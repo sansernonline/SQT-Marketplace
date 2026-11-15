@@ -6,7 +6,7 @@ Contents
 3. [หนังสือประทับตรา](#3-หนังสือประทับตรา)
 4. [Final checklist](#4-final-checklist)
 
-Layout per ระเบียบสำนักนายกรัฐมนตรีว่าด้วยงานสารบรรณ พ.ศ. 2526 และที่แก้ไขเพิ่มเติม (ฉบับที่ 4) พ.ศ. 2564. Placeholders in {braces}.
+Layout per ระเบียบสำนักนายกรัฐมนตรีว่าด้วยงานสารบรรณ พ.ศ. 2526 และที่แก้ไขเพิ่มเติม (ฉบับที่ 4) พ.ศ. 2564 (Prime Minister's Office Regulation on Correspondence Work, B.E. 2526 [1983], as amended, 4th amendment B.E. 2564 [2021]). Placeholders in {braces}. The templates below are Thai form wording and stay in Thai: copy them as written.
 
 ## 1. หนังสือภายนอก
 

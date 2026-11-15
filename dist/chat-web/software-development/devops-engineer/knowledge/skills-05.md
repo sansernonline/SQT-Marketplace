@@ -2,71 +2,71 @@
 
 Use when a mid-task finding needs a decision before going on
 
-# แจ้งสิ่งที่เจอ แล้วเสนอทางไป
+# Flag what you found, then propose a way forward
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line of wording following `human-writing`. This skill gives the format and structure. human-writing says how to write so the reader understands.
 
-> **กฎข้อเดียว:** เปิดด้วย**ผลกระทบ** ปิดด้วย**คำถามเดียว**
-> ตรงกลางคือหลักฐานกับข้อเสนอ ไม่ใช่การเล่าว่าเจอมาได้ยังไง
+> **The one rule:** open with the **impact**, close with **one question**.
+> The middle is evidence and proposals, not a story of how you found it.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เจอของที่ทำให้แผนเดิมใช้ไม่ได้ ระหว่างทำงานอย่างอื่นอยู่
-- ตัวเลข ไฟล์ หรือเอกสารไม่ตรงกัน แล้วต้องรู้ว่าจะยึดอันไหน — เฉพาะเมื่อเลือกผิดแล้วย้อนไม่ได้ · ถ้าย้อนได้ ให้เลือกเองแล้วลง [`decision-log`](../decision-log/SKILL.md)
-- มีทางไปต่อหลายทางที่ย้อนไม่ได้ เสียเงินหรือเวลามาก หรือส่งออกไปถึงคนนอก และต้องให้ผู้ใช้เลือกก่อน · ใน SuperUser ทำส่วนอื่นให้ครบก่อน แล้วเขียนเรื่องนี้ใต้ **รออนุมัติ** ตอนจบ ไม่หยุดถามกลางงาน
-- เสนอให้เพิ่มหรือเปลี่ยนอะไรบางอย่าง ที่ผู้ใช้ยังไม่ได้ขอ
+- You find something that makes the original plan unusable while working on something else.
+- Numbers, files or documents disagree, and you must know which to follow. Only when a wrong choice cannot be undone. If it can be undone, choose yourself and log it in [`decision-log`](../decision-log/SKILL.md).
+- There are several ways forward that cannot be undone, cost a lot of money or time, or go out to outsiders, and the user must choose first. In SuperUser, finish the other parts first, then write this under **รออนุมัติ** (awaiting approval) at the end. Do not stop to ask mid-task.
+- You propose adding or changing something the user has not asked for.
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use something else, or use it together
 
-| งาน | skill | |
+| Work | Skill | |
 |---|---|---|
-| ตอบคำถามที่ผู้ใช้ถามมา | `answer-shape` | แทน |
-| ทางเลือกที่ย้อนได้ (เปลี่ยนทีหลังได้ไม่เสียอะไร) | `principle-proceed-on-reversible-work` — ทำเลย แล้วลง `decision-log` | แทน |
-| ข้อเท็จจริงที่ไม่รู้ (ตัวเลข ชื่อ วันที่ งบ) | ใส่ `(รอยืนยัน)` แล้วทำต่อ ไม่ต้องหยุดถาม | แทน |
-| รายงานผลงานที่ทำเสร็จแล้ว | `human-writing` · `status-report` | แทน |
-| อธิบายเรื่องซับซ้อนให้เข้าใจ | `answer-shape` | แทน |
-| เขียนเป็นเอกสารให้คนอื่นอ่าน | `polished-document-style` | แทน |
-| งานพังจริงและต้องแก้ทันที | `targeted-fix` — แก้ก่อน แล้วค่อยรายงาน | แทน |
-| กางตัวย่อและศัพท์เฉพาะในคำตอบ | `spell-out-abbreviations` | คู่ |
-| สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` (plugin `software-development`) | คู่ |
+| Answer a question the user asked | `answer-shape` | instead |
+| A reversible choice (can be changed later at no cost) | `principle-proceed-on-reversible-work`: do it now, then log it in `decision-log` | instead |
+| An unknown fact (number, name, date, budget) | Put `(รอยืนยัน)` (awaiting confirmation) and keep going; do not stop to ask | instead |
+| Report finished work | `human-writing` · `status-report` | instead |
+| Explain something complex so it is understood | `answer-shape` | instead |
+| Write a document for others to read | `polished-document-style` | instead |
+| Something is really broken and must be fixed now | `targeted-fix`: fix first, then report | instead |
+| Spell out abbreviations and jargon in the answer | `spell-out-abbreviations` | together |
+| What you found is a real system incident | `incident-runbook-template` · `postmortem-template` (plugin `software-development`) | together |
 
 ---
 
-## 1 · โครงคำตอบ 4 บล็อก
+## 1 · The 4-block answer
 
-| บล็อก | ความยาว | กฎ |
+| Block | Length | Rule |
 |---|---|---|
-| 1 · สิ่งที่เจอ + ผลถ้าไม่แก้ | 1–2 บรรทัด | **ขึ้นก่อนเสมอ** ไม่มีคำเกริ่น ไม่ทวนคำถาม |
-| 2 · หลักฐาน | ตาราง ≤ 5 แถว | ตัวเลขที่ขัดกันเท่านั้น ไม่ต้องเล่าวิธีตรวจ |
-| 3 · ข้อเสนอ | ตาราง ≤ 5 แถว | ทำอะไร → **ได้อะไร** ไม่ใช่ทำอะไร → ทำยังไง |
-| 4 · คำถามปิด | 1 คำถาม | คำถามเดียว แบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน (ข้อ 6) |
+| 1 · What you found + the result if not fixed | 1–2 lines | **Always first.** No lead-in, no repeating the question |
+| 2 · Evidence | Table, at most 5 rows | Only the numbers that disagree. Do not tell how you checked |
+| 3 · Proposal | Table, at most 5 rows | Do what → **get what**, not do what → how |
+| 4 · Closing question | 1 question | One question, multiple choice, every option backed by evidence (section 6) |
 
-บล็อก 2 ตัดได้ถ้าไม่มีตัวเลข ส่วนบล็อก 3 ตัดได้ถ้ายังไม่มีข้อเสนอจริง ๆ
-**บล็อก 1 กับ 4 ตัดไม่ได้**
+Block 2 can be cut if there are no numbers. Block 3 can be cut if you have no real proposal yet.
+**Blocks 1 and 4 cannot be cut.**
 
-**ทั้งคำตอบควรจบใน 1 หน้าจอ** — ยาวกว่านั้นแปลว่ากำลังอธิบายกระบวนการ ไม่ใช่ขอการตัดสินใจ
+**The whole answer should end within 1 screen.** Longer than that means you are explaining a process, not asking for a decision.
 
 ---
 
-## 2 · บล็อกที่ 1 — สูตรประโยคเดียว
+## 2 · Block 1: the one-sentence formula
 
 ```
 <อะไรผิด> เพราะ <สาเหตุสั้น ๆ> · ต้อง <ทำอะไร> ก่อน <ขั้นถัดไป> ไม่งั้น <ผลเสียที่เป็นรูปธรรม>
 ```
 
-| ผิด: เขียนแบบเล่าเรื่อง | ถูก: เขียนแบบขึ้นด้วยผลกระทบ |
+| Wrong: written as a story | Right: written opening with the impact |
 |---|---|
 | "ระหว่างทำสรุปยอดผมพบว่าไฟล์ยอดขายที่ดึงมาเมื่อเช้านี้นั้นเป็นฉบับก่อนที่ร้านจะแก้ราคา…" | "**สรุปยอดขายใช้ราคาเก่า** เพราะดึงจากไฟล์ก่อนร้านแก้ราคา ต้องดึงใหม่ก่อนส่งบัญชี ไม่งั้นภาษีคำนวณผิด 38 รายการ" |
 
-- **"ไม่งั้น…" ต้องเป็นรูปธรรม** — "ข้าม FR-14.x (Functional Requirement — ความต้องการเชิงฟังก์ชัน ข้อ 14.x) ทั้งชุด" ไม่ใช่ "อาจมีปัญหาตามมา"
-- ไม่ต้องบอกว่าเจอตอนไหนหรือเจอได้ยังไง เว้นแต่วิธีเจอจะเปลี่ยนสิ่งที่ต้องทำ
-- ตัวหนาใช้กับ**คำที่เปลี่ยนการตัดสินใจ**เท่านั้น ไม่ใช่ทุกคำสำคัญ
+- **The "ไม่งั้น…" (otherwise…) part must be concrete.** "ข้าม FR-14.x (Functional Requirement — ความต้องการเชิงฟังก์ชัน ข้อ 14.x) ทั้งชุด" (skips the whole FR-14.x set), not "อาจมีปัญหาตามมา" (may cause problems later).
+- Do not say when or how you found it, unless how you found it changes what must be done.
+- Use bold only for **words that change the decision**, not every important word.
 
 ---
 
-## 3 · ตัวเลขที่ขัดกัน = ตารางเทียบเสมอ
+## 3 · Numbers that disagree: always a comparison table
 
-สองค่าขึ้นไปที่ไม่ตรงกัน อ่านจากประโยคยากกว่าอ่านจากตารางทุกครั้ง
+Two or more values that do not match are always harder to read in a sentence than in a table.
 
 ```markdown
 | | ที่บันทึกไว้ | ของจริง |
@@ -76,16 +76,16 @@ Use when a mid-task finding needs a decision before going on
 | ค่าส่งต่างประเทศ | ไม่มี | **มี** |
 ```
 
-- หัวคอลัมน์บอกว่า**ค่าไหนเชื่อได้** — "ที่บันทึกไว้ / ของจริง" ไม่ใช่ "เก่า / ใหม่"
-- ตัวหนาที่ฝั่งที่ถูกต้อง เพื่อให้กวาดตาแล้วรู้ทันทีว่าต้องยึดอะไร
-- แถวที่ตรงกันอยู่แล้ว **ไม่ต้องใส่**
+- Column headings say **which value can be trusted**: "ที่บันทึกไว้ / ของจริง" (recorded / actual), not "เก่า / ใหม่" (old / new).
+- Bold the correct side, so a glance shows what to follow.
+- Rows that already match: **leave them out.**
 
-**คำถามหรือสมมติฐานเดิมที่ตกไปเพราะข้อมูลใหม่ ให้ตัดทิ้งในหนึ่งบรรทัด**
-เช่น "คำถามข้อ 1 เรื่องยอดไม่ตรง — ตกไปเอง" แล้วไปต่อ อย่าอธิบายว่าทำไมถึงตก
+**Drop an old question or assumption that new data made obsolete, in one line,**
+such as "คำถามข้อ 1 เรื่องยอดไม่ตรง — ตกไปเอง" (question 1 about the mismatched total, dropped by itself), and move on. Do not explain why it dropped.
 
 ---
 
-## 4 · ข้อเสนอเป็นตาราง "ทำอะไร → ได้อะไร"
+## 4 · Proposals as a "do what → get what" table
 
 ```markdown
 | ไฟล์ | ได้อะไร |
@@ -94,70 +94,70 @@ Use when a mid-task finding needs a decision before going on
 | วันที่และฉบับบนหน้าแรกของแต่ละไฟล์ | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอ |
 ```
 
-- คอลัมน์ขวาคือ **ประโยชน์** ไม่ใช่ขั้นตอน — คนอ่านกำลังตัดสินใจว่าคุ้มไหม ไม่ได้กำลังลงมือทำ
-- เรียงจากคุ้มที่สุดลงมา ไม่ใช่เรียงตามลำดับการทำ · "คุ้ม" วัดด้วยสูตร คนหรือไฟล์ที่ได้ประโยชน์ × ผลกระทบ × ความมั่นใจ ÷ แรงงาน: ตั้งแต่ 3 ข้อขึ้นไปใส่ตัวเลขตามแม่แบบ [`templates/priority.json`](templates/priority.json) แล้วรัน `node <plugin>/skills/decision-scoring/scripts/decide.mjs priority priority.json` · ข้อที่ทำให้ผลผิดหรือไม่ปลอดภัยใส่ `"first": true` ให้ขึ้นก่อนเสมอ · มีงบเวลาจำกัดใช้ `knapsack` แทน (`decision-scoring`)
-- **ผูกข้อเสนอกับปัญหาที่เพิ่งเจอถ้าผูกได้** — เป็นเหตุผลที่หนักแน่นที่สุดที่มี
-- เกิน 5 แถวเมื่อไหร่ แปลว่ากำลังเสนอหลายเรื่องปนกัน ให้แยกเป็นคนละรอบ
+- The right column is the **benefit**, not the steps. The reader is deciding whether it is worth it, not doing it.
+- Order from most worthwhile downward, not in the order of doing. "Worthwhile" is measured by the formula: people or files that benefit × impact × confidence ÷ effort. With 3 or more items, fill in numbers using the template [`templates/priority.json`](templates/priority.json) and run `node <plugin>/skills/decision-scoring/scripts/decide.mjs priority priority.json`. Put `"first": true` on any item that makes the result wrong or unsafe so it always comes first. If time is limited, use `knapsack` instead (`decision-scoring`).
+- **Tie the proposal to the problem you just found, if you can.** It is the strongest reason you have.
+- More than 5 rows means you are proposing several things mixed together. Split them into separate rounds.
 
 ---
 
-## 5 · บอกสิ่งที่**ไม่**ทำด้วย
+## 5 · Also say what you will **not** do
 
-หนึ่งบรรทัด พร้อมเหตุผลและเวลาที่ควรทำแทน
+One line, with the reason and when to do it instead.
 
 > รายงานย้อนหลังรายปีไม่ทำตอนนี้ — ทำหลังยอดเดือนนี้ยืนยัน
 
-บรรทัดนี้กัน **"แล้วอันนั้นล่ะ ทำไมไม่ทำ"** ซึ่งเป็นคำถามที่ตามมาเกือบทุกครั้ง
-และบอกกลาย ๆ ว่าคิดครบแล้ว ไม่ได้ลืม
+This line heads off **"แล้วอันนั้นล่ะ ทำไมไม่ทำ"** (what about that one, why not do it), which is the question that follows almost every time.
+It also signals that you thought it through and did not forget.
 
 ---
 
-## 6 · ปิดด้วยคำถามเดียว
+## 6 · Close with one question
 
 ```
 เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วยดึงไฟล์ใหม่ + อัปเดตสรุป
 ```
 
-| กฎ | เหตุผล |
+| Rule | Reason |
 |---|---|
-| **หนึ่งคำถาม** ต่อหนึ่งคำตอบ | ถ้าถามสองคำถามขึ้นไป จะได้คำตอบแค่ข้อเดียว |
-| ตอบได้ด้วยไม่กี่คำ | "ทั้ง 4" · "เริ่มข้อ 2" |
-| มีตัวเลือก "เอาทั้งหมด" ให้ | ส่วนใหญ่ผู้ใช้เลือกอันนี้ ถ้าต้องพิมพ์เองจะเสียเวลา |
-| ถ้ามีลำดับที่แนะนำ ใส่ไว้ในคำถามเลย | เขาจะได้ตอบว่า "ตามนั้น" คำเดียว |
-| **ถามแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน** ตาม `superuser` §6: ตัวเลือก 2–4 ตัว · ตัวแนะนำอยู่บนสุดต่อท้าย `(แนะนำ)` พร้อมเหตุผล 1 บรรทัด | กดเลือกได้เลย และไม่เลือกจากตัวเลือกที่สมมุติขึ้น |
+| **One question** per answer | If you ask two or more, you get an answer to only one |
+| Answerable in a few words | "ทั้ง 4" · "เริ่มข้อ 2" |
+| Offer an "all of them" option | Most users pick it. Typing their own answer costs them time |
+| If there is a recommended order, put it in the question | They can answer "ตามนั้น" in one word |
+| **Ask as multiple choice, every option backed by evidence** per `superuser` §6: 2–4 options · the recommended one on top, ending with `(แนะนำ)` (recommended) and 1 line of reason | They can just pick, and do not choose from options you made up |
 
-**ห้ามปิดด้วยการถามว่า "มีอะไรให้ช่วยเพิ่มไหม"** — ไม่ใช่คำถามที่ขอการตัดสินใจ
+**Never close by asking "มีอะไรให้ช่วยเพิ่มไหม" (anything else I can help with)**. It does not ask for a decision.
 
 ---
 
-## 7 · ตัวอย่างเต็ม
+## 7 · Full example
 
-ตัวอย่างก่อนและหลังแก้ (งานเอกสารความต้องการและแผนงานซอฟต์แวร์) อยู่ใน [`references/example.md`](references/example.md)
+A before-and-after example (a software requirements document and work plan) is in [`references/example.md`](references/example.md)
 
 ---
 
 
 ## 8 · Anti-patterns
 
-- **เปิดด้วย "ระหว่างตรวจผมพบว่า…"** — ผู้อ่านต้องอ่านถึงท้ายย่อหน้าถึงจะรู้ว่าต้องทำอะไร
-- **ตัวเลขที่ขัดกันเขียนเป็นประโยค** — "เดิม 214 ตอนนี้ 245" ตาต้องกระโดดไปมา
-- **อธิบายว่าปัญหาเกิดได้ยังไง** ทั้งที่ไม่เปลี่ยนสิ่งที่ต้องทำ
-- **ข้อเสนอที่บอกวิธีทำแทนที่จะบอกประโยชน์** — ยังตัดสินใจไม่ได้อยู่ดี
-- **ถามสามคำถามในย่อหน้าเดียว** — จะได้คำตอบข้อเดียว แล้วต้องถามซ้ำ
-- **ปิดด้วย "แจ้งได้เลยครับ"** — ไม่ได้ขอการตัดสินใจอะไร
-- **ขอโทษยาว ๆ ที่พลาด** — บอกว่าอะไรผิดและแก้ยังไง พอแล้ว
-- **รายงานอย่างเดียวโดยไม่เสนอ** — ผลักภาระคิดกลับไปให้ผู้ใช้ทั้งหมด
+- **Opening with "ระหว่างตรวจผมพบว่า…" (while checking I found…).** The reader must read to the end of the paragraph to learn what to do.
+- **Disagreeing numbers written as a sentence.** "เดิม 214 ตอนนี้ 245" (was 214, now 245) makes the eye jump back and forth.
+- **Explaining how the problem happened** when it does not change what must be done.
+- **A proposal that says how to do it instead of the benefit.** The reader still cannot decide.
+- **Three questions in one paragraph.** You get one answer and must ask again.
+- **Closing with "แจ้งได้เลยครับ" (just let me know).** It asks for no decision.
+- **A long apology for a mistake.** Say what was wrong and how you fix it. That is enough.
+- **Reporting without proposing.** It pushes all the thinking back to the user.
 
 
 ## reference: example.md
 
-# flag-and-propose — ตัวอย่างเต็ม
+# flag-and-propose — full example
 
-ย้ายมาจาก [SKILL.md](../SKILL.md) §7
+Moved from [SKILL.md](../SKILL.md) §7
 
-ตัวย่อในตัวอย่าง: ความต้องการเชิงฟังก์ชัน (Functional Requirement — FR) · ความต้องการที่ไม่ใช่ฟังก์ชัน (Non-Functional Requirement — NFR) · กรณีทดสอบ (Test Case — TC) · บันทึกการตัดสินใจด้านสถาปัตยกรรม (Architecture Decision Record — ADR) · เอกสารข้อกำหนดเชิงฟังก์ชัน (Functional Specification Document — FSD) · Application Programming Interface (API)
+Abbreviations in the example: Functional Requirement (FR) · Non-Functional Requirement (NFR) · Test Case (TC) · Architecture Decision Record (ADR) · Functional Specification Document (FSD) · Application Programming Interface (API)
 
-**ก่อน — 1 ย่อหน้ายาว 3 ก้อน อ่านจบแล้วยังไม่รู้ว่าต้องตอบอะไร**
+**Before: 1 long paragraph with 3 lumps. After reading it, you still do not know what to answer.**
 
 > เรื่องด่วนที่เจอระหว่างตรวจ — BUILD-PLAN.md ที่สร้างเมื่อเช้านี้อ่านจาก
 > `_to_delete/extracted/*.md` ซึ่งเป็นฉบับก่อนที่ผมจะแก้ มันจึงบันทึกไว้ว่า
@@ -168,7 +168,7 @@ Use when a mid-task finding needs a decision before going on
 > เติม 4 ไฟล์ที่คุ้มที่สุดก่อน คือ docs/README.md เป็นสารบัญบอกว่าอ่านอะไรก่อนและ
 > ใครเป็นเจ้าของ, เพิ่มตารางประวัติการแก้ไขในหน้าแรกของทั้ง 4 docx, …
 
-**หลัง — โครงเดียวกัน 4 บล็อก**
+**After: the same structure in 4 blocks**
 
 > **ด่วน — `BUILD-PLAN.md` ตัวเลขเก่า** เพราะอ่านจาก `_to_delete/extracted/` ฉบับก่อนคุณแก้
 > ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันสร้างตามสเปกเก่าและข้าม FR-14.x กับ NFR ทั้งชุด
@@ -194,9 +194,9 @@ Use when a mid-task finding needs a decision before going on
 >
 > เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วย re-extract + อัปเดต BUILD-PLAN
 
-**สิ่งที่หายไป ทั้งที่ข้อมูลครบเท่าเดิม:** คำเกริ่น · การเล่าว่าตรวจเจอยังไง ·
-ชื่อไฟล์เต็มที่ไม่ได้ช่วยตัดสินใจ · คำอธิบายว่าทำไมคำถามเดิมถึงตกไป ·
-รายละเอียดวิธีทำของแต่ละข้อเสนอ
+**What disappeared, though the information is just as complete:** the lead-in · the story of how it was found ·
+full file names that do not help the decision · the explanation of why the old question dropped ·
+the how-to details of each proposal
 
 
 ---
@@ -205,37 +205,37 @@ Use when a mid-task finding needs a decision before going on
 
 Use before asking to continue on undoable work
 
-# principle · proceed on reversible work — ย้อนได้ ทำเลย
+# principle · proceed on reversible work: if it can be undone, do it
 
-> ทุกคำถามที่หยุดรอคำตอบ คือเวลาที่ทั้งคนและ agent ไม่ได้ทำงาน
-> ถ้างานย้อนกลับได้ ทำแล้วให้ดูเลยจะเร็วกว่าถามแล้วรอ
+> Every question that stops and waits for an answer is time when both the person and the agent are not working.
+> If the work is reversible, doing it and letting them look is faster than asking and waiting.
 
-## แยกให้ออก
+## Tell them apart
 
-| ย้อนได้ ให้ทำเลย | ย้อนไม่ได้ ให้เตรียมไว้ใน "รออนุมัติ" แล้วทำส่วนอื่นต่อ |
+| Reversible: do it now | Irreversible: prepare it in "รออนุมัติ" (awaiting approval) and carry on with the rest |
 |---|---|
-| แก้ไฟล์ที่มีสำเนาหรือประวัติ (ไฟล์เอกสาร · ชีต · git) | แก้หรือลบข้อมูลจริง (ฐานข้อมูล · ชีตหลัก · ไฟล์ของผู้ใช้) |
-| ร่างเอกสาร · ร่างอีเมลหรือคำตอบลูกค้า (ยังไม่ส่ง) · ร่าง mockup | ส่งอีเมล ข้อความ หรือโพสต์ถึงคนนอก |
-| รัน test · คำนวณ · ลองในสำเนา | ลงระบบจริง (deploy · ประกาศราคา · เผยแพร่) |
-| เลือกระหว่าง 2 ทางที่เปลี่ยนทีหลังได้ | จ่ายเงิน · จอง · ยอมรับเงื่อนไข · ใส่ค่าลับจริง |
-| ย้ายไฟล์ชั่วคราวไป `_to_delete/` | ลบถาวร |
-| โค้ด: commit ใน branch ของงาน เมื่อผู้ใช้อนุญาต | โค้ด: merge เข้า branch หลัก · force-push |
+| Edit a file that has a copy or history (document file · sheet · git) | Edit or delete real data (database · master sheet · the user's files) |
+| Draft a document · draft an email or customer reply (not yet sent) · draft a mockup | Send an email, message or post to outsiders |
+| Run tests · calculate · try in a copy | Release to the real system (deploy · announce a price · publish) |
+| Choose between 2 paths that can be changed later | Pay money · book · accept terms · enter a real secret |
+| Move a temporary file to `_to_delete/` | Delete permanently |
+| Code: commit on the work branch, when the user allows it | Code: merge into the main branch · force-push |
 
-## ก่อนจะถาม — ผ่านสามด่านนี้
+## Before you ask, pass these three gates
 
-1. **ดูได้จากการทดลองไหม** — ถ้าคำตอบคือพฤติกรรม ความเร็ว หน้าตา ผลลัพธ์ ให้ทดลองทำร่างดู (งานโค้ด: playbook `prototype` ใน plugin `software-development`) ไม่ใช่ถาม
-2. **ย้อนได้ไหม** — ถ้าได้ ให้เลือกทางที่ผลกระทบน้อยสุด ลงมือทำ แล้วจดใน [`decision-log`](../decision-log/SKILL.md)
-3. **เป็นข้อเท็จจริงหรือรสนิยมของผู้ใช้ไหม** — ตัวเลข ชื่อ วันที่ งบ ห้ามเดา ให้ใส่ `(รอยืนยัน)` แล้วทำส่วนอื่นต่อ · สีแบรนด์ที่ไม่มีให้ใช้ค่าตั้งต้นของ skill นั้นพร้อม `(รอยืนยัน)` และรวมคำถามไว้ใน "ค้างอยู่" ครั้งเดียว
+1. **Can an experiment show it?** If the answer is behaviour, speed, looks or output, try a draft (code work: playbook `prototype` in plugin `software-development`) instead of asking.
+2. **Is it reversible?** If so, pick the path with the least impact, do it, and note it in [`decision-log`](../decision-log/SKILL.md).
+3. **Is it a fact or the user's taste?** Numbers, names, dates and budgets must never be guessed: put `(รอยืนยัน)` (awaiting confirmation) and carry on with the rest. If the brand colour is missing, use that skill's default with `(รอยืนยัน)` and collect the question into "ค้างอยู่" (pending) once.
 
-ถ้าผ่านทั้ง 3 ด่านแล้วยังต้องถาม ก็ไม่หยุดรอ ให้รวมทุกคำถามไว้ใน "ค้างอยู่" ครั้งเดียว พร้อมทางที่แนะนำ แล้วทำส่วนอื่นต่อ ส่วนงานที่ย้อนไม่ได้ ให้เตรียมคำสั่ง ส่วนที่เปลี่ยน (diff) หรือร่างข้อความไว้ใน "รออนุมัติ" ไม่ทำเอง
+If you pass all 3 gates and still must ask, do not stop and wait. Collect every question into "ค้างอยู่" once, with your recommended path, and carry on with the rest. For irreversible work, prepare the command, the diff or the draft message in "รออนุมัติ" and do not do it yourself.
 
-**ข้อยกเว้นเดียวที่ถามก่อนได้** — ตอนเริ่มงาน ถ้าโจทย์ตีความได้หลายทางจนงานออกมาต่างกันทั้งชุด ให้ถามครั้งเดียวโดยรวมทุกคำถามไว้ในรอบนั้นแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน (skill `superuser` หัวข้อ 6 → `autonomy`) เริ่มแล้วไม่ถามอีก · ทางแยกที่ย้อนไม่ได้ แพง หรือออกไปถึงคนนอก ใช้ [`flag-and-propose`](../flag-and-propose/SKILL.md)
+**The one exception where you may ask first:** at the start of the job, if the brief can be read in so many ways that the whole output would differ, ask once, putting every question of that round together as multiple choice, with evidence for every option (skill `superuser` section 6 → `autonomy`). After you start, do not ask again. For a fork that is irreversible, costly or reaches outsiders, use [`flag-and-propose`](../flag-and-propose/SKILL.md).
 
-## สิ่งที่ห้ามทำ
+## What not to do
 
-- ถาม "ให้ทำต่อไหม" หลังจบแต่ละขั้นของงานที่สั่งไว้แล้ว
-- เสนอแผนแล้วรออนุมัติ ทั้งที่งานชัดและย้อนได้
-- ใช้หลักนี้เป็นข้ออ้างทำสิ่งที่ผู้ใช้ไม่ได้ขอ เพราะ "ทำต่อ" หมายถึงทำงานที่สั่งให้จบ ไม่ใช่ขยายขอบเขตเอง
+- Ask "ให้ทำต่อไหม" (shall I continue?) after each step of a job that was already ordered
+- Offer a plan and wait for approval when the work is clear and reversible
+- Use this principle as an excuse to do things the user did not ask for, because "continue" means finishing the ordered work, not widening the scope yourself
 
 
 ---
@@ -244,29 +244,29 @@ Use before asking to continue on undoable work
 
 Use when a task ends, to report status in a table
 
-# รายงานสถานะเมื่อจบงาน
+# Report status when a task ends
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write the wording of every line following `human-writing`. This skill gives the format and structure, and human-writing says how to write so that people understand.
 
-> **กฎข้อเดียว:** จบงานทุกครั้ง ต้องมีตารางสถานะในไฟล์กลางของงาน และตารางเดียวกันในคำตอบ
-> งานที่ไม่มีตารางสถานะ ถือว่ายังไม่จบ
-> **ยกเว้น** playbook ที่อ่านอย่างเดียว (`research` · `review` · software-development: `investigation`) — ใส่ตารางในคำตอบอย่างเดียว ไม่เขียนไฟล์
+> **The one rule:** every time a task ends, there must be a status table in the task's central file, and the same table in the reply.
+> A task with no status table is not finished.
+> **Exception:** read-only playbooks (`research` · `review` · software-development: `investigation`) put the table in the reply only and write no file.
 
 ---
 
-## 1 · เขียนที่ไหน
+## 1 · Where to write
 
-| สถานการณ์ | ทำอย่างไร |
+| Situation | What to do |
 |---|---|
-| งานทั่วไป (**ค่าตั้งต้น**) | `.claude/superuser/CONTEXT.md` แก้เฉพาะ `## ความคืบหน้า` · หัวข้อ `## รับงานต่อ` เป็นของ `handoff` หัวข้อ 5 เขียนตามกติกาที่นั่น · ไม่แตะหัวข้ออื่น · ยังไม่มีไฟล์ → สร้างจาก [`templates/CONTEXT.md`](../superuser/templates/CONTEXT.md) |
-| โปรเจกต์มี `docs/BUILD-PLAN.md` | ใช้แบบในข้อ 3 แทน เขียนที่เดียว ไม่เขียนซ้ำสองที่ |
-| มี subagent หลายตัวทำงานพร้อมกัน | subagent **รายงานกลับ** อย่างเดียว ให้หัวหน้าทีมเขียนไฟล์คนเดียว ไม่งั้นไฟล์พัง |
+| General work (**default**) | `.claude/superuser/CONTEXT.md`. Edit only `## ความคืบหน้า` (progress). The heading `## รับงานต่อ` (take over) belongs to `handoff` section 5, so write it by the rules there. Touch no other heading. If the file does not exist yet, create it from [`templates/CONTEXT.md`](../superuser/templates/CONTEXT.md). |
+| The project has `docs/BUILD-PLAN.md` | Use the form in section 3 instead. Write in one place, never duplicate in two. |
+| Several subagents work at the same time | Subagents only **report back**. Let the team lead write the file alone, or the file breaks. |
 
-ที่อยู่และกติกาของไฟล์ทั้งหมดอยู่ใน [`team-files`](../superuser/references/team-files.md)
+The location and rules of every file are in [`team-files`](../superuser/references/team-files.md).
 
 ---
 
-## 2 · ตาราง `## ความคืบหน้า`
+## 2 · The `## ความคืบหน้า` table
 
 ```markdown
 ## ความคืบหน้า
@@ -279,71 +279,71 @@ Use when a task ends, to report status in a table
 | ค้นหาสินค้า (โค้ด) | เสร็จ | test 48/48 · `reviewer` ตรวจแล้ว | 2026-10-21 14:20 |
 ```
 
-หัวข้อ `## รับงานต่อ` ที่อยู่ถัดลงไป เขียนตาม `handoff` หัวข้อ 5 (แบบเดียว ใช้ทั้งตอนจบงานและตอนส่งต่อ)
+The `## รับงานต่อ` heading that sits below it is written by `handoff` section 5 (one format, used both at the end of a task and at hand-over).
 
-- สถานะใช้ 5 คำเดียวกับ `superuser`: `เสร็จ` · `ทำอยู่` · `ติด` · `รออนุมัติ` · `ค้างอยู่` (ยังไม่เริ่มใช้ `ค้างอยู่`)
-- **หลักฐานต้องมีเสมอ** เมื่อเขียนว่า `เสร็จ` — ตัวเลขที่ตรวจจริง · จำนวนข้อที่เทียบ · ชื่อไฟล์ที่เปิดดู · ผลจาก `reviewer` ถ้าไม่ได้ตรวจให้เขียน `ยังไม่ได้ตรวจ` ห้ามเขียนว่าผ่าน
-- ผู้ตรวจต้องไม่ใช่ตัวเดียวกับผู้ทำ · มี subagent → ระบุชื่อบทบาทในช่องหลักฐาน
-- ตารางมีเฉพาะงานที่ยังเปิด ไม่เกิน 15 แถว · งานที่เสร็จแล้วย้ายเป็น 1 บรรทัดใน `HISTORY.md` · เขียนทับทั้งหัวข้อ ไม่ต่อท้าย
-- **ค้างอยู่** คือสิ่งที่ agent ไปต่อเองไม่ได้ ต้องมีคนตอบหรือตัดสิน เขียนเป็นคำถามที่ตอบได้ พร้อมบอกว่าถามใคร ไม่มีให้เขียน `ไม่มี`
-- **รออนุมัติ** คืองานที่เตรียมพร้อมแล้วแต่ย้อนไม่ได้ (superuser หัวข้อ 6) บอกคำสั่งหรือไฟล์ที่พร้อมใช้ ไม่มีก็ไม่ต้องใส่
-- **ข้อเสนอ** (ในคำตอบ) คือการปรับปรุงนอกขอบเขตไม่เกิน 3 ข้อ บอกว่าได้อะไรและใช้แรงแค่ไหน ไม่มีก็ไม่ต้องใส่
-
----
-
-## 3 · แบบสำหรับโปรเจกต์ที่มี `docs/BUILD-PLAN.md`
-
-เขียน `## สถานะล่าสุด` (เขียนทับ) และ `## ประวัติสถานะ` (เพิ่มบรรทัดบนสุด) ในไฟล์นั้นแทน `CONTEXT.md` · ลำดับหัวข้อ คอลัมน์ ค่าที่ใช้ได้ และเพดานแถว อยู่ใน [`build-plan-rules`](references/build-plan-rules.md) **เปิดก่อนเขียนทุกครั้ง**
+- Status uses the same 5 words as `superuser`: `เสร็จ` (done) · `ทำอยู่` (in progress) · `ติด` (blocked) · `รออนุมัติ` (awaiting approval) · `ค้างอยู่` (pending; not started yet also uses `ค้างอยู่`).
+- **Evidence is always required** when you write `เสร็จ`: a number that was really checked · how many items were compared · the file name that was opened · the result from `reviewer`. If it was not checked, write `ยังไม่ได้ตรวจ` (not yet checked). Never write that it passed.
+- The checker must not be the same one that did the work. If there is a subagent, name its role in the evidence column.
+- The table holds only open tasks, at most 15 rows. A finished task moves to 1 line in `HISTORY.md`. Overwrite the whole heading, never append.
+- **ค้างอยู่** (pending) is what the agent cannot continue by itself, because a person must answer or decide. Write it as a question that can be answered, and say whom to ask. If there is none, write `ไม่มี` (none).
+- **รออนุมัติ** (awaiting approval) is work that is prepared but irreversible (superuser section 6). Give the command or file that is ready to use. If there is none, leave it out.
+- **ข้อเสนอ** (proposals, in the reply) are improvements outside the scope, at most 3. Say what is gained and how much effort it takes. If there are none, leave it out.
 
 ---
 
-## 4 · ในคำตอบ
+## 3 · The form for a project that has `docs/BUILD-PLAN.md`
 
-แสดง "ภาพรวม" (ถ้ามี) + ตารางเฉพาะ **แถวที่เปลี่ยนในรอบนี้** + "ค้างอยู่" + "รออนุมัติ" (ถ้ามี) + "ข้อเสนอ" (ถ้ามี) + "ถัดไป" แล้วบอกว่าตารางเต็มอยู่ที่ไหน (`CONTEXT.md` หรือ `docs/BUILD-PLAN.md`) — ไม่ต้องแปะทั้งไฟล์
-
----
-
-## 5 · รายการตรวจก่อนบอกว่าจบ
-
-- [ ] อ่านไฟล์กลางจากดิสก์ก่อนแก้ (คนอื่นอาจแก้ไปแล้ว)
-- [ ] ตารางความคืบหน้าเขียนทับ ไม่ได้ต่อท้าย และมีวันที่เวลา
-- [ ] ทุกแถวที่เขียนว่า `เสร็จ` หรือ `ผ่าน` มีหลักฐาน · ผู้ตรวจไม่ใช่ผู้ทำ
-- [ ] ไม่ได้ตั้ง `Approved` เอง
-- [ ] `## รับงานต่อ` อัปเดตตาม `handoff` หัวข้อ 5 แล้ว
-- [ ] ไม่แตะหัวข้ออื่นในไฟล์
-- [ ] แบบ BUILD-PLAN: ตัวเลขใน "ภาพรวม" ตรงตาราง · เพิ่มบรรทัดใน `## ประวัติสถานะ` 1 บรรทัด · "ทีมตอนนี้" ไม่มีแถว `ทำอยู่` ค้างของงานที่จบแล้ว
-- [ ] แบบ BUILD-PLAN: รันตัวตรวจจนผ่าน (ตัวตรวจอยู่ใน plugin `superuser`): `python <โฟลเดอร์ superuser>/skills/polished-document-style/scripts/check_outline.py assets/build-plan-status.md <path ของ docs/BUILD-PLAN.md>` — จับหัวข้อหาย หัวข้อสลับ ช่องตัวหนาหาย หัวตารางเปลี่ยน และช่องที่ยังไม่เติม · หัวข้ออื่นในไฟล์ (ตารางงาน `## ตัดสินใจเอง`) ตัวตรวจปล่อยผ่าน
-- [ ] คำตอบมีตารางเฉพาะแถวที่เปลี่ยน + ค้าง + รออนุมัติ (ถ้ามี) + ข้อเสนอ (ถ้ามี) + ถัดไป
+Write `## สถานะล่าสุด` (latest status; overwrite) and `## ประวัติสถานะ` (status history; add a line at the top) in that file instead of `CONTEXT.md`. The heading order, columns, allowed values and row ceiling are in [`build-plan-rules`](references/build-plan-rules.md). **Open it before every write.**
 
 ---
 
-## 6 · สิ่งที่ห้ามทำ
+## 4 · In the reply
 
-| อย่าทำ | เพราะ |
+Show "ภาพรวม" (overview, if any) + a table of only **the rows that changed this round** + "ค้างอยู่" + "รออนุมัติ" (if any) + "ข้อเสนอ" (if any) + "ถัดไป" (next), then say where the full table lives (`CONTEXT.md` or `docs/BUILD-PLAN.md`). Do not paste the whole file.
+
+---
+
+## 5 · Checklist before saying it is finished
+
+- [ ] Read the central file from disk before editing (someone else may have edited it)
+- [ ] The progress table is overwritten, not appended, and has a date and time
+- [ ] Every row that says `เสร็จ` or `ผ่าน` (pass) has evidence · the checker is not the doer
+- [ ] You did not set `Approved` yourself
+- [ ] `## รับงานต่อ` is updated per `handoff` section 5
+- [ ] You touched no other heading in the file
+- [ ] BUILD-PLAN form: the numbers in "ภาพรวม" match the table · 1 line is added to `## ประวัติสถานะ` · "ทีมตอนนี้" (current team) has no leftover `ทำอยู่` row for a task that has finished
+- [ ] BUILD-PLAN form: run the checker until it passes (the checker is in plugin `superuser`): `python <superuser folder>/skills/polished-document-style/scripts/check_outline.py assets/build-plan-status.md <path of docs/BUILD-PLAN.md>`. It catches missing headings, swapped headings, missing bold cells, changed table headers and cells not yet filled. Other headings in the file (the task table, `## ตัดสินใจเอง`) the checker lets pass.
+- [ ] The reply has a table of only the changed rows + pending + awaiting approval (if any) + proposals (if any) + next
+
+---
+
+## 6 · What not to do
+
+| Do not | Because |
 |---|---|
-| เขียนว่า `เสร็จ` หรือ `ผ่าน` โดยไม่ได้ตรวจจริง | ตารางสถานะที่โกหกแย่กว่าไม่มีตาราง |
-| ต่อท้ายตารางทุกรอบ | ไฟล์ยาวขึ้นเรื่อย ๆ และไม่รู้ว่าแถวไหนคือปัจจุบัน |
-| สร้างไฟล์สถานะใหม่ (`STATUS.md` `progress.md`) | สถานะกระจายหลายที่ ไม่มีใครรู้ว่าดูที่ไหน |
-| ซ่อนรายการที่ไม่ผ่านไว้ในร้อยแก้ว | คนอ่านตารางแล้วเข้าใจว่าผ่านหมด |
-| ให้ subagent เขียนไฟล์กลางเอง | เขียนชนกันแล้วไฟล์พัง |
+| Write `เสร็จ` or `ผ่าน` without really checking | A status table that lies is worse than no table. |
+| Append to the table every round | The file keeps growing and nobody knows which row is current. |
+| Create a new status file (`STATUS.md` `progress.md`) | Status scatters across places and nobody knows where to look. |
+| Hide failing items in prose | A reader of the table will think everything passed. |
+| Let a subagent write the central file itself | Writes collide and the file breaks. |
 
 ---
 
-## แผนโครงการและรายงานประจำสัปดาห์
+## Project plan and weekly report
 
-แม่แบบแผนโครงการ (ผังเวลา · milestone · risk register · Responsible-Accountable-Consulted-Informed (RACI)) และรายงานสถานะประจำสัปดาห์ฉบับส่งผู้เกี่ยวข้อง อยู่ใน [`references/project-plan-and-weekly-status.md`](references/project-plan-and-weekly-status.md)
+The template for a project plan (timeline · milestone · risk register · Responsible-Accountable-Consulted-Informed (RACI)) and the weekly status report sent to stakeholders is in [`references/project-plan-and-weekly-status.md`](references/project-plan-and-weekly-status.md)
 
-## เชื่อมกับ skill อื่น
+## Link to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| ตารางงานและวงรอบเขียนโค้ด ในไฟล์เดียวกัน | `spec-to-code-loop` (plugin `software-development`) |
-| ชุดเอกสารของโปรเจกต์และสถานะเอกสาร | `project-doc-set` (plugin `software-development`) |
-| บันทึกบริบทเพื่อทำต่อในรอบสนทนาหน้า | `handoff` |
-| ตารางการตัดสินใจเองในไฟล์เดียวกัน | `decision-log` |
-| เลือก playbook และจบงานทุกชนิด | `superuser` |
-| รูปแบบตารางและเอกสาร | `polished-document-style` |
-| ชื่อและสถานะของไฟล์เอกสาร | `document-naming` |
+| The task table and the code-writing loop in the same file | `spec-to-code-loop` (plugin `software-development`) |
+| A project's document set and document status | `project-doc-set` (plugin `software-development`) |
+| Recording context to continue in the next conversation | `handoff` |
+| The table of self-made decisions in the same file | `decision-log` |
+| Choosing a playbook and finishing every kind of task | `superuser` |
+| Table and document format | `polished-document-style` |
+| Names and status of document files | `document-naming` |
 
 
 ## reference: build-plan-rules.md
@@ -375,7 +375,7 @@ Code work (a full example table · type `build`/`ส่งมอบ` · mobile a
 
 # Project plan and weekly status — stakeholder templates
 
-แม่แบบของ agent `project-manager` — ย้ายมาจากตัว agent (2026-10-14) · ตารางสถานะท้ายงานแบบสั้นอยู่ใน SKILL.md ของ `status-report` ส่วนไฟล์นี้คือแผนโครงการและรายงานประจำสัปดาห์ฉบับส่งผู้เกี่ยวข้อง
+Template for the agent `project-manager` · moved from the agent file (2026-10-14) · the short status table at the end of a job is in the SKILL.md of `status-report`, while this file holds the project plan and the weekly report for stakeholders
 
 **สารบัญ:**
 
@@ -857,155 +857,155 @@ Sources: code-modernization (Apache-2.0) · progress/summary · seen 2026-11-10 
 
 Use when a project needs a Docker sandbox for untrusted code
 
-# docker-sandbox — ห้องทดลองต่อโปรเจกต์
+# docker-sandbox: one lab per project
 
-> เครื่องเราเป็นคนสั่ง ห้องทดลองเป็นที่ลงมือ
-> ข้างในติดตั้ง ลบ รันเซิร์ฟเวอร์ ทำฐานข้อมูลทดสอบได้เต็มที่ เพราะพังแล้วล้างทิ้งสร้างใหม่ได้ในคำสั่งเดียว
-> ข้างนอก (เครื่องจริง · ระบบจริง · บัญชีจริง) แตะไม่ได้ เพราะไม่มีทางเข้าจากข้างใน
+> Our machine gives the orders; the lab is where the work happens.
+> Inside, you can install, delete, run servers, and build test databases freely, because when something breaks you wipe it and rebuild with one command.
+> Outside (the real machine · real systems · real accounts) cannot be touched, because there is no way in from the inside.
 
-ใช้คู่กับ [`superuser`](../superuser/SKILL.md) — โปรเจกต์ที่มี `.sandbox/` งานติดตั้งและรันทุกอย่างทำในห้องนี้
+Use together with [`superuser`](../superuser/SKILL.md). In a project that has `.sandbox/`, all install and run work happens in this lab.
 
-ไม่ใช้เมื่อ: เขียน Dockerfile หรือ image สำหรับ deploy จริง → [`kubernetes-helm`](../kubernetes-helm/SKILL.md) เพราะห้องทดลองเป็นที่รันงานชั่วคราว ไม่ใช่ image ที่ขึ้น production
+Do not use when: writing a Dockerfile or image for a real deploy → [`kubernetes-helm`](../kubernetes-helm/SKILL.md), because the lab is a temporary place to run work, not an image that goes to production.
 
 ---
 
-## 1 · หนึ่งโปรเจกต์ = หนึ่งห้อง
+## 1 · One project = one lab
 
-- **ห้องเดียวต่อโปรเจกต์** ชื่อ `sandbox-agent-<ชื่อโฟลเดอร์>-<วันที่สร้าง>` (เช่น `sandbox-agent-sample-app-20260125`)
-  - ตั้งชื่อครั้งเดียวตอน `up` แรก แล้วเก็บในไฟล์ `.sandbox/.name-<ชื่อโฟลเดอร์>` คำสั่งทีหลังอ่านชื่อจากไฟล์นี้ ชื่อจึงไม่เปลี่ยนตามวัน
-  - prefix `sandbox-agent-` บอกว่า agent สร้างห้องนี้ ไม่ใช่คนตั้ง ส่วนวันที่สร้างเก็บซ้ำไว้ใน label `sqt.created`
-  - ถ้าโปรเจกต์ต้องมีฐานข้อมูล cache หรือเบราว์เซอร์ ให้เพิ่มเป็น service ใน**ห้องเดียวกัน** (stack เดียว) ไม่แยกห้องใหม่
-- **image ฐานใช้ร่วมกันทั้งเครื่อง** — `sqt-sandbox-base:1` (Node · Python · Git · Playwright Chromium · Claude Code) build ครั้งเดียว ส่วน image ของแต่ละโปรเจกต์เพิ่มแค่ชั้นบาง ๆ ที่โปรเจกต์นั้นต้องใช้ จึงไม่กินดิสก์ซ้ำ
-- **ห้องที่หยุดอยู่ไม่กิน CPU และหน่วยความจำ** กินแค่ดิสก์ จบงานแล้วให้ `stop` และเลิกงานทั้งวันให้ `stop-all`
-- **ห้องเพิ่มชั่วคราว** (`-Name <โปรเจกต์>-a1`) ใช้เฉพาะตอนลองหลายทางพร้อมกันที่ต้องแยกเครื่องจริง (งานลองหลายทางทั่วไปใช้ git worktree ต่อตัวตาม `parallel-split-and-merge` เร็วกว่า) แล้ว `destroy` ทิ้งทันทีที่เลือกได้
-- **ไม่รวมหลายโปรเจกต์ไว้ห้องเดียว** — เพราะของที่ติดตั้งจะชนกัน โปรเจกต์หนึ่งพังแล้วลามไปอีกโปรเจกต์ และล้างทีละโปรเจกต์ไม่ได้
+- **One lab per project**, named `sandbox-agent-<folder name>-<creation date>` (e.g. `sandbox-agent-sample-app-20260125`).
+  - The name is set once at the first `up` and stored in the file `.sandbox/.name-<folder name>`. Later commands read the name from this file, so the name does not change with the date.
+  - The prefix `sandbox-agent-` says an agent created this lab, not a person. The creation date is also kept in the label `sqt.created`.
+  - If the project needs a database, cache, or browser, add it as a service in the **same lab** (one stack). Do not create a separate lab.
+- **The base image is shared across the whole machine.** `sqt-sandbox-base:1` (Node · Python · Git · Playwright Chromium · Claude Code) is built once. Each project's image adds only a thin layer the project needs, so disk is not used twice.
+- **A stopped lab uses no CPU or memory**, only disk. Run `stop` when you finish a task, and `stop-all` when you finish for the day.
+- **Extra temporary labs** (`-Name <project>-a1`) are for trying several paths in parallel when they need truly separate machines. (For ordinary multi-path trials, use one git worktree per attempt following `parallel-split-and-merge`; it is faster.) `destroy` them as soon as you pick a path.
+- **Never put several projects in one lab**, because installed things collide, one project's breakage spreads to another, and you cannot wipe one project at a time.
 
-## 2 · สองแบบ เลือกตามงาน
+## 2 · Two modes: choose by the work
 
-| | **mount** (ค่าเริ่ม) | **isolated** (`-Isolated`) |
+| | **mount** (default) | **isolated** (`-Isolated`) |
 |---|---|---|
-| ไฟล์โปรเจกต์ | โฟลเดอร์จริงต่อเข้าไปที่ `/work` แก้แล้วเห็นบนเครื่องทันที | สำเนาอยู่ใน volume โฟลเดอร์จริงต่อเข้าไปแบบอ่านอย่างเดียวที่ `/src` |
-| ใครแก้ไฟล์ | Claude Code บนเครื่องแก้ไฟล์ตามปกติ (`sandbox.ps1 claude` ใช้ไม่ได้ในโหมดนี้) | Claude Code **ในห้อง** (`sandbox.ps1 claude`) |
-| ใครรันคำสั่ง | ส่งเข้าห้องด้วย `sandbox.ps1 exec "..."` | Claude Code ในห้องรันเอง ไม่มีหน้าต่างขออนุญาต |
-| ผลกลับมาอย่างไร | อยู่ในโฟลเดอร์แล้ว | `sandbox.ps1 sync` → patch ใน `_to_delete\sandbox\` แล้วคนสั่ง `git apply` |
-| ใช้เมื่อ | งานประจำวันที่คนดูอยู่ | งานทั้งคืน · งานเสี่ยง · ลองหลายทางที่ต้องแยกเครื่องจริง (ห้องละทาง) |
+| Project files | The real folder is attached at `/work`; edits show on the machine at once | A copy lives in a volume; the real folder is attached read-only at `/src` |
+| Who edits files | Claude Code on the machine edits files as usual (`sandbox.ps1 claude` does not work in this mode) | Claude Code **inside the lab** (`sandbox.ps1 claude`) |
+| Who runs commands | Sent into the lab with `sandbox.ps1 exec "..."` | Claude Code in the lab runs them itself, with no permission prompt |
+| How results come back | Already in the folder | `sandbox.ps1 sync` → a patch in `_to_delete\sandbox\`, then the person runs `git apply` |
+| Use when | Daily work while a person is watching | Overnight work · risky work · trying several paths that need separate machines (one lab per path) |
 
-เพิ่ม `-Locked` ได้ทั้งสองแบบ — ปิดอินเทอร์เน็ตขาออก เหลือเฉพาะโฮสต์ใน `allowlist.txt` เหมาะกับงานที่รันโค้ดที่ยังไม่ไว้ใจ
-
----
-
-## 3 · ตั้งห้องให้โปรเจกต์ (ครั้งแรก)
-
-1. ตรวจว่า Docker Desktop รันอยู่ — `docker version` ต้องเห็นทั้ง Client และ Server ถ้าไม่เห็น ให้บอกผู้ใช้ให้เปิด Docker Desktop แล้วหยุดเฉพาะงานนี้
-2. คัดลอกทุกไฟล์ใน `assets/` ของ skill นี้ไปที่ `<โปรเจกต์>/.sandbox/` (ที่ราก) แล้วประกาศ `.sandbox/` เป็นข้อยกเว้นของรากใน README ของโฟลเดอร์โค้ด ตาม `project-doc-set` ข้อ 1
-3. ปรับ `Dockerfile` (ชั้นของโปรเจกต์)
-   - ถ้าเป็น .NET ให้ตั้ง `INSTALL_DOTNET=1` แล้วเพิ่ม `apt-get install` ของที่โปรเจกต์ต้องใช้
-   - **อย่าแก้ `base.Dockerfile`** ถ้าไม่จำเป็น เพราะทุกโปรเจกต์ใช้ร่วมกัน
-   - ถ้าต้องมีฐานข้อมูลทดสอบ ให้เพิ่มเป็น service ใหม่ใน `compose.yaml` (ไม่เปิด port ออกนอก)
-4. เพิ่ม `.sandbox/.mode-*` และ `.sandbox/.name-*` ใน `.gitignore`
-5. เปิดห้อง — `.\.sandbox\sandbox.ps1 up` (หรือ `up -Isolated` · `up -Browser`) โปรเจกต์แรกของเครื่องต้อง build image ฐานก่อน ใช้เวลาราว 5–15 นาที ส่วนโปรเจกต์ถัดไปจะเร็วขึ้นมาก
-6. **พิสูจน์ว่าใช้ได้** — `sandbox.ps1 exec "node -v && python3 --version && git status"` ถ้าโปรเจกต์มีคำสั่ง test ให้รันผ่าน `exec` 1 ครั้ง ส่วนโหมด `-Locked` ต้องเห็นบรรทัด `check passed`
-7. ลงใน `docs/README.md` ของโปรเจกต์ — ชื่อห้อง (`sandbox-agent-<ชื่อโฟลเดอร์>-<วันที่>`) · โหมด · port · คำสั่ง test ในห้อง
-
-**ทดสอบจริงแล้ว** บน Windows + Docker Desktop 4.46 (2026-10-05, โปรเจกต์ `sample-app`) — build ห้องได้ · unit test ผ่าน 15/15 · e2e บน Chromium ผ่าน 14/14 ในห้อง
-
-บั๊กที่เจอระหว่างทดสอบแก้ในสคริปต์แล้ว: PowerShell 5.1 กับ stderr · Playwright คนละรุ่นกับ image ฐาน · พอร์ตชน
-
-ถ้าสคริปต์พังบนเครื่องอื่น ให้ใช้ playbook `bug-fix` กับตัวสคริปต์
-
-**พอร์ต** — `up` หาพอร์ตว่างเอง เริ่มที่ 3000 แล้วบอกว่าได้พอร์ตไหน
-- ในห้องตั้งตัวแปร `APP_PORT` และ `PORT` เป็นพอร์ตนั้น และ `HOST=0.0.0.0`
-- แอปต้องฟังที่ `HOST` เพราะถ้าฟังแค่ `127.0.0.1` ในห้อง เครื่องจะเข้าไม่ถึง
-- ฝั่งเครื่องยังเปิดแค่ `127.0.0.1` เหมือนเดิม จึงเข้าจากเครื่องที่ `http://127.0.0.1:<พอร์ต>`
-
-**Playwright คนละรุ่น** — image ฐานมี Chromium รุ่นล่าสุด ถ้าโปรเจกต์ล็อก Playwright รุ่นอื่นไว้ ให้รัน `npx playwright install chromium` ในห้อง 1 ครั้งหลัง `npm ci` (ไม่ต้อง `--with-deps` เพราะ image มีให้แล้ว)
+You can add `-Locked` to either mode. It blocks outbound internet, leaving only the hosts in `allowlist.txt`. It suits work that runs code you do not yet trust.
 
 ---
 
-## 4 · ใช้ทุกวัน
+## 3 · Set up the lab for a project (first time)
 
-| ต้องการ | คำสั่ง (รันที่รากโปรเจกต์บนเครื่อง) |
+1. Check that Docker Desktop is running: `docker version` must show both Client and Server. If it does not, tell the user to open Docker Desktop and stop only this task.
+2. Copy every file in this skill's `assets/` to `<project>/.sandbox/` (at the root). Then declare `.sandbox/` as a root exception in the README of the code folder, following `project-doc-set` item 1.
+3. Adjust the `Dockerfile` (the project layer).
+   - For .NET, set `INSTALL_DOTNET=1` and add an `apt-get install` for whatever the project needs.
+   - **Do not edit `base.Dockerfile`** unless necessary, because every project shares it.
+   - If you need a test database, add it as a new service in `compose.yaml` (do not open a port to the outside).
+4. Add `.sandbox/.mode-*` and `.sandbox/.name-*` to `.gitignore`.
+5. Start the lab with `.\.sandbox\sandbox.ps1 up` (or `up -Isolated` · `up -Browser`). The first project on a machine must build the base image first, which takes about 5–15 minutes. Later projects are much faster.
+6. **Prove it works:** `sandbox.ps1 exec "node -v && python3 --version && git status"`. If the project has a test command, run it once through `exec`. In `-Locked` mode you must see the line `check passed`.
+7. Record in the project's `docs/README.md`: the lab name (`sandbox-agent-<folder name>-<date>`) · mode · port · test command in the lab.
+
+**Tested for real** on Windows + Docker Desktop 4.46 (2026-10-05, project `sample-app`): the lab built · unit tests passed 15/15 · e2e on Chromium passed 14/14 in the lab.
+
+Bugs found during testing are already fixed in the script: PowerShell 5.1 with stderr · Playwright a different version from the base image · port collisions.
+
+If the script breaks on another machine, use the `bug-fix` playbook on the script itself.
+
+**Ports:** `up` finds a free port itself, starting at 3000, and says which port it got.
+- Inside the lab it sets the variables `APP_PORT` and `PORT` to that port, and `HOST=0.0.0.0`.
+- The app must listen on `HOST`, because if it listens only on `127.0.0.1` inside the lab, the machine cannot reach it.
+- On the machine side the port is still opened only on `127.0.0.1`, so you reach it from the machine at `http://127.0.0.1:<port>`.
+
+**A different Playwright version:** the base image has the latest Chromium. If the project pins another Playwright version, run `npx playwright install chromium` in the lab once after `npm ci` (no `--with-deps` needed, because the image already has them).
+
+---
+
+## 4 · Daily use
+
+| Need | Command (run at the project root on the machine) |
 |---|---|
-| รันคำสั่งในห้อง (agent ใช้อันนี้) | `.\.sandbox\sandbox.ps1 exec "npm test"` |
-| เปิด shell ในห้อง | `.\.sandbox\sandbox.ps1 shell` |
-| ให้ Claude Code ทำงานในห้องเต็มที่ (**isolated เท่านั้น**) | `.\.sandbox\sandbox.ps1 claude` (ล็อกอินครั้งแรกครั้งเดียว volume เก็บไว้ · โหมด mount สคริปต์จะปฏิเสธ เพราะ `/work` คือโฟลเดอร์จริง) |
-| เอางานจากห้อง isolated ออกมา | `.\.sandbox\sandbox.ps1 sync` แล้วอ่าน patch ก่อน `git apply` |
-| ห้องทั้งหมดในเครื่อง | `.\.sandbox\sandbox.ps1 list` |
-| ล้างห้องให้สะอาด เริ่มใหม่ | `reset` แล้ว `up` |
-| หยุดทุกห้องในเครื่อง คืนหน่วยความจำ | `.\.sandbox\sandbox.ps1 stop-all` |
-| ห้องหลายห้องของโปรเจกต์เดียว | ใส่ `-Name <โปรเจกต์>-a1` ทุกคำสั่ง |
+| Run a command in the lab (agents use this one) | `.\.sandbox\sandbox.ps1 exec "npm test"` |
+| Open a shell in the lab | `.\.sandbox\sandbox.ps1 shell` |
+| Let Claude Code work fully in the lab (**isolated only**) | `.\.sandbox\sandbox.ps1 claude` (log in once the first time; the volume keeps it · in mount mode the script refuses, because `/work` is the real folder) |
+| Bring work out of an isolated lab | `.\.sandbox\sandbox.ps1 sync`, then read the patch before `git apply` |
+| All labs on the machine | `.\.sandbox\sandbox.ps1 list` |
+| Wipe the lab clean and start over | `reset`, then `up` |
+| Stop every lab on the machine and free memory | `.\.sandbox\sandbox.ps1 stop-all` |
+| Several labs for one project | Put `-Name <project>-a1` on every command |
 
-**กฎของ agent เมื่อโปรเจกต์มี `.sandbox/`**
-- install · build · test · dev server · migration และสคริปต์ใด ๆ ให้รันผ่าน `sandbox.ps1 exec` ไม่รันบนเครื่อง
-- skill ตรวจแอปของโปรเจกต์ (`app-verifier-setup`) รัน Playwright ในห้องแบบไม่มีหน้าจอ แล้วคัดภาพออกด้วย `docker compose cp` มาไว้ `_to_delete/`
-- ถ้าห้องหยุดอยู่ ให้ `up` เองได้เลย (ย้อนได้) ถ้าห้องพังจนแก้ไม่ได้ ก็ `reset` เองได้ เพราะของในห้องไม่ใช่ของผู้ใช้ — **ยกเว้น** ห้อง isolated ที่ยังไม่ได้ `sync` ต้อง sync ก่อนแล้วค่อย reset
+**Agent rules when a project has `.sandbox/`**
+- Run install · build · test · dev server · migration and any script through `sandbox.ps1 exec`. Never run them on the machine.
+- The project's app-checking skill (`app-verifier-setup`) runs Playwright headless in the lab, then copies the images out with `docker compose cp` into `_to_delete/`.
+- If the lab is stopped, you may `up` it yourself (reversible). If the lab breaks beyond repair, you may `reset` it yourself, because what is in the lab is not the user's. **Exception:** an isolated lab that has not been `sync`ed must be synced first, then reset.
 
 ---
 
-## 5 · เบราว์เซอร์เสมือนสำหรับทดสอบ
+## 5 · Virtual browser for testing
 
-| แบบ | ใช้เมื่อ | วิธี |
+| Type | Use when | How |
 |---|---|---|
-| headless ในห้อง (ค่าเริ่ม) | test อัตโนมัติ · verify skill · ไม่ต้องมีใครดู | Playwright Chromium มากับ image ฐานแล้ว |
-| **มองเห็นได้** (`up -Browser`) | อยากดู agent กดจริงทีละขั้น · ตรวจหน้าจอด้วยตา · อัดภาพ | เบราว์เซอร์จริงในคอนเทนเนอร์แยก ดูสดที่ `http://127.0.0.1:7900` และ Playwright ในห้องจะขับผ่าน `SELENIUM_REMOTE_URL` ให้เอง (Playwright เรียกความสามารถนี้ว่ายังทดลอง) |
-| ให้ Claude Code ในห้องคุมเบราว์เซอร์เอง | งานสำรวจหน้าเว็บที่ยังไม่มีสคริปต์ | ติดตั้ง Playwright MCP server ในห้อง (`.mcp.json` ของโปรเจกต์) ให้ทำงานแบบ headless |
+| Headless in the lab (default) | Automated tests · verify skill · nobody needs to watch | Playwright Chromium already comes with the base image |
+| **Visible** (`up -Browser`) | You want to watch the agent click step by step · check the screen by eye · record images | A real browser in a separate container, watched live at `http://127.0.0.1:7900`. Playwright in the lab drives it through `SELENIUM_REMOTE_URL` automatically (Playwright calls this capability experimental) |
+| Let Claude Code in the lab control the browser itself | Exploring web pages that have no script yet | Install the Playwright MCP server in the lab (the project's `.mcp.json`) and run it headless |
 
-- เบราว์เซอร์ในห้องไม่มีบัญชี ไม่มีคุกกี้ ไม่มีรหัสผ่านของผู้ใช้ — ล็อกอินด้วยบัญชีทดสอบของโปรเจกต์เท่านั้น
-- ภาพและวิดีโอจากการทดสอบ คัดออกมาที่ `_to_delete/` ด้วย `docker compose cp`
-- Playwright MCP ในห้อง (ตัวอย่างจากงานสอน ยังไม่ใช่เกณฑ์): รันเป็น root ต้องใส่ `--no-sandbox` · ค่า `--browser` ต้องตรงกับ `--help` ของรุ่นที่ลง (`chromium` หรือ `chrome` ถ้าไม่ตรงจะหาเบราว์เซอร์ไม่เจอ) · ภาพ screenshot ที่ตั้งชื่อแบบ relative ไปลงที่ working directory ของ process ไม่ใช่ `--output-dir` ต้องย้ายเอง · คลิกแล้ว timeout "not visible/stable" อาจเป็นแท็บเบื้องหลัง ดู `e2e-testing-patterns`
-- เบราว์เซอร์ของผู้ใช้บนเครื่อง (Chrome ที่ล็อกอินอยู่) ใช้กับเว็บจริงที่ต้องใช้บัญชีจริงเท่านั้น และทำตามกติกาของเครื่องมือนั้น ไม่ใช่ที่ทดสอบ
+- The browser in the lab has no accounts, cookies, or user passwords. Log in only with the project's test accounts.
+- Copy images and videos from tests out to `_to_delete/` with `docker compose cp`.
+- Playwright MCP in the lab (examples from teaching work, not yet a standard): running as root needs `--no-sandbox` · the `--browser` value must match the `--help` of the installed version (`chromium` or `chrome`; if it does not match, it cannot find the browser) · screenshots with a relative file name land in the process's working directory, not `--output-dir`, so move them yourself · a click that times out with "not visible/stable" may be a background tab; see `e2e-testing-patterns`.
+- The user's own browser on the machine (the logged-in Chrome) is for real websites that need a real account, and follows that tool's rules. It is not a place to test.
 
 ## 6 · CAPTCHA
 
-- **ระบบของเราเอง** — CAPTCHA ไม่ควรขวางการทดสอบตั้งแต่ต้น
-  - ใช้ค่าทดสอบ (test site key) ที่ผู้ให้บริการแจกไว้ ซึ่งผ่านทุกครั้ง reCAPTCHA · hCaptcha · Cloudflare Turnstile มีให้ทุกเจ้า ดูค่าได้จากเอกสารผู้ให้บริการ
-  - หรือปิดด้วยค่าตั้งเฉพาะ environment ทดสอบ (`CAPTCHA_ENABLED=false`)
-  - **ค่าทดสอบต้องไม่หลุดไปถึงระบบจริง** — ใส่ตัวตรวจตอนเริ่มระบบว่า production ห้ามใช้ test key (`config-and-secrets`)
-- **เว็บของคนอื่น** — agent **ไม่แก้ CAPTCHA และไม่หาทางหลบ** (ไม่ใช้บริการรับแก้ ไม่ปลอมตัวเป็นคน) ถ้าเจอ CAPTCHA ให้หยุดขั้นนั้น บอกผู้ใช้ให้ทำเอง แล้วทำส่วนอื่นต่อ ถ้าต้องดึงข้อมูลจากเว็บนั้นบ่อย ให้หา API ทางการแทน
-- เหตุผล — CAPTCHA คือเจ้าของเว็บบอกว่า "ห้ามบอท" การหลบจึงเท่ากับฝ่าข้อตกลงของเขา และทำให้ IP หรือบัญชีถูกแบน
+- **Our own system:** a CAPTCHA should not block testing from the start.
+  - Use the test site keys the provider publishes, which pass every time. reCAPTCHA · hCaptcha · Cloudflare Turnstile all have them; see the provider's documentation for the values.
+  - Or turn it off with a setting for the test environment only (`CAPTCHA_ENABLED=false`).
+  - **Test values must never reach the real system.** Add a startup check that production must not use a test key (`config-and-secrets`).
+- **Other people's websites:** the agent **does not solve a CAPTCHA and does not look for a way around it** (no solving services, no pretending to be a person). If you meet a CAPTCHA, stop that step, tell the user to do it themselves, and continue with the other parts. If you need data from that site often, look for an official API instead.
+- Reason: a CAPTCHA is the site owner saying "no bots." Getting around it breaks their terms and gets the IP or account banned.
 
-## 7 · ในห้องทำได้เต็มที่
+## 7 · What you may do freely in the lab
 
-ติดตั้งโปรแกรม (`sudo apt-get` · `npm -g` · `pip`) · ลบไฟล์ในห้อง · รันเซิร์ฟเวอร์และฐานข้อมูลทดสอบ · ดาวน์โหลด dependency · commit ในสำเนาของโหมด isolated · ทดลองทำลายแล้วสร้างใหม่
+Install programs (`sudo apt-get` · `npm -g` · `pip`) · delete files in the lab · run servers and test databases · download dependencies · commit in the copy in isolated mode · try destroying things and rebuild.
 
-เรื่องที่ยังอยู่ใน "รออนุมัติ" แม้อยู่ในห้อง (เตรียมไว้ ไม่ทำเอง) — เพราะผลออกไปนอกห้อง:
-- ส่งข้อมูล อีเมล ข้อความ หรือเรียก API ที่มีผลจริงกับคนหรือระบบภายนอก
-- ใช้บัญชีจริง ค่าลับจริง ฐานข้อมูลจริง
-- push ขึ้น remote · deploy
-- ในโหมด mount — ลบหรือเขียนทับไฟล์ของผู้ใช้ใน `/work` ที่ไม่ใช่ผลงานของรอบนี้ (มันคือโฟลเดอร์จริง)
+These still stay under "รออนุมัติ" (awaiting approval) even inside the lab (prepare them, do not do them yourself), because the result leaves the lab:
+- Sending data, email, or messages, or calling an API that has a real effect on people or outside systems.
+- Using real accounts, real secrets, or the real database.
+- Pushing to a remote · deploying.
+- In mount mode: deleting or overwriting the user's files in `/work` that are not this round's work (it is the real folder).
 
 ---
 
-## 8 · ห้ามแก้ compose ให้มีสิ่งเหล่านี้
+## 8 · Never edit compose to include these
 
-| ห้าม | เพราะ |
+| Never | Because |
 |---|---|
-| `privileged: true` · `pid: host` · `network_mode: host` | ห้องจะมองเห็นและแตะเครื่องจริงได้ |
-| mount `/var/run/docker.sock` หรือ `//./pipe/docker_engine` | คุม Docker ได้ = คุมเครื่องได้ |
-| mount โฟลเดอร์ home · `.ssh` · `.aws` · `.azure` · `.claude` ของเครื่อง · โปรไฟล์เบราว์เซอร์ · ไดรฟ์ทั้งลูก | ค่าลับหลุดได้ทันทีที่โค้ดในห้องอ่าน |
-| เปิด port แบบ `"3000:3000"` (ทุกการ์ดแลน) | คนในเครือข่ายเดียวกันเข้าถึงได้ — ใช้ `127.0.0.1:` เสมอ |
-| ใส่ค่าลับจริงใน `Dockerfile` หรือ image | ค่าลับติดไปกับ image ตลอด |
-| ปิดหรือเพิ่ม limit `cpus` `mem_limit` `pids_limit` จนเครื่องค้าง | ห้องที่วนไม่จบจะกินเครื่องทั้งเครื่อง |
-| mount ของจากเครื่องแบบเขียนได้ ทั้งที่ห้องแค่ต้องอ่าน (`ref/` · ข้อมูลตัวอย่าง · cache SDK ที่แชร์ · ซอร์สต้นทางของโหมด isolated) | โค้ดในห้องที่ถูกหลอกจะเขียนกลับเครื่องได้ — ใส่ `:ro` ทุก mount ที่ไม่ใช่ผลงานของรอบนี้ แล้วให้ห้องคัดลอกเข้าพื้นที่ของตัวเองถ้าต้องแก้ (แนวคิดจาก anthropics/claude-code devcontainer และ trailofbits/skills) |
+| `privileged: true` · `pid: host` · `network_mode: host` | The lab could see and touch the real machine |
+| Mounting `/var/run/docker.sock` or `//./pipe/docker_engine` | Controlling Docker = controlling the machine |
+| Mounting the machine's home folder · `.ssh` · `.aws` · `.azure` · `.claude` · browser profiles · a whole drive | Secrets can leak the moment code in the lab reads them |
+| Opening a port like `"3000:3000"` (every network card) | People on the same network can reach it. Always use `127.0.0.1:` |
+| Putting real secrets in the `Dockerfile` or image | The secret stays in the image forever |
+| Removing or raising the limits `cpus` `mem_limit` `pids_limit` until the machine hangs | A lab stuck in a loop will eat the whole machine |
+| Mounting things from the machine as writable when the lab only needs to read (`ref/` · sample data · a shared SDK cache · the source folder of isolated mode) | Tricked code in the lab can write back to the machine. Add `:ro` to every mount that is not this round's work, and have the lab copy into its own space if it must edit (idea from anthropics/claude-code devcontainer and trailofbits/skills) |
 
-เอกสารของ Claude Code เตือนไว้ว่า แม้ในคอนเทนเนอร์ การรันแบบไม่มีหน้าต่างขออนุญาต (`--dangerously-skip-permissions`) ยังกันไม่ได้ถ้าโค้ดในโปรเจกต์ตั้งใจขโมยของที่อยู่ในห้อง รวมถึง token ของ Claude Code เอง — ใช้กับ repo ที่ไว้ใจเท่านั้น และใช้ `-Locked` เมื่อไม่แน่ใจ
+The Claude Code documentation warns that even in a container, running without permission prompts (`--dangerously-skip-permissions`) cannot stop project code that deliberately steals what is in the lab, including Claude Code's own token. Use it only with a repo you trust, and use `-Locked` when unsure.
 
-`sandbox.ps1 claude` จึงรันได้เฉพาะโหมด isolated — โหมด mount สคริปต์ปฏิเสธ เพราะ `/work` คือโฟลเดอร์จริงของผู้ใช้ (§7 ข้อสุดท้าย)
+So `sandbox.ps1 claude` runs only in isolated mode. In mount mode the script refuses, because `/work` is the user's real folder (§7, last item).
 
-**ขีดจำกัดของ `-Locked`** — DNS ออกได้เฉพาะ resolver ที่ห้องได้รับ (ของ Docker) ไม่ใช่ DNS server ใดก็ได้ แต่ resolver นั้นยังส่งต่อคำถามออกนอก จึงยังแอบส่งข้อมูลผ่าน DNS (DNS tunnelling) ได้ งานที่ห้ามข้อมูลรั่วเด็ดขาดให้รันแบบไม่มีเครือข่ายเลย
+**Limits of `-Locked`:** DNS can go out only through the resolver the lab was given (Docker's), not any DNS server. But that resolver still forwards queries outward, so data can still be smuggled out through DNS (DNS tunnelling). For work where data must never leak, run with no network at all.
 
 ---
 
-## 9 · หมายเหตุ Windows
+## 9 · Windows notes
 
-- Docker Desktop ใช้ WSL 2 ไฟล์บนไดรฟ์ `C:` ที่ mount เข้าไปจึงช้ากว่าไฟล์ใน volume ถ้า build หรือ test ช้ามาก ให้ใช้ `-Isolated` (ตรวจจริง: `npm ci` แค่ 2 แพ็กเกจใช้ 52 วินาทีบนโฟลเดอร์ OneDrive)
-- **โปรเจกต์ในโฟลเดอร์ OneDrive** — โหมด mount จะทำให้ `node_modules` และไฟล์ build ถูก sync ขึ้นคลาวด์ จึงควรใช้ `-Isolated` หรือย้ายโปรเจกต์ออกจาก OneDrive
-- ถ้ารัน `sandbox.ps1` ไม่ได้ ให้ใช้ `powershell -ExecutionPolicy Bypass -File .\.sandbox\sandbox.ps1 <คำสั่ง>`
-- `-Locked` อ่าน IP ของโฮสต์ครั้งเดียวตอนเปิด บริการที่เปลี่ยน IP บ่อยอาจหลุด ให้ `up -Locked` ใหม่
+- Docker Desktop uses WSL 2. Files on drive `C:` that are mounted in are slower than files in a volume. If build or test is very slow, use `-Isolated` (verified: `npm ci` for just 2 packages took 52 seconds on a OneDrive folder).
+- **Projects in a OneDrive folder:** mount mode makes `node_modules` and build files sync to the cloud, so use `-Isolated` or move the project out of OneDrive.
+- If you cannot run `sandbox.ps1`, use `powershell -ExecutionPolicy Bypass -File .\.sandbox\sandbox.ps1 <command>`.
+- `-Locked` reads the host's IP once at startup. A service whose IP changes often may drop out; run `up -Locked` again.
 
-## เชื่อมกับ skill อื่น
+## Links to other skills
 
-- `parallel-attempts-pick-best` — ปกติผู้แข่งใช้ git worktree ต่อตัว · ใช้ห้อง isolated ต่อตัว (`-Name <โปรเจกต์>-a1` …) เฉพาะงานที่ต้องแยกเครื่องจริง
-- [`app-verifier-setup`](../app-verifier-setup/SKILL.md) — สคริปต์ `start` ของ verify skill รันในห้อง
-- `config-and-secrets` — ค่าทดสอบใส่ `.env` ที่ไม่เข้า git และไม่ bake ลง image
-- playbook `housekeeping` ของ `superuser` — เก็บกวาดห้องและ image เก่า
+- `parallel-attempts-pick-best`: normally competitors use one git worktree each. Use one isolated lab each (`-Name <project>-a1` …) only for work that needs truly separate machines.
+- [`app-verifier-setup`](../app-verifier-setup/SKILL.md): the verify skill's `start` script runs in the lab.
+- `config-and-secrets`: put test values in a `.env` that stays out of git, and do not bake them into the image.
+- The `superuser` playbook `housekeeping`: cleans up old labs and images.

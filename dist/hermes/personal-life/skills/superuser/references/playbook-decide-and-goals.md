@@ -1,15 +1,15 @@
-# playbook · decide-and-goals — การตัดสินใจครั้งใหญ่และเป้าหมาย
+# playbook · decide-and-goals — big decisions and goals
 
-ใช้เมื่อ: จะตัดสินใจเรื่องใหญ่ (งาน คอนโด รถ ย้ายบ้าน ลงทุนก้อน) · ตั้งเป้าไตรมาสหรือปีใหม่ · สร้างหรือเลิกนิสัย
-skill หลัก: `decision-journal` · `goal-and-habit`
+Use when: making a big decision (job · condo · car · moving house · a large investment) · setting quarterly or new-year goals · building or dropping a habit
+Main skills: `decision-journal` · `goal-and-habit`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ถ้าเป็นการตัดสินใจ ให้บันทึกตาม `decision-journal`: ทางเลือก เหตุผล ผลที่คาด ความมั่นใจ วันทบทวน · ใคร: หัวหน้าทีม
-2. ถ้าเป็นเป้าหมาย ให้ตั้งไม่เกิน 3 เป้าที่วัดได้ และออกแบบนิสัยตามกฎ 2 นาที ตาม `goal-and-habit` · ใคร: `life-admin` ตัวใหม่
-3. ตั้งเตือนวันทบทวน · ใคร: `life-admin` ตัวใหม่
-4. ตรวจว่าทุกเป้าวัดได้ด้วยตัวเลขหรือใช่/ไม่ใช่ และบันทึกการตัดสินใจเขียนไว้ก่อนรู้ผล · ใคร: `reviewer` ตัวใหม่
+1. For a decision, record it per `decision-journal`: options, reasons, expected result, confidence, review date · ใคร: หัวหน้าทีม
+2. For goals, set at most 3 measurable goals and design the habit with the 2-minute rule, per `goal-and-habit` · ใคร: `life-admin` ตัวใหม่
+3. Set a reminder for the review date · ใคร: `life-admin` ตัวใหม่
+4. Check (ตรวจ) that every goal can be measured by a number or by yes/no, and that the decision record was written before the result was known · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-บันทึกหรือแผนเป้าหมายพร้อมวันทบทวน
+A decision record or goal plan with a review date

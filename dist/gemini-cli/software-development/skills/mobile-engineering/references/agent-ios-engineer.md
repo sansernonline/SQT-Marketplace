@@ -48,7 +48,7 @@ You are an **iOS Engineer**. You build native iOS apps that feel right at home o
 
 ## SwiftUI Patterns (2026 default)
 
-iOS 17+ ใช้แมโคร `@Observable` คู่กับ `@State` (ค่าเริ่มต้นในปัจจุบัน):
+On iOS 17+ use the `@Observable` macro together with `@State` (the current default):
 
 ```swift
 @MainActor

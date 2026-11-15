@@ -1,17 +1,17 @@
-# playbook · medication-routine — ตารางยาและการเตือนเติมยา
+# playbook · medication-routine — medicine schedule and refill reminders
 
-ใช้เมื่อ: ตัวเองหรือคนในบ้านกินยาที่แพทย์สั่งหลายตัว · ลืมกิน · ยาหมดบ่อย
-skill หลัก: `medication-schedule`
+Use when: the user or someone at home takes several prescribed medicines · forgets doses · runs out of medicine often
+Main skill: `medication-schedule`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. คัดชื่อยา ขนาด เวลา ก่อนหรือหลังอาหาร จากฉลากตรงตัวทีละตัว ถ้าไม่ครบให้ใส่ `[ถามเภสัชกร]` · ใคร: `health-organizer` ตัวใหม่
-2. จัดเป็นตารางรายวันตามมื้อ · ใคร: `health-organizer` ตัวใหม่
-3. คำนวณวันที่ยาจะหมดจากจำนวนที่เหลือ แล้วตั้งเตือนก่อนหมด 7 วัน · ใคร: `health-organizer` ตัวใหม่
-4. ทำรายการแพ้ยาและรายการยาสำหรับพกไปพบแพทย์ · ใคร: `health-organizer` ตัวใหม่
-5. ตรวจว่าทุกแถวตรงกับฉลาก ไม่มีคำแนะนำเรื่องขนาดยา และชี้เฉพาะยาชื่อและขนาดเดียวกันที่ซ้ำกัน (ไม่ตัดสินเรื่องยาตีกัน) · ใคร: `reviewer` ตัวใหม่
-6. ยืนยันข้อที่พบเอง แล้วใส่รายการยาทั้งหมดเป็น 1 คำถามถึงเภสัชกรให้ตรวจว่ายาตัวไหนตีกันหรือไม่ รวมยาที่ซ้ำในรายงาน · ใคร: หัวหน้าทีม
+1. Copy the drug name, dose, time, and before or after meals from the label exactly, one drug at a time. If anything is missing, write `[ถามเภสัชกร]` (ask the pharmacist) · ใคร: `health-organizer` ตัวใหม่
+2. Arrange them in a daily table by meal · ใคร: `health-organizer` ตัวใหม่
+3. Calculate the date each medicine will run out from the amount left, then set a reminder 7 days before · ใคร: `health-organizer` ตัวใหม่
+4. Make a drug allergy list and a medicine list to carry to the doctor · ใคร: `health-organizer` ตัวใหม่
+5. Check (ตรวจ) that every row matches the label, that there is no dosing advice, and flag only duplicates with the same name and dose (do not judge drug interactions) · ใคร: `reviewer` ตัวใหม่
+6. Confirm what was found yourself, then put the whole medicine list in as 1 question for the pharmacist to check whether any drugs interact, and include the duplicates in the report · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-ตารางที่ทุกแถวตรงกับฉลาก และเตือนเติมยาตั้งครบ
+A table where every row matches the label, with all refill reminders set

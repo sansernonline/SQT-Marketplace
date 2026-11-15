@@ -1,11 +1,11 @@
-# รูปในเอกสาร FSD
+# Figures in an FSD document
 
-ตารางนี้บอกว่าหัวข้อไหนของ FSD ควรมีรูปชนิดไหน ส่วนเครื่องมือที่ใช้วาดและเรื่องธีมสีอยู่ใน `SKILL.md` ข้อ 10
+This table says which figure type belongs in which FSD section. The drawing tool and the color theme are in `SKILL.md` item 10.
 
-| หัวข้อ | รูปที่ควรมี |
+| Section | Figure to include |
 |---|---|
-| 3 ภาพรวมกระบวนการ | ผังขั้นตอนงานตั้งแต่ต้นจนจบ |
-| 4 use case ที่มีหลายฝ่าย | sequence diagram |
-| 5 หน้าจอ | ภาพร่างหน้าจอ พร้อมหมายเลขชี้ไปที่ตารางฟิลด์ |
-| 6 สถานะ | state diagram — **คู่กับตาราง ไม่ใช่แทนตาราง** |
-| 8 ข้อมูล | ER diagram เฉพาะตารางที่เกี่ยวกับโมดูลนี้ |
+| 3 Process overview | Flowchart of the work from start to finish |
+| 4 Use cases with several parties | Sequence diagram |
+| 5 Screens | Screen sketch with numbers pointing to the field table |
+| 6 States | State diagram — **a companion to the table, not a replacement** |
+| 8 Data | ER diagram of only the tables this module touches |

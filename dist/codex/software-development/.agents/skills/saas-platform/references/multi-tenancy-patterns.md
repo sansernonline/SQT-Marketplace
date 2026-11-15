@@ -78,9 +78,9 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON orders TO app_user;
 
 กฎที่ต้องถูกทุกข้อ (ที่มา [PostgreSQL — Row Security Policies](https://www.postgresql.org/docs/current/ddl-rowsecurity.html) · [SET](https://www.postgresql.org/docs/current/sql-set.html) · ตรวจ 22 ต.ค. 2569)
 
-- เจ้าของตารางข้าม RLS ถ้าไม่ได้ `FORCE ROW LEVEL SECURITY` · superuser และ role ที่มี `BYPASSRLS` ข้ามเสมอ → แอปต้องใช้ role แยก
-- `SET LOCAL` นอก transaction "emits a warning and otherwise has no effect" → ตั้งค่าภายใน `BEGIN … COMMIT` เท่านั้น
-- `SET` (ไม่มี LOCAL) ติดไปทั้ง session → connection ที่คืนเข้า pool จะพา tenant เดิมไปให้ request ถัดไป ห้ามใช้
+- The table owner bypasses RLS unless `FORCE ROW LEVEL SECURITY` is set · a superuser and any role with `BYPASSRLS` always bypass it → the app must use a separate role
+- `SET LOCAL` outside a transaction "emits a warning and otherwise has no effect" → set it only inside `BEGIN … COMMIT`
+- `SET` (without LOCAL) lasts for the whole session → a connection returned to the pool carries the old tenant into the next request. Do not use it
 - ห้ามต่อ string tenant id เข้า SQL — ส่งเป็น parameter (`$1`) ผ่าน `set_config(name, value, true)` (`true` = มีผลเฉพาะ transaction นี้)
 
 ### Application Enforcement (defense in depth)

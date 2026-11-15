@@ -1,40 +1,40 @@
-# สูตร 9 ลงลึก
+# Formula 9 in depth
 
-เปิดเมื่อผลิตชื่อด้วยสูตร 9
+Open this when you generate names with formula 9.
 
-## แบบที่ให้ชื่อดูเท่าที่สุดโดยไม่ต้องประดิษฐ์คำ
+## The pattern that makes a name look coolest without inventing a word
 
-`Tailscale` = *tail* + *scale* ซึ่งทั้ง 2 คำไม่เกี่ยวกับเครือข่ายส่วนตัวเลย และไม่เกี่ยวกันเองด้วย
+`Tailscale` = *tail* + *scale*. Neither word has anything to do with private networks, and the two words have nothing to do with each other either.
 
-| ต่างจากสูตร 2 ตรงไหน | |
+| How it differs from formula 2 | |
 |---|---|
-| สูตร 2 | **ตัด**พยางค์ก่อนต่อ เช่น `fold`+`drop` → Foldrop คำที่ได้จึงไม่ใช่คำจริง |
-| สูตร 9 | **ไม่ตัดอะไรเลย** เอาคำจริง 2 คำเต็ม ๆ วางติดกัน |
+| Formula 2 | **Cuts** syllables before joining, such as `fold`+`drop` → Foldrop, so the result is not a real word |
+| Formula 9 | **Cuts nothing.** Put 2 whole real words side by side |
 
-**ทำไมได้ผล**
+**Why it works**
 
-| เหตุผล | |
+| Reason | |
 |---|---|
-| จำง่าย | ผู้ฟังรู้จักทั้ง 2 คำอยู่แล้ว ไม่ต้องจำการสะกดใหม่ |
-| ไม่ซ้ำใคร | คู่คำที่ไม่มีเหตุผลต้องอยู่ด้วยกัน จึงไม่มีใครเคยจับคู่ไว้ |
-| โดเมนหาง่าย | มักหาง่ายกว่าคำเดี่ยว แต่ยังต้องตรวจตามหัวข้อ 5 ใน `SKILL.md` |
-| ผ่านทดสอบโทรศัพท์ | พูดแล้วพิมพ์ถูกทันที เพราะเป็นคำที่เขารู้จัก |
+| Easy to remember | The listener already knows both words, so there is no new spelling to learn |
+| Unique | Nothing forces these words together, so nobody has paired them before |
+| Domains are easier to find | Usually easier than a single word, but still check them as in section 5 of `SKILL.md` |
+| Passes the phone test | The listener types it correctly at once, because the words are familiar |
 
-**กฎของสูตรนี้**
+**Rules for this formula**
 
-- รวมกันไม่เกิน **3 พยางค์** — `Tailscale` 2 · `Basecamp` 2 · `Snowflake` 2
-- **คำแรกควรเป็นรูปธรรม** คือสิ่งที่นึกภาพออก (tail, snow, fire, base, bit, black, cloud)
-- อย่าให้คู่คำอธิบายสินค้า เพราะถ้าอธิบายได้ มันจะกลายเป็นชื่อเชย ๆ แบบ `DataSync`
-- **ห้ามให้ความหมายรวมกันแล้วแปลก** ลองอ่านออกเสียงและนึกภาพก่อน
-- ตัวสะกดต้องไม่ชนกันจนอ่านยาก ให้เลี่ยงคำแรกที่ลงท้ายด้วยตัวเดียวกับที่คำหลังขึ้นต้น
+- Total of at most **3 syllables**: `Tailscale` 2 · `Basecamp` 2 · `Snowflake` 2
+- **The first word should be concrete**, something you can picture (tail, snow, fire, base, bit, black, cloud)
+- Do not let the pair describe the product. If it explains the product, it becomes a dated name like `DataSync`
+- **The combined meaning must not come out odd.** Read it aloud and picture it first
+- Spellings must not collide into something hard to read. Avoid a first word that ends with the same letter the second word starts with
 
-**วิธีผลิต** — ทำ 2 คลังแยกกัน แล้วสุ่มจับคู่และอ่านออกเสียงทุกคู่
+**How to generate** — build 2 separate pools, then pair at random and read every pair aloud
 
-| คลัง A — รูปธรรม | คลัง B — โครงสร้าง/มาตรา |
+| Pool A: concrete | Pool B: structure/measure |
 |---|---|
 | tail · snow · fire · bit · black · cloud · iron · salt · moon · north · glass · pine | scale · flake · base · bucket · camp · bird · flare · stack · frame · gate · port · line |
 
-ตัวอย่างที่ได้จากการจับคู่ — `Saltframe` · `Pinegate` · `Moonstack` · `Ironport` · `Glassline`
+Example pairs: `Saltframe` · `Pinegate` · `Moonstack` · `Ironport` · `Glassline`
 
-> **ความหมายใส่ทีหลังได้เต็มที่** (ดูข้อ 3) — `Tailscale` ไม่ได้มีความหมายตั้งแต่แรก
-> แต่พอใช้ไปสักพัก คนก็ผูกมันกับเรื่องของเครือข่ายที่ขยายได้ไปเอง
+> **Meaning can be added fully afterward** (see item 3). `Tailscale` had no meaning at the start,
+> but after some use, people tied it to the idea of a network that can scale.

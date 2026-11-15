@@ -1,8 +1,8 @@
 # .NET และ Angular
 
-> ระวัง: โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/health.node.js` และ
-> `assets/health_py.py` ที่รันจริงครบทุก endpoint แล้ว) โค้ดนี้เป็นการตั้งค่ามาตรฐานของ
-> ASP.NET Core ตอนรันครั้งแรกให้เทียบ response กับรูปร่างใน SKILL.md ข้อ 1
+> Caution: the code in this file is **not yet compiled or tested** (unlike `assets/health.node.js` and
+> `assets/health_py.py`, which have been run against every endpoint). It is the standard setup of
+> ASP.NET Core. On the first run, compare the response with the shape in SKILL.md section 1.
 
 ---
 
@@ -70,7 +70,7 @@ app.MapGet("/version", () => Results.Ok(new
 }));
 ```
 
-ให้ response ตรงรูปแบบเดียวกับสแต็กอื่น:
+Make the response match the same format as the other stacks:
 
 ```csharp
 static Task WriteReady(HttpContext ctx, HealthReport report)
@@ -106,7 +106,7 @@ static Task WriteLive(HttpContext ctx, HealthReport _)
 
 ### Error envelope (RFC 9457)
 
-ASP.NET Core มี `ProblemDetails` มาให้อยู่แล้ว ให้ใช้ของที่มี อย่าประดิษฐ์รูปแบบเอง
+ASP.NET Core already ships `ProblemDetails`. Use it, and do not invent your own format.
 
 ```csharp
 builder.Services.AddProblemDetails(o => o.CustomizeProblemDetails = ctx =>
@@ -122,9 +122,9 @@ app.UseStatusCodePages();
 
 ### Graceful shutdown
 
-ให้ `/health/ready` ตอบ down ก่อนปิดจริงสักพัก เพื่อให้ load balancer ตัดเราออกจาก pool ทัน
-ใช้ `IHostedLifecycleService.StoppingAsync` (.NET 8 ขึ้นไป) เพราะ host เรียกมัน**ก่อน**หยุด Kestrel (หลัง `ApplicationStopping`)
-จึงรอแบบ `await Task.Delay` ได้โดยไม่บล็อกเธรด และ server ยังตอบ 503 ให้ load balancer เห็น
+Make `/health/ready` answer down for a short while before the real shutdown, so the load balancer removes the instance from its pool in time.
+Use `IHostedLifecycleService.StoppingAsync` (.NET 8 and later), because the host calls it **before** it stops Kestrel (after `ApplicationStopping`).
+So you can wait with `await Task.Delay` without blocking a thread, and the server still answers 503 for the load balancer to see.
 
 ```csharp
 // สถานะร่วม: ตัวรอปิดเขียน · health check อ่าน
@@ -163,7 +163,7 @@ builder.Services.Configure<HostOptions>(o =>
 
 ### สิ่งที่ต้องเปิดก่อน deploy
 
-ลงทะเบียน service ได้**ก่อน** `builder.Build()` เท่านั้น — หลัง Build รายการ service เป็นแบบอ่านอย่างเดียว เรียก `builder.Services.Add…` ตอนนั้นจะได้ `InvalidOperationException` ตอนเริ่มแอป
+Register services only **before** `builder.Build()`. After Build the service list is read-only, and calling `builder.Services.Add…` then throws `InvalidOperationException` at app start.
 
 ```csharp
 // ---- ก่อน Build: ลงทะเบียน service ----
@@ -212,7 +212,7 @@ export const requestIdInterceptor: HttpInterceptorFn = (req, next) => {
 };
 ```
 
-**แกะ problem+json ให้เป็นข้อความที่ผู้ใช้อ่านรู้เรื่อง**:
+**Turn problem+json into a message the user can understand**:
 
 ```ts
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
@@ -229,7 +229,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 };
 ```
 
-**หน้าสถานะระบบ** ให้ทีมซัพพอร์ตเปิดดูเองได้โดยไม่ต้องเรียกนักพัฒนา:
+**System status page**, so the support team can check it without calling a developer:
 
 ```ts
 this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r));

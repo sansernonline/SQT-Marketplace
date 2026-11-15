@@ -2,57 +2,57 @@
 
 Use when one attempt may lock in a wrong design or plan
 
-# parallel-attempts-pick-best — ลองหลายทาง เลือกทางที่ดีที่สุด
+# parallel-attempts-pick-best — try several ways, pick the best
 
-> ทางแรกที่คิดได้มักไม่ใช่ทางที่ดีที่สุด แต่ถ้าลงมือไปแล้วจะไม่มีใครย้อนกลับมาลองทางอื่น
+> The first way you think of is often not the best, but once you start building, nobody comes back to try another.
 
-มาจาก `arena` ของ pstack
+Comes from `arena` in pstack.
 
-แค่อยากได้ทางเลือกบนกระดาษก่อนลงมือ ไม่ต้องสร้างจริง → agent `brainstormer`
+If you only want options on paper before starting, with nothing built, use the agent `brainstormer`.
 
-เส้นแบ่งกับ [`adversarial-review-panel`](../adversarial-review-panel/SKILL.md): skill นี้สร้างหลายแบบก่อนเลือก (ยังไม่มีงาน หรือรูปแบบยังไม่ลงตัว) · panel โจมตีงานที่เสร็จแล้ว 1 ชิ้นก่อนส่ง · ใช้ต่อกันได้: เลือกแบบที่ชนะแล้วส่งเข้า panel
+The line between this and [`adversarial-review-panel`](../adversarial-review-panel/SKILL.md): this skill builds several versions before choosing (no work yet, or the form is not settled) · the panel attacks 1 finished piece before shipping · they chain: pick the winning version, then send it to the panel.
 
-## 1 · ตั้งโจทย์
+## 1 · Set the task
 
-0. **งานที่ตัดสินด้วยรสนิยม (ไอคอน · โลโก้ · หน้าตา · สี) ขอตัวอย่างที่ผู้ใช้ชอบ 2–3 ชิ้นก่อนแข่ง** แล้วใส่ไว้ในโจทย์ทุกตัว · ไม่มีตัวอย่าง ทุกแนวก็เดารสนิยมกันเอง ผู้ใช้จะไม่ชอบสักแนว (ไอคอน plugin 3 แนวถูกปฏิเสธทั้งหมด 2026-10-26) · ก่อนขอ ให้ค้นงานจริงในหมวดเดียวกันเองแบบนักออกแบบตาม `design-references` ประเภทที่ตรงงาน (ของที่จะวางข้างกัน · กฎของปลายทาง · แนวที่ใช้จนเฝือ) แล้วเสนอ 3–4 แนวพร้อมลิงก์ให้ผู้ใช้เลือก ไม่เสนอแนวจากความรู้สึก (ผู้ใช้ขอ 2026-10-26)
-1. บอกให้ชัดว่าทุกตัวต้องส่งอะไร (ฉบับร่างข้อเสนอ · ข้อความขาย · หน้าสไลด์ · แผน · ฟังก์ชัน) — ทุกตัวได้โจทย์เดียวกัน เพราะโจทย์คือสัญญา
-2. เขียนเกณฑ์ให้คะแนน 3–6 ข้อที่ตรวจได้ เช่น (งานเขียน) อ่านลื่นเมื่ออ่านออกเสียง · ครบตามข้อกำหนด · ถูกกว่า X · (โค้ด) ผ่าน test — **เกณฑ์เก็บไว้กับตัวเลือก ไม่ส่งให้ผู้แข่ง** · คุณภาพภาษาไทยของงานเขียนไม่ให้โมเดลโหวตจัดอันดับ เจ้าของเป็นคนเลือกเอง โมเดลทำได้แค่ไล่รหัสกฎจาก `human-writing` ที่เจอในแต่ละตัว
-3. เลือกจำนวน ปกติใช้ 3 ตัว ส่วนงานใหญ่หรือแพงใช้ไม่เกิน 4
-4. ความต่างต้องมาจากที่ไหนสักแห่ง เพราะใน Claude Code โมเดลมาจากค่ายเดียวกัน
-   - **ค่าเริ่ม:** ให้แต่ละตัวมีข้อจำกัดต่างกัน เช่น "ไม่เกิน 1 หน้า" · "เริ่มจากคำถามของผู้อ่าน" · ทุกตัวใช้ชนิด agent + โมเดล + effort เดียวกัน
-   - ข้อจำกัดยังไม่ทำให้ต่างพอ → ผสมระดับโมเดล (ใหญ่ · กลาง — ชื่อจริงดูหัวข้อ 5 ใน `superuser`) (ต่างโมเดล = ต่าง cache)
-5. กำหนดที่ส่งงานแยกกัน — โฟลเดอร์แยกต่อตัว `_to_delete/attempts-<เรื่อง>/<n>/` ห้ามเขียนที่เดียวกัน (เหมือน [`parallel-split-and-merge`](../parallel-split-and-merge/SKILL.md)) · งานโค้ด → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
+0. **For work decided by taste (icons · logos · looks · colors), ask for 2–3 examples the user likes before the contest**, and put them in every contestant's task · with no examples, every direction guesses the taste on its own and the user will like none (3 plugin icon directions were all rejected on 2026-10-26) · before asking, search real work in the same category yourself, the way a designer would, by `design-references`, the type that fits the work (things that will sit side by side · the destination's rules · directions that are overused), then offer 3–4 directions with links for the user to choose from. Do not offer directions from a gut feeling (the user asked for this on 2026-10-26).
+1. Say clearly what every contestant must deliver (a draft proposal · sales copy · a slide page · a plan · a function). Every contestant gets the same task, because the task is the contract.
+2. Write 3–6 checkable scoring criteria, such as (writing) reads smoothly aloud · meets the requirements · cheaper than X · (code) passes tests — **keep the criteria with the chooser and do not give them to the contestants** · for the Thai language quality of writing, do not let models vote a ranking. The owner chooses, and a model can only list the `human-writing` rule codes it finds in each entry.
+3. Choose the number. Normally 3 contestants, and at most 4 for big or costly work.
+4. The difference must come from somewhere, because in Claude Code the models come from one vendor.
+   - **Default:** give each contestant a different constraint, such as "at most 1 page" · "start from the reader's question" · all use the same agent type + model + effort.
+   - If constraints do not make them different enough → mix model tiers (large · medium; for real names see section 5 in `superuser`) (different model = different cache).
+5. Set separate delivery spots: 1 folder per contestant, `_to_delete/attempts-<topic>/<n>/`, and never write to the same place (like [`parallel-split-and-merge`](../parallel-split-and-merge/SKILL.md)) · code work → the add-on in plugin `software-development` → `superuser` → `references/code-extensions.md`.
 
-## 2 · ปล่อยพร้อมกัน
+## 2 · Launch all at once
 
-ส่ง subagent ทุกตัวในข้อความเดียว รันเบื้องหลัง แต่ละตัวได้รับ: โจทย์ · ตำแหน่งไฟล์อ้างอิง · ที่ส่งงานของตัวเอง
-ให้ส่งงาน (path) พร้อมเหตุผลสั้น ๆ ไม่เกินราว 40 บรรทัด ว่าคิดทางไหนไว้บ้าง และตัดทางไหนทิ้งเพราะอะไร ถ้าตัวไหนไม่ส่งงาน ให้ไปต่อกับตัวที่เหลือแล้วจดไว้
+Send every subagent in one message, running in the background. Each receives: the task · the location of reference files · its own delivery spot.
+Each delivers the work (path) with a short reason of about 40 lines at most saying which ways it considered and which it cut and why. If a contestant delivers nothing, go on with the rest and note it.
 
-## 3 · ให้คนกลางตัดสินอีกเสียง
+## 3 · Get a second vote from a neutral party
 
-หลังทุกตัวเสร็จ ส่ง subagent ตัวใหม่ (`reviewer` · อ่านอย่างเดียว · ไม่ใช่ผู้แข่ง) ให้คะแนนตามเกณฑ์ทีละข้อ
+After all finish, send a fresh subagent (`reviewer` · read-only · not a contestant) to score each criterion in turn.
 
-## 4 · เลือกฐาน
+## 4 · Choose the base
 
-อ่านทุกตัวจนจบก่อนตัดสิน ให้คะแนนทีละเกณฑ์ ไม่ใช่ตามความรู้สึกรวม แล้วเทียบกับคะแนนของคนกลาง
-- **เลือกอันดับด้วย `decision-scoring` คำสั่ง `pairwise`:** ให้ผู้ตรวจเทียบทีละคู่ และสลับตำแหน่งทุกคู่ (ผู้ตรวจที่เป็น LLM เอียงตามตำแหน่งที่เห็นก่อน · Zheng et al. arXiv 2306.05685) · คู่ที่สลับแล้วผลกลับข้างนับเสมอ · ผลสูสี (โอกาสชนะอันดับ 2 ต่ำกว่า 60%) ให้คนดูทั้ง 2 ตัว · เกณฑ์ที่วัดเป็นตัวเลขได้ (test ผ่านกี่ข้อ · ราคา · ขนาด) ใช้คะแนนตรงด้วยคำสั่ง `score` ได้ ไม่ต้องเทียบคู่
-- กฎเหล็กของงาน (ข้อกำหนดที่ต้องมี) กรองตัวที่ไม่ผ่านออกก่อนเทียบ
-- ถ้าตรงกัน ถือว่ายืนยันแล้ว
-- ถ้าไม่ตรงกัน แปลว่าเกณฑ์กำกวมหรือมีฝ่ายลำเอียง ให้อ่านเหตุผลของทั้ง 2 ฝ่ายก่อนตัดสิน
-- ถ้าคะแนนใกล้กัน ให้เลือกตัวที่แก้ต่อได้ง่ายที่สุด คือขอบเขตชัดกว่าและส่วนประกอบน้อยกว่า (`lazy-coding` (plugin `software-development`))
-- **ผ่านเกณฑ์ไม่ถึง 2 ตัว → ถอยเป็นงานตัวเดียว** — ไม่มีอะไรให้เทียบ ข้ามข้อ 5 เอาตัวที่ใกล้ผ่านสุดเป็นร่าง แล้วแก้ต่อตามรอบตรวจปกติของ `superuser` · ไม่ปล่อยรอบใหม่ เพราะทุกตัวตกพร้อมกันมักแปลว่าโจทย์หรือเกณฑ์ไม่ชัด ไม่ใช่ผู้แข่งไม่เก่ง · จดใน `decision-log` ว่า bake-off ไม่ได้ผลเพราะอะไร (แนวคิดจาก best-of-n ของ paulingham)
+Read every entry to the end before deciding. Score criterion by criterion, not by overall feeling, then compare with the neutral party's scores.
+- **Rank with `decision-scoring`, command `pairwise`:** have the reviewer compare pair by pair, and swap the positions of every pair (an LLM reviewer leans toward the position it sees first · Zheng et al. arXiv 2306.05685) · a pair whose result flips when swapped always counts · a close result (chance that 2nd place wins is below 60%) → a human looks at both entries · criteria that can be measured as numbers (how many tests pass · price · size) can use direct scoring with the command `score`, with no pairwise comparison.
+- The job's hard rules (required specs) filter out entries that fail, before comparing.
+- If the scores agree, treat it as confirmed.
+- If they disagree, the criteria are ambiguous or one side is biased. Read both sides' reasons before deciding.
+- If scores are close, choose the entry that is easiest to keep working on, meaning clearer scope and fewer parts (`lazy-coding` (plugin `software-development`)).
+- **Fewer than 2 entries pass the criteria → fall back to a single piece of work.** There is nothing to compare. Skip step 5, take the entry closest to passing as the draft, and fix it by the normal review round of `superuser`. Do not launch a new round, because every entry failing together usually means the task or criteria are unclear, not that the contestants are weak. Note in `decision-log` why the bake-off did not work (idea from best-of-n by paulingham).
 
-## 5 · ยกส่วนเด่นมาใส่
+## 5 · Lift the strong parts in
 
-ไล่ดูตัวที่แพ้อีกรอบ หาสิ่งที่ควรยกมา — ปกติตัวละ 1–2 อย่าง ไม่ใช่เกือบทั้งหมด
-เขียนเข้าไปในฐานเองให้กลมกลืน ห้ามแปะทั้งก้อน ผลต้องอ่านแล้วเป็นความคิดเดียว
+Go through the losing entries once more and look for what is worth lifting, usually 1–2 things per entry, not almost the whole thing.
+Write them into the base yourself so they blend in, never paste a whole block. The result must read as one idea.
 
-## 6 · ตรวจ
+## 6 · Check
 
-ตรวจผลที่รวมแล้วด้วยเกณฑ์ข้อ 1 อีกครั้ง และด้วยวิธีจริงของงานนั้น (เปิดดูของจริง · งานโค้ดรัน test)
-ลง [`decision-log`](../decision-log/SKILL.md) — ฐานคือตัวไหน · ยกอะไรมาจากตัวไหน · ทิ้งอะไรเพราะอะไร · คนกลางว่าอย่างไร
+Check the merged result against the criteria in step 1 again, and by the job's real method (open the real thing · for code, run the tests).
+Record in [`decision-log`](../decision-log/SKILL.md): which entry is the base · what was lifted from which entry · what was dropped and why · what the neutral party said.
 
-## ไม่ควรใช้เมื่อ
+## When not to use
 
-- งานกลไกที่มีคำตอบเดียว เพราะเปลืองแรงเปล่า
-- งานที่ตัดสินได้ด้วยการวัดตัวเลขตัวเดียว ให้วัดตัวเลขนั้นตรง ๆ แทน (งานโค้ด: playbook `prototype` ของ `superuser` ใน plugin `software-development`)
+- Mechanical work with a single answer, because it wastes effort
+- Work that one number can decide: measure that number directly instead (code work: the `prototype` playbook of `superuser` in plugin `software-development`)

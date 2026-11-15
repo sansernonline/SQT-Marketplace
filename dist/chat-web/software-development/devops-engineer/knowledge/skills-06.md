@@ -2,266 +2,266 @@
 
 Use when setting up or fixing a CI/CD pipeline
 
-# Continuous Integration / Continuous Delivery (CI/CD) และการปล่อยของ
+# Continuous Integration / Continuous Delivery (CI/CD) and releasing
 
-> **กฎข้อเดียว:** build ครั้งเดียว แล้วเอา **artifact ตัวเดิม** ไปทุก environment
-> ถ้า build ใหม่ตอนขึ้น production ของที่ทดสอบผ่านกับของที่ลูกค้าใช้จะไม่ใช่ตัวเดียวกัน
+> **The one rule:** build once, then carry the **same artifact** to every environment.
+> If you rebuild when going to production, what passed testing and what the customer runs are not the same thing.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ตั้ง pipeline ให้โปรเจกต์ใหม่ หรือรื้อของเดิมที่ช้าหรือผลไม่น่าเชื่อ
-- ต้องตัดสินใจเรื่อง branch, เวอร์ชัน, environment, หรือวิธีปล่อยของ
-- deploy แล้วพังบ่อย หรือ rollback ไม่ได้
-- มีคนถามว่า "ตอนนี้ production รันเวอร์ชันอะไร commit ไหน"
+- Setting up a pipeline for a new project, or rebuilding an old one that is slow or gives untrustworthy results
+- Deciding about branches, versions, environments, or how to release
+- Deploys often break, or you cannot roll back
+- Someone asks "which version and which commit is production running right now?"
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill, or use it alongside
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| ที่เก็บ secret และการหมุนเวียน | `config-and-secrets` | แทน |
-| pipeline อยู่บน Jenkins (Jenkinsfile · credentials · input อนุมัติ) | `jenkins-pipeline` | คู่ |
-| Dockerfile · Helm chart · deploy ขึ้น Kubernetes | `kubernetes-helm` | คู่ |
-| สัดส่วนและขอบเขตของ test | `testing-standards` | แทน |
-| เขียน migration | `database-design` | แทน |
-| ขั้นตอนตอนระบบล่ม | `incident-runbook-template` | แทน |
-| เขียนบันทึกการปล่อยให้ผู้ใช้อ่าน | command `/release-notes` | แทน |
-| สัดส่วน test แต่ละชั้นใน pipeline | `testing-standards` · `e2e-testing-patterns` | คู่ |
-| health check ที่ pipeline ใช้ตัดสิน | `web-service-essentials` | คู่ |
-| ขั้นตอนเมื่อ deploy แล้วล่ม | `incident-runbook-template` · `postmortem-template` | คู่ |
-| ข้อความ commit ที่สร้างบันทึกการปล่อยอัตโนมัติได้ | `commit-message-format` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Where secrets are stored and how they rotate | `config-and-secrets` | instead |
+| The pipeline runs on Jenkins (Jenkinsfile · credentials · approval input) | `jenkins-pipeline` | alongside |
+| Dockerfile · Helm chart · deploy to Kubernetes | `kubernetes-helm` | alongside |
+| Proportion and scope of tests | `testing-standards` | instead |
+| Writing a migration | `database-design` | instead |
+| Steps when the system is down | `incident-runbook-template` | instead |
+| Writing release notes for users to read | command `/release-notes` | instead |
+| Test proportion for each layer in the pipeline | `testing-standards` · `e2e-testing-patterns` | alongside |
+| Health check the pipeline uses to decide | `web-service-essentials` | alongside |
+| Steps when a deploy breaks the system | `incident-runbook-template` · `postmortem-template` | alongside |
+| Commit messages that can generate release notes automatically | `commit-message-format` | alongside |
+| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 
-**ไฟล์ pipeline ที่ใช้ได้จริงของ GitHub Actions, Azure DevOps และ GitLab** อยู่ใน `references/per-platform.md`
-**อ่านเพิ่มเมื่อต้องใช้:** [`references/deployment-plan-template.md`](references/deployment-plan-template.md) — แม่แบบแผน
+**Working pipeline files for GitHub Actions, Azure DevOps and GitLab** are in `references/per-platform.md`.
+**Read more when needed:** [`references/deployment-plan-template.md`](references/deployment-plan-template.md) — plan template
 
 ---
 
-## 1 · ขั้นตอนใน pipeline
+## 1 · Pipeline stages
 
-| ลำดับ | ขั้น | บล็อกเมื่อ | เวลาที่ยอมรับได้ |
+| Order | Stage | Blocks when | Acceptable time |
 |:--:|---|---|---|
-| 1 | ตรวจรูปแบบโค้ด + lint | ผิดกฎ | < 1 นาที |
-| 2 | build | คอมไพล์ไม่ผ่าน · มี warning ที่ตั้งเป็น error | < 3 นาที |
-| 3 | unit test | มี test ตก · ความครอบคลุมต่ำกว่าเกณฑ์ | < 5 นาที |
-| 4 | ตรวจ dependency + secret ที่หลุดเข้า git | พบช่องโหว่ระดับสูง · พบ secret | < 2 นาที |
-| 5 | สร้าง artifact + ประทับเวอร์ชัน | — | < 2 นาที |
-| 6 | deploy ลง staging | — | |
-| 7 | integration + end-to-end test | test ตก | < 15 นาที |
-| 8 | **ด่านคน** (เฉพาะ production) | ยังไม่มีคนกดอนุมัติ | |
-| 9 | deploy ลง production | — | |
-| 10 | ตรวจหลัง deploy | health check ไม่ผ่านจะ rollback อัตโนมัติ | < 2 นาที |
+| 1 | Check code format + lint | a rule is broken | < 1 minute |
+| 2 | Build | compile fails · a warning set as an error appears | < 3 minutes |
+| 3 | Unit test | a test fails · coverage is below the threshold | < 5 minutes |
+| 4 | Check dependencies + secrets leaked into git | a high-severity vulnerability or a secret is found | < 2 minutes |
+| 5 | Create the artifact + stamp the version | — | < 2 minutes |
+| 6 | Deploy to staging | — | |
+| 7 | Integration + end-to-end test | a test fails | < 15 minutes |
+| 8 | **Human gate** (production only) | nobody has clicked approve yet | |
+| 9 | Deploy to production | — | |
+| 10 | Post-deploy check | a failed health check triggers an automatic rollback | < 2 minutes |
 
-**ขั้น 1–5 คือ CI ต้องรันกับทุก pull request** ไม่ใช่เฉพาะตอน merge
-**ขั้น 1–5 รวมกันควรจบใน 10 นาที** ถ้านานกว่านั้นคนจะเริ่มหาทางข้าม
-
----
-
-## 2 · build ครั้งเดียว แล้วเลื่อนขั้น
-
-```
-commit → build → artifact v1.4.0+abc1234 ─┬→ staging  (ตัวนี้)
-                                           ├→ uat      (ตัวเดิม)
-                                           └→ production (ตัวเดิม)
-```
-
-- artifact คือไฟล์ที่ deploy ได้จริง: container image · ไฟล์ zip ที่ publish แล้ว · แพ็กเกจ
-- **environment ต่างกันได้แค่ที่ config ตอนรัน** ไม่ใช่ build ใหม่
-- เก็บ artifact ไว้ให้ย้อนกลับได้อย่างน้อย 30 วัน เพราะ rollback คือ deploy artifact เก่า ไม่ใช่ build ย้อนจาก commit เก่า
-
-> ผิด: **`git pull` บนเครื่อง production แล้ว build ตรงนั้น** ทำให้ไม่มีใครรู้ว่าของที่รันอยู่คือ commit ไหน
-> และ dependency ที่ดึงตอนนั้นอาจไม่ใช่ชุดเดียวกับที่ทดสอบ
+**Stages 1–5 are CI. They must run on every pull request**, not only at merge.
+**Stages 1–5 together should finish within 10 minutes.** If they take longer, people start looking for ways to skip them.
 
 ---
 
-## 3 · เวอร์ชันต้องไล่กลับไปหา commit ได้
+## 2 · Build once, then promote
 
-ใช้ Semantic Versioning (SemVer): `MAJOR.MINOR.PATCH`
+```
+commit → build → artifact v1.4.0+abc1234 ─┬→ staging  (this one)
+                                           ├→ uat      (same one)
+                                           └→ production (same one)
+```
 
-| ขึ้นเลขไหน | เมื่อ |
+- An artifact is a file that can really be deployed: a container image · a published zip file · a package
+- **Environments may differ only in the config applied at run time**, not in a new build
+- Keep artifacts for at least 30 days so you can go back, because a rollback means deploying an old artifact, not rebuilding from an old commit
+
+> Wrong: **running `git pull` on the production machine and building there.** Nobody then knows which commit is running,
+> and the dependencies pulled at that moment may not be the set that was tested.
+
+---
+
+## 3 · A version must trace back to a commit
+
+Use Semantic Versioning (SemVer): `MAJOR.MINOR.PATCH`
+
+| Which number goes up | When |
 |---|---|
-| MAJOR | เปลี่ยนแล้วฝั่งที่เรียกใช้พัง (ดูตารางใน `api-conventions`) |
-| MINOR | เพิ่มความสามารถ ของเดิมยังใช้ได้ |
-| PATCH | แก้บั๊ก |
+| MAJOR | a change that breaks the callers (see the table in `api-conventions`) |
+| MINOR | a new capability; old behavior still works |
+| PATCH | a bug fix |
 
-- **ยึด tag ใน git เป็นหลัก** · `v1.4.0` ชี้ commit เดียวเท่านั้น
-- artifact แปะ commit hash ไว้ด้วย เช่น `1.4.0+abc1234`
-- `/version` endpoint ต้องคืนค่าเดียวกันนี้ (ดู `web-service-essentials`) ส่วนแอปมือถือที่ไม่มี endpoint ให้แสดงในหน้า "เกี่ยวกับ" แทน
-- **ยกเว้น Flutter / Android** ตัวเลขหลัง `+` ใน `pubspec.yaml` คือ versionCode ซึ่งต้องเป็นจำนวนเต็ม จึงใส่ hash ไม่ได้ (ดูหัวข้อ "แอป Android / Flutter")
-- ก่อน 1.0.0 ใช้ `0.x` และถือว่ายังเปลี่ยนใหญ่ได้
+- **The git tag is the source of truth.** `v1.4.0` points to exactly one commit.
+- Attach the commit hash to the artifact too, for example `1.4.0+abc1234`
+- The `/version` endpoint must return the same value (see `web-service-essentials`). A mobile app with no endpoint shows it on the "About" page instead.
+- **Exception for Flutter / Android:** the number after `+` in `pubspec.yaml` is the versionCode, which must be an integer, so it cannot hold a hash (see the section "Android / Flutter apps")
+- Before 1.0.0, use `0.x` and treat big changes as still allowed
 
 ---
 
-## 4 · branch
+## 4 · Branches
 
-| แบบ | วิธี | เหมาะกับ |
+| Style | How | Fits |
 |---|---|---|
-| **trunk-based** (แนะนำ) | branch อายุสั้น 1–2 วัน merge เข้า `main` บ่อย · งานที่ยังไม่เสร็จซ่อนไว้ด้วย feature flag | ทีมส่วนใหญ่ · ปล่อยของบ่อย |
-| release branch | `main` + `release/1.4` สำหรับแก้ด่วน | ซอฟต์แวร์ที่ลูกค้าติดตั้งเอง · ต้องดูแลหลายเวอร์ชันพร้อมกัน |
-| gitflow | `develop` + `feature` + `release` + `hotfix` | ปล่อยของเป็นรอบใหญ่ นาน ๆ ครั้ง · ส่วนใหญ่ซับซ้อนเกินจำเป็น |
+| **trunk-based** (recommended) | short-lived branches of 1–2 days, merged into `main` often · unfinished work hidden behind a feature flag | most teams · frequent releases |
+| release branch | `main` + `release/1.4` for urgent fixes | software that customers install themselves · several versions to maintain at once |
+| gitflow | `develop` + `feature` + `release` + `hotfix` | big releases, rarely · usually more complex than needed |
 
-**กฎที่ไม่ขึ้นกับแบบที่เลือก:**
+**Rules that hold whichever style you pick:**
 
-- `main` ต้อง deploy ได้ตลอดเวลา
-- ป้องกัน `main` ไว้ ให้ต้องผ่าน pull request และ CI เขียว ห้าม push ตรง
-- branch ที่อายุเกิน 1 สัปดาห์ให้เตรียมเจอ merge conflict
-- merge แล้วลบ branch ทันที (`gh pr merge --delete-branch`) · เปิด "Automatically delete head branches" ใน Settings → General ของ repo บน GitHub ให้ลบเองทุก PR · branch ที่ลบแล้วกู้จากหน้า PR ได้
+- `main` must be deployable at all times
+- Protect `main`: require a pull request and a green CI, and never push directly
+- Expect merge conflicts on any branch older than 1 week
+- Delete the branch right after merging (`gh pr merge --delete-branch`) · turn on "Automatically delete head branches" in the repo's Settings → General on GitHub so it deletes after every PR · a deleted branch can be restored from the PR page
 
 ---
 
-## 5 · environment และด่าน
+## 5 · Environments and gates
 
-| environment | ข้อมูล | ใครกด deploy | ต้องผ่านอะไร |
+| Environment | Data | Who deploys | What it must pass |
 |---|---|---|---|
-| dev | ปลอม | อัตโนมัติทุก commit | build ผ่าน |
-| staging | คล้ายจริง (ปิดบังแล้ว) | อัตโนมัติเมื่อ merge เข้า `main` | unit + integration |
-| uat | คล้ายจริง | ทีมกด | ผู้ใช้ทดสอบผ่าน |
-| production | จริง | **คนกดอนุมัติ** | ทุกอย่างข้างบน |
+| dev | fake | automatic on every commit | build passes |
+| staging | production-like (masked) | automatic on merge into `main` | unit + integration |
+| uat | production-like | the team clicks | users pass their testing |
+| production | real | **a person clicks approve** | everything above |
 
-- staging ต้องใกล้เคียง production ให้มากที่สุด: เวอร์ชันฐานข้อมูล ระบบปฏิบัติการ ค่า config
-- **ห้ามคัดลอกข้อมูลจริงลง staging โดยไม่ปิดบังข้อมูลส่วนบุคคล**
-- ถ้ามี environment เดียวเพราะงบจำกัด ให้บอกตรง ๆ ในเอกสาร และใช้ feature flag ช่วยแทน
-
----
-
-## 6 · secret ใน pipeline
-
-- เก็บใน secret store ของแพลตฟอร์ม ไม่ใช่ในไฟล์ pipeline
-- ให้สิทธิ์เท่าที่ขั้นนั้นต้องใช้ เช่น ขั้น build ไม่ต้องรู้รหัสฐานข้อมูล production
-- pipeline ที่รันจาก fork ของคนนอก **ห้ามเห็น secret**
-- ตัวตรวจ secret ที่หลุดเข้า git ต้องอยู่ในขั้นที่ 4 ไม่ใช่ตรวจปีละครั้ง
-
-รายละเอียดทั้งหมดอยู่ใน `config-and-secrets`
+- Staging must be as close to production as possible: database version, operating system, config values
+- **Never copy real data into staging without masking personal data**
+- If you have only one environment because of budget, say so plainly in the documents and use feature flags to help
 
 ---
 
-## 7 · migration ฐานข้อมูลใน pipeline
+## 6 · Secrets in the pipeline
+
+- Store them in the platform's secret store, not in pipeline files
+- Grant only the permissions that stage needs. For example, the build stage does not need the production database password.
+- A pipeline that runs from an outsider's fork **must not see secrets**
+- The tool that detects secrets leaked into git must sit at stage 4, not run once a year
+
+Full detail is in `config-and-secrets`.
+
+---
+
+## 7 · Database migration in the pipeline
 
 ```
-deploy schema (ขยาย) → deploy โค้ด → ตรวจ → deploy schema (บีบ) รอบถัดไป
+deploy schema (expand) → deploy code → check → deploy schema (contract) in the next round
 ```
 
-- migration รันเป็น**ขั้นของตัวเอง** ก่อน deploy โค้ด ไม่ใช่รันตอนแอปบูต
-  (ถ้าแอปหลาย instance บูตพร้อมกัน migration จะรันชนกันจนข้อมูลพังได้)
-- ใช้บัญชีที่แก้ schema ได้เฉพาะขั้นนี้ ส่วนบัญชีที่แอปใช้รันต้องแก้ schema ไม่ได้
-- migration ต้องใช้ได้กับโค้ดเวอร์ชันก่อนหน้าด้วย ไม่งั้น rollback โค้ดแล้วระบบจะพัง
-- สำรองข้อมูลก่อนเสมอ และ**ทดสอบว่ากู้คืนได้จริง**
-- **ข้อยกเว้น: ฐานข้อมูลในเครื่องผู้ใช้** (SQLite · sqflite · drift บนมือถือ) ต้อง migrate ตอนแอปเปิด เพราะไม่มีทางอื่น
-  กฎข้างบนใช้กับฐานข้อมูลบนเซิร์ฟเวอร์ที่หลาย instance ใช้ร่วมกัน ส่วน migration ในเครื่องต้องมี test ไล่จากทุกเวอร์ชัน schema ที่เคยปล่อย
+- Run the migration as **its own stage** before the code deploy, not when the app boots
+  (if several app instances boot at once, the migrations collide and can corrupt data)
+- Use an account that can change the schema only in this stage. The account the app runs with must not be able to change the schema.
+- A migration must work with the previous code version too, or rolling back the code will break the system
+- Always back up first, and **test that the restore really works**
+- **Exception: databases on the user's device** (SQLite · sqflite · drift on mobile) must migrate when the app opens, because there is no other way.
+  The rules above apply to server databases shared by several instances. For an on-device migration, write tests that start from every schema version ever released.
 
-วิธี expand/contract ดูที่ `database-design` ข้อ 9
+For the expand/contract method, see `database-design` item 9.
 
 ---
 
-## 8 · วิธีปล่อยของ
+## 8 · Release methods
 
-| วิธี | ทำงานยังไง | ต้องมี | เหมาะกับ |
+| Method | How it works | Needs | Fits |
 |---|---|---|---|
-| หยุดแล้วเปลี่ยน | ปิด → เปลี่ยน → เปิด | ไม่มี | ระบบภายใน · ปิดได้ตอนกลางคืน |
-| **rolling** | ทยอยเปลี่ยนทีละเครื่อง | health check ที่เชื่อถือได้ · ใช้ร่วมกันได้ทั้ง 2 เวอร์ชัน | ค่าเริ่มต้นของระบบที่รันหลาย instance |
-| blue-green | ยกชุดใหม่ขึ้นครบ แล้วสลับ traffic | ทรัพยากร 2 เท่าชั่วคราว | ต้อง rollback ได้ในไม่กี่วินาที |
-| canary | ปล่อยให้ผู้ใช้ 5% ก่อน แล้วค่อยขยาย 5 → 25 → 100% ตามเกณฑ์ตัวเลขด้านล่าง | ตัวชี้วัดที่แยกตามเวอร์ชันได้ | ระบบใหญ่ · ความเสี่ยงสูง |
+| stop and replace | shut down → replace → start | nothing | internal systems · can shut down at night |
+| **rolling** | replace machines one at a time | a reliable health check · both versions can run together | the default for systems that run several instances |
+| blue-green | bring up the whole new set, then switch traffic | 2 times the resources, temporarily | must roll back within seconds |
+| canary | release to 5% of users first, then widen 5 → 25 → 100% by the numeric criteria below | metrics that split by version | large systems · high risk |
 
-> **rolling มีเรื่องที่คนมักลืม** คือระหว่าง deploy เวอร์ชันเก่าและใหม่ให้บริการพร้อมกัน
-> API และ schema จึงต้องใช้ได้กับทั้ง 2 เวอร์ชัน ถ้าไม่ได้ออกแบบเผื่อไว้ ผู้ใช้บางคนจะเจอ error ทุกครั้งที่ deploy
+> **Rolling has a point people often forget:** during the deploy, the old and new versions serve at the same time.
+> The API and schema must therefore work with both versions. If you did not design for this, some users will hit errors on every deploy.
 
-**เกณฑ์ขยาย canary (เป็นตัวเลข ตกลงก่อน deploy)** ใช้ burn rate (อัตราเผางบความผิดพลาด) ตามสูตรใน [`observability-basics`](../observability-basics/SKILL.md) หัวข้อ 4.1 โดยวัดเฉพาะทราฟฟิกของเวอร์ชันใหม่ ไม่คัดลอกสูตรมาไว้ที่นี่
+**Criteria for widening a canary (numeric, agreed before the deploy).** Use burn rate (the rate at which the error budget is spent) by the formula in [`observability-basics`](../observability-basics/SKILL.md) section 4.1, measured on the new version's traffic only. Do not copy the formula here.
 
-| ขั้น | ทราฟฟิก | ค้างอย่างน้อย | ขยายต่อเมื่อ (ต้องผ่านทุกข้อ) |
+| Step | Traffic | Hold at least | Widen when (all must pass) |
 |---|---|---|---|
-| 1 | 5% | 30 นาที และมีคำขอไม่น้อยกว่า 1,000 รายการ | burn rate ช่วงสั้น < 1 · เวลาตอบ p95 (95th percentile latency) ไม่เกิน 1.2 เท่าของเวอร์ชันเดิม (ค่าตั้งต้น ยังไม่ได้วัด) · health check ผ่านทุกเครื่อง |
-| 2 | 25% | 1 ชั่วโมง | เกณฑ์เดิมซ้ำ |
-| 3 | 100% | เฝ้า 1 ชั่วโมงแรก | burn rate ช่วงสั้น < 1 |
+| 1 | 5% | 30 minutes and at least 1,000 requests | short-window burn rate < 1 · p95 (95th percentile) latency no more than 1.2 times the old version (starting value, not yet measured) · health check passes on every machine |
+| 2 | 25% | 1 hour | same criteria again |
+| 3 | 100% | watch the first hour | short-window burn rate < 1 |
 
-ค้างและจำนวนคำขอขั้นต่ำเป็นค่าตั้งต้น ยังไม่ได้วัด ปรับตามทราฟฟิกจริง · ทราฟฟิกน้อยจนไม่ถึง 1,000 คำขอใน 30 นาที ให้ค้างนานขึ้นจนถึงจำนวนนั้น ไม่ลดเกณฑ์ · ระบบที่ไม่มี SLO (Service Level Objective เป้าหมายระดับบริการ) ใช้เกณฑ์แทน: error ของเวอร์ชันใหม่ ≤ max(2 เท่าของเวอร์ชันเดิม, เวอร์ชันเดิม + 0.5 จุดเปอร์เซ็นต์) (ค่าตั้งต้น ยังไม่ได้วัด)
+The hold time and the minimum request count are starting values, not yet measured. Adjust them to real traffic. If traffic is too low to reach 1,000 requests in 30 minutes, hold longer until it does. Do not lower the criteria. For a system with no SLO (Service Level Objective), use this criterion instead: the new version's errors ≤ max(2 times the old version, the old version + 0.5 percentage points) (starting value, not yet measured).
 
-**feature flag** (สวิตช์เปิดปิดฟีเจอร์) ช่วยแยก "ปล่อยโค้ด" ออกจาก "เปิดใช้ฟีเจอร์"
+A **feature flag** (a switch that turns a feature on or off) separates "releasing the code" from "turning the feature on".
 
-- merge โค้ดที่ยังไม่เสร็จเข้า `main` ได้ โดยปิด flag ไว้
-- เปิดให้คนบางกลุ่มก่อน ปิดได้ทันทีโดยไม่ต้อง deploy
-- **flag ต้องมีวันหมดอายุ** เพราะ flag ที่ค้าง 1 ปีจะกลายเป็นโค้ด 2 เส้นทางที่ไม่มีใครกล้าลบ
-  กำหนดให้ลบภายใน 2 sprint หลังเปิดใช้ 100%
-
----
-
-## 9 · rollback
-
-**เกณฑ์ที่ต้องกำหนดล่วงหน้า** ไม่ใช่มาตัดสินตอนทุกคนกำลังตกใจ แล้วเถียงกันว่าควรรอดูอีกหน่อยไหม · ใช้ burn rate จาก [`observability-basics`](../observability-basics/SKILL.md) หัวข้อ 4.1 แทน "error เกิน X%":
-
-| เงื่อนไข (ทราฟฟิกของเวอร์ชันใหม่) | ทำ |
-|---|---|
-| burn rate ≥ 14.4 ทั้งช่วง 1 ชั่วโมงและ 5 นาที | rollback ทันที ไม่ต้องรอใคร |
-| burn rate ≥ 6 ทั้งช่วง 6 ชั่วโมงและ 30 นาที | rollback และเปิดเหตุการณ์ |
-| burn rate 1–6 | หยุดขยาย ค้างที่ขั้นเดิม ให้คนดู |
-| เวลาตอบ p95 เกิน 2 เท่าของเวอร์ชันเดิมนาน 10 นาที (ค่าตั้งต้น ยังไม่ได้วัด) หรือ health check ไม่ผ่าน | rollback |
-
-ตอน canary 5% ที่ช่วง 1 ชั่วโมงยังไม่เต็ม ให้ใช้ช่วงสั้น (5 นาที) กับเกณฑ์ 14.4 ได้ แต่ต้องมีคำขอครบจำนวนขั้นต่ำของขั้นนั้นก่อนจึงเชื่อตัวเลข
-
-| ต้องมี | เกณฑ์ |
-|---|---|
-| คำสั่ง rollback | ทำได้ด้วยคำสั่งเดียว |
-| เวลาที่ใช้ | ต่ำกว่า 5 นาที |
-| **ซ้อมจริง** | อย่างน้อยไตรมาสละ 1 ครั้ง บน staging |
-| ข้อมูล | migration ที่ทำไปแล้วต้องไม่ทำให้โค้ดเก่าพัง |
-
-> **rollback ที่ไม่เคยซ้อม เท่ากับไม่มี rollback** เพราะจะรู้ว่าใช้ไม่ได้ก็ตอนที่ต้องใช้พอดี
+- You can merge unfinished code into `main` with the flag off
+- Turn it on for some groups first, and turn it off instantly without a deploy
+- **A flag needs an expiry date**, because a flag left for 1 year becomes two code paths that nobody dares to delete.
+  Remove it within 2 sprints after it reaches 100%.
 
 ---
 
-## 10 · pipeline ต้องเร็วและน่าเชื่อถือ
+## 9 · Rollback
 
-| ปัญหา | วิธีแก้ |
+**Set the criteria in advance.** Do not decide while everyone is panicking and arguing over whether to wait a little longer. Use the burn rate from [`observability-basics`](../observability-basics/SKILL.md) section 4.1 instead of "errors above X%":
+
+| Condition (new version's traffic) | Action |
 |---|---|
-| ช้า | แคช dependency · รัน test พร้อมกันหลายชุด · แยก test ที่ช้าไปรันกลางคืน |
-| test ที่ผลไม่คงที่ (flaky) | **แยกออกทันที** แล้วเปิดงานตามแก้ เพราะ test ที่ตกบ้างผ่านบ้างทำให้คนเลิกอ่านผล |
-| ทุกคนรอคิว | เพิ่มตัวรัน · ให้ pull request รันเฉพาะส่วนที่เกี่ยวข้อง |
-| build ไม่เหมือนเดิมทุกครั้ง | ล็อกเวอร์ชัน dependency (lock file) · ปักหมุดเวอร์ชัน image ด้วย digest |
+| burn rate ≥ 14.4 over both the 1-hour and the 5-minute windows | roll back at once, without waiting for anyone |
+| burn rate ≥ 6 over both the 6-hour and the 30-minute windows | roll back and open an incident |
+| burn rate 1–6 | stop widening, stay at the current step, have a person look |
+| p95 latency above 2 times the old version for 10 minutes (starting value, not yet measured) or the health check fails | roll back |
 
-**ตัวชี้วัดที่ควรดู:** ปล่อยของบ่อยแค่ไหน · จาก commit ถึงขึ้นจริงใช้เวลาเท่าไร ·
-deploy แล้วพังกี่เปอร์เซ็นต์ · กู้คืนใช้เวลาเท่าไร
+During a 5% canary, when the 1-hour window is not yet full, you may use the short window (5 minutes) with the 14.4 criterion. But the request count must first reach the minimum for that step before you trust the number.
 
-**อาการที่เจอบ่อยและจุดแรกที่ดู** (แนวคิดจาก wshobson deployment-pipeline-design)
-
-| อาการ | ดูตรงนี้ก่อน |
+| Required | Criterion |
 |---|---|
-| ผ่านบนเครื่อง ตกบน CI | lock file ไม่ได้ commit · ตัวแปรสภาพแวดล้อมที่มีแค่ในเครื่อง · ชื่อไฟล์ตัวพิมพ์ใหญ่เล็ก (Linux แยก) · time zone ของ runner เป็น UTC |
-| ตกเป็นบางครั้ง | test ที่ผลไม่คงที่ (แถวบน) · job ที่รันพร้อมกันแย่ง port หรือฐานข้อมูลเดียวกัน · runner หน่วยความจำไม่พอ |
-| ช้าขึ้นทุกสัปดาห์ | cache key เปลี่ยนทุกครั้งจึงไม่เคยโดน · image ไม่ pin จึง pull ใหม่ · test ชุดเดียวโตไม่แยก |
-| deploy เขียว แต่ของบนเซิร์ฟเวอร์ไม่เปลี่ยน | ใช้ artifact หรือ tag `latest` ตัวเก่าซ้ำ · cache ของ CDN หรือ reverse proxy · instance เก่ายังรับ traffic |
-| permission denied หรือ secret ว่างบน branch หรือ PR | PR จาก fork ไม่ได้ secret · environment protection rule · token หมดอายุหรือ scope ไม่พอ |
+| Rollback command | works with a single command |
+| Time taken | under 5 minutes |
+| **Real rehearsal** | at least once a quarter, on staging |
+| Data | a migration already applied must not break the old code |
+
+> **A rollback that has never been rehearsed is the same as no rollback**, because you find out it does not work at the moment you need it.
 
 ---
 
-## แอป Android / Flutter — ข้อที่ต่างจากเซิร์ฟเวอร์
+## 10 · The pipeline must be fast and trustworthy
 
-| เรื่อง | กฎ |
+| Problem | Fix |
 |---|---|
-| เลขเวอร์ชัน | `pubspec.yaml` `version: X.Y.Z+N` · `X.Y.Z` ตาม SemVer · **`N` คือ versionCode เป็นจำนวนเต็มที่ขึ้นอย่างเดียว** (เช่นเลขรอบของ CI) · commit hash ส่งผ่าน `--dart-define=GIT_SHA=<hash>` แล้วแสดงในหน้า "เกี่ยวกับ" |
-| build ครั้งเดียว | `flutter build appbundle --release` ได้ Android App Bundle (AAB) ไฟล์เดียว แล้วเลื่อนไฟล์เดิมผ่าน track ของ Play: internal → closed → production · ไม่ build ใหม่ต่อ track |
-| ปล่อยทีละส่วน | production ใช้ staged rollout เป็น % (เช่น 5 → 20 → 50 → 100) แทน canary ของเซิร์ฟเวอร์ · track ของ Play แทน environment ในข้อ 5 |
-| rollback | **ย้อนเวอร์ชันบน Play ไม่ได้** เพราะ versionCode ลดไม่ได้ และเครื่องที่ติดตั้งแล้วไม่ถอยกลับ ให้หยุด rollout (halt) แล้วปล่อยตัวแก้ที่ versionCode สูงกว่า และซ้อมขั้นตอนนี้แทนข้อ 9 |
-| กุญแจเซ็น | upload key เก็บใน secret store ของ CI เป็น base64 + รหัสผ่านแยกเป็น secret · `android/key.properties` และ `*.jks` อยู่ใน `.gitignore` · **สำรองกุญแจไว้นอก CI อย่างน้อย 1 ที่** ถ้าทำหายจะอัปเดตแอปไม่ได้จนกว่าจะขอ Play support รีเซ็ต (ใช้ Play App Signing ให้ Google ถือกุญแจจริง) |
+| Slow | cache dependencies · run several test sets in parallel · move slow tests to a nightly run |
+| Tests with unstable results (flaky) | **quarantine at once** and open a task to fix, because a test that sometimes fails and sometimes passes makes people stop reading results |
+| Everyone waits in the queue | add runners · let pull requests run only the relevant parts |
+| The build is not the same every time | lock dependency versions (lock file) · pin image versions by digest |
+
+**Metrics worth watching:** how often you release · how long from commit to live ·
+what percentage of deploys break · how long recovery takes
+
+**Common symptoms and the first place to look** (idea from wshobson deployment-pipeline-design)
+
+| Symptom | Look here first |
+|---|---|
+| Passes on the machine, fails on CI | lock file not committed · environment variables that exist only locally · file name letter case (Linux tells them apart) · the runner's time zone is UTC |
+| Fails sometimes | flaky tests (row above) · jobs running at the same time fight over the same port or database · runner out of memory |
+| Slower every week | the cache key changes every time so it never hits · an unpinned image is pulled again · one test suite grows and is not split |
+| Deploy is green but nothing changes on the server | reusing an old artifact or the `latest` tag · CDN or reverse proxy cache · an old instance still receives traffic |
+| permission denied or an empty secret on a branch or PR | a PR from a fork gets no secrets · environment protection rule · the token expired or its scope is too small |
+
+---
+
+## Android / Flutter apps — differences from servers
+
+| Topic | Rule |
+|---|---|
+| Version number | `pubspec.yaml` `version: X.Y.Z+N` · `X.Y.Z` follows SemVer · **`N` is the versionCode, an integer that only goes up** (for example the CI run number) · pass the commit hash through `--dart-define=GIT_SHA=<hash>` and show it on the "About" page |
+| Build once | `flutter build appbundle --release` gives one Android App Bundle (AAB) file, then promote that same file through the Play tracks: internal → closed → production · do not rebuild per track |
+| Staged release | production uses a staged rollout in % (for example 5 → 20 → 50 → 100) instead of a server canary · Play tracks stand in for the environments in section 5 |
+| Rollback | **you cannot roll back a version on Play**, because the versionCode cannot go down and devices that already installed it do not go back. Halt the rollout, then release a fix with a higher versionCode, and rehearse this procedure instead of section 9 |
+| Signing key | keep the upload key in the CI secret store as base64 + the password as a separate secret · `android/key.properties` and `*.jks` go in `.gitignore` · **back up the key outside CI in at least 1 place.** If you lose it, you cannot update the app until Play support resets it (use Play App Signing so Google holds the real key) |
 
 ---
 
 ## 11 · Anti-patterns
 
-- **build ใหม่ตอนขึ้น production** ทำให้ของที่ทดสอบไม่ใช่ของที่ปล่อย
-- **deploy ด้วยมือตามขั้นตอนใน Word** · วันไหนคนเขียนลาป่วย วันนั้น deploy ไม่ได้
-- **secret ในไฟล์ pipeline** · ใครอ่านโค้ดได้ก็อ่าน secret ได้
-- **test ตกแล้วปล่อยผ่าน** ทำครั้งเดียว คนก็เลิกเชื่อผลไปตลอด
-- **deploy วันศุกร์เย็น** ในทีมที่ยัง rollback ไม่ได้ด้วยคำสั่งเดียว
-- **migration ของฐานข้อมูลบนเซิร์ฟเวอร์รันตอนแอปบูต** · หลาย instance ชนกัน (ฐานข้อมูลในเครื่องมือถือยกเว้น ดูข้อ 7)
-- **ไม่มี artifact เก็บไว้** ทำให้ rollback กลายเป็นการ build ย้อนจาก commit เก่า
-- **environment ที่ config ต่างกันจนคาดเดาไม่ได้** · "บน staging ผ่านนะ"
-- **feature flag ที่ไม่มีวันลบ**
-- **pipeline ใช้เวลา 45 นาที** คนจะเริ่ม merge โดยไม่รอผล
+- **Rebuilding when going to production** means what was tested is not what is released
+- **Deploying by hand from steps in a Word file** · on the day the author is out sick, nobody can deploy
+- **Secrets in pipeline files** · anyone who can read the code can read the secrets
+- **Letting a failed test pass** once makes people stop trusting results for good
+- **Deploying on Friday evening** in a team that cannot yet roll back with a single command
+- **Server database migration run at app boot** · several instances collide (mobile on-device databases are the exception, see section 7)
+- **No artifact kept** turns a rollback into rebuilding from an old commit
+- **Environments whose config differs unpredictably** · "it passed on staging"
+- **A feature flag with no removal date**
+- **A pipeline that takes 45 minutes** · people start merging without waiting for the result
 
 
 ## reference: deployment-plan-template.md
 
 # แม่แบบแผน deploy
 
-เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+Open when you actually need to write this kind of document · put `(รอยืนยัน)` on anything you do not know
 
 ## Standard Output: Polished Deployment Plan
 
@@ -350,21 +350,21 @@ _[รูปขั้นตอน deploy: Tag release → CI สุดท้า�
 
 ## reference: per-platform.md
 
-# ไฟล์ pipeline ตั้งต้น แยกตามแพลตฟอร์ม
+# Starter pipeline files by platform
 
-**สารบัญ:** 1 GitHub Actions · 2 Azure DevOps · 3 GitLab CI · 4 Dockerfile หลายขั้น · 5 ตารางเทียบความสามารถ
+**Contents:** 1 GitHub Actions · 2 Azure DevOps · 3 GitLab CI · 4 Multi-stage Dockerfile · 5 Capability comparison table
 
 1. [GitHub Actions](#1--github-actions)
 2. [Azure DevOps](#2--azure-devops)
 3. [GitLab CI](#3--gitlab-ci)
-4. [Dockerfile หลายขั้น](#4--dockerfile-หลายขั้น)
-5. [ตารางเทียบความสามารถ](#5--ตารางเทียบความสามารถ)
+4. [Multi-stage Dockerfile](#4--multi-stage-dockerfile)
+5. [Capability comparison table](#5--capability-comparison-table)
 
 ---
 
 ## 1 · GitHub Actions
 
-`.github/workflows/ci.yml` รันทุก pull request
+`.github/workflows/ci.yml` runs on every pull request.
 
 ```yaml
 name: ci
@@ -372,7 +372,7 @@ on:
   pull_request:
   push: { branches: [main] }
 
-concurrency:                       # ยกเลิกรอบเก่าเมื่อ push ซ้ำ
+concurrency:                       # cancel the older run when a new push arrives
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
@@ -383,7 +383,7 @@ jobs:
     permissions: { contents: read }
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }   # ต้องมีประวัติครบเพื่อคำนวณเวอร์ชัน
+        with: { fetch-depth: 0 }   # full history is needed to compute the version
 
       - uses: actions/setup-node@v4
         with: { node-version: '22', cache: 'npm' }
@@ -400,7 +400,7 @@ jobs:
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }} # ต้องมีเมื่อ repo เป็นของ organization · บัญชีส่วนตัวไม่ต้อง (README gitleaks-action · ตรวจ 22 ต.ค. 2569)
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }} # required when the repo belongs to an organization; not needed for a personal account (gitleaks-action README, checked 22 Oct 2026 (B.E. 2569))
 
       - uses: actions/upload-artifact@v4
         with:
@@ -409,7 +409,7 @@ jobs:
           retention-days: 30
 ```
 
-`.github/workflows/deploy.yml` เอา artifact ตัวเดิมจาก ci ไป deploy ต่อทีละ environment
+`.github/workflows/deploy.yml` takes the same artifact from ci and deploys it to one environment at a time.
 
 ```yaml
 name: deploy
@@ -425,10 +425,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     steps:
-      - uses: actions/checkout@v4             # scripts/deploy.sh มาจาก repo
+      - uses: actions/checkout@v4             # scripts/deploy.sh comes from the repo
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
-      - uses: actions/download-artifact@v4    # ตัว build มาจาก artifact (dist/)
+      - uses: actions/download-artifact@v4    # the build output comes from the artifact (dist/)
         with:
           name: app-${{ github.event.workflow_run.head_sha }}
           run-id: ${{ github.event.workflow_run.id }}
@@ -438,12 +438,12 @@ jobs:
   production:
     needs: staging
     runs-on: ubuntu-latest
-    environment: production        # ← ตั้ง required reviewers ที่นี่ = ด่านคน
+    environment: production        # <- set required reviewers here = the human gate
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
-      - uses: actions/download-artifact@v4   # artifact ตัวเดียวกับ staging
+      - uses: actions/download-artifact@v4   # same artifact as staging
         with:
           name: app-${{ github.event.workflow_run.head_sha }}
           run-id: ${{ github.event.workflow_run.id }}
@@ -458,13 +458,13 @@ jobs:
           ./scripts/rollback.sh && exit 1
 ```
 
-**ข้อควรระวัง:**
+**Cautions:**
 
-- `pull_request_target` เห็น secret และรันโค้ดจาก fork จึง**อย่าใช้** เว้นแต่รู้จริงว่ากำลังทำอะไร
-- ตั้ง `permissions` ให้แคบที่สุดในทุก workflow เพราะบางองค์กรตั้งค่าเริ่มต้นให้เขียนได้ทั้ง repo
-- เวอร์ชันในตัวอย่าง (`@v4`, Node 22, .NET 8.x) เป็นแค่ตัวอย่าง ตรวจเวอร์ชันล่าสุดก่อนใช้ (รอยืนยัน)
-- ปักหมุด action อย่างน้อยด้วย tag เวอร์ชัน (`@v4`) ถ้าต้องการเข้มงวดให้ปักด้วย commit hash
-- `environment:` คือที่ตั้งผู้อนุมัติ (required reviewers) และ secret เฉพาะ environment
+- `pull_request_target` can see secrets and runs code from forks, so **do not use it** unless you know exactly what you are doing.
+- Set `permissions` as narrow as possible in every workflow, because some organizations default to write access on the whole repo.
+- The versions in the examples (`@v4`, Node 22, .NET 8.x) are only examples. Check the latest versions before use (`รอยืนยัน`, awaiting confirmation).
+- Pin each action at least by version tag (`@v4`). For stricter control, pin by commit hash.
+- `environment:` is where you set approvers (required reviewers) and secrets that belong to one environment.
 
 ---
 
@@ -511,19 +511,19 @@ stages:
   dependsOn: staging
   jobs:
   - deployment: production
-    environment: production        # ← ตั้ง approval ที่หน้า Environments
+    environment: production        # <- set approval on the Environments page
     strategy:
       runOnce:
         deploy:
           steps:
           - download: current
-            artifact: app          # artifact ตัวเดิมจาก stage build
+            artifact: app          # same artifact from the build stage
           - script: ./scripts/deploy.sh production
 ```
 
-- `deployment` job ต่างจาก `job` ธรรมดาตรงที่ผูกกับ environment จึงได้ประวัติการ deploy และขั้นอนุมัติมาด้วย
-- ตัวแปรลับเก็บใน variable group ที่ผูกกับ Azure Key Vault อย่าพิมพ์ลงไฟล์
-- ตัวแปรลับ**ไม่ถูกส่งเข้า script เอง** ต้อง map ผ่าน `env:` ทีละตัว
+- A `deployment` job differs from a plain `job` because it binds to an environment, so it gets deploy history and an approval step.
+- Keep secrets in a variable group linked to Azure Key Vault. Do not write them into files.
+- Secret variables are **not passed into scripts automatically**. Map them one by one through `env:`.
 
 ---
 
@@ -576,65 +576,65 @@ deploy:staging:
 deploy:production:
   stage: deploy
   environment: { name: production, url: https://example.co }
-  when: manual                     # ← ด่านคน
+  when: manual                     # <- human gate
   script: ./scripts/deploy.sh production $CI_COMMIT_SHA
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
 ```
 
-- ตั้งตัวแปรลับเป็น `Masked` และ `Protected` ที่หน้า Settings → CI/CD
-- `when: manual` ใช้คู่กับ protected environment จึงจะเป็นด่านอนุมัติที่กันได้จริง
+- Mark secret variables `Masked` and `Protected` under Settings → CI/CD.
+- Use `when: manual` together with a protected environment. Only then is it an approval gate that really blocks.
 
 ---
 
-## 4 · Dockerfile หลายขั้น
+## 4 · Multi-stage Dockerfile
 
 ```dockerfile
-# ---- ขั้น build ----
+# ---- build stage ----
 FROM node:22-alpine AS build
 WORKDIR /src
 COPY package*.json ./
-# ชั้นนี้ถูกแคชตราบใดที่ lock file ไม่เปลี่ยน
+# this layer stays cached as long as the lock file does not change
 RUN npm ci
 COPY . .
 RUN npm run build
 
-# ---- ขั้นรัน ----
+# ---- run stage ----
 FROM node:22-alpine
 ENV NODE_ENV=production
 WORKDIR /app
 COPY --from=build /src/dist ./dist
 COPY --from=build /src/node_modules ./node_modules
-# อย่ารันเป็น root
+# do not run as root
 USER node
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=3s CMD node dist/healthcheck.js
 CMD ["node", "dist/main.js"]
 ```
 
-**กฎ:**
+**Rules:**
 
-- คัดลอกไฟล์ที่เปลี่ยนน้อยก่อน ชั้นแรก ๆ จะได้ใช้แคชซ้ำ
-- อย่าคัดลอก `.env`, `.git`, `node_modules` เข้า image ให้กันไว้ด้วย `.dockerignore`
-- ถ้าต้องการให้ build ได้ผลเดิมทุกครั้ง ให้ปักหมุด base image ด้วย digest
-- ตั้งชื่อ tag ด้วย commit hash เสมอ ส่วน `latest` ใช้เป็นชื่อเล่นได้ แต่ห้าม deploy ด้วย `latest`
+- Copy the files that change least first, so the early layers reuse the cache.
+- Do not copy `.env`, `.git` or `node_modules` into the image. Block them with `.dockerignore`.
+- For a build that gives the same result every time, pin the base image by digest.
+- Always name the tag with the commit hash. `latest` may serve as an alias, but never deploy with `latest`.
 
 ---
 
-## 5 · ตารางเทียบความสามารถ
+## 5 · Capability comparison table
 
-| สิ่งที่ต้องการ | GitHub Actions | Azure DevOps | GitLab CI |
+| Need | GitHub Actions | Azure DevOps | GitLab CI |
 |---|---|---|---|
-| ด่านอนุมัติโดยคน | Environment + required reviewers | Environment approvals | `when: manual` + protected env |
-| เก็บ artifact | `upload/download-artifact` | `publish` / `download` | `artifacts:` |
-| แคช dependency | `actions/cache` หรือ `cache:` ใน setup | `Cache@2` | `cache:` |
-| secret ต่อ environment | Environment secrets | Variable group + Key Vault | ตัวแปร Protected ต่อ environment |
-| ยกเลิกรอบเก่า | `concurrency` | `batch: true` (รวม trigger ระหว่างรอบที่รันอยู่ ไม่ได้ยกเลิกรอบเก่า) | `interruptible: true` |
-| วิ่งขนาน | `strategy.matrix` | `strategy.matrix` | `parallel:` |
-| รันเอง (self-hosted) | ได้ | ได้ | ได้ |
+| Human approval gate | Environment + required reviewers | Environment approvals | `when: manual` + protected env |
+| Store artifacts | `upload/download-artifact` | `publish` / `download` | `artifacts:` |
+| Cache dependencies | `actions/cache` or `cache:` in setup | `Cache@2` | `cache:` |
+| Secrets per environment | Environment secrets | Variable group + Key Vault | Protected variables per environment |
+| Cancel older runs | `concurrency` | `batch: true` (merges triggers that arrive while a run is active; it does not cancel the older run) | `interruptible: true` |
+| Run in parallel | `strategy.matrix` | `strategy.matrix` | `parallel:` |
+| Self-hosted runners | Yes | Yes | Yes |
 
-> **ทุกแพลตฟอร์มทำสิ่งเดียวกันได้** จึงอย่าเลือกจากรายการความสามารถ
-> เลือกตัวที่อยู่ที่เดียวกับ repo แล้วลงแรงกับเนื้อหาของ pipeline แทน
+> **Every platform can do the same things**, so do not choose by feature list.
+> Pick the one that lives where the repo lives, and put your effort into the content of the pipeline instead.
 
 
 ---
@@ -643,72 +643,72 @@ CMD ["node", "dist/main.js"]
 
 Use when settings differ by environment or secrets need hiding
 
-# Config และ Secret
+# Config and secrets
 
-> **กฎ 2 ข้อ:**
-> 1. โค้ดชุดเดียวกันต้องรันได้ทุก environment ความต่างอยู่ที่ config เท่านั้น
-> 2. secret ต้องไม่อยู่ใน git ไม่อยู่ใน log และไม่อยู่ในไฟล์ที่ส่งไปให้เบราว์เซอร์
+> **2 rules:**
+> 1. The same code must run in every environment. The only difference is config.
+> 2. A secret must not be in git, not in logs, and not in any file sent to the browser.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เริ่มโปรเจกต์ หรือเพิ่ม environment ใหม่
-- ต้องเก็บ connection string, API key, ใบรับรอง, กุญแจสำหรับเซ็น
-- เจอค่าคงที่ฝังอยู่ในโค้ด (hardcode) แล้วต้องย้ายออก
-- secret หลุดเข้า git หรือสงสัยว่าหลุด ให้ไปข้อ 8 ทันที
+- Starting a project, or adding a new environment.
+- You need to store a connection string, API key, certificate, or signing key.
+- You find a hardcoded value in code and must move it out.
+- A secret leaked into git, or you suspect it did: go to step 8 at once.
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or together
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| เก็บ secret ใน pipeline · ด่านอนุมัติ | `cicd-and-release` | แทน |
-| ค่าลับใน Jenkinsfile (`withCredentials` · single quote) | `jenkins-pipeline` | คู่ |
-| Secret ของ Kubernetes ไม่อยู่ใน values.yaml (External Secrets · SealedSecret) | `kubernetes-helm` | คู่ |
-| ออกแบบ login, token, สิทธิ์ผู้ใช้ | `auth-implementation-patterns` | แทน |
-| กันไม่ให้ค่าอ่อนไหวโผล่ใน log | `logging-standards` | แทน |
-| connection string ของฐานข้อมูล | `database-design` | คู่ |
-| บันทึกเหตุการณ์หลัง secret หลุด | `postmortem-template` | คู่ |
-| ขั้นตอนตอนเกิดเหตุ | `incident-runbook-template` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Storing secrets in a pipeline · approval gates | `cicd-and-release` | instead |
+| Secrets in a Jenkinsfile (`withCredentials` · single quote) | `jenkins-pipeline` | together |
+| Kubernetes secrets kept out of values.yaml (External Secrets · SealedSecret) | `kubernetes-helm` | together |
+| Designing login, tokens, user permissions | `auth-implementation-patterns` | instead |
+| Keeping sensitive values out of logs | `logging-standards` | instead |
+| Database connection strings | `database-design` | together |
+| Recording the incident after a secret leak | `postmortem-template` | together |
+| Steps during an incident | `incident-runbook-template` | together |
+| Abbreviations in work people read | `spell-out-abbreviations` | together |
 
-**วิธีทำจริงในแต่ละภาษาและเฟรมเวิร์ก** อยู่ใน `references/per-stack.md`
+**How to do it in each language and framework** is in `references/per-stack.md`.
 
 ---
 
-## 1 · แยก config กับ secret ให้ออกก่อน
+## 1 · Tell config and secret apart first
 
 | | config | secret |
 |---|---|---|
-| ตัวอย่าง | ที่อยู่ API, ระดับ log, จำนวนต่อหน้า, โซนเวลา, feature flag | รหัสผ่านฐานข้อมูล, API key, กุญแจเซ็น token, ใบรับรอง |
-| อยู่ใน git ได้ | ✓ ได้ | ✗ ไม่ได้เด็ดขาด |
-| ใครเห็นได้ | ทั้งทีม | เฉพาะที่จำเป็น |
-| หลุดแล้วเป็นไร | ไม่เป็นไร | ต้องเพิกถอนและเปลี่ยนทันที |
-| เปลี่ยนบ่อย | ตามงาน | ตามรอบหมุนเวียน |
+| Examples | API address, log level, page size, time zone, feature flag | Database password, API key, token signing key, certificate |
+| Allowed in git | ✓ yes | ✗ never |
+| Who can see it | The whole team | Only those who need it |
+| If it leaks | No harm | Must be revoked and replaced at once |
+| Changes how often | With the work | On a rotation schedule |
 
-> **ถ้าตัดสินใจไม่ได้ว่าเป็นแบบไหน ให้ถือว่าเป็น secret** เพราะระวังเกินไปเสียแค่ความรำคาญเล็กน้อย
-> แต่ถ้าเดาผิด กุญแจจะอยู่ในประวัติ git ตลอดไป
-
----
-
-## 2 · ลำดับความสำคัญ — ค่าหลังทับค่าก่อน
-
-```
-1. ค่าเริ่มต้นในโค้ด        (ปลอดภัย ใช้ได้จริงสำหรับ dev)
-2. ไฟล์ config ตาม environment  (appsettings.Production.json, config/production.yaml)
-3. ตัวแปรสภาพแวดล้อม        (environment variable)
-4. secret store              (Key Vault, Secrets Manager, Kubernetes secret)
-5. อาร์กิวเมนต์ตอนสั่งรัน     (ใช้ตอนไล่ปัญหาเท่านั้น)
-```
-
-**ค่าเริ่มต้นต้องปลอดภัย** ถ้าลืมตั้งค่า ระบบต้องทำงานแบบเข้มงวดที่สุด
-เช่น `DEBUG=false` · `ALLOWED_ORIGINS=` ว่าง · เปิด Transport Layer Security (TLS) ไม่ใช่ตรงกันข้าม
+> **If you cannot decide which one it is, treat it as a secret.** Being too careful costs only a small annoyance.
+> But if you guess wrong, the key stays in git history forever.
 
 ---
 
-## 3 · ตรวจตอนบูต — ขาดค่าไหนให้ตายทันที
+## 2 · Order of priority: later values override earlier ones
 
-> **สำคัญ:** ข้อนี้คุ้มที่สุดในหน้านี้
-> ระบบที่บูตขึ้นมาได้ทั้งที่ config ผิด จะไปพังตอนตี 2 ในฟังก์ชันที่นาน ๆ ใช้ที
-> ระบบที่ **ไม่ยอมบูต** เมื่อ config ผิด ทำให้รู้ตั้งแต่ตอน deploy ซึ่งยัง rollback ได้
+```
+1. Defaults in code             (safe, really usable for dev)
+2. Config file per environment  (appsettings.Production.json, config/production.yaml)
+3. Environment variables
+4. Secret store                 (Key Vault, Secrets Manager, Kubernetes secret)
+5. Arguments at launch          (for troubleshooting only)
+```
+
+**Defaults must be safe.** If someone forgets to set a value, the system must run in its strictest mode.
+For example `DEBUG=false` · `ALLOWED_ORIGINS=` empty · Transport Layer Security (TLS) on, not the opposite.
+
+---
+
+## 3 · Check at boot: if any value is missing, die at once
+
+> **Important:** this step is worth the most on this page.
+> A system that boots with wrong config will break at 2 a.m. in a function that is rarely used.
+> A system that **refuses to boot** on wrong config tells you at deploy time, when you can still roll back.
 
 ```ts
 // Node — zod
@@ -720,44 +720,44 @@ const Env = z.object({
   LOG_LEVEL:     z.enum(['debug','info','warn','error']).default('info'),
 });
 
-export const env = Env.parse(process.env);   // ผิด = process ตายพร้อมบอกว่าตัวไหนผิด
+export const env = Env.parse(process.env);   // invalid = the process dies and says which value is wrong
 ```
 
-**สิ่งที่ต้องตรวจ:** มีค่าครบ · ชนิดถูก · อยู่ในช่วงที่ยอมรับ ·
-กุญแจยาวพอ · ค่าที่ห้ามใช้บน production (`JWT_SECRET=dev-secret` ต้องไม่ผ่าน)
+**What to check:** every value is present · types are right · values are in the accepted range ·
+keys are long enough · values banned on production (`JWT_SECRET=dev-secret` must fail).
 
-**พิมพ์สรุป config ตอนบูต**: ชื่อค่า และค่าที่ไม่ใช่ secret
-ส่วน secret พิมพ์แค่ "มีค่าแล้ว" หรือ 4 ตัวท้าย ไม่พิมพ์ค่าเต็ม
+**Print a config summary at boot:** the value names, and the values that are not secrets.
+For a secret, print only "set" or the last 4 characters, never the full value.
 
 ---
 
-## 4 · ตั้งชื่อตัวแปรสภาพแวดล้อม
+## 4 · Naming environment variables
 
 ```
-<ระบบ>_<กลุ่ม>_<ชื่อ>
+<system>_<group>_<name>
 
 APP_DB_HOST          APP_DB_PASSWORD
 APP_REDIS_URL        APP_SMTP_PASSWORD
 APP_FEATURE_NEW_CHECKOUT
 ```
 
-| กฎ | เหตุผล |
+| Rule | Reason |
 |---|---|
-| ตัวพิมพ์ใหญ่ ขีดล่าง | ข้อตกลงของทุกระบบปฏิบัติการ |
-| มีคำนำหน้าของระบบ | กัน `PATH`, `HOME`, `USER` ของระบบชนกัน |
-| ชื่อเดียวกันทุก environment | ค่าต่างได้ แต่ชื่อห้ามต่าง ไม่งั้นย้าย environment ทีไรต้องแก้โค้ด |
-| ใส่หน่วยในชื่อ | `APP_TIMEOUT_SECONDS` ไม่ใช่ `APP_TIMEOUT` |
-| อย่าใส่ชื่อ environment ในชื่อตัวแปร | ✗ `APP_PROD_DB_HOST` |
+| Uppercase with underscores | The convention on every operating system |
+| Start with a system prefix | Avoids clashing with the system's `PATH`, `HOME`, `USER` |
+| Same name in every environment | Values may differ, but names must not, or every move between environments means editing code |
+| Put the unit in the name | `APP_TIMEOUT_SECONDS`, not `APP_TIMEOUT` |
+| Do not put the environment name in the variable name | ✗ `APP_PROD_DB_HOST` |
 
 ---
 
-## 5 · `.env` และ `.env.example`
+## 5 · `.env` and `.env.example`
 
-| ไฟล์ | อยู่ใน git | หน้าที่ |
+| File | In git | Role |
 |---|:--:|---|
-| `.env.example` | ✓ | รายชื่อค่าที่ต้องมี **ทั้งหมด** พร้อมคำอธิบาย และค่าตัวอย่างที่ไม่ใช่ของจริง |
-| `.env` | ✗ | ค่าจริงบนเครื่องนักพัฒนาแต่ละคน |
-| `.env.production` | ✗ | **ไม่ควรมีไฟล์นี้เลย** เพราะ production ใช้ secret store |
+| `.env.example` | ✓ | The list of **all** required values, with explanations and example values that are not real |
+| `.env` | ✗ | Real values on each developer's machine |
+| `.env.production` | ✗ | **This file should not exist at all**, because production uses a secret store |
 
 ```bash
 # .gitignore
@@ -768,110 +768,110 @@ APP_FEATURE_NEW_CHECKOUT
 
 ```bash
 # .env.example
-APP_DB_HOST=localhost              # ที่อยู่ฐานข้อมูล
-APP_DB_PASSWORD=change-me          # สำคัญ: ค่าจริงอยู่ใน 1Password ห้องทีม
-APP_JWT_SECRET=                    # สำคัญ: สร้างด้วย: openssl rand -base64 48
+APP_DB_HOST=localhost              # database address
+APP_DB_PASSWORD=change-me          # important: the real value is in the team's 1Password vault
+APP_JWT_SECRET=                    # important: generate with: openssl rand -base64 48
 APP_LOG_LEVEL=debug
 ```
 
-**`.env.example` ต้องอัปเดตในคอมมิตเดียวกับที่เพิ่มค่าใหม่**
-ไม่งั้นคนถัดไปที่ clone จะเจอ error ที่ไม่มีใครอธิบายได้
+**Update `.env.example` in the same commit that adds a new value.**
+Otherwise the next person who clones hits an error nobody can explain.
 
-> **`.env` ที่ใส่ `.gitignore` ไม่ทัน**: ไฟล์ถูก track ไปแล้วแม้ครั้งเดียว
-> การเพิ่มใน `.gitignore` ทีหลัง**ไม่ลบมันออกจากประวัติ** ต้อง `git rm --cached` และถือว่า secret หลุดแล้ว
+> **A `.env` added to `.gitignore` too late:** once the file has been tracked, even once,
+> adding it to `.gitignore` later **does not remove it from history.** Run `git rm --cached` and treat the secret as leaked.
 
-**ด่านก่อน commit** (แนวคิดจาก wshobson secrets-management): `.gitignore` กันแค่ไฟล์ที่รู้ชื่อ แต่กุญแจที่เผลอวางในโค้ดหรือ YAML ต้องมีตัวสแกน — ติดตั้ง gitleaks เป็น pre-commit hook ของทุก repo (`gitleaks git --pre-commit --staged` ใน gitleaks 8.19 ขึ้นไป · รุ่นก่อนหน้าใช้ `gitleaks protect --staged`) และรันซ้ำใน CI ทั้งประวัติด้วย `gitleaks git --redact` · hook ตกแล้วห้าม `--no-verify` ให้ย้ายค่าออกก่อน · เจอใน history แล้วไปข้อ 8 ทันที ไม่ใช่แค่ลบบรรทัด
+**Pre-commit gate** (idea from wshobson secrets-management): `.gitignore` blocks only files you know by name, but a key pasted by mistake into code or YAML needs a scanner. Install gitleaks as a pre-commit hook in every repo (`gitleaks git --pre-commit --staged` in gitleaks 8.19 and later · earlier versions use `gitleaks protect --staged`) and rerun it in CI over the whole history with `gitleaks git --redact`. If the hook fails, never use `--no-verify`; move the value out first. If you find one in history, go to step 8 at once, not just delete the line.
 
 ---
 
-## 6 · เก็บ secret ไว้ที่ไหน
+## 6 · Where to keep secrets
 
-| สถานการณ์ | ใช้ | หมายเหตุ |
+| Situation | Use | Note |
 |---|---|---|
-| เครื่องนักพัฒนา | `.env` ที่ไม่เข้า git ส่วน .NET ใช้ `dotnet user-secrets` | ห้ามใช้ค่าของ production |
-| ทีมเล็ก แชร์กัน | ตัวจัดการรหัสผ่านของทีม (1Password, Bitwarden) | ไม่ใช่แชต ไม่ใช่อีเมล ไม่ใช่ Google Sheet |
-| production บนคลาวด์ | Azure Key Vault · AWS Secrets Manager · Google Secret Manager | ให้สิทธิ์ด้วย managed identity ไม่ใช่ key อีกอัน |
-| Kubernetes | External Secrets Operator ดึงจาก vault ข้างบน | secret ของ Kubernetes เองเป็นแค่ base64 **ไม่ใช่การเข้ารหัส** |
-| ต้องเก็บใน git จริง ๆ | SOPS หรือ sealed-secrets (เข้ารหัสก่อน commit) | ทางเลือกสุดท้าย |
+| Developer machine | A `.env` that stays out of git; for .NET use `dotnet user-secrets` | Never use production values |
+| Small team sharing | The team's password manager (1Password, Bitwarden) | Not chat, not email, not a Google Sheet |
+| Production in the cloud | Azure Key Vault · AWS Secrets Manager · Google Secret Manager | Grant access with a managed identity, not another key |
+| Kubernetes | External Secrets Operator pulling from a vault above | A Kubernetes secret is only base64, **not encryption** |
+| You really must store in git | SOPS or sealed-secrets (encrypt before commit) | Last resort |
 
-**สิทธิ์:** แต่ละ service อ่านได้เฉพาะ secret ของตัวเอง environment แยกกันสนิท และ
-ไม่มีบัญชีไหนอ่านได้ทุกอัน ยกเว้นบัญชีดูแลระบบที่บันทึกการเข้าถึง
+**Permissions:** each service reads only its own secrets, environments are fully separate, and
+no account can read all of them, except an admin account whose access is logged.
 
 ---
 
-## 7 · การหมุนเวียน (rotation)
+## 7 · Rotation
 
-**ออกแบบให้รองรับตั้งแต่วันแรก** ไม่ใช่รอถึงตอนต้องหมุนจริง
+**Design for it from day one**, not when you finally have to rotate.
 
-| ต้องมี | รายละเอียด |
+| Must have | Detail |
 |---|---|
-| ใช้ 2 ค่าพร้อมกันได้ | ระหว่างเปลี่ยน ทั้งค่าเก่าและใหม่ต้องใช้ได้ ไม่งั้นต้องปิดระบบ |
-| โหลดใหม่โดยไม่ต้อง restart | หรือยอมรับว่าต้อง deploy 1 รอบ และจดไว้ว่าต้องทำ |
-| รอบเวลา | กุญแจเซ็น token 90 วัน · รหัสฐานข้อมูล 180 วัน · ใบรับรองก่อนหมดอายุ 30 วัน |
-| ทำอัตโนมัติ | เพราะงานที่ต้องจำทำเอง สุดท้ายไม่มีใครทำ |
+| Two values valid at once | During the change, both the old and the new value must work, or you must shut the system down |
+| Reload without restart | Or accept that you need one deploy, and write down that it must be done |
+| Schedule | Token signing key 90 days · database password 180 days · certificate 30 days before expiry |
+| Automatic | A task that depends on someone remembering ends up done by nobody |
 
-**กุญแจสำหรับเซ็น token ต้องมี id กำกับ (key id)** เพื่อให้เซ็น token ใหม่ด้วยกุญแจใหม่แล้ว
-ก็ยังตรวจ token เก่าที่ยังไม่หมดอายุได้
-
----
-
-## 8 · เมื่อ secret หลุด — ลำดับสำคัญกว่าความเร็ว
-
-1. **เพิกถอนค่าเดิมก่อน**: ปิด key นั้นที่ต้นทาง
-2. ออกค่าใหม่ แล้ว deploy
-3. ตรวจ log ย้อนหลังว่ามีใครใช้จากที่ที่ไม่ใช่ของเราไหม
-4. ลบออกจากประวัติ git (`git filter-repo`) และแจ้งทุกคนให้ clone ใหม่ (ถ้าต้อง force push ให้รอผู้ใช้อนุมัติก่อน · แจ้งทีมก่อน)
-5. บันทึกเหตุการณ์ด้วย `postmortem-template`
-
-> **ข้อ 4 ไม่ใช่ข้อ 1** เพราะลบ commit แล้วกุญแจก็ไม่ปลอดภัยขึ้นเลย
-> ใครที่ fork หรือ clone ไปแล้ว รวมถึงข้อมูลสำรองของผู้ให้บริการ ยังมีค่าเดิมอยู่
-> **ถือว่าทุก secret ที่เคยเข้า git คือหลุดแล้ว** แม้ repo จะเป็น private
+**A token signing key must carry an id (key id)**, so that after signing new tokens with the new key,
+you can still verify old tokens that have not expired.
 
 ---
 
-## 9 · อย่าให้ secret ไหลออกทางอื่น
+## 8 · When a secret leaks: order matters more than speed
 
-| ทางรั่ว | วิธีปิด |
+1. **Revoke the old value first:** disable that key at its source.
+2. Issue a new value, then deploy.
+3. Check past logs for anyone using it from a place that is not ours.
+4. Remove it from git history (`git filter-repo`) and tell everyone to clone again. (If you must force push, wait for the user's approval and tell the team first.)
+5. Record the incident with `postmortem-template`.
+
+> **Step 4 is not step 1**, because deleting the commit does not make the key any safer.
+> Anyone who forked or cloned already, and the provider's backups, still have the old value.
+> **Treat every secret that has ever been in git as leaked**, even if the repo is private.
+
+---
+
+## 9 · Do not let secrets flow out other ways
+
+| Leak path | How to close it |
 |---|---|
-| log | รายการคำที่ต้องปิดบัง ดูที่ `logging-standards` |
-| ข้อความ error ที่ส่งให้ client | คืนเฉพาะ `requestId` ไม่ใช่ stack trace หรือ connection string |
-| รายงาน crash / ตัวติดตามข้อผิดพลาด | ตั้งตัวกรองข้อมูลอ่อนไหวก่อนส่งออก |
-| ประวัติคำสั่งใน shell | ใช้ `read -s` หรืออ่านจากไฟล์ แทนการพิมพ์ค่าลงบรรทัดคำสั่ง |
-| `docker history` | อย่าใส่ secret ใน `ARG`/`ENV` ตอน build ให้ใช้ mount ตอนรันแทน |
-| ไฟล์สำรองข้อมูลและ dump | เข้ารหัส และเก็บที่ที่คุมสิทธิ์ได้ |
-| ภาพหน้าจอในเอกสารและ issue | ปิดบังก่อนแนบเสมอ |
+| Logs | The list of terms to mask is in `logging-standards` |
+| Error messages sent to the client | Return only a `requestId`, not a stack trace or connection string |
+| Crash reports / error trackers | Set a sensitive-data filter before sending out |
+| Shell command history | Use `read -s` or read from a file, instead of typing the value on the command line |
+| `docker history` | Do not put secrets in `ARG`/`ENV` at build time; use a mount at run time instead |
+| Backup files and dumps | Encrypt them and store them where you control access |
+| Screenshots in documents and issues | Always mask before attaching |
 
 ---
 
-## 10 · config ของ frontend — ไม่มีอะไรลับ
+## 10 · Frontend config: nothing in it is secret
 
-> **สำคัญ:** ทุกอย่างที่อยู่ในไฟล์ที่เบราว์เซอร์โหลด **คือข้อมูลสาธารณะ**
-> ไม่ว่าจะชื่อว่า `VITE_SECRET_KEY` หรืออยู่ในไฟล์ที่ถูกย่อจนอ่านไม่ออกก็ตาม
-> การย่อโค้ดไม่ใช่การเข้ารหัส เปิด DevTools ก็เห็น
+> **Important:** everything in a file the browser loads **is public information**,
+> whether it is named `VITE_SECRET_KEY` or sits in a file minified until it is unreadable.
+> Minifying code is not encryption. Open DevTools and you can see it.
 
-| ใส่ใน frontend ได้ | ต้องอยู่ฝั่งเซิร์ฟเวอร์เท่านั้น |
+| Allowed in the frontend | Must stay on the server only |
 |---|---|
-| ที่อยู่ API · ชื่อ environment | API key ของบริการภายนอกทุกชนิด |
-| กุญแจสาธารณะ (publishable key) ของผู้ให้บริการชำระเงิน | กุญแจลับ (secret key) ของผู้ให้บริการเดียวกัน |
-| feature flag ที่ไม่ลับ | กฎการคิดราคา · เกณฑ์อนุมัติ |
-| รหัสเว็บของตัววัดสถิติ | token ที่เรียก API ของบุคคลที่สาม |
+| API address · environment name | API keys of any external service |
+| Publishable key of a payment provider | The secret key of the same provider |
+| Feature flags that are not secret | Pricing rules · approval thresholds |
+| Web ID of an analytics tool | Tokens that call a third party's API |
 
-**ถ้าต้องการเปลี่ยนค่าโดยไม่ build ใหม่** ให้โหลด `/config.json` ตอนแอปเริ่มทำงาน
-แทนการฝังค่าตอน build (`import.meta.env`) ที่ล็อกค่าติดไปกับไฟล์ที่ build ได้
+**If you need to change a value without rebuilding,** load `/config.json` when the app starts,
+instead of embedding the value at build time (`import.meta.env`), which locks the value into the built files.
 
 ---
 
 ## 11 · Anti-patterns
 
-- **connection string ในโค้ด** แม้จะเป็นของ dev เพราะสักวันจะมีคนลอกแบบนี้ไปใช้กับ production
-- **`.env` ของ production วางไว้บนเซิร์ฟเวอร์** ใครเข้าเครื่องได้ก็อ่านได้ และไม่มีบันทึกว่าใครอ่าน
-- **secret เดียวกันทุก environment** พอ staging หลุด production ก็หลุดด้วย
-- **ส่ง secret ทางแชตหรืออีเมล** ค่าจะอยู่ในนั้นตลอดไป และค้นเจอด้วย
-- **ไม่มี `.env.example`** คนใหม่จะเสียเวลาครึ่งวันเดาว่าต้องมีค่าอะไรบ้าง
-- **บูตผ่านทั้งที่ config ไม่ครบ** แล้วไปพังตอนใช้งานจริง
-- **พิมพ์ config ทั้งก้อนลง log ตอนบูต** รวม secret
-- **`ALLOWED_ORIGINS=*` บน production** เพราะ "ตอน dev มันติด Cross-Origin Resource Sharing (CORS)"
-- **กุญแจที่ไม่เคยเปลี่ยนเลยตั้งแต่ปีแรก**
+- **A connection string in code**, even a dev one, because one day someone will copy it for production.
+- **A production `.env` placed on the server.** Anyone who can enter the machine can read it, and nothing records who read it.
+- **The same secret in every environment.** When staging leaks, production leaks too.
+- **Sending secrets by chat or email.** The value stays there forever, and is searchable.
+- **No `.env.example`.** A new person wastes half a day guessing which values are needed.
+- **Booting successfully with incomplete config,** then breaking in real use.
+- **Printing the whole config to the log at boot,** secrets included.
+- **`ALLOWED_ORIGINS=*` on production** because "it was blocked by Cross-Origin Resource Sharing (CORS) in dev."
+- **A key that has never changed since the first year.**
 
 
 ## reference: per-stack.md
@@ -1117,200 +1117,200 @@ $b = New-Object byte[] 48
 
 Use when a live system needs metrics, logs or alerts
 
-# วัดผลและเฝ้าระบบ
+# Measuring and monitoring a system
 
-> **กฎข้อเดียว:** ถ้าลูกค้าเป็นคนบอกเราว่าระบบล่ม แปลว่าการเฝ้าระวังล้มเหลว
-> ไม่ใช่ว่าลูกค้าใจดี
+> **The one rule:** if a customer is the one who tells us the system is down, monitoring has failed.
+> It does not mean the customer is kind.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ระบบมีผู้ใช้จริงแล้ว
-- มีคนถามว่า "ตอนนี้ระบบปกติดีไหม" แล้วต้องไปเปิด log ดูถึงจะตอบได้
-- ถูกปลุกกลางดึกด้วยการแจ้งเตือนที่ไม่ต้องทำอะไร
-- ระบบช้าแล้วไม่รู้ว่าช้าตรงไหน
+- The system has real users
+- Someone asks "is the system healthy right now?" and you must open the logs to answer
+- You get woken in the middle of the night by an alert that needs no action
+- The system is slow and you do not know where
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Job | Use this instead |
 |---|---|
-| รูปแบบบรรทัด log และการปิดบัง | `logging-standards` |
-| ร่องรอยว่าใครทำอะไร | `audit-trail` |
-| endpoint health check | `web-service-essentials` |
-| ขั้นตอนตอนเกิดเหตุ | `incident-runbook-template` |
-| สรุปหลังเหตุการณ์ | `postmortem-template` |
+| Log line format and masking | `logging-standards` |
+| A trail of who did what | `audit-trail` |
+| Health check endpoint | `web-service-essentials` |
+| Steps during an incident | `incident-runbook-template` |
+| Post-incident summary | `postmortem-template` |
 
 ---
 
-## 1 · สามอย่างนี้ตอบคนละคำถาม
+## 1 · These three answer different questions
 
-| | ตอบคำถาม | ตัวอย่าง | ต้นทุน |
+| | Answers the question | Example | Cost |
 |---|---|---|---|
-| **metric** (ตัวชี้วัด) | "ตอนนี้แย่ไหม แย่ขึ้นหรือลง" | error 2.3% · p95 = 840 ms | ถูกสุด เก็บได้นาน |
-| **log** (บันทึก) | "คำขอนั้นเกิดอะไรขึ้น" | ข้อความ + stack trace + id | แพงปานกลาง |
-| **trace** (การไล่รอย) | "ช้าที่ขั้นตอนไหน" | คำขอเดียว ผ่าน 5 service | แพงสุด สุ่มเก็บ |
+| **metric** | "Is it bad now? Getting better or worse?" | error 2.3% · p95 = 840 ms | Cheapest, keeps a long time |
+| **log** | "What happened in that request?" | message + stack trace + id | Medium cost |
+| **trace** | "Which step is slow?" | one request across 5 services | Most expensive, sample it |
 
-**ลำดับการใช้เวลาเกิดเหตุ:** metric บอกว่า**มีปัญหา** → trace บอกว่า**ตรงไหน** → log บอกว่า**ทำไม**
-ทั้ง 3 อย่างต้องเชื่อมกันด้วย correlation id ตัวเดียวกัน (ดู `logging-standards`)
+**Order of use during an incident:** the metric says there **is a problem** → the trace says **where** → the log says **why**.
+All 3 must be linked by the same correlation id (see `logging-standards`).
 
 ---
 
-## 2 · สี่สัญญาณที่ต้องวัด
+## 2 · The four signals to measure
 
-| สัญญาณ | วัดอะไร | ตัวเลขที่ดู |
+| Signal | Measures | Numbers to watch |
 |---|---|---|
-| **อัตราคำขอ** | มีงานเข้ามาเท่าไหร่ | ต่อวินาที แยกตาม endpoint |
-| **อัตราความผิดพลาด** | ล้มกี่เปอร์เซ็นต์ | แยก 4xx (ผู้ใช้ผิด) กับ 5xx (เราผิด) |
-| **เวลาตอบสนอง** | ช้าแค่ไหน | **p50 · p95 · p99** |
-| **ทรัพยากร** | ใกล้เต็มไหม | CPU · หน่วยความจำ · พื้นที่ · connection pool |
+| **Request rate** | How much work is coming in | Per second, split by endpoint |
+| **Error rate** | What percentage fails | Split 4xx (user's fault) from 5xx (our fault) |
+| **Response time** | How slow | **p50 · p95 · p99** |
+| **Resources** | Is anything near full | CPU · memory · disk space · connection pool |
 
-> **ห้ามดูค่าเฉลี่ยของเวลาตอบสนอง** — เฉลี่ย 200 ms ฟังดูดี
-> ทั้งที่ผู้ใช้ 5% รอ 9 วินาที ค่าเฉลี่ยกลบคนที่เจอปัญหาเสมอ **ดู p95 และ p99**
+> **Never look at the average response time.** An average of 200 ms sounds good
+> while 5% of users wait 9 seconds. The average always hides the people who hit the problem. **Look at p95 and p99.**
 
-**สำหรับคิวและงานเบื้องหลัง** เพิ่มอีก 3 ตัว — งานค้างในคิว · เวลารอในคิว · งานที่ล้มถาวร
-(ดู `background-jobs`)
+**For queues and background jobs**, add 3 more: jobs waiting in the queue · wait time in the queue · jobs that failed for good
+(see `background-jobs`).
 
 ---
 
-## 3 · ตั้งชื่อตัวชี้วัด
+## 3 · Naming metrics
 
 ```
-<โดเมน>_<สิ่งที่วัด>_<หน่วย>
+<domain>_<what is measured>_<unit>
 
-http_requests_total              จำนวนสะสม
-http_request_duration_seconds    ระยะเวลา
-orders_created_total             เหตุการณ์ทางธุรกิจ
-queue_depth_jobs                 ค่า ณ ขณะนั้น
+http_requests_total              cumulative count
+http_request_duration_seconds    duration
+orders_created_total             business event
+queue_depth_jobs                 value at this moment
 ```
 
-| กฎ | เหตุผล |
+| Rule | Reason |
 |---|---|
-| ลงท้ายด้วยหน่วยเสมอ | `_seconds` ไม่ใช่ `_time` ที่ไม่มีใครรู้ว่าวินาทีหรือมิลลิวินาที |
-| ค่าสะสมลงท้าย `_total` | บอกว่าเป็นค่าที่เพิ่มขึ้นเรื่อย ๆ ไม่ใช่ค่าปัจจุบัน |
-| ใช้ label แทนการสร้างชื่อใหม่ | `http_requests_total{route,status}` ไม่ใช่ชื่อแยกต่อ endpoint |
-| **label ห้ามมีค่าที่ไม่จำกัด** | ถ้าใส่ user id หรือ order id เป็น label ระบบเก็บ metric จะรับไม่ไหว |
+| Always end with the unit | `_seconds`, not `_time`, which nobody can tell is seconds or milliseconds |
+| End cumulative values with `_total` | It says the value keeps rising and is not the current value |
+| Use labels instead of making new names | `http_requests_total{route,status}`, not a separate name per endpoint |
+| **A label must not take unbounded values** | If you put a user id or order id in a label, the metrics system cannot cope |
 
-### 3.1 · ถ้าใช้ Prometheus และ Grafana
+### 3.1 · If you use Prometheus and Grafana
 
-- **ชนิด metric:** counter ใช้นับเหตุการณ์ (อ่านด้วย `rate()`) · gauge ใช้ค่า ณ ตอนนี้ · histogram ใช้ระยะเวลาที่ต้องหา p95 · summary ใช้เมื่อไม่ต้องรวมข้าม instance
-- **หน่วย:** วินาที · byte · ratio 0 ถึง 1 (`_seconds` ไม่ใช่ `_milliseconds`)
-- **ห้ามใส่ `user_id` · เบอร์โทร · `call_id` เป็น label** เพราะทุกค่าใหม่คือ series ใหม่ 1 เส้น จนระบบเก็บ metric รับไม่ไหว · id เหล่านี้ลง log และ trace
-- p95: `histogram_quantile(0.95, sum by (le) (rate(<ชื่อ>_bucket[5m])))`
-- alert ทุกกฎมี `for:` · `severity` · ลิงก์ runbook · เตือนจากอาการ (latency · error) ไม่เตือนจาก CPU หรือ GPU
-- dashboard เก็บเป็น JSON ใน git แล้ว provision ด้วยไฟล์ · RED ต่อ service · USE ต่อทรัพยากร
-- รายละเอียด PromQL · ตัวอย่างกฎ alert · provisioning · ตัวอย่างระบบ voice agent (latency STT · LLM · TTS · lag ของ Kafka · GPU): `references/prometheus-grafana.md`
+- **Metric types:** a counter counts events (read it with `rate()`) · a gauge holds the value right now · a histogram holds durations when you need p95 · a summary is for when you do not need to aggregate across instances
+- **Units:** seconds · bytes · ratio 0 to 1 (`_seconds`, not `_milliseconds`)
+- **Never put `user_id` · a phone number · `call_id` in a label**, because every new value is a new series, until the metrics system cannot cope · these ids go in logs and traces
+- p95: `histogram_quantile(0.95, sum by (le) (rate(<name>_bucket[5m])))`
+- Every alert rule has `for:` · `severity` · a runbook link · alert on symptoms (latency · error), not on CPU or GPU
+- Keep dashboards as JSON in git and provision them from files · RED per service · USE per resource
+- Details on PromQL · alert rule examples · provisioning · a voice agent example (STT · LLM · TTS latency · Kafka lag · GPU): `references/prometheus-grafana.md`
 
 ---
 
-## 4 · การแจ้งเตือน
+## 4 · Alerts
 
-> **แจ้งเตือนทุกครั้งต้องมีอะไรให้ทำ** — ถ้าคนรับอ่านแล้วไม่ต้องทำอะไร
-> อีก 3 สัปดาห์เขาจะปิดเสียงแจ้งเตือน แล้ววันที่ของจริงเกิดก็จะไม่มีใครเห็น
+> **Every alert must give the receiver something to do.** If the person reads it and has nothing to do,
+> in 3 weeks they will mute alerts, and the day a real one fires nobody will see it.
 
-**แจ้งเตือนจากสิ่งที่ผู้ใช้รู้สึก ไม่ใช่จากตัวเลขของเครื่อง**
+**Alert on what users feel, not on machine numbers**
 
-| ✗ เตือนแบบนี้ | ✓ เตือนแบบนี้ |
+| ✗ Alert like this | ✓ Alert like this |
 |---|---|
-| CPU เกิน 80% | อัตรา error เกิน 2% นาน 5 นาที |
-| หน่วยความจำเกิน 70% | p95 ของหน้าชำระเงินเกิน 3 วินาที นาน 10 นาที |
-| pod restart | คำสั่งซื้อสำเร็จลดลงเกิน 50% เทียบกับสัปดาห์ก่อน |
-| disk 60% | **disk จะเต็มใน 4 ชั่วโมงตามอัตราปัจจุบัน** |
+| CPU over 80% | Error rate over 2% for 5 minutes |
+| Memory over 70% | p95 of the payment page over 3 seconds for 10 minutes |
+| pod restart | Successful orders drop by more than 50% against last week |
+| disk 60% | **disk will be full in 4 hours at the current rate** |
 
-| ระดับ | ตัวอย่าง | ส่งไปไหน |
+| Level | Example | Send to |
 |---|---|---|
-| **ปลุกคน** | ผู้ใช้ใช้งานไม่ได้ · ข้อมูลกำลังเสียหาย | โทร · push |
-| **ดูในเวลางาน** | disk จะเต็มใน 3 วัน · error เพิ่มแต่ยังไม่มาก | แชตของทีม |
-| **แค่บันทึกไว้** | ทุกอย่างที่เหลือ | แดชบอร์ด |
+| **Wake a person** | Users cannot use the system · data is being damaged | Phone call · push |
+| **Check in work hours** | disk will be full in 3 days · errors rising but still low | Team chat |
+| **Just record it** | Everything else | Dashboard |
 
-**ทุกการแจ้งเตือนต้องมี:** อะไรพัง · กระทบใคร · **ลิงก์ไป runbook** · ลิงก์ไปแดชบอร์ด
-**ตั้งช่วงเวลา (นาน N นาที) เสมอ** ไม่ใช่เตือนทันทีที่ค่าพุ่งครั้งเดียว
+**Every alert must have:** what broke · who is affected · **a link to the runbook** · a link to the dashboard.
+**Always set a duration (for N minutes)**, not an alert the moment a value spikes once.
 
-### 4.1 · งบความผิดพลาด (error budget) และอัตราเผางบ (burn rate)
+### 4.1 · Error budget and burn rate
 
-ระบบที่มี SLO ใช้วิธีนี้แทนการตั้งเกณฑ์ error % ตายตัว เพราะมันบอกว่า "ถ้าปล่อยไว้แบบนี้ งบทั้งเดือนจะหมดเมื่อไหร่" (แนวคิดจาก Google SRE Workbook)
+A system with an SLO uses this instead of a fixed error % threshold, because it says "if this goes on, when will the whole month's budget run out?" (idea from the Google SRE Workbook)
 
-- **งบ** = เวลาที่ยอมให้ล้มได้ใน 30 วัน → SLO 99.9% = 43 นาที · 99.5% = 3.6 ชั่วโมง · 99% = 7.2 ชั่วโมง
-- **burn rate** = อัตรา error ตอนนี้ ÷ (1 − SLO) → burn 1 = งบหมดพอดีวันที่ 30 · burn 10 = หมดใน 3 วัน
-- ตั้งแจ้งเตือน 3 ระดับตามตาราง และทุกระดับต้องเป็นจริงทั้งช่วงยาวและช่วงสั้น (ช่วงสั้น = 1/12 ของช่วงยาว) จะได้หยุดเตือนทันทีที่ระบบหาย
+- **Budget** = the time you may fail in 30 days → SLO 99.9% = 43 minutes · 99.5% = 3.6 hours · 99% = 7.2 hours
+- **Burn rate** = current error rate ÷ (1 − SLO) → burn 1 = the budget runs out exactly on day 30 · burn 10 = gone in 3 days
+- Set 3 alert levels as in the table, and every level must hold true over both the long window and the short window (short window = 1/12 of the long one), so the alert stops as soon as the system recovers
 
-| ระดับ | burn rate | ช่วงยาว · ช่วงสั้น | กินงบไปแล้ว | SLO 99.9% แปลว่า error เกิน | ส่งไปไหน |
+| Level | burn rate | Long window · short window | Budget already used | SLO 99.9% means errors above | Send to |
 |---|---|---|---|---|---|
-| ไหม้เร็ว | 14.4 | 1 ชั่วโมง · 5 นาที | 2% ของเดือน ใน 1 ชั่วโมง | 1.44% | ปลุกคน |
-| ไหม้ช้า | 6 | 6 ชั่วโมง · 30 นาที | 5% ของเดือน ใน 6 ชั่วโมง | 0.6% | ปลุกคน |
-| รั่วซึม | 1 | 3 วัน · 6 ชั่วโมง | 10% ของเดือน ใน 3 วัน | 0.1% | แชตของทีม |
+| Fast burn | 14.4 | 1 hour · 5 minutes | 2% of the month in 1 hour | 1.44% | Wake a person |
+| Slow burn | 6 | 6 hours · 30 minutes | 5% of the month in 6 hours | 0.6% | Wake a person |
+| Slow leak | 1 | 3 days · 6 hours | 10% of the month in 3 days | 0.1% | Team chat |
 
-งบเหลือเท่าไหร่ให้ขึ้นบนแดชบอร์ดภาพรวม — งบใกล้หมด = หยุดปล่อยฟีเจอร์ ไปแก้ความเสถียรก่อน เป็นกติกาที่ตกลงกับเจ้าของผลิตภัณฑ์ล่วงหน้า ไม่ใช่ตอนทะเลาะกัน
+Show the remaining budget on the overview dashboard. When the budget is nearly gone, stop shipping features and fix stability first. Agree this rule with the product owner in advance, not in the middle of an argument.
 
 ---
 
-## 5 · แดชบอร์ด
+## 5 · Dashboards
 
-ทำ 2 หน้าพอ
+Two pages are enough.
 
-| หน้า | ตอบคำถาม | มีอะไร |
+| Page | Answers the question | Contains |
 |---|---|---|
-| **ภาพรวม** | "ตอนนี้ปกติไหม" | 4 สัญญาณของทั้งระบบ · สถานะ dependency · การปล่อยของล่าสุด |
-| **เจาะลึกต่อ service** | "พังตรงไหน" | 4 สัญญาณแยกตาม endpoint · คิว · ฐานข้อมูล |
+| **Overview** | "Is it normal now?" | The 4 signals for the whole system · dependency status · latest releases |
+| **Deep dive per service** | "Where did it break?" | The 4 signals split by endpoint · queues · database |
 
-- **เส้นแนวตั้งบอกเวลาที่ deploy** — ปัญหาส่วนใหญ่เริ่มหลังเส้นนี้ และเห็นได้ในวินาทีเดียว
-- หน้าภาพรวมต้องอ่านจบใน 10 วินาที จึงควรมีไม่เกิน 6 กราฟ
-- ใส่เส้นเกณฑ์ที่ตั้งแจ้งเตือนไว้ในกราฟ จะได้รู้ว่าห่างจากเส้นแค่ไหน
+- **A vertical line marks the deploy time.** Most problems start after this line, and you see it in one second
+- The overview page must be readable in 10 seconds, so keep it to 6 graphs at most
+- Draw the alert threshold lines on the graphs, so you can see how far the value is from the line
 
 ---
 
-## 6 · ตัวชี้วัดทางธุรกิจ
+## 6 · Business metrics
 
-ตัวชี้วัดทางเทคนิคเขียวหมดแต่ธุรกิจหยุดเดิน เป็นเรื่องที่เกิดขึ้นจริงและตรวจไม่เจอถ้าไม่วัด
+Technical metrics all green while the business has stalled really happens, and you will not catch it unless you measure it.
 
-| ตัวอย่าง | จับอะไรได้ |
+| Example | What it catches |
 |---|---|
-| คำสั่งซื้อสำเร็จต่อชั่วโมง | ปุ่มชำระเงินพังแม้ทุก endpoint คืน 200 |
-| อัตราเข้าสู่ระบบสำเร็จ | ผู้ให้บริการยืนยันตัวตนภายนอกมีปัญหา |
-| งานเบื้องหลังที่รอเกิน N นาที | คิวตัน แต่ API ยังตอบปกติ |
-| อีเมลส่งไม่สำเร็จ | ลูกค้าไม่ได้รับใบเสร็จ โดยไม่มี error ที่ไหนเลย |
+| Successful orders per hour | The pay button is broken even though every endpoint returns 200 |
+| Successful login rate | A problem with an external identity provider |
+| Background jobs waiting more than N minutes | The queue is stuck but the API still answers normally |
+| Emails that failed to send | Customers do not get receipts, with no error anywhere |
 
-**เลือก 3–5 ตัวที่เป็นหัวใจของธุรกิจ** แล้วเตือนเมื่อมันตกผิดปกติเทียบกับช่วงเดียวกันของสัปดาห์ก่อน
+**Pick 3–5 that are the heart of the business**, and alert when they drop abnormally against the same period last week.
 
 ---
 
 ## 7 · Anti-patterns
 
-- **ดูค่าเฉลี่ยของเวลาตอบสนอง** — กลบคนที่เจอปัญหาทุกครั้ง
-- **แจ้งเตือนที่ไม่ต้องทำอะไร** — สอนให้ทุกคนเลิกสนใจการแจ้งเตือน
-- **เตือนจาก CPU และหน่วยความจำ** — ระบบที่ CPU 90% แต่ผู้ใช้ปกติ ไม่ใช่เหตุ
-- **ใส่ id ที่ไม่จำกัดค่าเป็น label** — ระบบเก็บ metric ล่มเสียเอง
-- **แดชบอร์ด 40 กราฟ** — ไม่มีใครรู้ว่าต้องดูอันไหน
-- **วัดแต่เทคนิค ไม่วัดธุรกิจ** — ทุกอย่างเขียวแต่ไม่มีใครสั่งซื้อได้
-- **เก็บ trace ทุกคำขอ** — แพงโดยไม่ได้อะไรเพิ่ม สุ่มเก็บก็พอ
-- **ไม่มีเส้นบอกเวลา deploy** — เสียเวลาครึ่งชั่วโมงกว่าจะนึกได้ว่าเพิ่ง deploy ไป
-- **แจ้งเตือนที่ไม่มีลิงก์ไป runbook** — คนรับต้องเริ่มค้นจากศูนย์ตอนตี 3
+- **Watching the average response time**: it hides the people who hit the problem every time
+- **Alerts that need no action**: they teach everyone to ignore alerts
+- **Alerting on CPU and memory**: a system at CPU 90% with normal users is not an incident
+- **Putting unbounded ids in labels**: the metrics system brings itself down
+- **A dashboard with 40 graphs**: nobody knows which one to look at
+- **Measuring only the technical side, not the business**: everything is green but nobody can place an order
+- **Tracing every request**: expensive for no extra gain, sampling is enough
+- **No line marking the deploy time**: you lose half an hour before you remember you just deployed
+- **Alerts with no link to a runbook**: the receiver starts searching from zero at 3 a.m.
 
 ---
 
-## 8 · ตัวย่อ
+## 8 · Abbreviations
 
-- **metric** — ตัวชี้วัด ตัวเลขที่เก็บตามเวลา
-- **trace** — การไล่รอยคำขอหนึ่งตลอดเส้นทางที่มันวิ่งผ่าน
-- **p95 / p99** — เปอร์เซ็นไทล์ที่ 95 และ 99 (ช้ากว่านี้มีแค่ 5% หรือ 1% ของคำขอ)
-- **label / tag** — ป้ายกำกับที่แนบกับตัวชี้วัด ใช้แยกดูเป็นกลุ่ม
-- **on-call** — เวรรับแจ้งเหตุนอกเวลาทำการ
-- **SLO** — Service Level Objective (เป้าหมายระดับบริการที่ตั้งไว้เอง เช่น สำเร็จ 99.5%)
-- **error budget / burn rate** — เวลาที่ยอมให้ล้มได้ต่อเดือนตาม SLO และความเร็วที่กำลังใช้มันหมด (ข้อ 4.1)
+- **metric**: a number collected over time
+- **trace**: following one request along the whole path it travels
+- **p95 / p99**: the 95th and 99th percentiles (only 5% or 1% of requests are slower than this)
+- **label / tag**: a tag attached to a metric, used to look at groups separately
+- **on-call**: the duty of receiving incident alerts outside working hours
+- **SLO**: Service Level Objective (a service-level target you set yourself, such as 99.5% success)
+- **error budget / burn rate**: the time you may fail per month under the SLO, and how fast you are using it up (item 4.1)
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Links to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| รูปแบบ log และ correlation id | `logging-standards` |
-| health check ที่ระบบเฝ้าใช้ | `web-service-essentials` |
-| ตัวชี้วัดของคิวและงานเบื้องหลัง | `background-jobs` |
-| อัตรา error และการตัดวงจร | `error-handling-patterns` |
-| ขั้นตอนเมื่อการแจ้งเตือนดัง | `incident-runbook-template` |
-| สรุปหลังเหตุการณ์ | `postmortem-template` |
-| ตัวเลขเป้าหมายที่ตกลงกับลูกค้า | `srs-writing` |
-| PromQL · กฎ alert · Grafana provisioning · ตัวอย่าง voice agent | `references/prometheus-grafana.md` |
-| ให้ agent อ่าน Prometheus หรือ Grafana ผ่าน MCP | `mcp-server` ข้อ 1.1 |
+| Log format and correlation id | `logging-standards` |
+| Health checks the monitor uses | `web-service-essentials` |
+| Metrics for queues and background jobs | `background-jobs` |
+| Error rate and circuit breaking | `error-handling-patterns` |
+| Steps when an alert fires | `incident-runbook-template` |
+| Post-incident summary | `postmortem-template` |
+| Target numbers agreed with the customer | `srs-writing` |
+| PromQL · alert rules · Grafana provisioning · voice agent example | `references/prometheus-grafana.md` |
+| Let an agent read Prometheus or Grafana through MCP | `mcp-server` item 1.1 |
 
-ที่มาของข้อ 3.1: prometheus.io (metric types · naming · histograms · alerting) และ grafana.com (dashboard best practices · provisioning) ตรวจ 2026-10-27 · ลิงก์เต็มอยู่ท้าย `references/prometheus-grafana.md`
+Source of item 3.1: prometheus.io (metric types · naming · histograms · alerting) and grafana.com (dashboard best practices · provisioning), checked 2026-10-27 · full links are at the end of `references/prometheus-grafana.md`
 
 
 ## reference: prometheus-grafana.md
@@ -1501,165 +1501,165 @@ Checked 2026-10-27
 
 Use when checking how many users a system holds
 
-# load-testing — ยิงโหลดแบบมีเป้า มีเกณฑ์ผ่าน และได้รับอนุญาต
+# load-testing — load tests with a goal, a pass threshold and permission
 
-อยู่ใน plugin `software-development` · ถ้อยคำในไฟล์นี้เขียนตาม `human-writing` · ข้อเท็จจริงของเครื่องมือทุกข้อมีลิงก์และวันที่ตรวจ 2026-10-28 ในหัวข้อ "ที่มา" · สคริปต์ตัวอย่าง [`assets/load-test.js`](assets/load-test.js) · workflow ตัวอย่าง [`assets/k6-smoke.yml`](assets/k6-smoke.yml) · วิธีอ่านผล [`reading-results`](references/reading-results.md) · MCP ของ k6 [`mcp-k6`](references/mcp-k6.md)
+Lives in plugin `software-development` · wording in this file follows `human-writing` · every tool fact has a link and the check date 2026-10-28 in the "Sources" section · sample script [`assets/load-test.js`](assets/load-test.js) · sample workflow [`assets/k6-smoke.yml`](assets/k6-smoke.yml) · how to read results [`reading-results`](references/reading-results.md) · k6 MCP [`mcp-k6`](references/mcp-k6.md)
 
-> **กฎข้อเดียว:** ไม่มีเกณฑ์ผ่านที่เขียนไว้ก่อนยิง = ไม่มีผลทดสอบ มีแค่กราฟ · และไม่ยิงระบบที่ไม่ใช่ของเรา หรือ production โดยไม่มีชื่อคนอนุมัติเป็นลายลักษณ์อักษร
+> **One rule:** no pass threshold written before the run = no test result, only a graph · and never load a system that is not ours, or production, without a named person's written approval.
 
-## ใช้เมื่อ
+## Use when
 
-- ก่อนเปิดระบบหรือก่อนแคมเปญที่คนจะเข้าพร้อมกันเยอะ (ลดราคา · เปิดลงทะเบียน · ประกาศผล)
-- ถามว่า "ระบบรับได้กี่คน" · "ตอนคนเยอะจะช้าไหม" · "เพิ่มเครื่องแล้วดีขึ้นจริงไหม"
-- postmortem บอกว่าเหตุเกิดเพราะไม่เคยทดสอบโหลด (`postmortem-template` หัวข้อ 5)
-- จะตั้ง smoke test ความเร็วใน CI ให้ล้มเมื่อช้ากว่าเกณฑ์
-- ผู้ใช้พูดว่า load test · stress test · spike · soak · k6 · Locust · JMeter · p95 · ยิงโหลด · ทดสอบประสิทธิภาพ
+- Before launching a system or before a campaign that brings many people at once (sale · registration opening · results announcement)
+- Someone asks "ระบบรับได้กี่คน" · "ตอนคนเยอะจะช้าไหม" · "เพิ่มเครื่องแล้วดีขึ้นจริงไหม" (how many users can it hold · will it be slow when busy · did adding machines really help)
+- A postmortem says the incident happened because load was never tested (`postmortem-template` section 5)
+- Setting up a speed smoke test in CI that fails when slower than the threshold
+- The user says load test · stress test · spike · soak · k6 · Locust · JMeter · p95 · ยิงโหลด · ทดสอบประสิทธิภาพ
 
-ไม่ใช้เมื่อ: หน้าเว็บหน้าเดียวโหลดช้าในเบราว์เซอร์ (Lighthouse · Core Web Vitals) → [`web-quality-audit`](../web-quality-audit/SKILL.md) · ระบบจริงช้าอยู่ตอนนี้และต้องหาว่าช้าตรงไหน → [`observability-basics`](../observability-basics/SKILL.md) ก่อน · ทดสอบว่ากดปุ่มแล้วได้ผลถูก → [`e2e-testing-patterns`](../e2e-testing-patterns/SKILL.md)
+Do not use when: one web page loads slowly in the browser (Lighthouse · Core Web Vitals) → [`web-quality-audit`](../web-quality-audit/SKILL.md) · the live system is slow right now and you must find where → [`observability-basics`](../observability-basics/SKILL.md) first · testing that a button click gives the right result → [`e2e-testing-patterns`](../e2e-testing-patterns/SKILL.md)
 
-## ใช้ตัวอื่นแทนหรือคู่กัน
+## Use another skill instead, or together
 
-| สถานการณ์ | ใช้ | เกี่ยวกับ skill นี้อย่างไร |
+| Situation | Use | How it relates to this skill |
 |---|---|---|
-| ความเร็วฝั่งเบราว์เซอร์ของหน้าเดียว | [`web-quality-audit`](../web-quality-audit/SKILL.md) | skill นี้วัดฝั่ง server ตอนคนเยอะ ไม่ใช่เวลาวาดหน้า |
-| ต้องเห็นว่าส่วนไหนของระบบตันระหว่างยิง | [`observability-basics`](../observability-basics/SKILL.md) | เปิดแดชบอร์ดของระบบคู่กับผล k6 (หัวข้อ 6) |
-| ใส่ smoke test ลง pipeline | [`cicd-and-release`](../cicd-and-release/SKILL.md) · [`jenkins-pipeline`](../jenkins-pipeline/SKILL.md) | หัวข้อ 7 บอกว่าอะไรรันทุก PR อะไรรันตามรอบ |
-| แผนทดสอบทั้งรุ่นที่มีทุกชนิด | [`test-case-template`](../test-case-template/SKILL.md) | ใส่ load test เป็นแถวหนึ่งในแผน พร้อมเกณฑ์จากหัวข้อ 1 |
-| ยิงแล้วต้องเพิ่มเครื่องหรือ autoscale | [`kubernetes-helm`](../kubernetes-helm/SKILL.md) · [`infra-as-code`](../infra-as-code/SKILL.md) | ยิงซ้ำด้วยสคริปต์เดิมหลังปรับ เทียบกับผลก่อนปรับ |
-| ข้อมูลทดสอบมีชื่อหรือเบอร์โทร | [`pdpa-compliance`](../pdpa-compliance/SKILL.md) | ใช้ข้อมูลปลอม ไม่ดึงข้อมูลลูกค้าจริงมายิง |
+| Browser-side speed of one page | [`web-quality-audit`](../web-quality-audit/SKILL.md) | This skill measures the server side when busy, not page paint time |
+| You must see which part of the system clogs during the run | [`observability-basics`](../observability-basics/SKILL.md) | Open the system's dashboards next to the k6 results (section 6) |
+| Adding a smoke test to a pipeline | [`cicd-and-release`](../cicd-and-release/SKILL.md) · [`jenkins-pipeline`](../jenkins-pipeline/SKILL.md) | Section 7 says what runs on every PR and what runs on a schedule |
+| A whole-release test plan with every kind of test | [`test-case-template`](../test-case-template/SKILL.md) | Put the load test in as one row of the plan, with the thresholds from section 1 |
+| After the run you must add machines or autoscale | [`kubernetes-helm`](../kubernetes-helm/SKILL.md) · [`infra-as-code`](../infra-as-code/SKILL.md) | Run again with the same script after the change and compare with the result before |
+| Test data contains names or phone numbers | [`pdpa-compliance`](../pdpa-compliance/SKILL.md) | Use fake data. Do not pull real customer data in to load the system |
 
-## 1 · เป้าและเกณฑ์ผ่าน — เขียนก่อนเปิดเครื่องมือ
+## 1 · Goal and pass threshold — write before opening the tool
 
-ถามให้ได้ 4 ข้อ แล้วจดลงหัวไฟล์สคริปต์หรือแผนทดสอบ:
+Get answers to 4 questions, then note them at the top of the script file or the test plan:
 
-| ข้อ | ตัวอย่างคำตอบ | ถ้าไม่มีคำตอบ |
+| Item | Example answer | If there is no answer |
 |---|---|---|
-| ปริมาณที่คาด | ชั่วโมงเร่งด่วน 50 คำขอต่อวินาที ที่ path `/api/orders` | ดึงจาก log หรือ metric ของระบบจริง · ระบบใหม่ ใช้ประมาณการของเจ้าของงานแล้วติด `(รอยืนยัน)` |
-| เส้นทางที่ยิง | ดูสินค้า 70% · ใส่ตะกร้า 20% · จ่ายเงิน 10% | ยิงเส้นทางที่ทำเงินหรือแพงที่สุดก่อน 1–3 เส้น |
-| เกณฑ์ความเร็ว | `p(95)` ของเวลาตอบไม่เกินกี่มิลลิวินาที | ค่าตั้งต้น 500 ms สำหรับ API **ค่าตั้งต้น ยังไม่ได้วัด** · ปรับหลังมีผล baseline |
-| เกณฑ์ error | `http_req_failed` ต่ำกว่ากี่เปอร์เซ็นต์ | ค่าตั้งต้น 1% **ค่าตั้งต้น ยังไม่ได้วัด** |
+| Expected volume | Peak hour 50 requests per second on path `/api/orders` | Pull it from the live system's logs or metrics · for a new system, use the owner's estimate and tag it `(รอยืนยัน)` (awaiting confirmation) |
+| Paths to load | Browse products 70% · add to cart 20% · pay 10% | Load the 1–3 paths that earn the most money or cost the most first |
+| Speed threshold | The `p(95)` of response time is at most how many milliseconds | Default 500 ms for an API. **Default, not measured** (`ค่าตั้งต้น ยังไม่ได้วัด`) · adjust once there is a baseline result |
+| Error threshold | `http_req_failed` below what percent | Default 1%. **Default, not measured** (`ค่าตั้งต้น ยังไม่ได้วัด`) |
 
-- วัดด้วย percentile ไม่ใช่ค่าเฉลี่ย: ค่าเฉลี่ยซ่อนคนส่วนน้อยที่รอนาน
-- เกณฑ์ทุกข้อแปลงเป็น `thresholds` ในสคริปต์ (หัวข้อ 4) ไม่เก็บไว้ในหัวคนอ่านผล
-- ถ้าไม่มีตัวเลขปริมาณเลย ให้ทำ smoke กับ baseline ได้ แต่ห้ามสรุปว่า "รับได้" เพราะไม่รู้ว่ารับได้เทียบกับอะไร
+- Measure with percentiles, not averages: an average hides the minority who wait a long time.
+- Turn every threshold into `thresholds` in the script (section 4). Do not keep them in the head of whoever reads the result.
+- If there is no volume figure at all, you can run smoke and baseline, but you must not conclude "it can handle it", because you do not know what it is handling it against.
 
-## 2 · ด่านอนุญาต — ก่อนยิงทุกครั้งที่เกิน smoke และทุกครั้งที่ยิง production
+## 2 · Permission gate — before every run beyond smoke and every run on production
 
-การยิงโหลดใส่ระบบที่ไม่ได้รับอนุญาตทำให้ระบบล่มได้จริงและอาจผิดกฎหมาย จึงหยุดรออนุมัติตรงนี้ ไม่ข้ามแม้ผู้ใช้เร่ง
+Loading a system without permission can really bring it down and may be illegal. So stop here and wait for approval. Do not skip it even if the user is in a hurry.
 
-1. **ระบบเป็นของใคร** · ของคนอื่น (API ของคู่ค้า · payment gateway · SaaS ภายนอก · เว็บคู่แข่ง) → ไม่ยิง · ใช้ mock หรือ sandbox ที่ผู้ให้บริการเปิดให้ทดสอบโหลด และอ่านเงื่อนไขของเขาก่อน
-2. **environment** · ยิงที่ staging หรือ environment แยกสำหรับทดสอบโหลด · เอกสาร k6 บอกว่า QA ที่เครื่องไม่เท่า production ใช้ประเมินความสามารถรับโหลดไม่ได้ ใช้ได้แค่ smoke
-3. **production** · ต้องมีชื่อคนอนุมัติ ช่วงเวลา ปริมาณสูงสุด และคนเฝ้าที่หยุดได้ทันที · เริ่มที่ smoke ปริมาณต่ำ (เอกสาร k6 ถือเป็นแนวปฏิบัติที่เสี่ยงต่ำ) · ห้ามสร้างคำสั่งซื้อ การจ่ายเงิน อีเมล หรือ SMS จริง
-4. **ของที่ยิงแล้วเกิดผลข้างเคียง** · ตัด webhook ส่งเงิน ส่งข้อความ ออกจากเส้นทาง หรือชี้ไป mock · ผู้ให้บริการภายนอกที่คิดเงินต่อครั้ง ตั้งเพดานเงินก่อน
-5. **บันทึก** ลงหัวสคริปต์หรือแผน: ระบบ · environment · ปริมาณสูงสุด · ช่วงเวลา · ผู้อนุมัติ · ช่องทางหยุด
+1. **Whose system is it?** · If it belongs to someone else (a partner's API · payment gateway · external SaaS · a competitor's site) → do not load it · use a mock, or a sandbox the provider opens for load testing, and read their terms first.
+2. **Environment** · Run on staging or a separate load-test environment · the k6 docs say a QA environment with machines unequal to production cannot be used to judge load capacity, only for smoke.
+3. **Production** · Needs a named approver, a time window, a peak volume, and a watcher who can stop at once · start with a low-volume smoke (the k6 docs treat it as a low-risk practice) · never create real orders, payments, emails or SMS.
+4. **Anything that causes side effects when hit** · Take payment and message-sending webhooks off the path, or point them at a mock · for an external provider that charges per call, set a spending cap first.
+5. **Record** in the script header or plan: system · environment · peak volume · time window · approver · way to stop
 
-สคริปต์ตัวอย่างบังคับด่านนี้ในโค้ด: ถ้าไม่มี `BASE_URL` หรือ `TARGET_ENV` สคริปต์จะหยุด · ถ้าเป็นแบบที่ไม่ใช่ smoke หรือ `TARGET_ENV=production` (รวม smoke) แต่ไม่มี `APPROVED_BY` สคริปต์ก็หยุด
+The sample script enforces this gate in code: if `BASE_URL` or `TARGET_ENV` is missing, the script stops · if the type is not smoke, or `TARGET_ENV=production` (smoke included), and `APPROVED_BY` is missing, the script stops too.
 
-## 3 · เลือกเครื่องมือ
+## 3 · Choose the tool
 
-| ถ้า | ใช้ | เหตุผล |
+| If | Use | Reason |
 |---|---|---|
-| เริ่มใหม่ · HTTP API หรือเว็บ · อยากให้เกณฑ์ผ่านล้ม CI ได้เลย | **k6** (ค่าหลัก) | เขียนเป็น JavaScript · `thresholds` ในสคริปต์ · ออก exit code ไม่ใช่ 0 เมื่อเกณฑ์ไม่ผ่าน · ใบอนุญาต AGPL-3.0 |
-| ทีมถนัด Python · ต้องเขียนลำดับขั้นซับซ้อนหรือโปรโตคอลเอง | **Locust** | สถานการณ์ทดสอบเป็นโค้ด Python ธรรมดา · กระจายหลายเครื่องได้ · รันแบบ headless ใน CI ได้ · ใบอนุญาต MIT |
-| องค์กรมีแผน `.jmx` อยู่แล้ว · ต้องยิง JDBC · JMS · LDAP · FTP · SOAP | **JMeter** | รองรับโปรโตคอลกว้าง · มี GUI บันทึกแผน · ยิงจริงใช้โหมด CLI (headless) |
+| Starting fresh · HTTP API or web · want the pass threshold to fail CI directly | **k6** (default) | Written in JavaScript · `thresholds` in the script · exits with a non-0 code when a threshold fails · AGPL-3.0 licence |
+| Team prefers Python · needs complex step sequences or its own protocol | **Locust** | Test scenarios are plain Python code · can be spread over several machines · runs headless in CI · MIT licence |
+| The organisation already has a `.jmx` plan · must load JDBC · JMS · LDAP · FTP · SOAP | **JMeter** | Wide protocol support · has a GUI to record plans · use CLI mode (headless) for real runs |
 
-- รุ่นที่เห็น 2026-10-28: k6 v2.3.0 (2026-09-21) และสาย 1.x ยังออกแพตช์ความปลอดภัย v1.8.2 (2026-10-12) · ล็อกรุ่นใน CI ไม่ใช้ `latest` · `setup-k6-action` ที่ไม่ใส่ `k6-version` จะได้รุ่นล่าสุดเสมอ ([README](https://github.com/grafana/setup-k6-action) ตรวจ 2026-10-28)
-- Grafana Cloud k6 (ยิงจากคลาวด์ · เก็บผล) ราคาและโควตา `(ยังไม่ได้ตรวจ)` · เริ่มด้วย k6 บนเครื่องหรือ runner ของ CI ซึ่งฟรี
-- เครื่องที่ยิงต้องไม่ใช่เครื่องเดียวกับระบบที่ถูกยิง ไม่งั้นแย่ง CPU กันเองแล้วผลเพี้ยน
+- Versions seen on 2026-10-28: k6 v2.3.0 (2026-09-21), and the 1.x line still gets a security patch v1.8.2 (2026-10-12) · pin the version in CI, do not use `latest` · `setup-k6-action` without `k6-version` always gets the latest ([README](https://github.com/grafana/setup-k6-action) checked 2026-10-28)
+- Grafana Cloud k6 (runs from the cloud · stores results): price and quota `(ยังไม่ได้ตรวจ)` (not yet checked) · start with k6 on a machine or a CI runner, which is free
+- The machine that sends the load must not be the same machine as the system under load, or they fight over CPU and the result is skewed.
 
-## 4 · แบบทดสอบและสคริปต์
+## 4 · Test types and the script
 
-ลำดับตามเอกสาร k6: **smoke ก่อนเสมอ** → average-load → แบบอื่นตามความเสี่ยง · รูปโหลดเรียบ ๆ (ไต่ขึ้น · คงที่ · ลง) ไม่ทำโหลดขึ้นลงหลายรอบเพราะหาต้นเหตุยาก
+Order per the k6 docs: **smoke always first** → average-load → other types by risk · use a plain load shape (ramp up · hold · ramp down). Do not run load that goes up and down several times, because the cause is hard to find.
 
-| แบบ | ถามอะไร | ผู้ใช้เสมือน (VU) และเวลา ตามเอกสาร k6 | เมื่อไหร่ |
+| Type | What it asks | Virtual users (VU) and time, per the k6 docs | When |
 |---|---|---|---|
-| smoke | สคริปต์ถูกไหม ระบบตอบได้ตอนคนน้อย | น้อย · วินาทีถึงไม่กี่นาที | ทุกครั้งก่อนแบบอื่น · ทุก PR ใน CI |
-| load (average-load) | ปริมาณปกติผ่านเกณฑ์ไหม | เท่าค่าเฉลี่ยของ production · 5–60 นาที | ก่อนปล่อยรุ่น · เป็น baseline |
-| stress | เกินปกติแล้วเป็นอย่างไร | สูงกว่าเฉลี่ย · 5–60 นาที | ระบบเสี่ยงช่วงใช้หนัก |
-| spike | คนแห่เข้าทันทีแล้วรอดไหม | สูงมาก · ไม่กี่นาที | ก่อนแคมเปญ · flash sale |
-| soak | ใช้นาน ๆ แล้วหน่วยความจำรั่ว connection ค้างไหม | เฉลี่ย · หลายชั่วโมง | ระบบที่เปิดยาว |
-| breakpoint | เพดานอยู่ตรงไหน | ไต่ขึ้นจนพัง | ทำไม่กี่ครั้ง ต้องได้อนุมัติข้อ 2 เสมอ · สคริปต์ตัวอย่างไม่มีแบบนี้ ต้องเขียน stages เอง |
+| smoke | Is the script right? Does the system answer when few people use it? | Few · seconds to a few minutes | Before every other type · every PR in CI |
+| load (average-load) | Does normal volume pass the threshold? | Equal to production average · 5–60 minutes | Before releasing a version · as the baseline |
+| stress | What happens above normal? | Above average · 5–60 minutes | Systems at risk in heavy-use periods |
+| spike | Does it survive a sudden rush? | Very high · a few minutes | Before a campaign · flash sale |
+| soak | After long use, does memory leak or do connections hang? | Average · several hours | Systems that stay up for long periods |
+| breakpoint | Where is the ceiling? | Ramp up until it breaks | Run only a few times, always needs approval per section 2 · the sample script has no such type, write the stages yourself |
 
-สคริปต์ [`assets/load-test.js`](assets/load-test.js) เลือกแบบด้วย `TEST_TYPE` ทุกแบบใช้ executor `ramping-arrival-rate` (กำหนดจำนวนรอบต่อหน่วยเวลา ระบบช้าลงก็ยังโดนยิงเท่าเดิม จึงเห็นอาการจริง) · หัวใจคือ thresholds:
+The script [`assets/load-test.js`](assets/load-test.js) picks the type with `TEST_TYPE`. Every type uses the `ramping-arrival-rate` executor (it fixes the number of iterations per unit of time, so when the system slows down it still gets hit at the same rate, and you see the real symptoms) · the core is thresholds:
 
 ```javascript
 thresholds: {
   http_req_failed: [{ threshold: 'rate<0.01', abortOnFail: true, delayAbortEval: '30s' }],
-  http_req_duration: ['p(95)<500'],              // ค่าตั้งต้น ยังไม่ได้วัด
-  'http_req_duration{type:API}': ['p(95)<500'],  // แยกเกณฑ์ตาม tag
+  http_req_duration: ['p(95)<500'],              // default, not measured
+  'http_req_duration{type:API}': ['p(95)<500'],  // separate threshold by tag
 },
 ```
 
-- `abortOnFail` หยุดการยิงเมื่อเกณฑ์ไม่ผ่านระหว่างทาง ไม่ทุบระบบต่อจนจบ · `delayAbortEval` รอเก็บตัวอย่างก่อนตัดสิน
-- ตัวเลขทุกตัวในสคริปต์ (rate · VU · stages) เป็น **ค่าตั้งต้น ยังไม่ได้วัด** ปรับตามหัวข้อ 1
-- รัน: `k6 run -e TEST_TYPE=smoke -e TARGET_ENV=staging -e BASE_URL=https://staging.example.com assets/load-test.js > _to_delete/k6.log 2>&1; tail -40 _to_delete/k6.log` (k6 พ่น progress ยาวตามเวลายิง อ่านแค่สรุปท้าย)
+- `abortOnFail` stops the run when a threshold fails midway, instead of pounding the system to the end · `delayAbortEval` waits to collect samples before judging
+- Every number in the script (rate · VU · stages) is a **default, not measured** value. Adjust per section 1.
+- Run: `k6 run -e TEST_TYPE=smoke -e TARGET_ENV=staging -e BASE_URL=https://staging.example.com assets/load-test.js > _to_delete/k6.log 2>&1; tail -40 _to_delete/k6.log` (k6 prints a long progress log for as long as the run lasts, so read only the closing summary)
 
-## 5 · อ่านผล
+## 5 · Reading the result
 
-รายละเอียดและตัวอย่างอ่านผลใน [`reading-results`](references/reading-results.md) · สั้น ๆ:
+Details and worked examples are in [`reading-results`](references/reading-results.md) · in short:
 
-1. ดูบรรทัด thresholds ท้ายรายงานก่อน (ผ่าน/ไม่ผ่าน) แล้วดู exit code: 0 = ผ่านทุกเกณฑ์ · เกณฑ์ไม่ผ่านมักได้ 99
-2. ดู `http_req_failed` ก่อน `http_req_duration` · error พุ่งแปลว่าเวลาตอบที่เห็นอาจเร็วเพราะตอบ error เร็ว
-3. ดูเครื่องที่ยิงด้วย CPU เต็มหรือ VU ไม่พอ = ผลบอกขีดของเครื่องยิง ไม่ใช่ระบบ
-4. เทียบกับ baseline รอบก่อนด้วยสคริปต์เดิม ข้อมูลเดิม environment เดิม · เปลี่ยนทีละอย่าง
-5. รายงานบอกผล "ผ่าน/ไม่ผ่านเกณฑ์ข้อไหน ที่ปริมาณเท่าไร" ไม่ใช่ "ระบบรับได้ 10,000 คน" ถ้าไม่ได้ยิงแบบนั้นจริง
+1. Look at the thresholds lines at the end of the report first (pass/fail), then the exit code: 0 = every threshold passed · a failed threshold usually gives 99
+2. Look at `http_req_failed` before `http_req_duration`. If errors spike, the response times you see may be fast only because errors answer fast.
+3. Look at the load-sending machine. CPU at full or too few VU = the result shows the limit of the load generator, not the system.
+4. Compare with the previous baseline using the same script, same data, same environment · change one thing at a time
+5. The report says "which threshold passed or failed, at what volume", not "the system holds 10,000 people", unless you really ran that.
 
-ระบบที่มีหลายขั้น (เช่น ฟังเสียง → แชท → พูด): ยิงทีละขั้นก่อน แล้วค่อยยิงทั้งเส้น · คอขวดไม่เท่ากันทุกขั้น (ตัวอย่างจากงานสอน ไม่ใช่เกณฑ์: แชทรับได้ 4 คน · ฟังเสียง 32 คน · พูด 2 คน) · ความเร็วทั้งระบบเท่ากับขั้นที่อ่อนที่สุด · คิวไม่ได้ทำให้เร็วขึ้น แต่ทำให้ไม่พัง (คนที่เกินได้คำตอบช้าลงแทนที่จะได้ error) · ตั้ง prefetch ของ consumer ให้เท่าจำนวนงานที่ backend ทำพร้อมกันได้จริง (`rabbitmq-messaging` หัวข้อ 4) · ถ้า backend ล่มกลางการยิง ให้ใส่ watchdog ตามหัวข้อ 8 ของ `rabbitmq-messaging`
+For a multi-stage system (for example listen to audio → chat → speak): load each stage alone first, then the whole path · the bottleneck differs per stage (an example from a teaching job, not a threshold: chat holds 4 · listening holds 32 · speaking holds 2) · whole-system speed equals the weakest stage · a queue does not make it faster, it keeps it from breaking (the extra people get slower answers instead of errors) · set the consumer's prefetch equal to the number of jobs the backend can really do at once (`rabbitmq-messaging` section 4) · if the backend dies mid-run, add a watchdog per section 8 of `rabbitmq-messaging`
 
-## 6 · ยิงคู่กับการเฝ้าระบบ
+## 6 · Run together with monitoring
 
-ผล k6 บอกว่าช้า แต่ไม่บอกว่าช้าเพราะอะไร · ระหว่างยิงเปิดแดชบอร์ดตาม `observability-basics` หัวข้อ 2 (latency · traffic · errors · saturation) ของ server ฐานข้อมูล คิว · จดเวลาเริ่มและจบการยิงเพื่อจับคู่กราฟ · คอขวดที่เจอบ่อย: connection pool ของฐานข้อมูล · query ไม่มี index · ไม่ได้คืน connection (ตัวอย่างใน `postmortem-template` หัวข้อ 5)
+The k6 result says it is slow, but not why · during the run, open the dashboards per `observability-basics` section 2 (latency · traffic · errors · saturation) for the server, database and queue · note the start and end time of the run so you can match the graphs · common bottlenecks: database connection pool · queries without an index · connections not returned (example in `postmortem-template` section 5)
 
-## 7 · ต่อเข้า CI
+## 7 · Plug into CI
 
-| รันเมื่อ | แบบ | ที่ไหน |
+| Run when | Type | Where |
 |---|---|---|
-| ทุก PR หรือทุก push | smoke · ไม่กี่นาที | staging หรือ environment ของ PR |
-| กลางคืนหรือตามรอบ | load · stress · spike | environment แยกสำหรับทดสอบโหลด |
-| ก่อนปล่อยรุ่นใหญ่ | ครบชุดที่เลือกในหัวข้อ 4 · รันซ้ำอย่างน้อย 2 รอบ | environment ที่เท่า production |
+| Every PR or every push | smoke · a few minutes | staging or the PR's environment |
+| Overnight or on a schedule | load · stress · spike | a separate load-test environment |
+| Before a major release | the full set chosen in section 4 · run at least 2 rounds | an environment equal to production |
 
-- เอกสาร k6 เตือนว่า load test ใช้ 3–15 นาทีขึ้นไป จึงไม่ใส่ในทางที่ deploy อัตโนมัติ และอย่าเชื่อผลผ่าน/ไม่ผ่านอย่างเดียวจนกว่ากระบวนการจะนิ่ง
-- GitHub Actions: `grafana/setup-k6-action@v1.2.2` (ใส่ `k6-version`) ติดตั้ง k6 แล้ว `grafana/run-k6-action@v1.5.0` รัน (รุ่นที่ล็อกไว้ ตรวจ 2026-10-28) · ตัวอย่างเต็มใน [`assets/k6-smoke.yml`](assets/k6-smoke.yml) · Jenkins หรือ CI อื่นเรียก `k6 run` ตรง ๆ
-- อย่าห่อ `k6 run` ด้วยสคริปต์ที่กลืน exit code (เช่นมี `echo` ต่อท้าย) · ให้ `k6 run` เป็นคำสั่งสุดท้าย หรือเก็บ `$?` แล้ว `exit` ด้วยค่านั้น
-- `BASE_URL` และ token มาจากตัวแปรลับของ CI (`config-and-secrets`) ไม่เขียนลงสคริปต์
+- The k6 docs warn that load tests take 3–15 minutes or more, so do not put them on the path that deploys automatically, and do not trust pass/fail alone until the process is stable.
+- GitHub Actions: `grafana/setup-k6-action@v1.2.2` (set `k6-version`) installs k6, then `grafana/run-k6-action@v1.5.0` runs it (pinned versions, checked 2026-10-28) · full example in [`assets/k6-smoke.yml`](assets/k6-smoke.yml) · Jenkins or other CI call `k6 run` directly
+- Do not wrap `k6 run` in a script that swallows the exit code (for example one with a trailing `echo`) · make `k6 run` the last command, or keep `$?` and `exit` with that value
+- `BASE_URL` and tokens come from CI secret variables (`config-and-secrets`), not written into the script
 
-## ตัวอย่างจริง 1 ชุด
+## One worked example
 
-ป้าย `ตัวอย่าง`: ออกแบบบนกระดาษ ยังไม่ได้ยิงระบบจริง
+Label `ตัวอย่าง` (example): designed on paper, no real system has been loaded
 
-**โจทย์:** ร้านออนไลน์จะจัด flash sale เที่ยงวันศุกร์ เคยล่มเพราะ connection pool เต็ม อยากรู้ว่ารอบนี้รอดไหม
+**Problem:** An online shop will run a flash sale at noon on Friday. It went down before because the connection pool filled up. They want to know whether it survives this time.
 
-| ขั้น | ที่ทำ | หัวข้อ |
+| Step | What is done | Section |
 |---|---|---|
-| เป้า | ปริมาณจากแคมเปญก่อน (รอยืนยัน) · เส้นทาง ดูสินค้า → ใส่ตะกร้า → จ่ายเงินด้วย mock · p95 ไม่เกิน 500 ms · error ไม่เกิน 1% (ค่าตั้งต้น ยังไม่ได้วัด) | 1 |
-| อนุญาต | ยิงที่ staging ที่ขนาดเท่า production · payment ชี้ mock · ผู้อนุมัติ ช่วงเวลา จดในหัวสคริปต์ | 2 |
-| ยิง | smoke → load (baseline) → spike | 4 |
-| เฝ้า | แดชบอร์ด connection pool และ CPU ฐานข้อมูลระหว่างยิง | 6 |
-| ผล | รายงานเกณฑ์ข้อที่ผ่านและไม่ผ่านที่ปริมาณที่ยิงจริง แล้วเพิ่ม smoke ลง CI | 5 · 7 |
+| Goal | Volume from the previous campaign (รอยืนยัน) · path: browse products → add to cart → pay with a mock · p95 at most 500 ms · errors at most 1% (default, not measured) | 1 |
+| Permission | Load staging at production size · payment points at a mock · approver and time window noted in the script header | 2 |
+| Run | smoke → load (baseline) → spike | 4 |
+| Monitor | Dashboards of connection pool and database CPU during the run | 6 |
+| Result | Report which thresholds passed and failed at the volume really run, then add smoke to CI | 5 · 7 |
 
-## ตรวจก่อนส่ง
+## Check before sending
 
-1. มีปริมาณที่คาด เส้นทาง และเกณฑ์ p95 กับอัตรา error ก่อนยิง · ค่าที่เดามีป้าย "ค่าตั้งต้น ยังไม่ได้วัด"
-2. ระบบเป็นของเรา · environment ระบุชัด · เกิน smoke มีชื่อผู้อนุมัติ · production มีคนเฝ้าและช่องทางหยุด
-3. ไม่มีเงิน อีเมล SMS หรือคำสั่งซื้อจริงเกิดจากการยิง
-4. เกณฑ์อยู่ใน `thresholds` · มี `abortOnFail` ที่อัตรา error
-5. smoke ผ่านก่อนแบบอื่น · เครื่องยิงไม่ใช่เครื่องเดียวกับระบบ
-6. รายงานบอกผลเทียบเกณฑ์และ baseline ที่ปริมาณที่ยิงจริง ไม่สรุปเกินที่ยิง
-7. CI ไม่กลืน exit code · ค่าลับมาจากตัวแปรลับ · ล็อกรุ่น k6
+1. Expected volume, paths, and the p95 and error-rate thresholds exist before the run · guessed values carry the label "ค่าตั้งต้น ยังไม่ได้วัด" (default, not measured)
+2. The system is ours · the environment is stated clearly · beyond smoke there is a named approver · production has a watcher and a way to stop
+3. No real money, email, SMS or order came from the run
+4. Thresholds are in `thresholds` · `abortOnFail` is set on the error rate
+5. smoke passed before other types · the load generator is not the same machine as the system
+6. The report states results against thresholds and the baseline at the volume really run, and does not conclude beyond what was run
+7. CI does not swallow the exit code · secrets come from secret variables · the k6 version is pinned
 
-## ที่มา
+## Sources
 
-ตรวจ 2026-10-28 (เปิดอ่านผ่านเครื่องมือดึงหน้าเว็บที่สรุปโดยโมเดลเล็ก ควรเปิดหน้าดิบซ้ำก่อนล็อกค่าใน production)
+Checked 2026-10-28 (opened through a web-fetch tool that summarises pages with a small model, so reopen the raw page before locking a value in production)
 
-- thresholds · `abortOnFail` · `delayAbortEval` · เกณฑ์ตาม tag https://grafana.com/docs/k6/latest/using-k6/thresholds/
-- ชื่อ executor ทั้ง 6 https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ · ตัวเลือกของ `ramping-arrival-rate` https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ramping-arrival-rate/
-- แบบทดสอบและลำดับ https://grafana.com/docs/k6/latest/testing-guides/test-types/
+- thresholds · `abortOnFail` · `delayAbortEval` · per-tag thresholds https://grafana.com/docs/k6/latest/using-k6/thresholds/
+- names of all 6 executors https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ · options of `ramping-arrival-rate` https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ramping-arrival-rate/
+- test types and their order https://grafana.com/docs/k6/latest/testing-guides/test-types/
 - CI · environment · production https://grafana.com/docs/k6/latest/testing-guides/automated-performance-testing/
-- exit code 0 และ 99 · สคริปต์กลืน exit code https://grafana.com/docs/learning-paths/automate-k6-cicd/handle-exit-code/
+- exit codes 0 and 99 · scripts that swallow the exit code https://grafana.com/docs/learning-paths/automate-k6-cicd/handle-exit-code/
 - GitHub Actions https://github.com/grafana/run-k6-action
-- ใบอนุญาต k6 https://github.com/grafana/k6 · รุ่น https://api.github.com/repos/grafana/k6/releases
-- Locust https://docs.locust.io/en/stable/what-is-locust.html · JMeter https://jmeter.apache.org/ (หน้าแรกลิงก์ไปใบอนุญาตของ Apache Software Foundation ไม่ได้ระบุรุ่นล่าสุด)
-- ยังไม่ได้ตรวจ: ราคาและโควตา Grafana Cloud k6 · รุ่นล่าสุดของ Locust และ JMeter
+- k6 licence https://github.com/grafana/k6 · versions https://api.github.com/repos/grafana/k6/releases
+- Locust https://docs.locust.io/en/stable/what-is-locust.html · JMeter https://jmeter.apache.org/ (the home page links to the Apache Software Foundation licence and does not state the latest version)
+- Not yet checked (`ยังไม่ได้ตรวจ`): Grafana Cloud k6 price and quota · latest versions of Locust and JMeter
 
 
 ## reference: mcp-k6.md

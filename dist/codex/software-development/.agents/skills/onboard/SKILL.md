@@ -54,7 +54,7 @@ The technical writer should:
    **Quick Reference Card:**
    - Critical commands
    - Important Slack channels
-   - On-call info / escalation (ชื่อช่องทางและตารางเวร ไม่ใส่รหัสผ่านหรือ token — ลิงก์ไปที่ขอสิทธิ์แทน)
+   - On-call info / escalation (channel names and the on-call schedule; no passwords or tokens — link to where access is requested instead)
    - Where to find docs
    - Who to ask about X
 
@@ -72,7 +72,7 @@ The technical writer should:
 
 5. **Produce polished onboarding doc** using `polished-document-style` skill:
    - Welcome message
-   - 30/60/90 timeline (รูปไทม์ไลน์ตามแบบประจำบ้านของ skill `diagram-figures` — เอกสารโปรเจกต์ห้ามใช้ Mermaid ค่าเริ่มต้น · Mermaid ใช้ได้เฉพาะภาพร่างในแชตหรือโน้ต README สั้น ๆ)
+   - 30/60/90 timeline (a timeline figure in the house style of the skill `diagram-figures` — project documents must not use default Mermaid · Mermaid is allowed only for a rough sketch in chat or a short README note)
    - Checklist per phase
    - Frequently Asked Questions (FAQ) section
    - Glossary of company terms

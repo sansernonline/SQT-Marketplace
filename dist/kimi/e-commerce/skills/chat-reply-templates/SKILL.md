@@ -8,13 +8,13 @@ argument-hint: <platform> <what the customer wrote> [order status, photos, shop 
 
 Response time and chat rate count toward shop ratings on the big platforms, and a fast, polite answer is half of every sale. Templates make the answer fast; filling them with the order's real facts makes it right.
 
-## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+## 0 · Look for an existing format first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before using the structure or templates in this file, check whether the user, the client or the project already has its own format:
 
-- **ที่ดู:** น้ำเสียงของร้าน: แชตที่ร้านตอบลูกค้าจริง 10–20 ข้อความล่าสุด (ผู้ใช้วางมาหรือมีไฟล์) · คำลงท้ายที่ใช้ (ค่ะ · ครับ · คะ · จ้า) · การเรียกลูกค้า · อีโมจิ · นโยบายคืนของและเวลาส่งของร้าน
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** แม่แบบ T1–T5 เป็นโครงของเนื้อหา คำและน้ำเสียงใช้ของร้าน · ไม่มีตัวอย่างแชต ถามผู้ใช้ข้อเดียวว่าร้านพูดแบบไหน แล้วทำต่อ
+- **What to look at:** the shop's voice: the last 10–20 real messages the shop sent to customers (pasted by the user or in a file) · the sentence endings used (ค่ะ · ครับ · คะ · จ้า) · how the shop addresses customers · emoji · the shop's return policy and shipping times
+- **Result:** if found, use it (headings, order, field names, running numbers) and say in the reply which file the format came from. If not found, use the templates in this file as the fallback and say that no existing format was found
+- **Every format still needs the content:** templates T1–T5 are the skeleton of the content, while the wording and voice are the shop's. If there are no chat samples, ask the user one question about how the shop speaks, then continue
 
 ## Workflow
 
@@ -59,7 +59,7 @@ When chats pile up, answer by money at risk and deadline, not by arrival order:
 - Never promise a delivery date the courier has not shown
 - Never paste another buyer's details, and never ask for a buyer's ID card or bank account in chat (refunds go through the platform)
 - Keep emoji to 1–2 per message; no stickers in complaint chats
-- ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ แชตร้าน · ชื่อร้าน/แอดมิน ใส่ครั้งแรกครั้งเดียว ประโยคถัดไปละได้
+- Thai text → `human-writing` `references/thai-grammar.md` section 4, the shop-chat register · put the shop name or แอดมิน in once at the start; later sentences can leave it out
 - Quotation or tax invoice for a business buyer → `doc-quotation`
 - LINE shop auto-replies → `line-oa-setup` · `line-chatbot` · rich menu image → `graphic-design:line-richmenu` (if installed)
 
@@ -76,7 +76,7 @@ Reply (T3 filled):
 - `returns-and-bad-reviews` — refunds and public review replies
 - `shipping-compare` — courier claims for lost parcels
 
-## เรียกเป็นคำสั่ง
+## Run as a command
 
 `/e-commerce:chat-reply-templates <platform> <what the customer wrote> [order status, photos, shop voice]`
 

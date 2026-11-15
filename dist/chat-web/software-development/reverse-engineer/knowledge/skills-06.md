@@ -157,7 +157,7 @@ AI-looking style in any medium → before sending, go through item 3 of `no-ai-l
 
 # รูปแบบ markdown พร้อมตัวอย่าง
 
-ตัวอย่างโค้ด markdown ของทุกรูปแบบที่ `SKILL.md` อ้างถึง ให้ลอกไปใช้ได้ทันที ส่วนกฎว่าใช้เมื่อไหร่อยู่ใน `SKILL.md`
+Markdown code examples for every format that `SKILL.md` refers to, ready to copy and use · the rules on when to use each one live in `SKILL.md`
 
 **สารบัญ:** Document Header · Table of Contents · Callout Boxes · Tables · Figures · Status Badges · Cover Block · Comparison / Decision Tables · Lists · Code Blocks · Approval/Sign-off · Glossary
 
@@ -233,7 +233,7 @@ Use a table:
 
 ## Figures (รูปในเอกสาร)
 
-รูปในเอกสารโปรเจกต์วาดด้วย `diagram-figures` (plugin `software-development` · house style) แล้วฝังเป็นไฟล์ภาพ · Mermaid ใช้แค่รูปด่วนใน README · PR ไม่ใช้ในเอกสารที่ส่งต่อ
+Figures in project documents are drawn with `diagram-figures` (plugin `software-development` · house style) and embedded as image files · use Mermaid only for quick figures in a README · do not use it in documents that are handed on, nor in PRs
 
 ```markdown
 ลำดับการเรียกเมื่อผู้ใช้กดบันทึกแสดงในรูปที่ 3
@@ -375,16 +375,16 @@ Define acronyms on first use, then add to glossary.
 
 ## reference: thai-office.md
 
-# เอกสาร Office ภาษาไทย
+# Thai Office documents
 
-ใช้กับไฟล์ Word · Excel · PDF ทุกไฟล์ที่มีภาษาไทย จะสร้างด้วยสคริปต์หรือทำมือก็ตาม รายละเอียดและตัวช่วยอยู่ใน `branded-document-design`
+Applies to every Word · Excel · PDF file that contains Thai, whether a script builds it or a person makes it by hand. Details and helpers are in `branded-document-design`.
 
-- Word นับภาษาไทยเป็น complex script จึงมีช่องฟอนต์ ขนาด และตัวหนาแยกจากละติน ถ้าตั้งแค่ช่องละติน ข้อความไทยจะไม่เปลี่ยน ต้องตั้งให้ครบทั้งสองชุด
-- ย่อหน้าไทยไม่จัดชิดสองขอบ (justify) เพราะไทยไม่มีช่องว่างระหว่างคำ Word จะยืดช่องไฟจนเป็นรู (ยกเว้นคู่มือวิทยานิพนธ์สั่ง Thai Distributed)
-- ข้อความไทยห้ามใช้ฟอนต์ mono เพราะ Consolas กับ Cascadia ไม่มีอักษรไทย ใช้ mono กับรหัส คีย์ และตัวเลขเท่านั้น
-- ส่งออก PDF ให้ฝังฟอนต์ทุกครั้ง ไม่งั้นเครื่องที่ไม่มีฟอนต์จะเอาตัวอื่นมาแทนและวรรณยุกต์ลอย
-- CSV ที่ให้คนไทยเปิดใน Excel บันทึกเป็น UTF-8 แบบมี BOM ไม่งั้นภาษาไทยเพี้ยน
-- ก่อนบอกว่าเสร็จ แปลงทุกหน้าเป็นภาพแล้วเปิดดูจริง ตารางล้น หัวข้อค้างท้ายหน้า วรรณยุกต์ลอย ดูจากโค้ดไม่เห็น
+- Word treats Thai as a complex script, so it has separate font, size and bold fields from Latin. If you set only the Latin field, the Thai text does not change. Set both.
+- Do not justify Thai paragraphs. Thai has no spaces between words, so Word stretches the letter spacing and leaves gaps. The exception is a thesis guide that requires Thai Distributed.
+- Never use a mono font for Thai text, because Consolas and Cascadia have no Thai letters. Use mono only for codes, keys and numbers.
+- Always embed fonts when exporting PDF. Otherwise a machine without the font substitutes another one and the tone marks float.
+- Save a CSV that Thai users will open in Excel as UTF-8 with BOM (byte order mark). Otherwise the Thai text turns to garbage.
+- Before you say it is done, render every page to an image and look at it. Overflowing tables, headings stranded at the bottom of a page and floating tone marks do not show up in the code.
 
 
 ## reference: theme-colors.md
@@ -452,36 +452,36 @@ Use when text is heavy with abbreviations or jargon
 
 # Spell Out Abbreviations
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** follow `human-writing` for the wording of every line. This skill gives the format and structure. `human-writing` says how to write so readers understand.
 
-> **กฎข้อ 1:** ตัวย่อทุกตัว เขียนเต็มครั้งแรก แล้ววงเล็บตัวย่อไว้ — หลังจากนั้นใช้ตัวย่อได้
-> **กฎข้อ 2:** ศัพท์เฉพาะทุกคำ วงเล็บคำอธิบายสั้น ๆ ไว้ครั้งแรก — ผู้อ่านนอกสายจะได้ไม่ต้องเดา
+> **Rule 1:** write every abbreviation in full the first time, with the abbreviation in brackets. After that you may use the abbreviation.
+> **Rule 2:** put a short explanation in brackets the first time you use any technical term, so readers from outside the field do not have to guess.
 
-## รูปแบบ
+## Format
 
 ```
 ถูก: Model Context Protocol (MCP) ทำให้ Claude ต่อกับระบบอื่นได้ ... MCP รองรับ ...
 ผิด: MCP ทำให้ Claude ต่อกับระบบอื่นได้
 ```
 
-- **ครั้งแรกของแต่ละเอกสาร** เขียนเต็มแล้ววงเล็บตัวย่อ ครั้งต่อไปใช้ตัวย่อล้วน
-- เอกสารยาวที่แบ่งบท ให้เขียนเต็มใหม่**ครั้งแรกของแต่ละบท** เพราะคนมักอ่านทีละบท
-- ตารางหรือหัวข้อที่มีที่ไม่พอ ให้เขียนเต็มในบรรทัดแรกของส่วนนั้นแทน
-- เอกสารที่มีตัวย่อตั้งแต่ 5 ตัวขึ้นไป ต้องมี **อภิธานศัพท์ (glossary)** ท้ายเอกสาร
+- **The first time in each document**, write it in full with the abbreviation in brackets. After that, use the bare abbreviation.
+- In a long document split into chapters, write it in full again **the first time in each chapter**, because people often read one chapter at a time.
+- If a table or heading has no room, write it in full on the first line of that section instead.
+- A document with 5 or more abbreviations must have a **glossary** at the end.
 
-### เอกสารภาษาไทย
+### Thai documents
 
-ครั้งแรกเขียน **ไทย (ชื่อเต็มอังกฤษ: ตัวย่อ)** เช่น ปัญญาประดิษฐ์ (Artificial Intelligence: AI) · ครั้งต่อไปใช้คำไทยหรือตัวย่อก็ได้ แต่ต้องเลือกแบบเดียวทั้งเอกสาร · กฎนี้เป็นที่เดียวที่กำหนดรูปแบบ `human-writing` `references/thai-grammar.md` หัวข้อ 5 แถว 4 ใช้ตามนี้
+The first time, write **Thai (English full name: abbreviation)**, for example ปัญญาประดิษฐ์ (Artificial Intelligence: AI). After that, use either the Thai word or the abbreviation, but pick one style for the whole document. This rule is the only place that sets the format. `human-writing` `references/thai-grammar.md` section 5 row 4 follows it.
 
-## ยกเว้น — ไม่ต้องขยาย
+## Exceptions — no need to expand
 
-คำที่คนทั่วไปรู้จักมากกว่าชื่อเต็ม: URL, PDF, HTML, CSS, JSON, USB, Wi-Fi, ID, OK
-และนามสกุลไฟล์ (`.docx`, `.pptx`) ถ้าไม่แน่ใจ **ให้ขยาย** เพราะขยายเกินไม่เสียหาย แต่คนอ่านไม่รู้เรื่องเสียหาย
+Terms the public knows better than the full name: URL, PDF, HTML, CSS, JSON, USB, Wi-Fi, ID, OK
+and file extensions (`.docx`, `.pptx`). If you are not sure, **expand it**, because expanding too much does no harm, but a reader who does not understand does.
 
-## ศัพท์เฉพาะ — วงเล็บคำอธิบาย ไม่ใช่แค่ตัวย่อ
+## Technical terms — explain in brackets, not just the abbreviation
 
-ขยายตัวย่อแล้วอาจยังไม่พอ ถ้าชื่อเต็มก็ยังไม่บอกอะไร **คำที่ผู้อ่านนอกสายไม่รู้จัก
-ต้องมีคำอธิบายสั้นในวงเล็บครั้งแรก**
+Expanding the abbreviation may not be enough if the full name still says nothing. **A term that an outside reader does not know
+needs a short explanation in brackets the first time.**
 
 ```
 ผิด: ใช้ idempotency key กันงานซ้ำ
@@ -491,25 +491,25 @@ Use when text is heavy with abbreviations or jargon
 ถูก: ต้องดู cash flow (เงินเข้า-ออกจริงแต่ละเดือน) ก่อนกู้
 ```
 
-**คำอธิบายต้องสั้นกว่า 1 บรรทัด** ถ้ายาวกว่านั้นให้แยกเป็นประโยคของตัวเอง
+**The explanation must be shorter than 1 line.** If it is longer, make it a sentence of its own.
 
-**วัดว่าคำไหนต้องอธิบาย** ด้วยคำถามเดียว — คนที่ทำงานคนละสายกับเรื่องนี้
-อ่านแล้วเดาความหมายได้ไหม ถ้าเดาไม่ได้ก็ต้องอธิบาย
+**Decide which terms need explaining** with one question: could a person who works in a different field from this topic
+read it and guess the meaning? If they cannot guess, explain it.
 
-| ระดับผู้อ่าน | อธิบายแค่ไหน |
+| Reader level | How much to explain |
 |---|---|
-| ลูกค้า ผู้บริหาร คนนอกสาย | ศัพท์เทคนิคทุกคำ แม้แต่คำที่ช่างใช้กันทุกวัน |
-| ทีมเดียวกันแต่คนละส่วนงาน | เฉพาะคำเฉพาะของส่วนนั้น เช่น ชื่อรูปแบบ ชื่อกระบวนการ |
-| คนที่ทำเรื่องนี้อยู่แล้ว | เฉพาะคำที่เพิ่งตั้งขึ้นใหม่ในโปรเจกต์นี้ |
+| Customers, executives, people outside the field | Every technical term, even words engineers use every day |
+| The same team but a different area of work | Only the terms specific to that area, such as names of formats and processes |
+| People already working on this | Only terms newly coined in this project |
 
 ---
 
-## ใช้กับอะไรบ้าง
+## What it applies to
 
-เอกสารทุกชนิด · สไลด์ · ป้ายและข้อความบนหน้าจอ · ข้อความขายของ · คำอธิบายไดอะแกรม · คอมเมนต์ในโค้ด ·
-คำตอบในแชต — **ทุกอย่างที่มีคนอ่าน**
+Every kind of document · slides · labels and on-screen text · sales copy · diagram descriptions · code comments ·
+chat answers — **anything a person reads**
 
-## ตัวอย่างที่เจอบ่อย
+## Common examples
 
 Model Context Protocol (MCP) · Application Programming Interface (API) ·
 Key Performance Indicator (KPI) · Service Level Agreement (SLA) ·
@@ -517,15 +517,15 @@ Return on Investment (ROI) · Stock Keeping Unit (SKU) · Value Added Tax (VAT) 
 Cash on Delivery (COD) · Objectives and Key Results (OKR) ·
 Personally Identifiable Information (PII) · Proof of Concept (POC)
 
-ตัวย่อฝั่งโค้ด (RBAC · SSO · CI/CD · SRS · ADR ฯลฯ) → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
+Code-side abbreviations (RBAC · SSO · CI/CD · SRS · ADR and so on) → the extension in plugin `software-development` → `superuser` → `references/code-extensions.md`
 
 ## Anti-patterns
 
-- ขยายตัวย่อซ้ำทุกครั้งที่โผล่ — รกและกวนสายตา ครั้งแรกพอ
-- วงเล็บกลับด้าน — `MCP (Model Context Protocol)` อ่านสะดุดกว่าเขียนเต็มขึ้นก่อน
-- ขยายผิด — ถ้าไม่รู้ว่าย่อมาจากอะไร ให้ค้นก่อน อย่าเดา
-- ขยายตัวย่อครบแต่ปล่อยศัพท์เฉพาะลอย — `Quadratic Weighted Kappa (QWK)` ยังไม่ช่วยใครถ้าไม่บอกว่าค่านี้วัดอะไร
-- อธิบายยาวเป็นย่อหน้าในวงเล็บ — วงเล็บไว้ให้คำสั้น ๆ ถ้ายาวให้แยกประโยค
+- Expanding the abbreviation every time it appears — cluttered and distracting. The first time is enough.
+- Reversed brackets — `MCP (Model Context Protocol)` reads less smoothly than writing the full name first.
+- Expanding wrongly — if you do not know what it stands for, look it up first. Do not guess.
+- Expanding every abbreviation but leaving technical terms unexplained — `Quadratic Weighted Kappa (QWK)` still helps no one unless you say what the value measures.
+- A paragraph-long explanation in brackets — brackets are for short words. If it is long, split it into sentences.
 
 
 ---

@@ -3,162 +3,162 @@ name: load-testing
 description: Use when checking how many users a system holds
 ---
 
-# load-testing — ยิงโหลดแบบมีเป้า มีเกณฑ์ผ่าน และได้รับอนุญาต
+# load-testing — load tests with a goal, a pass threshold and permission
 
-อยู่ใน plugin `software-development` · ถ้อยคำในไฟล์นี้เขียนตาม `human-writing` · ข้อเท็จจริงของเครื่องมือทุกข้อมีลิงก์และวันที่ตรวจ 2026-10-28 ในหัวข้อ "ที่มา" · สคริปต์ตัวอย่าง [`assets/load-test.js`](assets/load-test.js) · workflow ตัวอย่าง [`assets/k6-smoke.yml`](assets/k6-smoke.yml) · วิธีอ่านผล [`reading-results`](references/reading-results.md) · MCP ของ k6 [`mcp-k6`](references/mcp-k6.md)
+Lives in plugin `software-development` · wording in this file follows `human-writing` · every tool fact has a link and the check date 2026-10-28 in the "Sources" section · sample script [`assets/load-test.js`](assets/load-test.js) · sample workflow [`assets/k6-smoke.yml`](assets/k6-smoke.yml) · how to read results [`reading-results`](references/reading-results.md) · k6 MCP [`mcp-k6`](references/mcp-k6.md)
 
-> **กฎข้อเดียว:** ไม่มีเกณฑ์ผ่านที่เขียนไว้ก่อนยิง = ไม่มีผลทดสอบ มีแค่กราฟ · และไม่ยิงระบบที่ไม่ใช่ของเรา หรือ production โดยไม่มีชื่อคนอนุมัติเป็นลายลักษณ์อักษร
+> **One rule:** no pass threshold written before the run = no test result, only a graph · and never load a system that is not ours, or production, without a named person's written approval.
 
-## ใช้เมื่อ
+## Use when
 
-- ก่อนเปิดระบบหรือก่อนแคมเปญที่คนจะเข้าพร้อมกันเยอะ (ลดราคา · เปิดลงทะเบียน · ประกาศผล)
-- ถามว่า "ระบบรับได้กี่คน" · "ตอนคนเยอะจะช้าไหม" · "เพิ่มเครื่องแล้วดีขึ้นจริงไหม"
-- postmortem บอกว่าเหตุเกิดเพราะไม่เคยทดสอบโหลด (`postmortem-template` หัวข้อ 5)
-- จะตั้ง smoke test ความเร็วใน CI ให้ล้มเมื่อช้ากว่าเกณฑ์
-- ผู้ใช้พูดว่า load test · stress test · spike · soak · k6 · Locust · JMeter · p95 · ยิงโหลด · ทดสอบประสิทธิภาพ
+- Before launching a system or before a campaign that brings many people at once (sale · registration opening · results announcement)
+- Someone asks "ระบบรับได้กี่คน" · "ตอนคนเยอะจะช้าไหม" · "เพิ่มเครื่องแล้วดีขึ้นจริงไหม" (how many users can it hold · will it be slow when busy · did adding machines really help)
+- A postmortem says the incident happened because load was never tested (`postmortem-template` section 5)
+- Setting up a speed smoke test in CI that fails when slower than the threshold
+- The user says load test · stress test · spike · soak · k6 · Locust · JMeter · p95 · ยิงโหลด · ทดสอบประสิทธิภาพ
 
-ไม่ใช้เมื่อ: หน้าเว็บหน้าเดียวโหลดช้าในเบราว์เซอร์ (Lighthouse · Core Web Vitals) → [`web-quality-audit`](../web-quality-audit/SKILL.md) · ระบบจริงช้าอยู่ตอนนี้และต้องหาว่าช้าตรงไหน → [`observability-basics`](../observability-basics/SKILL.md) ก่อน · ทดสอบว่ากดปุ่มแล้วได้ผลถูก → [`e2e-testing-patterns`](../e2e-testing-patterns/SKILL.md)
+Do not use when: one web page loads slowly in the browser (Lighthouse · Core Web Vitals) → [`web-quality-audit`](../web-quality-audit/SKILL.md) · the live system is slow right now and you must find where → [`observability-basics`](../observability-basics/SKILL.md) first · testing that a button click gives the right result → [`e2e-testing-patterns`](../e2e-testing-patterns/SKILL.md)
 
-## ใช้ตัวอื่นแทนหรือคู่กัน
+## Use another skill instead, or together
 
-| สถานการณ์ | ใช้ | เกี่ยวกับ skill นี้อย่างไร |
+| Situation | Use | How it relates to this skill |
 |---|---|---|
-| ความเร็วฝั่งเบราว์เซอร์ของหน้าเดียว | [`web-quality-audit`](../web-quality-audit/SKILL.md) | skill นี้วัดฝั่ง server ตอนคนเยอะ ไม่ใช่เวลาวาดหน้า |
-| ต้องเห็นว่าส่วนไหนของระบบตันระหว่างยิง | [`observability-basics`](../observability-basics/SKILL.md) | เปิดแดชบอร์ดของระบบคู่กับผล k6 (หัวข้อ 6) |
-| ใส่ smoke test ลง pipeline | [`cicd-and-release`](../cicd-and-release/SKILL.md) · [`jenkins-pipeline`](../jenkins-pipeline/SKILL.md) | หัวข้อ 7 บอกว่าอะไรรันทุก PR อะไรรันตามรอบ |
-| แผนทดสอบทั้งรุ่นที่มีทุกชนิด | [`test-case-template`](../test-case-template/SKILL.md) | ใส่ load test เป็นแถวหนึ่งในแผน พร้อมเกณฑ์จากหัวข้อ 1 |
-| ยิงแล้วต้องเพิ่มเครื่องหรือ autoscale | [`kubernetes-helm`](../kubernetes-helm/SKILL.md) · [`infra-as-code`](../infra-as-code/SKILL.md) | ยิงซ้ำด้วยสคริปต์เดิมหลังปรับ เทียบกับผลก่อนปรับ |
-| ข้อมูลทดสอบมีชื่อหรือเบอร์โทร | [`pdpa-compliance`](../pdpa-compliance/SKILL.md) | ใช้ข้อมูลปลอม ไม่ดึงข้อมูลลูกค้าจริงมายิง |
+| Browser-side speed of one page | [`web-quality-audit`](../web-quality-audit/SKILL.md) | This skill measures the server side when busy, not page paint time |
+| You must see which part of the system clogs during the run | [`observability-basics`](../observability-basics/SKILL.md) | Open the system's dashboards next to the k6 results (section 6) |
+| Adding a smoke test to a pipeline | [`cicd-and-release`](../cicd-and-release/SKILL.md) · [`jenkins-pipeline`](../jenkins-pipeline/SKILL.md) | Section 7 says what runs on every PR and what runs on a schedule |
+| A whole-release test plan with every kind of test | [`test-case-template`](../test-case-template/SKILL.md) | Put the load test in as one row of the plan, with the thresholds from section 1 |
+| After the run you must add machines or autoscale | [`kubernetes-helm`](../kubernetes-helm/SKILL.md) · [`infra-as-code`](../infra-as-code/SKILL.md) | Run again with the same script after the change and compare with the result before |
+| Test data contains names or phone numbers | [`pdpa-compliance`](../pdpa-compliance/SKILL.md) | Use fake data. Do not pull real customer data in to load the system |
 
-## 1 · เป้าและเกณฑ์ผ่าน — เขียนก่อนเปิดเครื่องมือ
+## 1 · Goal and pass threshold — write before opening the tool
 
-ถามให้ได้ 4 ข้อ แล้วจดลงหัวไฟล์สคริปต์หรือแผนทดสอบ:
+Get answers to 4 questions, then note them at the top of the script file or the test plan:
 
-| ข้อ | ตัวอย่างคำตอบ | ถ้าไม่มีคำตอบ |
+| Item | Example answer | If there is no answer |
 |---|---|---|
-| ปริมาณที่คาด | ชั่วโมงเร่งด่วน 50 คำขอต่อวินาที ที่ path `/api/orders` | ดึงจาก log หรือ metric ของระบบจริง · ระบบใหม่ ใช้ประมาณการของเจ้าของงานแล้วติด `(รอยืนยัน)` |
-| เส้นทางที่ยิง | ดูสินค้า 70% · ใส่ตะกร้า 20% · จ่ายเงิน 10% | ยิงเส้นทางที่ทำเงินหรือแพงที่สุดก่อน 1–3 เส้น |
-| เกณฑ์ความเร็ว | `p(95)` ของเวลาตอบไม่เกินกี่มิลลิวินาที | ค่าตั้งต้น 500 ms สำหรับ API **ค่าตั้งต้น ยังไม่ได้วัด** · ปรับหลังมีผล baseline |
-| เกณฑ์ error | `http_req_failed` ต่ำกว่ากี่เปอร์เซ็นต์ | ค่าตั้งต้น 1% **ค่าตั้งต้น ยังไม่ได้วัด** |
+| Expected volume | Peak hour 50 requests per second on path `/api/orders` | Pull it from the live system's logs or metrics · for a new system, use the owner's estimate and tag it `(รอยืนยัน)` (awaiting confirmation) |
+| Paths to load | Browse products 70% · add to cart 20% · pay 10% | Load the 1–3 paths that earn the most money or cost the most first |
+| Speed threshold | The `p(95)` of response time is at most how many milliseconds | Default 500 ms for an API. **Default, not measured** (`ค่าตั้งต้น ยังไม่ได้วัด`) · adjust once there is a baseline result |
+| Error threshold | `http_req_failed` below what percent | Default 1%. **Default, not measured** (`ค่าตั้งต้น ยังไม่ได้วัด`) |
 
-- วัดด้วย percentile ไม่ใช่ค่าเฉลี่ย: ค่าเฉลี่ยซ่อนคนส่วนน้อยที่รอนาน
-- เกณฑ์ทุกข้อแปลงเป็น `thresholds` ในสคริปต์ (หัวข้อ 4) ไม่เก็บไว้ในหัวคนอ่านผล
-- ถ้าไม่มีตัวเลขปริมาณเลย ให้ทำ smoke กับ baseline ได้ แต่ห้ามสรุปว่า "รับได้" เพราะไม่รู้ว่ารับได้เทียบกับอะไร
+- Measure with percentiles, not averages: an average hides the minority who wait a long time.
+- Turn every threshold into `thresholds` in the script (section 4). Do not keep them in the head of whoever reads the result.
+- If there is no volume figure at all, you can run smoke and baseline, but you must not conclude "it can handle it", because you do not know what it is handling it against.
 
-## 2 · ด่านอนุญาต — ก่อนยิงทุกครั้งที่เกิน smoke และทุกครั้งที่ยิง production
+## 2 · Permission gate — before every run beyond smoke and every run on production
 
-การยิงโหลดใส่ระบบที่ไม่ได้รับอนุญาตทำให้ระบบล่มได้จริงและอาจผิดกฎหมาย จึงหยุดรออนุมัติตรงนี้ ไม่ข้ามแม้ผู้ใช้เร่ง
+Loading a system without permission can really bring it down and may be illegal. So stop here and wait for approval. Do not skip it even if the user is in a hurry.
 
-1. **ระบบเป็นของใคร** · ของคนอื่น (API ของคู่ค้า · payment gateway · SaaS ภายนอก · เว็บคู่แข่ง) → ไม่ยิง · ใช้ mock หรือ sandbox ที่ผู้ให้บริการเปิดให้ทดสอบโหลด และอ่านเงื่อนไขของเขาก่อน
-2. **environment** · ยิงที่ staging หรือ environment แยกสำหรับทดสอบโหลด · เอกสาร k6 บอกว่า QA ที่เครื่องไม่เท่า production ใช้ประเมินความสามารถรับโหลดไม่ได้ ใช้ได้แค่ smoke
-3. **production** · ต้องมีชื่อคนอนุมัติ ช่วงเวลา ปริมาณสูงสุด และคนเฝ้าที่หยุดได้ทันที · เริ่มที่ smoke ปริมาณต่ำ (เอกสาร k6 ถือเป็นแนวปฏิบัติที่เสี่ยงต่ำ) · ห้ามสร้างคำสั่งซื้อ การจ่ายเงิน อีเมล หรือ SMS จริง
-4. **ของที่ยิงแล้วเกิดผลข้างเคียง** · ตัด webhook ส่งเงิน ส่งข้อความ ออกจากเส้นทาง หรือชี้ไป mock · ผู้ให้บริการภายนอกที่คิดเงินต่อครั้ง ตั้งเพดานเงินก่อน
-5. **บันทึก** ลงหัวสคริปต์หรือแผน: ระบบ · environment · ปริมาณสูงสุด · ช่วงเวลา · ผู้อนุมัติ · ช่องทางหยุด
+1. **Whose system is it?** · If it belongs to someone else (a partner's API · payment gateway · external SaaS · a competitor's site) → do not load it · use a mock, or a sandbox the provider opens for load testing, and read their terms first.
+2. **Environment** · Run on staging or a separate load-test environment · the k6 docs say a QA environment with machines unequal to production cannot be used to judge load capacity, only for smoke.
+3. **Production** · Needs a named approver, a time window, a peak volume, and a watcher who can stop at once · start with a low-volume smoke (the k6 docs treat it as a low-risk practice) · never create real orders, payments, emails or SMS.
+4. **Anything that causes side effects when hit** · Take payment and message-sending webhooks off the path, or point them at a mock · for an external provider that charges per call, set a spending cap first.
+5. **Record** in the script header or plan: system · environment · peak volume · time window · approver · way to stop
 
-สคริปต์ตัวอย่างบังคับด่านนี้ในโค้ด: ถ้าไม่มี `BASE_URL` หรือ `TARGET_ENV` สคริปต์จะหยุด · ถ้าเป็นแบบที่ไม่ใช่ smoke หรือ `TARGET_ENV=production` (รวม smoke) แต่ไม่มี `APPROVED_BY` สคริปต์ก็หยุด
+The sample script enforces this gate in code: if `BASE_URL` or `TARGET_ENV` is missing, the script stops · if the type is not smoke, or `TARGET_ENV=production` (smoke included), and `APPROVED_BY` is missing, the script stops too.
 
-## 3 · เลือกเครื่องมือ
+## 3 · Choose the tool
 
-| ถ้า | ใช้ | เหตุผล |
+| If | Use | Reason |
 |---|---|---|
-| เริ่มใหม่ · HTTP API หรือเว็บ · อยากให้เกณฑ์ผ่านล้ม CI ได้เลย | **k6** (ค่าหลัก) | เขียนเป็น JavaScript · `thresholds` ในสคริปต์ · ออก exit code ไม่ใช่ 0 เมื่อเกณฑ์ไม่ผ่าน · ใบอนุญาต AGPL-3.0 |
-| ทีมถนัด Python · ต้องเขียนลำดับขั้นซับซ้อนหรือโปรโตคอลเอง | **Locust** | สถานการณ์ทดสอบเป็นโค้ด Python ธรรมดา · กระจายหลายเครื่องได้ · รันแบบ headless ใน CI ได้ · ใบอนุญาต MIT |
-| องค์กรมีแผน `.jmx` อยู่แล้ว · ต้องยิง JDBC · JMS · LDAP · FTP · SOAP | **JMeter** | รองรับโปรโตคอลกว้าง · มี GUI บันทึกแผน · ยิงจริงใช้โหมด CLI (headless) |
+| Starting fresh · HTTP API or web · want the pass threshold to fail CI directly | **k6** (default) | Written in JavaScript · `thresholds` in the script · exits with a non-0 code when a threshold fails · AGPL-3.0 licence |
+| Team prefers Python · needs complex step sequences or its own protocol | **Locust** | Test scenarios are plain Python code · can be spread over several machines · runs headless in CI · MIT licence |
+| The organisation already has a `.jmx` plan · must load JDBC · JMS · LDAP · FTP · SOAP | **JMeter** | Wide protocol support · has a GUI to record plans · use CLI mode (headless) for real runs |
 
-- รุ่นที่เห็น 2026-10-28: k6 v2.3.0 (2026-09-21) และสาย 1.x ยังออกแพตช์ความปลอดภัย v1.8.2 (2026-10-12) · ล็อกรุ่นใน CI ไม่ใช้ `latest` · `setup-k6-action` ที่ไม่ใส่ `k6-version` จะได้รุ่นล่าสุดเสมอ ([README](https://github.com/grafana/setup-k6-action) ตรวจ 2026-10-28)
-- Grafana Cloud k6 (ยิงจากคลาวด์ · เก็บผล) ราคาและโควตา `(ยังไม่ได้ตรวจ)` · เริ่มด้วย k6 บนเครื่องหรือ runner ของ CI ซึ่งฟรี
-- เครื่องที่ยิงต้องไม่ใช่เครื่องเดียวกับระบบที่ถูกยิง ไม่งั้นแย่ง CPU กันเองแล้วผลเพี้ยน
+- Versions seen on 2026-10-28: k6 v2.3.0 (2026-09-21), and the 1.x line still gets a security patch v1.8.2 (2026-10-12) · pin the version in CI, do not use `latest` · `setup-k6-action` without `k6-version` always gets the latest ([README](https://github.com/grafana/setup-k6-action) checked 2026-10-28)
+- Grafana Cloud k6 (runs from the cloud · stores results): price and quota `(ยังไม่ได้ตรวจ)` (not yet checked) · start with k6 on a machine or a CI runner, which is free
+- The machine that sends the load must not be the same machine as the system under load, or they fight over CPU and the result is skewed.
 
-## 4 · แบบทดสอบและสคริปต์
+## 4 · Test types and the script
 
-ลำดับตามเอกสาร k6: **smoke ก่อนเสมอ** → average-load → แบบอื่นตามความเสี่ยง · รูปโหลดเรียบ ๆ (ไต่ขึ้น · คงที่ · ลง) ไม่ทำโหลดขึ้นลงหลายรอบเพราะหาต้นเหตุยาก
+Order per the k6 docs: **smoke always first** → average-load → other types by risk · use a plain load shape (ramp up · hold · ramp down). Do not run load that goes up and down several times, because the cause is hard to find.
 
-| แบบ | ถามอะไร | ผู้ใช้เสมือน (VU) และเวลา ตามเอกสาร k6 | เมื่อไหร่ |
+| Type | What it asks | Virtual users (VU) and time, per the k6 docs | When |
 |---|---|---|---|
-| smoke | สคริปต์ถูกไหม ระบบตอบได้ตอนคนน้อย | น้อย · วินาทีถึงไม่กี่นาที | ทุกครั้งก่อนแบบอื่น · ทุก PR ใน CI |
-| load (average-load) | ปริมาณปกติผ่านเกณฑ์ไหม | เท่าค่าเฉลี่ยของ production · 5–60 นาที | ก่อนปล่อยรุ่น · เป็น baseline |
-| stress | เกินปกติแล้วเป็นอย่างไร | สูงกว่าเฉลี่ย · 5–60 นาที | ระบบเสี่ยงช่วงใช้หนัก |
-| spike | คนแห่เข้าทันทีแล้วรอดไหม | สูงมาก · ไม่กี่นาที | ก่อนแคมเปญ · flash sale |
-| soak | ใช้นาน ๆ แล้วหน่วยความจำรั่ว connection ค้างไหม | เฉลี่ย · หลายชั่วโมง | ระบบที่เปิดยาว |
-| breakpoint | เพดานอยู่ตรงไหน | ไต่ขึ้นจนพัง | ทำไม่กี่ครั้ง ต้องได้อนุมัติข้อ 2 เสมอ · สคริปต์ตัวอย่างไม่มีแบบนี้ ต้องเขียน stages เอง |
+| smoke | Is the script right? Does the system answer when few people use it? | Few · seconds to a few minutes | Before every other type · every PR in CI |
+| load (average-load) | Does normal volume pass the threshold? | Equal to production average · 5–60 minutes | Before releasing a version · as the baseline |
+| stress | What happens above normal? | Above average · 5–60 minutes | Systems at risk in heavy-use periods |
+| spike | Does it survive a sudden rush? | Very high · a few minutes | Before a campaign · flash sale |
+| soak | After long use, does memory leak or do connections hang? | Average · several hours | Systems that stay up for long periods |
+| breakpoint | Where is the ceiling? | Ramp up until it breaks | Run only a few times, always needs approval per section 2 · the sample script has no such type, write the stages yourself |
 
-สคริปต์ [`assets/load-test.js`](assets/load-test.js) เลือกแบบด้วย `TEST_TYPE` ทุกแบบใช้ executor `ramping-arrival-rate` (กำหนดจำนวนรอบต่อหน่วยเวลา ระบบช้าลงก็ยังโดนยิงเท่าเดิม จึงเห็นอาการจริง) · หัวใจคือ thresholds:
+The script [`assets/load-test.js`](assets/load-test.js) picks the type with `TEST_TYPE`. Every type uses the `ramping-arrival-rate` executor (it fixes the number of iterations per unit of time, so when the system slows down it still gets hit at the same rate, and you see the real symptoms) · the core is thresholds:
 
 ```javascript
 thresholds: {
   http_req_failed: [{ threshold: 'rate<0.01', abortOnFail: true, delayAbortEval: '30s' }],
-  http_req_duration: ['p(95)<500'],              // ค่าตั้งต้น ยังไม่ได้วัด
-  'http_req_duration{type:API}': ['p(95)<500'],  // แยกเกณฑ์ตาม tag
+  http_req_duration: ['p(95)<500'],              // default, not measured
+  'http_req_duration{type:API}': ['p(95)<500'],  // separate threshold by tag
 },
 ```
 
-- `abortOnFail` หยุดการยิงเมื่อเกณฑ์ไม่ผ่านระหว่างทาง ไม่ทุบระบบต่อจนจบ · `delayAbortEval` รอเก็บตัวอย่างก่อนตัดสิน
-- ตัวเลขทุกตัวในสคริปต์ (rate · VU · stages) เป็น **ค่าตั้งต้น ยังไม่ได้วัด** ปรับตามหัวข้อ 1
-- รัน: `k6 run -e TEST_TYPE=smoke -e TARGET_ENV=staging -e BASE_URL=https://staging.example.com assets/load-test.js > _to_delete/k6.log 2>&1; tail -40 _to_delete/k6.log` (k6 พ่น progress ยาวตามเวลายิง อ่านแค่สรุปท้าย)
+- `abortOnFail` stops the run when a threshold fails midway, instead of pounding the system to the end · `delayAbortEval` waits to collect samples before judging
+- Every number in the script (rate · VU · stages) is a **default, not measured** value. Adjust per section 1.
+- Run: `k6 run -e TEST_TYPE=smoke -e TARGET_ENV=staging -e BASE_URL=https://staging.example.com assets/load-test.js > _to_delete/k6.log 2>&1; tail -40 _to_delete/k6.log` (k6 prints a long progress log for as long as the run lasts, so read only the closing summary)
 
-## 5 · อ่านผล
+## 5 · Reading the result
 
-รายละเอียดและตัวอย่างอ่านผลใน [`reading-results`](references/reading-results.md) · สั้น ๆ:
+Details and worked examples are in [`reading-results`](references/reading-results.md) · in short:
 
-1. ดูบรรทัด thresholds ท้ายรายงานก่อน (ผ่าน/ไม่ผ่าน) แล้วดู exit code: 0 = ผ่านทุกเกณฑ์ · เกณฑ์ไม่ผ่านมักได้ 99
-2. ดู `http_req_failed` ก่อน `http_req_duration` · error พุ่งแปลว่าเวลาตอบที่เห็นอาจเร็วเพราะตอบ error เร็ว
-3. ดูเครื่องที่ยิงด้วย CPU เต็มหรือ VU ไม่พอ = ผลบอกขีดของเครื่องยิง ไม่ใช่ระบบ
-4. เทียบกับ baseline รอบก่อนด้วยสคริปต์เดิม ข้อมูลเดิม environment เดิม · เปลี่ยนทีละอย่าง
-5. รายงานบอกผล "ผ่าน/ไม่ผ่านเกณฑ์ข้อไหน ที่ปริมาณเท่าไร" ไม่ใช่ "ระบบรับได้ 10,000 คน" ถ้าไม่ได้ยิงแบบนั้นจริง
+1. Look at the thresholds lines at the end of the report first (pass/fail), then the exit code: 0 = every threshold passed · a failed threshold usually gives 99
+2. Look at `http_req_failed` before `http_req_duration`. If errors spike, the response times you see may be fast only because errors answer fast.
+3. Look at the load-sending machine. CPU at full or too few VU = the result shows the limit of the load generator, not the system.
+4. Compare with the previous baseline using the same script, same data, same environment · change one thing at a time
+5. The report says "which threshold passed or failed, at what volume", not "the system holds 10,000 people", unless you really ran that.
 
-ระบบที่มีหลายขั้น (เช่น ฟังเสียง → แชท → พูด): ยิงทีละขั้นก่อน แล้วค่อยยิงทั้งเส้น · คอขวดไม่เท่ากันทุกขั้น (ตัวอย่างจากงานสอน ไม่ใช่เกณฑ์: แชทรับได้ 4 คน · ฟังเสียง 32 คน · พูด 2 คน) · ความเร็วทั้งระบบเท่ากับขั้นที่อ่อนที่สุด · คิวไม่ได้ทำให้เร็วขึ้น แต่ทำให้ไม่พัง (คนที่เกินได้คำตอบช้าลงแทนที่จะได้ error) · ตั้ง prefetch ของ consumer ให้เท่าจำนวนงานที่ backend ทำพร้อมกันได้จริง (`rabbitmq-messaging` หัวข้อ 4) · ถ้า backend ล่มกลางการยิง ให้ใส่ watchdog ตามหัวข้อ 8 ของ `rabbitmq-messaging`
+For a multi-stage system (for example listen to audio → chat → speak): load each stage alone first, then the whole path · the bottleneck differs per stage (an example from a teaching job, not a threshold: chat holds 4 · listening holds 32 · speaking holds 2) · whole-system speed equals the weakest stage · a queue does not make it faster, it keeps it from breaking (the extra people get slower answers instead of errors) · set the consumer's prefetch equal to the number of jobs the backend can really do at once (`rabbitmq-messaging` section 4) · if the backend dies mid-run, add a watchdog per section 8 of `rabbitmq-messaging`
 
-## 6 · ยิงคู่กับการเฝ้าระบบ
+## 6 · Run together with monitoring
 
-ผล k6 บอกว่าช้า แต่ไม่บอกว่าช้าเพราะอะไร · ระหว่างยิงเปิดแดชบอร์ดตาม `observability-basics` หัวข้อ 2 (latency · traffic · errors · saturation) ของ server ฐานข้อมูล คิว · จดเวลาเริ่มและจบการยิงเพื่อจับคู่กราฟ · คอขวดที่เจอบ่อย: connection pool ของฐานข้อมูล · query ไม่มี index · ไม่ได้คืน connection (ตัวอย่างใน `postmortem-template` หัวข้อ 5)
+The k6 result says it is slow, but not why · during the run, open the dashboards per `observability-basics` section 2 (latency · traffic · errors · saturation) for the server, database and queue · note the start and end time of the run so you can match the graphs · common bottlenecks: database connection pool · queries without an index · connections not returned (example in `postmortem-template` section 5)
 
-## 7 · ต่อเข้า CI
+## 7 · Plug into CI
 
-| รันเมื่อ | แบบ | ที่ไหน |
+| Run when | Type | Where |
 |---|---|---|
-| ทุก PR หรือทุก push | smoke · ไม่กี่นาที | staging หรือ environment ของ PR |
-| กลางคืนหรือตามรอบ | load · stress · spike | environment แยกสำหรับทดสอบโหลด |
-| ก่อนปล่อยรุ่นใหญ่ | ครบชุดที่เลือกในหัวข้อ 4 · รันซ้ำอย่างน้อย 2 รอบ | environment ที่เท่า production |
+| Every PR or every push | smoke · a few minutes | staging or the PR's environment |
+| Overnight or on a schedule | load · stress · spike | a separate load-test environment |
+| Before a major release | the full set chosen in section 4 · run at least 2 rounds | an environment equal to production |
 
-- เอกสาร k6 เตือนว่า load test ใช้ 3–15 นาทีขึ้นไป จึงไม่ใส่ในทางที่ deploy อัตโนมัติ และอย่าเชื่อผลผ่าน/ไม่ผ่านอย่างเดียวจนกว่ากระบวนการจะนิ่ง
-- GitHub Actions: `grafana/setup-k6-action@v1.2.2` (ใส่ `k6-version`) ติดตั้ง k6 แล้ว `grafana/run-k6-action@v1.5.0` รัน (รุ่นที่ล็อกไว้ ตรวจ 2026-10-28) · ตัวอย่างเต็มใน [`assets/k6-smoke.yml`](assets/k6-smoke.yml) · Jenkins หรือ CI อื่นเรียก `k6 run` ตรง ๆ
-- อย่าห่อ `k6 run` ด้วยสคริปต์ที่กลืน exit code (เช่นมี `echo` ต่อท้าย) · ให้ `k6 run` เป็นคำสั่งสุดท้าย หรือเก็บ `$?` แล้ว `exit` ด้วยค่านั้น
-- `BASE_URL` และ token มาจากตัวแปรลับของ CI (`config-and-secrets`) ไม่เขียนลงสคริปต์
+- The k6 docs warn that load tests take 3–15 minutes or more, so do not put them on the path that deploys automatically, and do not trust pass/fail alone until the process is stable.
+- GitHub Actions: `grafana/setup-k6-action@v1.2.2` (set `k6-version`) installs k6, then `grafana/run-k6-action@v1.5.0` runs it (pinned versions, checked 2026-10-28) · full example in [`assets/k6-smoke.yml`](assets/k6-smoke.yml) · Jenkins or other CI call `k6 run` directly
+- Do not wrap `k6 run` in a script that swallows the exit code (for example one with a trailing `echo`) · make `k6 run` the last command, or keep `$?` and `exit` with that value
+- `BASE_URL` and tokens come from CI secret variables (`config-and-secrets`), not written into the script
 
-## ตัวอย่างจริง 1 ชุด
+## One worked example
 
-ป้าย `ตัวอย่าง`: ออกแบบบนกระดาษ ยังไม่ได้ยิงระบบจริง
+Label `ตัวอย่าง` (example): designed on paper, no real system has been loaded
 
-**โจทย์:** ร้านออนไลน์จะจัด flash sale เที่ยงวันศุกร์ เคยล่มเพราะ connection pool เต็ม อยากรู้ว่ารอบนี้รอดไหม
+**Problem:** An online shop will run a flash sale at noon on Friday. It went down before because the connection pool filled up. They want to know whether it survives this time.
 
-| ขั้น | ที่ทำ | หัวข้อ |
+| Step | What is done | Section |
 |---|---|---|
-| เป้า | ปริมาณจากแคมเปญก่อน (รอยืนยัน) · เส้นทาง ดูสินค้า → ใส่ตะกร้า → จ่ายเงินด้วย mock · p95 ไม่เกิน 500 ms · error ไม่เกิน 1% (ค่าตั้งต้น ยังไม่ได้วัด) | 1 |
-| อนุญาต | ยิงที่ staging ที่ขนาดเท่า production · payment ชี้ mock · ผู้อนุมัติ ช่วงเวลา จดในหัวสคริปต์ | 2 |
-| ยิง | smoke → load (baseline) → spike | 4 |
-| เฝ้า | แดชบอร์ด connection pool และ CPU ฐานข้อมูลระหว่างยิง | 6 |
-| ผล | รายงานเกณฑ์ข้อที่ผ่านและไม่ผ่านที่ปริมาณที่ยิงจริง แล้วเพิ่ม smoke ลง CI | 5 · 7 |
+| Goal | Volume from the previous campaign (รอยืนยัน) · path: browse products → add to cart → pay with a mock · p95 at most 500 ms · errors at most 1% (default, not measured) | 1 |
+| Permission | Load staging at production size · payment points at a mock · approver and time window noted in the script header | 2 |
+| Run | smoke → load (baseline) → spike | 4 |
+| Monitor | Dashboards of connection pool and database CPU during the run | 6 |
+| Result | Report which thresholds passed and failed at the volume really run, then add smoke to CI | 5 · 7 |
 
-## ตรวจก่อนส่ง
+## Check before sending
 
-1. มีปริมาณที่คาด เส้นทาง และเกณฑ์ p95 กับอัตรา error ก่อนยิง · ค่าที่เดามีป้าย "ค่าตั้งต้น ยังไม่ได้วัด"
-2. ระบบเป็นของเรา · environment ระบุชัด · เกิน smoke มีชื่อผู้อนุมัติ · production มีคนเฝ้าและช่องทางหยุด
-3. ไม่มีเงิน อีเมล SMS หรือคำสั่งซื้อจริงเกิดจากการยิง
-4. เกณฑ์อยู่ใน `thresholds` · มี `abortOnFail` ที่อัตรา error
-5. smoke ผ่านก่อนแบบอื่น · เครื่องยิงไม่ใช่เครื่องเดียวกับระบบ
-6. รายงานบอกผลเทียบเกณฑ์และ baseline ที่ปริมาณที่ยิงจริง ไม่สรุปเกินที่ยิง
-7. CI ไม่กลืน exit code · ค่าลับมาจากตัวแปรลับ · ล็อกรุ่น k6
+1. Expected volume, paths, and the p95 and error-rate thresholds exist before the run · guessed values carry the label "ค่าตั้งต้น ยังไม่ได้วัด" (default, not measured)
+2. The system is ours · the environment is stated clearly · beyond smoke there is a named approver · production has a watcher and a way to stop
+3. No real money, email, SMS or order came from the run
+4. Thresholds are in `thresholds` · `abortOnFail` is set on the error rate
+5. smoke passed before other types · the load generator is not the same machine as the system
+6. The report states results against thresholds and the baseline at the volume really run, and does not conclude beyond what was run
+7. CI does not swallow the exit code · secrets come from secret variables · the k6 version is pinned
 
-## ที่มา
+## Sources
 
-ตรวจ 2026-10-28 (เปิดอ่านผ่านเครื่องมือดึงหน้าเว็บที่สรุปโดยโมเดลเล็ก ควรเปิดหน้าดิบซ้ำก่อนล็อกค่าใน production)
+Checked 2026-10-28 (opened through a web-fetch tool that summarises pages with a small model, so reopen the raw page before locking a value in production)
 
-- thresholds · `abortOnFail` · `delayAbortEval` · เกณฑ์ตาม tag https://grafana.com/docs/k6/latest/using-k6/thresholds/
-- ชื่อ executor ทั้ง 6 https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ · ตัวเลือกของ `ramping-arrival-rate` https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ramping-arrival-rate/
-- แบบทดสอบและลำดับ https://grafana.com/docs/k6/latest/testing-guides/test-types/
+- thresholds · `abortOnFail` · `delayAbortEval` · per-tag thresholds https://grafana.com/docs/k6/latest/using-k6/thresholds/
+- names of all 6 executors https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ · options of `ramping-arrival-rate` https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ramping-arrival-rate/
+- test types and their order https://grafana.com/docs/k6/latest/testing-guides/test-types/
 - CI · environment · production https://grafana.com/docs/k6/latest/testing-guides/automated-performance-testing/
-- exit code 0 และ 99 · สคริปต์กลืน exit code https://grafana.com/docs/learning-paths/automate-k6-cicd/handle-exit-code/
+- exit codes 0 and 99 · scripts that swallow the exit code https://grafana.com/docs/learning-paths/automate-k6-cicd/handle-exit-code/
 - GitHub Actions https://github.com/grafana/run-k6-action
-- ใบอนุญาต k6 https://github.com/grafana/k6 · รุ่น https://api.github.com/repos/grafana/k6/releases
-- Locust https://docs.locust.io/en/stable/what-is-locust.html · JMeter https://jmeter.apache.org/ (หน้าแรกลิงก์ไปใบอนุญาตของ Apache Software Foundation ไม่ได้ระบุรุ่นล่าสุด)
-- ยังไม่ได้ตรวจ: ราคาและโควตา Grafana Cloud k6 · รุ่นล่าสุดของ Locust และ JMeter
+- k6 licence https://github.com/grafana/k6 · versions https://api.github.com/repos/grafana/k6/releases
+- Locust https://docs.locust.io/en/stable/what-is-locust.html · JMeter https://jmeter.apache.org/ (the home page links to the Apache Software Foundation licence and does not state the latest version)
+- Not yet checked (`ยังไม่ได้ตรวจ`): Grafana Cloud k6 price and quota · latest versions of Locust and JMeter

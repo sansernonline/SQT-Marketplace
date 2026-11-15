@@ -4,7 +4,7 @@ Use when a visual is about to ship or looks off
 
 # Design Review
 
-> **ด่านก่อนลงมือ:** งานที่ส่งมาตรวจต้องมีบรรทัด `ด่านก่อนลงมือ:` ตามหัวข้อนั้นของ `design-references` (plugin `superuser`) · ไม่มี หรือต้นแบบไม่มีลิงก์ → เป็นข้อแก้อันดับ 1 · งานที่ผู้ใช้หรือคนนอกออกแบบมาเอง ไม่ต้องมีบรรทัดนี้ แต่ยังตรวจด่านตาของ `no-ai-look`
+> **Pre-work gate:** work sent for review must carry the line `ด่านก่อนลงมือ:` as set out in that section of `design-references` (plugin `superuser`) · a missing line, or prototypes without links → fix number 1 · work designed by the user or an outsider does not need this line, but still gets the eye check of `no-ai-look`
 
 Visuals only; a second look at text, code or a plan → a new `reviewer` agent.
 

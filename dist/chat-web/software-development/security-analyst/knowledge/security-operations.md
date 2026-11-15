@@ -4,9 +4,9 @@ Use when running SOC, SIEM rules or threat hunting
 
 # security-operations
 
-งานความปลอดภัยฝั่งปฏิบัติการ — รับมือเหตุ · Security Operations Center (SOC — ทีมเฝ้าระวังความปลอดภัย) · กฎตรวจจับ · ล่าภัย · สถาปัตยกรรมความปลอดภัย (ฝั่งโค้ดใช้ `security-gate` · `principle-secure-by-default`)
+Operational security work — incident response · Security Operations Center (SOC, the team that watches for security events) · detection rules · threat hunting · security architecture (for code, use `security-gate` · `principle-secure-by-default`)
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทั้งหมด เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
+**Open only the files that match the job.** Do not read them all, because each file is the full guide to its topic.
 
 ## หัวข้อ
 
@@ -18,7 +18,7 @@ Use when running SOC, SIEM rules or threat hunting
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+An agent called in for this area opens its own role file before starting.
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -138,7 +138,7 @@ The SOC analyst hands over:
 
 ## Phase 2: Containment
 
-> **ถามผู้ใช้ก่อนทุกครั้ง** — ทุกขั้นที่เปลี่ยนระบบใน Phase 2-4 (ตัดเครือข่ายเครื่อง · ปิดบัญชี · บล็อก IP · รีเซ็ต MFA · เพิกถอนกุญแจ/ใบรับรอง · ลบ persistence · rebuild) ให้ **เสนอทีละขั้น** เป็นแถว `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` แล้ว **รันหลังผู้ใช้อนุมัติขั้นนั้นเท่านั้น** — อนุมัติขั้นหนึ่งไม่ครอบคลุมขั้นถัดไป · บันทึกทุกขั้นที่รันลง timeline ของเหตุ (เวลา UTC · ผู้อนุมัติ · คำสั่ง · ผล) · งานอ่านอย่างเดียว (ดู log · ทำสำเนาหลักฐาน) ทำได้เลย · รายละเอียด → [`security-incident-response.md`](security-incident-response.md) Phase 3
+> **Ask the user first, every time.** For every step that changes a system in Phase 2-4 (isolate a host from the network · disable an account · block an IP · reset MFA · revoke keys/certificates · remove persistence · rebuild), **propose one step at a time** as a row of `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` (command · target · impact · how to roll back) and **run it only after the user approves that step**. Approving one step does not cover the next. Log every step that ran in the incident timeline (time in UTC · approver · command · result). Read-only work (reading logs · copying evidence) can be done right away. Details → [`security-incident-response.md`](security-incident-response.md) Phase 3
 
 ### Short-term (stop the bleed)
 - Isolate affected hosts (network)
@@ -184,7 +184,7 @@ For every compromised credential:
 ```
 
 ### Eradication actions
-ทุกข้อด้านล่างใช้กฎ **ถามผู้ใช้ก่อนทุกครั้ง** (Phase 2)
+Every item below follows the **ask the user first, every time** rule (Phase 2)
 - Remove malware
 - Delete persistence mechanisms
 - Revoke all credentials
@@ -483,7 +483,7 @@ Each layer must withstand the next layer failing.
 ```
 Govern → Identify → Protect → Detect → Respond → Recover
 ```
-Govern (ใหม่ใน 2.0) ครอบทุกฟังก์ชัน — กลยุทธ์ · บทบาท · นโยบาย · ความเสี่ยงจากซัพพลายเชน · ที่มา [nist.gov/cyberframework](https://www.nist.gov/cyberframework)
+Govern (new in 2.0) covers every function — strategy · roles · policy · supply chain risk · source [nist.gov/cyberframework](https://www.nist.gov/cyberframework)
 
 ### CIS Controls v8 (top 18)
 ```
@@ -764,7 +764,7 @@ Map observed behaviors to ATT&CK tactics/techniques:
 
 ## Common Playbooks
 
-> ขั้นที่เปลี่ยนระบบ (รีเซ็ตรหัส · ปิด/ล็อกบัญชี · quarantine · eradicate · restore) ให้ **เสนอ `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` แล้วรอผู้ใช้อนุมัติทีละขั้นก่อนรัน** และบันทึกลง timeline — กฎเต็มอยู่ที่ [`security-incident-response.md`](security-incident-response.md) Phase 3 · ขั้นอ่านอย่างเดียวทำได้เลย
+> For steps that change a system (reset passwords · disable/lock accounts · quarantine · eradicate · restore), **propose `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` (command · target · impact · how to roll back), then wait for the user to approve each step before running it**, and log it in the timeline. The full rule is in [`security-incident-response.md`](security-incident-response.md) Phase 3 · read-only steps can be done right away
 
 ### Phishing
 1. Confirm whether a user reported it or a tool detected it
@@ -1263,7 +1263,7 @@ Decision: declare incident OR continue investigation
 
 ## Phase 3: Containment
 
-> **ถามผู้ใช้ก่อนทุกครั้ง** — ทุกขั้นที่เปลี่ยนระบบในเฟส Containment · Eradication · Recovery (ตัดเครือข่ายเครื่อง · ปิดบัญชี · บล็อก IP · เพิกถอนกุญแจ/ใบรับรอง · ลบ persistence · ลบมัลแวร์ · rebuild · ปิดบริการ) agent **เสนอทีละขั้น** เป็นแถว `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` แล้ว **รอให้ผู้ใช้อนุมัติขั้นนั้นก่อนรัน** — อนุมัติขั้นหนึ่งไม่ได้แปลว่าอนุมัติขั้นถัดไป · ทุกขั้นที่รันแล้วให้บันทึกลง timeline ของเหตุ (เวลา UTC · ใครอนุมัติ · คำสั่ง · ผล) · งานอ่านอย่างเดียว (ดู log · ทำสำเนาหลักฐาน) ทำได้เลย
+> **Ask the user first, every time.** For every step that changes a system in the Containment · Eradication · Recovery phases (isolate a host from the network · disable an account · block an IP · revoke keys/certificates · remove persistence · remove malware · rebuild · shut down a service), the agent **proposes one step at a time** as a row of `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` (command · target · impact · how to roll back) and **waits for the user to approve that step before running it**. Approving one step does not approve the next. Log every step that ran in the incident timeline (time in UTC · who approved · command · result). Read-only work (reading logs · copying evidence) can be done right away.
 
 ### Two phases
 
@@ -1296,7 +1296,7 @@ Decision: declare incident OR continue investigation
 
 ## Phase 4: Eradication
 
-> ทุกขั้นในเฟสนี้เปลี่ยนระบบ — ใช้กฎ **ถามผู้ใช้ก่อนทุกครั้ง** ที่หัวข้อ Phase 3 (เสนอ `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` → รออนุมัติ → บันทึกลง timeline)
+> Every step in this phase changes a system. Use the **ask the user first, every time** rule in the Phase 3 section (propose `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` → wait for approval → log in the timeline)
 
 ### Goals
 - Remove adversary access
@@ -1442,7 +1442,7 @@ Public: per disclosure obligations
 | GDPR | 72h | Personal data breach |
 | HIPAA | 60d | PHI breach |
 | State (US) | Varies | Per state law |
-| PDPA Thailand (พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562) | 72 h ถึงสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (สคส.) นับแต่ทราบเหตุ (ม.37(4)) · แจ้งเจ้าของข้อมูลโดยไม่ชักช้าเมื่อมีความเสี่ยงสูง · รายละเอียด → `pdpa-compliance` §8 | Personal data breach (ยกเว้นไม่มีความเสี่ยงต่อสิทธิและเสรีภาพ) |
+| PDPA Thailand (พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562, Personal Data Protection Act B.E. 2562) | 72 h to the Office of the Personal Data Protection Committee (สคส., PDPC) from when you learn of the incident (s.37(4)) · tell data subjects without delay when the risk is high · details → `pdpa-compliance` §8 | Personal data breach (except when there is no risk to rights and freedoms) |
 | SEC (US public) | 4 business days | Material cyber incident |
 | PCI-DSS | Immediate | Card data compromise |
 
@@ -1814,9 +1814,9 @@ Impact                Mass file modification, encryption
 
 ## Detection Examples (Splunk SPL)
 
-> **ยังไม่ได้ตรวจ** — query ด้านล่างเขียนตามไวยากรณ์ใน Splunk docs แต่ยังไม่ได้รันกับ Splunk จริง ชื่อ index และชื่อ field ขึ้นกับ add-on ที่ติดตั้ง (ตัวอย่างใช้ `index=sysmon` = Microsoft Sysmon ผ่าน Splunk Add-on for Sysmon และ `index=wineventlog` = Windows Security log) — ปรับให้ตรงของจริงแล้วทดสอบกับข้อมูลย้อนหลังก่อนเปิดใช้
+> **ยังไม่ได้ตรวจ** — the queries below follow the syntax in the Splunk docs but have not been run against a real Splunk. Index names and field names depend on the installed add-ons (the examples use `index=sysmon` = Microsoft Sysmon through the Splunk Add-on for Sysmon, and `index=wineventlog` = the Windows Security log). Adjust them to the real setup and test against historical data before enabling.
 >
-> กฎไวยากรณ์ที่พลาดบ่อย: wildcard `*` ใช้ได้ใน `search` (ต้นท่อ) เท่านั้น — ใน `where` ต้องใช้ `like(field, "%x")` หรือ `match(field, "regex")` · หมายเหตุใน SPL เขียนด้วย triple backtick ไม่ใช่ `#` · `stdev()` เป็นฟังก์ชันของ `stats` ใช้ใน `eval` ไม่ได้
+> Syntax rules that are often missed: the wildcard `*` works only in `search` (the start of the pipeline) — in `where` use `like(field, "%x")` or `match(field, "regex")` · write comments in SPL with triple backticks, not `#` · `stdev()` is a `stats` function and cannot be used in `eval`
 
 Event ที่ใช้: Sysmon `EventCode=1` = process create · `10` = process access · `13` = registry value set · Windows Security `4688` = process create (ต้องเปิด audit + command line) · `4624`/`4625` = logon สำเร็จ/ล้มเหลว · `4697` = ติดตั้ง service · `4698` = สร้าง scheduled task
 

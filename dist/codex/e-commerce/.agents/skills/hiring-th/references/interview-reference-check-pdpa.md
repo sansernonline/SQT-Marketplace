@@ -1,38 +1,38 @@
-# สัมภาษณ์ · ตรวจบุคคลอ้างอิง · ข้อมูลผู้สมัครตาม PDPA
+# Interviews · reference checks · applicant data under the PDPA
 
-หัวข้อ 4–6 ของ `hiring-th` ย้ายมาจาก `../SKILL.md` · เลขหัวข้อคงเดิม หัวข้อ 1–3 และ 9–11 อยู่ใน SKILL.md · ตัวย่อ: พระราชบัญญัติ (พ.ร.บ.) · มาตรา (ม.) · พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA)
+Sections 4–6 of `hiring-th`, moved from `../SKILL.md`. Section numbers stay the same. Sections 1–3 and 9–11 are in SKILL.md. Abbreviations: Act (พ.ร.บ.) · Section (ม.) · Personal Data Protection Act B.E. 2562 (2019) (PDPA).
 
-## 4 · แผนสัมภาษณ์
+## 4 · Interview plan
 
-**โครง 45–60 นาที (แนวปฏิบัติที่แนะนำ)**
+**45–60 minute outline (recommended practice)**
 
-| ช่วง | เวลา | ทำอะไร |
+| Part | Time | What happens |
 |---|---|---|
-| เปิด | 5 นาที | แนะนำคณะ บอกขั้นตอน และบอกว่าจะจดคำตอบ |
-| คำถามชุดเดียวกัน | 30 นาที | 6–8 ข้อ ผูกกับเกณฑ์ในใบคัดกรอง · ข้อเล่าประสบการณ์ ("เล่าครั้งที่คุณ…") สลับกับข้อสถานการณ์ ("ถ้า… คุณจะทำอย่างไร") |
-| แบบทดสอบงานจริง | 0–20 นาที | ถ้ายังไม่ได้ทดสอบก่อนหน้า ให้ทุกคนได้โจทย์และเวลาเท่ากัน |
-| ผู้สมัครถาม | 10 นาที | ตอบเรื่องงาน ทีม และขั้นตอนต่อไป |
-| ปิด | 2 นาที | บอกวันที่จะแจ้งผล |
+| Opening | 5 minutes | Introduce the panel, explain the steps, and say that you will take notes on the answers |
+| Same questions for everyone | 30 minutes | 6–8 questions tied to the criteria on the scorecard · alternate experience questions ("เล่าครั้งที่คุณ…") with situation questions ("ถ้า… คุณจะทำอย่างไร") |
+| Real work test | 0–20 minutes | If the candidate was not tested earlier, give everyone the same task and the same time |
+| Candidate's questions | 10 minutes | Answer about the job, the team and the next steps |
+| Closing | 2 minutes | Give the date when you will announce the result |
 
-**คณะสัมภาษณ์** 2–3 คน (หัวหน้างาน · คนที่จะทำงานด้วยกัน · HR) แบ่งเกณฑ์กันถาม คนเดิมถามคำถามเดิมกับผู้สมัครทุกคน แล้วให้คะแนนทันทีหลังจบแต่ละคน
+**Panel:** 2–3 people (line manager · a future teammate · HR). Split the criteria among them. The same person asks the same question of every candidate. Each person scores right after each interview ends.
 
-**จดโน้ตอย่างไร** จดสิ่งที่ผู้สมัครพูดและตัวเลขที่เล่า ("ปิดงบ 3 บริษัท ตรงเวลา 11 จาก 12 เดือน") ไม่จดความรู้สึก ("ดูไม่มั่นใจ") · โน้ตเป็นข้อมูลส่วนบุคคล เก็บและลบตามหัวข้อ 6
+**How to take notes:** Write what the candidate said and the numbers they gave ("ปิดงบ 3 บริษัท ตรงเวลา 11 จาก 12 เดือน"). Do not write impressions ("ดูไม่มั่นใจ"). Notes are personal data: keep and delete them as in section 6.
 
-**ไม่ถาม** แผนแต่งงานหรือมีบุตร · ศาสนา · โรคประจำตัว · รสนิยมทางเพศ · ความพิการที่ไม่เกี่ยวกับงาน · ถ้างานต้องใช้ความสามารถทางกายจริง ให้ถามว่า "ทำงาน {X} ได้ไหม" กับทุกคนเหมือนกัน (เพราะ ม.15 · พ.ร.บ.ความเท่าเทียมระหว่างเพศ · PDPA ม.26)
+**Do not ask about:** plans to marry or have children · religion · chronic illness · sexual orientation · disability unrelated to the job. If the job truly needs a physical ability, ask every candidate the same question, "ทำงาน {X} ได้ไหม" (because of Section 15 · the Gender Equality Act · PDPA Section 26).
 
-## 5 · ตรวจบุคคลอ้างอิงและประวัติ
+## 5 · Reference and background checks
 
-PDPA ม.25 ห้ามเก็บข้อมูลส่วนบุคคลจากแหล่งอื่นที่ไม่ใช่เจ้าของโดยตรง เว้นแต่แจ้งเจ้าของภายใน 30 วันนับจากวันที่เก็บและได้ความยินยอม หรือเป็นกรณีที่ยกเว้นตาม ม.24 หรือ ม.26 · ทางที่ง่ายที่สุดคือขอความยินยอมเป็นลายลักษณ์อักษรก่อนโทร · ประวัติอาชญากรรมเป็นข้อมูลอ่อนไหวตาม ม.26 ต้องได้ความยินยอมโดยชัดแจ้ง
+PDPA Section 25 bans collecting personal data from any source other than the data subject. The exceptions: you tell the subject within 30 days of collecting and get consent, or the case is exempt under Section 24 or 26. The easiest route is to get written consent before you call. Criminal records are sensitive data under Section 26 and need explicit consent.
 
-ตรวจล่าสุด 2026-10-23 · แหล่ง: PDPA ม.24 · ม.25 · ม.26 ในหนังสือกฎหมายของสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (ลิงก์ mdes.go.th ในหัวข้อ 2)
+Last checked 2026-10-23 · Source: PDPA Sections 24 · 25 · 26 in the law book of the Personal Data Protection Committee Office (mdes.go.th link in section 2).
 
-1. ตรวจเฉพาะคนที่จะเสนองาน 1–2 คนสุดท้าย
-2. ขอความยินยอม: ชื่อและเบอร์บุคคลอ้างอิงที่ผู้สมัครเลือกเอง · คำถามที่จะถาม · ใช้ผลทำอะไร · เก็บนานแค่ไหน · ไม่โทรหานายจ้างปัจจุบันถ้าผู้สมัครไม่อนุญาต (แนวปฏิบัติที่แนะนำ)
-3. ถามบุคคลอ้างอิงทุกคนด้วย 5 ข้อเดียวกัน
-4. จดคำตอบตามที่ได้ยิน ใช้ประกอบคะแนน ไม่ใช้ตัดสินเดี่ยว ๆ
-5. ตรวจประวัติอาชญากรรมเฉพาะตำแหน่งที่เกี่ยวข้องจริง (เงินสด ข้อมูลลูกค้า เด็ก) จดผลแค่ "ผ่าน" หรือ "ต้องคุยต่อ" แล้วลบสำเนาเมื่อพิจารณาเสร็จ
+1. Check only the 1–2 final people who will get an offer.
+2. Ask for consent covering: the names and phone numbers of referees the candidate chose · the questions you will ask · what you will use the answers for · how long you will keep them · no call to the current employer if the candidate does not allow it (recommended practice).
+3. Ask every referee the same 5 questions.
+4. Write the answers as heard. Use them as input to the score, never as the only basis for a decision.
+5. Check criminal records only for roles where it truly matters (cash, customer data, children). Record only "ผ่าน" or "ต้องคุยต่อ", then delete the copy once the decision is made.
 
-**คำถาม 5 ข้อ**
+**The 5 questions**
 
 1. คุณทำงานกับ {ชื่อผู้สมัคร} ในบทบาทอะไร ช่วงไหน
 2. งานหลักที่เขารับผิดชอบคืออะไร ผลงานที่จำได้มีอะไรบ้าง
@@ -40,26 +40,26 @@ PDPA ม.25 ห้ามเก็บข้อมูลส่วนบุคค�
 4. เรื่องไหนที่เขาควรพัฒนาต่อ
 5. ถ้ามีโอกาส คุณจะร่วมงานกับเขาอีกไหม เพราะอะไร
 
-## 6 · ข้อมูลผู้สมัครตาม PDPA
+## 6 · Applicant data under the PDPA
 
-**ประกาศความเป็นส่วนตัวสำหรับผู้สมัคร** แจ้งก่อนหรือขณะเก็บข้อมูล (ม.23) ให้ครบ 6 เรื่อง
+**Privacy notice for applicants.** Give it before or when you collect data (Section 23). It must cover 6 points.
 
-| เรื่องที่ ม.23 กำหนด | เขียนในประกาศว่า |
+| Point required by Section 23 | What the notice says |
 |---|---|
-| วัตถุประสงค์ | ใช้พิจารณารับเข้าทำงานตำแหน่ง {…} · ฐานกฎหมาย: ดำเนินการตามคำขอของผู้สมัครก่อนเข้าทำสัญญา (ม.24(3)) |
-| ต้องให้ข้อมูลไหม และถ้าไม่ให้เป็นอย่างไร | ไม่ให้ CV หรือช่องทางติดต่อ บริษัทฯ พิจารณาใบสมัครไม่ได้ |
-| ข้อมูลที่เก็บและเก็บนานเท่าไร | ข้อมูลในใบสมัคร · โน้ตสัมภาษณ์ · ผลแบบทดสอบ · ผลตรวจบุคคลอ้างอิง · ระยะเวลาตามตารางข้างล่าง |
-| ใครเห็นข้อมูล | คณะสัมภาษณ์ · HR · {ผู้ให้บริการระบบรับสมัคร} |
-| ผู้ควบคุมข้อมูลและช่องทางติดต่อ | {ชื่อบริษัท ที่อยู่ อีเมล} · {เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล ถ้ามี} |
-| สิทธิของผู้สมัคร | ขอดู ขอสำเนา ขอแก้ ขอลบ คัดค้าน และถอนความยินยอม ตามสิทธิที่ ม.23(6) อ้างถึง · วิธียื่นคำขอใช้ `pdpa-workflow` |
+| Purpose | Used to consider hiring for the position {…} · legal basis: taking steps at the applicant's request before entering a contract (Section 24(3)) |
+| Whether the data is required, and what happens if not given | Without a CV or a contact channel, the company cannot consider the application |
+| Data collected and how long it is kept | Application data · interview notes · test results · reference check results · retention periods as in the table below |
+| Who sees the data | The interview panel · HR · {the applicant tracking system provider} |
+| Data controller and contact channel | {company name, address, email} · {Data Protection Officer, if any} |
+| Applicant's rights | Access, copy, correct, delete, object, and withdraw consent, as the rights referred to in Section 23(6) · use `pdpa-workflow` for how to file a request |
 
-**อายุเก็บข้อมูล** (แนวปฏิบัติที่แนะนำ ไม่ใช่ตัวเลขในกฎหมาย · กฎหมายกำหนดแค่ว่าต้องมีระบบลบเมื่อพ้นระยะเก็บหรือเกินความจำเป็น ตาม ม.37(3))
+**Retention periods.** These are recommended practice, not figures in the law. The law only says you must have a system to delete data once the retention period ends or it is no longer needed, under Section 37(3).
 
-| ข้อมูล | เก็บนานเท่าไร | เพราะ |
+| Data | How long to keep | Because |
 |---|---|---|
-| ใบสมัคร โน้ต และคะแนนของคนที่ไม่ได้รับเลือก | 6 เดือนหลังปิดตำแหน่ง แล้วลบ | ครอบช่วงทดลองงานของคนที่รับ ถ้าไม่ผ่านจะติดต่อคนลำดับถัดไปได้ และพอให้ตอบคำถามเรื่องผลการคัดเลือก |
-| คลังผู้สมัคร (talent pool) | 12 เดือน เฉพาะคนที่ให้ความยินยอมแยกต่างหาก | ความยินยอมถอนได้ทุกเมื่อ |
-| ผลตรวจประวัติอาชญากรรม | จดผล "ผ่าน" แล้วลบสำเนาเมื่อพิจารณาเสร็จ | ข้อมูลอ่อนไหว ม.26 ยิ่งเก็บน้อยยิ่งเสี่ยงน้อย |
-| เอกสารของคนที่รับเข้าทำงาน | ย้ายเข้าแฟ้มพนักงาน ใช้อายุเก็บของแฟ้มพนักงาน | ดู `pdpa-workflow` และ `payroll-th` |
+| Applications, notes and scores of people not selected | 6 months after the position closes, then delete | Covers the probation of the person hired. If that person fails, you can contact the next candidate. It is also long enough to answer questions about the selection result |
+| Talent pool | 12 months, only for people who gave separate consent | Consent can be withdrawn at any time |
+| Criminal record check results | Record "ผ่าน", then delete the copy once the decision is made | Sensitive data under Section 26. The less you keep, the lower the risk |
+| Documents of the person hired | Move to the employee file and use the employee file's retention period | See `pdpa-workflow` and `payroll-th` |
 
-ตั้งวันลบในปฏิทินตั้งแต่วันปิดตำแหน่ง แล้วจดลง ROPA (บันทึกรายการกิจกรรมการประมวลผล) ตาม `pdpa-workflow`
+Set the deletion date in the calendar from the day the position closes. Then record it in the ROPA (Record of Processing Activities) as in `pdpa-workflow`.

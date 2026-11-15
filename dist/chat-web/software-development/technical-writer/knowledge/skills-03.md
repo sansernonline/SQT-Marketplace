@@ -4,9 +4,9 @@ Use when a Markdown doc needs an image, SVG or ASCII art
 
 # Markdown Visuals
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line of wording per `human-writing`. This skill gives the format and structure; human-writing gives the way to write so people understand.
 
 > **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
@@ -83,7 +83,7 @@ What are you showing?
 
 ### สี
 
-ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น ส่วนถ้ายังไม่มี ให้ค้นต้นแบบตาม `design-references` (plugin `superuser`) ประเภท `document` แล้วถอดสีจากงานที่เลือก · ค้นสดไม่ได้จึงใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม (ลำดับใน `diagram-figures` ข้อ 5 · ตารางโทนตามเนื้องาน [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) ส่วน token ตามหน้าที่ (`bg-canvas` · `accent-primary` · `state-*` …) ดูได้ใน [references/svg-snippets.md](references/svg-snippets.md) และ **1 เอกสารใช้ชุดสีเดียว**
+If the document or project already has a colour palette, use it. If not, search for references per `design-references` (plugin `superuser`), type `document`, and take the colours from the chosen work · if live search is not possible, use the house value `#2A78D6`, mark it `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask (order in `diagram-figures` item 5 · colour-by-domain table [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) · for role-based tokens (`bg-canvas` · `accent-primary` · `state-*` …) see [references/svg-snippets.md](references/svg-snippets.md) · and **1 document uses 1 palette**
 
 ### Reusable snippets
 
@@ -143,14 +143,14 @@ Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
 
 ## 4 · Mermaid
 
-**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams` (plugin `software-development`) ข้อ 1–5 และ `assets/mermaid-theme.md`** · Mermaid ในเอกสารโปรเจกต์ที่ต้องแปลงเป็นรูปลง Word ใช้ตัวแปลงใน `diagram-figures` → `references/engine-mermaid.md`
-ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
+**Choosing a diagram type, theme, readability rules and Thai labels is covered in `software-diagrams` (plugin `software-development`) items 1–5 and `assets/mermaid-theme.md`** · for Mermaid in project documents that must be converted to a picture for Word, use the converter in `diagram-figures` → `references/engine-mermaid.md`
+This file only says *when to choose Mermaid over other formats*
 
-| เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
+| Choose Mermaid when | Choose something else when |
 |---|---|
-| เป็นกล่องกับลูกศรที่เครื่องจัดวางให้ได้ | ถ้าต้องคุมตำแหน่งเองให้ใช้ inline SVG ส่วนรูปที่ต้องดูออกแบบมาให้ใช้ `diagram-figures` (HTML layout หรือ engine-svg-python) แล้วฝังเป็นไฟล์ภาพ |
-| อยู่ในไฟล์ที่ต้อง diff ใน git | เป็นภาพหน้าจอจริง ให้ใช้ไฟล์ภาพ |
-| ผู้อ่านเปิดใน GitHub หรือ Notion | ผู้อ่านเปิดในเอกสาร Word หรือสไลด์ ให้ใช้ไฟล์ภาพ |
+| It is boxes and arrows that the engine can lay out | If you must control placement yourself, use inline SVG; for a figure that must look designed, use `diagram-figures` (HTML layout or engine-svg-python) and embed it as an image file |
+| It lives in a file that must be diffed in git | It is a real screenshot: use an image file |
+| Readers open it in GitHub or Notion | Readers open it in a Word document or slides: use an image file |
 
 ## Combining formats in one doc
 
@@ -204,12 +204,12 @@ Not sure a visual will render? Preview it in the viewer the reader will use (Git
 
 ## ไม่ให้ดูเหมือน AI ทำ
 
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ทุกงานต้องผ่านด่านตา 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+Before sending, go through item 3 of `no-ai-look` — for HTML work, run its script · every piece must also pass eye check 3.2 (a web page adds items 10–14), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for all media is there
 
 ## ตัวย่อ
 
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้เลย ดูรายละเอียดใน skill `spell-out-abbreviations`
+Spell out each abbreviation in full on first use and put the short form in brackets — for example Model Context Protocol (MCP)
+After that, use the short form. Details are in the skill `spell-out-abbreviations`
 
 
 ## reference: ascii-patterns.md
@@ -295,30 +295,30 @@ Don't force everything into one format. Each format is best at something differe
 
 Reusable building blocks for inline SVG pictures of a screen inside .md docs (the real mockup is HTML) · used by [SKILL.md](../SKILL.md) §1
 
-## สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
+## Colour: it comes from the subject, not from a ready-made table
 
-ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น
-ถ้ายังไม่มี ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม และเสนอโทนจากเนื้องานไว้ในรายงาน — การแพทย์เขียว · การเงินน้ำเงินเข้ม ·
-อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า · ซอฟต์แวร์ทั่วไปน้ำเงิน (ตารางเต็มอยู่ใน [`diagram-figures/references/colour-by-domain.md`](../../diagram-figures/references/colour-by-domain.md))
+If the document or project already has a colour set, use that set.
+If not, use the house value `#2A78D6`, write `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask. Propose a tone drawn from the subject in the report: medical green · finance dark blue ·
+industrial amber · government navy · general software blue (the full table is in [`diagram-figures/references/colour-by-domain.md`](../../diagram-figures/references/colour-by-domain.md))
 
-กำหนดเป็น **token ตามหน้าที่** ไว้บนสุดของเอกสาร แล้วใช้ค่าเดียวกันทุกรูปในเอกสารนั้น:
+Define **tokens by role** at the top of the document, then use the same values in every figure in that document:
 
-| Token | หน้าที่ | ได้มาจาก |
+| Token | Role | Comes from |
 |---|---|---|
-| `bg-canvas` | พื้นหลังของรูป | เฉดเข้มสุด (โหมดมืด) หรืออ่อนสุด (โหมดสว่าง) |
-| `bg-surface` | แผ่น พาเนล การ์ด | ต่างจาก canvas พอให้เห็นขอบโดยไม่ต้องตีเส้น |
-| `bg-elevated` | ไทล์ที่ลอยขึ้นมาอีกชั้น | |
-| `accent-primary` | จุดเน้น สถานะที่กำลังทำงาน | **สีแบรนด์** (ไม่มี → `#2A78D6` + `(รอยืนยัน)`) |
-| `text-primary` | ข้อความหลัก | contrast ≥ 4.5:1 กับพื้นที่มันวางอยู่ |
-| `text-muted` | ข้อความรอง placeholder | `rgba(...,0.55)` ของ `text-primary` |
-| `state-success` · `state-warning` · `state-danger` | สถานะ | **ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่านเสมอ |
+| `bg-canvas` | Background of the figure | The darkest shade (dark mode) or the lightest (light mode) |
+| `bg-surface` | Sheets, panels, cards | Different enough from canvas to show the edge without drawing a line |
+| `bg-elevated` | A tile raised one more layer | |
+| `accent-primary` | Emphasis, the active state | **The brand colour** (none → `#2A78D6` + `(รอยืนยัน)`) |
+| `text-primary` | Main text | Contrast ≥ 4.5:1 against the surface it sits on |
+| `text-muted` | Secondary text, placeholder | `rgba(...,0.55)` of `text-primary` |
+| `state-success` · `state-warning` · `state-danger` | Status | **Does not change with the brand.** Green always means pass and red always means fail |
 
-**1 เอกสารใช้ชุดสีเดียว** — รูป 10 รูปในเอกสารเดียวที่สีไม่ตรงกัน อ่านยากกว่ารูปไม่สวยแต่สีตรงกัน
+**One document, one colour set.** 10 figures in one document with mismatched colours are harder to read than plain figures with matching colours.
 
 ## Snippets
 
-> ตัวอย่างข้างล่างใช้ชุดสีโหมดมืดชุดหนึ่งเป็นตัวแทนเท่านั้น
-> **เปลี่ยนค่าสีให้ตรงกับชุดที่ตกลงไว้ก่อนใช้** โครงสร้างคือสิ่งที่ต้องคัดลอก ไม่ใช่ค่าสี
+> The examples below use one dark-mode colour set as a stand-in only.
+> **Change the colour values to match the agreed set before use.** The structure is what you copy, not the colour values.
 
 **Window chrome (desktop app mockup):**
 ```xml
@@ -484,118 +484,118 @@ Use when one Markdown file must become a Word report
 
 # Markdown Report → .docx
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate "ด่านก่อนลงมือ" (every time):** read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for finding the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและขั้นตอน ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line of wording following `human-writing`. This skill gives the format and steps. human-writing says how to write so the reader understands.
 
-> **กฎข้อเดียวของ skill นี้:** Markdown คือต้นฉบับ .docx คือผลที่สร้างจากต้นฉบับ
-> แก้ที่ .md แล้วรันสคริปต์ใหม่ทุกครั้ง ไม่เปิด Word แก้มือ เพราะรอบหน้าจะหายหมด
+> **The one rule of this skill:** Markdown is the source. The .docx is the result built from the source.
+> Edit the .md and rerun the script every time. Never open Word and edit by hand, because the next run wipes it all out.
 
-ต้นแบบหน้าตามาจากรายงานโครงงาน X Fitness (29 หน้า · ใช้เป็นแบบอ้างอิงสไตล์เท่านั้น สีใช้ของโปรเจกต์ตัวเอง): ปกโลโก้กลางหน้า · สารบัญ · ตารางหัวสีแบรนด์อ่อน · กล่องหมายเหตุ · รูปพื้นเข้มพร้อมคำบรรยาย · ตารางสั้นไม่ขาดข้ามหน้า
+The page style comes from the X Fitness project report (29 pages · used only as a style reference, with the colours of your own project): logo cover centred on the page · table of contents · tables with a light brand-colour header · note boxes · dark-background figures with captions · short tables that do not split across pages.
 
-## เมื่อไหร่ใช้
+## When to use
 
-- รายงานธุรกิจ สรุปงานวิจัย รายงานโครงงาน รายงานส่งอาจารย์ รายงานผลทดสอบ เอกสารส่งมอบที่เนื้อหาเขียนเป็น Markdown อยู่แล้ว
-- ต้องสร้างรายงานซ้ำหลายรอบ (ตัวเลขหรือผลทดสอบเปลี่ยน → รันใหม่ ได้ไฟล์หน้าตาเดิม)
+- Business reports, research summaries, project reports, reports for a teacher, test result reports, handover documents whose content is already written in Markdown
+- You must build the report many times (numbers or test results change → rerun → same-looking file)
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use
 
-| งาน | ใช้ |
+| Work | Use |
 |---|---|
-| เอกสารทางการแบบปกมีแถบสี กล่อง metadata ตารางลงนาม (ข้อกำหนดความต้องการซอฟต์แวร์ (Software Requirements Specification — SRS) · เอกสารความต้องการทางธุรกิจ (Business Requirements Document — BRD) · ข้อเสนอ) | `branded-document-design` เรียก `BrandDoc` ตรง |
-| สไลด์นำเสนอ | `presentation-design` (ตารางบนสุดเลือก .pptx · .html · แปลง) |
-| เอกสารที่อยู่ในรีโปเป็น Markdown อย่างเดียว | `polished-document-style` |
-| วิทยานิพนธ์ · IS · บทความวิจัย | `personal-life:thesis-writing` ก่อน (ถ้าติดตั้ง) — คู่มือคณะคุมโครงเล่มและการจัดหน้า สคริปต์นี้ใช้ทำ .docx ต่อได้ |
+| A formal document with a colour-banded cover, a metadata box, a signature table (Software Requirements Specification (SRS) · Business Requirements Document (BRD) · proposal) | `branded-document-design`, calling `BrandDoc` directly |
+| Presentation slides | `presentation-design` (its top table chooses .pptx · .html · convert) |
+| A document that lives in the repo as Markdown only | `polished-document-style` |
+| Thesis · independent study · research article | `personal-life:thesis-writing` first (if installed): the faculty guide controls the book structure and layout. This script can still build the .docx afterwards |
 
 ---
 
-## 1 · ขั้นตอน
+## 1 · Steps
 
-1. เขียนเนื้อหาใน `docs/src/<ชื่อ>.md` (ต้นฉบับถาวร ตาม `document-naming` ข้อ 1) ตาม `polished-document-style` (plugin `superuser`) · ใส่ front matter (ข้อ 2) · ยังไม่มี `doc-theme` → **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `document` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้
-2. รัน `python scripts/md_to_docx.py docs/src/<ชื่อ>.md -o docs/<ชื่อไฟล์ส่งมอบ>.docx --pdf`
-   - สคริปต์ใช้ `brandkit.py` จาก `branded-document-design/scripts/` ที่อยู่ข้างกัน ต้องมี `python-docx`
-   - `--pdf` ใช้ Word บน Windows (อัปเดตสารบัญให้ด้วย) ไม่มี Word → LibreOffice · PDF นี้ไว้ตรวจข้อ 5 — ส่งเฉพาะคู่มือผู้ใช้หรือเมื่อลูกค้าขอ นอกนั้นย้ายไป `_to_delete/` (`document-naming` ข้อ 1)
-3. แปลง PDF เป็นภาพแล้ว**เปิดดูทุกหน้า** ตามข้อ 5 · เจอปัญหา → แก้ที่ .md แล้วรันใหม่
-4. ตั้งชื่อไฟล์ส่งมอบตาม `document-naming` (plugin `superuser`) เช่น `CLINIC-RPT-project-v1.0-DRAFT.docx`
+1. Write the content in `docs/src/<name>.md` (the permanent source, per `document-naming` item 1) following `polished-document-style` (plugin `superuser`). Add front matter (section 2). If there is no `doc-theme` yet, **search for references first:** take the project's keywords and search live as in `design-references` (plugin `superuser`), type `document`, then pull colours from the chosen work. Use the stored colour library when live search is not possible.
+2. Run `python scripts/md_to_docx.py docs/src/<name>.md -o docs/<deliverable-file-name>.docx --pdf`
+   - The script uses `brandkit.py` from `branded-document-design/scripts/` next to it, and needs `python-docx`.
+   - `--pdf` uses Word on Windows (it also updates the table of contents). Without Word, it uses LibreOffice. This PDF is for the checks in section 5. Deliver it only for a user manual or when the client asks. Otherwise move it to `_to_delete/` (`document-naming` item 1).
+3. Convert the PDF to images and **open every page** as in section 5. If you find a problem, fix it in the .md and rerun.
+4. Name the deliverable file per `document-naming` (plugin `superuser`), for example `CLINIC-RPT-project-v1.0-DRAFT.docx`
 
-ลองดูตัวอย่างครบทุกองค์ประกอบ: `python scripts/md_to_docx.py assets/example-report.md --pdf`
+To see an example with every element: `python scripts/md_to_docx.py assets/example-report.md --pdf`
 
 ## 2 · Front matter
 
 ```yaml
 ---
-title: Clinic Booking Assistant              # ชื่อใหญ่สีแบรนด์บนปก
-subtitle: เอกสารการพัฒนาโครงงานและผลการทดสอบ   # บรรทัดรองตัวหนา
-meta: วิชา 01234567 · ฉบับ 1.2 · 10 ตุลาคม 2569 # บรรทัดเล็กใต้ชื่อรอง
-note: ผู้พัฒนา 6500001 ชื่อ นามสกุล             # ตัวเอียงสีเทา (ไม่บังคับ)
-logo: ../assets/logo-on-light.png             # path เทียบกับไฟล์ .md (ไม่บังคับ)
+title: Clinic Booking Assistant              # large title in brand colour on the cover
+subtitle: เอกสารการพัฒนาโครงงานและผลการทดสอบ   # secondary line in bold
+meta: วิชา 01234567 · ฉบับ 1.2 · 10 ตุลาคม 2569 # small line under the subtitle
+note: ผู้พัฒนา 6500001 ชื่อ นามสกุล             # grey italic (optional)
+logo: ../assets/logo-on-light.png             # path relative to the .md file (optional)
 logo_width_cm: 6.5
-brand: 2A78D6          # สีหลักของโปรเจกต์ (ลำดับใน diagram-figures ข้อ 5) · ตัวอย่างนี้ = ค่าประจำบ้าน · หัวข้อ H1 ชื่อปก เลขข้อ
-brand_deep: 1B4E8B     # หัวข้อ H2 ตัวหนังสือหัวตาราง โค้ดในบรรทัด
-brand_tint: EAF2FB     # พื้นหัวตาราง
-brand_tint_2: F4F8FD   # พื้นแถวสลับ (ตารางเกิน 6 แถว)
+brand: 2A78D6          # the project's main colour (order in diagram-figures item 5) · this value is the house default · used for H1 headings, the cover title, item numbers
+brand_deep: 1B4E8B     # H2 headings, table header text, inline code
+brand_tint: EAF2FB     # table header background
+brand_tint_2: F4F8FD   # alternate row background (tables over 6 rows)
 ---
 ```
 
-ค่าเสริม: `brand_2` (สี accent รอง) · `toc: no` (ไม่ใส่สารบัญ) · `footer: Page` (คำหน้าเลขหน้า ค่าเริ่มต้น "หน้า") · `figure_width_cm` (ค่าเริ่มต้น 17) · `cover_top_pt` (ระยะจากขอบบนถึงโลโก้ ค่าเริ่มต้น 150)
+Optional values: `brand_2` (secondary accent colour) · `toc: no` (no table of contents) · `footer: Page` (the word before the page number, default "หน้า") · `figure_width_cm` (default 17) · `cover_top_pt` (distance from the top edge to the logo, default 150)
 
-**สีมาจากเจ้าของงาน** — หาตามลำดับใน `diagram-figures` ข้อ 5 (ระบบสี) · หาไม่เจอเลย → ใส่ `brand: 2A78D6` (ค่าประจำบ้าน) เขียน `(รอยืนยัน)` ไว้ในรายงาน แล้วทำต่อ ไม่หยุดถาม · ห้ามคัดลอกสีจากตัวอย่างหรือรายงานต้นแบบ · `brand_tint` ต้องอ่อนพอให้ตัวหนังสือ `brand_deep` อ่านชัด (contrast ≥ 7:1 ทั้งบนพื้นขาวและ `brand_tint` — สคริปต์ตรวจให้ ไม่ผ่านจะหยุดพร้อมบอกค่า)
+**Colours come from the work's owner.** Find them in the order in `diagram-figures` item 5 (colour system). If you find none at all, put `brand: 2A78D6` (the house default), write `(รอยืนยัน)` (awaiting confirmation) in the report, and keep going without stopping to ask. Never copy colours from the example or the reference report. `brand_tint` must be light enough for `brand_deep` text to read clearly (contrast ≥ 7:1 on both white and `brand_tint`; the script checks this and stops with the value if it fails).
 
-## 3 · Markdown แต่ละแบบกลายเป็นอะไร
+## 3 · What each Markdown form becomes
 
-| เขียนใน .md | ได้ใน .docx |
+| Written in .md | Result in .docx |
 |---|---|
-| `# 1. หัวข้อ` · `##` · `###` | หัวข้อ 3 ระดับ สีแบรนด์ อยู่ในสารบัญ ไม่ค้างท้ายหน้า · **ใส่เลขข้อเอง** |
-| ย่อหน้า มี `**ตัวหนา**` · `` `โค้ด` `` | เนื้อความเทาเข้ม · ตัวหนาสีเข้ม · โค้ดฟอนต์ monospace สี `brand_deep` |
-| ตาราง `\| … \|` | หัวพื้น `brand_tint` · คอลัมน์แรกตัวหนา · กว้างตามความยาวข้อความ · เกิน 6 แถวมีแถวสลับสี · ไม่เกิน 8 แถวอยู่หน้าเดียวกันทั้งตาราง · หัวตารางซ้ำเมื่อข้ามหน้า |
-| `> ข้อความ` | กล่อง "หมายเหตุ" พื้นเทา |
-| `> [!TIP]` · `[!WARNING]` · `[!IMPORTANT]` · `[!CAUTION]` · `[!NOTE]` | กล่องข้อแนะนำ · ข้อควรระวัง · สำคัญ · อันตราย · หมายเหตุ |
-| `![คำบรรยาย](path.png)` | รูปกลางหน้า + "รูปที่ N — คำบรรยาย" ตัวเอียง อยู่หน้าเดียวกับรูป |
-| `1. …` | เลขข้อสีแบรนด์ ตั้งเลขใหม่ทุกรายการ |
+| `# 1. Heading` · `##` · `###` | 3 heading levels in brand colour, in the table of contents, never stranded at the page bottom · **write the item numbers yourself** |
+| Paragraph with `**bold**` · `` `code` `` | Body text in dark grey · bold in a dark colour · code in a monospace font in `brand_deep` |
+| Table `\| … \|` | Header with `brand_tint` background · first column bold · width by text length · alternate row colours over 6 rows · a table of up to 8 rows stays on one page · header row repeats across pages |
+| `> text` | A grey "หมายเหตุ" (note) box |
+| `> [!TIP]` · `[!WARNING]` · `[!IMPORTANT]` · `[!CAUTION]` · `[!NOTE]` | Boxes for tip · caution · important · danger · note |
+| `![caption](path.png)` | Centred image + italic "รูปที่ N — caption" (Figure N), on the same page as the image |
+| `1. …` | Item numbers in brand colour, restarted for every list |
 | `- …` | bullet |
-| ```` ``` ```` | กล่องโค้ดพื้นเทา |
-| `<!-- pagebreak -->` | ขึ้นหน้าใหม่ |
-| `---` · `<!-- อื่น ๆ -->` | ข้าม |
+| ```` ``` ```` | Code box with grey background |
+| `<!-- pagebreak -->` | New page |
+| `---` · `<!-- other -->` | Skipped |
 
-บรรทัดที่อยู่ก่อนตาราง (ย่อหน้านำหรือกล่องหมายเหตุ) ถูกผูกให้อยู่หน้าเดียวกับตาราง
+A line before a table (a lead-in paragraph or a note box) is tied to stay on the same page as the table.
 
-## 4 · กฎเขียนให้ออกมาสวย
+## 4 · Rules for writing so it looks good
 
-- **ตารางคือเครื่องมือหลัก** — ข้อมูลที่มีหัวข้อ + รายละเอียดเขียนเป็นตาราง 2 คอลัมน์ ดีกว่าย่อหน้ายาว
-- **เซลล์ตารางไม่เกิน ~170 ตัวอักษร** — ยาวกว่านั้นตัดไปเขียนใต้ตาราง
-- **รูปพื้นเข้มหรือพื้นขาวเลือกแบบเดียวทั้งเล่ม** · กว้าง 1600–2000 px · วาดด้วย [`diagram-figures`](../diagram-figures/SKILL.md) แล้ว export PNG
-- **ผลทดสอบมาจากไฟล์ผลจริง** — สร้างตารางผลด้วยสคริปต์แล้วแทรกระหว่าง `<!-- RESULTS:START -->` กับ `<!-- RESULTS:END -->` ใน .md ก่อนรัน ไม่พิมพ์ตัวเลขเอง
-- **ข้อมูลจำลองต้องบอก** — กล่องหมายเหตุ 1 บรรทัดตั้งแต่หน้าแรกของเนื้อหา
+- **Tables are the main tool.** Data with a heading + details is better as a 2-column table than a long paragraph.
+- **A table cell is at most ~170 characters.** Longer than that, move it below the table.
+- **Pick dark-background or white-background figures and use one for the whole book** · 1600–2000 px wide · draw with [`diagram-figures`](../diagram-figures/SKILL.md) and export PNG
+- **Test results come from the real result files.** Build the results table with a script and insert it between `<!-- RESULTS:START -->` and `<!-- RESULTS:END -->` in the .md before running. Do not type numbers by hand.
+- **Say when data is simulated.** A 1-line note box from the first page of the content.
 
-## 5 · ตรวจด้วยตา — ห้ามข้าม
+## 5 · Check by eye. Never skip.
 
 ```bash
 python -c "import pymupdf; d=pymupdf.open('report.pdf'); [p.get_pixmap(dpi=70).save(f'_to_delete/p{i+1:02}.png') for i,p in enumerate(d)]"
 ```
 
-เปิดภาพทุกหน้า (Read tool) แล้วไล่เช็ก:
+Open the image of every page (Read tool) and go through the checks:
 
-- [ ] ปก: โลโก้ไม่แตก ชื่อไม่ขึ้นบรรทัดใหม่กลางคำ
-- [ ] สารบัญมีเลขหน้าครบ (ว่าง → เปิดใน Word กด F9 หรือใช้ `--pdf` บน Windows)
-- [ ] ไม่มีหน้าที่เกือบว่าง · ไม่มีหัวข้อค้างท้ายหน้า · คำบรรยายรูปไม่หลุดไปหน้าถัดไป
-- [ ] คอลัมน์ตารางไม่ตัดชื่อหรือรหัสกลางคำ — ถ้าตัด ย่อข้อความในคอลัมน์ที่ยาวที่สุด
-- [ ] สีแบรนด์ตรงกับโลโก้ (ไม่มีแบรนด์ → ค่าประจำบ้าน + `(รอยืนยัน)`) · ไม่มีสีฟ้าค่าเริ่มต้นของ Word หลงเหลือ
-- [ ] ไม่มี placeholder `[...]` หลงเหลือ · `(รอยืนยัน)` ไม่ใช่ placeholder ให้คงไว้ และทุกจุดอยู่ในรายการรอยืนยันของรายงาน
+- [ ] Cover: logo is not distorted, the title does not wrap in the middle of a word
+- [ ] The table of contents has all page numbers (if empty, open in Word and press F9, or use `--pdf` on Windows)
+- [ ] No nearly empty pages · no heading stranded at the page bottom · no figure caption pushed to the next page
+- [ ] Table columns do not cut a name or code in the middle. If they do, shorten the text in the longest column
+- [ ] Brand colour matches the logo (no brand → house default + `(รอยืนยัน)`) · no leftover Word default blue
+- [ ] No leftover `[...]` placeholder · `(รอยืนยัน)` is not a placeholder, so keep it, and every instance appears in the report's awaiting-confirmation list
 
 ## 6 · Anti-patterns
 
-- **แก้ .docx ใน Word แล้วส่ง** — รันใหม่เมื่อไรก็หาย · แก้ที่ .md
-- **ใช้ List Number ของ Word** — นับต่อข้ามรายการ สคริปต์จึงใส่เลขเอง
-- **ภาพหน้าจอขนาดเล็กขยายเต็มหน้า** — แตก ให้ถ่ายใหม่ที่ความกว้าง ≥ 1600 px
-- **ตารางกว้าง 7 คอลัมน์ขึ้นไปในหน้าแนวตั้ง** — แยกเป็น 2 ตาราง
-- **ส่งโดยไม่ได้เปิดดู PDF** — ดูข้อ 5
+- **Editing the .docx in Word and sending it.** It vanishes on the next run. Edit the .md.
+- **Using Word's List Number.** It continues counting across lists, which is why the script writes the numbers itself.
+- **A small screenshot enlarged to full page.** It breaks up. Retake it at width ≥ 1600 px.
+- **A table 7 columns wide or more on a portrait page.** Split it into 2 tables.
+- **Sending without opening the PDF.** See section 5.
 
-## 7 · เชื่อมกับ skill อื่น
+## 7 · Links to other skills
 
-| ต้องการ | ใช้ |
+| Need | Use |
 |---|---|
-| เพิ่มองค์ประกอบที่สคริปต์ไม่มี (KPI · pill · ลงนาม · หน้าแนวนอน) | เรียก `BrandDoc` ใน [`branded-document-design`](../branded-document-design/SKILL.md) ต่อจาก `build()` |
-| สไลด์คู่กับรายงานชุดเดียวกัน สีเดียวกัน | [`presentation-design`](../presentation-design/SKILL.md) (ตารางบนสุดเลือก .pptx · .html · แปลง) |
-| ชื่อไฟล์และเวอร์ชัน | `document-naming` (plugin `superuser`) |
-| รูปในรายงาน | [`diagram-figures`](../diagram-figures/SKILL.md) |
-| ปกเฉพาะโปรเจกต์ (มีโลโก้และ mockup แล้ว) | `doc-cover-design` (plugin `software-development`) |
+| Add elements the script lacks (KPI · pill · signature · landscape page) | Call `BrandDoc` in [`branded-document-design`](../branded-document-design/SKILL.md) after `build()` |
+| Slides paired with the same report, same colours | [`presentation-design`](../presentation-design/SKILL.md) (its top table chooses .pptx · .html · convert) |
+| File names and versions | `document-naming` (plugin `superuser`) |
+| Figures in the report | [`diagram-figures`](../diagram-figures/SKILL.md) |
+| A project-specific cover (logo and mockup already exist) | `doc-cover-design` (plugin `software-development`) |

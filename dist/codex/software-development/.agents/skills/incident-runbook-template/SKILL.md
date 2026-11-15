@@ -5,7 +5,7 @@ description: Use when writing a runbook or on-call guide
 
 # Incident Runbook Template
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line per `human-writing`. This skill gives the format and the structure, while human-writing says how to write so a person can follow it.
 
 ## When to use this skill
 
@@ -15,28 +15,28 @@ description: Use when writing a runbook or on-call guide
 - After a postmortem finds "we need a runbook for X"
 - Onboarding new on-call engineers
 
-## ไม่ใช้เมื่อ
+## When not to use
 
-| งาน | ใช้ตัวนี้แทน |
+| Task | Use this instead |
 |---|---|
-| เหตุจบแล้ว ต้องสรุปว่าเกิดอะไรและป้องกันยังไง | `postmortem-template` |
-| ตั้ง metric alert หรือ dashboard | `observability-basics` |
+| The incident is over and you must summarise what happened and how to prevent it | `postmortem-template` |
+| Setting up a metric alert or dashboard | `observability-basics` |
 
-## อ่านเพิ่มเมื่อ
+## Read more when
 
-| ไฟล์ | เปิดเมื่อ |
+| File | Open when |
 |---|---|
-| [references/runbook-template.md](references/runbook-template.md) | ทุกครั้งที่เริ่มเขียน runbook ใหม่ ให้คัดลอกแม่แบบเต็มจากไฟล์นี้ไปกรอก |
-| [references/index-and-alert-links.md](references/index-and-alert-links.md) | ถ้าทีมยังไม่มีหน้ารวม runbook หรือ alert ยังไม่มีลิงก์ไปหา runbook ให้เปิดดูตัวอย่างในไฟล์นี้ |
-| [references/game-days.md](references/game-days.md) | ตอนวางแผนซ้อมรับมือเหตุขัดข้องเพื่อทดสอบว่า runbook ใช้ได้จริง |
+| [references/runbook-template.md](references/runbook-template.md) | Every time you start a new runbook. Copy the full template from this file and fill it in |
+| [references/index-and-alert-links.md](references/index-and-alert-links.md) | If the team has no runbook index page, or alerts do not yet link to a runbook, open this file for examples |
+| [references/game-days.md](references/game-days.md) | When planning an incident drill to test that a runbook works in practice |
 
-## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+## 0 · Look for an existing format first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before using the structure or template in this file, check whether the user, customer or project already has its own format:
 
-- **ที่ดู:** runbook ที่มีอยู่: `docs/runbooks/` · wiki ของทีม on-call · เครื่องมือแจ้งเตือนที่ใช้ (PagerDuty · Opsgenie · Grafana) และชื่อ alert จริง · ระดับความรุนแรงขององค์กร
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** ชื่อ alert คำสั่ง และ dashboard ใช้ของจริงจากระบบ ไม่แต่งตัวอย่าง
+- **Where to look:** existing runbooks: `docs/runbooks/` · the on-call team's wiki · the alerting tool in use (PagerDuty · Opsgenie · Grafana) and the real alert names · the organisation's severity levels
+- **Result:** found → use that format (headings, order, field names, numbering) and say in the reply which file's format you used · not found → use the template in this file as a fallback and say that no existing format was found
+- **Still required either way:** alert names, commands and dashboards come from the real system. Do not invent examples.
 
 ## What's a Runbook?
 
@@ -68,33 +68,33 @@ A good runbook is:
 
 ## Runbook Template
 
-แม่แบบเต็มอยู่ใน [references/runbook-template.md](references/runbook-template.md) ทุกฉบับมีส่วนตามลำดับนี้ และแต่ละส่วนต้องมีของต่อไปนี้
+The full template is in [references/runbook-template.md](references/runbook-template.md). Every runbook has these sections in this order, and each section must contain the following.
 
-| ส่วน | ต้องมี |
+| Section | Must contain |
 |---|---|
-| ส่วนหัว | Severity · Service · Owner Team · Last Reviewed · Linked Alert |
-| TL;DR (30 seconds) | ย่อหน้าเดียวว่าอะไรพัง ต้องทำอะไรก่อน และต้องโทรหาใคร |
-| How to Detect | อาการที่ผู้ใช้เห็นและที่เห็นภายใน · alert ที่ดัง · dashboard ที่ต้องเปิด |
-| Diagnosis (60 seconds) | ผัง flowchart ตัดสินใจ และ quick checks ที่เป็นคำสั่งคัดลอกไปรันได้ เรียงตามลำดับ |
-| Mitigation Steps | ขั้นตอนเรียงจากความเสี่ยงต่ำไปสูง (ลำดับเดียวกับ `incident-response` Phase 3) ทุกขั้นบอก Expected effect · **VERIFY** (คำสั่งหรือกราฟที่ต้องดู และค่าที่ต้องเห็น — ไม่เห็นค่านั้นถือว่าขั้นนี้ยังไม่สำเร็จ ห้ามข้ามไปขั้นถัดไปโดยไม่รู้ว่าขั้นก่อนทำอะไร) และ Caveats หรือ If doesn't work · agent แค่เสนอคำสั่งกับผลที่คาด คน on-call เป็นคนรันหรืออนุมัติก่อนแตะ production |
-| Escalation Path | ใครต้องถูกเรียกเมื่อไหร่ เป็นนาทีที่ชัดเจน |
-| Verification | รายการตรวจว่าแก้แล้วจริง |
-| After Resolution | บันทึกในช่องเหตุการณ์ → อัปเดตหน้าสถานะ → เปิดตั๋ว postmortem → อัปเดต runbook นี้ |
-| Related Runbooks · Background | ลิงก์ไป runbook ที่เกี่ยวข้อง และที่มาของปัญหาแบบสั้น (ไม่บังคับ) |
+| Header | Severity · Service · Owner Team · Last Reviewed · Linked Alert |
+| TL;DR (30 seconds) | One paragraph: what broke, what to do first, and whom to call |
+| How to Detect | Symptoms users see and symptoms seen internally · the alert that fires · the dashboard to open |
+| Diagnosis (60 seconds) | A decision flowchart and quick checks written as commands to copy and run, in order |
+| Mitigation Steps | Steps ordered from low risk to high (the same order as `incident-response` Phase 3). Every step states Expected effect · **VERIFY** (the command or graph to look at, and the value to expect. If you do not see that value, the step has not worked yet. Do not move to the next step without knowing what the previous step did) and Caveats or If doesn't work · the agent only proposes commands and expected results, and the on-call person runs them or approves them before anything touches production |
+| Escalation Path | Who is called when, in clear minutes |
+| Verification | A checklist to confirm it is really fixed |
+| After Resolution | Log it in the incident channel → update the status page → open a postmortem ticket → update this runbook |
+| Related Runbooks · Background | Links to related runbooks, and a short background of the problem (optional) |
 
-**ลำดับ mitigation ในแม่แบบ:** Reduce load (low risk) → Scale up (medium risk) → Rollback recent deploy (higher risk) → Failover to backup region (last resort)
+**Mitigation order in the template:** Reduce load (low risk) → Scale up (medium risk) → Rollback recent deploy (higher risk) → Failover to backup region (last resort)
 
-**ลำดับ escalation ในแม่แบบ:** ถ้าแก้ไม่ได้ใน 15 นาที ให้เรียก secondary on-call ถ้าสองคนแก้ไม่ได้ใน 30 นาที ให้เรียกทีมเจ้าของ service ถ้ายังเป็น SEV1 หลัง 45 นาที ให้เรียก incident commander (IC) และถ้า SEV1 เกิน 1 ชั่วโมง ให้เรียกผู้บริหารฝ่ายวิศวกรรม
+**Escalation order in the template:** If it cannot be fixed in 15 minutes, call the secondary on-call. If two people cannot fix it in 30 minutes, call the service's owning team. If it is still SEV1 after 45 minutes, call the incident commander (IC). If SEV1 runs past 1 hour, call the head of engineering.
 
-**ถือว่าแก้แล้วเมื่อ** error rate กลับสู่ระดับปกติ · latency p95 ต่ำกว่าเกณฑ์ · หน้าสถานะเป็น "Operational" · ไม่มี alert ใหม่ · ลูกค้าหยุดแจ้งปัญหา และเฝ้าดูต่ออีก 30 นาทีแล้ว
+**Count it as fixed when** the error rate is back to normal · latency p95 is below the threshold · the status page says "Operational" · there are no new alerts · customers have stopped reporting problems, and you have watched for another 30 minutes.
 
 > Use `postmortem-template` skill for the full analysis
 
 ## Runbook Index and Alert Links
 
-ทำหน้ารวม runbook ไว้ที่เดียว ให้ค้นได้ทั้งตาม service ตามชื่อ alert และตามเหตุที่เกิดบ่อยใน 90 วันล่าสุด
+Keep one index page of runbooks in one place, searchable by service, by alert name, and by the most frequent incidents in the last 90 days.
 
-alert ทุกตัว**ต้อง**มีลิงก์ไป runbook ผ่าน annotation `runbook_url:` ของ alert และควรใส่ `dashboard:` คู่กันด้วย ส่วนตัวอย่างหน้ารวมและตัวอย่าง Prometheus alerting rule อยู่ใน [references/index-and-alert-links.md](references/index-and-alert-links.md)
+Every alert **must** link to a runbook through the alert's `runbook_url:` annotation, and should carry a matching `dashboard:` too. Examples of the index page and a Prometheus alerting rule are in [references/index-and-alert-links.md](references/index-and-alert-links.md).
 
 ## What Makes Runbooks Fail
 
@@ -107,11 +107,11 @@ alert ทุกตัว**ต้อง**มีลิงก์ไป runbook ผ�
 | Not discoverable | Link it from the alert and the index page |
 | No ownership | Each runbook has a team owner |
 | Not tested | Run game days, and follow it during real incidents |
-| Commands rot silently | CI job on every change to `runbooks/`: pull every fenced `bash` block → `bash -n` (parses) · every `./scripts/*.sh` it names exists in the repo · every `kubectl` resource name exists in staging (`kubectl get ... -n staging`) · fail the build on any miss — คำสั่งที่รันไม่ได้ตอนตี 3 แย่กว่าไม่มี runbook (แนวคิดจาก wshobson/agents incident-runbook-templates) |
+| Commands rot silently | CI job on every change to `runbooks/`: pull every fenced `bash` block → `bash -n` (parses) · every `./scripts/*.sh` it names exists in the repo · every `kubectl` resource name exists in staging (`kubectl get ... -n staging`) · fail the build on any miss. A command that cannot run at 3am is worse than no runbook (idea from wshobson/agents incident-runbook-templates) |
 
 ## Game Days
 
-ทดสอบ runbook ด้วยการจำลองเหตุขัดข้องโดยตั้งใจ ทุกไตรมาสให้เลือก runbook หนึ่งฉบับ จำลองเหตุใน staging แล้วให้ on-call ทำตาม จากนั้นอัปเดต runbook ตามช่องโหว่ที่เจอ รายการตรวจเต็มอยู่ใน [references/game-days.md](references/game-days.md)
+Test a runbook by deliberately simulating a failure. Each quarter, pick one runbook, simulate the incident in staging, and have on-call follow it. Then update the runbook for the gaps found. The full checklist is in [references/game-days.md](references/game-days.md).
 
 ## Anti-patterns
 

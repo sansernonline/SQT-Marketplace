@@ -3,199 +3,199 @@ name: product-naming
 description: Use when naming a product, shop, app or brand
 ---
 
-# ตั้งชื่อผลิตภัณฑ์
+# Naming a product
 
-> **กฎข้อเดียว:** ชื่อที่ดีคือชื่อที่คน**พิมพ์ถูกตั้งแต่ครั้งแรก หลังได้ยินครั้งเดียว**
-> ความหมายลึกซึ้งมาทีหลังได้ แต่ถ้าสะกดผิด ลูกค้าก็หาไม่เจอ
+> **The one rule:** a good name is one a person **types correctly the first time, after hearing it once.**
+> Deeper meaning can come later, but if people misspell the name, customers cannot find you.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ตั้งชื่อผลิตภัณฑ์ ร้าน บริการ แอป แบรนด์ โมดูล หรือชื่อโครงการภายใน
-- มีชื่ออยู่แล้วแต่รู้สึกว่าเชย ยาว หรือซ้ำกับคนอื่น
-- มีผลิตภัณฑ์หลายตัวและอยากให้ชื่อเป็นตระกูลเดียวกัน
-- ต้องเลือกจากรายการชื่อที่ระดมมาแล้ว แต่ตัดสินใจไม่ลง
+- Naming a product, shop, service, app, brand, module or internal project
+- A name exists but feels dated, long or the same as someone else's
+- There are several products and the names should form one family
+- You must choose from a brainstormed list of names and cannot decide
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Job | Use this instead |
 |---|---|
-| โลโก้ สี ตัวอักษรของแบรนด์ | `graphic-design` (plugin `software-development`) |
-| ตั้งชื่อไฟล์เอกสาร | `document-naming` |
-| ตั้งชื่อตาราง คอลัมน์ (งานซอฟต์แวร์) | `database-design` (plugin `software-development`) |
-| ตั้งชื่อ endpoint (งานซอฟต์แวร์) | `api-conventions` (plugin `software-development`) |
+| Logo, colours, brand typography | `graphic-design` (plugin `software-development`) |
+| Naming document files | `document-naming` |
+| Naming tables and columns (software work) | `database-design` (plugin `software-development`) |
+| Naming endpoints (software work) | `api-conventions` (plugin `software-development`) |
 
 ---
 
-## 1 · หกข้อที่ตัดชื่อทิ้งทันที
+## 1 · Six tests that cut a name at once
 
-ทดสอบก่อนคิดต่อ ถ้าตกข้อไหนข้อหนึ่งให้ตัดทิ้งเลย ไม่ต้องเสียดาย
+Test before you think further. If a name fails any one, cut it. Do not feel sorry.
 
-| # | ทดสอบ | ตกเมื่อ |
+| # | Test | Fails when |
 |:--:|---|---|
-| 1 | **ทดสอบโทรศัพท์** — พูดชื่อให้คนฟังทางโทรศัพท์ เขาพิมพ์ถูกไหม | ต้องสะกดให้ฟัง |
-| 2 | **ความยาว** | เกิน 3 พยางค์ หรือเกิน 12 ตัวอักษร |
-| 3 | **โดเมนและ handle** | `.com` และ `.co` ถูกจับหมด และ handle โซเชียลไม่ว่างสักที่ |
-| 4 | **ชนของที่มีอยู่** | มีผลิตภัณฑ์ ร้าน หรือบริการในหมวดเดียวกันชื่อเดียวกันหรือใกล้กันมาก |
-| 5 | **ความหมายในภาษาอื่น** | แปลว่าอะไรไม่ดีในภาษาที่ลูกค้าพูด |
-| 6 | **คนไทยออกเสียงได้** | มีเสียงควบที่คนไทยเลี่ยง หรือลงท้ายด้วยเสียงที่กลืนหาย |
+| 1 | **Phone test**: say the name to someone over the phone. Do they type it correctly? | You have to spell it out |
+| 2 | **Length** | More than 3 syllables, or more than 12 letters |
+| 3 | **Domain and handle** | `.com` and `.co` are both taken and no social handle is free anywhere |
+| 4 | **Collision with what exists** | A product, shop or service in the same category has the same or a very close name |
+| 5 | **Meaning in other languages** | It means something bad in a language your customers speak |
+| 6 | **Thai speakers can pronounce it** | It has a consonant cluster Thai speakers avoid, or ends in a sound that gets swallowed |
 
-> **ข้อ 1 คือข้อที่ฆ่าชื่อมากที่สุด** เพราะชื่อที่สะกดแปลกเพื่อให้ได้โดเมน
-> ต้องแลกกับการที่ลูกค้าทุกคนพิมพ์ผิดตลอดไป
+> **Test 1 kills the most names**, because a name spelled oddly to get a domain
+> means every customer mistypes it forever.
 >
-> **ข้อ 6 คนมักลืม** — ถ้าชื่อมี `th` `v` `z` ท้ายคำ หรือควบ `str-` `spl-`
-> คนไทยจะออกเสียงเพี้ยนแล้วพิมพ์ตามที่ได้ยิน
+> **People often forget test 6.** If the name has `th`, `v` or `z` at the end of a word, or a cluster like `str-` or `spl-`,
+> Thai speakers will pronounce it off and type what they heard.
 
 ---
 
-## 2 · เก้าสูตรผลิตชื่อ
+## 2 · Nine formulas for producing names
 
-อย่านั่งนึกลอย ๆ ให้เดินทีละสูตร คิดสูตรละ 5–10 ชื่อ แล้วค่อยคัด
+Do not sit and think in the air. Walk through the formulas one at a time, come up with 5–10 names per formula, then select.
 
-| # | สูตร | วิธี | ตัวอย่าง |
+| # | Formula | Method | Example |
 |:--:|---|---|---|
-| 1 | **คำจริง ตัดท้าย** | เอาคำอังกฤษมาตัดพยางค์สุดท้ายทิ้ง | `figure` → **Figma** · `velocity` → **Velo** |
-| 2 | **2 คำชนกัน** | ตัดหัวท้าย 2 คำมาต่อกัน | `fold`+`drop` → **Foldrop** · `data`+`dog` → **Datadog** |
-| 3 | **คำ + ปัจจัย** | เติม `-io` `-ly` `-ify` `-o` `-a` `-ex` | `home`+`ify` → **Homify** · `aurum`+`io` → **Aurio** |
-| 4 | **รากละติน/กรีก** | หาคำรากของสิ่งที่ทำ แล้วย่อให้สั้น | `lumen` → **Lumo** · `nexus` → **Nexa** |
-| 5 | **ตัวอักษรตระกูล** | คำบอกหน้าที่ + ตัวต่อท้ายประจำตระกูล | **TradeXI · TelXI · DockXI · SoundXI** |
-| 6 | **คำสั้นไร้ความหมาย** | 4–5 ตัวอักษร พยัญชนะ-สระ-พยัญชนะ อ่านได้ทันที | **Quix · Zeno · Riva · Volt** |
-| 7 | **คำจริงยืมข้ามบริบท** | คำธรรมดาที่ไม่เกี่ยวกับงาน แต่ให้ความรู้สึกตรง | **Slack · Notion · Arc · Linear** |
-| 8 | **2 พยางค์อ่านลื่น** | คำจริง 2 คำสั้น ๆ วางคู่กัน | **Speak Go · Cash App** |
-| 9 | **คำเต็ม 2 คำที่ไม่เกี่ยวกัน** | เอาคำจริง 2 คำที่ไม่เกี่ยวกับสินค้าและไม่เกี่ยวกันเอง มาต่อเป็นคำเดียว | **Tailscale · Snowflake · Firebase · Basecamp** |
+| 1 | **Real word, cut the end** | Take an English word and drop the last syllable | `figure` → **Figma** · `velocity` → **Velo** |
+| 2 | **2 words collided** | Cut the head and tail of 2 words and join them | `fold`+`drop` → **Foldrop** · `data`+`dog` → **Datadog** |
+| 3 | **Word + suffix** | Add `-io` `-ly` `-ify` `-o` `-a` `-ex` | `home`+`ify` → **Homify** · `aurum`+`io` → **Aurio** |
+| 4 | **Latin/Greek root** | Find the root word for what it does, then shorten it | `lumen` → **Lumo** · `nexus` → **Nexa** |
+| 5 | **Family letters** | A word for the function + a family ending | **TradeXI · TelXI · DockXI · SoundXI** |
+| 6 | **Short meaningless word** | 4–5 letters, consonant-vowel-consonant, readable at once | **Quix · Zeno · Riva · Volt** |
+| 7 | **Real word borrowed across contexts** | An ordinary word unrelated to the work that gives the right feeling | **Slack · Notion · Arc · Linear** |
+| 8 | **2 syllables that read smoothly** | 2 short real words side by side | **Speak Go · Cash App** |
+| 9 | **2 whole unrelated words** | Join 2 real words that relate neither to the product nor to each other into one word | **Tailscale · Snowflake · Firebase · Basecamp** |
 
-**สูตรที่ให้ชื่อ "cool + clean" มากที่สุด** คือสูตร 1 · 4 · 6 เพราะได้ชื่อสั้น ไร้ความหมายตรงตัว และจำง่าย
-**สูตร 7 ได้ชื่อที่ดูโตแล้ว** แต่โดเมนหายากที่สุด
+**The formulas that give the most "cool + clean" names** are 1 · 4 · 6, because they give short names with no literal meaning that are easy to remember.
+**Formula 7 gives names that look grown-up**, but its domains are the hardest to find.
 
-**ตัวอักษรที่ให้ความรู้สึกทันสมัย** — ขึ้นต้นด้วย `x` `z` `q` `v` หรือลงท้ายด้วย `-o` `-a` `-ix` `-ex`
-**ตัวอักษรที่ทำให้ดูเชย** — ต่อท้ายด้วย `-soft` `-tech` `-sys` `-pro` `-plus` `-max`
+**Letters that feel modern:** start with `x` `z` `q` `v`, or end with `-o` `-a` `-ix` `-ex`.
+**Letters that look dated:** ending with `-soft` `-tech` `-sys` `-pro` `-plus` `-max`.
 
 ---
 
-**สูตร 9 ลงลึก** — เอาคำจริง 2 คำเต็ม ๆ (ไม่ตัดอะไร) ที่ไม่เกี่ยวกับสินค้าและไม่เกี่ยวกันเอง วางติดกัน · รวมไม่เกิน 3 พยางค์ · คำแรกเป็นรูปธรรม · อ่านออกเสียงทุกคู่ก่อนเลือก → เหตุผล กฎ และคลังคำ A/B สำหรับจับคู่ใน [`references/formula-9-deep-dive.md`](references/formula-9-deep-dive.md) — เปิดเมื่อใช้สูตร 9
+**Formula 9 in depth:** take 2 whole real words (cut nothing) that relate neither to the product nor to each other, and put them side by side · at most 3 syllables in total · the first word concrete · read every pair aloud before choosing → reasons, rules and the A/B word pools for pairing are in [`references/formula-9-deep-dive.md`](references/formula-9-deep-dive.md). Open it when you use formula 9.
 
-## 3 · ใส่ความหมายให้ชื่อ
+## 3 · Giving the name a meaning
 
-ชื่อสั้นและทันสมัยไม่จำเป็นต้องไร้ความหมาย เพราะความหมายมาได้ 2 ทาง
+A short, modern name does not have to be meaningless, because meaning can arrive 2 ways.
 
-| ทาง | สูตรที่ให้มา | ตัวอย่าง |
+| Way | Formulas that give it | Example |
 |---|---|---|
-| **มีมาแต่กำเนิด** | 4 รากละติน/กรีก · 7 คำจริงยืมข้ามบริบท | `Aurio` จาก *aurum* ทอง · `Anchor` ความมั่นคง |
-| **ใส่ทีหลัง** | 6 คำสั้นไร้ความหมาย | `Quix` ตั้งก่อน แล้วค่อยผูกกับความเร็ว |
+| **Built in from birth** | 4 Latin/Greek roots · 7 real words borrowed across contexts | `Aurio` from *aurum*, gold · `Anchor`, stability |
+| **Added later** | 6 short meaningless words | `Quix` is chosen first, then tied to speed |
 
-> **ทางที่ 2 ใช้ได้จริงและปลอดภัยกว่า** ดู Kodak, Häagen-Dazs, Apple ไม่มีชื่อไหนบอกว่าขายอะไร
-> ความหมายถูกสร้างขึ้นหลังจากนั้นทั้งหมด
+> **Way 2 works in practice and is safer.** Look at Kodak, Häagen-Dazs, Apple: no name says what is sold.
+> The meaning was built entirely afterward.
 
-**กฎของความหมาย:** หารากจาก**สิ่งที่ผู้ใช้ได้** ไม่ใช่สิ่งที่ระบบทำ
-เช่น ระบบจัดการคลังทอง ให้ใช้ราก "ทอง" ไม่ใช่ราก "คลังสินค้า"
+**Rule for meaning:** find the root from **what the user gets**, not from what the system does.
+For example, for a gold inventory system, use the root "gold", not the root "warehouse".
 
-**ทดสอบ:** เขียนความหมายเป็น **1 บรรทัด** ได้ไหม
-"Aurio — จาก aurum ภาษาละตินแปลว่าทอง" แค่นี้จบ ถ้าต้องอธิบายเกิน 1 ประโยค แปลว่าความหมายอ่อนเกินไป
+**Test:** can you write the meaning in **1 line**?
+"Aurio: from Latin aurum, meaning gold." That is all. If it takes more than 1 sentence to explain, the meaning is too weak.
 
-**คลังช่วยคิด** — ตารางรากละติน/กรีกที่ใช้ได้จริง (แสง · ทอง · เชื่อมต่อ · เวลา · ปกป้อง ฯลฯ) และตารางคำจริงยืมข้ามบริบทแยกตามความรู้สึก (เร็ว · มั่นคง · ชัดเจน · เป็นระเบียบ · เชื่อมโยง · นำทาง · เงียบ) → [`references/meaning-libraries.md`](references/meaning-libraries.md) — เปิดเมื่อใช้สูตร 4 หรือ 7 · คำจริงหาโดเมนยากที่สุด ต้องมีแผนสำรอง (`arc.app` · `getprism.com`)
+**Thinking libraries:** a table of Latin/Greek roots that work in practice (light · gold · connect · time · protect and others) and a table of real words borrowed across contexts, grouped by feeling (fast · stable · clear · orderly · connected · guiding · quiet) → [`references/meaning-libraries.md`](references/meaning-libraries.md). Open it when you use formula 4 or 7. Real words are the hardest to find domains for, so keep a fallback (`arc.app` · `getprism.com`).
 
-**เรื่องเล่า:** สั้น จำได้ เล่าต่อได้ (ไม่ใช่ตัวย่อต่อกัน หรือชื่อหมาที่บ้าน) → ตัวอย่างดี/แย่ใน `references/meaning-libraries.md`
+**The story:** short, memorable, easy to retell (not a chain of initials, and not the family dog's name) → good and bad examples in `references/meaning-libraries.md`
 
-**เขียนความหมายลงเอกสารแบรนด์** ตั้งแต่วันเลือกชื่อ ไม่ใช่รอให้มีคนถาม
-ทีมขายจะได้เล่าเหมือนกันทุกคน
+**Write the meaning into the brand document** on the day you pick the name, not when someone asks.
+That way the sales team tells it the same way every time.
 
 ---
 
-## 4 · ตระกูลชื่อ เมื่อมีหลายผลิตภัณฑ์
+## 4 · Name families, when there are several products
 
-เลือกแบบเดียว แล้วใช้ทั้งตระกูล
+Pick one pattern and use it for the whole family.
 
-| แบบ | หน้าตา | ดี | เสีย |
+| Pattern | Looks like | Good | Bad |
 |---|---|---|---|
-| **ต่อท้ายเหมือนกัน** | `TradeXI` `TelXI` `DockXI` | รู้ทันทีว่าบ้านเดียวกัน และตั้งชื่อตัวใหม่ง่าย | ถ้าตัวเดียวเสียชื่อ จะกระทบทั้งตระกูล |
-| **นำหน้าเหมือนกัน** | `QuixChat` `QuixFlow` | แบรนด์แม่เด่น | ชื่อยาวขึ้นทุกตัว |
-| **อิสระ** | `Aurio` `Homify` `Foldrop` | แต่ละตัวขายตัวเองได้ และขายแยกได้ | ต้องสร้างแบรนด์ใหม่ทุกตัว |
+| **Same ending** | `TradeXI` `TelXI` `DockXI` | You know at once they share a house, and new names are easy to make | If one name is damaged, the whole family suffers |
+| **Same prefix** | `QuixChat` `QuixFlow` | The parent brand stands out | Every name gets longer |
+| **Independent** | `Aurio` `Homify` `Foldrop` | Each one sells itself and can be sold separately | You must build a new brand for each |
 
-**เกณฑ์เลือก:** ถ้าขายรวมเป็นชุด ให้ใช้ตระกูลเดียวกัน แต่ถ้าอาจขายแยกหรือขายกิจการทีหลัง ให้ตั้งแบบอิสระ
+**How to choose:** if you sell them as a bundle, use one family. If you might sell them separately or sell the business later, make them independent.
 
-> **จดชื่อตระกูลไว้เป็นเอกสาร** พร้อมกฎการตั้งชื่อตัวถัดไป
-> ไม่งั้นตัวที่ 5 จะหลุดแบบ แล้วทั้งชุดดูมั่ว
+> **Write the family's naming rules down in a document**, together with the rule for naming the next one.
+> Otherwise the 5th name breaks the pattern and the whole set looks messy.
 
 ---
 
-## 5 · ตรวจของว่างก่อนตกหลุมรัก
+## 5 · Check what is available before you fall in love
 
-**ตรวจตอนเหลือ 5 ชื่อ ไม่ใช่ตอนเหลือชื่อเดียว** เพราะถ้าชอบชื่อไหนมากแล้วมารู้ว่าใช้ไม่ได้ จะเจ็บกว่า
+**Check when 5 names are left, not when 1 is left.** If you love a name and then learn you cannot use it, it hurts more.
 
-| ตรวจอะไร | ที่ไหน | ตกเมื่อ |
+| Check what | Where | Fails when |
 |---|---|---|
-| โดเมน | ผู้ให้บริการจดโดเมน | `.com` และ `.co` ถูกจับ และตัวสำรองก็ไม่เหลือ |
-| เครื่องหมายการค้าไทย | กรมทรัพย์สินทางปัญญา | มีของจดไว้ในหมวดสินค้าหรือบริการของเรา |
-| เครื่องหมายการค้าสากล | ฐานข้อมูล WIPO | เหมือนข้อบน ถ้าจะขายต่างประเทศ |
-| ชื่อแพ็กเกจ (ถ้าเป็นซอฟต์แวร์) | npm · PyPI · NuGet | ถูกใช้แล้วในระบบนิเวศที่จะเผยแพร่ |
-| ชื่อในแอปสโตร์ (ถ้าเป็นแอป) | App Store · Play Store | มีแอปชื่อเดียวกันในหมวดเดียวกัน |
-| handle โซเชียล | X · Instagram · Facebook · TikTok · GitHub · LINE | ไม่ว่างสักที่ |
-| ค้นหาธรรมดา | เสิร์ชเอนจิน | หน้าแรกเต็มไปด้วยของคนอื่น |
+| Domain | Domain registrar | `.com` and `.co` are taken and no fallback is left |
+| Thai trademark | กรมทรัพย์สินทางปัญญา (Department of Intellectual Property) | A registration exists in our goods or services category |
+| International trademark | WIPO database | Same as above, if you will sell abroad |
+| Package name (if software) | npm · PyPI · NuGet | Already used in the ecosystem you will publish to |
+| App store name (if an app) | App Store · Play Store | An app with the same name exists in the same category |
+| Social handles | X · Instagram · Facebook · TikTok · GitHub · LINE | None is free |
+| Plain search | Search engine | The first page is full of other people's results |
 
-**เกณฑ์ตัดสิน:** โดเมนหลักต้องได้ handle ต้องว่างอย่างน้อยครึ่งหนึ่ง และ
-เครื่องหมายการค้าในหมวดของเราต้องไม่ชน 3 ข้อนี้ไม่มีข้อยกเว้น
+**Decision rule:** you must get the main domain, at least half the handles must be free, and
+there must be no trademark collision in our category. These 3 have no exceptions.
 
 ---
 
-## 6 · เสียงและการพิมพ์ในบริบทไทย
+## 6 · Sound and typing in the Thai context
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| ลูกค้าไทยจะเขียนชื่อเป็นภาษาไทยแน่นอน | ลองเขียนดูเองก่อน เช่น `Aurio` เป็น "ออริโอ" แล้วดูว่าอ่านลื่นไหม |
-| เลือกคำไทยทางการ 1 แบบ | เขียนตามหลักเกณฑ์ทับศัพท์ของราชบัณฑิตยสภา ไม่ใส่วรรณยุกต์ (ซอฟต์แวร์ ไม่ใช่ ซ้อฟต์แว่ร์) · บันทึกลง brand kit · แบบอื่นที่ลูกค้าพิมพ์กันจริงเก็บเป็นคำค้น (search keyword) ไม่ใช้ในงาน |
-| เสียงที่คนไทยกลืน | `-th` `-v` `-s` ท้ายคำ หายเกือบทุกครั้ง |
-| เสียงควบที่เลี่ยงกัน | `str-` `spl-` `thr-` |
-| ชื่อที่พิมพ์ผิดง่ายบนแป้นไทย | เลี่ยงตัวที่อยู่ใกล้กันจนสลับได้ |
-| ความยาวเมื่อเขียนไทย | ไม่ควรเกิน 5 พยางค์ไทย |
+| Thai customers will certainly write the name in Thai | Try writing it yourself first, for example `Aurio` as "ออริโอ", and see if it reads smoothly |
+| Choose 1 official Thai form | Follow the transliteration rules of the Royal Society of Thailand (ราชบัณฑิตยสภา) with no tone marks (ซอฟต์แวร์, not ซ้อฟต์แว่ร์) · record it in the brand kit · keep other forms that customers actually type as search keywords, not for the work itself |
+| Sounds Thai speakers swallow | `-th` `-v` `-s` at the end of a word vanish almost every time |
+| Clusters they avoid | `str-` `spl-` `thr-` |
+| Names easy to mistype on a Thai keyboard | Avoid letters so close together that they can swap |
+| Length when written in Thai | No more than 5 Thai syllables |
 
-**ทดสอบจริง** — พูดชื่อให้คนไทย 3 คนฟังทางโทรศัพท์ แล้วให้เขาพิมพ์ลงไลน์ส่งกลับมา
-ถ้ามีสักคนพิมพ์ไม่ตรง ชื่อนั้นตก
+**Real test:** say the name to 3 Thai speakers over the phone and have them type it in LINE and send it back.
+If even 1 person types it differently, the name fails.
 
 ---
 
-## 7 · ห้าข้อทดสอบก่อนตัดสินใจครั้งสุดท้าย
+## 7 · Five tests before the final decision
 
-| # | ทดสอบ | ผ่านเมื่อ |
+| # | Test | Passes when |
 |:--:|---|---|
-| 1 | เขียนในประโยคจริง | "ลองใช้ ___ ดูสิ" ฟังแล้วไม่ขัด |
-| 2 | เขียนคู่กับคำบอกหมวด | "___ — ระบบจัดการคลังทอง" อ่านแล้วเข้าใจ |
-| 3 | ย่อเป็นไอคอน | ตัวแรกหรือ 2 ตัวแรกทำเป็นสัญลักษณ์ได้ |
-| 4 | อยู่รอดเมื่อขอบเขตโต | ชื่อที่มีคำว่า "ทอง" จะพังวันที่ขายเงินด้วย |
-| 5 | ทนต่อการล้อ | ลองคิดมุกล้อชื่อตัวเอง ถ้าคิดออกง่ายเกินไป ระวัง |
+| 1 | Write it in a real sentence | "ลองใช้ ___ ดูสิ" (Thai for "try ___") sounds natural |
+| 2 | Write it next to the category word | "___ — ระบบจัดการคลังทอง" (Thai for "___, a gold inventory system") reads and makes sense |
+| 3 | Shrink it to an icon | The first letter or 2 can become a symbol |
+| 4 | Survives when the scope grows | A name with the word "gold" breaks the day you also sell silver |
+| 5 | Resists teasing | Try making up jokes about your own name. If they come too easily, beware |
 
-**ข้อ 4 สำคัญที่สุดสำหรับสิ่งที่จะโตต่อ (ผลิตภัณฑ์ ร้าน แบรนด์)** — ชื่อที่บอกความสามารถวันนี้
-จะกลายเป็นกรงขังเมื่อผลิตภัณฑ์โตขึ้น ชื่อไร้ความหมายจึงปลอดภัยกว่าในระยะยาว
+**Test 4 matters most for anything that will keep growing (a product, shop, brand).** A name that states today's ability
+becomes a cage when the product grows. A meaningless name is therefore safer in the long run.
 
 ---
 
 ## 8 · Anti-patterns
 
-- **สะกดแปลกเพื่อให้ได้โดเมน** — `Kleen` `Fyre` `Qwik` ลูกค้าพิมพ์ผิดตลอดไป
-- **ต่อท้ายด้วย `-soft` `-tech` `-sys` `-solutions`** — ดูเป็นปี 2005
-- **ใส่ตัวเลขในชื่อ** — `App360` `Pro24` ตกรุ่นทันทีที่เปลี่ยนรุ่น
-- **ชื่อที่บอกความสามารถเฉพาะ** — `InvoiceMaster` แล้ววันที่ทำเรื่องอื่นด้วย
-- **3 คำขึ้นไป** — ไม่มีใครพูดเต็ม จะถูกย่อจนจำไม่ได้
-- **คำไทยทับศัพท์ที่ฝรั่งอ่านไม่ออก** ถ้าคิดจะขายต่างประเทศ
-- **ชื่อที่ต้องอธิบายว่าทำไมถึงตั้งชื่อนี้** — ลูกค้าไม่มีเวลาฟัง
-- **เลือกชื่อก่อนตรวจโดเมนและเครื่องหมายการค้า** — เสียเวลา 2 รอบ
-- **ระดมชื่อคนเดียวในหัว** — ได้ชื่อจากมุมเดียว ให้เดินตาม 9 สูตรแทน
+- **Odd spelling to get a domain**: `Kleen` `Fyre` `Qwik`. Customers mistype forever
+- **Ending with `-soft` `-tech` `-sys` `-solutions`**: looks like 2005
+- **Numbers in the name**: `App360` `Pro24` become outdated as soon as the version changes
+- **A name that states one specific ability**: `InvoiceMaster`, and then the day you do something else too
+- **3 or more words**: nobody says the whole thing, so it gets shortened until it cannot be recognised
+- **A Thai transliteration that foreigners cannot read**, if you plan to sell abroad
+- **A name you must explain the reason for**: customers have no time to listen
+- **Choosing the name before checking domains and trademarks**: wastes 2 rounds
+- **Brainstorming alone in your head**: you get names from a single angle. Walk through the 9 formulas instead
 
 ---
 
-## 9 · ตัวย่อ
+## 9 · Abbreviations
 
-- **portmanteau** — คำที่เกิดจากการเอา 2 คำมาตัดต่อกัน
-- **handle** — ชื่อบัญชีบนโซเชียล เช่น `@quixapp`
-- **WIPO** — World Intellectual Property Organization (องค์การทรัพย์สินทางปัญญาโลก)
-- **npm · PyPI · NuGet** — คลังแพ็กเกจของ Node, Python และ .NET ตามลำดับ
+- **portmanteau**: a word made by cutting 2 words and joining them
+- **handle**: an account name on social media, such as `@quixapp`
+- **WIPO**: World Intellectual Property Organization
+- **npm · PyPI · NuGet**: package registries for Node, Python and .NET respectively
 
-## 10 · เชื่อมกับ skill อื่น
+## 10 · Links to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| โลโก้ สี ตัวอักษรของชื่อที่เลือกแล้ว | `graphic-design` (plugin `software-development`) |
-| เช็กว่ามีคนทำของแบบเดียวกันชื่อนี้อยู่แล้วไหม | `prior-art-review` |
-| ชื่อที่ใช้ในเอกสารและไฟล์ส่งมอบ | `document-naming` |
-| คำที่ใช้เรียกฟีเจอร์ในตัวผลิตภัณฑ์ | `i18n-and-locale` (plugin `software-development`) |
-| นำเสนอชื่อที่คัดแล้วให้ผู้มีอำนาจตัดสินใจ | `presentation-design` |
+| Logo, colours, typography for the chosen name | `graphic-design` (plugin `software-development`) |
+| Check whether someone already makes the same thing under this name | `prior-art-review` |
+| Names used in documents and deliverable files | `document-naming` |
+| Terms for features inside the product | `i18n-and-locale` (plugin `software-development`) |
+| Present the shortlisted names to the decision maker | `presentation-design` |
 
-**ตารางคัดชื่อที่กรอกต่อได้ทันที** → `assets/name-shortlist.md`
+**A shortlist table you can fill in right away** → `assets/name-shortlist.md`

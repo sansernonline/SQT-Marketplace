@@ -93,15 +93,15 @@ Related: `calendar-audit` (meetings worth keeping) · `polite-message-th-en` (ag
 The meeting did not happen unless the summary exists. Write it within the hour, while memory is fresh.
 
 Formal Thai minutes template: [references/thai-minutes-template.md](references/thai-minutes-template.md).
-ข้อความภาษาไทยในรายงานการประชุม → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ ราชการ
+Thai text in meeting minutes → `human-writing` `references/thai-grammar.md` section 4, register: official
 
-### 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+### 0 · Look for an existing format first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before using the structure or templates in this file, check whether the user, customer or project already has its own format:
 
-- **ที่ดู:** แบบรายงานการประชุมขององค์กร (รายงานฉบับก่อน · แบบฟอร์มของหน่วยงาน · หัวข้อที่ประธานกำหนด) · ถ้าเป็นการประชุมทางการแต่ไม่มีไฟล์ ถามผู้ใช้ข้อเดียวว่ามีแบบไหม
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** ข้อตัดสินใจ งานที่ต้องทำพร้อมเจ้าของและวันส่ง ยังต้องมีทุกแบบ
+- **Where to look:** the organisation's meeting minutes format (previous minutes · agency forms · headings set by the chair) · for a formal meeting with no file, ask the user one question: is there a format?
+- **Result:** found → use it (headings, order, field names, running numbers) and say in the reply which file the format came from · Not found → use the template in this file as a fallback and say that no earlier format was found
+- **Always required in every format:** decisions, and action items with an owner and a due date.
 
 ### Choose the format
 

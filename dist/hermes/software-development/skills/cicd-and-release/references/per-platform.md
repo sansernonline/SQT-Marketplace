@@ -1,18 +1,18 @@
-# ไฟล์ pipeline ตั้งต้น แยกตามแพลตฟอร์ม
+# Starter pipeline files by platform
 
-**สารบัญ:** 1 GitHub Actions · 2 Azure DevOps · 3 GitLab CI · 4 Dockerfile หลายขั้น · 5 ตารางเทียบความสามารถ
+**Contents:** 1 GitHub Actions · 2 Azure DevOps · 3 GitLab CI · 4 Multi-stage Dockerfile · 5 Capability comparison table
 
 1. [GitHub Actions](#1--github-actions)
 2. [Azure DevOps](#2--azure-devops)
 3. [GitLab CI](#3--gitlab-ci)
-4. [Dockerfile หลายขั้น](#4--dockerfile-หลายขั้น)
-5. [ตารางเทียบความสามารถ](#5--ตารางเทียบความสามารถ)
+4. [Multi-stage Dockerfile](#4--multi-stage-dockerfile)
+5. [Capability comparison table](#5--capability-comparison-table)
 
 ---
 
 ## 1 · GitHub Actions
 
-`.github/workflows/ci.yml` รันทุก pull request
+`.github/workflows/ci.yml` runs on every pull request.
 
 ```yaml
 name: ci
@@ -20,7 +20,7 @@ on:
   pull_request:
   push: { branches: [main] }
 
-concurrency:                       # ยกเลิกรอบเก่าเมื่อ push ซ้ำ
+concurrency:                       # cancel the older run when a new push arrives
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
@@ -31,7 +31,7 @@ jobs:
     permissions: { contents: read }
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }   # ต้องมีประวัติครบเพื่อคำนวณเวอร์ชัน
+        with: { fetch-depth: 0 }   # full history is needed to compute the version
 
       - uses: actions/setup-node@v4
         with: { node-version: '22', cache: 'npm' }
@@ -48,7 +48,7 @@ jobs:
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }} # ต้องมีเมื่อ repo เป็นของ organization · บัญชีส่วนตัวไม่ต้อง (README gitleaks-action · ตรวจ 22 ต.ค. 2569)
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }} # required when the repo belongs to an organization; not needed for a personal account (gitleaks-action README, checked 22 Oct 2026 (B.E. 2569))
 
       - uses: actions/upload-artifact@v4
         with:
@@ -57,7 +57,7 @@ jobs:
           retention-days: 30
 ```
 
-`.github/workflows/deploy.yml` เอา artifact ตัวเดิมจาก ci ไป deploy ต่อทีละ environment
+`.github/workflows/deploy.yml` takes the same artifact from ci and deploys it to one environment at a time.
 
 ```yaml
 name: deploy
@@ -73,10 +73,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     steps:
-      - uses: actions/checkout@v4             # scripts/deploy.sh มาจาก repo
+      - uses: actions/checkout@v4             # scripts/deploy.sh comes from the repo
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
-      - uses: actions/download-artifact@v4    # ตัว build มาจาก artifact (dist/)
+      - uses: actions/download-artifact@v4    # the build output comes from the artifact (dist/)
         with:
           name: app-${{ github.event.workflow_run.head_sha }}
           run-id: ${{ github.event.workflow_run.id }}
@@ -86,12 +86,12 @@ jobs:
   production:
     needs: staging
     runs-on: ubuntu-latest
-    environment: production        # ← ตั้ง required reviewers ที่นี่ = ด่านคน
+    environment: production        # <- set required reviewers here = the human gate
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
-      - uses: actions/download-artifact@v4   # artifact ตัวเดียวกับ staging
+      - uses: actions/download-artifact@v4   # same artifact as staging
         with:
           name: app-${{ github.event.workflow_run.head_sha }}
           run-id: ${{ github.event.workflow_run.id }}
@@ -106,13 +106,13 @@ jobs:
           ./scripts/rollback.sh && exit 1
 ```
 
-**ข้อควรระวัง:**
+**Cautions:**
 
-- `pull_request_target` เห็น secret และรันโค้ดจาก fork จึง**อย่าใช้** เว้นแต่รู้จริงว่ากำลังทำอะไร
-- ตั้ง `permissions` ให้แคบที่สุดในทุก workflow เพราะบางองค์กรตั้งค่าเริ่มต้นให้เขียนได้ทั้ง repo
-- เวอร์ชันในตัวอย่าง (`@v4`, Node 22, .NET 8.x) เป็นแค่ตัวอย่าง ตรวจเวอร์ชันล่าสุดก่อนใช้ (รอยืนยัน)
-- ปักหมุด action อย่างน้อยด้วย tag เวอร์ชัน (`@v4`) ถ้าต้องการเข้มงวดให้ปักด้วย commit hash
-- `environment:` คือที่ตั้งผู้อนุมัติ (required reviewers) และ secret เฉพาะ environment
+- `pull_request_target` can see secrets and runs code from forks, so **do not use it** unless you know exactly what you are doing.
+- Set `permissions` as narrow as possible in every workflow, because some organizations default to write access on the whole repo.
+- The versions in the examples (`@v4`, Node 22, .NET 8.x) are only examples. Check the latest versions before use (`รอยืนยัน`, awaiting confirmation).
+- Pin each action at least by version tag (`@v4`). For stricter control, pin by commit hash.
+- `environment:` is where you set approvers (required reviewers) and secrets that belong to one environment.
 
 ---
 
@@ -159,19 +159,19 @@ stages:
   dependsOn: staging
   jobs:
   - deployment: production
-    environment: production        # ← ตั้ง approval ที่หน้า Environments
+    environment: production        # <- set approval on the Environments page
     strategy:
       runOnce:
         deploy:
           steps:
           - download: current
-            artifact: app          # artifact ตัวเดิมจาก stage build
+            artifact: app          # same artifact from the build stage
           - script: ./scripts/deploy.sh production
 ```
 
-- `deployment` job ต่างจาก `job` ธรรมดาตรงที่ผูกกับ environment จึงได้ประวัติการ deploy และขั้นอนุมัติมาด้วย
-- ตัวแปรลับเก็บใน variable group ที่ผูกกับ Azure Key Vault อย่าพิมพ์ลงไฟล์
-- ตัวแปรลับ**ไม่ถูกส่งเข้า script เอง** ต้อง map ผ่าน `env:` ทีละตัว
+- A `deployment` job differs from a plain `job` because it binds to an environment, so it gets deploy history and an approval step.
+- Keep secrets in a variable group linked to Azure Key Vault. Do not write them into files.
+- Secret variables are **not passed into scripts automatically**. Map them one by one through `env:`.
 
 ---
 
@@ -224,62 +224,62 @@ deploy:staging:
 deploy:production:
   stage: deploy
   environment: { name: production, url: https://example.co }
-  when: manual                     # ← ด่านคน
+  when: manual                     # <- human gate
   script: ./scripts/deploy.sh production $CI_COMMIT_SHA
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
 ```
 
-- ตั้งตัวแปรลับเป็น `Masked` และ `Protected` ที่หน้า Settings → CI/CD
-- `when: manual` ใช้คู่กับ protected environment จึงจะเป็นด่านอนุมัติที่กันได้จริง
+- Mark secret variables `Masked` and `Protected` under Settings → CI/CD.
+- Use `when: manual` together with a protected environment. Only then is it an approval gate that really blocks.
 
 ---
 
-## 4 · Dockerfile หลายขั้น
+## 4 · Multi-stage Dockerfile
 
 ```dockerfile
-# ---- ขั้น build ----
+# ---- build stage ----
 FROM node:22-alpine AS build
 WORKDIR /src
 COPY package*.json ./
-# ชั้นนี้ถูกแคชตราบใดที่ lock file ไม่เปลี่ยน
+# this layer stays cached as long as the lock file does not change
 RUN npm ci
 COPY . .
 RUN npm run build
 
-# ---- ขั้นรัน ----
+# ---- run stage ----
 FROM node:22-alpine
 ENV NODE_ENV=production
 WORKDIR /app
 COPY --from=build /src/dist ./dist
 COPY --from=build /src/node_modules ./node_modules
-# อย่ารันเป็น root
+# do not run as root
 USER node
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=3s CMD node dist/healthcheck.js
 CMD ["node", "dist/main.js"]
 ```
 
-**กฎ:**
+**Rules:**
 
-- คัดลอกไฟล์ที่เปลี่ยนน้อยก่อน ชั้นแรก ๆ จะได้ใช้แคชซ้ำ
-- อย่าคัดลอก `.env`, `.git`, `node_modules` เข้า image ให้กันไว้ด้วย `.dockerignore`
-- ถ้าต้องการให้ build ได้ผลเดิมทุกครั้ง ให้ปักหมุด base image ด้วย digest
-- ตั้งชื่อ tag ด้วย commit hash เสมอ ส่วน `latest` ใช้เป็นชื่อเล่นได้ แต่ห้าม deploy ด้วย `latest`
+- Copy the files that change least first, so the early layers reuse the cache.
+- Do not copy `.env`, `.git` or `node_modules` into the image. Block them with `.dockerignore`.
+- For a build that gives the same result every time, pin the base image by digest.
+- Always name the tag with the commit hash. `latest` may serve as an alias, but never deploy with `latest`.
 
 ---
 
-## 5 · ตารางเทียบความสามารถ
+## 5 · Capability comparison table
 
-| สิ่งที่ต้องการ | GitHub Actions | Azure DevOps | GitLab CI |
+| Need | GitHub Actions | Azure DevOps | GitLab CI |
 |---|---|---|---|
-| ด่านอนุมัติโดยคน | Environment + required reviewers | Environment approvals | `when: manual` + protected env |
-| เก็บ artifact | `upload/download-artifact` | `publish` / `download` | `artifacts:` |
-| แคช dependency | `actions/cache` หรือ `cache:` ใน setup | `Cache@2` | `cache:` |
-| secret ต่อ environment | Environment secrets | Variable group + Key Vault | ตัวแปร Protected ต่อ environment |
-| ยกเลิกรอบเก่า | `concurrency` | `batch: true` (รวม trigger ระหว่างรอบที่รันอยู่ ไม่ได้ยกเลิกรอบเก่า) | `interruptible: true` |
-| วิ่งขนาน | `strategy.matrix` | `strategy.matrix` | `parallel:` |
-| รันเอง (self-hosted) | ได้ | ได้ | ได้ |
+| Human approval gate | Environment + required reviewers | Environment approvals | `when: manual` + protected env |
+| Store artifacts | `upload/download-artifact` | `publish` / `download` | `artifacts:` |
+| Cache dependencies | `actions/cache` or `cache:` in setup | `Cache@2` | `cache:` |
+| Secrets per environment | Environment secrets | Variable group + Key Vault | Protected variables per environment |
+| Cancel older runs | `concurrency` | `batch: true` (merges triggers that arrive while a run is active; it does not cancel the older run) | `interruptible: true` |
+| Run in parallel | `strategy.matrix` | `strategy.matrix` | `parallel:` |
+| Self-hosted runners | Yes | Yes | Yes |
 
-> **ทุกแพลตฟอร์มทำสิ่งเดียวกันได้** จึงอย่าเลือกจากรายการความสามารถ
-> เลือกตัวที่อยู่ที่เดียวกับ repo แล้วลงแรงกับเนื้อหาของ pipeline แทน
+> **Every platform can do the same things**, so do not choose by feature list.
+> Pick the one that lives where the repo lives, and put your effort into the content of the pipeline instead.

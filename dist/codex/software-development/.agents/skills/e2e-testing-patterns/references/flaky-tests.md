@@ -1,6 +1,6 @@
-# Fighting Flaky Tests — ตัวอย่างการรอที่ถูกวิธี
+# Fighting Flaky Tests — examples of waiting the right way
 
-โค้ดเทียบการรอแบบกำหนดเวลากับการรอตามเหตุการณ์ ส่วนตารางสาเหตุและกลยุทธ์การรันซ้ำอยู่ใน `SKILL.md`
+Code comparing a fixed-time wait with an event-based wait. The cause table and the retry strategy are in `SKILL.md`.
 
 ## Bad (sleep hack)
 ```typescript

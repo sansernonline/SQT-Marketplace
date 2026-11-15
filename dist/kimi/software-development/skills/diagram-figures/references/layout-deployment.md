@@ -1,22 +1,24 @@
-# โครง `figure-template.html` — deployment · ข้างในเครื่อง
+# Skeleton `figure-template.html` — deployment · inside the machine
 
-ตอบคำถาม "ของจริงรันอยู่บนเครื่องอะไร มีอะไรอยู่ข้างใน" ไฟล์โครงอยู่ที่ [`assets/figure-template.html`](../assets/figure-template.html)
+This skeleton answers "what machine does the real thing run on, and what is inside?" The skeleton file is at [`assets/figure-template.html`](../assets/figure-template.html).
 
-โครงนี้มี 3 คอลัมน์ เรียงซ้ายไปขวาตามทิศที่ข้อมูลไหล:
+It has 3 columns, left to right in the direction the data flows:
 
 ```
-┌─ หัวรูป ───────────────────────────────────────────────┐
-│  ชื่อ + คำขยาย                    เลขรูป · เวอร์ชัน · เจ้าของ  │
+┌─ figure header ────────────────────────────────────────┐
+│  name + subtitle              figure number · version · owner │
 ├────────────┬──────────────────────────┬────────────────┤
-│ นอกระบบ    │  ⬅ กล่อง .focus           │ ปลายทาง        │
-│ คน อุปกรณ์  │  สิ่งที่เอกสารนี้อธิบาย       │ ข้อบังคับ       │
-│ ระบบอื่น    │  ซ้อนได้อีก 1 ชั้น          │ ของที่ไหลออก    │
+│ outside    │  ⬅ .focus box             │ destination    │
+│ people,    │  what this document       │ regulations    │
+│ devices,   │  explains                 │ outgoing items │
+│ other      │  can nest 1 more level    │                │
+│ systems    │                           │                │
 ├────────────┴──────────────────────────┴────────────────┤
-│ เชิงอรรถ — รูปอื่นที่เกี่ยวข้อง · ที่มาของไอคอน              │
+│ footnote — related figures · icon sources              │
 └────────────────────────────────────────────────────────┘
 ```
 
-**ซ้อนกล่องได้ไม่เกิน 3 ชั้น** คือ คอลัมน์ → กล่องใหญ่ → กล่องย่อย
-ถ้ามีชั้นที่ 4 แปลว่ารูปนี้ตอบ 2 คำถาม ให้แยกเป็น 2 รูป
+**Nest boxes no more than 3 levels:** column → large box → small box.
+A 4th level means the figure answers 2 questions, so split it into 2 figures.
 
-**กล่อง `.focus` มีได้กล่องเดียวต่อรูป** ถ้ามี 2 กล่อง แปลว่ายังไม่ได้ตัดสินใจว่ารูปนี้เรื่องอะไร
+**A figure may have only one `.focus` box.** With 2 boxes, you have not yet decided what the figure is about.

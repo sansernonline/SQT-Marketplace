@@ -5,179 +5,178 @@ description: Use when writing or reviewing code that logs
 
 # Logging Standards
 
-> **กฎข้อเดียว:** log มีไว้ให้คนอ่านตอนตี 3 ที่ระบบล่ม ไม่ใช่ตอนเขียนโค้ด
-> ถ้าบรรทัดไหนไม่ช่วยตอบว่า "เกิดอะไรขึ้น กับใคร เมื่อไหร่" ก็อย่าเขียนลงไป
+> **The one rule:** Logs exist for a person to read at 3 a.m. when the system is down, not while writing the code.
+> If a line does not help answer "what happened, to whom, and when", do not write it.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เริ่มโปรเจกต์ใหม่ทุกชนิด (service, API, worker, batch, desktop, frontend)
-- มีคนขอ "ให้มี log file" หรือถามเรื่องรูปแบบและระดับของ log
-- ไล่ปัญหา production แล้วพบว่า log ที่มีอยู่ใช้ไม่ได้
+- Starting any new project (service, API, worker, batch, desktop, frontend)
+- Someone asks for "a log file", or asks about log format and levels
+- You are chasing a production problem and find that the existing logs are unusable
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-- ต้องการ metrics หรือ tracing (Prometheus, OpenTelemetry) เพราะเป็นคนละเรื่องกับ log ให้ไปใช้ `observability-basics`
-- ทำ endpoint สุขภาพของ service ให้ไปใช้ `web-service-essentials`
+- You need metrics or tracing (Prometheus, OpenTelemetry). That is a different topic from logs, so use `observability-basics`.
+- You are building a service health endpoint. Use `web-service-essentials`.
 
 ---
 
-## 1 · รูปแบบบรรทัด — เหมือนกันทุกภาษา
+## 1 · Line format — the same in every language
 
 ```
 2026-08-31 09:42:13.482 +07:00  INFO   [a3f9c1b2] orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 userId=57 ms=134
-└────────── เวลา + timezone ──────────┘ └level┘  └ cid ┘ └source┘ └── ข้อความ ──┘ └──── context k=v ────┘
+└───────── time + timezone ─────────┘ └level┘  └ cid ┘ └source┘ └─ message ─┘  └──── context k=v ────┘
 ```
 
-| ส่วน | กฎ |
+| Part | Rule |
 |---|---|
-| เวลา | `YYYY-MM-DD HH:mm:ss.SSS ±HH:MM` — **ต้องมี timezone** ไม่งั้นเทียบ log ข้ามเครื่องไม่ได้ |
-| level | ชิดซ้าย กว้าง 5 ตัวอักษร (`INFO ` `WARN ` `ERROR` `DEBUG` `FATAL`) — คอลัมน์จะได้ตรงกัน |
-| cid | correlation id 8 ตัวในวงเล็บเหลี่ยม ถ้าไม่มีให้ใส่ `[--------]` (8 ตัวเท่ากัน คอลัมน์จะได้ตรง) |
-| source | โมดูลหรือคลาสที่เขียน log ไม่ใช่ชื่อไฟล์ |
-| ข้อความ | ประโยคเดียว ไม่ฝังตัวแปรใน string |
-| context | `key=value` คั่นด้วยช่องว่าง ถ้าค่ามีช่องว่างให้ครอบด้วย `"` |
+| time | `YYYY-MM-DD HH:mm:ss.SSS ±HH:MM` — **the timezone is required**, or you cannot compare logs across machines |
+| level | Left-aligned, 5 characters wide (`INFO ` `WARN ` `ERROR` `DEBUG` `FATAL`), so the columns line up |
+| cid | An 8-character correlation id in square brackets. If there is none, use `[--------]` (also 8 characters, so the columns line up) |
+| source | The module or class that writes the log, not the file name |
+| message | One sentence, with no variables embedded in the string |
+| context | `key=value` separated by spaces. If a value contains a space, wrap it in `"` |
 
-**ทำไมไม่ใช่ JSON:** ไฟล์นี้มีไว้ให้คนเปิดอ่านและ `grep` เป็นหลัก รูปแบบนี้ยัง
-`grep "\[a3f9c1b2\]"` หรือ `awk` ได้อยู่ แต่ตาอ่านออกทันทีโดยไม่ต้องพึ่งเครื่องมือ
-วันที่ต้องส่งเข้าระบบรวม log อย่าง Grafana Loki หรือ Elasticsearch, Logstash, Kibana (ELK) ให้เพิ่ม sink (ปลายทางที่ส่ง log ไป) แบบ JSON อีก 1 ตัว แต่**อย่าทิ้งไฟล์ข้อความ**
+**Why not JSON:** This file is mainly for people to open and `grep`. This format still works with `grep "\[a3f9c1b2\]"` or `awk`, but the eye reads it at once without any tool.
+When you must ship logs to a central system such as Grafana Loki or Elasticsearch, Logstash, Kibana (ELK), add one more JSON sink (the destination logs are sent to). But **do not drop the text file**.
 
-**1 event = 1 บรรทัด** ยกเว้น stack trace ที่ต่อท้ายโดยเยื้อง 4 ช่อง
+**1 event = 1 line**, except a stack trace, which follows indented by 4 spaces.
 
 ---
 
-## 2 · ระดับ log — เขียนให้ตรงความหมาย
+## 2 · Log levels — write them to match their meaning
 
-| ระดับ | ใช้เมื่อ | ตัวอย่าง |
+| Level | Use when | Example |
 |---|---|---|
-| `FATAL` | แอปกำลังจะตาย ทำงานต่อไม่ได้ | ต่อ DB ตอน start ไม่ได้ |
-| `ERROR` | งานนี้ล้มเหลว **และต้องมีคนมาดู** | บันทึกคำสั่งซื้อไม่สำเร็จ |
-| `WARN` | ผิดปกติแต่ระบบยังไปต่อได้ | retry ครั้งที่ 2, disk เหลือ 10% |
-| `INFO` | เหตุการณ์สำคัญทางธุรกิจ | สร้างคำสั่งซื้อ, ผู้ใช้ล็อกอิน, job เริ่ม/จบ |
-| `DEBUG` | รายละเอียดสำหรับไล่ปัญหา — **ปิดใน production** | ค่าที่คำนวณได้ระหว่างทาง |
-| `TRACE` | ละเอียดระดับทุก step — เปิดเฉพาะตอนไล่จริง ๆ | payload ดิบ |
+| `FATAL` | The app is about to die and cannot continue | Cannot connect to the DB at start |
+| `ERROR` | This job failed **and someone must look** | Saving an order failed |
+| `WARN` | Abnormal, but the system can continue | Retry number 2, disk down to 10% |
+| `INFO` | An important business event | Order created, user logged in, job started/finished |
+| `DEBUG` | Details for chasing problems — **off in production** | Values computed along the way |
+| `TRACE` | Step-by-step detail — turn on only when really chasing | Raw payload |
 
-> ระวัง: **`ERROR` ที่ไม่มีใครต้องทำอะไร คือ `WARN`** — ถ้า ERROR ขึ้นทุกนาทีจนคนเลิกดู
-> คุณเพิ่งทำลายระบบเตือนภัยของตัวเอง
+> Warning: **an `ERROR` that nobody needs to act on is a `WARN`.** If ERROR fires every minute until people stop looking,
+> you have just destroyed your own alarm system.
 
-ค่าเริ่มต้นของ dev คือ `DEBUG` ส่วน production คือ `INFO` และปรับได้ด้วย env `LOG_LEVEL` **ไม่ต้อง build ใหม่ แค่ restart (หรือ reload config)** — .NET อ่านจาก `appsettings.json` แทน (ดู `references/per-stack.md`)
+The default is `DEBUG` in dev and `INFO` in production, adjustable with the env var `LOG_LEVEL`. **No new build is needed; just restart (or reload the config).** .NET reads it from `appsettings.json` instead (see `references/per-stack.md`).
 
 ---
 
-## 3 · Correlation id — สิ่งที่ทำให้ log ใช้งานได้จริง
+## 3 · Correlation id — what makes logs usable
 
-1 request ใช้ id เดียวตั้งแต่ต้นจนจบ ทุกบรรทัดที่เกิดจาก request นั้นจึงมี id เดียวกัน
+One request uses one id from start to finish, so every line that comes from that request has the same id.
 
 ```
 Client ──X-Request-Id?── API Gateway ──┬── Service A ──┐
-                        (ไม่มีก็สร้าง)   └── Service B ──┴─→ ทุกบรรทัดมี cid เดียวกัน
+                        (create if none)└── Service B ──┴─→ every line has the same cid
 ```
 
-- รับจาก header **`X-Request-Id`** เฉพาะเมื่อตรง `^[A-Za-z0-9-]{1,64}$` · ไม่มีหรือไม่ตรง → สร้างใหม่ (`uuid v4` ตัด 8 ตัวแรก) · เหตุผลดู `web-service-essentials` ข้อ 3
-- **ส่งกลับใน response header เสมอ** เพื่อให้ลูกค้าส่ง id มาตอนแจ้งปัญหา แล้วเราตามได้ทันที
-- ส่งต่อไปยัง service ปลายทางทุกครั้งที่เรียกข้ามระบบ
-- เก็บด้วยกลไกที่แยกตาม request: `AsyncLocalStorage` (Node) · `ContextVar` (Python)
-  · `IHttpContextAccessor`/`LogContext` (.NET) — **ห้ามใช้ตัวแปร global** เพราะจะปนกันทันทีที่มีหลาย request พร้อมกัน
+- Take it from the header **`X-Request-Id`** only when it matches `^[A-Za-z0-9-]{1,64}$`. If it is missing or does not match, create a new one (`uuid v4`, first 8 characters). For the reason, see `web-service-essentials` item 3.
+- **Always return it in the response header**, so the customer can send the id when reporting a problem and we can trace it at once.
+- Pass it to the downstream service on every cross-system call.
+- Store it with a mechanism that is separate per request: `AsyncLocalStorage` (Node) · `ContextVar` (Python)
+  · `IHttpContextAccessor`/`LogContext` (.NET). **Never use a global variable**, because ids mix as soon as several requests run at once.
 
 ---
 
-## 4 · ไฟล์ log
+## 4 · Log files
 
 ```
 logs/
-  app-20260831.log        ทุกระดับ · หมุนเที่ยงคืน · เก็บ 30 วัน · ไฟล์ละไม่เกิน 100MB
-  error-20260831.log      เฉพาะ ERROR/FATAL · เก็บ 90 วัน
-  fatal.log               exception ที่ไม่ถูกจับ (แอปตาย)
+  app-20260831.log        all levels · rotate at midnight · keep 30 days · max 100MB per file
+  error-20260831.log      ERROR/FATAL only · keep 90 days
+  fatal.log               uncaught exceptions (app died)
 ```
 
-- โฟลเดอร์กำหนดด้วย env `LOG_DIR` — **ห้าม hardcode path**
-- บีบไฟล์เก่า (`.gz`) และ**ต้องมี retention** ไม่อย่างนั้นดิสก์จะเต็มจนระบบล่มเพราะ log ของตัวเอง
-- ใน container ให้ log ออก stdout ด้วย (นอกเหนือจากไฟล์) เพื่อให้ `docker logs` ใช้ได้
-- `logs/` ต้องอยู่ใน `.gitignore`
+- Set the folder with the env var `LOG_DIR`. **Never hardcode the path.**
+- Compress old files (`.gz`) and **retention is required**. Otherwise the disk fills and the system goes down from its own logs.
+- In a container, also log to stdout (besides the file) so `docker logs` works.
+- `logs/` must be in `.gitignore`.
 
 ---
 
-## 5 · สิ่งที่ห้ามลง log เด็ดขาด
+## 5 · What must never go into a log
 
-รหัสผ่าน · token/API key · cookie/Authorization header · OTP/PIN · เลขบัตรเครดิต/CVV ·
-**เลขบัตรประชาชน** · ข้อมูลสุขภาพ · payload เต็มที่มีข้อมูลส่วนบุคคล
+Passwords · tokens/API keys · cookies/Authorization headers · OTP/PIN · credit card numbers/CVV ·
+**national ID numbers** · health data · full payloads that contain personal data
 
-ตัวช่วยที่มีให้แล้ว: ฟังก์ชัน redaction (ปิดค่าลับ) ดู**ว่าชื่อคีย์มีคำต้องห้ามอยู่ข้างในไหม** (`userPassword`, `pwd`,
-`accessToken` โดนหมด) แล้วแทนค่าด้วย `***` โดยตรวจลึกลงไปได้ 4 ชั้นของ object
+Helper already provided: the redaction function (which hides secret values) checks **whether the key name contains a forbidden word** (`userPassword`, `pwd`,
+`accessToken` are all caught) and replaces the value with `***`. It checks up to 4 levels deep inside an object.
 
-> **Log injection** — ค่าที่มาจากผู้ใช้อาจมี `\n` ถ้าปล่อยผ่าน ผู้ใช้จะ "แต่ง" บรรทัด log
-> ปลอมขึ้นมาเองได้ ทำให้คนอ่านเข้าใจผิดและ parser พัง โค้ดที่ให้มาจึงตัด `\r\n\t` ทิ้งจากทุกค่าและจากข้อความหลัก
+> **Log injection** — A value from a user may contain `\n`. If you let it through, the user can "forge" a fake log line,
+> which misleads readers and breaks parsers. So the provided code strips `\r\n\t` from every value and from the main message.
 
 ---
 
-## 6 · โค้ดที่พร้อมใช้
+## 6 · Ready-to-use code
 
-| ไฟล์ | สแต็ก | สถานะ |
+| File | Stack | Status |
 |---|---|---|
-| `assets/logger.node.js` | Node/TS — winston + winston-daily-rotate-file | ✓ รันทดสอบแล้ว 2026-10-25 (Node 22.23.2 · winston 3.19.0 · winston-daily-rotate-file 5.0.0 · ปิดรหัสผ่าน · correlation id · ตัดขึ้นบรรทัดในข้อความหลักและค่า) |
-| `assets/logger_py.py` | Python — stdlib ล้วน ไม่ต้องลงอะไร | ✓ รันทดสอบแล้ว 2026-10-25 (Python 3.13.5 · ชุดทดสอบเดียวกัน) |
-| `references/per-stack.md` | .NET (Serilog) + Angular | ระวัง ยังไม่ได้คอมไพล์ทดสอบ |
+| `assets/logger.node.js` | Node/TS — winston + winston-daily-rotate-file | ✓ Run and tested 2026-10-25 (Node 22.23.2 · winston 3.19.0 · winston-daily-rotate-file 5.0.0 · password redaction · correlation id · strips line breaks in the main message and values) |
+| `assets/logger_py.py` | Python — stdlib only, nothing to install | ✓ Run and tested 2026-10-25 (Python 3.13.5 · same test set) |
+| `references/per-stack.md` | .NET (Serilog) + Angular | Caution: not yet compiled or tested |
 
 ```js
 // Node
 const { withCorrelation } = require('./logger.node');
 const log = withCorrelation(req.id).child({ source: 'orders' });
 log.info('สร้างคำสั่งซื้อสำเร็จ', { orderId: 1042, ms: 134 });
-log.error('บันทึกไม่สำเร็จ', err);          // ส่ง Error ตรง ๆ ได้ stack ให้เอง
+log.error('บันทึกไม่สำเร็จ', err);          // pass an Error directly; the stack is added for you
 ```
 
 ```python
 # Python
 from logger_py import setup_logging, get_logger, set_correlation_id
-setup_logging(app_name="myapi")             # ครั้งเดียวตอนแอปเริ่ม
+setup_logging(app_name="myapi")             # once, when the app starts
 log = get_logger("orders")
 log.info("สร้างคำสั่งซื้อสำเร็จ", extra={"ctx": {"order_id": 1042, "ms": 134}})
-log.exception("บันทึกไม่สำเร็จ")             # ใน except — ได้ stack ให้เอง
+log.exception("บันทึกไม่สำเร็จ")             # inside except — the stack is added for you
 ```
 
 ---
 
-## 7 · ตรวจงาน
+## 7 · Checking the work
 
 ```bash
-# ไม่มี print/console.log หลงเหลือในโค้ด production
+# no leftover print/console.log in production code
 grep -rnE "console\.(log|error)|Console\.WriteLine|^\s*print\(" src/ --include="*.ts" \
   --include="*.js" --include="*.cs" --include="*.py" | grep -v test | head -30
 
-# log ที่ออกมาอ่านได้จริงและ grep ได้
+# the output logs are readable and greppable
 tail -n 50 logs/app-*.log
-grep "a3f9c1b2" logs/app-*.log          # ตาม request เดียวได้ครบทุกบรรทัดไหม
+grep "a3f9c1b2" logs/app-*.log          # does one request show every line?
 ```
 
-- [ ] ทุกบรรทัดมีครบ: เวลา+timezone · level · cid · source
-- [ ] `grep` ด้วย cid เดียวแล้วเห็นเรื่องราวของ request นั้นตั้งแต่ต้นจนจบ
-- [ ] ไม่มีความลับหลุด: ลอง log object ที่มี `password`, `token` แล้วต้องเห็น `***`
-- [ ] ยิงค่าที่มี `\n` เข้าไปแล้วไม่เกิดบรรทัดปลอม
-- [ ] ตั้ง `LOG_LEVEL=INFO` แล้ว DEBUG หายไปจริง
-- [ ] ไฟล์หมุนตามวันและมี retention (ปล่อยไว้ 1 เดือนดิสก์ต้องไม่เต็ม)
-- [ ] `logs/` อยู่ใน `.gitignore`
-- [ ] response ส่ง `X-Request-Id` กลับมาให้ลูกค้า
+- [ ] Every line has all of: time+timezone · level · cid · source
+- [ ] `grep` with one cid shows the story of that request from start to finish
+- [ ] No secrets leak: log an object with `password` and `token`, and you must see `***`
+- [ ] Feeding in a value that contains `\n` produces no fake line
+- [ ] With `LOG_LEVEL=INFO`, DEBUG really disappears
+- [ ] Files rotate daily and have retention (left for 1 month, the disk must not fill)
+- [ ] `logs/` is in `.gitignore`
+- [ ] The response sends `X-Request-Id` back to the customer
 
 ---
 
 ## 8 · Anti-patterns
 
-- **`console.log` / `print()` ในโค้ดจริง** — ไม่มี level ไม่มีเวลา ไม่มี cid ไม่ลงไฟล์
-- **log ทุกอย่าง** — ไฟล์ใหญ่จนหาอะไรไม่เจอ ราคาแพง และช้า
-- **`try { } catch (e) { }` เงียบ ๆ** — ต้อง log อย่างน้อย 1 บรรทัด
-- **log แล้ว throw ต่อ** — ปัญหาเดียวจะโผล่ 3 ครั้งในไฟล์ ให้ log ที่ชั้นบนสุดซึ่งจัดการ error จริงแทน
-- **ตัวแปรฝังในข้อความ** (`` `บันทึก order ${id} ไม่สำเร็จ` ``) — ทำให้ group log ไม่ได้
-  ใช้ข้อความคงที่ + context แทน
-- **log ในลูปที่วนหลายพันรอบ** — ให้สรุปทีเดียวตอนจบลูป
-- **timestamp ไม่มี timezone** — server ใช้ UTC แต่คนไทยอ่านเป็น +07:00 จึงเทียบเวลาผิดไป 7 ชั่วโมง
-- **ไม่มี retention** — วันหนึ่งดิสก์เต็มแล้วระบบล่มเพราะ log ของตัวเอง
+- **`console.log` / `print()` in real code** — no level, no time, no cid, not written to a file
+- **Logging everything** — the file grows so large you cannot find anything, and it is expensive and slow
+- **A silent `try { } catch (e) { }`** — log at least 1 line
+- **Log, then rethrow** — one problem shows up 3 times in the file. Log at the top layer that really handles the error instead.
+- **Variables embedded in the message** (`` `บันทึก order ${id} ไม่สำเร็จ` ``) — you cannot group the logs.
+  Use a fixed message + context instead.
+- **Logging inside a loop that runs thousands of times** — log one summary when the loop ends
+- **A timestamp with no timezone** — the server uses UTC but Thai readers read it as +07:00, so times are compared 7 hours off
+- **No retention** — one day the disk fills and the system goes down from its own logs
 
 ---
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Links to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use with |
 |---|---|
-| endpoint health/ping/version | `web-service-essentials` |
-| เขียน test ให้ครอบคลุม | `testing-standards` |
-| runbook ตอน incident | `incident-runbook-template` |
-| postmortem หลังเหตุ | `postmortem-template` |
+| health/ping/version endpoint | `web-service-essentials` |
+| Writing tests with full coverage | `testing-standards` |
+| Runbook during an incident | `incident-runbook-template` |
+| Postmortem after an incident | `postmortem-template` |

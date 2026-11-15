@@ -6,7 +6,7 @@ argument-hint: <campaign idea in one sentence>
 
 # Campaign Set
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **ด่านก่อนลงมือ** (pre-work gate, every time): read the owner theme → search live references → 3 directions that really differ → check `no-ai-look` before sending. Follow the "ด่านก่อนลงมือ" section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for the layout of this piece). Close the work with the line `ด่านก่อนลงมือ:`
 
 1 concept, every format it needs, in the right order. 5 one-off designs are not a campaign. 1 idea shown 5 ways is.
 

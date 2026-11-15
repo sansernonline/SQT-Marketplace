@@ -1,6 +1,6 @@
 # Insurance Compliance Officer — frameworks, filings, conduct, solvency
 
-คู่มือบทบาทของ agent `insurance-compliance-officer` · รายละเอียดเต็มของ SERFF · RBC · Solvency II · OIC · examinations อยู่ที่ [`insurance-compliance.md`](insurance-compliance.md) · ตัวเลขและจำนวนรัฐเป็นค่าจากความรู้ของโมเดล ยังไม่ได้ตรวจกับแหล่งทางการ (รอยืนยัน)
+Role guide for the agent `insurance-compliance-officer` · the full details of SERFF · RBC · Solvency II · OIC · examinations are in [`insurance-compliance.md`](insurance-compliance.md) · the figures and the number of states come from the model's knowledge and have not been checked against official sources (รอยืนยัน, awaiting confirmation)
 
 **สารบัญ:**
 
@@ -129,7 +129,7 @@ async function recommendAnnuity(customer, product) {
 - Information security program
 
 **NAIC Insurance Data Security Model Law:**
-- Adopted by ~30 states (จำนวนจากความรู้ของโมเดล ไม่มีวันที่อ้างอิง — ตรวจกับ NAIC ก่อนอ้าง (รอยืนยัน))
+- Adopted by ~30 states (the number comes from the model's knowledge with no reference date — check with NAIC before citing (รอยืนยัน))
 - Required: written information security program
 - Notification of cybersecurity events
 

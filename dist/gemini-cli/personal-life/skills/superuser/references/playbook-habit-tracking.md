@@ -1,15 +1,15 @@
-# playbook · habit-tracking — เริ่มออกกำลังกายหรือบันทึกการนอน
+# playbook · habit-tracking — start exercising or log sleep
 
-ใช้เมื่อ: อยากเริ่มออกกำลังกาย · นอนไม่ดีหรือเพลียแม้นอนพอ · จะไปหาหมอเรื่องการนอน
-skill หลัก: `exercise-plan` · `sleep-log`
+Use when: the user wants to start exercising · sleeps badly or feels tired despite enough sleep · is going to see a doctor about sleep
+Main skills: `exercise-plan` · `sleep-log`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ตรวจคำถามคัดกรองก่อนเริ่มออกกำลังกายใน `exercise-plan` — ถ้าตอบ "ใช่" ข้อไหน ให้ปรึกษาแพทย์ก่อน · ใคร: หัวหน้าทีม
-2. ตั้งจุดทบทวนหลัง 2 สัปดาห์ — ดูจากบันทึกจริง ไม่ใช่ความรู้สึก · ใคร: หัวหน้าทีม
-3. ถ้าเป็นเรื่องออกกำลังกาย ให้ทำแผนเริ่มต้นตามแนวทางกิจกรรมทางกายขององค์การอนามัยโลก แล้วค่อย ๆ เพิ่ม · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจก่อนถึงผู้ใช้
-4. ถ้าเป็นเรื่องการนอน ให้ใช้ไดอารีการนอน 2 สัปดาห์และเช็กลิสต์สุขอนามัยการนอนจาก `sleep-log` · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจก่อนถึงผู้ใช้
+1. Check (ตรวจ) the screening questions in `exercise-plan` before starting to exercise. If the user answers "yes" to any of them, they should see a doctor first · ใคร: หัวหน้าทีม
+2. Set a review point after 2 weeks, based on the real log and not on feelings · ใคร: หัวหน้าทีม
+3. For exercise, make a starter plan that follows the World Health Organization physical activity guidelines, then increase slowly · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user
+4. For sleep, use a 2-week sleep diary and the sleep hygiene checklist from `sleep-log` · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user
 
-## จบเมื่อ
+## Done when
 
-แผนหรือไดอารีพร้อมใช้ และวันทบทวนที่ตั้งไว้
+The plan or diary is ready to use, and the review date is set

@@ -1,16 +1,16 @@
-# playbook · digital-safety — ความปลอดภัยดิจิทัลของครอบครัว
+# playbook · digital-safety — digital safety for the family
 
-ใช้เมื่อ: ตั้งหรือตรวจรหัสผ่าน 2FA passkey · ย้าย LINE ไปเครื่องใหม่ · สงสัยถูกแฮกหรือถูกหลอก
-skill หลัก: `digital-hygiene`
+Use when: setting up or checking passwords, 2FA, and passkeys · moving LINE to a new phone · suspecting a hack or a scam
+Main skill: `digital-hygiene`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ถ้ากำลังถูกแฮกหรือถูกหลอกโอนเงินอยู่ตอนนี้ ให้ทำขั้นตอนชั่วโมงแรกใน `digital-hygiene` ก่อนอย่างอื่น · ใคร: หัวหน้าทีม (คุยกับผู้ใช้ทันที)
-2. ทำรายการบัญชีสำคัญของแต่ละคน — อีเมล ธนาคาร LINE โซเชียล และถามสถานะ (password manager · 2FA หรือ passkey · สำรองรูป) ครั้งเดียวตอนเริ่มงาน ไม่รู้ → `(รอยืนยัน)` · ใคร: หัวหน้าทีม
-3. ทำตารางสถานะ password manager · 2FA หรือ passkey · สำรองรูป จากคำตอบที่ผู้ใช้ให้ตอนเริ่มงาน (ไม่รู้ → `(รอยืนยัน)`) · ใคร: `life-admin` ตัวใหม่
-4. เขียนขั้นตอนทีละคลิกให้ผู้ใช้ทำเอง เรียงจากบัญชีที่เสี่ยงที่สุด · ใคร: `life-admin` ตัวใหม่ (ผู้ใช้ทำตามเอง)
-5. ร่างข้อความเตือนมิจฉาชีพให้ครอบครัว · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจทั้งชุดก่อนถึงผู้ใช้
+1. If the user is being hacked or tricked into transferring money right now, do the first-hour steps in `digital-hygiene` before anything else · ใคร: หัวหน้าทีม (talk to the user at once)
+2. List each person's important accounts: email, bank, LINE, social media. Ask about their status (password manager · 2FA or passkey · photo backup) once, at the start of the work. If the user does not know, write `(รอยืนยัน)` (awaiting confirmation) · ใคร: หัวหน้าทีม
+3. Make a status table for password manager · 2FA or passkey · photo backup, from the answers the user gave at the start (if unknown, `(รอยืนยัน)`) · ใคร: `life-admin` ตัวใหม่
+4. Write click-by-click steps for the user to do themselves, starting with the riskiest account · ใคร: `life-admin` ตัวใหม่ (the user follows the steps themselves)
+5. Draft a scam warning message for the family · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set before it reaches the user
 
-## จบเมื่อ
+## Done when
 
-ตารางสถานะบัญชีและขั้นตอนทีละคลิกพร้อมทำ โดยผู้ใช้เป็นคนกดเอง
+The account status table and the click-by-click steps are ready, and the user is the one who clicks

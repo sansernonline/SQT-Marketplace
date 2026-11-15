@@ -3,197 +3,197 @@ name: security-audit
 description: Use when auditing a whole codebase before handover
 ---
 
-# security-audit — ไล่หาช่องโหว่ทั้งระบบจากโค้ด แล้วยืนยันทุกข้อก่อนรายงาน
+# security-audit — hunt for vulnerabilities across the whole system from code, and verify every item before reporting
 
-อยู่ใน plugin `software-development` · ถ้อยคำในไฟล์นี้ รายงาน และ brief ลูกทีม เขียนตาม `human-writing` · งานนี้เป็นงานหลายขั้น หัวหน้าทีม (`superuser`) เป็นคนคุม
+Part of the `software-development` plugin. Wording in this file, in reports and in sub-agent briefs follows `human-writing`. This is a multi-step job, and the team lead (`superuser`) runs it.
 
-> **กฎข้อเดียว:** ถ้ายังชี้ไม่ได้ว่าใครเสียหาย เสียหายอย่างไร และผ่านทางเข้าไหน ข้อนั้นยังไม่ใช่ช่องโหว่ · ของที่ "ควรมีแต่ไม่มี" โดยไม่มีผู้ได้รับผลกระทบที่พิสูจน์ได้ เป็นคำแนะนำ hardening ไม่ใช่ finding
+> **The one rule:** if you cannot yet say who is harmed, how, and through which entry point, the item is not yet a vulnerability. Something that "should exist but does not", with no provable affected party, is hardening advice, not a finding.
 
-## ใช้เมื่อ
+## Use when
 
-- ลูกค้าจะรับระบบ หรือสัญญาให้ส่งผลตรวจความปลอดภัยทั้งระบบ ไม่ใช่แค่ diff ล่าสุด
-- ผู้ใช้ขอ "pen test จากโค้ด" · "audit ทั้ง repo" · "ไล่หาช่องโหว่ทั้งโปรเจกต์" · "ตรวจช่องโหว่ทั้งระบบ"
-- รับโค้ดของคนอื่นมาดูแลต่อ แล้วต้องรู้ว่ามีช่องโหว่อะไรค้างอยู่
-- รอบก่อนเคย audit แล้ว อยากยืนยันว่าข้อที่แก้ปิดจริง และหาของใหม่ในส่วนที่เปลี่ยน
+- The customer is about to accept the system, or the contract requires a whole-system security review, not just the latest diff
+- The user asks for a "pen test from code" · "audit the whole repo" · "hunt for vulnerabilities across the whole project" · "ตรวจช่องโหว่ทั้งระบบ"
+- You take over someone else's code and need to know which vulnerabilities are still open
+- A previous round already audited, and you want to confirm the fixed items are really closed and find new problems in the parts that changed
 
-ไม่ใช้เมื่อ: ด่านตรวจก่อน merge หรือ ship ที่ต้องเร็ว → `security-gate` · ถามเรื่องความปลอดภัยของโค้ดจุดเดียว → ตอบตรงจาก `principle-secure-by-default` โดยไม่ต้องเปิด 6 ขั้น · ทดสอบเจาะระบบที่ deploy อยู่จริง หรือระบบที่ไม่ใช่ของลูกค้าเรา → ไม่ทำ (skill นี้อ่านโค้ดและรันในห้องทดลองเท่านั้น)
+Do not use when: a pre-merge or pre-ship gate that must be fast → `security-gate` · a question about the security of a single piece of code → answer directly from `principle-secure-by-default` without opening the 6 steps · penetration testing a live deployed system, or a system that is not our customer's → do not do it (this skill reads code and runs only in a lab).
 
-## ใช้ตัวอื่นแทนหรือคู่กัน
+## Use another skill instead, or alongside
 
-| สถานการณ์ | ใช้ | เกี่ยวกับ skill นี้อย่างไร |
+| Situation | Use | How it relates to this skill |
 |---|---|---|
-| ก่อน merge · ship · เพิ่ม dependency | [`security-gate`](../security-gate/SKILL.md) | ผลสแกน gitleaks · semgrep · trivy ของ gate เข้ามาเป็น candidate ในขั้น 3 |
-| มี Terraform · compose · Kubernetes · Helm หรือสั่งตรวจ infra | [`infra-checklist`](references/infra-checklist.md) | รายการล่าของสาย infrastructure (พอร์ต · IAM · bucket · เข้ารหัส · image) ใช้เป็นหน่วยงานในขั้น 2 |
-| สัญญาระบุ OWASP Top 10 | [`security-gate` ส่วน OWASP](../security-gate/references/owasp-top10.md) | finding ทุกข้อมีช่อง `owasp` รายงานจึงสรุปแถว A01–A10 ให้ได้ทันที |
-| ออกแบบ feature ใหม่ ยังไม่มีโค้ด | [`threat-model`](../threat-model/SKILL.md) | ถ้ามี threat model อยู่แล้ว ขั้นสำรวจใช้ DFD และ non-capabilities เป็นจุดตั้งต้น |
-| คำสั่งสั้น `/security-scan` | [`security-scan`](../security-scan/SKILL.md) | เป็นทางลัดที่ชี้มาที่นี่ (ทั้ง codebase) หรือไป `security-gate` (diff ก่อน ship) |
-| ถูกเจาะแล้ว · ตามรอยเหตุ · กฎ SIEM | `security-operations` | audit หาช่องก่อนเกิดเหตุ ส่วน security-operations รับมือหลังเกิดเหตุ |
-| ไม่มี source มีแต่ไฟล์ exe · APK · firmware | `reverse-engineering` | ทำต่อเมื่อได้ source ที่ถอดมาแล้ว |
-| finding แตะข้อมูลส่วนบุคคล | [`pdpa-compliance`](../pdpa-compliance/SKILL.md) | ข้อ confirmed ที่อาจรั่วแล้ว เปิดหัวข้อ 8 (72 ชั่วโมงแรก) |
-| รันโค้ดเป้าหมายเพื่อพิสูจน์ | [`docker-sandbox`](../docker-sandbox/SKILL.md) | ห้องแบบ `-Isolated -Locked` เท่านั้น |
+| Before merge · ship · adding a dependency | [`security-gate`](../security-gate/SKILL.md) | The gate's gitleaks · semgrep · trivy scan results come in as candidates in step 3 |
+| Terraform · compose · Kubernetes · Helm is present, or an infra review is requested | [`infra-checklist`](references/infra-checklist.md) | The hunting list for the infrastructure family (ports · IAM · buckets · encryption · images) serves as work units in step 2 |
+| The contract names OWASP Top 10 | [`security-gate` OWASP section](../security-gate/references/owasp-top10.md) | Every finding has an `owasp` field, so the report can summarize rows A01–A10 right away |
+| Designing a new feature with no code yet | [`threat-model`](../threat-model/SKILL.md) | If a threat model already exists, the recon step starts from its DFD and non-capabilities |
+| The short command `/security-scan` | [`security-scan`](../security-scan/SKILL.md) | A shortcut that points here (whole codebase) or to `security-gate` (diff before ship) |
+| Already breached · tracing an incident · SIEM rules | `security-operations` | An audit finds holes before an incident, and security-operations handles the aftermath |
+| No source, only an exe · APK · firmware | `reverse-engineering` | Continue here once you have decompiled source |
+| A finding touches personal data | [`pdpa-compliance`](../pdpa-compliance/SKILL.md) | For a confirmed item that may already have leaked, open section 8 (the first 72 hours) |
+| Running the target code to prove something | [`docker-sandbox`](../docker-sandbox/SKILL.md) | `-Isolated -Locked` lab only |
 
-## 1 · ถามรวมครั้งเดียวตอนเริ่ม
+## 1 · Ask everything once at the start
 
-ค้นก่อนถาม: นับบรรทัดโค้ด (`git ls-files | xargs wc -l` หรือ `cloc`) · ดูว่ามี `.sandbox/` · `qa/security/audit-*` รอบก่อน · `docs/security/threat-model*.md` หรือยัง · แล้วถามทุกข้อในครั้งเดียว
+Search before asking: count lines of code (`git ls-files | xargs wc -l` or `cloc`) · check whether `.sandbox/`, an earlier `qa/security/audit-*`, or `docs/security/threat-model*.md` exists · then ask every question in one go.
 
-| คำถาม | ตัวเลือก (ตัวแรกคือค่าแนะนำ ปรับตามที่ค้นเจอ) |
+| Question | Options (the first is the recommended default, adjust to what you found) |
 |---|---|
-| โปรไฟล์ | `quick` (แนะนำเมื่อโค้ดไม่เกินราว 20,000 บรรทัด หรือรอบซ้ำ) ราว 8–15 agent · `standard` ราว 15–40 agent · `deep` ราว 40–100 agent สำหรับระบบเงิน สุขภาพ หรือหลายลูกค้าในฐานข้อมูลเดียว |
-| ขอบเขต | ทั้ง repo · เฉพาะ path หรือ subsystem ที่ระบุ · เฉพาะที่เปลี่ยนตั้งแต่ commit หรือ tag ที่ระบุ (ขอบเขตบางส่วนต้องเขียนในรายงานว่าเป็นการตรวจบางส่วน) |
-| รันโค้ดเพื่อพิสูจน์ได้ไหม | ได้ ใน `docker-sandbox -Isolated -Locked` (แนะนำถ้ามีห้องอยู่แล้ว) · อ่านโค้ดอย่างเดียว ข้อที่ต้องรันจะเป็น `needs_validation` |
-| งบสูงสุด (ช่องเปิด) | จำนวน agent สูงสุด · ไม่ตอบ ใช้ช่วงบนของโปรไฟล์ที่เลือก |
+| Profile | `quick` (recommended when the code is under about 20,000 lines, or for a repeat round) about 8–15 agents · `standard` about 15–40 agents · `deep` about 40–100 agents for money, health, or several customers in one database |
+| Scope | The whole repo · only a named path or subsystem · only what changed since a named commit or tag (a partial scope must be stated in the report as a partial review) |
+| May we run code to prove things | Yes, in `docker-sandbox -Isolated -Locked` (recommended if a lab already exists) · read code only, and anything that needs a run becomes `needs_validation` |
+| Maximum budget (open field) | The maximum number of agents · if unanswered, use the upper range of the chosen profile |
 
-จำนวน agent เป็นค่าประมาณจากโครงงานในหัวข้อ 2 (สำรวจ 4 · ล่า 1 ตัวต่อหน่วยงาน · ตรวจช่องว่าง 1–3 · ยืนยัน 1–2 ตัวต่อ candidate) ยังไม่ได้วัดจากงานจริง · ค่าเงินต่อรอบ `(ยังไม่ได้ตรวจ)` · ไม่ได้คำตอบหรือผู้ใช้สั่งไม่ต้องถาม ให้ใช้ค่าแนะนำแล้วจดลง `decision-log` (โปรเจกต์ที่ไม่มี `docs/BUILD-PLAN.md` ให้จดในหัวข้อ "ตัดสินใจเอง" ท้าย `REPORT.md`)
+The agent counts are estimates from the job structure in section 2 (recon 4 · 1 hunter per work unit · gap check 1–3 · 1–2 verifiers per candidate). They have not been measured on real jobs. Cost in money per round `(ยังไม่ได้ตรวจ)`. If you get no answer or the user says not to ask, use the recommended defaults and write them into the `decision-log` (a project with no `docs/BUILD-PLAN.md` records them under the "ตัดสินใจเอง" heading at the end of `REPORT.md`).
 
-โปรไฟล์เปลี่ยนแค่ความกว้างและจำนวนรอบ ไม่ลดเกณฑ์หลักฐาน: `quick` ล่ารอบเดียวและให้ตัวยืนยันขั้น 5 ทำงานขั้น 5 กับ 6 รวมกันได้ · `standard` ล่าและตรวจช่องว่างจนเหลือช่องว่างไม่เกิน 1 รอบ · `deep` แตกหน่วยงานตาม subsystem และวงจรชีวิตข้อมูล (สร้าง แก้ ลบ กู้คืน) และวนตรวจช่องว่างจนสะอาด · ทุกโปรไฟล์ confirmed ต้องผ่านตัวยืนยันที่ไม่ใช่คนล่า
+A profile changes only the breadth and the number of rounds, never the evidence standard. `quick` hunts one round, and lets the step 5 verifier do steps 5 and 6 together. `standard` hunts and gap-checks until at most 1 round of gaps remains. `deep` splits work units by subsystem and by data life cycle (create, edit, delete, restore) and loops the gap check until clean. In every profile, a confirmed item must pass a verifier that is not the hunter.
 
-**โปรเจกต์เล็ก** (โค้ดไม่เกินราว 2,000 บรรทัด ทางเข้าไม่เกินราว 10 จุด) หัวหน้าทีมทำขั้น 1–4 เองได้ เพราะส่ง 4 ตัวไปสำรวจโค้ดไม่กี่ไฟล์เปลืองกว่าอ่านเอง · ขั้น 5 ยังต้องเป็นตัวใหม่เสมอ และจดว่ารวมขั้นไว้ใน "ตัดสินใจเอง" · ใน `quick` ที่ตัวยืนยันทำขั้น 5 กับ 6 รวมกัน ข้อแก้ของตัวนั้นคือคำตัดสินของมันเอง ไม่ต้องมีตัวที่สาม · ตัวที่สามใช้เมื่อผู้ตรวจ record รอบสุดท้ายแย้งคำตัดสินของตัวยืนยันขั้น 5 ที่เป็นคนละตัวกัน
+**Small project** (code under about 2,000 lines, entry points under about 10): the team lead may do steps 1–4 itself, because sending 4 agents to survey a few files costs more than reading them. Step 5 must still be a fresh agent, and you record the merged steps under "ตัดสินใจเอง". In `quick`, where the verifier does steps 5 and 6 together, that agent's corrections are its own verdict and need no third agent. Use the third agent when the final record checker disputes the verdict of a step 5 verifier that is a different agent.
 
-## 2 · 6 ขั้น
+## 2 · The 6 steps
 
-ทำตามลำดับ ห้ามข้ามขั้น · จบได้ 2 แบบเท่านั้น: ไฟล์ผลครบและตัวตรวจผ่านทั้ง 2 ตัว หรือรายงานเขียนชัดว่า `ยังไม่ครบ` พร้อมเหตุผลและหน่วยที่ค้าง
+Do them in order and never skip a step. There are only 2 ways to finish: the result files are complete and both validators pass, or the report says `ยังไม่ครบ` plainly, with the reason and the outstanding units.
 
-| ขั้น | ทำอะไร | ใคร | ได้อะไร | อ่าน |
+| Step | What to do | Who | Output | Read |
 |---|---|---|---|---|
-| 1 สำรวจ | ส่ง 4 ตัวพร้อมกัน อ่านอย่างเดียว: ระบบและวิธีรัน · ผู้ใช้ สิทธิ์ และตัวคุม · ทางเข้าของข้อมูลและจุดอันตราย · อะไรรันในห้องได้ อะไรต้องดูที่ deployment · แล้วหัวหน้าเขียน `architecture.md` ไม่เกินราว 1,000 คำ | `Explore` หรือ `security-engineer` 4 ตัว | `architecture.md` | [`recon`](references/recon.md) |
-| 2 รายการครอบคลุม | แตกทางเข้า × ขอบเขต × ประเภทการโจมตี เป็นหน่วยงาน 1 แถวต่อหน่วย สถานะ `pending` · ดึงผล `security-gate` รอบล่าสุด (หรือรันใหม่) เป็น candidate ตั้งต้น | หัวหน้าทีม | `ledger.json` | [`ledger`](references/ledger.md) |
-| 3 ล่า | แจกหน่วยงานให้ลูกทีมทีละชุด ทุกตัวได้ brief ตามแม่แบบ คืน JSON ก้อนเดียว · ห้ามใช้ WebFetch และ WebSearch ระหว่างล่า เพราะโค้ดลูกค้าต้องไม่ออกนอกเครื่อง และเนื้อเว็บอาจมีคำสั่งแฝง | `security-engineer` | candidate + ผลต่อหน่วย | [`hunting`](references/hunting.md) · [`attack-classes`](references/attack-classes.md) + ไฟล์ตามสาย |
-| 4 ตรวจช่องว่าง | ตัวใหม่ 1 ตัวอ่าน ledger + architecture แล้วหาทางเข้าที่ไม่มีแถว ทางคู่ขนานที่ไม่ได้ตรวจ แถวที่ปิดโดยไม่มีหลักฐาน · มีช่องว่าง ให้กลับไปขั้น 3 กับหน่วยใหม่ | `security-engineer` ตัวใหม่ | หน่วยงานที่ขาด | [`hunting`](references/hunting.md) หัวข้อตรวจช่องว่าง |
-| 5 ยืนยัน | candidate ละ 1 ตัวยืนยันที่ไม่เคยเห็นงานล่า สั่งให้ **พยายามหักล้าง** อ่านโค้ดทุกจุดที่อ้างใหม่เอง รันในห้องถ้าได้รับอนุญาต | `reviewer` ตัวใหม่ (ไม่มีเครื่องมือเว็บ) | คำตัดสินต่อ candidate | [`verify`](references/verify.md) |
-| 6 ตรวจ record + รายงาน | หัวหน้าเขียน `findings.json` แล้วรันตัวตรวจ · ส่ง record ที่ confirmed และ needs_validation ให้ตัวใหม่อีกชุดเทียบกับโค้ดรอบสุดท้าย · ถ้าขอแก้แบบเปลี่ยนสาระ (ระดับ ต้นเหตุ ผลกระทบ คำตัดสิน) ต้องมีตัวที่สามยืนยันก่อนใช้ · แล้วสร้างรายงานจาก record เท่านั้น · `quick` รวมกับขั้น 5 ได้ (หัวข้อ 1) | `reviewer` ตัวใหม่ · หัวหน้าทีม | `REPORT.md` · `NEEDS-VALIDATION.md` | [`verify`](references/verify.md) หัวข้อ record รอบสุดท้าย · [`report-th`](assets/report-th.md) |
+| 1 Recon | Send 4 agents at once, read-only: the system and how it runs · users, rights and controls · where data enters and the dangerous points · what can run in the lab and what must be checked at deployment · then the lead writes `architecture.md` of about 1,000 words at most | `Explore` or `security-engineer`, 4 agents | `architecture.md` | [`recon`](references/recon.md) |
+| 2 Coverage list | Split entry points × boundaries × attack classes into work units, 1 row per unit, status `pending` · pull in the latest `security-gate` result (or run it again) as starting candidates | Team lead | `ledger.json` | [`ledger`](references/ledger.md) |
+| 3 Hunt | Hand work units to sub-agents one set at a time. Every agent gets a brief from the template and returns a single JSON block. Never use WebFetch or WebSearch while hunting, because the customer's code must not leave the machine and web content may carry hidden instructions. | `security-engineer` | Candidates + results per unit | [`hunting`](references/hunting.md) · [`attack-classes`](references/attack-classes.md) + family files |
+| 4 Gap check | 1 fresh agent reads the ledger + architecture and looks for entry points with no row, parallel paths not checked, and rows closed with no evidence. If there are gaps, return to step 3 with the new units. | A fresh `security-engineer` | The missing work units | [`hunting`](references/hunting.md) gap-check section |
+| 5 Verify | 1 verifier per candidate that has never seen the hunt, told to **try to refute**. It rereads every cited place in the code itself and runs in the lab if permitted. | A fresh `reviewer` (no web tools) | A verdict per candidate | [`verify`](references/verify.md) |
+| 6 Record check + report | The lead writes `findings.json` and runs the validators · sends the confirmed and needs_validation records to another fresh set to compare against the code one last time · a correction that changes substance (severity, root cause, impact, verdict) needs a third agent to confirm before use · then builds the report from records only · `quick` may merge this with step 5 (section 1) | A fresh `reviewer` · team lead | `REPORT.md` · `NEEDS-VALIDATION.md` | [`verify`](references/verify.md) final-record section · [`report-th`](assets/report-th.md) |
 
-**หัวหน้าทีมเขียน `ledger.json` และ `findings.json` คนเดียว** ลูกทีมคืน JSON ให้หัวหน้ารวม ไม่แก้ไฟล์เอง เพราะถ้าหลายตัวเขียนพร้อมกัน แถวจะทับกันและนับความครอบคลุมผิด
+**The team lead alone writes `ledger.json` and `findings.json`.** Sub-agents return JSON for the lead to merge and never edit the files themselves, because if several write at once, rows overwrite each other and the coverage count goes wrong.
 
-ผลของลูกทีมที่มีร้อยแก้วห่อ JSON หรือรูปแบบผิด ให้ทิ้งแล้วส่งตัวใหม่ ไม่ซ่อมเอง เพราะการซ่อมคือการเดาว่าลูกทีมหมายถึงอะไร
+If a sub-agent result has prose wrapped around the JSON or the wrong shape, discard it and send a new agent. Do not repair it yourself, because repairing means guessing what the sub-agent meant.
 
-## 3 · ผลสแกนเนอร์เข้าเป็น candidate ไม่ใช่ finding
+## 3 · Scanner results come in as candidates, not findings
 
-- ผล gitleaks · semgrep · trivy · `npm audit` จาก `security-gate` คือเบาะแส ทุกข้อต้องผ่านขั้น 5 เหมือน candidate จาก agent
-- ค่าลับจริงหลุด ไม่ต้องรอขั้น 5 ให้หยุดแล้วบอกผู้ใช้ทันทีตาม `security-gate` ขั้น 4 แล้วค่อยบันทึกเป็น finding
-- dependency ที่มี CVE จะ confirmed ได้ก็ต่อเมื่อโค้ดเรียกส่วนที่มีช่องโหว่ด้วย input ที่ผู้ใช้คุมได้ · มีแค่เวอร์ชันตรงแต่ไม่มีทางเรียก → `rejected` พร้อมเหตุผล (ยังแนะนำให้อัปเดตในหัวข้อ hardening ได้)
-- เครื่องมือที่รันไม่ได้ เขียนในรายงานหัวข้อ "ไม่ได้รัน" ตามกติกาของ `security-gate`
+- Results from gitleaks · semgrep · trivy · `npm audit` via `security-gate` are leads. Every one must pass step 5 like a candidate from an agent.
+- If a real secret has leaked, do not wait for step 5. Stop and tell the user at once, following `security-gate` step 4, and then record it as a finding.
+- A dependency with a CVE can be confirmed only if the code calls the vulnerable part with input the user controls. If only the version matches and no path calls it → `rejected` with the reason (you may still recommend the update under hardening).
+- Tools that could not run are written in the report under the "ไม่ได้รัน" heading, following the `security-gate` rule.
 
-## 4 · คำตัดสิน 3 แบบ
+## 4 · The 3 verdicts
 
-| คำตัดสิน | ใช้เมื่อ | ต้องมี | ห้ามมี |
+| Verdict | Use when | Must have | Must not have |
 |---|---|---|---|
-| `confirmed` | เห็นเส้นทางครบจากทางเข้าถึงผลเสียหาย ตัวคุมที่ควรกันไม่กัน และไม่มีชั้นอื่นในโค้ดที่กันได้ · ถ้ารันได้ ต้องเห็นผลจริงในห้อง | `severity` · `trace` ขั้นแรกเป็นไฟล์ของ entrypoint · `evidence` · `impact` · `owner_impact_th` · `fix` · `verified_by` ที่ไม่ใช่ `hunted_by` | — |
-| `needs_validation` | เส้นทางในโค้ดมีจริง แต่ข้อเท็จจริงที่ตัดสินอยู่นอก repo (proxy · ค่าใน cloud · การตั้งค่าที่ผู้ให้บริการ) หรือต้องรันแต่ไม่ได้รับอนุญาต | `missing` บอกว่าขาดข้อเท็จจริงอะไร · `check_plan` บอกว่าใครตรวจอะไรที่ไหนจึงจะตัดสินได้ | `severity` |
-| `rejected` | โค้ดหักล้างได้ เช่น มีตัวคุมอยู่อีกชั้น ทางเข้าไม่มีจริง ผลกระทบตกกับตัวผู้กระทำเอง | `reject_reason` อ้างไฟล์และบรรทัดที่หักล้าง | `severity` |
+| `confirmed` | You see the complete path from entry point to harm, the control that should block it does not, and no other layer in the code can block it. If it can run, you must see the real effect in the lab. | `severity` · the first `trace` step is the entrypoint's file · `evidence` · `impact` · `owner_impact_th` · `fix` · a `verified_by` that is not `hunted_by` | — |
+| `needs_validation` | The path in the code is real, but the deciding fact lies outside the repo (proxy · cloud settings · provider settings), or it needs a run that is not permitted | `missing` says which fact is lacking · `check_plan` says who checks what, where, so it can be decided | `severity` |
+| `rejected` | The code refutes it, for example another control layer exists, the entry point does not really exist, or the effect lands on the actor themselves | `reject_reason` cites the file and line that refute it | `severity` |
 
-- `needs_validation` ไม่ใช่ "confirmed ที่ไม่ค่อยแน่ใจ" และไม่ใช่ที่พักของข้อที่โค้ดหักล้างได้แล้ว
-- ตัวคุมที่อยู่นอก repo ห้ามเดาทั้งว่ามีและไม่มี ให้เป็น `needs_validation` แล้วบอกวิธีตรวจ
-- เก็บ `rejected` ไว้ใน `findings.json` เพื่อให้รอบหน้าไม่รายงานข้อเดิมซ้ำ ตราบที่โค้ดตรงนั้นไม่เปลี่ยน
+- `needs_validation` is not "confirmed but not very sure", and it is not a parking place for items the code has already refuted.
+- For a control outside the repo, never guess either that it exists or that it does not. Make it `needs_validation` and give the check method.
+- Keep `rejected` in `findings.json` so the next round does not report the same item again, as long as the code there has not changed.
 
-## 5 · ระดับความรุนแรง (เฉพาะ confirmed)
+## 5 · Severity levels (confirmed only)
 
-ระดับต้องไม่สูงกว่าผลที่พิสูจน์ได้ · บอกความเสียหายเป็นรูปธรรมไม่ได้ แปลว่าระดับต่ำกว่าที่รู้สึก
+The level must not exceed what has been proven. If you cannot state the concrete damage, the level is lower than it feels.
 
-| ระดับ | หลักยึด | ตัวอย่างในงานลูกค้าเรา |
+| Level | Anchor | Examples in our customers' work |
 |---|---|---|
-| `critical` | คนที่ไม่ได้ login รันโค้ดบนเซิร์ฟเวอร์ได้ · อ่านหรือแก้ฐานข้อมูลได้ทั้งก้อน · ยึดบัญชีใครก็ได้ | SQL injection ในหน้าค้นหาสาธารณะ · endpoint รีเซ็ตรหัสผ่านไม่ผูก token กับบัญชี |
-| `high` | ตัวคุมที่ระบบประกาศไว้พังทั้งหมด และผลเกิดกับคนอื่นหรือเงินจริง | ลูกค้าคนหนึ่งเปิดใบสั่งซื้อทุกใบของคนอื่นได้ · webhook ชำระเงินปลอมได้แล้วระบบส่งของ · XSS ที่เก็บไว้แล้วรันในหน้าแอดมิน |
-| `medium` | ข้ามขอบเขตจริง แต่วงจำกัด หรือต้องมีเงื่อนไขที่ไม่ค่อยเกิด | พนักงานสาขาหนึ่งดูยอดขายสาขาอื่นได้แต่แก้ไม่ได้ · ต้องรู้ id แบบสุ่มยาวก่อนถึงจะเปิดได้ |
-| `low` | เผยข้อมูลภายในที่ไม่ลับ หรือต้องลงแรงมากแต่ได้ผลน้อย | หน้า error บอกเวอร์ชัน framework · นับได้ว่ามีอีเมลนี้ในระบบไหม |
-| `info` | ยืนยันแล้วแต่ผลกระทบน้อยมาก มีค่าเป็นชิ้นส่วนของข้อที่ใหญ่กว่า | log มี path ภายในเซิร์ฟเวอร์ |
+| `critical` | Someone not logged in can run code on the server · read or edit the whole database · take over any account | SQL injection on a public search page · a password-reset endpoint whose token is not bound to the account |
+| `high` | A control the system advertises fails completely, and the effect lands on other people or real money | One customer can open every other customer's orders · a payment webhook can be forged and the system ships goods · stored XSS that runs on the admin page |
+| `medium` | Really crosses a boundary, but with limited reach, or needs a condition that rarely occurs | A staff member at one branch can view another branch's sales but cannot edit · you must already know a long random id before you can open it |
+| `low` | Exposes internal information that is not secret, or takes a lot of effort for little gain | An error page shows the framework version · you can tell whether an email exists in the system |
+| `info` | Confirmed but with very little impact, worth only as a piece of a larger item | A log contains an internal server path |
 
-ตัวแยก `high` กับ `medium`: ผลที่พิสูจน์ได้ทำให้ตัวคุมพังทั้งหมดในงานที่มีผลจริง หรือแค่ทำให้อ่อนลง · ข้อมูลส่วนบุคคลของคนอื่นหลุดข้ามลูกค้า (เลขบัตรประชาชน · เบอร์โทร · ที่อยู่) ให้ติดป้าย `pdpa` เสมอ และเสนอระดับให้ `legal-compliance-officer` ทบทวน `(รอยืนยัน)`
+What separates `high` from `medium`: whether the proven effect breaks the control entirely in work that has real effect, or only weakens it. When another person's personal data leaks across customers (ID card number · phone number · address), always apply the `pdpa` label, and propose the level for `legal-compliance-officer` to review `(รอยืนยัน)` (awaiting confirmation).
 
-## 6 · ไม่ใช่ finding
+## 6 · Not a finding
 
-- header ที่ควรมีแต่ไม่มี (CSP · HSTS) ในระบบที่ไม่ได้เสิร์ฟ HTML หรือไม่มีของลับให้ขโมย → hardening
-- cookie ไม่มี `HttpOnly` ต้องดูก่อนว่า cookie เก็บของลับไหม และ JavaScript ต้องอ่านมันตามการออกแบบหรือเปล่า
-- crash จาก input แปลก ๆ อย่าขยายเป็น "รันโค้ดได้" · ผู้ใช้ทำร้ายข้อมูลของตัวเอง ไม่ใช่การข้ามสิทธิ์
-- คำแนะนำ defense-in-depth ที่ไม่มีทางไปถึงผลเสียหาย · พฤติกรรม proxy หรือ cloud ที่เดาเอา · เวอร์ชันไลบรารีเก่าที่ไม่มีทางเรียก
-- "ระบบอื่นที่คล้ายกันก็ทำแบบนี้" ใช้เทียบระดับได้ แต่ไม่ใช่เหตุผลให้ทิ้ง finding
+- A header that should exist but does not (CSP · HSTS) in a system that does not serve HTML or has no secrets to steal → hardening
+- A cookie without `HttpOnly`: first check whether the cookie holds a secret and whether JavaScript must read it by design
+- A crash from odd input: do not inflate it to "can run code" · a user harming their own data is not a privilege bypass
+- Defense-in-depth advice with no path to harm · guessed proxy or cloud behavior · an old library version that nothing can call
+- "Other similar systems do this too" may be used to compare levels, but it is not a reason to drop a finding
 
-ของพวกนี้ลงหัวข้อ "คำแนะนำ hardening" ในรายงานได้ แต่ไม่มีระดับ ไม่นับในผลรวม และไม่ทำให้ส่งมอบไม่ได้
+These go under "คำแนะนำ hardening" (hardening advice) in the report, but they carry no level, are not counted in the total, and do not block delivery.
 
-## 7 · ที่เก็บผลและสัญญาข้อมูล
+## 7 · Where results live and the data contract
 
-ผลอยู่ใน `qa/security/audit-<YYYY-MM-DD>/` ของโปรเจกต์ (ส่งมอบลูกค้าได้) · ร่างของลูกทีมและผลสแกนดิบอยู่ใน `_to_delete/security/`
+Results live in `qa/security/audit-<YYYY-MM-DD>/` of the project (deliverable to the customer). Sub-agent drafts and raw scan output live in `_to_delete/security/`.
 
-| ไฟล์ | เนื้อ | ใครเขียน |
+| File | Content | Who writes it |
 |---|---|---|
-| `architecture.md` | ข้อสรุปจากขั้น 1 | หัวหน้าทีม |
-| `ledger.json` | `{ "rows": [...] }` แถวละหน่วยงาน · ช่องตาม [`ledger`](references/ledger.md) | หัวหน้าทีม |
-| `findings.json` | `{ "audit": {date, repo, commit, profile}, "findings": [...] }` · โฟลเดอร์ที่ไม่ใช่ git ใส่ `commit` เป็น `"none"` | หัวหน้าทีม |
-| `REPORT.md` · `NEEDS-VALIDATION.md` | สร้างจาก 2 ไฟล์บน ตามแม่แบบ [`report-th`](assets/report-th.md) | `scripts/render_report.mjs` แล้วหัวหน้าเติมส่วนที่เป็นร้อยแก้ว |
+| `architecture.md` | The conclusions of step 1 | Team lead |
+| `ledger.json` | `{ "rows": [...] }`, 1 row per work unit · fields as in [`ledger`](references/ledger.md) | Team lead |
+| `findings.json` | `{ "audit": {date, repo, commit, profile}, "findings": [...] }` · for a folder that is not git, set `commit` to `"none"` | Team lead |
+| `REPORT.md` · `NEEDS-VALIDATION.md` | Built from the 2 files above, following the [`report-th`](assets/report-th.md) template | `scripts/render_report.mjs`, then the lead fills in the prose parts |
 
-ช่องของ finding 1 ข้อ (ชื่อช่องตายตัว ตัวตรวจไม่รับช่องอื่น):
+The fields of 1 finding (field names are fixed and the validator accepts no others):
 
-| ช่อง | ความหมาย |
+| Field | Meaning |
 |---|---|
-| `id` | `F-001` เรียงตามลำดับในไฟล์ |
-| `fingerprint` | hex 16 ตัว คำนวณจาก `class` + `location.file` + `location.symbol` + `entrypoint` ด้วยสคริปต์ ไม่พิมพ์เอง · ต้นเหตุเดียวกันได้ค่าเดิมทุกรอบ |
-| `verdict` · `severity` | หัวข้อ 4 และ 5 |
-| `title` · `class` | ชื่อสั้น · ประเภทการโจมตีตาม `attack-classes` เช่น `idor` · `webhook-signature` |
-| `owasp` · `cwe` | `A01`..`A10` หรือ `null` · `CWE-639` หรือ `null` |
-| `location` | `{file, line, symbol}` จุดที่ต้องแก้ · path สัมพัทธ์ใน repo ใช้ `/` |
-| `entrypoint` | `<path>#<ทางเข้า>` เช่น `src/routes/orders.js#GET /orders/:id` |
-| `trace` | `[{file, line, note}]` ขั้นแรกเป็นไฟล์ของ entrypoint ไล่ไปจนถึงจุดเสียหาย |
-| `preconditions` | เงื่อนไขที่ต้องจริงก่อน เช่น `login เป็นลูกค้าธรรมดา` |
-| `impact` · `owner_impact_th` | ผลทางเทคนิค · ผลในภาษาเจ้าของกิจการ 1 ประโยค |
-| `pdpa` | `{personal_data, kinds}` เช่น `{"personal_data": true, "kinds": ["เลขบัตรประชาชน", "เบอร์โทร"]}` |
-| `evidence` | สิ่งที่เห็นจริง: บรรทัดโค้ด · คำสั่งที่รันในห้องและผล (ตัดค่าลับเหลือ 4 ตัวท้าย) |
-| `missing` · `check_plan` | ต้องมีเมื่อ `needs_validation` |
-| `reject_reason` | ต้องมีเมื่อ `rejected` |
-| `fix` | การแก้ที่แคบที่สุด ณ จุดตัดสินใจสุดท้ายที่ไว้ใจได้ + test ที่ต้องล้มก่อนแก้ |
-| `hunted_by` · `verified_by` | ชื่อหรือรหัส agent ที่ล่า · ที่ยืนยัน (ต้องไม่ใช่ตัวเดียวกัน) |
-| `coverage_ids` | แถวใน ledger ที่ finding นี้มาจาก อ้างกลับกันทั้ง 2 ทาง |
+| `id` | `F-001`, in file order |
+| `fingerprint` | 16 hex characters computed from `class` + `location.file` + `location.symbol` + `entrypoint` by the script, never typed by hand · the same root cause gets the same value every round |
+| `verdict` · `severity` | Sections 4 and 5 |
+| `title` · `class` | A short title · the attack class from `attack-classes`, such as `idor` · `webhook-signature` |
+| `owasp` · `cwe` | `A01`..`A10` or `null` · `CWE-639` or `null` |
+| `location` | `{file, line, symbol}` the place that must be fixed · a relative path in the repo using `/` |
+| `entrypoint` | `<path>#<entry point>` such as `src/routes/orders.js#GET /orders/:id` |
+| `trace` | `[{file, line, note}]` the first step is the entrypoint's file, running on to the point of harm |
+| `preconditions` | Conditions that must be true first, such as `login เป็นลูกค้าธรรมดา` |
+| `impact` · `owner_impact_th` | The technical effect · the effect in business-owner language, 1 sentence |
+| `pdpa` | `{personal_data, kinds}` such as `{"personal_data": true, "kinds": ["เลขบัตรประชาชน", "เบอร์โทร"]}` |
+| `evidence` | What was really seen: lines of code · commands run in the lab and their results (secrets cut to the last 4 characters) |
+| `missing` · `check_plan` | Required when `needs_validation` |
+| `reject_reason` | Required when `rejected` |
+| `fix` | The narrowest fix at the last trustworthy decision point + the test that must fail before the fix |
+| `hunted_by` · `verified_by` | The name or code of the agent that hunted · that verified (must not be the same) |
+| `coverage_ids` | The ledger rows this finding came from, cited back in both directions |
 
-ตรวจด้วยสคริปต์ในโฟลเดอร์ skill นี้ (Node ไม่มี dependency รันบน Windows ได้):
+Validate with the scripts in this skill's folder (Node with no dependencies, runs on Windows):
 
 ```bash
-node <skill>/scripts/fingerprint.mjs idor src/orders/repo.js findOrderById "src/routes/orders.js#GET /orders/:id"   # ไม่มี symbol ใส่ -
+node <skill>/scripts/fingerprint.mjs idor src/orders/repo.js findOrderById "src/routes/orders.js#GET /orders/:id"   # no symbol: put -
 node <skill>/scripts/validate_findings.mjs qa/security/audit-2026-10-26/findings.json --ledger qa/security/audit-2026-10-26/ledger.json
 node <skill>/scripts/validate_ledger.mjs qa/security/audit-2026-10-26/ledger.json --findings qa/security/audit-2026-10-26/findings.json
-node <skill>/scripts/render_report.mjs qa/security/audit-2026-10-26            # มีรายงานเดิมแล้ว ต้องใส่ --force ถึงจะเขียนทับ
+node <skill>/scripts/render_report.mjs qa/security/audit-2026-10-26            # if a report already exists, --force is needed to overwrite it
 ```
 
-ตัวตรวจ 2 ตัวและ `render_report.mjs` มี `--self-test` (`fingerprint.mjs` เป็นตัวคำนวณค่า ไม่มี) · exit 0 ผ่าน · 1 ไม่ผ่าน · 2 เรียกผิด · ผ่านแปลว่ารูปแบบและการอ้างกันถูก ไม่ได้แปลว่าช่องโหว่จริง · ตัวตรวจไม่ผ่าน ห้ามสร้างรายงาน · ห้ามมีค่าลับในไฟล์ใดของโฟลเดอร์ผล ตัวตรวจจะจับรูปแบบที่รู้จักแต่ไม่ครบทุกแบบ หัวหน้าทีมต้องอ่านช่อง `evidence` เองด้วย
+The 2 validators and `render_report.mjs` have `--self-test` (`fingerprint.mjs` is a calculator and has none). Exit 0 means pass · 1 means fail · 2 means bad invocation. A pass means the format and the cross-references are right, not that the vulnerability is real. If a validator fails, do not build the report. No secrets may appear in any file of the results folder. The validator catches known patterns but not every one, so the team lead must also read the `evidence` field.
 
-## 8 · หลัง audit
+## 8 · After the audit
 
-- **confirmed ที่แตะข้อมูลส่วนบุคคล** (`pdpa.personal_data` เป็น true) และมีร่องรอยว่าอาจถูกใช้แล้ว → เปิด `pdpa-compliance` หัวข้อ 8 ทันที นับ 72 ชั่วโมงจากตอนรู้ ไม่ใช่ตอนรายงานเสร็จ · ไม่มีร่องรอย ให้ระบุในรายงานว่าควรตรวจ log ย้อนหลัง
-- **confirmed ทุกข้อ** → playbook `bug-fix` (หาต้นเหตุ · เขียน test ที่ล้มก่อนแก้ ชื่อขึ้นต้นด้วยรหัส OWASP เช่น `A01_other_user_order_returns_404` · ค้นจุดอื่นที่เขียนแบบเดียวกัน) · ระดับ critical และ high ห้ามส่งมอบจนกว่าจะแก้ หรือลูกค้ายอมรับความเสี่ยงเป็นลายลักษณ์อักษรใน `decision-log`
-- **ก่อน merge แพตช์ของ confirmed ระดับ critical และ high** ให้ `reviewer` ตัวใหม่ที่ได้แค่ diff กับ finding (ไม่ได้คำอธิบายว่าช่องโหว่ทำงานอย่างไร) ตอบ 4 ข้อ: (1) แพตช์แตะเฉพาะเส้นทางของ finding นี้ไหม (2) แก้ที่ต้นเหตุ หรือกลบอาการ เช่น `try/except` ว่าง ลบการเช็ค ลดระดับ log (3) เพิ่มผิวโจมตีใหม่ไหม (4) นึกออกไหมว่ามี input ที่ยังไปถึงสภาพเดิมได้โดยไม่ชนแพตช์ · ข้อไหนตอบไม่ผ่านให้กลับไปแก้ก่อน (แนวคิดจากขั้นรีวิวแพตช์ของ defending-code-reference-harness · license ของ repo นั้นเป็น NOASSERTION จึงใช้แนวคิดเท่านั้น เขียนข้อความเอง · ดู 2026-11-10)
-- **needs_validation** → ส่ง `NEEDS-VALIDATION.md` ให้คนที่เข้าถึง deployment ได้ ตรวจตาม `check_plan` แล้วกลับมาปิดในรอบถัดไป
-- **รอบถัดไป** → อ่าน `findings.json` และ `ledger.json` รอบก่อนทั้งหมดก่อนวางแผน · ข้อ confirmed ที่โค้ดไม่เปลี่ยนยกมาพร้อม fingerprint เดิมแต่ต้องยืนยันใหม่ · โค้ดเปลี่ยนแล้ว ตรวจหน่วยนั้นใหม่ · แก้แล้ว ให้ตัวยืนยันรัน test ที่ล้มก่อนแก้ซ้ำ ผ่านจึงเขียนว่า `ปิดแล้ว` · หน่วย `blocked` และข้อ `needs_validation` เป็นงานของรอบนี้ · รอบเดียวไม่มีทางครอบคลุมทั้งหมด รายงานต้องไม่เขียนว่าครบ
-- **ส่งมอบตามมาตรฐาน** (PDPA · GDPR · PCI-DSS · SOC 2 · HIPAA) → ใส่ในรายงานว่า finding ข้อไหนชนข้อบังคับข้อไหน และหลักฐานที่เก็บแล้ว · แนบแผนแก้ 30/60/90 วัน เรียงตามระดับของ confirmed
-- สรุปสถานะด้วย `status-report` ประเภท `ตรวจ` · ถ้าส่งมอบตามสัญญา OWASP ให้แนบแถว A01–A10 จากรายงานนี้ไปกับรายงาน OWASP ของ `security-gate`
+- **A confirmed item that touches personal data** (`pdpa.personal_data` is true) and shows signs it may already have been exploited → open `pdpa-compliance` section 8 at once. Count 72 hours from when you learned of it, not from when the report is finished. If there are no signs, state in the report that past logs should be checked.
+- **Every confirmed item** → playbook `bug-fix` (find the root cause · write a test that fails before the fix, with a name starting with the OWASP code such as `A01_other_user_order_returns_404` · search for other places written the same way). Critical and high must not be delivered until fixed, or until the customer accepts the risk in writing in the `decision-log`.
+- **Before merging a patch for a confirmed critical or high item**, send a fresh `reviewer` that gets only the diff and the finding (not the explanation of how the vulnerability works) to answer 4 questions: (1) does the patch touch only the path of this finding (2) does it fix the root cause or mask the symptom, such as an empty `try/except`, a removed check, or a lowered log level (3) does it add new attack surface (4) can you think of any input that still reaches the original state without hitting the patch. Any question that fails goes back for a fix first. (The idea comes from the patch-review step of defending-code-reference-harness. That repo's license is NOASSERTION, so only the idea is used and the text is our own. See 2026-11-10.)
+- **needs_validation** → send `NEEDS-VALIDATION.md` to someone who can reach the deployment. They check by `check_plan` and come back to close it in the next round.
+- **Next round** → read the whole previous `findings.json` and `ledger.json` before planning. A confirmed item whose code has not changed carries over with the same fingerprint but must be re-verified. If the code changed, recheck that unit. If it was fixed, have the verifier rerun the test that failed before the fix, and write `ปิดแล้ว` (closed) only when it passes. `blocked` units and `needs_validation` items are this round's work. One round can never cover everything, so the report must not say it is complete.
+- **Delivering to a standard** (PDPA · GDPR · PCI-DSS · SOC 2 · HIPAA) → state in the report which finding hits which requirement, and the evidence already collected. Attach a 30/60/90-day fix plan, ordered by the level of the confirmed items.
+- Summarize status with `status-report` of the `ตรวจ` type. If delivering under an OWASP contract, attach rows A01–A10 from this report to the OWASP report from `security-gate`.
 
-## ตัวอย่าง 1 ชุด
+## One worked example
 
-ป้าย `ตัวอย่าง` — สร้างจากโจทย์ทดสอบของ skill นี้ ยังไม่ได้รันกับระบบลูกค้าจริง
+Label `ตัวอย่าง` (example). Built from this skill's test scenario and not yet run against a real customer system.
 
-**โจทย์:** "ลูกค้าจะรับระบบสั่งของสัปดาห์หน้า ช่วยไล่หาช่องโหว่ทั้งโปรเจกต์ให้หน่อย" · repo Express ราว 3,000 บรรทัด มี LINE webhook · ไม่มี `.sandbox/`
+**Scenario:** "ลูกค้าจะรับระบบสั่งของสัปดาห์หน้า ช่วยไล่หาช่องโหว่ทั้งโปรเจกต์ให้หน่อย" · an Express repo of about 3,000 lines with a LINE webhook · no `.sandbox/`
 
-**ที่ทำ:** ถามรวมครั้งเดียว ผู้ใช้เลือก `quick` · ทั้ง repo · อ่านอย่างเดียว · สำรวจ 4 ตัว ได้ทางเข้า 9 จุด → ledger 31 แถว → ล่า 6 ตัว → ตรวจช่องว่างเจอ `GET /orders/export.csv` ไม่มีแถว จึงเพิ่ม 2 แถวแล้วล่าอีก 1 ตัว → candidate 5 ข้อ ยืนยันด้วย `reviewer` ตัวใหม่ 5 ตัว
+**What was done:** Asked everything once. The user chose `quick` · whole repo · read-only. 4 recon agents found 9 entry points → ledger of 31 rows → 6 hunters → the gap check found `GET /orders/export.csv` had no row, so 2 rows were added and 1 more hunter ran → 5 candidates, verified by 5 fresh `reviewer` agents
 
-**ผล:**
+**Result:**
 
-| id | คำตัดสิน | เรื่อง | เหตุ |
+| id | Verdict | Subject | Reason |
 |---|---|---|---|
-| F-001 | `confirmed` · `high` · A01 | `GET /orders/:id` ไม่กรองเจ้าของ ลูกค้าเปิดใบสั่งซื้อพร้อมเบอร์โทรของคนอื่นได้ | query ใช้แค่ `id` ไม่มี `customerId` · `pdpa` เป็น true |
-| F-002 | `needs_validation` | `/webhook/line` ไม่ตรวจ `x-line-signature` | ในโค้ดไม่ตรวจจริง แต่ README บอกว่ามี reverse proxy ตรวจให้ ซึ่งไม่อยู่ใน repo · `check_plan`: ส่ง request ลายเซ็นผิดเข้า URL ทดสอบ ต้องได้ 401 |
-| F-003 | `rejected` | semgrep เตือน `exec()` ใน `scripts/seed.js` | ไฟล์รันตอนตั้งเครื่องเท่านั้น ไม่มีทางเข้าจากผู้ใช้ |
-| — | hardening | ไม่มี CSP | API ส่ง JSON อย่างเดียว ไม่มีหน้า HTML |
+| F-001 | `confirmed` · `high` · A01 | `GET /orders/:id` does not filter by owner, so a customer can open another person's order with their phone number | The query uses only `id`, with no `customerId` · `pdpa` is true |
+| F-002 | `needs_validation` | `/webhook/line` does not check `x-line-signature` | The code really does not check, but the README says a reverse proxy checks it, and that proxy is not in the repo · `check_plan`: send a request with a wrong signature to the test URL and expect 401 |
+| F-003 | `rejected` | semgrep warns about `exec()` in `scripts/seed.js` | The file runs only at machine setup and has no entry point from users |
+| — | hardening | No CSP | The API returns JSON only and has no HTML pages |
 
-F-001 ไป playbook `bug-fix` · test `A01_other_user_order_returns_404` ล้มก่อนแก้ ผ่านหลังแก้ · รายงานเขียนว่าตรวจแบบ `quick` และระบุหน่วยที่ยังไม่ได้ตรวจ
+F-001 goes to playbook `bug-fix`. The test `A01_other_user_order_returns_404` fails before the fix and passes after. The report states that the review was `quick` and names the units not yet checked.
 
-## ตรวจก่อนส่ง
+## Check before sending
 
-1. ทุก confirmed มีผู้ได้รับผลกระทบที่ชี้ได้ · `verified_by` ไม่ใช่ `hunted_by` · ระดับไม่สูงกว่าผลที่เห็นจริง
-2. ไม่มี needs_validation หรือ rejected ที่มีระดับ · needs_validation ทุกข้อมี `missing` และ `check_plan` ที่คนอื่นทำตามได้
-3. ตัวตรวจทั้ง 2 ตัวผ่าน และรายงานสร้างจาก record ไม่มีร้อยแก้วที่เปลี่ยนคำตัดสินหรือระดับ
-4. แถว ledger ที่ยัง `pending` หรือ `blocked` ขึ้นในรายงานพร้อมเหตุผล · ตรวจบางส่วนเขียนว่าบางส่วน
-5. เครื่องมือที่รันไม่ได้อยู่ในหัวข้อ "ไม่ได้รัน" · ไม่มีค่าลับในโฟลเดอร์ผล
-6. finding ที่ `pdpa.personal_data` เป็น true มีบรรทัดบอกขั้นต่อไปตาม `pdpa-compliance`
-7. ไม่มีคำว่า "ปลอดภัย 100%" หรือ "ผ่านการรับรอง"
+1. Every confirmed item has an affected party you can point to · `verified_by` is not `hunted_by` · the level is not higher than the effect really seen
+2. No needs_validation or rejected item has a level · every needs_validation item has a `missing` and a `check_plan` that someone else can follow
+3. Both validators pass, and the report is built from records with no prose that changes a verdict or level
+4. Ledger rows still `pending` or `blocked` appear in the report with reasons · a partial review is written as partial
+5. Tools that could not run are under the "ไม่ได้รัน" heading · no secrets in the results folder
+6. A finding whose `pdpa.personal_data` is true has a line giving the next step under `pdpa-compliance`
+7. The words "100% secure" or "certified" do not appear
 
-## ที่มา
+## Sources
 
-- แนวคิด 6 ขั้น · การยืนยันโดยตัวใหม่ที่พยายามหักล้าง · คำตัดสิน 3 แบบ · ระดับ 5 ขั้นที่ไม่สูงกว่าผลที่พิสูจน์ · รายการครอบคลุม (coverage ledger) · รายการประเภทการโจมตี — จาก cloudflare/security-audit-skill https://github.com/cloudflare/security-audit-skill (MIT · ดู 2026-10-26) ใช้เป็นรายการตรวจความครอบคลุม เนื้อ ตาราง และ prompt ในโฟลเดอร์นี้เขียนใหม่ทั้งหมด
-- ส่วนที่เพิ่มเอง: ผลสแกนเนอร์เป็น candidate · ช่อง `owasp` · `pdpa` · `owner_impact_th` · ระบบไทยใน [`classes-thai`](references/classes-thai.md) · การส่งต่อ `bug-fix` และ `pdpa-compliance` · ตัวตรวจที่รันบน Windows
-- OWASP Top 10:2025 — ตาม [`security-gate` ส่วน OWASP](../security-gate/references/owasp-top10.md)
+- The 6-step idea · verification by a fresh agent that tries to refute · the 3 verdicts · 5 levels not higher than what is proven · the coverage ledger · the list of attack classes — from cloudflare/security-audit-skill https://github.com/cloudflare/security-audit-skill (MIT · viewed 2026-10-26). Used as a coverage checklist. The text, tables and prompts in this folder are all newly written.
+- Added by us: scanner results as candidates · the `owasp` · `pdpa` · `owner_impact_th` fields · Thai systems in [`classes-thai`](references/classes-thai.md) · the hand-off to `bug-fix` and `pdpa-compliance` · validators that run on Windows
+- OWASP Top 10:2025 — per the [`security-gate` OWASP section](../security-gate/references/owasp-top10.md)

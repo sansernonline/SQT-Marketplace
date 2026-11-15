@@ -1,6 +1,6 @@
 # Runbook Index และการผูก runbook กับ alert
 
-ตัวอย่างหน้ารวม runbook และตัวอย่างการใส่ลิงก์ runbook ลงใน alert ใช้ตอนตั้งระบบ runbook ของทีมครั้งแรก
+An example runbook index page and an example of linking a runbook from an alert; use it when setting up the team's runbook system for the first time
 
 ## Runbook Index Pattern
 

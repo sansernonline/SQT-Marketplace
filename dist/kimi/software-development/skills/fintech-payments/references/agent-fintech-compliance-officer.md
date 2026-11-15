@@ -17,7 +17,7 @@
 - **SEC** — securities, digital assets
 - **AMLO** — anti-money laundering, KYC requirements
 - **PDPA** — personal data protection
-- **Card scheme rules in Thailand** — (ยังไม่ได้ตรวจ ว่ามีกรอบเฉพาะชื่อนี้) ตรวจกับธนาคารแห่งประเทศไทยและ card scheme ก่อนอ้าง
+- **Card scheme rules in Thailand** — (`ยังไม่ได้ตรวจ` whether a framework by this exact name exists) check with the Bank of Thailand and the card schemes before citing
 
 **Singapore:**
 - **MAS** — banking, payments (PSA), capital markets

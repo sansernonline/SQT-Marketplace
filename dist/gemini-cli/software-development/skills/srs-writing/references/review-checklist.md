@@ -1,35 +1,35 @@
-# รีวิวความครบถ้วนของ SRS
+# SRS completeness review
 
-ใช้กับ `srs-writing` ข้อ 8 · ไล่ให้ครบก่อนส่งทุกครั้ง · "ข้อ 5" หมายถึงหมวดข้อกำหนดที่ไม่ใช่หน้าที่ใน `SKILL.md`
+Use with `srs-writing` section 8. Go through all of it before every send. "Section 5" means the chapter of non-functional requirements in `SKILL.md`.
 
-**ขอบเขต**
+**Scope**
 
-- [ ] มีรายการ "ไม่อยู่ในขอบเขต" ไหม
-- [ ] มีข้อสมมติเขียนไว้ชัดไหม และใครต้องยืนยันข้อสมมตินั้น
-- [ ] ระบุระบบอื่นที่ต้องต่อครบไหม ใครเป็นเจ้าของแต่ละระบบ
+- [ ] Is there an "ไม่อยู่ในขอบเขต" (out of scope) list?
+- [ ] Are the assumptions written down clearly, and who must confirm each one?
+- [ ] Are all the other systems to connect to listed, and who owns each one?
 
-**ข้อกำหนดรายข้อ**
+**Individual requirements**
 
-- [ ] ทุกข้อมีรหัสไหม
-- [ ] ทุกข้อเขียน test case ได้ไหม
-- [ ] มีคำว่า "เร็ว" "ง่าย" "เหมาะสม" "เสถียร" "ยืดหยุ่น" หลงเหลือไหม
-- [ ] มี "เป็นต้น" "ฯลฯ" "และ/หรือ" หลงเหลือไหม
-- [ ] มีข้อไหนบอกวิธีทำแทนที่จะบอกผลลัพธ์ไหม
-- [ ] มี 2 ข้อที่ขัดกันไหม
+- [ ] Does every requirement have an id?
+- [ ] Can a test case be written for every requirement?
+- [ ] Are any of the words "เร็ว" (fast) "ง่าย" (easy) "เหมาะสม" (suitable) "เสถียร" (stable) "ยืดหยุ่น" (flexible) left over?
+- [ ] Are any of "เป็นต้น" (and so on) "ฯลฯ" (etc.) "และ/หรือ" (and/or) left over?
+- [ ] Does any requirement state a way of doing it instead of the result?
+- [ ] Do any 2 requirements conflict?
 
-**ความครบของหมวด**
+**Chapter coverage**
 
-- [ ] ครบทั้ง 11 หมวดในข้อ 5 ไหม (หรือเขียนไว้ว่าหมวดไหนไม่เกี่ยวเพราะอะไร)
-- [ ] มีข้อกำหนดเรื่องสิทธิ์ผู้ใช้ไหม
-- [ ] มีข้อกำหนดเรื่องการย้ายข้อมูลเดิมเข้าระบบใหม่ไหม
-- [ ] มีข้อกำหนดเรื่องรายงานไหม (มักถูกลืม แล้วมาโผล่ตอนใกล้ส่ง)
-- [ ] มีข้อกำหนดเรื่องการแจ้งเตือนไหม (อีเมล · LINE · ในระบบ)
-- [ ] มีเกณฑ์การตรวจรับที่วัดได้ไหม
+- [ ] Are all 11 chapters in section 5 present (or does the document say which chapter does not apply and why)?
+- [ ] Is there a requirement on user permissions?
+- [ ] Is there a requirement on migrating old data into the new system?
+- [ ] Is there a requirement on reports? (Often forgotten, then it pops up near delivery.)
+- [ ] Is there a requirement on notifications? (email · LINE · in-system)
+- [ ] Are there acceptance criteria that can be measured?
 
-**เอกสาร**
+**Document**
 
-- [ ] ทุกข้อมีที่มาในตารางสอบย้อนกลับไหม
-- [ ] "ต้องมี" ไม่เกิน 60% ใช่ไหม
-- [ ] มีประวัติการแก้ไขพร้อมเลขรุ่นไหม
-- [ ] มีช่องเซ็นรับพร้อมชื่อและตำแหน่งจริงไหม
-- [ ] อภิธานศัพท์ครอบคลุมทุกคำที่ใช้ในเล่มไหม
+- [ ] Does every requirement have a source in the traceability table?
+- [ ] Is "must have" no more than 60%?
+- [ ] Is there a revision history with version numbers?
+- [ ] Is there a sign-off box with real names and positions?
+- [ ] Does the glossary cover every term used in the document?

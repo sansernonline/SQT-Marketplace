@@ -3,146 +3,146 @@ name: file-upload-and-storage
 description: Use when users upload files or an app serves stored files
 ---
 
-# รับไฟล์อัปโหลดและการเก็บไฟล์
+# Accepting file uploads and storing files
 
-> **กฎข้อเดียว:** ไฟล์ที่ผู้ใช้ส่งมาคือข้อมูลที่เชื่อไม่ได้
-> ชื่อไฟล์ นามสกุล ชนิดที่เบราว์เซอร์แจ้งมา และขนาดที่บอกไว้ — **ปลอมได้ทั้งหมด**
+> **One rule:** a file a user sends is untrusted data.
+> The file name, the extension, the type the browser reports, and the size it claims can **all be faked**.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- มีหน้าจอให้ผู้ใช้แนบไฟล์ รูป หรือเอกสาร
-- ระบบต้องเก็บไฟล์แล้วส่งกลับให้ดูหรือดาวน์โหลด
-- ต้องตัดสินใจว่าเก็บไฟล์ไว้ที่ไหน
-- มีไฟล์ที่ไม่ควรให้คนอื่นเห็น แต่ตอนนี้ใครมีลิงก์ก็เปิดได้
+- A screen lets users attach files, images, or documents.
+- The system must store files and send them back for viewing or download.
+- You must decide where to keep the files.
+- Some files should be hidden from others, but right now anyone with the link can open them.
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or together
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| นำเข้า Excel/CSV แล้วเอาข้อมูลเข้าระบบ | `data-import-export` | แทน |
-| สิทธิ์ว่าใครเข้าถึงอะไรได้ | `auth-implementation-patterns` | แทน |
-| ประมวลผลไฟล์ใหญ่เป็นงานเบื้องหลัง | `background-jobs` | แทน |
-| ตาราง metadata ของไฟล์ | `database-design` | คู่ |
-| endpoint และ error ของการอัปโหลด | `api-conventions` · `web-service-essentials` | คู่ |
-| อายุการเก็บไฟล์ที่มีข้อมูลบุคคล | `pdpa-compliance` | คู่ |
-| ขนาดพื้นที่ที่ใช้และการแจ้งเตือน | `observability-basics` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Import Excel/CSV and load the data into the system | `data-import-export` | instead |
+| Permissions: who may access what | `auth-implementation-patterns` | instead |
+| Process large files as a background job | `background-jobs` | instead |
+| The file metadata table | `database-design` | together |
+| Upload endpoints and errors | `api-conventions` · `web-service-essentials` | together |
+| Retention of files that hold personal data | `pdpa-compliance` | together |
+| Storage used and alerts | `observability-basics` | together |
+| Abbreviations in anything a person reads | `spell-out-abbreviations` | together |
 
 ---
 
-## 1 · ตรวจก่อนรับ
+## 1 · Check before accepting
 
-| ตรวจอะไร | ทำยังไง |
+| What to check | How |
 |---|---|
-| **ชนิดไฟล์** | อ่าน**เนื้อในไฟล์** (magic bytes) ไม่ใช่เชื่อนามสกุลหรือ `Content-Type` |
-| **ขนาด** | บังคับที่เซิร์ฟเวอร์ **และ**ที่ตัวรับคำขอด้านหน้า — ตรวจฝั่งเบราว์เซอร์เป็นแค่ความสะดวก |
-| จำนวนไฟล์ต่อครั้ง | ตั้งเพดาน |
-| ขนาดรวมต่อผู้ใช้ | ตั้งโควตา ไม่งั้นคนเดียวกินพื้นที่หมด |
-| ชนิดที่อนุญาต | **รายการที่อนุญาต ไม่ใช่รายการที่ห้าม** |
+| **File type** | Read the **contents** (magic bytes). Do not trust the extension or `Content-Type`. |
+| **Size** | Enforce it on the server **and** at the front-facing request receiver. A check in the browser is only a convenience. |
+| Files per request | Set a limit. |
+| Total size per user | Set a quota, or one person uses up all the space. |
+| Allowed types | **An allow list, not a deny list.** |
 
 ```
-รายการที่อนุญาตทั่วไป: jpg · png · webp · pdf · xlsx · docx · csv
-ห้ามเสมอ: ไฟล์รันได้ (exe, sh, bat) · ไฟล์สคริปต์ของเซิร์ฟเวอร์ (php, aspx, jsp) · svg ที่ไม่ได้ทำความสะอาด
+Typical allow list: jpg · png · webp · pdf · xlsx · docx · csv
+Always forbidden: executables (exe, sh, bat) · server script files (php, aspx, jsp) · svg that has not been sanitised
 ```
 
-> **SVG คือ HTML** — มันรันสคริปต์ได้ ถ้าจะรับต้องทำความสะอาดก่อน หรือแปลงเป็น PNG
+> **SVG is HTML.** It can run scripts. To accept it, sanitise it first or convert it to PNG.
 >
-> **ตรวจขนาดก่อนอ่านไฟล์เข้าหน่วยความจำ** — ไม่งั้นไฟล์ 5 GB ทำให้เซิร์ฟเวอร์ตาย
-> ก่อนที่โค้ดตรวจขนาดจะได้ทำงาน
+> **Check the size before reading the file into memory.** Otherwise a 5 GB file kills the server
+> before the size-check code gets to run.
 
-**สแกนไวรัส** สำหรับไฟล์ที่คนอื่นจะดาวน์โหลดต่อ — ระหว่างรอผลสแกนให้สถานะเป็น `pending`
-และยังไม่ให้ใครเข้าถึง
+**Virus-scan** any file that other people will download. While the scan result is pending, set the status to `pending`
+and give nobody access.
 
 ---
 
-## 2 · เก็บที่ไหน
+## 2 · Where to store
 
-| ที่เก็บ | เหมาะกับ | หมายเหตุ |
+| Store | Good for | Note |
 |---|---|---|
-| **object storage** (S3 · Azure Blob · GCS) | ค่าเริ่มต้นที่ควรใช้ | ขยายได้ · มีลิงก์หมดอายุในตัว |
-| ดิสก์ของเซิร์ฟเวอร์ | ระบบเล็ก เครื่องเดียว | **ต้องอยู่นอกโฟลเดอร์ที่เว็บเสิร์ฟ** และต้องสำรองข้อมูล |
-| ในฐานข้อมูล | ไฟล์เล็กมากและต้องอยู่ใน transaction เดียวกัน | โตเร็ว · สำรองข้อมูลช้าลงมาก |
+| **object storage** (S3 · Azure Blob · GCS) | The default to use | Scales · has expiring links built in |
+| The server's disk | A small, single-machine system | **Must sit outside the folder the web serves**, and must be backed up |
+| In the database | Very small files that must be in the same transaction | Grows fast · backups get much slower |
 
-> ผิด: **เก็บไฟล์ในโฟลเดอร์ของแอป** — deploy ทีไรหาย และถ้ามีหลาย instance ก็ไม่เห็นกัน
-> ผิด: **เก็บไฟล์ในโฟลเดอร์ที่เว็บเสิร์ฟตรง ๆ** — อัปโหลดไฟล์สคริปต์แล้วเรียกรันได้
+> Wrong: **keeping files in the app's folder.** They vanish on every deploy, and with several instances they cannot see each other.
+> Wrong: **keeping files directly in the folder the web serves.** Someone uploads a script file and runs it.
 
-**ฐานข้อมูลเก็บแค่ metadata ส่วนตัวไฟล์เก็บที่อื่น** — ตาราง metadata ต้องมีคอลัมน์
+**The database holds only metadata; the file itself lives elsewhere.** The metadata table needs the columns
 `id` · `original_name` · `stored_key` · `content_type` · `size_bytes` · `checksum` ·
 `uploaded_by` · `uploaded_at` · `scan_status` · `owner_entity_type` · `owner_entity_id`
 
 ---
 
-## 3 · ตั้งชื่อไฟล์ที่เก็บ
+## 3 · Naming the stored file
 
-**ห้ามใช้ชื่อไฟล์ที่ผู้ใช้ส่งมาเป็นชื่อจริงที่เก็บ**
+**Never use the file name the user sent as the real stored name.**
 
 ```
-ผิด: uploads/รายงาน (1).xlsx              เว้นวรรค · ภาษาไทย · วงเล็บ
-ผิด: uploads/../../etc/passwd             หลุดออกนอกโฟลเดอร์
-ถูก: 2026/09/25/01J9Z8K7X2M4.xlsx         สุ่ม · แยกโฟลเดอร์ตามวันที่
+Wrong: uploads/รายงาน (1).xlsx              spaces · Thai · brackets
+Wrong: uploads/../../etc/passwd             escapes the folder
+Right: 2026/09/25/01J9Z8K7X2M4.xlsx         random · split into folders by date
 ```
 
-- ชื่อจริงที่เก็บเป็นค่าสุ่ม (UUIDv7 หรือ ULID) + นามสกุลที่**ตรวจแล้ว**
-- ชื่อเดิมของผู้ใช้เก็บไว้ในฐานข้อมูล แล้วส่งกลับตอนดาวน์โหลดผ่าน header
-- แยกโฟลเดอร์ตามวันที่ — โฟลเดอร์เดียวที่มีไฟล์เป็นล้านจะช้าและเปิดดูไม่ไหว
-- เก็บ checksum ไว้ด้วย — ตรวจไฟล์ซ้ำและตรวจว่าไฟล์ไม่เสีย
+- The real stored name is a random value (UUIDv7 or ULID) + an extension that you have **verified**.
+- Keep the user's original name in the database, and send it back on download through a header.
+- Split folders by date. One folder with millions of files is slow and cannot be browsed.
+- Store a checksum too. It detects duplicates and checks the file is not corrupted.
 
 ---
 
-## 4 · ส่งไฟล์กลับให้ผู้ใช้
+## 4 · Sending files back to the user
 
-| ไฟล์ | วิธีส่ง |
+| File | How to send |
 |---|---|
-| สาธารณะ (โลโก้ รูปสินค้า) | URL ตรงผ่าน CDN ได้ |
-| **ส่วนตัว** (เอกสาร ใบเสร็จ รูปผู้ใช้) | **ลิงก์ที่มีลายเซ็นและหมดอายุ** 5–15 นาที |
+| Public (logo, product image) | A direct URL through a CDN is fine |
+| **Private** (document, receipt, user photo) | **A signed link that expires** in 5–15 minutes |
 
-> **"ลิงก์เดายาก" ไม่ใช่การควบคุมสิทธิ์** — ลิงก์ถูกส่งต่อ ถูกบันทึกใน log ของ proxy
-> และติดอยู่ใน `Referer` เสมอ ไฟล์ส่วนตัวต้อง**ตรวจสิทธิ์ทุกครั้ง**แล้วค่อยออกลิงก์ชั่วคราวให้
+> **A "hard-to-guess link" is not access control.** Links get forwarded, logged by proxies,
+> and left in the `Referer` header. For a private file, **check permission every time**, then issue a temporary link.
 
-- ไฟล์ใหญ่ให้ผู้ใช้อัปโหลดตรงไปที่ object storage ด้วยลิงก์ที่เราเซ็นให้ ตัวไฟล์ไม่ต้องผ่านแอป
-  **แต่การตรวจใน §1 ยังต้องครบ** — ทางนี้ข้ามแอปไป เลยต้องคืนการตรวจกลับมาแบบนี้:
-  - **ตอนเซ็นลิงก์:** จำกัดขนาดและชนิดไว้ในลายเซ็น — S3 ใช้ presigned POST ที่ policy มี `content-length-range` และเงื่อนไข `Content-Type` (presigned PUT บังคับขนาดไม่ได้) · ผู้ให้บริการอื่นใช้ตัวเทียบเท่า เช่น GCS ใช้ header `x-goog-content-length-range`
-  - **ตอนเซ็นลิงก์:** กำหนด key เอง (ชื่อสุ่มตาม §3) ลงที่โฟลเดอร์พักไฟล์ · ลิงก์หมดอายุสั้น · บันทึกแถว metadata ด้วย `scan_status = pending`
-  - **หลังอัปโหลดเสร็จ** (event จาก storage หรือผู้ใช้แจ้งว่าเสร็จ): อ่าน magic bytes จริงจาก object · เทียบขนาดจริงกับเพดาน · สแกนไวรัส → ผ่านแล้วย้ายไปที่เก็บจริง และเปลี่ยนเป็น `clean` · ไม่ผ่านให้ลบหรือกักไว้
-  - ระหว่าง `pending` ห้ามออกลิงก์ดาวน์โหลดให้ใคร
-- ตอนส่งไฟล์ให้ดาวน์โหลด ต้องตั้ง `Content-Disposition` และ `Content-Type` ให้ถูก
-  และห้ามส่ง HTML ที่ผู้ใช้อัปโหลดกลับมาแบบให้เบราว์เซอร์เรนเดอร์
-- ถ้าทำได้ ให้เสิร์ฟไฟล์ของผู้ใช้จากคนละโดเมนกับแอป เพื่อกันสคริปต์ในไฟล์เข้าถึง cookie ของแอป
-
----
-
-## 5 · รูปภาพ
-
-- **ห้ามส่งรูปต้นฉบับจากกล้องลงหน้าจอ** — รูป 8 MB บนมือถือคือหน้าเว็บที่โหลดไม่ขึ้น
-- สร้างขนาดย่อไว้ล่วงหน้า 2–3 ขนาด (thumbnail · ขนาดกลาง · ขนาดเต็มที่ย่อแล้ว)
-- **ลบ EXIF ออก** — ในรูปมีพิกัดที่ถ่าย ผู้ใช้ไม่รู้ว่ากำลังเผยแพร่ออกไป
-- แปลงเป็น WebP ถ้าเบราว์เซอร์รองรับ
-- หมุนรูปตาม EXIF ก่อนลบ EXIF ทิ้ง ไม่งั้นรูปจากมือถือจะตะแคง
-- ถ้าไฟล์ใหญ่หรือมีหลายไฟล์ ให้ย่อรูปเป็นงานเบื้องหลัง (ดู `background-jobs`)
+- For large files, let the user upload straight to object storage with a link we sign, so the file does not pass through the app.
+  **The checks in §1 are still all required.** This route bypasses the app, so restore the checks like this:
+  - **When signing the link:** limit size and type inside the signature. S3 uses a presigned POST whose policy has `content-length-range` and a `Content-Type` condition (a presigned PUT cannot enforce size). Other providers have equivalents, for example GCS uses the header `x-goog-content-length-range`.
+  - **When signing the link:** set the key yourself (a random name as in §3) in a holding folder · keep the link's expiry short · save a metadata row with `scan_status = pending`.
+  - **After the upload finishes** (a storage event, or the user reports it done): read the real magic bytes from the object · compare the real size with the limit · virus-scan. If it passes, move it to the real store and set `clean`. If it fails, delete or quarantine it.
+  - While `pending`, issue no download link to anyone.
+- When serving a file for download, set `Content-Disposition` and `Content-Type` correctly,
+  and never send back user-uploaded HTML in a way that lets the browser render it.
+- If you can, serve user files from a different domain than the app, so scripts in a file cannot reach the app's cookies.
 
 ---
 
-## 6 · ลบและอายุการเก็บ
+## 5 · Images
 
-| เรื่อง | กฎ |
+- **Never send the original camera image to the screen.** An 8 MB photo on a phone is a page that does not load.
+- Pre-generate 2–3 sizes (thumbnail · medium · a downsized full size).
+- **Strip EXIF.** The photo holds the location where it was taken, and users do not know they are publishing it.
+- Convert to WebP if the browser supports it.
+- Rotate the image according to EXIF before you strip EXIF, or phone photos come out sideways.
+- If the file is large or there are many, resize as a background job (see `background-jobs`).
+
+---
+
+## 6 · Deleting and retention
+
+| Topic | Rule |
 |---|---|
-| ลบข้อมูลต้นเรื่อง | ต้องมีงานคอยตามลบไฟล์กำพร้าที่เหลืออยู่ด้วย |
-| ลำดับการลบ | ลบ metadata ก่อน แล้วค่อยลบไฟล์ — ไฟล์กำพร้าไม่อันตราย แต่ metadata ที่ชี้ไปหาไฟล์ที่หายไปแล้วทำให้หน้าจอพัง |
-| ไฟล์ที่อัปโหลดแล้วไม่ถูกผูกกับอะไร | ลบทิ้งหลัง 24 ชั่วโมง |
-| อายุการเก็บ | กำหนดต่อประเภทไฟล์ · ไฟล์ที่มีข้อมูลบุคคลต้องมีวันหมดอายุ (ดู `pdpa-compliance`) |
-| สำรองข้อมูล | ไฟล์ต้องอยู่ในแผนสำรองเหมือนฐานข้อมูล **และต้องเคยทดสอบกู้คืนจริง** |
+| Deleting the parent record | A job must also hunt down and delete the orphan files left behind. |
+| Order of deletion | Delete the metadata first, then the file. An orphan file is harmless, but metadata pointing to a file that is gone breaks the screen. |
+| An uploaded file never linked to anything | Delete it after 24 hours. |
+| Retention | Set it per file type · a file with personal data needs an expiry date (see `pdpa-compliance`). |
+| Backup | Files belong in the backup plan just like the database, **and a restore must have been tested for real.** |
 
 ---
 
 ## 7 · Anti-patterns
 
-- **เชื่อนามสกุลไฟล์** — เปลี่ยนชื่อไฟล์เป็น `.jpg` ใครก็ทำได้
-- **ตรวจขนาดแค่ฝั่งเบราว์เซอร์** — ข้ามได้ใน 3 วินาที
-- **ใช้ชื่อไฟล์ของผู้ใช้เป็นเส้นทางจริง** — `../` พาไปไหนก็ได้
-- **เก็บไฟล์ในโฟลเดอร์ที่เว็บเสิร์ฟ** — อัปโหลดสคริปต์แล้วเรียกรันได้
-- **"ลิงก์เดายาก" แทนการตรวจสิทธิ์**
-- **รับ SVG โดยไม่ทำความสะอาด** — สคริปต์ทำงานในเบราว์เซอร์คนอื่น
-- **ส่งรูปต้นฉบับ 8 MB ลงมือถือ**
-- **ไม่ลบ EXIF** — พิกัดบ้านผู้ใช้หลุดออกไปโดยไม่มีใครตั้งใจ
-- **ไฟล์ไม่อยู่ในแผนสำรองข้อมูล** — ฐานข้อมูลกู้ได้ แต่เอกสารหายหมด
-- **อ่านไฟล์ทั้งก้อนเข้าหน่วยความจำ** — ไฟล์ใหญ่ทำให้ process ตาย
+- **Trusting the file extension.** Anyone can rename a file to `.jpg`.
+- **Checking size only in the browser.** It is bypassed in 3 seconds.
+- **Using the user's file name as the real path.** `../` leads anywhere.
+- **Keeping files in the folder the web serves.** Someone uploads a script and runs it.
+- **A "hard-to-guess link" instead of a permission check.**
+- **Accepting SVG without sanitising it.** The script runs in other people's browsers.
+- **Sending an 8 MB original image to a phone.**
+- **Not stripping EXIF.** The coordinates of the user's home leak out and nobody meant it to.
+- **Files outside the backup plan.** The database can be restored, but every document is gone.
+- **Reading the whole file into memory.** A large file kills the process.

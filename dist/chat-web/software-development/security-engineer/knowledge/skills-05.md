@@ -2,233 +2,233 @@
 
 Use when software stores personal data in Thailand
 
-# PDPA — ข้อมูลส่วนบุคคล
+# PDPA — personal data
 
-> **กฎข้อเดียว:** ข้อมูลที่ไม่ได้เก็บ คือข้อมูลที่ไม่รั่ว ไม่ต้องดูแล และไม่ต้องลบ
-> คำถามแรกเสมอคือ "จำเป็นต้องเก็บไหม" ไม่ใช่ "เก็บยังไงให้ปลอดภัย"
+> **The one rule:** data you never collect cannot leak, needs no care and never has to be deleted.
+> The first question is always "do we need to collect it?", not "how do we keep it safe?"
 
-> ระวัง: นี่คือแนวทางสำหรับคนทำระบบ **ไม่ใช่คำแนะนำทางกฎหมาย**
-> เรื่องที่มีผลทางกฎหมายต้องให้ที่ปรึกษากฎหมายตัดสิน
+> Caution: this is guidance for people who build systems. **It is not legal advice.**
+> Anything with legal effect must be decided by a legal adviser.
 
-## ทางลัด — แอปที่ข้อมูลอยู่ในเครื่องผู้ใช้เท่านั้น
+## Shortcut — apps whose data stays on the user's device only
 
-ถ้าแอปไม่มีเซิร์ฟเวอร์ ไม่มีบัญชี และไม่ส่งข้อมูลออก ให้ข้ามหัวข้อเรื่องผู้ประมวลผลและฐานข้อมูลได้ แล้วตรวจแค่ 3 เรื่องนี้
+If the app has no server, no accounts and sends no data out, skip the sections on processors and databases. Then check only these 3 things.
 
-| เรื่อง | ทำไมยังเกี่ยว | ทำอะไร |
+| Item | Why it still matters | What to do |
 |---|---|---|
-| Android Auto Backup | ระบบสำรองข้อมูลแอปขึ้น Google Drive เองโดยค่าเริ่มต้น | ตั้ง `android:allowBackup` และ `android:dataExtractionRules` ให้ตรงกับที่ตั้งใจ แล้วลงเหตุผลไว้ใน `decision-log` |
-| ส่งออก · share sheet (หน้าต่างแชร์ของระบบ) | ข้อมูลออกจากเครื่องทางนี้ทางเดียว | ส่งเฉพาะที่ผู้ใช้เลือก และไม่แนบตำแหน่งหรือ metadata ของภาพโดยไม่บอก |
-| ข้อมูลที่ร้านค้าบังคับให้แจ้ง | Google Play บังคับกรอกแบบฟอร์ม Data safety ทุกแอป | กรอกตามจริง (ไม่เก็บก็ตอบว่าไม่เก็บ) ส่วนเรื่องที่ว่าขอสิทธิ์กล้องแล้วต้องมีนโยบายความเป็นส่วนตัวไหม `(รอยืนยัน)` ให้เตรียมหน้าสั้น ๆ ไว้ก่อน |
+| Android Auto Backup | By default the system backs up app data to Google Drive on its own | Set `android:allowBackup` and `android:dataExtractionRules` to match your intent, and record the reason in `decision-log` |
+| Export · share sheet (the system's share window) | This is the only way data leaves the device | Send only what the user selected, and do not attach location or image metadata without telling them |
+| Data the app store forces you to declare | Google Play requires the Data safety form for every app | Fill it in truthfully (if you collect nothing, say so). Whether requesting camera permission requires a privacy policy is `(รอยืนยัน)` (awaiting confirmation), so prepare a short page first |
 
-ถ้าภายหลังเพิ่ม analytics · crash report หรือบัญชีผู้ใช้ แอปนี้ก็ไม่ใช่แอปในเครื่องอย่างเดียวแล้ว ให้กลับไปใช้ทั้ง skill
+If you later add analytics · crash reports or user accounts, the app is no longer device-only. Go back and apply the whole skill.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ระบบเก็บชื่อ เบอร์โทร อีเมล ที่อยู่ เลขบัตร รูป หรือข้อมูลอื่นที่ระบุตัวบุคคลได้
-- ลูกค้าหรือฝ่ายกฎหมายถามเรื่องความสอดคล้องกับ PDPA
-- ต้องทำหน้าขอความยินยอม หรือหน้าให้ผู้ใช้ขอลบข้อมูล
-- จะส่งข้อมูลให้ผู้ให้บริการภายนอก
+- The system stores names, phone numbers, emails, addresses, ID card numbers, photos or other data that identifies a person
+- A customer or the legal team asks about PDPA compliance
+- You must build a consent page, or a page where users request deletion of their data
+- You will send data to an outside service provider
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Task | Use this instead |
 |---|---|
-| ร่องรอยว่าใครทำอะไรกับข้อมูล | `audit-trail` |
-| ตารางและการเข้ารหัสระดับคอลัมน์ | `database-design` |
-| การยืนยันตัวตนและสิทธิ์ | `auth-implementation-patterns` |
-| ปิดบังข้อมูลใน log | `logging-standards` |
-| ที่เก็บกุญแจ | `config-and-secrets` |
-| แบบฟอร์มยินยอม ประกาศความเป็นส่วนตัว และเอกสาร PDPA ของบริษัท (ไม่ใช่ระบบซอฟต์แวร์) | (ถ้าติดตั้ง plugin `e-commerce`) `e-commerce:pdpa-workflow` ไม่มีก็ใช้ข้อ 3 ของ skill นี้เป็นโครง |
+| A trail of who did what to the data | `audit-trail` |
+| Tables and column-level encryption | `database-design` |
+| Authentication and permissions | `auth-implementation-patterns` |
+| Masking data in logs | `logging-standards` |
+| Where to keep keys | `config-and-secrets` |
+| Consent forms, privacy notices and a company's PDPA documents (not a software system) | (if plugin `e-commerce` is installed) `e-commerce:pdpa-workflow`; if it is not, use item 3 of this skill as the outline |
 
 ---
 
-## 1 · ทำรายการก่อน
+## 1 · Make the inventory first
 
-**ตอบคำถาม "ข้อมูลของฉันอยู่ที่ไหนบ้าง" ไม่ได้ ถ้าไม่มีรายการนี้**
+**Without this inventory you cannot answer "where is my data?"**
 
-| ข้อมูล | เก็บที่ไหน | เก็บทำไม | ฐานทางกฎหมาย | เก็บนานเท่าไหร่ | ใครเห็นได้ | ส่งให้ใครบ้าง |
+| Data | Stored where | Why collected | Legal basis | Kept how long | Who can see it | Sent to whom |
 |---|---|---|---|---|---|---|
-| ชื่อ-นามสกุล | `users.name` | ระบุตัวลูกค้า | สัญญา | 5 ปีหลังปิดบัญชี | ฝ่ายขาย · ผู้ดูแล | — |
-| เบอร์โทร | `users.phone` | แจ้งสถานะจัดส่ง | สัญญา | เหมือนแถวบน | เหมือนแถวบน | ผู้ให้บริการ SMS |
-| เลขบัตรประชาชน | `kyc.id_number` | ยืนยันตัวตนตามกฎหมาย | หน้าที่ตามกฎหมาย | 10 ปี | ฝ่ายปฏิบัติตามกฎเกณฑ์ | — |
+| Full name | `users.name` | Identify the customer | Contract | 5 years after the account closes | Sales · admins | — |
+| Phone number | `users.phone` | Send delivery status | Contract | Same as the row above | Same as the row above | SMS provider |
+| National ID number | `kyc.id_number` | Legally required identity check | Legal obligation | 10 years | Compliance team | — |
 
-**ทำรายการนี้ให้ครบทุกที่จริง ๆ** — ฐานข้อมูลหลัก · ที่สำรอง · log · ระบบวิเคราะห์ ·
-ที่เก็บไฟล์ · สเปรดชีตที่ทีมทำเอง · แอปมือถือ: Android Auto Backup และไฟล์ที่ส่งออกผ่าน share sheet
+**List every place that really holds data**: main database · backups · logs · analytics systems ·
+file storage · spreadsheets the team keeps by hand · mobile apps (Android Auto Backup and files exported through the share sheet)
 
 ---
 
-## 2 · ฐานทางกฎหมาย — ไม่ใช่ทุกอย่างต้องขอความยินยอม
+## 2 · Legal basis — not everything needs consent
 
-| ฐาน | ใช้เมื่อ | ตัวอย่าง |
+| Basis | Use when | Example |
 |---|---|---|
-| **สัญญา** | จำเป็นเพื่อให้บริการตามที่ตกลง | ที่อยู่สำหรับจัดส่ง |
-| **หน้าที่ตามกฎหมาย** | กฎหมายบังคับให้เก็บ | เอกสารภาษี |
-| **ประโยชน์อันชอบธรรม** | จำเป็นและไม่กระทบสิทธิเกินควร | log ความปลอดภัย · ป้องกันการฉ้อโกง |
-| **ความยินยอม** | ทำไม่ได้ด้วยฐานอื่น | การตลาด · cookie ติดตามพฤติกรรม |
+| **Contract** | Needed to provide the agreed service | Delivery address |
+| **Legal obligation** | The law requires you to keep it | Tax documents |
+| **Legitimate interest** | Necessary, and does not harm rights excessively | Security logs · fraud prevention |
+| **Consent** | No other basis works | Marketing · behavior-tracking cookies |
 
-> **ความยินยอมคือฐานที่อ่อนที่สุด เพราะถอนเมื่อไหร่ก็ได้**
-> ถ้าขอความยินยอมสำหรับที่อยู่จัดส่ง แล้วเขาถอน ระบบจะส่งของไม่ได้
-> **ที่อยู่จัดส่งใช้ฐานสัญญา** ไม่ใช่ความยินยอม
+> **Consent is the weakest basis because it can be withdrawn at any time.**
+> If you ask consent for the delivery address and the person withdraws, the system cannot ship.
+> **The delivery address uses the contract basis**, not consent.
 >
-> การกดปุ่ม "ยอมรับทั้งหมด" ที่ทำให้ใช้งานต่อไม่ได้ถ้าไม่กด ไม่ถือว่าเป็นความยินยอมโดยอิสระ
+> A button labeled "accept all" that blocks use of the service unless pressed does not count as freely given consent.
 
 ---
 
-## 3 · ความยินยอมที่ใช้ได้จริง
+## 3 · Consent that works in practice
 
-| ต้องมี | รายละเอียด |
+| Required | Details |
 |---|---|
-| **แยกเป็นเรื่อง ๆ** | การตลาดทางอีเมล · การติดตามพฤติกรรม · การส่งต่อให้พันธมิตร — แยกช่องกัน |
-| ไม่ติ๊กมาให้ล่วงหน้า | ต้องเป็นการกระทำของผู้ใช้เอง |
-| ข้อความที่คนทั่วไปอ่านเข้าใจ | ไม่ใช่ย่อหน้ากฎหมาย 500 คำ |
-| **บันทึกไว้** | ใคร · เรื่องอะไร · เมื่อไหร่ · ข้อความเวอร์ชันไหน · จากช่องทางไหน |
-| ถอนได้ง่ายเท่าที่ให้ | ถ้าให้ได้ด้วย 1 คลิก ก็ต้องถอนได้ด้วย 1 คลิก |
-| ถอนแล้วมีผลจริง | **ต้องมีโค้ดที่หยุดใช้ข้อมูลนั้นจริง** ไม่ใช่แค่เก็บค่าไว้ |
+| **Separate by purpose** | Email marketing · behavior tracking · sharing with partners — separate checkboxes |
+| Not pre-ticked | It must be the user's own action |
+| Text an ordinary person can understand | Not a 500-word legal paragraph |
+| **Recorded** | Who · for what · when · which text version · through which channel |
+| Withdrawing is as easy as giving | If it takes 1 click to give, it must take 1 click to withdraw |
+| Withdrawal takes real effect | **Code must actually stop using that data**, not just store the flag |
 
-ตารางที่ต้องมี: `consent` — `user_id` · `purpose` · `granted` · `granted_at` · `withdrawn_at` ·
+Required table: `consent` — `user_id` · `purpose` · `granted` · `granted_at` · `withdrawn_at` ·
 `policy_version` · `source` · `ip`
-**เก็บเป็นประวัติ ไม่ใช่เขียนทับ** — ต้องพิสูจน์ย้อนหลังได้ว่าตอนนั้นเขายินยอมอะไรไว้
+**Keep it as history, never overwrite.** You must be able to prove later what the person agreed to at that time.
 
 ---
 
-## 4 · สิทธิของเจ้าของข้อมูล
+## 4 · Data subject rights
 
-ระบบต้อง**ทำได้จริง** ไม่ใช่รอทำมือทุกครั้ง โดยทั่วไปต้องตอบสนองภายใน 30 วัน
+The system must be **able to do these for real**, not wait for manual work each time. In general you must respond within 30 days.
 
-| สิทธิ | ระบบต้องทำอะไรได้ |
+| Right | What the system must be able to do |
 |---|---|
-| ขอดู | ออกสำเนาข้อมูลทั้งหมดของคนนั้น |
-| ขอแก้ | แก้ข้อมูลที่ไม่ถูกต้อง แล้ว**ส่งต่อการแก้ไปยังที่ที่เคยส่งข้อมูลไป** |
-| **ขอลบ** | ลบจริงจากทุกที่ที่ใช้งานอยู่ รวม log · ส่วนไฟล์สำรองให้ตัดออกจากการใช้งาน (ถ้ากู้คืนต้องลบซ้ำ) แล้วปล่อยให้หมดอายุตามรอบหมุนเวียน (ดูข้อ 6) พร้อมบอกเจ้าของข้อมูลว่าข้อมูลในไฟล์สำรองจะหายภายในวันที่เท่าไร |
-| ขอให้ระงับใช้ | หยุดใช้ชั่วคราวโดยไม่ลบ |
-| ขอย้ายข้อมูล | ส่งออกในรูปแบบที่เครื่องอ่านได้ |
-| คัดค้าน | หยุดการตลาดหรือการประมวลผลที่คัดค้าน |
+| Access | Produce a copy of all that person's data |
+| Rectification | Correct inaccurate data, then **pass the correction on to every place the data was sent** |
+| **Erasure** | Delete for real from every place in active use, including logs. For backups, take them out of use (if one is restored, delete again) and let them expire through the rotation cycle (see item 6). Tell the data subject by which date the data in backups will be gone. |
+| Restriction | Stop using the data temporarily without deleting it |
+| Portability | Export in a machine-readable format |
+| Objection | Stop the marketing or processing the person objects to |
 
-> **"ขอลบ" คือข้อที่ทำยากที่สุด** — ข้อมูลอยู่ในฐานข้อมูล ที่สำรอง log ระบบวิเคราะห์
-> และผู้ให้บริการภายนอก **ออกแบบให้ลบได้ตั้งแต่วันแรก** ไม่ใช่มาไล่หาทีหลัง
+> **"Erasure" is the hardest one.** Data sits in the database, backups, logs, analytics systems
+> and outside providers. **Design for deletion from day one**, not a hunt afterward.
 >
-> soft delete อย่างเดียว**ไม่นับว่าลบ** ส่วนข้อมูลที่กฎหมายบังคับให้เก็บต่อ (เช่นเอกสารภาษี)
-> เก็บได้ แต่ต้องบอกเจ้าของข้อมูลว่าเก็บอะไรไว้เพราะอะไร
+> Soft delete alone **does not count as deletion**. Data the law requires you to keep (such as tax documents)
+> may be kept, but you must tell the data subject what you keep and why.
 
 ---
 
-## 5 · เก็บเท่าที่จำเป็น
+## 5 · Collect only what you need
 
-| หลัก | ตัวอย่าง |
+| Principle | Example |
 |---|---|
-| **ไม่ถามสิ่งที่ไม่ได้ใช้** | ขายของออนไลน์ ไม่ต้องขอเลขบัตรประชาชน |
-| เก็บช่วงแทนค่าจริง | เก็บช่วงอายุ ไม่ใช่วันเกิด ถ้าใช้แค่แบ่งกลุ่ม |
-| **แฮชหรือทำให้ไม่ระบุตัวตน** สำหรับงานวิเคราะห์ | ระบบสถิติไม่ต้องรู้ว่าใครเป็นใคร |
-| เข้ารหัสระดับคอลัมน์ | เลขบัตร ข้อมูลสุขภาพ |
-| ปิดบังตอนแสดง | `x-xxxx-xxxx-12-3` |
-| **แยกข้อมูลอ่อนไหวออกจากตารางหลัก** | จำกัดสิทธิ์และตรวจสอบง่ายกว่า |
+| **Do not ask for what you do not use** | An online shop does not need the national ID number |
+| Store a range instead of the exact value | Store an age range, not the birth date, if you only use it to group people |
+| **Hash or anonymize** for analytics | A statistics system does not need to know who is who |
+| Column-level encryption | ID numbers, health data |
+| Mask on display | `x-xxxx-xxxx-12-3` |
+| **Keep sensitive data out of the main table** | Easier to restrict and audit |
 
-**ข้อมูลอ่อนไหวเป็นชั้นที่เข้มกว่า** (มาตรา 26) — เช่น เชื้อชาติ เผ่าพันธุ์ ความคิดเห็นทางการเมือง ความเชื่อลัทธิ ศาสนาหรือปรัชญา พฤติกรรมทางเพศ
-ประวัติอาชญากรรม **ข้อมูลสุขภาพ** ความพิการ ข้อมูลสหภาพแรงงาน ข้อมูลพันธุกรรม ข้อมูลชีวภาพ และข้อมูลอื่นที่กระทบเจ้าของข้อมูลในทำนองเดียวกัน
-จึงเก็บได้เมื่อจำเป็นจริงและต้องมีมาตรการเข้มกว่าปกติ (พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 มาตรา 26 ตรวจ 22 ต.ค. 2569)
+**Sensitive data has a stricter tier** (section 26), for example race, ethnic origin, political opinion, creed, religion or philosophy, sexual behavior,
+criminal record, **health data**, disability, trade union data, genetic data, biometric data, and other data that affects the subject in a similar way.
+It may be collected only when truly necessary, and needs stricter measures than usual (พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (Personal Data Protection Act B.E. 2562, 2019) section 26, checked 22 Oct 2026 (B.E. 2569))
 
-**ห้ามใช้ข้อมูลจริงบนเครื่องพัฒนาหรือ staging** — ต้องปิดบังก่อนเสมอ (ดู `cicd-and-release`)
-
----
-
-## 6 · อายุการเก็บ
-
-- กำหนด**ต่อประเภทข้อมูล** ไม่ใช่ทั้งระบบเป็นค่าเดียว
-- **มีงานลบจริงที่รันตามรอบ** — นโยบายที่ไม่มีงานรันคือนโยบายที่ไม่มีอยู่จริง
-- log ที่มีข้อมูลบุคคลก็มีอายุเช่นกัน (ดู `logging-standards`)
-- ไฟล์สำรองข้อมูลต้องมีรอบหมุนเวียนที่ทำให้ข้อมูลเก่าหายไปเองในที่สุด
-- ก่อนลบจริงครั้งแรก ให้แสดงรายการที่จะถูกลบและให้คนอนุมัติ
+**Never use real data on development machines or staging.** Always mask it first (see `cicd-and-release`).
 
 ---
 
-## 7 · ผู้ให้บริการภายนอกและการส่งข้อมูลออกนอกประเทศ
+## 6 · Retention
 
-| เรื่อง | ต้องทำ |
+- Set it **per data type**, not one value for the whole system
+- **Have a real deletion job that runs on a schedule.** A policy with no job running does not exist.
+- Logs that contain personal data also have a lifetime (see `logging-standards`)
+- Data backups need a rotation cycle that makes old data disappear on its own in the end
+- Before the first real deletion, show the list of what will be deleted and have a person approve it
+
+---
+
+## 7 · Outside providers and sending data abroad
+
+| Topic | What to do |
 |---|---|
-| รายชื่อผู้ประมวลผล | ทำรายการว่าส่งข้อมูลอะไรให้ใคร — คลาวด์ · SMS · อีเมล · วิเคราะห์ · แชต |
-| สัญญา | มีข้อตกลงการประมวลผลข้อมูลกับทุกราย |
-| ส่งออกนอกประเทศ | ตรวจว่าประเทศปลายทางมีมาตรฐานเพียงพอ หรือมีข้อสัญญามาตรฐานรองรับ |
-| ตัววัดสถิติและโฆษณา | นับเป็นการส่งข้อมูลออกไป — **ต้องมีฐานทางกฎหมายรองรับ** |
-| ยกเลิกใช้บริการ | ต้องได้ข้อมูลคืนและให้เขาลบจริง |
+| List of processors | List what data goes to whom — cloud · SMS · email · analytics · chat |
+| Contract | Have a data processing agreement with every one |
+| Sending abroad | Check that the destination country has adequate standards, or that standard contract clauses cover it |
+| Analytics and ad trackers | Count as sending data out — **they need a legal basis** |
+| Ending a service | You must get the data back and have them delete it for real |
 
-> **จุดที่คนลืมบ่อยที่สุด** — ปลั๊กอินวัดสถิติที่ใส่ไว้ตั้งแต่วันแรก ส่งข้อมูลพฤติกรรม
-> ผู้ใช้ออกไปต่างประเทศทุกวัน โดยไม่เคยมีใครใส่ไว้ในรายการ
+> **The most commonly forgotten spot:** an analytics plugin added on day one sends users' behavior
+> data abroad every day, and nobody ever put it on the list.
 
 ---
 
-## 8 · เมื่อข้อมูลรั่ว — 72 ชั่วโมงแรก
+## 8 · When data leaks — the first 72 hours
 
-| ลำดับ | ทำอะไร |
+| Order | What to do |
 |---|---|
-| 1 | **หยุดการรั่วก่อน** — เพิกถอนกุญแจ ปิดช่องทาง |
-| 2 | ประเมินขอบเขต — ข้อมูลอะไร กี่คน อ่อนไหวไหม |
-| 3 | เก็บหลักฐาน — log และสถานะระบบ **ก่อน**ที่จะแก้ทับ |
-| 4 | แจ้งผู้รับผิดชอบภายในและที่ปรึกษากฎหมายทันที |
-| 5 | **แจ้งสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคลภายใน 72 ชั่วโมง** เมื่อเข้าเงื่อนไข |
-| 6 | แจ้งเจ้าของข้อมูล เมื่อมีความเสี่ยงสูงต่อเขา |
-| 7 | บันทึกเหตุการณ์ด้วย `postmortem-template` |
+| 1 | **Stop the leak first** — revoke keys, close the channel |
+| 2 | Assess the scope — what data, how many people, is it sensitive |
+| 3 | Preserve evidence — logs and system state **before** you overwrite anything |
+| 4 | Notify the internal owner and the legal adviser at once |
+| 5 | **Notify the สำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (Personal Data Protection Committee Office) within 72 hours** when the conditions are met |
+| 6 | Notify the data subjects when the risk to them is high |
+| 7 | Record the incident with `postmortem-template` |
 
-**เตรียมไว้ล่วงหน้า ไม่ใช่ตอนเกิดเรื่อง** — ใครเป็นคนตัดสินใจแจ้ง · เบอร์ที่ปรึกษากฎหมาย ·
-แม่แบบข้อความแจ้ง · วิธีดึงรายชื่อผู้ได้รับผลกระทบ
+**Prepare in advance, not when it happens** — who decides to notify · the legal adviser's phone number ·
+the notification message template · how to pull the list of affected people
 
 ---
 
 ## 9 · Anti-patterns
 
-- **ขอความยินยอมสำหรับทุกอย่าง** — พอเขาถอน ระบบทำงานต่อไม่ได้
-- **ช่องติ๊กที่ติ๊กมาให้แล้ว** — ไม่ถือเป็นความยินยอม
-- **เก็บความยินยอมเป็นค่าเดียว `accepted_terms = true`** — พิสูจน์ย้อนหลังไม่ได้ว่ายินยอมอะไร
-- **soft delete แล้วบอกว่าลบแล้ว**
-- **นโยบายอายุการเก็บที่ไม่มีงานลบจริง**
-- **ใช้ข้อมูลจริงบน staging** — และคัดลอกลงเครื่อง developer
-- **เก็บเลขบัตรประชาชนเพราะ "เผื่อใช้"**
-- **ข้อมูลส่วนบุคคลใน log และในรายงาน crash**
-- **ไม่มีรายการผู้ให้บริการภายนอก** — ตอบไม่ได้ว่าข้อมูลไปที่ไหนบ้าง
-- **ส่งออก Excel ที่มีข้อมูลเต็ม** ให้คนที่ต้องการแค่ยอดรวม
-- **นโยบายความเป็นส่วนตัวที่ไม่ตรงกับสิ่งที่ระบบทำจริง**
+- **Asking consent for everything** — when they withdraw, the system cannot keep working
+- **Pre-ticked checkboxes** — they do not count as consent
+- **Storing consent as one value `accepted_terms = true`** — you cannot prove later what was agreed
+- **Soft delete, then saying it is deleted**
+- **A retention policy with no real deletion job**
+- **Real data on staging** — and copied onto developer machines
+- **Collecting the national ID number "just in case"**
+- **Personal data in logs and crash reports**
+- **No list of outside providers** — you cannot say where the data goes
+- **Exporting a full-data Excel file** for someone who needs only the totals
+- **A privacy policy that does not match what the system really does**
 
 ---
 
-## 10 · มาตราที่อ้างบ่อย และตัวย่อ
+## 10 · Frequently cited sections, and abbreviations
 
-ใช้ตอนลูกค้าหรือฝ่ายกฎหมายถามว่า "ข้อนี้อยู่มาตราไหน" (ตรวจกับฉบับแปลอังกฤษไม่เป็นทางการของ พ.ร.บ. 2562 ราชกิจจานุเบกษา 27 พ.ค. 2562 เมื่อ 23 ต.ค. 2569)
+Use this when a customer or the legal team asks "which section is this?" (checked against the unofficial English translation of the 2019 Act, Royal Gazette 27 May 2019 (B.E. 2562), on 23 Oct 2026 (B.E. 2569))
 
-| เรื่อง (ข้อใน skill นี้) | มาตรา |
+| Topic (item in this skill) | Section |
 |---|---|
-| ความยินยอม (ข้อ 3) | 19 |
-| ฐานทางกฎหมายที่ไม่ต้องขอความยินยอม (ข้อ 2) | 24 |
-| ข้อมูลอ่อนไหว (ข้อ 5) | 26 |
-| ส่งข้อมูลออกนอกประเทศ (ข้อ 7) | 28 |
-| สิทธิเจ้าของข้อมูล (ข้อ 4) — ขอดู · ขอย้าย · คัดค้าน · ขอลบ · ขอระงับ · ขอแก้ | 30 · 31 · 32 · 33 · 34 · 35–36 |
-| มาตรการความปลอดภัย · ระบบลบเมื่อหมดอายุ · แจ้งเหตุรั่วใน 72 ชั่วโมง (ข้อ 6, 8) | 37(1) · 37(3) · 37(4) |
-| บันทึกรายการประมวลผล (ข้อ 1) | 39 |
-| เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล (DPO) | 41 |
-| ค่าสินไหม · ค่าเสียหายเชิงลงโทษ | 77 · 78 |
-| โทษปรับทางปกครอง สูงสุด 1 · 3 · 5 ล้านบาท | 82 · 83 · 84 |
+| Consent (item 3) | 19 |
+| Legal bases that need no consent (item 2) | 24 |
+| Sensitive data (item 5) | 26 |
+| Sending data abroad (item 7) | 28 |
+| Data subject rights (item 4) — access · portability · objection · erasure · restriction · rectification | 30 · 31 · 32 · 33 · 34 · 35–36 |
+| Security measures · deletion system on expiry · breach notice in 72 hours (items 6, 8) | 37(1) · 37(3) · 37(4) |
+| Records of processing (item 1) | 39 |
+| Data Protection Officer (DPO) | 41 |
+| Compensation · punitive damages | 77 · 78 |
+| Administrative fines, maximum 1 · 3 · 5 million baht | 82 · 83 · 84 |
 
-**ภาคที่มีกฎทับอีกชั้น** — สุขภาพ · การเงิน · โทรคมนาคม มีหน่วยกำกับของตัวเอง (กระทรวงสาธารณสุข · ธปท./ก.ล.ต./คปภ. · กสทช.) ที่เพิ่มเงื่อนไขเรื่องความลับ อายุการเก็บ และการแจ้งเหตุ ให้ตรวจกฎของภาคนั้นก่อนออกแบบ ไม่ใช่ยึด PDPA อย่างเดียว (แนวคิดจาก BV thai-pdpa (MIT))
+**Sectors with a second layer of rules** — health · finance · telecom have their own regulators (กระทรวงสาธารณสุข (Ministry of Public Health) · ธปท. (Bank of Thailand, BOT) / ก.ล.ต. (Securities and Exchange Commission, SEC) / คปภ. (Office of Insurance Commission, OIC) · กสทช. (National Broadcasting and Telecommunications Commission, NBTC)) that add conditions on confidentiality, retention and breach notice. Check that sector's rules before designing, and do not rely on PDPA alone (idea from BV thai-pdpa (MIT))
 
 - **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562)
-- **ข้อมูลส่วนบุคคล** — ข้อมูลที่ระบุตัวบุคคลได้ ไม่ว่าทางตรงหรือทางอ้อม
-- **ข้อมูลอ่อนไหว** — ข้อมูลส่วนบุคคลกลุ่มพิเศษ เช่น สุขภาพ เชื้อชาติ ศาสนา
-- **ผู้ควบคุมข้อมูล** — ผู้ตัดสินใจว่าจะเก็บและใช้ข้อมูลอย่างไร (โดยทั่วไปคือเจ้าของระบบ)
-- **ผู้ประมวลผลข้อมูล** — ผู้ที่ประมวลผลข้อมูลตามคำสั่งของผู้ควบคุม เช่น ผู้ให้บริการคลาวด์
-- **เจ้าของข้อมูล** — บุคคลที่ข้อมูลนั้นเป็นของเขา
+- **Personal data** — data that identifies a person, directly or indirectly
+- **Sensitive data** — the special category of personal data, such as health, race, religion
+- **Data controller** — whoever decides how data is collected and used (usually the system owner)
+- **Data processor** — whoever processes data on the controller's instructions, such as a cloud provider
+- **Data subject** — the person the data belongs to
 
-## 11 · เชื่อมกับ skill อื่น
+## 11 · Links to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use with |
 |---|---|
-| ร่องรอยว่าใครดูหรือแก้ข้อมูล | `audit-trail` |
-| ตาราง การเข้ารหัส และ soft delete | `database-design` |
-| ปิดบังข้อมูลใน log | `logging-standards` |
-| สิทธิ์เข้าถึงและการยืนยันตัวตน | `auth-implementation-patterns` |
-| ปิดบังข้อมูลจริงก่อนลง staging | `cicd-and-release` |
-| การส่งและการยกเลิกรับข้อความการตลาด (เรื่องความยินยอมอยู่ที่ skill นี้) | `notifications` |
-| ปิดบังข้อมูลในไฟล์ส่งออก | `data-import-export` |
-| อายุการเก็บไฟล์แนบ | `file-upload-and-storage` |
-| งานลบข้อมูลที่หมดอายุ | `background-jobs` |
-| บันทึกเหตุการณ์หลังข้อมูลรั่ว | `postmortem-template` · `incident-runbook-template` |
+| A trail of who viewed or changed data | `audit-trail` |
+| Tables, encryption and soft delete | `database-design` |
+| Masking data in logs | `logging-standards` |
+| Access rights and authentication | `auth-implementation-patterns` |
+| Masking real data before loading staging | `cicd-and-release` |
+| Sending and unsubscribing from marketing messages (consent stays in this skill) | `notifications` |
+| Masking data in exported files | `data-import-export` |
+| Retention of attached files | `file-upload-and-storage` |
+| Jobs that delete expired data | `background-jobs` |
+| Recording the incident after a leak | `postmortem-template` · `incident-runbook-template` |
 
 
 ---
@@ -237,158 +237,158 @@ Use when software stores personal data in Thailand
 
 Use when a project needs a Docker sandbox for untrusted code
 
-# docker-sandbox — ห้องทดลองต่อโปรเจกต์
+# docker-sandbox: one lab per project
 
-> เครื่องเราเป็นคนสั่ง ห้องทดลองเป็นที่ลงมือ
-> ข้างในติดตั้ง ลบ รันเซิร์ฟเวอร์ ทำฐานข้อมูลทดสอบได้เต็มที่ เพราะพังแล้วล้างทิ้งสร้างใหม่ได้ในคำสั่งเดียว
-> ข้างนอก (เครื่องจริง · ระบบจริง · บัญชีจริง) แตะไม่ได้ เพราะไม่มีทางเข้าจากข้างใน
+> Our machine gives the orders; the lab is where the work happens.
+> Inside, you can install, delete, run servers, and build test databases freely, because when something breaks you wipe it and rebuild with one command.
+> Outside (the real machine · real systems · real accounts) cannot be touched, because there is no way in from the inside.
 
-ใช้คู่กับ [`superuser`](../superuser/SKILL.md) — โปรเจกต์ที่มี `.sandbox/` งานติดตั้งและรันทุกอย่างทำในห้องนี้
+Use together with [`superuser`](../superuser/SKILL.md). In a project that has `.sandbox/`, all install and run work happens in this lab.
 
-ไม่ใช้เมื่อ: เขียน Dockerfile หรือ image สำหรับ deploy จริง → [`kubernetes-helm`](../kubernetes-helm/SKILL.md) เพราะห้องทดลองเป็นที่รันงานชั่วคราว ไม่ใช่ image ที่ขึ้น production
+Do not use when: writing a Dockerfile or image for a real deploy → [`kubernetes-helm`](../kubernetes-helm/SKILL.md), because the lab is a temporary place to run work, not an image that goes to production.
 
 ---
 
-## 1 · หนึ่งโปรเจกต์ = หนึ่งห้อง
+## 1 · One project = one lab
 
-- **ห้องเดียวต่อโปรเจกต์** ชื่อ `sandbox-agent-<ชื่อโฟลเดอร์>-<วันที่สร้าง>` (เช่น `sandbox-agent-sample-app-20260125`)
-  - ตั้งชื่อครั้งเดียวตอน `up` แรก แล้วเก็บในไฟล์ `.sandbox/.name-<ชื่อโฟลเดอร์>` คำสั่งทีหลังอ่านชื่อจากไฟล์นี้ ชื่อจึงไม่เปลี่ยนตามวัน
-  - prefix `sandbox-agent-` บอกว่า agent สร้างห้องนี้ ไม่ใช่คนตั้ง ส่วนวันที่สร้างเก็บซ้ำไว้ใน label `sqt.created`
-  - ถ้าโปรเจกต์ต้องมีฐานข้อมูล cache หรือเบราว์เซอร์ ให้เพิ่มเป็น service ใน**ห้องเดียวกัน** (stack เดียว) ไม่แยกห้องใหม่
-- **image ฐานใช้ร่วมกันทั้งเครื่อง** — `sqt-sandbox-base:1` (Node · Python · Git · Playwright Chromium · Claude Code) build ครั้งเดียว ส่วน image ของแต่ละโปรเจกต์เพิ่มแค่ชั้นบาง ๆ ที่โปรเจกต์นั้นต้องใช้ จึงไม่กินดิสก์ซ้ำ
-- **ห้องที่หยุดอยู่ไม่กิน CPU และหน่วยความจำ** กินแค่ดิสก์ จบงานแล้วให้ `stop` และเลิกงานทั้งวันให้ `stop-all`
-- **ห้องเพิ่มชั่วคราว** (`-Name <โปรเจกต์>-a1`) ใช้เฉพาะตอนลองหลายทางพร้อมกันที่ต้องแยกเครื่องจริง (งานลองหลายทางทั่วไปใช้ git worktree ต่อตัวตาม `parallel-split-and-merge` เร็วกว่า) แล้ว `destroy` ทิ้งทันทีที่เลือกได้
-- **ไม่รวมหลายโปรเจกต์ไว้ห้องเดียว** — เพราะของที่ติดตั้งจะชนกัน โปรเจกต์หนึ่งพังแล้วลามไปอีกโปรเจกต์ และล้างทีละโปรเจกต์ไม่ได้
+- **One lab per project**, named `sandbox-agent-<folder name>-<creation date>` (e.g. `sandbox-agent-sample-app-20260125`).
+  - The name is set once at the first `up` and stored in the file `.sandbox/.name-<folder name>`. Later commands read the name from this file, so the name does not change with the date.
+  - The prefix `sandbox-agent-` says an agent created this lab, not a person. The creation date is also kept in the label `sqt.created`.
+  - If the project needs a database, cache, or browser, add it as a service in the **same lab** (one stack). Do not create a separate lab.
+- **The base image is shared across the whole machine.** `sqt-sandbox-base:1` (Node · Python · Git · Playwright Chromium · Claude Code) is built once. Each project's image adds only a thin layer the project needs, so disk is not used twice.
+- **A stopped lab uses no CPU or memory**, only disk. Run `stop` when you finish a task, and `stop-all` when you finish for the day.
+- **Extra temporary labs** (`-Name <project>-a1`) are for trying several paths in parallel when they need truly separate machines. (For ordinary multi-path trials, use one git worktree per attempt following `parallel-split-and-merge`; it is faster.) `destroy` them as soon as you pick a path.
+- **Never put several projects in one lab**, because installed things collide, one project's breakage spreads to another, and you cannot wipe one project at a time.
 
-## 2 · สองแบบ เลือกตามงาน
+## 2 · Two modes: choose by the work
 
-| | **mount** (ค่าเริ่ม) | **isolated** (`-Isolated`) |
+| | **mount** (default) | **isolated** (`-Isolated`) |
 |---|---|---|
-| ไฟล์โปรเจกต์ | โฟลเดอร์จริงต่อเข้าไปที่ `/work` แก้แล้วเห็นบนเครื่องทันที | สำเนาอยู่ใน volume โฟลเดอร์จริงต่อเข้าไปแบบอ่านอย่างเดียวที่ `/src` |
-| ใครแก้ไฟล์ | Claude Code บนเครื่องแก้ไฟล์ตามปกติ (`sandbox.ps1 claude` ใช้ไม่ได้ในโหมดนี้) | Claude Code **ในห้อง** (`sandbox.ps1 claude`) |
-| ใครรันคำสั่ง | ส่งเข้าห้องด้วย `sandbox.ps1 exec "..."` | Claude Code ในห้องรันเอง ไม่มีหน้าต่างขออนุญาต |
-| ผลกลับมาอย่างไร | อยู่ในโฟลเดอร์แล้ว | `sandbox.ps1 sync` → patch ใน `_to_delete\sandbox\` แล้วคนสั่ง `git apply` |
-| ใช้เมื่อ | งานประจำวันที่คนดูอยู่ | งานทั้งคืน · งานเสี่ยง · ลองหลายทางที่ต้องแยกเครื่องจริง (ห้องละทาง) |
+| Project files | The real folder is attached at `/work`; edits show on the machine at once | A copy lives in a volume; the real folder is attached read-only at `/src` |
+| Who edits files | Claude Code on the machine edits files as usual (`sandbox.ps1 claude` does not work in this mode) | Claude Code **inside the lab** (`sandbox.ps1 claude`) |
+| Who runs commands | Sent into the lab with `sandbox.ps1 exec "..."` | Claude Code in the lab runs them itself, with no permission prompt |
+| How results come back | Already in the folder | `sandbox.ps1 sync` → a patch in `_to_delete\sandbox\`, then the person runs `git apply` |
+| Use when | Daily work while a person is watching | Overnight work · risky work · trying several paths that need separate machines (one lab per path) |
 
-เพิ่ม `-Locked` ได้ทั้งสองแบบ — ปิดอินเทอร์เน็ตขาออก เหลือเฉพาะโฮสต์ใน `allowlist.txt` เหมาะกับงานที่รันโค้ดที่ยังไม่ไว้ใจ
-
----
-
-## 3 · ตั้งห้องให้โปรเจกต์ (ครั้งแรก)
-
-1. ตรวจว่า Docker Desktop รันอยู่ — `docker version` ต้องเห็นทั้ง Client และ Server ถ้าไม่เห็น ให้บอกผู้ใช้ให้เปิด Docker Desktop แล้วหยุดเฉพาะงานนี้
-2. คัดลอกทุกไฟล์ใน `assets/` ของ skill นี้ไปที่ `<โปรเจกต์>/.sandbox/` (ที่ราก) แล้วประกาศ `.sandbox/` เป็นข้อยกเว้นของรากใน README ของโฟลเดอร์โค้ด ตาม `project-doc-set` ข้อ 1
-3. ปรับ `Dockerfile` (ชั้นของโปรเจกต์)
-   - ถ้าเป็น .NET ให้ตั้ง `INSTALL_DOTNET=1` แล้วเพิ่ม `apt-get install` ของที่โปรเจกต์ต้องใช้
-   - **อย่าแก้ `base.Dockerfile`** ถ้าไม่จำเป็น เพราะทุกโปรเจกต์ใช้ร่วมกัน
-   - ถ้าต้องมีฐานข้อมูลทดสอบ ให้เพิ่มเป็น service ใหม่ใน `compose.yaml` (ไม่เปิด port ออกนอก)
-4. เพิ่ม `.sandbox/.mode-*` และ `.sandbox/.name-*` ใน `.gitignore`
-5. เปิดห้อง — `.\.sandbox\sandbox.ps1 up` (หรือ `up -Isolated` · `up -Browser`) โปรเจกต์แรกของเครื่องต้อง build image ฐานก่อน ใช้เวลาราว 5–15 นาที ส่วนโปรเจกต์ถัดไปจะเร็วขึ้นมาก
-6. **พิสูจน์ว่าใช้ได้** — `sandbox.ps1 exec "node -v && python3 --version && git status"` ถ้าโปรเจกต์มีคำสั่ง test ให้รันผ่าน `exec` 1 ครั้ง ส่วนโหมด `-Locked` ต้องเห็นบรรทัด `check passed`
-7. ลงใน `docs/README.md` ของโปรเจกต์ — ชื่อห้อง (`sandbox-agent-<ชื่อโฟลเดอร์>-<วันที่>`) · โหมด · port · คำสั่ง test ในห้อง
-
-**ทดสอบจริงแล้ว** บน Windows + Docker Desktop 4.46 (2026-10-05, โปรเจกต์ `sample-app`) — build ห้องได้ · unit test ผ่าน 15/15 · e2e บน Chromium ผ่าน 14/14 ในห้อง
-
-บั๊กที่เจอระหว่างทดสอบแก้ในสคริปต์แล้ว: PowerShell 5.1 กับ stderr · Playwright คนละรุ่นกับ image ฐาน · พอร์ตชน
-
-ถ้าสคริปต์พังบนเครื่องอื่น ให้ใช้ playbook `bug-fix` กับตัวสคริปต์
-
-**พอร์ต** — `up` หาพอร์ตว่างเอง เริ่มที่ 3000 แล้วบอกว่าได้พอร์ตไหน
-- ในห้องตั้งตัวแปร `APP_PORT` และ `PORT` เป็นพอร์ตนั้น และ `HOST=0.0.0.0`
-- แอปต้องฟังที่ `HOST` เพราะถ้าฟังแค่ `127.0.0.1` ในห้อง เครื่องจะเข้าไม่ถึง
-- ฝั่งเครื่องยังเปิดแค่ `127.0.0.1` เหมือนเดิม จึงเข้าจากเครื่องที่ `http://127.0.0.1:<พอร์ต>`
-
-**Playwright คนละรุ่น** — image ฐานมี Chromium รุ่นล่าสุด ถ้าโปรเจกต์ล็อก Playwright รุ่นอื่นไว้ ให้รัน `npx playwright install chromium` ในห้อง 1 ครั้งหลัง `npm ci` (ไม่ต้อง `--with-deps` เพราะ image มีให้แล้ว)
+You can add `-Locked` to either mode. It blocks outbound internet, leaving only the hosts in `allowlist.txt`. It suits work that runs code you do not yet trust.
 
 ---
 
-## 4 · ใช้ทุกวัน
+## 3 · Set up the lab for a project (first time)
 
-| ต้องการ | คำสั่ง (รันที่รากโปรเจกต์บนเครื่อง) |
+1. Check that Docker Desktop is running: `docker version` must show both Client and Server. If it does not, tell the user to open Docker Desktop and stop only this task.
+2. Copy every file in this skill's `assets/` to `<project>/.sandbox/` (at the root). Then declare `.sandbox/` as a root exception in the README of the code folder, following `project-doc-set` item 1.
+3. Adjust the `Dockerfile` (the project layer).
+   - For .NET, set `INSTALL_DOTNET=1` and add an `apt-get install` for whatever the project needs.
+   - **Do not edit `base.Dockerfile`** unless necessary, because every project shares it.
+   - If you need a test database, add it as a new service in `compose.yaml` (do not open a port to the outside).
+4. Add `.sandbox/.mode-*` and `.sandbox/.name-*` to `.gitignore`.
+5. Start the lab with `.\.sandbox\sandbox.ps1 up` (or `up -Isolated` · `up -Browser`). The first project on a machine must build the base image first, which takes about 5–15 minutes. Later projects are much faster.
+6. **Prove it works:** `sandbox.ps1 exec "node -v && python3 --version && git status"`. If the project has a test command, run it once through `exec`. In `-Locked` mode you must see the line `check passed`.
+7. Record in the project's `docs/README.md`: the lab name (`sandbox-agent-<folder name>-<date>`) · mode · port · test command in the lab.
+
+**Tested for real** on Windows + Docker Desktop 4.46 (2026-10-05, project `sample-app`): the lab built · unit tests passed 15/15 · e2e on Chromium passed 14/14 in the lab.
+
+Bugs found during testing are already fixed in the script: PowerShell 5.1 with stderr · Playwright a different version from the base image · port collisions.
+
+If the script breaks on another machine, use the `bug-fix` playbook on the script itself.
+
+**Ports:** `up` finds a free port itself, starting at 3000, and says which port it got.
+- Inside the lab it sets the variables `APP_PORT` and `PORT` to that port, and `HOST=0.0.0.0`.
+- The app must listen on `HOST`, because if it listens only on `127.0.0.1` inside the lab, the machine cannot reach it.
+- On the machine side the port is still opened only on `127.0.0.1`, so you reach it from the machine at `http://127.0.0.1:<port>`.
+
+**A different Playwright version:** the base image has the latest Chromium. If the project pins another Playwright version, run `npx playwright install chromium` in the lab once after `npm ci` (no `--with-deps` needed, because the image already has them).
+
+---
+
+## 4 · Daily use
+
+| Need | Command (run at the project root on the machine) |
 |---|---|
-| รันคำสั่งในห้อง (agent ใช้อันนี้) | `.\.sandbox\sandbox.ps1 exec "npm test"` |
-| เปิด shell ในห้อง | `.\.sandbox\sandbox.ps1 shell` |
-| ให้ Claude Code ทำงานในห้องเต็มที่ (**isolated เท่านั้น**) | `.\.sandbox\sandbox.ps1 claude` (ล็อกอินครั้งแรกครั้งเดียว volume เก็บไว้ · โหมด mount สคริปต์จะปฏิเสธ เพราะ `/work` คือโฟลเดอร์จริง) |
-| เอางานจากห้อง isolated ออกมา | `.\.sandbox\sandbox.ps1 sync` แล้วอ่าน patch ก่อน `git apply` |
-| ห้องทั้งหมดในเครื่อง | `.\.sandbox\sandbox.ps1 list` |
-| ล้างห้องให้สะอาด เริ่มใหม่ | `reset` แล้ว `up` |
-| หยุดทุกห้องในเครื่อง คืนหน่วยความจำ | `.\.sandbox\sandbox.ps1 stop-all` |
-| ห้องหลายห้องของโปรเจกต์เดียว | ใส่ `-Name <โปรเจกต์>-a1` ทุกคำสั่ง |
+| Run a command in the lab (agents use this one) | `.\.sandbox\sandbox.ps1 exec "npm test"` |
+| Open a shell in the lab | `.\.sandbox\sandbox.ps1 shell` |
+| Let Claude Code work fully in the lab (**isolated only**) | `.\.sandbox\sandbox.ps1 claude` (log in once the first time; the volume keeps it · in mount mode the script refuses, because `/work` is the real folder) |
+| Bring work out of an isolated lab | `.\.sandbox\sandbox.ps1 sync`, then read the patch before `git apply` |
+| All labs on the machine | `.\.sandbox\sandbox.ps1 list` |
+| Wipe the lab clean and start over | `reset`, then `up` |
+| Stop every lab on the machine and free memory | `.\.sandbox\sandbox.ps1 stop-all` |
+| Several labs for one project | Put `-Name <project>-a1` on every command |
 
-**กฎของ agent เมื่อโปรเจกต์มี `.sandbox/`**
-- install · build · test · dev server · migration และสคริปต์ใด ๆ ให้รันผ่าน `sandbox.ps1 exec` ไม่รันบนเครื่อง
-- skill ตรวจแอปของโปรเจกต์ (`app-verifier-setup`) รัน Playwright ในห้องแบบไม่มีหน้าจอ แล้วคัดภาพออกด้วย `docker compose cp` มาไว้ `_to_delete/`
-- ถ้าห้องหยุดอยู่ ให้ `up` เองได้เลย (ย้อนได้) ถ้าห้องพังจนแก้ไม่ได้ ก็ `reset` เองได้ เพราะของในห้องไม่ใช่ของผู้ใช้ — **ยกเว้น** ห้อง isolated ที่ยังไม่ได้ `sync` ต้อง sync ก่อนแล้วค่อย reset
+**Agent rules when a project has `.sandbox/`**
+- Run install · build · test · dev server · migration and any script through `sandbox.ps1 exec`. Never run them on the machine.
+- The project's app-checking skill (`app-verifier-setup`) runs Playwright headless in the lab, then copies the images out with `docker compose cp` into `_to_delete/`.
+- If the lab is stopped, you may `up` it yourself (reversible). If the lab breaks beyond repair, you may `reset` it yourself, because what is in the lab is not the user's. **Exception:** an isolated lab that has not been `sync`ed must be synced first, then reset.
 
 ---
 
-## 5 · เบราว์เซอร์เสมือนสำหรับทดสอบ
+## 5 · Virtual browser for testing
 
-| แบบ | ใช้เมื่อ | วิธี |
+| Type | Use when | How |
 |---|---|---|
-| headless ในห้อง (ค่าเริ่ม) | test อัตโนมัติ · verify skill · ไม่ต้องมีใครดู | Playwright Chromium มากับ image ฐานแล้ว |
-| **มองเห็นได้** (`up -Browser`) | อยากดู agent กดจริงทีละขั้น · ตรวจหน้าจอด้วยตา · อัดภาพ | เบราว์เซอร์จริงในคอนเทนเนอร์แยก ดูสดที่ `http://127.0.0.1:7900` และ Playwright ในห้องจะขับผ่าน `SELENIUM_REMOTE_URL` ให้เอง (Playwright เรียกความสามารถนี้ว่ายังทดลอง) |
-| ให้ Claude Code ในห้องคุมเบราว์เซอร์เอง | งานสำรวจหน้าเว็บที่ยังไม่มีสคริปต์ | ติดตั้ง Playwright MCP server ในห้อง (`.mcp.json` ของโปรเจกต์) ให้ทำงานแบบ headless |
+| Headless in the lab (default) | Automated tests · verify skill · nobody needs to watch | Playwright Chromium already comes with the base image |
+| **Visible** (`up -Browser`) | You want to watch the agent click step by step · check the screen by eye · record images | A real browser in a separate container, watched live at `http://127.0.0.1:7900`. Playwright in the lab drives it through `SELENIUM_REMOTE_URL` automatically (Playwright calls this capability experimental) |
+| Let Claude Code in the lab control the browser itself | Exploring web pages that have no script yet | Install the Playwright MCP server in the lab (the project's `.mcp.json`) and run it headless |
 
-- เบราว์เซอร์ในห้องไม่มีบัญชี ไม่มีคุกกี้ ไม่มีรหัสผ่านของผู้ใช้ — ล็อกอินด้วยบัญชีทดสอบของโปรเจกต์เท่านั้น
-- ภาพและวิดีโอจากการทดสอบ คัดออกมาที่ `_to_delete/` ด้วย `docker compose cp`
-- Playwright MCP ในห้อง (ตัวอย่างจากงานสอน ยังไม่ใช่เกณฑ์): รันเป็น root ต้องใส่ `--no-sandbox` · ค่า `--browser` ต้องตรงกับ `--help` ของรุ่นที่ลง (`chromium` หรือ `chrome` ถ้าไม่ตรงจะหาเบราว์เซอร์ไม่เจอ) · ภาพ screenshot ที่ตั้งชื่อแบบ relative ไปลงที่ working directory ของ process ไม่ใช่ `--output-dir` ต้องย้ายเอง · คลิกแล้ว timeout "not visible/stable" อาจเป็นแท็บเบื้องหลัง ดู `e2e-testing-patterns`
-- เบราว์เซอร์ของผู้ใช้บนเครื่อง (Chrome ที่ล็อกอินอยู่) ใช้กับเว็บจริงที่ต้องใช้บัญชีจริงเท่านั้น และทำตามกติกาของเครื่องมือนั้น ไม่ใช่ที่ทดสอบ
+- The browser in the lab has no accounts, cookies, or user passwords. Log in only with the project's test accounts.
+- Copy images and videos from tests out to `_to_delete/` with `docker compose cp`.
+- Playwright MCP in the lab (examples from teaching work, not yet a standard): running as root needs `--no-sandbox` · the `--browser` value must match the `--help` of the installed version (`chromium` or `chrome`; if it does not match, it cannot find the browser) · screenshots with a relative file name land in the process's working directory, not `--output-dir`, so move them yourself · a click that times out with "not visible/stable" may be a background tab; see `e2e-testing-patterns`.
+- The user's own browser on the machine (the logged-in Chrome) is for real websites that need a real account, and follows that tool's rules. It is not a place to test.
 
 ## 6 · CAPTCHA
 
-- **ระบบของเราเอง** — CAPTCHA ไม่ควรขวางการทดสอบตั้งแต่ต้น
-  - ใช้ค่าทดสอบ (test site key) ที่ผู้ให้บริการแจกไว้ ซึ่งผ่านทุกครั้ง reCAPTCHA · hCaptcha · Cloudflare Turnstile มีให้ทุกเจ้า ดูค่าได้จากเอกสารผู้ให้บริการ
-  - หรือปิดด้วยค่าตั้งเฉพาะ environment ทดสอบ (`CAPTCHA_ENABLED=false`)
-  - **ค่าทดสอบต้องไม่หลุดไปถึงระบบจริง** — ใส่ตัวตรวจตอนเริ่มระบบว่า production ห้ามใช้ test key (`config-and-secrets`)
-- **เว็บของคนอื่น** — agent **ไม่แก้ CAPTCHA และไม่หาทางหลบ** (ไม่ใช้บริการรับแก้ ไม่ปลอมตัวเป็นคน) ถ้าเจอ CAPTCHA ให้หยุดขั้นนั้น บอกผู้ใช้ให้ทำเอง แล้วทำส่วนอื่นต่อ ถ้าต้องดึงข้อมูลจากเว็บนั้นบ่อย ให้หา API ทางการแทน
-- เหตุผล — CAPTCHA คือเจ้าของเว็บบอกว่า "ห้ามบอท" การหลบจึงเท่ากับฝ่าข้อตกลงของเขา และทำให้ IP หรือบัญชีถูกแบน
+- **Our own system:** a CAPTCHA should not block testing from the start.
+  - Use the test site keys the provider publishes, which pass every time. reCAPTCHA · hCaptcha · Cloudflare Turnstile all have them; see the provider's documentation for the values.
+  - Or turn it off with a setting for the test environment only (`CAPTCHA_ENABLED=false`).
+  - **Test values must never reach the real system.** Add a startup check that production must not use a test key (`config-and-secrets`).
+- **Other people's websites:** the agent **does not solve a CAPTCHA and does not look for a way around it** (no solving services, no pretending to be a person). If you meet a CAPTCHA, stop that step, tell the user to do it themselves, and continue with the other parts. If you need data from that site often, look for an official API instead.
+- Reason: a CAPTCHA is the site owner saying "no bots." Getting around it breaks their terms and gets the IP or account banned.
 
-## 7 · ในห้องทำได้เต็มที่
+## 7 · What you may do freely in the lab
 
-ติดตั้งโปรแกรม (`sudo apt-get` · `npm -g` · `pip`) · ลบไฟล์ในห้อง · รันเซิร์ฟเวอร์และฐานข้อมูลทดสอบ · ดาวน์โหลด dependency · commit ในสำเนาของโหมด isolated · ทดลองทำลายแล้วสร้างใหม่
+Install programs (`sudo apt-get` · `npm -g` · `pip`) · delete files in the lab · run servers and test databases · download dependencies · commit in the copy in isolated mode · try destroying things and rebuild.
 
-เรื่องที่ยังอยู่ใน "รออนุมัติ" แม้อยู่ในห้อง (เตรียมไว้ ไม่ทำเอง) — เพราะผลออกไปนอกห้อง:
-- ส่งข้อมูล อีเมล ข้อความ หรือเรียก API ที่มีผลจริงกับคนหรือระบบภายนอก
-- ใช้บัญชีจริง ค่าลับจริง ฐานข้อมูลจริง
-- push ขึ้น remote · deploy
-- ในโหมด mount — ลบหรือเขียนทับไฟล์ของผู้ใช้ใน `/work` ที่ไม่ใช่ผลงานของรอบนี้ (มันคือโฟลเดอร์จริง)
+These still stay under "รออนุมัติ" (awaiting approval) even inside the lab (prepare them, do not do them yourself), because the result leaves the lab:
+- Sending data, email, or messages, or calling an API that has a real effect on people or outside systems.
+- Using real accounts, real secrets, or the real database.
+- Pushing to a remote · deploying.
+- In mount mode: deleting or overwriting the user's files in `/work` that are not this round's work (it is the real folder).
 
 ---
 
-## 8 · ห้ามแก้ compose ให้มีสิ่งเหล่านี้
+## 8 · Never edit compose to include these
 
-| ห้าม | เพราะ |
+| Never | Because |
 |---|---|
-| `privileged: true` · `pid: host` · `network_mode: host` | ห้องจะมองเห็นและแตะเครื่องจริงได้ |
-| mount `/var/run/docker.sock` หรือ `//./pipe/docker_engine` | คุม Docker ได้ = คุมเครื่องได้ |
-| mount โฟลเดอร์ home · `.ssh` · `.aws` · `.azure` · `.claude` ของเครื่อง · โปรไฟล์เบราว์เซอร์ · ไดรฟ์ทั้งลูก | ค่าลับหลุดได้ทันทีที่โค้ดในห้องอ่าน |
-| เปิด port แบบ `"3000:3000"` (ทุกการ์ดแลน) | คนในเครือข่ายเดียวกันเข้าถึงได้ — ใช้ `127.0.0.1:` เสมอ |
-| ใส่ค่าลับจริงใน `Dockerfile` หรือ image | ค่าลับติดไปกับ image ตลอด |
-| ปิดหรือเพิ่ม limit `cpus` `mem_limit` `pids_limit` จนเครื่องค้าง | ห้องที่วนไม่จบจะกินเครื่องทั้งเครื่อง |
-| mount ของจากเครื่องแบบเขียนได้ ทั้งที่ห้องแค่ต้องอ่าน (`ref/` · ข้อมูลตัวอย่าง · cache SDK ที่แชร์ · ซอร์สต้นทางของโหมด isolated) | โค้ดในห้องที่ถูกหลอกจะเขียนกลับเครื่องได้ — ใส่ `:ro` ทุก mount ที่ไม่ใช่ผลงานของรอบนี้ แล้วให้ห้องคัดลอกเข้าพื้นที่ของตัวเองถ้าต้องแก้ (แนวคิดจาก anthropics/claude-code devcontainer และ trailofbits/skills) |
+| `privileged: true` · `pid: host` · `network_mode: host` | The lab could see and touch the real machine |
+| Mounting `/var/run/docker.sock` or `//./pipe/docker_engine` | Controlling Docker = controlling the machine |
+| Mounting the machine's home folder · `.ssh` · `.aws` · `.azure` · `.claude` · browser profiles · a whole drive | Secrets can leak the moment code in the lab reads them |
+| Opening a port like `"3000:3000"` (every network card) | People on the same network can reach it. Always use `127.0.0.1:` |
+| Putting real secrets in the `Dockerfile` or image | The secret stays in the image forever |
+| Removing or raising the limits `cpus` `mem_limit` `pids_limit` until the machine hangs | A lab stuck in a loop will eat the whole machine |
+| Mounting things from the machine as writable when the lab only needs to read (`ref/` · sample data · a shared SDK cache · the source folder of isolated mode) | Tricked code in the lab can write back to the machine. Add `:ro` to every mount that is not this round's work, and have the lab copy into its own space if it must edit (idea from anthropics/claude-code devcontainer and trailofbits/skills) |
 
-เอกสารของ Claude Code เตือนไว้ว่า แม้ในคอนเทนเนอร์ การรันแบบไม่มีหน้าต่างขออนุญาต (`--dangerously-skip-permissions`) ยังกันไม่ได้ถ้าโค้ดในโปรเจกต์ตั้งใจขโมยของที่อยู่ในห้อง รวมถึง token ของ Claude Code เอง — ใช้กับ repo ที่ไว้ใจเท่านั้น และใช้ `-Locked` เมื่อไม่แน่ใจ
+The Claude Code documentation warns that even in a container, running without permission prompts (`--dangerously-skip-permissions`) cannot stop project code that deliberately steals what is in the lab, including Claude Code's own token. Use it only with a repo you trust, and use `-Locked` when unsure.
 
-`sandbox.ps1 claude` จึงรันได้เฉพาะโหมด isolated — โหมด mount สคริปต์ปฏิเสธ เพราะ `/work` คือโฟลเดอร์จริงของผู้ใช้ (§7 ข้อสุดท้าย)
+So `sandbox.ps1 claude` runs only in isolated mode. In mount mode the script refuses, because `/work` is the user's real folder (§7, last item).
 
-**ขีดจำกัดของ `-Locked`** — DNS ออกได้เฉพาะ resolver ที่ห้องได้รับ (ของ Docker) ไม่ใช่ DNS server ใดก็ได้ แต่ resolver นั้นยังส่งต่อคำถามออกนอก จึงยังแอบส่งข้อมูลผ่าน DNS (DNS tunnelling) ได้ งานที่ห้ามข้อมูลรั่วเด็ดขาดให้รันแบบไม่มีเครือข่ายเลย
+**Limits of `-Locked`:** DNS can go out only through the resolver the lab was given (Docker's), not any DNS server. But that resolver still forwards queries outward, so data can still be smuggled out through DNS (DNS tunnelling). For work where data must never leak, run with no network at all.
 
 ---
 
-## 9 · หมายเหตุ Windows
+## 9 · Windows notes
 
-- Docker Desktop ใช้ WSL 2 ไฟล์บนไดรฟ์ `C:` ที่ mount เข้าไปจึงช้ากว่าไฟล์ใน volume ถ้า build หรือ test ช้ามาก ให้ใช้ `-Isolated` (ตรวจจริง: `npm ci` แค่ 2 แพ็กเกจใช้ 52 วินาทีบนโฟลเดอร์ OneDrive)
-- **โปรเจกต์ในโฟลเดอร์ OneDrive** — โหมด mount จะทำให้ `node_modules` และไฟล์ build ถูก sync ขึ้นคลาวด์ จึงควรใช้ `-Isolated` หรือย้ายโปรเจกต์ออกจาก OneDrive
-- ถ้ารัน `sandbox.ps1` ไม่ได้ ให้ใช้ `powershell -ExecutionPolicy Bypass -File .\.sandbox\sandbox.ps1 <คำสั่ง>`
-- `-Locked` อ่าน IP ของโฮสต์ครั้งเดียวตอนเปิด บริการที่เปลี่ยน IP บ่อยอาจหลุด ให้ `up -Locked` ใหม่
+- Docker Desktop uses WSL 2. Files on drive `C:` that are mounted in are slower than files in a volume. If build or test is very slow, use `-Isolated` (verified: `npm ci` for just 2 packages took 52 seconds on a OneDrive folder).
+- **Projects in a OneDrive folder:** mount mode makes `node_modules` and build files sync to the cloud, so use `-Isolated` or move the project out of OneDrive.
+- If you cannot run `sandbox.ps1`, use `powershell -ExecutionPolicy Bypass -File .\.sandbox\sandbox.ps1 <command>`.
+- `-Locked` reads the host's IP once at startup. A service whose IP changes often may drop out; run `up -Locked` again.
 
-## เชื่อมกับ skill อื่น
+## Links to other skills
 
-- `parallel-attempts-pick-best` — ปกติผู้แข่งใช้ git worktree ต่อตัว · ใช้ห้อง isolated ต่อตัว (`-Name <โปรเจกต์>-a1` …) เฉพาะงานที่ต้องแยกเครื่องจริง
-- [`app-verifier-setup`](../app-verifier-setup/SKILL.md) — สคริปต์ `start` ของ verify skill รันในห้อง
-- `config-and-secrets` — ค่าทดสอบใส่ `.env` ที่ไม่เข้า git และไม่ bake ลง image
-- playbook `housekeeping` ของ `superuser` — เก็บกวาดห้องและ image เก่า
+- `parallel-attempts-pick-best`: normally competitors use one git worktree each. Use one isolated lab each (`-Name <project>-a1` …) only for work that needs truly separate machines.
+- [`app-verifier-setup`](../app-verifier-setup/SKILL.md): the verify skill's `start` script runs in the lab.
+- `config-and-secrets`: put test values in a `.env` that stays out of git, and do not bake them into the image.
+- The `superuser` playbook `housekeeping`: cleans up old labs and images.
 
 
 ---
@@ -399,9 +399,9 @@ Use when a Markdown doc needs an image, SVG or ASCII art
 
 # Markdown Visuals
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line of wording per `human-writing`. This skill gives the format and structure; human-writing gives the way to write so people understand.
 
 > **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
@@ -478,7 +478,7 @@ What are you showing?
 
 ### สี
 
-ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น ส่วนถ้ายังไม่มี ให้ค้นต้นแบบตาม `design-references` (plugin `superuser`) ประเภท `document` แล้วถอดสีจากงานที่เลือก · ค้นสดไม่ได้จึงใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม (ลำดับใน `diagram-figures` ข้อ 5 · ตารางโทนตามเนื้องาน [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) ส่วน token ตามหน้าที่ (`bg-canvas` · `accent-primary` · `state-*` …) ดูได้ใน [references/svg-snippets.md](references/svg-snippets.md) และ **1 เอกสารใช้ชุดสีเดียว**
+If the document or project already has a colour palette, use it. If not, search for references per `design-references` (plugin `superuser`), type `document`, and take the colours from the chosen work · if live search is not possible, use the house value `#2A78D6`, mark it `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask (order in `diagram-figures` item 5 · colour-by-domain table [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) · for role-based tokens (`bg-canvas` · `accent-primary` · `state-*` …) see [references/svg-snippets.md](references/svg-snippets.md) · and **1 document uses 1 palette**
 
 ### Reusable snippets
 
@@ -538,14 +538,14 @@ Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
 
 ## 4 · Mermaid
 
-**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams` (plugin `software-development`) ข้อ 1–5 และ `assets/mermaid-theme.md`** · Mermaid ในเอกสารโปรเจกต์ที่ต้องแปลงเป็นรูปลง Word ใช้ตัวแปลงใน `diagram-figures` → `references/engine-mermaid.md`
-ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
+**Choosing a diagram type, theme, readability rules and Thai labels is covered in `software-diagrams` (plugin `software-development`) items 1–5 and `assets/mermaid-theme.md`** · for Mermaid in project documents that must be converted to a picture for Word, use the converter in `diagram-figures` → `references/engine-mermaid.md`
+This file only says *when to choose Mermaid over other formats*
 
-| เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
+| Choose Mermaid when | Choose something else when |
 |---|---|
-| เป็นกล่องกับลูกศรที่เครื่องจัดวางให้ได้ | ถ้าต้องคุมตำแหน่งเองให้ใช้ inline SVG ส่วนรูปที่ต้องดูออกแบบมาให้ใช้ `diagram-figures` (HTML layout หรือ engine-svg-python) แล้วฝังเป็นไฟล์ภาพ |
-| อยู่ในไฟล์ที่ต้อง diff ใน git | เป็นภาพหน้าจอจริง ให้ใช้ไฟล์ภาพ |
-| ผู้อ่านเปิดใน GitHub หรือ Notion | ผู้อ่านเปิดในเอกสาร Word หรือสไลด์ ให้ใช้ไฟล์ภาพ |
+| It is boxes and arrows that the engine can lay out | If you must control placement yourself, use inline SVG; for a figure that must look designed, use `diagram-figures` (HTML layout or engine-svg-python) and embed it as an image file |
+| It lives in a file that must be diffed in git | It is a real screenshot: use an image file |
+| Readers open it in GitHub or Notion | Readers open it in a Word document or slides: use an image file |
 
 ## Combining formats in one doc
 
@@ -599,12 +599,12 @@ Not sure a visual will render? Preview it in the viewer the reader will use (Git
 
 ## ไม่ให้ดูเหมือน AI ทำ
 
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ทุกงานต้องผ่านด่านตา 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+Before sending, go through item 3 of `no-ai-look` — for HTML work, run its script · every piece must also pass eye check 3.2 (a web page adds items 10–14), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for all media is there
 
 ## ตัวย่อ
 
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้เลย ดูรายละเอียดใน skill `spell-out-abbreviations`
+Spell out each abbreviation in full on first use and put the short form in brackets — for example Model Context Protocol (MCP)
+After that, use the short form. Details are in the skill `spell-out-abbreviations`
 
 
 ## reference: ascii-patterns.md
@@ -690,30 +690,30 @@ Don't force everything into one format. Each format is best at something differe
 
 Reusable building blocks for inline SVG pictures of a screen inside .md docs (the real mockup is HTML) · used by [SKILL.md](../SKILL.md) §1
 
-## สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
+## Colour: it comes from the subject, not from a ready-made table
 
-ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น
-ถ้ายังไม่มี ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม และเสนอโทนจากเนื้องานไว้ในรายงาน — การแพทย์เขียว · การเงินน้ำเงินเข้ม ·
-อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า · ซอฟต์แวร์ทั่วไปน้ำเงิน (ตารางเต็มอยู่ใน [`diagram-figures/references/colour-by-domain.md`](../../diagram-figures/references/colour-by-domain.md))
+If the document or project already has a colour set, use that set.
+If not, use the house value `#2A78D6`, write `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask. Propose a tone drawn from the subject in the report: medical green · finance dark blue ·
+industrial amber · government navy · general software blue (the full table is in [`diagram-figures/references/colour-by-domain.md`](../../diagram-figures/references/colour-by-domain.md))
 
-กำหนดเป็น **token ตามหน้าที่** ไว้บนสุดของเอกสาร แล้วใช้ค่าเดียวกันทุกรูปในเอกสารนั้น:
+Define **tokens by role** at the top of the document, then use the same values in every figure in that document:
 
-| Token | หน้าที่ | ได้มาจาก |
+| Token | Role | Comes from |
 |---|---|---|
-| `bg-canvas` | พื้นหลังของรูป | เฉดเข้มสุด (โหมดมืด) หรืออ่อนสุด (โหมดสว่าง) |
-| `bg-surface` | แผ่น พาเนล การ์ด | ต่างจาก canvas พอให้เห็นขอบโดยไม่ต้องตีเส้น |
-| `bg-elevated` | ไทล์ที่ลอยขึ้นมาอีกชั้น | |
-| `accent-primary` | จุดเน้น สถานะที่กำลังทำงาน | **สีแบรนด์** (ไม่มี → `#2A78D6` + `(รอยืนยัน)`) |
-| `text-primary` | ข้อความหลัก | contrast ≥ 4.5:1 กับพื้นที่มันวางอยู่ |
-| `text-muted` | ข้อความรอง placeholder | `rgba(...,0.55)` ของ `text-primary` |
-| `state-success` · `state-warning` · `state-danger` | สถานะ | **ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่านเสมอ |
+| `bg-canvas` | Background of the figure | The darkest shade (dark mode) or the lightest (light mode) |
+| `bg-surface` | Sheets, panels, cards | Different enough from canvas to show the edge without drawing a line |
+| `bg-elevated` | A tile raised one more layer | |
+| `accent-primary` | Emphasis, the active state | **The brand colour** (none → `#2A78D6` + `(รอยืนยัน)`) |
+| `text-primary` | Main text | Contrast ≥ 4.5:1 against the surface it sits on |
+| `text-muted` | Secondary text, placeholder | `rgba(...,0.55)` of `text-primary` |
+| `state-success` · `state-warning` · `state-danger` | Status | **Does not change with the brand.** Green always means pass and red always means fail |
 
-**1 เอกสารใช้ชุดสีเดียว** — รูป 10 รูปในเอกสารเดียวที่สีไม่ตรงกัน อ่านยากกว่ารูปไม่สวยแต่สีตรงกัน
+**One document, one colour set.** 10 figures in one document with mismatched colours are harder to read than plain figures with matching colours.
 
 ## Snippets
 
-> ตัวอย่างข้างล่างใช้ชุดสีโหมดมืดชุดหนึ่งเป็นตัวแทนเท่านั้น
-> **เปลี่ยนค่าสีให้ตรงกับชุดที่ตกลงไว้ก่อนใช้** โครงสร้างคือสิ่งที่ต้องคัดลอก ไม่ใช่ค่าสี
+> The examples below use one dark-mode colour set as a stand-in only.
+> **Change the colour values to match the agreed set before use.** The structure is what you copy, not the colour values.
 
 **Window chrome (desktop app mockup):**
 ```xml
@@ -929,7 +929,7 @@ AI-looking style in any medium → before sending, go through item 3 of `no-ai-l
 
 # รูปแบบ markdown พร้อมตัวอย่าง
 
-ตัวอย่างโค้ด markdown ของทุกรูปแบบที่ `SKILL.md` อ้างถึง ให้ลอกไปใช้ได้ทันที ส่วนกฎว่าใช้เมื่อไหร่อยู่ใน `SKILL.md`
+Markdown code examples for every format that `SKILL.md` refers to, ready to copy and use · the rules on when to use each one live in `SKILL.md`
 
 **สารบัญ:** Document Header · Table of Contents · Callout Boxes · Tables · Figures · Status Badges · Cover Block · Comparison / Decision Tables · Lists · Code Blocks · Approval/Sign-off · Glossary
 
@@ -1005,7 +1005,7 @@ Use a table:
 
 ## Figures (รูปในเอกสาร)
 
-รูปในเอกสารโปรเจกต์วาดด้วย `diagram-figures` (plugin `software-development` · house style) แล้วฝังเป็นไฟล์ภาพ · Mermaid ใช้แค่รูปด่วนใน README · PR ไม่ใช้ในเอกสารที่ส่งต่อ
+Figures in project documents are drawn with `diagram-figures` (plugin `software-development` · house style) and embedded as image files · use Mermaid only for quick figures in a README · do not use it in documents that are handed on, nor in PRs
 
 ```markdown
 ลำดับการเรียกเมื่อผู้ใช้กดบันทึกแสดงในรูปที่ 3
@@ -1147,16 +1147,16 @@ Define acronyms on first use, then add to glossary.
 
 ## reference: thai-office.md
 
-# เอกสาร Office ภาษาไทย
+# Thai Office documents
 
-ใช้กับไฟล์ Word · Excel · PDF ทุกไฟล์ที่มีภาษาไทย จะสร้างด้วยสคริปต์หรือทำมือก็ตาม รายละเอียดและตัวช่วยอยู่ใน `branded-document-design`
+Applies to every Word · Excel · PDF file that contains Thai, whether a script builds it or a person makes it by hand. Details and helpers are in `branded-document-design`.
 
-- Word นับภาษาไทยเป็น complex script จึงมีช่องฟอนต์ ขนาด และตัวหนาแยกจากละติน ถ้าตั้งแค่ช่องละติน ข้อความไทยจะไม่เปลี่ยน ต้องตั้งให้ครบทั้งสองชุด
-- ย่อหน้าไทยไม่จัดชิดสองขอบ (justify) เพราะไทยไม่มีช่องว่างระหว่างคำ Word จะยืดช่องไฟจนเป็นรู (ยกเว้นคู่มือวิทยานิพนธ์สั่ง Thai Distributed)
-- ข้อความไทยห้ามใช้ฟอนต์ mono เพราะ Consolas กับ Cascadia ไม่มีอักษรไทย ใช้ mono กับรหัส คีย์ และตัวเลขเท่านั้น
-- ส่งออก PDF ให้ฝังฟอนต์ทุกครั้ง ไม่งั้นเครื่องที่ไม่มีฟอนต์จะเอาตัวอื่นมาแทนและวรรณยุกต์ลอย
-- CSV ที่ให้คนไทยเปิดใน Excel บันทึกเป็น UTF-8 แบบมี BOM ไม่งั้นภาษาไทยเพี้ยน
-- ก่อนบอกว่าเสร็จ แปลงทุกหน้าเป็นภาพแล้วเปิดดูจริง ตารางล้น หัวข้อค้างท้ายหน้า วรรณยุกต์ลอย ดูจากโค้ดไม่เห็น
+- Word treats Thai as a complex script, so it has separate font, size and bold fields from Latin. If you set only the Latin field, the Thai text does not change. Set both.
+- Do not justify Thai paragraphs. Thai has no spaces between words, so Word stretches the letter spacing and leaves gaps. The exception is a thesis guide that requires Thai Distributed.
+- Never use a mono font for Thai text, because Consolas and Cascadia have no Thai letters. Use mono only for codes, keys and numbers.
+- Always embed fonts when exporting PDF. Otherwise a machine without the font substitutes another one and the tone marks float.
+- Save a CSV that Thai users will open in Excel as UTF-8 with BOM (byte order mark). Otherwise the Thai text turns to garbage.
+- Before you say it is done, render every page to an image and look at it. Overflowing tables, headings stranded at the bottom of a page and floating tone marks do not show up in the code.
 
 
 ## reference: theme-colors.md

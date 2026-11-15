@@ -3,215 +3,215 @@ name: fsd-writing
 description: Use when writing or reviewing a Functional Specification Document
 ---
 
-# เขียน Functional Specification Document (FSD)
+# Writing a Functional Specification Document (FSD)
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-> ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ ธุรกิจ
+> **Language:** Write every line by `human-writing`. This skill gives the format and structure. `human-writing` says how to write so readers understand.
+> For Thai text, see `human-writing` `references/thai-grammar.md` section 4, business register.
 
-> **กฎข้อเดียว:** FSD เสร็จเมื่อ developer เปิดอ่านแล้ว**เขียนโค้ดได้โดยไม่ต้องเดาและไม่ต้องถาม**
-> ทุกจุดที่ต้องเดา คือจุดที่จะกลายเป็นงานแก้หลังส่งมอบ
+> **The one rule:** An FSD is done when a developer can read it and **write code without guessing or asking**.
+> Every point that forces a guess becomes rework after delivery.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เขียน FSD หรือ Functional Spec ของฟีเจอร์ โมดูล หรือทั้งระบบ
-- แปลง Software Requirements Specification (SRS) หรือ Business Requirements Document (BRD) ให้ละเอียดพอลงมือทำ
-- รีวิว FSD ของคนอื่น แล้วต้องบอกให้ได้ว่าขาดอะไร
-- developer ถามคำถามเดิมซ้ำ ๆ ระหว่างทำ — แปลว่า FSD ยังไม่ครบ
+- Writing an FSD or Functional Spec for a feature, a module, or a whole system
+- Expanding a Software Requirements Specification (SRS) or Business Requirements Document (BRD) to a level detailed enough to build from
+- Reviewing someone else's FSD, where you must say what is missing
+- A developer keeps asking the same questions while building. That means the FSD is incomplete.
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Task | Use this instead |
 |---|---|
-| ข้อกำหนดระดับที่ลูกค้าเซ็นรับ | `srs-writing` |
-| user story สำหรับ sprint | `user-story-writer` |
-| ออกแบบ endpoint ของฟีเจอร์หนึ่ง | command `/api-design` |
-| ข้อตกลงกลางของ API ทั้งระบบ | `api-conventions` |
-| ตาราง คอลัมน์ ความสัมพันธ์ | `database-design` |
-| หน้าตาหน้าจอ ระยะห่าง สถานะ | `ui-craft` + skill แพลตฟอร์ม |
-| รูปแบบ markdown และธีมเอกสาร | `polished-document-style` |
-| หน้าตาไฟล์ .docx ที่ส่งออก | `branded-document-design` |
+| Requirements at the level a customer signs off | `srs-writing` |
+| User stories for a sprint | `user-story-writer` |
+| Designing the endpoints of one feature | command `/api-design` |
+| System-wide API agreements | `api-conventions` |
+| Tables, columns, relationships | `database-design` |
+| Screen look, spacing, states | `ui-craft` + the platform skill |
+| Markdown format and document theme | `polished-document-style` |
+| Look of the exported .docx file | `branded-document-design` |
 
-## อ่านเพิ่มเมื่อ
+## Read more when
 
-| ไฟล์ | เปิดเมื่อ |
+| File | Open when |
 |---|---|
-| [references/worked-examples.md](references/worked-examples.md) | ถ้าจะเขียน use case หน้าจอ ตารางสถานะ หรือกฎทางธุรกิจตัวแรกของเอกสาร ให้เปิดดูตัวอย่างเต็มแล้วลอกรูปแบบไปใช้ |
-| [references/edge-cases.md](references/edge-cases.md) | ตอนเขียนหัวข้อข้อผิดพลาดและกรณีขอบ และตอนรีวิวก่อนส่ง เพื่อไล่ให้ครบทุกกรณี |
-| [references/fsd-vs-srs.md](references/fsd-vs-srs.md) | ถ้ายังไม่แน่ใจว่าเนื้อหาชิ้นหนึ่งควรอยู่ใน SRS หรือใน FSD ให้เปิดตารางเทียบนี้ |
-| [references/stakeholder-doc-templates.md](references/stakeholder-doc-templates.md) | ถ้าเขียน FSD แบบอ่านง่ายสำหรับผู้มีส่วนได้เสีย (Mode B — 11 หัวข้อเดียวกับข้อ 3) หรือต้องการแม่แบบ use case, API endpoint, data model ฉบับคนตรวจอ่าน |
-| [references/figures.md](references/figures.md) | ตอนวางแผนว่าหัวข้อไหนต้องมีรูปชนิดไหน |
-| [references/outline-sections.md](references/outline-sections.md) | ถ้าต้องตัดสินว่าหัวข้อไหนข้ามได้ ให้เปิดตารางนี้ ส่วนโครงเต็มที่ลอกไปกรอกได้อยู่ใน [assets/fsd-outline.md](assets/fsd-outline.md) |
-| [references/related-skills.md](references/related-skills.md) | ถ้างานต้องใช้ skill อื่นคู่กัน เช่น รูป ข้อตกลง API หรือ test case ให้เปิดดูว่าใช้ตัวไหน |
+| [references/worked-examples.md](references/worked-examples.md) | You are writing the first use case, screen, state table, or business rule of the document. Open the full examples and copy the format. |
+| [references/edge-cases.md](references/edge-cases.md) | You are writing the errors and edge cases section, and when you review before sending, to cover every case. |
+| [references/fsd-vs-srs.md](references/fsd-vs-srs.md) | You are unsure whether a piece of content belongs in the SRS or the FSD. Open this comparison table. |
+| [references/stakeholder-doc-templates.md](references/stakeholder-doc-templates.md) | You are writing an easy-to-read FSD for stakeholders (Mode B, the same 11 sections as item 3), or you need a reviewer-friendly template for a use case, API endpoint, or data model. |
+| [references/figures.md](references/figures.md) | You are planning which section needs which figure type. |
+| [references/outline-sections.md](references/outline-sections.md) | You must decide which section can be skipped. Open this table. The full copy-and-fill outline is in [assets/fsd-outline.md](assets/fsd-outline.md). |
+| [references/related-skills.md](references/related-skills.md) | The task needs another skill alongside this one, such as figures, API agreements, or test cases. Open it to see which one. |
 
-## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+## 0 · Look for an existing template first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before you use the outline or templates in this file, check whether the user, customer, or project already has its own:
 
-- **ที่ดู:** แบบ FSD (Functional Specification Document) จากผู้ว่าจ้างหรือ TOR · FSD ฉบับก่อนของระบบเดียวกัน · แบบ spec หน้าจอที่ทีม dev ใช้อยู่ (ดูใน `docs/` หรือถามผู้ใช้ข้อเดียว)
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** เส้นแบ่ง FSD กับ SRS ในข้อ 1 และการผูกรหัสกับ use case ยังต้องมีทุกแบบ
+- **Where to look:** the FSD (Functional Specification Document) template from the client or the TOR (terms of reference) · an earlier FSD of the same system · the screen spec template the dev team uses (look in `docs/`, or ask the user one question)
+- **Result:** Found → use it (sections, order, field names, numbering) and say in the reply which file it came from. Not found → use the template in this file as a fallback and say that no earlier template was found.
+- **Still required in every template:** the FSD/SRS boundary in item 1 and linking codes to use cases.
 
-## 1 · FSD ต่างจาก SRS ยังไง — เส้นแบ่งที่ต้องชัด
+## 1 · How an FSD differs from an SRS — the boundary must be clear
 
-เอกสารสองฉบับนี้ปนกันบ่อยที่สุด ผลคือ SRS ยาวจนลูกค้าไม่อ่าน และ FSD ตื้นจน developer ต้องถาม
-SRS บอกว่าระบบ**ต้องทำอะไรได้** ส่วน FSD บอกว่าระบบ**ทำสิ่งนั้นอย่างไร** ตารางเทียบทีละมิติอยู่ใน [references/fsd-vs-srs.md](references/fsd-vs-srs.md)
+These two documents get mixed up most often. The result is an SRS so long the customer does not read it, and an FSD so shallow that developers must ask.
+The SRS says what the system **must be able to do**. The FSD says **how** the system does it. A dimension-by-dimension comparison is in [references/fsd-vs-srs.md](references/fsd-vs-srs.md).
 
-> **ห้าม FSD สร้างข้อกำหนดใหม่เอง** — เจออะไรที่ SRS ไม่ได้ครอบคลุม ให้**ลงรายการคำถามค้าง** ใส่ `(รอยืนยัน)` แล้วทำส่วนอื่นต่อ
-> ข้อนั้นต้องเพิ่มใน SRS ก่อน ไม่ใช่เขียนลง FSD เงียบ ๆ
-> ข้อที่โผล่มาใน FSD โดยไม่มีที่มา คือข้อที่ลูกค้าจะปฏิเสธจ่ายตอนตรวจรับ
+> **An FSD must not create new requirements.** When you find something the SRS does not cover, **add it to the open-questions list**, mark it `(รอยืนยัน)` (awaiting confirmation), and keep working on the rest.
+> The item must be added to the SRS first. Do not write it quietly into the FSD.
+> An item that shows up in the FSD with no source is one the customer will refuse to pay for at acceptance.
 
-## 2 · ลำดับการทำงาน
+## 2 · Working order
 
-1. อ่าน SRS หรือ BRD ให้จบก่อน แล้ว**ทำรายการข้อที่ยังคลุมเครือ** ถามรวมครั้งเดียวตอนเริ่มแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน (skill `superuser` หัวข้อ 6) เฉพาะข้อที่ตีความต่างแล้วงานออกมาต่างกันทั้งชุด (ตัวเลือก = การตีความที่เป็นไปได้ อ้างข้อใน SRS/BRD) ที่เหลือใส่ `(รอยืนยัน)` แล้วทำต่อ
-2. ยืนยันว่าเอกสารนี้เขียนให้ใครอ่าน — developer อย่างเดียว (**Mode A** ค่าเริ่มต้น) หรือมีลูกค้าอ่านเพื่อเซ็นรับด้วย (**Mode B** — 11 หัวข้อเดิม เรียงเหมือนเดิม แค่จัดหน้าให้คนตรวจอ่านง่าย ดู [references/stakeholder-doc-templates.md](references/stakeholder-doc-templates.md))
-3. ไล่ทีละ use case ไม่ใช่ทีละหน้าจอ — หน้าจอเกิดจาก use case ไม่ใช่ทางกลับกัน
-4. เขียนกฎทางธุรกิจแยกออกมาก่อน แล้วค่อยอ้างถึงจากขั้นตอน (ข้อ 7)
-5. ทำตารางสอบย้อนกลับไปพร้อมกัน ไม่ใช่ทำตอนจบ
-6. **วาดแล้วเก็บคำถาม** — ตอนวาด sequence · ผังยกเลิก · ERD จะเจอเรื่องที่ story และ SRS ยังไม่ตอบ (เช่น คอร์สหักครั้งตอนจองหรือตอนมาใช้) จดท้ายเอกสารเป็นคำถามพร้อมคำตอบที่เสนอ `(รอยืนยัน)` ไม่เลือกเอง (ตัวอย่างจากงานนั้น: วาด 8 รูปได้คำถามใหม่ 15 ข้อ ในนั้น 10 ข้อไม่เคยอยู่ในชุดคำถามเดิม)
-7. รีวิวตามข้อ 11 ก่อนส่ง
+1. Read the whole SRS or BRD first, then **list the items that are still unclear**. Ask once, at the start, as multiple choice. Every option has evidence (skill `superuser` item 6). Ask only about items where different readings would change the whole deliverable (options = the possible readings, citing the item in the SRS/BRD). Mark the rest `(รอยืนยัน)` and keep going.
+2. Confirm who the document is for: developers only (**Mode A**, the default), or also a customer who reads it to sign off (**Mode B**: the same 11 sections in the same order, only laid out so a reviewer can read them easily; see [references/stakeholder-doc-templates.md](references/stakeholder-doc-templates.md)).
+3. Go use case by use case, not screen by screen. Screens come from use cases, not the other way around.
+4. Write the business rules separately first, then refer to them from the steps (item 7).
+5. Build the traceability matrix as you go, not at the end.
+6. **Draw, then collect questions.** While drawing the sequence diagram, cancellation flow, and ERD, you will find matters the stories and SRS do not answer (for example, whether a course deducts a session at booking or at attendance). Note them at the end of the document as questions with a proposed answer marked `(รอยืนยัน)`. Do not choose for the customer. (Example from that job: drawing 8 figures produced 15 new questions, and 10 of them were never in the original question set.)
+7. Review by item 11 before sending.
 
-## 3 · โครงเอกสาร
+## 3 · Document outline
 
-มี 11 หัวข้อ เรียงตามนี้: บทนำ · ผู้ใช้และสิทธิ์ · ภาพรวมกระบวนการ · use case · ข้อกำหนดหน้าจอ · ผังสถานะ · กฎทางธุรกิจ · ข้อมูลและการเชื่อมต่อ · ข้อผิดพลาดและกรณีขอบ · ตารางสอบย้อนกลับ · ประวัติการแก้ไข
-ข้ามได้แค่ข้อกำหนดหน้าจอถ้าไม่มีหน้าจอ และผังสถานะถ้าไม่มีสถานะ โครงเต็มอยู่ใน **[`assets/fsd-outline.md`](assets/fsd-outline.md)** ส่วนตารางที่บอกว่าแต่ละหัวข้อตอบคำถามอะไรอยู่ใน [references/outline-sections.md](references/outline-sections.md)
+There are 11 sections, in this order: Introduction · Users and permissions · Process overview · Use cases · Screen requirements · State diagram · Business rules · Data and integrations · Errors and edge cases · Traceability matrix · Revision history.
+You may skip only the screen requirements if there is no screen, and the state diagram if there are no states. The full outline is in **[`assets/fsd-outline.md`](assets/fsd-outline.md)**. The table of the question each section answers is in [references/outline-sections.md](references/outline-sections.md).
 
-## 4 · use case — รูปแบบเดียวทั้งเอกสาร
+## 4 · Use cases — one format across the document
 
-ทุก use case มีหัวตาราง (มาจาก · ผู้ทำ · เงื่อนไขก่อนเริ่ม · ผลเมื่อสำเร็จ · ความถี่) ตามด้วยตารางขั้นตอนหลัก ทางเลือกอื่น และกรณีผิดพลาด ตัวอย่างเต็ม UC-ORD-010 อยู่ใน [references/worked-examples.md](references/worked-examples.md)
+Every use case has a header table (comes from · actor · preconditions · result on success · frequency), followed by tables for the main steps, alternatives, and error cases. The full example UC-ORD-010 is in [references/worked-examples.md](references/worked-examples.md).
 
-**กฎของ use case:**
+**Rules for a use case:**
 
-- **หนึ่ง use case = หนึ่งเป้าหมายของผู้ใช้** ไม่ใช่หนึ่งหน้าจอ
-- ทุก use case ต้องมี **ทางเลือกอื่น** และ **กรณีผิดพลาด** อย่างน้อยอย่างละหนึ่ง —
-  use case ที่มีแต่ทางที่ทุกอย่างราบรื่น คือ use case ที่ยังเขียนไม่เสร็จ
-- คอลัมน์ "ระบบทำอะไรต่อ" ห้ามว่าง — ถ้าว่างแปลว่ายังไม่ได้คิดว่าระบบตอบสนองยังไง
-- **เงื่อนไขก่อนเริ่มต้องตรวจซ้ำที่ฝั่งเซิร์ฟเวอร์เสมอ** การซ่อนปุ่มไม่ใช่การควบคุมสิทธิ์
-- เขียนเป็น "ผู้ใช้ทำ → ระบบตอบ" สลับกัน ไม่ใช่เล่าเป็นย่อหน้า
+- **One use case = one user goal**, not one screen.
+- Every use case needs at least one **alternative** and one **error case**.
+  A use case with only the smooth path is a use case that is not finished.
+- The "what the system does next" column must not be empty. An empty cell means nobody has worked out how the system responds.
+- **Always re-check preconditions on the server.** Hiding a button is not access control.
+- Write it as alternating "user does → system responds", not as a paragraph of narrative.
 
-## 5 · ข้อกำหนดหน้าจอ
+## 5 · Screen requirements
 
-ตัวอย่างเต็ม SC-ORD-020 พร้อมตารางฟิลด์อยู่ใน [references/worked-examples.md](references/worked-examples.md)
+The full example SC-ORD-020 with its field table is in [references/worked-examples.md](references/worked-examples.md).
 
-**ทุกหน้าจอต้องระบุครบ 6 อย่าง:**
+**Every screen must specify all 6 things:**
 
-| ต้องมี | รายละเอียด |
+| Required | Detail |
 |---|---|
-| ตารางฟิลด์ | ชนิด · บังคับไหม · กฎตรวจ · **ข้อความ error ตามจริง** · ค่าเริ่มต้น |
-| สิทธิ์ต่อบทบาท | บทบาทไหนเห็น · แก้ได้ · แค่อ่าน · ไม่เห็นเลย |
-| ห้าสถานะของหน้าจอ | ว่าง · กำลังโหลด · ผิดพลาด · มีบางส่วน · สำเร็จ (ดู `ui-craft`) |
-| การกระทำและผลลัพธ์ | ปุ่มไหนพาไปไหน · ปุ่มไหนเปิดกล่องยืนยัน |
-| กฎการแสดงผล | รูปแบบวันที่ · ทศนิยมของเงิน · การปัดเศษ · เขตเวลา |
-| ที่มาของข้อมูล | ฟิลด์นี้มาจาก endpoint ไหนหรือตารางไหน |
+| Field table | Type · required or not · validation rule · **the actual error message** · default value |
+| Permission per role | Which role can see · edit · only read · not see at all |
+| The five screen states | Empty · loading · error · partial · success (see `ui-craft`) |
+| Actions and results | Which button goes where · which button opens a confirmation box |
+| Display rules | Date format · decimals for money · rounding · time zone |
+| Data source | Which endpoint or table this field comes from |
 
-> **"ข้อความ error ตามจริง" คือคำที่ผู้ใช้จะเห็นจริง ๆ** ไม่ใช่ "แสดงข้อความแจ้งเตือน"
-> ถ้าไม่เขียน developer จะแต่งเอง แล้วทั้งระบบจะมีสำนวนคนละแบบสิบแบบ
+> **"The actual error message" means the words the user will really see**, not "show a warning message".
+> If you leave it out, the developer will invent one, and the system will end up with ten different phrasings.
 >
-> **กฎการแสดงผลต้องเขียนไว้** — "ยอดรวม" ที่ไม่บอกว่าปัดเศษยังไง
-> คือบั๊กที่จะเจอตอนกระทบยอดสิ้นเดือน
+> **Display rules must be written down.** A "total" that does not say how it rounds
+> is a bug you will find at month-end reconciliation.
 
-## 6 · ผังสถานะ — จุดที่ FSD ลืมบ่อยที่สุด
+## 6 · State diagram — the point FSDs forget most often
 
-ของที่มี "สถานะ" (คำสั่งซื้อ ใบลา ตั๋วงาน เอกสาร) ต้องมีตารางที่มีคอลัมน์ จาก · ไป · ใครทำได้ · เงื่อนไข · ผลข้างเคียง และ**ห้ามมีแค่รูป** ตัวอย่างตารางอยู่ใน [references/worked-examples.md](references/worked-examples.md)
+Anything with a "status" (an order, a leave request, a work ticket, a document) needs a table with the columns From · To · Who can do it · Condition · Side effects, and **must not have only a picture**. A sample table is in [references/worked-examples.md](references/worked-examples.md).
 
-**กฎ:**
+**Rules:**
 
-- **การเปลี่ยนที่ไม่อยู่ในตาราง คือการเปลี่ยนที่ต้องถูกปฏิเสธ** เขียนบรรทัด "ทำไม่ได้" ไว้ให้ชัด
-  เพราะสิ่งที่ห้ามทำคือสิ่งที่ทดสอบได้ยากที่สุดถ้าไม่มีใครเขียนไว้
-- ทุกสถานะต้องมีทางออก ยกเว้นสถานะปลายทางที่ตั้งใจให้จบ
-- ผลข้างเคียงที่เกิดกับระบบอื่น (อีเมล สต็อก บัญชี) ต้องอยู่ในตารางนี้ ไม่ใช่ซ่อนอยู่ในขั้นตอน
+- **A transition not in the table is a transition that must be rejected.** Write a clear "not allowed" row.
+  What is forbidden is the hardest thing to test if nobody wrote it down.
+- Every state needs an exit, except a final state that is meant to end.
+- Side effects on other systems (email, stock, accounting) belong in this table, not hidden in the steps.
 
-## 7 · กฎทางธุรกิจแยกออกมาจากขั้นตอน
+## 7 · Business rules separate from the steps
 
-กฎแต่ละข้อมีรหัส ชื่อ เนื้อกฎ และที่มา ตัวอย่าง BR-030 อยู่ใน [references/worked-examples.md](references/worked-examples.md)
+Each rule has a code, a name, the rule text, and a source. A sample BR-030 is in [references/worked-examples.md](references/worked-examples.md).
 
-- **กฎหนึ่งข้อเขียนที่เดียว** แล้วอ้างด้วยรหัสจากทุกที่ที่ใช้ — ถ้าลอกไปวางสามที่ สักวันจะแก้ไม่ครบ
-- ทุกกฎต้องมี**ที่มา** กฎที่ไม่มีที่มาคือกฎที่ทีมคิดเอง
-- กฎที่เปลี่ยนตามเวลา (อัตราภาษี ค่าธรรมเนียม) ต้องระบุว่า**เก็บไว้ที่ไหน** —
-  ในโค้ด ในตารางตั้งค่า หรือให้ผู้ดูแลระบบแก้ได้เอง
+- **Write each rule in one place**, then cite it by code from everywhere it applies. If you copy it into three places, someday you will miss one when you change it.
+- Every rule needs a **source**. A rule with no source is a rule the team made up.
+- A rule that changes over time (tax rate, fee) must say **where it is stored**:
+  in code, in a settings table, or editable by the system administrator.
 
-## 8 · ข้อผิดพลาดและกรณีขอบที่ต้องตอบให้ครบ
+## 8 · Errors and edge cases to answer in full
 
-ตารางกรณีขอบคือสิ่งที่ทีมทดสอบจะใช้ และคือสิ่งที่ FSD ส่วนใหญ่ขาด ตั้งแต่ไม่มีข้อมูล กดปุ่มรัว ๆ สองคนแก้พร้อมกัน ไปจนถึงสิทธิ์ไม่พอ ให้ไล่ทุกแถวใน [references/edge-cases.md](references/edge-cases.md) แล้วตอบทุกแถวที่เกี่ยวกับฟีเจอร์
+The edge-case table is what the test team will use, and it is what most FSDs lack. It runs from no data, rapid repeated clicks, and two people editing at once, to insufficient permission. Go through every row in [references/edge-cases.md](references/edge-cases.md) and answer every row that touches the feature.
 
-## 9 · รหัสและการสอบย้อนกลับ
+## 9 · Codes and traceability
 
 ```
-UC-<โมดูล>-<เลข 3 หลัก>      use case              UC-ORD-010
-SC-<โมดูล>-<เลข 3 หลัก>      ข้อกำหนดหน้าจอ         SC-ORD-020
-BR-<เลข 3 หลัก>              กฎทางธุรกิจ            BR-030
+UC-<module>-<3-digit number>      use case              UC-ORD-010
+SC-<module>-<3-digit number>      screen requirement    SC-ORD-020
+BR-<3-digit number>               business rule         BR-030
 ```
 
-ใช้ระบบเดียวกับ `srs-writing` — **เว้นเลขทีละ 10** และ **รหัสที่ออกไปแล้วห้ามใช้ซ้ำ**
+Use the same system as `srs-writing`: **number in steps of 10**, and **never reuse a code that has been issued**.
 
-| SRS | FSD | หน้าจอ | test case | สถานะ |
+| SRS | FSD | Screen | test case | Status |
 |---|---|---|---|---|
-| FR-ORD-040 | UC-ORD-010 | SC-ORD-020 | TC-ORD-010..014 | ทำแล้ว |
-| FR-ORD-040 | UC-ORD-010 · 010-E1 | SC-ORD-020 | TC-ORD-015 | ทำแล้ว |
+| FR-ORD-040 | UC-ORD-010 | SC-ORD-020 | TC-ORD-010..014 | Done |
+| FR-ORD-040 | UC-ORD-010 · 010-E1 | SC-ORD-020 | TC-ORD-015 | Done |
 
-- **ทุก use case ต้องชี้กลับไปที่ข้อกำหนดใน SRS ได้** — ถ้าชี้ไม่ได้ แปลว่ามีของแถมที่ไม่มีใครสั่ง
-- **ทุกข้อกำหนดใน SRS ต้องมี use case อย่างน้อยหนึ่งตัว** — ถ้าไม่มี แปลว่าลืมทำ
-- ทางเลือกอื่นและกรณีผิดพลาดต้องมี test case ของตัวเอง ห้ามนับรวมกับทางหลัก
+- **Every use case must trace back to a requirement in the SRS.** If it cannot, someone added a bonus nobody ordered.
+- **Every requirement in the SRS must have at least one use case.** If it has none, it was forgotten.
+- Alternatives and error cases need their own test cases. Do not count them with the main path.
 
-## 10 · รูปในเอกสาร
+## 10 · Figures in the document
 
-ตารางว่าหัวข้อไหนควรมีรูปชนิดไหนอยู่ใน [references/figures.md](references/figures.md) ข้อที่ต้องจำคือ state diagram ใช้**คู่กับตาราง ไม่ใช่แทนตาราง**
+The table of which section needs which figure type is in [references/figures.md](references/figures.md). The point to remember: a state diagram goes **with the table, not instead of it**.
 
-รูปทุกรูปในเอกสาร FSD (ทั้ง Mode A และ Mode B ทั้ง markdown และไฟล์ที่ลูกค้าเซ็นรับ) ใช้ `diagram-figures` แบบ house style ชุดเดียว ส่วนภาพร่างหน้าจอใช้ `markdown-visuals`
-Mermaid ผ่าน `software-diagrams` ใช้แค่ร่างคุยกันในแชต ไม่ใส่ในเอกสารที่ส่ง
-**ทุกรูปในฉบับเดียวใช้ธีมสีชุดเดียวกัน** ตาม `doc-theme` (ดู `polished-document-style`)
+Every figure in an FSD document (Mode A and Mode B, in markdown and in the file the customer signs off) uses `diagram-figures` in one house style. Screen sketches use `markdown-visuals`.
+Mermaid through `software-diagrams` is only for drafts discussed in chat. Do not put it in a delivered document.
+**Every figure in one version uses the same color theme**, per `doc-theme` (see `polished-document-style`).
 
-## 11 · รีวิวความครบถ้วนก่อนส่ง
+## 11 · Completeness review before sending
 
-**ความครบ**
+**Completeness**
 
-- [ ] ทุกข้อกำหนดใน SRS มี use case อย่างน้อยหนึ่งตัว
-- [ ] ทุก use case มีทางเลือกอื่นและกรณีผิดพลาดอย่างน้อยอย่างละหนึ่ง
-- [ ] ทุกหน้าจอมีตารางฟิลด์ครบ 5 คอลัมน์ และห้าสถานะ
-- [ ] ทุกของที่มีสถานะ มีตารางการเปลี่ยนสถานะ รวมบรรทัดที่ "ทำไม่ได้"
-- [ ] ตอบตารางกรณีขอบในข้อ 8 ครบทุกแถวที่เกี่ยวข้อง
+- [ ] Every requirement in the SRS has at least one use case
+- [ ] Every use case has at least one alternative and one error case
+- [ ] Every screen has a field table with all 5 columns, and the five states
+- [ ] Everything that has a status has a state transition table, including the "not allowed" rows
+- [ ] Every relevant row of the edge-case table in item 8 is answered
 
-**ความชัด**
+**Clarity**
 
-- [ ] ไม่มีคำว่า "ตามความเหมาะสม" "โดยอัตโนมัติ" "ที่จำเป็น" โดยไม่บอกว่าคืออะไร
-- [ ] ข้อความ error ทุกอันเขียนเป็นคำจริง ไม่ใช่ "แสดงข้อความแจ้งเตือน"
-- [ ] ตัวเลขทุกตัวมีหน่วย และมีที่มา
-- [ ] ชื่อฟิลด์ ชื่อสถานะ ชื่อ endpoint ใช้ภาษาอังกฤษตรงกับที่จะใช้ในโค้ดจริง
+- [ ] No phrase such as "as appropriate", "automatically", or "as needed" without saying what it means
+- [ ] Every error message is written as real words, not "show a warning message"
+- [ ] Every number has a unit and a source
+- [ ] Field names, status names, and endpoint names are in English, matching what the real code will use
 
-**ความสอดคล้อง**
+**Consistency**
 
-- [ ] คำเดียวกันหมายถึงของเดียวกันทั้งเล่ม (มีอภิธานศัพท์)
-- [ ] ชื่อสถานะในผัง ในตาราง และใน use case ตรงกันหมด
-- [ ] ไม่มีข้อกำหนดใหม่ที่ไม่มีใน SRS
+- [ ] The same word means the same thing throughout (there is a glossary)
+- [ ] State names match across the diagram, the table, and the use cases
+- [ ] No new requirement that is missing from the SRS
 
-> **ทดสอบขั้นสุดท้าย:** ให้ developer ที่ไม่ได้อยู่ในที่ประชุมอ่านหนึ่งคน
-> ทุกคำถามที่เขาถาม คือหนึ่งช่องว่างที่ต้องเติมก่อนส่ง
+> **Final test:** Have one developer who was not in the meeting read it.
+> Every question they ask is one gap to fill before sending.
 
-ไม่มีคนว่างอ่าน ให้ใช้ agent ตัวใหม่ที่ได้เฉพาะไฟล์ FSD ตอบ 8–10 คำถามที่ developer และ QA จะถาม (เช่น "ถ้าจองซ้ำเกิดอะไร" "สถานะไหนย้อนกลับได้") ข้อที่ตอบผิดหรือตอบว่า "ไม่รู้" ต้องแก้ก่อนส่ง · วิธีและคำถามเฉพาะไทย (ปี พ.ศ. · รูปแบบเลขที่เอกสาร) → [`../srs-writing/references/reader-test.md`](../srs-writing/references/reader-test.md)
+If nobody is free to read it, use a fresh agent that gets only the FSD file. Have it answer 8–10 questions that a developer and QA would ask (for example, "what happens on a duplicate booking?" and "which states can be reversed?"). Fix every answer that is wrong or says "I don't know" before sending. For the method and the Thai-specific questions (B.E. years · document number format), see [`../srs-writing/references/reader-test.md`](../srs-writing/references/reader-test.md).
 
-**เมื่อมีโค้ดแล้ว — เทียบ FSD กับโค้ดจริง** (ทำตอนรีวิว FSD รอบหลัง build หรือก่อนรับงานแก้ · แนวคิดจาก trailofbits/skills และ ECC intent-driven-development)
+**Once code exists, compare the FSD with the real code.** Do this when you review the FSD after a build or before taking over a fix. The idea comes from trailofbits/skills and ECC intent-driven-development.
 
-- ไล่ทีละรหัสในข้อ 9: ค้นรหัส use case และชื่อหน้าจอในโค้ดและ test (`rg -n "UC-0[0-9]+" --glob '!**/node_modules/**' | head -50`) · รหัสที่ไม่เจอในโค้ดหรือ test เลย = ช่องว่างที่ต้องตอบว่ายังไม่ทำหรือทำไว้ใต้ชื่ออื่น
-- เทียบ 3 จุดที่ต่างกันบ่อยที่สุด: ตารางฟิลด์ (ข้อ 5) ↔ โค้ด validation · ตารางเปลี่ยนสถานะ (ข้อ 6) ↔ โค้ดที่เปลี่ยนสถานะ (รวมบรรทัด "ทำไม่ได้") · ข้อความ error (ข้อ 8) ↔ สตริงในโค้ด
-- ต่างกันให้จดเป็นตาราง `| spec:บรรทัด | file:บรรทัด | ใครถูก |` แล้วให้คนตัดสิน ไม่แก้ FSD ให้ตรงโค้ดเอง และไม่แก้โค้ดให้ตรง FSD เองในรอบรีวิว
+- Go code by code through item 9. Search the code and tests for use case codes and screen names (`rg -n "UC-0[0-9]+" --glob '!**/node_modules/**' | head -50`). A code that appears nowhere in the code or tests is a gap. Answer whether it is not built yet or built under another name.
+- Compare the 3 places that differ most often: field table (item 5) ↔ validation code · state transition table (item 6) ↔ the code that changes state (including "not allowed" rows) · error messages (item 8) ↔ strings in the code.
+- Record each difference as a table `| spec:line | file:line | who is right |` and let a person decide. During the review, do not change the FSD to match the code, and do not change the code to match the FSD.
 
 ## 12 · Anti-patterns
 
-- **คัดลอก SRS มาแล้วเติมคำว่า "ระบบจะ"** — ได้เอกสารสองฉบับที่พูดเรื่องเดียวกัน
-- **use case ที่มีแต่ทางที่ราบรื่น** — ทางที่พังคือสิ่งที่ FSD มีไว้เพื่อบอก
-- **"แสดงข้อความแจ้งเตือน"** โดยไม่บอกว่าข้อความว่าอะไร
-- **"ระบบจะคำนวณโดยอัตโนมัติ"** โดยไม่บอกสูตรและการปัดเศษ
-- **ผังสถานะเป็นรูปอย่างเดียว** — รูปบอกไม่ได้ว่าใครมีสิทธิ์และมีผลข้างเคียงอะไร
-- **คุมสิทธิ์ด้วยการซ่อนปุ่ม** โดยไม่ระบุการตรวจฝั่งเซิร์ฟเวอร์
-- **กฎทางธุรกิจกระจายอยู่ในขั้นตอน** — พอแก้ทีหลังก็ตกหล่น
-- **หน้าจอที่ไม่บอกว่าข้อมูลมาจากไหน** — developer จะเดา endpoint เอง
-- **เอา wireframe มาแทนข้อกำหนด** — รูปบอกไม่ได้ว่าอะไรบังคับ กฎตรวจคืออะไร
-- **ไม่มีตารางสอบย้อนกลับ** — แล้วไม่มีใครรู้ว่าทำครบหรือยัง
+- **Copying the SRS and adding "the system will"** — you get two documents saying the same thing.
+- **A use case with only the smooth path** — the failing path is what an FSD exists to describe.
+- **"Show a warning message"** without saying what the message says.
+- **"The system calculates automatically"** without the formula and the rounding.
+- **A state diagram that is only a picture** — a picture cannot say who has permission or what side effects occur.
+- **Controlling permission by hiding a button** without specifying the server-side check.
+- **Business rules scattered through the steps** — a later change misses some of them.
+- **A screen that does not say where its data comes from** — the developer will guess the endpoint.
+- **A wireframe in place of requirements** — a picture cannot say what is mandatory or what the validation rule is.
+- **No traceability matrix** — then nobody knows whether the work is complete.
 
-## 13 · ตัวย่อ
+## 13 · Abbreviations
 
-- **FSD** — Functional Specification Document (เอกสารข้อกำหนดเชิงหน้าที่ ระดับที่ลงมือทำได้)
-- **SRS** — Software Requirements Specification (เอกสารข้อกำหนดซอฟต์แวร์ ระดับที่ลูกค้าเซ็นรับ)
-- **BRD** — Business Requirements Document (เอกสารความต้องการทางธุรกิจ)
-- **use case** — กรณีการใช้งาน หนึ่งเป้าหมายของผู้ใช้ตั้งแต่เริ่มจนจบ
-- **state machine** — ผังสถานะ บอกว่าของชิ้นหนึ่งเปลี่ยนจากสถานะไหนไปสถานะไหนได้บ้าง
-- **ETag** — Entity Tag (รหัสระบุรุ่นของข้อมูล ใช้ตรวจว่ามีคนแก้ไปก่อนไหม)
+- **FSD** — Functional Specification Document (a requirements document detailed enough to build from)
+- **SRS** — Software Requirements Specification (a software requirements document at the level a customer signs off)
+- **BRD** — Business Requirements Document
+- **use case** — one user goal from start to finish
+- **state machine** — a state diagram showing which states an item can move between
+- **ETag** — Entity Tag (a version identifier for data, used to check whether someone else edited it first)

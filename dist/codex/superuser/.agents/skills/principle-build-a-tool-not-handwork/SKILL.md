@@ -3,32 +3,32 @@ name: principle-build-a-tool-not-handwork
 description: Use when the same edit repeats across many files or rows
 ---
 
-# principle · build a tool, not handwork — งานกลไกทำเป็นเครื่องมือ
-> ใช้คู่กัน: `principle-small-verifiable-steps` (ตัดเป็นชิ้นเล็กที่ตรวจได้) · `parallel-split-and-merge` (รันหลายชิ้นพร้อมกัน)
+# principle · build a tool, not handwork — turn mechanical work into a tool
+> Use together with: `principle-small-verifiable-steps` (cut into small pieces that can be checked) · `parallel-split-and-merge` (run several pieces at once)
 
-> งานมี 2 ส่วน: ส่วนที่ต้องใช้วิจารณญาณ กับส่วนที่เป็นกลไกล้วน ๆ
-> ส่วนกลไกไม่ต้องให้ agent คิดวิธีใหม่ทุกครั้ง ให้เขียนเป็นโปรแกรมครั้งเดียว แล้วเก็บแรงคิดไว้กับส่วนที่ต้องตัดสินใจ
+> Work has 2 parts: the part that needs judgment, and the part that is purely mechanical.
+> For the mechanical part, do not make the agent work out a new method every time. Write it as a program once, and save the thinking effort for the parts that need a decision.
 
-## เมื่อไรต้องทำเครื่องมือ
+## When to build a tool
 
-| สัญญาณ | เครื่องมือ |
+| Signal | Tool |
 |---|---|
-| แก้รูปแบบเดียวกันเกิน 10 จุด (ไฟล์ · แถวในชีต · เอกสาร · โค้ด) | สคริปต์หรือค้นหา-แทนที่ที่ลองกับตัวอย่างก่อน (โค้ด: codemod · `sed`) |
-| เอกสารจากแม่แบบซ้ำหลายใบ (ใบเสนอราคา 40 ใบ) | แม่แบบ + สคริปต์ผสมข้อมูลจากชีต |
-| ตรวจทุกหน้าจอ ทุกไฟล์ หรือทุกแถว | สคริปต์วนตรวจที่พิมพ์ตารางผล |
-| agent ทุกตัวต้องตั้งสภาพแวดล้อมเองก่อนตรวจ | สคริปต์ `start` ใน verify skill (`app-verifier-setup` (plugin `software-development`)) |
-| ย้ายหรือนำเข้าข้อมูล | สคริปต์ที่รันซ้ำได้ผลเดิม พร้อมโหมดลองก่อน (dry run) |
-| ข้ออ้างว่า "ทุกที่ทำแบบนี้แล้ว" | คำสั่ง grep หรือสคริปต์ที่พิสูจน์ได้ |
-| ทำงานเดิมเป็นครั้งที่ 3 | ทำเป็นคำสั่งหรือ skill |
+| The same change in more than 10 places (files · sheet rows · documents · code) | A script or find-and-replace, tried on a sample first (code: codemod · `sed`) |
+| Many documents from one template (40 quotations) | A template + a script that merges data from the sheet |
+| Checking every screen, every file or every row | A looping check script that prints a result table |
+| Every agent must set up the environment itself before checking | A `start` script in the verify skill (`app-verifier-setup` (plugin `software-development`)) |
+| Moving or importing data | A script that gives the same result when rerun, with a trial mode (dry run) |
+| The claim "everywhere already does it this way" | A grep command or script that proves it |
+| Doing the same job for the 3rd time | Make it a command or a skill |
 
-## กฎของเครื่องมือ
+## Rules for the tool
 
-- **รันซ้ำได้ผลเดิม** — รัน 2 ครั้งต้องไม่พัง และไม่แก้ซ้ำ (`principle-safe-to-rerun` (plugin `software-development`))
-- **พิมพ์ผลที่ตรวจได้** — บอกจำนวนที่แก้ · รายการที่ข้าม · รายการที่ล้ม
-- **เล็กที่สุดที่ทำงานได้** — ไม่ต้องสวย ไม่ต้องรองรับทุกกรณีในอนาคต (`lazy-coding` (plugin `software-development`))
-- **เก็บให้ถูกที่** — สคริปต์ที่ใช้ครั้งเดียวเก็บไว้ใน `_to_delete/` ส่วนสคริปต์ที่ใช้ซ้ำเก็บใน `scripts/` แล้วเขียนบรรทัดเดียวใน README ว่ารันเมื่อไร
-- **skill เหลือแค่คำอธิบายบาง ๆ** — ขั้นตอนตายตัวอยู่ในสคริปต์ ส่วน SKILL.md บอกแค่ว่าเรียกเมื่อไรและอ่านผลอย่างไร
+- **Same result when rerun** — running it twice must not break anything and must not change things twice (`principle-safe-to-rerun` (plugin `software-development`))
+- **Print results that can be checked** — say how many were changed · which items were skipped · which items failed
+- **As small as it can be and still work** — it need not be pretty, and need not handle every future case (`lazy-coding` (plugin `software-development`))
+- **Keep it in the right place** — a one-off script goes in `_to_delete/`, while a script used repeatedly goes in `scripts/` with one line in the README saying when to run it
+- **The skill shrinks to a thin description** — the fixed steps live in the script, while SKILL.md says only when to call it and how to read the result
 
-## ไม่ต้องทำเมื่อ
+## When not to bother
 
-งานแก้ 2–3 จุดที่ต่างกันจริง เพราะเขียนสคริปต์จะใช้เวลามากกว่าแก้เอง
+A change in 2–3 places that really differ, because writing a script takes longer than editing by hand

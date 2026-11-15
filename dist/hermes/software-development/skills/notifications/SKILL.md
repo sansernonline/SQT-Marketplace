@@ -3,49 +3,49 @@ name: notifications
 description: Use when a system sends email, SMS, LINE or push
 ---
 
-# การแจ้งเตือนผู้ใช้
+# User notifications
 
-> **กฎข้อเดียว:** ผู้ใช้จะเลิกอ่านทั้งหมด ถ้าได้รับสิ่งที่ไม่ต้องอ่านมากพอ
-> ทุกข้อความที่ส่งเกินความจำเป็น ทำให้ข้อความที่จำเป็นถูกมองข้ามไปด้วย
-> ข้อความภาษาไทยในแม่แบบ → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ หน้าจอ
+> **One rule:** users stop reading everything if they receive enough that they did not need to read.
+> Every message sent beyond what is necessary makes the necessary messages get ignored too.
+> For Thai text in templates → `human-writing` `references/thai-grammar.md` section 4, register "screen"
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ระบบต้องส่งอีเมล SMS LINE push หรือแจ้งเตือนในแอป
-- ผู้ใช้บ่นว่าได้รับซ้ำ ได้รับเยอะเกิน หรือไม่ได้รับเลย
-- ต้องทำหน้าตั้งค่าว่าจะรับแจ้งเตือนอะไรบ้าง
-- อีเมลสำคัญเข้า spam
+- The system must send email, SMS, LINE push or in-app notifications
+- Users complain of getting duplicates, getting too many, or getting none
+- You must build a settings page for which notifications to receive
+- Important email lands in spam
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Task | Use this instead |
 |---|---|
-| การแจ้งเตือนทีมเมื่อระบบมีปัญหา | `observability-basics` |
-| กลไกคิวและการลองใหม่ | `background-jobs` |
-| ข้อความหลายภาษา | `i18n-and-locale` |
-| ความยินยอมทางการตลาด | `pdpa-compliance` |
+| Alerting the team when the system has a problem | `observability-basics` |
+| Queue mechanics and retries | `background-jobs` |
+| Multi-language messages | `i18n-and-locale` |
+| Marketing consent | `pdpa-compliance` |
 
 ---
 
-## 1 · เลือกช่องทางตามความเร่งด่วน ไม่ใช่ตามความเคยชิน
+## 1 · Choose the channel by urgency, not by habit
 
-| ช่องทาง | เหมาะกับ | ข้อจำกัด |
+| Channel | Good for | Limits |
 |---|---|---|
-| **ในแอป** | ทุกอย่าง — เป็นบันทึกถาวรที่ย้อนดูได้ | เห็นเมื่อเข้าแอป |
-| **อีเมล** | ใบเสร็จ สรุป เอกสารแนบ สิ่งที่ต้องเก็บไว้ | ช้า · เข้า spam ได้ |
-| **push** | เรื่องที่ต้องรู้ตอนนี้ | ปิดได้ · หายถ้าไม่กด |
-| **LINE** | ไทย · ลูกค้าทั่วไป · อัตราเปิดสูง | มีค่าใช้จ่ายต่อข้อความ · มีกฎของผู้ให้บริการ |
-| **SMS** | รหัสยืนยัน · เรื่องด่วนที่ต้องถึงแน่ | แพงสุด · 70 ตัวอักษรถ้าเป็นภาษาไทย |
+| **In-app** | Everything — a permanent record that can be looked back at | Seen only when the user opens the app |
+| **Email** | Receipts, summaries, attachments, things to keep | Slow · can land in spam |
+| **push** | Things the user must know now | Can be turned off · lost if not tapped |
+| **LINE** | Thailand · general customers · high open rate | Cost per message · provider rules apply |
+| **SMS** | Verification codes · urgent things that must arrive | Most expensive · 70 characters if Thai |
 
-> **SMS ภาษาไทยได้แค่ 70 ตัวอักษรต่อข้อความ** (ไม่ใช่ 160 เหมือนอังกฤษ)
-> ถ้าเกินจะถูกตัดเป็นหลายข้อความและคิดเงินเพิ่มทุกท่อน จึงต้องนับความยาวก่อนส่งเสมอ
+> **Thai SMS holds only 70 characters per message** (not 160 as in English).
+> Anything longer is split into several messages and billed for every part, so always count the length before sending.
 
-**เรื่องเดียวส่งช่องทางเดียว** — เว้นแต่เป็นเรื่องที่พลาดไม่ได้จริง ๆ
-ให้ผู้ใช้เลือกเองว่าอยากรับทางไหน (ข้อ 5)
+**One matter goes on one channel** — unless it is something that truly cannot be missed.
+Let the user choose which channel they want (section 5).
 
 ---
 
-## 2 · แม่แบบข้อความอยู่นอกโค้ด
+## 2 · Message templates live outside the code
 
 ```
 templates/
@@ -54,119 +54,119 @@ templates/
     en.subject.txt  en.html  en.txt
 ```
 
-| กฎ | เหตุผล |
+| Rule | Reason |
 |---|---|
-| **ห้ามต่อข้อความในโค้ด** | เพราะแก้คำแต่ละครั้งต้อง deploy ใหม่ |
-| ตัวแปรใช้ชื่อ | ตั้งเป็นชื่ออย่าง `{{customerName}}` ไม่ใช่ลำดับ |
-| อีเมลต้องมีทั้ง HTML และข้อความล้วน | ตัวกรอง spam ลดคะแนนอีเมลที่มีแต่ HTML |
-| แยกไฟล์ต่อภาษา | ดู `i18n-and-locale` |
-| **ทดสอบด้วยค่าจริงก่อนส่ง** | `สวัสดีคุณ {{name}}` ที่หลุดออกไปคือความเสียหายต่อแบรนด์ |
+| **Never build messages by string concatenation in code** | Every wording change would need a new deploy |
+| Variables are named | Use names like `{{customerName}}`, not positions |
+| Email needs both HTML and plain text | Spam filters lower the score of HTML-only email |
+| One file per language | See `i18n-and-locale` |
+| **Test with real values before sending** | A leaked `สวัสดีคุณ {{name}}` damages the brand |
 
-**ทุกข้อความต้องมี 3 อย่าง** — เกิดอะไรขึ้น · เกี่ยวกับรายการไหน (มีเลขอ้างอิง) · ต้องทำอะไรต่อ (ปุ่มเดียว)
+**Every message needs 3 things** — what happened · which item it concerns (with a reference number) · what to do next (a single button)
 
 ---
 
-## 3 · ส่งเป็นงานเบื้องหลังเสมอ
+## 3 · Always send as a background job
 
-> **ส่งอีเมลไม่สำเร็จ ต้องไม่ทำให้การสั่งซื้อล้ม**
-> แยกกันด้วยคิว — ธุรกรรมบันทึกเสร็จ แล้วค่อยเข้าคิวส่ง (ดู `background-jobs`)
+> **A failed email must not make the order fail.**
+> Separate them with a queue — the transaction is saved first, then the message enters the send queue (see `background-jobs`)
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| เข้าคิวหลังธุรกรรมสำเร็จ | ไม่ใช่ระหว่างธุรกรรม เพราะถ้า rollback ทีหลัง อีเมลก็ออกไปแล้ว |
-| retry | 3 ครั้ง เว้นระยะเพิ่มเป็นเท่าตัวทุกรอบ แล้วย้ายเข้า dead letter (คิวเก็บงานที่ส่งไม่สำเร็จ) |
-| **กันส่งซ้ำ** | ใช้ unique key `(ประเภท, entity_id, event_id, ผู้รับ)` — `event_id` คือรหัสเหตุการณ์หรือเวอร์ชันของการเปลี่ยน (เช่น สถานะคำสั่งซื้อครั้งที่ 2 ของออเดอร์เดียวกันต้องส่งได้) ไม่ใช่หวังว่าจะไม่มีใครเรียกซ้ำ |
-| ข้อความเร่งด่วน (รหัส OTP) | ใช้คิวแยก จะได้ไม่ต้องไปต่อแถวหลังอีเมลสรุปรายเดือน 5,000 ฉบับ |
+| Enqueue after the transaction succeeds | Not during the transaction, because if it rolls back later the email has already gone out |
+| retry | 3 times, doubling the wait each round, then move to the dead letter queue (a queue that holds jobs that failed to send) |
+| **Prevent duplicate sends** | Use a unique key `(type, entity_id, event_id, recipient)` — `event_id` is the id of the event or version of the change (for example, the 2nd status of the same order must be sendable). Do not just hope nobody calls twice |
+| Urgent messages (OTP codes) | Use a separate queue so they do not wait behind 5,000 monthly summary emails |
 
-**กันการส่งถล่ม** — ตั้งเพดานต่อผู้ใช้ต่อชั่วโมง และรวบเรื่องเดียวกันที่เกิดถี่ ๆ
-เป็นข้อความเดียว ("มี 12 รายการใหม่" ไม่ใช่ 12 ข้อความ)
+**Prevent a flood** — set a per-user ceiling per hour, and merge frequent events of the same kind
+into one message ("มี 12 รายการใหม่", not 12 messages).
 
 ---
 
-## 4 · ห้ามใส่อะไรในข้อความ
+## 4 · What must never go in a message
 
-| ห้าม | ใส่แทน |
+| Never | Put this instead |
 |---|---|
-| รหัสผ่าน | ลิงก์ตั้งรหัสใหม่ที่หมดอายุ |
-| เลขบัตรเต็ม · เลขบัตรประชาชน | 4 ตัวท้าย |
-| ข้อมูลสุขภาพ ผลตรวจ | "มีผลตรวจใหม่ กรุณาเข้าระบบเพื่อดู" |
-| ไฟล์แนบที่มีข้อมูลอ่อนไหว | ลิงก์ที่ต้องเข้าสู่ระบบก่อน |
-| ลิงก์ที่เข้าถึงได้โดยไม่ต้องยืนยันตัวตน | ลิงก์ที่มีอายุสั้นและตรวจสิทธิ์ |
+| Passwords | A reset link that expires |
+| Full card numbers · national ID numbers | The last 4 digits |
+| Health data, test results | "มีผลตรวจใหม่ กรุณาเข้าระบบเพื่อดู" |
+| Attachments with sensitive data | A link that requires login first |
+| Links reachable without identity verification | A short-lived link that checks permission |
 
-> **ถือว่าอีเมลคือไปรษณียบัตร** — ผ่านหลายระบบ ค้างอยู่ในกล่องจดหมายบนเครื่องที่อาจไม่ใช่ของเขา
-> และถูกค้นเจอได้ตลอดไป
+> **Treat email as a postcard** — it passes through many systems, sits in a mailbox on a device that may not be theirs,
+> and can be found forever.
 
-**ลิงก์ในอีเมลต้องเป็นโดเมนของเรา** — ลิงก์ย่อทำให้ผู้ใช้แยกไม่ออกจากอีเมลหลอกลวง
+**Links in email must be on our own domain** — shortened links make users unable to tell them from scam email.
 
 ---
 
-## 5 · ให้ผู้ใช้เลือกได้
+## 5 · Let users choose
 
-| ประเภท | ปิดได้ไหม |
+| Type | Can it be turned off? |
 |---|---|
-| ธุรกรรม (ใบเสร็จ · รหัสยืนยัน · แจ้งความปลอดภัย) | ✗ ปิดไม่ได้ |
-| การดำเนินการ (สถานะคำสั่งซื้อ · มีคนตอบกลับ) | ✓ เลือกช่องทางได้ |
-| สรุปประจำงวด | ✓ เลือกความถี่ได้ |
-| การตลาด | ✓ **ต้องขอความยินยอมก่อนส่ง** (ดู `pdpa-compliance`) |
+| Transactional (receipts · verification codes · security notices) | ✗ cannot be turned off |
+| Action (order status · someone replied) | ✓ the channel can be chosen |
+| Periodic summary | ✓ the frequency can be chosen |
+| Marketing | ✓ **consent must be obtained before sending** (see `pdpa-compliance`) |
 
-- ตารางตั้งค่า: `user_id` · `notification_type` · `channel` · `enabled`
-- **ทุกข้อความที่ไม่ใช่ธุรกรรมต้องมีลิงก์ยกเลิกรับ** และต้องมีผลภายใน 24 ชั่วโมง (เป้าภายในของเรา เข้มกว่าที่ Gmail และ Yahoo กำหนดไว้ที่ 2 วัน)
-- **อีเมลการตลาดที่ส่งปริมาณมาก** ต้องใส่ header ยกเลิกรับแบบคลิกเดียวด้วย: `List-Unsubscribe: <https://...>` (URL แบบ HTTPS) คู่กับ `List-Unsubscribe-Post: List-Unsubscribe=One-Click` ตามมาตรฐาน RFC 8058 และอีเมลต้องผ่าน SPF + DKIM (Gmail ใช้กับผู้ส่งเกินราว 5,000 ฉบับต่อวัน · ใช้กับอีเมลการตลาด ไม่ใช่ธุรกรรม · ถ้าไม่ใส่ อีเมลมีโอกาสเข้า spam มากขึ้น) — แหล่ง: support.google.com/a/answer/14229414 · senders.yahooinc.com/best-practices ตรวจ 22 ต.ค. 2569
-- ยกเลิกรับได้โดยไม่ต้องเข้าสู่ระบบ — ใช้ token ในลิงก์
-- เคารพ "เวลาเงียบ" — ไม่ส่ง push หรือ SMS ที่ไม่ด่วนตอนตี 2 (ตามเขตเวลาผู้รับ)
+- Settings table: `user_id` · `notification_type` · `channel` · `enabled`
+- **Every non-transactional message must have an unsubscribe link**, and it must take effect within 24 hours (our own internal target, stricter than the 2 days that Gmail and Yahoo set)
+- **High-volume marketing email** must also carry a one-click unsubscribe header: `List-Unsubscribe: <https://...>` (an HTTPS URL) together with `List-Unsubscribe-Post: List-Unsubscribe=One-Click` per the RFC 8058 standard, and the email must pass SPF + DKIM (Gmail applies this to senders above about 5,000 messages per day · it applies to marketing email, not transactional · without it the email is more likely to land in spam) — sources: support.google.com/a/answer/14229414 · senders.yahooinc.com/best-practices checked 22 Oct 2026 (B.E. 2569)
+- Unsubscribing must work without logging in — use a token in the link
+- Respect "quiet hours" — never send non-urgent push or SMS at 2 a.m. (by the recipient's time zone)
 
 ---
 
-## 6 · ติดตามผลการส่ง
+## 6 · Track delivery
 
-| สถานะ | หมายถึง |
+| Status | Meaning |
 |---|---|
-| `queued` · `sent` | เข้าคิว · ส่งออกจากระบบเราแล้ว |
-| `delivered` | ปลายทางรับแล้ว |
-| `bounced` | ส่งไม่ถึง — **แยก hard (ที่อยู่ไม่มีจริง) กับ soft (กล่องเต็ม)** |
-| `failed` | ส่งไม่ออก |
+| `queued` · `sent` | Entered the queue · left our system |
+| `delivered` | The destination accepted it |
+| `bounced` | Did not arrive — **separate hard (the address does not exist) from soft (mailbox full)** |
+| `failed` | Could not be sent |
 
-- **hard bounce ต้องหยุดส่งที่อยู่นั้นทันที** — ส่งต่อไปเรื่อย ๆ ทำให้โดเมนเราถูกขึ้นบัญชีดำ
-- เก็บ log การส่งไว้ตอบคำถาม "ทำไมลูกค้าไม่ได้รับ" — ใคร ช่องทางไหน เมื่อไหร่ ผลอะไร
-- อีเมลที่ต้องถึงแน่ ๆ ต้องตั้ง **SPF · DKIM · DMARC** ให้ครบ ไม่อย่างนั้นอีเมลจะเข้า spam โดยไม่มีสัญญาณเตือนอะไรเลย
-- วัด: อัตราส่งสำเร็จ · อัตรา bounce · คิวค้าง (ดู `observability-basics`)
+- **Stop sending to an address immediately after a hard bounce** — continuing gets our domain blacklisted
+- Keep a send log to answer "why didn't the customer get it" — who, which channel, when, what result
+- Email that must arrive needs **SPF · DKIM · DMARC** all set, or it lands in spam with no warning at all
+- Measure: delivery success rate · bounce rate · queue backlog (see `observability-basics`)
 
 ---
 
 ## 7 · Anti-patterns
 
-- **ส่งข้อความในคำขอเดียวกับธุรกรรม** — ผู้ให้บริการอีเมลช้า แล้วหน้าจอค้าง
-- **ส่งก่อน commit** — rollback แล้วแต่ลูกค้าได้อีเมลไปแล้ว
-- **ข้อความอยู่ในโค้ด** — แก้คำแต่ละครั้งต้อง deploy ใหม่
-- **ไม่กันซ้ำ** — ลูกค้าได้ใบเสร็จ 5 ฉบับ
-- **ส่งทุกช่องทางพร้อมกัน** — ผู้ใช้ปิดทุกอย่างภายในสัปดาห์เดียว
-- **ไม่มีลิงก์ยกเลิกรับ** — ผู้ใช้กด "นี่คือ spam" แทน แล้วโดเมนเราเสียชื่อ
-- **ใส่ข้อมูลอ่อนไหวในตัวข้อความ**
-- **ส่งต่อไปยัง hard bounce** — โดเมนถูกขึ้นบัญชีดำ
-- **ไม่นับความยาว SMS ภาษาไทย** — ค่าใช้จ่ายบานโดยไม่รู้ตัว
-- **ไม่มี log การส่ง** — ตอบลูกค้าไม่ได้ว่าส่งไปหรือยัง
+- **Sending the message in the same request as the transaction** — the email provider is slow and the screen hangs
+- **Sending before commit** — rolled back, but the customer already got the email
+- **Messages in code** — every wording change needs a new deploy
+- **No duplicate prevention** — the customer gets 5 receipts
+- **Sending on every channel at once** — the user turns everything off within a week
+- **No unsubscribe link** — the user clicks "this is spam" instead and our domain loses reputation
+- **Putting sensitive data in the message body**
+- **Continuing to send to a hard bounce** — the domain gets blacklisted
+- **Not counting the length of Thai SMS** — costs balloon without anyone noticing
+- **No send log** — you cannot tell the customer whether it was sent
 
 ---
 
-## 8 · ตัวย่อ
+## 8 · Abbreviations
 
-- **OTP** — One-Time Password (รหัสผ่านใช้ครั้งเดียว)
-- **RFC** — Request for Comments (เอกสารมาตรฐานอินเทอร์เน็ต) · RFC 8058 = มาตรฐาน header ยกเลิกรับคลิกเดียว
-- **push notification** — การแจ้งเตือนที่เด้งขึ้นบนเครื่องผู้ใช้
-- **bounce** — อีเมลที่ส่งไม่ถึงและถูกตีกลับ
-- **SPF · DKIM · DMARC** — มาตรฐานพิสูจน์ว่าอีเมลถูกส่งจากโดเมนนั้นจริง
-- **opt-in / opt-out** — การขอรับ / การยกเลิกรับ
-- **LINE Official Account** — บัญชีทางการของธุรกิจบน LINE ใช้ส่งข้อความหาลูกค้า
+- **OTP** — One-Time Password
+- **RFC** — Request for Comments (internet standards documents) · RFC 8058 = the standard for the one-click unsubscribe header
+- **push notification** — a notification that pops up on the user's device
+- **bounce** — an email that did not arrive and was returned
+- **SPF · DKIM · DMARC** — standards that prove an email was really sent from that domain
+- **opt-in / opt-out** — asking to receive / asking to stop receiving
+- **LINE Official Account** — a business's official account on LINE, used to send messages to customers
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Link to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| คิว retry และ dead letter | `background-jobs` |
-| ข้อความหลายภาษา | `i18n-and-locale` |
-| ความยินยอมทางการตลาด | `pdpa-compliance` |
-| ตารางตั้งค่าและ log การส่ง | `database-design` |
-| ตัวชี้วัดอัตราส่งสำเร็จ | `observability-basics` |
-| ไฟล์แนบและลิงก์ที่หมดอายุ | `file-upload-and-storage` |
-| การแจ้งเตือนทีมเมื่อระบบมีปัญหา | `observability-basics` · `incident-runbook-template` |
-| broadcast ถึงเพื่อน LINE OA (โควตา · กลุ่มเป้าหมาย · ความถี่) | `e-commerce:line-broadcast` (ถ้าติดตั้ง) |
+| Retry queue and dead letter | `background-jobs` |
+| Multi-language messages | `i18n-and-locale` |
+| Marketing consent | `pdpa-compliance` |
+| Settings table and send log | `database-design` |
+| Delivery success rate metrics | `observability-basics` |
+| Attachments and expiring links | `file-upload-and-storage` |
+| Alerting the team when the system has a problem | `observability-basics` · `incident-runbook-template` |
+| Broadcast to LINE OA friends (quota · target group · frequency) | `e-commerce:line-broadcast` (if installed) |

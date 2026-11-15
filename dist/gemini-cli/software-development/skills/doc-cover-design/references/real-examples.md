@@ -1,44 +1,44 @@
-# เรียนจากปกจริงของคนอื่น — ก่อนออกแบบเอง
+# Learn from other people's real covers before designing your own
 
-ใช้กับ `SKILL.md` ข้อ 1 · ปกที่ดีเกือบทุกใบในโลกจริงใช้ระบบที่คนอื่นพิสูจน์แล้ว ไม่ได้คิดใหม่ทั้งหมด → **หาปกจริงที่ใกล้งานเรา ≥ 6 ใบต่อกลุ่ม แล้วยืมโครง ไม่ลอกงาน**
-ที่มา: ปกจริง 35 ใบ (ตรวจ 2026-10-15) จากงานจริงของ LiteNet · Telex · SwipeOS — รายการเต็มพร้อม URL อยู่ใน `_to_delete/cover-lab/examples/EXAMPLES.md` ของ repo ตอนทำ (ไฟล์ชั่วคราว)
+Used with `SKILL.md` step 1. Almost every good cover in the real world uses a system others have already proven; none is invented from scratch. → **Find at least 6 real covers close to our work in each group, then borrow the structure, not the work.**
+Source: 35 real covers (checked 2026-10-15) from the real work of LiteNet · Telex · SwipeOS. The full list with URLs was in `_to_delete/cover-lab/examples/EXAMPLES.md` of the repo at the time (a temporary file).
 
-## วิธีเก็บตัวอย่าง (ทำในขั้นสำรวจ)
+## How to collect examples (do this in the survey step)
 
-1. แบ่ง 3 กลุ่ม: **กลุ่มเดียวกับแอป** (เช่น เครือข่าย → NIST · Cloudflare · O'Reilly *Zero Trust Networks*) · **หนังสือหรือเอกสารของสำนักพิมพ์สายเทค** (O'Reilly · Stripe Press · A Book Apart · No Starch · Microsoft Press) · **ตัวอย่างไทย** (หน่วยงานรัฐ · บริษัทไทย)
-2. ใช้ PDF ทางการก่อน: ดาวน์โหลดลงโฟลเดอร์ใหม่ของตัวเอง แล้ว `pdftoppm -png -r 50 -f 1 -l 1` · ปกที่มีแค่บนเว็บ → ถ่ายจอด้วย playwright · ไฟล์ที่ดาวน์โหลดเป็นของไม่น่าไว้ใจ: เปิดด้วย pdftoppm หรือ Pillow เท่านั้น
-3. ทำภาพรวมแต่ละกลุ่ม (contact sheet) แล้ว**เปิดดูจริงทุกใบ** · จด URL และวันที่ตรวจ
-4. จดว่าแต่ละใบทำอะไร (โครง · ตัวอักษร · ภาพ · สี · บอกชนิดเอกสารหรือเล่มในชุดอย่างไร) และเราจะยืมอะไรไปใช้กับโปรเจกต์ไหน
+1. Split into 3 groups: **same field as the app** (e.g. networking → NIST · Cloudflare · O'Reilly *Zero Trust Networks*) · **books or documents from tech publishers** (O'Reilly · Stripe Press · A Book Apart · No Starch · Microsoft Press) · **Thai examples** (government agencies · Thai companies).
+2. Use official PDFs first: download them into your own new folder, then run `pdftoppm -png -r 50 -f 1 -l 1`. For covers that exist only on the web, take a screenshot with playwright. Downloaded files are untrusted: open them only with pdftoppm or Pillow.
+3. Make an overview sheet (contact sheet) for each group, and **actually open and look at every cover**. Note the URL and the date checked.
+4. Note what each cover does (structure · type · image · color · how it shows document type or volume in the series) and what we will borrow for which project.
 
-## รูปแบบที่เจอ ≥ 3 ครั้ง
+## Patterns seen at least 3 times
 
-| รูปแบบ | ตัวอย่างจริง | ใช้กับเราอย่างไร |
+| Pattern | Real examples | How we use it |
 |---|---|---|
-| แม่แบบชุดเดียว เปลี่ยนแค่สีหรือภาพ | O'Reilly · A Book Apart · Stripe Press · Thoughtworks Radar | ชนิดเอกสาร = เปลี่ยนภาพหรือสี 1 อย่าง ส่วนอื่นอยู่ที่เดิม |
-| บรรทัดหมวดตัวเล็กเหนือชื่อ | O'Reilly · NIST ("COMPUTER SECURITY") · Cloudflare ("WHITEPAPER") | บรรทัดชื่อชุดเอกสารเหนือชื่อเอกสาร |
-| เวอร์ชันเป็นวัตถุแยก (ริบบิ้น · ป้ายกลม · ตัวเลขใหญ่) | O'Reilly ริบบิ้นมุม · Windows Internals เลข "7" · A Book Apart "No 15" · Thailand Digital Outlook ป้าย พ.ศ. | "ฉบับร่าง 0.3" เป็นป้ายของตัวเอง ไม่ซ่อนในแถวข้อมูล |
-| ภาพเดียว สีเน้นเดียว พื้นที่ว่างเยอะ | Apple Platform Security · Cloudflare | ปกพิมพ์และเอกสารสายความปลอดภัย |
-| ข้อมูลเอกสารคือดีไซน์ | RFC 9000 · NIST SP 800-207 · WireGuard | ความน่าเชื่อถือมาจากรหัสและข้อมูล ไม่ใช่ภาพ |
-| ของจริงเป็นภาพ (ข้อมูล · ภาพจริง · รูปจริง) | Radar chart · ภาพจุดบนมือของ MediaPipe · ภาพดาวเทียมของ Google | ตรงกับ "ทดสอบความจริง" ใน SKILL.md ข้อ 1.5 |
-| ชื่อเล็ก ภาพใหญ่ | Stripe Press *Dream Machine* · *Working in Public* | ภาพรูปทรงโลโก้เต็มหน้า ชื่อเอกสารไม่ต้องใหญ่สุดเสมอ |
-| ✗ เส้นเครือข่ายเรืองแสง · ลูกโลก · เมืองนีออน | CISA · ปกรัฐไทยทั้ง 3 ใบ · Ultraleap | ห้ามใช้ — เป็นภาพจำของปกที่ไม่มีใครจำได้ |
+| One template for the whole set, changing only color or image | O'Reilly · A Book Apart · Stripe Press · Thoughtworks Radar | Document type = change 1 image or color; everything else stays put |
+| Small category line above the title | O'Reilly · NIST ("COMPUTER SECURITY") · Cloudflare ("WHITEPAPER") | A document-series line above the document title |
+| Version as a separate object (ribbon · round badge · large number) | O'Reilly corner ribbon · Windows Internals number "7" · A Book Apart "No 15" · Thailand Digital Outlook B.E. badge | "Draft 0.3" gets its own badge, not hidden in the data row |
+| One image, one accent color, lots of white space | Apple Platform Security · Cloudflare | Print covers and security documents |
+| Document data is the design | RFC 9000 · NIST SP 800-207 · WireGuard | Trust comes from codes and data, not images |
+| The real thing as the image (data · real picture · real figure) | Radar chart · MediaPipe hand landmark image · Google satellite imagery | Matches the "truth test" in SKILL.md step 1.5 |
+| Small title, big image | Stripe Press *Dream Machine* · *Working in Public* | A full-page logo-shape image; the document title need not always be the largest |
+| ✗ Glowing network lines · globe · neon city | CISA · all 3 Thai government covers · Ultraleap | Banned. These are the stereotype of covers nobody remembers |
 
-## ระบบชุดของสำนักพิมพ์
+## Publisher series systems
 
-| สำนักพิมพ์ | อยู่กับที่ | เปลี่ยนต่อเล่ม | บทเรียน |
+| Publisher | Fixed | Changes per book | Lesson |
 |---|---|---|---|
-| O'Reilly | พื้นขาว · ภาพลายเส้นแกะไม้ · แถบชื่อ · โลโก้ | สัตว์ · สีแถบ | ภาษาภาพเดียว แถบเดียว ชนิดเอกสารเปลี่ยนแค่ภาพหลักกับสีแถบ |
-| Stripe Press | ตัวอักษรเล็กที่มุม · เครื่องหมาย S · ขนาดเล่ม | ภาพและสีอิสระ | ภาพหลากหลายได้ ถ้าเครื่องหมายและตัวอักษรอยู่ที่เดิม |
-| A Book Apart | โครง · เส้นรอบชื่อ · ป้ายเลข | สีเรียบ 1 สี | ระบบถูกสุด: สีต่อชนิดเอกสาร + เลข |
-| Thoughtworks Radar | โครง · ภาพเรดาร์ · ตำแหน่ง volume | ชุดสีต่อฉบับ | ภาพเดิม สีใหม่ทุกฉบับ = "ภาพโตตามชนิดเอกสาร" |
-| NIST · IETF | ตัวอักษรเรียบ · เลขชุด · ข้อมูล | ไม่มีอะไรเปลี่ยน | รหัสเอกสารคือเครื่องหมายของชุด |
+| O'Reilly | White background · woodcut line art · title bar · logo | Animal · bar color | One visual language, one bar; document type changes only the main image and bar color |
+| Stripe Press | Small type at the corner · S mark · book size | Image and color are free | Images can vary if the mark and type stay put |
+| A Book Apart | Frame · line around the title · number badge | One flat color | The most correct system: one color per document type + number |
+| Thoughtworks Radar | Frame · radar image · volume position | A color set per issue | Same image, new colors every issue = "the image grows with the document type" |
+| NIST · IETF | Plain type · series number · data | Nothing changes | The document code is the mark of the series |
 
-## ตัวอย่างไทย
+## Thai examples
 
-ปกรายงานเทคของหน่วยงานรัฐไทย 3 ใบที่หาได้ใช้ภาพสต็อกเรืองแสงทั้งหมด (โล่ · ลูกโลก · เมืองนีออน) → ยืมได้แค่ 2 อย่าง: **ป้ายสีของปี พ.ศ. หรือฉบับ** และ **ชื่อไทยอยู่บน ชื่ออังกฤษเล็กและจางกว่าอยู่ล่าง**
+The 3 Thai government tech-report covers we could find all use glowing stock images (shield · globe · neon city). → Only 2 things are worth borrowing: **a colored badge for the year (B.E.) or edition**, and **the Thai title on top with a smaller, lighter English title below**.
 
-## กติกาการยืม
+## Rules for borrowing
 
-- ยืมโครงและความคิด ห้ามลอกภาพ เครื่องหมายการค้า หรือการจัดวางแบบหนึ่งต่อหนึ่ง
-- ทุกไอเดียบนปกเขียนว่ายืมมาจากปกจริงใบไหน และเปลี่ยนอะไร (ไฟล์ `ADAPTED.md` ของแต่ละแนว)
-- ตัวอย่างที่หาไม่ได้ (403 · ลิงก์ตาย · ไฟล์ใหญ่เกิน) เขียนไว้ตรง ๆ ไม่เดาหน้าตา
+- Borrow structure and ideas. Never copy images, trademarks, or layouts one-to-one.
+- For every idea on the cover, write which real cover it was borrowed from and what changed (the `ADAPTED.md` file of each style).
+- For examples you could not get (403 · dead link · file too large), say so plainly. Do not guess how they look.

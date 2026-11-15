@@ -4,9 +4,9 @@ Use when software handles legal documents or Thai ETA
 
 # legal-document-systems
 
-ซอฟต์แวร์ด้านเอกสารกฎหมาย — อ่านสัญญา · สร้างเอกสารอัตโนมัติ · ลายเซ็นอิเล็กทรอนิกส์
+Legal document software — reading contracts · automatic document generation · electronic signatures
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทั้งหมด เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้นอยู่แล้ว
+**Open only the files that match the job.** Do not read them all, because each file is the full guide to its topic.
 
 ## หัวข้อ
 
@@ -18,7 +18,7 @@ Use when software handles legal documents or Thai ETA
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+An agent called in for this area opens its own role file before starting.
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -914,7 +914,7 @@ app.post('/webhook/docusign', verifyDocusignSignature, async (req) => {
 
 # Legal Compliance Officer — privacy, retention, e-discovery, residency, audit
 
-คู่มือบทบาทของ agent `legal-compliance-officer` · PDPA ฉบับเต็ม (ฐานทางกฎหมาย · ความยินยอม · สิทธิ · แจ้งเหตุรั่วใน 72 ชั่วโมง) ใช้ skill `pdpa-compliance` · ระยะเวลาเก็บเอกสารต่างกันตามประเทศ ตรวจกับกฎหมายจริงก่อนใช้ (รอยืนยัน)
+Role guide for the agent `legal-compliance-officer` · for the full PDPA (legal bases · consent · rights · breach notice within 72 hours) use the skill `pdpa-compliance` · document retention periods differ by country, so check the real law before use (รอยืนยัน, awaiting confirmation)
 
 **สารบัญ:**
 
@@ -2252,7 +2252,7 @@ Even in e-sign friendly jurisdictions:
 
 ## Thailand: Electronic Transactions Act B.E. 2544
 
-พระราชบัญญัติว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. 2544 (amended B.E. 2551 and later). Checked 2026-10-22.
+Electronic Transactions Act B.E. 2544 (2001) (พระราชบัญญัติว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. 2544; amended B.E. 2551 and later). Checked 2026-10-22.
 
 - **Section 9 (มาตรา 9)** — where a law needs a signature, an electronic signature counts when the method identifies the signer, shows intent, and is reliable enough for the purpose of the transaction (source: opsmoac.go.th summary of the Act)
 - **Section 26 (มาตรา 26)** — a "reliable" electronic signature: the signing data links only to the signer, was under the signer's sole control, and any later change to the signature or the document can be detected. Use this level (usually a certificate-based signature) for high-value or disputed contracts (รอยืนยัน: section text not opened this round)

@@ -1,830 +1,82 @@
-# skill: logging-standards
-
-Use when writing or reviewing code that logs
-
-# Logging Standards
-
-> **กฎข้อเดียว:** log มีไว้ให้คนอ่านตอนตี 3 ที่ระบบล่ม ไม่ใช่ตอนเขียนโค้ด
-> ถ้าบรรทัดไหนไม่ช่วยตอบว่า "เกิดอะไรขึ้น กับใคร เมื่อไหร่" ก็อย่าเขียนลงไป
-
-## เมื่อไหร่ใช้ skill นี้
-
-- เริ่มโปรเจกต์ใหม่ทุกชนิด (service, API, worker, batch, desktop, frontend)
-- มีคนขอ "ให้มี log file" หรือถามเรื่องรูปแบบและระดับของ log
-- ไล่ปัญหา production แล้วพบว่า log ที่มีอยู่ใช้ไม่ได้
-
-## เมื่อไหร่ **ไม่** ใช้
-
-- ต้องการ metrics หรือ tracing (Prometheus, OpenTelemetry) เพราะเป็นคนละเรื่องกับ log ให้ไปใช้ `observability-basics`
-- ทำ endpoint สุขภาพของ service ให้ไปใช้ `web-service-essentials`
-
----
-
-## 1 · รูปแบบบรรทัด — เหมือนกันทุกภาษา
-
-```
-2026-08-31 09:42:13.482 +07:00  INFO   [a3f9c1b2] orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 userId=57 ms=134
-└────────── เวลา + timezone ──────────┘ └level┘  └ cid ┘ └source┘ └── ข้อความ ──┘ └──── context k=v ────┘
-```
-
-| ส่วน | กฎ |
-|---|---|
-| เวลา | `YYYY-MM-DD HH:mm:ss.SSS ±HH:MM` — **ต้องมี timezone** ไม่งั้นเทียบ log ข้ามเครื่องไม่ได้ |
-| level | ชิดซ้าย กว้าง 5 ตัวอักษร (`INFO ` `WARN ` `ERROR` `DEBUG` `FATAL`) — คอลัมน์จะได้ตรงกัน |
-| cid | correlation id 8 ตัวในวงเล็บเหลี่ยม ถ้าไม่มีให้ใส่ `[--------]` (8 ตัวเท่ากัน คอลัมน์จะได้ตรง) |
-| source | โมดูลหรือคลาสที่เขียน log ไม่ใช่ชื่อไฟล์ |
-| ข้อความ | ประโยคเดียว ไม่ฝังตัวแปรใน string |
-| context | `key=value` คั่นด้วยช่องว่าง ถ้าค่ามีช่องว่างให้ครอบด้วย `"` |
-
-**ทำไมไม่ใช่ JSON:** ไฟล์นี้มีไว้ให้คนเปิดอ่านและ `grep` เป็นหลัก รูปแบบนี้ยัง
-`grep "\[a3f9c1b2\]"` หรือ `awk` ได้อยู่ แต่ตาอ่านออกทันทีโดยไม่ต้องพึ่งเครื่องมือ
-วันที่ต้องส่งเข้าระบบรวม log อย่าง Grafana Loki หรือ Elasticsearch, Logstash, Kibana (ELK) ให้เพิ่ม sink (ปลายทางที่ส่ง log ไป) แบบ JSON อีก 1 ตัว แต่**อย่าทิ้งไฟล์ข้อความ**
-
-**1 event = 1 บรรทัด** ยกเว้น stack trace ที่ต่อท้ายโดยเยื้อง 4 ช่อง
-
----
-
-## 2 · ระดับ log — เขียนให้ตรงความหมาย
-
-| ระดับ | ใช้เมื่อ | ตัวอย่าง |
-|---|---|---|
-| `FATAL` | แอปกำลังจะตาย ทำงานต่อไม่ได้ | ต่อ DB ตอน start ไม่ได้ |
-| `ERROR` | งานนี้ล้มเหลว **และต้องมีคนมาดู** | บันทึกคำสั่งซื้อไม่สำเร็จ |
-| `WARN` | ผิดปกติแต่ระบบยังไปต่อได้ | retry ครั้งที่ 2, disk เหลือ 10% |
-| `INFO` | เหตุการณ์สำคัญทางธุรกิจ | สร้างคำสั่งซื้อ, ผู้ใช้ล็อกอิน, job เริ่ม/จบ |
-| `DEBUG` | รายละเอียดสำหรับไล่ปัญหา — **ปิดใน production** | ค่าที่คำนวณได้ระหว่างทาง |
-| `TRACE` | ละเอียดระดับทุก step — เปิดเฉพาะตอนไล่จริง ๆ | payload ดิบ |
-
-> ระวัง: **`ERROR` ที่ไม่มีใครต้องทำอะไร คือ `WARN`** — ถ้า ERROR ขึ้นทุกนาทีจนคนเลิกดู
-> คุณเพิ่งทำลายระบบเตือนภัยของตัวเอง
-
-ค่าเริ่มต้นของ dev คือ `DEBUG` ส่วน production คือ `INFO` และปรับได้ด้วย env `LOG_LEVEL` **ไม่ต้อง build ใหม่ แค่ restart (หรือ reload config)** — .NET อ่านจาก `appsettings.json` แทน (ดู `references/per-stack.md`)
-
----
-
-## 3 · Correlation id — สิ่งที่ทำให้ log ใช้งานได้จริง
-
-1 request ใช้ id เดียวตั้งแต่ต้นจนจบ ทุกบรรทัดที่เกิดจาก request นั้นจึงมี id เดียวกัน
-
-```
-Client ──X-Request-Id?── API Gateway ──┬── Service A ──┐
-                        (ไม่มีก็สร้าง)   └── Service B ──┴─→ ทุกบรรทัดมี cid เดียวกัน
-```
-
-- รับจาก header **`X-Request-Id`** เฉพาะเมื่อตรง `^[A-Za-z0-9-]{1,64}$` · ไม่มีหรือไม่ตรง → สร้างใหม่ (`uuid v4` ตัด 8 ตัวแรก) · เหตุผลดู `web-service-essentials` ข้อ 3
-- **ส่งกลับใน response header เสมอ** เพื่อให้ลูกค้าส่ง id มาตอนแจ้งปัญหา แล้วเราตามได้ทันที
-- ส่งต่อไปยัง service ปลายทางทุกครั้งที่เรียกข้ามระบบ
-- เก็บด้วยกลไกที่แยกตาม request: `AsyncLocalStorage` (Node) · `ContextVar` (Python)
-  · `IHttpContextAccessor`/`LogContext` (.NET) — **ห้ามใช้ตัวแปร global** เพราะจะปนกันทันทีที่มีหลาย request พร้อมกัน
-
----
-
-## 4 · ไฟล์ log
-
-```
-logs/
-  app-20260831.log        ทุกระดับ · หมุนเที่ยงคืน · เก็บ 30 วัน · ไฟล์ละไม่เกิน 100MB
-  error-20260831.log      เฉพาะ ERROR/FATAL · เก็บ 90 วัน
-  fatal.log               exception ที่ไม่ถูกจับ (แอปตาย)
-```
-
-- โฟลเดอร์กำหนดด้วย env `LOG_DIR` — **ห้าม hardcode path**
-- บีบไฟล์เก่า (`.gz`) และ**ต้องมี retention** ไม่อย่างนั้นดิสก์จะเต็มจนระบบล่มเพราะ log ของตัวเอง
-- ใน container ให้ log ออก stdout ด้วย (นอกเหนือจากไฟล์) เพื่อให้ `docker logs` ใช้ได้
-- `logs/` ต้องอยู่ใน `.gitignore`
-
----
-
-## 5 · สิ่งที่ห้ามลง log เด็ดขาด
-
-รหัสผ่าน · token/API key · cookie/Authorization header · OTP/PIN · เลขบัตรเครดิต/CVV ·
-**เลขบัตรประชาชน** · ข้อมูลสุขภาพ · payload เต็มที่มีข้อมูลส่วนบุคคล
-
-ตัวช่วยที่มีให้แล้ว: ฟังก์ชัน redaction (ปิดค่าลับ) ดู**ว่าชื่อคีย์มีคำต้องห้ามอยู่ข้างในไหม** (`userPassword`, `pwd`,
-`accessToken` โดนหมด) แล้วแทนค่าด้วย `***` โดยตรวจลึกลงไปได้ 4 ชั้นของ object
-
-> **Log injection** — ค่าที่มาจากผู้ใช้อาจมี `\n` ถ้าปล่อยผ่าน ผู้ใช้จะ "แต่ง" บรรทัด log
-> ปลอมขึ้นมาเองได้ ทำให้คนอ่านเข้าใจผิดและ parser พัง โค้ดที่ให้มาจึงตัด `\r\n\t` ทิ้งจากทุกค่าและจากข้อความหลัก
-
----
-
-## 6 · โค้ดที่พร้อมใช้
-
-| ไฟล์ | สแต็ก | สถานะ |
-|---|---|---|
-| `assets/logger.node.js` | Node/TS — winston + winston-daily-rotate-file | ✓ รันทดสอบแล้ว 2026-10-25 (Node 22.23.2 · winston 3.19.0 · winston-daily-rotate-file 5.0.0 · ปิดรหัสผ่าน · correlation id · ตัดขึ้นบรรทัดในข้อความหลักและค่า) |
-| `assets/logger_py.py` | Python — stdlib ล้วน ไม่ต้องลงอะไร | ✓ รันทดสอบแล้ว 2026-10-25 (Python 3.13.5 · ชุดทดสอบเดียวกัน) |
-| `references/per-stack.md` | .NET (Serilog) + Angular | ระวัง ยังไม่ได้คอมไพล์ทดสอบ |
-
-```js
-// Node
-const { withCorrelation } = require('./logger.node');
-const log = withCorrelation(req.id).child({ source: 'orders' });
-log.info('สร้างคำสั่งซื้อสำเร็จ', { orderId: 1042, ms: 134 });
-log.error('บันทึกไม่สำเร็จ', err);          // ส่ง Error ตรง ๆ ได้ stack ให้เอง
-```
-
-```python
-# Python
-from logger_py import setup_logging, get_logger, set_correlation_id
-setup_logging(app_name="myapi")             # ครั้งเดียวตอนแอปเริ่ม
-log = get_logger("orders")
-log.info("สร้างคำสั่งซื้อสำเร็จ", extra={"ctx": {"order_id": 1042, "ms": 134}})
-log.exception("บันทึกไม่สำเร็จ")             # ใน except — ได้ stack ให้เอง
-```
-
----
-
-## 7 · ตรวจงาน
-
-```bash
-# ไม่มี print/console.log หลงเหลือในโค้ด production
-grep -rnE "console\.(log|error)|Console\.WriteLine|^\s*print\(" src/ --include="*.ts" \
-  --include="*.js" --include="*.cs" --include="*.py" | grep -v test | head -30
-
-# log ที่ออกมาอ่านได้จริงและ grep ได้
-tail -n 50 logs/app-*.log
-grep "a3f9c1b2" logs/app-*.log          # ตาม request เดียวได้ครบทุกบรรทัดไหม
-```
-
-- [ ] ทุกบรรทัดมีครบ: เวลา+timezone · level · cid · source
-- [ ] `grep` ด้วย cid เดียวแล้วเห็นเรื่องราวของ request นั้นตั้งแต่ต้นจนจบ
-- [ ] ไม่มีความลับหลุด: ลอง log object ที่มี `password`, `token` แล้วต้องเห็น `***`
-- [ ] ยิงค่าที่มี `\n` เข้าไปแล้วไม่เกิดบรรทัดปลอม
-- [ ] ตั้ง `LOG_LEVEL=INFO` แล้ว DEBUG หายไปจริง
-- [ ] ไฟล์หมุนตามวันและมี retention (ปล่อยไว้ 1 เดือนดิสก์ต้องไม่เต็ม)
-- [ ] `logs/` อยู่ใน `.gitignore`
-- [ ] response ส่ง `X-Request-Id` กลับมาให้ลูกค้า
-
----
-
-## 8 · Anti-patterns
-
-- **`console.log` / `print()` ในโค้ดจริง** — ไม่มี level ไม่มีเวลา ไม่มี cid ไม่ลงไฟล์
-- **log ทุกอย่าง** — ไฟล์ใหญ่จนหาอะไรไม่เจอ ราคาแพง และช้า
-- **`try { } catch (e) { }` เงียบ ๆ** — ต้อง log อย่างน้อย 1 บรรทัด
-- **log แล้ว throw ต่อ** — ปัญหาเดียวจะโผล่ 3 ครั้งในไฟล์ ให้ log ที่ชั้นบนสุดซึ่งจัดการ error จริงแทน
-- **ตัวแปรฝังในข้อความ** (`` `บันทึก order ${id} ไม่สำเร็จ` ``) — ทำให้ group log ไม่ได้
-  ใช้ข้อความคงที่ + context แทน
-- **log ในลูปที่วนหลายพันรอบ** — ให้สรุปทีเดียวตอนจบลูป
-- **timestamp ไม่มี timezone** — server ใช้ UTC แต่คนไทยอ่านเป็น +07:00 จึงเทียบเวลาผิดไป 7 ชั่วโมง
-- **ไม่มี retention** — วันหนึ่งดิสก์เต็มแล้วระบบล่มเพราะ log ของตัวเอง
-
----
-
-## 9 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| endpoint health/ping/version | `web-service-essentials` |
-| เขียน test ให้ครอบคลุม | `testing-standards` |
-| runbook ตอน incident | `incident-runbook-template` |
-| postmortem หลังเหตุ | `postmortem-template` |
-
-
-## reference: per-stack.md
-
-# ตั้งค่า logger ให้ได้รูปแบบเดียวกัน — .NET และ Angular
-
-> ระวัง: โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/logger.node.js` และ
-> `assets/logger_py.py` ที่รันจริงแล้ว) โค้ดนี้ใช้การตั้งค่ามาตรฐานของแต่ละไลบรารี
-> ตอน build ครั้งแรกให้เทียบบรรทัดที่ออกมากับรูปแบบใน SKILL.md ข้อ 1
-
----
-
-## สารบัญ
-
-1. [.NET / C# — Serilog](#net--c--serilog)
-2. [Angular / frontend](#angular--frontend)
-3. [ตารางเทียบ](#ตารางเทียบ)
-
----
-
-## .NET / C# — Serilog
-
-```bash
-dotnet add package Serilog.AspNetCore
-dotnet add package Serilog.Sinks.File
-```
-
-`appsettings.json` — เก็บการตั้งค่าไว้นอกโค้ด เปลี่ยนระดับ log ได้โดยไม่ต้อง build ใหม่:
-
-```json
-{
-  "Serilog": {
-    "MinimumLevel": {
-      "Default": "Information",
-      "Override": {
-        "Microsoft.AspNetCore": "Warning",
-        "Microsoft.EntityFrameworkCore.Database.Command": "Warning"
-      }
-    }
-  }
-}
-```
-
-`Program.cs`:
-
-```csharp
-using Serilog;
-using Serilog.Events;
-
-const string LineTemplate =
-    "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}  {Level:u5}  " +
-    "[{CorrelationId}] {SourceContext}  {Message:lj}  {Context:l}{NewLine}{Exception}";
-
-Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
-    .Enrich.FromLogContext()
-    .Enrich.WithProperty("CorrelationId", "--------") // ค่าตั้งต้นเมื่อไม่มี request (8 ตัว)
-    .Enrich.WithProperty("Context", "")              // ค่าว่างเมื่อไม่มี context k=v
-    .WriteTo.Console(outputTemplate: LineTemplate)
-    .WriteTo.File(
-        path: Path.Combine(Environment.GetEnvironmentVariable("LOG_DIR") ?? "logs", "app-.log"),
-        rollingInterval: RollingInterval.Day,
-        retainedFileCountLimit: 30,
-        fileSizeLimitBytes: 100 * 1024 * 1024,
-        rollOnFileSizeLimit: true,
-        outputTemplate: LineTemplate)
-    .WriteTo.File(
-        path: Path.Combine(Environment.GetEnvironmentVariable("LOG_DIR") ?? "logs", "error-.log"),
-        restrictedToMinimumLevel: LogEventLevel.Error,
-        rollingInterval: RollingInterval.Day,
-        retainedFileCountLimit: 90,
-        outputTemplate: LineTemplate)
-    .CreateLogger();
-
-builder.Host.UseSerilog();
-```
-
-> `{Level:u5}` คือตัวพิมพ์ใหญ่กว้าง 5 ตัวอักษร จึงได้ `INFO ` `WARN ` `ERROR` ตรงกับสแต็กอื่น
-> `{Message:lj}` และ `{Context:l}` คือไม่ครอบ string ด้วย `"` ซ้ำอีกชั้น
-
-### Middleware correlation id
-
-```csharp
-using System.Text.RegularExpressions;
-
-public sealed class CorrelationIdMiddleware(RequestDelegate next)
-{
-    public const string Header = "X-Request-Id";
-    // รับค่าจากลูกค้าเฉพาะตัวอักษร ตัวเลข และ - ยาวไม่เกิน 36 ตัว — กันคนยัดข้อความยาวหรือ \n เข้า log
-    private static readonly Regex Valid = new("^[A-Za-z0-9-]{1,36}$", RegexOptions.Compiled);
-
-    public async Task Invoke(HttpContext ctx)
-    {
-        var cid = ctx.Request.Headers[Header].FirstOrDefault();
-        if (cid is null || !Valid.IsMatch(cid))
-            cid = Guid.NewGuid().ToString("N")[..8];   // ไม่มีหรือไม่ผ่าน → สร้างใหม่
-
-        var logCid = cid.Length > 8 ? cid[..8] : cid;   // log ใช้ 8 ตัวแรกให้ตรงคอลัมน์ cid (เหมือน Node/Python) — header ส่งค่าเต็มกลับ
-
-        ctx.Response.Headers[Header] = cid;          // ส่งกลับให้ลูกค้าอ้างอิงได้
-
-        // LogContext ผูกกับ async flow ของ request นี้เท่านั้น — ไม่ปนกับ request อื่น
-        using (Serilog.Context.LogContext.PushProperty("CorrelationId", logCid))
-            await next(ctx);
-    }
-}
-```
-
-### เขียน log
-
-```csharp
-// ถูก: ข้อความคงที่ + ค่าไปอยู่ใน {Context} เป็น k=v ตามรูปแบบ SKILL.md ข้อ 1
-//    ผลลัพธ์: ... INFO   [a3f9c1b2] Orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 ms=134
-using (Serilog.Context.LogContext.PushProperty("Context", $"orderId={orderId} ms={sw.ElapsedMilliseconds}"))
-    _logger.LogInformation("สร้างคำสั่งซื้อสำเร็จ");
-
-// ผิด: ตัวแปรฝังใน string — ทุกบรรทัดกลายเป็นข้อความคนละอัน group ไม่ได้
-_logger.LogInformation($"สร้างคำสั่งซื้อ {orderId} สำเร็จ");
-```
-
-### ปิดข้อมูลลับ
-
-Serilog ไม่ปิดค่าลับให้อัตโนมัติ ทางที่ชัวร์ที่สุดคือ**อย่าส่ง object ทั้งก้อนเข้า log**
-ให้เลือกเฉพาะ field ที่ต้องการ ถ้าจำเป็นต้องส่งทั้งก้อนให้เขียน `IDestructuringPolicy`
-หรือใส่ `[NotLogged]` ผ่าน `Destructure.ByTransforming<T>()`
-
----
-
-## Angular / frontend
-
-หลักการต่างจาก backend: **เบราว์เซอร์เขียนไฟล์ไม่ได้** log ที่สำคัญจึงต้องส่งขึ้น backend
-
-```ts
-// core/logger.service.ts
-import { Injectable, inject, isDevMode } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
-type Level = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
-
-@Injectable({ providedIn: 'root' })
-export class LoggerService {
-  private http = inject(HttpClient);
-  private buffer: unknown[] = [];
-
-  private write(level: Level, message: string, ctx: Record<string, unknown> = {}) {
-    // dev: ออก console เพื่อไล่ปัญหา — prod: เงียบ ยกเว้น WARN ขึ้นไปที่ส่งขึ้น server
-    if (isDevMode()) console[level === 'ERROR' ? 'error' : 'log'](level, message, ctx);
-    if (level === 'DEBUG' || (!isDevMode() && level === 'INFO')) return;   // prod ส่งเฉพาะ WARN ขึ้นไป
-
-    this.buffer.push({ ts: new Date().toISOString(), level, message, ctx });
-    if (this.buffer.length >= 10 || level === 'ERROR') this.flush();
-  }
-
-  /** ส่งเป็นชุด ไม่ยิงทีละบรรทัด — ไม่งั้น network tab เต็มไปด้วย request ของ log เอง */
-  flush() {
-    if (!this.buffer.length) return;
-    const batch = this.buffer.splice(0);
-    this.http.post('/api/client-logs', { entries: batch }).subscribe({ error: () => {} });
-  }
-
-  debug = (m: string, c?: Record<string, unknown>) => this.write('DEBUG', m, c);
-  info  = (m: string, c?: Record<string, unknown>) => this.write('INFO', m, c);
-  warn  = (m: string, c?: Record<string, unknown>) => this.write('WARN', m, c);
-  error = (m: string, c?: Record<string, unknown>) => this.write('ERROR', m, c);
-}
-```
-
-จับ error ที่หลุดทุกตัว:
-
-```ts
-// core/global-error.handler.ts
-import { ErrorHandler, Injectable, inject, isDevMode } from '@angular/core';
-import { LoggerService } from './logger.service';
-
-@Injectable()
-export class GlobalErrorHandler implements ErrorHandler {
-  private log = inject(LoggerService);
-  handleError(err: unknown) {
-    const e = err as Error;
-    this.log.error(e?.message ?? 'unknown error', { stack: e?.stack?.slice(0, 2000) });
-    if (isDevMode()) console.error(err);
-  }
-}
-// app.config.ts → providers: [{ provide: ErrorHandler, useClass: GlobalErrorHandler }]
-```
-
-ส่ง correlation id ในทุก request เพื่อให้ log ฝั่ง client กับ server ต่อกันติด:
-
-```ts
-// core/correlation.interceptor.ts
-import { HttpInterceptorFn } from '@angular/common/http';
-
-export const correlationInterceptor: HttpInterceptorFn = (req, next) =>
-  next(req.clone({ setHeaders: { 'X-Request-Id': crypto.randomUUID().slice(0, 8) } }));
-```
-
-**ฝั่ง backend** ต้องมี endpoint `POST /api/client-logs` ที่:
-- จำกัดขนาด body และทำ rate limit ไม่อย่างนั้นจะกลายเป็นช่องให้คนยิง log ถล่ม
-- เขียนลงไฟล์แยก `logs/client-YYYYMMDD.log`
-- **ถือว่าเนื้อหาเป็นข้อมูลที่เชื่อไม่ได้** จึงต้องตัด `\r\n` ออกจากทุกค่าเหมือน log ปกติ
-
----
-
-## ตารางเทียบ
-
-| เรื่อง | .NET | Node | Python | Angular |
-|---|---|---|---|---|
-| ไลบรารี | Serilog | winston | stdlib `logging` | เขียนเอง (บาง) |
-| หมุนไฟล์ | `rollingInterval: Day` | `winston-daily-rotate-file` | `TimedRotatingFileHandler` | — (ส่งขึ้น backend) |
-| correlation | `LogContext.PushProperty` | `AsyncLocalStorage` + `child()` | `ContextVar` | header `X-Request-Id` |
-| ระดับ | `LogEventLevel` | `level` | `setLevel` | enum ของตัวเอง |
-| ตั้งค่าจากภายนอก | `appsettings.json` | env `LOG_LEVEL` | env `LOG_LEVEL` | `isDevMode()` |
-
-
----
-
-# skill: auth-implementation-patterns
-
-Use when building login with sessions, JWT, OAuth or SSO
-
-# Authentication Implementation Patterns
-
-## When to use this skill
-
-- Building login/signup/logout
-- Adding password reset flow
-- Adding multi-factor authentication (MFA): TOTP, SMS, WebAuthn
-- Choosing session vs token authentication
-- Integrating OAuth or OpenID Connect (OIDC) logins (Google, GitHub, etc.)
-- Implementing single sign-on (SSO) with SAML or OIDC
-- Designing API authentication (API keys, JSON Web Token (JWT), OAuth)
-- Reviewing existing auth code for security issues
-
-## อ่านเพิ่มเมื่อ
-
-| ไฟล์ | เปิดเมื่อ |
-|---|---|
-| [references/auth-flows.md](references/auth-flows.md) | ถ้าจะลงมือเขียน session · JWT · OAuth กับ PKCE หรือการรีเซ็ตรหัสผ่าน ให้เปิดดูลำดับขั้นทีละข้อ |
-| [references/mfa.md](references/mfa.md) | ตอนเลือกหรือลงมือทำ MFA และต้องการขั้นตั้งค่า TOTP · การใช้ WebAuthn · ข้อจำกัดของ SMS |
-| [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md) | ถ้าออกแบบการยืนยันตัวตนของ API หรือ API key หรือต้องการตัวอย่าง RBAC กับ ABAC ให้เปิดไฟล์นี้ |
-| [references/libraries-and-code.md](references/libraries-and-code.md) | ตอนเลือกไลบรารีตามภาษา หรือต้องการโค้ดตัวอย่างการ hash รหัสผ่านและเครื่องมือจำกัดจำนวนครั้ง |
-
-## Choose the Right Pattern
-
-```
-What's authenticating?
-│
-├─ Browser user
-│  ├─ First-party app → Session cookies (HttpOnly, Secure, SameSite)
-│  └─ Need cross-domain → JWT with httpOnly cookie (NOT localStorage)
-│
-├─ Mobile app
-│  └─ Token-based: OAuth 2.0 PKCE flow
-│
-├─ Service-to-service
-│  ├─ Same org → mTLS or service mesh
-│  └─ External → OAuth 2.0 Client Credentials
-│
-└─ Third-party developer
-   └─ API keys (with rotation) OR OAuth
-```
-
-## Pattern 1: Session-Based Auth (Most apps)
-
-**When to use:** server-rendered apps, monoliths, one domain
-
-**Implementation requirements:**
-- Cookie: `HttpOnly`, `Secure`, `SameSite=Lax` (or Strict)
-- Session ID: cryptographically random, ≥ 128 bits
-- Session storage: Redis with a time-to-live (TTL). Not in app memory if you run more than one instance
-- Idle timeout: 30 min default
-- Absolute timeout: 8-12 hours
-- Issue a new session ID when privileges change (login, role change)
-- On logout, delete the session from the store
-
-**Pitfalls:**
-- ผิด: Storing session in JWT (can't revoke)
-- ผิด: Using `localStorage` for the session token (cross-site scripting (XSS) can steal it)
-- ผิด: Keeping the same ID after login (session fixation)
-
-## Pattern 2: JWT (Stateless Token)
-
-**When to use:** microservices, mobile, single-page app (SPA) with a backend API
-
-> ระวัง: **JWT is overused.** If you have a single backend, sessions are simpler and safer.
-
-**Implementation requirements:**
-- Algorithm: `RS256` or `ES256` (NOT `HS256` for distributed systems)
-- Short-lived access token: 5-15 min
-- Refresh token: longer-lived (days), stored separately, revocable
-- Issue a new refresh token each time one is used
-- Required claims: `sub`, `iat`, `exp`, `iss`, `aud`
-- Store JWT in `HttpOnly Secure cookie` (NOT localStorage)
-- Have a way to cancel tokens (blocklist, short expiry, etc.)
-
-**Pitfalls:**
-- ผิด: `alg: none` attacks (check the algorithm explicitly)
-- ผิด: Storing JWT in `localStorage` (XSS-stealable)
-- ผิด: Long-lived access tokens (you can't cancel them)
-- ผิด: Putting sensitive data in JWT (it's base64, not encrypted)
-- ผิด: Skipping signature verification
-
-## Pattern 3: OAuth 2.0 / OIDC
-
-**When to use:** "Login with Google/GitHub", or handing login to an identity provider (IdP)
-
-ใช้ Authorization Code Flow with PKCE (Proof Key for Code Exchange) เสมอ เพราะกันไม่ให้ code ที่ถูกขโมยไปแลกเป็น token ได้ ลำดับขั้นอยู่ใน [references/auth-flows.md](references/auth-flows.md)
-
-**Implementation requirements:**
-- **Always use PKCE** (even for confidential clients)
-- Validate `id_token` signature (use IdP's JWKS)
-- Validate `aud`, `iss`, `exp`, `nonce`
-- Use the `state` parameter to prevent cross-site request forgery (CSRF)
-- Match `code_verifier` to `code_challenge`
-- Use a library, don't write your own (Auth0, Passport.js, etc.)
-
-**Pitfalls:**
-- ผิด: Implicit flow (deprecated, insecure)
-- ผิด: Resource Owner Password Credentials flow (deprecated)
-- ผิด: Skipping `state` validation (CSRF risk)
-- ผิด: Trusting `id_token` without verifying signature
-
-## Pattern 4: Multi-Factor Authentication (MFA)
-
-มี 3 แบบ ถ้าเป็นแอปใหม่ให้ใช้ WebAuthn (passkeys) เป็นค่าเริ่มต้น เพราะไม่มีความลับร่วมให้ถูกหลอกเอาไป ถ้าต้องการ 2FA มาตรฐานที่ผู้ใช้ตั้งเองได้ง่ายให้ใช้ TOTP ส่วน SMS หรือ email ให้ใช้เป็นทางสุดท้ายเท่านั้น เพราะ SMS ไม่ปลอดภัยจากการสลับซิม (SIM swap) รายละเอียดทั้ง 3 แบบอยู่ใน [references/mfa.md](references/mfa.md)
-
-## Pattern 5: Password Management
-
-### Storage
-- ถูก: **Argon2id** (preferred) or **bcrypt** (cost factor ≥ 12)
-- ผิด: Never: MD5, SHA-1, SHA-256 raw, plain text
-
-### Password policy (NIST SP 800-63B-4 §3.1.1.2, checked 2026-10-14 at pages.nist.gov/800-63-4/sp800-63b.html)
-- ถูก: Minimum **15 characters** when the password is the only factor · minimum **8** when it is used only inside multi-factor authentication (MFA)
-- ถูก: Check against a list of breached passwords (Have I Been Pwned (HIBP) API)
-- ถูก: Allow long passphrases (any maximum must be at least 64 chars)
-- ถูก: Allow special characters (don't restrict them)
-- Don't force composition rules (uppercase + digit + symbol)
-- Don't force regular password changes (only when you suspect a breach)
-
-### Password reset flow
-
-ข้อที่ห้ามพลาดในการรีเซ็ตรหัสผ่าน: ข้อความตอบต้องเหมือนกันไม่ว่าอีเมลจะมีในระบบหรือไม่ token ต้องสุ่มอย่างน้อย 256 bits เก็บแบบ hash และหมดอายุใน 15 นาที และเมื่อตั้งรหัสใหม่แล้วต้องยกเลิกทุก session เดิมและส่งอีเมลยืนยัน ลำดับขั้นครบทั้ง 9 ข้ออยู่ใน [references/auth-flows.md](references/auth-flows.md)
-
-## Pattern 6: Account Lockout & Rate Limiting
-
-```
-Login attempts:
-- 5 failed attempts in 15 min → lock account 15 min
-- 10 failed attempts in 1 hour → lock 1 hour
-- Use IP + email combo, not just one
-
-Lockout messaging:
-ถูก: "Too many failed attempts. Try again in 15 minutes."
-ผิด: "Account locked." (reveals account exists)
-```
-
-ให้ใช้เครื่องมือที่มีอยู่แล้วแทนการเขียนเอง รายชื่อเครื่องมืออยู่ใน [references/libraries-and-code.md](references/libraries-and-code.md)
-
-## Pattern 7: API Authentication
-
-เลือกตามผู้เรียก: API key สำหรับ server-to-server แบบง่าย · OAuth 2.0 Client Credentials สำหรับ service-to-service · mTLS สำหรับระบบภายในที่ต้องการความปลอดภัยสูง · HMAC signing สำหรับตรวจ webhook ส่วน API key ต้องแสดง secret ครั้งเดียวตอนสร้าง เก็บแบบ hash และให้ผู้ใช้ยกเลิกได้ทันที ตารางเทียบและหลักการครบอยู่ใน [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md)
-
-## Authorization Patterns (after authentication)
-
-ใช้ RBAC (Role-Based Access Control) เป็นหลัก และใช้ ABAC (Attribute-Based Access Control) เมื่อต้องการสิทธิ์ละเอียดตามคุณสมบัติของข้อมูล ตัวอย่างอยู่ใน [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md)
-
-### Implementation tip
-- Check authorization at every endpoint
-- Don't trust a role sent by the client
-- Check on the server, using the user from the session or token
-
-## Common Vulnerabilities Checklist
-
-- [ ] Session fixation (regenerate ID on login)
-- [ ] CSRF (token or SameSite cookie)
-- [ ] Brute force (rate limiting)
-- [ ] Credential stuffing, i.e. logins with leaked passwords (HIBP check, MFA)
-- [ ] Open redirect (allowlist redirect URLs)
-- [ ] User enumeration, i.e. finding which accounts exist (same error message every time)
-- [ ] Timing attacks (compare in constant time)
-- [ ] Token in URL (use header or cookie)
-- [ ] Logout that does nothing on the server (invalidate server-side)
-- [ ] Privilege escalation (re-check after role change)
-
-## Anti-patterns
-
-- Writing your own crypto or auth (use libraries)
-- Storing passwords reversibly
-- JWT for sessions when you have one backend
-- Long-lived JWT without rotation
-- Authentication without authorization checks
-- Trusting JWT claims as authorization source
-- Logout that doesn't invalidate token server-side
-- Allowing weak passwords for compliance "convenience"
-
-
-## reference: api-auth-and-authorization.md
-
-# API Authentication และ Authorization Patterns
-
-วิธียืนยันตัวตนของ API แต่ละแบบ หลักการจัดการ API key และตัวอย่าง RBAC กับ ABAC
-
-## Pattern 7: API Authentication
-
-| Method | Use case | Token format |
-|--------|----------|--------------|
-| **API Keys** | Server-to-server, simple | `sk_live_xxx` |
-| **OAuth 2.0 Client Credentials** | Service-to-service | JWT bearer |
-| **mTLS** (both sides present certificates) | High-security, internal | X.509 certs |
-| **HMAC signing** | Webhook verification | `HMAC-SHA256` |
-
-### API Key best practices
-- Prefix with environment: `sk_test_xxx`, `sk_live_xxx`
-- Show the secret ONCE, when it is created
-- Store it hashed (like a password)
-- Allow scopes/permissions per key
-- Allow expiry and replacement
-- Show when each key was last used
-- Let users revoke a key instantly
-
-## Authorization Patterns (after authentication)
-
-### RBAC (Role-Based Access Control)
-```
-User → Role → Permissions
-e.g., user@example.com → admin → [users.read, users.write, billing.read]
-```
-
-### ABAC (Attribute-Based) — fine-grained
-```
-Allow if user.department === resource.department AND action === "read"
-```
-
-
-## reference: auth-flows.md
-
-# ลำดับขั้นของแต่ละ flow
-
-ลำดับขั้นทีละข้อของ session · JWT · OAuth กับ PKCE และการรีเซ็ตรหัสผ่าน ใช้ตอนลงมือเขียนโค้ดหรือรีวิวว่าโค้ดทำครบทุกขั้นไหม ส่วนข้อกำหนดและข้อผิดพลาดที่ต้องเลี่ยงอยู่ใน `SKILL.md`
-
-## Pattern 1: Session-Based Auth — Flow
-
-```
-1. User submits credentials
-2. Server validates, creates session ID
-3. Server stores session in Redis/DB
-4. Server sets HttpOnly Secure cookie
-5. Client sends cookie on every request
-6. Server looks up session, identifies user
-```
-
-## Pattern 2: JWT — Flow
-
-```
-1. User submits credentials
-2. Server validates, signs JWT
-3. Client stores JWT (in HttpOnly cookie preferred)
-4. Client sends JWT on every request (Authorization header or cookie)
-5. Server verifies signature, extracts claims
-```
-
-## Pattern 3: OAuth 2.0 / OIDC — Authorization Code Flow with PKCE
-
-PKCE = Proof Key for Code Exchange. It stops a stolen code from being swapped for a token.
-
-```
-1. App → IdP: /authorize?code_challenge=...
-2. User logs in at IdP
-3. IdP → App: /callback?code=...
-4. App → IdP: /token (with code_verifier)
-5. IdP → App: access_token + id_token + refresh_token
-```
-
-## Pattern 5: Password reset flow
-
-```
-1. User requests reset (enter email)
-2. Server: always show "if email exists, link sent" (don't leak)
-3. Generate random token (≥ 256 bits), hash it, store with expiry (15 min)
-4. Email link with raw token
-5. User clicks → /reset?token=...
-6. Server hashes input, compares, verifies expiry
-7. User sets new password (apply policy)
-8. Invalidate all existing sessions
-9. Send confirmation email
-```
-
-
-## reference: libraries-and-code.md
-
-# ไลบรารีและโค้ดตัวอย่าง
-
-โค้ดตัวอย่างการเก็บรหัสผ่าน เครื่องมือจำกัดจำนวนครั้ง และไลบรารีที่แนะนำแยกตามภาษา
-
-## Password storage — code
-
-```typescript
-// Good (using bcrypt)
-const hash = await bcrypt.hash(password, 12);
-const valid = await bcrypt.compare(password, storedHash);
-
-// Bad
-const hash = crypto.createHash('sha256').update(password).digest('hex');
-```
-
-## Rate limiting tools
-
-Use existing tools:
-- `express-rate-limit` (Node.js)
-- `django-ratelimit` (Django)
-- Cloudflare / AWS WAF (edge)
-
-## Library Recommendations
-
-| Stack | Library | Notes |
-|-------|---------|-------|
-| Node.js | `passport`, Auth.js, Better Auth | Lucia v3 is deprecated (lucia-auth.com, checked 22 Oct 2026) so do not start new work on it; Better Auth status (รอยืนยัน, check before use) |
-| Python | `authlib`, `PyJWT` (or `joserfc`) | authlib for OAuth; python-jose is rarely maintained (รอยืนยัน) |
-| Go | `oauth2`, `golang-jwt` | Standard |
-| Rust | `axum-login`, `jsonwebtoken` | — |
-| Any | Auth0, Clerk, Supabase Auth | Managed (faster) |
-
-
-## reference: mfa.md
-
-# Pattern 4: Multi-Factor Authentication (MFA)
-
-รายละเอียดของการยืนยันตัวตนหลายขั้นทั้ง 3 แบบ ใช้ตอนเลือกหรือลงมือทำ MFA
-
-## TOTP (Google Authenticator, Authy)
-**When:** standard two-factor login (2FA), easy for users. TOTP = time-based one-time password.
-
-```
-Setup:
-1. Server generates random secret (160 bits)
-2. Server shows QR code: otpauth://totp/...?secret=...
-3. User scans with authenticator app
-4. User confirms with first code
-5. Server stores secret encrypted
-
-Verify:
-1. User enters 6-digit code
-2. Server computes expected code(s) (±1 window for clock drift)
-3. Match → grant access
-```
-
-## WebAuthn (Passkeys) — Future-proof
-**When:** you want login that phishing can't beat, no SMS, hardware keys
-
-- Use `@simplewebauthn` library
-- Supports Touch ID, Face ID, YubiKey
-- No shared secret, so nothing to phish
-- Default for new apps in 2026+
-
-## SMS / Email codes
-**When:** there's no other option (users without smartphone apps)
-
-- Note: SMS is **NOT secure** (SIM swap attacks)
-- Use only as a last resort, never as the main method
-- Use strict rate limits
-- Codes: 6 digits, 5 min expiry
-
-
----
-
 # skill: database-design
 
 Use when designing or changing a database schema
 
-# ออกแบบฐานข้อมูล
+# Database design
 
-> **กฎข้อเดียว:** schema คือของที่แก้ยากที่สุดในระบบ
-> โค้ดผิดแก้วันนี้จบวันนี้ แต่ schema ผิดต้องอยู่กับมัน 3 ปี พร้อมข้อมูลจริงอีก 10 ล้านแถวที่ต้องย้ายตาม
+> **One rule:** the schema is the hardest thing in a system to change.
+> A code bug fixed today is done today, but a wrong schema stays for 3 years, with another 10 million real rows to migrate along with it.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ออกแบบฐานข้อมูลของระบบใหม่ หรือ module ใหม่
-- จะเพิ่ม/แก้ตาราง คอลัมน์ ความสัมพันธ์ หรือ index
-- จะเขียน migration โดยเฉพาะตอนที่ระบบมีข้อมูลจริงแล้ว
-- query ช้าแล้วสงสัยว่าเป็นที่ schema หรือที่ index
+- Designing the database of a new system or a new module
+- Adding or changing a table, column, relationship or index
+- Writing a migration, especially once the system holds real data
+- A query is slow and you suspect the schema or an index
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or together
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` | แทน |
-| ออกแบบ endpoint และรูปร่าง JSON | `api-conventions` | แทน |
-| เก็บรหัสผ่าน token สิทธิ์ผู้ใช้ | `auth-implementation-patterns` | แทน |
-| ที่เก็บ connection string | `config-and-secrets` | แทน |
-| รัน migration ใน pipeline | `cicd-and-release` | แทน |
-| วาดผัง Entity-Relationship (ER) | `diagram-figures` หรือ `markdown-visuals` | คู่ |
-| บันทึกเหตุผลที่เลือกฐานข้อมูลตัวนี้ | `adr-writer` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Choose the overall architecture | `architecture-patterns` | instead |
+| Design endpoints and JSON shapes | `api-conventions` | instead |
+| Store passwords, tokens, user permissions | `auth-implementation-patterns` | instead |
+| Where to keep connection strings | `config-and-secrets` | instead |
+| Run migrations in a pipeline | `cicd-and-release` | instead |
+| Draw an Entity-Relationship (ER) diagram | `diagram-figures` or `markdown-visuals` | together |
+| Record why this database was chosen | `adr-writer` | together |
+| Abbreviations in work people read | `spell-out-abbreviations` | together |
 
-**ไวยากรณ์เฉพาะแต่ละฐานข้อมูล ชนิดข้อมูลเทียบกัน และคำสั่ง migration ของแต่ละ Object-Relational Mapping (ORM)** อยู่ใน `references/per-stack.md`
+**Syntax specific to each database, data types compared, and the migration commands of each Object-Relational Mapping (ORM) tool** are in `references/per-stack.md`.
 
 ---
 
-## 1 · เลือกชนิดฐานข้อมูลก่อน
+## 1 · Choose the database type first
 
-| เกณฑ์ | Relational (PostgreSQL, SQL Server, MySQL) | Document (MongoDB) |
+| Criterion | Relational (PostgreSQL, SQL Server, MySQL) | Document (MongoDB) |
 |---|---|---|
-| ข้อมูลมีความสัมพันธ์ชัด ต้อง join | ✓ | ✗ ต้องทำมือ |
-| รูปร่างข้อมูลไม่แน่นอน ต่างกันรายตัว | ระวัง ใช้คอลัมน์ JSON | ✓ |
-| ต้องการ transaction ข้ามหลายตาราง | ✓ | ระวัง ได้แต่แพงกว่า |
-| รายงาน ผลรวม การวิเคราะห์ | ✓ | ✗ |
-| เขียนหนักมาก log/telemetry | ระวัง | ✓ หรือใช้ time-series |
+| Data has clear relationships and needs joins | ✓ | ✗ must be done by hand |
+| Data shape is uncertain and differs per record | Careful: use a JSON column | ✓ |
+| Needs transactions across several tables | ✓ | Careful: possible but costlier |
+| Reports, totals, analysis | ✓ | ✗ |
+| Very heavy writes, log/telemetry | Careful | ✓ or use a time-series database |
 
-> **ค่าเริ่มต้นคือ relational** ให้เลือก document เมื่อ**ตอบได้ว่าทำไม**
-> "ยืดหยุ่นกว่า" ไม่ใช่เหตุผล แต่แปลว่ายังไม่ได้ออกแบบ
-> ระบบส่วนใหญ่ที่เลือก document เพราะยืดหยุ่น สุดท้ายเขียนโค้ด join เองในแอป
+> **The default is relational.** Choose document only when you **can answer why**.
+> "More flexible" is not a reason. It means the design is not done yet.
+> Most systems that chose document for flexibility end up writing join code by hand in the app.
 
-**ผสมกันได้**: ใช้ relational เป็นหลัก แล้วเก็บข้อมูลที่รูปร่างไม่แน่นอนเป็นคอลัมน์ `jsonb`
-เกือบทุกกรณี ทางนี้ดีกว่าแยกฐานข้อมูล 2 ตัว
+**You can mix them**: use relational as the base, and store data of uncertain shape in a `jsonb` column.
+In almost every case this is better than running 2 separate databases.
 
 ---
 
-## 2 · กฎตั้งชื่อ — เลือกครั้งเดียว ใช้ทั้งระบบ
+## 2 · Naming rules — choose once, use across the whole system
 
-| สิ่งที่ตั้งชื่อ | รูปแบบ | ตัวอย่าง |
+| What you name | Format | Example |
 |---|---|---|
-| ตาราง | `snake_case` **พหูพจน์** | `orders`, `order_items` |
-| คอลัมน์ | `snake_case` เอกพจน์ | `created_at`, `total_amount` |
+| Table | `snake_case` **plural** | `orders`, `order_items` |
+| Column | `snake_case` singular | `created_at`, `total_amount` |
 | primary key | `id` | `id` |
-| foreign key | `<ตารางเอกพจน์>_id` | `customer_id` |
-| ตารางเชื่อม | `<a>_<b>` เรียงตามตัวอักษร | `role_users` ✓ (ไม่ใช่ `user_roles`) |
-| index | `ix_<ตาราง>_<คอลัมน์>` | `ix_orders_customer_id` |
-| unique | `ux_<ตาราง>_<คอลัมน์>` | `ux_users_email` |
-| foreign key constraint | `fk_<ตาราง>_<ตารางปลายทาง>` | `fk_orders_customers` |
-| check constraint | `ck_<ตาราง>_<เรื่อง>` | `ck_orders_total_non_negative` |
+| foreign key | `<singular table>_id` | `customer_id` |
+| Join table | `<a>_<b>` in alphabetical order | `role_users` ✓ (not `user_roles`) |
+| index | `ix_<table>_<column>` | `ix_orders_customer_id` |
+| unique | `ux_<table>_<column>` | `ux_users_email` |
+| foreign key constraint | `fk_<table>_<target table>` | `fk_orders_customers` |
+| check constraint | `ck_<table>_<topic>` | `ck_orders_total_non_negative` |
 
-**สิ่งที่ห้ามทำ:**
+**Do not:**
 
-- ผิด: ใส่ชนิดข้อมูลในชื่อ เช่น `name_varchar`, `is_active_bit`
-- ผิด: ใส่ชื่อตารางนำหน้าคอลัมน์ เช่น `order_order_date` (มันอยู่ในตาราง `orders` อยู่แล้ว)
-- ผิด: ใช้คำสงวน เช่น `user`, `order`, `group`, `key` ซึ่งต้องใส่เครื่องหมายคำพูดทุกครั้ง ให้ใช้ `users`, `orders` แทน
-- ผิด: ตัวย่อที่คนอ่านไม่ออก เช่น `cst_nm` ประหยัดได้ 8 ตัวอักษร แต่แลกกับความสับสน 3 ปี
+- Wrong: put the data type in the name, such as `name_varchar`, `is_active_bit`
+- Wrong: prefix a column with the table name, such as `order_order_date` (it is already in the `orders` table)
+- Wrong: use reserved words such as `user`, `order`, `group`, `key`, which need quotes every time. Use `users`, `orders` instead.
+- Wrong: use abbreviations people cannot read, such as `cst_nm`. It saves 8 characters but costs 3 years of confusion.
 
-> SQL Server ใช้ `PascalCase` ก็ได้ ถ้าโปรเจกต์เดิมใช้อยู่แล้ว
-> **ใช้แบบเดียวกันทั้งระบบสำคัญกว่าว่าแบบไหนถูก** อย่าเปลี่ยนกลางทาง
+> SQL Server may use `PascalCase` if the existing project already does.
+> **Using one style across the whole system matters more than which style is right.** Do not switch midway.
 
 ---
 
-## 3 · คอลัมน์ที่ทุกตารางต้องมี
+## 3 · Columns every table must have
 
 ```sql
 id           bigint / uuid   PRIMARY KEY
@@ -832,68 +84,68 @@ created_at   timestamptz     NOT NULL DEFAULT now()
 updated_at   timestamptz     NOT NULL DEFAULT now()
 ```
 
-เพิ่มตามความจำเป็น:
+Add these as needed:
 
-| คอลัมน์ | ใส่เมื่อ | หมายเหตุ |
+| Column | Add when | Note |
 |---|---|---|
-| `deleted_at timestamptz` | ต้องกู้ข้อมูลคืนได้ หรือกฎหมายบังคับให้เก็บ | **ทุก query ต้องกรอง** ไม่งั้นข้อมูลที่ลบแล้วโผล่ |
-| `created_by` / `updated_by` | ต้องตอบได้ว่าใครแก้ | เก็บ id ผู้ใช้ ไม่ใช่ชื่อ |
-| `row_version` / `xmin` | มีคนแก้พร้อมกันได้ | ใช้คู่กับ ETag ใน `api-conventions` |
-| `tenant_id` | ระบบหลายผู้เช่า | ดูข้อ 10 |
+| `deleted_at timestamptz` | Data must be recoverable, or the law requires keeping it | **Every query must filter on it**, or deleted data shows up |
+| `created_by` / `updated_by` | You must be able to say who changed it | Store the user id, not the name |
+| `row_version` / `xmin` | Several people can edit at the same time | Use with the ETag in `api-conventions` |
+| `tenant_id` | Multi-tenant system | See section 10 |
 
-> **soft delete (ลบโดยแค่ติดป้าย) มีต้นทุน** คือทุก unique constraint ต้องคิดใหม่
-> `ux_users_email` จะกันไม่ให้สมัครอีเมลเดิมซ้ำ แม้บัญชีเก่าถูกลบไปแล้ว
-> แก้ด้วย partial index: `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL`
+> **soft delete (delete by only setting a flag) has a cost**: every unique constraint must be rethought.
+> `ux_users_email` will block signing up with the same email again, even though the old account was deleted.
+> Fix it with a partial index: `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL`
 
 ---
 
-## 4 · เลือกชนิด identifier
+## 4 · Choose the identifier type
 
-| ชนิด | ข้อดี | ข้อเสีย | ใช้เมื่อ |
+| Type | Pros | Cons | Use when |
 |---|---|---|---|
-| `bigint` เรียงเพิ่ม | เล็ก เร็ว index ไม่แตก อ่านง่ายตอนไล่ปัญหา | เดา id ถัดไปได้ · รวมข้อมูลหลายที่แล้วชนกัน | ค่าเริ่มต้น ระบบเดียว ฐานข้อมูลเดียว |
-| **UUIDv7 / ULID** | เรียงตามเวลา · สร้างจากฝั่งแอปได้ · ไม่ชนกัน | 16 ไบต์ · อ่านด้วยตายาก | ระบบกระจาย · ต้องสร้าง id ก่อนบันทึก · id โผล่ใน URL |
-| `UUIDv4` สุ่มล้วน | ไม่ชนกัน เดาไม่ได้ | **index แตกกระจาย เขียนช้าลงชัดเจนเมื่อข้อมูลเยอะ** | เลี่ยงถ้าเลือกได้ |
+| `bigint` auto-increment | Small, fast, index does not fragment, easy to read when tracing problems | Next id can be guessed · ids collide when merging data from several places | Default, single system, single database |
+| **UUIDv7 / ULID** | Sorted by time · can be generated on the app side · no collisions | 16 bytes · hard to read by eye | Distributed system · id needed before saving · id appears in a URL |
+| `UUIDv4` fully random | No collisions, cannot be guessed | **index fragments, and writes get clearly slower with lots of data** | Avoid if you can |
 
-> **UUIDv4 เป็น primary key คือกับดักที่เจอบ่อยที่สุด**
-> ค่าสุ่มล้วนทำให้ทุก insert ไปแทรกกลางโครงสร้าง index
-> ข้อมูลหลักหมื่นยังไม่รู้สึก แต่พอถึงหลักสิบล้านจะช้าจนต้องรื้อ
-> ถ้าต้องใช้ UUID ให้ใช้ **v7** ซึ่งขึ้นต้นด้วยเวลา จึงเรียงเพิ่มเหมือน bigint
+> **UUIDv4 as a primary key is the most common trap.**
+> Fully random values make every insert land in the middle of the index structure.
+> You do not feel it at tens of thousands of rows, but at tens of millions it gets so slow you must rebuild.
+> If you must use a UUID, use **v7**, which starts with the time, so it grows in order like bigint.
 
-**เลขที่คนเห็นไม่ใช่ primary key**: เลขใบสั่งซื้อ `SO-2026-00042` ที่ลูกค้าอ้างถึง
-ให้เก็บเป็นคอลัมน์ต่างหากที่มี unique constraint และไม่เอา primary key ไปโชว์
-
----
-
-## 5 · normalisation แค่ไหนพอ
-
-**เริ่มที่ Third Normal Form (3NF) เสมอ**: ข้อเท็จจริง 1 อย่างเก็บที่เดียว
-
-denormalise (ยอมเก็บข้อมูลซ้ำ) ได้เมื่อครบ 3 ข้อนี้เท่านั้น:
-
-1. วัดแล้วว่าช้าจริง (มีตัวเลข ไม่ใช่ความรู้สึก)
-2. รู้ว่าข้อมูลซ้ำจะถูกอัปเดตยังไงให้ตรงกัน
-3. เขียนเหตุผลไว้ในคอมเมนต์ของตาราง
-
-**ข้อยกเว้นที่ยอมรับกันทั่วไป**: ข้อมูลที่ต้อง "แช่แข็ง" ณ เวลาหนึ่ง
-ราคาสินค้าในใบสั่งซื้อต้องคัดลอกลง `order_items.unit_price`
-ไม่ join ไปหา `products.price` เพราะราคาวันนี้ไม่ใช่ราคาวันที่ลูกค้าซื้อ
+**A number people see is not the primary key**: a purchase order number such as `SO-2026-00042` that the customer refers to
+should be stored as a separate column with a unique constraint, and the primary key should not be shown.
 
 ---
 
-## 6 · สี่ชนิดข้อมูลที่พลาดกันประจำ
+## 5 · How much normalisation is enough
 
-รายละเอียด 4 ชนิดข้อมูลที่พลาดกันประจำ (เงิน · เวลา · enum หรือสถานะ · boolean) พร้อมตัวอย่าง อยู่ใน [`data-types`](references/data-types.md)
+**Always start at Third Normal Form (3NF)**: each fact is stored in one place.
 
-## 7 · index — วางตรงไหนถึงได้ผล
+You may denormalise (accept duplicated data) only when all 3 of these hold:
 
-**ต้องมี:**
+1. You measured and it is truly slow (with numbers, not a feeling).
+2. You know how the duplicated data will be updated so that the copies match.
+3. You wrote the reason in the table comment.
 
-- ทุก foreign key (ฐานข้อมูลส่วนใหญ่ **ไม่สร้างให้อัตโนมัติ**)
-- คอลัมน์ที่อยู่ใน `WHERE` ของ query ที่รันบ่อย
-- คอลัมน์ที่ใช้ `ORDER BY` คู่กับ pagination
+**A commonly accepted exception**: data that must be "frozen" at a point in time.
+The product price in a purchase order must be copied into `order_items.unit_price`
+and not joined to `products.price`, because today's price is not the price on the day the customer bought.
 
-**composite index (index หลายคอลัมน์): ลำดับคอลัมน์สำคัญ**
+---
+
+## 6 · Four data types people get wrong all the time
+
+Details of the 4 data types people get wrong all the time (money · time · enum or status · boolean), with examples, are in [`data-types`](references/data-types.md).
+
+## 7 · index — where to put one so it works
+
+**Must have:**
+
+- Every foreign key (most databases **do not create it automatically**)
+- Columns in the `WHERE` of frequently run queries
+- Columns used in `ORDER BY` together with pagination
+
+**composite index (an index on several columns): column order matters**
 
 ```sql
 -- query: WHERE tenant_id = ? AND status = ? ORDER BY created_at DESC
@@ -901,94 +153,94 @@ CREATE INDEX ix_orders_tenant_status_created
   ON orders (tenant_id, status, created_at DESC);
 ```
 
-เรียงคอลัมน์ตามเงื่อนไข: **เท่ากับ → ช่วง → เรียงลำดับ**
-index `(a, b)` ใช้กับ query ที่กรองด้วย `a` อย่างเดียวได้ แต่กรองด้วย `b` อย่างเดียว**ไม่ได้**
+Order the columns by condition type: **equals → range → sort**.
+An index `(a, b)` works for a query that filters on `a` alone, but **not** for one that filters on `b` alone.
 
-**อย่าใส่ index เมื่อ:**
+**Do not add an index when:**
 
-- ตารางเล็กกว่าไม่กี่พันแถว เพราะฐานข้อมูลอ่านทั้งตารางเร็วกว่า
-- คอลัมน์มีค่าซ้ำเยอะ เช่น `is_active` ที่ 95% เป็น true
-- ตารางเขียนบ่อยกว่าอ่านมาก เพราะทุก index เพิ่มต้นทุนทุกครั้งที่เขียน
+- The table has fewer than a few thousand rows, because the database reads the whole table faster
+- The column has many repeated values, such as `is_active` where 95% are true
+- The table is written far more often than read, because every index adds cost on every write
 
-> **วัดก่อนเดา**: `EXPLAIN ANALYZE` (PostgreSQL) หรือ execution plan (SQL Server)
-> บอกได้ว่า index ถูกใช้จริงไหม ส่วนการเดาว่า "น่าจะช่วย" ผิดบ่อยกว่าถูก
+> **Measure before guessing**: `EXPLAIN ANALYZE` (PostgreSQL) or the execution plan (SQL Server)
+> tells you whether the index is really used. Guessing that it "should help" is wrong more often than right.
 
 ---
 
-## 8 · constraint อยู่ที่ฐานข้อมูล ไม่ใช่แค่ที่แอป
+## 8 · Constraints live in the database, not only in the app
 
-| กฎ | ที่ควรอยู่ |
+| Rule | Where it should live |
 |---|---|
-| อีเมลห้ามซ้ำ | `UNIQUE` ที่ฐานข้อมูล **และ** ตรวจในแอปเพื่อให้ข้อความ error สวย |
-| ยอดเงินห้ามติดลบ | `CHECK (total_amount >= 0)` |
-| ใบสั่งซื้อต้องมีลูกค้าจริง | `FOREIGN KEY` |
-| สถานะต้องเป็นค่าที่กำหนด | `CHECK` หรือ lookup table |
+| Email must not repeat | `UNIQUE` in the database **and** a check in the app so the error message looks nice |
+| Amount must not be negative | `CHECK (total_amount >= 0)` |
+| A purchase order must have a real customer | `FOREIGN KEY` |
+| Status must be one of the defined values | `CHECK` or a lookup table |
 
-> **เหตุผล:** แอปไม่ใช่ทางเดียวที่แตะข้อมูล ยังมี script แก้ข้อมูลด่วน
-> งาน import ตอนตี 3 และ service ตัวที่ 2 ที่เขียนทีหลัง
-> constraint ที่ฐานข้อมูลคือด่านสุดท้ายที่ไม่มีใครข้ามได้
+> **Reason:** the app is not the only thing that touches the data. There are also urgent data-fix scripts,
+> import jobs at 3 a.m., and a 2nd service written later.
+> A constraint in the database is the last gate that nobody can skip.
 
-**`ON DELETE` ต้องเลือกอย่างตั้งใจ:**
+**Choose `ON DELETE` on purpose:**
 
-| ตัวเลือก | ความหมาย | ใช้กับ |
+| Option | Meaning | Use with |
 |---|---|---|
-| `RESTRICT` (ค่าเริ่มต้นที่ควรใช้) | ลบไม่ได้ถ้ายังมีลูก | เกือบทุกกรณี |
-| `CASCADE` | ลบลูกตามทั้งหมด | ของที่เป็นส่วนประกอบจริง ๆ เช่น `order_items` |
-| `SET NULL` | ลูกกลายเป็นไม่มีพ่อ | ความสัมพันธ์ที่ไม่บังคับ |
+| `RESTRICT` (the default you should use) | Cannot delete while children exist | Almost every case |
+| `CASCADE` | Delete all the children too | True components, such as `order_items` |
+| `SET NULL` | Child becomes parentless | Optional relationships |
 
-ถ้าใส่ `CASCADE` ผิดที่เดียว ลบลูกค้า 1 คน แล้วประวัติการซื้อ 10 ปีจะหายตาม
+If you put `CASCADE` in the wrong place just once, deleting 1 customer wipes 10 years of purchase history with it.
 
 ---
 
-## 9 · migration — เปลี่ยน schema โดยไม่ต้องปิดระบบ
+## 9 · migration — change the schema without taking the system down
 
-ขั้นตอน expand-and-contract และตัวอย่าง migration ที่ deploy ได้โดยไม่ปิดระบบ อยู่ใน [`migrations`](references/migrations.md)
+The expand-and-contract steps, and example migrations that deploy without downtime, are in [`migrations`](references/migrations.md).
 
-คลังข้อมูลเพื่อวิเคราะห์ (star schema · SCD · ELT) อยู่ใน [`warehouse-modeling`](references/warehouse-modeling.md) · pipeline ที่รันซ้ำได้ (incremental · backfill · ทดสอบคุณภาพข้อมูล · checklist ก่อนขึ้น production) อยู่ใน [`data-pipeline-patterns`](references/data-pipeline-patterns.md)
+Data warehouses for analysis (star schema · SCD · ELT) are in [`warehouse-modeling`](references/warehouse-modeling.md) · pipelines that can rerun safely (incremental · backfill · data quality tests · checklist before going to production) are in [`data-pipeline-patterns`](references/data-pipeline-patterns.md).
 
-## 10 · ระบบหลายผู้เช่า (multi-tenant)
+## 10 · Multi-tenant systems
 
-| แบบ | แยกกันแค่ไหน | ต้นทุน | เหมาะกับ |
+| Style | How separate | Cost | Fits |
 |---|---|---|---|
-| คอลัมน์ `tenant_id` ในทุกตาราง | ต่ำ พลาดที่เดียวข้อมูลก็รั่วข้ามผู้เช่า | ถูกสุด | ผู้เช่าเยอะ ข้อมูลต่อรายไม่ใหญ่ |
-| schema แยกต่อผู้เช่า | กลาง | migration ต้องวนทุก schema | ผู้เช่าหลักสิบถึงหลักร้อย |
-| ฐานข้อมูลแยกต่อผู้เช่า | สูงสุด | แพงสุด | ลูกค้าองค์กรที่บังคับให้แยก |
+| A `tenant_id` column in every table | Low: one slip and data leaks across tenants | Cheapest | Many tenants, small data per tenant |
+| A separate schema per tenant | Medium | Migrations must loop over every schema | Tens to hundreds of tenants |
+| A separate database per tenant | Highest | Most expensive | Enterprise customers who require separation |
 
-> **สำคัญ:** ถ้าเลือกแบบ `tenant_id` ให้**บังคับที่ชั้นล่างสุด ไม่ใช่ใส่ใน query ทีละตัว**
-> ใช้ row-level security ของฐานข้อมูล หรือ global filter ของ ORM
-> query ที่ลืมใส่ `WHERE tenant_id = ?` แค่ตัวเดียว ก็ทำให้ข้อมูลลูกค้ารายหนึ่งโผล่ให้อีกรายเห็น
-> และไม่มี error ให้เห็นเลย
+> **Important:** if you choose the `tenant_id` style, **enforce it at the lowest layer, not by adding it to each query**.
+> Use the database's row-level security, or the ORM's global filter.
+> A single query that forgets `WHERE tenant_id = ?` shows one customer's data to another,
+> and no error appears at all.
 
 ---
 
-## 11 · ข้อมูลส่วนบุคคล
+## 11 · Personal data
 
-- ทำรายการว่า **คอลัมน์ไหนเป็นข้อมูลส่วนบุคคล** ถ้าไม่มีรายการนี้จะตอบคำถาม "ข้อมูลฉันอยู่ที่ไหนบ้าง" ไม่ได้
-- เลขบัตรประชาชน หมายเลขบัตรเครดิต และข้อมูลสุขภาพ ให้เข้ารหัสระดับคอลัมน์ หรือไม่เก็บเลยถ้าไม่จำเป็น
-- กำหนด **อายุการเก็บ** ต่อตาราง และมีงานลบจริงตามนั้น
-- ต้องลบได้เมื่อเจ้าของขอ และ soft delete อย่างเดียวไม่นับว่าลบ
-- ห้ามคัดลอกข้อมูลจริงลงเครื่อง developer โดยไม่ปิดบัง
+- Keep a list of **which columns are personal data**. Without this list you cannot answer the question "where is my data?".
+- National ID numbers, credit card numbers and health data: encrypt at the column level, or do not store them at all if not needed.
+- Set a **retention period** per table, and have a real job that deletes accordingly.
+- Data must be deletable when the owner asks, and soft delete alone does not count as deleting.
+- Never copy real data onto a developer machine without masking it.
 
 ---
 
 ## 12 · Anti-patterns
 
-- **ตารางเดียวเก็บทุกอย่าง** (`entity` / `attribute` / `value`) query อะไรก็ยากไปหมด
-- **`varchar(255)` ทุกคอลัมน์** ตัวเลขนี้ไม่มีความหมายอะไร ให้กำหนดจากข้อมูลจริง
-- **เก็บหลายค่าในคอลัมน์เดียว** เช่น `"1,4,7"` ค้นไม่ได้ ใส่ constraint ไม่ได้ ให้ใช้ตารางเชื่อม
-- **ไม่มี foreign key เพราะ "แอปดูแลเอง"** สักวันจะมีแถวกำพร้า
-- **index ทุกคอลัมน์เผื่อไว้** เขียนช้าลง พื้นที่บาน โดยไม่มีใครได้ประโยชน์
-- **`SELECT *` ในโค้ดจริง** เพิ่มคอลัมน์ทีไรโค้ดพังทุกที
-- **ตรรกะธุรกิจใน trigger** ไล่ปัญหาไม่เจอ เพราะไม่มีใครเห็นว่ามันทำงาน
-- **migration ที่เขียนข้อมูลด้วย** ปนกับที่เปลี่ยนโครงสร้าง พอ rollback ข้อมูลก็หาย
-- **แก้ schema บน production ด้วยมือ** deploy รอบหน้า schema จะไม่ตรงกัน
+- **One table that stores everything** (`entity` / `attribute` / `value`): every query becomes hard.
+- **`varchar(255)` on every column**: this number means nothing. Set it from real data.
+- **Several values in one column**, such as `"1,4,7"`: cannot search it, cannot add a constraint. Use a join table.
+- **No foreign key because "the app takes care of it"**: one day you will have orphan rows.
+- **An index on every column just in case**: writes get slower and storage bloats, with no one benefiting.
+- **`SELECT *` in real code**: the code breaks every time a column is added.
+- **Business logic in triggers**: problems are untraceable, because nobody sees it running.
+- **A migration that also writes data**, mixed with the structure change: on rollback the data is lost.
+- **Changing the schema on production by hand**: at the next deploy the schema will not match.
 
 
 ## reference: data-pipeline-patterns.md
 
 # Data pipeline patterns — incremental, backfill, quality, catalog
 
-ทุก pipeline ต้องรันซ้ำได้ผลเท่าเดิม (`principle-safe-to-rerun`) และส่งค่าเข้า SQL เป็น parameter เสมอ
+Every pipeline must give the same result when run again (`principle-safe-to-rerun`) and must always pass values into SQL as parameters.
 
 **สารบัญ:**
 
@@ -1212,11 +464,11 @@ may take 40 minutes on production and hold the table lock the whole time
 
 ## reference: per-stack.md
 
-# ไวยากรณ์และเครื่องมือแยกตามฐานข้อมูล/ORM
+# Syntax and tools per database and ORM
 
-**สารบัญ:** 1 ชนิดข้อมูลเทียบกัน · 2 PostgreSQL · 3 SQL Server · 4 MySQL / MariaDB · 5 MongoDB · 6 Entity Framework Core (.NET) · 7 Prisma / Drizzle (Node) · 8 Alembic (Python) · 9 คำสั่งตรวจ query ช้า
+**Contents:** 1 Data types compared · 2 PostgreSQL · 3 SQL Server · 4 MySQL / MariaDB · 5 MongoDB · 6 Entity Framework Core (.NET) · 7 Prisma / Drizzle (Node) · 8 Alembic (Python) · 9 Slow query commands
 
-1. [ชนิดข้อมูลเทียบกัน](#1--ชนิดข้อมูลเทียบกัน)
+1. [Data types compared](#1--data-types-compared)
 2. [PostgreSQL](#2--postgresql)
 3. [SQL Server](#3--sql-server)
 4. [MySQL / MariaDB](#4--mysql--mariadb)
@@ -1224,30 +476,30 @@ may take 40 minutes on production and hold the table lock the whole time
 6. [Entity Framework Core (.NET)](#6--entity-framework-core-net)
 7. [Prisma / Drizzle (Node)](#7--prisma--drizzle-node)
 8. [Alembic (Python)](#8--alembic-python)
-9. [คำสั่งตรวจ query ช้า](#9--คำสั่งตรวจ-query-ช้า)
+9. [Slow query commands](#9--slow-query-commands)
 
 ---
 
-## 1 · ชนิดข้อมูลเทียบกัน
+## 1 · Data types compared
 
-| ต้องการเก็บ | PostgreSQL | SQL Server | MySQL |
+| To store | PostgreSQL | SQL Server | MySQL |
 |---|---|---|---|
-| id เรียงเพิ่ม | `bigint GENERATED ALWAYS AS IDENTITY` | `bigint IDENTITY(1,1)` | `BIGINT AUTO_INCREMENT` |
-| UUID | `uuid` | `uniqueidentifier` | `BINARY(16)` หรือ `CHAR(36)` |
-| เงิน | `numeric(19,4)` | `decimal(19,4)` | `DECIMAL(19,4)` |
-| เวลา + โซนเวลา | `timestamptz` | `datetimeoffset(3)` | `TIMESTAMP` (เก็บ UTC) |
-| วันที่ล้วน | `date` | `date` | `DATE` |
-| ข้อความยาวไม่จำกัด | `text` | `nvarchar(max)` | `TEXT` / `LONGTEXT` |
-| ข้อความไทย | `text` (UTF-8 อยู่แล้ว) | **`nvarchar` เท่านั้น** | `utf8mb4` |
-| จริง/เท็จ | `boolean` | `bit` | `TINYINT(1)` |
-| JSON | `jsonb` (มี index ได้) | `nvarchar(max)` + `JSON_VALUE` | `JSON` |
-| ไฟล์ไบนารี | `bytea` (หรือเก็บนอกฐานข้อมูล) | `varbinary(max)` | `BLOB` |
+| Auto-increment id | `bigint GENERATED ALWAYS AS IDENTITY` | `bigint IDENTITY(1,1)` | `BIGINT AUTO_INCREMENT` |
+| UUID | `uuid` | `uniqueidentifier` | `BINARY(16)` or `CHAR(36)` |
+| Money | `numeric(19,4)` | `decimal(19,4)` | `DECIMAL(19,4)` |
+| Time + time zone | `timestamptz` | `datetimeoffset(3)` | `TIMESTAMP` (store UTC) |
+| Date only | `date` | `date` | `DATE` |
+| Unlimited-length text | `text` | `nvarchar(max)` | `TEXT` / `LONGTEXT` |
+| Thai text | `text` (already UTF-8) | **`nvarchar` only** | `utf8mb4` |
+| True/false | `boolean` | `bit` | `TINYINT(1)` |
+| JSON | `jsonb` (can be indexed) | `nvarchar(max)` + `JSON_VALUE` | `JSON` |
+| Binary file | `bytea` (or store outside the database) | `varbinary(max)` | `BLOB` |
 
-> **SQL Server + ภาษาไทย**: `varchar` ทำให้ตัวอักษรไทยกลายเป็น `?`
-> ต้องใช้ `nvarchar` และเขียนค่าคงที่เป็น `N'ข้อความ'` เสมอ
+> **SQL Server + Thai**: `varchar` turns Thai characters into `?`.
+> Use `nvarchar` and always write literals as `N'ข้อความ'`.
 >
-> **MySQL ต้องเป็น `utf8mb4`** เพราะชุดอักขระชื่อ `utf8` เฉย ๆ ของ MySQL
-> เก็บได้แค่ 3 ไบต์ต่อตัว อีโมจิและอักขระบางตัวจึงหาย
+> **MySQL must use `utf8mb4`**, because MySQL's character set named plain `utf8`
+> stores only 3 bytes per character, so emoji and some other characters are lost.
 
 ---
 
@@ -1274,14 +526,14 @@ CREATE INDEX ix_orders_customer_id ON orders (customer_id);
 CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC);
 ```
 
-**สร้าง index โดยไม่ล็อกตาราง:**
+**Create an index without locking the table:**
 
 ```sql
 CREATE INDEX CONCURRENTLY ix_orders_status ON orders (status);
--- ห้ามอยู่ใน transaction · ถ้าล้มจะเหลือ index สถานะ invalid ต้อง DROP แล้วทำใหม่
+-- Must not run inside a transaction · if it fails it leaves an index in invalid state: DROP it and redo
 ```
 
-**อัปเดต `updated_at` อัตโนมัติ:**
+**Update `updated_at` automatically:**
 
 ```sql
 CREATE OR REPLACE FUNCTION touch_updated_at() RETURNS trigger AS $$
@@ -1292,28 +544,28 @@ CREATE TRIGGER trg_orders_touch BEFORE UPDATE ON orders
 FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
 ```
 
-**row-level security สำหรับระบบหลายผู้เช่า:**
+**Row-level security for multi-tenant systems:**
 
 ```sql
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 CREATE POLICY tenant_isolation ON orders
   USING (tenant_id = current_setting('app.tenant_id')::bigint);
--- แอปตั้งค่าต่อ connection: SET app.tenant_id = '42';
+-- The app sets this per connection: SET app.tenant_id = '42';
 ```
 
-**กับดักที่เจอบ่อยใน PostgreSQL** (แนวคิดจาก wshobson postgresql-table-design · เลขรุ่นคือรุ่นที่พฤติกรรมเริ่มเป็นแบบนี้)
+**Common PostgreSQL traps** (ideas from wshobson postgresql-table-design · version numbers are the version where the behaviour began)
 
-| กับดัก | ทำแบบนี้แทน |
+| Trap | Do this instead |
 |---|---|
-| `timestamp` (ไม่มี time zone) ทิ้ง offset เงียบ ๆ เครื่อง `+07:00` กับ UTC เก็บค่าคนละความหมาย | `timestamptz` เสมอ |
-| `serial` สร้าง sequence แยกที่สิทธิ์และ `DROP` ไม่ตามตาราง | `GENERATED ALWAYS AS IDENTITY` (PG 10+) |
-| `ADD COLUMN ... NOT NULL` บนตารางใหญ่กลัวล็อกนาน | ถ้าใส่ `DEFAULT` ค่าคงที่ ไม่เขียนตารางใหม่แล้ว (PG 11+) · DEFAULT ที่เป็นฟังก์ชันเช่น `now()` ยังเขียนใหม่ทั้งตาราง |
-| `ADD CONSTRAINT` (FK · CHECK) สแกนทั้งตารางขณะถือล็อก | `... NOT VALID` ก่อน แล้ว `VALIDATE CONSTRAINT` แยกคำสั่ง (ล็อกเบากว่า) |
-| DDL ต่อคิวหลัง transaction ยาว แล้วทุก query หลังมันค้างตาม | `SET lock_timeout = '5s'` ก่อน DDL ทุกครั้ง ตกแล้วรันใหม่ |
-| unique index ปล่อยให้ `NULL` ซ้ำได้หลายแถว | `UNIQUE NULLS NOT DISTINCT` (PG 15+) หรือ partial index `WHERE col IS NOT NULL` |
-| `LIKE '%คำ%'` และ `ILIKE` ไม่ใช้ btree index | extension `pg_trgm` + GIN index · ค้นข้อความจริงจังใช้ `tsvector` |
-| `jsonb` ค้นด้วย `->>` ไม่ใช้ index | GIN index บนคอลัมน์ (`@>` · `?`) หรือ expression index บน `(meta->>'key')` |
-| `count(*)` ทั้งตารางเพื่อแสดงจำนวนหน้า | ใช้ค่าประมาณจาก `pg_class.reltuples` หรือเลิกแสดงจำนวนรวม (cursor pagination) |
+| `timestamp` (no time zone) silently drops the offset, so a `+07:00` machine and UTC store values with different meanings | Always `timestamptz` |
+| `serial` creates a separate sequence whose permissions and `DROP` do not follow the table | `GENERATED ALWAYS AS IDENTITY` (PG 10+) |
+| `ADD COLUMN ... NOT NULL` on a big table risks a long lock | With a constant `DEFAULT` the table is no longer rewritten (PG 11+) · a function DEFAULT such as `now()` still rewrites the whole table |
+| `ADD CONSTRAINT` (FK · CHECK) scans the whole table while holding the lock | Use `... NOT VALID` first, then run `VALIDATE CONSTRAINT` as a separate statement (lighter lock) |
+| DDL queues behind a long transaction, and every query after it waits too | Run `SET lock_timeout = '5s'` before every DDL, and rerun if it times out |
+| A unique index lets `NULL` repeat on many rows | `UNIQUE NULLS NOT DISTINCT` (PG 15+) or a partial index `WHERE col IS NOT NULL` |
+| `LIKE '%คำ%'` and `ILIKE` do not use a btree index | Extension `pg_trgm` + GIN index · for serious text search use `tsvector` |
+| `jsonb` search with `->>` does not use an index | GIN index on the column (`@>` · `?`) or an expression index on `(meta->>'key')` |
+| `count(*)` over the whole table to show a page count | Use the estimate from `pg_class.reltuples`, or drop the total count (cursor pagination) |
 
 ---
 
@@ -1334,12 +586,12 @@ CREATE TABLE orders (
 );
 
 CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC)
-  WITH (ONLINE = ON);   -- Enterprise / Azure SQL เท่านั้น
+  WITH (ONLINE = ON);   -- Enterprise / Azure SQL only
 ```
 
-- `rowversion` ใช้เป็น ETag ตรวจว่ามีคนแก้ชนกันได้ตรง ๆ
-- ถ้าต้องเรียงลำดับภาษาไทย ให้ตั้ง collation `Thai_100_CI_AS` ที่ระดับคอลัมน์หรือฐานข้อมูล
-- `datetime` แบบเก่าละเอียดแค่ 3.33 มิลลิวินาที ให้ใช้ `datetime2` / `datetimeoffset` แทน
+- `rowversion` works directly as an ETag to detect conflicting edits.
+- To sort Thai correctly, set the collation `Thai_100_CI_AS` at the column or database level.
+- The old `datetime` has a precision of only 3.33 milliseconds. Use `datetime2` / `datetimeoffset` instead.
 
 ---
 
@@ -1359,8 +611,8 @@ CREATE TABLE orders (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 ```
 
-- MySQL 8.0.12 ขึ้นไป `ADD COLUMN` ใช้ `ALGORITHM=INSTANT` ได้ (ก่อน 8.0.29 เพิ่มได้เฉพาะท้ายตาราง) ส่วนการเปลี่ยนชนิดข้อมูลยังเขียนตารางใหม่ (dev.mysql.com online DDL, ตรวจ 22 ต.ค. 2569) ตารางใหญ่ที่ต้อง rebuild จึงควรใช้ `pt-online-schema-change` หรือ `gh-ost`
-- ตั้งเวลาเซิร์ฟเวอร์เป็น UTC (`default_time_zone = '+00:00'`)
+- From MySQL 8.0.12, `ADD COLUMN` can use `ALGORITHM=INSTANT` (before 8.0.29 it could add only at the end of the table). Changing a data type still rewrites the table (dev.mysql.com online DDL, checked 22 Oct 2026 (B.E. 2569)). For big tables that need a rebuild, use `pt-online-schema-change` or `gh-ost`.
+- Set the server time to UTC (`default_time_zone = '+00:00'`).
 
 ---
 
@@ -1374,7 +626,7 @@ db.createCollection("orders", {
     properties: {
       orderNo:     { bsonType: "string" },
       customerId:  { bsonType: "objectId" },
-      totalAmount: { bsonType: "decimal" },   // ผิด: อย่าใช้ double กับเงิน
+      totalAmount: { bsonType: "decimal" },   // wrong: do not use double for money
       createdAt:   { bsonType: "date" }
     }
   }}
@@ -1383,9 +635,9 @@ db.orders.createIndex({ orderNo: 1 }, { unique: true });
 db.orders.createIndex({ customerId: 1, createdAt: -1 });
 ```
 
-- ฝัง (embed) เมื่อข้อมูลลูก **อ่านคู่กับพ่อเสมอ และไม่โตไม่จำกัด** นอกนั้นใช้การอ้างอิง
-- เอกสาร 1 ใบมีเพดาน 16 MB อาเรย์ที่โตเรื่อย ๆ จึงชนเพดานสักวัน
-- เงินใช้ `Decimal128` เท่านั้น
+- Embed when the child data is **always read together with the parent and does not grow without limit**. Otherwise use references.
+- One document has a 16 MB ceiling, so an array that keeps growing will hit it one day.
+- Use `Decimal128` for money, and nothing else.
 
 ---
 
@@ -1393,20 +645,20 @@ db.orders.createIndex({ customerId: 1, createdAt: -1 });
 
 ```bash
 dotnet ef migrations add AddOrderStatus
-dotnet ef migrations script <from> <to> -o migrate.sql   # ถูก: ตรวจ SQL ก่อนรันจริง
-dotnet ef database update                                # dev เท่านั้น
+dotnet ef migrations script <from> <to> -o migrate.sql   # right: review the SQL before the real run
+dotnet ef database update                                # dev only
 ```
 
-> **บน production รัน script ที่ตรวจแล้ว ไม่ใช่ `database update`**
-> คำสั่งนั้นต้องให้ connection ของแอปมีสิทธิ์แก้ schema ซึ่งไม่ควรมีตั้งแต่แรก
+> **On production, run the reviewed script, not `database update`.**
+> That command needs the app's connection to have permission to change the schema, which it should not have in the first place.
 
 ```csharp
 modelBuilder.Entity<Order>(e => {
     e.ToTable("orders");
     e.Property(x => x.TotalAmount).HasColumnType("decimal(19,4)");
     e.HasIndex(x => new { x.Status, x.CreatedAt }).HasDatabaseName("ix_orders_status_created");
-    e.HasQueryFilter(x => x.DeletedAt == null);          // soft delete ทั้งระบบ
-    e.Property(x => x.RowVersion).IsRowVersion();        // ตรวจการแก้ชนกัน
+    e.HasQueryFilter(x => x.DeletedAt == null);          // soft delete across the whole system
+    e.Property(x => x.RowVersion).IsRowVersion();        // detect conflicting edits
 });
 ```
 
@@ -1430,12 +682,12 @@ model Order {
 ```
 
 ```bash
-npx prisma migrate dev --name add_order_status   # dev — สร้างไฟล์ migration
-npx prisma migrate deploy                        # production — รันเฉพาะที่มีอยู่แล้ว
+npx prisma migrate dev --name add_order_status   # dev — creates the migration file
+npx prisma migrate deploy                        # production — runs only the existing ones
 ```
 
-- `Decimal` ของ Prisma คืนค่าเป็น object ไม่ใช่ number ให้คำนวณด้วย `decimal.js` อย่าแปลงเป็น float
-- `BigInt` แปลงเป็น JSON ตรง ๆ ไม่ได้ ต้องแปลงเป็น string ที่ชั้น API
+- Prisma's `Decimal` returns an object, not a number. Calculate with `decimal.js` and do not convert to float.
+- `BigInt` cannot be converted to JSON directly. Convert it to a string at the API layer.
 
 ---
 
@@ -1447,49 +699,49 @@ alembic upgrade head
 alembic downgrade -1
 ```
 
-แยกเป็น 3 migration (1 migration ทำเรื่องเดียว):
+Split into 3 migrations (1 migration does one thing):
 
 ```python
-# 1) schema: เพิ่มคอลัมน์ที่ยังว่างได้
+# 1) schema: add a nullable column
 def upgrade():
     op.add_column("orders", sa.Column("status", sa.String(20), nullable=True))
 
-# 2) ข้อมูล: เติมค่าเดิม (ตารางใหญ่ให้ทำเป็นชุดเล็ก ๆ)
+# 2) data: backfill existing values (on a big table, do it in small batches)
 def upgrade():
     op.execute("UPDATE orders SET status = 'draft' WHERE status IS NULL")
 
-# 3) schema: บังคับ NOT NULL และสร้าง index
+# 3) schema: enforce NOT NULL and create the index
 def upgrade():
     op.alter_column("orders", "status", nullable=False)
-    # CREATE INDEX CONCURRENTLY ห้ามอยู่ใน transaction จึงต้องออกจาก transaction ของ Alembic
+    # CREATE INDEX CONCURRENTLY must not run inside a transaction, so step out of Alembic's transaction
     with op.get_context().autocommit_block():
         op.create_index("ix_orders_status_created", "orders", ["status", "created_at"],
                         postgresql_concurrently=True)
 ```
 
-> `--autogenerate` **ไม่เห็น** การเปลี่ยนชื่อ (มองเป็นลบแล้วเพิ่มใหม่ ข้อมูลจึงหาย)
-> อ่านไฟล์ที่มันสร้างก่อน commit ทุกครั้ง
+> `--autogenerate` **does not see** renames (it reads them as a drop plus a new add, so the data is lost).
+> Always read the file it generates before you commit.
 
 ---
 
-## 9 · คำสั่งตรวจ query ช้า
+## 9 · Slow query commands
 
-| ฐานข้อมูล | คำสั่ง |
+| Database | Command |
 |---|---|
-| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) <query>;` · ส่วนขยาย `pg_stat_statements` |
-| SQL Server | เปิด "Include Actual Execution Plan" · `sys.dm_exec_query_stats` |
+| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) <query>;` · extension `pg_stat_statements` |
+| SQL Server | Turn on "Include Actual Execution Plan" · `sys.dm_exec_query_stats` |
 | MySQL | `EXPLAIN ANALYZE <query>;` · `performance_schema` |
 | MongoDB | `db.orders.find(...).explain("executionStats")` |
 
-**สัญญาณอันตรายที่ต้องแก้:** `Seq Scan` / `Table Scan` บนตารางใหญ่ ·
-จำนวนแถวที่ประมาณไว้ต่างจากที่ได้จริงเกิน 10 เท่า · `Nested Loop` ที่วนหลักแสนรอบ
+**Danger signs to fix:** `Seq Scan` / `Table Scan` on a big table ·
+estimated row count differs from the actual by more than 10 times · a `Nested Loop` that runs hundreds of thousands of times
 
 
 ## reference: warehouse-modeling.md
 
 # Warehouse modeling — ELT, stack, star schema, SCD
 
-สำหรับคลังข้อมูลเพื่อวิเคราะห์ (analytics warehouse) ไม่ใช่ฐานข้อมูลของแอป
+For an analytics warehouse, not an application database.
 
 **สารบัญ:**
 
@@ -1516,7 +768,7 @@ Source → Load raw → Transform in warehouse
 
 ## Tech Stack (2026 Recommendations)
 
-> รายชื่อเครื่องมือจากความรู้ของโมเดล ยังไม่ได้ตรวจกับเว็บทางการ (รอยืนยัน) — ตรวจก่อนแนะนำ
+> The tool list comes from model knowledge and has not been checked against official websites (รอยืนยัน, awaiting confirmation). Check before recommending.
 
 ### Warehouse / Lake
 | Tool | Best for | Cost |
@@ -1609,72 +861,72 @@ Customer table: current_city, previous_city
 
 Use when settings differ by environment or secrets need hiding
 
-# Config และ Secret
+# Config and secrets
 
-> **กฎ 2 ข้อ:**
-> 1. โค้ดชุดเดียวกันต้องรันได้ทุก environment ความต่างอยู่ที่ config เท่านั้น
-> 2. secret ต้องไม่อยู่ใน git ไม่อยู่ใน log และไม่อยู่ในไฟล์ที่ส่งไปให้เบราว์เซอร์
+> **2 rules:**
+> 1. The same code must run in every environment. The only difference is config.
+> 2. A secret must not be in git, not in logs, and not in any file sent to the browser.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เริ่มโปรเจกต์ หรือเพิ่ม environment ใหม่
-- ต้องเก็บ connection string, API key, ใบรับรอง, กุญแจสำหรับเซ็น
-- เจอค่าคงที่ฝังอยู่ในโค้ด (hardcode) แล้วต้องย้ายออก
-- secret หลุดเข้า git หรือสงสัยว่าหลุด ให้ไปข้อ 8 ทันที
+- Starting a project, or adding a new environment.
+- You need to store a connection string, API key, certificate, or signing key.
+- You find a hardcoded value in code and must move it out.
+- A secret leaked into git, or you suspect it did: go to step 8 at once.
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or together
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| เก็บ secret ใน pipeline · ด่านอนุมัติ | `cicd-and-release` | แทน |
-| ค่าลับใน Jenkinsfile (`withCredentials` · single quote) | `jenkins-pipeline` | คู่ |
-| Secret ของ Kubernetes ไม่อยู่ใน values.yaml (External Secrets · SealedSecret) | `kubernetes-helm` | คู่ |
-| ออกแบบ login, token, สิทธิ์ผู้ใช้ | `auth-implementation-patterns` | แทน |
-| กันไม่ให้ค่าอ่อนไหวโผล่ใน log | `logging-standards` | แทน |
-| connection string ของฐานข้อมูล | `database-design` | คู่ |
-| บันทึกเหตุการณ์หลัง secret หลุด | `postmortem-template` | คู่ |
-| ขั้นตอนตอนเกิดเหตุ | `incident-runbook-template` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Storing secrets in a pipeline · approval gates | `cicd-and-release` | instead |
+| Secrets in a Jenkinsfile (`withCredentials` · single quote) | `jenkins-pipeline` | together |
+| Kubernetes secrets kept out of values.yaml (External Secrets · SealedSecret) | `kubernetes-helm` | together |
+| Designing login, tokens, user permissions | `auth-implementation-patterns` | instead |
+| Keeping sensitive values out of logs | `logging-standards` | instead |
+| Database connection strings | `database-design` | together |
+| Recording the incident after a secret leak | `postmortem-template` | together |
+| Steps during an incident | `incident-runbook-template` | together |
+| Abbreviations in work people read | `spell-out-abbreviations` | together |
 
-**วิธีทำจริงในแต่ละภาษาและเฟรมเวิร์ก** อยู่ใน `references/per-stack.md`
+**How to do it in each language and framework** is in `references/per-stack.md`.
 
 ---
 
-## 1 · แยก config กับ secret ให้ออกก่อน
+## 1 · Tell config and secret apart first
 
 | | config | secret |
 |---|---|---|
-| ตัวอย่าง | ที่อยู่ API, ระดับ log, จำนวนต่อหน้า, โซนเวลา, feature flag | รหัสผ่านฐานข้อมูล, API key, กุญแจเซ็น token, ใบรับรอง |
-| อยู่ใน git ได้ | ✓ ได้ | ✗ ไม่ได้เด็ดขาด |
-| ใครเห็นได้ | ทั้งทีม | เฉพาะที่จำเป็น |
-| หลุดแล้วเป็นไร | ไม่เป็นไร | ต้องเพิกถอนและเปลี่ยนทันที |
-| เปลี่ยนบ่อย | ตามงาน | ตามรอบหมุนเวียน |
+| Examples | API address, log level, page size, time zone, feature flag | Database password, API key, token signing key, certificate |
+| Allowed in git | ✓ yes | ✗ never |
+| Who can see it | The whole team | Only those who need it |
+| If it leaks | No harm | Must be revoked and replaced at once |
+| Changes how often | With the work | On a rotation schedule |
 
-> **ถ้าตัดสินใจไม่ได้ว่าเป็นแบบไหน ให้ถือว่าเป็น secret** เพราะระวังเกินไปเสียแค่ความรำคาญเล็กน้อย
-> แต่ถ้าเดาผิด กุญแจจะอยู่ในประวัติ git ตลอดไป
-
----
-
-## 2 · ลำดับความสำคัญ — ค่าหลังทับค่าก่อน
-
-```
-1. ค่าเริ่มต้นในโค้ด        (ปลอดภัย ใช้ได้จริงสำหรับ dev)
-2. ไฟล์ config ตาม environment  (appsettings.Production.json, config/production.yaml)
-3. ตัวแปรสภาพแวดล้อม        (environment variable)
-4. secret store              (Key Vault, Secrets Manager, Kubernetes secret)
-5. อาร์กิวเมนต์ตอนสั่งรัน     (ใช้ตอนไล่ปัญหาเท่านั้น)
-```
-
-**ค่าเริ่มต้นต้องปลอดภัย** ถ้าลืมตั้งค่า ระบบต้องทำงานแบบเข้มงวดที่สุด
-เช่น `DEBUG=false` · `ALLOWED_ORIGINS=` ว่าง · เปิด Transport Layer Security (TLS) ไม่ใช่ตรงกันข้าม
+> **If you cannot decide which one it is, treat it as a secret.** Being too careful costs only a small annoyance.
+> But if you guess wrong, the key stays in git history forever.
 
 ---
 
-## 3 · ตรวจตอนบูต — ขาดค่าไหนให้ตายทันที
+## 2 · Order of priority: later values override earlier ones
 
-> **สำคัญ:** ข้อนี้คุ้มที่สุดในหน้านี้
-> ระบบที่บูตขึ้นมาได้ทั้งที่ config ผิด จะไปพังตอนตี 2 ในฟังก์ชันที่นาน ๆ ใช้ที
-> ระบบที่ **ไม่ยอมบูต** เมื่อ config ผิด ทำให้รู้ตั้งแต่ตอน deploy ซึ่งยัง rollback ได้
+```
+1. Defaults in code             (safe, really usable for dev)
+2. Config file per environment  (appsettings.Production.json, config/production.yaml)
+3. Environment variables
+4. Secret store                 (Key Vault, Secrets Manager, Kubernetes secret)
+5. Arguments at launch          (for troubleshooting only)
+```
+
+**Defaults must be safe.** If someone forgets to set a value, the system must run in its strictest mode.
+For example `DEBUG=false` · `ALLOWED_ORIGINS=` empty · Transport Layer Security (TLS) on, not the opposite.
+
+---
+
+## 3 · Check at boot: if any value is missing, die at once
+
+> **Important:** this step is worth the most on this page.
+> A system that boots with wrong config will break at 2 a.m. in a function that is rarely used.
+> A system that **refuses to boot** on wrong config tells you at deploy time, when you can still roll back.
 
 ```ts
 // Node — zod
@@ -1686,44 +938,44 @@ const Env = z.object({
   LOG_LEVEL:     z.enum(['debug','info','warn','error']).default('info'),
 });
 
-export const env = Env.parse(process.env);   // ผิด = process ตายพร้อมบอกว่าตัวไหนผิด
+export const env = Env.parse(process.env);   // invalid = the process dies and says which value is wrong
 ```
 
-**สิ่งที่ต้องตรวจ:** มีค่าครบ · ชนิดถูก · อยู่ในช่วงที่ยอมรับ ·
-กุญแจยาวพอ · ค่าที่ห้ามใช้บน production (`JWT_SECRET=dev-secret` ต้องไม่ผ่าน)
+**What to check:** every value is present · types are right · values are in the accepted range ·
+keys are long enough · values banned on production (`JWT_SECRET=dev-secret` must fail).
 
-**พิมพ์สรุป config ตอนบูต**: ชื่อค่า และค่าที่ไม่ใช่ secret
-ส่วน secret พิมพ์แค่ "มีค่าแล้ว" หรือ 4 ตัวท้าย ไม่พิมพ์ค่าเต็ม
+**Print a config summary at boot:** the value names, and the values that are not secrets.
+For a secret, print only "set" or the last 4 characters, never the full value.
 
 ---
 
-## 4 · ตั้งชื่อตัวแปรสภาพแวดล้อม
+## 4 · Naming environment variables
 
 ```
-<ระบบ>_<กลุ่ม>_<ชื่อ>
+<system>_<group>_<name>
 
 APP_DB_HOST          APP_DB_PASSWORD
 APP_REDIS_URL        APP_SMTP_PASSWORD
 APP_FEATURE_NEW_CHECKOUT
 ```
 
-| กฎ | เหตุผล |
+| Rule | Reason |
 |---|---|
-| ตัวพิมพ์ใหญ่ ขีดล่าง | ข้อตกลงของทุกระบบปฏิบัติการ |
-| มีคำนำหน้าของระบบ | กัน `PATH`, `HOME`, `USER` ของระบบชนกัน |
-| ชื่อเดียวกันทุก environment | ค่าต่างได้ แต่ชื่อห้ามต่าง ไม่งั้นย้าย environment ทีไรต้องแก้โค้ด |
-| ใส่หน่วยในชื่อ | `APP_TIMEOUT_SECONDS` ไม่ใช่ `APP_TIMEOUT` |
-| อย่าใส่ชื่อ environment ในชื่อตัวแปร | ✗ `APP_PROD_DB_HOST` |
+| Uppercase with underscores | The convention on every operating system |
+| Start with a system prefix | Avoids clashing with the system's `PATH`, `HOME`, `USER` |
+| Same name in every environment | Values may differ, but names must not, or every move between environments means editing code |
+| Put the unit in the name | `APP_TIMEOUT_SECONDS`, not `APP_TIMEOUT` |
+| Do not put the environment name in the variable name | ✗ `APP_PROD_DB_HOST` |
 
 ---
 
-## 5 · `.env` และ `.env.example`
+## 5 · `.env` and `.env.example`
 
-| ไฟล์ | อยู่ใน git | หน้าที่ |
+| File | In git | Role |
 |---|:--:|---|
-| `.env.example` | ✓ | รายชื่อค่าที่ต้องมี **ทั้งหมด** พร้อมคำอธิบาย และค่าตัวอย่างที่ไม่ใช่ของจริง |
-| `.env` | ✗ | ค่าจริงบนเครื่องนักพัฒนาแต่ละคน |
-| `.env.production` | ✗ | **ไม่ควรมีไฟล์นี้เลย** เพราะ production ใช้ secret store |
+| `.env.example` | ✓ | The list of **all** required values, with explanations and example values that are not real |
+| `.env` | ✗ | Real values on each developer's machine |
+| `.env.production` | ✗ | **This file should not exist at all**, because production uses a secret store |
 
 ```bash
 # .gitignore
@@ -1734,110 +986,110 @@ APP_FEATURE_NEW_CHECKOUT
 
 ```bash
 # .env.example
-APP_DB_HOST=localhost              # ที่อยู่ฐานข้อมูล
-APP_DB_PASSWORD=change-me          # สำคัญ: ค่าจริงอยู่ใน 1Password ห้องทีม
-APP_JWT_SECRET=                    # สำคัญ: สร้างด้วย: openssl rand -base64 48
+APP_DB_HOST=localhost              # database address
+APP_DB_PASSWORD=change-me          # important: the real value is in the team's 1Password vault
+APP_JWT_SECRET=                    # important: generate with: openssl rand -base64 48
 APP_LOG_LEVEL=debug
 ```
 
-**`.env.example` ต้องอัปเดตในคอมมิตเดียวกับที่เพิ่มค่าใหม่**
-ไม่งั้นคนถัดไปที่ clone จะเจอ error ที่ไม่มีใครอธิบายได้
+**Update `.env.example` in the same commit that adds a new value.**
+Otherwise the next person who clones hits an error nobody can explain.
 
-> **`.env` ที่ใส่ `.gitignore` ไม่ทัน**: ไฟล์ถูก track ไปแล้วแม้ครั้งเดียว
-> การเพิ่มใน `.gitignore` ทีหลัง**ไม่ลบมันออกจากประวัติ** ต้อง `git rm --cached` และถือว่า secret หลุดแล้ว
+> **A `.env` added to `.gitignore` too late:** once the file has been tracked, even once,
+> adding it to `.gitignore` later **does not remove it from history.** Run `git rm --cached` and treat the secret as leaked.
 
-**ด่านก่อน commit** (แนวคิดจาก wshobson secrets-management): `.gitignore` กันแค่ไฟล์ที่รู้ชื่อ แต่กุญแจที่เผลอวางในโค้ดหรือ YAML ต้องมีตัวสแกน — ติดตั้ง gitleaks เป็น pre-commit hook ของทุก repo (`gitleaks git --pre-commit --staged` ใน gitleaks 8.19 ขึ้นไป · รุ่นก่อนหน้าใช้ `gitleaks protect --staged`) และรันซ้ำใน CI ทั้งประวัติด้วย `gitleaks git --redact` · hook ตกแล้วห้าม `--no-verify` ให้ย้ายค่าออกก่อน · เจอใน history แล้วไปข้อ 8 ทันที ไม่ใช่แค่ลบบรรทัด
+**Pre-commit gate** (idea from wshobson secrets-management): `.gitignore` blocks only files you know by name, but a key pasted by mistake into code or YAML needs a scanner. Install gitleaks as a pre-commit hook in every repo (`gitleaks git --pre-commit --staged` in gitleaks 8.19 and later · earlier versions use `gitleaks protect --staged`) and rerun it in CI over the whole history with `gitleaks git --redact`. If the hook fails, never use `--no-verify`; move the value out first. If you find one in history, go to step 8 at once, not just delete the line.
 
 ---
 
-## 6 · เก็บ secret ไว้ที่ไหน
+## 6 · Where to keep secrets
 
-| สถานการณ์ | ใช้ | หมายเหตุ |
+| Situation | Use | Note |
 |---|---|---|
-| เครื่องนักพัฒนา | `.env` ที่ไม่เข้า git ส่วน .NET ใช้ `dotnet user-secrets` | ห้ามใช้ค่าของ production |
-| ทีมเล็ก แชร์กัน | ตัวจัดการรหัสผ่านของทีม (1Password, Bitwarden) | ไม่ใช่แชต ไม่ใช่อีเมล ไม่ใช่ Google Sheet |
-| production บนคลาวด์ | Azure Key Vault · AWS Secrets Manager · Google Secret Manager | ให้สิทธิ์ด้วย managed identity ไม่ใช่ key อีกอัน |
-| Kubernetes | External Secrets Operator ดึงจาก vault ข้างบน | secret ของ Kubernetes เองเป็นแค่ base64 **ไม่ใช่การเข้ารหัส** |
-| ต้องเก็บใน git จริง ๆ | SOPS หรือ sealed-secrets (เข้ารหัสก่อน commit) | ทางเลือกสุดท้าย |
+| Developer machine | A `.env` that stays out of git; for .NET use `dotnet user-secrets` | Never use production values |
+| Small team sharing | The team's password manager (1Password, Bitwarden) | Not chat, not email, not a Google Sheet |
+| Production in the cloud | Azure Key Vault · AWS Secrets Manager · Google Secret Manager | Grant access with a managed identity, not another key |
+| Kubernetes | External Secrets Operator pulling from a vault above | A Kubernetes secret is only base64, **not encryption** |
+| You really must store in git | SOPS or sealed-secrets (encrypt before commit) | Last resort |
 
-**สิทธิ์:** แต่ละ service อ่านได้เฉพาะ secret ของตัวเอง environment แยกกันสนิท และ
-ไม่มีบัญชีไหนอ่านได้ทุกอัน ยกเว้นบัญชีดูแลระบบที่บันทึกการเข้าถึง
+**Permissions:** each service reads only its own secrets, environments are fully separate, and
+no account can read all of them, except an admin account whose access is logged.
 
 ---
 
-## 7 · การหมุนเวียน (rotation)
+## 7 · Rotation
 
-**ออกแบบให้รองรับตั้งแต่วันแรก** ไม่ใช่รอถึงตอนต้องหมุนจริง
+**Design for it from day one**, not when you finally have to rotate.
 
-| ต้องมี | รายละเอียด |
+| Must have | Detail |
 |---|---|
-| ใช้ 2 ค่าพร้อมกันได้ | ระหว่างเปลี่ยน ทั้งค่าเก่าและใหม่ต้องใช้ได้ ไม่งั้นต้องปิดระบบ |
-| โหลดใหม่โดยไม่ต้อง restart | หรือยอมรับว่าต้อง deploy 1 รอบ และจดไว้ว่าต้องทำ |
-| รอบเวลา | กุญแจเซ็น token 90 วัน · รหัสฐานข้อมูล 180 วัน · ใบรับรองก่อนหมดอายุ 30 วัน |
-| ทำอัตโนมัติ | เพราะงานที่ต้องจำทำเอง สุดท้ายไม่มีใครทำ |
+| Two values valid at once | During the change, both the old and the new value must work, or you must shut the system down |
+| Reload without restart | Or accept that you need one deploy, and write down that it must be done |
+| Schedule | Token signing key 90 days · database password 180 days · certificate 30 days before expiry |
+| Automatic | A task that depends on someone remembering ends up done by nobody |
 
-**กุญแจสำหรับเซ็น token ต้องมี id กำกับ (key id)** เพื่อให้เซ็น token ใหม่ด้วยกุญแจใหม่แล้ว
-ก็ยังตรวจ token เก่าที่ยังไม่หมดอายุได้
-
----
-
-## 8 · เมื่อ secret หลุด — ลำดับสำคัญกว่าความเร็ว
-
-1. **เพิกถอนค่าเดิมก่อน**: ปิด key นั้นที่ต้นทาง
-2. ออกค่าใหม่ แล้ว deploy
-3. ตรวจ log ย้อนหลังว่ามีใครใช้จากที่ที่ไม่ใช่ของเราไหม
-4. ลบออกจากประวัติ git (`git filter-repo`) และแจ้งทุกคนให้ clone ใหม่ (ถ้าต้อง force push ให้รอผู้ใช้อนุมัติก่อน · แจ้งทีมก่อน)
-5. บันทึกเหตุการณ์ด้วย `postmortem-template`
-
-> **ข้อ 4 ไม่ใช่ข้อ 1** เพราะลบ commit แล้วกุญแจก็ไม่ปลอดภัยขึ้นเลย
-> ใครที่ fork หรือ clone ไปแล้ว รวมถึงข้อมูลสำรองของผู้ให้บริการ ยังมีค่าเดิมอยู่
-> **ถือว่าทุก secret ที่เคยเข้า git คือหลุดแล้ว** แม้ repo จะเป็น private
+**A token signing key must carry an id (key id)**, so that after signing new tokens with the new key,
+you can still verify old tokens that have not expired.
 
 ---
 
-## 9 · อย่าให้ secret ไหลออกทางอื่น
+## 8 · When a secret leaks: order matters more than speed
 
-| ทางรั่ว | วิธีปิด |
+1. **Revoke the old value first:** disable that key at its source.
+2. Issue a new value, then deploy.
+3. Check past logs for anyone using it from a place that is not ours.
+4. Remove it from git history (`git filter-repo`) and tell everyone to clone again. (If you must force push, wait for the user's approval and tell the team first.)
+5. Record the incident with `postmortem-template`.
+
+> **Step 4 is not step 1**, because deleting the commit does not make the key any safer.
+> Anyone who forked or cloned already, and the provider's backups, still have the old value.
+> **Treat every secret that has ever been in git as leaked**, even if the repo is private.
+
+---
+
+## 9 · Do not let secrets flow out other ways
+
+| Leak path | How to close it |
 |---|---|
-| log | รายการคำที่ต้องปิดบัง ดูที่ `logging-standards` |
-| ข้อความ error ที่ส่งให้ client | คืนเฉพาะ `requestId` ไม่ใช่ stack trace หรือ connection string |
-| รายงาน crash / ตัวติดตามข้อผิดพลาด | ตั้งตัวกรองข้อมูลอ่อนไหวก่อนส่งออก |
-| ประวัติคำสั่งใน shell | ใช้ `read -s` หรืออ่านจากไฟล์ แทนการพิมพ์ค่าลงบรรทัดคำสั่ง |
-| `docker history` | อย่าใส่ secret ใน `ARG`/`ENV` ตอน build ให้ใช้ mount ตอนรันแทน |
-| ไฟล์สำรองข้อมูลและ dump | เข้ารหัส และเก็บที่ที่คุมสิทธิ์ได้ |
-| ภาพหน้าจอในเอกสารและ issue | ปิดบังก่อนแนบเสมอ |
+| Logs | The list of terms to mask is in `logging-standards` |
+| Error messages sent to the client | Return only a `requestId`, not a stack trace or connection string |
+| Crash reports / error trackers | Set a sensitive-data filter before sending out |
+| Shell command history | Use `read -s` or read from a file, instead of typing the value on the command line |
+| `docker history` | Do not put secrets in `ARG`/`ENV` at build time; use a mount at run time instead |
+| Backup files and dumps | Encrypt them and store them where you control access |
+| Screenshots in documents and issues | Always mask before attaching |
 
 ---
 
-## 10 · config ของ frontend — ไม่มีอะไรลับ
+## 10 · Frontend config: nothing in it is secret
 
-> **สำคัญ:** ทุกอย่างที่อยู่ในไฟล์ที่เบราว์เซอร์โหลด **คือข้อมูลสาธารณะ**
-> ไม่ว่าจะชื่อว่า `VITE_SECRET_KEY` หรืออยู่ในไฟล์ที่ถูกย่อจนอ่านไม่ออกก็ตาม
-> การย่อโค้ดไม่ใช่การเข้ารหัส เปิด DevTools ก็เห็น
+> **Important:** everything in a file the browser loads **is public information**,
+> whether it is named `VITE_SECRET_KEY` or sits in a file minified until it is unreadable.
+> Minifying code is not encryption. Open DevTools and you can see it.
 
-| ใส่ใน frontend ได้ | ต้องอยู่ฝั่งเซิร์ฟเวอร์เท่านั้น |
+| Allowed in the frontend | Must stay on the server only |
 |---|---|
-| ที่อยู่ API · ชื่อ environment | API key ของบริการภายนอกทุกชนิด |
-| กุญแจสาธารณะ (publishable key) ของผู้ให้บริการชำระเงิน | กุญแจลับ (secret key) ของผู้ให้บริการเดียวกัน |
-| feature flag ที่ไม่ลับ | กฎการคิดราคา · เกณฑ์อนุมัติ |
-| รหัสเว็บของตัววัดสถิติ | token ที่เรียก API ของบุคคลที่สาม |
+| API address · environment name | API keys of any external service |
+| Publishable key of a payment provider | The secret key of the same provider |
+| Feature flags that are not secret | Pricing rules · approval thresholds |
+| Web ID of an analytics tool | Tokens that call a third party's API |
 
-**ถ้าต้องการเปลี่ยนค่าโดยไม่ build ใหม่** ให้โหลด `/config.json` ตอนแอปเริ่มทำงาน
-แทนการฝังค่าตอน build (`import.meta.env`) ที่ล็อกค่าติดไปกับไฟล์ที่ build ได้
+**If you need to change a value without rebuilding,** load `/config.json` when the app starts,
+instead of embedding the value at build time (`import.meta.env`), which locks the value into the built files.
 
 ---
 
 ## 11 · Anti-patterns
 
-- **connection string ในโค้ด** แม้จะเป็นของ dev เพราะสักวันจะมีคนลอกแบบนี้ไปใช้กับ production
-- **`.env` ของ production วางไว้บนเซิร์ฟเวอร์** ใครเข้าเครื่องได้ก็อ่านได้ และไม่มีบันทึกว่าใครอ่าน
-- **secret เดียวกันทุก environment** พอ staging หลุด production ก็หลุดด้วย
-- **ส่ง secret ทางแชตหรืออีเมล** ค่าจะอยู่ในนั้นตลอดไป และค้นเจอด้วย
-- **ไม่มี `.env.example`** คนใหม่จะเสียเวลาครึ่งวันเดาว่าต้องมีค่าอะไรบ้าง
-- **บูตผ่านทั้งที่ config ไม่ครบ** แล้วไปพังตอนใช้งานจริง
-- **พิมพ์ config ทั้งก้อนลง log ตอนบูต** รวม secret
-- **`ALLOWED_ORIGINS=*` บน production** เพราะ "ตอน dev มันติด Cross-Origin Resource Sharing (CORS)"
-- **กุญแจที่ไม่เคยเปลี่ยนเลยตั้งแต่ปีแรก**
+- **A connection string in code**, even a dev one, because one day someone will copy it for production.
+- **A production `.env` placed on the server.** Anyone who can enter the machine can read it, and nothing records who read it.
+- **The same secret in every environment.** When staging leaks, production leaks too.
+- **Sending secrets by chat or email.** The value stays there forever, and is searchable.
+- **No `.env.example`.** A new person wastes half a day guessing which values are needed.
+- **Booting successfully with incomplete config,** then breaking in real use.
+- **Printing the whole config to the log at boot,** secrets included.
+- **`ALLOWED_ORIGINS=*` on production** because "it was blocked by Cross-Origin Resource Sharing (CORS) in dev."
+- **A key that has never changed since the first year.**
 
 
 ## reference: per-stack.md
@@ -2083,195 +1335,195 @@ $b = New-Object byte[] 48
 
 Use when work runs outside the request in queues or schedules
 
-# งานเบื้องหลัง
+# Background jobs
 
-> **กฎข้อเดียว:** งานเบื้องหลังทุกตัวต้อง**รันซ้ำได้โดยไม่เกิดผลซ้ำ**
-> เพราะมันจะถูกรันซ้ำแน่นอน: เครื่องดับกลางทาง · คนกดใหม่ · ระบบ retry ให้เอง
+> **The one rule:** every background job must be **safe to run again without repeating its effect**,
+> because it will certainly run again: the machine dies halfway · a person clicks again · the system retries by itself.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- งานที่ผู้ใช้ไม่ควรต้องนั่งรอ: ส่งอีเมล สร้างรายงาน นำเข้าไฟล์
-- งานตามเวลา: สรุปรายวัน ปิดยอดสิ้นเดือน ลบข้อมูลที่หมดอายุ
-- เรียกระบบภายนอกที่ช้าหรือล่มบ่อย
-- คิวตันหรือมีงานหายแล้วไม่มีใครรู้
+- Work the user should not have to sit and wait for: sending email, building a report, importing a file
+- Scheduled work: a daily summary, month-end closing, deleting expired data
+- Calling an external system that is slow or often down
+- A jammed queue, or jobs that vanish with nobody noticing
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill, or use it alongside
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| timeout และการ retry ของคำขอปกติ | `error-handling-patterns` | แทน |
-| event ข้ามหลาย service ผ่าน Kafka (หลาย consumer อ่าน event เดียวกัน · เก็บย้อนหลัง) | `kafka-streaming` | แทน |
-| คิวงานผ่าน RabbitMQ (หลาย worker · retry · dead letter · ต้องมี broker จริง) | `rabbitmq-messaging` | แทน |
-| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` | แทน |
-| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` | แทน |
-| นำเข้าไฟล์ Excel/CSV เป็นเนื้องาน | `data-import-export` | แทน |
-| ส่งอีเมล/SMS เป็นเนื้องาน | `notifications` | แทน |
-| ตารางงานและ index | `database-design` | คู่ |
-| log ของ worker และ correlation id | `logging-standards` | คู่ |
-| งานลบข้อมูลที่หมดอายุ | `pdpa-compliance` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
-| ออกแบบระบบ agent (Loop · Graph · Dynamic · เลือก framework) | `llm-engineering` → [`agent-systems.md`](../llm-engineering/references/agent-systems.md) | คู่ |
+| Timeouts and retries for ordinary requests | `error-handling-patterns` | instead |
+| Events across several services through Kafka (several consumers read the same event · history is kept) | `kafka-streaming` | instead |
+| A job queue through RabbitMQ (several workers · retry · dead letter · needs a real broker) | `rabbitmq-messaging` | instead |
+| Metrics and alerts | `observability-basics` | instead |
+| Choosing the overall architecture | `architecture-patterns` | instead |
+| Importing Excel/CSV files as the main job | `data-import-export` | instead |
+| Sending email/SMS as the main job | `notifications` | instead |
+| The job table and indexes | `database-design` | alongside |
+| Worker logs and correlation id | `logging-standards` | alongside |
+| Jobs that delete expired data | `pdpa-compliance` | alongside |
+| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
+| Designing an agent system (Loop · Graph · Dynamic · choosing a framework) | `llm-engineering` → [`agent-systems.md`](../llm-engineering/references/agent-systems.md) | alongside |
 
 ---
 
-## 1 · อะไรควรไปอยู่เบื้องหลัง
+## 1 · What belongs in the background
 
-| เอาไปเบื้องหลัง | ทำในคำขอเลย |
+| Send to the background | Do inside the request |
 |---|---|
-| ใช้เวลาเกิน 1–2 วินาที | เร็วและผู้ใช้ต้องเห็นผลทันที |
-| เรียกระบบภายนอกที่ล้มได้ | ตรวจสิทธิ์ · ตรวจข้อมูล |
-| ผู้ใช้ไม่ต้องรอผล (อีเมล แจ้งเตือน) | ผลลัพธ์คือสิ่งที่เขากดมาดู |
-| งานหลายรายการเป็นชุด | |
+| Takes more than 1–2 seconds | Fast, and the user must see the result at once |
+| Calls an external system that can fail | Permission checks · data validation |
+| The user does not wait for the result (email, notification) | The result is what they clicked to see |
+| Many items done as a batch | |
 
-> **อย่าเอาไปเบื้องหลังเพียงเพราะมันช้า** ถ้าผู้ใช้ต้องเห็นผลก่อนไปต่อ
-> การย้ายไปเบื้องหลังจะต้องเพิ่มหน้าจอรอ การแจ้งเตือน และที่เก็บผลลัพธ์
-> บางครั้งแก้ให้เร็วขึ้นถูกกว่ามาก (ดู `lazy-coding`)
+> **Do not move work to the background just because it is slow.** If the user must see the result before moving on,
+> moving it adds a waiting screen, a notification, and a place to store results.
+> Sometimes making it faster is much cheaper (see `lazy-coding`).
 
 ---
 
-## 2 · เลือกกลไก
+## 2 · Choose a mechanism
 
-| กลไก | เหมาะกับ | ระวัง |
+| Mechanism | Fits | Watch out for |
 |---|---|---|
-| **ตารางงานในฐานข้อมูล** | ระบบเล็ก–กลาง · งานไม่เกินหลักพันต่อวัน | ต้องเขียนตัวหยิบงานเอง · ระวัง worker แย่งงานกัน |
-| **คิวจริง** (Redis · RabbitMQ · Amazon Simple Queue Service (SQS)) | งานเยอะ · ต้องการ retry และ dead letter ในตัว | เพิ่มของที่ต้องดูแล |
-| ตัวตั้งเวลาในแอป (cron ในโค้ด) | งานตามเวลาที่มี instance เดียว | **หลาย instance จะรันพร้อมกัน** · ดูข้อ 5 |
-| ตัวตั้งเวลาของแพลตฟอร์ม | งานตามเวลาบนคลาวด์ | |
+| **Job table in the database** | small to medium systems · up to a few thousand jobs a day | you must write the job picker yourself · watch for workers fighting over jobs |
+| **A real queue** (Redis · RabbitMQ · Amazon Simple Queue Service (SQS)) | many jobs · need built-in retry and dead letter | one more thing to look after |
+| In-app scheduler (cron in code) | scheduled work with a single instance | **several instances will run it at the same time** · see section 5 |
+| Platform scheduler | scheduled work on the cloud | |
 
-**ถ้าระบบยังเล็ก ให้เริ่มจากตารางในฐานข้อมูลก่อนเสมอ** เพราะ `SELECT ... FOR UPDATE SKIP LOCKED`
-ของ PostgreSQL ให้หลาย worker หยิบงานพร้อมกันได้อย่างปลอดภัย โดยไม่ต้องเพิ่มระบบใหม่
+**If the system is still small, always start with a table in the database,** because PostgreSQL's `SELECT ... FOR UPDATE SKIP LOCKED`
+lets several workers pick jobs at once safely, with no new system to add.
 
-**ทุกงานต้องมีอย่างน้อย:** `id` · `type` · `payload` · `status` · `attempts` ·
+**Every job needs at least:** `id` · `type` · `payload` · `status` · `attempts` ·
 `run_after` · `locked_by` · `locked_at` · `last_error` · `created_at`
 
 ---
 
-## 3 · รันซ้ำแล้วต้องไม่เกิดผลซ้ำ
+## 3 · Running again must not repeat the effect
 
-ระบบคิวเกือบทั้งหมดรับประกันแค่ว่า "ส่งถึงอย่างน้อย 1 ครั้ง" **ไม่ใช่ 1 ครั้งพอดี**
+Almost every queue system guarantees only "delivered at least once", **not exactly once**.
 
-| วิธี | ใช้ยังไง |
+| Method | How to use it |
 |---|---|
-| **กุญแจกันซ้ำ** | unique constraint บน `(job_type, business_key)` ทำให้งานซ้ำ insert ไม่ผ่าน |
-| **ตรวจสถานะก่อนทำ** | "ถ้าใบสั่งซื้อนี้ส่งอีเมลไปแล้ว ให้จบเลย" |
-| **ส่งต่อ idempotency key** | เวลาเรียก API ภายนอก (ดู `api-conventions`) |
-| **ตั้งค่าให้เป็นค่าใหม่ ไม่บวกเพิ่มจากค่าเดิม** | `set status = 'paid'` ปลอดภัยกว่า `balance = balance + 100` |
+| **Duplicate-blocking key** | a unique constraint on `(job_type, business_key)` makes a duplicate job fail to insert |
+| **Check state before acting** | "if the email for this purchase order was already sent, stop" |
+| **Pass on an idempotency key** | when calling an external API (see `api-conventions`) |
+| **Set a new value, do not add to the old one** | `set status = 'paid'` is safer than `balance = balance + 100` |
 
-> **งานที่บวกค่าหรือส่งของออกไปข้างนอก ถ้ารันซ้ำจะเสียเงินจริง**
-> อีเมล 2 ฉบับแค่น่ารำคาญ แต่โอนเงิน 2 ครั้งเป็นเรื่องใหญ่
+> **A job that adds to a value or sends something outside costs real money if it runs twice.**
+> Two emails are only annoying, but two money transfers are a big problem.
 
 ---
 
-## 4 · retry และงานที่ตายแล้ว
+## 4 · Retry and dead jobs
 
-ตัวเลขนี้สำหรับงานในคิว · ลองใหม่นอกคิวใช้ของ [`error-handling-patterns`](../error-handling-patterns/SKILL.md) §4: service เรียก service ใช้ 3 ครั้ง 1/2/4 วินาที · มีคนรอหน้าจอ → retry ไม่เกิน 1 ครั้งแล้วให้กดเอง
+These numbers are for jobs in a queue · for retries outside a queue use [`error-handling-patterns`](../error-handling-patterns/SKILL.md) §4: service-to-service calls use 3 tries at 1/2/4 seconds · when a person waits on the screen → at most 1 retry, then let them press again
 
 ```
-ล้ม → รอ 1 นาที → ล้ม → รอ 4 นาที → ล้ม → รอ 16 นาที → ล้มครั้งที่ 4 → dead letter
+fail → wait 1 min → fail → wait 4 min → fail → wait 16 min → 4th failure → dead letter
 ```
 
-| กฎ | รายละเอียด |
+| Rule | Detail |
 |---|---|
-| **มีเพดานเสมอ** | 3–5 ครั้ง ถ้า retry ไม่จำกัด งานเดียวก็ทำให้คิวตัน |
-| เว้นเวลาเพิ่มขึ้นทุกรอบ (เท่าตัวคงที่ เช่น ×4) + สุ่มเล็กน้อย | เหมือน `error-handling-patterns` |
-| ข้อมูลผิดไม่ต้อง retry | payload ผิดรูปแบบ ลองอีกกี่ครั้งก็เหมือนเดิม |
-| **งานที่หมดสิทธิ์ต้องไปที่เดียว** | dead letter (ที่เก็บงานที่ล้มจนหมดสิทธิ์) โดยเก็บ payload เต็มและ error ล่าสุด |
-| ต้องมีคนดู dead letter | **แจ้งเตือนเมื่อมีงานเข้าไปใหม่** ไม่ใช่รอให้ลูกค้าทัก |
-| เอากลับมารันใหม่ได้ | แก้ต้นเหตุแล้วสั่งรันใหม่จาก dead letter ได้ โดยไม่ต้องเขียนสคริปต์ |
+| **Always set a cap** | 3–5 tries · with unlimited retries a single job can jam the queue |
+| Increase the wait each round (a fixed multiple such as ×4) + a little randomness | same as `error-handling-patterns` |
+| Bad data needs no retry | a malformed payload stays the same however many times you try |
+| **A job that has run out of tries goes to one place** | dead letter (where jobs that failed until they ran out of tries are kept), keeping the full payload and the last error |
+| A person must watch the dead letter | **alert when a new job arrives there**, do not wait for a customer to complain |
+| It can be run again | after fixing the cause, you can re-run from the dead letter without writing a script |
 
-**งานที่ค้างเพราะ worker ตาย** ต้องมีตัวปลดล็อก
-งานที่ `locked_at` เก่ากว่า N นาที ให้ถือว่าไม่มีใครทำอยู่แล้ว แล้วปลดล็อกให้ worker อื่นหยิบไปทำต่อ
+**A job stuck because a worker died** needs an unlocker.
+If a job's `locked_at` is older than N minutes, treat it as having nobody working on it, and unlock it so another worker picks it up.
 
-**สถานะของงานเป็นเครื่องสถานะ ไม่ใช่ boolean** (แนวคิดจาก wshobson python-background-jobs) — ทุกกลไกในข้อ 2 ต้องตอบได้ว่างานอยู่สถานะไหนใน `queued → running → succeeded` หรือ `running → failed (attempts < เพดาน) → queued` หรือ `failed → dead` · เก็บ `attempts` · `locked_at` · `last_error` · `finished_at` ไว้กับงาน · เดินได้เฉพาะลูกศรข้างบน (งาน `succeeded` กลับไป `running` ไม่ได้ ต้องสร้างงานใหม่) · หน้าจอแอดมินและ dead letter อ่านจากสถานะนี้ที่เดียว
+**Job state is a state machine, not a boolean** (idea from wshobson python-background-jobs) — every mechanism in section 2 must be able to say which state a job is in: `queued → running → succeeded`, or `running → failed (attempts < cap) → queued`, or `failed → dead` · keep `attempts` · `locked_at` · `last_error` · `finished_at` with the job · move only along the arrows above (a `succeeded` job cannot go back to `running`; create a new job) · the admin screen and the dead letter read from this state in one place
 
 ---
 
-## 5 · งานตามเวลา
+## 5 · Scheduled jobs
 
-> **ถ้ามีหลาย instance งานตามเวลาจะรันหลายรอบพร้อมกัน**
-> รายงานสรุปยอดถูกส่ง 3 ฉบับ หรือหักเงิน 3 ครั้ง ก็เพราะข้อนี้
+> **With several instances, a scheduled job runs several times at once.**
+> A summary report sent 3 times, or money charged 3 times, comes from this.
 
-| วิธี | ใช้เมื่อ |
+| Method | Use when |
 |---|---|
-| ล็อกที่ฐานข้อมูล (advisory lock) | ทำได้ทันที ไม่ต้องเพิ่มของ |
-| ตัวตั้งเวลาของแพลตฟอร์มยิงเข้ามาที่ endpoint | บนคลาวด์ · Kubernetes CronJob |
-| ตัวตั้งเวลาที่รองรับหลาย instance โดยตรง | Quartz · Hangfire |
+| Lock in the database (advisory lock) | you can do it right away with nothing added |
+| The platform scheduler calls an endpoint | on the cloud · Kubernetes CronJob |
+| A scheduler that supports several instances directly | Quartz · Hangfire |
 
-**กฎของงานตามเวลา:**
+**Rules for scheduled jobs:**
 
-- **รับช่วงเวลาเป็นพารามิเตอร์** จะได้รันย้อนหลังวันที่พลาดได้โดยไม่ต้องแก้โค้ด
-- ถ้าตกไป 1 รอบ ต้องตามเก็บได้ ไม่ข้ามไปเลย
-- ระบุเขตเวลาให้ชัดว่า "ทุกเที่ยงคืน" ของเขตเวลาไหน (ดู `i18n-and-locale`)
-- **บันทึกว่ารันรอบไหนสำเร็จแล้ว** ไม่ใช่ดูจาก log
+- **Take the time range as a parameter**, so you can re-run missed dates without changing code
+- If a run is missed, you must be able to catch up, not skip it for good
+- State the time zone clearly: "every midnight" in which zone (see `i18n-and-locale`)
+- **Record which runs succeeded**, do not infer it from logs
 
 ---
 
-## 6 · งานยาวที่ผู้ใช้รออยู่
+## 6 · Long jobs the user waits on
 
-| ต้องมี | รายละเอียด |
+| Needed | Detail |
 |---|---|
-| id ของงาน | คืนให้ทันทีที่รับงาน ผู้ใช้เอาไว้ถามความคืบหน้า |
-| สถานะ | `queued` · `running` · `succeeded` · `failed` · `cancelled` |
-| ความคืบหน้า | "ทำแล้ว 340 จาก 1,200 รายการ" ไม่ใช่หมุนเปล่า ๆ |
-| ยกเลิกได้ | งานต้องเช็คสัญญาณยกเลิกเป็นระยะ |
-| ผลลัพธ์ | เก็บไว้ให้ดาวน์โหลดได้ พร้อมวันหมดอายุ |
-| แจ้งเมื่อเสร็จ | อีเมลหรือแจ้งเตือนในระบบ (ดู `notifications`) |
+| Job id | return it the moment the job is accepted · the user uses it to ask about progress |
+| State | `queued` · `running` · `succeeded` · `failed` · `cancelled` |
+| Progress | "340 of 1,200 items done" (ทำแล้ว 340 จาก 1,200 รายการ), not a blind spinner |
+| Cancellable | the job must check for a cancel signal regularly |
+| Result | keep it available to download, with an expiry date |
+| Notify when done | email or an in-system notification (see `notifications`) |
 
-**แบ่งงานใหญ่เป็นชิ้นเล็ก** เช่น นำเข้า 50,000 แถว ให้แบ่งเป็นงานย่อยละ 500 แถว
-เพราะงานเดียวที่ใช้เวลา 40 นาที ถ้าล้มที่นาทีที่ 39 ต้องเริ่มใหม่ทั้งหมด
+**Split a big job into small pieces.** For example, import 50,000 rows as sub-jobs of 500 rows each,
+because a single 40-minute job that fails at minute 39 must start over from the beginning.
 
 ---
 
-## 7 · วัดอะไร
+## 7 · What to measure
 
-| ตัวชี้วัด | เตือนเมื่อ |
+| Metric | Alert when |
 |---|---|
-| จำนวนงานค้างในคิว | โตขึ้นเรื่อย ๆ ไม่ลดลง |
-| เวลารอในคิว (p95 · 95% ของงานรอไม่เกินค่านี้) | เกินที่สัญญาไว้ |
-| อัตราความล้มเหลว | เกินเกณฑ์ |
-| **จำนวนใน dead letter** | **เพิ่มขึ้นแม้แค่ตัวเดียว** |
-| รอบของงานตามเวลาที่ไม่ได้รัน | ข้ามรอบ |
-| งานที่ค้างอยู่ในสถานะ running นานผิดปกติ | เกิน N เท่าของค่าปกติ |
+| Jobs waiting in the queue | keeps growing and does not fall |
+| Wait time in the queue (p95 · 95% of jobs wait no longer than this) | above what was promised |
+| Failure rate | above the threshold |
+| **Count in the dead letter** | **rises, even by just one** |
+| Scheduled runs that did not run | a run was skipped |
+| Jobs stuck in the running state for an unusual time | more than N times the normal |
 
-> **คิวที่ตันจะเงียบสนิท** API ยังตอบ 200 ทุกคำขอ health check เขียวหมด
-> แต่ไม่มีอีเมลออกไป 3 ชั่วโมงแล้ว ต้องวัดถึงจะเห็น
+> **A jammed queue is completely silent.** The API still answers 200 to every request and the health checks are all green,
+> but no email has gone out for 3 hours. You see it only if you measure.
 
 ---
 
 ## 8 · Anti-patterns
 
-- **งานที่รันซ้ำแล้วเกิดผลซ้ำ** — คิวจะรันซ้ำแน่นอน ไม่ใช่อาจจะ
-- **retry ไม่จำกัด** — งานเดียวที่พังทำให้ทั้งคิวตัน
-- **ไม่มี dead letter** — งานหายเงียบ ๆ ไม่มีใครรู้
-- **มี dead letter แต่ไม่มีใครดู** — เท่ากับไม่มี
-- **งานตามเวลาบนหลาย instance โดยไม่มีล็อก** — รันซ้อนกัน
-- **ส่งข้อมูลทั้งก้อนใน payload** — ควรส่ง id แล้วให้งานไปอ่านเอง จะได้ข้อมูลล่าสุดด้วย
-- **งานยาวที่ยกเลิกไม่ได้** — ผู้ใช้กดผิดแล้วต้องรอ 40 นาที
-- **หน้าจอที่หมุนเปล่าโดยไม่บอกความคืบหน้า** — ผู้ใช้จะกดซ้ำ แล้วได้งานซ้ำ
-- **ไม่วัดคิว** — ตันแล้วรู้ตอนลูกค้าโทรมา
+- **A job that repeats its effect when run again** — the queue will certainly run it again, not maybe
+- **Unlimited retry** — one broken job jams the whole queue
+- **No dead letter** — jobs vanish silently and nobody knows
+- **A dead letter that nobody watches** — the same as having none
+- **Scheduled jobs on several instances with no lock** — they run on top of each other
+- **Sending the whole data block in the payload** — send the id and let the job read it itself, so it gets the latest data too
+- **A long job that cannot be cancelled** — the user clicks wrong and waits 40 minutes
+- **A blind spinner that gives no progress** — the user clicks again and gets a duplicate job
+- **Not measuring the queue** — it jams and you find out when a customer calls
 
 ---
 
-## 9 · durable workflow สำหรับงาน agent ที่รันยาวหรือรอคนอนุมัติ
+## 9 · Durable workflow for agent jobs that run long or wait for human approval
 
-งาน agent ที่วิ่งหลายสิบนาที เรียก LLM และ tool หลายรอบ หรือหยุดรอคนอนุมัติข้ามวัน ใช้คิวธรรมดาไม่พอ เพราะถ้าล้มที่ขั้น 8 จาก 10 ต้องเริ่มใหม่และจ่ายค่า token ซ้ำ · ให้ใช้ engine ที่บันทึกผลทุกขั้นแล้วทำต่อจากจุดเดิมได้
+An agent job that runs for tens of minutes, calls an LLM and tools many times, or pauses for approval across days cannot use a plain queue, because a failure at step 8 of 10 means starting over and paying the token cost again · use an engine that records the result of every step and resumes from the same point
 
-| เครื่องมือ | เหมาะกับ | รอคนอนุมัติด้วย | ระวัง |
+| Tool | Fits | Waits for human approval | Watch out for |
 |---|---|---|---|
-| **Temporal** | โค้ด Python และภาษาอื่น · loop ของ agent อยู่ใน workflow ส่วนการเรียก LLM และ tool เป็น activity · มี `OpenAIAgentsPlugin` · `activity_as_tool` | (ยังไม่ได้ตรวจ หน้า signal) | integration กับ OpenAI Agents SDK ยังเป็น Public Preview |
-| **AWS Step Functions** | ขั้นตอนตายตัวบน AWS · fan-out ด้วย `Map` (Inline ขนาน 40 · Distributed 10,000 งานลูก) | `.waitForTaskToken` รอได้ถึง 1 ปีจนมี `SendTaskSuccess` / `SendTaskFailure` · ตั้ง `HeartbeatSeconds` กันค้างเงียบ | งานที่ต้องให้ LLM ตัดสินทาง ต้องให้ Lambda หรือ Bedrock ตัดสินแล้วใช้ `Choice` |
-| **checkpointer ของ framework agent** | ไม่อยากเพิ่ม engine · LangGraph `PostgresSaver` · Microsoft Agent Framework `CheckpointManager` · OpenAI `RunState.to_json()` | LangGraph `interrupt()` · OpenAI `needs_approval` · Microsoft Agent Framework `RequestInfoExecutor` | ตัวเก็บในหน่วยความจำหายเมื่อ process รีสตาร์ต · ใช้ตัวที่เก็บลงฐานข้อมูลใน production |
+| **Temporal** | Python and other languages · the agent loop lives in a workflow, while LLM and tool calls are activities · has `OpenAIAgentsPlugin` · `activity_as_tool` | (`ยังไม่ได้ตรวจ` · see the signal page) | the integration with the OpenAI Agents SDK is still in Public Preview |
+| **AWS Step Functions** | fixed steps on AWS · fan-out with `Map` (Inline in parallel 40 · Distributed 10,000 child jobs) | `.waitForTaskToken` can wait up to 1 year until `SendTaskSuccess` / `SendTaskFailure` arrives · set `HeartbeatSeconds` to prevent a silent hang | when an LLM must choose the route, let Lambda or Bedrock decide, then use `Choice` |
+| **Agent framework checkpointer** | you do not want to add an engine · LangGraph `PostgresSaver` · Microsoft Agent Framework `CheckpointManager` · OpenAI `RunState.to_json()` | LangGraph `interrupt()` · OpenAI `needs_approval` · Microsoft Agent Framework `RequestInfoExecutor` | an in-memory store is lost when the process restarts · use a database-backed store in production |
 
-**กฎของโค้ดที่ต้อง replay ได้** (Temporal · Google ADK · Claude Code workflow ใช้หลักเดียวกัน · ตรวจกับ [Temporal: Workflow Definition](https://docs.temporal.io/workflow-definition) 2026-10-26)
+**Rules for code that must be replayable** (Temporal · Google ADK · Claude Code workflows use the same principle · checked against [Temporal: Workflow Definition](https://docs.temporal.io/workflow-definition) 2026-10-26)
 
-- **ห้ามอ่านเวลาหรือสุ่มค่าในโค้ดที่คุมลำดับงาน** (`Date.now()` · `datetime.now()` · `Math.random()` · `uuid4()`) · ตอน replay ค่าจะต่างจากรอบแรก ลำดับงานเพี้ยน แล้วรีใช้ผลเดิมไม่ได้ · ต้องใช้เวลาหรือค่าสุ่ม ให้ทำใน activity หรือใช้ API ของ SDK ที่ให้มาสำหรับเรื่องนี้
-- **การเรียก LLM เรียก tool และอ่านเขียนข้างนอกทั้งหมดอยู่ใน activity** ผลถูกบันทึกครั้งเดียว ตอน replay อ่านจากบันทึก ไม่เรียกซ้ำ
-- **ลำดับการเรียกต้องเหมือนเดิมทุกรอบ** · แก้ลำดับขั้นในโค้ดที่ยังมีงานค้างอยู่ จะทำให้งานเก่า replay ไม่ผ่าน (Temporal เรียกว่า nondeterminism error) · ต้องเปลี่ยนให้ใช้ versioning หรือ patching ของ engine
-- **ขั้นก่อนจุดหยุดรอต้องรันซ้ำได้** (ข้อ 3) · LangGraph รัน node ที่หยุดไว้ใหม่ตั้งแต่ต้นตอน resume จึงย้ายผลข้างเคียงไปไว้หลังจุดหยุด
-- **state ที่บันทึกไว้ไม่มีการยืนยันตัวตน** (เอกสาร OpenAI เตือนเรื่อง `RunState`) · โหลดจากที่เก็บที่เราคุมเท่านั้น
-- เพดานรอบ งบ token และการหยุดเมื่อไม่ดีขึ้นยังต้องมีเหมือนงานในคิว · รายละเอียดใน [`agent-systems.md`](../llm-engineering/references/agent-systems.md) หัวข้อ 6
+- **Never read the time or draw a random value in code that controls the order of work** (`Date.now()` · `datetime.now()` · `Math.random()` · `uuid4()`) · on replay the value differs from the first run, the order drifts, and the old result cannot be reused · do anything that needs time or randomness in an activity, or use the SDK's own API for it
+- **All LLM calls, tool calls, and outside reads and writes go in activities.** The result is recorded once, and replay reads the record instead of calling again.
+- **The order of calls must be the same on every run** · changing the order of steps in code that still has jobs in flight makes the old jobs fail replay (Temporal calls this a nondeterminism error) · switch to the engine's versioning or patching
+- **The steps before a wait point must be safe to repeat** (section 3) · LangGraph re-runs the paused node from the start on resume, so move side effects to after the wait point
+- **Saved state carries no identity check** (the OpenAI docs warn about `RunState`) · load it only from a store we control
+- The cap on rounds, the token budget, and stopping when there is no improvement are still needed, as for jobs in a queue · details in [`agent-systems.md`](../llm-engineering/references/agent-systems.md) section 6
 
-ที่มา (เปิดอ่าน 2026-10-26): [Temporal · OpenAI Agents SDK](https://docs.temporal.io/ai-cookbook/openai-agents-sdk-python) · [ประกาศ Temporal](https://temporal.io/blog/announcing-openai-agents-sdk-integration) · [Step Functions integration patterns](https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html) · [Step Functions Map](https://docs.aws.amazon.com/step-functions/latest/dg/state-map.html) · [LangGraph interrupts](https://docs.langchain.com/oss/python/langgraph/interrupts) · [OpenAI human in the loop](https://openai.github.io/openai-agents-python/human_in_the_loop/) · [Claude Code workflows](https://code.claude.com/docs/en/workflows)
+Sources (opened 2026-10-26): [Temporal · OpenAI Agents SDK](https://docs.temporal.io/ai-cookbook/openai-agents-sdk-python) · [Temporal announcement](https://temporal.io/blog/announcing-openai-agents-sdk-integration) · [Step Functions integration patterns](https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html) · [Step Functions Map](https://docs.aws.amazon.com/step-functions/latest/dg/state-map.html) · [LangGraph interrupts](https://docs.langchain.com/oss/python/langgraph/interrupts) · [OpenAI human in the loop](https://openai.github.io/openai-agents-python/human_in_the_loop/) · [Claude Code workflows](https://code.claude.com/docs/en/workflows)
 
 
 ---
@@ -2280,29 +1532,29 @@ Use when work runs outside the request in queues or schedules
 
 Use when a system must record who did what and when
 
-# ร่องรอยการใช้งาน (audit trail)
+# Audit trail
 
-> **กฎข้อเดียว:** ร่องรอยย้อนหลังสร้างไม่ได้
-> วันที่ลูกค้าถามว่า "ใครเปลี่ยนราคาอันนี้" ถ้าไม่ได้เก็บไว้ก่อน ก็ตอบไม่ได้ตลอดไป
+> **One rule:** a trail cannot be built after the fact.
+> The day a customer asks "who changed this price", if it was not recorded beforehand, it can never be answered.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ระบบมีงานอนุมัติ การเงิน สิทธิ์ผู้ใช้ หรือข้อมูลส่วนบุคคล
-- ลูกค้าหรือผู้ตรวจสอบถามได้ว่า "ใครทำ เมื่อไหร่ เปลี่ยนจากอะไรเป็นอะไร"
-- มีข้อพิพาทเรื่องข้อมูลที่ถูกแก้ แล้วไม่มีใครตอบได้
-- ระบบอยู่ภายใต้ พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล (Personal Data Protection Act: PDPA) หรือมาตรฐานที่ต้องตรวจย้อนหลังได้
+- The system has approvals, money, user permissions, or personal data
+- A customer or auditor can ask "who did it, when, and what was changed from what to what"
+- There was a dispute over edited data and nobody could answer
+- The system falls under the Personal Data Protection Act (PDPA) or a standard that must be checkable after the fact
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill, or together
 
-| งาน | skill | |
+| Job | skill | |
 |---|---|---|
-| log สำหรับไล่ปัญหาทางเทคนิค | `logging-standards` | แทน |
-| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` | แทน |
-| คอลัมน์ `created_by` `updated_at` ในตารางงาน | `database-design` | แทน |
-| สิทธิ์และการยืนยันตัวตน | `auth-implementation-patterns` | แทน |
-| ความยินยอมและสิทธิเจ้าของข้อมูล | `pdpa-compliance` | แทน |
-| ข้อกำหนดว่าต้องเก็บอะไรกี่ปี | `srs-writing` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Logs for technical troubleshooting | `logging-standards` | instead |
+| Metrics and alerts | `observability-basics` | instead |
+| Columns `created_by` `updated_at` in working tables | `database-design` | instead |
+| Permissions and identity verification | `auth-implementation-patterns` | instead |
+| Consent and data-subject rights | `pdpa-compliance` | instead |
+| Requirements on what to keep and for how many years | `srs-writing` | together |
+| Abbreviations in work that people read | `spell-out-abbreviations` | together |
 
 ---
 
@@ -2310,67 +1562,67 @@ Use when a system must record who did what and when
 
 | | application log | **audit log** |
 |---|---|---|
-| มีไว้ให้ใครอ่าน | developer ตอนไล่ปัญหา | ผู้ตรวจสอบ · ลูกค้า · ฝ่ายกฎหมาย |
-| เขียนอะไร | อะไรก็ได้ที่ช่วยไล่ปัญหา | **เฉพาะเหตุการณ์ที่มีความหมายทางธุรกิจ** |
-| เก็บที่ไหน | ไฟล์ · ระบบรวบรวม log | **ตารางในฐานข้อมูล** หรือที่เก็บที่เขียนทับไม่ได้ |
-| อายุ | 7–90 วัน | **เป็นปี ตามที่กฎหมายหรือสัญญากำหนด** |
-| แก้ได้ไหม | ไม่สำคัญ | **ห้ามแก้ ห้ามลบ** |
-| หายได้ไหม | หายบ้างรับได้ | **หายไม่ได้** ถ้าเขียนไม่สำเร็จ ธุรกรรมต้องล้มตาม |
+| Who reads it | developers, when troubleshooting | auditors · customers · the legal team |
+| What it records | anything that helps troubleshooting | **only events with business meaning** |
+| Where it is kept | files · a log collection system | **a table in the database**, or storage that cannot be overwritten |
+| Lifetime | 7–90 days | **years, as the law or contract requires** |
+| Can it be edited | does not matter | **never edit, never delete** |
+| Can it be lost | some loss is acceptable | **cannot be lost.** If the write fails, the transaction must fail with it |
 
-> **2 อย่างนี้แยกกันเสมอ** เพราะ audit log ที่ปนอยู่ในไฟล์ log ทั่วไป
-> จะถูกลบตามอายุการเก็บ (retention) ของ log ภายในเดือนเดียว และไม่มีใครค้นเจอตอนที่ต้องใช้
+> **Always keep these 2 separate.** An audit log mixed into the general log files
+> gets deleted by the log retention period within a month, and nobody finds it when it is needed.
 
 ---
 
-## 2 · ฟิลด์ที่ทุกรายการต้องมี
+## 2 · Fields every entry must have
 
-| ฟิลด์ | ตัวอย่าง | หมายเหตุ |
+| Field | Example | Note |
 |---|---|---|
-| `id` | UUIDv7 | เรียงตามเวลาได้ |
-| `occurred_at` | `2026-09-25T09:42:13.482Z` | **UTC** และเป็นเวลาที่เกิด ไม่ใช่เวลาที่บันทึก |
-| `actor_id` | `1042` | id ผู้ใช้ ไม่ใช่ชื่อ เพราะชื่อเปลี่ยนได้ |
-| `actor_type` | `user` · `system` · `api_client` | งานอัตโนมัติก็ต้องมีตัวตน |
-| `actor_ip` · `user_agent` | | เก็บเมื่อจำเป็นต่อการตรวจสอบเท่านั้น |
-| `action` | `order.cancelled` | **คำกริยารูปอดีต** แบบเดียวกันทั้งระบบ |
-| `entity_type` · `entity_id` | `order` · `1042` | ของที่ถูกกระทำ |
-| `changes` | `{"status":{"from":"confirmed","to":"cancelled"}}` | เฉพาะฟิลด์ที่เปลี่ยน |
-| `reason` | "ลูกค้าโทรแจ้งยกเลิก" | บังคับกับการกระทำที่ต้องมีเหตุผล |
-| `correlation_id` | `01J9Z8…` | เชื่อมกลับไปที่ application log |
-| `result` | `success` · `denied` | **ต้องบันทึกครั้งที่ถูกปฏิเสธด้วย** |
+| `id` | UUIDv7 | sortable by time |
+| `occurred_at` | `2026-09-25T09:42:13.482Z` | **UTC**, and the time it happened, not the time it was recorded |
+| `actor_id` | `1042` | the user id, not the name, because names can change |
+| `actor_type` | `user` · `system` · `api_client` | automated jobs need an identity too |
+| `actor_ip` · `user_agent` | | keep only when needed for the audit |
+| `action` | `order.cancelled` | **a past-tense verb**, in one style across the system |
+| `entity_type` · `entity_id` | `order` · `1042` | the thing acted on |
+| `changes` | `{"status":{"from":"confirmed","to":"cancelled"}}` | only the fields that changed |
+| `reason` | "ลูกค้าโทรแจ้งยกเลิก" (customer phoned to cancel) | required for actions that need a reason |
+| `correlation_id` | `01J9Z8…` | links back to the application log |
+| `result` | `success` · `denied` | **denied attempts must be recorded too** |
 
-> **การกระทำที่ถูกปฏิเสธมีค่ามากกว่าที่สำเร็จ** เพราะคนที่พยายามเข้าถึงสิ่งที่ไม่มีสิทธิ์
-> คือสิ่งที่ผู้ตรวจสอบอยากเห็นที่สุด และเป็นสัญญาณเตือนที่ดีที่สุดที่มี
+> **A denied action is worth more than a successful one**, because someone trying to reach something
+> they have no right to is what auditors most want to see, and it is the best warning sign there is.
 
 ---
 
-## 3 · เก็บเหตุการณ์ไหน
+## 3 · Which events to record
 
-**เก็บ:**
+**Record:**
 
-| กลุ่ม | ตัวอย่าง |
+| Group | Examples |
 |---|---|
-| เงินและสัญญา | สร้าง/ยกเลิก/คืนเงิน · เปลี่ยนราคา · เปลี่ยนส่วนลด |
-| การอนุมัติ | อนุมัติ · ปฏิเสธ · ส่งกลับแก้ |
-| สิทธิ์และตัวตน | ให้/เพิกถอนสิทธิ์ · สร้าง/ปิดบัญชี · เปลี่ยนรหัสผ่าน · เข้าสู่ระบบล้มเหลวติดกัน |
-| ข้อมูลส่วนบุคคล | ดู · แก้ · ส่งออก · ลบ |
-| ค่าตั้งของระบบ | เปลี่ยนค่าที่กระทบทั้งระบบ |
-| การเข้าถึงข้อมูลจำนวนมาก | ส่งออกรายงาน · ดาวน์โหลดรายชื่อ |
+| money and contracts | create/cancel/refund · price change · discount change |
+| approvals | approve · reject · send back for fixing |
+| permissions and identity | grant/revoke permission · create/close account · change password · consecutive failed logins |
+| personal data | view · edit · export · delete |
+| system settings | changing a value that affects the whole system |
+| bulk data access | exporting a report · downloading a name list |
 
-**ไม่เก็บ:** เปิดดูหน้าจอทั่วไป · ค้นหา · เรียงลำดับ · กดปุ่มที่ไม่เปลี่ยนอะไร
-audit log ที่เก็บทุกอย่าง มีค่าเท่ากับไม่มีเลย เพราะค้นไม่เจอ
+**Do not record:** ordinary screen views · searches · sorting · clicks that change nothing.
+An audit log that records everything is worth the same as none, because nothing can be found in it.
 
-**ตั้งชื่อ action แบบเดียวทั้งระบบ:** `<entity>.<กริยาอดีต>` เช่น `order.cancelled` · `user.role_granted` ·
+**Name actions in one style across the system:** `<entity>.<past-tense verb>`, for example `order.cancelled` · `user.role_granted` ·
 `invoice.exported` · `patient_record.viewed`
 
 ---
 
-## 4 · เก็บ "เปลี่ยนอะไร" ยังไง
+## 4 · How to record "what changed"
 
-| วิธี | ดี | เสีย |
+| Method | Good | Bad |
 |---|---|---|
-| **เก็บเฉพาะฟิลด์ที่เปลี่ยน (from/to)** ✓ | เล็ก อ่านรู้เรื่องทันที | อยากเห็นภาพรวมต้องไล่ย้อน |
-| เก็บทั้งแถวก่อนและหลัง | ได้ภาพเต็ม | โตเร็วมาก และเสี่ยงเก็บข้อมูลอ่อนไหวเกินจำเป็น |
-| เก็บเฉพาะว่า "แก้แล้ว" | เล็กสุด | **ตอบคำถามไม่ได้** ไม่ควรใช้ |
+| **Record only the changed fields (from/to)** ✓ | small, readable at once | to see the whole picture you must trace back |
+| Record the whole row before and after | full picture | grows very fast and risks keeping more sensitive data than needed |
+| Record only that "it was edited" | smallest | **cannot answer the question**, so do not use it |
 
 ```jsonc
 "changes": {
@@ -2379,7 +1631,7 @@ audit log ที่เก็บทุกอย่าง มีค่าเท่
 }
 ```
 
-**ฟิลด์อ่อนไหวเก็บแค่ว่าเปลี่ยน ไม่เก็บค่า:**
+**For sensitive fields, record only that it changed, not the value:**
 
 ```jsonc
 "changes": { "password_hash": { "changed": true } }
@@ -2387,55 +1639,381 @@ audit log ที่เก็บทุกอย่าง มีค่าเท่
 
 ---
 
-## 5 · เขียนแล้วห้ามแก้
+## 5 · Never edit after writing
 
-- ตาราง audit ให้สิทธิ์แค่ **INSERT และ SELECT** · บัญชีที่แอปใช้ต้องไม่มีสิทธิ์ UPDATE หรือ DELETE
-- เขียนใน transaction เดียวกับการเปลี่ยนข้อมูลจริง **ถ้าเขียน audit ไม่สำเร็จ ธุรกรรมต้องล้มตาม**
-- ห้ามแก้ประวัติเพื่อ "จัดระเบียบ" ถ้าบันทึกผิด ให้เพิ่มรายการแก้ไข ไม่เขียนทับ
-- ระบบที่ต้องเข้มกว่านั้นให้ทำ hash ต่อกันเป็นสาย เพื่อพิสูจน์ว่าไม่มีใครแทรกหรือลบ
+- Grant the audit table only **INSERT and SELECT**. The account the app uses must have no UPDATE or DELETE permission.
+- Write in the same transaction as the real data change. **If the audit write fails, the transaction must fail with it.**
+- Never edit history to "tidy up". If a record is wrong, add a correction entry. Do not overwrite.
+- A system that needs stronger protection should chain the entries with hashes, to prove nobody inserted or deleted anything.
 
-**อายุการเก็บ** ตั้งตามกฎหมายหรือสัญญา เอกสารทางบัญชีในไทยมักต้องเก็บ 5 ปี
-เมื่อครบอายุให้ย้ายไปที่เก็บราคาถูก ไม่ลบทิ้งโดยไม่มีใครอนุมัติ
+**Retention** follows the law or the contract. Accounting documents in Thailand usually must be kept 5 years.
+When the period ends, move them to cheap storage. Never delete them without someone's approval.
 
 ---
 
-## 6 · ใครดูได้ และห้ามเก็บอะไร
+## 6 · Who can view, and what must not be recorded
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| สิทธิ์อ่าน | เฉพาะบทบาทที่มีหน้าที่ตรวจสอบ และ**การอ่าน audit log ก็ต้องบันทึกลง audit ด้วย** |
-| การส่งออก | บันทึกทุกครั้งว่าใครส่งออกช่วงไหน |
-| **ห้ามเก็บ** | รหัสผ่าน · token · เลขบัตร · ข้อมูลสุขภาพ · เนื้อหาของข้อมูลส่วนบุคคล |
-| เก็บได้แทน | ชี้ว่า**ของชิ้นไหน**ถูกดูหรือถูกแก้ ไม่ใช่เนื้อหาข้างใน |
+| Read permission | only roles with an audit duty, and **reading the audit log must also be recorded in the audit** |
+| Export | record every time who exported which period |
+| **Must not record** | passwords · tokens · ID card numbers · health data · the content of personal data |
+| Record instead | point to **which item** was viewed or edited, not the content inside |
 
-> `patient_record.viewed` กับ `entity_id` ก็พอแล้ว **ห้ามคัดลอกผลตรวจลงไปใน audit log**
-> ไม่งั้น audit log จะกลายเป็นที่รวมข้อมูลอ่อนไหวที่สุดในระบบ โดยไม่มีใครตั้งใจ
+> `patient_record.viewed` with the `entity_id` is enough. **Never copy test results into the audit log.**
+> Otherwise the audit log becomes the most sensitive data store in the system, without anyone meaning it to.
 
 ---
 
-## 7 · แสดงให้คนอ่าน
+## 7 · Show it to people
 
-หน้าจอประวัติต้องกรองได้อย่างน้อย 4 อย่าง: **ช่วงเวลา · ผู้ทำ · ประเภทการกระทำ · ของชิ้นไหน**
+The history screen must filter by at least 4 things: **time period · actor · action type · which item**.
 
-แสดงเป็นประโยคที่คนอ่านรู้เรื่อง ไม่ใช่ JSON ดิบ:
+Show it as a sentence people can read, not raw JSON (the sample below is the Thai text shown to Thai users: on 25 Sep 2569 [B.E.; 2026] at 16:42, Somchai (sales) cancelled order SO-2026-00042, status: confirmed → cancelled, reason: customer phoned to cancel):
 
 ```
 25 ก.ย. 2569 16:42  สมชาย (ฝ่ายขาย)  ยกเลิกคำสั่งซื้อ SO-2026-00042
                     สถานะ: ยืนยันแล้ว → ยกเลิก · เหตุผล: ลูกค้าโทรแจ้งยกเลิก
 ```
 
-แสดงเวลาตามเขตเวลาของผู้ดู แต่เก็บเป็น UTC (ดู `i18n-and-locale`)
+Show the time in the viewer's time zone, but store it as UTC (see `i18n-and-locale`).
 
 ---
 
 ## 8 · Anti-patterns
 
-- **เก็บ audit ในไฟล์ log ทั่วไป** — ถูกลบตาม retention ภายในเดือนเดียว
-- **เก็บชื่อผู้ทำแทน id** — พอเขาเปลี่ยนนามสกุล ประวัติเก่าก็กลายเป็นคนละคน
-- **บันทึกเฉพาะที่สำเร็จ** — ครั้งที่ถูกปฏิเสธคือสิ่งที่ผู้ตรวจสอบตามหา
-- **บันทึกแค่ "แก้ไขข้อมูล"** โดยไม่บอกว่าจากอะไรเป็นอะไร
-- **แอปมีสิทธิ์ UPDATE ตาราง audit** — ร่องรอยที่แก้ได้ ไม่ใช่ร่องรอย
-- **เขียน audit นอก transaction** — ธุรกรรมสำเร็จแต่ไม่มีบันทึก
-- **บันทึกทุกการคลิก** — ของสำคัญจมอยู่ในกองข้อมูลที่ไม่มีใครใช้
-- **คัดลอกข้อมูลอ่อนไหวลง audit** — เกิดช่องรั่วใหม่โดยไม่ตั้งใจ
-- **ไม่มีหน้าจอให้ดู** — มีข้อมูลแต่ต้องให้ developer query ทุกครั้งที่ลูกค้าถาม
+- **Keeping the audit in general log files**: deleted by retention within a month
+- **Recording the actor's name instead of the id**: when they change their surname, the old history turns into a different person
+- **Recording only successes**: the denied attempts are what auditors look for
+- **Recording only "edited data"** without saying from what to what
+- **The app has UPDATE permission on the audit table**: a trail that can be edited is not a trail
+- **Writing the audit outside the transaction**: the transaction succeeds but there is no record
+- **Recording every click**: the important entries sink in a pile of data nobody uses
+- **Copying sensitive data into the audit**: it creates a new leak by accident
+- **No screen to view it**: the data exists, but a developer must run a query every time a customer asks
+
+
+---
+
+# skill: file-upload-and-storage
+
+Use when users upload files or an app serves stored files
+
+# Accepting file uploads and storing files
+
+> **One rule:** a file a user sends is untrusted data.
+> The file name, the extension, the type the browser reports, and the size it claims can **all be faked**.
+
+## When to use this skill
+
+- A screen lets users attach files, images, or documents.
+- The system must store files and send them back for viewing or download.
+- You must decide where to keep the files.
+- Some files should be hidden from others, but right now anyone with the link can open them.
+
+## When to use another skill instead, or together
+
+| Task | Skill | |
+|---|---|---|
+| Import Excel/CSV and load the data into the system | `data-import-export` | instead |
+| Permissions: who may access what | `auth-implementation-patterns` | instead |
+| Process large files as a background job | `background-jobs` | instead |
+| The file metadata table | `database-design` | together |
+| Upload endpoints and errors | `api-conventions` · `web-service-essentials` | together |
+| Retention of files that hold personal data | `pdpa-compliance` | together |
+| Storage used and alerts | `observability-basics` | together |
+| Abbreviations in anything a person reads | `spell-out-abbreviations` | together |
+
+---
+
+## 1 · Check before accepting
+
+| What to check | How |
+|---|---|
+| **File type** | Read the **contents** (magic bytes). Do not trust the extension or `Content-Type`. |
+| **Size** | Enforce it on the server **and** at the front-facing request receiver. A check in the browser is only a convenience. |
+| Files per request | Set a limit. |
+| Total size per user | Set a quota, or one person uses up all the space. |
+| Allowed types | **An allow list, not a deny list.** |
+
+```
+Typical allow list: jpg · png · webp · pdf · xlsx · docx · csv
+Always forbidden: executables (exe, sh, bat) · server script files (php, aspx, jsp) · svg that has not been sanitised
+```
+
+> **SVG is HTML.** It can run scripts. To accept it, sanitise it first or convert it to PNG.
+>
+> **Check the size before reading the file into memory.** Otherwise a 5 GB file kills the server
+> before the size-check code gets to run.
+
+**Virus-scan** any file that other people will download. While the scan result is pending, set the status to `pending`
+and give nobody access.
+
+---
+
+## 2 · Where to store
+
+| Store | Good for | Note |
+|---|---|---|
+| **object storage** (S3 · Azure Blob · GCS) | The default to use | Scales · has expiring links built in |
+| The server's disk | A small, single-machine system | **Must sit outside the folder the web serves**, and must be backed up |
+| In the database | Very small files that must be in the same transaction | Grows fast · backups get much slower |
+
+> Wrong: **keeping files in the app's folder.** They vanish on every deploy, and with several instances they cannot see each other.
+> Wrong: **keeping files directly in the folder the web serves.** Someone uploads a script file and runs it.
+
+**The database holds only metadata; the file itself lives elsewhere.** The metadata table needs the columns
+`id` · `original_name` · `stored_key` · `content_type` · `size_bytes` · `checksum` ·
+`uploaded_by` · `uploaded_at` · `scan_status` · `owner_entity_type` · `owner_entity_id`
+
+---
+
+## 3 · Naming the stored file
+
+**Never use the file name the user sent as the real stored name.**
+
+```
+Wrong: uploads/รายงาน (1).xlsx              spaces · Thai · brackets
+Wrong: uploads/../../etc/passwd             escapes the folder
+Right: 2026/09/25/01J9Z8K7X2M4.xlsx         random · split into folders by date
+```
+
+- The real stored name is a random value (UUIDv7 or ULID) + an extension that you have **verified**.
+- Keep the user's original name in the database, and send it back on download through a header.
+- Split folders by date. One folder with millions of files is slow and cannot be browsed.
+- Store a checksum too. It detects duplicates and checks the file is not corrupted.
+
+---
+
+## 4 · Sending files back to the user
+
+| File | How to send |
+|---|---|
+| Public (logo, product image) | A direct URL through a CDN is fine |
+| **Private** (document, receipt, user photo) | **A signed link that expires** in 5–15 minutes |
+
+> **A "hard-to-guess link" is not access control.** Links get forwarded, logged by proxies,
+> and left in the `Referer` header. For a private file, **check permission every time**, then issue a temporary link.
+
+- For large files, let the user upload straight to object storage with a link we sign, so the file does not pass through the app.
+  **The checks in §1 are still all required.** This route bypasses the app, so restore the checks like this:
+  - **When signing the link:** limit size and type inside the signature. S3 uses a presigned POST whose policy has `content-length-range` and a `Content-Type` condition (a presigned PUT cannot enforce size). Other providers have equivalents, for example GCS uses the header `x-goog-content-length-range`.
+  - **When signing the link:** set the key yourself (a random name as in §3) in a holding folder · keep the link's expiry short · save a metadata row with `scan_status = pending`.
+  - **After the upload finishes** (a storage event, or the user reports it done): read the real magic bytes from the object · compare the real size with the limit · virus-scan. If it passes, move it to the real store and set `clean`. If it fails, delete or quarantine it.
+  - While `pending`, issue no download link to anyone.
+- When serving a file for download, set `Content-Disposition` and `Content-Type` correctly,
+  and never send back user-uploaded HTML in a way that lets the browser render it.
+- If you can, serve user files from a different domain than the app, so scripts in a file cannot reach the app's cookies.
+
+---
+
+## 5 · Images
+
+- **Never send the original camera image to the screen.** An 8 MB photo on a phone is a page that does not load.
+- Pre-generate 2–3 sizes (thumbnail · medium · a downsized full size).
+- **Strip EXIF.** The photo holds the location where it was taken, and users do not know they are publishing it.
+- Convert to WebP if the browser supports it.
+- Rotate the image according to EXIF before you strip EXIF, or phone photos come out sideways.
+- If the file is large or there are many, resize as a background job (see `background-jobs`).
+
+---
+
+## 6 · Deleting and retention
+
+| Topic | Rule |
+|---|---|
+| Deleting the parent record | A job must also hunt down and delete the orphan files left behind. |
+| Order of deletion | Delete the metadata first, then the file. An orphan file is harmless, but metadata pointing to a file that is gone breaks the screen. |
+| An uploaded file never linked to anything | Delete it after 24 hours. |
+| Retention | Set it per file type · a file with personal data needs an expiry date (see `pdpa-compliance`). |
+| Backup | Files belong in the backup plan just like the database, **and a restore must have been tested for real.** |
+
+---
+
+## 7 · Anti-patterns
+
+- **Trusting the file extension.** Anyone can rename a file to `.jpg`.
+- **Checking size only in the browser.** It is bypassed in 3 seconds.
+- **Using the user's file name as the real path.** `../` leads anywhere.
+- **Keeping files in the folder the web serves.** Someone uploads a script and runs it.
+- **A "hard-to-guess link" instead of a permission check.**
+- **Accepting SVG without sanitising it.** The script runs in other people's browsers.
+- **Sending an 8 MB original image to a phone.**
+- **Not stripping EXIF.** The coordinates of the user's home leak out and nobody meant it to.
+- **Files outside the backup plan.** The database can be restored, but every document is gone.
+- **Reading the whole file into memory.** A large file kills the process.
+
+
+---
+
+# skill: notifications
+
+Use when a system sends email, SMS, LINE or push
+
+# User notifications
+
+> **One rule:** users stop reading everything if they receive enough that they did not need to read.
+> Every message sent beyond what is necessary makes the necessary messages get ignored too.
+> For Thai text in templates → `human-writing` `references/thai-grammar.md` section 4, register "screen"
+
+## When to use this skill
+
+- The system must send email, SMS, LINE push or in-app notifications
+- Users complain of getting duplicates, getting too many, or getting none
+- You must build a settings page for which notifications to receive
+- Important email lands in spam
+
+## When **not** to use it
+
+| Task | Use this instead |
+|---|---|
+| Alerting the team when the system has a problem | `observability-basics` |
+| Queue mechanics and retries | `background-jobs` |
+| Multi-language messages | `i18n-and-locale` |
+| Marketing consent | `pdpa-compliance` |
+
+---
+
+## 1 · Choose the channel by urgency, not by habit
+
+| Channel | Good for | Limits |
+|---|---|---|
+| **In-app** | Everything — a permanent record that can be looked back at | Seen only when the user opens the app |
+| **Email** | Receipts, summaries, attachments, things to keep | Slow · can land in spam |
+| **push** | Things the user must know now | Can be turned off · lost if not tapped |
+| **LINE** | Thailand · general customers · high open rate | Cost per message · provider rules apply |
+| **SMS** | Verification codes · urgent things that must arrive | Most expensive · 70 characters if Thai |
+
+> **Thai SMS holds only 70 characters per message** (not 160 as in English).
+> Anything longer is split into several messages and billed for every part, so always count the length before sending.
+
+**One matter goes on one channel** — unless it is something that truly cannot be missed.
+Let the user choose which channel they want (section 5).
+
+---
+
+## 2 · Message templates live outside the code
+
+```
+templates/
+  order-confirmed/
+    th.subject.txt  th.html  th.txt
+    en.subject.txt  en.html  en.txt
+```
+
+| Rule | Reason |
+|---|---|
+| **Never build messages by string concatenation in code** | Every wording change would need a new deploy |
+| Variables are named | Use names like `{{customerName}}`, not positions |
+| Email needs both HTML and plain text | Spam filters lower the score of HTML-only email |
+| One file per language | See `i18n-and-locale` |
+| **Test with real values before sending** | A leaked `สวัสดีคุณ {{name}}` damages the brand |
+
+**Every message needs 3 things** — what happened · which item it concerns (with a reference number) · what to do next (a single button)
+
+---
+
+## 3 · Always send as a background job
+
+> **A failed email must not make the order fail.**
+> Separate them with a queue — the transaction is saved first, then the message enters the send queue (see `background-jobs`)
+
+| Topic | Rule |
+|---|---|
+| Enqueue after the transaction succeeds | Not during the transaction, because if it rolls back later the email has already gone out |
+| retry | 3 times, doubling the wait each round, then move to the dead letter queue (a queue that holds jobs that failed to send) |
+| **Prevent duplicate sends** | Use a unique key `(type, entity_id, event_id, recipient)` — `event_id` is the id of the event or version of the change (for example, the 2nd status of the same order must be sendable). Do not just hope nobody calls twice |
+| Urgent messages (OTP codes) | Use a separate queue so they do not wait behind 5,000 monthly summary emails |
+
+**Prevent a flood** — set a per-user ceiling per hour, and merge frequent events of the same kind
+into one message ("มี 12 รายการใหม่", not 12 messages).
+
+---
+
+## 4 · What must never go in a message
+
+| Never | Put this instead |
+|---|---|
+| Passwords | A reset link that expires |
+| Full card numbers · national ID numbers | The last 4 digits |
+| Health data, test results | "มีผลตรวจใหม่ กรุณาเข้าระบบเพื่อดู" |
+| Attachments with sensitive data | A link that requires login first |
+| Links reachable without identity verification | A short-lived link that checks permission |
+
+> **Treat email as a postcard** — it passes through many systems, sits in a mailbox on a device that may not be theirs,
+> and can be found forever.
+
+**Links in email must be on our own domain** — shortened links make users unable to tell them from scam email.
+
+---
+
+## 5 · Let users choose
+
+| Type | Can it be turned off? |
+|---|---|
+| Transactional (receipts · verification codes · security notices) | ✗ cannot be turned off |
+| Action (order status · someone replied) | ✓ the channel can be chosen |
+| Periodic summary | ✓ the frequency can be chosen |
+| Marketing | ✓ **consent must be obtained before sending** (see `pdpa-compliance`) |
+
+- Settings table: `user_id` · `notification_type` · `channel` · `enabled`
+- **Every non-transactional message must have an unsubscribe link**, and it must take effect within 24 hours (our own internal target, stricter than the 2 days that Gmail and Yahoo set)
+- **High-volume marketing email** must also carry a one-click unsubscribe header: `List-Unsubscribe: <https://...>` (an HTTPS URL) together with `List-Unsubscribe-Post: List-Unsubscribe=One-Click` per the RFC 8058 standard, and the email must pass SPF + DKIM (Gmail applies this to senders above about 5,000 messages per day · it applies to marketing email, not transactional · without it the email is more likely to land in spam) — sources: support.google.com/a/answer/14229414 · senders.yahooinc.com/best-practices checked 22 Oct 2026 (B.E. 2569)
+- Unsubscribing must work without logging in — use a token in the link
+- Respect "quiet hours" — never send non-urgent push or SMS at 2 a.m. (by the recipient's time zone)
+
+---
+
+## 6 · Track delivery
+
+| Status | Meaning |
+|---|---|
+| `queued` · `sent` | Entered the queue · left our system |
+| `delivered` | The destination accepted it |
+| `bounced` | Did not arrive — **separate hard (the address does not exist) from soft (mailbox full)** |
+| `failed` | Could not be sent |
+
+- **Stop sending to an address immediately after a hard bounce** — continuing gets our domain blacklisted
+- Keep a send log to answer "why didn't the customer get it" — who, which channel, when, what result
+- Email that must arrive needs **SPF · DKIM · DMARC** all set, or it lands in spam with no warning at all
+- Measure: delivery success rate · bounce rate · queue backlog (see `observability-basics`)
+
+---
+
+## 7 · Anti-patterns
+
+- **Sending the message in the same request as the transaction** — the email provider is slow and the screen hangs
+- **Sending before commit** — rolled back, but the customer already got the email
+- **Messages in code** — every wording change needs a new deploy
+- **No duplicate prevention** — the customer gets 5 receipts
+- **Sending on every channel at once** — the user turns everything off within a week
+- **No unsubscribe link** — the user clicks "this is spam" instead and our domain loses reputation
+- **Putting sensitive data in the message body**
+- **Continuing to send to a hard bounce** — the domain gets blacklisted
+- **Not counting the length of Thai SMS** — costs balloon without anyone noticing
+- **No send log** — you cannot tell the customer whether it was sent
+
+---
+
+## 8 · Abbreviations
+
+- **OTP** — One-Time Password
+- **RFC** — Request for Comments (internet standards documents) · RFC 8058 = the standard for the one-click unsubscribe header
+- **push notification** — a notification that pops up on the user's device
+- **bounce** — an email that did not arrive and was returned
+- **SPF · DKIM · DMARC** — standards that prove an email was really sent from that domain
+- **opt-in / opt-out** — asking to receive / asking to stop receiving
+- **LINE Official Account** — a business's official account on LINE, used to send messages to customers
+
+## 9 · Link to other skills
+
+| Need | Use together with |
+|---|---|
+| Retry queue and dead letter | `background-jobs` |
+| Multi-language messages | `i18n-and-locale` |
+| Marketing consent | `pdpa-compliance` |
+| Settings table and send log | `database-design` |
+| Delivery success rate metrics | `observability-basics` |
+| Attachments and expiring links | `file-upload-and-storage` |
+| Alerting the team when the system has a problem | `observability-basics` · `incident-runbook-template` |
+| Broadcast to LINE OA friends (quota · target group · frequency) | `e-commerce:line-broadcast` (if installed) |

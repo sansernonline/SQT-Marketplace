@@ -4,9 +4,9 @@ Use when a system calls an LLM with prompts or RAG
 
 # llm-engineering
 
-ทุกเรื่องของระบบที่เรียก Large Language Model (LLM): prompt · RAG (ค้นเอกสารมาประกอบคำตอบ) · การวัดคุณภาพ · บทบาทวิศวกร Machine Learning (ML) และ LLM
+Everything about systems that call a Large Language Model (LLM): prompts · RAG (retrieval-augmented generation, which searches documents to ground the answer) · quality measurement · the roles of Machine Learning (ML) and LLM engineers
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทุกไฟล์ เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้นอยู่แล้ว
+**Open only the files that match the job.** Do not read every file, because each file is already the full guide to its topic.
 
 ## หัวข้อ
 
@@ -20,7 +20,7 @@ Use when a system calls an LLM with prompts or RAG
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+An agent called in for this area opens its own role file before starting.
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -2064,10 +2064,10 @@ similarity = cosine_similarity(
 
 Use [RAGAS framework](https://docs.ragas.io/) for this.
 
-**ออกข้อสอบ RAG จากเอกสารจริง** (ตัวอย่างจากงานสอน ร้านวัสดุก่อสร้าง ไม่ใช่เกณฑ์):
-- เปิดอ่านหน้าจริงของ PDF ทีละไฟล์ แล้วให้แต่ละข้อระบุ ไฟล์ + หน้าที่มีคำตอบ + `key_facts` · ผสมตาราง หัวตาราง 2 ชั้น เชิงอรรถ คำตอบข้ามหน้า และข้อที่เอกสารไม่มีคำตอบ (ตอบว่าไม่มีข้อมูลคือถูก)
-- แยกเป็น 3 ชุดตามที่มาของคำตอบ: จาก PDF (169 ข้อ) · จากฐานข้อมูลที่คำนวณด้วยสูตรและ SQL (79 ข้อ) · บทสนทนาหลายตา (ตรวจว่าเข้าใจ "อันนั้น" "ตัวเมื่อกี้")
-- อะไรที่โค้ดตรวจได้ ให้โค้ดตรวจ (หน้าที่ค้นมาถูกไหม ตัวเลขตรงไหม) ส่วนที่เหลือให้ผู้ตัดสินหลายตัวช่วยกันขนาน ให้คะแนน 0 / 0.5 / 1 พร้อมเหตุผล · ผู้ตัดสินต้องไม่ใช่โมเดลตัวที่ถูกวัด
+**Writing a RAG exam from real documents** (an example from a teaching project, a building-materials shop; not a standard):
+- Open each PDF and read the real pages, then have each question state the file + the page that holds the answer + `key_facts` · mix tables, 2-level table headers, footnotes, answers that span pages, and questions the documents cannot answer (replying that there is no information is correct)
+- Split into 3 sets by where the answer comes from: from the PDFs (169 questions) · from the database, computed with formulas and SQL (79 questions) · multi-turn conversations (check that it understands "อันนั้น" (that one) and "ตัวเมื่อกี้" (the one just now))
+- Let code check whatever code can check (was the right page retrieved, do the numbers match). For the rest, have several judges work in parallel and score 0 / 0.5 / 1 with a reason · the judge must not be the model being measured
 - ผลรอบนั้น: ชุด PDF ผ่าน 95.9%
 
 ### Operational Metrics (Always Track)
@@ -3018,7 +3018,7 @@ final = [doc for doc, score in ranked[:5]]
 
 > **Tip:** Retrieve top-20, re-rank to top-5. Big quality gain, modest cost.
 
-**พิสูจน์ว่า reranker คุ้ม ด้วย ablation (ถอดทีละชิ้น)**: ให้ปิดชิ้นส่วนด้วย env flag (เช่น `RERANK=off`) · รันซ้ำเฉพาะชุดคำถามที่เกี่ยวข้อง · ตั้งกลับเป็นเปิด · รายงานเป็นตาราง เปิด / ปิด / ผลต่าง (ตัวอย่างจากงานสอน: หน้าที่ถูกอยู่ใน 4 ย่อหน้าแรก 80.8% → 95.4% · ตอบถูก 84.0% → 91.7% ไม่ใช่เกณฑ์)
+**Prove a reranker is worth it with an ablation (remove one part at a time)**: switch the part off with an env flag (for example `RERANK=off`) · re-run only the relevant question set · set it back to on · report a table of on / off / difference (an example from a teaching project: the right page within the first 4 paragraphs 80.8% → 95.4% · correct answers 84.0% → 91.7%; not a standard)
 
 ## Stage 7: Context Construction
 
@@ -3197,200 +3197,200 @@ final = await retrieve(refined_query)
 
 Use when a live system needs metrics, logs or alerts
 
-# วัดผลและเฝ้าระบบ
+# Measuring and monitoring a system
 
-> **กฎข้อเดียว:** ถ้าลูกค้าเป็นคนบอกเราว่าระบบล่ม แปลว่าการเฝ้าระวังล้มเหลว
-> ไม่ใช่ว่าลูกค้าใจดี
+> **The one rule:** if a customer is the one who tells us the system is down, monitoring has failed.
+> It does not mean the customer is kind.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ระบบมีผู้ใช้จริงแล้ว
-- มีคนถามว่า "ตอนนี้ระบบปกติดีไหม" แล้วต้องไปเปิด log ดูถึงจะตอบได้
-- ถูกปลุกกลางดึกด้วยการแจ้งเตือนที่ไม่ต้องทำอะไร
-- ระบบช้าแล้วไม่รู้ว่าช้าตรงไหน
+- The system has real users
+- Someone asks "is the system healthy right now?" and you must open the logs to answer
+- You get woken in the middle of the night by an alert that needs no action
+- The system is slow and you do not know where
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Job | Use this instead |
 |---|---|
-| รูปแบบบรรทัด log และการปิดบัง | `logging-standards` |
-| ร่องรอยว่าใครทำอะไร | `audit-trail` |
-| endpoint health check | `web-service-essentials` |
-| ขั้นตอนตอนเกิดเหตุ | `incident-runbook-template` |
-| สรุปหลังเหตุการณ์ | `postmortem-template` |
+| Log line format and masking | `logging-standards` |
+| A trail of who did what | `audit-trail` |
+| Health check endpoint | `web-service-essentials` |
+| Steps during an incident | `incident-runbook-template` |
+| Post-incident summary | `postmortem-template` |
 
 ---
 
-## 1 · สามอย่างนี้ตอบคนละคำถาม
+## 1 · These three answer different questions
 
-| | ตอบคำถาม | ตัวอย่าง | ต้นทุน |
+| | Answers the question | Example | Cost |
 |---|---|---|---|
-| **metric** (ตัวชี้วัด) | "ตอนนี้แย่ไหม แย่ขึ้นหรือลง" | error 2.3% · p95 = 840 ms | ถูกสุด เก็บได้นาน |
-| **log** (บันทึก) | "คำขอนั้นเกิดอะไรขึ้น" | ข้อความ + stack trace + id | แพงปานกลาง |
-| **trace** (การไล่รอย) | "ช้าที่ขั้นตอนไหน" | คำขอเดียว ผ่าน 5 service | แพงสุด สุ่มเก็บ |
+| **metric** | "Is it bad now? Getting better or worse?" | error 2.3% · p95 = 840 ms | Cheapest, keeps a long time |
+| **log** | "What happened in that request?" | message + stack trace + id | Medium cost |
+| **trace** | "Which step is slow?" | one request across 5 services | Most expensive, sample it |
 
-**ลำดับการใช้เวลาเกิดเหตุ:** metric บอกว่า**มีปัญหา** → trace บอกว่า**ตรงไหน** → log บอกว่า**ทำไม**
-ทั้ง 3 อย่างต้องเชื่อมกันด้วย correlation id ตัวเดียวกัน (ดู `logging-standards`)
+**Order of use during an incident:** the metric says there **is a problem** → the trace says **where** → the log says **why**.
+All 3 must be linked by the same correlation id (see `logging-standards`).
 
 ---
 
-## 2 · สี่สัญญาณที่ต้องวัด
+## 2 · The four signals to measure
 
-| สัญญาณ | วัดอะไร | ตัวเลขที่ดู |
+| Signal | Measures | Numbers to watch |
 |---|---|---|
-| **อัตราคำขอ** | มีงานเข้ามาเท่าไหร่ | ต่อวินาที แยกตาม endpoint |
-| **อัตราความผิดพลาด** | ล้มกี่เปอร์เซ็นต์ | แยก 4xx (ผู้ใช้ผิด) กับ 5xx (เราผิด) |
-| **เวลาตอบสนอง** | ช้าแค่ไหน | **p50 · p95 · p99** |
-| **ทรัพยากร** | ใกล้เต็มไหม | CPU · หน่วยความจำ · พื้นที่ · connection pool |
+| **Request rate** | How much work is coming in | Per second, split by endpoint |
+| **Error rate** | What percentage fails | Split 4xx (user's fault) from 5xx (our fault) |
+| **Response time** | How slow | **p50 · p95 · p99** |
+| **Resources** | Is anything near full | CPU · memory · disk space · connection pool |
 
-> **ห้ามดูค่าเฉลี่ยของเวลาตอบสนอง** — เฉลี่ย 200 ms ฟังดูดี
-> ทั้งที่ผู้ใช้ 5% รอ 9 วินาที ค่าเฉลี่ยกลบคนที่เจอปัญหาเสมอ **ดู p95 และ p99**
+> **Never look at the average response time.** An average of 200 ms sounds good
+> while 5% of users wait 9 seconds. The average always hides the people who hit the problem. **Look at p95 and p99.**
 
-**สำหรับคิวและงานเบื้องหลัง** เพิ่มอีก 3 ตัว — งานค้างในคิว · เวลารอในคิว · งานที่ล้มถาวร
-(ดู `background-jobs`)
+**For queues and background jobs**, add 3 more: jobs waiting in the queue · wait time in the queue · jobs that failed for good
+(see `background-jobs`).
 
 ---
 
-## 3 · ตั้งชื่อตัวชี้วัด
+## 3 · Naming metrics
 
 ```
-<โดเมน>_<สิ่งที่วัด>_<หน่วย>
+<domain>_<what is measured>_<unit>
 
-http_requests_total              จำนวนสะสม
-http_request_duration_seconds    ระยะเวลา
-orders_created_total             เหตุการณ์ทางธุรกิจ
-queue_depth_jobs                 ค่า ณ ขณะนั้น
+http_requests_total              cumulative count
+http_request_duration_seconds    duration
+orders_created_total             business event
+queue_depth_jobs                 value at this moment
 ```
 
-| กฎ | เหตุผล |
+| Rule | Reason |
 |---|---|
-| ลงท้ายด้วยหน่วยเสมอ | `_seconds` ไม่ใช่ `_time` ที่ไม่มีใครรู้ว่าวินาทีหรือมิลลิวินาที |
-| ค่าสะสมลงท้าย `_total` | บอกว่าเป็นค่าที่เพิ่มขึ้นเรื่อย ๆ ไม่ใช่ค่าปัจจุบัน |
-| ใช้ label แทนการสร้างชื่อใหม่ | `http_requests_total{route,status}` ไม่ใช่ชื่อแยกต่อ endpoint |
-| **label ห้ามมีค่าที่ไม่จำกัด** | ถ้าใส่ user id หรือ order id เป็น label ระบบเก็บ metric จะรับไม่ไหว |
+| Always end with the unit | `_seconds`, not `_time`, which nobody can tell is seconds or milliseconds |
+| End cumulative values with `_total` | It says the value keeps rising and is not the current value |
+| Use labels instead of making new names | `http_requests_total{route,status}`, not a separate name per endpoint |
+| **A label must not take unbounded values** | If you put a user id or order id in a label, the metrics system cannot cope |
 
-### 3.1 · ถ้าใช้ Prometheus และ Grafana
+### 3.1 · If you use Prometheus and Grafana
 
-- **ชนิด metric:** counter ใช้นับเหตุการณ์ (อ่านด้วย `rate()`) · gauge ใช้ค่า ณ ตอนนี้ · histogram ใช้ระยะเวลาที่ต้องหา p95 · summary ใช้เมื่อไม่ต้องรวมข้าม instance
-- **หน่วย:** วินาที · byte · ratio 0 ถึง 1 (`_seconds` ไม่ใช่ `_milliseconds`)
-- **ห้ามใส่ `user_id` · เบอร์โทร · `call_id` เป็น label** เพราะทุกค่าใหม่คือ series ใหม่ 1 เส้น จนระบบเก็บ metric รับไม่ไหว · id เหล่านี้ลง log และ trace
-- p95: `histogram_quantile(0.95, sum by (le) (rate(<ชื่อ>_bucket[5m])))`
-- alert ทุกกฎมี `for:` · `severity` · ลิงก์ runbook · เตือนจากอาการ (latency · error) ไม่เตือนจาก CPU หรือ GPU
-- dashboard เก็บเป็น JSON ใน git แล้ว provision ด้วยไฟล์ · RED ต่อ service · USE ต่อทรัพยากร
-- รายละเอียด PromQL · ตัวอย่างกฎ alert · provisioning · ตัวอย่างระบบ voice agent (latency STT · LLM · TTS · lag ของ Kafka · GPU): `references/prometheus-grafana.md`
+- **Metric types:** a counter counts events (read it with `rate()`) · a gauge holds the value right now · a histogram holds durations when you need p95 · a summary is for when you do not need to aggregate across instances
+- **Units:** seconds · bytes · ratio 0 to 1 (`_seconds`, not `_milliseconds`)
+- **Never put `user_id` · a phone number · `call_id` in a label**, because every new value is a new series, until the metrics system cannot cope · these ids go in logs and traces
+- p95: `histogram_quantile(0.95, sum by (le) (rate(<name>_bucket[5m])))`
+- Every alert rule has `for:` · `severity` · a runbook link · alert on symptoms (latency · error), not on CPU or GPU
+- Keep dashboards as JSON in git and provision them from files · RED per service · USE per resource
+- Details on PromQL · alert rule examples · provisioning · a voice agent example (STT · LLM · TTS latency · Kafka lag · GPU): `references/prometheus-grafana.md`
 
 ---
 
-## 4 · การแจ้งเตือน
+## 4 · Alerts
 
-> **แจ้งเตือนทุกครั้งต้องมีอะไรให้ทำ** — ถ้าคนรับอ่านแล้วไม่ต้องทำอะไร
-> อีก 3 สัปดาห์เขาจะปิดเสียงแจ้งเตือน แล้ววันที่ของจริงเกิดก็จะไม่มีใครเห็น
+> **Every alert must give the receiver something to do.** If the person reads it and has nothing to do,
+> in 3 weeks they will mute alerts, and the day a real one fires nobody will see it.
 
-**แจ้งเตือนจากสิ่งที่ผู้ใช้รู้สึก ไม่ใช่จากตัวเลขของเครื่อง**
+**Alert on what users feel, not on machine numbers**
 
-| ✗ เตือนแบบนี้ | ✓ เตือนแบบนี้ |
+| ✗ Alert like this | ✓ Alert like this |
 |---|---|
-| CPU เกิน 80% | อัตรา error เกิน 2% นาน 5 นาที |
-| หน่วยความจำเกิน 70% | p95 ของหน้าชำระเงินเกิน 3 วินาที นาน 10 นาที |
-| pod restart | คำสั่งซื้อสำเร็จลดลงเกิน 50% เทียบกับสัปดาห์ก่อน |
-| disk 60% | **disk จะเต็มใน 4 ชั่วโมงตามอัตราปัจจุบัน** |
+| CPU over 80% | Error rate over 2% for 5 minutes |
+| Memory over 70% | p95 of the payment page over 3 seconds for 10 minutes |
+| pod restart | Successful orders drop by more than 50% against last week |
+| disk 60% | **disk will be full in 4 hours at the current rate** |
 
-| ระดับ | ตัวอย่าง | ส่งไปไหน |
+| Level | Example | Send to |
 |---|---|---|
-| **ปลุกคน** | ผู้ใช้ใช้งานไม่ได้ · ข้อมูลกำลังเสียหาย | โทร · push |
-| **ดูในเวลางาน** | disk จะเต็มใน 3 วัน · error เพิ่มแต่ยังไม่มาก | แชตของทีม |
-| **แค่บันทึกไว้** | ทุกอย่างที่เหลือ | แดชบอร์ด |
+| **Wake a person** | Users cannot use the system · data is being damaged | Phone call · push |
+| **Check in work hours** | disk will be full in 3 days · errors rising but still low | Team chat |
+| **Just record it** | Everything else | Dashboard |
 
-**ทุกการแจ้งเตือนต้องมี:** อะไรพัง · กระทบใคร · **ลิงก์ไป runbook** · ลิงก์ไปแดชบอร์ด
-**ตั้งช่วงเวลา (นาน N นาที) เสมอ** ไม่ใช่เตือนทันทีที่ค่าพุ่งครั้งเดียว
+**Every alert must have:** what broke · who is affected · **a link to the runbook** · a link to the dashboard.
+**Always set a duration (for N minutes)**, not an alert the moment a value spikes once.
 
-### 4.1 · งบความผิดพลาด (error budget) และอัตราเผางบ (burn rate)
+### 4.1 · Error budget and burn rate
 
-ระบบที่มี SLO ใช้วิธีนี้แทนการตั้งเกณฑ์ error % ตายตัว เพราะมันบอกว่า "ถ้าปล่อยไว้แบบนี้ งบทั้งเดือนจะหมดเมื่อไหร่" (แนวคิดจาก Google SRE Workbook)
+A system with an SLO uses this instead of a fixed error % threshold, because it says "if this goes on, when will the whole month's budget run out?" (idea from the Google SRE Workbook)
 
-- **งบ** = เวลาที่ยอมให้ล้มได้ใน 30 วัน → SLO 99.9% = 43 นาที · 99.5% = 3.6 ชั่วโมง · 99% = 7.2 ชั่วโมง
-- **burn rate** = อัตรา error ตอนนี้ ÷ (1 − SLO) → burn 1 = งบหมดพอดีวันที่ 30 · burn 10 = หมดใน 3 วัน
-- ตั้งแจ้งเตือน 3 ระดับตามตาราง และทุกระดับต้องเป็นจริงทั้งช่วงยาวและช่วงสั้น (ช่วงสั้น = 1/12 ของช่วงยาว) จะได้หยุดเตือนทันทีที่ระบบหาย
+- **Budget** = the time you may fail in 30 days → SLO 99.9% = 43 minutes · 99.5% = 3.6 hours · 99% = 7.2 hours
+- **Burn rate** = current error rate ÷ (1 − SLO) → burn 1 = the budget runs out exactly on day 30 · burn 10 = gone in 3 days
+- Set 3 alert levels as in the table, and every level must hold true over both the long window and the short window (short window = 1/12 of the long one), so the alert stops as soon as the system recovers
 
-| ระดับ | burn rate | ช่วงยาว · ช่วงสั้น | กินงบไปแล้ว | SLO 99.9% แปลว่า error เกิน | ส่งไปไหน |
+| Level | burn rate | Long window · short window | Budget already used | SLO 99.9% means errors above | Send to |
 |---|---|---|---|---|---|
-| ไหม้เร็ว | 14.4 | 1 ชั่วโมง · 5 นาที | 2% ของเดือน ใน 1 ชั่วโมง | 1.44% | ปลุกคน |
-| ไหม้ช้า | 6 | 6 ชั่วโมง · 30 นาที | 5% ของเดือน ใน 6 ชั่วโมง | 0.6% | ปลุกคน |
-| รั่วซึม | 1 | 3 วัน · 6 ชั่วโมง | 10% ของเดือน ใน 3 วัน | 0.1% | แชตของทีม |
+| Fast burn | 14.4 | 1 hour · 5 minutes | 2% of the month in 1 hour | 1.44% | Wake a person |
+| Slow burn | 6 | 6 hours · 30 minutes | 5% of the month in 6 hours | 0.6% | Wake a person |
+| Slow leak | 1 | 3 days · 6 hours | 10% of the month in 3 days | 0.1% | Team chat |
 
-งบเหลือเท่าไหร่ให้ขึ้นบนแดชบอร์ดภาพรวม — งบใกล้หมด = หยุดปล่อยฟีเจอร์ ไปแก้ความเสถียรก่อน เป็นกติกาที่ตกลงกับเจ้าของผลิตภัณฑ์ล่วงหน้า ไม่ใช่ตอนทะเลาะกัน
+Show the remaining budget on the overview dashboard. When the budget is nearly gone, stop shipping features and fix stability first. Agree this rule with the product owner in advance, not in the middle of an argument.
 
 ---
 
-## 5 · แดชบอร์ด
+## 5 · Dashboards
 
-ทำ 2 หน้าพอ
+Two pages are enough.
 
-| หน้า | ตอบคำถาม | มีอะไร |
+| Page | Answers the question | Contains |
 |---|---|---|
-| **ภาพรวม** | "ตอนนี้ปกติไหม" | 4 สัญญาณของทั้งระบบ · สถานะ dependency · การปล่อยของล่าสุด |
-| **เจาะลึกต่อ service** | "พังตรงไหน" | 4 สัญญาณแยกตาม endpoint · คิว · ฐานข้อมูล |
+| **Overview** | "Is it normal now?" | The 4 signals for the whole system · dependency status · latest releases |
+| **Deep dive per service** | "Where did it break?" | The 4 signals split by endpoint · queues · database |
 
-- **เส้นแนวตั้งบอกเวลาที่ deploy** — ปัญหาส่วนใหญ่เริ่มหลังเส้นนี้ และเห็นได้ในวินาทีเดียว
-- หน้าภาพรวมต้องอ่านจบใน 10 วินาที จึงควรมีไม่เกิน 6 กราฟ
-- ใส่เส้นเกณฑ์ที่ตั้งแจ้งเตือนไว้ในกราฟ จะได้รู้ว่าห่างจากเส้นแค่ไหน
+- **A vertical line marks the deploy time.** Most problems start after this line, and you see it in one second
+- The overview page must be readable in 10 seconds, so keep it to 6 graphs at most
+- Draw the alert threshold lines on the graphs, so you can see how far the value is from the line
 
 ---
 
-## 6 · ตัวชี้วัดทางธุรกิจ
+## 6 · Business metrics
 
-ตัวชี้วัดทางเทคนิคเขียวหมดแต่ธุรกิจหยุดเดิน เป็นเรื่องที่เกิดขึ้นจริงและตรวจไม่เจอถ้าไม่วัด
+Technical metrics all green while the business has stalled really happens, and you will not catch it unless you measure it.
 
-| ตัวอย่าง | จับอะไรได้ |
+| Example | What it catches |
 |---|---|
-| คำสั่งซื้อสำเร็จต่อชั่วโมง | ปุ่มชำระเงินพังแม้ทุก endpoint คืน 200 |
-| อัตราเข้าสู่ระบบสำเร็จ | ผู้ให้บริการยืนยันตัวตนภายนอกมีปัญหา |
-| งานเบื้องหลังที่รอเกิน N นาที | คิวตัน แต่ API ยังตอบปกติ |
-| อีเมลส่งไม่สำเร็จ | ลูกค้าไม่ได้รับใบเสร็จ โดยไม่มี error ที่ไหนเลย |
+| Successful orders per hour | The pay button is broken even though every endpoint returns 200 |
+| Successful login rate | A problem with an external identity provider |
+| Background jobs waiting more than N minutes | The queue is stuck but the API still answers normally |
+| Emails that failed to send | Customers do not get receipts, with no error anywhere |
 
-**เลือก 3–5 ตัวที่เป็นหัวใจของธุรกิจ** แล้วเตือนเมื่อมันตกผิดปกติเทียบกับช่วงเดียวกันของสัปดาห์ก่อน
+**Pick 3–5 that are the heart of the business**, and alert when they drop abnormally against the same period last week.
 
 ---
 
 ## 7 · Anti-patterns
 
-- **ดูค่าเฉลี่ยของเวลาตอบสนอง** — กลบคนที่เจอปัญหาทุกครั้ง
-- **แจ้งเตือนที่ไม่ต้องทำอะไร** — สอนให้ทุกคนเลิกสนใจการแจ้งเตือน
-- **เตือนจาก CPU และหน่วยความจำ** — ระบบที่ CPU 90% แต่ผู้ใช้ปกติ ไม่ใช่เหตุ
-- **ใส่ id ที่ไม่จำกัดค่าเป็น label** — ระบบเก็บ metric ล่มเสียเอง
-- **แดชบอร์ด 40 กราฟ** — ไม่มีใครรู้ว่าต้องดูอันไหน
-- **วัดแต่เทคนิค ไม่วัดธุรกิจ** — ทุกอย่างเขียวแต่ไม่มีใครสั่งซื้อได้
-- **เก็บ trace ทุกคำขอ** — แพงโดยไม่ได้อะไรเพิ่ม สุ่มเก็บก็พอ
-- **ไม่มีเส้นบอกเวลา deploy** — เสียเวลาครึ่งชั่วโมงกว่าจะนึกได้ว่าเพิ่ง deploy ไป
-- **แจ้งเตือนที่ไม่มีลิงก์ไป runbook** — คนรับต้องเริ่มค้นจากศูนย์ตอนตี 3
+- **Watching the average response time**: it hides the people who hit the problem every time
+- **Alerts that need no action**: they teach everyone to ignore alerts
+- **Alerting on CPU and memory**: a system at CPU 90% with normal users is not an incident
+- **Putting unbounded ids in labels**: the metrics system brings itself down
+- **A dashboard with 40 graphs**: nobody knows which one to look at
+- **Measuring only the technical side, not the business**: everything is green but nobody can place an order
+- **Tracing every request**: expensive for no extra gain, sampling is enough
+- **No line marking the deploy time**: you lose half an hour before you remember you just deployed
+- **Alerts with no link to a runbook**: the receiver starts searching from zero at 3 a.m.
 
 ---
 
-## 8 · ตัวย่อ
+## 8 · Abbreviations
 
-- **metric** — ตัวชี้วัด ตัวเลขที่เก็บตามเวลา
-- **trace** — การไล่รอยคำขอหนึ่งตลอดเส้นทางที่มันวิ่งผ่าน
-- **p95 / p99** — เปอร์เซ็นไทล์ที่ 95 และ 99 (ช้ากว่านี้มีแค่ 5% หรือ 1% ของคำขอ)
-- **label / tag** — ป้ายกำกับที่แนบกับตัวชี้วัด ใช้แยกดูเป็นกลุ่ม
-- **on-call** — เวรรับแจ้งเหตุนอกเวลาทำการ
-- **SLO** — Service Level Objective (เป้าหมายระดับบริการที่ตั้งไว้เอง เช่น สำเร็จ 99.5%)
-- **error budget / burn rate** — เวลาที่ยอมให้ล้มได้ต่อเดือนตาม SLO และความเร็วที่กำลังใช้มันหมด (ข้อ 4.1)
+- **metric**: a number collected over time
+- **trace**: following one request along the whole path it travels
+- **p95 / p99**: the 95th and 99th percentiles (only 5% or 1% of requests are slower than this)
+- **label / tag**: a tag attached to a metric, used to look at groups separately
+- **on-call**: the duty of receiving incident alerts outside working hours
+- **SLO**: Service Level Objective (a service-level target you set yourself, such as 99.5% success)
+- **error budget / burn rate**: the time you may fail per month under the SLO, and how fast you are using it up (item 4.1)
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Links to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| รูปแบบ log และ correlation id | `logging-standards` |
-| health check ที่ระบบเฝ้าใช้ | `web-service-essentials` |
-| ตัวชี้วัดของคิวและงานเบื้องหลัง | `background-jobs` |
-| อัตรา error และการตัดวงจร | `error-handling-patterns` |
-| ขั้นตอนเมื่อการแจ้งเตือนดัง | `incident-runbook-template` |
-| สรุปหลังเหตุการณ์ | `postmortem-template` |
-| ตัวเลขเป้าหมายที่ตกลงกับลูกค้า | `srs-writing` |
-| PromQL · กฎ alert · Grafana provisioning · ตัวอย่าง voice agent | `references/prometheus-grafana.md` |
-| ให้ agent อ่าน Prometheus หรือ Grafana ผ่าน MCP | `mcp-server` ข้อ 1.1 |
+| Log format and correlation id | `logging-standards` |
+| Health checks the monitor uses | `web-service-essentials` |
+| Metrics for queues and background jobs | `background-jobs` |
+| Error rate and circuit breaking | `error-handling-patterns` |
+| Steps when an alert fires | `incident-runbook-template` |
+| Post-incident summary | `postmortem-template` |
+| Target numbers agreed with the customer | `srs-writing` |
+| PromQL · alert rules · Grafana provisioning · voice agent example | `references/prometheus-grafana.md` |
+| Let an agent read Prometheus or Grafana through MCP | `mcp-server` item 1.1 |
 
-ที่มาของข้อ 3.1: prometheus.io (metric types · naming · histograms · alerting) และ grafana.com (dashboard best practices · provisioning) ตรวจ 2026-10-27 · ลิงก์เต็มอยู่ท้าย `references/prometheus-grafana.md`
+Source of item 3.1: prometheus.io (metric types · naming · histograms · alerting) and grafana.com (dashboard best practices · provisioning), checked 2026-10-27 · full links are at the end of `references/prometheus-grafana.md`
 
 
 ## reference: prometheus-grafana.md

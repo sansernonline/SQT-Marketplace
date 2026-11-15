@@ -7,74 +7,74 @@ description: Use when writing a script for a person speaking on camera
 
 > **One rule of this skill:** write for the ear, not the eye — every line must survive being read aloud. The script is done when someone who did not write it can read it aloud once and sound like a person, not a document.
 
-Skill นี้อยู่ใน plugin `graphic-design` · ถ้อยคำในสคริปต์เขียนตาม `human-writing` (plugin `superuser`) ยกเว้นที่ระบุไว้ในนี้เพราะภาษาพูดมีกฎของตัวเอง · สคริปต์ที่เขียนเสร็จส่งต่อให้ถ่ายหรือ gen วิดีโอด้วย `video-script-to-clip` (shot list · captions · safe zones อยู่ที่นั่น)
+This skill lives in plugin `graphic-design` · the wording of the script follows `human-writing` (plugin `superuser`), except where this file says otherwise, because spoken language has its own rules · a finished script goes on to filming or video generation with `video-script-to-clip` (shot list · captions · safe zones are there)
 
 ## When to use
 
-- คลิปที่คนพูดหน้ากล้องเป็นหลัก — รีวิว · เล่าเรื่อง · สอน · พูดความเห็น · vlog · YouTube · TikTok/ Reel แบบพูด · พิธีกรงานอีเวนต์ · voiceover ให้คลิป
-- แก้สคริปต์พูดที่อ่านแล้วเหมือนบทความ
+- Clips where a person speaking to the camera is the main thing — review · storytelling · teaching · opinion · vlog · YouTube · spoken TikTok/ Reel · event host · voiceover for a clip
+- Fixing a spoken script that reads like an article
 
 ## When **not** to use
 
-| งาน | ใช้ |
+| Task | Use |
 |---|---|
-| คลิปโฆษณาสั้นที่ภาพนำ (สินค้า · demo · เสียงปิดก็เข้าใจ) | `video-script-to-clip` |
-| ไลฟ์ขายของเป็นนาทีต่อนาที | `live-selling-script` |
-| ซับไตเติล · ข้อความบนจอ · safe zone | `video-script-to-clip` หัวข้อ caption rules |
-| บทพูดงานประชุม/นำเสนอบนเวที พร้อมสไลด์ | `presentation-design` + บันทึกผู้พูด |
-| ทำเสียงจากสคริปต์โดยไม่อัดเอง (text-to-speech) | `narration-th` · เขียนบทที่นี่ก่อน แล้วส่งต่อ |
+| Short ad clip led by the picture (product · demo · understandable with sound off) | `video-script-to-clip` |
+| Minute-by-minute live selling | `live-selling-script` |
+| Subtitles · on-screen text · safe zone | `video-script-to-clip` section caption rules |
+| Speech for a meeting/stage presentation with slides | `presentation-design` + speaker notes |
+| Make audio from a script without recording it yourself (text-to-speech) | `narration-th` · write the script here first, then pass it on |
 
 ---
 
 ## Workflow
 
 0. **Watch what works first** — do this when the niche or format is new and no proven script of the series exists: find 3–5 clips in the same niche and format that perform (views/comments relative to the account size), write 1 line per clip on *why people keep watching* (the hook sentence · how fast the point starts · what keeps it open) · save links beside the script file · **these are a bar to clear, not a script to copy** — same lesson as `brief-to-image` step 0
-1. **One takeaway, one audience, one action** — sentence 1: "คนดูคือใคร จบคลิปแล้วอยากให้เขารู้/รู้สึก/ทำอะไร" · ถ้าเขียนไม่ได้ 1 ประโยค แปลว่าเป็น 2 คลิป
-2. **Write the hook as the first spoken sentence** — patterns below · no "สวัสดีครับ วันนี้จะมา…" — the hook must carry the reason to stay
-3. **Beat sheet** — hook → setup (ทำไมต้องฟัง · 1–2 ประโยค) → beats ละ 1 ความคิด → payoff (ตอบสิ่งที่ hook สัญญา) → call to action เดียว · คลิป 30–60 วินาทีมี 3–5 beats พอ
+1. **One takeaway, one audience, one action** — sentence 1: who is the viewer, and what do you want them to know, feel or do when the clip ends · if you cannot write it in 1 sentence, it is 2 clips
+2. **Write the hook as the first spoken sentence** — patterns below · no "สวัสดีครับ วันนี้จะมา…" (Hello, today I will…) — the hook must carry the reason to stay
+3. **Beat sheet** — hook → setup (why listen · 1–2 sentences) → beats with 1 idea each → payoff (answers what the hook promised) → a single call to action · a 30–60 second clip needs only 3–5 beats
 4. **Write spoken Thai** — rules below · read every line aloud as you write it
-5. **Time it with a stopwatch, not a word count** — read the whole script aloud once at show pace and time it · เกินเวลา → ตัด beat หลังสุดก่อน · ความเร็วพูดของแต่ละคนต่างกัน อย่าใช้ตัวเลขคำต่อนาทีของคนอื่น
-6. **Add delivery cues sparingly** — `[หยุด]` เฉพาะจุดที่เงียบแล้วมีผล · `[เน้น]` เฉพาะคำที่ประโยคเปลี่ยนความหมายถ้าไม่เน้น · ภาพประกอบ/B-roll ใส่เป็นหมายเหตุข้างบรรทัด ไม่เขียนเป็นฉาก (ฉากคืองานของ `video-script-to-clip`)
-7. **Read-aloud pass by someone who did not write it** (หรืออัดเสียงตัวเองฟัง) — จุดที่สะดุดคือจุดที่ต้องเขียนใหม่ ไม่ใช่จุดที่ "ตอนพูดจริงเดี๋ยวรอด"
+5. **Time it with a stopwatch, not a word count** — read the whole script aloud once at show pace and time it · over time → cut the last beat first · everyone speaks at a different speed, so do not use someone else's words-per-minute figure
+6. **Add delivery cues sparingly** — `[หยุด]` (pause) only where silence has an effect · `[เน้น]` (stress) only on the word whose sentence changes meaning if it is not stressed · put pictures/B-roll as a note beside the line, not written as a scene (scenes are the job of `video-script-to-clip`)
+7. **Read-aloud pass by someone who did not write it** (or record yourself and listen) — a spot where you stumble is a spot to rewrite, not a spot where "it will be fine when I really say it"
 
 ## Hook patterns (first spoken sentence)
 
-| Pattern | ตัวอย่าง |
+| Pattern | Example |
 |---|---|
-| สวนความคิดที่นิยม | "ทุกคนบอกให้ลงคลิปทุกวัน ผมหยุดลงไป 2 สัปดาห์แล้วยอดดูขึ้น" |
-| สารภาพ | "ผมเคยเสียเงิน 30,000 กับคอร์สที่สอนสิ่งที่เดี๋ยวบอกฟรีในคลิปนี้" |
-| ตัวเลขที่ขัดตา | "ร้านนี้ขายกาแฟแก้วละ 45 แต่คนต่อคิว 40 นาที" |
-| คำถามที่คนดูถามตัวเองอยู่แล้ว | "เคยไหม ซื้อของออนไลน์แล้วได้ของไม่ตรงปก คืนก็ไม่ได้" |
-| สัญญาผลตอบแทน | "ฟังจบคลิปนี้ เขียนสคริปต์พูดของตัวเองได้ใน 10 นาที" |
-| เริ่มกลางเหตุการณ์ | "ตอนนั้นผมยืนอยู่หน้าร้าน มือถือกุมใบเสร็จ แล้วรู้ว่าโดนแล้ว" |
+| Go against a popular idea | "ทุกคนบอกให้ลงคลิปทุกวัน ผมหยุดลงไป 2 สัปดาห์แล้วยอดดูขึ้น" |
+| Confession | "ผมเคยเสียเงิน 30,000 กับคอร์สที่สอนสิ่งที่เดี๋ยวบอกฟรีในคลิปนี้" |
+| A number that looks odd | "ร้านนี้ขายกาแฟแก้วละ 45 แต่คนต่อคิว 40 นาที" |
+| A question the viewer is already asking | "เคยไหม ซื้อของออนไลน์แล้วได้ของไม่ตรงปก คืนก็ไม่ได้" |
+| Promise a payoff | "ฟังจบคลิปนี้ เขียนสคริปต์พูดของตัวเองได้ใน 10 นาที" |
+| Start in the middle of the event | "ตอนนั้นผมยืนอยู่หน้าร้าน มือถือกุมใบเสร็จ แล้วรู้ว่าโดนแล้ว" |
 
-กฎ: ไม่ทักทายเปิดคลิป · ไม่เกริ่นชื่อตัวเองก่อน hook · hook ต้องตอบได้ว่า "แล้วไงต่อ" — ถ้าคนดูไม่มีคำถามค้างอยู่หลังประโยคแรก hook ยังไม่ผ่าน
+Rules: no greeting to open the clip · no introducing yourself before the hook · the hook must make the viewer ask "so what happens next?" — if the viewer has no open question after the first sentence, the hook has not passed
 
-## Retention — ทำให้อยู่ถึงจบ
+## Retention — keep them to the end
 
-- **เปิดลูป 1 อัน** — บอกตั้งแต่ต้นว่ามีอะไรรออยู่ท้ายคลิป ("สาเหตุที่แท้ เดี๋ยวบอกตอนจบ") · อย่าเปิดเกิน 1 ลูปในคลิปสั้น
-- **ป้ายบอกทาง** — "จุดแรก…" "สำคัญสุดคือจุดถัดไป" คนฟังต้องรู้ตลอดว่าอยู่ตรงไหน
-- **ตัดจังหวะ** — เปลี่ยนมุมเล่าทุก 2–3 beats (จากเล่าเรื่อง เป็นถาม เป็นยกตัวเลข)
-- **คำตอบที่ hook สัญญาต้องมาจริงตอน payoff** — hook ที่ไม่จ่ายคำตอบคือคลิกเบต คนดูจำและไม่กลับมา
+- **Open 1 loop** — say at the start what is waiting at the end of the clip ("สาเหตุที่แท้ เดี๋ยวบอกตอนจบ") · do not open more than 1 loop in a short clip
+- **Signposts** — "จุดแรก…" "สำคัญสุดคือจุดถัดไป" the listener must always know where they are
+- **Break the rhythm** — change the angle every 2–3 beats (from story, to a question, to a number)
+- **The answer the hook promised must really arrive at the payoff** — a hook that does not pay out is clickbait, and viewers remember it and do not come back
 
-## Spoken Thai — กฎที่ต่างจากภาษาเขียน
+## Spoken Thai — rules that differ from written language
 
-| ก่อน (ภาษาเขียน) | หลัง (ภาษาพูด) |
+| Before (written language) | After (spoken language) |
 |---|---|
 | เนื่องจากราคาสูงเกินไป ลูกค้าจึงไม่ซื้อ | แพงเกินไปครับ คนเลยไม่ซื้อ |
-| วันนี้ผมจะมาอธิบายเกี่ยวกับ… | (ตัดทิ้ง — เข้าเนื้อเลย) |
+| วันนี้ผมจะมาอธิบายเกี่ยวกับ… | (cut it — go straight to the point) |
 | ผลิตภัณฑ์นี้มีคุณสมบัติที่โดดเด่นคือ | ของชิ้นนี้ดีตรงที่… |
-| ดังนั้น อย่างไรก็ตาม ทั้งนี้ | แล้ว · แต่ · ก็ (ภาษาพูดใช้คำเชื่อมสั้น) |
-| ประโยคยาว 3 คำเชื่อมซ้อนกัน | แตกเป็นประโยคสั้น ประโยคละ 1 ใจความ |
+| ดังนั้น อย่างไรก็ตาม ทั้งนี้ | แล้ว · แต่ · ก็ (speech uses short connectors) |
+| A long sentence with 3 stacked connectors | Split into short sentences, 1 point each |
 
-- ลงท้ายด้วย ครับ/ค่ะ สม่ำเสมอตามตัวบุคคล (เลือกแบบเดียวทั้งสคริปต์ — ผูกกับแบรนด์ไว้ที่ `brand-kit` ข้อ Voice)
-- **ห้ามตัดคำทำหน้าที่จนห้วน** (กฎ `human-writing` ข้อ 3 ใช้กับสคริปต์พูดด้วย) — ตัดประโยคเชิงบรรยาย ไม่ตัดคำเชื่อมที่ทำให้ฟังรู้เรื่อง
-- ตัวเลขใหญ่ต้องพูดออกเสียงง่าย: "1,250,000 บาท" → เขียนในสคริปต์ว่า "ล้านสองแสนห้า" — คนพูดจะได้ไม่ต้องแปลงในใจกลางอากาศ
-- อ่านทุกบรรทัดออกเสียงขณะเขียน — ตาแก้ไม่ได้สิ่งที่หูจับได้
+- End with ครับ/ค่ะ consistently, matching the person (pick one style for the whole script — tie it to the brand in `brand-kit`, item Voice)
+- **Do not cut function words until the line is curt** (rule 3 of `human-writing` applies to spoken scripts too) — cut descriptive sentences, not the connectors that make it understandable by ear
+- Big numbers must be easy to say: "1,250,000 บาท" → write it in the script as "ล้านสองแสนห้า" — so the speaker does not have to convert it in their head mid-air
+- Read every line aloud while you write — the eye cannot fix what the ear catches
 
-## ตัวอย่างจริง — คลิป 45 วินาที รีวิวร้านกาแฟ
+## Real example — a 45-second coffee shop review clip
 
-**สรุปก่อนเขียน:** คนดู = คนทำงานย่านออฟฟิศ · จบคลิปอยากให้รู้ว่าร้านนี้คุ้มคิว · action = แวะไปลอง
+**Summary before writing:** viewer = people who work in the office area · by the end, they should know this shop is worth the queue · action = drop by and try it
 
 ```
 HOOK    "กาแฟแก้วละ 120 บาท แต่คนยอมต่อคิว 40 นาที ผมเลยไปลองดูว่ามันดียังไง"
@@ -86,41 +86,41 @@ PAYOFF  "คำตอบคือ คุ้มครับ ถ้าคุณเ
 CTA     "ใครไปแล้ว เมนูไหนดี คอมเมนต์บอกหน่อยครับ เดี๋ยวผมไปลองตาม"
 ```
 
-อ่านออกเสียงจับเวลาแล้วได้ 43 วินาที — ผ่าน · (ตัวอย่างเขียนโดยทีม ไม่ใช่สคริปต์จริงที่เผยแพร่)
+Read aloud and timed at 43 seconds — pass · (example written by the team, not a script that was actually published)
 
-## ตรวจก่อนส่ง
+## Check before sending
 
-- [ ] ประโยคแรกเป็น hook จากตาราง ไม่ใช่คำทักทาย
-- [ ] ทุกบรรทัดอ่านออกเสียงแล้วไม่สะดุด (มีคนที่ไม่ได้เขียนอ่าน หรืออัดฟังเอง)
-- [ ] จับเวลาจริงแล้วพอดีงบวินาที (เขียนเวลาที่วัดไว้หัวสคริปต์)
-- [ ] มีลูปเปิดไม่เกิน 1 อัน และ payoff จ่ายคำตอบที่ hook สัญญา
-- [ ] ไม่มีคำภาษาเขียน (เนื่องจาก · ดังนั้น · อย่างไรก็ตาม · ทั้งนี้ · คุณสมบัติ)
-- [ ] ตัวเลขเขียนเป็นคำอ่าน ไม่ใช่ตัวเลขอารบิก
-- [ ] ครับ/ค่ะ และสรรพนาม เป็นแบบเดียวตลอด และตรง `brand-kit` ถ้ามี
-- [ ] หมายเหตุภาพ/B-roll แยกจากบรรทัดพูด ไม่ปนกัน
+- [ ] The first sentence is a hook from the table, not a greeting
+- [ ] Every line reads aloud without stumbling (someone who did not write it read it, or you recorded and listened)
+- [ ] Timed for real and fits the second budget (write the measured time at the head of the script)
+- [ ] At most 1 open loop, and the payoff pays out the answer the hook promised
+- [ ] No written-language words (เนื่องจาก · ดังนั้น · อย่างไรก็ตาม · ทั้งนี้ · คุณสมบัติ — "because · therefore · however · in this regard · property")
+- [ ] Numbers are written as spoken words, not Arabic numerals
+- [ ] ครับ/ค่ะ and pronouns are the same throughout and match `brand-kit` if it exists
+- [ ] Picture/B-roll notes are kept apart from spoken lines, not mixed
 
 ## Anti-patterns
 
-- **เขียนเป็นย่อหน้าเหมือนบทความ** แล้วให้คนพูดอ่าน — ตาอ่านเร็วกว่าปากพูด สคริปต์ต้องเป็นบรรทัดสั้นที่ตัดตามจังหวะหายใจ
-- **hook เป็น "สวัสดีครับ วันนี้…"** — คนดูปัดผ่านก่อนประโยคสอง
-- **นับคำแทนการจับเวลา** — ความเร็วพูดแต่ละคนต่างกันมาก ตัวเลขคำต่อนาทีที่ไม่ได้วัดเองเป็นการอนุมาน (ยังไม่ได้ตรวจกับเสียงจริงของผู้พูด)
-- **ลูปเปิด 3 อันในคลิป 30 วินาที** — คนดูจำไม่ได้ว่ารออะไรอยู่ เลยไม่รออะไรเลย
-- **สคริปต์ที่ไม่เคยถูกอ่านออกเสียงก่อนส่ง** — ตรงกับกฎ `principle-prove-it-works`: "ใช้ได้" = มีคนอ่านออกเสียงแล้วลื่น ไม่ใช่ "เขียนเสร็จ"
+- **Writing in paragraphs like an article** and having the person read it — the eye reads faster than the mouth speaks, so a script must be short lines broken at breathing points
+- **A hook of "สวัสดีครับ วันนี้…"** — the viewer swipes away before sentence two
+- **Counting words instead of timing** — speaking speed varies a lot, and a words-per-minute figure you did not measure yourself is an inference (ยังไม่ได้ตรวจ against the speaker's real voice)
+- **3 open loops in a 30-second clip** — the viewer cannot remember what they are waiting for, so they wait for nothing
+- **A script never read aloud before sending** — matches the rule `principle-prove-it-works`: "works" = someone read it aloud and it flowed, not "finished writing"
 
-## เชื่อมกับ skill อื่น
+## Link to other skills
 
-| ต้องการ | ใช้ |
+| Need | Use |
 |---|---|
-| แปลงสคริปต์เป็นคลิป (shot list · ซับ · safe zone · เครื่องมือตัดต่อ) | `video-script-to-clip` + `skills/video-script-to-clip/references/production-tools.md` |
-| ภาพประกอบ/ฉาก gen ในคลิป | `brief-to-image` · `image-generation` |
-| ระดับภาษาและเสียงของแบรนด์ | `brand-kit` ข้อ Voice |
-| ถ้อยคำทั่วไป (สคริปต์มีข้อยกเว้นของตัวเองด้านบน) | `human-writing` (plugin `superuser`) |
-| หาคลิปอ้างอิงขั้น 0 | `research-with-sources` (plugin `superuser`) |
+| Turn the script into a clip (shot list · subtitles · safe zone · editing tools) | `video-script-to-clip` + `skills/video-script-to-clip/references/production-tools.md` |
+| Pictures/scenes generated in the clip | `brief-to-image` · `image-generation` |
+| Language level and brand voice | `brand-kit` item Voice |
+| General wording (the script has its own exceptions above) | `human-writing` (plugin `superuser`) |
+| Find reference clips for step 0 | `research-with-sources` (plugin `superuser`) |
 
-## ที่มา
+## Sources
 
-| เรื่อง | ที่มา |
+| Topic | Source |
 |---|---|
-| hook แบบประโยคพูด · เปิดลูป · ป้ายบอกทาง · payoff ต้องจ่าย | วิธีเขียนสคริปต์วิดีโอทั่วไปที่ทีมใช้ — ประสบการณ์ทีม ไม่มีแหล่งทางการ (ยังไม่ได้ตรวจ) |
-| ภาษาพูดต่างจากภาษาเขียน · ตัดคำทำหน้าที่ · ตัวเลขเขียนเป็นคำอ่าน | `human-writing` (plugin `superuser`) + กฎเฉพาะสคริปต์พูดในไฟล์นี้ |
-| คนดูตัดสินใน 3 วินาทีแรก · ดูแบบปิดเสียง | `video-script-to-clip` (ตรวจแหล่ง 2026-10-06 ที่นั่น) |
+| Spoken-sentence hook · open loop · signposts · payoff must pay out | General video-script writing practice the team uses — team experience, no official source (ยังไม่ได้ตรวจ) |
+| Spoken language differs from written · do not cut function words · numbers written as spoken words | `human-writing` (plugin `superuser`) + the spoken-script rules in this file |
+| Viewers decide in the first 3 seconds · watch with sound off | `video-script-to-clip` (source checked 2026-10-06 there) |

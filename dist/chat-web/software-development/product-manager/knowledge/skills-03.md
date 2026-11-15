@@ -4,82 +4,82 @@ Use when writing user stories with acceptance criteria
 
 # User Story Writer
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-> ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ ธุรกิจ
+> **Language:** write every line of wording following `human-writing`. This skill sets the format and structure, and human-writing sets how to write so readers understand.
+> Thai text → `human-writing` `references/thai-grammar.md` section 4, business register
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ผู้ใช้ขอให้เขียน user story ใหม่
-- มี requirement เป็นข้อความยาว ต้องแตกเป็น stories
-- ต้องเขียน acceptance criteria
-- ต้อง review/refine user story เดิมที่ไม่ชัดเจน
+- The user asks for a new user story
+- A requirement arrives as long text and must be split into stories
+- You must write acceptance criteria
+- You must review or refine an existing user story that is unclear
 
-ไม่ใช้เมื่อ: ต้องการเอกสาร requirement เต็ม → `srs-writing` · สเปกหน้าจอ → `fsd-writing` · เขียนกรณีทดสอบ → `test-case-template`
+Do not use when: you need a full requirements document → `srs-writing` · a screen spec → `fsd-writing` · writing test cases → `test-case-template`
 
-## ขั้นตอนการทำงาน
+## Workflow
 
-1. **เก็บข้อมูลให้ครบ** ก่อนเขียน ถ้าขาดอะไรให้ถาม:
-   - ใครคือ user (persona/role)
-   - เขาต้องการทำอะไร
-   - ทำเพื่ออะไร (business value)
-   - มีข้อจำกัด/business rule อะไรไหม
+1. **Collect complete information** before writing. Ask if anything is missing:
+   - Who is the user (persona/role)
+   - What do they want to do
+   - Why (business value)
+   - Are there any constraints or business rules
 
-2. **เขียน user story ตาม format**:
+2. **Write the user story in this format**:
    ```
    As a <type of user>
    I want <some goal>
    So that <some reason / business value>
    ```
 
-3. **เขียนเกณฑ์การยอมรับ (Acceptance Criteria · AC)** แบบ Given-When-Then:
+3. **Write the acceptance criteria (AC)** in Given-When-Then form:
    ```
    Given <precondition>
    When <action>
    Then <expected result>
    ```
-   - อย่างน้อย 1 happy path
-   - อย่างน้อย 1 edge case / error case
+   - At least 1 happy path
+   - At least 1 edge case / error case
 
-4. **ใส่ metadata เพิ่มเติม**:
+4. **Add extra metadata**:
    - Priority (High/Medium/Low)
-   - Story Points — ใช้ Fibonacci: 1, 2, 3, 5, 8, 13 · **คนประเมินคือนักพัฒนาหรือทีม** · ผู้เขียน story (เช่น `business-analyst`) เว้นว่างไว้ หรือใส่ค่าเสนอพร้อมเขียน `(เสนอ · รอทีมประเมิน)`
-   - Dependencies (ถ้ามี)
+   - Story Points — use Fibonacci: 1, 2, 3, 5, 8, 13 · **the developers or the team estimate** · the story author (for example `business-analyst`) leaves it blank, or enters a proposed value with `(เสนอ · รอทีมประเมิน)` (proposed · awaiting team estimate)
+   - Dependencies (if any)
 
-5. **บันทึกลงไฟล์** — ดูหัวข้อถัดไป story ที่อยู่แค่ในแชตถือว่ายังไม่ได้เขียน
+5. **Save to a file** — see the next section. A story that exists only in chat counts as not yet written.
 
-## เขียนลงไฟล์ไหน
+## Which file to write to
 
-ทุก story อยู่ใน **`docs/USER-STORIES.md`** ไฟล์เดียว เริ่มจากแบบฟอร์ม [assets/user-stories.md](assets/user-stories.md)
+Every story lives in the single file **`docs/USER-STORIES.md`**, starting from the template [assets/user-stories.md](assets/user-stories.md)
 
-- **อ่านไฟล์ก่อนเขียนเสมอ** ถ้ามีอยู่แล้ว ให้ต่อเลข ID จากตัวสุดท้าย และแก้ story เดิมในที่เดิม ไม่สร้างซ้ำ
-- **ID ไม่นำกลับมาใช้ซ้ำ** story ที่เลิกทำแล้วให้เปลี่ยนสถานะเป็น Dropped ไม่ลบทิ้ง
-- **ตารางสารบัญด้านบนต้องตรงกับเนื้อหาเสมอ** เพิ่มหรือแก้ story แล้วต้องแก้แถวในตารางในรอบเดียวกัน `/sprint-plan` อ่านจากตารางนี้
-- **คอลัมน์อ้างอิง** ใส่ที่มาของ story เช่นข้อกำหนดในเอกสารข้อกำหนดซอฟต์แวร์ (Software Requirements Specification · SRS) (`REQ-xxx`), กฎธุรกิจ (`BR-xxx`) หรือ change request (`CR-xxx`) เพื่อให้ไล่กลับไปหาได้
-- **story ที่เริ่มทำหรือทำเสร็จแล้ว (In sprint หรือ Done) ถ้าแก้ AC** ให้บันทึกในส่วนประวัติการเปลี่ยนท้ายไฟล์ แล้วค้นใน `qa/` หา test case ที่อ้าง `US-xxx, ACn` นั้น ใส่ชื่อลงช่อง test case ที่ต้องแก้ — ไม่แก้ไฟล์ของทีมประกันคุณภาพ (Quality Assurance · QA) เอง
-- **เกิน 30 story หรือมีหลาย epic ที่แยกทีมกันทำ** ให้ย้ายเนื้อหาไปไว้ที่ `docs/stories/<epic>.md` ส่วนตารางสารบัญยังคงอยู่ใน `docs/USER-STORIES.md` ที่เดียว
+- **Always read the file before writing.** If it exists, continue the ID numbering from the last one, and edit an existing story in place instead of creating a duplicate.
+- **Never reuse an ID.** For a story that is dropped, change its status to Dropped and do not delete it.
+- **The index table at the top must always match the content.** When you add or change a story, update its table row in the same round. `/sprint-plan` reads from this table.
+- **The reference column** holds the story's source, such as a requirement in the Software Requirements Specification (SRS) (`REQ-xxx`), a business rule (`BR-xxx`) or a change request (`CR-xxx`), so it can be traced back.
+- **When you change the AC of a story that has started or finished (In sprint or Done)**, record it in the change history section at the end of the file. Then search `qa/` for test cases that cite that `US-xxx, ACn`, and put their names in the "test cases to fix" cell. Do not edit the Quality Assurance (QA) team's files yourself.
+- **Over 30 stories, or several epics worked by separate teams:** move the content to `docs/stories/<epic>.md`. The index table stays in `docs/USER-STORIES.md` only.
 
-## เมื่อเริ่มจากบันทึกสัมภาษณ์
+## When starting from interview notes
 
-- **ครบทุกคนที่พูด** — ไล่ทีละคน ทุกคนต้องมี story อย่างน้อย 1 ข้อ หรือมีเหตุผลว่าทำไมไม่มี
-- **คำพูดที่ขัดกันเอง ห้ามตัดทิ้ง** — เขียน story ที่เคารพกติกาของร้านก่อน แล้วยกความขัดแย้งเป็นคำถาม (ตัวอย่างจากงานนั้น: ร้านห้ามเก็บรูปหน้าลูกค้า แต่ลูกค้าอยากอัปโหลดเซลฟี่ → story ให้วิเคราะห์ในเครื่องโดยไม่เก็บ แล้วถามร้านว่ารับไหม)
-- **ปิดไฟล์ด้วยหัวข้อ "คำถามที่ยังไม่ชัด"** ทุกข้อมีเลข ตัวเลือกที่เสนอ และ story ที่ติดอยู่ (ตัวอย่างจากงานนั้น: 36 story · 19 คำถาม)
-- **ผู้ใช้ที่ไม่มีใครพูดถึง** — เจ้าของร้านต้องมี story ของตัวเองเสมอ (เช่น กดว่าใช้บริการเสร็จ) · ของที่คนสร้างเติมให้เองโดยไม่มีใครขอ (หน้า admin · บัญชีเจ้าของ) ให้ลงรายการ "ระบบมีแต่ร้านไม่ได้ขอ" แล้วถามกลับว่ารับไหม ไม่ปล่อยให้ถือว่าตกลงแล้ว (ตัวอย่างจากงานนั้น: 6 รายการ)
+- **Cover everyone who spoke.** Go person by person. Every person needs at least 1 story, or a reason why there is none.
+- **Never drop statements that contradict each other.** Write the story that respects the shop's rule first, then raise the conflict as a question. (Example from that job: the shop forbids storing customers' face photos, but customers want to upload selfies → the story analyzes on the device without storing, then asks the shop whether it accepts.)
+- **Close the file with a section "คำถามที่ยังไม่ชัด" (open questions).** Every item has a number, the proposed options and the story it blocks. (Example from that job: 36 stories · 19 questions)
+- **Users nobody mentioned.** The shop owner always needs their own story (for example, mark a service as finished). Anything the builders added on their own that nobody asked for (an admin page · an owner account) goes in a list "ระบบมีแต่ร้านไม่ได้ขอ" (things the system has that the shop did not ask for), and you ask back whether the shop accepts it. Never leave it to be treated as agreed. (Example from that job: 6 items)
 
-## INVEST Checklist (ตรวจก่อนส่ง)
+## INVEST Checklist (check before sending)
 
-ทุก story ต้องผ่านเกณฑ์เหล่านี้:
+Every story must meet these criteria:
 
-- [ ] **I**ndependent — ไม่ขึ้นกับ story อื่น
-- [ ] **N**egotiable — เปิดให้คุยรายละเอียดได้
-- [ ] **V**aluable — มี business value ชัดเจน
-- [ ] **E**stimable — ประเมิน effort ได้
-- [ ] **S**mall — เล็กพอจะทำเสร็จใน 1 sprint
-- [ ] **T**estable — ทดสอบได้
+- [ ] **I**ndependent — does not depend on another story
+- [ ] **N**egotiable — open to discussion of details
+- [ ] **V**aluable — has clear business value
+- [ ] **E**stimable — effort can be estimated
+- [ ] **S**mall — small enough to finish within 1 sprint
+- [ ] **T**estable — can be tested
 
 ## Output Template
 
 ```markdown
-## US-XXX: <ชื่อสั้นๆ>
+## US-XXX: <short title>
 
 **Story**
 As a <role>
@@ -88,49 +88,49 @@ So that <value>
 
 **Acceptance Criteria**
 
-AC1: <ชื่อ scenario>
+AC1: <scenario name>
 - Given <context>
 - When <action>
 - Then <result>
 
-AC2: <ชื่อ scenario>
+AC2: <scenario name>
 - Given ...
 - When ...
 - Then ...
 
 **Priority:** High | Medium | Low
 **Story Points:** X
-**Blocked by:** US-YYY (story ที่ต้องเสร็จก่อนถึงจะเริ่มข้อนี้ได้) · ไม่มี → เขียน `None (เริ่มได้ทันที)`
-**Notes:** ข้อมูลเพิ่มเติม / business rules
+**Blocked by:** US-YYY (a story that must finish before this one can start) · none → write `None (เริ่มได้ทันที)`
+**Notes:** extra information / business rules
 ```
 
-**Blocked by ใส่เฉพาะที่กั้นจริง** (ปรับจาก mattpocock `to-tickets` · MIT) — story A กั้น B เมื่อ B เริ่มไม่ได้ถ้า A ยังไม่เสร็จ (ต้องใช้ตาราง · API · หน้าจอของ A) ไม่ใช่แค่ "ควรทำก่อน" · เรียงลำดับใน `USER-STORIES.md` ให้ตัวที่กั้นอยู่ก่อนตัวที่ถูกกั้น · ทีมหรือ agent หยิบงานจากชุด "ทุกตัวที่กั้นเสร็จแล้ว" ซึ่งเป็นชุดที่ทำขนานกันได้ · ถ้าใช้ tracker จริง (GitHub · Linear) ให้ใช้ความสัมพันธ์ blocking ของมัน ไม่ใช่เขียนในข้อความอย่างเดียว
+**List in Blocked by only real blockers** (adapted from mattpocock `to-tickets` · MIT). Story A blocks B when B cannot start until A is done (it needs A's table, API or screen), not merely when A "should come first". Order `USER-STORIES.md` so a blocker comes before the story it blocks. The team or agent picks work from the set "every story whose blockers are all done", which is the set that can run in parallel. If you use a real tracker (GitHub · Linear), use its blocking relationship, not only text in the description.
 
-## ตัวอย่าง
+## Example
 
-ดูตัวอย่างเต็มได้ที่ `examples/login-story.md`
+See the full example at `examples/login-story.md`
 
-## ข้อห้าม
+## Prohibitions
 
-- อย่าเขียน technical solution ใน story (เช่น "ใช้ JWT")
-- อย่าเขียน UI detail (เช่น "ปุ่มสีฟ้า") — ให้ designer ตัดสิน
-- อย่าใช้ "user" เฉยๆ ต้องระบุ role เจาะจง (admin, customer, guest)
-- อย่าเขียน story ใหญ่เกิน 13 points — ให้แตกออก
+- Do not write a technical solution in a story (for example "use JWT")
+- Do not write UI detail (for example "blue button") — the designer decides
+- Do not use plain "user". Name a specific role (admin, customer, guest).
+- Do not write a story bigger than 13 points — split it
 
 ---
 
-## หน้าตาของเอกสาร
+## How the document looks
 
-skill นี้ตัดสินว่า**เนื้อหาต้องมีอะไร** ไม่ได้ตัดสินว่า**หน้าตาเป็นอย่างไร** —
-โหลด skill ที่ตรงกับปลายทางก่อนเริ่มเขียน ไม่ใช่ตอนเขียนเสร็จ:
+This skill decides **what content the document needs**, not **how it looks**.
+Load the skill that matches the destination before you start writing, not after you finish:
 
-| ส่งมอบเป็นอะไร | โหลด |
+| Delivered as | Load |
 |---|---|
-| markdown ที่คนอ่าน (repo · wiki · ระบบติดตามงาน) | `polished-document-style` |
-| ไฟล์ `.docx` / `.pptx` / PDF ที่ผู้มีส่วนได้เสียเซ็นรับ | `branded-document-design` |
-| ต้องมีภาพถึงจะเข้าใจ | `diagram-figures` (house style ของเอกสารโปรเจกต์) |
+| Markdown that people read (repo · wiki · tracker) | `polished-document-style` |
+| A `.docx` / `.pptx` / PDF that stakeholders sign off | `branded-document-design` |
+| Needs a picture to be understood | `diagram-figures` (the house style of project documents) |
 
-การปล่อยรูปแบบเริ่มต้นไว้ไม่ได้ทำให้ดูเป็นกลาง คนอ่านจะมองว่างานยังไม่เสร็จ
+Leaving the default format in place does not make it look neutral. Readers will see the work as unfinished.
 
 
 ---
@@ -141,9 +141,9 @@ Use when a Markdown doc needs an image, SVG or ASCII art
 
 # Markdown Visuals
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line of wording per `human-writing`. This skill gives the format and structure; human-writing gives the way to write so people understand.
 
 > **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
@@ -220,7 +220,7 @@ What are you showing?
 
 ### สี
 
-ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น ส่วนถ้ายังไม่มี ให้ค้นต้นแบบตาม `design-references` (plugin `superuser`) ประเภท `document` แล้วถอดสีจากงานที่เลือก · ค้นสดไม่ได้จึงใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม (ลำดับใน `diagram-figures` ข้อ 5 · ตารางโทนตามเนื้องาน [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) ส่วน token ตามหน้าที่ (`bg-canvas` · `accent-primary` · `state-*` …) ดูได้ใน [references/svg-snippets.md](references/svg-snippets.md) และ **1 เอกสารใช้ชุดสีเดียว**
+If the document or project already has a colour palette, use it. If not, search for references per `design-references` (plugin `superuser`), type `document`, and take the colours from the chosen work · if live search is not possible, use the house value `#2A78D6`, mark it `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask (order in `diagram-figures` item 5 · colour-by-domain table [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) · for role-based tokens (`bg-canvas` · `accent-primary` · `state-*` …) see [references/svg-snippets.md](references/svg-snippets.md) · and **1 document uses 1 palette**
 
 ### Reusable snippets
 
@@ -280,14 +280,14 @@ Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
 
 ## 4 · Mermaid
 
-**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams` (plugin `software-development`) ข้อ 1–5 และ `assets/mermaid-theme.md`** · Mermaid ในเอกสารโปรเจกต์ที่ต้องแปลงเป็นรูปลง Word ใช้ตัวแปลงใน `diagram-figures` → `references/engine-mermaid.md`
-ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
+**Choosing a diagram type, theme, readability rules and Thai labels is covered in `software-diagrams` (plugin `software-development`) items 1–5 and `assets/mermaid-theme.md`** · for Mermaid in project documents that must be converted to a picture for Word, use the converter in `diagram-figures` → `references/engine-mermaid.md`
+This file only says *when to choose Mermaid over other formats*
 
-| เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
+| Choose Mermaid when | Choose something else when |
 |---|---|
-| เป็นกล่องกับลูกศรที่เครื่องจัดวางให้ได้ | ถ้าต้องคุมตำแหน่งเองให้ใช้ inline SVG ส่วนรูปที่ต้องดูออกแบบมาให้ใช้ `diagram-figures` (HTML layout หรือ engine-svg-python) แล้วฝังเป็นไฟล์ภาพ |
-| อยู่ในไฟล์ที่ต้อง diff ใน git | เป็นภาพหน้าจอจริง ให้ใช้ไฟล์ภาพ |
-| ผู้อ่านเปิดใน GitHub หรือ Notion | ผู้อ่านเปิดในเอกสาร Word หรือสไลด์ ให้ใช้ไฟล์ภาพ |
+| It is boxes and arrows that the engine can lay out | If you must control placement yourself, use inline SVG; for a figure that must look designed, use `diagram-figures` (HTML layout or engine-svg-python) and embed it as an image file |
+| It lives in a file that must be diffed in git | It is a real screenshot: use an image file |
+| Readers open it in GitHub or Notion | Readers open it in a Word document or slides: use an image file |
 
 ## Combining formats in one doc
 
@@ -341,12 +341,12 @@ Not sure a visual will render? Preview it in the viewer the reader will use (Git
 
 ## ไม่ให้ดูเหมือน AI ทำ
 
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ทุกงานต้องผ่านด่านตา 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+Before sending, go through item 3 of `no-ai-look` — for HTML work, run its script · every piece must also pass eye check 3.2 (a web page adds items 10–14), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for all media is there
 
 ## ตัวย่อ
 
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้เลย ดูรายละเอียดใน skill `spell-out-abbreviations`
+Spell out each abbreviation in full on first use and put the short form in brackets — for example Model Context Protocol (MCP)
+After that, use the short form. Details are in the skill `spell-out-abbreviations`
 
 
 ## reference: ascii-patterns.md
@@ -432,30 +432,30 @@ Don't force everything into one format. Each format is best at something differe
 
 Reusable building blocks for inline SVG pictures of a screen inside .md docs (the real mockup is HTML) · used by [SKILL.md](../SKILL.md) §1
 
-## สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
+## Colour: it comes from the subject, not from a ready-made table
 
-ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น
-ถ้ายังไม่มี ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม และเสนอโทนจากเนื้องานไว้ในรายงาน — การแพทย์เขียว · การเงินน้ำเงินเข้ม ·
-อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า · ซอฟต์แวร์ทั่วไปน้ำเงิน (ตารางเต็มอยู่ใน [`diagram-figures/references/colour-by-domain.md`](../../diagram-figures/references/colour-by-domain.md))
+If the document or project already has a colour set, use that set.
+If not, use the house value `#2A78D6`, write `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask. Propose a tone drawn from the subject in the report: medical green · finance dark blue ·
+industrial amber · government navy · general software blue (the full table is in [`diagram-figures/references/colour-by-domain.md`](../../diagram-figures/references/colour-by-domain.md))
 
-กำหนดเป็น **token ตามหน้าที่** ไว้บนสุดของเอกสาร แล้วใช้ค่าเดียวกันทุกรูปในเอกสารนั้น:
+Define **tokens by role** at the top of the document, then use the same values in every figure in that document:
 
-| Token | หน้าที่ | ได้มาจาก |
+| Token | Role | Comes from |
 |---|---|---|
-| `bg-canvas` | พื้นหลังของรูป | เฉดเข้มสุด (โหมดมืด) หรืออ่อนสุด (โหมดสว่าง) |
-| `bg-surface` | แผ่น พาเนล การ์ด | ต่างจาก canvas พอให้เห็นขอบโดยไม่ต้องตีเส้น |
-| `bg-elevated` | ไทล์ที่ลอยขึ้นมาอีกชั้น | |
-| `accent-primary` | จุดเน้น สถานะที่กำลังทำงาน | **สีแบรนด์** (ไม่มี → `#2A78D6` + `(รอยืนยัน)`) |
-| `text-primary` | ข้อความหลัก | contrast ≥ 4.5:1 กับพื้นที่มันวางอยู่ |
-| `text-muted` | ข้อความรอง placeholder | `rgba(...,0.55)` ของ `text-primary` |
-| `state-success` · `state-warning` · `state-danger` | สถานะ | **ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่านเสมอ |
+| `bg-canvas` | Background of the figure | The darkest shade (dark mode) or the lightest (light mode) |
+| `bg-surface` | Sheets, panels, cards | Different enough from canvas to show the edge without drawing a line |
+| `bg-elevated` | A tile raised one more layer | |
+| `accent-primary` | Emphasis, the active state | **The brand colour** (none → `#2A78D6` + `(รอยืนยัน)`) |
+| `text-primary` | Main text | Contrast ≥ 4.5:1 against the surface it sits on |
+| `text-muted` | Secondary text, placeholder | `rgba(...,0.55)` of `text-primary` |
+| `state-success` · `state-warning` · `state-danger` | Status | **Does not change with the brand.** Green always means pass and red always means fail |
 
-**1 เอกสารใช้ชุดสีเดียว** — รูป 10 รูปในเอกสารเดียวที่สีไม่ตรงกัน อ่านยากกว่ารูปไม่สวยแต่สีตรงกัน
+**One document, one colour set.** 10 figures in one document with mismatched colours are harder to read than plain figures with matching colours.
 
 ## Snippets
 
-> ตัวอย่างข้างล่างใช้ชุดสีโหมดมืดชุดหนึ่งเป็นตัวแทนเท่านั้น
-> **เปลี่ยนค่าสีให้ตรงกับชุดที่ตกลงไว้ก่อนใช้** โครงสร้างคือสิ่งที่ต้องคัดลอก ไม่ใช่ค่าสี
+> The examples below use one dark-mode colour set as a stand-in only.
+> **Change the colour values to match the agreed set before use.** The structure is what you copy, not the colour values.
 
 **Window chrome (desktop app mockup):**
 ```xml
@@ -669,45 +669,45 @@ The result is not "which one to use" but **"where is the gap"** · the compariso
 
 ## reference: licenses.md
 
-# สัญญาอนุญาตและข้อสัญญา
+# Licences and contract terms
 
-ส่วนของ `prior-art-review` ข้อ 4 · ตรวจก่อนลงมือใช้ ไม่ใช่หลังใช้ไปแล้ว
+Part of `prior-art-review` item 4 · check before you start using something, not after.
 
-**เรื่องนี้รู้ช้าเจ็บที่สุด** เพราะต้องรื้อตอนใกล้ส่งมอบ
+**This hurts most when learned late**, because you have to tear things out close to delivery.
 
-| กลุ่ม | ตัวอย่าง | ใช้ในของที่ขายได้ไหม |
+| Group | Examples | Can it go in something sold? |
 |---|---|---|
-| ปล่อยเสรี | MIT · Apache-2.0 · BSD | ได้ แต่ Apache-2.0 มีเงื่อนไขเรื่องสิทธิบัตรเพิ่ม |
-| ต้องเปิดโค้ดต่อ | GPL-3.0 · AGPL-3.0 | ได้แต่**ต้องเปิดโค้ดของเรา** และ AGPL นับรวมการให้บริการผ่านเครือข่ายด้วย |
-| ห้ามเชิงพาณิชย์ | CC BY-NC · โมเดลที่เขียนว่า research only | **ขายไม่ได้** แต่ใช้ทดลองและเทียบผลได้ |
-| ซื้อหรือเช่า (แม่แบบ ภาพ ฟอนต์ บริการ) | ต้องอ่านสัญญาจริง | ดูว่าใช้เชิงพาณิชย์ได้ไหม · เอาข้อมูลออกได้ไหม · ขึ้นราคาหรือเลิกบริการได้เมื่อไหร่ |
+| Permissive | MIT · Apache-2.0 · BSD | Yes, but Apache-2.0 adds patent conditions |
+| Must open the code in turn | GPL-3.0 · AGPL-3.0 | Yes, but **you must open your own code**, and AGPL also counts offering the software as a service over a network |
+| No commercial use | CC BY-NC · models marked research only | **Cannot be sold**, but fine for experiments and comparing results |
+| Bought or rented (templates, images, fonts, services) | Read the actual contract | Check whether commercial use is allowed · whether you can take your data out · when the price can rise or the service can end |
 
-**กฎ 2 ข้อที่พลาดกันบ่อย**
+**2 rules that people often get wrong**
 
-1. **โมเดลปัญญาประดิษฐ์มีสัญญาแยกจากโค้ด** — โค้ดอาจเป็น MIT แต่น้ำหนักโมเดลเป็น non-commercial ก็ได้
-2. **สัญญาตกทอดไปถึงโมเดลที่ต่อยอด** — เช่น โมเดลที่ fine-tune มาจากโมเดล non-commercial ก็ยัง non-commercial
+1. **An AI model has a licence separate from its code.** The code may be MIT while the model weights are non-commercial.
+2. **The licence passes down to models built on top.** For example, a model fine-tuned from a non-commercial model is still non-commercial.
 
-ทุกตัวที่จะใช้จริง ต้อง**เขียนชื่อสัญญาอนุญาตลงไฟล์** ไม่ใช่จำไว้
+For every item you will really use, **write the licence name into a file**. Do not rely on memory.
 
-## ชื่อเต็มของสัญญาอนุญาต
+## Full names of the licences
 
-- **MIT** — Massachusetts Institute of Technology License (สัญญาอนุญาตแบบปล่อยเสรี)
-- **GPL** — General Public License (ใช้ได้แต่ต้องเปิดโค้ดที่ต่อยอด)
-- **AGPL** — Affero General Public License (เหมือน GPL และนับรวมการให้บริการผ่านเครือข่าย)
+- **MIT** — Massachusetts Institute of Technology License (a permissive licence)
+- **GPL** — General Public License (usable, but derived code must be opened)
+- **AGPL** — Affero General Public License (like GPL, and it also counts offering the software as a service over a network)
 - **BSD** — Berkeley Software Distribution License
-- **CC BY-NC** — Creative Commons Attribution-NonCommercial (ห้ามใช้เชิงพาณิชย์)
+- **CC BY-NC** — Creative Commons Attribution-NonCommercial (no commercial use)
 
 
 ## reference: research-edition.md
 
-# ฉบับงานวิจัย
+# Research edition
 
-ส่วนของ `prior-art-review` ข้อ 8 · ใช้เมื่อสำรวจงานวิจัยก่อนตั้งโจทย์ แทนการเลือกเครื่องมือ
+Part of `prior-art-review` item 8 · use it when surveying research before setting the problem, instead of choosing a tool.
 
-ผลลัพธ์ไม่ใช่ "ใช้ตัวไหน" แต่คือ **"ช่องว่างอยู่ตรงไหน"**
+The output is not "which one to use" but **"where the gap is"**.
 
-- เปลี่ยนคอลัมน์ของตารางเทียบเป็น: งาน · ปี · วิธีที่ใช้ · ชุดข้อมูล · ผลที่รายงาน · ข้อจำกัดที่เขาบอกเอง
-- **คอลัมน์ "ข้อจำกัดที่เขาบอกเอง" คือที่มาของช่องว่าง** เพราะส่วนใหญ่ผู้เขียนบอกไว้เองในหัวข้อสุดท้าย
-- ช่องว่างที่ใช้ได้ต้องเป็นอย่างใดอย่างหนึ่ง: ยังไม่มีใครทดสอบกับบริบทนี้ · วิธีเดิมใช้ไม่ได้เมื่อเงื่อนไขเปลี่ยน · ผลที่รายงานทำซ้ำไม่ได้
-- **ห้ามอ้างงานที่ยังไม่ได้อ่านตัวเต็ม** เพราะการอ่านแค่บทคัดย่อแล้วอ้าง คือความผิดพลาดที่กรรมการจับได้เร็วที่สุด
-- งานที่หาโค้ดหรือชุดข้อมูลไม่ได้ ให้ระบุว่าทำซ้ำไม่ได้
+- Change the columns of the comparison table to: work · year · method used · dataset · reported result · limitations the authors state themselves
+- **The column "limitations the authors state themselves" is where gaps come from**, because most authors state them in the last section.
+- A usable gap must be one of these: nobody has tested it in this context · the existing method fails when conditions change · the reported result cannot be reproduced
+- **Never cite a work you have not read in full**, because reading only the abstract and then citing it is the mistake a reviewer catches fastest.
+- For work whose code or dataset you cannot find, state that it cannot be reproduced.

@@ -2,81 +2,81 @@
 
 Use when designing or changing a database schema
 
-# ออกแบบฐานข้อมูล
+# Database design
 
-> **กฎข้อเดียว:** schema คือของที่แก้ยากที่สุดในระบบ
-> โค้ดผิดแก้วันนี้จบวันนี้ แต่ schema ผิดต้องอยู่กับมัน 3 ปี พร้อมข้อมูลจริงอีก 10 ล้านแถวที่ต้องย้ายตาม
+> **One rule:** the schema is the hardest thing in a system to change.
+> A code bug fixed today is done today, but a wrong schema stays for 3 years, with another 10 million real rows to migrate along with it.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ออกแบบฐานข้อมูลของระบบใหม่ หรือ module ใหม่
-- จะเพิ่ม/แก้ตาราง คอลัมน์ ความสัมพันธ์ หรือ index
-- จะเขียน migration โดยเฉพาะตอนที่ระบบมีข้อมูลจริงแล้ว
-- query ช้าแล้วสงสัยว่าเป็นที่ schema หรือที่ index
+- Designing the database of a new system or a new module
+- Adding or changing a table, column, relationship or index
+- Writing a migration, especially once the system holds real data
+- A query is slow and you suspect the schema or an index
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or together
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` | แทน |
-| ออกแบบ endpoint และรูปร่าง JSON | `api-conventions` | แทน |
-| เก็บรหัสผ่าน token สิทธิ์ผู้ใช้ | `auth-implementation-patterns` | แทน |
-| ที่เก็บ connection string | `config-and-secrets` | แทน |
-| รัน migration ใน pipeline | `cicd-and-release` | แทน |
-| วาดผัง Entity-Relationship (ER) | `diagram-figures` หรือ `markdown-visuals` | คู่ |
-| บันทึกเหตุผลที่เลือกฐานข้อมูลตัวนี้ | `adr-writer` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Choose the overall architecture | `architecture-patterns` | instead |
+| Design endpoints and JSON shapes | `api-conventions` | instead |
+| Store passwords, tokens, user permissions | `auth-implementation-patterns` | instead |
+| Where to keep connection strings | `config-and-secrets` | instead |
+| Run migrations in a pipeline | `cicd-and-release` | instead |
+| Draw an Entity-Relationship (ER) diagram | `diagram-figures` or `markdown-visuals` | together |
+| Record why this database was chosen | `adr-writer` | together |
+| Abbreviations in work people read | `spell-out-abbreviations` | together |
 
-**ไวยากรณ์เฉพาะแต่ละฐานข้อมูล ชนิดข้อมูลเทียบกัน และคำสั่ง migration ของแต่ละ Object-Relational Mapping (ORM)** อยู่ใน `references/per-stack.md`
+**Syntax specific to each database, data types compared, and the migration commands of each Object-Relational Mapping (ORM) tool** are in `references/per-stack.md`.
 
 ---
 
-## 1 · เลือกชนิดฐานข้อมูลก่อน
+## 1 · Choose the database type first
 
-| เกณฑ์ | Relational (PostgreSQL, SQL Server, MySQL) | Document (MongoDB) |
+| Criterion | Relational (PostgreSQL, SQL Server, MySQL) | Document (MongoDB) |
 |---|---|---|
-| ข้อมูลมีความสัมพันธ์ชัด ต้อง join | ✓ | ✗ ต้องทำมือ |
-| รูปร่างข้อมูลไม่แน่นอน ต่างกันรายตัว | ระวัง ใช้คอลัมน์ JSON | ✓ |
-| ต้องการ transaction ข้ามหลายตาราง | ✓ | ระวัง ได้แต่แพงกว่า |
-| รายงาน ผลรวม การวิเคราะห์ | ✓ | ✗ |
-| เขียนหนักมาก log/telemetry | ระวัง | ✓ หรือใช้ time-series |
+| Data has clear relationships and needs joins | ✓ | ✗ must be done by hand |
+| Data shape is uncertain and differs per record | Careful: use a JSON column | ✓ |
+| Needs transactions across several tables | ✓ | Careful: possible but costlier |
+| Reports, totals, analysis | ✓ | ✗ |
+| Very heavy writes, log/telemetry | Careful | ✓ or use a time-series database |
 
-> **ค่าเริ่มต้นคือ relational** ให้เลือก document เมื่อ**ตอบได้ว่าทำไม**
-> "ยืดหยุ่นกว่า" ไม่ใช่เหตุผล แต่แปลว่ายังไม่ได้ออกแบบ
-> ระบบส่วนใหญ่ที่เลือก document เพราะยืดหยุ่น สุดท้ายเขียนโค้ด join เองในแอป
+> **The default is relational.** Choose document only when you **can answer why**.
+> "More flexible" is not a reason. It means the design is not done yet.
+> Most systems that chose document for flexibility end up writing join code by hand in the app.
 
-**ผสมกันได้**: ใช้ relational เป็นหลัก แล้วเก็บข้อมูลที่รูปร่างไม่แน่นอนเป็นคอลัมน์ `jsonb`
-เกือบทุกกรณี ทางนี้ดีกว่าแยกฐานข้อมูล 2 ตัว
+**You can mix them**: use relational as the base, and store data of uncertain shape in a `jsonb` column.
+In almost every case this is better than running 2 separate databases.
 
 ---
 
-## 2 · กฎตั้งชื่อ — เลือกครั้งเดียว ใช้ทั้งระบบ
+## 2 · Naming rules — choose once, use across the whole system
 
-| สิ่งที่ตั้งชื่อ | รูปแบบ | ตัวอย่าง |
+| What you name | Format | Example |
 |---|---|---|
-| ตาราง | `snake_case` **พหูพจน์** | `orders`, `order_items` |
-| คอลัมน์ | `snake_case` เอกพจน์ | `created_at`, `total_amount` |
+| Table | `snake_case` **plural** | `orders`, `order_items` |
+| Column | `snake_case` singular | `created_at`, `total_amount` |
 | primary key | `id` | `id` |
-| foreign key | `<ตารางเอกพจน์>_id` | `customer_id` |
-| ตารางเชื่อม | `<a>_<b>` เรียงตามตัวอักษร | `role_users` ✓ (ไม่ใช่ `user_roles`) |
-| index | `ix_<ตาราง>_<คอลัมน์>` | `ix_orders_customer_id` |
-| unique | `ux_<ตาราง>_<คอลัมน์>` | `ux_users_email` |
-| foreign key constraint | `fk_<ตาราง>_<ตารางปลายทาง>` | `fk_orders_customers` |
-| check constraint | `ck_<ตาราง>_<เรื่อง>` | `ck_orders_total_non_negative` |
+| foreign key | `<singular table>_id` | `customer_id` |
+| Join table | `<a>_<b>` in alphabetical order | `role_users` ✓ (not `user_roles`) |
+| index | `ix_<table>_<column>` | `ix_orders_customer_id` |
+| unique | `ux_<table>_<column>` | `ux_users_email` |
+| foreign key constraint | `fk_<table>_<target table>` | `fk_orders_customers` |
+| check constraint | `ck_<table>_<topic>` | `ck_orders_total_non_negative` |
 
-**สิ่งที่ห้ามทำ:**
+**Do not:**
 
-- ผิด: ใส่ชนิดข้อมูลในชื่อ เช่น `name_varchar`, `is_active_bit`
-- ผิด: ใส่ชื่อตารางนำหน้าคอลัมน์ เช่น `order_order_date` (มันอยู่ในตาราง `orders` อยู่แล้ว)
-- ผิด: ใช้คำสงวน เช่น `user`, `order`, `group`, `key` ซึ่งต้องใส่เครื่องหมายคำพูดทุกครั้ง ให้ใช้ `users`, `orders` แทน
-- ผิด: ตัวย่อที่คนอ่านไม่ออก เช่น `cst_nm` ประหยัดได้ 8 ตัวอักษร แต่แลกกับความสับสน 3 ปี
+- Wrong: put the data type in the name, such as `name_varchar`, `is_active_bit`
+- Wrong: prefix a column with the table name, such as `order_order_date` (it is already in the `orders` table)
+- Wrong: use reserved words such as `user`, `order`, `group`, `key`, which need quotes every time. Use `users`, `orders` instead.
+- Wrong: use abbreviations people cannot read, such as `cst_nm`. It saves 8 characters but costs 3 years of confusion.
 
-> SQL Server ใช้ `PascalCase` ก็ได้ ถ้าโปรเจกต์เดิมใช้อยู่แล้ว
-> **ใช้แบบเดียวกันทั้งระบบสำคัญกว่าว่าแบบไหนถูก** อย่าเปลี่ยนกลางทาง
+> SQL Server may use `PascalCase` if the existing project already does.
+> **Using one style across the whole system matters more than which style is right.** Do not switch midway.
 
 ---
 
-## 3 · คอลัมน์ที่ทุกตารางต้องมี
+## 3 · Columns every table must have
 
 ```sql
 id           bigint / uuid   PRIMARY KEY
@@ -84,68 +84,68 @@ created_at   timestamptz     NOT NULL DEFAULT now()
 updated_at   timestamptz     NOT NULL DEFAULT now()
 ```
 
-เพิ่มตามความจำเป็น:
+Add these as needed:
 
-| คอลัมน์ | ใส่เมื่อ | หมายเหตุ |
+| Column | Add when | Note |
 |---|---|---|
-| `deleted_at timestamptz` | ต้องกู้ข้อมูลคืนได้ หรือกฎหมายบังคับให้เก็บ | **ทุก query ต้องกรอง** ไม่งั้นข้อมูลที่ลบแล้วโผล่ |
-| `created_by` / `updated_by` | ต้องตอบได้ว่าใครแก้ | เก็บ id ผู้ใช้ ไม่ใช่ชื่อ |
-| `row_version` / `xmin` | มีคนแก้พร้อมกันได้ | ใช้คู่กับ ETag ใน `api-conventions` |
-| `tenant_id` | ระบบหลายผู้เช่า | ดูข้อ 10 |
+| `deleted_at timestamptz` | Data must be recoverable, or the law requires keeping it | **Every query must filter on it**, or deleted data shows up |
+| `created_by` / `updated_by` | You must be able to say who changed it | Store the user id, not the name |
+| `row_version` / `xmin` | Several people can edit at the same time | Use with the ETag in `api-conventions` |
+| `tenant_id` | Multi-tenant system | See section 10 |
 
-> **soft delete (ลบโดยแค่ติดป้าย) มีต้นทุน** คือทุก unique constraint ต้องคิดใหม่
-> `ux_users_email` จะกันไม่ให้สมัครอีเมลเดิมซ้ำ แม้บัญชีเก่าถูกลบไปแล้ว
-> แก้ด้วย partial index: `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL`
+> **soft delete (delete by only setting a flag) has a cost**: every unique constraint must be rethought.
+> `ux_users_email` will block signing up with the same email again, even though the old account was deleted.
+> Fix it with a partial index: `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL`
 
 ---
 
-## 4 · เลือกชนิด identifier
+## 4 · Choose the identifier type
 
-| ชนิด | ข้อดี | ข้อเสีย | ใช้เมื่อ |
+| Type | Pros | Cons | Use when |
 |---|---|---|---|
-| `bigint` เรียงเพิ่ม | เล็ก เร็ว index ไม่แตก อ่านง่ายตอนไล่ปัญหา | เดา id ถัดไปได้ · รวมข้อมูลหลายที่แล้วชนกัน | ค่าเริ่มต้น ระบบเดียว ฐานข้อมูลเดียว |
-| **UUIDv7 / ULID** | เรียงตามเวลา · สร้างจากฝั่งแอปได้ · ไม่ชนกัน | 16 ไบต์ · อ่านด้วยตายาก | ระบบกระจาย · ต้องสร้าง id ก่อนบันทึก · id โผล่ใน URL |
-| `UUIDv4` สุ่มล้วน | ไม่ชนกัน เดาไม่ได้ | **index แตกกระจาย เขียนช้าลงชัดเจนเมื่อข้อมูลเยอะ** | เลี่ยงถ้าเลือกได้ |
+| `bigint` auto-increment | Small, fast, index does not fragment, easy to read when tracing problems | Next id can be guessed · ids collide when merging data from several places | Default, single system, single database |
+| **UUIDv7 / ULID** | Sorted by time · can be generated on the app side · no collisions | 16 bytes · hard to read by eye | Distributed system · id needed before saving · id appears in a URL |
+| `UUIDv4` fully random | No collisions, cannot be guessed | **index fragments, and writes get clearly slower with lots of data** | Avoid if you can |
 
-> **UUIDv4 เป็น primary key คือกับดักที่เจอบ่อยที่สุด**
-> ค่าสุ่มล้วนทำให้ทุก insert ไปแทรกกลางโครงสร้าง index
-> ข้อมูลหลักหมื่นยังไม่รู้สึก แต่พอถึงหลักสิบล้านจะช้าจนต้องรื้อ
-> ถ้าต้องใช้ UUID ให้ใช้ **v7** ซึ่งขึ้นต้นด้วยเวลา จึงเรียงเพิ่มเหมือน bigint
+> **UUIDv4 as a primary key is the most common trap.**
+> Fully random values make every insert land in the middle of the index structure.
+> You do not feel it at tens of thousands of rows, but at tens of millions it gets so slow you must rebuild.
+> If you must use a UUID, use **v7**, which starts with the time, so it grows in order like bigint.
 
-**เลขที่คนเห็นไม่ใช่ primary key**: เลขใบสั่งซื้อ `SO-2026-00042` ที่ลูกค้าอ้างถึง
-ให้เก็บเป็นคอลัมน์ต่างหากที่มี unique constraint และไม่เอา primary key ไปโชว์
-
----
-
-## 5 · normalisation แค่ไหนพอ
-
-**เริ่มที่ Third Normal Form (3NF) เสมอ**: ข้อเท็จจริง 1 อย่างเก็บที่เดียว
-
-denormalise (ยอมเก็บข้อมูลซ้ำ) ได้เมื่อครบ 3 ข้อนี้เท่านั้น:
-
-1. วัดแล้วว่าช้าจริง (มีตัวเลข ไม่ใช่ความรู้สึก)
-2. รู้ว่าข้อมูลซ้ำจะถูกอัปเดตยังไงให้ตรงกัน
-3. เขียนเหตุผลไว้ในคอมเมนต์ของตาราง
-
-**ข้อยกเว้นที่ยอมรับกันทั่วไป**: ข้อมูลที่ต้อง "แช่แข็ง" ณ เวลาหนึ่ง
-ราคาสินค้าในใบสั่งซื้อต้องคัดลอกลง `order_items.unit_price`
-ไม่ join ไปหา `products.price` เพราะราคาวันนี้ไม่ใช่ราคาวันที่ลูกค้าซื้อ
+**A number people see is not the primary key**: a purchase order number such as `SO-2026-00042` that the customer refers to
+should be stored as a separate column with a unique constraint, and the primary key should not be shown.
 
 ---
 
-## 6 · สี่ชนิดข้อมูลที่พลาดกันประจำ
+## 5 · How much normalisation is enough
 
-รายละเอียด 4 ชนิดข้อมูลที่พลาดกันประจำ (เงิน · เวลา · enum หรือสถานะ · boolean) พร้อมตัวอย่าง อยู่ใน [`data-types`](references/data-types.md)
+**Always start at Third Normal Form (3NF)**: each fact is stored in one place.
 
-## 7 · index — วางตรงไหนถึงได้ผล
+You may denormalise (accept duplicated data) only when all 3 of these hold:
 
-**ต้องมี:**
+1. You measured and it is truly slow (with numbers, not a feeling).
+2. You know how the duplicated data will be updated so that the copies match.
+3. You wrote the reason in the table comment.
 
-- ทุก foreign key (ฐานข้อมูลส่วนใหญ่ **ไม่สร้างให้อัตโนมัติ**)
-- คอลัมน์ที่อยู่ใน `WHERE` ของ query ที่รันบ่อย
-- คอลัมน์ที่ใช้ `ORDER BY` คู่กับ pagination
+**A commonly accepted exception**: data that must be "frozen" at a point in time.
+The product price in a purchase order must be copied into `order_items.unit_price`
+and not joined to `products.price`, because today's price is not the price on the day the customer bought.
 
-**composite index (index หลายคอลัมน์): ลำดับคอลัมน์สำคัญ**
+---
+
+## 6 · Four data types people get wrong all the time
+
+Details of the 4 data types people get wrong all the time (money · time · enum or status · boolean), with examples, are in [`data-types`](references/data-types.md).
+
+## 7 · index — where to put one so it works
+
+**Must have:**
+
+- Every foreign key (most databases **do not create it automatically**)
+- Columns in the `WHERE` of frequently run queries
+- Columns used in `ORDER BY` together with pagination
+
+**composite index (an index on several columns): column order matters**
 
 ```sql
 -- query: WHERE tenant_id = ? AND status = ? ORDER BY created_at DESC
@@ -153,94 +153,94 @@ CREATE INDEX ix_orders_tenant_status_created
   ON orders (tenant_id, status, created_at DESC);
 ```
 
-เรียงคอลัมน์ตามเงื่อนไข: **เท่ากับ → ช่วง → เรียงลำดับ**
-index `(a, b)` ใช้กับ query ที่กรองด้วย `a` อย่างเดียวได้ แต่กรองด้วย `b` อย่างเดียว**ไม่ได้**
+Order the columns by condition type: **equals → range → sort**.
+An index `(a, b)` works for a query that filters on `a` alone, but **not** for one that filters on `b` alone.
 
-**อย่าใส่ index เมื่อ:**
+**Do not add an index when:**
 
-- ตารางเล็กกว่าไม่กี่พันแถว เพราะฐานข้อมูลอ่านทั้งตารางเร็วกว่า
-- คอลัมน์มีค่าซ้ำเยอะ เช่น `is_active` ที่ 95% เป็น true
-- ตารางเขียนบ่อยกว่าอ่านมาก เพราะทุก index เพิ่มต้นทุนทุกครั้งที่เขียน
+- The table has fewer than a few thousand rows, because the database reads the whole table faster
+- The column has many repeated values, such as `is_active` where 95% are true
+- The table is written far more often than read, because every index adds cost on every write
 
-> **วัดก่อนเดา**: `EXPLAIN ANALYZE` (PostgreSQL) หรือ execution plan (SQL Server)
-> บอกได้ว่า index ถูกใช้จริงไหม ส่วนการเดาว่า "น่าจะช่วย" ผิดบ่อยกว่าถูก
+> **Measure before guessing**: `EXPLAIN ANALYZE` (PostgreSQL) or the execution plan (SQL Server)
+> tells you whether the index is really used. Guessing that it "should help" is wrong more often than right.
 
 ---
 
-## 8 · constraint อยู่ที่ฐานข้อมูล ไม่ใช่แค่ที่แอป
+## 8 · Constraints live in the database, not only in the app
 
-| กฎ | ที่ควรอยู่ |
+| Rule | Where it should live |
 |---|---|
-| อีเมลห้ามซ้ำ | `UNIQUE` ที่ฐานข้อมูล **และ** ตรวจในแอปเพื่อให้ข้อความ error สวย |
-| ยอดเงินห้ามติดลบ | `CHECK (total_amount >= 0)` |
-| ใบสั่งซื้อต้องมีลูกค้าจริง | `FOREIGN KEY` |
-| สถานะต้องเป็นค่าที่กำหนด | `CHECK` หรือ lookup table |
+| Email must not repeat | `UNIQUE` in the database **and** a check in the app so the error message looks nice |
+| Amount must not be negative | `CHECK (total_amount >= 0)` |
+| A purchase order must have a real customer | `FOREIGN KEY` |
+| Status must be one of the defined values | `CHECK` or a lookup table |
 
-> **เหตุผล:** แอปไม่ใช่ทางเดียวที่แตะข้อมูล ยังมี script แก้ข้อมูลด่วน
-> งาน import ตอนตี 3 และ service ตัวที่ 2 ที่เขียนทีหลัง
-> constraint ที่ฐานข้อมูลคือด่านสุดท้ายที่ไม่มีใครข้ามได้
+> **Reason:** the app is not the only thing that touches the data. There are also urgent data-fix scripts,
+> import jobs at 3 a.m., and a 2nd service written later.
+> A constraint in the database is the last gate that nobody can skip.
 
-**`ON DELETE` ต้องเลือกอย่างตั้งใจ:**
+**Choose `ON DELETE` on purpose:**
 
-| ตัวเลือก | ความหมาย | ใช้กับ |
+| Option | Meaning | Use with |
 |---|---|---|
-| `RESTRICT` (ค่าเริ่มต้นที่ควรใช้) | ลบไม่ได้ถ้ายังมีลูก | เกือบทุกกรณี |
-| `CASCADE` | ลบลูกตามทั้งหมด | ของที่เป็นส่วนประกอบจริง ๆ เช่น `order_items` |
-| `SET NULL` | ลูกกลายเป็นไม่มีพ่อ | ความสัมพันธ์ที่ไม่บังคับ |
+| `RESTRICT` (the default you should use) | Cannot delete while children exist | Almost every case |
+| `CASCADE` | Delete all the children too | True components, such as `order_items` |
+| `SET NULL` | Child becomes parentless | Optional relationships |
 
-ถ้าใส่ `CASCADE` ผิดที่เดียว ลบลูกค้า 1 คน แล้วประวัติการซื้อ 10 ปีจะหายตาม
+If you put `CASCADE` in the wrong place just once, deleting 1 customer wipes 10 years of purchase history with it.
 
 ---
 
-## 9 · migration — เปลี่ยน schema โดยไม่ต้องปิดระบบ
+## 9 · migration — change the schema without taking the system down
 
-ขั้นตอน expand-and-contract และตัวอย่าง migration ที่ deploy ได้โดยไม่ปิดระบบ อยู่ใน [`migrations`](references/migrations.md)
+The expand-and-contract steps, and example migrations that deploy without downtime, are in [`migrations`](references/migrations.md).
 
-คลังข้อมูลเพื่อวิเคราะห์ (star schema · SCD · ELT) อยู่ใน [`warehouse-modeling`](references/warehouse-modeling.md) · pipeline ที่รันซ้ำได้ (incremental · backfill · ทดสอบคุณภาพข้อมูล · checklist ก่อนขึ้น production) อยู่ใน [`data-pipeline-patterns`](references/data-pipeline-patterns.md)
+Data warehouses for analysis (star schema · SCD · ELT) are in [`warehouse-modeling`](references/warehouse-modeling.md) · pipelines that can rerun safely (incremental · backfill · data quality tests · checklist before going to production) are in [`data-pipeline-patterns`](references/data-pipeline-patterns.md).
 
-## 10 · ระบบหลายผู้เช่า (multi-tenant)
+## 10 · Multi-tenant systems
 
-| แบบ | แยกกันแค่ไหน | ต้นทุน | เหมาะกับ |
+| Style | How separate | Cost | Fits |
 |---|---|---|---|
-| คอลัมน์ `tenant_id` ในทุกตาราง | ต่ำ พลาดที่เดียวข้อมูลก็รั่วข้ามผู้เช่า | ถูกสุด | ผู้เช่าเยอะ ข้อมูลต่อรายไม่ใหญ่ |
-| schema แยกต่อผู้เช่า | กลาง | migration ต้องวนทุก schema | ผู้เช่าหลักสิบถึงหลักร้อย |
-| ฐานข้อมูลแยกต่อผู้เช่า | สูงสุด | แพงสุด | ลูกค้าองค์กรที่บังคับให้แยก |
+| A `tenant_id` column in every table | Low: one slip and data leaks across tenants | Cheapest | Many tenants, small data per tenant |
+| A separate schema per tenant | Medium | Migrations must loop over every schema | Tens to hundreds of tenants |
+| A separate database per tenant | Highest | Most expensive | Enterprise customers who require separation |
 
-> **สำคัญ:** ถ้าเลือกแบบ `tenant_id` ให้**บังคับที่ชั้นล่างสุด ไม่ใช่ใส่ใน query ทีละตัว**
-> ใช้ row-level security ของฐานข้อมูล หรือ global filter ของ ORM
-> query ที่ลืมใส่ `WHERE tenant_id = ?` แค่ตัวเดียว ก็ทำให้ข้อมูลลูกค้ารายหนึ่งโผล่ให้อีกรายเห็น
-> และไม่มี error ให้เห็นเลย
+> **Important:** if you choose the `tenant_id` style, **enforce it at the lowest layer, not by adding it to each query**.
+> Use the database's row-level security, or the ORM's global filter.
+> A single query that forgets `WHERE tenant_id = ?` shows one customer's data to another,
+> and no error appears at all.
 
 ---
 
-## 11 · ข้อมูลส่วนบุคคล
+## 11 · Personal data
 
-- ทำรายการว่า **คอลัมน์ไหนเป็นข้อมูลส่วนบุคคล** ถ้าไม่มีรายการนี้จะตอบคำถาม "ข้อมูลฉันอยู่ที่ไหนบ้าง" ไม่ได้
-- เลขบัตรประชาชน หมายเลขบัตรเครดิต และข้อมูลสุขภาพ ให้เข้ารหัสระดับคอลัมน์ หรือไม่เก็บเลยถ้าไม่จำเป็น
-- กำหนด **อายุการเก็บ** ต่อตาราง และมีงานลบจริงตามนั้น
-- ต้องลบได้เมื่อเจ้าของขอ และ soft delete อย่างเดียวไม่นับว่าลบ
-- ห้ามคัดลอกข้อมูลจริงลงเครื่อง developer โดยไม่ปิดบัง
+- Keep a list of **which columns are personal data**. Without this list you cannot answer the question "where is my data?".
+- National ID numbers, credit card numbers and health data: encrypt at the column level, or do not store them at all if not needed.
+- Set a **retention period** per table, and have a real job that deletes accordingly.
+- Data must be deletable when the owner asks, and soft delete alone does not count as deleting.
+- Never copy real data onto a developer machine without masking it.
 
 ---
 
 ## 12 · Anti-patterns
 
-- **ตารางเดียวเก็บทุกอย่าง** (`entity` / `attribute` / `value`) query อะไรก็ยากไปหมด
-- **`varchar(255)` ทุกคอลัมน์** ตัวเลขนี้ไม่มีความหมายอะไร ให้กำหนดจากข้อมูลจริง
-- **เก็บหลายค่าในคอลัมน์เดียว** เช่น `"1,4,7"` ค้นไม่ได้ ใส่ constraint ไม่ได้ ให้ใช้ตารางเชื่อม
-- **ไม่มี foreign key เพราะ "แอปดูแลเอง"** สักวันจะมีแถวกำพร้า
-- **index ทุกคอลัมน์เผื่อไว้** เขียนช้าลง พื้นที่บาน โดยไม่มีใครได้ประโยชน์
-- **`SELECT *` ในโค้ดจริง** เพิ่มคอลัมน์ทีไรโค้ดพังทุกที
-- **ตรรกะธุรกิจใน trigger** ไล่ปัญหาไม่เจอ เพราะไม่มีใครเห็นว่ามันทำงาน
-- **migration ที่เขียนข้อมูลด้วย** ปนกับที่เปลี่ยนโครงสร้าง พอ rollback ข้อมูลก็หาย
-- **แก้ schema บน production ด้วยมือ** deploy รอบหน้า schema จะไม่ตรงกัน
+- **One table that stores everything** (`entity` / `attribute` / `value`): every query becomes hard.
+- **`varchar(255)` on every column**: this number means nothing. Set it from real data.
+- **Several values in one column**, such as `"1,4,7"`: cannot search it, cannot add a constraint. Use a join table.
+- **No foreign key because "the app takes care of it"**: one day you will have orphan rows.
+- **An index on every column just in case**: writes get slower and storage bloats, with no one benefiting.
+- **`SELECT *` in real code**: the code breaks every time a column is added.
+- **Business logic in triggers**: problems are untraceable, because nobody sees it running.
+- **A migration that also writes data**, mixed with the structure change: on rollback the data is lost.
+- **Changing the schema on production by hand**: at the next deploy the schema will not match.
 
 
 ## reference: data-pipeline-patterns.md
 
 # Data pipeline patterns — incremental, backfill, quality, catalog
 
-ทุก pipeline ต้องรันซ้ำได้ผลเท่าเดิม (`principle-safe-to-rerun`) และส่งค่าเข้า SQL เป็น parameter เสมอ
+Every pipeline must give the same result when run again (`principle-safe-to-rerun`) and must always pass values into SQL as parameters.
 
 **สารบัญ:**
 
@@ -464,11 +464,11 @@ may take 40 minutes on production and hold the table lock the whole time
 
 ## reference: per-stack.md
 
-# ไวยากรณ์และเครื่องมือแยกตามฐานข้อมูล/ORM
+# Syntax and tools per database and ORM
 
-**สารบัญ:** 1 ชนิดข้อมูลเทียบกัน · 2 PostgreSQL · 3 SQL Server · 4 MySQL / MariaDB · 5 MongoDB · 6 Entity Framework Core (.NET) · 7 Prisma / Drizzle (Node) · 8 Alembic (Python) · 9 คำสั่งตรวจ query ช้า
+**Contents:** 1 Data types compared · 2 PostgreSQL · 3 SQL Server · 4 MySQL / MariaDB · 5 MongoDB · 6 Entity Framework Core (.NET) · 7 Prisma / Drizzle (Node) · 8 Alembic (Python) · 9 Slow query commands
 
-1. [ชนิดข้อมูลเทียบกัน](#1--ชนิดข้อมูลเทียบกัน)
+1. [Data types compared](#1--data-types-compared)
 2. [PostgreSQL](#2--postgresql)
 3. [SQL Server](#3--sql-server)
 4. [MySQL / MariaDB](#4--mysql--mariadb)
@@ -476,30 +476,30 @@ may take 40 minutes on production and hold the table lock the whole time
 6. [Entity Framework Core (.NET)](#6--entity-framework-core-net)
 7. [Prisma / Drizzle (Node)](#7--prisma--drizzle-node)
 8. [Alembic (Python)](#8--alembic-python)
-9. [คำสั่งตรวจ query ช้า](#9--คำสั่งตรวจ-query-ช้า)
+9. [Slow query commands](#9--slow-query-commands)
 
 ---
 
-## 1 · ชนิดข้อมูลเทียบกัน
+## 1 · Data types compared
 
-| ต้องการเก็บ | PostgreSQL | SQL Server | MySQL |
+| To store | PostgreSQL | SQL Server | MySQL |
 |---|---|---|---|
-| id เรียงเพิ่ม | `bigint GENERATED ALWAYS AS IDENTITY` | `bigint IDENTITY(1,1)` | `BIGINT AUTO_INCREMENT` |
-| UUID | `uuid` | `uniqueidentifier` | `BINARY(16)` หรือ `CHAR(36)` |
-| เงิน | `numeric(19,4)` | `decimal(19,4)` | `DECIMAL(19,4)` |
-| เวลา + โซนเวลา | `timestamptz` | `datetimeoffset(3)` | `TIMESTAMP` (เก็บ UTC) |
-| วันที่ล้วน | `date` | `date` | `DATE` |
-| ข้อความยาวไม่จำกัด | `text` | `nvarchar(max)` | `TEXT` / `LONGTEXT` |
-| ข้อความไทย | `text` (UTF-8 อยู่แล้ว) | **`nvarchar` เท่านั้น** | `utf8mb4` |
-| จริง/เท็จ | `boolean` | `bit` | `TINYINT(1)` |
-| JSON | `jsonb` (มี index ได้) | `nvarchar(max)` + `JSON_VALUE` | `JSON` |
-| ไฟล์ไบนารี | `bytea` (หรือเก็บนอกฐานข้อมูล) | `varbinary(max)` | `BLOB` |
+| Auto-increment id | `bigint GENERATED ALWAYS AS IDENTITY` | `bigint IDENTITY(1,1)` | `BIGINT AUTO_INCREMENT` |
+| UUID | `uuid` | `uniqueidentifier` | `BINARY(16)` or `CHAR(36)` |
+| Money | `numeric(19,4)` | `decimal(19,4)` | `DECIMAL(19,4)` |
+| Time + time zone | `timestamptz` | `datetimeoffset(3)` | `TIMESTAMP` (store UTC) |
+| Date only | `date` | `date` | `DATE` |
+| Unlimited-length text | `text` | `nvarchar(max)` | `TEXT` / `LONGTEXT` |
+| Thai text | `text` (already UTF-8) | **`nvarchar` only** | `utf8mb4` |
+| True/false | `boolean` | `bit` | `TINYINT(1)` |
+| JSON | `jsonb` (can be indexed) | `nvarchar(max)` + `JSON_VALUE` | `JSON` |
+| Binary file | `bytea` (or store outside the database) | `varbinary(max)` | `BLOB` |
 
-> **SQL Server + ภาษาไทย**: `varchar` ทำให้ตัวอักษรไทยกลายเป็น `?`
-> ต้องใช้ `nvarchar` และเขียนค่าคงที่เป็น `N'ข้อความ'` เสมอ
+> **SQL Server + Thai**: `varchar` turns Thai characters into `?`.
+> Use `nvarchar` and always write literals as `N'ข้อความ'`.
 >
-> **MySQL ต้องเป็น `utf8mb4`** เพราะชุดอักขระชื่อ `utf8` เฉย ๆ ของ MySQL
-> เก็บได้แค่ 3 ไบต์ต่อตัว อีโมจิและอักขระบางตัวจึงหาย
+> **MySQL must use `utf8mb4`**, because MySQL's character set named plain `utf8`
+> stores only 3 bytes per character, so emoji and some other characters are lost.
 
 ---
 
@@ -526,14 +526,14 @@ CREATE INDEX ix_orders_customer_id ON orders (customer_id);
 CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC);
 ```
 
-**สร้าง index โดยไม่ล็อกตาราง:**
+**Create an index without locking the table:**
 
 ```sql
 CREATE INDEX CONCURRENTLY ix_orders_status ON orders (status);
--- ห้ามอยู่ใน transaction · ถ้าล้มจะเหลือ index สถานะ invalid ต้อง DROP แล้วทำใหม่
+-- Must not run inside a transaction · if it fails it leaves an index in invalid state: DROP it and redo
 ```
 
-**อัปเดต `updated_at` อัตโนมัติ:**
+**Update `updated_at` automatically:**
 
 ```sql
 CREATE OR REPLACE FUNCTION touch_updated_at() RETURNS trigger AS $$
@@ -544,28 +544,28 @@ CREATE TRIGGER trg_orders_touch BEFORE UPDATE ON orders
 FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
 ```
 
-**row-level security สำหรับระบบหลายผู้เช่า:**
+**Row-level security for multi-tenant systems:**
 
 ```sql
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 CREATE POLICY tenant_isolation ON orders
   USING (tenant_id = current_setting('app.tenant_id')::bigint);
--- แอปตั้งค่าต่อ connection: SET app.tenant_id = '42';
+-- The app sets this per connection: SET app.tenant_id = '42';
 ```
 
-**กับดักที่เจอบ่อยใน PostgreSQL** (แนวคิดจาก wshobson postgresql-table-design · เลขรุ่นคือรุ่นที่พฤติกรรมเริ่มเป็นแบบนี้)
+**Common PostgreSQL traps** (ideas from wshobson postgresql-table-design · version numbers are the version where the behaviour began)
 
-| กับดัก | ทำแบบนี้แทน |
+| Trap | Do this instead |
 |---|---|
-| `timestamp` (ไม่มี time zone) ทิ้ง offset เงียบ ๆ เครื่อง `+07:00` กับ UTC เก็บค่าคนละความหมาย | `timestamptz` เสมอ |
-| `serial` สร้าง sequence แยกที่สิทธิ์และ `DROP` ไม่ตามตาราง | `GENERATED ALWAYS AS IDENTITY` (PG 10+) |
-| `ADD COLUMN ... NOT NULL` บนตารางใหญ่กลัวล็อกนาน | ถ้าใส่ `DEFAULT` ค่าคงที่ ไม่เขียนตารางใหม่แล้ว (PG 11+) · DEFAULT ที่เป็นฟังก์ชันเช่น `now()` ยังเขียนใหม่ทั้งตาราง |
-| `ADD CONSTRAINT` (FK · CHECK) สแกนทั้งตารางขณะถือล็อก | `... NOT VALID` ก่อน แล้ว `VALIDATE CONSTRAINT` แยกคำสั่ง (ล็อกเบากว่า) |
-| DDL ต่อคิวหลัง transaction ยาว แล้วทุก query หลังมันค้างตาม | `SET lock_timeout = '5s'` ก่อน DDL ทุกครั้ง ตกแล้วรันใหม่ |
-| unique index ปล่อยให้ `NULL` ซ้ำได้หลายแถว | `UNIQUE NULLS NOT DISTINCT` (PG 15+) หรือ partial index `WHERE col IS NOT NULL` |
-| `LIKE '%คำ%'` และ `ILIKE` ไม่ใช้ btree index | extension `pg_trgm` + GIN index · ค้นข้อความจริงจังใช้ `tsvector` |
-| `jsonb` ค้นด้วย `->>` ไม่ใช้ index | GIN index บนคอลัมน์ (`@>` · `?`) หรือ expression index บน `(meta->>'key')` |
-| `count(*)` ทั้งตารางเพื่อแสดงจำนวนหน้า | ใช้ค่าประมาณจาก `pg_class.reltuples` หรือเลิกแสดงจำนวนรวม (cursor pagination) |
+| `timestamp` (no time zone) silently drops the offset, so a `+07:00` machine and UTC store values with different meanings | Always `timestamptz` |
+| `serial` creates a separate sequence whose permissions and `DROP` do not follow the table | `GENERATED ALWAYS AS IDENTITY` (PG 10+) |
+| `ADD COLUMN ... NOT NULL` on a big table risks a long lock | With a constant `DEFAULT` the table is no longer rewritten (PG 11+) · a function DEFAULT such as `now()` still rewrites the whole table |
+| `ADD CONSTRAINT` (FK · CHECK) scans the whole table while holding the lock | Use `... NOT VALID` first, then run `VALIDATE CONSTRAINT` as a separate statement (lighter lock) |
+| DDL queues behind a long transaction, and every query after it waits too | Run `SET lock_timeout = '5s'` before every DDL, and rerun if it times out |
+| A unique index lets `NULL` repeat on many rows | `UNIQUE NULLS NOT DISTINCT` (PG 15+) or a partial index `WHERE col IS NOT NULL` |
+| `LIKE '%คำ%'` and `ILIKE` do not use a btree index | Extension `pg_trgm` + GIN index · for serious text search use `tsvector` |
+| `jsonb` search with `->>` does not use an index | GIN index on the column (`@>` · `?`) or an expression index on `(meta->>'key')` |
+| `count(*)` over the whole table to show a page count | Use the estimate from `pg_class.reltuples`, or drop the total count (cursor pagination) |
 
 ---
 
@@ -586,12 +586,12 @@ CREATE TABLE orders (
 );
 
 CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC)
-  WITH (ONLINE = ON);   -- Enterprise / Azure SQL เท่านั้น
+  WITH (ONLINE = ON);   -- Enterprise / Azure SQL only
 ```
 
-- `rowversion` ใช้เป็น ETag ตรวจว่ามีคนแก้ชนกันได้ตรง ๆ
-- ถ้าต้องเรียงลำดับภาษาไทย ให้ตั้ง collation `Thai_100_CI_AS` ที่ระดับคอลัมน์หรือฐานข้อมูล
-- `datetime` แบบเก่าละเอียดแค่ 3.33 มิลลิวินาที ให้ใช้ `datetime2` / `datetimeoffset` แทน
+- `rowversion` works directly as an ETag to detect conflicting edits.
+- To sort Thai correctly, set the collation `Thai_100_CI_AS` at the column or database level.
+- The old `datetime` has a precision of only 3.33 milliseconds. Use `datetime2` / `datetimeoffset` instead.
 
 ---
 
@@ -611,8 +611,8 @@ CREATE TABLE orders (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 ```
 
-- MySQL 8.0.12 ขึ้นไป `ADD COLUMN` ใช้ `ALGORITHM=INSTANT` ได้ (ก่อน 8.0.29 เพิ่มได้เฉพาะท้ายตาราง) ส่วนการเปลี่ยนชนิดข้อมูลยังเขียนตารางใหม่ (dev.mysql.com online DDL, ตรวจ 22 ต.ค. 2569) ตารางใหญ่ที่ต้อง rebuild จึงควรใช้ `pt-online-schema-change` หรือ `gh-ost`
-- ตั้งเวลาเซิร์ฟเวอร์เป็น UTC (`default_time_zone = '+00:00'`)
+- From MySQL 8.0.12, `ADD COLUMN` can use `ALGORITHM=INSTANT` (before 8.0.29 it could add only at the end of the table). Changing a data type still rewrites the table (dev.mysql.com online DDL, checked 22 Oct 2026 (B.E. 2569)). For big tables that need a rebuild, use `pt-online-schema-change` or `gh-ost`.
+- Set the server time to UTC (`default_time_zone = '+00:00'`).
 
 ---
 
@@ -626,7 +626,7 @@ db.createCollection("orders", {
     properties: {
       orderNo:     { bsonType: "string" },
       customerId:  { bsonType: "objectId" },
-      totalAmount: { bsonType: "decimal" },   // ผิด: อย่าใช้ double กับเงิน
+      totalAmount: { bsonType: "decimal" },   // wrong: do not use double for money
       createdAt:   { bsonType: "date" }
     }
   }}
@@ -635,9 +635,9 @@ db.orders.createIndex({ orderNo: 1 }, { unique: true });
 db.orders.createIndex({ customerId: 1, createdAt: -1 });
 ```
 
-- ฝัง (embed) เมื่อข้อมูลลูก **อ่านคู่กับพ่อเสมอ และไม่โตไม่จำกัด** นอกนั้นใช้การอ้างอิง
-- เอกสาร 1 ใบมีเพดาน 16 MB อาเรย์ที่โตเรื่อย ๆ จึงชนเพดานสักวัน
-- เงินใช้ `Decimal128` เท่านั้น
+- Embed when the child data is **always read together with the parent and does not grow without limit**. Otherwise use references.
+- One document has a 16 MB ceiling, so an array that keeps growing will hit it one day.
+- Use `Decimal128` for money, and nothing else.
 
 ---
 
@@ -645,20 +645,20 @@ db.orders.createIndex({ customerId: 1, createdAt: -1 });
 
 ```bash
 dotnet ef migrations add AddOrderStatus
-dotnet ef migrations script <from> <to> -o migrate.sql   # ถูก: ตรวจ SQL ก่อนรันจริง
-dotnet ef database update                                # dev เท่านั้น
+dotnet ef migrations script <from> <to> -o migrate.sql   # right: review the SQL before the real run
+dotnet ef database update                                # dev only
 ```
 
-> **บน production รัน script ที่ตรวจแล้ว ไม่ใช่ `database update`**
-> คำสั่งนั้นต้องให้ connection ของแอปมีสิทธิ์แก้ schema ซึ่งไม่ควรมีตั้งแต่แรก
+> **On production, run the reviewed script, not `database update`.**
+> That command needs the app's connection to have permission to change the schema, which it should not have in the first place.
 
 ```csharp
 modelBuilder.Entity<Order>(e => {
     e.ToTable("orders");
     e.Property(x => x.TotalAmount).HasColumnType("decimal(19,4)");
     e.HasIndex(x => new { x.Status, x.CreatedAt }).HasDatabaseName("ix_orders_status_created");
-    e.HasQueryFilter(x => x.DeletedAt == null);          // soft delete ทั้งระบบ
-    e.Property(x => x.RowVersion).IsRowVersion();        // ตรวจการแก้ชนกัน
+    e.HasQueryFilter(x => x.DeletedAt == null);          // soft delete across the whole system
+    e.Property(x => x.RowVersion).IsRowVersion();        // detect conflicting edits
 });
 ```
 
@@ -682,12 +682,12 @@ model Order {
 ```
 
 ```bash
-npx prisma migrate dev --name add_order_status   # dev — สร้างไฟล์ migration
-npx prisma migrate deploy                        # production — รันเฉพาะที่มีอยู่แล้ว
+npx prisma migrate dev --name add_order_status   # dev — creates the migration file
+npx prisma migrate deploy                        # production — runs only the existing ones
 ```
 
-- `Decimal` ของ Prisma คืนค่าเป็น object ไม่ใช่ number ให้คำนวณด้วย `decimal.js` อย่าแปลงเป็น float
-- `BigInt` แปลงเป็น JSON ตรง ๆ ไม่ได้ ต้องแปลงเป็น string ที่ชั้น API
+- Prisma's `Decimal` returns an object, not a number. Calculate with `decimal.js` and do not convert to float.
+- `BigInt` cannot be converted to JSON directly. Convert it to a string at the API layer.
 
 ---
 
@@ -699,49 +699,49 @@ alembic upgrade head
 alembic downgrade -1
 ```
 
-แยกเป็น 3 migration (1 migration ทำเรื่องเดียว):
+Split into 3 migrations (1 migration does one thing):
 
 ```python
-# 1) schema: เพิ่มคอลัมน์ที่ยังว่างได้
+# 1) schema: add a nullable column
 def upgrade():
     op.add_column("orders", sa.Column("status", sa.String(20), nullable=True))
 
-# 2) ข้อมูล: เติมค่าเดิม (ตารางใหญ่ให้ทำเป็นชุดเล็ก ๆ)
+# 2) data: backfill existing values (on a big table, do it in small batches)
 def upgrade():
     op.execute("UPDATE orders SET status = 'draft' WHERE status IS NULL")
 
-# 3) schema: บังคับ NOT NULL และสร้าง index
+# 3) schema: enforce NOT NULL and create the index
 def upgrade():
     op.alter_column("orders", "status", nullable=False)
-    # CREATE INDEX CONCURRENTLY ห้ามอยู่ใน transaction จึงต้องออกจาก transaction ของ Alembic
+    # CREATE INDEX CONCURRENTLY must not run inside a transaction, so step out of Alembic's transaction
     with op.get_context().autocommit_block():
         op.create_index("ix_orders_status_created", "orders", ["status", "created_at"],
                         postgresql_concurrently=True)
 ```
 
-> `--autogenerate` **ไม่เห็น** การเปลี่ยนชื่อ (มองเป็นลบแล้วเพิ่มใหม่ ข้อมูลจึงหาย)
-> อ่านไฟล์ที่มันสร้างก่อน commit ทุกครั้ง
+> `--autogenerate` **does not see** renames (it reads them as a drop plus a new add, so the data is lost).
+> Always read the file it generates before you commit.
 
 ---
 
-## 9 · คำสั่งตรวจ query ช้า
+## 9 · Slow query commands
 
-| ฐานข้อมูล | คำสั่ง |
+| Database | Command |
 |---|---|
-| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) <query>;` · ส่วนขยาย `pg_stat_statements` |
-| SQL Server | เปิด "Include Actual Execution Plan" · `sys.dm_exec_query_stats` |
+| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) <query>;` · extension `pg_stat_statements` |
+| SQL Server | Turn on "Include Actual Execution Plan" · `sys.dm_exec_query_stats` |
 | MySQL | `EXPLAIN ANALYZE <query>;` · `performance_schema` |
 | MongoDB | `db.orders.find(...).explain("executionStats")` |
 
-**สัญญาณอันตรายที่ต้องแก้:** `Seq Scan` / `Table Scan` บนตารางใหญ่ ·
-จำนวนแถวที่ประมาณไว้ต่างจากที่ได้จริงเกิน 10 เท่า · `Nested Loop` ที่วนหลักแสนรอบ
+**Danger signs to fix:** `Seq Scan` / `Table Scan` on a big table ·
+estimated row count differs from the actual by more than 10 times · a `Nested Loop` that runs hundreds of thousands of times
 
 
 ## reference: warehouse-modeling.md
 
 # Warehouse modeling — ELT, stack, star schema, SCD
 
-สำหรับคลังข้อมูลเพื่อวิเคราะห์ (analytics warehouse) ไม่ใช่ฐานข้อมูลของแอป
+For an analytics warehouse, not an application database.
 
 **สารบัญ:**
 
@@ -768,7 +768,7 @@ Source → Load raw → Transform in warehouse
 
 ## Tech Stack (2026 Recommendations)
 
-> รายชื่อเครื่องมือจากความรู้ของโมเดล ยังไม่ได้ตรวจกับเว็บทางการ (รอยืนยัน) — ตรวจก่อนแนะนำ
+> The tool list comes from model knowledge and has not been checked against official websites (รอยืนยัน, awaiting confirmation). Check before recommending.
 
 ### Warehouse / Lake
 | Tool | Best for | Cost |
@@ -861,112 +861,112 @@ Customer table: current_city, previous_city
 
 Use when adding API endpoints or checking API consistency
 
-# ข้อตกลงของ Application Programming Interface (API)
+# Application Programming Interface (API) conventions
 
-> **กฎข้อเดียว:** ตัดสินใจครั้งเดียว ใช้ทุก endpoint
-> API ที่ทุก endpoint ทำเหมือนกัน แม้ "ไม่ค่อยถูกตามทฤษฎี" ใช้ง่ายกว่า
-> API ที่แต่ละ endpoint ถูกต้องคนละแบบ เพราะแบบหลังฝั่งเรียกต้องเดาใหม่ทุกครั้ง
+> **The one rule:** decide once, apply to every endpoint.
+> An API where every endpoint behaves the same, even if "not quite right in theory", is easier to use
+> than an API where each endpoint is correct in its own way, because with the latter the caller must guess again every time.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เริ่มออกแบบ API ตัวแรกของโปรเจกต์
-- จะเพิ่ม endpoint ใน API เดิม และอยากให้เข้ากับของเดิม
-- รีวิว API แล้วรู้สึกว่าแต่ละส่วนไม่เหมือนกัน
-- ต้องตอบว่า "เปลี่ยนแบบนี้แล้ว client พังไหม"
+- Starting to design the first API of a project
+- Adding an endpoint to an existing API and wanting it to match what is there
+- Reviewing an API and feeling that its parts are not alike
+- Needing to answer "if we change it this way, will clients break?"
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or alongside
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ ให้ครบ | command `/api-design` | แทน |
-| health check, error envelope, graceful shutdown | `web-service-essentials` | แทน |
-| ตาราง คอลัมน์ ความสัมพันธ์ | `database-design` | แทน |
-| token, scope, สิทธิ์ | `auth-implementation-patterns` | แทน |
-| correlation id ที่โผล่ใน error | `logging-standards` | คู่ |
-| test สัญญาระหว่างระบบ | `testing-standards` | คู่ |
-| บันทึกเหตุผลที่เลือกข้อตกลงนี้ | `adr-writer` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Design all the endpoints of one feature | command `/api-design` | instead |
+| Health check, error envelope, graceful shutdown | `web-service-essentials` | instead |
+| Tables, columns, relations | `database-design` | instead |
+| Tokens, scopes, permissions | `auth-implementation-patterns` | alongside |
+| Correlation id that appears in errors | `logging-standards` | alongside |
+| Contract tests between systems | `testing-standards` | alongside |
+| Recording why this convention was chosen | `adr-writer` | alongside |
+| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 
-**แม่แบบเอกสารข้อตกลงที่คัดลอกไปใช้ได้เลย** → `assets/API-CONVENTIONS.md`
-
----
-
-## 1 · เอกสารข้อตกลงต้องมีจริง
-
-วางไฟล์ `docs/API-CONVENTIONS.md` (แม่แบบอยู่ที่ `assets/API-CONVENTIONS.md`)
-ทุกข้อในหน้านี้ที่ตัดสินใจแล้ว ให้เขียนลงไฟล์นั้น พร้อมวันที่และเหตุผลสั้น ๆ
-
-> ข้อตกลงที่อยู่ในหัวคนใดคนหนึ่ง ไม่ใช่ข้อตกลง — คนที่เข้าทีมเดือนหน้าจะทำอีกแบบ
+**A template of the conventions document that you can copy and use** → `assets/API-CONVENTIONS.md`
 
 ---
 
-## 2 · ตั้งชื่อ URL
+## 1 · The conventions document must exist
+
+Put the file `docs/API-CONVENTIONS.md` in place (the template is at `assets/API-CONVENTIONS.md`).
+Write every decision made from this page into that file, with the date and a short reason.
+
+> A convention that lives in one person's head is not a convention — someone who joins the team next month will do it another way.
+
+---
+
+## 2 · Naming URLs
 
 ```
-GET    /v1/orders                 รายการ
-POST   /v1/orders                 สร้าง
-GET    /v1/orders/{id}            รายตัว
-PATCH  /v1/orders/{id}            แก้บางส่วน
-PUT    /v1/orders/{id}            แทนที่ทั้งตัว
-DELETE /v1/orders/{id}            ลบ
-GET    /v1/orders/{id}/items      ทรัพยากรลูก
-POST   /v1/orders/{id}/cancel     การกระทำที่ไม่ใช่ CRUD (Create, Read, Update, Delete)
+GET    /v1/orders                 list
+POST   /v1/orders                 create
+GET    /v1/orders/{id}            single item
+PATCH  /v1/orders/{id}            partial update
+PUT    /v1/orders/{id}            replace the whole item
+DELETE /v1/orders/{id}            delete
+GET    /v1/orders/{id}/items      child resource
+POST   /v1/orders/{id}/cancel     an action that is not CRUD (Create, Read, Update, Delete)
 ```
 
-| กฎ | ✓ | ✗ |
+| Rule | ✓ | ✗ |
 |---|---|---|
-| คำนาม พหูพจน์ | `/orders` | `/getOrders`, `/order` |
-| ตัวพิมพ์เล็ก ขีดกลาง | `/purchase-orders` | `/purchaseOrders`, `/purchase_orders` |
-| ความลึกไม่เกิน 2 ชั้น | `/orders/{id}/items` | `/customers/{a}/orders/{b}/items/{c}/logs` |
-| กริยาใช้เมื่อไม่ใช่ CRUD จริง ๆ | `POST /orders/{id}/cancel` | `POST /orders/cancelOrder` |
+| Plural nouns | `/orders` | `/getOrders`, `/order` |
+| Lowercase, hyphens | `/purchase-orders` | `/purchaseOrders`, `/purchase_orders` |
+| At most 2 levels deep | `/orders/{id}/items` | `/customers/{a}/orders/{b}/items/{c}/logs` |
+| Use a verb only when it is truly not CRUD | `POST /orders/{id}/cancel` | `POST /orders/cancelOrder` |
 
-**การกระทำที่ไม่ใช่ CRUD** (อนุมัติ ยกเลิก ส่งซ้ำ) — ใช้ `POST /{resource}/{id}/{action}`
-อย่าดัดให้เป็น `PATCH` ที่แก้ `status` เพราะการเปลี่ยนสถานะมักมีผลข้างเคียงมากกว่าการแก้ฟิลด์ทั่วไป
+**An action that is not CRUD** (approve, cancel, resend) uses `POST /{resource}/{id}/{action}`.
+Do not bend it into a `PATCH` that edits `status`, because a status change usually has more side effects than an ordinary field edit.
 
-**วิธี `PATCH`:** เลือกแบบเดียวทั้งระบบ โดยแนะนำให้ส่งเฉพาะฟิลด์ที่แก้ (`merge patch`)
-และต้องกำหนดให้ชัดว่า `null` แปลว่า "ล้างค่า" หรือ "ไม่แตะ" (ดูข้อ 6)
+**How to use `PATCH`:** pick one style for the whole system. Sending only the changed fields (`merge patch`) is recommended,
+and you must define clearly whether `null` means "clear the value" or "leave it alone" (see section 6).
 
 ---
 
-## 3 · versioning
+## 3 · Versioning
 
-| วิธี | ข้อดี | ข้อเสีย |
+| Method | Pros | Cons |
 |---|---|---|
-| **ใน path** `/v1/orders` | เห็นชัด ทดสอบง่าย แคชง่าย | URL เปลี่ยนตอนขึ้นเวอร์ชัน |
-| ใน header `Accept: application/vnd.acme.v1+json` | URL คงที่ | มองไม่เห็นตอน debug ลืมส่งบ่อย |
+| **In the path** `/v1/orders` | Obvious, easy to test, easy to cache | The URL changes when the version goes up |
+| In a header `Accept: application/vnd.acme.v1+json` | The URL stays fixed | Invisible when debugging, often forgotten |
 
-> **เลือก path** ถ้าไม่มีเหตุผลเฉพาะ — ทุกคนเห็นเวอร์ชันได้จากบรรทัดเดียวใน log
+> **Choose the path** unless there is a specific reason — everyone can see the version from a single line in the log.
 
-**เปลี่ยนแบบไหนแล้วฝั่งเรียกพัง:**
+**Which changes break callers:**
 
-| การเปลี่ยน | พังไหม |
+| Change | Breaks? |
 |---|:--:|
-| เพิ่ม endpoint ใหม่ | ไม่ |
-| เพิ่มฟิลด์ **ที่ไม่บังคับ** ใน request | ไม่ |
-| เพิ่มฟิลด์ใน response | ไม่* |
-| เพิ่มค่า enum ใหม่ | **พัง** — client ที่ `switch` ครบทุกค่าจะเจอค่าที่ไม่รู้จัก |
-| ลบ/เปลี่ยนชื่อฟิลด์ | **พัง** |
-| เปลี่ยนชนิดข้อมูล (`"12"` → `12`) | **พัง** |
-| ทำให้ฟิลด์ที่เคยไม่บังคับกลายเป็นบังคับ | **พัง** |
-| เปลี่ยน HTTP status ที่คืนในกรณีเดิม | **พัง** |
-| ทำให้กฎ validation เข้มขึ้น | **พัง** |
+| Add a new endpoint | No |
+| Add an **optional** field to a request | No |
+| Add a field to a response | No* |
+| Add a new enum value | **Breaks** — a client whose `switch` covers every value will meet an unknown one |
+| Remove/rename a field | **Breaks** |
+| Change a data type (`"12"` → `12`) | **Breaks** |
+| Make a formerly optional field required | **Breaks** |
+| Change the HTTP status returned in an existing case | **Breaks** |
+| Make a validation rule stricter | **Breaks** |
 
-\* ต่อเมื่อบอกฝั่งเรียกไว้แต่แรกว่า "ฟิลด์ที่ไม่รู้จักให้ข้ามไป"
-ข้อนี้ต้องเขียนไว้ใน `API-CONVENTIONS.md` ไม่ใช่หวังเอาเอง
+\* Only when callers were told from the start to "skip fields you do not recognize".
+This must be written in `API-CONVENTIONS.md`, not left to hope.
 
-**ขึ้นเวอร์ชันใหญ่เมื่อจำเป็นจริง** เพราะทุกเวอร์ชันที่ยังเปิดอยู่คือโค้ดอีกชุดที่ต้องดูแล
+**Raise the major version only when truly needed**, because every version still open is another body of code to maintain.
 
 ---
 
-## 4 · pagination
+## 4 · Pagination
 
-**ทุก endpoint ที่คืนรายการต้องมี pagination ตั้งแต่วันแรก** ไม่มีข้อยกเว้น
-รายการที่ "มีไม่กี่รายการหรอก" อีก 2 ปีจะมี 10,000 รายการ
+**Every endpoint that returns a list must have pagination from day one**, with no exceptions.
+A list that "only has a few items" will have 10,000 in 2 years.
 
-| วิธี | ใช้เมื่อ | ข้อจำกัด |
+| Method | Use when | Limits |
 |---|---|---|
-| **cursor** `?limit=50&cursor=eyJ...` | ค่าเริ่มต้น · ข้อมูลเยอะ · มีข้อมูลเพิ่มระหว่างเปิดดู | กระโดดไปหน้า 7 ไม่ได้ |
-| offset `?limit=50&offset=100` | ต้องมีเลขหน้าให้กด · ข้อมูลไม่เยอะ | ยิ่งหน้าลึกยิ่งช้า · ถ้ามีแถวแทรกระหว่างเปิดดู ข้อมูลจะซ้ำหรือหาย |
+| **cursor** `?limit=50&cursor=eyJ...` | Default · lots of data · data is added while the user is browsing | Cannot jump to page 7 |
+| offset `?limit=50&offset=100` | Page numbers must be clickable · little data | Slower the deeper the page · if a row is inserted while browsing, data repeats or goes missing |
 
 ```jsonc
 // GET /v1/orders?limit=2 → 200
@@ -974,161 +974,161 @@ POST   /v1/orders/{id}/cancel     การกระทำที่ไม่ใ�
   "data": [ { "id": "1042" }, { "id": "1041" } ],
   "page": {
     "limit": 2,
-    "nextCursor": "eyJpZCI6MTA0MX0",   // null เมื่อหมดแล้ว
+    "nextCursor": "eyJpZCI6MTA0MX0",   // null when there is no more
     "hasMore": true
   }
 }
 ```
 
-- ห่อรายการไว้ใน `data` เสมอ เพราะถ้าตอบเป็นอาเรย์เปล่า ๆ วันหลังจะเติมข้อมูลหน้าไม่ได้
-- `limit` มีค่าเริ่มต้นและ**เพดานที่บังคับฝั่งเซิร์ฟเวอร์** (เช่น เริ่มต้น 20 สูงสุด 100)
-- `totalCount` นับแพง จึงให้ขอเป็นตัวเลือก `?includeTotal=true` อย่านับทุกครั้ง
-- **cursor ต้องทึบ** (ฝั่งเรียกห้ามแกะหรือประกอบเอง)
+- Always wrap the list in `data`, because a bare array leaves no room to add page information later.
+- `limit` has a default and a **ceiling enforced on the server** (for example default 20, maximum 100).
+- `totalCount` is expensive to count, so make it optional with `?includeTotal=true`. Do not count every time.
+- **The cursor must be opaque** (callers must never decode or build one themselves).
 
 ---
 
-## 5 · filtering · sorting · ฟิลด์ที่ขอ
+## 5 · Filtering · sorting · requested fields
 
 ```
 GET /v1/orders?status=confirmed&createdAt[gte]=2026-01-01&sort=-createdAt&fields=id,orderNo,total
 ```
 
-| เรื่อง | ข้อตกลง |
+| Topic | Convention |
 |---|---|
-| กรองค่าเท่ากับ | `?status=confirmed` |
-| หลายค่า | `?status=confirmed,shipped` |
-| ช่วง | `?createdAt[gte]=...&createdAt[lt]=...` |
-| เรียง | `?sort=-createdAt,orderNo` — `-` คือมากไปน้อย |
-| ค้นหาข้อความ | `?q=สมชาย` แยกจากการกรอง |
-| เลือกฟิลด์ | `?fields=id,orderNo` |
+| Filter by equal value | `?status=confirmed` |
+| Several values | `?status=confirmed,shipped` |
+| Range | `?createdAt[gte]=...&createdAt[lt]=...` |
+| Sort | `?sort=-createdAt,orderNo` — `-` means descending |
+| Text search | `?q=สมชาย` kept separate from filtering |
+| Select fields | `?fields=id,orderNo` |
 
-- **รับเฉพาะฟิลด์ที่กำหนดไว้** ถ้ารับชื่อฟิลด์อะไรก็ได้ จะเกิดช่องโหว่ และ query ที่ไม่มี index
-- พารามิเตอร์ที่ไม่รู้จัก ตอบ `400` ดีกว่าข้ามเงียบ ๆ ไม่งั้นฝั่งเรียกพิมพ์ผิดแล้วได้ข้อมูลผิดโดยไม่รู้ตัว
+- **Accept only the fields you have defined.** If any field name is accepted, you get security holes and queries with no index.
+- For an unknown parameter, answering `400` is better than skipping it silently. Otherwise a caller who mistypes gets wrong data without knowing.
 
 ---
 
-## 6 · รูปแบบข้อมูล
+## 6 · Data formats
 
-| ข้อมูล | รูปแบบ | ตัวอย่าง |
+| Data | Format | Example |
 |---|---|---|
-| ชื่อฟิลด์ | `camelCase` ทั้งระบบ | `createdAt` |
-| เวลา | RFC 3339 · UTC · ลงท้าย `Z` | `"2026-09-25T09:42:13.482Z"` |
-| วันที่ล้วน | `YYYY-MM-DD` | `"2026-09-25"` |
-| เงิน | ตัวเลขเป็น**สตริง** + สกุลเงินแยก | `{ "amount": "1250.00", "currency": "THB" }` |
-| identifier | **สตริงเสมอ** | `"1042"` ไม่ใช่ `1042` |
-| enum | `SCREAMING_SNAKE` หรือ `lower_snake` เลือกแบบเดียว | `"CONFIRMED"` |
-| ระยะเวลา | วินาทีเป็นตัวเลข ตั้งชื่อให้รู้หน่วย | `"timeoutSeconds": 30` |
-| ประเทศ / สกุลเงิน / ภาษา | ISO 3166 · ISO 4217 · BCP 47 | `"TH"` · `"THB"` · `"th-TH"` |
+| Field names | `camelCase` across the system | `createdAt` |
+| Time | RFC 3339 · UTC · ends with `Z` | `"2026-09-25T09:42:13.482Z"` |
+| Date only | `YYYY-MM-DD` | `"2026-09-25"` |
+| Money | the number as a **string** + a separate currency | `{ "amount": "1250.00", "currency": "THB" }` |
+| identifier | **always a string** | `"1042"` not `1042` |
+| enum | `SCREAMING_SNAKE` or `lower_snake`, pick one style | `"CONFIRMED"` |
+| Duration | seconds as a number, named so the unit is clear | `"timeoutSeconds": 30` |
+| Country / currency / language | ISO 3166 · ISO 4217 · BCP 47 | `"TH"` · `"THB"` · `"th-TH"` |
 
-> **id เป็นตัวเลขใน JSON คือระเบิดเวลา** — JavaScript เก็บจำนวนเต็มได้ปลอดภัยถึง 9,007,199,254,740,991
-> `bigint` ที่เกินนั้นจะถูกปัดเศษเงียบ ๆ ตอน `JSON.parse` และถ้าจะเปลี่ยนเป็นสตริงทีหลังก็เป็น breaking change
+> **A numeric id in JSON is a time bomb** — JavaScript stores integers safely up to 9,007,199,254,740,991.
+> A `bigint` above that is silently rounded at `JSON.parse`, and changing it to a string later is a breaking change.
 >
-> **เงินเป็น float ใน JSON** — `1250.10` ที่ผ่าน 2 ภาษาโปรแกรมอาจกลายเป็น `1250.0999999999999`
+> **Money as a float in JSON** — `1250.10` passed through 2 programming languages may become `1250.0999999999999`.
 
-**`null` กับ "ไม่มีฟิลด์" ต้องหมายถึงคนละอย่าง:**
+**`null` and "no field" must mean different things:**
 
-- ใน response ฟิลด์ที่มีแต่ไม่มีค่าให้ส่ง `null` ไม่ตัดทิ้ง ฝั่งเรียกจะได้ไม่ต้องเช็ค 2 แบบ
-- ใน `PATCH` ถ้าส่ง `{"note": null}` แปลว่าล้างค่า ถ้าไม่ส่งคีย์ `note` เลยแปลว่าไม่แตะ
+- In a response, a field that exists but has no value is sent as `null`, not dropped, so callers do not have to check 2 cases.
+- In a `PATCH`, sending `{"note": null}` means clear the value, and leaving out the `note` key entirely means leave it alone.
 
-**อาเรย์ว่างคือ `[]` ไม่ใช่ `null`** ฝั่งเรียกจะวนลูปได้เลย
-
----
-
-## 7 · error
-
-รูปแบบ error (RFC 9457 · `requestId` · `errors` แบบ array `{field, code, message}`) และตัวอย่างอยู่ที่ `web-service-essentials` ข้อ 2 ที่เดียว ใช้ตามนั้น
-ที่ต้องตกลงเพิ่มคือ **error ระดับฟิลด์**:
-
-- **`code` ให้โปรแกรมอ่าน · `message` ให้คนอ่าน** อย่าให้ฝั่งเรียกต้องเอาข้อความไปเขียนเงื่อนไข
-- ชี้ตำแหน่งฟิลด์ด้วยเส้นทางเต็ม รวมดัชนีของอาเรย์
-- **คืน error ครบทุกฟิลด์ในครั้งเดียว** ไม่ใช่ทีละตัว ผู้ใช้จะได้ไม่ต้องกดส่ง 5 รอบ
-- ถ้ารองรับหลายภาษา ให้เลือกข้อความไทยหรืออังกฤษจาก `Accept-Language`
-
-**เลือก status ให้ตรง:** `400` รูปแบบคำขอผิด · `401` ยังไม่ได้ยืนยันตัวตน · `403` ยืนยันแล้วแต่ไม่มีสิทธิ์ ·
-`404` ไม่มีหรือไม่ให้รู้ว่ามี · `409` ชนกับสถานะปัจจุบัน · `422` รูปแบบถูกแต่ข้อมูลไม่ผ่านกฎ · `429` เรียกถี่เกิน
+**An empty array is `[]`, not `null`**, so callers can loop over it directly.
 
 ---
 
-## 8 · เรียกซ้ำไม่เกิดผลซ้ำ และการแก้ชนกัน
+## 7 · Errors
 
-### idempotency key (รหัสกำกับคำขอ — ส่งซ้ำแล้วไม่ทำงานซ้ำ)
+The error format (RFC 9457 · `requestId` · an `errors` array of `{field, code, message}`) and examples live in one place, `web-service-essentials` section 2. Follow that.
+What still needs agreement is the **field-level error**:
 
-**บังคับกับทุก `POST` ที่มีผลทางการเงินหรือส่งของออกไปข้างนอก**
+- **`code` is for programs, `message` is for people.** Never make callers write conditions against the message text.
+- Point to the field location with the full path, including array indexes.
+- **Return the errors for all fields at once**, not one at a time, so users do not have to submit 5 times.
+- If several languages are supported, choose Thai or English text from `Accept-Language`.
+
+**Pick the status to match:** `400` malformed request · `401` not authenticated · `403` authenticated but not permitted ·
+`404` does not exist, or you do not want to reveal that it exists · `409` conflicts with the current state · `422` well-formed but the data fails the rules · `429` too many calls
+
+---
+
+## 8 · Repeat calls without repeat effects, and edit conflicts
+
+### idempotency key (a request code — sending it again does not do the work again)
+
+**Required on every `POST` that has a financial effect or sends something out to the outside world.**
 
 ```
 POST /v1/payments
-Idempotency-Key: 7f3c1e10-...        ← ฝั่งเรียกสร้าง เก็บไว้ใช้ตอน retry
+Idempotency-Key: 7f3c1e10-...        ← created by the caller, kept for use when retrying
 ```
 
-- เซิร์ฟเวอร์เก็บ key คู่กับผลลัพธ์ไว้อย่างน้อย 24 ชั่วโมง
-- key เดิมกับเนื้อหาเดิม ให้คืนผลเดิม ไม่ทำงานซ้ำ
-- key เดิมแต่เนื้อหา**ต่าง** ให้ตอบ `422` ไม่ทำงานใหม่
-- เครือข่ายขาดระหว่างรอคำตอบเป็นเรื่องปกติ ไม่ใช่กรณีพิเศษ ฝั่งเรียกจึง retry เสมอ
+- The server stores the key together with the result for at least 24 hours.
+- Same key with the same body: return the earlier result and do not repeat the work.
+- Same key with a **different** body: answer `422` and do not do new work.
+- A network drop while waiting for the answer is normal, not a special case, so callers always retry.
 
-### แก้ชนกัน (optimistic concurrency)
+### Edit conflicts (optimistic concurrency)
 
 ```
 GET   /v1/orders/1042        → 200  ETag: "v7"
 PATCH /v1/orders/1042        If-Match: "v7"
-                             → 200 ปกติ · 412 ถ้ามีคนแก้ไปก่อนแล้ว
+                             → 200 normally · 412 if someone edited it first
 ```
 
-ถ้าไม่มี คนที่กดบันทึกทีหลังจะทับงานของคนแรกโดยไม่มีใครรู้
+Without this, whoever saves second overwrites the first person's work and nobody knows.
 
 ---
 
-## 9 · rate limit
+## 9 · Rate limit
 
 ```
 X-RateLimit-Limit: 1000
 X-RateLimit-Remaining: 997
 X-RateLimit-Reset: 1758790000
-Retry-After: 42                ← ต้องมีคู่กับ 429 เสมอ
+Retry-After: 42                ← must always accompany a 429
 ```
 
-ถ้า `429` ไม่มี `Retry-After` ฝั่งเรียกต้องเดาเอง และส่วนใหญ่เดาว่า "ลองใหม่ทันที"
+If a `429` has no `Retry-After`, the caller must guess, and most guess "try again at once".
 
 ---
 
-## 10 · การเลิกใช้ endpoint
+## 10 · Retiring an endpoint
 
-1. ประกาศล่วงหน้า พร้อมบอกว่าใช้อะไรแทน
-2. ส่ง header ในทุก response ของ endpoint นั้น:
+1. Announce in advance, and say what to use instead.
+2. Send these headers in every response of that endpoint:
    ```
    Deprecation: @1790812800
    Sunset: Wed, 31 Dec 2026 23:59:59 GMT
    Link: <https://docs.acme.co/v2/orders>; rel="successor-version"
    ```
-   `Deprecation` ตามมาตรฐาน Request for Comments (RFC) 9745 (มี.ค. 2025) ต้องเป็นวันที่แบบ `@<วินาที unix>` (ตัวอย่างนี้คือ 1 ต.ค. 2026 00:00 UTC) ไม่ใช่ `true` · ตรวจ 22 ต.ค. 2569
-3. **ดูจาก log ว่ายังมีใครเรียกอยู่** แล้วติดต่อเขาตรง ๆ อย่ารอให้เงียบไปเอง
-4. ปิดจริงหลังวันที่ประกาศ ไม่ใช่ก่อน
+   `Deprecation` follows the Request for Comments (RFC) 9745 standard (Mar 2025). It must be a date in the form `@<unix seconds>` (this example is 1 Oct 2026 00:00 UTC), not `true`. Checked 22 Oct 2026 (B.E. 2569).
+3. **Check the logs for who still calls it**, then contact them directly. Do not wait for them to go quiet on their own.
+4. Close it only after the announced date, not before.
 
-ระยะเวลาที่พอดี: API ภายในให้ 1 รอบ release ส่วน API ที่คนนอกใช้ให้อย่างน้อย 6 เดือน
+A fitting period: for an internal API, 1 release cycle. For an API used by outsiders, at least 6 months.
 
 ---
 
-## 11 · ตรวจก่อนปล่อย endpoint ใหม่
+## 11 · Check before releasing a new endpoint
 
-ไล่ทุกข้อกับ endpoint ที่เพิ่ม ตกข้อเดียวยังไม่ merge (แนวคิดจาก ECC api-design)
+Go through every item against the endpoint you added. Fail one and it is not merged yet (idea from ECC api-design).
 
-- [ ] URL เป็นคำนามพหูพจน์ตามข้อ 2 · อยู่ใต้เวอร์ชันตามข้อ 3 · ไม่มี `GET` ที่เปลี่ยนข้อมูล
-- [ ] รายการทุกตัวมี pagination และเพดานขนาดหน้า (ข้อ 4) · filter และ sort ใช้ชื่อพารามิเตอร์เดียวกับ endpoint เดิม (ข้อ 5)
-- [ ] วันที่ · id · เงิน อยู่ในรูปแบบของข้อ 6 · response ไม่ใช่ entity ของฐานข้อมูลตรง ๆ
-- [ ] error ทุกตัวตาม `web-service-essentials` §2 และมี `code` คงที่ (ข้อ 7) · คำขอที่สร้างหรือจ่ายเงินรับ idempotency key · การแก้รับ `If-Match` (ข้อ 8)
-- [ ] ระบุ auth และ rate limit (ข้อ 9) · อยู่ใน OpenAPI แล้ว และตัวอย่าง cURL ในเอกสารรันผ่านจริง
-- [ ] มี contract test หรือ test ระดับ endpoint อย่างน้อย 1 กรณีสำเร็จ 1 กรณี error — ตรวจ response กับ OpenAPI ใน CI · Pact เมื่อผู้เรียกแยกทีม · `oasdiff breaking` ทุก PR: [`references/contract-testing.md`](references/contract-testing.md)
+- [ ] The URL is a plural noun per section 2 · sits under a version per section 3 · has no `GET` that changes data
+- [ ] Every list has pagination and a page-size ceiling (section 4) · filter and sort use the same parameter names as existing endpoints (section 5)
+- [ ] Dates · ids · money are in the formats of section 6 · the response is not a raw database entity
+- [ ] Every error follows `web-service-essentials` §2 and has a fixed `code` (section 7) · a request that creates or pays accepts an idempotency key · an edit accepts `If-Match` (section 8)
+- [ ] Auth and rate limit are stated (section 9) · it is in OpenAPI, and the cURL examples in the docs really run
+- [ ] There is a contract test or an endpoint-level test with at least 1 success case and 1 error case — check the response against OpenAPI in CI · Pact when the caller is on another team · `oasdiff breaking` on every PR: [`references/contract-testing.md`](references/contract-testing.md)
 
 ## 12 · Anti-patterns
 
-- **`200 OK` พร้อม `{"success": false}`** — ตัวเฝ้าระบบและ log ทั้งหมดจะมองไม่เห็นว่าพัง
-- **กริยาใน URL** — `/createOrder`, `/getOrderById`
-- **รายการที่ไม่มี pagination** — วันหนึ่งจะคืนข้อมูล 50,000 แถวในครั้งเดียว
-- **รูปแบบวันที่คนละแบบในแต่ละ endpoint** — เช่น `"25/09/2026"` ที่ไม่มีใครรู้ว่าวันหรือเดือนขึ้นก่อน
-- **ส่ง entity ของฐานข้อมูลออกไปตรง ๆ** — เพิ่มคอลัมน์ทีไร API เปลี่ยนตามโดยไม่ตั้งใจ และเสี่ยงข้อมูลภายในหลุด
-- **ชื่อฟิลด์ปนกัน** `created_at` กับ `updatedAt` ใน response เดียวกัน
-- **`GET` ที่เปลี่ยนข้อมูล** — ตัวโหลดหน้าเว็บล่วงหน้าจะยิงเองโดยไม่มีใครกด
-- **error message เปลี่ยนไปเรื่อย ๆ** โดยไม่มี `code` คงที่
-- **ไม่มีเอกสาร** — OpenAPI ที่สร้างจากโค้ดจริง ดีกว่าเอกสารที่เขียนมือแล้วไม่ตรง
+- **`200 OK` with `{"success": false}`** — monitors and logs will not see that it failed.
+- **Verbs in the URL** — `/createOrder`, `/getOrderById`
+- **A list with no pagination** — one day it will return 50,000 rows at once.
+- **A different date format on each endpoint** — for example `"25/09/2026"`, where nobody knows whether day or month comes first.
+- **Sending a database entity out as is** — every time a column is added, the API changes by accident, and internal data may leak.
+- **Mixed field names** such as `created_at` and `updatedAt` in one response.
+- **A `GET` that changes data** — a web page prefetcher will fire it by itself with nobody clicking.
+- **Error messages that keep changing** with no fixed `code`.
+- **No documentation** — an OpenAPI generated from the real code is better than hand-written docs that do not match.
 
 
 ## reference: contract-testing.md
@@ -1179,61 +1179,61 @@ Use when building or reviewing an HTTP backend
 
 # Web Service Essentials
 
-> **กฎข้อเดียว:** ก่อนเขียน endpoint ธุรกิจตัวแรก service ต้องตอบได้ว่า
-> "ยังอยู่ไหม · พร้อมรับงานไหม · ตอนนี้รันเวอร์ชันอะไร" ถ้าตอบไม่ได้ วันที่ระบบล่มคุณจะต้องเดาล้วน ๆ
+> **The one rule:** before writing the first business endpoint, the service must be able to answer
+> "Are you still alive? · Are you ready for work? · Which version are you running now?" If it cannot, on the day the system goes down you will be guessing blind.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เริ่ม service / REST API / microservice ใหม่
-- มีคนขอ health check, ping, readiness, liveness, version endpoint
-- จะ deploy ขึ้น production ครั้งแรก หรือย้ายเข้า Docker/Kubernetes
-- ต้องกำหนดรูปแบบ error ของ API ให้เหมือนกันทั้งระบบ
+- Starting a new service / REST API / microservice
+- Someone asks for a health check, ping, readiness, liveness, or version endpoint
+- Deploying to production for the first time, or moving into Docker/Kubernetes
+- You must set one API error format for the whole system
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-- ออกแบบ endpoint ทางธุรกิจ ให้ใช้ command `/api-design`
-- รูปแบบ URL · paging · วันที่ · id ของ API ให้ใช้ `api-conventions`
-- รูปแบบ log ให้ใช้ `logging-standards`
-- เลือกสถาปัตยกรรม ให้ใช้ `architecture-patterns`
+- To design business endpoints, use the command `/api-design`
+- For URL style · paging · dates · API ids, use `api-conventions`
+- For log format, use `logging-standards`
+- To choose an architecture, use `architecture-patterns`
 
 ---
 
-## 1 · endpoint พื้นฐาน 4 ตัว
+## 1 · The 4 basic endpoints
 
-| Endpoint | ตอบอะไร | auth | เช็ค dependency | ใครเรียก |
+| Endpoint | What it answers | auth | Checks dependencies | Who calls it |
 |---|---|:---:|:---:|---|
-| `GET /ping` | `pong` (text) | ไม่ | ไม่ | load balancer ทุกวินาที |
-| `GET /health/live` | process ยังอยู่ | ไม่ | **ไม่** | orchestrator (restart ถ้าตาย) |
-| `GET /health/ready` | พร้อมรับ traffic | ไม่ | ใช่ | orchestrator (ตัดออกจาก pool) |
-| `GET /version` | รันอะไรอยู่ | ไม่* | ไม่ | คน ตอนไล่ปัญหา |
+| `GET /ping` | `pong` (text) | no | no | load balancer, every second |
+| `GET /health/live` | the process is still alive | no | **no** | orchestrator (restarts if dead) |
+| `GET /health/ready` | ready to take traffic | no | yes | orchestrator (removes from the pool) |
+| `GET /version` | what is running | no* | no | a person, when tracing a problem |
 
-> **live ห้ามเช็ค dependency** นี่คือความผิดพลาดที่เจอบ่อยที่สุด
-> ถ้า `/health/live` เช็คฐานข้อมูล (database · DB) แล้ว DB ล่มชั่วคราว Kubernetes จะ**ฆ่า pod ทิ้งทั้งหมด**
-> ทั้งที่แอปยังปกติดี พอ DB กลับมาก็ไม่มี pod เหลือรับ traffic แล้ว
-> การเช็ค dependency ต้องอยู่ที่ `/health/ready` ซึ่งแค่ตัด pod ออกจาก pool ชั่วคราว
+> **live must not check dependencies.** This is the most common mistake.
+> If `/health/live` checks the database (DB) and the DB goes down briefly, Kubernetes will **kill every pod**
+> even though the app itself is fine. When the DB comes back, no pod is left to take traffic.
+> The dependency check belongs in `/health/ready`, which only removes a pod from the pool for a while.
 
-\* ถ้าไม่อยากให้คนทั่วไปเห็น commit hash ใน `/version` ให้จำกัดให้เรียกได้เฉพาะเครือข่ายภายใน
+\* If you do not want the public to see the commit hash in `/version`, restrict it so only the internal network can call it.
 
-**ผูกกับ Kubernetes แบบนี้** (ปรับจาก secondsky `health-check-endpoints` · MIT) — live กับ ready ต้องชี้คนละ path ไม่งั้นข้อข้างบนไร้ความหมาย
+**Wire it to Kubernetes like this** (adapted from secondsky `health-check-endpoints` · MIT) — live and ready must point to different paths, or the point above means nothing.
 
 ```yaml
-livenessProbe:            # ตาย → restart container
+livenessProbe:            # dead → restart the container
   httpGet: { path: /health/live, port: 3000 }
-  initialDelaySeconds: 15 # ให้แอปขึ้นก่อน ไม่งั้นโดนฆ่าตั้งแต่ยังไม่ทัน listen
+  initialDelaySeconds: 15 # let the app start first, or it gets killed before it can listen
   periodSeconds: 10
-  failureThreshold: 3     # พลาด 3 ครั้งติด (30 วินาที) ค่อย restart
-readinessProbe:           # ไม่พร้อม → ตัดออกจาก Service ชั่วคราว ไม่ restart
+  failureThreshold: 3     # restart only after 3 failures in a row (30 seconds)
+readinessProbe:           # not ready → remove from the Service for a while, no restart
   httpGet: { path: /health/ready, port: 3000 }
   initialDelaySeconds: 5
   periodSeconds: 10
 ```
 
-แอปที่ warm-up นาน (โหลดโมเดล · cache ใหญ่) เพิ่ม `startupProbe` ชี้ `/health/live` พร้อม `failureThreshold` สูง แทนการยืด `initialDelaySeconds` ของ liveness
+For an app with a long warm-up (loading a model · a big cache), add a `startupProbe` pointing to `/health/live` with a high `failureThreshold`, instead of stretching the liveness `initialDelaySeconds`.
 
-### รูปร่าง response (เหมือนกันทุกภาษา)
+### Response shape (the same in every language)
 
 ```jsonc
-// GET /health/ready → 200 ปกติ · 503 เมื่อ dependency ที่ critical ล่ม
+// GET /health/ready → 200 normally · 503 when a critical dependency is down
 {
   "status": "up",                       // up | degraded | down
   "timestamp": "2026-08-31T09:42:13.482Z",
@@ -1253,105 +1253,105 @@ readinessProbe:           # ไม่พร้อม → ตัดออกจ�
 }
 ```
 
-**3 สถานะ ไม่ใช่ 2:**
-- `up` — ทุกอย่างปกติ → 200
-- `degraded` — dependency ที่**ไม่ critical** ล่ม (เช่น อีเมล) แต่ยังรับ traffic ได้ → 200
-- `down` — dependency ที่ critical ล่ม (เช่น DB) → **503**
+**3 states, not 2:**
+- `up` — everything is normal → 200
+- `degraded` — a **non-critical** dependency is down (such as email) but the service can still take traffic → 200
+- `down` — a critical dependency is down (such as the DB) → **503**
 
-**ทุก check ต้องมี timeout** (ค่าเริ่มต้น 3 วินาที) ไม่งั้น dependency ที่ค้าง
-จะทำให้ health endpoint ค้างตาม แล้ว orchestrator ตัดสินใจผิดทั้งระบบ
+**Every check must have a timeout** (default 3 seconds). Otherwise a hung dependency
+makes the health endpoint hang too, and the orchestrator makes the wrong decision for the whole system.
 
-**ห้ามส่ง stack trace หรือ connection string ออกทาง endpoint นี้** เพราะ endpoint นี้ใครก็เรียกได้
+**Never send a stack trace or connection string out through these endpoints**, because anyone can call them.
 
 ---
 
-## 2 · รูปแบบ error ที่เหมือนกันทั้งระบบ
+## 2 · One error format for the whole system
 
-ยึด **RFC 9457 (`application/problem+json`)** ซึ่งเป็นมาตรฐานจริง ไม่ต้องคิดเอง
+Follow **RFC 9457 (`application/problem+json`)**, which is a real standard, so you do not invent your own.
 
 ```jsonc
-// 422 — รูปแบบถูก แต่ข้อมูลไม่ผ่านกฎ (ดูตารางล่าง)
+// 422 — the format is right, but the data fails a rule (see the table below)
 {
   "type": "https://api.example.com/errors/validation",
   "title": "ข้อมูลที่ส่งมาไม่ถูกต้อง",
   "status": 422,
   "detail": "จำนวนสินค้าต้องมากกว่า 0",
   "instance": "/api/v1/orders",
-  "requestId": "a3f9c1b2",              // ตรงกับ cid ใน log — ตามเรื่องได้ทันที
-  "errors": [                           // เฉพาะ validation · ครบทุกฟิลด์ในครั้งเดียว
+  "requestId": "a3f9c1b2",              // matches the cid in the log — trace the case at once
+  "errors": [                           // validation only · every field in one response
     { "field": "items[0].qty", "code": "min_value", "message": "ต้องมากกว่า 0" }
   ]
 }
 ```
 
-- `field` เป็นเส้นทางเต็มรวมดัชนีอาเรย์ · `code` ให้โปรแกรมอ่าน · `message` ให้คนอ่าน
+- `field` is the full path including array indexes · `code` is for programs · `message` is for people
 
-| สถานะ | ใช้เมื่อ |
+| Status | Use when |
 |---|---|
-| 400 | ข้อมูลผิดรูป |
-| 401 | ยังไม่ได้ยืนยันตัวตน |
-| 403 | ยืนยันแล้วแต่ไม่มีสิทธิ์ |
-| 404 | ไม่มีสิ่งนี้ |
-| 409 | ชนกับสถานะปัจจุบัน (ซ้ำ, แก้ทับ) |
-| 422 | รูปแบบถูกแต่ผิดกฎธุรกิจ |
-| 429 | เรียกถี่เกิน — ต้องมี `Retry-After` |
-| 500 | ฝั่งเราพัง — **ห้ามส่งรายละเอียดภายในออกไป** ส่ง `requestId` แทน |
+| 400 | Malformed data |
+| 401 | Not yet authenticated |
+| 403 | Authenticated but not allowed |
+| 404 | The thing does not exist |
+| 409 | Conflicts with current state (duplicate, overwrite) |
+| 422 | Format is right but breaks a business rule |
+| 429 | Called too often — must have `Retry-After` |
+| 500 | Our side broke — **never send internal details out**, send `requestId` instead |
 
-> **500 ต้องบอกแค่ "เกิดข้อผิดพลาด กรุณาแจ้ง requestId นี้"** รายละเอียดจริงอยู่ใน log
-> การส่ง stack trace ออกไปก็เหมือนแจกแผนผังระบบให้คนที่กำลังหาช่องโจมตี
+> **A 500 must say only "an error occurred, please report this requestId".** The real details stay in the log.
+> Sending a stack trace out is like handing the system's blueprint to someone looking for a way in.
 
 ---
 
 ## 3 · Request id
 
-- รับจาก header **`X-Request-Id`** เฉพาะเมื่อตรง `^[A-Za-z0-9-]{1,64}$` · ไม่มีหรือไม่ตรง → สร้างใหม่ (uuid ตัด 8 ตัว)
-  ค่านี้ลงทุกบรรทัด log ถ้ารับมาตรง ๆ ผู้ส่งจะแทรกขึ้นบรรทัดใหม่หรือข้อความปลอมลง log ได้ (log injection)
-- **ส่งกลับใน response header ทุกครั้ง** รวมทั้งตอน error
-- ใส่ในทุกบรรทัด log (ดู `logging-standards`) และใน error body
-- ส่งต่อไป service ปลายทางทุกครั้งที่เรียกข้ามระบบ
+- Accept it from the **`X-Request-Id`** header only when it matches `^[A-Za-z0-9-]{1,64}$` · if it is missing or does not match → create a new one (a uuid cut to 8 characters).
+  This value goes into every log line. If you accept it as is, the sender can insert new lines or fake text into the log (log injection).
+- **Return it in a response header every time**, including on errors.
+- Put it in every log line (see `logging-standards`) and in the error body.
+- Pass it on to the downstream service every time you call across systems.
 
-พอลูกค้าโทรมาบอกว่า "มันพัง" ก็ขอ requestId แล้ว `grep` ครั้งเดียวเจอทั้งเรื่อง
+When a customer calls to say "it broke", ask for the requestId and `grep` once to find the whole story.
 
 ---
 
 ## 4 · Graceful shutdown
 
-ตอน deploy ใหม่ orchestrator จะส่ง `SIGTERM` มา ถ้าแอปตายทันที request ที่ทำอยู่จะขาดกลางคัน
+On a new deploy the orchestrator sends `SIGTERM`. If the app dies at once, requests in progress are cut off midway.
 
 ```
-SIGTERM → 1. หยุดรับ request ใหม่ (ให้ /health/ready ตอบ down ทันที)
-          2. รอ request ที่ค้างอยู่ทำงานจบ (timeout 15–30 วิ)
-          3. ปิด DB pool / คิว / ไฟล์
+SIGTERM → 1. Stop accepting new requests (make /health/ready answer down at once)
+          2. Wait for in-flight requests to finish (timeout 15–30 seconds)
+          3. Close the DB pool / queues / files
           4. exit(0)
 ```
 
-> ข้อ 1 สำคัญกว่าที่คิด ต้องให้ `/health/ready` ตอบ `down` **ก่อน** ปิดจริงสัก 5 วินาที
-> เพื่อให้ load balancer ตัดเราออกจาก pool ทัน ไม่งั้นยังมี traffic วิ่งเข้ามาตอนกำลังปิด
+> Step 1 matters more than it looks. `/health/ready` must answer `down` about 5 seconds **before** the real shutdown,
+> so the load balancer removes us from the pool in time. Otherwise traffic keeps arriving while we are closing.
 
 ---
 
-## 5 · สิ่งที่ต้องมีก่อน deploy (ไม่ใช่ทางเลือก)
+## 5 · What must exist before deploy (not optional)
 
-- **Timeout ทุกทาง** ทั้ง request เข้า การเรียกออก และ query DB ถ้าไม่มี timeout ปลายทางช้าเมื่อไร ทั้งระบบจะค้างตาม
-- **จำกัดขนาด body** (เช่น 1MB) เพื่อกัน memory ระเบิดจาก payload ใหญ่
-- **Cross-Origin Resource Sharing (CORS) ระบุ origin ชัดเจน** — `*` ใช้ได้เฉพาะ API สาธารณะที่ไม่มี cookie
-- **Rate limit** อย่างน้อยที่ endpoint ล็อกอินและที่ที่ส่งรหัสผ่านใช้ครั้งเดียว (One-Time Password · OTP)/อีเมล
-- **Security headers**: `X-Content-Type-Options: nosniff` · `Content-Security-Policy: frame-ancestors 'none'` (ตัวแทนของ `X-Frame-Options` ที่เป็น header รุ่นเก่า · ใส่ `X-Frame-Options: DENY` คู่ไว้ให้เบราว์เซอร์เก่า) ·
+- **Timeouts everywhere**: incoming requests, outgoing calls, and DB queries. Without a timeout, the moment a downstream is slow, the whole system hangs with it.
+- **Limit body size** (for example 1MB) to stop memory blowing up from a large payload.
+- **Cross-Origin Resource Sharing (CORS) names the origin explicitly** — `*` is allowed only for a public API with no cookies.
+- **Rate limit** at least on the login endpoint and on anything that sends a one-time password (OTP)/email.
+- **Security headers**: `X-Content-Type-Options: nosniff` · `Content-Security-Policy: frame-ancestors 'none'` (replaces the old `X-Frame-Options` header · also add `X-Frame-Options: DENY` for old browsers) ·
   `Strict-Transport-Security` (HTTP Strict Transport Security · HSTS)
-  Node: `helmet` ตั้งครบในบรรทัดเดียว · .NET: `UseHsts()` ตั้งแค่ HSTS ที่เหลือต้องเขียน middleware สั้น ๆ หรือใช้แพ็กเกจ `NetEscapades.AspNetCore.SecurityHeaders` (ตัวอย่างใน `references/per-stack.md`)
-- **ปิดหน้าโชว์ error เต็ม ๆ ใน production** (`app.UseDeveloperExceptionPage()` เฉพาะ dev)
-- **ตั้งเวอร์ชันไว้ใน path**: `/api/v1/...` ตั้งแต่วันแรก เพราะย้ายทีหลังแพงกว่ามาก
-- **OpenAPI** ที่ generate จากโค้ดจริง ไม่ใช่เขียนมือแล้วลืมอัปเดต
+  Node: `helmet` sets them all in one line · .NET: `UseHsts()` sets only HSTS, and the rest needs a short middleware or the package `NetEscapades.AspNetCore.SecurityHeaders` (example in `references/per-stack.md`)
+- **Turn off the full error page in production** (`app.UseDeveloperExceptionPage()` in dev only)
+- **Put the version in the path**: `/api/v1/...` from day one, because moving later costs much more.
+- **OpenAPI** generated from the real code, not written by hand and then forgotten.
 
 ---
 
-## 6 · โค้ดที่พร้อมใช้
+## 6 · Ready-to-use code
 
-| ไฟล์ | สแต็ก | สถานะ |
+| File | Stack | Status |
 |---|---|---|
-| `assets/health.node.js` | Node / Express | ✓ รันทดสอบครบทั้ง 4 endpoint + เคส degraded/down/timeout |
-| `assets/health_py.py` | Python / FastAPI | ✓ รันทดสอบครบเหมือนกัน ผลตรงกันทุก field |
-| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | ระวัง ยังไม่ได้คอมไพล์ทดสอบ |
+| `assets/health.node.js` | Node / Express | ✓ all 4 endpoints run and tested, plus the degraded/down/timeout cases |
+| `assets/health_py.py` | Python / FastAPI | ✓ run and tested the same way, results match on every field |
+| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | Caution: not yet compiled or tested |
 
 ```js
 // Node
@@ -1375,7 +1375,7 @@ app.include_router(make_health_router(
 
 ---
 
-## 7 · ตรวจงาน
+## 7 · Check the work
 
 ```bash
 curl -i localhost:8080/ping                    # 200 pong
@@ -1383,55 +1383,55 @@ curl -s localhost:8080/health/live  | jq
 curl -s localhost:8080/health/ready | jq
 curl -s localhost:8080/version      | jq
 
-# ปิด DB แล้วยิงซ้ำ — ready ต้องเป็น 503 แต่ live ต้องยัง 200
+# stop the DB and call again — ready must be 503 but live must still be 200
 docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:8080/health/live
 ```
 
-- [ ] `/health/live` **ไม่** แตะ DB — ปิด DB แล้วยังตอบ 200
-- [ ] `/health/ready` ตอบ 503 เมื่อ dependency ที่ critical ล่ม
-- [ ] dependency ที่ไม่ critical ล่มแล้วได้ `degraded` + 200 (ยังรับ traffic)
-- [ ] ทุก check มี timeout — ลองทำให้ dependency ค้าง แล้ว endpoint ต้องตอบภายใน ~3 วิ
-- [ ] `/version` ตรงกับ commit ที่ deploy จริง
-- [ ] ทุก response มี `X-Request-Id` รวมทั้งตอน 500
-- [ ] ยิง 500 แล้วไม่มี stack trace / connection string หลุดออกมา
-- [ ] `SIGTERM` แล้ว request ที่ค้างอยู่ทำงานจบก่อนแอปปิด
-- [ ] `/ping` ไม่ถูกเขียนลง log (ไม่งั้นไฟล์เต็มไปด้วย ping)
+- [ ] `/health/live` does **not** touch the DB — it still answers 200 with the DB stopped
+- [ ] `/health/ready` answers 503 when a critical dependency is down
+- [ ] When a non-critical dependency is down, the result is `degraded` + 200 (still takes traffic)
+- [ ] Every check has a timeout — make a dependency hang, and the endpoint must answer within ~3 seconds
+- [ ] `/version` matches the commit actually deployed
+- [ ] Every response has `X-Request-Id`, including a 500
+- [ ] Trigger a 500 and confirm no stack trace / connection string leaks out
+- [ ] After `SIGTERM`, in-flight requests finish before the app closes
+- [ ] `/ping` is not written to the log (or the file fills up with pings)
 
 ---
 
 ## 8 · Anti-patterns
 
-- **`/health` ตัวเดียวเช็คทุกอย่าง** — orchestrator แยกไม่ออกว่าควร restart หรือแค่ตัด traffic
-- **liveness เช็ค DB** — DB สะดุด 10 วินาที = pod ตายยกแถว
-- **health check ไม่มี timeout** — dependency ค้าง แล้ว health ค้างตาม
-- **ส่ง stack trace / connection string ใน health หรือ error 500**
-- **health ต้อง login** — orchestrator ไม่มี token ให้
-- **รูปแบบ error ต่างกันทุก endpoint** — client ต้องเขียนโค้ดแกะ 5 แบบ
-- **`/ping` เขียนลง log** — ทุกวินาที × 86400 = ขยะเต็มไฟล์
-- **ไม่มี graceful shutdown** — deploy ทีไรลูกค้าเจอ error ทุกที
-- **`Access-Control-Allow-Origin: *` คู่กับ cookie** — เปิดช่องให้เว็บอื่นยิงแทนผู้ใช้
+- **A single `/health` that checks everything** — the orchestrator cannot tell whether to restart or only cut traffic
+- **liveness checks the DB** — a 10-second DB hiccup = every pod dies together
+- **A health check with no timeout** — a dependency hangs, and health hangs with it
+- **Sending a stack trace / connection string in health or in a 500 error**
+- **Health requires login** — the orchestrator has no token to give
+- **A different error format on every endpoint** — the client must write 5 kinds of parsing code
+- **`/ping` written to the log** — every second × 86400 = a file full of junk
+- **No graceful shutdown** — every deploy, customers see errors
+- **`Access-Control-Allow-Origin: *` together with cookies** — lets other sites send requests as the user
 
 ---
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Links to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| รูปแบบ log และ correlation id | `logging-standards` |
-| test ให้ endpoint พวกนี้ | `testing-standards` |
-| ตรวจ response ตรงกับ OpenAPI ใน CI · contract กับทีม frontend · เช็ค breaking change | `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md) |
-| ออกแบบ endpoint ธุรกิจ | command `/api-design` |
-| runbook ตอน service ล่ม | `incident-runbook-template` |
-| ตรวจความปลอดภัย | `security-engineer` + command `/security-scan` (ทางลัดไป `security-audit` หรือ `security-gate`) |
+| Log format and correlation id | `logging-standards` |
+| Tests for these endpoints | `testing-standards` |
+| Check responses against OpenAPI in CI · contract with the frontend team · breaking-change check | `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md) |
+| Design business endpoints | command `/api-design` |
+| Runbook for when the service is down | `incident-runbook-template` |
+| Security review | `security-engineer` + command `/security-scan` (a shortcut to `security-audit` or `security-gate`) |
 
 
 ## reference: per-stack.md
 
 # .NET และ Angular
 
-> ระวัง: โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/health.node.js` และ
-> `assets/health_py.py` ที่รันจริงครบทุก endpoint แล้ว) โค้ดนี้เป็นการตั้งค่ามาตรฐานของ
-> ASP.NET Core ตอนรันครั้งแรกให้เทียบ response กับรูปร่างใน SKILL.md ข้อ 1
+> Caution: the code in this file is **not yet compiled or tested** (unlike `assets/health.node.js` and
+> `assets/health_py.py`, which have been run against every endpoint). It is the standard setup of
+> ASP.NET Core. On the first run, compare the response with the shape in SKILL.md section 1.
 
 ---
 
@@ -1499,7 +1499,7 @@ app.MapGet("/version", () => Results.Ok(new
 }));
 ```
 
-ให้ response ตรงรูปแบบเดียวกับสแต็กอื่น:
+Make the response match the same format as the other stacks:
 
 ```csharp
 static Task WriteReady(HttpContext ctx, HealthReport report)
@@ -1535,7 +1535,7 @@ static Task WriteLive(HttpContext ctx, HealthReport _)
 
 ### Error envelope (RFC 9457)
 
-ASP.NET Core มี `ProblemDetails` มาให้อยู่แล้ว ให้ใช้ของที่มี อย่าประดิษฐ์รูปแบบเอง
+ASP.NET Core already ships `ProblemDetails`. Use it, and do not invent your own format.
 
 ```csharp
 builder.Services.AddProblemDetails(o => o.CustomizeProblemDetails = ctx =>
@@ -1551,9 +1551,9 @@ app.UseStatusCodePages();
 
 ### Graceful shutdown
 
-ให้ `/health/ready` ตอบ down ก่อนปิดจริงสักพัก เพื่อให้ load balancer ตัดเราออกจาก pool ทัน
-ใช้ `IHostedLifecycleService.StoppingAsync` (.NET 8 ขึ้นไป) เพราะ host เรียกมัน**ก่อน**หยุด Kestrel (หลัง `ApplicationStopping`)
-จึงรอแบบ `await Task.Delay` ได้โดยไม่บล็อกเธรด และ server ยังตอบ 503 ให้ load balancer เห็น
+Make `/health/ready` answer down for a short while before the real shutdown, so the load balancer removes the instance from its pool in time.
+Use `IHostedLifecycleService.StoppingAsync` (.NET 8 and later), because the host calls it **before** it stops Kestrel (after `ApplicationStopping`).
+So you can wait with `await Task.Delay` without blocking a thread, and the server still answers 503 for the load balancer to see.
 
 ```csharp
 // สถานะร่วม: ตัวรอปิดเขียน · health check อ่าน
@@ -1592,7 +1592,7 @@ builder.Services.Configure<HostOptions>(o =>
 
 ### สิ่งที่ต้องเปิดก่อน deploy
 
-ลงทะเบียน service ได้**ก่อน** `builder.Build()` เท่านั้น — หลัง Build รายการ service เป็นแบบอ่านอย่างเดียว เรียก `builder.Services.Add…` ตอนนั้นจะได้ `InvalidOperationException` ตอนเริ่มแอป
+Register services only **before** `builder.Build()`. After Build the service list is read-only, and calling `builder.Services.Add…` then throws `InvalidOperationException` at app start.
 
 ```csharp
 // ---- ก่อน Build: ลงทะเบียน service ----
@@ -1641,7 +1641,7 @@ export const requestIdInterceptor: HttpInterceptorFn = (req, next) => {
 };
 ```
 
-**แกะ problem+json ให้เป็นข้อความที่ผู้ใช้อ่านรู้เรื่อง**:
+**Turn problem+json into a message the user can understand**:
 
 ```ts
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
@@ -1658,7 +1658,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 };
 ```
 
-**หน้าสถานะระบบ** ให้ทีมซัพพอร์ตเปิดดูเองได้โดยไม่ต้องเรียกนักพัฒนา:
+**System status page**, so the support team can check it without calling a developer:
 
 ```ts
 this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r));
@@ -1687,185 +1687,186 @@ this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r))
 
 Use when writing code that can fail, with retry and timeout
 
-# จัดการข้อผิดพลาด
+# Error handling
 
-> **กฎข้อเดียว:** จับ error เฉพาะตอนที่**ทำอะไรกับมันได้จริง**
-> จับแล้วไม่ทำอะไร แย่กว่าไม่จับ เพราะระบบจะเดินต่อทั้งที่ข้างในพังไปแล้ว
+> **The one rule:** catch an error only when you **can really do something about it.**
+> Catching it and doing nothing is worse than not catching, because the system keeps going while it is already broken inside.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เขียนโค้ดที่เรียกเครือข่าย ฐานข้อมูล ไฟล์ หรือระบบของทีมอื่น
-- ต้องตัดสินใจว่าจะ retry ไหม กี่ครั้ง รอเท่าไหร่
-- ผู้ใช้เจอข้อความว่า "เกิดข้อผิดพลาด" แล้วไม่รู้ต้องทำอะไรต่อ
-- ไล่ปัญหาแล้วพบว่า log ไม่มีอะไรให้ดูเลย เพราะมีคน catch ทิ้ง
+- Writing code that calls the network, a database, files, or another team's system
+- Deciding whether to retry, how many times, and how long to wait
+- The user sees "an error occurred" and does not know what to do next
+- Tracing a problem and finding nothing in the log because someone caught and discarded the error
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill, or use it alongside
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| รูปร่าง JSON ของ error ที่ API ส่งออก | `web-service-essentials` · `api-conventions` | แทน |
-| รูปแบบบรรทัด log และการปิดบังข้อมูล | `logging-standards` | แทน |
-| แก้บั๊กเฉพาะจุดที่มีคนแจ้งมา | `targeted-fix` | แทน |
-| ขั้นตอนตอนระบบล่มจริง | `incident-runbook-template` | แทน |
-| ตัวชี้วัดอัตรา error และการแจ้งเตือน | `observability-basics` | คู่ |
-| งานเบื้องหลังที่ล้มแล้วต้องไปไหนต่อ | `background-jobs` | คู่ |
-| ข้อความ error ที่ต้องแปลหลายภาษา | `i18n-and-locale` | คู่ |
-| test กรณีล้มเหลว | `testing-standards` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| The JSON shape of errors the API sends out | `web-service-essentials` · `api-conventions` | instead |
+| Log line format and data masking | `logging-standards` | instead |
+| Fixing one specific bug someone reported | `targeted-fix` | instead |
+| Steps when the system is really down | `incident-runbook-template` | instead |
+| Error-rate metrics and alerts | `observability-basics` | alongside |
+| Where a failed background job goes next | `background-jobs` | alongside |
+| Error messages that must be translated into several languages | `i18n-and-locale` | alongside |
+| Tests for failure cases | `testing-standards` | alongside |
+| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 
 ---
 
-## 1 · จับที่ไหน ปล่อยที่ไหน
+## 1 · Where to catch, where to let it pass
 
-| ชั้น | ทำอะไร |
+| Layer | What to do |
 |---|---|
-| ชั้นในสุด (เรียก DB, HTTP, ไฟล์) | **ปล่อยผ่าน** หรือแปลงเป็น error ของโดเมนที่มีความหมาย |
-| ชั้นตรรกะธุรกิจ | จับเฉพาะที่มีทางเลือกสำรองจริง ๆ (มีค่าเริ่มต้น มีแหล่งข้อมูลสำรอง) |
-| **ชั้นนอกสุด** (controller, handler, main) | **จับทุกอย่าง** · log 1 ครั้ง · แปลงเป็นคำตอบที่ผู้ใช้เข้าใจ |
+| Innermost layer (calls DB, HTTP, files) | **let it pass**, or convert it into a domain error that has meaning |
+| Business logic layer | catch only where there is a real fallback (a default value, a backup data source) |
+| **Outermost layer** (controller, handler, main) | **catch everything** · log once · convert to an answer the user understands |
 
-> **log ที่เดียว คือชั้นนอกสุด** — ถ้าทุกชั้น catch แล้ว log แล้ว throw ต่อ
-> error 1 ตัวจะกลายเป็น 10 บรรทัดใน log และไม่มีใครรู้ว่าเป็นเรื่องเดียวกัน
+> **Log in one place only, the outermost layer.** If every layer catches, logs, and rethrows,
+> 1 error becomes 10 log lines and nobody knows they are the same event.
 
-**3 อย่างที่ห้ามทำเด็ดขาด:**
+**3 things you must never do:**
 
 ```csharp
-try { ... } catch { }                      // ผิด: กลืนเงียบ
-try { ... } catch (Exception) { return null; }   // ผิด: ผู้เรียกเจอ null โดยไม่รู้ว่าเกิดอะไร
-catch (Exception ex) { log.Error(ex); throw; }   // ผิด: log ซ้ำทุกชั้น
+try { ... } catch { }                      // wrong: swallowed silently
+try { ... } catch (Exception) { return null; }   // wrong: the caller gets null and never learns what happened
+catch (Exception ex) { log.Error(ex); throw; }   // wrong: logs again at every layer
 ```
 
-**ถ้าตั้งใจจะกลืนจริง ๆ ต้องเขียนเหตุผลไว้:**
+**If you really mean to swallow it, write the reason:**
 
 ```csharp
 catch (SmtpException ex)
 {
-    // ตั้งใจกลืน — ส่งอีเมลแจ้งไม่สำเร็จไม่ควรทำให้การสั่งซื้อล้ม
+    // swallowed on purpose — a failed notification email should not make the order fail
     log.Warning(ex, "ส่งอีเมลยืนยันไม่สำเร็จ orderId={OrderId}", order.Id);
 }
 ```
 
 ---
 
-## 2 · ข้อความถึงผู้ใช้ ≠ ข้อความใน log
+## 2 · The message to the user ≠ the message in the log
 
-| | ผู้ใช้เห็น | log เก็บ |
+| | The user sees | The log keeps |
 |---|---|---|
-| เนื้อหา | เกิดอะไร · ต้องทำอะไรต่อ | stack trace · ค่าตัวแปร · id ของคำขอ |
-| ภาษา | ภาษาของผู้ใช้ | อังกฤษก็ได้ |
-| รายละเอียดภายใน | **ไม่มีเลย** | มีได้ |
-| ตัวเชื่อม 2 ฝั่ง | **รหัสอ้างอิง** | รหัสเดียวกัน |
+| Content | what happened · what to do next | stack trace · variable values · request id |
+| Language | the user's language | English is fine |
+| Internal detail | **none at all** | allowed |
+| Link between the 2 sides | **a reference code** | the same code |
 
 ```
-ผิด: "เกิดข้อผิดพลาด"                    ผู้ใช้ทำอะไรต่อไม่ได้
-ผิด: "SqlException: timeout expired"      หลุดรายละเอียดภายใน และเขาก็อ่านไม่ออก
-ถูก: "บันทึกไม่สำเร็จเพราะระบบตอบช้า ลองอีกครั้งใน 1 นาที (อ้างอิง: 01J9Z8K)"
+Wrong: "เกิดข้อผิดพลาด" (An error occurred)   the user cannot tell what to do
+Wrong: "SqlException: timeout expired"      leaks internal detail, and they cannot read it anyway
+Right: "บันทึกไม่สำเร็จเพราะระบบตอบช้า ลองอีกครั้งใน 1 นาที (อ้างอิง: 01J9Z8K)"
+       (Save failed because the system was slow. Try again in 1 minute. Reference: 01J9Z8K)
 ```
 
-**ข้อความที่ดีมี 3 ส่วน** — เกิดอะไร · เพราะอะไร (ถ้าบอกได้) · ต้องทำอะไรต่อ
-รหัสอ้างอิงคือ correlation id ตัวเดียวกับใน `logging-standards`
+**A good message has 3 parts**: what happened · why (if you can say) · what to do next.
+The reference code is the same correlation id as in `logging-standards`.
 
 ---
 
-## 3 · แยกประเภทก่อนตัดสินใจ
+## 3 · Classify before deciding
 
-| ประเภท | ตัวอย่าง | ทำยังไง | log ระดับ |
+| Type | Example | What to do | Log level |
 |---|---|---|---|
-| **ผู้ใช้ทำผิด** | กรอกไม่ครบ ค่าผิดรูปแบบ | บอกให้แก้ · **ห้าม retry** | ไม่ต้อง log |
-| **ชั่วคราว** | timeout · 503 · deadlock · เชื่อมต่อหลุด | **retry ได้** | warning |
-| **ถูกจำกัดอัตรา** | 429 Too Many Requests | retry ได้ **หลังเวลาที่ `Retry-After` บอก** (ไม่มีค่านี้ → ใช้สูตร §4) · ห้ามยิงถี่กว่านั้น | warning |
-| **ถาวร** | 404 · 401 · ข้อมูลไม่ตรงเงื่อนไข | ไม่ retry · บอกให้ชัด | warning |
-| **บั๊กของเรา** | null reference · แปลงชนิดไม่ได้ | ไม่ retry · **ต้องมีคนแก้** | error |
-| **ข้อมูลไม่สอดคล้อง** | ยอดไม่ตรง สถานะเป็นไปไม่ได้ | หยุด · **เรียกคน** | error + แจ้งเตือน |
+| **User mistake** | incomplete input, wrong format | tell them to fix it · **do not retry** | no log needed |
+| **Transient** | timeout · 503 · deadlock · dropped connection | **may retry** | warning |
+| **Rate limited** | 429 Too Many Requests | may retry **after the time `Retry-After` gives** (if absent, use the formula in §4) · never fire faster than that | warning |
+| **Permanent** | 404 · 401 · data fails a condition | do not retry · say so clearly | warning |
+| **Our bug** | null reference · cannot convert the type | do not retry · **someone must fix it** | error |
+| **Inconsistent data** | totals do not match, an impossible state | stop · **call a person** | error + alert |
 
-> **การ retry error ที่ลองกี่ครั้งก็ไม่หาย คือการยิงซ้ำใส่ระบบที่ล้มอยู่ให้ล้มหนักขึ้น**
-> `400` กับ `401` ยิงอีก 100 ครั้งก็ได้คำตอบเดิม
+> **Retrying an error that no number of tries will cure means firing again at a system that is already down, so it falls harder.**
+> Sending `400` or `401` another 100 times gets the same answer.
 
 ---
 
-## 4 · timeout และการลองใหม่
+## 4 · Timeout and retry
 
-**ทุกการเรียกออกนอก process ต้องมี timeout** — ค่าเริ่มต้นของไลบรารีส่วนใหญ่คือ "รอตลอดไป"
+**Every call that leaves the process needs a timeout** — the default in most libraries is "wait forever"
 
-| การเรียก | timeout ที่ใช้ได้ทั่วไป |
+| Call | A timeout that works in general |
 |---|---|
-| ฐานข้อมูล query ปกติ | 5–10 วินาที |
-| HTTP ภายใน | 3–5 วินาที |
-| HTTP ภายนอก | 10–30 วินาที |
-| งานเบื้องหลังที่หนัก | ตั้งตามของจริง แล้วต้องตัดจบได้ |
+| Ordinary database query | 5–10 seconds |
+| Internal HTTP | 3–5 seconds |
+| External HTTP | 10–30 seconds |
+| Heavy background job | set it from the real work, and it must be possible to cut it off |
 
-**สูตรการลองใหม่** (service เรียก service · งานในคิวใช้ตัวเลขของ [`background-jobs`](../background-jobs/SKILL.md) §4 · มีคนนั่งรอหน้าจอ → ดูข้อสุดท้ายด้านล่าง):
+**The retry formula** (service-to-service calls · jobs in a queue use the numbers in [`background-jobs`](../background-jobs/SKILL.md) §4 · when a person sits waiting on the screen → see the last item below):
 
 ```
-ลองไม่เกิน 3 ครั้ง · หน่วงแบบทวีคูณ + สุ่ม
-ครั้งที่ 1 รอ 1 วินาที · ครั้งที่ 2 รอ 2 · ครั้งที่ 3 รอ 4  (แต่ละครั้ง ±20% แบบสุ่ม)
+at most 3 tries · exponential delay + jitter
+try 1 waits 1 second · try 2 waits 2 · try 3 waits 4  (each ±20% random)
 ```
 
-- **ต้องมีตัวสุ่ม** — ไม่งั้นทุก instance จะลองใหม่พร้อมกันเป๊ะ แล้วทับระบบปลายทางซ้ำ
-- **เวลารวมของการลองใหม่ต้องน้อยกว่า timeout ของผู้เรียก** ไม่งั้นเขาเลิกรอไปแล้วแต่เรายังลองอยู่
-- **retry การเขียนต้องมี idempotency key** ไม่งั้นลูกค้าถูกตัดเงิน 2 รอบ (ดู `api-conventions`)
-- **มีคนนั่งรออยู่หน้าจอ** → ลองใหม่อัตโนมัติไม่เกิน 1 ครั้ง แล้วแสดงปุ่ม "ลองอีกครั้ง" ให้เขากดเอง (ไม่ใช้ 3 ครั้งของสูตรด้านบน)
+- **You need the random part** — otherwise every instance retries at the exact same moment and hits the target system again together
+- **The total retry time must be less than the caller's timeout**, or the caller has given up while we are still trying
+- **Retrying a write needs an idempotency key**, or the customer is charged twice (see `api-conventions`)
+- **A person sits waiting on the screen** → at most 1 automatic retry, then show a "ลองอีกครั้ง" (try again) button for them to press (do not use the 3 tries of the formula above)
 
 ---
 
-## 5 · ตัดวงจร (circuit breaker)
+## 5 · Circuit breaker
 
-เมื่อปลายทางล้ม การยิงต่อไม่ได้ช่วยอะไร แค่ทำให้เราค้างตามไปด้วย
+When the target is down, firing more does not help. It only makes us hang along with it.
 
 ```
-ปิด (ปกติ) → ล้มติดกัน N ครั้ง → เปิด (ไม่ยิงเลย ตอบ error ทันที)
-           → รอ X วินาที → ครึ่งเปิด (half-open): ปล่อยให้ลอง 1 คำขอ → สำเร็จก็กลับไปปิด · ล้มก็เปิดต่อ
+closed (normal) → N failures in a row → open (do not call at all, answer with an error at once)
+                → wait X seconds → half-open: let 1 request try → success: back to closed · failure: stay open
 ```
 
-ค่าเริ่มต้นที่ใช้ได้: ถ้าล้ม 5 ครั้งติดกันภายใน 30 วินาที ให้เปิดวงจรไว้ 60 วินาที
+A default that works: if 5 calls fail in a row within 30 seconds, keep the circuit open for 60 seconds.
 
-**ควรใส่เมื่อ** — เรียกระบบภายนอกที่เคยล่ม · เรียกข้ามหลาย service · ปลายทางช้าแล้วลามมาถึงเรา
-**ไม่ต้องใส่เมื่อ** — เรียกฐานข้อมูลของตัวเอง · งานที่วิ่งครั้งเดียวต่อวัน
+**Add one when** — calling an external system that has gone down before · calling across several services · a slow target spreads the slowness to us
+**Not needed when** — calling your own database · a job that runs once a day
 
 ---
 
-## 6 · ล้มบางส่วน
+## 6 · Partial failure
 
-งานที่ทำหลายรายการ ต้องตอบให้ได้ว่า **"ทำได้ 8 จาก 10 แล้วอีก 2 ไปไหน"**
+Work that handles many items must be able to answer **"8 of 10 succeeded, where did the other 2 go?"**
 
-| แบบ | เหมาะกับ |
+| Style | Fits |
 |---|---|
-| ทั้งหมดหรือไม่ทำเลย (transaction) | เงิน · สต็อก · อะไรที่ครึ่ง ๆ แล้วพัง |
-| ทำเท่าที่ได้ แล้วรายงานรายการที่ไม่ผ่าน | นำเข้าข้อมูล · ส่งแจ้งเตือนหลายคน |
+| All or nothing (transaction) | money · stock · anything that breaks when half done |
+| Do what you can, then report the items that failed | data import · notifying many people |
 
-แบบที่สองต้อง**คืนรายการที่ล้มพร้อมเหตุผลรายตัว** ไม่ใช่บอกว่า "บางรายการไม่สำเร็จ"
+The second style must **return the failed items with a reason for each**, not just say "some items failed".
 
-**งานเก็บกวาดต้องรันเสมอ** ไม่ว่างานหลักจะสำเร็จหรือไม่ เช่น ปิดไฟล์ คืน connection ลบไฟล์ชั่วคราว
-ให้ใช้ `finally` / `using` / `with` / `defer` แทนการเขียนซ้ำในทุกทางออก
+**Cleanup must always run**, whether or not the main work succeeds: closing files, returning connections, deleting temp files.
+Use `finally` / `using` / `with` / `defer` instead of repeating it on every exit path.
 
 ---
 
-## 7 · ตรวจก่อนส่ง
+## 7 · Check before sending
 
-ไล่กับ diff ทุกครั้งที่แตะโค้ดที่เรียกออกนอก process (แนวคิดจาก ECC error-handling)
+Go through this against the diff every time you touch code that calls outside the process (idea from ECC error-handling)
 
-- [ ] ทุก `catch` ทำอย่างใดอย่างหนึ่งชัด ๆ: จัดการแล้วไปต่อ · แปลงเป็น error ของชั้นตัวเองแล้วโยนต่อ · ปล่อยไปให้ชั้นนอกสุด log (ข้อ 1) — ไม่มี `catch` ที่ log แล้วโยนต่อ
-- [ ] ทุกการเรียกออกนอก (HTTP · DB · คิว · ไฟล์) มี timeout ที่ตั้งใจ และ retry เฉพาะประเภทชั่วคราวในข้อ 3 · การเขียนที่ retry มี idempotency key (ข้อ 4)
-- [ ] ข้อความถึงผู้ใช้บอกว่าทำอะไรต่อ · ไม่มี stack trace หรือชื่อตารางออกไป (ข้อ 2) · log ของ error เดียวกันมี correlation id และข้อมูลพอให้ทำซ้ำ
-- [ ] ผลที่ธุรกิจคาดไว้ (ไม่พบ · ยอดไม่พอ · ซ้ำ) เป็นค่าคืนหรือ type ที่ผู้เรียกต้องจัดการ ไม่ใช่ exception
-- [ ] dependency ภายนอกแต่ละตัวมี test เส้นทางล้มอย่างน้อย 1 กรณี (timeout · 5xx · payload ผิด) และ test ยืนยันว่าระบบล้มบางส่วนตามข้อ 6 ไม่ล้มทั้งหน้า
-- [ ] ไม่มีการกลืนความล้มเหลวเงียบ ๆ 4 แบบนี้ (เรียบเรียงจาก silent-failure-hunter ของ pr-review-toolkit · claude-plugins-official · Apache-2.0 · ดู 2026-11-10):
-  - **optional chaining หรือ `?? ค่าเริ่มต้น`** ที่ทำให้ค่าที่หายไปผ่านไปโดยไม่มีใครรู้ (`order?.total ?? 0` ทำให้ออเดอร์ที่โหลดไม่ขึ้นกลายเป็นยอดศูนย์)
-  - **fallback ไปใช้ mock หรือข้อมูลตัวอย่างนอก test** — ระบบจริงโชว์ข้อมูลปลอมแล้วดูเหมือนปกติ
-  - **retry หมดแล้วเงียบ** — ครบรอบแล้วคืนค่าว่างหรือสำเร็จ ไม่โยน error และไม่แจ้งผู้เรียก
-  - **catch ที่ log แล้วไปต่อใน UI** — ผู้ใช้เห็นหน้าจอปกติทั้งที่ข้อมูลไม่มา ต้องแสดงสถานะผิดพลาดให้เห็น
+- [ ] Every `catch` clearly does one of these: handles it and goes on · converts it to an error of its own layer and throws on · lets it pass to the outermost layer to log (section 1) — no `catch` that logs and rethrows
+- [ ] Every outside call (HTTP · DB · queue · file) has a deliberate timeout and retries only the transient types in section 3 · a write that retries has an idempotency key (section 4)
+- [ ] The message to the user says what to do next · no stack trace or table name goes out (section 2) · the log for the same error has a correlation id and enough data to reproduce it
+- [ ] Outcomes the business expects (not found · insufficient balance · duplicate) are return values or types the caller must handle, not exceptions
+- [ ] Each outside dependency has at least 1 failure-path test (timeout · 5xx · bad payload), and a test confirms that partial failure follows section 6 and does not fail the whole page
+- [ ] None of these 4 kinds of silent failure swallowing (adapted from silent-failure-hunter in pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10):
+  - **optional chaining or `?? default`** that lets a missing value pass with nobody knowing (`order?.total ?? 0` turns an order that failed to load into a zero total)
+  - **falling back to a mock or sample data outside tests** — the live system shows fake data and looks normal
+  - **retries run out, then silence** — after the last try it returns empty or success, throws no error, and tells the caller nothing
+  - **a catch that logs and carries on in the UI** — the user sees a normal screen although the data never arrived; show an error state they can see
 
 ## 8 · Anti-patterns
 
-- **`catch` ว่างเปล่า** — ปัญหาที่หายากที่สุดคือปัญหาที่ไม่มีร่องรอย
-- **คืน `null` แทนการโยน error** — ผู้เรียกไม่รู้ว่าไม่มีข้อมูล หรือระบบพัง
-- **`catch (Exception)` ที่ชั้นในสุด** — กลืนบั๊กของตัวเองไปด้วย
-- **log แล้ว throw ต่อทุกชั้น** — error 1 ตัวได้ 10 บรรทัด
-- **"เกิดข้อผิดพลาด"** — ไม่บอกว่าต้องทำอะไรต่อ
-- **ส่ง stack trace ให้ผู้ใช้** — เปิดโครงสร้างภายในให้คนที่กำลังหาช่องโหว่เห็น
-- **retry แบบไม่หน่วง** — ยิงรัวใส่ระบบที่ล้มอยู่
-- **retry การเขียนโดยไม่มี idempotency key** — ได้รายการซ้ำ
-- **ไม่มี timeout** — thread ค้างสะสมจนระบบตาย
-- **ใช้ error เป็นตัวควบคุมการทำงานปกติ** — เช่นโยน exception เมื่อ "ไม่พบข้อมูล" ซึ่งเป็นเรื่องปกติ
+- **An empty `catch`** — the hardest problem to find is the one that leaves no trace
+- **Returning `null` instead of throwing an error** — the caller cannot tell "no data" from "the system broke"
+- **`catch (Exception)` in the innermost layer** — swallows your own bugs too
+- **Log and rethrow at every layer** — 1 error gets 10 lines
+- **"เกิดข้อผิดพลาด" ("an error occurred")** — does not say what to do next
+- **Sending a stack trace to the user** — shows the internal structure to someone hunting for a hole
+- **Retry with no delay** — hammering a system that is already down
+- **Retrying a write with no idempotency key** — you get duplicate records
+- **No timeout** — threads pile up until the system dies
+- **Using errors to control normal flow** — for example throwing an exception on "not found", which is a normal event
 
 
 ---
@@ -1874,200 +1875,200 @@ catch (SmtpException ex)
 
 Use when a live system needs metrics, logs or alerts
 
-# วัดผลและเฝ้าระบบ
+# Measuring and monitoring a system
 
-> **กฎข้อเดียว:** ถ้าลูกค้าเป็นคนบอกเราว่าระบบล่ม แปลว่าการเฝ้าระวังล้มเหลว
-> ไม่ใช่ว่าลูกค้าใจดี
+> **The one rule:** if a customer is the one who tells us the system is down, monitoring has failed.
+> It does not mean the customer is kind.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ระบบมีผู้ใช้จริงแล้ว
-- มีคนถามว่า "ตอนนี้ระบบปกติดีไหม" แล้วต้องไปเปิด log ดูถึงจะตอบได้
-- ถูกปลุกกลางดึกด้วยการแจ้งเตือนที่ไม่ต้องทำอะไร
-- ระบบช้าแล้วไม่รู้ว่าช้าตรงไหน
+- The system has real users
+- Someone asks "is the system healthy right now?" and you must open the logs to answer
+- You get woken in the middle of the night by an alert that needs no action
+- The system is slow and you do not know where
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Job | Use this instead |
 |---|---|
-| รูปแบบบรรทัด log และการปิดบัง | `logging-standards` |
-| ร่องรอยว่าใครทำอะไร | `audit-trail` |
-| endpoint health check | `web-service-essentials` |
-| ขั้นตอนตอนเกิดเหตุ | `incident-runbook-template` |
-| สรุปหลังเหตุการณ์ | `postmortem-template` |
+| Log line format and masking | `logging-standards` |
+| A trail of who did what | `audit-trail` |
+| Health check endpoint | `web-service-essentials` |
+| Steps during an incident | `incident-runbook-template` |
+| Post-incident summary | `postmortem-template` |
 
 ---
 
-## 1 · สามอย่างนี้ตอบคนละคำถาม
+## 1 · These three answer different questions
 
-| | ตอบคำถาม | ตัวอย่าง | ต้นทุน |
+| | Answers the question | Example | Cost |
 |---|---|---|---|
-| **metric** (ตัวชี้วัด) | "ตอนนี้แย่ไหม แย่ขึ้นหรือลง" | error 2.3% · p95 = 840 ms | ถูกสุด เก็บได้นาน |
-| **log** (บันทึก) | "คำขอนั้นเกิดอะไรขึ้น" | ข้อความ + stack trace + id | แพงปานกลาง |
-| **trace** (การไล่รอย) | "ช้าที่ขั้นตอนไหน" | คำขอเดียว ผ่าน 5 service | แพงสุด สุ่มเก็บ |
+| **metric** | "Is it bad now? Getting better or worse?" | error 2.3% · p95 = 840 ms | Cheapest, keeps a long time |
+| **log** | "What happened in that request?" | message + stack trace + id | Medium cost |
+| **trace** | "Which step is slow?" | one request across 5 services | Most expensive, sample it |
 
-**ลำดับการใช้เวลาเกิดเหตุ:** metric บอกว่า**มีปัญหา** → trace บอกว่า**ตรงไหน** → log บอกว่า**ทำไม**
-ทั้ง 3 อย่างต้องเชื่อมกันด้วย correlation id ตัวเดียวกัน (ดู `logging-standards`)
+**Order of use during an incident:** the metric says there **is a problem** → the trace says **where** → the log says **why**.
+All 3 must be linked by the same correlation id (see `logging-standards`).
 
 ---
 
-## 2 · สี่สัญญาณที่ต้องวัด
+## 2 · The four signals to measure
 
-| สัญญาณ | วัดอะไร | ตัวเลขที่ดู |
+| Signal | Measures | Numbers to watch |
 |---|---|---|
-| **อัตราคำขอ** | มีงานเข้ามาเท่าไหร่ | ต่อวินาที แยกตาม endpoint |
-| **อัตราความผิดพลาด** | ล้มกี่เปอร์เซ็นต์ | แยก 4xx (ผู้ใช้ผิด) กับ 5xx (เราผิด) |
-| **เวลาตอบสนอง** | ช้าแค่ไหน | **p50 · p95 · p99** |
-| **ทรัพยากร** | ใกล้เต็มไหม | CPU · หน่วยความจำ · พื้นที่ · connection pool |
+| **Request rate** | How much work is coming in | Per second, split by endpoint |
+| **Error rate** | What percentage fails | Split 4xx (user's fault) from 5xx (our fault) |
+| **Response time** | How slow | **p50 · p95 · p99** |
+| **Resources** | Is anything near full | CPU · memory · disk space · connection pool |
 
-> **ห้ามดูค่าเฉลี่ยของเวลาตอบสนอง** — เฉลี่ย 200 ms ฟังดูดี
-> ทั้งที่ผู้ใช้ 5% รอ 9 วินาที ค่าเฉลี่ยกลบคนที่เจอปัญหาเสมอ **ดู p95 และ p99**
+> **Never look at the average response time.** An average of 200 ms sounds good
+> while 5% of users wait 9 seconds. The average always hides the people who hit the problem. **Look at p95 and p99.**
 
-**สำหรับคิวและงานเบื้องหลัง** เพิ่มอีก 3 ตัว — งานค้างในคิว · เวลารอในคิว · งานที่ล้มถาวร
-(ดู `background-jobs`)
+**For queues and background jobs**, add 3 more: jobs waiting in the queue · wait time in the queue · jobs that failed for good
+(see `background-jobs`).
 
 ---
 
-## 3 · ตั้งชื่อตัวชี้วัด
+## 3 · Naming metrics
 
 ```
-<โดเมน>_<สิ่งที่วัด>_<หน่วย>
+<domain>_<what is measured>_<unit>
 
-http_requests_total              จำนวนสะสม
-http_request_duration_seconds    ระยะเวลา
-orders_created_total             เหตุการณ์ทางธุรกิจ
-queue_depth_jobs                 ค่า ณ ขณะนั้น
+http_requests_total              cumulative count
+http_request_duration_seconds    duration
+orders_created_total             business event
+queue_depth_jobs                 value at this moment
 ```
 
-| กฎ | เหตุผล |
+| Rule | Reason |
 |---|---|
-| ลงท้ายด้วยหน่วยเสมอ | `_seconds` ไม่ใช่ `_time` ที่ไม่มีใครรู้ว่าวินาทีหรือมิลลิวินาที |
-| ค่าสะสมลงท้าย `_total` | บอกว่าเป็นค่าที่เพิ่มขึ้นเรื่อย ๆ ไม่ใช่ค่าปัจจุบัน |
-| ใช้ label แทนการสร้างชื่อใหม่ | `http_requests_total{route,status}` ไม่ใช่ชื่อแยกต่อ endpoint |
-| **label ห้ามมีค่าที่ไม่จำกัด** | ถ้าใส่ user id หรือ order id เป็น label ระบบเก็บ metric จะรับไม่ไหว |
+| Always end with the unit | `_seconds`, not `_time`, which nobody can tell is seconds or milliseconds |
+| End cumulative values with `_total` | It says the value keeps rising and is not the current value |
+| Use labels instead of making new names | `http_requests_total{route,status}`, not a separate name per endpoint |
+| **A label must not take unbounded values** | If you put a user id or order id in a label, the metrics system cannot cope |
 
-### 3.1 · ถ้าใช้ Prometheus และ Grafana
+### 3.1 · If you use Prometheus and Grafana
 
-- **ชนิด metric:** counter ใช้นับเหตุการณ์ (อ่านด้วย `rate()`) · gauge ใช้ค่า ณ ตอนนี้ · histogram ใช้ระยะเวลาที่ต้องหา p95 · summary ใช้เมื่อไม่ต้องรวมข้าม instance
-- **หน่วย:** วินาที · byte · ratio 0 ถึง 1 (`_seconds` ไม่ใช่ `_milliseconds`)
-- **ห้ามใส่ `user_id` · เบอร์โทร · `call_id` เป็น label** เพราะทุกค่าใหม่คือ series ใหม่ 1 เส้น จนระบบเก็บ metric รับไม่ไหว · id เหล่านี้ลง log และ trace
-- p95: `histogram_quantile(0.95, sum by (le) (rate(<ชื่อ>_bucket[5m])))`
-- alert ทุกกฎมี `for:` · `severity` · ลิงก์ runbook · เตือนจากอาการ (latency · error) ไม่เตือนจาก CPU หรือ GPU
-- dashboard เก็บเป็น JSON ใน git แล้ว provision ด้วยไฟล์ · RED ต่อ service · USE ต่อทรัพยากร
-- รายละเอียด PromQL · ตัวอย่างกฎ alert · provisioning · ตัวอย่างระบบ voice agent (latency STT · LLM · TTS · lag ของ Kafka · GPU): `references/prometheus-grafana.md`
+- **Metric types:** a counter counts events (read it with `rate()`) · a gauge holds the value right now · a histogram holds durations when you need p95 · a summary is for when you do not need to aggregate across instances
+- **Units:** seconds · bytes · ratio 0 to 1 (`_seconds`, not `_milliseconds`)
+- **Never put `user_id` · a phone number · `call_id` in a label**, because every new value is a new series, until the metrics system cannot cope · these ids go in logs and traces
+- p95: `histogram_quantile(0.95, sum by (le) (rate(<name>_bucket[5m])))`
+- Every alert rule has `for:` · `severity` · a runbook link · alert on symptoms (latency · error), not on CPU or GPU
+- Keep dashboards as JSON in git and provision them from files · RED per service · USE per resource
+- Details on PromQL · alert rule examples · provisioning · a voice agent example (STT · LLM · TTS latency · Kafka lag · GPU): `references/prometheus-grafana.md`
 
 ---
 
-## 4 · การแจ้งเตือน
+## 4 · Alerts
 
-> **แจ้งเตือนทุกครั้งต้องมีอะไรให้ทำ** — ถ้าคนรับอ่านแล้วไม่ต้องทำอะไร
-> อีก 3 สัปดาห์เขาจะปิดเสียงแจ้งเตือน แล้ววันที่ของจริงเกิดก็จะไม่มีใครเห็น
+> **Every alert must give the receiver something to do.** If the person reads it and has nothing to do,
+> in 3 weeks they will mute alerts, and the day a real one fires nobody will see it.
 
-**แจ้งเตือนจากสิ่งที่ผู้ใช้รู้สึก ไม่ใช่จากตัวเลขของเครื่อง**
+**Alert on what users feel, not on machine numbers**
 
-| ✗ เตือนแบบนี้ | ✓ เตือนแบบนี้ |
+| ✗ Alert like this | ✓ Alert like this |
 |---|---|
-| CPU เกิน 80% | อัตรา error เกิน 2% นาน 5 นาที |
-| หน่วยความจำเกิน 70% | p95 ของหน้าชำระเงินเกิน 3 วินาที นาน 10 นาที |
-| pod restart | คำสั่งซื้อสำเร็จลดลงเกิน 50% เทียบกับสัปดาห์ก่อน |
-| disk 60% | **disk จะเต็มใน 4 ชั่วโมงตามอัตราปัจจุบัน** |
+| CPU over 80% | Error rate over 2% for 5 minutes |
+| Memory over 70% | p95 of the payment page over 3 seconds for 10 minutes |
+| pod restart | Successful orders drop by more than 50% against last week |
+| disk 60% | **disk will be full in 4 hours at the current rate** |
 
-| ระดับ | ตัวอย่าง | ส่งไปไหน |
+| Level | Example | Send to |
 |---|---|---|
-| **ปลุกคน** | ผู้ใช้ใช้งานไม่ได้ · ข้อมูลกำลังเสียหาย | โทร · push |
-| **ดูในเวลางาน** | disk จะเต็มใน 3 วัน · error เพิ่มแต่ยังไม่มาก | แชตของทีม |
-| **แค่บันทึกไว้** | ทุกอย่างที่เหลือ | แดชบอร์ด |
+| **Wake a person** | Users cannot use the system · data is being damaged | Phone call · push |
+| **Check in work hours** | disk will be full in 3 days · errors rising but still low | Team chat |
+| **Just record it** | Everything else | Dashboard |
 
-**ทุกการแจ้งเตือนต้องมี:** อะไรพัง · กระทบใคร · **ลิงก์ไป runbook** · ลิงก์ไปแดชบอร์ด
-**ตั้งช่วงเวลา (นาน N นาที) เสมอ** ไม่ใช่เตือนทันทีที่ค่าพุ่งครั้งเดียว
+**Every alert must have:** what broke · who is affected · **a link to the runbook** · a link to the dashboard.
+**Always set a duration (for N minutes)**, not an alert the moment a value spikes once.
 
-### 4.1 · งบความผิดพลาด (error budget) และอัตราเผางบ (burn rate)
+### 4.1 · Error budget and burn rate
 
-ระบบที่มี SLO ใช้วิธีนี้แทนการตั้งเกณฑ์ error % ตายตัว เพราะมันบอกว่า "ถ้าปล่อยไว้แบบนี้ งบทั้งเดือนจะหมดเมื่อไหร่" (แนวคิดจาก Google SRE Workbook)
+A system with an SLO uses this instead of a fixed error % threshold, because it says "if this goes on, when will the whole month's budget run out?" (idea from the Google SRE Workbook)
 
-- **งบ** = เวลาที่ยอมให้ล้มได้ใน 30 วัน → SLO 99.9% = 43 นาที · 99.5% = 3.6 ชั่วโมง · 99% = 7.2 ชั่วโมง
-- **burn rate** = อัตรา error ตอนนี้ ÷ (1 − SLO) → burn 1 = งบหมดพอดีวันที่ 30 · burn 10 = หมดใน 3 วัน
-- ตั้งแจ้งเตือน 3 ระดับตามตาราง และทุกระดับต้องเป็นจริงทั้งช่วงยาวและช่วงสั้น (ช่วงสั้น = 1/12 ของช่วงยาว) จะได้หยุดเตือนทันทีที่ระบบหาย
+- **Budget** = the time you may fail in 30 days → SLO 99.9% = 43 minutes · 99.5% = 3.6 hours · 99% = 7.2 hours
+- **Burn rate** = current error rate ÷ (1 − SLO) → burn 1 = the budget runs out exactly on day 30 · burn 10 = gone in 3 days
+- Set 3 alert levels as in the table, and every level must hold true over both the long window and the short window (short window = 1/12 of the long one), so the alert stops as soon as the system recovers
 
-| ระดับ | burn rate | ช่วงยาว · ช่วงสั้น | กินงบไปแล้ว | SLO 99.9% แปลว่า error เกิน | ส่งไปไหน |
+| Level | burn rate | Long window · short window | Budget already used | SLO 99.9% means errors above | Send to |
 |---|---|---|---|---|---|
-| ไหม้เร็ว | 14.4 | 1 ชั่วโมง · 5 นาที | 2% ของเดือน ใน 1 ชั่วโมง | 1.44% | ปลุกคน |
-| ไหม้ช้า | 6 | 6 ชั่วโมง · 30 นาที | 5% ของเดือน ใน 6 ชั่วโมง | 0.6% | ปลุกคน |
-| รั่วซึม | 1 | 3 วัน · 6 ชั่วโมง | 10% ของเดือน ใน 3 วัน | 0.1% | แชตของทีม |
+| Fast burn | 14.4 | 1 hour · 5 minutes | 2% of the month in 1 hour | 1.44% | Wake a person |
+| Slow burn | 6 | 6 hours · 30 minutes | 5% of the month in 6 hours | 0.6% | Wake a person |
+| Slow leak | 1 | 3 days · 6 hours | 10% of the month in 3 days | 0.1% | Team chat |
 
-งบเหลือเท่าไหร่ให้ขึ้นบนแดชบอร์ดภาพรวม — งบใกล้หมด = หยุดปล่อยฟีเจอร์ ไปแก้ความเสถียรก่อน เป็นกติกาที่ตกลงกับเจ้าของผลิตภัณฑ์ล่วงหน้า ไม่ใช่ตอนทะเลาะกัน
+Show the remaining budget on the overview dashboard. When the budget is nearly gone, stop shipping features and fix stability first. Agree this rule with the product owner in advance, not in the middle of an argument.
 
 ---
 
-## 5 · แดชบอร์ด
+## 5 · Dashboards
 
-ทำ 2 หน้าพอ
+Two pages are enough.
 
-| หน้า | ตอบคำถาม | มีอะไร |
+| Page | Answers the question | Contains |
 |---|---|---|
-| **ภาพรวม** | "ตอนนี้ปกติไหม" | 4 สัญญาณของทั้งระบบ · สถานะ dependency · การปล่อยของล่าสุด |
-| **เจาะลึกต่อ service** | "พังตรงไหน" | 4 สัญญาณแยกตาม endpoint · คิว · ฐานข้อมูล |
+| **Overview** | "Is it normal now?" | The 4 signals for the whole system · dependency status · latest releases |
+| **Deep dive per service** | "Where did it break?" | The 4 signals split by endpoint · queues · database |
 
-- **เส้นแนวตั้งบอกเวลาที่ deploy** — ปัญหาส่วนใหญ่เริ่มหลังเส้นนี้ และเห็นได้ในวินาทีเดียว
-- หน้าภาพรวมต้องอ่านจบใน 10 วินาที จึงควรมีไม่เกิน 6 กราฟ
-- ใส่เส้นเกณฑ์ที่ตั้งแจ้งเตือนไว้ในกราฟ จะได้รู้ว่าห่างจากเส้นแค่ไหน
+- **A vertical line marks the deploy time.** Most problems start after this line, and you see it in one second
+- The overview page must be readable in 10 seconds, so keep it to 6 graphs at most
+- Draw the alert threshold lines on the graphs, so you can see how far the value is from the line
 
 ---
 
-## 6 · ตัวชี้วัดทางธุรกิจ
+## 6 · Business metrics
 
-ตัวชี้วัดทางเทคนิคเขียวหมดแต่ธุรกิจหยุดเดิน เป็นเรื่องที่เกิดขึ้นจริงและตรวจไม่เจอถ้าไม่วัด
+Technical metrics all green while the business has stalled really happens, and you will not catch it unless you measure it.
 
-| ตัวอย่าง | จับอะไรได้ |
+| Example | What it catches |
 |---|---|
-| คำสั่งซื้อสำเร็จต่อชั่วโมง | ปุ่มชำระเงินพังแม้ทุก endpoint คืน 200 |
-| อัตราเข้าสู่ระบบสำเร็จ | ผู้ให้บริการยืนยันตัวตนภายนอกมีปัญหา |
-| งานเบื้องหลังที่รอเกิน N นาที | คิวตัน แต่ API ยังตอบปกติ |
-| อีเมลส่งไม่สำเร็จ | ลูกค้าไม่ได้รับใบเสร็จ โดยไม่มี error ที่ไหนเลย |
+| Successful orders per hour | The pay button is broken even though every endpoint returns 200 |
+| Successful login rate | A problem with an external identity provider |
+| Background jobs waiting more than N minutes | The queue is stuck but the API still answers normally |
+| Emails that failed to send | Customers do not get receipts, with no error anywhere |
 
-**เลือก 3–5 ตัวที่เป็นหัวใจของธุรกิจ** แล้วเตือนเมื่อมันตกผิดปกติเทียบกับช่วงเดียวกันของสัปดาห์ก่อน
+**Pick 3–5 that are the heart of the business**, and alert when they drop abnormally against the same period last week.
 
 ---
 
 ## 7 · Anti-patterns
 
-- **ดูค่าเฉลี่ยของเวลาตอบสนอง** — กลบคนที่เจอปัญหาทุกครั้ง
-- **แจ้งเตือนที่ไม่ต้องทำอะไร** — สอนให้ทุกคนเลิกสนใจการแจ้งเตือน
-- **เตือนจาก CPU และหน่วยความจำ** — ระบบที่ CPU 90% แต่ผู้ใช้ปกติ ไม่ใช่เหตุ
-- **ใส่ id ที่ไม่จำกัดค่าเป็น label** — ระบบเก็บ metric ล่มเสียเอง
-- **แดชบอร์ด 40 กราฟ** — ไม่มีใครรู้ว่าต้องดูอันไหน
-- **วัดแต่เทคนิค ไม่วัดธุรกิจ** — ทุกอย่างเขียวแต่ไม่มีใครสั่งซื้อได้
-- **เก็บ trace ทุกคำขอ** — แพงโดยไม่ได้อะไรเพิ่ม สุ่มเก็บก็พอ
-- **ไม่มีเส้นบอกเวลา deploy** — เสียเวลาครึ่งชั่วโมงกว่าจะนึกได้ว่าเพิ่ง deploy ไป
-- **แจ้งเตือนที่ไม่มีลิงก์ไป runbook** — คนรับต้องเริ่มค้นจากศูนย์ตอนตี 3
+- **Watching the average response time**: it hides the people who hit the problem every time
+- **Alerts that need no action**: they teach everyone to ignore alerts
+- **Alerting on CPU and memory**: a system at CPU 90% with normal users is not an incident
+- **Putting unbounded ids in labels**: the metrics system brings itself down
+- **A dashboard with 40 graphs**: nobody knows which one to look at
+- **Measuring only the technical side, not the business**: everything is green but nobody can place an order
+- **Tracing every request**: expensive for no extra gain, sampling is enough
+- **No line marking the deploy time**: you lose half an hour before you remember you just deployed
+- **Alerts with no link to a runbook**: the receiver starts searching from zero at 3 a.m.
 
 ---
 
-## 8 · ตัวย่อ
+## 8 · Abbreviations
 
-- **metric** — ตัวชี้วัด ตัวเลขที่เก็บตามเวลา
-- **trace** — การไล่รอยคำขอหนึ่งตลอดเส้นทางที่มันวิ่งผ่าน
-- **p95 / p99** — เปอร์เซ็นไทล์ที่ 95 และ 99 (ช้ากว่านี้มีแค่ 5% หรือ 1% ของคำขอ)
-- **label / tag** — ป้ายกำกับที่แนบกับตัวชี้วัด ใช้แยกดูเป็นกลุ่ม
-- **on-call** — เวรรับแจ้งเหตุนอกเวลาทำการ
-- **SLO** — Service Level Objective (เป้าหมายระดับบริการที่ตั้งไว้เอง เช่น สำเร็จ 99.5%)
-- **error budget / burn rate** — เวลาที่ยอมให้ล้มได้ต่อเดือนตาม SLO และความเร็วที่กำลังใช้มันหมด (ข้อ 4.1)
+- **metric**: a number collected over time
+- **trace**: following one request along the whole path it travels
+- **p95 / p99**: the 95th and 99th percentiles (only 5% or 1% of requests are slower than this)
+- **label / tag**: a tag attached to a metric, used to look at groups separately
+- **on-call**: the duty of receiving incident alerts outside working hours
+- **SLO**: Service Level Objective (a service-level target you set yourself, such as 99.5% success)
+- **error budget / burn rate**: the time you may fail per month under the SLO, and how fast you are using it up (item 4.1)
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Links to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| รูปแบบ log และ correlation id | `logging-standards` |
-| health check ที่ระบบเฝ้าใช้ | `web-service-essentials` |
-| ตัวชี้วัดของคิวและงานเบื้องหลัง | `background-jobs` |
-| อัตรา error และการตัดวงจร | `error-handling-patterns` |
-| ขั้นตอนเมื่อการแจ้งเตือนดัง | `incident-runbook-template` |
-| สรุปหลังเหตุการณ์ | `postmortem-template` |
-| ตัวเลขเป้าหมายที่ตกลงกับลูกค้า | `srs-writing` |
-| PromQL · กฎ alert · Grafana provisioning · ตัวอย่าง voice agent | `references/prometheus-grafana.md` |
-| ให้ agent อ่าน Prometheus หรือ Grafana ผ่าน MCP | `mcp-server` ข้อ 1.1 |
+| Log format and correlation id | `logging-standards` |
+| Health checks the monitor uses | `web-service-essentials` |
+| Metrics for queues and background jobs | `background-jobs` |
+| Error rate and circuit breaking | `error-handling-patterns` |
+| Steps when an alert fires | `incident-runbook-template` |
+| Post-incident summary | `postmortem-template` |
+| Target numbers agreed with the customer | `srs-writing` |
+| PromQL · alert rules · Grafana provisioning · voice agent example | `references/prometheus-grafana.md` |
+| Let an agent read Prometheus or Grafana through MCP | `mcp-server` item 1.1 |
 
-ที่มาของข้อ 3.1: prometheus.io (metric types · naming · histograms · alerting) และ grafana.com (dashboard best practices · provisioning) ตรวจ 2026-10-27 · ลิงก์เต็มอยู่ท้าย `references/prometheus-grafana.md`
+Source of item 3.1: prometheus.io (metric types · naming · histograms · alerting) and grafana.com (dashboard best practices · provisioning), checked 2026-10-27 · full links are at the end of `references/prometheus-grafana.md`
 
 
 ## reference: prometheus-grafana.md

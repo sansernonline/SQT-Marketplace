@@ -2,7 +2,7 @@
 
 Use when choosing Thai deposits, bonds or money funds
 
-# Bonds and Deposits (เงินฝาก · พันธบัตรออมทรัพย์ · หุ้นกู้)
+# Bonds and Deposits (deposits · savings bonds · corporate bonds)
 
 General information, not investment advice. How big the emergency fund is and where its layers sit is `emergency-fund`; bond mutual funds are compared in `mutual-fund-picker`; tax on interest in the yearly return is `tax-basics-th`.
 

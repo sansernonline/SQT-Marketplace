@@ -6,9 +6,9 @@ argument-hint: <rag-design | llm-eval> <details>
 
 # llm-engineering
 
-ทุกเรื่องของระบบที่เรียก Large Language Model (LLM): prompt · RAG (ค้นเอกสารมาประกอบคำตอบ) · การวัดคุณภาพ · บทบาทวิศวกร Machine Learning (ML) และ LLM
+Everything about systems that call a Large Language Model (LLM): prompts · RAG (retrieval-augmented generation, which searches documents to ground the answer) · quality measurement · the roles of Machine Learning (ML) and LLM engineers
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทุกไฟล์ เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้นอยู่แล้ว
+**Open only the files that match the job.** Do not read every file, because each file is already the full guide to its topic.
 
 ## หัวข้อ
 
@@ -22,7 +22,7 @@ argument-hint: <rag-design | llm-eval> <details>
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+An agent called in for this area opens its own role file before starting.
 
 | บทบาท | อ่าน | agent |
 |---|---|---|

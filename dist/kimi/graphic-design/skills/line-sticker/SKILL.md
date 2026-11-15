@@ -5,18 +5,18 @@ description: Use when making LINE stickers that must pass file limits
 
 # LINE Sticker and Emoji
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists · close the work with the line `ด่านก่อนลงมือ:`
 
-อยู่ใน plugin `graphic-design` · ถ้อยคำเขียนตาม `human-writing`
+Lives in plugin `graphic-design` · write the wording by `human-writing`
 
-> **กฎข้อเดียว:** ตรวจไฟล์ด้วย `scripts/sticker_check.py` ก่อนอัปโหลดทุกครั้ง แล้วเปิดหน้าทางการของ LINE ดูเพดานซ้ำเมื่อเลยวันตรวจ · เพดานด้านล่างตรวจเมื่อ 2026-11-10
+> **The one rule:** check the files with `scripts/sticker_check.py` before every upload, and re-open LINE's official pages to confirm the limits once the check date has passed · the limits below were checked on 2026-11-10
 
 A sticker is read on a chat background, small, in half a second. One feeling per sticker, one short Thai phrase, a thick outline, no detail that vanishes at 100 px.
 
-## ใช้เมื่อ / ไม่ใช้เมื่อ
+## When to use / when not
 
-- ใช้เมื่อ: ทำชุดสติกเกอร์นิ่ง สติกเกอร์เคลื่อนไหว หรืออีโมจิ LINE เพื่อขายใน Creators Market หรือใช้เป็นของร้าน
-- ไม่ใช้เมื่อ: เมนูปุ่มของ LINE OA → `line-richmenu` · สติกเกอร์พิมพ์ติดสินค้า → `print-ready-files` · ภาพโพสต์ → `social-formats`
+- Use when: making a set of static stickers, animated stickers, or LINE emoji to sell on Creators Market or to use for a shop
+- Do not use when: a LINE OA button menu → `line-richmenu` · print stickers for products → `print-ready-files` · post images → `social-formats`
 
 ## 1 · Hard limits (checked 2026-11-10)
 
@@ -52,21 +52,21 @@ Asked "will it be approved" or "what share do I get": the script checks file num
 
 Uploading to a Creators Market account, accepting terms, or publishing a set for sale needs the owner's own yes · never use a login or token that was not handed over for this.
 
-## ตัวอย่างจริง
+## Worked example
 
-โจทย์: ร้านขนมทำชุดสติกเกอร์นิ่ง 8 ภาพ จากรูปตัวการ์ตูนแมวที่มีอยู่ · ทำ: ตั้งรายการ 8 สถานการณ์ วาดทั้ง 8 ภาพขนาด 370 × 320 พื้นโปร่ง ทำ `main.png` 240 × 240 และ `tab.png` 96 × 74 แล้วรัน `python scripts/sticker_check.py sticker-set --kind static` · ผล: ถ้ามีภาพหนึ่งเป็น 371 × 320 สคริปต์ตอบ `ไม่ผ่าน: 03.png: 371×320 ...` ให้แก้แล้วรันซ้ำจนขึ้น `ผ่านทุกข้อ`
+Task: a dessert shop makes a set of 8 static stickers from an existing cartoon cat · Do: list 8 situations, draw all 8 images at 370 × 320 with a transparent background, make `main.png` 240 × 240 and `tab.png` 96 × 74, then run `python scripts/sticker_check.py sticker-set --kind static` · Result: if one image is 371 × 320, the script answers `ไม่ผ่าน: 03.png: 371×320 ...`. Fix it and rerun until it shows `ผ่านทุกข้อ`
 
-## ตรวจก่อนส่ง
+## Check before sending
 
-1. สคริปต์ขึ้น `ผ่านทุกข้อ` บนโฟลเดอร์จริง
-2. ดูทุกภาพที่ 100% บนพื้นขาวและพื้นเข้ม ตัวหนังสือไทยอ่านออก วรรณยุกต์ไม่ขาด
-3. ชุดเป็นตัวละครเดียวกันทุกภาพ (`design-review` ข้อ 7)
-4. มี `ด่านก่อนลงมือ:` และผ่านด่านตาของ `no-ai-look`
+1. The script shows `ผ่านทุกข้อ` on the real folder
+2. View every image at 100% on a white and a dark background. The Thai text is readable and no tone mark is cut off
+3. The whole set uses the same character in every image (`design-review` item 7)
+4. The line `ด่านก่อนลงมือ:` is present and the work passes the eye check of `no-ai-look`
 
-## ที่มา
+## Sources
 
-- LINE Creators Market guideline 3 หน้าข้างบน · อ่าน 2026-11-10
-- รูปแบบสคริปต์ตรวจตามแนว `line-richmenu/scripts/richmenu_check.py` · แนวคิด "รายงานผ่าน/ไม่ผ่านต่อข้อ" จาก anthropics/skills `slack-gif-creator` `core/validators.py` (ตรวจ 2026-11-10 ว่าเขียนใหม่เองทั้งหมด ไม่ได้คัดลอกโค้ด)
+- The 3 LINE Creators Market guideline pages above · read 2026-11-10
+- The checker script follows the pattern of `line-richmenu/scripts/richmenu_check.py` · the idea of "report pass/fail per item" comes from anthropics/skills `slack-gif-creator` `core/validators.py` (checked 2026-11-10: it was rewritten entirely and no code was copied)
 
 ## Related
 

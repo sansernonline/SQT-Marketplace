@@ -1,58 +1,58 @@
-# ภาษีเงินได้ บุคคลธรรมดาเทียบนิติบุคคล (ย้ายมาจาก SKILL.md หัวข้อ 2)
+# Income tax: individual vs juristic person (moved from SKILL.md section 2)
 
-อยู่ใน skill `thai-business-setup` · `seller-tax-basics/scripts/tax-compare.mjs` อ้างตัวเลขชุดนี้
+Part of the skill `thai-business-setup`. `seller-tax-basics/scripts/tax-compare.mjs` uses this set of figures.
 
-## 2 · ภาษีเงินได้: บุคคลธรรมดาเทียบนิติบุคคล
+## 2 · Income tax: individual vs juristic person
 
-**บุคคลธรรมดา** (ปีภาษี 2568 ตามคำอธิบาย ภ.ง.ด.90)
+**Individual** (tax year 2025 (B.E. 2568), per the ภ.ง.ด.90 (PND 90, individual income tax return) instructions)
 
-| เงินได้สุทธิ (บาท/ปี) | อัตรา | ภาษีสะสมถึงขั้นบน |
+| Net income (baht/year) | Rate | Cumulative tax up to the top of the band |
 |---|---|---|
-| ไม่เกิน 150,000 | ยกเว้น | 0 |
+| Up to 150,000 | Exempt | 0 |
 | 150,001–300,000 | 5% | 7,500 |
 | 300,001–500,000 | 10% | 27,500 |
 | 500,001–750,000 | 15% | 65,000 |
 | 750,001–1,000,000 | 20% | 115,000 |
 | 1,000,001–2,000,000 | 25% | 365,000 |
 | 2,000,001–5,000,000 | 30% | 1,265,000 |
-| เกิน 5,000,000 | 35% | |
+| Over 5,000,000 | 35% | |
 
-คนที่มีเงินได้อื่นนอกจากเงินเดือนตั้งแต่ 120,000 บาท ต้องคิดอีกวิธีด้วย คือเงินได้พึงประเมิน (ไม่รวมเงินเดือน) × 0.5% แล้วเสียตามวิธีที่ได้ภาษีมากกว่า เว้นแต่วิธีนี้คิดแล้วไม่เกิน 5,000 บาท ก็เสียตามตารางข้างบน · ลดหย่อนส่วนตัว 60,000 บาท · การหักค่าใช้จ่ายของคนขายของใช้ `seller-tax-basics`
+Someone with income other than salary of 120,000 baht or more must also use a second method: assessable income (excluding salary) × 0.5%. They pay whichever method gives more tax. If the second method comes to 5,000 baht or less, they pay by the table above. The personal allowance is 60,000 baht. For how a seller deducts expenses, use `seller-tax-basics`.
 
-**นิติบุคคล**
+**Juristic person**
 
-| ประเภท | กำไรสุทธิ | อัตรา |
+| Type | Net profit | Rate |
 |---|---|---|
-| SME: ทุนชำระแล้ว ณ วันสุดท้ายของรอบบัญชีไม่เกิน 5 ล้านบาท และรายได้จากขายสินค้าและบริการไม่เกิน 30 ล้านบาท | ไม่เกิน 300,000 | ยกเว้น |
+| SME: paid-up capital at the last day of the accounting period of up to 5 million baht, and revenue from goods and services of up to 30 million baht | Up to 300,000 | Exempt |
 | | 300,001–3,000,000 | 15% |
-| | เกิน 3,000,000 | 20% |
-| ไม่เข้าเกณฑ์ SME | ทุกบาท | 20% |
+| | Over 3,000,000 | 20% |
+| Does not meet the SME criteria | Every baht | 20% |
 
-ตรวจล่าสุด 2026-10-23 · แหล่ง: คำอธิบายวิธีกรอก ภ.ง.ด.90 ปีภาษี 2568 (ตารางอัตรา · วิธีที่ 2 คูณ 0.005 · ลดหย่อนส่วนตัว) https://www.rd.go.th/fileadmin/tax_pdf/pit/2568/Ins90_241268.pdf · อัตรานิติบุคคลสำหรับรอบบัญชีตั้งแต่ 1 ม.ค. 2560 เป็นต้นไป https://www.rd.go.th/26218.html และเกณฑ์ SME https://www.rd.go.th/841.html (2 หน้านี้ปรับปรุงล่าสุดปี 2017 และ 2020 · ยังไม่พบประกาศเปลี่ยนอัตรา)
+Last checked 2026-10-23 · Sources: the ภ.ง.ด.90 instructions for tax year 2025 (B.E. 2568) (rate table · method 2 × 0.005 · personal allowance) https://www.rd.go.th/fileadmin/tax_pdf/pit/2568/Ins90_241268.pdf · juristic person rates for accounting periods from 1 Jan 2017 onward https://www.rd.go.th/26218.html and the SME criteria https://www.rd.go.th/841.html (these 2 pages were last updated in 2017 and 2020 · no announcement of a rate change found)
 
-**ตัวอย่าง** กำไรก่อนภาษี 1,000,000 บาทต่อปี (ตัวเลขสมมุติ)
+**Example** Profit before tax of 1,000,000 baht a year (assumed figures)
 
-| รูปแบบ | วิธีคิด | ภาษี (บาท) |
+| Form | Calculation | Tax (baht) |
 |---|---|---|
-| บุคคลธรรมดา (กำไรหลังหักค่าใช้จ่ายจริง แล้วหักลดหย่อนส่วนตัว 60,000) | เงินได้สุทธิ 940,000 → 65,000 + (940,000 − 750,000) × 20% | 103,000 |
-| วิธีที่ 2 ของบุคคลธรรมดา (สมมุติรายรับ 4,000,000) | 4,000,000 × 0.5% = 20,000 ต่ำกว่าวิธีแรก จึงเสียตามวิธีแรก | ไม่ใช้ |
-| บริษัทที่เข้าเกณฑ์ SME | (1,000,000 − 300,000) × 15% | 105,000 |
+| Individual (profit after actual expenses, then the 60,000 personal allowance) | Net income 940,000 → 65,000 + (940,000 − 750,000) × 20% | 103,000 |
+| Individual, method 2 (assuming revenue of 4,000,000) | 4,000,000 × 0.5% = 20,000, which is below the first method, so pay by the first method | Not used |
+| Company that meets the SME criteria | (1,000,000 − 300,000) × 15% | 105,000 |
 
-ภาษี 2 แบบใกล้กัน แต่เงิน 895,000 บาทที่เหลือในบริษัทยังเป็นของบริษัท ถ้าจ่ายออกมาเป็นเงินเดือนกรรมการหรือเงินปันผลจะมีภาษีอีกชั้น ให้นักบัญชีคิดรวมทั้ง 2 ชั้นก่อนตัดสิน
+The tax is close for both forms. But the remaining 895,000 baht in the company still belongs to the company. Paying it out as director salary or dividends adds a second layer of tax. Have an accountant work out both layers before deciding.
 
-### กำไรค่าเดียวหลอกได้ ให้คิด 3 สถานการณ์
+### Profit alone can mislead, so work out 3 scenarios
 
-ที่กำไร 1,000,000 บุคคลธรรมดาถูกกว่านิดเดียว แต่ที่กำไร 3,000,000 บริษัทถูกกว่าเกือบ 2 แสน · เปลี่ยนรูปแบบกิจการแล้วย้อนยาก จึงต้องดูหลายสถานการณ์
+At a profit of 1,000,000 the individual pays slightly less. At a profit of 3,000,000 the company pays almost 200,000 less. Changing the business form is hard to undo, so look at several scenarios.
 
-1. ถามผู้ใช้ 3 อย่าง: กำไรต่อปีแบบแย่ กลาง ดี · โอกาสของแต่ละแบบ (รวมกันได้ 1) · ค่าทำบัญชีและสอบบัญชีที่บริษัทต้องจ่ายเพิ่มจากใบเสนอราคาจริง · ห้ามใส่โอกาสหรือค่าทำบัญชีแทนผู้ใช้
-2. ต้องมี Node · ใส่ลงไฟล์แบบ `seller-tax-basics/scripts/example-company.json` แล้วรัน 2 คำสั่ง
+1. Ask the user for 3 things: yearly profit in a bad, middle and good case · the probability of each case (they add up to 1) · the extra bookkeeping and audit cost the company would pay, from real quotes · never fill in the probabilities or the bookkeeping cost for the user.
+2. Node is required. Put the data in a file shaped like `seller-tax-basics/scripts/example-company.json`, then run 2 commands.
 
 ```bash
-node <path>/tax-compare.mjs company.json            # <path> ดู Script path ข้างล่าง · ตารางภาษีทั้ง 2 แบบต่อสถานการณ์
+node <path>/tax-compare.mjs company.json            # <path>: see Script path below · tax table for both forms per scenario
 node tax-compare.mjs company.json --payoff > payoff.json
-node decide.mjs payoff payoff.json                    # decision-scoring: ค่าคาดหวัง · แย่สุด · เสียดายมากสุด
+node decide.mjs payoff payoff.json                    # decision-scoring: expected value · worst case · maximum regret
 ```
 
-**Script path:** ติดตั้งจาก marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/seller-tax-basics/scripts/tax-compare.mjs | sort -V | tail -1` · ใน repo SQT-Marketplace: `plugins/e-commerce/skills/seller-tax-basics/scripts/tax-compare.mjs` · `decide.mjs` อยู่ใน skill `decision-scoring` ของ plugin `superuser` (ไม่ได้ติดตั้ง → เล่าตาราง 2 แบบให้ผู้ใช้เลือกเอง)
+**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/seller-tax-basics/scripts/tax-compare.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/e-commerce/skills/seller-tax-basics/scripts/tax-compare.mjs` · `decide.mjs` is in the `decision-scoring` skill of plugin `superuser` (if it is not installed, walk the user through the table for both forms and let them choose).
 
-3. อ่านบรรทัดผล · ค่าคาดหวังกับเสียดายน้อยสุดชี้คนละทาง (ตัวอย่างโอกาส 0.4 · 0.4 · 0.2 และค่าทำบัญชี 60,000 ได้ "2 เกณฑ์ไม่ตรงกัน": ค่าคาดหวังเลือกบุคคลธรรมดา 172,400 ต่อ 183,000 · เสียดายน้อยสุดเลือกบริษัท 62,000 ต่อ 182,000) แปลว่าคำตอบขึ้นกับโอกาสที่ผู้ใช้ให้ · การเปลี่ยนรูปแบบย้อนยาก จึงเล่าทั้ง 2 เกณฑ์แล้วให้ผู้ใช้กับนักบัญชีตัดสิน · ทั้งหมดยังไม่รวมภาษีชั้นที่ 2 ตอนจ่ายเงินออกจากบริษัท
+3. Read the result line. Expected value and minimum regret may point different ways. With probabilities 0.4 · 0.4 · 0.2 and a bookkeeping cost of 60,000, the output says "2 เกณฑ์ไม่ตรงกัน" (the 2 criteria disagree): expected value picks the individual, 172,400 vs 183,000. Minimum regret picks the company, 62,000 vs 182,000. This means the answer depends on the probabilities the user gave. Changing the form is hard to undo, so explain both criteria and let the user and the accountant decide. None of this includes the second layer of tax when money leaves the company.

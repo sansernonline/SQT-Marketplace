@@ -1,390 +1,12 @@
-# skill: principle-build-a-tool-not-handwork
-
-Use when the same edit repeats across many files or rows
-
-# principle · build a tool, not handwork — งานกลไกทำเป็นเครื่องมือ
-> ใช้คู่กัน: `principle-small-verifiable-steps` (ตัดเป็นชิ้นเล็กที่ตรวจได้) · `parallel-split-and-merge` (รันหลายชิ้นพร้อมกัน)
-
-> งานมี 2 ส่วน: ส่วนที่ต้องใช้วิจารณญาณ กับส่วนที่เป็นกลไกล้วน ๆ
-> ส่วนกลไกไม่ต้องให้ agent คิดวิธีใหม่ทุกครั้ง ให้เขียนเป็นโปรแกรมครั้งเดียว แล้วเก็บแรงคิดไว้กับส่วนที่ต้องตัดสินใจ
-
-## เมื่อไรต้องทำเครื่องมือ
-
-| สัญญาณ | เครื่องมือ |
-|---|---|
-| แก้รูปแบบเดียวกันเกิน 10 จุด (ไฟล์ · แถวในชีต · เอกสาร · โค้ด) | สคริปต์หรือค้นหา-แทนที่ที่ลองกับตัวอย่างก่อน (โค้ด: codemod · `sed`) |
-| เอกสารจากแม่แบบซ้ำหลายใบ (ใบเสนอราคา 40 ใบ) | แม่แบบ + สคริปต์ผสมข้อมูลจากชีต |
-| ตรวจทุกหน้าจอ ทุกไฟล์ หรือทุกแถว | สคริปต์วนตรวจที่พิมพ์ตารางผล |
-| agent ทุกตัวต้องตั้งสภาพแวดล้อมเองก่อนตรวจ | สคริปต์ `start` ใน verify skill (`app-verifier-setup` (plugin `software-development`)) |
-| ย้ายหรือนำเข้าข้อมูล | สคริปต์ที่รันซ้ำได้ผลเดิม พร้อมโหมดลองก่อน (dry run) |
-| ข้ออ้างว่า "ทุกที่ทำแบบนี้แล้ว" | คำสั่ง grep หรือสคริปต์ที่พิสูจน์ได้ |
-| ทำงานเดิมเป็นครั้งที่ 3 | ทำเป็นคำสั่งหรือ skill |
-
-## กฎของเครื่องมือ
-
-- **รันซ้ำได้ผลเดิม** — รัน 2 ครั้งต้องไม่พัง และไม่แก้ซ้ำ (`principle-safe-to-rerun` (plugin `software-development`))
-- **พิมพ์ผลที่ตรวจได้** — บอกจำนวนที่แก้ · รายการที่ข้าม · รายการที่ล้ม
-- **เล็กที่สุดที่ทำงานได้** — ไม่ต้องสวย ไม่ต้องรองรับทุกกรณีในอนาคต (`lazy-coding` (plugin `software-development`))
-- **เก็บให้ถูกที่** — สคริปต์ที่ใช้ครั้งเดียวเก็บไว้ใน `_to_delete/` ส่วนสคริปต์ที่ใช้ซ้ำเก็บใน `scripts/` แล้วเขียนบรรทัดเดียวใน README ว่ารันเมื่อไร
-- **skill เหลือแค่คำอธิบายบาง ๆ** — ขั้นตอนตายตัวอยู่ในสคริปต์ ส่วน SKILL.md บอกแค่ว่าเรียกเมื่อไรและอ่านผลอย่างไร
-
-## ไม่ต้องทำเมื่อ
-
-งานแก้ 2–3 จุดที่ต่างกันจริง เพราะเขียนสคริปต์จะใช้เวลามากกว่าแก้เอง
-
-
----
-
-# skill: security-gate
-
-Use when about to ship or merge code, as a security check
-
-# security-gate — ประตูความปลอดภัยก่อนส่งงาน
-
-> เครื่องมือสแกนหาเจอเร็วแต่แจ้งผิดเยอะ ส่วนคนตรวจเข้าใจบริบทแต่ช้า
-> ประตูนี้ให้เครื่องหาก่อน แล้ว agent ยืนยันทุกข้อกับโค้ดจริง ก่อนจะถึงมือคน
-
-ใช้ร่วมกับ [`principle-secure-by-default`](../principle-secure-by-default/SKILL.md) ส่วนรายงานเชิงลึกให้ใช้ agent `security-engineer`
-
-## ขั้นตอน
-
-1. **รันในห้อง** (sandbox ของโปรเจกต์) — ถ้าโปรเจกต์มี `.sandbox/` ให้รันทุกคำสั่งผ่าน `sandbox.ps1 exec` ส่วนเครื่องมือที่ยังไม่มีให้ติดตั้งในห้องได้เลย ไม่ติดตั้งบนเครื่องผู้ใช้
-2. **สแกน 3 ด้าน** (เลือกตามที่โปรเจกต์มี)
-
-   | ด้าน | เครื่องมือแนะนำ | คำสั่งตัวอย่าง |
-   |---|---|---|
-   | ค่าลับหลุด (รวมประวัติ git) | gitleaks 8.19+ | ประวัติ git: `gitleaks git . --redact` · ไฟล์ที่ยังไม่ commit: `gitleaks dir . --redact` (`detect`/`protect` ถูก deprecate ตั้งแต่ v8.19.0 — ที่มา github.com/gitleaks/gitleaks/releases/tag/v8.19.0 · ตรวจ 22 ต.ค. 2569) |
-   | dependency มีช่องโหว่ | ตัวที่มากับภาษา + trivy หรือ osv-scanner | `npm audit --omit=dev` · `pip-audit` · `dotnet list package --vulnerable --include-transitive` · `trivy fs --scanners vuln .` |
-   | โค้ดเขียนแบบเสี่ยง (static analysis) | semgrep | มีเน็ต: `semgrep scan --config p/default --metrics=off` · ห้อง `-Locked` หรือเข้า semgrep.dev ไม่ได้: `semgrep scan --config <skill นี้>/assets/semgrep-offline.yml --metrics=off` |
-   | dependency ของ Dart / Flutter และ Gradle | osv-scanner (อ่าน `pubspec.lock` และ `gradle.lockfile`) | `osv-scanner scan source -r .` (ยังไม่ได้ตรวจบนเครื่องนี้) · ใช้ `flutter pub outdated` ดูของที่ค้างเวอร์ชัน · ถ้า Gradle ไม่มี lockfile ต้องเปิด `dependencyLocking` ก่อนถึงจะสแกนได้ |
-   | Dockerfile · compose · IaC (ถ้ามี) | trivy | `trivy config .` ส่วนแอป Android ไม่มีส่วนนี้ ให้อ่าน `android/app/build.gradle*` ด้วยตาแทน (signingConfig ต้องไม่ฝังรหัสผ่าน และ release ต้องเปิด minify) |
-   | แอป Android (ถ้ามี) | ตรวจด้วยตาตาม [`references/android.md`](references/android.md) ถ้าต้องการเชิงลึกให้ใช้ MobSF (Mobile Security Framework) | — |
-
-   **รายการตรวจ Android** → [`references/android.md`](references/android.md)
-
-   เก็บผลดิบใน `_to_delete/security/`
-   - **ห้ามใช้ `--config auto` คู่กับ `--metrics=off`** — semgrep ไม่ยอมรัน (เจอจริงในโปรเจกต์ตัวอย่าง)
-   - **ชุดกฎ semgrep เลือกตามภาษาที่เจอ ไม่ใช่ `p/default` อย่างเดียว** (แนวคิดจาก trailofbits/skills `semgrep` · CC-BY-SA เขียนใหม่ด้วยคำเรา) — ทุกโปรเจกต์: `p/security-audit` + `p/secrets` รันครั้งเดียวทั้ง repo · แล้วเพิ่มตามภาษา: `p/python` (+`p/django` หรือ `p/flask`) · `p/javascript` + `p/typescript` (+`p/react` · `p/nodejs`) · `p/csharp` · `p/dockerfile` · มีหลายภาษาใส่ `--config` หลายตัวในคำสั่งเดียวได้ · ชุดกฎไหนโหลดไม่ได้ (ไม่มีเน็ต · ชื่อผิด) ต้องขึ้นในรายงานว่าไม่ได้รัน ไม่ใช่หายเงียบ
-   - ชุดออฟไลน์มี 6 กฎที่แทบไม่มีกรณีปลอดภัย (eval · HTML จากตัวแปร · shell จากตัวแปร · SQL ต่อสตริง · ค่าลับในโค้ด) และพิสูจน์แล้วว่าจับได้ครบในไฟล์ที่ตั้งใจเขียนผิด ถ้าเครื่องมือไหนรันไม่ได้ ให้เขียนในรายงานว่า `ยังไม่ได้ตรวจ` พร้อมเหตุผล
-   - **semgrep รองรับ Dart น้อยมาก และกฎออฟไลน์เขียนไว้สำหรับเว็บกับ backend** ถ้า semgrep ไม่เจออะไรในโปรเจกต์ Flutter ก็ไม่ได้แปลว่าปลอดภัย รายงานต้องเขียนว่าโค้ด Dart `ยังไม่ได้ตรวจด้วย static analysis` แล้วพึ่ง `flutter analyze` กับการอ่านโค้ดแทน ห้ามสรุปว่า `ผ่าน` จากผลว่าง
-3. **ยืนยันทุกข้อ** — เปิดโค้ดจริงดูว่าใช้ได้จริงไหม (เช่น ช่องโหว่อยู่ในฟังก์ชันที่โปรเจกต์ไม่ได้เรียก) แล้วติดป้าย `ยืนยันแล้ว` / `แจ้งผิด` / `ยังไม่ยืนยัน` พร้อมเหตุผล · `ยังไม่ยืนยัน` ไม่ติดระดับ และบอกว่าขาดหลักฐานอะไร · ลูกค้าขอตรวจลึกทั้งระบบ หรือเจอข้อที่ต้องไล่เส้นทางข้อมูลข้ามหลายไฟล์ → [`security-audit`](../security-audit/SKILL.md) (ผู้ยืนยันเป็นตัวใหม่ ไม่ใช่ตัวที่สแกน)
-4. **จัดระดับและตัดสิน**
-
-   | ระดับ | ทำอะไร |
-   |---|---|
-   | ค่าลับจริงหลุด | **หยุดทันที บอกผู้ใช้** ต้องเปลี่ยนค่าลับที่ผู้ให้บริการ เพราะลบจากไฟล์อย่างเดียวไม่พอ และ agent ไม่แก้ประวัติ git เอง |
-   | critical · high ที่ยืนยันแล้ว | **ห้ามส่ง** จนกว่าจะแก้ หรือผู้ใช้ยอมรับความเสี่ยงเป็นลายลักษณ์อักษรใน `decision-log` |
-   | medium | แก้ในรอบนี้ถ้าประเมินว่าใช้ไม่เกิน 1 ชั่วโมง (ค่าตั้งต้น ยังไม่ได้วัด · ปรับตามทีมได้) · เกินนั้นเปิดเป็นงานแยกเข้าคิว แล้วเรียงด้วย `decision-scoring` คำสั่ง `priority` แบบ `rice` (คนหรือระบบที่โดน × ผลกระทบ × ความมั่นใจ ÷ ชั่วโมงแก้) · ผลสูสีให้คนเลือก |
-   | low · แจ้งผิด | บันทึกเหตุผล ไม่ต้องแก้ |
-
-5. **แก้**
-   - ช่องโหว่ใน dependency ให้อัปเดตเป็นเวอร์ชันที่แก้แล้ว แล้วรัน test
-   - ช่องโหว่ในโค้ดให้ใช้ playbook `bug-fix` (หาต้นเหตุ + เขียน test ที่ล้มก่อนแก้ + ค้นจุดอื่นที่เขียนแบบเดียวกัน)
-   - รูปแบบที่เจอซ้ำให้ส่งต่อ `repeated-mistakes-to-checks` ไปทำเป็นกฎ lint
-6. **รายงาน** — `qa/security/<ปี-เดือน-วัน>-gate.md` ตาราง `| ระดับ | เรื่อง | ไฟล์:บรรทัด หรือแพ็กเกจ | ยืนยัน | ทำอะไร |` พร้อมคำตัดสิน 1 บรรทัด (`ผ่าน` · `ผ่านหลังแก้` · `ไม่ผ่าน`) ห้ามคัดค่าลับลงรายงาน (ให้ใช้ผลแบบ `--redact`) แล้วรายงานสถานะด้วย `status-report` ประเภท `ตรวจ`
-   - **ต้องมีหัวข้อ "ไม่ได้รัน"** ก่อนคำตัดสิน: เครื่องมือหรือชุดกฎที่ติดตั้งไม่ได้ · ออก exit code ไม่ใช่ 0 · ภาษาที่สแกนเนอร์ไม่รองรับ (เช่น Dart) · ไฟล์หรือโฟลเดอร์ที่ข้าม — ระบุชื่อและเหตุผลทีละรายการ · รายงานที่สแกนไม่ครบแต่เขียนเหมือนครบ แย่กว่าไม่สแกน · ถ้ามีรายการในหัวข้อนี้ คำตัดสิน `ผ่าน` ต้องต่อท้ายว่า `(ยกเว้นที่ไม่ได้รัน)`
-   - ก่อนส่งมอบลูกค้า หรือสัญญาระบุ OWASP → กรอกรายงานรายข้อ A01–A10 ตาม [`references/owasp-top10.md`](references/owasp-top10.md) เพิ่มอีกไฟล์ `qa/security/<ปี-เดือน-วัน>-owasp.md` · ผลสแกนของ gate นี้ใช้เป็นหลักฐานข้อ A02 · A03 · A04 · A05 · A08
-
-## เมื่อไรต้องรัน
-
-- ทุกครั้งก่อน playbook `ship` และก่อนส่งมอบงานลูกค้า
-- หลังเพิ่มหรืออัปเดต dependency — ผลสแกนมีรายการ ให้ทำตาม [`references/dependency-updates.md`](references/dependency-updates.md) (จัดกลุ่มตามความเสี่ยงจริง · ลำดับ patch → minor → major · พิสูจน์ · ลง CHANGELOG)
-- สัญญาหรือข้อกำหนดความปลอดภัยระบุว่าเว็บแอปหรือ API ต้องผ่าน OWASP Top 10:2025 → อ่าน [`references/owasp-top10.md`](references/owasp-top10.md) (ตาราง A01–A10 ที่ต้องมีและพิสูจน์ด้วย · เกณฑ์ส่งมอบ · ข้อสัญญา [`owasp-contract-clause.md`](references/owasp-contract-clause.md) · วิธีตาม stack [`owasp-stack-checks.md`](references/owasp-stack-checks.md) · แม่แบบรายงาน [`assets/owasp-report.md`](assets/owasp-report.md))
-- โปรเจกต์ที่ยังใช้งานอยู่ให้รันสัปดาห์ละครั้งตามรอบ (scheduled task) เพราะช่องโหว่ใหม่ถูกประกาศทุกวันแม้โค้ดไม่เปลี่ยน
-
-## ไม่ใช่หน้าที่ของ skill นี้
-
-- ทดสอบเจาะระบบจริงหรือระบบของคนอื่น เพราะ skill นี้ทำเฉพาะโค้ดและ environment ทดสอบของโปรเจกต์นี้
-- รับรองว่าปลอดภัย 100% รายงานบอกแค่ว่าตรวจอะไร ด้วยอะไร และอะไรที่ยังไม่ได้ตรวจ
-- รีวิวตรรกะและการออกแบบของ diff → `code-review-checklist` (ก่อน merge รันทั้งสองตัว)
-
-
-## reference: android.md
-
-# รายการตรวจ Android — ใช้กับ `security-gate` ข้อ 2
-
-**รายการตรวจ Android** — ดู `AndroidManifest.xml` ที่รวมแล้ว (merged manifest) ไม่ใช่แค่ไฟล์ต้นฉบับ เพราะ plugin เติม permission ให้เอง · โฟลเดอร์เปลี่ยนตามเวอร์ชัน Android Gradle Plugin (AGP) (`merged_manifests/<variant>/` หรือ `merged_manifest/<variant>/process<Variant>MainManifest/` — ยังไม่ได้ตรวจ) ให้หาด้วย `find build -path '*merged_manifest*' -name AndroidManifest.xml` หลัง build release
-- `android:exported` — ให้มีแค่ activity หลักที่เป็น `true` ส่วนตัวอื่นต้องมีเหตุผล
-- `android:allowBackup` / `dataExtractionRules` — ตั้งชัดว่าข้อมูลไหนสำรองได้ ไม่ปล่อยค่าเริ่มต้น
-- `android:debuggable` ต้องไม่มีใน release และ `usesCleartextTraffic` ต้องไม่เป็น `true`
-- permission เท่าที่ใช้จริง — แอปออฟไลน์ต้องไม่มี `INTERNET` และต้องตรวจตัวที่ plugin เติมมาด้วย
-- `key.properties` · `*.jks` · `*.keystore` ไม่อยู่ใน git (`git ls-files` แล้วค้น)
-
-
-## reference: dependency-updates.md
-
-# Updating vulnerable dependencies — an extension of `security-gate` step 5
-
-Use when the dependency scan result has entries, or a new dependency was just added · ideas from wshobson `dependency-management` (MIT) and Trail of Bits `supply-chain-risk-auditor` (CC-BY-SA 4.0 — ideas only, rewritten in our own words)
-
-## 1 · Scan — use the tool that comes with the language, then add one that reads lockfiles of every language
-
-| stack | Command | Note |
-|---|---|---|
-| Node | `npm audit --omit=dev --json > _to_delete/security/npm-audit.json` | `--omit=dev` drops things that never reach production · never `npm audit fix --force` because it allows updates across a major version |
-| Python | `pip-audit -r requirements.txt` or `pip-audit` inside the venv | For projects using `uv` / `poetry`, export the lockfile to requirements first |
-| .NET | `dotnet list package --vulnerable --include-transitive` | Without `--include-transitive` you see only directly referenced ones |
-| Every stack | `trivy fs --scanners vuln .` or `osv-scanner scan source -r .` | Reads the lockfiles of every language at once, use it to confirm the results above and to catch Dart · Go · Rust |
-
-**Always commit the lockfile** (`package-lock.json` · `uv.lock` / `poetry.lock` · `packages.lock.json` · `pubspec.lock`) — with no lockfile each machine gets different versions, and the scanner does not know which version is really used
-
-## 2 · Group by real risk, not by the scanner's severity label
-
-Answer 3 questions per entry, then fill the table `| แพ็กเกจ | เวอร์ชัน | ช่องโหว่ | ใช้ถึงโค้ดที่เสี่ยงไหม | ตรง/ผ่านตัวอื่น | มีเวอร์ชันแก้ไหม | ทำอะไร |` (package · version · vulnerability · reaches the risky code · direct/via another · fixed version available · action)
-
-| Question | Look at | Effect on the decision |
-|---|---|---|
-| Does our code call the vulnerable function, and can outside input reach it | `grep` the function name in the advisory · the path of input | Does not reach → may be downgraded, but the reason must be recorded, not closed silently |
-| Referenced directly or through another package (transitive) | `npm ls <pkg>` · `pipdeptree -r -p <pkg>` · `dotnet nuget why <pkg>` | transitive → fix at the parent first, and if the parent has no new version yet, override in the lockfile and note that it must be removed when the parent is fixed |
-| Is there a fixed version | The `fixed in` field of the advisory | None → find a replacement package, or close the input's entry path and record it as an accepted risk in `decision-log` |
-
-Resulting summary: **fix now** (really reached + a fix exists) · **fix next round** (cannot be reached, but a fix exists) · **accept the risk temporarily** (no fix — the user must see it and agree)
-
-## 3 · Update order — small first, split the large ones out so they are visible
-
-1. All **patch** updates in one round (1.2.3 → 1.2.9) — by the semver contract they do not change behaviour, but you still must run tests
-2. **minor** may be combined if in the same group (for example the `@angular/*` set together) · read the release notes for the word deprecated
-3. **major — 1 PR per 1 package**: read the migration guide first, change the code accordingly, then run the whole test set · never bundle 2 majors in one PR, because when it breaks you will not know which one
-4. A package nobody maintains any more (no release over 2 years · open security issues) → open a separate task to find a replacement, do not hide it inside an update PR
-
-Automatic route: turn on **Renovate** or **Dependabot** to file PRs in the order above by themselves (group patch+minor automatically · major in its own PR · set the day of the week) — a person still must read the release notes and merge, and never auto-merge a major
-
-## 4 · Prove it before closing the entry
-
-- The whole test set is green and the build passes from a clean machine with the committed lockfile
-- **Walk the vulnerability's original path again** — if the advisory says input of form X makes it break, really send X in (in a sandbox) and see that it does not break · write it as a test if you can, so it does not regress when someone downgrades
-- Re-run the scanner of item 1, and that entry must be gone, not merely have its version changed in the file
-
-## 5 · Record
-
-- `CHANGELOG.md` under the heading Security: package · from → to · vulnerability ID (CVE or GHSA) · 1 line on whether we reach that vulnerability
-- Entries with an accepted risk or an override in the lockfile → `decision-log` with the date to come back and look
-- That round's gate report (`qa/security/<วัน>-gate.md`) points to the CHANGELOG instead of writing it again
-
-
-## reference: owasp-contract-clause.md
-
-# ข้อกำหนด OWASP Top 10:2025 ในสัญญาและ SRS
-
-ร่างนี้ใช้เป็นจุดเริ่ม ไม่ใช่คำแนะนำทางกฎหมาย · สัญญาจริงให้ `legal-compliance-officer` หรือทนายของผู้ว่าจ้างตรวจ · ร่างสัญญาภาษาไทยทั้งฉบับใช้ `e-commerce:doc-contract-th`
-
-## ทำไมต้องเขียนให้วัดได้
-
-"ระบบต้องปลอดภัยตาม OWASP" วัดไม่ได้ แล้วจะเถียงกันตอนส่งมอบ · ให้เขียนเป็น **เกณฑ์รับงาน** ที่ตรวจได้ทีละข้อ และบอกขอบเขตที่ไม่รวม
-
-## ร่างข้อกำหนด (ภาษาไทย)
-
-> **ข้อ X ความปลอดภัยของระบบ**
->
-> X.1 ผู้รับจ้างจะพัฒนาระบบโดยมีมาตรการรองรับความเสี่ยงทั้ง 10 ข้อของ Open Worldwide Application Security Project (OWASP) Top 10 ฉบับปี 2025 (A01 ถึง A10)
->
-> X.2 ก่อนส่งมอบแต่ละงวด ผู้รับจ้างจะส่งรายงานผลการตรวจ OWASP Top 10:2025 ซึ่งระบุ สำหรับแต่ละข้อ (ก) มาตรการที่ใช้ (ข) วิธีตรวจและเครื่องมือที่ใช้ (ค) หลักฐานผลการตรวจ และ (ง) สถานะ ผ่าน · ผ่านโดยการตรวจเอกสารหรือการตั้งค่าพร้อมระบุไฟล์ที่ตรวจ (สำหรับข้อที่ทดสอบอัตโนมัติไม่ได้) · ไม่ผ่าน · ไม่เกี่ยวข้องพร้อมเหตุผล · ยอมรับความเสี่ยงตามข้อ X.4 · ยังไม่ได้ตรวจพร้อมเหตุผล
->
-> X.3 งวดงานจะถือว่าผ่านเกณฑ์ด้านความปลอดภัยเมื่อ (ก) ไม่มีข้อใดมีสถานะไม่ผ่าน (ข) ไม่มีข้อใดมีสถานะยังไม่ได้ตรวจ และ (ค) ไม่มีช่องโหว่ระดับวิกฤต (Critical) หรือสูง (High) ที่ยืนยันแล้วค้างอยู่ในโค้ดหรือไลบรารีที่ใช้ ณ วันส่งมอบ โดยวัดระดับตามคะแนน Common Vulnerability Scoring System (CVSS) รุ่น 3.1 ขึ้นไป ที่เครื่องมือตรวจในภาคผนวกรายงาน · ช่องโหว่ที่ยังไม่มีเวอร์ชันแก้ไขจากผู้พัฒนาไลบรารี ผู้รับจ้างจะแจ้งพร้อมมาตรการบรรเทา แล้วให้ใช้ข้อ X.4
->
-> X.4 ข้อใดที่ผู้ว่าจ้างตกลงยอมรับความเสี่ยง ให้บันทึกเป็นลายลักษณ์อักษร พร้อมชื่อผู้อนุมัติและวันที่
->
-> X.5 ขอบเขตนี้ไม่รวม (ก) การทดสอบเจาะระบบ (penetration test) โดยบุคคลภายนอก เว้นแต่ตกลงไว้ในภาคผนวก (ข) โครงสร้างพื้นฐานและเซิร์ฟเวอร์ที่ผู้ว่าจ้างจัดหาและดูแลเอง (ค) ช่องโหว่ที่ประกาศหลังวันส่งมอบ ซึ่งให้เป็นไปตามข้อตกลงการดูแลรักษาระบบ (ถ้ามี)
->
-> X.6 การตรวจตามข้อนี้ไม่ใช่การรับรองว่าระบบปลอดภัยโดยสมบูรณ์
-
-## ร่างใน SRS — หมวดความต้องการที่ไม่ใช่ฟังก์ชัน ด้านความปลอดภัย (Non-Functional Requirement (NFR))
-
-| รหัส | ความต้องการ | วิธีตรวจรับ |
-|---|---|---|
-| NFR-SEC-01 | ระบบรองรับ OWASP Top 10:2025 ครบ A01–A10 | รายงานผลการตรวจตามข้อ X.2 ผ่านเกณฑ์ข้อ X.3 |
-| NFR-SEC-02 | ทุก endpoint ตรวจสิทธิ์ฝั่ง server และผู้ใช้เข้าถึงได้เฉพาะข้อมูลของตน | ชุด test ด้านสิทธิ์ (A01) ผ่านทั้งหมด |
-| NFR-SEC-03 | ไม่มี dependency ที่มีช่องโหว่ระดับ critical หรือ high (ตาม CVSS) ณ วันส่งมอบ ยกเว้นตามข้อ X.3 | ผลสแกน dependency ในภาคผนวกรายงาน |
-| NFR-SEC-04 | admin และธุรกรรมเงินใช้การยืนยันตัวตนหลายชั้น (MFA) | ชุด test ด้าน login (A07) |
-| NFR-SEC-05 | เหตุการณ์ความปลอดภัยมี log และแจ้งเตือน | ชุด test ด้าน log (A09) + ตัวอย่าง log |
-
-เพิ่มหรือตัดแถวตามระบบ · ทุกแถวต้องมี "วิธีตรวจรับ" ที่ทำได้จริง
-
-
-## reference: owasp-stack-checks.md
-
-# OWASP Top 10:2025 ตาม stack ที่ทีมใช้
-
-เปิดไฟล์นี้ตอนเขียนโค้ดและตอนกรอกรายงาน · แต่ละข้อบอก "ใช้อะไร" และ "อย่าทำ" · ค่าเริ่มของ framework ที่ปลอดภัยอยู่แล้ว ให้ใช้ตามนั้น ไม่เขียนเอง
-
-- [.NET / ASP.NET Core](#net--aspnet-core)
-- [TypeScript · Node · Angular](#typescript--node--angular)
-- [Python (FastAPI · Django · Flask)](#python-fastapi--django--flask)
-- [SQL (SQL Server · PostgreSQL · MySQL)](#sql-sql-server--postgresql--mysql)
-- [เครื่องมือที่ใช้พิสูจน์](#เครื่องมือที่ใช้พิสูจน์)
-
----
-
-## .NET / ASP.NET Core
-
-| ข้อ | ใช้อะไร | อย่าทำ |
-|---|---|---|
-| A01 | `FallbackPolicy` = ต้อง login ทุก endpoint แล้วเปิดเฉพาะที่ตั้งใจด้วย `[AllowAnonymous]` · ตรวจเจ้าของ record ด้วย `IAuthorizationService` + resource-based policy · ASP.NET MVC แบบเก่าใช้ `[Authorize]` ระดับ controller + filter กลาง · antiforgery token ทุก form (`[ValidateAntiForgeryToken]` หรือ `AutoValidateAntiforgeryTokenAttribute` ทั้งแอป) · รับ input ผ่าน ViewModel หรือ DTO ไม่ bind entity ตรง | ซ่อนปุ่มใน view แล้วถือว่าคุมสิทธิ์แล้ว · ใช้ id จาก URL ค้น DB โดยไม่กรองด้วย user |
-| A02 | `app.UseExceptionHandler` + `UseHsts` ใน production · `customErrors mode="RemoteOnly"` (MVC เก่า) · ลบ header `Server` · `X-Powered-By` | เปิด `UseDeveloperExceptionPage` บน production · เก็บ connection string ใน `appsettings.json` ที่ commit |
-| A03 | `dotnet list package --vulnerable --include-transitive` · `Directory.Packages.props` คุมเวอร์ชันที่เดียว · SBOM: `dotnet CycloneDX` | ใช้แพ็กเกจที่ไม่มีคนดูแลแล้ว (ดูวันออกล่าสุด) |
-| A04 | ASP.NET Core Identity (PBKDF2) หรือ `Rfc2898DeriveBytes.Pbkdf2` · Data Protection API สำหรับค่าที่ต้องถอดกลับ · ค่าลับใน User Secrets หรือ Key Vault | `MD5` · `SHA1` · `DES` · เขียน crypto เอง |
-| A05 | EF Core LINQ · `FromSqlInterpolated` · Dapper พร้อม parameter · Razor encode HTML ให้เอง | `FromSqlRaw` ต่อสตริง · `Html.Raw` กับข้อมูลผู้ใช้ · `Process.Start` กับ input |
-| A07 | Identity: `Lockout.MaxFailedAccessAttempts` + `PasswordSignInAsync(..., lockoutOnFailure: true)` (หน้า Login ที่ scaffold มาตั้งเป็น false) · cookie `HttpOnly` `Secure` `SameSite` · JWT: ตั้ง `ValidateIssuer` `ValidateAudience` `ValidateLifetime` `ValidateIssuerSigningKey` = true | `ValidateLifetime = false` · รับ algorithm `none` |
-| A08 | `System.Text.Json` · webhook ตรวจลายเซ็น Hash-based Message Authentication Code (HMAC) ด้วย `CryptographicOperations.FixedTimeEquals` | `BinaryFormatter` · `TypeNameHandling.All` ของ Newtonsoft |
-| A09 | `ILogger` แบบ structured (Serilog) · log ผล login · ถูกปฏิเสธสิทธิ์ · ตัดค่าลับด้วย destructuring policy | log ทั้ง request body ที่มีรหัสผ่าน |
-| A10 | ตัวจับกลาง `IExceptionHandler` (.NET 8 ขึ้นไป · ลงทะเบียน `AddExceptionHandler<T>()` + `AddProblemDetails()` **และ** ต้องมี `app.UseExceptionHandler()` ใน pipeline ไม่งั้นตัวจับไม่ทำงาน) คืน `ProblemDetails` · .NET เก่ากว่าใช้ `UseExceptionHandler` กับ lambda หรือ path · `TransactionScope` หรือ `BeginTransaction` ครอบงานหลายขั้น · `CancellationToken` + timeout ของ `HttpClient` | `catch { }` ว่าง · `catch` แล้วคืน `true` จากตัวตรวจสิทธิ์ |
-
-## TypeScript · Node · Angular
-
-| ข้อ | ใช้อะไร | อย่าทำ |
-|---|---|---|
-| A01 | middleware ตรวจสิทธิ์ตัวเดียวที่ router ระดับบน (ปฏิเสธเป็นค่าเริ่ม) · query กรองด้วย `userId` ของ session ทุกครั้ง · Angular route guard ใช้แค่ซ่อนหน้า ส่วนสิทธิ์จริงตรวจที่ API · SSRF: allowlist host ก่อน `fetch` URL ที่ผู้ใช้ส่ง · CSRF token เมื่อใช้ cookie session · ตรวจ body ด้วย schema (zod) แล้วหยิบเฉพาะฟิลด์ที่อนุญาต | เชื่อ `role` ที่ client ส่งมา · `Object.assign(entity, req.body)` · `cors({ origin: true, credentials: true })` |
-| A02 | `helmet()` · `NODE_ENV=production` · ปิด source map ใน production build · Express `app.disable("x-powered-by")` | ส่ง `err.stack` กลับ client |
-| A03 | `npm ci` + `package-lock.json` · `npm audit --omit=dev` · SBOM: `npx @cyclonedx/cyclonedx-npm` · ตรวจ `postinstall` ของแพ็กเกจใหม่ | `npm install` แพ็กเกจที่ชื่อคล้ายของดัง (typosquat) โดยไม่ดูผู้ดูแล |
-| A04 | `argon2` หรือ `bcrypt` · `crypto.randomBytes` · `crypto.timingSafeEqual` | `Math.random()` ทำ token · `crypto.createHash("md5")` กับรหัสผ่าน |
-| A05 | ORM (Prisma · TypeORM) หรือ parameter `$1` · Angular escape ให้เอง · `execFile` พร้อม argument เป็น array | `innerHTML` · `bypassSecurityTrustHtml` กับข้อมูลผู้ใช้ · `eval` · `exec` ต่อสตริง · `new Function` |
-| A07 | `express-rate-limit` ที่ `/login` · cookie `httpOnly` `secure` `sameSite` · JWT: `jwt.verify(token, key, { algorithms: ["RS256"], issuer, audience })` (ระบุ algorithm ที่ใช้จริงตายตัว) | เก็บ token ใน `localStorage` ของระบบที่มีข้อมูลอ่อนไหว · `jwt.decode` แทน `verify` |
-| A08 | ตรวจลายเซ็น webhook ก่อน `JSON.parse` · Subresource Integrity (SRI) กับ script จาก CDN | `node-serialize` · โหลด script จาก CDN โดยไม่มี `integrity` |
-| A09 | pino หรือ winston แบบ JSON · `redact: ["req.headers.authorization", "*.password"]` | `console.log(req.body)` |
-| A10 | Express error middleware ตัวสุดท้าย · `process.on("unhandledRejection")` log แล้วปิดอย่างเป็นระเบียบ · transaction ของ ORM · `AbortSignal.timeout()` กับ `fetch` | `.catch(() => {})` · promise ที่ไม่มีใคร await |
-
-## Python (FastAPI · Django · Flask)
-
-| ข้อ | ใช้อะไร | อย่าทำ |
-|---|---|---|
-| A01 | FastAPI `Depends(current_user)` ระดับ router · Django `LoginRequiredMixin` + `get_object_or_404(Model, pk=..., owner=request.user)` · SSRF: allowlist host ก่อน `httpx.get` · Django CSRF middleware เปิดไว้ · รับ input ด้วย Pydantic model หรือ Django `ModelForm(fields=[...])` | `Model.objects.get(pk=id)` โดยไม่กรองเจ้าของ · `fields = "__all__"` · `@csrf_exempt` ทั้ง view โดยไม่มีเหตุผล |
-| A02 | Django `DEBUG=False` · `SECURE_*` settings · `python manage.py check --deploy` · FastAPI ปิด `/docs` บน production ถ้าไม่ได้ตั้งใจเปิด | `DEBUG=True` · `ALLOWED_HOSTS=["*"]` |
-| A03 | lockfile (`uv.lock` · `poetry.lock` · `requirements.txt` ที่ pin เวอร์ชัน + `--require-hashes`) · `pip-audit` · SBOM: `cyclonedx-py environment` (หรือ `requirements` · `poetry`) | `pip install` จาก URL ที่ไม่รู้จัก |
-| A04 | `argon2-cffi` · Django password hasher ค่าเริ่ม · `secrets.token_urlsafe` · `hmac.compare_digest` | `hashlib.md5(password)` · `random` ทำ token |
-| A05 | ORM หรือ `cursor.execute(sql, params)` · Jinja2 `autoescape=True` · `subprocess.run([...])` แบบ list | f-string ใน SQL · `shell=True` กับ input · `eval` |
-| A07 | `slowapi` หรือ django-axes กัน login รัว · PyJWT: `jwt.decode(token, key, algorithms=["RS256"], audience=..., issuer=...)` (ระบุ algorithm ที่ใช้จริงตายตัว) | `jwt.decode(..., options={"verify_signature": False})` |
-| A08 | ตรวจลายเซ็น webhook ด้วย `hmac.compare_digest` · `yaml.safe_load` · `json` | `pickle.loads` · `yaml.load` กับข้อมูลภายนอก |
-| A09 | `logging` แบบ structured (structlog) · filter ตัดค่าลับ | log `request.headers` ทั้งก้อน |
-| A10 | FastAPI `@app.exception_handler(Exception)` · Django `handler500` · `with transaction.atomic():` · timeout ทุกการเรียก `httpx` | `except Exception: pass` · ตัวตรวจสิทธิ์ที่ `except` แล้ว `return True` |
-
-## SQL (SQL Server · PostgreSQL · MySQL)
-
-| ข้อ | ใช้อะไร | อย่าทำ |
-|---|---|---|
-| A01 | user ของแอปมีสิทธิ์เท่าที่ใช้ (ไม่ใช่ `sa` · `postgres` · `root`) · แยก user อ่านอย่างเดียวสำหรับรายงาน · Row-Level Security (RLS) ของ PostgreSQL หรือ SQL Server สำหรับระบบหลายลูกค้า (multi-tenant) | ให้แอปใช้ user เจ้าของ database |
-| A02 | ปิด port DB จากภายนอก · บังคับ TLS ของการเชื่อมต่อ · ปิด `xp_cmdshell` | เปิด DB ออก internet |
-| A04 | Transparent Data Encryption (TDE) หรือเข้ารหัสระดับดิสก์ · คอลัมน์อ่อนไหวเข้ารหัสระดับแอป หรือ Always Encrypted · backup เข้ารหัส | เก็บเลขบัตรประชาชน · เลขบัตรเครดิตเป็นข้อความเปล่า |
-| A05 | stored procedure หรือ query ที่รับ parameter · ถ้าต้องสร้าง SQL แบบ dynamic ใช้ `sp_executesql` พร้อม parameter และ `QUOTENAME` กับชื่อ object | `EXEC('... ' + @input)` · ต่อชื่อตารางจาก input |
-| A09 | audit ตารางเงินและสิทธิ์ (trigger หรือ temporal table) · log login ล้มของ DB | ปิด audit เพื่อให้เร็ว |
-| A10 | `BEGIN TRY ... BEGIN CATCH ... ROLLBACK` · `SET XACT_ABORT ON` · migration รันซ้ำได้ (`IF NOT EXISTS`) | migration ที่ล้มกลางทางแล้วทิ้งตารางครึ่ง ๆ |
-
-## เครื่องมือที่ใช้พิสูจน์
-
-| ใช้ทำอะไร | เครื่องมือ | ครอบข้อ |
-|---|---|---|
-| ค่าลับ · dependency · โค้ดเสี่ยง · ไฟล์ตั้งค่าโครงสร้างพื้นฐาน (Infrastructure as Code (IaC)) | ตาม [`security-gate`](../../security-gate/SKILL.md) (gitleaks · npm audit · pip-audit · dotnet · osv-scanner · trivy · semgrep) | A02 · A03 · A04 · A05 · A08 |
-| semgrep ชุดเฉพาะ OWASP | `semgrep scan --config p/owasp-top-ten --metrics=off` (ต้องมีเน็ต) · ออฟไลน์ใช้ชุดของ `security-gate` | A01 · A04 · A05 · A08 |
-| สแกนแอปที่รันอยู่ (header · cookie · error page) | OWASP ZAP (Zed Attack Proxy) baseline กับ environment ทดสอบของโปรเจกต์เท่านั้น: `docker run --rm -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t <URL ทดสอบ>` | A02 · A05 · A07 |
-| SBOM | CycloneDX ตามภาษา (ข้างบน) เก็บที่ `qa/security/sbom/` | A03 |
-| test สิทธิ์ · login · error · webhook | integration test ของโปรเจกต์ ตั้งชื่อขึ้นต้นด้วยรหัสข้อ (`A01_...`) | A01 · A06 · A07 · A08 · A09 · A10 |
-
-- ZAP ยิงจริง → ใช้กับ environment ทดสอบที่ทีม deploy เองเท่านั้น ห้ามยิง production หรือระบบของคนอื่นโดยไม่มีหนังสืออนุญาต
-- เครื่องมือไหนรันไม่ได้ ให้เขียน `ยังไม่ได้ตรวจ` พร้อมเหตุผลในรายงาน ห้ามสรุปว่าผ่านจากผลว่าง
-
-
-## reference: owasp-top10.md
-
-# OWASP Top 10:2025 — a delivered system must pass an item-by-item checklist
-
-An extension of [`SKILL.md`](../SKILL.md) · use when building or delivering a web app or API whose contract or security requirement (NFR) names OWASP Top 10:2025
-
-> A web-app contract may say "must pass OWASP Top 10:2025", but nobody can issue a certificate like that
-> What can really be delivered is **a report that says, item by item A01–A10, what controls it, what checks it, and what evidence there is**
-> This file makes every system the team builds have that report, from design to delivery
-
-Open Worldwide Application Security Project (OWASP) Top 10:2025 is the list of the 10 most common and most serious web-app risks, in its latest edition (original: owasp.org/Top10/2025)
-
-Use together with: [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md) (writing code) · [`security-gate`](../SKILL.md) (scan before sending) · the command `/software-development:threat-model` (design) · agent `security-engineer` (in-depth report)
-
----
-
-## 1 · The 10 items, and what the system must have
-
-Each item has 3 parts → **must have** (what code and configuration must do) · **prove with** (a test or tool that can really run) · **business-owner wording** (for explaining to the customer and in the report)
-
-| Item | Risk | Business-owner wording (ภาษาเจ้าของกิจการ) | Must have | Prove with |
-|---|---|---|---|---|
-| A01 | Broken Access Control | ลูกค้าคนหนึ่งเห็นข้อมูลของอีกคนได้ | Check permissions server-side on every endpoint · deny by default · check ownership of the record every time one is read or changed by id · stop the server from fetching internal URLs (Server-Side Request Forgery (SSRF)) with an allowlist · Cross-Origin Resource Sharing (CORS) never `*` together with cookies · a system using cookie sessions must have a token against forged requests on the user's behalf (Cross-Site Request Forgery (CSRF)) · accept input through a Data Transfer Object (DTO) or an allowed-field list, never bind a whole object (stops a client sending `role` · `isAdmin` itself) | integration test per endpoint: not logged in → 401 · wrong role → 403 · another person's id → 403 or 404 · POST with no CSRF token → 403 (cookie-based systems) · sending an extra `role` field → the value in the database does not change |
-| A02 | Security Misconfiguration | ตั้งค่าเซิร์ฟเวอร์หละหลวม เปิดหน้า admin ทิ้งไว้ | Configure by the same script in every environment, differing only in secrets · turn off debug · stack traces · directory listing · sample admin pages · add security headers (Content Security Policy (CSP) including `frame-ancestors` · HTTP Strict Transport Security (HSTS) · X-Content-Type-Options) · no default passwords · cloud storage not public | Scan headers (OWASP ZAP (Zed Attack Proxy) baseline) · `trivy config .` · a test that production returns errors with no stack trace |
-| A03 | Software Supply Chain Failures | ใช้ไลบรารีเก่า หรือมีช่องโหว่ | Lockfiles for every language · a list of software components (Software Bill of Materials (SBOM)) · no dependency with a critical or high vulnerability · cut what is not used · pull only from official registries | `security-gate` dependency side (npm audit · pip-audit · `dotnet list package --vulnerable` · osv-scanner) · SBOM in CycloneDX form |
-| A04 | Cryptographic Failures | ไม่เข้ารหัสรหัสผ่านและข้อมูลสำคัญ | Transport Layer Security (TLS) 1.2 or higher everywhere + HSTS · passwords use Argon2id · bcrypt · PBKDF2 (never MD5 · SHA-1 · plain SHA-256) · sensitive data encrypted at rest · secrets outside code · store only the data you use | semgrep (crypto rules) · a test that passwords in the DB are not the original text · check the TLS of the deployed server |
-| A05 | Injection | กรอกคำสั่งในช่องค้นหา แล้วดึงฐานข้อมูลได้ | SQL only through parameters or an ORM · never concatenate strings into shell commands · HTML-escape on output (stops Cross-Site Scripting (XSS)) · validate input at the system boundary | semgrep · a test sending `' OR 1=1--` · `<script>` · `; rm` which must not take effect |
-| A06 | Insecure Design | ออกแบบผิดตั้งแต่ต้น เช่น ใช้คูปองซ้ำได้ | threat model of login · permissions · money · personal data before writing · business rules enforced at the server (cannot reuse · balance cannot go negative · repeating does not charge twice) · rate limit · file upload: check the type from the file contents, limit size, store outside the web root, rename ([`file-upload-and-storage`](../../file-upload-and-storage/SKILL.md)) | The threat model document · a test uploading a `.php` · `.exe` renamed to `.jpg` → rejected · an abuse-case test, at least 1 per business rule about money or permissions |
-| A07 | Authentication Failures | เดารหัสได้ไม่จำกัด ไม่มี MFA | Limit failed logins · multiple-factor authentication (Multi-Factor Authentication (MFA)) for admin and money work · passwords at least 15 characters (8 if MFA is present per National Institute of Standards and Technology (NIST) Special Publication (SP) 800-63B-4) and check against lists of leaked passwords · a failed-login message does not reveal whether the user exists · session id random from the server and rotated after login · JSON Web Token (JWT) checks `iss` `aud` `exp` and the algorithm | test: N failed logins → delayed or locked · expired token → 401 · the failure message is the same for existing and non-existing users |
-| A08 | Software or Data Integrity Failures | อัปเดตหรือข้อมูลถูกแก้ระหว่างทาง โดยไม่ตรวจ | Never deserialize outside data into an object that can run code · webhooks verify signatures · update files verify a checksum or signature · the automatic delivery pipeline (CI/CD) uses least privilege and has no secrets in logs · prices and amounts are computed at the server and values from the client are not trusted | test a webhook with a wrong signature → rejected · test sending a fake price from the client → the server's price is used |
-| A09 | Security Logging and Alerting Failures | ถูกเจาะแล้วไม่มีใครรู้ ไม่มี log | Log successful and failed logins · permission denials · failed input validation · admin actions · money changes — with time · who · what · result · no passwords, tokens, or ID-card numbers in logs · an alert when logins fail in bursts | a test that a failed login leaves a log line · searching the logs for secrets must find none · see `audit-trail` · `logging-standards` |
-| A10 | Mishandling of Exceptional Conditions | ระบบล่มแล้วแสดงข้อมูลภายใน หรือเปิดช่องให้ผ่าน | Every error is caught, with a global handler as the last gate · on failure **close**, not open (permission check errors → deny) · a transaction that does not complete must roll back · error messages shown to users carry no stack trace or SQL · limit quota · timeout | test: make the DB or an external service fail mid-operation → a normal error, and data is not left half done · permission check throws → 403, not let through |
-
-**Items that do not apply**: write `ไม่เกี่ยว` (not applicable) with a 1-line reason, for example A07 in a system with no login at all · never leave blank
-
-How to write it for the team's stacks (.NET · TypeScript/Node/Angular · Python · SQL) → [`owasp-stack-checks.md`](owasp-stack-checks.md)
-
----
-
-## 2 · When to use it in the job
-
-| Phase | Do | Get |
-|---|---|---|
-| Taking the job · writing the contract | Put in the requirements and acceptance criteria per [`owasp-contract-clause.md`](owasp-contract-clause.md) · put in the requirements document (Software Requirements Specification (SRS)) security category (`srs-writing`) | Customer and team agree on what "pass" means |
-| Design | threat model of login · permissions · money · personal data (A01 · A06 · A07) · state roles and permissions as a table | `docs/security/threat-model.md` |
-| Writing code | Follow the "must have" column and [`owasp-stack-checks.md`](owasp-stack-checks.md) · make every item that can be so a reusable shared piece (one permission checker · one error handler · one logger) | Code where the safe way is the easiest way |
-| test | Write tests per the "prove with" column, put them in the normal test folder, named starting with the item code, such as `A01_other_user_order_returns_404` | Evidence that can be re-run every time |
-| Before delivery | Run `security-gate`, then fill [`assets/owasp-report.md` (in the security-gate folder)](../assets/owasp-report.md) item by item | `qa/security/<ปี-เดือน-วัน>-owasp.md` |
-
----
-
-## 3 · The report before delivery — rules
-
-- 1 row per item, all of A01–A10 · status uses only these 6 values
-
-  | Status | Deliverable | Write when |
-  |---|---|---|
-  | `ผ่าน` (pass) | Yes | There is evidence that can be run — test name + run result · tool name + result file |
-  | `ผ่าน (ตรวจด้วยตา)` (pass, checked by eye) | Yes, if it says which file was checked and that item truly cannot have a test written | For example a server configuration the team did not deploy a test for |
-  | `ไม่เกี่ยว — <เหตุผล>` (not applicable — <reason>) | Yes | The system has no such part at all |
-  | `ยอมรับความเสี่ยง — <วันที่ · ใคร>` (risk accepted — <date · who>) | Yes | The customer approved in writing, recorded in `decision-log` |
-  | `ไม่ผ่าน` (fail) | No | A confirmed vulnerability was found |
-  | `ยังไม่ได้ตรวจ — <เหตุผล>` (not yet checked — <reason>) | No | The tool cannot run or it has not been done |
-
-- **Deliverable when** there is no `ไม่ผ่าน` item and no `ยังไม่ได้ตรวจ` item
-- **An item that is `ไม่ผ่าน` is written as a finding block, one per entry** (template in `assets/owasp-report.md` (in the security-gate folder)) — ID `F-01` · file:line · item A0x + the Application Security Verification Standard (ASVS) level it must reach (L1 every system · L2 has personal data or transactions · L3 money, health, critical infrastructure) · impact in business-owner wording · fix · evidence used to confirm (command · test · image) · 1 block per vulnerability, never several spots in one row (idea from agamm/claude-code-owasp (MIT))
-- Always include a section **scope not checked**, for example penetration testing by outsiders · the customer's servers the team did not deploy · libraries with no vulnerability data
-- Never write "100% secure" or "OWASP certified" — OWASP issues no certificates · if it can be delivered, write "passes the OWASP Top 10:2025 criteria per the checklist in this report"
-- The totals count all 6 statuses separately, for example `ผ่าน 7 · ผ่าน (ตรวจด้วยตา) 1 · ไม่เกี่ยว 2 · ยอมรับความเสี่ยง 0 · ไม่ผ่าน 0 · ยังไม่ได้ตรวจ 0`
-- Summarise the status into `docs/BUILD-PLAN.md` with `status-report` of type `ตรวจ` (check) (who did it · who checked · check result `ผ่าน — ผ่าน 8 · ไม่เกี่ยว 2` or `ไม่ผ่าน — A01 · A07`)
-
----
-
-## 4 · Who does what
-
-| Part | agent |
-|---|---|
-| Contract and SRS requirements | `business-analyst` · legal clauses → `legal-compliance-officer` |
-| threat model · permissions table · design review | `security-engineer` |
-| Code and tests per the "must have" · "prove with" columns | `developer` (and the agent for the stack) |
-| Scan and fill the report | `security-engineer` through `security-gate` |
-| Check the report before sending to the customer | a new `reviewer` — every row marked `ผ่าน` (pass) must have evidence that can really be opened |
-
----
-
-## 5 · Not this file's job
-
-- Real penetration testing, or testing someone else's system — this file checks only this project's code and test environment
-- Other standards, such as OWASP API Security Top 10 · Application Security Verification Standard (ASVS) · Payment Card Industry Data Security Standard (PCI-DSS) · the Personal Data Protection Act (PDPA) — use the skill for that topic (`fintech-payments` · `pdpa-compliance`), but this report can be used as a common base
-- Mobile apps — use OWASP Mobile Top 10 together with [`android.md`](android.md) · the backend of a mobile app still uses this file
-
-
----
-
 # skill: markdown-visuals
 
 Use when a Markdown doc needs an image, SVG or ASCII art
 
 # Markdown Visuals
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line of wording per `human-writing`. This skill gives the format and structure; human-writing gives the way to write so people understand.
 
 > **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
@@ -461,7 +83,7 @@ What are you showing?
 
 ### สี
 
-ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น ส่วนถ้ายังไม่มี ให้ค้นต้นแบบตาม `design-references` (plugin `superuser`) ประเภท `document` แล้วถอดสีจากงานที่เลือก · ค้นสดไม่ได้จึงใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม (ลำดับใน `diagram-figures` ข้อ 5 · ตารางโทนตามเนื้องาน [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) ส่วน token ตามหน้าที่ (`bg-canvas` · `accent-primary` · `state-*` …) ดูได้ใน [references/svg-snippets.md](references/svg-snippets.md) และ **1 เอกสารใช้ชุดสีเดียว**
+If the document or project already has a colour palette, use it. If not, search for references per `design-references` (plugin `superuser`), type `document`, and take the colours from the chosen work · if live search is not possible, use the house value `#2A78D6`, mark it `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask (order in `diagram-figures` item 5 · colour-by-domain table [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) · for role-based tokens (`bg-canvas` · `accent-primary` · `state-*` …) see [references/svg-snippets.md](references/svg-snippets.md) · and **1 document uses 1 palette**
 
 ### Reusable snippets
 
@@ -521,14 +143,14 @@ Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
 
 ## 4 · Mermaid
 
-**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams` (plugin `software-development`) ข้อ 1–5 และ `assets/mermaid-theme.md`** · Mermaid ในเอกสารโปรเจกต์ที่ต้องแปลงเป็นรูปลง Word ใช้ตัวแปลงใน `diagram-figures` → `references/engine-mermaid.md`
-ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
+**Choosing a diagram type, theme, readability rules and Thai labels is covered in `software-diagrams` (plugin `software-development`) items 1–5 and `assets/mermaid-theme.md`** · for Mermaid in project documents that must be converted to a picture for Word, use the converter in `diagram-figures` → `references/engine-mermaid.md`
+This file only says *when to choose Mermaid over other formats*
 
-| เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
+| Choose Mermaid when | Choose something else when |
 |---|---|
-| เป็นกล่องกับลูกศรที่เครื่องจัดวางให้ได้ | ถ้าต้องคุมตำแหน่งเองให้ใช้ inline SVG ส่วนรูปที่ต้องดูออกแบบมาให้ใช้ `diagram-figures` (HTML layout หรือ engine-svg-python) แล้วฝังเป็นไฟล์ภาพ |
-| อยู่ในไฟล์ที่ต้อง diff ใน git | เป็นภาพหน้าจอจริง ให้ใช้ไฟล์ภาพ |
-| ผู้อ่านเปิดใน GitHub หรือ Notion | ผู้อ่านเปิดในเอกสาร Word หรือสไลด์ ให้ใช้ไฟล์ภาพ |
+| It is boxes and arrows that the engine can lay out | If you must control placement yourself, use inline SVG; for a figure that must look designed, use `diagram-figures` (HTML layout or engine-svg-python) and embed it as an image file |
+| It lives in a file that must be diffed in git | It is a real screenshot: use an image file |
+| Readers open it in GitHub or Notion | Readers open it in a Word document or slides: use an image file |
 
 ## Combining formats in one doc
 
@@ -582,12 +204,12 @@ Not sure a visual will render? Preview it in the viewer the reader will use (Git
 
 ## ไม่ให้ดูเหมือน AI ทำ
 
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ทุกงานต้องผ่านด่านตา 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+Before sending, go through item 3 of `no-ai-look` — for HTML work, run its script · every piece must also pass eye check 3.2 (a web page adds items 10–14), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for all media is there
 
 ## ตัวย่อ
 
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้เลย ดูรายละเอียดใน skill `spell-out-abbreviations`
+Spell out each abbreviation in full on first use and put the short form in brackets — for example Model Context Protocol (MCP)
+After that, use the short form. Details are in the skill `spell-out-abbreviations`
 
 
 ## reference: ascii-patterns.md
@@ -673,30 +295,30 @@ Don't force everything into one format. Each format is best at something differe
 
 Reusable building blocks for inline SVG pictures of a screen inside .md docs (the real mockup is HTML) · used by [SKILL.md](../SKILL.md) §1
 
-## สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
+## Colour: it comes from the subject, not from a ready-made table
 
-ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น
-ถ้ายังไม่มี ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม และเสนอโทนจากเนื้องานไว้ในรายงาน — การแพทย์เขียว · การเงินน้ำเงินเข้ม ·
-อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า · ซอฟต์แวร์ทั่วไปน้ำเงิน (ตารางเต็มอยู่ใน [`diagram-figures/references/colour-by-domain.md`](../../diagram-figures/references/colour-by-domain.md))
+If the document or project already has a colour set, use that set.
+If not, use the house value `#2A78D6`, write `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask. Propose a tone drawn from the subject in the report: medical green · finance dark blue ·
+industrial amber · government navy · general software blue (the full table is in [`diagram-figures/references/colour-by-domain.md`](../../diagram-figures/references/colour-by-domain.md))
 
-กำหนดเป็น **token ตามหน้าที่** ไว้บนสุดของเอกสาร แล้วใช้ค่าเดียวกันทุกรูปในเอกสารนั้น:
+Define **tokens by role** at the top of the document, then use the same values in every figure in that document:
 
-| Token | หน้าที่ | ได้มาจาก |
+| Token | Role | Comes from |
 |---|---|---|
-| `bg-canvas` | พื้นหลังของรูป | เฉดเข้มสุด (โหมดมืด) หรืออ่อนสุด (โหมดสว่าง) |
-| `bg-surface` | แผ่น พาเนล การ์ด | ต่างจาก canvas พอให้เห็นขอบโดยไม่ต้องตีเส้น |
-| `bg-elevated` | ไทล์ที่ลอยขึ้นมาอีกชั้น | |
-| `accent-primary` | จุดเน้น สถานะที่กำลังทำงาน | **สีแบรนด์** (ไม่มี → `#2A78D6` + `(รอยืนยัน)`) |
-| `text-primary` | ข้อความหลัก | contrast ≥ 4.5:1 กับพื้นที่มันวางอยู่ |
-| `text-muted` | ข้อความรอง placeholder | `rgba(...,0.55)` ของ `text-primary` |
-| `state-success` · `state-warning` · `state-danger` | สถานะ | **ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่านเสมอ |
+| `bg-canvas` | Background of the figure | The darkest shade (dark mode) or the lightest (light mode) |
+| `bg-surface` | Sheets, panels, cards | Different enough from canvas to show the edge without drawing a line |
+| `bg-elevated` | A tile raised one more layer | |
+| `accent-primary` | Emphasis, the active state | **The brand colour** (none → `#2A78D6` + `(รอยืนยัน)`) |
+| `text-primary` | Main text | Contrast ≥ 4.5:1 against the surface it sits on |
+| `text-muted` | Secondary text, placeholder | `rgba(...,0.55)` of `text-primary` |
+| `state-success` · `state-warning` · `state-danger` | Status | **Does not change with the brand.** Green always means pass and red always means fail |
 
-**1 เอกสารใช้ชุดสีเดียว** — รูป 10 รูปในเอกสารเดียวที่สีไม่ตรงกัน อ่านยากกว่ารูปไม่สวยแต่สีตรงกัน
+**One document, one colour set.** 10 figures in one document with mismatched colours are harder to read than plain figures with matching colours.
 
 ## Snippets
 
-> ตัวอย่างข้างล่างใช้ชุดสีโหมดมืดชุดหนึ่งเป็นตัวแทนเท่านั้น
-> **เปลี่ยนค่าสีให้ตรงกับชุดที่ตกลงไว้ก่อนใช้** โครงสร้างคือสิ่งที่ต้องคัดลอก ไม่ใช่ค่าสี
+> The examples below use one dark-mode colour set as a stand-in only.
+> **Change the colour values to match the agreed set before use.** The structure is what you copy, not the colour values.
 
 **Window chrome (desktop app mockup):**
 ```xml
@@ -759,61 +381,61 @@ Use when building or reviewing an HTTP backend
 
 # Web Service Essentials
 
-> **กฎข้อเดียว:** ก่อนเขียน endpoint ธุรกิจตัวแรก service ต้องตอบได้ว่า
-> "ยังอยู่ไหม · พร้อมรับงานไหม · ตอนนี้รันเวอร์ชันอะไร" ถ้าตอบไม่ได้ วันที่ระบบล่มคุณจะต้องเดาล้วน ๆ
+> **The one rule:** before writing the first business endpoint, the service must be able to answer
+> "Are you still alive? · Are you ready for work? · Which version are you running now?" If it cannot, on the day the system goes down you will be guessing blind.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เริ่ม service / REST API / microservice ใหม่
-- มีคนขอ health check, ping, readiness, liveness, version endpoint
-- จะ deploy ขึ้น production ครั้งแรก หรือย้ายเข้า Docker/Kubernetes
-- ต้องกำหนดรูปแบบ error ของ API ให้เหมือนกันทั้งระบบ
+- Starting a new service / REST API / microservice
+- Someone asks for a health check, ping, readiness, liveness, or version endpoint
+- Deploying to production for the first time, or moving into Docker/Kubernetes
+- You must set one API error format for the whole system
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-- ออกแบบ endpoint ทางธุรกิจ ให้ใช้ command `/api-design`
-- รูปแบบ URL · paging · วันที่ · id ของ API ให้ใช้ `api-conventions`
-- รูปแบบ log ให้ใช้ `logging-standards`
-- เลือกสถาปัตยกรรม ให้ใช้ `architecture-patterns`
+- To design business endpoints, use the command `/api-design`
+- For URL style · paging · dates · API ids, use `api-conventions`
+- For log format, use `logging-standards`
+- To choose an architecture, use `architecture-patterns`
 
 ---
 
-## 1 · endpoint พื้นฐาน 4 ตัว
+## 1 · The 4 basic endpoints
 
-| Endpoint | ตอบอะไร | auth | เช็ค dependency | ใครเรียก |
+| Endpoint | What it answers | auth | Checks dependencies | Who calls it |
 |---|---|:---:|:---:|---|
-| `GET /ping` | `pong` (text) | ไม่ | ไม่ | load balancer ทุกวินาที |
-| `GET /health/live` | process ยังอยู่ | ไม่ | **ไม่** | orchestrator (restart ถ้าตาย) |
-| `GET /health/ready` | พร้อมรับ traffic | ไม่ | ใช่ | orchestrator (ตัดออกจาก pool) |
-| `GET /version` | รันอะไรอยู่ | ไม่* | ไม่ | คน ตอนไล่ปัญหา |
+| `GET /ping` | `pong` (text) | no | no | load balancer, every second |
+| `GET /health/live` | the process is still alive | no | **no** | orchestrator (restarts if dead) |
+| `GET /health/ready` | ready to take traffic | no | yes | orchestrator (removes from the pool) |
+| `GET /version` | what is running | no* | no | a person, when tracing a problem |
 
-> **live ห้ามเช็ค dependency** นี่คือความผิดพลาดที่เจอบ่อยที่สุด
-> ถ้า `/health/live` เช็คฐานข้อมูล (database · DB) แล้ว DB ล่มชั่วคราว Kubernetes จะ**ฆ่า pod ทิ้งทั้งหมด**
-> ทั้งที่แอปยังปกติดี พอ DB กลับมาก็ไม่มี pod เหลือรับ traffic แล้ว
-> การเช็ค dependency ต้องอยู่ที่ `/health/ready` ซึ่งแค่ตัด pod ออกจาก pool ชั่วคราว
+> **live must not check dependencies.** This is the most common mistake.
+> If `/health/live` checks the database (DB) and the DB goes down briefly, Kubernetes will **kill every pod**
+> even though the app itself is fine. When the DB comes back, no pod is left to take traffic.
+> The dependency check belongs in `/health/ready`, which only removes a pod from the pool for a while.
 
-\* ถ้าไม่อยากให้คนทั่วไปเห็น commit hash ใน `/version` ให้จำกัดให้เรียกได้เฉพาะเครือข่ายภายใน
+\* If you do not want the public to see the commit hash in `/version`, restrict it so only the internal network can call it.
 
-**ผูกกับ Kubernetes แบบนี้** (ปรับจาก secondsky `health-check-endpoints` · MIT) — live กับ ready ต้องชี้คนละ path ไม่งั้นข้อข้างบนไร้ความหมาย
+**Wire it to Kubernetes like this** (adapted from secondsky `health-check-endpoints` · MIT) — live and ready must point to different paths, or the point above means nothing.
 
 ```yaml
-livenessProbe:            # ตาย → restart container
+livenessProbe:            # dead → restart the container
   httpGet: { path: /health/live, port: 3000 }
-  initialDelaySeconds: 15 # ให้แอปขึ้นก่อน ไม่งั้นโดนฆ่าตั้งแต่ยังไม่ทัน listen
+  initialDelaySeconds: 15 # let the app start first, or it gets killed before it can listen
   periodSeconds: 10
-  failureThreshold: 3     # พลาด 3 ครั้งติด (30 วินาที) ค่อย restart
-readinessProbe:           # ไม่พร้อม → ตัดออกจาก Service ชั่วคราว ไม่ restart
+  failureThreshold: 3     # restart only after 3 failures in a row (30 seconds)
+readinessProbe:           # not ready → remove from the Service for a while, no restart
   httpGet: { path: /health/ready, port: 3000 }
   initialDelaySeconds: 5
   periodSeconds: 10
 ```
 
-แอปที่ warm-up นาน (โหลดโมเดล · cache ใหญ่) เพิ่ม `startupProbe` ชี้ `/health/live` พร้อม `failureThreshold` สูง แทนการยืด `initialDelaySeconds` ของ liveness
+For an app with a long warm-up (loading a model · a big cache), add a `startupProbe` pointing to `/health/live` with a high `failureThreshold`, instead of stretching the liveness `initialDelaySeconds`.
 
-### รูปร่าง response (เหมือนกันทุกภาษา)
+### Response shape (the same in every language)
 
 ```jsonc
-// GET /health/ready → 200 ปกติ · 503 เมื่อ dependency ที่ critical ล่ม
+// GET /health/ready → 200 normally · 503 when a critical dependency is down
 {
   "status": "up",                       // up | degraded | down
   "timestamp": "2026-08-31T09:42:13.482Z",
@@ -833,105 +455,105 @@ readinessProbe:           # ไม่พร้อม → ตัดออกจ�
 }
 ```
 
-**3 สถานะ ไม่ใช่ 2:**
-- `up` — ทุกอย่างปกติ → 200
-- `degraded` — dependency ที่**ไม่ critical** ล่ม (เช่น อีเมล) แต่ยังรับ traffic ได้ → 200
-- `down` — dependency ที่ critical ล่ม (เช่น DB) → **503**
+**3 states, not 2:**
+- `up` — everything is normal → 200
+- `degraded` — a **non-critical** dependency is down (such as email) but the service can still take traffic → 200
+- `down` — a critical dependency is down (such as the DB) → **503**
 
-**ทุก check ต้องมี timeout** (ค่าเริ่มต้น 3 วินาที) ไม่งั้น dependency ที่ค้าง
-จะทำให้ health endpoint ค้างตาม แล้ว orchestrator ตัดสินใจผิดทั้งระบบ
+**Every check must have a timeout** (default 3 seconds). Otherwise a hung dependency
+makes the health endpoint hang too, and the orchestrator makes the wrong decision for the whole system.
 
-**ห้ามส่ง stack trace หรือ connection string ออกทาง endpoint นี้** เพราะ endpoint นี้ใครก็เรียกได้
+**Never send a stack trace or connection string out through these endpoints**, because anyone can call them.
 
 ---
 
-## 2 · รูปแบบ error ที่เหมือนกันทั้งระบบ
+## 2 · One error format for the whole system
 
-ยึด **RFC 9457 (`application/problem+json`)** ซึ่งเป็นมาตรฐานจริง ไม่ต้องคิดเอง
+Follow **RFC 9457 (`application/problem+json`)**, which is a real standard, so you do not invent your own.
 
 ```jsonc
-// 422 — รูปแบบถูก แต่ข้อมูลไม่ผ่านกฎ (ดูตารางล่าง)
+// 422 — the format is right, but the data fails a rule (see the table below)
 {
   "type": "https://api.example.com/errors/validation",
   "title": "ข้อมูลที่ส่งมาไม่ถูกต้อง",
   "status": 422,
   "detail": "จำนวนสินค้าต้องมากกว่า 0",
   "instance": "/api/v1/orders",
-  "requestId": "a3f9c1b2",              // ตรงกับ cid ใน log — ตามเรื่องได้ทันที
-  "errors": [                           // เฉพาะ validation · ครบทุกฟิลด์ในครั้งเดียว
+  "requestId": "a3f9c1b2",              // matches the cid in the log — trace the case at once
+  "errors": [                           // validation only · every field in one response
     { "field": "items[0].qty", "code": "min_value", "message": "ต้องมากกว่า 0" }
   ]
 }
 ```
 
-- `field` เป็นเส้นทางเต็มรวมดัชนีอาเรย์ · `code` ให้โปรแกรมอ่าน · `message` ให้คนอ่าน
+- `field` is the full path including array indexes · `code` is for programs · `message` is for people
 
-| สถานะ | ใช้เมื่อ |
+| Status | Use when |
 |---|---|
-| 400 | ข้อมูลผิดรูป |
-| 401 | ยังไม่ได้ยืนยันตัวตน |
-| 403 | ยืนยันแล้วแต่ไม่มีสิทธิ์ |
-| 404 | ไม่มีสิ่งนี้ |
-| 409 | ชนกับสถานะปัจจุบัน (ซ้ำ, แก้ทับ) |
-| 422 | รูปแบบถูกแต่ผิดกฎธุรกิจ |
-| 429 | เรียกถี่เกิน — ต้องมี `Retry-After` |
-| 500 | ฝั่งเราพัง — **ห้ามส่งรายละเอียดภายในออกไป** ส่ง `requestId` แทน |
+| 400 | Malformed data |
+| 401 | Not yet authenticated |
+| 403 | Authenticated but not allowed |
+| 404 | The thing does not exist |
+| 409 | Conflicts with current state (duplicate, overwrite) |
+| 422 | Format is right but breaks a business rule |
+| 429 | Called too often — must have `Retry-After` |
+| 500 | Our side broke — **never send internal details out**, send `requestId` instead |
 
-> **500 ต้องบอกแค่ "เกิดข้อผิดพลาด กรุณาแจ้ง requestId นี้"** รายละเอียดจริงอยู่ใน log
-> การส่ง stack trace ออกไปก็เหมือนแจกแผนผังระบบให้คนที่กำลังหาช่องโจมตี
+> **A 500 must say only "an error occurred, please report this requestId".** The real details stay in the log.
+> Sending a stack trace out is like handing the system's blueprint to someone looking for a way in.
 
 ---
 
 ## 3 · Request id
 
-- รับจาก header **`X-Request-Id`** เฉพาะเมื่อตรง `^[A-Za-z0-9-]{1,64}$` · ไม่มีหรือไม่ตรง → สร้างใหม่ (uuid ตัด 8 ตัว)
-  ค่านี้ลงทุกบรรทัด log ถ้ารับมาตรง ๆ ผู้ส่งจะแทรกขึ้นบรรทัดใหม่หรือข้อความปลอมลง log ได้ (log injection)
-- **ส่งกลับใน response header ทุกครั้ง** รวมทั้งตอน error
-- ใส่ในทุกบรรทัด log (ดู `logging-standards`) และใน error body
-- ส่งต่อไป service ปลายทางทุกครั้งที่เรียกข้ามระบบ
+- Accept it from the **`X-Request-Id`** header only when it matches `^[A-Za-z0-9-]{1,64}$` · if it is missing or does not match → create a new one (a uuid cut to 8 characters).
+  This value goes into every log line. If you accept it as is, the sender can insert new lines or fake text into the log (log injection).
+- **Return it in a response header every time**, including on errors.
+- Put it in every log line (see `logging-standards`) and in the error body.
+- Pass it on to the downstream service every time you call across systems.
 
-พอลูกค้าโทรมาบอกว่า "มันพัง" ก็ขอ requestId แล้ว `grep` ครั้งเดียวเจอทั้งเรื่อง
+When a customer calls to say "it broke", ask for the requestId and `grep` once to find the whole story.
 
 ---
 
 ## 4 · Graceful shutdown
 
-ตอน deploy ใหม่ orchestrator จะส่ง `SIGTERM` มา ถ้าแอปตายทันที request ที่ทำอยู่จะขาดกลางคัน
+On a new deploy the orchestrator sends `SIGTERM`. If the app dies at once, requests in progress are cut off midway.
 
 ```
-SIGTERM → 1. หยุดรับ request ใหม่ (ให้ /health/ready ตอบ down ทันที)
-          2. รอ request ที่ค้างอยู่ทำงานจบ (timeout 15–30 วิ)
-          3. ปิด DB pool / คิว / ไฟล์
+SIGTERM → 1. Stop accepting new requests (make /health/ready answer down at once)
+          2. Wait for in-flight requests to finish (timeout 15–30 seconds)
+          3. Close the DB pool / queues / files
           4. exit(0)
 ```
 
-> ข้อ 1 สำคัญกว่าที่คิด ต้องให้ `/health/ready` ตอบ `down` **ก่อน** ปิดจริงสัก 5 วินาที
-> เพื่อให้ load balancer ตัดเราออกจาก pool ทัน ไม่งั้นยังมี traffic วิ่งเข้ามาตอนกำลังปิด
+> Step 1 matters more than it looks. `/health/ready` must answer `down` about 5 seconds **before** the real shutdown,
+> so the load balancer removes us from the pool in time. Otherwise traffic keeps arriving while we are closing.
 
 ---
 
-## 5 · สิ่งที่ต้องมีก่อน deploy (ไม่ใช่ทางเลือก)
+## 5 · What must exist before deploy (not optional)
 
-- **Timeout ทุกทาง** ทั้ง request เข้า การเรียกออก และ query DB ถ้าไม่มี timeout ปลายทางช้าเมื่อไร ทั้งระบบจะค้างตาม
-- **จำกัดขนาด body** (เช่น 1MB) เพื่อกัน memory ระเบิดจาก payload ใหญ่
-- **Cross-Origin Resource Sharing (CORS) ระบุ origin ชัดเจน** — `*` ใช้ได้เฉพาะ API สาธารณะที่ไม่มี cookie
-- **Rate limit** อย่างน้อยที่ endpoint ล็อกอินและที่ที่ส่งรหัสผ่านใช้ครั้งเดียว (One-Time Password · OTP)/อีเมล
-- **Security headers**: `X-Content-Type-Options: nosniff` · `Content-Security-Policy: frame-ancestors 'none'` (ตัวแทนของ `X-Frame-Options` ที่เป็น header รุ่นเก่า · ใส่ `X-Frame-Options: DENY` คู่ไว้ให้เบราว์เซอร์เก่า) ·
+- **Timeouts everywhere**: incoming requests, outgoing calls, and DB queries. Without a timeout, the moment a downstream is slow, the whole system hangs with it.
+- **Limit body size** (for example 1MB) to stop memory blowing up from a large payload.
+- **Cross-Origin Resource Sharing (CORS) names the origin explicitly** — `*` is allowed only for a public API with no cookies.
+- **Rate limit** at least on the login endpoint and on anything that sends a one-time password (OTP)/email.
+- **Security headers**: `X-Content-Type-Options: nosniff` · `Content-Security-Policy: frame-ancestors 'none'` (replaces the old `X-Frame-Options` header · also add `X-Frame-Options: DENY` for old browsers) ·
   `Strict-Transport-Security` (HTTP Strict Transport Security · HSTS)
-  Node: `helmet` ตั้งครบในบรรทัดเดียว · .NET: `UseHsts()` ตั้งแค่ HSTS ที่เหลือต้องเขียน middleware สั้น ๆ หรือใช้แพ็กเกจ `NetEscapades.AspNetCore.SecurityHeaders` (ตัวอย่างใน `references/per-stack.md`)
-- **ปิดหน้าโชว์ error เต็ม ๆ ใน production** (`app.UseDeveloperExceptionPage()` เฉพาะ dev)
-- **ตั้งเวอร์ชันไว้ใน path**: `/api/v1/...` ตั้งแต่วันแรก เพราะย้ายทีหลังแพงกว่ามาก
-- **OpenAPI** ที่ generate จากโค้ดจริง ไม่ใช่เขียนมือแล้วลืมอัปเดต
+  Node: `helmet` sets them all in one line · .NET: `UseHsts()` sets only HSTS, and the rest needs a short middleware or the package `NetEscapades.AspNetCore.SecurityHeaders` (example in `references/per-stack.md`)
+- **Turn off the full error page in production** (`app.UseDeveloperExceptionPage()` in dev only)
+- **Put the version in the path**: `/api/v1/...` from day one, because moving later costs much more.
+- **OpenAPI** generated from the real code, not written by hand and then forgotten.
 
 ---
 
-## 6 · โค้ดที่พร้อมใช้
+## 6 · Ready-to-use code
 
-| ไฟล์ | สแต็ก | สถานะ |
+| File | Stack | Status |
 |---|---|---|
-| `assets/health.node.js` | Node / Express | ✓ รันทดสอบครบทั้ง 4 endpoint + เคส degraded/down/timeout |
-| `assets/health_py.py` | Python / FastAPI | ✓ รันทดสอบครบเหมือนกัน ผลตรงกันทุก field |
-| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | ระวัง ยังไม่ได้คอมไพล์ทดสอบ |
+| `assets/health.node.js` | Node / Express | ✓ all 4 endpoints run and tested, plus the degraded/down/timeout cases |
+| `assets/health_py.py` | Python / FastAPI | ✓ run and tested the same way, results match on every field |
+| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | Caution: not yet compiled or tested |
 
 ```js
 // Node
@@ -955,7 +577,7 @@ app.include_router(make_health_router(
 
 ---
 
-## 7 · ตรวจงาน
+## 7 · Check the work
 
 ```bash
 curl -i localhost:8080/ping                    # 200 pong
@@ -963,55 +585,55 @@ curl -s localhost:8080/health/live  | jq
 curl -s localhost:8080/health/ready | jq
 curl -s localhost:8080/version      | jq
 
-# ปิด DB แล้วยิงซ้ำ — ready ต้องเป็น 503 แต่ live ต้องยัง 200
+# stop the DB and call again — ready must be 503 but live must still be 200
 docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:8080/health/live
 ```
 
-- [ ] `/health/live` **ไม่** แตะ DB — ปิด DB แล้วยังตอบ 200
-- [ ] `/health/ready` ตอบ 503 เมื่อ dependency ที่ critical ล่ม
-- [ ] dependency ที่ไม่ critical ล่มแล้วได้ `degraded` + 200 (ยังรับ traffic)
-- [ ] ทุก check มี timeout — ลองทำให้ dependency ค้าง แล้ว endpoint ต้องตอบภายใน ~3 วิ
-- [ ] `/version` ตรงกับ commit ที่ deploy จริง
-- [ ] ทุก response มี `X-Request-Id` รวมทั้งตอน 500
-- [ ] ยิง 500 แล้วไม่มี stack trace / connection string หลุดออกมา
-- [ ] `SIGTERM` แล้ว request ที่ค้างอยู่ทำงานจบก่อนแอปปิด
-- [ ] `/ping` ไม่ถูกเขียนลง log (ไม่งั้นไฟล์เต็มไปด้วย ping)
+- [ ] `/health/live` does **not** touch the DB — it still answers 200 with the DB stopped
+- [ ] `/health/ready` answers 503 when a critical dependency is down
+- [ ] When a non-critical dependency is down, the result is `degraded` + 200 (still takes traffic)
+- [ ] Every check has a timeout — make a dependency hang, and the endpoint must answer within ~3 seconds
+- [ ] `/version` matches the commit actually deployed
+- [ ] Every response has `X-Request-Id`, including a 500
+- [ ] Trigger a 500 and confirm no stack trace / connection string leaks out
+- [ ] After `SIGTERM`, in-flight requests finish before the app closes
+- [ ] `/ping` is not written to the log (or the file fills up with pings)
 
 ---
 
 ## 8 · Anti-patterns
 
-- **`/health` ตัวเดียวเช็คทุกอย่าง** — orchestrator แยกไม่ออกว่าควร restart หรือแค่ตัด traffic
-- **liveness เช็ค DB** — DB สะดุด 10 วินาที = pod ตายยกแถว
-- **health check ไม่มี timeout** — dependency ค้าง แล้ว health ค้างตาม
-- **ส่ง stack trace / connection string ใน health หรือ error 500**
-- **health ต้อง login** — orchestrator ไม่มี token ให้
-- **รูปแบบ error ต่างกันทุก endpoint** — client ต้องเขียนโค้ดแกะ 5 แบบ
-- **`/ping` เขียนลง log** — ทุกวินาที × 86400 = ขยะเต็มไฟล์
-- **ไม่มี graceful shutdown** — deploy ทีไรลูกค้าเจอ error ทุกที
-- **`Access-Control-Allow-Origin: *` คู่กับ cookie** — เปิดช่องให้เว็บอื่นยิงแทนผู้ใช้
+- **A single `/health` that checks everything** — the orchestrator cannot tell whether to restart or only cut traffic
+- **liveness checks the DB** — a 10-second DB hiccup = every pod dies together
+- **A health check with no timeout** — a dependency hangs, and health hangs with it
+- **Sending a stack trace / connection string in health or in a 500 error**
+- **Health requires login** — the orchestrator has no token to give
+- **A different error format on every endpoint** — the client must write 5 kinds of parsing code
+- **`/ping` written to the log** — every second × 86400 = a file full of junk
+- **No graceful shutdown** — every deploy, customers see errors
+- **`Access-Control-Allow-Origin: *` together with cookies** — lets other sites send requests as the user
 
 ---
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Links to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| รูปแบบ log และ correlation id | `logging-standards` |
-| test ให้ endpoint พวกนี้ | `testing-standards` |
-| ตรวจ response ตรงกับ OpenAPI ใน CI · contract กับทีม frontend · เช็ค breaking change | `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md) |
-| ออกแบบ endpoint ธุรกิจ | command `/api-design` |
-| runbook ตอน service ล่ม | `incident-runbook-template` |
-| ตรวจความปลอดภัย | `security-engineer` + command `/security-scan` (ทางลัดไป `security-audit` หรือ `security-gate`) |
+| Log format and correlation id | `logging-standards` |
+| Tests for these endpoints | `testing-standards` |
+| Check responses against OpenAPI in CI · contract with the frontend team · breaking-change check | `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md) |
+| Design business endpoints | command `/api-design` |
+| Runbook for when the service is down | `incident-runbook-template` |
+| Security review | `security-engineer` + command `/security-scan` (a shortcut to `security-audit` or `security-gate`) |
 
 
 ## reference: per-stack.md
 
 # .NET และ Angular
 
-> ระวัง: โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/health.node.js` และ
-> `assets/health_py.py` ที่รันจริงครบทุก endpoint แล้ว) โค้ดนี้เป็นการตั้งค่ามาตรฐานของ
-> ASP.NET Core ตอนรันครั้งแรกให้เทียบ response กับรูปร่างใน SKILL.md ข้อ 1
+> Caution: the code in this file is **not yet compiled or tested** (unlike `assets/health.node.js` and
+> `assets/health_py.py`, which have been run against every endpoint). It is the standard setup of
+> ASP.NET Core. On the first run, compare the response with the shape in SKILL.md section 1.
 
 ---
 
@@ -1079,7 +701,7 @@ app.MapGet("/version", () => Results.Ok(new
 }));
 ```
 
-ให้ response ตรงรูปแบบเดียวกับสแต็กอื่น:
+Make the response match the same format as the other stacks:
 
 ```csharp
 static Task WriteReady(HttpContext ctx, HealthReport report)
@@ -1115,7 +737,7 @@ static Task WriteLive(HttpContext ctx, HealthReport _)
 
 ### Error envelope (RFC 9457)
 
-ASP.NET Core มี `ProblemDetails` มาให้อยู่แล้ว ให้ใช้ของที่มี อย่าประดิษฐ์รูปแบบเอง
+ASP.NET Core already ships `ProblemDetails`. Use it, and do not invent your own format.
 
 ```csharp
 builder.Services.AddProblemDetails(o => o.CustomizeProblemDetails = ctx =>
@@ -1131,9 +753,9 @@ app.UseStatusCodePages();
 
 ### Graceful shutdown
 
-ให้ `/health/ready` ตอบ down ก่อนปิดจริงสักพัก เพื่อให้ load balancer ตัดเราออกจาก pool ทัน
-ใช้ `IHostedLifecycleService.StoppingAsync` (.NET 8 ขึ้นไป) เพราะ host เรียกมัน**ก่อน**หยุด Kestrel (หลัง `ApplicationStopping`)
-จึงรอแบบ `await Task.Delay` ได้โดยไม่บล็อกเธรด และ server ยังตอบ 503 ให้ load balancer เห็น
+Make `/health/ready` answer down for a short while before the real shutdown, so the load balancer removes the instance from its pool in time.
+Use `IHostedLifecycleService.StoppingAsync` (.NET 8 and later), because the host calls it **before** it stops Kestrel (after `ApplicationStopping`).
+So you can wait with `await Task.Delay` without blocking a thread, and the server still answers 503 for the load balancer to see.
 
 ```csharp
 // สถานะร่วม: ตัวรอปิดเขียน · health check อ่าน
@@ -1172,7 +794,7 @@ builder.Services.Configure<HostOptions>(o =>
 
 ### สิ่งที่ต้องเปิดก่อน deploy
 
-ลงทะเบียน service ได้**ก่อน** `builder.Build()` เท่านั้น — หลัง Build รายการ service เป็นแบบอ่านอย่างเดียว เรียก `builder.Services.Add…` ตอนนั้นจะได้ `InvalidOperationException` ตอนเริ่มแอป
+Register services only **before** `builder.Build()`. After Build the service list is read-only, and calling `builder.Services.Add…` then throws `InvalidOperationException` at app start.
 
 ```csharp
 // ---- ก่อน Build: ลงทะเบียน service ----
@@ -1221,7 +843,7 @@ export const requestIdInterceptor: HttpInterceptorFn = (req, next) => {
 };
 ```
 
-**แกะ problem+json ให้เป็นข้อความที่ผู้ใช้อ่านรู้เรื่อง**:
+**Turn problem+json into a message the user can understand**:
 
 ```ts
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
@@ -1238,7 +860,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 };
 ```
 
-**หน้าสถานะระบบ** ให้ทีมซัพพอร์ตเปิดดูเองได้โดยไม่ต้องเรียกนักพัฒนา:
+**System status page**, so the support team can check it without calling a developer:
 
 ```ts
 this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r));
@@ -1267,112 +889,112 @@ this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r))
 
 Use when adding API endpoints or checking API consistency
 
-# ข้อตกลงของ Application Programming Interface (API)
+# Application Programming Interface (API) conventions
 
-> **กฎข้อเดียว:** ตัดสินใจครั้งเดียว ใช้ทุก endpoint
-> API ที่ทุก endpoint ทำเหมือนกัน แม้ "ไม่ค่อยถูกตามทฤษฎี" ใช้ง่ายกว่า
-> API ที่แต่ละ endpoint ถูกต้องคนละแบบ เพราะแบบหลังฝั่งเรียกต้องเดาใหม่ทุกครั้ง
+> **The one rule:** decide once, apply to every endpoint.
+> An API where every endpoint behaves the same, even if "not quite right in theory", is easier to use
+> than an API where each endpoint is correct in its own way, because with the latter the caller must guess again every time.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เริ่มออกแบบ API ตัวแรกของโปรเจกต์
-- จะเพิ่ม endpoint ใน API เดิม และอยากให้เข้ากับของเดิม
-- รีวิว API แล้วรู้สึกว่าแต่ละส่วนไม่เหมือนกัน
-- ต้องตอบว่า "เปลี่ยนแบบนี้แล้ว client พังไหม"
+- Starting to design the first API of a project
+- Adding an endpoint to an existing API and wanting it to match what is there
+- Reviewing an API and feeling that its parts are not alike
+- Needing to answer "if we change it this way, will clients break?"
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or alongside
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ ให้ครบ | command `/api-design` | แทน |
-| health check, error envelope, graceful shutdown | `web-service-essentials` | แทน |
-| ตาราง คอลัมน์ ความสัมพันธ์ | `database-design` | แทน |
-| token, scope, สิทธิ์ | `auth-implementation-patterns` | แทน |
-| correlation id ที่โผล่ใน error | `logging-standards` | คู่ |
-| test สัญญาระหว่างระบบ | `testing-standards` | คู่ |
-| บันทึกเหตุผลที่เลือกข้อตกลงนี้ | `adr-writer` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Design all the endpoints of one feature | command `/api-design` | instead |
+| Health check, error envelope, graceful shutdown | `web-service-essentials` | instead |
+| Tables, columns, relations | `database-design` | instead |
+| Tokens, scopes, permissions | `auth-implementation-patterns` | alongside |
+| Correlation id that appears in errors | `logging-standards` | alongside |
+| Contract tests between systems | `testing-standards` | alongside |
+| Recording why this convention was chosen | `adr-writer` | alongside |
+| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 
-**แม่แบบเอกสารข้อตกลงที่คัดลอกไปใช้ได้เลย** → `assets/API-CONVENTIONS.md`
-
----
-
-## 1 · เอกสารข้อตกลงต้องมีจริง
-
-วางไฟล์ `docs/API-CONVENTIONS.md` (แม่แบบอยู่ที่ `assets/API-CONVENTIONS.md`)
-ทุกข้อในหน้านี้ที่ตัดสินใจแล้ว ให้เขียนลงไฟล์นั้น พร้อมวันที่และเหตุผลสั้น ๆ
-
-> ข้อตกลงที่อยู่ในหัวคนใดคนหนึ่ง ไม่ใช่ข้อตกลง — คนที่เข้าทีมเดือนหน้าจะทำอีกแบบ
+**A template of the conventions document that you can copy and use** → `assets/API-CONVENTIONS.md`
 
 ---
 
-## 2 · ตั้งชื่อ URL
+## 1 · The conventions document must exist
+
+Put the file `docs/API-CONVENTIONS.md` in place (the template is at `assets/API-CONVENTIONS.md`).
+Write every decision made from this page into that file, with the date and a short reason.
+
+> A convention that lives in one person's head is not a convention — someone who joins the team next month will do it another way.
+
+---
+
+## 2 · Naming URLs
 
 ```
-GET    /v1/orders                 รายการ
-POST   /v1/orders                 สร้าง
-GET    /v1/orders/{id}            รายตัว
-PATCH  /v1/orders/{id}            แก้บางส่วน
-PUT    /v1/orders/{id}            แทนที่ทั้งตัว
-DELETE /v1/orders/{id}            ลบ
-GET    /v1/orders/{id}/items      ทรัพยากรลูก
-POST   /v1/orders/{id}/cancel     การกระทำที่ไม่ใช่ CRUD (Create, Read, Update, Delete)
+GET    /v1/orders                 list
+POST   /v1/orders                 create
+GET    /v1/orders/{id}            single item
+PATCH  /v1/orders/{id}            partial update
+PUT    /v1/orders/{id}            replace the whole item
+DELETE /v1/orders/{id}            delete
+GET    /v1/orders/{id}/items      child resource
+POST   /v1/orders/{id}/cancel     an action that is not CRUD (Create, Read, Update, Delete)
 ```
 
-| กฎ | ✓ | ✗ |
+| Rule | ✓ | ✗ |
 |---|---|---|
-| คำนาม พหูพจน์ | `/orders` | `/getOrders`, `/order` |
-| ตัวพิมพ์เล็ก ขีดกลาง | `/purchase-orders` | `/purchaseOrders`, `/purchase_orders` |
-| ความลึกไม่เกิน 2 ชั้น | `/orders/{id}/items` | `/customers/{a}/orders/{b}/items/{c}/logs` |
-| กริยาใช้เมื่อไม่ใช่ CRUD จริง ๆ | `POST /orders/{id}/cancel` | `POST /orders/cancelOrder` |
+| Plural nouns | `/orders` | `/getOrders`, `/order` |
+| Lowercase, hyphens | `/purchase-orders` | `/purchaseOrders`, `/purchase_orders` |
+| At most 2 levels deep | `/orders/{id}/items` | `/customers/{a}/orders/{b}/items/{c}/logs` |
+| Use a verb only when it is truly not CRUD | `POST /orders/{id}/cancel` | `POST /orders/cancelOrder` |
 
-**การกระทำที่ไม่ใช่ CRUD** (อนุมัติ ยกเลิก ส่งซ้ำ) — ใช้ `POST /{resource}/{id}/{action}`
-อย่าดัดให้เป็น `PATCH` ที่แก้ `status` เพราะการเปลี่ยนสถานะมักมีผลข้างเคียงมากกว่าการแก้ฟิลด์ทั่วไป
+**An action that is not CRUD** (approve, cancel, resend) uses `POST /{resource}/{id}/{action}`.
+Do not bend it into a `PATCH` that edits `status`, because a status change usually has more side effects than an ordinary field edit.
 
-**วิธี `PATCH`:** เลือกแบบเดียวทั้งระบบ โดยแนะนำให้ส่งเฉพาะฟิลด์ที่แก้ (`merge patch`)
-และต้องกำหนดให้ชัดว่า `null` แปลว่า "ล้างค่า" หรือ "ไม่แตะ" (ดูข้อ 6)
+**How to use `PATCH`:** pick one style for the whole system. Sending only the changed fields (`merge patch`) is recommended,
+and you must define clearly whether `null` means "clear the value" or "leave it alone" (see section 6).
 
 ---
 
-## 3 · versioning
+## 3 · Versioning
 
-| วิธี | ข้อดี | ข้อเสีย |
+| Method | Pros | Cons |
 |---|---|---|
-| **ใน path** `/v1/orders` | เห็นชัด ทดสอบง่าย แคชง่าย | URL เปลี่ยนตอนขึ้นเวอร์ชัน |
-| ใน header `Accept: application/vnd.acme.v1+json` | URL คงที่ | มองไม่เห็นตอน debug ลืมส่งบ่อย |
+| **In the path** `/v1/orders` | Obvious, easy to test, easy to cache | The URL changes when the version goes up |
+| In a header `Accept: application/vnd.acme.v1+json` | The URL stays fixed | Invisible when debugging, often forgotten |
 
-> **เลือก path** ถ้าไม่มีเหตุผลเฉพาะ — ทุกคนเห็นเวอร์ชันได้จากบรรทัดเดียวใน log
+> **Choose the path** unless there is a specific reason — everyone can see the version from a single line in the log.
 
-**เปลี่ยนแบบไหนแล้วฝั่งเรียกพัง:**
+**Which changes break callers:**
 
-| การเปลี่ยน | พังไหม |
+| Change | Breaks? |
 |---|:--:|
-| เพิ่ม endpoint ใหม่ | ไม่ |
-| เพิ่มฟิลด์ **ที่ไม่บังคับ** ใน request | ไม่ |
-| เพิ่มฟิลด์ใน response | ไม่* |
-| เพิ่มค่า enum ใหม่ | **พัง** — client ที่ `switch` ครบทุกค่าจะเจอค่าที่ไม่รู้จัก |
-| ลบ/เปลี่ยนชื่อฟิลด์ | **พัง** |
-| เปลี่ยนชนิดข้อมูล (`"12"` → `12`) | **พัง** |
-| ทำให้ฟิลด์ที่เคยไม่บังคับกลายเป็นบังคับ | **พัง** |
-| เปลี่ยน HTTP status ที่คืนในกรณีเดิม | **พัง** |
-| ทำให้กฎ validation เข้มขึ้น | **พัง** |
+| Add a new endpoint | No |
+| Add an **optional** field to a request | No |
+| Add a field to a response | No* |
+| Add a new enum value | **Breaks** — a client whose `switch` covers every value will meet an unknown one |
+| Remove/rename a field | **Breaks** |
+| Change a data type (`"12"` → `12`) | **Breaks** |
+| Make a formerly optional field required | **Breaks** |
+| Change the HTTP status returned in an existing case | **Breaks** |
+| Make a validation rule stricter | **Breaks** |
 
-\* ต่อเมื่อบอกฝั่งเรียกไว้แต่แรกว่า "ฟิลด์ที่ไม่รู้จักให้ข้ามไป"
-ข้อนี้ต้องเขียนไว้ใน `API-CONVENTIONS.md` ไม่ใช่หวังเอาเอง
+\* Only when callers were told from the start to "skip fields you do not recognize".
+This must be written in `API-CONVENTIONS.md`, not left to hope.
 
-**ขึ้นเวอร์ชันใหญ่เมื่อจำเป็นจริง** เพราะทุกเวอร์ชันที่ยังเปิดอยู่คือโค้ดอีกชุดที่ต้องดูแล
+**Raise the major version only when truly needed**, because every version still open is another body of code to maintain.
 
 ---
 
-## 4 · pagination
+## 4 · Pagination
 
-**ทุก endpoint ที่คืนรายการต้องมี pagination ตั้งแต่วันแรก** ไม่มีข้อยกเว้น
-รายการที่ "มีไม่กี่รายการหรอก" อีก 2 ปีจะมี 10,000 รายการ
+**Every endpoint that returns a list must have pagination from day one**, with no exceptions.
+A list that "only has a few items" will have 10,000 in 2 years.
 
-| วิธี | ใช้เมื่อ | ข้อจำกัด |
+| Method | Use when | Limits |
 |---|---|---|
-| **cursor** `?limit=50&cursor=eyJ...` | ค่าเริ่มต้น · ข้อมูลเยอะ · มีข้อมูลเพิ่มระหว่างเปิดดู | กระโดดไปหน้า 7 ไม่ได้ |
-| offset `?limit=50&offset=100` | ต้องมีเลขหน้าให้กด · ข้อมูลไม่เยอะ | ยิ่งหน้าลึกยิ่งช้า · ถ้ามีแถวแทรกระหว่างเปิดดู ข้อมูลจะซ้ำหรือหาย |
+| **cursor** `?limit=50&cursor=eyJ...` | Default · lots of data · data is added while the user is browsing | Cannot jump to page 7 |
+| offset `?limit=50&offset=100` | Page numbers must be clickable · little data | Slower the deeper the page · if a row is inserted while browsing, data repeats or goes missing |
 
 ```jsonc
 // GET /v1/orders?limit=2 → 200
@@ -1380,161 +1002,161 @@ POST   /v1/orders/{id}/cancel     การกระทำที่ไม่ใ�
   "data": [ { "id": "1042" }, { "id": "1041" } ],
   "page": {
     "limit": 2,
-    "nextCursor": "eyJpZCI6MTA0MX0",   // null เมื่อหมดแล้ว
+    "nextCursor": "eyJpZCI6MTA0MX0",   // null when there is no more
     "hasMore": true
   }
 }
 ```
 
-- ห่อรายการไว้ใน `data` เสมอ เพราะถ้าตอบเป็นอาเรย์เปล่า ๆ วันหลังจะเติมข้อมูลหน้าไม่ได้
-- `limit` มีค่าเริ่มต้นและ**เพดานที่บังคับฝั่งเซิร์ฟเวอร์** (เช่น เริ่มต้น 20 สูงสุด 100)
-- `totalCount` นับแพง จึงให้ขอเป็นตัวเลือก `?includeTotal=true` อย่านับทุกครั้ง
-- **cursor ต้องทึบ** (ฝั่งเรียกห้ามแกะหรือประกอบเอง)
+- Always wrap the list in `data`, because a bare array leaves no room to add page information later.
+- `limit` has a default and a **ceiling enforced on the server** (for example default 20, maximum 100).
+- `totalCount` is expensive to count, so make it optional with `?includeTotal=true`. Do not count every time.
+- **The cursor must be opaque** (callers must never decode or build one themselves).
 
 ---
 
-## 5 · filtering · sorting · ฟิลด์ที่ขอ
+## 5 · Filtering · sorting · requested fields
 
 ```
 GET /v1/orders?status=confirmed&createdAt[gte]=2026-01-01&sort=-createdAt&fields=id,orderNo,total
 ```
 
-| เรื่อง | ข้อตกลง |
+| Topic | Convention |
 |---|---|
-| กรองค่าเท่ากับ | `?status=confirmed` |
-| หลายค่า | `?status=confirmed,shipped` |
-| ช่วง | `?createdAt[gte]=...&createdAt[lt]=...` |
-| เรียง | `?sort=-createdAt,orderNo` — `-` คือมากไปน้อย |
-| ค้นหาข้อความ | `?q=สมชาย` แยกจากการกรอง |
-| เลือกฟิลด์ | `?fields=id,orderNo` |
+| Filter by equal value | `?status=confirmed` |
+| Several values | `?status=confirmed,shipped` |
+| Range | `?createdAt[gte]=...&createdAt[lt]=...` |
+| Sort | `?sort=-createdAt,orderNo` — `-` means descending |
+| Text search | `?q=สมชาย` kept separate from filtering |
+| Select fields | `?fields=id,orderNo` |
 
-- **รับเฉพาะฟิลด์ที่กำหนดไว้** ถ้ารับชื่อฟิลด์อะไรก็ได้ จะเกิดช่องโหว่ และ query ที่ไม่มี index
-- พารามิเตอร์ที่ไม่รู้จัก ตอบ `400` ดีกว่าข้ามเงียบ ๆ ไม่งั้นฝั่งเรียกพิมพ์ผิดแล้วได้ข้อมูลผิดโดยไม่รู้ตัว
+- **Accept only the fields you have defined.** If any field name is accepted, you get security holes and queries with no index.
+- For an unknown parameter, answering `400` is better than skipping it silently. Otherwise a caller who mistypes gets wrong data without knowing.
 
 ---
 
-## 6 · รูปแบบข้อมูล
+## 6 · Data formats
 
-| ข้อมูล | รูปแบบ | ตัวอย่าง |
+| Data | Format | Example |
 |---|---|---|
-| ชื่อฟิลด์ | `camelCase` ทั้งระบบ | `createdAt` |
-| เวลา | RFC 3339 · UTC · ลงท้าย `Z` | `"2026-09-25T09:42:13.482Z"` |
-| วันที่ล้วน | `YYYY-MM-DD` | `"2026-09-25"` |
-| เงิน | ตัวเลขเป็น**สตริง** + สกุลเงินแยก | `{ "amount": "1250.00", "currency": "THB" }` |
-| identifier | **สตริงเสมอ** | `"1042"` ไม่ใช่ `1042` |
-| enum | `SCREAMING_SNAKE` หรือ `lower_snake` เลือกแบบเดียว | `"CONFIRMED"` |
-| ระยะเวลา | วินาทีเป็นตัวเลข ตั้งชื่อให้รู้หน่วย | `"timeoutSeconds": 30` |
-| ประเทศ / สกุลเงิน / ภาษา | ISO 3166 · ISO 4217 · BCP 47 | `"TH"` · `"THB"` · `"th-TH"` |
+| Field names | `camelCase` across the system | `createdAt` |
+| Time | RFC 3339 · UTC · ends with `Z` | `"2026-09-25T09:42:13.482Z"` |
+| Date only | `YYYY-MM-DD` | `"2026-09-25"` |
+| Money | the number as a **string** + a separate currency | `{ "amount": "1250.00", "currency": "THB" }` |
+| identifier | **always a string** | `"1042"` not `1042` |
+| enum | `SCREAMING_SNAKE` or `lower_snake`, pick one style | `"CONFIRMED"` |
+| Duration | seconds as a number, named so the unit is clear | `"timeoutSeconds": 30` |
+| Country / currency / language | ISO 3166 · ISO 4217 · BCP 47 | `"TH"` · `"THB"` · `"th-TH"` |
 
-> **id เป็นตัวเลขใน JSON คือระเบิดเวลา** — JavaScript เก็บจำนวนเต็มได้ปลอดภัยถึง 9,007,199,254,740,991
-> `bigint` ที่เกินนั้นจะถูกปัดเศษเงียบ ๆ ตอน `JSON.parse` และถ้าจะเปลี่ยนเป็นสตริงทีหลังก็เป็น breaking change
+> **A numeric id in JSON is a time bomb** — JavaScript stores integers safely up to 9,007,199,254,740,991.
+> A `bigint` above that is silently rounded at `JSON.parse`, and changing it to a string later is a breaking change.
 >
-> **เงินเป็น float ใน JSON** — `1250.10` ที่ผ่าน 2 ภาษาโปรแกรมอาจกลายเป็น `1250.0999999999999`
+> **Money as a float in JSON** — `1250.10` passed through 2 programming languages may become `1250.0999999999999`.
 
-**`null` กับ "ไม่มีฟิลด์" ต้องหมายถึงคนละอย่าง:**
+**`null` and "no field" must mean different things:**
 
-- ใน response ฟิลด์ที่มีแต่ไม่มีค่าให้ส่ง `null` ไม่ตัดทิ้ง ฝั่งเรียกจะได้ไม่ต้องเช็ค 2 แบบ
-- ใน `PATCH` ถ้าส่ง `{"note": null}` แปลว่าล้างค่า ถ้าไม่ส่งคีย์ `note` เลยแปลว่าไม่แตะ
+- In a response, a field that exists but has no value is sent as `null`, not dropped, so callers do not have to check 2 cases.
+- In a `PATCH`, sending `{"note": null}` means clear the value, and leaving out the `note` key entirely means leave it alone.
 
-**อาเรย์ว่างคือ `[]` ไม่ใช่ `null`** ฝั่งเรียกจะวนลูปได้เลย
-
----
-
-## 7 · error
-
-รูปแบบ error (RFC 9457 · `requestId` · `errors` แบบ array `{field, code, message}`) และตัวอย่างอยู่ที่ `web-service-essentials` ข้อ 2 ที่เดียว ใช้ตามนั้น
-ที่ต้องตกลงเพิ่มคือ **error ระดับฟิลด์**:
-
-- **`code` ให้โปรแกรมอ่าน · `message` ให้คนอ่าน** อย่าให้ฝั่งเรียกต้องเอาข้อความไปเขียนเงื่อนไข
-- ชี้ตำแหน่งฟิลด์ด้วยเส้นทางเต็ม รวมดัชนีของอาเรย์
-- **คืน error ครบทุกฟิลด์ในครั้งเดียว** ไม่ใช่ทีละตัว ผู้ใช้จะได้ไม่ต้องกดส่ง 5 รอบ
-- ถ้ารองรับหลายภาษา ให้เลือกข้อความไทยหรืออังกฤษจาก `Accept-Language`
-
-**เลือก status ให้ตรง:** `400` รูปแบบคำขอผิด · `401` ยังไม่ได้ยืนยันตัวตน · `403` ยืนยันแล้วแต่ไม่มีสิทธิ์ ·
-`404` ไม่มีหรือไม่ให้รู้ว่ามี · `409` ชนกับสถานะปัจจุบัน · `422` รูปแบบถูกแต่ข้อมูลไม่ผ่านกฎ · `429` เรียกถี่เกิน
+**An empty array is `[]`, not `null`**, so callers can loop over it directly.
 
 ---
 
-## 8 · เรียกซ้ำไม่เกิดผลซ้ำ และการแก้ชนกัน
+## 7 · Errors
 
-### idempotency key (รหัสกำกับคำขอ — ส่งซ้ำแล้วไม่ทำงานซ้ำ)
+The error format (RFC 9457 · `requestId` · an `errors` array of `{field, code, message}`) and examples live in one place, `web-service-essentials` section 2. Follow that.
+What still needs agreement is the **field-level error**:
 
-**บังคับกับทุก `POST` ที่มีผลทางการเงินหรือส่งของออกไปข้างนอก**
+- **`code` is for programs, `message` is for people.** Never make callers write conditions against the message text.
+- Point to the field location with the full path, including array indexes.
+- **Return the errors for all fields at once**, not one at a time, so users do not have to submit 5 times.
+- If several languages are supported, choose Thai or English text from `Accept-Language`.
+
+**Pick the status to match:** `400` malformed request · `401` not authenticated · `403` authenticated but not permitted ·
+`404` does not exist, or you do not want to reveal that it exists · `409` conflicts with the current state · `422` well-formed but the data fails the rules · `429` too many calls
+
+---
+
+## 8 · Repeat calls without repeat effects, and edit conflicts
+
+### idempotency key (a request code — sending it again does not do the work again)
+
+**Required on every `POST` that has a financial effect or sends something out to the outside world.**
 
 ```
 POST /v1/payments
-Idempotency-Key: 7f3c1e10-...        ← ฝั่งเรียกสร้าง เก็บไว้ใช้ตอน retry
+Idempotency-Key: 7f3c1e10-...        ← created by the caller, kept for use when retrying
 ```
 
-- เซิร์ฟเวอร์เก็บ key คู่กับผลลัพธ์ไว้อย่างน้อย 24 ชั่วโมง
-- key เดิมกับเนื้อหาเดิม ให้คืนผลเดิม ไม่ทำงานซ้ำ
-- key เดิมแต่เนื้อหา**ต่าง** ให้ตอบ `422` ไม่ทำงานใหม่
-- เครือข่ายขาดระหว่างรอคำตอบเป็นเรื่องปกติ ไม่ใช่กรณีพิเศษ ฝั่งเรียกจึง retry เสมอ
+- The server stores the key together with the result for at least 24 hours.
+- Same key with the same body: return the earlier result and do not repeat the work.
+- Same key with a **different** body: answer `422` and do not do new work.
+- A network drop while waiting for the answer is normal, not a special case, so callers always retry.
 
-### แก้ชนกัน (optimistic concurrency)
+### Edit conflicts (optimistic concurrency)
 
 ```
 GET   /v1/orders/1042        → 200  ETag: "v7"
 PATCH /v1/orders/1042        If-Match: "v7"
-                             → 200 ปกติ · 412 ถ้ามีคนแก้ไปก่อนแล้ว
+                             → 200 normally · 412 if someone edited it first
 ```
 
-ถ้าไม่มี คนที่กดบันทึกทีหลังจะทับงานของคนแรกโดยไม่มีใครรู้
+Without this, whoever saves second overwrites the first person's work and nobody knows.
 
 ---
 
-## 9 · rate limit
+## 9 · Rate limit
 
 ```
 X-RateLimit-Limit: 1000
 X-RateLimit-Remaining: 997
 X-RateLimit-Reset: 1758790000
-Retry-After: 42                ← ต้องมีคู่กับ 429 เสมอ
+Retry-After: 42                ← must always accompany a 429
 ```
 
-ถ้า `429` ไม่มี `Retry-After` ฝั่งเรียกต้องเดาเอง และส่วนใหญ่เดาว่า "ลองใหม่ทันที"
+If a `429` has no `Retry-After`, the caller must guess, and most guess "try again at once".
 
 ---
 
-## 10 · การเลิกใช้ endpoint
+## 10 · Retiring an endpoint
 
-1. ประกาศล่วงหน้า พร้อมบอกว่าใช้อะไรแทน
-2. ส่ง header ในทุก response ของ endpoint นั้น:
+1. Announce in advance, and say what to use instead.
+2. Send these headers in every response of that endpoint:
    ```
    Deprecation: @1790812800
    Sunset: Wed, 31 Dec 2026 23:59:59 GMT
    Link: <https://docs.acme.co/v2/orders>; rel="successor-version"
    ```
-   `Deprecation` ตามมาตรฐาน Request for Comments (RFC) 9745 (มี.ค. 2025) ต้องเป็นวันที่แบบ `@<วินาที unix>` (ตัวอย่างนี้คือ 1 ต.ค. 2026 00:00 UTC) ไม่ใช่ `true` · ตรวจ 22 ต.ค. 2569
-3. **ดูจาก log ว่ายังมีใครเรียกอยู่** แล้วติดต่อเขาตรง ๆ อย่ารอให้เงียบไปเอง
-4. ปิดจริงหลังวันที่ประกาศ ไม่ใช่ก่อน
+   `Deprecation` follows the Request for Comments (RFC) 9745 standard (Mar 2025). It must be a date in the form `@<unix seconds>` (this example is 1 Oct 2026 00:00 UTC), not `true`. Checked 22 Oct 2026 (B.E. 2569).
+3. **Check the logs for who still calls it**, then contact them directly. Do not wait for them to go quiet on their own.
+4. Close it only after the announced date, not before.
 
-ระยะเวลาที่พอดี: API ภายในให้ 1 รอบ release ส่วน API ที่คนนอกใช้ให้อย่างน้อย 6 เดือน
+A fitting period: for an internal API, 1 release cycle. For an API used by outsiders, at least 6 months.
 
 ---
 
-## 11 · ตรวจก่อนปล่อย endpoint ใหม่
+## 11 · Check before releasing a new endpoint
 
-ไล่ทุกข้อกับ endpoint ที่เพิ่ม ตกข้อเดียวยังไม่ merge (แนวคิดจาก ECC api-design)
+Go through every item against the endpoint you added. Fail one and it is not merged yet (idea from ECC api-design).
 
-- [ ] URL เป็นคำนามพหูพจน์ตามข้อ 2 · อยู่ใต้เวอร์ชันตามข้อ 3 · ไม่มี `GET` ที่เปลี่ยนข้อมูล
-- [ ] รายการทุกตัวมี pagination และเพดานขนาดหน้า (ข้อ 4) · filter และ sort ใช้ชื่อพารามิเตอร์เดียวกับ endpoint เดิม (ข้อ 5)
-- [ ] วันที่ · id · เงิน อยู่ในรูปแบบของข้อ 6 · response ไม่ใช่ entity ของฐานข้อมูลตรง ๆ
-- [ ] error ทุกตัวตาม `web-service-essentials` §2 และมี `code` คงที่ (ข้อ 7) · คำขอที่สร้างหรือจ่ายเงินรับ idempotency key · การแก้รับ `If-Match` (ข้อ 8)
-- [ ] ระบุ auth และ rate limit (ข้อ 9) · อยู่ใน OpenAPI แล้ว และตัวอย่าง cURL ในเอกสารรันผ่านจริง
-- [ ] มี contract test หรือ test ระดับ endpoint อย่างน้อย 1 กรณีสำเร็จ 1 กรณี error — ตรวจ response กับ OpenAPI ใน CI · Pact เมื่อผู้เรียกแยกทีม · `oasdiff breaking` ทุก PR: [`references/contract-testing.md`](references/contract-testing.md)
+- [ ] The URL is a plural noun per section 2 · sits under a version per section 3 · has no `GET` that changes data
+- [ ] Every list has pagination and a page-size ceiling (section 4) · filter and sort use the same parameter names as existing endpoints (section 5)
+- [ ] Dates · ids · money are in the formats of section 6 · the response is not a raw database entity
+- [ ] Every error follows `web-service-essentials` §2 and has a fixed `code` (section 7) · a request that creates or pays accepts an idempotency key · an edit accepts `If-Match` (section 8)
+- [ ] Auth and rate limit are stated (section 9) · it is in OpenAPI, and the cURL examples in the docs really run
+- [ ] There is a contract test or an endpoint-level test with at least 1 success case and 1 error case — check the response against OpenAPI in CI · Pact when the caller is on another team · `oasdiff breaking` on every PR: [`references/contract-testing.md`](references/contract-testing.md)
 
 ## 12 · Anti-patterns
 
-- **`200 OK` พร้อม `{"success": false}`** — ตัวเฝ้าระบบและ log ทั้งหมดจะมองไม่เห็นว่าพัง
-- **กริยาใน URL** — `/createOrder`, `/getOrderById`
-- **รายการที่ไม่มี pagination** — วันหนึ่งจะคืนข้อมูล 50,000 แถวในครั้งเดียว
-- **รูปแบบวันที่คนละแบบในแต่ละ endpoint** — เช่น `"25/09/2026"` ที่ไม่มีใครรู้ว่าวันหรือเดือนขึ้นก่อน
-- **ส่ง entity ของฐานข้อมูลออกไปตรง ๆ** — เพิ่มคอลัมน์ทีไร API เปลี่ยนตามโดยไม่ตั้งใจ และเสี่ยงข้อมูลภายในหลุด
-- **ชื่อฟิลด์ปนกัน** `created_at` กับ `updatedAt` ใน response เดียวกัน
-- **`GET` ที่เปลี่ยนข้อมูล** — ตัวโหลดหน้าเว็บล่วงหน้าจะยิงเองโดยไม่มีใครกด
-- **error message เปลี่ยนไปเรื่อย ๆ** โดยไม่มี `code` คงที่
-- **ไม่มีเอกสาร** — OpenAPI ที่สร้างจากโค้ดจริง ดีกว่าเอกสารที่เขียนมือแล้วไม่ตรง
+- **`200 OK` with `{"success": false}`** — monitors and logs will not see that it failed.
+- **Verbs in the URL** — `/createOrder`, `/getOrderById`
+- **A list with no pagination** — one day it will return 50,000 rows at once.
+- **A different date format on each endpoint** — for example `"25/09/2026"`, where nobody knows whether day or month comes first.
+- **Sending a database entity out as is** — every time a column is added, the API changes by accident, and internal data may leak.
+- **Mixed field names** such as `created_at` and `updatedAt` in one response.
+- **A `GET` that changes data** — a web page prefetcher will fire it by itself with nobody clicking.
+- **Error messages that keep changing** with no fixed `code`.
+- **No documentation** — an OpenAPI generated from the real code is better than hand-written docs that do not match.
 
 
 ## reference: contract-testing.md
@@ -1583,182 +1205,931 @@ Our default: Schemathesis in a CI job after the service is up with test data (th
 
 Use when writing code that can fail, with retry and timeout
 
-# จัดการข้อผิดพลาด
+# Error handling
 
-> **กฎข้อเดียว:** จับ error เฉพาะตอนที่**ทำอะไรกับมันได้จริง**
-> จับแล้วไม่ทำอะไร แย่กว่าไม่จับ เพราะระบบจะเดินต่อทั้งที่ข้างในพังไปแล้ว
+> **The one rule:** catch an error only when you **can really do something about it.**
+> Catching it and doing nothing is worse than not catching, because the system keeps going while it is already broken inside.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เขียนโค้ดที่เรียกเครือข่าย ฐานข้อมูล ไฟล์ หรือระบบของทีมอื่น
-- ต้องตัดสินใจว่าจะ retry ไหม กี่ครั้ง รอเท่าไหร่
-- ผู้ใช้เจอข้อความว่า "เกิดข้อผิดพลาด" แล้วไม่รู้ต้องทำอะไรต่อ
-- ไล่ปัญหาแล้วพบว่า log ไม่มีอะไรให้ดูเลย เพราะมีคน catch ทิ้ง
+- Writing code that calls the network, a database, files, or another team's system
+- Deciding whether to retry, how many times, and how long to wait
+- The user sees "an error occurred" and does not know what to do next
+- Tracing a problem and finding nothing in the log because someone caught and discarded the error
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill, or use it alongside
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| รูปร่าง JSON ของ error ที่ API ส่งออก | `web-service-essentials` · `api-conventions` | แทน |
-| รูปแบบบรรทัด log และการปิดบังข้อมูล | `logging-standards` | แทน |
-| แก้บั๊กเฉพาะจุดที่มีคนแจ้งมา | `targeted-fix` | แทน |
-| ขั้นตอนตอนระบบล่มจริง | `incident-runbook-template` | แทน |
-| ตัวชี้วัดอัตรา error และการแจ้งเตือน | `observability-basics` | คู่ |
-| งานเบื้องหลังที่ล้มแล้วต้องไปไหนต่อ | `background-jobs` | คู่ |
-| ข้อความ error ที่ต้องแปลหลายภาษา | `i18n-and-locale` | คู่ |
-| test กรณีล้มเหลว | `testing-standards` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| The JSON shape of errors the API sends out | `web-service-essentials` · `api-conventions` | instead |
+| Log line format and data masking | `logging-standards` | instead |
+| Fixing one specific bug someone reported | `targeted-fix` | instead |
+| Steps when the system is really down | `incident-runbook-template` | instead |
+| Error-rate metrics and alerts | `observability-basics` | alongside |
+| Where a failed background job goes next | `background-jobs` | alongside |
+| Error messages that must be translated into several languages | `i18n-and-locale` | alongside |
+| Tests for failure cases | `testing-standards` | alongside |
+| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 
 ---
 
-## 1 · จับที่ไหน ปล่อยที่ไหน
+## 1 · Where to catch, where to let it pass
 
-| ชั้น | ทำอะไร |
+| Layer | What to do |
 |---|---|
-| ชั้นในสุด (เรียก DB, HTTP, ไฟล์) | **ปล่อยผ่าน** หรือแปลงเป็น error ของโดเมนที่มีความหมาย |
-| ชั้นตรรกะธุรกิจ | จับเฉพาะที่มีทางเลือกสำรองจริง ๆ (มีค่าเริ่มต้น มีแหล่งข้อมูลสำรอง) |
-| **ชั้นนอกสุด** (controller, handler, main) | **จับทุกอย่าง** · log 1 ครั้ง · แปลงเป็นคำตอบที่ผู้ใช้เข้าใจ |
+| Innermost layer (calls DB, HTTP, files) | **let it pass**, or convert it into a domain error that has meaning |
+| Business logic layer | catch only where there is a real fallback (a default value, a backup data source) |
+| **Outermost layer** (controller, handler, main) | **catch everything** · log once · convert to an answer the user understands |
 
-> **log ที่เดียว คือชั้นนอกสุด** — ถ้าทุกชั้น catch แล้ว log แล้ว throw ต่อ
-> error 1 ตัวจะกลายเป็น 10 บรรทัดใน log และไม่มีใครรู้ว่าเป็นเรื่องเดียวกัน
+> **Log in one place only, the outermost layer.** If every layer catches, logs, and rethrows,
+> 1 error becomes 10 log lines and nobody knows they are the same event.
 
-**3 อย่างที่ห้ามทำเด็ดขาด:**
+**3 things you must never do:**
 
 ```csharp
-try { ... } catch { }                      // ผิด: กลืนเงียบ
-try { ... } catch (Exception) { return null; }   // ผิด: ผู้เรียกเจอ null โดยไม่รู้ว่าเกิดอะไร
-catch (Exception ex) { log.Error(ex); throw; }   // ผิด: log ซ้ำทุกชั้น
+try { ... } catch { }                      // wrong: swallowed silently
+try { ... } catch (Exception) { return null; }   // wrong: the caller gets null and never learns what happened
+catch (Exception ex) { log.Error(ex); throw; }   // wrong: logs again at every layer
 ```
 
-**ถ้าตั้งใจจะกลืนจริง ๆ ต้องเขียนเหตุผลไว้:**
+**If you really mean to swallow it, write the reason:**
 
 ```csharp
 catch (SmtpException ex)
 {
-    // ตั้งใจกลืน — ส่งอีเมลแจ้งไม่สำเร็จไม่ควรทำให้การสั่งซื้อล้ม
+    // swallowed on purpose — a failed notification email should not make the order fail
     log.Warning(ex, "ส่งอีเมลยืนยันไม่สำเร็จ orderId={OrderId}", order.Id);
 }
 ```
 
 ---
 
-## 2 · ข้อความถึงผู้ใช้ ≠ ข้อความใน log
+## 2 · The message to the user ≠ the message in the log
 
-| | ผู้ใช้เห็น | log เก็บ |
+| | The user sees | The log keeps |
 |---|---|---|
-| เนื้อหา | เกิดอะไร · ต้องทำอะไรต่อ | stack trace · ค่าตัวแปร · id ของคำขอ |
-| ภาษา | ภาษาของผู้ใช้ | อังกฤษก็ได้ |
-| รายละเอียดภายใน | **ไม่มีเลย** | มีได้ |
-| ตัวเชื่อม 2 ฝั่ง | **รหัสอ้างอิง** | รหัสเดียวกัน |
+| Content | what happened · what to do next | stack trace · variable values · request id |
+| Language | the user's language | English is fine |
+| Internal detail | **none at all** | allowed |
+| Link between the 2 sides | **a reference code** | the same code |
 
 ```
-ผิด: "เกิดข้อผิดพลาด"                    ผู้ใช้ทำอะไรต่อไม่ได้
-ผิด: "SqlException: timeout expired"      หลุดรายละเอียดภายใน และเขาก็อ่านไม่ออก
-ถูก: "บันทึกไม่สำเร็จเพราะระบบตอบช้า ลองอีกครั้งใน 1 นาที (อ้างอิง: 01J9Z8K)"
+Wrong: "เกิดข้อผิดพลาด" (An error occurred)   the user cannot tell what to do
+Wrong: "SqlException: timeout expired"      leaks internal detail, and they cannot read it anyway
+Right: "บันทึกไม่สำเร็จเพราะระบบตอบช้า ลองอีกครั้งใน 1 นาที (อ้างอิง: 01J9Z8K)"
+       (Save failed because the system was slow. Try again in 1 minute. Reference: 01J9Z8K)
 ```
 
-**ข้อความที่ดีมี 3 ส่วน** — เกิดอะไร · เพราะอะไร (ถ้าบอกได้) · ต้องทำอะไรต่อ
-รหัสอ้างอิงคือ correlation id ตัวเดียวกับใน `logging-standards`
+**A good message has 3 parts**: what happened · why (if you can say) · what to do next.
+The reference code is the same correlation id as in `logging-standards`.
 
 ---
 
-## 3 · แยกประเภทก่อนตัดสินใจ
+## 3 · Classify before deciding
 
-| ประเภท | ตัวอย่าง | ทำยังไง | log ระดับ |
+| Type | Example | What to do | Log level |
 |---|---|---|---|
-| **ผู้ใช้ทำผิด** | กรอกไม่ครบ ค่าผิดรูปแบบ | บอกให้แก้ · **ห้าม retry** | ไม่ต้อง log |
-| **ชั่วคราว** | timeout · 503 · deadlock · เชื่อมต่อหลุด | **retry ได้** | warning |
-| **ถูกจำกัดอัตรา** | 429 Too Many Requests | retry ได้ **หลังเวลาที่ `Retry-After` บอก** (ไม่มีค่านี้ → ใช้สูตร §4) · ห้ามยิงถี่กว่านั้น | warning |
-| **ถาวร** | 404 · 401 · ข้อมูลไม่ตรงเงื่อนไข | ไม่ retry · บอกให้ชัด | warning |
-| **บั๊กของเรา** | null reference · แปลงชนิดไม่ได้ | ไม่ retry · **ต้องมีคนแก้** | error |
-| **ข้อมูลไม่สอดคล้อง** | ยอดไม่ตรง สถานะเป็นไปไม่ได้ | หยุด · **เรียกคน** | error + แจ้งเตือน |
+| **User mistake** | incomplete input, wrong format | tell them to fix it · **do not retry** | no log needed |
+| **Transient** | timeout · 503 · deadlock · dropped connection | **may retry** | warning |
+| **Rate limited** | 429 Too Many Requests | may retry **after the time `Retry-After` gives** (if absent, use the formula in §4) · never fire faster than that | warning |
+| **Permanent** | 404 · 401 · data fails a condition | do not retry · say so clearly | warning |
+| **Our bug** | null reference · cannot convert the type | do not retry · **someone must fix it** | error |
+| **Inconsistent data** | totals do not match, an impossible state | stop · **call a person** | error + alert |
 
-> **การ retry error ที่ลองกี่ครั้งก็ไม่หาย คือการยิงซ้ำใส่ระบบที่ล้มอยู่ให้ล้มหนักขึ้น**
-> `400` กับ `401` ยิงอีก 100 ครั้งก็ได้คำตอบเดิม
+> **Retrying an error that no number of tries will cure means firing again at a system that is already down, so it falls harder.**
+> Sending `400` or `401` another 100 times gets the same answer.
 
 ---
 
-## 4 · timeout และการลองใหม่
+## 4 · Timeout and retry
 
-**ทุกการเรียกออกนอก process ต้องมี timeout** — ค่าเริ่มต้นของไลบรารีส่วนใหญ่คือ "รอตลอดไป"
+**Every call that leaves the process needs a timeout** — the default in most libraries is "wait forever"
 
-| การเรียก | timeout ที่ใช้ได้ทั่วไป |
+| Call | A timeout that works in general |
 |---|---|
-| ฐานข้อมูล query ปกติ | 5–10 วินาที |
-| HTTP ภายใน | 3–5 วินาที |
-| HTTP ภายนอก | 10–30 วินาที |
-| งานเบื้องหลังที่หนัก | ตั้งตามของจริง แล้วต้องตัดจบได้ |
+| Ordinary database query | 5–10 seconds |
+| Internal HTTP | 3–5 seconds |
+| External HTTP | 10–30 seconds |
+| Heavy background job | set it from the real work, and it must be possible to cut it off |
 
-**สูตรการลองใหม่** (service เรียก service · งานในคิวใช้ตัวเลขของ [`background-jobs`](../background-jobs/SKILL.md) §4 · มีคนนั่งรอหน้าจอ → ดูข้อสุดท้ายด้านล่าง):
+**The retry formula** (service-to-service calls · jobs in a queue use the numbers in [`background-jobs`](../background-jobs/SKILL.md) §4 · when a person sits waiting on the screen → see the last item below):
 
 ```
-ลองไม่เกิน 3 ครั้ง · หน่วงแบบทวีคูณ + สุ่ม
-ครั้งที่ 1 รอ 1 วินาที · ครั้งที่ 2 รอ 2 · ครั้งที่ 3 รอ 4  (แต่ละครั้ง ±20% แบบสุ่ม)
+at most 3 tries · exponential delay + jitter
+try 1 waits 1 second · try 2 waits 2 · try 3 waits 4  (each ±20% random)
 ```
 
-- **ต้องมีตัวสุ่ม** — ไม่งั้นทุก instance จะลองใหม่พร้อมกันเป๊ะ แล้วทับระบบปลายทางซ้ำ
-- **เวลารวมของการลองใหม่ต้องน้อยกว่า timeout ของผู้เรียก** ไม่งั้นเขาเลิกรอไปแล้วแต่เรายังลองอยู่
-- **retry การเขียนต้องมี idempotency key** ไม่งั้นลูกค้าถูกตัดเงิน 2 รอบ (ดู `api-conventions`)
-- **มีคนนั่งรออยู่หน้าจอ** → ลองใหม่อัตโนมัติไม่เกิน 1 ครั้ง แล้วแสดงปุ่ม "ลองอีกครั้ง" ให้เขากดเอง (ไม่ใช้ 3 ครั้งของสูตรด้านบน)
+- **You need the random part** — otherwise every instance retries at the exact same moment and hits the target system again together
+- **The total retry time must be less than the caller's timeout**, or the caller has given up while we are still trying
+- **Retrying a write needs an idempotency key**, or the customer is charged twice (see `api-conventions`)
+- **A person sits waiting on the screen** → at most 1 automatic retry, then show a "ลองอีกครั้ง" (try again) button for them to press (do not use the 3 tries of the formula above)
 
 ---
 
-## 5 · ตัดวงจร (circuit breaker)
+## 5 · Circuit breaker
 
-เมื่อปลายทางล้ม การยิงต่อไม่ได้ช่วยอะไร แค่ทำให้เราค้างตามไปด้วย
+When the target is down, firing more does not help. It only makes us hang along with it.
 
 ```
-ปิด (ปกติ) → ล้มติดกัน N ครั้ง → เปิด (ไม่ยิงเลย ตอบ error ทันที)
-           → รอ X วินาที → ครึ่งเปิด (half-open): ปล่อยให้ลอง 1 คำขอ → สำเร็จก็กลับไปปิด · ล้มก็เปิดต่อ
+closed (normal) → N failures in a row → open (do not call at all, answer with an error at once)
+                → wait X seconds → half-open: let 1 request try → success: back to closed · failure: stay open
 ```
 
-ค่าเริ่มต้นที่ใช้ได้: ถ้าล้ม 5 ครั้งติดกันภายใน 30 วินาที ให้เปิดวงจรไว้ 60 วินาที
+A default that works: if 5 calls fail in a row within 30 seconds, keep the circuit open for 60 seconds.
 
-**ควรใส่เมื่อ** — เรียกระบบภายนอกที่เคยล่ม · เรียกข้ามหลาย service · ปลายทางช้าแล้วลามมาถึงเรา
-**ไม่ต้องใส่เมื่อ** — เรียกฐานข้อมูลของตัวเอง · งานที่วิ่งครั้งเดียวต่อวัน
+**Add one when** — calling an external system that has gone down before · calling across several services · a slow target spreads the slowness to us
+**Not needed when** — calling your own database · a job that runs once a day
 
 ---
 
-## 6 · ล้มบางส่วน
+## 6 · Partial failure
 
-งานที่ทำหลายรายการ ต้องตอบให้ได้ว่า **"ทำได้ 8 จาก 10 แล้วอีก 2 ไปไหน"**
+Work that handles many items must be able to answer **"8 of 10 succeeded, where did the other 2 go?"**
 
-| แบบ | เหมาะกับ |
+| Style | Fits |
 |---|---|
-| ทั้งหมดหรือไม่ทำเลย (transaction) | เงิน · สต็อก · อะไรที่ครึ่ง ๆ แล้วพัง |
-| ทำเท่าที่ได้ แล้วรายงานรายการที่ไม่ผ่าน | นำเข้าข้อมูล · ส่งแจ้งเตือนหลายคน |
+| All or nothing (transaction) | money · stock · anything that breaks when half done |
+| Do what you can, then report the items that failed | data import · notifying many people |
 
-แบบที่สองต้อง**คืนรายการที่ล้มพร้อมเหตุผลรายตัว** ไม่ใช่บอกว่า "บางรายการไม่สำเร็จ"
+The second style must **return the failed items with a reason for each**, not just say "some items failed".
 
-**งานเก็บกวาดต้องรันเสมอ** ไม่ว่างานหลักจะสำเร็จหรือไม่ เช่น ปิดไฟล์ คืน connection ลบไฟล์ชั่วคราว
-ให้ใช้ `finally` / `using` / `with` / `defer` แทนการเขียนซ้ำในทุกทางออก
+**Cleanup must always run**, whether or not the main work succeeds: closing files, returning connections, deleting temp files.
+Use `finally` / `using` / `with` / `defer` instead of repeating it on every exit path.
 
 ---
 
-## 7 · ตรวจก่อนส่ง
+## 7 · Check before sending
 
-ไล่กับ diff ทุกครั้งที่แตะโค้ดที่เรียกออกนอก process (แนวคิดจาก ECC error-handling)
+Go through this against the diff every time you touch code that calls outside the process (idea from ECC error-handling)
 
-- [ ] ทุก `catch` ทำอย่างใดอย่างหนึ่งชัด ๆ: จัดการแล้วไปต่อ · แปลงเป็น error ของชั้นตัวเองแล้วโยนต่อ · ปล่อยไปให้ชั้นนอกสุด log (ข้อ 1) — ไม่มี `catch` ที่ log แล้วโยนต่อ
-- [ ] ทุกการเรียกออกนอก (HTTP · DB · คิว · ไฟล์) มี timeout ที่ตั้งใจ และ retry เฉพาะประเภทชั่วคราวในข้อ 3 · การเขียนที่ retry มี idempotency key (ข้อ 4)
-- [ ] ข้อความถึงผู้ใช้บอกว่าทำอะไรต่อ · ไม่มี stack trace หรือชื่อตารางออกไป (ข้อ 2) · log ของ error เดียวกันมี correlation id และข้อมูลพอให้ทำซ้ำ
-- [ ] ผลที่ธุรกิจคาดไว้ (ไม่พบ · ยอดไม่พอ · ซ้ำ) เป็นค่าคืนหรือ type ที่ผู้เรียกต้องจัดการ ไม่ใช่ exception
-- [ ] dependency ภายนอกแต่ละตัวมี test เส้นทางล้มอย่างน้อย 1 กรณี (timeout · 5xx · payload ผิด) และ test ยืนยันว่าระบบล้มบางส่วนตามข้อ 6 ไม่ล้มทั้งหน้า
-- [ ] ไม่มีการกลืนความล้มเหลวเงียบ ๆ 4 แบบนี้ (เรียบเรียงจาก silent-failure-hunter ของ pr-review-toolkit · claude-plugins-official · Apache-2.0 · ดู 2026-11-10):
-  - **optional chaining หรือ `?? ค่าเริ่มต้น`** ที่ทำให้ค่าที่หายไปผ่านไปโดยไม่มีใครรู้ (`order?.total ?? 0` ทำให้ออเดอร์ที่โหลดไม่ขึ้นกลายเป็นยอดศูนย์)
-  - **fallback ไปใช้ mock หรือข้อมูลตัวอย่างนอก test** — ระบบจริงโชว์ข้อมูลปลอมแล้วดูเหมือนปกติ
-  - **retry หมดแล้วเงียบ** — ครบรอบแล้วคืนค่าว่างหรือสำเร็จ ไม่โยน error และไม่แจ้งผู้เรียก
-  - **catch ที่ log แล้วไปต่อใน UI** — ผู้ใช้เห็นหน้าจอปกติทั้งที่ข้อมูลไม่มา ต้องแสดงสถานะผิดพลาดให้เห็น
+- [ ] Every `catch` clearly does one of these: handles it and goes on · converts it to an error of its own layer and throws on · lets it pass to the outermost layer to log (section 1) — no `catch` that logs and rethrows
+- [ ] Every outside call (HTTP · DB · queue · file) has a deliberate timeout and retries only the transient types in section 3 · a write that retries has an idempotency key (section 4)
+- [ ] The message to the user says what to do next · no stack trace or table name goes out (section 2) · the log for the same error has a correlation id and enough data to reproduce it
+- [ ] Outcomes the business expects (not found · insufficient balance · duplicate) are return values or types the caller must handle, not exceptions
+- [ ] Each outside dependency has at least 1 failure-path test (timeout · 5xx · bad payload), and a test confirms that partial failure follows section 6 and does not fail the whole page
+- [ ] None of these 4 kinds of silent failure swallowing (adapted from silent-failure-hunter in pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10):
+  - **optional chaining or `?? default`** that lets a missing value pass with nobody knowing (`order?.total ?? 0` turns an order that failed to load into a zero total)
+  - **falling back to a mock or sample data outside tests** — the live system shows fake data and looks normal
+  - **retries run out, then silence** — after the last try it returns empty or success, throws no error, and tells the caller nothing
+  - **a catch that logs and carries on in the UI** — the user sees a normal screen although the data never arrived; show an error state they can see
 
 ## 8 · Anti-patterns
 
-- **`catch` ว่างเปล่า** — ปัญหาที่หายากที่สุดคือปัญหาที่ไม่มีร่องรอย
-- **คืน `null` แทนการโยน error** — ผู้เรียกไม่รู้ว่าไม่มีข้อมูล หรือระบบพัง
-- **`catch (Exception)` ที่ชั้นในสุด** — กลืนบั๊กของตัวเองไปด้วย
-- **log แล้ว throw ต่อทุกชั้น** — error 1 ตัวได้ 10 บรรทัด
-- **"เกิดข้อผิดพลาด"** — ไม่บอกว่าต้องทำอะไรต่อ
-- **ส่ง stack trace ให้ผู้ใช้** — เปิดโครงสร้างภายในให้คนที่กำลังหาช่องโหว่เห็น
-- **retry แบบไม่หน่วง** — ยิงรัวใส่ระบบที่ล้มอยู่
-- **retry การเขียนโดยไม่มี idempotency key** — ได้รายการซ้ำ
-- **ไม่มี timeout** — thread ค้างสะสมจนระบบตาย
-- **ใช้ error เป็นตัวควบคุมการทำงานปกติ** — เช่นโยน exception เมื่อ "ไม่พบข้อมูล" ซึ่งเป็นเรื่องปกติ
+- **An empty `catch`** — the hardest problem to find is the one that leaves no trace
+- **Returning `null` instead of throwing an error** — the caller cannot tell "no data" from "the system broke"
+- **`catch (Exception)` in the innermost layer** — swallows your own bugs too
+- **Log and rethrow at every layer** — 1 error gets 10 lines
+- **"เกิดข้อผิดพลาด" ("an error occurred")** — does not say what to do next
+- **Sending a stack trace to the user** — shows the internal structure to someone hunting for a hole
+- **Retry with no delay** — hammering a system that is already down
+- **Retrying a write with no idempotency key** — you get duplicate records
+- **No timeout** — threads pile up until the system dies
+- **Using errors to control normal flow** — for example throwing an exception on "not found", which is a normal event
+
+
+---
+
+# skill: logging-standards
+
+Use when writing or reviewing code that logs
+
+# Logging Standards
+
+> **The one rule:** Logs exist for a person to read at 3 a.m. when the system is down, not while writing the code.
+> If a line does not help answer "what happened, to whom, and when", do not write it.
+
+## When to use this skill
+
+- Starting any new project (service, API, worker, batch, desktop, frontend)
+- Someone asks for "a log file", or asks about log format and levels
+- You are chasing a production problem and find that the existing logs are unusable
+
+## When **not** to use it
+
+- You need metrics or tracing (Prometheus, OpenTelemetry). That is a different topic from logs, so use `observability-basics`.
+- You are building a service health endpoint. Use `web-service-essentials`.
+
+---
+
+## 1 · Line format — the same in every language
+
+```
+2026-08-31 09:42:13.482 +07:00  INFO   [a3f9c1b2] orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 userId=57 ms=134
+└───────── time + timezone ─────────┘ └level┘  └ cid ┘ └source┘ └─ message ─┘  └──── context k=v ────┘
+```
+
+| Part | Rule |
+|---|---|
+| time | `YYYY-MM-DD HH:mm:ss.SSS ±HH:MM` — **the timezone is required**, or you cannot compare logs across machines |
+| level | Left-aligned, 5 characters wide (`INFO ` `WARN ` `ERROR` `DEBUG` `FATAL`), so the columns line up |
+| cid | An 8-character correlation id in square brackets. If there is none, use `[--------]` (also 8 characters, so the columns line up) |
+| source | The module or class that writes the log, not the file name |
+| message | One sentence, with no variables embedded in the string |
+| context | `key=value` separated by spaces. If a value contains a space, wrap it in `"` |
+
+**Why not JSON:** This file is mainly for people to open and `grep`. This format still works with `grep "\[a3f9c1b2\]"` or `awk`, but the eye reads it at once without any tool.
+When you must ship logs to a central system such as Grafana Loki or Elasticsearch, Logstash, Kibana (ELK), add one more JSON sink (the destination logs are sent to). But **do not drop the text file**.
+
+**1 event = 1 line**, except a stack trace, which follows indented by 4 spaces.
+
+---
+
+## 2 · Log levels — write them to match their meaning
+
+| Level | Use when | Example |
+|---|---|---|
+| `FATAL` | The app is about to die and cannot continue | Cannot connect to the DB at start |
+| `ERROR` | This job failed **and someone must look** | Saving an order failed |
+| `WARN` | Abnormal, but the system can continue | Retry number 2, disk down to 10% |
+| `INFO` | An important business event | Order created, user logged in, job started/finished |
+| `DEBUG` | Details for chasing problems — **off in production** | Values computed along the way |
+| `TRACE` | Step-by-step detail — turn on only when really chasing | Raw payload |
+
+> Warning: **an `ERROR` that nobody needs to act on is a `WARN`.** If ERROR fires every minute until people stop looking,
+> you have just destroyed your own alarm system.
+
+The default is `DEBUG` in dev and `INFO` in production, adjustable with the env var `LOG_LEVEL`. **No new build is needed; just restart (or reload the config).** .NET reads it from `appsettings.json` instead (see `references/per-stack.md`).
+
+---
+
+## 3 · Correlation id — what makes logs usable
+
+One request uses one id from start to finish, so every line that comes from that request has the same id.
+
+```
+Client ──X-Request-Id?── API Gateway ──┬── Service A ──┐
+                        (create if none)└── Service B ──┴─→ every line has the same cid
+```
+
+- Take it from the header **`X-Request-Id`** only when it matches `^[A-Za-z0-9-]{1,64}$`. If it is missing or does not match, create a new one (`uuid v4`, first 8 characters). For the reason, see `web-service-essentials` item 3.
+- **Always return it in the response header**, so the customer can send the id when reporting a problem and we can trace it at once.
+- Pass it to the downstream service on every cross-system call.
+- Store it with a mechanism that is separate per request: `AsyncLocalStorage` (Node) · `ContextVar` (Python)
+  · `IHttpContextAccessor`/`LogContext` (.NET). **Never use a global variable**, because ids mix as soon as several requests run at once.
+
+---
+
+## 4 · Log files
+
+```
+logs/
+  app-20260831.log        all levels · rotate at midnight · keep 30 days · max 100MB per file
+  error-20260831.log      ERROR/FATAL only · keep 90 days
+  fatal.log               uncaught exceptions (app died)
+```
+
+- Set the folder with the env var `LOG_DIR`. **Never hardcode the path.**
+- Compress old files (`.gz`) and **retention is required**. Otherwise the disk fills and the system goes down from its own logs.
+- In a container, also log to stdout (besides the file) so `docker logs` works.
+- `logs/` must be in `.gitignore`.
+
+---
+
+## 5 · What must never go into a log
+
+Passwords · tokens/API keys · cookies/Authorization headers · OTP/PIN · credit card numbers/CVV ·
+**national ID numbers** · health data · full payloads that contain personal data
+
+Helper already provided: the redaction function (which hides secret values) checks **whether the key name contains a forbidden word** (`userPassword`, `pwd`,
+`accessToken` are all caught) and replaces the value with `***`. It checks up to 4 levels deep inside an object.
+
+> **Log injection** — A value from a user may contain `\n`. If you let it through, the user can "forge" a fake log line,
+> which misleads readers and breaks parsers. So the provided code strips `\r\n\t` from every value and from the main message.
+
+---
+
+## 6 · Ready-to-use code
+
+| File | Stack | Status |
+|---|---|---|
+| `assets/logger.node.js` | Node/TS — winston + winston-daily-rotate-file | ✓ Run and tested 2026-10-25 (Node 22.23.2 · winston 3.19.0 · winston-daily-rotate-file 5.0.0 · password redaction · correlation id · strips line breaks in the main message and values) |
+| `assets/logger_py.py` | Python — stdlib only, nothing to install | ✓ Run and tested 2026-10-25 (Python 3.13.5 · same test set) |
+| `references/per-stack.md` | .NET (Serilog) + Angular | Caution: not yet compiled or tested |
+
+```js
+// Node
+const { withCorrelation } = require('./logger.node');
+const log = withCorrelation(req.id).child({ source: 'orders' });
+log.info('สร้างคำสั่งซื้อสำเร็จ', { orderId: 1042, ms: 134 });
+log.error('บันทึกไม่สำเร็จ', err);          // pass an Error directly; the stack is added for you
+```
+
+```python
+# Python
+from logger_py import setup_logging, get_logger, set_correlation_id
+setup_logging(app_name="myapi")             # once, when the app starts
+log = get_logger("orders")
+log.info("สร้างคำสั่งซื้อสำเร็จ", extra={"ctx": {"order_id": 1042, "ms": 134}})
+log.exception("บันทึกไม่สำเร็จ")             # inside except — the stack is added for you
+```
+
+---
+
+## 7 · Checking the work
+
+```bash
+# no leftover print/console.log in production code
+grep -rnE "console\.(log|error)|Console\.WriteLine|^\s*print\(" src/ --include="*.ts" \
+  --include="*.js" --include="*.cs" --include="*.py" | grep -v test | head -30
+
+# the output logs are readable and greppable
+tail -n 50 logs/app-*.log
+grep "a3f9c1b2" logs/app-*.log          # does one request show every line?
+```
+
+- [ ] Every line has all of: time+timezone · level · cid · source
+- [ ] `grep` with one cid shows the story of that request from start to finish
+- [ ] No secrets leak: log an object with `password` and `token`, and you must see `***`
+- [ ] Feeding in a value that contains `\n` produces no fake line
+- [ ] With `LOG_LEVEL=INFO`, DEBUG really disappears
+- [ ] Files rotate daily and have retention (left for 1 month, the disk must not fill)
+- [ ] `logs/` is in `.gitignore`
+- [ ] The response sends `X-Request-Id` back to the customer
+
+---
+
+## 8 · Anti-patterns
+
+- **`console.log` / `print()` in real code** — no level, no time, no cid, not written to a file
+- **Logging everything** — the file grows so large you cannot find anything, and it is expensive and slow
+- **A silent `try { } catch (e) { }`** — log at least 1 line
+- **Log, then rethrow** — one problem shows up 3 times in the file. Log at the top layer that really handles the error instead.
+- **Variables embedded in the message** (`` `บันทึก order ${id} ไม่สำเร็จ` ``) — you cannot group the logs.
+  Use a fixed message + context instead.
+- **Logging inside a loop that runs thousands of times** — log one summary when the loop ends
+- **A timestamp with no timezone** — the server uses UTC but Thai readers read it as +07:00, so times are compared 7 hours off
+- **No retention** — one day the disk fills and the system goes down from its own logs
+
+---
+
+## 9 · Links to other skills
+
+| Need | Use with |
+|---|---|
+| health/ping/version endpoint | `web-service-essentials` |
+| Writing tests with full coverage | `testing-standards` |
+| Runbook during an incident | `incident-runbook-template` |
+| Postmortem after an incident | `postmortem-template` |
+
+
+## reference: per-stack.md
+
+# Set up the logger to produce the same format — .NET and Angular
+
+> Warning: the code in this file is **not yet compiled or tested** (unlike `assets/logger.node.js` and
+> `assets/logger_py.py`, which have really been run). It uses the standard setup of each library.
+> At the first build, compare the output lines with the format in SKILL.md item 1.
+
+---
+
+## Contents
+
+1. [.NET / C# — Serilog](#net--c--serilog)
+2. [Angular / frontend](#angular--frontend)
+3. [Comparison table](#comparison-table)
+
+---
+
+## .NET / C# — Serilog
+
+```bash
+dotnet add package Serilog.AspNetCore
+dotnet add package Serilog.Sinks.File
+```
+
+`appsettings.json` — keeps the settings outside the code, so you can change the log level without a new build:
+
+```json
+{
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Information",
+      "Override": {
+        "Microsoft.AspNetCore": "Warning",
+        "Microsoft.EntityFrameworkCore.Database.Command": "Warning"
+      }
+    }
+  }
+}
+```
+
+`Program.cs`:
+
+```csharp
+using Serilog;
+using Serilog.Events;
+
+const string LineTemplate =
+    "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}  {Level:u5}  " +
+    "[{CorrelationId}] {SourceContext}  {Message:lj}  {Context:l}{NewLine}{Exception}";
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .Enrich.WithProperty("CorrelationId", "--------") // default when there is no request (8 characters)
+    .Enrich.WithProperty("Context", "")              // empty when there is no context k=v
+    .WriteTo.Console(outputTemplate: LineTemplate)
+    .WriteTo.File(
+        path: Path.Combine(Environment.GetEnvironmentVariable("LOG_DIR") ?? "logs", "app-.log"),
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 30,
+        fileSizeLimitBytes: 100 * 1024 * 1024,
+        rollOnFileSizeLimit: true,
+        outputTemplate: LineTemplate)
+    .WriteTo.File(
+        path: Path.Combine(Environment.GetEnvironmentVariable("LOG_DIR") ?? "logs", "error-.log"),
+        restrictedToMinimumLevel: LogEventLevel.Error,
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 90,
+        outputTemplate: LineTemplate)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+```
+
+> `{Level:u5}` means upper case, 5 characters wide, which gives `INFO ` `WARN ` `ERROR` to match the other stacks.
+> `{Message:lj}` and `{Context:l}` mean the string is not wrapped in an extra layer of `"`.
+
+### Middleware correlation id
+
+```csharp
+using System.Text.RegularExpressions;
+
+public sealed class CorrelationIdMiddleware(RequestDelegate next)
+{
+    public const string Header = "X-Request-Id";
+    // accept from the customer only letters, digits, and - up to 36 characters — blocks people stuffing long text or \n into the log
+ into the log
+    private static readonly Regex Valid = new("^[A-Za-z0-9-]{1,36}$", RegexOptions.Compiled);
+
+    public async Task Invoke(HttpContext ctx)
+    {
+        var cid = ctx.Request.Headers[Header].FirstOrDefault();
+        if (cid is null || !Valid.IsMatch(cid))
+            cid = Guid.NewGuid().ToString("N")[..8];   // missing or invalid → create a new one
+
+        var logCid = cid.Length > 8 ? cid[..8] : cid;   // the log uses the first 8 characters to fit the cid column (same as Node/Python) — the header returns the full value
+
+        ctx.Response.Headers[Header] = cid;          // return it so the customer can quote it
+
+        // LogContext is tied only to this request's async flow — it does not mix with other requests
+        using (Serilog.Context.LogContext.PushProperty("CorrelationId", logCid))
+            await next(ctx);
+    }
+}
+```
+
+### Writing logs
+
+```csharp
+// Right: fixed message + values go in {Context} as k=v, per the format in SKILL.md item 1
+//    Output: ... INFO   [a3f9c1b2] Orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 ms=134
+using (Serilog.Context.LogContext.PushProperty("Context", $"orderId={orderId} ms={sw.ElapsedMilliseconds}"))
+    _logger.LogInformation("สร้างคำสั่งซื้อสำเร็จ");
+
+// Wrong: a variable embedded in the string — every line becomes a different message and cannot be grouped
+_logger.LogInformation($"สร้างคำสั่งซื้อ {orderId} สำเร็จ");
+```
+
+### Redacting secrets
+
+Serilog does not redact secrets automatically. The surest way is to **never pass a whole object into the log**.
+Pick only the fields you need. If you must pass the whole object, write an `IDestructuringPolicy`
+or add `[NotLogged]` through `Destructure.ByTransforming<T>()`.
+
+---
+
+## Angular / frontend
+
+The principle differs from the backend: **a browser cannot write files**, so important logs must be sent up to the backend.
+
+```ts
+// core/logger.service.ts
+import { Injectable, inject, isDevMode } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+type Level = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
+
+@Injectable({ providedIn: 'root' })
+export class LoggerService {
+  private http = inject(HttpClient);
+  private buffer: unknown[] = [];
+
+  private write(level: Level, message: string, ctx: Record<string, unknown> = {}) {
+    // dev: print to the console for chasing problems — prod: silent, except WARN and above, which go to the server
+    if (isDevMode()) console[level === 'ERROR' ? 'error' : 'log'](level, message, ctx);
+    if (level === 'DEBUG' || (!isDevMode() && level === 'INFO')) return;   // prod sends only WARN and above
+
+    this.buffer.push({ ts: new Date().toISOString(), level, message, ctx });
+    if (this.buffer.length >= 10 || level === 'ERROR') this.flush();
+  }
+
+  /** Send in batches, not line by line — otherwise the network tab fills with the log's own requests */
+  flush() {
+    if (!this.buffer.length) return;
+    const batch = this.buffer.splice(0);
+    this.http.post('/api/client-logs', { entries: batch }).subscribe({ error: () => {} });
+  }
+
+  debug = (m: string, c?: Record<string, unknown>) => this.write('DEBUG', m, c);
+  info  = (m: string, c?: Record<string, unknown>) => this.write('INFO', m, c);
+  warn  = (m: string, c?: Record<string, unknown>) => this.write('WARN', m, c);
+  error = (m: string, c?: Record<string, unknown>) => this.write('ERROR', m, c);
+}
+```
+
+Catch every uncaught error:
+
+```ts
+// core/global-error.handler.ts
+import { ErrorHandler, Injectable, inject, isDevMode } from '@angular/core';
+import { LoggerService } from './logger.service';
+
+@Injectable()
+export class GlobalErrorHandler implements ErrorHandler {
+  private log = inject(LoggerService);
+  handleError(err: unknown) {
+    const e = err as Error;
+    this.log.error(e?.message ?? 'unknown error', { stack: e?.stack?.slice(0, 2000) });
+    if (isDevMode()) console.error(err);
+  }
+}
+// app.config.ts → providers: [{ provide: ErrorHandler, useClass: GlobalErrorHandler }]
+```
+
+Send a correlation id with every request so client-side and server-side logs connect:
+
+```ts
+// core/correlation.interceptor.ts
+import { HttpInterceptorFn } from '@angular/common/http';
+
+export const correlationInterceptor: HttpInterceptorFn = (req, next) =>
+  next(req.clone({ setHeaders: { 'X-Request-Id': crypto.randomUUID().slice(0, 8) } }));
+```
+
+**On the backend** you need an endpoint `POST /api/client-logs` that:
+- Limits the body size and applies a rate limit. Otherwise it becomes a hole for people to flood you with logs.
+- Writes to a separate file `logs/client-YYYYMMDD.log`
+- **Treats the content as untrusted data**, so strip `\r\n` from every value just like a normal log
+
+---
+
+## Comparison table
+
+| Topic | .NET | Node | Python | Angular |
+|---|---|---|---|---|
+| Library | Serilog | winston | stdlib `logging` | Hand-written (thin) |
+| File rotation | `rollingInterval: Day` | `winston-daily-rotate-file` | `TimedRotatingFileHandler` | — (sent to the backend) |
+| correlation | `LogContext.PushProperty` | `AsyncLocalStorage` + `child()` | `ContextVar` | header `X-Request-Id` |
+| Level | `LogEventLevel` | `level` | `setLevel` | Its own enum |
+| External configuration | `appsettings.json` | env `LOG_LEVEL` | env `LOG_LEVEL` | `isDevMode()` |
+
+
+---
+
+# skill: auth-implementation-patterns
+
+Use when building login with sessions, JWT, OAuth or SSO
+
+# Authentication Implementation Patterns
+
+## When to use this skill
+
+- Building login/signup/logout
+- Adding password reset flow
+- Adding multi-factor authentication (MFA): TOTP, SMS, WebAuthn
+- Choosing session vs token authentication
+- Integrating OAuth or OpenID Connect (OIDC) logins (Google, GitHub, etc.)
+- Implementing single sign-on (SSO) with SAML or OIDC
+- Designing API authentication (API keys, JSON Web Token (JWT), OAuth)
+- Reviewing existing auth code for security issues
+
+## อ่านเพิ่มเมื่อ
+
+| ไฟล์ | เปิดเมื่อ |
+|---|---|
+| [references/auth-flows.md](references/auth-flows.md) | When writing session, JWT, OAuth with PKCE or password reset code, open it for the step-by-step order |
+| [references/mfa.md](references/mfa.md) | When choosing or building MFA and you need TOTP setup steps, WebAuthn usage or the limits of SMS |
+| [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md) | ถ้าออกแบบการยืนยันตัวตนของ API หรือ API key หรือต้องการตัวอย่าง RBAC กับ ABAC ให้เปิดไฟล์นี้ |
+| [references/libraries-and-code.md](references/libraries-and-code.md) | When choosing a library by language, or you need sample code for password hashing and rate limiting |
+
+## Choose the Right Pattern
+
+```
+What's authenticating?
+│
+├─ Browser user
+│  ├─ First-party app → Session cookies (HttpOnly, Secure, SameSite)
+│  └─ Need cross-domain → JWT with httpOnly cookie (NOT localStorage)
+│
+├─ Mobile app
+│  └─ Token-based: OAuth 2.0 PKCE flow
+│
+├─ Service-to-service
+│  ├─ Same org → mTLS or service mesh
+│  └─ External → OAuth 2.0 Client Credentials
+│
+└─ Third-party developer
+   └─ API keys (with rotation) OR OAuth
+```
+
+## Pattern 1: Session-Based Auth (Most apps)
+
+**When to use:** server-rendered apps, monoliths, one domain
+
+**Implementation requirements:**
+- Cookie: `HttpOnly`, `Secure`, `SameSite=Lax` (or Strict)
+- Session ID: cryptographically random, ≥ 128 bits
+- Session storage: Redis with a time-to-live (TTL). Not in app memory if you run more than one instance
+- Idle timeout: 30 min default
+- Absolute timeout: 8-12 hours
+- Issue a new session ID when privileges change (login, role change)
+- On logout, delete the session from the store
+
+**Pitfalls:**
+- ผิด: Storing session in JWT (can't revoke)
+- ผิด: Using `localStorage` for the session token (cross-site scripting (XSS) can steal it)
+- ผิด: Keeping the same ID after login (session fixation)
+
+## Pattern 2: JWT (Stateless Token)
+
+**When to use:** microservices, mobile, single-page app (SPA) with a backend API
+
+> ระวัง: **JWT is overused.** If you have a single backend, sessions are simpler and safer.
+
+**Implementation requirements:**
+- Algorithm: `RS256` or `ES256` (NOT `HS256` for distributed systems)
+- Short-lived access token: 5-15 min
+- Refresh token: longer-lived (days), stored separately, revocable
+- Issue a new refresh token each time one is used
+- Required claims: `sub`, `iat`, `exp`, `iss`, `aud`
+- Store JWT in `HttpOnly Secure cookie` (NOT localStorage)
+- Have a way to cancel tokens (blocklist, short expiry, etc.)
+
+**Pitfalls:**
+- ผิด: `alg: none` attacks (check the algorithm explicitly)
+- ผิด: Storing JWT in `localStorage` (XSS-stealable)
+- ผิด: Long-lived access tokens (you can't cancel them)
+- ผิด: Putting sensitive data in JWT (it's base64, not encrypted)
+- ผิด: Skipping signature verification
+
+## Pattern 3: OAuth 2.0 / OIDC
+
+**When to use:** "Login with Google/GitHub", or handing login to an identity provider (IdP)
+
+ใช้ Authorization Code Flow with PKCE (Proof Key for Code Exchange) เสมอ เพราะกันไม่ให้ code ที่ถูกขโมยไปแลกเป็น token ได้ ลำดับขั้นอยู่ใน [references/auth-flows.md](references/auth-flows.md)
+
+**Implementation requirements:**
+- **Always use PKCE** (even for confidential clients)
+- Validate `id_token` signature (use IdP's JWKS)
+- Validate `aud`, `iss`, `exp`, `nonce`
+- Use the `state` parameter to prevent cross-site request forgery (CSRF)
+- Match `code_verifier` to `code_challenge`
+- Use a library, don't write your own (Auth0, Passport.js, etc.)
+
+**Pitfalls:**
+- ผิด: Implicit flow (deprecated, insecure)
+- ผิด: Resource Owner Password Credentials flow (deprecated)
+- ผิด: Skipping `state` validation (CSRF risk)
+- ผิด: Trusting `id_token` without verifying signature
+
+## Pattern 4: Multi-Factor Authentication (MFA)
+
+There are 3 types. For a new app, use WebAuthn (passkeys) as the default, because there is no shared secret to steal. If you need 2FA that users can set up easily and that is standard, use TOTP. Use SMS or email only as a last resort, because SMS is not safe against SIM swap. Details of all 3 are in [references/mfa.md](references/mfa.md)
+
+## Pattern 5: Password Management
+
+### Storage
+- ถูก: **Argon2id** (preferred) or **bcrypt** (cost factor ≥ 12)
+- ผิด: Never: MD5, SHA-1, SHA-256 raw, plain text
+
+### Password policy (NIST SP 800-63B-4 §3.1.1.2, checked 2026-10-14 at pages.nist.gov/800-63-4/sp800-63b.html)
+- ถูก: Minimum **15 characters** when the password is the only factor · minimum **8** when it is used only inside multi-factor authentication (MFA)
+- ถูก: Check against a list of breached passwords (Have I Been Pwned (HIBP) API)
+- ถูก: Allow long passphrases (any maximum must be at least 64 chars)
+- ถูก: Allow special characters (don't restrict them)
+- Don't force composition rules (uppercase + digit + symbol)
+- Don't force regular password changes (only when you suspect a breach)
+
+### Password reset flow
+
+Must-haves for password reset: the response message must be the same whether or not the email exists in the system. The token must be random with at least 256 bits, stored as a hash, and expire in 15 minutes. After the new password is set, revoke all old sessions and send a confirmation email. All 9 steps in order are in [references/auth-flows.md](references/auth-flows.md)
+
+## Pattern 6: Account Lockout & Rate Limiting
+
+```
+Login attempts:
+- 5 failed attempts in 15 min → lock account 15 min
+- 10 failed attempts in 1 hour → lock 1 hour
+- Use IP + email combo, not just one
+
+Lockout messaging:
+ถูก: "Too many failed attempts. Try again in 15 minutes."
+ผิด: "Account locked." (reveals account exists)
+```
+
+Use existing tools instead of writing your own. The list of tools is in [references/libraries-and-code.md](references/libraries-and-code.md)
+
+## Pattern 7: API Authentication
+
+Choose by caller: API key for simple server-to-server · OAuth 2.0 Client Credentials for service-to-service · mTLS for internal systems that need high security · HMAC signing for verifying webhooks. For an API key, show the secret only once at creation, store it as a hash, and let users revoke it immediately. The comparison table and full principles are in [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md)
+
+## Authorization Patterns (after authentication)
+
+ใช้ RBAC (Role-Based Access Control) เป็นหลัก และใช้ ABAC (Attribute-Based Access Control) เมื่อต้องการสิทธิ์ละเอียดตามคุณสมบัติของข้อมูล ตัวอย่างอยู่ใน [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md)
+
+### Implementation tip
+- Check authorization at every endpoint
+- Don't trust a role sent by the client
+- Check on the server, using the user from the session or token
+
+## Common Vulnerabilities Checklist
+
+- [ ] Session fixation (regenerate ID on login)
+- [ ] CSRF (token or SameSite cookie)
+- [ ] Brute force (rate limiting)
+- [ ] Credential stuffing, i.e. logins with leaked passwords (HIBP check, MFA)
+- [ ] Open redirect (allowlist redirect URLs)
+- [ ] User enumeration, i.e. finding which accounts exist (same error message every time)
+- [ ] Timing attacks (compare in constant time)
+- [ ] Token in URL (use header or cookie)
+- [ ] Logout that does nothing on the server (invalidate server-side)
+- [ ] Privilege escalation (re-check after role change)
+
+## Anti-patterns
+
+- Writing your own crypto or auth (use libraries)
+- Storing passwords reversibly
+- JWT for sessions when you have one backend
+- Long-lived JWT without rotation
+- Authentication without authorization checks
+- Trusting JWT claims as authorization source
+- Logout that doesn't invalidate token server-side
+- Allowing weak passwords for compliance "convenience"
+
+
+## reference: api-auth-and-authorization.md
+
+# API Authentication และ Authorization Patterns
+
+How each type of API authentication works, principles for managing API keys, and examples of RBAC and ABAC
+
+## Pattern 7: API Authentication
+
+| Method | Use case | Token format |
+|--------|----------|--------------|
+| **API Keys** | Server-to-server, simple | `sk_live_xxx` |
+| **OAuth 2.0 Client Credentials** | Service-to-service | JWT bearer |
+| **mTLS** (both sides present certificates) | High-security, internal | X.509 certs |
+| **HMAC signing** | Webhook verification | `HMAC-SHA256` |
+
+### API Key best practices
+- Prefix with environment: `sk_test_xxx`, `sk_live_xxx`
+- Show the secret ONCE, when it is created
+- Store it hashed (like a password)
+- Allow scopes/permissions per key
+- Allow expiry and replacement
+- Show when each key was last used
+- Let users revoke a key instantly
+
+## Authorization Patterns (after authentication)
+
+### RBAC (Role-Based Access Control)
+```
+User → Role → Permissions
+e.g., user@example.com → admin → [users.read, users.write, billing.read]
+```
+
+### ABAC (Attribute-Based) — fine-grained
+```
+Allow if user.department === resource.department AND action === "read"
+```
+
+
+## reference: auth-flows.md
+
+# ลำดับขั้นของแต่ละ flow
+
+Step-by-step order for session, JWT, OAuth with PKCE and password reset. Use it when writing code, or when reviewing whether the code covers every step. The requirements and mistakes to avoid are in `SKILL.md`
+
+## Pattern 1: Session-Based Auth — Flow
+
+```
+1. User submits credentials
+2. Server validates, creates session ID
+3. Server stores session in Redis/DB
+4. Server sets HttpOnly Secure cookie
+5. Client sends cookie on every request
+6. Server looks up session, identifies user
+```
+
+## Pattern 2: JWT — Flow
+
+```
+1. User submits credentials
+2. Server validates, signs JWT
+3. Client stores JWT (in HttpOnly cookie preferred)
+4. Client sends JWT on every request (Authorization header or cookie)
+5. Server verifies signature, extracts claims
+```
+
+## Pattern 3: OAuth 2.0 / OIDC — Authorization Code Flow with PKCE
+
+PKCE = Proof Key for Code Exchange. It stops a stolen code from being swapped for a token.
+
+```
+1. App → IdP: /authorize?code_challenge=...
+2. User logs in at IdP
+3. IdP → App: /callback?code=...
+4. App → IdP: /token (with code_verifier)
+5. IdP → App: access_token + id_token + refresh_token
+```
+
+## Pattern 5: Password reset flow
+
+```
+1. User requests reset (enter email)
+2. Server: always show "if email exists, link sent" (don't leak)
+3. Generate random token (≥ 256 bits), hash it, store with expiry (15 min)
+4. Email link with raw token
+5. User clicks → /reset?token=...
+6. Server hashes input, compares, verifies expiry
+7. User sets new password (apply policy)
+8. Invalidate all existing sessions
+9. Send confirmation email
+```
+
+
+## reference: libraries-and-code.md
+
+# ไลบรารีและโค้ดตัวอย่าง
+
+Sample code for storing passwords, rate-limiting tools, and recommended libraries by language
+
+## Password storage — code
+
+```typescript
+// Good (using bcrypt)
+const hash = await bcrypt.hash(password, 12);
+const valid = await bcrypt.compare(password, storedHash);
+
+// Bad
+const hash = crypto.createHash('sha256').update(password).digest('hex');
+```
+
+## Rate limiting tools
+
+Use existing tools:
+- `express-rate-limit` (Node.js)
+- `django-ratelimit` (Django)
+- Cloudflare / AWS WAF (edge)
+
+## Library Recommendations
+
+| Stack | Library | Notes |
+|-------|---------|-------|
+| Node.js | `passport`, Auth.js, Better Auth | Lucia v3 is deprecated (lucia-auth.com, checked 22 Oct 2026) so do not start new work on it; Better Auth status (รอยืนยัน, check before use) |
+| Python | `authlib`, `PyJWT` (or `joserfc`) | authlib for OAuth; python-jose is rarely maintained (รอยืนยัน) |
+| Go | `oauth2`, `golang-jwt` | Standard |
+| Rust | `axum-login`, `jsonwebtoken` | — |
+| Any | Auth0, Clerk, Supabase Auth | Managed (faster) |
+
+
+## reference: mfa.md
+
+# Pattern 4: Multi-Factor Authentication (MFA)
+
+Details of all 3 types of multi-factor authentication. Use it when choosing or building MFA
+
+## TOTP (Google Authenticator, Authy)
+**When:** standard two-factor login (2FA), easy for users. TOTP = time-based one-time password.
+
+```
+Setup:
+1. Server generates random secret (160 bits)
+2. Server shows QR code: otpauth://totp/...?secret=...
+3. User scans with authenticator app
+4. User confirms with first code
+5. Server stores secret encrypted
+
+Verify:
+1. User enters 6-digit code
+2. Server computes expected code(s) (±1 window for clock drift)
+3. Match → grant access
+```
+
+## WebAuthn (Passkeys) — Future-proof
+**When:** you want login that phishing can't beat, no SMS, hardware keys
+
+- Use `@simplewebauthn` library
+- Supports Touch ID, Face ID, YubiKey
+- No shared secret, so nothing to phish
+- Default for new apps in 2026+
+
+## SMS / Email codes
+**When:** there's no other option (users without smartphone apps)
+
+- Note: SMS is **NOT secure** (SIM swap attacks)
+- Use only as a last resort, never as the main method
+- Use strict rate limits
+- Codes: 6 digits, 5 min expiry

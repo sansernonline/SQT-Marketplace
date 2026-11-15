@@ -2,7 +2,7 @@
 
 Use when reading a Thai stock's financials or ratios
 
-# Stock Fundamentals (อ่านงบและตัวเลขพื้นฐานหุ้น SET)
+# Stock Fundamentals (reading statements and basic figures of SET stocks)
 
 General information, not investment advice. This skill turns a company's filed statements into a handful of ratios and the places worth a second look. It never says buy, sell or hold, even when asked straight out (see "Check before sending").
 

@@ -1,6 +1,6 @@
 # Clinical analytics — cohorts, measures, risk adjustment, report
 
-คู่มือของ agent `clinical-data-analyst` · SQL ทุกตัวเป็นตัวอย่าง ต้องปรับชื่อตารางและรหัสให้ตรงระบบจริง
+Guide for the `clinical-data-analyst` agent · every SQL query is an example; adapt table names and codes to the real system
 
 **สารบัญ:**
 

@@ -4,33 +4,33 @@ A full example for `course-builder` section 10 · all the rules are in [SKILL.md
 
 This whole section is an **example** (ตัวอย่าง): the learners, head count and times are assumed values · every Git command line was really run with Git 2.54 on Windows (2026-10-23)
 
-โจทย์: นักวิเคราะห์ธุรกิจ (Business Analyst: BA) และผู้ทดสอบระบบ (Quality Assurance: QA) 12 คน อยากเก็บเอกสารข้อกำหนดและ test case ใน Git แทนการส่งไฟล์ `_final_v3` ทางอีเมล · สอนในห้อง · เครื่องของบริษัทติดตั้ง Git ไว้แล้ว
+Brief: 12 business analysts (BA) and quality assurance testers (QA) want to keep requirement documents and test cases in Git, instead of emailing `_final_v3` files. Classroom teaching. The company laptops already have Git installed.
 
-ความรู้ที่ต้องมี: เปิด terminal แล้วใช้ `cd` กับ `ls` ได้ · พิมพ์ `git --version` แล้วเห็นเลขรุ่น
+Prerequisites: the learner can open a terminal and use `cd` and `ls` · typing `git --version` shows a version number.
 
-**ผลลัพธ์ 3 ข้อ** เมื่อจบวัน ผู้เรียน
+**3 outcomes.** By the end of the day, the learner can:
 
-1. สร้าง repository แล้ว commit การแก้ไฟล์ 3 ครั้ง ข้อความ commit ทุกอันบอกว่าแก้อะไร (ประยุกต์ใช้)
-2. ใช้ `git log` กับ `git show` หา commit ที่ทำให้ราคาในเมนูผิด แล้วย้อนเฉพาะการแก้นั้นด้วย `git revert` ได้เอง (วิเคราะห์)
-3. แยก branch แก้งาน แล้ว merge กลับ `main` และแก้ conflict 1 จุดให้ไฟล์เก็บงานของทั้ง 2 ฝั่ง (ประยุกต์ใช้)
+1. Create a repository and commit changes to a file 3 times, with every commit message saying what changed (apply).
+2. Use `git log` and `git show` to find the commit that made a menu price wrong, then undo only that change with `git revert` unaided (analyze).
+3. Work on a branch, merge it back into `main`, and fix 1 conflict so the file keeps the work from both sides (apply).
 
-**ตาราง 4 ช่วง** (วันอบรมตามสมมุติฐานในหัวข้อ 3)
+**Table of 4 sessions** (training day as assumed in section 3)
 
-| เวลา | ช่วง | ผลลัพธ์ข้อ | สอน (นาที) | ลงมือ (นาที) | ทำอะไร |
+| Time | Session | Outcome no. | Teach (min) | Hands-on (min) | What happens |
 |---|---|---|---:|---:|---|
-| 09:00–10:30 | 1 · เก็บรุ่นของไฟล์ | 1 | 25 | 65 | ไฟล์ `_final_v3` พังเพราะอะไร · `git config` · `init` · `status` · `diff` · `add` · `commit` · แบบฝึก 1 ส่วน ก |
-| 10:30–10:45 | พัก | | | | |
-| 10:45–12:00 | 2 · ย้อนดูและย้อนกลับ | 2 | 20 | 55 | `log` · `show` · `revert` · แบบฝึก 1 ส่วน ข |
-| 12:00–13:00 | พักเที่ยง | | | | |
-| 13:00–14:30 | 3 · แยกงานแล้วรวม | 3 | 20 | 70 | `switch -c` · `merge` · conflict · แบบฝึก 2 |
-| 14:30–14:45 | พัก | | | | |
-| 14:45–16:00 | 4 · ทำเองทั้งชุด | 1–3 | 30 | 45 | อธิบายโจทย์ 10 นาที · โจทย์ปิดท้ายคนเดียว 45 นาที ประเมินด้วย rubric · ทวนและแบบประเมิน 20 นาที |
+| 09:00–10:30 | 1 · Keeping versions of a file | 1 | 25 | 65 | Why the `_final_v3` file breaks · `git config` · `init` · `status` · `diff` · `add` · `commit` · exercise 1 part A |
+| 10:30–10:45 | Break | | | | |
+| 10:45–12:00 | 2 · Looking back and undoing | 2 | 20 | 55 | `log` · `show` · `revert` · exercise 1 part B |
+| 12:00–13:00 | Lunch | | | | |
+| 13:00–14:30 | 3 · Splitting work and merging | 3 | 20 | 70 | `switch -c` · `merge` · conflict · exercise 2 |
+| 14:30–14:45 | Break | | | | |
+| 14:45–16:00 | 4 · Doing the whole set alone | 1–3 | 30 | 45 | 10 minutes to explain the task · 45-minute solo closing task scored with the rubric · 20 minutes of review and the feedback form |
 
-รวมสอน 95 นาที ลงมือ 235 นาที (ราว 29% ต่อ 71%) · การ push ขึ้น GitHub และ pull request ไม่อยู่ในวันนี้ เก็บไว้หลักสูตรครึ่งวันถัดไป
+Total: 95 minutes of teaching and 235 minutes of hands-on work (about 29% to 71%). Pushing to GitHub and pull requests are not in this day. They are kept for the next half-day course.
 
-**แบบฝึก 1 · เมนูร้านกาแฟ** (ขั้นทำตาม · ผลลัพธ์ 1 และ 2)
+**Exercise 1 · Coffee shop menu** (follow-along level · outcomes 1 and 2)
 
-ส่วน ก (ช่วง 1): แจกโฟลเดอร์ `cafe-menu/` ที่มีไฟล์ `menu.md` แล้วพิมพ์ไปพร้อมกันทีละคำสั่ง
+Part A (session 1): hand out the `cafe-menu/` folder that holds a `menu.md` file, then type each command together.
 
 ```bash
 git config --global user.name "ชื่อของคุณ"
@@ -38,48 +38,48 @@ git config --global user.email "you@example.com"
 git config --global init.defaultBranch main
 cd cafe-menu
 git init
-git status                      # menu.md ยังไม่อยู่ในความดูแลของ Git
+git status                      # menu.md is not yet tracked by Git
 git add menu.md
 git commit -m "เริ่มเมนูร้าน"
-# เพิ่มบรรทัด "- ชาไทยเย็น 45" ใน menu.md แล้วบันทึกไฟล์
-git diff                        # เห็นบรรทัดที่เพิ่ม
+# add the line "- ชาไทยเย็น 45" to menu.md and save the file
+git diff                        # shows the added line
 git add menu.md
 git commit -m "เพิ่มชาไทยเย็นในเมนู"
 git log --oneline
 ```
 
-เสร็จเมื่อ `git log --oneline` แสดง 3 บรรทัด (commit ที่ 3 ผู้เรียนทำเอง) และอ่านแล้วรู้ว่าแต่ละครั้งแก้อะไร · คำใบ้ 3 ขั้น: ดูว่า `git status` บอกสถานะไฟล์ว่าอะไร → ต้อง `add` ก่อน `commit` → คำสั่งเต็ม 2 บรรทัด · บน Windows อาจเห็นคำเตือน `LF will be replaced by CRLF` ให้บอกผู้เรียนก่อนว่าไม่ใช่ error
+Done when `git log --oneline` shows 3 lines (the learner makes the 3rd commit alone) and each line tells what changed. 3-step hint: look at what `git status` says about the file → `add` must come before `commit` → the full 2-line command. On Windows the learner may see the warning `LF will be replaced by CRLF`. Tell them first that it is not an error.
 
-ส่วน ข (ช่วง 2): แจก repo `cafe-history` ที่มี commit 6 อัน อันหนึ่งชื่อ "ปรับเมนู" แก้ราคาอเมริกาโน่จาก 50 เป็น 500 · ผู้เรียนไล่หาด้วย `git log --oneline` ดูว่าแก้อะไรด้วย `git show <รหัส commit>` แล้วย้อนเฉพาะการแก้นั้นด้วย `git revert --no-edit <รหัส commit>` (`--no-edit` กันไม่ให้ Git เปิดโปรแกรมแก้ข้อความที่มือใหม่ปิดไม่เป็น) · เสร็จเมื่อ `menu.md` กลับเป็น 50 และการแก้อื่นหลังจากนั้นยังอยู่ครบ
+Part B (session 2): hand out the `cafe-history` repo with 6 commits. One commit, named "ปรับเมนู", changes the Americano price from 50 to 500. The learner finds it with `git log --oneline`, checks what it changed with `git show <commit id>`, then undoes only that change with `git revert --no-edit <commit id>`. (`--no-edit` stops Git from opening a message editor that beginners cannot close.) Done when `menu.md` is back to 50 and every later change is still there.
 
-ตอนเตรียม repo นี้ อย่าให้ commit หลังจากนั้นแก้บรรทัดที่ติดกับบรรทัดราคาผิด ไม่อย่างนั้น `git revert` จะ conflict และกลายเป็นบทเรียนของช่วง 3 ก่อนเวลา (เจอจริงตอนทดสอบตัวอย่างนี้)
+When you prepare this repo, make sure no later commit edits a line next to the wrong-price line. Otherwise `git revert` hits a conflict and turns into the lesson of session 3 too early (this happened when we tested this example).
 
-**แบบฝึก 2 · ลาเต้นมโอ๊ต** (ขั้นทำเองมีตัวช่วย แล้วทำเอง · ผลลัพธ์ 3)
+**Exercise 2 · Oat milk latte** (guided do-it-yourself level, then alone · outcome 3)
 
-รอบแรกมีใบขั้นตอน 5 ขั้นและคำใบ้ 3 ขั้น
+Round 1 has a 5-step instruction sheet and a 3-step hint.
 
-1. `git switch -c oat-milk` แล้วแก้บรรทัด `- ลาเต้เย็น 55` เป็น `- ลาเต้เย็นนมโอ๊ต 55` แล้ว `add` และ `commit`
-2. `git switch main` แล้วแก้บรรทัดเดียวกันเป็น `- ลาเต้เย็น 60` แล้ว `add` และ `commit`
-3. `git merge oat-milk` จะเกิด conflict ใน `menu.md`
-4. แก้ไฟล์ให้เก็บทั้ง 2 เจตนาเป็น `- ลาเต้เย็นนมโอ๊ต 60` แล้วลบเครื่องหมาย `<<<<<<<` `=======` `>>>>>>>` ออก
-5. `git add menu.md` แล้ว `git commit --no-edit`
+1. `git switch -c oat-milk`, then change the line `- ลาเต้เย็น 55` to `- ลาเต้เย็นนมโอ๊ต 55`, then `add` and `commit`.
+2. `git switch main`, then change the same line to `- ลาเต้เย็น 60`, then `add` and `commit`.
+3. `git merge oat-milk` causes a conflict in `menu.md`.
+4. Edit the file so it keeps both intentions as `- ลาเต้เย็นนมโอ๊ต 60`, and delete the markers `<<<<<<<` `=======` `>>>>>>>`.
+5. `git add menu.md`, then `git commit --no-edit`.
 
-รอบสองแจกไฟล์ `hours.md` (เวลาเปิดร้าน) ให้ commit ลง `main` ก่อน แล้วสร้าง conflict แบบเดียวกันบน branch ชื่อใหม่ เช่น `weekend-hours` (ฝั่งหนึ่งเพิ่มวันเสาร์ อีกฝั่งเลื่อนเวลาเปิด) โดยไม่มีใบขั้นตอน · เสร็จเมื่อ `git log --graph --oneline` เห็นเส้น 2 เส้นมารวมกัน และไม่มีเครื่องหมาย `<<<<<<<` เหลือในไฟล์
+Round 2 hands out the file `hours.md` (shop opening hours), committed to `main` first. Then create the same kind of conflict on a branch with a new name, such as `weekend-hours` (one side adds Saturday, the other moves the opening time). Give no instruction sheet. Done when `git log --graph --oneline` shows 2 lines joining together and no `<<<<<<<` marker is left in the file.
 
-**rubric ของโจทย์ปิดท้าย (ช่วง 4)** 4 ระดับ · ผ่านเมื่อทุกเกณฑ์ถึงระดับ 3
+**Rubric for the closing task (session 4)**: 4 levels · pass when every criterion reaches level 3.
 
-| เกณฑ์ (ผลลัพธ์) | 1 ยังทำไม่ได้ | 2 ทำได้เมื่อมีคนช่วย | 3 ทำได้เอง | 4 ทำได้และอธิบายให้คนอื่นได้ |
+| Criterion (outcome) | 1 Cannot do yet | 2 Can do with help | 3 Can do alone | 4 Can do and explain to others |
 |---|---|---|---|---|
-| commit (ข้อ 1) | ไม่มี commit หรือ commit ทุกอย่างก้อนเดียวโดยไม่ดูว่ามีอะไร | commit ได้ แต่ข้อความไม่บอกว่าแก้อะไร เช่น `update` | แยก commit ตามเรื่อง ข้อความบอกสิ่งที่แก้ | ได้ระดับ 3 และเปิด `git status` กับ `git diff` ดูก่อน commit ทุกครั้งโดยไม่มีใครเตือน |
-| หาและย้อนการแก้ (ข้อ 2) | หา commit ที่ทำให้ราคาผิดไม่เจอ | หาเจอเมื่อมีคนบอกคำสั่ง | ใช้ `log` กับ `show` หาเจอ แล้ว `revert` ได้เอง | ได้ระดับ 3 และบอกได้ว่าเมื่อไรควรย้อนทั้ง commit เมื่อไรควรแก้ไฟล์เดียว |
-| branch และ conflict (ข้อ 3) | merge ไม่สำเร็จ หรือแก้ conflict แล้วงานอีกฝั่งหาย | แก้ conflict ได้เมื่อดูใบขั้นตอน | แก้ conflict เองและเก็บงานของทั้ง 2 ฝั่ง | ได้ระดับ 3 และบอกได้ว่าครั้งหน้าจะเลี่ยง conflict แบบนี้อย่างไร |
+| commit (no. 1) | No commit, or everything in one commit without checking what is in it | Can commit, but the message does not say what changed, such as `update` | Splits commits by topic, and messages say what changed | Level 3, and opens `git status` and `git diff` before every commit without being reminded |
+| Find and undo a change (no. 2) | Cannot find the commit that made the price wrong | Finds it when someone gives the command | Finds it with `log` and `show`, then runs `revert` alone | Level 3, and can say when to undo a whole commit and when to edit one file |
+| branch and conflict (no. 3) | Merge fails, or the other side's work is lost after fixing the conflict | Fixes the conflict while following the instruction sheet | Fixes the conflict alone and keeps the work from both sides | Level 3, and can say how to avoid this kind of conflict next time |
 
-งานตัวอย่างประจำระดับ: หลังรอบทดลองสอน เก็บภาพ `git log --graph --oneline` กับไฟล์ `menu.md` หลังแก้ ของงานระดับ 2 และระดับ 3 ในเกณฑ์ branch และ conflict ไว้ที่ `course/anchors/` (ลบชื่อออกแล้ว)
+Sample work for each level: after the pilot run, keep a screenshot of `git log --graph --oneline` and the fixed `menu.md` file, from level 2 and level 3 work on the branch and conflict criterion, in `course/anchors/` (names removed).
 
-**ตารางจับคู่**
+**Alignment table**
 
-| ผลลัพธ์ | ช่วง | แบบฝึก | ประเมิน |
+| Outcome | Session | Exercise | Assessment |
 |---|---|---|---|
-| 1 commit | 1 | แบบฝึก 1 ส่วน ก | rubric เกณฑ์ commit · แบบทดสอบก่อนและหลัง ข้อ 1–2 |
-| 2 หาและย้อนการแก้ | 2 | แบบฝึก 1 ส่วน ข | rubric เกณฑ์หาและย้อน · แบบทดสอบข้อ 3–4 |
-| 3 branch และ conflict | 3 | แบบฝึก 2 | rubric เกณฑ์ branch และ conflict · แบบทดสอบข้อ 5 |
+| 1 commit | 1 | Exercise 1 part A | Rubric criterion commit · pre-test and post-test items 1–2 |
+| 2 Find and undo a change | 2 | Exercise 1 part B | Rubric criterion find and undo · test items 3–4 |
+| 3 branch and conflict | 3 | Exercise 2 | Rubric criterion branch and conflict · test item 5 |

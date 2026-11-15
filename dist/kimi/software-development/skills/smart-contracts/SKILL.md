@@ -6,52 +6,52 @@ argument-hint: <smart-contract-audit | tokenomics-design> <details>
 
 # smart-contracts
 
-งานบล็อกเชน — smart contract · ความปลอดภัย · ทดสอบ · DeFi · tokenomics
+Blockchain work — smart contracts · security · testing · DeFi · tokenomics
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทั้งหมด เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
+**Open only the files that match the job.** Do not read them all, because each file is the full guide to its topic.
 
-## หัวข้อ
+## Topics
 
-| ใช้เมื่อ | อ่าน |
+| Use when | Read |
 |---|---|
 | reviewing or writing Solidity smart contracts for security — reentrancy, access control, integer issues, oracle manipulation, upgradability, common vulnerabilities | [`references/solidity-security.md`](references/solidity-security.md) |
 | testing smart contracts — unit tests (Foundry/Hardhat), fuzz testing, invariant testing, mainnet forking, integration tests with other protocols | [`references/smart-contract-testing.md`](references/smart-contract-testing.md) |
 | implementing DeFi protocols — AMMs, lending, vaults, oracle integration, liquidations, rewards distribution, governance. Common patterns from Uniswap/Compound/Aave/Yearn | [`references/defi-patterns.md`](references/defi-patterns.md) |
 
-## ลำดับตรวจความปลอดภัย 5 ขั้น — ทำตามลำดับ ไม่ข้ามไปขั้น 5 ก่อน
+## The 5-step security review order — follow it in order, never jump to step 5 first
 
-แนวคิดจาก Trail of Bits `secure-workflow-guide` (CC-BY-SA 4.0 — เขียนใหม่ด้วยคำเรา ไม่คัดข้อความ รายละเอียดคำสั่งดูที่ github.com/trailofbits/skills)
+The idea comes from Trail of Bits `secure-workflow-guide` (CC-BY-SA 4.0 — rewritten in our own words, no text copied; for command details see github.com/trailofbits/skills)
 
-| ขั้น | ทำอะไร | ผ่านเมื่อ |
+| Step | What to do | Passes when |
 |---|---|---|
-| 1 ของที่เครื่องหาเจอ | รัน Slither ทั้ง repo แล้วไล่ทุกข้อ: แก้ · หรือจดว่าแจ้งผิดพร้อมเหตุผล | รายงานว่าง หรือทุกข้อมีคำตัดสิน |
-| 2 เฉพาะที่โปรเจกต์มี | สัญญาอัปเกรดได้ → ตรวจความเสี่ยง storage layout และ initializer · อ้างว่าเป็น ERC → ตรวจความตรงมาตรฐาน · รับ token ภายนอก → ตรวจพฤติกรรม token นั้น (fee-on-transfer · rebasing · ไม่คืนค่า bool) | รันเฉพาะข้อที่เข้าเงื่อนไข ข้ออื่นเขียนว่าไม่เกี่ยว |
-| 3 ดูภาพรวมด้วยตา | วาด 3 ภาพจาก Slither printers: inheritance (หา shadowing) · สรุปฟังก์ชันกับ visibility · ใครเขียน state ตัวไหนได้ | ทุก state ที่สำคัญมีคนเขียนได้ตามที่ตั้งใจเท่านั้น |
-| 4 เขียน invariant แล้วให้เครื่องพยายามทำลาย | จดคุณสมบัติที่ต้องจริงเสมอ (state machine · สิทธิ์ · เลขคณิตและความละเอียด · การเรียกออกนอก · มาตรฐาน) แล้วเขียนเป็น property test ให้ Echidna หรือ Medusa (fuzz) — ขั้นนี้สำคัญที่สุด | ทุก invariant มี test และ fuzz รันผ่านตามรอบที่กำหนด (ดู `references/smart-contract-testing.md`) |
-| 5 สิ่งที่เครื่องมอไม่เห็น | อ่านเองเรื่อง ความลับบน chain (ต้อง commit-reveal ไหม) · front-running และ MEV (slippage · ลำดับ) · การสุ่มและลายเซ็น · oracle และ flash loan | ทุกหัวข้อมีบันทึกว่าเจอหรือไม่เกี่ยว |
+| 1 What tools can find | Run Slither on the whole repo and go through every finding: fix it, or record it as a false alarm with the reason | The report is empty, or every finding has a verdict |
+| 2 Only what the project has | Upgradeable contract → check storage layout and initializer risks · claims to be an ERC → check conformance to the standard · accepts external tokens → check that token's behavior (fee-on-transfer · rebasing · no bool return value) | Run only the items whose condition applies; write "not applicable" for the others |
+| 3 See the big picture by eye | Draw 3 views from the Slither printers: inheritance (find shadowing) · function summary with visibility · who can write which state | Every important state can be written only by whoever is intended |
+| 4 Write invariants and let the tool try to break them | Record the properties that must always hold (state machine · permissions · arithmetic and precision · external calls · standards), then write them as property tests for Echidna or Medusa (fuzz) — this step matters most | Every invariant has a test, and the fuzz run passes for the configured number of rounds (see `references/smart-contract-testing.md`) |
+| 5 What tools cannot see | Read by hand for on-chain secrets (is commit-reveal needed?) · front-running and MEV (slippage · ordering) · randomness and signatures · oracles and flash loans | Every topic has a note saying whether it was found or does not apply |
 
-ผลทั้ง 5 ขั้นเป็นหลักฐานของขั้น "Static analysis" และ "Manual review" ใน `/software-development:smart-contracts smart-contract-audit`
+The results of all 5 steps are the evidence for the "Static analysis" and "Manual review" steps in `/software-development:smart-contracts smart-contract-audit`
 
-## คู่มือบทบาท
+## Role guides
 
-agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+An agent called in for this area opens its own role file before starting.
 
-| บทบาท | อ่าน | agent |
+| Role | Read | Agent |
 |---|---|---|
 | designing blockchain systems — chain selection, L1/L2 strategy, on-chain/off-chain split, bridges, indexing infrastructure, multi-chain considerations | [`references/agent-blockchain-architect.md`](references/agent-blockchain-architect.md) | `blockchain-engineer` |
 | developing smart contracts on EVM chains (Solidity), Solana (Rust/Anchor), or other blockchains. Covers contract design, security patterns, testing, gas optimization, upgradability | [`references/agent-smart-contract-developer.md`](references/agent-smart-contract-developer.md) | `blockchain-engineer` |
 | building DeFi protocols — DEX/AMM, lending, staking, yield farming, derivatives, stablecoins. Covers economic mechanism design and implementation patterns | [`references/agent-defi-engineer.md`](references/agent-defi-engineer.md) | `blockchain-engineer` |
 | designing token economics — supply curves, distribution, vesting, utility, governance, sustainable incentives. Covers fungible (ERC-20) and NFT tokenomics | [`references/agent-tokenomics-designer.md`](references/agent-tokenomics-designer.md) | `blockchain-engineer` |
 
-## agent ของสายนี้
+## Agents for this area
 
 `blockchain-engineer`
 
-## ที่มา
+## Origin
 
-รวมจาก plugin `software-development-web3` (เดิมชื่อ solidity-security → `references/solidity-security.md` · smart-contract-testing → `references/smart-contract-testing.md` · defi-patterns → `references/defi-patterns.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-development` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+Merged from the plugin `software-development-web3` (formerly solidity-security → `references/solidity-security.md` · smart-contract-testing → `references/smart-contract-testing.md` · defi-patterns → `references/defi-patterns.md`, which are no longer separate skills) into `software-development` in v2.0.0. The original content is fully kept in `references/`.
 
-## โหมดออกแบบ (เรียกเป็นคำสั่ง)
+## Design modes (called as a command)
 
 `/software-development:smart-contracts <smart-contract-audit | tokenomics-design> <details>`
 
@@ -62,4 +62,4 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 | `smart-contract-audit` | Audit smart contracts using the blockchain-engineer agent. |
 | `tokenomics-design` | Design tokenomics using blockchain-engineer agent. |
 
-ขั้นตอนเต็มของแต่ละโหมด → [references/design-modes.md](references/design-modes.md)
+The full steps of each mode → [references/design-modes.md](references/design-modes.md)

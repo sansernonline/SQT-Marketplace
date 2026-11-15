@@ -1,28 +1,28 @@
-# เลือกรูปแบบธุรกิจ (ย้ายมาจาก SKILL.md หัวข้อ 1)
+# Choosing a business form (moved from SKILL.md section 1)
 
-อยู่ใน skill `thai-business-setup` · ตัวย่อดูหัวไฟล์ SKILL.md
+Part of the skill `thai-business-setup`. For the abbreviations, see the top of SKILL.md.
 
-## 1 · เลือกรูปแบบธุรกิจ
+## 1 · Choosing a business form
 
-| เรื่อง | บุคคลธรรมดา + ทะเบียนพาณิชย์ | ห้างหุ้นส่วนสามัญนิติบุคคล | ห้างหุ้นส่วนจำกัด | บริษัทจำกัด |
+| Topic | Individual + commercial registration (บุคคลธรรมดา + ทะเบียนพาณิชย์) | Registered ordinary partnership (ห้างหุ้นส่วนสามัญนิติบุคคล) | Limited partnership (ห้างหุ้นส่วนจำกัด) | Limited company (บริษัทจำกัด) |
 |---|---|---|---|---|
-| คนตั้ง | 1 คน | หุ้นส่วน 2 คนขึ้นไป | หุ้นส่วน 2 คนขึ้นไป | ผู้เริ่มก่อการ 2 คนขึ้นไป |
-| รับผิดต่อหนี้ | เจ้าของรับเองทั้งหมด ธุรกิจไม่แยกจากตัวคน | หุ้นส่วนทุกคนรับผิดร่วมกันไม่จำกัดจำนวน | หุ้นส่วนจำกัดความรับผิด: ไม่เกินเงินที่ลงหุ้นและจัดการกิจการไม่ได้ · หุ้นส่วนไม่จำกัดความรับผิด: ไม่จำกัดจำนวนและเป็นหุ้นส่วนผู้จัดการ | ผู้ถือหุ้นรับผิดไม่เกินค่าหุ้นที่ยังชำระไม่ครบ |
-| ลงทุนด้วย | เงินของเจ้าของ | เงิน ทรัพย์สิน หรือแรงงาน | เงิน ทรัพย์สิน หรือแรงงาน (หุ้นส่วนจำกัดความรับผิดลงแรงงานไม่ได้) | หุ้นมูลค่าไม่ต่ำกว่า 5 บาท เรียกชำระอย่างน้อย 25% |
-| จดที่ | สำนักงานเขต (กรุงเทพฯ) · เทศบาล · องค์การบริหารส่วนตำบล (อบต.) · เมืองพัทยา | DBD Biz Regist (ออนไลน์) | DBD Biz Regist | DBD Biz Regist |
-| ค่าธรรมเนียมรัฐ | 50 บาท | 1,000 บาท | 1,000 บาท | 5,500 บาท (หนังสือบริคณห์สนธิ 500 + จดตั้งบริษัท 5,000) + อากรแสตมป์ 200 (+200 ถ้ามีข้อบังคับ) |
-| บัญชีและผู้สอบบัญชี | ไม่มีผู้สอบบัญชี เก็บหลักฐานรายรับรายจ่ายไว้ยื่นภาษี (รอยืนยัน หน้าที่ทำบัญชีของบุคคลธรรมดา) | ผู้ทำบัญชีที่มีคุณสมบัติ · ผู้สอบบัญชีรับอนุญาต ยกเว้นห้างฯ ที่ทุนไม่เกิน 5 ล้าน สินทรัพย์ไม่เกิน 30 ล้าน และรายได้ไม่เกิน 30 ล้านบาท (แต่ ภ.ง.ด.50 ต้องแนบรายงานของผู้ตรวจสอบและรับรองบัญชี) | เหมือนห้างหุ้นส่วนสามัญนิติบุคคล | ผู้ทำบัญชีที่มีคุณสมบัติ + ผู้สอบบัญชีรับอนุญาตตรวจงบทุกปี |
-| ภาษีเงินได้ | อัตราก้าวหน้า 0–35% (หัวข้อ 2) | ภาษีเงินได้นิติบุคคล (หัวข้อ 2) | ภาษีเงินได้นิติบุคคล | ภาษีเงินได้นิติบุคคล |
-| งานประจำปี | ภ.ง.ด.90 และ ภ.ง.ด.94 (ดู `seller-tax-basics`) | งบการเงิน + ภ.ง.ด.50 (ดู `dbd-annual-filing`) | งบการเงิน + ภ.ง.ด.50 | ประชุมผู้ถือหุ้น + งบการเงิน + บอจ.5 + ภ.ง.ด.50 |
+| Founders | 1 person | 2 or more partners | 2 or more partners | 2 or more promoters (ผู้เริ่มก่อการ) |
+| Liability for debts | The owner is fully liable. The business is not separate from the person. | Every partner is jointly liable without limit. | Limited-liability partners: up to the amount they invested, and they cannot manage the business. Unlimited-liability partners: no limit, and they act as managing partners. | Shareholders are liable only for unpaid share value. |
+| Contribution | The owner's money | Money, property or labour | Money, property or labour (limited-liability partners cannot contribute labour) | Shares with a par value of at least 5 baht, with at least 25% called up |
+| Register at | District office (Bangkok) · municipality · subdistrict administrative organization (อบต.) · Pattaya City | DBD Biz Regist (online) | DBD Biz Regist | DBD Biz Regist |
+| Government fee | 50 baht | 1,000 baht | 1,000 baht | 5,500 baht (memorandum of association 500 + company registration 5,000) + stamp duty 200 (+200 if there are articles of association) |
+| Accounting and auditor | No auditor. Keep income and expense records for tax filing (รอยืนยัน (awaiting confirmation): an individual's bookkeeping duty). | A qualified bookkeeper · a licensed auditor, except a partnership with capital up to 5 million, assets up to 30 million and revenue up to 30 million baht (but ภ.ง.ด.50 (PND 50, corporate income tax return) must attach the report of the person who audited and certified the accounts) | Same as the registered ordinary partnership | A qualified bookkeeper + a licensed auditor who audits the financial statements every year |
+| Income tax | Progressive rate 0–35% (section 2) | Corporate income tax (section 2) | Corporate income tax | Corporate income tax |
+| Yearly filings | ภ.ง.ด.90 and ภ.ง.ด.94 (PND 90 and PND 94, individual income tax returns; see `seller-tax-basics`) | Financial statements + ภ.ง.ด.50 (see `dbd-annual-filing`) | Financial statements + ภ.ง.ด.50 | Shareholder meeting + financial statements + บอจ.5 (shareholder list) + ภ.ง.ด.50 |
 
-**ตัดสินด้วยคำถาม 5 ข้อ**
+**Decide with 5 questions**
 
-1. ทำคนเดียวหรือมีหุ้นส่วน · คนเดียวเริ่มแบบบุคคลธรรมดาได้ ส่วนบริษัทต้องมีผู้เริ่มก่อการ 2 คนขึ้นไป
-2. ธุรกิจมีโอกาสเป็นหนี้ก้อนใหญ่หรือถูกฟ้องไหม (กู้เงิน · สัญญามูลค่าสูง · สินค้าที่อาจทำให้คนบาดเจ็บ) ถ้าใช่ ให้เลือกรูปแบบที่จำกัดความรับผิด
-3. กำไรต่อปีประมาณเท่าไร แล้วเทียบภาษีตามหัวข้อ 2 · ที่กำไรราว 1 ล้านบาท ภาษี 2 แบบใกล้กัน สิ่งที่ต่างคือภาระบัญชีและผู้สอบบัญชีทุกปี
-4. ลูกค้าเป็นบริษัทที่ต้องการใบกำกับภาษีและหัก ณ ที่จ่ายไหม · ลูกค้าธุรกิจหลายรายสะดวกซื้อกับนิติบุคคลมากกว่า (แนวปฏิบัติที่พบบ่อย ไม่ใช่กฎหมาย)
-5. รับภาระทำบัญชีและสอบบัญชีทุกปีไหวไหม · ขอใบเสนอราคาจากสำนักงานบัญชี 2–3 แห่งก่อนจด เพราะค่าบริการเป็นราคาตลาด ไม่มีอัตราทางการ
+1. Are you working alone or with partners? One person can start as an individual. A company needs 2 or more promoters.
+2. Could the business take on a large debt or be sued (a loan · a high-value contract · a product that could injure someone)? If so, choose a form that limits liability.
+3. About how much is the yearly profit? Then compare the tax as in section 2. At a profit of about 1 million baht, the tax is close for both forms. What differs is the yearly bookkeeping and audit burden.
+4. Are your customers companies that want a tax invoice and withhold tax? Many business customers find it easier to buy from a juristic person (common practice, not law).
+5. Can you carry the yearly bookkeeping and audit cost? Get quotes from 2–3 accounting firms before registering. The fees are market prices, with no official rate.
 
-เริ่มเล็กแล้วขยับทีหลังได้: ห้างหุ้นส่วนแปรสภาพเป็นบริษัทได้ ค่าธรรมเนียม 5,000 บาท
+You can start small and move up later: a partnership can convert into a company for a 5,000 baht fee.
 
-ตรวจล่าสุด 2026-10-23 · แหล่ง: คู่มือนิติบุคคลตั้งใหม่ของ DBD (ความรับผิด · ผู้ทำบัญชี · ผู้สอบบัญชี · ทะเบียนนายจ้าง) https://www.dbd.go.th/storage/manual/644ffb30-f6bf-4e60-a3be-9db74a65509b.pdf · จดตั้งห้างหุ้นส่วน https://www.dbd.go.th/storage/manual/66c900f7-4df6-4344-b0c4-cd11a2ab7b20.pdf · จดตั้งบริษัทในวันเดียว https://www.dbd.go.th/storage/manual/0097faba-992d-4e07-8f37-d029a4d6c133.pdf · ทะเบียนพาณิชย์ https://www.dbd.go.th/storage/manual/43eec450-c4b5-4fe5-9b9e-2814d961eeec.pdf · กฎกระทรวงค่าธรรมเนียมห้างหุ้นส่วนและบริษัทจำกัด พ.ศ. 2563 (ราชกิจจานุเบกษา เล่ม 137 ตอนที่ 106 ก) https://www.dbd.go.th/data-storage/attachment/561b5f78c634931010a7d26420.PDF
+Last checked 2026-10-23 · Sources: the DBD manual for newly registered juristic persons (liability · bookkeeper · auditor · employer registration) https://www.dbd.go.th/storage/manual/644ffb30-f6bf-4e60-a3be-9db74a65509b.pdf · registering a partnership https://www.dbd.go.th/storage/manual/66c900f7-4df6-4344-b0c4-cd11a2ab7b20.pdf · registering a company in one day https://www.dbd.go.th/storage/manual/0097faba-992d-4e07-8f37-d029a4d6c133.pdf · commercial registration https://www.dbd.go.th/storage/manual/43eec450-c4b5-4fe5-9b9e-2814d961eeec.pdf · Ministerial Regulation on partnership and limited company fees, B.E. 2563 (2020) (กฎกระทรวงค่าธรรมเนียมห้างหุ้นส่วนและบริษัทจำกัด พ.ศ. 2563, Royal Gazette vol. 137, part 106 ก) https://www.dbd.go.th/data-storage/attachment/561b5f78c634931010a7d26420.PDF

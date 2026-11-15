@@ -343,21 +343,21 @@ ALTER INDEX ix_orders_pending ON dbo.orders REBUILD WITH (ONLINE = ON); -- >= 30
 
 ## reference: safe-changes.md
 
-# เปลี่ยนข้อมูลอย่างปลอดภัย — ตารางเทียบ engine และตัวอย่าง (ฉบับเต็ม)
+# Changing data safely — engine comparison table and examples (full version)
 
-อ่านเมื่อเขียนสคริปต์แก้ข้อมูล upsert หรือ ALTER TABLE · กฎย่ออยู่ใน `SKILL.md` ข้อ 4
+Read this when writing a data-fix script, an upsert or an ALTER TABLE · the short rules are in `SKILL.md` item 4
 
-| เรื่อง | SQL Server | PostgreSQL | MySQL (InnoDB) |
+| Topic | SQL Server | PostgreSQL | MySQL (InnoDB) |
 |---|---|---|---|
-| isolation เริ่มต้น | READ COMMITTED แบบ lock ส่วน Azure SQL Database เปิด Read Committed Snapshot Isolation (RCSI) ให้แล้ว | READ COMMITTED (อ่านจาก snapshot ไม่บล็อกคนเขียน) | REPEATABLE READ |
-| upsert ที่รันซ้ำได้ | `UPDATE` แล้ว `INSERT ... WHERE NOT EXISTS` ใน transaction พร้อม `UPDLOCK, HOLDLOCK` | `INSERT ... ON CONFLICT (...) DO UPDATE` | `INSERT ... ON DUPLICATE KEY UPDATE` |
-| สร้าง index ไม่ล็อกตาราง | `WITH (ONLINE = ON)` ใช้ได้เฉพาะ Enterprise (รวม 2025) | `CREATE INDEX CONCURRENTLY` แต่รันใน transaction ไม่ได้ | `ALGORITHM=INPLACE, LOCK=NONE` |
+| Default isolation | Lock-based READ COMMITTED. Azure SQL Database already has Read Committed Snapshot Isolation (RCSI) on | READ COMMITTED (reads from a snapshot, does not block writers) | REPEATABLE READ |
+| A rerunnable upsert | `UPDATE`, then `INSERT ... WHERE NOT EXISTS` in a transaction with `UPDLOCK, HOLDLOCK` | `INSERT ... ON CONFLICT (...) DO UPDATE` | `INSERT ... ON DUPLICATE KEY UPDATE` |
+| Create an index without locking the table | `WITH (ONLINE = ON)`, Enterprise only (including 2025) | `CREATE INDEX CONCURRENTLY`, but it cannot run inside a transaction | `ALGORITHM=INPLACE, LOCK=NONE` |
 
-- ถ้า SQL Server มีคนอ่านบล็อกคนเขียนบ่อย ให้พิจารณาเปิด `READ_COMMITTED_SNAPSHOT ON` แต่จะเพิ่มภาระ tempdb จึงต้องทดสอบก่อน
-- ป้องกัน deadlock: ทุกโค้ดแตะตารางเรียงลำดับเดียวกัน ทำ transaction ให้สั้นที่สุด และไม่รอ API ภายนอกขณะถือ transaction
-- สคริปต์ทุกตัวต้องรันซ้ำได้ (`principle-safe-to-rerun`): `IF NOT EXISTS` · `CREATE INDEX IF NOT EXISTS` (PostgreSQL) · `CREATE OR ALTER` (SQL Server)
-- ก่อนคำสั่งที่ลบหรือแก้ข้อมูลจำนวนมาก: backup ตารางที่โดน หรือยืนยันว่า backup ล่าสุด restore ได้จริง แล้วเขียนวิธีย้อนกลับไว้ก่อนรัน
-- นับแถวที่คาดไว้ก่อน แล้วตรวจก่อน `COMMIT`:
+- If readers often block writers in SQL Server, consider turning on `READ_COMMITTED_SNAPSHOT ON`. It adds load on tempdb, so test first.
+- To prevent deadlocks: every piece of code touches tables in the same order, keep transactions as short as possible, and never wait on an external API while holding a transaction.
+- Every script must be rerunnable (`principle-safe-to-rerun`): `IF NOT EXISTS` · `CREATE INDEX IF NOT EXISTS` (PostgreSQL) · `CREATE OR ALTER` (SQL Server)
+- Before a command that deletes or edits a lot of data: back up the affected tables, or confirm that the latest backup can really be restored, and write down the way back before running.
+- Count the expected rows first, then check before `COMMIT`:
 
 ```sql
 BEGIN TRAN;
@@ -366,46 +366,46 @@ WHERE status = 'pending' AND created_at < @cutoff;
 IF @@ROWCOUNT <> @expected
 BEGIN ROLLBACK; THROW 50001, 'จำนวนแถวไม่ตรงกับที่นับไว้', 1; END
 COMMIT;
--- PostgreSQL: ใน DO block ใช้ GET DIAGNOSTICS n = ROW_COUNT; ไม่ตรง → RAISE EXCEPTION
+-- PostgreSQL: in a DO block use GET DIAGNOSTICS n = ROW_COUNT; if it does not match → RAISE EXCEPTION
 ```
 
-- `ALTER TABLE` บนตารางใหญ่:
-  - PostgreSQL ขอ lock `ACCESS EXCLUSIVE` แล้วรอ query ยาวที่ค้างอยู่ ระหว่างรอ query ใหม่ทุกตัวก็ต่อคิวด้วย จึงต้องตั้ง `SET lock_timeout = '5s'` แล้ว retry
-  - PostgreSQL 11+ เพิ่มคอลัมน์ที่มี default คงที่ได้ทันที แต่การเปลี่ยนชนิดคอลัมน์จะเขียนตารางใหม่ทั้งก้อน
-  - SQL Server เพิ่มคอลัมน์ `NOT NULL` พร้อม default ทำได้ทันทีเฉพาะ Enterprise ส่วน edition อื่นต้องเขียนทุกแถว
-  - ถ้าเปลี่ยนชนิดหรือย้ายข้อมูล ให้ทำแบบ expand-and-contract ตาม `database-design`
+- `ALTER TABLE` on a big table:
+  - PostgreSQL asks for an `ACCESS EXCLUSIVE` lock and waits for long queries still running. While it waits, every new query queues behind it too, so set `SET lock_timeout = '5s'` and retry.
+  - PostgreSQL 11+ can add a column with a constant default instantly, but changing a column type rewrites the whole table.
+  - SQL Server can add a `NOT NULL` column with a default instantly only on Enterprise. Other editions must write every row.
+  - To change a type or move data, use expand-and-contract per `database-design`.
 
 
 ## reference: snippets.md
 
-# ตัวอย่างโค้ดสั้น — เวลาไทย · dynamic SQL
+# Short code examples — Thai time · dynamic SQL
 
-กฎอยู่ใน `SKILL.md` ข้อ 2 และ 7
+The rules are in `SKILL.md` items 2 and 7
 
-## แปลงเวลา UTC เป็นเวลาไทยตอนแสดง (ข้อ 2)
+## Convert UTC to Thai time when displaying (item 2)
 
 ```sql
--- แปลงเวลา UTC เป็นเวลาไทยตอนแสดง
-SELECT created_at AT TIME ZONE 'UTC' AT TIME ZONE 'SE Asia Standard Time'  -- SQL Server (ชื่อโซนแบบ Windows)
+-- Convert UTC time to Thai time when displaying
+SELECT created_at AT TIME ZONE 'UTC' AT TIME ZONE 'SE Asia Standard Time'  -- SQL Server (Windows-style zone name)
 FROM dbo.orders;
-SELECT created_at AT TIME ZONE 'Asia/Bangkok' FROM orders;                  -- PostgreSQL (คอลัมน์ timestamptz)
+SELECT created_at AT TIME ZONE 'Asia/Bangkok' FROM orders;                  -- PostgreSQL (timestamptz column)
 ```
 
-## dynamic SQL ที่ส่งค่าเป็น parameter (ข้อ 7)
+## Dynamic SQL that passes values as parameters (item 7)
 
 ```sql
 -- SQL Server
 EXEC sp_executesql N'SELECT id, name FROM dbo.customers WHERE email = @email',
                    N'@email nvarchar(320)', @email = @input;
--- ชื่อคอลัมน์: QUOTENAME(@column) หลังตรวจกับ allowlist
--- PostgreSQL ใน plpgsql
+-- Column name: QUOTENAME(@column) after checking against an allowlist
+-- PostgreSQL in plpgsql
 EXECUTE format('SELECT id, name FROM %I WHERE email = $1', tbl) USING p_email;
 ```
 
-## ตรวจว่ามี collation ไทยหรือไม่ (ข้อ 2)
+## Check whether a Thai collation exists (item 2)
 
-- PostgreSQL มี `th-TH-x-icu` เมื่อ server build ด้วย International Components for Unicode (ICU) ตรวจได้ด้วย `SELECT collname FROM pg_collation WHERE collname LIKE 'th%'`
-- MySQL ตรวจ collation ไทยที่มีด้วย `SHOW COLLATION LIKE '%thai%'` ก่อนเลือก
+- PostgreSQL has `th-TH-x-icu` when the server is built with International Components for Unicode (ICU). Check with `SELECT collname FROM pg_collation WHERE collname LIKE 'th%'`
+- For MySQL, check which Thai collations exist with `SHOW COLLATION LIKE '%thai%'` before choosing
 
 
 ---
@@ -414,112 +414,112 @@ EXECUTE format('SELECT id, name FROM %I WHERE email = $1', tbl) USING p_email;
 
 Use when adding API endpoints or checking API consistency
 
-# ข้อตกลงของ Application Programming Interface (API)
+# Application Programming Interface (API) conventions
 
-> **กฎข้อเดียว:** ตัดสินใจครั้งเดียว ใช้ทุก endpoint
-> API ที่ทุก endpoint ทำเหมือนกัน แม้ "ไม่ค่อยถูกตามทฤษฎี" ใช้ง่ายกว่า
-> API ที่แต่ละ endpoint ถูกต้องคนละแบบ เพราะแบบหลังฝั่งเรียกต้องเดาใหม่ทุกครั้ง
+> **The one rule:** decide once, apply to every endpoint.
+> An API where every endpoint behaves the same, even if "not quite right in theory", is easier to use
+> than an API where each endpoint is correct in its own way, because with the latter the caller must guess again every time.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เริ่มออกแบบ API ตัวแรกของโปรเจกต์
-- จะเพิ่ม endpoint ใน API เดิม และอยากให้เข้ากับของเดิม
-- รีวิว API แล้วรู้สึกว่าแต่ละส่วนไม่เหมือนกัน
-- ต้องตอบว่า "เปลี่ยนแบบนี้แล้ว client พังไหม"
+- Starting to design the first API of a project
+- Adding an endpoint to an existing API and wanting it to match what is there
+- Reviewing an API and feeling that its parts are not alike
+- Needing to answer "if we change it this way, will clients break?"
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or alongside
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ ให้ครบ | command `/api-design` | แทน |
-| health check, error envelope, graceful shutdown | `web-service-essentials` | แทน |
-| ตาราง คอลัมน์ ความสัมพันธ์ | `database-design` | แทน |
-| token, scope, สิทธิ์ | `auth-implementation-patterns` | แทน |
-| correlation id ที่โผล่ใน error | `logging-standards` | คู่ |
-| test สัญญาระหว่างระบบ | `testing-standards` | คู่ |
-| บันทึกเหตุผลที่เลือกข้อตกลงนี้ | `adr-writer` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Design all the endpoints of one feature | command `/api-design` | instead |
+| Health check, error envelope, graceful shutdown | `web-service-essentials` | instead |
+| Tables, columns, relations | `database-design` | instead |
+| Tokens, scopes, permissions | `auth-implementation-patterns` | alongside |
+| Correlation id that appears in errors | `logging-standards` | alongside |
+| Contract tests between systems | `testing-standards` | alongside |
+| Recording why this convention was chosen | `adr-writer` | alongside |
+| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 
-**แม่แบบเอกสารข้อตกลงที่คัดลอกไปใช้ได้เลย** → `assets/API-CONVENTIONS.md`
-
----
-
-## 1 · เอกสารข้อตกลงต้องมีจริง
-
-วางไฟล์ `docs/API-CONVENTIONS.md` (แม่แบบอยู่ที่ `assets/API-CONVENTIONS.md`)
-ทุกข้อในหน้านี้ที่ตัดสินใจแล้ว ให้เขียนลงไฟล์นั้น พร้อมวันที่และเหตุผลสั้น ๆ
-
-> ข้อตกลงที่อยู่ในหัวคนใดคนหนึ่ง ไม่ใช่ข้อตกลง — คนที่เข้าทีมเดือนหน้าจะทำอีกแบบ
+**A template of the conventions document that you can copy and use** → `assets/API-CONVENTIONS.md`
 
 ---
 
-## 2 · ตั้งชื่อ URL
+## 1 · The conventions document must exist
+
+Put the file `docs/API-CONVENTIONS.md` in place (the template is at `assets/API-CONVENTIONS.md`).
+Write every decision made from this page into that file, with the date and a short reason.
+
+> A convention that lives in one person's head is not a convention — someone who joins the team next month will do it another way.
+
+---
+
+## 2 · Naming URLs
 
 ```
-GET    /v1/orders                 รายการ
-POST   /v1/orders                 สร้าง
-GET    /v1/orders/{id}            รายตัว
-PATCH  /v1/orders/{id}            แก้บางส่วน
-PUT    /v1/orders/{id}            แทนที่ทั้งตัว
-DELETE /v1/orders/{id}            ลบ
-GET    /v1/orders/{id}/items      ทรัพยากรลูก
-POST   /v1/orders/{id}/cancel     การกระทำที่ไม่ใช่ CRUD (Create, Read, Update, Delete)
+GET    /v1/orders                 list
+POST   /v1/orders                 create
+GET    /v1/orders/{id}            single item
+PATCH  /v1/orders/{id}            partial update
+PUT    /v1/orders/{id}            replace the whole item
+DELETE /v1/orders/{id}            delete
+GET    /v1/orders/{id}/items      child resource
+POST   /v1/orders/{id}/cancel     an action that is not CRUD (Create, Read, Update, Delete)
 ```
 
-| กฎ | ✓ | ✗ |
+| Rule | ✓ | ✗ |
 |---|---|---|
-| คำนาม พหูพจน์ | `/orders` | `/getOrders`, `/order` |
-| ตัวพิมพ์เล็ก ขีดกลาง | `/purchase-orders` | `/purchaseOrders`, `/purchase_orders` |
-| ความลึกไม่เกิน 2 ชั้น | `/orders/{id}/items` | `/customers/{a}/orders/{b}/items/{c}/logs` |
-| กริยาใช้เมื่อไม่ใช่ CRUD จริง ๆ | `POST /orders/{id}/cancel` | `POST /orders/cancelOrder` |
+| Plural nouns | `/orders` | `/getOrders`, `/order` |
+| Lowercase, hyphens | `/purchase-orders` | `/purchaseOrders`, `/purchase_orders` |
+| At most 2 levels deep | `/orders/{id}/items` | `/customers/{a}/orders/{b}/items/{c}/logs` |
+| Use a verb only when it is truly not CRUD | `POST /orders/{id}/cancel` | `POST /orders/cancelOrder` |
 
-**การกระทำที่ไม่ใช่ CRUD** (อนุมัติ ยกเลิก ส่งซ้ำ) — ใช้ `POST /{resource}/{id}/{action}`
-อย่าดัดให้เป็น `PATCH` ที่แก้ `status` เพราะการเปลี่ยนสถานะมักมีผลข้างเคียงมากกว่าการแก้ฟิลด์ทั่วไป
+**An action that is not CRUD** (approve, cancel, resend) uses `POST /{resource}/{id}/{action}`.
+Do not bend it into a `PATCH` that edits `status`, because a status change usually has more side effects than an ordinary field edit.
 
-**วิธี `PATCH`:** เลือกแบบเดียวทั้งระบบ โดยแนะนำให้ส่งเฉพาะฟิลด์ที่แก้ (`merge patch`)
-และต้องกำหนดให้ชัดว่า `null` แปลว่า "ล้างค่า" หรือ "ไม่แตะ" (ดูข้อ 6)
+**How to use `PATCH`:** pick one style for the whole system. Sending only the changed fields (`merge patch`) is recommended,
+and you must define clearly whether `null` means "clear the value" or "leave it alone" (see section 6).
 
 ---
 
-## 3 · versioning
+## 3 · Versioning
 
-| วิธี | ข้อดี | ข้อเสีย |
+| Method | Pros | Cons |
 |---|---|---|
-| **ใน path** `/v1/orders` | เห็นชัด ทดสอบง่าย แคชง่าย | URL เปลี่ยนตอนขึ้นเวอร์ชัน |
-| ใน header `Accept: application/vnd.acme.v1+json` | URL คงที่ | มองไม่เห็นตอน debug ลืมส่งบ่อย |
+| **In the path** `/v1/orders` | Obvious, easy to test, easy to cache | The URL changes when the version goes up |
+| In a header `Accept: application/vnd.acme.v1+json` | The URL stays fixed | Invisible when debugging, often forgotten |
 
-> **เลือก path** ถ้าไม่มีเหตุผลเฉพาะ — ทุกคนเห็นเวอร์ชันได้จากบรรทัดเดียวใน log
+> **Choose the path** unless there is a specific reason — everyone can see the version from a single line in the log.
 
-**เปลี่ยนแบบไหนแล้วฝั่งเรียกพัง:**
+**Which changes break callers:**
 
-| การเปลี่ยน | พังไหม |
+| Change | Breaks? |
 |---|:--:|
-| เพิ่ม endpoint ใหม่ | ไม่ |
-| เพิ่มฟิลด์ **ที่ไม่บังคับ** ใน request | ไม่ |
-| เพิ่มฟิลด์ใน response | ไม่* |
-| เพิ่มค่า enum ใหม่ | **พัง** — client ที่ `switch` ครบทุกค่าจะเจอค่าที่ไม่รู้จัก |
-| ลบ/เปลี่ยนชื่อฟิลด์ | **พัง** |
-| เปลี่ยนชนิดข้อมูล (`"12"` → `12`) | **พัง** |
-| ทำให้ฟิลด์ที่เคยไม่บังคับกลายเป็นบังคับ | **พัง** |
-| เปลี่ยน HTTP status ที่คืนในกรณีเดิม | **พัง** |
-| ทำให้กฎ validation เข้มขึ้น | **พัง** |
+| Add a new endpoint | No |
+| Add an **optional** field to a request | No |
+| Add a field to a response | No* |
+| Add a new enum value | **Breaks** — a client whose `switch` covers every value will meet an unknown one |
+| Remove/rename a field | **Breaks** |
+| Change a data type (`"12"` → `12`) | **Breaks** |
+| Make a formerly optional field required | **Breaks** |
+| Change the HTTP status returned in an existing case | **Breaks** |
+| Make a validation rule stricter | **Breaks** |
 
-\* ต่อเมื่อบอกฝั่งเรียกไว้แต่แรกว่า "ฟิลด์ที่ไม่รู้จักให้ข้ามไป"
-ข้อนี้ต้องเขียนไว้ใน `API-CONVENTIONS.md` ไม่ใช่หวังเอาเอง
+\* Only when callers were told from the start to "skip fields you do not recognize".
+This must be written in `API-CONVENTIONS.md`, not left to hope.
 
-**ขึ้นเวอร์ชันใหญ่เมื่อจำเป็นจริง** เพราะทุกเวอร์ชันที่ยังเปิดอยู่คือโค้ดอีกชุดที่ต้องดูแล
+**Raise the major version only when truly needed**, because every version still open is another body of code to maintain.
 
 ---
 
-## 4 · pagination
+## 4 · Pagination
 
-**ทุก endpoint ที่คืนรายการต้องมี pagination ตั้งแต่วันแรก** ไม่มีข้อยกเว้น
-รายการที่ "มีไม่กี่รายการหรอก" อีก 2 ปีจะมี 10,000 รายการ
+**Every endpoint that returns a list must have pagination from day one**, with no exceptions.
+A list that "only has a few items" will have 10,000 in 2 years.
 
-| วิธี | ใช้เมื่อ | ข้อจำกัด |
+| Method | Use when | Limits |
 |---|---|---|
-| **cursor** `?limit=50&cursor=eyJ...` | ค่าเริ่มต้น · ข้อมูลเยอะ · มีข้อมูลเพิ่มระหว่างเปิดดู | กระโดดไปหน้า 7 ไม่ได้ |
-| offset `?limit=50&offset=100` | ต้องมีเลขหน้าให้กด · ข้อมูลไม่เยอะ | ยิ่งหน้าลึกยิ่งช้า · ถ้ามีแถวแทรกระหว่างเปิดดู ข้อมูลจะซ้ำหรือหาย |
+| **cursor** `?limit=50&cursor=eyJ...` | Default · lots of data · data is added while the user is browsing | Cannot jump to page 7 |
+| offset `?limit=50&offset=100` | Page numbers must be clickable · little data | Slower the deeper the page · if a row is inserted while browsing, data repeats or goes missing |
 
 ```jsonc
 // GET /v1/orders?limit=2 → 200
@@ -527,161 +527,161 @@ POST   /v1/orders/{id}/cancel     การกระทำที่ไม่ใ�
   "data": [ { "id": "1042" }, { "id": "1041" } ],
   "page": {
     "limit": 2,
-    "nextCursor": "eyJpZCI6MTA0MX0",   // null เมื่อหมดแล้ว
+    "nextCursor": "eyJpZCI6MTA0MX0",   // null when there is no more
     "hasMore": true
   }
 }
 ```
 
-- ห่อรายการไว้ใน `data` เสมอ เพราะถ้าตอบเป็นอาเรย์เปล่า ๆ วันหลังจะเติมข้อมูลหน้าไม่ได้
-- `limit` มีค่าเริ่มต้นและ**เพดานที่บังคับฝั่งเซิร์ฟเวอร์** (เช่น เริ่มต้น 20 สูงสุด 100)
-- `totalCount` นับแพง จึงให้ขอเป็นตัวเลือก `?includeTotal=true` อย่านับทุกครั้ง
-- **cursor ต้องทึบ** (ฝั่งเรียกห้ามแกะหรือประกอบเอง)
+- Always wrap the list in `data`, because a bare array leaves no room to add page information later.
+- `limit` has a default and a **ceiling enforced on the server** (for example default 20, maximum 100).
+- `totalCount` is expensive to count, so make it optional with `?includeTotal=true`. Do not count every time.
+- **The cursor must be opaque** (callers must never decode or build one themselves).
 
 ---
 
-## 5 · filtering · sorting · ฟิลด์ที่ขอ
+## 5 · Filtering · sorting · requested fields
 
 ```
 GET /v1/orders?status=confirmed&createdAt[gte]=2026-01-01&sort=-createdAt&fields=id,orderNo,total
 ```
 
-| เรื่อง | ข้อตกลง |
+| Topic | Convention |
 |---|---|
-| กรองค่าเท่ากับ | `?status=confirmed` |
-| หลายค่า | `?status=confirmed,shipped` |
-| ช่วง | `?createdAt[gte]=...&createdAt[lt]=...` |
-| เรียง | `?sort=-createdAt,orderNo` — `-` คือมากไปน้อย |
-| ค้นหาข้อความ | `?q=สมชาย` แยกจากการกรอง |
-| เลือกฟิลด์ | `?fields=id,orderNo` |
+| Filter by equal value | `?status=confirmed` |
+| Several values | `?status=confirmed,shipped` |
+| Range | `?createdAt[gte]=...&createdAt[lt]=...` |
+| Sort | `?sort=-createdAt,orderNo` — `-` means descending |
+| Text search | `?q=สมชาย` kept separate from filtering |
+| Select fields | `?fields=id,orderNo` |
 
-- **รับเฉพาะฟิลด์ที่กำหนดไว้** ถ้ารับชื่อฟิลด์อะไรก็ได้ จะเกิดช่องโหว่ และ query ที่ไม่มี index
-- พารามิเตอร์ที่ไม่รู้จัก ตอบ `400` ดีกว่าข้ามเงียบ ๆ ไม่งั้นฝั่งเรียกพิมพ์ผิดแล้วได้ข้อมูลผิดโดยไม่รู้ตัว
+- **Accept only the fields you have defined.** If any field name is accepted, you get security holes and queries with no index.
+- For an unknown parameter, answering `400` is better than skipping it silently. Otherwise a caller who mistypes gets wrong data without knowing.
 
 ---
 
-## 6 · รูปแบบข้อมูล
+## 6 · Data formats
 
-| ข้อมูล | รูปแบบ | ตัวอย่าง |
+| Data | Format | Example |
 |---|---|---|
-| ชื่อฟิลด์ | `camelCase` ทั้งระบบ | `createdAt` |
-| เวลา | RFC 3339 · UTC · ลงท้าย `Z` | `"2026-09-25T09:42:13.482Z"` |
-| วันที่ล้วน | `YYYY-MM-DD` | `"2026-09-25"` |
-| เงิน | ตัวเลขเป็น**สตริง** + สกุลเงินแยก | `{ "amount": "1250.00", "currency": "THB" }` |
-| identifier | **สตริงเสมอ** | `"1042"` ไม่ใช่ `1042` |
-| enum | `SCREAMING_SNAKE` หรือ `lower_snake` เลือกแบบเดียว | `"CONFIRMED"` |
-| ระยะเวลา | วินาทีเป็นตัวเลข ตั้งชื่อให้รู้หน่วย | `"timeoutSeconds": 30` |
-| ประเทศ / สกุลเงิน / ภาษา | ISO 3166 · ISO 4217 · BCP 47 | `"TH"` · `"THB"` · `"th-TH"` |
+| Field names | `camelCase` across the system | `createdAt` |
+| Time | RFC 3339 · UTC · ends with `Z` | `"2026-09-25T09:42:13.482Z"` |
+| Date only | `YYYY-MM-DD` | `"2026-09-25"` |
+| Money | the number as a **string** + a separate currency | `{ "amount": "1250.00", "currency": "THB" }` |
+| identifier | **always a string** | `"1042"` not `1042` |
+| enum | `SCREAMING_SNAKE` or `lower_snake`, pick one style | `"CONFIRMED"` |
+| Duration | seconds as a number, named so the unit is clear | `"timeoutSeconds": 30` |
+| Country / currency / language | ISO 3166 · ISO 4217 · BCP 47 | `"TH"` · `"THB"` · `"th-TH"` |
 
-> **id เป็นตัวเลขใน JSON คือระเบิดเวลา** — JavaScript เก็บจำนวนเต็มได้ปลอดภัยถึง 9,007,199,254,740,991
-> `bigint` ที่เกินนั้นจะถูกปัดเศษเงียบ ๆ ตอน `JSON.parse` และถ้าจะเปลี่ยนเป็นสตริงทีหลังก็เป็น breaking change
+> **A numeric id in JSON is a time bomb** — JavaScript stores integers safely up to 9,007,199,254,740,991.
+> A `bigint` above that is silently rounded at `JSON.parse`, and changing it to a string later is a breaking change.
 >
-> **เงินเป็น float ใน JSON** — `1250.10` ที่ผ่าน 2 ภาษาโปรแกรมอาจกลายเป็น `1250.0999999999999`
+> **Money as a float in JSON** — `1250.10` passed through 2 programming languages may become `1250.0999999999999`.
 
-**`null` กับ "ไม่มีฟิลด์" ต้องหมายถึงคนละอย่าง:**
+**`null` and "no field" must mean different things:**
 
-- ใน response ฟิลด์ที่มีแต่ไม่มีค่าให้ส่ง `null` ไม่ตัดทิ้ง ฝั่งเรียกจะได้ไม่ต้องเช็ค 2 แบบ
-- ใน `PATCH` ถ้าส่ง `{"note": null}` แปลว่าล้างค่า ถ้าไม่ส่งคีย์ `note` เลยแปลว่าไม่แตะ
+- In a response, a field that exists but has no value is sent as `null`, not dropped, so callers do not have to check 2 cases.
+- In a `PATCH`, sending `{"note": null}` means clear the value, and leaving out the `note` key entirely means leave it alone.
 
-**อาเรย์ว่างคือ `[]` ไม่ใช่ `null`** ฝั่งเรียกจะวนลูปได้เลย
-
----
-
-## 7 · error
-
-รูปแบบ error (RFC 9457 · `requestId` · `errors` แบบ array `{field, code, message}`) และตัวอย่างอยู่ที่ `web-service-essentials` ข้อ 2 ที่เดียว ใช้ตามนั้น
-ที่ต้องตกลงเพิ่มคือ **error ระดับฟิลด์**:
-
-- **`code` ให้โปรแกรมอ่าน · `message` ให้คนอ่าน** อย่าให้ฝั่งเรียกต้องเอาข้อความไปเขียนเงื่อนไข
-- ชี้ตำแหน่งฟิลด์ด้วยเส้นทางเต็ม รวมดัชนีของอาเรย์
-- **คืน error ครบทุกฟิลด์ในครั้งเดียว** ไม่ใช่ทีละตัว ผู้ใช้จะได้ไม่ต้องกดส่ง 5 รอบ
-- ถ้ารองรับหลายภาษา ให้เลือกข้อความไทยหรืออังกฤษจาก `Accept-Language`
-
-**เลือก status ให้ตรง:** `400` รูปแบบคำขอผิด · `401` ยังไม่ได้ยืนยันตัวตน · `403` ยืนยันแล้วแต่ไม่มีสิทธิ์ ·
-`404` ไม่มีหรือไม่ให้รู้ว่ามี · `409` ชนกับสถานะปัจจุบัน · `422` รูปแบบถูกแต่ข้อมูลไม่ผ่านกฎ · `429` เรียกถี่เกิน
+**An empty array is `[]`, not `null`**, so callers can loop over it directly.
 
 ---
 
-## 8 · เรียกซ้ำไม่เกิดผลซ้ำ และการแก้ชนกัน
+## 7 · Errors
 
-### idempotency key (รหัสกำกับคำขอ — ส่งซ้ำแล้วไม่ทำงานซ้ำ)
+The error format (RFC 9457 · `requestId` · an `errors` array of `{field, code, message}`) and examples live in one place, `web-service-essentials` section 2. Follow that.
+What still needs agreement is the **field-level error**:
 
-**บังคับกับทุก `POST` ที่มีผลทางการเงินหรือส่งของออกไปข้างนอก**
+- **`code` is for programs, `message` is for people.** Never make callers write conditions against the message text.
+- Point to the field location with the full path, including array indexes.
+- **Return the errors for all fields at once**, not one at a time, so users do not have to submit 5 times.
+- If several languages are supported, choose Thai or English text from `Accept-Language`.
+
+**Pick the status to match:** `400` malformed request · `401` not authenticated · `403` authenticated but not permitted ·
+`404` does not exist, or you do not want to reveal that it exists · `409` conflicts with the current state · `422` well-formed but the data fails the rules · `429` too many calls
+
+---
+
+## 8 · Repeat calls without repeat effects, and edit conflicts
+
+### idempotency key (a request code — sending it again does not do the work again)
+
+**Required on every `POST` that has a financial effect or sends something out to the outside world.**
 
 ```
 POST /v1/payments
-Idempotency-Key: 7f3c1e10-...        ← ฝั่งเรียกสร้าง เก็บไว้ใช้ตอน retry
+Idempotency-Key: 7f3c1e10-...        ← created by the caller, kept for use when retrying
 ```
 
-- เซิร์ฟเวอร์เก็บ key คู่กับผลลัพธ์ไว้อย่างน้อย 24 ชั่วโมง
-- key เดิมกับเนื้อหาเดิม ให้คืนผลเดิม ไม่ทำงานซ้ำ
-- key เดิมแต่เนื้อหา**ต่าง** ให้ตอบ `422` ไม่ทำงานใหม่
-- เครือข่ายขาดระหว่างรอคำตอบเป็นเรื่องปกติ ไม่ใช่กรณีพิเศษ ฝั่งเรียกจึง retry เสมอ
+- The server stores the key together with the result for at least 24 hours.
+- Same key with the same body: return the earlier result and do not repeat the work.
+- Same key with a **different** body: answer `422` and do not do new work.
+- A network drop while waiting for the answer is normal, not a special case, so callers always retry.
 
-### แก้ชนกัน (optimistic concurrency)
+### Edit conflicts (optimistic concurrency)
 
 ```
 GET   /v1/orders/1042        → 200  ETag: "v7"
 PATCH /v1/orders/1042        If-Match: "v7"
-                             → 200 ปกติ · 412 ถ้ามีคนแก้ไปก่อนแล้ว
+                             → 200 normally · 412 if someone edited it first
 ```
 
-ถ้าไม่มี คนที่กดบันทึกทีหลังจะทับงานของคนแรกโดยไม่มีใครรู้
+Without this, whoever saves second overwrites the first person's work and nobody knows.
 
 ---
 
-## 9 · rate limit
+## 9 · Rate limit
 
 ```
 X-RateLimit-Limit: 1000
 X-RateLimit-Remaining: 997
 X-RateLimit-Reset: 1758790000
-Retry-After: 42                ← ต้องมีคู่กับ 429 เสมอ
+Retry-After: 42                ← must always accompany a 429
 ```
 
-ถ้า `429` ไม่มี `Retry-After` ฝั่งเรียกต้องเดาเอง และส่วนใหญ่เดาว่า "ลองใหม่ทันที"
+If a `429` has no `Retry-After`, the caller must guess, and most guess "try again at once".
 
 ---
 
-## 10 · การเลิกใช้ endpoint
+## 10 · Retiring an endpoint
 
-1. ประกาศล่วงหน้า พร้อมบอกว่าใช้อะไรแทน
-2. ส่ง header ในทุก response ของ endpoint นั้น:
+1. Announce in advance, and say what to use instead.
+2. Send these headers in every response of that endpoint:
    ```
    Deprecation: @1790812800
    Sunset: Wed, 31 Dec 2026 23:59:59 GMT
    Link: <https://docs.acme.co/v2/orders>; rel="successor-version"
    ```
-   `Deprecation` ตามมาตรฐาน Request for Comments (RFC) 9745 (มี.ค. 2025) ต้องเป็นวันที่แบบ `@<วินาที unix>` (ตัวอย่างนี้คือ 1 ต.ค. 2026 00:00 UTC) ไม่ใช่ `true` · ตรวจ 22 ต.ค. 2569
-3. **ดูจาก log ว่ายังมีใครเรียกอยู่** แล้วติดต่อเขาตรง ๆ อย่ารอให้เงียบไปเอง
-4. ปิดจริงหลังวันที่ประกาศ ไม่ใช่ก่อน
+   `Deprecation` follows the Request for Comments (RFC) 9745 standard (Mar 2025). It must be a date in the form `@<unix seconds>` (this example is 1 Oct 2026 00:00 UTC), not `true`. Checked 22 Oct 2026 (B.E. 2569).
+3. **Check the logs for who still calls it**, then contact them directly. Do not wait for them to go quiet on their own.
+4. Close it only after the announced date, not before.
 
-ระยะเวลาที่พอดี: API ภายในให้ 1 รอบ release ส่วน API ที่คนนอกใช้ให้อย่างน้อย 6 เดือน
+A fitting period: for an internal API, 1 release cycle. For an API used by outsiders, at least 6 months.
 
 ---
 
-## 11 · ตรวจก่อนปล่อย endpoint ใหม่
+## 11 · Check before releasing a new endpoint
 
-ไล่ทุกข้อกับ endpoint ที่เพิ่ม ตกข้อเดียวยังไม่ merge (แนวคิดจาก ECC api-design)
+Go through every item against the endpoint you added. Fail one and it is not merged yet (idea from ECC api-design).
 
-- [ ] URL เป็นคำนามพหูพจน์ตามข้อ 2 · อยู่ใต้เวอร์ชันตามข้อ 3 · ไม่มี `GET` ที่เปลี่ยนข้อมูล
-- [ ] รายการทุกตัวมี pagination และเพดานขนาดหน้า (ข้อ 4) · filter และ sort ใช้ชื่อพารามิเตอร์เดียวกับ endpoint เดิม (ข้อ 5)
-- [ ] วันที่ · id · เงิน อยู่ในรูปแบบของข้อ 6 · response ไม่ใช่ entity ของฐานข้อมูลตรง ๆ
-- [ ] error ทุกตัวตาม `web-service-essentials` §2 และมี `code` คงที่ (ข้อ 7) · คำขอที่สร้างหรือจ่ายเงินรับ idempotency key · การแก้รับ `If-Match` (ข้อ 8)
-- [ ] ระบุ auth และ rate limit (ข้อ 9) · อยู่ใน OpenAPI แล้ว และตัวอย่าง cURL ในเอกสารรันผ่านจริง
-- [ ] มี contract test หรือ test ระดับ endpoint อย่างน้อย 1 กรณีสำเร็จ 1 กรณี error — ตรวจ response กับ OpenAPI ใน CI · Pact เมื่อผู้เรียกแยกทีม · `oasdiff breaking` ทุก PR: [`references/contract-testing.md`](references/contract-testing.md)
+- [ ] The URL is a plural noun per section 2 · sits under a version per section 3 · has no `GET` that changes data
+- [ ] Every list has pagination and a page-size ceiling (section 4) · filter and sort use the same parameter names as existing endpoints (section 5)
+- [ ] Dates · ids · money are in the formats of section 6 · the response is not a raw database entity
+- [ ] Every error follows `web-service-essentials` §2 and has a fixed `code` (section 7) · a request that creates or pays accepts an idempotency key · an edit accepts `If-Match` (section 8)
+- [ ] Auth and rate limit are stated (section 9) · it is in OpenAPI, and the cURL examples in the docs really run
+- [ ] There is a contract test or an endpoint-level test with at least 1 success case and 1 error case — check the response against OpenAPI in CI · Pact when the caller is on another team · `oasdiff breaking` on every PR: [`references/contract-testing.md`](references/contract-testing.md)
 
 ## 12 · Anti-patterns
 
-- **`200 OK` พร้อม `{"success": false}`** — ตัวเฝ้าระบบและ log ทั้งหมดจะมองไม่เห็นว่าพัง
-- **กริยาใน URL** — `/createOrder`, `/getOrderById`
-- **รายการที่ไม่มี pagination** — วันหนึ่งจะคืนข้อมูล 50,000 แถวในครั้งเดียว
-- **รูปแบบวันที่คนละแบบในแต่ละ endpoint** — เช่น `"25/09/2026"` ที่ไม่มีใครรู้ว่าวันหรือเดือนขึ้นก่อน
-- **ส่ง entity ของฐานข้อมูลออกไปตรง ๆ** — เพิ่มคอลัมน์ทีไร API เปลี่ยนตามโดยไม่ตั้งใจ และเสี่ยงข้อมูลภายในหลุด
-- **ชื่อฟิลด์ปนกัน** `created_at` กับ `updatedAt` ใน response เดียวกัน
-- **`GET` ที่เปลี่ยนข้อมูล** — ตัวโหลดหน้าเว็บล่วงหน้าจะยิงเองโดยไม่มีใครกด
-- **error message เปลี่ยนไปเรื่อย ๆ** โดยไม่มี `code` คงที่
-- **ไม่มีเอกสาร** — OpenAPI ที่สร้างจากโค้ดจริง ดีกว่าเอกสารที่เขียนมือแล้วไม่ตรง
+- **`200 OK` with `{"success": false}`** — monitors and logs will not see that it failed.
+- **Verbs in the URL** — `/createOrder`, `/getOrderById`
+- **A list with no pagination** — one day it will return 50,000 rows at once.
+- **A different date format on each endpoint** — for example `"25/09/2026"`, where nobody knows whether day or month comes first.
+- **Sending a database entity out as is** — every time a column is added, the API changes by accident, and internal data may leak.
+- **Mixed field names** such as `created_at` and `updatedAt` in one response.
+- **A `GET` that changes data** — a web page prefetcher will fire it by itself with nobody clicking.
+- **Error messages that keep changing** with no fixed `code`.
+- **No documentation** — an OpenAPI generated from the real code is better than hand-written docs that do not match.
 
 
 ## reference: contract-testing.md
@@ -730,139 +730,139 @@ Our default: Schemathesis in a CI job after the service is up with test data (th
 
 Use when a system imports or exports Excel or CSV
 
-# นำเข้าและส่งออกข้อมูล
+# Importing and exporting data
 
-> **กฎข้อเดียว:** ตรวจให้จบก่อน แล้วค่อยเขียน
-> ถ้าเขียนไปครึ่งทางแล้วเจอแถวผิด ข้อมูลจะค้างอยู่ครึ่ง ๆ และไม่มีใครรู้ว่าต้องแก้ตรงไหน
+> **The one rule:** validate everything first, then write.
+> If you write halfway and then find a bad row, the data is left half-done and nobody knows what to fix.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- มีหน้าจอให้ผู้ใช้อัปโหลด Excel หรือ CSV เพื่อนำข้อมูลเข้าระบบ
-- มีปุ่มส่งออกเป็น Excel หรือ CSV
-- ย้ายข้อมูลจากระบบเก่าเข้าระบบใหม่
-- ผู้ใช้อัปโหลดแล้วได้ข้อความว่า "ไฟล์ไม่ถูกต้อง" แล้วไม่รู้ว่าผิดตรงไหน
+- A screen lets users upload Excel or CSV to bring data into the system
+- A button exports to Excel or CSV
+- Moving data from an old system into a new one
+- A user uploads and gets the message "ไฟล์ไม่ถูกต้อง" (file is invalid) without knowing what is wrong
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or together
 
-| งาน | skill | |
+| Job | skill | |
 |---|---|---|
-| รับไฟล์อัปโหลดทั่วไป (รูป เอกสาร) | `file-upload-and-storage` | แทน |
-| สร้างไฟล์ Excel ที่จัดรูปแบบสวยงาม | `anthropic-skills:xlsx` | แทน |
-| กลไกคิวและความคืบหน้า | `background-jobs` | แทน |
-| ปี พ.ศ. และการเรียงลำดับไทย | `i18n-and-locale` | แทน |
-| ส่งเอกสารเข้าโปรแกรมบัญชีไทย (PEAK · FlowAccount) ผ่าน API แทนไฟล์ | [`references/thai-accounting-apis.md`](references/thai-accounting-apis.md) | แทน |
-| บันทึกว่าใครนำเข้าหรือส่งออกอะไร | `audit-trail` | คู่ |
-| ปิดบังข้อมูลส่วนบุคคลในไฟล์ส่งออก | `pdpa-compliance` | คู่ |
-| แจ้งผู้ใช้เมื่อนำเข้าเสร็จ | `notifications` | คู่ |
-| ข้อจำกัดและ constraint ของตารางปลายทาง | `database-design` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Receiving general file uploads (images, documents) | `file-upload-and-storage` | Instead |
+| Building a nicely formatted Excel file | `anthropic-skills:xlsx` | Instead |
+| Queue mechanics and progress | `background-jobs` | Instead |
+| Buddhist Era (B.E.) years and Thai sorting order | `i18n-and-locale` | Instead |
+| Sending documents into Thai accounting software (PEAK · FlowAccount) through an API instead of a file | [`references/thai-accounting-apis.md`](references/thai-accounting-apis.md) | Instead |
+| Recording who imported or exported what | `audit-trail` | Together |
+| Masking personal data in export files | `pdpa-compliance` | Together |
+| Telling the user when an import finishes | `notifications` | Together |
+| Limits and constraints of the target table | `database-design` | Together |
+| Abbreviations in work people read | `spell-out-abbreviations` | Together |
 
 ---
 
-## 1 · ให้แม่แบบ อย่าให้เดา
+## 1 · Give a template, do not make people guess
 
-**ทุกหน้าจอนำเข้าต้องมีปุ่มดาวน์โหลดแม่แบบ** ในแม่แบบมี
+**Every import screen needs a button to download a template.** The template contains
 
-- หัวคอลัมน์ตรงกับที่ระบบต้องการเป๊ะ
-- **แถวตัวอย่าง 1–2 แถวที่ถูกต้อง**
-- แถวคำอธิบายว่าคอลัมน์ไหนบังคับ รูปแบบอะไร ค่าที่รับได้มีอะไรบ้าง
-- ชีตแยกสำหรับรายการค่าที่เลือกได้ (สถานะ ประเภท หน่วย)
+- Column headers that match exactly what the system needs
+- **1–2 correct sample rows**
+- A row explaining which columns are required, what format, and which values are accepted
+- A separate sheet for lists of selectable values (status, type, unit)
 
-| ไฟล์ต่างจากแม่แบบแบบไหน | ทำ |
+| How the file differs from the template | Do this |
 |---|---|
-| ลำดับคอลัมน์สลับ | ✓ อ่านจากชื่อหัวคอลัมน์ ไม่ใช่ตำแหน่ง |
-| หัวคอลัมน์มีเว้นวรรคเกิน ตัวพิมพ์ต่าง | ✓ ตัดช่องว่างและเทียบแบบไม่สนตัวพิมพ์ |
-| มีคอลัมน์เกินที่ไม่รู้จัก | ✓ ข้ามไป แต่**บอกให้รู้ว่าข้ามอะไร** |
-| ขาดคอลัมน์บังคับ | ✗ หยุดทันที บอกว่าขาดคอลัมน์ไหน |
+| Column order swapped | ✓ Read by header name, not by position |
+| Header has extra spaces or different letter case | ✓ Trim spaces and compare case-insensitively |
+| Extra unknown columns | ✓ Skip them, but **tell the user what was skipped** |
+| A required column is missing | ✗ Stop at once and say which column is missing |
 
 ---
 
-## 2 · ตรวจสามชั้น ก่อนเขียนอะไรทั้งนั้น
+## 2 · Three layers of validation before writing anything
 
-| ชั้น | ตรวจอะไร | ตัวอย่างข้อความ |
+| Layer | Checks | Example message |
 |:--:|---|---|
-| 1 · ไฟล์ | เปิดได้ · มีชีตที่ต้องการ · คอลัมน์บังคับครบ · ไม่เกินจำนวนแถวสูงสุด | "ไม่พบคอลัมน์ 'รหัสสินค้า'" |
-| 2 · รายแถว | ชนิดข้อมูล · ค่าบังคับ · อยู่ในรายการที่กำหนด · ช่วงตัวเลข | "แถว 42 คอลัมน์ 'จำนวน' ต้องเป็นตัวเลขมากกว่า 0 (พบ '-5')" |
-| 3 · ความสัมพันธ์ | รหัสมีอยู่จริงในระบบ · ไม่ซ้ำกันเองในไฟล์ · กฎทางธุรกิจ | "แถว 88 ไม่พบลูกค้ารหัส C-1042" |
+| 1 · File | Opens · has the needed sheet · all required columns present · within the maximum row count | "ไม่พบคอลัมน์ 'รหัสสินค้า'" (column 'product code' not found) |
+| 2 · Per row | Data type · required values · in the allowed list · number range | "แถว 42 คอลัมน์ 'จำนวน' ต้องเป็นตัวเลขมากกว่า 0 (พบ '-5')" (row 42, column 'quantity' must be a number above 0, found '-5') |
+| 3 · Relationships | The code exists in the system · no duplicates within the file · business rules | "แถว 88 ไม่พบลูกค้ารหัส C-1042" (row 88, customer code C-1042 not found) |
 
-**รายงานความผิดพลาดต้องระบุ: แถว · คอลัมน์ · ค่าที่พบ · ค่าที่ควรเป็น**
+**An error report must state: row · column · value found · value expected**
 
 ```
-ผิด: "ไฟล์ไม่ถูกต้อง"
-ผิด: "พบข้อผิดพลาด 37 รายการ"
-ถูก: ตารางผลตรวจ พร้อมปุ่มดาวน์โหลดไฟล์เดิมที่มีคอลัมน์ "ข้อผิดพลาด" ต่อท้าย
+Wrong: "ไฟล์ไม่ถูกต้อง"
+Wrong: "พบข้อผิดพลาด 37 รายการ"
+Right: a table of check results, with a button to download the original file with an "ข้อผิดพลาด" (error) column appended
 ```
 
-> **รายงานข้อผิดพลาดทั้งหมดในครั้งเดียว ไม่หยุดที่แถวแรกที่ผิด**
-> ผู้ใช้จะได้แก้รอบเดียวจบ ไม่ใช่อัปโหลดใหม่ 37 รอบ
+> **Report all errors in one pass. Do not stop at the first bad row.**
+> The user then fixes everything in one round, instead of uploading 37 times.
 
 ---
 
-## 3 · เขียนลงระบบ
+## 3 · Writing into the system
 
-| แบบ | ใช้เมื่อ |
+| Mode | Use when |
 |---|---|
-| **ทั้งหมดหรือไม่ทำเลย** | ค่าเริ่มต้น ไฟล์ต้องถูกหมดถึงจะนำเข้า |
-| ทำเท่าที่ผ่าน ข้ามแถวที่ผิด | ไฟล์ใหญ่มากและแต่ละแถวไม่เกี่ยวกัน โดย**ผู้ใช้ต้องเลือกเอง ระบบไม่ตัดสินใจแทน** |
+| **All or nothing** | The default. The file must be fully correct to be imported |
+| Do what passes, skip the bad rows | The file is very large and the rows are unrelated, and **the user must choose this, the system does not decide for them** |
 
-- **ทุกครั้งต้องมีหน้าสรุปก่อนยืนยัน** เช่น "จะเพิ่ม 120 · แก้ 45 · ข้าม 3 · ผิด 0" แล้วให้กดยืนยัน
-- ถ้าเจอแถวซ้ำในไฟล์ ให้หยุดและบอก ไม่ใช่ใช้แถวสุดท้ายเงียบ ๆ
-- ถ้าข้อมูลมีอยู่แล้วในระบบ ให้ผู้ใช้เลือก: ข้าม · เขียนทับ · หยุด
-- **นำเข้าทุกครั้งต้องบันทึกใน audit** ว่าใครนำเข้า ไฟล์อะไร กระทบกี่แถว (ดู `audit-trail`)
-- **เก็บไฟล์ต้นฉบับไว้** พอมีปัญหาจะได้ย้อนดูว่าไฟล์ที่ส่งมาหน้าตาอย่างไรจริง ๆ
-- ทำให้ย้อนกลับได้: บันทึก batch id (รหัสรอบนำเข้า) ไว้กับทุกแถวที่นำเข้า
+- **Always show a summary page before confirming**, such as "จะเพิ่ม 120 · แก้ 45 · ข้าม 3 · ผิด 0" (will add 120 · update 45 · skip 3 · error 0), then have the user click confirm
+- If the file has duplicate rows, stop and say so. Do not silently use the last row
+- If the data already exists in the system, let the user choose: skip · overwrite · stop
+- **Every import must be recorded in the audit log**: who imported, which file, how many rows affected (see `audit-trail`)
+- **Keep the original file**, so when there is a problem you can look back at what the submitted file really looked like
+- Make it reversible: store a batch id (the id of the import run) on every imported row
 
-**ไฟล์ใหญ่ทำเป็นงานเบื้องหลัง**: ถ้าเกินประมาณ 1,000 แถวให้เข้าคิว
-แบ่งเป็นชุดละ 500 แถว แสดงความคืบหน้า และยกเลิกได้ (ดู `background-jobs`)
+**Large files run as background jobs.** Above roughly 1,000 rows, put them in a queue,
+split into batches of 500 rows, show progress, and allow cancel (see `background-jobs`).
 
 ---
 
-## 4 · กับดักของ Excel และ CSV
+## 4 · Excel and CSV traps
 
-| กับดัก | ผลที่เกิด | ทางแก้ |
+| Trap | What happens | Fix |
 |---|---|---|
-| **ภาษาไทยใน CSV เพี้ยน** | เปิดใน Excel แล้วตัวอักษรอ่านไม่ออก | บันทึกเป็น UTF-8 **พร้อม BOM** หรือแนะให้ใช้ .xlsx |
-| **รหัสที่ขึ้นต้นด้วย 0 หาย** | `0812345678` กลายเป็น `812345678` | อ่านเป็นข้อความเสมอ ส่วนตอนส่งออกให้ตั้งรูปแบบเซลล์เป็นข้อความ |
-| **เลขยาวกลายเป็นเลขยกกำลัง** | เลขบัตร 13 หลัก → `1.23457E+12` | เหมือนข้างบน |
-| **วันที่ถูกตีความเอง** | `03/04/2026` เป็นมีนาคมหรือเมษายน | บังคับ `YYYY-MM-DD` ในแม่แบบ |
-| **ปี พ.ศ. กับ ค.ศ. ปนกัน** | เพี้ยน 543 ปีเงียบ ๆ | **ถามในหน้าจอนำเข้าว่าไฟล์ใช้ปีแบบไหน** |
-| ช่องว่างท้ายค่า | จับคู่รหัสไม่เจอ | ตัดช่องว่างหัวท้ายทุกค่า |
-| เซลล์ที่เป็นสูตร | ได้สูตรแทนค่า | อ่านค่าที่คำนวณแล้ว |
-| **สูตรที่ขึ้นต้นด้วย `=` `+` `-` `@` ในไฟล์ส่งออก** | ผู้ใช้เปิดแล้ว Excel รันคำสั่ง | เติม `'` นำหน้าค่าที่ขึ้นต้นด้วยอักขระเหล่านี้ |
+| **Thai in CSV garbled** | Opened in Excel, the characters are unreadable | Save as UTF-8 **with a BOM**, or recommend .xlsx |
+| **Codes starting with 0 lose it** | `0812345678` becomes `812345678` | Always read as text, and on export set the cell format to text |
+| **Long numbers turn into scientific notation** | A 13-digit ID card number → `1.23457E+12` | Same as above |
+| **Dates interpreted automatically** | Is `03/04/2026` March or April | Force `YYYY-MM-DD` in the template |
+| **B.E. and C.E. years mixed** | Silently off by 543 years | **Ask on the import screen which year style the file uses** |
+| Trailing spaces in a value | Code matching fails | Trim leading and trailing spaces on every value |
+| Cells that are formulas | You get the formula instead of the value | Read the calculated value |
+| **Values starting with `=` `+` `-` `@` in an export file** | Excel runs a command when the user opens it | Prefix with `'` any value that starts with these characters |
 
-> **ช่องโหว่ที่คนไม่ค่อยรู้**: ชื่อลูกค้าที่เป็น `=cmd|'/c calc'!A1` ถ้าส่งออกดิบ ๆ
-> แล้วมีคนเปิดใน Excel มันจะพยายามรันคำสั่งจริง ตอนส่งออกจึงต้อง escape เสมอ
+> **A vulnerability people rarely know about:** a customer name of `=cmd|'/c calc'!A1`, if exported raw
+> and someone opens it in Excel, will try to run the command for real. So always escape on export.
 
 ---
 
-## 5 · ส่งออก
+## 5 · Export
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| ขนาด | ถ้าเกินประมาณ 50,000 แถว ให้ทำเป็นงานเบื้องหลัง แล้วส่งลิงก์ให้ดาวน์โหลด |
-| สิทธิ์ | **ส่งออกได้เฉพาะข้อมูลที่ผู้ใช้คนนั้นมีสิทธิ์เห็นอยู่แล้ว** เพราะนี่คือจุดรั่วที่พบบ่อยที่สุด |
-| audit | บันทึกทุกครั้งว่าใครส่งออกข้อมูลอะไร ช่วงไหน กี่แถว |
-| ข้อมูลส่วนบุคคล | ปิดบังคอลัมน์ที่ไม่จำเป็น (ดู `pdpa-compliance`) |
-| ชื่อไฟล์ | `<เรื่อง>-<ช่วงวันที่>-<เวลาที่ส่งออก>.xlsx` |
-| ส่วนหัวของไฟล์ | ใส่เงื่อนไขกรองที่ใช้ และเวลาที่ส่งออก ไม่งั้นอีก 3 เดือนไม่มีใครรู้ว่าไฟล์นี้คือข้อมูลอะไร |
-| ลิงก์ดาวน์โหลด | ต้องหมดอายุ (ดู `file-upload-and-storage`) |
-| รูปแบบ | `.xlsx` สำหรับคนอ่าน · CSV สำหรับเครื่องอ่าน |
+| Size | Above roughly 50,000 rows, run it as a background job and send a download link |
+| Permission | **Export only data that this user already has permission to see**, because this is the most common leak |
+| audit | Record every time who exported what data, which period, how many rows |
+| Personal data | Mask columns that are not needed (see `pdpa-compliance`) |
+| File name | `<เรื่อง>-<ช่วงวันที่>-<เวลาที่ส่งออก>.xlsx` |
+| File header | Put in the filter conditions used and the export time. Otherwise in 3 months nobody knows what data this file is |
+| Download link | Must expire (see `file-upload-and-storage`) |
+| Format | `.xlsx` for people to read · CSV for machines to read |
 
 ---
 
 ## 6 · Anti-patterns
 
-- **"ไฟล์ไม่ถูกต้อง"** ผู้ใช้ทำอะไรต่อไม่ได้
-- **หยุดที่แถวแรกที่ผิด** ผู้ใช้ต้องอัปโหลดใหม่ 30 รอบ
-- **เขียนไปตรวจไป** พอล้มกลางทาง ข้อมูลก็ค้างครึ่ง ๆ
-- **ไม่มีหน้าสรุปก่อนยืนยัน** เขียนทับข้อมูลจริงโดยไม่มีใครทันได้ดู
-- **ไม่มีแม่แบบให้ดาวน์โหลด** ผู้ใช้ต้องเดาหัวคอลัมน์
-- **อ่านคอลัมน์ตามตำแหน่ง** ผู้ใช้แทรกคอลัมน์เดียวก็พังทั้งไฟล์
-- **อ่านรหัสเป็นตัวเลข** เลข 0 นำหน้าหายทุกครั้ง
-- **ไม่ถามว่าปีเป็น พ.ศ. หรือ ค.ศ.** ปีเพี้ยน 543 ปีโดยไม่มีใครรู้
-- **ส่งออกโดยไม่ escape สูตร** เปิดไฟล์แล้วรันคำสั่ง
-- **ส่งออกได้เกินสิทธิ์ที่มี** ข้อมูลรั่วผ่านปุ่มที่เราทำเอง
-- **ไม่เก็บไฟล์ต้นฉบับ** มีปัญหาแล้วย้อนดูไม่ได้
+- **"ไฟล์ไม่ถูกต้อง"** (file is invalid): the user cannot do anything next
+- **Stopping at the first bad row**: the user must upload 30 times
+- **Writing while validating**: if it fails midway, the data is left half-done
+- **No summary page before confirming**: real data is overwritten before anyone could look
+- **No template to download**: the user has to guess the headers
+- **Reading columns by position**: the user inserts one column and the whole file breaks
+- **Reading codes as numbers**: the leading 0 is lost every time
+- **Not asking whether the year is B.E. or C.E.**: years are off by 543 and nobody knows
+- **Exporting without escaping formulas**: opening the file runs a command
+- **Exporting more than the user's permission**: data leaks through a button we built ourselves
+- **Not keeping the original file**: when there is a problem, you cannot look back
 
 
 ## reference: thai-accounting-apis.md
@@ -956,182 +956,183 @@ Abbreviations: small and medium enterprises (SME) · Application Programming Int
 
 Use when writing code that can fail, with retry and timeout
 
-# จัดการข้อผิดพลาด
+# Error handling
 
-> **กฎข้อเดียว:** จับ error เฉพาะตอนที่**ทำอะไรกับมันได้จริง**
-> จับแล้วไม่ทำอะไร แย่กว่าไม่จับ เพราะระบบจะเดินต่อทั้งที่ข้างในพังไปแล้ว
+> **The one rule:** catch an error only when you **can really do something about it.**
+> Catching it and doing nothing is worse than not catching, because the system keeps going while it is already broken inside.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เขียนโค้ดที่เรียกเครือข่าย ฐานข้อมูล ไฟล์ หรือระบบของทีมอื่น
-- ต้องตัดสินใจว่าจะ retry ไหม กี่ครั้ง รอเท่าไหร่
-- ผู้ใช้เจอข้อความว่า "เกิดข้อผิดพลาด" แล้วไม่รู้ต้องทำอะไรต่อ
-- ไล่ปัญหาแล้วพบว่า log ไม่มีอะไรให้ดูเลย เพราะมีคน catch ทิ้ง
+- Writing code that calls the network, a database, files, or another team's system
+- Deciding whether to retry, how many times, and how long to wait
+- The user sees "an error occurred" and does not know what to do next
+- Tracing a problem and finding nothing in the log because someone caught and discarded the error
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill, or use it alongside
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| รูปร่าง JSON ของ error ที่ API ส่งออก | `web-service-essentials` · `api-conventions` | แทน |
-| รูปแบบบรรทัด log และการปิดบังข้อมูล | `logging-standards` | แทน |
-| แก้บั๊กเฉพาะจุดที่มีคนแจ้งมา | `targeted-fix` | แทน |
-| ขั้นตอนตอนระบบล่มจริง | `incident-runbook-template` | แทน |
-| ตัวชี้วัดอัตรา error และการแจ้งเตือน | `observability-basics` | คู่ |
-| งานเบื้องหลังที่ล้มแล้วต้องไปไหนต่อ | `background-jobs` | คู่ |
-| ข้อความ error ที่ต้องแปลหลายภาษา | `i18n-and-locale` | คู่ |
-| test กรณีล้มเหลว | `testing-standards` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| The JSON shape of errors the API sends out | `web-service-essentials` · `api-conventions` | instead |
+| Log line format and data masking | `logging-standards` | instead |
+| Fixing one specific bug someone reported | `targeted-fix` | instead |
+| Steps when the system is really down | `incident-runbook-template` | instead |
+| Error-rate metrics and alerts | `observability-basics` | alongside |
+| Where a failed background job goes next | `background-jobs` | alongside |
+| Error messages that must be translated into several languages | `i18n-and-locale` | alongside |
+| Tests for failure cases | `testing-standards` | alongside |
+| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 
 ---
 
-## 1 · จับที่ไหน ปล่อยที่ไหน
+## 1 · Where to catch, where to let it pass
 
-| ชั้น | ทำอะไร |
+| Layer | What to do |
 |---|---|
-| ชั้นในสุด (เรียก DB, HTTP, ไฟล์) | **ปล่อยผ่าน** หรือแปลงเป็น error ของโดเมนที่มีความหมาย |
-| ชั้นตรรกะธุรกิจ | จับเฉพาะที่มีทางเลือกสำรองจริง ๆ (มีค่าเริ่มต้น มีแหล่งข้อมูลสำรอง) |
-| **ชั้นนอกสุด** (controller, handler, main) | **จับทุกอย่าง** · log 1 ครั้ง · แปลงเป็นคำตอบที่ผู้ใช้เข้าใจ |
+| Innermost layer (calls DB, HTTP, files) | **let it pass**, or convert it into a domain error that has meaning |
+| Business logic layer | catch only where there is a real fallback (a default value, a backup data source) |
+| **Outermost layer** (controller, handler, main) | **catch everything** · log once · convert to an answer the user understands |
 
-> **log ที่เดียว คือชั้นนอกสุด** — ถ้าทุกชั้น catch แล้ว log แล้ว throw ต่อ
-> error 1 ตัวจะกลายเป็น 10 บรรทัดใน log และไม่มีใครรู้ว่าเป็นเรื่องเดียวกัน
+> **Log in one place only, the outermost layer.** If every layer catches, logs, and rethrows,
+> 1 error becomes 10 log lines and nobody knows they are the same event.
 
-**3 อย่างที่ห้ามทำเด็ดขาด:**
+**3 things you must never do:**
 
 ```csharp
-try { ... } catch { }                      // ผิด: กลืนเงียบ
-try { ... } catch (Exception) { return null; }   // ผิด: ผู้เรียกเจอ null โดยไม่รู้ว่าเกิดอะไร
-catch (Exception ex) { log.Error(ex); throw; }   // ผิด: log ซ้ำทุกชั้น
+try { ... } catch { }                      // wrong: swallowed silently
+try { ... } catch (Exception) { return null; }   // wrong: the caller gets null and never learns what happened
+catch (Exception ex) { log.Error(ex); throw; }   // wrong: logs again at every layer
 ```
 
-**ถ้าตั้งใจจะกลืนจริง ๆ ต้องเขียนเหตุผลไว้:**
+**If you really mean to swallow it, write the reason:**
 
 ```csharp
 catch (SmtpException ex)
 {
-    // ตั้งใจกลืน — ส่งอีเมลแจ้งไม่สำเร็จไม่ควรทำให้การสั่งซื้อล้ม
+    // swallowed on purpose — a failed notification email should not make the order fail
     log.Warning(ex, "ส่งอีเมลยืนยันไม่สำเร็จ orderId={OrderId}", order.Id);
 }
 ```
 
 ---
 
-## 2 · ข้อความถึงผู้ใช้ ≠ ข้อความใน log
+## 2 · The message to the user ≠ the message in the log
 
-| | ผู้ใช้เห็น | log เก็บ |
+| | The user sees | The log keeps |
 |---|---|---|
-| เนื้อหา | เกิดอะไร · ต้องทำอะไรต่อ | stack trace · ค่าตัวแปร · id ของคำขอ |
-| ภาษา | ภาษาของผู้ใช้ | อังกฤษก็ได้ |
-| รายละเอียดภายใน | **ไม่มีเลย** | มีได้ |
-| ตัวเชื่อม 2 ฝั่ง | **รหัสอ้างอิง** | รหัสเดียวกัน |
+| Content | what happened · what to do next | stack trace · variable values · request id |
+| Language | the user's language | English is fine |
+| Internal detail | **none at all** | allowed |
+| Link between the 2 sides | **a reference code** | the same code |
 
 ```
-ผิด: "เกิดข้อผิดพลาด"                    ผู้ใช้ทำอะไรต่อไม่ได้
-ผิด: "SqlException: timeout expired"      หลุดรายละเอียดภายใน และเขาก็อ่านไม่ออก
-ถูก: "บันทึกไม่สำเร็จเพราะระบบตอบช้า ลองอีกครั้งใน 1 นาที (อ้างอิง: 01J9Z8K)"
+Wrong: "เกิดข้อผิดพลาด" (An error occurred)   the user cannot tell what to do
+Wrong: "SqlException: timeout expired"      leaks internal detail, and they cannot read it anyway
+Right: "บันทึกไม่สำเร็จเพราะระบบตอบช้า ลองอีกครั้งใน 1 นาที (อ้างอิง: 01J9Z8K)"
+       (Save failed because the system was slow. Try again in 1 minute. Reference: 01J9Z8K)
 ```
 
-**ข้อความที่ดีมี 3 ส่วน** — เกิดอะไร · เพราะอะไร (ถ้าบอกได้) · ต้องทำอะไรต่อ
-รหัสอ้างอิงคือ correlation id ตัวเดียวกับใน `logging-standards`
+**A good message has 3 parts**: what happened · why (if you can say) · what to do next.
+The reference code is the same correlation id as in `logging-standards`.
 
 ---
 
-## 3 · แยกประเภทก่อนตัดสินใจ
+## 3 · Classify before deciding
 
-| ประเภท | ตัวอย่าง | ทำยังไง | log ระดับ |
+| Type | Example | What to do | Log level |
 |---|---|---|---|
-| **ผู้ใช้ทำผิด** | กรอกไม่ครบ ค่าผิดรูปแบบ | บอกให้แก้ · **ห้าม retry** | ไม่ต้อง log |
-| **ชั่วคราว** | timeout · 503 · deadlock · เชื่อมต่อหลุด | **retry ได้** | warning |
-| **ถูกจำกัดอัตรา** | 429 Too Many Requests | retry ได้ **หลังเวลาที่ `Retry-After` บอก** (ไม่มีค่านี้ → ใช้สูตร §4) · ห้ามยิงถี่กว่านั้น | warning |
-| **ถาวร** | 404 · 401 · ข้อมูลไม่ตรงเงื่อนไข | ไม่ retry · บอกให้ชัด | warning |
-| **บั๊กของเรา** | null reference · แปลงชนิดไม่ได้ | ไม่ retry · **ต้องมีคนแก้** | error |
-| **ข้อมูลไม่สอดคล้อง** | ยอดไม่ตรง สถานะเป็นไปไม่ได้ | หยุด · **เรียกคน** | error + แจ้งเตือน |
+| **User mistake** | incomplete input, wrong format | tell them to fix it · **do not retry** | no log needed |
+| **Transient** | timeout · 503 · deadlock · dropped connection | **may retry** | warning |
+| **Rate limited** | 429 Too Many Requests | may retry **after the time `Retry-After` gives** (if absent, use the formula in §4) · never fire faster than that | warning |
+| **Permanent** | 404 · 401 · data fails a condition | do not retry · say so clearly | warning |
+| **Our bug** | null reference · cannot convert the type | do not retry · **someone must fix it** | error |
+| **Inconsistent data** | totals do not match, an impossible state | stop · **call a person** | error + alert |
 
-> **การ retry error ที่ลองกี่ครั้งก็ไม่หาย คือการยิงซ้ำใส่ระบบที่ล้มอยู่ให้ล้มหนักขึ้น**
-> `400` กับ `401` ยิงอีก 100 ครั้งก็ได้คำตอบเดิม
+> **Retrying an error that no number of tries will cure means firing again at a system that is already down, so it falls harder.**
+> Sending `400` or `401` another 100 times gets the same answer.
 
 ---
 
-## 4 · timeout และการลองใหม่
+## 4 · Timeout and retry
 
-**ทุกการเรียกออกนอก process ต้องมี timeout** — ค่าเริ่มต้นของไลบรารีส่วนใหญ่คือ "รอตลอดไป"
+**Every call that leaves the process needs a timeout** — the default in most libraries is "wait forever"
 
-| การเรียก | timeout ที่ใช้ได้ทั่วไป |
+| Call | A timeout that works in general |
 |---|---|
-| ฐานข้อมูล query ปกติ | 5–10 วินาที |
-| HTTP ภายใน | 3–5 วินาที |
-| HTTP ภายนอก | 10–30 วินาที |
-| งานเบื้องหลังที่หนัก | ตั้งตามของจริง แล้วต้องตัดจบได้ |
+| Ordinary database query | 5–10 seconds |
+| Internal HTTP | 3–5 seconds |
+| External HTTP | 10–30 seconds |
+| Heavy background job | set it from the real work, and it must be possible to cut it off |
 
-**สูตรการลองใหม่** (service เรียก service · งานในคิวใช้ตัวเลขของ [`background-jobs`](../background-jobs/SKILL.md) §4 · มีคนนั่งรอหน้าจอ → ดูข้อสุดท้ายด้านล่าง):
+**The retry formula** (service-to-service calls · jobs in a queue use the numbers in [`background-jobs`](../background-jobs/SKILL.md) §4 · when a person sits waiting on the screen → see the last item below):
 
 ```
-ลองไม่เกิน 3 ครั้ง · หน่วงแบบทวีคูณ + สุ่ม
-ครั้งที่ 1 รอ 1 วินาที · ครั้งที่ 2 รอ 2 · ครั้งที่ 3 รอ 4  (แต่ละครั้ง ±20% แบบสุ่ม)
+at most 3 tries · exponential delay + jitter
+try 1 waits 1 second · try 2 waits 2 · try 3 waits 4  (each ±20% random)
 ```
 
-- **ต้องมีตัวสุ่ม** — ไม่งั้นทุก instance จะลองใหม่พร้อมกันเป๊ะ แล้วทับระบบปลายทางซ้ำ
-- **เวลารวมของการลองใหม่ต้องน้อยกว่า timeout ของผู้เรียก** ไม่งั้นเขาเลิกรอไปแล้วแต่เรายังลองอยู่
-- **retry การเขียนต้องมี idempotency key** ไม่งั้นลูกค้าถูกตัดเงิน 2 รอบ (ดู `api-conventions`)
-- **มีคนนั่งรออยู่หน้าจอ** → ลองใหม่อัตโนมัติไม่เกิน 1 ครั้ง แล้วแสดงปุ่ม "ลองอีกครั้ง" ให้เขากดเอง (ไม่ใช้ 3 ครั้งของสูตรด้านบน)
+- **You need the random part** — otherwise every instance retries at the exact same moment and hits the target system again together
+- **The total retry time must be less than the caller's timeout**, or the caller has given up while we are still trying
+- **Retrying a write needs an idempotency key**, or the customer is charged twice (see `api-conventions`)
+- **A person sits waiting on the screen** → at most 1 automatic retry, then show a "ลองอีกครั้ง" (try again) button for them to press (do not use the 3 tries of the formula above)
 
 ---
 
-## 5 · ตัดวงจร (circuit breaker)
+## 5 · Circuit breaker
 
-เมื่อปลายทางล้ม การยิงต่อไม่ได้ช่วยอะไร แค่ทำให้เราค้างตามไปด้วย
+When the target is down, firing more does not help. It only makes us hang along with it.
 
 ```
-ปิด (ปกติ) → ล้มติดกัน N ครั้ง → เปิด (ไม่ยิงเลย ตอบ error ทันที)
-           → รอ X วินาที → ครึ่งเปิด (half-open): ปล่อยให้ลอง 1 คำขอ → สำเร็จก็กลับไปปิด · ล้มก็เปิดต่อ
+closed (normal) → N failures in a row → open (do not call at all, answer with an error at once)
+                → wait X seconds → half-open: let 1 request try → success: back to closed · failure: stay open
 ```
 
-ค่าเริ่มต้นที่ใช้ได้: ถ้าล้ม 5 ครั้งติดกันภายใน 30 วินาที ให้เปิดวงจรไว้ 60 วินาที
+A default that works: if 5 calls fail in a row within 30 seconds, keep the circuit open for 60 seconds.
 
-**ควรใส่เมื่อ** — เรียกระบบภายนอกที่เคยล่ม · เรียกข้ามหลาย service · ปลายทางช้าแล้วลามมาถึงเรา
-**ไม่ต้องใส่เมื่อ** — เรียกฐานข้อมูลของตัวเอง · งานที่วิ่งครั้งเดียวต่อวัน
+**Add one when** — calling an external system that has gone down before · calling across several services · a slow target spreads the slowness to us
+**Not needed when** — calling your own database · a job that runs once a day
 
 ---
 
-## 6 · ล้มบางส่วน
+## 6 · Partial failure
 
-งานที่ทำหลายรายการ ต้องตอบให้ได้ว่า **"ทำได้ 8 จาก 10 แล้วอีก 2 ไปไหน"**
+Work that handles many items must be able to answer **"8 of 10 succeeded, where did the other 2 go?"**
 
-| แบบ | เหมาะกับ |
+| Style | Fits |
 |---|---|
-| ทั้งหมดหรือไม่ทำเลย (transaction) | เงิน · สต็อก · อะไรที่ครึ่ง ๆ แล้วพัง |
-| ทำเท่าที่ได้ แล้วรายงานรายการที่ไม่ผ่าน | นำเข้าข้อมูล · ส่งแจ้งเตือนหลายคน |
+| All or nothing (transaction) | money · stock · anything that breaks when half done |
+| Do what you can, then report the items that failed | data import · notifying many people |
 
-แบบที่สองต้อง**คืนรายการที่ล้มพร้อมเหตุผลรายตัว** ไม่ใช่บอกว่า "บางรายการไม่สำเร็จ"
+The second style must **return the failed items with a reason for each**, not just say "some items failed".
 
-**งานเก็บกวาดต้องรันเสมอ** ไม่ว่างานหลักจะสำเร็จหรือไม่ เช่น ปิดไฟล์ คืน connection ลบไฟล์ชั่วคราว
-ให้ใช้ `finally` / `using` / `with` / `defer` แทนการเขียนซ้ำในทุกทางออก
+**Cleanup must always run**, whether or not the main work succeeds: closing files, returning connections, deleting temp files.
+Use `finally` / `using` / `with` / `defer` instead of repeating it on every exit path.
 
 ---
 
-## 7 · ตรวจก่อนส่ง
+## 7 · Check before sending
 
-ไล่กับ diff ทุกครั้งที่แตะโค้ดที่เรียกออกนอก process (แนวคิดจาก ECC error-handling)
+Go through this against the diff every time you touch code that calls outside the process (idea from ECC error-handling)
 
-- [ ] ทุก `catch` ทำอย่างใดอย่างหนึ่งชัด ๆ: จัดการแล้วไปต่อ · แปลงเป็น error ของชั้นตัวเองแล้วโยนต่อ · ปล่อยไปให้ชั้นนอกสุด log (ข้อ 1) — ไม่มี `catch` ที่ log แล้วโยนต่อ
-- [ ] ทุกการเรียกออกนอก (HTTP · DB · คิว · ไฟล์) มี timeout ที่ตั้งใจ และ retry เฉพาะประเภทชั่วคราวในข้อ 3 · การเขียนที่ retry มี idempotency key (ข้อ 4)
-- [ ] ข้อความถึงผู้ใช้บอกว่าทำอะไรต่อ · ไม่มี stack trace หรือชื่อตารางออกไป (ข้อ 2) · log ของ error เดียวกันมี correlation id และข้อมูลพอให้ทำซ้ำ
-- [ ] ผลที่ธุรกิจคาดไว้ (ไม่พบ · ยอดไม่พอ · ซ้ำ) เป็นค่าคืนหรือ type ที่ผู้เรียกต้องจัดการ ไม่ใช่ exception
-- [ ] dependency ภายนอกแต่ละตัวมี test เส้นทางล้มอย่างน้อย 1 กรณี (timeout · 5xx · payload ผิด) และ test ยืนยันว่าระบบล้มบางส่วนตามข้อ 6 ไม่ล้มทั้งหน้า
-- [ ] ไม่มีการกลืนความล้มเหลวเงียบ ๆ 4 แบบนี้ (เรียบเรียงจาก silent-failure-hunter ของ pr-review-toolkit · claude-plugins-official · Apache-2.0 · ดู 2026-11-10):
-  - **optional chaining หรือ `?? ค่าเริ่มต้น`** ที่ทำให้ค่าที่หายไปผ่านไปโดยไม่มีใครรู้ (`order?.total ?? 0` ทำให้ออเดอร์ที่โหลดไม่ขึ้นกลายเป็นยอดศูนย์)
-  - **fallback ไปใช้ mock หรือข้อมูลตัวอย่างนอก test** — ระบบจริงโชว์ข้อมูลปลอมแล้วดูเหมือนปกติ
-  - **retry หมดแล้วเงียบ** — ครบรอบแล้วคืนค่าว่างหรือสำเร็จ ไม่โยน error และไม่แจ้งผู้เรียก
-  - **catch ที่ log แล้วไปต่อใน UI** — ผู้ใช้เห็นหน้าจอปกติทั้งที่ข้อมูลไม่มา ต้องแสดงสถานะผิดพลาดให้เห็น
+- [ ] Every `catch` clearly does one of these: handles it and goes on · converts it to an error of its own layer and throws on · lets it pass to the outermost layer to log (section 1) — no `catch` that logs and rethrows
+- [ ] Every outside call (HTTP · DB · queue · file) has a deliberate timeout and retries only the transient types in section 3 · a write that retries has an idempotency key (section 4)
+- [ ] The message to the user says what to do next · no stack trace or table name goes out (section 2) · the log for the same error has a correlation id and enough data to reproduce it
+- [ ] Outcomes the business expects (not found · insufficient balance · duplicate) are return values or types the caller must handle, not exceptions
+- [ ] Each outside dependency has at least 1 failure-path test (timeout · 5xx · bad payload), and a test confirms that partial failure follows section 6 and does not fail the whole page
+- [ ] None of these 4 kinds of silent failure swallowing (adapted from silent-failure-hunter in pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10):
+  - **optional chaining or `?? default`** that lets a missing value pass with nobody knowing (`order?.total ?? 0` turns an order that failed to load into a zero total)
+  - **falling back to a mock or sample data outside tests** — the live system shows fake data and looks normal
+  - **retries run out, then silence** — after the last try it returns empty or success, throws no error, and tells the caller nothing
+  - **a catch that logs and carries on in the UI** — the user sees a normal screen although the data never arrived; show an error state they can see
 
 ## 8 · Anti-patterns
 
-- **`catch` ว่างเปล่า** — ปัญหาที่หายากที่สุดคือปัญหาที่ไม่มีร่องรอย
-- **คืน `null` แทนการโยน error** — ผู้เรียกไม่รู้ว่าไม่มีข้อมูล หรือระบบพัง
-- **`catch (Exception)` ที่ชั้นในสุด** — กลืนบั๊กของตัวเองไปด้วย
-- **log แล้ว throw ต่อทุกชั้น** — error 1 ตัวได้ 10 บรรทัด
-- **"เกิดข้อผิดพลาด"** — ไม่บอกว่าต้องทำอะไรต่อ
-- **ส่ง stack trace ให้ผู้ใช้** — เปิดโครงสร้างภายในให้คนที่กำลังหาช่องโหว่เห็น
-- **retry แบบไม่หน่วง** — ยิงรัวใส่ระบบที่ล้มอยู่
-- **retry การเขียนโดยไม่มี idempotency key** — ได้รายการซ้ำ
-- **ไม่มี timeout** — thread ค้างสะสมจนระบบตาย
-- **ใช้ error เป็นตัวควบคุมการทำงานปกติ** — เช่นโยน exception เมื่อ "ไม่พบข้อมูล" ซึ่งเป็นเรื่องปกติ
+- **An empty `catch`** — the hardest problem to find is the one that leaves no trace
+- **Returning `null` instead of throwing an error** — the caller cannot tell "no data" from "the system broke"
+- **`catch (Exception)` in the innermost layer** — swallows your own bugs too
+- **Log and rethrow at every layer** — 1 error gets 10 lines
+- **"เกิดข้อผิดพลาด" ("an error occurred")** — does not say what to do next
+- **Sending a stack trace to the user** — shows the internal structure to someone hunting for a hole
+- **Retry with no delay** — hammering a system that is already down
+- **Retrying a write with no idempotency key** — you get duplicate records
+- **No timeout** — threads pile up until the system dies
+- **Using errors to control normal flow** — for example throwing an exception on "not found", which is a normal event

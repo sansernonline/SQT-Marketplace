@@ -140,6 +140,6 @@ Honda City first registered 15 Feb 2018, tax expires 14 Feb 2027. On the tax exp
 ## Accident card (keep in the glovebox)
 
 - Insurer claim line: ______ · Policy no.: ______
-- พ.ร.บ. policy no.: ______
-- Emergency 191 (police) · 1669 (ambulance) · 1193 (ตำรวจทางหลวง)
-- At the scene: photos of all cars, plates, road, damage; do not move vehicles before photos unless blocking traffic and safe; wait for the insurer's surveyor (เคลมสด)
+- พ.ร.บ. (compulsory motor insurance) policy no.: ______
+- Emergency 191 (police) · 1669 (ambulance) · 1193 (ตำรวจทางหลวง, highway police)
+- At the scene: photos of all cars, plates, road, damage; do not move vehicles before photos unless blocking traffic and safe; wait for the insurer's surveyor (เคลมสด, on-the-spot claim)

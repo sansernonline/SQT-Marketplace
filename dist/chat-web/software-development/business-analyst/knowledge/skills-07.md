@@ -2,37 +2,37 @@
 
 Use before asking to continue on undoable work
 
-# principle · proceed on reversible work — ย้อนได้ ทำเลย
+# principle · proceed on reversible work: if it can be undone, do it
 
-> ทุกคำถามที่หยุดรอคำตอบ คือเวลาที่ทั้งคนและ agent ไม่ได้ทำงาน
-> ถ้างานย้อนกลับได้ ทำแล้วให้ดูเลยจะเร็วกว่าถามแล้วรอ
+> Every question that stops and waits for an answer is time when both the person and the agent are not working.
+> If the work is reversible, doing it and letting them look is faster than asking and waiting.
 
-## แยกให้ออก
+## Tell them apart
 
-| ย้อนได้ ให้ทำเลย | ย้อนไม่ได้ ให้เตรียมไว้ใน "รออนุมัติ" แล้วทำส่วนอื่นต่อ |
+| Reversible: do it now | Irreversible: prepare it in "รออนุมัติ" (awaiting approval) and carry on with the rest |
 |---|---|
-| แก้ไฟล์ที่มีสำเนาหรือประวัติ (ไฟล์เอกสาร · ชีต · git) | แก้หรือลบข้อมูลจริง (ฐานข้อมูล · ชีตหลัก · ไฟล์ของผู้ใช้) |
-| ร่างเอกสาร · ร่างอีเมลหรือคำตอบลูกค้า (ยังไม่ส่ง) · ร่าง mockup | ส่งอีเมล ข้อความ หรือโพสต์ถึงคนนอก |
-| รัน test · คำนวณ · ลองในสำเนา | ลงระบบจริง (deploy · ประกาศราคา · เผยแพร่) |
-| เลือกระหว่าง 2 ทางที่เปลี่ยนทีหลังได้ | จ่ายเงิน · จอง · ยอมรับเงื่อนไข · ใส่ค่าลับจริง |
-| ย้ายไฟล์ชั่วคราวไป `_to_delete/` | ลบถาวร |
-| โค้ด: commit ใน branch ของงาน เมื่อผู้ใช้อนุญาต | โค้ด: merge เข้า branch หลัก · force-push |
+| Edit a file that has a copy or history (document file · sheet · git) | Edit or delete real data (database · master sheet · the user's files) |
+| Draft a document · draft an email or customer reply (not yet sent) · draft a mockup | Send an email, message or post to outsiders |
+| Run tests · calculate · try in a copy | Release to the real system (deploy · announce a price · publish) |
+| Choose between 2 paths that can be changed later | Pay money · book · accept terms · enter a real secret |
+| Move a temporary file to `_to_delete/` | Delete permanently |
+| Code: commit on the work branch, when the user allows it | Code: merge into the main branch · force-push |
 
-## ก่อนจะถาม — ผ่านสามด่านนี้
+## Before you ask, pass these three gates
 
-1. **ดูได้จากการทดลองไหม** — ถ้าคำตอบคือพฤติกรรม ความเร็ว หน้าตา ผลลัพธ์ ให้ทดลองทำร่างดู (งานโค้ด: playbook `prototype` ใน plugin `software-development`) ไม่ใช่ถาม
-2. **ย้อนได้ไหม** — ถ้าได้ ให้เลือกทางที่ผลกระทบน้อยสุด ลงมือทำ แล้วจดใน [`decision-log`](../decision-log/SKILL.md)
-3. **เป็นข้อเท็จจริงหรือรสนิยมของผู้ใช้ไหม** — ตัวเลข ชื่อ วันที่ งบ ห้ามเดา ให้ใส่ `(รอยืนยัน)` แล้วทำส่วนอื่นต่อ · สีแบรนด์ที่ไม่มีให้ใช้ค่าตั้งต้นของ skill นั้นพร้อม `(รอยืนยัน)` และรวมคำถามไว้ใน "ค้างอยู่" ครั้งเดียว
+1. **Can an experiment show it?** If the answer is behaviour, speed, looks or output, try a draft (code work: playbook `prototype` in plugin `software-development`) instead of asking.
+2. **Is it reversible?** If so, pick the path with the least impact, do it, and note it in [`decision-log`](../decision-log/SKILL.md).
+3. **Is it a fact or the user's taste?** Numbers, names, dates and budgets must never be guessed: put `(รอยืนยัน)` (awaiting confirmation) and carry on with the rest. If the brand colour is missing, use that skill's default with `(รอยืนยัน)` and collect the question into "ค้างอยู่" (pending) once.
 
-ถ้าผ่านทั้ง 3 ด่านแล้วยังต้องถาม ก็ไม่หยุดรอ ให้รวมทุกคำถามไว้ใน "ค้างอยู่" ครั้งเดียว พร้อมทางที่แนะนำ แล้วทำส่วนอื่นต่อ ส่วนงานที่ย้อนไม่ได้ ให้เตรียมคำสั่ง ส่วนที่เปลี่ยน (diff) หรือร่างข้อความไว้ใน "รออนุมัติ" ไม่ทำเอง
+If you pass all 3 gates and still must ask, do not stop and wait. Collect every question into "ค้างอยู่" once, with your recommended path, and carry on with the rest. For irreversible work, prepare the command, the diff or the draft message in "รออนุมัติ" and do not do it yourself.
 
-**ข้อยกเว้นเดียวที่ถามก่อนได้** — ตอนเริ่มงาน ถ้าโจทย์ตีความได้หลายทางจนงานออกมาต่างกันทั้งชุด ให้ถามครั้งเดียวโดยรวมทุกคำถามไว้ในรอบนั้นแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน (skill `superuser` หัวข้อ 6 → `autonomy`) เริ่มแล้วไม่ถามอีก · ทางแยกที่ย้อนไม่ได้ แพง หรือออกไปถึงคนนอก ใช้ [`flag-and-propose`](../flag-and-propose/SKILL.md)
+**The one exception where you may ask first:** at the start of the job, if the brief can be read in so many ways that the whole output would differ, ask once, putting every question of that round together as multiple choice, with evidence for every option (skill `superuser` section 6 → `autonomy`). After you start, do not ask again. For a fork that is irreversible, costly or reaches outsiders, use [`flag-and-propose`](../flag-and-propose/SKILL.md).
 
-## สิ่งที่ห้ามทำ
+## What not to do
 
-- ถาม "ให้ทำต่อไหม" หลังจบแต่ละขั้นของงานที่สั่งไว้แล้ว
-- เสนอแผนแล้วรออนุมัติ ทั้งที่งานชัดและย้อนได้
-- ใช้หลักนี้เป็นข้ออ้างทำสิ่งที่ผู้ใช้ไม่ได้ขอ เพราะ "ทำต่อ" หมายถึงทำงานที่สั่งให้จบ ไม่ใช่ขยายขอบเขตเอง
+- Ask "ให้ทำต่อไหม" (shall I continue?) after each step of a job that was already ordered
+- Offer a plan and wait for approval when the work is clear and reversible
+- Use this principle as an excuse to do things the user did not ask for, because "continue" means finishing the ordered work, not widening the scope yourself
 
 
 ---
@@ -41,108 +41,108 @@ Use before asking to continue on undoable work
 
 Use when naming or filing a document others keep
 
-# ตั้งชื่อและจัดเวอร์ชันเอกสาร
+# Naming and versioning documents
 
-> **กฎข้อเดียว:** ไฟล์ที่มีระบบเก็บประวัติให้อยู่แล้ว (git · ประวัติเวอร์ชันของ Google Docs) **ห้ามใส่เวอร์ชันในชื่อ**
-> ไฟล์ที่ออกไปนอกระบบนั้น **ต้องใส่** เพราะไม่มีอะไรบอกได้อีกแล้วว่าใครถือฉบับไหน
+> **The one rule:** a file that a system already keeps history for (git · Google Docs version history) **must not carry a version in its name.**
+> A file that leaves that system **must carry one**, because nothing else can tell you who holds which copy.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- สร้างเอกสารใหม่ที่ทีมหรือลูกค้าจะเก็บไว้
-- ส่งเอกสารออกไปให้คนนอกทีม
-- โฟลเดอร์เริ่มมี `final`, `final2`, `ล่าสุด`, `แก้แล้ว`
-- มีคนถามว่า "ตกลงยึดฉบับไหน"
+- Creating a new document that the team or the client will keep.
+- Sending a document to people outside the team.
+- A folder starts to fill with `final`, `final2`, `ล่าสุด` (latest), `แก้แล้ว` (edited).
+- Someone asks "so which version do we go with?"
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or together
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| เนื้อหาข้างในเอกสาร | `human-writing` (งานโค้ด: `srs-writing` · `fsd-writing` ใน plugin `software-development`) | แทน |
-| รูปแบบ markdown | `polished-document-style` | แทน |
-| หน้าตาไฟล์ที่ render ออกมา | `branded-document-design` (plugin `software-development`) | แทน |
-| ไฟล์ชั่วคราวระหว่างทำงาน | `superuser:temp-file-discipline` | แทน |
-| งานโค้ด: ข้อความ commit · เวอร์ชันของ **โปรแกรม** · สารบัญเอกสารโปรเจกต์ | `commit-message-format` · `cicd-and-release` · `project-bootstrap` (plugin `software-development`) | แทน/คู่ |
-| ตัวย่อในงานที่คนอ่าน | [`spell-out-abbreviations`](../spell-out-abbreviations/SKILL.md) | คู่ |
+| The content inside the document | `human-writing` (code work: `srs-writing` · `fsd-writing` in plugin `software-development`) | instead |
+| Markdown formatting | `polished-document-style` | instead |
+| The look of the rendered file | `branded-document-design` (plugin `software-development`) | instead |
+| Temporary files during work | `superuser:temp-file-discipline` | instead |
+| Code work: commit messages · version of the **program** · the project document index | `commit-message-format` · `cicd-and-release` · `project-bootstrap` (plugin `software-development`) | instead / together |
+| Abbreviations in work people read | [`spell-out-abbreviations`](../spell-out-abbreviations/SKILL.md) | together |
 
-**แม่แบบตารางประวัติการแก้ไข และรายการชื่อไฟล์มาตรฐาน** อยู่ใน `assets/naming-cheatsheet.md`
+**The revision-history table template and the standard file-name list** are in `assets/naming-cheatsheet.md`.
 
 ---
 
-## 1 · เลือกรูปแบบก่อนตั้งชื่อ
+## 1 · Pick the format before naming
 
-**เกณฑ์เดียว: ถ้ามีคนเซ็นหรือส่งออกนอกทีม ให้ทำเป็นไฟล์ส่งมอบ ส่วนเอกสารที่เปลี่ยนตามเนื้องานให้เป็น markdown ในโฟลเดอร์เอกสาร (เช่น `docs/`)**
+**One test: if someone signs it or it goes outside the team, make it a deliverable file. A document that changes with the work stays markdown in the documents folder (e.g. `docs/`).**
 
-| เอกสาร | รูปแบบ | เหตุผล |
+| Document | Format | Reason |
 |---|---|---|
-| ข้อเสนอ · ใบเสนอราคา · รายงานส่งมอบ · ใบตรวจรับงาน · สัญญา (ชุดเอกสารโปรเจกต์ซอฟต์แวร์ → plugin `software-development`) | **docx** | มีคนเซ็น ต้องล็อกฉบับ |
-| คู่มือผู้ใช้ | **docx + PDF** | ผู้ใช้ปลายทางเปิดได้ทุกเครื่อง |
-| สไลด์นำเสนอ | **pptx** · ขอ html → .html ไฟล์เดียว (ชนิดไฟล์ตาม `presentation-design` ใน plugin `software-development`) · PDF เมื่อเครื่องปลายทางไม่มีฟอนต์ | |
-| ขั้นตอนทำงาน · คู่มือภายใน · README · บันทึกประชุม · บันทึกการตัดสินใจ (งานโค้ด → plugin `software-development`) | **markdown** ในโฟลเดอร์เอกสาร | เปลี่ยนบ่อย ต้องเทียบความต่างได้ ค้นหาง่าย |
+| Proposal · quotation · handover report · acceptance certificate · contract (software project document sets → plugin `software-development`) | **docx** | Someone signs it, so the version must be locked |
+| User manual | **docx + PDF** | End users can open it on any machine |
+| Presentation slides | **pptx** · if html is requested → a single .html file (file type per `presentation-design` in plugin `software-development`) · PDF when the target machine lacks the fonts | |
+| Work procedures · internal guides · README · meeting notes · decision records (code work → plugin `software-development`) | **markdown** in the documents folder | It changes often, needs diffs, and is easy to search |
 
-> 🚨 **ต้นฉบับ markdown ที่ render ซ้ำได้ เก็บถาวรใน `docs/src/<เรื่อง>.md` แล้ว render เป็น docx ลงโฟลเดอร์เอกสาร (`docs/`)**
-> `docs/` มีเอกสารส่งมอบของเรื่องนั้นฉบับเดียวคือ .docx — ไม่มี .md และ .pdf ของเรื่องเดียวกันวางซ้ำข้างกัน (ต้นฉบับอยู่ใน `docs/src/` · ไม่ใช่ `_to_delete/` เพราะต้องใช้ทุกรอบที่แก้)
-> แก้รอบถัดไป → แก้ที่ `docs/src/` แล้ว render ใหม่ ไม่เปิด Word แก้มือ (ตรงกับ `markdown-report-docx`) · บรรทัด "ต้นฉบับ" บนปกชี้ไปที่ไฟล์นี้
+> 🚨 **Markdown source that can be re-rendered is kept permanently in `docs/src/<topic>.md`, then rendered to docx into the documents folder (`docs/`).**
+> `docs/` holds exactly one deliverable for that topic, the .docx. No .md or .pdf of the same topic sits beside it. (The source lives in `docs/src/`, not `_to_delete/`, because it is needed every time you revise.)
+> On the next revision, edit `docs/src/` and render again. Never open Word and edit by hand (matches `markdown-report-docx`). The "ต้นฉบับ" (source) line on the cover points to this file.
 
-**PDF ทำเฉพาะคู่มือผู้ใช้ หรือเมื่อลูกค้าขอ** — นอกนั้น docx ฉบับเดียว
+**Make a PDF only for user manuals, or when the client asks.** Otherwise, one docx.
 
 ---
 
-## 2 · รูปแบบชื่อไฟล์
+## 2 · File name format
 
 ```
-<รหัสโปรเจกต์>-<ประเภท>-<เรื่อง>-v<M.m>-<สถานะ>.docx
+<project code>-<type>-<topic>-v<M.m>-<status>.docx
 ```
 
-| ประเภทเอกสาร | รูปแบบ | ตัวอย่าง |
+| Document type | Format | Example |
 |---|---|---|
-| ไฟล์ส่งออก | `<โปรเจกต์>-<ประเภท>-v<M.m>-<สถานะ>.docx` | `ACME-QUOTE-v1.2-APPROVED.docx` |
-| มีหลายเรื่อง | เติมเรื่องต่อจากประเภท | `ACME-REPORT-sales-v0.3-DRAFT.docx` |
-| ฉบับที่ส่งให้ลูกค้าจริง | เติมวันที่ตามมาตรฐาน International Organization for Standardization (ISO) 8601 ท้ายสุด | `ACME-QUOTE-v1.2-APPROVED-2026-09-25.docx` |
-| เอกสาร markdown | `<ประเภท>-<เรื่อง>.md` ตัวพิมพ์เล็ก ขีดกลาง | `docs/guide-onboarding.md` |
-| บันทึกประชุม (ข้อยกเว้น: วันที่ขึ้นก่อน) | `YYYY-MM-DD-<เรื่อง>.md` | `docs/meetings/2026-09-25-kickoff.md` |
+| Exported file | `<project>-<type>-v<M.m>-<status>.docx` | `ACME-QUOTE-v1.2-APPROVED.docx` |
+| Several topics | Add the topic after the type | `ACME-REPORT-sales-v0.3-DRAFT.docx` |
+| Version actually sent to the client | Add the date at the very end, in International Organization for Standardization (ISO) 8601 format | `ACME-QUOTE-v1.2-APPROVED-2026-09-25.docx` |
+| Markdown document | `<type>-<topic>.md`, lowercase, hyphens | `docs/guide-onboarding.md` |
+| Meeting notes (exception: date first) | `YYYY-MM-DD-<topic>.md` | `docs/meetings/2026-09-25-kickoff.md` |
 
-**กฎชื่อไฟล์:**
+**File name rules:**
 
-- ไม่มีเว้นวรรค ใช้ขีดกลาง — เว้นวรรคทำให้ลิงก์และคำสั่งใน command line พัง
-- **วันที่เป็น ISO `YYYY-MM-DD` เสมอ** และวางท้ายสุด — เรียงตามชื่อแล้วได้เรียงตามเวลาเอง · ข้อยกเว้นเดียว: บันทึกประชุมวางวันที่ไว้หน้าสุด เพราะโฟลเดอร์ `docs/meetings/` มีแต่บันทึกประชุม จึงเรียงตามวันได้ทันที
-- ชื่อไฟล์เป็นอังกฤษ แม้เนื้อหาเป็นไทย — กันปัญหาตอนแนบอีเมลและ zip ข้ามระบบ
-- ห้ามใส่ชื่อคนในชื่อไฟล์ — `-somchai-edit` คือสัญญาณว่าไม่ได้ใช้ต้นฉบับเดียว
+- No spaces; use hyphens. Spaces break links and command-line commands.
+- **The date is always ISO `YYYY-MM-DD`** and goes at the very end, so sorting by name also sorts by time. The one exception: meeting notes put the date first, because the `docs/meetings/` folder holds only meeting notes, so it sorts by date at once.
+- File names are in English even when the content is Thai. This avoids trouble when attaching to email and zipping across systems.
+- Never put a person's name in a file name. `-somchai-edit` is a sign that people are not working from one source.
 
-**ตรวจด้วยสคริปต์:** `node <โฟลเดอร์ skill นี้>/scripts/doc-name-check.mjs docs/*` → บอกชื่อที่ผิดพร้อมชื่อที่เสนอ · เปลี่ยนชื่อหลายไฟล์: เติม `--plan _to_delete/renames.json` ได้แผนโดยยังไม่แตะไฟล์ ตรวจหรือแก้แผนแล้วรัน `--plan _to_delete/renames.json --apply` · สคริปต์ไม่เปลี่ยนชื่อไฟล์ `APPROVED` และไม่ทับไฟล์ที่มีอยู่ · ไม่ใส่ไฟล์ที่ได้รับมา (`ref/`) เข้าแผน
+**Check with the script:** `node <this skill's folder>/scripts/doc-name-check.mjs docs/*` → it lists wrong names with a proposed name. To rename many files, add `--plan _to_delete/renames.json` to get a plan without touching files, check or edit the plan, then run `--plan _to_delete/renames.json --apply`. The script does not rename `APPROVED` files, does not overwrite existing files, and does not put received files (`ref/`) in the plan.
 
 ---
 
-## 3 · เวอร์ชัน
+## 3 · Versions
 
-| ขึ้นเลขไหน | เมื่อ |
+| Which number goes up | When |
 |---|---|
-| **major** (1.x → 2.0) | ขอบเขตเปลี่ยน · โครงเอกสารเปลี่ยน · ต้องเซ็นรับใหม่ |
-| **minor** (1.1 → 1.2) | เพิ่มหรือแก้เนื้อหา ยังเป็นเรื่องเดิม |
-| ไม่ขึ้นเลข | แก้คำผิด จัดหน้า — แต่**ยังต้องลงประวัติการแก้ไข** |
+| **major** (1.x → 2.0) | Scope changes · document structure changes · needs a new sign-off |
+| **minor** (1.1 → 1.2) | Content added or edited, still the same topic |
+| No number change | Typo fixes, layout, but you **must still log it in the revision history** |
 
-- ฉบับที่ส่งให้คนดูครั้งแรกคือ `v0.1` ส่วนฉบับแรกที่มีคนเซ็นคือ `v1.0`
-- **เลขเวอร์ชันเดินหน้าอย่างเดียว** ไม่ย้อนกลับไปใช้เลขเดิม
-- ไฟล์ที่ระบบเก็บประวัติให้ ไม่มีเลขเวอร์ชันในชื่อ — ถ้าต้องอ้างถึงฉบับหนึ่ง ให้อ้าง tag · commit หรือประวัติเวอร์ชัน
+- The first version shown to anyone is `v0.1`, and the first version someone signs is `v1.0`.
+- **Version numbers only move forward.** Never go back to an old number.
+- A file that a system keeps history for has no version number in its name. To refer to a version, use a tag, commit, or version history.
 
 ---
 
-## 4 · สถานะ — คนละเรื่องกับเวอร์ชัน
+## 4 · Status is a different thing from version
 
-| สถานะ | แปลว่า | ใครแก้ได้ |
+| Status | Means | Who may edit |
 |---|---|---|
-| `DRAFT` | ยังเขียนอยู่ | ผู้เขียน |
-| `REVIEW` | ส่งให้ตรวจแล้ว รอความเห็น | ผู้เขียน ตามความเห็นที่ได้ |
-| `APPROVED` | เซ็นรับแล้ว | **ห้ามแก้** ต้องขึ้นเวอร์ชันใหม่เป็น DRAFT |
+| `DRAFT` | Still being written | The author |
+| `REVIEW` | Sent for review, awaiting comments | The author, following the comments received |
+| `APPROVED` | Signed off | **No edits.** Raise a new version as DRAFT |
 
-> **`APPROVED` แล้วห้ามแก้ไฟล์เดิม** แม้จะเป็นแค่คำผิด
-> ถ้าแก้ได้ ฉบับที่ลูกค้าถือกับที่เราถือจะไม่เหมือนกัน ทั้งที่ชื่อไฟล์เหมือนกันทุกตัวอักษร
+> **Once `APPROVED`, never edit the original file**, even for a typo.
+> If you can, the version the client holds and the one we hold will differ, even though the file names match letter for letter.
 
 ---
 
-## 5 · ประวัติการแก้ไขต้องอยู่ในไฟล์
+## 5 · The revision history must be in the file
 
-**ชื่อไฟล์บอกได้แค่ว่านี่คือฉบับไหน ไม่ได้บอกว่าเปลี่ยนอะไร**
-ทุกเอกสารส่งออกต้องมีตารางนี้ในหน้าแรก
+**A file name says only which version this is, not what changed.**
+Every exported document must have this table on the first page.
 
 ```markdown
 | เวอร์ชัน | วันที่ | ผู้แก้ | แก้อะไร | เหตุผล |
@@ -152,31 +152,31 @@ Use when naming or filing a document others keep
 | 1.0 | 2026-09-01 | สมชาย | ฉบับเซ็นรับ | — |
 ```
 
-- **คอลัมน์ "แก้อะไร" ต้องเป็นรูปธรรม** — "ปรับปรุงเนื้อหา" ไม่มีประโยชน์กับใครเลย
-- เรียงใหม่อยู่บน — คนเปิดอ่านอยากรู้ว่าเปลี่ยนอะไรล่าสุด
+- **The "แก้อะไร" (what changed) column must be concrete.** "Improved the content" helps nobody.
+- Put the newest on top. A reader opening the file wants to know what changed last.
 
 ---
 
-## 6 · ที่เก็บและการส่ง
+## 6 · Storage and sending
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| ต้นฉบับ | อยู่ใน `docs/src/` ของงานที่เดียว (งานโค้ด: `project-doc-set` ใน plugin `software-development`) |
-| ไฟล์ส่งออก | อยู่ในโฟลเดอร์เอกสาร (`docs/`) หรือที่เก็บของลูกค้า **ไม่ใช่รากโปรเจกต์** |
-| ไฟล์ที่ได้รับมา | เก็บชื่อเดิมของเขาไว้ ห้ามเปลี่ยน — เขาอ้างถึงชื่อนั้น |
-| ไฟล์ระหว่างแปลง | `_to_delete/` (ดู `superuser:temp-file-discipline`) |
-| ส่งทางแชตหรืออีเมล | ส่งไฟล์ที่มีเวอร์ชันและสถานะในชื่อเสมอ ไม่ส่ง `เอกสาร.docx` |
+| Source | Lives in `docs/src/` of the work, in one place only (code work: `project-doc-set` in plugin `software-development`) |
+| Exported files | Live in the documents folder (`docs/`) or the client's storage, **not the project root** |
+| Received files | Keep their original name; never rename. They refer to that name |
+| Files mid-conversion | `_to_delete/` (see `superuser:temp-file-discipline`) |
+| Sending by chat or email | Always send a file with the version and status in the name. Never send `เอกสาร.docx` |
 
 ---
 
 ## 7 · Anti-patterns
 
-- **`final.docx`, `final2.docx`, `final_ล่าสุด.docx`** — ไม่มีใครรู้ว่าอันไหนใหม่กว่า
-- **`ใบเสนอราคา แก้แล้ว.docx`** — แก้จากฉบับไหน แก้อะไร
-- **ใส่เวอร์ชันในชื่อไฟล์ที่มีระบบเก็บประวัติให้แล้ว** — จะได้ `spec-v1.md` กับ `spec-v2.md` อยู่คู่กันตลอดไป
-- **แก้ไฟล์ที่ `APPROVED` แล้ว** แม้แต่คำผิดเดียว
-- **ไม่มีตารางประวัติการแก้ไข** — แล้วต้องเปิดเทียบทีละหน้า
-- **วันที่แบบ `25-09-2026` หรือ `250926`** — เรียงไม่ได้ และคนอ่านคนละแบบ
+- **`final.docx`, `final2.docx`, `final_ล่าสุด.docx`**: nobody knows which is newer.
+- **`ใบเสนอราคา แก้แล้ว.docx`**: edited from which version, and what was edited?
+- **Putting a version in the name of a file that a system keeps history for.** You get `spec-v1.md` and `spec-v2.md` side by side forever.
+- **Editing a file that is already `APPROVED`**, even a single typo.
+- **No revision-history table.** Then you must open and compare page by page.
+- **Dates like `25-09-2026` or `250926`.** They do not sort, and people read them differently.
 
 
 ---
@@ -185,230 +185,230 @@ Use when naming or filing a document others keep
 
 Use when software stores personal data in Thailand
 
-# PDPA — ข้อมูลส่วนบุคคล
+# PDPA — personal data
 
-> **กฎข้อเดียว:** ข้อมูลที่ไม่ได้เก็บ คือข้อมูลที่ไม่รั่ว ไม่ต้องดูแล และไม่ต้องลบ
-> คำถามแรกเสมอคือ "จำเป็นต้องเก็บไหม" ไม่ใช่ "เก็บยังไงให้ปลอดภัย"
+> **The one rule:** data you never collect cannot leak, needs no care and never has to be deleted.
+> The first question is always "do we need to collect it?", not "how do we keep it safe?"
 
-> ระวัง: นี่คือแนวทางสำหรับคนทำระบบ **ไม่ใช่คำแนะนำทางกฎหมาย**
-> เรื่องที่มีผลทางกฎหมายต้องให้ที่ปรึกษากฎหมายตัดสิน
+> Caution: this is guidance for people who build systems. **It is not legal advice.**
+> Anything with legal effect must be decided by a legal adviser.
 
-## ทางลัด — แอปที่ข้อมูลอยู่ในเครื่องผู้ใช้เท่านั้น
+## Shortcut — apps whose data stays on the user's device only
 
-ถ้าแอปไม่มีเซิร์ฟเวอร์ ไม่มีบัญชี และไม่ส่งข้อมูลออก ให้ข้ามหัวข้อเรื่องผู้ประมวลผลและฐานข้อมูลได้ แล้วตรวจแค่ 3 เรื่องนี้
+If the app has no server, no accounts and sends no data out, skip the sections on processors and databases. Then check only these 3 things.
 
-| เรื่อง | ทำไมยังเกี่ยว | ทำอะไร |
+| Item | Why it still matters | What to do |
 |---|---|---|
-| Android Auto Backup | ระบบสำรองข้อมูลแอปขึ้น Google Drive เองโดยค่าเริ่มต้น | ตั้ง `android:allowBackup` และ `android:dataExtractionRules` ให้ตรงกับที่ตั้งใจ แล้วลงเหตุผลไว้ใน `decision-log` |
-| ส่งออก · share sheet (หน้าต่างแชร์ของระบบ) | ข้อมูลออกจากเครื่องทางนี้ทางเดียว | ส่งเฉพาะที่ผู้ใช้เลือก และไม่แนบตำแหน่งหรือ metadata ของภาพโดยไม่บอก |
-| ข้อมูลที่ร้านค้าบังคับให้แจ้ง | Google Play บังคับกรอกแบบฟอร์ม Data safety ทุกแอป | กรอกตามจริง (ไม่เก็บก็ตอบว่าไม่เก็บ) ส่วนเรื่องที่ว่าขอสิทธิ์กล้องแล้วต้องมีนโยบายความเป็นส่วนตัวไหม `(รอยืนยัน)` ให้เตรียมหน้าสั้น ๆ ไว้ก่อน |
+| Android Auto Backup | By default the system backs up app data to Google Drive on its own | Set `android:allowBackup` and `android:dataExtractionRules` to match your intent, and record the reason in `decision-log` |
+| Export · share sheet (the system's share window) | This is the only way data leaves the device | Send only what the user selected, and do not attach location or image metadata without telling them |
+| Data the app store forces you to declare | Google Play requires the Data safety form for every app | Fill it in truthfully (if you collect nothing, say so). Whether requesting camera permission requires a privacy policy is `(รอยืนยัน)` (awaiting confirmation), so prepare a short page first |
 
-ถ้าภายหลังเพิ่ม analytics · crash report หรือบัญชีผู้ใช้ แอปนี้ก็ไม่ใช่แอปในเครื่องอย่างเดียวแล้ว ให้กลับไปใช้ทั้ง skill
+If you later add analytics · crash reports or user accounts, the app is no longer device-only. Go back and apply the whole skill.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ระบบเก็บชื่อ เบอร์โทร อีเมล ที่อยู่ เลขบัตร รูป หรือข้อมูลอื่นที่ระบุตัวบุคคลได้
-- ลูกค้าหรือฝ่ายกฎหมายถามเรื่องความสอดคล้องกับ PDPA
-- ต้องทำหน้าขอความยินยอม หรือหน้าให้ผู้ใช้ขอลบข้อมูล
-- จะส่งข้อมูลให้ผู้ให้บริการภายนอก
+- The system stores names, phone numbers, emails, addresses, ID card numbers, photos or other data that identifies a person
+- A customer or the legal team asks about PDPA compliance
+- You must build a consent page, or a page where users request deletion of their data
+- You will send data to an outside service provider
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Task | Use this instead |
 |---|---|
-| ร่องรอยว่าใครทำอะไรกับข้อมูล | `audit-trail` |
-| ตารางและการเข้ารหัสระดับคอลัมน์ | `database-design` |
-| การยืนยันตัวตนและสิทธิ์ | `auth-implementation-patterns` |
-| ปิดบังข้อมูลใน log | `logging-standards` |
-| ที่เก็บกุญแจ | `config-and-secrets` |
-| แบบฟอร์มยินยอม ประกาศความเป็นส่วนตัว และเอกสาร PDPA ของบริษัท (ไม่ใช่ระบบซอฟต์แวร์) | (ถ้าติดตั้ง plugin `e-commerce`) `e-commerce:pdpa-workflow` ไม่มีก็ใช้ข้อ 3 ของ skill นี้เป็นโครง |
+| A trail of who did what to the data | `audit-trail` |
+| Tables and column-level encryption | `database-design` |
+| Authentication and permissions | `auth-implementation-patterns` |
+| Masking data in logs | `logging-standards` |
+| Where to keep keys | `config-and-secrets` |
+| Consent forms, privacy notices and a company's PDPA documents (not a software system) | (if plugin `e-commerce` is installed) `e-commerce:pdpa-workflow`; if it is not, use item 3 of this skill as the outline |
 
 ---
 
-## 1 · ทำรายการก่อน
+## 1 · Make the inventory first
 
-**ตอบคำถาม "ข้อมูลของฉันอยู่ที่ไหนบ้าง" ไม่ได้ ถ้าไม่มีรายการนี้**
+**Without this inventory you cannot answer "where is my data?"**
 
-| ข้อมูล | เก็บที่ไหน | เก็บทำไม | ฐานทางกฎหมาย | เก็บนานเท่าไหร่ | ใครเห็นได้ | ส่งให้ใครบ้าง |
+| Data | Stored where | Why collected | Legal basis | Kept how long | Who can see it | Sent to whom |
 |---|---|---|---|---|---|---|
-| ชื่อ-นามสกุล | `users.name` | ระบุตัวลูกค้า | สัญญา | 5 ปีหลังปิดบัญชี | ฝ่ายขาย · ผู้ดูแล | — |
-| เบอร์โทร | `users.phone` | แจ้งสถานะจัดส่ง | สัญญา | เหมือนแถวบน | เหมือนแถวบน | ผู้ให้บริการ SMS |
-| เลขบัตรประชาชน | `kyc.id_number` | ยืนยันตัวตนตามกฎหมาย | หน้าที่ตามกฎหมาย | 10 ปี | ฝ่ายปฏิบัติตามกฎเกณฑ์ | — |
+| Full name | `users.name` | Identify the customer | Contract | 5 years after the account closes | Sales · admins | — |
+| Phone number | `users.phone` | Send delivery status | Contract | Same as the row above | Same as the row above | SMS provider |
+| National ID number | `kyc.id_number` | Legally required identity check | Legal obligation | 10 years | Compliance team | — |
 
-**ทำรายการนี้ให้ครบทุกที่จริง ๆ** — ฐานข้อมูลหลัก · ที่สำรอง · log · ระบบวิเคราะห์ ·
-ที่เก็บไฟล์ · สเปรดชีตที่ทีมทำเอง · แอปมือถือ: Android Auto Backup และไฟล์ที่ส่งออกผ่าน share sheet
+**List every place that really holds data**: main database · backups · logs · analytics systems ·
+file storage · spreadsheets the team keeps by hand · mobile apps (Android Auto Backup and files exported through the share sheet)
 
 ---
 
-## 2 · ฐานทางกฎหมาย — ไม่ใช่ทุกอย่างต้องขอความยินยอม
+## 2 · Legal basis — not everything needs consent
 
-| ฐาน | ใช้เมื่อ | ตัวอย่าง |
+| Basis | Use when | Example |
 |---|---|---|
-| **สัญญา** | จำเป็นเพื่อให้บริการตามที่ตกลง | ที่อยู่สำหรับจัดส่ง |
-| **หน้าที่ตามกฎหมาย** | กฎหมายบังคับให้เก็บ | เอกสารภาษี |
-| **ประโยชน์อันชอบธรรม** | จำเป็นและไม่กระทบสิทธิเกินควร | log ความปลอดภัย · ป้องกันการฉ้อโกง |
-| **ความยินยอม** | ทำไม่ได้ด้วยฐานอื่น | การตลาด · cookie ติดตามพฤติกรรม |
+| **Contract** | Needed to provide the agreed service | Delivery address |
+| **Legal obligation** | The law requires you to keep it | Tax documents |
+| **Legitimate interest** | Necessary, and does not harm rights excessively | Security logs · fraud prevention |
+| **Consent** | No other basis works | Marketing · behavior-tracking cookies |
 
-> **ความยินยอมคือฐานที่อ่อนที่สุด เพราะถอนเมื่อไหร่ก็ได้**
-> ถ้าขอความยินยอมสำหรับที่อยู่จัดส่ง แล้วเขาถอน ระบบจะส่งของไม่ได้
-> **ที่อยู่จัดส่งใช้ฐานสัญญา** ไม่ใช่ความยินยอม
+> **Consent is the weakest basis because it can be withdrawn at any time.**
+> If you ask consent for the delivery address and the person withdraws, the system cannot ship.
+> **The delivery address uses the contract basis**, not consent.
 >
-> การกดปุ่ม "ยอมรับทั้งหมด" ที่ทำให้ใช้งานต่อไม่ได้ถ้าไม่กด ไม่ถือว่าเป็นความยินยอมโดยอิสระ
+> A button labeled "accept all" that blocks use of the service unless pressed does not count as freely given consent.
 
 ---
 
-## 3 · ความยินยอมที่ใช้ได้จริง
+## 3 · Consent that works in practice
 
-| ต้องมี | รายละเอียด |
+| Required | Details |
 |---|---|
-| **แยกเป็นเรื่อง ๆ** | การตลาดทางอีเมล · การติดตามพฤติกรรม · การส่งต่อให้พันธมิตร — แยกช่องกัน |
-| ไม่ติ๊กมาให้ล่วงหน้า | ต้องเป็นการกระทำของผู้ใช้เอง |
-| ข้อความที่คนทั่วไปอ่านเข้าใจ | ไม่ใช่ย่อหน้ากฎหมาย 500 คำ |
-| **บันทึกไว้** | ใคร · เรื่องอะไร · เมื่อไหร่ · ข้อความเวอร์ชันไหน · จากช่องทางไหน |
-| ถอนได้ง่ายเท่าที่ให้ | ถ้าให้ได้ด้วย 1 คลิก ก็ต้องถอนได้ด้วย 1 คลิก |
-| ถอนแล้วมีผลจริง | **ต้องมีโค้ดที่หยุดใช้ข้อมูลนั้นจริง** ไม่ใช่แค่เก็บค่าไว้ |
+| **Separate by purpose** | Email marketing · behavior tracking · sharing with partners — separate checkboxes |
+| Not pre-ticked | It must be the user's own action |
+| Text an ordinary person can understand | Not a 500-word legal paragraph |
+| **Recorded** | Who · for what · when · which text version · through which channel |
+| Withdrawing is as easy as giving | If it takes 1 click to give, it must take 1 click to withdraw |
+| Withdrawal takes real effect | **Code must actually stop using that data**, not just store the flag |
 
-ตารางที่ต้องมี: `consent` — `user_id` · `purpose` · `granted` · `granted_at` · `withdrawn_at` ·
+Required table: `consent` — `user_id` · `purpose` · `granted` · `granted_at` · `withdrawn_at` ·
 `policy_version` · `source` · `ip`
-**เก็บเป็นประวัติ ไม่ใช่เขียนทับ** — ต้องพิสูจน์ย้อนหลังได้ว่าตอนนั้นเขายินยอมอะไรไว้
+**Keep it as history, never overwrite.** You must be able to prove later what the person agreed to at that time.
 
 ---
 
-## 4 · สิทธิของเจ้าของข้อมูล
+## 4 · Data subject rights
 
-ระบบต้อง**ทำได้จริง** ไม่ใช่รอทำมือทุกครั้ง โดยทั่วไปต้องตอบสนองภายใน 30 วัน
+The system must be **able to do these for real**, not wait for manual work each time. In general you must respond within 30 days.
 
-| สิทธิ | ระบบต้องทำอะไรได้ |
+| Right | What the system must be able to do |
 |---|---|
-| ขอดู | ออกสำเนาข้อมูลทั้งหมดของคนนั้น |
-| ขอแก้ | แก้ข้อมูลที่ไม่ถูกต้อง แล้ว**ส่งต่อการแก้ไปยังที่ที่เคยส่งข้อมูลไป** |
-| **ขอลบ** | ลบจริงจากทุกที่ที่ใช้งานอยู่ รวม log · ส่วนไฟล์สำรองให้ตัดออกจากการใช้งาน (ถ้ากู้คืนต้องลบซ้ำ) แล้วปล่อยให้หมดอายุตามรอบหมุนเวียน (ดูข้อ 6) พร้อมบอกเจ้าของข้อมูลว่าข้อมูลในไฟล์สำรองจะหายภายในวันที่เท่าไร |
-| ขอให้ระงับใช้ | หยุดใช้ชั่วคราวโดยไม่ลบ |
-| ขอย้ายข้อมูล | ส่งออกในรูปแบบที่เครื่องอ่านได้ |
-| คัดค้าน | หยุดการตลาดหรือการประมวลผลที่คัดค้าน |
+| Access | Produce a copy of all that person's data |
+| Rectification | Correct inaccurate data, then **pass the correction on to every place the data was sent** |
+| **Erasure** | Delete for real from every place in active use, including logs. For backups, take them out of use (if one is restored, delete again) and let them expire through the rotation cycle (see item 6). Tell the data subject by which date the data in backups will be gone. |
+| Restriction | Stop using the data temporarily without deleting it |
+| Portability | Export in a machine-readable format |
+| Objection | Stop the marketing or processing the person objects to |
 
-> **"ขอลบ" คือข้อที่ทำยากที่สุด** — ข้อมูลอยู่ในฐานข้อมูล ที่สำรอง log ระบบวิเคราะห์
-> และผู้ให้บริการภายนอก **ออกแบบให้ลบได้ตั้งแต่วันแรก** ไม่ใช่มาไล่หาทีหลัง
+> **"Erasure" is the hardest one.** Data sits in the database, backups, logs, analytics systems
+> and outside providers. **Design for deletion from day one**, not a hunt afterward.
 >
-> soft delete อย่างเดียว**ไม่นับว่าลบ** ส่วนข้อมูลที่กฎหมายบังคับให้เก็บต่อ (เช่นเอกสารภาษี)
-> เก็บได้ แต่ต้องบอกเจ้าของข้อมูลว่าเก็บอะไรไว้เพราะอะไร
+> Soft delete alone **does not count as deletion**. Data the law requires you to keep (such as tax documents)
+> may be kept, but you must tell the data subject what you keep and why.
 
 ---
 
-## 5 · เก็บเท่าที่จำเป็น
+## 5 · Collect only what you need
 
-| หลัก | ตัวอย่าง |
+| Principle | Example |
 |---|---|
-| **ไม่ถามสิ่งที่ไม่ได้ใช้** | ขายของออนไลน์ ไม่ต้องขอเลขบัตรประชาชน |
-| เก็บช่วงแทนค่าจริง | เก็บช่วงอายุ ไม่ใช่วันเกิด ถ้าใช้แค่แบ่งกลุ่ม |
-| **แฮชหรือทำให้ไม่ระบุตัวตน** สำหรับงานวิเคราะห์ | ระบบสถิติไม่ต้องรู้ว่าใครเป็นใคร |
-| เข้ารหัสระดับคอลัมน์ | เลขบัตร ข้อมูลสุขภาพ |
-| ปิดบังตอนแสดง | `x-xxxx-xxxx-12-3` |
-| **แยกข้อมูลอ่อนไหวออกจากตารางหลัก** | จำกัดสิทธิ์และตรวจสอบง่ายกว่า |
+| **Do not ask for what you do not use** | An online shop does not need the national ID number |
+| Store a range instead of the exact value | Store an age range, not the birth date, if you only use it to group people |
+| **Hash or anonymize** for analytics | A statistics system does not need to know who is who |
+| Column-level encryption | ID numbers, health data |
+| Mask on display | `x-xxxx-xxxx-12-3` |
+| **Keep sensitive data out of the main table** | Easier to restrict and audit |
 
-**ข้อมูลอ่อนไหวเป็นชั้นที่เข้มกว่า** (มาตรา 26) — เช่น เชื้อชาติ เผ่าพันธุ์ ความคิดเห็นทางการเมือง ความเชื่อลัทธิ ศาสนาหรือปรัชญา พฤติกรรมทางเพศ
-ประวัติอาชญากรรม **ข้อมูลสุขภาพ** ความพิการ ข้อมูลสหภาพแรงงาน ข้อมูลพันธุกรรม ข้อมูลชีวภาพ และข้อมูลอื่นที่กระทบเจ้าของข้อมูลในทำนองเดียวกัน
-จึงเก็บได้เมื่อจำเป็นจริงและต้องมีมาตรการเข้มกว่าปกติ (พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 มาตรา 26 ตรวจ 22 ต.ค. 2569)
+**Sensitive data has a stricter tier** (section 26), for example race, ethnic origin, political opinion, creed, religion or philosophy, sexual behavior,
+criminal record, **health data**, disability, trade union data, genetic data, biometric data, and other data that affects the subject in a similar way.
+It may be collected only when truly necessary, and needs stricter measures than usual (พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (Personal Data Protection Act B.E. 2562, 2019) section 26, checked 22 Oct 2026 (B.E. 2569))
 
-**ห้ามใช้ข้อมูลจริงบนเครื่องพัฒนาหรือ staging** — ต้องปิดบังก่อนเสมอ (ดู `cicd-and-release`)
-
----
-
-## 6 · อายุการเก็บ
-
-- กำหนด**ต่อประเภทข้อมูล** ไม่ใช่ทั้งระบบเป็นค่าเดียว
-- **มีงานลบจริงที่รันตามรอบ** — นโยบายที่ไม่มีงานรันคือนโยบายที่ไม่มีอยู่จริง
-- log ที่มีข้อมูลบุคคลก็มีอายุเช่นกัน (ดู `logging-standards`)
-- ไฟล์สำรองข้อมูลต้องมีรอบหมุนเวียนที่ทำให้ข้อมูลเก่าหายไปเองในที่สุด
-- ก่อนลบจริงครั้งแรก ให้แสดงรายการที่จะถูกลบและให้คนอนุมัติ
+**Never use real data on development machines or staging.** Always mask it first (see `cicd-and-release`).
 
 ---
 
-## 7 · ผู้ให้บริการภายนอกและการส่งข้อมูลออกนอกประเทศ
+## 6 · Retention
 
-| เรื่อง | ต้องทำ |
+- Set it **per data type**, not one value for the whole system
+- **Have a real deletion job that runs on a schedule.** A policy with no job running does not exist.
+- Logs that contain personal data also have a lifetime (see `logging-standards`)
+- Data backups need a rotation cycle that makes old data disappear on its own in the end
+- Before the first real deletion, show the list of what will be deleted and have a person approve it
+
+---
+
+## 7 · Outside providers and sending data abroad
+
+| Topic | What to do |
 |---|---|
-| รายชื่อผู้ประมวลผล | ทำรายการว่าส่งข้อมูลอะไรให้ใคร — คลาวด์ · SMS · อีเมล · วิเคราะห์ · แชต |
-| สัญญา | มีข้อตกลงการประมวลผลข้อมูลกับทุกราย |
-| ส่งออกนอกประเทศ | ตรวจว่าประเทศปลายทางมีมาตรฐานเพียงพอ หรือมีข้อสัญญามาตรฐานรองรับ |
-| ตัววัดสถิติและโฆษณา | นับเป็นการส่งข้อมูลออกไป — **ต้องมีฐานทางกฎหมายรองรับ** |
-| ยกเลิกใช้บริการ | ต้องได้ข้อมูลคืนและให้เขาลบจริง |
+| List of processors | List what data goes to whom — cloud · SMS · email · analytics · chat |
+| Contract | Have a data processing agreement with every one |
+| Sending abroad | Check that the destination country has adequate standards, or that standard contract clauses cover it |
+| Analytics and ad trackers | Count as sending data out — **they need a legal basis** |
+| Ending a service | You must get the data back and have them delete it for real |
 
-> **จุดที่คนลืมบ่อยที่สุด** — ปลั๊กอินวัดสถิติที่ใส่ไว้ตั้งแต่วันแรก ส่งข้อมูลพฤติกรรม
-> ผู้ใช้ออกไปต่างประเทศทุกวัน โดยไม่เคยมีใครใส่ไว้ในรายการ
+> **The most commonly forgotten spot:** an analytics plugin added on day one sends users' behavior
+> data abroad every day, and nobody ever put it on the list.
 
 ---
 
-## 8 · เมื่อข้อมูลรั่ว — 72 ชั่วโมงแรก
+## 8 · When data leaks — the first 72 hours
 
-| ลำดับ | ทำอะไร |
+| Order | What to do |
 |---|---|
-| 1 | **หยุดการรั่วก่อน** — เพิกถอนกุญแจ ปิดช่องทาง |
-| 2 | ประเมินขอบเขต — ข้อมูลอะไร กี่คน อ่อนไหวไหม |
-| 3 | เก็บหลักฐาน — log และสถานะระบบ **ก่อน**ที่จะแก้ทับ |
-| 4 | แจ้งผู้รับผิดชอบภายในและที่ปรึกษากฎหมายทันที |
-| 5 | **แจ้งสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคลภายใน 72 ชั่วโมง** เมื่อเข้าเงื่อนไข |
-| 6 | แจ้งเจ้าของข้อมูล เมื่อมีความเสี่ยงสูงต่อเขา |
-| 7 | บันทึกเหตุการณ์ด้วย `postmortem-template` |
+| 1 | **Stop the leak first** — revoke keys, close the channel |
+| 2 | Assess the scope — what data, how many people, is it sensitive |
+| 3 | Preserve evidence — logs and system state **before** you overwrite anything |
+| 4 | Notify the internal owner and the legal adviser at once |
+| 5 | **Notify the สำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (Personal Data Protection Committee Office) within 72 hours** when the conditions are met |
+| 6 | Notify the data subjects when the risk to them is high |
+| 7 | Record the incident with `postmortem-template` |
 
-**เตรียมไว้ล่วงหน้า ไม่ใช่ตอนเกิดเรื่อง** — ใครเป็นคนตัดสินใจแจ้ง · เบอร์ที่ปรึกษากฎหมาย ·
-แม่แบบข้อความแจ้ง · วิธีดึงรายชื่อผู้ได้รับผลกระทบ
+**Prepare in advance, not when it happens** — who decides to notify · the legal adviser's phone number ·
+the notification message template · how to pull the list of affected people
 
 ---
 
 ## 9 · Anti-patterns
 
-- **ขอความยินยอมสำหรับทุกอย่าง** — พอเขาถอน ระบบทำงานต่อไม่ได้
-- **ช่องติ๊กที่ติ๊กมาให้แล้ว** — ไม่ถือเป็นความยินยอม
-- **เก็บความยินยอมเป็นค่าเดียว `accepted_terms = true`** — พิสูจน์ย้อนหลังไม่ได้ว่ายินยอมอะไร
-- **soft delete แล้วบอกว่าลบแล้ว**
-- **นโยบายอายุการเก็บที่ไม่มีงานลบจริง**
-- **ใช้ข้อมูลจริงบน staging** — และคัดลอกลงเครื่อง developer
-- **เก็บเลขบัตรประชาชนเพราะ "เผื่อใช้"**
-- **ข้อมูลส่วนบุคคลใน log และในรายงาน crash**
-- **ไม่มีรายการผู้ให้บริการภายนอก** — ตอบไม่ได้ว่าข้อมูลไปที่ไหนบ้าง
-- **ส่งออก Excel ที่มีข้อมูลเต็ม** ให้คนที่ต้องการแค่ยอดรวม
-- **นโยบายความเป็นส่วนตัวที่ไม่ตรงกับสิ่งที่ระบบทำจริง**
+- **Asking consent for everything** — when they withdraw, the system cannot keep working
+- **Pre-ticked checkboxes** — they do not count as consent
+- **Storing consent as one value `accepted_terms = true`** — you cannot prove later what was agreed
+- **Soft delete, then saying it is deleted**
+- **A retention policy with no real deletion job**
+- **Real data on staging** — and copied onto developer machines
+- **Collecting the national ID number "just in case"**
+- **Personal data in logs and crash reports**
+- **No list of outside providers** — you cannot say where the data goes
+- **Exporting a full-data Excel file** for someone who needs only the totals
+- **A privacy policy that does not match what the system really does**
 
 ---
 
-## 10 · มาตราที่อ้างบ่อย และตัวย่อ
+## 10 · Frequently cited sections, and abbreviations
 
-ใช้ตอนลูกค้าหรือฝ่ายกฎหมายถามว่า "ข้อนี้อยู่มาตราไหน" (ตรวจกับฉบับแปลอังกฤษไม่เป็นทางการของ พ.ร.บ. 2562 ราชกิจจานุเบกษา 27 พ.ค. 2562 เมื่อ 23 ต.ค. 2569)
+Use this when a customer or the legal team asks "which section is this?" (checked against the unofficial English translation of the 2019 Act, Royal Gazette 27 May 2019 (B.E. 2562), on 23 Oct 2026 (B.E. 2569))
 
-| เรื่อง (ข้อใน skill นี้) | มาตรา |
+| Topic (item in this skill) | Section |
 |---|---|
-| ความยินยอม (ข้อ 3) | 19 |
-| ฐานทางกฎหมายที่ไม่ต้องขอความยินยอม (ข้อ 2) | 24 |
-| ข้อมูลอ่อนไหว (ข้อ 5) | 26 |
-| ส่งข้อมูลออกนอกประเทศ (ข้อ 7) | 28 |
-| สิทธิเจ้าของข้อมูล (ข้อ 4) — ขอดู · ขอย้าย · คัดค้าน · ขอลบ · ขอระงับ · ขอแก้ | 30 · 31 · 32 · 33 · 34 · 35–36 |
-| มาตรการความปลอดภัย · ระบบลบเมื่อหมดอายุ · แจ้งเหตุรั่วใน 72 ชั่วโมง (ข้อ 6, 8) | 37(1) · 37(3) · 37(4) |
-| บันทึกรายการประมวลผล (ข้อ 1) | 39 |
-| เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล (DPO) | 41 |
-| ค่าสินไหม · ค่าเสียหายเชิงลงโทษ | 77 · 78 |
-| โทษปรับทางปกครอง สูงสุด 1 · 3 · 5 ล้านบาท | 82 · 83 · 84 |
+| Consent (item 3) | 19 |
+| Legal bases that need no consent (item 2) | 24 |
+| Sensitive data (item 5) | 26 |
+| Sending data abroad (item 7) | 28 |
+| Data subject rights (item 4) — access · portability · objection · erasure · restriction · rectification | 30 · 31 · 32 · 33 · 34 · 35–36 |
+| Security measures · deletion system on expiry · breach notice in 72 hours (items 6, 8) | 37(1) · 37(3) · 37(4) |
+| Records of processing (item 1) | 39 |
+| Data Protection Officer (DPO) | 41 |
+| Compensation · punitive damages | 77 · 78 |
+| Administrative fines, maximum 1 · 3 · 5 million baht | 82 · 83 · 84 |
 
-**ภาคที่มีกฎทับอีกชั้น** — สุขภาพ · การเงิน · โทรคมนาคม มีหน่วยกำกับของตัวเอง (กระทรวงสาธารณสุข · ธปท./ก.ล.ต./คปภ. · กสทช.) ที่เพิ่มเงื่อนไขเรื่องความลับ อายุการเก็บ และการแจ้งเหตุ ให้ตรวจกฎของภาคนั้นก่อนออกแบบ ไม่ใช่ยึด PDPA อย่างเดียว (แนวคิดจาก BV thai-pdpa (MIT))
+**Sectors with a second layer of rules** — health · finance · telecom have their own regulators (กระทรวงสาธารณสุข (Ministry of Public Health) · ธปท. (Bank of Thailand, BOT) / ก.ล.ต. (Securities and Exchange Commission, SEC) / คปภ. (Office of Insurance Commission, OIC) · กสทช. (National Broadcasting and Telecommunications Commission, NBTC)) that add conditions on confidentiality, retention and breach notice. Check that sector's rules before designing, and do not rely on PDPA alone (idea from BV thai-pdpa (MIT))
 
 - **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562)
-- **ข้อมูลส่วนบุคคล** — ข้อมูลที่ระบุตัวบุคคลได้ ไม่ว่าทางตรงหรือทางอ้อม
-- **ข้อมูลอ่อนไหว** — ข้อมูลส่วนบุคคลกลุ่มพิเศษ เช่น สุขภาพ เชื้อชาติ ศาสนา
-- **ผู้ควบคุมข้อมูล** — ผู้ตัดสินใจว่าจะเก็บและใช้ข้อมูลอย่างไร (โดยทั่วไปคือเจ้าของระบบ)
-- **ผู้ประมวลผลข้อมูล** — ผู้ที่ประมวลผลข้อมูลตามคำสั่งของผู้ควบคุม เช่น ผู้ให้บริการคลาวด์
-- **เจ้าของข้อมูล** — บุคคลที่ข้อมูลนั้นเป็นของเขา
+- **Personal data** — data that identifies a person, directly or indirectly
+- **Sensitive data** — the special category of personal data, such as health, race, religion
+- **Data controller** — whoever decides how data is collected and used (usually the system owner)
+- **Data processor** — whoever processes data on the controller's instructions, such as a cloud provider
+- **Data subject** — the person the data belongs to
 
-## 11 · เชื่อมกับ skill อื่น
+## 11 · Links to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use with |
 |---|---|
-| ร่องรอยว่าใครดูหรือแก้ข้อมูล | `audit-trail` |
-| ตาราง การเข้ารหัส และ soft delete | `database-design` |
-| ปิดบังข้อมูลใน log | `logging-standards` |
-| สิทธิ์เข้าถึงและการยืนยันตัวตน | `auth-implementation-patterns` |
-| ปิดบังข้อมูลจริงก่อนลง staging | `cicd-and-release` |
-| การส่งและการยกเลิกรับข้อความการตลาด (เรื่องความยินยอมอยู่ที่ skill นี้) | `notifications` |
-| ปิดบังข้อมูลในไฟล์ส่งออก | `data-import-export` |
-| อายุการเก็บไฟล์แนบ | `file-upload-and-storage` |
-| งานลบข้อมูลที่หมดอายุ | `background-jobs` |
-| บันทึกเหตุการณ์หลังข้อมูลรั่ว | `postmortem-template` · `incident-runbook-template` |
+| A trail of who viewed or changed data | `audit-trail` |
+| Tables, encryption and soft delete | `database-design` |
+| Masking data in logs | `logging-standards` |
+| Access rights and authentication | `auth-implementation-patterns` |
+| Masking real data before loading staging | `cicd-and-release` |
+| Sending and unsubscribing from marketing messages (consent stays in this skill) | `notifications` |
+| Masking data in exported files | `data-import-export` |
+| Retention of attached files | `file-upload-and-storage` |
+| Jobs that delete expired data | `background-jobs` |
+| Recording the incident after a leak | `postmortem-template` · `incident-runbook-template` |

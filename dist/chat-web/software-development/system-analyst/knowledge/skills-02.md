@@ -1,451 +1,3 @@
-# skill: polished-document-style
-
-Use when a kept document needs headings, tables and theme
-
-# Polished Document Style
-
-> **Gate before starting (every time):** read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (gate before starting) of `design-references` (plugin `superuser`) even when a brand exists (the brand controls color and font, while the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
-
-> **Boundary:** this skill handles the look (headings, tables, text boxes, theme) · every line of wording belongs to `human-writing` — open both for a document people keep to read
-
-## When to use this skill
-
-- Output is meant for **general readers** (managers, executives, clients, customers)
-- Document needs **sign-off** or formal review
-- Output will be **shared widely** or converted to PDF/Word later · any doc with 3+ sections or 500+ words
-- Laying out any kind of document people keep to read (Markdown · Word · PDF), including Thai text in Office files
-
-## When NOT to use
-
-- Internal notes for the author's own team (keep them concise)
-- Quick scratch notes · code comments
-- A whole Markdown report that must come out as one .docx → `markdown-report-docx` (plugin `software-development`)
-
-> **Note:** This skill governs the *markdown source*. When the deliverable is a
-> rendered **.docx / .pptx / .pdf** that a stakeholder will open, use
-> `branded-document-design` (plugin `software-development`) on top of it — that skill carries the design tokens,
-> the typography scale, Thai typography rules, and the `brandkit.py` builder.
-
-## Read more when
-
-| File | Open when |
-|---|---|
-| [references/markdown-patterns.md](references/markdown-patterns.md) | When you will write a header, table of contents, text box, table, status badge, cover block, options comparison table, sign-off section, or glossary, open it to see the markdown examples and copy them |
-| [scripts/check_outline.py](scripts/check_outline.py) | If the skill that writes the document has a template in `assets/`, run `python scripts/check_outline.py <template.md> <document.md>` before sending — it checks that headings are complete and in the template's order, bold fields are complete, table headers match, and no field is left unfilled · in a template, put `<!-- optional -->` at the end of a heading or field that is not required · after editing the checker, run `--self-test` first |
-| [references/theme-colors.md](references/theme-colors.md) | When you must choose the document's main color, or put real colors into a figure, .docx file or slides, open it to see how to declare the theme, who controls the color of which part, and the house default colors |
-| [references/thai-office.md](references/thai-office.md) | When creating Word · Excel · PDF files that contain Thai, open it first for fonts, paragraph layout, and export |
-
-## 0 · Find an existing template first (every time)
-
-Before using a structure or template in this file, check whether the user, client or project already has its own:
-
-- **Where to look:** the client's or organization's document standard: Word/Google Docs templates the client gave · earlier documents in the project (`docs/` · `ref/`) · format requirements in the TOR (terms of reference) or contract
-- **Result:** found → use that template (headings, order, field names, running numbers) and say in the answer which file it came from · not found → use the template in this file as the fallback and say no existing template was found
-- **Still required for every template:** the document header, heading order and theme in this file are the fallback · readability (clear headings, readable tables) applies to every template
-
-## Document Header (Always)
-
-Every polished doc MUST start with the same header set: a plain-text H1, then a quote box giving version, date, status, author, reviewer and tags, closed with `---`. A full example is in [references/markdown-patterns.md](references/markdown-patterns.md)
-
-Status values:
-- **Draft** (ร่าง) — work in progress
-- **Review** (กำลังรีวิว) — under stakeholder review
-- **Approved** (อนุมัติแล้ว) — signed off
-- **Archived** (เก็บถาวร) — historical reference
-
-Only these 4 values, written the same in every skill (`status-report` uses the same set and adds `ยังไม่เริ่ม` (not started) for documents where work has not begun) · the Status column in the Sign-off table is the signer's status and uses **Approved** · **Review** · **Pending** (not yet sent for review) · **Rejected**
-
-## Section Hierarchy
-
-- **H1** — Document title (exactly one)
-- **H2** — Numbered sections (`## 1. Section`)
-- **H3** — Sub-sections (`### 1.1 Sub-topic`)
-- **H4** — Rare, use only if needed
-
-**Always add Table of Contents** for docs with 5+ sections, and clicking a link in the table of contents must reach the real heading. An example is in [references/markdown-patterns.md](references/markdown-patterns.md)
-
-## Document theme — decide once, use everywhere in that document
-
-One document passes through several skills (markdown · `diagram-figures` · `branded-document-design` · `presentation-design`), so choose the main color once, declare it as `<!-- doc-theme: accent=… · ที่มา=… · ยืนยันเมื่อ=YYYY-MM-DD -->` at the end of the document header, and every tool reads the value from there · when you must choose a color or put real colors into a .docx figure or slides → open [references/theme-colors.md](references/theme-colors.md) (where the color comes from, house default, status colors)
-
-## Labels — use words, not emoji
-
-**No emoji in documents**: not in headings, text boxes, status badges or tables, because emoji in headings and badges signal that an AI made it (`no-ai-look`) · use bold words that stay fixed across the whole document instead.
-
-| Used for | Words to use |
-|---|---|
-| Importance level | วิกฤต · สูง · กลาง · ต่ำ |
-| Work status | เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่ |
-| Check result | ผ่าน · ไม่ผ่าน |
-| Text box type | ข้อแนะนำ (Tip) · ข้อควรจำ (Note) · ข้อควรระวัง (Warning) · อันตราย (Critical) · คำถามที่ยังเปิด (Open Question) |
-
-For yes/no cells in a table, you may use the text characters `✓` `✗` (not colored emoji), or write "ใช่" (yes) / "ไม่" (no).
-
-## Callout Boxes
-
-Use blockquotes with a bold label (no emoji). There are 5 kinds: **Tip** (ข้อแนะนำ) · **Note** (ข้อควรจำ) · **Warning** (ข้อควรระวัง) · **Critical** (อันตราย) · **Open Question** (คำถามที่ยังเปิด). Examples are in [references/markdown-patterns.md](references/markdown-patterns.md)
-
-**Rules:**
-- Keep callouts to 1-3 sentences
-- One callout per topic — don't stack
-- Don't overuse — max 3-5 per page
-
-## Tables — When and How
-
-Use tables when items have **2+ attributes**. If you wrote bullets where each line has several values separated by commas, change them to a table. Side-by-side examples are in [references/markdown-patterns.md](references/markdown-patterns.md)
-
-- Left-align text, center checkmarks/numbers, right-align money
-- Use `—` (em dash) for "not applicable", not `-` or blank
-- Keep cells short — long content goes in body paragraphs
-- Bold key columns: `**email**`
-
-If the document must compare options or weigh pros and cons (strategy, vendor choice, plan options), use a comparison table with a Recommendation column. A document that needs approval ends with a Sign-off table, and a document with 5 or more abbreviations (the same threshold as `spell-out-abbreviations`) gets a glossary. Examples of all three are in [references/markdown-patterns.md](references/markdown-patterns.md)
-
-## Diagrams
-
-**Figures in project documents (reports · proposals · process flows · data flows) are drawn with `diagram-figures`, the single house style, and embedded as image files** · Mermaid (`software-diagrams` in plugin `software-development`) is only for quick figures in a README · PR · code notes
-This skill controls only how figures are placed in the document.
-
-- Place it **after the paragraph that explains what question the figure answers**, not floating in from nowhere
-- Every figure has a 1-line caption under it, starting with **รูปที่ N —** (Figure N —)
-- Do not put the same figure in several places in the document; refer to the figure number instead
-
-## Status Badges and Cover Block
-
-For important fields in the header or in a table, use a status badge as a bold word, such as `**Status:** Approved`. A formal document (proposal · formal report · contract · postmortem) opens with a cover block that gives the document type, version, status, date, author, reviewer, and related documents. An example is in [references/markdown-patterns.md](references/markdown-patterns.md)
-
-## Lists and Code Blocks
-
-**Rule:** never nest bullets. If a list needs sub-levels, split into sub-headings or use a table.
-Examples of a good list and an over-nested list are in [references/markdown-patterns.md](references/markdown-patterns.md)
-
-Code blocks must always specify the language (Always specify language), and if the code is long, put the file name as a comment on the first line. An example is in [references/markdown-patterns.md](references/markdown-patterns.md)
-
-## Thai Office documents
-
-Word · Excel · PDF files that contain Thai (complex-script font · no justify · embed fonts · BOM CSV) → open [references/thai-office.md](references/thai-office.md) before creating the file
-
-## Quality Checklist
-
-Before delivering any polished doc:
-
-- [ ] H1 title in plain text — no emoji in any heading, callout, badge or table
-- [ ] Header block with version, date, status, authors (cover block for formal documents only)
-- [ ] TOC if 5+ sections
-- [ ] All sections numbered consistently
-- [ ] Anchor links in TOC actually work
-- [ ] Status badges where applicable
-- [ ] Tables used (not bullets) where data has 2+ attributes
-- [ ] Every flow or relationship has a diagram drawn with `diagram-figures` (plugin `software-development` · house style), not default Mermaid
-- [ ] Callout boxes for tips/warnings (not just paragraphs)
-- [ ] Code blocks have language hints
-- [ ] Glossary for docs with 5+ abbreviations
-- [ ] No placeholder text (TBD, TODO, Lorem ipsum) — `(รอยืนยัน)` markers listed in the pending-confirmation list are not placeholders; keep them
-- [ ] Tested rendering in the real viewer (Word · PDF · GitHub preview)
-
-> Diagrams in project documents are in `diagram-figures` · code documents (quick Mermaid · software requirements) → the addition in plugin `software-development`
-
-## Anti-patterns
-
-- **Inconsistent terminology** — "user" in one section, "customer" in next
-- **Tables of paragraphs** — if cells are >2 sentences, use headings instead
-
-AI-looking style in any medium → before sending, go through item 3 of `no-ai-look` · rules for writing abbreviations → `spell-out-abbreviations`
-
-
-## reference: markdown-patterns.md
-
-# รูปแบบ markdown พร้อมตัวอย่าง
-
-ตัวอย่างโค้ด markdown ของทุกรูปแบบที่ `SKILL.md` อ้างถึง ให้ลอกไปใช้ได้ทันที ส่วนกฎว่าใช้เมื่อไหร่อยู่ใน `SKILL.md`
-
-**สารบัญ:** Document Header · Table of Contents · Callout Boxes · Tables · Figures · Status Badges · Cover Block · Comparison / Decision Tables · Lists · Code Blocks · Approval/Sign-off · Glossary
-
-## Document Header (Always)
-
-Every polished doc MUST start with:
-
-```markdown
-# <Document Title>
-
-> **Version:** 1.0 · **Date:** YYYY-MM-DD · **Status:** Draft
-> **Authors:** <names> · **Reviewers:** <names>
-> **Tags:** `<area>` `<topic>`
-
----
-```
-
-Status values:
-- **Draft** — work in progress
-- **Review** — under stakeholder review
-- **Approved** — signed off
-- **Archived** — historical reference
-
-## Table of Contents
-
-**Always add Table of Contents** for docs with 5+ sections:
-
-```markdown
-## Table of Contents
-
-1. [Executive Summary](#1-executive-summary)
-2. [Scope](#2-scope)
-3. [Details](#3-details)
-```
-
-## Callout Boxes
-
-Use blockquotes with a bold label — no emoji. 5 ชนิด ชื่อไทยคู่กัน: Tip (ข้อแนะนำ) · Note (ข้อควรจำ) · Warning (ข้อควรระวัง) · Critical (อันตราย) · Open Question (คำถามที่ยังเปิด):
-
-```markdown
-> **Tip:** Brief actionable insight.
-
-> **Warning:** Important caveat or limitation.
-
-> **Critical:** Must-read before proceeding.
-
-> **Note:** Additional context or background.
-
-> **Open Question:** Needs decision/clarification.
-```
-
-## Tables — When and How
-
-### When to use tables instead of bullets
-
-Use tables when items have **2+ attributes**:
-
-Don't use bullets:
-```markdown
-- email: string, required, unique
-- age: number, optional
-- role: enum, required, default "user"
-```
-
-Use a table:
-```markdown
-| Field | Type   | Required | Default | Description       |
-|-------|--------|:--------:|:-------:|-------------------|
-| email | string | ✓        | —       | Unique login email|
-| age   | number | ✗        | —       | Optional          |
-| role  | enum   | ✓        | `user`  | Access level      |
-```
-
-## Figures (รูปในเอกสาร)
-
-รูปในเอกสารโปรเจกต์วาดด้วย `diagram-figures` (plugin `software-development` · house style) แล้วฝังเป็นไฟล์ภาพ · Mermaid ใช้แค่รูปด่วนใน README · PR ไม่ใช้ในเอกสารที่ส่งต่อ
-
-```markdown
-ลำดับการเรียกเมื่อผู้ใช้กดบันทึกแสดงในรูปที่ 3
-
-![ลำดับการเรียกเมื่อผู้ใช้กดบันทึก](figures/fig-03.png)
-
-**รูปที่ 3 —** ลำดับการเรียกเมื่อผู้ใช้กดบันทึก
-```
-
-## Status Badges (Inline)
-
-For key fields in headers/tables:
-
-```markdown
-**Status:** Approved
-**Priority:** High
-**Risk Level:** Medium
-**Service Level Agreement (SLA):** < 200ms
-```
-
-Multiple badges in a header:
-
-```markdown
-> **Approved** · **High Priority** · Owner @alice · Due 2025-03-15
-```
-
-## Cover Block Pattern
-
-For formal documents (Business Requirements Document (BRD), Functional Specification Document (FSD), Architecture Decision Record (ADR), postmortem):
-
-```markdown
-# <Title>
-
-| | |
-|--|--|
-| **Document Type** | BRD \| FSD \| ADR \| Postmortem |
-| **Version** | 1.2 |
-| **Status** | Approved |
-| **Date** | 2025-01-15 |
-| **Author(s)** | @alice, @bob |
-| **Reviewer(s)** | @charlie |
-| **Related** | [BRD-001](link), [FSD-005](link) |
-
----
-```
-
-## Comparison / Decision Tables
-
-For trade-off analysis (architect, Project Manager (PM), Search Engine Optimization (SEO) recommendations):
-
-```markdown
-| Option | Cost | Effort | Risk | Time-to-Value | Recommendation |
-|--------|:----:|:------:|:----:|:-------------:|:--------------:|
-| **A**  | ฿80k | Med  | Low  | Fast | **Recommended** |
-| B      | ฿40k | Low  | High | Med  | Not recommended |
-| C      | ฿150k| High | Low  | Slow | Future consideration |
-```
-
-## Lists — When to nest, when to flatten
-
-### Good list
-```markdown
-- Email is unique across all users
-- Passwords must be 8+ characters with mixed case
-- Sessions expire after 30 days of inactivity
-```
-
-### Bad list (over-nested)
-```markdown
-- Users
-  - Email
-    - Must be unique
-    - Required
-  - Password
-    - 8+ chars
-    - Mixed case
-```
-
-→ Should be a table instead.
-
-## Code Blocks
-
-Always specify language:
-
-````markdown
-```typescript
-const user: User = { id: 1, email: 'a@b.com' };
-```
-
-```bash
-npm install
-```
-
-```sql
-SELECT * FROM users WHERE id = $1;
-```
-````
-
-For long blocks, put the file name in a comment on the first line:
-
-```typescript
-// src/services/auth.ts
-export async function login(email: string, password: string) {
-  // ...
-}
-```
-
-## Approval/Sign-off Section (End of Doc)
-
-For documents needing formal approval:
-
-```markdown
-## Sign-off
-
-| Role | Name | Status | Date |
-|------|------|:------:|------|
-| Product Owner | @alice | Approved | 2025-01-15 |
-| Tech Lead | @bob | Review | — |
-| QA Lead | @charlie | Pending | — |
-| Security | @dave | Rejected | 2025-01-14 |
-```
-
-## Glossary Section
-
-For docs with 5+ technical terms:
-
-```markdown
-## Glossary
-
-| Term | Definition |
-|------|------------|
-| **API** | Application Programming Interface |
-| **JWT** | JSON Web Token, used for stateless auth |
-| **SLA** | Service Level Agreement |
-```
-
-Define acronyms on first use, then add to glossary.
-
-
-## reference: thai-office.md
-
-# เอกสาร Office ภาษาไทย
-
-ใช้กับไฟล์ Word · Excel · PDF ทุกไฟล์ที่มีภาษาไทย จะสร้างด้วยสคริปต์หรือทำมือก็ตาม รายละเอียดและตัวช่วยอยู่ใน `branded-document-design`
-
-- Word นับภาษาไทยเป็น complex script จึงมีช่องฟอนต์ ขนาด และตัวหนาแยกจากละติน ถ้าตั้งแค่ช่องละติน ข้อความไทยจะไม่เปลี่ยน ต้องตั้งให้ครบทั้งสองชุด
-- ย่อหน้าไทยไม่จัดชิดสองขอบ (justify) เพราะไทยไม่มีช่องว่างระหว่างคำ Word จะยืดช่องไฟจนเป็นรู (ยกเว้นคู่มือวิทยานิพนธ์สั่ง Thai Distributed)
-- ข้อความไทยห้ามใช้ฟอนต์ mono เพราะ Consolas กับ Cascadia ไม่มีอักษรไทย ใช้ mono กับรหัส คีย์ และตัวเลขเท่านั้น
-- ส่งออก PDF ให้ฝังฟอนต์ทุกครั้ง ไม่งั้นเครื่องที่ไม่มีฟอนต์จะเอาตัวอื่นมาแทนและวรรณยุกต์ลอย
-- CSV ที่ให้คนไทยเปิดใน Excel บันทึกเป็น UTF-8 แบบมี BOM ไม่งั้นภาษาไทยเพี้ยน
-- ก่อนบอกว่าเสร็จ แปลงทุกหน้าเป็นภาพแล้วเปิดดูจริง ตารางล้น หัวข้อค้างท้ายหน้า วรรณยุกต์ลอย ดูจากโค้ดไม่เห็น
-
-
-## reference: theme-colors.md
-
-# Document theme color table
-
-This file says who controls the color of each part of a document, and what the house default colors are. Use it when you must put real colors into a figure, a .docx file or slides.
-
-## Declare the theme — decide once, use everywhere in that document
-
-One document passes through several skills: markdown (`polished-document-style`) · figures from `diagram-figures` ·
-.docx files from `branded-document-design` · slides from `presentation-design` (all three are in plugin `software-development`).
-If each one picks its own color, the reader gets a document with figures in one color, headings in another, and slides in a third.
-
-**Markdown is the main source (source of truth), so the theme is declared here** — put it at the end of the document header or in a file beside it:
-
-```markdown
-<!-- doc-theme: accent=<สีหลัก> · ที่มา=<แบรนด์ลูกค้า / เสนอจากเนื้องาน> · ยืนยันเมื่อ=YYYY-MM-DD -->
-```
-
-(Keys: `accent` = main color · `ที่มา` = source (client brand / proposed from the work's content) · `ยืนยันเมื่อ` = confirmed on.)
-
-**The main color comes from the work's content, not from a tool's default.**
-If a brand color already exists, use it. If not, search for references per `design-references` (plugin `superuser`) of type `document` and extract the color from the chosen work · if live search is not possible, use the house default, write `(รอยืนยัน)` (awaiting confirmation), carry on without stopping to ask, and propose a tone that fits the work's content in the report.
-(Backup: the table matching work content to color tones is in `colour-by-domain` of skill `diagram-figures` (plugin `software-development`).)
-
-Markdown itself has no color, so use labels and font weight instead. Diagrams, figures, .docx files and slides read the value from `doc-theme`. If `doc-theme` has not declared a work-specific accent, use the house default. Both tables are below.
-
-**Status words do not depend on the theme** — วิกฤต (critical) · ผ่าน (pass) use the same words in every document. Status colors in .docx files and slides are below.
-
-## Who controls the color of which part
-
-| Part of the document | Who controls the color | Read the value from |
-|---|---|---|
-| Headings, tables, text boxes in markdown | Markdown has no color; use bold labels and font weight instead | — |
-| Mermaid diagrams | `diagram-figures` → `references/engine-mermaid.md` (README · PR: `software-diagrams` item 2 in plugin `software-development`) | `doc-theme` |
-| Figures that are image files | `diagram-figures` (plugin `software-development`) | `doc-theme` |
-| Exported .docx / .pdf files | `branded-document-design` (plugin `software-development`) items 0–1 | `doc-theme` |
-| Slides | `presentation-design` (plugin `software-development`) | `doc-theme` |
-
-## House default
-
-If `doc-theme` has not declared a work-specific accent, every skill uses this set as the default, so figures, documents and slides share one palette from the start. This is the same set as `presentation-design` and `branded-document-design`:
-
-| token | Value | Used for |
-|---|---|---|
-| brand | `#2A78D6` | Main color · headings · accent lines |
-| brand-deep | `#2A4C86` | Table headers · H2 · system names |
-| brand-2 | `#6A5CD6` | Secondary accent (purple) |
-| tint | `#EDF1FB` | Table header background · highlight box background |
-| ink / body | `#333B4A` / `#414957` | Headings / body text |
-| muted / faint | `#7D8492` / `#A9AEB9` | Captions / notes |
-| line | `#E4E7EE` | Borders · connector lines |
-| exception | `#C77A11` | A path/zone that is not the main route (always different from brand) |
-| Font | Tahoma (documents/slides) · Noto Sans Thai → Tahoma (images) | Both Thai and English |
-
-Once a work-specific accent is declared, use it in place of brand, and compute the other colors from that accent.
-
-
----
-
 # skill: diagram-figures
 
 Use when a document or slide needs a designed diagram
@@ -792,228 +344,228 @@ An image drawn by Mermaid itself has free-curved, diagonal lines and colours tha
 
 ## reference: engine-svg-python.md
 
-# SVG/Python engine — รูปที่ generate จากข้อมูลหรือโค้ด
+# SVG/Python engine — figures generated from data or code
 
-ทางที่ 2 ของ `diagram-figures` ใช้แทนโครง HTML เมื่อรูปต้องสร้างจากข้อมูลหรือโค้ด เช่น รูปหลายใบที่ต้องออกซ้ำทุกครั้งที่ข้อมูลเปลี่ยน หรือรูปที่ต้องคุมตำแหน่งทุกจุดเองบนกริดด้วยเส้นตั้งฉากมุมโค้ง
-Python เขียน SVG ลงกริดแล้วเรนเดอร์เป็น PNG ส่วนไอคอนและโลโก้มาจากคลังเดียวกับโครง HTML ([icons.md](icons.md))
+Route 2 of `diagram-figures`. Use it instead of the HTML skeleton when a figure must be generated from data or code. Examples: several figures that must be re-exported every time the data changes, or a figure where you control every position on a grid with right-angle lines and rounded corners.
+Python writes the SVG onto the grid, then renders it to PNG. Icons and logos come from the same library as the HTML skeleton ([icons.md](icons.md)).
 
-ข้อเสียคือใช้เวลา เพราะ 1 รูปต้องแก้หลายรอบ ดังนั้นให้ใช้เฉพาะรูปที่คนนอกทีมจะเห็นและเห็นซ้ำ
+The cost is time, because 1 figure takes several rounds of fixes. So use it only for figures that people outside the team will see, and see repeatedly.
 
-> **สีหลัก = สีหลักของโปรเจกต์** · หาตามลำดับใน `diagram-figures` ข้อ 5 (ระบบสี) แล้วใส่ใน `ACCENT` ของ `theme.py` · ชุดประจำบ้าน `#2A78D6` ใช้เฉพาะเมื่อลำดับนั้นหาไม่เจอเลย
-
----
-
-**สารบัญ**
-- [0 · สีมาจากเนื้องาน — ไม่หยุดถาม](#0--สีมาจากเนื้องาน--ไม่หยุดถาม)
-- [1 · ลำดับการทำงาน](#1--ลำดับการทำงาน)
-- [2 · โครงไฟล์](#2--โครงไฟล์)
-- [3 · กฎข้อที่หนึ่ง — กริดก่อน เส้นทีหลัง](#3--กฎข้อที่หนึ่ง--กริดก่อน-เส้นทีหลัง)
-- [4 · เส้นเชื่อม](#4--เส้นเชื่อม)
-- [5 · ป้ายบนเส้น — สองบทบาทเท่านั้น](#5--ป้ายบนเส้น--สองบทบาทเท่านั้น)
-- [6 · โซน](#6--โซน)
-- [7 · ไอคอนและโลโก้](#7--ไอคอนและโลโก้)
-- [8 · เรนเดอร์](#8--เรนเดอร์)
-- [9 · วงจรตรวจงาน — ห้ามข้าม](#9--วงจรตรวจงาน--ห้ามข้าม)
-- [10 · ค่าคงที่ที่ใช้ได้จริง](#10--ค่าคงที่ที่ใช้ได้จริง)
-- [11 · แถบสัญลักษณ์](#11--แถบสัญลักษณ์)
-- [ตัวย่อ](#ตัวย่อ)
-
-## 0 · สีมาจากเนื้องาน — ไม่หยุดถาม
-
-**ถ้าเอกสารต้นทางประกาศ `doc-theme` ไว้แล้ว ให้ใช้ค่านั้นและอย่าถามซ้ำ**
-(ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร") ถ้ายังไม่มี ให้ทำตามข้างล่างนี้แล้วเขียนกลับลง `doc-theme`
-
-**ไม่มีสีแบรนด์ → ทำตามลำดับใน `diagram-figures` ข้อ 5:** ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` ไว้ในรายงาน แล้วทำต่อ ไม่หยุดถาม
-เสนอโทนจากเนื้องานตามตารางใน [colour-by-domain.md](colour-by-domain.md) ไว้ในรายงานให้เลือกทีหลัง
-
-ใส่**สีหลักสีเดียว**ที่ `ACCENT` ใน `assets/svg-engine/theme.py` แล้วเฉดอ่อนและเข้มทั้งหมด
-จะคำนวณจากสีนั้นด้วย `tint()` โค้ดวาดรูปจึงไม่มีสีอื่นฝังอยู่
-
-สีเดียวที่ไม่ผูกกับ `ACCENT` คือ `EXCEPT_HUE` สำหรับป้าย "ข้อยกเว้น" ซึ่งต้องต่างจากสีหลักเสมอ
-ถ้าสีหลักเป็นส้มอยู่แล้ว ให้เปลี่ยน `EXCEPT_HUE` เป็นสีอื่นที่ตัดกัน
+> **Main colour = the project's main colour.** Find it in the order given in `diagram-figures` section 5 (colour system), then put it in `ACCENT` in `theme.py`. Use the house colour `#2A78D6` only when that order finds nothing at all.
 
 ---
 
-## 1 · ลำดับการทำงาน
+**Contents**
+- [0 · Colour comes from the work — do not stop to ask](#0--colour-comes-from-the-work--do-not-stop-to-ask)
+- [1 · Order of work](#1--order-of-work)
+- [2 · File layout](#2--file-layout)
+- [3 · Rule 1 — grid first, lines after](#3--rule-1--grid-first-lines-after)
+- [4 · Connector lines](#4--connector-lines)
+- [5 · Labels on lines — only two roles](#5--labels-on-lines--only-two-roles)
+- [6 · Zones](#6--zones)
+- [7 · Icons and logos](#7--icons-and-logos)
+- [8 · Rendering](#8--rendering)
+- [9 · Check loop — do not skip](#9--check-loop--do-not-skip)
+- [10 · Constants that work](#10--constants-that-work)
+- [11 · Legend bar](#11--legend-bar)
+- [Abbreviations](#abbreviations)
 
-1. อ่านไดอะแกรมที่มีอยู่ทั้งหมดก่อน แล้วถามว่า**รูปนี้ตอบคำถามอะไร** — 1 รูปตอบ 1 คำถาม
-2. เลือกสีตามข้อ 0 (ไม่มีสี → ค่าประจำบ้าน + `(รอยืนยัน)`)
-3. **วางตำแหน่งทุกกล่องลงกริดก่อนลากเส้น** — ข้อนี้สำคัญที่สุด ดูข้อ 3
-4. แก้ `theme.py` และ `ref.py` ให้เสร็จก่อน แล้วค่อยเขียนไฟล์รูป
-5. **เรนเดอร์แล้วเปิดไฟล์ภาพดูจริง** ไม่ใช่แค่เช็กว่าสคริปต์รันผ่าน
-6. เมื่อได้รูปที่สะอาดแล้ว จึงเขียนลงโฟลเดอร์ปลายทาง ส่วนรูปเก่าให้ย้ายไป `_to_delete/`
+## 0 · Colour comes from the work — do not stop to ask
+
+**If the source document already declares a `doc-theme`, use that value and do not ask again.**
+(See `polished-document-style`, section "Document theme".) If there is none yet, follow the steps below, then write the result back into `doc-theme`.
+
+**No brand colour → follow the order in `diagram-figures` section 5:** use the house value `#2A78D6`, write `(รอยืนยัน)` (awaiting confirmation) in the report, and carry on without stopping to ask.
+Put a tone suggested from the content, using the table in [colour-by-domain.md](colour-by-domain.md), in the report so the user can choose later.
+
+Put **one main colour** in `ACCENT` in `assets/svg-engine/theme.py`. All light and dark shades
+are computed from it with `tint()`, so the drawing code has no other colour hard-coded.
+
+The only colour not tied to `ACCENT` is `EXCEPT_HUE`, for the "exception" label. It must always differ from the main colour.
+If the main colour is already orange, change `EXCEPT_HUE` to another contrasting colour.
 
 ---
 
-## 2 · โครงไฟล์
+## 1 · Order of work
+
+1. Read all existing diagrams first, then ask **what question this figure answers**. 1 figure answers 1 question.
+2. Pick the colour by section 0 (no colour → house value + `(รอยืนยัน)`).
+3. **Place every box on the grid before drawing any line.** This is the most important step. See section 3.
+4. Finish `theme.py` and `ref.py` first, then write the figure file.
+5. **Render, then open the image file and look at it.** Checking that the script ran without errors is not enough.
+6. Once the figure is clean, write it to the target folder. Move the old figure to `_to_delete/`.
+
+---
+
+## 2 · File layout
 
 ```
 architecture/
-  01-system-context.png      ← ผลลัพธ์ เลขนำหน้าเรียงตามลำดับการอ่าน
+  01-system-context.png      ← output; the number prefix follows reading order
   _src/
-    theme.py                 ← สีทั้งหมด — แก้ที่นี่ที่เดียว
-    ref.py                   ← ภาษาภาพ: โซน หน่วย เส้น ป้าย แถบสัญลักษณ์
-    render.py                ← SVG → PNG ด้วย Playwright ที่ 2 เท่า
-    d01.py … dNN.py          ← หนึ่งไฟล์ต่อหนึ่งรูป มีแต่การจัดวาง
-    logos/                   ← โลโก้ผลิตภัณฑ์ + colors.json
+    theme.py                 ← all colours — edit here only
+    ref.py                   ← visual language: zones, units, lines, labels, legend bar
+    render.py                ← SVG → PNG with Playwright at 2x
+    d01.py … dNN.py          ← one file per figure; layout only
+    logos/                   ← product logos + colors.json
 ```
 
-ให้คัดลอกทั้งโฟลเดอร์ [`assets/svg-engine/`](../assets/svg-engine/) ไปเป็น `_src/` แล้วเริ่มงาน — [`d01.py`](../assets/svg-engine/d01.py) เป็นรูปตัวอย่างที่เรนเดอร์ได้จริง
+Copy the whole folder [`assets/svg-engine/`](../assets/svg-engine/) to `_src/` and start from there. [`d01.py`](../assets/svg-engine/d01.py) is a sample figure that really renders.
 
 ---
 
-## 3 · กฎข้อที่หนึ่ง — กริดก่อน เส้นทีหลัง
+## 3 · Rule 1 — grid first, lines after
 
-เส้นเฉียงทำให้อ่านยาก แต่การดัดเส้นทีหลังไม่ช่วย **ต้องแก้ที่ตำแหน่ง**
+Diagonal lines are hard to read, and bending the lines afterwards does not help. **Fix the positions.**
 
 ```python
-CA,CB,CC,CD,CE,CF = 178,452,678,896,1080,1312   # คอลัมน์
-R1,R2,R3          = 288,458,624                  # แถว ห่างกัน ~170
+CA,CB,CC,CD,CE,CF = 178,452,678,896,1080,1312   # columns
+R1,R2,R3          = 288,458,624                  # rows, spaced ~170 apart
 ```
 
-ทุกกล่องอยู่บนจุดตัดของคอลัมน์กับแถว และไม่มีตัวไหนหลุดกริด
-เมื่อทุกจุดอยู่บนเส้นเดียวกัน เส้นเชื่อมก็ตั้งฉากได้เองโดยไม่ต้องดัด
+Every box sits on an intersection of a column and a row, and none strays off the grid.
+When all points sit on the same lines, the connectors are right-angled by themselves with no bending.
 
-### กฎจุดกึ่งกลาง
+### Midpoint rule
 
-ตัวที่รับหลายทางต้องอยู่**กึ่งกลางของทางเหล่านั้น** ไม่ใช่เกาะแถวใดแถวหนึ่ง
-และถ้าส่งต่อหลายทาง ก็ต้องอยู่กึ่งกลางของทางที่ส่งออกด้วย
+A node that receives from several paths must sit **midway between those paths**, not stick to one row.
+If it also sends on to several paths, it must sit midway between the outgoing paths too.
 
-ให้ใช้**จุดรวมเดียวและจุดแยกเดียว** เพื่อให้เส้นสมมาตร
+Use **one merge point and one split point** so the lines are symmetric.
 
 ```python
-RM = (R1+R2)//2      # Nginx อยู่กึ่งกลางของสองแถวที่รับเข้ามา
+RM = (R1+R2)//2      # Nginx sits midway between the two incoming rows
 J1, J2 = CB-74, CB+86
 
-flow([(CA+34,R1),(J1,R1),(J1,RM),(CB-30,RM)])   # เข้าจากบน
-flow([(CA+34,R2),(J1,R2),(J1,RM),(CB-30,RM)])   # เข้าจากล่าง
-flow([(CB+30,RM),(J2,RM),(J2,R1),(CC-30,R1)])   # ออกขึ้นบน
-flow([(CB+30,RM),(J2,RM),(J2,R2),(CC-30,R2)])   # ออกลงล่าง
+flow([(CA+34,R1),(J1,R1),(J1,RM),(CB-30,RM)])   # enters from above
+flow([(CA+34,R2),(J1,R2),(J1,RM),(CB-30,RM)])   # enters from below
+flow([(CB+30,RM),(J2,RM),(J2,R1),(CC-30,R1)])   # leaves going up
+flow([(CB+30,RM),(J2,RM),(J2,R2),(CC-30,R2)])   # leaves going down
 ```
 
-### ช่องเดินสาย
+### Wiring channels
 
-เส้นที่ต้องข้ามกริด **ห้ามวิ่งทับแถวที่มีกล่อง** ให้จองช่องว่างไว้เฉพาะ
+A line that must cross the grid **must not run over a row that holds boxes.** Reserve separate channels for it.
 
 ```python
-TB = 238        # ช่องบน — ห่างจากขอบโซนอย่างน้อย 36
-MB = R3-48      # ช่องกลาง — ระหว่างแถว
+TB = 238        # top channel — at least 36 from the zone edge
+MB = R3-48      # middle channel — between rows
 ```
 
 ---
 
-## 4 · เส้นเชื่อม
+## 4 · Connector lines
 
-เส้นตั้งฉากทั้งหมดและมุมโค้งรัศมี 14 — จุดนี้ทำให้ดูประณีตขึ้นมากโดยไม่เสียความชัดเจน
-`ref.flow(pts, dashed=False, arrow=True)` คำนวณมุมโค้งให้เอง
+All lines are right-angled, with corners rounded at radius 14. This makes the figure look much more refined without losing clarity.
+`ref.flow(pts, dashed=False, arrow=True)` computes the rounded corners itself.
 
-**หัวลูกศรต้องจบที่ขอบไอคอน ไม่ใช่ที่ป้ายชื่อ** — เช่น `CD-30` เมื่อไอคอนกว้าง 46
+**The arrowhead must end at the icon edge, not at the name label.** For example `CD-30` when the icon is 46 wide.
 
 ---
 
-## 5 · ป้ายบนเส้น — สองบทบาทเท่านั้น
+## 5 · Labels on lines — only two roles
 
-| บทบาท | สี | ใช้กับ |
+| Role | Colour | Use for |
 |---|---|---|
-| ปกติ | เฉดอ่อนของ `ACCENT` | สิ่งที่ไหลผ่านเส้นตามปกติ |
-| ข้อยกเว้น | `EXCEPT_HUE` | ทางที่ไม่ผ่านประตูหน้า · กรณีพิเศษ |
+| Normal | light shade of `ACCENT` | what normally flows along the line |
+| Exception | `EXCEPT_HUE` | a path that does not pass the front gate · special cases |
 
-**ข้อยกเว้นมีได้ป้ายเดียวต่อรูป** ถ้ามีตั้งแต่ 2 ป้าย แปลว่าไม่มีป้ายไหนเด่นจริง
+**A figure may have only one exception label.** If there are 2 or more, no label really stands out.
 
-ป้ายบอกว่า**อะไรไหลผ่าน** เช่น `SQL` `/api/` `DICOM 11112` ไม่ใช่ `เชื่อมต่อ`
+A label says **what flows through**, such as `SQL` `/api/` `DICOM 11112`, not `เชื่อมต่อ` (connect).
 
 ---
 
-## 6 · โซน
+## 6 · Zones
 
-โซนเป็นกรอบพื้นสีอ่อนมาก ส่วนป้ายชื่อเป็นแคปซูลพื้นขาวคร่อมเส้นขอบและมีจุดสีนำหน้า
+A zone is a frame with a very light fill. Its name label is a white capsule that straddles the border and has a coloured dot in front.
 
 ```python
 zone(x, y, w, h, "ห้อง Server ของโรงพยาบาล", "physical")
 ```
 
-| ชนิด | เส้น | ความหมาย |
+| Type | Line | Meaning |
 |---|---|---|
-| `physical` | ทึบ | ขอบเขตของจริงทางกายภาพ — ห้อง อาคาร เครื่อง |
-| `logical` | ประ | ขอบเขตเชิงตรรกะ — Docker Compose · namespace · VPC |
-| `outside` | ประ | นอกระบบที่เราดูแล |
+| `physical` | solid | A real physical boundary: room, building, machine |
+| `logical` | dashed | A logical boundary: Docker Compose · namespace · VPC |
+| `outside` | dashed | Outside the system we look after |
 
-ผู้อ่านจะเห็นทันทีว่าอันไหนมีอยู่จริง และซ้อนโซนได้ไม่เกิน 3 ชั้น
+The reader sees at once which one physically exists. Nest zones no more than 3 levels deep.
 
 ---
 
-## 7 · ไอคอนและโลโก้
+## 7 · Icons and logos
 
-ไอคอน**ลอยบนพื้น ไม่มีกรอบ ไม่มีไทล์** ส่วนชื่อและคำอธิบายอยู่ใต้ภาพ
+Icons **float on the background with no frame and no tile.** The name and description sit below the image.
 
 ```python
 unit(cx, cy, "Nginx", "ประตูเดียวที่เข้าระบบได้", slug="nginx")
-#  มี logos/<slug>.svg → ใช้โลโก้จริง เติมสีจาก colors.json
-#  ไม่มี              → ใช้สัญลักษณ์เส้นที่ออกแบบเอง
+#  logos/<slug>.svg exists → use the real logo, filled with the colour from colors.json
+#  does not exist         → use a line symbol of our own design
 ```
 
-ค่าที่ใช้ได้จริง: ไอคอน 46 · ชื่อ 11.5 ตัวหนา ห่างจากกึ่งกลาง `size/2+20` · คำอธิบาย 10 ห่าง `size/2+35`
+Values that work: icon 46 · name 11.5 bold, placed `size/2+20` from the centre · description 10, placed `size/2+35` from the centre.
 
-โลโก้เอามาจากคลังไอคอนของ skill นี้ ([icons.md](icons.md)) ให้รัน `python assets/find-icon.py --group brands <ชื่อ>` จากโฟลเดอร์ `diagram-figures/` แล้ว `--copy` ไปไว้ใน `_src/logos/`
-Simple Icons ให้ SVG สีเดียว `viewBox 0 0 24 24` และมาพร้อม `colors.json` ที่เก็บรหัสสีทางการของแต่ละแบรนด์
+Take logos from this skill's icon library ([icons.md](icons.md)). Run `python assets/find-icon.py --group brands <name>` from the `diagram-figures/` folder, then `--copy` the result into `_src/logos/`.
+Simple Icons gives single-colour SVG with `viewBox 0 0 24 24` and comes with `colors.json`, which holds each brand's official colour code.
 
-### เรื่องเครื่องหมายการค้า — ห้ามข้าม
+### Trademarks — do not skip
 
-- โลโก้เป็นของเจ้าของ ใช้เพื่ออ้างถึงตัวผลิตภัณฑ์ในผังได้
-  แต่**ห้ามดัดแปลงรูปทรง ห้ามยืดบีบ และห้ามทำให้ดูเหมือนเจ้าของมารับรอง**
-- ถ้าตัวไหนไม่มีไฟล์โลโก้ ให้ใช้สัญลักษณ์แทน แล้ว**ระบุชื่อตัวนั้นไว้ในหมายเหตุท้ายรูป**
-- อย่าไปดาวน์โหลดโลโก้ใหม่มาเอง ให้ใช้จากชุดที่มีอยู่ หรือให้ผู้ใช้หาจากหน้า brand ของโครงการนั้น
+- A logo belongs to its owner. You may use it to refer to the product itself in the diagram,
+  but **do not alter its shape, do not stretch or squash it, and do not make it look as if the owner endorses the figure.**
+- If a product has no logo file, use a symbol instead, and **name that product in the note under the figure.**
+- Do not download new logos on your own. Use the set that exists, or have the user get them from that project's brand page.
 
 ---
 
-## 8 · เรนเดอร์
+## 8 · Rendering
 
 ```bash
 pip install playwright && playwright install chromium
 python render.py d01.svg ../01-architecture.png 1400 860
 ```
 
-เรนเดอร์ที่ 2 เท่าเสมอ เพราะ 1 เท่าได้ภาพเบลอเมื่อขยายในสไลด์
+Always render at 2x, because 1x gives a blurry image when enlarged on a slide.
 
-ภาษาไทยต้องมีฟอนต์ไทยในเครื่องที่เรนเดอร์ แล้วประกาศไว้ใน `font-family` ของ `<svg>`
-**อย่าใช้ Python Imaging Library (PIL) วาดข้อความไทยปนอังกฤษ** เพราะจะได้กล่องสี่เหลี่ยมแทนตัวอักษร
-
----
-
-## 9 · วงจรตรวจงาน — ห้ามข้าม
-
-เรนเดอร์ → เปิดไฟล์ภาพดูจริง → แก้ → เรนเดอร์ใหม่ จนกว่าจะสะอาด
-**6 ข้อนี้เจอซ้ำทุกครั้ง ให้ตรวจทุกรอบ:**
-
-1. **ป้ายบนเส้นทับไอคอนหรือชื่อ** — ย้ายไปกึ่งกลางช่วงที่ยาวที่สุด หรือย้ายไปบนขาตั้ง
-2. **เส้นที่ออกจากไอคอนตัดคำอธิบายของตัวเอง** — เริ่มเส้นที่ `cy+58` ไม่ใช่ `cy+32`
-3. **ขอบโซนตัดคำอธิบายแถวล่างสุด** — ขอบล่างโซนต้อง ≥ `R_ล่างสุด + 58 + 24`
-4. **ข้อความกำกับโซนนั่งทับเส้นขอบ** — รวมกับชื่อในแคปซูลเดียว
-5. **หัวลูกศรไปจบที่ป้ายชื่อ ไม่ใช่ที่ไอคอน** — ให้จบที่ขอบไอคอน
-6. **ข้อความล้นกรอบ** — ไทย 11.5px ≈ 6.0 px/ตัว · หัวเรื่อง 15px ≈ 7.5 px/ตัว
-   ถ้าที่ไม่พอ ให้ตัดคำ **อย่าลดขนาดตัวอักษร**
+Thai text needs a Thai font on the machine that renders, declared in the `font-family` of `<svg>`.
+**Do not use Python Imaging Library (PIL) to draw mixed Thai and English text**, because it produces square boxes in place of letters.
 
 ---
 
-## 10 · ค่าคงที่ที่ใช้ได้จริง
+## 9 · Check loop — do not skip
+
+Render → open the image and look → fix → render again, until it is clean.
+**These 6 problems come up every time. Check them in every round:**
+
+1. **A label on a line covers an icon or a name.** Move it to the midpoint of the longest segment, or onto the stub.
+2. **A line leaving an icon cuts through its own description.** Start the line at `cy+58`, not `cy+32`.
+3. **A zone edge cuts the description of the bottom row.** The zone's bottom edge must be ≥ `R_bottom + 58 + 24`.
+4. **Zone caption text sits on the border.** Merge it with the name into one capsule.
+5. **An arrowhead ends at the name label, not the icon.** Make it end at the icon edge.
+6. **Text overflows its frame.** Thai 11.5px ≈ 6.0 px/char · heading 15px ≈ 7.5 px/char.
+   If space is short, cut words. **Do not shrink the font.**
+
+---
+
+## 10 · Constants that work
 
 ```
-ความกว้าง 1400 · ขอบ 56
-หัวเรื่องกลางหน้า 22 · คำอธิบายใต้หัว 12.5
-ชื่อหน่วย 11.5 ตัวหนา · คำอธิบาย 10 · ป้ายบนเส้น 10.5
-เส้นเชื่อม 1.6 · ขอบโซน 1.4 · รัศมีมุมโค้ง 14 · ป้ายสูง 21
+width 1400 · margin 56
+centred title 22 · subtitle under title 12.5
+unit name 11.5 bold · description 10 · label on line 10.5
+connector 1.6 · zone border 1.4 · corner radius 14 · label height 21
 ```
 
 ---
 
-## 11 · แถบสัญลักษณ์
+## 11 · Legend bar
 
-ทุกรูปปิดท้ายด้วยแถบเดียวที่บอกว่ากรอบแต่ละแบบคืออะไร และป้าย 2 สีต่างกันตรงไหน
-แล้วต่อด้วยหมายเหตุ 2–4 บรรทัด ซึ่งรวมบรรทัดเรื่องเครื่องหมายการค้า และการอ้างถึงรูปอื่นที่เกี่ยวข้อง
+Every figure ends with a single bar that says what each kind of frame means and where the 2 label colours differ.
+After it come 2–4 lines of notes. These include the trademark line and references to other related figures.
 
 ---
 
-## ตัวย่อ
+## Abbreviations
 
 - **SVG** — Scalable Vector Graphics
 - **PNG** — Portable Network Graphics
@@ -1022,12 +574,12 @@ python render.py d01.svg ../01-architecture.png 1400 860
 
 ## reference: icons.md
 
-# คลังไอคอน — ใช้ร่วมกันทั้งโครง HTML และ SVG/Python engine
+# Icon library — shared by the HTML skeleton and the SVG/Python engine
 
-**ไอคอนมีให้แล้ว 205 ตัวใน `assets/icons/`** ไม่ต้องติดตั้งอะไรเพิ่ม —
-เป็น PNG พื้นโปร่ง 160×160 ซึ่งเป็นไอคอนทางการของผู้ให้บริการและเครื่องมือ แบ่งเป็น 9 กลุ่ม
+**205 icons are already provided in `assets/icons/`.** Nothing more to install.
+They are PNG files with a transparent background at 160×160, official icons of providers and tools, split into 9 groups.
 
-| โฟลเดอร์ | มีอะไร |
+| Folder | Contents |
 |---|---|
 | `icons/aws/` | 39 — EC2 · RDS · S3 · Lambda · ELB · Route 53 · CloudFront · SQS · SNS · IAM · CloudWatch … |
 | `icons/azure/` | 24 — VM · App Service · AKS · Cosmos DB · Blob Storage · Key Vault … |
@@ -1037,196 +589,198 @@ python render.py d01.svg ../01-architecture.png 1400 860
 | `icons/queue/` | 6 — RabbitMQ · Kafka · Celery · NATS · ActiveMQ · EMQX |
 | `icons/infra/` | 26 — Nginx · Docker · HAProxy · Traefik · Istio · firewall · router · Windows · Linux … |
 | `icons/ops/` | 19 — Prometheus · Grafana · Jenkins · GitLab CI · GitHub Actions · Terraform · Vault … |
-| `icons/app/` | 37 — Angular · React · .NET · Spring · Python · LINE · Slack · Stripe · ผู้ใช้ … |
+| `icons/app/` | 37 — Angular · React · .NET · Spring · Python · LINE · Slack · Stripe · user … |
 
-รายชื่อทั้งหมดอยู่ใน [`assets/icons/INDEX.md`](../assets/icons/INDEX.md) และเปิด [`assets/icons/contact-sheet.html`](../assets/icons/contact-sheet.html) เพื่อดูรูปทั้งหมดในหน้าเดียว
+The full list is in [`assets/icons/INDEX.md`](../assets/icons/INDEX.md). Open [`assets/icons/contact-sheet.html`](../assets/icons/contact-sheet.html) to see every icon on one page.
 
-**ถ้าต้องการตัวที่ไม่มีใน 205 ตัวนี้** ให้ค้นในคลังเต็ม `assets/tech-icons.zip` (8,602 ไอคอน · 5 กลุ่ม) ด้วย [`find-icon.py`](../assets/find-icon.py) ซึ่งไม่ต้องติดตั้งอะไรและไม่ต้องแตกทั้งก้อน
+**If you need an icon that is not among these 205**, search the full library `assets/tech-icons.zip` (8,602 icons · 5 groups) with [`find-icon.py`](../assets/find-icon.py). It needs no installation and does not need the archive unpacked.
 
-| กลุ่ม | มีอะไร |
+| Group | Contents |
 |---|---|
 | `cloud/` | 1,986 PNG · AWS · Azure · Google Cloud · IBM · Oracle · Alibaba · DigitalOcean · Firebase … |
-| `platform/` | 471 PNG · ฐานข้อมูล · คิว · CI/CD · เฝ้าระวัง · Kubernetes · ภาษาโปรแกรม · GIS |
-| `brands/` | 3,461 SVG สีเดียว · โลโก้แบรนด์ + รหัสสีทางการใน `colors.json` |
-| `devtools/` | 572 SVG มีสี · โลโก้เครื่องมือนักพัฒนา |
-| `ui/` | 2,112 SVG ไอคอนเส้นทั่วไป (Lucide) ไม่ใช่โลโก้ |
+| `platform/` | 471 PNG · databases · queues · CI/CD · monitoring · Kubernetes · programming languages · GIS |
+| `brands/` | 3,461 single-colour SVG · brand logos + official colour codes in `colors.json` |
+| `devtools/` | 572 coloured SVG · developer tool logos |
+| `ui/` | 2,112 SVG general line icons (Lucide), not logos |
 
 ```bash
-python assets/find-icon.py kafka redis                       # ค้นชื่อ
-python assets/find-icon.py --group ui user                    # ค้นเฉพาะกลุ่ม
+python assets/find-icon.py kafka redis                       # search by name
+python assets/find-icon.py --group ui user                    # search one group only
 python assets/find-icon.py --copy cloud/aws/compute/ec2.png brands/docker.svg --to docs/figures/icons
-python assets/find-icon.py --colors docker                    # สีทางการของโลโก้
+python assets/find-icon.py --colors docker                    # official logo colours
 ```
 
-ให้ดึงมาเฉพาะตัวที่ใช้แล้ววางไว้ข้างไฟล์รูป ห้ามแตกทั้งคลังลงโปรเจกต์ สัญญาอนุญาตของคลังคือ MIT · CC0 · ISC (ดู `--groups`) แต่โลโก้ยังเป็นเครื่องหมายการค้าของเจ้าของ
+Pull out only the icons you use and put them next to the figure file. Do not unpack the whole library into the project. The library's licences are MIT · CC0 · ISC (see `--groups`), but logos remain trademarks of their owners.
 
-> **เรื่องสัญญาอนุญาต** — ชุดไอคอนสถาปัตยกรรมของ AWS · Azure · Google Cloud
-> เผยแพร่มาเพื่อใช้วาดผังสถาปัตยกรรมโดยเฉพาะ จึงใช้ในเอกสารข้อเสนอได้
-> สิ่งที่ทำไม่ได้คือใช้โลโก้ในลักษณะที่ทำให้เข้าใจว่าผู้ให้บริการรับรองหรือร่วมงานด้วย
-> และใช้เป็นส่วนหนึ่งของแบรนด์ตัวเอง ส่วนถ้าไม่มีไอคอนทางการของเครื่องมือนั้น ให้วาดไอคอนเส้นเองตาม [SKILL.md](../SKILL.md) ข้อ 6
+> **About licences** — The architecture icon sets of AWS · Azure · Google Cloud
+> are published specifically for drawing architecture diagrams, so they may be used in proposal documents.
+> What you cannot do is use a logo in a way that suggests the provider endorses or partners with you,
+> or use it as part of your own brand. If a tool has no official icon, draw a line icon yourself following [SKILL.md](../SKILL.md) section 6.
 
 
 ## reference: layout-cloud.md
 
-# โครง `figure-cloud.html` — ผังคลาวด์พร้อมโลโก้ผู้ให้บริการ
+# Skeleton `figure-cloud.html` — cloud diagram with provider logos
 
-โครงนี้ตอบคำถาม "ใช้บริการอะไรของคลาวด์บ้าง" ไฟล์โครงอยู่ที่ [`assets/figure-cloud.html`](../assets/figure-cloud.html)
+This skeleton answers "which cloud services do we use?" The skeleton file is at [`assets/figure-cloud.html`](../assets/figure-cloud.html).
 
-ใช้เมื่อผู้อ่านคาดหวังจะเห็นไอคอน Amazon Web Services (AWS) · Azure · Google Cloud ·
-Kubernetes ของจริง แบบผังอ้างอิงที่ผู้ให้บริการเผยแพร่ ไอคอนหาได้จากคลังตาม [icons.md](icons.md)
+Use it when the reader expects to see real Amazon Web Services (AWS) · Azure · Google Cloud ·
+Kubernetes icons, like the reference diagrams the providers publish. Find the icons in the library, per [icons.md](icons.md).
 
 ```html
 <div class="unit"><img src="icons/aws/ec2.png" alt="">
   <div class="name">Web Server</div><div class="desc">AZ-1</div></div>
 ```
 
-**กติกาเฉพาะโครงนี้:**
+**Rules specific to this skeleton:**
 
-- **สายที่ข้ามขอบเขต ให้ออกจากขอบของกล่องขอบเขต** (`n-region`) ไม่ใช่จากกล่องข้างใน
-  — เพราะถ้าต่อจากกล่องข้างใน เส้นจะพาดทะแยงทับทุกอย่างที่ขวางทาง
-- **เส้นประ = ขอบเขตที่ผู้ให้บริการจัดการให้** ส่วนเส้นทึบสีส้ม = เครื่องที่เราดูแลเอง
-  และให้ใส่ความหมายไว้ในคำอธิบายสัญลักษณ์เสมอ
-- ไอคอนแสดงเปล่า ๆ ไม่ต้องมีกรอบ เพราะโลโก้มีสีและรูปทรงของตัวเองอยู่แล้ว
-- ชื่อบริการใช้ชื่อทางการ (`Amazon RDS`) ส่วนคำอธิบายใต้ชื่อเป็นภาษาไทยได้
+- **A line that crosses a boundary leaves from the edge of the boundary box** (`n-region`), not from a box inside it,
+  because a line that starts from an inner box cuts diagonally across everything in the way.
+- **Dashed line = a boundary the provider manages for you.** A solid orange line = a machine we look after ourselves.
+  Always put these meanings in the legend.
+- Show icons bare, with no frame, because a logo already has its own colour and shape.
+- Use the official service name (`Amazon RDS`). The description under the name may be in Thai.
 
 
 ## reference: layout-context.md
 
-# โครง `figure-context.html` — ระบบกับโลกภายนอก
+# Skeleton `figure-context.html` — the system and the outside world
 
-ตอบคำถาม "ระบบนี้คุยกับใครและกับอะไรข้างนอกบ้าง" (C4 ระดับ 1) ไฟล์โครงอยู่ที่ [`assets/figure-context.html`](../assets/figure-context.html)
+This skeleton answers "who and what outside does this system talk to?" (C4 level 1). The skeleton file is at [`assets/figure-context.html`](../assets/figure-context.html).
 
 ```
-┌─ หัวรูป ────────────────────────────────────────────────────────┐
-│  ผู้ใช้งาน (แถบนอน)   →   ระบบที่อธิบาย (การ์ดใหญ่)   ←   ระบบภายนอก  │
-│  ─ เจ้าหน้าที่           ─ ชื่อ + คำขยาย                ─ external system │
-│  ─ แพทย์                ─ หน้าที่ 3-6 ข้อ               ─ ชื่อ + สถานะ    │
-│  ─ ผู้ดูแล               ─ ป้ายข้อจำกัด                                │
-├─ คำอธิบายสัญลักษณ์ ─────────────────────────────────────────────┤
-│  เชิงอรรถ — ความหมายเส้นประ · ตัวย่อทั้งหมด · รูปถัดไป              │
+┌─ figure header ─────────────────────────────────────────────────┐
+│  users (horizontal strip) → described system (large card) ← external systems │
+│  ─ staff                    ─ name + subtitle              ─ external system │
+│  ─ doctor                   ─ 3-6 functions                ─ name + status   │
+│  ─ admin                    ─ limitation tag                                 │
+├─ legend ────────────────────────────────────────────────────────┤
+│  footnote — meaning of dashed line · all abbreviations · next figure │
 └────────────────────────────────────────────────────────────────┘
 ```
 
-- **ผู้ใช้งานอยู่ซ้าย ส่วนระบบภายนอกอยู่ขวา** และไม่ปนกัน เพราะคนกับเครื่องเป็นคนละชนิด
-- **หน้าที่ในการ์ดกลางมี 3 ถึง 6 ข้อ** ถ้าเกินนี้ แปลว่ากำลังเขียน SRS ไม่ใช่วาดรูป
-- **ระบบภายนอกที่ยังไม่ได้เชื่อม** ให้ใช้เส้นประ (`planned:true`) แล้วเขียนไว้ในการ์ดว่าอยู่ในแผนเวอร์ชันไหน
-  — เพราะรูปที่วาดเฉพาะของที่มีแล้วจะถูกถามซ้ำทุกรอบว่า "แล้วเชื่อม HIS หรือยัง"
-- **มีคำอธิบายสัญลักษณ์เสมอ** เมื่อรูปทรงหรือเส้นสื่อความหมาย
-- **ตัวย่อเขียนเต็มที่เชิงอรรถ** เพราะผู้อ่านฝั่งลูกค้าไม่รู้ว่า SEG คืออะไร
+- **Users go on the left and external systems on the right**, never mixed, because people and machines are different kinds of thing.
+- **The central card lists 3 to 6 functions.** More than that means you are writing an SRS (Software Requirements Specification), not drawing a figure.
+- **An external system not yet connected** gets a dashed line (`planned:true`), and the card says which version plans it,
+  because a figure that shows only what exists gets the question "so is HIS connected yet?" every round.
+- **Always include a legend** when a shape or line carries meaning.
+- **Spell out abbreviations in the footnote**, because readers on the customer side do not know what SEG is.
 
 
 ## reference: layout-deployment.md
 
-# โครง `figure-template.html` — deployment · ข้างในเครื่อง
+# Skeleton `figure-template.html` — deployment · inside the machine
 
-ตอบคำถาม "ของจริงรันอยู่บนเครื่องอะไร มีอะไรอยู่ข้างใน" ไฟล์โครงอยู่ที่ [`assets/figure-template.html`](../assets/figure-template.html)
+This skeleton answers "what machine does the real thing run on, and what is inside?" The skeleton file is at [`assets/figure-template.html`](../assets/figure-template.html).
 
-โครงนี้มี 3 คอลัมน์ เรียงซ้ายไปขวาตามทิศที่ข้อมูลไหล:
+It has 3 columns, left to right in the direction the data flows:
 
 ```
-┌─ หัวรูป ───────────────────────────────────────────────┐
-│  ชื่อ + คำขยาย                    เลขรูป · เวอร์ชัน · เจ้าของ  │
+┌─ figure header ────────────────────────────────────────┐
+│  name + subtitle              figure number · version · owner │
 ├────────────┬──────────────────────────┬────────────────┤
-│ นอกระบบ    │  ⬅ กล่อง .focus           │ ปลายทาง        │
-│ คน อุปกรณ์  │  สิ่งที่เอกสารนี้อธิบาย       │ ข้อบังคับ       │
-│ ระบบอื่น    │  ซ้อนได้อีก 1 ชั้น          │ ของที่ไหลออก    │
+│ outside    │  ⬅ .focus box             │ destination    │
+│ people,    │  what this document       │ regulations    │
+│ devices,   │  explains                 │ outgoing items │
+│ other      │  can nest 1 more level    │                │
+│ systems    │                           │                │
 ├────────────┴──────────────────────────┴────────────────┤
-│ เชิงอรรถ — รูปอื่นที่เกี่ยวข้อง · ที่มาของไอคอน              │
+│ footnote — related figures · icon sources              │
 └────────────────────────────────────────────────────────┘
 ```
 
-**ซ้อนกล่องได้ไม่เกิน 3 ชั้น** คือ คอลัมน์ → กล่องใหญ่ → กล่องย่อย
-ถ้ามีชั้นที่ 4 แปลว่ารูปนี้ตอบ 2 คำถาม ให้แยกเป็น 2 รูป
+**Nest boxes no more than 3 levels:** column → large box → small box.
+A 4th level means the figure answers 2 questions, so split it into 2 figures.
 
-**กล่อง `.focus` มีได้กล่องเดียวต่อรูป** ถ้ามี 2 กล่อง แปลว่ายังไม่ได้ตัดสินใจว่ารูปนี้เรื่องอะไร
+**A figure may have only one `.focus` box.** With 2 boxes, you have not yet decided what the figure is about.
 
 
 ## reference: layout-flow.md
 
-# โครง `figure-flow.html` — ข้อมูลไหลผ่านอะไร ตามลำดับไหน
+# Skeleton `figure-flow.html` — what the data flows through, in what order
 
-ตอบคำถาม "ข้อความ 1 ชิ้น (คำขอ · งาน · เอกสาร) วิ่งผ่านอะไรบ้าง ตามลำดับไหน" ไฟล์โครงอยู่ที่ [`assets/figure-flow.html`](../assets/figure-flow.html) · ตัวอย่างที่เรนเดอร์แล้ว [`assets/figure-flow-example.png`](../assets/figure-flow-example.png)
+This skeleton answers "what does 1 message (request · job · document) pass through, and in what order?" The skeleton file is at [`assets/figure-flow.html`](../assets/figure-flow.html) · a rendered example is at [`assets/figure-flow-example.png`](../assets/figure-flow-example.png)
 
 ```
-┌─ หัวรูป ──────────────────────────────────── ①–⑥ ความหมายเลขลำดับ ┐
-│ ┌ผู้ใช้┐   ┌ช่องทาง┐    ┌ เครื่องที่รัน (เทา) ─────────┐   ┌ บริการภายนอก ┐ │
-│ │ คน  │①→│ เว็บ   │②→ │ ┌ ระบบ .focus (สีหลัก) ┐ │③→ │ AI · API     │ │
-│ │ คน  │①→│ LINE  │②→ │ │ ชั้น · หน้าที่         │ │   └─────────────┘ │
-│ │ คน  │ →│ หลังบ้าน│ → │ │ ชั้น · หน้าที่         │ │④→ ┌ ข้อมูล ──────┐ │
-│ └────┘   └──────┘    │ └──────────────────────┘ │   │ ไฟล์ · DB    │ │
+┌─ figure header ─────────────────────── ①–⑥ meaning of sequence numbers ┐
+│ ┌users┐   ┌channels┐    ┌ host machine (grey) ──────────┐   ┌ external services ┐ │
+│ │ person │①→│ web    │②→ │ ┌ system .focus (main colour) ┐ │③→ │ AI · API     │ │
+│ │ person │①→│ LINE   │②→ │ │ layer · function      │ │   └─────────────┘ │
+│ │ person │ →│ back office│ → │ │ layer · function      │ │④→ ┌ data ────────┐ │
+│ └────┘   └──────┘    │ └──────────────────────┘ │   │ files · DB   │ │
 │                       └─────────────────────────┘   └─────────────┘ │
-├─ เชิงอรรถ: ความหมายพื้นสีอ่อน · เส้นประ · ตัวย่อทั้งหมด ───────────────┤
+├─ footnote: meaning of light fill · dashed line · all abbreviations ────┤
 ```
 
-## สี — มาจากสีหลักของโปรเจกต์ตัวเดียว
+## Colour — from the project's single main colour
 
-- แก้ `--accent` ใน `:root` ที่เดียว แล้วเฉดเข้ม พื้นอ่อน และสีตัวหนังสือบนพื้นสีหลักคำนวณให้เอง (สีสว่างเช่นเหลือง สคริปต์จะสลับตัวหนังสือเป็นสีเข้มให้อ่านออก)
-- หาสีหลักตามลำดับใน SKILL.md ข้อ 5 · ลองสีอื่นโดยไม่แก้ไฟล์: เปิด `figure-flow.html#accent=0F8B8D`
-- **สีหลักใช้กับ 4 อย่างเท่านั้น:** ขอบกล่อง `.focus` · ป้ายชื่อระบบ · เส้นทางข้อมูลกับเลขลำดับ · ชื่อโปรเจกต์ในหัวรูป
-- โครงที่เหลือเป็นเทากลาง — กลุ่มเส้นประ กล่องเครื่องที่รัน การ์ด ส่วนไอคอนใช้ 7 สีความหมายเดิม (ข้อ 5)
+- Change `--accent` in `:root` in one place. The dark shade, light fill and the text colour on the main-colour fill are computed for you. (For a light colour such as yellow, the script switches the text to a dark colour so it stays readable.)
+- Find the main colour in the order in SKILL.md section 5 · to try another colour without editing the file, open `figure-flow.html#accent=0F8B8D`
+- **The main colour is used for only 4 things:** the border of the `.focus` box · the system name label · the data path and its sequence numbers · the project name in the figure header
+- The rest of the skeleton is neutral grey: dashed groups, host machine boxes, cards. Icons use the 7 existing meaning colours (section 5).
 
-## กติกา
+## Rules
 
-- **ทิศเดียว ซ้าย → ขวา**: ผู้ใช้ → ช่องทาง → ระบบ → ของที่ระบบเรียกใช้ ถ้ามีเส้นย้อนกลับ ให้บอกในคำอธิบายชั้น (เช่น "push คำตอบกลับ LINE") แทนการลากเส้นย้อน
-- **เลขลำดับ = เส้นทางของ 1 ข้อความ** ไม่ใช่เลขเส้น เส้นที่เกิดพร้อมกันใช้เลขเดียวกัน (สองช่องทางเข้า = ② ทั้งคู่) · เส้นทางแยกที่ไม่ได้เกิดทุกครั้ง (เช่นอ่านภาพ) ไม่ต้องมีเลข
-- **ชั้นในกล่องระบบ 5–9 ชั้น** เรียงตามลำดับที่ข้อความผ่าน · ชื่อชั้นสั้น หน้าที่ 1–2 บรรทัด ถ้าเกิน 9 ชั้น แยกเป็นรูปข้างในระบบอีกรูป
-- **ชั้นเน้น `.guard` ไม่เกิน 2 ชั้น** และเขียนความหมายไว้ที่เชิงอรรถ
-- **เส้นต่อเข้าชั้นที่ทำงานนั้นจริง** ไม่ใช่ขอบกล่องใหญ่ — เส้นวาดอยู่บนกล่อง หัวลูกศรจึงถึงชั้นข้างใน
-- **เส้นที่ใช้ช่องว่างเดียวกันต้องไม่ตัดกัน** — เลื่อนช่วงหักด้วย `mx` (เส้นที่ปลายอยู่สูงกว่าให้ `mx` น้อยกว่า) แล้วเรนเดอร์ดูทุกครั้ง
-- ป้ายบนเส้นเป็นคำสั้น 1–3 คำบอกว่าอะไรไหลผ่าน (`HTTPS` · `webhook` · `ถาม LLM`) · ต้นเส้นมีเลขลำดับ ให้ใช้ `lp:"start"` เมื่อช่วงท้ายสั้นเกิน
+- **One direction, left → right**: users → channels → system → things the system calls. If a line must go back, say so in the layer's description (for example "push the reply back to LINE") instead of drawing a return line.
+- **Sequence number = the path of 1 message**, not a line number. Lines that happen together share the same number (two incoming channels are both ②) · a branch that does not happen every time (such as reading an image) needs no number.
+- **5–9 layers in the system box**, in the order the message passes through them · short layer names, 1–2 lines for each function. If there are more than 9 layers, split into a separate figure of the inside of the system.
+- **At most 2 emphasised `.guard` layers**, and explain what they mean in the footnote.
+- **Connect a line to the layer that really does the work**, not the edge of the big box. The lines are drawn above the boxes, so the arrowhead reaches the inner layer.
+- **Lines that share the same gap must not cross.** Shift the bend with `mx` (a line whose end sits higher gets a smaller `mx`), and render to check every time.
+- A label on a line is 1–3 short words saying what flows through (`HTTPS` · `webhook` · `ถาม LLM`) · if the start of the line carries a sequence number, use `lp:"start"` when the final segment is too short
 
 
 ## reference: pitfalls.md
 
-# กับดักที่เจอจริง — โครง HTML
+# Pitfalls found in practice — HTML skeletons
 
-อาการที่เจอซ้ำเมื่อทำรูปด้วยโครงใน `assets/` พร้อมสาเหตุและทางแก้ ส่วนกับดักของ SVG/Python engine อยู่ใน [engine-svg-python.md](engine-svg-python.md) ข้อ 9
+Symptoms that come up again and again when making figures with the skeletons in `assets/`, with their causes and fixes. Pitfalls of the SVG/Python engine are in [engine-svg-python.md](engine-svg-python.md) section 9.
 
-| อาการ | สาเหตุ · ทางแก้ |
+| Symptom | Cause · fix |
 |---|---|
-| หัวลูกศรหายทั้งรูป | สคริปต์ลบ `path` ทุกตัวก่อนวาดใหม่ รวมถึงสามเหลี่ยมหัวลูกศรที่อยู่ใน `<defs>` — ลบเฉพาะ `path.wire` (โครงแก้ไว้แล้ว) |
-| เส้นลากไปผิดกล่อง | `id` ไปติดกล่องอื่นที่หน้าตาเหมือนกัน — เปิด console ดู `wire: ไม่พบ id` และตรวจว่า `id` ไม่ซ้ำ |
-| เส้นจ่อกลางกล่องสูง แล้วพาดทับของข้างใน | ใส่ `tp` / `fp` ให้เส้นเข้าใกล้ขอบบน |
-| สระไทยหาย | เครื่องไม่มีฟอนต์ไทยในรายการ — ติดตั้ง Noto Sans Thai หรือเพิ่มฟอนต์ที่มีเข้าไปในรายการ |
-| ภาพเบลอในสไลด์ | เรนเดอร์ด้วยตัวคูณ 1 |
-| รูปมีขอบขาวเยอะ | ถ่ายทั้งหน้าแทนที่จะถ่ายเฉพาะ `.sheet` |
-| แก้ข้อความแล้วเส้นหลุด | เขียนพิกัดเส้นตายตัวแทนที่จะใช้ `WIRES` |
-| ป้ายบนเส้นทับกล่อง หรือบังเส้นจนมองไม่เห็น | ป้ายกว้างกว่าช่องว่างระหว่างคอลัมน์ — เพิ่ม `gap` หรือตัดคำในป้ายให้สั้นลง |
-| ชื่อกล่องภาษาไทยตกบรรทัดสอง | คอลัมน์แคบไป — เพิ่มความกว้างคอลัมน์นั้น อย่าลดขนาดตัวอักษร |
-| ใช้ไอคอนเป็นไฟล์ภาพแล้วเส้นลากผิดตำแหน่งทั้งรูป | สคริปต์คำนวณก่อนรูปโหลดเสร็จ — เรียก `draw()` ใน `window.onload` ไม่ใช่ตอนอ่านสคริปต์ (`figure-cloud.html` ทำไว้แล้ว) |
-| เส้นหักมุมใน `figure-flow.html` ตัดกันเอง | หลายเส้นใช้ช่องว่างเดียวกัน — ตั้ง `mx` ให้เส้นที่ปลายอยู่สูงกว่ามีค่าน้อยกว่า แล้วเรนเดอร์ดูใหม่ |
-| ลูกศรหายเข้าไปใต้กล่องระบบ | ชั้น `.wires` ไม่มี `z-index` — โครง flow ตั้งไว้แล้ว ถ้าก๊อปไปใช้โครงอื่นต้องตั้งตาม |
-| รูปออกมาเป็นสีของรูปตัวอย่าง | ลืมแก้ `--accent` — หาสีหลักของโปรเจกต์ตาม SKILL.md ข้อ 5 ก่อนเรนเดอร์ |
-| เส้นพาดทะแยงทับทั้งรูป | ต่อเส้นจากกล่องข้างในกล่องขอบเขต — ต่อจากขอบของกล่องขอบเขตแทน |
+| Arrowheads vanish from the whole figure | The script deletes every `path` before redrawing, including the arrowhead triangle inside `<defs>`. Delete only `path.wire` (the skeletons already do this) |
+| A line goes to the wrong box | The `id` is attached to another box that looks the same. Open the console, look for `wire: ไม่พบ id`, and check that the `id` is unique |
+| A line aims at the middle of a tall box and cuts across what is inside | Set `tp` / `fp` so the line enters near the top edge |
+| Thai vowels disappear | The machine has no Thai font in the list. Install Noto Sans Thai or add an installed font to the list |
+| Image is blurry on a slide | Rendered at a 1x multiplier |
+| Image has a lot of white margin | You captured the whole page instead of only `.sheet` |
+| A line comes loose after editing text | You wrote fixed line coordinates instead of using `WIRES` |
+| A label on a line covers a box, or hides the line so it cannot be seen | The label is wider than the gap between columns. Increase `gap` or shorten the label text |
+| A Thai box name wraps to a second line | The column is too narrow. Widen that column. Do not shrink the font |
+| Icons used as image files, and the lines go wrong everywhere | The script calculates before the images finish loading. Call `draw()` in `window.onload`, not when the script is read (`figure-cloud.html` already does this) |
+| Elbow lines in `figure-flow.html` cross each other | Several lines use the same gap. Set `mx` so a line whose end is higher gets a smaller value, then render again |
+| Arrows disappear under the system box | The `.wires` layer has no `z-index`. The flow skeleton sets it already. If you copy to another skeleton, set it there too |
+| The figure comes out in the example figure's colour | You forgot to edit `--accent`. Find the project's main colour by SKILL.md section 5 before rendering |
+| A line cuts diagonally across the whole figure | The line starts from a box inside the boundary box. Start it from the edge of the boundary box instead |
 
 
 ## reference: wires.md
 
-# สายเชื่อม — รายละเอียด
+# Connector wires — details
 
-เปิดเมื่อเขียน `WIRES` หรือแก้เส้นที่ลากผิด
+Open this when writing `WIRES` or fixing a line that goes the wrong way.
 
-**ในคอลัมน์เดียวกัน** ให้ใช้ลูกศรลง `.down` ระหว่างกล่อง โดยไม่ต้องเขียนอะไรเพิ่ม
+**Within the same column**, use the downward arrow `.down` between boxes. Nothing more to write.
 
-**ข้ามคอลัมน์** ให้ใช้รายการ `WIRES` ท้ายไฟล์ แล้วสคริปต์จะลากเส้นให้หลังจัดหน้าเสร็จ:
+**Across columns**, use the `WIRES` list at the end of the file. The script draws the lines after the layout is done:
 
 ```js
 {from:"n-browser", fs:"r", to:"n-server", ts:"l", tp:0.10, label:"HTTPS 443"}
-//    ^id ต้นทาง   ^ด้านออก  ^id ปลายทาง  ^ด้านเข้า ^ตำแหน่งบนขอบ 0=บน 1=ล่าง
+//    ^source id   ^exit side ^target id  ^entry side ^position on the edge 0=top 1=bottom
 ```
 
-ที่ต้องคำนวณหลังจัดหน้า เพราะตำแหน่งกล่องขึ้นกับความยาวข้อความไทย
-ถ้าเขียนพิกัดตายตัวไว้ พอแก้ข้อความทีเดียวเส้นจะหลุดทั้งรูป
+The calculation happens after layout because box positions depend on the length of the Thai text.
+If you write fixed coordinates, one text edit knocks the lines off across the whole figure.
 
-**กติกา:**
+**Rules:**
 
-- **เส้นวิ่งแนวตั้งหรือแนวนอนเท่านั้น และหักมุมด้วยมุมโค้ง** — ฟังก์ชัน `elbow()` ในโครงทำให้เอง (นอน → ตั้ง → นอน) ใช้ `mx` เลื่อนช่วงหักเมื่อหลายเส้นใช้ช่องเดียวกัน อย่าเขียน `path` เป็นเส้นตรงจากจุดถึงจุด เพราะกล่องสองข้างสูงไม่เท่ากันแล้วเส้นจะเฉียง
-- **ป้ายต้องแคบกว่าช่องว่างระหว่างคอลัมน์** ไม่อย่างนั้นป้ายจะทับกล่องหรือบังเส้นจนหาย ถ้าป้ายยาวขึ้น ต้องเพิ่ม `gap` ของ `.stage` ตามไปด้วย
-- เลื่อนป้ายไปตามเส้นได้ด้วย `lp` (0 = ต้นทาง · 1 = ปลายทาง · ไม่ใส่ = กลางเส้น)
-- เส้นที่ยังไม่ได้เชื่อมจริง ให้ใช้ `planned:true` เพื่อได้เส้นประ แล้ว**เขียนความหมายไว้ที่เชิงอรรถ**
-- เส้นข้ามคอลัมน์ **ไม่เกิน 5 เส้น** ต่อรูป เพราะเกินนี้รูปจะกลายเป็นใยแมงมุม
-- ต่อเข้า**กล่องเล็กที่สุดที่ถูกต้อง** ไม่ใช่กล่องใหญ่ที่ครอบอยู่ ถ้ากล่องสูงมาก ให้ใส่ `tp` เพื่อเลี่ยงไม่ให้เส้นจ่อกลางกล่อง
-- ป้ายบนเส้นบอกว่า**อะไรไหลผ่าน** เช่น `HTTPS 443` ไม่ใช่ `เชื่อมต่อ` ส่วนเส้นที่ไม่มีอะไรจะบอก ไม่ต้องใส่ป้ายเลยดีกว่าใส่คำว่า "ใช้"
+- **Lines run only vertically or horizontally, and turn with rounded corners.** The `elbow()` function in the skeleton does this itself (horizontal → vertical → horizontal). Use `mx` to shift the bend when several lines share one gap. Do not write a `path` as a straight line from point to point, because when the boxes at the two ends have different heights, the line goes slanted.
+- **A label must be narrower than the gap between columns.** Otherwise it covers a box or hides the line. If a label gets longer, raise the `gap` of `.stage` to match.
+- Move a label along the line with `lp` (0 = source · 1 = target · omit = middle of the line).
+- For a line not yet really connected, use `planned:true` to get a dashed line, and **explain the meaning in the footnote.**
+- **No more than 5** cross-column lines per figure, because beyond that the figure turns into a spider web.
+- Connect to the **smallest box that is correct**, not the large box around it. If a box is very tall, set `tp` so the line does not aim at the middle of the box.
+- A label on a line says **what flows through**, such as `HTTPS 443`, not `เชื่อมต่อ` (connect). If there is nothing to say about a line, leave the label off rather than writing "use".
 
 
 ---
@@ -1237,87 +791,89 @@ Use when a README or PR needs a quick Mermaid diagram
 
 # Software Diagrams
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** every line of wording follows `human-writing`. This skill gives the format and structure, while human-writing says how to write so a reader understands.
 
-> **กฎข้อเดียวของ skill นี้:** ไดอะแกรมตอบ**คำถามเดียว**
-> ถ้าตอบ 2 คำถาม ให้วาด 2 รูป
+> **The one rule of this skill:** a diagram answers **one question**.
+> If it answers 2 questions, draw 2 pictures.
 
-> **ปลายทางตัดสินเครื่องมือ:** skill นี้วาดไดอะแกรมด่วนด้วย Mermaid ธีมประจำบ้าน สำหรับ README · Pull Request · โน้ตในโค้ดเท่านั้น
-> ส่วนรูปในเอกสารโปรเจกต์ (BRD · SRS · FSD · ADR · ER · ผังขั้นตอน) ข้อเสนอลูกค้า สไลด์ และงานพิมพ์ ให้ไปที่ `diagram-figures` · ตารางเลือกทางฉบับเต็มอยู่ที่หัว skill นั้น
+> **The destination decides the tool:** this skill draws quick diagrams with Mermaid in the house theme, only for a README · Pull Request · note in code.
+> For figures in project documents (BRD · SRS · FSD · ADR · ER · process maps), client proposals, slides and print work, go to `diagram-figures`. The full table for choosing is at the top of that skill.
 >
-> **สีในรูปต้องสื่อความหมาย ไม่ใช่ตกแต่ง** และถ้าเอกสารต้นทางประกาศ `doc-theme` ไว้แล้ว ให้ใช้ค่านั้น ไม่ต้องเลือกสีใหม่รายรูป (ค่าเริ่มต้นคือชุดประจำบ้านใน `polished-document-style` · ความหมายของสีดู `branded-document-design/references/tokens-and-type.md`):
-> ไดอะแกรมด่วนใช้ **สีหลักสีเดียว** = "ของที่เรากำลังพูดถึง" · เทา = ระบบภายนอก/ปิดอยู่ · ขาวเส้นเทา (`store`) = ที่เก็บข้อมูล · กล่องอื่นใช้ค่าตั้งต้น (3 คลาส `focus` · `ext` · `store` ใน `assets/mermaid-theme.md`) · ถ้าต้องแยกจุดพัง/ข้อยกเว้น/สำเร็จด้วยสีหลายสี แปลว่าตอบหลายคำถามในรูปเดียว ให้แยกเป็นรูปใหม่หรือใช้ `diagram-figures`
+> **Colour in a figure must carry meaning, not decorate.** If the source document already declares a `doc-theme`, use that value and do not pick new colours per figure (the default is the house set in `polished-document-style` · for the meaning of colours see `branded-document-design/references/tokens-and-type.md`):
+> A quick diagram uses **one main colour** = "the thing we are talking about" · grey = external/closed systems · white with a grey line (`store`) = data stores · other boxes use the defaults (3 classes `focus` · `ext` · `store` in `assets/mermaid-theme.md`). If you need several colours to separate failure points, exceptions and successes, the figure answers several questions. Split it into new figures or use `diagram-figures`.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-ใน README · Pull Request · โน้ตในโค้ด:
+In a README · Pull Request · note in code:
 
-- อธิบายสถาปัตยกรรมระบบ
-- อธิบายลำดับการทำงานข้ามหลายส่วน
-- อธิบายสถานะของข้อมูล
-- ออกแบบฐานข้อมูล
-- บอกว่าอะไรรันอยู่บนเครื่องไหน
-- รีวิวไดอะแกรมที่คนอื่นวาด
+- Explain the system architecture
+- Explain the order of work across several parts
+- Explain the states of data
+- Design a database
+- Say what runs on which machine
+- Review a diagram someone else drew
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use
 
-| งาน | ใช้ตัวนี้แทน |
+| Job | Use this instead |
 |---|---|
-| เลือกว่าจะใช้ภาพแบบไหน (SVG / ASCII / Mermaid) | `markdown-visuals` |
-| ภาพหน้าจอ · wireframe | `ui-craft` + skill แพลตฟอร์ม |
-| กราฟข้อมูล | `web-app-design` → `references/tokens.md` หัวข้อ "สีข้อมูล (กราฟ)" |
-| ตัดสินใจเลือกสถาปัตยกรรม | `architecture-patterns` |
+| Choose which kind of picture to use (SVG / ASCII / Mermaid) | `markdown-visuals` |
+| Screenshots · wireframes | `ui-craft` + the platform skill |
+| Data charts | `web-app-design` → `references/tokens.md` heading "สีข้อมูล (กราฟ)" (data colours, charts) |
+| Choose an architecture | `architecture-patterns` |
 
-## 1 · คำถามไหน วาดแบบไหน
+## 1 · Which question, which diagram
 
-**เริ่มจากคำถาม ไม่ใช่เริ่มจากชนิดไดอะแกรม** — คนวาดผิดเพราะเลือกชนิดก่อนแล้วค่อยยัดเนื้อหาลงไป
+**Start from the question, not from the diagram type.** People draw wrongly because they pick the type first and then stuff content into it.
 
-| คำถามที่ผู้อ่านมีในหัว | ไดอะแกรม |
+| The question in the reader's head | Diagram |
 |---|---|
-| "ระบบนี้คุยกับใครข้างนอกบ้าง" | C4 ระดับ 1 — System Context |
-| "ข้างในระบบมีอะไรบ้าง รันแยกกันไหม" | C4 ระดับ 2 — Container |
-| "ใน service ตัวนี้แบ่งเป็นส่วนอะไร" | C4 ระดับ 3 — Component |
-| "กดปุ่มนี้แล้วเกิดอะไรขึ้นบ้าง ตามลำดับ" | Sequence |
-| "เอกสารนี้เปลี่ยนสถานะยังไงได้บ้าง" | State |
-| "ตารางไหนเชื่อมกับตารางไหน" | Entity Relationship (ER) |
-| "ของจริงรันอยู่บนเครื่องอะไร กี่ตัว" | Deployment |
-| "ใครอนุมัติต่อจากใคร" | Flowchart (ขั้นตอนงาน) |
-| "ผังคลาวด์ใน repo ที่มีโลโก้ AWS / Azure จริง ๆ" | Infrastructure — ข้อ 3 |
-| "อยากได้รูปสวย ๆ ไว้ใส่ข้อเสนอลูกค้า" | ไม่ใช่งานของ skill นี้ — `diagram-figures` |
+| "Who outside does this system talk to?" | C4 level 1 — System Context |
+| "What is inside the system? Do the parts run separately?" | C4 level 2 — Container |
+| "How is this service divided inside?" | C4 level 3 — Component |
+| "When I press this button, what happens, in order?" | Sequence |
+| "How can this document change state?" | State |
+| "Which table links to which table?" | Entity Relationship (ER) |
+| "What machines does the real thing run on, and how many?" | Deployment |
+| "Who approves after whom?" | Flowchart (work steps) |
+| "A cloud diagram in the repo with real AWS / Azure logos" | Infrastructure — section 3 |
+| "I want a nice picture for the client proposal" | Not the job of this skill — `diagram-figures` |
 
-> **C4 model** คือวิธีวาดสถาปัตยกรรมเป็นชั้น ๆ เหมือนซูมแผนที่ —
-> ระดับ 1 มองจากนอกระบบ · ระดับ 2 เปิดฝาดูข้างใน · ระดับ 3 ซูมเข้าไปในกล่องเดียว
-> **วาดระดับ 1 กับ 2 ให้ครบก่อนเสมอ** ระดับ 3 วาดเฉพาะส่วนที่ซับซ้อนจริง
+> The **C4 model** is a way to draw architecture in layers, like zooming a map:
+> level 1 looks from outside the system · level 2 opens the lid and looks inside · level 3 zooms into a single box.
+> **Always draw levels 1 and 2 in full first.** Draw level 3 only for the parts that are truly complex.
 
-## 2 · ธีม — ใช้ชุดเดียวทั้งโปรเจกต์
+## 2 · Theme — one set for the whole project
 
-วางบรรทัด `%%{init: ...}%%` ไว้**บรรทัดแรกสุด**ของทุกไดอะแกรม แล้วใช้สีหลักสีเดียวกับ 3 คลาส `focus` · `ext` · `store` ซึ่งสีหลักสงวนไว้ให้ "ของที่เรากำลังพูดถึง" เท่านั้น
-บรรทัดธีม ตัวแทนค่าสี คลาส และตัวอย่างที่เรนเดอร์แล้วอยู่ใน [`assets/mermaid-theme.md`](assets/mermaid-theme.md) ส่วนตารางที่จับคู่เนื้องานกับโทนสีอยู่ใน `diagram-figures/references/colour-by-domain.md`
+Put the `%%{init: ...}%%` line on the **very first line** of every diagram, and use the one main colour with the 3 classes `focus` · `ext` · `store`. The main colour is reserved for "the thing we are talking about" only.
+The theme line, colour stand-ins, classes and rendered examples are in [`assets/mermaid-theme.md`](assets/mermaid-theme.md). The table that matches kinds of work to colour tones is in `diagram-figures/references/colour-by-domain.md`.
 
-> ระวัง: **`fontFamily` ต้องอยู่นอก `themeVariables`** ถ้าใส่ไว้ข้างใน จะถูกเมินเงียบ ๆ แล้วกลับไปใช้ฟอนต์เริ่มต้นของ Mermaid
+> Warning: **`fontFamily` must sit outside `themeVariables`.** If you put it inside, it is silently ignored and Mermaid falls back to its default font.
 
-**ตรวจด้วยเครื่องก่อนส่งทุกครั้ง** — กฎข้อนี้ถูกลืมบ่อยที่สุด (โปรเจกต์ทดสอบหนึ่งมี 63 จาก 66 รูปที่ไม่มีบรรทัดธีม และไม่มีใครเห็น):
+**Check with a tool before every send.** This rule is forgotten most often (one test project had 63 of 66 figures with no theme line, and nobody noticed):
 
-สคริปต์อยู่ในโฟลเดอร์ `scripts/` ของ skill นี้ — รันด้วย path เต็มของสคริปต์ กับโฟลเดอร์ `docs` ของโปรเจกต์ที่ตรวจ (`<path ของ skill>` = โฟลเดอร์ที่ติดตั้ง skill นี้):
+The scripts are in the `scripts/` folder of this skill. Run them with the script's full path and the `docs` folder of the project being checked (`<path ของ skill>` = the folder where this skill is installed):
 
 ```bash
-node <path ของ skill>/scripts/check-mermaid-theme.mjs docs          # exit 1 พร้อม ไฟล์:บรรทัด ของบล็อกที่ไม่มี %%{init
-node <path ของ skill>/scripts/check-mermaid-theme.mjs --self-test   # พิสูจน์ว่าตัวตรวจยังจับได้
+node <path ของ skill>/scripts/check-mermaid-theme.mjs docs          # exit 1 with file:line of each block that lacks %%{init
+node <path ของ skill>/scripts/check-mermaid-theme.mjs --self-test   # proves the checker still catches it
 ```
 
-agent ที่ไม่มี shell รันเองไม่ได้ → agent หลักรันหลังรับงาน
+An agent with no shell cannot run it → the main agent runs it after taking the work back.
 
-## 3 · ผังที่ต้องมีโลโก้จริง (infrastructure)
+## 3 · Diagrams that need real logos (infrastructure)
 
-ถ้าผังโครงสร้างพื้นฐานที่อยู่ใน repo ต้องมีไอคอน Amazon Web Services (AWS) · Azure · Kubernetes ของจริง ซึ่ง Mermaid วาดให้ไม่ได้ ให้ใช้ไลบรารี **`diagrams`** (Python + Graphviz) โดยเริ่มจาก [`assets/infra-diagram.py`](assets/infra-diagram.py)
-วิธีติดตั้ง กติกา node ที่ใช้บ่อย และกับดักอยู่ใน [`assets/diagrams-python.md`](assets/diagrams-python.md) · ส่วนผังคลาวด์ที่ลูกค้าหรือสไลด์จะเห็น ให้ใช้ `diagram-figures`
+If an infrastructure diagram that lives in the repo needs real Amazon Web Services (AWS) · Azure · Kubernetes icons, which Mermaid cannot draw, use the **`diagrams`** library (Python + Graphviz), starting from [`assets/infra-diagram.py`](assets/infra-diagram.py).
+Install steps, the commonly used node rules and the traps are in [`assets/diagrams-python.md`](assets/diagrams-python.md). For cloud diagrams that a client or a slide will show, use `diagram-figures`.
 
-## 4 · กฎที่ทำให้อ่านรู้เรื่อง
+## 4 · Rules that make it readable
 
-**ไม่เกิน 7 กล่อง** — เกินนี้คนอ่านเลิกอ่าน (นับกล่องจริง ไม่นับ subgraph)
+**No more than 7 boxes.** Past that, readers stop reading (count real boxes, not subgraphs).
 
-**นับกล่องก่อนวาด ไม่ใช่หลังวาด** — ถ้าเกิน 7 ให้**แยกรูปตามลำดับเรื่องก่อนวาด** จดการแยกลง `decision-log` แล้วบอกในคำตอบ
-ห้ามวาดจนครบแล้วค่อยบอกทีหลัง
+**Count boxes before drawing, not after.** If there are more than 7, **split the figure by the order of the story before drawing**. Note the split in `decision-log` and say so in the reply.
+Never draw everything and then say so afterwards.
+
+The sample reply to the Thai user (kept in Thai because it is the text the agent says):
 
 ```
 เนื้อหาที่ให้มามี 20 กล่อง เกินเพดานสามเท่า ขอแยกเป็น 3 รูป:
@@ -1327,114 +883,1196 @@ agent ที่ไม่มี shell รันเองไม่ได้ → ag
 อยากแบ่งแบบอื่น บอกได้ — แยกใหม่ได้
 ```
 
-> **"แยกคนละไฟล์ก็ได้" แปลว่าต้องแยก** — ถ้าคำขอเปิดช่องให้แยก และเนื้อหาเกินเพดาน
-> ให้ถือว่าเป็นคำสั่งให้แยก ไม่ใช่ทางเลือก
+> **"Separate files are fine" means you must split.** If the request leaves room to split and the content passes the cap,
+> treat it as an order to split, not an option.
 
-**3 อย่างนี้ห้ามอยู่ในไดอะแกรม** — เป็นเนื้อหาของคู่มือ ไม่ใช่รูป และทำให้กล่องบานจนผังเบี้ยว
+**These 3 things do not belong in a diagram.** They are manual content, not a picture, and they swell the boxes until the diagram warps.
 
-| ห้ามใส่ | ไปอยู่ที่ไหน |
+| Do not put in | Where it goes |
 |---|---|
-| ตัวเลือกบรรทัดคำสั่ง `--all` `--resume` `--limit N` | `README` หรือ `docs/cli.md` |
-| รายการ input/output ของหลายตัว | **ตารางข้างรูป** — คอลัมน์: ส่วนประกอบ · รับอะไร · ให้อะไร · เก็บที่ไหน |
-| ชื่อไฟล์หรือ path ครบทุกตัว | ตารางเดียวกัน ใส่ในรูปเฉพาะตัวที่เป็นใจความ |
+| Command-line options `--all` `--resume` `--limit N` | `README` or `docs/cli.md` |
+| Lists of inputs/outputs for several parts | **A table beside the figure** — columns: component · takes what · gives what · stored where |
+| Every file name or path | The same table. Put in the figure only the ones that carry the point |
 
-**คำขอว่า "บอก input/output ด้วย" ไม่ได้แปลว่าให้วาดทุกอย่างเป็นกล่อง** —
-กล่องคือสิ่งที่ *ทำงาน* สิ่งที่ *ไหลผ่าน* เป็นป้ายบนเส้น ส่วน *รายละเอียด* ไปอยู่ในตาราง
+**A request like "show the input/output too" does not mean draw everything as boxes.**
+A box is something that *does work*. What *flows through* is a label on the line. *Detail* goes in the table.
 
-**ระดับรายละเอียดเดียวกันทั้งรูป** — มี `PostgreSQL` กับ `OrderRepository.cs` อยู่ในรูปเดียวกัน
-คือสัญญาณว่าผสม 2 ระดับ
+**One level of detail across the whole figure.** If `PostgreSQL` and `OrderRepository.cs` sit in the same figure,
+that signals a mix of 2 levels.
 
-**ทุกเส้นต้องมีป้าย** และป้ายต้องบอก**อะไรไหลผ่าน** ไม่ใช่ว่าต่อกันอยู่
-
-```
-ผิด: api --> db
-ผิด: api -->|ใช้| db
-ถูก: api -->|SQL · อ่าน-เขียนคำสั่งซื้อ| db
-```
-
-**ทิศทางเดียว** — บนลงล่าง (`TB`) หรือซ้ายไปขวา (`LR`) เลือกแล้วอย่าให้มีเส้นวิ่งย้อน
-เส้นย้อนแปลว่าเรียงลำดับกล่องผิด ไม่ใช่ว่าต้องวาดลูกศร 2 หัว
-
-**ชื่อกล่อง = สิ่งที่มันทำ ไม่ใช่เทคโนโลยี** เทคโนโลยีใส่บรรทัดที่สองตัวเล็ก
+**Every line needs a label,** and the label must say **what flows through**, not that they are connected.
 
 ```
-ผิด: [Redis]
-ถูก: ["ที่พักข้อมูลชั่วคราว<br><small>Redis</small>"]
+Wrong: api --> db
+Wrong: api -->|ใช้| db
+Right: api -->|SQL · อ่าน-เขียนคำสั่งซื้อ| db
 ```
 
-**มีคำอธิบายสัญลักษณ์ (legend) เมื่อใช้สีหรือรูปทรงสื่อความหมาย** —
-ถ้าอธิบายไม่ได้ว่าทำไมกล่องนี้สีต่าง แปลว่าสีนั้นไม่ควรมี
+**One direction.** Top to bottom (`TB`) or left to right (`LR`). Choose one and let no line run backwards.
+A backward line means the boxes are in the wrong order. It does not mean you need a double-headed arrow.
 
-## 5 · ภาษาไทยในไดอะแกรม
+**Box name = what it does, not the technology.** Put the technology on a second line in small type.
 
-- **ป้ายเส้นภาษาไทยยาวเกิน 3 คำจะทับเส้น** — ตัดให้สั้น หรือใส่ `<br>` เอง
-- **ห้ามใช้ `()` `[]` `{}` ในข้อความ** จะไปชนกับไวยากรณ์ Mermaid — ครอบด้วย `"..."` เสมอ
-- **วรรณยุกต์ลอยเหนือกล่อง** เมื่อ `fontSize` เล็กกว่า 12px — อย่าลดต่ำกว่านี้
-- ชื่อตารางและชื่อฟิลด์ในไดอะแกรม ER ใช้ภาษาอังกฤษ (ตรงกับฐานข้อมูลจริง)
-  ส่วนคำอธิบายใช้ไทยได้
+```
+Wrong: [Redis]
+Right: ["ที่พักข้อมูลชั่วคราว<br><small>Redis</small>"]
+```
 
-## 6 · เรนเดอร์ดูจริง — ห้ามข้าม
+**Add a legend when colour or shape carries meaning.**
+If you cannot explain why this box has a different colour, that colour should not be there.
 
-ไดอะแกรมที่ไม่เคยเรนเดอร์ยังเป็นแค่ข้อความ ไม่ใช่รูป เพราะไวยากรณ์ผิดบางแบบ Mermaid ไม่แจ้ง error
-และบ่อยครั้งวาดออกมาไม่ตรงกับที่คิด
+## 5 · Thai in diagrams
+
+- **A Thai line label longer than 3 words overlaps the line.** Shorten it, or add `<br>` yourself.
+- **Do not use `()` `[]` `{}` in text.** They clash with Mermaid syntax. Always wrap the text in `"..."`.
+- **Tone marks float above the box** when `fontSize` is below 12px. Do not go lower.
+- Table and field names in an ER diagram use English (matching the real database).
+  Descriptions can use Thai.
+
+## 6 · Render and look — never skip
+
+A diagram that was never rendered is still only text, not a picture. Some syntax mistakes give no error in Mermaid,
+and the result often does not match what you thought.
 
 ```bash
-# ไม่ติดตั้งลงเครื่อง · pin รุ่นที่ทดสอบธีมไว้ (11.17.0 · รุ่นล่าสุด 12.0.0 ณ 2026-10-14 ยังไม่ได้ทดสอบธีม)
+# not installed on the machine · pin the version the theme was tested on (11.17.0 · the latest 12.0.0 as of 2026-10-14 has not been tested with the theme)
 npx -y @mermaid-js/mermaid-cli@11.17.0 -i diagram.mmd -o diagram.png -b white -s 2
 ```
 
-แล้ว**เปิดไฟล์ภาพดูด้วยตา** ไล่ตามนี้:
+Then **open the image file and look at it with your eyes**. Go through this list:
 
-- [ ] กล่องไม่เกิน 7 ใบใช่ไหม
-- [ ] ทุกเส้นมีป้ายไหม และป้ายบอกว่าอะไรไหลผ่านไหม
-- [ ] มีเส้นวิ่งย้อนทิศไหม
-- [ ] ป้ายทับเส้นหรือทับกล่องไหม
-- [ ] ข้อความไทยครบ ไม่มีสระหาย
-- [ ] ระดับรายละเอียดเดียวกันทั้งรูป
-- [ ] คนที่ไม่เคยเห็นระบบนี้อ่านแล้วตอบคำถามต้นทางได้ไหม
+- [ ] Are there at most 7 boxes?
+- [ ] Does every line have a label, and does the label say what flows through?
+- [ ] Does any line run in the opposite direction?
+- [ ] Does a label overlap a line or a box?
+- [ ] Is the Thai text complete, with no missing vowels?
+- [ ] Is the level of detail the same across the figure?
+- [ ] Can someone who has never seen this system read it and answer the original question?
 
-**ข้อจำกัดของ Mermaid ที่ต้องรู้ก่อนเสียเวลา:**
+**Mermaid limits to know before you waste time:**
 
-| อาการ | สาเหตุ |
+| Symptom | Cause |
 |---|---|
-| `direction LR` ใน subgraph ไม่ทำงาน | ถูกเมินเมื่อ subgraph มีเส้นเชื่อมออกนอก — ต้องจัดลำดับกล่องเอา |
-| กล่องกว้างผิดปกติ | มีข้อความยาวบรรทัดเดียว — ใส่ `<br>` เอง Mermaid ไม่ตัดบรรทัดให้ |
-| เส้นทับกันมั่ว | กล่องเยอะเกินไป — Mermaid ไม่มีการจัดเส้นแบบฉลาด ต้องลดกล่อง |
-| ฟอนต์ไม่เปลี่ยน | `fontFamily` อยู่ผิดที่ (ดูข้อ 2) |
+| `direction LR` inside a subgraph does not work | It is ignored when the subgraph has a line linking out — order the boxes yourself |
+| A box is abnormally wide | One long line of text — add `<br>` yourself, Mermaid does not wrap lines |
+| Lines overlap in a mess | Too many boxes — Mermaid has no smart line routing, so cut boxes |
+| The font does not change | `fontFamily` is in the wrong place (see section 2) |
 
-ถ้าจัดวางเองไม่ได้ดั่งใจจริง ๆ และรูปยังอยู่ในเอกสาร markdown ให้วาด inline SVG ตาม `markdown-visuals` · ส่วนถ้ารูปต้องดูออกแบบมา ให้ไปที่ `diagram-figures`
+If you truly cannot get the layout you want and the figure stays in a markdown document, draw an inline SVG per `markdown-visuals`. If the figure must look designed, go to `diagram-figures`.
 
 ## 7 · Anti-patterns
 
-- **ไดอะแกรมสถาปัตยกรรม 40 กล่อง** — ไม่มีใครอ่าน แยกเป็น C4 หลายระดับ
-- **วาดจนเกินเพดานแล้วค่อยบอก** — ต้องแยกตั้งแต่นับได้ว่าเกิน
-- **ยัดตัวเลือกบรรทัดคำสั่งลงในกล่อง** — กล่องบาน ตัวอักษรเล็ก อ่านไม่ออกทั้งรูป
-- **เส้นไม่มีป้าย** — ผู้อ่านเดาเองว่าอะไรไหลผ่าน แล้วเดาผิด
-- **ผสมระดับรายละเอียด** — `Kubernetes` อยู่ข้าง ๆ `UserService.validate()`
-- **สีรุ้ง** — สีต้องมีความหมาย ไม่ใช่ใส่ให้ไม่น่าเบื่อ
-- **วาดทุกกรณี error ใน sequence เดียว** — วาดทางหลักก่อน แล้วแยกรูปกรณีพิเศษ
-- **ER ที่มีทุกตารางในระบบ** — แยกตามโดเมน
-- **ไดอะแกรมที่ไม่มีวันที่และเจ้าของ** — ผ่านไป 1 ปีไม่มีใครกล้าแก้
-- **ส่งไดอะแกรมโดยไม่เคยเรนเดอร์ดู**
-- **ธีมต่างกันทุกรูปในเอกสารเดียว**
+- **A 40-box architecture diagram** — nobody reads it. Split it into several C4 levels.
+- **Drawing past the cap and then saying so** — split as soon as you count that it is over.
+- **Stuffing command-line options into a box** — the box swells, the letters shrink, and the whole figure is unreadable.
+- **A line with no label** — the reader guesses what flows through, and guesses wrong.
+- **Mixing levels of detail** — `Kubernetes` sitting next to `UserService.validate()`.
+- **Rainbow colours** — colour must carry meaning. Do not add it to avoid boredom.
+- **Drawing every error case in one sequence** — draw the main path first, then split the special cases into separate figures.
+- **An ER diagram with every table in the system** — split by domain.
+- **A diagram with no date and no owner** — after a year nobody dares to edit it.
+- **Sending a diagram that was never rendered**
+- **A different theme in every figure of one document**
 
-## 8 · เชื่อมกับ skill อื่น
+## 8 · Link to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use with |
 |---|---|
-| เลือกรูปแบบภาพในเอกสาร markdown | `markdown-visuals` |
-| เอกสารรอบ ๆ ไดอะแกรม | `polished-document-style` |
-| ฝังในไฟล์ Word / PowerPoint | `branded-document-design` |
-| ไดอะแกรมในเอกสาร SRS | `srs-writing` |
-| เลือกสถาปัตยกรรมก่อนวาด | `architecture-patterns` |
-| รูปที่ต้องดูออกแบบมาหรือต้องเซ็นรับ | `diagram-figures` |
-| บันทึกเหตุผลที่เลือกแบบนี้ | `adr-writer` |
+| Choose the visual format in a markdown document | `markdown-visuals` |
+| The document around the diagram | `polished-document-style` |
+| Embed in a Word / PowerPoint file | `branded-document-design` |
+| A diagram in an SRS document | `srs-writing` |
+| Choose the architecture before drawing | `architecture-patterns` |
+| A figure that must look designed or needs sign-off | `diagram-figures` |
+| Record why this design was chosen | `adr-writer` |
+
+## Do not look AI-made
+
+Before sending, walk through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass eye check 3.2 (web pages also answer items 10–14), because a script result of 0 items is not yet a pass. The bans in this file are specific to this kind of work. The full list for every medium is there.
+
+## Abbreviations
+
+Always spell an abbreviation out in full the first time, and put the abbreviation in brackets — for example Model Context Protocol (MCP).
+After that you can use the abbreviation. For details see the skill `spell-out-abbreviations`.
+
+
+---
+
+# skill: markdown-visuals
+
+Use when a Markdown doc needs an image, SVG or ASCII art
+
+# Markdown Visuals
+
+> **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
+
+> **Language:** write every line of wording per `human-writing`. This skill gives the format and structure; human-writing gives the way to write so people understand.
+
+> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
+
+> **Rule:** Every plan, process, design, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
+
+## When to use this skill
+
+- A picture *inside a markdown file* — sketch, flow or state in a business plan, report, process guide, spec or README
+- Writing a plan, Functional Specification Document (FSD), Business Requirements Document (BRD), Architecture Decision Record (ADR) or architecture doc that describes layout, flow, or relationships (the diagrams themselves follow the routing rule below)
+- Explaining state transitions, user journeys, or system interactions
+- Comparing 2+ visual options for the user
+- The user asked "show me how it looks" inside a markdown doc or chat reply
+
+**If the doc has zero visuals and is about anything visual or structural — stop and add one.**
+
+## When NOT to use
+
+| Task | Use instead |
+|---|---|
+| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) (plugin `software-development`) |
+| Chart colours and chart design in an app or dashboard | `web-app-design` (plugin `software-development`) → `references/tokens.md` "สีข้อมูล (กราฟ)" |
+| Designed figure for a proposal, slide or print | `diagram-figures` |
+
+## Decision tree: which format?
+
+```
+What are you showing?
+│
+├─ UI sketch in a doc / component state / icon → Inline SVG (doc read on GitHub → same SVG as a `.svg` file, §2)
+├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
+├─ Flow / process / money flow / decision   →  repo note (README · Pull Request (PR) · code note) → Mermaid (`software-diagrams`, plugin `software-development`)
+│                                              project document (BRD · Software Requirements Specification (SRS) · FSD · ADR) or read outside the team → `diagram-figures`
+├─ Architecture / Entity-Relationship (ER) / class → same rule as the line above
+├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
+├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design (plugin `software-development`) tokens.md "สีข้อมูล (กราฟ)"
+├─ Photo, screenshot, complex illustration  →  External file → ![alt](figures/x.png) (file in `docs/figures/`)
+└─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
+```
+
+**Routing rule (same in `software-diagrams` and `diagram-figures`):** markdown in a repo read by the team (README · PR · code note) → Mermaid via `software-diagrams` · a project document (BRD · SRS · FSD · ADR · ER · flows) or anything people outside the team read → `diagram-figures`.
+
+**Follow the tree above.** Where the doc will be read decides inline SVG vs image file:
+
+- **Inline `<svg>` renders** in VS Code preview, Obsidian, many static-site generators and chat replies.
+- **Inline `<svg>` does not render on GitHub** — GitHub's sanitizer drops the `<svg>` element, so the reader sees nothing. Other hosts (GitLab, Bitbucket): preview before relying on it.
+- **Doc will be read on GitHub** → save the SVG as `docs/figures/x.svg` and reference it with `![alt](figures/x.svg)` or `<img>` (§2). It still versions cleanly in git and stays editable.
+
+## 1 · Inline SVG (for viewers that render it — not GitHub)
+
+### Boilerplate
+
+```markdown
+<p align="center">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-label="<what this shows>">
+  <!-- background = bg-canvas of the project palette (see สี below) -->
+  <rect width="640" height="280" rx="14" fill="<bg-canvas>"/>
+
+  <!-- content goes here -->
+</svg>
+</p>
+```
+
+**Required attributes:**
+- `xmlns="http://www.w3.org/2000/svg"` — required when the same markup is saved as a `.svg` file (GitHub shows `.svg` files only through `![]()` / `<img>`, and only with `xmlns`)
+- `viewBox` — sets the coordinate space; lets the SVG scale responsively
+- `role="img"` + `aria-label` — accessibility, screen readers
+- `<p align="center">` wrapper — centers in the rendered page
+
+**Sizing:** Use `viewBox` (not width/height) so it scales. Common sizes:
+- Sketch of a UI bar: `viewBox="0 0 640 200"` (wide, short)
+- Component state: `viewBox="0 0 400 300"` (squarer)
+- Icon / chip: `viewBox="0 0 64 64"`
+- Full screen layout: `viewBox="0 0 800 500"`
+
+### สี
+
+If the document or project already has a colour palette, use it. If not, search for references per `design-references` (plugin `superuser`), type `document`, and take the colours from the chosen work · if live search is not possible, use the house value `#2A78D6`, mark it `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask (order in `diagram-figures` item 5 · colour-by-domain table [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) · for role-based tokens (`bg-canvas` · `accent-primary` · `state-*` …) see [references/svg-snippets.md](references/svg-snippets.md) · and **1 document uses 1 palette**
+
+### Reusable snippets
+
+Window chrome, phone frame, button, card, status badge, running dot and tooltip snippets, plus the UI-state worked example, are in [references/svg-snippets.md](references/svg-snippets.md). Copy the structure and swap in the agreed colour tokens.
+
+## 2 · External image files
+
+Use when:
+- The doc will be read on GitHub (inline `<svg>` is dropped there) — save the SVG as a file
+- Photo or screenshot
+- Illustration too complex to author as SVG by hand (50+ shapes)
+- Reusing the same image across many docs
+- Generated by a design tool (Figma export, etc.)
+
+### Folder convention
+
+```
+docs/
+  figures/
+    01-hover-state.svg
+    02-empty-state.png
+    architecture-overview.svg
+    src/                      editable sources (.mmd · .drawio · .html)
+```
+
+- Put figures in `docs/figures/` (editable sources in `docs/figures/src/`) — relative to the doc · brand files (logo, icons) live in the project-root `assets/`, not here
+- Name files `<doc-section-number>-<short-slug>.<ext>` so they sort with the doc
+- Prefer `.svg` over `.png` when possible (scales, smaller, diff-friendly)
+
+### Reference syntax
+
+```markdown
+![Hover state showing magnified Projects tile](figures/01-hover-state.svg)
+```
+
+- **Alt text** describes what the image shows, for accessibility — not "screenshot.png"
+- Path is **relative to the markdown file**, not absolute
+- For centered + sized images, wrap in HTML:
+
+```markdown
+<p align="center">
+  <img src="figures/01-hover-state.svg" alt="Hover state" width="640"/>
+</p>
+```
+
+### Creating SVG files
+
+When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file in `docs/figures/`.
+
+## 3 · ASCII art
+
+For quick layouts, state diagrams, and structural sketches that don't need pixel-perfect visuals. Renders identically in every viewer and in terminal/diff output.
+
+Box-drawing characters plus worked layout sketch, state machine and curve examples are in [references/ascii-patterns.md](references/ascii-patterns.md).
+
+Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
+
+## 4 · Mermaid
+
+**Choosing a diagram type, theme, readability rules and Thai labels is covered in `software-diagrams` (plugin `software-development`) items 1–5 and `assets/mermaid-theme.md`** · for Mermaid in project documents that must be converted to a picture for Word, use the converter in `diagram-figures` → `references/engine-mermaid.md`
+This file only says *when to choose Mermaid over other formats*
+
+| Choose Mermaid when | Choose something else when |
+|---|---|
+| It is boxes and arrows that the engine can lay out | If you must control placement yourself, use inline SVG; for a figure that must look designed, use `diagram-figures` (HTML layout or engine-svg-python) and embed it as an image file |
+| It lives in a file that must be diffed in git | It is a real screenshot: use an image file |
+| Readers open it in GitHub or Notion | Readers open it in a Word document or slides: use an image file |
+
+## Combining formats in one doc
+
+A full design spec usually mixes formats (SVG mockup, reference table, ASCII sketch, Mermaid state diagram, acceptance table). The 6-part pattern is in [references/combining-formats.md](references/combining-formats.md). Don't force everything into one format.
+
+## Accessibility checklist
+
+For every visual:
+
+- [ ] **Inline SVG** has `role="img"` and `aria-label="<description>"`
+- [ ] **Image file** has descriptive alt text (not "image.png")
+- [ ] **Mermaid** diagrams have a 1-sentence caption above or below
+- [ ] **ASCII art** has a prose summary nearby — screen readers will read the characters literally
+- [ ] **Colour** is not the only signal — pair red badges with `!`, green dots with a label
+- [ ] **Contrast** for text in SVG ≥ 4.5:1 against its background
+
+## Anti-patterns
+
+- **Text-only design docs** — "the icon is in the top-right" with no picture
+- **Linking to Figma / external design tools as the only source** — visuals must render in the repo
+- **PNG screenshots of text** — use the text, in a code block
+- **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
+- **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
+- **ASCII art outside a code fence** — proportional fonts will mangle alignment
+- **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
+- **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
+- **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
+
+## Quick-start recipe
+
+When a markdown doc needs a design picture (clickable app screens go to the platform design skill, `mockup/<CODE>-mockup.html`):
+
+1. **Identify what kinds of visuals are needed** (UI state? flow? architecture?)
+2. **Pick the format(s)** using the decision tree above
+3. **For each visual:**
+   - State a one-line caption
+   - Emit the SVG/Mermaid/ASCII
+   - Add `role="img"` + `aria-label` (SVG) or alt text (file)
+4. **Add a feature reference table** below the visuals — what each element means
+5. **Cross-check accessibility checklist** before delivery
+
+Not sure a visual will render? Preview it in the viewer the reader will use (GitHub, Notion, VS Code) before delivery.
+
+## Related skills
+
+- `polished-document-style` — overall doc formatting, figure captions, callout boxes
+- `simplicity-first` (plugin `software-development`) — don't over-design the diagram; show what's needed
+- `software-diagrams` (plugin `software-development`) — which diagram type answers which question, plus the shared Mermaid theme
+- `diagram-figures` — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
+- `ui-craft` (plugin `software-development`) — spacing, hierarchy and states when the picture is a screen
 
 ## ไม่ให้ดูเหมือน AI ทำ
 
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ทุกงานต้องผ่านด่านตา 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+Before sending, go through item 3 of `no-ai-look` — for HTML work, run its script · every piece must also pass eye check 3.2 (a web page adds items 10–14), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for all media is there
 
 ## ตัวย่อ
 
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
+Spell out each abbreviation in full on first use and put the short form in brackets — for example Model Context Protocol (MCP)
+After that, use the short form. Details are in the skill `spell-out-abbreviations`
+
+
+## reference: ascii-patterns.md
+
+# ASCII patterns
+
+Worked ASCII examples for markdown docs · used by [SKILL.md](../SKILL.md) §3 · always wrap ASCII in a fenced code block so spacing is preserved
+
+## Box-drawing characters
+
+```
+┌─────┐  ┏━━━━━┓  ╭─────╮  ┌╌╌╌╌╌┐
+│     │  ┃     ┃  │     │  ╎     ╎
+└─────┘  ┗━━━━━┛  ╰─────╯  └╌╌╌╌╌┘
+ light    heavy   rounded   dashed
+```
+
+Corners: `┌ ┐ └ ┘` ‧ `┏ ┓ ┗ ┛` ‧ `╭ ╮ ╰ ╯`
+Lines:   `─ │` ‧ `━ ┃` ‧ `═ ║`
+Joins:   `├ ┤ ┬ ┴ ┼`
+Arrows:  `→ ← ↑ ↓ ▲ ▼ ▶ ◀ ↔ ↕ ⇒ ⇐`
+Dots:    `• · ◦ ● ○ ▪ ▫`
+
+## Common patterns
+
+**Layout sketch:**
+```
+┌─────────────────────────────────────┐
+│ Header        [Search]      [👤]    │
+├──────────┬──────────────────────────┤
+│ Sidebar  │ Main content             │
+│  • Item  │                          │
+│  • Item  │  ┌────────────────────┐  │
+│          │  │  Primary CTA       │  │
+│          │  └────────────────────┘  │
+└──────────┴──────────────────────────┘
+```
+
+**State machine:**
+```
+┌─────────┐  hover  ┌──────────┐  click  ┌─────────┐
+│  REST   │────────►│ MAGNIFIED│────────►│ LAUNCH  │
+└─────────┘◄────────└──────────┘◄────────└─────────┘
+            exit               done
+```
+
+**Curve / chart:**
+```
+scale
+ ↑
+1.7│         ╱╲
+1.4│       ╱    ╲
+1.2│     ╱        ╲
+1.0│___╱            ╲___
+   └──────────┬──────────→ cursor X
+         tile.Center
+```
+
+
+## reference: combining-formats.md
+
+# Combining formats in one doc
+
+Used by [SKILL.md](../SKILL.md) · a full design spec usually mixes formats.
+
+The 6-part pattern for a design spec:
+
+```
+1. Inline SVG mockup of each UI state              ← "what it looks like"
+2. Feature reference table                          ← "what it does"
+3. ASCII layout sketch with measurements           ← "how it's positioned"
+4. Mermaid state diagram                            ← "how it transitions"
+5. ASCII / inline-SVG zoom curve                    ← "the math"
+6. Acceptance criteria table                        ← "how we verify"
+```
+
+Don't force everything into one format. Each format is best at something different.
+
+
+## reference: svg-snippets.md
+
+# Inline SVG snippets
+
+Reusable building blocks for inline SVG pictures of a screen inside .md docs (the real mockup is HTML) · used by [SKILL.md](../SKILL.md) §1
+
+## Colour: it comes from the subject, not from a ready-made table
+
+If the document or project already has a colour set, use that set.
+If not, use the house value `#2A78D6`, write `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask. Propose a tone drawn from the subject in the report: medical green · finance dark blue ·
+industrial amber · government navy · general software blue (the full table is in [`diagram-figures/references/colour-by-domain.md`](../../diagram-figures/references/colour-by-domain.md))
+
+Define **tokens by role** at the top of the document, then use the same values in every figure in that document:
+
+| Token | Role | Comes from |
+|---|---|---|
+| `bg-canvas` | Background of the figure | The darkest shade (dark mode) or the lightest (light mode) |
+| `bg-surface` | Sheets, panels, cards | Different enough from canvas to show the edge without drawing a line |
+| `bg-elevated` | A tile raised one more layer | |
+| `accent-primary` | Emphasis, the active state | **The brand colour** (none → `#2A78D6` + `(รอยืนยัน)`) |
+| `text-primary` | Main text | Contrast ≥ 4.5:1 against the surface it sits on |
+| `text-muted` | Secondary text, placeholder | `rgba(...,0.55)` of `text-primary` |
+| `state-success` · `state-warning` · `state-danger` | Status | **Does not change with the brand.** Green always means pass and red always means fail |
+
+**One document, one colour set.** 10 figures in one document with mismatched colours are harder to read than plain figures with matching colours.
+
+## Snippets
+
+> The examples below use one dark-mode colour set as a stand-in only.
+> **Change the colour values to match the agreed set before use.** The structure is what you copy, not the colour values.
+
+**Window chrome (desktop app mockup):**
+```xml
+<rect x="20" y="20" width="600" height="360" rx="10" fill="#2a3245"/>
+<circle cx="42" cy="42" r="6" fill="#ff5f57"/>
+<circle cx="62" cy="42" r="6" fill="#febc2e"/>
+<circle cx="82" cy="42" r="6" fill="#28c940"/>
+<text x="320" y="46" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Window title</text>
+<line x1="20" y1="64" x2="620" y2="64" stroke="rgba(255,255,255,0.08)"/>
+```
+
+**Phone frame (mobile mockup):**
+```xml
+<rect x="100" y="20" width="200" height="400" rx="28" fill="#0a0d14" stroke="#2a3245" stroke-width="2"/>
+<rect x="120" y="50" width="160" height="340" rx="6" fill="#1c2230"/>
+<rect x="170" y="28" width="60" height="14" rx="7" fill="#0a0d14"/>
+```
+
+**Button:**
+```xml
+<rect x="40" y="100" width="120" height="40" rx="8" fill="#0078d4"/>
+<text x="100" y="125" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="14" font-weight="500">Click me</text>
+```
+
+**Card with title and body:**
+```xml
+<rect x="40" y="40" width="240" height="120" rx="12" fill="#2a3245"/>
+<text x="60" y="72" fill="#fff" font-family="system-ui" font-size="14" font-weight="600">Card title</text>
+<text x="60" y="96" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="12">Supporting body text goes here.</text>
+<rect x="60" y="116" width="80" height="28" rx="6" fill="#0078d4"/>
+<text x="100" y="134" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Action</text>
+```
+
+**Status badge (top-right of tile):**
+```xml
+<circle cx="<tile-right-x>" cy="<tile-top-y>" r="9" fill="#e24b4a"/>
+<text x="<tile-right-x>" y="<tile-top-y + 4>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="13" font-weight="500">!</text>
+```
+
+**Running dot (indicator below tile):**
+```xml
+<circle cx="<tile-center-x>" cy="<tile-bottom-y + 12>" r="4" fill="#4cc2ff"/>
+```
+
+**Tooltip text (no balloon — plain floating text):**
+```xml
+<text x="<tile-center-x>" y="<tile-top-y - 12>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12" font-weight="500">Tooltip label</text>
+```
+
+## Worked example — UI state mockup
+
+Use this pattern by default for showing UI feature states. On GitHub, save the SVG as a file in `docs/figures/` and reference it (inline `<svg>` is dropped there).
+
+
+---
+
+# skill: branded-document-design
+
+Use when a Word, PowerPoint or PDF must look designed
+
+# Branded Document Design
+
+> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the owner's theme → search live for reference designs → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-references` (plugin `superuser`) even when a brand exists (the brand controls color and fonts; the search is for finding this piece's structure) · close the job with the line `ด่านก่อนลงมือ:`
+
+> **Language:** write all wording per `human-writing`. This skill gives format and structure; human-writing gives how to write so people can understand.
+
+> **The one rule of this skill:** an exported document must look intentionally designed: one color set, one set of type sizes
+> and spacing that is the same on every page. It must not look like someone opened Word and just typed.
+
+## When to use this skill
+
+- The output is a **.docx / .pptx / .pdf** (quotation · business plan · report · contract · software document such as an SRS) that a customer, executive or another team will open
+- The document must be **signed off** or attached to a contract/proposal
+- Mixed Thai–English documents (they break very easily if fonts are not fully set)
+- The same kind of document is issued repeatedly and every copy should look the same
+
+## When **not** to use
+
+- The output is markdown (in the repo or work folder): use `polished-document-style`
+- You only need to **read/extract** a received Office file: use `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
+- Diagrams in a markdown document: use `markdown-visuals`
+- A whole-book report from a single Markdown file (shared logo cover · table of contents · tables · figures): use `markdown-report-docx`, which has a ready md → docx script
+
+**The correct order:** write the content as markdown first (polished-document-style)
+→ then use this skill to render it into the deliverable file, and always fix content in the markdown (markdown is the source).
+
+---
+
+**Install before use:** `pip install python-docx python-pptx` · LibreOffice (`soffice`) to convert to PDF · `pdftoppm` (poppler) to convert to images
+
+## 0 · Colors come from the project — look in order, do not stop and wait
+
+**If the source markdown already has a `doc-theme`, use that value. Do not ask again, do not set a new one.**
+(See `polished-document-style`, section "ธีมของเอกสาร" (document theme).)
+
+If there is none yet, look in the order given in `diagram-figures` item 5, in that one place (`doc-theme` → brand colors in code, logo, brand kit → nothing at all).
+Nothing at all → **search for reference designs first:** take the project's keywords to a live search per `design-references` (plugin `superuser`), type `document`, then extract colors from the chosen work. The stored palette library is used when a live search is impossible. Live search impossible → use the house color `#2A78D6`, write `(รอยืนยัน)` (awaiting confirmation) in the report, and carry on without stopping to ask. Put a tone suggested by the content of the work (see the next line) in the report for the user to choose later.
+Once you have the colors, **write them back into `doc-theme`** in the markdown file so the document, figures and slides use the same colors.
+
+Tones suggested by the content of the work (medical · finance · government etc. · fallback library, used when live search is impossible) → [`references/palette-examples.md`](references/palette-examples.md) · if the customer already has a brand, always use the brand colors.
+
+**There is only one main color.** All light and dark shades are computed from it; do not pick more one by one.
+The only colors not tied to the main color are the status colors (success · warning · error), and they must always keep their meaning.
+
+
+## 0.1 · The document's look continues from the brand's or app's look — do this before the first render
+
+> This skill's defaults (Tahoma · solid color band cover · table with lines in every cell) are the **floor**, not the deliverable look.
+> Using the defaults as is = a document that looks printed from Word at every company, even though the brand or app of that job already passed a beauty gate.
+
+1. **Is there an identity already?** Look at the existing brand kit (`graphic-design:brand-kit` if installed; use the colors and fonts from that kit) · `assets/logo/` · `docs/design/` · software work: a mockup that passed the beauty gate (score in `docs/BUILD-PLAN.md`) · field `doc-theme` in `docs/README.md` → if there is: the document must use the same logo (cover + page header), brand colors and patterns as the app · if not: follow item 0
+2. **Do 1 direction first.** Only if the user is not wowed, or asks for several directions, do **3 directions in parallel** (3–5 times the labor · `parallel-attempts-pick-best` · a new agent with Bash per direction · for the cover use the 3-direction vote method in section 0.2). Each direction makes an HTML mock of A4 pages: cover · a content page with a real 4-row requirements table + callout · a table-of-contents page or a figure page · **1 figure redone for the direction** (use `diagram-figures`) · the file header says how to build each piece in real Word. When doing several directions they must really differ, for example a dark cover continuing from the app / a light editorial report / an engineering spec.
+3. **2 reviewers who did not do the work** (if there is only one direction, score that one only; no mixing) score 1–5 (pass = 4): first impression · continuity with the app · craftsmanship (a long Thai table of 60 rows without breaking mid-word · type scale · contrast) · figures readable when placed for real · really buildable in Word → **mixing is allowed** (cover from one direction, body from another) if the reviewers name the pieces clearly.
+4. Work on the render script (do not edit .docx files one by one) → render every copy → **document beauty gate (`ด่านสวย`)**: 2 new reviewers look at images of the real pages (cover · table of contents · chapter opener · long table page · figure page) using the 5 axes above, and take the lower score · ceiling **3 rounds** (more detail in `ui-craft/references/states-and-checks.md` in plugin `software-development` if installed) · record every round's score in `docs/BUILD-PLAN.md`
+5. **Fonts:** use the brand's Thai font installed on the machine and embedded in the file (`embed_fonts`) · Tahoma is the fallback when embedding is impossible · **never set Thai text in a mono font** (Cascadia/Consolas have no Thai letters). Mono is for code, keys and numbers only.
+6. **Figures in documents · rules the beauty gate often catches · cover** (minimum pixel sizes, rules in the render script's `check`, cover recipe) → [`references/word-layout.md`](references/word-layout.md), section at the end of the file
+
+## 0.2 · A cover that belongs to this document set — make 3 directions, then vote 2 of 3
+
+Use when a document set (proposal · report · business plan) needs its own cover and the default cover looks like another job's. Do one direction first; only if the user is not wowed, or asks for several directions, use this (3–5 times the labor). The full steps (find real examples to hold up · 3 designers · 3 reviewers · voting criteria · cover text) are in [`cover-vote`](references/cover-vote.md).
+
+---
+
+## 1 · Design tokens — never hardcode colors outside this table
+
+This table defines each token's **role**, not the color value. The real values come from item 0, then are set once with `use_brand(...)`.
+
+- tokens: `brand` · `brand_2` · `brand_deep` · `brand_tint` · `brand_tint_2` · `text` · `text_body` · `text_muted` · `line` + 6 status colors (success · info · warning · error · accent · neutral) that **do not change with the brand**
+- Choose colors by meaning, not by looks (red = danger/real error only) · use the same meaning set as diagrams
+- Thresholds every color set must pass: body text and `text_muted` on the background ≥ 4.5:1 · H2 and table headers (`brand_deep`) ≥ 7:1 · H1 and KPI numbers (`brand`, large) ≥ 3:1 · `use_brand()` checks and stops if it fails · printed in black and white, the hierarchy must still be distinguishable · if it fails, adjust the darkness, do not change the color
+- Text is never pure black (use `text_body`) · **do not add type sizes outside the scale** (Word body 11pt · slides 17pt)
+
+Full token table · color meaning table · type scale (pt) · reusable elements + methods → [`references/tokens-and-type.md`](references/tokens-and-type.md). Open it when setting the theme or choosing sizes/colors · examples of color sets used before → [`references/palette-examples.md`](references/palette-examples.md)
+
+---
+
+## 2 · Fonts and Thai — where it breaks most often
+
+Use the brand's Thai font per item 0.1 step 5 first · if absent or not embeddable, use **Tahoma** as the fallback · rules that must not be missed:
+
+- Word treats Thai as a *complex script*: **never set font/size/bold by hand.** Use `style_run()` in `brandkit.py` (it sets `w:szCs` `w:bCs` `w:iCs` and all 4 slots of `w:rFonts`)
+- When the Latin and Thai fonts differ → set `bk.FONT` and `bk.LATIN_FONT`, then call `bk.thai_runs(doc.element.body)` and on every header/footer before `save()`
+- Line spacing 1.3–1.35 (Tahoma) (the middle value is in `human-writing` `references/thai-line-breaking.md`) · **never justify** Thai paragraphs · to send a PDF, export it from real Word or check by eye first (LibreOffice breaks Thai words differently from Word)
+- Linux has no Tahoma → Loma/Sarabun · ReportLab places tone marks wrongly
+
+Details on dual-font traps · embedding fonts · variable fonts · Thai looking small on Linux → [`references/thai-fonts.md`](references/thai-fonts.md). Open it when setting fonts or when a PDF looks off.
+
+---
+
+## 3 · Word page structure
+
+Document structure: cover page (project has a logo and mockup already → a project-specific cover per section 0.2 · no identity → use the default) → table of contents (TOC field) → body (H1 with section numbers · keep-with-next on every heading) → sign-off table · footer "หน้า N" (page N) centered, gray 9pt · full structure line by line → [`references/word-layout.md`](references/word-layout.md), section "Page structure"
+
+**Dark cover** (the app or brand uses a dark screen) → `doc.cover(..., style="night")` · example `scripts/example_srs.py` · image `examples/example_srs-preview.png` · details and lessons from the work's owner → [`references/word-layout.md`](references/word-layout.md). Rule to remember every time:
+- The cover background image and logo must not be in the first-page header (Word shows them faded while editing the file). Anchor them to the cover's first paragraph.
+
+**Inner-page table headers must not use a full-width solid dark fill.** Dark cover background · logo size · small text · glow line under the title → [`references/word-layout.md`](references/word-layout.md)
+
+Paper A4 · margins top/bottom 2.2 cm · left/right 2.0 cm give a content width of **17 cm = 9638 twips** (`BODY_TWIPS`)
+(use this number to set table column widths so they add up exactly)
+
+---
+
+## 4 · Reusable elements
+
+Elements (`cover()` · `table()` · `pill_table()` · `kpi_row()` · `callout()` · `figure()` · `code()` · `signoff()`): full look and methods → [`references/tokens-and-type.md`](references/tokens-and-type.md)
+
+**Right proportions:** at most 3–5 callout boxes per 10 pages · KPI strip of 3–5 cells · a table over 6 columns should become a landscape page (`landscape_section()`)
+
+---
+
+## 5 · How to use brandkit
+
+Import: `from brandkit import BrandDoc, use_brand, to_pdf` (put `scripts/` on the path or copy `brandkit.py` next to the work) · slides → `brandkit_pptx.BrandDeck` · speaking deck → `brandkit_stage.StageDeck`
+
+Full sample code (Word · slides · Stage deck) → [`references/brandkit-usage.md`](references/brandkit-usage.md) · all methods → `references/api.md` · runnable scripts `scripts/example_srs.py` · `scripts/example_deck.py`
+
+**Stage deck** (the default for a deck used for speaking): the colors `accent`/`bg` are extracted from the source work per `presentation-design` `references/deck-theme.md` (`source_palette.py` prints the `StageDeck(...)` line for you) · if the source has no color, look per `diagram-figures` item 5 · a light background `FFFFFF` with `block=True` (cover and chapter dividers in solid main color) is the default; use a dark background when the source work is dark · no color at all → use `#2A78D6` with background `FFFFFF` + `(รอยืนยัน)` (awaiting confirmation) · details → `references/brandkit-usage.md`
+
+---
+
+## 6 · Check the work by eye — a step that must not be skipped
+
+A document that nobody has opened to look at the real pages is not finished, because there may be tables overflowing the margin, headings stranded at the page bottom,
+floating tone marks. These problems cannot be seen from the code.
+Render to PDF, convert to images, then **open and look at every page** (Read tool) before delivery · `soffice` and `pdftoppm` commands and the 7-point checklist → [`references/visual-check.md`](references/visual-check.md)
+
+---
+
+## 7 · Anti-patterns
+
+- **Using Word's built-in Heading styles** → use `h1()/h2()/h3()`
+- **Thick black default table lines** → `line` 0.5pt lines
+- **Pure black text** → use `text_body`
+- **Bold table headers with no fill color**
+- **Letting Word decide column widths** → always `fixed_widths()`
+- **Too many emoji**
+- **Sending a file never rendered for a look**
+- **Using the skill's default look as the deliverable when the app already has an identity** → do item 0.1
+- **A 2000px-wide figure placed on a 17 cm portrait page without thinking about type size** → the text ends up around 5pt (item 0.1 step 6)
+- **A decorative image on the cover that nobody said wows** → cut it, let the type be the highlight (references/word-layout.md item 8)
+- **Creating a .docx without keeping the source markdown**
+
+Reasons and replacements for each item → [`references/anti-patterns.md`](references/anti-patterns.md)
+
+---
+
+## 8 · Linking with other skills
+
+| Need | Use together with |
+|---------|-----------|
+| Content structure/wording of formal documents · **the document's color theme** | `polished-document-style` |
+| Diagrams to paste in as figures | `diagram-figures` (designed figures) · `software-diagrams` (plugin `software-development`) (Mermaid) → export PNG → `figure()` |
+| Read Office files a customer sent | `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` |
+| Spreadsheet deliverable | `anthropic-skills:xlsx` (the same color tokens can be used) |
+| Content and completeness of an SRS document | `srs-writing` (plugin `software-development`) |
+| Slide storyline and layout | `presentation-design` |
+| A presentation deck as a single .html file | `html-slide-deck` (when a .pptx exists, use the entry from .pptx in the same skill) |
+| Diagrams drawn in Mermaid with the same theme | `software-diagrams` (plugin `software-development`) |
+| Origin of the color and type system · logo | `graphic-design` (plugin `software-development`) |
+
+---
+
+## Do not look AI-made
+
+Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye gate 3.2 (web pages answer items 10–14 in addition), because 0 script findings is not yet a pass. The prohibitions in this file are the parts specific to this work; the full list for all media is there.
+
+## Abbreviations
+
+Always spell out an abbreviation in full the first time, then put the abbreviation in brackets, for example Model Context Protocol (MCP).
+After that the abbreviation may be used. See the skill `spell-out-abbreviations` for details.
+
+
+## reference: anti-patterns.md
+
+# Anti-patterns — reasons and what to use instead
+
+The short headings are in `SKILL.md`.
+
+- **Using Word's built-in Heading styles** — they override the colors you set. Use `h1()/h2()/h3()`,
+  which set `outlineLvl` themselves, so the table of contents (TOC) still shows the headings.
+- **Thick black default table borders** — the document looks dated at once. Use lines in the `line` color at 0.5pt between rows (under the header row is the 1.5pt brand line).
+- **Pure black text** — use `text_body`, a dark gray. The body text becomes much softer.
+- **Bold table headers with no fill color** — when a table spans pages, readers cannot tell where it starts.
+- **Letting Word work out column widths** — always call `fixed_widths()`.
+  Otherwise the code column ends up as wide as the detail column.
+- **Too many emoji** — 1 per callout is enough. Do not put one in every heading.
+- **Sending the file without ever rendering it** — see item 6.
+- **Creating the .docx without keeping the source markdown** — you cannot edit it next time.
+
+
+## reference: api.md
+
+# brandkit API — method reference
+
+Every method returns the object it created (paragraph / table / slide), so you can customize it further.
+
+## Contents
+
+1. [brandkit.py — Word (.docx)](#brandkitpy--word-docx)
+2. [brandkit_pptx.py — slides (.pptx)](#brandkit_pptxpy--slides-pptx)
+3. [brandkit_stage.py — Stage deck (.pptx)](#brandkit_stagepy--stage-deck-pptx)
+4. [Column width formulas (Word)](#column-width-formulas-word)
+
+---
+
+## brandkit.py — Word (.docx)
+
+### Create a document
+
+```python
+BrandDoc(path_template=None, page="A4", margins_cm=(2.2, 2.0, 2.2, 2.0),
+         footer_text="หน้า")
+```
+
+| Parameter | Meaning |
+|-------------|----------|
+| `path_template` | A .docx/.dotx file used as the template (already holds the organization's header/logo) |
+| `page` | `"A4"` or `"Letter"` |
+| `margins_cm` | (top, right, bottom, left) |
+| `footer_text` | Prefix before the page number · `""` = bare number |
+
+### Page-level blocks
+
+| Method | Note |
+|-------|----------|
+| `cover(title, subtitle, meta, note, logo, logo_width_cm=None, eyebrow=None, meta_rows=None, top_space_pt=24, page_break=True, style="light", art_colors=None)` | The logo accepts .png and .emf, but **.svg does not work in python-docx**; convert to PNG first (`rsvg-convert -w 600` or `cairosvg`) |
+| `cover(..., style="night")` | **Full-page dark cover** (see the example `examples/example_srs-preview.png`): dark gray background `#1C1C22` + a faint brand-colored glow · `logo` (omitted = no logo) small at top left, 4.6 cm wide · `eyebrow` → document title (32pt · if longer than 2 lines, reduce to 26pt) → `subtitle` → a glow line the full width of the text · `meta_rows` short values (≤18 characters, at most 4 values) go in a 4-cell table, the rest as label/value rows · `note` last · the cover has no footer · `art_colors=(color1, color2, color3)` colors of the glow line from left to right and of the background glow (default `brand_2` → `brand` → light `brand`) · the background image/logo/line are anchored to a paragraph in the body, not the header · needs numpy + pillow (`cover_art.py`) · `logo_width_cm` default 2.6 (light) / 4.6 (night) |
+| `toc(heading="สารบัญ", levels="1-3")` | Inserts a TOC field; then in Word press **Ctrl+A then F9** so the entries appear (it is empty when created) |
+| `page_break()` | |
+| `landscape_section()` | Opens a landscape section for wide tables |
+
+### Headings and text
+
+| Method | Result |
+|-------|---------|
+| `h1(text)` `h2(text)` `h3(text)` | 16 / 12.5 / 11.5 pt · bold · brand / brand_deep / text · sets `outlineLvl` so the TOC sees them |
+| `para(text, size, color, bold, italic, align, space_after)` | `align` = `"center"｜"right"｜"justify"` (do not justify Thai) |
+| `rich([(text, opts), ...])` | Several formats in one paragraph, e.g. `[("สถานะ: ", {"bold": True}), ("อนุมัติ", {"color": "green"})]` |
+| `bullets([...], style="List Bullet")` | `style="List Number"` for numbered lists |
+| `code(text)` | Gray-background code block |
+
+### Tables and data
+
+| Method | Note |
+|-------|----------|
+| `table(headers, rows, widths=None, zebra=False, align=None, first_col_bold=False, size=None, header_style="tint")` | `widths` in twips totaling **9638** (`BODY_TWIPS`) for A4 with 2 cm margins · `align` = a list per column · `header_style="tint"` (default) header filled with `brand` mixed 80% with white, bold `brand_deep` text, no top line, a single 1.5pt `brand` line under the header, thin row lines, no vertical lines · `"classic"` = the old style (`brand_tint` header, thin gray grid) |
+| `pill_table(headers, rows, status_col, palette, widths)` | `palette = {"เสร็จ": "green", "ค้าง": "red"}` · available tones: green blue amber red violet grey |
+| `kpi_row([(value, label), ...])` | Exactly 3–5 cells |
+| `signoff([(role, name), ...])` | Sign-off table |
+
+### Other
+
+| Method | Note |
+|-------|----------|
+| `callout(kind, title, body)` | kind = `tip｜note｜warning｜critical｜success｜question` |
+| `figure(image_path, caption, width_cm=15.5, number=None)` | `number=1` prefixes the caption with "รูปที่ 1 — " (Figure 1) |
+| `save(path)` | |
+
+### Module-level functions
+
+| Function | Use when |
+|----------|---------|
+| `use_brand(**tokens)` | Change the whole color set; must be called **before** creating `BrandDoc` |
+| `style_run(run, size, color, bold, italic, mono)` | Set the font yourself (complex-script is already covered) |
+| `shade(cell, token)` · `left_accent(cell, token, size)` | Fill a cell / add a colored bar on its left |
+| `fixed_widths(table, widths)` | Force column widths |
+| `set_borders(table)` · `row_borders(table)` · `no_borders(table)` · `cell_border(cell, edge, color, size)` | `row_borders` = horizontal lines only · `cell_border(..., color=None)` = no line on that side |
+| `mix(color, other="FFFFFF", amount=0.5)` | Mix colors to make lighter/darker shades from the palette |
+| `repeat_header(row)` · `keep_with_next(paragraph)` | |
+| `add_field(paragraph, "PAGE")` | Insert a Word field |
+| `to_pdf(docx_path, outdir)` | Calls LibreOffice to convert to PDF |
+
+---
+
+## brandkit_pptx.py — slides (.pptx)
+
+```python
+BrandDeck(template=None)      # 16:9 (13.333 × 7.5 inches)
+```
+
+| Method | Resulting slide |
+|-------|-------------|
+| `title_slide(title, subtitle, meta)` | Light blue background + a brand divider line |
+| `section(title, kicker=None)` | Vertical brand bar on the left + section name |
+| `bullets_slide(title, items, subtitle=None)` | Title + purple dash under the title + 17pt bullets |
+| `kpi_slide(title, items, subtitle=None)` | Number cards |
+| `table_slide(title, headers, rows, col_widths, subtitle, status_col, palette)` | `col_widths` are proportions, e.g. `[1, 4, 2, 2]` |
+| `image_slide(title, image_path, caption, subtitle)` | Image centered on the slide, fitted to the frame automatically |
+| `quote_slide(text, source)` | Quote/conclusion slide |
+| `save(path)` | |
+
+**Limits to know**
+
+- Every slide is built from the blank layout (`slide_layouts[6]`), so there are no placeholders to edit in PowerPoint
+  as in a normal template. If the customer will edit a lot themselves, pass `template=` as the organization's .pptx file instead.
+- Tables in python-pptx have no API to turn off borders directly. If you want a table without lines, arrange text boxes instead.
+- Table row height is a minimum. Long text pushes the row taller by itself, so leave room.
+
+---
+
+## brandkit_stage.py — Stage deck (.pptx)
+
+```python
+StageDeck(accent="2A78D6", bg="09090A", project="", template=None,
+          head_font="Chakra Petch", body_font="IBM Plex Sans Thai", block=False, **colors)
+# accent / bg = main color and background color from the project's design · colors = colors the project already fixed, e.g. text="1B2430"
+# block=True = cover() and section() are a solid main-color full sheet, text on it gets ≥ 4.5:1 (white, near black or black)
+```
+
+Every sheet except the cover and chapter divider has: a main-color square + category name (`kicker`) · 28 pt slide title · a line at the foot of the page · `PROJECT · category` · 2-digit page number
+
+| Method | Resulting slide |
+|-------|-------------|
+| `cover(title, lines, meta, logo=None, mark=None)` | 60 pt title + a main-color dash · `lines[1]` is in the main color · `mark` = a large faint symbol on the right (omitted = a faint ring) |
+| `section(number, title, note)` | Chapter divider: a large number in the main color |
+| `figure(kicker, title, image, caption, subtitle)` | Full-sheet diagram image (rendered with the same `#bg=` as the deck) |
+| `compare(kicker, title, headers, rows, widths=(1, 1.85, 1.95))` | Table with row separator lines · column 1 gray, 2 bold white, 3 body text · at most 5 rows |
+| `stats(kicker, title, items, subtitle)` | 2–4 big numbers + a sample question/answer under each number |
+| `steps(kicker, title, rows, example_head, note)` | Numbered steps · `rows = [(name, what it does, example)]` at most 6 steps |
+| `points(kicker, title, points, image, caption, side, side_caption)` | Image on the left + gist with a main-color dash · `side` = a small image on the right, e.g. a QR code |
+| `statement(kicker, text, sub)` | A single statement centered on the sheet |
+| `save(path)` | |
+
+Color helpers: `make_theme(accent, bg)` returns the whole color set · `fit(color, bg)` adjusts lightness while keeping vividness until readable on that background · `is_dark(bg)` · `contrast(a, b)`
+
+---
+
+## Column width formulas (Word)
+
+| Columns | Example widths (total 9638) |
+|:---:|---|
+| 2 | `[2600, 7038]` — heading/detail |
+| 3 | `[1400, 6238, 2000]` — code/item/owner |
+| 4 | `[1100, 4478, 1900, 2160]` — code/item/owner/status |
+| 5 | `[1000, 1800, 2838, 2000, 2000]` |
+| 6 or more | Use `landscape_section()` (area 14570 twips) |
+
+
+## reference: brandkit-usage.md
+
+# How to use brandkit — sample code
+
+Read when you start writing a script that builds real files · all methods are in `api.md`
+
+## Word document (`brandkit.py`)
+
+```python
+import sys; sys.path.insert(0, "scripts")     # หรือ copy brandkit.py มาไว้ข้างงาน
+from brandkit import BrandDoc, use_brand, to_pdf
+
+doc = BrandDoc()                                # A4 · Tahoma · สีประจำบ้าน
+doc.cover("เอกสารข้อกำหนดซอฟต์แวร์ (Software Specification)",
+          subtitle="ระบบตัวอย่าง (Sample System) — Project Control & Monitor",
+          meta="เวอร์ชันเอกสาร 3.5  •  ปรับปรุง 19 กรกฎาคม 2026",
+          logo="asset/Sample_Logo_Badge.png")
+doc.toc()
+
+doc.h1("1. ภาพรวมระบบ")
+doc.para("ระบบตัวอย่างเป็นระบบบริหารและติดตามโครงการ ...")
+doc.kpi_row([("19", "โครงการ"), ("115", "Work items"), ("103", "Open tasks")])
+doc.table(["หัวข้อ", "รายละเอียด"],
+          [["URL ระบบ", "https://app.example.com"]],
+          widths=[2600, 7038])                  # รวม = 9638
+doc.callout("warning", "ข้อควรระวัง", "Token ต้องไม่ถูกแสดงกลับใน UI หลังบันทึก")
+doc.figure("diagrams/context.png", "ภาพรวมระบบและขอบเขตการใช้งาน", number=1)
+doc.pill_table(["รหัส", "งาน", "สถานะ"], rows, status_col=2,
+               palette={"เสร็จ": "green", "กำลังทำ": "amber", "ค้าง": "red"})
+doc.signoff([("Product Owner", "—"), ("Tech Lead", "—")])
+doc.save("SRS.docx")
+```
+
+## Slides (`brandkit_pptx.py`)
+
+Slides use `brandkit_pptx.py`, which takes the same token set:
+
+```python
+from brandkit_pptx import BrandDeck
+d = BrandDeck()                                  # 16:9
+d.title_slide("ระบบตัวอย่าง", "Project Control & Monitor", "19 กรกฎาคม 2026")
+d.section("1 · ภาพรวมระบบ", kicker="ส่วนที่ 1")
+d.bullets_slide("ขอบเขตงาน", ["...", "..."], subtitle="สรุปจาก SRS v3.5")
+d.kpi_slide("ตัวเลขสำคัญ", [("19", "โครงการ"), ("115", "Work items")])
+d.table_slide("สถานะ Milestone", headers, rows, col_widths=[1, 4, 2, 2],
+              status_col=3, palette={"เสร็จ": "green", "กำลังทำ": "amber"})
+d.image_slide("สถาปัตยกรรม", "diagrams/arch.png", caption="ภาพรวมองค์ประกอบ")
+d.save("deck.pptx")
+```
+
+All methods are in `references/api.md`. The runnable example files are
+`scripts/example_srs.py` (document) · `scripts/example_deck.py` (`BrandDeck` slides)
+
+## "Stage" deck (`brandkit_stage.py`) — the default for a deck used for speaking
+
+`brandkit_stage.py` makes a deck with the same structure as the model deck: headings in Chakra Petch, body in IBM Plex Sans Thai, while the **background and main colors come from the project's design**, dark or light.
+(The model is for deck structure only: X Fitness Chatbot Summary v1.2 · an example already run: `examples/example_stage.pptx`)
+
+```python
+from brandkit_stage import StageDeck
+d = StageDeck(accent="2A78D6", bg="09090A", project="Sample Chatbot")   # ตัวอย่าง: สีหลัก · สีพื้นต้องมาจากดีไซน์ของโปรเจกต์คุณเอง
+d.cover("Sample Chatbot", ["สรุปการทำงานของแชตบอท", "ตอบจากข้อมูลจริง และไม่ถูกหลอก"],
+        meta="ทีมพัฒนา · ตุลาคม 2569", logo="logo.png", mark="mark.png")
+d.figure("องค์ประกอบของระบบ", "แอปเดียวรับทุกช่องทาง ความฉลาดเรียกจาก Typhoon",
+         "fig-flow-dark.png", caption="หน้าเว็บ + LINE OA → FastAPI → LightRAG + Typhoon")
+d.save("deck.pptx")
+```
+
+- **2 colors come from the project's design:** `accent` (main color) and `bg` (background color). Look in the order given in `diagram-figures` item 5 (`doc-theme` → design in code, such as `--primary` · `--background` · the Tailwind theme · the app's dark/light mode → logo and brand kit → nothing at all: use the house color `#2A78D6` with background `FFFFFF` and write `(รอยืนยัน)` (awaiting confirmation)). Never use the model deck's colors · if the work being made into a deck has its own colors, extract them first with `presentation-design/scripts/source_palette.py` · for a light-background deck, set `block=True` so the cover and chapter dividers are a solid main-color full sheet (`presentation-design` `references/deck-theme.md`)
+- Every gray level is computed from `bg` (dark background mixed with white, light background mixed with black), so it carries the same tone as the project's background · `accent_hi` is the main color with lightness adjusted until readable on that background; use it for big numbers, sequence numbers and emphasis words · a project that already fixed a text color can override it, e.g. `text="1B2430"`
+- Fonts of the project can be used (`head_font=` · `body_font=`); if the project has none, use Chakra Petch + IBM Plex Sans Thai
+- **Diagram images must use the same background color as the deck** — render `diagram-figures` with `#accent=<main color>&bg=<background color>` (now available in `figure-flow.html`)
+- **The fonts Chakra Petch and IBM Plex Sans Thai must be installed** (Google Fonts · free to use) on the machine that opens the file. If the destination machine lacks them, send a PDF along, or rebuild with `head_font="Tahoma", body_font="Tahoma"`
+- For printing, build another set with `bg="FFFFFF"` instead of using a dark background that wastes ink · `BrandDeck` (color bar on top) is still usable for reports sent to be read on their own
+
+
+## reference: cover-vote.md
+
+# A cover that belongs to this document set — make 3 directions, then vote 2 of 3
+
+Open when a document set needs its own cover.
+
+Use when a document set (proposal · report · business plan) needs its own cover and the default cover looks like another job's. Do one direction first; use this only if the user is not wowed or asks for several directions (3–5 times the labor).
+
+1. **Find the real thing to hold on to:** logo, name, the main verb of the job (propose · analyze · sell), or real images of the work · look at at least 6 real covers by others · every image on the cover must point back to something real, otherwise cut it.
+2. **3 designers (use `parallel-attempts-pick-best`).** Same brief, different directions: A drawn from the job's real data · B a real image of the work is the hero (screen, photo, sample of the output) · C the logo shape or lettering is the structure, no drawn image · each agent needs Bash to render and open the image itself.
+3. **3 new reviewers who have not seen the work, each from a different angle:** art director (is it truly wow, does it look AI-made) · brand and customer (is it memorable, does it show what the work is about, does it go with the whole set) · Word production (is it repeatable, can the text be edited) · include the old cover as an option too.
+4. **Criteria scored 1–5, then vote:** wow compared with the old cover · not a repeat of other work · tells the truth of the work · fits the whole set · craftsmanship (Thai, contrast, smallest text) · buildable and repeatable in Word · the direction with **2 of 3 votes wins** · borrow at most 2 strong pieces from a losing direction · if the votes split 3 ways, "repeatable" decides.
+5. **Text on the cover is editable Word text** (title, version, date) · the background image has no lettering baked in · anchor the image to the first paragraph, not in the header.
+6. **Software document sets only** (BRD · SRS · FSD whose cover must come from the logo shape or a real mockup · uses the cover generator) → if plugin `software-development` is present, also see `doc-cover-design` · without it, items 1–5 are complete on their own.
+
+
+## reference: palette-examples.md
+
+# Color sets that were actually used (examples)
+
+> Warning: **these are examples, not standard values.**
+> Always choose colors from the content of the work first, per item 0 of `SKILL.md`.
+> Use this file to see what a complete set that passes the contrast thresholds looks like (checked with the script on 22 Oct 2026 (2569 BE)), not to copy.
+
+## Set A — blue–violet (general software · extracted from Apps Track)
+
+Light tone, airy, soft, cool gray text
+
+```python
+use_brand(
+    brand="2A78D6", brand_2="6A5CD6", brand_deep="2A4C86",
+    brand_tint="EDF1FB", brand_tint_2="F6F8FD",
+    text="333B4A", text_body="414957", text_muted="676D7A", line="E4E7EE",
+)
+```
+
+## Set B — teal green (medical · health)
+
+```python
+use_brand(
+    brand="0E8F86", brand_2="2F9E6E", brand_deep="0A5A56",
+    brand_tint="E6F4F2", brand_tint_2="F3FAF9",
+    text="2C3A38", text_body="3A4846", text_muted="636F6A", line="E1EAE8",
+)
+```
+
+## Set C — navy (government · legal)
+
+```python
+use_brand(
+    brand="1F3C88", brand_2="5B4B8A", brand_deep="14275C",
+    brand_tint="E8ECF7", brand_tint_2="F5F7FC",
+    text="2B3245", text_body="3A4156", text_muted="636A7D", line="E2E6F0",
+)
+```
+
+## Set D — amber yellow + steel gray (industrial · factory)
+
+A warm accent on a cool gray frame. Use the accent only at the spots that need attention, not across the whole page.
+
+```python
+use_brand(
+    brand="B57509", brand_2="8C5A2B", brand_deep="704805",
+    brand_tint="FBF2E1", brand_tint_2="FDF9F1",
+    text="2F3439", text_body="3E444A", text_muted="676F76", line="E5E8EA",
+)
+```
+
+## Status colors — the same set for every brand
+
+Status colors **do not change with the brand**, because their meaning is fixed.
+
+| Status | Background | Text |
+|---|---|---|
+| Success | `E9F7EF` | `17794A` |
+| Info | `EAF2FD` | `2160AB` |
+| Warning | `FDF5E4` | `96660D` |
+| Error | `FDEDEC` | `A63A34` |
+| Accent | `F1EEFC` | `52439F` |
+| Neutral | `F2F4F8` | `626A7A` |
+
+> If the brand color clashes with one of the status colors (for example the brand is green), change the **brand color in that context**.
+> Do not change the status color. Readers interpret green as "passed" before reading the text.
+
+## How to check before use
+
+1. Body text and `text_muted` on a white background and on a `brand_tint` background ≥ 4.5:1 · `brand_deep` (H2 and table headers) on white and `brand_tint` ≥ 7:1 · `brand` (H1 16pt bold, and KPI numbers count as large text) ≥ 3:1
+2. Printed in black and white, headings must still be distinguishable from body text
+3. Open the rendered file and look by eye; do not trust the values in the table
+
+## Tones suggested by the content of the work (use when there is no brand color to hold on to)
+
+| Content of the work | Suggested tone | Reason |
+|---|---|---|
+| Medical · health | Teal green · green | Cleanliness, safety |
+| Finance · banking | Dark blue · silver gray | Stability |
+| Industrial · factory | Amber yellow · steel gray | Machinery, warning |
+| Education | Purple · light orange | Enthusiasm |
+| Retail · food | Orange · pinkish red | Warmth, appetite |
+| Government · legal | Navy · oxblood | Formality |
+| General software | Blue | A neutral default when there is no other context |
+
+If the customer already has a brand, use the brand colors. This table is used only when there is nothing to hold on to.
+
+
+## reference: thai-fonts.md
+
+# Fonts and Thai — details
+
+The rules that must not be missed are abbreviated in `SKILL.md`
+
+Use **Tahoma** as the default: on every Windows/Office machine · tone marks do not collide with vowels ·
+bold reads clearly · the x-height of Thai and English is close.
+
+> **Complex script trap:** Word treats Thai as a *complex script*, a separate set from Latin.
+> If you set only `run.font.size` / `run.font.bold`, Thai text will **not follow**.
+> You must set `w:szCs`, `w:bCs`, `w:iCs` and `w:rFonts` in all of `ascii/hAnsi/cs/eastAsia`.
+> The function `style_run()` in `brandkit.py` handles this. **Never set fonts by hand.**
+
+> **Dual-font trap:** if the Latin font and the Thai font differ, such as Noto Sans + Noto Sans Thai,
+> setting only the `cs` slot is not enough. Word draws Thai with the font in the Latin slot if that font has Thai glyphs; if not, it silently falls back to Browallia New.
+> Set `bk.FONT` (Thai) and `bk.LATIN_FONT` (Latin), then call `bk.thai_runs(doc.element.body)` and on every header and footer before `save()`.
+> This function splits Thai text into runs of its own and sets all 4 slots to the Thai font.
+> For fonts that are not on every machine, call `bk.embed_fonts(doc)` to embed the fonts in the file. This works only for fonts whose license allows embedding, such as OFL, and the file grows by several MB.
+> Variable fonts such as Cascadia Mono become Calibri when Word exports to PDF. Use Consolas for code.
+
+Other rules for Thai documents:
+
+- Line spacing **1.3–1.35** for Tahoma (English only can use 1.15, but Thai has tone marks and upper–lower vowels that need room) · Noto family fonts have a built-in line height of 1.36–1.51 em, so **1.1–1.15** gives the same spacing. Decide from the real PDF page, not from the numbers.
+- **Never justify** Thai paragraphs, because Thai has no spaces between words and Word stretches words until holes appear.
+- LibreOffice breaks Thai words differently from Word. To send a PDF, export it from real Word,
+  or at least open the PDF and check by eye before sending.
+- To create a PDF on Linux without Tahoma, use **Loma** or **Sarabun** instead
+  (ReportLab places Thai tone marks wrongly; use python-docx→LibreOffice or WeasyPrint instead).
+- When previewing on Linux, Thai text looks **smaller** than Latin because the substitute font has a lower x-height.
+  It is not a bug in the font size. On Windows with real Tahoma the heights are equal, so do the final check from Word.
+
+
+## reference: tokens-and-type.md
+
+# Design tokens · type scale · reusable elements
+
+Contents: tokens → color meanings → type scale → reusable elements
+
+This table sets the **job** of each token, not the color value.
+The real values come from item 0, then you set them once with `use_brand(...)`.
+
+| Token | Job | Comes from |
+|-------|---------|----------|
+| `brand` | H1 headings · KPI numbers · accent bars · links (if `brand` is below 4.5:1 on a white background, use `brand_deep` for links) | The brand color (none → the house default + `(รอยืนยัน)` (awaiting confirmation)) |
+| `brand_2` | Secondary accent · underline under slide headings · end of a gradient | A neighbor of the main color on the color wheel |
+| `brand_deep` | H2 headings · table header text | The main color mixed with black, giving contrast ≥ 7:1 on white |
+| `brand_tint` | Table header fill · KPI cards · cover background | The main color mixed with white, about 90% |
+| `brand_tint_2` | Alternating (zebra) rows in long tables | The main color mixed with white, about 96% |
+| `text` | H3 headings · emphasized text | A dark gray tinted toward the main color |
+| `text_body` | All body text | A dark gray 1 step lighter than `text`. **Not pure black, because pure black tires the eyes** |
+| `text_muted` | Figure captions · meta · footer | A mid gray with contrast ≥ 4.5:1 on white and on `brand_tint` |
+| `line` | Table lines, dividers | A very light gray, visible but not competing for attention |
+
+**6 status colors** (each has a fill color and a text color as a pair): success · info · warning · error · highlight · neutral
+Status colors **do not change with the brand**, because green means pass and red means fail in every document.
+The fill is a very light shade and the text is a dark shade of the same color, giving contrast ≥ 4.5:1.
+
+**What each color means — always choose a color by its meaning** (the same for documents and diagrams)
+
+| Color | Means | Used for (callout / pill / box / line in a figure) |
+|---|---|---|
+| Red | Danger · forbidden · delete · error · overdue | `critical` · status "stuck/failed" · a step that destroys data · a broken line |
+| Yellow/orange | Caution · waiting for action · caveat · a path that is not the main line | `warning` · status "in progress" · exception zone/line (`#C77A11`) |
+| Green | Success · pass · safe · done | `success` · status "done" · a confirmed result |
+| Main color (the brand color; with no brand, the house blue) | Information · main action · normal path | `tip` · primary button · box/line of the main path |
+| Purple | Question · option · side note | `question` · optional extras |
+| Gray | Neutral · disabled · external | `note` · external system · a part that is switched off |
+
+The one rule: **choose a color by meaning, not by looks.** Do not use red just to stand out. Use red only when something is truly dangerous or wrong. Diagrams use this same set of meanings too (see `software-diagrams` · `diagram-figures`, which has the orange `EXCEPT_HUE` for paths that leave the main line).
+
+> **Thresholds every color set must pass:** body text and `text_muted` on the background ≥ 4.5:1 · H2 and table headers (`brand_deep`) ≥ 7:1 ·
+> H1 and KPI numbers (`brand` in large size, per the WCAG 2.2 large-text definition, criterion 1.4.3) ≥ 3:1 ·
+> printed in black and white, the hierarchy must still be distinguishable. If a set fails, adjust the intensity and do not change the color.
+>
+> **A color set that was really used** (not a standard value; do not copy it without looking at the content of the work) → `references/palette-examples.md`
+
+> **Change the whole brand in one line:**
+> `use_brand(brand="C1121F", brand_deep="780000", brand_tint="FDECEC")`
+
+## Type scale (pt)
+
+| Level | Word | Slide | Weight · color |
+|-------|------|-------|--------------|
+| Cover title | 20 | 40 | bold · `brand` (Word) / `brand_deep` (slides) |
+| H1 | 16 | 26 | bold · `brand` |
+| H2 | 12.5 | — | bold · `brand_deep` |
+| H3 | 11.5 | — | bold · `text` |
+| Body | 11 | 17 | regular · `text_body` |
+| Table | 11 | 12.5 | regular · `text_body` |
+| Caption/footer | 8.5–9 | 10–12 | italic or regular · `text_muted` |
+
+**Do not add sizes outside this scale.** Every extra size makes the document look inconsistent, and readers notice.
+
+## Reusable elements (from item 4)
+
+| Element | Look | Method |
+|-----------|--------|-------|
+| Cover page | Logo + title in the brand color, centered on the page | `cover()` |
+| Table | Header fill `brand_tint` with `brand_deep` text · 1.5pt brand line under the header row · `line` 0.5pt between rows · header repeats on every page | `table()` |
+| Status table | The status column is tinted by value | `pill_table()` |
+| Summary figure strip | Cards with `brand_tint` fill, a big number in the brand color + a small gray label | `kpi_row()` |
+| Text box | Light fill + a thick colored bar on the left + 1 emoji | `callout()` |
+| Figure with caption | Figure centered on the page + "รูปที่ N — ..." in gray italic under the figure | `figure()` |
+| Code block | Light gray fill, Consolas 9pt font | `code()` |
+| Sign-off table | Role / name / signature / date | `signoff()` |
+
+**Good proportions:** no more than 3–5 callouts per 10 pages · a summary figure strip (KPI strip) of 3–5 cells (from 6 cells on, the numbers get too small to stand out) ·
+a table with more than 6 columns should move to a landscape page (`landscape_section()`).
+
+
+## reference: visual-check.md
+
+# Check a document by eye — commands and checklist
+
+```bash
+soffice --headless --convert-to pdf --outdir _to_delete/preview SRS.docx
+pdftoppm -png -r 80 _to_delete/preview/SRS.pdf _to_delete/preview/page      # ได้ page-1.png หรือ page-01.png (เลขเติมศูนย์ตามจำนวนหน้าทั้งหมด)
+```
+
+Then **open and look at every page image** (Read tool) before delivery. Check these:
+
+- [ ] No table overflows the paper edge; columns are wide enough; no word is squeezed onto a strange new line
+- [ ] No heading stranded on the last line of a page
+- [ ] Thai tone marks/vowels do not collide, and no character turns into a square box
+- [ ] The cover has no overflowing or edge-cut text · **page 2 is not blank** (a full-page cover, then the page-break paragraph falls onto page 2; `cover()` puts the break at the end of the last paragraph already, and a hand-written cover must do the same)
+- [ ] Spacing before/after tables and callouts is the same across the document
+- [ ] Footer page numbers on every page
+- [ ] No TBD / Lorem ipsum / leftover placeholder (except `(รอยืนยัน)` (awaiting confirmation) that is in the report's awaiting-confirmation list)
+
+
+## reference: word-layout.md
+
+# Dark cover and table headers — details from real jobs
+
+Read when making a dark cover or adjusting table headers on inner pages · the short rules to use every time are in `SKILL.md` item 3.
+
+## Dark cover style
+
+**Dark cover style (when the app or brand uses a dark screen):** a full-page cover in a neutral near-black dark gray (for example `#1C1C22`) with a very faint brand-colored glow (at most 15%). A deep purple glow filling the corner made the cover look purple, and the work's owner asked to go back to dark gray ·
+The document title, subtitle and the line under the title go **right under the logo**, not in the middle or at the bottom of the page. The document-info table sits toward the bottom ·
+A light-on-dark lettering logo at top left · document title 28–32pt · a 4-cell document-info table
+(document code · version · date · status) · inner pages have a white background and dark code blocks; the header has a small logo, the document title and the document code;
+the footer has the system name and "หน้า / ทั้งหมด" (page / total). The dark color is on the cover page only, so it can still be printed. The title size on this kind of cover may exceed the scale in item 1.
+The logo on the cover uses a **small size (about 4.5 cm wide) at top left, above the document title**. Enlarging the symbol into the main image in the middle of the cover was tried, and the work's owner asked to go back to small.
+If you want a flourish, stretch the logo's color glow into a long line as wide as the text (leave left and right margins equal to the paper margins; a line touching the paper edge was asked to be set in from the edge) as a bar of even thickness **with straight-cut ends and slightly rounded corners** (about 0.7 mm thick, corners about 0.25 mm). Tapered pointed ends were criticized as too sharp · the glow must fade to zero before the image edge, otherwise the box edge of the image shows. Use it instead of an underline below the document title (anchor the line image to the paragraph under the title so it follows both 1-line and 2-line titles) · the line must be **one continuous image** with the same thickness and glow throughout, a smoothstep gradient with both ends fading softly, drawn at 300 dpi. Never lay short bars over a long line, because it shows as a thick lump with colors that do not join (the work's owner said "the colored line is not smooth").
+> **The cover background image and the logo on the cover must not be placed in the first page's header.** Word shows everything in the header as faded while reading or editing the document, so a full-page dark cover looks washed out (it is not faded in the PDF, so checking from the PDF alone will not find it; the work's owner said "looks washed out"). Anchor the floating behind-text image to the cover's first paragraph instead, and set `relativeHeight` the way Word does (background image 251658240 · images above it increase by 1024 each), because Word re-orders small numbers like 1, 2, 3 on save, and then the background image covers the logo.
+
+Small text on a dark cover (labels, author info, notes) uses a size **of at least 8.5pt** and a light gray from `#CFCCDE` up; the subtitle uses a near-white light color. 7.5pt mid-gray text on a dark background looks faint.
+
+**Use in code:** `doc.cover(title, subtitle=..., eyebrow=..., meta_rows=[...], logo="logo.png", style="night")`. The logo is optional · the glow line colors can be adjusted with `art_colors=(color1, color2, color3)` · the resulting look: `examples/example_srs-preview.png` (cover + inner page) · the example call: `scripts/example_srs.py` · `table()` uses this table header style by default (`header_style="classic"` = the old style)
+
+## Table headers on inner pages
+
+**Table headers on inner pages must not use a full-width solid dark fill**, even when the cover is dark, because tables are on every page, so dark color is heavy on the eye and wastes ink (the work's owner really asked for this change in one job).
+Use a light fill of the brand color that still clearly reads as the header row, such as `#E4DCFD` (a lighter fill like `#F5F3FF` was called too faint by the work's owner), with bold dark brand-colored text.
+There is only one border: a 1.5pt brand-colored line under the header row. No line on top (a black top line looks heavy and was asked to be changed), and no white gaps between header cells, because that would break the line under the header into segments.
+Word cannot draw gradient borders; if you add a gradient, the color changes in steps along the columns.
+
+## Page structure (moved from `SKILL.md` item 3; wording not changed)
+
+```
+หน้าปก        โลโก้กลาง → ชื่อเอกสาร (brand, bold) → ชื่อระบบ (text, bold)
+              → บรรทัดเวอร์ชัน/วันที่ (9pt) → หมายเหตุการแก้ไข (8pt เอียง เทา)
+              → ขึ้นหน้าใหม่
+สารบัญ        field TOC (ผู้ใช้กด F9 อัปเดต) → ขึ้นหน้าใหม่
+เนื้อหา        H1 มีเลขข้อเสมอ ("1. ภาพรวมระบบ") · H2 เป็น "1.1"
+              ทุก H1/H2/H3 ตั้ง keep-with-next กันหัวข้อค้างท้ายหน้า
+ท้ายเอกสาร    ตารางลงนามอนุมัติ
+footer        "หน้า N" กลางหน้า สีเทา 9pt
+```
+
+## Figures in documents · beauty-gate rules · cover (moved from SKILL.md §0.1 items 6–8)
+
+6. **Figures in documents:** the smallest text after real placement ≥ 7pt → minimum pixels on the canvas = `0.247 × canvas width(px) ÷ placed width(cm)` (a 2000px canvas placed 17 cm wide = 29px · placed on a 25.7 cm landscape page = 20px · use 26px to get 9pt) · a wide figure should go on a landscape page at the full column width (≥ 95%) · use the **version placed in the document without a figure title**, because the Word caption already gives the number and the figure's name · figure caption ≥ 9pt in body text color · after a figure, start a new section; the next paragraph must not flow onto the figure's page.
+7. **What the beauty gate (`ด่านสวย`) often catches (put them as rules in the render script's `check`):** stray markdown marks (`**` · backtick) · Thai text in a mono font · a table overflowing a text column · a table of contents with a single entry stranded on the next page · a code list cut in the middle of a code (one code per line, one font for the whole column) · the "(รอยืนยัน)" tag uses the warning color, not the brand color · identity lost after the cover (chapter opener pages use the app's brand color bar) · a light cover available to print alongside the dark cover.
+8. **Cover — plain lettering first, images later** (a project-specific cover that uses the logo shape or a real screen instead of decorative images → `doc-cover-design` (plugin `software-development`))**:** an illustration on the cover is optional, and an open cover with well-set lettering always beats an image that does not wow · a design that passed the gate: the document type (SRS · FSD · ARCH) large at 150–200px in the brand color as the only highlight (width at most ~85% of the column · a name over 5 letters such as TESTPLAN splits into 2 lines, never shrunk smaller than other copies, since the whole set must look the same size) → a short brand-colored line → Thai title → English title → a 1-sentence summary line (≥ 12pt, narrow column) → an info row at the page foot (labels ≥ 10pt) · leave the rest empty · parts with fixed positions (logo · document type · line · status tag) are drawn into the cover background image, while the title and info are Word text that can be searched and edited · the `(รอยืนยัน)` (awaiting confirmation) tag on a dark background uses a bright warning color, with no highlight fill · **if the user says the cover is not beautiful → cut the decorative images first** (curves, glowing dots, gradients), then make 3 plain-lettering covers to choose from (project has a logo or mockup → use `doc-cover-design` item 7 instead)

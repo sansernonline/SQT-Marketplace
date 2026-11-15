@@ -2,195 +2,195 @@
 
 Use when work runs outside the request in queues or schedules
 
-# งานเบื้องหลัง
+# Background jobs
 
-> **กฎข้อเดียว:** งานเบื้องหลังทุกตัวต้อง**รันซ้ำได้โดยไม่เกิดผลซ้ำ**
-> เพราะมันจะถูกรันซ้ำแน่นอน: เครื่องดับกลางทาง · คนกดใหม่ · ระบบ retry ให้เอง
+> **The one rule:** every background job must be **safe to run again without repeating its effect**,
+> because it will certainly run again: the machine dies halfway · a person clicks again · the system retries by itself.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- งานที่ผู้ใช้ไม่ควรต้องนั่งรอ: ส่งอีเมล สร้างรายงาน นำเข้าไฟล์
-- งานตามเวลา: สรุปรายวัน ปิดยอดสิ้นเดือน ลบข้อมูลที่หมดอายุ
-- เรียกระบบภายนอกที่ช้าหรือล่มบ่อย
-- คิวตันหรือมีงานหายแล้วไม่มีใครรู้
+- Work the user should not have to sit and wait for: sending email, building a report, importing a file
+- Scheduled work: a daily summary, month-end closing, deleting expired data
+- Calling an external system that is slow or often down
+- A jammed queue, or jobs that vanish with nobody noticing
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill, or use it alongside
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| timeout และการ retry ของคำขอปกติ | `error-handling-patterns` | แทน |
-| event ข้ามหลาย service ผ่าน Kafka (หลาย consumer อ่าน event เดียวกัน · เก็บย้อนหลัง) | `kafka-streaming` | แทน |
-| คิวงานผ่าน RabbitMQ (หลาย worker · retry · dead letter · ต้องมี broker จริง) | `rabbitmq-messaging` | แทน |
-| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` | แทน |
-| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` | แทน |
-| นำเข้าไฟล์ Excel/CSV เป็นเนื้องาน | `data-import-export` | แทน |
-| ส่งอีเมล/SMS เป็นเนื้องาน | `notifications` | แทน |
-| ตารางงานและ index | `database-design` | คู่ |
-| log ของ worker และ correlation id | `logging-standards` | คู่ |
-| งานลบข้อมูลที่หมดอายุ | `pdpa-compliance` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
-| ออกแบบระบบ agent (Loop · Graph · Dynamic · เลือก framework) | `llm-engineering` → [`agent-systems.md`](../llm-engineering/references/agent-systems.md) | คู่ |
+| Timeouts and retries for ordinary requests | `error-handling-patterns` | instead |
+| Events across several services through Kafka (several consumers read the same event · history is kept) | `kafka-streaming` | instead |
+| A job queue through RabbitMQ (several workers · retry · dead letter · needs a real broker) | `rabbitmq-messaging` | instead |
+| Metrics and alerts | `observability-basics` | instead |
+| Choosing the overall architecture | `architecture-patterns` | instead |
+| Importing Excel/CSV files as the main job | `data-import-export` | instead |
+| Sending email/SMS as the main job | `notifications` | instead |
+| The job table and indexes | `database-design` | alongside |
+| Worker logs and correlation id | `logging-standards` | alongside |
+| Jobs that delete expired data | `pdpa-compliance` | alongside |
+| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
+| Designing an agent system (Loop · Graph · Dynamic · choosing a framework) | `llm-engineering` → [`agent-systems.md`](../llm-engineering/references/agent-systems.md) | alongside |
 
 ---
 
-## 1 · อะไรควรไปอยู่เบื้องหลัง
+## 1 · What belongs in the background
 
-| เอาไปเบื้องหลัง | ทำในคำขอเลย |
+| Send to the background | Do inside the request |
 |---|---|
-| ใช้เวลาเกิน 1–2 วินาที | เร็วและผู้ใช้ต้องเห็นผลทันที |
-| เรียกระบบภายนอกที่ล้มได้ | ตรวจสิทธิ์ · ตรวจข้อมูล |
-| ผู้ใช้ไม่ต้องรอผล (อีเมล แจ้งเตือน) | ผลลัพธ์คือสิ่งที่เขากดมาดู |
-| งานหลายรายการเป็นชุด | |
+| Takes more than 1–2 seconds | Fast, and the user must see the result at once |
+| Calls an external system that can fail | Permission checks · data validation |
+| The user does not wait for the result (email, notification) | The result is what they clicked to see |
+| Many items done as a batch | |
 
-> **อย่าเอาไปเบื้องหลังเพียงเพราะมันช้า** ถ้าผู้ใช้ต้องเห็นผลก่อนไปต่อ
-> การย้ายไปเบื้องหลังจะต้องเพิ่มหน้าจอรอ การแจ้งเตือน และที่เก็บผลลัพธ์
-> บางครั้งแก้ให้เร็วขึ้นถูกกว่ามาก (ดู `lazy-coding`)
+> **Do not move work to the background just because it is slow.** If the user must see the result before moving on,
+> moving it adds a waiting screen, a notification, and a place to store results.
+> Sometimes making it faster is much cheaper (see `lazy-coding`).
 
 ---
 
-## 2 · เลือกกลไก
+## 2 · Choose a mechanism
 
-| กลไก | เหมาะกับ | ระวัง |
+| Mechanism | Fits | Watch out for |
 |---|---|---|
-| **ตารางงานในฐานข้อมูล** | ระบบเล็ก–กลาง · งานไม่เกินหลักพันต่อวัน | ต้องเขียนตัวหยิบงานเอง · ระวัง worker แย่งงานกัน |
-| **คิวจริง** (Redis · RabbitMQ · Amazon Simple Queue Service (SQS)) | งานเยอะ · ต้องการ retry และ dead letter ในตัว | เพิ่มของที่ต้องดูแล |
-| ตัวตั้งเวลาในแอป (cron ในโค้ด) | งานตามเวลาที่มี instance เดียว | **หลาย instance จะรันพร้อมกัน** · ดูข้อ 5 |
-| ตัวตั้งเวลาของแพลตฟอร์ม | งานตามเวลาบนคลาวด์ | |
+| **Job table in the database** | small to medium systems · up to a few thousand jobs a day | you must write the job picker yourself · watch for workers fighting over jobs |
+| **A real queue** (Redis · RabbitMQ · Amazon Simple Queue Service (SQS)) | many jobs · need built-in retry and dead letter | one more thing to look after |
+| In-app scheduler (cron in code) | scheduled work with a single instance | **several instances will run it at the same time** · see section 5 |
+| Platform scheduler | scheduled work on the cloud | |
 
-**ถ้าระบบยังเล็ก ให้เริ่มจากตารางในฐานข้อมูลก่อนเสมอ** เพราะ `SELECT ... FOR UPDATE SKIP LOCKED`
-ของ PostgreSQL ให้หลาย worker หยิบงานพร้อมกันได้อย่างปลอดภัย โดยไม่ต้องเพิ่มระบบใหม่
+**If the system is still small, always start with a table in the database,** because PostgreSQL's `SELECT ... FOR UPDATE SKIP LOCKED`
+lets several workers pick jobs at once safely, with no new system to add.
 
-**ทุกงานต้องมีอย่างน้อย:** `id` · `type` · `payload` · `status` · `attempts` ·
+**Every job needs at least:** `id` · `type` · `payload` · `status` · `attempts` ·
 `run_after` · `locked_by` · `locked_at` · `last_error` · `created_at`
 
 ---
 
-## 3 · รันซ้ำแล้วต้องไม่เกิดผลซ้ำ
+## 3 · Running again must not repeat the effect
 
-ระบบคิวเกือบทั้งหมดรับประกันแค่ว่า "ส่งถึงอย่างน้อย 1 ครั้ง" **ไม่ใช่ 1 ครั้งพอดี**
+Almost every queue system guarantees only "delivered at least once", **not exactly once**.
 
-| วิธี | ใช้ยังไง |
+| Method | How to use it |
 |---|---|
-| **กุญแจกันซ้ำ** | unique constraint บน `(job_type, business_key)` ทำให้งานซ้ำ insert ไม่ผ่าน |
-| **ตรวจสถานะก่อนทำ** | "ถ้าใบสั่งซื้อนี้ส่งอีเมลไปแล้ว ให้จบเลย" |
-| **ส่งต่อ idempotency key** | เวลาเรียก API ภายนอก (ดู `api-conventions`) |
-| **ตั้งค่าให้เป็นค่าใหม่ ไม่บวกเพิ่มจากค่าเดิม** | `set status = 'paid'` ปลอดภัยกว่า `balance = balance + 100` |
+| **Duplicate-blocking key** | a unique constraint on `(job_type, business_key)` makes a duplicate job fail to insert |
+| **Check state before acting** | "if the email for this purchase order was already sent, stop" |
+| **Pass on an idempotency key** | when calling an external API (see `api-conventions`) |
+| **Set a new value, do not add to the old one** | `set status = 'paid'` is safer than `balance = balance + 100` |
 
-> **งานที่บวกค่าหรือส่งของออกไปข้างนอก ถ้ารันซ้ำจะเสียเงินจริง**
-> อีเมล 2 ฉบับแค่น่ารำคาญ แต่โอนเงิน 2 ครั้งเป็นเรื่องใหญ่
+> **A job that adds to a value or sends something outside costs real money if it runs twice.**
+> Two emails are only annoying, but two money transfers are a big problem.
 
 ---
 
-## 4 · retry และงานที่ตายแล้ว
+## 4 · Retry and dead jobs
 
-ตัวเลขนี้สำหรับงานในคิว · ลองใหม่นอกคิวใช้ของ [`error-handling-patterns`](../error-handling-patterns/SKILL.md) §4: service เรียก service ใช้ 3 ครั้ง 1/2/4 วินาที · มีคนรอหน้าจอ → retry ไม่เกิน 1 ครั้งแล้วให้กดเอง
+These numbers are for jobs in a queue · for retries outside a queue use [`error-handling-patterns`](../error-handling-patterns/SKILL.md) §4: service-to-service calls use 3 tries at 1/2/4 seconds · when a person waits on the screen → at most 1 retry, then let them press again
 
 ```
-ล้ม → รอ 1 นาที → ล้ม → รอ 4 นาที → ล้ม → รอ 16 นาที → ล้มครั้งที่ 4 → dead letter
+fail → wait 1 min → fail → wait 4 min → fail → wait 16 min → 4th failure → dead letter
 ```
 
-| กฎ | รายละเอียด |
+| Rule | Detail |
 |---|---|
-| **มีเพดานเสมอ** | 3–5 ครั้ง ถ้า retry ไม่จำกัด งานเดียวก็ทำให้คิวตัน |
-| เว้นเวลาเพิ่มขึ้นทุกรอบ (เท่าตัวคงที่ เช่น ×4) + สุ่มเล็กน้อย | เหมือน `error-handling-patterns` |
-| ข้อมูลผิดไม่ต้อง retry | payload ผิดรูปแบบ ลองอีกกี่ครั้งก็เหมือนเดิม |
-| **งานที่หมดสิทธิ์ต้องไปที่เดียว** | dead letter (ที่เก็บงานที่ล้มจนหมดสิทธิ์) โดยเก็บ payload เต็มและ error ล่าสุด |
-| ต้องมีคนดู dead letter | **แจ้งเตือนเมื่อมีงานเข้าไปใหม่** ไม่ใช่รอให้ลูกค้าทัก |
-| เอากลับมารันใหม่ได้ | แก้ต้นเหตุแล้วสั่งรันใหม่จาก dead letter ได้ โดยไม่ต้องเขียนสคริปต์ |
+| **Always set a cap** | 3–5 tries · with unlimited retries a single job can jam the queue |
+| Increase the wait each round (a fixed multiple such as ×4) + a little randomness | same as `error-handling-patterns` |
+| Bad data needs no retry | a malformed payload stays the same however many times you try |
+| **A job that has run out of tries goes to one place** | dead letter (where jobs that failed until they ran out of tries are kept), keeping the full payload and the last error |
+| A person must watch the dead letter | **alert when a new job arrives there**, do not wait for a customer to complain |
+| It can be run again | after fixing the cause, you can re-run from the dead letter without writing a script |
 
-**งานที่ค้างเพราะ worker ตาย** ต้องมีตัวปลดล็อก
-งานที่ `locked_at` เก่ากว่า N นาที ให้ถือว่าไม่มีใครทำอยู่แล้ว แล้วปลดล็อกให้ worker อื่นหยิบไปทำต่อ
+**A job stuck because a worker died** needs an unlocker.
+If a job's `locked_at` is older than N minutes, treat it as having nobody working on it, and unlock it so another worker picks it up.
 
-**สถานะของงานเป็นเครื่องสถานะ ไม่ใช่ boolean** (แนวคิดจาก wshobson python-background-jobs) — ทุกกลไกในข้อ 2 ต้องตอบได้ว่างานอยู่สถานะไหนใน `queued → running → succeeded` หรือ `running → failed (attempts < เพดาน) → queued` หรือ `failed → dead` · เก็บ `attempts` · `locked_at` · `last_error` · `finished_at` ไว้กับงาน · เดินได้เฉพาะลูกศรข้างบน (งาน `succeeded` กลับไป `running` ไม่ได้ ต้องสร้างงานใหม่) · หน้าจอแอดมินและ dead letter อ่านจากสถานะนี้ที่เดียว
+**Job state is a state machine, not a boolean** (idea from wshobson python-background-jobs) — every mechanism in section 2 must be able to say which state a job is in: `queued → running → succeeded`, or `running → failed (attempts < cap) → queued`, or `failed → dead` · keep `attempts` · `locked_at` · `last_error` · `finished_at` with the job · move only along the arrows above (a `succeeded` job cannot go back to `running`; create a new job) · the admin screen and the dead letter read from this state in one place
 
 ---
 
-## 5 · งานตามเวลา
+## 5 · Scheduled jobs
 
-> **ถ้ามีหลาย instance งานตามเวลาจะรันหลายรอบพร้อมกัน**
-> รายงานสรุปยอดถูกส่ง 3 ฉบับ หรือหักเงิน 3 ครั้ง ก็เพราะข้อนี้
+> **With several instances, a scheduled job runs several times at once.**
+> A summary report sent 3 times, or money charged 3 times, comes from this.
 
-| วิธี | ใช้เมื่อ |
+| Method | Use when |
 |---|---|
-| ล็อกที่ฐานข้อมูล (advisory lock) | ทำได้ทันที ไม่ต้องเพิ่มของ |
-| ตัวตั้งเวลาของแพลตฟอร์มยิงเข้ามาที่ endpoint | บนคลาวด์ · Kubernetes CronJob |
-| ตัวตั้งเวลาที่รองรับหลาย instance โดยตรง | Quartz · Hangfire |
+| Lock in the database (advisory lock) | you can do it right away with nothing added |
+| The platform scheduler calls an endpoint | on the cloud · Kubernetes CronJob |
+| A scheduler that supports several instances directly | Quartz · Hangfire |
 
-**กฎของงานตามเวลา:**
+**Rules for scheduled jobs:**
 
-- **รับช่วงเวลาเป็นพารามิเตอร์** จะได้รันย้อนหลังวันที่พลาดได้โดยไม่ต้องแก้โค้ด
-- ถ้าตกไป 1 รอบ ต้องตามเก็บได้ ไม่ข้ามไปเลย
-- ระบุเขตเวลาให้ชัดว่า "ทุกเที่ยงคืน" ของเขตเวลาไหน (ดู `i18n-and-locale`)
-- **บันทึกว่ารันรอบไหนสำเร็จแล้ว** ไม่ใช่ดูจาก log
+- **Take the time range as a parameter**, so you can re-run missed dates without changing code
+- If a run is missed, you must be able to catch up, not skip it for good
+- State the time zone clearly: "every midnight" in which zone (see `i18n-and-locale`)
+- **Record which runs succeeded**, do not infer it from logs
 
 ---
 
-## 6 · งานยาวที่ผู้ใช้รออยู่
+## 6 · Long jobs the user waits on
 
-| ต้องมี | รายละเอียด |
+| Needed | Detail |
 |---|---|
-| id ของงาน | คืนให้ทันทีที่รับงาน ผู้ใช้เอาไว้ถามความคืบหน้า |
-| สถานะ | `queued` · `running` · `succeeded` · `failed` · `cancelled` |
-| ความคืบหน้า | "ทำแล้ว 340 จาก 1,200 รายการ" ไม่ใช่หมุนเปล่า ๆ |
-| ยกเลิกได้ | งานต้องเช็คสัญญาณยกเลิกเป็นระยะ |
-| ผลลัพธ์ | เก็บไว้ให้ดาวน์โหลดได้ พร้อมวันหมดอายุ |
-| แจ้งเมื่อเสร็จ | อีเมลหรือแจ้งเตือนในระบบ (ดู `notifications`) |
+| Job id | return it the moment the job is accepted · the user uses it to ask about progress |
+| State | `queued` · `running` · `succeeded` · `failed` · `cancelled` |
+| Progress | "340 of 1,200 items done" (ทำแล้ว 340 จาก 1,200 รายการ), not a blind spinner |
+| Cancellable | the job must check for a cancel signal regularly |
+| Result | keep it available to download, with an expiry date |
+| Notify when done | email or an in-system notification (see `notifications`) |
 
-**แบ่งงานใหญ่เป็นชิ้นเล็ก** เช่น นำเข้า 50,000 แถว ให้แบ่งเป็นงานย่อยละ 500 แถว
-เพราะงานเดียวที่ใช้เวลา 40 นาที ถ้าล้มที่นาทีที่ 39 ต้องเริ่มใหม่ทั้งหมด
+**Split a big job into small pieces.** For example, import 50,000 rows as sub-jobs of 500 rows each,
+because a single 40-minute job that fails at minute 39 must start over from the beginning.
 
 ---
 
-## 7 · วัดอะไร
+## 7 · What to measure
 
-| ตัวชี้วัด | เตือนเมื่อ |
+| Metric | Alert when |
 |---|---|
-| จำนวนงานค้างในคิว | โตขึ้นเรื่อย ๆ ไม่ลดลง |
-| เวลารอในคิว (p95 · 95% ของงานรอไม่เกินค่านี้) | เกินที่สัญญาไว้ |
-| อัตราความล้มเหลว | เกินเกณฑ์ |
-| **จำนวนใน dead letter** | **เพิ่มขึ้นแม้แค่ตัวเดียว** |
-| รอบของงานตามเวลาที่ไม่ได้รัน | ข้ามรอบ |
-| งานที่ค้างอยู่ในสถานะ running นานผิดปกติ | เกิน N เท่าของค่าปกติ |
+| Jobs waiting in the queue | keeps growing and does not fall |
+| Wait time in the queue (p95 · 95% of jobs wait no longer than this) | above what was promised |
+| Failure rate | above the threshold |
+| **Count in the dead letter** | **rises, even by just one** |
+| Scheduled runs that did not run | a run was skipped |
+| Jobs stuck in the running state for an unusual time | more than N times the normal |
 
-> **คิวที่ตันจะเงียบสนิท** API ยังตอบ 200 ทุกคำขอ health check เขียวหมด
-> แต่ไม่มีอีเมลออกไป 3 ชั่วโมงแล้ว ต้องวัดถึงจะเห็น
+> **A jammed queue is completely silent.** The API still answers 200 to every request and the health checks are all green,
+> but no email has gone out for 3 hours. You see it only if you measure.
 
 ---
 
 ## 8 · Anti-patterns
 
-- **งานที่รันซ้ำแล้วเกิดผลซ้ำ** — คิวจะรันซ้ำแน่นอน ไม่ใช่อาจจะ
-- **retry ไม่จำกัด** — งานเดียวที่พังทำให้ทั้งคิวตัน
-- **ไม่มี dead letter** — งานหายเงียบ ๆ ไม่มีใครรู้
-- **มี dead letter แต่ไม่มีใครดู** — เท่ากับไม่มี
-- **งานตามเวลาบนหลาย instance โดยไม่มีล็อก** — รันซ้อนกัน
-- **ส่งข้อมูลทั้งก้อนใน payload** — ควรส่ง id แล้วให้งานไปอ่านเอง จะได้ข้อมูลล่าสุดด้วย
-- **งานยาวที่ยกเลิกไม่ได้** — ผู้ใช้กดผิดแล้วต้องรอ 40 นาที
-- **หน้าจอที่หมุนเปล่าโดยไม่บอกความคืบหน้า** — ผู้ใช้จะกดซ้ำ แล้วได้งานซ้ำ
-- **ไม่วัดคิว** — ตันแล้วรู้ตอนลูกค้าโทรมา
+- **A job that repeats its effect when run again** — the queue will certainly run it again, not maybe
+- **Unlimited retry** — one broken job jams the whole queue
+- **No dead letter** — jobs vanish silently and nobody knows
+- **A dead letter that nobody watches** — the same as having none
+- **Scheduled jobs on several instances with no lock** — they run on top of each other
+- **Sending the whole data block in the payload** — send the id and let the job read it itself, so it gets the latest data too
+- **A long job that cannot be cancelled** — the user clicks wrong and waits 40 minutes
+- **A blind spinner that gives no progress** — the user clicks again and gets a duplicate job
+- **Not measuring the queue** — it jams and you find out when a customer calls
 
 ---
 
-## 9 · durable workflow สำหรับงาน agent ที่รันยาวหรือรอคนอนุมัติ
+## 9 · Durable workflow for agent jobs that run long or wait for human approval
 
-งาน agent ที่วิ่งหลายสิบนาที เรียก LLM และ tool หลายรอบ หรือหยุดรอคนอนุมัติข้ามวัน ใช้คิวธรรมดาไม่พอ เพราะถ้าล้มที่ขั้น 8 จาก 10 ต้องเริ่มใหม่และจ่ายค่า token ซ้ำ · ให้ใช้ engine ที่บันทึกผลทุกขั้นแล้วทำต่อจากจุดเดิมได้
+An agent job that runs for tens of minutes, calls an LLM and tools many times, or pauses for approval across days cannot use a plain queue, because a failure at step 8 of 10 means starting over and paying the token cost again · use an engine that records the result of every step and resumes from the same point
 
-| เครื่องมือ | เหมาะกับ | รอคนอนุมัติด้วย | ระวัง |
+| Tool | Fits | Waits for human approval | Watch out for |
 |---|---|---|---|
-| **Temporal** | โค้ด Python และภาษาอื่น · loop ของ agent อยู่ใน workflow ส่วนการเรียก LLM และ tool เป็น activity · มี `OpenAIAgentsPlugin` · `activity_as_tool` | (ยังไม่ได้ตรวจ หน้า signal) | integration กับ OpenAI Agents SDK ยังเป็น Public Preview |
-| **AWS Step Functions** | ขั้นตอนตายตัวบน AWS · fan-out ด้วย `Map` (Inline ขนาน 40 · Distributed 10,000 งานลูก) | `.waitForTaskToken` รอได้ถึง 1 ปีจนมี `SendTaskSuccess` / `SendTaskFailure` · ตั้ง `HeartbeatSeconds` กันค้างเงียบ | งานที่ต้องให้ LLM ตัดสินทาง ต้องให้ Lambda หรือ Bedrock ตัดสินแล้วใช้ `Choice` |
-| **checkpointer ของ framework agent** | ไม่อยากเพิ่ม engine · LangGraph `PostgresSaver` · Microsoft Agent Framework `CheckpointManager` · OpenAI `RunState.to_json()` | LangGraph `interrupt()` · OpenAI `needs_approval` · Microsoft Agent Framework `RequestInfoExecutor` | ตัวเก็บในหน่วยความจำหายเมื่อ process รีสตาร์ต · ใช้ตัวที่เก็บลงฐานข้อมูลใน production |
+| **Temporal** | Python and other languages · the agent loop lives in a workflow, while LLM and tool calls are activities · has `OpenAIAgentsPlugin` · `activity_as_tool` | (`ยังไม่ได้ตรวจ` · see the signal page) | the integration with the OpenAI Agents SDK is still in Public Preview |
+| **AWS Step Functions** | fixed steps on AWS · fan-out with `Map` (Inline in parallel 40 · Distributed 10,000 child jobs) | `.waitForTaskToken` can wait up to 1 year until `SendTaskSuccess` / `SendTaskFailure` arrives · set `HeartbeatSeconds` to prevent a silent hang | when an LLM must choose the route, let Lambda or Bedrock decide, then use `Choice` |
+| **Agent framework checkpointer** | you do not want to add an engine · LangGraph `PostgresSaver` · Microsoft Agent Framework `CheckpointManager` · OpenAI `RunState.to_json()` | LangGraph `interrupt()` · OpenAI `needs_approval` · Microsoft Agent Framework `RequestInfoExecutor` | an in-memory store is lost when the process restarts · use a database-backed store in production |
 
-**กฎของโค้ดที่ต้อง replay ได้** (Temporal · Google ADK · Claude Code workflow ใช้หลักเดียวกัน · ตรวจกับ [Temporal: Workflow Definition](https://docs.temporal.io/workflow-definition) 2026-10-26)
+**Rules for code that must be replayable** (Temporal · Google ADK · Claude Code workflows use the same principle · checked against [Temporal: Workflow Definition](https://docs.temporal.io/workflow-definition) 2026-10-26)
 
-- **ห้ามอ่านเวลาหรือสุ่มค่าในโค้ดที่คุมลำดับงาน** (`Date.now()` · `datetime.now()` · `Math.random()` · `uuid4()`) · ตอน replay ค่าจะต่างจากรอบแรก ลำดับงานเพี้ยน แล้วรีใช้ผลเดิมไม่ได้ · ต้องใช้เวลาหรือค่าสุ่ม ให้ทำใน activity หรือใช้ API ของ SDK ที่ให้มาสำหรับเรื่องนี้
-- **การเรียก LLM เรียก tool และอ่านเขียนข้างนอกทั้งหมดอยู่ใน activity** ผลถูกบันทึกครั้งเดียว ตอน replay อ่านจากบันทึก ไม่เรียกซ้ำ
-- **ลำดับการเรียกต้องเหมือนเดิมทุกรอบ** · แก้ลำดับขั้นในโค้ดที่ยังมีงานค้างอยู่ จะทำให้งานเก่า replay ไม่ผ่าน (Temporal เรียกว่า nondeterminism error) · ต้องเปลี่ยนให้ใช้ versioning หรือ patching ของ engine
-- **ขั้นก่อนจุดหยุดรอต้องรันซ้ำได้** (ข้อ 3) · LangGraph รัน node ที่หยุดไว้ใหม่ตั้งแต่ต้นตอน resume จึงย้ายผลข้างเคียงไปไว้หลังจุดหยุด
-- **state ที่บันทึกไว้ไม่มีการยืนยันตัวตน** (เอกสาร OpenAI เตือนเรื่อง `RunState`) · โหลดจากที่เก็บที่เราคุมเท่านั้น
-- เพดานรอบ งบ token และการหยุดเมื่อไม่ดีขึ้นยังต้องมีเหมือนงานในคิว · รายละเอียดใน [`agent-systems.md`](../llm-engineering/references/agent-systems.md) หัวข้อ 6
+- **Never read the time or draw a random value in code that controls the order of work** (`Date.now()` · `datetime.now()` · `Math.random()` · `uuid4()`) · on replay the value differs from the first run, the order drifts, and the old result cannot be reused · do anything that needs time or randomness in an activity, or use the SDK's own API for it
+- **All LLM calls, tool calls, and outside reads and writes go in activities.** The result is recorded once, and replay reads the record instead of calling again.
+- **The order of calls must be the same on every run** · changing the order of steps in code that still has jobs in flight makes the old jobs fail replay (Temporal calls this a nondeterminism error) · switch to the engine's versioning or patching
+- **The steps before a wait point must be safe to repeat** (section 3) · LangGraph re-runs the paused node from the start on resume, so move side effects to after the wait point
+- **Saved state carries no identity check** (the OpenAI docs warn about `RunState`) · load it only from a store we control
+- The cap on rounds, the token budget, and stopping when there is no improvement are still needed, as for jobs in a queue · details in [`agent-systems.md`](../llm-engineering/references/agent-systems.md) section 6
 
-ที่มา (เปิดอ่าน 2026-10-26): [Temporal · OpenAI Agents SDK](https://docs.temporal.io/ai-cookbook/openai-agents-sdk-python) · [ประกาศ Temporal](https://temporal.io/blog/announcing-openai-agents-sdk-integration) · [Step Functions integration patterns](https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html) · [Step Functions Map](https://docs.aws.amazon.com/step-functions/latest/dg/state-map.html) · [LangGraph interrupts](https://docs.langchain.com/oss/python/langgraph/interrupts) · [OpenAI human in the loop](https://openai.github.io/openai-agents-python/human_in_the_loop/) · [Claude Code workflows](https://code.claude.com/docs/en/workflows)
+Sources (opened 2026-10-26): [Temporal · OpenAI Agents SDK](https://docs.temporal.io/ai-cookbook/openai-agents-sdk-python) · [Temporal announcement](https://temporal.io/blog/announcing-openai-agents-sdk-integration) · [Step Functions integration patterns](https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html) · [Step Functions Map](https://docs.aws.amazon.com/step-functions/latest/dg/state-map.html) · [LangGraph interrupts](https://docs.langchain.com/oss/python/langgraph/interrupts) · [OpenAI human in the loop](https://openai.github.io/openai-agents-python/human_in_the_loop/) · [Claude Code workflows](https://code.claude.com/docs/en/workflows)
 
 
 ---
@@ -199,29 +199,29 @@ Use when work runs outside the request in queues or schedules
 
 Use when a system must record who did what and when
 
-# ร่องรอยการใช้งาน (audit trail)
+# Audit trail
 
-> **กฎข้อเดียว:** ร่องรอยย้อนหลังสร้างไม่ได้
-> วันที่ลูกค้าถามว่า "ใครเปลี่ยนราคาอันนี้" ถ้าไม่ได้เก็บไว้ก่อน ก็ตอบไม่ได้ตลอดไป
+> **One rule:** a trail cannot be built after the fact.
+> The day a customer asks "who changed this price", if it was not recorded beforehand, it can never be answered.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ระบบมีงานอนุมัติ การเงิน สิทธิ์ผู้ใช้ หรือข้อมูลส่วนบุคคล
-- ลูกค้าหรือผู้ตรวจสอบถามได้ว่า "ใครทำ เมื่อไหร่ เปลี่ยนจากอะไรเป็นอะไร"
-- มีข้อพิพาทเรื่องข้อมูลที่ถูกแก้ แล้วไม่มีใครตอบได้
-- ระบบอยู่ภายใต้ พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล (Personal Data Protection Act: PDPA) หรือมาตรฐานที่ต้องตรวจย้อนหลังได้
+- The system has approvals, money, user permissions, or personal data
+- A customer or auditor can ask "who did it, when, and what was changed from what to what"
+- There was a dispute over edited data and nobody could answer
+- The system falls under the Personal Data Protection Act (PDPA) or a standard that must be checkable after the fact
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill, or together
 
-| งาน | skill | |
+| Job | skill | |
 |---|---|---|
-| log สำหรับไล่ปัญหาทางเทคนิค | `logging-standards` | แทน |
-| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` | แทน |
-| คอลัมน์ `created_by` `updated_at` ในตารางงาน | `database-design` | แทน |
-| สิทธิ์และการยืนยันตัวตน | `auth-implementation-patterns` | แทน |
-| ความยินยอมและสิทธิเจ้าของข้อมูล | `pdpa-compliance` | แทน |
-| ข้อกำหนดว่าต้องเก็บอะไรกี่ปี | `srs-writing` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Logs for technical troubleshooting | `logging-standards` | instead |
+| Metrics and alerts | `observability-basics` | instead |
+| Columns `created_by` `updated_at` in working tables | `database-design` | instead |
+| Permissions and identity verification | `auth-implementation-patterns` | instead |
+| Consent and data-subject rights | `pdpa-compliance` | instead |
+| Requirements on what to keep and for how many years | `srs-writing` | together |
+| Abbreviations in work that people read | `spell-out-abbreviations` | together |
 
 ---
 
@@ -229,67 +229,67 @@ Use when a system must record who did what and when
 
 | | application log | **audit log** |
 |---|---|---|
-| มีไว้ให้ใครอ่าน | developer ตอนไล่ปัญหา | ผู้ตรวจสอบ · ลูกค้า · ฝ่ายกฎหมาย |
-| เขียนอะไร | อะไรก็ได้ที่ช่วยไล่ปัญหา | **เฉพาะเหตุการณ์ที่มีความหมายทางธุรกิจ** |
-| เก็บที่ไหน | ไฟล์ · ระบบรวบรวม log | **ตารางในฐานข้อมูล** หรือที่เก็บที่เขียนทับไม่ได้ |
-| อายุ | 7–90 วัน | **เป็นปี ตามที่กฎหมายหรือสัญญากำหนด** |
-| แก้ได้ไหม | ไม่สำคัญ | **ห้ามแก้ ห้ามลบ** |
-| หายได้ไหม | หายบ้างรับได้ | **หายไม่ได้** ถ้าเขียนไม่สำเร็จ ธุรกรรมต้องล้มตาม |
+| Who reads it | developers, when troubleshooting | auditors · customers · the legal team |
+| What it records | anything that helps troubleshooting | **only events with business meaning** |
+| Where it is kept | files · a log collection system | **a table in the database**, or storage that cannot be overwritten |
+| Lifetime | 7–90 days | **years, as the law or contract requires** |
+| Can it be edited | does not matter | **never edit, never delete** |
+| Can it be lost | some loss is acceptable | **cannot be lost.** If the write fails, the transaction must fail with it |
 
-> **2 อย่างนี้แยกกันเสมอ** เพราะ audit log ที่ปนอยู่ในไฟล์ log ทั่วไป
-> จะถูกลบตามอายุการเก็บ (retention) ของ log ภายในเดือนเดียว และไม่มีใครค้นเจอตอนที่ต้องใช้
+> **Always keep these 2 separate.** An audit log mixed into the general log files
+> gets deleted by the log retention period within a month, and nobody finds it when it is needed.
 
 ---
 
-## 2 · ฟิลด์ที่ทุกรายการต้องมี
+## 2 · Fields every entry must have
 
-| ฟิลด์ | ตัวอย่าง | หมายเหตุ |
+| Field | Example | Note |
 |---|---|---|
-| `id` | UUIDv7 | เรียงตามเวลาได้ |
-| `occurred_at` | `2026-09-25T09:42:13.482Z` | **UTC** และเป็นเวลาที่เกิด ไม่ใช่เวลาที่บันทึก |
-| `actor_id` | `1042` | id ผู้ใช้ ไม่ใช่ชื่อ เพราะชื่อเปลี่ยนได้ |
-| `actor_type` | `user` · `system` · `api_client` | งานอัตโนมัติก็ต้องมีตัวตน |
-| `actor_ip` · `user_agent` | | เก็บเมื่อจำเป็นต่อการตรวจสอบเท่านั้น |
-| `action` | `order.cancelled` | **คำกริยารูปอดีต** แบบเดียวกันทั้งระบบ |
-| `entity_type` · `entity_id` | `order` · `1042` | ของที่ถูกกระทำ |
-| `changes` | `{"status":{"from":"confirmed","to":"cancelled"}}` | เฉพาะฟิลด์ที่เปลี่ยน |
-| `reason` | "ลูกค้าโทรแจ้งยกเลิก" | บังคับกับการกระทำที่ต้องมีเหตุผล |
-| `correlation_id` | `01J9Z8…` | เชื่อมกลับไปที่ application log |
-| `result` | `success` · `denied` | **ต้องบันทึกครั้งที่ถูกปฏิเสธด้วย** |
+| `id` | UUIDv7 | sortable by time |
+| `occurred_at` | `2026-09-25T09:42:13.482Z` | **UTC**, and the time it happened, not the time it was recorded |
+| `actor_id` | `1042` | the user id, not the name, because names can change |
+| `actor_type` | `user` · `system` · `api_client` | automated jobs need an identity too |
+| `actor_ip` · `user_agent` | | keep only when needed for the audit |
+| `action` | `order.cancelled` | **a past-tense verb**, in one style across the system |
+| `entity_type` · `entity_id` | `order` · `1042` | the thing acted on |
+| `changes` | `{"status":{"from":"confirmed","to":"cancelled"}}` | only the fields that changed |
+| `reason` | "ลูกค้าโทรแจ้งยกเลิก" (customer phoned to cancel) | required for actions that need a reason |
+| `correlation_id` | `01J9Z8…` | links back to the application log |
+| `result` | `success` · `denied` | **denied attempts must be recorded too** |
 
-> **การกระทำที่ถูกปฏิเสธมีค่ามากกว่าที่สำเร็จ** เพราะคนที่พยายามเข้าถึงสิ่งที่ไม่มีสิทธิ์
-> คือสิ่งที่ผู้ตรวจสอบอยากเห็นที่สุด และเป็นสัญญาณเตือนที่ดีที่สุดที่มี
+> **A denied action is worth more than a successful one**, because someone trying to reach something
+> they have no right to is what auditors most want to see, and it is the best warning sign there is.
 
 ---
 
-## 3 · เก็บเหตุการณ์ไหน
+## 3 · Which events to record
 
-**เก็บ:**
+**Record:**
 
-| กลุ่ม | ตัวอย่าง |
+| Group | Examples |
 |---|---|
-| เงินและสัญญา | สร้าง/ยกเลิก/คืนเงิน · เปลี่ยนราคา · เปลี่ยนส่วนลด |
-| การอนุมัติ | อนุมัติ · ปฏิเสธ · ส่งกลับแก้ |
-| สิทธิ์และตัวตน | ให้/เพิกถอนสิทธิ์ · สร้าง/ปิดบัญชี · เปลี่ยนรหัสผ่าน · เข้าสู่ระบบล้มเหลวติดกัน |
-| ข้อมูลส่วนบุคคล | ดู · แก้ · ส่งออก · ลบ |
-| ค่าตั้งของระบบ | เปลี่ยนค่าที่กระทบทั้งระบบ |
-| การเข้าถึงข้อมูลจำนวนมาก | ส่งออกรายงาน · ดาวน์โหลดรายชื่อ |
+| money and contracts | create/cancel/refund · price change · discount change |
+| approvals | approve · reject · send back for fixing |
+| permissions and identity | grant/revoke permission · create/close account · change password · consecutive failed logins |
+| personal data | view · edit · export · delete |
+| system settings | changing a value that affects the whole system |
+| bulk data access | exporting a report · downloading a name list |
 
-**ไม่เก็บ:** เปิดดูหน้าจอทั่วไป · ค้นหา · เรียงลำดับ · กดปุ่มที่ไม่เปลี่ยนอะไร
-audit log ที่เก็บทุกอย่าง มีค่าเท่ากับไม่มีเลย เพราะค้นไม่เจอ
+**Do not record:** ordinary screen views · searches · sorting · clicks that change nothing.
+An audit log that records everything is worth the same as none, because nothing can be found in it.
 
-**ตั้งชื่อ action แบบเดียวทั้งระบบ:** `<entity>.<กริยาอดีต>` เช่น `order.cancelled` · `user.role_granted` ·
+**Name actions in one style across the system:** `<entity>.<past-tense verb>`, for example `order.cancelled` · `user.role_granted` ·
 `invoice.exported` · `patient_record.viewed`
 
 ---
 
-## 4 · เก็บ "เปลี่ยนอะไร" ยังไง
+## 4 · How to record "what changed"
 
-| วิธี | ดี | เสีย |
+| Method | Good | Bad |
 |---|---|---|
-| **เก็บเฉพาะฟิลด์ที่เปลี่ยน (from/to)** ✓ | เล็ก อ่านรู้เรื่องทันที | อยากเห็นภาพรวมต้องไล่ย้อน |
-| เก็บทั้งแถวก่อนและหลัง | ได้ภาพเต็ม | โตเร็วมาก และเสี่ยงเก็บข้อมูลอ่อนไหวเกินจำเป็น |
-| เก็บเฉพาะว่า "แก้แล้ว" | เล็กสุด | **ตอบคำถามไม่ได้** ไม่ควรใช้ |
+| **Record only the changed fields (from/to)** ✓ | small, readable at once | to see the whole picture you must trace back |
+| Record the whole row before and after | full picture | grows very fast and risks keeping more sensitive data than needed |
+| Record only that "it was edited" | smallest | **cannot answer the question**, so do not use it |
 
 ```jsonc
 "changes": {
@@ -298,7 +298,7 @@ audit log ที่เก็บทุกอย่าง มีค่าเท่
 }
 ```
 
-**ฟิลด์อ่อนไหวเก็บแค่ว่าเปลี่ยน ไม่เก็บค่า:**
+**For sensitive fields, record only that it changed, not the value:**
 
 ```jsonc
 "changes": { "password_hash": { "changed": true } }
@@ -306,58 +306,58 @@ audit log ที่เก็บทุกอย่าง มีค่าเท่
 
 ---
 
-## 5 · เขียนแล้วห้ามแก้
+## 5 · Never edit after writing
 
-- ตาราง audit ให้สิทธิ์แค่ **INSERT และ SELECT** · บัญชีที่แอปใช้ต้องไม่มีสิทธิ์ UPDATE หรือ DELETE
-- เขียนใน transaction เดียวกับการเปลี่ยนข้อมูลจริง **ถ้าเขียน audit ไม่สำเร็จ ธุรกรรมต้องล้มตาม**
-- ห้ามแก้ประวัติเพื่อ "จัดระเบียบ" ถ้าบันทึกผิด ให้เพิ่มรายการแก้ไข ไม่เขียนทับ
-- ระบบที่ต้องเข้มกว่านั้นให้ทำ hash ต่อกันเป็นสาย เพื่อพิสูจน์ว่าไม่มีใครแทรกหรือลบ
+- Grant the audit table only **INSERT and SELECT**. The account the app uses must have no UPDATE or DELETE permission.
+- Write in the same transaction as the real data change. **If the audit write fails, the transaction must fail with it.**
+- Never edit history to "tidy up". If a record is wrong, add a correction entry. Do not overwrite.
+- A system that needs stronger protection should chain the entries with hashes, to prove nobody inserted or deleted anything.
 
-**อายุการเก็บ** ตั้งตามกฎหมายหรือสัญญา เอกสารทางบัญชีในไทยมักต้องเก็บ 5 ปี
-เมื่อครบอายุให้ย้ายไปที่เก็บราคาถูก ไม่ลบทิ้งโดยไม่มีใครอนุมัติ
+**Retention** follows the law or the contract. Accounting documents in Thailand usually must be kept 5 years.
+When the period ends, move them to cheap storage. Never delete them without someone's approval.
 
 ---
 
-## 6 · ใครดูได้ และห้ามเก็บอะไร
+## 6 · Who can view, and what must not be recorded
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| สิทธิ์อ่าน | เฉพาะบทบาทที่มีหน้าที่ตรวจสอบ และ**การอ่าน audit log ก็ต้องบันทึกลง audit ด้วย** |
-| การส่งออก | บันทึกทุกครั้งว่าใครส่งออกช่วงไหน |
-| **ห้ามเก็บ** | รหัสผ่าน · token · เลขบัตร · ข้อมูลสุขภาพ · เนื้อหาของข้อมูลส่วนบุคคล |
-| เก็บได้แทน | ชี้ว่า**ของชิ้นไหน**ถูกดูหรือถูกแก้ ไม่ใช่เนื้อหาข้างใน |
+| Read permission | only roles with an audit duty, and **reading the audit log must also be recorded in the audit** |
+| Export | record every time who exported which period |
+| **Must not record** | passwords · tokens · ID card numbers · health data · the content of personal data |
+| Record instead | point to **which item** was viewed or edited, not the content inside |
 
-> `patient_record.viewed` กับ `entity_id` ก็พอแล้ว **ห้ามคัดลอกผลตรวจลงไปใน audit log**
-> ไม่งั้น audit log จะกลายเป็นที่รวมข้อมูลอ่อนไหวที่สุดในระบบ โดยไม่มีใครตั้งใจ
+> `patient_record.viewed` with the `entity_id` is enough. **Never copy test results into the audit log.**
+> Otherwise the audit log becomes the most sensitive data store in the system, without anyone meaning it to.
 
 ---
 
-## 7 · แสดงให้คนอ่าน
+## 7 · Show it to people
 
-หน้าจอประวัติต้องกรองได้อย่างน้อย 4 อย่าง: **ช่วงเวลา · ผู้ทำ · ประเภทการกระทำ · ของชิ้นไหน**
+The history screen must filter by at least 4 things: **time period · actor · action type · which item**.
 
-แสดงเป็นประโยคที่คนอ่านรู้เรื่อง ไม่ใช่ JSON ดิบ:
+Show it as a sentence people can read, not raw JSON (the sample below is the Thai text shown to Thai users: on 25 Sep 2569 [B.E.; 2026] at 16:42, Somchai (sales) cancelled order SO-2026-00042, status: confirmed → cancelled, reason: customer phoned to cancel):
 
 ```
 25 ก.ย. 2569 16:42  สมชาย (ฝ่ายขาย)  ยกเลิกคำสั่งซื้อ SO-2026-00042
                     สถานะ: ยืนยันแล้ว → ยกเลิก · เหตุผล: ลูกค้าโทรแจ้งยกเลิก
 ```
 
-แสดงเวลาตามเขตเวลาของผู้ดู แต่เก็บเป็น UTC (ดู `i18n-and-locale`)
+Show the time in the viewer's time zone, but store it as UTC (see `i18n-and-locale`).
 
 ---
 
 ## 8 · Anti-patterns
 
-- **เก็บ audit ในไฟล์ log ทั่วไป** — ถูกลบตาม retention ภายในเดือนเดียว
-- **เก็บชื่อผู้ทำแทน id** — พอเขาเปลี่ยนนามสกุล ประวัติเก่าก็กลายเป็นคนละคน
-- **บันทึกเฉพาะที่สำเร็จ** — ครั้งที่ถูกปฏิเสธคือสิ่งที่ผู้ตรวจสอบตามหา
-- **บันทึกแค่ "แก้ไขข้อมูล"** โดยไม่บอกว่าจากอะไรเป็นอะไร
-- **แอปมีสิทธิ์ UPDATE ตาราง audit** — ร่องรอยที่แก้ได้ ไม่ใช่ร่องรอย
-- **เขียน audit นอก transaction** — ธุรกรรมสำเร็จแต่ไม่มีบันทึก
-- **บันทึกทุกการคลิก** — ของสำคัญจมอยู่ในกองข้อมูลที่ไม่มีใครใช้
-- **คัดลอกข้อมูลอ่อนไหวลง audit** — เกิดช่องรั่วใหม่โดยไม่ตั้งใจ
-- **ไม่มีหน้าจอให้ดู** — มีข้อมูลแต่ต้องให้ developer query ทุกครั้งที่ลูกค้าถาม
+- **Keeping the audit in general log files**: deleted by retention within a month
+- **Recording the actor's name instead of the id**: when they change their surname, the old history turns into a different person
+- **Recording only successes**: the denied attempts are what auditors look for
+- **Recording only "edited data"** without saying from what to what
+- **The app has UPDATE permission on the audit table**: a trail that can be edited is not a trail
+- **Writing the audit outside the transaction**: the transaction succeeds but there is no record
+- **Recording every click**: the important entries sink in a pile of data nobody uses
+- **Copying sensitive data into the audit**: it creates a new leak by accident
+- **No screen to view it**: the data exists, but a developer must run a query every time a customer asks
 
 
 ---
@@ -366,233 +366,233 @@ audit log ที่เก็บทุกอย่าง มีค่าเท่
 
 Use when software stores personal data in Thailand
 
-# PDPA — ข้อมูลส่วนบุคคล
+# PDPA — personal data
 
-> **กฎข้อเดียว:** ข้อมูลที่ไม่ได้เก็บ คือข้อมูลที่ไม่รั่ว ไม่ต้องดูแล และไม่ต้องลบ
-> คำถามแรกเสมอคือ "จำเป็นต้องเก็บไหม" ไม่ใช่ "เก็บยังไงให้ปลอดภัย"
+> **The one rule:** data you never collect cannot leak, needs no care and never has to be deleted.
+> The first question is always "do we need to collect it?", not "how do we keep it safe?"
 
-> ระวัง: นี่คือแนวทางสำหรับคนทำระบบ **ไม่ใช่คำแนะนำทางกฎหมาย**
-> เรื่องที่มีผลทางกฎหมายต้องให้ที่ปรึกษากฎหมายตัดสิน
+> Caution: this is guidance for people who build systems. **It is not legal advice.**
+> Anything with legal effect must be decided by a legal adviser.
 
-## ทางลัด — แอปที่ข้อมูลอยู่ในเครื่องผู้ใช้เท่านั้น
+## Shortcut — apps whose data stays on the user's device only
 
-ถ้าแอปไม่มีเซิร์ฟเวอร์ ไม่มีบัญชี และไม่ส่งข้อมูลออก ให้ข้ามหัวข้อเรื่องผู้ประมวลผลและฐานข้อมูลได้ แล้วตรวจแค่ 3 เรื่องนี้
+If the app has no server, no accounts and sends no data out, skip the sections on processors and databases. Then check only these 3 things.
 
-| เรื่อง | ทำไมยังเกี่ยว | ทำอะไร |
+| Item | Why it still matters | What to do |
 |---|---|---|
-| Android Auto Backup | ระบบสำรองข้อมูลแอปขึ้น Google Drive เองโดยค่าเริ่มต้น | ตั้ง `android:allowBackup` และ `android:dataExtractionRules` ให้ตรงกับที่ตั้งใจ แล้วลงเหตุผลไว้ใน `decision-log` |
-| ส่งออก · share sheet (หน้าต่างแชร์ของระบบ) | ข้อมูลออกจากเครื่องทางนี้ทางเดียว | ส่งเฉพาะที่ผู้ใช้เลือก และไม่แนบตำแหน่งหรือ metadata ของภาพโดยไม่บอก |
-| ข้อมูลที่ร้านค้าบังคับให้แจ้ง | Google Play บังคับกรอกแบบฟอร์ม Data safety ทุกแอป | กรอกตามจริง (ไม่เก็บก็ตอบว่าไม่เก็บ) ส่วนเรื่องที่ว่าขอสิทธิ์กล้องแล้วต้องมีนโยบายความเป็นส่วนตัวไหม `(รอยืนยัน)` ให้เตรียมหน้าสั้น ๆ ไว้ก่อน |
+| Android Auto Backup | By default the system backs up app data to Google Drive on its own | Set `android:allowBackup` and `android:dataExtractionRules` to match your intent, and record the reason in `decision-log` |
+| Export · share sheet (the system's share window) | This is the only way data leaves the device | Send only what the user selected, and do not attach location or image metadata without telling them |
+| Data the app store forces you to declare | Google Play requires the Data safety form for every app | Fill it in truthfully (if you collect nothing, say so). Whether requesting camera permission requires a privacy policy is `(รอยืนยัน)` (awaiting confirmation), so prepare a short page first |
 
-ถ้าภายหลังเพิ่ม analytics · crash report หรือบัญชีผู้ใช้ แอปนี้ก็ไม่ใช่แอปในเครื่องอย่างเดียวแล้ว ให้กลับไปใช้ทั้ง skill
+If you later add analytics · crash reports or user accounts, the app is no longer device-only. Go back and apply the whole skill.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ระบบเก็บชื่อ เบอร์โทร อีเมล ที่อยู่ เลขบัตร รูป หรือข้อมูลอื่นที่ระบุตัวบุคคลได้
-- ลูกค้าหรือฝ่ายกฎหมายถามเรื่องความสอดคล้องกับ PDPA
-- ต้องทำหน้าขอความยินยอม หรือหน้าให้ผู้ใช้ขอลบข้อมูล
-- จะส่งข้อมูลให้ผู้ให้บริการภายนอก
+- The system stores names, phone numbers, emails, addresses, ID card numbers, photos or other data that identifies a person
+- A customer or the legal team asks about PDPA compliance
+- You must build a consent page, or a page where users request deletion of their data
+- You will send data to an outside service provider
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Task | Use this instead |
 |---|---|
-| ร่องรอยว่าใครทำอะไรกับข้อมูล | `audit-trail` |
-| ตารางและการเข้ารหัสระดับคอลัมน์ | `database-design` |
-| การยืนยันตัวตนและสิทธิ์ | `auth-implementation-patterns` |
-| ปิดบังข้อมูลใน log | `logging-standards` |
-| ที่เก็บกุญแจ | `config-and-secrets` |
-| แบบฟอร์มยินยอม ประกาศความเป็นส่วนตัว และเอกสาร PDPA ของบริษัท (ไม่ใช่ระบบซอฟต์แวร์) | (ถ้าติดตั้ง plugin `e-commerce`) `e-commerce:pdpa-workflow` ไม่มีก็ใช้ข้อ 3 ของ skill นี้เป็นโครง |
+| A trail of who did what to the data | `audit-trail` |
+| Tables and column-level encryption | `database-design` |
+| Authentication and permissions | `auth-implementation-patterns` |
+| Masking data in logs | `logging-standards` |
+| Where to keep keys | `config-and-secrets` |
+| Consent forms, privacy notices and a company's PDPA documents (not a software system) | (if plugin `e-commerce` is installed) `e-commerce:pdpa-workflow`; if it is not, use item 3 of this skill as the outline |
 
 ---
 
-## 1 · ทำรายการก่อน
+## 1 · Make the inventory first
 
-**ตอบคำถาม "ข้อมูลของฉันอยู่ที่ไหนบ้าง" ไม่ได้ ถ้าไม่มีรายการนี้**
+**Without this inventory you cannot answer "where is my data?"**
 
-| ข้อมูล | เก็บที่ไหน | เก็บทำไม | ฐานทางกฎหมาย | เก็บนานเท่าไหร่ | ใครเห็นได้ | ส่งให้ใครบ้าง |
+| Data | Stored where | Why collected | Legal basis | Kept how long | Who can see it | Sent to whom |
 |---|---|---|---|---|---|---|
-| ชื่อ-นามสกุล | `users.name` | ระบุตัวลูกค้า | สัญญา | 5 ปีหลังปิดบัญชี | ฝ่ายขาย · ผู้ดูแล | — |
-| เบอร์โทร | `users.phone` | แจ้งสถานะจัดส่ง | สัญญา | เหมือนแถวบน | เหมือนแถวบน | ผู้ให้บริการ SMS |
-| เลขบัตรประชาชน | `kyc.id_number` | ยืนยันตัวตนตามกฎหมาย | หน้าที่ตามกฎหมาย | 10 ปี | ฝ่ายปฏิบัติตามกฎเกณฑ์ | — |
+| Full name | `users.name` | Identify the customer | Contract | 5 years after the account closes | Sales · admins | — |
+| Phone number | `users.phone` | Send delivery status | Contract | Same as the row above | Same as the row above | SMS provider |
+| National ID number | `kyc.id_number` | Legally required identity check | Legal obligation | 10 years | Compliance team | — |
 
-**ทำรายการนี้ให้ครบทุกที่จริง ๆ** — ฐานข้อมูลหลัก · ที่สำรอง · log · ระบบวิเคราะห์ ·
-ที่เก็บไฟล์ · สเปรดชีตที่ทีมทำเอง · แอปมือถือ: Android Auto Backup และไฟล์ที่ส่งออกผ่าน share sheet
+**List every place that really holds data**: main database · backups · logs · analytics systems ·
+file storage · spreadsheets the team keeps by hand · mobile apps (Android Auto Backup and files exported through the share sheet)
 
 ---
 
-## 2 · ฐานทางกฎหมาย — ไม่ใช่ทุกอย่างต้องขอความยินยอม
+## 2 · Legal basis — not everything needs consent
 
-| ฐาน | ใช้เมื่อ | ตัวอย่าง |
+| Basis | Use when | Example |
 |---|---|---|
-| **สัญญา** | จำเป็นเพื่อให้บริการตามที่ตกลง | ที่อยู่สำหรับจัดส่ง |
-| **หน้าที่ตามกฎหมาย** | กฎหมายบังคับให้เก็บ | เอกสารภาษี |
-| **ประโยชน์อันชอบธรรม** | จำเป็นและไม่กระทบสิทธิเกินควร | log ความปลอดภัย · ป้องกันการฉ้อโกง |
-| **ความยินยอม** | ทำไม่ได้ด้วยฐานอื่น | การตลาด · cookie ติดตามพฤติกรรม |
+| **Contract** | Needed to provide the agreed service | Delivery address |
+| **Legal obligation** | The law requires you to keep it | Tax documents |
+| **Legitimate interest** | Necessary, and does not harm rights excessively | Security logs · fraud prevention |
+| **Consent** | No other basis works | Marketing · behavior-tracking cookies |
 
-> **ความยินยอมคือฐานที่อ่อนที่สุด เพราะถอนเมื่อไหร่ก็ได้**
-> ถ้าขอความยินยอมสำหรับที่อยู่จัดส่ง แล้วเขาถอน ระบบจะส่งของไม่ได้
-> **ที่อยู่จัดส่งใช้ฐานสัญญา** ไม่ใช่ความยินยอม
+> **Consent is the weakest basis because it can be withdrawn at any time.**
+> If you ask consent for the delivery address and the person withdraws, the system cannot ship.
+> **The delivery address uses the contract basis**, not consent.
 >
-> การกดปุ่ม "ยอมรับทั้งหมด" ที่ทำให้ใช้งานต่อไม่ได้ถ้าไม่กด ไม่ถือว่าเป็นความยินยอมโดยอิสระ
+> A button labeled "accept all" that blocks use of the service unless pressed does not count as freely given consent.
 
 ---
 
-## 3 · ความยินยอมที่ใช้ได้จริง
+## 3 · Consent that works in practice
 
-| ต้องมี | รายละเอียด |
+| Required | Details |
 |---|---|
-| **แยกเป็นเรื่อง ๆ** | การตลาดทางอีเมล · การติดตามพฤติกรรม · การส่งต่อให้พันธมิตร — แยกช่องกัน |
-| ไม่ติ๊กมาให้ล่วงหน้า | ต้องเป็นการกระทำของผู้ใช้เอง |
-| ข้อความที่คนทั่วไปอ่านเข้าใจ | ไม่ใช่ย่อหน้ากฎหมาย 500 คำ |
-| **บันทึกไว้** | ใคร · เรื่องอะไร · เมื่อไหร่ · ข้อความเวอร์ชันไหน · จากช่องทางไหน |
-| ถอนได้ง่ายเท่าที่ให้ | ถ้าให้ได้ด้วย 1 คลิก ก็ต้องถอนได้ด้วย 1 คลิก |
-| ถอนแล้วมีผลจริง | **ต้องมีโค้ดที่หยุดใช้ข้อมูลนั้นจริง** ไม่ใช่แค่เก็บค่าไว้ |
+| **Separate by purpose** | Email marketing · behavior tracking · sharing with partners — separate checkboxes |
+| Not pre-ticked | It must be the user's own action |
+| Text an ordinary person can understand | Not a 500-word legal paragraph |
+| **Recorded** | Who · for what · when · which text version · through which channel |
+| Withdrawing is as easy as giving | If it takes 1 click to give, it must take 1 click to withdraw |
+| Withdrawal takes real effect | **Code must actually stop using that data**, not just store the flag |
 
-ตารางที่ต้องมี: `consent` — `user_id` · `purpose` · `granted` · `granted_at` · `withdrawn_at` ·
+Required table: `consent` — `user_id` · `purpose` · `granted` · `granted_at` · `withdrawn_at` ·
 `policy_version` · `source` · `ip`
-**เก็บเป็นประวัติ ไม่ใช่เขียนทับ** — ต้องพิสูจน์ย้อนหลังได้ว่าตอนนั้นเขายินยอมอะไรไว้
+**Keep it as history, never overwrite.** You must be able to prove later what the person agreed to at that time.
 
 ---
 
-## 4 · สิทธิของเจ้าของข้อมูล
+## 4 · Data subject rights
 
-ระบบต้อง**ทำได้จริง** ไม่ใช่รอทำมือทุกครั้ง โดยทั่วไปต้องตอบสนองภายใน 30 วัน
+The system must be **able to do these for real**, not wait for manual work each time. In general you must respond within 30 days.
 
-| สิทธิ | ระบบต้องทำอะไรได้ |
+| Right | What the system must be able to do |
 |---|---|
-| ขอดู | ออกสำเนาข้อมูลทั้งหมดของคนนั้น |
-| ขอแก้ | แก้ข้อมูลที่ไม่ถูกต้อง แล้ว**ส่งต่อการแก้ไปยังที่ที่เคยส่งข้อมูลไป** |
-| **ขอลบ** | ลบจริงจากทุกที่ที่ใช้งานอยู่ รวม log · ส่วนไฟล์สำรองให้ตัดออกจากการใช้งาน (ถ้ากู้คืนต้องลบซ้ำ) แล้วปล่อยให้หมดอายุตามรอบหมุนเวียน (ดูข้อ 6) พร้อมบอกเจ้าของข้อมูลว่าข้อมูลในไฟล์สำรองจะหายภายในวันที่เท่าไร |
-| ขอให้ระงับใช้ | หยุดใช้ชั่วคราวโดยไม่ลบ |
-| ขอย้ายข้อมูล | ส่งออกในรูปแบบที่เครื่องอ่านได้ |
-| คัดค้าน | หยุดการตลาดหรือการประมวลผลที่คัดค้าน |
+| Access | Produce a copy of all that person's data |
+| Rectification | Correct inaccurate data, then **pass the correction on to every place the data was sent** |
+| **Erasure** | Delete for real from every place in active use, including logs. For backups, take them out of use (if one is restored, delete again) and let them expire through the rotation cycle (see item 6). Tell the data subject by which date the data in backups will be gone. |
+| Restriction | Stop using the data temporarily without deleting it |
+| Portability | Export in a machine-readable format |
+| Objection | Stop the marketing or processing the person objects to |
 
-> **"ขอลบ" คือข้อที่ทำยากที่สุด** — ข้อมูลอยู่ในฐานข้อมูล ที่สำรอง log ระบบวิเคราะห์
-> และผู้ให้บริการภายนอก **ออกแบบให้ลบได้ตั้งแต่วันแรก** ไม่ใช่มาไล่หาทีหลัง
+> **"Erasure" is the hardest one.** Data sits in the database, backups, logs, analytics systems
+> and outside providers. **Design for deletion from day one**, not a hunt afterward.
 >
-> soft delete อย่างเดียว**ไม่นับว่าลบ** ส่วนข้อมูลที่กฎหมายบังคับให้เก็บต่อ (เช่นเอกสารภาษี)
-> เก็บได้ แต่ต้องบอกเจ้าของข้อมูลว่าเก็บอะไรไว้เพราะอะไร
+> Soft delete alone **does not count as deletion**. Data the law requires you to keep (such as tax documents)
+> may be kept, but you must tell the data subject what you keep and why.
 
 ---
 
-## 5 · เก็บเท่าที่จำเป็น
+## 5 · Collect only what you need
 
-| หลัก | ตัวอย่าง |
+| Principle | Example |
 |---|---|
-| **ไม่ถามสิ่งที่ไม่ได้ใช้** | ขายของออนไลน์ ไม่ต้องขอเลขบัตรประชาชน |
-| เก็บช่วงแทนค่าจริง | เก็บช่วงอายุ ไม่ใช่วันเกิด ถ้าใช้แค่แบ่งกลุ่ม |
-| **แฮชหรือทำให้ไม่ระบุตัวตน** สำหรับงานวิเคราะห์ | ระบบสถิติไม่ต้องรู้ว่าใครเป็นใคร |
-| เข้ารหัสระดับคอลัมน์ | เลขบัตร ข้อมูลสุขภาพ |
-| ปิดบังตอนแสดง | `x-xxxx-xxxx-12-3` |
-| **แยกข้อมูลอ่อนไหวออกจากตารางหลัก** | จำกัดสิทธิ์และตรวจสอบง่ายกว่า |
+| **Do not ask for what you do not use** | An online shop does not need the national ID number |
+| Store a range instead of the exact value | Store an age range, not the birth date, if you only use it to group people |
+| **Hash or anonymize** for analytics | A statistics system does not need to know who is who |
+| Column-level encryption | ID numbers, health data |
+| Mask on display | `x-xxxx-xxxx-12-3` |
+| **Keep sensitive data out of the main table** | Easier to restrict and audit |
 
-**ข้อมูลอ่อนไหวเป็นชั้นที่เข้มกว่า** (มาตรา 26) — เช่น เชื้อชาติ เผ่าพันธุ์ ความคิดเห็นทางการเมือง ความเชื่อลัทธิ ศาสนาหรือปรัชญา พฤติกรรมทางเพศ
-ประวัติอาชญากรรม **ข้อมูลสุขภาพ** ความพิการ ข้อมูลสหภาพแรงงาน ข้อมูลพันธุกรรม ข้อมูลชีวภาพ และข้อมูลอื่นที่กระทบเจ้าของข้อมูลในทำนองเดียวกัน
-จึงเก็บได้เมื่อจำเป็นจริงและต้องมีมาตรการเข้มกว่าปกติ (พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 มาตรา 26 ตรวจ 22 ต.ค. 2569)
+**Sensitive data has a stricter tier** (section 26), for example race, ethnic origin, political opinion, creed, religion or philosophy, sexual behavior,
+criminal record, **health data**, disability, trade union data, genetic data, biometric data, and other data that affects the subject in a similar way.
+It may be collected only when truly necessary, and needs stricter measures than usual (พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (Personal Data Protection Act B.E. 2562, 2019) section 26, checked 22 Oct 2026 (B.E. 2569))
 
-**ห้ามใช้ข้อมูลจริงบนเครื่องพัฒนาหรือ staging** — ต้องปิดบังก่อนเสมอ (ดู `cicd-and-release`)
-
----
-
-## 6 · อายุการเก็บ
-
-- กำหนด**ต่อประเภทข้อมูล** ไม่ใช่ทั้งระบบเป็นค่าเดียว
-- **มีงานลบจริงที่รันตามรอบ** — นโยบายที่ไม่มีงานรันคือนโยบายที่ไม่มีอยู่จริง
-- log ที่มีข้อมูลบุคคลก็มีอายุเช่นกัน (ดู `logging-standards`)
-- ไฟล์สำรองข้อมูลต้องมีรอบหมุนเวียนที่ทำให้ข้อมูลเก่าหายไปเองในที่สุด
-- ก่อนลบจริงครั้งแรก ให้แสดงรายการที่จะถูกลบและให้คนอนุมัติ
+**Never use real data on development machines or staging.** Always mask it first (see `cicd-and-release`).
 
 ---
 
-## 7 · ผู้ให้บริการภายนอกและการส่งข้อมูลออกนอกประเทศ
+## 6 · Retention
 
-| เรื่อง | ต้องทำ |
+- Set it **per data type**, not one value for the whole system
+- **Have a real deletion job that runs on a schedule.** A policy with no job running does not exist.
+- Logs that contain personal data also have a lifetime (see `logging-standards`)
+- Data backups need a rotation cycle that makes old data disappear on its own in the end
+- Before the first real deletion, show the list of what will be deleted and have a person approve it
+
+---
+
+## 7 · Outside providers and sending data abroad
+
+| Topic | What to do |
 |---|---|
-| รายชื่อผู้ประมวลผล | ทำรายการว่าส่งข้อมูลอะไรให้ใคร — คลาวด์ · SMS · อีเมล · วิเคราะห์ · แชต |
-| สัญญา | มีข้อตกลงการประมวลผลข้อมูลกับทุกราย |
-| ส่งออกนอกประเทศ | ตรวจว่าประเทศปลายทางมีมาตรฐานเพียงพอ หรือมีข้อสัญญามาตรฐานรองรับ |
-| ตัววัดสถิติและโฆษณา | นับเป็นการส่งข้อมูลออกไป — **ต้องมีฐานทางกฎหมายรองรับ** |
-| ยกเลิกใช้บริการ | ต้องได้ข้อมูลคืนและให้เขาลบจริง |
+| List of processors | List what data goes to whom — cloud · SMS · email · analytics · chat |
+| Contract | Have a data processing agreement with every one |
+| Sending abroad | Check that the destination country has adequate standards, or that standard contract clauses cover it |
+| Analytics and ad trackers | Count as sending data out — **they need a legal basis** |
+| Ending a service | You must get the data back and have them delete it for real |
 
-> **จุดที่คนลืมบ่อยที่สุด** — ปลั๊กอินวัดสถิติที่ใส่ไว้ตั้งแต่วันแรก ส่งข้อมูลพฤติกรรม
-> ผู้ใช้ออกไปต่างประเทศทุกวัน โดยไม่เคยมีใครใส่ไว้ในรายการ
+> **The most commonly forgotten spot:** an analytics plugin added on day one sends users' behavior
+> data abroad every day, and nobody ever put it on the list.
 
 ---
 
-## 8 · เมื่อข้อมูลรั่ว — 72 ชั่วโมงแรก
+## 8 · When data leaks — the first 72 hours
 
-| ลำดับ | ทำอะไร |
+| Order | What to do |
 |---|---|
-| 1 | **หยุดการรั่วก่อน** — เพิกถอนกุญแจ ปิดช่องทาง |
-| 2 | ประเมินขอบเขต — ข้อมูลอะไร กี่คน อ่อนไหวไหม |
-| 3 | เก็บหลักฐาน — log และสถานะระบบ **ก่อน**ที่จะแก้ทับ |
-| 4 | แจ้งผู้รับผิดชอบภายในและที่ปรึกษากฎหมายทันที |
-| 5 | **แจ้งสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคลภายใน 72 ชั่วโมง** เมื่อเข้าเงื่อนไข |
-| 6 | แจ้งเจ้าของข้อมูล เมื่อมีความเสี่ยงสูงต่อเขา |
-| 7 | บันทึกเหตุการณ์ด้วย `postmortem-template` |
+| 1 | **Stop the leak first** — revoke keys, close the channel |
+| 2 | Assess the scope — what data, how many people, is it sensitive |
+| 3 | Preserve evidence — logs and system state **before** you overwrite anything |
+| 4 | Notify the internal owner and the legal adviser at once |
+| 5 | **Notify the สำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (Personal Data Protection Committee Office) within 72 hours** when the conditions are met |
+| 6 | Notify the data subjects when the risk to them is high |
+| 7 | Record the incident with `postmortem-template` |
 
-**เตรียมไว้ล่วงหน้า ไม่ใช่ตอนเกิดเรื่อง** — ใครเป็นคนตัดสินใจแจ้ง · เบอร์ที่ปรึกษากฎหมาย ·
-แม่แบบข้อความแจ้ง · วิธีดึงรายชื่อผู้ได้รับผลกระทบ
+**Prepare in advance, not when it happens** — who decides to notify · the legal adviser's phone number ·
+the notification message template · how to pull the list of affected people
 
 ---
 
 ## 9 · Anti-patterns
 
-- **ขอความยินยอมสำหรับทุกอย่าง** — พอเขาถอน ระบบทำงานต่อไม่ได้
-- **ช่องติ๊กที่ติ๊กมาให้แล้ว** — ไม่ถือเป็นความยินยอม
-- **เก็บความยินยอมเป็นค่าเดียว `accepted_terms = true`** — พิสูจน์ย้อนหลังไม่ได้ว่ายินยอมอะไร
-- **soft delete แล้วบอกว่าลบแล้ว**
-- **นโยบายอายุการเก็บที่ไม่มีงานลบจริง**
-- **ใช้ข้อมูลจริงบน staging** — และคัดลอกลงเครื่อง developer
-- **เก็บเลขบัตรประชาชนเพราะ "เผื่อใช้"**
-- **ข้อมูลส่วนบุคคลใน log และในรายงาน crash**
-- **ไม่มีรายการผู้ให้บริการภายนอก** — ตอบไม่ได้ว่าข้อมูลไปที่ไหนบ้าง
-- **ส่งออก Excel ที่มีข้อมูลเต็ม** ให้คนที่ต้องการแค่ยอดรวม
-- **นโยบายความเป็นส่วนตัวที่ไม่ตรงกับสิ่งที่ระบบทำจริง**
+- **Asking consent for everything** — when they withdraw, the system cannot keep working
+- **Pre-ticked checkboxes** — they do not count as consent
+- **Storing consent as one value `accepted_terms = true`** — you cannot prove later what was agreed
+- **Soft delete, then saying it is deleted**
+- **A retention policy with no real deletion job**
+- **Real data on staging** — and copied onto developer machines
+- **Collecting the national ID number "just in case"**
+- **Personal data in logs and crash reports**
+- **No list of outside providers** — you cannot say where the data goes
+- **Exporting a full-data Excel file** for someone who needs only the totals
+- **A privacy policy that does not match what the system really does**
 
 ---
 
-## 10 · มาตราที่อ้างบ่อย และตัวย่อ
+## 10 · Frequently cited sections, and abbreviations
 
-ใช้ตอนลูกค้าหรือฝ่ายกฎหมายถามว่า "ข้อนี้อยู่มาตราไหน" (ตรวจกับฉบับแปลอังกฤษไม่เป็นทางการของ พ.ร.บ. 2562 ราชกิจจานุเบกษา 27 พ.ค. 2562 เมื่อ 23 ต.ค. 2569)
+Use this when a customer or the legal team asks "which section is this?" (checked against the unofficial English translation of the 2019 Act, Royal Gazette 27 May 2019 (B.E. 2562), on 23 Oct 2026 (B.E. 2569))
 
-| เรื่อง (ข้อใน skill นี้) | มาตรา |
+| Topic (item in this skill) | Section |
 |---|---|
-| ความยินยอม (ข้อ 3) | 19 |
-| ฐานทางกฎหมายที่ไม่ต้องขอความยินยอม (ข้อ 2) | 24 |
-| ข้อมูลอ่อนไหว (ข้อ 5) | 26 |
-| ส่งข้อมูลออกนอกประเทศ (ข้อ 7) | 28 |
-| สิทธิเจ้าของข้อมูล (ข้อ 4) — ขอดู · ขอย้าย · คัดค้าน · ขอลบ · ขอระงับ · ขอแก้ | 30 · 31 · 32 · 33 · 34 · 35–36 |
-| มาตรการความปลอดภัย · ระบบลบเมื่อหมดอายุ · แจ้งเหตุรั่วใน 72 ชั่วโมง (ข้อ 6, 8) | 37(1) · 37(3) · 37(4) |
-| บันทึกรายการประมวลผล (ข้อ 1) | 39 |
-| เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล (DPO) | 41 |
-| ค่าสินไหม · ค่าเสียหายเชิงลงโทษ | 77 · 78 |
-| โทษปรับทางปกครอง สูงสุด 1 · 3 · 5 ล้านบาท | 82 · 83 · 84 |
+| Consent (item 3) | 19 |
+| Legal bases that need no consent (item 2) | 24 |
+| Sensitive data (item 5) | 26 |
+| Sending data abroad (item 7) | 28 |
+| Data subject rights (item 4) — access · portability · objection · erasure · restriction · rectification | 30 · 31 · 32 · 33 · 34 · 35–36 |
+| Security measures · deletion system on expiry · breach notice in 72 hours (items 6, 8) | 37(1) · 37(3) · 37(4) |
+| Records of processing (item 1) | 39 |
+| Data Protection Officer (DPO) | 41 |
+| Compensation · punitive damages | 77 · 78 |
+| Administrative fines, maximum 1 · 3 · 5 million baht | 82 · 83 · 84 |
 
-**ภาคที่มีกฎทับอีกชั้น** — สุขภาพ · การเงิน · โทรคมนาคม มีหน่วยกำกับของตัวเอง (กระทรวงสาธารณสุข · ธปท./ก.ล.ต./คปภ. · กสทช.) ที่เพิ่มเงื่อนไขเรื่องความลับ อายุการเก็บ และการแจ้งเหตุ ให้ตรวจกฎของภาคนั้นก่อนออกแบบ ไม่ใช่ยึด PDPA อย่างเดียว (แนวคิดจาก BV thai-pdpa (MIT))
+**Sectors with a second layer of rules** — health · finance · telecom have their own regulators (กระทรวงสาธารณสุข (Ministry of Public Health) · ธปท. (Bank of Thailand, BOT) / ก.ล.ต. (Securities and Exchange Commission, SEC) / คปภ. (Office of Insurance Commission, OIC) · กสทช. (National Broadcasting and Telecommunications Commission, NBTC)) that add conditions on confidentiality, retention and breach notice. Check that sector's rules before designing, and do not rely on PDPA alone (idea from BV thai-pdpa (MIT))
 
 - **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562)
-- **ข้อมูลส่วนบุคคล** — ข้อมูลที่ระบุตัวบุคคลได้ ไม่ว่าทางตรงหรือทางอ้อม
-- **ข้อมูลอ่อนไหว** — ข้อมูลส่วนบุคคลกลุ่มพิเศษ เช่น สุขภาพ เชื้อชาติ ศาสนา
-- **ผู้ควบคุมข้อมูล** — ผู้ตัดสินใจว่าจะเก็บและใช้ข้อมูลอย่างไร (โดยทั่วไปคือเจ้าของระบบ)
-- **ผู้ประมวลผลข้อมูล** — ผู้ที่ประมวลผลข้อมูลตามคำสั่งของผู้ควบคุม เช่น ผู้ให้บริการคลาวด์
-- **เจ้าของข้อมูล** — บุคคลที่ข้อมูลนั้นเป็นของเขา
+- **Personal data** — data that identifies a person, directly or indirectly
+- **Sensitive data** — the special category of personal data, such as health, race, religion
+- **Data controller** — whoever decides how data is collected and used (usually the system owner)
+- **Data processor** — whoever processes data on the controller's instructions, such as a cloud provider
+- **Data subject** — the person the data belongs to
 
-## 11 · เชื่อมกับ skill อื่น
+## 11 · Links to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use with |
 |---|---|
-| ร่องรอยว่าใครดูหรือแก้ข้อมูล | `audit-trail` |
-| ตาราง การเข้ารหัส และ soft delete | `database-design` |
-| ปิดบังข้อมูลใน log | `logging-standards` |
-| สิทธิ์เข้าถึงและการยืนยันตัวตน | `auth-implementation-patterns` |
-| ปิดบังข้อมูลจริงก่อนลง staging | `cicd-and-release` |
-| การส่งและการยกเลิกรับข้อความการตลาด (เรื่องความยินยอมอยู่ที่ skill นี้) | `notifications` |
-| ปิดบังข้อมูลในไฟล์ส่งออก | `data-import-export` |
-| อายุการเก็บไฟล์แนบ | `file-upload-and-storage` |
-| งานลบข้อมูลที่หมดอายุ | `background-jobs` |
-| บันทึกเหตุการณ์หลังข้อมูลรั่ว | `postmortem-template` · `incident-runbook-template` |
+| A trail of who viewed or changed data | `audit-trail` |
+| Tables, encryption and soft delete | `database-design` |
+| Masking data in logs | `logging-standards` |
+| Access rights and authentication | `auth-implementation-patterns` |
+| Masking real data before loading staging | `cicd-and-release` |
+| Sending and unsubscribing from marketing messages (consent stays in this skill) | `notifications` |
+| Masking data in exported files | `data-import-export` |
+| Retention of attached files | `file-upload-and-storage` |
+| Jobs that delete expired data | `background-jobs` |
+| Recording the incident after a leak | `postmortem-template` · `incident-runbook-template` |
 
 
 ---
@@ -601,266 +601,266 @@ Use when software stores personal data in Thailand
 
 Use when setting up or fixing a CI/CD pipeline
 
-# Continuous Integration / Continuous Delivery (CI/CD) และการปล่อยของ
+# Continuous Integration / Continuous Delivery (CI/CD) and releasing
 
-> **กฎข้อเดียว:** build ครั้งเดียว แล้วเอา **artifact ตัวเดิม** ไปทุก environment
-> ถ้า build ใหม่ตอนขึ้น production ของที่ทดสอบผ่านกับของที่ลูกค้าใช้จะไม่ใช่ตัวเดียวกัน
+> **The one rule:** build once, then carry the **same artifact** to every environment.
+> If you rebuild when going to production, what passed testing and what the customer runs are not the same thing.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ตั้ง pipeline ให้โปรเจกต์ใหม่ หรือรื้อของเดิมที่ช้าหรือผลไม่น่าเชื่อ
-- ต้องตัดสินใจเรื่อง branch, เวอร์ชัน, environment, หรือวิธีปล่อยของ
-- deploy แล้วพังบ่อย หรือ rollback ไม่ได้
-- มีคนถามว่า "ตอนนี้ production รันเวอร์ชันอะไร commit ไหน"
+- Setting up a pipeline for a new project, or rebuilding an old one that is slow or gives untrustworthy results
+- Deciding about branches, versions, environments, or how to release
+- Deploys often break, or you cannot roll back
+- Someone asks "which version and which commit is production running right now?"
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill, or use it alongside
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| ที่เก็บ secret และการหมุนเวียน | `config-and-secrets` | แทน |
-| pipeline อยู่บน Jenkins (Jenkinsfile · credentials · input อนุมัติ) | `jenkins-pipeline` | คู่ |
-| Dockerfile · Helm chart · deploy ขึ้น Kubernetes | `kubernetes-helm` | คู่ |
-| สัดส่วนและขอบเขตของ test | `testing-standards` | แทน |
-| เขียน migration | `database-design` | แทน |
-| ขั้นตอนตอนระบบล่ม | `incident-runbook-template` | แทน |
-| เขียนบันทึกการปล่อยให้ผู้ใช้อ่าน | command `/release-notes` | แทน |
-| สัดส่วน test แต่ละชั้นใน pipeline | `testing-standards` · `e2e-testing-patterns` | คู่ |
-| health check ที่ pipeline ใช้ตัดสิน | `web-service-essentials` | คู่ |
-| ขั้นตอนเมื่อ deploy แล้วล่ม | `incident-runbook-template` · `postmortem-template` | คู่ |
-| ข้อความ commit ที่สร้างบันทึกการปล่อยอัตโนมัติได้ | `commit-message-format` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Where secrets are stored and how they rotate | `config-and-secrets` | instead |
+| The pipeline runs on Jenkins (Jenkinsfile · credentials · approval input) | `jenkins-pipeline` | alongside |
+| Dockerfile · Helm chart · deploy to Kubernetes | `kubernetes-helm` | alongside |
+| Proportion and scope of tests | `testing-standards` | instead |
+| Writing a migration | `database-design` | instead |
+| Steps when the system is down | `incident-runbook-template` | instead |
+| Writing release notes for users to read | command `/release-notes` | instead |
+| Test proportion for each layer in the pipeline | `testing-standards` · `e2e-testing-patterns` | alongside |
+| Health check the pipeline uses to decide | `web-service-essentials` | alongside |
+| Steps when a deploy breaks the system | `incident-runbook-template` · `postmortem-template` | alongside |
+| Commit messages that can generate release notes automatically | `commit-message-format` | alongside |
+| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 
-**ไฟล์ pipeline ที่ใช้ได้จริงของ GitHub Actions, Azure DevOps และ GitLab** อยู่ใน `references/per-platform.md`
-**อ่านเพิ่มเมื่อต้องใช้:** [`references/deployment-plan-template.md`](references/deployment-plan-template.md) — แม่แบบแผน
+**Working pipeline files for GitHub Actions, Azure DevOps and GitLab** are in `references/per-platform.md`.
+**Read more when needed:** [`references/deployment-plan-template.md`](references/deployment-plan-template.md) — plan template
 
 ---
 
-## 1 · ขั้นตอนใน pipeline
+## 1 · Pipeline stages
 
-| ลำดับ | ขั้น | บล็อกเมื่อ | เวลาที่ยอมรับได้ |
+| Order | Stage | Blocks when | Acceptable time |
 |:--:|---|---|---|
-| 1 | ตรวจรูปแบบโค้ด + lint | ผิดกฎ | < 1 นาที |
-| 2 | build | คอมไพล์ไม่ผ่าน · มี warning ที่ตั้งเป็น error | < 3 นาที |
-| 3 | unit test | มี test ตก · ความครอบคลุมต่ำกว่าเกณฑ์ | < 5 นาที |
-| 4 | ตรวจ dependency + secret ที่หลุดเข้า git | พบช่องโหว่ระดับสูง · พบ secret | < 2 นาที |
-| 5 | สร้าง artifact + ประทับเวอร์ชัน | — | < 2 นาที |
-| 6 | deploy ลง staging | — | |
-| 7 | integration + end-to-end test | test ตก | < 15 นาที |
-| 8 | **ด่านคน** (เฉพาะ production) | ยังไม่มีคนกดอนุมัติ | |
-| 9 | deploy ลง production | — | |
-| 10 | ตรวจหลัง deploy | health check ไม่ผ่านจะ rollback อัตโนมัติ | < 2 นาที |
+| 1 | Check code format + lint | a rule is broken | < 1 minute |
+| 2 | Build | compile fails · a warning set as an error appears | < 3 minutes |
+| 3 | Unit test | a test fails · coverage is below the threshold | < 5 minutes |
+| 4 | Check dependencies + secrets leaked into git | a high-severity vulnerability or a secret is found | < 2 minutes |
+| 5 | Create the artifact + stamp the version | — | < 2 minutes |
+| 6 | Deploy to staging | — | |
+| 7 | Integration + end-to-end test | a test fails | < 15 minutes |
+| 8 | **Human gate** (production only) | nobody has clicked approve yet | |
+| 9 | Deploy to production | — | |
+| 10 | Post-deploy check | a failed health check triggers an automatic rollback | < 2 minutes |
 
-**ขั้น 1–5 คือ CI ต้องรันกับทุก pull request** ไม่ใช่เฉพาะตอน merge
-**ขั้น 1–5 รวมกันควรจบใน 10 นาที** ถ้านานกว่านั้นคนจะเริ่มหาทางข้าม
-
----
-
-## 2 · build ครั้งเดียว แล้วเลื่อนขั้น
-
-```
-commit → build → artifact v1.4.0+abc1234 ─┬→ staging  (ตัวนี้)
-                                           ├→ uat      (ตัวเดิม)
-                                           └→ production (ตัวเดิม)
-```
-
-- artifact คือไฟล์ที่ deploy ได้จริง: container image · ไฟล์ zip ที่ publish แล้ว · แพ็กเกจ
-- **environment ต่างกันได้แค่ที่ config ตอนรัน** ไม่ใช่ build ใหม่
-- เก็บ artifact ไว้ให้ย้อนกลับได้อย่างน้อย 30 วัน เพราะ rollback คือ deploy artifact เก่า ไม่ใช่ build ย้อนจาก commit เก่า
-
-> ผิด: **`git pull` บนเครื่อง production แล้ว build ตรงนั้น** ทำให้ไม่มีใครรู้ว่าของที่รันอยู่คือ commit ไหน
-> และ dependency ที่ดึงตอนนั้นอาจไม่ใช่ชุดเดียวกับที่ทดสอบ
+**Stages 1–5 are CI. They must run on every pull request**, not only at merge.
+**Stages 1–5 together should finish within 10 minutes.** If they take longer, people start looking for ways to skip them.
 
 ---
 
-## 3 · เวอร์ชันต้องไล่กลับไปหา commit ได้
+## 2 · Build once, then promote
 
-ใช้ Semantic Versioning (SemVer): `MAJOR.MINOR.PATCH`
+```
+commit → build → artifact v1.4.0+abc1234 ─┬→ staging  (this one)
+                                           ├→ uat      (same one)
+                                           └→ production (same one)
+```
 
-| ขึ้นเลขไหน | เมื่อ |
+- An artifact is a file that can really be deployed: a container image · a published zip file · a package
+- **Environments may differ only in the config applied at run time**, not in a new build
+- Keep artifacts for at least 30 days so you can go back, because a rollback means deploying an old artifact, not rebuilding from an old commit
+
+> Wrong: **running `git pull` on the production machine and building there.** Nobody then knows which commit is running,
+> and the dependencies pulled at that moment may not be the set that was tested.
+
+---
+
+## 3 · A version must trace back to a commit
+
+Use Semantic Versioning (SemVer): `MAJOR.MINOR.PATCH`
+
+| Which number goes up | When |
 |---|---|
-| MAJOR | เปลี่ยนแล้วฝั่งที่เรียกใช้พัง (ดูตารางใน `api-conventions`) |
-| MINOR | เพิ่มความสามารถ ของเดิมยังใช้ได้ |
-| PATCH | แก้บั๊ก |
+| MAJOR | a change that breaks the callers (see the table in `api-conventions`) |
+| MINOR | a new capability; old behavior still works |
+| PATCH | a bug fix |
 
-- **ยึด tag ใน git เป็นหลัก** · `v1.4.0` ชี้ commit เดียวเท่านั้น
-- artifact แปะ commit hash ไว้ด้วย เช่น `1.4.0+abc1234`
-- `/version` endpoint ต้องคืนค่าเดียวกันนี้ (ดู `web-service-essentials`) ส่วนแอปมือถือที่ไม่มี endpoint ให้แสดงในหน้า "เกี่ยวกับ" แทน
-- **ยกเว้น Flutter / Android** ตัวเลขหลัง `+` ใน `pubspec.yaml` คือ versionCode ซึ่งต้องเป็นจำนวนเต็ม จึงใส่ hash ไม่ได้ (ดูหัวข้อ "แอป Android / Flutter")
-- ก่อน 1.0.0 ใช้ `0.x` และถือว่ายังเปลี่ยนใหญ่ได้
+- **The git tag is the source of truth.** `v1.4.0` points to exactly one commit.
+- Attach the commit hash to the artifact too, for example `1.4.0+abc1234`
+- The `/version` endpoint must return the same value (see `web-service-essentials`). A mobile app with no endpoint shows it on the "About" page instead.
+- **Exception for Flutter / Android:** the number after `+` in `pubspec.yaml` is the versionCode, which must be an integer, so it cannot hold a hash (see the section "Android / Flutter apps")
+- Before 1.0.0, use `0.x` and treat big changes as still allowed
 
 ---
 
-## 4 · branch
+## 4 · Branches
 
-| แบบ | วิธี | เหมาะกับ |
+| Style | How | Fits |
 |---|---|---|
-| **trunk-based** (แนะนำ) | branch อายุสั้น 1–2 วัน merge เข้า `main` บ่อย · งานที่ยังไม่เสร็จซ่อนไว้ด้วย feature flag | ทีมส่วนใหญ่ · ปล่อยของบ่อย |
-| release branch | `main` + `release/1.4` สำหรับแก้ด่วน | ซอฟต์แวร์ที่ลูกค้าติดตั้งเอง · ต้องดูแลหลายเวอร์ชันพร้อมกัน |
-| gitflow | `develop` + `feature` + `release` + `hotfix` | ปล่อยของเป็นรอบใหญ่ นาน ๆ ครั้ง · ส่วนใหญ่ซับซ้อนเกินจำเป็น |
+| **trunk-based** (recommended) | short-lived branches of 1–2 days, merged into `main` often · unfinished work hidden behind a feature flag | most teams · frequent releases |
+| release branch | `main` + `release/1.4` for urgent fixes | software that customers install themselves · several versions to maintain at once |
+| gitflow | `develop` + `feature` + `release` + `hotfix` | big releases, rarely · usually more complex than needed |
 
-**กฎที่ไม่ขึ้นกับแบบที่เลือก:**
+**Rules that hold whichever style you pick:**
 
-- `main` ต้อง deploy ได้ตลอดเวลา
-- ป้องกัน `main` ไว้ ให้ต้องผ่าน pull request และ CI เขียว ห้าม push ตรง
-- branch ที่อายุเกิน 1 สัปดาห์ให้เตรียมเจอ merge conflict
-- merge แล้วลบ branch ทันที (`gh pr merge --delete-branch`) · เปิด "Automatically delete head branches" ใน Settings → General ของ repo บน GitHub ให้ลบเองทุก PR · branch ที่ลบแล้วกู้จากหน้า PR ได้
+- `main` must be deployable at all times
+- Protect `main`: require a pull request and a green CI, and never push directly
+- Expect merge conflicts on any branch older than 1 week
+- Delete the branch right after merging (`gh pr merge --delete-branch`) · turn on "Automatically delete head branches" in the repo's Settings → General on GitHub so it deletes after every PR · a deleted branch can be restored from the PR page
 
 ---
 
-## 5 · environment และด่าน
+## 5 · Environments and gates
 
-| environment | ข้อมูล | ใครกด deploy | ต้องผ่านอะไร |
+| Environment | Data | Who deploys | What it must pass |
 |---|---|---|---|
-| dev | ปลอม | อัตโนมัติทุก commit | build ผ่าน |
-| staging | คล้ายจริง (ปิดบังแล้ว) | อัตโนมัติเมื่อ merge เข้า `main` | unit + integration |
-| uat | คล้ายจริง | ทีมกด | ผู้ใช้ทดสอบผ่าน |
-| production | จริง | **คนกดอนุมัติ** | ทุกอย่างข้างบน |
+| dev | fake | automatic on every commit | build passes |
+| staging | production-like (masked) | automatic on merge into `main` | unit + integration |
+| uat | production-like | the team clicks | users pass their testing |
+| production | real | **a person clicks approve** | everything above |
 
-- staging ต้องใกล้เคียง production ให้มากที่สุด: เวอร์ชันฐานข้อมูล ระบบปฏิบัติการ ค่า config
-- **ห้ามคัดลอกข้อมูลจริงลง staging โดยไม่ปิดบังข้อมูลส่วนบุคคล**
-- ถ้ามี environment เดียวเพราะงบจำกัด ให้บอกตรง ๆ ในเอกสาร และใช้ feature flag ช่วยแทน
-
----
-
-## 6 · secret ใน pipeline
-
-- เก็บใน secret store ของแพลตฟอร์ม ไม่ใช่ในไฟล์ pipeline
-- ให้สิทธิ์เท่าที่ขั้นนั้นต้องใช้ เช่น ขั้น build ไม่ต้องรู้รหัสฐานข้อมูล production
-- pipeline ที่รันจาก fork ของคนนอก **ห้ามเห็น secret**
-- ตัวตรวจ secret ที่หลุดเข้า git ต้องอยู่ในขั้นที่ 4 ไม่ใช่ตรวจปีละครั้ง
-
-รายละเอียดทั้งหมดอยู่ใน `config-and-secrets`
+- Staging must be as close to production as possible: database version, operating system, config values
+- **Never copy real data into staging without masking personal data**
+- If you have only one environment because of budget, say so plainly in the documents and use feature flags to help
 
 ---
 
-## 7 · migration ฐานข้อมูลใน pipeline
+## 6 · Secrets in the pipeline
+
+- Store them in the platform's secret store, not in pipeline files
+- Grant only the permissions that stage needs. For example, the build stage does not need the production database password.
+- A pipeline that runs from an outsider's fork **must not see secrets**
+- The tool that detects secrets leaked into git must sit at stage 4, not run once a year
+
+Full detail is in `config-and-secrets`.
+
+---
+
+## 7 · Database migration in the pipeline
 
 ```
-deploy schema (ขยาย) → deploy โค้ด → ตรวจ → deploy schema (บีบ) รอบถัดไป
+deploy schema (expand) → deploy code → check → deploy schema (contract) in the next round
 ```
 
-- migration รันเป็น**ขั้นของตัวเอง** ก่อน deploy โค้ด ไม่ใช่รันตอนแอปบูต
-  (ถ้าแอปหลาย instance บูตพร้อมกัน migration จะรันชนกันจนข้อมูลพังได้)
-- ใช้บัญชีที่แก้ schema ได้เฉพาะขั้นนี้ ส่วนบัญชีที่แอปใช้รันต้องแก้ schema ไม่ได้
-- migration ต้องใช้ได้กับโค้ดเวอร์ชันก่อนหน้าด้วย ไม่งั้น rollback โค้ดแล้วระบบจะพัง
-- สำรองข้อมูลก่อนเสมอ และ**ทดสอบว่ากู้คืนได้จริง**
-- **ข้อยกเว้น: ฐานข้อมูลในเครื่องผู้ใช้** (SQLite · sqflite · drift บนมือถือ) ต้อง migrate ตอนแอปเปิด เพราะไม่มีทางอื่น
-  กฎข้างบนใช้กับฐานข้อมูลบนเซิร์ฟเวอร์ที่หลาย instance ใช้ร่วมกัน ส่วน migration ในเครื่องต้องมี test ไล่จากทุกเวอร์ชัน schema ที่เคยปล่อย
+- Run the migration as **its own stage** before the code deploy, not when the app boots
+  (if several app instances boot at once, the migrations collide and can corrupt data)
+- Use an account that can change the schema only in this stage. The account the app runs with must not be able to change the schema.
+- A migration must work with the previous code version too, or rolling back the code will break the system
+- Always back up first, and **test that the restore really works**
+- **Exception: databases on the user's device** (SQLite · sqflite · drift on mobile) must migrate when the app opens, because there is no other way.
+  The rules above apply to server databases shared by several instances. For an on-device migration, write tests that start from every schema version ever released.
 
-วิธี expand/contract ดูที่ `database-design` ข้อ 9
+For the expand/contract method, see `database-design` item 9.
 
 ---
 
-## 8 · วิธีปล่อยของ
+## 8 · Release methods
 
-| วิธี | ทำงานยังไง | ต้องมี | เหมาะกับ |
+| Method | How it works | Needs | Fits |
 |---|---|---|---|
-| หยุดแล้วเปลี่ยน | ปิด → เปลี่ยน → เปิด | ไม่มี | ระบบภายใน · ปิดได้ตอนกลางคืน |
-| **rolling** | ทยอยเปลี่ยนทีละเครื่อง | health check ที่เชื่อถือได้ · ใช้ร่วมกันได้ทั้ง 2 เวอร์ชัน | ค่าเริ่มต้นของระบบที่รันหลาย instance |
-| blue-green | ยกชุดใหม่ขึ้นครบ แล้วสลับ traffic | ทรัพยากร 2 เท่าชั่วคราว | ต้อง rollback ได้ในไม่กี่วินาที |
-| canary | ปล่อยให้ผู้ใช้ 5% ก่อน แล้วค่อยขยาย 5 → 25 → 100% ตามเกณฑ์ตัวเลขด้านล่าง | ตัวชี้วัดที่แยกตามเวอร์ชันได้ | ระบบใหญ่ · ความเสี่ยงสูง |
+| stop and replace | shut down → replace → start | nothing | internal systems · can shut down at night |
+| **rolling** | replace machines one at a time | a reliable health check · both versions can run together | the default for systems that run several instances |
+| blue-green | bring up the whole new set, then switch traffic | 2 times the resources, temporarily | must roll back within seconds |
+| canary | release to 5% of users first, then widen 5 → 25 → 100% by the numeric criteria below | metrics that split by version | large systems · high risk |
 
-> **rolling มีเรื่องที่คนมักลืม** คือระหว่าง deploy เวอร์ชันเก่าและใหม่ให้บริการพร้อมกัน
-> API และ schema จึงต้องใช้ได้กับทั้ง 2 เวอร์ชัน ถ้าไม่ได้ออกแบบเผื่อไว้ ผู้ใช้บางคนจะเจอ error ทุกครั้งที่ deploy
+> **Rolling has a point people often forget:** during the deploy, the old and new versions serve at the same time.
+> The API and schema must therefore work with both versions. If you did not design for this, some users will hit errors on every deploy.
 
-**เกณฑ์ขยาย canary (เป็นตัวเลข ตกลงก่อน deploy)** ใช้ burn rate (อัตราเผางบความผิดพลาด) ตามสูตรใน [`observability-basics`](../observability-basics/SKILL.md) หัวข้อ 4.1 โดยวัดเฉพาะทราฟฟิกของเวอร์ชันใหม่ ไม่คัดลอกสูตรมาไว้ที่นี่
+**Criteria for widening a canary (numeric, agreed before the deploy).** Use burn rate (the rate at which the error budget is spent) by the formula in [`observability-basics`](../observability-basics/SKILL.md) section 4.1, measured on the new version's traffic only. Do not copy the formula here.
 
-| ขั้น | ทราฟฟิก | ค้างอย่างน้อย | ขยายต่อเมื่อ (ต้องผ่านทุกข้อ) |
+| Step | Traffic | Hold at least | Widen when (all must pass) |
 |---|---|---|---|
-| 1 | 5% | 30 นาที และมีคำขอไม่น้อยกว่า 1,000 รายการ | burn rate ช่วงสั้น < 1 · เวลาตอบ p95 (95th percentile latency) ไม่เกิน 1.2 เท่าของเวอร์ชันเดิม (ค่าตั้งต้น ยังไม่ได้วัด) · health check ผ่านทุกเครื่อง |
-| 2 | 25% | 1 ชั่วโมง | เกณฑ์เดิมซ้ำ |
-| 3 | 100% | เฝ้า 1 ชั่วโมงแรก | burn rate ช่วงสั้น < 1 |
+| 1 | 5% | 30 minutes and at least 1,000 requests | short-window burn rate < 1 · p95 (95th percentile) latency no more than 1.2 times the old version (starting value, not yet measured) · health check passes on every machine |
+| 2 | 25% | 1 hour | same criteria again |
+| 3 | 100% | watch the first hour | short-window burn rate < 1 |
 
-ค้างและจำนวนคำขอขั้นต่ำเป็นค่าตั้งต้น ยังไม่ได้วัด ปรับตามทราฟฟิกจริง · ทราฟฟิกน้อยจนไม่ถึง 1,000 คำขอใน 30 นาที ให้ค้างนานขึ้นจนถึงจำนวนนั้น ไม่ลดเกณฑ์ · ระบบที่ไม่มี SLO (Service Level Objective เป้าหมายระดับบริการ) ใช้เกณฑ์แทน: error ของเวอร์ชันใหม่ ≤ max(2 เท่าของเวอร์ชันเดิม, เวอร์ชันเดิม + 0.5 จุดเปอร์เซ็นต์) (ค่าตั้งต้น ยังไม่ได้วัด)
+The hold time and the minimum request count are starting values, not yet measured. Adjust them to real traffic. If traffic is too low to reach 1,000 requests in 30 minutes, hold longer until it does. Do not lower the criteria. For a system with no SLO (Service Level Objective), use this criterion instead: the new version's errors ≤ max(2 times the old version, the old version + 0.5 percentage points) (starting value, not yet measured).
 
-**feature flag** (สวิตช์เปิดปิดฟีเจอร์) ช่วยแยก "ปล่อยโค้ด" ออกจาก "เปิดใช้ฟีเจอร์"
+A **feature flag** (a switch that turns a feature on or off) separates "releasing the code" from "turning the feature on".
 
-- merge โค้ดที่ยังไม่เสร็จเข้า `main` ได้ โดยปิด flag ไว้
-- เปิดให้คนบางกลุ่มก่อน ปิดได้ทันทีโดยไม่ต้อง deploy
-- **flag ต้องมีวันหมดอายุ** เพราะ flag ที่ค้าง 1 ปีจะกลายเป็นโค้ด 2 เส้นทางที่ไม่มีใครกล้าลบ
-  กำหนดให้ลบภายใน 2 sprint หลังเปิดใช้ 100%
-
----
-
-## 9 · rollback
-
-**เกณฑ์ที่ต้องกำหนดล่วงหน้า** ไม่ใช่มาตัดสินตอนทุกคนกำลังตกใจ แล้วเถียงกันว่าควรรอดูอีกหน่อยไหม · ใช้ burn rate จาก [`observability-basics`](../observability-basics/SKILL.md) หัวข้อ 4.1 แทน "error เกิน X%":
-
-| เงื่อนไข (ทราฟฟิกของเวอร์ชันใหม่) | ทำ |
-|---|---|
-| burn rate ≥ 14.4 ทั้งช่วง 1 ชั่วโมงและ 5 นาที | rollback ทันที ไม่ต้องรอใคร |
-| burn rate ≥ 6 ทั้งช่วง 6 ชั่วโมงและ 30 นาที | rollback และเปิดเหตุการณ์ |
-| burn rate 1–6 | หยุดขยาย ค้างที่ขั้นเดิม ให้คนดู |
-| เวลาตอบ p95 เกิน 2 เท่าของเวอร์ชันเดิมนาน 10 นาที (ค่าตั้งต้น ยังไม่ได้วัด) หรือ health check ไม่ผ่าน | rollback |
-
-ตอน canary 5% ที่ช่วง 1 ชั่วโมงยังไม่เต็ม ให้ใช้ช่วงสั้น (5 นาที) กับเกณฑ์ 14.4 ได้ แต่ต้องมีคำขอครบจำนวนขั้นต่ำของขั้นนั้นก่อนจึงเชื่อตัวเลข
-
-| ต้องมี | เกณฑ์ |
-|---|---|
-| คำสั่ง rollback | ทำได้ด้วยคำสั่งเดียว |
-| เวลาที่ใช้ | ต่ำกว่า 5 นาที |
-| **ซ้อมจริง** | อย่างน้อยไตรมาสละ 1 ครั้ง บน staging |
-| ข้อมูล | migration ที่ทำไปแล้วต้องไม่ทำให้โค้ดเก่าพัง |
-
-> **rollback ที่ไม่เคยซ้อม เท่ากับไม่มี rollback** เพราะจะรู้ว่าใช้ไม่ได้ก็ตอนที่ต้องใช้พอดี
+- You can merge unfinished code into `main` with the flag off
+- Turn it on for some groups first, and turn it off instantly without a deploy
+- **A flag needs an expiry date**, because a flag left for 1 year becomes two code paths that nobody dares to delete.
+  Remove it within 2 sprints after it reaches 100%.
 
 ---
 
-## 10 · pipeline ต้องเร็วและน่าเชื่อถือ
+## 9 · Rollback
 
-| ปัญหา | วิธีแก้ |
+**Set the criteria in advance.** Do not decide while everyone is panicking and arguing over whether to wait a little longer. Use the burn rate from [`observability-basics`](../observability-basics/SKILL.md) section 4.1 instead of "errors above X%":
+
+| Condition (new version's traffic) | Action |
 |---|---|
-| ช้า | แคช dependency · รัน test พร้อมกันหลายชุด · แยก test ที่ช้าไปรันกลางคืน |
-| test ที่ผลไม่คงที่ (flaky) | **แยกออกทันที** แล้วเปิดงานตามแก้ เพราะ test ที่ตกบ้างผ่านบ้างทำให้คนเลิกอ่านผล |
-| ทุกคนรอคิว | เพิ่มตัวรัน · ให้ pull request รันเฉพาะส่วนที่เกี่ยวข้อง |
-| build ไม่เหมือนเดิมทุกครั้ง | ล็อกเวอร์ชัน dependency (lock file) · ปักหมุดเวอร์ชัน image ด้วย digest |
+| burn rate ≥ 14.4 over both the 1-hour and the 5-minute windows | roll back at once, without waiting for anyone |
+| burn rate ≥ 6 over both the 6-hour and the 30-minute windows | roll back and open an incident |
+| burn rate 1–6 | stop widening, stay at the current step, have a person look |
+| p95 latency above 2 times the old version for 10 minutes (starting value, not yet measured) or the health check fails | roll back |
 
-**ตัวชี้วัดที่ควรดู:** ปล่อยของบ่อยแค่ไหน · จาก commit ถึงขึ้นจริงใช้เวลาเท่าไร ·
-deploy แล้วพังกี่เปอร์เซ็นต์ · กู้คืนใช้เวลาเท่าไร
+During a 5% canary, when the 1-hour window is not yet full, you may use the short window (5 minutes) with the 14.4 criterion. But the request count must first reach the minimum for that step before you trust the number.
 
-**อาการที่เจอบ่อยและจุดแรกที่ดู** (แนวคิดจาก wshobson deployment-pipeline-design)
-
-| อาการ | ดูตรงนี้ก่อน |
+| Required | Criterion |
 |---|---|
-| ผ่านบนเครื่อง ตกบน CI | lock file ไม่ได้ commit · ตัวแปรสภาพแวดล้อมที่มีแค่ในเครื่อง · ชื่อไฟล์ตัวพิมพ์ใหญ่เล็ก (Linux แยก) · time zone ของ runner เป็น UTC |
-| ตกเป็นบางครั้ง | test ที่ผลไม่คงที่ (แถวบน) · job ที่รันพร้อมกันแย่ง port หรือฐานข้อมูลเดียวกัน · runner หน่วยความจำไม่พอ |
-| ช้าขึ้นทุกสัปดาห์ | cache key เปลี่ยนทุกครั้งจึงไม่เคยโดน · image ไม่ pin จึง pull ใหม่ · test ชุดเดียวโตไม่แยก |
-| deploy เขียว แต่ของบนเซิร์ฟเวอร์ไม่เปลี่ยน | ใช้ artifact หรือ tag `latest` ตัวเก่าซ้ำ · cache ของ CDN หรือ reverse proxy · instance เก่ายังรับ traffic |
-| permission denied หรือ secret ว่างบน branch หรือ PR | PR จาก fork ไม่ได้ secret · environment protection rule · token หมดอายุหรือ scope ไม่พอ |
+| Rollback command | works with a single command |
+| Time taken | under 5 minutes |
+| **Real rehearsal** | at least once a quarter, on staging |
+| Data | a migration already applied must not break the old code |
+
+> **A rollback that has never been rehearsed is the same as no rollback**, because you find out it does not work at the moment you need it.
 
 ---
 
-## แอป Android / Flutter — ข้อที่ต่างจากเซิร์ฟเวอร์
+## 10 · The pipeline must be fast and trustworthy
 
-| เรื่อง | กฎ |
+| Problem | Fix |
 |---|---|
-| เลขเวอร์ชัน | `pubspec.yaml` `version: X.Y.Z+N` · `X.Y.Z` ตาม SemVer · **`N` คือ versionCode เป็นจำนวนเต็มที่ขึ้นอย่างเดียว** (เช่นเลขรอบของ CI) · commit hash ส่งผ่าน `--dart-define=GIT_SHA=<hash>` แล้วแสดงในหน้า "เกี่ยวกับ" |
-| build ครั้งเดียว | `flutter build appbundle --release` ได้ Android App Bundle (AAB) ไฟล์เดียว แล้วเลื่อนไฟล์เดิมผ่าน track ของ Play: internal → closed → production · ไม่ build ใหม่ต่อ track |
-| ปล่อยทีละส่วน | production ใช้ staged rollout เป็น % (เช่น 5 → 20 → 50 → 100) แทน canary ของเซิร์ฟเวอร์ · track ของ Play แทน environment ในข้อ 5 |
-| rollback | **ย้อนเวอร์ชันบน Play ไม่ได้** เพราะ versionCode ลดไม่ได้ และเครื่องที่ติดตั้งแล้วไม่ถอยกลับ ให้หยุด rollout (halt) แล้วปล่อยตัวแก้ที่ versionCode สูงกว่า และซ้อมขั้นตอนนี้แทนข้อ 9 |
-| กุญแจเซ็น | upload key เก็บใน secret store ของ CI เป็น base64 + รหัสผ่านแยกเป็น secret · `android/key.properties` และ `*.jks` อยู่ใน `.gitignore` · **สำรองกุญแจไว้นอก CI อย่างน้อย 1 ที่** ถ้าทำหายจะอัปเดตแอปไม่ได้จนกว่าจะขอ Play support รีเซ็ต (ใช้ Play App Signing ให้ Google ถือกุญแจจริง) |
+| Slow | cache dependencies · run several test sets in parallel · move slow tests to a nightly run |
+| Tests with unstable results (flaky) | **quarantine at once** and open a task to fix, because a test that sometimes fails and sometimes passes makes people stop reading results |
+| Everyone waits in the queue | add runners · let pull requests run only the relevant parts |
+| The build is not the same every time | lock dependency versions (lock file) · pin image versions by digest |
+
+**Metrics worth watching:** how often you release · how long from commit to live ·
+what percentage of deploys break · how long recovery takes
+
+**Common symptoms and the first place to look** (idea from wshobson deployment-pipeline-design)
+
+| Symptom | Look here first |
+|---|---|
+| Passes on the machine, fails on CI | lock file not committed · environment variables that exist only locally · file name letter case (Linux tells them apart) · the runner's time zone is UTC |
+| Fails sometimes | flaky tests (row above) · jobs running at the same time fight over the same port or database · runner out of memory |
+| Slower every week | the cache key changes every time so it never hits · an unpinned image is pulled again · one test suite grows and is not split |
+| Deploy is green but nothing changes on the server | reusing an old artifact or the `latest` tag · CDN or reverse proxy cache · an old instance still receives traffic |
+| permission denied or an empty secret on a branch or PR | a PR from a fork gets no secrets · environment protection rule · the token expired or its scope is too small |
+
+---
+
+## Android / Flutter apps — differences from servers
+
+| Topic | Rule |
+|---|---|
+| Version number | `pubspec.yaml` `version: X.Y.Z+N` · `X.Y.Z` follows SemVer · **`N` is the versionCode, an integer that only goes up** (for example the CI run number) · pass the commit hash through `--dart-define=GIT_SHA=<hash>` and show it on the "About" page |
+| Build once | `flutter build appbundle --release` gives one Android App Bundle (AAB) file, then promote that same file through the Play tracks: internal → closed → production · do not rebuild per track |
+| Staged release | production uses a staged rollout in % (for example 5 → 20 → 50 → 100) instead of a server canary · Play tracks stand in for the environments in section 5 |
+| Rollback | **you cannot roll back a version on Play**, because the versionCode cannot go down and devices that already installed it do not go back. Halt the rollout, then release a fix with a higher versionCode, and rehearse this procedure instead of section 9 |
+| Signing key | keep the upload key in the CI secret store as base64 + the password as a separate secret · `android/key.properties` and `*.jks` go in `.gitignore` · **back up the key outside CI in at least 1 place.** If you lose it, you cannot update the app until Play support resets it (use Play App Signing so Google holds the real key) |
 
 ---
 
 ## 11 · Anti-patterns
 
-- **build ใหม่ตอนขึ้น production** ทำให้ของที่ทดสอบไม่ใช่ของที่ปล่อย
-- **deploy ด้วยมือตามขั้นตอนใน Word** · วันไหนคนเขียนลาป่วย วันนั้น deploy ไม่ได้
-- **secret ในไฟล์ pipeline** · ใครอ่านโค้ดได้ก็อ่าน secret ได้
-- **test ตกแล้วปล่อยผ่าน** ทำครั้งเดียว คนก็เลิกเชื่อผลไปตลอด
-- **deploy วันศุกร์เย็น** ในทีมที่ยัง rollback ไม่ได้ด้วยคำสั่งเดียว
-- **migration ของฐานข้อมูลบนเซิร์ฟเวอร์รันตอนแอปบูต** · หลาย instance ชนกัน (ฐานข้อมูลในเครื่องมือถือยกเว้น ดูข้อ 7)
-- **ไม่มี artifact เก็บไว้** ทำให้ rollback กลายเป็นการ build ย้อนจาก commit เก่า
-- **environment ที่ config ต่างกันจนคาดเดาไม่ได้** · "บน staging ผ่านนะ"
-- **feature flag ที่ไม่มีวันลบ**
-- **pipeline ใช้เวลา 45 นาที** คนจะเริ่ม merge โดยไม่รอผล
+- **Rebuilding when going to production** means what was tested is not what is released
+- **Deploying by hand from steps in a Word file** · on the day the author is out sick, nobody can deploy
+- **Secrets in pipeline files** · anyone who can read the code can read the secrets
+- **Letting a failed test pass** once makes people stop trusting results for good
+- **Deploying on Friday evening** in a team that cannot yet roll back with a single command
+- **Server database migration run at app boot** · several instances collide (mobile on-device databases are the exception, see section 7)
+- **No artifact kept** turns a rollback into rebuilding from an old commit
+- **Environments whose config differs unpredictably** · "it passed on staging"
+- **A feature flag with no removal date**
+- **A pipeline that takes 45 minutes** · people start merging without waiting for the result
 
 
 ## reference: deployment-plan-template.md
 
 # แม่แบบแผน deploy
 
-เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+Open when you actually need to write this kind of document · put `(รอยืนยัน)` on anything you do not know
 
 ## Standard Output: Polished Deployment Plan
 
@@ -949,21 +949,21 @@ _[รูปขั้นตอน deploy: Tag release → CI สุดท้า�
 
 ## reference: per-platform.md
 
-# ไฟล์ pipeline ตั้งต้น แยกตามแพลตฟอร์ม
+# Starter pipeline files by platform
 
-**สารบัญ:** 1 GitHub Actions · 2 Azure DevOps · 3 GitLab CI · 4 Dockerfile หลายขั้น · 5 ตารางเทียบความสามารถ
+**Contents:** 1 GitHub Actions · 2 Azure DevOps · 3 GitLab CI · 4 Multi-stage Dockerfile · 5 Capability comparison table
 
 1. [GitHub Actions](#1--github-actions)
 2. [Azure DevOps](#2--azure-devops)
 3. [GitLab CI](#3--gitlab-ci)
-4. [Dockerfile หลายขั้น](#4--dockerfile-หลายขั้น)
-5. [ตารางเทียบความสามารถ](#5--ตารางเทียบความสามารถ)
+4. [Multi-stage Dockerfile](#4--multi-stage-dockerfile)
+5. [Capability comparison table](#5--capability-comparison-table)
 
 ---
 
 ## 1 · GitHub Actions
 
-`.github/workflows/ci.yml` รันทุก pull request
+`.github/workflows/ci.yml` runs on every pull request.
 
 ```yaml
 name: ci
@@ -971,7 +971,7 @@ on:
   pull_request:
   push: { branches: [main] }
 
-concurrency:                       # ยกเลิกรอบเก่าเมื่อ push ซ้ำ
+concurrency:                       # cancel the older run when a new push arrives
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
@@ -982,7 +982,7 @@ jobs:
     permissions: { contents: read }
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }   # ต้องมีประวัติครบเพื่อคำนวณเวอร์ชัน
+        with: { fetch-depth: 0 }   # full history is needed to compute the version
 
       - uses: actions/setup-node@v4
         with: { node-version: '22', cache: 'npm' }
@@ -999,7 +999,7 @@ jobs:
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }} # ต้องมีเมื่อ repo เป็นของ organization · บัญชีส่วนตัวไม่ต้อง (README gitleaks-action · ตรวจ 22 ต.ค. 2569)
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }} # required when the repo belongs to an organization; not needed for a personal account (gitleaks-action README, checked 22 Oct 2026 (B.E. 2569))
 
       - uses: actions/upload-artifact@v4
         with:
@@ -1008,7 +1008,7 @@ jobs:
           retention-days: 30
 ```
 
-`.github/workflows/deploy.yml` เอา artifact ตัวเดิมจาก ci ไป deploy ต่อทีละ environment
+`.github/workflows/deploy.yml` takes the same artifact from ci and deploys it to one environment at a time.
 
 ```yaml
 name: deploy
@@ -1024,10 +1024,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     steps:
-      - uses: actions/checkout@v4             # scripts/deploy.sh มาจาก repo
+      - uses: actions/checkout@v4             # scripts/deploy.sh comes from the repo
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
-      - uses: actions/download-artifact@v4    # ตัว build มาจาก artifact (dist/)
+      - uses: actions/download-artifact@v4    # the build output comes from the artifact (dist/)
         with:
           name: app-${{ github.event.workflow_run.head_sha }}
           run-id: ${{ github.event.workflow_run.id }}
@@ -1037,12 +1037,12 @@ jobs:
   production:
     needs: staging
     runs-on: ubuntu-latest
-    environment: production        # ← ตั้ง required reviewers ที่นี่ = ด่านคน
+    environment: production        # <- set required reviewers here = the human gate
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
-      - uses: actions/download-artifact@v4   # artifact ตัวเดียวกับ staging
+      - uses: actions/download-artifact@v4   # same artifact as staging
         with:
           name: app-${{ github.event.workflow_run.head_sha }}
           run-id: ${{ github.event.workflow_run.id }}
@@ -1057,13 +1057,13 @@ jobs:
           ./scripts/rollback.sh && exit 1
 ```
 
-**ข้อควรระวัง:**
+**Cautions:**
 
-- `pull_request_target` เห็น secret และรันโค้ดจาก fork จึง**อย่าใช้** เว้นแต่รู้จริงว่ากำลังทำอะไร
-- ตั้ง `permissions` ให้แคบที่สุดในทุก workflow เพราะบางองค์กรตั้งค่าเริ่มต้นให้เขียนได้ทั้ง repo
-- เวอร์ชันในตัวอย่าง (`@v4`, Node 22, .NET 8.x) เป็นแค่ตัวอย่าง ตรวจเวอร์ชันล่าสุดก่อนใช้ (รอยืนยัน)
-- ปักหมุด action อย่างน้อยด้วย tag เวอร์ชัน (`@v4`) ถ้าต้องการเข้มงวดให้ปักด้วย commit hash
-- `environment:` คือที่ตั้งผู้อนุมัติ (required reviewers) และ secret เฉพาะ environment
+- `pull_request_target` can see secrets and runs code from forks, so **do not use it** unless you know exactly what you are doing.
+- Set `permissions` as narrow as possible in every workflow, because some organizations default to write access on the whole repo.
+- The versions in the examples (`@v4`, Node 22, .NET 8.x) are only examples. Check the latest versions before use (`รอยืนยัน`, awaiting confirmation).
+- Pin each action at least by version tag (`@v4`). For stricter control, pin by commit hash.
+- `environment:` is where you set approvers (required reviewers) and secrets that belong to one environment.
 
 ---
 
@@ -1110,19 +1110,19 @@ stages:
   dependsOn: staging
   jobs:
   - deployment: production
-    environment: production        # ← ตั้ง approval ที่หน้า Environments
+    environment: production        # <- set approval on the Environments page
     strategy:
       runOnce:
         deploy:
           steps:
           - download: current
-            artifact: app          # artifact ตัวเดิมจาก stage build
+            artifact: app          # same artifact from the build stage
           - script: ./scripts/deploy.sh production
 ```
 
-- `deployment` job ต่างจาก `job` ธรรมดาตรงที่ผูกกับ environment จึงได้ประวัติการ deploy และขั้นอนุมัติมาด้วย
-- ตัวแปรลับเก็บใน variable group ที่ผูกกับ Azure Key Vault อย่าพิมพ์ลงไฟล์
-- ตัวแปรลับ**ไม่ถูกส่งเข้า script เอง** ต้อง map ผ่าน `env:` ทีละตัว
+- A `deployment` job differs from a plain `job` because it binds to an environment, so it gets deploy history and an approval step.
+- Keep secrets in a variable group linked to Azure Key Vault. Do not write them into files.
+- Secret variables are **not passed into scripts automatically**. Map them one by one through `env:`.
 
 ---
 
@@ -1175,65 +1175,65 @@ deploy:staging:
 deploy:production:
   stage: deploy
   environment: { name: production, url: https://example.co }
-  when: manual                     # ← ด่านคน
+  when: manual                     # <- human gate
   script: ./scripts/deploy.sh production $CI_COMMIT_SHA
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
 ```
 
-- ตั้งตัวแปรลับเป็น `Masked` และ `Protected` ที่หน้า Settings → CI/CD
-- `when: manual` ใช้คู่กับ protected environment จึงจะเป็นด่านอนุมัติที่กันได้จริง
+- Mark secret variables `Masked` and `Protected` under Settings → CI/CD.
+- Use `when: manual` together with a protected environment. Only then is it an approval gate that really blocks.
 
 ---
 
-## 4 · Dockerfile หลายขั้น
+## 4 · Multi-stage Dockerfile
 
 ```dockerfile
-# ---- ขั้น build ----
+# ---- build stage ----
 FROM node:22-alpine AS build
 WORKDIR /src
 COPY package*.json ./
-# ชั้นนี้ถูกแคชตราบใดที่ lock file ไม่เปลี่ยน
+# this layer stays cached as long as the lock file does not change
 RUN npm ci
 COPY . .
 RUN npm run build
 
-# ---- ขั้นรัน ----
+# ---- run stage ----
 FROM node:22-alpine
 ENV NODE_ENV=production
 WORKDIR /app
 COPY --from=build /src/dist ./dist
 COPY --from=build /src/node_modules ./node_modules
-# อย่ารันเป็น root
+# do not run as root
 USER node
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=3s CMD node dist/healthcheck.js
 CMD ["node", "dist/main.js"]
 ```
 
-**กฎ:**
+**Rules:**
 
-- คัดลอกไฟล์ที่เปลี่ยนน้อยก่อน ชั้นแรก ๆ จะได้ใช้แคชซ้ำ
-- อย่าคัดลอก `.env`, `.git`, `node_modules` เข้า image ให้กันไว้ด้วย `.dockerignore`
-- ถ้าต้องการให้ build ได้ผลเดิมทุกครั้ง ให้ปักหมุด base image ด้วย digest
-- ตั้งชื่อ tag ด้วย commit hash เสมอ ส่วน `latest` ใช้เป็นชื่อเล่นได้ แต่ห้าม deploy ด้วย `latest`
+- Copy the files that change least first, so the early layers reuse the cache.
+- Do not copy `.env`, `.git` or `node_modules` into the image. Block them with `.dockerignore`.
+- For a build that gives the same result every time, pin the base image by digest.
+- Always name the tag with the commit hash. `latest` may serve as an alias, but never deploy with `latest`.
 
 ---
 
-## 5 · ตารางเทียบความสามารถ
+## 5 · Capability comparison table
 
-| สิ่งที่ต้องการ | GitHub Actions | Azure DevOps | GitLab CI |
+| Need | GitHub Actions | Azure DevOps | GitLab CI |
 |---|---|---|---|
-| ด่านอนุมัติโดยคน | Environment + required reviewers | Environment approvals | `when: manual` + protected env |
-| เก็บ artifact | `upload/download-artifact` | `publish` / `download` | `artifacts:` |
-| แคช dependency | `actions/cache` หรือ `cache:` ใน setup | `Cache@2` | `cache:` |
-| secret ต่อ environment | Environment secrets | Variable group + Key Vault | ตัวแปร Protected ต่อ environment |
-| ยกเลิกรอบเก่า | `concurrency` | `batch: true` (รวม trigger ระหว่างรอบที่รันอยู่ ไม่ได้ยกเลิกรอบเก่า) | `interruptible: true` |
-| วิ่งขนาน | `strategy.matrix` | `strategy.matrix` | `parallel:` |
-| รันเอง (self-hosted) | ได้ | ได้ | ได้ |
+| Human approval gate | Environment + required reviewers | Environment approvals | `when: manual` + protected env |
+| Store artifacts | `upload/download-artifact` | `publish` / `download` | `artifacts:` |
+| Cache dependencies | `actions/cache` or `cache:` in setup | `Cache@2` | `cache:` |
+| Secrets per environment | Environment secrets | Variable group + Key Vault | Protected variables per environment |
+| Cancel older runs | `concurrency` | `batch: true` (merges triggers that arrive while a run is active; it does not cancel the older run) | `interruptible: true` |
+| Run in parallel | `strategy.matrix` | `strategy.matrix` | `parallel:` |
+| Self-hosted runners | Yes | Yes | Yes |
 
-> **ทุกแพลตฟอร์มทำสิ่งเดียวกันได้** จึงอย่าเลือกจากรายการความสามารถ
-> เลือกตัวที่อยู่ที่เดียวกับ repo แล้วลงแรงกับเนื้อหาของ pipeline แทน
+> **Every platform can do the same things**, so do not choose by feature list.
+> Pick the one that lives where the repo lives, and put your effort into the content of the pipeline instead.
 
 
 ---
@@ -1242,64 +1242,64 @@ CMD ["node", "dist/main.js"]
 
 Use when the same mistake gets corrected twice
 
-# repeated-mistakes-to-checks — ความผิดที่ทำซ้ำ ต้องเกิดไม่ได้อีก
+# repeated-mistakes-to-checks: a mistake that repeats must become impossible
 
-> agent ไม่ต้องจำกฎร้อยข้อ ถ้าทางเดินมีราวกั้นในจุดที่ถูก มันจะชนแล้วถูกหยุดในจังหวะที่ใช่เอง
-> ข้อความเตือนใน SKILL.md คือราวกั้นที่อ่อนที่สุด ใช้เป็นทางสุดท้าย
+> The agent does not need to remember a hundred rules. If the path has guard rails at the right places, it hits one and gets stopped at the right moment on its own.
+> A warning in SKILL.md is the weakest guard rail. Use it as the last resort.
 
-มาจากคำสั่ง correct และ rules-as-checks ของ pstack (ไม่มีใน marketplace นี้)
+This comes from pstack's correct command and rules-as-checks (not in this marketplace).
 
-## ไม่ใช้เมื่อ
+## Do not use when
 
-ใช้ตัวไหนระหว่าง `session-lessons-to-skills` · `repeated-mistakes-to-checks` · `owner-style-capture` → ตารางกลางใน [`session-lessons-to-skills`](../session-lessons-to-skills/SKILL.md) หัวข้อ "ใช้ตัวไหน"
+For choosing among `session-lessons-to-skills` · `repeated-mistakes-to-checks` · `owner-style-capture`, see the central table in [`session-lessons-to-skills`](../session-lessons-to-skills/SKILL.md), under the heading "Which one to use".
 
-## ขั้นตอน
+## Steps
 
-1. **เก็บหลักฐาน** — ผู้ใช้แก้อะไรบ้าง (ข้อความในบทสนทนานี้ · บรรทัด `correction: true` ใน `.claude/superuser/log/` · เรื่องที่ซ้ำใน `.claude/superuser/learn/` · ตาราง "การตัดสินใจ" ที่ขึ้นต้น `ผู้ใช้แก้ —` · ความเห็นในการรีวิว · งานที่ลูกค้าตีกลับ · commit ที่ revert ซ้ำ ๆ) ต้องมีอย่างน้อย 2 ครั้งที่เป็นเรื่องเดียวกัน ถ้าเกิดครั้งเดียวยังไม่นับ
-   - **ไม่ต้องรอผู้ใช้พูดซ้ำ — ขุดเอง:** อ่านข้อความของผู้ใช้ในบทสนทนาย้อนจากล่าสุด หาสัญญาณ 3 แบบ: คำสั่งห้าม ("อย่า…" · "ไม่ต้อง…") · "ฉันไม่ได้ขอ" หรือให้ทำใหม่ · การ revert หรือแก้ทับงานที่ agent เพิ่งเสร็จ · แล้วจัดตามความหนักก่อนไปข้อ 2
+1. **Gather evidence:** what the user corrected (messages in this conversation · lines with `correction: true` in `.claude/superuser/log/` · repeated topics in `.claude/superuser/learn/` · rows of the "การตัดสินใจ" (decisions) table that start with `ผู้ใช้แก้ —` (user corrected) · review comments · work a client sent back · commits reverted repeatedly). You need at least 2 incidents of the same thing. One incident does not count yet.
+   - **Do not wait for the user to say it again; dig it out yourself.** Read the user's messages in the conversation, working back from the latest, and look for 3 kinds of signal: a prohibition ("อย่า…" · "ไม่ต้อง…") · "ฉันไม่ได้ขอ" (I did not ask for that) or a request to redo · a revert or overwrite of work the agent just finished. Then rank by severity before going to step 2.
 
-     | หนัก | สัญญาณ | ทำอะไรต่อ |
+     | Severity | Signal | Next |
      |---|---|---|
-     | สูง | revert · ลบสิ่งที่ agent เพิ่ม · "ทำไมแตะไฟล์นี้" | ทำเป็นตัวตรวจเลย แม้เกิดครั้งเดียว ถ้าตรวจด้วยเครื่องได้ |
-     | กลาง | "อย่า…" · "ไม่ได้ขอ" ซ้ำ 2 ครั้งขึ้นไป | เข้าข้อ 2 ตามปกติ |
-     | เบา | ความชอบเรื่องถ้อยคำหรือรูปแบบ | `owner-style-capture` |
-2. **จัดเป็นประเภท** — ตั้งชื่อความผิดแต่ละประเภทให้สั้นและชัด เช่น "ใช้ราคาไม่รวม VAT ในใบเสนอราคา" · "ลืมวันที่แหล่งข้อมูลในรายงาน" · "ใช้ปี พ.ศ. ในฐานข้อมูล"
-3. **เลือกชั้นที่แก้ — สูงสุดที่ทำได้**
+     | High | A revert · deleting something the agent added · "ทำไมแตะไฟล์นี้" (why did you touch this file) | Build a check right away, even after one incident, if a machine can check it |
+     | Medium | "อย่า…" · "ไม่ได้ขอ" repeated 2 or more times | Go to step 2 as usual |
+     | Low | A preference about wording or format | `owner-style-capture` |
+2. **Sort into types.** Name each type of mistake short and clear, e.g. "using a price excluding VAT in a quotation" · "forgetting the source date in a report" · "using Buddhist Era years in the database".
+3. **Choose the layer to fix at: the highest you can.**
 
-   | ชั้น | ตัวอย่าง | เหตุที่ดีกว่าชั้นล่าง |
+   | Layer | Examples | Why it beats the layer below |
    |---|---|---|
-   | โครงสร้าง | แม่แบบที่เหลือช่องให้เติมแค่ที่ต้องเติม · เหลือวิธีทำวิธีเดียว · ลบของเก่าที่ทำให้สับสน | ทางผิดหายไปเลย |
-   | ชนิดข้อมูล | ช่องวันที่ในชีตตั้งให้รับแค่วันที่ · งานโค้ด: type แยก `ThaiYear` กับ `Year` | เครื่องหยุดให้ |
-   | สคริปต์ตรวจ | สูตรเทียบยอดรวมในชีต · สคริปต์ grep หาคำต้องห้ามในเอกสาร · lint ใน CI · **ข้อความ error บอกวิธีแก้** | ชนแล้วรู้ทันทีว่าต้องทำอะไร |
-   | ตัวอย่างตรวจ | ชุดตัวอย่างที่ต้องผ่านก่อนส่ง · test ที่ล้มเมื่อพฤติกรรมผิด | จับได้ก่อนส่งหรือ merge |
-   | ข้อความ | แก้ย่อหน้าใน SKILL.md หรือ agent | ใช้เมื่อชั้นบนทำไม่ได้จริงเท่านั้น · กฎ "ห้ามเด็ดขาด" อย่าอยู่แค่ใน skill เพราะ skill อาจไม่ถูกเรียก (คอร์ส CWN2026 2026-11-04: ถามเรื่องแผนโดยไม่เรียก skill agent เปิดหัวข้อเฉลยทั้งไฟล์) ใส่ใน hook หรือ CLAUDE.md ด้วย |
+   | Structure | A template that leaves only the fields that must be filled · leave only one way to do it · delete old things that cause confusion | The wrong path disappears |
+   | Data type | A date field in a sheet set to accept only dates · in code: separate types `ThaiYear` and `Year` | The machine stops you |
+   | Check script | A formula that compares totals in a sheet · a grep script that finds banned words in documents · lint in CI · **an error message that says how to fix it** | On a hit you know at once what to do |
+   | Check examples | A set of examples that must pass before sending · a test that fails when behavior is wrong | Catches it before sending or merging |
+   | Text | Edit a paragraph in SKILL.md or an agent | Use only when the layers above are truly impossible. A "never" rule must not live only in a skill, because the skill may not be called (course CWN2026 2026-11-04: asked about the plan without calling the skill, the agent opened the whole answer-key heading). Put it in a hook or CLAUDE.md too |
 
-4. **สร้างการตรวจ** — เขียนแบบเล็กที่สุดที่จับประเภทนั้นได้ ([`principle-build-a-tool-not-handwork`](../principle-build-a-tool-not-handwork/SKILL.md))
-   - ร่างกฎที่จับด้วย regex ได้ก่อน: ระบุเครื่องมือหรือไฟล์ที่กฎคุม · pattern · ข้อความที่แสดงเมื่อชน (บอกวิธีแก้) · ตัวอย่างที่ต้องชน 1 ตัวและตัวอย่างที่ต้องไม่ชน 1 ตัว (ใช้ในข้อ 5) · จับด้วย regex ไม่ได้ → ลงชั้นข้อความและบอกว่าเพราะอะไร
-5. **พิสูจน์ว่ามันจับได้จริง** — ย้อนเอาโค้ดหรือเอกสารจากความผิดครั้งจริง (หรือสร้างซ้ำให้เหมือน) แล้วรันการตรวจ ซึ่ง**ต้องล้ม** จากนั้นรันกับของปัจจุบัน ซึ่งต้องผ่าน เพราะตัวตรวจที่ไม่เคยล้มเลยคือตัวตรวจที่พัง
-6. **ลงตาราง** — `| ความผิด | ชั้นที่แก้ | ตัวตรวจ (ไฟล์) | พิสูจน์ด้วย |` ลงใน `.claude/superuser/IMPROVEMENTS.md` (งานโค้ดใช้ `docs/AGENT-RULES.md` หรือ `README` ของ repo skill ก็ได้) แล้วเพิ่ม 1 บรรทัดในหัวข้อ "กติกา" ของ `CONTEXT.md` ชี้ไปหา
-7. ทำซ้ำทุกครั้งที่ผู้ใช้แก้เรื่องใหม่เป็นครั้งที่ 2
+4. **Build the check.** Write the smallest form that catches that type ([`principle-build-a-tool-not-handwork`](../principle-build-a-tool-not-handwork/SKILL.md)).
+   - Draft a rule that a regex can catch first: name the tool or file the rule governs · the pattern · the message shown on a hit (saying how to fix) · 1 example that must hit and 1 example that must not hit (used in step 5). If a regex cannot catch it → use the text layer and say why.
+5. **Prove it really catches.** Take the code or document from the real mistake (or recreate it faithfully) and run the check, which **must fail.** Then run it on the current version, which must pass. A check that has never failed is a broken check.
+6. **Log it in the table:** `| ความผิด | ชั้นที่แก้ | ตัวตรวจ (ไฟล์) | พิสูจน์ด้วย |` (mistake · layer fixed · check (file) · proven by) in `.claude/superuser/IMPROVEMENTS.md` (for code work, `docs/AGENT-RULES.md` or the `README` of the skill repo also works). Then add 1 line under the "กติกา" (rules) heading of `CONTEXT.md` that points to it.
+7. Repeat every time the user corrects a new topic for the 2nd time.
 
-## ไม่ต้องรอให้ผิดซ้ำ — สัญญาณที่ควรทำเป็นการตรวจเลย
+## Do not wait for a repeat: signs you should build a check right away
 
-- ถ้ากฎเดียวกันอยู่ในหลายไฟล์ (เช่น เขียนซ้ำในทุก prompt) ให้ย้ายไปไว้ที่เดียว แล้วให้ที่อื่นอ้างถึง
-- ถ้ากำลังจะเขียน "ห้าม..." เพิ่มอีกบรรทัด ทั้งที่ตรวจด้วยเครื่องได้ (grep · สูตร · CI) ให้ทำเป็นตัวตรวจแทน
-- ข้อความ error ของตัวตรวจต้องบอกวิธีแก้ ไม่ใช่แค่บอกว่าผิด
+- If the same rule lives in several files (e.g. repeated in every prompt), move it to one place and let the others refer to it.
+- If you are about to write one more "never..." line when a machine could check it (grep · formula · CI), build a check instead.
+- A check's error message must say how to fix it, not just say it is wrong.
 
-ตัวอย่างในชุดนี้:
+Examples in this set:
 
-| กฎ | เคยเป็นข้อความ | ตอนนี้เป็น |
+| Rule | Used to be | Now it is |
 |---|---|---|
-| description ของ skill ห้ามมี `": "` โดยไม่ครอบเครื่องหมายคำพูด | คำเตือนในเอกสาร | `scripts/check/validate-marketplace.mjs` + `--self-test` |
-| ตัวเลขใน README ต้องตรงกับของจริง | แก้มือ | `scripts/sync/sync-docs.mjs --check` |
-| ของกลาง SuperUser ต้องเหมือนกันทุก plugin | ข้อความ "แก้ให้ครบทุกตัว" | `scripts/sync/sync-superuser.mjs --check` |
+| A skill's description must not contain `": "` without quotation marks | A warning in a document | `scripts/check/validate-marketplace.mjs` + `--self-test` |
+| Numbers in the README must match reality | Edited by hand | `scripts/sync/sync-docs.mjs --check` |
+| SuperUser shared files must be identical in every plugin | A text line "edit every copy" | `scripts/sync/sync-superuser.mjs --check` |
 
-## สิ่งที่ห้ามทำ
+## What not to do
 
-- เพิ่มข้อความ "ห้าม..." ใน SKILL.md ทั้งที่ทำเป็นตัวตรวจได้
-- สร้างกฎที่ไม่ได้พิสูจน์ด้วยความผิดจริง เพราะกฎที่ยิงไม่โดนเป้าทำให้ทุกคนเชื่อผิด ๆ ว่าปลอดภัย
-- ตรวจกว้างเกินจนจับของถูกด้วย เพราะสุดท้ายทุกคนจะเรียนรู้ที่จะข้ามมัน
+- Add a "never..." text to SKILL.md when it could be a check.
+- Create a rule that was not proven with a real mistake, because a rule that misses its target makes everyone wrongly believe they are safe.
+- Check so broadly that it also catches correct things, because in the end everyone learns to skip it.
 
-## ที่มา
+## Source
 
-hookify (Apache-2.0) · `agents/conversation-analyzer.md` · ดู 2026-11-10 (ขุดสัญญาณแก้ของผู้ใช้ย้อนจากล่าสุด จัดตามความหนัก ร่างกฎแบบ regex)
+hookify (Apache-2.0) · `agents/conversation-analyzer.md` · viewed 2026-11-10 (dig out the user's correction signals working back from the latest, rank by severity, draft regex-style rules).

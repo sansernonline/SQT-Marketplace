@@ -2,67 +2,67 @@
 
 Use when the same mistake gets corrected twice
 
-# repeated-mistakes-to-checks — ความผิดที่ทำซ้ำ ต้องเกิดไม่ได้อีก
+# repeated-mistakes-to-checks: a mistake that repeats must become impossible
 
-> agent ไม่ต้องจำกฎร้อยข้อ ถ้าทางเดินมีราวกั้นในจุดที่ถูก มันจะชนแล้วถูกหยุดในจังหวะที่ใช่เอง
-> ข้อความเตือนใน SKILL.md คือราวกั้นที่อ่อนที่สุด ใช้เป็นทางสุดท้าย
+> The agent does not need to remember a hundred rules. If the path has guard rails at the right places, it hits one and gets stopped at the right moment on its own.
+> A warning in SKILL.md is the weakest guard rail. Use it as the last resort.
 
-มาจากคำสั่ง correct และ rules-as-checks ของ pstack (ไม่มีใน marketplace นี้)
+This comes from pstack's correct command and rules-as-checks (not in this marketplace).
 
-## ไม่ใช้เมื่อ
+## Do not use when
 
-ใช้ตัวไหนระหว่าง `session-lessons-to-skills` · `repeated-mistakes-to-checks` · `owner-style-capture` → ตารางกลางใน [`session-lessons-to-skills`](../session-lessons-to-skills/SKILL.md) หัวข้อ "ใช้ตัวไหน"
+For choosing among `session-lessons-to-skills` · `repeated-mistakes-to-checks` · `owner-style-capture`, see the central table in [`session-lessons-to-skills`](../session-lessons-to-skills/SKILL.md), under the heading "Which one to use".
 
-## ขั้นตอน
+## Steps
 
-1. **เก็บหลักฐาน** — ผู้ใช้แก้อะไรบ้าง (ข้อความในบทสนทนานี้ · บรรทัด `correction: true` ใน `.claude/superuser/log/` · เรื่องที่ซ้ำใน `.claude/superuser/learn/` · ตาราง "การตัดสินใจ" ที่ขึ้นต้น `ผู้ใช้แก้ —` · ความเห็นในการรีวิว · งานที่ลูกค้าตีกลับ · commit ที่ revert ซ้ำ ๆ) ต้องมีอย่างน้อย 2 ครั้งที่เป็นเรื่องเดียวกัน ถ้าเกิดครั้งเดียวยังไม่นับ
-   - **ไม่ต้องรอผู้ใช้พูดซ้ำ — ขุดเอง:** อ่านข้อความของผู้ใช้ในบทสนทนาย้อนจากล่าสุด หาสัญญาณ 3 แบบ: คำสั่งห้าม ("อย่า…" · "ไม่ต้อง…") · "ฉันไม่ได้ขอ" หรือให้ทำใหม่ · การ revert หรือแก้ทับงานที่ agent เพิ่งเสร็จ · แล้วจัดตามความหนักก่อนไปข้อ 2
+1. **Gather evidence:** what the user corrected (messages in this conversation · lines with `correction: true` in `.claude/superuser/log/` · repeated topics in `.claude/superuser/learn/` · rows of the "การตัดสินใจ" (decisions) table that start with `ผู้ใช้แก้ —` (user corrected) · review comments · work a client sent back · commits reverted repeatedly). You need at least 2 incidents of the same thing. One incident does not count yet.
+   - **Do not wait for the user to say it again; dig it out yourself.** Read the user's messages in the conversation, working back from the latest, and look for 3 kinds of signal: a prohibition ("อย่า…" · "ไม่ต้อง…") · "ฉันไม่ได้ขอ" (I did not ask for that) or a request to redo · a revert or overwrite of work the agent just finished. Then rank by severity before going to step 2.
 
-     | หนัก | สัญญาณ | ทำอะไรต่อ |
+     | Severity | Signal | Next |
      |---|---|---|
-     | สูง | revert · ลบสิ่งที่ agent เพิ่ม · "ทำไมแตะไฟล์นี้" | ทำเป็นตัวตรวจเลย แม้เกิดครั้งเดียว ถ้าตรวจด้วยเครื่องได้ |
-     | กลาง | "อย่า…" · "ไม่ได้ขอ" ซ้ำ 2 ครั้งขึ้นไป | เข้าข้อ 2 ตามปกติ |
-     | เบา | ความชอบเรื่องถ้อยคำหรือรูปแบบ | `owner-style-capture` |
-2. **จัดเป็นประเภท** — ตั้งชื่อความผิดแต่ละประเภทให้สั้นและชัด เช่น "ใช้ราคาไม่รวม VAT ในใบเสนอราคา" · "ลืมวันที่แหล่งข้อมูลในรายงาน" · "ใช้ปี พ.ศ. ในฐานข้อมูล"
-3. **เลือกชั้นที่แก้ — สูงสุดที่ทำได้**
+     | High | A revert · deleting something the agent added · "ทำไมแตะไฟล์นี้" (why did you touch this file) | Build a check right away, even after one incident, if a machine can check it |
+     | Medium | "อย่า…" · "ไม่ได้ขอ" repeated 2 or more times | Go to step 2 as usual |
+     | Low | A preference about wording or format | `owner-style-capture` |
+2. **Sort into types.** Name each type of mistake short and clear, e.g. "using a price excluding VAT in a quotation" · "forgetting the source date in a report" · "using Buddhist Era years in the database".
+3. **Choose the layer to fix at: the highest you can.**
 
-   | ชั้น | ตัวอย่าง | เหตุที่ดีกว่าชั้นล่าง |
+   | Layer | Examples | Why it beats the layer below |
    |---|---|---|
-   | โครงสร้าง | แม่แบบที่เหลือช่องให้เติมแค่ที่ต้องเติม · เหลือวิธีทำวิธีเดียว · ลบของเก่าที่ทำให้สับสน | ทางผิดหายไปเลย |
-   | ชนิดข้อมูล | ช่องวันที่ในชีตตั้งให้รับแค่วันที่ · งานโค้ด: type แยก `ThaiYear` กับ `Year` | เครื่องหยุดให้ |
-   | สคริปต์ตรวจ | สูตรเทียบยอดรวมในชีต · สคริปต์ grep หาคำต้องห้ามในเอกสาร · lint ใน CI · **ข้อความ error บอกวิธีแก้** | ชนแล้วรู้ทันทีว่าต้องทำอะไร |
-   | ตัวอย่างตรวจ | ชุดตัวอย่างที่ต้องผ่านก่อนส่ง · test ที่ล้มเมื่อพฤติกรรมผิด | จับได้ก่อนส่งหรือ merge |
-   | ข้อความ | แก้ย่อหน้าใน SKILL.md หรือ agent | ใช้เมื่อชั้นบนทำไม่ได้จริงเท่านั้น · กฎ "ห้ามเด็ดขาด" อย่าอยู่แค่ใน skill เพราะ skill อาจไม่ถูกเรียก (คอร์ส CWN2026 2026-11-04: ถามเรื่องแผนโดยไม่เรียก skill agent เปิดหัวข้อเฉลยทั้งไฟล์) ใส่ใน hook หรือ CLAUDE.md ด้วย |
+   | Structure | A template that leaves only the fields that must be filled · leave only one way to do it · delete old things that cause confusion | The wrong path disappears |
+   | Data type | A date field in a sheet set to accept only dates · in code: separate types `ThaiYear` and `Year` | The machine stops you |
+   | Check script | A formula that compares totals in a sheet · a grep script that finds banned words in documents · lint in CI · **an error message that says how to fix it** | On a hit you know at once what to do |
+   | Check examples | A set of examples that must pass before sending · a test that fails when behavior is wrong | Catches it before sending or merging |
+   | Text | Edit a paragraph in SKILL.md or an agent | Use only when the layers above are truly impossible. A "never" rule must not live only in a skill, because the skill may not be called (course CWN2026 2026-11-04: asked about the plan without calling the skill, the agent opened the whole answer-key heading). Put it in a hook or CLAUDE.md too |
 
-4. **สร้างการตรวจ** — เขียนแบบเล็กที่สุดที่จับประเภทนั้นได้ ([`principle-build-a-tool-not-handwork`](../principle-build-a-tool-not-handwork/SKILL.md))
-   - ร่างกฎที่จับด้วย regex ได้ก่อน: ระบุเครื่องมือหรือไฟล์ที่กฎคุม · pattern · ข้อความที่แสดงเมื่อชน (บอกวิธีแก้) · ตัวอย่างที่ต้องชน 1 ตัวและตัวอย่างที่ต้องไม่ชน 1 ตัว (ใช้ในข้อ 5) · จับด้วย regex ไม่ได้ → ลงชั้นข้อความและบอกว่าเพราะอะไร
-5. **พิสูจน์ว่ามันจับได้จริง** — ย้อนเอาโค้ดหรือเอกสารจากความผิดครั้งจริง (หรือสร้างซ้ำให้เหมือน) แล้วรันการตรวจ ซึ่ง**ต้องล้ม** จากนั้นรันกับของปัจจุบัน ซึ่งต้องผ่าน เพราะตัวตรวจที่ไม่เคยล้มเลยคือตัวตรวจที่พัง
-6. **ลงตาราง** — `| ความผิด | ชั้นที่แก้ | ตัวตรวจ (ไฟล์) | พิสูจน์ด้วย |` ลงใน `.claude/superuser/IMPROVEMENTS.md` (งานโค้ดใช้ `docs/AGENT-RULES.md` หรือ `README` ของ repo skill ก็ได้) แล้วเพิ่ม 1 บรรทัดในหัวข้อ "กติกา" ของ `CONTEXT.md` ชี้ไปหา
-7. ทำซ้ำทุกครั้งที่ผู้ใช้แก้เรื่องใหม่เป็นครั้งที่ 2
+4. **Build the check.** Write the smallest form that catches that type ([`principle-build-a-tool-not-handwork`](../principle-build-a-tool-not-handwork/SKILL.md)).
+   - Draft a rule that a regex can catch first: name the tool or file the rule governs · the pattern · the message shown on a hit (saying how to fix) · 1 example that must hit and 1 example that must not hit (used in step 5). If a regex cannot catch it → use the text layer and say why.
+5. **Prove it really catches.** Take the code or document from the real mistake (or recreate it faithfully) and run the check, which **must fail.** Then run it on the current version, which must pass. A check that has never failed is a broken check.
+6. **Log it in the table:** `| ความผิด | ชั้นที่แก้ | ตัวตรวจ (ไฟล์) | พิสูจน์ด้วย |` (mistake · layer fixed · check (file) · proven by) in `.claude/superuser/IMPROVEMENTS.md` (for code work, `docs/AGENT-RULES.md` or the `README` of the skill repo also works). Then add 1 line under the "กติกา" (rules) heading of `CONTEXT.md` that points to it.
+7. Repeat every time the user corrects a new topic for the 2nd time.
 
-## ไม่ต้องรอให้ผิดซ้ำ — สัญญาณที่ควรทำเป็นการตรวจเลย
+## Do not wait for a repeat: signs you should build a check right away
 
-- ถ้ากฎเดียวกันอยู่ในหลายไฟล์ (เช่น เขียนซ้ำในทุก prompt) ให้ย้ายไปไว้ที่เดียว แล้วให้ที่อื่นอ้างถึง
-- ถ้ากำลังจะเขียน "ห้าม..." เพิ่มอีกบรรทัด ทั้งที่ตรวจด้วยเครื่องได้ (grep · สูตร · CI) ให้ทำเป็นตัวตรวจแทน
-- ข้อความ error ของตัวตรวจต้องบอกวิธีแก้ ไม่ใช่แค่บอกว่าผิด
+- If the same rule lives in several files (e.g. repeated in every prompt), move it to one place and let the others refer to it.
+- If you are about to write one more "never..." line when a machine could check it (grep · formula · CI), build a check instead.
+- A check's error message must say how to fix it, not just say it is wrong.
 
-ตัวอย่างในชุดนี้:
+Examples in this set:
 
-| กฎ | เคยเป็นข้อความ | ตอนนี้เป็น |
+| Rule | Used to be | Now it is |
 |---|---|---|
-| description ของ skill ห้ามมี `": "` โดยไม่ครอบเครื่องหมายคำพูด | คำเตือนในเอกสาร | `scripts/check/validate-marketplace.mjs` + `--self-test` |
-| ตัวเลขใน README ต้องตรงกับของจริง | แก้มือ | `scripts/sync/sync-docs.mjs --check` |
-| ของกลาง SuperUser ต้องเหมือนกันทุก plugin | ข้อความ "แก้ให้ครบทุกตัว" | `scripts/sync/sync-superuser.mjs --check` |
+| A skill's description must not contain `": "` without quotation marks | A warning in a document | `scripts/check/validate-marketplace.mjs` + `--self-test` |
+| Numbers in the README must match reality | Edited by hand | `scripts/sync/sync-docs.mjs --check` |
+| SuperUser shared files must be identical in every plugin | A text line "edit every copy" | `scripts/sync/sync-superuser.mjs --check` |
 
-## สิ่งที่ห้ามทำ
+## What not to do
 
-- เพิ่มข้อความ "ห้าม..." ใน SKILL.md ทั้งที่ทำเป็นตัวตรวจได้
-- สร้างกฎที่ไม่ได้พิสูจน์ด้วยความผิดจริง เพราะกฎที่ยิงไม่โดนเป้าทำให้ทุกคนเชื่อผิด ๆ ว่าปลอดภัย
-- ตรวจกว้างเกินจนจับของถูกด้วย เพราะสุดท้ายทุกคนจะเรียนรู้ที่จะข้ามมัน
+- Add a "never..." text to SKILL.md when it could be a check.
+- Create a rule that was not proven with a real mistake, because a rule that misses its target makes everyone wrongly believe they are safe.
+- Check so broadly that it also catches correct things, because in the end everyone learns to skip it.
 
-## ที่มา
+## Source
 
-hookify (Apache-2.0) · `agents/conversation-analyzer.md` · ดู 2026-11-10 (ขุดสัญญาณแก้ของผู้ใช้ย้อนจากล่าสุด จัดตามความหนัก ร่างกฎแบบ regex)
+hookify (Apache-2.0) · `agents/conversation-analyzer.md` · viewed 2026-11-10 (dig out the user's correction signals working back from the latest, rank by severity, draft regex-style rules).
 
 
 ---
@@ -71,52 +71,52 @@ hookify (Apache-2.0) · `agents/conversation-analyzer.md` · ดู 2026-11-10 (
 
 Use when a big task ends and lessons should be kept
 
-# session-lessons-to-skills — ทุกงานใหญ่ทิ้งบทเรียนไว้ในเครื่องมือ
+# session-lessons-to-skills — every big task leaves its lessons in the tools
 
-> บทสนทนาที่ผ่านมามีค่า เพราะเป็นสิ่งที่เกิดขึ้นจริง ไม่ใช่สิ่งที่นึกเอา
-> แต่บทเรียนที่อยู่แค่ในบทสนทนาจะหายไปพร้อมบทสนทนา
+> A past conversation is valuable because it really happened, not because someone imagined it.
+> But a lesson that lives only in the conversation disappears with the conversation.
 
-## ข้ามได้เมื่อ
+## Skip when
 
-งานสั้นหรือง่าย agent ทำตาม skill ที่มีอยู่แล้วได้ถูกต้อง หรือเป็นเรื่องที่เกิดครั้งเดียว
+The task is short or easy, the agent followed the existing skills correctly, or the issue happened only once.
 
-## ใช้ตัวไหน — ตารางเดียวของ 3 skill
+## Which one to use — one table for 3 skills
 
-ตารางนี้เป็นของกลางของ `session-lessons-to-skills` · `repeated-mistakes-to-checks` · `owner-style-capture` (อีก 2 ตัวชี้มาที่นี่)
+This table is shared by `session-lessons-to-skills` · `repeated-mistakes-to-checks` · `owner-style-capture` (the other 2 point here).
 
-| เกิดอะไร | ใช้ | ผลลัพธ์ |
+| What happened | Use | Output |
 |---|---|---|
-| งานใหญ่จบ · ผู้ใช้สั่งรวมบทเรียน · skill พาไปผิด | `session-lessons-to-skills` (ตัวนี้) | ข้อเสนอแก้ skill หรือ agent |
-| ผู้ใช้แก้เรื่องเดิมครั้งที่ 2 · รีวิวเตือนเรื่องเดิมซ้ำ | [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) | ตัวตรวจ (type · lint · test · hook) |
-| รสนิยมหรือความชอบของผู้ใช้ ไม่ใช่ความผิด | [`owner-style-capture`](../owner-style-capture/SKILL.md) | `~/.claude/superuser-style.md` |
+| A big task ended · the user asked to gather lessons · a skill led the agent wrong | `session-lessons-to-skills` (this one) | A proposal to fix a skill or agent |
+| The user corrected the same thing a 2nd time · a review warned about the same thing again | [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) | A checker (type · lint · test · hook) |
+| The user's taste or preference, not a mistake | [`owner-style-capture`](../owner-style-capture/SKILL.md) | `~/.claude/superuser-style.md` |
 
-## ขั้นตอน
+## Steps
 
-ใช้เป็นขั้นรีวิวของ playbook [`learn-from-session`](../superuser/references/playbook-learn-from-session.md) ส่วนการรวบรวม การเสนอให้ผู้ใช้ดู และการปิดรายการให้ทำตาม playbook นั้น ไม่เขียนซ้ำไว้ที่นี่
+Use this as the review step of the playbook [`learn-from-session`](../superuser/references/playbook-learn-from-session.md). Gathering, showing the result to the user, and closing the items follow that playbook and are not repeated here.
 
-0. **อ่านโฟลเดอร์ `learn/drop/` ก่อน** (ถ้ามี) — บทเรียนที่ทิ้งไว้ข้อละไฟล์ระหว่างงาน ไม่เคยถูกตัดสินตอนเขียน · อ่านทุกไฟล์รวมกัน จับกลุ่มตามเรื่อง ข้อที่ซ้ำกันหรือชนิดเดียวกันรวมเป็นข้อเดียวแล้วเข้า digest · ใช้แล้วย้ายไป `learn/drop/used/` (ที่มา claude-remember · ห้ามแจกจ่ายซ้ำ เอาแค่กลไก · ดู 2026-11-10)
-1. **ทำสรุป (digest)** — จากของที่ playbook รวบรวมมา เขียน `_to_delete/session-digest.md`: ลำดับเหตุการณ์ · จุดที่ผู้ใช้แก้ · จุดที่ติดนาน · skill ที่ถูกเรียกและผล จากนั้นส่งไฟล์นี้ให้ subagent ไม่ส่งบทสนทนาดิบ
-2. **ปล่อยผู้ตรวจ 3 มุมพร้อมกัน** (แต่ละคนอ่าน digest และไฟล์ skill ที่เกี่ยวข้อง)
+0. **Read the `learn/drop/` folder first** (if it exists). These are lessons dropped one per file during the work, and they were never judged when written. Read all the files together and group them by topic. Merge items that repeat or are of the same kind into one item, then put it in the digest. After use, move them to `learn/drop/used/` (source: claude-remember · do not redistribute, take only the mechanism · see 2026-11-10)
+1. **Make a digest.** From what the playbook gathered, write `_to_delete/session-digest.md`: the order of events · where the user corrected · where it got stuck for long · which skills were called and the result. Then hand this file to the subagent. Do not hand over the raw conversation.
+2. **Launch the reviewers for 3 angles at the same time** (each reads the digest and the related skill files)
 
-   | มุม | ถามว่า | ระดับโมเดล + effort · agent |
+   | Angle | Asks | Model level + effort · agent |
    |---|---|---|
-   | การตัดสินใจ | agent ตัดสินผิดตรงไหน ทำไม ควรมีกฎอะไรที่จะทำให้ตัดสินถูก | ใหญ่ + high · `general-purpose` ตัวใหม่ |
-   | เครื่องมือ | ทำอะไรด้วยมือที่ควรเป็นสคริปต์ แม่แบบ หรือสูตร · ขั้นไหนล้มซ้ำ · skill ไหนบอกขั้นตอนผิด | กลาง + medium · `learning-reviewer` |
-   | มุมกลับ | ถ้าเริ่มใหม่ ทางที่ง่ายกว่ามากคืออะไร · มีสมมติฐานไหนที่ไม่ควรเชื่อตั้งแต่แรก | ใหญ่ + high · `general-purpose` ตัวใหม่ |
+   | Decisions | Where did the agent decide wrongly, and why? What rule would have made it decide right? | big + high · fresh `general-purpose` |
+   | Tools | What was done by hand that should be a script, a template, or a formula? Which step failed repeatedly? Which skill gave the wrong steps? | medium + medium · `learning-reviewer` |
+   | Reverse | If starting over, what is a much easier path? Which assumption should not have been trusted from the start? | big + high · fresh `general-purpose` |
 
-   ทุกคนส่งผลเป็นตาราง `| บทเรียน | ชนิดพลาด | หลักฐานในบทสนทนา | แก้ที่ไฟล์ไหน | ข้อความเดิม → ข้อความใหม่ |` ไม่เกิน 40 บรรทัดต่อคน · ชนิดพลาดใช้ 3 ค่าตาม agent `learning-reviewer`: `ไม่ได้เปิด skill` (แก้การบอก skill ไม่ใช่เนื้อ skill) · `เปิดแต่ไม่ทำตาม` (แก้คำ ตำแหน่ง หรือเพิ่มตัวตรวจ) · `ไม่มีกฎ` (ตัวอย่างคู่ก่อน)
-   **ตัวอย่างคู่มาก่อนกฎ** — บทเรียนเรื่องคำ น้ำเสียง หรือหน้าตา ใส่เป็นคู่ `ก่อน → หลัง` ในไฟล์ references ของ skill นั้น ("หลัง" ต้องเป็นข้อความที่ผู้ใช้เขียนเอง) · เขียนเป็นกฎต่อเมื่อคู่รูปเดียวกันโผล่ซ้ำตั้งแต่ 2 ครั้ง
-   **หมวดที่ผู้ตรวจต้องไล่ทุกรอบ** (นอกจาก 3 มุมข้างบน): (ก) ป้ายนำทาง — ชื่อหรือคำอธิบาย skill ที่ทำให้เปิดผิดหรือไม่เปิด · (ข) ด่านอัตโนมัติ — ข้อที่ควรเป็น test · lint · hook แทนข้อความเตือน (ส่งไป `repeated-mistakes-to-checks`) · (ค) `CLAUDE.md` หรือ `CONTEXT.md` ใหญ่เกินจนไม่มีใครอ่านจบ · (ง) คำสั่งที่เขียนไว้แต่ไม่มีผล (log แสดงว่าถูกเมินหรือทำไม่ได้) · ผลตรวจทุกหมวดต้องผ่านมาตรฐานเดียวกันคือมีหลักฐานจาก digest (ที่มา mattpocock-skills · MIT · ดู 2026-11-10)
-3. **กรอง** — เก็บเฉพาะที่ (ก) มีหลักฐานจริง (ข) จะเกิดอีก (ค) ชี้ได้ว่าแก้ไฟล์ไหน (ง) มีขอบเขตว่าใช้กับงานไหน และหมดอายุเมื่อถ้อยคำต้นทางเปลี่ยน — บทเรียนของงานหนึ่งไม่ควรไปทำให้อีกงานผิด (ตัวอย่างคอร์ส CWN2026: คำตอบเดิมผูกกับชื่อแผน URL และถ้อยคำในแผน ถ้อยคำเปลี่ยนก็หมดอายุ · การทดสอบ "หมดอายุ" Claude รายงานเอง ยังไม่ได้รันซ้ำ 2026-11-04) เช่น "รายงานส่งลูกค้าใช้ตัวเลขเก่า เพราะ skill ไม่บอกให้เปิดไฟล์ล่าสุด" ไม่ใช่ "ควรระวังตัวเลข" ส่วนบทเรียนที่ทำเป็นการตรวจอัตโนมัติได้ให้ส่งไป [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) แทน
-4. **แก้ของเดิมก่อนสร้างใหม่ และแก้ทีละย่อหน้า** — อย่าเขียน SKILL.md ใหม่ทั้งไฟล์ เพราะข้อที่ใช้ได้อยู่แล้วจะหายไป ส่วนใหญ่ควรแก้ย่อหน้าใน SKILL.md หรือไฟล์ agent ที่มีอยู่ และสร้าง skill ใหม่เฉพาะเมื่อเป็นงานที่ยังไม่มี skill ไหนครอบ
-5. **ทดสอบการแก้ก่อนและหลัง** — เอาสถานการณ์จาก digest ที่ทำให้พลาด เขียนเป็นโจทย์สั้น 3–5 บรรทัด (ไม่เฉลย) · ส่ง subagent ระดับเล็กตัวใหม่ทำโจทย์นี้กับ skill **ฉบับเดิม** ต้องพลาดแบบเดียวกับใน digest (ไม่พลาด = บทเรียนนี้ไม่ได้มาจาก skill ตัดออก) · แก้ skill แล้วส่งตัวใหม่อีกตัวทำโจทย์เดิม ต้องไม่พลาด (ยังพลาด = คำที่แก้ไม่ชัดพอ หรือวางผิดตำแหน่ง แก้ใหม่) · จดผลทั้ง 2 รอบไว้ในตารางที่เสนอผู้ใช้ (แนวคิดจาก writing-skills ใน obra/superpowers · MIT)
-6. ส่งตารางที่กรองแล้วกลับไปขั้นเสนอผู้ใช้ของ playbook `learn-from-session` ส่วน digest อยู่ใน `_to_delete/` แล้ว จึงไม่ต้องย้าย
+   Each reviewer returns a table `| บทเรียน | ชนิดพลาด | หลักฐานในบทสนทนา | แก้ที่ไฟล์ไหน | ข้อความเดิม → ข้อความใหม่ |` (lesson · mistake type · evidence in the conversation · file to fix · old text → new text), at most 40 lines per reviewer. The mistake type takes 3 values per agent `learning-reviewer`: `ไม่ได้เปิด skill` (did not open the skill; fix how the skill is advertised, not its content) · `เปิดแต่ไม่ทำตาม` (opened but did not follow it; fix the wording or position, or add a checker) · `ไม่มีกฎ` (no rule; paired example first).
+   **Paired examples come before rules.** A lesson about wording, tone, or looks goes in as a `ก่อน → หลัง` (before → after) pair in the references file of that skill (the "after" must be text the user wrote). Write it as a rule only when a pair of the same shape appears at least 2 times.
+   **Categories the reviewers must go through every round** (besides the 3 angles above): (a) signposts: skill names or descriptions that make the agent open the wrong skill or not open it · (b) automatic gates: items that should be a test, lint, or hook instead of a warning text (send to `repeated-mistakes-to-checks`) · (c) a `CLAUDE.md` or `CONTEXT.md` so large that nobody reads it to the end · (d) instructions written down that have no effect (the log shows they were ignored or could not be done). The result for every category must meet the same standard: evidence from the digest (source: mattpocock-skills · MIT · see 2026-11-10)
+3. **Filter.** Keep only items that (a) have real evidence, (b) will happen again, (c) can point to which file to fix, and (d) have a scope saying which work they apply to and expire when the source wording changes. A lesson from one task should not make another task wrong. (Example from course CWN2026: the old answer was tied to the plan name, the URL, and the wording in the plan; when the wording changes it expires. The "expires" test was reported by Claude itself and has not been rerun, 2026-11-04.) For example, "the customer report used old figures because the skill did not say to open the latest file", not "be more careful with figures". A lesson that can become an automatic check goes to [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) instead.
+4. **Fix what exists before creating new, and fix one paragraph at a time.** Do not rewrite the whole SKILL.md, because the parts that already work will be lost. Most of the time, edit a paragraph in an existing SKILL.md or agent file. Create a new skill only for work that no skill covers yet.
+5. **Test the fix before and after.** Take the situation from the digest that caused the mistake and write it as a short task of 3–5 lines (no answer given). Send a fresh small-level subagent to do this task with the **old version** of the skill. It must make the same mistake as in the digest (if it does not, this lesson did not come from the skill; drop it). Fix the skill, then send another fresh subagent to do the same task. It must not make the mistake (if it still does, the fixed wording is not clear enough or is in the wrong place; fix it again). Record both rounds in the table shown to the user (idea from writing-skills in obra/superpowers · MIT)
+6. Send the filtered table back to the propose-to-user step of the playbook `learn-from-session`. The digest is already in `_to_delete/`, so it does not need to be moved.
 
-## สิ่งที่ห้ามทำ
+## What not to do
 
-- เขียนบทเรียนกว้าง ๆ แบบ "ควรระวังมากขึ้น" เพราะไม่มีใครทำตามได้
-- แก้ skill โดยไม่ให้ผู้ใช้เห็นก่อน
-- เพิ่มข้อความจนกฎขัดกันเอง — ถ้าข้อใหม่ขัดกับข้อเดิม ให้แก้ข้อเดิม อย่าต่อท้าย
+- Write broad lessons such as "be more careful", because nobody can follow them
+- Change a skill without letting the user see it first
+- Add text until the rules contradict each other. If a new item conflicts with an old one, fix the old one. Do not append.
 
 
 ---
@@ -125,108 +125,108 @@ Use when a big task ends and lessons should be kept
 
 Use when naming or filing a document others keep
 
-# ตั้งชื่อและจัดเวอร์ชันเอกสาร
+# Naming and versioning documents
 
-> **กฎข้อเดียว:** ไฟล์ที่มีระบบเก็บประวัติให้อยู่แล้ว (git · ประวัติเวอร์ชันของ Google Docs) **ห้ามใส่เวอร์ชันในชื่อ**
-> ไฟล์ที่ออกไปนอกระบบนั้น **ต้องใส่** เพราะไม่มีอะไรบอกได้อีกแล้วว่าใครถือฉบับไหน
+> **The one rule:** a file that a system already keeps history for (git · Google Docs version history) **must not carry a version in its name.**
+> A file that leaves that system **must carry one**, because nothing else can tell you who holds which copy.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- สร้างเอกสารใหม่ที่ทีมหรือลูกค้าจะเก็บไว้
-- ส่งเอกสารออกไปให้คนนอกทีม
-- โฟลเดอร์เริ่มมี `final`, `final2`, `ล่าสุด`, `แก้แล้ว`
-- มีคนถามว่า "ตกลงยึดฉบับไหน"
+- Creating a new document that the team or the client will keep.
+- Sending a document to people outside the team.
+- A folder starts to fill with `final`, `final2`, `ล่าสุด` (latest), `แก้แล้ว` (edited).
+- Someone asks "so which version do we go with?"
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or together
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| เนื้อหาข้างในเอกสาร | `human-writing` (งานโค้ด: `srs-writing` · `fsd-writing` ใน plugin `software-development`) | แทน |
-| รูปแบบ markdown | `polished-document-style` | แทน |
-| หน้าตาไฟล์ที่ render ออกมา | `branded-document-design` (plugin `software-development`) | แทน |
-| ไฟล์ชั่วคราวระหว่างทำงาน | `superuser:temp-file-discipline` | แทน |
-| งานโค้ด: ข้อความ commit · เวอร์ชันของ **โปรแกรม** · สารบัญเอกสารโปรเจกต์ | `commit-message-format` · `cicd-and-release` · `project-bootstrap` (plugin `software-development`) | แทน/คู่ |
-| ตัวย่อในงานที่คนอ่าน | [`spell-out-abbreviations`](../spell-out-abbreviations/SKILL.md) | คู่ |
+| The content inside the document | `human-writing` (code work: `srs-writing` · `fsd-writing` in plugin `software-development`) | instead |
+| Markdown formatting | `polished-document-style` | instead |
+| The look of the rendered file | `branded-document-design` (plugin `software-development`) | instead |
+| Temporary files during work | `superuser:temp-file-discipline` | instead |
+| Code work: commit messages · version of the **program** · the project document index | `commit-message-format` · `cicd-and-release` · `project-bootstrap` (plugin `software-development`) | instead / together |
+| Abbreviations in work people read | [`spell-out-abbreviations`](../spell-out-abbreviations/SKILL.md) | together |
 
-**แม่แบบตารางประวัติการแก้ไข และรายการชื่อไฟล์มาตรฐาน** อยู่ใน `assets/naming-cheatsheet.md`
+**The revision-history table template and the standard file-name list** are in `assets/naming-cheatsheet.md`.
 
 ---
 
-## 1 · เลือกรูปแบบก่อนตั้งชื่อ
+## 1 · Pick the format before naming
 
-**เกณฑ์เดียว: ถ้ามีคนเซ็นหรือส่งออกนอกทีม ให้ทำเป็นไฟล์ส่งมอบ ส่วนเอกสารที่เปลี่ยนตามเนื้องานให้เป็น markdown ในโฟลเดอร์เอกสาร (เช่น `docs/`)**
+**One test: if someone signs it or it goes outside the team, make it a deliverable file. A document that changes with the work stays markdown in the documents folder (e.g. `docs/`).**
 
-| เอกสาร | รูปแบบ | เหตุผล |
+| Document | Format | Reason |
 |---|---|---|
-| ข้อเสนอ · ใบเสนอราคา · รายงานส่งมอบ · ใบตรวจรับงาน · สัญญา (ชุดเอกสารโปรเจกต์ซอฟต์แวร์ → plugin `software-development`) | **docx** | มีคนเซ็น ต้องล็อกฉบับ |
-| คู่มือผู้ใช้ | **docx + PDF** | ผู้ใช้ปลายทางเปิดได้ทุกเครื่อง |
-| สไลด์นำเสนอ | **pptx** · ขอ html → .html ไฟล์เดียว (ชนิดไฟล์ตาม `presentation-design` ใน plugin `software-development`) · PDF เมื่อเครื่องปลายทางไม่มีฟอนต์ | |
-| ขั้นตอนทำงาน · คู่มือภายใน · README · บันทึกประชุม · บันทึกการตัดสินใจ (งานโค้ด → plugin `software-development`) | **markdown** ในโฟลเดอร์เอกสาร | เปลี่ยนบ่อย ต้องเทียบความต่างได้ ค้นหาง่าย |
+| Proposal · quotation · handover report · acceptance certificate · contract (software project document sets → plugin `software-development`) | **docx** | Someone signs it, so the version must be locked |
+| User manual | **docx + PDF** | End users can open it on any machine |
+| Presentation slides | **pptx** · if html is requested → a single .html file (file type per `presentation-design` in plugin `software-development`) · PDF when the target machine lacks the fonts | |
+| Work procedures · internal guides · README · meeting notes · decision records (code work → plugin `software-development`) | **markdown** in the documents folder | It changes often, needs diffs, and is easy to search |
 
-> 🚨 **ต้นฉบับ markdown ที่ render ซ้ำได้ เก็บถาวรใน `docs/src/<เรื่อง>.md` แล้ว render เป็น docx ลงโฟลเดอร์เอกสาร (`docs/`)**
-> `docs/` มีเอกสารส่งมอบของเรื่องนั้นฉบับเดียวคือ .docx — ไม่มี .md และ .pdf ของเรื่องเดียวกันวางซ้ำข้างกัน (ต้นฉบับอยู่ใน `docs/src/` · ไม่ใช่ `_to_delete/` เพราะต้องใช้ทุกรอบที่แก้)
-> แก้รอบถัดไป → แก้ที่ `docs/src/` แล้ว render ใหม่ ไม่เปิด Word แก้มือ (ตรงกับ `markdown-report-docx`) · บรรทัด "ต้นฉบับ" บนปกชี้ไปที่ไฟล์นี้
+> 🚨 **Markdown source that can be re-rendered is kept permanently in `docs/src/<topic>.md`, then rendered to docx into the documents folder (`docs/`).**
+> `docs/` holds exactly one deliverable for that topic, the .docx. No .md or .pdf of the same topic sits beside it. (The source lives in `docs/src/`, not `_to_delete/`, because it is needed every time you revise.)
+> On the next revision, edit `docs/src/` and render again. Never open Word and edit by hand (matches `markdown-report-docx`). The "ต้นฉบับ" (source) line on the cover points to this file.
 
-**PDF ทำเฉพาะคู่มือผู้ใช้ หรือเมื่อลูกค้าขอ** — นอกนั้น docx ฉบับเดียว
+**Make a PDF only for user manuals, or when the client asks.** Otherwise, one docx.
 
 ---
 
-## 2 · รูปแบบชื่อไฟล์
+## 2 · File name format
 
 ```
-<รหัสโปรเจกต์>-<ประเภท>-<เรื่อง>-v<M.m>-<สถานะ>.docx
+<project code>-<type>-<topic>-v<M.m>-<status>.docx
 ```
 
-| ประเภทเอกสาร | รูปแบบ | ตัวอย่าง |
+| Document type | Format | Example |
 |---|---|---|
-| ไฟล์ส่งออก | `<โปรเจกต์>-<ประเภท>-v<M.m>-<สถานะ>.docx` | `ACME-QUOTE-v1.2-APPROVED.docx` |
-| มีหลายเรื่อง | เติมเรื่องต่อจากประเภท | `ACME-REPORT-sales-v0.3-DRAFT.docx` |
-| ฉบับที่ส่งให้ลูกค้าจริง | เติมวันที่ตามมาตรฐาน International Organization for Standardization (ISO) 8601 ท้ายสุด | `ACME-QUOTE-v1.2-APPROVED-2026-09-25.docx` |
-| เอกสาร markdown | `<ประเภท>-<เรื่อง>.md` ตัวพิมพ์เล็ก ขีดกลาง | `docs/guide-onboarding.md` |
-| บันทึกประชุม (ข้อยกเว้น: วันที่ขึ้นก่อน) | `YYYY-MM-DD-<เรื่อง>.md` | `docs/meetings/2026-09-25-kickoff.md` |
+| Exported file | `<project>-<type>-v<M.m>-<status>.docx` | `ACME-QUOTE-v1.2-APPROVED.docx` |
+| Several topics | Add the topic after the type | `ACME-REPORT-sales-v0.3-DRAFT.docx` |
+| Version actually sent to the client | Add the date at the very end, in International Organization for Standardization (ISO) 8601 format | `ACME-QUOTE-v1.2-APPROVED-2026-09-25.docx` |
+| Markdown document | `<type>-<topic>.md`, lowercase, hyphens | `docs/guide-onboarding.md` |
+| Meeting notes (exception: date first) | `YYYY-MM-DD-<topic>.md` | `docs/meetings/2026-09-25-kickoff.md` |
 
-**กฎชื่อไฟล์:**
+**File name rules:**
 
-- ไม่มีเว้นวรรค ใช้ขีดกลาง — เว้นวรรคทำให้ลิงก์และคำสั่งใน command line พัง
-- **วันที่เป็น ISO `YYYY-MM-DD` เสมอ** และวางท้ายสุด — เรียงตามชื่อแล้วได้เรียงตามเวลาเอง · ข้อยกเว้นเดียว: บันทึกประชุมวางวันที่ไว้หน้าสุด เพราะโฟลเดอร์ `docs/meetings/` มีแต่บันทึกประชุม จึงเรียงตามวันได้ทันที
-- ชื่อไฟล์เป็นอังกฤษ แม้เนื้อหาเป็นไทย — กันปัญหาตอนแนบอีเมลและ zip ข้ามระบบ
-- ห้ามใส่ชื่อคนในชื่อไฟล์ — `-somchai-edit` คือสัญญาณว่าไม่ได้ใช้ต้นฉบับเดียว
+- No spaces; use hyphens. Spaces break links and command-line commands.
+- **The date is always ISO `YYYY-MM-DD`** and goes at the very end, so sorting by name also sorts by time. The one exception: meeting notes put the date first, because the `docs/meetings/` folder holds only meeting notes, so it sorts by date at once.
+- File names are in English even when the content is Thai. This avoids trouble when attaching to email and zipping across systems.
+- Never put a person's name in a file name. `-somchai-edit` is a sign that people are not working from one source.
 
-**ตรวจด้วยสคริปต์:** `node <โฟลเดอร์ skill นี้>/scripts/doc-name-check.mjs docs/*` → บอกชื่อที่ผิดพร้อมชื่อที่เสนอ · เปลี่ยนชื่อหลายไฟล์: เติม `--plan _to_delete/renames.json` ได้แผนโดยยังไม่แตะไฟล์ ตรวจหรือแก้แผนแล้วรัน `--plan _to_delete/renames.json --apply` · สคริปต์ไม่เปลี่ยนชื่อไฟล์ `APPROVED` และไม่ทับไฟล์ที่มีอยู่ · ไม่ใส่ไฟล์ที่ได้รับมา (`ref/`) เข้าแผน
+**Check with the script:** `node <this skill's folder>/scripts/doc-name-check.mjs docs/*` → it lists wrong names with a proposed name. To rename many files, add `--plan _to_delete/renames.json` to get a plan without touching files, check or edit the plan, then run `--plan _to_delete/renames.json --apply`. The script does not rename `APPROVED` files, does not overwrite existing files, and does not put received files (`ref/`) in the plan.
 
 ---
 
-## 3 · เวอร์ชัน
+## 3 · Versions
 
-| ขึ้นเลขไหน | เมื่อ |
+| Which number goes up | When |
 |---|---|
-| **major** (1.x → 2.0) | ขอบเขตเปลี่ยน · โครงเอกสารเปลี่ยน · ต้องเซ็นรับใหม่ |
-| **minor** (1.1 → 1.2) | เพิ่มหรือแก้เนื้อหา ยังเป็นเรื่องเดิม |
-| ไม่ขึ้นเลข | แก้คำผิด จัดหน้า — แต่**ยังต้องลงประวัติการแก้ไข** |
+| **major** (1.x → 2.0) | Scope changes · document structure changes · needs a new sign-off |
+| **minor** (1.1 → 1.2) | Content added or edited, still the same topic |
+| No number change | Typo fixes, layout, but you **must still log it in the revision history** |
 
-- ฉบับที่ส่งให้คนดูครั้งแรกคือ `v0.1` ส่วนฉบับแรกที่มีคนเซ็นคือ `v1.0`
-- **เลขเวอร์ชันเดินหน้าอย่างเดียว** ไม่ย้อนกลับไปใช้เลขเดิม
-- ไฟล์ที่ระบบเก็บประวัติให้ ไม่มีเลขเวอร์ชันในชื่อ — ถ้าต้องอ้างถึงฉบับหนึ่ง ให้อ้าง tag · commit หรือประวัติเวอร์ชัน
+- The first version shown to anyone is `v0.1`, and the first version someone signs is `v1.0`.
+- **Version numbers only move forward.** Never go back to an old number.
+- A file that a system keeps history for has no version number in its name. To refer to a version, use a tag, commit, or version history.
 
 ---
 
-## 4 · สถานะ — คนละเรื่องกับเวอร์ชัน
+## 4 · Status is a different thing from version
 
-| สถานะ | แปลว่า | ใครแก้ได้ |
+| Status | Means | Who may edit |
 |---|---|---|
-| `DRAFT` | ยังเขียนอยู่ | ผู้เขียน |
-| `REVIEW` | ส่งให้ตรวจแล้ว รอความเห็น | ผู้เขียน ตามความเห็นที่ได้ |
-| `APPROVED` | เซ็นรับแล้ว | **ห้ามแก้** ต้องขึ้นเวอร์ชันใหม่เป็น DRAFT |
+| `DRAFT` | Still being written | The author |
+| `REVIEW` | Sent for review, awaiting comments | The author, following the comments received |
+| `APPROVED` | Signed off | **No edits.** Raise a new version as DRAFT |
 
-> **`APPROVED` แล้วห้ามแก้ไฟล์เดิม** แม้จะเป็นแค่คำผิด
-> ถ้าแก้ได้ ฉบับที่ลูกค้าถือกับที่เราถือจะไม่เหมือนกัน ทั้งที่ชื่อไฟล์เหมือนกันทุกตัวอักษร
+> **Once `APPROVED`, never edit the original file**, even for a typo.
+> If you can, the version the client holds and the one we hold will differ, even though the file names match letter for letter.
 
 ---
 
-## 5 · ประวัติการแก้ไขต้องอยู่ในไฟล์
+## 5 · The revision history must be in the file
 
-**ชื่อไฟล์บอกได้แค่ว่านี่คือฉบับไหน ไม่ได้บอกว่าเปลี่ยนอะไร**
-ทุกเอกสารส่งออกต้องมีตารางนี้ในหน้าแรก
+**A file name says only which version this is, not what changed.**
+Every exported document must have this table on the first page.
 
 ```markdown
 | เวอร์ชัน | วันที่ | ผู้แก้ | แก้อะไร | เหตุผล |
@@ -236,28 +236,28 @@ Use when naming or filing a document others keep
 | 1.0 | 2026-09-01 | สมชาย | ฉบับเซ็นรับ | — |
 ```
 
-- **คอลัมน์ "แก้อะไร" ต้องเป็นรูปธรรม** — "ปรับปรุงเนื้อหา" ไม่มีประโยชน์กับใครเลย
-- เรียงใหม่อยู่บน — คนเปิดอ่านอยากรู้ว่าเปลี่ยนอะไรล่าสุด
+- **The "แก้อะไร" (what changed) column must be concrete.** "Improved the content" helps nobody.
+- Put the newest on top. A reader opening the file wants to know what changed last.
 
 ---
 
-## 6 · ที่เก็บและการส่ง
+## 6 · Storage and sending
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| ต้นฉบับ | อยู่ใน `docs/src/` ของงานที่เดียว (งานโค้ด: `project-doc-set` ใน plugin `software-development`) |
-| ไฟล์ส่งออก | อยู่ในโฟลเดอร์เอกสาร (`docs/`) หรือที่เก็บของลูกค้า **ไม่ใช่รากโปรเจกต์** |
-| ไฟล์ที่ได้รับมา | เก็บชื่อเดิมของเขาไว้ ห้ามเปลี่ยน — เขาอ้างถึงชื่อนั้น |
-| ไฟล์ระหว่างแปลง | `_to_delete/` (ดู `superuser:temp-file-discipline`) |
-| ส่งทางแชตหรืออีเมล | ส่งไฟล์ที่มีเวอร์ชันและสถานะในชื่อเสมอ ไม่ส่ง `เอกสาร.docx` |
+| Source | Lives in `docs/src/` of the work, in one place only (code work: `project-doc-set` in plugin `software-development`) |
+| Exported files | Live in the documents folder (`docs/`) or the client's storage, **not the project root** |
+| Received files | Keep their original name; never rename. They refer to that name |
+| Files mid-conversion | `_to_delete/` (see `superuser:temp-file-discipline`) |
+| Sending by chat or email | Always send a file with the version and status in the name. Never send `เอกสาร.docx` |
 
 ---
 
 ## 7 · Anti-patterns
 
-- **`final.docx`, `final2.docx`, `final_ล่าสุด.docx`** — ไม่มีใครรู้ว่าอันไหนใหม่กว่า
-- **`ใบเสนอราคา แก้แล้ว.docx`** — แก้จากฉบับไหน แก้อะไร
-- **ใส่เวอร์ชันในชื่อไฟล์ที่มีระบบเก็บประวัติให้แล้ว** — จะได้ `spec-v1.md` กับ `spec-v2.md` อยู่คู่กันตลอดไป
-- **แก้ไฟล์ที่ `APPROVED` แล้ว** แม้แต่คำผิดเดียว
-- **ไม่มีตารางประวัติการแก้ไข** — แล้วต้องเปิดเทียบทีละหน้า
-- **วันที่แบบ `25-09-2026` หรือ `250926`** — เรียงไม่ได้ และคนอ่านคนละแบบ
+- **`final.docx`, `final2.docx`, `final_ล่าสุด.docx`**: nobody knows which is newer.
+- **`ใบเสนอราคา แก้แล้ว.docx`**: edited from which version, and what was edited?
+- **Putting a version in the name of a file that a system keeps history for.** You get `spec-v1.md` and `spec-v2.md` side by side forever.
+- **Editing a file that is already `APPROVED`**, even a single typo.
+- **No revision-history table.** Then you must open and compare page by page.
+- **Dates like `25-09-2026` or `250926`.** They do not sort, and people read them differently.

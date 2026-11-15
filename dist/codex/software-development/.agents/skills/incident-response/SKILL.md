@@ -3,7 +3,7 @@ name: "incident-response"
 description: "Guide a live incident with devops-engineer (breaches with security-analyst) — triage, mitigate with human approval, resolve, postmortem."
 ---
 
-> **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook `bug-fix` แล้วคัดขั้นตอนของ playbook ลง todo ก่อน ส่วนขั้นตอนด้านล่างคือรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้ประกอบ playbook ไม่ใช่แทนที่
+> **Shortcut into SuperUser:** open the skill `superuser` with the `bug-fix` playbook and pick the playbook steps into the todo first · the steps below are the work format and output of this command, to be used alongside the playbook, not in place of it
 
 Use the `devops-engineer` agent to coordinate incident response for: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**
 

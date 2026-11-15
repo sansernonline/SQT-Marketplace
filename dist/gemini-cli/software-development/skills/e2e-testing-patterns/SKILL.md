@@ -3,7 +3,7 @@ name: e2e-testing-patterns
 description: Use when writing end-to-end tests or fixing flaky ones
 ---
 
-> **ใน SuperUser:** ถ้าอยากให้ agent รันแอปและพิสูจน์ผลเอง ให้ใช้ [`app-verifier-setup`](../app-verifier-setup/SKILL.md) ส่วน skill นี้คือหลักออกแบบชุดทดสอบ E2E (end-to-end) ที่ verifier นั้นเรียกใช้
+> **In SuperUser:** to have an agent run the app and prove the result itself, use [`app-verifier-setup`](../app-verifier-setup/SKILL.md). This skill holds the design principles for the E2E (end-to-end) test suite that verifier calls.
 
 # End-to-End Testing Patterns
 
@@ -24,17 +24,17 @@ description: Use when writing end-to-end tests or fixing flaky ones
 | Writing manual test cases (steps, expected result) | `test-case-template` |
 | Unit or integration tests, test ratio and scope | `testing-standards` |
 
-## อ่านเพิ่มเมื่อ
+## Read more when
 
-| ไฟล์ | เปิดเมื่อ |
+| File | Open when |
 |---|---|
-| [references/page-object-model.md](references/page-object-model.md) | ถ้าจะตั้งโครงชุดทดสอบใหม่ หรือเจอเทสต์ที่ลอกขั้นตอนล็อกอินซ้ำกัน ให้เปิดดูโค้ดเทียบแบบไม่ดีกับแบบ Page Object |
-| [references/test-data-strategies.md](references/test-data-strategies.md) | ตอนเลือกวิธีเตรียมข้อมูลทดสอบ และอยากเห็นข้อดีข้อเสียของทั้ง 4 แบบพร้อมโค้ดตัวอย่าง |
-| [references/flaky-tests.md](references/flaky-tests.md) | ถ้าเทสต์ผ่านบ้างไม่ผ่านบ้าง ให้เปิดดูโค้ดเทียบการรอแบบ sleep กับการรอตามเหตุการณ์ |
-| [references/auth-in-e2e.md](references/auth-in-e2e.md) | ตอนวางวิธีล็อกอินในชุดทดสอบ และต้องการโค้ด `storageState` หรือการฉีด cookie ผ่าน API |
-| [references/ci-and-parallel.md](references/ci-and-parallel.md) | ตอนตั้งการรันขนานหรือแบ่งรอบการรัน E2E ใน CI และต้องรู้ว่าต้องเก็บไฟล์อะไรเมื่อเทสต์ล้ม |
-| [references/coverage-and-libraries.md](references/coverage-and-libraries.md) | ตอนทำตารางความครอบคลุมของเส้นทางผู้ใช้ หรือย้ายคำสั่งระหว่าง Playwright กับ Cypress |
-| [references/oracle-and-mutation.md](references/oracle-and-mutation.md) | ถ้ามีระบบเดิมให้เทียบ (differential) · จะเทียบโครงสร้างหน้าด้วย accessibility tree · อยากรู้ว่าชุดทดสอบจับบั๊กได้จริงไหม (mutation) · หรือต้องบันทึกแล้วเล่นซ้ำคำขอเครือข่ายให้นิ่ง |
+| [references/page-object-model.md](references/page-object-model.md) | You are setting up a new suite structure, or you find tests that copy the same login steps. It shows code comparing the bad way with the Page Object way. |
+| [references/test-data-strategies.md](references/test-data-strategies.md) | You are choosing how to prepare test data and want the pros and cons of all 4 options with sample code. |
+| [references/flaky-tests.md](references/flaky-tests.md) | Tests pass sometimes and fail sometimes. It shows code comparing a sleep wait with an event-based wait. |
+| [references/auth-in-e2e.md](references/auth-in-e2e.md) | You are planning how to log in within the suite and need the `storageState` code or cookie injection through the API. |
+| [references/ci-and-parallel.md](references/ci-and-parallel.md) | You are setting up parallel runs or splitting E2E run rounds in CI, and need to know which files to keep when a test fails. |
+| [references/coverage-and-libraries.md](references/coverage-and-libraries.md) | You are building the user-path coverage table, or translating commands between Playwright and Cypress. |
+| [references/oracle-and-mutation.md](references/oracle-and-mutation.md) | You have an old system to compare against (differential) · you will compare page structure with the accessibility tree · you want to know whether the suite really catches bugs (mutation) · or you must record and replay network requests to keep them stable. |
 
 ## The Testing Pyramid (Get This Right First)
 
@@ -68,7 +68,7 @@ description: Use when writing end-to-end tests or fixing flaky ones
 
 ## Test Structure: Page Object Model (POM)
 
-ถ้าทุกเทสต์เขียน `page.fill` และ `page.click` ของหน้าเดียวกันซ้ำ ๆ ให้ย้ายขั้นตอนเหล่านั้นไปไว้ในคลาสของหน้านั้น แล้วให้เทสต์เรียกเมธอดแทน โค้ดเทียบอยู่ใน [references/page-object-model.md](references/page-object-model.md)
+If every test repeats the same `page.fill` and `page.click` calls for one page, move those steps into that page's class and have the tests call its methods instead. Comparison code is in [references/page-object-model.md](references/page-object-model.md)
 
 > **One Page Object per page or major component.**
 
@@ -77,25 +77,25 @@ description: Use when writing end-to-end tests or fixing flaky ones
 ```
 Most resilient ─────────────────────────► Most brittle
 
-ถูก: Role + accessible name      page.getByRole('button', { name: 'Submit' })
-ถูก: Test IDs                     page.getByTestId('submit-btn')
-กลาง: Visible text              page.getByText('Submit')
-กลาง: Label                     page.getByLabel('Email')
-ผิด: CSS classes               page.locator('.btn-primary')
-ผิด: Tag + index               page.locator('button:nth-child(3)')
-ผิด: XPath                        page.locator('//div[2]/button')
+Good:   Role + accessible name   page.getByRole('button', { name: 'Submit' })
+Good:   Test IDs                page.getByTestId('submit-btn')
+Medium: Visible text            page.getByText('Submit')
+Medium: Label                   page.getByLabel('Email')
+Bad:    CSS classes             page.locator('.btn-primary')
+Bad:    Tag + index             page.locator('button:nth-child(3)')
+Bad:    XPath                   page.locator('//div[2]/button')
 ```
 
 **Rule:** Prefer queries that survive refactoring.
 
 ## Test Data Strategy
 
-มี 4 แบบ คือ shared test DB · per-test setup · API setup กับ UI verification · database snapshot กับ rollback
-แบบที่แนะนำคือ **Option 3: API setup, UI verification (best)** — เตรียมข้อมูลผ่าน API ให้เร็วและแน่นอน แล้วค่อยทดสอบ UI จริง ส่วน shared test DB ทำให้เทสต์พึ่งลำดับกัน รันขนานยาก และข้อมูลปนกัน ส่วนข้อดีข้อเสียครบทุกแบบอยู่ใน [references/test-data-strategies.md](references/test-data-strategies.md)
+There are 4 options: shared test DB · per-test setup · API setup with UI verification · database snapshot with rollback.
+The recommended one is **Option 3: API setup, UI verification (best)**. Prepare data through the API so it is fast and certain, then test the real UI. A shared test DB makes tests depend on order, makes parallel runs hard and mixes data. The pros and cons of every option are in [references/test-data-strategies.md](references/test-data-strategies.md)
 
 ## What to Test E2E (Not Everything!)
 
-### ถูก: DO test E2E
+### DO test E2E
 - Critical user journeys (login → checkout → confirmation)
 - Multi-step workflows that span multiple pages
 - Integration with external services (payment, email)
@@ -111,19 +111,19 @@ Most resilient ─────────────────────�
 
 > **Rule of thumb:** If a unit/integration test can verify it, don't add E2E.
 
-ให้ทำตารางความครอบคลุมของเส้นทางผู้ใช้ (Critical Path Coverage Matrix) ที่บอกว่าแต่ละเส้นทางครอบคลุมแล้วหรือยัง และสำคัญระดับ P1 P2 หรือ P3 (scale เดียวกับ `test-case-template` และ tag ด้านล่าง · P1 สำคัญสุด) ตัวอย่างอยู่ใน [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
+Make a Critical Path Coverage Matrix that says whether each path is covered yet and how important it is: P1, P2 or P3 (the same scale as `test-case-template` and the tags below · P1 is most important). An example is in [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
 
 ## Expected Values and Failing Tests
 
-ชุด E2E ที่แปลงมาจากแผนทดสอบ (`test-case-template`):
+For an E2E suite converted from a test plan (`test-case-template`):
 
-- ชื่อ test ขึ้นต้นด้วยรหัส TC · tag `@<module>` `@P1|@P2|@P3` · ใส่ผลที่คาดหวังและ oracle เป็น annotation
+- Start each test name with the TC code · tag `@<module>` `@P1|@P2|@P3` · put the expected result and the oracle in an annotation
   `test.info().annotations.push({ type: 'expected', description: '฿760 · [D] BR-03' })`
-- ค่าที่คาดหวังเป็นค่าคงที่จากแผน · ห้ามอ่านค่าจากหน้าจอแล้ว assert กลับ เช่น อ่านราคาจากการ์ดแล้วเทียบยอดรวม → ผิดทั้งคู่ก็ผ่าน
-- reset ข้อมูลก่อนทุก TC (API reset หรือ seed) · ล็อก "วันนี้" ด้วย `page.clock.setFixedTime()` · `timezoneId` · `locale` ใน config
-- TC ที่มี **Check when** `หลังรีโหลด` → `page.reload()` แล้ว assert อีกครั้ง
-- รันทุกเบราว์เซอร์ที่แผนระบุ · เกณฑ์ผ่านคิดแยกทีละเบราว์เซอร์
-- test ล้ม → ห้ามแก้ค่าที่คาดหวัง · จำแนก `app` / `plan` / `test` ตาม agent `qa-tester` ลง `triage.json` · ใน CI ห้าม retry จนผ่านแล้วถือว่าจบ
+- Expected values are constants from the plan · never read a value from the screen and assert it back, for example reading the price from the card and comparing it with the total → if both are wrong, the test still passes
+- Reset data before every TC (API reset or seed) · lock "today" with `page.clock.setFixedTime()` · `timezoneId` · `locale` in the config
+- A TC with **Check when** `หลังรีโหลด` (after reload) → call `page.reload()` and assert again
+- Run every browser the plan names · judge pass criteria per browser separately
+- When a test fails → never edit the expected value · classify it as `app` / `plan` / `test` per the `qa-tester` agent into `triage.json` · in CI, never retry until green and call it done
 
 ## Fighting Flaky Tests
 
@@ -138,7 +138,7 @@ Most resilient ─────────────────────�
 | Element not stable | `expect(el).toBeVisible()` before interacting |
 | Click times out "not visible/stable" but the site works | The tab may be in the background (`document.visibilityState === "hidden"`, common with Playwright MCP sharing one browser). Check with `browser_evaluate`, switch to the tab, then click. Do not retry blindly |
 
-ห้ามใช้ `page.waitForTimeout` รอแบบกำหนดเวลา ให้รอเหตุการณ์จริง เช่น response ของ API แทน โค้ดเทียบอยู่ใน [references/flaky-tests.md](references/flaky-tests.md)
+Never use `page.waitForTimeout` for a fixed-time wait. Wait for a real event instead, such as the API response. Comparison code is in [references/flaky-tests.md](references/flaky-tests.md)
 
 ### Retry strategy
 - **In CI:** retry at most 1 time, **only to collect a trace** (`retries: 1` + `trace: 'on-first-retry'`)
@@ -149,13 +149,13 @@ Most resilient ─────────────────────�
 
 ## Authentication in E2E
 
-อย่าล็อกอินผ่าน UI ในทุกเทสต์ เพราะช้า เปราะ และโค้ดซ้ำ ให้ล็อกอินครั้งเดียวแล้วแชร์สถานะ (`storageState`) หรือดีกว่านั้นคือล็อกอินผ่าน API แล้วฉีด cookie เข้า browser context โค้ดทั้งสามแบบอยู่ใน [references/auth-in-e2e.md](references/auth-in-e2e.md)
+Do not log in through the UI in every test, because it is slow, brittle and repeats code. Log in once and share the state (`storageState`), or better, log in through the API and inject the cookie into the browser context. Code for all three ways is in [references/auth-in-e2e.md](references/auth-in-e2e.md)
 
 ## Parallelization and CI
 
-เงื่อนไขก่อนรันขนาน (Requirements for safe parallel) อยู่ใน [references/ci-and-parallel.md](references/ci-and-parallel.md)
+The requirements for safe parallel runs are in [references/ci-and-parallel.md](references/ci-and-parallel.md)
 
-แบ่ง E2E ใน CI เป็น 3 รอบ คือ smoke ทุก pull request (PR) บน Chromium ตัวเดียว ที่ล้มแล้วบล็อกการ merge → full ตอน merge เข้า main และทุกคืน บน Chromium + WebKit (จอ iPhone) → pre-prod ก่อน deploy ที่ต้องผ่าน P1 และ P2 บนครบ 3 browser (เพิ่ม Firefox) เมื่อเทสต์ล้มต้องเก็บ screenshot · video · trace · console log · network log ไว้เสมอ ส่วนระดับการรันขนานตาราง browser แต่ละรอบ และรายละเอียดของแต่ละรอบอยู่ใน [references/ci-and-parallel.md](references/ci-and-parallel.md)
+Split E2E in CI into 3 rounds. First, smoke on every pull request (PR) on Chromium only; a failure blocks the merge. Second, full on merge into main and every night, on Chromium + WebKit (iPhone screen). Third, pre-prod before deploy, which must pass P1 and P2 on all 3 browsers (adding Firefox). When a test fails, always keep the screenshot · video · trace · console log · network log. The parallel level, the browser table for each round and the details of each round are in [references/ci-and-parallel.md](references/ci-and-parallel.md)
 
 ## Anti-patterns
 
@@ -176,4 +176,4 @@ Most resilient ─────────────────────�
 - Pass rate in main: > 95%
 - Mean time to fix flake: < 2 days
 
-ตารางเทียบคำสั่งที่ใช้บ่อยของ Playwright กับ Cypress (Library Quick Reference) อยู่ใน [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
+The table comparing common Playwright and Cypress commands (Library Quick Reference) is in [references/coverage-and-libraries.md](references/coverage-and-libraries.md)

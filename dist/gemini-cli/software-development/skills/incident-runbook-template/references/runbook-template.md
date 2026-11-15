@@ -2,9 +2,9 @@
 
 **สารบัญ:** แม่แบบเต็ม 1 บล็อก: TL;DR · How to Detect · Diagnosis · Mitigation Steps (ขั้น 1–5) · Escalation Path · Verification · After Resolution · Related Runbooks · Background
 
-- [แม่แบบทั้งไฟล์](#runbook-template) อยู่ในบล็อกเดียว ให้คัดลอกทั้งบล็อกไปเป็นไฟล์ runbook ใหม่
+- [The whole template](#runbook-template) is in a single block; copy the whole block into a new runbook file
 
-แม่แบบเต็มของ runbook หนึ่งฉบับ ให้คัดลอกไปกรอกต่อได้ทันที ส่วนกฎว่าแต่ละส่วนต้องมีอะไรอยู่ใน `SKILL.md`
+The full template for one runbook, ready to copy and fill in. The rules for what each section must contain are in `SKILL.md`
 
 ````markdown
 # Runbook: <Alert Name or Failure Mode>

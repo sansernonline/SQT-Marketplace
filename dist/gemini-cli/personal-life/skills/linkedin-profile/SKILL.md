@@ -86,6 +86,6 @@ Ask for 2–3, from a manager, a client and a peer — one each. Make it easy: s
 - [ ] Profile and CV dates and titles match exactly
 - [ ] No confidential numbers (client names, unpublished revenue) without permission
 
-ข้อความภาษาไทย (ย่อหน้าไทยท้าย About) → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ สมัครงาน
+For Thai text (the Thai paragraph at the end of About) → `human-writing` `references/thai-grammar.md` section 4, level "job application"
 
 Related: `resume-th-en` · `salary-negotiation` · `interview-prep`.

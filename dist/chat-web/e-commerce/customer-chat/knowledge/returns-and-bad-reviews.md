@@ -61,7 +61,7 @@ Do:
 - State facts that help future buyers ("สินค้าไซซ์เล็กกว่าปกติ แนะนำเพิ่มหนึ่งไซซ์ ร้านเพิ่มตารางไซซ์แล้วค่ะ")
 - Write for the next buyer, not the reviewer: answer the doubt a stranger has after reading the review, then stop. The reviewer gets the personal part in chat
 - Sizing or fit complaint → name the measurement that caused it, the fix in the listing (size chart added, "สั่งเพิ่ม 1 ไซซ์"), and that exchange is open — a fit reply that removes the next buyer's doubt is the one that sells
-- ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ แชตร้าน · ใช้กริยาตรง ("ร้านส่งของใหม่ให้แล้ว" ไม่ใช่ "ร้านได้ส่ง…แล้ว") · สัญญาสิ่งที่เปลี่ยนจริง 1 อย่าง ไม่ใช่ "กำลังปรับปรุง"
+- Thai text → `human-writing` `references/thai-grammar.md` section 4, register: shop chat · use direct verbs ("ร้านส่งของใหม่ให้แล้ว", not "ร้านได้ส่ง…แล้ว") · promise 1 change that really happens, not "กำลังปรับปรุง" (being improved)
 
 Don't:
 

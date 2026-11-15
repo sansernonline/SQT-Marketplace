@@ -1,16 +1,16 @@
-# playbook · stock-sync — สต็อกหลายร้านให้ตรงกัน
+# playbook · stock-sync — keep stock the same across several shops
 
-ใช้เมื่อ: ขายของชุดเดียวกันหลายแพลตฟอร์มแล้วขายเกิน · นับของไม่ตรง
-skill หลัก: `multi-shop-stock`
+Use when: the same goods sell on several platforms and oversell · counts do not match
+Main skills: `multi-shop-stock`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. รวมยอดสต็อกจากทุกร้านและของจริงในคลังลงไฟล์หลักเดียว · ใคร: `shop-manager` ตัวใหม่
-2. ตั้งชื่อ SKU ให้เป็นแบบเดียวกันทุกร้าน · ใคร: `shop-manager` ตัวใหม่
-3. ตั้งกฎซิงก์สต็อก บัฟเฟอร์ (ของที่กันไว้ไม่ขาย) ต่อร้าน และจุดสั่งซื้อซ้ำ ตาม `multi-shop-stock` · ใคร: `shop-manager` ตัวใหม่
-4. ทำรายการปรับยอดต่อร้าน (ร้านไหน SKU ไหน จากเท่าไรเป็นเท่าไร) ส่วนการแก้ในร้านจริงให้อยู่ใน "รออนุมัติ" · ใคร: `shop-manager` ตัวใหม่ · ผู้ใช้อนุมัติการแก้ในร้านจริง
-5. ตรวจว่ายอดที่โชว์แต่ละร้านไม่เกิน available − บัฟเฟอร์ (ของจริงในคลัง − ของที่จองแล้ว − บัฟเฟอร์) และกำหนดรอบซิงก์ไว้แล้ว · ใคร: `reviewer` ตัวใหม่
+1. Merge the stock figures from every shop and the real goods in the warehouse into one master file · ใคร: `shop-manager` ตัวใหม่
+2. Give SKUs the same naming style in every shop · ใคร: `shop-manager` ตัวใหม่
+3. Set the stock sync rules, a buffer (stock held back from sale) per shop, and the reorder point, per `multi-shop-stock` · ใคร: `shop-manager` ตัวใหม่
+4. Make an adjustment list per shop (which shop, which SKU, from how many to how many), and keep the edits in the live shops under "รออนุมัติ" (awaiting approval) · ใคร: `shop-manager` ตัวใหม่ · ผู้ใช้อนุมัติการแก้ในร้านจริง
+5. Check (ตรวจ) that the quantity shown in each shop does not exceed available − buffer (real stock in the warehouse − reserved stock − buffer) and that a sync cadence is set · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-ไฟล์สต็อกหลักตรงกับของจริง · ยอดโชว์ทุกร้านไม่เกิน available − บัฟเฟอร์ และรายการปรับยอดพร้อมทำ
+The master stock file matches the real goods · the quantity shown in every shop is at most available − buffer · the adjustment list is ready to apply.

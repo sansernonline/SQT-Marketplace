@@ -221,7 +221,7 @@ Dump risk huge
 
 ## Regulatory Considerations
 
-> **ไม่ใช่คำแนะนำทางกฎหมาย** — ทุกข้อในหัวข้อนี้ `(รอยืนยัน)` ณ 22 ต.ค. 2569 · กฎเปลี่ยนเร็ว (สหรัฐฯ เปลี่ยนท่าทีหลายเรื่องในปี 2025) · **ทนายในแต่ละประเทศเป็นคนตัดสิน** ว่าโทเคนเป็นหลักทรัพย์หรือไม่ ไม่ใช่ checklist นี้ → ส่ง `legal-compliance-officer`
+> **Not legal advice** — every item in this section is `(รอยืนยัน)` as of 22 Oct 2026 (B.E. 2569) · rules change fast (the US changed its stance on several matters in 2025) · **lawyers in each country decide** whether a token is a security, not this checklist → hand off to `legal-compliance-officer`
 
 ### Howey Test (US)
 ```
@@ -240,7 +240,7 @@ Questions to bring to the lawyer (not a safe-harbour checklist):
 - **EU (Markets in Crypto-Assets Regulation, MiCA)**: fully applicable since 30 Dec 2024 (รอยืนยัน)
 - **Singapore (Monetary Authority of Singapore, MAS)**: licensing under the Payment Services Act (รอยืนยัน)
 - **Switzerland (FINMA)**: token classification guidelines (รอยืนยัน)
-- **Thailand (สำนักงาน ก.ล.ต.)**: พ.ร.ก. การประกอบธุรกิจสินทรัพย์ดิจิทัล พ.ศ. 2561 — ออกโทเคนต่อประชาชนต้องได้รับอนุญาตและขายผ่าน ICO portal ที่ ก.ล.ต. เห็นชอบ · ธุรกิจศูนย์ซื้อขาย/นายหน้า/ผู้ค้าต้องได้รับใบอนุญาต (รอยืนยัน · ตรวจกับ sec.or.th ก่อนใช้)
+- **Thailand (the SEC, สำนักงาน ก.ล.ต.)**: the Emergency Decree on Digital Asset Businesses B.E. 2561 (พ.ร.ก. การประกอบธุรกิจสินทรัพย์ดิจิทัล พ.ศ. 2561) — an offering of tokens to the public needs approval and must be sold through an ICO portal the SEC has approved · exchange/broker/dealer businesses need a licence (รอยืนยัน · check with sec.or.th before use)
 
 > **Consult lawyers in each jurisdiction.**
 

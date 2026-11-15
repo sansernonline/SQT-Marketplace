@@ -2,300 +2,300 @@
 
 Use when naming a product, shop, app or brand
 
-# ตั้งชื่อผลิตภัณฑ์
+# Naming a product
 
-> **กฎข้อเดียว:** ชื่อที่ดีคือชื่อที่คน**พิมพ์ถูกตั้งแต่ครั้งแรก หลังได้ยินครั้งเดียว**
-> ความหมายลึกซึ้งมาทีหลังได้ แต่ถ้าสะกดผิด ลูกค้าก็หาไม่เจอ
+> **The one rule:** a good name is one a person **types correctly the first time, after hearing it once.**
+> Deeper meaning can come later, but if people misspell the name, customers cannot find you.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ตั้งชื่อผลิตภัณฑ์ ร้าน บริการ แอป แบรนด์ โมดูล หรือชื่อโครงการภายใน
-- มีชื่ออยู่แล้วแต่รู้สึกว่าเชย ยาว หรือซ้ำกับคนอื่น
-- มีผลิตภัณฑ์หลายตัวและอยากให้ชื่อเป็นตระกูลเดียวกัน
-- ต้องเลือกจากรายการชื่อที่ระดมมาแล้ว แต่ตัดสินใจไม่ลง
+- Naming a product, shop, service, app, brand, module or internal project
+- A name exists but feels dated, long or the same as someone else's
+- There are several products and the names should form one family
+- You must choose from a brainstormed list of names and cannot decide
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Job | Use this instead |
 |---|---|
-| โลโก้ สี ตัวอักษรของแบรนด์ | `graphic-design` (plugin `software-development`) |
-| ตั้งชื่อไฟล์เอกสาร | `document-naming` |
-| ตั้งชื่อตาราง คอลัมน์ (งานซอฟต์แวร์) | `database-design` (plugin `software-development`) |
-| ตั้งชื่อ endpoint (งานซอฟต์แวร์) | `api-conventions` (plugin `software-development`) |
+| Logo, colours, brand typography | `graphic-design` (plugin `software-development`) |
+| Naming document files | `document-naming` |
+| Naming tables and columns (software work) | `database-design` (plugin `software-development`) |
+| Naming endpoints (software work) | `api-conventions` (plugin `software-development`) |
 
 ---
 
-## 1 · หกข้อที่ตัดชื่อทิ้งทันที
+## 1 · Six tests that cut a name at once
 
-ทดสอบก่อนคิดต่อ ถ้าตกข้อไหนข้อหนึ่งให้ตัดทิ้งเลย ไม่ต้องเสียดาย
+Test before you think further. If a name fails any one, cut it. Do not feel sorry.
 
-| # | ทดสอบ | ตกเมื่อ |
+| # | Test | Fails when |
 |:--:|---|---|
-| 1 | **ทดสอบโทรศัพท์** — พูดชื่อให้คนฟังทางโทรศัพท์ เขาพิมพ์ถูกไหม | ต้องสะกดให้ฟัง |
-| 2 | **ความยาว** | เกิน 3 พยางค์ หรือเกิน 12 ตัวอักษร |
-| 3 | **โดเมนและ handle** | `.com` และ `.co` ถูกจับหมด และ handle โซเชียลไม่ว่างสักที่ |
-| 4 | **ชนของที่มีอยู่** | มีผลิตภัณฑ์ ร้าน หรือบริการในหมวดเดียวกันชื่อเดียวกันหรือใกล้กันมาก |
-| 5 | **ความหมายในภาษาอื่น** | แปลว่าอะไรไม่ดีในภาษาที่ลูกค้าพูด |
-| 6 | **คนไทยออกเสียงได้** | มีเสียงควบที่คนไทยเลี่ยง หรือลงท้ายด้วยเสียงที่กลืนหาย |
+| 1 | **Phone test**: say the name to someone over the phone. Do they type it correctly? | You have to spell it out |
+| 2 | **Length** | More than 3 syllables, or more than 12 letters |
+| 3 | **Domain and handle** | `.com` and `.co` are both taken and no social handle is free anywhere |
+| 4 | **Collision with what exists** | A product, shop or service in the same category has the same or a very close name |
+| 5 | **Meaning in other languages** | It means something bad in a language your customers speak |
+| 6 | **Thai speakers can pronounce it** | It has a consonant cluster Thai speakers avoid, or ends in a sound that gets swallowed |
 
-> **ข้อ 1 คือข้อที่ฆ่าชื่อมากที่สุด** เพราะชื่อที่สะกดแปลกเพื่อให้ได้โดเมน
-> ต้องแลกกับการที่ลูกค้าทุกคนพิมพ์ผิดตลอดไป
+> **Test 1 kills the most names**, because a name spelled oddly to get a domain
+> means every customer mistypes it forever.
 >
-> **ข้อ 6 คนมักลืม** — ถ้าชื่อมี `th` `v` `z` ท้ายคำ หรือควบ `str-` `spl-`
-> คนไทยจะออกเสียงเพี้ยนแล้วพิมพ์ตามที่ได้ยิน
+> **People often forget test 6.** If the name has `th`, `v` or `z` at the end of a word, or a cluster like `str-` or `spl-`,
+> Thai speakers will pronounce it off and type what they heard.
 
 ---
 
-## 2 · เก้าสูตรผลิตชื่อ
+## 2 · Nine formulas for producing names
 
-อย่านั่งนึกลอย ๆ ให้เดินทีละสูตร คิดสูตรละ 5–10 ชื่อ แล้วค่อยคัด
+Do not sit and think in the air. Walk through the formulas one at a time, come up with 5–10 names per formula, then select.
 
-| # | สูตร | วิธี | ตัวอย่าง |
+| # | Formula | Method | Example |
 |:--:|---|---|---|
-| 1 | **คำจริง ตัดท้าย** | เอาคำอังกฤษมาตัดพยางค์สุดท้ายทิ้ง | `figure` → **Figma** · `velocity` → **Velo** |
-| 2 | **2 คำชนกัน** | ตัดหัวท้าย 2 คำมาต่อกัน | `fold`+`drop` → **Foldrop** · `data`+`dog` → **Datadog** |
-| 3 | **คำ + ปัจจัย** | เติม `-io` `-ly` `-ify` `-o` `-a` `-ex` | `home`+`ify` → **Homify** · `aurum`+`io` → **Aurio** |
-| 4 | **รากละติน/กรีก** | หาคำรากของสิ่งที่ทำ แล้วย่อให้สั้น | `lumen` → **Lumo** · `nexus` → **Nexa** |
-| 5 | **ตัวอักษรตระกูล** | คำบอกหน้าที่ + ตัวต่อท้ายประจำตระกูล | **TradeXI · TelXI · DockXI · SoundXI** |
-| 6 | **คำสั้นไร้ความหมาย** | 4–5 ตัวอักษร พยัญชนะ-สระ-พยัญชนะ อ่านได้ทันที | **Quix · Zeno · Riva · Volt** |
-| 7 | **คำจริงยืมข้ามบริบท** | คำธรรมดาที่ไม่เกี่ยวกับงาน แต่ให้ความรู้สึกตรง | **Slack · Notion · Arc · Linear** |
-| 8 | **2 พยางค์อ่านลื่น** | คำจริง 2 คำสั้น ๆ วางคู่กัน | **Speak Go · Cash App** |
-| 9 | **คำเต็ม 2 คำที่ไม่เกี่ยวกัน** | เอาคำจริง 2 คำที่ไม่เกี่ยวกับสินค้าและไม่เกี่ยวกันเอง มาต่อเป็นคำเดียว | **Tailscale · Snowflake · Firebase · Basecamp** |
+| 1 | **Real word, cut the end** | Take an English word and drop the last syllable | `figure` → **Figma** · `velocity` → **Velo** |
+| 2 | **2 words collided** | Cut the head and tail of 2 words and join them | `fold`+`drop` → **Foldrop** · `data`+`dog` → **Datadog** |
+| 3 | **Word + suffix** | Add `-io` `-ly` `-ify` `-o` `-a` `-ex` | `home`+`ify` → **Homify** · `aurum`+`io` → **Aurio** |
+| 4 | **Latin/Greek root** | Find the root word for what it does, then shorten it | `lumen` → **Lumo** · `nexus` → **Nexa** |
+| 5 | **Family letters** | A word for the function + a family ending | **TradeXI · TelXI · DockXI · SoundXI** |
+| 6 | **Short meaningless word** | 4–5 letters, consonant-vowel-consonant, readable at once | **Quix · Zeno · Riva · Volt** |
+| 7 | **Real word borrowed across contexts** | An ordinary word unrelated to the work that gives the right feeling | **Slack · Notion · Arc · Linear** |
+| 8 | **2 syllables that read smoothly** | 2 short real words side by side | **Speak Go · Cash App** |
+| 9 | **2 whole unrelated words** | Join 2 real words that relate neither to the product nor to each other into one word | **Tailscale · Snowflake · Firebase · Basecamp** |
 
-**สูตรที่ให้ชื่อ "cool + clean" มากที่สุด** คือสูตร 1 · 4 · 6 เพราะได้ชื่อสั้น ไร้ความหมายตรงตัว และจำง่าย
-**สูตร 7 ได้ชื่อที่ดูโตแล้ว** แต่โดเมนหายากที่สุด
+**The formulas that give the most "cool + clean" names** are 1 · 4 · 6, because they give short names with no literal meaning that are easy to remember.
+**Formula 7 gives names that look grown-up**, but its domains are the hardest to find.
 
-**ตัวอักษรที่ให้ความรู้สึกทันสมัย** — ขึ้นต้นด้วย `x` `z` `q` `v` หรือลงท้ายด้วย `-o` `-a` `-ix` `-ex`
-**ตัวอักษรที่ทำให้ดูเชย** — ต่อท้ายด้วย `-soft` `-tech` `-sys` `-pro` `-plus` `-max`
+**Letters that feel modern:** start with `x` `z` `q` `v`, or end with `-o` `-a` `-ix` `-ex`.
+**Letters that look dated:** ending with `-soft` `-tech` `-sys` `-pro` `-plus` `-max`.
 
 ---
 
-**สูตร 9 ลงลึก** — เอาคำจริง 2 คำเต็ม ๆ (ไม่ตัดอะไร) ที่ไม่เกี่ยวกับสินค้าและไม่เกี่ยวกันเอง วางติดกัน · รวมไม่เกิน 3 พยางค์ · คำแรกเป็นรูปธรรม · อ่านออกเสียงทุกคู่ก่อนเลือก → เหตุผล กฎ และคลังคำ A/B สำหรับจับคู่ใน [`references/formula-9-deep-dive.md`](references/formula-9-deep-dive.md) — เปิดเมื่อใช้สูตร 9
+**Formula 9 in depth:** take 2 whole real words (cut nothing) that relate neither to the product nor to each other, and put them side by side · at most 3 syllables in total · the first word concrete · read every pair aloud before choosing → reasons, rules and the A/B word pools for pairing are in [`references/formula-9-deep-dive.md`](references/formula-9-deep-dive.md). Open it when you use formula 9.
 
-## 3 · ใส่ความหมายให้ชื่อ
+## 3 · Giving the name a meaning
 
-ชื่อสั้นและทันสมัยไม่จำเป็นต้องไร้ความหมาย เพราะความหมายมาได้ 2 ทาง
+A short, modern name does not have to be meaningless, because meaning can arrive 2 ways.
 
-| ทาง | สูตรที่ให้มา | ตัวอย่าง |
+| Way | Formulas that give it | Example |
 |---|---|---|
-| **มีมาแต่กำเนิด** | 4 รากละติน/กรีก · 7 คำจริงยืมข้ามบริบท | `Aurio` จาก *aurum* ทอง · `Anchor` ความมั่นคง |
-| **ใส่ทีหลัง** | 6 คำสั้นไร้ความหมาย | `Quix` ตั้งก่อน แล้วค่อยผูกกับความเร็ว |
+| **Built in from birth** | 4 Latin/Greek roots · 7 real words borrowed across contexts | `Aurio` from *aurum*, gold · `Anchor`, stability |
+| **Added later** | 6 short meaningless words | `Quix` is chosen first, then tied to speed |
 
-> **ทางที่ 2 ใช้ได้จริงและปลอดภัยกว่า** ดู Kodak, Häagen-Dazs, Apple ไม่มีชื่อไหนบอกว่าขายอะไร
-> ความหมายถูกสร้างขึ้นหลังจากนั้นทั้งหมด
+> **Way 2 works in practice and is safer.** Look at Kodak, Häagen-Dazs, Apple: no name says what is sold.
+> The meaning was built entirely afterward.
 
-**กฎของความหมาย:** หารากจาก**สิ่งที่ผู้ใช้ได้** ไม่ใช่สิ่งที่ระบบทำ
-เช่น ระบบจัดการคลังทอง ให้ใช้ราก "ทอง" ไม่ใช่ราก "คลังสินค้า"
+**Rule for meaning:** find the root from **what the user gets**, not from what the system does.
+For example, for a gold inventory system, use the root "gold", not the root "warehouse".
 
-**ทดสอบ:** เขียนความหมายเป็น **1 บรรทัด** ได้ไหม
-"Aurio — จาก aurum ภาษาละตินแปลว่าทอง" แค่นี้จบ ถ้าต้องอธิบายเกิน 1 ประโยค แปลว่าความหมายอ่อนเกินไป
+**Test:** can you write the meaning in **1 line**?
+"Aurio: from Latin aurum, meaning gold." That is all. If it takes more than 1 sentence to explain, the meaning is too weak.
 
-**คลังช่วยคิด** — ตารางรากละติน/กรีกที่ใช้ได้จริง (แสง · ทอง · เชื่อมต่อ · เวลา · ปกป้อง ฯลฯ) และตารางคำจริงยืมข้ามบริบทแยกตามความรู้สึก (เร็ว · มั่นคง · ชัดเจน · เป็นระเบียบ · เชื่อมโยง · นำทาง · เงียบ) → [`references/meaning-libraries.md`](references/meaning-libraries.md) — เปิดเมื่อใช้สูตร 4 หรือ 7 · คำจริงหาโดเมนยากที่สุด ต้องมีแผนสำรอง (`arc.app` · `getprism.com`)
+**Thinking libraries:** a table of Latin/Greek roots that work in practice (light · gold · connect · time · protect and others) and a table of real words borrowed across contexts, grouped by feeling (fast · stable · clear · orderly · connected · guiding · quiet) → [`references/meaning-libraries.md`](references/meaning-libraries.md). Open it when you use formula 4 or 7. Real words are the hardest to find domains for, so keep a fallback (`arc.app` · `getprism.com`).
 
-**เรื่องเล่า:** สั้น จำได้ เล่าต่อได้ (ไม่ใช่ตัวย่อต่อกัน หรือชื่อหมาที่บ้าน) → ตัวอย่างดี/แย่ใน `references/meaning-libraries.md`
+**The story:** short, memorable, easy to retell (not a chain of initials, and not the family dog's name) → good and bad examples in `references/meaning-libraries.md`
 
-**เขียนความหมายลงเอกสารแบรนด์** ตั้งแต่วันเลือกชื่อ ไม่ใช่รอให้มีคนถาม
-ทีมขายจะได้เล่าเหมือนกันทุกคน
+**Write the meaning into the brand document** on the day you pick the name, not when someone asks.
+That way the sales team tells it the same way every time.
 
 ---
 
-## 4 · ตระกูลชื่อ เมื่อมีหลายผลิตภัณฑ์
+## 4 · Name families, when there are several products
 
-เลือกแบบเดียว แล้วใช้ทั้งตระกูล
+Pick one pattern and use it for the whole family.
 
-| แบบ | หน้าตา | ดี | เสีย |
+| Pattern | Looks like | Good | Bad |
 |---|---|---|---|
-| **ต่อท้ายเหมือนกัน** | `TradeXI` `TelXI` `DockXI` | รู้ทันทีว่าบ้านเดียวกัน และตั้งชื่อตัวใหม่ง่าย | ถ้าตัวเดียวเสียชื่อ จะกระทบทั้งตระกูล |
-| **นำหน้าเหมือนกัน** | `QuixChat` `QuixFlow` | แบรนด์แม่เด่น | ชื่อยาวขึ้นทุกตัว |
-| **อิสระ** | `Aurio` `Homify` `Foldrop` | แต่ละตัวขายตัวเองได้ และขายแยกได้ | ต้องสร้างแบรนด์ใหม่ทุกตัว |
+| **Same ending** | `TradeXI` `TelXI` `DockXI` | You know at once they share a house, and new names are easy to make | If one name is damaged, the whole family suffers |
+| **Same prefix** | `QuixChat` `QuixFlow` | The parent brand stands out | Every name gets longer |
+| **Independent** | `Aurio` `Homify` `Foldrop` | Each one sells itself and can be sold separately | You must build a new brand for each |
 
-**เกณฑ์เลือก:** ถ้าขายรวมเป็นชุด ให้ใช้ตระกูลเดียวกัน แต่ถ้าอาจขายแยกหรือขายกิจการทีหลัง ให้ตั้งแบบอิสระ
+**How to choose:** if you sell them as a bundle, use one family. If you might sell them separately or sell the business later, make them independent.
 
-> **จดชื่อตระกูลไว้เป็นเอกสาร** พร้อมกฎการตั้งชื่อตัวถัดไป
-> ไม่งั้นตัวที่ 5 จะหลุดแบบ แล้วทั้งชุดดูมั่ว
+> **Write the family's naming rules down in a document**, together with the rule for naming the next one.
+> Otherwise the 5th name breaks the pattern and the whole set looks messy.
 
 ---
 
-## 5 · ตรวจของว่างก่อนตกหลุมรัก
+## 5 · Check what is available before you fall in love
 
-**ตรวจตอนเหลือ 5 ชื่อ ไม่ใช่ตอนเหลือชื่อเดียว** เพราะถ้าชอบชื่อไหนมากแล้วมารู้ว่าใช้ไม่ได้ จะเจ็บกว่า
+**Check when 5 names are left, not when 1 is left.** If you love a name and then learn you cannot use it, it hurts more.
 
-| ตรวจอะไร | ที่ไหน | ตกเมื่อ |
+| Check what | Where | Fails when |
 |---|---|---|
-| โดเมน | ผู้ให้บริการจดโดเมน | `.com` และ `.co` ถูกจับ และตัวสำรองก็ไม่เหลือ |
-| เครื่องหมายการค้าไทย | กรมทรัพย์สินทางปัญญา | มีของจดไว้ในหมวดสินค้าหรือบริการของเรา |
-| เครื่องหมายการค้าสากล | ฐานข้อมูล WIPO | เหมือนข้อบน ถ้าจะขายต่างประเทศ |
-| ชื่อแพ็กเกจ (ถ้าเป็นซอฟต์แวร์) | npm · PyPI · NuGet | ถูกใช้แล้วในระบบนิเวศที่จะเผยแพร่ |
-| ชื่อในแอปสโตร์ (ถ้าเป็นแอป) | App Store · Play Store | มีแอปชื่อเดียวกันในหมวดเดียวกัน |
-| handle โซเชียล | X · Instagram · Facebook · TikTok · GitHub · LINE | ไม่ว่างสักที่ |
-| ค้นหาธรรมดา | เสิร์ชเอนจิน | หน้าแรกเต็มไปด้วยของคนอื่น |
+| Domain | Domain registrar | `.com` and `.co` are taken and no fallback is left |
+| Thai trademark | กรมทรัพย์สินทางปัญญา (Department of Intellectual Property) | A registration exists in our goods or services category |
+| International trademark | WIPO database | Same as above, if you will sell abroad |
+| Package name (if software) | npm · PyPI · NuGet | Already used in the ecosystem you will publish to |
+| App store name (if an app) | App Store · Play Store | An app with the same name exists in the same category |
+| Social handles | X · Instagram · Facebook · TikTok · GitHub · LINE | None is free |
+| Plain search | Search engine | The first page is full of other people's results |
 
-**เกณฑ์ตัดสิน:** โดเมนหลักต้องได้ handle ต้องว่างอย่างน้อยครึ่งหนึ่ง และ
-เครื่องหมายการค้าในหมวดของเราต้องไม่ชน 3 ข้อนี้ไม่มีข้อยกเว้น
+**Decision rule:** you must get the main domain, at least half the handles must be free, and
+there must be no trademark collision in our category. These 3 have no exceptions.
 
 ---
 
-## 6 · เสียงและการพิมพ์ในบริบทไทย
+## 6 · Sound and typing in the Thai context
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| ลูกค้าไทยจะเขียนชื่อเป็นภาษาไทยแน่นอน | ลองเขียนดูเองก่อน เช่น `Aurio` เป็น "ออริโอ" แล้วดูว่าอ่านลื่นไหม |
-| เลือกคำไทยทางการ 1 แบบ | เขียนตามหลักเกณฑ์ทับศัพท์ของราชบัณฑิตยสภา ไม่ใส่วรรณยุกต์ (ซอฟต์แวร์ ไม่ใช่ ซ้อฟต์แว่ร์) · บันทึกลง brand kit · แบบอื่นที่ลูกค้าพิมพ์กันจริงเก็บเป็นคำค้น (search keyword) ไม่ใช้ในงาน |
-| เสียงที่คนไทยกลืน | `-th` `-v` `-s` ท้ายคำ หายเกือบทุกครั้ง |
-| เสียงควบที่เลี่ยงกัน | `str-` `spl-` `thr-` |
-| ชื่อที่พิมพ์ผิดง่ายบนแป้นไทย | เลี่ยงตัวที่อยู่ใกล้กันจนสลับได้ |
-| ความยาวเมื่อเขียนไทย | ไม่ควรเกิน 5 พยางค์ไทย |
+| Thai customers will certainly write the name in Thai | Try writing it yourself first, for example `Aurio` as "ออริโอ", and see if it reads smoothly |
+| Choose 1 official Thai form | Follow the transliteration rules of the Royal Society of Thailand (ราชบัณฑิตยสภา) with no tone marks (ซอฟต์แวร์, not ซ้อฟต์แว่ร์) · record it in the brand kit · keep other forms that customers actually type as search keywords, not for the work itself |
+| Sounds Thai speakers swallow | `-th` `-v` `-s` at the end of a word vanish almost every time |
+| Clusters they avoid | `str-` `spl-` `thr-` |
+| Names easy to mistype on a Thai keyboard | Avoid letters so close together that they can swap |
+| Length when written in Thai | No more than 5 Thai syllables |
 
-**ทดสอบจริง** — พูดชื่อให้คนไทย 3 คนฟังทางโทรศัพท์ แล้วให้เขาพิมพ์ลงไลน์ส่งกลับมา
-ถ้ามีสักคนพิมพ์ไม่ตรง ชื่อนั้นตก
+**Real test:** say the name to 3 Thai speakers over the phone and have them type it in LINE and send it back.
+If even 1 person types it differently, the name fails.
 
 ---
 
-## 7 · ห้าข้อทดสอบก่อนตัดสินใจครั้งสุดท้าย
+## 7 · Five tests before the final decision
 
-| # | ทดสอบ | ผ่านเมื่อ |
+| # | Test | Passes when |
 |:--:|---|---|
-| 1 | เขียนในประโยคจริง | "ลองใช้ ___ ดูสิ" ฟังแล้วไม่ขัด |
-| 2 | เขียนคู่กับคำบอกหมวด | "___ — ระบบจัดการคลังทอง" อ่านแล้วเข้าใจ |
-| 3 | ย่อเป็นไอคอน | ตัวแรกหรือ 2 ตัวแรกทำเป็นสัญลักษณ์ได้ |
-| 4 | อยู่รอดเมื่อขอบเขตโต | ชื่อที่มีคำว่า "ทอง" จะพังวันที่ขายเงินด้วย |
-| 5 | ทนต่อการล้อ | ลองคิดมุกล้อชื่อตัวเอง ถ้าคิดออกง่ายเกินไป ระวัง |
+| 1 | Write it in a real sentence | "ลองใช้ ___ ดูสิ" (Thai for "try ___") sounds natural |
+| 2 | Write it next to the category word | "___ — ระบบจัดการคลังทอง" (Thai for "___, a gold inventory system") reads and makes sense |
+| 3 | Shrink it to an icon | The first letter or 2 can become a symbol |
+| 4 | Survives when the scope grows | A name with the word "gold" breaks the day you also sell silver |
+| 5 | Resists teasing | Try making up jokes about your own name. If they come too easily, beware |
 
-**ข้อ 4 สำคัญที่สุดสำหรับสิ่งที่จะโตต่อ (ผลิตภัณฑ์ ร้าน แบรนด์)** — ชื่อที่บอกความสามารถวันนี้
-จะกลายเป็นกรงขังเมื่อผลิตภัณฑ์โตขึ้น ชื่อไร้ความหมายจึงปลอดภัยกว่าในระยะยาว
+**Test 4 matters most for anything that will keep growing (a product, shop, brand).** A name that states today's ability
+becomes a cage when the product grows. A meaningless name is therefore safer in the long run.
 
 ---
 
 ## 8 · Anti-patterns
 
-- **สะกดแปลกเพื่อให้ได้โดเมน** — `Kleen` `Fyre` `Qwik` ลูกค้าพิมพ์ผิดตลอดไป
-- **ต่อท้ายด้วย `-soft` `-tech` `-sys` `-solutions`** — ดูเป็นปี 2005
-- **ใส่ตัวเลขในชื่อ** — `App360` `Pro24` ตกรุ่นทันทีที่เปลี่ยนรุ่น
-- **ชื่อที่บอกความสามารถเฉพาะ** — `InvoiceMaster` แล้ววันที่ทำเรื่องอื่นด้วย
-- **3 คำขึ้นไป** — ไม่มีใครพูดเต็ม จะถูกย่อจนจำไม่ได้
-- **คำไทยทับศัพท์ที่ฝรั่งอ่านไม่ออก** ถ้าคิดจะขายต่างประเทศ
-- **ชื่อที่ต้องอธิบายว่าทำไมถึงตั้งชื่อนี้** — ลูกค้าไม่มีเวลาฟัง
-- **เลือกชื่อก่อนตรวจโดเมนและเครื่องหมายการค้า** — เสียเวลา 2 รอบ
-- **ระดมชื่อคนเดียวในหัว** — ได้ชื่อจากมุมเดียว ให้เดินตาม 9 สูตรแทน
+- **Odd spelling to get a domain**: `Kleen` `Fyre` `Qwik`. Customers mistype forever
+- **Ending with `-soft` `-tech` `-sys` `-solutions`**: looks like 2005
+- **Numbers in the name**: `App360` `Pro24` become outdated as soon as the version changes
+- **A name that states one specific ability**: `InvoiceMaster`, and then the day you do something else too
+- **3 or more words**: nobody says the whole thing, so it gets shortened until it cannot be recognised
+- **A Thai transliteration that foreigners cannot read**, if you plan to sell abroad
+- **A name you must explain the reason for**: customers have no time to listen
+- **Choosing the name before checking domains and trademarks**: wastes 2 rounds
+- **Brainstorming alone in your head**: you get names from a single angle. Walk through the 9 formulas instead
 
 ---
 
-## 9 · ตัวย่อ
+## 9 · Abbreviations
 
-- **portmanteau** — คำที่เกิดจากการเอา 2 คำมาตัดต่อกัน
-- **handle** — ชื่อบัญชีบนโซเชียล เช่น `@quixapp`
-- **WIPO** — World Intellectual Property Organization (องค์การทรัพย์สินทางปัญญาโลก)
-- **npm · PyPI · NuGet** — คลังแพ็กเกจของ Node, Python และ .NET ตามลำดับ
+- **portmanteau**: a word made by cutting 2 words and joining them
+- **handle**: an account name on social media, such as `@quixapp`
+- **WIPO**: World Intellectual Property Organization
+- **npm · PyPI · NuGet**: package registries for Node, Python and .NET respectively
 
-## 10 · เชื่อมกับ skill อื่น
+## 10 · Links to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| โลโก้ สี ตัวอักษรของชื่อที่เลือกแล้ว | `graphic-design` (plugin `software-development`) |
-| เช็กว่ามีคนทำของแบบเดียวกันชื่อนี้อยู่แล้วไหม | `prior-art-review` |
-| ชื่อที่ใช้ในเอกสารและไฟล์ส่งมอบ | `document-naming` |
-| คำที่ใช้เรียกฟีเจอร์ในตัวผลิตภัณฑ์ | `i18n-and-locale` (plugin `software-development`) |
-| นำเสนอชื่อที่คัดแล้วให้ผู้มีอำนาจตัดสินใจ | `presentation-design` |
+| Logo, colours, typography for the chosen name | `graphic-design` (plugin `software-development`) |
+| Check whether someone already makes the same thing under this name | `prior-art-review` |
+| Names used in documents and deliverable files | `document-naming` |
+| Terms for features inside the product | `i18n-and-locale` (plugin `software-development`) |
+| Present the shortlisted names to the decision maker | `presentation-design` |
 
-**ตารางคัดชื่อที่กรอกต่อได้ทันที** → `assets/name-shortlist.md`
+**A shortlist table you can fill in right away** → `assets/name-shortlist.md`
 
 
 ## reference: formula-9-deep-dive.md
 
-# สูตร 9 ลงลึก
+# Formula 9 in depth
 
-เปิดเมื่อผลิตชื่อด้วยสูตร 9
+Open this when you generate names with formula 9.
 
-## แบบที่ให้ชื่อดูเท่าที่สุดโดยไม่ต้องประดิษฐ์คำ
+## The pattern that makes a name look coolest without inventing a word
 
-`Tailscale` = *tail* + *scale* ซึ่งทั้ง 2 คำไม่เกี่ยวกับเครือข่ายส่วนตัวเลย และไม่เกี่ยวกันเองด้วย
+`Tailscale` = *tail* + *scale*. Neither word has anything to do with private networks, and the two words have nothing to do with each other either.
 
-| ต่างจากสูตร 2 ตรงไหน | |
+| How it differs from formula 2 | |
 |---|---|
-| สูตร 2 | **ตัด**พยางค์ก่อนต่อ เช่น `fold`+`drop` → Foldrop คำที่ได้จึงไม่ใช่คำจริง |
-| สูตร 9 | **ไม่ตัดอะไรเลย** เอาคำจริง 2 คำเต็ม ๆ วางติดกัน |
+| Formula 2 | **Cuts** syllables before joining, such as `fold`+`drop` → Foldrop, so the result is not a real word |
+| Formula 9 | **Cuts nothing.** Put 2 whole real words side by side |
 
-**ทำไมได้ผล**
+**Why it works**
 
-| เหตุผล | |
+| Reason | |
 |---|---|
-| จำง่าย | ผู้ฟังรู้จักทั้ง 2 คำอยู่แล้ว ไม่ต้องจำการสะกดใหม่ |
-| ไม่ซ้ำใคร | คู่คำที่ไม่มีเหตุผลต้องอยู่ด้วยกัน จึงไม่มีใครเคยจับคู่ไว้ |
-| โดเมนหาง่าย | มักหาง่ายกว่าคำเดี่ยว แต่ยังต้องตรวจตามหัวข้อ 5 ใน `SKILL.md` |
-| ผ่านทดสอบโทรศัพท์ | พูดแล้วพิมพ์ถูกทันที เพราะเป็นคำที่เขารู้จัก |
+| Easy to remember | The listener already knows both words, so there is no new spelling to learn |
+| Unique | Nothing forces these words together, so nobody has paired them before |
+| Domains are easier to find | Usually easier than a single word, but still check them as in section 5 of `SKILL.md` |
+| Passes the phone test | The listener types it correctly at once, because the words are familiar |
 
-**กฎของสูตรนี้**
+**Rules for this formula**
 
-- รวมกันไม่เกิน **3 พยางค์** — `Tailscale` 2 · `Basecamp` 2 · `Snowflake` 2
-- **คำแรกควรเป็นรูปธรรม** คือสิ่งที่นึกภาพออก (tail, snow, fire, base, bit, black, cloud)
-- อย่าให้คู่คำอธิบายสินค้า เพราะถ้าอธิบายได้ มันจะกลายเป็นชื่อเชย ๆ แบบ `DataSync`
-- **ห้ามให้ความหมายรวมกันแล้วแปลก** ลองอ่านออกเสียงและนึกภาพก่อน
-- ตัวสะกดต้องไม่ชนกันจนอ่านยาก ให้เลี่ยงคำแรกที่ลงท้ายด้วยตัวเดียวกับที่คำหลังขึ้นต้น
+- Total of at most **3 syllables**: `Tailscale` 2 · `Basecamp` 2 · `Snowflake` 2
+- **The first word should be concrete**, something you can picture (tail, snow, fire, base, bit, black, cloud)
+- Do not let the pair describe the product. If it explains the product, it becomes a dated name like `DataSync`
+- **The combined meaning must not come out odd.** Read it aloud and picture it first
+- Spellings must not collide into something hard to read. Avoid a first word that ends with the same letter the second word starts with
 
-**วิธีผลิต** — ทำ 2 คลังแยกกัน แล้วสุ่มจับคู่และอ่านออกเสียงทุกคู่
+**How to generate** — build 2 separate pools, then pair at random and read every pair aloud
 
-| คลัง A — รูปธรรม | คลัง B — โครงสร้าง/มาตรา |
+| Pool A: concrete | Pool B: structure/measure |
 |---|---|
 | tail · snow · fire · bit · black · cloud · iron · salt · moon · north · glass · pine | scale · flake · base · bucket · camp · bird · flare · stack · frame · gate · port · line |
 
-ตัวอย่างที่ได้จากการจับคู่ — `Saltframe` · `Pinegate` · `Moonstack` · `Ironport` · `Glassline`
+Example pairs: `Saltframe` · `Pinegate` · `Moonstack` · `Ironport` · `Glassline`
 
-> **ความหมายใส่ทีหลังได้เต็มที่** (ดูข้อ 3) — `Tailscale` ไม่ได้มีความหมายตั้งแต่แรก
-> แต่พอใช้ไปสักพัก คนก็ผูกมันกับเรื่องของเครือข่ายที่ขยายได้ไปเอง
+> **Meaning can be added fully afterward** (see item 3). `Tailscale` had no meaning at the start,
+> but after some use, people tied it to the idea of a network that can scale.
 
 
 ## reference: meaning-libraries.md
 
-# คลังช่วยคิดความหมายของชื่อ
+# Libraries for developing a name's meaning
 
-สารบัญ: คลังรากละติน/กรีก → คลังคำจริงยืมข้ามบริบท → เรื่องเล่าที่ดีกับที่แย่
+Contents: Latin/Greek root library → real words borrowed across contexts → good and bad stories
 
-## คลังรากละติน/กรีก ที่ใช้ได้จริง
+## Latin/Greek roots that work in practice
 
-| ความหมาย | ราก | ชื่อที่ได้ |
+| Meaning | Root | Resulting names |
 |---|---|---|
-| แสง · ความชัด | *lux · lumen* | Lumo · Lumen · Lucent |
-| ทอง · มีค่า | *aurum* | Aurio · Aura |
-| เชื่อมต่อ | *nexus · syn-* | Nexa · Syno · Nexo |
-| พลัง · ไฟฟ้า | *volta · vis* | Volta · Vira |
-| วง · โลก | *orbis · kyklos* | Orbis · Kyklo |
-| เวลา · จังหวะ | *tempus · chronos · kairos* | Tempo · Chrono · Kairo |
-| ไหล · เคลื่อน | *fluxus · kinesis* | Flux · Kinet |
-| เสียง | *sonus · vox* | Sona · Voxa |
-| เก็บ · หีบ | *arca* | Arca · Arka |
-| ปกป้อง · โล่ | *aegis · scutum* | Aegis · Scuto |
-| ดูแล · รักษา | *cura* | Cura · Curo |
-| จุดเริ่ม | *arche* | Arka · Archo |
-| รูปแบบ | *morphe* | Morpho · Forma |
-| คำ · ภาษา | *lexis · verbum* | Lexi · Verba |
-| มอง · ตรวจ | *specto* | Specta · Scopo |
-| ใหม่ | *nova* | Nova · Novo |
-| จริง | *veritas* | Vera · Verio |
-| งาน · ผลงาน | *opus* | Opus · Opero |
-| ท่า · ประตู | *portus · porta* | Porta · Portio |
+| light · clarity | *lux · lumen* | Lumo · Lumen · Lucent |
+| gold · valuable | *aurum* | Aurio · Aura |
+| connect | *nexus · syn-* | Nexa · Syno · Nexo |
+| power · electricity | *volta · vis* | Volta · Vira |
+| circle · world | *orbis · kyklos* | Orbis · Kyklo |
+| time · rhythm | *tempus · chronos · kairos* | Tempo · Chrono · Kairo |
+| flow · move | *fluxus · kinesis* | Flux · Kinet |
+| sound | *sonus · vox* | Sona · Voxa |
+| store · chest | *arca* | Arca · Arka |
+| protect · shield | *aegis · scutum* | Aegis · Scuto |
+| care · look after | *cura* | Cura · Curo |
+| beginning | *arche* | Arka · Archo |
+| form | *morphe* | Morpho · Forma |
+| word · language | *lexis · verbum* | Lexi · Verba |
+| look · inspect | *specto* | Specta · Scopo |
+| new | *nova* | Nova · Novo |
+| true | *veritas* | Vera · Verio |
+| work · output | *opus* | Opus · Opero |
+| port · door | *portus · porta* | Porta · Portio |
 
-## คลังคำจริงยืมข้ามบริบท แยกตามความรู้สึก
+## Real words borrowed across contexts, grouped by feeling
 
-| ความรู้สึก | คำ |
+| Feeling | Words |
 |---|---|
-| เร็ว · คล่อง | Arc · Bolt · Dash · Swift · Rush · Skim |
-| มั่นคง · ปลอดภัย | Anchor · Vault · Keel · Bastion · Forge · Bedrock |
-| ชัดเจน · เห็นได้ | Prism · Lens · Beacon · Signal · Facet |
-| เป็นระเบียบ | Grid · Frame · Ledger · Atlas · Index · Stack |
-| เชื่อมโยง | Bridge · Relay · Mesh · Loom · Thread · Weave |
-| นำทาง | Compass · Pilot · Helm · North · Trail |
-| เงียบ · เรียบ | Slate · Quill · Linen · Drift · Still |
+| fast · agile | Arc · Bolt · Dash · Swift · Rush · Skim |
+| stable · safe | Anchor · Vault · Keel · Bastion · Forge · Bedrock |
+| clear · visible | Prism · Lens · Beacon · Signal · Facet |
+| orderly | Grid · Frame · Ledger · Atlas · Index · Stack |
+| connected | Bridge · Relay · Mesh · Loom · Thread · Weave |
+| guiding | Compass · Pilot · Helm · North · Trail |
+| quiet · smooth | Slate · Quill · Linen · Drift · Still |
 
-> ระวัง: **คำจริงหาโดเมนยากที่สุด** จึงต้องเตรียมแผนสำรอง เช่น เติมคำบอกหมวด (`arc.app`, `getprism.com`)
-> หรือใช้โดเมนสั้นแบบอื่น
+> Warning: **real words are the hardest to find domains for**, so prepare a fallback, such as adding a category word (`arc.app`, `getprism.com`)
+> or using another short domain style.
 
-## เรื่องเล่าที่ดีกับที่แย่
+## Good and bad stories
 
-| | ตัวอย่าง |
+| | Example |
 |---|---|
-| ✓ ดี | "Aegis คือโล่ของเทพซุส — ระบบนี้มีไว้ปกป้อง" — สั้น จำได้ เล่าต่อได้ |
-| ✗ แย่ | "A มาจาก Advanced, U มาจาก Unified, R มาจาก Realtime…" — ไม่มีใครจำ |
-| ✗ แย่ | "ชื่อนี้มาจากชื่อหมาที่บ้าน" — ความหมายส่วนตัว ลูกค้าไม่รู้สึกด้วย |
+| ✓ Good | "Aegis is the shield of Zeus. This system exists to protect." Short, memorable, easy to retell |
+| ✗ Bad | "A stands for Advanced, U for Unified, R for Realtime…" Nobody remembers it |
+| ✗ Bad | "The name comes from the family dog's name." A personal meaning, so customers feel nothing |
 
 
 ---
@@ -304,166 +304,166 @@ Use when naming a product, shop, app or brand
 
 Use when starting a repository or setting up a new machine
 
-# ตั้งต้นโปรเจกต์
+# Project bootstrap
 
-> **กฎข้อเดียว:** คนที่ไม่เคยเห็นโปรเจกต์นี้มาก่อน ต้องรันได้ภายใน **30 นาที**
-> โดยอ่านแค่ `README.md` และไม่ต้องถามใคร
+> **The one rule:** someone who has never seen this project must be able to run it within **30 minutes**,
+> reading only `README.md` and asking nobody.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-เริ่ม repository ใหม่ · คนใหม่ใช้ครึ่งวันกว่าจะรันได้ · pull request diff ทั้งไฟล์เพราะตัวจัดรูปแบบไม่ตรงกัน · ไม่มีใครรู้ว่าเอกสารอยู่ไหน
+Starting a new repository · a newcomer needs half a day before the project runs · a pull request shows a whole-file diff because formatters disagree · nobody knows where the documents are
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Task | Use this instead |
 |---|---|
-| ตั้ง pipeline build และ deploy | `cicd-and-release` |
-| ค่าตั้งต่อ environment และ secret | `config-and-secrets` |
-| เลือกสถาปัตยกรรม | `architecture-patterns` |
-| ตั้ง test framework | `testing-standards` |
-| ตั้งชื่อเอกสาร | `document-naming` |
+| Set up the build and deploy pipeline | `cicd-and-release` |
+| Per-environment settings and secrets | `config-and-secrets` |
+| Choose an architecture | `architecture-patterns` |
+| Set up a test framework | `testing-standards` |
+| Name documents | `document-naming` |
 
 ---
 
-## 1 · โครงโฟลเดอร์
+## 1 · Folder layout
 
-**ราก (โฟลเดอร์ที่ผู้ใช้เปิด) จัดตาม `project-doc-set` ข้อ 1 แบบ B** — ผังราก แบบ ecosystem และที่อยู่ไฟล์ของ SuperUser (`.claude/superuser/`) อยู่ที่นั่นที่เดียว · โค้ดอยู่ใน `<project-name>/` โครงข้างในเป็นแบบนี้:
+**The root (the folder the user opens) follows `project-doc-set` item 1, layout B.** The root tree, the ecosystem layout and the SuperUser file locations (`.claude/superuser/`) are defined there and only there. Code lives in `<project-name>/`. Its inner layout is:
 
-ใน `<project-name>/` (ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-`): `README.md` (ข้อ 2) · `CHANGELOG.md` · `ARCHITECTURE.md` · `CONTRIBUTING.md` · `LICENSE` (3 ตัวนี้เมื่อมีเงื่อนไขใน `references/readme-skeleton.md` หัวข้อ 2) · `.env.example` (เฉพาะเมื่ออ่าน environment variable จริง · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · ค่าลับ · `_to_delete/`) · `src/` (unit test อยู่ข้างไฟล์โค้ด · `readable-code` ข้อ 7) · `tests/` (เฉพาะ integration · e2e หรือ stack ที่เครื่องมือบังคับ ดูตารางข้อ 1) · `scripts/` (setup · seed · migrate) — ผังพร้อมคำอธิบาย [`references/code-folder.md`](references/code-folder.md) · ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ในโฟลเดอร์โค้ด (`project-doc-set` ข้อ 1)
+Inside `<project-name>/` (lowercase project name, words joined by `-`): `README.md` (item 2) · `CHANGELOG.md` · `ARCHITECTURE.md` · `CONTRIBUTING.md` · `LICENSE` (these 3 only when the conditions in `references/readme-skeleton.md` section 2 apply) · `.env.example` (only when the project really reads environment variables · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · secrets · `_to_delete/`) · `src/` (unit tests sit beside the code files · `readable-code` item 7) · `tests/` (integration · e2e only, or stacks whose tools require it, see the table in this item) · `scripts/` (setup · seed · migrate). The annotated tree is in [`references/code-folder.md`](references/code-folder.md). ADRs (architecture decision records) and runbooks live in `docs/` at the root, not in the code folder (`project-doc-set` item 1).
 
-**ชื่อโฟลเดอร์โค้ด** — เอาชื่อโฟลเดอร์โปรเจกต์มาทำเป็นตัวพิมพ์เล็ก เว้นวรรคและเครื่องหมายเปลี่ยนเป็น `-` ตัวเดียว:
+**Code folder name.** Take the project folder name, lowercase it, and turn each run of spaces and punctuation into a single `-`:
 `Lumio - Light Meter/` → `lumio-light-meter/`
-คำสั่ง build test และ run ทุกตัวรันจากในโฟลเดอร์นี้ ส่วนชื่อแพ็กเกจในภาษาที่บังคับรูปแบบ (Dart `name:` ใน pubspec · Python package) ยังตั้งตามกฎของภาษา เพราะกฎนี้คุมแค่ชื่อโฟลเดอร์
+Run every build, test and run command from inside this folder. In languages that force a package-name format (Dart `name:` in pubspec · Python package), keep naming the package by the language's rules, because this rule governs only the folder name.
 
-**กฎของราก (ชั้นบนสุดของโฟลเดอร์โปรเจกต์):**
-- มีแค่ของในผัง `project-doc-set` ข้อ 1 · ข้อยกเว้นประกาศใน README ของโปรเจกต์ · README, CHANGELOG และไฟล์ตั้งค่าอยู่ใน repo · `.docx`/`.xlsx` ที่ได้รับมาอยู่ `ref/` ที่เราเขียนอยู่ `docs/`
-- **ของชั่วคราวไม่เคยอยู่ที่ราก** — ถ้าไฟล์ชั่วคราวที่ agent สร้างไปตกที่ราก ให้ย้ายเข้า `_to_delete/` ทันที
-- ถ้า build แล้วมีโฟลเดอร์งอกที่ราก (เช่น `build/` `lib/` ว่างหลังย้ายโค้ด) แปลว่า cache ของเครื่องมือยังจำ path เก่า ให้ล้าง cache (`flutter clean` · ลบ `obj/`) แล้ว build ใหม่
-- ชื่อโฟลเดอร์และไฟล์ใน repo เป็นตัวพิมพ์เล็กคั่นด้วยขีดกลาง ไม่มีเว้นวรรค **ยกเว้นภาษาที่มีธรรมเนียมของตัวเอง** ให้ตามภาษานั้น
+**Root rules (the top level of the project folder):**
+- Hold only what is in the `project-doc-set` item 1 layout. Exceptions are declared in the project's README. README, CHANGELOG and config files live in the repo. Received `.docx`/`.xlsx` files go in `ref/`. Ones we write go in `docs/`.
+- **Temporary files never live at the root.** If a temp file an agent created lands at the root, move it into `_to_delete/` at once.
+- If a build leaves a stray folder at the root (such as an empty `build/` or `lib/` after moving the code), a tool cache still remembers the old path. Clear the cache (`flutter clean` · delete `obj/`) and build again.
+- Folder and file names in the repo are lowercase with hyphens and no spaces. **The exception is a language with its own convention.** Follow that language.
 
-**ข้อยกเว้นตาม stack** — ชื่อโฟลเดอร์โค้ด โฟลเดอร์ทดสอบ และชื่อไฟล์ใน repo ใช้ตามที่เครื่องมือของภาษาคาดไว้
-ไม่ฝืนให้เป็น `src/` · ปกติไฟล์ทดสอบอยู่ข้างไฟล์โค้ด ใช้โฟลเดอร์ทดสอบแยกเฉพาะ stack ที่เครื่องมือบังคับ (ช่องที่เขียนว่า **บังคับ**):
+**Exceptions by stack.** The code folder name, the test folder and the file names in the repo follow what the language's tools expect.
+Do not force `src/`. Test files normally sit beside the code files. Use a separate test folder only for stacks whose tools require one (the cells marked **required**):
 
-| Stack | โค้ด | ทดสอบ | ชื่อไฟล์ |
+| Stack | Code | Tests | File names |
 |---|---|---|---|
-| Node | `src/` | unit test ข้างไฟล์โค้ด (`*.test.ts`) · integration และ e2e ไว้ใน `tests/` | `kebab-case` |
-| .NET | `src/` | `tests/` **บังคับ** (โปรเจกต์ทดสอบแยก `.csproj`) | `PascalCase.cs` |
-| Python | `src/<package>/` | unit test ข้างไฟล์โค้ด (`test_*.py`) · integration และ e2e ไว้ใน `tests/` | `snake_case.py` |
-| Dart / Flutter | `lib/` | `test/` · `integration_test/` **บังคับ** (โครงเหมือน `lib/`) | `snake_case.dart` (lint `file_names`) · `android/` `ios/` อยู่ใน repo |
+| Node | `src/` | Unit tests beside the code files (`*.test.ts`) · integration and e2e in `tests/` | `kebab-case` |
+| .NET | `src/` | `tests/` **required** (a separate test `.csproj` project) | `PascalCase.cs` |
+| Python | `src/<package>/` | Unit tests beside the code files (`test_*.py`) · integration and e2e in `tests/` | `snake_case.py` |
+| Dart / Flutter | `lib/` | `test/` · `integration_test/` **required** (same layout as `lib/`) | `snake_case.dart` (lint `file_names`) · `android/` `ios/` stay in the repo |
 
-skill อื่นที่เขียน `tests/` หรือ `test/` ให้อ่านว่า "โฟลเดอร์ทดสอบของ stack นั้น" แล้วเลือกชื่อเดียวใช้ทั้ง repo
+When another skill writes `tests/` or `test/`, read it as "the test folder of that stack". Pick one name and use it across the whole repo.
 
-**แบบ A** (ใช้เมื่อผู้ใช้ขอเท่านั้น · ข้อนี้คือเจ้าของผัง) — เพิ่ม `<project-name>/docs/` ในโฟลเดอร์โค้ด เป็น markdown ล้วน ผังข้างในเหมือน `docs/` ของแบบ B (`README.md` สารบัญ · `decisions/ADR-NNNN-<slug>.md` · `runbook-<เรื่อง>.md` · `research/`) ไม่มี `.docx` หรือ PNG ส่งมอบ · ส่วนที่เหลือของรากยังตามผัง `project-doc-set` ข้อ 1 โดยไม่มี `docs/` ที่ราก
+**Layout A** (use only when the user asks · this item owns the layout). Add `<project-name>/docs/` inside the code folder, as plain markdown. The inner layout matches the `docs/` of layout B (`README.md` index · `decisions/ADR-NNNN-<slug>.md` · `runbook-<topic>.md` · `research/`). It has no `.docx` or PNG deliverables. The rest of the root still follows the `project-doc-set` item 1 layout, without a `docs/` at the root.
 
-**`docs/README.md` คือสารบัญ ไม่ใช่เนื้อหา:**
+**`docs/README.md` is an index, not content:**
 
-แม่แบบ → `assets/starter-files.md` (คอลัมน์ เอกสาร · อ่านเมื่อ · เจ้าของ · อัปเดตล่าสุด)
+Template → `assets/starter-files.md` (columns: document · read when · owner · last updated)
 
 ---
 
-## 2 · README — โครงกว้าง แล้วสำรวจโปรเจกต์ก่อนเลือกหัวข้อ
+## 2 · README — broad outline, then survey the project before choosing sections
 
-README ของแต่ละงานไม่เหมือนกัน · แอปเว็บ · library · CLI (Command-Line Interface) · แอปมือถือ · monorepo · infra หรือสคริปต์ ต้องการหัวข้อและคำสั่งต่างกัน จึงทำ 3 ชั้น:
+READMEs differ from job to job. A web app · library · CLI (Command-Line Interface) · mobile app · monorepo · infra or script project needs different sections and commands. So work in 3 layers:
 
-**ชั้น 1 · โครงกว้าง (ตายตัว)** — README ต้องตอบคำถามเหล่านี้ให้คนใหม่ ตามลำดับที่ต้องใช้:
-นี่คืออะไร ใครใช้ → ต้องมีอะไรบนเครื่อง → ติดตั้งและรัน → ตั้งค่า → คำสั่งที่ใช้บ่อย (test) → โครงสร้างโปรเจกต์ → สถาปัตยกรรม → build → deploy → ติดปัญหา → ร่วมพัฒนา → ติดต่อ → สัญญาอนุญาต
-คำถามไหนไม่มีของในโปรเจกต์ ตัดทิ้ง ยกเว้น "ตั้งค่า" ที่ต้องบอกว่าไม่มีค่าตั้งภายนอก
+**Layer 1 · Broad outline (fixed).** The README must answer these questions for a newcomer, in the order they need them:
+What is this and who uses it → what must be on the machine → install and run → configure → common commands (test) → project structure → architecture → build → deploy → troubleshooting → contributing → contact → license
+Drop any question the project has nothing for. The exception is "configure", which must say there are no external settings.
 
-**ชั้น 2 · สำรวจก่อนเขียน (ทุกครั้ง)** — จดผลลง `_to_delete/readme-survey.md` แล้วใช้ตัดสินชั้น 3
-1. **อ่านโปรเจกต์:** ไฟล์ประกาศแพ็กเกจ (`package.json` · `*.csproj` · `pyproject.toml` · `pubspec.yaml` ฯลฯ) · ไฟล์ปักรุ่น · `Dockerfile` / `compose` · ไฟล์ CI (Continuous Integration) · `Makefile` / สคริปต์ · `.env.example` · โฟลเดอร์บนสุด → ได้ประเภทงาน stack คำสั่งที่มีอยู่จริง และส่วนประกอบของระบบ (`code-orientation` ถ้าโค้ดเยอะ)
-2. **ค้นเอกสารทางการของ stack นั้น** (`research-with-sources`): คำสั่งติดตั้ง รัน test build และไฟล์ที่ควร commit ของรุ่นที่โปรเจกต์ใช้ · ห้ามเอาคำสั่งจากความจำหรือจากตารางสำรองลง README โดยไม่ตรวจ
-3. **ดู README ของโปรเจกต์ดังประเภทเดียวกัน 2–3 ตัว** (ค้นด้วยประเภทงาน + stack) เพื่อดูว่าวงการนั้นคนอ่านคาดหวังหัวข้อไหนเพิ่ม เช่น library มีตัวอย่างโค้ดและตารางรุ่นที่รองรับ · CLI มีตัวเลือกคำสั่ง · infra มีสิ่งที่ต้องเตรียมในบัญชี cloud · แอปมือถือมี flavor และวิธีเซ็นแอป
-4. ค้นไม่ได้ (ไม่มีเน็ต) → ใช้ชั้น 3 ค่าสำรอง แล้วติด `(รอยืนยัน)` ที่คำสั่งที่ยังไม่ได้ตรวจ
+**Layer 2 · Survey before writing (every time).** Record the results in `_to_delete/readme-survey.md` and use them to decide layer 3.
+1. **Read the project:** package manifest files (`package.json` · `*.csproj` · `pyproject.toml` · `pubspec.yaml` and so on) · version-pin files · `Dockerfile` / `compose` · CI (Continuous Integration) files · `Makefile` / scripts · `.env.example` · top-level folders → this gives the project type, stack, the commands that really exist and the system's components (`code-orientation` if the code is large).
+2. **Search the official documentation for that stack** (`research-with-sources`): install, run, test and build commands, and which files to commit, for the version the project uses. Never put commands from memory or from the fallback table into the README without checking them.
+3. **Look at 2–3 READMEs of well-known projects of the same type** (search by project type + stack) to see which extra sections readers in that field expect. For example, a library has code samples and a table of supported versions · a CLI has command options · infra has what to prepare in the cloud account · a mobile app has flavors and how to sign the app.
+4. If search is impossible (no internet), use the layer 3 fallback tables and mark each unchecked command `(รอยืนยัน)` (awaiting confirmation).
 
-**ชั้น 3 · เลือกหัวข้อและคำสั่ง** — จัดหัวข้อจากชั้น 1 + หัวข้อเพิ่มที่ได้จากข้อ 3 · คำสั่งจากข้อ 1–2 · ตารางเต็ม (ตอบอะไร · ยาวแค่ไหน · ยาวเกินย้ายไปไหน) → [`references/readme-skeleton.md`](references/readme-skeleton.md) เป็นค่าสำรองและเกณฑ์ความยาว ไม่ใช่รายการที่ต้องมีครบ
+**Layer 3 · Choose sections and commands.** Arrange the sections from layer 1 plus the extra sections found in step 3. Take commands from steps 1–2. The full table (what each section answers · how long it should be · where to move it when too long) is in [`references/readme-skeleton.md`](references/readme-skeleton.md). It is a fallback and a length guide, not a list that must be complete.
 
-- **README มีแค่สิ่งที่คนใหม่ใช้ใน 30 นาทีแรก** — ยาวเกินย้ายไป `ARCHITECTURE.md` · `CONTRIBUTING.md` · `docs/runbook-deploy.md` แล้วลิงก์กลับ (ตาราง "แยกไปไฟล์อื่น" และแม่แบบ `ARCHITECTURE.md` ในไฟล์เดียวกัน)
-- **ตารางสำรองตามภาษา** (Node · .NET · Python · Java · Go · Flutter · Rust · Laravel) → [`references/readme-by-stack.md`](references/readme-by-stack.md) · ใช้เป็นจุดตั้งต้นของคำค้นในชั้น 2 ข้อ 2 · stack ที่ไม่อยู่ในตาราง ค้นจากเอกสารทางการตรง ๆ
-- แม่แบบที่คัดลอกไปใช้ (Node · Flutter / Android) → `assets/starter-files.md` · แอปที่ไม่มี DB หรือ Docker ก็ต้องบอกของบนเครื่องให้ครบ
+- **The README holds only what a newcomer uses in the first 30 minutes.** Move anything longer to `ARCHITECTURE.md` · `CONTRIBUTING.md` · `docs/runbook-deploy.md` and link back (see the "split into other files" table and the `ARCHITECTURE.md` template in the same file).
+- **Fallback tables by language** (Node · .NET · Python · Java · Go · Flutter · Rust · Laravel) → [`references/readme-by-stack.md`](references/readme-by-stack.md). Use them as the starting point for the layer 2 step 2 search. For a stack not in the tables, search the official documentation directly.
+- Copy-ready templates (Node · Flutter / Android) → `assets/starter-files.md`. An app with no DB or Docker must still list everything needed on the machine.
 
-> **ทุกคำสั่งต้องเคยรันจริงบนเครื่องเปล่า** เพราะ README ส่วนใหญ่ผิดตรงที่คนเขียน
-> มีของครบอยู่แล้วบนเครื่องตัวเอง จึงไม่เห็นว่ามีขั้นตอนที่หายไป
+> **Every command must have been run on a clean machine.** Most READMEs are wrong because the author
+> already has everything on their own machine and cannot see the missing steps.
 >
-> **1 คำสั่งติดตั้ง 1 คำสั่งรัน** — ถ้ามี 12 ขั้นตอน ให้เขียนเป็น `scripts/setup.sh`
+> **1 install command, 1 run command.** If there are 12 steps, write them as `scripts/setup.sh`.
 
 ---
 
 ## 3 · CHANGELOG
 
-รูปแบบ Keep a Changelog 1.1.0 · หัวข้อในแต่ละรุ่นเรียงแบบนี้ ตัดหัวข้อที่ไม่มีของ: **เปลี่ยนที่ทำให้ของเดิมพัง** (ของเราเพิ่ม อยู่บนสุดเสมอ) · เพิ่ม · เปลี่ยน · จะเลิกใช้ · เอาออก · แก้ · ความปลอดภัย · มี `[ยังไม่ปล่อย]` รอไว้บนสุดเสมอ · รุ่นใหม่อยู่บน วันที่แบบ `YYYY-MM-DD` — ตัวอย่างเต็ม [`references/changelog-examples.md`](references/changelog-examples.md)
+Use the Keep a Changelog 1.1.0 format. Order the headings in each version as follows and drop headings with no items: **เปลี่ยนที่ทำให้ของเดิมพัง** (breaking changes; our own addition, always on top) · เพิ่ม · เปลี่ยน · จะเลิกใช้ · เอาออก · แก้ · ความปลอดภัย. Keep `[ยังไม่ปล่อย]` (unreleased) at the top at all times. Put the newest version first. Write dates as `YYYY-MM-DD`. The full example is in [`references/changelog-examples.md`](references/changelog-examples.md).
 
-**ต้องมี CHANGELOG ไหม**
+**Is a CHANGELOG needed?**
 
-| สถานการณ์ | CHANGELOG |
+| Situation | CHANGELOG |
 |---|---|
-| ส่งงานให้ลูกค้า มีรอบ UAT หรือมีเลขเวอร์ชัน | ต้องมี — ลูกค้าและผู้ตรวจรับดูว่ารอบนี้ได้อะไร |
-| คนอื่นเรียกใช้ (API · library · แอปที่มีผู้ใช้) | ต้องมี — เขารู้ว่าต้องแก้อะไรฝั่งตัวเองไหม |
-| ต้นแบบ · สคริปต์ส่วนตัว · ทำคนเดียวและไม่มีรอบปล่อย | ไม่ต้อง — `git log` พอ · เขียนเหตุผลไว้ใน README |
+| Delivered to a customer, with a UAT (user acceptance testing) round or a version number | Required — the customer and the acceptance reviewer see what this round delivers |
+| Others call it (API · library · app with users) | Required — they learn whether they must change anything on their side |
+| Prototype · personal script · solo work with no release rounds | Not needed — `git log` is enough · write the reason in the README |
 
-**เขียนให้คนใช้งานอ่าน** — 1 ข้อ 1 บรรทัด บอกผลที่ผู้ใช้เห็น ไม่ใช่รายการ commit ชื่อไฟล์หรือเลข ticket · งานที่มองไม่เห็นไม่ใส่ เว้นแต่รู้สึกได้ · "เปลี่ยนที่ทำให้ของเดิมพัง" อยู่บนสุดเสมอ · กฎเต็มและตัวอย่าง ผิด → ถูก ใน [`references/changelog-examples.md`](references/changelog-examples.md)
-- เลขเวอร์ชันและกฎการขึ้นเลข ดู `cicd-and-release`
-
----
-
-## 4 · ตัวจัดรูปแบบและ linter — จบการเถียงเรื่องสไตล์
-
-- `.editorconfig` (เว้นวรรค · ตัวขึ้นบรรทัด · encoding) ทุกภาษา · แม่แบบพร้อม `.gitattributes` → `assets/starter-files.md`
-- ตัวจัดรูปแบบจัดสไตล์ตอนบันทึก (Prettier · dotnet format · black/ruff · `dart format`) · linter จับของที่ผิดจริงเท่านั้น (ESLint · analyzer ของ .NET · ruff · `flutter analyze`)
-- ตั้ง `end_of_line = lf` และ `.gitattributes` `* text=auto eol=lf` — ไม่งั้นทีมที่ใช้ Windows ปนระบบอื่นจะเจอ pull request ที่ diff ทั้งไฟล์
-- **ตัวจัดรูปแบบตัดสินใจแทนคน** จะเลือกค่าไหนก็ได้ แต่ต้องเป็นค่าเดียวกันทั้งทีม
-- ให้ CI ตรวจด้วย ไม่ใช่พึ่งว่าทุกคนตั้งเครื่องเหมือนกัน
-- เวลาเปิดใช้กับโปรเจกต์เก่า ให้จัดรูปแบบทั้ง repo ใน **commit เดียวที่ไม่มีอย่างอื่นปน**
-  แล้วใส่ commit นั้นใน `.git-blame-ignore-revs`
+**Write for the people who use the product.** 1 item per line, stating the result the user sees, not a commit list, file names or ticket numbers. Leave out invisible work unless it can be felt. "เปลี่ยนที่ทำให้ของเดิมพัง" is always on top. The full rules and the wrong → right examples are in [`references/changelog-examples.md`](references/changelog-examples.md).
+- For version numbers and bump rules, see `cicd-and-release`.
 
 ---
 
-## 5 · Dependency
+## 4 · Formatters and linters — end the style arguments
 
-- **commit lock file เสมอ** และติดตั้งบน CI ด้วยคำสั่งที่ยึด lock (`npm ci` · `flutter pub get --enforce-lockfile`) ไม่งั้น build แต่ละวันได้คนละชุด
-- ตรวจช่องโหว่ใน pipeline (`cicd-and-release`) · อัปเดตเป็นรอบ: patch เดือนละครั้ง minor ไตรมาสละครั้ง ไม่ใช่รอพัง
-- dependency ใหม่ต้องมีเหตุผลใน pull request (`lazy-coding`)
-
-**ก่อนเพิ่มไลบรารี ถาม 3 ข้อ** — มาตรฐานของภาษาทำได้ไหม โครงการยังมีชีวิตอยู่ไหม และ
-สัญญาอนุญาตใช้ได้กับงานที่ขายไหม (ดู `prior-art-review`)
+- `.editorconfig` (indentation · line endings · encoding) for every language · template with `.gitattributes` → `assets/starter-files.md`
+- The formatter fixes style on save (Prettier · dotnet format · black/ruff · `dart format`). The linter catches only real mistakes (ESLint · .NET analyzers · ruff · `flutter analyze`).
+- Set `end_of_line = lf` and `.gitattributes` `* text=auto eol=lf`. Otherwise a team mixing Windows with other systems gets pull requests that diff the whole file.
+- **The formatter decides for people.** Any setting is fine, but the whole team must use the same one.
+- Have CI check it too, instead of trusting that everyone set up their machine the same way.
+- When turning it on in an old project, format the whole repo in **one commit with nothing else in it**,
+  then add that commit to `.git-blame-ignore-revs`.
 
 ---
 
-## 6 · รายการตรวจเมื่อเปิดโปรเจกต์ใหม่
+## 5 · Dependencies
 
-ติ๊ก `[x]` เฉพาะข้อที่**รันหรือเปิดดูแล้วในรอบนี้** ข้อที่ยังไม่ได้สร้างหรือยังไม่ได้รัน ให้ใส่ `[ ]` พร้อมบอกว่าค้างอะไร ส่วนข้อที่ไม่เกี่ยวกับโปรเจกต์นี้ ให้ใส่ `N/A — <เหตุผล>`
+- **Always commit the lock file**, and install on CI with a command that follows the lock (`npm ci` · `flutter pub get --enforce-lockfile`). Otherwise each day's build gets a different set.
+- Check for vulnerabilities in the pipeline (`cicd-and-release`). Update on a schedule: patch monthly, minor quarterly, not only when something breaks.
+- A new dependency needs a reason in the pull request (`lazy-coding`).
 
-- [ ] `README.md` ตอบคำถามในชั้น 1 ที่โปรเจกต์มีของครบ · หัวข้อและคำสั่งมาจากผลสำรวจชั้น 2 (มี `_to_delete/readme-survey.md`) · คำสั่งเคยรันจริงบนเครื่องเปล่า
-- [ ] รากตรงผังใน `project-doc-set` ข้อ 1 (repo ชื่อโปรเจกต์ตัวเล็กคั่น `-` · ecosystem ใช้ `ecosystem/`) และไม่มีไฟล์ชั่วคราวหรือ `.docx` ที่ราก
-- [ ] `.env.example` มีค่าครบทุกตัวพร้อมคอมเมนต์ ถ้าโปรเจกต์ไม่อ่าน environment variable เลย (เช่นแอปมือถือออฟไลน์) ก็ไม่ต้องสร้าง แต่ให้เขียนใน README ว่า "ไม่มีค่าตั้งภายนอก"
-- [ ] `.editorconfig` · `.gitattributes` · ตัวจัดรูปแบบ · linter ตั้งแล้ว และ CI ตรวจ
-- [ ] `.gitignore` ครอบคลุม `.env` · โฟลเดอร์ build · `_to_delete/` · Android: `key.properties` · `*.jks` · `*.keystore`
-- [ ] `docs/README.md` เป็นสารบัญ พร้อมเจ้าของแต่ละเอกสาร
-- [ ] `CHANGELOG.md` มีหัวข้อ "ยังไม่ปล่อย" รออยู่
-- [ ] test อย่างน้อย 1 ตัวที่รันผ่าน เพื่อพิสูจน์ว่าโครงใช้ได้
-- [ ] `main` ถูกป้องกัน ต้องผ่าน pull request และ CI ส่วน repo ที่ยังไม่มี remote หรือทำคนเดียวข้ามข้อนี้ได้ แต่ต้องเขียนเหตุผลไว้ใน README และรัน test กับ linter ก่อน commit แทน
-- [ ] **ให้คนที่ไม่ได้ตั้งโปรเจกต์ลองทำตาม README แล้วจับเวลา**
+**Before adding a library, ask 3 questions:** can the language's standard library do it, is the project still alive, and
+does the license allow use in work that is sold (see `prior-art-review`)?
+
+---
+
+## 6 · Checklist when opening a new project
+
+Tick `[x]` only for items you **ran or opened in this round**. For an item not yet built or run, write `[ ]` and say what is pending. For an item that does not apply to this project, write `N/A — <reason>`.
+
+- [ ] `README.md` answers the layer 1 questions the project has content for · sections and commands come from the layer 2 survey results (`_to_delete/readme-survey.md` exists) · commands have been run on a clean machine
+- [ ] The root matches the layout in `project-doc-set` item 1 (repo named as the lowercase project name joined by `-` · an ecosystem uses `ecosystem/`) and has no temp files or `.docx` at the root
+- [ ] `.env.example` lists every value with comments. If the project reads no environment variables at all (for example an offline mobile app), do not create it, but write "ไม่มีค่าตั้งภายนอก" (no external settings) in the README
+- [ ] `.editorconfig` · `.gitattributes` · formatter · linter are set up, and CI checks them
+- [ ] `.gitignore` covers `.env` · build folders · `_to_delete/` · Android: `key.properties` · `*.jks` · `*.keystore`
+- [ ] `docs/README.md` is an index, with an owner for each document
+- [ ] `CHANGELOG.md` has an "ยังไม่ปล่อย" heading waiting
+- [ ] At least 1 test runs and passes, to prove the layout works
+- [ ] `main` is protected and needs a pull request and CI. A repo with no remote, or a solo repo, may skip this, but must write the reason in the README and run tests and the linter before each commit instead.
+- [ ] **Have someone who did not set up the project follow the README, and time them**
 
 ---
 
 ## 7 · Anti-patterns
 
-ผิด: README มีแต่ชื่อ · คำสั่งที่ไม่เคยรันบนเครื่องเปล่า · "ขอ `.env` จากพี่คนนั้น" (ไม่มี `.env.example`) · ไม่ commit lock file · ไม่มี `.editorconfig` · linter เถียงเรื่องสไตล์ · ไฟล์ทดลองที่ราก (`test.js` `backup_final.zip`) · เอกสารกระจายในแชตและ Drive ไม่มีสารบัญ · CHANGELOG ที่ก๊อปรายการ commit
+Wrong: a README with only a title · commands never run on a clean machine · "ask so-and-so for the `.env`" (no `.env.example`) · no committed lock file · no `.editorconfig` · a linter that argues about style · experiment files at the root (`test.js` `backup_final.zip`) · documents scattered across chats and Drive with no index · a CHANGELOG that copies the commit list
 
 
-## 8 · ตัวย่อ
+## 8 · Abbreviations
 
-**lock file** ไฟล์ตรึงเวอร์ชัน dependency · **linter** ตัวตรวจโค้ดหาของที่น่าจะผิด · **formatter** ตัวจัดรูปแบบอัตโนมัติ · **LF** Line Feed ตัวขึ้นบรรทัดแบบ Unix (Windows ใช้ CRLF) · **CI** Continuous Integration การตรวจอัตโนมัติทุกครั้งที่รวมโค้ด
+**lock file** a file that pins dependency versions · **linter** a checker that finds code likely to be wrong · **formatter** an automatic style fixer · **LF** Line Feed, the Unix line ending (Windows uses CRLF) · **CI** Continuous Integration, an automatic check on every code merge
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Links to other skills
 
-นอกจากตาราง "ไม่ใช้" ด้านบน: ของชั่วคราว → `temp-file-discipline` · commit ที่สร้าง CHANGELOG ได้ → `commit-message-format` · ก่อนเพิ่ม dependency → `lazy-coding` · `prior-art-review` · แม่แบบไฟล์ทั้งหมด → `assets/starter-files.md`
+Besides the "not for" table above: temp files → `temp-file-discipline` · commits that can build a CHANGELOG → `commit-message-format` · before adding a dependency → `lazy-coding` · `prior-art-review` · all file templates → `assets/starter-files.md`
 
 
 ## reference: changelog-examples.md
 
-# CHANGELOG — ตัวอย่าง
+# CHANGELOG — examples
 
-อ่านเมื่อเขียน CHANGELOG ครั้งแรกหรือรีวิว · กฎอยู่ใน `SKILL.md` ข้อ 3 · แม่แบบเปล่าอยู่ใน `assets/starter-files.md`
+Read this when writing a CHANGELOG for the first time or reviewing one. The rules are in `SKILL.md` item 3. The blank template is in `assets/starter-files.md`. The sample below is Thai because the CHANGELOG itself is written for Thai users.
 
 ```markdown
 # Changelog
@@ -487,131 +487,131 @@ README ของแต่ละงานไม่เหมือนกัน · 
 ## [1.1.1] — 2026-09-10 [ถอน]
 ```
 
-## หัวข้อและเลขรุ่น
+## Headings and version numbers
 
-| หัวข้อ (Keep a Changelog) | ใช้กับ | ขึ้นเลขรุ่นส่วนไหน (Semantic Versioning) |
+| Heading (Keep a Changelog) | Use for | Version part to bump (Semantic Versioning) |
 |---|---|---|
-| เปลี่ยนที่ทำให้ของเดิมพัง (ของเราเพิ่ม) | ผู้ใช้หรือระบบที่เรียกใช้ต้องแก้ฝั่งตัวเอง | MAJOR · ช่วง `0.y.z` ขึ้น MINOR ได้ |
-| เพิ่ม (Added) | ความสามารถใหม่ | MINOR |
-| เปลี่ยน (Changed) | ของเดิมทำงานต่างไปแต่ไม่พัง | MINOR |
-| จะเลิกใช้ (Deprecated) | ยังใช้ได้ แต่จะเอาออก · บอกรุ่นที่จะเอาออกและของที่ใช้แทน | MINOR |
-| เอาออก (Removed) | เอาออกแล้ว | MAJOR |
-| แก้ (Fixed) | บั๊ก | PATCH |
-| ความปลอดภัย (Security) | ช่องโหว่ที่ปิดแล้ว · ไม่บอกวิธีโจมตี | PATCH หรือตามขนาด |
+| เปลี่ยนที่ทำให้ของเดิมพัง (breaking changes; our own addition) | Users or calling systems must change something on their side | MAJOR · in the `0.y.z` range, MINOR is allowed |
+| เพิ่ม (Added) | New capability | MINOR |
+| เปลี่ยน (Changed) | Existing behavior works differently but does not break | MINOR |
+| จะเลิกใช้ (Deprecated) | Still works but will be removed · name the removal version and the replacement | MINOR |
+| เอาออก (Removed) | Already removed | MAJOR |
+| แก้ (Fixed) | Bugs | PATCH |
+| ความปลอดภัย (Security) | Vulnerabilities already closed · do not describe how to attack | PATCH, or by size |
 
-คอลัมน์ขึ้นเลขรุ่นเป็นข้อเสนอของ skill นี้ · Semantic Versioning บอกไว้แค่ MAJOR = ไม่เข้ากับของเดิม · MINOR = เพิ่มหรือประกาศเลิกใช้แบบเข้ากันได้ · PATCH = แก้บั๊กแบบเข้ากันได้
+The version-bump column is this skill's own proposal. Semantic Versioning says only this: MAJOR = incompatible with the old version · MINOR = backward-compatible additions or deprecation notices · PATCH = backward-compatible bug fixes.
 
-รุ่นที่ปล่อยไปแล้วต้องถอนเพราะบั๊กร้ายหรือช่องโหว่ → ต่อท้ายหัวรุ่นด้วย `[ถอน]` (Keep a Changelog ใช้ `[YANKED]`) ไม่ลบรุ่นนั้นทิ้ง · แหล่ง: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/) · [Semantic Versioning 2.0.0](https://semver.org/) · เปิดอ่าน 2026-11-07
+If a released version must be pulled because of a serious bug or vulnerability, append `[ถอน]` to the version heading (Keep a Changelog uses `[YANKED]`). Do not delete that version. Sources: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/) · [Semantic Versioning 2.0.0](https://semver.org/) · opened 2026-11-07
 
-เขียนเป็นผลที่ผู้ใช้เห็น ไม่ใช่รายการ commit:
+Write what the user sees, not a list of commits:
 
 | ✗ | ✓ |
 |---|---|
 | `- fix(items): change > to >= in withdraw() (#42)` | `- เบิกของเท่ากับจำนวนที่เหลือพอดีได้แล้ว` |
 | `- refactor lowStockReport to read movements once` | `- รายงานของใกล้หมดเปิดได้ในไม่ถึง 1 วินาที (เดิม 50 วินาที)` |
 
-## กฎการเขียน (ฉบับเต็ม)
+## Writing rules (full version)
 
-- เขียนให้**คนใช้งาน**อ่าน ไม่ใช่คัดลอกรายการ commit มาวาง
-- 1 ข้อ = 1 บรรทัด บอกว่าผู้ใช้ได้อะไรหรือเห็นอะไรเปลี่ยน ไม่ใช่ว่าแก้ไฟล์ไหน
-- ไม่ใส่ชื่อไฟล์ ชื่อฟังก์ชัน หรือเลข ticket ยกเว้นผู้อ่านเป็นนักพัฒนาที่เรียก API นั้น
-- ไม่ใส่งานที่ผู้ใช้มองไม่เห็น เช่น ปรับโครงโค้ด เพิ่ม test หรือแก้ CI · ยกเว้นทำให้เร็วขึ้นหรือเสถียรขึ้นจนรู้สึกได้ ให้เขียนเป็นผลที่ได้ ("รายงานของใกล้หมดเปิดได้ในไม่ถึง 1 วินาที")
-- ในแต่ละหัวข้อ เรียงข้อที่กระทบผู้ใช้มากที่สุดไว้บน · หัวข้อไหนไม่มีของให้ตัดหัวข้อนั้นทิ้ง
-- หัวข้อ "เปลี่ยนที่ทำให้ของเดิมพัง" ต้องอยู่**บนสุด**ของเวอร์ชันนั้นเสมอ · ทุกการเลิกใช้ เอาออก และเปลี่ยนที่ทำให้พัง ต้องลงทุกครั้ง แม้เป็นเรื่องเล็ก
+- Write for the **people who use the product**. Do not paste the commit list.
+- 1 item = 1 line. Say what the user gains or sees change, not which file changed.
+- Leave out file names, function names and ticket numbers, unless the reader is a developer who calls that API.
+- Leave out work the user cannot see, such as code restructuring, new tests or CI fixes. The exception is a speed or stability gain big enough to feel. Then write it as the result ("รายงานของใกล้หมดเปิดได้ในไม่ถึง 1 วินาที").
+- Within each heading, put the items that affect users most at the top. Drop any heading that has no items.
+- The heading "เปลี่ยนที่ทำให้ของเดิมพัง" must always sit at the **top** of that version. Every deprecation, removal and breaking change must be listed, even a small one.
 
 
 ## reference: code-folder.md
 
-# โครงในโฟลเดอร์โค้ด — ผังเต็ม
+# Code folder layout — full tree
 
-กฎอยู่ใน `SKILL.md` ข้อ 1 · ผังรากอยู่ใน `project-doc-set` ข้อ 1 · ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ที่นี่
+The rules are in `SKILL.md` item 1. The root tree is in `project-doc-set` item 1. ADRs (architecture decision records) and runbooks live in `docs/` at the root, not here.
 
 ```
-<project-name>/          ← ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่นด้วย `-`
-  README.md              ← ข้อ 2 · โครงกว้าง + สำรวจโปรเจกต์ก่อนเลือกหัวข้อ
-  CHANGELOG.md           ← สิ่งที่เปลี่ยนในแต่ละเวอร์ชัน
-  ARCHITECTURE.md        ← แผนที่โค้ด · มีเมื่อผังใน README เกิน 15 บรรทัดหรือระบบมีหลายส่วน (references/readme-skeleton.md)
-  CONTRIBUTING.md        ← มีเมื่อหัวข้อร่วมพัฒนาใน README ยาวเกิน 5 บรรทัด
-  LICENSE                ← repo เปิดสาธารณะหรือสัญญาจ้างระบุ
-  .env.example           ← ค่าที่ต้องมีทั้งหมด (ดู config-and-secrets) · มีเฉพาะเมื่อโปรเจกต์อ่าน environment variable จริง
-  .editorconfig          ← ข้อ 4
+<project-name>/          ← lowercase project name, words joined by `-`
+  README.md              ← item 2 · broad outline + survey the project before choosing sections
+  CHANGELOG.md           ← what changed in each version
+  ARCHITECTURE.md        ← code map · add it when the README tree passes 15 lines or the system has many parts (references/readme-skeleton.md)
+  CONTRIBUTING.md        ← add it when the contributing section in the README passes 5 lines
+  LICENSE                ← public repo, or the contract requires it
+  .env.example           ← every required value (see config-and-secrets) · only when the project really reads environment variables
+  .editorconfig          ← item 4
   .gitattributes
-  .gitignore             ← build output · ค่าลับ · `_to_delete/`
-  src/                   ← โค้ดจริง (หรือโครงตามธรรมเนียมของ stack ใน `SKILL.md` ข้อ 1)
-  tests/                 ← บังคับใน .NET · Flutter (`test/`) · Node และ Python ใช้เก็บเฉพาะ integration และ e2e (unit test อยู่ข้างไฟล์โค้ด) — ตาราง stack อยู่ใน `SKILL.md` ข้อ 1
-  scripts/               ← setup, seed, migrate — สคริปต์ที่คนต้องรัน
+  .gitignore             ← build output · secrets · `_to_delete/`
+  src/                   ← the real code (or the layout the stack expects, per `SKILL.md` item 1)
+  tests/                 ← required in .NET · Flutter (`test/`) · Node and Python keep only integration and e2e here (unit tests sit beside the code files) — the stack table is in `SKILL.md` item 1
+  scripts/               ← setup, seed, migrate — scripts a person has to run
 ```
 
 
 ## reference: readme-by-stack.md
 
-# README ตามภาษา — คำสั่ง ไฟล์ และหัวข้อที่ต้องเพิ่ม
+# README by language — commands, files and extra sections
 
-ใช้คู่กับ [`readme-skeleton.md`](readme-skeleton.md) · ตารางนี้เป็นค่าสำรองและจุดตั้งต้นของคำค้น (`SKILL.md` ข้อ 2 ชั้น 2) ไม่ใช่คำสั่งที่ใส่ได้ทันที · คำสั่งจริงเอาจากไฟล์ในโปรเจกต์และเอกสารทางการของรุ่นที่ใช้ **ทุกคำสั่งต้องรันจริงบนเครื่องเปล่าก่อนลง README** (`SKILL.md` ข้อ 2) · ช่องที่มี ※ คือยังไม่ได้เปิดหน้าทางการยืนยันในรอบที่เขียน (2026-11-07)
+Use this with [`readme-skeleton.md`](readme-skeleton.md). These tables are a fallback and a starting point for search terms (`SKILL.md` item 2, layer 2). They are not commands you can paste in as is. Take the real commands from the project's files and the official documentation for the version in use. **Run every command on a clean machine before it goes into the README** (`SKILL.md` item 2). A cell marked ※ means the official page was not opened to confirm it in the round it was written (2026-11-07).
 
-## 1 · รุ่น ไฟล์หลัก และค่าตั้งตาม environment
+## 1 · Versions, main files and per-environment settings
 
-ใส่ลงหัวข้อ 4 "ต้องมีบนเครื่อง" และหัวข้อ 6 "ตั้งค่า" ของ README
+Put these into README section 4 "Prerequisites" and section 6 "Configuration".
 
-| Stack | manifest + lock (commit ทั้งคู่) | ปักรุ่น runtime ที่ไฟล์ | ค่าตั้งตาม environment |
+| Stack | manifest + lock (commit both) | Pin the runtime version in a file | Per-environment settings |
 |---|---|---|---|
-| Node / TypeScript | `package.json` + `package-lock.json` หรือ `pnpm-lock.yaml` (lock แบบเดียว) | `.nvmrc` (`nvm use`) · `engines` ใน `package.json` เป็นแค่คำเตือนจนกว่าจะเปิด `engine-strict` | Vite: `.env` · `.env.[mode]` · `.env.local` · มีแค่ `VITE_*` ที่ถึง browser · Angular: `src/environments/` + `ng build --configuration <ชื่อ>` |
-| .NET / C# | `.sln` หรือ `.slnx` + `.csproj` · `packages.lock.json` ไม่บังคับ ※ | `global.json` → `sdk.version` (เลขเต็ม) + `rollForward` (ใช้ lock file ให้ตั้ง `disable`) | `appsettings.json` + `appsettings.{Env}.json` · เลือกด้วย `ASPNETCORE_ENVIRONMENT` (เว็บ) หรือ `DOTNET_ENVIRONMENT` · ไม่ตั้ง = Production · ค่าลับตอน dev: `dotnet user-secrets` · `launchSettings.json` ใช้แค่เครื่อง dev |
-| Python | `pyproject.toml` + `uv.lock` · ไม่ commit `.venv` | `.python-version` (`uv python pin`) + `requires-python` | ไม่มีมาตรฐานกลาง · `.env` + environment variable หรือ settings ของ framework ※ |
-| Java / Kotlin | `pom.xml` หรือ `build.gradle.kts` + `settings.gradle.kts` | Gradle wrapper (commit `gradlew` `gradlew.bat` `gradle/wrapper/*`) · Maven wrapper `mvnw` ※ · รุ่น Java Development Kit (JDK) | Spring Boot: `application.yml` + `application-{profile}.yml` · เปิดด้วย `SPRING_PROFILES_ACTIVE` หรือ `--spring.profiles.active=prod` |
-| Go | `go.mod` + `go.sum` | บรรทัด `go 1.xx` (ขั้นต่ำ) + `toolchain` | ไม่มีมาตรฐาน · environment variable ※ |
-| Flutter / Dart | `pubspec.yaml` + `pubspec.lock` (แอป commit lock · library ไม่ commit) | `environment:` ใน pubspec ※ · FVM ถ้าใช้ (ไม่ใช่ทางการ) | flavor: Android `productFlavors` ใน `android/app/build.gradle.kts` · iOS ใช้ scheme ※ · `--dart-define` ※ |
-| Rust | `Cargo.toml` + `Cargo.lock` | `rust-toolchain.toml` (`channel` + `components`) | ไม่มีมาตรฐาน · environment variable ※ |
-| PHP / Laravel | `composer.json` + `composer.lock` | `"php": "^8.x"` ใน `require` | `.env` (ไม่ commit) + `.env.example` · `APP_ENV` เลือก `.env.[APP_ENV]` · `APP_DEBUG=false` ใน production |
+| Node / TypeScript | `package.json` + `package-lock.json` or `pnpm-lock.yaml` (one lock type only) | `.nvmrc` (`nvm use`) · `engines` in `package.json` is only a warning until `engine-strict` is on | Vite: `.env` · `.env.[mode]` · `.env.local` · only `VITE_*` reaches the browser · Angular: `src/environments/` + `ng build --configuration <name>` |
+| .NET / C# | `.sln` or `.slnx` + `.csproj` · `packages.lock.json` optional ※ | `global.json` → `sdk.version` (full number) + `rollForward` (set `disable` when using a lock file) | `appsettings.json` + `appsettings.{Env}.json` · chosen by `ASPNETCORE_ENVIRONMENT` (web) or `DOTNET_ENVIRONMENT` · unset = Production · dev secrets: `dotnet user-secrets` · `launchSettings.json` is for dev machines only |
+| Python | `pyproject.toml` + `uv.lock` · do not commit `.venv` | `.python-version` (`uv python pin`) + `requires-python` | No central standard · `.env` + environment variables, or the framework's settings ※ |
+| Java / Kotlin | `pom.xml` or `build.gradle.kts` + `settings.gradle.kts` | Gradle wrapper (commit `gradlew` `gradlew.bat` `gradle/wrapper/*`) · Maven wrapper `mvnw` ※ · Java Development Kit (JDK) version | Spring Boot: `application.yml` + `application-{profile}.yml` · enable with `SPRING_PROFILES_ACTIVE` or `--spring.profiles.active=prod` |
+| Go | `go.mod` + `go.sum` | The `go 1.xx` line (minimum) + `toolchain` | No standard · environment variables ※ |
+| Flutter / Dart | `pubspec.yaml` + `pubspec.lock` (apps commit the lock · libraries do not) | `environment:` in pubspec ※ · FVM if used (not official) | Flavors: Android `productFlavors` in `android/app/build.gradle.kts` · iOS uses schemes ※ · `--dart-define` ※ |
+| Rust | `Cargo.toml` + `Cargo.lock` | `rust-toolchain.toml` (`channel` + `components`) | No standard · environment variables ※ |
+| PHP / Laravel | `composer.json` + `composer.lock` | `"php": "^8.x"` in `require` | `.env` (not committed) + `.env.example` · `APP_ENV` selects `.env.[APP_ENV]` · `APP_DEBUG=false` in production |
 
-## 2 · คำสั่ง
+## 2 · Commands
 
-ใส่ลงหัวข้อ 5 "เริ่มใช้งาน" · 7 "คำสั่งที่ใช้บ่อย" · 10 "build และไฟล์ที่ได้"
+Put these into README section 5 "Getting started", 7 "Common commands" and 10 "Build and output files".
 
-| Stack | ติดตั้ง | รัน | test | lint · format | build / แพ็ก → ไฟล์ที่ได้ |
+| Stack | Install | Run | test | lint · format | build / package → output files |
 |---|---|---|---|---|---|
-| Node / TypeScript | `npm ci` (ยึด lock) · `pnpm install --frozen-lockfile` | `npm run dev` ※ | `npm test` ※ | `npm run lint` ※ · Prettier ※ | `npm run build` ※ → `dist/` |
-| .NET / C# | `dotnet restore` | `dotnet run` · `dotnet run -lp https` | `dotnet test` ※ | `dotnet format` ※ | `dotnet publish` (net8.0 ขึ้นไปเป็น Release เอง) → `bin/Release/<tfm>/publish/` · `-r <RID> --self-contained` (Runtime Identifier (RID) เช่น `linux-x64`) |
-| Python | `uv sync` | `uv run <คำสั่ง>` | `uv run pytest` ※ | `ruff check` · `ruff format` | `uv build` ※ → wheel · sdist |
-| Java / Kotlin | ดึงตอน build | `./mvnw spring-boot:run` · `./gradlew bootRun` ※ | `./mvnw test` · `./gradlew test` ※ | Spotless · Checkstyle · ktlint (ไม่มีตัวกลาง) ※ | `./mvnw package` · `./gradlew build` ※ → jar รันด้วย `java -jar` |
-| Go | `go mod download` ※ | `go run ./cmd/<ชื่อ>` ※ | `go test ./...` ※ | `gofmt` · `go vet` ※ | `go build ./...` ※ → binary ไฟล์เดียว |
-| Flutter / Dart | `flutter pub get` ※ | `flutter run --flavor <ชื่อ>` | `flutter test` ※ | `flutter analyze` · `dart format .` ※ | `flutter build appbundle` → `build/app/outputs/bundle/release/app.aab` · `flutter build ipa` ※ |
+| Node / TypeScript | `npm ci` (follows the lock) · `pnpm install --frozen-lockfile` | `npm run dev` ※ | `npm test` ※ | `npm run lint` ※ · Prettier ※ | `npm run build` ※ → `dist/` |
+| .NET / C# | `dotnet restore` | `dotnet run` · `dotnet run -lp https` | `dotnet test` ※ | `dotnet format` ※ | `dotnet publish` (net8.0 and later default to Release) → `bin/Release/<tfm>/publish/` · `-r <RID> --self-contained` (Runtime Identifier (RID), for example `linux-x64`) |
+| Python | `uv sync` | `uv run <command>` | `uv run pytest` ※ | `ruff check` · `ruff format` | `uv build` ※ → wheel · sdist |
+| Java / Kotlin | Fetched at build time | `./mvnw spring-boot:run` · `./gradlew bootRun` ※ | `./mvnw test` · `./gradlew test` ※ | Spotless · Checkstyle · ktlint (no single standard) ※ | `./mvnw package` · `./gradlew build` ※ → a jar, run with `java -jar` |
+| Go | `go mod download` ※ | `go run ./cmd/<name>` ※ | `go test ./...` ※ | `gofmt` · `go vet` ※ | `go build ./...` ※ → one binary file |
+| Flutter / Dart | `flutter pub get` ※ | `flutter run --flavor <name>` | `flutter test` ※ | `flutter analyze` · `dart format .` ※ | `flutter build appbundle` → `build/app/outputs/bundle/release/app.aab` · `flutter build ipa` ※ |
 | Rust | `cargo fetch` ※ | `cargo run` ※ | `cargo test` ※ | `cargo clippy` · `cargo fmt` ※ | `cargo build --release` ※ → `target/release/` |
-| PHP / Laravel | `composer install` · `npm ci && npm run build` (asset) ※ | `php artisan serve` ※ | `php artisan test` | Laravel Pint ※ | deploy: `php artisan config:cache` (ห้ามรันตอน dev) · `php artisan storage:link` |
+| PHP / Laravel | `composer install` · `npm ci && npm run build` (assets) ※ | `php artisan serve` ※ | `php artisan test` | Laravel Pint ※ | deploy: `php artisan config:cache` (never run in dev) · `php artisan storage:link` |
 
-## 3 · หัวข้อที่ต้องเพิ่มใน README ตามภาษา
+## 3 · Extra README sections by language
 
-| Stack | เพิ่มอะไร |
+| Stack | What to add |
 |---|---|
-| Node / TypeScript | รุ่น Node จาก `.nvmrc` + บอกให้สั่ง `nvm use` · ใช้ npm หรือ pnpm (ห้ามมี lock 2 แบบ) · ตาราง `scripts` · ตัวแปร `VITE_*` ทุกตัวพร้อมเตือนว่าค่าถึง browser · Angular: รายชื่อ configuration |
-| .NET / C# | รุ่น Software Development Kit (SDK) ตาม `global.json` · project ไหนเป็นตัวเริ่ม · ตั้ง `ASPNETCORE_ENVIRONMENT` ที่ไหนบ้าง · ชื่อคีย์ที่ต้องใส่ผ่าน `user-secrets` (ไม่ใส่ค่า) · คำสั่ง `dotnet publish` ที่ใช้จริง · คำสั่ง migration ของ EF Core |
-| Python | รุ่นจาก `.python-version` · ใช้ uv หรือ venv + pip (ทางเดียว) · เป็น src layout ต้องติดตั้งก่อน test · ตั้งค่า ruff อยู่ไหน · ไฟล์ `.env` ที่ต้องมี |
-| Java / Kotlin | รุ่น JDK · ใช้ `./mvnw` หรือ `./gradlew` เสมอ ไม่ใช่ตัวที่ลงในเครื่อง · ตาราง profile และวิธีเปิด · ชื่อและที่อยู่ jar ที่ได้ |
-| Go | รุ่นจากบรรทัด `go` และ `toolchain` · binary ใน `cmd/` แต่ละตัวทำอะไร · environment variable ที่อ่าน |
-| Flutter / Dart | รุ่น Flutter และ Dart · ตาราง flavor (ชื่อ · applicationId · ไฟล์เริ่ม) · signing: `key.properties` และ keystore อยู่ไหน ขอจากใคร (ห้าม commit) · iOS: team และ provisioning · คำสั่ง build ต่อ flavor และที่อยู่ไฟล์ที่ได้ |
-| Rust | toolchain จาก `rust-toolchain.toml` · feature flag ที่มี · binary ใน `src/bin/` · รุ่น Rust ต่ำสุดที่รองรับ (Minimum Supported Rust Version (MSRV)) ถ้าเป็น library |
-| PHP / Laravel | รุ่น PHP และ extension ที่ต้องมี · `cp .env.example .env` → `php artisan key:generate` ※ → migrate · build asset · ขั้น deploy (`config:cache` · `storage:link` · queue worker) |
+| Node / TypeScript | The Node version from `.nvmrc` + tell readers to run `nvm use` · npm or pnpm (never 2 lock types) · a `scripts` table · every `VITE_*` variable, with a warning that the value reaches the browser · Angular: the list of configurations |
+| .NET / C# | The Software Development Kit (SDK) version from `global.json` · which project is the startup project · where `ASPNETCORE_ENVIRONMENT` is set · the key names to set through `user-secrets` (no values) · the `dotnet publish` command actually used · the EF Core migration commands |
+| Python | The version from `.python-version` · uv, or venv + pip (one way only) · with a src layout, install before testing · where the ruff settings live · the `.env` file that must exist |
+| Java / Kotlin | The JDK version · always use `./mvnw` or `./gradlew`, never the locally installed tool · a profile table and how to enable each · the name and location of the jar produced |
+| Go | The version from the `go` and `toolchain` lines · what each binary in `cmd/` does · the environment variables read |
+| Flutter / Dart | The Flutter and Dart versions · a flavor table (name · applicationId · entry file) · signing: where `key.properties` and the keystore are, and whom to ask (never commit them) · iOS: team and provisioning · the build command per flavor and where the output lands |
+| Rust | The toolchain from `rust-toolchain.toml` · the feature flags available · the binaries in `src/bin/` · the Minimum Supported Rust Version (MSRV) if it is a library |
+| PHP / Laravel | The PHP version and required extensions · `cp .env.example .env` → `php artisan key:generate` ※ → migrate · build assets · deploy steps (`config:cache` · `storage:link` · queue worker) |
 
-## 4 · โครงโฟลเดอร์ตามแหล่งทางการ
+## 4 · Folder layout from official sources
 
-ใช้ประกอบหัวข้อ 8 "โครงโปรเจกต์" · กฎของ repo นี้ (ชื่อโฟลเดอร์โค้ด · ที่อยู่ test) อยู่ใน `SKILL.md` ข้อ 1 และชนะเมื่อขัดกัน
+Use this for README section 8 "Project structure". This repo's rules (code folder name · test location) are in `SKILL.md` item 1 and win when they conflict.
 
-| Stack | โครงที่เครื่องมือคาดไว้ | แหล่ง |
+| Stack | Layout the tools expect | Source |
 |---|---|---|
-| Node / TypeScript | npm ไม่กำหนด · ใช้ตามตัวสร้างของ framework (`src/` · `public/` · `vite.config.ts` หรือ `angular.json`) ※ | — |
-| .NET / C# | ไม่มีหน้าทางการ · ที่พบบ่อย `src/<App>/` + `tests/<App>.Tests/` + `global.json` + `.slnx` ※ | — |
-| Python | src layout: `src/<package>/` · `pyproject.toml` ที่ราก | [PyPA src vs flat](https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/) |
-| Java / Kotlin | `src/main/java` (หรือ `kotlin`) · `src/main/resources` · `src/test/java` | [Maven Standard Directory Layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html) |
-| Go | `cmd/<binary>/main.go` · `internal/` · แพ็กเกจเล็กวางไฟล์ที่รากได้ · `golang-standards/project-layout` และ `pkg/` เป็นของชุมชน ไม่ใช่ของทีม Go | [Organizing a Go module](https://go.dev/doc/modules/layout) |
-| Flutter / Dart | `lib/` (`lib/src/` ส่วนภายใน) · `test/` · `android/` · `ios/` ※ | [Dart package layout](https://dart.dev/tools/pub/package-layout) |
+| Node / TypeScript | npm sets none · follow the framework generator (`src/` · `public/` · `vite.config.ts` or `angular.json`) ※ | — |
+| .NET / C# | No official page · most common is `src/<App>/` + `tests/<App>.Tests/` + `global.json` + `.slnx` ※ | — |
+| Python | src layout: `src/<package>/` · `pyproject.toml` at the root | [PyPA src vs flat](https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/) |
+| Java / Kotlin | `src/main/java` (or `kotlin`) · `src/main/resources` · `src/test/java` | [Maven Standard Directory Layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html) |
+| Go | `cmd/<binary>/main.go` · `internal/` · a small package can keep its files at the root · `golang-standards/project-layout` and `pkg/` come from the community, not the Go team | [Organizing a Go module](https://go.dev/doc/modules/layout) |
+| Flutter / Dart | `lib/` (`lib/src/` for internals) · `test/` · `android/` · `ios/` ※ | [Dart package layout](https://dart.dev/tools/pub/package-layout) |
 | Rust | `src/main.rs` · `src/lib.rs` · `src/bin/` · `tests/` · `examples/` · `benches/` | [Cargo project layout](https://doc.rust-lang.org/cargo/guide/project-layout.html) |
 | PHP / Laravel | `app/` · `config/` · `database/` · `public/` · `resources/` · `routes/` · `storage/` · `tests/` | [Laravel 13.x structure](https://laravel.com/docs/13.x/structure) |
 
-## 5 · แหล่ง (เปิดอ่าน 2026-11-07)
+## 5 · Sources (opened 2026-11-07)
 
 [npm ci](https://docs.npmjs.com/cli/v10/commands/npm-ci) · [package.json engines](https://docs.npmjs.com/cli/v10/configuring-npm/package-json) · [pnpm install](https://pnpm.io/cli/install) · [nvm .nvmrc](https://github.com/nvm-sh/nvm/blob/master/README.md) · [Vite env and mode](https://vite.dev/guide/env-and-mode) · [Angular environments](https://angular.dev/tools/cli/environments) · [global.json](https://learn.microsoft.com/en-us/dotnet/core/tools/global-json) · [ASP.NET Core environments](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/environments) · [user-secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) · [dotnet publish](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-publish) · [Writing pyproject.toml](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/) · [uv project layout](https://docs.astral.sh/uv/concepts/projects/layout/) · [uv Python versions](https://docs.astral.sh/uv/concepts/python-versions/) · [Ruff configuration](https://docs.astral.sh/ruff/configuration/) · [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) · [Spring Boot profiles](https://docs.spring.io/spring-boot/reference/features/profiles.html) · [Spring Boot Maven run](https://docs.spring.io/spring-boot/maven-plugin/run.html) · [Go toolchains](https://go.dev/doc/toolchain) · [Flutter flavors](https://docs.flutter.dev/deployment/flavors) · [Flutter Android release](https://docs.flutter.dev/deployment/android) · [Cargo FAQ](https://doc.rust-lang.org/cargo/faq.html) · [rust-toolchain.toml](https://rust-lang.github.io/rustup/overrides.html) · [Composer basic usage](https://getcomposer.org/doc/01-basic-usage.md) · [Laravel configuration](https://laravel.com/docs/12.x/configuration)
 
-รุ่นของเครื่องมือเปลี่ยนเร็ว (Laravel 13.x ออกแล้ว ณ วันที่ตรวจ) · ก่อนใช้ตารางนี้กับโปรเจกต์จริง เปิดหน้าทางการของรุ่นที่ใช้
+Tool versions change fast (Laravel 13.x was already out on the date checked). Before using these tables on a real project, open the official page for the version in use.
 
 
 ## reference: readme-skeleton.md

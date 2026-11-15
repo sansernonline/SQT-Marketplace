@@ -654,22 +654,22 @@ The column template and the values used in each field live in one place, the [qu
 
 ## reference: playbook-business-doc.md
 
-# playbook · business-doc — เอกสารธุรกิจภาษาไทย
+# playbook · business-doc — Thai business documents
 
-ใช้เมื่อ: ใบเสนอราคา ใบแจ้งหนี้ ใบเสร็จ ใบกำกับภาษี · หนังสือราชการ · สัญญา · ใบลา
-skill หลัก: `doc-quotation` · `e-tax-invoice` · `doc-thai-official` · `doc-contract-th` · `doc-leave` · agent `thai-doc-writer`
+Use when: a quotation · invoice · receipt · tax invoice · official letter · contract · leave request
+Main skills: `doc-quotation` · `e-tax-invoice` · `doc-thai-official` · `doc-contract-th` · `doc-leave` · agent `thai-doc-writer`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เลือกชนิดเอกสารให้ถูกกับเหตุการณ์ตาม `doc-quotation` (เสนอราคา · วางบิล · รับเงิน · ใบกำกับภาษี) · ใคร: หัวหน้าทีม
-2. เก็บข้อมูลคู่สัญญาและรายการจากของจริง · เลขผู้เสียภาษีและที่อยู่ใส่ตามที่ผู้ใช้ให้ · ใคร: หัวหน้าทีม
-3. ร่างตามรูปแบบของ skill — ใบกำกับภาษีมีช่องครบตามกฎหมาย · หนังสือราชการตามระเบียบงานสารบรรณ · สัญญาตามเช็กลิสต์ข้อสัญญา · ใคร: `thai-doc-writer` ตัวใหม่
-4. คำนวณ VAT ภาษีหัก ณ ที่จ่าย และยอดรวมเป็นตัวหนังสือไทยด้วยสูตร · ใคร: `thai-doc-writer` ตัวใหม่
-5. ตรวจ — ช่องบังคับครบ · ตัวเลขและตัวหนังสือตรงกัน · ข้อสัญญาที่ต้องให้ทนายดูติดธงแล้ว · ใคร: `reviewer` ตัวใหม่
+1. Pick the document type that fits the event, per `doc-quotation` (quote · billing · payment received · tax invoice) · ใคร: หัวหน้าทีม
+2. Collect the parties' details and line items from real sources · put the tax ID and address exactly as the user gave them · ใคร: หัวหน้าทีม
+3. Draft in the skill's format — a tax invoice has every field the law requires · an official letter follows the correspondence regulations · a contract follows the contract-clause checklist · ใคร: `thai-doc-writer` ตัวใหม่
+4. Calculate VAT, withholding tax, and the total in Thai words using the formulas · ใคร: `thai-doc-writer` ตัวใหม่
+5. Check (ตรวจ) — mandatory fields are complete · figures and words match · contract clauses that need a lawyer are flagged · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-เอกสารพร้อมส่ง ช่องบังคับครบ ยอดตรง และจุดที่ต้องให้ผู้เชี่ยวชาญดูติดธงแล้ว
+The document is ready to send, the mandatory fields are complete, the totals match, and every point that needs an expert is flagged.
 
 
 ## reference: playbook-buy-decision.md
@@ -716,22 +716,22 @@ The timeline, the evidence list and the drafts for every rung are ready to send.
 
 ## reference: playbook-customer-issue.md
 
-# playbook · customer-issue — เรื่องลูกค้า คืนสินค้า และรีวิวแย่
+# playbook · customer-issue — customer cases, returns, and bad reviews
 
-ใช้เมื่อ: ลูกค้าถามหรือบ่น · ของส่งช้า ผิด หรือเสีย · ขอคืนเงิน · ได้รีวิว 1–3 ดาว
-skill หลัก: `chat-reply-templates` · `returns-and-bad-reviews` · agent `customer-chat`
+Use when: a customer asks or complains · an item is late, wrong, or broken · a refund request · a 1–3 star review
+Main skills: `chat-reply-templates` · `returns-and-bad-reviews` · agent `customer-chat`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. อ่านแชตหรือรีวิวและข้อมูลคำสั่งซื้อจริง — สถานะพัสดุ วันที่ นโยบายร้าน · ใคร: หัวหน้าทีม
-2. แยกประเภทกรณี แล้วเลือกทางตาม `returns-and-bad-reviews`: ตอบ · เปลี่ยน · คืนเงิน · โต้แย้งกับแพลตฟอร์ม · ใคร: `customer-chat` ตัวใหม่
-3. ร่างคำตอบภาษาไทยสุภาพในน้ำเสียงของร้าน และอยู่ในนโยบายแพลตฟอร์ม · ใคร: `customer-chat` ตัวใหม่
-4. ถ้าเป็นรีวิวสาธารณะ ให้ร่างคำตอบที่ไม่เถียง และไม่เปิดเผยข้อมูลลูกค้า · ใคร: `customer-chat` ตัวใหม่
-5. ตรวจว่าไม่มีสัญญาที่ร้านทำไม่ได้ และข้อเท็จจริงตรงกับคำสั่งซื้อ · ใคร: `reviewer` ตัวใหม่
+1. Read the chat or review and the real order data — parcel status, dates, shop policy · ใคร: หัวหน้าทีม
+2. Classify the case, then choose the route per `returns-and-bad-reviews`: reply · exchange · refund · dispute with the platform · ใคร: `customer-chat` ตัวใหม่
+3. Draft a polite Thai reply in the shop's tone of voice, within platform policy · ใคร: `customer-chat` ตัวใหม่
+4. For a public review, draft a reply that does not argue and does not reveal customer data · ใคร: `customer-chat` ตัวใหม่
+5. Check (ตรวจ) that the reply promises nothing the shop cannot do and that the facts match the order · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-ร่างคำตอบและทางที่เลือกพร้อมส่ง โดยการส่งและคืนเงินอยู่ใน "รออนุมัติ"
+The draft reply and the chosen route are ready to send, with sending and refunds listed under "รออนุมัติ" (awaiting approval).
 
 
 ## reference: playbook-learn-from-session.md
@@ -793,21 +793,21 @@ The test message really passed, no secret is in code or chat, and the quota has 
 
 ## reference: playbook-live-session.md
 
-# playbook · live-session — เตรียมไลฟ์ขายของ
+# playbook · live-session — prepare a live sales stream
 
-ใช้เมื่อ: จะไลฟ์บน TikTok Shop · Shopee Live · Lazada Live · Facebook Live
-skill หลัก: `live-selling-script` · `product-listing` · agent `live-seller`
+Use when: going live on TikTok Shop · Shopee Live · Lazada Live · Facebook Live
+Main skills: `live-selling-script` · `product-listing` · agent `live-seller`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เลือกสินค้าและดีลของไลฟ์ ตรวจสต็อกและราคาว่ายังมีกำไร · ใคร: `shop-manager` ตัวใหม่
-2. ทำ run sheet รายนาทีตาม `live-selling-script` — hook เปิด · ลำดับสินค้า · จังหวะ flash deal · ประโยคปิดการขาย · ใคร: `live-seller` ตัวใหม่
-3. ทำเช็กลิสต์หลังบ้าน — คนตอบแชต สต็อกที่ล็อกไว้ ลิงก์สินค้า · ใคร: `live-seller` ตัวใหม่
-4. ตรวจคำพูดทุกบรรทัดกับรายการคำโฆษณาต้องห้าม และเช็กลิสต์กับสต็อกจริง · ใคร: `reviewer` ตัวใหม่
+1. Choose the products and deals for the live, and check that stock and prices still leave a profit · ใคร: `shop-manager` ตัวใหม่
+2. Make a minute-by-minute run sheet per `live-selling-script` — opening hook · product order · flash deal timing · closing lines · ใคร: `live-seller` ตัวใหม่
+3. Make the back-office checklist — who answers chat, which stock is locked, product links · ใคร: `live-seller` ตัวใหม่
+4. Check (ตรวจ) every spoken line against the list of banned advertising words, and check the checklist against real stock · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-run sheet และเช็กลิสต์พร้อมใช้ ผ่านการตรวจคำต้องห้ามทุกบรรทัด
+The run sheet and checklist are ready to use, and every line has passed the banned-word check.
 
 
 ## reference: playbook-monthly-close.md
@@ -833,43 +833,43 @@ A payroll table that has been recalculated, and the filing set for every form of
 
 ## reference: playbook-new-product.md
 
-# playbook · new-product — ลงสินค้าใหม่ครบชุด
+# playbook · new-product — list a new product with the full set
 
-ใช้เมื่อ: มีสินค้าใหม่จะลงขาย 1 หรือหลายแพลตฟอร์ม
-skill หลัก: `product-listing` · `marketplace-fees-pricing` · `multi-shop-stock` · `shipping-compare`
+Use when: a new product will be listed on 1 or more platforms
+Main skills: `product-listing` · `marketplace-fees-pricing` · `multi-shop-stock` · `shipping-compare`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เก็บข้อมูล — สินค้า ต้นทุนต่อชิ้น แพลตฟอร์ม ประเภทร้าน หมวด น้ำหนักและขนาดพัสดุ ข้อไหนไม่มีให้ใส่ `(รอยืนยัน)` · ใคร: หัวหน้าทีม
-2. คิดค่าส่งจริงจากขนาดพัสดุตาม `shipping-compare` (รวมน้ำหนักตามปริมาตร) · ใคร: `shop-manager` ตัวใหม่
-3. ตั้งราคาต่อแพลตฟอร์มด้วยสูตรของ `marketplace-fees-pricing` เป็นตาราง แล้วบอกให้ตรวจอัตรากับ Seller Centre · ใคร: `shop-manager` ตัวใหม่
-4. เขียนชื่อสินค้า คำค้น คำบรรยาย และเช็กลิสต์รูป ต่อแพลตฟอร์มตาม `product-listing` · ใคร: `shop-manager` ตัวใหม่
-5. ตั้ง SKU และใส่ในไฟล์สต็อกหลักตาม `multi-shop-stock` พร้อมจุดสั่งซื้อซ้ำ · ใคร: `shop-manager` ตัวใหม่
-6. ตรวจคำโฆษณาต้องห้าม SKU และขนาดรูปตามแพลตฟอร์ม (`social-formats` ใน graphic-design ถ้าติดตั้ง) · ใคร: `reviewer` ตัวใหม่
+1. Collect the data — product, cost per unit, platforms, shop type, category, parcel weight and size. Mark any missing item `(รอยืนยัน)` (awaiting confirmation) · ใคร: หัวหน้าทีม
+2. Work out the real shipping cost from the parcel size per `shipping-compare` (including volumetric weight) · ใคร: `shop-manager` ตัวใหม่
+3. Set the price per platform with the formula in `marketplace-fees-pricing`, as a table, and tell the user to check the rates against Seller Centre · ใคร: `shop-manager` ตัวใหม่
+4. Write the product name, search keywords, description, and image checklist per platform, following `product-listing` · ใคร: `shop-manager` ตัวใหม่
+5. Set the SKU and enter it in the master stock file per `multi-shop-stock`, with a reorder point · ใคร: `shop-manager` ตัวใหม่
+6. Check (ตรวจ) banned advertising words, the SKU, and image sizes for each platform (`social-formats` in graphic-design, ถ้าติดตั้ง) · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-ตารางราคาที่คำนวณซ้ำแล้ว · listing ทุกแพลตฟอร์มผ่านการตรวจคำต้องห้าม · SKU อยู่ในไฟล์สต็อก · การลงขายจริงอยู่ใน "รออนุมัติ"
+The price table has been recalculated · every platform's listing has passed the banned-word check · the SKU is in the stock file · the actual listing is under "รออนุมัติ" (awaiting approval).
 
 
 ## reference: playbook-pdpa-setup.md
 
-# playbook · pdpa-setup — ตั้งระบบ PDPA ของ SME
+# playbook · pdpa-setup — set up PDPA (Personal Data Protection Act) for an SME
 
-ใช้เมื่อ: เริ่มทำ PDPA · ทำแบบขอความยินยอม · มีคำขอจากเจ้าของข้อมูล · ข้อมูลรั่ว
-skill หลัก: `pdpa-workflow` · agent `compliance-helper`
+Use when: starting PDPA work · making a consent form · a data subject has made a request · data has leaked
+Main skills: `pdpa-workflow` · agent `compliance-helper`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ถ้ามีข้อมูลรั่วอยู่ตอนนี้ ให้ทำขั้นตอนรับมือเหตุละเมิดใน `pdpa-workflow` ก่อนอย่างอื่น และเริ่มนับเวลาที่ต้องแจ้งหน่วยงาน · ใคร: หัวหน้าทีม (คุยกับผู้ใช้ทันที)
-2. ทำรายการข้อมูลส่วนบุคคลที่บริษัทเก็บ — เก็บอะไร ของใคร เพื่ออะไร ฐานทางกฎหมาย เก็บนานเท่าไร · ใคร: `compliance-helper` ตัวใหม่
-3. ร่างแบบขอความยินยอม ประกาศความเป็นส่วนตัว และบันทึกรายการกิจกรรมประมวลผล · ใคร: `compliance-helper` ตัวใหม่
-4. วางขั้นตอนรับคำขอจากเจ้าของข้อมูลพร้อมกรอบเวลา · ใคร: `compliance-helper` ตัวใหม่
-5. ตรวจ — ทุกกิจกรรมต้องมีฐานทางกฎหมาย และจุดที่ต้องให้ทนายดูติดธงแล้ว · ใคร: `reviewer` ตัวใหม่
+1. If data is leaking right now, run the breach-response steps in `pdpa-workflow` before anything else, and start the clock for notifying the authority · ใคร: หัวหน้าทีม (talk to the user at once)
+2. List the personal data the company keeps — what, whose, why, the legal basis, and how long · ใคร: `compliance-helper` ตัวใหม่
+3. Draft the consent form, the privacy notice, and the record of processing activities · ใคร: `compliance-helper` ตัวใหม่
+4. Set out the steps for handling data subject requests, with deadlines · ใคร: `compliance-helper` ตัวใหม่
+5. Check (ตรวจ) — every activity has a legal basis, and every point that needs a lawyer is flagged · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-ชุดเอกสาร PDPA พร้อมใช้ และขั้นตอนรับคำขอและเหตุละเมิดที่มีกรอบเวลาชัด
+The PDPA document set is ready to use, and the steps for requests and breaches have clear deadlines.
 
 
 ## reference: playbook-pricing-check.md
@@ -940,22 +940,22 @@ Every item in the report points to a spot in the work and has passed confirmatio
 
 ## reference: playbook-stock-sync.md
 
-# playbook · stock-sync — สต็อกหลายร้านให้ตรงกัน
+# playbook · stock-sync — keep stock the same across several shops
 
-ใช้เมื่อ: ขายของชุดเดียวกันหลายแพลตฟอร์มแล้วขายเกิน · นับของไม่ตรง
-skill หลัก: `multi-shop-stock`
+Use when: the same goods sell on several platforms and oversell · counts do not match
+Main skills: `multi-shop-stock`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. รวมยอดสต็อกจากทุกร้านและของจริงในคลังลงไฟล์หลักเดียว · ใคร: `shop-manager` ตัวใหม่
-2. ตั้งชื่อ SKU ให้เป็นแบบเดียวกันทุกร้าน · ใคร: `shop-manager` ตัวใหม่
-3. ตั้งกฎซิงก์สต็อก บัฟเฟอร์ (ของที่กันไว้ไม่ขาย) ต่อร้าน และจุดสั่งซื้อซ้ำ ตาม `multi-shop-stock` · ใคร: `shop-manager` ตัวใหม่
-4. ทำรายการปรับยอดต่อร้าน (ร้านไหน SKU ไหน จากเท่าไรเป็นเท่าไร) ส่วนการแก้ในร้านจริงให้อยู่ใน "รออนุมัติ" · ใคร: `shop-manager` ตัวใหม่ · ผู้ใช้อนุมัติการแก้ในร้านจริง
-5. ตรวจว่ายอดที่โชว์แต่ละร้านไม่เกิน available − บัฟเฟอร์ (ของจริงในคลัง − ของที่จองแล้ว − บัฟเฟอร์) และกำหนดรอบซิงก์ไว้แล้ว · ใคร: `reviewer` ตัวใหม่
+1. Merge the stock figures from every shop and the real goods in the warehouse into one master file · ใคร: `shop-manager` ตัวใหม่
+2. Give SKUs the same naming style in every shop · ใคร: `shop-manager` ตัวใหม่
+3. Set the stock sync rules, a buffer (stock held back from sale) per shop, and the reorder point, per `multi-shop-stock` · ใคร: `shop-manager` ตัวใหม่
+4. Make an adjustment list per shop (which shop, which SKU, from how many to how many), and keep the edits in the live shops under "รออนุมัติ" (awaiting approval) · ใคร: `shop-manager` ตัวใหม่ · ผู้ใช้อนุมัติการแก้ในร้านจริง
+5. Check (ตรวจ) that the quantity shown in each shop does not exceed available − buffer (real stock in the warehouse − reserved stock − buffer) and that a sync cadence is set · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-ไฟล์สต็อกหลักตรงกับของจริง · ยอดโชว์ทุกร้านไม่เกิน available − บัฟเฟอร์ และรายการปรับยอดพร้อมทำ
+The master stock file matches the real goods · the quantity shown in every shop is at most available − buffer · the adjustment list is ready to apply.
 
 
 ## reference: playbook-team-project.md
@@ -1071,42 +1071,42 @@ All the step 1 conditions pass, or every remaining piece has a reason why it is 
 
 ## reference: playbook-warranty-claim.md
 
-# playbook · warranty-claim — ทะเบียนรับประกันและการเคลม
+# playbook · warranty-claim — warranty register and claims
 
-ใช้เมื่อ: เพิ่งซื้อของที่มีประกัน · อยากเก็บใบเสร็จให้เป็นระบบ · ของเสียและอยากรู้ว่ายังอยู่ในประกันไหม
-skill หลัก: `warranty-tracker`
+Use when: you just bought something with a warranty · you want to keep receipts in order · something broke and you want to know whether it is still under warranty
+Main skills: `warranty-tracker`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. สร้างหรือเปิดทะเบียนตาม `warranty-tracker` — สินค้า · วันที่ซื้อ · ร้าน · หมดประกัน · ที่เก็บใบเสร็จ · ใคร: `consumer-advocate` ตัวใหม่
-2. เพิ่มของที่ผู้ใช้ส่งมา โดยอ่านจากใบเสร็จหรือใบรับประกันจริง · ใคร: `consumer-advocate` ตัวใหม่
-3. ถ้าจะเคลม ให้ตรวจว่ายังอยู่ในประกัน อ่านเงื่อนไขยกเว้น แล้วเตรียมเอกสารและข้อความแจ้งศูนย์ · ใคร: `consumer-advocate` ตัวใหม่ตรวจสิทธิ์และเตรียมเอกสาร
-4. ตั้งเตือนก่อนหมดประกัน 30 วันสำหรับของที่ควรตรวจก่อนหมด · ใคร: หัวหน้าทีม
-5. ตรวจทะเบียน การตั้งเตือน และชุดเคลม (ถ้ามี) ก่อนถึงผู้ใช้ · ใคร: `reviewer` ตัวใหม่
+1. Create or open the register per `warranty-tracker` — product · purchase date · shop · warranty end · where the receipt is kept · ใคร: `consumer-advocate` ตัวใหม่
+2. Add the items the user sent, reading from the real receipt or warranty card · ใคร: `consumer-advocate` ตัวใหม่
+3. If a claim is planned, check that the item is still under warranty, read the exclusion terms, and prepare the documents and the message to the service center · ใคร: `consumer-advocate` ตัวใหม่ checks eligibility and prepares the documents
+4. Set a reminder 30 days before the warranty ends for items worth checking before then · ใคร: หัวหน้าทีม
+5. Check (ตรวจ) the register, the reminders, and the claim pack (if any) before it reaches the user · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-ทะเบียนตรงกับเอกสารจริงทุกแถว และชุดเคลมพร้อมส่ง (ถ้ามี)
+Every row of the register matches the real documents, and the claim pack is ready to send (if there is one).
 
 
 ## reference: playbook-year-end.md
 
-# playbook · year-end — งานปิดปี — งบการเงิน ประชุมผู้ถือหุ้น ภ.ง.ด.50 และ 50 ทวิ
+# playbook · year-end — year-end close: financial statements, shareholder meeting, ภ.ง.ด.50 (PND 50, corporate income tax return) and 50 ทวิ (withholding tax certificate)
 
-ใช้เมื่อ: หลังวันสิ้นรอบบัญชี · ทำหนังสือรับรองหักภาษีและ ภ.ง.ด.1ก ให้พนักงาน
-skill หลัก: `dbd-annual-filing` · `payroll-th` · `tax-vat-th`
+Use when: after the accounting period ends · issuing withholding tax certificates and ภ.ง.ด.1ก (PND 1 Kor, annual employee withholding tax summary) for employees
+Main skills: `dbd-annual-filing` · `payroll-th` · `tax-vat-th`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. นับย้อนจากวันสิ้นรอบบัญชีตาม `dbd-annual-filing` — ประชุมผู้ถือหุ้น · งบการเงินผ่านผู้สอบ · บอจ.5 · ภ.ง.ด.50 · ใคร: `tax-helper` ตัวใหม่
-2. ตรวจกำหนดวันและค่าปรับจากเว็บกรมพัฒนาธุรกิจการค้าและกรมสรรพากร · ใคร: `tax-helper` ตัวใหม่
-3. เตรียม ภ.ง.ด.1ก และ 50 ทวิ จากตารางเงินเดือนทั้งปี · ใคร: `tax-helper` ตัวใหม่
-4. ทำรายการเอกสารที่ต้องได้จากผู้สอบบัญชีและกรรมการ พร้อมวันที่ต้องได้ · ใคร: `tax-helper` ตัวใหม่
-5. ตรวจ — ยอดทั้งปีใน 50 ทวิ ต้องตรงกับผลรวม 12 เดือน · ใคร: `reviewer` ตัวใหม่
+1. Count back from the period end date per `dbd-annual-filing` — shareholder meeting · financial statements audited · บอจ.5 (Bor Or Jor 5, shareholder list) · ภ.ง.ด.50 · ใคร: `tax-helper` ตัวใหม่
+2. Check the deadlines and penalties on the websites of the Department of Business Development and the Revenue Department · ใคร: `tax-helper` ตัวใหม่
+3. Prepare ภ.ง.ด.1ก and 50 ทวิ from the full-year payroll table · ใคร: `tax-helper` ตัวใหม่
+4. List the documents needed from the auditor and the directors, with the date each is needed · ใคร: `tax-helper` ตัวใหม่
+5. Check (ตรวจ) — the full-year amounts in each 50 ทวิ must match the 12-month totals · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-ไทม์ไลน์ปิดปีที่ตรวจกับแหล่งทางการแล้ว และ 50 ทวิทุกคนตรงกับยอดรวม
+The year-end timeline has been checked against official sources, and every person's 50 ทวิ matches the totals.
 
 
 ## reference: review-lenses.md

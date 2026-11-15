@@ -62,7 +62,7 @@ Put these in the forecast on the date the money leaves, for the forms that apply
 | Social security (สปส.1-10) | by the 15th of next month | employee share withheld + employer share |
 | Half-year and annual income tax (ภ.ง.ด.94 / 90 individuals · ภ.ง.ด.51 / 50 companies) | see `seller-tax-basics` · `tax-vat-th` | estimate from year-to-date profit; this is the payment that most often surprises small shops |
 
-ตรวจล่าสุด 2026-10-25 (วันครบกำหนดยกมาจาก `tax-vat-th` และ `social-security-th` ซึ่งตรวจกับเว็บทางการ 2026-10-22 · รอบนี้ไม่ได้เปิดตัวบทซ้ำ) · แหล่ง: https://www.rd.go.th · https://www.sso.go.th
+Last checked 2026-10-25 (due dates are taken from `tax-vat-th` and `social-security-th`, which were checked against official websites on 2026-10-22; the legal text was not reopened this time) · Sources: https://www.rd.go.th · https://www.sso.go.th
 
 ## 4. Warning signs and what to do
 

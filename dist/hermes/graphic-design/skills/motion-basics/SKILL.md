@@ -5,13 +5,13 @@ description: Use when a non-designer makes motion graphics
 
 # Motion Basics
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
 Motion is emphasis. Everything else is decoration. Most amateur motion has 3 faults: linear easing, everything moving at once, and text that leaves before anyone could read it.
 
 ## Workflow
 
-0. **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `motion` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้
+0. **Search for references first:** take the project's keywords and search live per `design-references` (plugin `superuser`) type `motion`, then pull colours from the chosen work · use the stored palette library when a live search is not possible
 1. **Name the purpose** of each movement — reveal, connect, emphasise, transition. No purpose, no motion. A background must carry meaning too: on the AI4BA site, 1 dot = 1 registered person, the path = the agenda, and the camera flies to the item you hover. A background that only decorates is cut
 2. **Pick 1 entrance and 1 exit style** for the whole piece (e.g. fade-up in, fade out)
 3. **Set durations** from the timing table

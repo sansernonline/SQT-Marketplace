@@ -200,9 +200,9 @@ Fill this in for each error message, RFC clause or documentation passage. Keep t
 
 Full list: `human-writing` `references/thai-grammar.md` section 7.
 
-1. Topic first (f1): ยกสิ่งที่พูดถึงขึ้นก่อน ไม่ลากประธานยาวแบบอังกฤษ
-2. Condition first (f2): เงื่อนไขและเวลามาก่อนผล ไม่ห้อยท้ายด้วย "เมื่อ…"
-3. No มัน / ถูก- calque: บอกว่าใครทำ ละประธานที่รู้แล้ว
+1. Topic first (f1): move the thing being talked about to the front, and do not drag out a long subject the English way
+2. Condition first (f2): put conditions and time before the result, and do not hang them at the end with "เมื่อ…"
+3. No มัน / ถูก- calque: say who does it, and drop a subject that is already known
 4. Keep the English term, add the Thai once: header (ส่วนหัว) then header
 5. Read aloud: ถ้าสะดุด เขียนใหม่
 

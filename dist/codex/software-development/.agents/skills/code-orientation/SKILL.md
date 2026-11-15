@@ -3,88 +3,88 @@ name: code-orientation
 description: Use before changing code you have not yet read
 ---
 
-# code-orientation — อ่านโค้ดเดิมให้เข้าใจก่อนแตะ
+# code-orientation — understand the existing code before touching it
 
-> โค้ดที่ agent เขียนพังส่วนใหญ่ไม่ใช่เพราะเขียนไม่เป็น แต่เพราะไม่รู้ว่าโค้ดเดิมทำงานยังไง และทำไมถึงเขียนแบบนี้
-> 10 นาทีที่อ่าน ประหยัดรอบแก้ได้หลายรอบ
+> Most code an agent writes breaks not because the agent cannot write, but because it does not know how the old code works or why it was written that way.
+> 10 minutes of reading saves several rounds of fixes.
 
-ให้ใช้ก่อน playbook `feature` · `bug-fix` · `refactor` · `review` ทุกครั้งที่ยังไม่ได้อ่านส่วนนั้นใน session นี้
+Use it before every `feature` · `bug-fix` · `refactor` · `review` playbook, whenever you have not yet read that part of the code in this session.
 
-ข้ามได้เมื่อแก้ข้อความหรือค่าคงที่จุดเดียว หรือเขียนไฟล์ใหม่ที่ไม่มีใครเรียก
+Skip it when you change one piece of text or one constant, or when you write a new file that nothing calls.
 
 ---
 
-## ไม่ใช้เมื่อ
+## Do not use when
 
-| งาน | ใช้ตัวนี้แทน |
+| Job | Use this instead |
 |---|---|
-| ระบบเดิมทั้งระบบไม่มีเอกสาร ต้องกู้ spec ก่อนรับงานแก้ | `legacy-spec-recovery` |
-| ไม่มีซอร์สโค้ด มีแต่ไฟล์ที่ compile แล้ว | `reverse-engineering` |
-| คนใหม่ต้องรู้จักทั้ง repo (ติดตั้ง รัน โครงทั้งหมด) ไม่ใช่แค่ส่วนที่จะแก้ | `/onboard` |
+| The whole existing system has no documents and you must recover the spec before taking the fix | `legacy-spec-recovery` |
+| There is no source code, only compiled files | `reverse-engineering` |
+| A newcomer must learn the whole repo (install, run, full structure), not just the part to be changed | `/onboard` |
 
-## 1 · How — โค้ดทำงานยังไง
+## 1 · How — how the code works
 
-1. **หาทางเข้า** — route · controller · command · job · event handler ที่รับงานนี้ โดยค้นจากข้อความบนหน้าจอ URL หรือชื่อ API ที่ผู้ใช้พูดถึง (`rg -n "ข้อความ" --glob '!**/node_modules/**'`)
-2. **ไล่เส้นทางจริง** — จากทางเข้า → กฎธุรกิจ → ที่เก็บข้อมูล แล้วจดชื่อไฟล์และฟังก์ชันตามลำดับที่เรียก ไม่เดาจากชื่อ แต่เปิดอ่านจริง
-3. **หาจุดที่ใช้ร่วม** — ฟังก์ชันหรือ type ที่จะแตะ ถูกเรียกจากที่ไหนอีก (`rg -n "ชื่อฟังก์ชัน\("`) ถ้ามีหลายจุดต้องใช้ `blast-radius` ตอนแก้
-4. **รันดูจริงถ้าทำได้** — ใส่ log ชั่วคราวหรือ breakpoint 1–2 จุด แล้วทำตามขั้นตอนของผู้ใช้ เพราะเห็นค่าจริงดีกว่าอ่านอย่างเดียว และลบ log ชั่วคราวก่อนส่ง
+1. **Find the entry point.** This is the route · controller · command · job · event handler that takes this work. Search from the on-screen text, the URL or the API name the user mentioned (`rg -n "ข้อความ" --glob '!**/node_modules/**'`).
+2. **Follow the real path.** Go from the entry point → business rules → data store, and note file and function names in the order they are called. Do not guess from names. Open and read them.
+3. **Find the shared points.** Check where else the function or type you will touch is called (`rg -n "ชื่อฟังก์ชัน\("`). If there are several callers, use `blast-radius` when you make the change.
+4. **Run it for real if you can.** Add 1–2 temporary logs or breakpoints, then follow the user's steps. Seeing real values beats reading alone. Remove the temporary logs before you hand in.
 
-ถ้าโค้ดยาว ให้ส่ง subagent โมเดลเล็ก (haiku) หรือกลาง (sonnet) ไปไล่ แล้วรับแค่แผนที่กลับมาไม่เกิน 30 บรรทัด (`context-budget`)
+If the code is long, send a small-model (haiku) or mid-model (sonnet) subagent to trace it, and take back only a map of at most 30 lines (`context-budget`).
 
-## 2 · Why — ทำไมถึงเขียนแบบนี้
+## 2 · Why — why it was written this way
 
-ก่อนเปลี่ยนสิ่งที่ดูแปลก ให้หาเหตุผลก่อน เพราะโค้ดแปลก ๆ มักกันบั๊กที่เคยเกิด
+Before you change something that looks odd, look for the reason first, because odd code often guards against a bug that happened before.
 
-| ดูที่ | คำสั่ง |
+| Look at | Command |
 |---|---|
-| ใครแก้บรรทัดนี้ เพราะอะไร | `git log -L <เริ่ม>,<จบ>:<ไฟล์> \| head -40` · `git blame -w -L <เริ่ม>,<จบ> <ไฟล์>` แล้ว `git show <commit>` |
-| commit ที่พูดถึงเรื่องนี้ | `git log --oneline -n 20 -S "ชื่อฟังก์ชัน"` · `git log --oneline -n 20 --grep "คำค้น"` |
-| เอกสาร | `docs/` · ADR · `CONTEXT.md` · comment ที่บอก "ทำไม" |
-| test ที่ล็อกพฤติกรรมไว้ | ค้นชื่อฟังก์ชันในโฟลเดอร์ test เพราะ test บอกเจตนาได้ดีกว่า comment |
+| Who changed this line, and why | `git log -L <เริ่ม>,<จบ>:<ไฟล์> \| head -40` · `git blame -w -L <เริ่ม>,<จบ> <ไฟล์>` then `git show <commit>` |
+| Commits that mention this | `git log --oneline -n 20 -S "ชื่อฟังก์ชัน"` · `git log --oneline -n 20 --grep "คำค้น"` |
+| Documents | `docs/` · ADR · `CONTEXT.md` · comments that say "why" |
+| Tests that lock the behaviour | Search for the function name in the test folder, because tests show intent better than comments |
 
-ถ้าหาเหตุผลไม่เจอ อย่าเพิ่งลบทิ้ง ให้จดเป็น `(รอยืนยัน)` ในแผนที่ แล้วเขียน test ล็อกพฤติกรรมเดิมก่อนเปลี่ยน
+If you cannot find the reason, do not delete the code yet. Note it as `(รอยืนยัน)` (awaiting confirmation) in the map, and write a test that locks the old behaviour before you change it.
 
-## 3 · แบบแผนของ repo
+## 3 · Repo conventions
 
-อ่านไฟล์ที่คล้ายกับที่จะเขียน 2–3 ไฟล์ แล้วจด:
-- **คำสั่ง** — install · build · test · lint · format · รัน test ตัวเดียว (จาก README · `package.json` · `*.csproj` · `pyproject.toml` · CI config)
-- **โครง** — วางไฟล์แบบไหน · ตั้งชื่อแบบไหน · จัดการ error และ log แบบไหน · test เขียนแบบไหน
-- **รายการตรวจแบบแผน** (จดเฉพาะที่ต่างจากค่าเริ่มต้นของภาษา · แนวคิดจาก ECC codebase-onboarding)
+Read 2–3 files similar to the one you will write, then note:
+- **Commands** — install · build · test · lint · format · run a single test (from README · `package.json` · `*.csproj` · `pyproject.toml` · CI config)
+- **Structure** — how files are placed · how things are named · how errors and logs are handled · how tests are written
+- **Convention checklist** (note only what differs from the language default · idea from ECC codebase-onboarding)
 
-  | ดู | หลักฐานที่เปิด |
+  | Look at | Evidence to open |
   |---|---|
-  | ชื่อไฟล์ คลาส ฟังก์ชัน ตัวแปร (`PascalCase` · `kebab-case` · prefix `I` · suffix `Service`) | ไฟล์พี่น้อง 2–3 ไฟล์ในโฟลเดอร์เดียวกัน |
-  | lint และ format ที่ใช้จริง | `.editorconfig` · `.eslintrc*` · `.prettierrc` · `ruff.toml` · `.globalconfig` หรือ `Directory.Build.props` (.NET) · pre-commit |
-  | import (path alias · ลำดับ · barrel file) · error (throw vs Result) · log (library · ฟิลด์) · async (Promise vs Observable · `async`/`await` vs callback) | ไฟล์ทางเข้าและ 1 ไฟล์ใน layer เดียวกับที่จะแก้ |
-  | test: ชื่อไฟล์ · วางข้างโค้ดหรือแยกโฟลเดอร์ · fixture หรือ builder ที่ repo มีอยู่ | โฟลเดอร์ test ที่ใกล้ที่สุด |
-- **stack** — เปิด skill ตามภาษา: `stack-dotnet` · `stack-typescript` · `stack-python` · `stack-sql`
+  | Names of files, classes, functions, variables (`PascalCase` · `kebab-case` · prefix `I` · suffix `Service`) | 2–3 sibling files in the same folder |
+  | The lint and format tools actually used | `.editorconfig` · `.eslintrc*` · `.prettierrc` · `ruff.toml` · `.globalconfig` or `Directory.Build.props` (.NET) · pre-commit |
+  | Imports (path alias · order · barrel file) · errors (throw vs Result) · logs (library · fields) · async (Promise vs Observable · `async`/`await` vs callback) | The entry file and 1 file in the same layer as the code to change |
+  | Tests: file names · beside the code or in a separate folder · fixtures or builders the repo already has | The nearest test folder |
+- **Stack** — open the skill for the language: `stack-dotnet` · `stack-typescript` · `stack-python` · `stack-sql`
 
-ทำตามแบบของ repo แม้ไม่ใช่แบบที่ชอบ ถ้าอยากเปลี่ยนแบบแผนให้เสนอในรายงาน ไม่เปลี่ยนเงียบ ๆ กลางงาน
+Follow the repo's style even if it is not the style you like. If you want to change a convention, propose it in the report. Do not change it quietly in the middle of the work.
 
-## 4 · แผนที่ 10 บรรทัด
+## 4 · The 10-line map
 
-เขียนลง todo หรือคำตอบก่อนเริ่มแก้ แล้วส่งให้ subagent ที่จะเขียนโค้ดด้วย
+Write it into the todo or the reply before you start the change, and pass it to the subagent that will write the code.
 
 ```text
-งาน: <1 บรรทัด>
-ทางเข้า: <ไฟล์:บรรทัด>
-เส้นทาง: <A.fn> → <B.fn> → <C.fn> → <ตาราง/ไฟล์>
-จุดที่จะแก้: <ไฟล์:ฟังก์ชัน>
-ใช้ร่วมกับ: <จุดอื่นที่เรียก> (blast-radius: ใช่/ไม่)
-ทำไมเขียนแบบนี้: <เหตุผลจาก commit หรือ docs> · ไม่รู้ → (รอยืนยัน)
-แบบแผน: <ชื่อ · error · test ที่ต้องตาม>
-คำสั่ง: build <...> · test <...> · test ตัวเดียว <...>
-test ที่ล็อกพฤติกรรมอยู่: <ไฟล์> · ไม่มี → เขียนก่อนแก้
-เสี่ยง: <อะไรพังได้>
+Task: <1 line>
+Entry point: <file:line>
+Path: <A.fn> → <B.fn> → <C.fn> → <table/file>
+Place to change: <file:function>
+Shared with: <other callers> (blast-radius: yes/no)
+Why it is written this way: <reason from commit or docs> · unknown → (รอยืนยัน)
+Conventions: <naming · error · test to follow>
+Commands: build <...> · test <...> · single test <...>
+Tests that lock the behaviour: <file> · none → write before the change
+เสี่ยง: <what could break>
 ```
 
-## 5 · กับดัก
+## 5 · Traps
 
-- อ่านแค่ไฟล์ที่ชื่อตรงกับงาน แล้วพลาด wrapper หรือ middleware ที่แปลงข้อมูลก่อนถึง
-- เชื่อ comment เก่าที่ไม่ตรงกับโค้ดแล้ว ทั้งที่โค้ดและ test คือความจริง
-- ไล่โค้ดทั้ง repo จน context เต็ม ทั้งที่ควรอ่านเฉพาะเส้นทางของงานนี้
-- "ปรับให้สะอาด" ระหว่างทางโดยไม่มี test ซึ่งควรแยกเป็นงาน refactor
+- Reading only the file whose name matches the task, and missing a wrapper or middleware that transforms the data before it arrives.
+- Trusting an old comment that no longer matches the code, when the code and tests are the truth.
+- Tracing the whole repo until the context is full, when you should read only the path of this task.
+- "Cleaning up" along the way without a test. That should be a separate refactor task.
 
-## 6 · เชื่อมกับ skill อื่น
+## 6 · Link to other skills
 
-`context-budget` (อ่านเยอะ) · `blast-radius` (แก้ของใช้ร่วม) · `principle-fix-root-cause` (bug) · `readable-code` · `lazy-coding` · `testing-standards` · skill ตาม stack
+`context-budget` (heavy reading) · `blast-radius` (changing shared code) · `principle-fix-root-cause` (bug) · `readable-code` · `lazy-coding` · `testing-standards` · the stack skill

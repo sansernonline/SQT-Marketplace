@@ -2,49 +2,49 @@
 
 Use when a big task ends and lessons should be kept
 
-# session-lessons-to-skills — ทุกงานใหญ่ทิ้งบทเรียนไว้ในเครื่องมือ
+# session-lessons-to-skills — every big task leaves its lessons in the tools
 
-> บทสนทนาที่ผ่านมามีค่า เพราะเป็นสิ่งที่เกิดขึ้นจริง ไม่ใช่สิ่งที่นึกเอา
-> แต่บทเรียนที่อยู่แค่ในบทสนทนาจะหายไปพร้อมบทสนทนา
+> A past conversation is valuable because it really happened, not because someone imagined it.
+> But a lesson that lives only in the conversation disappears with the conversation.
 
-## ข้ามได้เมื่อ
+## Skip when
 
-งานสั้นหรือง่าย agent ทำตาม skill ที่มีอยู่แล้วได้ถูกต้อง หรือเป็นเรื่องที่เกิดครั้งเดียว
+The task is short or easy, the agent followed the existing skills correctly, or the issue happened only once.
 
-## ใช้ตัวไหน — ตารางเดียวของ 3 skill
+## Which one to use — one table for 3 skills
 
-ตารางนี้เป็นของกลางของ `session-lessons-to-skills` · `repeated-mistakes-to-checks` · `owner-style-capture` (อีก 2 ตัวชี้มาที่นี่)
+This table is shared by `session-lessons-to-skills` · `repeated-mistakes-to-checks` · `owner-style-capture` (the other 2 point here).
 
-| เกิดอะไร | ใช้ | ผลลัพธ์ |
+| What happened | Use | Output |
 |---|---|---|
-| งานใหญ่จบ · ผู้ใช้สั่งรวมบทเรียน · skill พาไปผิด | `session-lessons-to-skills` (ตัวนี้) | ข้อเสนอแก้ skill หรือ agent |
-| ผู้ใช้แก้เรื่องเดิมครั้งที่ 2 · รีวิวเตือนเรื่องเดิมซ้ำ | [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) | ตัวตรวจ (type · lint · test · hook) |
-| รสนิยมหรือความชอบของผู้ใช้ ไม่ใช่ความผิด | [`owner-style-capture`](../owner-style-capture/SKILL.md) | `~/.claude/superuser-style.md` |
+| A big task ended · the user asked to gather lessons · a skill led the agent wrong | `session-lessons-to-skills` (this one) | A proposal to fix a skill or agent |
+| The user corrected the same thing a 2nd time · a review warned about the same thing again | [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) | A checker (type · lint · test · hook) |
+| The user's taste or preference, not a mistake | [`owner-style-capture`](../owner-style-capture/SKILL.md) | `~/.claude/superuser-style.md` |
 
-## ขั้นตอน
+## Steps
 
-ใช้เป็นขั้นรีวิวของ playbook [`learn-from-session`](../superuser/references/playbook-learn-from-session.md) ส่วนการรวบรวม การเสนอให้ผู้ใช้ดู และการปิดรายการให้ทำตาม playbook นั้น ไม่เขียนซ้ำไว้ที่นี่
+Use this as the review step of the playbook [`learn-from-session`](../superuser/references/playbook-learn-from-session.md). Gathering, showing the result to the user, and closing the items follow that playbook and are not repeated here.
 
-0. **อ่านโฟลเดอร์ `learn/drop/` ก่อน** (ถ้ามี) — บทเรียนที่ทิ้งไว้ข้อละไฟล์ระหว่างงาน ไม่เคยถูกตัดสินตอนเขียน · อ่านทุกไฟล์รวมกัน จับกลุ่มตามเรื่อง ข้อที่ซ้ำกันหรือชนิดเดียวกันรวมเป็นข้อเดียวแล้วเข้า digest · ใช้แล้วย้ายไป `learn/drop/used/` (ที่มา claude-remember · ห้ามแจกจ่ายซ้ำ เอาแค่กลไก · ดู 2026-11-10)
-1. **ทำสรุป (digest)** — จากของที่ playbook รวบรวมมา เขียน `_to_delete/session-digest.md`: ลำดับเหตุการณ์ · จุดที่ผู้ใช้แก้ · จุดที่ติดนาน · skill ที่ถูกเรียกและผล จากนั้นส่งไฟล์นี้ให้ subagent ไม่ส่งบทสนทนาดิบ
-2. **ปล่อยผู้ตรวจ 3 มุมพร้อมกัน** (แต่ละคนอ่าน digest และไฟล์ skill ที่เกี่ยวข้อง)
+0. **Read the `learn/drop/` folder first** (if it exists). These are lessons dropped one per file during the work, and they were never judged when written. Read all the files together and group them by topic. Merge items that repeat or are of the same kind into one item, then put it in the digest. After use, move them to `learn/drop/used/` (source: claude-remember · do not redistribute, take only the mechanism · see 2026-11-10)
+1. **Make a digest.** From what the playbook gathered, write `_to_delete/session-digest.md`: the order of events · where the user corrected · where it got stuck for long · which skills were called and the result. Then hand this file to the subagent. Do not hand over the raw conversation.
+2. **Launch the reviewers for 3 angles at the same time** (each reads the digest and the related skill files)
 
-   | มุม | ถามว่า | ระดับโมเดล + effort · agent |
+   | Angle | Asks | Model level + effort · agent |
    |---|---|---|
-   | การตัดสินใจ | agent ตัดสินผิดตรงไหน ทำไม ควรมีกฎอะไรที่จะทำให้ตัดสินถูก | ใหญ่ + high · `general-purpose` ตัวใหม่ |
-   | เครื่องมือ | ทำอะไรด้วยมือที่ควรเป็นสคริปต์ แม่แบบ หรือสูตร · ขั้นไหนล้มซ้ำ · skill ไหนบอกขั้นตอนผิด | กลาง + medium · `learning-reviewer` |
-   | มุมกลับ | ถ้าเริ่มใหม่ ทางที่ง่ายกว่ามากคืออะไร · มีสมมติฐานไหนที่ไม่ควรเชื่อตั้งแต่แรก | ใหญ่ + high · `general-purpose` ตัวใหม่ |
+   | Decisions | Where did the agent decide wrongly, and why? What rule would have made it decide right? | big + high · fresh `general-purpose` |
+   | Tools | What was done by hand that should be a script, a template, or a formula? Which step failed repeatedly? Which skill gave the wrong steps? | medium + medium · `learning-reviewer` |
+   | Reverse | If starting over, what is a much easier path? Which assumption should not have been trusted from the start? | big + high · fresh `general-purpose` |
 
-   ทุกคนส่งผลเป็นตาราง `| บทเรียน | ชนิดพลาด | หลักฐานในบทสนทนา | แก้ที่ไฟล์ไหน | ข้อความเดิม → ข้อความใหม่ |` ไม่เกิน 40 บรรทัดต่อคน · ชนิดพลาดใช้ 3 ค่าตาม agent `learning-reviewer`: `ไม่ได้เปิด skill` (แก้การบอก skill ไม่ใช่เนื้อ skill) · `เปิดแต่ไม่ทำตาม` (แก้คำ ตำแหน่ง หรือเพิ่มตัวตรวจ) · `ไม่มีกฎ` (ตัวอย่างคู่ก่อน)
-   **ตัวอย่างคู่มาก่อนกฎ** — บทเรียนเรื่องคำ น้ำเสียง หรือหน้าตา ใส่เป็นคู่ `ก่อน → หลัง` ในไฟล์ references ของ skill นั้น ("หลัง" ต้องเป็นข้อความที่ผู้ใช้เขียนเอง) · เขียนเป็นกฎต่อเมื่อคู่รูปเดียวกันโผล่ซ้ำตั้งแต่ 2 ครั้ง
-   **หมวดที่ผู้ตรวจต้องไล่ทุกรอบ** (นอกจาก 3 มุมข้างบน): (ก) ป้ายนำทาง — ชื่อหรือคำอธิบาย skill ที่ทำให้เปิดผิดหรือไม่เปิด · (ข) ด่านอัตโนมัติ — ข้อที่ควรเป็น test · lint · hook แทนข้อความเตือน (ส่งไป `repeated-mistakes-to-checks`) · (ค) `CLAUDE.md` หรือ `CONTEXT.md` ใหญ่เกินจนไม่มีใครอ่านจบ · (ง) คำสั่งที่เขียนไว้แต่ไม่มีผล (log แสดงว่าถูกเมินหรือทำไม่ได้) · ผลตรวจทุกหมวดต้องผ่านมาตรฐานเดียวกันคือมีหลักฐานจาก digest (ที่มา mattpocock-skills · MIT · ดู 2026-11-10)
-3. **กรอง** — เก็บเฉพาะที่ (ก) มีหลักฐานจริง (ข) จะเกิดอีก (ค) ชี้ได้ว่าแก้ไฟล์ไหน (ง) มีขอบเขตว่าใช้กับงานไหน และหมดอายุเมื่อถ้อยคำต้นทางเปลี่ยน — บทเรียนของงานหนึ่งไม่ควรไปทำให้อีกงานผิด (ตัวอย่างคอร์ส CWN2026: คำตอบเดิมผูกกับชื่อแผน URL และถ้อยคำในแผน ถ้อยคำเปลี่ยนก็หมดอายุ · การทดสอบ "หมดอายุ" Claude รายงานเอง ยังไม่ได้รันซ้ำ 2026-11-04) เช่น "รายงานส่งลูกค้าใช้ตัวเลขเก่า เพราะ skill ไม่บอกให้เปิดไฟล์ล่าสุด" ไม่ใช่ "ควรระวังตัวเลข" ส่วนบทเรียนที่ทำเป็นการตรวจอัตโนมัติได้ให้ส่งไป [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) แทน
-4. **แก้ของเดิมก่อนสร้างใหม่ และแก้ทีละย่อหน้า** — อย่าเขียน SKILL.md ใหม่ทั้งไฟล์ เพราะข้อที่ใช้ได้อยู่แล้วจะหายไป ส่วนใหญ่ควรแก้ย่อหน้าใน SKILL.md หรือไฟล์ agent ที่มีอยู่ และสร้าง skill ใหม่เฉพาะเมื่อเป็นงานที่ยังไม่มี skill ไหนครอบ
-5. **ทดสอบการแก้ก่อนและหลัง** — เอาสถานการณ์จาก digest ที่ทำให้พลาด เขียนเป็นโจทย์สั้น 3–5 บรรทัด (ไม่เฉลย) · ส่ง subagent ระดับเล็กตัวใหม่ทำโจทย์นี้กับ skill **ฉบับเดิม** ต้องพลาดแบบเดียวกับใน digest (ไม่พลาด = บทเรียนนี้ไม่ได้มาจาก skill ตัดออก) · แก้ skill แล้วส่งตัวใหม่อีกตัวทำโจทย์เดิม ต้องไม่พลาด (ยังพลาด = คำที่แก้ไม่ชัดพอ หรือวางผิดตำแหน่ง แก้ใหม่) · จดผลทั้ง 2 รอบไว้ในตารางที่เสนอผู้ใช้ (แนวคิดจาก writing-skills ใน obra/superpowers · MIT)
-6. ส่งตารางที่กรองแล้วกลับไปขั้นเสนอผู้ใช้ของ playbook `learn-from-session` ส่วน digest อยู่ใน `_to_delete/` แล้ว จึงไม่ต้องย้าย
+   Each reviewer returns a table `| บทเรียน | ชนิดพลาด | หลักฐานในบทสนทนา | แก้ที่ไฟล์ไหน | ข้อความเดิม → ข้อความใหม่ |` (lesson · mistake type · evidence in the conversation · file to fix · old text → new text), at most 40 lines per reviewer. The mistake type takes 3 values per agent `learning-reviewer`: `ไม่ได้เปิด skill` (did not open the skill; fix how the skill is advertised, not its content) · `เปิดแต่ไม่ทำตาม` (opened but did not follow it; fix the wording or position, or add a checker) · `ไม่มีกฎ` (no rule; paired example first).
+   **Paired examples come before rules.** A lesson about wording, tone, or looks goes in as a `ก่อน → หลัง` (before → after) pair in the references file of that skill (the "after" must be text the user wrote). Write it as a rule only when a pair of the same shape appears at least 2 times.
+   **Categories the reviewers must go through every round** (besides the 3 angles above): (a) signposts: skill names or descriptions that make the agent open the wrong skill or not open it · (b) automatic gates: items that should be a test, lint, or hook instead of a warning text (send to `repeated-mistakes-to-checks`) · (c) a `CLAUDE.md` or `CONTEXT.md` so large that nobody reads it to the end · (d) instructions written down that have no effect (the log shows they were ignored or could not be done). The result for every category must meet the same standard: evidence from the digest (source: mattpocock-skills · MIT · see 2026-11-10)
+3. **Filter.** Keep only items that (a) have real evidence, (b) will happen again, (c) can point to which file to fix, and (d) have a scope saying which work they apply to and expire when the source wording changes. A lesson from one task should not make another task wrong. (Example from course CWN2026: the old answer was tied to the plan name, the URL, and the wording in the plan; when the wording changes it expires. The "expires" test was reported by Claude itself and has not been rerun, 2026-11-04.) For example, "the customer report used old figures because the skill did not say to open the latest file", not "be more careful with figures". A lesson that can become an automatic check goes to [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) instead.
+4. **Fix what exists before creating new, and fix one paragraph at a time.** Do not rewrite the whole SKILL.md, because the parts that already work will be lost. Most of the time, edit a paragraph in an existing SKILL.md or agent file. Create a new skill only for work that no skill covers yet.
+5. **Test the fix before and after.** Take the situation from the digest that caused the mistake and write it as a short task of 3–5 lines (no answer given). Send a fresh small-level subagent to do this task with the **old version** of the skill. It must make the same mistake as in the digest (if it does not, this lesson did not come from the skill; drop it). Fix the skill, then send another fresh subagent to do the same task. It must not make the mistake (if it still does, the fixed wording is not clear enough or is in the wrong place; fix it again). Record both rounds in the table shown to the user (idea from writing-skills in obra/superpowers · MIT)
+6. Send the filtered table back to the propose-to-user step of the playbook `learn-from-session`. The digest is already in `_to_delete/`, so it does not need to be moved.
 
-## สิ่งที่ห้ามทำ
+## What not to do
 
-- เขียนบทเรียนกว้าง ๆ แบบ "ควรระวังมากขึ้น" เพราะไม่มีใครทำตามได้
-- แก้ skill โดยไม่ให้ผู้ใช้เห็นก่อน
-- เพิ่มข้อความจนกฎขัดกันเอง — ถ้าข้อใหม่ขัดกับข้อเดิม ให้แก้ข้อเดิม อย่าต่อท้าย
+- Write broad lessons such as "be more careful", because nobody can follow them
+- Change a skill without letting the user see it first
+- Add text until the rules contradict each other. If a new item conflicts with an old one, fix the old one. Do not append.

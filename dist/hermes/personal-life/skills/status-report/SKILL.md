@@ -3,29 +3,29 @@ name: status-report
 description: Use when a task ends, to report status in a table
 ---
 
-# รายงานสถานะเมื่อจบงาน
+# Report status when a task ends
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write the wording of every line following `human-writing`. This skill gives the format and structure, and human-writing says how to write so that people understand.
 
-> **กฎข้อเดียว:** จบงานทุกครั้ง ต้องมีตารางสถานะในไฟล์กลางของงาน และตารางเดียวกันในคำตอบ
-> งานที่ไม่มีตารางสถานะ ถือว่ายังไม่จบ
-> **ยกเว้น** playbook ที่อ่านอย่างเดียว (`research` · `review` · software-development: `investigation`) — ใส่ตารางในคำตอบอย่างเดียว ไม่เขียนไฟล์
+> **The one rule:** every time a task ends, there must be a status table in the task's central file, and the same table in the reply.
+> A task with no status table is not finished.
+> **Exception:** read-only playbooks (`research` · `review` · software-development: `investigation`) put the table in the reply only and write no file.
 
 ---
 
-## 1 · เขียนที่ไหน
+## 1 · Where to write
 
-| สถานการณ์ | ทำอย่างไร |
+| Situation | What to do |
 |---|---|
-| งานทั่วไป (**ค่าตั้งต้น**) | `.claude/superuser/CONTEXT.md` แก้เฉพาะ `## ความคืบหน้า` · หัวข้อ `## รับงานต่อ` เป็นของ `handoff` หัวข้อ 5 เขียนตามกติกาที่นั่น · ไม่แตะหัวข้ออื่น · ยังไม่มีไฟล์ → สร้างจาก [`templates/CONTEXT.md`](../superuser/templates/CONTEXT.md) |
-| โปรเจกต์มี `docs/BUILD-PLAN.md` | ใช้แบบในข้อ 3 แทน เขียนที่เดียว ไม่เขียนซ้ำสองที่ |
-| มี subagent หลายตัวทำงานพร้อมกัน | subagent **รายงานกลับ** อย่างเดียว ให้หัวหน้าทีมเขียนไฟล์คนเดียว ไม่งั้นไฟล์พัง |
+| General work (**default**) | `.claude/superuser/CONTEXT.md`. Edit only `## ความคืบหน้า` (progress). The heading `## รับงานต่อ` (take over) belongs to `handoff` section 5, so write it by the rules there. Touch no other heading. If the file does not exist yet, create it from [`templates/CONTEXT.md`](../superuser/templates/CONTEXT.md). |
+| The project has `docs/BUILD-PLAN.md` | Use the form in section 3 instead. Write in one place, never duplicate in two. |
+| Several subagents work at the same time | Subagents only **report back**. Let the team lead write the file alone, or the file breaks. |
 
-ที่อยู่และกติกาของไฟล์ทั้งหมดอยู่ใน [`team-files`](../superuser/references/team-files.md)
+The location and rules of every file are in [`team-files`](../superuser/references/team-files.md).
 
 ---
 
-## 2 · ตาราง `## ความคืบหน้า`
+## 2 · The `## ความคืบหน้า` table
 
 ```markdown
 ## ความคืบหน้า
@@ -38,68 +38,68 @@ description: Use when a task ends, to report status in a table
 | ค้นหาสินค้า (โค้ด) | เสร็จ | test 48/48 · `reviewer` ตรวจแล้ว | 2026-10-21 14:20 |
 ```
 
-หัวข้อ `## รับงานต่อ` ที่อยู่ถัดลงไป เขียนตาม `handoff` หัวข้อ 5 (แบบเดียว ใช้ทั้งตอนจบงานและตอนส่งต่อ)
+The `## รับงานต่อ` heading that sits below it is written by `handoff` section 5 (one format, used both at the end of a task and at hand-over).
 
-- สถานะใช้ 5 คำเดียวกับ `superuser`: `เสร็จ` · `ทำอยู่` · `ติด` · `รออนุมัติ` · `ค้างอยู่` (ยังไม่เริ่มใช้ `ค้างอยู่`)
-- **หลักฐานต้องมีเสมอ** เมื่อเขียนว่า `เสร็จ` — ตัวเลขที่ตรวจจริง · จำนวนข้อที่เทียบ · ชื่อไฟล์ที่เปิดดู · ผลจาก `reviewer` ถ้าไม่ได้ตรวจให้เขียน `ยังไม่ได้ตรวจ` ห้ามเขียนว่าผ่าน
-- ผู้ตรวจต้องไม่ใช่ตัวเดียวกับผู้ทำ · มี subagent → ระบุชื่อบทบาทในช่องหลักฐาน
-- ตารางมีเฉพาะงานที่ยังเปิด ไม่เกิน 15 แถว · งานที่เสร็จแล้วย้ายเป็น 1 บรรทัดใน `HISTORY.md` · เขียนทับทั้งหัวข้อ ไม่ต่อท้าย
-- **ค้างอยู่** คือสิ่งที่ agent ไปต่อเองไม่ได้ ต้องมีคนตอบหรือตัดสิน เขียนเป็นคำถามที่ตอบได้ พร้อมบอกว่าถามใคร ไม่มีให้เขียน `ไม่มี`
-- **รออนุมัติ** คืองานที่เตรียมพร้อมแล้วแต่ย้อนไม่ได้ (superuser หัวข้อ 6) บอกคำสั่งหรือไฟล์ที่พร้อมใช้ ไม่มีก็ไม่ต้องใส่
-- **ข้อเสนอ** (ในคำตอบ) คือการปรับปรุงนอกขอบเขตไม่เกิน 3 ข้อ บอกว่าได้อะไรและใช้แรงแค่ไหน ไม่มีก็ไม่ต้องใส่
-
----
-
-## 3 · แบบสำหรับโปรเจกต์ที่มี `docs/BUILD-PLAN.md`
-
-เขียน `## สถานะล่าสุด` (เขียนทับ) และ `## ประวัติสถานะ` (เพิ่มบรรทัดบนสุด) ในไฟล์นั้นแทน `CONTEXT.md` · ลำดับหัวข้อ คอลัมน์ ค่าที่ใช้ได้ และเพดานแถว อยู่ใน [`build-plan-rules`](references/build-plan-rules.md) **เปิดก่อนเขียนทุกครั้ง**
+- Status uses the same 5 words as `superuser`: `เสร็จ` (done) · `ทำอยู่` (in progress) · `ติด` (blocked) · `รออนุมัติ` (awaiting approval) · `ค้างอยู่` (pending; not started yet also uses `ค้างอยู่`).
+- **Evidence is always required** when you write `เสร็จ`: a number that was really checked · how many items were compared · the file name that was opened · the result from `reviewer`. If it was not checked, write `ยังไม่ได้ตรวจ` (not yet checked). Never write that it passed.
+- The checker must not be the same one that did the work. If there is a subagent, name its role in the evidence column.
+- The table holds only open tasks, at most 15 rows. A finished task moves to 1 line in `HISTORY.md`. Overwrite the whole heading, never append.
+- **ค้างอยู่** (pending) is what the agent cannot continue by itself, because a person must answer or decide. Write it as a question that can be answered, and say whom to ask. If there is none, write `ไม่มี` (none).
+- **รออนุมัติ** (awaiting approval) is work that is prepared but irreversible (superuser section 6). Give the command or file that is ready to use. If there is none, leave it out.
+- **ข้อเสนอ** (proposals, in the reply) are improvements outside the scope, at most 3. Say what is gained and how much effort it takes. If there are none, leave it out.
 
 ---
 
-## 4 · ในคำตอบ
+## 3 · The form for a project that has `docs/BUILD-PLAN.md`
 
-แสดง "ภาพรวม" (ถ้ามี) + ตารางเฉพาะ **แถวที่เปลี่ยนในรอบนี้** + "ค้างอยู่" + "รออนุมัติ" (ถ้ามี) + "ข้อเสนอ" (ถ้ามี) + "ถัดไป" แล้วบอกว่าตารางเต็มอยู่ที่ไหน (`CONTEXT.md` หรือ `docs/BUILD-PLAN.md`) — ไม่ต้องแปะทั้งไฟล์
-
----
-
-## 5 · รายการตรวจก่อนบอกว่าจบ
-
-- [ ] อ่านไฟล์กลางจากดิสก์ก่อนแก้ (คนอื่นอาจแก้ไปแล้ว)
-- [ ] ตารางความคืบหน้าเขียนทับ ไม่ได้ต่อท้าย และมีวันที่เวลา
-- [ ] ทุกแถวที่เขียนว่า `เสร็จ` หรือ `ผ่าน` มีหลักฐาน · ผู้ตรวจไม่ใช่ผู้ทำ
-- [ ] ไม่ได้ตั้ง `Approved` เอง
-- [ ] `## รับงานต่อ` อัปเดตตาม `handoff` หัวข้อ 5 แล้ว
-- [ ] ไม่แตะหัวข้ออื่นในไฟล์
-- [ ] แบบ BUILD-PLAN: ตัวเลขใน "ภาพรวม" ตรงตาราง · เพิ่มบรรทัดใน `## ประวัติสถานะ` 1 บรรทัด · "ทีมตอนนี้" ไม่มีแถว `ทำอยู่` ค้างของงานที่จบแล้ว
-- [ ] แบบ BUILD-PLAN: รันตัวตรวจจนผ่าน (ตัวตรวจอยู่ใน plugin `superuser`): `python <โฟลเดอร์ superuser>/skills/polished-document-style/scripts/check_outline.py assets/build-plan-status.md <path ของ docs/BUILD-PLAN.md>` — จับหัวข้อหาย หัวข้อสลับ ช่องตัวหนาหาย หัวตารางเปลี่ยน และช่องที่ยังไม่เติม · หัวข้ออื่นในไฟล์ (ตารางงาน `## ตัดสินใจเอง`) ตัวตรวจปล่อยผ่าน
-- [ ] คำตอบมีตารางเฉพาะแถวที่เปลี่ยน + ค้าง + รออนุมัติ (ถ้ามี) + ข้อเสนอ (ถ้ามี) + ถัดไป
+Write `## สถานะล่าสุด` (latest status; overwrite) and `## ประวัติสถานะ` (status history; add a line at the top) in that file instead of `CONTEXT.md`. The heading order, columns, allowed values and row ceiling are in [`build-plan-rules`](references/build-plan-rules.md). **Open it before every write.**
 
 ---
 
-## 6 · สิ่งที่ห้ามทำ
+## 4 · In the reply
 
-| อย่าทำ | เพราะ |
+Show "ภาพรวม" (overview, if any) + a table of only **the rows that changed this round** + "ค้างอยู่" + "รออนุมัติ" (if any) + "ข้อเสนอ" (if any) + "ถัดไป" (next), then say where the full table lives (`CONTEXT.md` or `docs/BUILD-PLAN.md`). Do not paste the whole file.
+
+---
+
+## 5 · Checklist before saying it is finished
+
+- [ ] Read the central file from disk before editing (someone else may have edited it)
+- [ ] The progress table is overwritten, not appended, and has a date and time
+- [ ] Every row that says `เสร็จ` or `ผ่าน` (pass) has evidence · the checker is not the doer
+- [ ] You did not set `Approved` yourself
+- [ ] `## รับงานต่อ` is updated per `handoff` section 5
+- [ ] You touched no other heading in the file
+- [ ] BUILD-PLAN form: the numbers in "ภาพรวม" match the table · 1 line is added to `## ประวัติสถานะ` · "ทีมตอนนี้" (current team) has no leftover `ทำอยู่` row for a task that has finished
+- [ ] BUILD-PLAN form: run the checker until it passes (the checker is in plugin `superuser`): `python <superuser folder>/skills/polished-document-style/scripts/check_outline.py assets/build-plan-status.md <path of docs/BUILD-PLAN.md>`. It catches missing headings, swapped headings, missing bold cells, changed table headers and cells not yet filled. Other headings in the file (the task table, `## ตัดสินใจเอง`) the checker lets pass.
+- [ ] The reply has a table of only the changed rows + pending + awaiting approval (if any) + proposals (if any) + next
+
+---
+
+## 6 · What not to do
+
+| Do not | Because |
 |---|---|
-| เขียนว่า `เสร็จ` หรือ `ผ่าน` โดยไม่ได้ตรวจจริง | ตารางสถานะที่โกหกแย่กว่าไม่มีตาราง |
-| ต่อท้ายตารางทุกรอบ | ไฟล์ยาวขึ้นเรื่อย ๆ และไม่รู้ว่าแถวไหนคือปัจจุบัน |
-| สร้างไฟล์สถานะใหม่ (`STATUS.md` `progress.md`) | สถานะกระจายหลายที่ ไม่มีใครรู้ว่าดูที่ไหน |
-| ซ่อนรายการที่ไม่ผ่านไว้ในร้อยแก้ว | คนอ่านตารางแล้วเข้าใจว่าผ่านหมด |
-| ให้ subagent เขียนไฟล์กลางเอง | เขียนชนกันแล้วไฟล์พัง |
+| Write `เสร็จ` or `ผ่าน` without really checking | A status table that lies is worse than no table. |
+| Append to the table every round | The file keeps growing and nobody knows which row is current. |
+| Create a new status file (`STATUS.md` `progress.md`) | Status scatters across places and nobody knows where to look. |
+| Hide failing items in prose | A reader of the table will think everything passed. |
+| Let a subagent write the central file itself | Writes collide and the file breaks. |
 
 ---
 
-## แผนโครงการและรายงานประจำสัปดาห์
+## Project plan and weekly report
 
-แม่แบบแผนโครงการ (ผังเวลา · milestone · risk register · Responsible-Accountable-Consulted-Informed (RACI)) และรายงานสถานะประจำสัปดาห์ฉบับส่งผู้เกี่ยวข้อง อยู่ใน [`references/project-plan-and-weekly-status.md`](references/project-plan-and-weekly-status.md)
+The template for a project plan (timeline · milestone · risk register · Responsible-Accountable-Consulted-Informed (RACI)) and the weekly status report sent to stakeholders is in [`references/project-plan-and-weekly-status.md`](references/project-plan-and-weekly-status.md)
 
-## เชื่อมกับ skill อื่น
+## Link to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| ตารางงานและวงรอบเขียนโค้ด ในไฟล์เดียวกัน | `spec-to-code-loop` (plugin `software-development`) |
-| ชุดเอกสารของโปรเจกต์และสถานะเอกสาร | `project-doc-set` (plugin `software-development`) |
-| บันทึกบริบทเพื่อทำต่อในรอบสนทนาหน้า | `handoff` |
-| ตารางการตัดสินใจเองในไฟล์เดียวกัน | `decision-log` |
-| เลือก playbook และจบงานทุกชนิด | `superuser` |
-| รูปแบบตารางและเอกสาร | `polished-document-style` |
-| ชื่อและสถานะของไฟล์เอกสาร | `document-naming` |
+| The task table and the code-writing loop in the same file | `spec-to-code-loop` (plugin `software-development`) |
+| A project's document set and document status | `project-doc-set` (plugin `software-development`) |
+| Recording context to continue in the next conversation | `handoff` |
+| The table of self-made decisions in the same file | `decision-log` |
+| Choosing a playbook and finishing every kind of task | `superuser` |
+| Table and document format | `polished-document-style` |
+| Names and status of document files | `document-naming` |

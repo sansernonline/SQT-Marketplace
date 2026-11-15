@@ -1,39 +1,39 @@
-# จดทะเบียน (ย้ายมาจาก SKILL.md หัวข้อ 3)
+# Registration (moved from SKILL.md section 3)
 
-อยู่ใน skill `thai-business-setup`
+Part of the skill `thai-business-setup`.
 
-## 3 · จดทะเบียน
+## 3 · Registration
 
-### บุคคลธรรมดา: ทะเบียนพาณิชย์
+### Individual: commercial registration (ทะเบียนพาณิชย์)
 
-- ต้องจดเมื่อทำกิจการตามประกาศกระทรวงพาณิชย์ พ.ศ. 2567 เช่น ขายสินค้าได้วันละ 300 บาทขึ้นไปหรือมีสินค้าไว้ขาย 10,000 บาทขึ้นไป · ซื้อขายสินค้าหรือบริการผ่านอินเทอร์เน็ต · เป็นนายหน้าหรือตัวแทนค้าต่างที่สินค้ามีค่าวันละ 300 บาทขึ้นไป · ผลิตแล้วขายตามเกณฑ์เดียวกัน
-- จดภายใน 30 วันนับจากวันเริ่มประกอบการ และจดเปลี่ยนแปลงหรือเลิกภายใน 30 วันเช่นกัน
-- กรุงเทพฯ ยื่นที่สำนักงานเขต 50 เขต (หรือสำนักงานมาตรฐานการคลังและทรัพย์สิน สำนักการคลัง) · ต่างจังหวัดยื่นที่เทศบาล อบต. หรือเมืองพัทยา ตามที่ตั้งสำนักงานใหญ่
-- ค่าธรรมเนียม: จดใหม่ 50 บาท · เปลี่ยนแปลงครั้งละ 20 บาท · เลิก 20 บาท · ใบแทน 30 บาท
-- แสดงใบทะเบียนพาณิชย์ที่สำนักงานใหญ่ (หรือแสดงทางอิเล็กทรอนิกส์) และติดป้ายชื่อหน้าสำนักงานใหญ่และสาขา
+- You must register when you run a business covered by the Ministry of Commerce announcement of 2024 (B.E. 2567). Examples: selling goods at 300 baht a day or more, or holding 10,000 baht or more of stock for sale · buying and selling goods or services over the internet · acting as a broker or agent for goods worth 300 baht a day or more · making goods and selling them under the same criteria.
+- Register within 30 days of starting the business. Register a change or closure within 30 days as well.
+- In Bangkok, file at one of the 50 district offices (or the Standards, Finance and Property Office, Finance Bureau). Outside Bangkok, file at the municipality, the subdistrict administrative organization (อบต.) or Pattaya City, according to where the head office is.
+- Fees: new registration 50 baht · each change 20 baht · closure 20 baht · replacement certificate 30 baht.
+- Display the commercial registration certificate at the head office (or display it electronically). Put up a name sign at the head office and every branch.
 
-### ห้างหุ้นส่วนและบริษัท: DBD Biz Regist
+### Partnership and company: DBD Biz Regist
 
-ตั้งแต่ 1 ก.ค. 2569 การจดตั้งห้างหุ้นส่วนและบริษัทใหม่ทำผ่านระบบจดทะเบียนนิติบุคคลดิจิทัล (DBD Biz Regist) ช่องทางเดียว ไม่รับกระดาษแล้ว · ตั้งแต่ 1 พ.ย. 2569 คำขอจดทะเบียนห้างหุ้นส่วนและบริษัททุกประเภทยื่นออนไลน์ช่องทางเดียว · สงสัยการใช้ระบบโทร Call Center 1570
+From 1 Jul 2026 (B.E. 2569), new partnerships and companies register only through the digital juristic person registration system (DBD Biz Regist). Paper is no longer accepted. From 1 Nov 2026, every kind of partnership and company registration request is filed online only. For help with the system, call the Call Center on 1570.
 
-1. ตรวจและจองชื่อนิติบุคคลที่ reserve.dbd.go.th (ตั้งชื่อก่อนจองใช้ `product-naming` ได้)
-2. เตรียมข้อมูล: ที่ตั้งสำนักงานใหญ่พร้อมเลขรหัสประจำบ้าน · วัตถุที่ประสงค์ · ทุนและจำนวนหุ้นหรือเงินลงหุ้น · ผู้เริ่มก่อการหรือหุ้นส่วน · กรรมการและอำนาจลงนาม (บริษัท) หรือหุ้นส่วนผู้จัดการ (ห้างฯ) · ผู้สอบบัญชีรับอนุญาตและค่าตอบแทน (บริษัท) · พยาน 2 คน (บริษัท)
-3. บริษัทจดหนังสือบริคณห์สนธิและจดตั้งบริษัทพร้อมกันในวันเดียวได้ เมื่อทำครบ: มีผู้เข้าชื่อซื้อหุ้นครบ · ประชุมจัดตั้งบริษัทและทุกคนเห็นชอบ · ผู้เริ่มก่อการมอบกิจการให้กรรมการ · เรียกชำระค่าหุ้นแล้วอย่างน้อย 25%
-4. ยื่นคำขอใน DBD Biz Regist แล้วชำระค่าธรรมเนียมตามตาราง
-5. ได้เลขทะเบียนนิติบุคคล 13 หลัก เลขนี้ใช้เป็นเลขประจำตัวผู้เสียภาษี และได้ทะเบียนนายจ้างประกันสังคมโดยอัตโนมัติ
-6. ทุนจดทะเบียนเกิน 5 ล้านบาท หรือมีผู้ถือหุ้นหรือกรรมการผู้มีอำนาจเป็นคนต่างด้าว ต้องส่งเอกสารเพิ่มตามคำสั่งนายทะเบียน (ดูหัวข้อ 6)
+1. Check and reserve the juristic person's name at reserve.dbd.go.th (if you still need to pick a name, use `product-naming`).
+2. Prepare the data: head office address with the house code number · business objectives · capital and number of shares or invested amounts · promoters or partners · directors and signing authority (company) or the managing partner (partnership) · licensed auditor and fee (company) · 2 witnesses (company).
+3. A company can register the memorandum of association and the company itself on the same day when all of these are done: every subscriber has signed for shares · the incorporation meeting is held and everyone agrees · the promoters hand the business over to the directors · at least 25% of the share value has been called up.
+4. File the request in DBD Biz Regist and pay the fees in the table.
+5. You receive a 13-digit juristic person registration number. This number serves as the taxpayer ID, and the social security employer registration is created automatically.
+6. If the registered capital is over 5 million baht, or a shareholder or an authorized director is a foreigner, send extra documents as the registrar orders (see section 6).
 
-| รายการ | ค่าธรรมเนียม (บาท) |
+| Item | Fee (baht) |
 |---|---|
-| จดทะเบียนห้างหุ้นส่วน | 1,000 |
-| จดทะเบียนหนังสือบริคณห์สนธิ | 500 |
-| จดทะเบียนบริษัทจำกัด | 5,000 |
-| อากรแสตมป์หนังสือบริคณห์สนธิ · ข้อบังคับ (ถ้ามี) | 200 · 200 |
-| หนังสือรับรอง | รายการละ 40 |
-| ใบสำคัญแสดงการจดทะเบียน | ฉบับละ 100 |
-| รับรองสำเนาเอกสาร | หน้าละ 50 |
-| แปรสภาพห้างหุ้นส่วนเป็นบริษัท | 5,000 |
+| Partnership registration | 1,000 |
+| Memorandum of association registration | 500 |
+| Limited company registration | 5,000 |
+| Stamp duty on the memorandum of association · articles of association (if any) | 200 · 200 |
+| Certificate | 40 per item |
+| Registration certificate | 100 per copy |
+| Certified copy of a document | 50 per page |
+| Converting a partnership into a company | 5,000 |
 
-ส่วนลด 50% สำหรับการยื่นออนไลน์ตามกฎกระทรวง พ.ศ. 2563 ใช้ได้ถึง 31 ธ.ค. 2566 เท่านั้น ปัจจุบันยื่นออนไลน์จ่ายเท่ากับอัตราในตาราง · DBD มีร่างกฎกระทรวงค่าธรรมเนียมฉบับใหม่ที่เปิดรับฟังความเห็นช่วง มี.ค.–เม.ย. 2569 (รอยืนยัน ว่าประกาศใช้แล้วหรือยัง) จึงต้องดูอัตราในระบบก่อนชำระทุกครั้ง
+The 50% discount for online filing under the 2020 (B.E. 2563) ministerial regulation was valid only until 31 Dec 2023. Today online filing costs the same as the rates in the table. DBD has a draft of a new fee regulation that was open for comment in Mar–Apr 2026 (รอยืนยัน (awaiting confirmation) whether it has been issued). So check the rate in the system before every payment.
 
-ตรวจล่าสุด 2026-10-23 · แหล่ง: ข่าว DBD 23 ต.ค. 2569 เรื่องให้บริการออนไลน์ช่องทางเดียวตั้งแต่ 1 พ.ย. 2569 https://www.dbd.go.th/news/37630092569 · ประกาศสำนักงานพาณิชย์จังหวัดลพบุรี 29 พ.ค. 2569 เรื่องยุติรับจดตั้งแบบกระดาษ 1 ก.ค. 2569 https://lopburi.moc.go.th/th/content/category/detail/id/161/iid/166937 · ค่าธรรมเนียมและขั้นตอน: คู่มือ DBD 3 ฉบับและกฎกระทรวงในหัวข้อ 1
+Last checked 2026-10-23 · Sources: DBD news of 23 Oct 2026 (B.E. 2569) on online-only service from 1 Nov 2026 https://www.dbd.go.th/news/37630092569 · Lopburi Provincial Commerce Office announcement of 29 May 2026 on ending paper registration on 1 Jul 2026 https://lopburi.moc.go.th/th/content/category/detail/id/161/iid/166937 · fees and steps: the 3 DBD manuals and the ministerial regulation listed in section 1

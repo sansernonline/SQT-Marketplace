@@ -3,27 +3,27 @@ name: principle-user-experience-first
 description: Use when easier to build conflicts with better for users
 ---
 
-# principle · user experience first — เลือกสิ่งที่ผู้ใช้รู้สึก ไม่ใช่สิ่งที่เราทำง่าย
+# principle · user experience first — choose what the user feels, not what is easy for us
 
-> ผู้ใช้ (หรือผู้อ่าน · ลูกค้า) ไม่เห็นว่างานเราทำง่ายแค่ไหน เขาเห็นแค่ว่าใช้แล้วลื่นหรือสะดุด
+> The user (or reader · customer) does not see how easy the work was for us. They only see whether using it felt smooth or bumpy.
 
-## กฎ
+## Rules
 
-- **"ทำแบบนี้ง่ายกว่า" ใช้ได้เฉพาะเมื่อผู้ใช้ไม่เห็นความต่าง**
-- **น้อยแต่เสร็จจริง** — 3 ฟีเจอร์ (หรือ 3 หัวข้อ) ที่ครบทุกสถานะ ดีกว่า 6 อย่างที่ขาดหน้าว่าง หน้า error หรือ loading
-- **ตัด scope ด้วยการตัดเนื้อหา ไม่ใช่ตัดความประณีต**
-- **ค่าเริ่มต้นที่ถูกสำหรับคนส่วนใหญ่** ดีกว่าหน้าตั้งค่าหรือฟอร์มยาว
-- **ข้อความ error บอกว่าเกิดอะไรและต้องทำอะไรต่อ** เป็นภาษาผู้ใช้ ไม่ใช่รหัสภายในหรือ stack trace
-- **ไม่มีปุ่มประดับ** — ทุกปุ่มที่เห็นต้องทำงานได้จริง
+- **"This way is easier" is allowed only when the user cannot see the difference.**
+- **Fewer, but really finished.** 3 features (or 3 sections) that cover every state beat 6 that lack an empty page, an error page or a loading state.
+- **Cut scope by cutting content, not by cutting polish.**
+- **Defaults that are right for most people** beat a settings page or a long form.
+- **Error messages say what happened and what to do next,** in the user's language, not an internal code or a stack trace.
+- **No decorative buttons.** Every button you can see must really work.
 
-## ทดสอบ
+## Test
 
-ก่อนส่ง ให้เปิดของจริง (แอป · เอกสาร · ฟอร์ม · ข้อความที่จะส่ง) แล้วเดินเส้นทางหลักแบบผู้ใช้ใหม่ จุดที่ต้องหยุดคิด ต้องอ่านคู่มือ หรือรอโดยไม่รู้ว่ารออะไร คือจุดที่ต้องแก้ แอปให้ agent เดินเองได้ด้วย verify skill จาก `app-verifier-setup` (plugin `software-development`)
+Before sending, open the real thing (app · document · form · message to be sent) and walk the main path as a new user. Any point where you must stop and think, read a manual, or wait without knowing what you are waiting for is a point to fix. For an app, the agent can walk it itself with the verify skill from `app-verifier-setup` (plugin `software-development`).
 
-## ดูต่อ
+## See also
 
-งานโค้ด → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md` (สถานะหน้าจอ 5 แบบและลำดับความสำคัญในหน้า `ui-craft` · ข้อความหลายภาษา `i18n-and-locale`)
+For code work → the additions in plugin `software-development` → `superuser` → `references/code-extensions.md` (the 5 screen states and the priority order on the `ui-craft` page · multi-language text `i18n-and-locale`)
 
-## ไม่ใช้กับ
+## Do not use for
 
-เครื่องมือภายในที่ใช้คนเดียวครั้งเดียว · prototype ที่ตั้งใจทิ้ง
+One-off internal tools used by one person · prototypes meant to be thrown away

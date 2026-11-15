@@ -6,9 +6,9 @@ argument-hint: <saas-architecture-review | integration-design> <details>
 
 # saas-platform
 
-SaaS แบบขายองค์กร — multi-tenant · SSO/SCIM · คิดเงินรายเดือน · onboarding ลูกค้า
+Enterprise-sold SaaS: multi-tenant · SSO/SCIM · monthly billing · customer onboarding
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทั้งหมด เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
+**Open only the files that match the task.** Do not read them all, because each file is a full guide to its topic.
 
 ## หัวข้อ
 
@@ -20,7 +20,7 @@ SaaS แบบขายองค์กร — multi-tenant · SSO/SCIM · คิ
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+An agent called to work in this area opens its own role file before starting.
 
 | บทบาท | อ่าน | agent |
 |---|---|---|

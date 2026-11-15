@@ -3,76 +3,76 @@ name: thai-business-setup
 description: Use when starting a Thai business
 ---
 
-# ตั้งธุรกิจในไทย: เลือกรูปแบบและจดทะเบียน
+# Starting a business in Thailand: choose a form and register
 
-skill นี้ช่วยเลือกว่าจะทำธุรกิจในนามตัวเอง ห้างหุ้นส่วน หรือบริษัท พาจดทะเบียน และไล่เช็กลิสต์หลังจดทะเบียน · เนื้อหานี้เป็นข้อมูลทั่วไป ไม่ใช่คำปรึกษาภาษีหรือกฎหมาย ตัวเลขภาษีของกิจการจริงให้นักบัญชีคิดซ้ำ
+This skill helps the user choose between trading as an individual, a partnership or a company. It walks them through registration, then through the checklist after registration. The content is general information, not tax or legal advice. An accountant should recalculate the tax figures for a real business.
 
-ตัวย่อในไฟล์นี้: กรมพัฒนาธุรกิจการค้า (DBD) · ภาษีมูลค่าเพิ่ม (VAT) · วิสาหกิจขนาดกลางและขนาดย่อม (SME)
+Abbreviations in this file: Department of Business Development (DBD) · value added tax (VAT) · small and medium enterprise (SME)
 
-## 1 · เลือกรูปแบบธุรกิจ
+## 1 · Choosing a business form
 
-เทียบ 4 รูปแบบ (บุคคลธรรมดา + ทะเบียนพาณิชย์ · ห้างหุ้นส่วนสามัญนิติบุคคล · ห้างหุ้นส่วนจำกัด · บริษัทจำกัด) ตามความรับผิดต่อหนี้ ทุน ที่จด ค่าธรรมเนียม และภาษี (บุคคลธรรมดาอัตราก้าวหน้า 0–35% ส่วนนิติบุคคลอัตราของนิติบุคคล) · ตารางเต็ม ลำดับคำถามเลือกรูปแบบ และแหล่งที่ตรวจ 2026-10-23 อยู่ใน [`references/business-forms.md`](references/business-forms.md) · เปิดไฟล์นั้นก่อนตอบว่าควรจดแบบไหน
+Compare 4 forms (individual + commercial registration (ทะเบียนพาณิชย์) · registered ordinary partnership (ห้างหุ้นส่วนสามัญนิติบุคคล) · limited partnership (ห้างหุ้นส่วนจำกัด) · limited company (บริษัทจำกัด)) by liability for debts, capital, where to register, fees and tax (progressive 0–35% for an individual, the juristic person rate for the others). The full table, the order of questions for choosing a form and the sources checked 2026-10-23 are in [`references/business-forms.md`](references/business-forms.md). Open that file before answering which form to register.
 
-## 2 · ภาษีเงินได้: บุคคลธรรมดาเทียบนิติบุคคล
+## 2 · Income tax: individual vs juristic person
 
-ขั้นบันไดภาษีบุคคลธรรมดา (ปีภาษี 2568) อัตราของนิติบุคคล SME การคิด 3 สถานการณ์ของกำไร และวิธีรัน `decide.mjs` กับ `tax-compare.mjs` อยู่ใน [`references/income-tax-compare.md`](references/income-tax-compare.md) · ตัวเลขนี้ยังไม่รวมภาษีชั้นที่ 2 ตอนจ่ายเงินออกจากบริษัท · เปิดไฟล์นั้นก่อนเทียบตัวเลข
+The individual tax brackets (tax year 2025 (B.E. 2568)), the SME juristic person rates, the 3 profit scenarios and how to run `decide.mjs` with `tax-compare.mjs` are in [`references/income-tax-compare.md`](references/income-tax-compare.md). These figures do not yet include the second layer of tax when money leaves the company. Open that file before comparing numbers.
 
-## 3 · จดทะเบียน
+## 3 · Registration
 
-บุคคลธรรมดาจดทะเบียนพาณิชย์ (ขายออนไลน์ต้องจด) · ห้างหุ้นส่วนและบริษัทจดผ่าน DBD Biz Regist (ออนไลน์ช่องทางเดียวตั้งแต่ 1 พ.ย. 2569) · ขั้นตอน ค่าธรรมเนียม และแหล่งที่ตรวจอยู่ใน [`references/registration.md`](references/registration.md) · ดูอัตราในระบบก่อนชำระทุกครั้ง
+An individual registers commercial registration (anyone selling online must register). Partnerships and companies register through DBD Biz Regist (online only from 1 Nov 2026 (B.E. 2569)). The steps, fees and sources checked are in [`references/registration.md`](references/registration.md). Check the rate in the system before every payment.
 
-## 4 · หลังจดทะเบียน: เช็กลิสต์
+## 4 · After registration: checklist
 
-| งาน | เมื่อไร | ใช้ |
+| Task | When | Use |
 |---|---|---|
-| เปิดบัญชีธนาคารในชื่อกิจการ แยกจากเงินส่วนตัว | ทันที | แนวปฏิบัติที่แนะนำ |
-| นิติบุคคล: ทำบัญชีตั้งแต่วันที่จดทะเบียน · จัดหาผู้ทำบัญชีที่มีคุณสมบัติ · ปิดบัญชีครั้งแรกภายใน 12 เดือน · เก็บบัญชีและเอกสารไม่น้อยกว่า 5 ปีนับจากวันปิดบัญชี | ทันที | `dbd-annual-filing` |
-| จด VAT เมื่อรายรับจากการขายสินค้าหรือให้บริการเกิน 1.8 ล้านบาทต่อปี ยื่นคำขอภายใน 30 วันนับจากวันที่รายรับเกิน · รายรับไม่ถึงก็ขอจดเองได้ · นิติบุคคลยื่นคำขอจด VAT พร้อมคำขอจดตั้งได้ | ตามรายรับ | `tax-vat-th` |
-| ออกใบกำกับภาษีอิเล็กทรอนิกส์ (e-Tax Invoice) | หลังจด VAT | `e-tax-invoice` |
-| จ้างคนแรก: ขึ้นทะเบียนลูกจ้างเป็นผู้ประกันตนภายใน 30 วันนับจากวันเริ่มงาน · นายจ้างที่เป็นบุคคลธรรมดาต้องขึ้นทะเบียนนายจ้างเอง | เมื่อจ้าง | `hiring-th` · `social-security-th` |
-| ภาษีหัก ณ ที่จ่ายและ VAT รายเดือน | ทุกเดือน | `tax-vat-th` |
-| เงินเดือน | ทุกเดือน | `payroll-th` |
-| งบการเงินและภาษีประจำปี | หลังปิดปีบัญชี | `dbd-annual-filing` |
-| ประกาศความเป็นส่วนตัวสำหรับลูกค้าและพนักงาน | ก่อนเก็บข้อมูล | `pdpa-workflow` |
-| ใบเสนอราคา ใบแจ้งหนี้ ใบเสร็จ · QR พร้อมเพย์ | ตอนเปิดขาย | `doc-quotation` · `promptpay-qr` |
+| Open a bank account in the business name, separate from personal money | Right away | Recommended practice |
+| Juristic person: keep books from the registration date · appoint a qualified bookkeeper · close the first accounting period within 12 months · keep books and documents for at least 5 years from the closing date | Right away | `dbd-annual-filing` |
+| Register for VAT when revenue from selling goods or services exceeds 1.8 million baht a year. File the request within 30 days of the date revenue passes it · below that, the owner can still register voluntarily · a juristic person can file the VAT request together with the incorporation request | By revenue | `tax-vat-th` |
+| Issue electronic tax invoices (e-Tax Invoice) | After VAT registration | `e-tax-invoice` |
+| First hire: register the employee as an insured person within 30 days of the start date · an employer who is an individual must register as an employer themselves | When hiring | `hiring-th` · `social-security-th` |
+| Withholding tax and monthly VAT | Every month | `tax-vat-th` |
+| Payroll | Every month | `payroll-th` |
+| Financial statements and yearly tax | After the accounting year closes | `dbd-annual-filing` |
+| Privacy notice for customers and staff | Before collecting data | `pdpa-workflow` |
+| Quotation, invoice, receipt · PromptPay QR | When sales open | `doc-quotation` · `promptpay-qr` |
 
-ตรวจล่าสุด 2026-10-23 · แหล่ง: เกณฑ์จด VAT https://www.rd.go.th/7061.html · หน้าที่ทำบัญชี จด VAT พร้อมจดตั้ง และทะเบียนนายจ้างอัตโนมัติ: คู่มือนิติบุคคลตั้งใหม่ของ DBD (ลิงก์ในหัวข้อ 1) · ขึ้นทะเบียนลูกจ้าง 30 วัน: ข่าวสำนักงานประกันสังคม 30 ต.ค. 2567 (ลิงก์ใน `hiring-th/references/offer-letter-first-week.md` หัวข้อ 8)
+Last checked 2026-10-23 · Sources: VAT registration threshold https://www.rd.go.th/7061.html · bookkeeping duty, VAT registration with incorporation and automatic employer registration: the DBD manual for newly registered juristic persons (link in section 1) · employee registration within 30 days: Social Security Office news of 30 Oct 2024 (B.E. 2567) (link in `hiring-th/references/offer-letter-first-week.md` section 8)
 
-## 5 · ต้นทุนนำเข้าจากจีน
+## 5 · Import cost from China
 
-ย้ายไป skill `import-landed-cost` แล้ว (สูตร CIF อากร VAT · กติกาปี 2569 · ทางรถหรือทางเรือ · สคริปต์ `landed-cost.mjs`)
+Moved to the skill `import-landed-cost` (CIF formula, duty and VAT · 2026 rules · by road or by sea · script `landed-cost.mjs`).
 
-## 6 · เมื่อไหร่ต้องถามนักบัญชีหรือทนาย
+## 6 · When to ask an accountant or lawyer
 
-- ก่อนเลือกรูปแบบ ถ้ากำไรคาดว่าเกิน 1 ล้านบาทต่อปี หรือหุ้นส่วนลงเงินไม่เท่ากัน (แนวปฏิบัติที่แนะนำ)
-- มีผู้ถือหุ้น หุ้นส่วน หรือกรรมการเป็นคนต่างด้าว · DBD ขอเอกสารเพิ่มตามคำสั่งสำนักงานทะเบียนหุ้นส่วนบริษัทกลาง (บริษัท: ที่ 2/2569 · ห้างหุ้นส่วน: ที่ 205/2555) และกฎหมายการประกอบธุรกิจของคนต่างด้าวต้องให้ทนายดู
-- ทุนจดทะเบียนเกิน 5 ล้านบาท · DBD ขอเอกสารเพิ่มตามคำสั่งที่ 1/2567
-- รายรับใกล้ 1.8 ล้านบาท หรือกำลังจะจด VAT
-- ยื่นงบการเงินหรือภาษีล่าช้ามาแล้ว (ค่าปรับเพิ่มทุกวัน ดู `dbd-annual-filing`)
+- Before choosing a form, if profit is expected to exceed 1 million baht a year or partners put in unequal amounts (recommended practice)
+- A shareholder, partner or director is a foreigner · DBD asks for extra documents under the orders of the Central Partnership and Company Registration Office (company: no. 2/2569 · partnership: no. 205/2555), and the law on foreign business operation needs a lawyer's review
+- Registered capital over 5 million baht · DBD asks for extra documents under order no. 1/2567
+- Revenue is near 1.8 million baht, or the business is about to register for VAT
+- Financial statements or tax were filed late (penalties grow every day; see `dbd-annual-filing`)
 
-## 7 · รออนุมัติ
+## 7 · รออนุมัติ (awaiting approval)
 
-ย้อนไม่ได้หรือกระทบคนนอก agent เตรียมข้อมูลและร่างให้ แต่ไม่ทำเอง
+These steps cannot be undone or they affect outsiders. The agent prepares the data and drafts, but does not do them.
 
-- ยื่นจดทะเบียนจริง ยืนยันตัวตน หรือชำระค่าธรรมเนียมในระบบของรัฐ
-- ลงนามสัญญาหุ้นส่วน หรือสัญญาเช่า
-- ยื่นคำขอจด VAT
-- ใส่รหัสผ่าน รหัสยืนยันตัวตน หรือเลขบัญชีของผู้ใช้
+- Filing a real registration, verifying identity or paying a fee in a government system
+- Signing a partnership agreement or a lease
+- Filing a VAT registration request
+- Entering the user's password, identity verification code or account number
 
-## 8 · เชื่อมกับ skill อื่น
+## 8 · Links to other skills
 
-| ต้องการ | ใช้ |
+| Need | Use |
 |---|---|
-| ภาษีคนขายออนไลน์แบบบุคคลธรรมดา (หักค่าใช้จ่าย · ภ.ง.ด.90 และ 94) | `seller-tax-basics` |
-| ยื่นภาษีรายเดือน VAT หัก ณ ที่จ่าย และค่าปรับ | `tax-vat-th` + agent `tax-helper` |
-| ใบกำกับภาษีอิเล็กทรอนิกส์ | `e-tax-invoice` |
-| ปิดปี งบการเงิน บอจ.5 ภ.ง.ด.50 | `dbd-annual-filing` |
-| จ้างพนักงานคนแรก | `hiring-th` · `social-security-th` · `payroll-th` |
-| สัญญาหุ้นส่วน เช่า และจ้างทำของ | `doc-contract-th` |
-| ใบเสนอราคา ใบแจ้งหนี้ ใบเสร็จ | `doc-quotation` |
-| ตั้งราคาขายบน Shopee Lazada TikTok Shop หลังรู้ต้นทุน | `marketplace-fees-pricing` |
-| เทียบขนส่งในประเทศ | `shipping-compare` |
-| ตั้งชื่อธุรกิจก่อนจองชื่อ | `product-naming` (plugin `software-development`) |
-| ถ้อยคำทุกบรรทัด | `human-writing` |
+| Tax for an online seller who is an individual (deducting expenses · ภ.ง.ด.90 (PND 90) and 94 (PND 94)) | `seller-tax-basics` |
+| Monthly filing of VAT, withholding tax and penalties | `tax-vat-th` + agent `tax-helper` |
+| Electronic tax invoice | `e-tax-invoice` |
+| Year-end close, financial statements, บอจ.5, ภ.ง.ด.50 | `dbd-annual-filing` |
+| Hiring the first employee | `hiring-th` · `social-security-th` · `payroll-th` |
+| Partnership, lease and work-for-hire contracts | `doc-contract-th` |
+| Quotation, invoice, receipt | `doc-quotation` |
+| Setting a selling price on Shopee, Lazada and TikTok Shop once the cost is known | `marketplace-fees-pricing` |
+| Comparing domestic carriers | `shipping-compare` |
+| Naming the business before reserving the name | `product-naming` (plugin `software-development`) |
+| Wording of every line | `human-writing` |
 
-ที่มาของแนวคิด: ลำดับคำถามเลือกรูปแบบธุรกิจได้แนวคิดจาก https://github.com/Boom-Vitt/claude-thai-business-skills (MIT License · Copyright (c) 2026 Vittawat (boombignose) · ตรวจไฟล์ LICENSE 2026-10-23) · เขียนใหม่ทั้งหมด ไม่คัดลอกข้อความ และตรวจตัวเลขทุกตัวกับแหล่งทางการใหม่
+Origin of the idea: the order of questions for choosing a business form took its idea from https://github.com/Boom-Vitt/claude-thai-business-skills (MIT License · Copyright (c) 2026 Vittawat (boombignose) · LICENSE file checked 2026-10-23). It was rewritten from scratch with no copied text, and every figure was rechecked against official sources.

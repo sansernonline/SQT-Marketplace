@@ -1,11 +1,11 @@
-# ฉบับงานวิจัย
+# Research edition
 
-ส่วนของ `prior-art-review` ข้อ 8 · ใช้เมื่อสำรวจงานวิจัยก่อนตั้งโจทย์ แทนการเลือกเครื่องมือ
+Part of `prior-art-review` item 8 · use it when surveying research before setting the problem, instead of choosing a tool.
 
-ผลลัพธ์ไม่ใช่ "ใช้ตัวไหน" แต่คือ **"ช่องว่างอยู่ตรงไหน"**
+The output is not "which one to use" but **"where the gap is"**.
 
-- เปลี่ยนคอลัมน์ของตารางเทียบเป็น: งาน · ปี · วิธีที่ใช้ · ชุดข้อมูล · ผลที่รายงาน · ข้อจำกัดที่เขาบอกเอง
-- **คอลัมน์ "ข้อจำกัดที่เขาบอกเอง" คือที่มาของช่องว่าง** เพราะส่วนใหญ่ผู้เขียนบอกไว้เองในหัวข้อสุดท้าย
-- ช่องว่างที่ใช้ได้ต้องเป็นอย่างใดอย่างหนึ่ง: ยังไม่มีใครทดสอบกับบริบทนี้ · วิธีเดิมใช้ไม่ได้เมื่อเงื่อนไขเปลี่ยน · ผลที่รายงานทำซ้ำไม่ได้
-- **ห้ามอ้างงานที่ยังไม่ได้อ่านตัวเต็ม** เพราะการอ่านแค่บทคัดย่อแล้วอ้าง คือความผิดพลาดที่กรรมการจับได้เร็วที่สุด
-- งานที่หาโค้ดหรือชุดข้อมูลไม่ได้ ให้ระบุว่าทำซ้ำไม่ได้
+- Change the columns of the comparison table to: work · year · method used · dataset · reported result · limitations the authors state themselves
+- **The column "limitations the authors state themselves" is where gaps come from**, because most authors state them in the last section.
+- A usable gap must be one of these: nobody has tested it in this context · the existing method fails when conditions change · the reported result cannot be reproduced
+- **Never cite a work you have not read in full**, because reading only the abstract and then citing it is the mistake a reviewer catches fastest.
+- For work whose code or dataset you cannot find, state that it cannot be reproduced.

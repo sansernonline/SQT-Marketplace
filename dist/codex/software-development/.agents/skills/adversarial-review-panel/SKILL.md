@@ -3,43 +3,43 @@ name: adversarial-review-panel
 description: Use for an adversarial review or stress test before shipping
 ---
 
-# adversarial-review-panel — คณะรีวิวที่ตั้งใจหาเรื่อง
+# adversarial-review-panel — a review panel that deliberately hunts for faults
 
-> ผู้ตรวจคนเดียวเห็นแค่มุมเดียว ส่วนคณะที่ถูกสั่งให้ "พยายามทำให้มันพัง" คนละมุม จะจับสิ่งที่คนเดียวมองข้ามได้
-> ผลลัพธ์คือคำตัดสิน **ไม่ใช่การแก้งาน**
+> A single reviewer sees only one angle. A panel told to "try to break it," each from a different angle, catches what one person overlooks.
+> The output is a verdict, **not a fix to the work.**
 
-เส้นแบ่งกับ [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md): panel โจมตีงานที่เสร็จแล้ว 1 ชิ้นก่อนส่ง · ยังไม่มีงานหรือยังไม่รู้ว่ารูปแบบไหนดี (แผน · ดีไซน์ · ร่าง) → สร้างหลายแบบแล้วเลือกด้วย pick-best ก่อน
+The line between this and [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md): the panel attacks 1 finished piece of work before shipping · if there is no work yet, or you do not know which form is best (plan · design · draft), build several versions and choose with pick-best first.
 
-## ขั้นตอน
+## Steps
 
-1. **ขอบเขต** — สิ่งที่จะรีวิว เช่น เอกสาร · แผน · ผลวิจัย · รายการสินค้า · ชุดไฟล์ที่สร้างหรือแก้ในรอบนี้ รวมของรอบข้างที่ต้องอ่านประกอบ
-2. **แพ็กเกจและเจตนา** — สร้างแพ็กเกจรีวิวตาม [`review-lenses`](../superuser/references/review-lenses.md) ข้อ 1 (diff เป็นไฟล์ · เงื่อนไข spec คัดตรงตัว · รหัส `head:`) แล้วเขียนเจตนา 1 ย่อหน้าว่างานนี้ตั้งใจทำอะไร โดยดูจากคำขอ · บันทึกงาน · ตัวงานเอง ถ้าไม่แน่ใจให้เลือกการตีความที่ผลกระทบน้อยสุด แล้วจดลง [`decision-log`](../decision-log/SKILL.md) โดยไม่หยุดถาม
-3. **ตั้งคณะ 3 คน ต่างมุมกัน** (แต่ละคนคือ agent `reviewer` ตัวใหม่ อ่านอย่างเดียว · งานชิ้นเดียวที่ไม่เสี่ยงใช้ `reviewer` ตัวเดียวพอ) — ใน Claude Code โมเดลทุกตัวมาจากค่ายเดียวกัน ความต่างจึงต้องมาจากมุมที่สั่งให้ดู และการผสมโมเดลหลายขนาด
+1. **Scope**: what will be reviewed, such as a document · plan · research result · product list · the set of files created or changed this round, including neighboring items that must be read alongside.
+2. **Package and intent**: build the review package by [`review-lenses`](../superuser/references/review-lenses.md) item 1 (diff as a file · spec conditions quoted verbatim · a `head:` code), then write a 1-paragraph intent saying what the work means to do, from the request · the work log · the work itself. If unsure, choose the interpretation with the least impact and note it in the [`decision-log`](../decision-log/SKILL.md) without stopping to ask.
+3. **Form a panel of 3 with different angles** (each is a fresh read-only `reviewer` agent · for a single low-risk piece 1 `reviewer` is enough). In Claude Code every model comes from the same vendor, so the difference must come from the angle assigned and from mixing model sizes.
 
-   | ผู้ตรวจ | มุม | ระดับโมเดล |
+   | Reviewer | Angle | Model tier |
    |---|---|---|
-   | ก | ความถูกต้อง — ข้อเท็จจริงผิด · ตัวเลขไม่ตรง · กรณีขอบ · ข้อมูลว่าง | ใหญ่ |
-   | ข | ความเสี่ยงและข้อมูล — ข้อมูลส่วนบุคคล · ค่าลับ · สิทธิ์ · เงินหรือการกระทำที่ย้อนกลับไม่ได้ · ข้อกฎหมายหรือข้อตกลงที่ละเมิด | ใหญ่ |
-   | ค | ความเรียบง่ายและคนใช้ต่อ — ส่วนเกินจำเป็น · ขัดกันเอง · คำหรือชื่อที่ชวนเข้าใจผิด · คนอ่านหรือลูกค้าจริงจะติดตรงไหน | กลาง |
+   | A | Correctness: wrong facts · numbers that do not match · edge cases · empty data | large |
+   | B | Risk and data: personal data · secrets · permissions · money or irreversible actions · legal or contract terms violated | large |
+   | C | Simplicity and next users: what is more than needed · self-contradiction · misleading words or names · where a real reader or customer would get stuck | medium |
 
-   งานโค้ด (ขอบเขตจาก git · มุมเพิ่มของแต่ละผู้ตรวจ · แอปมือถือ) → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
+   For code work (scope from git · extra angles for each reviewer · mobile apps) → the add-on in plugin `software-development` → `superuser` → `references/code-extensions.md`.
 
-   **ผู้ตรวจจากค่ายอื่น (ถ้ามี)** — ถ้าเครื่องมี Command-Line Interface (CLI) ของโมเดลค่ายอื่นติดตั้งไว้แล้ว (เช่น `codex` · `gemini`) ให้ใช้แทนผู้ตรวจ ค ด้วย prompt และมุมเดิม ในโหมดอ่านอย่างเดียว เพราะโมเดลต่างค่ายอาจพลาดไม่เหมือนกัน (ยังไม่มีหลักฐานวัดเทียบว่าดีกว่าค่ายเดียว) แต่ **เนื้องานจะถูกส่งออกไปยังผู้ให้บริการนั้น** จึงใช้ได้เฉพาะเมื่ออนุญาตไว้ล่วงหน้าใน `~/.claude/superuser-style.md` หรือ `docs/AGENT-LOOP.md` ถ้าไม่มี CLI หรือไม่ได้อนุญาต ให้ใช้คณะค่ายเดียวตามตาราง
+   **A reviewer from another vendor (if available)**: if the machine has the Command-Line Interface (CLI) of another vendor's model installed (such as `codex` · `gemini`), use it in place of reviewer C, with the same prompt and angle, in read-only mode, because models from different vendors may miss different things (no measured evidence yet that it beats a single vendor). But **the work content is sent out to that provider**, so use it only when permitted in advance in `~/.claude/superuser-style.md` or `docs/AGENT-LOOP.md`. If there is no CLI or no permission, use the single-vendor panel in the table.
 
-   ข้อควรรู้ว่าความเป็นอิสระมาจากไหน: ในบันทึกรอบเดียวของคอร์ส CWN2026 (2026-11-04) ผู้ตัดสิน Codex เขียนข้อสอบรับงาน 47 ข้อก่อนแอปมี · 25 ข้อ (53%) ใช้ไม่ได้เมื่อรันกับของจริงต้นฉบับ · จับของที่ผู้สร้างพลาดได้ 2 ข้อ (ผ่าน 20/22 → 22/22) · ข้อมูลที่ 2 ฝั่งใช้ร่วมกันผิด (ตรงจอจริง 278/300) และถูกจับเพราะรันซ้ำกับต้นฉบับจริง ไม่ใช่เพราะต่างค่าย · เส้นที่สำคัญจึงเป็น **คำตอบมาจากต้นฉบับจริง** ไม่ใช่ยี่ห้อโมเดล · ไม่มีกลุ่มควบคุม จึงแยกผลของยี่ห้อโมเดลออกไม่ได้
+   Where independence comes from, worth knowing: in one recorded round of the CWN2026 course (2026-11-04), the Codex judge wrote 47 acceptance exam items before the app existed · 25 items (53%) were unusable when run against the real original · it caught 2 things the builder missed (pass 20/22 → 22/22) · data wrongly shared by both sides (matching the real screen 278/300) was caught because it was rerun against the real original, not because of the different vendor · so the line that matters is **the answer comes from the real original**, not the model brand · there was no control group, so the effect of the model brand cannot be separated out.
 
-4. **ปล่อยพร้อมกันในข้อความเดียว อ่านอย่างเดียว** — ทุกคนได้ path แพ็กเกจและเจตนาเดียวกัน ต่างกันแค่มุม (มุมของแต่ละคนคือเลนส์ใน `review-lenses` ข้อ 2) · prompt ไม่มีความเห็นของหัวหน้าทีมว่างานดีหรือไม่ ให้ส่งผลเป็นตาราง `| ปัญหา | ที่ไหน (หน้า · ข้อ · ไฟล์:บรรทัด) | ทำให้พังอย่างไร (ขั้นตอนหรือ input) | ความรุนแรง |` ไม่เกิน 40 บรรทัดต่อคน และ **ห้ามแก้ไฟล์**
-5. **ยืนยันทุกข้อ ทีละข้อ** — ข้อละ 1 ผู้ยืนยัน (`reviewer` ตัวใหม่ ค่าตั้งต้น `FALSE_POSITIVE` มั่นใจต่ำกว่า 80 ไม่เข้ารายงาน ตาม `review-lenses` ข้อ 3) ตรวจกับต้นฉบับจริงหรือรันให้เห็น ข้อที่ยืนยันไม่ได้ให้ติด `PLAUSIBLE` (เป็นไปได้ แต่ยังพิสูจน์ไม่ได้) หรือทิ้งพร้อมเหตุผล ส่วนข้อ `PLAUSIBLE` ให้ตัดสินเองโดยเลือกทางที่ผลกระทบน้อยสุด แล้วจดลงรายการ ยกเว้นเรื่องในรายการ "รออนุมัติ" ของ `superuser` (ลบหรือเขียนทับของผู้ใช้ · commit/push · ส่งออกนอกเครื่อง) ให้เตรียมไว้และจดลงรายการ ไม่ทำเอง
-6. **ซักค้าน (เฉพาะงานเสี่ยงสูง หรือเมื่อตาราง 3 ใบขัดกัน)** — ผู้โหวต 3 คน **คงที่ 3 เสมอ** ไม่ลดไม่เพิ่มตามงบ เพื่อให้ความมั่นใจเทียบข้ามรอบได้ · ถือคนละเลนส์ `security-reach` · `security-impact` · `security-defense` (หรือเลนส์ที่เหมาะกับข้อนั้น) ยืนยันได้ต้องอ้าง `ไฟล์:บรรทัด` ของทางเข้า จุดที่พัง และตัวกันที่ขาด ไม่ครบถือว่าไม่ยืนยัน · รวม 3 ตารางเป็นใบเดียว ตัดชื่อคนเจอออก แล้วส่งกลับให้ผู้ตรวจแต่ละคน (ตัวเดิมผ่าน `SendMessage` ไม่ต้องอ่านไฟล์ใหม่) ตอบทีละข้อว่า `ยืนยัน` · `ค้าน` (พร้อมเหตุผลหรือขั้นที่ทำให้ไม่พัง) · `ไม่รู้` · ข้อ `PLAUSIBLE` จากข้อ 5 เข้ารอบนี้ด้วย · งานปกติข้ามข้อนี้ เพราะเป็นอีก 3 รอบ token
-7. **ให้น้ำหนัก 4 กลุ่ม** — `ยืนยันข้าม` (2 คนขึ้นไปเจอเองโดยอิสระ) > `เห็นพ้อง` (เจอคนเดียว ซักค้านแล้วคนอื่นยืนยัน) > `คนเดียว` (ไม่มีใครค้านแต่ไม่มีใครยืนยัน · จริงต่อเมื่อมีขั้นตอนทำให้พังชัด) > `ขัดแย้ง` (มีคนค้าน — หัวหน้าทีมตัดสินเองจากต้นฉบับ ไม่นับเสียง) · ไม่ได้ซักค้าน → มีแค่ `ยืนยันข้าม` กับ `คนเดียว` · ความเห็นเรื่องรสนิยมเป็นแค่ข้อสังเกตทุกกลุ่ม (แนวคิดจาก adverse ของ addyosmani · MIT)
-8. **คำตัดสิน** — ก่อนเขียน เทียบ `head:` ในแพ็กเกจกับของจริง ไม่ตรงหรือมีผู้ตรวจที่ล้ม ยังรัน หรือถูกตัดผล ให้รายงานตามนั้น ห้ามนับเป็นสะอาด · 1 บรรทัด: `ส่งได้` · `ส่งได้หลังแก้` · `ยังไม่ควรส่ง` แล้วตามด้วยรายการ: สูง · กลาง · ต่ำ (ตามนิยามใน `reviewer`) แต่ละข้อบอกกลุ่มจากข้อ 7 · ข้อที่ปัดทิ้งบันทึกใน `ledger.md` พร้อมเหตุผลจากรายการของ `review-lenses` ข้อ 4
-9. การสั่งแก้ต่อเป็นหน้าที่ของผู้ใช้หรือ playbook ส่วน skill นี้หยุดที่คำตัดสิน
+4. **Launch all at once in one message, read-only**: everyone gets the same package and intent paths and differs only in angle (each person's angle is the lens in `review-lenses` item 2) · the prompt holds no opinion from the team lead on whether the work is good. Send results as a table `| ปัญหา | ที่ไหน (หน้า · ข้อ · ไฟล์:บรรทัด) | ทำให้พังอย่างไร (ขั้นตอนหรือ input) | ความรุนแรง |` (problem · where (page · item · file:line) · how it breaks (steps or input) · severity), at most 40 lines per person, and **no editing files.**
+5. **Verify every finding, one at a time**: 1 verifier per finding (a fresh `reviewer`, default `FALSE_POSITIVE`, confidence below 80 stays out of the report, per `review-lenses` item 3) who checks against the real original or runs it to show it. A finding that cannot be verified gets `PLAUSIBLE` (possible but not yet proven) or is dropped with a reason. For `PLAUSIBLE` items, decide yourself by choosing the path with the least impact and note it in the log, except matters on the `superuser` "awaiting approval" (`รออนุมัติ`) list (deleting or overwriting the user's things · commit/push · sending off the machine): prepare those and note them in the log, but do not do them yourself.
+6. **Cross-examination (only for high-risk work, or when the 3 tables contradict)**: the 3 voters are **always fixed at 3**, never reduced or increased by budget, so confidence is comparable across rounds · each holds a different lens: `security-reach` · `security-impact` · `security-defense` (or the lens that fits the item) · to confirm, a voter must cite the `file:line` of the entry point, the breaking spot and the missing guard, and an incomplete citation counts as not confirmed · merge the 3 tables into 1, strip the finders' names, and send it back to each reviewer (the same instance through `SendMessage`, no need to reread files), who answers item by item `ยืนยัน` (confirm) · `ค้าน` (object, with a reason or the step that makes it not break) · `ไม่รู้` (do not know) · `PLAUSIBLE` items from step 5 join this round too · normal work skips this step, because it is another 3 rounds of tokens.
+7. **Weight into 4 groups**: `ยืนยันข้าม` (cross-confirmed: 2 or more found it independently) > `เห็นพ้อง` (agreed: 1 found it, and after cross-examination others confirmed) > `คนเดียว` (single: nobody objected but nobody confirmed · true only when a clear breaking step exists) > `ขัดแย้ง` (disputed: someone objected, and the team lead decides from the original without counting votes) · with no cross-examination there are only `ยืนยันข้าม` and `คนเดียว` · opinions about taste are only observations in every group (idea from adverse by addyosmani · MIT).
+8. **Verdict**: before writing, compare `head:` in the package with the real one. If it does not match, or a reviewer failed, is still running, or had its result cut, report it that way and never count it as clean · 1 line: `ส่งได้` (can ship) · `ส่งได้หลังแก้` (can ship after fixes) · `ยังไม่ควรส่ง` (should not ship yet), followed by the list: high · medium · low (by the definitions in `reviewer`), each item naming its group from step 7 · items dismissed are recorded in `ledger.md` with a reason from the list in `review-lenses` item 4.
+9. Ordering the fixes is the job of the user or a playbook. This skill stops at the verdict.
 
-## ข้อควรระวัง
+## Cautions
 
-- คณะรีวิวใช้ token ราว 3 เท่าของ `reviewer` ตัวเดียว · เลือกคณะเมื่อ ราคาของการพลาด × โอกาสพลาด มากกว่าค่าผู้ตรวจที่เพิ่มอีก 2 ตัว (คิดด้วย `decision-scoring` คำสั่ง `review`) · ถ้าประเมินไม่ได้ ใช้ค่าตั้งต้น (ยังไม่ได้วัด): งานที่ส่งคนนอก เงิน กฎหมาย สุขภาพ หรือเลือกทางที่ย้อนไม่ได้ → คณะ 3 มุม · ที่เหลือ → `reviewer` ตัวเดียว · งานโค้ดดู `code-review-checklist` · `pr-description-template` (plugin `software-development`)
-- ผู้ตรวจ Artificial Intelligence (AI) ก็แจ้งปัญหาที่ไม่มีจริงได้ ทุกข้อจึงต้องผ่านข้อ 5 ก่อนเข้ารายงาน
+- A panel uses about 3 times the tokens of a single `reviewer`. Choose a panel when the price of a miss × the chance of a miss is more than the cost of 2 extra reviewers (compute with `decision-scoring`, command `review`) · if you cannot estimate, use the default (not yet measured): work sent to outsiders, money, law, health, or choosing an irreversible path → a 3-angle panel · everything else → a single `reviewer` · for code work see `code-review-checklist` · `pr-description-template` (plugin `software-development`).
+- An Artificial Intelligence (AI) reviewer can also report problems that do not exist, so every finding must pass step 5 before entering the report.
 
-## ที่มา
+## Sources
 
-ผู้โหวต 3 เลนส์ ค่าตั้งต้น false positive · claude-security (All rights reserved · เอาแค่กลไก) · agents/scan-verifier.md · ดู 2026-11-10 · ผู้ยืนยันทีละข้อ · code-review (Anthropic) · ดู 2026-11-10 · ความสดของผลรีวิว · qodo · skills/qodo-review-resolver/SKILL.md · ดู 2026-11-10 · รายละเอียดอื่นดู `review-lenses` หัวข้อ "ที่มา"
+3-lens voters, default false positive · claude-security (All rights reserved · mechanism only) · agents/scan-verifier.md · viewed 2026-11-10 · one-by-one verifiers · code-review (Anthropic) · viewed 2026-11-10 · freshness of review results · qodo · skills/qodo-review-resolver/SKILL.md · viewed 2026-11-10 · for other details see `review-lenses`, section "Sources"

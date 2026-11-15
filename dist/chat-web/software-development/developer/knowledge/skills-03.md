@@ -1,343 +1,3 @@
-# skill: decision-log
-
-Use when an agent makes its own call in unattended work
-
-# decision-log — ทุกการตัดสินใจเองต้องตรวจย้อนได้
-
-> agent ทำต่อเองโดยไม่ถามได้ ก็ต่อเมื่อคนกลับมาดูได้ว่ามันเลือกอะไรไปบ้าง และกลับคำตัดสินทีละข้อได้
-
-ใช้ไฟล์เดียวกับ [`status-report`](../status-report/SKILL.md)
-
-## เขียนที่ไหน
-
-ค่าตั้งต้น: ตาราง "การตัดสินใจ" ใน `.claude/superuser/CONTEXT.md` (เก็บ 20 แถวล่าสุด แถวเก่าย้ายไป `HISTORY.md` ตาม [`team-files`](../superuser/references/team-files.md))
-ถ้าโปรเจกต์มี `docs/BUILD-PLAN.md` ให้ลง `## ตัดสินใจเอง` ซึ่งเป็นหัวข้อสุดท้ายของไฟล์นั้นแทน (ลำดับ `## สถานะล่าสุด` → ตารางงาน → `## ประวัติสถานะ` → `## ตัดสินใจเอง`) ถ้ายังไม่มีหัวข้อให้สร้างขึ้น และเพิ่ม 2 คอลัมน์หน้า `เลือก` คือ `งาน` · `เรื่อง`
-subagent ไม่เขียนตารางเอง แต่**รายงานการตัดสินใจกลับมา** ให้ตัวหลักลงตาราง
-
-```markdown
-| วันที่ | เลือก | ไม่เลือก | เหตุผล · หลักฐาน |
-|---|---|---|---|
-| 2026-10-04 15:40 | ยอดขายเดือนนี้ใช้ไฟล์ส่งออกของร้าน | ยอดจากแอปธนาคาร | ธนาคารรวมค่าส่งและเงินคืน · ไฟล์ร้านตรงใบสั่งซื้อ 212/212 `ตรวจจริง` |
-| 2026-10-04 16:05 | รายงานคู่แข่งใช้ราคาจากหน้าเว็บทางการ | ราคาจากรีวิว | รีวิวเก่า 8 เดือน · หน้าทางการ `จากแหล่ง` |
-| 2026-10-04 16:20 | เก็บไฟล์แนบบนดิสก์ + path ในฐานข้อมูล | object storage | งานขนาด S · ย้ายทีหลังได้ · ADR-0004 |
-```
-
-## ต้องลงเมื่อ
-
-- ผู้ใช้แก้หรือเปลี่ยนทิศงาน ให้ช่อง "เหตุผล · หลักฐาน" ขึ้นต้นว่า `ผู้ใช้แก้ —` (agent `learning-reviewer` ใช้หาจุดที่ผู้ใช้แก้)
-- เลือกระหว่างหลายทางที่ใช้ได้ทั้งคู่
-- เอกสารไม่ได้บอก แล้ว agent เติมค่าเอง
-- เอกสาร 2 ฉบับขัดกัน แล้วเลือกยึดฉบับหนึ่ง · ถ้าเป็นข้อเท็จจริงที่ตรวจได้ ให้ยึดฉบับที่มีหลักฐาน · ถ้าเป็นกฎหรือนโยบายของเจ้าของงาน ไม่เลือกเอง ให้จดทั้ง 2 ฝั่งติด `(รอยืนยัน)` แล้วทำส่วนที่ไม่ขึ้นกับข้อนี้ต่อ (`agent-patterns` หัวข้อ 4 ข้อ 9)
-- ข้ามขั้นตอนหรือฉบับที่สั่ง เพราะทำไม่ได้หรือไม่จำเป็น
-- ผลทดลองหรือเทียบทางเลือกเป็นตัวตัดสิน (เช่น `parallel-attempts-pick-best`)
-
-**ไม่ต้องลง**: เรื่องที่ skill หรือเอกสารสั่งไว้ชัดแล้ว และรายละเอียดเล็กที่ไม่เปลี่ยนผลงาน (ชื่อไฟล์ชั่วคราว · ชื่อตัวแปร)
-**ไม่ใช่ที่นี่ (ผู้ใช้ต้องตัดสิน)**: เรื่องที่ agent ตัดสินเองไม่ได้และต้องรอคำตอบก่อนทำส่วนนั้นต่อ (ไฟล์เก่า ตัวเลขผิด ขั้นที่ติด) → [`flag-and-propose`](../flag-and-propose/SKILL.md) · skill นี้จดเฉพาะเรื่องที่ agent ตัดสินเองแล้วทำต่อ
-**ไม่ใช่ที่นี่ (เรื่องยาว)**: การเลือกที่ต้องอยู่ยาวและมีคนถามทีหลังว่าทำไม (ผู้ขายหลัก · รูปแบบสัญญา · สถาปัตยกรรม) → เขียนเป็นบันทึกแยก เช่น `adr-writer` (plugin `software-development`) แล้วตารางนี้ลงแค่ 1 แถวชี้ไปหา
-
-## หลักการเลือกเมื่อต้องตัดสินเอง
-
-เลือกทางที่กระทบน้อยสุด: ย้อนกลับง่าย · แก้ไฟล์น้อย · ตรงกับที่เอกสารหรือ repo ใช้อยู่ · ไม่ปิดทางเลือกอื่น
-**เกณฑ์ขัดกัน** (เช่น ทางหนึ่งแก้ไฟล์น้อยแต่ไม่ตรงแบบ repo) และมี 3 ทางขึ้นไป → ให้คะแนนแทนการเดา: ย้อนกลับได้เป็นกฎเหล็ก อีก 3 เกณฑ์ถ่วงน้ำหนัก ตามแม่แบบ [`templates/score.json`](templates/score.json) แล้วรัน `node <plugin>/skills/decision-scoring/scripts/decide.mjs score score.json` · ช่องเหตุผลใส่คะแนนและคำว่า นิ่ง หรือ ยังไม่นิ่ง · ยังไม่นิ่งแปลว่าสูสี ถือเป็นข้อที่เปลี่ยนแล้วกระทบงาน → โหวตตามบรรทัดถัดไป · 2 ทางหรือข้อเล็ก เลือกเองได้เลยตาม `voting.md`
-**ข้อที่เปลี่ยนแล้วกระทบงาน** ตัดสินด้วยการค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 → `references/voting.md` · ช่อง "เหตุผล · หลักฐาน" ขึ้นต้นด้วยผลโหวต เช่น `โหวต 2/3 (ต้นทุน ✔ · ความเสี่ยง ✘ · ส่งเร็ว ✔) —` แล้วตามด้วยแหล่ง
-**ค่าตั้งต้นของเจ้าของ** ใน `~/.claude/superuser-style.md` (ชื่อคนในบทบาทที่ว่าง · นโยบายค่าใช้จ่าย) ใช้แทนการถามได้ ช่องเหตุผลขึ้นต้นว่า `ค่าตั้งต้นของเจ้าของ —`
-**ข้อเท็จจริงที่เหลือ** (ตัวเลข ชื่อ วันที่ งบ ที่ค้นไม่ได้และไม่มีค่าตั้งต้น) ห้ามเดา ใส่ `(รอยืนยัน)` ตรงที่ต้องใช้ (ค่าที่มาจากหลักฐาน เช่น ตัวเลขที่ตรวจจริง ใส่ได้พร้อมป้าย) แล้วลงคำถามในส่วน "ค้างอยู่" ของ `status-report` ส่วนงานที่ย้อนไม่ได้ให้เตรียมคำสั่ง ร่างอีเมล หรือ diff ไว้ในส่วน "รออนุมัติ" ไม่ลงมือเอง
-
-## กติกาของแถว
-
-- 1 แถวต่อ 1 การตัดสินใจ ลงทันทีที่ตัดสิน ไม่รวบไปเขียนตอนจบ
-- "ไม่เลือก" ต้องมีอย่างน้อย 1 ทาง ถ้าไม่มีทางอื่นเลยก็ไม่ใช่การตัดสินใจ · ทางที่ไม่เลือกต้องเป็นทางที่มีจริงตามหลักฐาน ไม่ใช่ทางที่แต่งขึ้นให้ครบช่อง เพราะตอนจบจะถูกยกไปเป็นตัวเลือกให้ผู้ใช้ `คงไว้` หรือเปลี่ยน (skill `superuser` หัวข้อ 6)
-- "เหตุผล · หลักฐาน" ระบุที่มา: ไฟล์ · ADR · ตัวเลขที่วัด ถ้าเป็นตัวเลขให้ติดป้าย `ตรวจจริง` / `จากแหล่ง` / `อนุมาน`
-- ไม่ลบและไม่แก้แถวเก่า ถ้าผู้ใช้ไม่เห็นด้วยให้เพิ่มแถวใหม่ไว้บนสุด ช่อง "เหตุผล · หลักฐาน" ขึ้นต้นว่า `ผู้ใช้แก้ — แทนแถว <วันที่>` แล้วทำใหม่เฉพาะงานนั้น — แถวเดิมยังอยู่ให้เห็นว่าเคยเลือกอะไรไว้
-- คอลัมน์ `ทบทวนเมื่อ` ใส่ได้ถ้าต้องการ — วันที่หรือเหตุการณ์ที่ควรกลับมาดูว่าการตัดสินนั้นยังถูกอยู่ไหม (เช่น หลังรุ่นถัดไป · เมื่อมีผู้ใช้เกิน 100 คน)
-- ถ้า**ผู้ใช้เป็นคนตัดสินเอง** (เช่น ยอมรับความเสี่ยงที่ถูกเตือน) ให้ลงตารางเดียวกัน และเพิ่มคอลัมน์ท้าย `ผู้ตัดสิน` ใส่ `agent` หรือ `ผู้ใช้` ถ้าตารางไม่มีคอลัมน์นี้ แปลว่า agent ตัดสินทุกแถว
-
-## ในคำตอบตอนจบ
-
-ท้ายคำตอบมีหัวข้อ **ตัดสินใจเอง** แสดง**ทุกแถวของรอบนี้** แถวละ 1 บรรทัด (เลือกอะไร · ไม่เลือกอะไร · ทำไม) แล้วชี้ไปที่ตารางเต็ม
-ถ้าเกิน 15 แถว สรุปเป็นกลุ่มได้ (เช่น "เลือกแหล่งข้อมูล 6 แหล่ง") แต่ต้องบอกจำนวนรวมและลิงก์ไปที่ตาราง ส่วนแถวที่กระทบผลมากยังต้องแสดงเต็ม
-
-
----
-
-# skill: status-report
-
-Use when a task ends, to report status in a table
-
-# รายงานสถานะเมื่อจบงาน
-
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-
-> **กฎข้อเดียว:** จบงานทุกครั้ง ต้องมีตารางสถานะในไฟล์กลางของงาน และตารางเดียวกันในคำตอบ
-> งานที่ไม่มีตารางสถานะ ถือว่ายังไม่จบ
-> **ยกเว้น** playbook ที่อ่านอย่างเดียว (`research` · `review` · software-development: `investigation`) — ใส่ตารางในคำตอบอย่างเดียว ไม่เขียนไฟล์
-
----
-
-## 1 · เขียนที่ไหน
-
-| สถานการณ์ | ทำอย่างไร |
-|---|---|
-| งานทั่วไป (**ค่าตั้งต้น**) | `.claude/superuser/CONTEXT.md` แก้เฉพาะ `## ความคืบหน้า` · หัวข้อ `## รับงานต่อ` เป็นของ `handoff` หัวข้อ 5 เขียนตามกติกาที่นั่น · ไม่แตะหัวข้ออื่น · ยังไม่มีไฟล์ → สร้างจาก [`templates/CONTEXT.md`](../superuser/templates/CONTEXT.md) |
-| โปรเจกต์มี `docs/BUILD-PLAN.md` | ใช้แบบในข้อ 3 แทน เขียนที่เดียว ไม่เขียนซ้ำสองที่ |
-| มี subagent หลายตัวทำงานพร้อมกัน | subagent **รายงานกลับ** อย่างเดียว ให้หัวหน้าทีมเขียนไฟล์คนเดียว ไม่งั้นไฟล์พัง |
-
-ที่อยู่และกติกาของไฟล์ทั้งหมดอยู่ใน [`team-files`](../superuser/references/team-files.md)
-
----
-
-## 2 · ตาราง `## ความคืบหน้า`
-
-```markdown
-## ความคืบหน้า
-| งาน | สถานะ | หลักฐาน | อัปเดต |
-|---|---|---|---|
-| สรุปยอดขายเดือนนี้ (`docs/sales-oct.xlsx`) | เสร็จ | ยอดรวมตรงใบสั่งซื้อ 212/212 · `reviewer` ตรวจแล้ว | 2026-10-21 14:20 |
-| รายงานคู่แข่ง 5 ราย | ทำอยู่ | อ่านแหล่งทางการครบ 3/5 | 2026-10-21 14:20 |
-| ใบเสนอราคาลูกค้า A | รออนุมัติ | ร่างพร้อมใน `out/quote-A.pdf` · ส่งแล้วย้อนไม่ได้ | 2026-10-21 14:20 |
-| ค่าส่งต่างประเทศ | ค้างอยู่ | รอผู้ใช้ยืนยันเรทของขนส่ง | 2026-10-21 14:20 |
-| ค้นหาสินค้า (โค้ด) | เสร็จ | test 48/48 · `reviewer` ตรวจแล้ว | 2026-10-21 14:20 |
-```
-
-หัวข้อ `## รับงานต่อ` ที่อยู่ถัดลงไป เขียนตาม `handoff` หัวข้อ 5 (แบบเดียว ใช้ทั้งตอนจบงานและตอนส่งต่อ)
-
-- สถานะใช้ 5 คำเดียวกับ `superuser`: `เสร็จ` · `ทำอยู่` · `ติด` · `รออนุมัติ` · `ค้างอยู่` (ยังไม่เริ่มใช้ `ค้างอยู่`)
-- **หลักฐานต้องมีเสมอ** เมื่อเขียนว่า `เสร็จ` — ตัวเลขที่ตรวจจริง · จำนวนข้อที่เทียบ · ชื่อไฟล์ที่เปิดดู · ผลจาก `reviewer` ถ้าไม่ได้ตรวจให้เขียน `ยังไม่ได้ตรวจ` ห้ามเขียนว่าผ่าน
-- ผู้ตรวจต้องไม่ใช่ตัวเดียวกับผู้ทำ · มี subagent → ระบุชื่อบทบาทในช่องหลักฐาน
-- ตารางมีเฉพาะงานที่ยังเปิด ไม่เกิน 15 แถว · งานที่เสร็จแล้วย้ายเป็น 1 บรรทัดใน `HISTORY.md` · เขียนทับทั้งหัวข้อ ไม่ต่อท้าย
-- **ค้างอยู่** คือสิ่งที่ agent ไปต่อเองไม่ได้ ต้องมีคนตอบหรือตัดสิน เขียนเป็นคำถามที่ตอบได้ พร้อมบอกว่าถามใคร ไม่มีให้เขียน `ไม่มี`
-- **รออนุมัติ** คืองานที่เตรียมพร้อมแล้วแต่ย้อนไม่ได้ (superuser หัวข้อ 6) บอกคำสั่งหรือไฟล์ที่พร้อมใช้ ไม่มีก็ไม่ต้องใส่
-- **ข้อเสนอ** (ในคำตอบ) คือการปรับปรุงนอกขอบเขตไม่เกิน 3 ข้อ บอกว่าได้อะไรและใช้แรงแค่ไหน ไม่มีก็ไม่ต้องใส่
-
----
-
-## 3 · แบบสำหรับโปรเจกต์ที่มี `docs/BUILD-PLAN.md`
-
-เขียน `## สถานะล่าสุด` (เขียนทับ) และ `## ประวัติสถานะ` (เพิ่มบรรทัดบนสุด) ในไฟล์นั้นแทน `CONTEXT.md` · ลำดับหัวข้อ คอลัมน์ ค่าที่ใช้ได้ และเพดานแถว อยู่ใน [`build-plan-rules`](references/build-plan-rules.md) **เปิดก่อนเขียนทุกครั้ง**
-
----
-
-## 4 · ในคำตอบ
-
-แสดง "ภาพรวม" (ถ้ามี) + ตารางเฉพาะ **แถวที่เปลี่ยนในรอบนี้** + "ค้างอยู่" + "รออนุมัติ" (ถ้ามี) + "ข้อเสนอ" (ถ้ามี) + "ถัดไป" แล้วบอกว่าตารางเต็มอยู่ที่ไหน (`CONTEXT.md` หรือ `docs/BUILD-PLAN.md`) — ไม่ต้องแปะทั้งไฟล์
-
----
-
-## 5 · รายการตรวจก่อนบอกว่าจบ
-
-- [ ] อ่านไฟล์กลางจากดิสก์ก่อนแก้ (คนอื่นอาจแก้ไปแล้ว)
-- [ ] ตารางความคืบหน้าเขียนทับ ไม่ได้ต่อท้าย และมีวันที่เวลา
-- [ ] ทุกแถวที่เขียนว่า `เสร็จ` หรือ `ผ่าน` มีหลักฐาน · ผู้ตรวจไม่ใช่ผู้ทำ
-- [ ] ไม่ได้ตั้ง `Approved` เอง
-- [ ] `## รับงานต่อ` อัปเดตตาม `handoff` หัวข้อ 5 แล้ว
-- [ ] ไม่แตะหัวข้ออื่นในไฟล์
-- [ ] แบบ BUILD-PLAN: ตัวเลขใน "ภาพรวม" ตรงตาราง · เพิ่มบรรทัดใน `## ประวัติสถานะ` 1 บรรทัด · "ทีมตอนนี้" ไม่มีแถว `ทำอยู่` ค้างของงานที่จบแล้ว
-- [ ] แบบ BUILD-PLAN: รันตัวตรวจจนผ่าน (ตัวตรวจอยู่ใน plugin `superuser`): `python <โฟลเดอร์ superuser>/skills/polished-document-style/scripts/check_outline.py assets/build-plan-status.md <path ของ docs/BUILD-PLAN.md>` — จับหัวข้อหาย หัวข้อสลับ ช่องตัวหนาหาย หัวตารางเปลี่ยน และช่องที่ยังไม่เติม · หัวข้ออื่นในไฟล์ (ตารางงาน `## ตัดสินใจเอง`) ตัวตรวจปล่อยผ่าน
-- [ ] คำตอบมีตารางเฉพาะแถวที่เปลี่ยน + ค้าง + รออนุมัติ (ถ้ามี) + ข้อเสนอ (ถ้ามี) + ถัดไป
-
----
-
-## 6 · สิ่งที่ห้ามทำ
-
-| อย่าทำ | เพราะ |
-|---|---|
-| เขียนว่า `เสร็จ` หรือ `ผ่าน` โดยไม่ได้ตรวจจริง | ตารางสถานะที่โกหกแย่กว่าไม่มีตาราง |
-| ต่อท้ายตารางทุกรอบ | ไฟล์ยาวขึ้นเรื่อย ๆ และไม่รู้ว่าแถวไหนคือปัจจุบัน |
-| สร้างไฟล์สถานะใหม่ (`STATUS.md` `progress.md`) | สถานะกระจายหลายที่ ไม่มีใครรู้ว่าดูที่ไหน |
-| ซ่อนรายการที่ไม่ผ่านไว้ในร้อยแก้ว | คนอ่านตารางแล้วเข้าใจว่าผ่านหมด |
-| ให้ subagent เขียนไฟล์กลางเอง | เขียนชนกันแล้วไฟล์พัง |
-
----
-
-## แผนโครงการและรายงานประจำสัปดาห์
-
-แม่แบบแผนโครงการ (ผังเวลา · milestone · risk register · Responsible-Accountable-Consulted-Informed (RACI)) และรายงานสถานะประจำสัปดาห์ฉบับส่งผู้เกี่ยวข้อง อยู่ใน [`references/project-plan-and-weekly-status.md`](references/project-plan-and-weekly-status.md)
-
-## เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| ตารางงานและวงรอบเขียนโค้ด ในไฟล์เดียวกัน | `spec-to-code-loop` (plugin `software-development`) |
-| ชุดเอกสารของโปรเจกต์และสถานะเอกสาร | `project-doc-set` (plugin `software-development`) |
-| บันทึกบริบทเพื่อทำต่อในรอบสนทนาหน้า | `handoff` |
-| ตารางการตัดสินใจเองในไฟล์เดียวกัน | `decision-log` |
-| เลือก playbook และจบงานทุกชนิด | `superuser` |
-| รูปแบบตารางและเอกสาร | `polished-document-style` |
-| ชื่อและสถานะของไฟล์เอกสาร | `document-naming` |
-
-
-## reference: build-plan-rules.md
-
-# Format for projects that have docs/BUILD-PLAN.md
-
-Moved from `SKILL.md` item 3 · open it when the project has `docs/BUILD-PLAN.md`
-
-Write these 2 sections in that file instead of `CONTEXT.md` · no file → create a file holding only the project name, then copy from [`assets/build-plan-status.md`](../assets/build-plan-status.md) (never invent the structure) · **never touch the job table or other sections**
-Section order: `## สถานะล่าสุด` (latest status) → job table → `## ประวัติสถานะ` (status history) → `## ตัดสินใจเอง` (decisions made on your own, `decision-log`)
-
-- `## สถานะล่าสุด` — **overwrite the whole section** every time, as the single current picture
-- `## ประวัติสถานะ` — **add 1 line at the very top** per job, never delete the old ones, in the format `วันที่ เวลา · งาน · สถานะ · ผล · ทำ <agent> · ตรวจ <agent> · ค้างกี่ข้อ` (date time · job · status · result · made by <agent> · checked by <agent> · how many items pending; if you decided anything on your own that round, append `· ตัดสินใจเอง <count>`)
-
-Section `## สถานะล่าสุด` holds: an update line (date and time · latest job) · **ภาพรวม** (overview: done N/total · in progress · blocked · failed check — counted from the table and must match) · a table `| รายการ | ประเภท | สถานะ | ใครทำ | ใครตรวจ | ผลตรวจ | ค้าง / หมายเหตุ |` (item · type · status · made by · checked by · check result · pending / note) · **ทีมตอนนี้** (team now: 1 row per agent used this round · no subagent, leave it out · starting a new round clears the old rows) · ค้างอยู่ (pending) · รออนุมัติ (awaiting approval) · ถัดไป (next, at most 3) · ข้อเสนอ (proposals)
-
-| Column | Allowed values |
-|---|---|
-| ประเภท (type) | `เอกสาร` (document) · `ตรวจ` (check) · `ส่งมอบ` (delivery) · `โค้ด` (code) · `build` |
-| สถานะ (status), documents | `ยังไม่เริ่ม` (not started) · `Draft` · `Review` · `Approved` · `Archived` (the same set as `polished-document-style`) — `Approved` belongs only to someone who can change it, and an agent may set at most `Review` |
-| สถานะ (status), others | the 5 words in `SKILL.md` item 2 |
-| ผลตรวจ (check result) | `ผ่าน — <evidence>` · `ไม่ผ่าน — <what failed>` · `ยังไม่ได้ตรวจ` · `—` |
-
-The table holds every item of the project, not just this round's work (items not touched copy their old values), at most 25 rows
-Code work (a full example table · type `build`/`ส่งมอบ` · mobile app evidence) → the extension in plugin `software-development` → `superuser` → `references/code-extensions.md`
-
-
-## reference: project-plan-and-weekly-status.md
-
-# Project plan and weekly status — stakeholder templates
-
-แม่แบบของ agent `project-manager` — ย้ายมาจากตัว agent (2026-10-14) · ตารางสถานะท้ายงานแบบสั้นอยู่ใน SKILL.md ของ `status-report` ส่วนไฟล์นี้คือแผนโครงการและรายงานประจำสัปดาห์ฉบับส่งผู้เกี่ยวข้อง
-
-**สารบัญ:**
-
-- [Standard Output: Polished Project Plan](#standard-output-polished-project-plan)
-- [Standard Output: Polished Status Report](#standard-output-polished-status-report)
-
-## Standard Output: Polished Project Plan
-
-```markdown
-# Project Plan: <Project Name>
-
-| | |
-|--|--|
-| **Project Lead** | @pm-name |
-| **Sponsor** | @sponsor |
-| **Status** | ทำอยู่ (วางแผน) |
-| **Start Date** | YYYY-MM-DD |
-| **Target End** | YYYY-MM-DD |
-| **Budget** | ฿XX,XXX |
-
----
-
-## Objective
-
-> One-sentence goal that fits in a tweet.
-
-## Scope
-
-| In Scope | Out of Scope |
-|-------------|-----------------|
-| ... | ... |
-
-## Timeline
-
-![ผังเวลาโครงการ: Discovery → Build → Launch](figures/fig-01.png)
-
-**รูปที่ 1 —** ผังเวลาโครงการ วาดด้วย `diagram-figures` (plugin `software-development` · house style) แล้วฝังเป็นไฟล์ภาพ · ไม่ใช้ Mermaid ในแผนที่ส่งผู้เกี่ยวข้อง
-
-## Milestones
-
-| # | Milestone | Target Date | Owner | Status |
-|:-:|-----------|:-----------:|:------|:------:|
-| 1 | Requirements approved | YYYY-MM-DD | @ba | ค้างอยู่ |
-| 2 | Architecture signed off | YYYY-MM-DD | @architect | ค้างอยู่ |
-| 3 | Minimum Viable Product (MVP) feature complete | YYYY-MM-DD | @dev-lead | ค้างอยู่ |
-| 4 | User Acceptance Testing (UAT) passed | YYYY-MM-DD | @qa | ค้างอยู่ |
-| 5 | Production launch | YYYY-MM-DD | @devops | ค้างอยู่ |
-
-## Risk Register
-
-| ID | Risk | Likelihood | Impact | Score | Mitigation | Owner |
-|:--:|------|:----------:|:------:|:-----:|------------|:------|
-| R-001 | Payment vendor delay | Medium | High | 6 | Plan B vendor | @architect |
-| R-002 | Resource availability | Low | Medium | 2 | Cross-training | @pm |
-
-> **Score = Likelihood × Impact** (1-9 scale)
-
-## Dependencies
-
-| Type | Dependency | Owner | Status |
-|------|------------|:------|:------:|
-| External | Payment gateway (Application Programming Interface, API) | Vendor X | ติด |
-| Internal | Design team availability | @design-lead | ทำอยู่ |
-| Technical | New cloud account | @devops | ทำอยู่ |
-
-## Responsible-Accountable-Consulted-Informed (RACI) Matrix
-
-| Activity | PM | BA | Arch | Dev | QA | DevOps |
-|----------|:--:|:--:|:----:|:---:|:--:|:------:|
-| Requirements | A | R | C | I | C | I |
-| Architecture | A | C | R | C | I | C |
-| Implementation | A | I | C | R | C | C |
-| Testing | A | I | I | C | R | I |
-| Deployment | A | I | C | C | I | R |
-```
-
-## Standard Output: Polished Status Report
-
-```markdown
-# Status Report: <Project> — Week of YYYY-MM-DD
-
-| | |
-|--|--|
-| **Reporting Period** | YYYY-MM-DD to YYYY-MM-DD |
-| **Overall Status** | On Track |
-| **Health Trend** | Improving / Declining / Stable |
-
----
-
-## สรุปสั้นสำหรับผู้บริหาร (Too Long; Didn't Read, TL;DR)
-
-> 1-2 sentence summary for executives.
-
-## Status by Track
-
-| Track | Status | Notes |
-|-------|:------:|-------|
-| Scope | On track | On target |
-| Schedule | At risk | 3 days behind, recoverable |
-| Budget | On track | 65% spent, on track |
-| Quality | On track | 0 critical bugs open |
-| Team Morale | On track | High |
-
-> **Note:** On track / At risk / Off track คือระดับสุขภาพของแต่ละด้านสำหรับผู้อ่านต่างประเทศ ไม่ใช่สถานะของงาน · สถานะรายการงานใช้ 5 คำกลาง (เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่)
-
-## Completed This Period
-
-- ...
-- ...
-
-## In Progress
-
-| Item | Owner | Due | % Done |
-|------|:------|:---:|:------:|
-| Feature X | @alice | MM/DD | 75% |
-| Feature Y | @bob | MM/DD | 40% |
-
-## Blocked
-
-| Item | Blocker | Owner | Action |
-|------|---------|:------|--------|
-| ... | Waiting on legal review | @legal | Escalate to Chief Technology Officer (CTO) |
-
-## Upcoming (Next Period)
-
-- ...
-
-## New Risks / Issues
-
-| Severity | Item | Owner |
-|:--------:|------|:------|
-| High | ... | ... |
-
-## Asks for Stakeholders
-
-- Decision needed on X by MM/DD
-- Need 1 more QA resource starting next sprint
-```
-
-
----
-
 # skill: handoff
 
 Use when work passes to a subagent, session or person
@@ -898,42 +558,42 @@ Open it when working on a Windows machine through Git Bash or PowerShell · ever
 
 Use when writing or fixing C# and .NET code
 
-# stack-dotnet — เขียน C# ให้ build สะอาด test ผ่าน ไม่มีกับดักเดิม
+# stack-dotnet — write C# that builds clean, passes tests, and avoids the usual traps
 
-ใช้เมื่องานแตะโค้ด C# ทุกแบบ: ASP.NET Core (Web API · Model-View-Controller (MVC) · minimal API) · Entity Framework (EF) Core · ASP.NET MVC 5 บน .NET Framework 4.x ที่ยังดูแลอยู่
+Use whenever the work touches C# code of any kind: ASP.NET Core (Web API · Model-View-Controller (MVC) · minimal API) · Entity Framework (EF) Core · ASP.NET MVC 5 on .NET Framework 4.x that is still maintained.
 
-ไฟล์นี้มีแค่เรื่องเฉพาะ .NET ส่วนหลักทั่วไปอยู่ที่ `lazy-coding` · `readable-code` · `testing-standards` · `logging-standards` · `error-handling-patterns` · `database-design` · `principle-secure-by-default`
+This file covers only what is specific to .NET. The general rules live in `lazy-coding` · `readable-code` · `testing-standards` · `logging-standards` · `error-handling-patterns` · `database-design` · `principle-secure-by-default`.
 
 ---
 
-## 1 · เริ่มงาน: อ่านเวอร์ชันก่อน แล้วรันคำสั่งชุดเดียวกันทุกครั้ง
+## 1 · Start: read the version first, then run the same commands every time
 
-- เวอร์ชัน Software Development Kit (SDK) ดูที่ `global.json` ส่วนเวอร์ชันที่ target ดูที่ `<TargetFramework>` ใน `*.csproj` หรือ `Directory.Build.props`
-- เวอร์ชัน (ตรวจล่าสุด 2026-10-14 · แหล่ง: https://dotnet.microsoft.com/platform/support/policy/dotnet-core): `net10.0` คือ Long Term Support (LTS) ล่าสุด รองรับถึง 2028-11-14 · `net8.0` (LTS) และ `net9.0` (Standard Term Support, STS) อยู่ช่วงท้าย รองรับถึง 2026-11-10 · ถ้าเจอ 2 ตัวนี้ให้แจ้งเจ้าของ ไม่อัปเกรดเองกลางงาน · ก่อนใช้ให้ตรวจหน้านี้ซ้ำ
-- ถ้าเจอ `net48` หรือ `v4.x` ใน `<TargetFrameworkVersion>` แปลว่าเป็น .NET Framework ให้ใช้ชุดคำสั่ง legacy ด้านล่าง
+- Find the Software Development Kit (SDK) version in `global.json`, and the target version in `<TargetFramework>` in `*.csproj` or `Directory.Build.props`.
+- Versions (last checked 2026-10-14 · source: https://dotnet.microsoft.com/platform/support/policy/dotnet-core): `net10.0` is the latest Long Term Support (LTS) release, supported until 2028-11-14 · `net8.0` (LTS) and `net9.0` (Standard Term Support, STS) are near the end, supported until 2026-11-10 · if you meet these 2, tell the owner and do not upgrade on your own mid-task · recheck this page before relying on it.
+- If you find `net48` or `v4.x` in `<TargetFrameworkVersion>`, it is .NET Framework, so use the legacy commands below.
 
-| ขั้น | .NET (Core) 8+ | .NET Framework 4.x (Windows) |
+| Step | .NET (Core) 8+ | .NET Framework 4.x (Windows) |
 |---|---|---|
-| ดึงแพ็กเกจ | `dotnet restore` | `msbuild App.sln -t:restore` หรือ `nuget restore App.sln` |
-| build | `dotnet build -warnaserror` (หรือตามนโยบาย repo) | `msbuild App.sln -p:Configuration=Release` |
-| test ทั้งหมด | `dotnet test` | `vstest.console.exe Tests/bin/Release/App.Tests.dll` |
-| จัดรูปแบบ | `dotnet format --verify-no-changes` | ตาม `.editorconfig` ใน Visual Studio |
+| Restore packages | `dotnet restore` | `msbuild App.sln -t:restore` or `nuget restore App.sln` |
+| build | `dotnet build -warnaserror` (or per the repo's policy) | `msbuild App.sln -p:Configuration=Release` |
+| Run all tests | `dotnet test` | `vstest.console.exe Tests/bin/Release/App.Tests.dll` |
+| Format | `dotnet format --verify-no-changes` | Per `.editorconfig` in Visual Studio |
 
-รัน test ตัวเดียว:
+Run a single test:
 
 ```bash
-dotnet test --filter "FullyQualifiedName~OrderServiceTests.Cancel"   # VSTest (ค่าเริ่ม)
-dotnet test --filter-method "*Cancel_*"                               # xUnit v3 บน Microsoft Testing Platform (MTP)
+dotnet test --filter "FullyQualifiedName~OrderServiceTests.Cancel"   # VSTest (default)
+dotnet test --filter-method "*Cancel_*"                               # xUnit v3 on Microsoft Testing Platform (MTP)
 vstest.console.exe App.Tests.dll /TestCaseFilter:"FullyQualifiedName~Cancel"   # .NET Framework
 ```
 
-- test ทั้งชุดพ่นผลยาว ให้ต่อท้าย `2>&1 | tail -40` ดูแค่สรุปและ test ที่ล้ม
-- ถ้า repo ตั้ง MTP ไว้ใน `global.json` (`"test": { "runner": "Microsoft.Testing.Platform" }`) ให้ใช้ `--filter-*` แบบบรรทัดที่ 2
-- `msbuild` และ `vstest.console.exe` อยู่ใน Visual Studio หรือ Build Tools ให้เปิดผ่าน Developer PowerShell ส่วนเครื่อง Linux build .NET Framework web project ไม่ได้ จึงต้องบอกตรง ๆ ว่ายังไม่ได้ build
+- A full test run prints a long log. Append `2>&1 | tail -40` to see only the summary and the failed tests.
+- If the repo sets MTP in `global.json` (`"test": { "runner": "Microsoft.Testing.Platform" }`), use the `--filter-*` form on the 2nd line.
+- `msbuild` and `vstest.console.exe` live in Visual Studio or Build Tools. Open them through Developer PowerShell. A Linux machine cannot build a .NET Framework web project, so say plainly that it has not been built.
 
-## 2 · โครงและแบบแผน
+## 2 · Structure and patterns
 
-ตั้งค่าครั้งเดียวที่ `Directory.Build.props` ให้ทุกโปรเจกต์ใน solution:
+Set this once in `Directory.Build.props` for every project in the solution:
 
 ```xml
 <PropertyGroup>
@@ -945,21 +605,21 @@ vstest.console.exe App.Tests.dll /TestCaseFilter:"FullyQualifiedName~Cancel"   #
 </PropertyGroup>
 ```
 
-- ถ้า repo เก่ามี warning เป็นร้อย อย่าเปิด `TreatWarningsAsErrors` ทั้ง solution ในงานเดียว ให้เปิดเฉพาะโปรเจกต์ใหม่ และไม่เพิ่ม warning ใหม่
-- จัดโฟลเดอร์ตาม feature (`Features/Orders/...`) ตาม `readable-code` แต่ถ้า repo ใช้ `Controllers/ Services/` อยู่แล้ว ให้ตามของเดิม
-- ใช้ file-scoped namespace (`namespace App.Orders;`) ให้ Data Transfer Object (DTO) เป็น `record` และห้ามคืน entity ของ EF ออก API ตรง ๆ
-- async ตลอดสาย: method ที่รอ I/O รับ `CancellationToken ct` แล้วส่งต่อทุกชั้นจนถึง EF และ `HttpClient`
-- จะใช้ minimal API หรือ controller ให้ตามแบบที่ repo ใช้อยู่ ไม่ผสมใน feature เดียวกัน
+- If an old repo has hundreds of warnings, do not switch on `TreatWarningsAsErrors` for the whole solution in one task. Turn it on only for new projects, and add no new warnings.
+- Organise folders by feature (`Features/Orders/...`) per `readable-code`, but if the repo already uses `Controllers/ Services/`, follow the existing layout.
+- Use file-scoped namespaces (`namespace App.Orders;`), make Data Transfer Objects (DTO) a `record`, and never return an EF entity straight out of an API.
+- Async all the way: a method that waits on I/O takes `CancellationToken ct` and passes it down every layer to EF and `HttpClient`.
+- Choose minimal API or controllers to match what the repo uses. Do not mix them within one feature.
 
-อายุของ service ใน Dependency Injection (DI):
+Service lifetimes in Dependency Injection (DI):
 
-| lifetime | ใช้กับ | ห้าม |
+| Lifetime | Use for | Never |
 |---|---|---|
-| Singleton | ของไม่มี state · cache · `TimeProvider` | รับ Scoped ใน constructor (`DbContext` จะค้างข้าม request) |
-| Scoped | `DbContext` · service ที่ใช้ข้อมูลของ request | เรียกจาก `BackgroundService` ตรง ๆ (ให้ใช้ `IServiceScopeFactory.CreateScope()` แทน) |
-| Transient | ของเบา ไม่มี state | ถือ resource ที่ต้อง dispose แล้วฝากไว้ใน singleton |
+| Singleton | Stateless things · caches · `TimeProvider` | Take a Scoped service in the constructor (`DbContext` would live across requests) |
+| Scoped | `DbContext` · services that use per-request data | Call it from a `BackgroundService` directly (use `IServiceScopeFactory.CreateScope()` instead) |
+| Transient | Light, stateless things | Hold a resource that needs disposing and hand it to a singleton |
 
-ค่า config ใช้ options pattern และตรวจตอนเริ่มแอป:
+Use the options pattern for config values, and validate them at app start:
 
 ```csharp
 builder.Services.AddOptions<SmtpOptions>()
@@ -968,7 +628,7 @@ builder.Services.AddOptions<SmtpOptions>()
     .ValidateOnStart();
 ```
 
-ผลที่ "ไม่สำเร็จแต่คาดได้" (ไม่พบ · ซ้ำ · สต็อกไม่พอ) คืนเป็นค่า ไม่โยน exception — exception เก็บไว้สำหรับสิ่งที่โค้ดไม่คาด (ปรับจาก wshobson `dotnet-backend-patterns` · MIT):
+An outcome that is "unsuccessful but expected" (not found · duplicate · out of stock) is returned as a value, not thrown. Keep exceptions for what the code does not expect (adapted from wshobson `dotnet-backend-patterns` · MIT):
 
 ```csharp
 public sealed record Result<T>(bool IsSuccess, T? Value, string? Error, string? Code)
@@ -980,16 +640,16 @@ public sealed record Result<T>(bool IsSuccess, T? Value, string? Error, string? 
 // service
 return stock < qty ? Result<Order>.Fail("สต็อกไม่พอ", "OUT_OF_STOCK") : Result<Order>.Ok(order);
 
-// endpoint — code → status เดียวกันทั้งระบบ แล้วออกเป็น ProblemDetails
+// endpoint — one code → status mapping for the whole system, then emit ProblemDetails
 return r.IsSuccess ? Results.Ok(r.Value) : Results.Problem(r.Error, statusCode: r.Code switch { "NOT_FOUND" => 404, "OUT_OF_STOCK" => 409, _ => 400 });
 ```
 
-repo ที่มี `FluentResults` หรือ `ErrorOr` อยู่แล้วให้ใช้ตัวนั้น ไม่เพิ่ม record ใหม่ซ้อน
+If the repo already has `FluentResults` or `ErrorOr`, use that one and do not add a second record on top.
 
-**เช็ก type ใหม่ 4 ข้อ** (แนวคิดจาก type-design-analyzer · claude-plugins-official · Apache-2.0 · ดู 2026-11-10): (1) ซ่อนภายใน ใช้ `record` ที่ constructor เป็น `private` และมี factory `Create` (2) กฎอยู่ใน type ค่าผิดสร้างไม่ได้ (3) ตรวจที่ constructor หรือ factory ครั้งเดียว (4) ไม่เปิด setter ใช้ `init` หรือ `readonly record struct`
+**4 checks for a new type** (idea from type-design-analyzer · claude-plugins-official · Apache-2.0 · viewed 2026-11-10): (1) hide the internals: use a `record` whose constructor is `private` and give it a `Create` factory (2) the rules live in the type, so an invalid value cannot be built (3) validate once, in the constructor or factory (4) expose no setter: use `init` or a `readonly record struct`
 
 ```csharp
-// เลขบัตรประชาชน 13 หลัก + ตรวจเลขท้าย · จำนวนเงินเป็นสตางค์ (long) ไม่ใช้ double
+// Thai national ID: 13 digits + check digit · money in satang (long), never double
 public readonly record struct ThaiNationalId
 {
     public string Value { get; }
@@ -1002,99 +662,99 @@ public readonly record struct ThaiNationalId
     }
 }
 ```
-(ยังไม่ได้คอมไพล์ตัวอย่าง C# นี้ · สูตรเลขท้ายเดียวกับตัวอย่าง TypeScript ที่รันแล้ว)
+(This C# example has not been compiled · the check-digit formula is the same as in the TypeScript example that has been run)
 
 ## 3 · EF Core
 
-| เรื่อง | ทำแบบนี้ |
+| Topic | Do this |
 |---|---|
-| อ่านอย่างเดียว | `AsNoTracking()` · ดึงเฉพาะคอลัมน์ที่ใช้ด้วย `Select(o => new OrderDto(...))` |
-| N+1 | ห้ามวนลูปแล้ว query ในลูป ให้ใช้ `Include` หรือ projection ถ้า `Include` หลาย collection ให้เติม `AsSplitQuery()` |
-| แก้หรือลบหลายแถว | ใช้ `ExecuteUpdateAsync` / `ExecuteDeleteAsync` ไม่โหลดมาแก้ทีละตัว แต่คำสั่งนี้ข้าม change tracker |
-| migration | อ่าน SQL ทุกครั้ง: `dotnet ef migrations script --idempotent -o migrate.sql` |
-| production | ห้าม `EnsureCreated()` และห้าม `Database.Migrate()` ตอนแอปเริ่มหลาย instance พร้อมกัน ให้รันสคริปต์ตอน deploy แทน |
-| แก้พร้อมกัน | ใช้ `[Timestamp] byte[] RowVersion` (SQL Server) หรือ `IsConcurrencyToken()` แล้วจับ `DbUpdateConcurrencyException` เพื่อบอกผู้ใช้ |
-| เวลา | เก็บ UTC เสมอ และ PostgreSQL (Npgsql) บังคับ `DateTimeKind.Utc` สำหรับ `timestamptz` |
+| Read-only | `AsNoTracking()` · fetch only the columns you use with `Select(o => new OrderDto(...))` |
+| N+1 | Never loop and query inside the loop. Use `Include` or a projection. If you `Include` several collections, add `AsSplitQuery()` |
+| Update or delete many rows | Use `ExecuteUpdateAsync` / `ExecuteDeleteAsync`, do not load and edit one by one, but note these commands bypass the change tracker |
+| migration | Read the SQL every time: `dotnet ef migrations script --idempotent -o migrate.sql` |
+| production | Never `EnsureCreated()`, and never `Database.Migrate()` at app start when several instances start together. Run the script at deploy time instead |
+| Concurrent edits | Use `[Timestamp] byte[] RowVersion` (SQL Server) or `IsConcurrencyToken()`, then catch `DbUpdateConcurrencyException` to tell the user |
+| Time | Always store UTC, and PostgreSQL (Npgsql) requires `DateTimeKind.Utc` for `timestamptz` |
 
-ดู SQL ที่ EF สร้างจริงก่อนส่งงาน:
+Look at the SQL EF really generates before handing over:
 
 ```csharp
 var sql = db.Orders.Where(o => o.Status == Status.Open).ToQueryString();
-// หรือใน Development
+// or in Development
 options.LogTo(Console.WriteLine, LogLevel.Information).EnableSensitiveDataLogging();
 ```
 
-`EnableSensitiveDataLogging` ใช้ในเครื่อง dev เท่านั้น ส่วน schema และ index ให้ทำตาม `database-design`
+Use `EnableSensitiveDataLogging` on dev machines only. For schema and indexes, follow `database-design`.
 
-## 4 · กับดักที่เจอบ่อย
+## 4 · Common traps
 
-| กับดัก | ผลที่เกิด | ทำแบบนี้แทน |
+| Trap | What happens | Do this instead |
 |---|---|---|
-| `async void` | exception ทำ process ล่ม จับไม่ได้ | ใช้ `async Task` ยกเว้น event handler ของ UI |
-| `.Result` · `.Wait()` · `GetAwaiter().GetResult()` | MVC 5 ค้างตาย (deadlock) · Core กิน thread จนแอปช้า | ใช้ `async Task<ActionResult>` ตลอดสาย ส่วน library ใช้ `ConfigureAwait(false)` |
-| `new HttpClient()` ทุกครั้ง | socket หมด และ DNS ไม่อัปเดต | ใช้ `IHttpClientFactory` หรือ typed client ส่วน .NET Framework ใช้ `static readonly HttpClient` |
-| ลืม dispose | connection และไฟล์ค้าง | `using var` · `await using` สำหรับ `IAsyncDisposable` |
-| ต่อ string เป็น SQL | SQL injection | LINQ · `FromSql($"...{id}")` (ใส่พารามิเตอร์ให้) · Dapper ส่ง `new { id }` · ห้าม `FromSqlRaw` กับข้อความที่ต่อเอง |
-| parse หรือ format ด้วย culture ของเครื่อง | เครื่อง `th-TH` ใช้ปฏิทินพุทธ ปีจึงออกมาเป็น 2569 และ parse "2026-01-05" แล้วได้ปีผิด 543 ปี | เก็บและ parse ด้วย `CultureInfo.InvariantCulture` · แสดงผลพุทธศักราชเฉพาะตอนแสดงผล ตาม `i18n-and-locale` |
-| เงินเป็น `double` | 0.1 + 0.2 ≠ 0.3 | ใช้ `decimal` และระบุคอลัมน์เป็น `decimal(18,2)` ให้ชัด |
-| `DateTime.Now` | test ไม่ได้ และเวลาเพี้ยนตาม server | ใช้ `TimeProvider` ผ่าน DI และ `FakeTimeProvider` ใน test |
-| เวลาไทย | server อยู่ UTC | `TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")` ส่วน .NET Framework บน Windows ใช้ `"SE Asia Standard Time"` |
-| array หรือ string ใหญ่ ≥ 85,000 bytes | ลง Large Object Heap (LOH) ทำให้ตัวเก็บขยะหน่วยความจำ (Garbage Collector — GC) หนัก | stream ข้อมูล · `ArrayPool<T>` · `IAsyncEnumerable<T>` สำหรับรายการยาว |
-| `$"..."` ใน log | ค้นตาม field ไม่ได้ และสร้าง string แม้ระดับ log ปิด | message template: `log.LogInformation("Order {OrderId} paid", id)` ส่วน format อื่นดู `logging-standards` |
+| `async void` | An exception crashes the process and cannot be caught | Use `async Task`, except for UI event handlers |
+| `.Result` · `.Wait()` · `GetAwaiter().GetResult()` | MVC 5 deadlocks · Core eats threads until the app slows | Use `async Task<ActionResult>` all the way, and `ConfigureAwait(false)` in libraries |
+| `new HttpClient()` every time | Sockets run out and DNS never refreshes | Use `IHttpClientFactory` or a typed client; on .NET Framework use `static readonly HttpClient` |
+| Forgetting to dispose | Connections and files stay open | `using var` · `await using` for `IAsyncDisposable` |
+| Building SQL by string concatenation | SQL injection | LINQ · `FromSql($"...{id}")` (it parameterises for you) · Dapper with `new { id }` · never `FromSqlRaw` with a string you built |
+| Parsing or formatting with the machine's culture | A `th-TH` machine uses the Buddhist calendar, so the year comes out as 2569 and parsing "2026-01-05" gives a year wrong by 543 | Store and parse with `CultureInfo.InvariantCulture` · show Buddhist Era years only when displaying, per `i18n-and-locale` |
+| Money as `double` | 0.1 + 0.2 ≠ 0.3 | Use `decimal` and state the column as `decimal(18,2)` explicitly |
+| `DateTime.Now` | Cannot be tested, and time drifts with the server | Use `TimeProvider` through DI and `FakeTimeProvider` in tests |
+| Thai time | The server runs in UTC | `TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")`; on .NET Framework on Windows use `"SE Asia Standard Time"` |
+| An array or string ≥ 85,000 bytes | Lands on the Large Object Heap (LOH) and burdens the memory garbage collector (GC) | Stream the data · `ArrayPool<T>` · `IAsyncEnumerable<T>` for long lists |
+| `$"..."` in a log call | Cannot search by field, and builds the string even when the log level is off | Message template: `log.LogInformation("Order {OrderId} paid", id)`; for other formats see `logging-standards` |
 
-จะจับ exception ที่ไหนและ retry อย่างไร ดู `error-handling-patterns` ส่วน ASP.NET Core ใช้ `IExceptionHandler` + `AddProblemDetails()` ที่จุดเดียว
+For where to catch exceptions and how to retry, see `error-handling-patterns`. In ASP.NET Core, use `IExceptionHandler` + `AddProblemDetails()` in one place.
 
-## 5 · test
+## 5 · Tests
 
-- ใช้ framework ที่ repo มีอยู่ ถ้าเป็นโปรเจกต์ใหม่ให้ใช้ xUnit (v3 สำหรับ .NET 8+) ตาม `testing-standards`
-- FluentAssertions ตั้งแต่ v8 ต้องซื้อ license ถ้าใช้เชิงพาณิชย์ ส่วน v7 ยังฟรี (Apache 2.0) โปรเจกต์ใหม่ให้ใช้ assert ของ xUnit หรือ AwesomeAssertions (fork ฟรี) ถ้า repo ใช้ v8 อยู่แล้วให้ถามเจ้าของเรื่อง license
-- ชื่อ test: `Method_Condition_Result` เช่น `Cancel_WhenAlreadyShipped_Throws`
-- ถ้าเป็น logic ใหม่หรือ bug ให้เขียน test ที่แดงก่อน แล้วค่อยแก้ให้เขียว และ bug ต้องมี test ที่จำลองอาการจริง
-- test API ทั้งเส้นใช้ `WebApplicationFactory<Program>` ถ้า test มองไม่เห็น `Program` ให้เพิ่ม `public partial class Program;`
-- ฐานข้อมูลจริงใช้ Testcontainers (`Testcontainers.MsSql` · `Testcontainers.PostgreSql`) ห้ามใช้ EF InMemory แทนฐานจริง เพราะไม่ตรวจ constraint และแปล SQL ต่างกัน
+- Use the framework the repo already has. For a new project use xUnit (v3 for .NET 8+), per `testing-standards`.
+- FluentAssertions from v8 onward needs a paid licence for commercial use, while v7 is still free (Apache 2.0). In a new project use xUnit's asserts or AwesomeAssertions (a free fork). If the repo already uses v8, ask the owner about the licence.
+- Test names: `Method_Condition_Result`, for example `Cancel_WhenAlreadyShipped_Throws`
+- For new logic or a bug, write a failing test first, then fix it until green, and a bug needs a test that reproduces the real symptom.
+- Test a whole API path with `WebApplicationFactory<Program>`. If the test cannot see `Program`, add `public partial class Program;`.
+- For a real database use Testcontainers (`Testcontainers.MsSql` · `Testcontainers.PostgreSql`). Never use EF InMemory in place of a real database, because it does not check constraints and translates SQL differently.
 
-ตั้งค่า xUnit และตัวอย่าง `WebApplicationFactory` เต็ม ดู [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#net--xunit)
+For the full xUnit setup and a `WebApplicationFactory` example, see [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#net--xunit)
 
-## 6 · ความปลอดภัยเฉพาะ .NET
+## 6 · .NET-specific security
 
-| เรื่อง | ASP.NET Core | MVC 5 (.NET Framework) |
+| Topic | ASP.NET Core | MVC 5 (.NET Framework) |
 |---|---|---|
-| Cross-Site Request Forgery (CSRF) | MVC ใส่ `AutoValidateAntiforgeryToken` เป็น global filter ส่วน Razor Pages ตรวจให้เอง | `@Html.AntiForgeryToken()` + `[ValidateAntiForgeryToken]` ทุก POST |
-| ต้อง login เป็นค่าเริ่ม | ตั้ง `FallbackPolicy` เป็น `RequireAuthenticatedUser()` แล้วใส่ `[AllowAnonymous]` ทีละจุดในหน้าที่เปิดให้ทุกคน | `GlobalFilters.Filters.Add(new AuthorizeAttribute())` |
-| ส่งฟิลด์เกิน (over-posting) | bind เข้า DTO ที่มีเฉพาะฟิลด์ที่แก้ได้ | ใช้ view model แยก ไม่ bind entity ตรง ๆ |
-| แสดงผล | Razor encode ให้ แต่ห้ามใช้ `Html.Raw` กับข้อมูลผู้ใช้ | เหมือนกัน และระวัง `MvcHtmlString` |
-| Data Protection keys | ถ้ามีหลาย instance หรือ container ให้เก็บ key ไว้ที่เดียวกัน (`PersistKeysToDbContext` หรือ file share) ไม่งั้น cookie หลุดทุกครั้งที่ restart | `machineKey` ใน `web.config` เหมือนกันทุกเครื่อง |
-| secret | dev: `dotnet user-secrets set "Db:Password" "..."` · prod: environment variable หรือ secret store | แยก transform ของ `web.config` และไม่ commit ค่าจริง |
+| Cross-Site Request Forgery (CSRF) | For MVC add `AutoValidateAntiforgeryToken` as a global filter; Razor Pages check it themselves | `@Html.AntiForgeryToken()` + `[ValidateAntiForgeryToken]` on every POST |
+| Login required by default | Set `FallbackPolicy` to `RequireAuthenticatedUser()`, then add `[AllowAnonymous]` one place at a time on pages open to everyone | `GlobalFilters.Filters.Add(new AuthorizeAttribute())` |
+| Extra fields posted (over-posting) | Bind into a DTO that holds only the editable fields | Use a separate view model, never bind the entity directly |
+| Output | Razor encodes for you, but never use `Html.Raw` on user data | The same, and beware `MvcHtmlString` |
+| Data Protection keys | With several instances or containers, keep the keys in one shared place (`PersistKeysToDbContext` or a file share), or cookies break on every restart | The same `machineKey` in `web.config` on every machine |
+| secret | dev: `dotnet user-secrets set "Db:Password" "..."` · prod: environment variable or secret store | Keep a separate `web.config` transform and never commit real values |
 
-- `appsettings.json` และ `web.config` ที่ commit ห้ามมีรหัสผ่าน connection string จริง หรือ API key ส่วนเรื่องการเก็บ secret ดู `config-and-secrets`
-- เรื่องตรวจ input · upload · การเข้ารหัส ดู `principle-secure-by-default`
+- A committed `appsettings.json` or `web.config` must not hold passwords, real connection strings or API keys. For storing secrets, see `config-and-secrets`.
+- For input validation · uploads · encryption, see `principle-secure-by-default`.
 
-## 7 · ตรวจก่อนส่ง
+## 7 · Check before sending
 
-- [ ] `dotnet build -warnaserror` ได้ 0 warning (หรือไม่เพิ่ม warning จากเดิมใน repo เก่า)
-- [ ] `dotnet test` ผ่านหมด และรายงานว่าผ่านกี่ตัวจากกี่ตัว (ผลยาว → `> _to_delete/test.txt 2>&1` แล้ว `tail -20`)
-- [ ] `dotnet format --verify-no-changes` ไม่มีอะไรต้องแก้
-- [ ] พฤติกรรมใหม่มี test ที่เคยแดงก่อนแก้
-- [ ] ไม่มี `.Result` · `.Wait()` · `async void` ใหม่: `grep -rnE "\.Result\b|\.Wait\(\)|async void" --include=*.cs`
-- [ ] query ที่แก้ ดู SQL จริงแล้ว ไม่มี N+1
-- [ ] migration มีสคริปต์ `--idempotent` และอ่านแล้ว ไม่มี `DROP` ที่ไม่ได้ตั้งใจ
-- [ ] ถ้า build .NET Framework บนเครื่องไม่ได้ ให้เขียนในรายงานว่ายังไม่ได้ build ไม่บอกว่าผ่าน
+- [ ] `dotnet build -warnaserror` gives 0 warnings (or, in an old repo, adds no warnings over before)
+- [ ] `dotnet test` all pass, and the report says how many passed out of how many (long output → `> _to_delete/test.txt 2>&1`, then `tail -20`)
+- [ ] `dotnet format --verify-no-changes` finds nothing to fix
+- [ ] New behaviour has a test that was red before the fix
+- [ ] No new `.Result` · `.Wait()` · `async void`: `grep -rnE "\.Result\b|\.Wait\(\)|async void" --include=*.cs`
+- [ ] For any query you changed, you looked at the real SQL and there is no N+1
+- [ ] The migration has an `--idempotent` script, you read it, and it has no unintended `DROP`
+- [ ] If you cannot build .NET Framework on this machine, write in the report that it was not built. Do not say it passed.
 
-## 8 · เชื่อมกับ skill อื่น
+## 8 · Link to other skills
 
-| ต้องการ | ใช้ |
+| Need | Use |
 |---|---|
-| ทำให้น้อยที่สุดที่ยังใช้ได้ | `lazy-coding` |
-| ชื่อ · โครงไฟล์ · comment | `readable-code` |
-| ระดับ test · coverage · test ที่แดงสลับเขียว | `testing-standards` |
-| รูปแบบ log · Serilog | `logging-standards` |
-| จับ exception · retry · timeout | `error-handling-patterns` |
-| ตาราง · index · migration แบบ expand-and-contract | `database-design` |
-| ค่าเริ่มที่ปลอดภัย | `principle-secure-by-default` |
-| connection string · secret store | `config-and-secrets` |
-| วันที่ไทย · พุทธศักราช · เรียงภาษาไทย | `i18n-and-locale` |
-| URL · error format ของ API | `api-conventions` |
-| พิสูจน์ว่าใช้ได้จริงก่อนบอกว่าเสร็จ | `principle-prove-it-works` |
+| Do the least that still works | `lazy-coding` |
+| Names · file layout · comments | `readable-code` |
+| Test levels · coverage · tests that go red then green | `testing-standards` |
+| Log format · Serilog | `logging-standards` |
+| Catching exceptions · retry · timeout | `error-handling-patterns` |
+| Tables · indexes · expand-and-contract migrations | `database-design` |
+| Secure defaults | `principle-secure-by-default` |
+| Connection strings · secret store | `config-and-secrets` |
+| Thai dates · Buddhist Era · Thai sorting | `i18n-and-locale` |
+| API URLs · error format | `api-conventions` |
+| Prove it works before saying done | `principle-prove-it-works` |
 
 
 ---
@@ -1274,3 +934,415 @@ Use the framework the repo has · for Vitest and Angular setup with examples, se
 | security rules for every diff | `principle-secure-by-default` |
 | env and secrets | `config-and-secrets` |
 | Thai dates · Buddhist Era · Thai word sorting | `i18n-and-locale` |
+
+
+---
+
+# skill: stack-python
+
+Use when writing or testing Python code
+
+# stack-python — Python that is easy to read, correctly typed, and safe to rerun
+
+Use the same tools the repo already uses, and every diff must pass ruff · type check · pytest before sending. This file holds only Python-specific matters.
+General matters are elsewhere: writing less → `lazy-coding` · naming → `readable-code` · logging → `logging-standards` · catching errors → `error-handling-patterns`
+
+## 1 · Getting started: see what the repo uses, then use that
+
+| File found | Install | Run a command |
+|---|---|---|
+| `uv.lock` | `uv sync` | `uv run <cmd>` |
+| `poetry.lock` | `poetry install` | `poetry run <cmd>` |
+| `pdm.lock` | `pdm install` | `pdm run <cmd>` |
+| `requirements*.txt` only | `python -m venv .venv` then `pip install -r requirements.txt` | Activate `.venv` first |
+| Nothing at all (new project) | `uv init` then `uv add` | `uv run <cmd>` |
+
+- Always use a virtual environment; never `pip install` into the system Python
+- Never mix tools; for example if the repo uses poetry, do not add a `uv.lock`
+- Read `requires-python` in `pyproject.toml` and never use syntax newer than it
+- Versions (last checked 2026-10-14 · source: https://devguide.python.org/versions/): the newest is 3.15 (released 2026-10-09) · 3.14 still gets bug fixes · 3.11–3.13 get security fixes only · 3.10 has reached end of life (2026-10-01) · the next to end is 3.11 (Oct 2027) · a new project starts at 3.14 or 3.15 if the libraries it uses already support it · check this page again before using
+
+Routine commands (prefix with `uv run` or `poetry run` according to the repo's tool):
+
+```bash
+ruff check .                      # lint
+ruff format --check .             # รูปแบบโค้ด · แก้ด้วย ruff format .
+pyright                           # หรือ mypy . · ดูว่า repo ตั้งตัวไหนใน pyproject.toml
+pytest -q 2>&1 | tail -40         # ทั้งชุด · ดูแค่ท้ายผล (สรุปและ test ที่ล้ม)
+pytest -q tests/test_order.py::test_refund_over_limit   # test เดียวด้วย node id
+pytest -q -k "refund and not slow"                      # เลือกตามชื่อ
+```
+
+- type checker: if the repo has `[tool.pyright]` or `pyrightconfig.json`, use pyright; if it has `[tool.mypy]` or `mypy.ini`, use mypy; if it has neither, ask once; Astral's ty is used only when the repo has already set it up
+- If the repo still uses black · isort · flake8, use them as they are; do not move to ruff in the same task
+
+## 2 · Standard patterns
+
+| Topic | Do this | Do not |
+|---|---|---|
+| type hint | Add to every function and method called from outside the file, using `list[str]` · `X \| None` | `List` · `Optional` from `typing` in new code |
+| Data shape | Inside, use `@dataclass(frozen=True)`; at the system edge use pydantic | A bare `dict` passed across modules |
+| path | `pathlib.Path` | Joining strings with `+ "/"` |
+| Text | f-string | `%` or `.format()` in new code |
+| log | `log.info("ส่งแล้ว order_id=%s", oid)` letting the logger substitute the value | An f-string in a log call (builds the string every time even if the level is off) |
+| File · lock · connection | `with ...:` | Opening and waiting to `close()` yourself |
+| Default value | `None`, then create it new inside the function | `def f(items=[])` (one list shared across every call) |
+| Thai text files | `open(p, encoding="utf-8")` · `p.read_text(encoding="utf-8")` | Not specifying (Windows reads as cp874 or cp1252) |
+| Scripts | Logic in functions, with `if __name__ == "__main__":` calling `main()` | Code that runs at import |
+| Command Line Interface (CLI) | Use what the repo uses; if none, start with `argparse` before typer | Parsing `sys.argv` yourself |
+
+```python
+@dataclass(frozen=True)
+class Refund:
+    order_id: int
+    amount_satang: int
+
+def main() -> int:
+    args = parse_args()
+    return run(args.input_path)
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+```
+
+## 3 · Web: FastAPI and Django
+
+- Data in and out goes through pydantic models at the edge, while inside you use domain types; never pass a raw `request.json()` into a service
+- FastAPI: things that must change during tests (DB session · external client · clock) are taken through `Depends` and swapped with `app.dependency_overrides`
+- `async def` only when the whole call chain is async (httpx `AsyncClient` · an async DB driver); if you use a blocking library (`requests` · `time.sleep` · a sync driver), use a plain `def` so FastAPI runs it in a threadpool, or wrap it with `asyncio.to_thread`
+- 1 DB session per request through a dependency that `yield`s; never keep a session at module level
+- Django Object-Relational Mapping (ORM): if you loop and touch a FK, use `select_related`; if you touch many-to-many or a reverse FK, use `prefetch_related`, then check the query count in tests with `assertNumQueries` or `django_assert_num_queries`
+- migration: read the file `makemigrations` creates every time before commit; if you drop a column or change a type on a big table, split it into several steps per `database-design`
+- For health endpoints · timeouts · the shape of errors sent out, see `web-service-essentials` and `api-conventions`
+
+```python
+def get_db() -> Iterator[Session]:
+    with SessionLocal() as session:
+        yield session
+
+@app.post("/refunds", status_code=201)
+def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
+    return refund_service.create(db, body.to_domain())
+```
+
+## 4 · Data and AI
+
+| Topic | Do this |
+|---|---|
+| Changing values in a DataFrame | Use `df.loc[mask, "col"] = x`, because pandas 3.x turns Copy-on-Write on by default, so `df["col"][mask] = x` does not change `df` at all |
+| Speed | Use whole-column operations (`df["a"] * df["b"]` · `np.where`) before `apply`; use `iterrows` only when there is no other way |
+| Money | Store as satang of type `int64` or `Decimal`; never use float, and round once at display time |
+| Thai CSV | Try `utf-8-sig` first (Excel adds a BOM); if that fails, try `cp874` (TIS-620), and give the `dtype` of codes that start with 0 as `str` |
+| Reproducible results | `rng = np.random.default_rng(42)` passed along as a parameter; also set the seeds of torch and `random`, and record the seed in the output |
+| notebook | Fine for trying ideas, but move code you will reuse into a module with tests; leave the notebook only calling functions and drawing charts |
+| Large files | Read in parts (`chunksize`) or use parquet instead of CSV when you control the format |
+
+- For LLM calls · prompts · RAG · evaluation, see `llm-engineering`
+- For importing or exporting Excel and Buddhist Era years, see `data-import-export`
+
+## 5 · Common traps
+
+| Trap | Symptom | Fix |
+|---|---|---|
+| datetime without timezone | Time is off by 7 hours, or comparing gives a `TypeError` | Create with `datetime.now(timezone.utc)` (3.11+ can use `datetime.UTC`), store as UTC, display with `ZoneInfo("Asia/Bangkok")`, and never use `utcnow()` |
+| Money as float | `0.1 + 0.2 != 0.3` and the total is short by 1 satang | Use `int` satang, or `Decimal("0.10")` from a string |
+| Closure in a loop | Every callback gets the last value of the loop | Bind the value at creation `lambda i=i: ...` or `functools.partial` |
+| A broad `except Exception:` | Real errors are swallowed | Catch only known types, per `error-handling-patterns` |
+| Circular imports | `ImportError` of the partially initialized kind | Move shared things into a third module, and put imports used only for types under `if TYPE_CHECKING:` |
+| CPU-heavy work in threads | Using several threads does not speed it up, because of the Global Interpreter Lock (GIL) | Use `ProcessPoolExecutor`; threads are for I/O waiting |
+| `subprocess(..., shell=True)` | User input becomes a shell command | Pass a list `["git", "log", ref]`, add `check=True` and set a `timeout` |
+| `pickle.load` of outside data | Runs someone else's code the moment it loads | Use JSON or parquet; for models use `safetensors`; for torch add `weights_only=True` |
+| `yaml.load` | Builds any object from the file | `yaml.safe_load` |
+| The repo uses `uv` but packages are added with `uv pip install` or by hand-editing `pyproject.toml` | `uv.lock` is not updated, other machines run `uv sync` and lack the package | Only `uv add <pkg>` / `uv remove <pkg>` · dev things go in with `uv add --group dev` (`[dependency-groups]`) · run everything through `uv run`, do not activate the venv yourself (idea from trailofbits `modern-python` · CC-BY-SA, rewritten) |
+| A single-file script with a separate `requirements.txt` | The runner forgets to install · versions do not match | Put the dependencies in the file header in PEP 723 form (`# /// script` … `# dependencies = ["httpx"]` … `# ///`), then `uv run script.py` builds the env itself |
+| Blocking inside `async def` | The whole server stalls at the pace of the slowest request | See section 3 |
+
+## 6 · Tests
+
+For pytest setup · fixtures · `parametrize` and examples, see [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#python--pytest); this section keeps only Python-specific traps
+
+- Temporary files use `tmp_path`; never write into the repo's folders · environment values use `monkeypatch.setenv`
+- Time: pass the clock into the function as a parameter first; if you cannot change it, use `time-machine`, but if the repo already uses `freezegun`, keep using it
+- External HTTP: httpx uses `respx` · requests uses `responses` · never hit the real network in a unit test
+- For a real database, use `testcontainers` of the same kind as production; do not use SQLite in place of Postgres
+- For new logic and bugs, write a test that fails (red) first, then fix until it passes (green)
+- Look at coverage only for changed lines: `pytest --cov --cov-report=term-missing`, then go through the lines in the diff that did not run
+
+## 7 · Python-specific security
+
+The 10 principles are in `principle-secure-by-default`; this section is how to do them in Python
+
+- Always lock dependencies (`uv.lock` · `poetry.lock` · `pip-compile --generate-hashes`) and commit the lock file
+- Vulnerability scanning: `pip-audit` (works with every tool); uv has `uv audit` but it is still a preview (the version that first has it (รอยืนยัน) (pending confirmation) · source: https://github.com/astral-sh/uv/blob/main/CHANGELOG.md · checked 22 Oct 2569 BE), so it may be used, but Continuous Integration (CI) still relies on `pip-audit`
+- Before `uv add` or `pip install` of a new package, spell the name exactly as on its PyPI page, check the maintainers and the latest release date, and beware of look-alike names (`reqeusts` · `python-dateutil` versus `dateutil`)
+- SQL passes values through parameters: `cur.execute("... WHERE id = %s", (oid,))`; with SQLAlchemy use `text(...)` with `:name`, and never an f-string
+- File names from users: `(base / name).resolve()` then check `.is_relative_to(base.resolve())`; for uploads see `file-upload-and-storage`
+- Secrets are read from the environment (`os.environ["KEY"]` or pydantic-settings) and checked at startup; keep `.env` in `.gitignore` (see `config-and-secrets`)
+- Django production: `DEBUG = False` · `ALLOWED_HOSTS` with real names · `SECRET_KEY` from the environment · run `python manage.py check --deploy` before release
+
+## 8 · Check before sending
+
+- [ ] `ruff check` has no errors
+- [ ] `ruff format --check` passes (or the formatter the repo uses)
+- [ ] The repo's type checker gives 0 errors in the files you changed
+- [ ] `pytest -q` is green for the whole suite, not just the changed files (long output → `> _to_delete/test.txt 2>&1` then `tail -20`)
+- [ ] Every new behavior has a test that was red before the fix
+- [ ] No `requests` · `time.sleep` · sync driver or blocking I/O inside `async def`
+- [ ] Every place that opens a text file gives `encoding="utf-8"` and stored datetimes have a timezone
+- [ ] Added dependencies are in the lock file and pass `pip-audit`
+
+## 9 · Connecting to other skills
+
+| Task | Open |
+|---|---|
+| Write less, add nothing extra | `lazy-coding` |
+| Names · function shape · where files live | `readable-code` |
+| Choosing a test framework · proportions · test names | `testing-standards` |
+| Log format · correlation id · ready-made Python logger | `logging-standards` |
+| Catching errors · retry · timeout | `error-handling-patterns` |
+| Security rules for every diff | `principle-secure-by-default`, and before sending use `security-gate` |
+| LLM calls · RAG · evaluation | `llm-engineering` |
+| schema · migration | `database-design` |
+| Background jobs (Celery · RQ · cron) | `background-jobs` |
+| Confirm it really works before saying it is done | `principle-prove-it-works` |
+
+
+---
+
+# skill: stack-sql
+
+Use when writing or reviewing SQL queries
+
+# stack · SQL — write queries that are correct, fast, and change data safely
+
+> **The one rule:** a query that has never run against a realistic amount of data is not finished
+
+Table design, naming, data types, and expand-and-contract migrations → `database-design`
+
+## 1 · Getting started: know the database before writing the first line
+
+- engine and version: `SELECT @@VERSION` (SQL Server) · `SELECT version()` (PostgreSQL) · `SELECT VERSION()` (MySQL) · on SQL Server also check `SERVERPROPERTY('Edition')`, because many features exist only in Enterprise
+- what the repo runs migrations with: `Migrations/` (EF Core) · `db/migration/V1__*.sql` (Flyway) · Liquibase `changelog` · `alembic/` · `prisma/migrations/` · raw scripts in `sql/`
+- the server's collation and time zone: `SERVERPROPERTY('Collation')` · `SHOW timezone`
+
+- Use the migration tool the repo already uses; never add a second one and never change the schema by hand outside the tool
+- Never run anything on production; prepare the commands for a person to approve instead (see `principle-proceed-on-reversible-work`)
+- Use a local or sandbox database whose row count is close to real (a 100-row table hides every speed problem); if you have none, generate mock data with a script so the volume and value distribution are close to real
+
+## 2 · Write queries that are correct
+
+| Topic | Do this | Trap |
+|---|---|---|
+| Values from users | Always pass as a parameter | Concatenating strings → SQL injection |
+| Columns | Write the full column names | `SELECT *` → pulls too much · a new column breaks code · cannot use a covering index |
+| NULL | `IS NULL` · `NOT EXISTS` | `= NULL` is never true · `NOT IN (subquery)` with a single NULL → 0 rows |
+| JOIN | Count rows before and after the join | Join on the 1-to-many side then `SUM` → doubled totals; fix by summing before the join |
+| GROUP BY | Every non-aggregate column must be in `GROUP BY` | MySQL with `ONLY_FULL_GROUP_BY` off → silently picks a random value |
+| Division | `CAST(a AS decimal(18,4)) / b` and guard against divide by 0 with `NULLIF(b, 0)` | SQL Server and PostgreSQL give `5/2 = 2`, while MySQL gives `5/2 = 2.5000` |
+| Mismatched data types | A parameter of the same type as the column | SQL Server sends `nvarchar` to compare with a `varchar` column → `CONVERT_IMPLICIT` → scans the whole table |
+| Date range | `>= start AND < end` (half-open) | `BETWEEN '2026-01-01' AND '2026-01-31'` → drops all of the 31st after midnight |
+| time zone | Store UTC, convert to Asia/Bangkok when displaying | Storing Thai time with no offset → merging data across systems is off by 7 hours |
+| Buddhist Era (พ.ศ.) year | Always store Common Era (ค.ศ.), convert when displaying | Storing 2569 → age calculation, sorting and export all break |
+| Money | `decimal(19,4)` · `numeric(19,4)` | `float` · `real` → 0.1 + 0.2 does not equal 0.3 |
+| Sorting Thai names | SQL Server `Thai_100_CI_AS` · PostgreSQL `COLLATE "th-TH-x-icu"` | A general collation → leading vowels (เ แ โ ใ ไ) sort wrong with no error |
+
+Convert UTC to Thai time when displaying: SQL Server `AT TIME ZONE 'UTC' AT TIME ZONE 'SE Asia Standard Time'` · PostgreSQL `AT TIME ZONE 'Asia/Bangkok'` (a `timestamptz` column)
+
+- A Thai collation is not on every server, so check before choosing (commands in [`references/snippets.md`](references/snippets.md)) · showing Thai dates and accepting Buddhist Era years from a form → `i18n-and-locale`
+
+## 3 · Make it fast: read the real plan, do not guess
+
+Commands to see the real plan by engine · what to look for in a plan · keyset example · deleting in batches · parameter sniffing fixes step by step → [`references/performance.md`](references/performance.md)
+
+- Short rules: look at the real plan on data close to real volume, do not guess · conditions must be sargable (do not wrap an indexed column in a function) · every index must answer which query it serves · deep paging uses keyset · count N+1 from the Object-Relational Mapper (ORM) log · big UPDATE/DELETE goes in batches — details and examples are only in [`references/performance.md`](references/performance.md)
+
+## 4 · Change data safely
+
+A table of isolation levels · upsert · creating an index without locking the table, by engine, with examples that check row counts → [`references/safe-changes.md`](references/safe-changes.md)
+
+- Short rules: scripts can be rerun · back up before changing a big batch of data · count rows first and check before `COMMIT` · upsert uses the engine's own form · touch tables in the same order to prevent deadlocks · `ALTER TABLE` on a big table needs `lock_timeout` set — details and examples are only in [`references/safe-changes.md`](references/safe-changes.md)
+
+## 5 · Common traps
+
+- `MERGE` (SQL Server) has several bugs, and without `HOLDLOCK` 2 sessions insert duplicates → separate `UPDATE` + `INSERT`, or `MERGE ... WITH (HOLDLOCK)` with a test
+- A trigger hides business rules and breaks on multi-row inserts → keep rules in app code; use triggers only for audit · a cursor/row-by-row loop → a set-based statement
+- `WITH (NOLOCK)` reads uncommitted data, rows go missing or repeat → turn on Read Committed Snapshot Isolation (RCSI) instead · building SQL by string concatenation → parameters (section 7)
+- A collation mismatch in a join → set them equal on the column (putting `COLLATE` in the query stops it using the index)
+- Ids are not always consecutive (identity jumps · a sequence does not go back on rollback) → document numbers that must have no gaps are issued by yourself in a counter table
+- A timestamp with no time zone → PostgreSQL `timestamptz` · SQL Server `datetime2` agreed to be UTC, or `datetimeoffset`
+- A query that always filters a small share of rows (`WHERE status = 'pending'` · `deleted_at IS NULL`) but the index covers every row → the index is big and the planner does not pick it → put that condition into the index itself: PostgreSQL `CREATE INDEX ... WHERE status = 'pending'` · SQL Server filtered index `CREATE INDEX ... WHERE status = 'pending'` (the query must write the same condition for it to be used · idea from supabase/agent-skills · MIT)
+- After deleting or updating many rows, queries get slower though the plan did not change → table and index bloat (dead tuples · split pages) → in PostgreSQL look at `pg_stat_user_tables.n_dead_tup` then `VACUUM (ANALYZE)` or `REINDEX CONCURRENTLY` · in SQL Server look at `sys.dm_db_index_physical_stats` then `ALTER INDEX ... REORGANIZE` (below 30%) or `REBUILD` · check this before blaming the query
+
+Example commands for both of these → [`references/performance.md`](references/performance.md)
+
+## 6 · Tests
+
+- Test queries against a real database of the same kind as production; never use SQLite or in-memory in place of SQL Server/PostgreSQL, because NULL, collation and lock behavior differ
+- Start a fresh database every run with Testcontainers and load seed data with a script · logic in stored procedures uses tSQLt (SQL Server) or pgTAP (PostgreSQL)
+- Check both row counts and values: cases with NULL · date ranges right at the midnight edge · Thai names · money amounts with fractions
+- Run a new migration on a copy of a production-like schema with data close to real volume, then time it and watch the locks
+- To fix a bug, write a test that fails first, then fix it (`principle-fix-root-cause`); for the general test framework see `testing-standards`
+
+## 7 · Database-specific security
+
+- 1 app, 1 database user, with only the permissions it uses; the app must never use `sa` · `postgres` · `root`, and the user that runs migrations must be separate from the user the app uses at run time
+- For dynamic SQL with values from users, pass the values as parameters, and choose table or column names from an allowlist and then quote them
+
+Examples of `sp_executesql` · `QUOTENAME` · plpgsql `format('%I')` → [`references/snippets.md`](references/snippets.md)
+
+- If the data of several companies is in one table, consider row-level security: SQL Server `CREATE SECURITY POLICY` · PostgreSQL `CREATE POLICY` (the table owner bypasses the policy unless `FORCE ROW LEVEL SECURITY`)
+- Personal data columns (national ID number · phone number · address) are not pulled unless used; SQL Server's Dynamic Data Masking helps hide values on display but is not access control; for details see `pdpa-compliance`
+- Changes to important data must leave a trace of who did it (`audit-trail`)
+
+## 8 · Check before sending
+
+- [ ] Every outside value is a parameter · no `SELECT *`
+- [ ] Checked NULL · half-open date ranges · division · parameter types match the columns
+- [ ] Looked at the real plan on near-real data, noted logical reads or time before/after · every new index can say which query it serves
+- [ ] Scripts can be rerun and big data goes in batches
+- [ ] Transaction + check row counts before `COMMIT` · wrote the way back and confirmed a backup exists
+- [ ] There is a test that runs against the same kind of database as production
+
+## 9 · Connecting to other skills
+
+Table design and expand-and-contract migrations → `database-design` · rerunnable scripts → `principle-safe-to-rerun` · Excel/CSV → `data-import-export` · who changed what → `audit-trail` · injection and permissions → `principle-secure-by-default` · Thai Buddhist Era dates, Thai sorting → `i18n-and-locale` · connection string → `config-and-secrets` · migrations in the pipeline → `cicd-and-release`
+
+
+## reference: performance.md
+
+# Making it fast — read the plan · indexes · paging · big jobs (full version)
+
+Read this when a query is slow or you are adding an index · the short rules are in `SKILL.md` section 3
+
+| engine | Command to see the real plan |
+|---|---|
+| SQL Server | `SET STATISTICS IO, TIME ON;` + open the Actual Execution Plan (in SQL Server Management Studio (SSMS) press `Ctrl+M`), then look at logical reads |
+| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) SELECT ...` beware that `ANALYZE` really runs the statement; for UPDATE/DELETE wrap it in `BEGIN ... ROLLBACK` |
+| MySQL 8.0.18+ | `EXPLAIN ANALYZE SELECT ...` |
+
+What to look for in a plan: a scan of a whole big table · expected vs actual row counts far apart (stale statistics) · key lookups repeated thousands of times · a sort or hash that spills to disk
+
+- **sargable** means a condition that can use an index; never wrap an indexed column in a function
+  - Wrong: `WHERE YEAR(created_at) = 2026` → right: `WHERE created_at >= '2026-01-01' AND created_at < '2027-01-01'`
+  - Wrong: `WHERE LOWER(email) = @e` → right: store email in lower case from the start, or make an index on an expression (PostgreSQL) or a computed column + index (SQL Server)
+  - Wrong: `WHERE name LIKE '%สมชาย'` cannot use an index; if you must search the middle of a word, use full-text search
+- **covering index**: put the columns the query reads in `INCLUDE (...)` (SQL Server · PostgreSQL 11+) so it need not go back to read the table; MySQL has no `INCLUDE`, so append them to the key instead
+- Every index you add must answer which query it serves, because every index makes INSERT/UPDATE slower
+- **For deep paging** use keyset instead of `OFFSET`, because `OFFSET 100000` must read and throw away 100,000 rows every time
+
+```sql
+-- keyset: ส่งค่าแถวสุดท้ายของหน้าก่อนมาเป็น parameter
+SELECT id, created_at, total_amount
+FROM orders
+WHERE (created_at, id) < ($1, $2)   -- PostgreSQL ($1, $2) · MySQL (?, ?) · ส่งค่าแถวสุดท้ายของหน้าก่อน
+ORDER BY created_at DESC, id DESC
+LIMIT 50;
+-- SQL Server: WHERE created_at < @c OR (created_at = @c AND id < @id) · ใช้ TOP (50)
+```
+
+- **N+1 from an Object-Relational Mapper (ORM)**: a loop that loads children one row at a time → 1 screen fires 201 queries; turn on the ORM's SQL log and count, then fix with `Include` (EF Core) · `selectinload` (SQLAlchemy) · `include` (Prisma)
+- **parameter sniffing (SQL Server)**: a plan is built from the first value passed and reused with values that are distributed very differently → some customers are fast, some are 100 times slower
+  - Fixes from lightest to heaviest: SQL Server 2022+ compatibility level 160 has Parameter Sensitive Plan optimization · `OPTION (RECOMPILE)` for queries that run rarely · `OPTIMIZE FOR` · force a plan through Query Store
+  - Never fix it by clearing the plan cache of the whole server
+- **statistics**: after loading a big batch of data, run `UPDATE STATISTICS dbo.orders` or, in PostgreSQL, `ANALYZE orders`
+- **Big UPDATE/DELETE** in batches, for example 5,000 rows, because doing a million rows in one batch locks the whole table, grows the log, and takes just as long to roll back
+
+```sql
+-- SQL Server: ลบทีละ 5,000 แถวจนหมด
+WHILE 1 = 1
+BEGIN
+    DELETE TOP (5000) FROM dbo.audit_logs WHERE created_at < @cutoff;
+    IF @@ROWCOUNT < 5000 BREAK;
+END
+-- PostgreSQL: DELETE FROM audit_logs WHERE id IN (SELECT id FROM audit_logs WHERE created_at < $1 LIMIT 5000); วนจากแอปหรือ procedure
+```
+
+## Indexes for a small share of rows, and bloated tables (SKILL.md section 5)
+
+```sql
+-- PostgreSQL · partial index: index เฉพาะแถวที่ query กรองเสมอ
+CREATE INDEX CONCURRENTLY ix_orders_pending ON orders (created_at) WHERE status = 'pending';
+-- SQL Server · filtered index แบบเดียวกัน (query ต้องมี WHERE status = 'pending' ตรงตัว)
+CREATE INDEX ix_orders_pending ON dbo.orders (created_at) WHERE status = 'pending';
+
+-- PostgreSQL · ตารางบวมหลังลบหรืออัปเดตก้อนใหญ่
+SELECT relname, n_live_tup, n_dead_tup, last_autovacuum
+FROM pg_stat_user_tables WHERE n_dead_tup > 10000 ORDER BY n_dead_tup DESC;
+VACUUM (VERBOSE, ANALYZE) orders;          -- ปกติ
+REINDEX INDEX CONCURRENTLY ix_orders_pending; -- index บวม
+
+-- SQL Server · index แตกเป็นชิ้น
+SELECT i.name, s.avg_fragmentation_in_percent, s.page_count
+FROM sys.dm_db_index_physical_stats(DB_ID(), OBJECT_ID('dbo.orders'), NULL, NULL, 'LIMITED') s
+JOIN sys.indexes i ON i.object_id = s.object_id AND i.index_id = s.index_id
+WHERE s.page_count > 1000;
+ALTER INDEX ix_orders_pending ON dbo.orders REORGANIZE; -- < 30%
+ALTER INDEX ix_orders_pending ON dbo.orders REBUILD WITH (ONLINE = ON); -- >= 30% (Enterprise/Azure)
+```
+
+
+## reference: safe-changes.md
+
+# Changing data safely — engine comparison table and examples (full version)
+
+Read this when writing a data-fix script, an upsert or an ALTER TABLE · the short rules are in `SKILL.md` item 4
+
+| Topic | SQL Server | PostgreSQL | MySQL (InnoDB) |
+|---|---|---|---|
+| Default isolation | Lock-based READ COMMITTED. Azure SQL Database already has Read Committed Snapshot Isolation (RCSI) on | READ COMMITTED (reads from a snapshot, does not block writers) | REPEATABLE READ |
+| A rerunnable upsert | `UPDATE`, then `INSERT ... WHERE NOT EXISTS` in a transaction with `UPDLOCK, HOLDLOCK` | `INSERT ... ON CONFLICT (...) DO UPDATE` | `INSERT ... ON DUPLICATE KEY UPDATE` |
+| Create an index without locking the table | `WITH (ONLINE = ON)`, Enterprise only (including 2025) | `CREATE INDEX CONCURRENTLY`, but it cannot run inside a transaction | `ALGORITHM=INPLACE, LOCK=NONE` |
+
+- If readers often block writers in SQL Server, consider turning on `READ_COMMITTED_SNAPSHOT ON`. It adds load on tempdb, so test first.
+- To prevent deadlocks: every piece of code touches tables in the same order, keep transactions as short as possible, and never wait on an external API while holding a transaction.
+- Every script must be rerunnable (`principle-safe-to-rerun`): `IF NOT EXISTS` · `CREATE INDEX IF NOT EXISTS` (PostgreSQL) · `CREATE OR ALTER` (SQL Server)
+- Before a command that deletes or edits a lot of data: back up the affected tables, or confirm that the latest backup can really be restored, and write down the way back before running.
+- Count the expected rows first, then check before `COMMIT`:
+
+```sql
+BEGIN TRAN;
+UPDATE dbo.orders SET status = 'cancelled'
+WHERE status = 'pending' AND created_at < @cutoff;
+IF @@ROWCOUNT <> @expected
+BEGIN ROLLBACK; THROW 50001, 'จำนวนแถวไม่ตรงกับที่นับไว้', 1; END
+COMMIT;
+-- PostgreSQL: in a DO block use GET DIAGNOSTICS n = ROW_COUNT; if it does not match → RAISE EXCEPTION
+```
+
+- `ALTER TABLE` on a big table:
+  - PostgreSQL asks for an `ACCESS EXCLUSIVE` lock and waits for long queries still running. While it waits, every new query queues behind it too, so set `SET lock_timeout = '5s'` and retry.
+  - PostgreSQL 11+ can add a column with a constant default instantly, but changing a column type rewrites the whole table.
+  - SQL Server can add a `NOT NULL` column with a default instantly only on Enterprise. Other editions must write every row.
+  - To change a type or move data, use expand-and-contract per `database-design`.
+
+
+## reference: snippets.md
+
+# Short code examples — Thai time · dynamic SQL
+
+The rules are in `SKILL.md` items 2 and 7
+
+## Convert UTC to Thai time when displaying (item 2)
+
+```sql
+-- Convert UTC time to Thai time when displaying
+SELECT created_at AT TIME ZONE 'UTC' AT TIME ZONE 'SE Asia Standard Time'  -- SQL Server (Windows-style zone name)
+FROM dbo.orders;
+SELECT created_at AT TIME ZONE 'Asia/Bangkok' FROM orders;                  -- PostgreSQL (timestamptz column)
+```
+
+## Dynamic SQL that passes values as parameters (item 7)
+
+```sql
+-- SQL Server
+EXEC sp_executesql N'SELECT id, name FROM dbo.customers WHERE email = @email',
+                   N'@email nvarchar(320)', @email = @input;
+-- Column name: QUOTENAME(@column) after checking against an allowlist
+-- PostgreSQL in plpgsql
+EXECUTE format('SELECT id, name FROM %I WHERE email = $1', tbl) USING p_email;
+```
+
+## Check whether a Thai collation exists (item 2)
+
+- PostgreSQL has `th-TH-x-icu` when the server is built with International Components for Unicode (ICU). Check with `SELECT collname FROM pg_collation WHERE collname LIKE 'th%'`
+- For MySQL, check which Thai collations exist with `SHOW COLLATION LIKE '%thai%'` before choosing

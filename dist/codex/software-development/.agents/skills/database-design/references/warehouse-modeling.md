@@ -1,6 +1,6 @@
 # Warehouse modeling — ELT, stack, star schema, SCD
 
-สำหรับคลังข้อมูลเพื่อวิเคราะห์ (analytics warehouse) ไม่ใช่ฐานข้อมูลของแอป
+For an analytics warehouse, not an application database.
 
 **สารบัญ:**
 
@@ -27,7 +27,7 @@ Source → Load raw → Transform in warehouse
 
 ## Tech Stack (2026 Recommendations)
 
-> รายชื่อเครื่องมือจากความรู้ของโมเดล ยังไม่ได้ตรวจกับเว็บทางการ (รอยืนยัน) — ตรวจก่อนแนะนำ
+> The tool list comes from model knowledge and has not been checked against official websites (รอยืนยัน, awaiting confirmation). Check before recommending.
 
 ### Warehouse / Lake
 | Tool | Best for | Cost |

@@ -1,466 +1,140 @@
-# skill: file-upload-and-storage
-
-Use when users upload files or an app serves stored files
-
-# รับไฟล์อัปโหลดและการเก็บไฟล์
-
-> **กฎข้อเดียว:** ไฟล์ที่ผู้ใช้ส่งมาคือข้อมูลที่เชื่อไม่ได้
-> ชื่อไฟล์ นามสกุล ชนิดที่เบราว์เซอร์แจ้งมา และขนาดที่บอกไว้ — **ปลอมได้ทั้งหมด**
-
-## เมื่อไหร่ใช้ skill นี้
-
-- มีหน้าจอให้ผู้ใช้แนบไฟล์ รูป หรือเอกสาร
-- ระบบต้องเก็บไฟล์แล้วส่งกลับให้ดูหรือดาวน์โหลด
-- ต้องตัดสินใจว่าเก็บไฟล์ไว้ที่ไหน
-- มีไฟล์ที่ไม่ควรให้คนอื่นเห็น แต่ตอนนี้ใครมีลิงก์ก็เปิดได้
-
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
-
-| งาน | skill | |
-|---|---|---|
-| นำเข้า Excel/CSV แล้วเอาข้อมูลเข้าระบบ | `data-import-export` | แทน |
-| สิทธิ์ว่าใครเข้าถึงอะไรได้ | `auth-implementation-patterns` | แทน |
-| ประมวลผลไฟล์ใหญ่เป็นงานเบื้องหลัง | `background-jobs` | แทน |
-| ตาราง metadata ของไฟล์ | `database-design` | คู่ |
-| endpoint และ error ของการอัปโหลด | `api-conventions` · `web-service-essentials` | คู่ |
-| อายุการเก็บไฟล์ที่มีข้อมูลบุคคล | `pdpa-compliance` | คู่ |
-| ขนาดพื้นที่ที่ใช้และการแจ้งเตือน | `observability-basics` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
-
----
-
-## 1 · ตรวจก่อนรับ
-
-| ตรวจอะไร | ทำยังไง |
-|---|---|
-| **ชนิดไฟล์** | อ่าน**เนื้อในไฟล์** (magic bytes) ไม่ใช่เชื่อนามสกุลหรือ `Content-Type` |
-| **ขนาด** | บังคับที่เซิร์ฟเวอร์ **และ**ที่ตัวรับคำขอด้านหน้า — ตรวจฝั่งเบราว์เซอร์เป็นแค่ความสะดวก |
-| จำนวนไฟล์ต่อครั้ง | ตั้งเพดาน |
-| ขนาดรวมต่อผู้ใช้ | ตั้งโควตา ไม่งั้นคนเดียวกินพื้นที่หมด |
-| ชนิดที่อนุญาต | **รายการที่อนุญาต ไม่ใช่รายการที่ห้าม** |
-
-```
-รายการที่อนุญาตทั่วไป: jpg · png · webp · pdf · xlsx · docx · csv
-ห้ามเสมอ: ไฟล์รันได้ (exe, sh, bat) · ไฟล์สคริปต์ของเซิร์ฟเวอร์ (php, aspx, jsp) · svg ที่ไม่ได้ทำความสะอาด
-```
-
-> **SVG คือ HTML** — มันรันสคริปต์ได้ ถ้าจะรับต้องทำความสะอาดก่อน หรือแปลงเป็น PNG
->
-> **ตรวจขนาดก่อนอ่านไฟล์เข้าหน่วยความจำ** — ไม่งั้นไฟล์ 5 GB ทำให้เซิร์ฟเวอร์ตาย
-> ก่อนที่โค้ดตรวจขนาดจะได้ทำงาน
-
-**สแกนไวรัส** สำหรับไฟล์ที่คนอื่นจะดาวน์โหลดต่อ — ระหว่างรอผลสแกนให้สถานะเป็น `pending`
-และยังไม่ให้ใครเข้าถึง
-
----
-
-## 2 · เก็บที่ไหน
-
-| ที่เก็บ | เหมาะกับ | หมายเหตุ |
-|---|---|---|
-| **object storage** (S3 · Azure Blob · GCS) | ค่าเริ่มต้นที่ควรใช้ | ขยายได้ · มีลิงก์หมดอายุในตัว |
-| ดิสก์ของเซิร์ฟเวอร์ | ระบบเล็ก เครื่องเดียว | **ต้องอยู่นอกโฟลเดอร์ที่เว็บเสิร์ฟ** และต้องสำรองข้อมูล |
-| ในฐานข้อมูล | ไฟล์เล็กมากและต้องอยู่ใน transaction เดียวกัน | โตเร็ว · สำรองข้อมูลช้าลงมาก |
-
-> ผิด: **เก็บไฟล์ในโฟลเดอร์ของแอป** — deploy ทีไรหาย และถ้ามีหลาย instance ก็ไม่เห็นกัน
-> ผิด: **เก็บไฟล์ในโฟลเดอร์ที่เว็บเสิร์ฟตรง ๆ** — อัปโหลดไฟล์สคริปต์แล้วเรียกรันได้
-
-**ฐานข้อมูลเก็บแค่ metadata ส่วนตัวไฟล์เก็บที่อื่น** — ตาราง metadata ต้องมีคอลัมน์
-`id` · `original_name` · `stored_key` · `content_type` · `size_bytes` · `checksum` ·
-`uploaded_by` · `uploaded_at` · `scan_status` · `owner_entity_type` · `owner_entity_id`
-
----
-
-## 3 · ตั้งชื่อไฟล์ที่เก็บ
-
-**ห้ามใช้ชื่อไฟล์ที่ผู้ใช้ส่งมาเป็นชื่อจริงที่เก็บ**
-
-```
-ผิด: uploads/รายงาน (1).xlsx              เว้นวรรค · ภาษาไทย · วงเล็บ
-ผิด: uploads/../../etc/passwd             หลุดออกนอกโฟลเดอร์
-ถูก: 2026/09/25/01J9Z8K7X2M4.xlsx         สุ่ม · แยกโฟลเดอร์ตามวันที่
-```
-
-- ชื่อจริงที่เก็บเป็นค่าสุ่ม (UUIDv7 หรือ ULID) + นามสกุลที่**ตรวจแล้ว**
-- ชื่อเดิมของผู้ใช้เก็บไว้ในฐานข้อมูล แล้วส่งกลับตอนดาวน์โหลดผ่าน header
-- แยกโฟลเดอร์ตามวันที่ — โฟลเดอร์เดียวที่มีไฟล์เป็นล้านจะช้าและเปิดดูไม่ไหว
-- เก็บ checksum ไว้ด้วย — ตรวจไฟล์ซ้ำและตรวจว่าไฟล์ไม่เสีย
-
----
-
-## 4 · ส่งไฟล์กลับให้ผู้ใช้
-
-| ไฟล์ | วิธีส่ง |
-|---|---|
-| สาธารณะ (โลโก้ รูปสินค้า) | URL ตรงผ่าน CDN ได้ |
-| **ส่วนตัว** (เอกสาร ใบเสร็จ รูปผู้ใช้) | **ลิงก์ที่มีลายเซ็นและหมดอายุ** 5–15 นาที |
-
-> **"ลิงก์เดายาก" ไม่ใช่การควบคุมสิทธิ์** — ลิงก์ถูกส่งต่อ ถูกบันทึกใน log ของ proxy
-> และติดอยู่ใน `Referer` เสมอ ไฟล์ส่วนตัวต้อง**ตรวจสิทธิ์ทุกครั้ง**แล้วค่อยออกลิงก์ชั่วคราวให้
-
-- ไฟล์ใหญ่ให้ผู้ใช้อัปโหลดตรงไปที่ object storage ด้วยลิงก์ที่เราเซ็นให้ ตัวไฟล์ไม่ต้องผ่านแอป
-  **แต่การตรวจใน §1 ยังต้องครบ** — ทางนี้ข้ามแอปไป เลยต้องคืนการตรวจกลับมาแบบนี้:
-  - **ตอนเซ็นลิงก์:** จำกัดขนาดและชนิดไว้ในลายเซ็น — S3 ใช้ presigned POST ที่ policy มี `content-length-range` และเงื่อนไข `Content-Type` (presigned PUT บังคับขนาดไม่ได้) · ผู้ให้บริการอื่นใช้ตัวเทียบเท่า เช่น GCS ใช้ header `x-goog-content-length-range`
-  - **ตอนเซ็นลิงก์:** กำหนด key เอง (ชื่อสุ่มตาม §3) ลงที่โฟลเดอร์พักไฟล์ · ลิงก์หมดอายุสั้น · บันทึกแถว metadata ด้วย `scan_status = pending`
-  - **หลังอัปโหลดเสร็จ** (event จาก storage หรือผู้ใช้แจ้งว่าเสร็จ): อ่าน magic bytes จริงจาก object · เทียบขนาดจริงกับเพดาน · สแกนไวรัส → ผ่านแล้วย้ายไปที่เก็บจริง และเปลี่ยนเป็น `clean` · ไม่ผ่านให้ลบหรือกักไว้
-  - ระหว่าง `pending` ห้ามออกลิงก์ดาวน์โหลดให้ใคร
-- ตอนส่งไฟล์ให้ดาวน์โหลด ต้องตั้ง `Content-Disposition` และ `Content-Type` ให้ถูก
-  และห้ามส่ง HTML ที่ผู้ใช้อัปโหลดกลับมาแบบให้เบราว์เซอร์เรนเดอร์
-- ถ้าทำได้ ให้เสิร์ฟไฟล์ของผู้ใช้จากคนละโดเมนกับแอป เพื่อกันสคริปต์ในไฟล์เข้าถึง cookie ของแอป
-
----
-
-## 5 · รูปภาพ
-
-- **ห้ามส่งรูปต้นฉบับจากกล้องลงหน้าจอ** — รูป 8 MB บนมือถือคือหน้าเว็บที่โหลดไม่ขึ้น
-- สร้างขนาดย่อไว้ล่วงหน้า 2–3 ขนาด (thumbnail · ขนาดกลาง · ขนาดเต็มที่ย่อแล้ว)
-- **ลบ EXIF ออก** — ในรูปมีพิกัดที่ถ่าย ผู้ใช้ไม่รู้ว่ากำลังเผยแพร่ออกไป
-- แปลงเป็น WebP ถ้าเบราว์เซอร์รองรับ
-- หมุนรูปตาม EXIF ก่อนลบ EXIF ทิ้ง ไม่งั้นรูปจากมือถือจะตะแคง
-- ถ้าไฟล์ใหญ่หรือมีหลายไฟล์ ให้ย่อรูปเป็นงานเบื้องหลัง (ดู `background-jobs`)
-
----
-
-## 6 · ลบและอายุการเก็บ
-
-| เรื่อง | กฎ |
-|---|---|
-| ลบข้อมูลต้นเรื่อง | ต้องมีงานคอยตามลบไฟล์กำพร้าที่เหลืออยู่ด้วย |
-| ลำดับการลบ | ลบ metadata ก่อน แล้วค่อยลบไฟล์ — ไฟล์กำพร้าไม่อันตราย แต่ metadata ที่ชี้ไปหาไฟล์ที่หายไปแล้วทำให้หน้าจอพัง |
-| ไฟล์ที่อัปโหลดแล้วไม่ถูกผูกกับอะไร | ลบทิ้งหลัง 24 ชั่วโมง |
-| อายุการเก็บ | กำหนดต่อประเภทไฟล์ · ไฟล์ที่มีข้อมูลบุคคลต้องมีวันหมดอายุ (ดู `pdpa-compliance`) |
-| สำรองข้อมูล | ไฟล์ต้องอยู่ในแผนสำรองเหมือนฐานข้อมูล **และต้องเคยทดสอบกู้คืนจริง** |
-
----
-
-## 7 · Anti-patterns
-
-- **เชื่อนามสกุลไฟล์** — เปลี่ยนชื่อไฟล์เป็น `.jpg` ใครก็ทำได้
-- **ตรวจขนาดแค่ฝั่งเบราว์เซอร์** — ข้ามได้ใน 3 วินาที
-- **ใช้ชื่อไฟล์ของผู้ใช้เป็นเส้นทางจริง** — `../` พาไปไหนก็ได้
-- **เก็บไฟล์ในโฟลเดอร์ที่เว็บเสิร์ฟ** — อัปโหลดสคริปต์แล้วเรียกรันได้
-- **"ลิงก์เดายาก" แทนการตรวจสิทธิ์**
-- **รับ SVG โดยไม่ทำความสะอาด** — สคริปต์ทำงานในเบราว์เซอร์คนอื่น
-- **ส่งรูปต้นฉบับ 8 MB ลงมือถือ**
-- **ไม่ลบ EXIF** — พิกัดบ้านผู้ใช้หลุดออกไปโดยไม่มีใครตั้งใจ
-- **ไฟล์ไม่อยู่ในแผนสำรองข้อมูล** — ฐานข้อมูลกู้ได้ แต่เอกสารหายหมด
-- **อ่านไฟล์ทั้งก้อนเข้าหน่วยความจำ** — ไฟล์ใหญ่ทำให้ process ตาย
-
-
----
-
-# skill: notifications
-
-Use when a system sends email, SMS, LINE or push
-
-# การแจ้งเตือนผู้ใช้
-
-> **กฎข้อเดียว:** ผู้ใช้จะเลิกอ่านทั้งหมด ถ้าได้รับสิ่งที่ไม่ต้องอ่านมากพอ
-> ทุกข้อความที่ส่งเกินความจำเป็น ทำให้ข้อความที่จำเป็นถูกมองข้ามไปด้วย
-> ข้อความภาษาไทยในแม่แบบ → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ หน้าจอ
-
-## เมื่อไหร่ใช้ skill นี้
-
-- ระบบต้องส่งอีเมล SMS LINE push หรือแจ้งเตือนในแอป
-- ผู้ใช้บ่นว่าได้รับซ้ำ ได้รับเยอะเกิน หรือไม่ได้รับเลย
-- ต้องทำหน้าตั้งค่าว่าจะรับแจ้งเตือนอะไรบ้าง
-- อีเมลสำคัญเข้า spam
-
-## เมื่อไหร่ **ไม่** ใช้
-
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| การแจ้งเตือนทีมเมื่อระบบมีปัญหา | `observability-basics` |
-| กลไกคิวและการลองใหม่ | `background-jobs` |
-| ข้อความหลายภาษา | `i18n-and-locale` |
-| ความยินยอมทางการตลาด | `pdpa-compliance` |
-
----
-
-## 1 · เลือกช่องทางตามความเร่งด่วน ไม่ใช่ตามความเคยชิน
-
-| ช่องทาง | เหมาะกับ | ข้อจำกัด |
-|---|---|---|
-| **ในแอป** | ทุกอย่าง — เป็นบันทึกถาวรที่ย้อนดูได้ | เห็นเมื่อเข้าแอป |
-| **อีเมล** | ใบเสร็จ สรุป เอกสารแนบ สิ่งที่ต้องเก็บไว้ | ช้า · เข้า spam ได้ |
-| **push** | เรื่องที่ต้องรู้ตอนนี้ | ปิดได้ · หายถ้าไม่กด |
-| **LINE** | ไทย · ลูกค้าทั่วไป · อัตราเปิดสูง | มีค่าใช้จ่ายต่อข้อความ · มีกฎของผู้ให้บริการ |
-| **SMS** | รหัสยืนยัน · เรื่องด่วนที่ต้องถึงแน่ | แพงสุด · 70 ตัวอักษรถ้าเป็นภาษาไทย |
-
-> **SMS ภาษาไทยได้แค่ 70 ตัวอักษรต่อข้อความ** (ไม่ใช่ 160 เหมือนอังกฤษ)
-> ถ้าเกินจะถูกตัดเป็นหลายข้อความและคิดเงินเพิ่มทุกท่อน จึงต้องนับความยาวก่อนส่งเสมอ
-
-**เรื่องเดียวส่งช่องทางเดียว** — เว้นแต่เป็นเรื่องที่พลาดไม่ได้จริง ๆ
-ให้ผู้ใช้เลือกเองว่าอยากรับทางไหน (ข้อ 5)
-
----
-
-## 2 · แม่แบบข้อความอยู่นอกโค้ด
-
-```
-templates/
-  order-confirmed/
-    th.subject.txt  th.html  th.txt
-    en.subject.txt  en.html  en.txt
-```
-
-| กฎ | เหตุผล |
-|---|---|
-| **ห้ามต่อข้อความในโค้ด** | เพราะแก้คำแต่ละครั้งต้อง deploy ใหม่ |
-| ตัวแปรใช้ชื่อ | ตั้งเป็นชื่ออย่าง `{{customerName}}` ไม่ใช่ลำดับ |
-| อีเมลต้องมีทั้ง HTML และข้อความล้วน | ตัวกรอง spam ลดคะแนนอีเมลที่มีแต่ HTML |
-| แยกไฟล์ต่อภาษา | ดู `i18n-and-locale` |
-| **ทดสอบด้วยค่าจริงก่อนส่ง** | `สวัสดีคุณ {{name}}` ที่หลุดออกไปคือความเสียหายต่อแบรนด์ |
-
-**ทุกข้อความต้องมี 3 อย่าง** — เกิดอะไรขึ้น · เกี่ยวกับรายการไหน (มีเลขอ้างอิง) · ต้องทำอะไรต่อ (ปุ่มเดียว)
-
----
-
-## 3 · ส่งเป็นงานเบื้องหลังเสมอ
-
-> **ส่งอีเมลไม่สำเร็จ ต้องไม่ทำให้การสั่งซื้อล้ม**
-> แยกกันด้วยคิว — ธุรกรรมบันทึกเสร็จ แล้วค่อยเข้าคิวส่ง (ดู `background-jobs`)
-
-| เรื่อง | กฎ |
-|---|---|
-| เข้าคิวหลังธุรกรรมสำเร็จ | ไม่ใช่ระหว่างธุรกรรม เพราะถ้า rollback ทีหลัง อีเมลก็ออกไปแล้ว |
-| retry | 3 ครั้ง เว้นระยะเพิ่มเป็นเท่าตัวทุกรอบ แล้วย้ายเข้า dead letter (คิวเก็บงานที่ส่งไม่สำเร็จ) |
-| **กันส่งซ้ำ** | ใช้ unique key `(ประเภท, entity_id, event_id, ผู้รับ)` — `event_id` คือรหัสเหตุการณ์หรือเวอร์ชันของการเปลี่ยน (เช่น สถานะคำสั่งซื้อครั้งที่ 2 ของออเดอร์เดียวกันต้องส่งได้) ไม่ใช่หวังว่าจะไม่มีใครเรียกซ้ำ |
-| ข้อความเร่งด่วน (รหัส OTP) | ใช้คิวแยก จะได้ไม่ต้องไปต่อแถวหลังอีเมลสรุปรายเดือน 5,000 ฉบับ |
-
-**กันการส่งถล่ม** — ตั้งเพดานต่อผู้ใช้ต่อชั่วโมง และรวบเรื่องเดียวกันที่เกิดถี่ ๆ
-เป็นข้อความเดียว ("มี 12 รายการใหม่" ไม่ใช่ 12 ข้อความ)
-
----
-
-## 4 · ห้ามใส่อะไรในข้อความ
-
-| ห้าม | ใส่แทน |
-|---|---|
-| รหัสผ่าน | ลิงก์ตั้งรหัสใหม่ที่หมดอายุ |
-| เลขบัตรเต็ม · เลขบัตรประชาชน | 4 ตัวท้าย |
-| ข้อมูลสุขภาพ ผลตรวจ | "มีผลตรวจใหม่ กรุณาเข้าระบบเพื่อดู" |
-| ไฟล์แนบที่มีข้อมูลอ่อนไหว | ลิงก์ที่ต้องเข้าสู่ระบบก่อน |
-| ลิงก์ที่เข้าถึงได้โดยไม่ต้องยืนยันตัวตน | ลิงก์ที่มีอายุสั้นและตรวจสิทธิ์ |
-
-> **ถือว่าอีเมลคือไปรษณียบัตร** — ผ่านหลายระบบ ค้างอยู่ในกล่องจดหมายบนเครื่องที่อาจไม่ใช่ของเขา
-> และถูกค้นเจอได้ตลอดไป
-
-**ลิงก์ในอีเมลต้องเป็นโดเมนของเรา** — ลิงก์ย่อทำให้ผู้ใช้แยกไม่ออกจากอีเมลหลอกลวง
-
----
-
-## 5 · ให้ผู้ใช้เลือกได้
-
-| ประเภท | ปิดได้ไหม |
-|---|---|
-| ธุรกรรม (ใบเสร็จ · รหัสยืนยัน · แจ้งความปลอดภัย) | ✗ ปิดไม่ได้ |
-| การดำเนินการ (สถานะคำสั่งซื้อ · มีคนตอบกลับ) | ✓ เลือกช่องทางได้ |
-| สรุปประจำงวด | ✓ เลือกความถี่ได้ |
-| การตลาด | ✓ **ต้องขอความยินยอมก่อนส่ง** (ดู `pdpa-compliance`) |
-
-- ตารางตั้งค่า: `user_id` · `notification_type` · `channel` · `enabled`
-- **ทุกข้อความที่ไม่ใช่ธุรกรรมต้องมีลิงก์ยกเลิกรับ** และต้องมีผลภายใน 24 ชั่วโมง (เป้าภายในของเรา เข้มกว่าที่ Gmail และ Yahoo กำหนดไว้ที่ 2 วัน)
-- **อีเมลการตลาดที่ส่งปริมาณมาก** ต้องใส่ header ยกเลิกรับแบบคลิกเดียวด้วย: `List-Unsubscribe: <https://...>` (URL แบบ HTTPS) คู่กับ `List-Unsubscribe-Post: List-Unsubscribe=One-Click` ตามมาตรฐาน RFC 8058 และอีเมลต้องผ่าน SPF + DKIM (Gmail ใช้กับผู้ส่งเกินราว 5,000 ฉบับต่อวัน · ใช้กับอีเมลการตลาด ไม่ใช่ธุรกรรม · ถ้าไม่ใส่ อีเมลมีโอกาสเข้า spam มากขึ้น) — แหล่ง: support.google.com/a/answer/14229414 · senders.yahooinc.com/best-practices ตรวจ 22 ต.ค. 2569
-- ยกเลิกรับได้โดยไม่ต้องเข้าสู่ระบบ — ใช้ token ในลิงก์
-- เคารพ "เวลาเงียบ" — ไม่ส่ง push หรือ SMS ที่ไม่ด่วนตอนตี 2 (ตามเขตเวลาผู้รับ)
-
----
-
-## 6 · ติดตามผลการส่ง
-
-| สถานะ | หมายถึง |
-|---|---|
-| `queued` · `sent` | เข้าคิว · ส่งออกจากระบบเราแล้ว |
-| `delivered` | ปลายทางรับแล้ว |
-| `bounced` | ส่งไม่ถึง — **แยก hard (ที่อยู่ไม่มีจริง) กับ soft (กล่องเต็ม)** |
-| `failed` | ส่งไม่ออก |
-
-- **hard bounce ต้องหยุดส่งที่อยู่นั้นทันที** — ส่งต่อไปเรื่อย ๆ ทำให้โดเมนเราถูกขึ้นบัญชีดำ
-- เก็บ log การส่งไว้ตอบคำถาม "ทำไมลูกค้าไม่ได้รับ" — ใคร ช่องทางไหน เมื่อไหร่ ผลอะไร
-- อีเมลที่ต้องถึงแน่ ๆ ต้องตั้ง **SPF · DKIM · DMARC** ให้ครบ ไม่อย่างนั้นอีเมลจะเข้า spam โดยไม่มีสัญญาณเตือนอะไรเลย
-- วัด: อัตราส่งสำเร็จ · อัตรา bounce · คิวค้าง (ดู `observability-basics`)
-
----
-
-## 7 · Anti-patterns
-
-- **ส่งข้อความในคำขอเดียวกับธุรกรรม** — ผู้ให้บริการอีเมลช้า แล้วหน้าจอค้าง
-- **ส่งก่อน commit** — rollback แล้วแต่ลูกค้าได้อีเมลไปแล้ว
-- **ข้อความอยู่ในโค้ด** — แก้คำแต่ละครั้งต้อง deploy ใหม่
-- **ไม่กันซ้ำ** — ลูกค้าได้ใบเสร็จ 5 ฉบับ
-- **ส่งทุกช่องทางพร้อมกัน** — ผู้ใช้ปิดทุกอย่างภายในสัปดาห์เดียว
-- **ไม่มีลิงก์ยกเลิกรับ** — ผู้ใช้กด "นี่คือ spam" แทน แล้วโดเมนเราเสียชื่อ
-- **ใส่ข้อมูลอ่อนไหวในตัวข้อความ**
-- **ส่งต่อไปยัง hard bounce** — โดเมนถูกขึ้นบัญชีดำ
-- **ไม่นับความยาว SMS ภาษาไทย** — ค่าใช้จ่ายบานโดยไม่รู้ตัว
-- **ไม่มี log การส่ง** — ตอบลูกค้าไม่ได้ว่าส่งไปหรือยัง
-
----
-
-## 8 · ตัวย่อ
-
-- **OTP** — One-Time Password (รหัสผ่านใช้ครั้งเดียว)
-- **RFC** — Request for Comments (เอกสารมาตรฐานอินเทอร์เน็ต) · RFC 8058 = มาตรฐาน header ยกเลิกรับคลิกเดียว
-- **push notification** — การแจ้งเตือนที่เด้งขึ้นบนเครื่องผู้ใช้
-- **bounce** — อีเมลที่ส่งไม่ถึงและถูกตีกลับ
-- **SPF · DKIM · DMARC** — มาตรฐานพิสูจน์ว่าอีเมลถูกส่งจากโดเมนนั้นจริง
-- **opt-in / opt-out** — การขอรับ / การยกเลิกรับ
-- **LINE Official Account** — บัญชีทางการของธุรกิจบน LINE ใช้ส่งข้อความหาลูกค้า
-
-## 9 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| คิว retry และ dead letter | `background-jobs` |
-| ข้อความหลายภาษา | `i18n-and-locale` |
-| ความยินยอมทางการตลาด | `pdpa-compliance` |
-| ตารางตั้งค่าและ log การส่ง | `database-design` |
-| ตัวชี้วัดอัตราส่งสำเร็จ | `observability-basics` |
-| ไฟล์แนบและลิงก์ที่หมดอายุ | `file-upload-and-storage` |
-| การแจ้งเตือนทีมเมื่อระบบมีปัญหา | `observability-basics` · `incident-runbook-template` |
-| broadcast ถึงเพื่อน LINE OA (โควตา · กลุ่มเป้าหมาย · ความถี่) | `e-commerce:line-broadcast` (ถ้าติดตั้ง) |
-
-
----
-
 # skill: data-import-export
 
 Use when a system imports or exports Excel or CSV
 
-# นำเข้าและส่งออกข้อมูล
+# Importing and exporting data
 
-> **กฎข้อเดียว:** ตรวจให้จบก่อน แล้วค่อยเขียน
-> ถ้าเขียนไปครึ่งทางแล้วเจอแถวผิด ข้อมูลจะค้างอยู่ครึ่ง ๆ และไม่มีใครรู้ว่าต้องแก้ตรงไหน
+> **The one rule:** validate everything first, then write.
+> If you write halfway and then find a bad row, the data is left half-done and nobody knows what to fix.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- มีหน้าจอให้ผู้ใช้อัปโหลด Excel หรือ CSV เพื่อนำข้อมูลเข้าระบบ
-- มีปุ่มส่งออกเป็น Excel หรือ CSV
-- ย้ายข้อมูลจากระบบเก่าเข้าระบบใหม่
-- ผู้ใช้อัปโหลดแล้วได้ข้อความว่า "ไฟล์ไม่ถูกต้อง" แล้วไม่รู้ว่าผิดตรงไหน
+- A screen lets users upload Excel or CSV to bring data into the system
+- A button exports to Excel or CSV
+- Moving data from an old system into a new one
+- A user uploads and gets the message "ไฟล์ไม่ถูกต้อง" (file is invalid) without knowing what is wrong
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or together
 
-| งาน | skill | |
+| Job | skill | |
 |---|---|---|
-| รับไฟล์อัปโหลดทั่วไป (รูป เอกสาร) | `file-upload-and-storage` | แทน |
-| สร้างไฟล์ Excel ที่จัดรูปแบบสวยงาม | `anthropic-skills:xlsx` | แทน |
-| กลไกคิวและความคืบหน้า | `background-jobs` | แทน |
-| ปี พ.ศ. และการเรียงลำดับไทย | `i18n-and-locale` | แทน |
-| ส่งเอกสารเข้าโปรแกรมบัญชีไทย (PEAK · FlowAccount) ผ่าน API แทนไฟล์ | [`references/thai-accounting-apis.md`](references/thai-accounting-apis.md) | แทน |
-| บันทึกว่าใครนำเข้าหรือส่งออกอะไร | `audit-trail` | คู่ |
-| ปิดบังข้อมูลส่วนบุคคลในไฟล์ส่งออก | `pdpa-compliance` | คู่ |
-| แจ้งผู้ใช้เมื่อนำเข้าเสร็จ | `notifications` | คู่ |
-| ข้อจำกัดและ constraint ของตารางปลายทาง | `database-design` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Receiving general file uploads (images, documents) | `file-upload-and-storage` | Instead |
+| Building a nicely formatted Excel file | `anthropic-skills:xlsx` | Instead |
+| Queue mechanics and progress | `background-jobs` | Instead |
+| Buddhist Era (B.E.) years and Thai sorting order | `i18n-and-locale` | Instead |
+| Sending documents into Thai accounting software (PEAK · FlowAccount) through an API instead of a file | [`references/thai-accounting-apis.md`](references/thai-accounting-apis.md) | Instead |
+| Recording who imported or exported what | `audit-trail` | Together |
+| Masking personal data in export files | `pdpa-compliance` | Together |
+| Telling the user when an import finishes | `notifications` | Together |
+| Limits and constraints of the target table | `database-design` | Together |
+| Abbreviations in work people read | `spell-out-abbreviations` | Together |
 
 ---
 
-## 1 · ให้แม่แบบ อย่าให้เดา
+## 1 · Give a template, do not make people guess
 
-**ทุกหน้าจอนำเข้าต้องมีปุ่มดาวน์โหลดแม่แบบ** ในแม่แบบมี
+**Every import screen needs a button to download a template.** The template contains
 
-- หัวคอลัมน์ตรงกับที่ระบบต้องการเป๊ะ
-- **แถวตัวอย่าง 1–2 แถวที่ถูกต้อง**
-- แถวคำอธิบายว่าคอลัมน์ไหนบังคับ รูปแบบอะไร ค่าที่รับได้มีอะไรบ้าง
-- ชีตแยกสำหรับรายการค่าที่เลือกได้ (สถานะ ประเภท หน่วย)
+- Column headers that match exactly what the system needs
+- **1–2 correct sample rows**
+- A row explaining which columns are required, what format, and which values are accepted
+- A separate sheet for lists of selectable values (status, type, unit)
 
-| ไฟล์ต่างจากแม่แบบแบบไหน | ทำ |
+| How the file differs from the template | Do this |
 |---|---|
-| ลำดับคอลัมน์สลับ | ✓ อ่านจากชื่อหัวคอลัมน์ ไม่ใช่ตำแหน่ง |
-| หัวคอลัมน์มีเว้นวรรคเกิน ตัวพิมพ์ต่าง | ✓ ตัดช่องว่างและเทียบแบบไม่สนตัวพิมพ์ |
-| มีคอลัมน์เกินที่ไม่รู้จัก | ✓ ข้ามไป แต่**บอกให้รู้ว่าข้ามอะไร** |
-| ขาดคอลัมน์บังคับ | ✗ หยุดทันที บอกว่าขาดคอลัมน์ไหน |
+| Column order swapped | ✓ Read by header name, not by position |
+| Header has extra spaces or different letter case | ✓ Trim spaces and compare case-insensitively |
+| Extra unknown columns | ✓ Skip them, but **tell the user what was skipped** |
+| A required column is missing | ✗ Stop at once and say which column is missing |
 
 ---
 
-## 2 · ตรวจสามชั้น ก่อนเขียนอะไรทั้งนั้น
+## 2 · Three layers of validation before writing anything
 
-| ชั้น | ตรวจอะไร | ตัวอย่างข้อความ |
+| Layer | Checks | Example message |
 |:--:|---|---|
-| 1 · ไฟล์ | เปิดได้ · มีชีตที่ต้องการ · คอลัมน์บังคับครบ · ไม่เกินจำนวนแถวสูงสุด | "ไม่พบคอลัมน์ 'รหัสสินค้า'" |
-| 2 · รายแถว | ชนิดข้อมูล · ค่าบังคับ · อยู่ในรายการที่กำหนด · ช่วงตัวเลข | "แถว 42 คอลัมน์ 'จำนวน' ต้องเป็นตัวเลขมากกว่า 0 (พบ '-5')" |
-| 3 · ความสัมพันธ์ | รหัสมีอยู่จริงในระบบ · ไม่ซ้ำกันเองในไฟล์ · กฎทางธุรกิจ | "แถว 88 ไม่พบลูกค้ารหัส C-1042" |
+| 1 · File | Opens · has the needed sheet · all required columns present · within the maximum row count | "ไม่พบคอลัมน์ 'รหัสสินค้า'" (column 'product code' not found) |
+| 2 · Per row | Data type · required values · in the allowed list · number range | "แถว 42 คอลัมน์ 'จำนวน' ต้องเป็นตัวเลขมากกว่า 0 (พบ '-5')" (row 42, column 'quantity' must be a number above 0, found '-5') |
+| 3 · Relationships | The code exists in the system · no duplicates within the file · business rules | "แถว 88 ไม่พบลูกค้ารหัส C-1042" (row 88, customer code C-1042 not found) |
 
-**รายงานความผิดพลาดต้องระบุ: แถว · คอลัมน์ · ค่าที่พบ · ค่าที่ควรเป็น**
+**An error report must state: row · column · value found · value expected**
 
 ```
-ผิด: "ไฟล์ไม่ถูกต้อง"
-ผิด: "พบข้อผิดพลาด 37 รายการ"
-ถูก: ตารางผลตรวจ พร้อมปุ่มดาวน์โหลดไฟล์เดิมที่มีคอลัมน์ "ข้อผิดพลาด" ต่อท้าย
+Wrong: "ไฟล์ไม่ถูกต้อง"
+Wrong: "พบข้อผิดพลาด 37 รายการ"
+Right: a table of check results, with a button to download the original file with an "ข้อผิดพลาด" (error) column appended
 ```
 
-> **รายงานข้อผิดพลาดทั้งหมดในครั้งเดียว ไม่หยุดที่แถวแรกที่ผิด**
-> ผู้ใช้จะได้แก้รอบเดียวจบ ไม่ใช่อัปโหลดใหม่ 37 รอบ
+> **Report all errors in one pass. Do not stop at the first bad row.**
+> The user then fixes everything in one round, instead of uploading 37 times.
 
 ---
 
-## 3 · เขียนลงระบบ
+## 3 · Writing into the system
 
-| แบบ | ใช้เมื่อ |
+| Mode | Use when |
 |---|---|
-| **ทั้งหมดหรือไม่ทำเลย** | ค่าเริ่มต้น ไฟล์ต้องถูกหมดถึงจะนำเข้า |
-| ทำเท่าที่ผ่าน ข้ามแถวที่ผิด | ไฟล์ใหญ่มากและแต่ละแถวไม่เกี่ยวกัน โดย**ผู้ใช้ต้องเลือกเอง ระบบไม่ตัดสินใจแทน** |
+| **All or nothing** | The default. The file must be fully correct to be imported |
+| Do what passes, skip the bad rows | The file is very large and the rows are unrelated, and **the user must choose this, the system does not decide for them** |
 
-- **ทุกครั้งต้องมีหน้าสรุปก่อนยืนยัน** เช่น "จะเพิ่ม 120 · แก้ 45 · ข้าม 3 · ผิด 0" แล้วให้กดยืนยัน
-- ถ้าเจอแถวซ้ำในไฟล์ ให้หยุดและบอก ไม่ใช่ใช้แถวสุดท้ายเงียบ ๆ
-- ถ้าข้อมูลมีอยู่แล้วในระบบ ให้ผู้ใช้เลือก: ข้าม · เขียนทับ · หยุด
-- **นำเข้าทุกครั้งต้องบันทึกใน audit** ว่าใครนำเข้า ไฟล์อะไร กระทบกี่แถว (ดู `audit-trail`)
-- **เก็บไฟล์ต้นฉบับไว้** พอมีปัญหาจะได้ย้อนดูว่าไฟล์ที่ส่งมาหน้าตาอย่างไรจริง ๆ
-- ทำให้ย้อนกลับได้: บันทึก batch id (รหัสรอบนำเข้า) ไว้กับทุกแถวที่นำเข้า
+- **Always show a summary page before confirming**, such as "จะเพิ่ม 120 · แก้ 45 · ข้าม 3 · ผิด 0" (will add 120 · update 45 · skip 3 · error 0), then have the user click confirm
+- If the file has duplicate rows, stop and say so. Do not silently use the last row
+- If the data already exists in the system, let the user choose: skip · overwrite · stop
+- **Every import must be recorded in the audit log**: who imported, which file, how many rows affected (see `audit-trail`)
+- **Keep the original file**, so when there is a problem you can look back at what the submitted file really looked like
+- Make it reversible: store a batch id (the id of the import run) on every imported row
 
-**ไฟล์ใหญ่ทำเป็นงานเบื้องหลัง**: ถ้าเกินประมาณ 1,000 แถวให้เข้าคิว
-แบ่งเป็นชุดละ 500 แถว แสดงความคืบหน้า และยกเลิกได้ (ดู `background-jobs`)
+**Large files run as background jobs.** Above roughly 1,000 rows, put them in a queue,
+split into batches of 500 rows, show progress, and allow cancel (see `background-jobs`).
 
 ---
 
-## 4 · กับดักของ Excel และ CSV
+## 4 · Excel and CSV traps
 
-| กับดัก | ผลที่เกิด | ทางแก้ |
+| Trap | What happens | Fix |
 |---|---|---|
-| **ภาษาไทยใน CSV เพี้ยน** | เปิดใน Excel แล้วตัวอักษรอ่านไม่ออก | บันทึกเป็น UTF-8 **พร้อม BOM** หรือแนะให้ใช้ .xlsx |
-| **รหัสที่ขึ้นต้นด้วย 0 หาย** | `0812345678` กลายเป็น `812345678` | อ่านเป็นข้อความเสมอ ส่วนตอนส่งออกให้ตั้งรูปแบบเซลล์เป็นข้อความ |
-| **เลขยาวกลายเป็นเลขยกกำลัง** | เลขบัตร 13 หลัก → `1.23457E+12` | เหมือนข้างบน |
-| **วันที่ถูกตีความเอง** | `03/04/2026` เป็นมีนาคมหรือเมษายน | บังคับ `YYYY-MM-DD` ในแม่แบบ |
-| **ปี พ.ศ. กับ ค.ศ. ปนกัน** | เพี้ยน 543 ปีเงียบ ๆ | **ถามในหน้าจอนำเข้าว่าไฟล์ใช้ปีแบบไหน** |
-| ช่องว่างท้ายค่า | จับคู่รหัสไม่เจอ | ตัดช่องว่างหัวท้ายทุกค่า |
-| เซลล์ที่เป็นสูตร | ได้สูตรแทนค่า | อ่านค่าที่คำนวณแล้ว |
-| **สูตรที่ขึ้นต้นด้วย `=` `+` `-` `@` ในไฟล์ส่งออก** | ผู้ใช้เปิดแล้ว Excel รันคำสั่ง | เติม `'` นำหน้าค่าที่ขึ้นต้นด้วยอักขระเหล่านี้ |
+| **Thai in CSV garbled** | Opened in Excel, the characters are unreadable | Save as UTF-8 **with a BOM**, or recommend .xlsx |
+| **Codes starting with 0 lose it** | `0812345678` becomes `812345678` | Always read as text, and on export set the cell format to text |
+| **Long numbers turn into scientific notation** | A 13-digit ID card number → `1.23457E+12` | Same as above |
+| **Dates interpreted automatically** | Is `03/04/2026` March or April | Force `YYYY-MM-DD` in the template |
+| **B.E. and C.E. years mixed** | Silently off by 543 years | **Ask on the import screen which year style the file uses** |
+| Trailing spaces in a value | Code matching fails | Trim leading and trailing spaces on every value |
+| Cells that are formulas | You get the formula instead of the value | Read the calculated value |
+| **Values starting with `=` `+` `-` `@` in an export file** | Excel runs a command when the user opens it | Prefix with `'` any value that starts with these characters |
 
-> **ช่องโหว่ที่คนไม่ค่อยรู้**: ชื่อลูกค้าที่เป็น `=cmd|'/c calc'!A1` ถ้าส่งออกดิบ ๆ
-> แล้วมีคนเปิดใน Excel มันจะพยายามรันคำสั่งจริง ตอนส่งออกจึงต้อง escape เสมอ
+> **A vulnerability people rarely know about:** a customer name of `=cmd|'/c calc'!A1`, if exported raw
+> and someone opens it in Excel, will try to run the command for real. So always escape on export.
 
 ---
 
-## 5 · ส่งออก
+## 5 · Export
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| ขนาด | ถ้าเกินประมาณ 50,000 แถว ให้ทำเป็นงานเบื้องหลัง แล้วส่งลิงก์ให้ดาวน์โหลด |
-| สิทธิ์ | **ส่งออกได้เฉพาะข้อมูลที่ผู้ใช้คนนั้นมีสิทธิ์เห็นอยู่แล้ว** เพราะนี่คือจุดรั่วที่พบบ่อยที่สุด |
-| audit | บันทึกทุกครั้งว่าใครส่งออกข้อมูลอะไร ช่วงไหน กี่แถว |
-| ข้อมูลส่วนบุคคล | ปิดบังคอลัมน์ที่ไม่จำเป็น (ดู `pdpa-compliance`) |
-| ชื่อไฟล์ | `<เรื่อง>-<ช่วงวันที่>-<เวลาที่ส่งออก>.xlsx` |
-| ส่วนหัวของไฟล์ | ใส่เงื่อนไขกรองที่ใช้ และเวลาที่ส่งออก ไม่งั้นอีก 3 เดือนไม่มีใครรู้ว่าไฟล์นี้คือข้อมูลอะไร |
-| ลิงก์ดาวน์โหลด | ต้องหมดอายุ (ดู `file-upload-and-storage`) |
-| รูปแบบ | `.xlsx` สำหรับคนอ่าน · CSV สำหรับเครื่องอ่าน |
+| Size | Above roughly 50,000 rows, run it as a background job and send a download link |
+| Permission | **Export only data that this user already has permission to see**, because this is the most common leak |
+| audit | Record every time who exported what data, which period, how many rows |
+| Personal data | Mask columns that are not needed (see `pdpa-compliance`) |
+| File name | `<เรื่อง>-<ช่วงวันที่>-<เวลาที่ส่งออก>.xlsx` |
+| File header | Put in the filter conditions used and the export time. Otherwise in 3 months nobody knows what data this file is |
+| Download link | Must expire (see `file-upload-and-storage`) |
+| Format | `.xlsx` for people to read · CSV for machines to read |
 
 ---
 
 ## 6 · Anti-patterns
 
-- **"ไฟล์ไม่ถูกต้อง"** ผู้ใช้ทำอะไรต่อไม่ได้
-- **หยุดที่แถวแรกที่ผิด** ผู้ใช้ต้องอัปโหลดใหม่ 30 รอบ
-- **เขียนไปตรวจไป** พอล้มกลางทาง ข้อมูลก็ค้างครึ่ง ๆ
-- **ไม่มีหน้าสรุปก่อนยืนยัน** เขียนทับข้อมูลจริงโดยไม่มีใครทันได้ดู
-- **ไม่มีแม่แบบให้ดาวน์โหลด** ผู้ใช้ต้องเดาหัวคอลัมน์
-- **อ่านคอลัมน์ตามตำแหน่ง** ผู้ใช้แทรกคอลัมน์เดียวก็พังทั้งไฟล์
-- **อ่านรหัสเป็นตัวเลข** เลข 0 นำหน้าหายทุกครั้ง
-- **ไม่ถามว่าปีเป็น พ.ศ. หรือ ค.ศ.** ปีเพี้ยน 543 ปีโดยไม่มีใครรู้
-- **ส่งออกโดยไม่ escape สูตร** เปิดไฟล์แล้วรันคำสั่ง
-- **ส่งออกได้เกินสิทธิ์ที่มี** ข้อมูลรั่วผ่านปุ่มที่เราทำเอง
-- **ไม่เก็บไฟล์ต้นฉบับ** มีปัญหาแล้วย้อนดูไม่ได้
+- **"ไฟล์ไม่ถูกต้อง"** (file is invalid): the user cannot do anything next
+- **Stopping at the first bad row**: the user must upload 30 times
+- **Writing while validating**: if it fails midway, the data is left half-done
+- **No summary page before confirming**: real data is overwritten before anyone could look
+- **No template to download**: the user has to guess the headers
+- **Reading columns by position**: the user inserts one column and the whole file breaks
+- **Reading codes as numbers**: the leading 0 is lost every time
+- **Not asking whether the year is B.E. or C.E.**: years are off by 543 and nobody knows
+- **Exporting without escaping formulas**: opening the file runs a command
+- **Exporting more than the user's permission**: data leaks through a button we built ourselves
+- **Not keeping the original file**: when there is a problem, you cannot look back
 
 
 ## reference: thai-accounting-apis.md
@@ -554,200 +228,200 @@ Abbreviations: small and medium enterprises (SME) · Application Programming Int
 
 Use when a live system needs metrics, logs or alerts
 
-# วัดผลและเฝ้าระบบ
+# Measuring and monitoring a system
 
-> **กฎข้อเดียว:** ถ้าลูกค้าเป็นคนบอกเราว่าระบบล่ม แปลว่าการเฝ้าระวังล้มเหลว
-> ไม่ใช่ว่าลูกค้าใจดี
+> **The one rule:** if a customer is the one who tells us the system is down, monitoring has failed.
+> It does not mean the customer is kind.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ระบบมีผู้ใช้จริงแล้ว
-- มีคนถามว่า "ตอนนี้ระบบปกติดีไหม" แล้วต้องไปเปิด log ดูถึงจะตอบได้
-- ถูกปลุกกลางดึกด้วยการแจ้งเตือนที่ไม่ต้องทำอะไร
-- ระบบช้าแล้วไม่รู้ว่าช้าตรงไหน
+- The system has real users
+- Someone asks "is the system healthy right now?" and you must open the logs to answer
+- You get woken in the middle of the night by an alert that needs no action
+- The system is slow and you do not know where
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Job | Use this instead |
 |---|---|
-| รูปแบบบรรทัด log และการปิดบัง | `logging-standards` |
-| ร่องรอยว่าใครทำอะไร | `audit-trail` |
-| endpoint health check | `web-service-essentials` |
-| ขั้นตอนตอนเกิดเหตุ | `incident-runbook-template` |
-| สรุปหลังเหตุการณ์ | `postmortem-template` |
+| Log line format and masking | `logging-standards` |
+| A trail of who did what | `audit-trail` |
+| Health check endpoint | `web-service-essentials` |
+| Steps during an incident | `incident-runbook-template` |
+| Post-incident summary | `postmortem-template` |
 
 ---
 
-## 1 · สามอย่างนี้ตอบคนละคำถาม
+## 1 · These three answer different questions
 
-| | ตอบคำถาม | ตัวอย่าง | ต้นทุน |
+| | Answers the question | Example | Cost |
 |---|---|---|---|
-| **metric** (ตัวชี้วัด) | "ตอนนี้แย่ไหม แย่ขึ้นหรือลง" | error 2.3% · p95 = 840 ms | ถูกสุด เก็บได้นาน |
-| **log** (บันทึก) | "คำขอนั้นเกิดอะไรขึ้น" | ข้อความ + stack trace + id | แพงปานกลาง |
-| **trace** (การไล่รอย) | "ช้าที่ขั้นตอนไหน" | คำขอเดียว ผ่าน 5 service | แพงสุด สุ่มเก็บ |
+| **metric** | "Is it bad now? Getting better or worse?" | error 2.3% · p95 = 840 ms | Cheapest, keeps a long time |
+| **log** | "What happened in that request?" | message + stack trace + id | Medium cost |
+| **trace** | "Which step is slow?" | one request across 5 services | Most expensive, sample it |
 
-**ลำดับการใช้เวลาเกิดเหตุ:** metric บอกว่า**มีปัญหา** → trace บอกว่า**ตรงไหน** → log บอกว่า**ทำไม**
-ทั้ง 3 อย่างต้องเชื่อมกันด้วย correlation id ตัวเดียวกัน (ดู `logging-standards`)
+**Order of use during an incident:** the metric says there **is a problem** → the trace says **where** → the log says **why**.
+All 3 must be linked by the same correlation id (see `logging-standards`).
 
 ---
 
-## 2 · สี่สัญญาณที่ต้องวัด
+## 2 · The four signals to measure
 
-| สัญญาณ | วัดอะไร | ตัวเลขที่ดู |
+| Signal | Measures | Numbers to watch |
 |---|---|---|
-| **อัตราคำขอ** | มีงานเข้ามาเท่าไหร่ | ต่อวินาที แยกตาม endpoint |
-| **อัตราความผิดพลาด** | ล้มกี่เปอร์เซ็นต์ | แยก 4xx (ผู้ใช้ผิด) กับ 5xx (เราผิด) |
-| **เวลาตอบสนอง** | ช้าแค่ไหน | **p50 · p95 · p99** |
-| **ทรัพยากร** | ใกล้เต็มไหม | CPU · หน่วยความจำ · พื้นที่ · connection pool |
+| **Request rate** | How much work is coming in | Per second, split by endpoint |
+| **Error rate** | What percentage fails | Split 4xx (user's fault) from 5xx (our fault) |
+| **Response time** | How slow | **p50 · p95 · p99** |
+| **Resources** | Is anything near full | CPU · memory · disk space · connection pool |
 
-> **ห้ามดูค่าเฉลี่ยของเวลาตอบสนอง** — เฉลี่ย 200 ms ฟังดูดี
-> ทั้งที่ผู้ใช้ 5% รอ 9 วินาที ค่าเฉลี่ยกลบคนที่เจอปัญหาเสมอ **ดู p95 และ p99**
+> **Never look at the average response time.** An average of 200 ms sounds good
+> while 5% of users wait 9 seconds. The average always hides the people who hit the problem. **Look at p95 and p99.**
 
-**สำหรับคิวและงานเบื้องหลัง** เพิ่มอีก 3 ตัว — งานค้างในคิว · เวลารอในคิว · งานที่ล้มถาวร
-(ดู `background-jobs`)
+**For queues and background jobs**, add 3 more: jobs waiting in the queue · wait time in the queue · jobs that failed for good
+(see `background-jobs`).
 
 ---
 
-## 3 · ตั้งชื่อตัวชี้วัด
+## 3 · Naming metrics
 
 ```
-<โดเมน>_<สิ่งที่วัด>_<หน่วย>
+<domain>_<what is measured>_<unit>
 
-http_requests_total              จำนวนสะสม
-http_request_duration_seconds    ระยะเวลา
-orders_created_total             เหตุการณ์ทางธุรกิจ
-queue_depth_jobs                 ค่า ณ ขณะนั้น
+http_requests_total              cumulative count
+http_request_duration_seconds    duration
+orders_created_total             business event
+queue_depth_jobs                 value at this moment
 ```
 
-| กฎ | เหตุผล |
+| Rule | Reason |
 |---|---|
-| ลงท้ายด้วยหน่วยเสมอ | `_seconds` ไม่ใช่ `_time` ที่ไม่มีใครรู้ว่าวินาทีหรือมิลลิวินาที |
-| ค่าสะสมลงท้าย `_total` | บอกว่าเป็นค่าที่เพิ่มขึ้นเรื่อย ๆ ไม่ใช่ค่าปัจจุบัน |
-| ใช้ label แทนการสร้างชื่อใหม่ | `http_requests_total{route,status}` ไม่ใช่ชื่อแยกต่อ endpoint |
-| **label ห้ามมีค่าที่ไม่จำกัด** | ถ้าใส่ user id หรือ order id เป็น label ระบบเก็บ metric จะรับไม่ไหว |
+| Always end with the unit | `_seconds`, not `_time`, which nobody can tell is seconds or milliseconds |
+| End cumulative values with `_total` | It says the value keeps rising and is not the current value |
+| Use labels instead of making new names | `http_requests_total{route,status}`, not a separate name per endpoint |
+| **A label must not take unbounded values** | If you put a user id or order id in a label, the metrics system cannot cope |
 
-### 3.1 · ถ้าใช้ Prometheus และ Grafana
+### 3.1 · If you use Prometheus and Grafana
 
-- **ชนิด metric:** counter ใช้นับเหตุการณ์ (อ่านด้วย `rate()`) · gauge ใช้ค่า ณ ตอนนี้ · histogram ใช้ระยะเวลาที่ต้องหา p95 · summary ใช้เมื่อไม่ต้องรวมข้าม instance
-- **หน่วย:** วินาที · byte · ratio 0 ถึง 1 (`_seconds` ไม่ใช่ `_milliseconds`)
-- **ห้ามใส่ `user_id` · เบอร์โทร · `call_id` เป็น label** เพราะทุกค่าใหม่คือ series ใหม่ 1 เส้น จนระบบเก็บ metric รับไม่ไหว · id เหล่านี้ลง log และ trace
-- p95: `histogram_quantile(0.95, sum by (le) (rate(<ชื่อ>_bucket[5m])))`
-- alert ทุกกฎมี `for:` · `severity` · ลิงก์ runbook · เตือนจากอาการ (latency · error) ไม่เตือนจาก CPU หรือ GPU
-- dashboard เก็บเป็น JSON ใน git แล้ว provision ด้วยไฟล์ · RED ต่อ service · USE ต่อทรัพยากร
-- รายละเอียด PromQL · ตัวอย่างกฎ alert · provisioning · ตัวอย่างระบบ voice agent (latency STT · LLM · TTS · lag ของ Kafka · GPU): `references/prometheus-grafana.md`
+- **Metric types:** a counter counts events (read it with `rate()`) · a gauge holds the value right now · a histogram holds durations when you need p95 · a summary is for when you do not need to aggregate across instances
+- **Units:** seconds · bytes · ratio 0 to 1 (`_seconds`, not `_milliseconds`)
+- **Never put `user_id` · a phone number · `call_id` in a label**, because every new value is a new series, until the metrics system cannot cope · these ids go in logs and traces
+- p95: `histogram_quantile(0.95, sum by (le) (rate(<name>_bucket[5m])))`
+- Every alert rule has `for:` · `severity` · a runbook link · alert on symptoms (latency · error), not on CPU or GPU
+- Keep dashboards as JSON in git and provision them from files · RED per service · USE per resource
+- Details on PromQL · alert rule examples · provisioning · a voice agent example (STT · LLM · TTS latency · Kafka lag · GPU): `references/prometheus-grafana.md`
 
 ---
 
-## 4 · การแจ้งเตือน
+## 4 · Alerts
 
-> **แจ้งเตือนทุกครั้งต้องมีอะไรให้ทำ** — ถ้าคนรับอ่านแล้วไม่ต้องทำอะไร
-> อีก 3 สัปดาห์เขาจะปิดเสียงแจ้งเตือน แล้ววันที่ของจริงเกิดก็จะไม่มีใครเห็น
+> **Every alert must give the receiver something to do.** If the person reads it and has nothing to do,
+> in 3 weeks they will mute alerts, and the day a real one fires nobody will see it.
 
-**แจ้งเตือนจากสิ่งที่ผู้ใช้รู้สึก ไม่ใช่จากตัวเลขของเครื่อง**
+**Alert on what users feel, not on machine numbers**
 
-| ✗ เตือนแบบนี้ | ✓ เตือนแบบนี้ |
+| ✗ Alert like this | ✓ Alert like this |
 |---|---|
-| CPU เกิน 80% | อัตรา error เกิน 2% นาน 5 นาที |
-| หน่วยความจำเกิน 70% | p95 ของหน้าชำระเงินเกิน 3 วินาที นาน 10 นาที |
-| pod restart | คำสั่งซื้อสำเร็จลดลงเกิน 50% เทียบกับสัปดาห์ก่อน |
-| disk 60% | **disk จะเต็มใน 4 ชั่วโมงตามอัตราปัจจุบัน** |
+| CPU over 80% | Error rate over 2% for 5 minutes |
+| Memory over 70% | p95 of the payment page over 3 seconds for 10 minutes |
+| pod restart | Successful orders drop by more than 50% against last week |
+| disk 60% | **disk will be full in 4 hours at the current rate** |
 
-| ระดับ | ตัวอย่าง | ส่งไปไหน |
+| Level | Example | Send to |
 |---|---|---|
-| **ปลุกคน** | ผู้ใช้ใช้งานไม่ได้ · ข้อมูลกำลังเสียหาย | โทร · push |
-| **ดูในเวลางาน** | disk จะเต็มใน 3 วัน · error เพิ่มแต่ยังไม่มาก | แชตของทีม |
-| **แค่บันทึกไว้** | ทุกอย่างที่เหลือ | แดชบอร์ด |
+| **Wake a person** | Users cannot use the system · data is being damaged | Phone call · push |
+| **Check in work hours** | disk will be full in 3 days · errors rising but still low | Team chat |
+| **Just record it** | Everything else | Dashboard |
 
-**ทุกการแจ้งเตือนต้องมี:** อะไรพัง · กระทบใคร · **ลิงก์ไป runbook** · ลิงก์ไปแดชบอร์ด
-**ตั้งช่วงเวลา (นาน N นาที) เสมอ** ไม่ใช่เตือนทันทีที่ค่าพุ่งครั้งเดียว
+**Every alert must have:** what broke · who is affected · **a link to the runbook** · a link to the dashboard.
+**Always set a duration (for N minutes)**, not an alert the moment a value spikes once.
 
-### 4.1 · งบความผิดพลาด (error budget) และอัตราเผางบ (burn rate)
+### 4.1 · Error budget and burn rate
 
-ระบบที่มี SLO ใช้วิธีนี้แทนการตั้งเกณฑ์ error % ตายตัว เพราะมันบอกว่า "ถ้าปล่อยไว้แบบนี้ งบทั้งเดือนจะหมดเมื่อไหร่" (แนวคิดจาก Google SRE Workbook)
+A system with an SLO uses this instead of a fixed error % threshold, because it says "if this goes on, when will the whole month's budget run out?" (idea from the Google SRE Workbook)
 
-- **งบ** = เวลาที่ยอมให้ล้มได้ใน 30 วัน → SLO 99.9% = 43 นาที · 99.5% = 3.6 ชั่วโมง · 99% = 7.2 ชั่วโมง
-- **burn rate** = อัตรา error ตอนนี้ ÷ (1 − SLO) → burn 1 = งบหมดพอดีวันที่ 30 · burn 10 = หมดใน 3 วัน
-- ตั้งแจ้งเตือน 3 ระดับตามตาราง และทุกระดับต้องเป็นจริงทั้งช่วงยาวและช่วงสั้น (ช่วงสั้น = 1/12 ของช่วงยาว) จะได้หยุดเตือนทันทีที่ระบบหาย
+- **Budget** = the time you may fail in 30 days → SLO 99.9% = 43 minutes · 99.5% = 3.6 hours · 99% = 7.2 hours
+- **Burn rate** = current error rate ÷ (1 − SLO) → burn 1 = the budget runs out exactly on day 30 · burn 10 = gone in 3 days
+- Set 3 alert levels as in the table, and every level must hold true over both the long window and the short window (short window = 1/12 of the long one), so the alert stops as soon as the system recovers
 
-| ระดับ | burn rate | ช่วงยาว · ช่วงสั้น | กินงบไปแล้ว | SLO 99.9% แปลว่า error เกิน | ส่งไปไหน |
+| Level | burn rate | Long window · short window | Budget already used | SLO 99.9% means errors above | Send to |
 |---|---|---|---|---|---|
-| ไหม้เร็ว | 14.4 | 1 ชั่วโมง · 5 นาที | 2% ของเดือน ใน 1 ชั่วโมง | 1.44% | ปลุกคน |
-| ไหม้ช้า | 6 | 6 ชั่วโมง · 30 นาที | 5% ของเดือน ใน 6 ชั่วโมง | 0.6% | ปลุกคน |
-| รั่วซึม | 1 | 3 วัน · 6 ชั่วโมง | 10% ของเดือน ใน 3 วัน | 0.1% | แชตของทีม |
+| Fast burn | 14.4 | 1 hour · 5 minutes | 2% of the month in 1 hour | 1.44% | Wake a person |
+| Slow burn | 6 | 6 hours · 30 minutes | 5% of the month in 6 hours | 0.6% | Wake a person |
+| Slow leak | 1 | 3 days · 6 hours | 10% of the month in 3 days | 0.1% | Team chat |
 
-งบเหลือเท่าไหร่ให้ขึ้นบนแดชบอร์ดภาพรวม — งบใกล้หมด = หยุดปล่อยฟีเจอร์ ไปแก้ความเสถียรก่อน เป็นกติกาที่ตกลงกับเจ้าของผลิตภัณฑ์ล่วงหน้า ไม่ใช่ตอนทะเลาะกัน
+Show the remaining budget on the overview dashboard. When the budget is nearly gone, stop shipping features and fix stability first. Agree this rule with the product owner in advance, not in the middle of an argument.
 
 ---
 
-## 5 · แดชบอร์ด
+## 5 · Dashboards
 
-ทำ 2 หน้าพอ
+Two pages are enough.
 
-| หน้า | ตอบคำถาม | มีอะไร |
+| Page | Answers the question | Contains |
 |---|---|---|
-| **ภาพรวม** | "ตอนนี้ปกติไหม" | 4 สัญญาณของทั้งระบบ · สถานะ dependency · การปล่อยของล่าสุด |
-| **เจาะลึกต่อ service** | "พังตรงไหน" | 4 สัญญาณแยกตาม endpoint · คิว · ฐานข้อมูล |
+| **Overview** | "Is it normal now?" | The 4 signals for the whole system · dependency status · latest releases |
+| **Deep dive per service** | "Where did it break?" | The 4 signals split by endpoint · queues · database |
 
-- **เส้นแนวตั้งบอกเวลาที่ deploy** — ปัญหาส่วนใหญ่เริ่มหลังเส้นนี้ และเห็นได้ในวินาทีเดียว
-- หน้าภาพรวมต้องอ่านจบใน 10 วินาที จึงควรมีไม่เกิน 6 กราฟ
-- ใส่เส้นเกณฑ์ที่ตั้งแจ้งเตือนไว้ในกราฟ จะได้รู้ว่าห่างจากเส้นแค่ไหน
+- **A vertical line marks the deploy time.** Most problems start after this line, and you see it in one second
+- The overview page must be readable in 10 seconds, so keep it to 6 graphs at most
+- Draw the alert threshold lines on the graphs, so you can see how far the value is from the line
 
 ---
 
-## 6 · ตัวชี้วัดทางธุรกิจ
+## 6 · Business metrics
 
-ตัวชี้วัดทางเทคนิคเขียวหมดแต่ธุรกิจหยุดเดิน เป็นเรื่องที่เกิดขึ้นจริงและตรวจไม่เจอถ้าไม่วัด
+Technical metrics all green while the business has stalled really happens, and you will not catch it unless you measure it.
 
-| ตัวอย่าง | จับอะไรได้ |
+| Example | What it catches |
 |---|---|
-| คำสั่งซื้อสำเร็จต่อชั่วโมง | ปุ่มชำระเงินพังแม้ทุก endpoint คืน 200 |
-| อัตราเข้าสู่ระบบสำเร็จ | ผู้ให้บริการยืนยันตัวตนภายนอกมีปัญหา |
-| งานเบื้องหลังที่รอเกิน N นาที | คิวตัน แต่ API ยังตอบปกติ |
-| อีเมลส่งไม่สำเร็จ | ลูกค้าไม่ได้รับใบเสร็จ โดยไม่มี error ที่ไหนเลย |
+| Successful orders per hour | The pay button is broken even though every endpoint returns 200 |
+| Successful login rate | A problem with an external identity provider |
+| Background jobs waiting more than N minutes | The queue is stuck but the API still answers normally |
+| Emails that failed to send | Customers do not get receipts, with no error anywhere |
 
-**เลือก 3–5 ตัวที่เป็นหัวใจของธุรกิจ** แล้วเตือนเมื่อมันตกผิดปกติเทียบกับช่วงเดียวกันของสัปดาห์ก่อน
+**Pick 3–5 that are the heart of the business**, and alert when they drop abnormally against the same period last week.
 
 ---
 
 ## 7 · Anti-patterns
 
-- **ดูค่าเฉลี่ยของเวลาตอบสนอง** — กลบคนที่เจอปัญหาทุกครั้ง
-- **แจ้งเตือนที่ไม่ต้องทำอะไร** — สอนให้ทุกคนเลิกสนใจการแจ้งเตือน
-- **เตือนจาก CPU และหน่วยความจำ** — ระบบที่ CPU 90% แต่ผู้ใช้ปกติ ไม่ใช่เหตุ
-- **ใส่ id ที่ไม่จำกัดค่าเป็น label** — ระบบเก็บ metric ล่มเสียเอง
-- **แดชบอร์ด 40 กราฟ** — ไม่มีใครรู้ว่าต้องดูอันไหน
-- **วัดแต่เทคนิค ไม่วัดธุรกิจ** — ทุกอย่างเขียวแต่ไม่มีใครสั่งซื้อได้
-- **เก็บ trace ทุกคำขอ** — แพงโดยไม่ได้อะไรเพิ่ม สุ่มเก็บก็พอ
-- **ไม่มีเส้นบอกเวลา deploy** — เสียเวลาครึ่งชั่วโมงกว่าจะนึกได้ว่าเพิ่ง deploy ไป
-- **แจ้งเตือนที่ไม่มีลิงก์ไป runbook** — คนรับต้องเริ่มค้นจากศูนย์ตอนตี 3
+- **Watching the average response time**: it hides the people who hit the problem every time
+- **Alerts that need no action**: they teach everyone to ignore alerts
+- **Alerting on CPU and memory**: a system at CPU 90% with normal users is not an incident
+- **Putting unbounded ids in labels**: the metrics system brings itself down
+- **A dashboard with 40 graphs**: nobody knows which one to look at
+- **Measuring only the technical side, not the business**: everything is green but nobody can place an order
+- **Tracing every request**: expensive for no extra gain, sampling is enough
+- **No line marking the deploy time**: you lose half an hour before you remember you just deployed
+- **Alerts with no link to a runbook**: the receiver starts searching from zero at 3 a.m.
 
 ---
 
-## 8 · ตัวย่อ
+## 8 · Abbreviations
 
-- **metric** — ตัวชี้วัด ตัวเลขที่เก็บตามเวลา
-- **trace** — การไล่รอยคำขอหนึ่งตลอดเส้นทางที่มันวิ่งผ่าน
-- **p95 / p99** — เปอร์เซ็นไทล์ที่ 95 และ 99 (ช้ากว่านี้มีแค่ 5% หรือ 1% ของคำขอ)
-- **label / tag** — ป้ายกำกับที่แนบกับตัวชี้วัด ใช้แยกดูเป็นกลุ่ม
-- **on-call** — เวรรับแจ้งเหตุนอกเวลาทำการ
-- **SLO** — Service Level Objective (เป้าหมายระดับบริการที่ตั้งไว้เอง เช่น สำเร็จ 99.5%)
-- **error budget / burn rate** — เวลาที่ยอมให้ล้มได้ต่อเดือนตาม SLO และความเร็วที่กำลังใช้มันหมด (ข้อ 4.1)
+- **metric**: a number collected over time
+- **trace**: following one request along the whole path it travels
+- **p95 / p99**: the 95th and 99th percentiles (only 5% or 1% of requests are slower than this)
+- **label / tag**: a tag attached to a metric, used to look at groups separately
+- **on-call**: the duty of receiving incident alerts outside working hours
+- **SLO**: Service Level Objective (a service-level target you set yourself, such as 99.5% success)
+- **error budget / burn rate**: the time you may fail per month under the SLO, and how fast you are using it up (item 4.1)
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Links to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| รูปแบบ log และ correlation id | `logging-standards` |
-| health check ที่ระบบเฝ้าใช้ | `web-service-essentials` |
-| ตัวชี้วัดของคิวและงานเบื้องหลัง | `background-jobs` |
-| อัตรา error และการตัดวงจร | `error-handling-patterns` |
-| ขั้นตอนเมื่อการแจ้งเตือนดัง | `incident-runbook-template` |
-| สรุปหลังเหตุการณ์ | `postmortem-template` |
-| ตัวเลขเป้าหมายที่ตกลงกับลูกค้า | `srs-writing` |
-| PromQL · กฎ alert · Grafana provisioning · ตัวอย่าง voice agent | `references/prometheus-grafana.md` |
-| ให้ agent อ่าน Prometheus หรือ Grafana ผ่าน MCP | `mcp-server` ข้อ 1.1 |
+| Log format and correlation id | `logging-standards` |
+| Health checks the monitor uses | `web-service-essentials` |
+| Metrics for queues and background jobs | `background-jobs` |
+| Error rate and circuit breaking | `error-handling-patterns` |
+| Steps when an alert fires | `incident-runbook-template` |
+| Post-incident summary | `postmortem-template` |
+| Target numbers agreed with the customer | `srs-writing` |
+| PromQL · alert rules · Grafana provisioning · voice agent example | `references/prometheus-grafana.md` |
+| Let an agent read Prometheus or Grafana through MCP | `mcp-server` item 1.1 |
 
-ที่มาของข้อ 3.1: prometheus.io (metric types · naming · histograms · alerting) และ grafana.com (dashboard best practices · provisioning) ตรวจ 2026-10-27 · ลิงก์เต็มอยู่ท้าย `references/prometheus-grafana.md`
+Source of item 3.1: prometheus.io (metric types · naming · histograms · alerting) and grafana.com (dashboard best practices · provisioning), checked 2026-10-27 · full links are at the end of `references/prometheus-grafana.md`
 
 
 ## reference: prometheus-grafana.md
@@ -938,202 +612,202 @@ Checked 2026-10-27
 
 Use when a system shows text, dates or money in Thai and English
 
-# ภาษาและรูปแบบท้องถิ่น
+# Language and Locale Formats
 
-> **กฎข้อเดียว:** เก็บเป็นค่ากลาง แปลงตอนแสดงผล
-> เวลาเก็บเป็น UTC ปีเก็บเป็น ค.ศ. ส่วนเงินเก็บเป็นตัวเลขคู่กับรหัสสกุลเงิน
-> อะไรที่ "แปลงไว้ก่อนแล้วค่อยเก็บ" จะกลายเป็นข้อมูลที่แปลงกลับไม่ได้
+> **The one rule:** Store a neutral value, convert at display time.
+> Store time in UTC, store years in C.E. (Common Era), and store money as a number paired with a currency code.
+> Anything "converted first and stored after" becomes data you cannot convert back.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ระบบมีผู้ใช้ทั้งไทยและอังกฤษ หรืออาจมีในอนาคต
-- ต้องแสดงวันที่แบบ พ.ศ. ควบคู่กับการเก็บ ค.ศ.
-- เรียงชื่อภาษาไทยแล้วลำดับไม่ถูก หรือค้นหาแล้วไม่เจอ
-- ข้อความไทยตัดบรรทัดกลางคำ หรือล้นออกนอกปุ่ม
+- The system has Thai and English users, or may have them in the future
+- You must show dates in B.E. (Buddhist Era) while storing C.E.
+- Thai names sort in the wrong order, or search does not find them
+- Thai text breaks a line in the middle of a word, or overflows a button
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Task | Use this instead |
 |---|---|
-| ชนิดข้อมูลวันเวลาในฐานข้อมูล | `database-design` |
-| รูปแบบวันเวลาใน JSON | `api-conventions` |
-| ฟอนต์ไทยและการจัดหน้าเอกสาร | `branded-document-design` |
-| ฟอนต์ไทยบนหน้าจอ | skill แพลตฟอร์ม + `ui-craft` |
+| Date and time data types in the database | `database-design` |
+| Date and time format in JSON | `api-conventions` |
+| Thai fonts and document layout | `branded-document-design` |
+| Thai fonts on screen | the platform skill + `ui-craft` |
 
 ---
 
-## 1 · ข้อความแปล
+## 1 · Translated text
 
-**ห้ามมีข้อความที่ผู้ใช้เห็นฝังอยู่ในโค้ด** แม้โครงการจะมีภาษาเดียววันนี้
+**No user-visible text may be embedded in code**, even if the project has only one language today.
 
 ```
 locales/
-  th.json        ← ภาษาหลัก เป็นแหล่งความจริง
+  th.json        ← main language, the source of truth
   en.json
 ```
 
-| Stack | ไฟล์ข้อความแปล | รูปแบบคีย์ |
+| Stack | Translation files | Key format |
 |---|---|---|
-| เว็บ / ไลบรารีที่ใช้ JSON | `locales/th.json` · `en.json` | จุดคั่นตามที่อยู่ `order.cancel.confirmTitle` |
-| Flutter (`gen-l10n`) | `lib/l10n/app_th.arb` · `app_en.arb` + `l10n.yaml` ที่รากของโฟลเดอร์โค้ด | **camelCase ไม่มีจุด** `orderCancelConfirmTitle` — คีย์ ARB กลายเป็นชื่อ getter ของ Dart จุดจึงใช้ไม่ได้ |
+| Web / libraries that use JSON | `locales/th.json` · `en.json` | Dot-separated by location, `order.cancel.confirmTitle` |
+| Flutter (`gen-l10n`) | `lib/l10n/app_th.arb` · `app_en.arb` + `l10n.yaml` at the root of the code folder | **camelCase, no dots**, `orderCancelConfirmTitle`. An ARB key becomes a Dart getter name, so dots do not work. |
 
-**ตั้งชื่อคีย์ตามที่มันอยู่ ไม่ใช่ตามเนื้อความ:**
+**Name a key by where it lives, not by its content:**
 
 ```jsonc
-// ถูก: เปลี่ยนคำได้โดยไม่ต้องแก้คีย์
+// Right: you can change the wording without changing the key
 "order.cancel.confirmTitle": "ยืนยันการยกเลิกคำสั่งซื้อ"
-// ผิด: พอเปลี่ยนคำ คีย์กับเนื้อหาก็ไม่ตรงกัน
+// Wrong: once the wording changes, the key and the content no longer match
 "ยืนยันการยกเลิก": "ยืนยันการยกเลิกคำสั่งซื้อ"
 ```
 
-| กฎ | เหตุผล |
+| Rule | Reason |
 |---|---|
-| ตัวแปรใช้ชื่อ ไม่ใช่ลำดับ — `"เหลือ {count} รายการ"` | ลำดับคำแต่ละภาษาไม่เหมือนกัน |
-| **ห้ามต่อประโยคจากชิ้นส่วน** | ภาษาอื่นเรียงคำคนละแบบ ประโยคที่ได้จะผิดไวยากรณ์ |
-| คีย์ที่ขาดให้แสดงคีย์ ไม่ใช่ค่าว่าง | ค่าว่างทำให้ปุ่มไม่มีข้อความ และไม่มีใครเห็นว่าพัง |
-| ตรวจใน Continuous Integration (CI) ว่าทุกภาษามีคีย์ครบ | ไม่งั้นจะรู้ตอนลูกค้าเห็นแล้ว |
+| Variables use names, not positions — `"เหลือ {count} รายการ"` | Word order differs in each language |
+| **Never build a sentence from fragments** | Other languages order words differently, so the resulting sentence is ungrammatical |
+| For a missing key, show the key, not an empty value | An empty value leaves a button with no text, and nobody sees that it broke |
+| Check in Continuous Integration (CI) that every language has every key | Otherwise you find out when a customer sees it |
 
 ```
-ผิด: t("มีทั้งหมด") + count + t("รายการ")
-ถูก: t("list.total", { count })
+Wrong: t("มีทั้งหมด") + count + t("รายการ")
+Right: t("list.total", { count })
 ```
 
-**ถ้อยคำในไฟล์ภาษาไทย**
+**Wording in the Thai file**
 
-- เขียนข้อความไทยตรง ๆ จากสิ่งที่หน้าจอต้องบอก ไม่แปลจากคีย์หรือจากข้อความอังกฤษทีละคำ
-- 1 การกระทำ 1 คำทั้งแอป (บันทึก ไม่ใช่ เซฟ ปนกับ บันทึก) · เก็บคู่คำไว้ใน `locales/glossary.md` แล้วตรวจกับไฟล์นี้ทุกครั้งที่เพิ่มคีย์
-- ถ้อยคำบนปุ่ม ป้าย และข้อความ error → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ หน้าจอ
+- Write the Thai text directly from what the screen must say. Do not translate word by word from the key or from English text.
+- 1 action, 1 word across the whole app (บันทึก, not a mix of เซฟ and บันทึก). Keep the word pairs in `locales/glossary.md` and check against that file every time you add a key.
+- For wording on buttons, labels, and error messages, see `human-writing` `references/thai-grammar.md` section 4, screen register.
 
 ---
 
-## 2 · เวลา — เก็บ UTC แสดงตามเขตเวลาผู้ดู
+## 2 · Time — store UTC, show in the viewer's time zone
 
 ```
-เก็บ:   2026-09-25T02:42:13.482Z          (UTC เสมอ)
-แสดง:   25 ก.ย. 2569 09:42                (Asia/Bangkok ของผู้ดู)
+Store:  2026-09-25T02:42:13.482Z          (always UTC)
+Show:   25 ก.ย. 2569 09:42                (viewer's Asia/Bangkok)
 ```
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| เวลาที่เกิดเหตุการณ์ | `timestamptz` เก็บเป็น UTC แล้วแปลงตอนแสดง |
-| วันเกิด วันครบกำหนด | `date` ล้วน **ห้ามมีเวลาและโซนเวลา** |
-| "วันนี้" ในรายงาน | ต้องระบุว่าเป็นวันนี้ของเขตเวลาไหน รายงานยอดขายรายวันเพี้ยนเพราะข้อนี้บ่อยมาก |
-| ช่วงเวลาทำการ | เก็บเป็น `time` + เขตเวลาของสาขา |
+| Time an event happened | `timestamptz`, stored as UTC and converted at display time |
+| Birth date, due date | Plain `date`. **No time and no time zone.** |
+| "Today" in a report | Say whose time zone "today" means. Daily sales reports go wrong because of this very often. |
+| Business hours | Store as `time` + the branch's time zone |
 
-> **ไทยไม่มี daylight saving (ปรับเวลาตามฤดู) จึงไม่เคยเจอปัญหา จนถึงวันที่ขายให้ลูกค้าต่างประเทศ**
-> โค้ดที่บวก 7 ชั่วโมงเองจะผิดทันทีที่มีผู้ใช้นอกประเทศ จึงต้องใช้ไลบรารีเขตเวลาเสมอ
+> **Thailand has no daylight saving (seasonal clock change), so it never hits this problem, until the day you sell to a customer abroad.**
+> Code that adds 7 hours by hand breaks the moment a user is outside the country, so always use a time zone library.
 
 ---
 
-## 3 · พุทธศักราช
+## 3 · Buddhist Era
 
-**เก็บ ค.ศ. เสมอ แปลงเป็น พ.ศ. ตอนแสดงผลเท่านั้น** (`พ.ศ. = ค.ศ. + 543`)
+**Always store C.E., and convert to B.E. only at display time.** (`B.E. = C.E. + 543`)
 
-| จุดที่ต้องระวัง | ทำยังไง |
+| Point to watch | What to do |
 |---|---|
-| ผู้ใช้กรอก "2569" | รับเข้ามาแล้วแปลงเป็น 2026 ทันทีที่ชั้นรับข้อมูล |
-| ปี 2 หลัก "69" | **ห้ามเดา** ให้บังคับกรอก 4 หลัก หรือถามให้ชัด · ถ้าสเปกบอกว่าเป็น พ.ศ. 2 หลักแน่ ๆ (เอกสารราชการ) ให้แปลง 2 ขั้นและเขียน test ไว้: `68 → 2568 → 2025` |
-| นำเข้าไฟล์ Excel | ตรวจก่อนว่าคอลัมน์ปีเป็น พ.ศ. หรือ ค.ศ. ถ้าพลาด ปีจะเพี้ยน 543 ปีโดยไม่มี error |
-| ส่งออกให้ระบบอื่น | ส่งเป็น ค.ศ. เสมอ เว้นแต่ปลายทางระบุว่าต้องการ พ.ศ. |
-| เลขไทย ๒๕๖๙ | ใช้แสดงได้ แต่**ห้ามเก็บ** · แปลง ๐–๙ → 0–9 ที่ชั้นรับข้อมูลก่อน parse (ฟอร์มที่ผู้ใช้วางข้อความจากเอกสารราชการเจอบ่อย) |
+| The user enters "2569" | Accept it, then convert to 2026 as soon as it enters the input layer |
+| A 2-digit year "69" | **Never guess.** Force 4 digits, or ask clearly. If the spec says it is definitely a 2-digit B.E. year (official documents), convert in 2 steps and write a test: `68 → 2568 → 2025` |
+| Importing an Excel file | First check whether the year column is B.E. or C.E. If you get it wrong, years are off by 543 with no error |
+| Exporting to another system | Always send C.E., unless the destination says it needs B.E. |
+| Thai digits ๒๕๖๙ | You may display them, but **never store them**. Convert ๐–๙ → 0–9 at the input layer before parsing (forms where users paste text from official documents hit this often) |
 
-**ถ้าระบบมีผู้ใช้ทั้ง 2 แบบ ให้ผู้ใช้เลือกปฏิทินได้** แต่ค่าที่เก็บยังเป็นแบบเดิม
+**If the system has both kinds of users, let the user pick the calendar**, but the stored value stays the same.
 
-**ตัวตรวจ** — เขียนสคริปต์สั้น ๆ กวาดโค้ดหา ข้อความไทยที่ฝังในโค้ดนอกไฟล์แปล · ตัวเลขปี 25xx ที่เขียนตายตัว · `new Date("…")` ที่รับสตริงไม่ระบุเขตเวลา แล้วรันใน CI ก่อน merge (แนวคิดจาก BV thai-date-format: ตัวแปลงต้องมี test ของมันเอง)
+**Checker** — write a short script that sweeps the code for Thai text embedded in code outside the translation files · hard-coded year numbers 25xx · `new Date("…")` that takes a string with no time zone. Run it in CI before merge. (The idea comes from BV thai-date-format: a converter needs its own tests.)
 
 ---
 
-## 4 · การเรียงลำดับและการค้นหาภาษาไทย
+## 4 · Sorting and searching Thai
 
-การเรียงแบบมาตรฐาน (ตามรหัสอักขระ) **ผิดสำหรับภาษาไทย** เพราะสระหน้าอย่าง เ แ โ ใ ไ
-อยู่หน้าพยัญชนะที่มันออกเสียงตาม
+Standard sorting (by character code) **is wrong for Thai**, because leading vowels such as เ แ โ ใ ไ
+sit before the consonant they are pronounced after.
 
-| ต้องการ | ทำยังไง |
+| Need | What to do |
 |---|---|
-| เรียงชื่อไทย | ใช้ collation ของภาษาไทย เช่น PostgreSQL `th-TH-x-icu` และ SQL Server `Thai_100_CI_AS` |
-| เรียงชื่อไทยในแอป Flutter | Dart ไม่มี collation ไทยในตัว (`compareTo` เรียงตามรหัสอักขระ) จึงต้องใช้ `Collator` ของ platform ผ่าน plugin หรือ platform channel ถ้าไม่คุ้มให้เรียงตามเวลาที่สร้างแทนแล้วบอกผู้ใช้ (ยังไม่ได้ตรวจ package ที่ทำเรื่องนี้) |
-| ค้นหาไม่สนตัวพิมพ์และวรรณยุกต์ | normalize ข้อความก่อน แล้วเก็บลงคอลัมน์ค้นหาที่แยกไว้ต่างหาก |
-| ค้นหาคำกลางประโยค | ภาษาไทยไม่มีเว้นวรรค full-text search ที่แบ่งคำด้วยเว้นวรรคจึงใช้ไม่ได้ |
+| Sort Thai names | Use a Thai collation, such as PostgreSQL `th-TH-x-icu` and SQL Server `Thai_100_CI_AS` |
+| Sort Thai names in a Flutter app | Dart has no built-in Thai collation (`compareTo` sorts by character code), so use the platform `Collator` through a plugin or platform channel. If that is not worth it, sort by creation time instead and tell the user. (`ยังไม่ได้ตรวจ` any package that does this) |
+| Search ignoring case and tone marks | Normalize the text first, then store it in a separate search column |
+| Search for a word mid-sentence | Thai has no spaces, so full-text search that splits words on spaces does not work |
 
-> **ภาษาไทยเขียนติดกันไม่มีเว้นวรรคระหว่างคำ** จึงกระทบ 3 เรื่อง:
-> ค้นหา (ต้องมีตัวตัดคำ) · ตัดบรรทัด (เบราว์เซอร์ตัดกลางคำ) · ตัดข้อความด้วย `...`
+> **Thai is written without spaces between words**, which affects 3 things:
+> search (you need a word segmenter) · line breaking (browsers break mid-word) · truncating text with `...`
 >
-> เรื่องตัดบรรทัด: เบราว์เซอร์หลักตัดคำไทยด้วยพจนานุกรมให้อยู่แล้ว **ห้ามใส่ `word-break: break-all`** เพราะจะตัดกลางคำ
-> (`line-break: strict` เปลี่ยนแค่กฎเครื่องหมายวรรคตอนของจีน ญี่ปุ่น เกาหลี ไม่ช่วยภาษาไทย)
-> แล้วทดสอบด้วยข้อความไทยจริง อย่าทดสอบด้วย Lorem ipsum เพราะมีเว้นวรรคทุกคำ
+> On line breaking: major browsers already break Thai with a dictionary. **Never add `word-break: break-all`**, because it breaks mid-word.
+> (`line-break: strict` only changes the punctuation rules for Chinese, Japanese, and Korean, and does not help Thai.)
+> Then test with real Thai text. Do not test with Lorem ipsum, because it has a space after every word.
 >
-> Flutter `Text` ตัดบรรทัดไทยด้วยตัวตัดคำของ engine เอง และไม่มี CSS ให้ตั้ง
-> จึงต้องตรวจด้วยข้อความไทยยาวจริงบนเครื่องจริงทั้ง 2 ขนาดจอ แล้วเผื่อ `maxLines` + `overflow: TextOverflow.ellipsis`
+> Flutter `Text` breaks Thai lines with the engine's own word segmenter and has no CSS to set.
+> So check with real long Thai text on a real device at both screen sizes, and allow for `maxLines` + `overflow: TextOverflow.ellipsis`.
 
 ---
 
-## 5 · ตัวเลข เงิน และหน่วย
+## 5 · Numbers, money, and units
 
-| ข้อมูล | เก็บ | แสดง |
+| Data | Store | Show |
 |---|---|---|
-| เงิน | ทศนิยมแบบตรงตัว ไม่ใช่ float (ฐานข้อมูลใช้ `decimal(19,4)` ตาม `stack-sql`) + รหัสสกุลเงิน | `1,250.00 บาท` หรือ `฿1,250.00` |
-| ตัวคั่นหลักพันและจุดทศนิยม | ไม่เก็บ | ตามท้องถิ่น บางประเทศใช้สลับกับไทย |
-| เปอร์เซ็นต์ | เก็บเป็นสัดส่วนทศนิยม (`0.075`) หรือ basis points (`750` = 7.5%) **เลือกแบบเดียวทั้งระบบ** · ห้ามเก็บเป็นจำนวนเต็มเปอร์เซ็นต์ เพราะ 7.5% จะกลายเป็น 7 หรือ 8 | `7.5%` |
-| ที่อยู่ | แยกฟิลด์ตามโครงของไทย (แขวง/เขต หรือ ตำบล/อำเภอ) | |
-| เบอร์โทร | เก็บรูปแบบสากล `+66812345678` | แสดง `081-234-5678` |
+| Money | Exact decimal, not float (in the database use `decimal(19,4)` per `stack-sql`) + currency code | `1,250.00 บาท` or `฿1,250.00` |
+| Thousands separator and decimal point | Not stored | Per locale. Some countries swap them relative to Thailand. |
+| Percent | Store as a decimal fraction (`0.075`) or basis points (`750` = 7.5%). **Pick one form for the whole system.** Never store as a whole-number percent, because 7.5% would become 7 or 8 | `7.5%` |
+| Address | Separate fields following the Thai structure (แขวง/เขต or ตำบล/อำเภอ — sub-district/district) | |
+| Phone number | Store in international format `+66812345678` | Show `081-234-5678` |
 
-**พหูพจน์และเพศ** — ภาษาไทยไม่มีรูปพหูพจน์ แต่ภาษาอังกฤษมี
-จึงควรให้ไลบรารีจัดการ อย่าเขียน `if (count > 1)` เอง เพราะบางภาษามีมากกว่า 2 รูป
+**Plurals and gender** — Thai has no plural form, but English does.
+So let a library handle it. Do not write `if (count > 1)` yourself, because some languages have more than 2 forms.
 
 ---
 
-## 6 · หน้าจอ
+## 6 · Screens
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| ความยาวข้อความ | อังกฤษยาวกว่าไทยได้ถึง 1.5 เท่า จึงต้อง**เผื่อที่ อย่าตรึงความกว้างปุ่ม** |
-| ความสูงบรรทัด | ไทยต้องการมากกว่า เพราะมีสระบนและวรรณยุกต์ซ้อนกัน 2 ชั้น |
-| ฟอนต์ | ต้องมีน้ำหนักครบทั้งไทยและอังกฤษ ไม่งั้นระบบจะวาดตัวหนาปลอมขึ้นเอง |
-| ทดสอบ | ทดสอบด้วยข้อความจริงของทั้ง 2 ภาษา **ไม่ใช่ Lorem ipsum** |
-| สลับภาษา | จำค่าไว้ที่โปรไฟล์ผู้ใช้ ไม่ใช่แค่ใน session ส่วนแอปที่ไม่มีบัญชีผู้ใช้ (แอปมือถือออฟไลน์) ให้เก็บค่าในเครื่อง โดยค่าเริ่มต้นคือ "ตามภาษาของเครื่อง" |
-| ส่งออก CSV ให้คนไทยเปิดใน Excel | ใช้ UTF-8 แบบ**มี BOM** (ไม่งั้นไทยเพี้ยน) ทศนิยมใช้ `.` และเวลาเป็น ISO 8601 UTC เช่น `2026-10-05T03:15:00Z` ดูเพิ่มที่ `data-import-export` |
+| Text length | English can be up to 1.5 times longer than Thai, so **leave room and do not fix a button's width** |
+| Line height | Thai needs more, because upper vowels and tone marks stack 2 levels high |
+| Fonts | Must have every weight for both Thai and English, or the system draws a fake bold |
+| Testing | Test with real text in both languages, **not Lorem ipsum** |
+| Switching language | Save the choice in the user profile, not only in the session. For an app with no user accounts (an offline mobile app), store the value on the device, with the default "follow the device language". |
+| Exporting CSV for Thai users to open in Excel | Use UTF-8 **with a BOM** (otherwise Thai text is garbled). Use `.` for decimals and ISO 8601 UTC for time, such as `2026-10-05T03:15:00Z`. See also `data-import-export`. |
 
 ---
 
 ## 7 · Anti-patterns
 
-- **ข้อความฝังในโค้ด** เพราะ "ตอนนี้มีภาษาเดียว"
-- **ต่อประโยคจากชิ้นส่วน** — ภาษาอื่นเรียงคำคนละแบบ
-- **เก็บ พ.ศ. ลงฐานข้อมูล** — ทุกฟังก์ชันจะคำนวณช่วงเวลาผิด
-- **บวก 7 ชั่วโมงเองในโค้ด** — พังทันทีที่มีผู้ใช้นอกเขตเวลาไทย
-- **เรียงชื่อไทยด้วย collation มาตรฐาน** — ลำดับผิดโดยไม่มี error
-- **ทดสอบหน้าจอด้วย Lorem ipsum** — ไม่เจอปัญหาการตัดบรรทัดของไทยเลย
-- **`if (count > 1) "s"`** — ใช้ได้แค่ภาษาอังกฤษ
-- **ปี 2 หลัก** — "69" คือ 1969, 2069 หรือ 2569
-- **นำเข้า Excel โดยไม่ถามว่าปีเป็น พ.ศ. หรือ ค.ศ.** — ปีเพี้ยน 543 ปีโดยไม่มีอะไรเตือน
-- **คีย์แปลที่หายแล้วแสดงค่าว่าง** — ได้ปุ่มเปล่าที่ไม่มีใครสังเกต
+- **Text embedded in code** because "there is only one language for now"
+- **Building a sentence from fragments** — other languages order words differently
+- **Storing B.E. in the database** — every function will compute time spans wrongly
+- **Adding 7 hours by hand in code** — breaks the moment there are users outside the Thai time zone
+- **Sorting Thai names with the standard collation** — wrong order with no error
+- **Testing screens with Lorem ipsum** — you never see Thai line-breaking problems
+- **`if (count > 1) "s"`** — works only for English
+- **2-digit years** — "69" is 1969, 2069, or 2569
+- **Importing Excel without asking whether the year is B.E. or C.E.** — years are off by 543 with nothing to warn you
+- **A translation key that is missing and shows an empty value** — you get an empty button nobody notices
 
 ---
 
-## 8 · ตัวย่อ
+## 8 · Abbreviations
 
-- **i18n** — internationalization (การทำให้รองรับหลายภาษาและท้องถิ่น ที่ย่อแบบนี้เพราะมีตัวอักษร 18 ตัวระหว่าง i กับ n)
-- **locale** — ชุดค่าประจำท้องถิ่น ได้แก่ ภาษา รูปแบบวันที่ ตัวเลข และสกุลเงิน
-- **collation** — กฎการเรียงลำดับและเปรียบเทียบข้อความของฐานข้อมูล
-- **UTC** — Coordinated Universal Time (เวลามาตรฐานสากล ไทยคือ UTC+7)
-- **ICU** — International Components for Unicode (ไลบรารีมาตรฐานสำหรับกฎภาษาและการเรียงลำดับ)
-- **BCP 47** — Best Current Practice (BCP) 47 มาตรฐานรหัสภาษา เช่น `th-TH`, `en-US`
-- **ARB** — Application Resource Bundle (ไฟล์ข้อความแปลแบบ JSON ที่ Flutter `gen-l10n` ใช้)
-- **BOM** — Byte Order Mark (3 ไบต์ต้นไฟล์ที่บอก Excel ว่าเป็น UTF-8)
+- **i18n** — internationalization (making software support many languages and locales; abbreviated this way because 18 letters sit between i and n)
+- **locale** — the set of local conventions: language, date format, numbers, and currency
+- **collation** — a database's rules for ordering and comparing text
+- **UTC** — Coordinated Universal Time (the world standard time; Thailand is UTC+7)
+- **ICU** — International Components for Unicode (the standard library for language rules and sorting)
+- **BCP 47** — Best Current Practice (BCP) 47, the standard for language codes such as `th-TH`, `en-US`
+- **ARB** — Application Resource Bundle (the JSON-style translation file that Flutter `gen-l10n` uses)
+- **BOM** — Byte Order Mark (the 3 bytes at the start of a file that tell Excel it is UTF-8)
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Links to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use with |
 |---|---|
-| ชนิดข้อมูลวันเวลาและ collation | `database-design` |
-| รูปแบบวันเวลาและเงินใน JSON | `api-conventions` |
-| ข้อความ error ที่ต้องแปล | `error-handling-patterns` |
-| ฟอนต์ไทยบนหน้าจอ | `ui-craft` + skill แพลตฟอร์ม |
-| ฟอนต์ไทยในเอกสารและสไลด์ | `branded-document-design` · `presentation-design` |
-| นำเข้าไฟล์ที่ปีเป็น พ.ศ. · ส่งออก CSV ที่ Excel เปิดแล้วไทยไม่เพี้ยน | `data-import-export` |
-| แม่แบบข้อความแจ้งเตือนหลายภาษา | `notifications` |
-| แปลเอกสารหรือข้อความหน้าจอทั้งชุด ไทย↔อังกฤษ · glossary ต่อโปรเจกต์ | `translate-th-en` (plugin `superuser`) |
-| ตัดคำ · ถอดเสียงเป็นอักษรโรมัน · ตรวจเลขบัตรประชาชน ในโค้ด | [`references/thai-text-tools.md`](references/thai-text-tools.md) |
+| Date and time data types and collation | `database-design` |
+| Date, time, and money format in JSON | `api-conventions` |
+| Error messages that must be translated | `error-handling-patterns` |
+| Thai fonts on screen | `ui-craft` + the platform skill |
+| Thai fonts in documents and slides | `branded-document-design` · `presentation-design` |
+| Importing files with B.E. years · exporting CSV that opens in Excel without garbled Thai | `data-import-export` |
+| Multi-language notification message templates | `notifications` |
+| Translating a whole set of documents or screen text, Thai↔English · a glossary per project | `translate-th-en` (plugin `superuser`) |
+| Word segmentation · transliteration to Roman letters · validating national ID numbers in code | [`references/thai-text-tools.md`](references/thai-text-tools.md) |
 
 
 ## reference: thai-text-tools.md
@@ -1181,166 +855,166 @@ Source for the last 3 sections: `thai-text-processing` and `thai-id-validate` `t
 
 Use when starting a repository or setting up a new machine
 
-# ตั้งต้นโปรเจกต์
+# Project bootstrap
 
-> **กฎข้อเดียว:** คนที่ไม่เคยเห็นโปรเจกต์นี้มาก่อน ต้องรันได้ภายใน **30 นาที**
-> โดยอ่านแค่ `README.md` และไม่ต้องถามใคร
+> **The one rule:** someone who has never seen this project must be able to run it within **30 minutes**,
+> reading only `README.md` and asking nobody.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-เริ่ม repository ใหม่ · คนใหม่ใช้ครึ่งวันกว่าจะรันได้ · pull request diff ทั้งไฟล์เพราะตัวจัดรูปแบบไม่ตรงกัน · ไม่มีใครรู้ว่าเอกสารอยู่ไหน
+Starting a new repository · a newcomer needs half a day before the project runs · a pull request shows a whole-file diff because formatters disagree · nobody knows where the documents are
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Task | Use this instead |
 |---|---|
-| ตั้ง pipeline build และ deploy | `cicd-and-release` |
-| ค่าตั้งต่อ environment และ secret | `config-and-secrets` |
-| เลือกสถาปัตยกรรม | `architecture-patterns` |
-| ตั้ง test framework | `testing-standards` |
-| ตั้งชื่อเอกสาร | `document-naming` |
+| Set up the build and deploy pipeline | `cicd-and-release` |
+| Per-environment settings and secrets | `config-and-secrets` |
+| Choose an architecture | `architecture-patterns` |
+| Set up a test framework | `testing-standards` |
+| Name documents | `document-naming` |
 
 ---
 
-## 1 · โครงโฟลเดอร์
+## 1 · Folder layout
 
-**ราก (โฟลเดอร์ที่ผู้ใช้เปิด) จัดตาม `project-doc-set` ข้อ 1 แบบ B** — ผังราก แบบ ecosystem และที่อยู่ไฟล์ของ SuperUser (`.claude/superuser/`) อยู่ที่นั่นที่เดียว · โค้ดอยู่ใน `<project-name>/` โครงข้างในเป็นแบบนี้:
+**The root (the folder the user opens) follows `project-doc-set` item 1, layout B.** The root tree, the ecosystem layout and the SuperUser file locations (`.claude/superuser/`) are defined there and only there. Code lives in `<project-name>/`. Its inner layout is:
 
-ใน `<project-name>/` (ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-`): `README.md` (ข้อ 2) · `CHANGELOG.md` · `ARCHITECTURE.md` · `CONTRIBUTING.md` · `LICENSE` (3 ตัวนี้เมื่อมีเงื่อนไขใน `references/readme-skeleton.md` หัวข้อ 2) · `.env.example` (เฉพาะเมื่ออ่าน environment variable จริง · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · ค่าลับ · `_to_delete/`) · `src/` (unit test อยู่ข้างไฟล์โค้ด · `readable-code` ข้อ 7) · `tests/` (เฉพาะ integration · e2e หรือ stack ที่เครื่องมือบังคับ ดูตารางข้อ 1) · `scripts/` (setup · seed · migrate) — ผังพร้อมคำอธิบาย [`references/code-folder.md`](references/code-folder.md) · ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ในโฟลเดอร์โค้ด (`project-doc-set` ข้อ 1)
+Inside `<project-name>/` (lowercase project name, words joined by `-`): `README.md` (item 2) · `CHANGELOG.md` · `ARCHITECTURE.md` · `CONTRIBUTING.md` · `LICENSE` (these 3 only when the conditions in `references/readme-skeleton.md` section 2 apply) · `.env.example` (only when the project really reads environment variables · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · secrets · `_to_delete/`) · `src/` (unit tests sit beside the code files · `readable-code` item 7) · `tests/` (integration · e2e only, or stacks whose tools require it, see the table in this item) · `scripts/` (setup · seed · migrate). The annotated tree is in [`references/code-folder.md`](references/code-folder.md). ADRs (architecture decision records) and runbooks live in `docs/` at the root, not in the code folder (`project-doc-set` item 1).
 
-**ชื่อโฟลเดอร์โค้ด** — เอาชื่อโฟลเดอร์โปรเจกต์มาทำเป็นตัวพิมพ์เล็ก เว้นวรรคและเครื่องหมายเปลี่ยนเป็น `-` ตัวเดียว:
+**Code folder name.** Take the project folder name, lowercase it, and turn each run of spaces and punctuation into a single `-`:
 `Lumio - Light Meter/` → `lumio-light-meter/`
-คำสั่ง build test และ run ทุกตัวรันจากในโฟลเดอร์นี้ ส่วนชื่อแพ็กเกจในภาษาที่บังคับรูปแบบ (Dart `name:` ใน pubspec · Python package) ยังตั้งตามกฎของภาษา เพราะกฎนี้คุมแค่ชื่อโฟลเดอร์
+Run every build, test and run command from inside this folder. In languages that force a package-name format (Dart `name:` in pubspec · Python package), keep naming the package by the language's rules, because this rule governs only the folder name.
 
-**กฎของราก (ชั้นบนสุดของโฟลเดอร์โปรเจกต์):**
-- มีแค่ของในผัง `project-doc-set` ข้อ 1 · ข้อยกเว้นประกาศใน README ของโปรเจกต์ · README, CHANGELOG และไฟล์ตั้งค่าอยู่ใน repo · `.docx`/`.xlsx` ที่ได้รับมาอยู่ `ref/` ที่เราเขียนอยู่ `docs/`
-- **ของชั่วคราวไม่เคยอยู่ที่ราก** — ถ้าไฟล์ชั่วคราวที่ agent สร้างไปตกที่ราก ให้ย้ายเข้า `_to_delete/` ทันที
-- ถ้า build แล้วมีโฟลเดอร์งอกที่ราก (เช่น `build/` `lib/` ว่างหลังย้ายโค้ด) แปลว่า cache ของเครื่องมือยังจำ path เก่า ให้ล้าง cache (`flutter clean` · ลบ `obj/`) แล้ว build ใหม่
-- ชื่อโฟลเดอร์และไฟล์ใน repo เป็นตัวพิมพ์เล็กคั่นด้วยขีดกลาง ไม่มีเว้นวรรค **ยกเว้นภาษาที่มีธรรมเนียมของตัวเอง** ให้ตามภาษานั้น
+**Root rules (the top level of the project folder):**
+- Hold only what is in the `project-doc-set` item 1 layout. Exceptions are declared in the project's README. README, CHANGELOG and config files live in the repo. Received `.docx`/`.xlsx` files go in `ref/`. Ones we write go in `docs/`.
+- **Temporary files never live at the root.** If a temp file an agent created lands at the root, move it into `_to_delete/` at once.
+- If a build leaves a stray folder at the root (such as an empty `build/` or `lib/` after moving the code), a tool cache still remembers the old path. Clear the cache (`flutter clean` · delete `obj/`) and build again.
+- Folder and file names in the repo are lowercase with hyphens and no spaces. **The exception is a language with its own convention.** Follow that language.
 
-**ข้อยกเว้นตาม stack** — ชื่อโฟลเดอร์โค้ด โฟลเดอร์ทดสอบ และชื่อไฟล์ใน repo ใช้ตามที่เครื่องมือของภาษาคาดไว้
-ไม่ฝืนให้เป็น `src/` · ปกติไฟล์ทดสอบอยู่ข้างไฟล์โค้ด ใช้โฟลเดอร์ทดสอบแยกเฉพาะ stack ที่เครื่องมือบังคับ (ช่องที่เขียนว่า **บังคับ**):
+**Exceptions by stack.** The code folder name, the test folder and the file names in the repo follow what the language's tools expect.
+Do not force `src/`. Test files normally sit beside the code files. Use a separate test folder only for stacks whose tools require one (the cells marked **required**):
 
-| Stack | โค้ด | ทดสอบ | ชื่อไฟล์ |
+| Stack | Code | Tests | File names |
 |---|---|---|---|
-| Node | `src/` | unit test ข้างไฟล์โค้ด (`*.test.ts`) · integration และ e2e ไว้ใน `tests/` | `kebab-case` |
-| .NET | `src/` | `tests/` **บังคับ** (โปรเจกต์ทดสอบแยก `.csproj`) | `PascalCase.cs` |
-| Python | `src/<package>/` | unit test ข้างไฟล์โค้ด (`test_*.py`) · integration และ e2e ไว้ใน `tests/` | `snake_case.py` |
-| Dart / Flutter | `lib/` | `test/` · `integration_test/` **บังคับ** (โครงเหมือน `lib/`) | `snake_case.dart` (lint `file_names`) · `android/` `ios/` อยู่ใน repo |
+| Node | `src/` | Unit tests beside the code files (`*.test.ts`) · integration and e2e in `tests/` | `kebab-case` |
+| .NET | `src/` | `tests/` **required** (a separate test `.csproj` project) | `PascalCase.cs` |
+| Python | `src/<package>/` | Unit tests beside the code files (`test_*.py`) · integration and e2e in `tests/` | `snake_case.py` |
+| Dart / Flutter | `lib/` | `test/` · `integration_test/` **required** (same layout as `lib/`) | `snake_case.dart` (lint `file_names`) · `android/` `ios/` stay in the repo |
 
-skill อื่นที่เขียน `tests/` หรือ `test/` ให้อ่านว่า "โฟลเดอร์ทดสอบของ stack นั้น" แล้วเลือกชื่อเดียวใช้ทั้ง repo
+When another skill writes `tests/` or `test/`, read it as "the test folder of that stack". Pick one name and use it across the whole repo.
 
-**แบบ A** (ใช้เมื่อผู้ใช้ขอเท่านั้น · ข้อนี้คือเจ้าของผัง) — เพิ่ม `<project-name>/docs/` ในโฟลเดอร์โค้ด เป็น markdown ล้วน ผังข้างในเหมือน `docs/` ของแบบ B (`README.md` สารบัญ · `decisions/ADR-NNNN-<slug>.md` · `runbook-<เรื่อง>.md` · `research/`) ไม่มี `.docx` หรือ PNG ส่งมอบ · ส่วนที่เหลือของรากยังตามผัง `project-doc-set` ข้อ 1 โดยไม่มี `docs/` ที่ราก
+**Layout A** (use only when the user asks · this item owns the layout). Add `<project-name>/docs/` inside the code folder, as plain markdown. The inner layout matches the `docs/` of layout B (`README.md` index · `decisions/ADR-NNNN-<slug>.md` · `runbook-<topic>.md` · `research/`). It has no `.docx` or PNG deliverables. The rest of the root still follows the `project-doc-set` item 1 layout, without a `docs/` at the root.
 
-**`docs/README.md` คือสารบัญ ไม่ใช่เนื้อหา:**
+**`docs/README.md` is an index, not content:**
 
-แม่แบบ → `assets/starter-files.md` (คอลัมน์ เอกสาร · อ่านเมื่อ · เจ้าของ · อัปเดตล่าสุด)
+Template → `assets/starter-files.md` (columns: document · read when · owner · last updated)
 
 ---
 
-## 2 · README — โครงกว้าง แล้วสำรวจโปรเจกต์ก่อนเลือกหัวข้อ
+## 2 · README — broad outline, then survey the project before choosing sections
 
-README ของแต่ละงานไม่เหมือนกัน · แอปเว็บ · library · CLI (Command-Line Interface) · แอปมือถือ · monorepo · infra หรือสคริปต์ ต้องการหัวข้อและคำสั่งต่างกัน จึงทำ 3 ชั้น:
+READMEs differ from job to job. A web app · library · CLI (Command-Line Interface) · mobile app · monorepo · infra or script project needs different sections and commands. So work in 3 layers:
 
-**ชั้น 1 · โครงกว้าง (ตายตัว)** — README ต้องตอบคำถามเหล่านี้ให้คนใหม่ ตามลำดับที่ต้องใช้:
-นี่คืออะไร ใครใช้ → ต้องมีอะไรบนเครื่อง → ติดตั้งและรัน → ตั้งค่า → คำสั่งที่ใช้บ่อย (test) → โครงสร้างโปรเจกต์ → สถาปัตยกรรม → build → deploy → ติดปัญหา → ร่วมพัฒนา → ติดต่อ → สัญญาอนุญาต
-คำถามไหนไม่มีของในโปรเจกต์ ตัดทิ้ง ยกเว้น "ตั้งค่า" ที่ต้องบอกว่าไม่มีค่าตั้งภายนอก
+**Layer 1 · Broad outline (fixed).** The README must answer these questions for a newcomer, in the order they need them:
+What is this and who uses it → what must be on the machine → install and run → configure → common commands (test) → project structure → architecture → build → deploy → troubleshooting → contributing → contact → license
+Drop any question the project has nothing for. The exception is "configure", which must say there are no external settings.
 
-**ชั้น 2 · สำรวจก่อนเขียน (ทุกครั้ง)** — จดผลลง `_to_delete/readme-survey.md` แล้วใช้ตัดสินชั้น 3
-1. **อ่านโปรเจกต์:** ไฟล์ประกาศแพ็กเกจ (`package.json` · `*.csproj` · `pyproject.toml` · `pubspec.yaml` ฯลฯ) · ไฟล์ปักรุ่น · `Dockerfile` / `compose` · ไฟล์ CI (Continuous Integration) · `Makefile` / สคริปต์ · `.env.example` · โฟลเดอร์บนสุด → ได้ประเภทงาน stack คำสั่งที่มีอยู่จริง และส่วนประกอบของระบบ (`code-orientation` ถ้าโค้ดเยอะ)
-2. **ค้นเอกสารทางการของ stack นั้น** (`research-with-sources`): คำสั่งติดตั้ง รัน test build และไฟล์ที่ควร commit ของรุ่นที่โปรเจกต์ใช้ · ห้ามเอาคำสั่งจากความจำหรือจากตารางสำรองลง README โดยไม่ตรวจ
-3. **ดู README ของโปรเจกต์ดังประเภทเดียวกัน 2–3 ตัว** (ค้นด้วยประเภทงาน + stack) เพื่อดูว่าวงการนั้นคนอ่านคาดหวังหัวข้อไหนเพิ่ม เช่น library มีตัวอย่างโค้ดและตารางรุ่นที่รองรับ · CLI มีตัวเลือกคำสั่ง · infra มีสิ่งที่ต้องเตรียมในบัญชี cloud · แอปมือถือมี flavor และวิธีเซ็นแอป
-4. ค้นไม่ได้ (ไม่มีเน็ต) → ใช้ชั้น 3 ค่าสำรอง แล้วติด `(รอยืนยัน)` ที่คำสั่งที่ยังไม่ได้ตรวจ
+**Layer 2 · Survey before writing (every time).** Record the results in `_to_delete/readme-survey.md` and use them to decide layer 3.
+1. **Read the project:** package manifest files (`package.json` · `*.csproj` · `pyproject.toml` · `pubspec.yaml` and so on) · version-pin files · `Dockerfile` / `compose` · CI (Continuous Integration) files · `Makefile` / scripts · `.env.example` · top-level folders → this gives the project type, stack, the commands that really exist and the system's components (`code-orientation` if the code is large).
+2. **Search the official documentation for that stack** (`research-with-sources`): install, run, test and build commands, and which files to commit, for the version the project uses. Never put commands from memory or from the fallback table into the README without checking them.
+3. **Look at 2–3 READMEs of well-known projects of the same type** (search by project type + stack) to see which extra sections readers in that field expect. For example, a library has code samples and a table of supported versions · a CLI has command options · infra has what to prepare in the cloud account · a mobile app has flavors and how to sign the app.
+4. If search is impossible (no internet), use the layer 3 fallback tables and mark each unchecked command `(รอยืนยัน)` (awaiting confirmation).
 
-**ชั้น 3 · เลือกหัวข้อและคำสั่ง** — จัดหัวข้อจากชั้น 1 + หัวข้อเพิ่มที่ได้จากข้อ 3 · คำสั่งจากข้อ 1–2 · ตารางเต็ม (ตอบอะไร · ยาวแค่ไหน · ยาวเกินย้ายไปไหน) → [`references/readme-skeleton.md`](references/readme-skeleton.md) เป็นค่าสำรองและเกณฑ์ความยาว ไม่ใช่รายการที่ต้องมีครบ
+**Layer 3 · Choose sections and commands.** Arrange the sections from layer 1 plus the extra sections found in step 3. Take commands from steps 1–2. The full table (what each section answers · how long it should be · where to move it when too long) is in [`references/readme-skeleton.md`](references/readme-skeleton.md). It is a fallback and a length guide, not a list that must be complete.
 
-- **README มีแค่สิ่งที่คนใหม่ใช้ใน 30 นาทีแรก** — ยาวเกินย้ายไป `ARCHITECTURE.md` · `CONTRIBUTING.md` · `docs/runbook-deploy.md` แล้วลิงก์กลับ (ตาราง "แยกไปไฟล์อื่น" และแม่แบบ `ARCHITECTURE.md` ในไฟล์เดียวกัน)
-- **ตารางสำรองตามภาษา** (Node · .NET · Python · Java · Go · Flutter · Rust · Laravel) → [`references/readme-by-stack.md`](references/readme-by-stack.md) · ใช้เป็นจุดตั้งต้นของคำค้นในชั้น 2 ข้อ 2 · stack ที่ไม่อยู่ในตาราง ค้นจากเอกสารทางการตรง ๆ
-- แม่แบบที่คัดลอกไปใช้ (Node · Flutter / Android) → `assets/starter-files.md` · แอปที่ไม่มี DB หรือ Docker ก็ต้องบอกของบนเครื่องให้ครบ
+- **The README holds only what a newcomer uses in the first 30 minutes.** Move anything longer to `ARCHITECTURE.md` · `CONTRIBUTING.md` · `docs/runbook-deploy.md` and link back (see the "split into other files" table and the `ARCHITECTURE.md` template in the same file).
+- **Fallback tables by language** (Node · .NET · Python · Java · Go · Flutter · Rust · Laravel) → [`references/readme-by-stack.md`](references/readme-by-stack.md). Use them as the starting point for the layer 2 step 2 search. For a stack not in the tables, search the official documentation directly.
+- Copy-ready templates (Node · Flutter / Android) → `assets/starter-files.md`. An app with no DB or Docker must still list everything needed on the machine.
 
-> **ทุกคำสั่งต้องเคยรันจริงบนเครื่องเปล่า** เพราะ README ส่วนใหญ่ผิดตรงที่คนเขียน
-> มีของครบอยู่แล้วบนเครื่องตัวเอง จึงไม่เห็นว่ามีขั้นตอนที่หายไป
+> **Every command must have been run on a clean machine.** Most READMEs are wrong because the author
+> already has everything on their own machine and cannot see the missing steps.
 >
-> **1 คำสั่งติดตั้ง 1 คำสั่งรัน** — ถ้ามี 12 ขั้นตอน ให้เขียนเป็น `scripts/setup.sh`
+> **1 install command, 1 run command.** If there are 12 steps, write them as `scripts/setup.sh`.
 
 ---
 
 ## 3 · CHANGELOG
 
-รูปแบบ Keep a Changelog 1.1.0 · หัวข้อในแต่ละรุ่นเรียงแบบนี้ ตัดหัวข้อที่ไม่มีของ: **เปลี่ยนที่ทำให้ของเดิมพัง** (ของเราเพิ่ม อยู่บนสุดเสมอ) · เพิ่ม · เปลี่ยน · จะเลิกใช้ · เอาออก · แก้ · ความปลอดภัย · มี `[ยังไม่ปล่อย]` รอไว้บนสุดเสมอ · รุ่นใหม่อยู่บน วันที่แบบ `YYYY-MM-DD` — ตัวอย่างเต็ม [`references/changelog-examples.md`](references/changelog-examples.md)
+Use the Keep a Changelog 1.1.0 format. Order the headings in each version as follows and drop headings with no items: **เปลี่ยนที่ทำให้ของเดิมพัง** (breaking changes; our own addition, always on top) · เพิ่ม · เปลี่ยน · จะเลิกใช้ · เอาออก · แก้ · ความปลอดภัย. Keep `[ยังไม่ปล่อย]` (unreleased) at the top at all times. Put the newest version first. Write dates as `YYYY-MM-DD`. The full example is in [`references/changelog-examples.md`](references/changelog-examples.md).
 
-**ต้องมี CHANGELOG ไหม**
+**Is a CHANGELOG needed?**
 
-| สถานการณ์ | CHANGELOG |
+| Situation | CHANGELOG |
 |---|---|
-| ส่งงานให้ลูกค้า มีรอบ UAT หรือมีเลขเวอร์ชัน | ต้องมี — ลูกค้าและผู้ตรวจรับดูว่ารอบนี้ได้อะไร |
-| คนอื่นเรียกใช้ (API · library · แอปที่มีผู้ใช้) | ต้องมี — เขารู้ว่าต้องแก้อะไรฝั่งตัวเองไหม |
-| ต้นแบบ · สคริปต์ส่วนตัว · ทำคนเดียวและไม่มีรอบปล่อย | ไม่ต้อง — `git log` พอ · เขียนเหตุผลไว้ใน README |
+| Delivered to a customer, with a UAT (user acceptance testing) round or a version number | Required — the customer and the acceptance reviewer see what this round delivers |
+| Others call it (API · library · app with users) | Required — they learn whether they must change anything on their side |
+| Prototype · personal script · solo work with no release rounds | Not needed — `git log` is enough · write the reason in the README |
 
-**เขียนให้คนใช้งานอ่าน** — 1 ข้อ 1 บรรทัด บอกผลที่ผู้ใช้เห็น ไม่ใช่รายการ commit ชื่อไฟล์หรือเลข ticket · งานที่มองไม่เห็นไม่ใส่ เว้นแต่รู้สึกได้ · "เปลี่ยนที่ทำให้ของเดิมพัง" อยู่บนสุดเสมอ · กฎเต็มและตัวอย่าง ผิด → ถูก ใน [`references/changelog-examples.md`](references/changelog-examples.md)
-- เลขเวอร์ชันและกฎการขึ้นเลข ดู `cicd-and-release`
-
----
-
-## 4 · ตัวจัดรูปแบบและ linter — จบการเถียงเรื่องสไตล์
-
-- `.editorconfig` (เว้นวรรค · ตัวขึ้นบรรทัด · encoding) ทุกภาษา · แม่แบบพร้อม `.gitattributes` → `assets/starter-files.md`
-- ตัวจัดรูปแบบจัดสไตล์ตอนบันทึก (Prettier · dotnet format · black/ruff · `dart format`) · linter จับของที่ผิดจริงเท่านั้น (ESLint · analyzer ของ .NET · ruff · `flutter analyze`)
-- ตั้ง `end_of_line = lf` และ `.gitattributes` `* text=auto eol=lf` — ไม่งั้นทีมที่ใช้ Windows ปนระบบอื่นจะเจอ pull request ที่ diff ทั้งไฟล์
-- **ตัวจัดรูปแบบตัดสินใจแทนคน** จะเลือกค่าไหนก็ได้ แต่ต้องเป็นค่าเดียวกันทั้งทีม
-- ให้ CI ตรวจด้วย ไม่ใช่พึ่งว่าทุกคนตั้งเครื่องเหมือนกัน
-- เวลาเปิดใช้กับโปรเจกต์เก่า ให้จัดรูปแบบทั้ง repo ใน **commit เดียวที่ไม่มีอย่างอื่นปน**
-  แล้วใส่ commit นั้นใน `.git-blame-ignore-revs`
+**Write for the people who use the product.** 1 item per line, stating the result the user sees, not a commit list, file names or ticket numbers. Leave out invisible work unless it can be felt. "เปลี่ยนที่ทำให้ของเดิมพัง" is always on top. The full rules and the wrong → right examples are in [`references/changelog-examples.md`](references/changelog-examples.md).
+- For version numbers and bump rules, see `cicd-and-release`.
 
 ---
 
-## 5 · Dependency
+## 4 · Formatters and linters — end the style arguments
 
-- **commit lock file เสมอ** และติดตั้งบน CI ด้วยคำสั่งที่ยึด lock (`npm ci` · `flutter pub get --enforce-lockfile`) ไม่งั้น build แต่ละวันได้คนละชุด
-- ตรวจช่องโหว่ใน pipeline (`cicd-and-release`) · อัปเดตเป็นรอบ: patch เดือนละครั้ง minor ไตรมาสละครั้ง ไม่ใช่รอพัง
-- dependency ใหม่ต้องมีเหตุผลใน pull request (`lazy-coding`)
-
-**ก่อนเพิ่มไลบรารี ถาม 3 ข้อ** — มาตรฐานของภาษาทำได้ไหม โครงการยังมีชีวิตอยู่ไหม และ
-สัญญาอนุญาตใช้ได้กับงานที่ขายไหม (ดู `prior-art-review`)
+- `.editorconfig` (indentation · line endings · encoding) for every language · template with `.gitattributes` → `assets/starter-files.md`
+- The formatter fixes style on save (Prettier · dotnet format · black/ruff · `dart format`). The linter catches only real mistakes (ESLint · .NET analyzers · ruff · `flutter analyze`).
+- Set `end_of_line = lf` and `.gitattributes` `* text=auto eol=lf`. Otherwise a team mixing Windows with other systems gets pull requests that diff the whole file.
+- **The formatter decides for people.** Any setting is fine, but the whole team must use the same one.
+- Have CI check it too, instead of trusting that everyone set up their machine the same way.
+- When turning it on in an old project, format the whole repo in **one commit with nothing else in it**,
+  then add that commit to `.git-blame-ignore-revs`.
 
 ---
 
-## 6 · รายการตรวจเมื่อเปิดโปรเจกต์ใหม่
+## 5 · Dependencies
 
-ติ๊ก `[x]` เฉพาะข้อที่**รันหรือเปิดดูแล้วในรอบนี้** ข้อที่ยังไม่ได้สร้างหรือยังไม่ได้รัน ให้ใส่ `[ ]` พร้อมบอกว่าค้างอะไร ส่วนข้อที่ไม่เกี่ยวกับโปรเจกต์นี้ ให้ใส่ `N/A — <เหตุผล>`
+- **Always commit the lock file**, and install on CI with a command that follows the lock (`npm ci` · `flutter pub get --enforce-lockfile`). Otherwise each day's build gets a different set.
+- Check for vulnerabilities in the pipeline (`cicd-and-release`). Update on a schedule: patch monthly, minor quarterly, not only when something breaks.
+- A new dependency needs a reason in the pull request (`lazy-coding`).
 
-- [ ] `README.md` ตอบคำถามในชั้น 1 ที่โปรเจกต์มีของครบ · หัวข้อและคำสั่งมาจากผลสำรวจชั้น 2 (มี `_to_delete/readme-survey.md`) · คำสั่งเคยรันจริงบนเครื่องเปล่า
-- [ ] รากตรงผังใน `project-doc-set` ข้อ 1 (repo ชื่อโปรเจกต์ตัวเล็กคั่น `-` · ecosystem ใช้ `ecosystem/`) และไม่มีไฟล์ชั่วคราวหรือ `.docx` ที่ราก
-- [ ] `.env.example` มีค่าครบทุกตัวพร้อมคอมเมนต์ ถ้าโปรเจกต์ไม่อ่าน environment variable เลย (เช่นแอปมือถือออฟไลน์) ก็ไม่ต้องสร้าง แต่ให้เขียนใน README ว่า "ไม่มีค่าตั้งภายนอก"
-- [ ] `.editorconfig` · `.gitattributes` · ตัวจัดรูปแบบ · linter ตั้งแล้ว และ CI ตรวจ
-- [ ] `.gitignore` ครอบคลุม `.env` · โฟลเดอร์ build · `_to_delete/` · Android: `key.properties` · `*.jks` · `*.keystore`
-- [ ] `docs/README.md` เป็นสารบัญ พร้อมเจ้าของแต่ละเอกสาร
-- [ ] `CHANGELOG.md` มีหัวข้อ "ยังไม่ปล่อย" รออยู่
-- [ ] test อย่างน้อย 1 ตัวที่รันผ่าน เพื่อพิสูจน์ว่าโครงใช้ได้
-- [ ] `main` ถูกป้องกัน ต้องผ่าน pull request และ CI ส่วน repo ที่ยังไม่มี remote หรือทำคนเดียวข้ามข้อนี้ได้ แต่ต้องเขียนเหตุผลไว้ใน README และรัน test กับ linter ก่อน commit แทน
-- [ ] **ให้คนที่ไม่ได้ตั้งโปรเจกต์ลองทำตาม README แล้วจับเวลา**
+**Before adding a library, ask 3 questions:** can the language's standard library do it, is the project still alive, and
+does the license allow use in work that is sold (see `prior-art-review`)?
+
+---
+
+## 6 · Checklist when opening a new project
+
+Tick `[x]` only for items you **ran or opened in this round**. For an item not yet built or run, write `[ ]` and say what is pending. For an item that does not apply to this project, write `N/A — <reason>`.
+
+- [ ] `README.md` answers the layer 1 questions the project has content for · sections and commands come from the layer 2 survey results (`_to_delete/readme-survey.md` exists) · commands have been run on a clean machine
+- [ ] The root matches the layout in `project-doc-set` item 1 (repo named as the lowercase project name joined by `-` · an ecosystem uses `ecosystem/`) and has no temp files or `.docx` at the root
+- [ ] `.env.example` lists every value with comments. If the project reads no environment variables at all (for example an offline mobile app), do not create it, but write "ไม่มีค่าตั้งภายนอก" (no external settings) in the README
+- [ ] `.editorconfig` · `.gitattributes` · formatter · linter are set up, and CI checks them
+- [ ] `.gitignore` covers `.env` · build folders · `_to_delete/` · Android: `key.properties` · `*.jks` · `*.keystore`
+- [ ] `docs/README.md` is an index, with an owner for each document
+- [ ] `CHANGELOG.md` has an "ยังไม่ปล่อย" heading waiting
+- [ ] At least 1 test runs and passes, to prove the layout works
+- [ ] `main` is protected and needs a pull request and CI. A repo with no remote, or a solo repo, may skip this, but must write the reason in the README and run tests and the linter before each commit instead.
+- [ ] **Have someone who did not set up the project follow the README, and time them**
 
 ---
 
 ## 7 · Anti-patterns
 
-ผิด: README มีแต่ชื่อ · คำสั่งที่ไม่เคยรันบนเครื่องเปล่า · "ขอ `.env` จากพี่คนนั้น" (ไม่มี `.env.example`) · ไม่ commit lock file · ไม่มี `.editorconfig` · linter เถียงเรื่องสไตล์ · ไฟล์ทดลองที่ราก (`test.js` `backup_final.zip`) · เอกสารกระจายในแชตและ Drive ไม่มีสารบัญ · CHANGELOG ที่ก๊อปรายการ commit
+Wrong: a README with only a title · commands never run on a clean machine · "ask so-and-so for the `.env`" (no `.env.example`) · no committed lock file · no `.editorconfig` · a linter that argues about style · experiment files at the root (`test.js` `backup_final.zip`) · documents scattered across chats and Drive with no index · a CHANGELOG that copies the commit list
 
 
-## 8 · ตัวย่อ
+## 8 · Abbreviations
 
-**lock file** ไฟล์ตรึงเวอร์ชัน dependency · **linter** ตัวตรวจโค้ดหาของที่น่าจะผิด · **formatter** ตัวจัดรูปแบบอัตโนมัติ · **LF** Line Feed ตัวขึ้นบรรทัดแบบ Unix (Windows ใช้ CRLF) · **CI** Continuous Integration การตรวจอัตโนมัติทุกครั้งที่รวมโค้ด
+**lock file** a file that pins dependency versions · **linter** a checker that finds code likely to be wrong · **formatter** an automatic style fixer · **LF** Line Feed, the Unix line ending (Windows uses CRLF) · **CI** Continuous Integration, an automatic check on every code merge
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Links to other skills
 
-นอกจากตาราง "ไม่ใช้" ด้านบน: ของชั่วคราว → `temp-file-discipline` · commit ที่สร้าง CHANGELOG ได้ → `commit-message-format` · ก่อนเพิ่ม dependency → `lazy-coding` · `prior-art-review` · แม่แบบไฟล์ทั้งหมด → `assets/starter-files.md`
+Besides the "not for" table above: temp files → `temp-file-discipline` · commits that can build a CHANGELOG → `commit-message-format` · before adding a dependency → `lazy-coding` · `prior-art-review` · all file templates → `assets/starter-files.md`
 
 
 ## reference: changelog-examples.md
 
-# CHANGELOG — ตัวอย่าง
+# CHANGELOG — examples
 
-อ่านเมื่อเขียน CHANGELOG ครั้งแรกหรือรีวิว · กฎอยู่ใน `SKILL.md` ข้อ 3 · แม่แบบเปล่าอยู่ใน `assets/starter-files.md`
+Read this when writing a CHANGELOG for the first time or reviewing one. The rules are in `SKILL.md` item 3. The blank template is in `assets/starter-files.md`. The sample below is Thai because the CHANGELOG itself is written for Thai users.
 
 ```markdown
 # Changelog
@@ -1364,131 +1038,131 @@ README ของแต่ละงานไม่เหมือนกัน · 
 ## [1.1.1] — 2026-09-10 [ถอน]
 ```
 
-## หัวข้อและเลขรุ่น
+## Headings and version numbers
 
-| หัวข้อ (Keep a Changelog) | ใช้กับ | ขึ้นเลขรุ่นส่วนไหน (Semantic Versioning) |
+| Heading (Keep a Changelog) | Use for | Version part to bump (Semantic Versioning) |
 |---|---|---|
-| เปลี่ยนที่ทำให้ของเดิมพัง (ของเราเพิ่ม) | ผู้ใช้หรือระบบที่เรียกใช้ต้องแก้ฝั่งตัวเอง | MAJOR · ช่วง `0.y.z` ขึ้น MINOR ได้ |
-| เพิ่ม (Added) | ความสามารถใหม่ | MINOR |
-| เปลี่ยน (Changed) | ของเดิมทำงานต่างไปแต่ไม่พัง | MINOR |
-| จะเลิกใช้ (Deprecated) | ยังใช้ได้ แต่จะเอาออก · บอกรุ่นที่จะเอาออกและของที่ใช้แทน | MINOR |
-| เอาออก (Removed) | เอาออกแล้ว | MAJOR |
-| แก้ (Fixed) | บั๊ก | PATCH |
-| ความปลอดภัย (Security) | ช่องโหว่ที่ปิดแล้ว · ไม่บอกวิธีโจมตี | PATCH หรือตามขนาด |
+| เปลี่ยนที่ทำให้ของเดิมพัง (breaking changes; our own addition) | Users or calling systems must change something on their side | MAJOR · in the `0.y.z` range, MINOR is allowed |
+| เพิ่ม (Added) | New capability | MINOR |
+| เปลี่ยน (Changed) | Existing behavior works differently but does not break | MINOR |
+| จะเลิกใช้ (Deprecated) | Still works but will be removed · name the removal version and the replacement | MINOR |
+| เอาออก (Removed) | Already removed | MAJOR |
+| แก้ (Fixed) | Bugs | PATCH |
+| ความปลอดภัย (Security) | Vulnerabilities already closed · do not describe how to attack | PATCH, or by size |
 
-คอลัมน์ขึ้นเลขรุ่นเป็นข้อเสนอของ skill นี้ · Semantic Versioning บอกไว้แค่ MAJOR = ไม่เข้ากับของเดิม · MINOR = เพิ่มหรือประกาศเลิกใช้แบบเข้ากันได้ · PATCH = แก้บั๊กแบบเข้ากันได้
+The version-bump column is this skill's own proposal. Semantic Versioning says only this: MAJOR = incompatible with the old version · MINOR = backward-compatible additions or deprecation notices · PATCH = backward-compatible bug fixes.
 
-รุ่นที่ปล่อยไปแล้วต้องถอนเพราะบั๊กร้ายหรือช่องโหว่ → ต่อท้ายหัวรุ่นด้วย `[ถอน]` (Keep a Changelog ใช้ `[YANKED]`) ไม่ลบรุ่นนั้นทิ้ง · แหล่ง: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/) · [Semantic Versioning 2.0.0](https://semver.org/) · เปิดอ่าน 2026-11-07
+If a released version must be pulled because of a serious bug or vulnerability, append `[ถอน]` to the version heading (Keep a Changelog uses `[YANKED]`). Do not delete that version. Sources: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/) · [Semantic Versioning 2.0.0](https://semver.org/) · opened 2026-11-07
 
-เขียนเป็นผลที่ผู้ใช้เห็น ไม่ใช่รายการ commit:
+Write what the user sees, not a list of commits:
 
 | ✗ | ✓ |
 |---|---|
 | `- fix(items): change > to >= in withdraw() (#42)` | `- เบิกของเท่ากับจำนวนที่เหลือพอดีได้แล้ว` |
 | `- refactor lowStockReport to read movements once` | `- รายงานของใกล้หมดเปิดได้ในไม่ถึง 1 วินาที (เดิม 50 วินาที)` |
 
-## กฎการเขียน (ฉบับเต็ม)
+## Writing rules (full version)
 
-- เขียนให้**คนใช้งาน**อ่าน ไม่ใช่คัดลอกรายการ commit มาวาง
-- 1 ข้อ = 1 บรรทัด บอกว่าผู้ใช้ได้อะไรหรือเห็นอะไรเปลี่ยน ไม่ใช่ว่าแก้ไฟล์ไหน
-- ไม่ใส่ชื่อไฟล์ ชื่อฟังก์ชัน หรือเลข ticket ยกเว้นผู้อ่านเป็นนักพัฒนาที่เรียก API นั้น
-- ไม่ใส่งานที่ผู้ใช้มองไม่เห็น เช่น ปรับโครงโค้ด เพิ่ม test หรือแก้ CI · ยกเว้นทำให้เร็วขึ้นหรือเสถียรขึ้นจนรู้สึกได้ ให้เขียนเป็นผลที่ได้ ("รายงานของใกล้หมดเปิดได้ในไม่ถึง 1 วินาที")
-- ในแต่ละหัวข้อ เรียงข้อที่กระทบผู้ใช้มากที่สุดไว้บน · หัวข้อไหนไม่มีของให้ตัดหัวข้อนั้นทิ้ง
-- หัวข้อ "เปลี่ยนที่ทำให้ของเดิมพัง" ต้องอยู่**บนสุด**ของเวอร์ชันนั้นเสมอ · ทุกการเลิกใช้ เอาออก และเปลี่ยนที่ทำให้พัง ต้องลงทุกครั้ง แม้เป็นเรื่องเล็ก
+- Write for the **people who use the product**. Do not paste the commit list.
+- 1 item = 1 line. Say what the user gains or sees change, not which file changed.
+- Leave out file names, function names and ticket numbers, unless the reader is a developer who calls that API.
+- Leave out work the user cannot see, such as code restructuring, new tests or CI fixes. The exception is a speed or stability gain big enough to feel. Then write it as the result ("รายงานของใกล้หมดเปิดได้ในไม่ถึง 1 วินาที").
+- Within each heading, put the items that affect users most at the top. Drop any heading that has no items.
+- The heading "เปลี่ยนที่ทำให้ของเดิมพัง" must always sit at the **top** of that version. Every deprecation, removal and breaking change must be listed, even a small one.
 
 
 ## reference: code-folder.md
 
-# โครงในโฟลเดอร์โค้ด — ผังเต็ม
+# Code folder layout — full tree
 
-กฎอยู่ใน `SKILL.md` ข้อ 1 · ผังรากอยู่ใน `project-doc-set` ข้อ 1 · ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ที่นี่
+The rules are in `SKILL.md` item 1. The root tree is in `project-doc-set` item 1. ADRs (architecture decision records) and runbooks live in `docs/` at the root, not here.
 
 ```
-<project-name>/          ← ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่นด้วย `-`
-  README.md              ← ข้อ 2 · โครงกว้าง + สำรวจโปรเจกต์ก่อนเลือกหัวข้อ
-  CHANGELOG.md           ← สิ่งที่เปลี่ยนในแต่ละเวอร์ชัน
-  ARCHITECTURE.md        ← แผนที่โค้ด · มีเมื่อผังใน README เกิน 15 บรรทัดหรือระบบมีหลายส่วน (references/readme-skeleton.md)
-  CONTRIBUTING.md        ← มีเมื่อหัวข้อร่วมพัฒนาใน README ยาวเกิน 5 บรรทัด
-  LICENSE                ← repo เปิดสาธารณะหรือสัญญาจ้างระบุ
-  .env.example           ← ค่าที่ต้องมีทั้งหมด (ดู config-and-secrets) · มีเฉพาะเมื่อโปรเจกต์อ่าน environment variable จริง
-  .editorconfig          ← ข้อ 4
+<project-name>/          ← lowercase project name, words joined by `-`
+  README.md              ← item 2 · broad outline + survey the project before choosing sections
+  CHANGELOG.md           ← what changed in each version
+  ARCHITECTURE.md        ← code map · add it when the README tree passes 15 lines or the system has many parts (references/readme-skeleton.md)
+  CONTRIBUTING.md        ← add it when the contributing section in the README passes 5 lines
+  LICENSE                ← public repo, or the contract requires it
+  .env.example           ← every required value (see config-and-secrets) · only when the project really reads environment variables
+  .editorconfig          ← item 4
   .gitattributes
-  .gitignore             ← build output · ค่าลับ · `_to_delete/`
-  src/                   ← โค้ดจริง (หรือโครงตามธรรมเนียมของ stack ใน `SKILL.md` ข้อ 1)
-  tests/                 ← บังคับใน .NET · Flutter (`test/`) · Node และ Python ใช้เก็บเฉพาะ integration และ e2e (unit test อยู่ข้างไฟล์โค้ด) — ตาราง stack อยู่ใน `SKILL.md` ข้อ 1
-  scripts/               ← setup, seed, migrate — สคริปต์ที่คนต้องรัน
+  .gitignore             ← build output · secrets · `_to_delete/`
+  src/                   ← the real code (or the layout the stack expects, per `SKILL.md` item 1)
+  tests/                 ← required in .NET · Flutter (`test/`) · Node and Python keep only integration and e2e here (unit tests sit beside the code files) — the stack table is in `SKILL.md` item 1
+  scripts/               ← setup, seed, migrate — scripts a person has to run
 ```
 
 
 ## reference: readme-by-stack.md
 
-# README ตามภาษา — คำสั่ง ไฟล์ และหัวข้อที่ต้องเพิ่ม
+# README by language — commands, files and extra sections
 
-ใช้คู่กับ [`readme-skeleton.md`](readme-skeleton.md) · ตารางนี้เป็นค่าสำรองและจุดตั้งต้นของคำค้น (`SKILL.md` ข้อ 2 ชั้น 2) ไม่ใช่คำสั่งที่ใส่ได้ทันที · คำสั่งจริงเอาจากไฟล์ในโปรเจกต์และเอกสารทางการของรุ่นที่ใช้ **ทุกคำสั่งต้องรันจริงบนเครื่องเปล่าก่อนลง README** (`SKILL.md` ข้อ 2) · ช่องที่มี ※ คือยังไม่ได้เปิดหน้าทางการยืนยันในรอบที่เขียน (2026-11-07)
+Use this with [`readme-skeleton.md`](readme-skeleton.md). These tables are a fallback and a starting point for search terms (`SKILL.md` item 2, layer 2). They are not commands you can paste in as is. Take the real commands from the project's files and the official documentation for the version in use. **Run every command on a clean machine before it goes into the README** (`SKILL.md` item 2). A cell marked ※ means the official page was not opened to confirm it in the round it was written (2026-11-07).
 
-## 1 · รุ่น ไฟล์หลัก และค่าตั้งตาม environment
+## 1 · Versions, main files and per-environment settings
 
-ใส่ลงหัวข้อ 4 "ต้องมีบนเครื่อง" และหัวข้อ 6 "ตั้งค่า" ของ README
+Put these into README section 4 "Prerequisites" and section 6 "Configuration".
 
-| Stack | manifest + lock (commit ทั้งคู่) | ปักรุ่น runtime ที่ไฟล์ | ค่าตั้งตาม environment |
+| Stack | manifest + lock (commit both) | Pin the runtime version in a file | Per-environment settings |
 |---|---|---|---|
-| Node / TypeScript | `package.json` + `package-lock.json` หรือ `pnpm-lock.yaml` (lock แบบเดียว) | `.nvmrc` (`nvm use`) · `engines` ใน `package.json` เป็นแค่คำเตือนจนกว่าจะเปิด `engine-strict` | Vite: `.env` · `.env.[mode]` · `.env.local` · มีแค่ `VITE_*` ที่ถึง browser · Angular: `src/environments/` + `ng build --configuration <ชื่อ>` |
-| .NET / C# | `.sln` หรือ `.slnx` + `.csproj` · `packages.lock.json` ไม่บังคับ ※ | `global.json` → `sdk.version` (เลขเต็ม) + `rollForward` (ใช้ lock file ให้ตั้ง `disable`) | `appsettings.json` + `appsettings.{Env}.json` · เลือกด้วย `ASPNETCORE_ENVIRONMENT` (เว็บ) หรือ `DOTNET_ENVIRONMENT` · ไม่ตั้ง = Production · ค่าลับตอน dev: `dotnet user-secrets` · `launchSettings.json` ใช้แค่เครื่อง dev |
-| Python | `pyproject.toml` + `uv.lock` · ไม่ commit `.venv` | `.python-version` (`uv python pin`) + `requires-python` | ไม่มีมาตรฐานกลาง · `.env` + environment variable หรือ settings ของ framework ※ |
-| Java / Kotlin | `pom.xml` หรือ `build.gradle.kts` + `settings.gradle.kts` | Gradle wrapper (commit `gradlew` `gradlew.bat` `gradle/wrapper/*`) · Maven wrapper `mvnw` ※ · รุ่น Java Development Kit (JDK) | Spring Boot: `application.yml` + `application-{profile}.yml` · เปิดด้วย `SPRING_PROFILES_ACTIVE` หรือ `--spring.profiles.active=prod` |
-| Go | `go.mod` + `go.sum` | บรรทัด `go 1.xx` (ขั้นต่ำ) + `toolchain` | ไม่มีมาตรฐาน · environment variable ※ |
-| Flutter / Dart | `pubspec.yaml` + `pubspec.lock` (แอป commit lock · library ไม่ commit) | `environment:` ใน pubspec ※ · FVM ถ้าใช้ (ไม่ใช่ทางการ) | flavor: Android `productFlavors` ใน `android/app/build.gradle.kts` · iOS ใช้ scheme ※ · `--dart-define` ※ |
-| Rust | `Cargo.toml` + `Cargo.lock` | `rust-toolchain.toml` (`channel` + `components`) | ไม่มีมาตรฐาน · environment variable ※ |
-| PHP / Laravel | `composer.json` + `composer.lock` | `"php": "^8.x"` ใน `require` | `.env` (ไม่ commit) + `.env.example` · `APP_ENV` เลือก `.env.[APP_ENV]` · `APP_DEBUG=false` ใน production |
+| Node / TypeScript | `package.json` + `package-lock.json` or `pnpm-lock.yaml` (one lock type only) | `.nvmrc` (`nvm use`) · `engines` in `package.json` is only a warning until `engine-strict` is on | Vite: `.env` · `.env.[mode]` · `.env.local` · only `VITE_*` reaches the browser · Angular: `src/environments/` + `ng build --configuration <name>` |
+| .NET / C# | `.sln` or `.slnx` + `.csproj` · `packages.lock.json` optional ※ | `global.json` → `sdk.version` (full number) + `rollForward` (set `disable` when using a lock file) | `appsettings.json` + `appsettings.{Env}.json` · chosen by `ASPNETCORE_ENVIRONMENT` (web) or `DOTNET_ENVIRONMENT` · unset = Production · dev secrets: `dotnet user-secrets` · `launchSettings.json` is for dev machines only |
+| Python | `pyproject.toml` + `uv.lock` · do not commit `.venv` | `.python-version` (`uv python pin`) + `requires-python` | No central standard · `.env` + environment variables, or the framework's settings ※ |
+| Java / Kotlin | `pom.xml` or `build.gradle.kts` + `settings.gradle.kts` | Gradle wrapper (commit `gradlew` `gradlew.bat` `gradle/wrapper/*`) · Maven wrapper `mvnw` ※ · Java Development Kit (JDK) version | Spring Boot: `application.yml` + `application-{profile}.yml` · enable with `SPRING_PROFILES_ACTIVE` or `--spring.profiles.active=prod` |
+| Go | `go.mod` + `go.sum` | The `go 1.xx` line (minimum) + `toolchain` | No standard · environment variables ※ |
+| Flutter / Dart | `pubspec.yaml` + `pubspec.lock` (apps commit the lock · libraries do not) | `environment:` in pubspec ※ · FVM if used (not official) | Flavors: Android `productFlavors` in `android/app/build.gradle.kts` · iOS uses schemes ※ · `--dart-define` ※ |
+| Rust | `Cargo.toml` + `Cargo.lock` | `rust-toolchain.toml` (`channel` + `components`) | No standard · environment variables ※ |
+| PHP / Laravel | `composer.json` + `composer.lock` | `"php": "^8.x"` in `require` | `.env` (not committed) + `.env.example` · `APP_ENV` selects `.env.[APP_ENV]` · `APP_DEBUG=false` in production |
 
-## 2 · คำสั่ง
+## 2 · Commands
 
-ใส่ลงหัวข้อ 5 "เริ่มใช้งาน" · 7 "คำสั่งที่ใช้บ่อย" · 10 "build และไฟล์ที่ได้"
+Put these into README section 5 "Getting started", 7 "Common commands" and 10 "Build and output files".
 
-| Stack | ติดตั้ง | รัน | test | lint · format | build / แพ็ก → ไฟล์ที่ได้ |
+| Stack | Install | Run | test | lint · format | build / package → output files |
 |---|---|---|---|---|---|
-| Node / TypeScript | `npm ci` (ยึด lock) · `pnpm install --frozen-lockfile` | `npm run dev` ※ | `npm test` ※ | `npm run lint` ※ · Prettier ※ | `npm run build` ※ → `dist/` |
-| .NET / C# | `dotnet restore` | `dotnet run` · `dotnet run -lp https` | `dotnet test` ※ | `dotnet format` ※ | `dotnet publish` (net8.0 ขึ้นไปเป็น Release เอง) → `bin/Release/<tfm>/publish/` · `-r <RID> --self-contained` (Runtime Identifier (RID) เช่น `linux-x64`) |
-| Python | `uv sync` | `uv run <คำสั่ง>` | `uv run pytest` ※ | `ruff check` · `ruff format` | `uv build` ※ → wheel · sdist |
-| Java / Kotlin | ดึงตอน build | `./mvnw spring-boot:run` · `./gradlew bootRun` ※ | `./mvnw test` · `./gradlew test` ※ | Spotless · Checkstyle · ktlint (ไม่มีตัวกลาง) ※ | `./mvnw package` · `./gradlew build` ※ → jar รันด้วย `java -jar` |
-| Go | `go mod download` ※ | `go run ./cmd/<ชื่อ>` ※ | `go test ./...` ※ | `gofmt` · `go vet` ※ | `go build ./...` ※ → binary ไฟล์เดียว |
-| Flutter / Dart | `flutter pub get` ※ | `flutter run --flavor <ชื่อ>` | `flutter test` ※ | `flutter analyze` · `dart format .` ※ | `flutter build appbundle` → `build/app/outputs/bundle/release/app.aab` · `flutter build ipa` ※ |
+| Node / TypeScript | `npm ci` (follows the lock) · `pnpm install --frozen-lockfile` | `npm run dev` ※ | `npm test` ※ | `npm run lint` ※ · Prettier ※ | `npm run build` ※ → `dist/` |
+| .NET / C# | `dotnet restore` | `dotnet run` · `dotnet run -lp https` | `dotnet test` ※ | `dotnet format` ※ | `dotnet publish` (net8.0 and later default to Release) → `bin/Release/<tfm>/publish/` · `-r <RID> --self-contained` (Runtime Identifier (RID), for example `linux-x64`) |
+| Python | `uv sync` | `uv run <command>` | `uv run pytest` ※ | `ruff check` · `ruff format` | `uv build` ※ → wheel · sdist |
+| Java / Kotlin | Fetched at build time | `./mvnw spring-boot:run` · `./gradlew bootRun` ※ | `./mvnw test` · `./gradlew test` ※ | Spotless · Checkstyle · ktlint (no single standard) ※ | `./mvnw package` · `./gradlew build` ※ → a jar, run with `java -jar` |
+| Go | `go mod download` ※ | `go run ./cmd/<name>` ※ | `go test ./...` ※ | `gofmt` · `go vet` ※ | `go build ./...` ※ → one binary file |
+| Flutter / Dart | `flutter pub get` ※ | `flutter run --flavor <name>` | `flutter test` ※ | `flutter analyze` · `dart format .` ※ | `flutter build appbundle` → `build/app/outputs/bundle/release/app.aab` · `flutter build ipa` ※ |
 | Rust | `cargo fetch` ※ | `cargo run` ※ | `cargo test` ※ | `cargo clippy` · `cargo fmt` ※ | `cargo build --release` ※ → `target/release/` |
-| PHP / Laravel | `composer install` · `npm ci && npm run build` (asset) ※ | `php artisan serve` ※ | `php artisan test` | Laravel Pint ※ | deploy: `php artisan config:cache` (ห้ามรันตอน dev) · `php artisan storage:link` |
+| PHP / Laravel | `composer install` · `npm ci && npm run build` (assets) ※ | `php artisan serve` ※ | `php artisan test` | Laravel Pint ※ | deploy: `php artisan config:cache` (never run in dev) · `php artisan storage:link` |
 
-## 3 · หัวข้อที่ต้องเพิ่มใน README ตามภาษา
+## 3 · Extra README sections by language
 
-| Stack | เพิ่มอะไร |
+| Stack | What to add |
 |---|---|
-| Node / TypeScript | รุ่น Node จาก `.nvmrc` + บอกให้สั่ง `nvm use` · ใช้ npm หรือ pnpm (ห้ามมี lock 2 แบบ) · ตาราง `scripts` · ตัวแปร `VITE_*` ทุกตัวพร้อมเตือนว่าค่าถึง browser · Angular: รายชื่อ configuration |
-| .NET / C# | รุ่น Software Development Kit (SDK) ตาม `global.json` · project ไหนเป็นตัวเริ่ม · ตั้ง `ASPNETCORE_ENVIRONMENT` ที่ไหนบ้าง · ชื่อคีย์ที่ต้องใส่ผ่าน `user-secrets` (ไม่ใส่ค่า) · คำสั่ง `dotnet publish` ที่ใช้จริง · คำสั่ง migration ของ EF Core |
-| Python | รุ่นจาก `.python-version` · ใช้ uv หรือ venv + pip (ทางเดียว) · เป็น src layout ต้องติดตั้งก่อน test · ตั้งค่า ruff อยู่ไหน · ไฟล์ `.env` ที่ต้องมี |
-| Java / Kotlin | รุ่น JDK · ใช้ `./mvnw` หรือ `./gradlew` เสมอ ไม่ใช่ตัวที่ลงในเครื่อง · ตาราง profile และวิธีเปิด · ชื่อและที่อยู่ jar ที่ได้ |
-| Go | รุ่นจากบรรทัด `go` และ `toolchain` · binary ใน `cmd/` แต่ละตัวทำอะไร · environment variable ที่อ่าน |
-| Flutter / Dart | รุ่น Flutter และ Dart · ตาราง flavor (ชื่อ · applicationId · ไฟล์เริ่ม) · signing: `key.properties` และ keystore อยู่ไหน ขอจากใคร (ห้าม commit) · iOS: team และ provisioning · คำสั่ง build ต่อ flavor และที่อยู่ไฟล์ที่ได้ |
-| Rust | toolchain จาก `rust-toolchain.toml` · feature flag ที่มี · binary ใน `src/bin/` · รุ่น Rust ต่ำสุดที่รองรับ (Minimum Supported Rust Version (MSRV)) ถ้าเป็น library |
-| PHP / Laravel | รุ่น PHP และ extension ที่ต้องมี · `cp .env.example .env` → `php artisan key:generate` ※ → migrate · build asset · ขั้น deploy (`config:cache` · `storage:link` · queue worker) |
+| Node / TypeScript | The Node version from `.nvmrc` + tell readers to run `nvm use` · npm or pnpm (never 2 lock types) · a `scripts` table · every `VITE_*` variable, with a warning that the value reaches the browser · Angular: the list of configurations |
+| .NET / C# | The Software Development Kit (SDK) version from `global.json` · which project is the startup project · where `ASPNETCORE_ENVIRONMENT` is set · the key names to set through `user-secrets` (no values) · the `dotnet publish` command actually used · the EF Core migration commands |
+| Python | The version from `.python-version` · uv, or venv + pip (one way only) · with a src layout, install before testing · where the ruff settings live · the `.env` file that must exist |
+| Java / Kotlin | The JDK version · always use `./mvnw` or `./gradlew`, never the locally installed tool · a profile table and how to enable each · the name and location of the jar produced |
+| Go | The version from the `go` and `toolchain` lines · what each binary in `cmd/` does · the environment variables read |
+| Flutter / Dart | The Flutter and Dart versions · a flavor table (name · applicationId · entry file) · signing: where `key.properties` and the keystore are, and whom to ask (never commit them) · iOS: team and provisioning · the build command per flavor and where the output lands |
+| Rust | The toolchain from `rust-toolchain.toml` · the feature flags available · the binaries in `src/bin/` · the Minimum Supported Rust Version (MSRV) if it is a library |
+| PHP / Laravel | The PHP version and required extensions · `cp .env.example .env` → `php artisan key:generate` ※ → migrate · build assets · deploy steps (`config:cache` · `storage:link` · queue worker) |
 
-## 4 · โครงโฟลเดอร์ตามแหล่งทางการ
+## 4 · Folder layout from official sources
 
-ใช้ประกอบหัวข้อ 8 "โครงโปรเจกต์" · กฎของ repo นี้ (ชื่อโฟลเดอร์โค้ด · ที่อยู่ test) อยู่ใน `SKILL.md` ข้อ 1 และชนะเมื่อขัดกัน
+Use this for README section 8 "Project structure". This repo's rules (code folder name · test location) are in `SKILL.md` item 1 and win when they conflict.
 
-| Stack | โครงที่เครื่องมือคาดไว้ | แหล่ง |
+| Stack | Layout the tools expect | Source |
 |---|---|---|
-| Node / TypeScript | npm ไม่กำหนด · ใช้ตามตัวสร้างของ framework (`src/` · `public/` · `vite.config.ts` หรือ `angular.json`) ※ | — |
-| .NET / C# | ไม่มีหน้าทางการ · ที่พบบ่อย `src/<App>/` + `tests/<App>.Tests/` + `global.json` + `.slnx` ※ | — |
-| Python | src layout: `src/<package>/` · `pyproject.toml` ที่ราก | [PyPA src vs flat](https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/) |
-| Java / Kotlin | `src/main/java` (หรือ `kotlin`) · `src/main/resources` · `src/test/java` | [Maven Standard Directory Layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html) |
-| Go | `cmd/<binary>/main.go` · `internal/` · แพ็กเกจเล็กวางไฟล์ที่รากได้ · `golang-standards/project-layout` และ `pkg/` เป็นของชุมชน ไม่ใช่ของทีม Go | [Organizing a Go module](https://go.dev/doc/modules/layout) |
-| Flutter / Dart | `lib/` (`lib/src/` ส่วนภายใน) · `test/` · `android/` · `ios/` ※ | [Dart package layout](https://dart.dev/tools/pub/package-layout) |
+| Node / TypeScript | npm sets none · follow the framework generator (`src/` · `public/` · `vite.config.ts` or `angular.json`) ※ | — |
+| .NET / C# | No official page · most common is `src/<App>/` + `tests/<App>.Tests/` + `global.json` + `.slnx` ※ | — |
+| Python | src layout: `src/<package>/` · `pyproject.toml` at the root | [PyPA src vs flat](https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/) |
+| Java / Kotlin | `src/main/java` (or `kotlin`) · `src/main/resources` · `src/test/java` | [Maven Standard Directory Layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html) |
+| Go | `cmd/<binary>/main.go` · `internal/` · a small package can keep its files at the root · `golang-standards/project-layout` and `pkg/` come from the community, not the Go team | [Organizing a Go module](https://go.dev/doc/modules/layout) |
+| Flutter / Dart | `lib/` (`lib/src/` for internals) · `test/` · `android/` · `ios/` ※ | [Dart package layout](https://dart.dev/tools/pub/package-layout) |
 | Rust | `src/main.rs` · `src/lib.rs` · `src/bin/` · `tests/` · `examples/` · `benches/` | [Cargo project layout](https://doc.rust-lang.org/cargo/guide/project-layout.html) |
 | PHP / Laravel | `app/` · `config/` · `database/` · `public/` · `resources/` · `routes/` · `storage/` · `tests/` | [Laravel 13.x structure](https://laravel.com/docs/13.x/structure) |
 
-## 5 · แหล่ง (เปิดอ่าน 2026-11-07)
+## 5 · Sources (opened 2026-11-07)
 
 [npm ci](https://docs.npmjs.com/cli/v10/commands/npm-ci) · [package.json engines](https://docs.npmjs.com/cli/v10/configuring-npm/package-json) · [pnpm install](https://pnpm.io/cli/install) · [nvm .nvmrc](https://github.com/nvm-sh/nvm/blob/master/README.md) · [Vite env and mode](https://vite.dev/guide/env-and-mode) · [Angular environments](https://angular.dev/tools/cli/environments) · [global.json](https://learn.microsoft.com/en-us/dotnet/core/tools/global-json) · [ASP.NET Core environments](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/environments) · [user-secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) · [dotnet publish](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-publish) · [Writing pyproject.toml](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/) · [uv project layout](https://docs.astral.sh/uv/concepts/projects/layout/) · [uv Python versions](https://docs.astral.sh/uv/concepts/python-versions/) · [Ruff configuration](https://docs.astral.sh/ruff/configuration/) · [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) · [Spring Boot profiles](https://docs.spring.io/spring-boot/reference/features/profiles.html) · [Spring Boot Maven run](https://docs.spring.io/spring-boot/maven-plugin/run.html) · [Go toolchains](https://go.dev/doc/toolchain) · [Flutter flavors](https://docs.flutter.dev/deployment/flavors) · [Flutter Android release](https://docs.flutter.dev/deployment/android) · [Cargo FAQ](https://doc.rust-lang.org/cargo/faq.html) · [rust-toolchain.toml](https://rust-lang.github.io/rustup/overrides.html) · [Composer basic usage](https://getcomposer.org/doc/01-basic-usage.md) · [Laravel configuration](https://laravel.com/docs/12.x/configuration)
 
-รุ่นของเครื่องมือเปลี่ยนเร็ว (Laravel 13.x ออกแล้ว ณ วันที่ตรวจ) · ก่อนใช้ตารางนี้กับโปรเจกต์จริง เปิดหน้าทางการของรุ่นที่ใช้
+Tool versions change fast (Laravel 13.x was already out on the date checked). Before using these tables on a real project, open the official page for the version in use.
 
 
 ## reference: readme-skeleton.md
@@ -1585,3 +1259,782 @@ The 5 main sources used to count the "Sources" column in item 1:
 Supporting sources: [GitHub community health files](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/creating-a-default-community-health-file) · [About code owners](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners) · [matklad: ARCHITECTURE.md](https://matklad.github.io/2021/02/06/ARCHITECTURE.md.html) · [arc42](https://arc42.org/overview) · [C4 model diagrams](https://c4model.com/diagrams) · [Diátaxis](https://diataxis.fr/) · [Twelve-Factor: Config](https://12factor.net/config) · [Build, release, run](https://12factor.net/build-release-run)
 
 The section order · the 15-line and 6-command ceilings · the configuration table · the troubleshooting and short-architecture sections are this skill's own judgment, not the sources' words.
+
+
+---
+
+# skill: docker-sandbox
+
+Use when a project needs a Docker sandbox for untrusted code
+
+# docker-sandbox: one lab per project
+
+> Our machine gives the orders; the lab is where the work happens.
+> Inside, you can install, delete, run servers, and build test databases freely, because when something breaks you wipe it and rebuild with one command.
+> Outside (the real machine · real systems · real accounts) cannot be touched, because there is no way in from the inside.
+
+Use together with [`superuser`](../superuser/SKILL.md). In a project that has `.sandbox/`, all install and run work happens in this lab.
+
+Do not use when: writing a Dockerfile or image for a real deploy → [`kubernetes-helm`](../kubernetes-helm/SKILL.md), because the lab is a temporary place to run work, not an image that goes to production.
+
+---
+
+## 1 · One project = one lab
+
+- **One lab per project**, named `sandbox-agent-<folder name>-<creation date>` (e.g. `sandbox-agent-sample-app-20260125`).
+  - The name is set once at the first `up` and stored in the file `.sandbox/.name-<folder name>`. Later commands read the name from this file, so the name does not change with the date.
+  - The prefix `sandbox-agent-` says an agent created this lab, not a person. The creation date is also kept in the label `sqt.created`.
+  - If the project needs a database, cache, or browser, add it as a service in the **same lab** (one stack). Do not create a separate lab.
+- **The base image is shared across the whole machine.** `sqt-sandbox-base:1` (Node · Python · Git · Playwright Chromium · Claude Code) is built once. Each project's image adds only a thin layer the project needs, so disk is not used twice.
+- **A stopped lab uses no CPU or memory**, only disk. Run `stop` when you finish a task, and `stop-all` when you finish for the day.
+- **Extra temporary labs** (`-Name <project>-a1`) are for trying several paths in parallel when they need truly separate machines. (For ordinary multi-path trials, use one git worktree per attempt following `parallel-split-and-merge`; it is faster.) `destroy` them as soon as you pick a path.
+- **Never put several projects in one lab**, because installed things collide, one project's breakage spreads to another, and you cannot wipe one project at a time.
+
+## 2 · Two modes: choose by the work
+
+| | **mount** (default) | **isolated** (`-Isolated`) |
+|---|---|---|
+| Project files | The real folder is attached at `/work`; edits show on the machine at once | A copy lives in a volume; the real folder is attached read-only at `/src` |
+| Who edits files | Claude Code on the machine edits files as usual (`sandbox.ps1 claude` does not work in this mode) | Claude Code **inside the lab** (`sandbox.ps1 claude`) |
+| Who runs commands | Sent into the lab with `sandbox.ps1 exec "..."` | Claude Code in the lab runs them itself, with no permission prompt |
+| How results come back | Already in the folder | `sandbox.ps1 sync` → a patch in `_to_delete\sandbox\`, then the person runs `git apply` |
+| Use when | Daily work while a person is watching | Overnight work · risky work · trying several paths that need separate machines (one lab per path) |
+
+You can add `-Locked` to either mode. It blocks outbound internet, leaving only the hosts in `allowlist.txt`. It suits work that runs code you do not yet trust.
+
+---
+
+## 3 · Set up the lab for a project (first time)
+
+1. Check that Docker Desktop is running: `docker version` must show both Client and Server. If it does not, tell the user to open Docker Desktop and stop only this task.
+2. Copy every file in this skill's `assets/` to `<project>/.sandbox/` (at the root). Then declare `.sandbox/` as a root exception in the README of the code folder, following `project-doc-set` item 1.
+3. Adjust the `Dockerfile` (the project layer).
+   - For .NET, set `INSTALL_DOTNET=1` and add an `apt-get install` for whatever the project needs.
+   - **Do not edit `base.Dockerfile`** unless necessary, because every project shares it.
+   - If you need a test database, add it as a new service in `compose.yaml` (do not open a port to the outside).
+4. Add `.sandbox/.mode-*` and `.sandbox/.name-*` to `.gitignore`.
+5. Start the lab with `.\.sandbox\sandbox.ps1 up` (or `up -Isolated` · `up -Browser`). The first project on a machine must build the base image first, which takes about 5–15 minutes. Later projects are much faster.
+6. **Prove it works:** `sandbox.ps1 exec "node -v && python3 --version && git status"`. If the project has a test command, run it once through `exec`. In `-Locked` mode you must see the line `check passed`.
+7. Record in the project's `docs/README.md`: the lab name (`sandbox-agent-<folder name>-<date>`) · mode · port · test command in the lab.
+
+**Tested for real** on Windows + Docker Desktop 4.46 (2026-10-05, project `sample-app`): the lab built · unit tests passed 15/15 · e2e on Chromium passed 14/14 in the lab.
+
+Bugs found during testing are already fixed in the script: PowerShell 5.1 with stderr · Playwright a different version from the base image · port collisions.
+
+If the script breaks on another machine, use the `bug-fix` playbook on the script itself.
+
+**Ports:** `up` finds a free port itself, starting at 3000, and says which port it got.
+- Inside the lab it sets the variables `APP_PORT` and `PORT` to that port, and `HOST=0.0.0.0`.
+- The app must listen on `HOST`, because if it listens only on `127.0.0.1` inside the lab, the machine cannot reach it.
+- On the machine side the port is still opened only on `127.0.0.1`, so you reach it from the machine at `http://127.0.0.1:<port>`.
+
+**A different Playwright version:** the base image has the latest Chromium. If the project pins another Playwright version, run `npx playwright install chromium` in the lab once after `npm ci` (no `--with-deps` needed, because the image already has them).
+
+---
+
+## 4 · Daily use
+
+| Need | Command (run at the project root on the machine) |
+|---|---|
+| Run a command in the lab (agents use this one) | `.\.sandbox\sandbox.ps1 exec "npm test"` |
+| Open a shell in the lab | `.\.sandbox\sandbox.ps1 shell` |
+| Let Claude Code work fully in the lab (**isolated only**) | `.\.sandbox\sandbox.ps1 claude` (log in once the first time; the volume keeps it · in mount mode the script refuses, because `/work` is the real folder) |
+| Bring work out of an isolated lab | `.\.sandbox\sandbox.ps1 sync`, then read the patch before `git apply` |
+| All labs on the machine | `.\.sandbox\sandbox.ps1 list` |
+| Wipe the lab clean and start over | `reset`, then `up` |
+| Stop every lab on the machine and free memory | `.\.sandbox\sandbox.ps1 stop-all` |
+| Several labs for one project | Put `-Name <project>-a1` on every command |
+
+**Agent rules when a project has `.sandbox/`**
+- Run install · build · test · dev server · migration and any script through `sandbox.ps1 exec`. Never run them on the machine.
+- The project's app-checking skill (`app-verifier-setup`) runs Playwright headless in the lab, then copies the images out with `docker compose cp` into `_to_delete/`.
+- If the lab is stopped, you may `up` it yourself (reversible). If the lab breaks beyond repair, you may `reset` it yourself, because what is in the lab is not the user's. **Exception:** an isolated lab that has not been `sync`ed must be synced first, then reset.
+
+---
+
+## 5 · Virtual browser for testing
+
+| Type | Use when | How |
+|---|---|---|
+| Headless in the lab (default) | Automated tests · verify skill · nobody needs to watch | Playwright Chromium already comes with the base image |
+| **Visible** (`up -Browser`) | You want to watch the agent click step by step · check the screen by eye · record images | A real browser in a separate container, watched live at `http://127.0.0.1:7900`. Playwright in the lab drives it through `SELENIUM_REMOTE_URL` automatically (Playwright calls this capability experimental) |
+| Let Claude Code in the lab control the browser itself | Exploring web pages that have no script yet | Install the Playwright MCP server in the lab (the project's `.mcp.json`) and run it headless |
+
+- The browser in the lab has no accounts, cookies, or user passwords. Log in only with the project's test accounts.
+- Copy images and videos from tests out to `_to_delete/` with `docker compose cp`.
+- Playwright MCP in the lab (examples from teaching work, not yet a standard): running as root needs `--no-sandbox` · the `--browser` value must match the `--help` of the installed version (`chromium` or `chrome`; if it does not match, it cannot find the browser) · screenshots with a relative file name land in the process's working directory, not `--output-dir`, so move them yourself · a click that times out with "not visible/stable" may be a background tab; see `e2e-testing-patterns`.
+- The user's own browser on the machine (the logged-in Chrome) is for real websites that need a real account, and follows that tool's rules. It is not a place to test.
+
+## 6 · CAPTCHA
+
+- **Our own system:** a CAPTCHA should not block testing from the start.
+  - Use the test site keys the provider publishes, which pass every time. reCAPTCHA · hCaptcha · Cloudflare Turnstile all have them; see the provider's documentation for the values.
+  - Or turn it off with a setting for the test environment only (`CAPTCHA_ENABLED=false`).
+  - **Test values must never reach the real system.** Add a startup check that production must not use a test key (`config-and-secrets`).
+- **Other people's websites:** the agent **does not solve a CAPTCHA and does not look for a way around it** (no solving services, no pretending to be a person). If you meet a CAPTCHA, stop that step, tell the user to do it themselves, and continue with the other parts. If you need data from that site often, look for an official API instead.
+- Reason: a CAPTCHA is the site owner saying "no bots." Getting around it breaks their terms and gets the IP or account banned.
+
+## 7 · What you may do freely in the lab
+
+Install programs (`sudo apt-get` · `npm -g` · `pip`) · delete files in the lab · run servers and test databases · download dependencies · commit in the copy in isolated mode · try destroying things and rebuild.
+
+These still stay under "รออนุมัติ" (awaiting approval) even inside the lab (prepare them, do not do them yourself), because the result leaves the lab:
+- Sending data, email, or messages, or calling an API that has a real effect on people or outside systems.
+- Using real accounts, real secrets, or the real database.
+- Pushing to a remote · deploying.
+- In mount mode: deleting or overwriting the user's files in `/work` that are not this round's work (it is the real folder).
+
+---
+
+## 8 · Never edit compose to include these
+
+| Never | Because |
+|---|---|
+| `privileged: true` · `pid: host` · `network_mode: host` | The lab could see and touch the real machine |
+| Mounting `/var/run/docker.sock` or `//./pipe/docker_engine` | Controlling Docker = controlling the machine |
+| Mounting the machine's home folder · `.ssh` · `.aws` · `.azure` · `.claude` · browser profiles · a whole drive | Secrets can leak the moment code in the lab reads them |
+| Opening a port like `"3000:3000"` (every network card) | People on the same network can reach it. Always use `127.0.0.1:` |
+| Putting real secrets in the `Dockerfile` or image | The secret stays in the image forever |
+| Removing or raising the limits `cpus` `mem_limit` `pids_limit` until the machine hangs | A lab stuck in a loop will eat the whole machine |
+| Mounting things from the machine as writable when the lab only needs to read (`ref/` · sample data · a shared SDK cache · the source folder of isolated mode) | Tricked code in the lab can write back to the machine. Add `:ro` to every mount that is not this round's work, and have the lab copy into its own space if it must edit (idea from anthropics/claude-code devcontainer and trailofbits/skills) |
+
+The Claude Code documentation warns that even in a container, running without permission prompts (`--dangerously-skip-permissions`) cannot stop project code that deliberately steals what is in the lab, including Claude Code's own token. Use it only with a repo you trust, and use `-Locked` when unsure.
+
+So `sandbox.ps1 claude` runs only in isolated mode. In mount mode the script refuses, because `/work` is the user's real folder (§7, last item).
+
+**Limits of `-Locked`:** DNS can go out only through the resolver the lab was given (Docker's), not any DNS server. But that resolver still forwards queries outward, so data can still be smuggled out through DNS (DNS tunnelling). For work where data must never leak, run with no network at all.
+
+---
+
+## 9 · Windows notes
+
+- Docker Desktop uses WSL 2. Files on drive `C:` that are mounted in are slower than files in a volume. If build or test is very slow, use `-Isolated` (verified: `npm ci` for just 2 packages took 52 seconds on a OneDrive folder).
+- **Projects in a OneDrive folder:** mount mode makes `node_modules` and build files sync to the cloud, so use `-Isolated` or move the project out of OneDrive.
+- If you cannot run `sandbox.ps1`, use `powershell -ExecutionPolicy Bypass -File .\.sandbox\sandbox.ps1 <command>`.
+- `-Locked` reads the host's IP once at startup. A service whose IP changes often may drop out; run `up -Locked` again.
+
+## Links to other skills
+
+- `parallel-attempts-pick-best`: normally competitors use one git worktree each. Use one isolated lab each (`-Name <project>-a1` …) only for work that needs truly separate machines.
+- [`app-verifier-setup`](../app-verifier-setup/SKILL.md): the verify skill's `start` script runs in the lab.
+- `config-and-secrets`: put test values in a `.env` that stays out of git, and do not bake them into the image.
+- The `superuser` playbook `housekeeping`: cleans up old labs and images.
+
+
+---
+
+# skill: project-doc-set
+
+Use when choosing a project doc set or open-items Excel
+
+# Project doc set
+
+> **One rule:** every doc must answer **who reads it** and **what they decide after reading**.
+> If it cannot answer, do not write it.
+
+---
+
+## When to use this skill
+
+Use it when: opening a new project and deciding which docs it needs · docs are scattered and nobody knows which is the real one · a client asks what will be delivered · about to write a doc but unsure what must come first.
+
+## When **not** to use it
+
+| Situation | Use instead |
+|---|---|
+| Folder layout of the **code** (including the `docs/` inside code in type A) · README · CHANGELOG · linter | `project-bootstrap` |
+| Naming **files** and version numbers of docs | `document-naming` |
+| Actually writing one doc | The skill for that doc (table in section 4) |
+| Making document pages look good | `branded-document-design` |
+
+---
+
+## 1 · Docs inside or outside the repo
+
+**Decide this first** (moving later means fixing links across the whole project). **The default is type B**, even when the docs are pure markdown. The code lives in `<project-name>/` (lowercase, joined with `-`). Use type A only when the user asks.
+
+- **Type B** (docs outside the repo): use it for every set size (S · M · L). `.docx` / `.xlsx` / mockups / PNGs that the client must see stay out of pull requests. The root layout is below (this section owns the root layout).
+- **Type A** (docs inside the repo): only when the user asks and the docs are pure markdown. Docs and code change in the same pull request. The root looks like type B but has no root `docs/`. The `docs/` folder sits inside the code folder, and its inner layout belongs to `project-bootstrap` section 1.
+- A type A project that grows deliverable docs moves to type B **as a whole set in one go**. A doc that lives in 2 places means 2 versions.
+
+### Type B layout
+
+```
+<project-name>/
+├─ ref/                 things received — TOR · meeting notes · screenshots of the old system · client files  **read-only, never edit**
+├─ docs/                every doc we write — delivered .docx and technical .md live together
+│  ├─ figures/          exported figures — .png only        [exists when delivered docs have figures]
+│  │  └─ src/           source files of the figures (.html · .mmd · .drawio)
+│  ├─ decisions/        ADR-NNNN-<slug>.md, one decision per file  [optional]
+│  ├─ runbook-<topic>.md  guide for when the system has problems, one topic per file  [optional]
+│  └─ research/         research on a reference app (`reference-app-research`) [optional]
+├─ mockup/              .html that opens and really clicks
+├─ qa/                  test cases · test results · bugs/ bug reports
+├─ assets/              logos · icons in all sizes · favicon · wordmark (.svg source + exports)
+├─ _to_delete/          every kind of temporary item
+├─ .claude/            project skills (such as verify) — must sit where Claude Code is opened
+│  └─ superuser/        SuperUser working files — CONTEXT.md · HISTORY.md · IMPROVEMENTS.md · log/ · inbox/ · learn/
+└─ <project-name>/      code repo, project name lowercase joined with `-` — inner layout belongs to `project-bootstrap`
+```
+
+**SuperUser files** (`.claude/superuser/` · `docs/BRIEF.md` · `AGENTS.md`/`GEMINI.md`): the single source is [`superuser/references/team-files.md`](../superuser/references/team-files.md).
+
+**ADRs and runbooks live in the root `docs/`, not in `<project-name>/docs/`.** Type A moves the whole `docs/` into the code folder, with the same inner layout. Paths: `docs/decisions/ADR-NNNN-<slug>.md` · `docs/runbook-<topic>.md`. This section is the only place that defines this.
+
+**Root exceptions:** `.sandbox/` may sit at the root when you use `docker-sandbox` · `AGENTS.md` / `GEMINI.md` under the conditions above. Declare every exception in the README of the code folder.
+
+**Create folders when real content exists, not in advance:** `ref/` when you get files from the client or the old system (never mix them into `docs/`) · `docs/figures/` when a delivered doc has a self-drawn figure (otherwise the figure is stuck inside the `.docx` and cannot be edited) · `docs/decisions/` when a decision needs explaining later · `docs/research/` when the user wants an app like an existing one · `qa/` when test cases exist (test cases always live here; `docs/test-plan.md` holds only the plan) · `assets/` when there is a logo or icon.
+
+**Ecosystem project** (2 or more sub-projects, each with its own doc set): the folder is always named `ecosystem/` (never `projects/` `modules/` `apps/`). `ecosystem/<code>-<SUB>/` holds `docs/` `mockup/` `qa/` and its own repo. Docs that cover all sub-projects live in one place, the root `docs/`. Full layout and rules: [`references/ecosystem.md`](references/ecosystem.md).
+
+
+**Folder rules (both types):**
+
+- **`.docx` and `.md` may share one `docs/`.** No need for separate folders, because the extension already says who reads it.
+- **Never lose the source files of figures.** If a figure must change next year and only the PNG is left, the whole figure must be redrawn.
+- **Every button in a mockup must really click**, because a fake button makes the review wrong.
+- **`.docx` / `.xlsx` live only in `docs/` and `qa/`.** Do not scatter them to the project root.
+- **Temporary items go to `_to_delete/`** (`temp-file-discipline`).
+- **`docs/README.md` is the index.** It says what to read first and who owns what (template in `project-bootstrap` → `assets/starter-files.md`).
+
+---
+
+## 2 · Choose the doc set by project size
+
+Size is measured by **duration × number of people who must agree**, not by lines of code.
+
+**S** ≤ 2 weeks · one team · nobody outside the team signs — **M** 1–3 months · internal client · delivered in rounds — **L** > 3 months · external client signs off · contractual obligations
+
+### 2.1 · Deliverable docs: people read and sign them
+
+| Doc | Format | Readers | S | M | L |
+|---|---|---|:-:|:-:|:-:|
+| Project Plan | `.docx` | client · team | ○ | ● | ● |
+| SRS | `.docx` | dev · client | ○ | ● | ● |
+| Architecture | `.docx` | dev · ops | ○ | ● | ● |
+| Test Plan | `.docx` | QA · client | ○ | ● | ● |
+| User guide (`MAN`) | `.docx` → `.pdf` | end users | ○ | ● | ● |
+| FSD | `.docx` | dev · QA | ○ | ○ | ● |
+| BRD | `.docx` | business side | ○ | ○ | ● |
+| Document Checklist | `.docx` | everyone | ○ | ○ | ● |
+| Test Cases | `.xlsx` | QA | ○ | ○ | ● |
+
+● required · ○ not needed unless there is a specific reason
+**Set S has none of these docs.** That is correct.
+
+---
+
+### 2.2 · Technical docs: the team and agents use them while building
+
+All markdown. They **depend on what the project contains**, not on project size. Full table (file · question answered): [`references/technical-docs.md`](references/technical-docs.md).
+
+- **Always:** `<project-name>/README.md` · `docs/BUILD-PLAN.md`
+- **Conditional:** USER-STORIES and `docs/sprints/sprint-NN.md` (work runs in sprints) · AGENT-LOOP (an agent writes code in rounds) · API-SPEC (an API that others call) · DATA-DICTIONARY (a database exists) · EVALUATION-POLICY and PROMPT-LIBRARY (LLM used) · `docs/decisions/ADR-NNNN-<slug>.md` (decisions that will be questioned again) · `docs/runbook-<topic>.md` (system in real use and someone on call)
+- People forget the 4 docs about LLM · API · database most often, and then must ask the agent every round which prompt is the real one.
+
+---
+
+## 3 · Writing order
+
+**Delivery track.** Never skip a step that belongs to the set for that size. Skip steps that are not in the set, such as BRD · FSD in set M.
+
+```
+Project Plan ─► BRD ─► SRS ─┬─► mockup
+                            └─► Architecture ─► FSD
+                                                 │
+              User Guide ◄─ Test Cases ◄─ Test Plan
+```
+
+**The next doc may build on the DRAFT of the previous one.** Put `(รอยืนยัน)` (awaiting confirmation) on every unconfirmed item in both docs. Never set the next doc to APPROVED before the previous one, because if the upstream doc changes, the whole chain must be redone.
+The one exception: **the mockup may run in parallel with the SRS**, because screenshots help the SRS get confirmed faster.
+
+### 3.1 · Open-items register: when the user asks "what is still stuck", answer with an Excel file, not chat text
+
+Labels such as `(รอยืนยัน)` · `(รอวัดใน Phase 0)` (awaiting measurement in Phase 0) and question tables are spread over every doc, so the decision maker sees no overall picture. Merge them into one file with the script. Do not read them all by hand:
+
+```
+python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE>    # test the script: --self-test
+```
+
+- It reads every `.docx` in `docs/`: question tables · tables of undecided assumptions · sign-off tables still "waiting" · labels in the body. It skips revision history, table of contents, label-explanation lines and `(รอบหลัง)` (later round).
+- The **สรุป** (summary) sheet counts by document × type with formulas. The **รายการค้าง** (open items) sheet has the heading in the doc · who answers · decide by · value used for now · cross-references · and "สถานะ" (status) and "คำตอบ" (answer) columns for people to fill in.
+- Types (ประเภทที่ต้องเลือก), shown in Thai in the sheet: **เจ้าของตัดสิน** (owner decides: a web search cannot close it) · **ทีมตัดสิน** (team decides: BA · SA) · **กฎหมาย** (legal) · **วัดจริง** (needs a real-world number: none is published) · **ลงนาม** (sign-off). A question that cites an owner question in another doc also counts as "เจ้าของตัดสิน".
+- **Before sending, read the list by eye.** The script matches wording. A row that was already answered but does not use the words "ตอบแล้ว · ปิดแล้ว · ตัดสินแล้ว" (answered · closed · decided) still gets through. In one sample set (6 docs) it found 75 items, and about 3 rows were like this.
+- When the user fills in answers: write the answer into the source doc, remove the label, record it in the revision history, then rerun the script. This file is a work list, not a source. Do not edit answers in this file in place of the doc.
+
+**Technical track.** Write when you reach the point of need. No need to wait for anyone: README · BUILD-PLAN before the first line of code · DATA-DICTIONARY when designing the first table · API-SPEC at the first endpoint · PROMPT-LIBRARY at the first prompt really used · ADR at decision time (not in the final wrap-up, because the real reasons are gone by then) · Runbook before going live. Full table in [`references/technical-docs.md`](references/technical-docs.md).
+
+---
+
+## 4 · Who writes which doc, with which skill
+
+Full table (agent · skill for each of 16 doc types): [`references/technical-docs.md`](references/technical-docs.md). Main ones: SRS → `srs-writing` · FSD → `fsd-writing` · ADR → `adr-writer` · Test → `test-case-template` · mockup → `web-app-design` + `ui-craft` · README → `project-bootstrap`
+
+---
+
+## 5 · Figures in docs: choose correctly from the start
+
+- Figures in every kind of project doc (BRD · SRS · FSD · ADR · ER · flowcharts) · slides · print work → `diagram-figures` (one house style). Keep them in `docs/figures/` with sources in `src/`. **Default Mermaid is banned from project docs.**
+- Quick figures in a README · PR · code notes → Mermaid (`software-diagrams`) embedded in `.md` (colours are random and meaningless, Thai overflows the boxes, and shrunk to A4 it is unreadable).
+
+**Every figure header needs all 6 items:** project logo · title · 1-line subtitle · figure number · version and date · owner (details in `diagram-figures` section 3).
+Architecture figures get copied into emails and slides and then live on for a year. **Nobody dares to edit a figure with no date.**
+
+---
+
+## 6 · Colour theme of the doc set
+
+Declare it once per project, at the top of every doc's source file:
+
+```markdown
+<!-- doc-theme: accent=#2A78D6 -->
+```
+
+(The example uses the house colour `#2A78D6`. Replace it with the project's main colour.)
+
+`branded-document-design` · `presentation-design` · `diagram-figures`
+read this value instead of picking colours themselves, so docs, slides and every figure form one set.
+
+**Colour comes from the work, not from taste.** If there is a brand colour, use it. If not, use the house colour of `branded-document-design`, write `(รอยืนยัน)`, and carry on without stopping to ask.
+Exceptions that do not follow the theme: service provider logo colours · grey structural lines · green = pass / red = fail
+
+---
+
+## 7 · Checklist before delivering the doc set
+
+- [ ] In every `.docx`, open the Navigation Pane and **see all headings** (use real Heading styles, not bold text)
+- [ ] Every doc has a revision history page · version number · date · author
+- [ ] Every figure has a figure number and is cited in the body at least once
+- [ ] The source file of every figure is in `docs/figures/src/` (if this folder exists)
+- [ ] Technical docs that meet the conditions in section 2.2 are all present. For example, if there is an API there must be an API-SPEC, and if an LLM is used there must be a PROMPT-LIBRARY
+- [ ] Every abbreviation is spelled out at first appearance
+- [ ] File names follow `document-naming`: no `final2`, no `ล่าสุด` ("latest")
+- [ ] Docs in the set cite each other's versions consistently
+- [ ] Run `scripts/open_items.py`, and the open-items register has no row with status "เปิด" (open), or the client knows about every row still open
+- [ ] Tell the user what is left in `_to_delete/` (do not delete it yourself; delete only when the user says so)
+
+---
+
+## 8 · Anti-patterns
+
+Wrong: `.docx` with no Heading style · keeping only the PNG and not the source · `.docx` and mockups inside the code repo (at this point move to type B) · a doc in 2 places (= 2 versions) · FSD before the SRS is confirmed · using an LLM with no PROMPT-LIBRARY · sub-projects named `projects/` `modules/` `apps/` · empty folders created in advance · one doc that answers every question
+
+---
+
+## 9 · Abbreviations
+
+ADR Architecture Decision Record · BRD Business Requirements Document · FSD Functional Specification Document · QA Quality Assurance · SRS Software Requirements Specification · TOC Table of Contents
+
+---
+
+## 10 · Links to other skills
+
+Besides the "not for" table above: drawing figures → `diagram-figures` (project docs) · `software-diagrams` (README · PR) · temporary items → `temp-file-discipline` · doc status in `docs/BUILD-PLAN.md` → `status-report` · checklist for the printed version → `assets/doc-set-checklist.md`
+
+**Read more when needed:** [`references/writer-templates.md`](references/writer-templates.md): `technical-writer` doc templates (tutorial · API reference · release notes · for README see `project-bootstrap`)
+
+**When the guide must go on the web, be searchable and have many versions:** [`references/docs-site.md`](references/docs-site.md): choosing MkDocs Material · Docusaurus · Starlight · VitePress · Thai search test results · hosting · Thai fonts
+
+
+## reference: docs-site.md
+
+# Docs site
+
+Pick a docs-site generator when a manual or developer documentation must go on the web, be searchable, and have several versions · use with `SKILL.md` item 1 (where the documents live) and the templates in [`writer-templates.md`](writer-templates.md).
+Facts checked 2026-10-23 from official docs · npm · PyPI · GitHub and real tests (section "Sources").
+Abbreviations: Application Programming Interface (API) · Software Development Kit (SDK) · Architecture Decision Record (ADR) · SIL Open Font License (OFL) · Software as a Service (SaaS) · user interface (UI)
+
+## 1 · Is a docs site needed
+
+| Situation | Use |
+|---|---|
+| People outside the team read often (public API · SDK · a manual updated every release) · search needed · several versions at once | a docs site (this file) |
+| The team reads it themselves | `README.md` + `docs/*.md` on GitHub is enough |
+| The customer signs for acceptance | `.docx` per `SKILL.md` item 2.1 · a docs site does not replace the handover document |
+
+## 2 · Comparing the 4 generators
+
+| | MkDocs Material | Docusaurus | Starlight | VitePress |
+|---|---|---|---|---|
+| Requires | Python | Node · React | Node · Astro | Node · Vue |
+| Latest version | 9.7.7 | 3.10.2 | 0.42.6 (not yet 1.0) | 1.6.4 · 2.0 is still alpha |
+| Built-in search | yes · lunr.js + lunr-languages (can set `lang: th`) | no · the official one is Algolia DocSearch · local search uses a community plugin | yes · Pagefind is on by default, no setup | yes · MiniSearch (`provider: 'local'`) or Algolia |
+| Versioning | via `mike`, an external tool | built in, `docusaurus docs:version` | community plugin `starlight-versions` | none · issue #109 is still open |
+| Multiple languages (i18n) | the UI can be translated (`th` exists) · a multilingual site = one project per language + a language switcher | built in | built in · a Thai UI is included | built in |
+| licence | MIT | MIT | MIT | MIT |
+
+MkDocs Material: the maintainers announced they will maintain only critical fixes until 5 May 2027 and told users to move to Zensical (version 0.0.71 · status Alpha · MIT) · a new project that must live for years should record this in an ADR.
+Quick pick: Python team → MkDocs Material (plan a move) · need built-in versioning → Docusaurus · want a light site with little setup → Starlight · Vue team → VitePress
+
+## 3 · Thai search, tested for real
+
+Thai has no spaces between words, so a search engine that splits words on spaces cannot find a word in the middle of a sentence · tested 2026-10-23 with 2 Thai pages, searching 9 words: ภาษี · กำกับ · สต็อก · สินค้า · ร้านค้า · ภาษีมูลค่าเพิ่ม · อิเล็กทรอนิกส์ · ตัดสต็อก · ทะเบียน
+
+| Search engine (version tested) | Used in | What the docs say about Thai | Found |
+|---|---|---|---|
+| Pagefind 1.5.2 (builds an index, searches in the browser) | Starlight | has `th` · no stemming · the word-segmentation section mentions only Chinese, Japanese, Korean | 6/9 · missed กำกับ · ทะเบียน · ภาษีมูลค่าเพิ่ม |
+| lunr 2.3.9 + lunr-languages 1.23.0 `th` (word splitting with wordcut · tested in Node, not in the theme) | MkDocs Material · plugin `@easyops-cn/docusaurus-search-local` (accepts every lunr-languages language) | Material accepts `lang: th` | 6/9 · missed ร้านค้า · ตัดสต็อก · ภาษีมูลค่าเพิ่ม |
+| MiniSearch 7.2.0 defaults (prefix + fuzzy as in VitePress) | VitePress | VitePress segments with `Intl.Segmenter` only for Chinese and Japanese | 0/9 |
+| MiniSearch + a `tokenize` that uses `Intl.Segmenter('th', { granularity: 'word' })` | VitePress (`options.miniSearch.options.tokenize`) | `tokenize` can be set by yourself | 9/9 (tested in Node 22 · not yet tested in a whole VitePress site) |
+| Algolia DocSearch | Docusaurus · Starlight · VitePress | Algolia's language table: Thai segmentation "Not supported" | not tested |
+
+- Results depend on the project's vocabulary → before delivery, search 20 real terms and record the results in the docs site's README.
+- DocSearch is free only for technical documentation and technical blogs that are public. The site must be live and have no non-technical content.
+
+## 4 · Hosting
+
+| | GitHub Pages | Cloudflare |
+|---|---|---|
+| Price | free · a free account needs a public repo | Pages has a free plan · Workers static assets: static file requests are free and unlimited |
+| Limits | site ≤ 1 GB · bandwidth 100 GB/month (soft) · build 10 times/hour (soft · builds through GitHub Actions do not count) · a deploy over 10 minutes fails | Pages free plan: 500 builds/month · 1 build at a time · max 20 minutes · 20,000 files · each file ≤ 25 MiB |
+| Conditions | must not be used as free hosting for an online business or SaaS · the site is public even if the repo is private | the Pages page tells new projects to start on Workers |
+
+A document that outsiders must not see does not go on a public site. Keep it as `docs/*.md` in the repo (how each host restricts readers has not been checked).
+
+## 5 · Thai fonts
+
+- Use the same fonts as the app: `Inter` + `Noto Sans Thai` (`web-app-design` → `references/tokens.md`) · other Google Fonts choices that have Thai letters and are OFL: Sarabun · IBM Plex Sans Thai · Anuphan
+- Load through the Google Fonts CSS2 API with `display=swap` · the API splits out the `/* thai */` block with `unicode-range: U+0E01-0E5B …` by itself, so the browser loads only the parts the page uses (seen in the CSS the API returned 2026-10-23)
+- Thai line-height is the English value plus 0.1 (`ui-craft` item 2)
+- Set the font in the slot the theme exposes · the setting names and CSS variables of each theme have not been checked
+
+## 6 · Content lives in the repo beside the code
+
+- The docs site source lives in the code folder `<project-name>/docs/` with the generator's config file (layout A of `project-bootstrap` item 1) · code and manual change in the same pull request
+- Type B projects: the handover `.docx` · ADR · runbook · BUILD-PLAN stay in `docs/` at the root · the docs site takes only what outsiders read (manual · tutorial · API reference · release notes) · the same content must never live in 2 places
+- Build in Continuous Integration (CI) on every pull request and deploy on merge (`cicd-and-release`)
+- An exception to the root is declared in the code folder's README (`SKILL.md` item 1)
+
+## Sources
+
+| Topic | URL or evidence (2026-10-23) |
+|---|---|
+| MkDocs Material | https://squidfunk.github.io/mkdocs-material/ (status · Zensical) · .../plugins/search/ · .../setup/changing-the-language/ · .../setup/setting-up-versioning/ |
+| Docusaurus | https://docusaurus.io/docs/search · https://docusaurus.io/docs/versioning · https://docusaurus.io/docs/i18n/introduction |
+| Starlight | https://starlight.astro.build/guides/site-search/ · .../guides/i18n/ · .../resources/plugins/ |
+| VitePress | https://vitepress.dev/reference/default-theme-search · https://vitepress.dev/guide/i18n · https://github.com/vuejs/vitepress/issues/109 |
+| Pagefind | https://pagefind.app/docs/multilingual/ |
+| lunr-languages | https://github.com/MihaiValentin/lunr-languages (file `lunr.th.js` uses wordcut) |
+| MiniSearch | https://lucaong.github.io/minisearch/types/MiniSearch.Options.html |
+| Algolia | https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/ · https://docsearch.algolia.com/docs/who-can-apply/ |
+| Docusaurus local-search plugin | https://github.com/easyops-cn/docusaurus-search-local |
+| Versions and licence | registry.npmjs.org · pypi.org · api.github.com (Zensical: GitHub = MIT · PyPI = Alpha) |
+| GitHub Pages | https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits · .../creating-a-github-pages-site |
+| Cloudflare | https://developers.cloudflare.com/pages/platform/limits/ · https://developers.cloudflare.com/pages/ · https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/ |
+| Google Fonts | https://developers.google.com/fonts/docs/css2 · `METADATA.pb` in https://github.com/google/fonts · real CSS from fonts.googleapis.com |
+| Thai search test | Pagefind via `npx pagefind@1.5.2` + a browser · lunr and MiniSearch via Node 22 · 2 test pages, the 9 search words in item 3 |
+
+
+## reference: ecosystem.md
+
+# Ecosystem project: 1 system split into several sub-projects
+
+Read this when a project has 2 or more sub-projects and each one has its own doc set. The short rule is in `SKILL.md` section 1.
+
+Use it when the project is a product suite with 2 or more sub-projects, and each has its own doc set (SRS · mockup · architecture). Example: Quanton, split into CONNECT · LAB · INTEL · DESK.
+**The folder must always be named `ecosystem/`.** Never use `projects/`, `modules/` or `apps/`. When someone opens the folder, they must see at once that everything inside is a piece of one system.
+
+```
+<project-name>/
+├─ docs/                ecosystem-level docs — README (index) · BUILD-PLAN · project-plan · BRD · figures/
+├─ ecosystem/
+│  └─ <code>-<SUB>/     1 folder per sub-project, e.g. QTN-CONNECT
+│     ├─ docs/          srs.md · architecture.md · decisions/ · figures/ · fsd-*.md · test-plan.md
+│     ├─ mockup/
+│     ├─ qa/
+│     └─ <sub-name>/    code repo of this sub-project (lowercase, joined with `-`)
+├─ ref/ · assets/ · _to_delete/ · .claude/   shared by the whole ecosystem (same rules as type B)
+```
+
+- Docs that cover every sub-project (BRD · project plan · BUILD-PLAN) live in one place, the root `docs/`. Never copy them into each sub-project.
+- Create a sub-project folder when you start writing that sub-project's docs. Do not create folders in advance.
+- Sub-project folder name = project code + sub-project name in capitals (`QTN-CONNECT`). Use the same code the docs cite.
+- If a project already uses `projects/`, rename it to `ecosystem/` and fix the paths in every doc and script in the same pass.
+- A project with a single product does not need `ecosystem/`. Use type B as usual.
+
+
+## reference: technical-docs.md
+
+# Technical docs: table, writing order and who writes what
+
+Read this when choosing the technical doc set or about to write one of them. The summary is in `SKILL.md` sections 2.2–4.
+
+## Technical docs (section 2.2)
+
+This group is **all markdown** and **does not depend on project size**. It depends on what the project contains.
+
+| Doc | File | Answers the question | Needed when |
+|---|---|---|---|
+| README | `<project-name>/README.md` | How to install and run | **Always** |
+| BUILD-PLAN | `docs/BUILD-PLAN.md` | What to build first and next · where we are now | **Always** |
+| USER-STORIES | `docs/USER-STORIES.md` | What to build for whom · which story is ready for a sprint · what the AC (acceptance criteria) are | Work runs in sprints or there is a backlog (`user-story-writer`) |
+| Sprint plan | `docs/sprints/sprint-NN.md` | Which stories this sprint takes · what the goal is · what the risks are | Work runs in sprints (`/sprint-plan`). One file per sprint; never overwrite old ones |
+| AGENT-LOOP | `docs/AGENT-LOOP.md` | How the agent works in a cycle · what the stop condition is | An agent writes code in rounds (`spec-to-code-loop`) |
+| API-SPEC | `docs/API-SPEC.md` | What each endpoint accepts, returns and how it fails | There is an API that others call (`api-conventions`) |
+| DATA-DICTIONARY | `docs/DATA-DICTIONARY.md` | What a field means · what values it can take | There is a database or data schema (`database-design`) |
+| EVALUATION-POLICY | `docs/EVALUATION-POLICY.md` | What measures whether the output is good enough · what the pass threshold is | Output comes from a model or LLM that is not always right |
+| PROMPT-LIBRARY | `docs/PROMPT-LIBRARY.md` | Which prompt is the real one · which version · what changed | An LLM sits on the system's main path |
+| ADR | `docs/decisions/ADR-*.md` | Why we chose this way and not the other | A decision will be questioned again (`adr-writer`) |
+| Runbook | `docs/runbook-<topic>.md`, one topic per file | What to do when the system goes down at 2 a.m. | A system is really running and someone is on call |
+
+> **The 4 conditional docs (LLM · API · database) are the ones people forget most often.**
+> The team then ends up asking the agent every round "which prompt is the real one" or "what does this field mean".
+
+## Technical track: when to write (section 3)
+
+| Write when | Doc |
+|---|---|
+| Before the first line of code | README · BUILD-PLAN |
+| Before letting an agent work in rounds | AGENT-LOOP |
+| When designing the first table | DATA-DICTIONARY |
+| When designing the first endpoint | API-SPEC |
+| When writing the first prompt that will really be used | PROMPT-LIBRARY · EVALUATION-POLICY |
+| When deciding something that will be questioned again | ADR |
+| Before going live | Runbook |
+
+> **Write the ADR and DATA-DICTIONARY at decision time, not in the project wrap-up.**
+> You can write them afterwards, but the real reasons are gone by then.
+
+## Who writes which doc, with which skill (section 4)
+
+| Doc | agent | skill used |
+|---|---|---|
+| README · CHANGELOG | `technical-writer` | `project-bootstrap` |
+| Project Plan | `project-manager` | `branded-document-design` |
+| BRD · user story | `business-analyst` | `user-story-writer` |
+| SRS | `system-analyst` | `srs-writing` |
+| FSD | `system-analyst` | `fsd-writing` |
+| Architecture | `solution-architect` | `architecture-patterns` · `diagram-figures` |
+| ADR | `solution-architect` | `adr-writer` |
+| Test Plan · Test Cases | `qa-tester` | `test-case-template` |
+| mockups | `ux-designer` | `web-app-design` · `ui-craft` |
+| User guide (`MAN`) | `technical-writer` | `polished-document-style` |
+| Runbook | `devops-engineer` | `incident-runbook-template` |
+| BUILD-PLAN | `project-manager` | `simplicity-first` |
+| AGENT-LOOP | `developer` | `spec-to-code-loop` |
+| API-SPEC | `system-analyst` | `api-conventions` |
+| DATA-DICTIONARY | `system-analyst` | `database-design` |
+| PROMPT-LIBRARY · EVALUATION-POLICY | `developer` | none (pairs with skill `llm-engineering`) |
+
+
+## reference: writer-templates.md
+
+# technical-writer templates — README · tutorial · API reference · release notes
+
+**Contents:** README · Tutorial Template · API Reference Template · Release Notes Template
+
+Open when you actually have to write this kind of document · put `(รอยืนยัน)` (to be confirmed) on any part you do not know.
+
+## Standard Outputs
+
+### README
+
+There is no README template here — use the single template of `project-bootstrap` (`SKILL.md` item 2 and `assets/starter-files.md`). The 15-section skeleton (9 always present · 6 present when the project has that thing) is in `references/readme-skeleton.md` · commands per language are in `references/readme-by-stack.md`.
+
+### Tutorial Template
+
+````markdown
+# Tutorial: Build Your First X in 10 Minutes
+
+> **What you'll learn:** by the end, you'll have built Y and understand Z.
+
+## What You'll Need
+
+- Node.js 22+ (Node 18 หมดอายุ 30 เม.ย. 2568, Node 20 หมด 30 เม.ย. 2569 — endoflife.date ตรวจ 22 ต.ค. 2569)
+- A free account at example.com
+- 10 minutes
+
+## Step 1: Set Up
+
+Run:
+```bash
+npx create-thing my-project
+cd my-project
+```
+
+> **What just happened?** Brief explanation.
+
+You should see:
+```
+✓ Project created
+```
+
+## Step 2: Configure
+
+...
+
+## Step 3: Run It
+
+...
+
+## Congratulations!
+
+You've built X. Try these next:
+
+- [Add feature A](#how-to-add-a) (how-to)
+- [Understand B](#concept-b) (explanation)
+- [Full API](#reference) (reference)
+````
+
+### API Reference Template (per endpoint)
+
+````markdown
+## POST `/api/v1/resource`
+
+Create a new resource.
+
+### Authentication
+
+Required. Bearer token in `Authorization` header.
+
+### Request
+
+```http
+POST /api/v1/resource HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <token>
+
+{
+  "name": "string (required)",
+  "tags": ["string (optional)"]
+}
+```
+
+### Parameters
+
+| Field | Type | Required | Description |
+|-------|------|:--------:|-------------|
+| `name` | string | ✓ | Display name, 1-100 chars |
+| `tags` | string[] | ✗ | Up to 10 tags |
+
+### Response: 201 Created
+
+```json
+{
+  "id": "res_abc123",
+  "name": "...",
+  "created_at": "2025-01-15T10:30:00Z"
+}
+```
+
+### Errors
+
+| Code | When |
+|:----:|------|
+| 400 | Validation failed (see body) |
+| 401 | Missing/invalid token |
+| 429 | Rate limit (60 req/min) |
+
+### Code Examples
+
+```typescript
+const res = await fetch('/api/v1/resource', {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ name: 'My Resource' })
+});
+```
+````
+
+### Release Notes Template
+
+> Breaking Changes must always come before the other sections (right after Highlights) — the full release notes rules are in the skill `release-notes`.
+
+````markdown
+# Release v2.1.0 — YYYY-MM-DD
+
+## Highlights
+
+> The TL;DR for busy readers.
+
+- **New:** X feature — try it: `command`
+- **Improved:** Y is faster — <measured number only, e.g. p95 login 1.2 s → 0.7 s; drop the number if not measured>
+- **Fixed:** Z bug affecting users on platform A
+
+## Breaking Changes
+
+### `api.oldMethod()` removed
+
+**Before:**
+```typescript
+api.oldMethod(arg)
+```
+
+**After:**
+```typescript
+api.newMethod({ arg })
+```
+
+[Migration guide](#)
+
+## New Features
+
+### Feature Name
+
+Description with user-facing benefit.
+
+```bash
+# Example usage
+command --new-flag
+```
+
+[Read the docs](#)
+
+## Improvements
+
+- Faster initial load time
+- Better error messages for X
+
+## Bug Fixes
+
+- Fix issue where ... ([#1234](#))
+- Resolve crash when ... ([#5678](#))
+
+## Contributors
+
+Thanks to: @alice, @bob, @charlie
+````
+
+### Release Notes Template (Thai)
+
+> Same structure as the English version · wording at news register (`human-writing` `references/thai-grammar.md` section 4): no first person · each line has subject + verb + object · numbers must be measured, and if there are none, leave them out · right/wrong examples are in the skill `release-notes` item 4.
+
+````markdown
+# เวอร์ชัน 2.1.0 — YYYY-MM-DD
+
+## สรุป
+
+- **ใหม่:** ส่งออกรายงานเป็น CSV ได้แล้ว — เมนู รายงาน → ส่งออก
+- **เร็วขึ้น:** ส่งออกรายงาน 1,000 แถวใช้เวลา 3 วินาที จาก 12 วินาที
+- **แก้แล้ว:** ลบสินค้าชิ้นสุดท้ายในตะกร้าแล้วแอปไม่ปิดตัวเองอีก
+
+## สิ่งที่ต้องแก้ก่อนอัปเดต
+
+### `api.oldMethod()` ถูกถอดออก
+
+**เดิม:** `api.oldMethod(arg)` · **ใหม่:** `api.newMethod({ arg })` · [วิธีย้าย](#)
+
+## ฟีเจอร์ใหม่
+
+### ชื่อฟีเจอร์
+
+ผู้ใช้ทำอะไรได้ 1 ประโยค แล้วตามด้วยตัวอย่างคำสั่งหรือภาพหน้าจอ
+
+## ปรับปรุง
+
+- หน้าแรกโหลดเสร็จใน 1.2 วินาที จาก 2.8 วินาที
+- ข้อความแจ้งเตือนตอนอัปโหลดไฟล์ผิดชนิด บอกชนิดที่รับได้แล้ว
+
+## แก้บั๊ก
+
+- ยอดรวมในใบเสนอราคาไม่เพี้ยนเมื่อมีส่วนลดเป็นเปอร์เซ็นต์ ([#1234](#))
+
+## ผู้ร่วมพัฒนา
+
+ขอบคุณ @alice @bob @charlie
+
+เวอร์ชัน 2.1.0 · ออก YYYY-MM-DD
+````

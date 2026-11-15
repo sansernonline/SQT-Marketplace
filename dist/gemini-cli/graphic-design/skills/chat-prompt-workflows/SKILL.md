@@ -3,112 +3,112 @@ name: chat-prompt-workflows
 description: Use for a multi-step prompt to paste into a chat app
 ---
 
-# chat-prompt-workflows — prompt หลายขั้นแบบ Loop · Graph · Dynamic ที่คัดลอกไปวางในแชตได้ทันที
+# chat-prompt-workflows — multi-step Loop · Graph · Dynamic prompts the user can copy straight into a chat
 
-อยู่ใน plugin `superuser` · ถ้อยคำเขียนตาม `human-writing` · แม่แบบอยู่ใน [`templates/loop.md`](templates/loop.md) · [`templates/graph.md`](templates/graph.md) · [`templates/dynamic.md`](templates/dynamic.md) · ผู้ใช้ไม่ต้องเขียนโค้ด แค่กรอกช่อง `{{...}}` แล้ววาง
+Part of the `superuser` plugin. Follow `human-writing` for wording. Templates are in [`templates/loop.md`](templates/loop.md) · [`templates/graph.md`](templates/graph.md) · [`templates/dynamic.md`](templates/dynamic.md). The user writes no code. They fill in the `{{...}}` slots and paste.
 
-> **กฎข้อเดียว:** ทุก prompt ที่ส่งให้ผู้ใช้มีเกณฑ์ตรวจที่หาหลักฐานได้จากข้อมูลที่ผู้ใช้วางเอง และมีเกณฑ์หยุด 3 แบบ — ผู้ตรวจที่ไม่มีของจริงให้เทียบมักเปลี่ยนคำตอบถูกให้ผิด และ loop ที่ไม่มีเพดานจะวนไม่จบ
+> **One rule:** every prompt you hand the user has check criteria that can be proved from data the user pastes themselves, and 3 stop conditions. A checker with no real material to compare against often turns right answers into wrong ones, and a loop with no ceiling never ends.
 
-## ใช้เมื่อ
+## Use when
 
-- ผู้ใช้อยากได้ prompt ไปวางใน Claude · ChatGPT · Gemini ให้ AI ทำหลายขั้น ตรวจงานตัวเอง แตกงานแล้วรวม หรือปรับแผนกลางทาง
-- คำที่ผู้ใช้พิมพ์: "prompt หลายขั้น" · "ให้ AI ตรวจงานตัวเองจนผ่าน" · "workflow ในแชต" · "loop graph dynamic" · "แม่แบบ prompt" · "self-check prompt"
-- สอนหรือทำเอกสารสอนเรื่อง workflow ของ AI ให้คนที่ไม่เขียนโค้ด
+- The user wants a prompt to paste into Claude · ChatGPT · Gemini so the AI works in several steps, checks its own work, splits the work and merges it, or adjusts the plan midway
+- Words the user types: "prompt หลายขั้น" · "ให้ AI ตรวจงานตัวเองจนผ่าน" · "workflow ในแชต" · "loop graph dynamic" · "แม่แบบ prompt" · "self-check prompt"
+- Teaching, or writing teaching material, about AI workflows for people who do not write code
 
-ไม่ใช้เมื่อ: งานถามตอบครั้งเดียวที่ไม่มีเกณฑ์ตรวจ (prompt ธรรมดาพอ) · ทีม agent ใน Claude Code แบ่งงานกันเอง · ระบบที่เขียนโค้ดเรียกโมเดล
+Do not use when: a one-shot question with no check criteria (a plain prompt is enough) · a team of agents in Claude Code splits the work among themselves · a system where code calls the model
 
-## ใช้ตัวอื่นแทนหรือคู่กัน
+## Use something else instead, or alongside
 
-| สถานการณ์ | ใช้ |
+| Situation | Use |
 |---|---|
-| หัวหน้าทีมใน Claude Code วางแผนให้ subagent ทำงาน (Loop · Graph · Dynamic ฉบับทีม agent มีไฟล์ มี reviewer ตัวใหม่) | `agent-patterns` |
-| เขียนโค้ดที่เรียก Large Language Model (LLM) · structured output · RAG · eval | `llm-engineering` ของ `software-development` |
-| แตกงานให้หลาย agent ทำพร้อมกันจริงใน Claude Code | `parallel-split-and-merge` |
-| ถ้อยคำในคำตอบและในเกณฑ์ตรวจ | `human-writing` (คู่กัน) |
+| A team lead in Claude Code plans work for subagents (the agent-team versions of Loop · Graph · Dynamic have files and a fresh reviewer) | `agent-patterns` |
+| Writing code that calls a Large Language Model (LLM) · structured output · RAG · eval | `llm-engineering` in `software-development` |
+| Splitting work so several agents really run at once in Claude Code | `parallel-split-and-merge` |
+| Wording of the answers and of the check criteria | `human-writing` (use together) |
 
-## 1 · เลือกแบบด้วยคำถาม 2 ข้อ
+## 1 · Choose the pattern with 2 questions
 
-1. **รู้ทางตั้งแต่ต้นไหม** — ลำดับงานแน่นอน และไม่คาดว่าข้อมูลหรือข้อกำหนดจะเปลี่ยนกลางทาง · ไม่รู้ → **Dynamic**
-2. **แยกเป็นชิ้นอิสระได้ไหม** — งานแตกเป็น 2–4 ชิ้นที่ทำได้โดยไม่ต้องรอผลของกัน · ได้ → **Graph** · ไม่ได้ (ผลงานชิ้นเดียว) → **Loop**
+1. **Do you know the path from the start?** — the order of work is fixed, and you do not expect the data or requirements to change midway · if you do not know → **Dynamic**
+2. **Can it split into independent pieces?** — the work breaks into 2–4 pieces that can be done without waiting for each other · yes → **Graph** · no (a single piece of output) → **Loop**
 
-| แบบ | ลำดับงาน | ตัวอย่างโจทย์ |
+| Pattern | Order of work | Example task |
 |---|---|---|
-| Loop | ตายตัว: ทำ → ตรวจ → แก้ซ้ำ | ประกาศรับสมัครงาน 1 ฉบับที่ต้องผ่านเกณฑ์ 5 ข้อ |
-| Graph | วาดครั้งเดียวตอนเริ่ม แตกชิ้นแล้วรวม | คู่มือพนักงานใหม่ 3 บท ที่ใช้ศัพท์และตัวเลขชุดเดียวกัน |
-| Dynamic | ปรับระหว่างทาง แผนมีเลขรุ่น | แผนจัดงานเลี้ยงที่งบหรือจำนวนคนอาจเปลี่ยน |
+| Loop | Fixed: do → check → fix again | 1 job ad that must pass 5 criteria |
+| Graph | Drawn once at the start, split then merge | A new-hire handbook of 3 chapters that use the same terms and numbers |
+| Dynamic | Adjusted along the way, the plan has version numbers | A party plan where the budget or head count may change |
 
-ตอบไม่ได้ทั้ง 2 ข้อ ให้เริ่มที่ Loop เพราะเรียบง่ายสุด · Graph และ Dynamic จบด้วยขั้นตรวจแบบเดียวกับ Loop อยู่แล้ว
+If you cannot answer either question, start with Loop because it is the simplest. Graph and Dynamic already end with the same check step as Loop.
 
-## 2 · Loop — ทำ → ตรวจ → แก้
+## 2 · Loop — do → check → fix
 
-- **ใช้เมื่อ** ผลงานชิ้นเดียว (อีเมล · ประกาศ · สรุป · โพสต์) ที่มีเกณฑ์ตรวจชัด
-- **ไม่ใช้เมื่อ** เกณฑ์เป็นความรู้สึก ("น่าสนใจ" · "ดูดี") หรือเป็นคำถามเหตุผลที่ไม่มีข้อมูลให้เทียบ เพราะผู้ตรวจจะตอบว่าดีแล้วหรือแก้ถูกให้เป็นผิด → ให้ผู้ใช้หาข้อมูลจริงมาวางก่อน หรือให้คนตัดสิน
-- **ช่องที่ต้องกรอก** งานที่ต้องการ · ข้อมูลต้นทาง · เกณฑ์ตรวจ C1–Cn
-- **เกณฑ์หยุด 3 แบบ** ผ่านครบ · ครบ 3 รอบ · เกณฑ์เดิมไม่ผ่าน 2 รอบติดโดยไม่ดีขึ้น (รอบ 1–2 ให้ผลมากสุด รอบหลังจากนั้นได้น้อยลงเร็ว)
-- **ผู้ตรวจต้องยกหลักฐาน** ทุกข้อยกข้อความจากผลงานหรือข้อมูลต้นทาง · หาหลักฐานไม่ได้นับว่าไม่ผ่าน · เกณฑ์ที่ต้องเปิดเว็บหรือรันโปรแกรมแต่แชตทำไม่ได้ ให้ตอบ "ตรวจไม่ได้" ไม่ใช่ "ผ่าน"
-- **รอบแก้แตะเฉพาะข้อที่ไม่ผ่าน** ส่วนที่ผ่านแล้วไม่แตะ ถ้าต้องแตะให้ตรวจข้อนั้นซ้ำ
+- **Use when** there is a single piece of output (email · announcement · summary · post) with clear check criteria
+- **Do not use when** the criteria are feelings ("interesting" · "looks good") or a reasoning question with no data to compare against, because the checker will say it is fine or turn a right answer into a wrong one → ask the user to bring real data and paste it first, or let a person decide
+- **Slots to fill** the task · source data · check criteria C1–Cn
+- **3 stop conditions** all pass · 3 rounds reached · the same criterion fails 2 rounds in a row with no improvement (rounds 1–2 give the most, later rounds give much less)
+- **The checker must quote evidence** every item quotes text from the output or the source data · no evidence found counts as fail · for a criterion that needs the web or running a program that the chat cannot do, answer "ตรวจไม่ได้" (cannot check), not "ผ่าน"
+- **The fix round touches only the items that failed.** Do not touch what already passed. If you must touch it, re-check that item.
 
-## 3 · Graph — แตกชิ้น ทำ แล้วรวม
+## 3 · Graph — split, do, then merge
 
-- **ใช้เมื่อ** งานรวมแตกเป็น 2–4 ชิ้นที่รู้ล่วงหน้าและไม่ต้องรอกัน
-- **ไม่ใช้เมื่อ** ชิ้นงานพึ่งกันมากหรือต้องคุยกลับไปกลับมา → Loop ชิ้นเดียวดีกว่า · ชิ้นเกิน 4 ในแชตเดียว → แชตเริ่มลืมต้นเรื่อง ให้แยกแชต
-- **ช่องที่ต้องกรอก** งานที่ต้องการ · ข้อมูลต้นทาง · เกณฑ์ตรวจของผลงานรวม · ผังงาน (ชิ้น · ทำอะไร · ต้องรอชิ้นไหน · ส่งอะไรออก)
-- **ชิ้นแรกตกลงรูปข้อมูลร่วม** (data contract: ชื่อเรียก หัวข้อ ตัวเลขที่ทุกชิ้นใช้) และทุกชิ้นส่งกลับรูปเดียวกัน: สถานะ (`เสร็จ` · `ติด`) · ผล · สมมติฐาน · ไม่ตกลงก่อน ชิ้นต่าง ๆ จะเรียกของเดียวกันคนละชื่อแล้วพังตอนรวม
-- **ข้อกำหนดขัดกันเอง** แยกเป็นชิ้นเก็บข้อขัดแย้ง (N1b) ที่บันทึกทั้ง 2 ฝั่งพร้อมข้อความต้นทาง ไม่เลือกข้าง ติด `(รอยืนยัน)` และขั้นรวมต้องรอชิ้นนี้
-- **ขั้นรวม** รับเฉพาะชิ้นที่ `เสร็จ` · ผลขัดกันยึดข้อมูลต้นทาง · ตรวจตามเกณฑ์แบบ Loop
+- **Use when** the whole task splits into 2–4 pieces that are known in advance and need not wait for each other
+- **Do not use when** the pieces depend heavily on each other or need back-and-forth → a single Loop is better · more than 4 pieces in one chat → the chat starts to forget the beginning, so split into separate chats
+- **Slots to fill** the task · source data · check criteria for the merged output · the flow chart (piece · what it does · which piece it waits for · what it sends out)
+- **The first piece agrees a shared data format** (data contract: the names, headings and numbers every piece uses), and every piece returns the same shape: status (`เสร็จ` · `ติด`) · result · assumptions · without this, pieces call the same thing by different names and the merge breaks
+- **When the requirements contradict each other**, split off a conflict piece (N1b) that records both sides with the original text and picks no side, tag it `(รอยืนยัน)` (awaiting confirmation), and the merge step must wait for this piece
+- **The merge step** takes only pieces that are `เสร็จ` · when results conflict, trust the source data · check with the Loop criteria
 
-## 4 · Dynamic — วางแผน → ทำทีละงาน → ประเมินแผน
+## 4 · Dynamic — plan → do one task at a time → assess the plan
 
-- **ใช้เมื่อ** ข้อเท็จจริงหรือข้อกำหนดอาจเปลี่ยนกลางงาน หรือทำไปแล้วถึงจะรู้ว่าต้องมีงานอะไรเพิ่ม
-- **ไม่ใช้เมื่อ** รู้ทางชัดตั้งแต่ต้น → Loop หรือ Graph คาดเดาผลได้ง่ายกว่า · ห้ามสร้าง v2 เพื่อโชว์
-- **ช่องที่ต้องกรอก** งานที่ต้องการ · ข้อมูลต้นทาง · เกณฑ์ว่าเสร็จ · ข้อมูลใหม่ (รอบแรกใส่ "ไม่มี")
-- **ปรับแผนเฉพาะ 3 เหตุ** ผลของงานที่ทำแล้วเผยงานที่แผนไม่มี · งานหนึ่งทำตามแผนไม่ได้ · ข้อมูลใหม่ทำให้ข้อกำหนดเปลี่ยน
-- **ทุกรุ่นใหม่เขียน 4 ช่อง** เหตุ · เปลี่ยนอะไร · กระทบอะไร · ใช้ต่อได้ (งานที่เสร็จและไม่กระทบห้ามทำซ้ำ) · ปรับได้ไม่เกิน 3 ครั้ง
-- **บันทึกความคืบหน้า 5 คำถาม** ทุกงานที่จบ ผู้ประเมินตอบ: เสร็จหรือยัง · วนซ้ำไหม · คืบไหม · ใครหรืองานไหนทำต่อ · สั่งอะไร · วนซ้ำหรือไม่คืบ 2 รอบติดนับเป็นเหตุ "ทำตามแผนไม่ได้"
-- **ข้อมูลใหม่มากลางทาง** วางบล็อกที่ 2 ของ `templates/dynamic.md` ในแชตเดิม: เก็บผลเดิม → ตรวจผลเดิมด้วยข้อกำหนดใหม่ → ทำใหม่เฉพาะงานที่ตก
+- **Use when** facts or requirements may change midway, or you only learn what extra work is needed after starting
+- **Do not use when** the path is clear from the start → Loop or Graph is easier to predict · never create a v2 just to show off
+- **Slots to fill** the task · source data · the done criteria · new information (put "ไม่มี" (none) in the first round)
+- **Adjust the plan for only 3 reasons:** the result of finished work reveals work the plan lacks · one task cannot be done as planned · new information changes the requirements
+- **Every new version writes 4 fields:** reason · what changed · what it affects · what can be reused (work that is finished and unaffected must not be redone) · adjust at most 3 times
+- **Progress log of 5 questions** after every finished task, the assessor answers: is it done · is it repeating · is it moving forward · who or which task continues · what to order · repeating or not moving forward for 2 rounds in a row counts as the reason "cannot be done as planned"
+- **When new information arrives midway**, paste block 2 of `templates/dynamic.md` into the same chat: keep the old results → check the old results against the new requirements → redo only the tasks that fail
 
-## 5 · ข้อจำกัดของแชต — บอกผู้ใช้ทุกครั้ง
+## 5 · Limits of a chat — tell the user every time
 
-1. **บทบาทในแชตเดียวไม่ใช่ผู้ตรวจอิสระจริง** ผู้ทำกับผู้ตรวจคือโมเดลเดียวกันในบทสนทนาเดียว มันเห็นแต่สิ่งที่ตั้งใจทำ · คำว่า "ผ่าน" ในแชตเป็นข้อมูลให้คนดู ไม่ใช่การรับรอง · งานที่คนอื่นจะใช้ ให้เปิดแชตใหม่แล้ววาง prompt ตรวจอิสระท้าย `templates/loop.md` (หรือสลับไปอีกค่าย) หรือให้คนตรวจตามตารางเกณฑ์
-2. **Graph ในแชตเดียวไม่ได้รันขนานจริง** โมเดลทำทีละชิ้นและชิ้นหลังเห็นชิ้นก่อน · อยากแยกจริงให้เปิดแชตละชิ้นตามหัวข้อท้าย `templates/graph.md`
-3. **ผู้ตรวจเทียบได้เฉพาะของจริงที่คนวางให้** คือเกณฑ์กับข้อมูลต้นทาง · ข้อเท็จจริงที่ไม่ได้วาง (ราคา · กฎหมาย · ชื่อคน) ผู้ตรวจรู้ไม่ได้ว่าถูก ให้ติด `(รอยืนยัน)` แล้วให้คนตรวจเอง
-4. **แชตยาวเริ่มลืมต้นเรื่อง** เกิน 3 รอบหรือ 4 ชิ้น ให้ขอสรุปสถานะ แล้วเริ่มแชตใหม่ด้วยสรุปนั้น
-5. ข้อมูลลับหรือข้อมูลส่วนตัว (เลขบัตร · เงินเดือนรายคน) ไม่วางในแชต ใช้ค่าสมมติหรือ `(รอยืนยัน)` แทน
+1. **A role in a single chat is not a truly independent checker.** The maker and the checker are the same model in the same conversation, and it sees only what it meant to do. The word "ผ่าน" in a chat is information for a person to look at, not a certification. For work others will use, open a new chat and paste the independent-check prompt at the end of `templates/loop.md` (or switch to another vendor), or have a person check against the criteria table.
+2. **A Graph in a single chat does not truly run in parallel.** The model does one piece at a time and later pieces see earlier ones. To really separate them, open one chat per piece, following the section at the end of `templates/graph.md`.
+3. **The checker can compare only against the real material a person pasted**, which means the criteria and the source data. For facts that were not pasted (prices · law · names of people), the checker cannot know if they are right. Tag them `(รอยืนยัน)` and let a person check.
+4. **A long chat starts to forget the beginning.** After 3 rounds or 4 pieces, ask for a status summary, then start a new chat with that summary.
+5. Do not paste secret or personal data (ID card numbers · individual salaries) into the chat. Use made-up values or `(รอยืนยัน)` instead.
 
-## 6 · ส่งงานให้ผู้ใช้
+## 6 · Hand the work to the user
 
-1. บอกแบบที่เลือก พร้อมเหตุผล 1 บรรทัดจากคำถาม 2 ข้อในหัวข้อ 1
-2. ส่ง prompt ที่กรอกช่องแล้วในบล็อกเดียว คัดลอกได้ทั้งก้อน ลอกโครงจากแม่แบบ ไม่เขียนโครงใหม่เอง
-3. เกณฑ์ที่ผู้ใช้ไม่ได้ให้ ให้ร่างเป็นข้อที่นับหรือหาเจอได้ แล้วบอกว่าเป็นเกณฑ์ที่ตั้งให้ แก้ได้ · ข้อเท็จจริงที่ไม่รู้ (ชื่อ · ตัวเลข · วันที่) ทิ้งเป็นช่อง `{{...}}` ไม่เดา
-4. ปิดด้วยวิธีตรวจอิสระ (ข้อจำกัดข้อ 1) 1–2 บรรทัด · ไม่อธิบายทฤษฎียาว
+1. Say which pattern you chose, with a 1-line reason from the 2 questions in section 1.
+2. Send the filled-in prompt in one block that can be copied whole. Copy the structure from the template and do not write a new structure yourself.
+3. For criteria the user did not give, draft them as items that can be counted or found, and say they are criteria you set that can be changed. For unknown facts (names · numbers · dates), leave a `{{...}}` slot and do not guess.
+4. Close with how to check independently (limit 1) in 1–2 lines. Do not explain the theory at length.
 
-## ตัวอย่างจริง
+## A real example
 
-**โจทย์:** "ร้านเบเกอรี่อยากให้ ChatGPT เขียนคำบรรยายเค้กกล้วยหอมลงเพจ ไม่เกิน 80 คำ ต้องมีราคา 85 บาท สั่งล่วงหน้า 1 วัน และไม่อ้างว่าไม่มีน้ำตาล เพราะมีน้ำตาล"
+**Task:** "ร้านเบเกอรี่อยากให้ ChatGPT เขียนคำบรรยายเค้กกล้วยหอมลงเพจ ไม่เกิน 80 คำ ต้องมีราคา 85 บาท สั่งล่วงหน้า 1 วัน และไม่อ้างว่าไม่มีน้ำตาล เพราะมีน้ำตาล" (a bakery wants ChatGPT to write a banana cake description for its page: at most 80 words, must show the price 85 baht and 1 day advance order, and must not claim it is sugar-free because it has sugar)
 
-**สิ่งที่ทำ:** คำถามข้อ 1 รู้ทาง · ข้อ 2 ผลงานชิ้นเดียว → Loop · กรอก `templates/loop.md`:
-- งานที่ต้องการ: คำบรรยายเค้กกล้วยหอม 1 โพสต์ ไม่เกิน 80 คำ
-- ข้อมูลต้นทาง: ราคา 85 บาท · สั่งล่วงหน้า 1 วัน · ส่วนผสมมีน้ำตาลทรายแดง
-- C1 ไม่เกิน 80 คำ (ผู้ตรวจนับและบอกจำนวน) · C2 ราคาและเงื่อนไขสั่งล่วงหน้าตรงกับข้อมูลต้นทาง (ยกข้อความ) · C3 ไม่มีคำว่า "ไม่มีน้ำตาล" "ไร้น้ำตาล" "หวานน้อยเพื่อสุขภาพ"
+**What was done:** question 1: the path is known · question 2: a single piece of output → Loop · filled in `templates/loop.md`:
+- Task: 1 post describing the banana cake, at most 80 words
+- Source data: price 85 baht · order 1 day ahead · ingredients include brown sugar
+- C1 at most 80 words (the checker counts and states the number) · C2 the price and advance-order condition match the source data (quote the text) · C3 does not contain the words "ไม่มีน้ำตาล" "ไร้น้ำตาล" "หวานน้อยเพื่อสุขภาพ"
 
-**ผล (สิ่งที่ส่งให้ผู้ใช้):** บรรทัดแรก "ใช้ Loop เพราะเป็นโพสต์ชิ้นเดียวที่มีเกณฑ์ชัด" → prompt ที่กรอกแล้ว 1 บล็อก (เกณฑ์หยุด: ผ่านครบ · 3 รอบ · ข้อเดิมไม่ผ่าน 2 รอบติด) → 2 บรรทัดท้าย: "C3 เป็นเกณฑ์ที่ตั้งให้ แก้ได้ · ก่อนโพสต์ เปิดแชตใหม่วาง prompt ตรวจอิสระพร้อมเกณฑ์และข้อมูลต้นทางชุดเดิม" · ไม่เขียนว่าเค้ก "ดีต่อสุขภาพ" แทนร้าน เพราะไม่มีในข้อมูลต้นทาง
+**Result (what is sent to the user):** first line "ใช้ Loop เพราะเป็นโพสต์ชิ้นเดียวที่มีเกณฑ์ชัด" → 1 block of the filled-in prompt (stop conditions: all pass · 3 rounds · the same item fails 2 rounds in a row) → last 2 lines: "C3 เป็นเกณฑ์ที่ตั้งให้ แก้ได้ · ก่อนโพสต์ เปิดแชตใหม่วาง prompt ตรวจอิสระพร้อมเกณฑ์และข้อมูลต้นทางชุดเดิม" · it does not write that the cake is "ดีต่อสุขภาพ" (good for health) on the shop's behalf, because that is not in the source data
 
-## ตรวจก่อนส่ง
+## Check before sending
 
-1. เลือกแบบด้วยคำถาม 2 ข้อ และบอกเหตุผลแล้ว
-2. prompt มีครบ: ข้อมูลต้นทาง · เกณฑ์ที่หาหลักฐานได้ · ผู้ตรวจยกหลักฐาน หาไม่เจอนับไม่ผ่าน · เกณฑ์หยุด 3 แบบ · ห้ามแต่งข้อเท็จจริง ใส่ `(รอยืนยัน)`
-3. Graph มีชิ้นตกลงรูปข้อมูลร่วมและกติกาชิ้นเก็บข้อขัดแย้ง · Dynamic มี 3 เหตุ 4 ช่อง เพดาน 3 และบันทึกความคืบหน้า 5 คำถาม
-4. บอกข้อจำกัดของแชตและวิธีตรวจอิสระในแชตใหม่แล้ว
-5. ไม่มีอีโมจิ · ไม่เดาข้อเท็จจริงของผู้ใช้
+1. The pattern is chosen with the 2 questions and the reason is stated.
+2. The prompt has everything: source data · criteria that can be proved · the checker quotes evidence and counts not-found as fail · 3 stop conditions · no invented facts, with `(รอยืนยัน)` used instead.
+3. Graph has the shared-data-format piece and the conflict-piece rule · Dynamic has the 3 reasons, 4 fields, the ceiling of 3 and the 5-question progress log.
+4. The chat limits and the independent check in a new chat have been told.
+5. No emoji · no guessing of the user's facts.
 
-## ที่มา
+## Sources
 
-- แม่แบบ Loop · Graph · Dynamic และใบตรวจผลงานของคอร์ส AI Workflow (CWN2026) ของเจ้าของ repo · ดัดแปลงให้สั้นลงและใช้ศัพท์ของทีม · อ่าน 2026-10-26
-- กฎทีมที่แม่แบบสอดคล้อง: `agent-patterns` และ [`pattern-details`](../agent-patterns/references/pattern-details.md) หัวข้อ 1 ปรับแผน · 3 Reflection · 4 Multi-Agent
-- [Anthropic · Building effective agents](https://www.anthropic.com/engineering/building-effective-agents) (เริ่มจากแบบง่ายสุด · evaluator-optimizer · เพดานรอบ) · เปิดอ่าน 2026-10-26
-- [Huang et al. · LLMs Cannot Self-Correct Reasoning Yet (ICLR 2024)](https://arxiv.org/abs/2310.01798) (แก้ตัวเองโดยไม่มีของจริงให้เทียบแล้วแย่ลง) · เปิดอ่าน 2026-10-26
-- [Madaan et al. · Self-Refine](https://arxiv.org/abs/2303.17651) (รอบแรก ๆ ได้ผลมากสุด · ผู้ตรวจตอบ "ดีแล้ว" บ่อยในข้อคณิต) · เปิดอ่าน 2026-10-26
-- [Google ADK · Loop agents](https://adk.dev/agents/workflow-agents/loop-agents/) (loop ต้องมีเพดานรอบเอง) · เปิดอ่าน 2026-10-26
-- [Claude Code docs · Dynamic workflows](https://code.claude.com/docs/en/workflows) (หยุดเมื่อ 2 รอบติดไม่คืบ) · เปิดอ่าน 2026-10-26
-- [Microsoft Research · Magentic-One](https://www.microsoft.com/en-us/research/articles/magentic-one-a-generalist-multi-agent-system-for-solving-complex-tasks/) และ [AutoGen · Magentic-One](https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/magentic-one.html) (progress ledger: เสร็จหรือยัง · วนซ้ำไหม · คืบไหม · ใครทำต่อ · สั่งอะไร) · เปิดอ่าน 2026-10-26
-- [Kim et al. · LLMCompiler](https://arxiv.org/abs/2312.04511) (ผังงานที่ชิ้นพึ่งกันบางส่วน) · เปิดอ่าน 2026-10-26
+- The Loop · Graph · Dynamic templates and the work-check sheet from the AI Workflow course (CWN2026) of the repo owner · shortened and adapted to the team's terms · read 2026-10-26
+- Team rules the templates match: `agent-patterns` and [`pattern-details`](../agent-patterns/references/pattern-details.md) section 1 plan adjustment · 3 Reflection · 4 Multi-Agent
+- [Anthropic · Building effective agents](https://www.anthropic.com/engineering/building-effective-agents) (start from the simplest pattern · evaluator-optimizer · round ceiling) · opened 2026-10-26
+- [Huang et al. · LLMs Cannot Self-Correct Reasoning Yet (ICLR 2024)](https://arxiv.org/abs/2310.01798) (self-correcting with no real material to compare against gets worse) · opened 2026-10-26
+- [Madaan et al. · Self-Refine](https://arxiv.org/abs/2303.17651) (the first rounds give the most · the checker often answers "fine" on math items) · opened 2026-10-26
+- [Google ADK · Loop agents](https://adk.dev/agents/workflow-agents/loop-agents/) (a loop needs its own round ceiling) · opened 2026-10-26
+- [Claude Code docs · Dynamic workflows](https://code.claude.com/docs/en/workflows) (stop when 2 rounds in a row make no progress) · opened 2026-10-26
+- [Microsoft Research · Magentic-One](https://www.microsoft.com/en-us/research/articles/magentic-one-a-generalist-multi-agent-system-for-solving-complex-tasks/) and [AutoGen · Magentic-One](https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/magentic-one.html) (progress ledger: is it done · is it repeating · is it moving forward · who continues · what to order) · opened 2026-10-26
+- [Kim et al. · LLMCompiler](https://arxiv.org/abs/2312.04511) (a flow chart where pieces partly depend on each other) · opened 2026-10-26

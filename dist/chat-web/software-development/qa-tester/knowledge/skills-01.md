@@ -11,14 +11,14 @@ Use when writing test cases or a test plan
 - Building a regression test suite
 - Reviewing test coverage gaps
 
-## ไม่ใช้เมื่อ
+## When not to use
 
-| งาน | ใช้ตัวนี้แทน |
+| Task | Use this instead |
 |---|---|
-| รายงานข้อบกพร่องที่เจอแล้ว 1 เรื่อง | `bug-report-template` |
-| รันเคสแล้วเก็บหลักฐาน (GIF) · รายงานผ่าน/ไม่ผ่าน | `test-evidence` |
-| คัดรายงานบั๊กที่กองอยู่ในกล่องข้อความ | `bug-inbox-triage` |
-| ตัดสินสัดส่วน unit · integration · end-to-end (E2E) หรือเขียนโค้ด test | `testing-standards` · `e2e-testing-patterns` |
+| A report of 1 defect that was already found | `bug-report-template` |
+| Running the cases and collecting evidence (GIF) · pass/fail report | `test-evidence` |
+| Sorting bug reports piled up in an inbox | `bug-inbox-triage` |
+| Deciding the ratio of unit · integration · end-to-end (E2E) tests, or writing test code | `testing-standards` · `e2e-testing-patterns` |
 
 ## Where test cases live
 
@@ -31,13 +31,13 @@ Test cases go in the `qa/` folder at the project root, never inside `docs/`. Use
 - Columns `test_result` (what actually happened) and `evidence` (GIF link) follow `result`, added empty if the table lacks them. After a run, `--results qa/evidence/<run-id>/results.csv` fills all three — see `test-evidence`. A workbook the user made themselves → `test-evidence/scripts/record_results.py`.
 - Check: open it in Excel; the Overview totals must equal the source row count.
 
-## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+## 0 · Look for an existing format first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before using the structure or template in this file, check whether the user, the customer, or the project already has its own format:
 
-- **ที่ดู:** แบบ test case ของลูกค้าหรือทีม QA: ไฟล์ Excel/CSV ใน `docs/` หรือ `ref/` · เครื่องมือที่ใช้อยู่ (TestRail · Zephyr · Xray · Azure Test Plans) และฟิลด์บังคับของมัน · test case ชุดก่อนของโปรเจกต์ → ดูคอลัมน์ ระบบรหัส และระดับความสำคัญ
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** รหัสต้องต่อจากชุดเดิม · ผลที่คาดหวังต้องมาจากข้อกำหนดเหมือนเดิม
+- **Where to look:** the test case format of the customer or QA team: Excel/CSV files in `docs/` or `ref/` · the tool in use (TestRail · Zephyr · Xray · Azure Test Plans) and its mandatory fields · the project's earlier test case set → look at the columns, the ID system, and the priority levels
+- **Result:** found → use that format (headings, order, field names, run numbers) and say in the answer which file the format came from · not found → use the template in this file as a fallback and say that no existing format was found
+- **Still required in every format:** IDs must continue from the existing set · expected results must still come from the requirements
 
 ## Test Case ID Convention
 
@@ -60,34 +60,34 @@ Copy **[`assets/test-case.md`](assets/test-case.md)** once per test case and fil
 
   It flags missing or reordered headings, missing fields, changed table headers, and anything still unfilled (`<...>`, `YYYY-MM-DD`, `XXXX`, `...`, a field still listing every option).
 
-## ผลที่คาดหวังมาจากไหน (oracle)
+## Where the expected result comes from (oracle)
 
-ทุก TC บอกในช่อง **Oracle** ว่าผลที่คาดหวังมาจากใคร
+Every TC says in the **Oracle** field who the expected result comes from.
 
-| ป้าย | ฟังจาก | เชื่อได้ |
+| Label | Heard from | Trust |
 |---|---|---|
-| `[D]` เจ้าของงาน | ลูกค้า · เจ้าของระบบ → `docs/USER-STORIES.md` · REQUIREMENTS · ข้อมูลทดสอบที่เขายืนยัน | ✓ สูงสุด |
-| `[R]` กฎทั่วไป | คณิตศาสตร์ · กฎหมาย · มาตรฐาน · สามัญสำนึก → เขียนเหตุผลกำกับ | ดี |
-| `[A]` คนสร้าง | SPEC · README · คำอ้างของคนหรือ AI ที่เขียนระบบ | ต่ำ — ตรวจงานตัวเอง |
-| `[O]` หน้าจอ | สิ่งที่เห็นตอนสำรวจระบบ | ต่ำสุด — ระบบอาจผิดอยู่แล้ว |
+| `[D]` the work owner | the customer · the system owner → `docs/USER-STORIES.md` · REQUIREMENTS · test data they confirmed | ✓ highest |
+| `[R]` general rule | mathematics · law · standards · common sense → write the reason beside it | good |
+| `[A]` the builder | SPEC · README · claims of the person or AI who wrote the system | low — it checks its own work |
+| `[O]` the screen | what was seen while exploring the system | lowest — the system may already be wrong |
 
-- ทุก TC ต้องมี `[D]` หรือ `[R]` · มีแค่ `[A]` / `[O]` → ใส่ `[O-ยังไม่ยืนยัน]` แล้วเพิ่มเป็นคำถามถึงเจ้าของงาน (ผ่าน BA หรือหัวหน้าทีม)
-- ทุก `[O-ยังไม่ยืนยัน]` ต้องมีเลขคำถามกำกับ (เช่น `Q7`) ไม่ใช้ป้ายลอย ๆ
-- **ระดับความสำคัญ:** TC ด้าน Security (XSS · open redirect · IDOR · ยิง API ข้ามการตรวจของหน้าเว็บ · แก้ราคา/สต็อกฝั่งเครื่องแล้วสั่งได้) เป็น P1 เสมอ ไม่ว่าอยู่ฟีเจอร์ไหน · TC อื่นใช้ระดับเดียวกับฟีเจอร์
-- **ระบบตอนนี้ทำผิดอยู่แล้ว:** เขียนผลที่คาดหวังเป็นพฤติกรรมที่ถูก แล้วต่อท้าย `(ตอนนี้ล้ม: …)` ว่าระบบให้ผลอะไร · นับข้อที่มีป้ายนี้และแยกตามระดับ เพื่อคาดการณ์ว่ารอบแรกจะไม่ผ่านเกณฑ์ออกกี่ข้อ (ตัวอย่างจากงานนั้น: 88 ข้อมีป้าย ในนั้น 39 ข้อเป็น P1)
-- `[A]` ใช้ได้กับรายละเอียดที่เจ้าของงานไม่สนใจ เช่น ข้อความ error คำต่อคำ · แต่ "ต้องห้าม / ต้องเตือน" ต้องมี `[D]` หรือ `[R]` รองรับ
-- **อย่าอบบั๊กลงในผลที่คาดหวัง** → ตัวเลขเงิน แต้ม ยอดรวม คิดจาก `[D]` + `[R]` **ก่อนเปิดระบบ** และเขียนวิธีคิดไว้ (`฿800 − 5% (฿40) = ฿760`) · ห้ามลอกค่าจากหน้าจอ เพราะถ้าระบบผิดอยู่แล้ว test จะผ่านตลอดไป
+- Every TC needs `[D]` or `[R]`. If it has only `[A]` / `[O]`, put `[O-ยังไม่ยืนยัน]` (observed, not confirmed) and add it as a question to the work owner (through the BA or the team lead).
+- Every `[O-ยังไม่ยืนยัน]` must carry a question number (for example `Q7`). Never use the label by itself.
+- **Priority:** a Security TC (XSS · open redirect · IDOR · calling the API around the web page's checks · changing price/stock on the client and still being able to order) is always P1, whichever feature it sits in. Other TCs use the same priority as the feature.
+- **The system is already wrong today:** write the expected result as the correct behavior, then append `(ตอนนี้ล้ม: …)` (currently failing: …) with what the system returns. Count the items with this label and split them by priority, to forecast how many items will fail the exit criteria in the first round (example from that work: 88 items had the label, 39 of them P1).
+- `[A]` is fine for details the work owner does not care about, such as the exact wording of an error message. But a "must not / must warn" rule needs `[D]` or `[R]` behind it.
+- **Do not bake the bug into the expected result.** Work out money, points, and totals from `[D]` + `[R]` **before opening the system**, and write the working (`฿800 − 5% (฿40) = ฿760`). Never copy a value from the screen, because if the system is already wrong, the test will pass forever.
 
-**ค่าขอบผูกกับกฎ** → กฎธุรกิจ (Business Rule, BR) ที่มีตัวเลข 1 ข้อ = 3 ค่า: ต่ำกว่าขอบ · ที่ขอบ · เกินขอบ เช่น `ส่งฟรี ≤ 5 กม.` → 4.9 · 5.0 · 5.1 · ช่อง Related อ้าง BR ด้วย
+**Boundary values tied to rules.** A business rule (BR) with a number gives 3 values: below the edge · at the edge · over the edge. For example `free delivery ≤ 5 km` → 4.9 · 5.0 · 5.1. The Related field cites the BR too.
 
-**จังหวะตรวจ** → TC ที่เปลี่ยนข้อมูล (จอง · ยกเลิก · แต้ม · สต็อก · สิทธิ์) ใส่ **Check when** = `ทันที` · `หลังรีโหลด` · `ทั้งสอง` · ถูกทันทีแต่หายหลังรีโหลด = ไม่ได้บันทึกจริง
+**When to check.** A TC that changes data (booking · cancelling · points · stock · permissions) gets **Check when** = `ทันที` (immediately) · `หลังรีโหลด` (after reload) · `ทั้งสอง` (both). Right at once but gone after a reload = it was not really saved.
 
-**ครอบคลุมและโยงกลับ** → ท้ายไฟล์ test case มี 2 ตาราง
+**Coverage and tracing back.** At the end of the test case file there are 2 tables.
 
-| ตาราง | หน้าตา | กติกา |
+| Table | Looks like | Rule |
 |---|---|---|
-| Coverage matrix | ฟีเจอร์ × เทคนิค (Happy · Negative · Boundary · Equivalence · State · Security/API) | ช่องที่ควรมีแต่ยังว่าง → ระวัง + เหตุผล · ไม่เกี่ยว → `—` |
-| Traceability | FR / BR → รหัส TC | BR ทุกข้อมี ≥ 1 TC · ไม่มี → ระวัง แล้วเพิ่ม TC |
+| Coverage matrix | feature × technique (Happy · Negative · Boundary · Equivalence · State · Security/API) | A cell that should have a case but is empty → `ระวัง` (watch out) + the reason · not relevant → `—` |
+| Traceability | FR / BR → TC ID | Every BR has ≥ 1 TC · if none → `ระวัง`, then add a TC |
 
 ## Test Case Categories (Coverage Guide)
 
@@ -179,7 +179,7 @@ Each test case should:
 - Only happy-path tests (must include negative + boundary)
 - Tests with no traceability to requirements
 - Expected result copied from the screen or the builder's SPEC — it bakes the bug into the test
-- Test fails → expected result edited to match the system. Triage first (`qa-tester` → เมื่อผลไม่ตรง)
+- Test fails → expected result edited to match the system. Triage first (`qa-tester` → "when the result does not match")
 
 ---
 
@@ -196,9 +196,9 @@ load the matching skill before writing, not after:
 
 Default formatting is not neutral — it reads as unfinished work.
 
-**อ่านเพิ่มเมื่อต้องใช้:** [`references/test-plan-template.md`](references/test-plan-template.md) — แม่แบบ
+**Read more when needed:** [`references/test-plan-template.md`](references/test-plan-template.md) — template
 
-## เรียกเป็นคำสั่ง
+## Run as a command
 
 `/software-development:test-case-template <feature or user story>`
 
@@ -218,7 +218,7 @@ The tester should:
 
 # Example: Login Feature Test Cases
 
-**สารบัญ:** (หัวข้อเคสอยู่ในกรอบโค้ด จึงลิงก์ไม่ได้ — เลื่อนหาตามรหัสเคส)
+**Contents:** (the case headings are inside a code block, so they cannot be linked. Scroll to the case code.)
 
 - TC-LOGIN-001: Successful login with valid credentials
 - TC-LOGIN-002: Empty email field
@@ -531,111 +531,111 @@ Use when running test cases and keeping proof
 
 # Test Evidence
 
-ทุกเคสที่รัน → GIF 1 ไฟล์ที่บอกว่าเคสไหน ทำอะไร เห็นอะไร ผ่านไหม · รายงาน `.md` 1 ฉบับต่อรอบ · ผลลง Excel พร้อมลิงก์หลักฐาน
+Every case you run → 1 GIF file that says which case it is, what was done, what was seen, and whether it passed · 1 `.md` report per run · results go into Excel with links to the evidence
 
-## ไม่ใช้เมื่อ
+## When not to use
 
-| งาน | ใช้ตัวนี้แทน |
+| Task | Use this instead |
 |---|---|
-| เขียน test case ก่อนรัน | `test-case-template` |
-| บั๊ก 1 เรื่องที่เจอแล้ว | `bug-report-template` (แนบ GIF จาก skill นี้ได้) |
-| เขียนโค้ด E2E · เทสต์ใน CI ที่ล้ม | `e2e-testing-patterns` (trace · video ของ Playwright) |
+| Writing test cases before running | `test-case-template` |
+| 1 bug already found | `bug-report-template` (can attach the GIF from this skill) |
+| Writing E2E code · CI tests that fail | `e2e-testing-patterns` (Playwright trace · video) |
 
-## ไฟล์อยู่ที่ไหน
+## Where the files go
 
-| ไฟล์ | ที่อยู่ |
+| File | Location |
 |---|---|
-| ภาพแต่ละขั้น + `run.json` (ของชั่วคราว) | `_to_delete/test-frames/<run-id>/` |
-| GIF · ภาพเต็มของขั้นที่ล้ม · `results.csv` | `qa/evidence/<run-id>/` |
-| รายงาน | `qa/reports/<run-id>-test-report.md` |
-| Excel test case | `qa/<project-code>-test-cases.xlsx` |
+| Per-step images + `run.json` (temporary) | `_to_delete/test-frames/<run-id>/` |
+| GIF · full image of the failed step · `results.csv` | `qa/evidence/<run-id>/` |
+| Report | `qa/reports/<run-id>-test-report.md` |
+| Excel test cases | `qa/<project-code>-test-cases.xlsx` |
 
-`<run-id>` = `YYYY-MM-DD-r<n>` เช่น `2026-10-18-r1` · ลิงก์ใน Excel และรายงานเป็น path แบบสัมพัทธ์ ย้ายโฟลเดอร์ `qa/` ทั้งก้อนแล้วยังเปิดได้
+`<run-id>` = `YYYY-MM-DD-r<n>`, such as `2026-10-18-r1` · links in Excel and the report are relative paths, so you can move the whole `qa/` folder and they still open
 
-## 1 · ถ่ายภาพระหว่างรัน
+## 1 · Take screenshots while running
 
-- 1 ขั้นใน test case = ภาพ 1 ใบ ถ่าย **หลัง** ทำขั้นนั้นเสร็จ (เห็นผลของขั้น) · ใบแรกคือสภาพก่อนเริ่ม
-- เว็บ → Playwright ขนาดหน้าจอ 1280×720 ทุกเคส (`page.screenshot(path=...)`) · desktop · mobile → วิธีถ่ายจาก verify skill ของโปรเจกต์ (`app-verifier-setup`)
-- ขั้นที่ผิด → ใส่ `box` = กรอบแดงรอบจุดที่ผิด (x, y, w, h ของภาพ) · Playwright หาได้จาก `locator.bounding_box()`
-- ใช้ข้อมูลทดสอบเท่านั้น ห้ามมีข้อมูลคนจริง รหัสผ่าน token ในภาพ (`pdpa-compliance`) · ช่องรหัสผ่านต้องเป็นจุด
+- 1 step in a test case = 1 image, taken **after** that step is done (so it shows the step's result) · the first image is the state before starting
+- Web → Playwright at a 1280×720 screen size for every case (`page.screenshot(path=...)`) · desktop · mobile → use the capture method from the project's verify skill (`app-verifier-setup`)
+- A wrong step → set `box` = a red frame around the wrong spot (x, y, w, h of the image) · Playwright finds it with `locator.bounding_box()`
+- Use test data only. No real people's data, passwords or tokens in the images (`pdpa-compliance`) · password fields must show dots
 
-## 2 · เขียนคำบรรยาย
+## 2 · Write the captions
 
-ต่อขั้น 1 ประโยค: **ทำอะไร → เห็นอะไร** เช่น `กดเข้าสู่ระบบ → ขึ้นว่า รหัสผ่านไม่ถูกต้อง แต่ที่คาดคือ อีเมลหรือรหัสผ่านไม่ถูกต้อง`
+1 sentence per step: **what was done → what was seen.** Example: `กดเข้าสู่ระบบ → ขึ้นว่า รหัสผ่านไม่ถูกต้อง แต่ที่คาดคือ อีเมลหรือรหัสผ่านไม่ถูกต้อง` (Thai caption sample: "Pressed log in → saw 'password incorrect', but expected 'email or password incorrect'")
 
-- ไม่เกิน 2 บรรทัด (ราว 70 ตัวอักษรต่อบรรทัด) · ยาวกว่านั้นจะถูกตัด
-- เว้นวรรคระหว่างวลี สคริปต์ตัดบรรทัดตรงช่องว่าง
-- ขั้นที่ล้มต้องบอกทั้ง "ที่เห็น" และ "ที่คาด" · ภาษาตาม `human-writing`
+- At most 2 lines (about 70 characters per line) · anything longer is cut
+- Put spaces between phrases in Thai captions, because the script breaks lines at spaces
+- A failed step must give both "what was seen" and "what was expected" · wording by `human-writing`
 
-## 3 · สร้าง GIF + รายงาน
+## 3 · Build the GIF + report
 
-กรอก `run.json` (รูปแบบเต็มอยู่หัวไฟล์ [`scripts/make_evidence.py`](scripts/make_evidence.py)) · ต่อเคส: `id` · `title` · `result` (`Pass` `Fail` `Blocked` `Not run`) · `expected` · `actual` · `issue` · `bug` · `steps[]`
+Fill in `run.json` (the full format is at the top of [`scripts/make_evidence.py`](scripts/make_evidence.py)) · per case: `id` · `title` · `result` (`Pass` `Fail` `Blocked` `Not run`) · `expected` · `actual` · `issue` · `bug` · `steps[]`
 
 ```bash
-# รันจากรากโปรเจกต์ · เรียกสคริปต์ด้วยพาธเต็มของโฟลเดอร์ skill นี้ (เขียนแทน <โฟลเดอร์ skill test-evidence>)
+# run from the project root · call the script by the full path of this skill's folder (write it in place of <โฟลเดอร์ skill test-evidence>)
 python "<โฟลเดอร์ skill test-evidence>/scripts/make_evidence.py" _to_delete/test-frames/2026-10-18-r1/run.json \
   --out qa/evidence/2026-10-18-r1 --report qa/reports/2026-10-18-r1-test-report.md
 ```
 
-หน้าตา GIF (ตั้งไว้ในสคริปต์ ไม่ต้องปรับเอง):
+GIF look (set in the script, do not adjust by hand):
 
-| ส่วน | ค่า | เหตุผล |
+| Part | Value | Reason |
 |---|---|---|
-| ความกว้าง | ปรับทุกภาพเป็น 1280 px | เคสต่างกันขนาดตัวอักษรยังเท่ากัน |
-| แถบบน | รหัสเคส · ชื่อเคส · `ขั้น n/N` · ป้าย PASS เขียว / FAIL แดง / BLOCKED ส้ม · ตัวอักษร 24 px | รู้ทันทีว่าดูเคสไหน ผลอะไร |
-| แถบคำบรรยาย | ใต้ภาพ ไม่ทับหน้าจอ · ตัวอักษร 28 px · พื้นดำ ตัวขาว | ย่อเหลือ 800 px ยังอ่านได้ (~17 px) |
-| เวลาต่อขั้น | 2–6 วินาที ตามความยาวคำบรรยาย | อ่านทัน ไม่ต้องหยุดภาพ |
-| ภาพปิด | ผลตัวใหญ่ + ปัญหา + คาดว่า / ที่เกิดจริง | ดูภาพสุดท้ายภาพเดียวก็รู้เรื่อง |
-| ฟอนต์ | Sarabun (ไทย + อังกฤษ) และชุดเครื่องหมาย ✓ ✗ อยู่ใน `assets/fonts/` | ทุกเครื่องหน้าตาเหมือนกัน |
+| Width | Every image scaled to 1280 px | Cases differ but text size stays the same |
+| Top bar | Case id · case title · `ขั้น n/N` (step n of N) · badge PASS green / FAIL red / BLOCKED orange · 24 px text | You know at once which case and what result |
+| Caption bar | Under the image, not over the screen · 28 px text · black background, white text | Still readable (~17 px) when shrunk to 800 px |
+| Time per step | 2–6 seconds, by caption length | Time to read, no need to pause the image |
+| Closing image | Big result + problem + expected / actual | The last image alone tells the story |
+| Font | Sarabun (Thai + English) and the ✓ ✗ symbol set are in `assets/fonts/` | Looks the same on every machine |
 
-- เคส `Fail` · `Blocked` ได้ `<id>-fail.png` เพิ่ม = ขั้นที่ล้มแบบสีเต็ม (GIF มีแค่ 256 สี) ใช้แนบบั๊ก
-- สคริปต์เตือน `no raqm` → สระ วรรณยุกต์ไทยจะซ้อนกัน · รันใน Docker sandbox ของโปรเจกต์ (`docker-sandbox`) แล้วหาย
-- รายงานที่ได้มี: หัวรอบ · ตารางสรุปจำนวน · ผลรายเคสพร้อมลิงก์ GIF · เคสที่ไม่ผ่านหรือติดขัดแบบละเอียดพร้อมภาพ · เคสที่ยังไม่ได้รัน
-- เปิดรายงานแล้วเขียน **ข้อสรุป** 1–2 ประโยคเอง (ปล่อยได้ไหม · ติดอะไร) แทนบรรทัด `(รอยืนยัน)` · ช่อง `ปัญหา` ที่ยังว่างต้องเติม
+- A `Fail` or `Blocked` case also gets `<id>-fail.png` = the failed step in full color (a GIF has only 256 colors), used to attach to the bug
+- If the script warns `no raqm`, Thai vowels and tone marks will stack on each other · run it in the project's Docker sandbox (`docker-sandbox`) and it goes away
+- The report contains: the run header · a summary count table · per-case results with GIF links · details of failed or blocked cases with images · cases not yet run
+- Open the report and write a 1–2 sentence **ข้อสรุป** (conclusion: can it ship? what is stuck?) yourself in place of the `(รอยืนยัน)` line · fill in any `ปัญหา` (problem) field still empty
 
-## 4 · ลงผลใน Excel
+## 4 · Record the results in Excel
 
-`results.csv` มีคอลัมน์ `id` · `result` · `test_result` (ที่เกิดจริงหรือปัญหา) · `evidence` (ชื่อไฟล์ GIF)
+`results.csv` has the columns `id` · `result` · `test_result` (what actually happened, or the problem) · `evidence` (GIF file name)
 
-| มี Excel อยู่แล้วแบบไหน | คำสั่ง |
+| Which Excel exists already | Command |
 |---|---|
-| ยังไม่มี หรือสร้างจาก `test-case-template` | `python "<โฟลเดอร์ skill test-case-template>/scripts/build-test-workbook.py" cases.csv qa/PRJ-test-cases.xlsx --results qa/evidence/<run-id>/results.csv` |
-| ผู้ใช้ส่งไฟล์ของตัวเองมา (หน้าตาแบบไหนก็ได้) | `python "<โฟลเดอร์ skill test-evidence>/scripts/record_results.py" <ไฟล์ของผู้ใช้>.xlsx qa/evidence/<run-id>/results.csv -o qa/PRJ-test-cases.xlsx` |
+| None yet, or built from `test-case-template` | `python "<โฟลเดอร์ skill test-case-template>/scripts/build-test-workbook.py" cases.csv qa/PRJ-test-cases.xlsx --results qa/evidence/<run-id>/results.csv` |
+| The user sent their own file (any layout) | `python "<โฟลเดอร์ skill test-evidence>/scripts/record_results.py" <ไฟล์ของผู้ใช้>.xlsx qa/evidence/<run-id>/results.csv -o qa/PRJ-test-cases.xlsx` |
 
-`record_results.py` หาแถวหัวตารางที่มีคอลัมน์รหัสเคส (`ID` · `TC ID` · `Test Case ID` · `รหัส`) ทุก sheet · คอลัมน์ผลที่มีอยู่แล้ว (`Status` · `ผล`) ใช้ต่อ · ที่ไม่มีเพิ่มท้ายตาราง: **Result** · **Test result** · **Evidence** (ลิงก์กดเปิด GIF) · ไฟล์ต้นฉบับของผู้ใช้ไม่แก้ทับ ถ้าจะทับให้ย้ายตัวเดิมไป `_to_delete/` ก่อน
+`record_results.py` looks in every sheet for a header row with a case id column (`ID` · `TC ID` · `Test Case ID` · `รหัส`) · it reuses an existing result column (`Status` · `ผล`) · if none exists, it adds these at the end of the table: **Result** · **Test result** · **Evidence** (a clickable link that opens the GIF) · it never overwrites the user's original file. To overwrite, move the old one to `_to_delete/` first.
 
-## 5 · ทำให้ตัวเลขน่าเชื่อ
+## 5 · Make the numbers believable
 
-ใช้เมื่อผลทดสอบถูกใช้ตัดสินว่าแอปดีขึ้นหรือเลวลง (เทียบกับระบบเดิม เทียบเวอร์ชัน หรือเป็นเกณฑ์ของลูป) · ที่มา: วัดจริง 6 เวอร์ชันของแอปโคลนเว็บ (Week 03 ของ Teaching_CWN2026) · ตัวเลขเป็นตัวอย่างจากงานนั้น
+Use this when test results decide whether an app got better or worse (against the old system, across versions, or as a loop's criterion) · source: a real measurement of 6 versions of a web clone app (Week 03 of Teaching_CWN2026) · the numbers are examples from that job
 
-| ปัญหา | ทำ |
+| Problem | Do |
 |---|---|
-| ข้อสอบผิดเอง ทำให้แอปถูกหักคะแนน | **รันข้อสอบกับระบบเดิมก่อนนับ** · ผ่าน = valid · ไม่ผ่านเพราะเขียนผิด = แก้แล้วรันใหม่ได้ 1 ครั้ง · ไม่ผ่านเพราะตรวจผ่านหน้าจอไม่ได้หรือระบบเดิมเปลี่ยน = invalid ไม่นับ พร้อมเหตุผล (รอบจริง 47 ข้อใช้ได้ 22 ข้อ ถ้าไม่ทำ 25 ข้อจะหักคะแนนแอปทั้งที่แอปไม่ผิด) |
-| เฉลยที่จดมือเก่าหรือผิด | **คำนวณค่าคาดหวังจากระบบเดิมตอนรัน** ไม่ฝังตัวเลขในโค้ดเทียบ เว้นแต่พารามิเตอร์ที่มาจากโจทย์ · เฉลยกับข้อมูลต้องแช่แข็งในช่วงเวลาเดียวกัน (รอบจริงราคาเปลี่ยน 22 ใบใน 1 ชั่วโมง) · เก็บข้อมูลของแอปและหน้าจอเฉลยในรอบรันเดียวกัน (ข้อมูลที่เก็บ 17:07 ตรงจอเฉลย 18:34 แค่ 278/300 · เก็บใหม่ในรอบเดียวกันได้ 300/300) |
-| เฉลยที่อนุมานเอง (กรองเอง นับเอง) | พิสูจน์วิธีก่อนด้วยกรณีที่มีเฉลยจริง · ถ้าลำดับเชื่อไม่ได้ ให้ตัดสินจากจำนวนและชุดข้อมูล · เขียนบอกตรง ๆ ว่าเกณฑ์อ่อนกว่า และใส่ตาราง "ที่มาของเฉลย" ต่อสถานการณ์ |
-| ผลมีแค่ผ่าน/ตก | ใช้คำตัดสิน 3 ค่า **ผ่าน · ไม่ผ่าน · ยืนยันไม่ได้ในขอบเขตนี้** แล้วนับ "ยืนยันไม่ได้" เป็นไม่ผ่านอย่างชัดเจน ไม่เดาว่าผ่าน · ในรายงานผลต่างบอกตำแหน่ง แถว หรือช่อง ("สายการบินต่าง 6 ตำแหน่ง เริ่มที่ #13") ไม่ใช่แค่ตก |
-| ได้ 0 ทั้งชุด | ดูว่า setup ตัวเดียวพังไหม (รอบจริง 0/82 เพราะทุกข้อเริ่มจากฟอร์มที่ไม่มี) · รายงาน "ล้มที่ setup" แยกจาก "ไม่ผ่านที่ขั้นตรวจ" · 0% ไม่ได้แปลว่าไม่มีฟีเจอร์ |
-| ตัวเลขที่ข้อสอบคาดขัดกันเอง | ตรวจก่อนใช้ว่าเลขคาดไม่ขัดกันและตรงข้อมูลจริง (ตัวอย่างจากงานนั้น: ผลรวม 299 แต่ต้องมี 300 · 35 กับ 33 · 76 กับ 77 มาจากสำรวจคนละรอบ) · คนสร้างห้ามบิดแอปให้ตรงข้อสอบที่ขัดกันเอง ให้สรุปว่าเป็นเพดานและส่งกลับให้เจ้าของข้อสอบแก้ |
-| เกณฑ์ผ่านหลวม | เขียนเกณฑ์เป็นตัวเลขตรง ("ต้อง 300" ไม่ใช่ "ทำส่วนหลักได้") · ถ้าใช้เกณฑ์หลวมให้รายงานผลตามเกณฑ์เข้มคู่กัน (รอบจริง 4/35 หลวม เป็น 2/35 เข้ม) |
-| เทียบคะแนนข้ามชุดข้อสอบ | ทำไม่ได้ ถ้าผู้ออก ขอบเขต เกณฑ์ หรือ setup ต่าง (รอบจริงเวอร์ชันเดียวกันได้ 94.3% ในชุดเก่า 62.2% ในชุดใหม่) · ข้อสอบกับแอปมาจากบันทึกเดียวกันทำให้ชื่อปุ่มตรงกันและคะแนนสูงเกินจริง |
-| ตัววัดตัวเดียวหลอกได้ | อ่านหลายตัวคู่กัน (รอบจริง visual diff 27% ทั้งที่ไม่มีฟอร์มเลย เพราะพื้นขาวตรงกัน ขณะโครงสร้างได้ 3.8%) · ข้อที่ยอมรับว่าแก้ไม่ได้ทำให้ตัววัดนั้นตาบอด (74/82 แยกสองเวอร์ชันไม่ออก) ต้องมีตัววัดคนละชนิดมาช่วย |
-| ตัววัดเองอาจผิด | พิสูจน์ก่อนใช้: วัดเทียบเฉลยกับตัวเอง ต้องได้เต็ม · ฝังบั๊กแล้วดูว่าเกณฑ์ที่ผ่อนยังจับได้ · จำลอง "แอปที่ถูกสมบูรณ์" เพื่อรู้ว่าเกณฑ์ผิดหรือแอปผิด · เก็บ SHA-256 ของไฟล์ข้อสอบก่อนและหลังรัน พิสูจน์ว่าไม่ถูกแก้ |
-| วัดซ้ำแล้วค่าต่าง | อธิบายด้วยการทดลองแล้วแยก "ยืนยันแล้ว" (ลบประโยคแล้วได้ 27.36%) ออกจาก "ยังไม่ยืนยัน" (ส่วนที่เหลือราว 0.5 จุด) · ข้อมูลที่เปลี่ยนตามเวลาให้เทียบโครงสร้างและกฎ ไม่เทียบตัวเลข และจดวันที่เก็บ |
-| รายงานของ agent | ไฟล์คือหลักฐาน คำสรุปคือความเห็น (รอบจริง agent บอกว่าผ่านเต็ม 16 ข้อ แต่ไฟล์จริง 14 ข้อ) · วัดซ้ำเองด้วยชุดเดียวกันก่อนเชื่อ |
+| The exam itself is wrong, so the app loses points | **Run the exam against the old system before counting** · pass = valid · fail because it was written wrong = fix and rerun once · fail because it cannot be checked through the screen or the old system changed = invalid, not counted, with a reason (in the real run 22 of 47 items were usable. Without this, 25 items would have cut the app's score although the app was not wrong) |
+| Answer key written by hand is old or wrong | **Compute the expected value from the old system at run time** and do not hardcode numbers in the comparison code, except parameters that come from the task · the answer key and the data must be frozen at the same time (in the real run prices changed on 22 tickets within 1 hour) · collect the app's data and the answer screen in the same run (data collected at 17:07 matched the answer screen at 18:34 only 278/300 · recollecting in the same run gave 300/300) |
+| An answer key you inferred yourself (filtered or counted yourself) | Prove the method first on cases that have a real answer · if the order cannot be trusted, judge by count and data set · say plainly that the criterion is weaker, and add a "ที่มาของเฉลย" (source of the answer key) table per scenario |
+| Results are only pass/fail | Use a 3-value verdict **ผ่าน · ไม่ผ่าน · ยืนยันไม่ได้ในขอบเขตนี้** (cannot be confirmed within this scope), and count "cannot be confirmed" clearly as a fail, never guess it passed · in the report, say where a difference is: position, row or field ("airlines differ at 6 positions, starting at #13"), not just fail |
+| 0 for the whole set | Check whether a single setup broke (in the real run 0/82 because every item started from a form that did not exist) · report "failed at setup" separately from "failed at the check step" · 0% does not mean the feature is absent |
+| The exam's expected numbers contradict each other | Before use, check that the expected numbers do not contradict each other and match the real data (example from that job: the total was 299 but must be 300 · 35 versus 33 · 76 versus 77 came from different surveys) · the builder must not bend the app to fit an exam that contradicts itself. Conclude it is a ceiling and send it back to the exam owner to fix |
+| A loose pass criterion | Write the criterion as an exact number ("must be 300," not "main part works") · if you use a loose criterion, also report the result under the strict one (real run: 4/35 loose became 2/35 strict) |
+| Comparing scores across exam sets | Not possible if the author, scope, criterion or setup differ (in the real run the same version got 94.3% on the old set and 62.2% on the new set) · when the exam and the app come from the same recording, button names match and the score is inflated |
+| One measure can mislead | Read several together (in the real run visual diff was 27% although there was no form at all, because the white backgrounds matched, while structure scored 3.8%) · an item you accept you cannot fix makes that measure blind (74/82 could not tell two versions apart), so bring in a different kind of measure to help |
+| The measure itself may be wrong | Prove it before use: measure the answer key against itself, which must score full · plant a bug and see whether the relaxed criterion still catches it · simulate a "perfectly correct app" to learn whether the criterion or the app is wrong · keep the SHA-256 of the exam files before and after the run to prove they were not edited |
+| Repeated measurement gives different values | Explain it with an experiment, then separate "confirmed" (removing the sentence gave 27.36%) from "not yet confirmed" (the remainder, about 0.5 points) · for data that changes over time, compare structure and rules, not numbers, and note the date collected |
+| An agent's report | The file is the evidence, the summary is an opinion (in the real run the agent said a full pass of 16 items, but the real file had 14) · re-measure yourself with the same set before believing it |
 
-- ตัวรันควรเก็บหลักฐานทุกข้อ ทั้งผ่านและตก และใช้ exit code แยก 0 = ผ่านทั้งหมด · 1 = มีข้อไม่ผ่าน · 2 = ตัวรันพัง
-- ข้อมูลดิบที่บันทึกจากเครือข่ายมี cookie และ token ห้าม commit และห้ามนำออกนอกเครื่อง
-- ตัวเลขข้างบนมาจากงานเดียว ตัวอย่างเทียบเวอร์ชันมี 3–4 จุด ใช้ดูทิศทางได้ ไม่ใช่ข้อพิสูจน์ทางสถิติ
+- The runner should keep evidence for every item, passed and failed, and use separate exit codes: 0 = all passed · 1 = some items failed · 2 = the runner crashed
+- Raw data recorded from the network contains cookies and tokens. Never commit it and never take it off the machine.
+- The numbers above come from a single job, and the version-comparison example has 3–4 points. Use them to see direction, not as statistical proof.
 
-## เช็กก่อนส่ง
+## Check before sending
 
-- [ ] เคสที่บอกว่า `Pass` รันจริงรอบนี้ (`principle-prove-it-works`) · ไม่ได้รันใส่ `Not run` พร้อมเหตุผล
-- [ ] เปิด GIF ของเคสที่ล้มอย่างน้อย 1 ไฟล์ด้วยตา: อ่านคำบรรยายออก กรอบแดงตรงจุด
-- [ ] จำนวนในตารางสรุปของรายงาน = จำนวนเคสใน `run.json` = ผลใน Excel
-- [ ] ถ้าผลใช้ตัดสินแอปหรือลูป: ข้อสอบรันกับระบบเดิมแล้ว · ข้อที่ไม่นับมีเหตุผล · แยก "ล้มที่ setup" ออกจาก "ไม่ผ่าน" (ข้อ 5)
-- [ ] ไม่มีข้อมูลจริงหรือรหัสผ่านในภาพ
-- [ ] ภาพดิบอยู่ใน `_to_delete/` ไม่ค้างใน `qa/`
-- [ ] รันสคริปต์ทดสอบตัวเองผ่าน: `python "<โฟลเดอร์ skill test-evidence>/scripts/make_evidence.py" --self-test` · `python "<โฟลเดอร์ skill test-evidence>/scripts/record_results.py" --self-test`
+- [ ] A case marked `Pass` was really run this round (`principle-prove-it-works`) · one not run gets `Not run` with a reason
+- [ ] Open the GIF of at least 1 failed case by eye: the caption reads clearly, and the red frame sits on the spot
+- [ ] The count in the report's summary table = the number of cases in `run.json` = the results in Excel
+- [ ] If the results judge an app or a loop: the exam was run against the old system · every uncounted item has a reason · "failed at setup" is separated from "fail" (item 5)
+- [ ] No real data or passwords in the images
+- [ ] Raw images are in `_to_delete/`, none left in `qa/`
+- [ ] The scripts' own tests pass: `python "<โฟลเดอร์ skill test-evidence>/scripts/make_evidence.py" --self-test` · `python "<โฟลเดอร์ skill test-evidence>/scripts/record_results.py" --self-test`
 
 
 ---
@@ -646,7 +646,7 @@ Use when writing up one software defect
 
 # Bug Report Template
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write all wording per `human-writing`. This skill gives format and structure; human-writing gives how to write so people can understand.
 
 ## Where bug reports live
 
@@ -660,19 +660,19 @@ One file per bug in `qa/bugs/BUG-<NNNN>-<slug>.md` at the project root. Attach s
 
 ## ไม่ใช้เมื่อ
 
-| งาน | ใช้ตัวนี้แทน |
+| Task | Use this instead |
 |---|---|
-| รายงานบั๊กกองอยู่หลายเรื่อง ต้องคัด ทำซ้ำ และจัดกลุ่มก่อน | `bug-inbox-triage` แล้วใช้ skill นี้เขียนทีละใบ |
-| เขียนกรณีทดสอบล่วงหน้าจากข้อกำหนด (ยังไม่มีบั๊ก) | `test-case-template` |
-| ระบบจริงล่มหรือกระทบผู้ใช้จำนวนมาก | `incident-runbook-template` ระหว่างเหตุ · `postmortem-template` หลังเหตุ |
+| A pile of bug reports that must be screened, reproduced and grouped first | `bug-inbox-triage`, then use this skill to write each one |
+| Writing test cases ahead of time from requirements (no bug yet) | `test-case-template` |
+| The live system is down or many users are affected | `incident-runbook-template` during the incident · `postmortem-template` after it |
 
-## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+## 0 · Look for an existing format first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before using the structure or templates in this file, check whether the user, the client or the project already has its own format:
 
-- **ที่ดู:** แบบฟอร์มของระบบติดตามงานที่โปรเจกต์ใช้: `.github/ISSUE_TEMPLATE/*.yml` หรือ `*.md` · ฟิลด์บังคับของ Jira / Azure Boards / GitLab ที่ผู้ใช้แจ้ง · รายงานบั๊กเก่า 2–3 ใบใน `docs/` หรือ tracker
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** ระดับความรุนแรงใช้ชื่อและเกณฑ์ของทีมถ้ามี · ขั้นทำซ้ำ ผลจริง ผลที่คาดหวัง ยังต้องครบไม่ว่าใช้แบบไหน
+- **What to look at:** the form of the issue tracker the project uses: `.github/ISSUE_TEMPLATE/*.yml` or `*.md` · the required fields of Jira / Azure Boards / GitLab that the user names · 2–3 old bug reports in `docs/` or the tracker
+- **Result:** if found, use it (headings, order, field names, running numbers) and say in the reply which file the format came from. If not found, use the template in this file as the fallback and say that no existing format was found
+- **Every format still needs:** the severity names and criteria of the team, if they have them · the reproduction steps, actual result and expected result, whichever format is used
 
 ## Severity vs Priority
 
@@ -776,7 +776,7 @@ Default formatting is not neutral. It looks like unfinished work.
 
 `/software-development:bug-report-template <brief description of the bug>`
 
-> **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook `bug-fix` แล้วคัดลอกขั้นตอนของ playbook ลง todo ก่อน ส่วนขั้นตอนด้านล่างบอกรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้คู่กับ playbook ไม่ได้ใช้แทน
+> **Shortcut into SuperUser:** open the `superuser` skill with the `bug-fix` playbook and copy the playbook's steps into the todo first. The steps below describe the work format and output of this command. Use them together with the playbook, not instead of it.
 
 Use the `qa-tester` agent to create a complete bug report for: **$ARGUMENTS**
 
@@ -1513,29 +1513,29 @@ The column template and the values used in each field live in one place, the [qu
 
 ## reference: playbook-bug-fix.md
 
-# playbook · bug-fix — แก้ของพังด้วยหลักฐาน
+# playbook · bug-fix — fix broken things with evidence
 
-ใช้เมื่อ: error · stack trace · test ล้ม · หน้าจอผิด · หน่วยความจำรั่ว · CPU วิ่งตอนว่าง · ผู้ใช้แจ้งปัญหา · ของที่ไม่ควรเกิดเลย (ถ้าใช้ได้อยู่แต่อยากให้เร็วหรือเบาขึ้นถึงเป้า → `performance`) (รวม `bug fix` · `runtime forensics` · `trace forensics` ของ pstack)
-skill หลัก: [`code-orientation`](../../code-orientation/SKILL.md) · skill ตาม stack · `targeted-fix` · `principle-fix-root-cause` · `principle-prove-it-works`
+Use when: an error · stack trace · failing test · wrong screen · memory leak · CPU busy while idle · a user report · something that should never happen (if it works but you want it faster or lighter to a target → `performance`) (covers pstack's `bug fix` · `runtime forensics` · `trace forensics`)
+Main skills: [`code-orientation`](../../code-orientation/SKILL.md) · the skill for the stack · `targeted-fix` · `principle-fix-root-cause` · `principle-prove-it-works`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. คัดอาการตรงตัว — ข้อความ error · ชื่อ test · ภาพหน้าจอ · ขั้นตอนที่ผู้ใช้ทำ · ใคร: หัวหน้าทีม
-2. **ทำให้เกิดซ้ำเองในที่เดียวกับที่ผู้ใช้เจอ** — ถ้าเป็นหน้าเว็บ ให้ใช้ skill ตรวจแอปของโปรเจกต์ (ถ้ายังไม่มี ให้ทำ `app-verifier-setup` ก่อน) ถ้าเป็น API ให้ใช้คำสั่งเรียกจริง ถ้าทำซ้ำไม่ได้ ให้บอกว่าขาดอะไร (ข้อมูล · สภาพแวดล้อม · ขั้นตอน) แล้วหยุดเฉพาะบั๊กนี้ ส่วนโปรเจกต์ที่มี `.sandbox/` (ข้อยกเว้นของรากตาม `project-doc-set` ข้อ 1) ให้ทำซ้ำใน sandbox · ใคร: `qa-tester` ตัวใหม่
-   - อาการที่เกิดตอนรัน (รั่ว · ค้างเป็นพัก ๆ · วิ่งตอนว่าง) ให้ใส่การวัดหรือ log ชั่วคราว เพื่อให้อาการกลายเป็นตัวเลขก่อนแก้ ถ้าได้ไฟล์ profile มา (cpuprofile · heap snapshot · trace) ให้อ่านด้วยเครื่องมือของไฟล์ชนิดนั้น ไม่เดาจากโค้ด
-3. **เขียน test ที่ล้มเพราะบั๊กนี้ก่อน** แล้วรันให้เห็นว่าแดง (`testing-standards`) ถ้าโปรเจกต์ยังไม่มี test เลย ให้ตั้ง test ตัวแรกให้รันได้ก่อน ถ้าทำ test ไม่ได้จริง (เช่น อาการที่เกิดตอนรันบนเครื่องผู้ใช้) ให้เขียนเหตุผลลงรายงาน และต้องมีขั้นตอนทำซ้ำที่รันได้แทน · ใคร: `developer` ตัวใหม่
-   - ถ้ายังไม่ได้อ่านส่วนนี้ใน session นี้ ให้ทำ [`code-orientation`](../../code-orientation/SKILL.md) ก่อนไล่ต้นเหตุ
-4. หาต้นเหตุตาม `principle-fix-root-cause` · ต้นเหตุที่หายากหรือหลายชั้น ส่ง agent ด้วย `model: opus` (`superuser` หัวข้อ 5) · ใคร: `developer` ตัวใหม่ (ส่งผลขั้น 3)
-5. ถ้าจะแก้ของที่ใช้ร่วม (helper · type · config · schema) ให้หาทุกจุดที่กระทบตาม [`blast-radius`](../../blast-radius/SKILL.md) ก่อนแก้ · **บั๊กด้านความปลอดภัย** ให้ค้นทั้ง repo หาจุดที่เขียนแบบเดียวกันด้วย · ส่งรายการจุดให้ขั้น 6 · ใคร: `Explore` ตัวใหม่
-6. แก้ให้เล็กที่สุดที่ยังถูก (`lazy-coding`) ครบทุกจุดจากขั้น 4–5 ในรอบเดียว — ส่งตำแหน่งไฟล์และต้นเหตุไปด้วย · บั๊กความปลอดภัยลงรายงานใน `qa/security/` ถ้ามีค่าลับหลุด ให้บอกผู้ใช้ให้เปลี่ยนค่าทันที · ใคร: `developer` ตัวใหม่
-7. พิสูจน์ — รันกรณีที่เคยล้มให้ผ่าน รันกรณีใกล้เคียงว่ายังผ่าน แล้วลองทำซ้ำในที่เดิมอีกครั้งด้วยตัวเอง · ใคร: `qa-tester` ตัวใหม่
-8. **รีวิว diff ก่อนบอกว่าเสร็จ** — ตาม `code-review-checklist`: แก้ที่ต้นเหตุ ไม่ลามนอกจุด ผลขั้น 7 ครอบกรณีที่เคยล้ม · บั๊กความปลอดภัยดูครบทุกจุดจากขั้น 5 · ไม่ผ่าน → `developer` ตัวใหม่แก้ แล้ววนตามรอบตรวจใน [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
-9. ถ้าบั๊กนี้เป็นแบบที่ agent เคยทำมาแล้ว ให้ใช้ `repeated-mistakes-to-checks` · ใคร: หัวหน้าทีม
-10. ส่งมอบตามกฎ commit ใน `superuser` หัวข้อ 6 แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม
+1. Copy the symptom exactly — the error message · test name · screenshot · the steps the user took · ใคร: หัวหน้าทีม
+2. **Reproduce it yourself in the same place the user hit it.** For a web page, use the project's app-checking skill (if there is none yet, do `app-verifier-setup` first). For an API, use a real call. If you cannot reproduce it, say what is missing (data · environment · steps) and stop on this bug only. In a project that has `.sandbox/` (the root exception in `project-doc-set` item 1), reproduce inside the sandbox · ใคร: `qa-tester` ตัวใหม่
+   - For a symptom that appears at run time (leak · intermittent hang · busy while idle), add temporary measurement or logging so the symptom becomes a number before you fix it. If you were given a profile file (cpuprofile · heap snapshot · trace), read it with the tool for that file type. Do not guess from the code.
+3. **Write a test that fails because of this bug first**, and run it to see it red (`testing-standards`). If the project has no tests at all, first set up a first test that runs. If you truly cannot write a test (for example a symptom that happens at run time on the user's machine), write the reason in the report, and provide a runnable reproduction procedure instead · ใคร: `developer` ตัวใหม่
+   - If you have not read this part in this session, do [`code-orientation`](../../code-orientation/SKILL.md) before tracing the cause
+4. Find the root cause per `principle-fix-root-cause` · for a rare or multi-layer cause, send an agent with `model: opus` (`superuser` section 5) · ใคร: `developer` ตัวใหม่ (pass in the step 3 result)
+5. If you will change something shared (helper · type · config · schema), find every spot it affects per [`blast-radius`](../../blast-radius/SKILL.md) before changing it · for a **security bug**, also search the whole repo for places written the same way · pass the list of spots to step 6 · ใคร: `Explore` ตัวใหม่
+6. Make the smallest fix that is still correct (`lazy-coding`), covering every spot from steps 4–5 in one round — pass the file locations and the root cause along · write a security bug up in the report under `qa/security/` · if a secret leaked, tell the user to rotate it at once · ใคร: `developer` ตัวใหม่
+7. Prove it — run the case that used to fail and see it pass, run the nearby cases and see they still pass, then try to reproduce it in the original place once more yourself · ใคร: `qa-tester` ตัวใหม่
+8. **Check (ตรวจ) the diff by review before saying done** — per `code-review-checklist`: the fix is at the root cause, does not spread beyond the spot, and the step 7 result covers the case that used to fail · for a security bug, look at every spot from step 5 · if it fails → a fresh `developer` fixes it, then loop per the check rounds in [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
+9. If this bug is the kind an agent has made before, use `repeated-mistakes-to-checks` · ใคร: หัวหน้าทีม
+10. Deliver per the commit rules in `superuser` section 6, then finish with `status-report` · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-`ต้นเหตุ: … · แก้: … · พิสูจน์: <กรณีที่เคยล้มและตอนนี้ผ่าน + วิธีที่รัน>`
+`ต้นเหตุ: … · แก้: … · พิสูจน์: <the case that used to fail and now passes + how it was run>` (root cause · fix · proof)
 
 
 ## reference: playbook-feature.md
@@ -1583,25 +1583,25 @@ Every pass criterion of the requirements has evidence — a test that actually r
 
 ## reference: playbook-housekeeping.md
 
-# playbook · housekeeping — เก็บกวาดเครื่องและโปรเจกต์
+# playbook · housekeeping — clean up the machine and the project
 
-ใช้เมื่อ: ดิสก์เต็ม · worktree หรือ branch ค้างเยอะ · sandbox และ image เก่าสะสม · `_to_delete/` ใหญ่ (รวม `worktree cleanup` ของ pstack)
-หลัก: เก็บกวาดคือการลบ อะไรที่อาจมีงานของคนอยู่ให้ **ใส่ไว้ใน "รออนุมัติ"** พร้อมคำสั่งลบ ไม่ลบเอง
+Use when: the disk is full · many leftover worktrees or branches · old sandboxes and images pile up · `_to_delete/` is large (covers pstack's `worktree cleanup`)
+Principle: cleaning up means deleting. Anything that may hold someone's work goes **under "รออนุมัติ"** (awaiting approval) with its delete command, and you do not delete it yourself.
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ทำรายการ ขั้นนี้ยังไม่ลบอะไร · ใคร: หัวหน้าทีม
-   - git worktree และ branch ที่ merge แล้วหรือไม่ได้แตะเกิน 30 วัน (`git worktree list` · `git branch --merged`)
-   - sandbox ของ SQT (`docker ps -a --filter label=sqt.sandbox=true`) · image และ volume ที่ไม่มีคอนเทนเนอร์ใช้
-   - ขนาด `_to_delete/` ของแต่ละโปรเจกต์
-2. แยกเป็น 2 กลุ่ม คือกลุ่มที่ลบได้แน่ (merge แล้ว · ไม่มีไฟล์ค้าง) และกลุ่มที่ต้องให้คนตัดสิน (มีงานที่ยังไม่ commit · ไม่แน่ใจ) · ใคร: หัวหน้าทีม
-3. แสดงตาราง `| ของ | ขนาด | เหตุผลที่ลบได้ | ความเสี่ยง |` ให้ผู้ใช้ ใต้หัวข้อ **"รออนุมัติ"** พร้อมคำสั่งลบที่กดได้ทันที ส่วนข้อที่ไม่แน่ใจให้ลงใน "ค้างอยู่" · ใคร: หัวหน้าทีมเสนอ · ผู้ใช้อนุมัติ
-4. เมื่อผู้ใช้อนุมัติแล้ว ให้ลบเฉพาะรายการที่อนุมัติ worktree ที่มีไฟล์ค้างให้เก็บ patch ไว้ก่อนลบ ส่วน sandbox ให้ใช้ `.sandbox/sandbox.ps1 destroy` (`.sandbox/` เองอยู่ที่รากต่อได้ตาม `project-doc-set` ข้อ 1) · ใคร: หัวหน้าทีม
-5. รายงานพื้นที่ที่ได้คืน แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม
+1. Make the list. Delete nothing in this step · ใคร: หัวหน้าทีม
+   - git worktrees and branches that are merged or untouched for more than 30 days (`git worktree list` · `git branch --merged`)
+   - SQT sandboxes (`docker ps -a --filter label=sqt.sandbox=true`) · images and volumes no container uses
+   - the size of each project's `_to_delete/`
+2. Split into 2 groups: what is surely deletable (merged · no leftover files) and what needs a person to decide (uncommitted work · unsure) · ใคร: หัวหน้าทีม
+3. Show the user the table `| ของ | ขนาด | เหตุผลที่ลบได้ | ความเสี่ยง |` (item · size · reason it can be deleted · risk) under the heading **"รออนุมัติ"**, with delete commands ready to run at once. Put the unsure items under "ค้างอยู่" (pending) · ใคร: หัวหน้าทีมเสนอ · ผู้ใช้อนุมัติ
+4. Once the user approves, delete only the approved items. For a worktree with leftover files, keep a patch before deleting. For a sandbox, use `.sandbox/sandbox.ps1 destroy` (`.sandbox/` itself may stay at the root per `project-doc-set` item 1) · ใคร: หัวหน้าทีม
+5. Report the space recovered, then finish with `status-report` · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-ลบเฉพาะสิ่งที่ผู้ใช้อนุมัติ และไม่มีงานของใครหายไปโดยไม่มี patch สำรอง
+Only what the user approved was deleted, and no one's work was lost without a backup patch
 
 
 ## reference: playbook-investigation.md
@@ -1768,24 +1768,24 @@ Every document ordered has a status in `docs/BUILD-PLAN.md` and its check result
 
 ## reference: playbook-prototype.md
 
-# playbook · prototype — ทดลองให้ผลรันเป็นคนตัดสิน
+# playbook · prototype — experiment, and let the run result decide
 
-ใช้เมื่อ: กำลังจะถามคนว่า "แบบไหนดี" แต่คำตอบดูได้จากการรัน — ความเร็ว · หน้าตา · พฤติกรรม · ผลลัพธ์
-ห้ามใช้เมื่อ: เป็นเรื่องรสนิยมหรือการตัดสินใจทางธุรกิจที่ทดลองไม่ได้ — อันนั้นถามคน
+Use when: you are about to ask a person "which one is better?" but the answer can be seen by running it — speed · looks · behavior · output
+Do not use when: it is a matter of taste or a business decision that an experiment cannot settle — ask a person for that
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เขียนคำถามที่จะให้การทดลองตอบ และเกณฑ์ตัดสินเป็นตัวเลขหรือสิ่งที่เห็นได้ ก่อนลงมือ · ใคร: หัวหน้าทีม
-2. สร้างทางเลือก 2–3 ทาง แบบเล็กที่สุดที่ยังตอบคำถามได้ ใน `_to_delete/prototype-<เรื่อง>/` ถ้าทางเลือกเยอะหรือใหญ่ ให้ใช้ `parallel-attempts-pick-best` · ใคร: `developer` ตัวใหม่ทางละตัว (ยังไม่รู้ว่าจะลองทางไหน: `brainstormer` ตัวใหม่เสนอก่อน)
-3. รันทุกทางด้วยวิธีวัดเดียวกัน — ข้อมูลชุดเดียวกัน เครื่องเดียวกัน แล้วบันทึกผลดิบ · ใคร: `qa-tester` ตัวใหม่
-4. ตัดสินตามเกณฑ์ข้อ 1 ถ้าผลก้ำกึ่ง ให้เลือกทางที่โค้ดน้อยและแก้ทีหลังง่ายกว่า · ใคร: หัวหน้าทีม
-5. ตรวจการตัดสิน — ตัวเลขมาจากผลดิบข้อ 3 จริง วัดแบบเดียวกันทุกทาง และเกณฑ์ตรงกับข้อ 1 · ใคร: `reviewer` ตัวใหม่
-6. ลงผลใน `decision-log` — เลือก · ไม่เลือก · ตัวเลขที่วัดได้ · ใคร: หัวหน้าทีม
-7. กลับไปทำ playbook เดิมต่อด้วยทางที่ชนะ แต่ไม่ย้ายโค้ดทดลองเข้าโปรเจกต์ตรง ๆ · ใคร: หัวหน้าทีม
+1. Before starting, write the question the experiment will answer, and the deciding criterion as a number or something visible · ใคร: หัวหน้าทีม
+2. Build 2–3 options, each as small as can still answer the question, in `_to_delete/prototype-<topic>/`. If the options are many or large, use `parallel-attempts-pick-best` · ใคร: `developer` ตัวใหม่ one per option (if it is not yet known which options to try: `brainstormer` ตัวใหม่ proposes first)
+3. Run every option with the same way of measuring — the same data, the same machine — and record the raw results · ใคร: `qa-tester` ตัวใหม่
+4. Decide by the criterion from step 1. If the result is close, choose the option with less code that is easier to change later · ใคร: หัวหน้าทีม
+5. Check (ตรวจ) the decision — the numbers really come from the raw results in step 3, every option was measured the same way, and the criterion matches step 1 · ใคร: `reviewer` ตัวใหม่
+6. Record the result in `decision-log` — chosen · not chosen · the measured numbers · ใคร: หัวหน้าทีม
+7. Return to the original playbook with the winning option, but do not move the experiment code straight into the project · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-มีตัวเลขหรือภาพเทียบที่ตอบคำถามข้อ 1 ได้ และการตัดสินถูกบันทึกแล้ว
+There are numbers or a side-by-side picture that answer the step 1 question, and the decision is recorded
 
 
 ## reference: playbook-refactor.md
@@ -2026,26 +2026,26 @@ All the step 1 conditions pass, or every remaining piece has a reason why it is 
 
 ## reference: playbook-visual-parity.md
 
-# playbook · visual-parity — หน้าจอจริงต้องตรงกับต้นแบบ
+# playbook · visual-parity — the real screen must match the reference
 
-ใช้เมื่อ: ทำหน้าจอให้ตรง mockup · ย้ายหน้าจอจากเทคโนโลยีเก่าไปใหม่แล้วต้องเหมือนเดิม · ผู้ใช้บอกว่า "ไม่เหมือนแบบ"
-skill หลัก: skill ตรวจแอปของโปรเจกต์ (`app-verifier-setup`) · `ui-craft` · `principle-prove-it-works`
+Use when: making a screen match a mockup · moving a screen from an old technology to a new one and it must look the same · the user says "ไม่เหมือนแบบ" (it does not look like the design)
+Main skills: the project's app-checking skill (`app-verifier-setup`) · `ui-craft` · `principle-prove-it-works`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ระบุต้นแบบ (ไฟล์ใน `mockup/` หรือหน้าจอระบบเดิม) และหน้าจอจริงที่จะเทียบ เป็นคู่ ๆ · ใคร: หัวหน้าทีม
-2. ถ่ายภาพทั้งสองฝั่งด้วยขนาดหน้าต่างเดียวกัน ข้อมูลชุดเดียวกัน ด้วย skill ตรวจแอป แล้วเก็บใน `_to_delete/parity/` · ใคร: `qa-tester` ตัวใหม่
-3. เทียบด้วยเครื่องมือ — ใช้ภาพต่าง (pixel diff) ถ้ามี ถ้าไม่มีให้เทียบทีละส่วน: ระยะห่าง · ขนาดตัวอักษร · สี · ลำดับ · สถานะว่าง/โหลด/ผิดพลาด · ใคร: `qa-tester` ตัวใหม่
-4. ทำรายการต่างที่พบ `| จุด | ต้นแบบ | ของจริง | แก้ที่ไฟล์ |` เรียงจากที่ผู้ใช้เห็นก่อน · ใคร: `qa-tester` ตัวใหม่
-5. แก้ทีละกลุ่ม แล้วถ่ายภาพเทียบใหม่ทุกครั้ง · ใคร: `developer` ตัวใหม่ต่อกลุ่ม · `qa-tester` ตัวใหม่ถ่ายเทียบ
-6. จุดที่ต่างโดยตั้งใจ (ต้นแบบผิดหลัก `ui-craft` หรือทำจริงไม่ได้) ไม่ต้องแก้ตาม แต่ให้ลงเหตุผลใน `decision-log` · ใคร: หัวหน้าทีม
-7. กดทุกปุ่มบนหน้าจอจริงว่าทำงาน ไม่ดูแค่หน้าตาเหมือน · ใคร: `qa-tester` ตัวใหม่
-8. ตรวจว่ารายการต่างข้อ 4 ปิดครบ ภาพเทียบล่าสุดตรงต้นแบบ และเหตุผลข้อ 6 ฟังขึ้น · ไม่ผ่าน → วนตามรอบตรวจใน [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
-9. จบด้วย `status-report` · ใคร: หัวหน้าทีม
+1. Identify the reference (a file in `mockup/` or the old system's screen) and the real screen to compare, as pairs · ใคร: หัวหน้าทีม
+2. Capture both sides at the same window size with the same data, using the app-checking skill, and keep them in `_to_delete/parity/` · ใคร: `qa-tester` ตัวใหม่
+3. Compare with a tool — use a pixel diff if there is one. If not, compare part by part: spacing · font size · colour · order · empty/loading/error states · ใคร: `qa-tester` ตัวใหม่
+4. Make a list of the differences found, `| จุด | ต้นแบบ | ของจริง | แก้ที่ไฟล์ |` (spot · reference · real · file to fix), ordered by what the user sees first · ใคร: `qa-tester` ตัวใหม่
+5. Fix one group at a time, and capture a new comparison after each · ใคร: `developer` ตัวใหม่ per group · `qa-tester` ตัวใหม่ captures the comparison
+6. For differences that are deliberate (the reference breaks `ui-craft` rules or cannot really be built), do not fix them to match, but record the reason in `decision-log` · ใคร: หัวหน้าทีม
+7. Click every button on the real screen to confirm it works. Do not stop at looking the same · ใคร: `qa-tester` ตัวใหม่
+8. Check (ตรวจ) that every difference in the step 4 list is closed, the latest comparison matches the reference, and the step 6 reasons hold up · if it fails → loop per the check rounds in [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
+9. Finish with `status-report` · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-ทุกคู่มีภาพเทียบล่าสุด และรายการต่างที่เหลือมีเหตุผลกำกับทุกข้อ
+Every pair has a latest comparison image, and every remaining difference has a reason attached
 
 
 ## reference: playbooks.md

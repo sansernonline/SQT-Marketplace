@@ -1,10 +1,10 @@
-# ขั้น 2 รายการครอบคลุม (ledger) — นับได้ว่าตรวจอะไรไปแล้ว และอะไรยังไม่ได้ตรวจ
+# Step 2 coverage list (ledger): count what has been checked and what has not
 
-ledger คือรายการหน่วยงาน 1 แถวต่อ 1 หน่วย · 1 หน่วย = ทางเข้า 1 ทาง × ขอบเขตความไว้ใจ 1 เส้น × ประเภทการโจมตี 1 ประเภท · หัวหน้าทีมเขียนไฟล์นี้คนเดียว ลูกทีมคืนผลต่อหน่วยให้หัวหน้าอัปเดต
+The ledger is the list of work units, 1 row per unit. 1 unit = 1 entry point × 1 trust boundary × 1 attack class. Only the team lead writes this file. Sub-agents return results per unit and the lead updates the ledger.
 
-ไม่มี ledger ก็บอกไม่ได้ว่า "ไม่เจอ" แปลว่าไม่มี หรือแปลว่าไม่ได้ดู · รายงานทุกฉบับจึงนับจาก ledger ไม่ใช่จากความรู้สึก
+Without a ledger you cannot tell whether "found nothing" means there is nothing or means nobody looked. So every report counts from the ledger, not from a feeling.
 
-## รูปไฟล์
+## File shape
 
 `qa/security/audit-<YYYY-MM-DD>/ledger.json`
 
@@ -24,48 +24,48 @@ ledger คือรายการหน่วยงาน 1 แถวต่อ 
 }
 ```
 
-| ช่อง | ความหมาย |
+| Field | Meaning |
 |---|---|
-| `coverage_id` | `<path>#<symbol>:<boundary>:<class>` · ไม่ซ้ำ · ไม่มีเลขบรรทัด รอบ หรือชื่อ agent เพราะต้องคงเดิมข้ามรอบ |
-| `entrypoint` | `<path>#<ทางเข้า>` รูปเดียวกับ `entrypoint` ของ finding |
-| `boundary` | เส้นที่ถูกข้าม เขียนเป็น `<ต้นทาง>-to-<ปลายทาง>` เช่น `anonymous-to-customer` · `customer-to-other-customer` · `shop-to-other-shop` · `line-platform-to-server` · `staff-to-admin` |
-| `class` | ประเภทการโจมตี ใช้ชื่อเดียวกับช่อง `class` ของ finding (รายการใน `attack-classes`) · ตัวตรวจไม่ล็อกรายชื่อ เพื่อให้ใส่ประเภทใหม่ได้ แต่ถ้ามีชื่อในรายการแล้วต้องใช้ชื่อนั้น เพราะ fingerprint คิดจากช่องนี้ ชื่อเปลี่ยนแล้ว finding เดิมจะกลายเป็นข้อใหม่ |
-| `status` | ตารางด้านล่าง |
-| `finding_ids` | id ของ finding ที่มาจากหน่วยนี้ · ไม่มีให้ใส่ `[]` · finding ต้องอ้างแถวนี้กลับใน `coverage_ids` |
-| `note` | สิ่งที่ตรวจและผล · ต้องมีเมื่อ `not_applicable` หรือ `blocked` |
+| `coverage_id` | `<path>#<symbol>:<boundary>:<class>` · unique · no line number, round or agent name, because it must stay the same across rounds |
+| `entrypoint` | `<path>#<entry point>` in the same form as the finding's `entrypoint` |
+| `boundary` | The line being crossed, written as `<from>-to-<to>`, for example `anonymous-to-customer` · `customer-to-other-customer` · `shop-to-other-shop` · `line-platform-to-server` · `staff-to-admin` |
+| `class` | The attack class, using the same name as the finding's `class` field (the list is in `attack-classes`). The validator does not lock the list, so you may add a new class. But if a name is already in the list, use that name, because the fingerprint is computed from this field. If the name changes, the old finding becomes a new one. |
+| `status` | The table below |
+| `finding_ids` | The ids of findings that come from this unit · use `[]` if none · a finding must refer back to this row in `coverage_ids` |
+| `note` | What was checked and the result · required when `not_applicable` or `blocked` |
 
 ## coverage_id
 
-- `<path>` คือไฟล์ที่มีตัวจัดการทางเข้า · `<symbol>` คือชื่อฟังก์ชัน คลาส หรือ handler (ไม่มีชื่อ ใช้ method+path ที่ตัดอักขระพิเศษ เช่น `get-orders-id`) · path ใช้ `/` เสมอ แม้ทำงานบน Windows
-- ตัวอักษรที่ใช้: a-z 0-9 `/` `.` `_` `-` `#` `:` เท่านั้น · ช่องว่างและตัวอื่นแปลงเป็น `-`
-- `quick` รวมหน่วยหยาบได้: ใช้ `<path>#*` แทน symbol เมื่อทั้งไฟล์ใช้ตัวคุมเดียวกัน แต่ห้ามรวมข้ามขอบเขตหรือข้ามประเภท
-- `deep` แตกตามวงจรชีวิตข้อมูลด้วย ต่อท้าย class เช่น `idor-delete` · `idor-restore`
+- `<path>` is the file that holds the entry-point handler. `<symbol>` is the function, class or handler name (if it has no name, use the method+path with special characters removed, such as `get-orders-id`). The path always uses `/`, even on Windows.
+- Allowed characters: a-z 0-9 `/` `.` `_` `-` `#` `:` only. Spaces and any other character become `-`.
+- `quick` may merge units coarsely: use `<path>#*` in place of the symbol when the whole file uses the same control. Never merge across boundaries or across classes.
+- `deep` also splits by data life cycle, appended to the class, such as `idor-delete` · `idor-restore`.
 
-## สถานะ
+## Status
 
-| สถานะ | ความหมาย | ต้องมี |
+| Status | Meaning | Requires |
 |---|---|---|
-| `pending` | ยังไม่ได้แจก หรือแจกแล้วยังไม่ได้ผล | — |
-| `checked` | ลูกทีมคืนผลแล้ว และหัวหน้าเห็นหลักฐานว่าตรวจครบตามหน่วย จะมี finding หรือไม่มีก็ได้ | `note` บอกสิ่งที่ตรวจ |
-| `not_applicable` | หน่วยนี้ไม่มีจริง เช่น ทางเข้าไม่ต้อง login จึงไม่มีขอบเขต `customer-to-other-customer` | `note` บอกเหตุผล |
-| `blocked` | ตรวจไม่ได้ เพราะขาดข้อเท็จจริงนอก repo ห้องรันไม่ได้ หรืองบหมด | `note` บอกว่าติดอะไร |
+| `pending` | Not yet handed out, or handed out with no result yet | — |
+| `checked` | The sub-agent returned a result, and the lead saw evidence that the unit was fully checked. It may or may not have a finding. | `note` says what was checked |
+| `not_applicable` | This unit does not really exist, for example the entry point needs no login, so the `customer-to-other-customer` boundary does not exist | `note` gives the reason |
+| `blocked` | Cannot be checked, because a fact outside the repo is missing, the lab cannot run, or the budget ran out | `note` says what blocked it |
 
-- แถวที่ยัง `pending` ตอนจบ ตัวตรวจจะเตือน และรายงานต้องนับเป็นงานค้าง ห้ามเปลี่ยนเป็น `checked` เพื่อให้ตัวเลขดูดี
-- ขอบเขตนอกงานรอบนี้ (ผู้ใช้เลือกตรวจบางส่วน) ไม่ต้องมีแถว แต่รายงานต้องเขียนขอบเขตไว้
-- งบหมดก่อนแจกครบ ให้แถวที่เหลือเป็น `blocked` พร้อม `note: งบหมด` แล้วรายงานว่า `ยังไม่ครบ`
+- A row still `pending` at the end draws a warning from the validator, and the report must count it as outstanding work. Never change it to `checked` to make the numbers look good.
+- Scope outside this round (the user chose a partial review) needs no row, but the report must state the scope.
+- If the budget runs out before everything is handed out, set the remaining rows to `blocked` with `note: งบหมด` and report `ยังไม่ครบ`.
 
-## วิธีสร้างแถวจาก architecture.md
+## Building rows from architecture.md
 
-1. ไล่ทางเข้าทุกทางจากมุม 1c
-2. ต่อทางเข้า ถามว่าผู้ใช้ระดับไหนเข้าถึงได้ และข้ามไปถึงอะไรได้บ้าง ได้เป็นขอบเขต 1 เส้นขึ้นไป
-3. ต่อขอบเขต เลือกประเภทการโจมตีที่เป็นไปได้จาก `attack-classes` และไฟล์ตามสายที่เลือกไว้
-4. candidate จาก `security-gate` ผูกกับแถวที่ตรงกัน ไม่มีแถวตรง ให้สร้างแถวใหม่
-5. รอบก่อนมี ledger: ยกแถวเดิมมาทั้งหมด · โค้ดของแถวไม่เปลี่ยนและเคย `checked` คงเป็น `checked` ได้ แต่ข้อ confirmed ในแถวนั้นต้องยืนยันใหม่ · โค้ดเปลี่ยน กลับเป็น `pending` · `blocked` เดิมกลับเป็น `pending`
+1. Go through every entry point from angle 1c.
+2. For each entry point, ask which user level can reach it and what it can cross into. That gives 1 or more boundaries.
+3. For each boundary, choose the possible attack classes from `attack-classes` and the family files chosen.
+4. Bind each candidate from `security-gate` to the row that matches it. If no row matches, create a new row.
+5. If a previous round has a ledger: carry over all old rows. A row whose code has not changed and was `checked` may stay `checked`, but the confirmed items in that row must be re-verified. If the code changed, go back to `pending`. An earlier `blocked` goes back to `pending`.
 
-## ตรวจ
+## Validate
 
 ```bash
 node <skill>/scripts/validate_ledger.mjs qa/security/audit-<YYYY-MM-DD>/ledger.json --findings qa/security/audit-<YYYY-MM-DD>/findings.json
 ```
 
-ตัวตรวจจับ: `coverage_id` ซ้ำ · สถานะนอก 4 ค่า · `not_applicable` หรือ `blocked` ที่ไม่มี `note` · path ไม่ปลอดภัย · แถวที่ยัง `pending` ขึ้นเป็นคำเตือน ไม่ใช่ error · เมื่อใส่ `--findings` จะจับการอ้างที่ไม่กลับกันทั้ง 2 ทาง (แถวอ้าง finding แต่ finding ไม่อ้างแถว หรือกลับกัน)
+The validator catches: duplicate `coverage_id` · a status outside the 4 values · `not_applicable` or `blocked` with no `note` · an unsafe path. A row still `pending` appears as a warning, not an error. With `--findings`, it catches references that do not point back in both directions (a row cites a finding but the finding does not cite the row, or the reverse).

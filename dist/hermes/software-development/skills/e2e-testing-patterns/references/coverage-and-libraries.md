@@ -1,6 +1,6 @@
 # Critical Path Coverage Matrix และ Library Quick Reference
 
-ตัวอย่างตารางความครอบคลุมของเส้นทางผู้ใช้ และตารางเทียบคำสั่งที่ใช้บ่อยของ Playwright กับ Cypress
+An example user-journey coverage table, and a table comparing commonly used Playwright and Cypress commands
 
 ## Critical Path Coverage Matrix
 

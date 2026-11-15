@@ -1,52 +1,52 @@
-# สายข้อมูลหลายลูกค้า และวงจรชีวิตข้อมูล
+# Class family: multi-customer data and data lifecycle
 
-เปิดเมื่อข้อมูลของหลายร้าน หลายสาขา หรือหลายลูกค้าอยู่ในฐานเดียว · มี export · backup · import · ลบหรือกู้คืนข้อมูล · มี cache search หรือ analytics ที่เก็บสำเนา · วางหัวข้อที่เลือกลง brief ลูกทีมทั้งก้อน · ระบบ SaaS หลายผู้เช่าดูหลักออกแบบใน `saas-platform` ประกอบ
+Open this when data from several shops, branches or customers lives in one database · there is export · backup · import · deletion or restore · a cache, search or analytics store keeps copies. Paste the chosen sections into the sub-agent brief whole. For a multi-tenant SaaS system, read the design principles in `saas-platform` alongside.
 
-## กติกาประจำสาย
+## Rules for this family
 
-- มีคอลัมน์ `shop_id` หรือ `owner_id` ในตาราง ไม่ได้แปลว่าแยกข้อมูลแล้ว ต้องหาให้เจอว่า query · key · path หรือ policy ตัวไหนบังคับใช้ ในทุกทางอ่านและเขียน
-- ตามสำเนาให้ครบ: ข้อมูลหลักที่ปลอดภัยอาจรั่วจาก cache · search index · ไฟล์ export · log · backup · ภาพตัวอย่าง ที่ตรวจสิทธิ์คนละแบบ
-- การลบและการเพิกถอนสิทธิ์คือสัญญา ต้องดูทั้งข้อมูลปัจจุบัน ประวัติ cache index export ที่ส่งไปแล้ว และงานในคิว
-- ความชอบเรื่องความเป็นส่วนตัวหรือระยะเวลาเก็บ ยังไม่ใช่ช่องโหว่ ต้องมีขอบเขตที่ระบบสัญญาไว้ และคนที่ไม่มีสิทธิ์เข้าถึงได้จริง · เรื่องระยะเวลาเก็บตามกฎหมาย ส่ง `pdpa-compliance`
-- พิสูจน์ด้วยผู้เช่าปลอม 2 รายในห้องเสมอ ห้ามใช้ข้อมูลจริง
+- A `shop_id` or `owner_id` column in a table does not mean the data is separated. Find which query · key · path or policy enforces it, on every read and write path.
+- Follow every copy: a safe primary store can still leak from a cache · search index · export file · log · backup · preview image, each of which checks rights differently.
+- Deletion and revoking rights are promises. Check the current data, history, cache, index, exports already sent, and jobs in the queue.
+- A privacy preference or a retention period is not yet a vulnerability. There must be a boundary the system promised, and someone without rights must really be able to cross it. For legal retention periods, hand off to `pdpa-compliance`.
+- Always prove it with 2 fake tenants in the lab. Never use real data.
 
-## การแยกข้อมูล
+## Data separation
 
-| ประเภท (`class`) | ล่าอะไร | สัญญาณในโค้ด | พิสูจน์อย่างไร | มักแจ้งผิดเมื่อ |
+| Class (`class`) | What it hunts | Signal in code | How to prove it | Often misreported when |
 |---|---|---|---|---|
-| `idor` · `tenant-scope` | อ่านหรือแก้ record ด้วย id โดยไม่กรองเจ้าของหรือร้าน | `findById(id)` · `WHERE id = ?` ไม่มี `AND shop_id = ?` · repository กลางที่ไม่รับ tenant | test ผู้เช่า A ขอ id ของ B ต้องได้ 403 หรือ 404 | มี global filter (EF `HasQueryFilter` · Prisma middleware · Postgres RLS) ครอบอยู่แล้ว ต้องเปิดดูว่าครอบ query นี้จริง |
-| `key-collision` | key ของ cache ไฟล์ หรือ unique index ไม่รวม tenant จนชนกัน | `cache.get('orders:' + id)` · `UNIQUE(code)` ที่ควรเป็น `UNIQUE(shop_id, code)` | 2 ร้านสร้างรหัสเดียวกันแล้วดูว่าเห็นของกันไหม | id เป็น UUID ทั้งระบบและไม่มีทางชน |
-| `policy-query-mismatch` | ตรวจสิทธิ์ด้วยเงื่อนไขหนึ่ง แต่ query ดึงด้วยอีกเงื่อนไข | ตรวจ `user.shopId` แล้ว query ใช้ `req.body.shopId` | test ส่ง shopId ของร้านอื่นใน body | ค่าใน body ถูกเขียนทับด้วยค่าจาก session ก่อน query |
-| `signed-url-scope` | ลิงก์ไฟล์ที่ลงชื่อแล้วใช้ได้นานเกิน กว้างเกิน หรือเดาได้ | `expiresIn` เป็นวันหรือไม่มี · path ไฟล์เป็นเลขเรียง | ดูอายุลิงก์ที่สร้างในห้อง · เปลี่ยนเลขใน path | ไฟล์เป็นของสาธารณะโดยตั้งใจ (รูปสินค้า) |
+| `idor` · `tenant-scope` | Reads or edits a record by id without filtering on owner or shop | `findById(id)` · `WHERE id = ?` with no `AND shop_id = ?` · a central repository that takes no tenant | A test where tenant A asks for B's id must get 403 or 404 | A global filter already wraps it (EF `HasQueryFilter` · Prisma middleware · Postgres RLS). Open it and confirm it really covers this query |
+| `key-collision` | A cache key, file key or unique index leaves out the tenant, so keys collide | `cache.get('orders:' + id)` · `UNIQUE(code)` that should be `UNIQUE(shop_id, code)` | Two shops create the same code. Check whether they see each other's data | Ids are UUIDs across the whole system and cannot collide |
+| `policy-query-mismatch` | Rights are checked on one condition, but the query fetches on another | Checks `user.shopId`, then the query uses `req.body.shopId` | A test sends another shop's shopId in the body | The body value is overwritten by the session value before the query |
+| `signed-url-scope` | A signed file link lives too long, is too broad or can be guessed | `expiresIn` in days or missing · file paths are sequential numbers | Check the lifetime of links created in the lab · change the number in the path | The file is public on purpose (product images) |
 
-## สำเนาและการเปิดเผยทางอ้อม
+## Copies and indirect disclosure
 
-| ประเภท (`class`) | ล่าอะไร | สัญญาณในโค้ด | พิสูจน์อย่างไร | มักแจ้งผิดเมื่อ |
+| Class (`class`) | What it hunts | Signal in code | How to prove it | Often misreported when |
 |---|---|---|---|---|
-| `search-acl-drift` | search index หรือ cache ไม่กรองสิทธิ์แบบเดียวกับฐานข้อมูล | ค้นใน Elasticsearch หรือ Meilisearch โดยไม่ใส่ filter tenant | 2 ร้านค้นคำเดียวกันในห้อง | index แยกต่อร้าน |
-| `log-pii` | ข้อมูลส่วนบุคคลหรือ token ลง log trace หรือระบบวิเคราะห์ที่คนกว้างกว่าอ่านได้ | `logger.info(req.body)` · ส่ง event ทั้ง object ไป analytics | เรียก endpoint ในห้องแล้วค้น log หาเลขบัตร เบอร์ token | log อยู่ในที่ที่เฉพาะคนมีสิทธิ์เดียวกันอ่าน (ยังเป็นเรื่อง PDPA ได้ ส่ง `pdpa-compliance`) |
-| `enumeration` | ข้อความ error เวลา หรือขนาด response ต่างกันจนนับได้ว่ามี record หรือผู้ใช้อยู่ | `404` กับ `403` ต่างกันตามการมีอยู่ · ฟอร์มสมัครบอก "อีเมลนี้มีแล้ว" | เทียบ response ของ id ที่มีและไม่มี | ข้อมูลที่นับได้ไม่ลับ (ชื่อร้านสาธารณะ) |
-| `aggregate-oracle` | รายงานสรุปหรือ filter ที่ใช้เดาค่ารายบุคคลได้ | กลุ่มที่มีคนเดียว · sort ตามฟิลด์ที่ซ่อน | query กลุ่มเล็กในห้องแล้วดูว่าได้ค่ารายคน | ระบบกำหนดขนาดกลุ่มขั้นต่ำแล้ว |
+| `search-acl-drift` | A search index or cache does not filter rights the way the database does | Searches Elasticsearch or Meilisearch with no tenant filter | Two shops search the same term in the lab | The index is separate per shop |
+| `log-pii` | Personal data or tokens land in logs, traces or analytics that a wider group can read | `logger.info(req.body)` · sends a whole event object to analytics | Call the endpoint in the lab, then search the logs for ID card numbers, phone numbers, tokens | The log is readable only by people with the same rights (still a PDPA matter, hand off to `pdpa-compliance`) |
+| `enumeration` | Error messages, timing or response size differ enough to count which records or users exist | `404` versus `403` differing by existence · a sign-up form that says "this email already exists" | Compare responses for an id that exists and one that does not | The countable data is not secret (public shop names) |
+| `aggregate-oracle` | A summary report or filter can be used to guess individual values | A group with one person · sort by a hidden field | Query a small group in the lab and see whether it yields a per-person value | The system already sets a minimum group size |
 
-## export import backup migrate
+## Export, import, backup, migrate
 
-| ประเภท (`class`) | ล่าอะไร | สัญญาณในโค้ด | พิสูจน์อย่างไร | มักแจ้งผิดเมื่อ |
+| Class (`class`) | What it hunts | Signal in code | How to prove it | Often misreported when |
 |---|---|---|---|---|
-| `export-scope` | export ได้ข้อมูลเกินสิทธิ์ ข้อมูลที่ลบแล้ว หรือร่าง | query ของ export คนละตัวกับหน้าจอ · ไม่มีเงื่อนไข `deleted_at IS NULL` | export ด้วยบัญชีสิทธิ์ต่ำในห้องแล้วนับแถว | export เป็นของแอดมินระบบตามออกแบบ |
-| `import-abuse` | import ทับ record ของคนอื่น สร้าง record ข้าม validation หรือข้ามร้าน | upsert ด้วย id จากไฟล์ · ไม่เรียก validator ตัวเดียวกับฟอร์ม | import ไฟล์ปลอมที่มี id ของร้านอื่น | import ทำงานในขอบเขตร้านเดียวและเขียนทับ shop_id เสมอ |
-| `restore-authz` | กู้คืนหรือย้อนรุ่นแล้วได้สิทธิ์หรือข้อมูลเก่ากลับมา | restore ทั้งแถวรวม `role` หรือ `owner_id` | ลดสิทธิ์ผู้ใช้ แล้ว restore record เก่า | restore เก็บเฉพาะเนื้อหา ไม่แตะสิทธิ์ |
-| `migration-default` | migration เติมค่าเริ่มที่ทำให้ record ไม่มีเจ้าของหรือเป็นของทุกคน | `DEFAULT NULL` บน `shop_id` ที่ query ตีความ null เป็นทุกร้าน | รัน migration ในห้องแล้ว query ด้วยร้านอื่น | ค่าเริ่มถูกเติมครบใน migration ถัดไปทันที |
+| `export-scope` | Export returns data beyond the user's rights, deleted data or drafts | The export query differs from the screen's query · no `deleted_at IS NULL` condition | Export with a low-rights account in the lab and count the rows | The export belongs to the system admin by design |
+| `import-abuse` | Import overwrites someone else's record, or creates records that skip validation or cross shops | Upsert by id from the file · does not call the same validator as the form | Import a fake file that carries another shop's id | Import works within one shop and always overwrites shop_id |
+| `restore-authz` | Restore or rollback brings back old rights or old data | Restores the whole row including `role` or `owner_id` | Lower a user's rights, then restore the old record | Restore keeps content only and does not touch rights |
+| `migration-default` | A migration fills a default that leaves records with no owner or owned by everyone | `DEFAULT NULL` on `shop_id` where queries read null as every shop | Run the migration in the lab, then query as another shop | The defaults are fully filled in by the next migration right away |
 
-## ลบ เพิกถอน และอายุข้อมูล
+## Deletion, revocation and data age
 
-| ประเภท (`class`) | ล่าอะไร | สัญญาณในโค้ด | พิสูจน์อย่างไร | มักแจ้งผิดเมื่อ |
+| Class (`class`) | What it hunts | Signal in code | How to prove it | Often misreported when |
 |---|---|---|---|---|
-| `soft-delete-bypass` | record ที่ลบแบบ soft ยังเปิดได้ผ่าน id หรือ API อื่น | `deleted_at` ถูกกรองในหน้ารายการแต่ไม่กรองใน `findById` | ลบแล้วเรียกด้วย id ในห้อง | ระบบสัญญาว่ากู้คืนได้ภายในเวลาที่กำหนด และผู้เรียกเป็นเจ้าของเอง |
-| `stale-authz` | ถอดสิทธิ์หรือลบพนักงานแล้ว session token หรือ cache สิทธิ์ยังใช้ได้ | สิทธิ์อยู่ใน JWT อายุยาว · cache สิทธิ์ไม่ล้างตอนเปลี่ยน | ถอดสิทธิ์แล้วใช้ token เดิมในห้อง | token อายุสั้นตามที่ระบบประกาศ และยอมรับช่วงนั้นเป็นลายลักษณ์อักษร |
-| `queued-after-delete` | งานในคิวที่ยังส่งอีเมลหรือประมวลข้อมูลของคนที่ขอลบแล้ว | job อ่านข้อมูลจาก payload ที่คัดไว้ ไม่อ่านสถานะปัจจุบัน | ลบผู้ใช้แล้วปล่อย job ที่ค้างในห้อง | job ตรวจสถานะก่อนทำทุกครั้ง |
+| `soft-delete-bypass` | A soft-deleted record can still be opened by id or through another API | `deleted_at` is filtered on the list page but not in `findById` | Delete, then call by id in the lab | The system promises recovery within a set time, and the caller is the owner |
+| `stale-authz` | After rights are removed or an employee is deleted, the session token or rights cache still works | Rights live in a long-lived JWT · the rights cache is not cleared on change | Remove the rights, then use the old token in the lab | Tokens are short-lived as the system states, and that window is accepted in writing |
+| `queued-after-delete` | A queued job still emails or processes data of someone who asked for deletion | The job reads from a payload copied earlier, not from current state | Delete the user, then release the pending job in the lab | The job checks current state before every run |
 
-## วิธีไล่ที่ใช้ได้ทั้งสาย
+## Method that works across the family
 
-- เลือก record สำคัญ 1 ชนิด แล้ววาดทุกทาง: เขียน · อ่าน · cache · index · event · export · backup · ลบ · กู้คืน · ทุกเส้นเขียนว่าใครเป็นผู้กระทำ และตรวจ tenant ที่ไหน
-- เริ่มจากทางที่มักไม่มีตัวตนของผู้ใช้ติดมา: job เบื้องหลัง · migration · client ที่ข้าม API · unique index ทั้งระบบ · key ของ cache
-- ทำซ้ำ test 2 ร้านอีกครั้งหลังเปลี่ยนสิทธิ์ ลบ สลับบัญชี และกู้คืน
+- Pick 1 important record type and map every path: write · read · cache · index · event · export · backup · delete · restore. For each path, write who acts and where the tenant is checked.
+- Start from the paths that often carry no user identity: background jobs · migrations · clients that bypass the API · system-wide unique indexes · cache keys.
+- Repeat the 2-shop test after changing rights, deleting, switching accounts and restoring.

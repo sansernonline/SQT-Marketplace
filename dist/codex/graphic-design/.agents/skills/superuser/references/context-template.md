@@ -8,7 +8,7 @@ Fill in the blanks of the template below.
 - ชื่องาน (job name): แคมเปญ 11.11
 - งานนี้คืออะไร (what this job is): which brand or campaign, where it is used, overall status
 - กติกา (rules): where the brand kit is · which image-generation tool is used · credit budget per job
-- ตัวอย่างแถว IMPROVEMENTS: แพลตฟอร์มหนึ่งเปลี่ยน safe zone ของวิดีโอแนวตั้ง · หลักฐาน: หน้าช่วยเหลือของแพลตฟอร์ม + ภาพทดสอบ · ไปรวมที่ `social-formats` references/platform-sizes.md
+- Example IMPROVEMENTS row: a platform changed the safe zone of vertical video · evidence: the platform's help page + a test image · merge into `social-formats` references/platform-sizes.md
 
 <!-- superuser:begin context -->
 ## CONTEXT.md

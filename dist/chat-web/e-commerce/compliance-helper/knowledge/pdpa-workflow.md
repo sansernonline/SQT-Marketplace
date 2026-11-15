@@ -123,7 +123,9 @@ General information, not legal advice; incidents with legal exposure go to a Tha
 
 Contents: 1. ROPA · 2. Consent form · 3. DSR log and reply · 4. Breach log and notice to data subjects
 
-## 1. ROPA (บันทึกรายการกิจกรรมการประมวลผล, ม.39)
+## 1. ROPA (บันทึกรายการกิจกรรมการประมวลผล, ม.39 — record of processing activities, Section 39)
+
+The column headings and sample rows below are Thai form wording to copy as written. Column order: activity · data collected · sensitive? · purpose · legal basis (Sections 24/26) · source · who has access · shared with (processor/country) · storage · retention period · deletion/destruction method · security measures.
 
 | # | กิจกรรม | ข้อมูลที่เก็บ | ข้อมูลอ่อนไหว? | วัตถุประสงค์ | ฐานทางกฎหมาย (ม.24/26) | แหล่งที่มา | ผู้เข้าถึง | ส่งต่อให้ (ผู้ประมวลผล/ประเทศ) | ที่จัดเก็บ | ระยะเวลาเก็บ | วิธีลบ/ทำลาย | มาตรการความปลอดภัย |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -131,9 +133,11 @@ Contents: 1. ROPA · 2. Consent form · 3. DSR log and reply · 4. Breach log an
 | 2 | LINE OA ลูกค้า | ชื่อ LINE เบอร์ ที่อยู่จัดส่ง ประวัติแชท | ไม่ | ขายและจัดส่ง | สัญญา | ลูกค้า | ฝ่ายขาย | ผู้ให้บริการขนส่ง | LINE, ชีตคำสั่งซื้อ | 1 ปีหลังคำสั่งซื้อล่าสุด | ลบแถว | 2FA |
 | 3 | กล้องวงจรปิด | ภาพบุคคล | ไม่ | ความปลอดภัย | ประโยชน์โดยชอบด้วยกฎหมาย | ผู้มาติดต่อ | รปภ., ผู้จัดการ | — | NVR | 30 วัน วนทับ | วนทับอัตโนมัติ | ห้องล็อก |
 
-Plus header: ชื่อผู้ควบคุมข้อมูล, ที่อยู่, ผู้ติดต่อ/DPO, วันที่ปรับปรุงล่าสุด.
+Plus header (Thai wording): ชื่อผู้ควบคุมข้อมูล, ที่อยู่, ผู้ติดต่อ/DPO, วันที่ปรับปรุงล่าสุด (data controller name, address, contact/DPO, last updated date).
 
 ## 2. Consent form (หนังสือให้ความยินยอม)
+
+Output the form below in Thai to the customer, filling the `{…}` fields.
 
 ```
 หนังสือให้ความยินยอมในการเก็บรวบรวม ใช้ และเปิดเผยข้อมูลส่วนบุคคล   ฉบับที่ {v1.2} วันที่ {…}
@@ -155,13 +159,15 @@ Store: who, which version, which ticks, when, channel. Never pre-tick, never bun
 
 ## 3. DSR log and reply
 
+DSR = data subject request. Column headings (Thai): number · date received (day 0) · due (+30 days) · requester · right type · identity verified by · outcome · reason if refused · date replied.
+
 | เลขที่ | วันที่รับ (วันที่ 0) | ครบกำหนด (+30 วัน) | ผู้ขอ | ประเภทสิทธิ | ยืนยันตัวตนโดย | ผลการดำเนินการ | เหตุผลถ้าปฏิเสธ | วันที่ตอบ |
 |---|---|---|---|---|---|---|---|---|
 
-Reply: "บริษัทได้รับคำขอ {ประเภท} ของท่านเมื่อวันที่ {…} และได้ดำเนินการ {…} แล้วเมื่อวันที่ {…} / ไม่สามารถดำเนินการได้ในส่วน {…} เนื่องจาก {เหตุตามกฎหมาย} ท่านมีสิทธิร้องเรียนต่อสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล"
+Reply (send in Thai): "บริษัทได้รับคำขอ {ประเภท} ของท่านเมื่อวันที่ {…} และได้ดำเนินการ {…} แล้วเมื่อวันที่ {…} / ไม่สามารถดำเนินการได้ในส่วน {…} เนื่องจาก {เหตุตามกฎหมาย} ท่านมีสิทธิร้องเรียนต่อสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล"
 
 ## 4. Breach log and notice
 
-Log fields: วันเวลาที่ทราบ · ผู้พบ · ลักษณะเหตุ · ข้อมูลที่กระทบ · จำนวนคน · ข้อมูลอ่อนไหว? · การระงับเหตุ · ประเมินความเสี่ยง (ต่ำ/มี/สูง) · แจ้ง สคส. (วันเวลา, เลขอ้างอิง) · แจ้งเจ้าของข้อมูล (วันเวลา, ช่องทาง) · การแก้ไขต้นเหตุ.
+Log fields (Thai, in this order: time known · finder · nature of the incident · data affected · number of people · sensitive? · containment · risk assessment (low/some/high) · notified PDPC with time and reference number · notified data subjects with time and channel · root-cause fix): วันเวลาที่ทราบ · ผู้พบ · ลักษณะเหตุ · ข้อมูลที่กระทบ · จำนวนคน · ข้อมูลอ่อนไหว? · การระงับเหตุ · ประเมินความเสี่ยง (ต่ำ/มี/สูง) · แจ้ง สคส. (วันเวลา, เลขอ้างอิง) · แจ้งเจ้าของข้อมูล (วันเวลา, ช่องทาง) · การแก้ไขต้นเหตุ.
 
-Notice to people: "เมื่อวันที่ {…} บริษัทพบเหตุ {…} ซึ่งอาจกระทบข้อมูล {…} ของท่าน บริษัทได้ {มาตรการ} แล้ว บริษัทขออภัยในเหตุที่เกิดขึ้น ขอแนะนำให้ท่าน {เปลี่ยนรหัสผ่าน/ระวังข้อความหลอกลวง} สอบถามได้ที่ {…}" — if scam calls are a risk, add the anti-online-scam hotline **1441** (AOC, 24 hours).
+Notice to people (send in Thai): "เมื่อวันที่ {…} บริษัทพบเหตุ {…} ซึ่งอาจกระทบข้อมูล {…} ของท่าน บริษัทได้ {มาตรการ} แล้ว บริษัทขออภัยในเหตุที่เกิดขึ้น ขอแนะนำให้ท่าน {เปลี่ยนรหัสผ่าน/ระวังข้อความหลอกลวง} สอบถามได้ที่ {…}" — if scam calls are a risk, add the anti-online-scam hotline **1441** (AOC, 24 hours).

@@ -1,6 +1,6 @@
 # Legal Compliance Officer — privacy, retention, e-discovery, residency, audit
 
-คู่มือบทบาทของ agent `legal-compliance-officer` · PDPA ฉบับเต็ม (ฐานทางกฎหมาย · ความยินยอม · สิทธิ · แจ้งเหตุรั่วใน 72 ชั่วโมง) ใช้ skill `pdpa-compliance` · ระยะเวลาเก็บเอกสารต่างกันตามประเทศ ตรวจกับกฎหมายจริงก่อนใช้ (รอยืนยัน)
+Role guide for the agent `legal-compliance-officer` · for the full PDPA (legal bases · consent · rights · breach notice within 72 hours) use the skill `pdpa-compliance` · document retention periods differ by country, so check the real law before use (รอยืนยัน, awaiting confirmation)
 
 **สารบัญ:**
 

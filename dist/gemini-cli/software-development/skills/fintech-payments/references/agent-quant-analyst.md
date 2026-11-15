@@ -1,6 +1,6 @@
 # Quant Analyst — models, backtesting, model card, backtest report
 
-คู่มือบทบาทของ agent `quant-analyst` · โค้ดเป็นตัวอย่าง ต้องตรวจกับข้อมูลจริงก่อนใช้
+Role guide for the `quant-analyst` agent · the code is an example; check it against real data before use
 
 **สารบัญ:**
 

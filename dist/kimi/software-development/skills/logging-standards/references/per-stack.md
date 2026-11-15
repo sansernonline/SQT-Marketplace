@@ -1,16 +1,16 @@
-# ตั้งค่า logger ให้ได้รูปแบบเดียวกัน — .NET และ Angular
+# Set up the logger to produce the same format — .NET and Angular
 
-> ระวัง: โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/logger.node.js` และ
-> `assets/logger_py.py` ที่รันจริงแล้ว) โค้ดนี้ใช้การตั้งค่ามาตรฐานของแต่ละไลบรารี
-> ตอน build ครั้งแรกให้เทียบบรรทัดที่ออกมากับรูปแบบใน SKILL.md ข้อ 1
+> Warning: the code in this file is **not yet compiled or tested** (unlike `assets/logger.node.js` and
+> `assets/logger_py.py`, which have really been run). It uses the standard setup of each library.
+> At the first build, compare the output lines with the format in SKILL.md item 1.
 
 ---
 
-## สารบัญ
+## Contents
 
 1. [.NET / C# — Serilog](#net--c--serilog)
 2. [Angular / frontend](#angular--frontend)
-3. [ตารางเทียบ](#ตารางเทียบ)
+3. [Comparison table](#comparison-table)
 
 ---
 
@@ -21,7 +21,7 @@ dotnet add package Serilog.AspNetCore
 dotnet add package Serilog.Sinks.File
 ```
 
-`appsettings.json` — เก็บการตั้งค่าไว้นอกโค้ด เปลี่ยนระดับ log ได้โดยไม่ต้อง build ใหม่:
+`appsettings.json` — keeps the settings outside the code, so you can change the log level without a new build:
 
 ```json
 {
@@ -50,8 +50,8 @@ const string LineTemplate =
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
-    .Enrich.WithProperty("CorrelationId", "--------") // ค่าตั้งต้นเมื่อไม่มี request (8 ตัว)
-    .Enrich.WithProperty("Context", "")              // ค่าว่างเมื่อไม่มี context k=v
+    .Enrich.WithProperty("CorrelationId", "--------") // default when there is no request (8 characters)
+    .Enrich.WithProperty("Context", "")              // empty when there is no context k=v
     .WriteTo.Console(outputTemplate: LineTemplate)
     .WriteTo.File(
         path: Path.Combine(Environment.GetEnvironmentVariable("LOG_DIR") ?? "logs", "app-.log"),
@@ -71,8 +71,8 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 ```
 
-> `{Level:u5}` คือตัวพิมพ์ใหญ่กว้าง 5 ตัวอักษร จึงได้ `INFO ` `WARN ` `ERROR` ตรงกับสแต็กอื่น
-> `{Message:lj}` และ `{Context:l}` คือไม่ครอบ string ด้วย `"` ซ้ำอีกชั้น
+> `{Level:u5}` means upper case, 5 characters wide, which gives `INFO ` `WARN ` `ERROR` to match the other stacks.
+> `{Message:lj}` and `{Context:l}` mean the string is not wrapped in an extra layer of `"`.
 
 ### Middleware correlation id
 
@@ -82,49 +82,50 @@ using System.Text.RegularExpressions;
 public sealed class CorrelationIdMiddleware(RequestDelegate next)
 {
     public const string Header = "X-Request-Id";
-    // รับค่าจากลูกค้าเฉพาะตัวอักษร ตัวเลข และ - ยาวไม่เกิน 36 ตัว — กันคนยัดข้อความยาวหรือ \n เข้า log
+    // accept from the customer only letters, digits, and - up to 36 characters — blocks people stuffing long text or \n into the log
+ into the log
     private static readonly Regex Valid = new("^[A-Za-z0-9-]{1,36}$", RegexOptions.Compiled);
 
     public async Task Invoke(HttpContext ctx)
     {
         var cid = ctx.Request.Headers[Header].FirstOrDefault();
         if (cid is null || !Valid.IsMatch(cid))
-            cid = Guid.NewGuid().ToString("N")[..8];   // ไม่มีหรือไม่ผ่าน → สร้างใหม่
+            cid = Guid.NewGuid().ToString("N")[..8];   // missing or invalid → create a new one
 
-        var logCid = cid.Length > 8 ? cid[..8] : cid;   // log ใช้ 8 ตัวแรกให้ตรงคอลัมน์ cid (เหมือน Node/Python) — header ส่งค่าเต็มกลับ
+        var logCid = cid.Length > 8 ? cid[..8] : cid;   // the log uses the first 8 characters to fit the cid column (same as Node/Python) — the header returns the full value
 
-        ctx.Response.Headers[Header] = cid;          // ส่งกลับให้ลูกค้าอ้างอิงได้
+        ctx.Response.Headers[Header] = cid;          // return it so the customer can quote it
 
-        // LogContext ผูกกับ async flow ของ request นี้เท่านั้น — ไม่ปนกับ request อื่น
+        // LogContext is tied only to this request's async flow — it does not mix with other requests
         using (Serilog.Context.LogContext.PushProperty("CorrelationId", logCid))
             await next(ctx);
     }
 }
 ```
 
-### เขียน log
+### Writing logs
 
 ```csharp
-// ถูก: ข้อความคงที่ + ค่าไปอยู่ใน {Context} เป็น k=v ตามรูปแบบ SKILL.md ข้อ 1
-//    ผลลัพธ์: ... INFO   [a3f9c1b2] Orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 ms=134
+// Right: fixed message + values go in {Context} as k=v, per the format in SKILL.md item 1
+//    Output: ... INFO   [a3f9c1b2] Orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 ms=134
 using (Serilog.Context.LogContext.PushProperty("Context", $"orderId={orderId} ms={sw.ElapsedMilliseconds}"))
     _logger.LogInformation("สร้างคำสั่งซื้อสำเร็จ");
 
-// ผิด: ตัวแปรฝังใน string — ทุกบรรทัดกลายเป็นข้อความคนละอัน group ไม่ได้
+// Wrong: a variable embedded in the string — every line becomes a different message and cannot be grouped
 _logger.LogInformation($"สร้างคำสั่งซื้อ {orderId} สำเร็จ");
 ```
 
-### ปิดข้อมูลลับ
+### Redacting secrets
 
-Serilog ไม่ปิดค่าลับให้อัตโนมัติ ทางที่ชัวร์ที่สุดคือ**อย่าส่ง object ทั้งก้อนเข้า log**
-ให้เลือกเฉพาะ field ที่ต้องการ ถ้าจำเป็นต้องส่งทั้งก้อนให้เขียน `IDestructuringPolicy`
-หรือใส่ `[NotLogged]` ผ่าน `Destructure.ByTransforming<T>()`
+Serilog does not redact secrets automatically. The surest way is to **never pass a whole object into the log**.
+Pick only the fields you need. If you must pass the whole object, write an `IDestructuringPolicy`
+or add `[NotLogged]` through `Destructure.ByTransforming<T>()`.
 
 ---
 
 ## Angular / frontend
 
-หลักการต่างจาก backend: **เบราว์เซอร์เขียนไฟล์ไม่ได้** log ที่สำคัญจึงต้องส่งขึ้น backend
+The principle differs from the backend: **a browser cannot write files**, so important logs must be sent up to the backend.
 
 ```ts
 // core/logger.service.ts
@@ -139,15 +140,15 @@ export class LoggerService {
   private buffer: unknown[] = [];
 
   private write(level: Level, message: string, ctx: Record<string, unknown> = {}) {
-    // dev: ออก console เพื่อไล่ปัญหา — prod: เงียบ ยกเว้น WARN ขึ้นไปที่ส่งขึ้น server
+    // dev: print to the console for chasing problems — prod: silent, except WARN and above, which go to the server
     if (isDevMode()) console[level === 'ERROR' ? 'error' : 'log'](level, message, ctx);
-    if (level === 'DEBUG' || (!isDevMode() && level === 'INFO')) return;   // prod ส่งเฉพาะ WARN ขึ้นไป
+    if (level === 'DEBUG' || (!isDevMode() && level === 'INFO')) return;   // prod sends only WARN and above
 
     this.buffer.push({ ts: new Date().toISOString(), level, message, ctx });
     if (this.buffer.length >= 10 || level === 'ERROR') this.flush();
   }
 
-  /** ส่งเป็นชุด ไม่ยิงทีละบรรทัด — ไม่งั้น network tab เต็มไปด้วย request ของ log เอง */
+  /** Send in batches, not line by line — otherwise the network tab fills with the log's own requests */
   flush() {
     if (!this.buffer.length) return;
     const batch = this.buffer.splice(0);
@@ -161,7 +162,7 @@ export class LoggerService {
 }
 ```
 
-จับ error ที่หลุดทุกตัว:
+Catch every uncaught error:
 
 ```ts
 // core/global-error.handler.ts
@@ -180,7 +181,7 @@ export class GlobalErrorHandler implements ErrorHandler {
 // app.config.ts → providers: [{ provide: ErrorHandler, useClass: GlobalErrorHandler }]
 ```
 
-ส่ง correlation id ในทุก request เพื่อให้ log ฝั่ง client กับ server ต่อกันติด:
+Send a correlation id with every request so client-side and server-side logs connect:
 
 ```ts
 // core/correlation.interceptor.ts
@@ -190,19 +191,19 @@ export const correlationInterceptor: HttpInterceptorFn = (req, next) =>
   next(req.clone({ setHeaders: { 'X-Request-Id': crypto.randomUUID().slice(0, 8) } }));
 ```
 
-**ฝั่ง backend** ต้องมี endpoint `POST /api/client-logs` ที่:
-- จำกัดขนาด body และทำ rate limit ไม่อย่างนั้นจะกลายเป็นช่องให้คนยิง log ถล่ม
-- เขียนลงไฟล์แยก `logs/client-YYYYMMDD.log`
-- **ถือว่าเนื้อหาเป็นข้อมูลที่เชื่อไม่ได้** จึงต้องตัด `\r\n` ออกจากทุกค่าเหมือน log ปกติ
+**On the backend** you need an endpoint `POST /api/client-logs` that:
+- Limits the body size and applies a rate limit. Otherwise it becomes a hole for people to flood you with logs.
+- Writes to a separate file `logs/client-YYYYMMDD.log`
+- **Treats the content as untrusted data**, so strip `\r\n` from every value just like a normal log
 
 ---
 
-## ตารางเทียบ
+## Comparison table
 
-| เรื่อง | .NET | Node | Python | Angular |
+| Topic | .NET | Node | Python | Angular |
 |---|---|---|---|---|
-| ไลบรารี | Serilog | winston | stdlib `logging` | เขียนเอง (บาง) |
-| หมุนไฟล์ | `rollingInterval: Day` | `winston-daily-rotate-file` | `TimedRotatingFileHandler` | — (ส่งขึ้น backend) |
+| Library | Serilog | winston | stdlib `logging` | Hand-written (thin) |
+| File rotation | `rollingInterval: Day` | `winston-daily-rotate-file` | `TimedRotatingFileHandler` | — (sent to the backend) |
 | correlation | `LogContext.PushProperty` | `AsyncLocalStorage` + `child()` | `ContextVar` | header `X-Request-Id` |
-| ระดับ | `LogEventLevel` | `level` | `setLevel` | enum ของตัวเอง |
-| ตั้งค่าจากภายนอก | `appsettings.json` | env `LOG_LEVEL` | env `LOG_LEVEL` | `isDevMode()` |
+| Level | `LogEventLevel` | `level` | `setLevel` | Its own enum |
+| External configuration | `appsettings.json` | env `LOG_LEVEL` | env `LOG_LEVEL` | `isDevMode()` |

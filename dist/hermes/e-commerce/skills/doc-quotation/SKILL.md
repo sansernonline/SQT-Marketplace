@@ -8,13 +8,13 @@ argument-hint: <customer> <items and prices> [terms]
 
 The right documents at the right time prevent arguments about payment. This is general information, not tax advice. The company's accountant (นักบัญชี) has the final word on tax documents.
 
-## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+## 0 · Look for an existing format first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before using the structure or template in this file, check whether the user, customer or project already has its own format:
 
-- **ที่ดู:** ใบเสนอราคา ใบแจ้งหนี้ หรือใบเสร็จฉบับก่อนของบริษัท (ไฟล์ที่ผู้ใช้ให้ หรือใน `docs/` · `ref/`) → ดูหัวกระดาษ เลขรัน เงื่อนไขชำระเงิน และหมายเหตุท้ายเอกสาร
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** เลขรันต่อจากฉบับล่าสุด · ช่องที่กฎหมายบังคับในข้อ 2 ต้องครบไม่ว่าใช้แบบไหน
+- **Where to look:** the company's earlier quotations, invoices or receipts (files the user gives, or in `docs/` · `ref/`) → check the letterhead, running numbers, payment terms and footer notes
+- **Result:** found → use that format (headings, order, field names, numbering) and say in the reply which file's format you used · not found → use the template in this file as a fallback and say that no existing format was found
+- **Still required either way:** the running number continues from the latest document · the fields the law requires in section 2 must be complete in any format
 
 ## 1. Which document, when
 

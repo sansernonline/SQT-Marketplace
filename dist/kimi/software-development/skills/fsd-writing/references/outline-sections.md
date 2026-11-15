@@ -1,17 +1,17 @@
-# หัวข้อของ FSD และข้ามได้เมื่อไหร่
+# FSD sections and when you may skip them
 
-ตารางนี้สรุปว่าแต่ละหัวข้อของ FSD ตอบคำถามอะไร ส่วนโครงเต็มที่มีคำใบ้ให้กรอกอยู่ใน [`../assets/fsd-outline.md`](../assets/fsd-outline.md)
+This table sums up the question each FSD section answers. The full outline with fill-in hints is in [`../assets/fsd-outline.md`](../assets/fsd-outline.md).
 
-| # | หัวข้อ | ตอบคำถามว่า | ข้ามได้ไหม |
+| # | Section | Question it answers | Skippable? |
 |---|---|---|---|
-| 1 | บทนำ · ขอบเขต · เอกสารอ้างอิง | ฉบับนี้ครอบคลุมส่วนไหน อ้างอิง SRS ข้อไหน | ไม่ได้ |
-| 2 | ผู้ใช้และสิทธิ์ | ใครทำอะไรได้บ้าง | ไม่ได้ |
-| 3 | ภาพรวมกระบวนการ | งานไหลจากต้นจนจบยังไง | ไม่ได้ |
-| 4 | use case รายตัว | แต่ละงานทำทีละขั้นยังไง | ไม่ได้ |
-| 5 | ข้อกำหนดหน้าจอ | หน้าจอมีอะไร ฟิลด์ตรวจอะไร | ข้ามได้ถ้าไม่มีหน้าจอ |
-| 6 | ผังสถานะ | ของชิ้นนี้เปลี่ยนสถานะไปไหนได้บ้าง | ข้ามได้ถ้าไม่มีสถานะ |
-| 7 | กฎทางธุรกิจ | กฎอะไรบังคับอยู่ | ไม่ได้ |
-| 8 | ข้อมูลและการเชื่อมต่อ | ใช้ข้อมูลอะไร ต่อกับระบบไหน | ไม่ได้ |
-| 9 | ข้อผิดพลาดและกรณีขอบ | พังแบบไหนได้บ้าง แล้วผู้ใช้เห็นอะไร | ไม่ได้ |
-| 10 | ตารางสอบย้อนกลับ | ข้อนี้มาจาก SRS ข้อไหน ทดสอบด้วยอะไร | ไม่ได้ |
-| 11 | ประวัติการแก้ไข | ใครแก้อะไรเมื่อไหร่ | ไม่ได้ |
+| 1 | Introduction · scope · references | What does this version cover? Which SRS items does it cite? | No |
+| 2 | Users and permissions | Who can do what? | No |
+| 3 | Process overview | How does the work flow from start to finish? | No |
+| 4 | Individual use cases | How is each task done, step by step? | No |
+| 5 | Screen requirements | What is on the screen? What does each field validate? | Skippable if there is no screen |
+| 6 | State diagram | Which states can this item move between? | Skippable if there are no states |
+| 7 | Business rules | Which rules are enforced? | No |
+| 8 | Data and integrations | What data is used? Which systems connect? | No |
+| 9 | Errors and edge cases | How can it fail, and what does the user see? | No |
+| 10 | Traceability matrix | Which SRS item does this come from, and what tests it? | No |
+| 11 | Revision history | Who changed what, and when? | No |

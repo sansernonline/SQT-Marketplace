@@ -81,7 +81,7 @@ The SOC analyst hands over:
 
 ## Phase 2: Containment
 
-> **ถามผู้ใช้ก่อนทุกครั้ง** — ทุกขั้นที่เปลี่ยนระบบใน Phase 2-4 (ตัดเครือข่ายเครื่อง · ปิดบัญชี · บล็อก IP · รีเซ็ต MFA · เพิกถอนกุญแจ/ใบรับรอง · ลบ persistence · rebuild) ให้ **เสนอทีละขั้น** เป็นแถว `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` แล้ว **รันหลังผู้ใช้อนุมัติขั้นนั้นเท่านั้น** — อนุมัติขั้นหนึ่งไม่ครอบคลุมขั้นถัดไป · บันทึกทุกขั้นที่รันลง timeline ของเหตุ (เวลา UTC · ผู้อนุมัติ · คำสั่ง · ผล) · งานอ่านอย่างเดียว (ดู log · ทำสำเนาหลักฐาน) ทำได้เลย · รายละเอียด → [`security-incident-response.md`](security-incident-response.md) Phase 3
+> **Ask the user first, every time.** For every step that changes a system in Phase 2-4 (isolate a host from the network · disable an account · block an IP · reset MFA · revoke keys/certificates · remove persistence · rebuild), **propose one step at a time** as a row of `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` (command · target · impact · how to roll back) and **run it only after the user approves that step**. Approving one step does not cover the next. Log every step that ran in the incident timeline (time in UTC · approver · command · result). Read-only work (reading logs · copying evidence) can be done right away. Details → [`security-incident-response.md`](security-incident-response.md) Phase 3
 
 ### Short-term (stop the bleed)
 - Isolate affected hosts (network)
@@ -127,7 +127,7 @@ For every compromised credential:
 ```
 
 ### Eradication actions
-ทุกข้อด้านล่างใช้กฎ **ถามผู้ใช้ก่อนทุกครั้ง** (Phase 2)
+Every item below follows the **ask the user first, every time** rule (Phase 2)
 - Remove malware
 - Delete persistence mechanisms
 - Revoke all credentials

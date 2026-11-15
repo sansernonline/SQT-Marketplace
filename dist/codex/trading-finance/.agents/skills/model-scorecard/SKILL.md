@@ -3,83 +3,83 @@ name: model-scorecard
 description: Use when comparing which model fits which step
 ---
 
-# model-scorecard — model ไหนเหมาะกับขั้นไหน ดูจากงานจริงของโปรเจกต์
+# model-scorecard — which model fits which step, judged from the project's real work
 
-อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies` · ถ้อยคำตาม `human-writing`
+It lives only in plugin `superuser`; other plugins share it through `dependencies` · wording follows `human-writing`
 
-> **กฎข้อเดียว:** ข้อมูลอยู่ในโปรเจกต์ของมันเอง (`.claude/superuser/log/`) ไม่เขียนออกนอกโปรเจกต์ · การรวมหลายโปรเจกต์ทำเมื่อคนสั่งและระบุโฟลเดอร์เท่านั้น
+> **One rule:** the data stays in its own project (`.claude/superuser/log/`) and is never written outside the project · combining several projects happens only when a person asks and names the folders.
 
-## ใช้เมื่อ
+## Use when
 
-- ถามว่า model ไหนเหมาะกับขั้นไหน · เทียบ token ความเร็ว ความคุ้มราย model จากงานที่ทำไปแล้ว
-- ก่อนเปลี่ยน model ประจำของ agent หรือขั้น (เช่น ให้ผู้ตรวจใช้ Sonnet แทน Opus) อยากเห็นตัวเลขก่อน
-- คนสั่งรวมผลหลายโปรเจกต์ไปปรับ plugin (`--rollup` ข้อ 3)
+- Someone asks which model fits which step · compare tokens, speed and value per model from work already done
+- Before changing the default model of an agent or a step (for example, letting the reviewer use Sonnet instead of Opus), you want to see numbers first
+- A person asks to combine results from several projects to tune a plugin (`--rollup`, step 3)
 
-ไม่ใช้เมื่อ: แค่สั่งเปลี่ยน model ของงานนี้ → ทำตามสั่ง
+Do not use when: the person only tells you to change the model for this task → just do as told.
 
-## ใช้ตัวอื่นแทนหรือคู่กัน
+## Use another skill instead, or together
 
-| สถานการณ์ | ใช้ | เหตุผล |
+| Situation | Use | Reason |
 |---|---|---|
-| ถามราคา model ปัจจุบัน | `research-with-sources` | ราคาเปลี่ยนได้ ต้องเปิดหน้าราคาทางการ |
-| ตัดสินว่า skill ไหนควรแก้จากบทเรียนของงาน | `session-lessons-to-skills` | skill นี้ให้ตัวเลข ไม่ได้ตัดสินว่าแก้อะไร |
-| อยากทดลองเทียบ model บนโจทย์เดียวกัน | `scripts/evals/models/` ใน repo SQT-Marketplace | log งานจริงตอบได้แค่ model ที่ใช้อยู่ การทดลองเทียบได้ทุกตัว (เสียเงิน) |
+| Ask the current price of a model | `research-with-sources` | Prices change, so open the official price page |
+| Decide which skill to fix from the lessons of a task | `session-lessons-to-skills` | This skill gives numbers, it does not decide what to fix |
+| Want to test models against each other on the same problem | `scripts/evals/models/` in the SQT-Marketplace repo | The real work log can only answer for the models in use · a head-to-head test can cover every model (costs money) |
 
-## ข้อมูลมาจากไหน
+## Where the data comes from
 
-hook ของ `superuser` จดให้เองใน `log/<วันที่>/runs.jsonl` (ไม่ต้องทำอะไร ถ้าโมดูล `log` เปิดอยู่):
+The `superuser` hook records it by itself in `log/<date>/runs.jsonl` (you do nothing, if the `log` module is on):
 
-| บรรทัด | ได้อะไร |
+| Line | What you get |
 |---|---|
-| `run` | ตอนสั่ง Agent: ชนิด agent · `model` ที่สั่ง (ไม่ระบุ = `inherit`) · `resolved_model` ที่ใช้จริง · `effort` (ไม่ระบุ = `null`) · ขั้น `step` · `async` · เวลา · token ถ้า tool_response มี · `estimate_tokens` · `brief_sections` = ใบสั่งงานมีหัวข้อครบกี่ข้อจาก 5 (เป้า · ขอบเขต · เสร็จเมื่อ · กติกาหรือใช้อะไร · ส่งกลับ) · งานที่รอผลจด `verdict` `round` `high` `mid` `low` |
-| `result` | ลูกทีมส่งรายงานกลับ: `verdict` (pass · fail · conditional) · `round` · `high` `mid` `low` = จำนวนข้อ สูง กลาง ต่ำ จากบรรทัดหัวรายงานผู้ตรวจ (ไม่มีบนบรรทัดนั้น = `null`) · ข้อความงานจบให้ token รวมจริง (`total_tokens`) |
-| `feedback` | ผู้ใช้ปฏิเสธหรือรับ (`reject` · `accept`) อนุมานจากคำ ติดป้าย `inferred` |
-| `expect` | หัวหน้าทีมเพิ่มบรรทัด `คาด:` ลง `CONTEXT.md`: `size` · `workers` · `review_rounds` · `level` · `critical_k` · `width` (แยกจากคำ ไม่เก็บข้อความ) · จับจาก Edit และ MultiEdit (เฉพาะบรรทัดใหม่) · Write และคำสั่ง Bash ที่มีทั้ง `superuser/CONTEXT.md` และ `คาด:` นับเฉพาะบรรทัดที่มีวันที่ของวันนี้ บรรทัด `คาด:` ที่ไม่มีวันที่และเขียนผ่าน 2 ทางนี้จึงไม่ถูกจด · `SUMMARY.md` หัวข้อ "คุ้มแค่ไหน" เทียบกับจำนวนลูกทีมและรอบตรวจที่สั่งจริงหลังบรรทัดนั้นในวันเดียวกัน |
+| `run` | When an Agent is ordered: agent type · the `model` ordered (not given = `inherit`) · the `resolved_model` actually used · `effort` (not given = `null`) · the step `step` · `async` · time · tokens if tool_response has them · `estimate_tokens` · `brief_sections` = how many of the 5 headings the brief has (goal · scope · done-when · rules or what to use · what to send back) · for work that waits for a result, it records `verdict` `round` `high` `mid` `low` |
+| `result` | A subagent sends its report back: `verdict` (pass · fail · conditional) · `round` · `high` `mid` `low` = counts of high, medium, low items from the reviewer's report header line (not on that line = `null`) · the task-finished message gives the real total tokens (`total_tokens`) |
+| `feedback` | The user rejects or accepts (`reject` · `accept`), inferred from wording, tagged `inferred` |
+| `expect` | The team lead adds a `คาด:` (expected) line to `CONTEXT.md`: `size` · `workers` · `review_rounds` · `level` · `critical_k` · `width` (parsed from the words, the text is not stored) · caught from Edit and MultiEdit (new lines only) · Write and Bash commands that contain both `superuser/CONTEXT.md` and `คาด:` count only lines that carry today's date, so a `คาด:` line with no date written through these 2 routes is not recorded · the heading "คุ้มแค่ไหน" (how worthwhile) in `SUMMARY.md` is compared with the number of subagents and review rounds actually ordered after that line on the same day |
 
-- ขั้น (`plan` `code` `review` `research` `design` `write` `test` `other`) จัดจากกฎคำใน `hooks/step-rules.json` · แก้ไฟล์นั้นได้โดยไม่แตะโค้ด
-- ใบสั่งงานที่มีบรรทัด `ขนาด: <N>k` → บรรทัด `run` ได้ `estimate_tokens` · รายงานหัวข้อ **ขนาดจริงต่อที่ประเมิน** ให้ค่า k ต่อขั้น (k ← 0.6k + 0.4 × จริง ÷ ประเมิน) หัวหน้าทีมคูณ k กับขนาดที่ประเมินตอนแตกชิ้นครั้งหน้า (`superuser` → `references/team-roles.md` "แบ่งงาน" ข้อ 2) · ขนาดจริง = `subagent_tokens` จากข้อความงานเบื้องหลังจบ หรือผลรวม token 4 ช่อง (ใน · ออก · อ่านแคช · เขียนแคช) ของงานที่รอผล · 2 ทางนี้นับแบบเดียวกันไหม `ยังไม่ได้ตรวจ` กับ log จริง จนกว่าจะตรวจ ให้ใช้ k ที่ได้จากงานแบบเดียวกับที่จะประเมิน
-- รายงานมี 3 หัวข้อที่ใช้ตัดสินแทนความรู้สึก (ตัวเลขทุกตัวมาจาก `run` ที่มีจริง · ขั้นที่ตัวอย่างต่ำกว่า 5 ติดป้าย "ตัวอย่างน้อย" ห้ามใช้ตัดสิน):
-  - **ขนาดชิ้นงานจากงานเก่า** ต่อขั้น: P10 · P50 · P90 ของ token ที่ใช้จริง กับค่าคาด PERT = (O + 4M + P) ÷ 6 (O = P10 · M = P50 · P = P90) ± (P − O) ÷ 2.56 · ใช้เป็นขนาดชิ้นที่หัวหน้าทีมไม่รู้ (`superuser` หัวข้อ 2) · ค่า k ด้านบนยังใช้ปรับขนาดที่ประเมินเอง
-  - **model ต่อขั้น** (Thompson sampling): สุ่มโอกาสผ่านของแต่ละ model จาก Beta(1 + ผ่าน, 1 + ไม่ผ่าน) แล้วหารด้วยค่าใช้จ่ายต่องาน นับว่า model ไหนคุ้มที่สุดบ่อยแค่ไหน · ถึง 95% แล้วใช้ตัวนั้นประจำขั้น · ไม่ถึงจับทีละงานด้วย `scorecard.mjs --pick <ขั้น> [--candidates a,b]` (ต้องมีผู้ท้าชิงตั้งแต่ 2 ตัว)
-  - **การแจกงาน** นับจาก log เอง: ระบุ model · ระบุ effort · run ต่อ model · ลูกทีมพร้อมกันมากสุดต่อ session (`ts` ห่างไม่เกิน 5 วินาที ไม่นับ review) และจำนวนครั้งที่เกิน 8 · ใบสั่งงานครบ (`brief_sections` ÷ 5) · ผ่านรอบแรก พร้อมช่วง Wilson 95% และ `verdict` ว่างกี่แถว · คาดก่อนแจก และ จริง ÷ คาด · ช่องที่ log ไม่มีขึ้น "วัดไม่ได้ — ต้องมีช่อง <ชื่อ>"
-  - **กฎเหล็ก:** งานในรายการ "รออนุมัติ" หรืองานเสี่ยง (เงิน · กฎหมาย · สุขภาพ · ส่งคนนอก) ไม่สุ่มลง model เล็ก ใช้ระดับใหญ่ตามตารางใน `superuser` หัวข้อ 5 · ตัวเลขที่ได้เป็นข้อมูลประกอบ ไม่ใช่คำสั่ง
-- วันที่ไม่มี `runs.jsonl` (log เก่า) ใช้ `main.jsonl` + `tokens.json` ทำแบบหยาบ ไม่มีผลตรวจ
+- The step (`plan` `code` `review` `research` `design` `write` `test` `other`) is assigned from the word rules in `hooks/step-rules.json` · you can edit that file without touching code
+- A brief that has the line `ขนาด: <N>k` (size) → the `run` line gets `estimate_tokens` · the report heading **ขนาดจริงต่อที่ประเมิน** (actual size per estimate) gives the k value per step (k ← 0.6k + 0.4 × actual ÷ estimated) · the team lead multiplies k by the size estimated when splitting the next job (`superuser` → `references/team-roles.md` "แบ่งงาน" (splitting work) item 2) · actual size = `subagent_tokens` from the background task-finished message, or the sum of the 4 token fields (input · output · cache read · cache write) of work that waits for the result · whether these 2 routes count the same way is `ยังไม่ได้ตรวจ` (not yet checked) against a real log · until checked, use the k from the same kind of work you are about to estimate
+- The report has 3 headings used to decide instead of a feeling (every number comes from a real `run` · a step with fewer than 5 samples is tagged "ตัวอย่างน้อย" (few samples) and must not be used to decide):
+  - **Job size from past work** per step: P10 · P50 · P90 of the tokens actually used, with the PERT expected value = (O + 4M + P) ÷ 6 (O = P10 · M = P50 · P = P90) ± (P − O) ÷ 2.56 · use it as the size of a piece the team lead cannot size (`superuser` heading 2) · the k above still adjusts a size you estimated yourself
+  - **Model per step** (Thompson sampling): draw each model's pass probability from Beta(1 + pass, 1 + fail), then divide by the cost per task, and count how often each model is the best value · at 95%, use that model as the default for the step · below that, pick per task with `scorecard.mjs --pick <step> [--candidates a,b]` (needs at least 2 challengers)
+  - **Work distribution**, counted from the log itself: model given · effort given · runs per model · most subagents at the same time per session (`ts` within 5 seconds, not counting review) and the number of times it exceeds 8 · brief completeness (`brief_sections` ÷ 5) · passed the first round, with the Wilson 95% interval and how many rows have an empty `verdict` · expected before ordering, and actual ÷ expected · a field the log lacks shows "cannot measure — needs field <name>"
+  - **Iron rule:** work on the "รออนุมัติ" (awaiting approval) list, or risky work (money · law · health · sending to outsiders), is never randomly assigned to a small model · use the large tier from the table in `superuser` heading 5 · the numbers are supporting data, not orders
+- For days with no `runs.jsonl` (old logs), use `main.jsonl` + `tokens.json` for a rough version, with no review results
 
-## ขั้นตอน
+## Steps
 
-1. **รายงานโปรเจกต์นี้** (ปลอดภัย อ่าน log ของตัวเองเขียนไฟล์ในโฟลเดอร์ log):
-   `node <plugin>/skills/model-scorecard/scripts/scorecard.mjs` → `log/MODEL-REPORT.md` · เลือกที่อื่นด้วย `--log` และ `--out`
-2. **อ่านรายงานอย่างระวัง:** ช่องที่ติดป้าย "ตัวอย่างน้อย" (ต่ำกว่า 5) ห้ามใช้ตัดสินใจ · ผ่านรอบแรก และรอบแก้ ผูกผลผู้ตรวจกับงานล่าสุดก่อนหน้าใน session เดียวกัน เป็นการประมาณ · ราคาอยู่ใน `references/prices.json` ว่างอยู่ = ขึ้น "ยังไม่มีราคา" ให้เติมจากหน้าราคาทางการแล้วใส่วันที่ตรวจ
-3. **รวมหลายโปรเจกต์ (เมื่อคนสั่งเท่านั้น):**
-   `node scorecard.mjs --rollup <โฟลเดอร์โปรเจกต์ 1> <โฟลเดอร์โปรเจกต์ 2> --out <ไฟล์>` · อ่านอย่างเดียว · `--out` ต้องอยู่นอกทุกโปรเจกต์ที่อ่าน (สคริปต์ปฏิเสธเอง) · อ่านเฉพาะโฟลเดอร์ที่คนระบุ ไม่ไล่หาโปรเจกต์อื่นเอง
-4. **เลือก model ให้งานถัดไป:** `node scorecard.mjs --pick <ขั้น>` เมื่อรายงานบอกว่ายังไม่ถึง 95% และงานไม่ติดกฎเหล็กข้างบน · ผลที่ได้ใส่ในใบสั่งงานช่อง model
-5. **ตัดสิน:** ข้อสังเกต 3 ข้อท้ายรายงานเป็นจุดเริ่ม ไม่ใช่ข้อสรุป · จะเปลี่ยน model ของขั้นไหน ให้บอกตัวเลขและจำนวนตัวอย่าง แล้วลงตาราง `decision-log` · ผู้ใช้ตัดสินเรื่องที่กระทบค่าใช้จ่ายของเขา
+1. **Report on this project** (safe: reads its own log and writes a file in the log folder):
+   `node <plugin>/skills/model-scorecard/scripts/scorecard.mjs` → `log/MODEL-REPORT.md` · pick other places with `--log` and `--out`
+2. **Read the report with care:** a cell tagged "ตัวอย่างน้อย" (below 5) must not be used to decide · passed the first round, and the fix round, tie the reviewer's result to the latest earlier work in the same session, which is an estimate · prices are in `references/prices.json` · if empty it shows "ยังไม่มีราคา" (no price yet): fill it in from the official price page and add the date checked
+3. **Combine several projects (only when a person asks):**
+   `node scorecard.mjs --rollup <project folder 1> <project folder 2> --out <file>` · read-only · `--out` must be outside every project that is read (the script refuses it by itself) · read only the folders the person named, and do not go looking for other projects
+4. **Pick a model for the next task:** `node scorecard.mjs --pick <step>` when the report says it has not reached 95% and the work does not hit the iron rule above · put the result in the model field of the brief
+5. **Decide:** the 3 findings at the end of the report are a starting point, not a conclusion · to change the model of a step, state the numbers and the sample count, then record it in the `decision-log` table · the user decides anything that affects his or her costs
 
-ทดสอบสคริปต์: `node scripts/scorecard.mjs --self-test`
+Test the script: `node scripts/scorecard.mjs --self-test`
 
-## เครื่องมืออ่าน transcript และ log
+## Tools for reading transcripts and logs
 
-นอกจาก log ของ hook ยังอ่าน transcript ของ session (`~/.claude/projects/`) ได้ด้วยสคริปต์ Node 4 ตัวใน `scripts/` · อ่านแบบสตรีม ไม่ส่งบรรทัดดิบเข้า context · ข้อความที่พิมพ์ออกผ่านตัวตัดความลับของ hook · รายละเอียดทุกตัวอยู่ใน `references/log-tools.md`
+Besides the hook's log, you can also read session transcripts (`~/.claude/projects/`) with 4 Node scripts in `scripts/` · they read as a stream and send no raw lines into context · printed text goes through the hook's secret stripper · details of each are in `references/log-tools.md`
 
-| ต้องการ | รัน |
+| Need | Run |
 |---|---|
-| หาว่าเคยทำเรื่อง X ไว้ตอนไหน (โปรเจกต์นี้) | `node scripts/session-search.mjs <คำ>...` |
-| หาช่องว่างของ router จาก prompt จริง | `node scripts/router-replay.mjs --installed` |
-| ย่อ log เป็น `.claude/superuser/digest.md` (ติดหรือรออยู่ไม่ถูกตัด) | `node scripts/digest.mjs` |
-| ดู token ต่อ skill ต่อชนิดลูกทีม cache หลุด ข้อความแพงสุด | `node scripts/usage-report.mjs --json` อ่านตัวเลข เขียนข้อสังเกต 3–5 ข้อ แล้ว `--findings <ไฟล์>` ให้ได้ HTML |
+| Find when topic X was done (this project) | `node scripts/session-search.mjs <word>...` |
+| Find router gaps from real prompts | `node scripts/router-replay.mjs --installed` |
+| Shrink the log into `.claude/superuser/digest.md` (blocked or waiting items are not cut) | `node scripts/digest.mjs` |
+| See tokens per skill per subagent type, cache misses, most expensive message | `node scripts/usage-report.mjs --json`, read the numbers, write 3–5 findings, then `--findings <file>` to get HTML |
 
-ข้ามโปรเจกต์ (`--all`) เมื่อคนสั่งเท่านั้น · ทดสอบ: `node scripts/log-tools.test.mjs`
+Across projects (`--all`) only when a person asks · test: `node scripts/log-tools.test.mjs`
 
-## ตัวอย่างจริง
+## Real example
 
-โจทย์ (ตัวเลขสมมติ): "ผู้ตรวจใช้ Opus แพงไปไหม" · ทำ: รันข้อ 1 · ผล: ตารางขั้น `review` มี `opus` กับ `sonnet` ข้อสังเกตข้อแรกบอก "opus ค่าใช้จ่ายต่องานสูงกว่า sonnet 4.0 เท่า · ผ่านรอบแรก 80% เทียบ 80% (12 งาน เทียบ 9 งาน)" → เสนอให้ลองผู้ตรวจ Sonnet กับงานเสี่ยงต่ำ เก็บ Opus ไว้ตรวจงานความปลอดภัย แล้วดูรายงานซ้ำเมื่อสะสมครบ 5 งานต่อช่อง
+Problem (made-up numbers): "Is using Opus for the reviewer too expensive?" · Done: ran step 1 · Result: the `review` step table has `opus` and `sonnet`, and the first finding says "opus costs 4.0 times more per task than sonnet · passed the first round 80% vs 80% (12 tasks vs 9 tasks)" → suggest trying a Sonnet reviewer on low-risk work, keep Opus for security review, and look at the report again once each cell has 5 tasks
 
-## ตรวจก่อนส่ง
+## Check before sending
 
-- [ ] ทุกตัวเลขที่อ้างบอกจำนวนตัวอย่างและไม่ใช้ช่องที่ติดป้าย "ตัวอย่างน้อย"
-- [ ] ไม่ได้เขียนไฟล์ผลรวมลงโปรเจกต์ที่อ่าน
-- [ ] ตัวเลขราคามาจาก `references/prices.json` ที่มีแหล่งและวันที่ตรวจ
+- [ ] Every number cited states its sample count and does not use a cell tagged "ตัวอย่างน้อย"
+- [ ] No combined result file was written into a project that was read
+- [ ] Price figures come from `references/prices.json`, which has a source and a date checked
 
-## ที่มา
+## Sources
 
-รูปแบบ log และกฎจัดขั้นเป็นของ hook `superuser` (`hooks/superuser-hook.mjs` · `hooks/step-rules.json`) · คำสั่ง `--rollup` และขอบเขตข้อมูลตามที่ผู้ใช้สั่ง 2026-10-27 · เครื่องมืออ่าน transcript ได้ไอเดียจาก duckdb-skills · vercel · claude-remember · session-report (ชื่อ ใบอนุญาต และไฟล์ ดูท้าย `references/log-tools.md`)
+The log format and the step rules belong to the `superuser` hook (`hooks/superuser-hook.mjs` · `hooks/step-rules.json`) · the `--rollup` command and the data boundary follow what the user ordered on 2026-10-27 · the transcript-reading tools took ideas from duckdb-skills · vercel · claude-remember · session-report (names, licences and files are at the end of `references/log-tools.md`)

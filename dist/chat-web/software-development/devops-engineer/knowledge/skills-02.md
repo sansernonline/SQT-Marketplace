@@ -99,7 +99,7 @@ Use when writing a blameless post-incident review
 
 # Blameless Postmortem Template
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line per `human-writing`. This skill gives the format and the structure, while human-writing says how to write so a person can follow it.
 > ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ ธุรกิจ
 
 ## When to use this skill
@@ -113,17 +113,17 @@ Use when writing a blameless post-incident review
 
 | งาน | ใช้ตัวนี้แทน |
 |---|---|
-| เหตุยังเกิดอยู่ ต้องรู้ว่าจะทำอะไรตอนนี้ | `incident-runbook-template` |
-| บั๊กธรรมดาที่ไม่ได้ทำให้ระบบจริงล่ม | `bug-report-template` |
-| action item "เพิ่ม load test" (ระบบล่มเพราะคนเยอะหรือ connection pool เต็ม) | `load-testing` — ตั้งเกณฑ์ p95 กับอัตรา error · ด่านอนุญาตก่อนยิง · smoke ใน CI |
+| The incident is still happening and you need to know what to do now | `incident-runbook-template` |
+| An ordinary bug that did not take the real system down | `bug-report-template` |
+| Action item "add a load test" (the system went down because of heavy traffic or a full connection pool) | `load-testing` — set p95 and error-rate thresholds · permission gate before firing · smoke test in CI |
 
-## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+## 0 · Look for an existing format first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before using the structure or template in this file, check whether the user, customer or project already has its own format:
 
-- **ที่ดู:** แบบรายงานเหตุขัดข้องขององค์กร · ระดับความรุนแรงที่องค์กรนิยามไว้ (SEV/P1–P4) · postmortem ฉบับก่อนใน `docs/postmortems/` หรือที่ผู้ใช้ชี้
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** ใช้ชื่อระดับความรุนแรงขององค์กร · หลักไม่กล่าวโทษบุคคล ไทม์ไลน์ และ action item ที่มีเจ้าของยังต้องมีทุกแบบ
+- **Where to look:** the organisation's incident report format · the severity levels the organisation defines (SEV/P1–P4) · earlier postmortems in `docs/postmortems/` or where the user points
+- **Result:** found → use that format (headings, order, field names, numbering) and say in the reply which file's format you used · not found → use the template in this file as a fallback and say that no existing format was found
+- **Still required either way:** use the organisation's severity names · the blameless principle, a timeline, and action items with owners are required in every format
 
 ## Core Principles
 
@@ -497,7 +497,7 @@ AI-looking style in any medium → before sending, go through item 3 of `no-ai-l
 
 # รูปแบบ markdown พร้อมตัวอย่าง
 
-ตัวอย่างโค้ด markdown ของทุกรูปแบบที่ `SKILL.md` อ้างถึง ให้ลอกไปใช้ได้ทันที ส่วนกฎว่าใช้เมื่อไหร่อยู่ใน `SKILL.md`
+Markdown code examples for every format that `SKILL.md` refers to, ready to copy and use · the rules on when to use each one live in `SKILL.md`
 
 **สารบัญ:** Document Header · Table of Contents · Callout Boxes · Tables · Figures · Status Badges · Cover Block · Comparison / Decision Tables · Lists · Code Blocks · Approval/Sign-off · Glossary
 
@@ -573,7 +573,7 @@ Use a table:
 
 ## Figures (รูปในเอกสาร)
 
-รูปในเอกสารโปรเจกต์วาดด้วย `diagram-figures` (plugin `software-development` · house style) แล้วฝังเป็นไฟล์ภาพ · Mermaid ใช้แค่รูปด่วนใน README · PR ไม่ใช้ในเอกสารที่ส่งต่อ
+Figures in project documents are drawn with `diagram-figures` (plugin `software-development` · house style) and embedded as image files · use Mermaid only for quick figures in a README · do not use it in documents that are handed on, nor in PRs
 
 ```markdown
 ลำดับการเรียกเมื่อผู้ใช้กดบันทึกแสดงในรูปที่ 3
@@ -715,16 +715,16 @@ Define acronyms on first use, then add to glossary.
 
 ## reference: thai-office.md
 
-# เอกสาร Office ภาษาไทย
+# Thai Office documents
 
-ใช้กับไฟล์ Word · Excel · PDF ทุกไฟล์ที่มีภาษาไทย จะสร้างด้วยสคริปต์หรือทำมือก็ตาม รายละเอียดและตัวช่วยอยู่ใน `branded-document-design`
+Applies to every Word · Excel · PDF file that contains Thai, whether a script builds it or a person makes it by hand. Details and helpers are in `branded-document-design`.
 
-- Word นับภาษาไทยเป็น complex script จึงมีช่องฟอนต์ ขนาด และตัวหนาแยกจากละติน ถ้าตั้งแค่ช่องละติน ข้อความไทยจะไม่เปลี่ยน ต้องตั้งให้ครบทั้งสองชุด
-- ย่อหน้าไทยไม่จัดชิดสองขอบ (justify) เพราะไทยไม่มีช่องว่างระหว่างคำ Word จะยืดช่องไฟจนเป็นรู (ยกเว้นคู่มือวิทยานิพนธ์สั่ง Thai Distributed)
-- ข้อความไทยห้ามใช้ฟอนต์ mono เพราะ Consolas กับ Cascadia ไม่มีอักษรไทย ใช้ mono กับรหัส คีย์ และตัวเลขเท่านั้น
-- ส่งออก PDF ให้ฝังฟอนต์ทุกครั้ง ไม่งั้นเครื่องที่ไม่มีฟอนต์จะเอาตัวอื่นมาแทนและวรรณยุกต์ลอย
-- CSV ที่ให้คนไทยเปิดใน Excel บันทึกเป็น UTF-8 แบบมี BOM ไม่งั้นภาษาไทยเพี้ยน
-- ก่อนบอกว่าเสร็จ แปลงทุกหน้าเป็นภาพแล้วเปิดดูจริง ตารางล้น หัวข้อค้างท้ายหน้า วรรณยุกต์ลอย ดูจากโค้ดไม่เห็น
+- Word treats Thai as a complex script, so it has separate font, size and bold fields from Latin. If you set only the Latin field, the Thai text does not change. Set both.
+- Do not justify Thai paragraphs. Thai has no spaces between words, so Word stretches the letter spacing and leaves gaps. The exception is a thesis guide that requires Thai Distributed.
+- Never use a mono font for Thai text, because Consolas and Cascadia have no Thai letters. Use mono only for codes, keys and numbers.
+- Always embed fonts when exporting PDF. Otherwise a machine without the font substitutes another one and the tone marks float.
+- Save a CSV that Thai users will open in Excel as UTF-8 with BOM (byte order mark). Otherwise the Thai text turns to garbage.
+- Before you say it is done, render every page to an image and look at it. Overflowing tables, headings stranded at the bottom of a page and floating tone marks do not show up in the code.
 
 
 ## reference: theme-colors.md
@@ -965,20 +965,20 @@ After that the abbreviation may be used. See the skill `spell-out-abbreviations`
 
 ## reference: anti-patterns.md
 
-# Anti-patterns — เหตุผลและสิ่งที่ใช้แทน
+# Anti-patterns — reasons and what to use instead
 
-หัวข้อสั้นอยู่ใน `SKILL.md`
+The short headings are in `SKILL.md`.
 
-- **ใช้ Heading style ที่มากับ Word** — จะทับสีที่ตั้งไว้ ให้ใช้ `h1()/h2()/h3()`
-  ซึ่งตั้ง `outlineLvl` เอง สารบัญ (TOC) จึงยังเห็นหัวข้อ
-- **เส้นตารางดำหนาแบบค่าเริ่มต้น** — เอกสารดูเก่าทันที ใช้เส้นสี `line` หนา 0.5pt ระหว่างแถว (ใต้แถวหัวคือเส้นแบรนด์ 1.5pt)
-- **ตัวอักษรสีดำสนิท** — ให้ใช้ `text_body` ซึ่งเป็นเทาเข้ม เนื้อความจะนุ่มขึ้นมาก
-- **หัวตารางตัวหนาแต่ไม่มีพื้นสี** — ตารางข้ามหน้าแล้วคนอ่านไม่รู้ว่าเริ่มตรงไหน
-- **ปล่อยความกว้างคอลัมน์ให้ Word คิดเอง** — ต้อง `fixed_widths()` เสมอ
-  ไม่งั้นคอลัมน์รหัสจะกว้างเท่าคอลัมน์รายละเอียด
-- **อีโมจิเยอะเกิน** — 1 ตัวต่อ callout พอ ไม่ใส่ในหัวข้อทุกอัน
-- **ส่งไฟล์โดยไม่เคย render ดู** — ดูข้อ 6
-- **สร้าง .docx โดยไม่เก็บ markdown ต้นฉบับ** — รอบหน้าแก้ไม่ได้
+- **Using Word's built-in Heading styles** — they override the colors you set. Use `h1()/h2()/h3()`,
+  which set `outlineLvl` themselves, so the table of contents (TOC) still shows the headings.
+- **Thick black default table borders** — the document looks dated at once. Use lines in the `line` color at 0.5pt between rows (under the header row is the 1.5pt brand line).
+- **Pure black text** — use `text_body`, a dark gray. The body text becomes much softer.
+- **Bold table headers with no fill color** — when a table spans pages, readers cannot tell where it starts.
+- **Letting Word work out column widths** — always call `fixed_widths()`.
+  Otherwise the code column ends up as wide as the detail column.
+- **Too many emoji** — 1 per callout is enough. Do not put one in every heading.
+- **Sending the file without ever rendering it** — see item 6.
+- **Creating the .docx without keeping the source markdown** — you cannot edit it next time.
 
 
 ## reference: api.md
@@ -1345,80 +1345,80 @@ Other rules for Thai documents:
 
 ## reference: tokens-and-type.md
 
-# Design tokens · สเกลตัวอักษร · องค์ประกอบที่ใช้ซ้ำ
+# Design tokens · type scale · reusable elements
 
-สารบัญ: tokens → ความหมายของสี → สเกลตัวอักษร → องค์ประกอบที่ใช้ซ้ำ
+Contents: tokens → color meanings → type scale → reusable elements
 
-ตารางนี้กำหนด**หน้าที่**ของแต่ละ token ไม่ได้กำหนดค่าสี
-ค่าจริงมาจากข้อ 0 แล้วตั้งครั้งเดียวด้วย `use_brand(...)`
+This table sets the **job** of each token, not the color value.
+The real values come from item 0, then you set them once with `use_brand(...)`.
 
-| Token | หน้าที่ | ได้มาจาก |
+| Token | Job | Comes from |
 |-------|---------|----------|
-| `brand` | หัวข้อ H1 · ตัวเลข KPI · แถบ accent · ลิงก์ (ถ้า `brand` ต่ำกว่า 4.5:1 บนพื้นขาว ใช้ `brand_deep` กับลิงก์) | สีแบรนด์ (ไม่มี → ค่าประจำบ้าน + `(รอยืนยัน)`) |
-| `brand_2` | accent รอง · ขีดใต้หัวข้อสไลด์ · ปลายไล่สี | เพื่อนบ้านของสีหลักบนวงล้อสี |
-| `brand_deep` | หัวข้อ H2 · ตัวอักษรหัวตาราง | สีหลักผสมดำ ให้ contrast ≥ 7:1 บนพื้นขาว |
-| `brand_tint` | พื้นหัวตาราง · การ์ด KPI · พื้นหน้าปก | สีหลักผสมขาวประมาณ 90% |
-| `brand_tint_2` | แถวสลับ (zebra) ในตารางยาว | สีหลักผสมขาวประมาณ 96% |
-| `text` | หัวข้อ H3 · ข้อความเน้น | เทาเข้มอมโทนเดียวกับสีหลัก |
-| `text_body` | เนื้อความทั้งหมด | เทาเข้มอ่อนกว่า `text` 1 ขั้น **ไม่ใช่ดำสนิท เพราะดำสนิทล้าตา** |
-| `text_muted` | คำบรรยายรูป · meta · footer | เทากลาง contrast ≥ 4.5:1 บนพื้นขาวและ `brand_tint` |
-| `line` | เส้นตาราง เส้นคั่น | เทาอ่อนมาก เห็นได้แต่ไม่แย่งสายตา |
+| `brand` | H1 headings · KPI numbers · accent bars · links (if `brand` is below 4.5:1 on a white background, use `brand_deep` for links) | The brand color (none → the house default + `(รอยืนยัน)` (awaiting confirmation)) |
+| `brand_2` | Secondary accent · underline under slide headings · end of a gradient | A neighbor of the main color on the color wheel |
+| `brand_deep` | H2 headings · table header text | The main color mixed with black, giving contrast ≥ 7:1 on white |
+| `brand_tint` | Table header fill · KPI cards · cover background | The main color mixed with white, about 90% |
+| `brand_tint_2` | Alternating (zebra) rows in long tables | The main color mixed with white, about 96% |
+| `text` | H3 headings · emphasized text | A dark gray tinted toward the main color |
+| `text_body` | All body text | A dark gray 1 step lighter than `text`. **Not pure black, because pure black tires the eyes** |
+| `text_muted` | Figure captions · meta · footer | A mid gray with contrast ≥ 4.5:1 on white and on `brand_tint` |
+| `line` | Table lines, dividers | A very light gray, visible but not competing for attention |
 
-**สีสถานะ 6 ตัว** (แต่ละตัวมีคู่สีพื้นกับสีตัวอักษร): สำเร็จ · ข้อมูล · เตือน · ผิดพลาด · เน้น · เป็นกลาง
-สีสถานะ**ไม่เปลี่ยนตามแบรนด์** เพราะเขียวคือผ่าน แดงคือไม่ผ่าน ในทุกเอกสาร
-พื้นคือเฉดอ่อนมาก ตัวอักษรคือเฉดเข้มของสีเดียวกัน ให้ contrast ≥ 4.5:1
+**6 status colors** (each has a fill color and a text color as a pair): success · info · warning · error · highlight · neutral
+Status colors **do not change with the brand**, because green means pass and red means fail in every document.
+The fill is a very light shade and the text is a dark shade of the same color, giving contrast ≥ 4.5:1.
 
-**ความหมายของแต่ละสี — เลือกสีตามความหมายเสมอ** (เหมือนกันทั้งเอกสารและไดอะแกรม)
+**What each color means — always choose a color by its meaning** (the same for documents and diagrams)
 
-| สี | หมายความว่า | ใช้กับ (callout / pill / กล่อง / เส้นในรูป) |
+| Color | Means | Used for (callout / pill / box / line in a figure) |
 |---|---|---|
-| แดง | อันตราย · ห้าม · ลบทิ้ง · ผิดพลาด · เลยกำหนด | `critical` · สถานะ "ค้าง/ล้มเหลว" · ขั้นที่ทำลายข้อมูล · เส้นที่พัง |
-| เหลือง/ส้ม | ระวัง · รอดำเนินการ · ข้อแม้ · ทางที่ไม่ใช่เส้นหลัก | `warning` · สถานะ "กำลังทำ" · โซน/เส้นข้อยกเว้น (`#C77A11`) |
-| เขียว | สำเร็จ · ผ่าน · ปลอดภัย · เสร็จแล้ว | `success` · สถานะ "เสร็จ" · ผลลัพธ์ที่ยืนยันแล้ว |
-| สีหลัก (สีแบรนด์ ไม่มีแบรนด์ใช้น้ำเงินประจำบ้าน) | ข้อมูล · การกระทำหลัก · เส้นทางปกติ | `tip` · ปุ่มหลัก · กล่อง/เส้นเส้นทางหลัก |
-| ม่วง | คำถาม · ทางเลือก · หมายเหตุเสริม | `question` · ของเสริมที่ไม่บังคับ |
-| เทา | เป็นกลาง · ปิดใช้งาน · ของภายนอก | `note` · ระบบภายนอก · ส่วนที่ปิดอยู่ |
+| Red | Danger · forbidden · delete · error · overdue | `critical` · status "stuck/failed" · a step that destroys data · a broken line |
+| Yellow/orange | Caution · waiting for action · caveat · a path that is not the main line | `warning` · status "in progress" · exception zone/line (`#C77A11`) |
+| Green | Success · pass · safe · done | `success` · status "done" · a confirmed result |
+| Main color (the brand color; with no brand, the house blue) | Information · main action · normal path | `tip` · primary button · box/line of the main path |
+| Purple | Question · option · side note | `question` · optional extras |
+| Gray | Neutral · disabled · external | `note` · external system · a part that is switched off |
 
-กฎเดียว: **เลือกสีตามความหมาย ไม่ใช่ตามความสวย** อย่าใช้แดงเพราะอยากให้เด่น ใช้แดงเฉพาะเมื่ออันตรายหรือผิดจริง และไดอะแกรมก็ใช้ชุดความหมายเดียวกันนี้ (ดู `software-diagrams` · `diagram-figures` ที่มี `EXCEPT_HUE` ส้มสำหรับทางที่ไม่ผ่านเส้นหลัก)
+The one rule: **choose a color by meaning, not by looks.** Do not use red just to stand out. Use red only when something is truly dangerous or wrong. Diagrams use this same set of meanings too (see `software-diagrams` · `diagram-figures`, which has the orange `EXCEPT_HUE` for paths that leave the main line).
 
-> **เกณฑ์ที่ต้องผ่านทุกชุดสี:** เนื้อความและ `text_muted` บนพื้น ≥ 4.5:1 · H2 และหัวตาราง (`brand_deep`) ≥ 7:1 ·
-> H1 และตัวเลข KPI (`brand` ตัวใหญ่ ตามนิยามตัวใหญ่ของ WCAG 2.2 ข้อ 1.4.3) ≥ 3:1 ·
-> พิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก ถ้าไม่ผ่านให้ปรับความเข้ม ไม่เปลี่ยนสี
+> **Thresholds every color set must pass:** body text and `text_muted` on the background ≥ 4.5:1 · H2 and table headers (`brand_deep`) ≥ 7:1 ·
+> H1 and KPI numbers (`brand` in large size, per the WCAG 2.2 large-text definition, criterion 1.4.3) ≥ 3:1 ·
+> printed in black and white, the hierarchy must still be distinguishable. If a set fails, adjust the intensity and do not change the color.
 >
-> **ตัวอย่างชุดสีที่เคยใช้จริง** (ไม่ใช่ค่ามาตรฐาน อย่าคัดลอกไปใช้โดยไม่ดูเนื้องาน) → `references/palette-examples.md`
+> **A color set that was really used** (not a standard value; do not copy it without looking at the content of the work) → `references/palette-examples.md`
 
-> **เปลี่ยนแบรนด์ทั้งชุดในบรรทัดเดียว:**
+> **Change the whole brand in one line:**
 > `use_brand(brand="C1121F", brand_deep="780000", brand_tint="FDECEC")`
 
-## สเกลตัวอักษร (pt)
+## Type scale (pt)
 
-| ระดับ | Word | Slide | น้ำหนัก · สี |
+| Level | Word | Slide | Weight · color |
 |-------|------|-------|--------------|
-| ชื่อบนปก | 20 | 40 | bold · `brand` (Word) / `brand_deep` (สไลด์) |
+| Cover title | 20 | 40 | bold · `brand` (Word) / `brand_deep` (slides) |
 | H1 | 16 | 26 | bold · `brand` |
 | H2 | 12.5 | — | bold · `brand_deep` |
 | H3 | 11.5 | — | bold · `text` |
-| เนื้อความ | 11 | 17 | regular · `text_body` |
-| ตาราง | 11 | 12.5 | regular · `text_body` |
-| คำบรรยาย/footer | 8.5–9 | 10–12 | italic หรือ regular · `text_muted` |
+| Body | 11 | 17 | regular · `text_body` |
+| Table | 11 | 12.5 | regular · `text_body` |
+| Caption/footer | 8.5–9 | 10–12 | italic or regular · `text_muted` |
 
-**อย่าเพิ่มขนาดนอกสเกลนี้** เพราะทุกขนาดที่เพิ่มทำให้เอกสารดูไม่สม่ำเสมอ และคนอ่านสังเกตเห็น
+**Do not add sizes outside this scale.** Every extra size makes the document look inconsistent, and readers notice.
 
-## องค์ประกอบที่ใช้ซ้ำ (จากข้อ 4)
+## Reusable elements (from item 4)
 
-| องค์ประกอบ | หน้าตา | เมธอด |
+| Element | Look | Method |
 |-----------|--------|-------|
-| หน้าปก | โลโก้ + ชื่อสีแบรนด์ กลางหน้า | `cover()` |
-| ตาราง | หัวพื้น `brand_tint` ตัวอักษร `brand_deep` · เส้นแบรนด์ 1.5pt ใต้แถวหัว · เส้นระหว่างแถว `line` 0.5pt · หัวซ้ำทุกหน้า | `table()` |
-| ตารางสถานะ | คอลัมน์สถานะย้อมสีตามค่า | `pill_table()` |
-| แถบตัวเลขสรุป | การ์ดพื้น `brand_tint` ตัวเลขใหญ่สีแบรนด์ + ป้ายเทาเล็ก | `kpi_row()` |
-| กล่องข้อความ | พื้นสีอ่อน + แถบสีหนาด้านซ้าย + อีโมจิ 1 ตัว | `callout()` |
-| รูปพร้อมคำบรรยาย | รูปกลางหน้า + "รูปที่ N — ..." เอียงเทาใต้รูป | `figure()` |
-| บล็อกโค้ด | พื้นเทาอ่อน ฟอนต์ Consolas 9pt | `code()` |
-| ตารางเซ็น | บทบาท / ชื่อ / ลายเซ็น / วันที่ | `signoff()` |
+| Cover page | Logo + title in the brand color, centered on the page | `cover()` |
+| Table | Header fill `brand_tint` with `brand_deep` text · 1.5pt brand line under the header row · `line` 0.5pt between rows · header repeats on every page | `table()` |
+| Status table | The status column is tinted by value | `pill_table()` |
+| Summary figure strip | Cards with `brand_tint` fill, a big number in the brand color + a small gray label | `kpi_row()` |
+| Text box | Light fill + a thick colored bar on the left + 1 emoji | `callout()` |
+| Figure with caption | Figure centered on the page + "รูปที่ N — ..." in gray italic under the figure | `figure()` |
+| Code block | Light gray fill, Consolas 9pt font | `code()` |
+| Sign-off table | Role / name / signature / date | `signoff()` |
 
-**สัดส่วนที่พอดี:** callout ไม่เกิน 3–5 กล่องต่อ 10 หน้า · แถบตัวเลขสรุป (KPI strip) 3–5 ช่อง (ตั้งแต่ 6 ช่อง ตัวเลขจะเล็กจนไม่เด่น) ·
-ตารางเกิน 6 คอลัมน์ให้เปลี่ยนเป็นหน้าแนวนอน (`landscape_section()`)
+**Good proportions:** no more than 3–5 callouts per 10 pages · a summary figure strip (KPI strip) of 3–5 cells (from 6 cells on, the numbers get too small to stand out) ·
+a table with more than 6 columns should move to a landscape page (`landscape_section()`).
 
 
 ## reference: visual-check.md
@@ -1837,228 +1837,228 @@ An image drawn by Mermaid itself has free-curved, diagonal lines and colours tha
 
 ## reference: engine-svg-python.md
 
-# SVG/Python engine — รูปที่ generate จากข้อมูลหรือโค้ด
+# SVG/Python engine — figures generated from data or code
 
-ทางที่ 2 ของ `diagram-figures` ใช้แทนโครง HTML เมื่อรูปต้องสร้างจากข้อมูลหรือโค้ด เช่น รูปหลายใบที่ต้องออกซ้ำทุกครั้งที่ข้อมูลเปลี่ยน หรือรูปที่ต้องคุมตำแหน่งทุกจุดเองบนกริดด้วยเส้นตั้งฉากมุมโค้ง
-Python เขียน SVG ลงกริดแล้วเรนเดอร์เป็น PNG ส่วนไอคอนและโลโก้มาจากคลังเดียวกับโครง HTML ([icons.md](icons.md))
+Route 2 of `diagram-figures`. Use it instead of the HTML skeleton when a figure must be generated from data or code. Examples: several figures that must be re-exported every time the data changes, or a figure where you control every position on a grid with right-angle lines and rounded corners.
+Python writes the SVG onto the grid, then renders it to PNG. Icons and logos come from the same library as the HTML skeleton ([icons.md](icons.md)).
 
-ข้อเสียคือใช้เวลา เพราะ 1 รูปต้องแก้หลายรอบ ดังนั้นให้ใช้เฉพาะรูปที่คนนอกทีมจะเห็นและเห็นซ้ำ
+The cost is time, because 1 figure takes several rounds of fixes. So use it only for figures that people outside the team will see, and see repeatedly.
 
-> **สีหลัก = สีหลักของโปรเจกต์** · หาตามลำดับใน `diagram-figures` ข้อ 5 (ระบบสี) แล้วใส่ใน `ACCENT` ของ `theme.py` · ชุดประจำบ้าน `#2A78D6` ใช้เฉพาะเมื่อลำดับนั้นหาไม่เจอเลย
-
----
-
-**สารบัญ**
-- [0 · สีมาจากเนื้องาน — ไม่หยุดถาม](#0--สีมาจากเนื้องาน--ไม่หยุดถาม)
-- [1 · ลำดับการทำงาน](#1--ลำดับการทำงาน)
-- [2 · โครงไฟล์](#2--โครงไฟล์)
-- [3 · กฎข้อที่หนึ่ง — กริดก่อน เส้นทีหลัง](#3--กฎข้อที่หนึ่ง--กริดก่อน-เส้นทีหลัง)
-- [4 · เส้นเชื่อม](#4--เส้นเชื่อม)
-- [5 · ป้ายบนเส้น — สองบทบาทเท่านั้น](#5--ป้ายบนเส้น--สองบทบาทเท่านั้น)
-- [6 · โซน](#6--โซน)
-- [7 · ไอคอนและโลโก้](#7--ไอคอนและโลโก้)
-- [8 · เรนเดอร์](#8--เรนเดอร์)
-- [9 · วงจรตรวจงาน — ห้ามข้าม](#9--วงจรตรวจงาน--ห้ามข้าม)
-- [10 · ค่าคงที่ที่ใช้ได้จริง](#10--ค่าคงที่ที่ใช้ได้จริง)
-- [11 · แถบสัญลักษณ์](#11--แถบสัญลักษณ์)
-- [ตัวย่อ](#ตัวย่อ)
-
-## 0 · สีมาจากเนื้องาน — ไม่หยุดถาม
-
-**ถ้าเอกสารต้นทางประกาศ `doc-theme` ไว้แล้ว ให้ใช้ค่านั้นและอย่าถามซ้ำ**
-(ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร") ถ้ายังไม่มี ให้ทำตามข้างล่างนี้แล้วเขียนกลับลง `doc-theme`
-
-**ไม่มีสีแบรนด์ → ทำตามลำดับใน `diagram-figures` ข้อ 5:** ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` ไว้ในรายงาน แล้วทำต่อ ไม่หยุดถาม
-เสนอโทนจากเนื้องานตามตารางใน [colour-by-domain.md](colour-by-domain.md) ไว้ในรายงานให้เลือกทีหลัง
-
-ใส่**สีหลักสีเดียว**ที่ `ACCENT` ใน `assets/svg-engine/theme.py` แล้วเฉดอ่อนและเข้มทั้งหมด
-จะคำนวณจากสีนั้นด้วย `tint()` โค้ดวาดรูปจึงไม่มีสีอื่นฝังอยู่
-
-สีเดียวที่ไม่ผูกกับ `ACCENT` คือ `EXCEPT_HUE` สำหรับป้าย "ข้อยกเว้น" ซึ่งต้องต่างจากสีหลักเสมอ
-ถ้าสีหลักเป็นส้มอยู่แล้ว ให้เปลี่ยน `EXCEPT_HUE` เป็นสีอื่นที่ตัดกัน
+> **Main colour = the project's main colour.** Find it in the order given in `diagram-figures` section 5 (colour system), then put it in `ACCENT` in `theme.py`. Use the house colour `#2A78D6` only when that order finds nothing at all.
 
 ---
 
-## 1 · ลำดับการทำงาน
+**Contents**
+- [0 · Colour comes from the work — do not stop to ask](#0--colour-comes-from-the-work--do-not-stop-to-ask)
+- [1 · Order of work](#1--order-of-work)
+- [2 · File layout](#2--file-layout)
+- [3 · Rule 1 — grid first, lines after](#3--rule-1--grid-first-lines-after)
+- [4 · Connector lines](#4--connector-lines)
+- [5 · Labels on lines — only two roles](#5--labels-on-lines--only-two-roles)
+- [6 · Zones](#6--zones)
+- [7 · Icons and logos](#7--icons-and-logos)
+- [8 · Rendering](#8--rendering)
+- [9 · Check loop — do not skip](#9--check-loop--do-not-skip)
+- [10 · Constants that work](#10--constants-that-work)
+- [11 · Legend bar](#11--legend-bar)
+- [Abbreviations](#abbreviations)
 
-1. อ่านไดอะแกรมที่มีอยู่ทั้งหมดก่อน แล้วถามว่า**รูปนี้ตอบคำถามอะไร** — 1 รูปตอบ 1 คำถาม
-2. เลือกสีตามข้อ 0 (ไม่มีสี → ค่าประจำบ้าน + `(รอยืนยัน)`)
-3. **วางตำแหน่งทุกกล่องลงกริดก่อนลากเส้น** — ข้อนี้สำคัญที่สุด ดูข้อ 3
-4. แก้ `theme.py` และ `ref.py` ให้เสร็จก่อน แล้วค่อยเขียนไฟล์รูป
-5. **เรนเดอร์แล้วเปิดไฟล์ภาพดูจริง** ไม่ใช่แค่เช็กว่าสคริปต์รันผ่าน
-6. เมื่อได้รูปที่สะอาดแล้ว จึงเขียนลงโฟลเดอร์ปลายทาง ส่วนรูปเก่าให้ย้ายไป `_to_delete/`
+## 0 · Colour comes from the work — do not stop to ask
+
+**If the source document already declares a `doc-theme`, use that value and do not ask again.**
+(See `polished-document-style`, section "Document theme".) If there is none yet, follow the steps below, then write the result back into `doc-theme`.
+
+**No brand colour → follow the order in `diagram-figures` section 5:** use the house value `#2A78D6`, write `(รอยืนยัน)` (awaiting confirmation) in the report, and carry on without stopping to ask.
+Put a tone suggested from the content, using the table in [colour-by-domain.md](colour-by-domain.md), in the report so the user can choose later.
+
+Put **one main colour** in `ACCENT` in `assets/svg-engine/theme.py`. All light and dark shades
+are computed from it with `tint()`, so the drawing code has no other colour hard-coded.
+
+The only colour not tied to `ACCENT` is `EXCEPT_HUE`, for the "exception" label. It must always differ from the main colour.
+If the main colour is already orange, change `EXCEPT_HUE` to another contrasting colour.
 
 ---
 
-## 2 · โครงไฟล์
+## 1 · Order of work
+
+1. Read all existing diagrams first, then ask **what question this figure answers**. 1 figure answers 1 question.
+2. Pick the colour by section 0 (no colour → house value + `(รอยืนยัน)`).
+3. **Place every box on the grid before drawing any line.** This is the most important step. See section 3.
+4. Finish `theme.py` and `ref.py` first, then write the figure file.
+5. **Render, then open the image file and look at it.** Checking that the script ran without errors is not enough.
+6. Once the figure is clean, write it to the target folder. Move the old figure to `_to_delete/`.
+
+---
+
+## 2 · File layout
 
 ```
 architecture/
-  01-system-context.png      ← ผลลัพธ์ เลขนำหน้าเรียงตามลำดับการอ่าน
+  01-system-context.png      ← output; the number prefix follows reading order
   _src/
-    theme.py                 ← สีทั้งหมด — แก้ที่นี่ที่เดียว
-    ref.py                   ← ภาษาภาพ: โซน หน่วย เส้น ป้าย แถบสัญลักษณ์
-    render.py                ← SVG → PNG ด้วย Playwright ที่ 2 เท่า
-    d01.py … dNN.py          ← หนึ่งไฟล์ต่อหนึ่งรูป มีแต่การจัดวาง
-    logos/                   ← โลโก้ผลิตภัณฑ์ + colors.json
+    theme.py                 ← all colours — edit here only
+    ref.py                   ← visual language: zones, units, lines, labels, legend bar
+    render.py                ← SVG → PNG with Playwright at 2x
+    d01.py … dNN.py          ← one file per figure; layout only
+    logos/                   ← product logos + colors.json
 ```
 
-ให้คัดลอกทั้งโฟลเดอร์ [`assets/svg-engine/`](../assets/svg-engine/) ไปเป็น `_src/` แล้วเริ่มงาน — [`d01.py`](../assets/svg-engine/d01.py) เป็นรูปตัวอย่างที่เรนเดอร์ได้จริง
+Copy the whole folder [`assets/svg-engine/`](../assets/svg-engine/) to `_src/` and start from there. [`d01.py`](../assets/svg-engine/d01.py) is a sample figure that really renders.
 
 ---
 
-## 3 · กฎข้อที่หนึ่ง — กริดก่อน เส้นทีหลัง
+## 3 · Rule 1 — grid first, lines after
 
-เส้นเฉียงทำให้อ่านยาก แต่การดัดเส้นทีหลังไม่ช่วย **ต้องแก้ที่ตำแหน่ง**
+Diagonal lines are hard to read, and bending the lines afterwards does not help. **Fix the positions.**
 
 ```python
-CA,CB,CC,CD,CE,CF = 178,452,678,896,1080,1312   # คอลัมน์
-R1,R2,R3          = 288,458,624                  # แถว ห่างกัน ~170
+CA,CB,CC,CD,CE,CF = 178,452,678,896,1080,1312   # columns
+R1,R2,R3          = 288,458,624                  # rows, spaced ~170 apart
 ```
 
-ทุกกล่องอยู่บนจุดตัดของคอลัมน์กับแถว และไม่มีตัวไหนหลุดกริด
-เมื่อทุกจุดอยู่บนเส้นเดียวกัน เส้นเชื่อมก็ตั้งฉากได้เองโดยไม่ต้องดัด
+Every box sits on an intersection of a column and a row, and none strays off the grid.
+When all points sit on the same lines, the connectors are right-angled by themselves with no bending.
 
-### กฎจุดกึ่งกลาง
+### Midpoint rule
 
-ตัวที่รับหลายทางต้องอยู่**กึ่งกลางของทางเหล่านั้น** ไม่ใช่เกาะแถวใดแถวหนึ่ง
-และถ้าส่งต่อหลายทาง ก็ต้องอยู่กึ่งกลางของทางที่ส่งออกด้วย
+A node that receives from several paths must sit **midway between those paths**, not stick to one row.
+If it also sends on to several paths, it must sit midway between the outgoing paths too.
 
-ให้ใช้**จุดรวมเดียวและจุดแยกเดียว** เพื่อให้เส้นสมมาตร
+Use **one merge point and one split point** so the lines are symmetric.
 
 ```python
-RM = (R1+R2)//2      # Nginx อยู่กึ่งกลางของสองแถวที่รับเข้ามา
+RM = (R1+R2)//2      # Nginx sits midway between the two incoming rows
 J1, J2 = CB-74, CB+86
 
-flow([(CA+34,R1),(J1,R1),(J1,RM),(CB-30,RM)])   # เข้าจากบน
-flow([(CA+34,R2),(J1,R2),(J1,RM),(CB-30,RM)])   # เข้าจากล่าง
-flow([(CB+30,RM),(J2,RM),(J2,R1),(CC-30,R1)])   # ออกขึ้นบน
-flow([(CB+30,RM),(J2,RM),(J2,R2),(CC-30,R2)])   # ออกลงล่าง
+flow([(CA+34,R1),(J1,R1),(J1,RM),(CB-30,RM)])   # enters from above
+flow([(CA+34,R2),(J1,R2),(J1,RM),(CB-30,RM)])   # enters from below
+flow([(CB+30,RM),(J2,RM),(J2,R1),(CC-30,R1)])   # leaves going up
+flow([(CB+30,RM),(J2,RM),(J2,R2),(CC-30,R2)])   # leaves going down
 ```
 
-### ช่องเดินสาย
+### Wiring channels
 
-เส้นที่ต้องข้ามกริด **ห้ามวิ่งทับแถวที่มีกล่อง** ให้จองช่องว่างไว้เฉพาะ
+A line that must cross the grid **must not run over a row that holds boxes.** Reserve separate channels for it.
 
 ```python
-TB = 238        # ช่องบน — ห่างจากขอบโซนอย่างน้อย 36
-MB = R3-48      # ช่องกลาง — ระหว่างแถว
+TB = 238        # top channel — at least 36 from the zone edge
+MB = R3-48      # middle channel — between rows
 ```
 
 ---
 
-## 4 · เส้นเชื่อม
+## 4 · Connector lines
 
-เส้นตั้งฉากทั้งหมดและมุมโค้งรัศมี 14 — จุดนี้ทำให้ดูประณีตขึ้นมากโดยไม่เสียความชัดเจน
-`ref.flow(pts, dashed=False, arrow=True)` คำนวณมุมโค้งให้เอง
+All lines are right-angled, with corners rounded at radius 14. This makes the figure look much more refined without losing clarity.
+`ref.flow(pts, dashed=False, arrow=True)` computes the rounded corners itself.
 
-**หัวลูกศรต้องจบที่ขอบไอคอน ไม่ใช่ที่ป้ายชื่อ** — เช่น `CD-30` เมื่อไอคอนกว้าง 46
+**The arrowhead must end at the icon edge, not at the name label.** For example `CD-30` when the icon is 46 wide.
 
 ---
 
-## 5 · ป้ายบนเส้น — สองบทบาทเท่านั้น
+## 5 · Labels on lines — only two roles
 
-| บทบาท | สี | ใช้กับ |
+| Role | Colour | Use for |
 |---|---|---|
-| ปกติ | เฉดอ่อนของ `ACCENT` | สิ่งที่ไหลผ่านเส้นตามปกติ |
-| ข้อยกเว้น | `EXCEPT_HUE` | ทางที่ไม่ผ่านประตูหน้า · กรณีพิเศษ |
+| Normal | light shade of `ACCENT` | what normally flows along the line |
+| Exception | `EXCEPT_HUE` | a path that does not pass the front gate · special cases |
 
-**ข้อยกเว้นมีได้ป้ายเดียวต่อรูป** ถ้ามีตั้งแต่ 2 ป้าย แปลว่าไม่มีป้ายไหนเด่นจริง
+**A figure may have only one exception label.** If there are 2 or more, no label really stands out.
 
-ป้ายบอกว่า**อะไรไหลผ่าน** เช่น `SQL` `/api/` `DICOM 11112` ไม่ใช่ `เชื่อมต่อ`
+A label says **what flows through**, such as `SQL` `/api/` `DICOM 11112`, not `เชื่อมต่อ` (connect).
 
 ---
 
-## 6 · โซน
+## 6 · Zones
 
-โซนเป็นกรอบพื้นสีอ่อนมาก ส่วนป้ายชื่อเป็นแคปซูลพื้นขาวคร่อมเส้นขอบและมีจุดสีนำหน้า
+A zone is a frame with a very light fill. Its name label is a white capsule that straddles the border and has a coloured dot in front.
 
 ```python
 zone(x, y, w, h, "ห้อง Server ของโรงพยาบาล", "physical")
 ```
 
-| ชนิด | เส้น | ความหมาย |
+| Type | Line | Meaning |
 |---|---|---|
-| `physical` | ทึบ | ขอบเขตของจริงทางกายภาพ — ห้อง อาคาร เครื่อง |
-| `logical` | ประ | ขอบเขตเชิงตรรกะ — Docker Compose · namespace · VPC |
-| `outside` | ประ | นอกระบบที่เราดูแล |
+| `physical` | solid | A real physical boundary: room, building, machine |
+| `logical` | dashed | A logical boundary: Docker Compose · namespace · VPC |
+| `outside` | dashed | Outside the system we look after |
 
-ผู้อ่านจะเห็นทันทีว่าอันไหนมีอยู่จริง และซ้อนโซนได้ไม่เกิน 3 ชั้น
+The reader sees at once which one physically exists. Nest zones no more than 3 levels deep.
 
 ---
 
-## 7 · ไอคอนและโลโก้
+## 7 · Icons and logos
 
-ไอคอน**ลอยบนพื้น ไม่มีกรอบ ไม่มีไทล์** ส่วนชื่อและคำอธิบายอยู่ใต้ภาพ
+Icons **float on the background with no frame and no tile.** The name and description sit below the image.
 
 ```python
 unit(cx, cy, "Nginx", "ประตูเดียวที่เข้าระบบได้", slug="nginx")
-#  มี logos/<slug>.svg → ใช้โลโก้จริง เติมสีจาก colors.json
-#  ไม่มี              → ใช้สัญลักษณ์เส้นที่ออกแบบเอง
+#  logos/<slug>.svg exists → use the real logo, filled with the colour from colors.json
+#  does not exist         → use a line symbol of our own design
 ```
 
-ค่าที่ใช้ได้จริง: ไอคอน 46 · ชื่อ 11.5 ตัวหนา ห่างจากกึ่งกลาง `size/2+20` · คำอธิบาย 10 ห่าง `size/2+35`
+Values that work: icon 46 · name 11.5 bold, placed `size/2+20` from the centre · description 10, placed `size/2+35` from the centre.
 
-โลโก้เอามาจากคลังไอคอนของ skill นี้ ([icons.md](icons.md)) ให้รัน `python assets/find-icon.py --group brands <ชื่อ>` จากโฟลเดอร์ `diagram-figures/` แล้ว `--copy` ไปไว้ใน `_src/logos/`
-Simple Icons ให้ SVG สีเดียว `viewBox 0 0 24 24` และมาพร้อม `colors.json` ที่เก็บรหัสสีทางการของแต่ละแบรนด์
+Take logos from this skill's icon library ([icons.md](icons.md)). Run `python assets/find-icon.py --group brands <name>` from the `diagram-figures/` folder, then `--copy` the result into `_src/logos/`.
+Simple Icons gives single-colour SVG with `viewBox 0 0 24 24` and comes with `colors.json`, which holds each brand's official colour code.
 
-### เรื่องเครื่องหมายการค้า — ห้ามข้าม
+### Trademarks — do not skip
 
-- โลโก้เป็นของเจ้าของ ใช้เพื่ออ้างถึงตัวผลิตภัณฑ์ในผังได้
-  แต่**ห้ามดัดแปลงรูปทรง ห้ามยืดบีบ และห้ามทำให้ดูเหมือนเจ้าของมารับรอง**
-- ถ้าตัวไหนไม่มีไฟล์โลโก้ ให้ใช้สัญลักษณ์แทน แล้ว**ระบุชื่อตัวนั้นไว้ในหมายเหตุท้ายรูป**
-- อย่าไปดาวน์โหลดโลโก้ใหม่มาเอง ให้ใช้จากชุดที่มีอยู่ หรือให้ผู้ใช้หาจากหน้า brand ของโครงการนั้น
+- A logo belongs to its owner. You may use it to refer to the product itself in the diagram,
+  but **do not alter its shape, do not stretch or squash it, and do not make it look as if the owner endorses the figure.**
+- If a product has no logo file, use a symbol instead, and **name that product in the note under the figure.**
+- Do not download new logos on your own. Use the set that exists, or have the user get them from that project's brand page.
 
 ---
 
-## 8 · เรนเดอร์
+## 8 · Rendering
 
 ```bash
 pip install playwright && playwright install chromium
 python render.py d01.svg ../01-architecture.png 1400 860
 ```
 
-เรนเดอร์ที่ 2 เท่าเสมอ เพราะ 1 เท่าได้ภาพเบลอเมื่อขยายในสไลด์
+Always render at 2x, because 1x gives a blurry image when enlarged on a slide.
 
-ภาษาไทยต้องมีฟอนต์ไทยในเครื่องที่เรนเดอร์ แล้วประกาศไว้ใน `font-family` ของ `<svg>`
-**อย่าใช้ Python Imaging Library (PIL) วาดข้อความไทยปนอังกฤษ** เพราะจะได้กล่องสี่เหลี่ยมแทนตัวอักษร
-
----
-
-## 9 · วงจรตรวจงาน — ห้ามข้าม
-
-เรนเดอร์ → เปิดไฟล์ภาพดูจริง → แก้ → เรนเดอร์ใหม่ จนกว่าจะสะอาด
-**6 ข้อนี้เจอซ้ำทุกครั้ง ให้ตรวจทุกรอบ:**
-
-1. **ป้ายบนเส้นทับไอคอนหรือชื่อ** — ย้ายไปกึ่งกลางช่วงที่ยาวที่สุด หรือย้ายไปบนขาตั้ง
-2. **เส้นที่ออกจากไอคอนตัดคำอธิบายของตัวเอง** — เริ่มเส้นที่ `cy+58` ไม่ใช่ `cy+32`
-3. **ขอบโซนตัดคำอธิบายแถวล่างสุด** — ขอบล่างโซนต้อง ≥ `R_ล่างสุด + 58 + 24`
-4. **ข้อความกำกับโซนนั่งทับเส้นขอบ** — รวมกับชื่อในแคปซูลเดียว
-5. **หัวลูกศรไปจบที่ป้ายชื่อ ไม่ใช่ที่ไอคอน** — ให้จบที่ขอบไอคอน
-6. **ข้อความล้นกรอบ** — ไทย 11.5px ≈ 6.0 px/ตัว · หัวเรื่อง 15px ≈ 7.5 px/ตัว
-   ถ้าที่ไม่พอ ให้ตัดคำ **อย่าลดขนาดตัวอักษร**
+Thai text needs a Thai font on the machine that renders, declared in the `font-family` of `<svg>`.
+**Do not use Python Imaging Library (PIL) to draw mixed Thai and English text**, because it produces square boxes in place of letters.
 
 ---
 
-## 10 · ค่าคงที่ที่ใช้ได้จริง
+## 9 · Check loop — do not skip
+
+Render → open the image and look → fix → render again, until it is clean.
+**These 6 problems come up every time. Check them in every round:**
+
+1. **A label on a line covers an icon or a name.** Move it to the midpoint of the longest segment, or onto the stub.
+2. **A line leaving an icon cuts through its own description.** Start the line at `cy+58`, not `cy+32`.
+3. **A zone edge cuts the description of the bottom row.** The zone's bottom edge must be ≥ `R_bottom + 58 + 24`.
+4. **Zone caption text sits on the border.** Merge it with the name into one capsule.
+5. **An arrowhead ends at the name label, not the icon.** Make it end at the icon edge.
+6. **Text overflows its frame.** Thai 11.5px ≈ 6.0 px/char · heading 15px ≈ 7.5 px/char.
+   If space is short, cut words. **Do not shrink the font.**
+
+---
+
+## 10 · Constants that work
 
 ```
-ความกว้าง 1400 · ขอบ 56
-หัวเรื่องกลางหน้า 22 · คำอธิบายใต้หัว 12.5
-ชื่อหน่วย 11.5 ตัวหนา · คำอธิบาย 10 · ป้ายบนเส้น 10.5
-เส้นเชื่อม 1.6 · ขอบโซน 1.4 · รัศมีมุมโค้ง 14 · ป้ายสูง 21
+width 1400 · margin 56
+centred title 22 · subtitle under title 12.5
+unit name 11.5 bold · description 10 · label on line 10.5
+connector 1.6 · zone border 1.4 · corner radius 14 · label height 21
 ```
 
 ---
 
-## 11 · แถบสัญลักษณ์
+## 11 · Legend bar
 
-ทุกรูปปิดท้ายด้วยแถบเดียวที่บอกว่ากรอบแต่ละแบบคืออะไร และป้าย 2 สีต่างกันตรงไหน
-แล้วต่อด้วยหมายเหตุ 2–4 บรรทัด ซึ่งรวมบรรทัดเรื่องเครื่องหมายการค้า และการอ้างถึงรูปอื่นที่เกี่ยวข้อง
+Every figure ends with a single bar that says what each kind of frame means and where the 2 label colours differ.
+After it come 2–4 lines of notes. These include the trademark line and references to other related figures.
 
 ---
 
-## ตัวย่อ
+## Abbreviations
 
 - **SVG** — Scalable Vector Graphics
 - **PNG** — Portable Network Graphics
@@ -2067,12 +2067,12 @@ python render.py d01.svg ../01-architecture.png 1400 860
 
 ## reference: icons.md
 
-# คลังไอคอน — ใช้ร่วมกันทั้งโครง HTML และ SVG/Python engine
+# Icon library — shared by the HTML skeleton and the SVG/Python engine
 
-**ไอคอนมีให้แล้ว 205 ตัวใน `assets/icons/`** ไม่ต้องติดตั้งอะไรเพิ่ม —
-เป็น PNG พื้นโปร่ง 160×160 ซึ่งเป็นไอคอนทางการของผู้ให้บริการและเครื่องมือ แบ่งเป็น 9 กลุ่ม
+**205 icons are already provided in `assets/icons/`.** Nothing more to install.
+They are PNG files with a transparent background at 160×160, official icons of providers and tools, split into 9 groups.
 
-| โฟลเดอร์ | มีอะไร |
+| Folder | Contents |
 |---|---|
 | `icons/aws/` | 39 — EC2 · RDS · S3 · Lambda · ELB · Route 53 · CloudFront · SQS · SNS · IAM · CloudWatch … |
 | `icons/azure/` | 24 — VM · App Service · AKS · Cosmos DB · Blob Storage · Key Vault … |
@@ -2082,193 +2082,195 @@ python render.py d01.svg ../01-architecture.png 1400 860
 | `icons/queue/` | 6 — RabbitMQ · Kafka · Celery · NATS · ActiveMQ · EMQX |
 | `icons/infra/` | 26 — Nginx · Docker · HAProxy · Traefik · Istio · firewall · router · Windows · Linux … |
 | `icons/ops/` | 19 — Prometheus · Grafana · Jenkins · GitLab CI · GitHub Actions · Terraform · Vault … |
-| `icons/app/` | 37 — Angular · React · .NET · Spring · Python · LINE · Slack · Stripe · ผู้ใช้ … |
+| `icons/app/` | 37 — Angular · React · .NET · Spring · Python · LINE · Slack · Stripe · user … |
 
-รายชื่อทั้งหมดอยู่ใน [`assets/icons/INDEX.md`](../assets/icons/INDEX.md) และเปิด [`assets/icons/contact-sheet.html`](../assets/icons/contact-sheet.html) เพื่อดูรูปทั้งหมดในหน้าเดียว
+The full list is in [`assets/icons/INDEX.md`](../assets/icons/INDEX.md). Open [`assets/icons/contact-sheet.html`](../assets/icons/contact-sheet.html) to see every icon on one page.
 
-**ถ้าต้องการตัวที่ไม่มีใน 205 ตัวนี้** ให้ค้นในคลังเต็ม `assets/tech-icons.zip` (8,602 ไอคอน · 5 กลุ่ม) ด้วย [`find-icon.py`](../assets/find-icon.py) ซึ่งไม่ต้องติดตั้งอะไรและไม่ต้องแตกทั้งก้อน
+**If you need an icon that is not among these 205**, search the full library `assets/tech-icons.zip` (8,602 icons · 5 groups) with [`find-icon.py`](../assets/find-icon.py). It needs no installation and does not need the archive unpacked.
 
-| กลุ่ม | มีอะไร |
+| Group | Contents |
 |---|---|
 | `cloud/` | 1,986 PNG · AWS · Azure · Google Cloud · IBM · Oracle · Alibaba · DigitalOcean · Firebase … |
-| `platform/` | 471 PNG · ฐานข้อมูล · คิว · CI/CD · เฝ้าระวัง · Kubernetes · ภาษาโปรแกรม · GIS |
-| `brands/` | 3,461 SVG สีเดียว · โลโก้แบรนด์ + รหัสสีทางการใน `colors.json` |
-| `devtools/` | 572 SVG มีสี · โลโก้เครื่องมือนักพัฒนา |
-| `ui/` | 2,112 SVG ไอคอนเส้นทั่วไป (Lucide) ไม่ใช่โลโก้ |
+| `platform/` | 471 PNG · databases · queues · CI/CD · monitoring · Kubernetes · programming languages · GIS |
+| `brands/` | 3,461 single-colour SVG · brand logos + official colour codes in `colors.json` |
+| `devtools/` | 572 coloured SVG · developer tool logos |
+| `ui/` | 2,112 SVG general line icons (Lucide), not logos |
 
 ```bash
-python assets/find-icon.py kafka redis                       # ค้นชื่อ
-python assets/find-icon.py --group ui user                    # ค้นเฉพาะกลุ่ม
+python assets/find-icon.py kafka redis                       # search by name
+python assets/find-icon.py --group ui user                    # search one group only
 python assets/find-icon.py --copy cloud/aws/compute/ec2.png brands/docker.svg --to docs/figures/icons
-python assets/find-icon.py --colors docker                    # สีทางการของโลโก้
+python assets/find-icon.py --colors docker                    # official logo colours
 ```
 
-ให้ดึงมาเฉพาะตัวที่ใช้แล้ววางไว้ข้างไฟล์รูป ห้ามแตกทั้งคลังลงโปรเจกต์ สัญญาอนุญาตของคลังคือ MIT · CC0 · ISC (ดู `--groups`) แต่โลโก้ยังเป็นเครื่องหมายการค้าของเจ้าของ
+Pull out only the icons you use and put them next to the figure file. Do not unpack the whole library into the project. The library's licences are MIT · CC0 · ISC (see `--groups`), but logos remain trademarks of their owners.
 
-> **เรื่องสัญญาอนุญาต** — ชุดไอคอนสถาปัตยกรรมของ AWS · Azure · Google Cloud
-> เผยแพร่มาเพื่อใช้วาดผังสถาปัตยกรรมโดยเฉพาะ จึงใช้ในเอกสารข้อเสนอได้
-> สิ่งที่ทำไม่ได้คือใช้โลโก้ในลักษณะที่ทำให้เข้าใจว่าผู้ให้บริการรับรองหรือร่วมงานด้วย
-> และใช้เป็นส่วนหนึ่งของแบรนด์ตัวเอง ส่วนถ้าไม่มีไอคอนทางการของเครื่องมือนั้น ให้วาดไอคอนเส้นเองตาม [SKILL.md](../SKILL.md) ข้อ 6
+> **About licences** — The architecture icon sets of AWS · Azure · Google Cloud
+> are published specifically for drawing architecture diagrams, so they may be used in proposal documents.
+> What you cannot do is use a logo in a way that suggests the provider endorses or partners with you,
+> or use it as part of your own brand. If a tool has no official icon, draw a line icon yourself following [SKILL.md](../SKILL.md) section 6.
 
 
 ## reference: layout-cloud.md
 
-# โครง `figure-cloud.html` — ผังคลาวด์พร้อมโลโก้ผู้ให้บริการ
+# Skeleton `figure-cloud.html` — cloud diagram with provider logos
 
-โครงนี้ตอบคำถาม "ใช้บริการอะไรของคลาวด์บ้าง" ไฟล์โครงอยู่ที่ [`assets/figure-cloud.html`](../assets/figure-cloud.html)
+This skeleton answers "which cloud services do we use?" The skeleton file is at [`assets/figure-cloud.html`](../assets/figure-cloud.html).
 
-ใช้เมื่อผู้อ่านคาดหวังจะเห็นไอคอน Amazon Web Services (AWS) · Azure · Google Cloud ·
-Kubernetes ของจริง แบบผังอ้างอิงที่ผู้ให้บริการเผยแพร่ ไอคอนหาได้จากคลังตาม [icons.md](icons.md)
+Use it when the reader expects to see real Amazon Web Services (AWS) · Azure · Google Cloud ·
+Kubernetes icons, like the reference diagrams the providers publish. Find the icons in the library, per [icons.md](icons.md).
 
 ```html
 <div class="unit"><img src="icons/aws/ec2.png" alt="">
   <div class="name">Web Server</div><div class="desc">AZ-1</div></div>
 ```
 
-**กติกาเฉพาะโครงนี้:**
+**Rules specific to this skeleton:**
 
-- **สายที่ข้ามขอบเขต ให้ออกจากขอบของกล่องขอบเขต** (`n-region`) ไม่ใช่จากกล่องข้างใน
-  — เพราะถ้าต่อจากกล่องข้างใน เส้นจะพาดทะแยงทับทุกอย่างที่ขวางทาง
-- **เส้นประ = ขอบเขตที่ผู้ให้บริการจัดการให้** ส่วนเส้นทึบสีส้ม = เครื่องที่เราดูแลเอง
-  และให้ใส่ความหมายไว้ในคำอธิบายสัญลักษณ์เสมอ
-- ไอคอนแสดงเปล่า ๆ ไม่ต้องมีกรอบ เพราะโลโก้มีสีและรูปทรงของตัวเองอยู่แล้ว
-- ชื่อบริการใช้ชื่อทางการ (`Amazon RDS`) ส่วนคำอธิบายใต้ชื่อเป็นภาษาไทยได้
+- **A line that crosses a boundary leaves from the edge of the boundary box** (`n-region`), not from a box inside it,
+  because a line that starts from an inner box cuts diagonally across everything in the way.
+- **Dashed line = a boundary the provider manages for you.** A solid orange line = a machine we look after ourselves.
+  Always put these meanings in the legend.
+- Show icons bare, with no frame, because a logo already has its own colour and shape.
+- Use the official service name (`Amazon RDS`). The description under the name may be in Thai.
 
 
 ## reference: layout-context.md
 
-# โครง `figure-context.html` — ระบบกับโลกภายนอก
+# Skeleton `figure-context.html` — the system and the outside world
 
-ตอบคำถาม "ระบบนี้คุยกับใครและกับอะไรข้างนอกบ้าง" (C4 ระดับ 1) ไฟล์โครงอยู่ที่ [`assets/figure-context.html`](../assets/figure-context.html)
+This skeleton answers "who and what outside does this system talk to?" (C4 level 1). The skeleton file is at [`assets/figure-context.html`](../assets/figure-context.html).
 
 ```
-┌─ หัวรูป ────────────────────────────────────────────────────────┐
-│  ผู้ใช้งาน (แถบนอน)   →   ระบบที่อธิบาย (การ์ดใหญ่)   ←   ระบบภายนอก  │
-│  ─ เจ้าหน้าที่           ─ ชื่อ + คำขยาย                ─ external system │
-│  ─ แพทย์                ─ หน้าที่ 3-6 ข้อ               ─ ชื่อ + สถานะ    │
-│  ─ ผู้ดูแล               ─ ป้ายข้อจำกัด                                │
-├─ คำอธิบายสัญลักษณ์ ─────────────────────────────────────────────┤
-│  เชิงอรรถ — ความหมายเส้นประ · ตัวย่อทั้งหมด · รูปถัดไป              │
+┌─ figure header ─────────────────────────────────────────────────┐
+│  users (horizontal strip) → described system (large card) ← external systems │
+│  ─ staff                    ─ name + subtitle              ─ external system │
+│  ─ doctor                   ─ 3-6 functions                ─ name + status   │
+│  ─ admin                    ─ limitation tag                                 │
+├─ legend ────────────────────────────────────────────────────────┤
+│  footnote — meaning of dashed line · all abbreviations · next figure │
 └────────────────────────────────────────────────────────────────┘
 ```
 
-- **ผู้ใช้งานอยู่ซ้าย ส่วนระบบภายนอกอยู่ขวา** และไม่ปนกัน เพราะคนกับเครื่องเป็นคนละชนิด
-- **หน้าที่ในการ์ดกลางมี 3 ถึง 6 ข้อ** ถ้าเกินนี้ แปลว่ากำลังเขียน SRS ไม่ใช่วาดรูป
-- **ระบบภายนอกที่ยังไม่ได้เชื่อม** ให้ใช้เส้นประ (`planned:true`) แล้วเขียนไว้ในการ์ดว่าอยู่ในแผนเวอร์ชันไหน
-  — เพราะรูปที่วาดเฉพาะของที่มีแล้วจะถูกถามซ้ำทุกรอบว่า "แล้วเชื่อม HIS หรือยัง"
-- **มีคำอธิบายสัญลักษณ์เสมอ** เมื่อรูปทรงหรือเส้นสื่อความหมาย
-- **ตัวย่อเขียนเต็มที่เชิงอรรถ** เพราะผู้อ่านฝั่งลูกค้าไม่รู้ว่า SEG คืออะไร
+- **Users go on the left and external systems on the right**, never mixed, because people and machines are different kinds of thing.
+- **The central card lists 3 to 6 functions.** More than that means you are writing an SRS (Software Requirements Specification), not drawing a figure.
+- **An external system not yet connected** gets a dashed line (`planned:true`), and the card says which version plans it,
+  because a figure that shows only what exists gets the question "so is HIS connected yet?" every round.
+- **Always include a legend** when a shape or line carries meaning.
+- **Spell out abbreviations in the footnote**, because readers on the customer side do not know what SEG is.
 
 
 ## reference: layout-deployment.md
 
-# โครง `figure-template.html` — deployment · ข้างในเครื่อง
+# Skeleton `figure-template.html` — deployment · inside the machine
 
-ตอบคำถาม "ของจริงรันอยู่บนเครื่องอะไร มีอะไรอยู่ข้างใน" ไฟล์โครงอยู่ที่ [`assets/figure-template.html`](../assets/figure-template.html)
+This skeleton answers "what machine does the real thing run on, and what is inside?" The skeleton file is at [`assets/figure-template.html`](../assets/figure-template.html).
 
-โครงนี้มี 3 คอลัมน์ เรียงซ้ายไปขวาตามทิศที่ข้อมูลไหล:
+It has 3 columns, left to right in the direction the data flows:
 
 ```
-┌─ หัวรูป ───────────────────────────────────────────────┐
-│  ชื่อ + คำขยาย                    เลขรูป · เวอร์ชัน · เจ้าของ  │
+┌─ figure header ────────────────────────────────────────┐
+│  name + subtitle              figure number · version · owner │
 ├────────────┬──────────────────────────┬────────────────┤
-│ นอกระบบ    │  ⬅ กล่อง .focus           │ ปลายทาง        │
-│ คน อุปกรณ์  │  สิ่งที่เอกสารนี้อธิบาย       │ ข้อบังคับ       │
-│ ระบบอื่น    │  ซ้อนได้อีก 1 ชั้น          │ ของที่ไหลออก    │
+│ outside    │  ⬅ .focus box             │ destination    │
+│ people,    │  what this document       │ regulations    │
+│ devices,   │  explains                 │ outgoing items │
+│ other      │  can nest 1 more level    │                │
+│ systems    │                           │                │
 ├────────────┴──────────────────────────┴────────────────┤
-│ เชิงอรรถ — รูปอื่นที่เกี่ยวข้อง · ที่มาของไอคอน              │
+│ footnote — related figures · icon sources              │
 └────────────────────────────────────────────────────────┘
 ```
 
-**ซ้อนกล่องได้ไม่เกิน 3 ชั้น** คือ คอลัมน์ → กล่องใหญ่ → กล่องย่อย
-ถ้ามีชั้นที่ 4 แปลว่ารูปนี้ตอบ 2 คำถาม ให้แยกเป็น 2 รูป
+**Nest boxes no more than 3 levels:** column → large box → small box.
+A 4th level means the figure answers 2 questions, so split it into 2 figures.
 
-**กล่อง `.focus` มีได้กล่องเดียวต่อรูป** ถ้ามี 2 กล่อง แปลว่ายังไม่ได้ตัดสินใจว่ารูปนี้เรื่องอะไร
+**A figure may have only one `.focus` box.** With 2 boxes, you have not yet decided what the figure is about.
 
 
 ## reference: layout-flow.md
 
-# โครง `figure-flow.html` — ข้อมูลไหลผ่านอะไร ตามลำดับไหน
+# Skeleton `figure-flow.html` — what the data flows through, in what order
 
-ตอบคำถาม "ข้อความ 1 ชิ้น (คำขอ · งาน · เอกสาร) วิ่งผ่านอะไรบ้าง ตามลำดับไหน" ไฟล์โครงอยู่ที่ [`assets/figure-flow.html`](../assets/figure-flow.html) · ตัวอย่างที่เรนเดอร์แล้ว [`assets/figure-flow-example.png`](../assets/figure-flow-example.png)
+This skeleton answers "what does 1 message (request · job · document) pass through, and in what order?" The skeleton file is at [`assets/figure-flow.html`](../assets/figure-flow.html) · a rendered example is at [`assets/figure-flow-example.png`](../assets/figure-flow-example.png)
 
 ```
-┌─ หัวรูป ──────────────────────────────────── ①–⑥ ความหมายเลขลำดับ ┐
-│ ┌ผู้ใช้┐   ┌ช่องทาง┐    ┌ เครื่องที่รัน (เทา) ─────────┐   ┌ บริการภายนอก ┐ │
-│ │ คน  │①→│ เว็บ   │②→ │ ┌ ระบบ .focus (สีหลัก) ┐ │③→ │ AI · API     │ │
-│ │ คน  │①→│ LINE  │②→ │ │ ชั้น · หน้าที่         │ │   └─────────────┘ │
-│ │ คน  │ →│ หลังบ้าน│ → │ │ ชั้น · หน้าที่         │ │④→ ┌ ข้อมูล ──────┐ │
-│ └────┘   └──────┘    │ └──────────────────────┘ │   │ ไฟล์ · DB    │ │
+┌─ figure header ─────────────────────── ①–⑥ meaning of sequence numbers ┐
+│ ┌users┐   ┌channels┐    ┌ host machine (grey) ──────────┐   ┌ external services ┐ │
+│ │ person │①→│ web    │②→ │ ┌ system .focus (main colour) ┐ │③→ │ AI · API     │ │
+│ │ person │①→│ LINE   │②→ │ │ layer · function      │ │   └─────────────┘ │
+│ │ person │ →│ back office│ → │ │ layer · function      │ │④→ ┌ data ────────┐ │
+│ └────┘   └──────┘    │ └──────────────────────┘ │   │ files · DB   │ │
 │                       └─────────────────────────┘   └─────────────┘ │
-├─ เชิงอรรถ: ความหมายพื้นสีอ่อน · เส้นประ · ตัวย่อทั้งหมด ───────────────┤
+├─ footnote: meaning of light fill · dashed line · all abbreviations ────┤
 ```
 
-## สี — มาจากสีหลักของโปรเจกต์ตัวเดียว
+## Colour — from the project's single main colour
 
-- แก้ `--accent` ใน `:root` ที่เดียว แล้วเฉดเข้ม พื้นอ่อน และสีตัวหนังสือบนพื้นสีหลักคำนวณให้เอง (สีสว่างเช่นเหลือง สคริปต์จะสลับตัวหนังสือเป็นสีเข้มให้อ่านออก)
-- หาสีหลักตามลำดับใน SKILL.md ข้อ 5 · ลองสีอื่นโดยไม่แก้ไฟล์: เปิด `figure-flow.html#accent=0F8B8D`
-- **สีหลักใช้กับ 4 อย่างเท่านั้น:** ขอบกล่อง `.focus` · ป้ายชื่อระบบ · เส้นทางข้อมูลกับเลขลำดับ · ชื่อโปรเจกต์ในหัวรูป
-- โครงที่เหลือเป็นเทากลาง — กลุ่มเส้นประ กล่องเครื่องที่รัน การ์ด ส่วนไอคอนใช้ 7 สีความหมายเดิม (ข้อ 5)
+- Change `--accent` in `:root` in one place. The dark shade, light fill and the text colour on the main-colour fill are computed for you. (For a light colour such as yellow, the script switches the text to a dark colour so it stays readable.)
+- Find the main colour in the order in SKILL.md section 5 · to try another colour without editing the file, open `figure-flow.html#accent=0F8B8D`
+- **The main colour is used for only 4 things:** the border of the `.focus` box · the system name label · the data path and its sequence numbers · the project name in the figure header
+- The rest of the skeleton is neutral grey: dashed groups, host machine boxes, cards. Icons use the 7 existing meaning colours (section 5).
 
-## กติกา
+## Rules
 
-- **ทิศเดียว ซ้าย → ขวา**: ผู้ใช้ → ช่องทาง → ระบบ → ของที่ระบบเรียกใช้ ถ้ามีเส้นย้อนกลับ ให้บอกในคำอธิบายชั้น (เช่น "push คำตอบกลับ LINE") แทนการลากเส้นย้อน
-- **เลขลำดับ = เส้นทางของ 1 ข้อความ** ไม่ใช่เลขเส้น เส้นที่เกิดพร้อมกันใช้เลขเดียวกัน (สองช่องทางเข้า = ② ทั้งคู่) · เส้นทางแยกที่ไม่ได้เกิดทุกครั้ง (เช่นอ่านภาพ) ไม่ต้องมีเลข
-- **ชั้นในกล่องระบบ 5–9 ชั้น** เรียงตามลำดับที่ข้อความผ่าน · ชื่อชั้นสั้น หน้าที่ 1–2 บรรทัด ถ้าเกิน 9 ชั้น แยกเป็นรูปข้างในระบบอีกรูป
-- **ชั้นเน้น `.guard` ไม่เกิน 2 ชั้น** และเขียนความหมายไว้ที่เชิงอรรถ
-- **เส้นต่อเข้าชั้นที่ทำงานนั้นจริง** ไม่ใช่ขอบกล่องใหญ่ — เส้นวาดอยู่บนกล่อง หัวลูกศรจึงถึงชั้นข้างใน
-- **เส้นที่ใช้ช่องว่างเดียวกันต้องไม่ตัดกัน** — เลื่อนช่วงหักด้วย `mx` (เส้นที่ปลายอยู่สูงกว่าให้ `mx` น้อยกว่า) แล้วเรนเดอร์ดูทุกครั้ง
-- ป้ายบนเส้นเป็นคำสั้น 1–3 คำบอกว่าอะไรไหลผ่าน (`HTTPS` · `webhook` · `ถาม LLM`) · ต้นเส้นมีเลขลำดับ ให้ใช้ `lp:"start"` เมื่อช่วงท้ายสั้นเกิน
+- **One direction, left → right**: users → channels → system → things the system calls. If a line must go back, say so in the layer's description (for example "push the reply back to LINE") instead of drawing a return line.
+- **Sequence number = the path of 1 message**, not a line number. Lines that happen together share the same number (two incoming channels are both ②) · a branch that does not happen every time (such as reading an image) needs no number.
+- **5–9 layers in the system box**, in the order the message passes through them · short layer names, 1–2 lines for each function. If there are more than 9 layers, split into a separate figure of the inside of the system.
+- **At most 2 emphasised `.guard` layers**, and explain what they mean in the footnote.
+- **Connect a line to the layer that really does the work**, not the edge of the big box. The lines are drawn above the boxes, so the arrowhead reaches the inner layer.
+- **Lines that share the same gap must not cross.** Shift the bend with `mx` (a line whose end sits higher gets a smaller `mx`), and render to check every time.
+- A label on a line is 1–3 short words saying what flows through (`HTTPS` · `webhook` · `ถาม LLM`) · if the start of the line carries a sequence number, use `lp:"start"` when the final segment is too short
 
 
 ## reference: pitfalls.md
 
-# กับดักที่เจอจริง — โครง HTML
+# Pitfalls found in practice — HTML skeletons
 
-อาการที่เจอซ้ำเมื่อทำรูปด้วยโครงใน `assets/` พร้อมสาเหตุและทางแก้ ส่วนกับดักของ SVG/Python engine อยู่ใน [engine-svg-python.md](engine-svg-python.md) ข้อ 9
+Symptoms that come up again and again when making figures with the skeletons in `assets/`, with their causes and fixes. Pitfalls of the SVG/Python engine are in [engine-svg-python.md](engine-svg-python.md) section 9.
 
-| อาการ | สาเหตุ · ทางแก้ |
+| Symptom | Cause · fix |
 |---|---|
-| หัวลูกศรหายทั้งรูป | สคริปต์ลบ `path` ทุกตัวก่อนวาดใหม่ รวมถึงสามเหลี่ยมหัวลูกศรที่อยู่ใน `<defs>` — ลบเฉพาะ `path.wire` (โครงแก้ไว้แล้ว) |
-| เส้นลากไปผิดกล่อง | `id` ไปติดกล่องอื่นที่หน้าตาเหมือนกัน — เปิด console ดู `wire: ไม่พบ id` และตรวจว่า `id` ไม่ซ้ำ |
-| เส้นจ่อกลางกล่องสูง แล้วพาดทับของข้างใน | ใส่ `tp` / `fp` ให้เส้นเข้าใกล้ขอบบน |
-| สระไทยหาย | เครื่องไม่มีฟอนต์ไทยในรายการ — ติดตั้ง Noto Sans Thai หรือเพิ่มฟอนต์ที่มีเข้าไปในรายการ |
-| ภาพเบลอในสไลด์ | เรนเดอร์ด้วยตัวคูณ 1 |
-| รูปมีขอบขาวเยอะ | ถ่ายทั้งหน้าแทนที่จะถ่ายเฉพาะ `.sheet` |
-| แก้ข้อความแล้วเส้นหลุด | เขียนพิกัดเส้นตายตัวแทนที่จะใช้ `WIRES` |
-| ป้ายบนเส้นทับกล่อง หรือบังเส้นจนมองไม่เห็น | ป้ายกว้างกว่าช่องว่างระหว่างคอลัมน์ — เพิ่ม `gap` หรือตัดคำในป้ายให้สั้นลง |
-| ชื่อกล่องภาษาไทยตกบรรทัดสอง | คอลัมน์แคบไป — เพิ่มความกว้างคอลัมน์นั้น อย่าลดขนาดตัวอักษร |
-| ใช้ไอคอนเป็นไฟล์ภาพแล้วเส้นลากผิดตำแหน่งทั้งรูป | สคริปต์คำนวณก่อนรูปโหลดเสร็จ — เรียก `draw()` ใน `window.onload` ไม่ใช่ตอนอ่านสคริปต์ (`figure-cloud.html` ทำไว้แล้ว) |
-| เส้นหักมุมใน `figure-flow.html` ตัดกันเอง | หลายเส้นใช้ช่องว่างเดียวกัน — ตั้ง `mx` ให้เส้นที่ปลายอยู่สูงกว่ามีค่าน้อยกว่า แล้วเรนเดอร์ดูใหม่ |
-| ลูกศรหายเข้าไปใต้กล่องระบบ | ชั้น `.wires` ไม่มี `z-index` — โครง flow ตั้งไว้แล้ว ถ้าก๊อปไปใช้โครงอื่นต้องตั้งตาม |
-| รูปออกมาเป็นสีของรูปตัวอย่าง | ลืมแก้ `--accent` — หาสีหลักของโปรเจกต์ตาม SKILL.md ข้อ 5 ก่อนเรนเดอร์ |
-| เส้นพาดทะแยงทับทั้งรูป | ต่อเส้นจากกล่องข้างในกล่องขอบเขต — ต่อจากขอบของกล่องขอบเขตแทน |
+| Arrowheads vanish from the whole figure | The script deletes every `path` before redrawing, including the arrowhead triangle inside `<defs>`. Delete only `path.wire` (the skeletons already do this) |
+| A line goes to the wrong box | The `id` is attached to another box that looks the same. Open the console, look for `wire: ไม่พบ id`, and check that the `id` is unique |
+| A line aims at the middle of a tall box and cuts across what is inside | Set `tp` / `fp` so the line enters near the top edge |
+| Thai vowels disappear | The machine has no Thai font in the list. Install Noto Sans Thai or add an installed font to the list |
+| Image is blurry on a slide | Rendered at a 1x multiplier |
+| Image has a lot of white margin | You captured the whole page instead of only `.sheet` |
+| A line comes loose after editing text | You wrote fixed line coordinates instead of using `WIRES` |
+| A label on a line covers a box, or hides the line so it cannot be seen | The label is wider than the gap between columns. Increase `gap` or shorten the label text |
+| A Thai box name wraps to a second line | The column is too narrow. Widen that column. Do not shrink the font |
+| Icons used as image files, and the lines go wrong everywhere | The script calculates before the images finish loading. Call `draw()` in `window.onload`, not when the script is read (`figure-cloud.html` already does this) |
+| Elbow lines in `figure-flow.html` cross each other | Several lines use the same gap. Set `mx` so a line whose end is higher gets a smaller value, then render again |
+| Arrows disappear under the system box | The `.wires` layer has no `z-index`. The flow skeleton sets it already. If you copy to another skeleton, set it there too |
+| The figure comes out in the example figure's colour | You forgot to edit `--accent`. Find the project's main colour by SKILL.md section 5 before rendering |
+| A line cuts diagonally across the whole figure | The line starts from a box inside the boundary box. Start it from the edge of the boundary box instead |
 
 
 ## reference: wires.md
 
-# สายเชื่อม — รายละเอียด
+# Connector wires — details
 
-เปิดเมื่อเขียน `WIRES` หรือแก้เส้นที่ลากผิด
+Open this when writing `WIRES` or fixing a line that goes the wrong way.
 
-**ในคอลัมน์เดียวกัน** ให้ใช้ลูกศรลง `.down` ระหว่างกล่อง โดยไม่ต้องเขียนอะไรเพิ่ม
+**Within the same column**, use the downward arrow `.down` between boxes. Nothing more to write.
 
-**ข้ามคอลัมน์** ให้ใช้รายการ `WIRES` ท้ายไฟล์ แล้วสคริปต์จะลากเส้นให้หลังจัดหน้าเสร็จ:
+**Across columns**, use the `WIRES` list at the end of the file. The script draws the lines after the layout is done:
 
 ```js
 {from:"n-browser", fs:"r", to:"n-server", ts:"l", tp:0.10, label:"HTTPS 443"}
-//    ^id ต้นทาง   ^ด้านออก  ^id ปลายทาง  ^ด้านเข้า ^ตำแหน่งบนขอบ 0=บน 1=ล่าง
+//    ^source id   ^exit side ^target id  ^entry side ^position on the edge 0=top 1=bottom
 ```
 
-ที่ต้องคำนวณหลังจัดหน้า เพราะตำแหน่งกล่องขึ้นกับความยาวข้อความไทย
-ถ้าเขียนพิกัดตายตัวไว้ พอแก้ข้อความทีเดียวเส้นจะหลุดทั้งรูป
+The calculation happens after layout because box positions depend on the length of the Thai text.
+If you write fixed coordinates, one text edit knocks the lines off across the whole figure.
 
-**กติกา:**
+**Rules:**
 
-- **เส้นวิ่งแนวตั้งหรือแนวนอนเท่านั้น และหักมุมด้วยมุมโค้ง** — ฟังก์ชัน `elbow()` ในโครงทำให้เอง (นอน → ตั้ง → นอน) ใช้ `mx` เลื่อนช่วงหักเมื่อหลายเส้นใช้ช่องเดียวกัน อย่าเขียน `path` เป็นเส้นตรงจากจุดถึงจุด เพราะกล่องสองข้างสูงไม่เท่ากันแล้วเส้นจะเฉียง
-- **ป้ายต้องแคบกว่าช่องว่างระหว่างคอลัมน์** ไม่อย่างนั้นป้ายจะทับกล่องหรือบังเส้นจนหาย ถ้าป้ายยาวขึ้น ต้องเพิ่ม `gap` ของ `.stage` ตามไปด้วย
-- เลื่อนป้ายไปตามเส้นได้ด้วย `lp` (0 = ต้นทาง · 1 = ปลายทาง · ไม่ใส่ = กลางเส้น)
-- เส้นที่ยังไม่ได้เชื่อมจริง ให้ใช้ `planned:true` เพื่อได้เส้นประ แล้ว**เขียนความหมายไว้ที่เชิงอรรถ**
-- เส้นข้ามคอลัมน์ **ไม่เกิน 5 เส้น** ต่อรูป เพราะเกินนี้รูปจะกลายเป็นใยแมงมุม
-- ต่อเข้า**กล่องเล็กที่สุดที่ถูกต้อง** ไม่ใช่กล่องใหญ่ที่ครอบอยู่ ถ้ากล่องสูงมาก ให้ใส่ `tp` เพื่อเลี่ยงไม่ให้เส้นจ่อกลางกล่อง
-- ป้ายบนเส้นบอกว่า**อะไรไหลผ่าน** เช่น `HTTPS 443` ไม่ใช่ `เชื่อมต่อ` ส่วนเส้นที่ไม่มีอะไรจะบอก ไม่ต้องใส่ป้ายเลยดีกว่าใส่คำว่า "ใช้"
+- **Lines run only vertically or horizontally, and turn with rounded corners.** The `elbow()` function in the skeleton does this itself (horizontal → vertical → horizontal). Use `mx` to shift the bend when several lines share one gap. Do not write a `path` as a straight line from point to point, because when the boxes at the two ends have different heights, the line goes slanted.
+- **A label must be narrower than the gap between columns.** Otherwise it covers a box or hides the line. If a label gets longer, raise the `gap` of `.stage` to match.
+- Move a label along the line with `lp` (0 = source · 1 = target · omit = middle of the line).
+- For a line not yet really connected, use `planned:true` to get a dashed line, and **explain the meaning in the footnote.**
+- **No more than 5** cross-column lines per figure, because beyond that the figure turns into a spider web.
+- Connect to the **smallest box that is correct**, not the large box around it. If a box is very tall, set `tp` so the line does not aim at the middle of the box.
+- A label on a line says **what flows through**, such as `HTTPS 443`, not `เชื่อมต่อ` (connect). If there is nothing to say about a line, leave the label off rather than writing "use".

@@ -3,114 +3,114 @@ name: hiring-th
 description: Use when a Thai employer hires staff
 ---
 
-# จ้างพนักงาน 1 ตำแหน่ง (ฝั่งนายจ้างไทย)
+# Hiring one position (Thai employer side)
 
-skill นี้พาจ้างคน 1 ตำแหน่ง ตั้งแต่ร่างประกาศรับสมัครจนพนักงานเริ่มงานครบสัปดาห์แรก ผู้สมัครทุกคนได้คำถามและเกณฑ์ชุดเดียวกัน ข้อมูลผู้สมัครเก็บตามกฎหมายคุ้มครองข้อมูลส่วนบุคคล และจดหมายเสนองานไม่ขัดกฎหมายแรงงาน · ฝั่งผู้สมัคร (CV · ซ้อมสัมภาษณ์ · ต่อรองเงินเดือน) ใช้ `resume-th-en` `interview-prep` `salary-negotiation` ใน plugin `personal-life`
+This skill walks through hiring one position, from drafting the job ad to the new employee finishing the first week. Every applicant gets the same questions and criteria. Applicant data is kept under the personal data protection law. The offer letter does not conflict with labour law. For the applicant side (CV · interview practice · salary negotiation), use `resume-th-en` `interview-prep` `salary-negotiation` in plugin `personal-life`.
 
-เนื้อหานี้เป็นข้อมูลทั่วไป ไม่ใช่คำปรึกษากฎหมาย ข้อพิพาทให้ถามพนักงานตรวจแรงงาน (สายด่วน 1506 กด 3 หรือ 1546) หรือทนายความด้านแรงงาน
+This content is general information, not legal advice. For disputes, ask a labour inspector (hotline 1506 press 3, or 1546) or a labour lawyer.
 
-ตัวย่อในไฟล์นี้: พระราชบัญญัติ (พ.ร.บ.) · มาตรา (ม.) · พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA)
+Abbreviations in this file: Act (พ.ร.บ.) · Section (ม.) · Personal Data Protection Act B.E. 2562 (2019) (PDPA).
 
-## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+## 0 · Find the existing template first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before you use the outline or templates in this file, check whether the user, client or project already has its own:
 
-- **ที่ดู:** ประกาศเดิมของบริษัทและหน้ารับสมัครงานของบริษัท (น้ำเสียง สวัสดิการที่ประกาศอยู่แล้ว) · ค้นประกาศตำแหน่งเดียวกันในพื้นที่หรือวงการเดียวกัน 3–5 ประกาศ (JobThai · JobsDB · LinkedIn) เพื่อดูหน้าที่ ทักษะ และช่วงเงินเดือนที่ตลาดเขียน
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** แม่แบบประกาศในข้อ 2 เป็นค่าสำรอง · กฎห้ามเลือกปฏิบัติในข้อ 2 ใช้ทุกแบบ
+- **Where to look:** the company's earlier job ads and careers page (tone, benefits already advertised) · search 3–5 ads for the same position in the same area or industry (JobThai · JobsDB · LinkedIn) to see the duties, skills and salary range the market writes
+- **Result:** if found, use that template (headings, order, field names, running numbers) and say in the reply which file's template you used. If not found, use the templates in this file as the fallback and say that no earlier template was found.
+- **Still required in every template:** the ad template in section 2 is the fallback · the anti-discrimination rules in section 2 apply to every template
 
-## 1 · ลำดับงาน
+## 1 · Work sequence
 
-| # | ขั้น | ได้อะไร | หัวข้อ |
+| # | Step | Output | Section |
 |---|---|---|---|
-| 1 | เขียนงานที่ต้องทำได้ใน 90 วันแรก แล้วแปลงเป็นเกณฑ์ 4–6 ข้อพร้อมน้ำหนัก | ใบคัดกรอง (scorecard) | 3 |
-| 2 | ร่างประกาศรับสมัคร TH/EN จากเกณฑ์ข้อ 1 แล้วตัดคุณสมบัติที่เลือกปฏิบัติออก | ประกาศพร้อมลง | 2 |
-| 3 | คัดใบสมัครด้วยใบคัดกรอง ทุกคนให้คะแนนเองก่อนคุยกัน | รายชื่อเรียกสัมภาษณ์ | 3 |
-| 4 | สัมภาษณ์ด้วยคำถามชุดเดียวกัน คณะ 2–3 คน จดคำตอบ | คะแนนรายคน | 4 |
-| 5 | ตรวจบุคคลอ้างอิงเฉพาะคนที่จะเสนองาน หลังได้ความยินยอม | บันทึกผลตรวจ | 5 |
-| 6 | ส่งจดหมายเสนองาน | ข้อเสนอที่ลงนามตอบรับแล้ว | 7 |
-| 7 | แจ้งผลคนที่ไม่ได้รับเลือก แล้วตั้งวันลบข้อมูล | อีเมลแจ้งผล · วันลบในปฏิทิน | 6 |
-| 8 | สัปดาห์แรก: ประกันสังคม · เงินเดือน · สัญญาจ้าง · วันลา | เช็กลิสต์ครบ | 8 |
+| 1 | Write the work to be done in the first 90 days, then turn it into 4–6 criteria with weights | Scorecard | 3 |
+| 2 | Draft the TH/EN job ad from the criteria in step 1, then remove discriminatory requirements | Ad ready to post | 2 |
+| 3 | Screen applications with the scorecard. Everyone scores alone before discussing | Interview shortlist | 3 |
+| 4 | Interview with the same questions, panel of 2–3, write down the answers | Score per candidate | 4 |
+| 5 | Check references only for the person who will get an offer, after consent | Check record | 5 |
+| 6 | Send the offer letter | Offer signed and accepted | 7 |
+| 7 | Tell the candidates not selected, then set the data deletion date | Result emails · deletion date in the calendar | 6 |
+| 8 | First week: social security · payroll · employment contract · leave | Completed checklist | 8 |
 
-ขั้น 2 · 5 · 6 · 7 มีงานที่ต้องรออนุมัติก่อน (หัวข้อ 10)
+Steps 2 · 5 · 6 · 7 contain work that needs approval first (section 10).
 
-## 2 · ประกาศรับสมัครที่ไม่เลือกปฏิบัติ
+## 2 · A job ad that does not discriminate
 
-### กฎหมายที่แตะประกาศรับสมัคร
+### Laws that touch a job ad
 
-| กฎหมาย | ผลต่อประกาศรับสมัคร |
+| Law | Effect on the job ad |
 |---|---|
-| พ.ร.บ.คุ้มครองแรงงาน พ.ศ. 2541 ม.15 | นายจ้างต้องปฏิบัติต่อลูกจ้างชายและหญิงเท่าเทียมกันในการจ้างงาน เว้นแต่ลักษณะหรือสภาพของงานทำเช่นนั้นไม่ได้ · งานเหมือนกันต้องได้ค่าจ้างเท่ากันไม่ว่าชายหรือหญิง (ม.53) |
-| พ.ร.บ.ความเท่าเทียมระหว่างเพศ พ.ศ. 2558 (มีผล 9 ก.ย. 2558) | ห้ามแบ่งแยก กีดกัน หรือจำกัดสิทธิประโยชน์ทั้งทางตรงและทางอ้อมอย่างไม่ชอบธรรม เพราะเป็นชาย หญิง หรือแสดงออกต่างจากเพศกำเนิด · คู่มือของรัฐยกกรณีบริษัทประกาศ "รับเลขานุการเฉพาะเพศหญิง" ทั้งที่ผู้สมัครชายมีคุณสมบัติครบ เป็นตัวอย่างการเลือกปฏิบัติโดยไม่เป็นธรรมระหว่างเพศ · ไม่ทำตามคำสั่งคณะกรรมการวินิจฉัยการเลือกปฏิบัติโดยไม่เป็นธรรมระหว่างเพศ (วลพ.) จำคุกไม่เกิน 6 เดือน หรือปรับไม่เกิน 20,000 บาท หรือทั้งจำทั้งปรับ |
-| PDPA ม.26 | ศาสนา สุขภาพ ความพิการ ประวัติอาชญากรรม ข้อมูลชีวภาพ และข้อมูลอ่อนไหวอื่นในมาตรานี้ เก็บได้เมื่อเจ้าของให้ความยินยอมโดยชัดแจ้ง หรือเข้าข้อยกเว้นที่มาตรานี้เขียนไว้ |
-| อายุ | ยังไม่พบกฎหมายที่ห้ามนายจ้างเอกชนระบุช่วงอายุในประกาศรับสมัครโดยตรง · รัฐธรรมนูญ พ.ศ. 2560 ม.27 วรรคสาม ห้ามเลือกปฏิบัติโดยไม่เป็นธรรมด้วยเหตุอายุ เพศ ความพิการ ศาสนา และเหตุอื่น แต่จะใช้บังคับกับนายจ้างเอกชนได้แค่ไหน ยังไม่ได้ตรวจ (รอยืนยัน) |
+| Labour Protection Act B.E. 2541 (1998) Section 15 | The employer must treat male and female employees equally in employment, unless the nature or condition of the work makes that impossible · the same work must get the same pay for men and women (Section 53) |
+| Gender Equality Act B.E. 2558 (2015) (in force 9 Sep 2015) | Bans unjust direct or indirect discrimination, exclusion or restriction of benefits because a person is male, female, or expresses a gender different from their birth sex · the government guide gives the example of a company advertising "รับเลขานุการเฉพาะเพศหญิง" (secretary, women only) when a qualified male applicant exists, as unjust discrimination between genders · not following an order of the Committee on Unjust Gender Discrimination (วลพ.) carries up to 6 months in prison, or a fine up to 20,000 baht, or both |
+| PDPA Section 26 | Religion, health, disability, criminal record, biometric data and the other sensitive data in this section can be collected only with the data subject's explicit consent, or under an exception that the section states |
+| Age | No law found that directly bans a private employer from stating an age range in a job ad · Constitution B.E. 2560 (2017) Section 27 paragraph 3 bans unjust discrimination because of age, sex, disability, religion and other grounds, but how far it binds private employers is not yet checked (`รอยืนยัน`, awaiting confirmation) |
 
-ตรวจล่าสุด 2026-10-23 · แหล่ง: labour.go.th (ม.15 · ม.53) · คู่มือ พ.ร.บ.ความเท่าเทียมระหว่างเพศ (tmd.go.th) · ตัวบท PDPA (mdes.go.th) · รัฐธรรมนูญ ม.27 (senate.go.th) — URL เต็มใน [references/sources.md](references/sources.md)
+Last checked 2026-10-23 · Sources: labour.go.th (Section 15 · Section 53) · Gender Equality Act guide (tmd.go.th) · PDPA text (mdes.go.th) · Constitution Section 27 (senate.go.th) — full URLs in [references/sources.md](references/sources.md)
 
-### คำที่ต้องแก้ก่อนลงประกาศ
+### Wording to fix before posting
 
-| เขียนแบบนี้ | เขียนใหม่ | เพราะ |
+| Written like this | Rewrite as | Because |
 |---|---|---|
-| "รับเฉพาะเพศหญิง" · "ชายเท่านั้น" | ไม่ระบุเพศ เขียนงานที่ต้องทำแทน · ถ้าสภาพงานต้องใช้เพศใดจริง ให้จดเหตุผลของงานเก็บไว้ | ม.15 · พ.ร.บ.ความเท่าเทียมระหว่างเพศ |
-| "โสด ไม่มีบุตร" | ตัดออก | ไม่เกี่ยวกับความสามารถในงาน (แนวปฏิบัติที่แนะนำ) · คู่มือของรัฐยกกรณีนี้เป็นคำถามชวนคิด แต่ไม่ได้ชี้ขาด |
-| "อายุ 22–30 ปี" | "มีประสบการณ์ปิดงบรายเดือนอย่างน้อย 1 ปี" | กฎหมายยังไม่ห้ามโดยตรง แต่อายุวัดความสามารถไม่ได้ และตัดคนเก่งออกโดยไม่จำเป็น (แนวปฏิบัติที่แนะนำ) |
-| "บุคลิกดี หน้าตาดี" | "คุยกับลูกค้าหน้าร้านได้วันละ 50 คน" | สิ่งที่วัดไม่ได้ ให้คะแนนอย่างเป็นธรรมไม่ได้ |
-| "ไม่มีโรคประจำตัว" · ถามศาสนาในใบสมัคร | ตัดออก · งานที่กฎหมายบังคับตรวจสุขภาพ ให้ตรวจหลังเสนองานพร้อมขอความยินยอมโดยชัดแจ้ง | PDPA ม.26 |
-| "แนบรูปถ่ายเต็มตัว" | ไม่ขอรูป | รูปชวนให้ตัดสินจากหน้าตา (แนวปฏิบัติที่แนะนำ) |
-| "ต้องวางเงินค้ำประกันการทำงาน" | ตรวจข้อจำกัดตามกฎหมายแรงงานก่อน | ดู `doc-contract-th` หัวข้อ 4 (รอยืนยัน กฎกระทรวงเรื่องหลักประกัน) |
+| "รับเฉพาะเพศหญิง" · "ชายเท่านั้น" | Do not state gender. Write the work to be done instead · if the nature of the work truly needs one gender, record the reason for the work | Section 15 · Gender Equality Act |
+| "โสด ไม่มีบุตร" | Remove | Unrelated to ability to do the job (recommended practice) · the government guide raises this case as a question to think about but does not rule on it |
+| "อายุ 22–30 ปี" | "มีประสบการณ์ปิดงบรายเดือนอย่างน้อย 1 ปี" | The law does not yet ban it directly, but age does not measure ability and it removes strong candidates for no need (recommended practice) |
+| "บุคลิกดี หน้าตาดี" | "คุยกับลูกค้าหน้าร้านได้วันละ 50 คน" | It cannot be measured, so it cannot be scored fairly |
+| "ไม่มีโรคประจำตัว" · asking religion on the application | Remove · for jobs where the law requires a health check, do it after the offer, with explicit consent | PDPA Section 26 |
+| "แนบรูปถ่ายเต็มตัว" | Do not ask for a photo | A photo invites judging by looks (recommended practice) |
+| "ต้องวางเงินค้ำประกันการทำงาน" | Check the labour law limits first | See `doc-contract-th` section 4 (`รอยืนยัน`, awaiting confirmation: ministerial regulation on security deposits) |
 
-### แม่แบบประกาศรับสมัคร
+### Job ad templates
 
-ภาษาไทย: [references/job-ad-thai.md](references/job-ad-thai.md) · English: [references/job-ad-english.md](references/job-ad-english.md) · ทั้ง 2 ฉบับขึ้นด้วยงาน 90 วันแรกและคุณสมบัติที่วัดได้ ปิดท้ายด้วยประโยคไม่เลือกปฏิบัติและลิงก์ประกาศความเป็นส่วนตัวสำหรับผู้สมัคร
+Thai: [references/job-ad-thai.md](references/job-ad-thai.md) · English: [references/job-ad-english.md](references/job-ad-english.md) · Both open with the first-90-days work and measurable requirements, and end with the non-discrimination sentence and the link to the applicant privacy notice.
 
-## 3 · ใบคัดกรอง (scorecard)
+## 3 · Scorecard
 
-กฎของใบคัดกรอง
+Scorecard rules:
 
-1. เกณฑ์ 4–6 ข้อ ผูกกับงานใน 90 วันแรก น้ำหนักรวม 100
-2. ให้คะแนน 1–5 และเขียนคำอธิบายของคะแนน 1 · 3 · 5 ไว้ก่อนเปิดใบสมัครใบแรก (คะแนน 2 กับ 4 อยู่ระหว่างกลาง)
-3. คะแนนรวม = ผลรวมของ (น้ำหนัก × คะแนน) ÷ 5 จะได้คะแนนเต็ม 100
-4. ข้อขั้นต่ำที่ตัดทิ้งทันทีใช้เฉพาะสิ่งที่กฎหมายหรืองานบังคับจริง เช่น ใบอนุญาตประกอบวิชาชีพ
-5. ทุกคนในคณะให้คะแนนเองก่อนคุยกัน ถ้าคะแนนเกณฑ์เดียวกันห่างกันตั้งแต่ 2 ขึ้นไป ให้เปิดโน้ตดูหลักฐานด้วยกันแล้วค่อยปรับ
-6. รวมคะแนนแล้ว ดูความนิ่งด้วย `decision-scoring` คำสั่ง `score` (`node decide.mjs score <ไฟล์.json>` · น้ำหนักใบคัดกรอง ÷ 100 · ทุกเกณฑ์ `better: high` · ข้อขั้นต่ำตามข้อ 4 ใส่ใน `must`) สคริปต์ขยับน้ำหนักทีละเกณฑ์ ±20% แล้วบอกว่าอันดับ 1 `นิ่ง` หรือ `ยังไม่นิ่ง` · นิ่ง → เสนองานคนอันดับ 1 · ยังไม่นิ่ง (รวมคะแนนเสมอ) → คณะสัมภาษณ์ตัดสินเองระหว่าง 2 คนบน โดยดูว่าเกณฑ์ที่ทำให้พลิกสำคัญกับงานแค่ไหน แล้วจดเหตุผลไว้ · แม่แบบ `templates/score-example.json`
+1. 4–6 criteria, tied to the work in the first 90 days, total weight 100.
+2. Score 1–5, and write the descriptions for scores 1 · 3 · 5 before opening the first application (scores 2 and 4 sit in between).
+3. Total score = sum of (weight × score) ÷ 5, which gives a maximum of 100.
+4. A minimum requirement that rejects an applicant at once applies only to what the law or the job truly requires, such as a professional licence.
+5. Everyone on the panel scores alone before discussing. If scores on the same criterion differ by 2 or more, open the notes, look at the evidence together, and then adjust.
+6. After totalling, check stability with `decision-scoring` command `score` (`node decide.mjs score <file.json>` · scorecard weight ÷ 100 · every criterion `better: high` · minimum requirements from rule 4 go in `must`). The script shifts each criterion's weight by ±20% and reports whether the rank 1 result is `นิ่ง` (stable) or `ยังไม่นิ่ง` (not stable). If stable, make the offer to rank 1. If not stable (including tied totals), the panel decides between the top 2 itself, looking at how much the criterion that flipped the result matters to the job, and records the reason. Template: `templates/score-example.json`
 
-| เกณฑ์ | น้ำหนัก | 1 = | 3 = | 5 = | หลักฐานจากไหน |
+| Criterion | Weight | 1 = | 3 = | 5 = | Evidence from |
 |---|---|---|---|---|---|
-| {งานหลักข้อ 1} | {…} | {ยังทำไม่ได้} | {ทำได้โดยมีคนตรวจ} | {ทำเองได้ครบ มีผลงานให้ดู} | CV · แบบทดสอบ · คำถามสัมภาษณ์ข้อ {…} |
-| {ทักษะเครื่องมือ} | {…} | | | | แบบทดสอบ {…} นาที |
-| {การทำงานกับคนอื่น} | {…} | | | | คำถามสัมภาษณ์ข้อ {…} |
+| {main duty 1} | {…} | {cannot do it yet} | {can do it with someone checking} | {does it alone fully, has work to show} | CV · test · interview question {…} |
+| {tool skill} | {…} | | | | Test {…} minutes |
+| {working with others} | {…} | | | | Interview question {…} |
 
-## 4–8 · รายละเอียดแยกไฟล์
+## 4–8 · Details in separate files
 
-| หัวข้อ | ไฟล์ |
+| Section | File |
 |---|---|
-| 4 แผนสัมภาษณ์ · 5 ตรวจบุคคลอ้างอิงและประวัติ · 6 ข้อมูลผู้สมัครตาม PDPA | [references/interview-reference-check-pdpa.md](references/interview-reference-check-pdpa.md) |
-| 7 จดหมายเสนองาน · 8 สัปดาห์แรก | [references/offer-letter-first-week.md](references/offer-letter-first-week.md) |
+| 4 Interview plan · 5 Reference and background checks · 6 Applicant data under the PDPA | [references/interview-reference-check-pdpa.md](references/interview-reference-check-pdpa.md) |
+| 7 Offer letter · 8 First week | [references/offer-letter-first-week.md](references/offer-letter-first-week.md) |
 
-## 9 · ตัวอย่าง: เจ้าหน้าที่บัญชี 1 ตำแหน่ง
+## 9 · Example: one accountant position
 
-ใบคัดกรอง 5 เกณฑ์ · คะแนน 3 คน · ผล `decide.mjs score` ที่ขึ้น `ยังไม่นิ่ง` แล้วคณะสัมภาษณ์ตัดสินเอง · ข้อเสนอพร้อมทดลองงาน 119 วันและค่าชดเชยถ้าเลิกจ้างหลัง 120 วัน → [references/example-accountant.md](references/example-accountant.md) (เปิดเมื่อต้องการดูตัวอย่างเต็ม)
+Scorecard with 5 criteria · scores for 3 candidates · the `decide.mjs score` result showing `ยังไม่นิ่ง` (not stable), then the panel decides · an offer with a 119-day probation and the severance due if dismissed after 120 days → [references/example-accountant.md](references/example-accountant.md) (open it when you want the full example)
 
-## 10 · รออนุมัติ
+## 10 · Awaiting approval
 
-ย้อนไม่ได้หรือกระทบคนนอก agent เตรียมร่างให้ แต่ไม่ทำเอง
+These cannot be undone or affect people outside. The agent prepares drafts but does not do them.
 
-- ลงประกาศรับสมัครบนเว็บหางานหรือโซเชียลในนามบริษัท
-- ส่งจดหมายเสนองาน (ผูกพันบริษัทเมื่อผู้สมัครตอบรับ)
-- แจ้งผลไม่ผ่านถึงผู้สมัคร
-- ติดต่อบุคคลอ้างอิงหรือยื่นขอตรวจประวัติอาชญากรรม
-- ลบข้อมูลผู้สมัครจริง (agent เตรียมรายการที่ถึงวันลบให้ผู้ใช้ยืนยันก่อน)
+- Posting the job ad on a job site or social media in the company's name
+- Sending the offer letter (it binds the company once the applicant accepts)
+- Telling an applicant they did not pass
+- Contacting a referee or applying for a criminal record check
+- Deleting real applicant data (the agent prepares the list of items past their deletion date for the user to confirm first)
 
-## 11 · เชื่อมกับ skill อื่น
+## 11 · Links to other skills
 
-| ต้องการ | ใช้ |
+| Need | Use |
 |---|---|
-| สัญญาจ้างแรงงานฉบับเต็ม และข้อที่ต้องติดธงให้ทนายดู | `doc-contract-th` |
-| ทดลองงาน การบอกกล่าว ค่าชดเชย วันลา ค่าจ้างขั้นต่ำ | `labour-law-basics` |
-| ขึ้นทะเบียนผู้ประกันตน และเงินสมทบ | `social-security-th` |
-| รอบเงินเดือนแรก ภาษีหัก ณ ที่จ่าย และแบบแจ้งค่าลดหย่อน | `payroll-th` |
-| ใบลาและยอดวันลาคงเหลือ | `doc-leave` |
-| ประกาศความเป็นส่วนตัว ROPA และคำขอของเจ้าของข้อมูล | `pdpa-workflow` + agent `compliance-helper` |
-| จดหมายแจ้งผลหรือหนังสือถึงหน่วยงาน | `doc-thai-official` + agent `thai-doc-writer` |
-| ฝั่งผู้สมัคร: CV · ซ้อมสัมภาษณ์ · ต่อรองเงินเดือน | `resume-th-en` · `interview-prep` · `salary-negotiation` (plugin `personal-life`) |
-| ถ้อยคำทุกบรรทัด | `human-writing` |
+| Full employment contract, and the clauses to flag for a lawyer | `doc-contract-th` |
+| Probation, notice, severance, leave, minimum wage | `labour-law-basics` |
+| Register insured persons and contributions | `social-security-th` |
+| First payroll run, withholding tax and allowance forms | `payroll-th` |
+| Leave forms and remaining leave balance | `doc-leave` |
+| Privacy notice, ROPA and data subject requests | `pdpa-workflow` + agent `compliance-helper` |
+| Result letters or letters to agencies | `doc-thai-official` + agent `thai-doc-writer` |
+| Applicant side: CV · interview practice · salary negotiation | `resume-th-en` · `interview-prep` · `salary-negotiation` (plugin `personal-life`) |
+| Wording of every line | `human-writing` |

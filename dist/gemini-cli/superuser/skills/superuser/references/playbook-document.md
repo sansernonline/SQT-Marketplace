@@ -1,20 +1,20 @@
-# playbook · document — ทำเอกสารที่คนอื่นจะอ่าน
+# playbook · document — write a document that other people will read
 
-ใช้เมื่อ: รายงาน · แผน · สรุป · จดหมาย · ข้อความสำคัญ · เอกสารที่ต้องส่งต่อ
-ผลลัพธ์: เอกสารที่ผู้อ่านใช้ได้ทันที เขียนตาม `human-writing`
-รูปแบบหลัก: Planning · Reflection (`agent-patterns`)
+Use when: a report · plan · summary · letter · important message · a document that will be passed on
+Result: a document the reader can use at once, written per `human-writing`
+Main pattern: Planning · Reflection (`agent-patterns`)
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ระบุผู้อ่าน · เขาจะทำอะไรหลังอ่าน · รูปแบบไฟล์ที่ต้องส่ง · ใคร: หัวหน้าทีม
-2. รวบรวมข้อเท็จจริงก่อนเขียน — ของที่ไม่มีหลักฐาน ใส่ `(รอยืนยัน)` ไม่แต่ง · ใคร: `general-purpose` ตัวใหม่
-3. วางโครง: ข้อสรุปก่อน → เหตุผล → รายละเอียด → สิ่งที่ผู้อ่านต้องทำ · ใคร: หัวหน้าทีม
-4. ร่างทีละส่วนตามโครง · ตัวเลขเป็นเลข · 1 เรื่อง 1 คำ · ใคร: `general-purpose` ตัวใหม่
-5. ตรวจ — subagent ตัวใหม่อ่านแบบผู้อ่านจริง: เข้าใจไหม · ทำต่อได้ไหม · มีอะไรขาด · เทียบตัวเลขกับต้นทาง · ใคร: `reviewer` ตัวใหม่
-6. แก้ข้อที่หัวหน้าทีมยืนยันแล้ว · ใคร: `general-purpose` ตัวใหม่
-7. รอบตรวจ — ดูข้อเดิมทุกข้อและจุดที่เปลี่ยน แล้วเปิดไฟล์จริงดูอีกรอบ (หัวข้อ ตาราง ลิงก์ รูป) ตาม [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
-8. ส่ง — ถ้าต้องส่งถึงคนอื่น ให้เตรียมไว้ใน "รออนุมัติ" ไม่ส่งเอง · ใคร: หัวหน้าทีม (กดส่ง: ผู้ใช้)
+1. Identify the reader · what they will do after reading · the file format to deliver · ใคร: หัวหน้าทีม
+2. Gather the facts before writing. Anything with no evidence gets `(รอยืนยัน)` (awaiting confirmation) and is never made up · ใคร: `general-purpose` ตัวใหม่
+3. Lay out the structure: conclusion first → reasons → details → what the reader must do · ใคร: หัวหน้าทีม
+4. Draft one section at a time following the structure · numbers as numerals · 1 topic, 1 term · ใคร: `general-purpose` ตัวใหม่
+5. Check (ตรวจ): a fresh subagent reads as the real reader would: can they understand it · can they act on it · is anything missing · compare the numbers against the source · ใคร: `reviewer` ตัวใหม่
+6. Fix the points the team lead has confirmed · ใคร: `general-purpose` ตัวใหม่
+7. Check (ตรวจ) again: look at every earlier finding and every changed spot, then open the real file and look once more (headings · tables · links · images) per [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
+8. Send: if it must go to other people, prepare it in "รออนุมัติ" (awaiting approval) and do not send it yourself · ใคร: หัวหน้าทีม (sends: ผู้ใช้)
 
-## จบเมื่อ
+## Done when
 
-ผู้อ่านเป้าหมายใช้เอกสารได้โดยไม่ต้องถามกลับ และตัวเลขทุกตัวตรงกับต้นทาง
+The target reader can use the document without asking back, and every number matches the source

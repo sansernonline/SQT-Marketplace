@@ -3,182 +3,183 @@ name: error-handling-patterns
 description: Use when writing code that can fail, with retry and timeout
 ---
 
-# จัดการข้อผิดพลาด
+# Error handling
 
-> **กฎข้อเดียว:** จับ error เฉพาะตอนที่**ทำอะไรกับมันได้จริง**
-> จับแล้วไม่ทำอะไร แย่กว่าไม่จับ เพราะระบบจะเดินต่อทั้งที่ข้างในพังไปแล้ว
+> **The one rule:** catch an error only when you **can really do something about it.**
+> Catching it and doing nothing is worse than not catching, because the system keeps going while it is already broken inside.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เขียนโค้ดที่เรียกเครือข่าย ฐานข้อมูล ไฟล์ หรือระบบของทีมอื่น
-- ต้องตัดสินใจว่าจะ retry ไหม กี่ครั้ง รอเท่าไหร่
-- ผู้ใช้เจอข้อความว่า "เกิดข้อผิดพลาด" แล้วไม่รู้ต้องทำอะไรต่อ
-- ไล่ปัญหาแล้วพบว่า log ไม่มีอะไรให้ดูเลย เพราะมีคน catch ทิ้ง
+- Writing code that calls the network, a database, files, or another team's system
+- Deciding whether to retry, how many times, and how long to wait
+- The user sees "an error occurred" and does not know what to do next
+- Tracing a problem and finding nothing in the log because someone caught and discarded the error
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill, or use it alongside
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| รูปร่าง JSON ของ error ที่ API ส่งออก | `web-service-essentials` · `api-conventions` | แทน |
-| รูปแบบบรรทัด log และการปิดบังข้อมูล | `logging-standards` | แทน |
-| แก้บั๊กเฉพาะจุดที่มีคนแจ้งมา | `targeted-fix` | แทน |
-| ขั้นตอนตอนระบบล่มจริง | `incident-runbook-template` | แทน |
-| ตัวชี้วัดอัตรา error และการแจ้งเตือน | `observability-basics` | คู่ |
-| งานเบื้องหลังที่ล้มแล้วต้องไปไหนต่อ | `background-jobs` | คู่ |
-| ข้อความ error ที่ต้องแปลหลายภาษา | `i18n-and-locale` | คู่ |
-| test กรณีล้มเหลว | `testing-standards` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| The JSON shape of errors the API sends out | `web-service-essentials` · `api-conventions` | instead |
+| Log line format and data masking | `logging-standards` | instead |
+| Fixing one specific bug someone reported | `targeted-fix` | instead |
+| Steps when the system is really down | `incident-runbook-template` | instead |
+| Error-rate metrics and alerts | `observability-basics` | alongside |
+| Where a failed background job goes next | `background-jobs` | alongside |
+| Error messages that must be translated into several languages | `i18n-and-locale` | alongside |
+| Tests for failure cases | `testing-standards` | alongside |
+| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 
 ---
 
-## 1 · จับที่ไหน ปล่อยที่ไหน
+## 1 · Where to catch, where to let it pass
 
-| ชั้น | ทำอะไร |
+| Layer | What to do |
 |---|---|
-| ชั้นในสุด (เรียก DB, HTTP, ไฟล์) | **ปล่อยผ่าน** หรือแปลงเป็น error ของโดเมนที่มีความหมาย |
-| ชั้นตรรกะธุรกิจ | จับเฉพาะที่มีทางเลือกสำรองจริง ๆ (มีค่าเริ่มต้น มีแหล่งข้อมูลสำรอง) |
-| **ชั้นนอกสุด** (controller, handler, main) | **จับทุกอย่าง** · log 1 ครั้ง · แปลงเป็นคำตอบที่ผู้ใช้เข้าใจ |
+| Innermost layer (calls DB, HTTP, files) | **let it pass**, or convert it into a domain error that has meaning |
+| Business logic layer | catch only where there is a real fallback (a default value, a backup data source) |
+| **Outermost layer** (controller, handler, main) | **catch everything** · log once · convert to an answer the user understands |
 
-> **log ที่เดียว คือชั้นนอกสุด** — ถ้าทุกชั้น catch แล้ว log แล้ว throw ต่อ
-> error 1 ตัวจะกลายเป็น 10 บรรทัดใน log และไม่มีใครรู้ว่าเป็นเรื่องเดียวกัน
+> **Log in one place only, the outermost layer.** If every layer catches, logs, and rethrows,
+> 1 error becomes 10 log lines and nobody knows they are the same event.
 
-**3 อย่างที่ห้ามทำเด็ดขาด:**
+**3 things you must never do:**
 
 ```csharp
-try { ... } catch { }                      // ผิด: กลืนเงียบ
-try { ... } catch (Exception) { return null; }   // ผิด: ผู้เรียกเจอ null โดยไม่รู้ว่าเกิดอะไร
-catch (Exception ex) { log.Error(ex); throw; }   // ผิด: log ซ้ำทุกชั้น
+try { ... } catch { }                      // wrong: swallowed silently
+try { ... } catch (Exception) { return null; }   // wrong: the caller gets null and never learns what happened
+catch (Exception ex) { log.Error(ex); throw; }   // wrong: logs again at every layer
 ```
 
-**ถ้าตั้งใจจะกลืนจริง ๆ ต้องเขียนเหตุผลไว้:**
+**If you really mean to swallow it, write the reason:**
 
 ```csharp
 catch (SmtpException ex)
 {
-    // ตั้งใจกลืน — ส่งอีเมลแจ้งไม่สำเร็จไม่ควรทำให้การสั่งซื้อล้ม
+    // swallowed on purpose — a failed notification email should not make the order fail
     log.Warning(ex, "ส่งอีเมลยืนยันไม่สำเร็จ orderId={OrderId}", order.Id);
 }
 ```
 
 ---
 
-## 2 · ข้อความถึงผู้ใช้ ≠ ข้อความใน log
+## 2 · The message to the user ≠ the message in the log
 
-| | ผู้ใช้เห็น | log เก็บ |
+| | The user sees | The log keeps |
 |---|---|---|
-| เนื้อหา | เกิดอะไร · ต้องทำอะไรต่อ | stack trace · ค่าตัวแปร · id ของคำขอ |
-| ภาษา | ภาษาของผู้ใช้ | อังกฤษก็ได้ |
-| รายละเอียดภายใน | **ไม่มีเลย** | มีได้ |
-| ตัวเชื่อม 2 ฝั่ง | **รหัสอ้างอิง** | รหัสเดียวกัน |
+| Content | what happened · what to do next | stack trace · variable values · request id |
+| Language | the user's language | English is fine |
+| Internal detail | **none at all** | allowed |
+| Link between the 2 sides | **a reference code** | the same code |
 
 ```
-ผิด: "เกิดข้อผิดพลาด"                    ผู้ใช้ทำอะไรต่อไม่ได้
-ผิด: "SqlException: timeout expired"      หลุดรายละเอียดภายใน และเขาก็อ่านไม่ออก
-ถูก: "บันทึกไม่สำเร็จเพราะระบบตอบช้า ลองอีกครั้งใน 1 นาที (อ้างอิง: 01J9Z8K)"
+Wrong: "เกิดข้อผิดพลาด" (An error occurred)   the user cannot tell what to do
+Wrong: "SqlException: timeout expired"      leaks internal detail, and they cannot read it anyway
+Right: "บันทึกไม่สำเร็จเพราะระบบตอบช้า ลองอีกครั้งใน 1 นาที (อ้างอิง: 01J9Z8K)"
+       (Save failed because the system was slow. Try again in 1 minute. Reference: 01J9Z8K)
 ```
 
-**ข้อความที่ดีมี 3 ส่วน** — เกิดอะไร · เพราะอะไร (ถ้าบอกได้) · ต้องทำอะไรต่อ
-รหัสอ้างอิงคือ correlation id ตัวเดียวกับใน `logging-standards`
+**A good message has 3 parts**: what happened · why (if you can say) · what to do next.
+The reference code is the same correlation id as in `logging-standards`.
 
 ---
 
-## 3 · แยกประเภทก่อนตัดสินใจ
+## 3 · Classify before deciding
 
-| ประเภท | ตัวอย่าง | ทำยังไง | log ระดับ |
+| Type | Example | What to do | Log level |
 |---|---|---|---|
-| **ผู้ใช้ทำผิด** | กรอกไม่ครบ ค่าผิดรูปแบบ | บอกให้แก้ · **ห้าม retry** | ไม่ต้อง log |
-| **ชั่วคราว** | timeout · 503 · deadlock · เชื่อมต่อหลุด | **retry ได้** | warning |
-| **ถูกจำกัดอัตรา** | 429 Too Many Requests | retry ได้ **หลังเวลาที่ `Retry-After` บอก** (ไม่มีค่านี้ → ใช้สูตร §4) · ห้ามยิงถี่กว่านั้น | warning |
-| **ถาวร** | 404 · 401 · ข้อมูลไม่ตรงเงื่อนไข | ไม่ retry · บอกให้ชัด | warning |
-| **บั๊กของเรา** | null reference · แปลงชนิดไม่ได้ | ไม่ retry · **ต้องมีคนแก้** | error |
-| **ข้อมูลไม่สอดคล้อง** | ยอดไม่ตรง สถานะเป็นไปไม่ได้ | หยุด · **เรียกคน** | error + แจ้งเตือน |
+| **User mistake** | incomplete input, wrong format | tell them to fix it · **do not retry** | no log needed |
+| **Transient** | timeout · 503 · deadlock · dropped connection | **may retry** | warning |
+| **Rate limited** | 429 Too Many Requests | may retry **after the time `Retry-After` gives** (if absent, use the formula in §4) · never fire faster than that | warning |
+| **Permanent** | 404 · 401 · data fails a condition | do not retry · say so clearly | warning |
+| **Our bug** | null reference · cannot convert the type | do not retry · **someone must fix it** | error |
+| **Inconsistent data** | totals do not match, an impossible state | stop · **call a person** | error + alert |
 
-> **การ retry error ที่ลองกี่ครั้งก็ไม่หาย คือการยิงซ้ำใส่ระบบที่ล้มอยู่ให้ล้มหนักขึ้น**
-> `400` กับ `401` ยิงอีก 100 ครั้งก็ได้คำตอบเดิม
+> **Retrying an error that no number of tries will cure means firing again at a system that is already down, so it falls harder.**
+> Sending `400` or `401` another 100 times gets the same answer.
 
 ---
 
-## 4 · timeout และการลองใหม่
+## 4 · Timeout and retry
 
-**ทุกการเรียกออกนอก process ต้องมี timeout** — ค่าเริ่มต้นของไลบรารีส่วนใหญ่คือ "รอตลอดไป"
+**Every call that leaves the process needs a timeout** — the default in most libraries is "wait forever"
 
-| การเรียก | timeout ที่ใช้ได้ทั่วไป |
+| Call | A timeout that works in general |
 |---|---|
-| ฐานข้อมูล query ปกติ | 5–10 วินาที |
-| HTTP ภายใน | 3–5 วินาที |
-| HTTP ภายนอก | 10–30 วินาที |
-| งานเบื้องหลังที่หนัก | ตั้งตามของจริง แล้วต้องตัดจบได้ |
+| Ordinary database query | 5–10 seconds |
+| Internal HTTP | 3–5 seconds |
+| External HTTP | 10–30 seconds |
+| Heavy background job | set it from the real work, and it must be possible to cut it off |
 
-**สูตรการลองใหม่** (service เรียก service · งานในคิวใช้ตัวเลขของ [`background-jobs`](../background-jobs/SKILL.md) §4 · มีคนนั่งรอหน้าจอ → ดูข้อสุดท้ายด้านล่าง):
+**The retry formula** (service-to-service calls · jobs in a queue use the numbers in [`background-jobs`](../background-jobs/SKILL.md) §4 · when a person sits waiting on the screen → see the last item below):
 
 ```
-ลองไม่เกิน 3 ครั้ง · หน่วงแบบทวีคูณ + สุ่ม
-ครั้งที่ 1 รอ 1 วินาที · ครั้งที่ 2 รอ 2 · ครั้งที่ 3 รอ 4  (แต่ละครั้ง ±20% แบบสุ่ม)
+at most 3 tries · exponential delay + jitter
+try 1 waits 1 second · try 2 waits 2 · try 3 waits 4  (each ±20% random)
 ```
 
-- **ต้องมีตัวสุ่ม** — ไม่งั้นทุก instance จะลองใหม่พร้อมกันเป๊ะ แล้วทับระบบปลายทางซ้ำ
-- **เวลารวมของการลองใหม่ต้องน้อยกว่า timeout ของผู้เรียก** ไม่งั้นเขาเลิกรอไปแล้วแต่เรายังลองอยู่
-- **retry การเขียนต้องมี idempotency key** ไม่งั้นลูกค้าถูกตัดเงิน 2 รอบ (ดู `api-conventions`)
-- **มีคนนั่งรออยู่หน้าจอ** → ลองใหม่อัตโนมัติไม่เกิน 1 ครั้ง แล้วแสดงปุ่ม "ลองอีกครั้ง" ให้เขากดเอง (ไม่ใช้ 3 ครั้งของสูตรด้านบน)
+- **You need the random part** — otherwise every instance retries at the exact same moment and hits the target system again together
+- **The total retry time must be less than the caller's timeout**, or the caller has given up while we are still trying
+- **Retrying a write needs an idempotency key**, or the customer is charged twice (see `api-conventions`)
+- **A person sits waiting on the screen** → at most 1 automatic retry, then show a "ลองอีกครั้ง" (try again) button for them to press (do not use the 3 tries of the formula above)
 
 ---
 
-## 5 · ตัดวงจร (circuit breaker)
+## 5 · Circuit breaker
 
-เมื่อปลายทางล้ม การยิงต่อไม่ได้ช่วยอะไร แค่ทำให้เราค้างตามไปด้วย
+When the target is down, firing more does not help. It only makes us hang along with it.
 
 ```
-ปิด (ปกติ) → ล้มติดกัน N ครั้ง → เปิด (ไม่ยิงเลย ตอบ error ทันที)
-           → รอ X วินาที → ครึ่งเปิด (half-open): ปล่อยให้ลอง 1 คำขอ → สำเร็จก็กลับไปปิด · ล้มก็เปิดต่อ
+closed (normal) → N failures in a row → open (do not call at all, answer with an error at once)
+                → wait X seconds → half-open: let 1 request try → success: back to closed · failure: stay open
 ```
 
-ค่าเริ่มต้นที่ใช้ได้: ถ้าล้ม 5 ครั้งติดกันภายใน 30 วินาที ให้เปิดวงจรไว้ 60 วินาที
+A default that works: if 5 calls fail in a row within 30 seconds, keep the circuit open for 60 seconds.
 
-**ควรใส่เมื่อ** — เรียกระบบภายนอกที่เคยล่ม · เรียกข้ามหลาย service · ปลายทางช้าแล้วลามมาถึงเรา
-**ไม่ต้องใส่เมื่อ** — เรียกฐานข้อมูลของตัวเอง · งานที่วิ่งครั้งเดียวต่อวัน
+**Add one when** — calling an external system that has gone down before · calling across several services · a slow target spreads the slowness to us
+**Not needed when** — calling your own database · a job that runs once a day
 
 ---
 
-## 6 · ล้มบางส่วน
+## 6 · Partial failure
 
-งานที่ทำหลายรายการ ต้องตอบให้ได้ว่า **"ทำได้ 8 จาก 10 แล้วอีก 2 ไปไหน"**
+Work that handles many items must be able to answer **"8 of 10 succeeded, where did the other 2 go?"**
 
-| แบบ | เหมาะกับ |
+| Style | Fits |
 |---|---|
-| ทั้งหมดหรือไม่ทำเลย (transaction) | เงิน · สต็อก · อะไรที่ครึ่ง ๆ แล้วพัง |
-| ทำเท่าที่ได้ แล้วรายงานรายการที่ไม่ผ่าน | นำเข้าข้อมูล · ส่งแจ้งเตือนหลายคน |
+| All or nothing (transaction) | money · stock · anything that breaks when half done |
+| Do what you can, then report the items that failed | data import · notifying many people |
 
-แบบที่สองต้อง**คืนรายการที่ล้มพร้อมเหตุผลรายตัว** ไม่ใช่บอกว่า "บางรายการไม่สำเร็จ"
+The second style must **return the failed items with a reason for each**, not just say "some items failed".
 
-**งานเก็บกวาดต้องรันเสมอ** ไม่ว่างานหลักจะสำเร็จหรือไม่ เช่น ปิดไฟล์ คืน connection ลบไฟล์ชั่วคราว
-ให้ใช้ `finally` / `using` / `with` / `defer` แทนการเขียนซ้ำในทุกทางออก
+**Cleanup must always run**, whether or not the main work succeeds: closing files, returning connections, deleting temp files.
+Use `finally` / `using` / `with` / `defer` instead of repeating it on every exit path.
 
 ---
 
-## 7 · ตรวจก่อนส่ง
+## 7 · Check before sending
 
-ไล่กับ diff ทุกครั้งที่แตะโค้ดที่เรียกออกนอก process (แนวคิดจาก ECC error-handling)
+Go through this against the diff every time you touch code that calls outside the process (idea from ECC error-handling)
 
-- [ ] ทุก `catch` ทำอย่างใดอย่างหนึ่งชัด ๆ: จัดการแล้วไปต่อ · แปลงเป็น error ของชั้นตัวเองแล้วโยนต่อ · ปล่อยไปให้ชั้นนอกสุด log (ข้อ 1) — ไม่มี `catch` ที่ log แล้วโยนต่อ
-- [ ] ทุกการเรียกออกนอก (HTTP · DB · คิว · ไฟล์) มี timeout ที่ตั้งใจ และ retry เฉพาะประเภทชั่วคราวในข้อ 3 · การเขียนที่ retry มี idempotency key (ข้อ 4)
-- [ ] ข้อความถึงผู้ใช้บอกว่าทำอะไรต่อ · ไม่มี stack trace หรือชื่อตารางออกไป (ข้อ 2) · log ของ error เดียวกันมี correlation id และข้อมูลพอให้ทำซ้ำ
-- [ ] ผลที่ธุรกิจคาดไว้ (ไม่พบ · ยอดไม่พอ · ซ้ำ) เป็นค่าคืนหรือ type ที่ผู้เรียกต้องจัดการ ไม่ใช่ exception
-- [ ] dependency ภายนอกแต่ละตัวมี test เส้นทางล้มอย่างน้อย 1 กรณี (timeout · 5xx · payload ผิด) และ test ยืนยันว่าระบบล้มบางส่วนตามข้อ 6 ไม่ล้มทั้งหน้า
-- [ ] ไม่มีการกลืนความล้มเหลวเงียบ ๆ 4 แบบนี้ (เรียบเรียงจาก silent-failure-hunter ของ pr-review-toolkit · claude-plugins-official · Apache-2.0 · ดู 2026-11-10):
-  - **optional chaining หรือ `?? ค่าเริ่มต้น`** ที่ทำให้ค่าที่หายไปผ่านไปโดยไม่มีใครรู้ (`order?.total ?? 0` ทำให้ออเดอร์ที่โหลดไม่ขึ้นกลายเป็นยอดศูนย์)
-  - **fallback ไปใช้ mock หรือข้อมูลตัวอย่างนอก test** — ระบบจริงโชว์ข้อมูลปลอมแล้วดูเหมือนปกติ
-  - **retry หมดแล้วเงียบ** — ครบรอบแล้วคืนค่าว่างหรือสำเร็จ ไม่โยน error และไม่แจ้งผู้เรียก
-  - **catch ที่ log แล้วไปต่อใน UI** — ผู้ใช้เห็นหน้าจอปกติทั้งที่ข้อมูลไม่มา ต้องแสดงสถานะผิดพลาดให้เห็น
+- [ ] Every `catch` clearly does one of these: handles it and goes on · converts it to an error of its own layer and throws on · lets it pass to the outermost layer to log (section 1) — no `catch` that logs and rethrows
+- [ ] Every outside call (HTTP · DB · queue · file) has a deliberate timeout and retries only the transient types in section 3 · a write that retries has an idempotency key (section 4)
+- [ ] The message to the user says what to do next · no stack trace or table name goes out (section 2) · the log for the same error has a correlation id and enough data to reproduce it
+- [ ] Outcomes the business expects (not found · insufficient balance · duplicate) are return values or types the caller must handle, not exceptions
+- [ ] Each outside dependency has at least 1 failure-path test (timeout · 5xx · bad payload), and a test confirms that partial failure follows section 6 and does not fail the whole page
+- [ ] None of these 4 kinds of silent failure swallowing (adapted from silent-failure-hunter in pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10):
+  - **optional chaining or `?? default`** that lets a missing value pass with nobody knowing (`order?.total ?? 0` turns an order that failed to load into a zero total)
+  - **falling back to a mock or sample data outside tests** — the live system shows fake data and looks normal
+  - **retries run out, then silence** — after the last try it returns empty or success, throws no error, and tells the caller nothing
+  - **a catch that logs and carries on in the UI** — the user sees a normal screen although the data never arrived; show an error state they can see
 
 ## 8 · Anti-patterns
 
-- **`catch` ว่างเปล่า** — ปัญหาที่หายากที่สุดคือปัญหาที่ไม่มีร่องรอย
-- **คืน `null` แทนการโยน error** — ผู้เรียกไม่รู้ว่าไม่มีข้อมูล หรือระบบพัง
-- **`catch (Exception)` ที่ชั้นในสุด** — กลืนบั๊กของตัวเองไปด้วย
-- **log แล้ว throw ต่อทุกชั้น** — error 1 ตัวได้ 10 บรรทัด
-- **"เกิดข้อผิดพลาด"** — ไม่บอกว่าต้องทำอะไรต่อ
-- **ส่ง stack trace ให้ผู้ใช้** — เปิดโครงสร้างภายในให้คนที่กำลังหาช่องโหว่เห็น
-- **retry แบบไม่หน่วง** — ยิงรัวใส่ระบบที่ล้มอยู่
-- **retry การเขียนโดยไม่มี idempotency key** — ได้รายการซ้ำ
-- **ไม่มี timeout** — thread ค้างสะสมจนระบบตาย
-- **ใช้ error เป็นตัวควบคุมการทำงานปกติ** — เช่นโยน exception เมื่อ "ไม่พบข้อมูล" ซึ่งเป็นเรื่องปกติ
+- **An empty `catch`** — the hardest problem to find is the one that leaves no trace
+- **Returning `null` instead of throwing an error** — the caller cannot tell "no data" from "the system broke"
+- **`catch (Exception)` in the innermost layer** — swallows your own bugs too
+- **Log and rethrow at every layer** — 1 error gets 10 lines
+- **"เกิดข้อผิดพลาด" ("an error occurred")** — does not say what to do next
+- **Sending a stack trace to the user** — shows the internal structure to someone hunting for a hole
+- **Retry with no delay** — hammering a system that is already down
+- **Retrying a write with no idempotency key** — you get duplicate records
+- **No timeout** — threads pile up until the system dies
+- **Using errors to control normal flow** — for example throwing an exception on "not found", which is a normal event

@@ -1,6 +1,6 @@
 # แม่แบบประกาศรับสมัคร (English)
 
-ย้ายมาจาก `../SKILL.md` หัวข้อ 2 · กฎเรื่องคำที่ต้องแก้ก่อนลงประกาศอยู่ใน SKILL.md หัวข้อ 2
+Moved from `../SKILL.md` section 2 · the rules on words to fix before posting an ad stay in SKILL.md section 2
 
 ```
 Role: {title} · {team} · reports to {manager title}

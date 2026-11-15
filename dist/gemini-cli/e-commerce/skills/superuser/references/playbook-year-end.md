@@ -1,16 +1,16 @@
-# playbook · year-end — งานปิดปี — งบการเงิน ประชุมผู้ถือหุ้น ภ.ง.ด.50 และ 50 ทวิ
+# playbook · year-end — year-end close: financial statements, shareholder meeting, ภ.ง.ด.50 (PND 50, corporate income tax return) and 50 ทวิ (withholding tax certificate)
 
-ใช้เมื่อ: หลังวันสิ้นรอบบัญชี · ทำหนังสือรับรองหักภาษีและ ภ.ง.ด.1ก ให้พนักงาน
-skill หลัก: `dbd-annual-filing` · `payroll-th` · `tax-vat-th`
+Use when: after the accounting period ends · issuing withholding tax certificates and ภ.ง.ด.1ก (PND 1 Kor, annual employee withholding tax summary) for employees
+Main skills: `dbd-annual-filing` · `payroll-th` · `tax-vat-th`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. นับย้อนจากวันสิ้นรอบบัญชีตาม `dbd-annual-filing` — ประชุมผู้ถือหุ้น · งบการเงินผ่านผู้สอบ · บอจ.5 · ภ.ง.ด.50 · ใคร: `tax-helper` ตัวใหม่
-2. ตรวจกำหนดวันและค่าปรับจากเว็บกรมพัฒนาธุรกิจการค้าและกรมสรรพากร · ใคร: `tax-helper` ตัวใหม่
-3. เตรียม ภ.ง.ด.1ก และ 50 ทวิ จากตารางเงินเดือนทั้งปี · ใคร: `tax-helper` ตัวใหม่
-4. ทำรายการเอกสารที่ต้องได้จากผู้สอบบัญชีและกรรมการ พร้อมวันที่ต้องได้ · ใคร: `tax-helper` ตัวใหม่
-5. ตรวจ — ยอดทั้งปีใน 50 ทวิ ต้องตรงกับผลรวม 12 เดือน · ใคร: `reviewer` ตัวใหม่
+1. Count back from the period end date per `dbd-annual-filing` — shareholder meeting · financial statements audited · บอจ.5 (Bor Or Jor 5, shareholder list) · ภ.ง.ด.50 · ใคร: `tax-helper` ตัวใหม่
+2. Check the deadlines and penalties on the websites of the Department of Business Development and the Revenue Department · ใคร: `tax-helper` ตัวใหม่
+3. Prepare ภ.ง.ด.1ก and 50 ทวิ from the full-year payroll table · ใคร: `tax-helper` ตัวใหม่
+4. List the documents needed from the auditor and the directors, with the date each is needed · ใคร: `tax-helper` ตัวใหม่
+5. Check (ตรวจ) — the full-year amounts in each 50 ทวิ must match the 12-month totals · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-ไทม์ไลน์ปิดปีที่ตรวจกับแหล่งทางการแล้ว และ 50 ทวิทุกคนตรงกับยอดรวม
+The year-end timeline has been checked against official sources, and every person's 50 ทวิ matches the totals.

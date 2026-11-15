@@ -1,50 +1,50 @@
-# คลังช่วยคิดความหมายของชื่อ
+# Libraries for developing a name's meaning
 
-สารบัญ: คลังรากละติน/กรีก → คลังคำจริงยืมข้ามบริบท → เรื่องเล่าที่ดีกับที่แย่
+Contents: Latin/Greek root library → real words borrowed across contexts → good and bad stories
 
-## คลังรากละติน/กรีก ที่ใช้ได้จริง
+## Latin/Greek roots that work in practice
 
-| ความหมาย | ราก | ชื่อที่ได้ |
+| Meaning | Root | Resulting names |
 |---|---|---|
-| แสง · ความชัด | *lux · lumen* | Lumo · Lumen · Lucent |
-| ทอง · มีค่า | *aurum* | Aurio · Aura |
-| เชื่อมต่อ | *nexus · syn-* | Nexa · Syno · Nexo |
-| พลัง · ไฟฟ้า | *volta · vis* | Volta · Vira |
-| วง · โลก | *orbis · kyklos* | Orbis · Kyklo |
-| เวลา · จังหวะ | *tempus · chronos · kairos* | Tempo · Chrono · Kairo |
-| ไหล · เคลื่อน | *fluxus · kinesis* | Flux · Kinet |
-| เสียง | *sonus · vox* | Sona · Voxa |
-| เก็บ · หีบ | *arca* | Arca · Arka |
-| ปกป้อง · โล่ | *aegis · scutum* | Aegis · Scuto |
-| ดูแล · รักษา | *cura* | Cura · Curo |
-| จุดเริ่ม | *arche* | Arka · Archo |
-| รูปแบบ | *morphe* | Morpho · Forma |
-| คำ · ภาษา | *lexis · verbum* | Lexi · Verba |
-| มอง · ตรวจ | *specto* | Specta · Scopo |
-| ใหม่ | *nova* | Nova · Novo |
-| จริง | *veritas* | Vera · Verio |
-| งาน · ผลงาน | *opus* | Opus · Opero |
-| ท่า · ประตู | *portus · porta* | Porta · Portio |
+| light · clarity | *lux · lumen* | Lumo · Lumen · Lucent |
+| gold · valuable | *aurum* | Aurio · Aura |
+| connect | *nexus · syn-* | Nexa · Syno · Nexo |
+| power · electricity | *volta · vis* | Volta · Vira |
+| circle · world | *orbis · kyklos* | Orbis · Kyklo |
+| time · rhythm | *tempus · chronos · kairos* | Tempo · Chrono · Kairo |
+| flow · move | *fluxus · kinesis* | Flux · Kinet |
+| sound | *sonus · vox* | Sona · Voxa |
+| store · chest | *arca* | Arca · Arka |
+| protect · shield | *aegis · scutum* | Aegis · Scuto |
+| care · look after | *cura* | Cura · Curo |
+| beginning | *arche* | Arka · Archo |
+| form | *morphe* | Morpho · Forma |
+| word · language | *lexis · verbum* | Lexi · Verba |
+| look · inspect | *specto* | Specta · Scopo |
+| new | *nova* | Nova · Novo |
+| true | *veritas* | Vera · Verio |
+| work · output | *opus* | Opus · Opero |
+| port · door | *portus · porta* | Porta · Portio |
 
-## คลังคำจริงยืมข้ามบริบท แยกตามความรู้สึก
+## Real words borrowed across contexts, grouped by feeling
 
-| ความรู้สึก | คำ |
+| Feeling | Words |
 |---|---|
-| เร็ว · คล่อง | Arc · Bolt · Dash · Swift · Rush · Skim |
-| มั่นคง · ปลอดภัย | Anchor · Vault · Keel · Bastion · Forge · Bedrock |
-| ชัดเจน · เห็นได้ | Prism · Lens · Beacon · Signal · Facet |
-| เป็นระเบียบ | Grid · Frame · Ledger · Atlas · Index · Stack |
-| เชื่อมโยง | Bridge · Relay · Mesh · Loom · Thread · Weave |
-| นำทาง | Compass · Pilot · Helm · North · Trail |
-| เงียบ · เรียบ | Slate · Quill · Linen · Drift · Still |
+| fast · agile | Arc · Bolt · Dash · Swift · Rush · Skim |
+| stable · safe | Anchor · Vault · Keel · Bastion · Forge · Bedrock |
+| clear · visible | Prism · Lens · Beacon · Signal · Facet |
+| orderly | Grid · Frame · Ledger · Atlas · Index · Stack |
+| connected | Bridge · Relay · Mesh · Loom · Thread · Weave |
+| guiding | Compass · Pilot · Helm · North · Trail |
+| quiet · smooth | Slate · Quill · Linen · Drift · Still |
 
-> ระวัง: **คำจริงหาโดเมนยากที่สุด** จึงต้องเตรียมแผนสำรอง เช่น เติมคำบอกหมวด (`arc.app`, `getprism.com`)
-> หรือใช้โดเมนสั้นแบบอื่น
+> Warning: **real words are the hardest to find domains for**, so prepare a fallback, such as adding a category word (`arc.app`, `getprism.com`)
+> or using another short domain style.
 
-## เรื่องเล่าที่ดีกับที่แย่
+## Good and bad stories
 
-| | ตัวอย่าง |
+| | Example |
 |---|---|
-| ✓ ดี | "Aegis คือโล่ของเทพซุส — ระบบนี้มีไว้ปกป้อง" — สั้น จำได้ เล่าต่อได้ |
-| ✗ แย่ | "A มาจาก Advanced, U มาจาก Unified, R มาจาก Realtime…" — ไม่มีใครจำ |
-| ✗ แย่ | "ชื่อนี้มาจากชื่อหมาที่บ้าน" — ความหมายส่วนตัว ลูกค้าไม่รู้สึกด้วย |
+| ✓ Good | "Aegis is the shield of Zeus. This system exists to protect." Short, memorable, easy to retell |
+| ✗ Bad | "A stands for Advanced, U for Unified, R for Realtime…" Nobody remembers it |
+| ✗ Bad | "The name comes from the family dog's name." A personal meaning, so customers feel nothing |
