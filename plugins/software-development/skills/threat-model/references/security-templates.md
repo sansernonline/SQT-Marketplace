@@ -13,7 +13,7 @@ The agent and `/threat-model` open this file when they need to write a real docu
 ### OWASP Top 10:2025 (Web Application)
 A01 Broken Access Control (รวม Server-Side Request Forgery, SSRF) · A02 Security Misconfiguration · A03 Software Supply Chain Failures · A04 Cryptographic Failures · A05 Injection · A06 Insecure Design · A07 Authentication Failures · A08 Software or Data Integrity Failures · A09 Security Logging and Alerting Failures · A10 Mishandling of Exceptional Conditions
 
-สิ่งที่ต้องมี วิธีพิสูจน์ และรายงานรายข้อ → skill [`security-gate` ส่วน OWASP](../../security-gate/references/owasp-top10.md)
+What is required, how to prove it, and the per-item report → skill [`security-gate` OWASP section](../../security-gate/references/owasp-top10.md)
 
 ### STRIDE Threat Categories
 
