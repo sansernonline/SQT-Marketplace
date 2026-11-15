@@ -1,0 +1,16 @@
+{
+  "_note": "ตัวอย่างจาก SKILL.md ต่อ 60 เดือน · 36 เดือนแรกตามโปร แล้วอัตราหลังโปร (สมมติ ไม่ใช่ใบเสนอจริง) · shift บวกเข้าช่วง floating · ค่าธรรมเนียมเป็นตัวอย่างจนกว่าธนาคารยืนยัน",
+  "balance": 2400000,
+  "payment": 18000,
+  "months": 60,
+  "stay": { "rates": [{ "rate": 6.5, "floating": true }] },
+  "options": [
+    { "name": "รีไฟแนนซ์ 3.2% 3 ปี", "cost": 28200, "rates": [{ "months": 36, "rate": 3.2 }, { "rate": 5.5, "floating": true }] },
+    { "name": "รีเทนชั่น 4.0% 3 ปี", "cost": 24000, "rates": [{ "months": 36, "rate": 4.0 }, { "rate": 5.5, "floating": true }] }
+  ],
+  "scenarios": [
+    { "name": "MRR ลง 1 จุด", "shift": -1 },
+    { "name": "MRR ทรงตัว", "shift": 0 },
+    { "name": "MRR ขึ้น 1 จุด", "shift": 1 }
+  ]
+}

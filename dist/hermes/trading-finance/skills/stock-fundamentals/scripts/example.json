@@ -1,0 +1,12 @@
+{
+  "_note": "ตัวอย่างสมมติใน SKILL.md (Worked example) · ตัวเลขงบหน่วยพันบาท (unit 1000) · shares เป็นหุ้น · price เป็นบาท · ไม่ใช่บริษัทจริง",
+  "companies": [
+    { "symbol": "AAA", "statementDate": "2026-09-30", "price": 40, "priceDate": "2026-11-07", "unit": 1000, "shares": 1000000000,
+      "netProfit": 2500000, "netProfitPrev": 2000000, "equity": 20000000, "totalLiabilities": 15000000,
+      "revenue": 30000000, "revenuePrev": 25000000, "ebit": 3600000, "interestExpense": 400000, "dps": 1.5, "oneOff": 500000 },
+    { "symbol": "BBB", "statementDate": "2026-06-30", "price": 5, "priceDate": "2026-11-07", "unit": 1000, "shares": 100000000,
+      "netProfit": -50000, "equity": 500000, "totalLiabilities": 1500000,
+      "revenue": 1000000, "revenuePrev": 400000, "ebit": 30000, "interestExpense": 40000, "dps": 0.2 }
+  ],
+  "screen": { "maxPE": 20, "minROE": 10, "maxDE": 1.5 }
+}

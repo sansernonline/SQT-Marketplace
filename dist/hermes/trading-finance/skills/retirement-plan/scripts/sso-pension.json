@@ -1,0 +1,12 @@
+{
+  "checked": "2026-10-06",
+  "source": "retirement-plan/SKILL.md บรรทัด 27-37 (ตรวจล่าสุด 2026-10-06) · https://www.prd.go.th/th/content/category/detail/id/31/iid/303450 , https://www.thairath.co.th/money/economics/thai_economics/2899435",
+  "pension": { "min_months": 180, "base_pct": 20, "step_pct": 1.5, "step_months": 12, "source": "SKILL.md บรรทัด 31: 180 เดือนขึ้นไป บำนาญ 20% ของค่าจ้างเฉลี่ย 60 เดือนสุดท้าย + 1.5% ทุก 12 เดือนที่เกิน 180" },
+  "wage_ceiling_source": "SKILL.md บรรทัด 33: 15,000 ถึง 2568 · 17,500 ปี 2569–2571 · 20,000 ปี 2572–2574 · 23,000 ตั้งแต่ 2575 · กติกาช่วงเปลี่ยนผ่านของค่าเฉลี่ย 60 เดือน (รอยืนยัน) กับสายด่วน 1506",
+  "wage_ceiling": [
+    { "from_year": 0, "ceiling": 15000 },
+    { "from_year": 2569, "ceiling": 17500 },
+    { "from_year": 2572, "ceiling": 20000 },
+    { "from_year": 2575, "ceiling": 23000 }
+  ]
+}

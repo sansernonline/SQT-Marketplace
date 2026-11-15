@@ -1,0 +1,153 @@
+# รูปแบบ eval ของ Claude Code — `claude plugin eval`
+
+ทุกข้อ `จากแหล่ง` [code.claude.com/docs/en/plugin-evals](https://code.claude.com/docs/en/plugin-evals) · ดู 2026-10-23 · ต้องใช้ Claude Code 2.1.269 ขึ้นไป · ใช้บัญชีที่ล็อกอินอยู่ มีค่าใช้จ่าย
+
+## สารบัญ
+- [โครงไฟล์](#โครงไฟล์)
+- [case.yaml](#caseyaml)
+- [grader](#grader)
+- [คะแนนและรอบไม่มี plugin](#คะแนนและรอบไม่มี-plugin) (รวม [วัด trigger ให้แน่นขึ้น](#วัด-trigger-ให้แน่นขึ้น-วิธีที่แน่กว่าขั้นต่ำของเรา))
+- [จำนวนรอบและเกณฑ์ผ่าน](#จำนวนรอบและเกณฑ์ผ่าน)
+- [สภาพแวดล้อมตอนรัน](#สภาพแวดล้อมตอนรัน)
+- [คำสั่งและ exit code](#คำสั่งและ-exit-code)
+
+## โครงไฟล์
+
+```
+plugins/<plugin>/
+└─ evals/
+   ├─ <เคส>/
+   │  ├─ case.yaml          ← เราใช้ไฟล์นี้ไฟล์เดียว (โจทย์ใน execution.prompt · grader ใน graders:)
+   │  ├─ prompt.md          ← ทางเลือก: frontmatter = ช่องของเคส · เนื้อ = โจทย์ (ทับค่าใน case.yaml)
+   │  ├─ graders/<ชื่อ>.md  ← ทางเลือก: grader ละ 1 ไฟล์ ต่อท้ายรายการใน case.yaml
+   │  └─ mocks/             ← ผลจำลองของ MCP tool
+   ├─ mocks/<server>/<tool>.md
+   └─ results/<timestamp>/  ← aggregate-result.json + report.html — ใส่ .gitignore
+```
+
+- โฟลเดอร์นับเป็นเคสเมื่อมี `prompt.md` หรือ `case.yaml` · เคสที่ไม่มี grader โหลดไม่ผ่าน · ซ้อนเคสใต้โฟลเดอร์กลุ่มได้
+- `claude plugin eval init` ให้ Claude ช่วยเขียนเคส · `init --bare <ชื่อ>` สร้างแม่แบบเปล่า
+- โฟลเดอร์อื่นแทน `evals/`: `"experimental": { "evals": "<path>" }` ใน plugin.json หรือ `--eval-dir`
+
+## case.yaml
+
+```yaml
+schema_version: "1.1"        # บังคับ
+name: human-writing-behaviour # บังคับ · ตรงชื่อโฟลเดอร์
+description: …               # ให้คนอ่าน
+tags: [smoke]
+runs: 10                     # 1–50 · เราใช้ 10 (เหตุผลในหัวข้อ "จำนวนรอบและเกณฑ์ผ่าน")
+expected_outcome: …          # ให้คนอ่าน ไม่ใช้ตัดสิน
+execution:
+  prompt: |                  # โจทย์ (เมื่อไม่มี prompt.md)
+    …
+  model: …
+  max_turns: 10              # ≤ 200
+  timeout_seconds: 300       # ≤ 3600
+  allowed_tools: []
+  append_system_prompt: …
+  env: { EVAL_X: … }         # ชื่อต้องขึ้นต้น EVAL_
+context:
+  scaffold_script: fixture.sh  # รันเมื่อใส่ --scaffold เท่านั้น · 120 วินาที
+  add_dirs: [resources]        # โฟลเดอร์อ่านอย่างเดียว
+  history_file: …jsonl         # เริ่มจากบทสนทนาเดิม
+graders:
+  - name: …
+    type: …                  # ดูตาราง
+    …
+```
+
+## grader
+
+ช่องร่วม: `type` (บังคับ) · `weight` (1) · `arm` (`with-only` หรือ `both`) · `target` หรือ `focus` = `last_message` (ค่าเริ่ม) · `trace` · `files` · `{ source: file, path }` · `mock_calls`
+
+| type | ช่อง | ใช้เมื่อ |
+|---|---|---|
+| `regex` | `pattern` · `flags` · `match` (`contains` ค่าเริ่ม · `not_contains` · `"count:N"`) · `target` | คำต้องมี/ต้องไม่มี · ถูกสุด ไม่แกว่ง |
+| `tool_used` | `tool` · `input_match` (regex กับ JSON ของ input) · `min` (1) · `max` · `min: 0, max: 0` = ห้ามเรียก (เคส `-no-trigger` ใส่ `arm: both` ด้วย ให้นับคะแนน) | skill ถูกเปิดไหม: `tool: Skill` + `input_match: '"skill"\s*:\s*"(?:[\w-]+:)?human-writing"'` |
+| `tool_order` | `before` · `after` | ลำดับเครื่องมือ |
+| `file_exists` | `path` · `exists` | ผลเป็นไฟล์ (ต้องให้สิทธิ์ Write ก่อน) |
+| `llm` | `criteria` · `focus` | เกณฑ์ที่ regex จับไม่ได้ · ผู้ตัดสิน 3 เสียง ผ่านเมื่อ ≥ 2 |
+| `baseline` | `baseline_file` · `criteria` | เทียบกับคำตอบอ้างอิง |
+
+ไม่มี grader แบบเขียนโค้ดเอง · ตัวที่เขียนใน `graders/*.md` ใช้ frontmatter ช่องเดียวกัน เนื้อไฟล์ = `criteria`
+
+### เขียนเกณฑ์ `llm` ให้ผู้ตัดสินตัดสินถูก
+
+รอบ 2026-10-26 เกณฑ์ `llm` 4 ตัวตก 0/3 ทั้งรอบมีและไม่มี skill · ถามผู้ตัดสิน (haiku) ทีละข้อแล้วพบว่าคำตอบผ่าน 4–5 จาก 6 ข้อ แต่ตกทั้งก้อนเพราะข้อเดียว:
+
+- **1 grader = 1–3 เรื่องที่เป็นหัวใจของ skill** · เรื่องเยอะให้แยกเป็นหลาย grader จะได้เห็นว่าตกที่เรื่องไหน · เดิมรวม 4–6 ข้อแบบ "ครบทุกข้อ" ขาดคำว่า "ชัก" คำเดียวก็ตก
+- **ขึ้นต้นด้วย "ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน"** · ตัวอย่างในวงเล็บเขียนว่า "เช่น … อย่างใดอย่างหนึ่งก็พอ" ไม่งั้นผู้ตัดสินถือว่าต้องมีครบทุกตัว
+- **ห้ามเกณฑ์ที่ผู้ตัดสินตรวจไม่ได้** เช่น "ไม่แต่งตัวเลขที่ไม่มีแหล่ง" · ผู้ตัดสินเห็นแค่คำตอบ ไม่มีรายการแหล่งหรือโจทย์ จึงตัดสินตกกับตัวเลขที่ถูกอยู่แล้ว (เบอร์ คปภ. 1186) · ให้เขียนเป็นสิ่งที่เห็นได้ในคำตอบแทน: "ตัวเลข X ต้องติดที่มาหรือรอยืนยัน" หรือใส่ค่าที่ผิดแน่ใน `regex` `not_contains`
+- **ข้อเท็จจริงที่เป็นตัวเลขหรือคำเฉพาะไปอยู่ใน `regex`** (120 วัน · 15,000 · 1669) · `llm` เก็บไว้ตัดสินลำดับ ท่าที และเหตุผล
+- **เกณฑ์ที่จับความผิดจริงให้แยกเป็น grader ของตัวเอง** เช่น `rmf-skip-limit` ที่ agent ตอบผิดว่าหยุดซื้อ RMF 2 ปีได้ ทั้งที่ skill บอกว่าไม่ได้
+- ตกทั้ง 2 แขนเกินครึ่ง → ตรวจเกณฑ์ก่อนโทษ skill: ส่งคำตอบใน `evidence` ของผลกับเกณฑ์ให้ `claude -p --model haiku` ตัดสินทีละข้อพร้อมยกข้อความ แล้วดูว่าข้อไหนทำให้ตก
+
+### เคสแบบอ่านอย่างเดียว ให้ regex ให้คะแนนก่อน
+
+- ให้เคสแค่เครื่องมืออ่าน (`Read` `Glob` `Grep` `Skill`) ใน `allowed_tools` · เคสที่ไม่ต้องเขียนไฟล์ไม่ขอ `Write` `Edit` `Bash` เลย (รันบน Windows ได้ด้วยเพราะไม่ต้องมี sandbox)
+- **ให้คะแนนด้วย `regex` ก่อน** เพราะถูกและไม่แกว่ง · grader `llm` เป็นที่ปรึกษา: ตั้ง `arm: with-only` เพื่อให้เป็นตัวชี้วัดไม่นับคะแนน เมื่อยังไม่ได้ปรับกับป้ายของคน ([`eval-loop-rules`](eval-loop-rules.md) หัวข้อ 5) · `tool_used: Skill` เป็นตัวชี้วัดว่า skill ถูกเปิดไหม ไม่ใช่ผลลัพธ์
+- **ใส่เพดานเงินทุกครั้ง** `--max-cost-usd` (ตัวอย่างในหัวข้อคำสั่ง) · รอบเดียวของ 2026-10-26 เสีย 35.39 ดอลลาร์โดยไม่รู้ตัว
+- ก่อนรันทั้งชุดให้นำร่อง 3 รายการและตรวจสำเนา plugin ที่ติดตั้ง: [`eval-loop-rules`](eval-loop-rules.md) หัวข้อ 1 (แนวจาก coderabbit evals/README.md · MIT · ดู 2026-11-10)
+
+## คะแนนและรอบไม่มี plugin
+
+- แต่ละเคสรัน 3 รอบต่อแขน · คะแนนรอบ = สัดส่วน grader ที่ผ่านถ่วงน้ำหนัก · คะแนนเคส = ค่าเฉลี่ย · ผ่านเมื่อถึง `--threshold` (ค่าเริ่ม 1.0)
+- **2 แขนโดยค่าเริ่มต้น**: รอบมี plugin (`WITH`) และรอบไม่มี plugin เลย (`W/OUT`) แล้วรายงานผลต่าง `Δ` · `--ablation none` รันแขนเดียว
+- ในรอบ 2 แขน grader `tool_used` ที่ `tool: Skill` และ grader ที่ `arm: with-only` รายงานเป็นตัวชี้วัด (`scored: false`) ไม่นับคะแนน เว้นแต่ใส่ `arm: both` · เคสที่มีแต่ grader ชนิดนี้จึงต้องมี grader ผลลัพธ์อีก 1 ตัว
+
+## จำนวนรอบและเกณฑ์ผ่าน
+
+ค่าในหัวข้อนี้เป็นค่าตั้งต้น ยังไม่ได้วัด · ปรับเมื่อมีผลรันจริงหลายรอบ
+
+- **รันเคสละ 10 รอบ** (`runs: 10`) · 3 รอบได้อัตราผ่านแค่ 0 · .33 · .67 · 1 และที่ .67 ช่วงความเชื่อมั่น 95% (p ± 1.96√(p(1−p)/n)) กว้าง ±.53 · 10 รอบแคบลงเหลือ ±.29 · แยก 80% กับ 95% ให้ขาดต้องราว 72 รอบต่อแขน จึงใช้ 10 รอบจับแค่การถอยหลังที่ชัด ไม่ใช้ตัดสินความต่างเล็ก ๆ
+- **รายงาน 2 ค่า** จากผลรายรอบใน `aggregate-result.json`: **pass@k** = มีอย่างน้อย 1 ใน k รอบผ่าน (skill ทำได้ไหม) · **pass^k** = ผ่านครบทั้ง k รอบ (ไว้ใจได้ทุกครั้งไหม) · ค่าเฉลี่ยค่าเดียวซ่อนเคสที่ผ่านครึ่งเดียว
+- **แยกเกณฑ์ 2 แบบ** แทน threshold 0.8 ชุดเดียว · แยกรันด้วย `--tag`:
+
+| แบบ | เคส (tag) | เกณฑ์ผ่าน |
+|---|---|---|
+| วัดความสามารถ | `trigger` · `behaviour` | คะแนนเฉลี่ย ≥ 0.8 (`--threshold 0.8`) |
+| กันถอยหลัง | `regression` · `guard` · `no-trigger` | ผ่านครบ k จาก k รอบ (`--threshold 1.0`) · ตก 1 รอบ = ถอยหลัง |
+
+- **ตัวเลขเดียวซ่อนความต่าง** — รายงานตัวชี้วัดรองด้วย (ตัวอย่างจากงานจัดคิวในคอร์ส 2026-11-04: เวลารวมเท่าเดิม 125 นาทีทุกการตั้งน้ำหนัก แต่งานย้ายไปบัญชีที่ไม่ใกล้รีเซ็ต) · เคสที่ทุกแขนได้คะแนนเท่ากันไม่นับเป็นหลักฐาน (ดูหัวข้อ 6 ของ `SKILL.md`)
+- **รายงานโทเคนและเวลาต่อแขน** นอกจากผ่านหรือไม่ผ่าน · มี paper 2 ฉบับรายงานว่า skill ที่ดูเกี่ยวข้องทำให้ช้าหรือแพงขึ้น (arXiv 2608.11888 ล้มเหลว 307 กรณี 182 กรณีเป็นแบบช้าหรือแพงขึ้น · arXiv 2608.23067 โทเคนเพิ่ม 72–394% ความมั่นใจต่ำถึงปานกลาง · ดูผ่านบทสรุป 2026-11-04 ดู [`skill-evaluation-evidence`](skill-evaluation-evidence.md)) · ผลของ `claude plugin eval` มี `costUsd` ต่อเคสให้แล้ว
+- **ผู้ตัดสินต้องปิดตา** — ไม่บอกว่าฉบับไหนมี skill · สลับป้าย A/B · เขียนเกณฑ์ก่อนอ่านผล · ถ้า `tool_used: Skill` ผ่านแต่ `Δ` ติดลบ ให้สงสัยผู้ตัดสินก่อน แล้วรันซ้ำด้วย `--judge-model sonnet` (เอกสาร Claude Code ผ่านบทสรุป 2026-11-04)
+
+### วัด trigger ให้แน่นขึ้น (วิธีที่แน่กว่าขั้นต่ำของเรา)
+
+ขั้นต่ำของเราคือเคส `-trigger` 1 เคสต่อ skill · เมื่อ description เป็นปัญหาจริง (skill ไม่ถูกเรียก หรือชนกับพี่น้อง) ใช้วิธีจาก agentskills.io optimizing-descriptions และ anthropics/skills skill-creator ซึ่งตรงกัน (ดูผ่านบทสรุป 2026-11-04):
+
+1. ชุดคำค้นราว 20 ข้อ: 8–10 ข้อควรเปิด skill · 8–10 ข้อไม่ควร เน้นข้อใกล้เคียง (ใช้คำเดียวกันแต่เป็นงานอื่น)
+2. เขียนชุดคำค้นโดยคนหรือ agent ที่ไม่เคยเห็น description (การจำลอง BM25 ในคอร์สได้ hit@1 98.3% กับคำที่เคยเห็น และ 80% กับคำใหม่ n=60 2026-11-04)
+3. รันข้อละ 3 รอบ · ผ่านเมื่ออัตราเปิด > 0.5 (ข้อที่ไม่ควรเปิดให้อัตราต่ำกว่า 0.5 · ส่วนนี้เราตีความเอง แหล่งระบุแค่ข้อที่ควรเปิด) · นับว่าเปิดเมื่อเห็นการเรียกเครื่องมือ `Skill` จริงเท่านั้น
+4. แบ่ง train 60% กับ validation 40% · แก้ description ด้วย train · เลือกฉบับด้วย validation · ไม่เกิน 5 รอบ
+
+เทียบ 2 ฉบับของ description หรือ skill ด้วยสคริปต์ได้: `node scripts/evals/ab/ab-run.mjs --cases cases.json --plugin <plugin> --baseline-ref origin/main` · รัน baseline (ฉบับใน git ref) กับ working tree ผ่าน `claude -p --plugin-dir` · เก็บ baseline ไว้ตามรหัส commit รันใหม่เมื่อ ref ขยับหรือชุดเคส รอบ model เปลี่ยน (แนวจาก crowdstrike-falcon-fusion run-ab-test.sh · MIT · ดู 2026-11-10) · ใช้ regex ให้คะแนนเท่านั้น ต่างจาก `claude plugin eval` ที่ใช้ grader หลายชนิด
+
+หมายเหตุรูปแบบ: `evals/evals.json` ของ skill-creator เป็นคนละรูปแบบกับ `claude plugin eval` (ไม่อ่านไฟล์ของกันและกัน) · `claude plugin eval` ต้องใช้ git 2.31 ขึ้นไป
+
+## สภาพแวดล้อมตอนรัน
+
+- แต่ละรอบ = home ใหม่ · workspace ใหม่ · `claude -p` ที่โหลดเฉพาะ plugin นี้ · ไม่มี CLAUDE.md ของเครื่อง · ไม่มี auto memory · ไม่มี plugin อื่น · eval ของ skill กลางจึงรันที่ `plugins/superuser` โดยตรง
+- **plugin ที่มี `dependencies` โหลดไม่ขึ้นทั้งตัวใน eval** (`plugin_errors: dependency-unsatisfied` ใน trace ที่ `--keep-temp` เก็บไว้) · ไม่มีตัวเลือกให้โหลด dependency · ผลคือรอบมี plugin ไม่มี skill ของเราเลย เคส trigger เปิด skill ได้ 0/3 ทุกเคส และ Δ ใกล้ 0 · ตรวจจริง 2026-10-26 Claude Code 2.1.310 (รันครบ 5 ชุด 59 เคส เสีย 35.39 ดอลลาร์ก่อนรู้) · **วิธีรัน:** `node scripts/evals/plugin-eval.mjs <plugin> [--only <regex ชื่อเคส>] [อาร์กิวเมนต์ของ eval]` ทำสำเนาที่ลบ `dependencies` ให้ ลองเคส trigger 1 เคสก่อน ถ้า skill ไม่ถูกเปิดจะหยุดก่อนรันทั้งชุด (ทดสอบจริง 2026-10-26 กับ `flood-prep-trigger`) · `--case` รับ glob แต่ไม่รับปีกกา `{a,b}-*` (ได้ 0 เคสโดยไม่ error) จึงใช้ `--only` แทน · skill กลางของ superuser จะไม่อยู่ในรอบนั้น
+- **ปิดสำเนา plugin ที่ติดตั้งก่อนวัดด้วย `--plugin-dir`** ไม่งั้น description ของสำเนานั้นถูกให้คะแนนแทนโดยไม่รู้ตัว · `plugin-eval.mjs` เตือน และ `ab-run.mjs` หยุดให้เมื่อพบ plugin ที่ติดตั้งและเปิดอยู่ ([`eval-loop-rules`](eval-loop-rules.md) หัวข้อ 1)
+- เครื่องมือที่ให้โดยไม่ต้องขอ: อ่านอย่างเดียว (`Read` `Glob` `Grep` `Skill` `Agent` `TodoWrite` …) · เพิ่มด้วย `--allow-tools Write Edit "Bash(npm test *)"` · Bash รันใต้ sandbox ของระบบ — **Windows ไม่มี sandbox ให้ใช้ WSL2** · โฟลเดอร์ `evals/` ถูกซ่อนจาก agent
+
+## คำสั่งและ exit code
+
+```
+claude plugin eval plugins/superuser --trust-plugin --case "human-writing-*" --no-publish --max-cost-usd 5
+claude plugin eval plugins/superuser --trust-plugin --tag behaviour --json behaviour.json --threshold 0.8 --model claude-sonnet-5 --judge-model claude-haiku-4-5 --no-publish --max-cost-usd 20   # CI ความสามารถ
+claude plugin eval plugins/superuser --trust-plugin --tag regression --json regression.json --threshold 1.0 --model claude-sonnet-5 --judge-model claude-haiku-4-5 --no-publish --max-cost-usd 20   # CI กันถอยหลัง (ทำซ้ำกับ --tag guard และ --tag no-trigger)
+```
+
+flag อื่น: `--runs` · `-j/--concurrency 1–8` · `--ablation none|with-without` · `--tag` · `--scaffold` · `--mocks record|off` · `--output-dir` · `--report` · `--verbose` · `--keep-temp` · ใส่ target ก่อน `--tag` `--allow-tools` `--json`
+
+| exit | ความหมาย |
+|---|---|
+| 0 | ทุกเคสถึง threshold |
+| 1 | มีเคสต่ำกว่า threshold · โหลดเคสไม่ได้ · ไม่มีเคส · API พัง · โฟลเดอร์ไม่ trusted โดยไม่ใส่ `--trust-plugin` |
+| 2 | รันไม่ครบ (`partial: true`) เพราะชนเพดานเงินหรือ auth ถูกปฏิเสธ |
+| 130 / 143 | ถูกขัดจังหวะ / ถูกหยุด |
+
+`Δ` ไม่เปลี่ยน exit code · ผล JSON มี `aggregates.overallScore` `casesPassed` `casesTotal` `meanDelta` และ `cases[].aggregates.score` · `delta` · `costUsd`

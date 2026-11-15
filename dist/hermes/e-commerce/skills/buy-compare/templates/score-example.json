@@ -1,0 +1,17 @@
+{
+  "_note": "Example from buy-compare SKILL.md: 12,000 BTU air conditioner over 7 years. TCO in baht = price incl. installation + electricity 7 years (A 13,266/yr, B 8,442/yr). 1-5 scores are illustrative. Budget cap 18,000 baht is a hard rule, not a weight.",
+  "criteria": [
+    { "name": "งานหลัก 1-5", "weight": 0.30, "better": "high" },
+    { "name": "TCO 7 ปี บาท", "weight": 0.25, "better": "low" },
+    { "name": "บริการในไทย 1-5", "weight": 0.15, "better": "high" },
+    { "name": "ประกัน 1-5", "weight": 0.10, "better": "high" },
+    { "name": "ความเข้ากัน 1-5", "weight": 0.10, "better": "high" },
+    { "name": "ขายต่อ 1-5", "weight": 0.10, "better": "high" }
+  ],
+  "must": [ { "criterion": "ราคารวมติดตั้ง บาท", "max": 18000 } ],
+  "options": [
+    { "name": "A fixed-speed", "values": { "งานหลัก 1-5": 4, "TCO 7 ปี บาท": 104762, "บริการในไทย 1-5": 4, "ประกัน 1-5": 3, "ความเข้ากัน 1-5": 5, "ขายต่อ 1-5": 3, "ราคารวมติดตั้ง บาท": 11900 } },
+    { "name": "B inverter", "values": { "งานหลัก 1-5": 5, "TCO 7 ปี บาท": 75994, "บริการในไทย 1-5": 3, "ประกัน 1-5": 4, "ความเข้ากัน 1-5": 4, "ขายต่อ 1-5": 3, "ราคารวมติดตั้ง บาท": 16900 } },
+    { "name": "C premium inverter", "values": { "งานหลัก 1-5": 5, "TCO 7 ปี บาท": 79500, "บริการในไทย 1-5": 4, "ประกัน 1-5": 5, "ความเข้ากัน 1-5": 4, "ขายต่อ 1-5": 4, "ราคารวมติดตั้ง บาท": 24900 } }
+  ]
+}

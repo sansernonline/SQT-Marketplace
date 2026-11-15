@@ -1,0 +1,85 @@
+---
+name: chat-reply-templates
+description: Use when a Thai seller replies to buyer chat on marketplaces
+argument-hint: <platform> <what the customer wrote> [order status, photos, shop voice]
+---
+
+# Chat Reply Templates (Thai)
+
+Response time and chat rate count toward shop ratings on the big platforms, and a fast, polite answer is half of every sale. Templates make the answer fast; filling them with the order's real facts makes it right.
+
+## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+
+ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+
+- **ที่ดู:** น้ำเสียงของร้าน: แชตที่ร้านตอบลูกค้าจริง 10–20 ข้อความล่าสุด (ผู้ใช้วางมาหรือมีไฟล์) · คำลงท้ายที่ใช้ (ค่ะ · ครับ · คะ · จ้า) · การเรียกลูกค้า · อีโมจิ · นโยบายคืนของและเวลาส่งของร้าน
+- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
+- **ยังต้องมีทุกแบบ:** แม่แบบ T1–T5 เป็นโครงของเนื้อหา คำและน้ำเสียงใช้ของร้าน · ไม่มีตัวอย่างแชต ถามผู้ใช้ข้อเดียวว่าร้านพูดแบบไหน แล้วทำต่อ
+
+## Workflow
+
+1. **Read the order first** — order number, items, paid or not, ship date, tracking status, chat history
+2. **Pick the template** from the table and from [templates](references/templates.md)
+3. **Fill every `<...>`** with real facts; never send a template with a blank or a guessed date
+4. **Match the voice** — ค่ะ or ครับ consistently; the shop's name for itself (แอดมิน / ร้าน <name>)
+5. **Say the next step and when** — "แอดมินจะแจ้งกลับภายใน 17:00 วันนี้ค่ะ" and then actually do it
+6. **Log** recurring questions; 3 of the same question in a week means the listing or FAQ auto-reply is missing it
+
+## Which template
+
+| Buyer says | Template | Check first |
+|---|---|---|
+| ราคาเท่าไหร่ / ลดได้ไหม | T1 price · T6 decline discount | current price and running vouchers |
+| มีของไหม / มีสีนี้ไหม / ไซซ์ไหนดี | T2 stock & size | master sheet (`multi-shop-stock`), size chart |
+| ของยังไม่มา | T3 late parcel | tracking page, courier status, platform's estimated date |
+| ได้ของผิด / ไม่ครบ / ชำรุด | T4 wrong or damaged item | photos/video from buyer, packing record |
+| ขอคืนเงิน / ขอคืนสินค้า | T5 refund | decision table in `returns-and-bad-reviews` |
+| ส่งของวันไหน | T7 shipping time | cut-off time, today's shipments |
+| ขอใบเสร็จ / ใบกำกับภาษี | T8 receipt | VAT-registered or not (`seller-tax-basics`) |
+
+## Which chat first
+
+When chats pile up, answer by money at risk and deadline, not by arrival order:
+
+| Order | Chat | Why first |
+|---|---|---|
+| 1 | Return or refund request, or open dispute, with little time left to respond | a missed deadline is usually an automatic refund (`returns-and-bad-reviews`, return windows table; the deadlines there are still รอยืนยัน, so read them in Seller Centre) |
+| 2 | Buyer mentions สคบ., police report, lawyer, or posting publicly | escalate to the owner the same hour; reply with facts only |
+| 3 | Same buyer writing for the 2nd or 3rd time about one order | each extra message means the last answer did not solve it |
+| 4 | Late parcel, wrong or damaged item | money and a review at stake |
+| 5 | Pre-sale questions (price, stock, size) | a sale to win, no loss yet |
+
+## Rules
+
+- **Reply from the shop's written policy.** If the buyer asks for something the policy does not give (return after the window, extra compensation), draft a polite no with what the shop *can* do. If the policy says nothing or contradicts itself, ask the owner before drafting; do not invent a policy in the reply. Never offer a refund or exchange while a dispute is open on the platform; the platform's process decides
+- Return windows count from the date the parcel was actually delivered (tracking), not the order date; if only an estimate is known, say the count is from the estimated date
+- Answer within the platform's expected window during shop hours; set an auto-reply for after hours that says when a person will answer
+- Never send a buyer to pay outside Shopee, Lazada or TikTok Shop, or give a LINE ID or phone number there — it breaks platform rules and removes buyer protection
+- Never blame the courier or the buyer; state facts and the fix
+- Never promise a delivery date the courier has not shown
+- Never paste another buyer's details, and never ask for a buyer's ID card or bank account in chat (refunds go through the platform)
+- Keep emoji to 1–2 per message; no stickers in complaint chats
+- ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ แชตร้าน · ชื่อร้าน/แอดมิน ใส่ครั้งแรกครั้งเดียว ประโยคถัดไปละได้
+- Quotation or tax invoice for a business buyer → `doc-quotation`
+- LINE shop auto-replies → `line-oa-setup` · `line-chatbot` · rich menu image → `graphic-design:line-richmenu` (if installed)
+
+## Worked example
+
+Buyer (Shopee): "สั่งไปตั้งแต่วันที่ 2 ยังไม่ได้เลย ร้านโกงหรือเปล่า"
+Check: shipped 3 Oct with Flash, tracking shows "ถึงศูนย์คัดแยก ขอนแก่น" on 5 Oct, platform estimate 6–8 Oct.
+
+Reply (T3 filled):
+> สวัสดีค่ะคุณลูกค้า ขอโทษที่ทำให้รอนะคะ 🙏 แอดมินเช็กให้แล้วค่ะ พัสดุส่งออกวันที่ 3 ต.ค. เลขพัสดุ TH123456789 ตอนนี้อยู่ที่ศูนย์คัดแยกขอนแก่น (5 ต.ค.) ระบบประเมินว่าจะถึงภายใน 6–8 ต.ค. ค่ะ ถ้าถึงวันที่ 8 แล้วยังไม่ได้รับ ทักมาได้เลยนะคะ จะตามกับขนส่งให้ทันทีค่ะ
+
+## Related
+
+- `returns-and-bad-reviews` — refunds and public review replies
+- `shipping-compare` — courier claims for lost parcels
+
+## เรียกเป็นคำสั่ง
+
+`/e-commerce:chat-reply-templates <platform> <what the customer wrote> [order status, photos, shop voice]`
+
+Run `chat-reply-templates` (and `returns-and-bad-reviews` for returns, refunds and reviews) with the `customer-chat` agent for: **$ARGUMENTS**
+
+Give one ready-to-send reply, plus the next action for the seller (refund, resend, open a dispute, nothing).

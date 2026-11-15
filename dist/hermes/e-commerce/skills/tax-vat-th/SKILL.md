@@ -1,0 +1,108 @@
+---
+name: tax-vat-th
+description: Use when a Thai company asks what tax to file
+argument-hint: '[company|personal] [--month <n>]'
+---
+
+# Thai VAT, Withholding Tax and Company Filing Calendar
+
+Which form, which date, how much to withhold, and what filing late costs. This is general information, not tax advice. A licensed accountant (ผู้สอบบัญชี / สำนักงานบัญชี) signs off real filings.
+
+## 1. Do you have to register for VAT?
+
+| Situation | Rule |
+|---|---|
+| Revenue from VAT-able goods/services **over 1.8 million baht a year** | Must register (ภ.พ.01) within **30 days** of the day revenue passes 1.8 M |
+| Revenue at or under 1.8 M | Exempt, but may register voluntarily — then ภ.พ.30 is due every month and leaving the system is not easy |
+| Exempt activities (ม.81) — e.g. unprocessed farm produce, healthcare, education, residential rent | No VAT on that revenue |
+| Registered | Revenue Department issues **ภ.พ.20** (certificate) — display it at the place of business |
+| Change of name, address, branch, closing down | **ภ.พ.09** |
+
+- VAT rate: **7%** (6.3% + local tax 0.7%), reduced from the statutory 10%, extended by พ.ร.ฎ. (ฉบับที่ 807) พ.ศ. 2569 to **30 Sep 2570**.
+- Registration is online through RD e-Registration (rd.go.th).
+
+ตรวจล่าสุด 2026-10-25 (พ.ร.ฎ. ฉบับที่ 807 ลงราชกิจจานุเบกษา 23 ส.ค. 2569 ใช้ 1 ต.ค. 2569 – 30 ก.ย. 2570) · แหล่ง: https://www.rd.go.th/1603.html · https://www.thaipbs.or.th/news/content/509779 · https://www.thansettakij.com/economy/667217 · https://www.prd.go.th/th/content/category/detail/id/33/iid/526275
+
+## 2. Monthly and yearly calendar
+
+| Form | What | Paper deadline |
+|---|---|---|
+| ภ.พ.30 | VAT return — **every month, even with zero sales** | 15th of next month |
+| ภ.ง.ด.1 | Withholding tax (WHT) on salary and wages | 7th of next month |
+| ภ.ง.ด.2 | WHT on interest/dividends paid to individuals | 7th |
+| ภ.ง.ด.3 | WHT on payments to **individuals** (services, rent, fees) | 7th |
+| ภ.ง.ด.53 | WHT on payments to **companies / juristic persons** | 7th |
+| ภ.ง.ด.54 | WHT on payments to **foreign** juristic persons not doing business in Thailand | 7th |
+| ภ.พ.36 | Self-assessed VAT on imported services | 7th |
+| ภ.ง.ด.1ก | Annual summary of employee income and WHT | end of February |
+| ภ.ง.ด.51 | Half-year corporate income tax (estimate) | within 2 months after month 6 of the accounting year |
+| ภ.ง.ด.50 | Annual corporate income tax | within **150 days** after year end |
+
+- **e-Filing extension:** filing online gets extra days on top of the paper deadline. A Ministry of Finance announcement sets the number of days and the window of due dates it covers, and each announcement ends on a fixed date. e-Filing deadline = paper deadline + extension days, then shift for holidays.
+- Look up the current e-Filing extension (number of extra days, and whether the window covers the due date in question) at https://rd.go.th/49808.html · https://www.rd.go.th/fileadmin/user_upload/kormor/newlaw/FilingExtension_4.pdf. Look it up live (WebSearch/WebFetch) before quoting; if the page will not open, mark the value (รอยืนยัน).
+- A due date on a weekend or public holiday moves to the next working day (see `thai-holidays`).
+- For a 31 December year end: ภ.ง.ด.51 by 31 Aug; ภ.ง.ด.50 by 30 May (150 days; 29 May when February has 29 days). Add the e-Filing extension for online filing. When 30 May falls on a Sunday (as in 2570), the next working day applies (RD Order ป.117/2545, https://www.rd.go.th/10514.html, checked 22 ต.ค. 2569).
+
+## 3. Withholding tax — how much
+
+Full table with legal basis and edge cases: [references/wht-rates.md](references/wht-rates.md). The ones used every week:
+
+| Payment | To company (ภ.ง.ด.53) | To individual (ภ.ง.ด.3) |
+|---|---|---|
+| Services, hire of work (ค่าบริการ / ค่าจ้างทำของ) | 3% | 3% |
+| Rent (ค่าเช่า) — property, equipment, vehicles | 5% | 5% |
+| Advertising (ค่าโฆษณา) | 2% | 2% |
+| Transport (ค่าขนส่ง) — not public passenger transport | 1% | 1% |
+| Professional fees (วิชาชีพอิสระ — lawyer, accountant, architect, doctor) | 3% | 3% |
+| Prizes / lucky draws | 5% | 5% |
+
+- Withhold only when a single payment is **1,000 baht or more** (or smaller payments under 1 contract that add up to 1,000+).
+- The base is the amount **before VAT**.
+- Give the payee **หนังสือรับรองการหักภาษี ณ ที่จ่าย (50 ทวิ)** — fields in `payroll-th`.
+
+### e-Withholding Tax (e-WHT)
+
+Pay through a bank that supports e-WHT and the bank deducts, files and remits — no ภ.ง.ด.3/53 for those payments and no paper 50 ทวิ. The rate for services, rent, advertising, professional fees and commission is cut to **1%**. Cabinet approved extending this from 1 Jan 2569 to **31 Dec 2570** (รอยืนยัน — check the พ.ร.ฎ. was published in ราชกิจจานุเบกษา).
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.infoquest.co.th/?p=601636 · https://www.kasikornbank.com/th/business/sme/financial-services/ecertificate/Pages/e-withholding-tax.aspx
+
+## 4. Late filing and late payment
+
+| Item | Rule |
+|---|---|
+| เงินเพิ่ม (surcharge) | **1.5% per month** or part of a month on unpaid tax, capped at the tax amount — income tax, WHT and VAT |
+| เบี้ยปรับ VAT (penalty) | Up to 2× the tax (ม.89); late ภ.พ.30 filed with payment before any written notice is cut to a share **of the penalty**: 2% if paid within 15 days of the due date, 5% within 15–30 days, 10% within 30–60 days, 20% after 60 days (คำสั่ง ท.ป.81/2542 ข้อ 5(1), amended by ท.ป.369/2569 from 3 Jul 2569) |
+| ค่าปรับอาญา for a late return | Up to 2,000 baht (ม.35); usual settlement 100–200 baht per WHT return and 300–500 baht per ภ.พ.30 (รอยืนยัน) |
+| Under-estimated ภ.ง.ด.51 | Estimate more than 25% below actual profit without reasonable cause: 20% surcharge on the shortfall |
+
+ตรวจล่าสุด 2026-10-25 (เบี้ยปรับ VAT) · แหล่ง: https://www.rd.go.th/3361.html , https://www.prosofterp.com/Article/Detail/141129 , https://www.auditorasia.com/th/process_add_money · ค่าปรับอาญา 100/200 และ 300/500 บาท (ยื่นช้าไม่เกิน 7 วัน / เกิน 7 วัน) พบแค่แหล่งรอง ยังไม่พบระเบียบทางการ
+
+## Workflow
+
+1. Ask: entity type (บริษัท / หจก. / บุคคลธรรมดา), VAT registered or not, accounting year end, pays salaries, pays suppliers or foreigners.
+2. Build the calendar from section 2 — only the forms that apply. Shift dates for weekends/holidays.
+3. For each payment the user mentions, give the WHT rate, form and 50 ทวิ obligation.
+4. Document checklist per form: sales tax report (รายงานภาษีขาย), purchase tax report (รายงานภาษีซื้อ) with original tax invoices, payment vouchers, 50 ทวิ copies, payroll register.
+5. If anything is late, compute the surcharge from section 4 and tell the user to file now. The cost grows every month.
+6. End with the handoff list for the accountant.
+
+## Worked example — a service payment
+
+Company pays a design agency (บริษัท) 20,000 baht + VAT 7% = 21,400.
+
+- WHT 3% × 20,000 = **600** → pay the agency 21,400 − 600 = **20,800**
+- Issue 50 ทวิ for 600; file ภ.ง.ด.53 and remit 600 by the 7th of next month on paper, or by the e-Filing deadline online (section 2).
+- Through e-WHT at 1%: withhold 200, pay 21,200, the bank files.
+- Paid 2 months late: surcharge 600 × 1.5% × 2 = 18 baht plus the settlement fine.
+
+## Related
+
+`payroll-th` (ภ.ง.ด.1, 50 ทวิ) · `e-tax-invoice` · `dbd-annual-filing` (ภ.ง.ด.50) · `social-security-th` · `thai-holidays` · `doc-quotation` · `tax-basics-th` in `trading-finance` (if installed) (personal investment tax).
+
+## เรียกเป็นคำสั่ง
+
+`/e-commerce:tax-vat-th [company|personal] [--month <n>]`
+
+Run `tax-vat-th` with the `tax-helper` agent for: **$ARGUMENTS**
+
+Verifies dates against current RD announcements rather than reusing last year's calendar, and ends with the accountant handoff checklist.

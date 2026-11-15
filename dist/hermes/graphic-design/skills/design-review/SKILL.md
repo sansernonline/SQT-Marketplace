@@ -1,0 +1,132 @@
+---
+name: design-review
+description: Use when a visual is about to ship or looks off
+argument-hint: <path to the asset>
+---
+
+# Design Review
+
+> **ด่านก่อนลงมือ:** งานที่ส่งมาตรวจต้องมีบรรทัด `ด่านก่อนลงมือ:` ตามหัวข้อนั้นของ `design-references` (plugin `superuser`) · ไม่มี หรือต้นแบบไม่มีลิงก์ → เป็นข้อแก้อันดับ 1 · งานที่ผู้ใช้หรือคนนอกออกแบบมาเอง ไม่ต้องมีบรรทัดนี้ แต่ยังตรวจด่านตาของ `no-ai-look`
+
+Visuals only; a second look at text, code or a plan → a new `reviewer` agent.
+
+8 points, 3 fixes, then ship. A review that lists 20 nitpicks is a redesign request. A review that only says "feels busy" is not a review.
+
+## Workflow
+
+1. **Know the job** — placement, campaign sentence, one action (from the `campaign-set` card). Without it, point 1 cannot be judged
+2. **View at real size** — on a phone for social (or 375 px wide on screen), at arm's length for print proofs
+3. **2-second test** — look for 2 seconds, look away, and say what it was about
+   - **Squint test** — squint, or zoom to 10%, or blur the image 10 px: what still shows is the real hierarchy. If the offer or the one action disappears and the photo stays, point 2 fails whatever the sizes say
+4. **Score the 8 points** below — pass or fail by the criteria, 1 line each
+5. **Rank the top 3 fixes** by impact on the one action. Each fix names the element, the change and the amount · with more than 3 candidate fixes, rank them with `decision-scoring` `priority` (`node <decision-scoring>/scripts/decide.mjs priority fixes.json`; `<decision-scoring>` is the folder of skill `superuser:decision-scoring`): reach = how many of the pieces in the set the fault touches, impact 0.25–3 on the one action, confidence 0–1, effort in hours · example in [fix-priority.example.json](references/fix-priority.example.json) (made-up numbers, run 2026-10-28) · a tie → the cheaper fix first
+6. **Name 1 thing to keep** that the fixes must not break
+7. Write the result with the sheet in [review-sheet.md](references/review-sheet.md)
+
+## The eight points
+
+| # | Point | Pass when | Fail signs |
+|---|---|---|---|
+| 1 | First read | In 2 seconds a stranger names the product or offer intended | They name the background, a model's face, or "a promotion" |
+| 2 | Hierarchy | Exactly 1 primary element, clearly largest or highest contrast; 3 levels or fewer | 2 elements the same size and weight; price and headline fight |
+| 3 | Contrast | Body text ≥ 4.5:1, large text ≥ 3:1 (Web Content Accessibility Guidelines (WCAG) AA); text over photo passes a squint test · icons, chart lines and button outlines ≥ 3:1 against their background · no meaning carried by colour alone (price up/down also has an arrow or a word) | Text on busy photo areas without overlay; amber on white; a pale-grey icon on white |
+| 4 | Spacing | 1 spacing scale (e.g. multiples of 8 px); outer margin ≥ inner gaps; text clear of safe zones (look up the platform's safe-zone guide live; links in social-formats/references/platform-sizes.md) | Random gaps; text touching edges; text inside the story's bottom UI zone |
+| 5 | Alignment | Every element sits on a shared edge or centre line | Items "almost" aligned (off by a few px); centred and left-aligned mixed |
+| 6 | Type | ≤ 2 families; ≤ 3 sizes; Thai line-height ≥ 1.5 for body; no single word alone on a headline line | Third font; faux bold; clipped tone marks or vowels; one-word last line |
+| 7 | Consistency | Colours, fonts and logo from the brand kit; matches sibling assets' style lock | Off-kit colour; stretched or recoloured logo; different lighting style |
+| 8 | Craft | No artefacts, no stretching, no default effects, correct spelling in both languages | AI artefacts (fingers, warped text, melted objects); jagged cut-outs; typos in price or date |
+
+Point 3 source: WCAG 2.2 criterion 1.4.3 — ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html · the 3:1 for graphics is criterion 1.4.11 (anthropics/knowledge-work-plugins `design/skills/accessibility-review`, Apache-2.0 · ideas only, rewritten · ตรวจ 2026-11-10; (ยังไม่ได้เปิดหน้า W3C ของ 1.4.11 ในรอบนี้))
+
+### Alt text before delivery
+
+Every post, banner or video cover that goes out has 1 line of alt text in the delivery sheet: what is seen plus any text on the image, in Thai, short, not starting with "ภาพของ". Example: `ถ้วยมัทฉะเย็น 2 แก้วบนเคาน์เตอร์ ข้อความ "ซื้อ 1 แถม 1 ถึง 15 เม.ย."`. Where each platform stores alt text: (รอยืนยัน) open the platform's help page first and do not promise a step before that.
+
+Point 6, 4 quick checks (house rules):
+
+- Levels differ by size **and** weight, not by colour alone — a headline 2 weights heavier than body, not just orange
+- Line length: body text 45–75 Latin characters, about 35–55 Thai characters per line; longer lines are skipped on a phone
+- No letter-spacing on Thai body text — it breaks the vowel and tone-mark stacking; tracking only on short Latin caps
+- One alignment per text block; a centred headline over left-aligned body needs a visible reason (a centred photo axis)
+
+## Rendered-image defects (look at the exported file, not the layout)
+
+Check in this order and write each hit with its place:
+
+1. Text overflowing or clipped at the edge of a box or the image (look here first)
+2. Overlaps: text on text, text on a face or the product, footnote or source line touching content
+3. Uneven gaps between items that should repeat; outer margin smaller than the margin you set
+4. Dark icon or text on a dark area (or light on light) that looked fine in the editor
+5. Decoration of a template that stayed in place after the text changed length
+6. Thai tone marks or upper vowels missing or colliding after rendering (known with some fonts: `software-development` `data-analysis` 3.10.6) · mark the font and swap it
+
+Left-over placeholders: before shipping run `grep -rniE "lorem|xxx|todo|\[insert|ชื่อ-นามสกุล|ใส่ข้อความ|ตัวอย่างข้อความ" <source files>`; on an image, read the text layer or the OCR. A hit is a fail on point 8.
+
+If you made the asset yourself you see what you expected to see: hand the exported file to a fresh `design-critic` agent (see `no-ai-look` 3.2).
+
+## Match the review to the stage
+
+| Stage | Check | Do not |
+|---|---|---|
+| First sketch | Points 1 and 2 only | List spacing or craft faults on a draft |
+| Before it ships | All 8 points plus the defects list above | Skip a point because "it is nearly done" |
+
+Severity: a fail on 1, 3 or 8 (wrong price, unreadable text, broken hands) blocks shipping. Fails on 4–7 can ship if the deadline is hard and they go on the next-round list.
+
+## Writing fixes
+
+| Weak | Strong |
+|---|---|
+| "Feels busy" | "Remove the second badge; the price badge alone carries the offer" |
+| "Make the text pop" | "Add a 40% black gradient behind the headline's bottom half; ratio goes from 2.1 to 6.8" |
+| "Logo too small" | "Logo to 120 px wide, top-left inside the 6% side margin" |
+| "Not on brand" | "Background #FFFFFF → #FAF7F2 (kit background)" |
+
+## Worked critique
+
+**Asset:** Instagram (IG) story, 1080 × 1920, café "ซื้อ 1 แถม 1" promo. Photo of two drinks, headline in white Kanit Bold over a light window background, price badge bottom-centre, LINE ID at the very bottom.
+
+| # | Result | Note |
+|---|---|---|
+| 1 First read | Fail | Read as "two drinks"; the offer was not noticed in 2 s |
+| 2 Hierarchy | Fail | Headline and price badge same size, both orange |
+| 3 Contrast | Fail | White headline on bright window ≈ 1.6:1 |
+| 4 Spacing | Fail | Badge and LINE ID sit in the story's bottom UI zone, under the reply bar |
+| 5 Alignment | Pass | Central axis kept |
+| 6 Type | Pass | Kanit + Sarabun, line-height 1.6 |
+| 7 Consistency | Pass | Kit colours and logo used correctly |
+| 8 Craft | Pass | No artefacts; dates checked |
+
+**Top 3 fixes**
+
+1. Move badge and LINE ID up into the middle band (above y = 1248 px) — the offer is currently hidden by the story UI
+2. Make "ซื้อ 1 แถม 1" the single primary element: 140 px, dark `#1F2328` on an amber panel; drop the headline to 64 px
+3. Darken the top third with a 50% gradient or move the headline onto the counter area — contrast to ≥ 4.5:1
+
+**Keep:** the photo's soft side light and the two-glass composition — that is what makes it look premium.
+
+## Rules
+
+- At most 3 fixes per round. More than that means the brief needs rewriting
+- Each fix has element + change + amount
+- Praise 1 specific thing. That protects what works in the next round
+- Judge against the job and the kit, not personal taste. When asked "is it good?", state the criterion first
+
+## Not an AI look
+
+Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files.
+
+## Related
+
+- `brand-kit` — the source for point 7
+- `social-formats` — safe zones for point 4
+- `style-consistency` — sibling comparison for point 7
+- `image-editing-brief` — when the fix is in the image itself
+
+## เรียกเป็นคำสั่ง
+
+`/graphic-design:design-review <path to the asset>`
+
+Run `design-review` with the `design-critic` agent on: **$ARGUMENTS**
+
+Output is pass or fix for each point, plus the top 3 fixes ranked by impact.

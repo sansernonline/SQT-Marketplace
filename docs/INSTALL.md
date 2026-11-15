@@ -235,7 +235,7 @@ hook เขียน log เฉพาะโปรเจกต์ที่มี 
 
 `dist/claude-web/<plugin>.zip` คือ plugin ที่บีบอัดไว้ 1 ไฟล์ต่อ 1 plugin · **อัปโหลดเข้า claude.ai** แล้วใช้ skill ได้ใน Cowork และแชทบนเว็บหรือเดสก์ท็อปด้วย ไม่ใช่แค่ใน Claude Code
 
-**`software-development.zip`:** 104 skills · 38 agents · 12 commands · `plugin.json` v3.5.0 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-development/`
+**`software-development.zip`:** 104 skills · 38 agents · 12 commands · `plugin.json` v3.5.1 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-development/`
 
 ---
 
@@ -315,6 +315,7 @@ node scripts/build/build-targets.mjs          # สร้าง dist/ ทั้�
 | OpenAI Codex CLI | `dist/codex/<plugin>/` | skill · subagent · คำสั่งสำเร็จรูป (แปลงเป็น skill) | ส่วน `model:` ของ agent |
 | Gemini CLI | `dist/gemini-cli/<plugin>/` | skill · subagent · slash command | ส่วน `tools:` `model:` ของ agent |
 | Kimi Code CLI | `dist/kimi/<plugin>/` | skill · subagent · คำสั่งสำเร็จรูป (แปลงเป็น skill เรียกด้วย `/skill:ชื่อ`) | ส่วน `tools:` `model:` ของ agent |
+| Hermes Agent | `dist/hermes/<plugin>/` | skill · คำสั่งสำเร็จรูปและบทบาท (แปลงเป็น skill เรียกด้วย `/ชื่อ` และ `/role-ชื่อ`) | subagent แบบไฟล์ (Hermes ไม่มี) · ส่วน `tools:` `model:` ของ agent |
 | ChatGPT Custom GPT | `dist/chat-web/` | 1 บทบาทต่อ 1 GPT พร้อม skill ที่บทบาทนั้นใช้ | script ใน skill · slash command |
 | Gemini Gem | `dist/chat-web/` | เหมือน Custom GPT | เหมือน Custom GPT |
 
@@ -367,6 +368,23 @@ gemini extensions install ./dist/gemini-cli/software-development
 - ตัวเนื้อ agent ถูกแปลงเป็น template (`${ชื่อ}`) → `technical-writer` มี `${token}` ในตัวอย่างโค้ด ยังไม่ได้ลองว่า Kimi แสดงผลถูกไหม (รอยืนยัน)
 
 > รูปแบบไฟล์ตรวจจากเอกสารทางการของ Kimi Code CLI เมื่อ 2026-10-10 · ยังไม่ได้ลองติดตั้งจริง
+
+### Hermes Agent
+
+`dist/hermes/<plugin>/skills/` เป็นโฟลเดอร์ skill 1 ชุดต่อ 1 plugin · ใส่ path ไว้ใน `~/.hermes/config.yaml` แล้วพิมพ์ `/reload-skills` ในหน้าจอ Hermes:
+
+```yaml
+skills:
+  external_dirs:
+    - C:/path/to/SQT-Marketplace/dist/hermes/software-development/skills
+```
+
+- skill ทุกตัวเรียกเป็นคำสั่งได้ด้วย `/ชื่อ` · บทบาท (agent) เรียกด้วย `/role-ชื่อ` เช่น `/role-reviewer` เพราะ Hermes ไม่มีไฟล์ subagent
+- อย่าคัดไปไว้ใน `.hermes/skills` ของโปรเจกต์ ตัวสแกนความปลอดภัยของ Hermes จะกัก skill `superuser` (อ่านรายการคำสั่งที่ด่าน guard ห้ามว่าเป็นคำสั่งอันตราย และนับไฟล์เกิน 50) · `external_dirs` ไม่ผ่านตัวสแกนนี้
+- `HERMES.md` เป็นบริบทของโปรเจกต์ คัดไปรากโปรเจกต์ถ้าต้องการ · Hermes อ่านไฟล์บริบทได้ทีละไฟล์ (`.hermes.md` หรือ `HERMES.md` → `AGENTS.override.md` → `AGENTS.md` → `CLAUDE.md`) ถ้าโปรเจกต์มี `AGENTS.md` อยู่แล้ว ไฟล์ `HERMES.md` จะถูกอ่านแทน
+- Hermes ไม่รัน hook ของเรา → ช่วงที่ใช้ Hermes จะไม่มี log ใน `.claude/superuser/log/`
+
+> รูปแบบตรวจจากเอกสารทางการ hermes-agent.nousresearch.com เมื่อ 2026-11-15 · ลองกับ Hermes v0.23.1 ในเครื่อง: ชุด e-commerce โหลดได้ 84 จาก 85 skill (ตัวที่ไม่ขึ้นคือ `superuser` ตอนวางในโปรเจกต์ ตามข้อบน) · ยังไม่ได้ลองแบบ `external_dirs` กับ Hermes จริง (อ่านจากโค้ดของ Hermes ว่าไม่สแกน)
 
 ### ChatGPT Custom GPT และ Gemini Gem
 

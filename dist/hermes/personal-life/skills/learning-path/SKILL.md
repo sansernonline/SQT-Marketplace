@@ -1,0 +1,54 @@
+---
+name: learning-path
+description: Use when learning a new language or framework properly
+argument-hint: <technology or paper> [--depth skim|working|mastery]
+---
+
+# Learning Path
+
+Learn on your own real project, in small wins.
+
+Not for: a certification exam → `cert-prep` · choosing a practice or portfolio project → `side-project-picker`.
+
+## Steps
+
+1. **Goal and depth** — what "learned" means here (skim, working knowledge or mastery) and why. Choose the depth out loud. Then **check the hours against the real week** ("สัปดาห์ปกติมีอะไรอยู่แล้วบ้าง") and ask whether this path **adds to or replaces** a course the user already follows; never two syllabi at once. Same checks as `cert-prep` step 4
+2. **Baseline check** — 10 quick questions to find what the user already knows. Skip everything they already know
+3. **Milestones** — 4–7 steps, each: concept → tiny exercise → applied to the user's real project. Each step takes under 2 hours
+4. **Anchoring rule** — at least half the milestones modify or extend something the user already owns, not toy examples
+5. **Checkpoints** — after milestone 3 and at the end: can the user do the thing without help? If not, go back. If yes, the path ends even if topics remain. The rest is reference material
+
+## Worked example — Docker to working knowledge, anchored to the user's project
+
+Goal: "run my Flask expense app and its Postgres with one command on any machine". Depth: **working**. Baseline: has used `docker run`, never written a Dockerfile.
+
+| # | Concept | Tiny exercise (≤ 30 min) | Applied to the real project | Done when | Hours |
+|---|---|---|---|---|---:|
+| 1 | Image vs container, layers | Build the official Python image tutorial | Write a Dockerfile for the Flask app | `docker run` serves the home page | 1.5 |
+| 2 | Layer caching, `.dockerignore` | Reorder COPY lines and time two builds | Cut rebuild time of the app | Rebuild after a code change < 10 s | 1 |
+| 3 | Volumes and networks | Run Postgres with a named volume | App connects to Postgres in a container | Data survives `docker rm` | 1.5 |
+| ✔ | **Checkpoint**: explain image/container/volume without notes; rebuild from scratch unaided | | | | |
+| 4 | Compose | Two-service compose file | `docker compose up` runs app + DB | One command from a fresh clone | 1.5 |
+| 5 | Config and secrets | `.env` + compose `env_file` | Remove the hard-coded DB password | No secret in git | 1 |
+| ✔ | **Final checkpoint**: a teammate runs it from the README alone | | | | |
+
+Stopped after 5 milestones (6.5 hours). Kubernetes was out of scope for "working" depth and went to the reference list.
+
+## Template
+
+Use [references/path-template.md](references/path-template.md) for the plan file and the `learning-log.md` entry.
+
+## Rules
+
+- The path ends on competence, not exhaustion — knowing when you know enough is the skill
+- Each milestone's deliverable is visible in the project (a feature, a refactor, a test)
+- Re-plan freely when reality differs from the plan. The path serves the learner
+- Record finished paths in a `learning-log.md` with dates — future-you will want the map
+
+## เรียกเป็นคำสั่ง
+
+`/personal-life:learning-path <technology or paper> [--depth skim|working|mastery]`
+
+With `--depth` or a technology: run `learning-path`. With a paper, RFC, or article: run `paper-to-practice`. Both with the `tech-mentor` agent: **$ARGUMENTS**
+
+Every path ends in something runnable in the user's own project.

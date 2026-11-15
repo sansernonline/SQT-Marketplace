@@ -2,6 +2,19 @@
 
 ใหม่สุดอยู่ล่างสุด · รันด้วย `node scripts/evals/plugin-eval.mjs superuser` แล้วคิดระดับด้วย `node scripts/evals/skill-grades.mjs` · เกณฑ์ระดับอยู่ใน `docs/SKILL-SCORECARD.md`
 
+## 2026-11-15 · design-references 4 เคส · superuser 3.42.0 · sonnet · 10 รอบต่อแขน · $15.49 (ชนเพดาน $15)
+
+ผลรอบนี้เชื่อได้น้อย: plugin superuser 3.42.0 ติดตั้งและเปิดอยู่ในเครื่องตอนรัน (ตัวรันเตือนแล้ว) แขน "ไม่มี" จึงอาจได้ skill ไปด้วย · ToolSearch ไม่ได้ส่งเข้า `--allow-tools` ทุกเคส · ตัวรันใช้ 10 รอบต่อแขน ไม่ใช่ 3 จึงชนเพดานก่อนจบ
+
+| เคส | มี skill | ไม่มี | ข้อที่ตก |
+|---|---|---|---|
+| `design-references-behaviour` | 0.50 | 0.50 | `eight-roles` ตก 20/20 รอบ (ทั้ง 2 แขน) |
+| `design-references-no-trigger` | 1.00 | 1.00 | ไม่มี |
+| `design-references-owner-pick` | 0.00 | 0.00 | `board-for-owner` ตก 20/20 |
+| `design-references-regression` | 0.44 (3 รอบ) | ไม่ได้รัน | ยังวาด `<svg` ทันที 3/3 · สีจากต้นแบบ 1/2 |
+
+เทียบ 2026-11-10: ยังตกข้อเดิมทุกข้อ · รอบหน้าปิด plugin ในเครื่อง (`claude plugin disable superuser@sqt-marketplace`) ใส่ `ToolSearch` ใน `--allow-tools` และตั้ง `-n 3`
+
 ## 2026-11-09 · superuser 3.29.1 · Claude Code 2.1.319 · sonnet · 3 รอบต่อแขน · $40.85
 
 - รันได้ 41 จาก 46 เคส แล้วหยุดเพราะชนเพดานเงิน $40 · 5 เคสที่ไม่มีผลคือเคสท้ายรายการ (`superuser-behaviour-own-decisions` · `superuser-behaviour-unknown-facts` · `targeted-fix-behaviour` · `-code` · `-typo`)

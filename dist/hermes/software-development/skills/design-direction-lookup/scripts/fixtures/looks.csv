@@ -1,0 +1,7 @@
+id,name_th,name_en,keywords,depth,motion,density,avoid_th
+quiet-utility,เครื่องมือเงียบ,quiet utility,tool;admin;เรียบ;minimal,เรียบมีเส้น,100-150ms เฉพาะตอบการกด,แน่น,สีแบรนด์จางจนหาปุ่มไม่เจอ
+editorial,นิตยสาร,editorial,magazine;นิตยสาร;story,เรียบมีเส้น,fade 200-300ms,ปกติ,เซอริฟตัวเอียงยักษ์
+luxury,หรู,luxury,luxury;หรู;premium,เรียบไม่มีเงา,fade 300-400ms,โปร่ง,ตัวบางสีจางบนภาพ
+thai-craft,งานมือไทย,Thai craft,thai;craft;หัตถกรรม,กระดาษ,เส้นวาดเข้าครั้งเดียว,ปกติ,ลายไทยเต็มขอบทุกหน้า
+bento,กล่องข้าว,bento,bento;grid,เรียบมีเส้น,ช่องเข้าทีละช่อง,ปกติ,ช่องเท่ากันหมด
+playful,ขี้เล่น,playful,fun;ขี้เล่น;kids,เส้นหนา,250-400ms,โปร่ง,อีโมจิแทนไอคอน

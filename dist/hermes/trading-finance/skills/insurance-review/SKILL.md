@@ -1,0 +1,101 @@
+---
+name: insurance-review
+description: Use when checking if insurance cover is enough
+---
+
+# Insurance Review (ทบทวนประกันภัย)
+
+General information, not insurance advice — a licensed agent or broker sells; check their licence at oic.or.th. This skill organises and asks the right questions; it does not pick a product.
+
+## Workflow
+
+1. **List every policy**: insurer, type, sum insured, rider, yearly premium, renewal date, who is covered, group (employer) or personal. Employer group cover ends when the job ends — mark it.
+2. **List what is at risk**: dependants, debts, monthly spending, existing savings, which hospital the user would actually use.
+3. **Size each need** with the table below.
+4. **Gap and overlap**: show have / need / gap per type; flag duplicate riders and savings-type policies with low cover per baht.
+5. **Premium check**: total protection premium at most 10% of yearly income. This is the `must` filter in "Comparing quotes" below. The 10% is a starting value (starting value, not yet measured); the user may raise or lower it for dependants.
+6. **Prepare questions** for the agent (end of file).
+7. **Tax**: premiums deductible — life + health max 100,000, own health 25,000, parents' health 15,000 (`tax-deduction-planner`). Never buy cover for the deduction alone.
+8. **Beneficiaries**: check who is named now against who the user wants (section below), especially after marriage, divorce, a birth or a death in the family.
+
+## Beneficiaries — does the paper match the intent
+
+Money with a named beneficiary is paid to that person, whatever the user meant later (whether it then counts as part of the estate: รอยืนยัน with the insurer or fund; `estate-and-will` in personal-life marks the same point). Check while the user is alive, not after:
+
+| Account | Where the name is set | Ask |
+|---|---|---|
+| Life insurance policy | Policy schedule; change by the insurer's form | Who is named now · is it still who the user wants · share for each |
+| Provident fund (PVD, กองทุนสำรองเลี้ยงชีพ) | Beneficiary form held by the fund or employer (รอยืนยัน with the fund) | Same; a form signed years ago at the first job is common |
+| RMF, other funds, savings bond | Ask the fund house or bank whether a beneficiary can be named at all (รอยืนยัน per provider) | If not, it follows the will or the statutory heirs |
+| Bank deposits | Usually no beneficiary, part of the estate (รอยืนยัน with the bank) | Covered by a will (`estate-and-will`) |
+
+Put the result in one table: account · named now · intended · matches? Flag in this order: **high** — an ex-spouse or someone who has died is still named, or nobody is named; **medium** — a minor child is named directly with no plan for who manages the money until adulthood (the rules for minors receiving money: รอยืนยัน, ask the insurer and see `estate-and-will`); **low** — shares do not match the intent. Changing a beneficiary is the user's own step with the insurer or fund; wills and inheritance go to `estate-and-will` (personal-life, if installed).
+
+Idea: `estate-and-tax-brief` steps 5–6, anthropics/claude-for-financial-advisors (Apache-2.0, viewed 2026-11-10); US account types and legal terms left out.
+
+## Sizing rules of thumb
+
+| Type | What it pays | Rule of thumb |
+|---|---|---|
+| Life (term) | lump sum on death | debts + (yearly spending of dependants × years until they are independent) + education fund − liquid assets. Shortcut 5–10 × annual income. With no dependants and no debt, little or none is needed |
+| Health — in-patient department (IPD) | hospital bills | room rate per day = the room at the hospital you would use; yearly or per-illness cap able to cover a major surgery there (private hospital major case often 1–3 million (รอยืนยัน)) |
+| Health — out-patient department (OPD) | outpatient visits | usually poor value; pay from budget |
+| Critical illness (โรคร้ายแรง) | lump sum on diagnosis | 1–3 years of spending to cover lost income during treatment |
+| Personal accident (PA) | death / disability / treatment from accident | cheap top-up for riders, drivers, manual work; not a substitute for health |
+| Disability income | monthly if unable to work | consider for self-employed with no sick-pay |
+
+Social security ม.33 already covers medical care at the registered hospital — count it as the base layer.
+
+## Comparing quotes
+
+Use `decision-scoring`, command `score`, when 2 or more plans fill the same gap. Get every figure from the agent's benefit table in writing. Script path: see `decision-scoring` (superuser plugin).
+
+| Step | Value |
+|---|---|
+| Hard rules (`must`) | Total premium of all policies after purchase at most 10% of yearly income · health cover must be the new standard form · no purchase for the tax deduction alone |
+| Criterion 1 | Yearly premium, baht · `low` · proposed weight 0.30 |
+| Criterion 2 | Gap this plan fills, baht · `high` · 0.30 |
+| Criterion 3 | Room limit per night (IPD), baht · `high` · 0.12 |
+| Criterion 4 | Limit per illness or per year (IPD), baht · `high` · 0.13 |
+| Criterion 5 | Premium at age 60 per the insurer's table, baht · `low` · 0.15 |
+
+Weights are starting values the user can change (starting value, not yet measured). Order the gaps to fix by gap size in baht, largest first. If the result reads `ยังไม่นิ่ง` (not stable) or `สูสี` (too close), the user decides. Insurance output is information; this skill does not pick a plan (see the line at the top).
+
+## Rules that changed recently
+
+**New Health Standard (มาตรฐานใหม่สัญญาประกันสุขภาพ)** — new policies from 8 Nov 2564, existing policies from 1 Jul 2565: standard coverage categories, renewal guaranteed except for fraud, claims for unnecessary treatment, or non-disclosure; premium increases only by age band or medical cost trend for the whole portfolio, not one person.
+
+**Co-payment (ส่วนร่วมจ่าย)** — health policies with cover starting **from 20 March 2568**. Assessed at each renewal on last year's IPD claims:
+
+| Case | Trigger | Next year co-pay |
+|---|---|---|
+| 1 | simple illness claims (โรคทั่วไปไม่รุนแรง) 3+ times and claim amount ≥ 200% of premium | 30% |
+| 2 | general illness claims (excluding major surgery / serious illness) 3+ times and ≥ 400% of premium | 30% |
+| 3 | both 1 and 2 | 50% |
+
+Co-pay is lifted when the following year's claims fall below the trigger. Policies held before 20 March 2568 and renewed continuously are not affected. Exact exclusions per policy (รอยืนยัน in the policy wording).
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.thairath.co.th/money/personal_finance/insurance/2840568 , https://www.thaipost.net/public-relations-news/182924/
+
+## Before signing
+
+- **Free-look period**: return a new life or health policy within 15 days of receiving it for a refund (30 days when sold by phone) (รอยืนยัน per policy)
+- Disclose all health history truthfully — non-disclosure lets the insurer void the policy
+- Savings / investment-linked (unit-linked) policies: ask the cover-only cost; compare with term + fund
+- Waiting periods: usually 30 days for illness, 120 days for specified conditions (รอยืนยัน per policy)
+
+## Complaints
+
+Office of Insurance Commission (สำนักงาน คปภ.) hotline **1186**, oic.or.th, or any provincial OIC office. Bring policy, claim letters, receipts, and the timeline.
+
+## Questions to ask the agent
+
+1. Is this policy under the New Health Standard? Does co-payment apply?
+2. Room rate, per-illness cap, yearly cap, and what is excluded?
+3. Premium at age 50, 60, 70 — show the table.
+4. Guaranteed renewable to what age?
+5. For life: how much of the premium is pure protection?
+
+## Output format
+
+Table of policies → have / need / gap per type → overlap and overspend → questions for the agent → one-line priority (the gap with the largest baht amount first, for example "fix IPD cap first").

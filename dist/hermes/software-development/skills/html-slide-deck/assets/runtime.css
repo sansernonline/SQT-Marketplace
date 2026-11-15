@@ -1,0 +1,97 @@
+
+:root{--acc:#e4572e;--acc2:#ff6a3d;--W:1920px;--H:1080px;--panel:#16161a;--line:#2a2a30;--text:#f5f5f4;--soft:#d4d4d8;--muted:#a3a3a8;--dim:#8a8a92;
+  --body:Tahoma,'Leelawadee UI',Loma,sans-serif;--mono:Consolas,'JetBrains Mono',Menlo,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#000;overflow:hidden;font-family:var(--body);color:var(--text)}
+#stage{position:absolute;left:50%;top:50%;width:var(--W);height:var(--H);transform-origin:0 0;box-shadow:0 0 80px rgba(0,0,0,.6)}
+.slide{position:absolute;inset:0;display:none;overflow:hidden;color:#000}
+.slide.on{display:block}
+.slide aside{display:none}
+/* ---------- shapes converted from the pptx ---------- */
+.s{position:absolute}
+.tx{position:absolute;inset:0;display:flex;flex-direction:column;font-family:var(--body);font-size:36px;line-height:1.2;overflow-wrap:break-word}
+.tx p{margin:0}
+.tx .bu{display:inline-block;width:0;text-indent:0;margin-left:-24px;margin-right:24px}
+.b{overflow:visible}
+.b.diamond .geo{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.tbl{border-collapse:collapse;table-layout:fixed;font-family:var(--body);line-height:1.2}
+.tbl td{overflow:hidden}
+.tbl td p{margin:0}
+svg.ln{overflow:visible}
+.pic{object-fit:fill}
+.chart{display:block;overflow:visible}
+
+/* ---------- motion (same feel as the x-fitness deck): everything rises in, one group after another ---------- */
+@keyframes up{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:none}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-80px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes clipR{from{clip-path:inset(-30px 100% -30px -30px)}to{clip-path:inset(-30px)}}
+@keyframes clipL{from{clip-path:inset(-30px -30px -30px 100%)}to{clip-path:inset(-30px)}}
+@keyframes clipD{from{clip-path:inset(-30px -30px 100% -30px)}to{clip-path:inset(-30px)}}
+@keyframes clipU{from{clip-path:inset(100% -30px -30px -30px)}to{clip-path:inset(-30px)}}
+@keyframes growY{from{transform:scaleY(0)}to{transform:none}}
+@keyframes growX{from{transform:scaleX(0)}to{transform:none}}
+@keyframes ring{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--acc) 55%,transparent)}100%{box-shadow:0 0 0 22px transparent}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--acc) 35%,transparent)}}
+[data-a]{--t:calc(var(--k,0) * 85ms + 260ms)}
+.slide.on [data-a]{animation:up .55s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--t)}
+.slide.on [data-a=title]{animation:slideIn .7s cubic-bezier(.2,.7,.2,1) both;animation-delay:0s}
+.slide.on [data-a=pop]{animation:pop .5s cubic-bezier(.2,.7,.2,1) both;animation-delay:.15s}
+.slide.on [data-a=box],.slide.on [data-a=pic]{animation-name:pop}
+.slide.on [data-a=table]{animation:fade .3s both;animation-delay:var(--t)}
+.slide.on [data-a=table] tr{animation:up .45s cubic-bezier(.2,.7,.2,1) both}
+.slide.on [data-a=chart]{animation:fade .4s both;animation-delay:var(--t)}
+.slide.on .gb{transform-box:fill-box;animation:growY .9s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--t) + 250ms + var(--d) * 45ms)}
+.gb.v{transform-origin:50% 100%}
+.slide.on .gb.h{transform-origin:0 50%;animation-name:growX}
+.slide.on .dl{animation:fade .4s both;animation-delay:calc(var(--t) + 900ms + var(--d) * 45ms)}
+.slide.on [data-a=draw]{animation:clipR .6s ease-out both;animation-delay:calc(var(--t) + 120ms)}
+.slide.on [data-a=draw][data-dir=l]{animation-name:clipL}.slide.on [data-a=draw][data-dir=d]{animation-name:clipD}.slide.on [data-a=draw][data-dir=u]{animation-name:clipU}
+.slide.on .b.ellipse[data-a]{animation:pop .5s cubic-bezier(.2,.7,.2,1) both,ring 1.2s ease-out 1 both;animation-delay:var(--t),calc(var(--t) + 450ms)}
+.lit{animation:glow 1.4s ease-in-out infinite!important;outline:3px solid var(--acc);outline-offset:3px}
+/* ---------- click steps (PowerPoint "On Click" animations): hidden until their step ---------- */
+.slide.on [data-step].later{visibility:hidden;animation:none!important}
+.slide.on [data-step].now{animation-delay:.05s!important}
+.unsupported{background:repeating-linear-gradient(45deg,#f4d9d0 0 12px,#fbeee9 12px 24px);border:2px dashed var(--acc);display:flex;align-items:center;justify-content:center;font:600 18px var(--body);color:#7a2e18}
+@media (prefers-reduced-motion:reduce){.slide.on *,.slide.on [data-a]{animation:none!important}}
+
+/* ---------- presenter chrome (from the x-fitness deck) ---------- */
+#bar{position:fixed;left:0;right:0;bottom:0;height:20px;display:flex;gap:1px;z-index:6}
+#bar i{flex:1;height:100%;position:relative;cursor:pointer}
+#bar i::after{content:'';position:absolute;left:0;right:0;bottom:0;height:5px;background:#2a2a30;transition:background .3s,height .15s}
+#bar i.done::after,#bar i.now::after{background:var(--acc)}
+#bar i:hover::after{height:10px;background:#fff}
+#bartip{position:fixed;bottom:26px;z-index:7;background:#16161a;color:#fff;border:1px solid #3a3a40;border-radius:8px;padding:6px 12px;font:15px var(--body);white-space:nowrap;pointer-events:none;display:none;transform:translateX(-50%)}
+#bartip b{font:600 13px var(--mono);color:var(--acc2);margin-right:8px}#bartip span{color:var(--dim);margin-left:8px;font-size:13px}
+#ui{position:fixed;right:16px;bottom:14px;display:flex;gap:8px;align-items:center;z-index:5;font:14px var(--body);color:var(--muted);opacity:.12;transition:opacity .2s}
+#ui:hover{opacity:1}
+#ui button{background:#16161a;color:var(--text);border:1px solid #3a3a40;border-radius:8px;padding:6px 12px;font:14px var(--body);cursor:pointer}
+#ui button:hover{border-color:var(--acc)}
+#count{font:600 14px var(--mono);color:var(--muted);min-width:56px;text-align:center}
+#clock{font:600 14px var(--mono);color:var(--muted);min-width:60px;text-align:right}
+#notes{position:fixed;left:16px;right:16px;bottom:24px;max-height:34vh;overflow:auto;background:rgba(18,18,20,.96);color:#e5e5e5;border:1px solid #3a3a40;border-radius:12px;padding:16px 20px;font:18px/1.7 var(--body);display:none;z-index:6}
+#notes.on{display:block}
+#notes .nclose{position:sticky;top:0;float:right;margin:-6px -8px 4px 12px;font:700 18px var(--body);background:#26262b;color:#fff;border:1px solid #3a3a40;border-radius:8px;width:36px;height:36px;cursor:pointer}
+#notes .nclose:hover{background:var(--acc)}
+#menu{position:fixed;inset:0;background:rgba(6,6,8,.96);z-index:15;display:none;overflow:auto;padding:32px 4vw 40px}
+#menu.on{display:block}
+#menu .mhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+#menu .mhead b{font:700 30px var(--body);color:#fff}#menu .mhead span{font-size:15px;color:var(--dim);margin-left:14px;font-weight:400}
+#menu .mclose{font:600 17px var(--body);background:#26262b;color:#fff;border:1px solid #3a3a40;border-radius:10px;padding:9px 18px;cursor:pointer}#menu .mclose:hover{background:var(--acc);border-color:var(--acc)}
+#menuList{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start}
+#menu .part{background:#121215;border:1px solid #26262b;border-radius:14px;padding:16px 18px}
+#menu .part h5{font:700 21px var(--body);color:var(--acc2);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #2a2a30}
+#menu .part.cur h5{color:#fff}
+#menu ul{list-style:none}
+#menu li{display:flex;gap:10px;align-items:baseline;padding:4px 8px;margin:1px -9px;border:1px solid transparent;border-radius:8px;cursor:pointer;font-size:16px;color:var(--soft)}
+#menu li i{font:700 14px var(--mono);color:var(--acc2);font-style:normal;width:24px;flex:none}
+#menu li:hover{background:#1f1f24;color:#fff}
+#menu li.cur{background:color-mix(in srgb,var(--acc) 18%,#121215);color:#fff;font-weight:700;border-color:var(--acc);animation:glow 1.4s ease-in-out infinite}
+.edge{position:fixed;top:0;bottom:0;width:64px;z-index:4;cursor:pointer;display:flex;align-items:center;justify-content:center;font:400 64px var(--body);color:transparent;transition:color .2s,transform .2s,background .2s;user-select:none}
+.edge.l{left:0}.edge.r{right:0}
+.edge:hover{color:var(--acc);background:linear-gradient(90deg,color-mix(in srgb,var(--acc) 12%,transparent),transparent)}.edge.r:hover{background:linear-gradient(270deg,color-mix(in srgb,var(--acc) 12%,transparent),transparent)}
+.edge.l:hover{transform:translateX(-3px)}.edge.r:hover{transform:translateX(3px)}
+.edge.off{display:none}
+#help{position:fixed;left:50%;top:18px;transform:translateX(-50%);background:rgba(18,18,20,.92);border:1px solid #3a3a40;border-radius:10px;padding:8px 16px;font:14px var(--body);color:var(--soft);z-index:8;transition:opacity .6s;pointer-events:none}
+#help b{color:var(--acc2);font-family:var(--mono)}

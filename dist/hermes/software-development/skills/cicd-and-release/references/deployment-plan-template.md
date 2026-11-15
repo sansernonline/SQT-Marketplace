@@ -1,0 +1,87 @@
+# แม่แบบแผน deploy
+
+เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+
+## Standard Output: Polished Deployment Plan
+
+```markdown
+# Deployment Plan: <Release vX.Y.Z>
+
+| | |
+|--|--|
+| **Release** | vX.Y.Z |
+| **Type** | Routine \| Major \| Hotfix |
+| **Status** | Planned |
+| **Deploy Lead** | @name |
+| **Maintenance Window** | YYYY-MM-DD HH:MM-HH:MM UTC |
+| **Expected Downtime** | Zero / 5 min |
+
+---
+
+## Pre-Deployment Checklist
+
+| # | Item | Owner | Status |
+|:-:|------|:------|:------:|
+| 1 | All tests passing in CI | @dev | Done |
+| 2 | Security scan passed | @security | Done |
+| 3 | Database migrations reviewed | @dba | Pending |
+| 4 | Rollback plan documented | @devops | Pending |
+| 5 | Stakeholders notified | @pm | Pending |
+| 6 | On-call engineer briefed | @oncall | Pending |
+| 7 | Status page prepared | @devops | Pending |
+
+## Deployment Flow
+
+_[รูปขั้นตอน deploy: Tag release → CI สุดท้าย → ผ่านทั้งหมด? (ไม่ผ่าน = หยุดและตรวจ) → canary 5% → ปกติหลัง 10 นาที? (ไม่ = rollback) → 50% → ปกติ? (ไม่ = rollback) → 100% → smoke test → เสร็จ. วาดด้วย skill `diagram-figures`]_
+
+## Deployment Steps
+
+| Step | Action | Command/Link | Owner |
+|:----:|--------|--------------|:------|
+| 1 | Tag release | `git tag vX.Y.Z && git push --tags` | @devops |
+| 2 | Trigger CD pipeline | [Pipeline link](#) | @devops |
+| 3 | Deploy canary | Auto via pipeline | — |
+| 4 | Monitor canary | [Grafana](#) | @oncall |
+| 5 | Approve full deploy | Slack `/deploy approve` | @lead |
+| 6 | Verify production | Smoke test suite | @qa |
+
+## Verification
+
+### Health Checks
+- [ ] `/health` returns 200
+- [ ] All pods/instances running
+- [ ] Database connections OK
+- [ ] No spike in 5xx errors (Grafana dashboard X)
+
+### Smoke Tests
+- [ ] User login works
+- [ ] Critical user journey #1 works
+- [ ] Critical API endpoints return expected response
+
+### Key Metrics (15 min post-deploy)
+| Metric | Baseline | Threshold | Current |
+|--------|---------:|----------:|--------:|
+| p95 latency | 150ms | < 200ms | — |
+| Error rate | 0.1% | < 0.5% | — |
+| Throughput | 1000 RPS | > 800 RPS | — |
+
+## Rollback Plan
+
+> **Triggers:** Any of the following requires immediate rollback
+> - 5xx error rate > 2% sustained for 5 min
+> - p95 latency > 500ms sustained for 5 min
+> - Customer-impacting bug confirmed
+
+### Rollback Steps
+1. Run: `./scripts/rollback.sh vX.Y.Z-1`
+2. Verify health checks
+3. Post in #incidents channel
+4. Schedule post-mortem within 48h
+
+## Post-Deployment
+
+- Monitor for 1 hour post-deploy
+- Update changelog with release notes
+- Send announcement to #releases
+- Close release ticket
+```

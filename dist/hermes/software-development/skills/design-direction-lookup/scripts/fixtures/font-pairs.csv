@@ -1,0 +1,5 @@
+id,heading,body,numeric,thai_style,keywords,min_body_px,line_height,size_note_th,notes_th,checked
+plex-pair,IBM Plex Sans Thai;IBM Plex Sans,IBM Plex Sans Thai;IBM Plex Sans,IBM Plex Mono,ไม่มีหัว,modern;corporate;ทางการ,16,1.6,ไทยกับละตินสูงเท่ากัน,ออกแบบมาด้วยกัน,2026-10-26
+trirong-pair,Trirong,Sarabun,Sarabun,มีหัว,classic;serif;หรู;luxury,16,1.7,หัวใช้ 600,หัวมีหัวคู่เนื้อมีหัว,2026-10-26
+noto-only,Noto Sans Thai,Noto Sans Thai,Noto Sans Thai,ไม่มีหัว,plain,16,1.6,,ไม่มีละติน ใช้ทดสอบว่าถูกตัด,2026-10-26
+inter-pair,Inter;Noto Sans Thai,Inter;Noto Sans Thai,Inter,ไม่มีหัว,saas,16,1.6,,Inter นำ ใช้ทดสอบว่าถูกตัด,2026-10-26

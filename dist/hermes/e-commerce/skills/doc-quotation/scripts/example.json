@@ -1,0 +1,6 @@
+{
+  "items": [{ "name": "ค่าบริการ", "qty": 1, "price": 50000 }],
+  "vatMode": "exclusive",
+  "whtRate": 3,
+  "sellerTaxId": "1234567890139"
+}

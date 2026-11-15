@@ -1,0 +1,12 @@
+{
+  "_note": "portfolio-snapshot worked example (as of 2026-10-31, illustrative) · value = shares × price, or give value for cash and money market",
+  "startValue": 285000,
+  "netDeposits": 10000,
+  "holdings": [
+    { "name": "ABC", "shares": 2000, "avgCost": 42.00, "price": 49.00 },
+    { "name": "DEF", "shares": 1000, "avgCost": 60.00, "price": 45.00 },
+    { "name": "SET50 index fund", "shares": 4000, "avgCost": 11.50, "price": 12.25 },
+    { "name": "Money market fund", "value": 78000 },
+    { "name": "Cash at broker", "value": 30000 }
+  ]
+}

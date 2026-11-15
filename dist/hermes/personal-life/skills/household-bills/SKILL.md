@@ -1,0 +1,113 @@
+---
+name: household-bills
+description: Use when reading or tracking electricity and water bills
+argument-hint: <bill figures or "tracker"> [month]
+---
+
+# Household Bills (Thailand)
+
+Know what each line on the bill means, log it every month, and catch a spike in the month it happens rather than 3 months later.
+
+General information, not financial advice. Tariffs change — the utility's own page is the authority.
+
+## Who bills you
+
+| Service | Bangkok, Nonthaburi, Samut Prakan | Rest of the country | App to check and pay |
+|---|---|---|---|
+| Electricity | การไฟฟ้านครหลวง (กฟน. / MEA) | การไฟฟ้าส่วนภูมิภาค (กฟภ. / PEA) | MEA Smart Life · PEA Smart Plus |
+| Water | การประปานครหลวง (กปน. / MWA) | การประปาส่วนภูมิภาค (กปภ. / PWA), or a local องค์การปกครองส่วนท้องถิ่น (อปท.) system | MWA onMobile · PWA 1662 |
+| Internet / mobile | AIS, True/dtac, 3BB (now with AIS), NT | same | each operator's app |
+
+## Reading an electricity bill
+
+The bill (ใบแจ้งค่าไฟฟ้า) adds 4 parts:
+
+1. **ค่าพลังงานไฟฟ้า** — units (หน่วย = kWh) × the tiered base tariff for your type (your tariff type is printed on the bill; the old residential split 1.1.1 / 1.1.2 may have changed with the new home tariff — รอยืนยัน)
+2. **ค่าบริการ** — a fixed monthly service charge
+3. **ค่า Ft** — units × the Ft rate for the current 4-month period (can be positive or negative)
+4. **ภาษีมูลค่าเพิ่ม 7%** on the sum of 1–3
+
+Units used = เลขอ่านครั้งนี้ − เลขอ่านครั้งก่อน. Check the two readings are printed and the reading date (วันที่จดเลขอ่าน) is roughly 30 days after the last one — a period of 33 days or more inflates the bill and can push units into a higher tier.
+
+| Item | Current value | Applies |
+|---|---|---|
+| Ft rate | 16.23 สตางค์/หน่วย | งวด ก.ย.–ธ.ค. 2569 |
+| Average all-in tariff, Ft period (base 3.78 + Ft, before VAT) | 3.95 บาท/หน่วย | งวด ก.ย.–ธ.ค. 2569 |
+| Average all-in tariff, new tiered home tariff, all users | 3.86 บาท/หน่วย (≈ 4.13 incl. VAT 7%) | tiered tariff from Sep 2569 bills |
+| Residential tier rates and service charge | (รอยืนยัน) — read your type's table on mea.or.th / pea.co.th | คณะกรรมการกำกับกิจการพลังงาน (กกพ.) announced a new progressive home tariff on 13 ส.ค. 2569 for bills from ก.ย. 2569; tier rates not checked (รอยืนยัน) |
+
+ตรวจล่าสุด 2026-10-14 · แหล่ง: https://www.erc.or.th/th/news-release/3458 (ค่า Ft งวด ก.ย.–ธ.ค. 2569) · https://erc.or.th/th/news-release/3472 (อัตราแบบขั้นบันได 3.86) · https://www.naewna.com/business/979048
+
+Ft is reset every 4 months (ม.ค.–เม.ย., พ.ค.–ส.ค., ก.ย.–ธ.ค.). When comparing months across a reset, compare **units**, not baht.
+
+## Reading a water bill
+
+ค่าน้ำประปา = units (ลูกบาศก์เมตร, ลบ.ม.) × progressive rate + ค่าบริการรายเดือน (by meter size, ½ inch for most homes) + VAT 7%. Rates differ between กปน. and กปภ. — use the rate table on the bill's back or mwa.co.th / pwa.co.th (รอยืนยัน for any figure you quote). A family of 4 in a house typically uses 15–30 ลบ.ม./month (รอยืนยัน — compare against your own last 6 months, which is the better baseline).
+
+## Workflow
+
+1. **Collect** the last 3–6 bills for each service (apps keep 12+ months of history)
+2. **Log** each month in the tracker — [references/bill-tracker-template.md](references/bill-tracker-template.md)
+3. **Set due dates** in the family calendar 3 days before each due date; note the disconnection date printed on the electricity bill (it is later than the due date — do not plan on it)
+4. **Auto-debit** (หักบัญชีอัตโนมัติ) for fixed-ish bills: set it up in the bank app or the utility app; keep one account just for bills and check the debit on the statement each month. Before paying a batch or switching on a new debit:
+   - **Check the money first.** Add up every bill due before the next salary and compare with what will be left in the account ("จ่าย 6 บิลวันศุกร์รวม 7,840 บาท เหลือ 3,100 ก่อนเงินเดือนเข้าวันที่ 25 · พอ"). The user gives the balance or checks it in the bank app; if nobody checked, say so plainly ("ยังไม่ได้ดูยอดเงินในบัญชี") instead of calling the plan safe
+   - **An old auto-debit is not a standing approval.** A bill debited for 3 years is still looked at when its amount jumps (step 5); the debit just pays, it does not check
+   - **A bill or message asking to pay into a new account number** is verified by calling the number printed on an old bill or the utility's own app, never one in the message, and nothing is paid until then (same rule as **Verify** in `inbox-triage`)
+5. **Spike check** — if a bill is >20% above the 3-month average in units (20% is a default threshold, not measured), run the checklist below · do not compute the percentage by hand: `node power-bill.mjs --history scripts/example-history.json` (4 months of units, oldest first)
+6. **Monthly review** — 5 minutes on the 5th of each month; totals feed `trading-finance` `personal-budget` (if installed)
+
+## Spike investigation
+
+| Step | Check | What it tells you |
+|---|---|---|
+| 1 | Units vs. last 3 months (not baht) | Rule out a Ft or tariff change |
+| 2 | Billing period length | 33+ days inflates usage |
+| 3 | Was it read or estimated? (จดเลขจริง vs. ประมาณการ) | An estimate is corrected next month |
+| 4 | Season | April–May aircon load is often 30–60% higher than December |
+| 5 | **Electricity leak test**: switch off every appliance, watch the meter for 10 minutes | Meter still turning = leakage or a hidden load — call a licensed electrician |
+| 6 | **Water leak test**: close all taps at night, read the meter, read again in the morning | Any movement = leak (toilet cistern, buried pipe, tank float valve) |
+| 7 | New appliance, guest, work-from-home, a pet heater, an old fridge | Load change |
+| 8 | Aircon not cleaned for 6+ months | See `home-maintenance` |
+| 9 | Still unexplained | Ask the utility to test the meter (ขอตรวจสอบมิเตอร์) — call 1130 (กฟน.), 1129 (กฟภ.), 1125 (กปน.), 1662 (กปภ.) |
+
+## Script
+
+`power-bill.mjs` computes the bill as (tiered energy + service charge + Ft × units) + VAT 7%. Given 2 months it says how much of the difference comes from more units, from units moving into a higher tier, and from a Ft change; the three add up to the difference (VAT included).
+
+```
+node power-bill.mjs <file.json> [--json]     # example file: scripts/example.json
+node power-bill.mjs --history <file.json>    # latest month vs the 3 before it, units only; example: scripts/example-history.json
+node power-bill.mjs --self-test
+```
+
+Input file: `{ "tiers": [ { "upTo": 150, "rate": 3.0 }, { "upTo": null, "rate": 5.0 } ], "service": 25, "months": [ { "label": "Apr", "units": 330, "ft": 39.72 } ] }` · `rate` is baht/unit, `upTo` is the cumulative unit limit (last tier `null`), `ft` is satang/unit. One month = a bill; two months = a comparison. A bad field stops the script with a message naming it.
+
+`scripts/rates.json` holds only what this file lists with a source: the Ft rate (16.23 สตางค์, ก.ย.–ธ.ค. 2569, checked 2026-10-14) and VAT. The tier rates and service charge are still (รอยืนยัน) above, so **you must pass `tiers` and `service` from the back of the user's bill**; the script stops and says so if they are missing. When the Ft period changes, pass `ft` in the file or update `rates.json`. `scripts/example.json` uses made-up tier rates, not real tariffs.
+
+**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/personal-life/*/skills/household-bills/scripts/power-bill.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/personal-life/skills/household-bills/scripts/power-bill.mjs` · Node only, no dependencies.
+
+The output is information; check it against the printed bill before acting.
+
+## Worked example
+
+A Bangkok house used 412 units in May against 318 / 305 / 330 in Feb–Apr (average 318). 412 / 318 = +30% → spike. Billing period 30 days, read not estimated. Night leak test: meter still. May is peak heat and 2 aircons were last cleaned 9 months ago. Action: clean both aircons (see `home-maintenance`), set them to 26 °C, re-check June units. June came in at 352 — the residual over April is seasonal.
+
+## Internet and mobile
+
+- List every line with the contract end date (สัญญาขั้นต่ำ) — early cancellation fees apply before it
+- After the contract ends, call the operator's retention line and ask for the current promotion; a 30–40% reduction is common for a re-signed plan (รอยืนยัน, varies)
+- Remove unused add-ons (data packs, content subscriptions charged to the mobile bill — check \*137 style SMS services)
+
+## Related
+
+`home-maintenance` · `trading-finance` `personal-budget` (if installed) · `important-docs` (keep the meter number, electricity customer number CA/รหัสผู้ใช้ไฟ, and water account number there)
+
+The money check before paying and the "old debit is not approval" rule in step 4 are ideas from anthropics/knowledge-work-plugins `small-business/skills/pay-the-bills` (Apache-2.0, rewritten, viewed 2026-11-10).
+
+## เรียกเป็นคำสั่ง
+
+`/personal-life:household-bills <bill figures or "tracker"> [month]`
+
+Run `household-bills` with the `home-manager` agent for: **$ARGUMENTS**
+
+Use the units and amounts printed on the bill, not estimates. Check the current Ft and tariff with การไฟฟ้านครหลวง (กฟน.) / การไฟฟ้าส่วนภูมิภาค (กฟภ.) / คณะกรรมการกำกับกิจการพลังงาน (กกพ.) before splitting the bill into its parts; anything unconfirmed is written as the official value + `(รอยืนยัน)`. If this month's units are more than 20% above the 3-month average in units (20% is a default, not measured), run the spike checklist. Get the percentage from `power-bill.mjs --history` (see `household-bills`), not by hand.

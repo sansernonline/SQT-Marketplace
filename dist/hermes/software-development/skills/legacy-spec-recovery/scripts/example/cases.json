@@ -1,0 +1,12 @@
+{"system": "ตัวอย่างรายงาน",
+ "legacy": {"label": ".NET Framework 4.8"},
+ "new": {"label": ".NET 8"},
+ "cases": [
+  {"id": "C01", "title": "รายงานดอกเบี้ย มี mask วันที่ พ.ศ. กับเวลารัน",
+   "legacy": "out/legacy/C01.out", "new": "out/new/C01.out",
+   "mask": [{"regex": "\\d{2}/\\d{2}/25\\d{2} \\d{2}:\\d{2}:\\d{2}", "why": "วันที่ พ.ศ. และเวลาที่รันรายงาน"}]},
+  {"id": "C02", "title": "ภาษี VAT 7% ปัดเศษต่างกัน 1 สตางค์ (ต้องไม่ผ่าน)",
+   "legacy": "out/legacy/C02.out", "new": "out/new/C02.out"},
+  {"id": "C03", "title": "ไฟล์ไม่มี (ต้องเป็น missing ไม่ใช่ผ่าน)",
+   "legacy": "out/legacy/C03.out", "new": "out/new/C03.out"}
+ ]}

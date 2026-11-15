@@ -1,0 +1,11 @@
+{
+  "prefix": "PRJ",
+  "root": "../../../..",
+  "drafts": "docs/figures/src/gen/mermaid",
+  "out": "docs/figures",
+  "map": "docs/figures/src/gen/map.md",
+  "skip": [],
+  "skip_reason": "blocks that already have a hand-laid figure in docs/figures/src/*.html",
+  "node_modules": "_to_delete/figgen/node_modules",
+  "captions": {}
+}

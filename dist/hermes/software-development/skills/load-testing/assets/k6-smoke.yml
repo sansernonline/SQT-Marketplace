@@ -1,0 +1,40 @@
+# GitHub Actions ตัวอย่าง · skill load-testing หัวข้อ 7
+# วางที่ .github/workflows/k6-smoke.yml ของโปรเจกต์ · คัดลอก load-test.js ไปที่ tests/load/
+# ชื่อ action และ input (path · flags · k6-version) ตาม README ของ grafana/run-k6-action และ setup-k6-action ตรวจ 2026-10-28 · ยังไม่ได้รันจริง
+# ล็อกรุ่น: setup-k6-action v1.2.2 · run-k6-action v1.5.0 · k6 2.3.0 (รุ่นล่าสุดบน GitHub 2026-10-28) · ไม่ใส่ k6-version จะได้ k6 รุ่นล่าสุดเสมอ
+# smoke ทุก PR · load ตามรอบกลางคืน (ต้องตั้ง vars.LOADTEST_APPROVED_BY ก่อน ไม่งั้นสคริปต์หยุดเอง)
+
+name: k6
+
+on:
+  pull_request:
+  schedule:
+    - cron: '0 18 * * *' # 01:00 เวลาไทย
+
+jobs:
+  smoke:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4 # ล็อกระดับ major · รุ่นเต็มยังไม่ได้ตรวจรอบนี้
+      - uses: grafana/setup-k6-action@v1.2.2
+        with:
+          k6-version: '2.3.0'
+      - uses: grafana/run-k6-action@v1.5.0
+        with:
+          path: ./tests/load/load-test.js
+          flags: -e TEST_TYPE=smoke -e TARGET_ENV=staging -e BASE_URL=${{ vars.LOADTEST_BASE_URL }}
+
+  nightly-load:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: grafana/setup-k6-action@v1.2.2
+        with:
+          k6-version: '2.3.0'
+      - uses: grafana/run-k6-action@v1.5.0
+        with:
+          path: ./tests/load/load-test.js
+          # ชื่อผู้อนุมัติใน vars ใช้แบบไม่มีเว้นวรรค (วิธีแยกคำของ flags ยังไม่ได้ตรวจ)
+          flags: -e TEST_TYPE=load -e TARGET_ENV=staging -e BASE_URL=${{ vars.LOADTEST_BASE_URL }} -e APPROVED_BY=${{ vars.LOADTEST_APPROVED_BY }}

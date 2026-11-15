@@ -1,0 +1,3 @@
+{"event":"run","role":"developer"}
+{"event":"result","role":"reviewer","verdict":"fail","round":1}
+{"event":"result","role":"reviewer","verdict":"pass","round":2}

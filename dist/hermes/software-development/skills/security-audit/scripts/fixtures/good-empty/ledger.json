@@ -1,0 +1,22 @@
+{
+  "rows": [
+    {
+      "coverage_id": "C-login",
+      "entrypoint": "src/routes/auth.js#POST /login",
+      "boundary": "คนนอก → บัญชี",
+      "class": "brute-force",
+      "status": "checked",
+      "finding_ids": [],
+      "note": "มี rate limit 5 ครั้งต่อนาที"
+    },
+    {
+      "coverage_id": "C-graphql",
+      "entrypoint": "src/server.js",
+      "boundary": "คนนอก → GraphQL",
+      "class": "graphql-introspection",
+      "status": "not_applicable",
+      "finding_ids": [],
+      "note": "ระบบไม่มี GraphQL"
+    }
+  ]
+}

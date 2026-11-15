@@ -1,0 +1,15 @@
+{
+  "capital": 100000,
+  "trades": [
+    { "account": "live", "r_multiple": 2.0, "pnl_baht": 2000 },
+    { "account": "live", "r_multiple": -1.0, "pnl_baht": -1000 },
+    { "account": "live", "r_multiple": -1.0, "pnl_baht": -1000 },
+    { "account": "live", "r_multiple": 3.0, "pnl_baht": 3000 },
+    { "account": "live", "r_multiple": -1.2, "pnl_baht": -1200, "emotion": "FOMO" },
+    { "account": "live", "r_multiple": 0.5, "pnl_baht": 500 },
+    { "account": "live", "r_multiple": -1.0, "pnl_baht": -1000 },
+    { "account": "live", "r_multiple": 1.5, "pnl_baht": 1500 },
+    { "account": "live", "r_multiple": -1.0, "pnl_baht": -1000 },
+    { "account": "live", "r_multiple": -2.0, "pnl_baht": -2000, "violation": "moved-stop" }
+  ]
+}

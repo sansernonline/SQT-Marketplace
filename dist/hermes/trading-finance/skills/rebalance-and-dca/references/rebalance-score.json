@@ -1,0 +1,13 @@
+{
+  "_note": "Options A/B/C from the rebalance-and-dca worked example. Weights 0.5/0.5 are starting values, not yet measured; the user's weights win. Switching fee 0.5% of the amount moved (600 / 300 baht) is a placeholder (รอยืนยัน from the fund's factsheet); replace it before showing the user. Months: A = 120,000 ÷ 6,000 = 20, C = 60,000 ÷ 6,000 = 10 (money-calc.mjs drift).",
+  "criteria": [
+    { "name": "Total cost, baht", "weight": 0.5, "better": "low" },
+    { "name": "Months to target mix", "weight": 0.5, "better": "low" }
+  ],
+  "must": [ { "criterion": "Sells RMF/ThaiESG units early (1 = yes)", "max": 0 } ],
+  "options": [
+    { "name": "A New money only", "values": { "Total cost, baht": 0, "Months to target mix": 20, "Sells RMF/ThaiESG units early (1 = yes)": 0 } },
+    { "name": "B Switch 120,000 now", "values": { "Total cost, baht": 600, "Months to target mix": 0, "Sells RMF/ThaiESG units early (1 = yes)": 0 } },
+    { "name": "C Switch 60,000 + DCA", "values": { "Total cost, baht": 300, "Months to target mix": 10, "Sells RMF/ThaiESG units early (1 = yes)": 0 } }
+  ]
+}
