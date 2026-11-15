@@ -86,8 +86,8 @@ Use this when an organisation or team needs a full guide (tone of voice, key mes
 
 - **One file:** `docs/brand-guidelines.md`, which every person and every agent reads from one place · its colours and fonts are the source, and the token file follows them
 - Start from `templates/brand-guidelines-starter.md` · put `(รอยืนยัน)` (awaiting confirmation) for any data you do not have, and do not invent it
-- ซิงก์ token: `node scripts/sync-brand-to-tokens.cjs` · ตรวจไฟล์: `scripts/validate-asset.cjs` · เทียบสีภาพ: `scripts/extract-colors.cjs` · สรุปแบรนด์แปะ prompt: `scripts/inject-brand-context.cjs`
-- ขั้นตอนเต็ม ตารางหัวข้อ/ไฟล์ต้นฉบับ ข้อจำกัด และรายการตรวจ: [references/brand-guidelines.md](references/brand-guidelines.md)
+- Sync tokens: `node scripts/sync-brand-to-tokens.cjs` · check a file: `scripts/validate-asset.cjs` · compare image colours: `scripts/extract-colors.cjs` · brand summary to paste into a prompt: `scripts/inject-brand-context.cjs`
+- Full steps, topic/source-file table, limits and checklist: [references/brand-guidelines.md](references/brand-guidelines.md)
 
 ## Not an AI look
 

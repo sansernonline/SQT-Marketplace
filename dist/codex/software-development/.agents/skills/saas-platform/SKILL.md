@@ -35,7 +35,7 @@ An agent called to work in this area opens its own role file before starting.
 
 ## ที่มา
 
-รวมจาก plugin `software-development-saas-b2b` (เดิมชื่อ multi-tenancy-patterns → `references/multi-tenancy-patterns.md` · enterprise-integration → `references/enterprise-integration.md` · subscription-billing → `references/subscription-billing.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-development` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+Merged from plugin `software-development-saas-b2b` (formerly named multi-tenancy-patterns → `references/multi-tenancy-patterns.md` · enterprise-integration → `references/enterprise-integration.md` · subscription-billing → `references/subscription-billing.md` — no longer separate skills) into `software-development` in v2.0.0. The original content is all still in `references/`
 
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 

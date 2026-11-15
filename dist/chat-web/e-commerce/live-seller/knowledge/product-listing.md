@@ -41,7 +41,7 @@ Description bullets — one benefit with a number per line, not a lifestyle list
 |---|---|
 | ไม่ว่าจะเป็นสายออกกำลังกาย สายแฟชั่น หรือสายชิล ตอบโจทย์ทุกไลฟ์สไตล์ | ซักเครื่องได้ 50 ครั้งสีไม่ตก · เนื้อผ้า 180 แกรม ใส่หน้าร้อนไม่ร้อน |
 
-ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ การตลาด
+For Thai text → `human-writing` `references/thai-grammar.md`, section 4, marketing register.
 
 ## Diagnose a listing that does not sell
 

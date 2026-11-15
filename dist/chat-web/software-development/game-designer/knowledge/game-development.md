@@ -4,7 +4,7 @@ Use when building a game
 
 # game-development
 
-งานเกม — สถาปัตยกรรมและ engine · multiplayer · game design · live-ops
+Game work — architecture and engine · multiplayer · game design · live-ops
 
 **Open only the files that match the job.** Do not read them all, because each file is the full guide to its topic.
 
@@ -33,7 +33,7 @@ An agent called to work in this area opens its own role file before starting · 
 
 ## ที่มา
 
-ย้ายมาจาก plugin `software-development-gaming` (เดิมชื่อ game-architecture → `references/game-architecture.md` · multiplayer-netcode → `references/multiplayer-netcode.md` · live-ops-patterns → `references/live-ops-patterns.md` ไม่ใช่ skill แยกแล้ว) และรวมเข้า `software-development` ใน v2.0.0 เนื้อหาเดิมยังอยู่ครบใน `references/`
+Moved from plugin `software-development-gaming` (formerly named game-architecture → `references/game-architecture.md` · multiplayer-netcode → `references/multiplayer-netcode.md` · live-ops-patterns → `references/live-ops-patterns.md` — no longer separate skills) and merged into `software-development` in v2.0.0. The original content is all still in `references/`
 
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 

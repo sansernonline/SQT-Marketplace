@@ -35,7 +35,7 @@ An agent called in for this area opens its own role file before starting work ·
 
 ## ที่มา
 
-รวมจาก plugin `software-development-iot` (เดิมชื่อ device-fleet-management → `references/device-fleet-management.md` · edge-computing-architecture → `references/edge-computing-architecture.md` · mqtt-protocol-patterns → `references/mqtt-protocol-patterns.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-development` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+Merged from plugin `software-development-iot` (formerly named device-fleet-management → `references/device-fleet-management.md` · edge-computing-architecture → `references/edge-computing-architecture.md` · mqtt-protocol-patterns → `references/mqtt-protocol-patterns.md` — no longer separate skills) into `software-development` in v2.0.0. The original content is all still in `references/`
 
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 

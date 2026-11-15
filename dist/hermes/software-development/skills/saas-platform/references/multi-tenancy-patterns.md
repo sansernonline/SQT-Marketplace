@@ -1,4 +1,4 @@
-> เดิมชื่อ multi-tenancy-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-development-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
+> Formerly named multi-tenancy-patterns (no longer a separate skill; the content is in this file) in plugin `software-development-saas-b2b` — merged into `saas-platform` in v2.0.0
 
 **สารบัญ:** 
 
@@ -76,12 +76,12 @@ CREATE ROLE app_user LOGIN NOSUPERUSER NOBYPASSRLS;
 GRANT SELECT, INSERT, UPDATE, DELETE ON orders TO app_user;
 ```
 
-กฎที่ต้องถูกทุกข้อ (ที่มา [PostgreSQL — Row Security Policies](https://www.postgresql.org/docs/current/ddl-rowsecurity.html) · [SET](https://www.postgresql.org/docs/current/sql-set.html) · ตรวจ 22 ต.ค. 2569)
+Every rule below must be followed (source [PostgreSQL — Row Security Policies](https://www.postgresql.org/docs/current/ddl-rowsecurity.html) · [SET](https://www.postgresql.org/docs/current/sql-set.html) · checked 22 Oct 2026)
 
 - The table owner bypasses RLS unless `FORCE ROW LEVEL SECURITY` is set · a superuser and any role with `BYPASSRLS` always bypass it → the app must use a separate role
 - `SET LOCAL` outside a transaction "emits a warning and otherwise has no effect" → set it only inside `BEGIN … COMMIT`
 - `SET` (without LOCAL) lasts for the whole session → a connection returned to the pool carries the old tenant into the next request. Do not use it
-- ห้ามต่อ string tenant id เข้า SQL — ส่งเป็น parameter (`$1`) ผ่าน `set_config(name, value, true)` (`true` = มีผลเฉพาะ transaction นี้)
+- Never concatenate the tenant id string into SQL — pass it as a parameter (`$1`) through `set_config(name, value, true)` (`true` = applies only to this transaction)
 
 ### Application Enforcement (defense in depth)
 ```typescript

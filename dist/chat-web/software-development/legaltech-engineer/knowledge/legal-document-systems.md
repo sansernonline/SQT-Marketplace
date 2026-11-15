@@ -34,7 +34,7 @@ An agent called in for this area opens its own role file before starting.
 
 ## ที่มา
 
-รวมจาก plugin `software-development-legaltech` (เดิมชื่อ contract-parsing-patterns → `references/contract-parsing-patterns.md` · document-automation-patterns → `references/document-automation-patterns.md` · e-signature-compliance → `references/e-signature-compliance.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-development` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+Merged from plugin `software-development-legaltech` (formerly named contract-parsing-patterns → `references/contract-parsing-patterns.md` · document-automation-patterns → `references/document-automation-patterns.md` · e-signature-compliance → `references/e-signature-compliance.md` — no longer separate skills) into `software-development` in v2.0.0. The original content is all still in `references/`
 
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 

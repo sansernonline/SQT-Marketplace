@@ -1,6 +1,6 @@
 # Recommendation Engineer — algorithms, serving, evaluation
 
-คู่มือบทบาทของ agent `recommendation-engineer` · จุดแสดงผลในร้าน · email · A/B test อยู่ที่ [`recommendation-systems.md`](recommendation-systems.md)
+Role guide for the agent `recommendation-engineer` · in-store placements · email · A/B test are in [`recommendation-systems.md`](recommendation-systems.md)
 
 **สารบัญ:**
 

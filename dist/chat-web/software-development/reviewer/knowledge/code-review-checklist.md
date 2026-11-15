@@ -2,7 +2,7 @@
 
 Use when reviewing a pull request or your own code
 
-> **ใน SuperUser:** รีวิวเริ่มจาก playbook [`review`](../superuser/references/playbook-review.md) แล้วใช้ checklist นี้กับรีวิวทั่วไป ส่วนงานเสี่ยงสูงหรือ diff ใหญ่ใช้ `adversarial-review-panel`
+> **In SuperUser:** start a review from the playbook [`review`](../superuser/references/playbook-review.md) then use this checklist for ordinary reviews. For high-risk work or a large diff, use `adversarial-review-panel`
 
 # Code Review Checklist
 
@@ -81,7 +81,7 @@ Nice approach with X — much cleaner than the previous version.
 | `q:` | Question, not necessarily a change |
 | `praise:` | Acknowledge good work |
 
-These prefixes are for comments on a pull request. A review report uses the `reviewer` scale: `blocking:` = สูง · `important:` = กลาง · `nit:` = ต่ำ, verdict ผ่าน / ไม่ผ่าน
+These prefixes are for comments on a pull request. A review report uses the `reviewer` scale: `blocking:` = สูง (high) · `important:` = กลาง (medium) · `nit:` = ต่ำ (low), verdict ผ่าน / ไม่ผ่าน
 
 ## Anti-patterns to Avoid
 

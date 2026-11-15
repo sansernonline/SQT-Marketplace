@@ -1,4 +1,4 @@
-> เดิมชื่อ threat-detection-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-development-cybersecurity` — รวมเข้า `security-operations` ใน v2.0.0
+> Formerly named threat-detection-patterns (no longer a separate skill; the content is in this file) in plugin `software-development-cybersecurity` — merged into `security-operations` in v2.0.0
 
 **สารบัญ:** 
 
@@ -84,7 +84,7 @@ Impact                Mass file modification, encryption
 >
 > Syntax rules that are often missed: the wildcard `*` works only in `search` (the start of the pipeline) — in `where` use `like(field, "%x")` or `match(field, "regex")` · write comments in SPL with triple backticks, not `#` · `stdev()` is a `stats` function and cannot be used in `eval`
 
-Event ที่ใช้: Sysmon `EventCode=1` = process create · `10` = process access · `13` = registry value set · Windows Security `4688` = process create (ต้องเปิด audit + command line) · `4624`/`4625` = logon สำเร็จ/ล้มเหลว · `4697` = ติดตั้ง service · `4698` = สร้าง scheduled task
+Events used: Sysmon `EventCode=1` = process create · `10` = process access · `13` = registry value set · Windows Security `4688` = process create (audit and command line logging must be turned on) · `4624`/`4625` = logon success/failure · `4697` = service installed · `4698` = scheduled task created
 
 ### Suspicious PowerShell
 
@@ -155,7 +155,7 @@ index=sysmon EventCode=1 ParentImage="*\\winword.exe" Image="*\\powershell.exe"
 
 ## Sigma Rules (Vendor-Agnostic)
 
-`id` ต้องเป็น UUID (สร้างใหม่ทุกกฎ เช่น `python -c "import uuid; print(uuid.uuid4())"`) · กฎใหม่เริ่ม `status: experimental` แล้วค่อยเลื่อนเป็น `test`/`stable` เมื่อทดสอบกับข้อมูลจริงแล้ว — ที่มา [Sigma rule specification](https://github.com/SigmaHQ/sigma-specification)
+`id` must be a UUID (generate a new one for every rule, for example `python -c "import uuid; print(uuid.uuid4())"`) · start a new rule at `status: experimental`, then move it to `test`/`stable` after testing on real data — source [Sigma rule specification](https://github.com/SigmaHQ/sigma-specification)
 
 ```yaml
 title: PowerShell Encoded Command

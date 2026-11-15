@@ -41,7 +41,7 @@ Description bullets — one benefit with a number per line, not a lifestyle list
 |---|---|
 | ไม่ว่าจะเป็นสายออกกำลังกาย สายแฟชั่น หรือสายชิล ตอบโจทย์ทุกไลฟ์สไตล์ | ซักเครื่องได้ 50 ครั้งสีไม่ตก · เนื้อผ้า 180 แกรม ใส่หน้าร้อนไม่ร้อน |
 
-ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ การตลาด
+For Thai text → `human-writing` `references/thai-grammar.md`, section 4, marketing register.
 
 ## Diagnose a listing that does not sell
 
@@ -300,7 +300,7 @@ node price-calc.mjs --self-test
 
 Input file: `{ "rates_checked": "2026-10-06", "items": [ { "name": "...", "cost": 120, "shipping": 15, "fixed": 1.07, "margin_pct": 20, "vat_registered": false, "fees_pct": { "commission": 10.7, "transaction": 3.21 }, "campaign": { "extra_pct": 3, "voucher": 20 } } ] }` · `fees_pct` is the % already including VAT, and you can give any number of fields · `campaign` is optional · the script holds no platform rates in code, so enter them from the shop's own Seller Centre · `rates_checked` is the date checked, which the script prints in the result and warns about when it is older than 30 days (a default, not yet measured) · when it warns, open Seller Centre and read the new rates before using the prices · a total cost of 0 stops the script · a `margin_pct` below 1 (for example 0.2 instead of 20) and a voucher at or above the selling price raise a warning · a wrong field makes the script stop with a message that names the field · if fees + VAT + the wanted margin add up to 100% or more, the script says no price can be found
 
-**Script path:** ติดตั้งจาก marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/marketplace-fees-pricing/scripts/price-calc.mjs | sort -V | tail -1` · ใน repo SQT-Marketplace: `plugins/e-commerce/skills/marketplace-fees-pricing/scripts/price-calc.mjs` · Node อย่างเดียว ไม่มี dependency
+**Script path:** Installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/marketplace-fees-pricing/scripts/price-calc.mjs | sort -V | tail -1` · In the SQT-Marketplace repo: `plugins/e-commerce/skills/marketplace-fees-pricing/scripts/price-calc.mjs` · Node only, no dependencies
 
 The result is supporting information, not accounting or tax advice.
 

@@ -1065,7 +1065,7 @@ Use the step 5 brief on the existing record, with 1 added line: "This item is re
 
 Use when reviewing a pull request or your own code
 
-> **ใน SuperUser:** รีวิวเริ่มจาก playbook [`review`](../superuser/references/playbook-review.md) แล้วใช้ checklist นี้กับรีวิวทั่วไป ส่วนงานเสี่ยงสูงหรือ diff ใหญ่ใช้ `adversarial-review-panel`
+> **In SuperUser:** start a review from the playbook [`review`](../superuser/references/playbook-review.md) then use this checklist for ordinary reviews. For high-risk work or a large diff, use `adversarial-review-panel`
 
 # Code Review Checklist
 
@@ -1144,7 +1144,7 @@ Nice approach with X — much cleaner than the previous version.
 | `q:` | Question, not necessarily a change |
 | `praise:` | Acknowledge good work |
 
-These prefixes are for comments on a pull request. A review report uses the `reviewer` scale: `blocking:` = สูง · `important:` = กลาง · `nit:` = ต่ำ, verdict ผ่าน / ไม่ผ่าน
+These prefixes are for comments on a pull request. A review report uses the `reviewer` scale: `blocking:` = สูง (high) · `important:` = กลาง (medium) · `nit:` = ต่ำ (low), verdict ผ่าน / ไม่ผ่าน
 
 ## Anti-patterns to Avoid
 
@@ -1326,7 +1326,7 @@ Use when building login with sessions, JWT, OAuth or SSO
 |---|---|
 | [references/auth-flows.md](references/auth-flows.md) | When writing session, JWT, OAuth with PKCE or password reset code, open it for the step-by-step order |
 | [references/mfa.md](references/mfa.md) | When choosing or building MFA and you need TOTP setup steps, WebAuthn usage or the limits of SMS |
-| [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md) | ถ้าออกแบบการยืนยันตัวตนของ API หรือ API key หรือต้องการตัวอย่าง RBAC กับ ABAC ให้เปิดไฟล์นี้ |
+| [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md) | Open this file if you are designing API authentication or API keys, or need RBAC and ABAC examples |
 | [references/libraries-and-code.md](references/libraries-and-code.md) | When choosing a library by language, or you need sample code for password hashing and rate limiting |
 
 ## Choose the Right Pattern
@@ -1371,7 +1371,7 @@ What's authenticating?
 
 **When to use:** microservices, mobile, single-page app (SPA) with a backend API
 
-> ระวัง: **JWT is overused.** If you have a single backend, sessions are simpler and safer.
+> Caution: **JWT is overused.** If you have a single backend, sessions are simpler and safer.
 
 **Implementation requirements:**
 - Algorithm: `RS256` or `ES256` (NOT `HS256` for distributed systems)
@@ -1393,7 +1393,7 @@ What's authenticating?
 
 **When to use:** "Login with Google/GitHub", or handing login to an identity provider (IdP)
 
-ใช้ Authorization Code Flow with PKCE (Proof Key for Code Exchange) เสมอ เพราะกันไม่ให้ code ที่ถูกขโมยไปแลกเป็น token ได้ ลำดับขั้นอยู่ใน [references/auth-flows.md](references/auth-flows.md)
+Use Authorization Code Flow with PKCE (Proof Key for Code Exchange) always, because it stops a stolen code from being exchanged for a token. The steps are in [references/auth-flows.md](references/auth-flows.md)
 
 **Implementation requirements:**
 - **Always use PKCE** (even for confidential clients)
@@ -1452,7 +1452,7 @@ Choose by caller: API key for simple server-to-server · OAuth 2.0 Client Creden
 
 ## Authorization Patterns (after authentication)
 
-ใช้ RBAC (Role-Based Access Control) เป็นหลัก และใช้ ABAC (Attribute-Based Access Control) เมื่อต้องการสิทธิ์ละเอียดตามคุณสมบัติของข้อมูล ตัวอย่างอยู่ใน [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md)
+Use RBAC (Role-Based Access Control) as the main model, and use ABAC (Attribute-Based Access Control) when you need fine-grained permissions based on data attributes. Examples are in [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md)
 
 ### Implementation tip
 - Check authorization at every endpoint

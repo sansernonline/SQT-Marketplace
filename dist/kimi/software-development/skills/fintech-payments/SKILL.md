@@ -15,7 +15,7 @@ Systems that money flows through — payment gateway · KYC/AML · PCI-DSS · fi
 | ใช้เมื่อ | อ่าน |
 |---|---|
 | integrating with payment gateways (Stripe, Adyen, Omise, 2C2P, PromptPay), implementing checkout flows, handling 3D Secure / SCA, managing payment retries, or building robust webhook processing | [`references/payment-gateway-integration.md`](references/payment-gateway-integration.md) |
-| สร้าง payload ของ PromptPay QR (EMVCo) ให้หน้าชำระเงิน | `e-commerce:promptpay-qr` |
+| Build the PromptPay QR (EMVCo) payload for the payment page | `e-commerce:promptpay-qr` |
 | implementing customer identification (KYC), anti-money laundering (AML) controls, sanctions screening, PEP checks, transaction monitoring, or suspicious activity reporting. Covers risk-based approach, vendor integration, and ongoing monitoring | [`references/kyc-aml-patterns.md`](references/kyc-aml-patterns.md) |
 | handling card data, reducing PCI scope, selecting SAQ type, designing CDE (Cardholder Data Environment), preparing for PCI assessment, or implementing PCI-DSS v4 controls. Provides concrete guidance on the 12 requirements with implementation patterns | [`references/pci-dss-compliance.md`](references/pci-dss-compliance.md) |
 
@@ -36,7 +36,7 @@ An agent called in for this area opens its own role file before starting work ·
 
 ## ที่มา
 
-ย้ายมาจาก plugin `software-development-fintech` (เดิมชื่อ payment-gateway-integration → `references/payment-gateway-integration.md` · kyc-aml-patterns → `references/kyc-aml-patterns.md` · pci-dss-compliance → `references/pci-dss-compliance.md` ไม่ใช่ skill แยกแล้ว) และรวมเข้า `software-development` ใน v2.0.0 เนื้อหาเดิมยังอยู่ครบใน `references/`
+Moved from plugin `software-development-fintech` (formerly named payment-gateway-integration → `references/payment-gateway-integration.md` · kyc-aml-patterns → `references/kyc-aml-patterns.md` · pci-dss-compliance → `references/pci-dss-compliance.md` — no longer separate skills) and merged into `software-development` in v2.0.0. The original content is all still in `references/`
 
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 

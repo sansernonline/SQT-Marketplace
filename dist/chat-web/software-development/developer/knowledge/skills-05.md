@@ -790,7 +790,7 @@ builder.Services.Configure<HostOptions>(o =>
     o.ShutdownTimeout = TimeSpan.FromSeconds(30));   // รวมเวลารอ 5 วินาทีข้างบน + request ที่ค้าง
 ```
 
-ลำดับตอนปิดของ host (.NET 8+): `ApplicationStopping` → `StoppingAsync` → `StopAsync` ของ hosted service (รวม Kestrel) → `StoppedAsync` → `ApplicationStopped` — ตามหน้า .NET Generic Host ที่ learn.microsoft.com (ตรวจ 22 ต.ค. 2569)
+Host shutdown order (.NET 8+): `ApplicationStopping` → `StoppingAsync` → `StopAsync` of the hosted services (including Kestrel) → `StoppedAsync` → `ApplicationStopped` — per the .NET Generic Host page at learn.microsoft.com (checked 22 Oct 2026)
 
 ### สิ่งที่ต้องเปิดก่อน deploy
 
@@ -828,7 +828,7 @@ app.UseRateLimiter();
 app.MapPost("/api/v1/login", Login).RequireRateLimiting("login");
 ```
 
-ไม่อยากเขียน middleware เอง → แพ็กเกจ `NetEscapades.AspNetCore.SecurityHeaders` (`app.UseSecurityHeaders()`) ตั้งชุด header พื้นฐานให้ครบ
+To avoid writing your own middleware, use the package `NetEscapades.AspNetCore.SecurityHeaders` (`app.UseSecurityHeaders()`) which sets the full basic header set
 
 ---
 
@@ -1810,7 +1810,7 @@ Use when building login with sessions, JWT, OAuth or SSO
 |---|---|
 | [references/auth-flows.md](references/auth-flows.md) | When writing session, JWT, OAuth with PKCE or password reset code, open it for the step-by-step order |
 | [references/mfa.md](references/mfa.md) | When choosing or building MFA and you need TOTP setup steps, WebAuthn usage or the limits of SMS |
-| [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md) | ถ้าออกแบบการยืนยันตัวตนของ API หรือ API key หรือต้องการตัวอย่าง RBAC กับ ABAC ให้เปิดไฟล์นี้ |
+| [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md) | Open this file if you are designing API authentication or API keys, or need RBAC and ABAC examples |
 | [references/libraries-and-code.md](references/libraries-and-code.md) | When choosing a library by language, or you need sample code for password hashing and rate limiting |
 
 ## Choose the Right Pattern
@@ -1855,7 +1855,7 @@ What's authenticating?
 
 **When to use:** microservices, mobile, single-page app (SPA) with a backend API
 
-> ระวัง: **JWT is overused.** If you have a single backend, sessions are simpler and safer.
+> Caution: **JWT is overused.** If you have a single backend, sessions are simpler and safer.
 
 **Implementation requirements:**
 - Algorithm: `RS256` or `ES256` (NOT `HS256` for distributed systems)
@@ -1877,7 +1877,7 @@ What's authenticating?
 
 **When to use:** "Login with Google/GitHub", or handing login to an identity provider (IdP)
 
-ใช้ Authorization Code Flow with PKCE (Proof Key for Code Exchange) เสมอ เพราะกันไม่ให้ code ที่ถูกขโมยไปแลกเป็น token ได้ ลำดับขั้นอยู่ใน [references/auth-flows.md](references/auth-flows.md)
+Use Authorization Code Flow with PKCE (Proof Key for Code Exchange) always, because it stops a stolen code from being exchanged for a token. The steps are in [references/auth-flows.md](references/auth-flows.md)
 
 **Implementation requirements:**
 - **Always use PKCE** (even for confidential clients)
@@ -1936,7 +1936,7 @@ Choose by caller: API key for simple server-to-server · OAuth 2.0 Client Creden
 
 ## Authorization Patterns (after authentication)
 
-ใช้ RBAC (Role-Based Access Control) เป็นหลัก และใช้ ABAC (Attribute-Based Access Control) เมื่อต้องการสิทธิ์ละเอียดตามคุณสมบัติของข้อมูล ตัวอย่างอยู่ใน [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md)
+Use RBAC (Role-Based Access Control) as the main model, and use ABAC (Attribute-Based Access Control) when you need fine-grained permissions based on data attributes. Examples are in [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md)
 
 ### Implementation tip
 - Check authorization at every endpoint

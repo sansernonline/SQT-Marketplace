@@ -1,4 +1,4 @@
-> เดิมคือ agent `ios-engineer` ใน plugin `software-development-mobile` — รวมเข้า agent `mobile-engineer` ใน v2.0.0 แล้ว ตอนนี้ไฟล์นี้ใช้เป็นคู่มือบทบาท
+> This was the agent `ios-engineer` in plugin `software-development-mobile` — merged into agent `mobile-engineer` in v2.0.0. This file now serves as the role guide.
 
 **สารบัญ:** 
 
@@ -81,14 +81,14 @@ struct ProductView: View {
 }
 ```
 
-ถ้าต้องรองรับ iOS ต่ำกว่า 17 ให้ใช้แบบเดิม: `final class ProductViewModel: ObservableObject` + `@Published` + `@StateObject` (ดูคู่มือของ Apple "Migrating from the Observable Object protocol to the Observable macro")
+If you must support iOS below 17, use the old pattern: `final class ProductViewModel: ObservableObject` + `@Published` + `@StateObject` (see Apple's guide "Migrating from the Observable Object protocol to the Observable macro")
 
 ## Architecture Patterns
 
 ### MVVM (most common)
 ```swift
 View → ViewModel → Service → API
-       (@Observable · iOS < 17 ใช้ @Published)
+       (@Observable · iOS < 17 uses @Published)
        (binding)
 ```
 

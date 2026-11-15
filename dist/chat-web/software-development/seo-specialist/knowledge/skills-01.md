@@ -285,7 +285,7 @@ Used by `seo-audit-checklist` step 3 (manual review). Numbers here are the singl
 
 Search engine optimization (SEO) brief for one page.
 
-ใช้ตอนเขียน brief ของหน้าเดียว (ไม่ใช่ audit ทั้งเว็บ) · rich result ของ Google: ตั้งแต่ 8 ส.ค. 2023 FAQ แสดงเฉพาะเว็บรัฐและเว็บสุขภาพที่น่าเชื่อถือ · HowTo เลิกแสดงแล้ว — ที่มา [Google Search Central blog: Changes to HowTo and FAQ rich results](https://developers.google.com/search/blog/2023/08/howto-faq-changes) (ตรวจ 22 ต.ค. 2569)
+Use when writing a brief for a single page (not an audit of the whole site) · Google rich results: since 8 Aug 2023, FAQ is shown only for authoritative government and health sites · HowTo is no longer shown — source [Google Search Central blog: Changes to HowTo and FAQ rich results](https://developers.google.com/search/blog/2023/08/howto-faq-changes) (checked 22 Oct 2026)
 
 **สารบัญ:**
 
