@@ -1,6 +1,6 @@
 ---
 name: principle-proceed-on-reversible-work
-description: Use when about to ask shall I continue on work that can be undone. Proceed.
+description: Use before asking to continue on undoable work
 ---
 
 # principle · proceed on reversible work — ย้อนได้ ทำเลย

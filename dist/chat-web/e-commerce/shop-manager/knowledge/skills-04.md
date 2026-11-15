@@ -1,6 +1,6 @@
 # skill: shop-daily-briefing
 
-Use when a Thai online seller starts the day and asks what to handle first (late orders, pending returns, unanswered chats, low stock).
+Use when a Thai online seller starts the day
 
 # Shop Daily Briefing
 
@@ -69,7 +69,7 @@ Briefing:
 
 # skill: doc-quotation
 
-Use when issuing a Thai quotation, invoice, billing note or receipt (VAT, withholding, total in words).
+Use when issuing a Thai quotation, invoice or receipt
 
 # Thai Sales Documents — quotation to receipt
 

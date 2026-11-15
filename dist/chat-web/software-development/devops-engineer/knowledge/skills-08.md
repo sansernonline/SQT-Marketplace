@@ -1,6 +1,6 @@
 # skill: kafka-streaming
 
-Use when services pass events via Kafka or events get lost or doubled.
+Use when services pass events via Kafka
 
 # kafka-streaming — ออกแบบ topic · producer · consumer ของ Apache Kafka ไม่ให้ event หายหรือซ้ำแบบเงียบ ๆ
 
@@ -323,7 +323,7 @@ max.poll.interval.ms=300000
 
 # skill: rabbitmq-messaging
 
-Use when work goes through RabbitMQ (queue, exchange, ack). Event log → kafka-streaming.
+Use when work goes through RabbitMQ queues
 
 # rabbitmq-messaging — ออกแบบคิว RabbitMQ ไม่ให้ข้อความหายหรือซ้ำแบบเงียบ ๆ
 
@@ -613,7 +613,7 @@ ch.basic_consume("order.email.send", on_message, auto_ack=False)
 
 # skill: jenkins-pipeline
 
-Use when writing or fixing a Jenkinsfile or Jenkins pipeline.
+Use when writing or fixing a Jenkinsfile
 
 # jenkins-pipeline — Jenkinsfile ที่ build image, ทดสอบ และ deploy ด้วย Helm โดยค่าลับไม่รั่ว
 
@@ -932,7 +932,7 @@ pipeline {
 
 # skill: mcp-server
 
-Use when an agent must reach a real system (database, ERP, API) through an MCP server.
+Use when an agent must reach a real system via MCP
 
 # mcp-server — สร้าง MCP server ให้ agent ใช้ระบบจริงได้
 
@@ -1577,7 +1577,7 @@ docstring (Python) หรือ `description` (TypeScript) คือสิ่ง
 
 # skill: simplify
 
-Use when a deliverable has steps, layers or options nobody needs yet, or a newcomer must follow it. Not Claude Code /simplify.
+Use to cut extras nobody needs yet. Not Claude Code simplify
 
 # simplify — ทำให้ง่าย คนอ่านครั้งแรกก็ตามได้
 

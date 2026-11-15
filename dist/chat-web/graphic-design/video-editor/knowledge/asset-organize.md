@@ -1,6 +1,6 @@
 # skill: asset-organize
 
-Use when design files are a mess (untitled exports, final_v2 copies, lost logo). Folders, naming, versions.
+Use when design files are messy or versions are lost
 
 # Asset Organize
 

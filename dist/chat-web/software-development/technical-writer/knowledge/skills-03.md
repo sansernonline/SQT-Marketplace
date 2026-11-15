@@ -1,6 +1,6 @@
 # skill: markdown-visuals
 
-Use when a Markdown doc needs a picture (inline SVG, image, ASCII or Mermaid).
+Use when a Markdown doc needs an image, SVG or ASCII art
 
 # Markdown Visuals
 
@@ -377,7 +377,7 @@ Use this pattern by default for showing UI feature states. On GitHub, save the S
 
 # skill: commit-message-format
 
-Use when setting up commitlint or semantic-release. Everyday commits → commit-log.
+Use when setting up commitlint or semantic-release
 
 # Conventional Commit Message Format
 
@@ -480,7 +480,7 @@ Co-authored-by: ...      ← attribution
 
 # skill: markdown-report-docx
 
-Use when one Markdown file must become a polished Word report. Thesis → thesis-writing.
+Use when one Markdown file must become a Word report
 
 # Markdown Report → .docx
 

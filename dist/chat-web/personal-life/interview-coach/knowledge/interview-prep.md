@@ -1,6 +1,6 @@
 # skill: interview-prep
 
-Use when preparing for a job interview (HR screen, technical, final). STAR stories, questions, thank-you note.
+Use when preparing for a job interview
 
 # Interview Prep
 

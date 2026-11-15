@@ -1,6 +1,6 @@
 # skill: social-security-th
 
-Use when asking about Thai social security (sections 33, 39, 40), wage cap, benefits or SSO filings.
+Use for Thai social security questions
 
 # Thai Social Security (ประกันสังคม)
 
@@ -88,7 +88,7 @@ Salary 30,000. Base capped at 17,500 → employee 875, employer 875. Salary 12,0
 
 # skill: e-tax-invoice
 
-Use when a Thai VAT-registered business issues or checks tax invoices (Section 86/4, e-Tax Invoice).
+Use when a Thai VAT business issues or checks tax invoices
 
 # Thai Tax Invoice and e-Tax Invoice
 

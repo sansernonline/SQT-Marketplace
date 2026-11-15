@@ -1,6 +1,6 @@
 ---
 name: live-selling-script
-description: Use when preparing a live selling session on TikTok Shop, Shopee, Lazada or Facebook. Run sheet, hook.
+description: Use when preparing a live selling session
 argument-hint: <platform> <length in minutes> <products with price and stock>
 ---
 

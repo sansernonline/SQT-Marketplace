@@ -1,6 +1,6 @@
 ---
 name: thai-business-setup
-description: Use when starting a Thai business (sole trader, partnership or company, DBD registration, after-registration checklist). Imports → import-landed-cost.
+description: Use when starting a Thai business
 ---
 
 # ตั้งธุรกิจในไทย: เลือกรูปแบบและจดทะเบียน

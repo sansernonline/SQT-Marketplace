@@ -1,6 +1,6 @@
 # skill: status-report
 
-Use when a task that produces or checks work ends, to report status in a table.
+Use when a task ends, to report status in a table
 
 # รายงานสถานะเมื่อจบงาน
 
@@ -278,7 +278,7 @@ Use when a task that produces or checks work ends, to report status in a table.
 
 # skill: handoff
 
-Use when work passes to a subagent, next session, another model or person, or an inbox message lands.
+Use when work passes to a subagent, session or person
 
 # handoff — ส่งงานต่อ ให้คนรับไม่ต้องเดา
 
@@ -613,7 +613,7 @@ Claude Code มี 2 ระบบ: CLAUDE.md ที่คนเขียน แ�
 
 # skill: decision-scoring
 
-Use when picking or ranking options by numbers, not gut feel (which is best, worth it).
+Use when ranking options by numbers, not gut feel
 
 # decision-scoring — ตัดสินด้วยตัวเลข ไม่ใช่ความรู้สึก
 
@@ -711,7 +711,7 @@ Use when picking or ranking options by numbers, not gut feel (which is best, wor
 
 # skill: simplify
 
-Use when a deliverable has steps, layers or options nobody needs yet, or a newcomer must follow it. Not Claude Code /simplify.
+Use to cut extras nobody needs yet. Not Claude Code simplify
 
 # simplify — ทำให้ง่าย คนอ่านครั้งแรกก็ตามได้
 

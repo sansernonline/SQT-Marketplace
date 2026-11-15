@@ -1,6 +1,6 @@
 ---
 name: legal-document-systems
-description: Use when software handles legal documents (clause extraction, e-signature, Thai ETA).
+description: Use when software handles legal documents or Thai ETA
 argument-hint: <contract-analysis-design | esignature-audit> <details>
 ---
 

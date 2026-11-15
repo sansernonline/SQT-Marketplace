@@ -1,6 +1,6 @@
 ---
 name: calendar-audit
-description: Use when there is never time for real work, or monthly. Audits the calendar, proposes focus blocks.
+description: Use when there is no time for focus work
 ---
 
 # Calendar Audit

@@ -1,6 +1,6 @@
 # skill: test-case-template
 
-Use when writing test cases or a test plan from acceptance criteria.
+Use when writing test cases or a test plan
 
 # Test Case Template
 
@@ -527,7 +527,7 @@ A break with no case that fails → add a case, then add the row again.
 
 # skill: test-evidence
 
-Use when running test cases and keeping proof (GIF per case, pass/fail report).
+Use when running test cases and keeping proof
 
 # Test Evidence
 
@@ -642,7 +642,7 @@ python "<โฟลเดอร์ skill test-evidence>/scripts/make_evidence.py"
 
 # skill: bug-report-template
 
-Use when writing up one software defect (repro steps, severity).
+Use when writing up one software defect
 
 # Bug Report Template
 
@@ -804,7 +804,7 @@ The tester should:
 
 # skill: superuser
 
-Use when software work is big or risky (5+ modules, whole repo, money, personal data, deletes, prod, client delivery) or says superuser.
+Use when software work is big or risky
 
 # SuperUser — Team Lead
 
@@ -2569,7 +2569,7 @@ claude-security (All rights reserved · เอากลไกอย่างเ�
 
 # skill: lazy-coding
 
-Use when writing, fixing, refactoring or reviewing code, or on bloat complaints. Simplest that works.
+Use when writing or reviewing code, for the simplest that works
 
 # Lazy Coding
 

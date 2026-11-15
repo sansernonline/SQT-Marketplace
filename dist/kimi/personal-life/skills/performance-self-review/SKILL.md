@@ -1,6 +1,6 @@
 ---
 name: performance-self-review
-description: Use when writing a mid-year or year-end self-review, a brag document, or a promotion or raise case.
+description: Use when writing a self-review or promotion case
 ---
 
 # Performance Self-Review

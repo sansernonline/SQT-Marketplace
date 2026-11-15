@@ -31,7 +31,6 @@ scripts/
 | **install** | `install/install-marketplace.ps1` | ติดตั้ง marketplace นี้จากโฟลเดอร์ในเครื่อง | ครั้งแรก และเมื่อเพิ่ม plugin ใหม่ |
 | install | `install/install-global-rules.ps1` / `.sh` | ติดตั้ง `CLAUDE.global.md` เป็น `~/.claude/CLAUDE.md` (สำรองไฟล์เดิมก่อน) | ครั้งแรกบนเครื่องใหม่ และหลังแก้กฎ |
 | install | `install/CLAUDE.global.md` | ต้นฉบับกฎประจำตัวระดับเครื่อง — ไม่ใช่สคริปต์ แต่เป็นไฟล์ที่ `install-global-rules` ติดตั้ง | แก้ที่นี่ที่เดียว |
-| install | `install/set-skill-budget.mjs` | ตั้ง `skillListingBudgetFraction` = 0.02 ใน `~/.claude/settings.json` ให้รายการ skill ของ 12 plugin ไม่ถูกตัดคำอธิบาย (`install-global-rules` เรียกให้) | ครั้งแรกบนเครื่องใหม่ |
 
 ---
 

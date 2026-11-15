@@ -1,6 +1,6 @@
 # skill: saas-platform
 
-Use when building B2B SaaS (multi-tenancy, SSO, billing, usage metering).
+Use when building B2B SaaS with tenants and billing
 
 # saas-platform
 
@@ -2102,7 +2102,7 @@ await stripe.subscriptions.create({
 
 # skill: superuser
 
-Use when software work is big or risky (5+ modules, whole repo, money, personal data, deletes, prod, client delivery) or says superuser.
+Use when software work is big or risky
 
 # SuperUser — Team Lead
 

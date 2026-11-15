@@ -1,6 +1,6 @@
 ---
 name: news-impact
-description: Use when the user asks what news matters today for their stocks, what is due next week (งบออก, XD, กนง.), or how to prepare for results.
+description: Use when asking which news or events matter for my stocks
 argument-hint: '[today | week-ahead | results <symbol>]'
 ---
 

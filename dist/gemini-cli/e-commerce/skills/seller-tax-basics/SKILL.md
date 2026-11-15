@@ -1,6 +1,6 @@
 ---
 name: seller-tax-basics
-description: Use when a Thai individual selling online asks about tax (40(8), deemed expenses, PND 90 and 94, VAT).
+description: Use when a Thai individual online seller asks about tax
 ---
 
 # Seller Tax Basics (Thai individual online seller)

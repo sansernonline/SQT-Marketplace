@@ -1,6 +1,6 @@
 # skill: performance-self-review
 
-Use when writing a mid-year or year-end self-review, a brag document, or a promotion or raise case.
+Use when writing a self-review or promotion case
 
 # Performance Self-Review
 
@@ -162,7 +162,7 @@ Opening line for the conversation:
 
 # skill: linkedin-profile
 
-Use when creating or improving a LinkedIn profile for a Thai job search (headline, About, keywords).
+Use when improving a LinkedIn profile for Thai job search
 
 # LinkedIn Profile (Thai market)
 

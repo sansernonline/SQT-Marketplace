@@ -1,5 +1,10 @@
 # Changelog — graphic-design
 
+## 0.29.0 — 2026-11-15
+
+- description ของ skill ทั้ง 24 ตัวเป็นภาษาอังกฤษประโยคเดียว ยาวไม่เกิน 65 ตัวอักษร · รายการ skill ของ plugin นี้ลดจาก 3,784 เหลือ 2,056 ตัวอักษร · รวมทุก plugin เหลือ 24,071 ตัว ต่ำกว่างบตั้งต้น 30,000 ของ Claude Code จึงไม่ต้องตั้ง `skillListingBudgetFraction` แล้ว (ผู้ใช้สั่ง 2026-11-15)
+- ยังไม่ได้รัน trigger eval เทียบก่อนและหลัง (เสียเงิน รออนุมัติ)
+
 ## 0.28.8 — 2026-11-12
 
 - ตัวเลขที่เปลี่ยนบ่อยไม่เก็บใน skill แล้ว ให้ค้นสดจากหน้าทางการทุกครั้ง เปิดไม่ได้ใส่ `(รอยืนยัน)` · คงเฉพาะเลขที่สคริปต์ใช้คำนวณ · แถวใน `scripts/check/expiry.json` ลดจาก 26 เหลือ 8 · `social-formats` (ระยะปลอดภัย · ขนาดโฆษณา · `platform-sizes.md`) · `marketplace-product-images` · `youtube-thumbnail` · `brief-to-image` (รุ่น Gemini) · `video-editing` (ความดังต่อแพลตฟอร์ม คงค่าตั้งต้น -16 LUFS ที่ `loudnorm2.py` ใช้) · `narration-th` (ราคา TTS) · คง `line-richmenu` เพราะ `richmenu_check.py` ใช้ · eval `social-formats-behaviour` และ `youtube-thumbnail-behaviour` ตรวจว่าอ้างหรือค้นหน้าทางการแทนตัวเลข · `facts.json` ตัด 3 ค่า (ความดัง Apple Podcasts · Spotify · โควตาฟรี Google TTS)

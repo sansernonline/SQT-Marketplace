@@ -1,6 +1,6 @@
 # skill: image-generation
 
-Use when a page, slide, post or mockup needs real images (hero, product, people). Picks the route (generate, draw, stock). Prompts → brief-to-image.
+Use when a page needs images and a route must be picked
 
 # สร้างรูปจริงด้วย AI
 
@@ -190,7 +190,7 @@ Composition: eye-level, subject in left third, empty space on the right for the 
 
 # skill: design-references
 
-Use before any design work (web, app, slide, logo, poster) to search live references and colours.
+Use before design work to search live references and colours
 
 # design-references — ค้นงานจริงก่อนออกแบบ แล้วหยิบสีจากงานที่เลือก
 

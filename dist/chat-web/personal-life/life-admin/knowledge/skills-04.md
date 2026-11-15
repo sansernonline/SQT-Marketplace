@@ -1,6 +1,6 @@
 # skill: inbox-triage
 
-Use when an email inbox is overwhelming or the user asks what mail needs a reply today.
+Use when an email inbox is overwhelming
 
 # Inbox Triage
 
@@ -113,7 +113,7 @@ Output is six buckets with counts (Verify · Today · This week · Delegate · F
 
 # skill: calendar-audit
 
-Use when there is never time for real work, or monthly. Audits the calendar, proposes focus blocks.
+Use when there is no time for focus work
 
 # Calendar Audit
 

@@ -1,6 +1,6 @@
 # skill: style-consistency
 
-Use when a series of AI or shot images must look like one set (product line, posts, recurring character).
+Use when a series of images must look like one set
 
 # Style Consistency
 

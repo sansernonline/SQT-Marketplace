@@ -1,6 +1,6 @@
 # skill: important-docs
 
-Use when tracking ID, passport, house, vehicle, insurance or contract papers and expiry dates.
+Use when tracking ID and document expiry dates
 
 # Important Docs Registry (ทะเบียนเอกสารสำคัญ)
 

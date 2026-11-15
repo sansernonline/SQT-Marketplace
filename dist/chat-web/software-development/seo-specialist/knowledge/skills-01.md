@@ -1,6 +1,6 @@
 # skill: seo-audit-checklist
 
-Use when auditing a website or page for SEO or doing pre-launch SEO checks.
+Use when auditing a site or page for SEO
 
 # SEO Audit Checklist
 
@@ -487,7 +487,7 @@ Used by `seo-audit-checklist` step 5 and its command form `/software-development
 
 # skill: superuser
 
-Use when software work is big or risky (5+ modules, whole repo, money, personal data, deletes, prod, client delivery) or says superuser.
+Use when software work is big or risky
 
 # SuperUser — Team Lead
 

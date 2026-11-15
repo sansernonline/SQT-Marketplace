@@ -1,6 +1,6 @@
 # skill: doctor-visit-prep
 
-Use when preparing for a doctor visit (symptoms, medicines, allergies, questions) or recording it. No diagnosis.
+Use when preparing for a doctor visit, with no diagnosis
 
 # Doctor Visit Prep
 

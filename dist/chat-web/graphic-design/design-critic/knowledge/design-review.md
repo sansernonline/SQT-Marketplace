@@ -1,6 +1,6 @@
 # skill: design-review
 
-Use when a visual is about to ship or looks off for no clear reason. 8-point check and the top 3 fixes.
+Use when a visual is about to ship or looks off
 
 # Design Review
 

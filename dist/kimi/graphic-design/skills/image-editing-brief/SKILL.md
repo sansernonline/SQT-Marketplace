@@ -1,6 +1,6 @@
 ---
 name: image-editing-brief
-description: Use when an existing or AI image needs a change (remove object, fix colour, swap background, upscale).
+description: Use when an image needs edits like a background swap
 ---
 
 # Image Editing Brief

@@ -1,6 +1,6 @@
 ---
 name: video-script-to-clip
-description: Use when making a short video, Reel, TikTok or video ad. Hook, shot list, Thai subtitles, shot briefs.
+description: Use for a short video, Reel or TikTok ad, from hook to shot list
 argument-hint: <the message> [target platform and length]
 ---
 

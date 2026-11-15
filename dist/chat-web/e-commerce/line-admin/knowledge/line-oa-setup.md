@@ -1,6 +1,6 @@
 # skill: line-oa-setup
 
-Use when creating a LINE Official Account or enabling the Messaging API (tokens, webhook, quotas).
+Use when creating a LINE OA or enabling Messaging API
 
 # LINE OA Setup
 

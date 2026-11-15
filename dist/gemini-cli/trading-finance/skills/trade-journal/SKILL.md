@@ -1,6 +1,6 @@
 ---
 name: trade-journal
-description: Use when logging a trade (entry, exit, why) or reviewing results weekly or monthly, with win rate, expectancy, drawdown.
+description: Use when logging trades or reviewing win rate
 argument-hint: <entry|exit|read|review> [trade details or week|month]
 ---
 

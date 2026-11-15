@@ -1,6 +1,6 @@
 # skill: graphic-design
 
-Use when a software project needs a one-off logo or poster. Full brand → graphic-design plugin.
+Use for a one-off logo or poster, not a full brand kit
 
 # Graphic Design
 

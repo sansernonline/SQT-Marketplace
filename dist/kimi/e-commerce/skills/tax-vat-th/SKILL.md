@@ -1,6 +1,6 @@
 ---
 name: tax-vat-th
-description: Use when a Thai company asks what to file this month, VAT, withholding or penalties (PP 30, PND 3, 53).
+description: Use when a Thai company asks what tax to file
 argument-hint: '[company|personal] [--month <n>]'
 ---
 

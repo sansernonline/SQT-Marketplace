@@ -1,6 +1,6 @@
 ---
 name: reference-app-research
-description: Use when someone says I want an app like X. Researches it and its competitors.
+description: Use when someone wants an app like another app
 ---
 
 # Research แอปต้นแบบ — แกะ feature · UI · UX แล้วหาว่าเราจะทำให้ดีกว่าอย่างไร

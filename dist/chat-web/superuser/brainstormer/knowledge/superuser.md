@@ -1,6 +1,6 @@
 # skill: superuser
 
-Use when work is big or risky (5+ parts, whole repo, research, money, legal, health, personal data, deletes, outsiders) or says superuser. Team lead.
+Use when work is big or risky (money, deletes) or says superuser
 
 # SuperUser — Team Lead
 

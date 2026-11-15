@@ -1,6 +1,6 @@
 # skill: audit-trail
 
-Use when a system must record who did what and when (approvals, money, permissions).
+Use when a system must record who did what and when
 
 # ร่องรอยการใช้งาน (audit trail)
 
@@ -167,7 +167,7 @@ audit log ที่เก็บทุกอย่าง มีค่าเท่
 
 # skill: notifications
 
-Use when a system sends email, SMS, LINE, push or in-app messages.
+Use when a system sends email, SMS, LINE or push
 
 # การแจ้งเตือนผู้ใช้
 
@@ -342,7 +342,7 @@ templates/
 
 # skill: pdpa-compliance
 
-Use when software stores personal data of people in Thailand (PDPA).
+Use when software stores personal data in Thailand
 
 # PDPA — ข้อมูลส่วนบุคคล
 

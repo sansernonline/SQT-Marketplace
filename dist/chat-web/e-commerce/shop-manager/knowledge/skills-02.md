@@ -1,6 +1,6 @@
 # skill: multi-shop-stock
 
-Use when one seller lists the same stock on several marketplaces and oversells. Master stock sheet, SKUs.
+Use when one stock sells on several marketplaces and oversells
 
 # Multi-shop Stock
 
@@ -143,7 +143,7 @@ Worked example — `BAG-TOTE-BLK-L`, all channels together:
 
 # skill: shipping-compare
 
-Use when a Thai seller compares couriers (Flash, Kerry, J&T, Thailand Post, SPX) on cost, COD, weight.
+Use when a Thai seller compares couriers
 
 # Shipping Compare
 

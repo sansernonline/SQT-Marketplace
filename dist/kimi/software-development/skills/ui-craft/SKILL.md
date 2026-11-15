@@ -1,6 +1,6 @@
 ---
 name: ui-craft
-description: Use when a task produces a screen, screen spec or mockup, alongside the platform skill.
+description: Use with a platform skill when a task produces a screen or mockup
 ---
 
 # UI Craft

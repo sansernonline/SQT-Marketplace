@@ -1,6 +1,6 @@
 # skill: load-testing
 
-Use when checking how many users a system holds (load, stress, spike, k6). Page speed → web-quality-audit.
+Use when checking how many users a system holds
 
 # load-testing — ยิงโหลดแบบมีเป้า มีเกณฑ์ผ่าน และได้รับอนุญาต
 
@@ -264,7 +264,7 @@ claude mcp add --scope=user --transport=stdio k6 -- docker run --rm -i grafana/m
 
 # skill: fsd-writing
 
-Use when writing or reviewing a Functional Specification Document (FSD).
+Use when writing or reviewing a Functional Specification Document
 
 # เขียน Functional Specification Document (FSD)
 
@@ -936,7 +936,7 @@ Every error body is `application/problem+json` (RFC 9457): `type` · `title` · 
 
 # skill: simplify
 
-Use when a deliverable has steps, layers or options nobody needs yet, or a newcomer must follow it. Not Claude Code /simplify.
+Use to cut extras nobody needs yet. Not Claude Code simplify
 
 # simplify — ทำให้ง่าย คนอ่านครั้งแรกก็ตามได้
 
@@ -987,7 +987,7 @@ plugin `software-development` มีรายละเอียดของโ�
 
 # skill: stack-dotnet
 
-Use when writing, reviewing or fixing C# and .NET (ASP.NET Core, MVC 5, EF Core).
+Use when writing or fixing C# and .NET code
 
 # stack-dotnet — เขียน C# ให้ build สะอาด test ผ่าน ไม่มีกับดักเดิม
 
@@ -1192,7 +1192,7 @@ options.LogTo(Console.WriteLine, LogLevel.Information).EnableSensitiveDataLoggin
 
 # skill: stack-typescript
 
-Use when writing or reviewing TypeScript (Node, NestJS, Angular, React, Vite).
+Use when writing or reviewing TypeScript code
 
 # stack-typescript — TypeScript ที่ทีมอ่านง่าย และพังยาก
 

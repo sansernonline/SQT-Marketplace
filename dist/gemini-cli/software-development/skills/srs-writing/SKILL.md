@@ -1,6 +1,6 @@
 ---
 name: srs-writing
-description: Use when writing or reviewing a Software Requirements Specification (SRS).
+description: Use when writing a Software Requirements Specification
 ---
 
 # SRS Writing

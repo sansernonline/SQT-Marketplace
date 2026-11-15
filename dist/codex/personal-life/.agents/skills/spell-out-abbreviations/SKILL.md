@@ -1,6 +1,6 @@
 ---
 name: spell-out-abbreviations
-description: Use when text people read is heavy with abbreviations or jargon, or needs a glossary.
+description: Use when text is heavy with abbreviations or jargon
 ---
 
 # Spell Out Abbreviations

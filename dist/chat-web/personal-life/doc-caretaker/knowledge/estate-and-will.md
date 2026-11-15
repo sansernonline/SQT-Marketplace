@@ -1,6 +1,6 @@
 # skill: estate-and-will
 
-Use when someone in a Thai family dies or the user asks about inheritance (มรดก), making a will (พินัยกรรม) or an executor.
+Use when a Thai family faces inheritance or a will
 
 # Estate and Will (Thailand)
 

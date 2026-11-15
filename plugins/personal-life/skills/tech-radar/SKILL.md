@@ -1,6 +1,6 @@
 ---
 name: tech-radar
-description: Use when catching up weekly on changes in followed libraries and tools, from official release notes.
+description: Use when catching up weekly on library release notes
 argument-hint: '[--deep <project>]'
 ---
 

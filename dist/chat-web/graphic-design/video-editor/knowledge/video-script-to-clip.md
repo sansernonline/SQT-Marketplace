@@ -1,6 +1,6 @@
 # skill: video-script-to-clip
 
-Use when making a short video, Reel, TikTok or video ad. Hook, shot list, Thai subtitles, shot briefs.
+Use for a short video, Reel or TikTok ad, from hook to shot list
 
 # Video Script to Clip
 

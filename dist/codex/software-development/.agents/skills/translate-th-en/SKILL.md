@@ -1,6 +1,6 @@
 ---
 name: translate-th-en
-description: Use when translating Thai to English or back, or syncing TH/EN files.
+description: Use when translating Thai and English or syncing files
 ---
 
 # translate-th-en — แปลไทย-อังกฤษให้อ่านเหมือนเขียนในภาษานั้นตั้งแต่แรก

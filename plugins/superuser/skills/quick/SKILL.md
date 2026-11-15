@@ -1,6 +1,6 @@
 ---
 name: quick
-description: Use when the hook marks a request as a small task (one file, one fix, one question). Runs it on a small model with SuperUser checks.
+description: Use when the hook marks a request as a small task
 argument-hint: "[task: user's words, file paths, facts from chat, skill to open]"
 context: fork
 agent: general-purpose

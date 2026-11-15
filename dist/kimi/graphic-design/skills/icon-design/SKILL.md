@@ -1,6 +1,6 @@
 ---
 name: icon-design
-description: Use when an app, website, plugin or brand needs icons (UI icon set, app icon, favicon, logo mark) or says ไอคอน, icon ไม่สวย, ทำไอคอนแอป.
+description: Use when an app or brand needs icons or a favicon
 ---
 
 # icon-design — ไอคอนที่คนออกแบบจริงทำ ไม่ใช่รูปทรงที่โค้ดวาด

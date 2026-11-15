@@ -1,6 +1,6 @@
 # skill: saas-platform
 
-Use when building B2B SaaS (multi-tenancy, SSO, billing, usage metering).
+Use when building B2B SaaS with tenants and billing
 
 # saas-platform
 
@@ -2102,7 +2102,7 @@ await stripe.subscriptions.create({
 
 # skill: principle-prove-it-works
 
-Use when about to say any work is done, fixed or working. Check against the real thing first.
+Use before saying work is done, fixed or working
 
 # principle · prove it works — พิสูจน์กับของจริง
 

@@ -1,6 +1,6 @@
 # skill: course-builder
 
-Use when designing a course, workshop or training day you will teach. Outcomes, session timing, exercises, rubric, feedback form.
+Use when designing a course or workshop you will teach
 
 # course-builder · ออกแบบหลักสูตรฝั่งผู้สอน
 
@@ -345,7 +345,7 @@ git log --oneline
 
 # skill: human-writing
 
-Use before writing or editing anything people read (answer, email, report, README, slide, label) in Thai or English. Look → polished-document-style.
+Use before writing anything people read, in Thai or English
 
 # human-writing — write like a person: smooth to read, easy to understand
 

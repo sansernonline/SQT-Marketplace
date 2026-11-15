@@ -1,6 +1,6 @@
 ---
 name: workspace-setup
-description: Use when work starts in a new project folder or agents should merge branches without asking.
+description: Use when work starts in a new project folder
 ---
 
 # ตั้งโปรเจกต์ให้ agent ทำงานจนจบได้

@@ -1,6 +1,6 @@
 ---
 name: principle-prove-it-works
-description: Use when about to say any work is done, fixed or working. Check against the real thing first.
+description: Use before saying work is done, fixed or working
 ---
 
 # principle · prove it works — พิสูจน์กับของจริง

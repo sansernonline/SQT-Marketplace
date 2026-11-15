@@ -1,6 +1,6 @@
 ---
 name: code-orientation
-description: Use when about to change code not yet read this session. Maps how it runs.
+description: Use before changing code you have not yet read
 ---
 
 # code-orientation — อ่านโค้ดเดิมให้เข้าใจก่อนแตะ

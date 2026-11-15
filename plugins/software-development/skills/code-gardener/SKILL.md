@@ -1,6 +1,6 @@
 ---
 name: code-gardener
-description: Use when patrolling code for duplication, dead code or naming drift, or says garden.
+description: Use when patrolling code for duplication or dead code
 ---
 
 # code-gardener — คนสวนที่จดก่อน ยังไม่ตัด

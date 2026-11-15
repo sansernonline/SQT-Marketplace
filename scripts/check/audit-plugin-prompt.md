@@ -96,7 +96,7 @@ plugin: <ชื่อ plugin · ทุก plugin>
    - จด token ที่ใช้ทั้งแบบเปิดและปิด plugin · skill ที่ได้ผลเท่ากันแต่กิน token มากกว่า = เสนอให้ย่อ
 
 8. ประหยัด token
-   - โหลดทุก session: ผลรวมความยาว description ของ skill · agent · command ทั้ง plugin · และผลรวมถ้าติดตั้งครบทุก plugin (`skills/superuser` มี 1 ตัวต่อ plugin จึงนับทุกตัว) · เทียบกับงบรายการ skill ราว 30,000 ตัวอักษรที่งบ 1% ค่าเริ่ม ถ้าเกิน คำอธิบายของบางตัวจะถูกตัด (ติดตั้งครบได้ 38,804 ตัวอักษร ตาม `scripts/evals/triggers/RESULTS.md`) · ทางแก้ชั่วคราวคือ `scripts/install/set-skill-budget.mjs` · เสนอทางลด
+   - โหลดทุก session: ผลรวมความยาว description ของ skill · agent · command ทั้ง plugin · และผลรวมถ้าติดตั้งครบทุก plugin (`skills/superuser` มี 1 ตัวต่อ plugin จึงนับทุกตัว) · เทียบกับงบรายการ skill ราว 30,000 ตัวอักษรที่งบ 1% ค่าเริ่ม ถ้าเกิน คำอธิบายของบางตัวจะถูกตัด (ติดตั้งครบได้ 38,804 ตัวอักษร ตาม `scripts/evals/triggers/RESULTS.md`) · ทางแก้คือย่อ description (เป้า ≤ 65 ตัวต่อ skill) ไม่ตั้งงบเพิ่ม เพราะ `skillListingBudgetFraction` ทำให้ model ที่ context 200k ได้งบน้อยกว่าค่าตั้งต้น · เสนอทางลด
    - description ที่เขียนเป็นภาษาไทย (ไทยกิน token ต่อตัวอักษรมากกว่าอังกฤษ)
    - hook (มีใน `superuser` ที่เดียว · `hooks/hooks.json`): ข้อความที่พ่นเข้า context ต่อครั้ง วัดเป็นตัวอักษร แยกตามจังหวะ SessionStart · UserPromptSubmit · PreToolUse · PostToolUse · Stop · ดู `core-rules.md` ที่ส่งตอนเริ่ม session และข้อความ "skill ที่ต้องเปิด" จาก `skill-router.json` ที่ส่งทุก prompt · จังหวะที่พ่นทุกรอบทั้งที่ไม่จำเป็น · plugin สาขาที่เพิ่ม hook ของตัวเองแล้วทำงานซ้อนกับของ superuser
    - ไฟล์ที่ skill สั่งให้อ่านทุกครั้ง (CONTEXT.md · log · IMPROVEMENTS.md): อ่านทั้งไฟล์ หรืออ่านแค่ส่วนที่ใช้ · ไฟล์ที่โตไม่หยุดมีกฎตัดหรือแยกไฟล์ไหม

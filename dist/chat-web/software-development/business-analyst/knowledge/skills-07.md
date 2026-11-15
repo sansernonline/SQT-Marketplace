@@ -1,6 +1,6 @@
 # skill: principle-proceed-on-reversible-work
 
-Use when about to ask shall I continue on work that can be undone. Proceed.
+Use before asking to continue on undoable work
 
 # principle · proceed on reversible work — ย้อนได้ ทำเลย
 
@@ -39,7 +39,7 @@ Use when about to ask shall I continue on work that can be undone. Proceed.
 
 # skill: document-naming
 
-Use when creating, renaming or filing a document others keep (name, version, status).
+Use when naming or filing a document others keep
 
 # ตั้งชื่อและจัดเวอร์ชันเอกสาร
 
@@ -183,7 +183,7 @@ Use when creating, renaming or filing a document others keep (name, version, sta
 
 # skill: pdpa-compliance
 
-Use when software stores personal data of people in Thailand (PDPA).
+Use when software stores personal data in Thailand
 
 # PDPA — ข้อมูลส่วนบุคคล
 

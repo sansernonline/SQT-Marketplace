@@ -1,6 +1,6 @@
 # skill: personal-budget
 
-Use when the month starts, salary runs out early, or the user wants a budget from real spending.
+Use when salary runs out early or making a monthly budget
 
 # Personal Budget (งบรายเดือน)
 
@@ -130,7 +130,7 @@ Payday transfer done? Y/N    One fix for next month: ______
 
 # skill: emergency-fund
 
-Use when the user asks how big an emergency fund should be, where to park it, or deposit protection.
+Use when sizing an emergency fund or where to keep it
 
 # Emergency Fund (เงินสำรองฉุกเฉิน)
 

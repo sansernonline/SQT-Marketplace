@@ -1,6 +1,6 @@
 ---
 name: goal-and-habit
-description: Use when setting quarterly or new-year goals, starting or stopping a habit, or goals fade by February.
+description: Use when setting quarterly goals or building a habit
 ---
 
 # Goals and Habits

@@ -1,6 +1,6 @@
 ---
 name: reverse-engineering
-description: Use when a compiled app, firmware, network capture or unknown format has no source.
+description: Use when a binary, firmware or format has no source
 allowed-tools: Read, Grep, Glob, Bash(python -I *), Bash(node *check-tools.mjs*)
 ---
 

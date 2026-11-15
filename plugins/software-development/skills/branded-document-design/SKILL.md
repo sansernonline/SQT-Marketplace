@@ -1,6 +1,6 @@
 ---
 name: branded-document-design
-description: Use when a Word, PowerPoint or PDF deliverable must look designed. Markdown report → markdown-report-docx.
+description: Use when a Word, PowerPoint or PDF must look designed
 ---
 
 # Branded Document Design

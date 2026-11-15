@@ -1,6 +1,6 @@
 # skill: polite-message-th-en
 
-Use when writing an awkward everyday message in Thai or English (favour, decline, chasing payment).
+Use for an awkward everyday message in Thai or English
 
 # Polite Messages in Thai and English
 
@@ -247,7 +247,7 @@ Third follow-up with no reply: change the channel (from email to a phone call) r
 
 # skill: important-docs
 
-Use when tracking ID, passport, house, vehicle, insurance or contract papers and expiry dates.
+Use when tracking ID and document expiry dates
 
 # Important Docs Registry (ทะเบียนเอกสารสำคัญ)
 

@@ -1,6 +1,6 @@
 # skill: personal-kb
 
-Use when the user cannot find a note they wrote, or wants a personal knowledge base or second brain.
+Use when building a personal knowledge base
 
 # Personal KB (คลังความรู้ส่วนตัว)
 
@@ -93,7 +93,7 @@ Related: `meeting` (Leg 2 summaries file into `journal/`) · `important-docs` (d
 
 # skill: travel-prep
 
-Use when a trip is one to two weeks away or a passport is near expiry. Visa, insurance, money, itinerary.
+Use when a trip is near or a passport expires
 
 # Travel Prep (เตรียมเดินทาง)
 

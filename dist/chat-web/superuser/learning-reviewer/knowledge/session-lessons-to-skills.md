@@ -1,6 +1,6 @@
 # skill: session-lessons-to-skills
 
-Use when a big task ends, the user says reflect or wants lessons, or a skill misled.
+Use when a big task ends and lessons should be kept
 
 # session-lessons-to-skills — ทุกงานใหญ่ทิ้งบทเรียนไว้ในเครื่องมือ
 

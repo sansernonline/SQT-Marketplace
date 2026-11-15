@@ -1,6 +1,6 @@
 ---
 name: payroll-th
-description: Use when running Thai monthly payroll (tax withholding, social security, provident fund, PND 1).
+description: Use when running Thai monthly payroll
 argument-hint: '[month|year-end] [--employees <file>]'
 ---
 

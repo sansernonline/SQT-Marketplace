@@ -1,6 +1,6 @@
 # skill: stock-fundamentals
 
-Use when reading a Thai stock's financial statements or ratios (P/E, P/BV, ROE, D/E, payout, งบการเงิน) or screening SET names before a watchlist.
+Use when reading a Thai stock's financials or ratios
 
 # Stock Fundamentals (อ่านงบและตัวเลขพื้นฐานหุ้น SET)
 

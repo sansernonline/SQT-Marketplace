@@ -1,6 +1,6 @@
 ---
 name: asset-organize
-description: Use when design files are a mess (untitled exports, final_v2 copies, lost logo). Folders, naming, versions.
+description: Use when design files are messy or versions are lost
 ---
 
 # Asset Organize

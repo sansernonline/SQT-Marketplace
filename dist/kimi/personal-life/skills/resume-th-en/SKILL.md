@@ -1,6 +1,6 @@
 ---
 name: resume-th-en
-description: Use when writing or reviewing a Thai or English CV or resume (ATS layout, what to omit, number bullets).
+description: Use when writing a Thai or English CV or resume
 argument-hint: <th|en|both> [job post URL or text]
 ---
 

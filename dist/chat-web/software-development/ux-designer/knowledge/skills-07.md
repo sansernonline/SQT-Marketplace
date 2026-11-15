@@ -1,6 +1,6 @@
 # skill: context-budget
 
-Use when a task will read large material (many files, long PDFs, a codebase) or long output.
+Use when a task reads large material or writes long output
 
 # งบ context
 
@@ -211,7 +211,7 @@ subagent มี context ของตัวเอง จึงอ่านไป 
 
 # skill: handoff
 
-Use when work passes to a subagent, next session, another model or person, or an inbox message lands.
+Use when work passes to a subagent, session or person
 
 # handoff — ส่งงานต่อ ให้คนรับไม่ต้องเดา
 
@@ -546,7 +546,7 @@ Claude Code มี 2 ระบบ: CLAUDE.md ที่คนเขียน แ�
 
 # skill: human-writing
 
-Use before writing or editing anything people read (answer, email, report, README, slide, label) in Thai or English. Look → polished-document-style.
+Use before writing anything people read, in Thai or English
 
 # human-writing — write like a person: smooth to read, easy to understand
 

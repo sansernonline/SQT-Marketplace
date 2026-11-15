@@ -1,6 +1,6 @@
 ---
 name: image-generation
-description: Use when a page, slide, post or mockup needs real images (hero, product, people). Picks the route (generate, draw, stock). Prompts → brief-to-image.
+description: Use when a page needs images and a route must be picked
 ---
 
 # สร้างรูปจริงด้วย AI

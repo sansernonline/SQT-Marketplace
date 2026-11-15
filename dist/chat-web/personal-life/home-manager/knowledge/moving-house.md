@@ -1,6 +1,6 @@
 # skill: moving-house
 
-Use when a Thai household moves home or changes address (ย้ายบ้าน, ย้ายทะเบียนบ้าน, คืนห้องเช่า, เงินประกันค่าไฟ/น้ำ, แจ้งเปลี่ยนที่อยู่).
+Use when a Thai household moves or changes address
 
 # Moving House (ย้ายบ้าน · เปลี่ยนที่อยู่)
 

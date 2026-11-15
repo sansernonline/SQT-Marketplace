@@ -1,6 +1,6 @@
 # skill: markdown-visuals
 
-Use when a Markdown doc needs a picture (inline SVG, image, ASCII or Mermaid).
+Use when a Markdown doc needs an image, SVG or ASCII art
 
 # Markdown Visuals
 
@@ -377,7 +377,7 @@ Use this pattern by default for showing UI feature states. On GitHub, save the S
 
 # skill: software-diagrams
 
-Use when a README, PR or code note needs a quick Mermaid diagram. Doc figures → diagram-figures.
+Use when a README or PR needs a quick Mermaid diagram
 
 # Software Diagrams
 
@@ -588,7 +588,7 @@ npx -y @mermaid-js/mermaid-cli@11.17.0 -i diagram.mmd -o diagram.png -b white -s
 
 # skill: incident-runbook-template
 
-Use when writing a runbook or on-call guide for when something breaks.
+Use when writing a runbook or on-call guide
 
 # Incident Runbook Template
 
@@ -988,7 +988,7 @@ Useful for new on-call engineers.
 
 # skill: logging-standards
 
-Use when writing or reviewing code that logs (levels, ids, redaction).
+Use when writing or reviewing code that logs
 
 # Logging Standards
 
@@ -1386,7 +1386,7 @@ export const correlationInterceptor: HttpInterceptorFn = (req, next) =>
 
 # skill: web-service-essentials
 
-Use when building or reviewing any HTTP backend (health endpoints, RFC 9457 errors).
+Use when building or reviewing an HTTP backend
 
 # Web Service Essentials
 

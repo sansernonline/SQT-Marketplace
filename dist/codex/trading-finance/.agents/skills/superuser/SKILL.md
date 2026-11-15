@@ -1,6 +1,6 @@
 ---
 name: superuser
-description: Use when a money matter spans several steps (trades, portfolio, budget, debt, tax) or the user says superuser for money.
+description: Use when a money matter spans several steps
 ---
 
 # SuperUser — Team Lead

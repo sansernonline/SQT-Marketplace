@@ -1,6 +1,6 @@
 ---
 name: subscription-audit
-description: Use when finding and cutting recurring charges (streaming, apps, gym, cloud, free trials) from statements.
+description: Use when cutting recurring subscriptions and charges
 argument-hint: <statement files or folder> [--months 3|12]
 ---
 

@@ -1,6 +1,6 @@
 # skill: credit-bureau
 
-Use when a loan was refused, the user fears a credit blacklist, or wants to check or dispute their Thai credit bureau (เครดิตบูโร, NCB) report.
+Use when a loan is refused or checking an NCB report
 
 # Credit Bureau (เครดิตบูโร · รายงานข้อมูลเครดิตของตัวเอง)
 
@@ -95,7 +95,7 @@ User: refused a home loan; 2 years ago paid a credit card 3 months late, now clo
 
 # skill: rebalance-and-dca
 
-Use when setting up monthly investing (DCA) in Thai funds or stocks, or a portfolio has drifted from its target mix and needs rebalancing.
+Use when setting up monthly DCA or rebalancing a portfolio
 
 # Rebalance and DCA (ลงทุนรายเดือน · ปรับสัดส่วนพอร์ต)
 

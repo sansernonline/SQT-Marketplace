@@ -1,6 +1,6 @@
 # skill: agent-patterns
 
-Use when SuperUser plans how agents run a task (ReAct, Reflection, Multi-Agent, Reranker).
+Use when planning how agents run a task, like ReAct
 
 # agent-patterns — 6 รูปแบบการทำงานของทีม agent
 

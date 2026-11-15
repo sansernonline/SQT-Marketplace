@@ -1,6 +1,6 @@
 # skill: superuser
 
-Use when daily-life work spans several steps (weekly reset, documents, home, health, career, learning, thesis) or says superuser for life admin.
+Use when daily-life admin spans several steps
 
 # SuperUser — Team Lead
 
@@ -1891,7 +1891,7 @@ claude-security (All rights reserved · เอากลไกอย่างเ�
 
 # skill: legal-help-prep
 
-Use when the user has a dispute or court summons (หมายศาล, ปรึกษาทนาย, rent, debt, wages), asks a deadline or who wins, or preps a lawyer visit.
+Use when facing a dispute or court summons
 
 # Legal Help Prep (เตรียมเรื่องก่อนไปหาทนายหรือหน่วยงาน)
 

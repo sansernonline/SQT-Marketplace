@@ -1,6 +1,6 @@
 ---
 name: web-service-essentials
-description: Use when building or reviewing any HTTP backend (health endpoints, RFC 9457 errors).
+description: Use when building or reviewing an HTTP backend
 ---
 
 # Web Service Essentials

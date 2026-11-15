@@ -1,6 +1,6 @@
 ---
 name: superuser
-description: Use when software work is big or risky (5+ modules, whole repo, money, personal data, deletes, prod, client delivery) or says superuser.
+description: Use when software work is big or risky
 ---
 
 # SuperUser — the team's single front door

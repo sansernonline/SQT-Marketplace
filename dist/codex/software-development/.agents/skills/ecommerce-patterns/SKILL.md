@@ -1,6 +1,6 @@
 ---
 name: ecommerce-patterns
-description: Use when building shop software (cart, checkout, orders, promotions). Not running a shop.
+description: Use when building shop software with cart and checkout
 argument-hint: <checkout-audit | recommendation-design> <details>
 ---
 

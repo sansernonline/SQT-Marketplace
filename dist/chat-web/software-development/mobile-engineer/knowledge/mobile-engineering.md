@@ -1,6 +1,6 @@
 # skill: mobile-engineering
 
-Use when engineering a mobile app (Kotlin, Swift, Flutter, React Native).
+Use when building a mobile app in code
 
 # mobile-engineering
 

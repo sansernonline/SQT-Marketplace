@@ -1,6 +1,6 @@
 ---
 name: marketplace-fees-pricing
-description: Use when a Thai seller asks what to charge, why a product loses money, or how marketplace fees compare.
+description: Use when a Thai seller sets prices or checks marketplace fees
 argument-hint: <product> <cost> <platform> [current price, category, target margin]
 ---
 

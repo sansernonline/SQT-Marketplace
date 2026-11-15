@@ -1,6 +1,6 @@
 ---
 name: handoff
-description: Use when work passes to a subagent, next session, another model or person, or an inbox message lands.
+description: Use when work passes to a subagent, session or person
 ---
 
 # handoff — ส่งงานต่อ ให้คนรับไม่ต้องเดา

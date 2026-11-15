@@ -1,6 +1,6 @@
 # skill: project-doc-set
 
-Use when deciding a project's doc set or listing open items in one Excel.
+Use when choosing a project doc set or open-items Excel
 
 # ชุดเอกสารโปรเจกต์
 
@@ -619,7 +619,7 @@ Thanks to: @alice, @bob, @charlie
 
 # skill: architecture-patterns
 
-Use when choosing system architecture (monolith, microservices, serverless, events).
+Use when choosing monolith, microservices or serverless
 
 # Architecture Patterns
 
@@ -1199,7 +1199,7 @@ When proposing architecture, compare options:
 
 # skill: prior-art-review
 
-Use when about to build something that may already exist. Decide adopt, buy or build.
+Use before building something that may already exist
 
 # สำรวจของที่มีอยู่แล้วก่อนลงมือทำ
 
@@ -1398,7 +1398,7 @@ Use when about to build something that may already exist. Decide adopt, buy or b
 
 # skill: parallel-attempts-pick-best
 
-Use when one attempt could lock in the wrong shape (design, plan) or the user says bake-off.
+Use when one attempt may lock in a wrong design or plan
 
 # parallel-attempts-pick-best — ลองหลายทาง เลือกทางที่ดีที่สุด
 
@@ -1460,7 +1460,7 @@ Use when one attempt could lock in the wrong shape (design, plan) or the user sa
 
 # skill: adversarial-review-panel
 
-Use when asked for adversarial review, stress test or blind spots before shipping.
+Use for an adversarial review or stress test before shipping
 
 # adversarial-review-panel — คณะรีวิวที่ตั้งใจหาเรื่อง
 

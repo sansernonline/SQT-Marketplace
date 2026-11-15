@@ -1,6 +1,6 @@
 # skill: context-budget
 
-Use when a task will read large material (many files, long PDFs, a codebase) or long output.
+Use when a task reads large material or writes long output
 
 # งบ context
 
@@ -211,7 +211,7 @@ subagent มี context ของตัวเอง จึงอ่านไป 
 
 # skill: temp-file-discipline
 
-Use when a task writes temporary files (extracts, backups, scripts) into a project.
+Use when a task writes temporary files into a project
 
 # ระเบียบไฟล์ชั่วคราว
 
@@ -329,7 +329,7 @@ Use when a task writes temporary files (extracts, backups, scripts) into a proje
 
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next and needs a decision.
+Use when a mid-task finding needs a decision before going on
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 

@@ -1,6 +1,6 @@
 # skill: image-editing-brief
 
-Use when an existing or AI image needs a change (remove object, fix colour, swap background, upscale).
+Use when an image needs edits like a background swap
 
 # Image Editing Brief
 
@@ -124,7 +124,7 @@ Decide where the new pixels go (top for text space, bottom only if it stays outs
 
 # skill: brand-kit
 
-Use when starting a brand, posts look inconsistent, a full guideline is needed or colours synced to design tokens. Logo, colours, Thai fonts, voice.
+Use when starting a brand or needing a style guideline
 
 # Brand Kit
 

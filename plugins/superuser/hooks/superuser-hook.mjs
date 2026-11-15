@@ -446,20 +446,6 @@ export function coreRules({ configDir = process.env.CLAUDE_CONFIG_DIR ?? join(ho
   return text.slice(0, CONTEXT_MAX);
 }
 
-// ติดตั้ง plugin ครบ รายการ skill ยาว 46,056 ตัวอักษร เกินงบตั้งต้น 30,000 (1%) → คำอธิบายถูกตัด
-// eval triggers 2026-11-09 ที่งบ 1%: debug log ขึ้น "Skill listing over budget" ทุกรอบ · docx · Python · สไลด์ ไม่เปิด skill 0/3
-// ติดตั้งผ่าน `claude plugin install` ไม่ได้รัน set-skill-budget.mjs จึงบอกตอนเริ่ม session จนกว่าจะตั้ง
-// บอกแล้วเงียบ 7 วัน · eval รอบ 3 (2026-11-09) ข้อความนี้ขึ้นท้ายคำตอบแรกทุก session
-export const SKILL_BUDGET_MIN = 0.02;
-export const SKILL_BUDGET_QUIET_MS = 7 * 86400000;
-export function skillBudgetNote({ configDir = process.env.CLAUDE_CONFIG_DIR ?? join(homedir(), ".claude"), now = Date.now() } = {}) {
-  const set = readJson(join(configDir, "settings.json"), {})?.skillListingBudgetFraction ?? 0;   // ไฟล์ที่มีแค่ null ต้องไม่ทำให้กฎประจำตัวหาย
-  if (set >= SKILL_BUDGET_MIN) return "";
-  const stamp = join(configDir, "superuser", "skill-budget-noted");
-  try { if (now - statSync(stamp).mtimeMs < SKILL_BUDGET_QUIET_MS) return ""; } catch { /* ยังไม่เคยบอก */ }
-  try { mkdirSync(dirname(stamp), { recursive: true }); writeFileSync(stamp, ""); utimesSync(stamp, now / 1000, now / 1000); } catch { /* เขียนไม่ได้ก็บอกทุกครั้ง */ }
-  return `Skill listing budget is below ${SKILL_BUDGET_MIN} (default 0.01), so skill descriptions get cut and skills are often missed · tell the user once in the first reply to set "skillListingBudgetFraction": ${SKILL_BUDGET_MIN} in ~/.claude/settings.json and start a new session · do not edit that file yourself`;
-}
 
 // งานหลายขั้นที่ไม่เอ่ยชื่อ superuser มักไม่มีคำเฉพาะให้ regex แถวเดียวจับ (เปิดเองแทบ 0% เมื่อพูดอ้อม · Scott Spence 2026-02-08)
 // จึงนับสัญญาณหลายอย่างใน router.multistep: แต่ละ signal นับ 1 แต้มเมื่อเจอ pattern อย่างน้อย min ครั้ง หรือข้อความยาวถึง minLength
@@ -644,7 +630,7 @@ export function promptNotice(input, router, dir = OPEN_DIR) {
 
 function leadContext(input) {
   if (input.agent_id) return "";
-  if (input.hook_event_name === "SessionStart") return [coreRules(), skillBudgetNote()].filter(Boolean).join("\n\n");
+  if (input.hook_event_name === "SessionStart") return coreRules();
   if (input.hook_event_name === "UserPromptSubmit") return promptNotice(input, readJson(join(HERE, "skill-router.json"), { rules: [] }));
   return "";
 }
@@ -1814,18 +1800,6 @@ function selfTest() {
     ["ข้อความ hook: เตือนงานหลายขั้น ≤ 200 ตัวอักษร · SessionStart ไม่มีข้อความเรื่องนี้ซ้ำ", [], true, () => MULTISTEP_REMINDER.length <= 200 && !leadContext({ hook_event_name: "SessionStart" }).includes(MULTISTEP_REMINDER.slice(0, 20))],
     ["กฎประจำตัว: ส่งได้ไม่เกินเพดาน", [], true, () => { const c = coreRules({ configDir: "/nonexistent" }); return c.includes(CORE_MARK) && c.length <= CONTEXT_MAX; }],
     ["กฎประจำตัว: ไม่ส่งหัวสำเนา · เริ่มที่ CORE_MARK", [], true, () => coreRules({ configDir: "/nonexistent" }).startsWith(CORE_MARK)],
-    ["งบรายการ skill: ไม่มี settings → เตือน · ตั้ง 0.02 แล้วเงียบ · เตือนแล้วเงียบ 7 วัน", [], true, () => {
-      const ok = join(tmpdir(), `su-budget-${TMP_USER}`);
-      const low = join(tmpdir(), `su-budget-low-${TMP_USER}`);
-      mkdirSync(ok, { recursive: true });
-      rmSync(low, { recursive: true, force: true });
-      writeFileSync(join(ok, "settings.json"), JSON.stringify({ skillListingBudgetFraction: SKILL_BUDGET_MIN }));
-      const t = Date.now();
-      const first = skillBudgetNote({ configDir: low, now: t }).includes("skillListingBudgetFraction");
-      const again = skillBudgetNote({ configDir: low, now: t + 86400000 }) === "";
-      const later = skillBudgetNote({ configDir: low, now: t + SKILL_BUDGET_QUIET_MS + 86400000 }).includes("skillListingBudgetFraction");
-      return first && again && later && skillBudgetNote({ configDir: ok }) === "";
-    }],
     ["กฎประจำตัว: subagent ได้แค่ตาราง skill", [], true, () => { const c = coreRules({ configDir: "/nonexistent", routeOnly: true }); return c.startsWith(ROUTE_HEAD) && !c.includes("## ทำให้จบ"); }],
   );
   const tmp = join(tmpdir(), `sqt-claim-test-${process.pid}`);

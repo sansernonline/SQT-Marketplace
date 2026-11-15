@@ -1,6 +1,6 @@
 # skill: simplicity-first
 
-Use when cutting a software spec or architecture to fewest parts. Code → lazy-coding.
+Use when cutting a spec or architecture to fewest parts
 
 # Simplicity First
 
@@ -95,7 +95,7 @@ auth middleware. Log to the existing system."
 
 # skill: postmortem-template
 
-Use when writing a post-incident review or blameless postmortem.
+Use when writing a blameless post-incident review
 
 # Blameless Postmortem Template
 
@@ -340,7 +340,7 @@ Default formatting is not neutral — it reads as unfinished work.
 
 # skill: polished-document-style
 
-Use when a kept doc (report, proposal, Word, PDF) needs headings, tables, theme. Wording → human-writing.
+Use when a kept document needs headings, tables and theme
 
 # Polished Document Style
 
@@ -786,7 +786,7 @@ markdown เองไม่มีสี จึงใช้คำกำกับ�
 
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable must look designed. Markdown report → markdown-report-docx.
+Use when a Word, PowerPoint or PDF must look designed
 
 # Branded Document Design
 
@@ -1491,7 +1491,7 @@ footer        "หน้า N" กลางหน้า สีเทา 9pt
 
 # skill: diagram-figures
 
-Use when a document, plan, slide or spec needs a designed diagram (process, budget flow, BRD).
+Use when a document or slide needs a designed diagram
 
 > **สีหลักของรูป = สีหลักของโปรเจกต์** · หาตามลำดับในข้อ 5 ถ้าหาไม่เจอเลยจึงใช้ชุดสีประจำบ้าน `#2A78D6` ใน `polished-document-style/references/theme-colors.md` ("ค่าตั้งต้นประจำบ้าน")
 

@@ -1,6 +1,6 @@
 # skill: position-sizing
 
-Use when about to enter a trade and asking how many shares or lots, where the stop goes or if it is too big (shares, forex, crypto).
+Use before a trade to set share size and stop placement
 
 # Position Sizing (คำนวณขนาดไม้)
 

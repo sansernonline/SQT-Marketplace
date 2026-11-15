@@ -1,6 +1,6 @@
 # skill: principle-proceed-on-reversible-work
 
-Use when about to ask shall I continue on work that can be undone. Proceed.
+Use before asking to continue on undoable work
 
 # principle · proceed on reversible work — ย้อนได้ ทำเลย
 
@@ -39,7 +39,7 @@ Use when about to ask shall I continue on work that can be undone. Proceed.
 
 # skill: simplicity-first
 
-Use when cutting a software spec or architecture to fewest parts. Code → lazy-coding.
+Use when cutting a spec or architecture to fewest parts
 
 # Simplicity First
 
@@ -134,7 +134,7 @@ auth middleware. Log to the existing system."
 
 # skill: reverse-engineering
 
-Use when a compiled app, firmware, network capture or unknown format has no source.
+Use when a binary, firmware or format has no source
 
 # Reverse Engineering — แกะซอฟต์แวร์ที่ไม่มีซอร์ส แบบมีหลักฐานทุกข้อ
 
@@ -1006,7 +1006,7 @@ tshark -r <file.pcap> -Y 'tls.handshake.type == 1' -T fields -e tls.handshake.ex
 
 # skill: human-writing
 
-Use before writing or editing anything people read (answer, email, report, README, slide, label) in Thai or English. Look → polished-document-style.
+Use before writing anything people read, in Thai or English
 
 # human-writing — write like a person: smooth to read, easy to understand
 
@@ -1533,7 +1533,7 @@ Applies to slide titles, figure titles, document headings, and box titles in a d
 
 # skill: answer-shape
 
-Use when an answer has structure (options, trade-offs, how parts connect). Prose, table or diagram.
+Use when an answer needs prose, a table or a diagram
 
 # รูปทรงของคำตอบ
 
@@ -1643,7 +1643,7 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 
 # skill: spell-out-abbreviations
 
-Use when text people read is heavy with abbreviations or jargon, or needs a glossary.
+Use when text is heavy with abbreviations or jargon
 
 # Spell Out Abbreviations
 

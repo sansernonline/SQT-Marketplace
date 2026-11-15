@@ -1,6 +1,6 @@
 ---
 name: repeated-mistakes-to-checks
-description: Use when the same mistake is corrected twice or reviews keep flagging one issue.
+description: Use when the same mistake gets corrected twice
 ---
 
 # repeated-mistakes-to-checks — ความผิดที่ทำซ้ำ ต้องเกิดไม่ได้อีก

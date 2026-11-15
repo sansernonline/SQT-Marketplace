@@ -1,6 +1,6 @@
 ---
 name: commit-log
-description: Use when a step of work is finished in a git folder, or the user asks to commit. Not for questions about how git works.
+description: Use when a work step ends in a git folder or to commit
 ---
 
 # commit-log — commit ทุกขั้น ให้ git log เป็นบันทึกงาน

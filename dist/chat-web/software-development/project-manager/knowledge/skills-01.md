@@ -1,6 +1,6 @@
 # skill: superuser
 
-Use when software work is big or risky (5+ modules, whole repo, money, personal data, deletes, prod, client delivery) or says superuser.
+Use when software work is big or risky
 
 # SuperUser — Team Lead
 
@@ -1765,7 +1765,7 @@ claude-security (All rights reserved · เอากลไกอย่างเ�
 
 # skill: principle-prove-it-works
 
-Use when about to say any work is done, fixed or working. Check against the real thing first.
+Use before saying work is done, fixed or working
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -1818,7 +1818,7 @@ Use when about to say any work is done, fixed or working. Check against the real
 
 # skill: simplify
 
-Use when a deliverable has steps, layers or options nobody needs yet, or a newcomer must follow it. Not Claude Code /simplify.
+Use to cut extras nobody needs yet. Not Claude Code simplify
 
 # simplify — ทำให้ง่าย คนอ่านครั้งแรกก็ตามได้
 

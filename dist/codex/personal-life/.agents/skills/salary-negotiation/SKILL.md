@@ -1,6 +1,6 @@
 ---
 name: salary-negotiation
-description: Use when the user gets a job offer, is asked expected salary, wants a raise or compares offers.
+description: Use when handling a job offer or salary talk
 argument-hint: <offer|raise|counter> [offer details]
 ---
 

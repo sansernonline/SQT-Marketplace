@@ -1,6 +1,6 @@
 # skill: resume-th-en
 
-Use when writing or reviewing a Thai or English CV or resume (ATS layout, what to omit, number bullets).
+Use when writing a Thai or English CV or resume
 
 # Resume — Thai and International
 
@@ -208,7 +208,7 @@ Thai:
 
 # skill: salary-negotiation
 
-Use when the user gets a job offer, is asked expected salary, wants a raise or compares offers.
+Use when handling a job offer or salary talk
 
 # Salary Negotiation (Thailand)
 

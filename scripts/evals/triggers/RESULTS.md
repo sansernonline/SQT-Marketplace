@@ -178,3 +178,127 @@
 | slides | 0/1 | superuser |
 | multistep-noname | 1/1 | superuser |
 | no-git-concept | 0/1 | commit-log |
+
+## 2026-11-15 04:23 · desc-after · ผ่าน 30/40 · $7.39
+
+- plugin: 6 ตัวจาก `C:\_DATA\Personal\Work\_KK\Agent Skill - Sub Agents & Agent Skills\SQT-Marketplace-claude-desc\plugins` · listing: ไม่เกินงบ
+
+| เคส | ผ่าน | skill ที่เปิด |
+|---|---|---|
+| docx-edit | 0/1 | — |
+| meeting-minutes | 0/1 | quick, meeting |
+| client-email | 1/1 | human-writing |
+| readme | 1/1 | human-writing |
+| compare | 0/1 | quick, stack-sql |
+| python-code | 1/1 | quick, stack-python |
+| bugfix | 0/1 | — |
+| slides | 0/1 | — |
+| domain-tax | 1/1 | seller-tax-basics |
+| domain-pet | 1/1 | quick, pet-care |
+| multistep-noname | 0/1 | — |
+| multistep-docs-all | 1/1 | superuser |
+| small-no-lead | 1/1 | — |
+| no-small-rename | 1/1 | quick |
+| no-unit-fact | 1/1 | — |
+| no-regex-only | 1/1 | — |
+| no-css-one-rule | 1/1 | — |
+| no-explain-diff | 1/1 | quick |
+| no-one-line-prompt | 1/1 | — |
+| no-score-function | 1/1 | quick |
+| no-git-concept | 1/1 | quick |
+| no-bmi | 1/1 | — |
+| no-done-question | 1/1 | quick |
+| ecom-promptpay | 1/1 | superuser, promptpay-qr |
+| ecom-payroll | 1/1 | payroll-th |
+| ecom-quotation | 1/1 | doc-quotation |
+| ecom-shopee-fees | 1/1 | marketplace-fees-pricing |
+| ecom-slip | 0/1 | — |
+| ecom-none-dividend | 1/1 | superuser |
+| ecom-none-insurance | 1/1 | insurance-review |
+| gd-print-files | 1/1 | print-ready-files |
+| gd-icon | 0/1 | — |
+| gd-thumbnail | 1/1 | quick, youtube-thumbnail |
+| gd-richmenu | 1/1 | quick, line-richmenu |
+| gd-clip | 0/1 | quick |
+| tf-stock-gain-tax | 1/1 | superuser, tax-basics-th |
+| tf-year-end-rmf | 1/1 | tax-deduction-planner |
+| tf-fund-fee | 0/1 | — |
+| tf-park-lump-sum | 1/1 | bonds-and-deposits |
+| tf-copy-trade | 1/1 | copy-trade-check, stack-mql |
+
+## 2026-11-15 04:23 · desc-before · ผ่าน 32/40 · $9.25
+
+- plugin: 6 ตัวจาก `C:\_DATA\Personal\Work\_KK\Agent Skill - Sub Agents & Agent Skills\_to_delete\2026-11-15-skill-desc\before-src\plugins` · listing: ไม่เกินงบ
+
+| เคส | ผ่าน | skill ที่เปิด |
+|---|---|---|
+| docx-edit | 0/1 | polished-document-style |
+| meeting-minutes | 0/1 | quick, meeting |
+| client-email | 1/1 | human-writing |
+| readme | 1/1 | human-writing |
+| compare | 0/1 | quick, stack-sql |
+| python-code | 1/1 | quick, stack-python |
+| bugfix | 0/1 | — |
+| slides | 1/1 | presentation-design |
+| domain-tax | 1/1 | seller-tax-basics |
+| domain-pet | 1/1 | quick, pet-care |
+| multistep-noname | 0/1 | — |
+| multistep-docs-all | 0/1 | — |
+| small-no-lead | 1/1 | — |
+| no-small-rename | 1/1 | quick |
+| no-unit-fact | 1/1 | quick |
+| no-regex-only | 1/1 | — |
+| no-css-one-rule | 1/1 | — |
+| no-explain-diff | 1/1 | — |
+| no-one-line-prompt | 1/1 | — |
+| no-score-function | 1/1 | quick |
+| no-git-concept | 1/1 | quick |
+| no-bmi | 1/1 | — |
+| no-done-question | 1/1 | quick |
+| ecom-promptpay | 1/1 | promptpay-qr |
+| ecom-payroll | 1/1 | payroll-th |
+| ecom-quotation | 1/1 | doc-quotation |
+| ecom-shopee-fees | 1/1 | marketplace-fees-pricing |
+| ecom-slip | 0/1 | — |
+| ecom-none-dividend | 1/1 | superuser |
+| ecom-none-insurance | 1/1 | insurance-review |
+| gd-print-files | 1/1 | print-ready-files |
+| gd-icon | 0/1 | — |
+| gd-thumbnail | 1/1 | quick, youtube-thumbnail |
+| gd-richmenu | 1/1 | quick, line-richmenu |
+| gd-clip | 1/1 | quick, video-script-to-clip |
+| tf-stock-gain-tax | 1/1 | superuser, tax-basics-th |
+| tf-year-end-rmf | 1/1 | tax-deduction-planner |
+| tf-fund-fee | 1/1 | mutual-fund-picker |
+| tf-park-lump-sum | 1/1 | bonds-and-deposits |
+| tf-copy-trade | 1/1 | copy-trade-check, stack-mql |
+
+## 2026-11-15 04:25 · desc-after-r3 · ผ่าน 8/12 · $2.26
+
+- plugin: 6 ตัวจาก `C:\_DATA\Personal\Work\_KK\Agent Skill - Sub Agents & Agent Skills\SQT-Marketplace-claude-desc\plugins` · listing: ไม่เกินงบ
+
+| เคส | ผ่าน | skill ที่เปิด |
+|---|---|---|
+| slides | 1/3 | presentation-design |
+| multistep-docs-all | 3/3 | superuser |
+| gd-clip | 1/3 | quick, video-script-to-clip |
+| tf-fund-fee | 3/3 | mutual-fund-picker |
+
+## 2026-11-15 04:25 · desc-before-r3 · ผ่าน 9/12 · $2.72
+
+- plugin: 6 ตัวจาก `C:\_DATA\Personal\Work\_KK\Agent Skill - Sub Agents & Agent Skills\_to_delete\2026-11-15-skill-desc\before-src\plugins` · listing: ไม่เกินงบ
+
+| เคส | ผ่าน | skill ที่เปิด |
+|---|---|---|
+| slides | 1/3 | presentation-design |
+| multistep-docs-all | 3/3 | superuser |
+| gd-clip | 3/3 | quick, video-script-to-clip |
+| tf-fund-fee | 2/3 | mutual-fund-picker |
+
+## 2026-11-15 04:27 · desc-after-clipfix · ผ่าน 3/3 · $0.74
+
+- plugin: 6 ตัวจาก `C:\_DATA\Personal\Work\_KK\Agent Skill - Sub Agents & Agent Skills\SQT-Marketplace-claude-desc\plugins` · listing: ไม่เกินงบ
+
+| เคส | ผ่าน | skill ที่เปิด |
+|---|---|---|
+| gd-clip | 3/3 | quick, video-script-to-clip |

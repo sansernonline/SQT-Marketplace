@@ -1,6 +1,6 @@
 # skill: simplify
 
-Use when a deliverable has steps, layers or options nobody needs yet, or a newcomer must follow it. Not Claude Code /simplify.
+Use to cut extras nobody needs yet. Not Claude Code simplify
 
 # simplify — ทำให้ง่าย คนอ่านครั้งแรกก็ตามได้
 
@@ -51,7 +51,7 @@ plugin `software-development` มีรายละเอียดของโ�
 
 # skill: polished-document-style
 
-Use when a kept doc (report, proposal, Word, PDF) needs headings, tables, theme. Wording → human-writing.
+Use when a kept document needs headings, tables and theme
 
 # Polished Document Style
 
@@ -497,7 +497,7 @@ markdown เองไม่มีสี จึงใช้คำกำกับ�
 
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable must look designed. Markdown report → markdown-report-docx.
+Use when a Word, PowerPoint or PDF must look designed
 
 # Branded Document Design
 

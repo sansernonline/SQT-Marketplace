@@ -1,6 +1,6 @@
 ---
 name: flood-prep
-description: Use when a Thai home may flood or has flooded (น้ำท่วม) — warnings, checklist, power and gas safety, relief money, insurance claims.
+description: Use when a Thai home may flood or has flooded
 ---
 
 # Flood Prep (Thailand)

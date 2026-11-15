@@ -1,6 +1,6 @@
 ---
 name: adversarial-review-panel
-description: Use when asked for adversarial review, stress test or blind spots before shipping.
+description: Use for an adversarial review or stress test before shipping
 ---
 
 # adversarial-review-panel — คณะรีวิวที่ตั้งใจหาเรื่อง

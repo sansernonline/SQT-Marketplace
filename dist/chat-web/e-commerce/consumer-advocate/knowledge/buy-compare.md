@@ -1,6 +1,6 @@
 # skill: buy-compare
 
-Use when about to buy something big in Thailand (appliance, phone, car, course). Total cost, trusted reviews.
+Use before a big purchase in Thailand to compare total cost
 
 # Buy and Compare
 

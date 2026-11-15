@@ -28,8 +28,9 @@ const STRICT = process.argv.includes('--warn');
 
 const errors = [];
 const warns  = [];
-// คำอธิบายทุกตัวโหลดทุก session: skill และ command เตือนเกิน 150 · agent เตือนเกิน 120 · เกิน 160 = error (D14 · R4)
-const DESC_HARD_MAX = 160, SKILL_DESC_SOFT = 150, AGENT_DESC_SOFT = 120;
+// คำอธิบายทุกตัวโหลดทุก session: agent เตือนเกิน 120 · เกิน 160 = error (D14 · R4)
+// skill เตือนเกิน 70 · รายการ skill ทั้งหมดต้องไม่เกินงบตั้งต้น 30,000 ตัวอักษรของ Claude Code (275 skill × ~90 ตัวต่อบรรทัด · ผู้ใช้สั่ง 2026-11-15)
+const DESC_HARD_MAX = 160, SKILL_DESC_SOFT = 70, AGENT_DESC_SOFT = 120, COMMAND_DESC_SOFT = 150, SKILL_DESC_MIN = 20;
 function checkDescLength(file, len, soft) {
   if (len > DESC_HARD_MAX) err(file, `description ยาว ${len} ตัว เกิน ${DESC_HARD_MAX} — ตัดให้เหลือ "ใช้เมื่อไหร่" + งานหลัก`);
   else if (len > soft) warn(file, `description ยาว ${len} ตัว เกิน ${soft}`);
@@ -119,11 +120,11 @@ function checkSkill(dir) {
   else {
     if (description.length > 1024) err(file, `description ยาว ${description.length} ตัว เกิน 1024 — จะถูกตัด`);
     // คำอธิบายทุกตัวถูกโหลดเข้า context ทุก session — ยาวเกินจะดันตัวอื่นตกโควตา
-    checkDescLength(file, description.length, SKILL_DESC_SOFT);
-    // คำสั่งที่ผู้ใช้พิมพ์เอง (disable-model-invocation: true) — Claude ไม่ได้ใช้ description เลือก จึงไม่ต้องบอก "ใช้เมื่อไหร่"
+    // คำสั่งที่ผู้ใช้พิมพ์เอง (disable-model-invocation: true) — Claude ไม่ได้ใช้ description เลือก จึงไม่ต้องบอก "ใช้เมื่อไหร่" และไม่อยู่ในรายการ skill
     const userOnly = String(fm['disable-model-invocation']) === 'true';
+    checkDescLength(file, description.length, userOnly ? COMMAND_DESC_SOFT : SKILL_DESC_SOFT);
     if (userOnly) { /* ตรวจแค่ความยาวกับแท็กด้านบนและล่าง */ }
-    else if (description.length < 60)   warn(file, `description สั้นแค่ ${description.length} ตัว — บอก "ใช้เมื่อไหร่" ให้ครบ ไม่งั้น skill จะไม่ถูกเรียก`);
+    else if (description.length < SKILL_DESC_MIN)   warn(file, `description สั้นแค่ ${description.length} ตัว — บอก "ใช้เมื่อไหร่" ให้ครบ ไม่งั้น skill จะไม่ถูกเรียก`);
     if (/<[a-zA-Z/]/.test(description)) err(file, 'description มีแท็ก < > — ไม่อนุญาต');
     // หมายเหตุ: \b ใช้กับอักษรไทยไม่ได้ใน JavaScript regex — ตรวจแบบไม่มี word boundary
     if (!userOnly && !/(^|[^a-z])use\s|ใช้/i.test(description)) warn(file, 'description ไม่ได้บอกว่าใช้เมื่อไหร่ — ขึ้นต้นด้วย "Use when …" หรือ "ใช้เมื่อ …"');
@@ -185,7 +186,7 @@ function checkPlugin(dir) {
     for (const e of readdirSync(d)) {
       const p = join(d, e);
       if (sub === 'skills' && statSync(p).isDirectory()) checkSkill(p);
-      if (sub !== 'skills' && e.endsWith('.md')) checkAgent(p, sub === 'agents' ? AGENT_DESC_SOFT : SKILL_DESC_SOFT);
+      if (sub !== 'skills' && e.endsWith('.md')) checkAgent(p, sub === 'agents' ? AGENT_DESC_SOFT : COMMAND_DESC_SOFT);
     }
   }
 
@@ -504,12 +505,13 @@ function selfTest() {
   const xHit = xBad && warns.length === 0;
   console.log(`  ${xHit ? '✅' : '❌'} playbook agent ข้าม plugin ต้องบอก "ถ้าติดตั้ง"`);
   if (xHit) ok++;
-  // description: agent เตือนเกิน 120 · skill เตือนเกิน 150 · ทุกชนิด error เกิน 160
+  // description: agent เตือนเกิน 120 · skill เตือนเกิน 70 · command เตือนเกิน 150 · ทุกชนิด error เกิน 160
   errors.length = 0; warns.length = 0;
-  checkDescLength('a', 121, AGENT_DESC_SOFT); checkDescLength('s', 151, SKILL_DESC_SOFT);
-  checkDescLength('ok', 150, SKILL_DESC_SOFT); checkDescLength('big', 161, SKILL_DESC_SOFT);
+  checkDescLength('a', 121, AGENT_DESC_SOFT); checkDescLength('s', 71, SKILL_DESC_SOFT);
+  checkDescLength('ok', 70, SKILL_DESC_SOFT); checkDescLength('cmd', 150, COMMAND_DESC_SOFT);
+  checkDescLength('big', 161, COMMAND_DESC_SOFT);
   const lenHit = warns.length === 2 && errors.length === 1 && errors[0].startsWith('big');
-  console.log(`  ${lenHit ? '✅' : '❌'} description agent 120 · skill 150 · error 160`);
+  console.log(`  ${lenHit ? '✅' : '❌'} description agent 120 · skill 70 · command 150 · error 160`);
   if (lenHit) ok++;
   // บทเรียน 2026-10-12 — กรณีทดสอบคือข้อความจริงจากเหตุการณ์ ต้องล้มกับของเดิม และผ่านกับที่แก้แล้ว
   // คนตรวจได้งานลงมือ: warranty-claim ขั้น 3 · side-project ขั้น 3 (ข้อความก่อนแก้)

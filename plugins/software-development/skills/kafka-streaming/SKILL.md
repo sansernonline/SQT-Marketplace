@@ -1,6 +1,6 @@
 ---
 name: kafka-streaming
-description: Use when services pass events via Kafka or events get lost or doubled.
+description: Use when services pass events via Kafka
 ---
 
 # kafka-streaming — ออกแบบ topic · producer · consumer ของ Apache Kafka ไม่ให้ event หายหรือซ้ำแบบเงียบ ๆ

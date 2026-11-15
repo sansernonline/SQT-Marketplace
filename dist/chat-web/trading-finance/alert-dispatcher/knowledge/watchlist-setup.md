@@ -1,6 +1,6 @@
 # skill: watchlist-setup
 
-Use when starting to follow new stocks or rebuilding a messy watchlist. Thesis, entry, alerts.
+Use when following new stocks or rebuilding a watchlist
 
 # Watchlist Setup (รายชื่อหุ้นที่จับตา)
 

@@ -1,6 +1,6 @@
 # skill: fintech-payments
 
-Use when money moves through software (Stripe, Omise, PromptPay, webhooks, refunds).
+Use when money moves through software via Stripe or PromptPay
 
 # fintech-payments
 
@@ -2077,7 +2077,7 @@ Before QSA arrives:
 
 # skill: superuser
 
-Use when software work is big or risky (5+ modules, whole repo, money, personal data, deletes, prod, client delivery) or says superuser.
+Use when software work is big or risky
 
 # SuperUser — Team Lead
 

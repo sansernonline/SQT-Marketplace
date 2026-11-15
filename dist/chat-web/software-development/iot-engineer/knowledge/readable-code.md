@@ -1,6 +1,6 @@
 # skill: readable-code
 
-Use when writing or reviewing code for readability (names, function shape, comments, file location).
+Use when writing or reviewing code for readability
 
 # โค้ดที่คนอ่านรู้เรื่อง
 

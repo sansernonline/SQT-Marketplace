@@ -1,6 +1,6 @@
 # skill: design-references
 
-Use before any design work (web, app, slide, logo, poster) to search live references and colours.
+Use before design work to search live references and colours
 
 # design-references — ค้นงานจริงก่อนออกแบบ แล้วหยิบสีจากงานที่เลือก
 
@@ -151,7 +151,7 @@ Use before any design work (web, app, slide, logo, poster) to search live refere
 
 # skill: superuser
 
-Use when design work spans several assets (brand kit, campaign, AI image or video series) or the user says superuser for design.
+Use when design work spans several linked assets
 
 # SuperUser — Team Lead
 

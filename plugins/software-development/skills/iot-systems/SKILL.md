@@ -1,6 +1,6 @@
 ---
 name: iot-systems
-description: Use when building connected devices (provisioning, OTA updates, MQTT, firmware).
+description: Use when building connected devices with MQTT or OTA updates
 argument-hint: <iot-architecture | device-fleet-design> <details>
 ---
 

@@ -1,6 +1,6 @@
 # skill: win-back-customers
 
-Use when a shop wants lapsed regulars back (ลูกค้าเก่าหายไป, ลูกค้าประจำไม่กลับมา, win-back) from its own LINE, Facebook or store customer list.
+Use when a shop wants lapsed regular customers back
 
 # Win Back Customers
 

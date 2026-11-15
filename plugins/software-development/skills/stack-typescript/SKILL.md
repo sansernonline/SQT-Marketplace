@@ -1,6 +1,6 @@
 ---
 name: stack-typescript
-description: Use when writing or reviewing TypeScript (Node, NestJS, Angular, React, Vite).
+description: Use when writing or reviewing TypeScript code
 ---
 
 # stack-typescript — TypeScript ที่ทีมอ่านง่าย และพังยาก

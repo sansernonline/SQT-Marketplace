@@ -1,6 +1,6 @@
 ---
 name: social-formats
-description: Use when designing for Facebook, Instagram, TikTok, YouTube, LINE OA or X. Sizes, ratios, safe zones.
+description: Use for platform sizes, ratios and safe zones before designing
 argument-hint: <path to master asset> [platforms needed]
 ---
 

@@ -1,6 +1,6 @@
 # skill: kids-school
 
-Use when a Thai family organises a child's school year (term dates, fees, tutoring, transfer, tax deduction).
+Use when a Thai family plans a child's school year
 
 # Kids and School (Thailand)
 

@@ -1,6 +1,6 @@
 ---
 name: line-sticker
-description: Use when making LINE stickers or emoji (สติกเกอร์ LINE, LINE Creators Market) and the image sizes, count and file limits must pass.
+description: Use when making LINE stickers that must pass file limits
 ---
 
 # LINE Sticker and Emoji

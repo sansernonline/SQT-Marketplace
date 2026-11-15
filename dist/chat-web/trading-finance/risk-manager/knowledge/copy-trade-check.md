@@ -1,6 +1,6 @@
 # skill: copy-trade-check
 
-Use when picking, setting up or weekly-checking an MQL5 (MT4/MT5) copy-trade signal, or deciding when to stop following it (ตามสัญญาณ).
+Use when picking or checking a copy-trade signal
 
 # Copy Trade Check (ตามสัญญาณ copy trade ทั้งวงจร)
 

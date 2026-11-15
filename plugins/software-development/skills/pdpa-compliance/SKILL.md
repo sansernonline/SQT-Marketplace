@@ -1,6 +1,6 @@
 ---
 name: pdpa-compliance
-description: Use when software stores personal data of people in Thailand (PDPA).
+description: Use when software stores personal data in Thailand
 ---
 
 # PDPA — ข้อมูลส่วนบุคคล

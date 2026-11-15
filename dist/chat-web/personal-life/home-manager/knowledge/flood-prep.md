@@ -1,6 +1,6 @@
 # skill: flood-prep
 
-Use when a Thai home may flood or has flooded (น้ำท่วม) — warnings, checklist, power and gas safety, relief money, insurance claims.
+Use when a Thai home may flood or has flooded
 
 # Flood Prep (Thailand)
 

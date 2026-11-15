@@ -1,6 +1,6 @@
 # skill: sleep-log
 
-Use when someone sleeps badly, wakes tired, or will see a doctor about sleep. Sleep diary, no diagnosis.
+Use when sleeping badly and keeping a sleep diary, no diagnosis
 
 # Sleep Log
 

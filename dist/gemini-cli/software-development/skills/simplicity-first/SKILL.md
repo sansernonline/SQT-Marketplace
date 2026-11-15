@@ -1,6 +1,6 @@
 ---
 name: simplicity-first
-description: Use when cutting a software spec or architecture to fewest parts. Code → lazy-coding.
+description: Use when cutting a spec or architecture to fewest parts
 ---
 
 # Simplicity First

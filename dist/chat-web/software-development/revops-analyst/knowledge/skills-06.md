@@ -1,6 +1,6 @@
 # skill: human-writing
 
-Use before writing or editing anything people read (answer, email, report, README, slide, label) in Thai or English. Look → polished-document-style.
+Use before writing anything people read, in Thai or English
 
 # human-writing — write like a person: smooth to read, easy to understand
 
@@ -527,7 +527,7 @@ Applies to slide titles, figure titles, document headings, and box titles in a d
 
 # skill: simplify
 
-Use when a deliverable has steps, layers or options nobody needs yet, or a newcomer must follow it. Not Claude Code /simplify.
+Use to cut extras nobody needs yet. Not Claude Code simplify
 
 # simplify — ทำให้ง่าย คนอ่านครั้งแรกก็ตามได้
 

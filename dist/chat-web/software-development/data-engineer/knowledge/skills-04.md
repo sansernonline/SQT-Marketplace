@@ -1,6 +1,6 @@
 # skill: llm-engineering
 
-Use when a system calls a large language model (prompts, RAG, embeddings, evals).
+Use when a system calls an LLM with prompts or RAG
 
 # llm-engineering
 
@@ -3195,7 +3195,7 @@ final = await retrieve(refined_query)
 
 # skill: data-import-export
 
-Use when a system imports or exports Excel or CSV (row errors, Buddhist years).
+Use when a system imports or exports Excel or CSV
 
 # นำเข้าและส่งออกข้อมูล
 

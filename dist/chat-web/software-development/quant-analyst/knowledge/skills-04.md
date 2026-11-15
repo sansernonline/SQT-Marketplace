@@ -1,6 +1,6 @@
 # skill: markdown-visuals
 
-Use when a Markdown doc needs a picture (inline SVG, image, ASCII or Mermaid).
+Use when a Markdown doc needs an image, SVG or ASCII art
 
 # Markdown Visuals
 
@@ -377,7 +377,7 @@ Use this pattern by default for showing UI feature states. On GitHub, save the S
 
 # skill: stack-mql
 
-Use when writing, reviewing or testing MQL4/MQL5 code for MetaTrader (EAs, indicators).
+Use when writing MQL4 or MQL5 code for MetaTrader
 
 # stack · MQL — Expert Advisor (EA) ที่ส่งออร์เดอร์ถูก ทุกโบรกเกอร์ ทุกครั้ง
 

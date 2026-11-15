@@ -1,6 +1,6 @@
 # skill: user-story-writer
 
-Use when writing user stories with Given-When-Then acceptance criteria.
+Use when writing user stories with acceptance criteria
 
 # User Story Writer
 
@@ -137,7 +137,7 @@ skill นี้ตัดสินว่า**เนื้อหาต้องม
 
 # skill: markdown-visuals
 
-Use when a Markdown doc needs a picture (inline SVG, image, ASCII or Mermaid).
+Use when a Markdown doc needs an image, SVG or ASCII art
 
 # Markdown Visuals
 
@@ -514,7 +514,7 @@ Use this pattern by default for showing UI feature states. On GitHub, save the S
 
 # skill: prior-art-review
 
-Use when about to build something that may already exist. Decide adopt, buy or build.
+Use before building something that may already exist
 
 # สำรวจของที่มีอยู่แล้วก่อนลงมือทำ
 

@@ -1,6 +1,6 @@
 # skill: line-chatbot
 
-Use when a company LINE OA should answer customers automatically (quota, knowledge base, handoff).
+Use when a LINE OA should answer customers automatically
 
 # LINE Chatbot
 

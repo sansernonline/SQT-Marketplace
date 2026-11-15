@@ -1,6 +1,6 @@
 # skill: tax-vat-th
 
-Use when a Thai company asks what to file this month, VAT, withholding or penalties (PP 30, PND 3, 53).
+Use when a Thai company asks what tax to file
 
 # Thai VAT, Withholding Tax and Company Filing Calendar
 
@@ -158,7 +158,7 @@ Legal basis: ประมวลรัษฎากร ม.3 เตรส, ม.50,
 
 # skill: payroll-th
 
-Use when running Thai monthly payroll (tax withholding, social security, provident fund, PND 1).
+Use when running Thai monthly payroll
 
 # Thai Payroll
 

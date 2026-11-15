@@ -1,6 +1,6 @@
 # skill: superuser
 
-Use when software work is big or risky (5+ modules, whole repo, money, personal data, deletes, prod, client delivery) or says superuser.
+Use when software work is big or risky
 
 # SuperUser — Team Lead
 
@@ -1765,7 +1765,7 @@ claude-security (All rights reserved · เอากลไกอย่างเ�
 
 # skill: principle-prove-it-works
 
-Use when about to say any work is done, fixed or working. Check against the real thing first.
+Use before saying work is done, fixed or working
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -1818,7 +1818,7 @@ Use when about to say any work is done, fixed or working. Check against the real
 
 # skill: simplicity-first
 
-Use when cutting a software spec or architecture to fewest parts. Code → lazy-coding.
+Use when cutting a spec or architecture to fewest parts
 
 # Simplicity First
 

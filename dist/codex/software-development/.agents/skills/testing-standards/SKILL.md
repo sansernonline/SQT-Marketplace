@@ -1,6 +1,6 @@
 ---
 name: testing-standards
-description: Use when adding or setting up automated tests, or a test suite is flaky.
+description: Use when setting up automated tests or fixing flaky ones
 ---
 
 # Testing Standards

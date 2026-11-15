@@ -1,6 +1,6 @@
 ---
 name: principle-small-verifiable-steps
-description: Use when work has many steps (migration, batch edits, long report). Cut into pieces.
+description: Use when work has many steps to cut into pieces
 ---
 
 # principle · small verifiable steps — ตัดเป็นชิ้นเล็กที่ตรวจได้ทีละชิ้น

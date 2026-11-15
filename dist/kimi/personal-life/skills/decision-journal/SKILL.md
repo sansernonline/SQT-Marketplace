@@ -1,6 +1,6 @@
 ---
 name: decision-journal
-description: Use when facing a big personal decision (job change, condo, car, moving, lump sum). Records it, revisits.
+description: Use when facing a big personal life decision
 argument-hint: <the decision, in one sentence>
 ---
 

@@ -1,6 +1,6 @@
 # skill: app-verifier-setup
 
-Use when a project has no scripted way for an agent to run the app and see results.
+Use when an agent has no scripted way to run the app
 
 # app-verifier-setup — ให้ agent มีมือและตา
 
@@ -189,7 +189,7 @@ verify ต้องพึ่งของที่แอปเตรียมไ�
 
 # skill: app-verifier-upkeep
 
-Use when a project verify skill has drifted from the real app (steps fail).
+Use when a project verify skill no longer matches the app
 
 # app-verifier-upkeep — ดูแลมือและตาให้ตรงกับแอป
 
@@ -218,7 +218,7 @@ Use when a project verify skill has drifted from the real app (steps fail).
 
 # skill: docker-sandbox
 
-Use when a project needs its own Docker container for untrusted code, or says sandbox.
+Use when a project needs a Docker sandbox for untrusted code
 
 # docker-sandbox — ห้องทดลองต่อโปรเจกต์
 
@@ -378,7 +378,7 @@ Use when a project needs its own Docker container for untrusted code, or says sa
 
 # skill: security-gate
 
-Use when about to ship, merge or hand over code, or asked for a security check.
+Use when about to ship or merge code, as a security check
 
 # security-gate — ประตูความปลอดภัยก่อนส่งงาน
 
@@ -719,7 +719,7 @@ Open Worldwide Application Security Project (OWASP) Top 10:2025 คือรา�
 
 # skill: adversarial-review-panel
 
-Use when asked for adversarial review, stress test or blind spots before shipping.
+Use for an adversarial review or stress test before shipping
 
 # adversarial-review-panel — คณะรีวิวที่ตั้งใจหาเรื่อง
 

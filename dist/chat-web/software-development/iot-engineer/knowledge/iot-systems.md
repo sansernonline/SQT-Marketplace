@@ -1,6 +1,6 @@
 # skill: iot-systems
 
-Use when building connected devices (provisioning, OTA updates, MQTT, firmware).
+Use when building connected devices with MQTT or OTA updates
 
 # iot-systems
 

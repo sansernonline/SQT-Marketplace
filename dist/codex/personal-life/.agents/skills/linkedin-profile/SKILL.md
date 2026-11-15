@@ -1,6 +1,6 @@
 ---
 name: linkedin-profile
-description: Use when creating or improving a LinkedIn profile for a Thai job search (headline, About, keywords).
+description: Use when improving a LinkedIn profile for Thai job search
 ---
 
 # LinkedIn Profile (Thai market)

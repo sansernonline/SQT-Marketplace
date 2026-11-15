@@ -1,6 +1,6 @@
 ---
 name: web-quality-audit
-description: Use when auditing a web page for accessibility (WCAG) or speed (Lighthouse).
+description: Use when auditing a page for accessibility or speed
 ---
 
 # Web Quality Audit — การเข้าถึงและความเร็วในรอบเดียว

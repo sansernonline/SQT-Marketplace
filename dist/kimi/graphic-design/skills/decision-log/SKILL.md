@@ -1,6 +1,6 @@
 ---
 name: decision-log
-description: Use when an agent makes its own judgment call in long or unattended work.
+description: Use when an agent makes its own call in unattended work
 ---
 
 # decision-log — ทุกการตัดสินใจเองต้องตรวจย้อนได้

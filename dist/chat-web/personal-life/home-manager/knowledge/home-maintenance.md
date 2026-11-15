@@ -1,6 +1,6 @@
 # skill: home-maintenance
 
-Use when a Thai home needs a seasonal maintenance schedule (aircon, pump, termites, roof) or compares quotes.
+Use when a Thai home needs a maintenance schedule
 
 # Home Maintenance (Thai climate)
 

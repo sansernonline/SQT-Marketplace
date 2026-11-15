@@ -1,6 +1,6 @@
 ---
 name: principle-fix-root-cause
-description: Use when something is broken or wrong (error, failed step, flaky test). Find the cause. Small known fix → targeted-fix.
+description: Use when something is broken and the cause is unknown
 ---
 
 # principle · fix root cause — แก้ที่ต้นเหตุ

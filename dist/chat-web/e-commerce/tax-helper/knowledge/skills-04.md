@@ -1,6 +1,6 @@
 # skill: promptpay-qr
 
-Use when a Thai business needs a PromptPay QR on an invoice or counter, or builds the QR payload.
+Use when a Thai business needs a PromptPay QR
 
 # PromptPay QR (Thai QR Payment)
 
@@ -188,7 +188,7 @@ Biller ID and allowed reference formats come from the company's bank — ask for
 
 # skill: seller-tax-basics
 
-Use when a Thai individual selling online asks about tax (40(8), deemed expenses, PND 90 and 94, VAT).
+Use when a Thai individual online seller asks about tax
 
 # Seller Tax Basics (Thai individual online seller)
 

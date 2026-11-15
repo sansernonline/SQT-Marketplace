@@ -1,6 +1,6 @@
 # skill: e-tax-invoice
 
-Use when a Thai VAT-registered business issues or checks tax invoices (Section 86/4, e-Tax Invoice).
+Use when a Thai VAT business issues or checks tax invoices
 
 # Thai Tax Invoice and e-Tax Invoice
 

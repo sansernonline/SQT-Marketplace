@@ -1,6 +1,6 @@
 # skill: background-jobs
 
-Use when work runs outside the user request (queues, scheduled jobs, retries).
+Use when work runs outside the request in queues or schedules
 
 # งานเบื้องหลัง
 
@@ -197,7 +197,7 @@ Use when work runs outside the user request (queues, scheduled jobs, retries).
 
 # skill: audit-trail
 
-Use when a system must record who did what and when (approvals, money, permissions).
+Use when a system must record who did what and when
 
 # ร่องรอยการใช้งาน (audit trail)
 
@@ -364,7 +364,7 @@ audit log ที่เก็บทุกอย่าง มีค่าเท่
 
 # skill: pdpa-compliance
 
-Use when software stores personal data of people in Thailand (PDPA).
+Use when software stores personal data in Thailand
 
 # PDPA — ข้อมูลส่วนบุคคล
 
@@ -599,7 +599,7 @@ Use when software stores personal data of people in Thailand (PDPA).
 
 # skill: cicd-and-release
 
-Use when setting up or fixing a build and deploy pipeline (CI/CD).
+Use when setting up or fixing a CI/CD pipeline
 
 # Continuous Integration / Continuous Delivery (CI/CD) และการปล่อยของ
 
@@ -1240,7 +1240,7 @@ CMD ["node", "dist/main.js"]
 
 # skill: repeated-mistakes-to-checks
 
-Use when the same mistake is corrected twice or reviews keep flagging one issue.
+Use when the same mistake gets corrected twice
 
 # repeated-mistakes-to-checks — ความผิดที่ทำซ้ำ ต้องเกิดไม่ได้อีก
 

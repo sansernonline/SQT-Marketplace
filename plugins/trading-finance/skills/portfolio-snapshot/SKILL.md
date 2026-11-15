@@ -1,6 +1,6 @@
 ---
 name: portfolio-snapshot
-description: Use when the user asks how their portfolio looks or how much they are up or down. Allocation, P/L.
+description: Use when asking how the portfolio is doing
 argument-hint: '[--file <path>]'
 ---
 

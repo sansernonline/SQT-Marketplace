@@ -1,6 +1,6 @@
 # skill: icon-design
 
-Use when an app, website, plugin or brand needs icons (UI icon set, app icon, favicon, logo mark) or says ไอคอน, icon ไม่สวย, ทำไอคอนแอป.
+Use when an app or brand needs icons or a favicon
 
 # icon-design — ไอคอนที่คนออกแบบจริงทำ ไม่ใช่รูปทรงที่โค้ดวาด
 
@@ -309,7 +309,7 @@ python scripts/icon_check.py <ไฟล์.svg ...> --out _to_delete/icon-check 
 
 # skill: simplify
 
-Use when a deliverable has steps, layers or options nobody needs yet, or a newcomer must follow it. Not Claude Code /simplify.
+Use to cut extras nobody needs yet. Not Claude Code simplify
 
 # simplify — ทำให้ง่าย คนอ่านครั้งแรกก็ตามได้
 

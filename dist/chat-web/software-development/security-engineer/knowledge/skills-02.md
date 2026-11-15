@@ -1,6 +1,6 @@
 # skill: lazy-coding
 
-Use when writing, fixing, refactoring or reviewing code, or on bloat complaints. Simplest that works.
+Use when writing or reviewing code, for the simplest that works
 
 # Lazy Coding
 
@@ -115,7 +115,7 @@ unless asked. Trivial one-liners need no test.
 
 # skill: readable-code
 
-Use when writing or reviewing code for readability (names, function shape, comments, file location).
+Use when writing or reviewing code for readability
 
 # โค้ดที่คนอ่านรู้เรื่อง
 
@@ -367,7 +367,7 @@ src/
 
 # skill: principle-secure-by-default
 
-Use when writing or reviewing code, config or scripts, especially input, database, files, logins, money.
+Use when writing or reviewing code for security basics
 
 # principle · secure by default — ปลอดภัยตั้งแต่บรรทัดแรก
 
@@ -443,7 +443,7 @@ Use when writing or reviewing code, config or scripts, especially input, databas
 
 # skill: principle-prove-it-works
 
-Use when about to say any work is done, fixed or working. Check against the real thing first.
+Use before saying work is done, fixed or working
 
 # principle · prove it works — พิสูจน์กับของจริง
 

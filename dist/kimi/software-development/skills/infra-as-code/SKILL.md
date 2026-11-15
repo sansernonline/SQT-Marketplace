@@ -1,6 +1,6 @@
 ---
 name: infra-as-code
-description: Use when servers or networks should be built from code (Terraform, OpenTofu).
+description: Use when building servers or networks with Terraform
 ---
 
 # Infrastructure as Code (IaC) · สร้างเครื่องและฐานข้อมูลบนคลาวด์จากโค้ด

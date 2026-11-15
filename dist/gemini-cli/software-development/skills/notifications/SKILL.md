@@ -1,6 +1,6 @@
 ---
 name: notifications
-description: Use when a system sends email, SMS, LINE, push or in-app messages.
+description: Use when a system sends email, SMS, LINE or push
 ---
 
 # การแจ้งเตือนผู้ใช้

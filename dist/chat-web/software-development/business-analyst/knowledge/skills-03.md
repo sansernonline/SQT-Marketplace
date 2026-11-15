@@ -1,6 +1,6 @@
 # skill: markdown-visuals
 
-Use when a Markdown doc needs a picture (inline SVG, image, ASCII or Mermaid).
+Use when a Markdown doc needs an image, SVG or ASCII art
 
 # Markdown Visuals
 
@@ -377,7 +377,7 @@ Use this pattern by default for showing UI feature states. On GitHub, save the S
 
 # skill: software-diagrams
 
-Use when a README, PR or code note needs a quick Mermaid diagram. Doc figures → diagram-figures.
+Use when a README or PR needs a quick Mermaid diagram
 
 # Software Diagrams
 
@@ -588,7 +588,7 @@ npx -y @mermaid-js/mermaid-cli@11.17.0 -i diagram.mmd -o diagram.png -b white -s
 
 # skill: presentation-design
 
-Use when making slides or a deck (pitch, plan, progress report, training) in any format · ทำสไลด์. Story, layouts.
+Use when planning a slide deck story and layouts
 
 # Presentation Design
 

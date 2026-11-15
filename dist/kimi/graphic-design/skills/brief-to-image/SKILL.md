@@ -1,6 +1,6 @@
 ---
 name: brief-to-image
-description: Use when the AI-image route is chosen and a brief and prompt must be written, or prompts keep missing. Route choice → image-generation.
+description: Use when writing a brief and prompt for AI images
 argument-hint: <what the image must show> [where it will be used]
 ---
 

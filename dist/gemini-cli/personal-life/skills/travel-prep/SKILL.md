@@ -1,6 +1,6 @@
 ---
 name: travel-prep
-description: Use when a trip is one to two weeks away or a passport is near expiry. Visa, insurance, money, itinerary.
+description: Use when a trip is near or a passport expires
 argument-hint: <destination> <dates> [travelers]
 ---
 

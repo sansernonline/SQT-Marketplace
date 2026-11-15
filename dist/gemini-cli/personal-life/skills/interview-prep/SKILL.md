@@ -1,6 +1,6 @@
 ---
 name: interview-prep
-description: Use when preparing for a job interview (HR screen, technical, final). STAR stories, questions, thank-you note.
+description: Use when preparing for a job interview
 argument-hint: <company> <role> [round — hr|manager|technical|final] [th|en]
 ---
 

@@ -1,6 +1,6 @@
 # skill: user-story-writer
 
-Use when writing user stories with Given-When-Then acceptance criteria.
+Use when writing user stories with acceptance criteria
 
 # User Story Writer
 
@@ -137,7 +137,7 @@ skill นี้ตัดสินว่า**เนื้อหาต้องม
 
 # skill: superuser
 
-Use when software work is big or risky (5+ modules, whole repo, money, personal data, deletes, prod, client delivery) or says superuser.
+Use when software work is big or risky
 
 # SuperUser — Team Lead
 
@@ -1902,7 +1902,7 @@ claude-security (All rights reserved · เอากลไกอย่างเ�
 
 # skill: principle-prove-it-works
 
-Use when about to say any work is done, fixed or working. Check against the real thing first.
+Use before saying work is done, fixed or working
 
 # principle · prove it works — พิสูจน์กับของจริง
 

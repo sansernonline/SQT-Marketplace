@@ -1,6 +1,6 @@
 ---
 name: api-conventions
-description: Use when adding API endpoints or checking API consistency (URLs, ids).
+description: Use when adding API endpoints or checking API consistency
 ---
 
 # ข้อตกลงของ Application Programming Interface (API)

@@ -1,6 +1,6 @@
 ---
 name: spec-to-code-loop
-description: Use when building from a spec and mockups test-first (TDD, failing test, check screen).
+description: Use when building test-first from a spec and mockups
 ---
 
 > **ใน SuperUser:** ลูปนี้คือแกนของ playbook [`feature`](../superuser/references/playbook-feature.md) และ [`new-project`](../superuser/references/playbook-new-project.md) ถ้าเปิด superuser อยู่ ให้ทำตาม playbook แล้วใช้ไฟล์นี้เป็นรายละเอียดของลูป

@@ -1,6 +1,6 @@
 ---
 name: logging-standards
-description: Use when writing or reviewing code that logs (levels, ids, redaction).
+description: Use when writing or reviewing code that logs
 ---
 
 # Logging Standards

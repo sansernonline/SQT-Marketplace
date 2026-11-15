@@ -1,6 +1,6 @@
 # skill: repeated-mistakes-to-checks
 
-Use when the same mistake is corrected twice or reviews keep flagging one issue.
+Use when the same mistake gets corrected twice
 
 # repeated-mistakes-to-checks — ความผิดที่ทำซ้ำ ต้องเกิดไม่ได้อีก
 

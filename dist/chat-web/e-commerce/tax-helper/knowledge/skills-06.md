@@ -1,6 +1,6 @@
 # skill: sme-bookkeeping
 
-Use when a Thai shop or SME keeps its books (income-expense journal, receipts to keep, month-end close, รายงานเงินสดรับ-จ่าย, hire an accountant).
+Use when a Thai shop or SME keeps its books
 
 # SME Bookkeeping (Thai small business and online seller)
 
@@ -183,7 +183,7 @@ Copy into Google Sheets or Excel. One tab per year, one row per money movement. 
 
 # skill: cash-flow
 
-Use when a Thai seller or SME may run short of cash (13-week forecast, slow marketplace payouts, COD, stock buys, VAT and WHT due dates).
+Use when a Thai seller may run short of cash
 
 # Cash Flow for a Thai Small Business
 

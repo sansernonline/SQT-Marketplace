@@ -1,6 +1,6 @@
 ---
 name: mutual-fund-picker
-description: Use when choosing Thai mutual funds, reading a factsheet, or picking RMF or ThaiESG. DCA plan → rebalance-and-dca.
+description: Use when picking Thai funds, RMF or ThaiESG, or a factsheet
 ---
 
 # Mutual Fund Picker (เลือกกองทุนรวม)

@@ -1,6 +1,6 @@
 ---
 name: readable-code
-description: Use when writing or reviewing code for readability (names, function shape, comments, file location).
+description: Use when writing or reviewing code for readability
 ---
 
 # โค้ดที่คนอ่านรู้เรื่อง

@@ -1,6 +1,6 @@
 # skill: no-ai-look
 
-Use when making or reviewing anything people look at so it looks made by a person, not AI.
+Use when making visuals so they do not look AI-made
 
 # no-ai-look — งานที่ดูเหมือนคนออกแบบ ไม่ใช่ AI
 
@@ -316,7 +316,7 @@ python <path ของ skill นี้>/scripts/slop_scan.py --self-test        
 
 # skill: design-references
 
-Use before any design work (web, app, slide, logo, poster) to search live references and colours.
+Use before design work to search live references and colours
 
 # design-references — ค้นงานจริงก่อนออกแบบ แล้วหยิบสีจากงานที่เลือก
 

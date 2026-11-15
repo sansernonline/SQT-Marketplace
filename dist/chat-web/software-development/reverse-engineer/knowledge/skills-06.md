@@ -1,6 +1,6 @@
 # skill: polished-document-style
 
-Use when a kept doc (report, proposal, Word, PDF) needs headings, tables, theme. Wording → human-writing.
+Use when a kept document needs headings, tables and theme
 
 # Polished Document Style
 
@@ -446,7 +446,7 @@ markdown เองไม่มีสี จึงใช้คำกำกับ�
 
 # skill: spell-out-abbreviations
 
-Use when text people read is heavy with abbreviations or jargon, or needs a glossary.
+Use when text is heavy with abbreviations or jargon
 
 # Spell Out Abbreviations
 
@@ -530,7 +530,7 @@ Personally Identifiable Information (PII) · Proof of Concept (POC)
 
 # skill: answer-shape
 
-Use when an answer has structure (options, trade-offs, how parts connect). Prose, table or diagram.
+Use when an answer needs prose, a table or a diagram
 
 # รูปทรงของคำตอบ
 

@@ -1,6 +1,6 @@
 # skill: principle-secure-by-default
 
-Use when writing or reviewing code, config or scripts, especially input, database, files, logins, money.
+Use when writing or reviewing code for security basics
 
 # principle · secure by default — ปลอดภัยตั้งแต่บรรทัดแรก
 

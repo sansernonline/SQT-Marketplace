@@ -1,6 +1,6 @@
 # skill: fintech-payments
 
-Use when money moves through software (Stripe, Omise, PromptPay, webhooks, refunds).
+Use when money moves through software via Stripe or PromptPay
 
 # fintech-payments
 

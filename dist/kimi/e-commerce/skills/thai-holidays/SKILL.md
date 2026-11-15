@@ -1,6 +1,6 @@
 ---
 name: thai-holidays
-description: Use when planning around Thai public holidays (government and bank lists, substitution days).
+description: Use when planning around Thai public holidays
 ---
 
 # Thai Holidays Planner

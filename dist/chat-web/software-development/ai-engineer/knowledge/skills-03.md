@@ -1,6 +1,6 @@
 # skill: llm-engineering
 
-Use when a system calls a large language model (prompts, RAG, embeddings, evals).
+Use when a system calls an LLM with prompts or RAG
 
 # llm-engineering
 
@@ -3195,7 +3195,7 @@ final = await retrieve(refined_query)
 
 # skill: voice-agent
 
-Use when building a realtime voice agent or phone bot (STT, TTS, barge-in), especially Thai.
+Use when building a realtime voice agent or phone bot
 
 # voice-agent — ออกแบบและสร้าง voice agent ภาษาไทยที่คุยได้ทันใจและไม่โกหกลูกค้า
 

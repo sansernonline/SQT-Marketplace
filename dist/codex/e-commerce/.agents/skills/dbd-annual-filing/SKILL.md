@@ -1,6 +1,6 @@
 ---
 name: dbd-annual-filing
-description: Use when a Thai company files after year end (AGM, audited statements via DBD e-Filing, BOJ 5, PND 50).
+description: Use when a Thai company files year-end DBD accounts
 argument-hint: '[company|partnership] [--year-end <date>]'
 ---
 

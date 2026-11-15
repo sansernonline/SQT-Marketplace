@@ -1,6 +1,6 @@
 ---
 name: new-job-first-90-days
-description: Use when the user starts a new job soon or just started (first day, probation, 30/60/90-day plan, เริ่มงานใหม่, ผ่านโปร).
+description: Use when starting a new job or probation
 ---
 
 # New Job — First 90 Days (เริ่มงานใหม่)

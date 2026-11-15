@@ -1,6 +1,6 @@
 ---
 name: study-drill
-description: Use when the user wants flashcards from notes, or to be quizzed for an exam without being told the answer (ทำบัตรคำ, ติวสอบ, quiz me).
+description: Use when making flashcards or quizzes for an exam
 ---
 
 # Study Drill (บัตรคำและซ้อมถามตอบ)

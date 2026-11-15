@@ -1,6 +1,6 @@
 # skill: principle-prove-it-works
 
-Use when about to say any work is done, fixed or working. Check against the real thing first.
+Use before saying work is done, fixed or working
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -53,7 +53,7 @@ Use when about to say any work is done, fixed or working. Check against the real
 
 # skill: pdpa-compliance
 
-Use when software stores personal data of people in Thailand (PDPA).
+Use when software stores personal data in Thailand
 
 # PDPA — ข้อมูลส่วนบุคคล
 

@@ -1,6 +1,6 @@
 ---
 name: architecture-patterns
-description: Use when choosing system architecture (monolith, microservices, serverless, events).
+description: Use when choosing monolith, microservices or serverless
 ---
 
 # Architecture Patterns

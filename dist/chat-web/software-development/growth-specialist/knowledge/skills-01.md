@@ -1,6 +1,6 @@
 # skill: superuser
 
-Use when software work is big or risky (5+ modules, whole repo, money, personal data, deletes, prod, client delivery) or says superuser.
+Use when software work is big or risky
 
 # SuperUser — Team Lead
 
@@ -1765,7 +1765,7 @@ claude-security (All rights reserved · เอากลไกอย่างเ�
 
 # skill: lazy-coding
 
-Use when writing, fixing, refactoring or reviewing code, or on bloat complaints. Simplest that works.
+Use when writing or reviewing code, for the simplest that works
 
 # Lazy Coding
 

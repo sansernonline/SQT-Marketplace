@@ -1,6 +1,6 @@
 ---
 name: markdown-visuals
-description: Use when a Markdown doc needs a picture (inline SVG, image, ASCII or Mermaid).
+description: Use when a Markdown doc needs an image, SVG or ASCII art
 ---
 
 # Markdown Visuals

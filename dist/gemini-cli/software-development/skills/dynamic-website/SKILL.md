@@ -1,6 +1,6 @@
 ---
 name: dynamic-website
-description: Use when a marketing or event website needs scroll motion (GSAP, 3D). Not an app.
+description: Use when a marketing website needs scroll motion or 3D
 ---
 
 # Dynamic Website

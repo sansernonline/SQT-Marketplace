@@ -1,6 +1,6 @@
 ---
 name: tax-deduction-planner
-description: Use when cutting Thai income tax before year end, checking deductions, or how much RMF or ThaiESG to buy.
+description: Use when cutting Thai income tax with deductions
 argument-hint: '[yearly income and what you already have, e.g. "salary 60k/month, PVD 5%, life 20k"]'
 ---
 

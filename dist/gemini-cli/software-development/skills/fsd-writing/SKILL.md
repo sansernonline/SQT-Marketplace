@@ -1,6 +1,6 @@
 ---
 name: fsd-writing
-description: Use when writing or reviewing a Functional Specification Document (FSD).
+description: Use when writing or reviewing a Functional Specification Document
 ---
 
 # เขียน Functional Specification Document (FSD)

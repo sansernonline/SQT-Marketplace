@@ -1,6 +1,6 @@
 # skill: trade-journal
 
-Use when logging a trade (entry, exit, why) or reviewing results weekly or monthly, with win rate, expectancy, drawdown.
+Use when logging trades or reviewing win rate
 
 # Trade Journal (บันทึกการเทรด)
 

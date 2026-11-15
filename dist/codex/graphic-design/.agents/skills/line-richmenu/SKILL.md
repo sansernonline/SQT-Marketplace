@@ -1,6 +1,6 @@
 ---
 name: line-richmenu
-description: Use when a LINE OA needs a rich menu built (image sizes, tap areas, JSON, API calls).
+description: Use when a LINE OA needs a rich menu built
 ---
 
 # LINE Rich Menu

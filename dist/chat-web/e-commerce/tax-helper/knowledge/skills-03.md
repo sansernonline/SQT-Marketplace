@@ -1,6 +1,6 @@
 # skill: dbd-annual-filing
 
-Use when a Thai company files after year end (AGM, audited statements via DBD e-Filing, BOJ 5, PND 50).
+Use when a Thai company files year-end DBD accounts
 
 # Year-End Filing — Department of Business Development (DBD) and Revenue Department
 
@@ -81,7 +81,7 @@ Shifts dates for weekends and holidays with `thai-holidays`, lists the documents
 
 # skill: labour-law-basics
 
-Use when asking about the Thai Labour Protection Act (probation, OT, leave, notice, severance, wages).
+Use for Thai Labour Protection Act questions
 
 # Thai Labour Law Basics (พ.ร.บ.คุ้มครองแรงงาน พ.ศ. 2541 และที่แก้ไขเพิ่มเติม)
 

@@ -1,6 +1,6 @@
 # skill: pdpa-workflow
 
-Use when a Thai SME runs PDPA paperwork (consent, ROPA, data-subject requests, breach notice).
+Use when a Thai SME handles PDPA paperwork
 
 # Personal Data Protection Act (PDPA) Workflow for Thai SMEs
 

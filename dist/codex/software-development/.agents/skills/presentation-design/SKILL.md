@@ -1,6 +1,6 @@
 ---
 name: presentation-design
-description: Use when making slides or a deck (pitch, plan, progress report, training) in any format · ทำสไลด์. Story, layouts.
+description: Use when planning a slide deck story and layouts
 ---
 
 # Presentation Design

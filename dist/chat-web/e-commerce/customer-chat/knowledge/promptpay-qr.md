@@ -1,6 +1,6 @@
 # skill: promptpay-qr
 
-Use when a Thai business needs a PromptPay QR on an invoice or counter, or builds the QR payload.
+Use when a Thai business needs a PromptPay QR
 
 # PromptPay QR (Thai QR Payment)
 

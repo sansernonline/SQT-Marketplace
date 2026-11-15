@@ -1,6 +1,6 @@
 # skill: ui-craft
 
-Use when a task produces a screen, screen spec or mockup, alongside the platform skill.
+Use with a platform skill when a task produces a screen or mockup
 
 # UI Craft
 
@@ -1153,7 +1153,7 @@ Text parts of a UX spec that sit beside the clickable HTML mockup (`mockup/<CODE
 
 # skill: design-references
 
-Use before any design work (web, app, slide, logo, poster) to search live references and colours.
+Use before design work to search live references and colours
 
 # design-references — ค้นงานจริงก่อนออกแบบ แล้วหยิบสีจากงานที่เลือก
 
@@ -1304,7 +1304,7 @@ Use before any design work (web, app, slide, logo, poster) to search live refere
 
 # skill: superuser
 
-Use when software work is big or risky (5+ modules, whole repo, money, personal data, deletes, prod, client delivery) or says superuser.
+Use when software work is big or risky
 
 # SuperUser — Team Lead
 

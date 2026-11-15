@@ -1,6 +1,6 @@
 # skill: superuser
 
-Use when design work spans several assets (brand kit, campaign, AI image or video series) or the user says superuser for design.
+Use when design work spans several linked assets
 
 # SuperUser — Team Lead
 

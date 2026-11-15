@@ -1,6 +1,6 @@
 ---
 name: line-chatbot
-description: Use when a company LINE OA should answer customers automatically (quota, knowledge base, handoff).
+description: Use when a LINE OA should answer customers automatically
 argument-hint: '[what customers ask about, or "improve existing"]'
 ---
 

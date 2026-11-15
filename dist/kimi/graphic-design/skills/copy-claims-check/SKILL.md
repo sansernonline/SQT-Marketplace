@@ -1,6 +1,6 @@
 ---
 name: copy-claims-check
-description: Use when ad or post copy needs an overclaim check (โฆษณาเกินจริง, อย., สคบ.) before posting. Not legal advice.
+description: Use when ad copy needs an overclaim check before posting
 argument-hint: <path to the copy or the asset>
 ---
 

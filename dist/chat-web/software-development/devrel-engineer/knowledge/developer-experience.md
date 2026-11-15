@@ -1,6 +1,6 @@
 # skill: developer-experience
 
-Use when the users are developers (hello-world time, error messages, CLI, SDK).
+Use when the users are developers
 
 # developer-experience
 

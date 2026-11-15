@@ -1,6 +1,6 @@
 ---
 name: sme-bookkeeping
-description: Use when a Thai shop or SME keeps its books (income-expense journal, receipts to keep, month-end close, รายงานเงินสดรับ-จ่าย, hire an accountant).
+description: Use when a Thai shop or SME keeps its books
 ---
 
 # SME Bookkeeping (Thai small business and online seller)

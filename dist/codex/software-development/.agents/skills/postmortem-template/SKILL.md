@@ -1,6 +1,6 @@
 ---
 name: postmortem-template
-description: Use when writing a post-incident review or blameless postmortem.
+description: Use when writing a blameless post-incident review
 ---
 
 # Blameless Postmortem Template

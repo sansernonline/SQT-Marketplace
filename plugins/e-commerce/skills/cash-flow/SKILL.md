@@ -1,6 +1,6 @@
 ---
 name: cash-flow
-description: Use when a Thai seller or SME may run short of cash (13-week forecast, slow marketplace payouts, COD, stock buys, VAT and WHT due dates).
+description: Use when a Thai seller may run short of cash
 ---
 
 # Cash Flow for a Thai Small Business

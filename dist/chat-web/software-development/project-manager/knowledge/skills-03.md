@@ -1,6 +1,6 @@
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable must look designed. Markdown report → markdown-report-docx.
+Use when a Word, PowerPoint or PDF must look designed
 
 # Branded Document Design
 
@@ -705,7 +705,7 @@ footer        "หน้า N" กลางหน้า สีเทา 9pt
 
 # skill: human-writing
 
-Use before writing or editing anything people read (answer, email, report, README, slide, label) in Thai or English. Look → polished-document-style.
+Use before writing anything people read, in Thai or English
 
 # human-writing — write like a person: smooth to read, easy to understand
 
@@ -1232,7 +1232,7 @@ Applies to slide titles, figure titles, document headings, and box titles in a d
 
 # skill: answer-shape
 
-Use when an answer has structure (options, trade-offs, how parts connect). Prose, table or diagram.
+Use when an answer needs prose, a table or a diagram
 
 # รูปทรงของคำตอบ
 
