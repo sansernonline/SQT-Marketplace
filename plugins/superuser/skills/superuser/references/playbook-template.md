@@ -1,30 +1,32 @@
-# playbook · <ชื่อ> — <ทำอะไร ในไม่เกิน 8 คำ>
+# playbook · <name> — <what it does, in at most 8 words>
 
-ใช้เมื่อ: <สถานการณ์ หรือคำที่ผู้ใช้พูด 2–3 แบบ>
-ผลลัพธ์: <ผู้ใช้ได้อะไร · รูปแบบไฟล์>
-รูปแบบหลัก: <Planning · ReAct · Reflection · Multi-Agent · MoA (Mixture-of-Agents) · Reranker ที่ใช้> (`agent-patterns`)
+Use when: <the situation, or 2–3 phrases the user says>
+Result: <what the user gets · file format>
+Main patterns: <Planning · ReAct · Reflection · Multi-Agent · MoA (Mixture-of-Agents) · Reranker used> (`agent-patterns`)
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน — Steps (copy into the todo exactly)
 
-1. เข้าใจ — <อ่านอะไร · เทียบกับอะไร> · ใคร: หัวหน้าทีม
-2. วางแผน — <แตกเป็นชิ้นที่ตรวจได้> · ใคร: หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่)
-3. ลงมือ — <ทำทีละชิ้น> · ใคร: `<agent ของสาขา>` ตัวใหม่ต่อชิ้น (<ระดับโมเดล>)
-4. พิสูจน์ — <ตรวจกับของจริงด้วยอะไร> · ใคร: `reviewer` ตัวใหม่ (หรือผู้ตรวจเฉพาะทางของสาขา) · ไม่ผ่าน → แก้ → ตรวจซ้ำ
-5. รายงาน — <สิ่งที่ต้องอยู่ในคำตอบ> · ใคร: หัวหน้าทีม
+Labels kept in Thai because the validator matches them: `ใคร:` = who · `หัวหน้าทีม` = the lead · `ตัวใหม่` = fresh (a new instance) · `ตัวเดิม (ถือ …)` = the same agent, holding something.
 
-## จบเมื่อ
+1. Understand: <what to read · what to compare against> · ใคร: หัวหน้าทีม
+2. Plan: <split into checkable pieces> · ใคร: หัวหน้าทีม (unclear brief: `brainstormer` ตัวใหม่)
+3. Do: <one piece at a time> · ใคร: `<branch agent>` ตัวใหม่ per piece (<model tier>)
+4. Prove (พิสูจน์): <what to check against the real thing, and with what> · ใคร: `reviewer` ตัวใหม่ (or the branch's specialist reviewer) · fail → fix → recheck
+5. Report: <what must be in the answer> · ใคร: หัวหน้าทีม
 
-<เงื่อนไขที่ตรวจได้ 1–2 บรรทัด>
+## Done when
+
+<1–2 lines of checkable conditions>
 
 ---
 
-วิธีใช้แม่แบบนี้
-- **ประกอบเองระหว่างงาน** — เขียนตามโครงนี้ลง todo ได้เลย ไม่ต้องสร้างไฟล์ แล้วบอกในรายงานตอนจบว่าประกอบเอง
-- **ทำเป็น playbook ถาวร** — เมื่อแบบเดียวกันใช้ซ้ำ 2 ครั้งขึ้นไปและผู้ใช้เห็นด้วย ให้สร้าง `references/playbook-<ชื่อ>.md` แล้วเพิ่ม 1 แถวในตาราง playbook หัวข้อ 2 ของ `superuser`
-- แต่ละขั้นต้องตรวจได้ ขั้นไหนเขียน "เสร็จเมื่อ" ไม่ได้ให้แตกให้เล็กลง และรวมแล้วไม่เกิน 9 ขั้น
-- **ผูกข้อกำหนดกับเกณฑ์ก่อนลงมือ** — งานที่มีข้อกำหนดหลายข้อ ขั้นวางแผนเขียนตาราง `ข้อกำหนด | อยู่ส่วนไหนของงาน | ตรวจด้วยอะไร` ข้อกำหนดที่ไม่มีที่อยู่หรือไม่มีวิธีตรวจคือข้อที่จะหลุด · ขั้นพิสูจน์ใช้ตารางนี้ตรวจทีละแถว
-- **ลงรายละเอียดเฉพาะ 2–3 ขั้นถัดไป** ขั้นที่ไกลกว่าเขียนแค่หัวข้อ · ขั้นไหนพัง 2 รอบ → แตกเป็นขั้นย่อย ไม่ลองแบบเดิมซ้ำ (แนวคิด ADaPT — As-needed Decomposition and Planning: แตกงานเมื่อทำไม่ผ่าน)
-- **ขั้นที่ย้อนไม่ได้ในเครื่อง** (migration · เขียนทับไฟล์ · ลบ) → สำรองหรือ dry-run ก่อนในขั้นเดียวกัน · ขั้นที่กระทบคนนอกยังไป "รออนุมัติ" ตามเดิม
-- **งานสร้างของใหม่** ขั้นลงมือแรกคือทางเดินบาง ๆ ที่ใช้ได้ครบ 1 เส้นตั้งแต่ต้นจนจบ แล้วค่อยเติมทีละส่วน
-- **ทุกขั้นบอก `ใคร:`** ท้ายบรรทัด — หัวหน้าทีม · ชื่อ agent ใน backtick ที่มีจริง (หรือ `general-purpose` · `Explore` · `Plan`) · agent ตัวใหม่ทุกขั้น ยกเว้นถือของที่ย้ายยาก "ตัวเดิม (ถือ …)" · ผู้ใช้ไม่เป็นคนทำขั้นกลางงาน (ถามรวมตอนเริ่ม หรือ "รออนุมัติ")
-- **ขั้นตรวจอยู่หลังขั้นสุดท้ายที่ลงมือทำ** — `reviewer` ตัวใหม่ (หรือผู้ตรวจเฉพาะทาง เช่น `design-critic` · `qa-tester`) · หัวหน้าทีมยืนยันทุกข้อที่พบเอง · ผู้ใช้เลือกทางไม่นับเป็นการตรวจ · `validate-marketplace.mjs` ตรวจทุกข้อนี้
+How to use this template
+- **Assemble on the spot during the work.** Write to this structure straight into the todo, no file needed, and say in the final report that it was assembled on the spot.
+- **Make it a permanent playbook.** When the same pattern is used 2 or more times and the user agrees, create `references/playbook-<name>.md` and add 1 row to the playbook table in section 2 of `superuser`.
+- Each step must be checkable. A step you cannot give a "done when" must be split smaller, and the total is at most 9 steps.
+- **Tie requirements to criteria before doing.** For work with many requirements, the planning step writes a table `ข้อกำหนด | อยู่ส่วนไหนของงาน | ตรวจด้วยอะไร` (requirement | where in the work | how to check). A requirement with no place or no way to check is the one that will slip · the prove step uses this table, row by row.
+- **Detail only the next 2–3 steps.** Further steps get only a heading · a step that breaks twice → split into sub-steps, do not retry the same way (the ADaPT idea — As-needed Decomposition and Planning: split the task when it fails).
+- **A step that cannot be undone locally** (migration · overwriting a file · deleting) → back up or dry-run first within the same step · a step that affects outsiders still goes to "รออนุมัติ" (awaiting approval) as before.
+- **Building something new.** The first doing step is a thin path that works end to end, 1 line from start to finish, then fill in part by part.
+- **Every step says `ใคร:` (who:)** at the end of the line: the lead · a real agent name in backticks (or `general-purpose` · `Explore` · `Plan`) · a fresh agent every step, except holding something hard to transfer, "the same one (holding …)" · the user is not the one doing a middle step (ask together at the start, or "รออนุมัติ").
+- **The check step sits after the last doing step.** A fresh `reviewer` (or a specialist reviewer such as `design-critic` · `qa-tester`) · the lead confirms every finding itself · the user choosing a path does not count as a check · `validate-marketplace.mjs` checks all of this.

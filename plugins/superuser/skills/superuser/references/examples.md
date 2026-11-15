@@ -1,27 +1,27 @@
-# ตัวอย่างของ plugin นี้ — ระดับโมเดล · รูปแบบทีม
+# Examples for this plugin — model tiers · team patterns
 
-ย้ายมาจาก `SKILL.md` หัวข้อ 5 · 9 · กฎอยู่ใน `SKILL.md` ไฟล์นี้มีแต่ตัวอย่าง
+Moved from `SKILL.md` sections 5 and 9. The rules live in `SKILL.md`. This file has only examples.
 
-## ระดับโมเดล — ตัวอย่างงาน (หัวข้อ 5)
+## Model tiers — example tasks (section 5)
 
-กฎ ชื่อโมเดล และการสลับกลางทาง อยู่ใน `SKILL.md` หัวข้อ 5 (แจกงาน) · ไฟล์นี้มีแต่ตัวอย่างงานของแต่ละระดับ
+The rules, model names, and mid-task switching are in `SKILL.md` section 5 (handing out work). This file has only example tasks for each tier.
 
-| ระดับ | ตัวอย่างงาน | ตัวอย่างที่มักเลือกผิด |
+| Tier | Example tasks | Example often chosen wrongly |
 |---|---|---|
-| **ใหญ่** `opus` | ออกแบบระบบสิทธิ์ผู้ใช้ทั้งระบบ · คำนวณยอดเงินเดือนที่ส่งเข้าธนาคาร · ร่างอีเมลแจ้งข้อมูลรั่วถึงลูกค้า · ตรวจรอบสุดท้ายของงานเสี่ยง | ชิ้นเขียนคู่มือของระบบสิทธิ์ผู้ใช้ → ใหญ่ ไม่ใช่กลาง เพราะทั้งงานเสี่ยง |
-| **กลาง** `sonnet` (ค่าเริ่มต้น) | เพิ่มหน้าค้นหาสินค้า · แก้บั๊กปฏิทิน · ร่างคู่มือติดตั้ง · ค้นเทียบไลบรารี · ตรวจรอบแรก | ย้าย callback ไปเป็น async/await → กลาง แม้มี test เพราะต้องเลือกวิธีแก้ |
-| **เล็ก** `haiku` | เติมรหัสไปรษณีย์ลงตารางตามรายการที่ให้ · แปลงรายการหนังสือจาก CSV เป็น JSON ตามโครงที่ให้ · ค้นคำในเอกสารแล้วรายงานบรรทัด | ลบช่องว่างท้ายบรรทัดทุกไฟล์ → เขียนสคริปต์ ไม่ส่งลูกทีม |
-| **`fable`** (ไม่ใช่ค่าเริ่ม) | ชิ้นที่ opus + high พลาดซ้ำ 2 ครั้ง และบัญชีมีเครดิต | ใช้ fable ตั้งแต่ต้นกับงานยาก → เริ่มที่ opus ก่อน |
+| **Large** `opus` | Design the whole user-permission system · compute payroll amounts sent to the bank · draft an email telling customers about a data leak · final check of risky work | A piece writing the manual for the user-permission system → large, not medium, because the whole job is risky |
+| **Medium** `sonnet` (default) | Add a product search page · fix a calendar bug · draft an install guide · search and compare libraries · first-round check | Move callbacks to async/await → medium even with tests, because a way to fix must be chosen |
+| **Small** `haiku` | Fill postal codes into a table from a given list · convert a book list from CSV to JSON in a given structure · search a word in documents and report the lines | Trim trailing spaces from every file → write a script, do not send a worker |
+| **`fable`** (not the default) | A piece where opus + high failed twice and the account has credit | Using fable from the start on a hard task → start with opus first |
 
-## รูปแบบทีม — ใช้อย่างไรในงานนี้ (หัวข้อ 9)
+## Team patterns — how each is used in this work (section 9)
 
-วิธีทำ ต้นทุน และกับดักของแต่ละแบบอยู่ใน `agent-patterns`
+How to do each, its cost, and its traps are in `agent-patterns`.
 
-| รูปแบบ | ในงานนี้ใช้อย่างไร |
+| Pattern | How it is used in this work |
 |---|---|
-| **Planning** | playbook → todo · งานยาว → แผนใน `CONTEXT.md` หัวข้อ "ความคืบหน้า" |
-| **ReAct** | ทุกขั้น: คิด → ทำ 1 อย่าง → ดูผลจริง → ขั้นถัดไป |
-| **Reflection** | ขั้นตรวจของ playbook ใช้ `reviewer` ตัวใหม่ (หรือผู้ตรวจเฉพาะทางที่อ่านอย่างเดียว) ที่ไม่เห็นงานมาก่อน ไม่ใช่ตัวที่ทำงาน |
-| **Multi-Agent** | หัวข้อ 5 · ชิ้นงานอิสระแยกให้หลายตัว ส่งต่อกันด้วยไฟล์ |
-| **Mixture-of-Agents (MoA)** | ทางที่เลือกผิดแล้วแพงมาก: `brainstormer` 3 ตัวคนละมุม แล้วรวม |
-| **Reranker** | playbook `research`: รวบรวมแหล่งกว้าง → ให้คะแนน → อ่านเต็มเฉพาะที่ได้คะแนนสูงสุด |
+| **Planning** | playbook → todo · long job → a plan in `CONTEXT.md` section "ความคืบหน้า" (progress) |
+| **ReAct** | Every step: think → do 1 thing → look at the real result → next step |
+| **Reflection** | The playbook's check step uses a fresh `reviewer` (or a read-only specialist reviewer) that has not seen the work before, not the one that did it |
+| **Multi-Agent** | Section 5 · independent pieces split among several workers, handed on through files |
+| **Mixture-of-Agents (MoA)** | A wrongly chosen path that would be very expensive: 3 `brainstormer`s from different angles, then merge |
+| **Reranker** | playbook `research`: gather sources widely → score → read in full only the top scorers |

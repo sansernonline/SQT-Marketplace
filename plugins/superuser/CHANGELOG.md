@@ -1,5 +1,9 @@
 # Changelog — superuser
 
+## 3.42.1 — 2026-11-15
+
+- ไฟล์ที่ model อ่านของ skill ที่ถูกเปิดจริง (human-writing · skill-authoring · no-ai-look · handoff · design-references · parallel-split-and-merge · context-budget และอื่น) รวม reference ของ superuser เป็นภาษาอังกฤษ (ผู้ใช้สั่ง 2026-11-15 · เลือกไฟล์จากการใช้จริงใน log 2,900 session · ไทยในไฟล์ที่แปลลดลง 88%) · ป้ายสถานะ ป้ายหลักฐาน คำที่ hook และตัวตรวจจับ และตัวอย่างภาษาไทยคงเป็นไทย · ยังไม่ได้รัน eval เทียบก่อนและหลัง
+
 ## 3.42.0 — 2026-11-15
 
 - description ของ skill ทั้ง 40 ตัวเป็นภาษาอังกฤษประโยคเดียว ยาวไม่เกิน 65 ตัวอักษร · รายการ skill ของ plugin นี้ลดจาก 5,146 เหลือ 3,473 ตัวอักษร · รวมทุก plugin เหลือ 24,071 ตัว ต่ำกว่างบตั้งต้น 30,000 ของ Claude Code จึงไม่ต้องตั้ง `skillListingBudgetFraction` แล้ว (ผู้ใช้สั่ง 2026-11-15)
