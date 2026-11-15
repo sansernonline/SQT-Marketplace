@@ -3,55 +3,55 @@ name: design-system
 description: Use when authoring design tokens or a Tailwind theme
 ---
 
-# Design System — token สามชั้นและสเปกคอมโพเนนต์
+# Design System — 3-layer tokens and component specs
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Gate before starting (every time):** read the owner's theme → search live references → 3 genuinely different directions → run `no-ai-look` before sending · follow the "Gate before starting" (`ด่านก่อนลงมือ`) section of `design-references` (plugin `superuser`) even when a brand already exists (the brand controls color and fonts, while the search is for finding the structure of this piece) · close the job with the line `ด่านก่อนลงมือ:`
 
-> **กฎข้อเดียว:** โค้ดหน้าจอห้ามมีสีหรือระยะดิบ ทุกค่าอ้าง token · token มี 3 ชั้น: **primitive** (ค่าดิบ `--color-blue-600`) → **semantic** (หน้าที่ `--color-primary`) → **component** (`--button-bg`) · เปลี่ยนธีมแก้ชั้นกลางที่เดียว
+> **One rule:** screen code must have no raw colors or spacing. Every value references a token · tokens have 3 layers: **primitive** (raw value `--color-blue-600`) → **semantic** (role `--color-primary`) → **component** (`--button-bg`) · to change the theme, edit the middle layer in one place
 
-อยู่ใน plugin `software-development` · ลอกและปรับจาก ui-ux-pro-max-skill (MIT · commit `b7d5353` · ดู 2026-11-05) · ต้นฉบับอังกฤษคงไว้ที่ `data/upstream/` ไม่แก้ · สัญญาอนุญาต `data/upstream/LICENSE`
+Part of plugin `software-development` · copied and adapted from ui-ux-pro-max-skill (MIT · commit `b7d5353` · viewed 2026-11-05) · the English original is kept unchanged in `data/upstream/` · licence at `data/upstream/LICENSE`
 
-## ใช้ตัวไหน
+## Which one to use
 
-| งาน | ใช้ |
+| Task | Use |
 |---|---|
-| มีโค้ดอยู่แล้ว อยากรู้ว่าใช้ค่าอะไร หลุดสเกลตรงไหน | `ui-craft` → `scripts/design_tokens.py` (อ่านโค้ด → `docs/DESIGN.md`) |
-| เขียน token ใหม่ สร้าง CSS จาก JSON ตรวจว่าโค้ดไม่มีค่าดิบ | **skill นี้** |
-| สเกลระยะและขนาดตัวอักษร | `ui-craft` ข้อ 1–2 (ใช้สเกลเดียวกับ token ที่ตั้ง) |
-| เลือกสีและฟอนต์เริ่มต้น | `design-direction-lookup` |
-| สีและฟอนต์ของแบรนด์ที่มีเอกสารแล้ว | `brand-kit` หัวข้อ "เขียนเป็นเอกสาร" (plugin `graphic-design`) → ซิงก์เข้าไฟล์ token ที่นี่ |
+| Code already exists; the user wants to know which values it uses and where it leaves the scale | `ui-craft` → `scripts/design_tokens.py` (reads the code → `docs/DESIGN.md`) |
+| Write new tokens, generate CSS from JSON, check that code has no raw values | **this skill** |
+| Spacing and font size scales | `ui-craft` items 1–2 (use the same scale as the tokens you set) |
+| Pick starting colors and fonts | `design-direction-lookup` |
+| Colors and fonts of a brand that already has a document | `brand-kit` section "เขียนเป็นเอกสาร" (write as a document) (plugin `graphic-design`) → sync into the token file here |
 
-## ขั้นตอน
+## Steps
 
-1. **เริ่มจากแม่แบบ** `templates/design-tokens-starter.json` (มี 3 ชั้นครบ) · ใส่สีแบรนด์ที่ชั้น primitive · ระยะใช้สเกล 4 8 12 16 24 32 48 64 ของ `ui-craft`
-2. **สร้าง CSS:** `node scripts/generate-tokens.cjs --config <tokens.json> -o <tokens.css>` (ทดสอบ 2026-11-05 กับแม่แบบ ได้ `:root` ครบ)
-3. **ตรวจโค้ด:** `node scripts/validate-tokens.cjs --dir src/` → รายงานสีและ px ดิบที่ควรเป็น token (ทดสอบ 2026-11-05: เจอ hex 1 · px 1 ในไฟล์ตัวอย่าง) · ผลเป็นเหตุผลให้ดูซ้ำ ไม่ใช่ให้แก้ทุกบรรทัด
-4. **สถานะคอมโพเนนต์:** ปุ่ม · input · การ์ด ทำตารางสถานะ default / hover / active / focus / disabled ตาม `data/upstream/states-and-variants.md` ก่อนเขียน CSS
-5. **Tailwind:** `data/upstream/tailwind-integration.md` — ผูก token เข้า theme · สีต้องมาจากแบรนด์ ไม่ใช่ชุดตั้งต้นของ framework (`no-ai-look`)
+1. **Start from the template** `templates/design-tokens-starter.json` (it has all 3 layers) · put the brand colors in the primitive layer · for spacing use the 4 8 12 16 24 32 48 64 scale of `ui-craft`
+2. **Generate CSS:** `node scripts/generate-tokens.cjs --config <tokens.json> -o <tokens.css>` (tested 2026-11-05 with the template; it produced a full `:root`)
+3. **Check the code:** `node scripts/validate-tokens.cjs --dir src/` → reports raw colors and px that should be tokens (tested 2026-11-05: found 1 hex and 1 px in the sample file) · the result is a reason to look again, not a demand to fix every line
+4. **Component states:** for buttons · inputs · cards, make a state table of default / hover / active / focus / disabled per `data/upstream/states-and-variants.md` before writing CSS
+5. **Tailwind:** `data/upstream/tailwind-integration.md` — bind the tokens into the theme · colors must come from the brand, not from the framework's starter set (`no-ai-look`)
 
-สคริปต์เป็น Node ไม่ติดตั้งแพ็กเกจเพิ่ม ไม่ต่อเน็ต
+The scripts are Node, install no extra packages, and make no network calls.
 
-## ไฟล์ต้นฉบับ
+## Original files
 
-| หัวข้อ | ไฟล์ใน `data/upstream/` |
+| Topic | File in `data/upstream/` |
 |---|---|
-| ภาพรวมสามชั้น | `token-architecture.md` |
-| ค่าดิบ · หน้าที่ · คอมโพเนนต์ | `primitive-tokens.md` · `semantic-tokens.md` · `component-tokens.md` |
-| สเปกคอมโพเนนต์และสถานะ | `component-specs.md` · `states-and-variants.md` |
+| Overview of the three layers | `token-architecture.md` |
+| Raw values · roles · components | `primitive-tokens.md` · `semantic-tokens.md` · `component-tokens.md` |
+| Component specs and states | `component-specs.md` · `states-and-variants.md` |
 | Tailwind | `tailwind-integration.md` |
 
-## ไม่ได้ลอกมา (เหตุผล)
+## Not copied (reason)
 
-- ระบบสร้างสไลด์ (`search-slides.py` · `generate-slide.py` · `slide-token-validator.py` · CSV `slide-*`): CSV มีอยู่แล้วใน `design-direction-lookup/data/upstream/uipro/` · ส่วนที่เหลือซ้ำกับ `presentation-design` และ `html-slide-deck`
-- `fetch-background.py`: ดึงภาพจากเน็ตตอนรัน ขัดกฎไม่ดาวน์โหลดตอนรัน
-- ตัวอย่างในต้นฉบับใช้สีฟ้า-ม่วงแบบ SaaS เป็นแค่รูปแบบข้อมูล ไม่ใช่ค่าแนะนำ
+- The slide-making system (`search-slides.py` · `generate-slide.py` · `slide-token-validator.py` · the `slide-*` CSV files): the CSV files already exist in `design-direction-lookup/data/upstream/uipro/` · the rest duplicates `presentation-design` and `html-slide-deck`
+- `fetch-background.py`: pulls images from the internet at run time, which breaks the rule of no downloads at run time
+- The examples in the original use SaaS-style blue-purple only as a data format, not as recommended values
 
-## ตรวจก่อนส่ง
+## Check before sending
 
-1. `validate-tokens.cjs` ไม่เหลือสีหรือ px ดิบในโค้ดใหม่ (ยกเว้นที่จดเหตุผลไว้)
-2. ทุกคู่ semantic ข้อความ/พื้นผ่าน 4.5:1 ทั้งโหมดสว่างและมืด
-3. คอมโพเนนต์ทุกตัวมีครบ 5 สถานะ
+1. `validate-tokens.cjs` leaves no raw colors or px in new code (except those with a written reason)
+2. Every semantic text/background pair passes 4.5:1 in both light and dark mode
+3. Every component has all 5 states
 
-## ที่มา
+## Sources
 
-- nextlevelbuilder/ui-ux-pro-max-skill `.claude/skills/design-system` · MIT · commit `b7d5353` · ดู 2026-11-05 · ไฟล์ใน `data/upstream/` `scripts/` `templates/` คัดลอกไม่แก้
+- nextlevelbuilder/ui-ux-pro-max-skill `.claude/skills/design-system` · MIT · commit `b7d5353` · viewed 2026-11-05 · the files in `data/upstream/` `scripts/` `templates/` are copied unchanged

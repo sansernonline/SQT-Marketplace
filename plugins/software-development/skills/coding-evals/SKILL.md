@@ -4,74 +4,74 @@ description: Use when changing coding skills, playbooks or the developer agent, 
 disable-model-invocation: true
 ---
 
-# coding-evals — วัดว่าทีมเขียนโค้ดเก่งขึ้นจริง
+# coding-evals — measure whether the team really codes better
 
-> แก้ skill แล้ว "รู้สึก" ว่าดีขึ้นยังไม่พอ ต้องรันงานชุดเดิมก่อนและหลัง แล้วเทียบตัวเลข
+> Feeling that a skill change "improved things" is not enough. Run the same set of jobs before and after, and compare the numbers.
 
-ใช้เมื่อ: แก้ `stack-*` · `code-orientation` · `testing-standards` · playbook `feature` · `bug-fix` · `refactor` · agent `developer` · หรือผู้ใช้ถามว่าเก่งขึ้นไหม
-ไม่ใช้กับ: งานลูกค้าจริง · งานที่ไม่มีโค้ด
+Use when: changing `stack-*` · `code-orientation` · `testing-standards` · the playbooks `feature` · `bug-fix` · `refactor` · the agent `developer` · or the user asks whether the team has improved
+Do not use for: real customer work · work with no code
 
 ---
 
-## 1 · ชุดงาน
+## 1 · The job set
 
-มี 8 งาน stack ละ 2 งาน แต่ละงานมีโปรเจกต์เล็กที่รันได้ และเกณฑ์ผ่านที่ตรวจด้วยคำสั่ง ไม่ใช่ความเห็น
+There are 8 jobs, 2 per stack. Each job has a small runnable project and a pass criterion checked by command, not by opinion.
 
-| # | stack | งาน | ตรวจด้วย |
+| # | Stack | Job | Checked by |
 |---|---|---|---|
-| 1 | .NET | เพิ่ม endpoint ยกเลิก order (ห้ามยกเลิกเมื่อส่งของแล้ว) | test ที่ซ่อนไว้ 6 ตัว · ไม่มี warning ใหม่ |
-| 2 | .NET | แก้บั๊กวันที่ปีพุทธ 2569 ใน report (เครื่อง culture `th-TH`) | test ที่ซ่อนไว้ · ต้นเหตุถูกจุด |
-| 3 | TypeScript | Angular form สมัครสมาชิก ตรวจเบอร์โทรไทย | test ที่ซ่อนไว้ · `tsc` 0 error · ไม่มี `any` |
-| 4 | TypeScript | แก้ memory leak จาก subscription ใน component | วัดจำนวน subscription ก่อนและหลัง |
-| 5 | Python | สคริปต์ import CSV ภาษาไทย (cp874) เข้า DB รันซ้ำได้ | รัน 2 ครั้ง แถวไม่ซ้ำ · test ที่ซ่อนไว้ |
-| 6 | Python | FastAPI endpoint เรียกช้าเพราะ blocking call ใน async | latency ก่อนและหลัง · test ผ่าน |
-| 7 | SQL | query รายงานยอดขายรายเดือน ช้าเกิน 2 วินาทีบนข้อมูล 1 ล้านแถว | เวลารันและ plan · ผลตรงกับคำตอบ |
-| 8 | SQL | migration เพิ่มคอลัมน์ NOT NULL บนตารางใหญ่ โดยไม่ล็อกนาน | รันซ้ำได้ · ไม่มี downtime ในสคริปต์ |
+| 1 | .NET | add an endpoint that cancels an order (not allowed once shipped) | 6 hidden tests · no new warnings |
+| 2 | .NET | fix a Buddhist-year 2569 date bug in a report (machine culture `th-TH`) | hidden tests · root cause at the right spot |
+| 3 | TypeScript | an Angular sign-up form that validates Thai phone numbers | hidden tests · `tsc` 0 errors · no `any` |
+| 4 | TypeScript | fix a memory leak from a subscription in a component | count the subscriptions before and after |
+| 5 | Python | a script that imports a Thai CSV (cp874) into the DB and can run again | run twice, no duplicate rows · hidden tests |
+| 6 | Python | a FastAPI endpoint that is slow because of a blocking call in async | latency before and after · tests pass |
+| 7 | SQL | a monthly sales report query that takes over 2 seconds on 1 million rows | run time and plan · result matches the answer |
+| 8 | SQL | a migration adding a NOT NULL column on a big table without a long lock | can run again · no downtime in the script |
 
-ชุดงานอยู่ใน SQT-Marketplace ที่ `scripts/evals/coding/tasks/c<เลข>-<ชื่อ>/` (ไม่อยู่ใน plugin): `TASK.md` (คำสั่งที่ส่งให้ทีม) · `task.json` · `repo/` (โค้ดตั้งต้น) · `hidden/` (test ที่ทีมห้ามเห็น) · `reference/` (คำตอบอ้างอิง) · `check.mjs` · กติกาเต็มใน `scripts/evals/coding/CONTRACT.md`
+The job set lives in SQT-Marketplace at `scripts/evals/coding/tasks/c<number>-<name>/` (not inside a plugin): `TASK.md` (the instruction handed to the team) · `task.json` · `repo/` (starting code) · `hidden/` (tests the team must not see) · `reference/` (the reference answer) · `check.mjs` · full rules in `scripts/evals/coding/CONTRACT.md`
 
-## 2 · คะแนนต่องาน (เต็ม 10)
+## 2 · Score per job (out of 10)
 
-| ข้อ | คะแนน | ดูจาก |
+| Item | Points | Judged from |
 |---|---|---|
-| ถูกต้อง | 4 | hidden test ผ่านกี่ % (100% = 4 · ≥ 80% = 2 · ต่ำกว่า = 0) |
-| test ของทีมเอง | 2 | มี test ใหม่ที่ล้มก่อนแก้ = 2 · มี test แต่ไม่ได้พิสูจน์ว่าเคยล้ม = 1 |
-| สะอาด | 2 | build/lint/type 0 ปัญหาใหม่ = 1 · diff ไม่เกิน 1.5 เท่าของคำตอบอ้างอิง = 1 |
-| ตามแบบแผน repo | 1 | reviewer ตัวใหม่ตอบว่าตาม/ไม่ตาม พร้อมจุด |
-| รายงานจริง | 1 | ทุกข้ออ้างในรายงานตรวจได้ · ไม่มี "ผ่านแล้ว" ที่ไม่ได้รัน |
+| Correct | 4 | what % of hidden tests pass (100% = 4 · ≥ 80% = 2 · lower = 0) |
+| The team's own tests | 2 | a new test that failed before the fix = 2 · tests exist but do not prove they ever failed = 1 |
+| Clean | 2 | build/lint/type 0 new problems = 1 · diff no more than 1.5 times the reference answer = 1 |
+| Follows repo conventions | 1 | a new reviewer answers follows / does not follow, with the spot |
+| Honest report | 1 | every claim in the report can be checked · no "passed" that was never run |
 
-จดด้วย: เวลาที่ใช้ · token โดยประมาณ · จำนวนครั้งที่ต้องแก้ซ้ำ · รายงานเวลาและ token แยกตามฉบับ (มีหรือไม่มี skill) เพราะ skill เพิ่ม token ได้ และ skill ที่ AI เขียนเองอาจได้คะแนนต่ำกว่าไม่มี skill (SkillsBench arXiv 2602.12670 ฉบับ preprint รายงาน −8.1 ถึง −11.5 จุด · ความมั่นใจปานกลาง · อ่านผ่านสรุปในบทเรียนเมื่อ 2026-11-04 ไม่ได้เปิดต้นฉบับ) จึงควรคาดว่าส่วนต่างในงานโค้ดจะเล็ก
+Also record: time used · approximate tokens · number of times it needed fixing again · report time and tokens separately for each version (with or without the skill), because a skill can add tokens, and a skill the AI wrote itself may score lower than no skill (SkillsBench arXiv 2602.12670, preprint, reports −8.1 to −11.5 points · medium confidence · read through a summary in a lesson on 2026-11-04, original not opened), so expect the difference on coding jobs to be small
 
-## 3 · วิธีรัน
+## 3 · How to run
 
-สคริปต์ `scripts/evals/coding/run-coding.mjs` ทำทุกขั้นให้ (วิธีใช้เต็มใน `scripts/evals/coding/README.md`)
+The script `scripts/evals/coding/run-coding.mjs` does every step (full usage in `scripts/evals/coding/README.md`)
 
 ```powershell
-node scripts/evals/coding/run-coding.mjs --verify                     # ตรวจชุดงานก่อน: โค้ดตั้งต้นต้องตก · คำตอบอ้างอิงต้องผ่านครบ
-node scripts/evals/coding/run-coding.mjs --old HEAD --tasks c1,c5     # รุ่นก่อน = commit ล่าสุด · รุ่นหลัง = ไฟล์ที่แก้อยู่
+node scripts/evals/coding/run-coding.mjs --verify                     # check the job set first: starting code must fail · the reference answer must pass fully
+node scripts/evals/coding/run-coding.mjs --old HEAD --tasks c1,c5     # old version = latest commit · new version = the files being edited
 ```
 
-1. ทุกรอบรันในโฟลเดอร์ใหม่ใต้ `_to_delete/coding-bench/runs/` โหลด plugin ที่เทียบพร้อม `superuser` รุ่นเดียวกัน (ไม่โหลด plugin ที่ติดตั้งในเครื่อง) แล้วส่งคำสั่งเดียวกันให้ `superuser` ตรงตัว ไม่ช่วยเพิ่ม
-2. ตรวจด้วย `check.mjs` ของงาน แล้วนับข้อ "test ของทีมเอง" กับ "สะอาด" ให้อัตโนมัติ (เอา test ของทีมไปรันกับโค้ดตั้งต้น · เทียบขนาด diff กับ `reference/`)
-3. ข้อ "ตามแบบแผน" กับ "รายงานจริง" ให้ claude ตัวใหม่ที่ไม่เห็นงานตอนทำเป็นคนตัดสิน · ผู้ตัดสินต้องไม่รู้ว่าฉบับไหนมี skill: สลับป้าย A/B แล้วจดกุญแจไว้นอกสายตาผู้ตัดสิน และเขียนเกณฑ์ให้เสร็จก่อนเห็นผล (ตัวอย่างจากงานนั้น: แผนโปรเจกต์ 1 คู่ ผู้ตัดสินตาบอดให้ 1/12 ข้อสำหรับฉบับไม่มีแพ็ก กับ 12/12 สำหรับฉบับมีแพ็ก ตรวจจากไฟล์ผลเมื่อ 2026-11-04 · คู่เดียว ยังไม่ใช่ค่าเฉลี่ย)
-4. งานที่ผลแกว่ง (โมเดลสุ่ม) ให้รัน `--runs 2` ขึ้นไปแล้วใช้ค่าเฉลี่ย และรายงาน 2 ตัวเลขต่องาน: **pass@k** = ผ่านอย่างน้อย 1 ใน k รอบ (บอกเพดาน) · **pass^k** = ผ่านครบทุก k รอบ (บอกความนิ่ง) · ตัดสินปล่อยด้วย pass^k เพราะงานจริงไม่ได้รันซ้ำให้เลือกรอบที่ดี (แนวคิดจาก ECC eval-harness)
+1. Each run happens in a new folder under `_to_delete/coding-bench/runs/`. It loads the plugin being compared together with the same version of `superuser` (it does not load plugins installed on the machine), then hands the same instruction to `superuser` exactly, with no extra help.
+2. Check with the job's `check.mjs`, then count the items "the team's own tests" and "clean" automatically (run the team's tests against the starting code · compare the diff size with `reference/`)
+3. A new claude that did not see the work being done judges the items "follows conventions" and "honest report" · the judge must not know which version has the skill: swap the A/B labels, keep the key out of the judge's sight, and finish writing the criteria before seeing results (an example from that work: for 1 project-plan pair, the blind judge gave 1/12 items to the version without the pack and 12/12 to the version with the pack, checked from the result files on 2026-11-04 · a single pair, not yet an average)
+4. For jobs whose results swing (a random model), run `--runs 2` or more and use the average, and report 2 numbers per job: **pass@k** = passes at least 1 of k runs (shows the ceiling) · **pass^k** = passes all k runs (shows stability) · decide on release by pass^k, because real work is not rerun for you to pick the best run (idea from ECC eval-harness)
 
-## 4 · รายงานผล
+## 4 · Reporting results
 
-สคริปต์เพิ่มแถวใน `scripts/evals/coding/RESULTS.md` เอง (1 แถวต่อรุ่น) · ผลรายรอบอยู่ใน `_to_delete/coding-bench/runs/`:
+The script adds a row to `scripts/evals/coding/RESULTS.md` itself (1 row per version) · per-run results live in `_to_delete/coding-bench/runs/`:
 
-| วันที่ | เวอร์ชัน | งาน 1–8 | รวม /80 | เวลา | หมายเหตุ |
+| Date | Version | Jobs 1–8 | Total /80 | Time | Note |
 |---|---|---|---|---|---|
 
-- ถ้าเวอร์ชันใหม่คะแนนรวมต่ำกว่าเดิม หรืองานไหนตก ≥ 2 คะแนน ให้ยังไม่ปล่อย แล้วหาเหตุจากงานที่ตก
-- ใส่สรุป 3 บรรทัดในรายงานของ playbook `skill-authoring`: ดีขึ้นตรงไหน · แย่ลงตรงไหน · เพราะอะไร
+- If the new version's total is lower than before, or any job drops by ≥ 2 points, do not release yet, and find the cause from the job that dropped
+- Put a 3-line summary in the report of the playbook `skill-authoring`: what got better · what got worse · why
 
-## 5 · กติกา
+## 5 · Rules
 
-- ทีมห้ามเห็น `hidden/` และคำตอบอ้างอิง ส่วนคนให้คะแนนต้องเป็น subagent ตัวใหม่เสมอ
-- ห้ามแก้ชุดงานให้ผ่านง่ายขึ้นระหว่างเทียบ เพิ่มงานใหม่ได้ แต่เทียบเฉพาะงานที่มีทั้ง 2 รอบ
-- บั๊กจริงที่ทีมเคยพลาด (จาก `.claude/superuser/learn/`) แปลงเป็นงานใหม่ในชุดนี้ได้ หลังตัดข้อมูลลูกค้าออก
+- The team must not see `hidden/` or the reference answer, and the scorer must always be a new subagent
+- Do not edit the job set to make it easier to pass during a comparison. You may add new jobs, but compare only jobs that have both rounds.
+- Real bugs the team once missed (from `.claude/superuser/learn/`) can become new jobs in this set after customer data is removed
 
-## 6 · เชื่อมกับ skill อื่น
+## 6 · Link to other skills
 
 `docker-sandbox` · `testing-standards` · `principle-prove-it-works` · playbook `skill-authoring` · `stack-dotnet` · `stack-typescript` · `stack-python` · `stack-sql` · `code-orientation`

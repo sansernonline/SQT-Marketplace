@@ -2,7 +2,7 @@
 
 **สารบัญ:** กรอบที่ใช้ (OWASP Top 10 · STRIDE · Defense in Depth) · Quick Reference: Common Vulnerabilities · แม่แบบเอกสาร: Threat Model · Security Code Review · Compliance Audit Brief
 
-agent และ `/threat-model` เปิดไฟล์นี้เมื่อต้องเขียนเอกสารจริง · กรอกจากของจริง ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+The agent and `/threat-model` open this file when they need to write a real document · fill it from real facts, and mark what you do not know with `(รอยืนยัน)` (awaiting confirmation)
 
 - [กรอบที่ใช้](#กรอบที่ใช้) — Open Worldwide Application Security Project (OWASP) Top 10:2025 · STRIDE (Spoofing · Tampering · Repudiation · Information disclosure · Denial of service · Elevation of privilege) · defense in depth
 - [Quick Reference: Common Vulnerabilities](#quick-reference-common-vulnerabilities)

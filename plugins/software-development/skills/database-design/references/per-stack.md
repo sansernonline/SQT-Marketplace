@@ -1,8 +1,8 @@
-# ไวยากรณ์และเครื่องมือแยกตามฐานข้อมูล/ORM
+# Syntax and tools per database and ORM
 
-**สารบัญ:** 1 ชนิดข้อมูลเทียบกัน · 2 PostgreSQL · 3 SQL Server · 4 MySQL / MariaDB · 5 MongoDB · 6 Entity Framework Core (.NET) · 7 Prisma / Drizzle (Node) · 8 Alembic (Python) · 9 คำสั่งตรวจ query ช้า
+**Contents:** 1 Data types compared · 2 PostgreSQL · 3 SQL Server · 4 MySQL / MariaDB · 5 MongoDB · 6 Entity Framework Core (.NET) · 7 Prisma / Drizzle (Node) · 8 Alembic (Python) · 9 Slow query commands
 
-1. [ชนิดข้อมูลเทียบกัน](#1--ชนิดข้อมูลเทียบกัน)
+1. [Data types compared](#1--data-types-compared)
 2. [PostgreSQL](#2--postgresql)
 3. [SQL Server](#3--sql-server)
 4. [MySQL / MariaDB](#4--mysql--mariadb)
@@ -10,30 +10,30 @@
 6. [Entity Framework Core (.NET)](#6--entity-framework-core-net)
 7. [Prisma / Drizzle (Node)](#7--prisma--drizzle-node)
 8. [Alembic (Python)](#8--alembic-python)
-9. [คำสั่งตรวจ query ช้า](#9--คำสั่งตรวจ-query-ช้า)
+9. [Slow query commands](#9--slow-query-commands)
 
 ---
 
-## 1 · ชนิดข้อมูลเทียบกัน
+## 1 · Data types compared
 
-| ต้องการเก็บ | PostgreSQL | SQL Server | MySQL |
+| To store | PostgreSQL | SQL Server | MySQL |
 |---|---|---|---|
-| id เรียงเพิ่ม | `bigint GENERATED ALWAYS AS IDENTITY` | `bigint IDENTITY(1,1)` | `BIGINT AUTO_INCREMENT` |
-| UUID | `uuid` | `uniqueidentifier` | `BINARY(16)` หรือ `CHAR(36)` |
-| เงิน | `numeric(19,4)` | `decimal(19,4)` | `DECIMAL(19,4)` |
-| เวลา + โซนเวลา | `timestamptz` | `datetimeoffset(3)` | `TIMESTAMP` (เก็บ UTC) |
-| วันที่ล้วน | `date` | `date` | `DATE` |
-| ข้อความยาวไม่จำกัด | `text` | `nvarchar(max)` | `TEXT` / `LONGTEXT` |
-| ข้อความไทย | `text` (UTF-8 อยู่แล้ว) | **`nvarchar` เท่านั้น** | `utf8mb4` |
-| จริง/เท็จ | `boolean` | `bit` | `TINYINT(1)` |
-| JSON | `jsonb` (มี index ได้) | `nvarchar(max)` + `JSON_VALUE` | `JSON` |
-| ไฟล์ไบนารี | `bytea` (หรือเก็บนอกฐานข้อมูล) | `varbinary(max)` | `BLOB` |
+| Auto-increment id | `bigint GENERATED ALWAYS AS IDENTITY` | `bigint IDENTITY(1,1)` | `BIGINT AUTO_INCREMENT` |
+| UUID | `uuid` | `uniqueidentifier` | `BINARY(16)` or `CHAR(36)` |
+| Money | `numeric(19,4)` | `decimal(19,4)` | `DECIMAL(19,4)` |
+| Time + time zone | `timestamptz` | `datetimeoffset(3)` | `TIMESTAMP` (store UTC) |
+| Date only | `date` | `date` | `DATE` |
+| Unlimited-length text | `text` | `nvarchar(max)` | `TEXT` / `LONGTEXT` |
+| Thai text | `text` (already UTF-8) | **`nvarchar` only** | `utf8mb4` |
+| True/false | `boolean` | `bit` | `TINYINT(1)` |
+| JSON | `jsonb` (can be indexed) | `nvarchar(max)` + `JSON_VALUE` | `JSON` |
+| Binary file | `bytea` (or store outside the database) | `varbinary(max)` | `BLOB` |
 
-> **SQL Server + ภาษาไทย**: `varchar` ทำให้ตัวอักษรไทยกลายเป็น `?`
-> ต้องใช้ `nvarchar` และเขียนค่าคงที่เป็น `N'ข้อความ'` เสมอ
+> **SQL Server + Thai**: `varchar` turns Thai characters into `?`.
+> Use `nvarchar` and always write literals as `N'ข้อความ'`.
 >
-> **MySQL ต้องเป็น `utf8mb4`** เพราะชุดอักขระชื่อ `utf8` เฉย ๆ ของ MySQL
-> เก็บได้แค่ 3 ไบต์ต่อตัว อีโมจิและอักขระบางตัวจึงหาย
+> **MySQL must use `utf8mb4`**, because MySQL's character set named plain `utf8`
+> stores only 3 bytes per character, so emoji and some other characters are lost.
 
 ---
 
@@ -60,14 +60,14 @@ CREATE INDEX ix_orders_customer_id ON orders (customer_id);
 CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC);
 ```
 
-**สร้าง index โดยไม่ล็อกตาราง:**
+**Create an index without locking the table:**
 
 ```sql
 CREATE INDEX CONCURRENTLY ix_orders_status ON orders (status);
--- ห้ามอยู่ใน transaction · ถ้าล้มจะเหลือ index สถานะ invalid ต้อง DROP แล้วทำใหม่
+-- Must not run inside a transaction · if it fails it leaves an index in invalid state: DROP it and redo
 ```
 
-**อัปเดต `updated_at` อัตโนมัติ:**
+**Update `updated_at` automatically:**
 
 ```sql
 CREATE OR REPLACE FUNCTION touch_updated_at() RETURNS trigger AS $$
@@ -78,28 +78,28 @@ CREATE TRIGGER trg_orders_touch BEFORE UPDATE ON orders
 FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
 ```
 
-**row-level security สำหรับระบบหลายผู้เช่า:**
+**Row-level security for multi-tenant systems:**
 
 ```sql
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 CREATE POLICY tenant_isolation ON orders
   USING (tenant_id = current_setting('app.tenant_id')::bigint);
--- แอปตั้งค่าต่อ connection: SET app.tenant_id = '42';
+-- The app sets this per connection: SET app.tenant_id = '42';
 ```
 
-**กับดักที่เจอบ่อยใน PostgreSQL** (แนวคิดจาก wshobson postgresql-table-design · เลขรุ่นคือรุ่นที่พฤติกรรมเริ่มเป็นแบบนี้)
+**Common PostgreSQL traps** (ideas from wshobson postgresql-table-design · version numbers are the version where the behaviour began)
 
-| กับดัก | ทำแบบนี้แทน |
+| Trap | Do this instead |
 |---|---|
-| `timestamp` (ไม่มี time zone) ทิ้ง offset เงียบ ๆ เครื่อง `+07:00` กับ UTC เก็บค่าคนละความหมาย | `timestamptz` เสมอ |
-| `serial` สร้าง sequence แยกที่สิทธิ์และ `DROP` ไม่ตามตาราง | `GENERATED ALWAYS AS IDENTITY` (PG 10+) |
-| `ADD COLUMN ... NOT NULL` บนตารางใหญ่กลัวล็อกนาน | ถ้าใส่ `DEFAULT` ค่าคงที่ ไม่เขียนตารางใหม่แล้ว (PG 11+) · DEFAULT ที่เป็นฟังก์ชันเช่น `now()` ยังเขียนใหม่ทั้งตาราง |
-| `ADD CONSTRAINT` (FK · CHECK) สแกนทั้งตารางขณะถือล็อก | `... NOT VALID` ก่อน แล้ว `VALIDATE CONSTRAINT` แยกคำสั่ง (ล็อกเบากว่า) |
-| DDL ต่อคิวหลัง transaction ยาว แล้วทุก query หลังมันค้างตาม | `SET lock_timeout = '5s'` ก่อน DDL ทุกครั้ง ตกแล้วรันใหม่ |
-| unique index ปล่อยให้ `NULL` ซ้ำได้หลายแถว | `UNIQUE NULLS NOT DISTINCT` (PG 15+) หรือ partial index `WHERE col IS NOT NULL` |
-| `LIKE '%คำ%'` และ `ILIKE` ไม่ใช้ btree index | extension `pg_trgm` + GIN index · ค้นข้อความจริงจังใช้ `tsvector` |
-| `jsonb` ค้นด้วย `->>` ไม่ใช้ index | GIN index บนคอลัมน์ (`@>` · `?`) หรือ expression index บน `(meta->>'key')` |
-| `count(*)` ทั้งตารางเพื่อแสดงจำนวนหน้า | ใช้ค่าประมาณจาก `pg_class.reltuples` หรือเลิกแสดงจำนวนรวม (cursor pagination) |
+| `timestamp` (no time zone) silently drops the offset, so a `+07:00` machine and UTC store values with different meanings | Always `timestamptz` |
+| `serial` creates a separate sequence whose permissions and `DROP` do not follow the table | `GENERATED ALWAYS AS IDENTITY` (PG 10+) |
+| `ADD COLUMN ... NOT NULL` on a big table risks a long lock | With a constant `DEFAULT` the table is no longer rewritten (PG 11+) · a function DEFAULT such as `now()` still rewrites the whole table |
+| `ADD CONSTRAINT` (FK · CHECK) scans the whole table while holding the lock | Use `... NOT VALID` first, then run `VALIDATE CONSTRAINT` as a separate statement (lighter lock) |
+| DDL queues behind a long transaction, and every query after it waits too | Run `SET lock_timeout = '5s'` before every DDL, and rerun if it times out |
+| A unique index lets `NULL` repeat on many rows | `UNIQUE NULLS NOT DISTINCT` (PG 15+) or a partial index `WHERE col IS NOT NULL` |
+| `LIKE '%คำ%'` and `ILIKE` do not use a btree index | Extension `pg_trgm` + GIN index · for serious text search use `tsvector` |
+| `jsonb` search with `->>` does not use an index | GIN index on the column (`@>` · `?`) or an expression index on `(meta->>'key')` |
+| `count(*)` over the whole table to show a page count | Use the estimate from `pg_class.reltuples`, or drop the total count (cursor pagination) |
 
 ---
 
@@ -120,12 +120,12 @@ CREATE TABLE orders (
 );
 
 CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC)
-  WITH (ONLINE = ON);   -- Enterprise / Azure SQL เท่านั้น
+  WITH (ONLINE = ON);   -- Enterprise / Azure SQL only
 ```
 
-- `rowversion` ใช้เป็น ETag ตรวจว่ามีคนแก้ชนกันได้ตรง ๆ
-- ถ้าต้องเรียงลำดับภาษาไทย ให้ตั้ง collation `Thai_100_CI_AS` ที่ระดับคอลัมน์หรือฐานข้อมูล
-- `datetime` แบบเก่าละเอียดแค่ 3.33 มิลลิวินาที ให้ใช้ `datetime2` / `datetimeoffset` แทน
+- `rowversion` works directly as an ETag to detect conflicting edits.
+- To sort Thai correctly, set the collation `Thai_100_CI_AS` at the column or database level.
+- The old `datetime` has a precision of only 3.33 milliseconds. Use `datetime2` / `datetimeoffset` instead.
 
 ---
 
@@ -145,8 +145,8 @@ CREATE TABLE orders (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 ```
 
-- MySQL 8.0.12 ขึ้นไป `ADD COLUMN` ใช้ `ALGORITHM=INSTANT` ได้ (ก่อน 8.0.29 เพิ่มได้เฉพาะท้ายตาราง) ส่วนการเปลี่ยนชนิดข้อมูลยังเขียนตารางใหม่ (dev.mysql.com online DDL, ตรวจ 22 ต.ค. 2569) ตารางใหญ่ที่ต้อง rebuild จึงควรใช้ `pt-online-schema-change` หรือ `gh-ost`
-- ตั้งเวลาเซิร์ฟเวอร์เป็น UTC (`default_time_zone = '+00:00'`)
+- From MySQL 8.0.12, `ADD COLUMN` can use `ALGORITHM=INSTANT` (before 8.0.29 it could add only at the end of the table). Changing a data type still rewrites the table (dev.mysql.com online DDL, checked 22 Oct 2026 (B.E. 2569)). For big tables that need a rebuild, use `pt-online-schema-change` or `gh-ost`.
+- Set the server time to UTC (`default_time_zone = '+00:00'`).
 
 ---
 
@@ -160,7 +160,7 @@ db.createCollection("orders", {
     properties: {
       orderNo:     { bsonType: "string" },
       customerId:  { bsonType: "objectId" },
-      totalAmount: { bsonType: "decimal" },   // ผิด: อย่าใช้ double กับเงิน
+      totalAmount: { bsonType: "decimal" },   // wrong: do not use double for money
       createdAt:   { bsonType: "date" }
     }
   }}
@@ -169,9 +169,9 @@ db.orders.createIndex({ orderNo: 1 }, { unique: true });
 db.orders.createIndex({ customerId: 1, createdAt: -1 });
 ```
 
-- ฝัง (embed) เมื่อข้อมูลลูก **อ่านคู่กับพ่อเสมอ และไม่โตไม่จำกัด** นอกนั้นใช้การอ้างอิง
-- เอกสาร 1 ใบมีเพดาน 16 MB อาเรย์ที่โตเรื่อย ๆ จึงชนเพดานสักวัน
-- เงินใช้ `Decimal128` เท่านั้น
+- Embed when the child data is **always read together with the parent and does not grow without limit**. Otherwise use references.
+- One document has a 16 MB ceiling, so an array that keeps growing will hit it one day.
+- Use `Decimal128` for money, and nothing else.
 
 ---
 
@@ -179,20 +179,20 @@ db.orders.createIndex({ customerId: 1, createdAt: -1 });
 
 ```bash
 dotnet ef migrations add AddOrderStatus
-dotnet ef migrations script <from> <to> -o migrate.sql   # ถูก: ตรวจ SQL ก่อนรันจริง
-dotnet ef database update                                # dev เท่านั้น
+dotnet ef migrations script <from> <to> -o migrate.sql   # right: review the SQL before the real run
+dotnet ef database update                                # dev only
 ```
 
-> **บน production รัน script ที่ตรวจแล้ว ไม่ใช่ `database update`**
-> คำสั่งนั้นต้องให้ connection ของแอปมีสิทธิ์แก้ schema ซึ่งไม่ควรมีตั้งแต่แรก
+> **On production, run the reviewed script, not `database update`.**
+> That command needs the app's connection to have permission to change the schema, which it should not have in the first place.
 
 ```csharp
 modelBuilder.Entity<Order>(e => {
     e.ToTable("orders");
     e.Property(x => x.TotalAmount).HasColumnType("decimal(19,4)");
     e.HasIndex(x => new { x.Status, x.CreatedAt }).HasDatabaseName("ix_orders_status_created");
-    e.HasQueryFilter(x => x.DeletedAt == null);          // soft delete ทั้งระบบ
-    e.Property(x => x.RowVersion).IsRowVersion();        // ตรวจการแก้ชนกัน
+    e.HasQueryFilter(x => x.DeletedAt == null);          // soft delete across the whole system
+    e.Property(x => x.RowVersion).IsRowVersion();        // detect conflicting edits
 });
 ```
 
@@ -216,12 +216,12 @@ model Order {
 ```
 
 ```bash
-npx prisma migrate dev --name add_order_status   # dev — สร้างไฟล์ migration
-npx prisma migrate deploy                        # production — รันเฉพาะที่มีอยู่แล้ว
+npx prisma migrate dev --name add_order_status   # dev — creates the migration file
+npx prisma migrate deploy                        # production — runs only the existing ones
 ```
 
-- `Decimal` ของ Prisma คืนค่าเป็น object ไม่ใช่ number ให้คำนวณด้วย `decimal.js` อย่าแปลงเป็น float
-- `BigInt` แปลงเป็น JSON ตรง ๆ ไม่ได้ ต้องแปลงเป็น string ที่ชั้น API
+- Prisma's `Decimal` returns an object, not a number. Calculate with `decimal.js` and do not convert to float.
+- `BigInt` cannot be converted to JSON directly. Convert it to a string at the API layer.
 
 ---
 
@@ -233,39 +233,39 @@ alembic upgrade head
 alembic downgrade -1
 ```
 
-แยกเป็น 3 migration (1 migration ทำเรื่องเดียว):
+Split into 3 migrations (1 migration does one thing):
 
 ```python
-# 1) schema: เพิ่มคอลัมน์ที่ยังว่างได้
+# 1) schema: add a nullable column
 def upgrade():
     op.add_column("orders", sa.Column("status", sa.String(20), nullable=True))
 
-# 2) ข้อมูล: เติมค่าเดิม (ตารางใหญ่ให้ทำเป็นชุดเล็ก ๆ)
+# 2) data: backfill existing values (on a big table, do it in small batches)
 def upgrade():
     op.execute("UPDATE orders SET status = 'draft' WHERE status IS NULL")
 
-# 3) schema: บังคับ NOT NULL และสร้าง index
+# 3) schema: enforce NOT NULL and create the index
 def upgrade():
     op.alter_column("orders", "status", nullable=False)
-    # CREATE INDEX CONCURRENTLY ห้ามอยู่ใน transaction จึงต้องออกจาก transaction ของ Alembic
+    # CREATE INDEX CONCURRENTLY must not run inside a transaction, so step out of Alembic's transaction
     with op.get_context().autocommit_block():
         op.create_index("ix_orders_status_created", "orders", ["status", "created_at"],
                         postgresql_concurrently=True)
 ```
 
-> `--autogenerate` **ไม่เห็น** การเปลี่ยนชื่อ (มองเป็นลบแล้วเพิ่มใหม่ ข้อมูลจึงหาย)
-> อ่านไฟล์ที่มันสร้างก่อน commit ทุกครั้ง
+> `--autogenerate` **does not see** renames (it reads them as a drop plus a new add, so the data is lost).
+> Always read the file it generates before you commit.
 
 ---
 
-## 9 · คำสั่งตรวจ query ช้า
+## 9 · Slow query commands
 
-| ฐานข้อมูล | คำสั่ง |
+| Database | Command |
 |---|---|
-| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) <query>;` · ส่วนขยาย `pg_stat_statements` |
-| SQL Server | เปิด "Include Actual Execution Plan" · `sys.dm_exec_query_stats` |
+| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) <query>;` · extension `pg_stat_statements` |
+| SQL Server | Turn on "Include Actual Execution Plan" · `sys.dm_exec_query_stats` |
 | MySQL | `EXPLAIN ANALYZE <query>;` · `performance_schema` |
 | MongoDB | `db.orders.find(...).explain("executionStats")` |
 
-**สัญญาณอันตรายที่ต้องแก้:** `Seq Scan` / `Table Scan` บนตารางใหญ่ ·
-จำนวนแถวที่ประมาณไว้ต่างจากที่ได้จริงเกิน 10 เท่า · `Nested Loop` ที่วนหลักแสนรอบ
+**Danger signs to fix:** `Seq Scan` / `Table Scan` on a big table ·
+estimated row count differs from the actual by more than 10 times · a `Nested Loop` that runs hundreds of thousands of times

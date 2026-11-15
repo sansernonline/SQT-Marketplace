@@ -5,82 +5,82 @@ description: Use when writing user stories with acceptance criteria
 
 # User Story Writer
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-> ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ ธุรกิจ
+> **Language:** write every line of wording following `human-writing`. This skill sets the format and structure, and human-writing sets how to write so readers understand.
+> Thai text → `human-writing` `references/thai-grammar.md` section 4, business register
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ผู้ใช้ขอให้เขียน user story ใหม่
-- มี requirement เป็นข้อความยาว ต้องแตกเป็น stories
-- ต้องเขียน acceptance criteria
-- ต้อง review/refine user story เดิมที่ไม่ชัดเจน
+- The user asks for a new user story
+- A requirement arrives as long text and must be split into stories
+- You must write acceptance criteria
+- You must review or refine an existing user story that is unclear
 
-ไม่ใช้เมื่อ: ต้องการเอกสาร requirement เต็ม → `srs-writing` · สเปกหน้าจอ → `fsd-writing` · เขียนกรณีทดสอบ → `test-case-template`
+Do not use when: you need a full requirements document → `srs-writing` · a screen spec → `fsd-writing` · writing test cases → `test-case-template`
 
-## ขั้นตอนการทำงาน
+## Workflow
 
-1. **เก็บข้อมูลให้ครบ** ก่อนเขียน ถ้าขาดอะไรให้ถาม:
-   - ใครคือ user (persona/role)
-   - เขาต้องการทำอะไร
-   - ทำเพื่ออะไร (business value)
-   - มีข้อจำกัด/business rule อะไรไหม
+1. **Collect complete information** before writing. Ask if anything is missing:
+   - Who is the user (persona/role)
+   - What do they want to do
+   - Why (business value)
+   - Are there any constraints or business rules
 
-2. **เขียน user story ตาม format**:
+2. **Write the user story in this format**:
    ```
    As a <type of user>
    I want <some goal>
    So that <some reason / business value>
    ```
 
-3. **เขียนเกณฑ์การยอมรับ (Acceptance Criteria · AC)** แบบ Given-When-Then:
+3. **Write the acceptance criteria (AC)** in Given-When-Then form:
    ```
    Given <precondition>
    When <action>
    Then <expected result>
    ```
-   - อย่างน้อย 1 happy path
-   - อย่างน้อย 1 edge case / error case
+   - At least 1 happy path
+   - At least 1 edge case / error case
 
-4. **ใส่ metadata เพิ่มเติม**:
+4. **Add extra metadata**:
    - Priority (High/Medium/Low)
-   - Story Points — ใช้ Fibonacci: 1, 2, 3, 5, 8, 13 · **คนประเมินคือนักพัฒนาหรือทีม** · ผู้เขียน story (เช่น `business-analyst`) เว้นว่างไว้ หรือใส่ค่าเสนอพร้อมเขียน `(เสนอ · รอทีมประเมิน)`
-   - Dependencies (ถ้ามี)
+   - Story Points — use Fibonacci: 1, 2, 3, 5, 8, 13 · **the developers or the team estimate** · the story author (for example `business-analyst`) leaves it blank, or enters a proposed value with `(เสนอ · รอทีมประเมิน)` (proposed · awaiting team estimate)
+   - Dependencies (if any)
 
-5. **บันทึกลงไฟล์** — ดูหัวข้อถัดไป story ที่อยู่แค่ในแชตถือว่ายังไม่ได้เขียน
+5. **Save to a file** — see the next section. A story that exists only in chat counts as not yet written.
 
-## เขียนลงไฟล์ไหน
+## Which file to write to
 
-ทุก story อยู่ใน **`docs/USER-STORIES.md`** ไฟล์เดียว เริ่มจากแบบฟอร์ม [assets/user-stories.md](assets/user-stories.md)
+Every story lives in the single file **`docs/USER-STORIES.md`**, starting from the template [assets/user-stories.md](assets/user-stories.md)
 
-- **อ่านไฟล์ก่อนเขียนเสมอ** ถ้ามีอยู่แล้ว ให้ต่อเลข ID จากตัวสุดท้าย และแก้ story เดิมในที่เดิม ไม่สร้างซ้ำ
-- **ID ไม่นำกลับมาใช้ซ้ำ** story ที่เลิกทำแล้วให้เปลี่ยนสถานะเป็น Dropped ไม่ลบทิ้ง
-- **ตารางสารบัญด้านบนต้องตรงกับเนื้อหาเสมอ** เพิ่มหรือแก้ story แล้วต้องแก้แถวในตารางในรอบเดียวกัน `/sprint-plan` อ่านจากตารางนี้
-- **คอลัมน์อ้างอิง** ใส่ที่มาของ story เช่นข้อกำหนดในเอกสารข้อกำหนดซอฟต์แวร์ (Software Requirements Specification · SRS) (`REQ-xxx`), กฎธุรกิจ (`BR-xxx`) หรือ change request (`CR-xxx`) เพื่อให้ไล่กลับไปหาได้
-- **story ที่เริ่มทำหรือทำเสร็จแล้ว (In sprint หรือ Done) ถ้าแก้ AC** ให้บันทึกในส่วนประวัติการเปลี่ยนท้ายไฟล์ แล้วค้นใน `qa/` หา test case ที่อ้าง `US-xxx, ACn` นั้น ใส่ชื่อลงช่อง test case ที่ต้องแก้ — ไม่แก้ไฟล์ของทีมประกันคุณภาพ (Quality Assurance · QA) เอง
-- **เกิน 30 story หรือมีหลาย epic ที่แยกทีมกันทำ** ให้ย้ายเนื้อหาไปไว้ที่ `docs/stories/<epic>.md` ส่วนตารางสารบัญยังคงอยู่ใน `docs/USER-STORIES.md` ที่เดียว
+- **Always read the file before writing.** If it exists, continue the ID numbering from the last one, and edit an existing story in place instead of creating a duplicate.
+- **Never reuse an ID.** For a story that is dropped, change its status to Dropped and do not delete it.
+- **The index table at the top must always match the content.** When you add or change a story, update its table row in the same round. `/sprint-plan` reads from this table.
+- **The reference column** holds the story's source, such as a requirement in the Software Requirements Specification (SRS) (`REQ-xxx`), a business rule (`BR-xxx`) or a change request (`CR-xxx`), so it can be traced back.
+- **When you change the AC of a story that has started or finished (In sprint or Done)**, record it in the change history section at the end of the file. Then search `qa/` for test cases that cite that `US-xxx, ACn`, and put their names in the "test cases to fix" cell. Do not edit the Quality Assurance (QA) team's files yourself.
+- **Over 30 stories, or several epics worked by separate teams:** move the content to `docs/stories/<epic>.md`. The index table stays in `docs/USER-STORIES.md` only.
 
-## เมื่อเริ่มจากบันทึกสัมภาษณ์
+## When starting from interview notes
 
-- **ครบทุกคนที่พูด** — ไล่ทีละคน ทุกคนต้องมี story อย่างน้อย 1 ข้อ หรือมีเหตุผลว่าทำไมไม่มี
-- **คำพูดที่ขัดกันเอง ห้ามตัดทิ้ง** — เขียน story ที่เคารพกติกาของร้านก่อน แล้วยกความขัดแย้งเป็นคำถาม (ตัวอย่างจากงานนั้น: ร้านห้ามเก็บรูปหน้าลูกค้า แต่ลูกค้าอยากอัปโหลดเซลฟี่ → story ให้วิเคราะห์ในเครื่องโดยไม่เก็บ แล้วถามร้านว่ารับไหม)
-- **ปิดไฟล์ด้วยหัวข้อ "คำถามที่ยังไม่ชัด"** ทุกข้อมีเลข ตัวเลือกที่เสนอ และ story ที่ติดอยู่ (ตัวอย่างจากงานนั้น: 36 story · 19 คำถาม)
-- **ผู้ใช้ที่ไม่มีใครพูดถึง** — เจ้าของร้านต้องมี story ของตัวเองเสมอ (เช่น กดว่าใช้บริการเสร็จ) · ของที่คนสร้างเติมให้เองโดยไม่มีใครขอ (หน้า admin · บัญชีเจ้าของ) ให้ลงรายการ "ระบบมีแต่ร้านไม่ได้ขอ" แล้วถามกลับว่ารับไหม ไม่ปล่อยให้ถือว่าตกลงแล้ว (ตัวอย่างจากงานนั้น: 6 รายการ)
+- **Cover everyone who spoke.** Go person by person. Every person needs at least 1 story, or a reason why there is none.
+- **Never drop statements that contradict each other.** Write the story that respects the shop's rule first, then raise the conflict as a question. (Example from that job: the shop forbids storing customers' face photos, but customers want to upload selfies → the story analyzes on the device without storing, then asks the shop whether it accepts.)
+- **Close the file with a section "คำถามที่ยังไม่ชัด" (open questions).** Every item has a number, the proposed options and the story it blocks. (Example from that job: 36 stories · 19 questions)
+- **Users nobody mentioned.** The shop owner always needs their own story (for example, mark a service as finished). Anything the builders added on their own that nobody asked for (an admin page · an owner account) goes in a list "ระบบมีแต่ร้านไม่ได้ขอ" (things the system has that the shop did not ask for), and you ask back whether the shop accepts it. Never leave it to be treated as agreed. (Example from that job: 6 items)
 
-## INVEST Checklist (ตรวจก่อนส่ง)
+## INVEST Checklist (check before sending)
 
-ทุก story ต้องผ่านเกณฑ์เหล่านี้:
+Every story must meet these criteria:
 
-- [ ] **I**ndependent — ไม่ขึ้นกับ story อื่น
-- [ ] **N**egotiable — เปิดให้คุยรายละเอียดได้
-- [ ] **V**aluable — มี business value ชัดเจน
-- [ ] **E**stimable — ประเมิน effort ได้
-- [ ] **S**mall — เล็กพอจะทำเสร็จใน 1 sprint
-- [ ] **T**estable — ทดสอบได้
+- [ ] **I**ndependent — does not depend on another story
+- [ ] **N**egotiable — open to discussion of details
+- [ ] **V**aluable — has clear business value
+- [ ] **E**stimable — effort can be estimated
+- [ ] **S**mall — small enough to finish within 1 sprint
+- [ ] **T**estable — can be tested
 
 ## Output Template
 
 ```markdown
-## US-XXX: <ชื่อสั้นๆ>
+## US-XXX: <short title>
 
 **Story**
 As a <role>
@@ -89,46 +89,46 @@ So that <value>
 
 **Acceptance Criteria**
 
-AC1: <ชื่อ scenario>
+AC1: <scenario name>
 - Given <context>
 - When <action>
 - Then <result>
 
-AC2: <ชื่อ scenario>
+AC2: <scenario name>
 - Given ...
 - When ...
 - Then ...
 
 **Priority:** High | Medium | Low
 **Story Points:** X
-**Blocked by:** US-YYY (story ที่ต้องเสร็จก่อนถึงจะเริ่มข้อนี้ได้) · ไม่มี → เขียน `None (เริ่มได้ทันที)`
-**Notes:** ข้อมูลเพิ่มเติม / business rules
+**Blocked by:** US-YYY (a story that must finish before this one can start) · none → write `None (เริ่มได้ทันที)`
+**Notes:** extra information / business rules
 ```
 
-**Blocked by ใส่เฉพาะที่กั้นจริง** (ปรับจาก mattpocock `to-tickets` · MIT) — story A กั้น B เมื่อ B เริ่มไม่ได้ถ้า A ยังไม่เสร็จ (ต้องใช้ตาราง · API · หน้าจอของ A) ไม่ใช่แค่ "ควรทำก่อน" · เรียงลำดับใน `USER-STORIES.md` ให้ตัวที่กั้นอยู่ก่อนตัวที่ถูกกั้น · ทีมหรือ agent หยิบงานจากชุด "ทุกตัวที่กั้นเสร็จแล้ว" ซึ่งเป็นชุดที่ทำขนานกันได้ · ถ้าใช้ tracker จริง (GitHub · Linear) ให้ใช้ความสัมพันธ์ blocking ของมัน ไม่ใช่เขียนในข้อความอย่างเดียว
+**List in Blocked by only real blockers** (adapted from mattpocock `to-tickets` · MIT). Story A blocks B when B cannot start until A is done (it needs A's table, API or screen), not merely when A "should come first". Order `USER-STORIES.md` so a blocker comes before the story it blocks. The team or agent picks work from the set "every story whose blockers are all done", which is the set that can run in parallel. If you use a real tracker (GitHub · Linear), use its blocking relationship, not only text in the description.
 
-## ตัวอย่าง
+## Example
 
-ดูตัวอย่างเต็มได้ที่ `examples/login-story.md`
+See the full example at `examples/login-story.md`
 
-## ข้อห้าม
+## Prohibitions
 
-- อย่าเขียน technical solution ใน story (เช่น "ใช้ JWT")
-- อย่าเขียน UI detail (เช่น "ปุ่มสีฟ้า") — ให้ designer ตัดสิน
-- อย่าใช้ "user" เฉยๆ ต้องระบุ role เจาะจง (admin, customer, guest)
-- อย่าเขียน story ใหญ่เกิน 13 points — ให้แตกออก
+- Do not write a technical solution in a story (for example "use JWT")
+- Do not write UI detail (for example "blue button") — the designer decides
+- Do not use plain "user". Name a specific role (admin, customer, guest).
+- Do not write a story bigger than 13 points — split it
 
 ---
 
-## หน้าตาของเอกสาร
+## How the document looks
 
-skill นี้ตัดสินว่า**เนื้อหาต้องมีอะไร** ไม่ได้ตัดสินว่า**หน้าตาเป็นอย่างไร** —
-โหลด skill ที่ตรงกับปลายทางก่อนเริ่มเขียน ไม่ใช่ตอนเขียนเสร็จ:
+This skill decides **what content the document needs**, not **how it looks**.
+Load the skill that matches the destination before you start writing, not after you finish:
 
-| ส่งมอบเป็นอะไร | โหลด |
+| Delivered as | Load |
 |---|---|
-| markdown ที่คนอ่าน (repo · wiki · ระบบติดตามงาน) | `polished-document-style` |
-| ไฟล์ `.docx` / `.pptx` / PDF ที่ผู้มีส่วนได้เสียเซ็นรับ | `branded-document-design` |
-| ต้องมีภาพถึงจะเข้าใจ | `diagram-figures` (house style ของเอกสารโปรเจกต์) |
+| Markdown that people read (repo · wiki · tracker) | `polished-document-style` |
+| A `.docx` / `.pptx` / PDF that stakeholders sign off | `branded-document-design` |
+| Needs a picture to be understood | `diagram-figures` (the house style of project documents) |
 
-การปล่อยรูปแบบเริ่มต้นไว้ไม่ได้ทำให้ดูเป็นกลาง คนอ่านจะมองว่างานยังไม่เสร็จ
+Leaving the default format in place does not make it look neutral. Readers will see the work as unfinished.

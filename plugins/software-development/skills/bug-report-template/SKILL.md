@@ -6,7 +6,7 @@ argument-hint: <brief description of the bug>
 
 # Bug Report Template
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write all wording per `human-writing`. This skill gives format and structure; human-writing gives how to write so people can understand.
 
 ## Where bug reports live
 
@@ -20,19 +20,19 @@ One file per bug in `qa/bugs/BUG-<NNNN>-<slug>.md` at the project root. Attach s
 
 ## ไม่ใช้เมื่อ
 
-| งาน | ใช้ตัวนี้แทน |
+| Task | Use this instead |
 |---|---|
-| รายงานบั๊กกองอยู่หลายเรื่อง ต้องคัด ทำซ้ำ และจัดกลุ่มก่อน | `bug-inbox-triage` แล้วใช้ skill นี้เขียนทีละใบ |
-| เขียนกรณีทดสอบล่วงหน้าจากข้อกำหนด (ยังไม่มีบั๊ก) | `test-case-template` |
-| ระบบจริงล่มหรือกระทบผู้ใช้จำนวนมาก | `incident-runbook-template` ระหว่างเหตุ · `postmortem-template` หลังเหตุ |
+| A pile of bug reports that must be screened, reproduced and grouped first | `bug-inbox-triage`, then use this skill to write each one |
+| Writing test cases ahead of time from requirements (no bug yet) | `test-case-template` |
+| The live system is down or many users are affected | `incident-runbook-template` during the incident · `postmortem-template` after it |
 
-## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+## 0 · Look for an existing format first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before using the structure or templates in this file, check whether the user, the client or the project already has its own format:
 
-- **ที่ดู:** แบบฟอร์มของระบบติดตามงานที่โปรเจกต์ใช้: `.github/ISSUE_TEMPLATE/*.yml` หรือ `*.md` · ฟิลด์บังคับของ Jira / Azure Boards / GitLab ที่ผู้ใช้แจ้ง · รายงานบั๊กเก่า 2–3 ใบใน `docs/` หรือ tracker
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** ระดับความรุนแรงใช้ชื่อและเกณฑ์ของทีมถ้ามี · ขั้นทำซ้ำ ผลจริง ผลที่คาดหวัง ยังต้องครบไม่ว่าใช้แบบไหน
+- **What to look at:** the form of the issue tracker the project uses: `.github/ISSUE_TEMPLATE/*.yml` or `*.md` · the required fields of Jira / Azure Boards / GitLab that the user names · 2–3 old bug reports in `docs/` or the tracker
+- **Result:** if found, use it (headings, order, field names, running numbers) and say in the reply which file the format came from. If not found, use the template in this file as the fallback and say that no existing format was found
+- **Every format still needs:** the severity names and criteria of the team, if they have them · the reproduction steps, actual result and expected result, whichever format is used
 
 ## Severity vs Priority
 
@@ -136,7 +136,7 @@ Default formatting is not neutral. It looks like unfinished work.
 
 `/software-development:bug-report-template <brief description of the bug>`
 
-> **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook `bug-fix` แล้วคัดลอกขั้นตอนของ playbook ลง todo ก่อน ส่วนขั้นตอนด้านล่างบอกรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้คู่กับ playbook ไม่ได้ใช้แทน
+> **Shortcut into SuperUser:** open the `superuser` skill with the `bug-fix` playbook and copy the playbook's steps into the todo first. The steps below describe the work format and output of this command. Use them together with the playbook, not instead of it.
 
 Use the `qa-tester` agent to create a complete bug report for: **$ARGUMENTS**
 

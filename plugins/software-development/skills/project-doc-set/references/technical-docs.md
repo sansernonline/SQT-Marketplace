@@ -1,46 +1,46 @@
-# เอกสารเชิงเทคนิค — ตาราง ลำดับเขียน และใครเขียน
+# Technical docs: table, writing order and who writes what
 
-อ่านเมื่อเลือกชุดเอกสารเชิงเทคนิค หรือกำลังจะเขียนชิ้นใดชิ้นหนึ่ง · สรุปอยู่ใน `SKILL.md` ข้อ 2.2–4
+Read this when choosing the technical doc set or about to write one of them. The summary is in `SKILL.md` sections 2.2–4.
 
-## เอกสารเชิงเทคนิค (ข้อ 2.2)
+## Technical docs (section 2.2)
 
-กลุ่มนี้เป็น **markdown ทั้งหมด** และ**ไม่ได้ขึ้นกับขนาดงาน** แต่ขึ้นกับว่าโปรเจกต์มีอะไร
+This group is **all markdown** and **does not depend on project size**. It depends on what the project contains.
 
-| เอกสาร | ไฟล์ | ตอบคำถามว่า | ต้องมีเมื่อ |
+| Doc | File | Answers the question | Needed when |
 |---|---|---|---|
-| README | `<project-name>/README.md` | ติดตั้งและรันยังไง | **เสมอ** |
-| BUILD-PLAN | `docs/BUILD-PLAN.md` | จะสร้างอะไรก่อนหลัง · ตอนนี้ถึงไหนแล้ว | **เสมอ** |
-| USER-STORIES | `docs/USER-STORIES.md` | จะสร้างอะไรให้ใคร · story ไหนพร้อมเข้า sprint · AC คืออะไร | ทำงานเป็น sprint หรือมี backlog (`user-story-writer`) |
-| Sprint plan | `docs/sprints/sprint-NN.md` | sprint นี้รับ story ไหน · เป้าหมายคืออะไร · เสี่ยงอะไร | ทำงานเป็น sprint (`/sprint-plan`) — ไฟล์ละ sprint ไม่เขียนทับของเก่า |
-| AGENT-LOOP | `docs/AGENT-LOOP.md` | agent ทำงานเป็นวงจรแบบไหน · อะไรคือเงื่อนไขว่าจบ | ให้ agent เขียนโค้ดเป็นรอบ ๆ (`spec-to-code-loop`) |
-| API-SPEC | `docs/API-SPEC.md` | endpoint ไหนรับอะไร คืนอะไร พังยังไง | มี API ที่คนอื่นเรียก (`api-conventions`) |
-| DATA-DICTIONARY | `docs/DATA-DICTIONARY.md` | ฟิลด์นี้แปลว่าอะไร · ค่าที่เป็นไปได้มีอะไรบ้าง | มีฐานข้อมูลหรือสคีมาข้อมูล (`database-design`) |
-| EVALUATION-POLICY | `docs/EVALUATION-POLICY.md` | วัดว่าผลลัพธ์ดีพอหรือยังด้วยอะไร · เกณฑ์ผ่านเท่าไร | ผลลัพธ์มาจากโมเดลหรือ LLM ที่ไม่ได้ถูกเสมอ |
-| PROMPT-LIBRARY | `docs/PROMPT-LIBRARY.md` | prompt ตัวจริงคือตัวไหน เวอร์ชันอะไร เปลี่ยนอะไรไป | ใช้ LLM ในเส้นทางหลักของระบบ |
-| ADR | `docs/decisions/ADR-*.md` | ทำไมถึงเลือกทางนี้ ไม่เลือกทางนั้น | มีการตัดสินใจที่จะถูกถามซ้ำ (`adr-writer`) |
-| Runbook | `docs/runbook-<เรื่อง>.md` ไฟล์ละเรื่อง | ระบบล่มตอนตี 2 ต้องทำอะไร | มีระบบที่รันอยู่จริงและมีคนอยู่เวร |
+| README | `<project-name>/README.md` | How to install and run | **Always** |
+| BUILD-PLAN | `docs/BUILD-PLAN.md` | What to build first and next · where we are now | **Always** |
+| USER-STORIES | `docs/USER-STORIES.md` | What to build for whom · which story is ready for a sprint · what the AC (acceptance criteria) are | Work runs in sprints or there is a backlog (`user-story-writer`) |
+| Sprint plan | `docs/sprints/sprint-NN.md` | Which stories this sprint takes · what the goal is · what the risks are | Work runs in sprints (`/sprint-plan`). One file per sprint; never overwrite old ones |
+| AGENT-LOOP | `docs/AGENT-LOOP.md` | How the agent works in a cycle · what the stop condition is | An agent writes code in rounds (`spec-to-code-loop`) |
+| API-SPEC | `docs/API-SPEC.md` | What each endpoint accepts, returns and how it fails | There is an API that others call (`api-conventions`) |
+| DATA-DICTIONARY | `docs/DATA-DICTIONARY.md` | What a field means · what values it can take | There is a database or data schema (`database-design`) |
+| EVALUATION-POLICY | `docs/EVALUATION-POLICY.md` | What measures whether the output is good enough · what the pass threshold is | Output comes from a model or LLM that is not always right |
+| PROMPT-LIBRARY | `docs/PROMPT-LIBRARY.md` | Which prompt is the real one · which version · what changed | An LLM sits on the system's main path |
+| ADR | `docs/decisions/ADR-*.md` | Why we chose this way and not the other | A decision will be questioned again (`adr-writer`) |
+| Runbook | `docs/runbook-<topic>.md`, one topic per file | What to do when the system goes down at 2 a.m. | A system is really running and someone is on call |
 
-> **เอกสาร 4 ตัวที่มีเงื่อนไขเรื่อง LLM · API · ฐานข้อมูล คือตัวที่คนลืมบ่อยที่สุด**
-> แล้วไปจบด้วยการถาม agent ซ้ำทุกรอบว่า "prompt ตัวไหนคือตัวจริง" หรือ "ฟิลด์นี้แปลว่าอะไร"
+> **The 4 conditional docs (LLM · API · database) are the ones people forget most often.**
+> The team then ends up asking the agent every round "which prompt is the real one" or "what does this field mean".
 
-## สายเทคนิค — เขียนเมื่อไหร่ (ข้อ 3)
+## Technical track: when to write (section 3)
 
-| เขียนเมื่อ | เอกสาร |
+| Write when | Doc |
 |---|---|
-| ก่อนเขียนโค้ดบรรทัดแรก | README · BUILD-PLAN |
-| ก่อนปล่อย agent ทำงานเป็นรอบ | AGENT-LOOP |
-| ตอนออกแบบตารางแรก | DATA-DICTIONARY |
-| ตอนออกแบบ endpoint แรก | API-SPEC |
-| ตอนเขียน prompt ตัวแรกที่จะใช้จริง | PROMPT-LIBRARY · EVALUATION-POLICY |
-| ตอนตัดสินใจเรื่องที่จะถูกถามซ้ำ | ADR |
-| ก่อนขึ้นระบบจริง | Runbook |
+| Before the first line of code | README · BUILD-PLAN |
+| Before letting an agent work in rounds | AGENT-LOOP |
+| When designing the first table | DATA-DICTIONARY |
+| When designing the first endpoint | API-SPEC |
+| When writing the first prompt that will really be used | PROMPT-LIBRARY · EVALUATION-POLICY |
+| When deciding something that will be questioned again | ADR |
+| Before going live | Runbook |
 
-> **ADR กับ DATA-DICTIONARY เขียนตอนที่ตัดสินใจ ไม่ใช่ตอนสรุปท้ายโปรเจกต์**
-> เขียนย้อนหลังก็ได้ แต่ตอนนั้นเหตุผลจริงหายไปแล้ว
+> **Write the ADR and DATA-DICTIONARY at decision time, not in the project wrap-up.**
+> You can write them afterwards, but the real reasons are gone by then.
 
-## ใครเขียนชิ้นไหน ด้วย skill อะไร (ข้อ 4)
+## Who writes which doc, with which skill (section 4)
 
-| เอกสาร | agent | skill ที่ใช้ |
+| Doc | agent | skill used |
 |---|---|---|
 | README · CHANGELOG | `technical-writer` | `project-bootstrap` |
 | Project Plan | `project-manager` | `branded-document-design` |
@@ -51,10 +51,10 @@
 | ADR | `solution-architect` | `adr-writer` |
 | Test Plan · Test Cases | `qa-tester` | `test-case-template` |
 | mockups | `ux-designer` | `web-app-design` · `ui-craft` |
-| คู่มือผู้ใช้ (`MAN`) | `technical-writer` | `polished-document-style` |
+| User guide (`MAN`) | `technical-writer` | `polished-document-style` |
 | Runbook | `devops-engineer` | `incident-runbook-template` |
 | BUILD-PLAN | `project-manager` | `simplicity-first` |
 | AGENT-LOOP | `developer` | `spec-to-code-loop` |
 | API-SPEC | `system-analyst` | `api-conventions` |
 | DATA-DICTIONARY | `system-analyst` | `database-design` |
-| PROMPT-LIBRARY · EVALUATION-POLICY | `developer` | — (คู่กับ skill `llm-engineering`) |
+| PROMPT-LIBRARY · EVALUATION-POLICY | `developer` | none (pairs with skill `llm-engineering`) |

@@ -1,6 +1,6 @@
 # Page Object Model (POM) — ตัวอย่างโค้ด
 
-ตัวอย่างเทียบเทสต์ที่ไม่มี abstraction กับเทสต์ที่ใช้ Page Object ใช้ตอนตั้งโครงชุดทดสอบหรือรีวิวเทสต์ที่ลอกขั้นตอนซ้ำกัน
+An example comparing a test with no abstraction and a test that uses a Page Object · use it when setting up a test suite or reviewing tests that copy the same steps
 
 ## Bad (no abstraction)
 ```typescript

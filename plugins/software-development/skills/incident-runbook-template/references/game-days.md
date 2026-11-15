@@ -1,6 +1,6 @@
 # Game Days
 
-รายการตรวจของการซ้อมรับมือเหตุขัดข้องเพื่อทดสอบ runbook ใช้ตอนวางแผนซ้อมรายไตรมาส
+A checklist for incident-response drills that test a runbook; use it when planning the quarterly drill
 
 Test runbooks by faking failures on purpose:
 

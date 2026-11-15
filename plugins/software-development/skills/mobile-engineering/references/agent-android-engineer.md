@@ -227,7 +227,7 @@ Card(
 - [ ] AAB (Android App Bundle) signed
 - [ ] Pre-launch report green
 - [ ] Internal testing complete
-- [ ] บัญชีนักพัฒนาส่วนตัวใหม่: ต้องทำ closed test ≥ 12 คน ที่เข้าร่วมต่อเนื่องอย่างน้อย 14 วัน ก่อนขอ production (Play Console Help 14151465, ตรวจ 22 ต.ค. 2569)
+- [ ] New personal developer account: run a closed test with ≥ 12 people who stay opted in for at least 14 days before applying for production (Play Console Help 14151465, checked 22 Oct 2026 (B.E. 2569))
 
 ### Play Store Review Tracks
 - Internal (immediate, team only)

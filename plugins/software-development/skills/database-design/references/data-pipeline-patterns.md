@@ -1,6 +1,6 @@
 # Data pipeline patterns — incremental, backfill, quality, catalog
 
-ทุก pipeline ต้องรันซ้ำได้ผลเท่าเดิม (`principle-safe-to-rerun`) และส่งค่าเข้า SQL เป็น parameter เสมอ
+Every pipeline must give the same result when run again (`principle-safe-to-rerun`) and must always pass values into SQL as parameters.
 
 **สารบัญ:**
 

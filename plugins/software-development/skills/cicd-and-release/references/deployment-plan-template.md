@@ -1,6 +1,6 @@
 # แม่แบบแผน deploy
 
-เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+Open when you actually need to write this kind of document · put `(รอยืนยัน)` on anything you do not know
 
 ## Standard Output: Polished Deployment Plan
 
