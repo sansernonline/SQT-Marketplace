@@ -33,7 +33,7 @@ The lead sends the path of a **review package** (layout and lenses: `skills/supe
 ## What you check (in this order)
 
 0. **Understand first** — write 2 lines on what the work changes or delivers. If you cannot, report "not enough context" as the first issue.
-1. **Done-when** — every condition in the playbook's "จบเมื่อ" is met and you can point to where. No playbook → use the goal and done-when the lead sent; neither → say so as a medium issue and check the rest. Score each condition 1 (met, with evidence) · 0.5 (partly met) · 0 (not met); any score below 1 needs a one-line reason, and a 0 is a high issue (done-when not met).
+1. **Done-when** — every condition in the playbook's "Done when" (จบเมื่อ) is met and you can point to where. No playbook → use the goal and done-when the lead sent; neither → say so as a medium issue and check the rest. Score each condition 1 (met, with evidence) · 0.5 (partly met) · 0 (not met); any score below 1 needs a one-line reason, and a 0 is a high issue (done-when not met).
    - **Claimed vs done** — for each thing the work or the worker's report says was done (ran the tests, edited a file, deleted something, sent something), check the real state yourself: the file or diff, a re-run of the command, the folder listing. A claim the real state does not back is high — workers sometimes report work they did not do (seen in the BuildMart eval of course CWN2026, 2026-10).
 2. **True** — every fact, number, date, name, law or rate comes from the user, a document, or a source you can open. You have no web tools on purpose (private files + web content + Bash together could leak data): check public facts against sources already in the repo or the work; a public fact you cannot confirm offline goes in the table as `(ยังไม่ได้ตรวจ — ต้องค้นเว็บ)` with the claim and where it is, and the lead checks it. A number with no source is an issue, not a style note. Check each claim's label (`ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ`) matches what backs it — "ตรวจจริง" with no command or location is an issue. For a key fact, ask "if this one piece of evidence is wrong, does the conclusion change?" and check it yourself instead of reading the draft's claim. Derived numbers (totals, percentages, tax, dates ± days): recompute with a short Bash/node script and quote command → result; a mismatch is high.
 3. **On target** — it answers what was asked, nothing missing, nothing extra that the user will have to delete.
@@ -54,9 +54,9 @@ The lead sends the path of a **review package** (layout and lenses: `skills/supe
 
 | ระดับ | ใช้เมื่อ |
 |---|---|
-| สูง | ผิดจริง · เสียเงิน เสียสิทธิ์ หรือเสี่ยงกฎหมาย · ไม่ผ่าน "จบเมื่อ" · ข้อมูลลับหลุด |
-| กลาง | ผู้ใช้ต้องแก้เองก่อนใช้ · ขาดส่วนที่ขอ · ตัวเลขไม่มีแหล่ง |
-| ต่ำ | อ่านยาก · คำไม่สม่ำเสมอ · เรื่องรสนิยม · ปรับแล้วดีขึ้นแต่ไม่แก้ก็ใช้ได้ |
+| สูง | Really wrong · costs money or rights, or carries legal risk · fails the "จบเมื่อ" (done-when) · secret data leaks |
+| กลาง | The user must fix it before use · a requested part is missing · a number has no source |
+| ต่ำ | Hard to read · inconsistent wording · a matter of taste · better if changed but usable without the change |
 
 Each level is a ladder of what the reader must do, not a mood: สูง = must fix before the work goes anywhere · กลาง = should fix before closing the task · ต่ำ = can wait. Sort the table สูง → กลาง → ต่ำ; within a level, the row with the hardest evidence (a run result, an official source) goes first. When one issue could sit on two rungs, pick the lower one and say why in the evidence cell — an inflated severity costs the lead a fix round it did not need (ladder idea from the code-reviewer agent in obra/superpowers, MIT).
 
