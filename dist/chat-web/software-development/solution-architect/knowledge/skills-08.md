@@ -298,7 +298,7 @@ All files, first-time setup, inbox and log: [`team-memory`](references/team-memo
 ## 3 · Task sheet (`ใบสั่งงาน`)
 The header is machine-readable (Quix · Agent Desk read it); the content is human language. **All 5 sections must be there, or it is not sent yet.**
 
-Header fields: `id` · `from` · `to` · `tier` (ใหญ่ · กลาง · เล็ก + effort) · `status` (เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่) · `depends_on` · `files_allowed`. Sections in order: `## เป้า` (goal, with `ขนาด: <n>k`) · `## เสร็จเมื่อ` · `## ใช้อะไร` (files to read, skills) · `## ขอบเขต` (writable files, what not to do) · `## ส่งกลับแบบไหน` (delivery sheet appended, message back about 40 lines or fewer). Full example → [`references/sheet-examples.md`](references/sheet-examples.md).
+Header fields: `id` · `from` · `to` · `tier` (ใหญ่ · กลาง · เล็ก + effort) · `status` (เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่) · `depends_on` · `files_allowed` · optional `claimed_by` · `claimed_at` (section 5). Sections in order: `## เป้า` (goal, with `ขนาด: <n>k`) · `## เสร็จเมื่อ` · `## ใช้อะไร` (files to read, skills) · `## ขอบเขต` (writable files, what not to do) · `## ส่งกลับแบบไหน` (delivery sheet appended, message back about 40 lines or fewer). Full example → [`references/sheet-examples.md`](references/sheet-examples.md).
 
 - Code work uses the same sheet: `to: software-development:developer` · `files_allowed: [src/auth/**]` · done-when = tests pass · skill = `stack-*`.
 - A normal piece puts the 5-item sheet in the message that sends the task (`superuser` section 5). Write a file only for a piece that crosses sessions or goes to another person or bot; then the instruction is one line: `ทำตาม .claude/superuser/handoff/<id>.md`. Pass the path, not the content.
@@ -328,14 +328,26 @@ The `## รับงานต่อ` section in `CONTEXT.md` follows these rules
 - **ส่งมาแล้ว N ครั้ง:** count real handoffs only (end of session · switching model), not `/compact`. If the receiver sees N ≥ 2, old text may linger; check against the real thing before following it.
 - **สมุดงาน:** point to `notes/<plan>.md` and `ledger/<plan>.md` of the open plan ([`team-memory`](references/team-memory.md) section 8). A multi-piece plan is done only when the line `Task N: complete` is in its ledger.
 - **Tag every item** `ตรวจจริง` (seen yourself this session) or `ยังไม่ได้ตรวจ` (remembered). No tag = not yet checked. The receiver may believe the first at once and must check the second before use.
+- **Close what is done in the same round:** a finished item leaves `รับงานต่อ` at once; write 1 line with its evidence (PR · commit · file) in `HISTORY.md`. A done item left in the list gets picked up again by the next reader.
+
+**Claim before starting (1 item, 1 taker).** Two sessions or vendors reading the same `CONTEXT.md` will otherwise start the same item.
+- Re-read `รับงานต่อ` just before starting, then add to the item `รับโดย: <tool>/<branch or session> · <YYYY-MM-DD HH:MM>`. A `handoff/<id>.md` gets `claimed_by` and `claimed_at` in its header and `status: ทำอยู่`.
+- With git worktrees, a branch's own copy of `CONTEXT.md` cannot see other branches' claims: also run `git worktree list` and `git branch -a`, since a branch named for the item is a claim too. If the project keeps one shared `CONTEXT.md` outside git (as in a root `AGENTS.md`), write the claim there, not in your branch's copy.
+- An item already `รับโดย` someone else → take another. Take it over only when the claim is over 24 hours old and nothing happened since: no new commit on its branch and no new `log/` line after the claim time (without git, no file in the piece modified since). Write `รับต่อจาก <old taker>` and say so in the answer.
+- Stopping without finishing → remove your `รับโดย` or change it to `ค้างอยู่` with the reason, so it does not block others.
+
+**Flag contradictions, do not pick a side silently.** Notes (`CONTEXT.md` · ledger · delivery sheet · memory) that disagree with the real thing, or with each other, mislead every later reader.
+- Note versus real thing (note says done, test fails · note says file exists, it does not) → the real thing wins: rewrite the note line to what you saw, tagged `ตรวจจริง <date>`, in the same round.
+- Two notes disagree and you cannot check now → tag both `ขัดกัน: ดู <other place>` and keep working on the parts not affected. If settling it needs the user (a decision · money · eyes), add a row to "รอผู้ใช้".
+- Writing a new fact that replaces an older line → fix or delete the older line in the same edit, never leave both.
 
 Switching to another vendor (Codex · Gemini) or back to Claude → [`team-memory`](references/team-memory.md) section 3. Test: a new model that reads only `CONTEXT.md` must be able to start the first item without asking; if not, write more.
 
 **Start-of-work ritual** (every new lead session and every worker):
 1. Read your own sheet: worker → `handoff/<id>.md`; lead → `CONTEXT.md` "รับงานต่อ" + `inbox/` (which messages count as orders → `team-memory` section 4).
 2. With git: `git log --oneline -10` and `git status` to see what happened last and whether edits were left unfinished. Without git: read "ความคืบหน้า" and file modified dates. Read `notes/<plan>.md` and compare the original brief with what the user orders now. Use "คำตอบที่ได้แล้ว" instead of asking again.
-3. Walk the tracking files (`ledger/` · delivery sheet · progress) to the last finished gate, then check that gate's real state (run the test · open the file) before building on it. Matches → go on. Does not match (ledger says done, test fails) → fix the earlier gate, add a row to "รอผู้ใช้", continue with other parts. No tracking file → start fresh; do not guess it is the same work.
-4. Start `ทำต่อเป็นข้อแรก` or the goal in the task sheet.
+3. Walk the tracking files (`ledger/` · delivery sheet · progress) to the last finished gate, then check that gate's real state (run the test · open the file) before building on it. Matches → go on. Does not match (ledger says done, test fails) → fix the note per "Flag contradictions" above, fix the earlier gate, add a row to "รอผู้ใช้", continue with other parts. No tracking file → start fresh; do not guess it is the same work.
+4. Claim the item (above), then start `ทำต่อเป็นข้อแรก` or the goal in the task sheet.
 
 ## 6 · Sending outside the team — people · other bots · Quix · Agent Desk
 Hand-off package = `CONTEXT.md` + the still-open `handoff/` pieces + `docs/BRIEF.md` (if it exists).
@@ -357,7 +369,8 @@ Unsure whether a note goes into `CONTEXT.md` · `CLAUDE.md` · `.claude/rules/` 
 
 ## Check before done
 - Task sheet has all 5 sections; delivery sheet has evidence in `ตรวจแล้วด้วย`.
-- `รับงานต่อ` has an item at the top that a new model can start without asking, every item tagged.
+- `รับงานต่อ` has an item at the top that a new model can start without asking, every item tagged · no finished item left in it · your own unfinished claim removed or marked `ค้างอยู่`.
+- Every contradiction you saw is fixed or tagged `ขัดกัน`.
 - Nothing under `handoff/` `notes/` `ledger/` is committed or holds secrets.
 
 ## References
