@@ -95,7 +95,9 @@ export function chooseSections(runs, cells, prices) {
   for (const [step, list] of steps) {
     const { usePrice, rows } = bestOdds(list);
     const top = rows[0];
-    const action = top.pBest >= SURE ? `ใช้ ${top.model} ประจำขั้นนี้` : `ยังไม่ชัด · แต่ละงานจับ 1 ครั้ง \`scorecard.mjs --pick ${step}\``;
+    // ผลตรวจน้อยกว่า THIN: Beta(1+1, 1+0) ของ model ถูกชนะได้ 99% จากผลเดียว (log 2026-11-16: haiku ขั้น write ผลตรวจ 1 ครั้ง) · ห้ามสั่งใช้ประจำ
+    const action = top.n < THIN ? `ตัวอย่างน้อย (${top.model} มีผลตรวจ ${top.n} ครั้ง ต้องถึง ${THIN}) · ใช้ตามตารางระดับใน \`superuser\` หัวข้อ 5`
+      : top.pBest >= SURE ? `ใช้ ${top.model} ประจำขั้นนี้` : `ยังไม่ชัด · แต่ละงานจับ 1 ครั้ง \`scorecard.mjs --pick ${step}\``;
     rows.forEach((c, i) => out.push(`| ${i ? "" : step} | ${c.model} | ${c.n} | ${Math.round(c.mean * 100)}% | ${Math.round(c.pBest * 100)}%${usePrice ? "" : " (ไม่มีราคา เทียบแค่โอกาสผ่าน)"} | ${i ? "" : action} |`));
   }
   out.push("", `โอกาสคุ้มที่สุด = สัดส่วนครั้งที่ model นั้นชนะเมื่อสุ่มโอกาสผ่านจาก Beta(1 + ผ่าน, 1 + ไม่ผ่าน) แล้วหารด้วยค่าใช้จ่ายต่องาน ${DRAWS} ครั้ง · ถึง ${SURE * 100}% แล้วใช้ตัวนั้นประจำ · ไม่ถึงให้สุ่มต่อ เพราะการสุ่มตามโอกาสนี้ลองตัวที่ยังไม่แน่ใจพอดี ๆ ไม่ทิ้งตัวที่อาจดีกว่า`, "");
