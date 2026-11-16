@@ -50,8 +50,8 @@ Choose the way with the least impact: easy to reverse · edits few files · matc
 - "ไม่เลือก" (not chosen) needs at least 1 option. If there is no other option at all, it is not a decision. An unchosen option must really exist per the evidence, not be made up to fill the cell, because at the end it is shown to the user as a choice: `คงไว้` (keep) or change (skill `superuser` section 6).
 - "เหตุผล · หลักฐาน" names the source: file · ADR · measured number. If it is a number, add the label `ตรวจจริง` / `จากแหล่ง` / `อนุมาน`.
 - Never delete or edit an old row. If the user disagrees, add a new row at the top. Start its "เหตุผล · หลักฐาน" cell with `ผู้ใช้แก้ — แทนแถว <วันที่>` (user corrected, replaces the row of <date>), then redo only that piece of work. The old row stays so people can see what was chosen before.
-- You may add a column `ทบทวนเมื่อ` (review when) if you want — a date or event when someone should check that the decision is still right (for example, after the next release · when there are over 100 users).
 - If **the user decides** (for example, accepts a risk that was warned about), log it in the same table, and add a last column `ผู้ตัดสิน` (decided by) with `agent` or `ผู้ใช้` (user). If the table has no such column, it means the agent decided every row.
+- You may add a column `ทบทวนเมื่อ` (review when) if you want — a date or event when someone should check that the decision is still right (for example, after the next release · when there are over 100 users).
 
 ## In the closing answer
 

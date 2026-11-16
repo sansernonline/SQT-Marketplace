@@ -1,0 +1,3 @@
+# Worked example · pregnancy-and-baby
+
+Office worker, มาตรา 33, positive test at 7 weeks, due 20 Jun 2570. Plan: book first ANC this week (before 12 weeks) at the hospital where she will deliver; 8 visits into the calendar; pink book in the work bag. Money: 15,000 lump sum + SSO 50% for 90 days (wage base 17,500 → 8,750 a month) + employer 60 days full pay; check the SSO contribution count (needs 5 of the last 15 months). After birth: register at the เขต of the hospital within 15 days (by 5 Jul 2570), claim สปส. 2-01, child allowance 1,000/month, ask the เขต about the 600-baht grant. Vaccine calendar from the pink book.

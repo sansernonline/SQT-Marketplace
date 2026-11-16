@@ -9,16 +9,7 @@ description: Use when starting a new job or probation
 
 The employee's side of onboarding: paperwork before day 1, questions for week 1, goals for days 30/60/90 and passing probation. HR's side (writing an onboarding guide for a team) is not this skill.
 
-## Use when / not when
-
-| Situation | Use |
-|---|---|
-| Offer signed, start date set · first week · "ช่วยวางแผน 90 วันแรก" · probation review coming | this skill |
-| Still comparing offers or negotiating | `salary-negotiation` |
-| What the law says about probation, notice, severance | `labour-law-basics` (e-commerce, if installed) |
-| Social security after changing employer | `social-security-th` (e-commerce, if installed) |
-| Writing the probation or year-end self-review | `performance-self-review` |
-| Leaving or being let go from a job | `job-exit` |
+Not for: comparing or negotiating offers → `salary-negotiation` · the law on probation, notice, severance → `labour-law-basics` (e-commerce, if installed) · social security after changing employer → `social-security-th` (e-commerce, if installed) · writing the probation or year-end self-review → `performance-self-review` · leaving or being let go → `job-exit`
 
 ## 1 · Before day 1
 
@@ -59,10 +50,6 @@ Review with the manager at day 30 and day 60, not only at day 90. A goal that tu
 - When severance starts to count during probation, and what notice the employer must give, are rules of the Labour Protection Act → `labour-law-basics` section 4. This skill does not restate them. Asked "what do I get if let go in probation": name the Act (พ.ร.บ.คุ้มครองแรงงาน), point to `labour-law-basics` and to the rights table in `job-exit` section 3, and do not say "nothing" from memory.
 - After passing: update LinkedIn (`linkedin-profile`) and file the confirmation letter in `important-docs`.
 
-## Worked example
-
-Starts as a data analyst on 1 Dec, 119-day probation in the contract. Before day 1: documents sent with ID number blacked out in the chat copy, tax allowance form filled for 1 child and parents, provident fund question sent to both HR teams. Week 1: manager answers "ภายใน 3 เดือน dashboard ยอดขายรายสัปดาห์ต้องออกเองได้โดยไม่ต้องให้ทีม IT ทำ". 30/60/90 goals all point at that dashboard. Day 30 check-in moves one goal (data source changed). The brag document has 11 entries by day 100; the summary goes to the manager 2 weeks before the review.
-
 ## Check before sending
 
 - [ ] The manager's day-90 answer is written in their words
@@ -70,6 +57,6 @@ Starts as a data analyst on 1 Dec, 119-day probation in the contract. Before day
 - [ ] Legal points point to `labour-law-basics`; no section number or day count restated here
 - [ ] No full ID or account number anywhere in the answer, even when the user asked for it (last 4 digits only)
 
-## Source
+## References
 
-Idea from anthropics/knowledge-work-plugins `human-resources/skills/onboarding` (Apache-2.0, turned to the new employee's side and rewritten, viewed 2026-11-10).
+- [`references/worked-example.md`](references/worked-example.md) — a data analyst's 119-day probation, start to review

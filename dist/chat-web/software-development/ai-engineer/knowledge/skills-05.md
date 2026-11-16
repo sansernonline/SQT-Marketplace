@@ -2,116 +2,43 @@
 
 Use when an answer needs prose, a table or a diagram
 
-# The shape of an answer
+# The shape of an answer — pick prose, table, list or figure from the content
 
-This skill gives the shape and structure; every line of wording follows `human-writing` · lives only in plugin `superuser`; other plugins share it through `dependencies`
+> **One rule:** whatever structure the content has, the answer uses that shape. Comparison → table · connections → figure · one thing → sentences.
 
-> **One rule:** whatever structure the content has, the answer uses that shape.
-> Comparison → table · connections → figure · one thing → sentences
+## Use when
+- Deciding how to lay out an answer: prose, table, list or figure.
+- The question compares options, asks what connects to what, or you are blocked and must ask for something.
 
----
+## Steps
+1. Pick the shape from the signal in the question (quoted signals are Thai phrasings; English in brackets):
 
-## Pick the shape from signals in the question
+   | Signal | Shape |
+   |---|---|
+   | "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" (which is better · how they differ · what options) | **Comparison table** |
+   | "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" (what connects to what · how data flows · the sequence) | **Figure** |
+   | "มีอะไรบ้าง" (what are there) when the items are not compared | **Bullet list** |
+   | "ทำไม" · "แปลว่าอะไร" (why · what does it mean) · one thing with no branches | **Plain sentences** |
+   | Several numbers that must be seen together | **Table** |
+   | Steps that must be done in order | **Numbered list** |
+   | Cannot continue · must wait for something from the user | **Short list: what is blocking → what is needed** |
 
-The quoted signals are Thai user phrasings; English meanings are in brackets.
+   Having 2 or more "things being compared" is the strongest signal for a table, because in a paragraph the reader must hold the first one in their head while reading the second.
+2. **If you use a table:** the first column is the thing compared, the next columns the aspects · 3–5 columns, at most 8 rows in chat · every cell has content (no data → "ไม่มี"; a table where every cell says "it depends" has no content either) · at most 1 line per cell, longer goes below the table · rows ordered by weight (recommended or most used first, not alphabetical) · column headings are the reader's questions (`เร็วแค่ไหน` · `ต้องดูแลมากไหม`, not `ประสิทธิภาพ` · `ความซับซ้อน`) · always close with a 1-line conclusion.
+3. **If the relationship is the answer** (what connects to what, what sits inside what, a sequence with forks or loops, one thing in several states), draw a figure. In chat a small ASCII figure or a short Mermaid is enough (`กล้อง ──DICOM──▶ Orthanc ──▶ API ──▶ รายงาน`). A figure that must be a real file for a document or slides uses that plugin's figure-drawing skill, if there is one.
+4. **If the answer is shorter than 3 lines, is yes/no plus 1 sentence of reason, or the reason matters more than the options, use sentences.** A 1–2 row table, or a figure that draws what one sentence can say, is the wrong shape.
+5. **If you cannot continue,** list only 2 things: what is blocking, and what you need from the user. 1 line per item, at most 4 items. Do not tell the cause at length, answer side topics or plan ahead. If the user must choose among paths, 1 item per path, easiest first. Example:
+   ```
+   ติดอยู่ 1 เรื่อง:
+      - มองไม่เห็นไฟล์ — โฟลเดอร์ที่เชื่อมไว้ว่าง
+      ต้องการ 1 อย่าง:
+      - แนบ Mockup.html มา หรือบอก path ใหม่
+   ```
 
-| Signal | Shape |
-|---|---|
-| "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" ("which is better" · "how do they differ" · "what options are there") | **Comparison table** |
-| "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" ("what connects to what" · "how does data flow" · "what is the sequence") | **Figure** |
-| "มีอะไรบ้าง" ("what are there") when the items are not compared | **Bullet list** |
-| "ทำไม" · "แปลว่าอะไร" ("why" · "what does it mean") · one thing with no branches | **Plain sentences** |
-| Several numbers that must be seen together | **Table** |
-| Steps that must be done in order | **Numbered list** |
-| Cannot continue · must wait for something from the user | **Short list: what is blocking → what is needed** |
-
-**The most important signal is having 2 or more "things being compared"**; use a table then,
-because in a paragraph the reader must hold the first one in their head while reading the second.
-
----
-
-## A table that reads easily
-
-- **The first column is the thing being compared**, and the next columns are the aspects compared
-- **3–5 columns**; more than that cannot be read in time, and at most 8 rows in a chat answer
-- **Every cell must have content** — an empty cell means that column should not exist, or the data is incomplete; if there is no data, write "ไม่มี" (none) plainly · a table where every cell says "it depends" also has no content
-- **At most 1 line per cell**; if longer, move it below the table
-- **Order rows by weight**: the recommended one or the most used one on top, not alphabetical
-- **Column headings are the questions in the reader's head**, not names of academic fields
-
-```
-ผิด: | ตัวเลือก | ประสิทธิภาพ | ความซับซ้อน |
-ถูก: | ตัวเลือก | เร็วแค่ไหน | ต้องดูแลมากไหม |
-```
-
-(Gloss: wrong = "Option | Performance | Complexity" · right = "Option | How fast | Does it need much upkeep".)
-
-**Always close a table with a 1-line conclusion** — a table gives data; it does not say what to choose
-
----
-
-## When a figure beats a table
-
-Use a figure when **the relationship is the answer** — a table can give properties, but cannot say what connects to what.
-
-| Use a figure | Use a table |
-|---|---|
-| What connects to what · what sits inside what | Which is better than which, and in what respect |
-| A sequence with forks or loops back | A straight sequence of steps with no branches (a numbered list is enough) |
-| The same thing in several states | Different things on the same aspects |
-
-In chat, **a small ASCII figure or a short Mermaid is enough** — no need to open a drawing tool
-
-```
-กล้อง ──DICOM──▶ Orthanc ──▶ API ──▶ รายงาน
-                    │
-                    └──▶ ที่เก็บถาวร
-```
-
-(Gloss: กล้อง = camera/scanner · รายงาน = report · ที่เก็บถาวร = permanent storage.)
-
-A figure that must be a real file to go into a document or slides uses the figure-drawing skill of that plugin (if there is one)
-
----
-
-## When sentences beat both
-
-- The answer is shorter than 3 lines — a 2-row table is only decoration and explains nothing
-- A question answered "yes" or "no" followed by 1 sentence of reason
-- A matter where **the reason matters more than the options** — a table cuts the reason to fit the cell
-
-> A table with one row or 2 short rows means the wrong shape was used · a figure that draws what one sentence can say is the same
-
----
-
-## When you cannot continue
-
-Whenever you are blocked → list only 2 things: **what is blocking** and **what you need from the user**
-
-- 1 line per item · at most 4 items
-- Do not tell the cause at length, do not answer side topics, do not plan the work ahead — wait until you have the thing, then do it
-- If there are several paths for the user to choose → each path is 1 item, the easiest on top
-
-```
-ผิด: ย่อหน้ายาวเล่าว่า container ใหม่ · โฟลเดอร์ว่าง · OneDrive หาย · แล้ววางแผนแก้ 3 ข้อรอไว้
-ถูก: ติดอยู่ 1 เรื่อง:
-   - มองไม่เห็นไฟล์ — โฟลเดอร์ที่เชื่อมไว้ว่าง
-   ต้องการ 1 อย่าง:
-   - แนบ Mockup.html มา หรือบอก path ใหม่
-```
-
-(Gloss: wrong = a long paragraph telling that the container is new · the folder is empty · OneDrive is gone · and then planning 3 fixes while waiting · right = "Blocked on 1 thing: cannot see the file — the linked folder is empty. Need 1 thing: attach Mockup.html or give the new path.")
-
----
-
-## Abbreviations
-
-Abbreviations used in this file · rules for writing abbreviations → `spell-out-abbreviations`
-
-- **ASCII** — American Standard Code for Information Interchange (drawing figures with plain characters)
-- **Mermaid** — a language that writes diagrams as text and lets a program draw them
-- **DICOM** — Digital Imaging and Communications in Medicine (a standard for medical image files and transfer)
-- **API** — Application Programming Interface (the channel through which one program calls another)
+## Check before done
+- [ ] The shape matches the content's structure (not a table for one thing, not a paragraph for a comparison).
+- [ ] Every table has content in every cell and ends with a 1-line conclusion.
+- [ ] A blocked answer lists only what is blocking and what is needed.
 
 
 ---
@@ -122,88 +49,80 @@ Use before writing anything people read, in Thai or English
 
 # human-writing — write like a person: smooth to read, easy to understand
 
-Applies to everything a person will read, from chat to labels in a diagram. This skill teaches good Thai and good English. Rules about Thai output stay as written. Examples of every rule and their sources → [`headings-and-examples`](references/headings-and-examples.md). Thai of 1 paragraph or more → [`thai-grammar`](references/thai-grammar.md) (sentence structure · register · example paragraphs in [`thai-examples`](references/thai-examples.md)). Research or work sent to outsiders → [`strict-review`](references/strict-review.md). Thai documents with justified alignment → [`thai-line-breaking`](references/thai-line-breaking.md). It lives only in plugin `superuser`; other plugins share it through `dependencies`.
+## Use when
+- Writing anything a person will read, from chat to labels in a diagram, in Thai or English.
 
-Boundary: this skill owns the wording. The look of kept documents (headings, tables, text boxes, theme) → `polished-document-style`. Abbreviations and glossaries → `spell-out-abbreviations`.
+Not for: the look of kept documents (headings, tables, text boxes, theme) → `polished-document-style` · abbreviations and glossaries → `spell-out-abbreviations`.
 
-## 1 · Core principles
+## Steps
 
+### 1 · Core principles
 - Write as if explaining to a skilled coworker who is not on the project. If it trips you up when read aloud, rewrite it.
 - Answer or conclusion first, then the reason. No preamble, no repeating the question.
 - 1 sentence, 1 idea. If you chain "ซึ่ง" "โดย" "จึง" several layers deep, split into several sentences.
 - English follows the same rules: sentences under 25 words · who does what (active voice) · plain words.
 
-## 2 · Symbols and numbers
-
-- `→` means order of steps or a consequence · `·` separates short nouns on one line · `:` introduces detail · write every kind of count as a numeral · the words around a symbol must be human language.
-- **Write conditions and instructions as full sentences with connectors** (ถ้า … ให้ … · แล้ว · ส่วน · เพราะ — that is, if … then … · and then · as for · because). Do not chain sentences into fragments with `→` or `·`.
-- In tables, short text is fine, but it must still read as human language, not code.
-- A symbol must never replace a word so far that the reader has to decode it. If an outsider must guess what the arrow means, add words.
-- **No emoji or icons** (📌 ✅ 💡 🚀 👀) in headings, body, tables, labels, or text boxes, because readers spot them at once as AI-written. Use bold words instead, such as **หมายเหตุ** (note). Yes/no cells in a table may use `✓` `✗`. Show severity with the words `วิกฤต · สูง · กลาง · ต่ำ`, never coloured dots. Do not delete emoji the owner wrote, and do not copy them. The one exception is customer chat text that the task's own skill prescribes.
+### 2 · Symbols and numbers
+- `→` means order of steps or a consequence · `·` separates short nouns on one line · `:` introduces detail · write every kind of count as a numeral.
+- **Write conditions and instructions as full sentences with connectors** (ถ้า … ให้ … · แล้ว · ส่วน · เพราะ). Do not chain sentences into fragments with `→` or `·`. If an outsider must guess what an arrow means, add words. In tables short text is fine, but it must read as human language, not code.
+- **No emoji or icons** (📌 ✅ 💡 🚀 👀) in headings, body, tables, labels, or text boxes. Use bold words instead, such as **หมายเหตุ**. Yes/no cells in a table may use `✓` `✗`. Show severity with the words `วิกฤต · สูง · กลาง · ต่ำ`, never coloured dots. Do not delete emoji the owner wrote, and do not copy them. The one exception is customer chat text that the task's own skill prescribes.
 - Say what every number means. Compare so it is easy to picture (times, easier to read than %). If a result is uncertain, say plainly why.
-- **Figures that change over time** (prices · tax rates · law · filing deadlines): give the source and the date checked. Cite only sources you actually opened, with a link or DOI. Mark hypothetical numbers or mock data with the label `ตัวอย่าง` (example) from the first place they appear.
-- **Dates** in Thai text use Buddhist Era (พ.ศ.) or Common Era (ค.ศ.), one style across the whole set. File names, codes, and machine-read data use Common Era `YYYY-MM-DD`.
-- **Task status** uses these 5 words in every document: `เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่` (done · in progress · blocked · awaiting approval · pending). Check results use `ผ่าน · ไม่ผ่าน` (pass · fail).
+- **Figures that change over time** (prices · tax rates · law · filing deadlines): give the source and the date checked. Cite only sources you actually opened, with a link or DOI. Mark hypothetical numbers or mock data with the label `ตัวอย่าง` from the first place they appear.
+- **Dates** in Thai text use พ.ศ. or ค.ศ., one style across the whole set. File names, codes, and machine-read data use `YYYY-MM-DD` in Common Era.
+- **Task status** uses these 5 words in every document: `เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่`. Check results use `ผ่าน · ไม่ผ่าน`.
 
-## 3 · Words
+### 3 · Words
+- Use words people actually say. No bureaucratic words or literal-translation jargon. Keep terms the field uses in English (token · prompt · API · OCR). Explain a coined or confusing term the first time. Abbreviations → `spell-out-abbreviations`.
+- Call one thing by one word across the whole set: chat, slides, documents, diagrams.
+- Two-language documents: pick 1 main language and put the other in brackets or a second column. Do not switch inside a sentence.
+- Cut padding words ("ทำการ" · "มีการ" · "ในส่วนของ" · "ได้มีการ" · "เป็นการ").
+- **Cut items, not function words.** Every length budget (words per bullet · characters per commit title · characters per subtitle) is met by dropping items, condensing, or moving content to the next piece. Never cut `จะ` `ให้` `ก็` `ด้วย` `แล้ว` `ต่างหาก` or polite words (`ขอ` `รบกวน` `นะ` and ครับ/ค่ะ, per register). They do work in the sentence; without them Thai turns curt and reads like a translation.
+- Avoid AI-looking moves: a quotable opener · the slogan "ไม่ใช่แค่… แต่ยัง…" for emphasis (a sentence that contrasts with something real or reframes the problem is fine, but it must close with "ด้วย") · grouping everything in threes · praising something as more important than it is · bold on every line · a closing recap · opening with "แน่นอน" · closing with "หวังว่าจะช่วยได้" · "หลาย" when you know the number · stacked hedges (hedge once, where you are truly unsure).
+- For work people look at (screens · slides · ads) also avoid: broad ad words (ยกระดับ · ไร้รอยต่อ · ล้ำสมัย · supercharge) · em dashes in every sentence · canned openers ("ในยุคดิจิทัลที่…") · short fragments split by full stops ("เร็ว. ง่าย. ครบ.") · claims a competitor could also make (put in a real name or number). For the look of the work, use `no-ai-look`.
 
-- Use words people actually say. No bureaucratic words or literal-translation jargon.
-- Keep terms the field already uses in English (token · prompt · API · OCR).
-- Abbreviations → follow `spell-out-abbreviations`. Explain a coined or confusing term the first time you use it.
-- Call one thing by one word across the whole set: chat, slides, documents, and diagrams.
-- Two-language documents: pick 1 main language and put the other in brackets or a second column. Do not switch back and forth inside a sentence.
-- Cut padding words ("ทำการ" · "มีการ" · "ในส่วนของ" · "ได้มีการ" · "เป็นการ" — empty Thai fillers such as "ทำการ" before a verb).
-- **Cut items, not function words.** Every kind of length budget (words per bullet · characters per commit title · characters per subtitle) is met by dropping items, condensing content, or moving it to the next piece. Never cut `จะ` `ให้` `ก็` `ด้วย` `แล้ว` `ต่างหาก` (Thai function words: future marker, "to/let", "also", "too", "then", emphatic particle) or polite words (`ขอ` `รบกวน` `นะ` and ครับ/ค่ะ, per register). These do work in the sentence. Cut them and Thai turns curt and reads like a translation.
-- Avoid moves that look AI-written: a quotable opener · the slogan "ไม่ใช่แค่… แต่ยัง…" (not just… but also…) used for emphasis (a sentence that contrasts with something real or reframes the problem is fine, but it must close with "ด้วย") · grouping everything in threes · praising something as more important than it is · bold on every line · a closing recap · opening with "แน่นอน" (certainly) · closing with "หวังว่าจะช่วยได้" (hope this helps) · using "หลาย" (several) when you know the number · stacked hedges (hedge once, at the point you are truly unsure).
-- For work people look at (screens · slides · ads) also avoid: broad ad words (ยกระดับ · ไร้รอยต่อ · ล้ำสมัย · supercharge — elevate · seamless · cutting-edge) · em dashes in every sentence · canned openers ("ในยุคดิจิทัลที่…" — "In the digital age where…") · short fragments split by full stops ("เร็ว. ง่าย. ครบ." — "Fast. Easy. Complete.") · claims a competitor could also make: put in a real name or number instead · for the look of the work, use `no-ai-look`.
-
-## 4 · Answering in chat
-
-- First sentence answers directly, then the reason.
-- Short question → short answer, 2–3 sentences, no headings or tables.
-- Use a table to compare 2 or more options or many numbers. Use a list when there are several items to scan. No nested bullets (split sub-topics into a new bold heading). 2–3 short items go on one line separated by ` · `. Include only what the reader needs.
+### 4 · Answering in chat
+- First sentence answers directly, then the reason. Short question → 2–3 sentences, no headings or tables.
+- Table to compare 2 or more options or many numbers; list for several items to scan. No nested bullets (use a new bold heading). 2–3 short items go on one line with ` · `. Include only what the reader needs.
 - Report finished work by its result, not by narrating the steps.
-- If you told them something wrong, say what was wrong and what is right. No long apology. If unsure, say where and how to check. Do not guess in a confident voice.
-- When the user must decide: offer options, name the recommended one and why, and close with 1 question that is easy to answer.
+- If you told them something wrong, say what was wrong and what is right, with no long apology. If unsure, say where and how to check; do not guess in a confident voice.
+- When the user must decide: offer options, name the recommended one and why, close with 1 easy question.
 - Longer than 1 screen: answer the important part first and offer the detailed version in 1 line (do not stop to ask).
-- If the user says "งง" (confused) or "พูดง่าย ๆ" (say it simply): rewrite the last answer at half the length, with no unexplained jargon and no new content.
-- End with 1 thing they can actually do next. No recap.
-- **Answering from a document or the web**: retell in your own words, never translate sentence by sentence · cause and effect in one paragraph · small exceptions in brackets · 2–3 bold labels are enough · put sources together at the end of the answer.
+- If the user says "งง" or "พูดง่าย ๆ": rewrite the last answer at half the length, no unexplained jargon, no new content.
+- End with 1 thing they can do next. No recap.
+- **Answering from a document or the web**: retell in your own words, never sentence-by-sentence translation · cause and effect in one paragraph · small exceptions in brackets · 2–3 bold labels are enough · sources together at the end.
 
-## 5 · Documents and reports
+### 5 · Documents and reports
+- The first paragraph is the conclusion; reading only it gives the point. Headings say what the content is, not the category name. At most 5 sentences per paragraph.
+- Column headings say what is measured · 1 column, 1 meaning. Footnotes are for definitions and number sources; never hide an important conclusion there.
+- Work summaries and status reports: bold headings only as needed, **ผล** → **ที่ทำ** → **ต่อไป** (add headings for real content, such as awaiting approval). Cut behind-the-scenes method, solved problems that do not affect the reader, and numbers not used for a decision. Tag every claim `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ` (meanings in `superuser` `references/evidence.md`).
+- Formal documents (official letters · contracts · tax invoices) use the wording the form requires; this skill covers only the parts you write yourself. Choose the register for each job (official · business · shop chat · job application · complaint · screen) from the table in `thai-grammar` section 4 before writing, and keep it through the piece.
 
-- The first paragraph is the conclusion. Reading only it must give the point.
-- Headings say what the content is, not the category name · at most 5 sentences per paragraph.
-- Column headings say what is measured · 1 column, 1 meaning.
-- Footnotes are for definitions and number sources · never hide an important conclusion in a footnote.
-- Work summaries and status reports: bold headings only as needed, **ผล** (result) → **ที่ทำ** (what was done) → **ต่อไป** (next) (add headings when there is real content, such as awaiting approval) · cut behind-the-scenes method, solved problems that do not affect the reader, and numbers not used for a decision · tag every claim `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ` (verified · from a source · inferred · not yet checked; meanings in `superuser` `references/evidence.md`).
-- Formal documents (official letters · contracts · tax invoices) use the wording the form requires. This file covers only the parts you write yourself. Choose the register for each job (official · business · shop chat · job application · complaint · screen) from the table in `thai-grammar` section 4 before writing, and keep it through the whole piece.
-
-## 6 · Slides and headings of every kind
-
-Applies to slide titles, figure titles, document headings, and box titles in a diagram. The full rules and the before → after table are in the same reference.
-
-- A slide title = the conclusion of the page, not the topic name · at most 2 lines (about 15 words) · detail goes in the page body.
-- **A title with 2 parts needs a connector that matches the real relationship** ("เพราะ" or "จึง" for reason · "ส่วน" for a split of roles · "แต่" for contrast — because or so · as for · but) · 1 title, 1 connector. If it needs 2, you crammed too much in.
-- Use phrases people actually say, not strings of nouns · choose words by reader.
-- The verb matches what the page shows · do not use "คน" (person) for things that are not people.
-- The caption under a picture must say what the picture does not. If it repeats the picture, cut it · page structure: problem → fix → result · write a speaking script the way it is actually spoken.
+### 6 · Slides and headings of every kind
+Applies to slide titles, figure titles, document headings, and box titles in a diagram.
+- A slide title = the conclusion of the page, not the topic name · at most 2 lines (about 15 words) · detail goes in the body.
+- **A title with 2 parts needs a connector that matches the real relationship** ("เพราะ" or "จึง" for reason · "ส่วน" for a split of roles · "แต่" for contrast) · 1 title, 1 connector. If it needs 2, you crammed too much in.
+- Use phrases people actually say, not strings of nouns · choose words by reader · the verb matches what the page shows · do not use "คน" for things that are not people.
+- The caption under a picture must say what the picture does not; if it repeats the picture, cut it · page structure: problem → fix → result · write a speaking script the way it is spoken.
 - **Test:** read the title once to an outsider. If they cannot retell it, rewrite it.
 
-## 7 · Diagrams
-
-- Box labels are short nouns of 1–4 words people understand · arrow labels are verbs · an unlabelled arrow must be impossible to misread.
+### 7 · Diagrams
+- Box labels are short nouns of 1–4 words · arrow labels are verbs · an unlabelled arrow must be impossible to misread.
 - Words in the figure match the document · the figure title is a conclusion, with 1 sentence under it saying what to look at · follow the house style if there is one.
 
-## 8 · 7-point check before sending
-
+## Check before sending
 1. Does it read smoothly aloud, and not like a translation?
 2. Can an outsider understand it without asking? Can every symbol be read?
-3. Does the first sentence already answer the question or give the conclusion?
+3. Does the first sentence already answer or give the conclusion?
 4. Do terms and numbers match across every file in the set?
-5. Is there any padding you can cut without changing the meaning? If so, cut it. But `จะ` `ให้` `ก็` `ด้วย` `แล้ว` and polite words are not padding (section 3). If cutting made a sentence curt, put them back.
-6. Does every heading pass section 6: 2 parts have a connector · a phrase people say · words fit the reader · the verb matches what the figure shows?
-7. Thai of 1 paragraph or more: run `python scripts/thai_tells.py <file>` (warns only, does not judge), then walk the 7 sentence-structure rules in `thai-grammar`. Passing every rule is not the same as reading smoothly. For language, taste, and looks, the final verdict belongs to the user, not to the model doing the check.
+5. Any padding to cut without changing meaning? Cut it, but `จะ` `ให้` `ก็` `ด้วย` `แล้ว` and polite words are not padding; if cutting made a sentence curt, put them back.
+6. Does every heading pass section 6?
+7. Thai of 1 paragraph or more: run `python scripts/thai_tells.py <file>` (warns only), then walk the 7 sentence-structure rules in `thai-grammar`. Passing every rule is not the same as reading smoothly. The final verdict on language, taste and looks belongs to the user.
+
+## References
+- [`references/headings-and-examples.md`](references/headings-and-examples.md) — open for examples of every rule, the before → after heading table, and their sources
+- [`references/thai-grammar.md`](references/thai-grammar.md) — open when writing Thai of 1 paragraph or more (sentence structure · register); example paragraphs in [`references/thai-examples.md`](references/thai-examples.md)
+- [`references/strict-review.md`](references/strict-review.md) — open for research or work sent to outsiders
+- [`references/thai-line-breaking.md`](references/thai-line-breaking.md) — open for Thai documents with justified alignment
 
 
 ## reference: headings-and-examples.md

@@ -27,7 +27,7 @@ Who pays how much, what the money buys, and what the employer must file by when.
 The 5% employee share covers: sickness, maternity, disability, death 1.5% · child allowance and old age 3% · unemployment 0.5%.
 Minimum base 1,650 baht (ข่าวอ้างข้อความกฎกระทรวง "ไม่ต่ำกว่า 1,650 ไม่เกิน 17,500 ใช้ตั้งแต่ 1 ม.ค. 2569" ตรวจ 2026-10-22 · รอยืนยัน กับราชกิจจานุเบกษา).
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.infoquest.co.th/2025/550753 · https://www.krungsri.com/th/krungsri-the-coach/life/good-life/sso-section-33-rate-increase · https://www.bangkokbiznews.com/health/labour/1136027
+Sources and check dates: [references/sources.md](references/sources.md)
 
 ## 2. Benefits (มาตรา 33 — seven cases)
 
@@ -41,7 +41,7 @@ Minimum base 1,650 baht (ข่าวอ้างข้อความกฎก�
 | Old age | Pension 20% of the average last-60-months wage, +1.5% per year beyond 15 years — if 180+ months paid; otherwise lump sum | 180 months for pension |
 | Unemployment | Laid off: **60%** of wage for up to 180 days from 28 Jun 2568 per the government news agency (กฎกระทรวง ฉบับที่ 2 พ.ศ. 2568), but SSO's own page (dated 3 Oct 2567, before the change) still says **50%** (รอยืนยัน which rate SSO pays now; gazette text not opened). Wage is the capped wage: SSO's page uses the 15,000 cap (ceiling 9,000/month at 60%, 7,500 at 50%); whether the 17,500 cap from 1 Jan 2569 applies to this benefit is (รอยืนยัน) · resigned or contract ended: 30% for up to 90 days · register online at e-service.doe.go.th (กรมการจัดหางาน) within 30 days; registered in time, pay starts from day 8 | 6 months within the last 15 |
 
-Unemployment sources, checked 2026-11-10: [thainews.prd.go.th news 1231742](https://thainews.prd.go.th/thainews/news/view/1231742/?bid=1) (60%, 180 days, from 28 Jun; page shows no publication date) · [sso.go.th unemployment conditions](https://www.sso.go.th/wpr/main/service/%E0%B8%81%E0%B8%AD%E0%B8%87%E0%B8%97%E0%B8%B8%E0%B8%99%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%81%E0%B8%B1%E0%B8%99%E0%B8%AA%E0%B8%B1%E0%B8%87%E0%B8%84%E0%B8%A1_detail_detail_1_125_696/236_236) (dated 3 Oct 2567: 50% · 30% · cap 15,000 · floor 1,650 · e-service.doe.go.th). The 17,500 cap from 1 Jan 2569 in section 1 still rests on news sources, no official page found (รอยืนยัน).
+The 17,500 cap from 1 Jan 2569 in section 1 still rests on news sources, no official page found (รอยืนยัน). Sources, checked 2026-11-10: [references/sources.md](references/sources.md)
 
 มาตรา 39 gets the same except unemployment. มาตรา 40 benefits depend on the plan (70 = sickness, disability, death · 100 = + old-age lump sum · 300 = + child allowance).
 

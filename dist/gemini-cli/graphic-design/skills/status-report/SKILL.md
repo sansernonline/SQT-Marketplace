@@ -5,8 +5,6 @@ description: Use when a task ends, to report status in a table
 
 # Report status when a task ends
 
-> **Language:** write the wording of every line following `human-writing`. This skill gives the format and structure, and human-writing says how to write so that people understand.
-
 > **The one rule:** every time a task ends, there must be a status table in the task's central file, and the same table in the reply.
 > A task with no status table is not finished.
 > **Exception:** read-only playbooks (`research` · `review` · software-development: `investigation`) put the table in the reply only and write no file.
@@ -72,19 +70,13 @@ Show "ภาพรวม" (overview, if any) + a table of only **the rows that c
 - [ ] You touched no other heading in the file
 - [ ] BUILD-PLAN form: the numbers in "ภาพรวม" match the table · 1 line is added to `## ประวัติสถานะ` · "ทีมตอนนี้" (current team) has no leftover `ทำอยู่` row for a task that has finished
 - [ ] BUILD-PLAN form: run the checker until it passes (the checker is in plugin `superuser`): `python <superuser folder>/skills/polished-document-style/scripts/check_outline.py assets/build-plan-status.md <path of docs/BUILD-PLAN.md>`. It catches missing headings, swapped headings, missing bold cells, changed table headers and cells not yet filled. Other headings in the file (the task table, `## ตัดสินใจเอง`) the checker lets pass.
-- [ ] The reply has a table of only the changed rows + pending + awaiting approval (if any) + proposals (if any) + next
-
 ---
 
 ## 6 · What not to do
 
-| Do not | Because |
-|---|---|
-| Write `เสร็จ` or `ผ่าน` without really checking | A status table that lies is worse than no table. |
-| Append to the table every round | The file keeps growing and nobody knows which row is current. |
-| Create a new status file (`STATUS.md` `progress.md`) | Status scatters across places and nobody knows where to look. |
-| Hide failing items in prose | A reader of the table will think everything passed. |
-| Let a subagent write the central file itself | Writes collide and the file breaks. |
+- Do not create a new status file (`STATUS.md` `progress.md`), because status then scatters across places.
+- Do not hide failing items in prose, because a reader of the table will think everything passed.
+- Do not append to the table every round, and do not let a subagent write the central file.
 
 ---
 

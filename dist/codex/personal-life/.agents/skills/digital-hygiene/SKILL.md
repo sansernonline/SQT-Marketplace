@@ -68,14 +68,6 @@ Rule: one manager per family, chosen by whoever will support everyone else.
 - Check that the cloud copy is actually running: open the photos website on a computer and find last week's photo
 - A cloud copy is not a backup against deleting a photo by mistake, because a deletion syncs. The offline copy is the protection
 
-## Worked example — the Somchai family
-
-- Dad: Gmail with SMS 2FA → switched to a passkey + authenticator app. Recovery codes printed and put in the document folder
-- Mum: LINE had no email registered and no PIN → set both, and turned on two-factor authentication
-- Grandma: receives +697 calls → dialled `*138*1#` to block incoming international calls (she has no family abroad). Taught the rule "police never call on LINE"
-- Photos: 2 iPhones on a 200 GB iCloud family plan, plus a quarterly copy to a 1 TB drive kept at an aunt's house
-- Time taken: one Saturday afternoon
-
 ## Yearly checklist (copy into `digital-hygiene.md`)
 
 - [ ] Each person: the recovery phone and email on email, Apple and Google accounts are still current
@@ -89,4 +81,6 @@ Rule: one manager per family, chosen by whoever will support everyone else.
 - [ ] Emergency access in the password manager is still set to the right person
 - [ ] The first-hour card is still on the fridge, with its numbers checked
 
-Related: `important-docs` (where the recovery-code envelope is kept), `subscription-audit` (unknown charges), `scam-check` in `trading-finance`, and `pdpa-workflow` in `e-commerce`.
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open for a model setup of one family

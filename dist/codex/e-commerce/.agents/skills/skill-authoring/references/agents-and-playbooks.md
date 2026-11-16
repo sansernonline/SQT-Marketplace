@@ -1,0 +1,7 @@
+# Agents and playbooks · skill-authoring
+
+Open when writing an agent file, a playbook, a plugin command file or a plugin's shared `INTENT.md`.
+
+- **Command files and shared rules of a plugin**: a command file has 4 headings: Preflight · Plan · Commands · Verification. A plugin with 3 or more skills keeps shared rules in a single `INTENT.md`. A skill that calls an external command has a fallback for when the CLI is older than the skill. All templates are in [`skill-structure`](skill-structure.md).
+- **agent** (`agents/<name>.md`): `name` matches the file name · `description` "Use when …" at most 120 characters · `tools:` · `model` · `effort` · must have a `## Writing` heading pointing to `human-writing` · says what it receives from the team lead, what it returns (result format as a markdown block) and what it must not do. See `agents/brainstormer.md` as the model.
+- **playbook** (`skills/superuser/references/playbook-<name>.md` from `playbook-template.md`): has `## ขั้นตอน` as numbered items · every step ends with `ใคร:` (team lead · user · or a new agent) · must have a check step done by someone other than the doer, and the last check step comes after the last doing step · a check step is pure checking (check · prove · review · run · measure), not "check and fix" · no step that waits for a user reply mid-work (ask everything at the start, or write `(รอยืนยัน)` and log "รออนุมัติ") · an agent from another plugin is written "(ถ้าติดตั้ง plugin …)" with a fallback · do not use "ตัวเดิม" (the same one) unless carrying something hard to move.

@@ -4,8 +4,6 @@ Use when a mid-task finding needs a decision before going on
 
 # Flag what you found, then propose a way forward
 
-> **Language:** write every line of wording following `human-writing`. This skill gives the format and structure. human-writing says how to write so the reader understands.
-
 > **The one rule:** open with the **impact**, close with **one question**.
 > The middle is evidence and proposals, not a story of how you found it.
 
@@ -23,11 +21,7 @@ Use when a mid-task finding needs a decision before going on
 | Answer a question the user asked | `answer-shape` | instead |
 | A reversible choice (can be changed later at no cost) | `principle-proceed-on-reversible-work`: do it now, then log it in `decision-log` | instead |
 | An unknown fact (number, name, date, budget) | Put `(รอยืนยัน)` (awaiting confirmation) and keep going; do not stop to ask | instead |
-| Report finished work | `human-writing` · `status-report` | instead |
-| Explain something complex so it is understood | `answer-shape` | instead |
-| Write a document for others to read | `polished-document-style` | instead |
 | Something is really broken and must be fixed now | `targeted-fix`: fix first, then report | instead |
-| Spell out abbreviations and jargon in the answer | `spell-out-abbreviations` | together |
 | What you found is a real system incident | `incident-runbook-template` · `postmortem-template` (plugin `software-development`) | together |
 
 ---
@@ -134,20 +128,6 @@ It also signals that you thought it through and did not forget.
 
 A before-and-after example (a software requirements document and work plan) is in [`references/example.md`](references/example.md)
 
----
-
-
-## 8 · Anti-patterns
-
-- **Opening with "ระหว่างตรวจผมพบว่า…" (while checking I found…).** The reader must read to the end of the paragraph to learn what to do.
-- **Disagreeing numbers written as a sentence.** "เดิม 214 ตอนนี้ 245" (was 214, now 245) makes the eye jump back and forth.
-- **Explaining how the problem happened** when it does not change what must be done.
-- **A proposal that says how to do it instead of the benefit.** The reader still cannot decide.
-- **Three questions in one paragraph.** You get one answer and must ask again.
-- **Closing with "แจ้งได้เลยครับ" (just let me know).** It asks for no decision.
-- **A long apology for a mistake.** Say what was wrong and how you fix it. That is enough.
-- **Reporting without proposing.** It pushes all the thinking back to the user.
-
 
 ## reference: example.md
 
@@ -246,8 +226,6 @@ Use when a task ends, to report status in a table
 
 # Report status when a task ends
 
-> **Language:** write the wording of every line following `human-writing`. This skill gives the format and structure, and human-writing says how to write so that people understand.
-
 > **The one rule:** every time a task ends, there must be a status table in the task's central file, and the same table in the reply.
 > A task with no status table is not finished.
 > **Exception:** read-only playbooks (`research` · `review` · software-development: `investigation`) put the table in the reply only and write no file.
@@ -313,19 +291,13 @@ Show "ภาพรวม" (overview, if any) + a table of only **the rows that c
 - [ ] You touched no other heading in the file
 - [ ] BUILD-PLAN form: the numbers in "ภาพรวม" match the table · 1 line is added to `## ประวัติสถานะ` · "ทีมตอนนี้" (current team) has no leftover `ทำอยู่` row for a task that has finished
 - [ ] BUILD-PLAN form: run the checker until it passes (the checker is in plugin `superuser`): `python <superuser folder>/skills/polished-document-style/scripts/check_outline.py assets/build-plan-status.md <path of docs/BUILD-PLAN.md>`. It catches missing headings, swapped headings, missing bold cells, changed table headers and cells not yet filled. Other headings in the file (the task table, `## ตัดสินใจเอง`) the checker lets pass.
-- [ ] The reply has a table of only the changed rows + pending + awaiting approval (if any) + proposals (if any) + next
-
 ---
 
 ## 6 · What not to do
 
-| Do not | Because |
-|---|---|
-| Write `เสร็จ` or `ผ่าน` without really checking | A status table that lies is worse than no table. |
-| Append to the table every round | The file keeps growing and nobody knows which row is current. |
-| Create a new status file (`STATUS.md` `progress.md`) | Status scatters across places and nobody knows where to look. |
-| Hide failing items in prose | A reader of the table will think everything passed. |
-| Let a subagent write the central file itself | Writes collide and the file breaks. |
+- Do not create a new status file (`STATUS.md` `progress.md`), because status then scatters across places.
+- Do not hide failing items in prose, because a reader of the table will think everything passed.
+- Do not append to the table every round, and do not let a subagent write the central file.
 
 ---
 
@@ -524,14 +496,9 @@ Use when work passes to a subagent, session or person
 
 # handoff — pass work on so the receiver does not have to guess
 
-Part of `superuser` · lives only in plugin `superuser`; other plugins share it through `dependencies` · wording follows `human-writing`
+> **One rule:** whoever receives the work (new subagent · session · model · person · bot) remembers nothing, so only what is written to a file can be passed on. Write it so someone who never saw the chat can start within 2 minutes.
 
-> **One principle:** whoever receives the work (a new subagent · a new session · a new model · a person · another bot) remembers nothing → only what is written to a file can be passed on. Write it so that someone who never saw the chat can open it and start work within 2 minutes.
-
----
-
-## 1 · When to hand off and what to use
-
+## 1 · Use when
 | Moment | Use | Who writes |
 |---|---|---|
 | Lead → worker | **Task sheet** (`ใบสั่งงาน`, section 3) | Lead |
@@ -539,34 +506,96 @@ Part of `superuser` · lives only in plugin `superuser`; other plugins share it 
 | This session → next session · switching model · context nearly full | **Resume** (`รับงานต่อ`) in `CONTEXT.md` (section 5) | Lead |
 | Team → a person · another bot · Quix · Agent Desk | **Hand-off package** (section 6) | Lead |
 
-> **Quix · Agent Desk** = optional external tools. Quix queues work for agents; Agent Desk is a task board for a team of agents. Both read the header of `handoff/*.md`. This skill is complete in every item without them installed.
+Quix (work queue) and Agent Desk (task board) are optional external tools that read the header of `handoff/*.md`. Everything here works without them.
 
----
+## 2 · `.claude/superuser/` — the team's shared store
+All files, first-time setup, inbox and log: [`team-memory`](references/team-memory.md). Commit rules: [`team-files`](../superuser/references/team-files.md).
 
-## 2 · `.claude/superuser` — the team's shared store
-
-Everything lives under `.claude/superuser/`. All the files, first-time setup, inbox and log are in [`team-memory`](references/team-memory.md). The commit rules are in [`team-files`](../superuser/references/team-files.md).
-
-```
-.claude/superuser/
-├─ CONTEXT.md            งาน · ความคืบหน้า · การตัดสินใจ · รับงานต่อ  ← ทุกคนอ่านก่อน
-├─ handoff/
-│  ├─ 2026-10-21-03-login-api.md     ใบสั่งงาน + ใบส่งงาน ของชิ้นนั้น (1 ชิ้น 1 ไฟล์)
-│  └─ 2026-10-21-03-login-api/       ผลยาวของชิ้นนั้น (รายงาน · ข้อมูล · ร่าง)
-├─ notes/ · ledger/ · out-of-scope/  สมุดงานของแผน · ledger · แนวคิดที่ปฏิเสธ (team-memory หัวข้อ 8)
-└─ log/ · inbox/ · learn/            ของเดิม (learn/drop/ = บทเรียนที่ทิ้งไว้ข้อละไฟล์)
-```
-
-- **Piece name** `<date>-<2-digit sequence>-<short English words>` · use the same name for the file, the folder and in the log.
-- **The real work product** (code · documents · images) lives in the project's normal folders. `handoff/` keeps only instructions, summaries and in-between material.
-- **Do not commit** `handoff/` `notes/` `ledger/` `out-of-scope/` (put them in `.gitignore` along with `log/`). Before writing to these, `git check-ignore <path>` must find it and the path must not be a symlink. If that fails, do not write; tell the user to add it to `.gitignore`. When the work is done, for any piece that still has value → move its substance up to `CONTEXT.md` or `HISTORY.md`.
+- Files: `CONTEXT.md` (everyone reads first) · `handoff/<piece>.md` (task sheet + delivery sheet, 1 piece per file) · `handoff/<piece>/` (long results) · `notes/` · `ledger/` · `out-of-scope/` · `log/` · `inbox/` · `learn/`.
+- **Piece name** `<date>-<2-digit sequence>-<short English words>`, the same for the file, the folder and the log.
+- The real work product (code · documents · images) lives in the project's normal folders. `handoff/` keeps only instructions, summaries and in-between material.
+- **Do not commit** `handoff/` `notes/` `ledger/` `out-of-scope/` (put them in `.gitignore` along with `log/`). Before writing to these, `git check-ignore <path>` must find it and the path must not be a symlink. If that fails, do not write; tell the user to add it to `.gitignore`. When work is done, move anything of lasting value up to `CONTEXT.md` or `HISTORY.md`.
 - **Never put in** secrets · ID card numbers · full account numbers · other people's data.
 
----
-
 ## 3 · Task sheet (`ใบสั่งงาน`)
+The header is machine-readable (Quix · Agent Desk read it); the content is human language. **All 5 sections must be there, or it is not sent yet.**
 
-The file header is machine-readable data (Quix · Agent Desk read these fields). The content is in human language. **All 5 sections must be there, or it is not sent yet.**
+Header fields: `id` · `from` · `to` · `tier` (ใหญ่ · กลาง · เล็ก + effort) · `status` (เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่) · `depends_on` · `files_allowed`. Sections in order: `## เป้า` (goal, with `ขนาด: <n>k`) · `## เสร็จเมื่อ` · `## ใช้อะไร` (files to read, skills) · `## ขอบเขต` (writable files, what not to do) · `## ส่งกลับแบบไหน` (delivery sheet appended, message back about 40 lines or fewer). Full example → [`references/sheet-examples.md`](references/sheet-examples.md).
+
+- Code work uses the same sheet: `to: software-development:developer` · `files_allowed: [src/auth/**]` · done-when = tests pass · skill = `stack-*`.
+- A normal piece puts the 5-item sheet in the message that sends the task (`superuser` section 5). Write a file only for a piece that crosses sessions or goes to another person or bot; then the instruction is one line: `ทำตาม .claude/superuser/handoff/<id>.md`. Pass the path, not the content.
+- A brief picked up several days later uses `superuser/templates/DURABLE-BRIEF.md`: write behavior and interface names, not paths or line numbers; include testable acceptance criteria and what is out of scope. A sheet for a piece done today may use paths.
+- State the intent of the rule, not only the condition. For a fix or retry round, add `## รอบก่อน` (previous worker's report + what must change) and send a new worker.
+- A sheet to `reviewer` has no lead opinion in it (`superuser` section 5).
+- **Workers that review or research:** a conclusion that something is "outdated", "wrong" or "contradictory" must attach `file:line` and say whether it checked that it was not on purpose (history sections · script-generated numbers · noted exceptions). Put this in every such sheet. The lead opens a few at random before believing them.
+
+## 4 · Delivery sheet (`ใบส่งงาน`)
+The worker appends it to its own task sheet, then edits `status:`. The message back = path + result + 1-line summary. Heading `## ส่ง — <date time> · <agent> · <model>`, then fields **ผล** · **ของที่ได้** · **ตรวจแล้วด้วย** · **ตัดสินใจเอง** · **ลองแล้วพัง** · **ค้างอยู่ · ไม่แน่ใจ** (example in `references/sheet-examples.md`).
+
+- **ผล** is 1 of 4 values (`superuser` section 5): `เสร็จ` · `เสร็จ มีข้อกังวล` · `ขาดบริบท` · `ติด`.
+- `เสร็จ` needs evidence in `ตรวจแล้วด้วย`. If there is none → `status: ติด` or `ค้างอยู่`.
+- **ลองแล้วพัง:** note every path tried that did not work, with a 1-line reason (`dead_ends` in the header if a machine must read it), so the next worker does not walk it again.
+- A result longer than 40 lines → write it to `handoff/<id>/` and cite the path.
+- The lead reads the delivery sheet, checks it against `เสร็จเมื่อ` itself, then moves any `ตัดสินใจเอง` that affects other work up to the "การตัดสินใจ" table in `CONTEXT.md`.
+
+## 5 · Resuming work (`รับงานต่อ`) — across sessions · switching model · context nearly full
+The `## รับงานต่อ` section in `CONTEXT.md` follows these rules. The `## ความคืบหน้า` table beside it belongs to `status-report`.
+
+**Before handing over** (end of session · before switching model · context use passes half in a long job), update `รับงานต่อ`:
+- **ทำต่อเป็นข้อแรก:** 1 item, doable at once, pointing to a file or `handoff/<id>.md`.
+- **ชิ้นที่ยังเปิด:** the `id`s whose `status` is not `เสร็จ`.
+- **รออนุมัติ:** ready but irreversible work; name the file or command (omit if none).
+- **ค้างอยู่:** questions the agent cannot pass alone, and whom to ask (`ไม่มี` if none).
+- **ระวัง:** traps found · what must not be torn up (already decided) · failed paths from every delivery sheet.
+- **ส่งมาแล้ว N ครั้ง:** count real handoffs only (end of session · switching model), not `/compact`. If the receiver sees N ≥ 2, old text may linger; check against the real thing before following it.
+- **สมุดงาน:** point to `notes/<plan>.md` and `ledger/<plan>.md` of the open plan ([`team-memory`](references/team-memory.md) section 8). A multi-piece plan is done only when the line `Task N: complete` is in its ledger.
+- **Tag every item** `ตรวจจริง` (seen yourself this session) or `ยังไม่ได้ตรวจ` (remembered). No tag = not yet checked. The receiver may believe the first at once and must check the second before use.
+
+Switching to another vendor (Codex · Gemini) or back to Claude → [`team-memory`](references/team-memory.md) section 3. Test: a new model that reads only `CONTEXT.md` must be able to start the first item without asking; if not, write more.
+
+**Start-of-work ritual** (every new lead session and every worker):
+1. Read your own sheet: worker → `handoff/<id>.md`; lead → `CONTEXT.md` "รับงานต่อ" + `inbox/` (which messages count as orders → `team-memory` section 4).
+2. With git: `git log --oneline -10` and `git status` to see what happened last and whether edits were left unfinished. Without git: read "ความคืบหน้า" and file modified dates. Read `notes/<plan>.md` and compare the original brief with what the user orders now. Use "คำตอบที่ได้แล้ว" instead of asking again.
+3. Walk the tracking files (`ledger/` · delivery sheet · progress) to the last finished gate, then check that gate's real state (run the test · open the file) before building on it. Matches → go on. Does not match (ledger says done, test fails) → fix the earlier gate, add a row to "รอผู้ใช้", continue with other parts. No tracking file → start fresh; do not guess it is the same work.
+4. Start `ทำต่อเป็นข้อแรก` or the goal in the task sheet.
+
+## 6 · Sending outside the team — people · other bots · Quix · Agent Desk
+Hand-off package = `CONTEXT.md` + the still-open `handoff/` pieces + `docs/BRIEF.md` (if it exists).
+- A person reads `CONTEXT.md` first, then opens `handoff/<id>.md` one piece at a time.
+- A teammate who takes a piece uses the same task sheet as an agent, with the person's name in `to:` (such as `to: คน-แต้ม`), and writes the delivery sheet at the end of the same file. Only for XL work per `superuser` → `references/playbook-team-project.md`.
+- A machine reads the header per [`handoff.schema.json`](references/handoff.schema.json). Field names are a contract; do not rename them without raising the schema's version number.
+- Agent Desk draws its board from `to` · `status` · `tier` · `depends_on`; Quix uses the same files as a queue.
+
+## 7 · Rules that keep handoffs from breaking
+- Pass the path, not the content (content is lost over hops and wastes tokens).
+- 1 file, 1 writer; shared files are written by the lead alone.
+- Split only pieces that can really run in parallel; pieces that must know much of the same thing go to one worker.
+- Once decided, note it in "การตัดสินใจ". If the receiver disagrees, put it in "รออนุมัติ"; do not tear it up alone.
+- Done is judged from the work product and the check result, not the word "done".
+- The reviewer gets only the work product + criteria, not the maker's context.
+
+## 8 · Our files versus Claude Code's built-in memory
+Unsure whether a note goes into `CONTEXT.md` · `CLAUDE.md` · `.claude/rules/` or auto memory → [`team-memory`](references/team-memory.md) section 7.
+
+## Check before done
+- Task sheet has all 5 sections; delivery sheet has evidence in `ตรวจแล้วด้วย`.
+- `รับงานต่อ` has an item at the top that a new model can start without asking, every item tagged.
+- Nothing under `handoff/` `notes/` `ledger/` is committed or holds secrets.
+
+## References
+- [`references/sheet-examples.md`](references/sheet-examples.md) — open when writing a task sheet or delivery sheet
+- [`references/team-memory.md`](references/team-memory.md) — open for first-time setup, vendor switch, inbox, log, workbooks, auto memory
+- [`references/handoff.schema.json`](references/handoff.schema.json) — open when a machine reads the header
+- [`references/sources.md`](references/sources.md) — sources and licences
+
+
+## reference: sheet-examples.md
+
+# Sheet examples · task sheet and delivery sheet
+
+Full examples for `handoff` SKILL.md sections 3 and 4. The headings and field names are the format; the content is an example.
+
+## Task sheet (`ใบสั่งงาน`)
 
 ```markdown
 ---
@@ -598,18 +627,9 @@ files_allowed: [research/shipping/**]
 ใบส่งงานต่อท้ายไฟล์นี้ · ข้อความกลับหัวหน้าทีมไม่เกินราว 40 บรรทัด (สิ่งที่เปลี่ยน · ผลตรวจ · สิ่งที่ไม่แน่ใจ)
 ```
 
-- **Code work** uses the same sheet, differing only in fields: `to: software-development:developer` · `files_allowed: [src/auth/**]` · done-when = `npm test` passes · skill = `stack-*` (plugin `software-development`).
-- **A normal piece puts the 5-item sheet in the message that sends the task** (the core of `superuser` section 5). Write a file only for a piece that crosses sessions or goes to another person or bot (module `handoff`); then the instruction reaches the agent as one line: `ทำตาม .claude/superuser/handoff/<id>.md`. Pass the path, not the content; the worker opens and reads it itself.
-- **A brief that will be picked up several days after it is written** uses the template `superuser/templates/DURABLE-BRIEF.md`: write behavior and interface names, not paths or line numbers (files move, then the old brief is stale). It has testable acceptance criteria and a list of what is out of scope. A normal task sheet for a piece done today may use paths.
-- **State the intent of the rule**, not only the condition. For a fix or retry round → add a `## รอบก่อน` (previous round) section (the previous worker's report + what must change) and send a new worker.
-- **A sheet to `reviewer`** has no lead opinion in it (rule in `superuser` section 5).
-- **Workers that review or research** — a conclusion that something in the work is "outdated", "wrong" or "contradictory" must attach `file:line` and say whether it looked and found it so on purpose (history sections · numbers a script generates · noted exceptions). Put this in every task sheet. The lead opens a few at random before believing them (lesson 2026-10-26: "PLUGINS.md is outdated" was a Roadmap section kept on purpose · "skill 49 is wrong" was a shared total).
+Code work uses the same sheet, differing only in fields: `to: software-development:developer` · `files_allowed: [src/auth/**]` · done-when = `npm test` passes · skill = `stack-*` (plugin `software-development`).
 
----
-
-## 4 · Delivery sheet (`ใบส่งงาน`)
-
-The worker appends it to its own task sheet, then edits `status:`. The message back to the lead = path + result + 1-line summary.
+## Delivery sheet (`ใบส่งงาน`)
 
 ```markdown
 ## ส่ง — 2026-10-21 14:20 · general-purpose · sonnet
@@ -621,71 +641,18 @@ The worker appends it to its own task sheet, then edits `status:`. The message b
 - **ค้างอยู่ · ไม่แน่ใจ:** เจ้าที่ 3 ไม่บอกค่าเก็บเงินปลายทาง (รอยืนยัน)
 ```
 
-- **ผล** (result) uses 1 of 4 values per `superuser` section 5: `เสร็จ` · `เสร็จ มีข้อกังวล` · `ขาดบริบท` · `ติด`
-- **"เสร็จ" needs evidence** in `ตรวจแล้วด้วย` (checked with). If there is none → `status: ติด` or `ค้างอยู่`.
-- **ลองแล้วพัง** (tried and failed): note every path tried that did not work, with a 1-line reason (the `dead_ends` field in the header if a machine must read it). A dead end that is not noted is a path the next worker will waste time walking again.
-- **A result longer than 40 lines** → write it to `handoff/<id>/` and cite the path.
-- **The lead is responsible for the result** — read the delivery sheet, check it against "เสร็จเมื่อ" (done-when) yourself, then move any `ตัดสินใจเอง` that affects other work up to the "การตัดสินใจ" (decisions) table in `CONTEXT.md`.
+## Lesson behind the review rule
 
----
+2026-10-26: "PLUGINS.md is outdated" was a Roadmap section kept on purpose. "Skill 49 is wrong" was a shared total.
 
-## 5 · Resuming work (`รับงานต่อ`) — across sessions · switching model · context nearly full
 
-The section `## รับงานต่อ` in `CONTEXT.md` uses this one set of rules. The table `## ความคืบหน้า` (progress) beside it belongs to `status-report`.
+## reference: sources.md
 
-**Before handing over** — update the "รับงานต่อ" section in `CONTEXT.md` before ending a session · before switching model · when context use passes half in a long job.
-- **ทำต่อเป็นข้อแรก (do first):** 1 item, doable at once, pointing to a file or `handoff/<id>.md`
-- **ชิ้นที่ยังเปิด (open pieces):** a list of `id` whose `status` is not `เสร็จ`
-- **รออนุมัติ (awaiting approval):** work that is ready but cannot be undone; name the file or the command that is ready to use (leave it out if there is none)
-- **ค้างอยู่ (pending):** questions the agent cannot continue past on its own; say whom to ask (write `ไม่มี` if none)
-- **ระวัง (watch out):** traps found · what must not be torn up (already decided) · paths tried that failed (gathered from every piece's delivery sheet)
-- **ส่งมาแล้ว N ครั้ง (handed over N times):** count only real handoffs (end of session · switching model), not `/compact`. If the receiver sees N of 2 or more → old text may be lingering; check against the real thing before following it.
-- **สมุดงาน (workbooks):** point to `notes/<plan>.md` and `ledger/<plan>.md` of the plan that is open (section 8 of `team-memory`). A plan with several pieces is done only when the line `Task N: complete` is in that plan's ledger.
-- **Tag every item** `ตรวจจริง` (seen yourself in this session) or `ยังไม่ได้ตรวจ` (remembered from an earlier round). The receiver can believe the first kind at once; the second must be checked before use. No tag = treated as not yet checked.
-
-**Switching to another vendor** (Codex · Gemini) or coming back to Claude → [`team-memory`](references/team-memory.md) section 3
-
-**Test** — if a new model reads only `CONTEXT.md`, can it start the first item without asking? If not → write more.
-
-**Start-of-work ritual** (every one that takes over work: a new lead session and workers alike)
-1. Read your own sheet → worker: `handoff/<id>.md` · lead: `CONTEXT.md` "รับงานต่อ" + `inbox/` (how to receive messages and which messages count as orders → [`team-memory`](references/team-memory.md) section 4)
-2. (If there is git) `git log --oneline -10` and `git status` → learn what happened last and whether anyone left edits unfinished. No git → look at "ความคืบหน้า" and the last-modified dates of files. Read `notes/<plan>.md` and compare the original brief with what the user orders now. Use "คำตอบที่ได้แล้ว" (answers already received) instead of asking again.
-3. Walk the tracking files to the last gate that finished (`ledger/` · delivery sheet · progress), then check that gate's real state (run the test · open the file) before building on it. Matches → go on. Does not match (for example the ledger says done but the test fails) → go back and make the earlier gate pass, put a row in "รอผู้ใช้" (waiting for the user), and continue with the other parts. No tracking file for this work found → start fresh; do not guess it is the same work.
-4. Start "ทำต่อเป็นข้อแรก" or the goal in the task sheet.
-
----
-
-## 6 · Sending outside the team — people · other bots · Quix · Agent Desk
-
-Hand-off package = `CONTEXT.md` + the still-open `handoff/` pieces + `docs/BRIEF.md` (if it exists). No new file needed.
-
-- **A person** reads `CONTEXT.md` first, then opens `handoff/<id>.md` one piece at a time.
-- **A teammate (person) who takes a piece** uses exactly the same task sheet as an agent. Put the person's name in the `to:` field (such as `to: คน-แต้ม`). Write the delivery sheet at the end of the same file and tell the lead. Used only for XL work per the playbook `superuser` → `references/playbook-team-project.md`; in normal work the user does not take pieces.
-- **A machine** reads the header of `handoff/*.md` per [`handoff.schema.json`](references/handoff.schema.json). Field names are a contract; do not rename them without raising the schema's version number.
-- **Agent Desk** uses `to` · `status` · `tier` · `depends_on` to draw the task board · **Quix** uses the same files as a work queue.
-
----
-
-## 7 · Rules that keep handoffs from breaking
-
-| Rule | Because |
-|---|---|
-| Pass the path, not the content | Over several hops, data gets lost ("telephone game") and tokens are wasted |
-| 1 file, 1 writer · shared files are written by the lead alone | Several agents writing the same place scatters decisions and they collide |
-| Split only pieces that can really run in parallel · pieces that must know much of the same thing go to one worker | Splitting context makes workers understand the brief differently |
-| Once decided, note it in "การตัดสินใจ" · if the receiver disagrees → put it in "รออนุมัติ", do not tear it up alone | Stops arguing the same thing every session |
-| Done is judged from the work product and the check result, not the word "done" | Words in a conversation cannot be checked |
-| The reviewer gets only the work product + criteria, not the maker's context | A reviewer who sees the maker's reasons tends to go along |
+# Sources · handoff
 
 Sources of the workbook and resume mechanisms: code-modernization (Apache-2.0) · mercadopago (Apache-2.0) · math-proof (Apache-2.0) · superpowers (MIT) · mattpocock-skills (MIT) · aws (Apache-2.0) · vsql-extension-builder (license not stated, mechanism only) · claude-remember (no redistribution, mechanism only) · seen 2026-11-10 · details per file in `team-memory` section 8
 
 Sources (`จากแหล่ง`): Anthropic — *How we built our multi-agent research system* (2025-06) · *Effective harnesses for long-running agents* (2025-11) · *Effective context engineering for AI agents* (2025-09) · Cognition — *Don't Build Multi-Agents* (2025-06) · *Multi-Agents: What's Actually Working* (2026-04)
-
----
-
-## 8 · Our files versus Claude Code's built-in memory
-
-If you want to note something and are unsure whether it goes into `CONTEXT.md` · `CLAUDE.md` · `.claude/rules/` or auto memory → open [`team-memory`](references/team-memory.md) section 7
 
 
 ## reference: team-memory.md
@@ -859,11 +826,8 @@ Use when a project needs a Docker sandbox for untrusted code
 
 # docker-sandbox: one lab per project
 
-> Our machine gives the orders; the lab is where the work happens.
 > Inside, you can install, delete, run servers, and build test databases freely, because when something breaks you wipe it and rebuild with one command.
 > Outside (the real machine · real systems · real accounts) cannot be touched, because there is no way in from the inside.
-
-Use together with [`superuser`](../superuser/SKILL.md). In a project that has `.sandbox/`, all install and run work happens in this lab.
 
 Do not use when: writing a Dockerfile or image for a real deploy → [`kubernetes-helm`](../kubernetes-helm/SKILL.md), because the lab is a temporary place to run work, not an image that goes to production.
 
@@ -873,7 +837,7 @@ Do not use when: writing a Dockerfile or image for a real deploy → [`kubernete
 
 - **One lab per project**, named `sandbox-agent-<folder name>-<creation date>` (e.g. `sandbox-agent-sample-app-20260125`).
   - The name is set once at the first `up` and stored in the file `.sandbox/.name-<folder name>`. Later commands read the name from this file, so the name does not change with the date.
-  - The prefix `sandbox-agent-` says an agent created this lab, not a person. The creation date is also kept in the label `sqt.created`.
+  - The creation date is also kept in the label `sqt.created`.
   - If the project needs a database, cache, or browser, add it as a service in the **same lab** (one stack). Do not create a separate lab.
 - **The base image is shared across the whole machine.** `sqt-sandbox-base:1` (Node · Python · Git · Playwright Chromium · Claude Code) is built once. Each project's image adds only a thin layer the project needs, so disk is not used twice.
 - **A stopped lab uses no CPU or memory**, only disk. Run `stop` when you finish a task, and `stop-all` when you finish for the day.
@@ -906,10 +870,6 @@ You can add `-Locked` to either mode. It blocks outbound internet, leaving only 
 5. Start the lab with `.\.sandbox\sandbox.ps1 up` (or `up -Isolated` · `up -Browser`). The first project on a machine must build the base image first, which takes about 5–15 minutes. Later projects are much faster.
 6. **Prove it works:** `sandbox.ps1 exec "node -v && python3 --version && git status"`. If the project has a test command, run it once through `exec`. In `-Locked` mode you must see the line `check passed`.
 7. Record in the project's `docs/README.md`: the lab name (`sandbox-agent-<folder name>-<date>`) · mode · port · test command in the lab.
-
-**Tested for real** on Windows + Docker Desktop 4.46 (2026-10-05, project `sample-app`): the lab built · unit tests passed 15/15 · e2e on Chromium passed 14/14 in the lab.
-
-Bugs found during testing are already fixed in the script: PowerShell 5.1 with stderr · Playwright a different version from the base image · port collisions.
 
 If the script breaks on another machine, use the `bug-fix` playbook on the script itself.
 
@@ -952,7 +912,7 @@ If the script breaks on another machine, use the `bug-fix` playbook on the scrip
 
 - The browser in the lab has no accounts, cookies, or user passwords. Log in only with the project's test accounts.
 - Copy images and videos from tests out to `_to_delete/` with `docker compose cp`.
-- Playwright MCP in the lab (examples from teaching work, not yet a standard): running as root needs `--no-sandbox` · the `--browser` value must match the `--help` of the installed version (`chromium` or `chrome`; if it does not match, it cannot find the browser) · screenshots with a relative file name land in the process's working directory, not `--output-dir`, so move them yourself · a click that times out with "not visible/stable" may be a background tab; see `e2e-testing-patterns`.
+- Playwright MCP quirks (root, `--browser`, screenshot paths, click timeouts): [references/playwright-mcp.md](references/playwright-mcp.md).
 - The user's own browser on the machine (the logged-in Chrome) is for real websites that need a real account, and follows that tool's rules. It is not a place to test.
 
 ## 6 · CAPTCHA
@@ -962,7 +922,6 @@ If the script breaks on another machine, use the `bug-fix` playbook on the scrip
   - Or turn it off with a setting for the test environment only (`CAPTCHA_ENABLED=false`).
   - **Test values must never reach the real system.** Add a startup check that production must not use a test key (`config-and-secrets`).
 - **Other people's websites:** the agent **does not solve a CAPTCHA and does not look for a way around it** (no solving services, no pretending to be a person). If you meet a CAPTCHA, stop that step, tell the user to do it themselves, and continue with the other parts. If you need data from that site often, look for an official API instead.
-- Reason: a CAPTCHA is the site owner saying "no bots." Getting around it breaks their terms and gets the IP or account banned.
 
 ## 7 · What you may do freely in the lab
 
@@ -986,11 +945,9 @@ These still stay under "รออนุมัติ" (awaiting approval) even in
 | Opening a port like `"3000:3000"` (every network card) | People on the same network can reach it. Always use `127.0.0.1:` |
 | Putting real secrets in the `Dockerfile` or image | The secret stays in the image forever |
 | Removing or raising the limits `cpus` `mem_limit` `pids_limit` until the machine hangs | A lab stuck in a loop will eat the whole machine |
-| Mounting things from the machine as writable when the lab only needs to read (`ref/` · sample data · a shared SDK cache · the source folder of isolated mode) | Tricked code in the lab can write back to the machine. Add `:ro` to every mount that is not this round's work, and have the lab copy into its own space if it must edit (idea from anthropics/claude-code devcontainer and trailofbits/skills) |
+| Mounting things from the machine as writable when the lab only needs to read (`ref/` · sample data · a shared SDK cache · the source folder of isolated mode) | Tricked code in the lab can write back to the machine. Add `:ro` to every mount that is not this round's work, and have the lab copy into its own space if it must edit |
 
 The Claude Code documentation warns that even in a container, running without permission prompts (`--dangerously-skip-permissions`) cannot stop project code that deliberately steals what is in the lab, including Claude Code's own token. Use it only with a repo you trust, and use `-Locked` when unsure.
-
-So `sandbox.ps1 claude` runs only in isolated mode. In mount mode the script refuses, because `/work` is the user's real folder (§7, last item).
 
 **Limits of `-Locked`:** DNS can go out only through the resolver the lab was given (Docker's), not any DNS server. But that resolver still forwards queries outward, so data can still be smuggled out through DNS (DNS tunnelling). For work where data must never leak, run with no network at all.
 
@@ -998,14 +955,35 @@ So `sandbox.ps1 claude` runs only in isolated mode. In mount mode the script ref
 
 ## 9 · Windows notes
 
-- Docker Desktop uses WSL 2. Files on drive `C:` that are mounted in are slower than files in a volume. If build or test is very slow, use `-Isolated` (verified: `npm ci` for just 2 packages took 52 seconds on a OneDrive folder).
+- Docker Desktop uses WSL 2. Files on drive `C:` that are mounted in are slower than files in a volume. If build or test is very slow, use `-Isolated`.
 - **Projects in a OneDrive folder:** mount mode makes `node_modules` and build files sync to the cloud, so use `-Isolated` or move the project out of OneDrive.
 - If you cannot run `sandbox.ps1`, use `powershell -ExecutionPolicy Bypass -File .\.sandbox\sandbox.ps1 <command>`.
 - `-Locked` reads the host's IP once at startup. A service whose IP changes often may drop out; run `up -Locked` again.
 
 ## Links to other skills
 
-- `parallel-attempts-pick-best`: normally competitors use one git worktree each. Use one isolated lab each (`-Name <project>-a1` …) only for work that needs truly separate machines.
-- [`app-verifier-setup`](../app-verifier-setup/SKILL.md): the verify skill's `start` script runs in the lab.
 - `config-and-secrets`: put test values in a `.env` that stays out of git, and do not bake them into the image.
 - The `superuser` playbook `housekeeping`: cleans up old labs and images.
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
+
+
+## reference: playwright-mcp.md
+
+# Playwright MCP in the lab · docker-sandbox
+
+Open from SKILL.md section 5 when you run Playwright MCP inside the lab.
+
+- Playwright MCP in the lab (examples from teaching work, not yet a standard): running as root needs `--no-sandbox` · the `--browser` value must match the `--help` of the installed version (`chromium` or `chrome`; if it does not match, it cannot find the browser) · screenshots with a relative file name land in the process's working directory, not `--output-dir`, so move them yourself · a click that times out with "not visible/stable" may be a background tab; see `e2e-testing-patterns`.
+
+
+## reference: sources.md
+
+# Sources · docker-sandbox
+
+- Tested for real on Windows + Docker Desktop 4.46 (2026-10-05, project `sample-app`): the lab built · unit tests passed 15/15 · e2e on Chromium passed 14/14 in the lab.
+- Bugs found during testing were fixed in the script: PowerShell 5.1 with stderr · Playwright a different version from the base image · port collisions.
+- Verified: `npm ci` for just 2 packages took 52 seconds on a OneDrive folder (why `-Isolated` is advised on OneDrive).
+- The `:ro` mount rule is an idea from anthropics/claude-code devcontainer and trailofbits/skills.

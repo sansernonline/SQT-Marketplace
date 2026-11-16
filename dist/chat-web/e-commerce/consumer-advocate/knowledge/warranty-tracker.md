@@ -45,10 +45,8 @@ For the monthly check, filter or grep the rows with `end_date` in the next 60 da
 
 ## What the law gives you anyway
 
-Even without a warranty card, the seller is liable for defects that existed at delivery and make the item unfit for normal use (ป.พ.พ. มาตรา 472, ความชำรุดบกพร่อง). A lawsuit over the defect is barred once **1 year has passed from discovering the defect** (มาตรา 474) — so a complaint that drags on must not run past that date without filing. Unsafe products causing injury or damage are covered by the พ.ร.บ.ความรับผิดต่อความเสียหายที่เกิดขึ้นจากสินค้าที่ไม่ปลอดภัย พ.ศ. 2551.
+Even without a warranty card, the seller is liable for defects that existed at delivery and make the item unfit for normal use (ป.พ.พ. มาตรา 472, ความชำรุดบกพร่อง). A lawsuit over the defect is barred once **1 year has passed from discovering the defect** (มาตรา 474) — so a complaint that drags on must not run past that date without filing. Unsafe products causing injury or damage are covered by the พ.ร.บ.ความรับผิดต่อความเสียหายที่เกิดขึ้นจากสินค้าที่ไม่ปลอดภัย พ.ศ. 2551. The section texts come from secondary websites only (รอยืนยัน with the official law at krisdika.go.th · ocpb.go.th). Sources: [`references/sources.md`](references/sources.md).
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://legardy.com/thai-law/civil-commercial/civil-and-commercial-section474 · https://www.thailawonline.com/th/thai-civil-code/section-474/
-Section texts come from 2 secondary websites. Check the official law at krisdika.go.th (สำนักงานคณะกรรมการกฤษฎีกา, Office of the Council of State) · ocpb.go.th. The official text has not been opened yet (รอยืนยัน, awaiting confirmation).
 
 The manufacturer's warranty is a contract on top of this — read what it excludes (water damage, "misuse", installation by non-authorised technicians, consumables).
 
@@ -89,3 +87,11 @@ Buy only if **all** are true:
 Skip if: the item is cheap to replace · the credit card already extends the warranty (some do — check card benefits) · the plan duplicates the manufacturer warranty for the first year · you are likely to replace the item before it expires.
 
 Worked example: laptop 32,000 baht, 2-year extension offered at 3,900 baht (12%). Common failure for this model per owner reviews: battery (≈ 2,500 baht to replace) — excluded by the plan as a consumable. **Skip**; set aside 3,900 in a repair fund instead.
+
+
+## reference: sources.md
+
+# Sources · warranty-tracker
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://legardy.com/thai-law/civil-commercial/civil-and-commercial-section474 · https://www.thailawonline.com/th/thai-civil-code/section-474/
+Section texts come from 2 secondary websites. Check the official law at krisdika.go.th (สำนักงานคณะกรรมการกฤษฎีกา, Office of the Council of State) · ocpb.go.th. The official text has not been opened yet (รอยืนยัน, awaiting confirmation).

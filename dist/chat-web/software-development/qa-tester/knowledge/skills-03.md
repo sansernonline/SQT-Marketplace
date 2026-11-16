@@ -4,7 +4,7 @@ Use when checking how many users a system holds
 
 # load-testing — load tests with a goal, a pass threshold and permission
 
-Lives in plugin `software-development` · wording in this file follows `human-writing` · every tool fact has a link and the check date 2026-10-28 in the "Sources" section · sample script [`assets/load-test.js`](assets/load-test.js) · sample workflow [`assets/k6-smoke.yml`](assets/k6-smoke.yml) · how to read results [`reading-results`](references/reading-results.md) · k6 MCP [`mcp-k6`](references/mcp-k6.md)
+Sample script [`assets/load-test.js`](assets/load-test.js) · sample workflow [`assets/k6-smoke.yml`](assets/k6-smoke.yml) · tool facts checked 2026-10-28, links in [`sources`](references/sources.md)
 
 > **One rule:** no pass threshold written before the run = no test result, only a graph · and never load a system that is not ours, or production, without a named person's written approval.
 
@@ -18,16 +18,13 @@ Lives in plugin `software-development` · wording in this file follows `human-wr
 
 Do not use when: one web page loads slowly in the browser (Lighthouse · Core Web Vitals) → [`web-quality-audit`](../web-quality-audit/SKILL.md) · the live system is slow right now and you must find where → [`observability-basics`](../observability-basics/SKILL.md) first · testing that a button click gives the right result → [`e2e-testing-patterns`](../e2e-testing-patterns/SKILL.md)
 
-## Use another skill instead, or together
+## Related skills
 
-| Situation | Use | How it relates to this skill |
-|---|---|---|
-| Browser-side speed of one page | [`web-quality-audit`](../web-quality-audit/SKILL.md) | This skill measures the server side when busy, not page paint time |
-| You must see which part of the system clogs during the run | [`observability-basics`](../observability-basics/SKILL.md) | Open the system's dashboards next to the k6 results (section 6) |
-| Adding a smoke test to a pipeline | [`cicd-and-release`](../cicd-and-release/SKILL.md) · [`jenkins-pipeline`](../jenkins-pipeline/SKILL.md) | Section 7 says what runs on every PR and what runs on a schedule |
-| A whole-release test plan with every kind of test | [`test-case-template`](../test-case-template/SKILL.md) | Put the load test in as one row of the plan, with the thresholds from section 1 |
-| After the run you must add machines or autoscale | [`kubernetes-helm`](../kubernetes-helm/SKILL.md) · [`infra-as-code`](../infra-as-code/SKILL.md) | Run again with the same script after the change and compare with the result before |
-| Test data contains names or phone numbers | [`pdpa-compliance`](../pdpa-compliance/SKILL.md) | Use fake data. Do not pull real customer data in to load the system |
+- `observability-basics`: open the system's dashboards next to the k6 results (section 6).
+- `cicd-and-release` · `jenkins-pipeline`: section 7 says what runs on every PR and what runs on a schedule.
+- `test-case-template`: for a whole-release test plan, put the load test in as one row, with the thresholds from section 1.
+- `kubernetes-helm` · `infra-as-code`: if you must add machines or autoscale after the run, run again with the same script and compare with the result before.
+- `pdpa-compliance`: if test data contains names or phone numbers, use fake data. Do not pull real customer data in to load the system.
 
 ## 1 · Goal and pass threshold — write before opening the tool
 
@@ -124,20 +121,6 @@ The k6 result says it is slow, but not why · during the run, open the dashboard
 - Do not wrap `k6 run` in a script that swallows the exit code (for example one with a trailing `echo`) · make `k6 run` the last command, or keep `$?` and `exit` with that value
 - `BASE_URL` and tokens come from CI secret variables (`config-and-secrets`), not written into the script
 
-## One worked example
-
-Label `ตัวอย่าง` (example): designed on paper, no real system has been loaded
-
-**Problem:** An online shop will run a flash sale at noon on Friday. It went down before because the connection pool filled up. They want to know whether it survives this time.
-
-| Step | What is done | Section |
-|---|---|---|
-| Goal | Volume from the previous campaign (รอยืนยัน) · path: browse products → add to cart → pay with a mock · p95 at most 500 ms · errors at most 1% (default, not measured) | 1 |
-| Permission | Load staging at production size · payment points at a mock · approver and time window noted in the script header | 2 |
-| Run | smoke → load (baseline) → spike | 4 |
-| Monitor | Dashboards of connection pool and database CPU during the run | 6 |
-| Result | Report which thresholds passed and failed at the volume really run, then add smoke to CI | 5 · 7 |
-
 ## Check before sending
 
 1. Expected volume, paths, and the p95 and error-rate thresholds exist before the run · guessed values carry the label "ค่าตั้งต้น ยังไม่ได้วัด" (default, not measured)
@@ -148,19 +131,12 @@ Label `ตัวอย่าง` (example): designed on paper, no real system ha
 6. The report states results against thresholds and the baseline at the volume really run, and does not conclude beyond what was run
 7. CI does not swallow the exit code · secrets come from secret variables · the k6 version is pinned
 
-## Sources
+## References
 
-Checked 2026-10-28 (opened through a web-fetch tool that summarises pages with a small model, so reopen the raw page before locking a value in production)
-
-- thresholds · `abortOnFail` · `delayAbortEval` · per-tag thresholds https://grafana.com/docs/k6/latest/using-k6/thresholds/
-- names of all 6 executors https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ · options of `ramping-arrival-rate` https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ramping-arrival-rate/
-- test types and their order https://grafana.com/docs/k6/latest/testing-guides/test-types/
-- CI · environment · production https://grafana.com/docs/k6/latest/testing-guides/automated-performance-testing/
-- exit codes 0 and 99 · scripts that swallow the exit code https://grafana.com/docs/learning-paths/automate-k6-cicd/handle-exit-code/
-- GitHub Actions https://github.com/grafana/run-k6-action
-- k6 licence https://github.com/grafana/k6 · versions https://api.github.com/repos/grafana/k6/releases
-- Locust https://docs.locust.io/en/stable/what-is-locust.html · JMeter https://jmeter.apache.org/ (the home page links to the Apache Software Foundation licence and does not state the latest version)
-- Not yet checked (`ยังไม่ได้ตรวจ`): Grafana Cloud k6 price and quota · latest versions of Locust and JMeter
+- [`references/reading-results.md`](references/reading-results.md) — open to read a k6 result (section 5)
+- [`references/mcp-k6.md`](references/mcp-k6.md) — open when using the k6 MCP server
+- [`references/worked-example.md`](references/worked-example.md) — open for a flash-sale example run through sections 1 to 7
+- [`references/sources.md`](references/sources.md) — links and check date 2026-10-28 for every tool fact
 
 
 ## reference: mcp-k6.md
@@ -260,6 +236,43 @@ Write results only as actually run · if you only ran 50 rounds per second → n
 - run at least 2 rounds again https://grafana.com/docs/k6/latest/testing-guides/automated-performance-testing/ (checked 2026-10-28)
 
 
+## reference: sources.md
+
+# Sources · load-testing
+
+Checked 2026-10-28 (opened through a web-fetch tool that summarises pages with a small model, so reopen the raw page before locking a value in production)
+
+- thresholds · `abortOnFail` · `delayAbortEval` · per-tag thresholds https://grafana.com/docs/k6/latest/using-k6/thresholds/
+- names of all 6 executors https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ · options of `ramping-arrival-rate` https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ramping-arrival-rate/
+- test types and their order https://grafana.com/docs/k6/latest/testing-guides/test-types/
+- CI · environment · production https://grafana.com/docs/k6/latest/testing-guides/automated-performance-testing/
+- exit codes 0 and 99 · scripts that swallow the exit code https://grafana.com/docs/learning-paths/automate-k6-cicd/handle-exit-code/
+- GitHub Actions https://github.com/grafana/run-k6-action
+- k6 licence https://github.com/grafana/k6 · versions https://api.github.com/repos/grafana/k6/releases
+- Locust https://docs.locust.io/en/stable/what-is-locust.html · JMeter https://jmeter.apache.org/ (the home page links to the Apache Software Foundation licence and does not state the latest version)
+- Not yet checked (`ยังไม่ได้ตรวจ`): Grafana Cloud k6 price and quota · latest versions of Locust and JMeter
+
+
+## reference: worked-example.md
+
+# Worked example · load-testing
+
+## One worked example
+
+Label `ตัวอย่าง` (example): designed on paper, no real system has been loaded
+
+**Problem:** An online shop will run a flash sale at noon on Friday. It went down before because the connection pool filled up. They want to know whether it survives this time.
+
+| Step | What is done | Section |
+|---|---|---|
+| Goal | Volume from the previous campaign (รอยืนยัน) · path: browse products → add to cart → pay with a mock · p95 at most 500 ms · errors at most 1% (default, not measured) | 1 |
+| Permission | Load staging at production size · payment points at a mock · approver and time window noted in the script header | 2 |
+| Run | smoke → load (baseline) → spike | 4 |
+| Monitor | Dashboards of connection pool and database CPU during the run | 6 |
+| Result | Report which thresholds passed and failed at the volume really run, then add smoke to CI | 5 · 7 |
+
+
+
 ---
 
 # skill: fsd-writing
@@ -268,8 +281,7 @@ Use when writing or reviewing a Functional Specification Document
 
 # Writing a Functional Specification Document (FSD)
 
-> **Language:** Write every line by `human-writing`. This skill gives the format and structure. `human-writing` says how to write so readers understand.
-> For Thai text, see `human-writing` `references/thai-grammar.md` section 4, business register.
+> For Thai text, use the business register (`human-writing` `references/thai-grammar.md` section 4).
 
 > **The one rule:** An FSD is done when a developer can read it and **write code without guessing or asking**.
 > Every point that forces a guess becomes rework after delivery.
@@ -281,18 +293,7 @@ Use when writing or reviewing a Functional Specification Document
 - Reviewing someone else's FSD, where you must say what is missing
 - A developer keeps asking the same questions while building. That means the FSD is incomplete.
 
-## When **not** to use it
-
-| Task | Use this instead |
-|---|---|
-| Requirements at the level a customer signs off | `srs-writing` |
-| User stories for a sprint | `user-story-writer` |
-| Designing the endpoints of one feature | command `/api-design` |
-| System-wide API agreements | `api-conventions` |
-| Tables, columns, relationships | `database-design` |
-| Screen look, spacing, states | `ui-craft` + the platform skill |
-| Markdown format and document theme | `polished-document-style` |
-| Look of the exported .docx file | `branded-document-design` |
+Not for: requirements a customer signs off → `srs-writing` · user stories for a sprint → `user-story-writer` · endpoints of one feature → command `/api-design` (system-wide agreements → `api-conventions`) · tables and columns → `database-design`
 
 ## Read more when
 
@@ -330,7 +331,7 @@ The SRS says what the system **must be able to do**. The FSD says **how** the sy
 3. Go use case by use case, not screen by screen. Screens come from use cases, not the other way around.
 4. Write the business rules separately first, then refer to them from the steps (item 7).
 5. Build the traceability matrix as you go, not at the end.
-6. **Draw, then collect questions.** While drawing the sequence diagram, cancellation flow, and ERD, you will find matters the stories and SRS do not answer (for example, whether a course deducts a session at booking or at attendance). Note them at the end of the document as questions with a proposed answer marked `(รอยืนยัน)`. Do not choose for the customer. (Example from that job: drawing 8 figures produced 15 new questions, and 10 of them were never in the original question set.)
+6. **Draw, then collect questions.** While drawing the sequence diagram, cancellation flow, and ERD, you will find matters the stories and SRS do not answer (for example, whether a course deducts a session at booking or at attendance). Note them at the end of the document as questions with a proposed answer marked `(รอยืนยัน)`. Do not choose for the customer.
 7. Review by item 11 before sending.
 
 ## 3 · Document outline
@@ -451,33 +452,11 @@ Mermaid through `software-diagrams` is only for drafts discussed in chat. Do not
 
 If nobody is free to read it, use a fresh agent that gets only the FSD file. Have it answer 8–10 questions that a developer and QA would ask (for example, "what happens on a duplicate booking?" and "which states can be reversed?"). Fix every answer that is wrong or says "I don't know" before sending. For the method and the Thai-specific questions (B.E. years · document number format), see [`../srs-writing/references/reader-test.md`](../srs-writing/references/reader-test.md).
 
-**Once code exists, compare the FSD with the real code.** Do this when you review the FSD after a build or before taking over a fix. The idea comes from trailofbits/skills and ECC intent-driven-development.
+**Once code exists, compare the FSD with the real code.** Do this when you review the FSD after a build or before taking over a fix.
 
 - Go code by code through item 9. Search the code and tests for use case codes and screen names (`rg -n "UC-0[0-9]+" --glob '!**/node_modules/**' | head -50`). A code that appears nowhere in the code or tests is a gap. Answer whether it is not built yet or built under another name.
 - Compare the 3 places that differ most often: field table (item 5) ↔ validation code · state transition table (item 6) ↔ the code that changes state (including "not allowed" rows) · error messages (item 8) ↔ strings in the code.
 - Record each difference as a table `| spec:line | file:line | who is right |` and let a person decide. During the review, do not change the FSD to match the code, and do not change the code to match the FSD.
-
-## 12 · Anti-patterns
-
-- **Copying the SRS and adding "the system will"** — you get two documents saying the same thing.
-- **A use case with only the smooth path** — the failing path is what an FSD exists to describe.
-- **"Show a warning message"** without saying what the message says.
-- **"The system calculates automatically"** without the formula and the rounding.
-- **A state diagram that is only a picture** — a picture cannot say who has permission or what side effects occur.
-- **Controlling permission by hiding a button** without specifying the server-side check.
-- **Business rules scattered through the steps** — a later change misses some of them.
-- **A screen that does not say where its data comes from** — the developer will guess the endpoint.
-- **A wireframe in place of requirements** — a picture cannot say what is mandatory or what the validation rule is.
-- **No traceability matrix** — then nobody knows whether the work is complete.
-
-## 13 · Abbreviations
-
-- **FSD** — Functional Specification Document (a requirements document detailed enough to build from)
-- **SRS** — Software Requirements Specification (a software requirements document at the level a customer signs off)
-- **BRD** — Business Requirements Document
-- **use case** — one user goal from start to finish
-- **state machine** — a state diagram showing which states an item can move between
-- **ETag** — Entity Tag (a version identifier for data, used to check whether someone else edited it first)
 
 
 ## reference: edge-cases.md
@@ -940,47 +919,33 @@ Use to cut extras nobody needs yet. Not Claude Code simplify
 
 # simplify — make it simple so a first-time reader can follow
 
-Use on any work handed to people: code, documents, plans, designs, slides, tables and answers · `human-writing` controls **how it is written**, while this skill controls **what the work contains** · lives only in plugin `superuser`; other plugins share it through `dependencies`
+> **One rule:** someone not on this work, opening it 6 months from now, must understand it and continue it without asking anyone.
 
-## 1 · Main principles
+## Use when
+- Any work handed to people (code, documents, plans, designs, slides, tables, answers) may hold more than the task needs.
+- `human-writing` controls how it is written; this skill controls what the work contains.
 
-- **The test:** someone not on this work, opening it 6 months from now, must understand it and continue it without asking anyone
-- Do only what the task needs; do not provide for a future nobody has asked for
-- Cut before adding · if removing a part loses neither meaning nor function, cut it
-- Plain things people know beat clever things that need decoding
-- **Simple is not sloppy** — never cut correctness, safety, validation of data from outside, error handling that prevents data loss, or what the user asked for explicitly
-- **Simple is not one big pile** — reduce the number of things, but keep clear separation of duties, 1 part doing 1 thing, as professional work does
+Not for: Claude Code's own `/simplify` command · more detail on code and architecture (if installed) → `lazy-coding` · `readable-code` · `simplicity-first` in plugin `software-development`.
 
-## 2 · Ladder before starting — stop at the first step that works
+## Steps
+1. Climb the ladder and stop at the first step that works: (a) is this really needed? If not, do not do it and say in 1 line what you skipped; (b) is there an existing thing that works (file, template, function, tool, built-in feature)? Use it; (c) do the shortest version that is still complete and correct.
+2. Do only what the task needs; cut before adding (if removing a part loses neither meaning nor function, cut it); plain things people know beat clever things that need decoding.
+3. Apply by kind of work:
+   - **Code:** names say what it is and carry units · 1 function does 1 thing · return early instead of nesting `if` · at most 3 levels of indentation · comments say why · follow the project's style. Avoid an abstraction with one user, clever hard-to-read shortcuts, one big file, a pile-up `utils/`, a new dependency for a few lines.
+   - **Documents · reports:** conclusion first · 1 paragraph 1 topic · an example for abstract points · a table for compared data. Avoid repeats, empty headings, unknown terms.
+   - **Plans · procedures:** 3–5 key items, each with an owner and a way to measure done · fewest steps that work. Avoid a 20-item list with no priority.
+   - **Designs · slides · figures:** 1 page 1 point · shortest path to the user's goal · familiar patterns. Avoid cramming and decoration that does not help.
+   - **Tables · data:** only columns used to decide · short formulas. Avoid columns that repeat a meaning and long nested formulas.
+   - **Answers:** answer first, as long as the question needs.
+4. **Simple is not sloppy:** never cut correctness, safety, validation of data from outside, error handling that prevents data loss, or what the user asked for explicitly. **Simple is not one big pile:** keep clear separation of duties, 1 part doing 1 thing.
+5. When you take a deliberate shortcut, write how far it works and when it changes, for example `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process`, and put 1 line in the report: `ข้าม: X — เพิ่มเมื่อ Y`.
 
-1. Do we really need this · not needed → do not do it, and say in 1 line what you skipped
-2. Is there an existing thing that works (file, template, function, tool, a feature that comes with the system) · yes → use the existing thing
-3. Do the shortest version that is still complete and correct
-
-## 3 · By kind of work
-
-| Work | Do | Avoid |
-|---|---|---|
-| **Code** | Names say what it is and carry units · 1 function does 1 thing · return early instead of nesting `if` · at most 3 levels of indentation · comments say "why" · follow the project's style | An abstraction with a single user · a clever shortcut that is hard to read · one big file doing everything · a pile-up `utils/` folder · a new dependency for a few lines of work |
-| **Documents · reports** | Conclusion first · 1 paragraph 1 topic · an example for abstract points · a table for data that is compared | Repeating what was already said · headings with no content · terms the reader does not know |
-| **Plans · procedures** | 3–5 key items · every item has an owner and a way to measure done · the fewest steps that work | A list of 20 items with no priority · steps kept "just in case" |
-| **Designs · slides · figures** | 1 page 1 point · the shortest path to the user's goal · use patterns people are familiar with | Cramming data until people must squint · decoration that does not help understanding |
-| **Tables · data** | Only the columns used to decide · short formulas you can follow | Columns that repeat a meaning · long nested formulas in one line |
-| **Answers** | Answer first · as long as the question needs | An explanation longer than the work itself |
-
-Plugin `software-development` has more detail on code and architecture: `lazy-coding` (write less) · `readable-code` (names, function shape, file structure) · `simplicity-first` (documents, plans, architecture) · if installed, open them together
-
-## 4 · Say that you made it simple on purpose
-
-A deliberate shortcut should be written down with how far it works and when it changes, so it does not look forgotten, for example `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process` (gloss: simple: kept in memory — move to Redis when running more than 1 process) · in the report put 1 line `ข้าม: X — เพิ่มเมื่อ Y` (skipped: X — add when Y)
-
-## 5 · 5-point check before sending
-
-1. Can an outsider open it for the first time and understand within 30 seconds
-2. Is there any part, step or layer that can be cut with no loss? If so, cut it
-3. Does every part added have a reason it is needed now, not "just in case"
-4. Is it still complete on correctness, safety, and what the user asked for
-5. Are duties still clearly separated, and not several things squashed into one place to look short
+## Check before done
+- [ ] An outsider can open it for the first time and understand within 30 seconds.
+- [ ] No part, step or layer can be cut with no loss.
+- [ ] Every added part has a reason it is needed now, not "just in case".
+- [ ] Still complete on correctness, safety and what the user asked for.
+- [ ] Duties still clearly separated, not squashed into one place to look short.
 
 
 ---
@@ -992,8 +957,6 @@ Use when writing or fixing C# and .NET code
 # stack-dotnet — write C# that builds clean, passes tests, and avoids the usual traps
 
 Use whenever the work touches C# code of any kind: ASP.NET Core (Web API · Model-View-Controller (MVC) · minimal API) · Entity Framework (EF) Core · ASP.NET MVC 5 on .NET Framework 4.x that is still maintained.
-
-This file covers only what is specific to .NET. The general rules live in `lazy-coding` · `readable-code` · `testing-standards` · `logging-standards` · `error-handling-patterns` · `database-design` · `principle-secure-by-default`.
 
 ---
 
@@ -1059,41 +1022,9 @@ builder.Services.AddOptions<SmtpOptions>()
     .ValidateOnStart();
 ```
 
-An outcome that is "unsuccessful but expected" (not found · duplicate · out of stock) is returned as a value, not thrown. Keep exceptions for what the code does not expect (adapted from wshobson `dotnet-backend-patterns` · MIT):
+An outcome that is "unsuccessful but expected" (not found · duplicate · out of stock) is returned as a value (a `Result<T>` record with `IsSuccess`, `Value`, `Error`, `Code`), not thrown. Keep exceptions for what the code does not expect. Use one code → status mapping for the whole system, then emit `ProblemDetails`. If the repo already has `FluentResults` or `ErrorOr`, use that one and do not add a second record on top. Code: [`references/patterns.md`](references/patterns.md).
 
-```csharp
-public sealed record Result<T>(bool IsSuccess, T? Value, string? Error, string? Code)
-{
-    public static Result<T> Ok(T value) => new(true, value, null, null);
-    public static Result<T> Fail(string error, string? code = null) => new(false, default, error, code);
-}
-
-// service
-return stock < qty ? Result<Order>.Fail("สต็อกไม่พอ", "OUT_OF_STOCK") : Result<Order>.Ok(order);
-
-// endpoint — one code → status mapping for the whole system, then emit ProblemDetails
-return r.IsSuccess ? Results.Ok(r.Value) : Results.Problem(r.Error, statusCode: r.Code switch { "NOT_FOUND" => 404, "OUT_OF_STOCK" => 409, _ => 400 });
-```
-
-If the repo already has `FluentResults` or `ErrorOr`, use that one and do not add a second record on top.
-
-**4 checks for a new type** (idea from type-design-analyzer · claude-plugins-official · Apache-2.0 · viewed 2026-11-10): (1) hide the internals: use a `record` whose constructor is `private` and give it a `Create` factory (2) the rules live in the type, so an invalid value cannot be built (3) validate once, in the constructor or factory (4) expose no setter: use `init` or a `readonly record struct`
-
-```csharp
-// Thai national ID: 13 digits + check digit · money in satang (long), never double
-public readonly record struct ThaiNationalId
-{
-    public string Value { get; }
-    private ThaiNationalId(string v) => Value = v;
-    public static ThaiNationalId? Create(string s)
-    {
-        if (s.Length != 13 || !s.All(char.IsAsciiDigit)) return null;
-        var sum = s.Take(12).Select((c, i) => (c - '0') * (13 - i)).Sum();
-        return (11 - sum % 11) % 10 == s[12] - '0' ? new ThaiNationalId(s) : null;
-    }
-}
-```
-(This C# example has not been compiled · the check-digit formula is the same as in the TypeScript example that has been run)
+**4 checks for a new type**: (1) hide the internals: use a `record` whose constructor is `private` and give it a `Create` factory (2) the rules live in the type, so an invalid value cannot be built (3) validate once, in the constructor or factory (4) expose no setter: use `init` or a `readonly record struct`
 
 ## 3 · EF Core
 
@@ -1171,21 +1102,48 @@ For the full xUnit setup and a `WebApplicationFactory` example, see [`testing-st
 - [ ] The migration has an `--idempotent` script, you read it, and it has no unintended `DROP`
 - [ ] If you cannot build .NET Framework on this machine, write in the report that it was not built. Do not say it passed.
 
-## 8 · Link to other skills
+## References
 
-| Need | Use |
-|---|---|
-| Do the least that still works | `lazy-coding` |
-| Names · file layout · comments | `readable-code` |
-| Test levels · coverage · tests that go red then green | `testing-standards` |
-| Log format · Serilog | `logging-standards` |
-| Catching exceptions · retry · timeout | `error-handling-patterns` |
-| Tables · indexes · expand-and-contract migrations | `database-design` |
-| Secure defaults | `principle-secure-by-default` |
-| Connection strings · secret store | `config-and-secrets` |
-| Thai dates · Buddhist Era · Thai sorting | `i18n-and-locale` |
-| API URLs · error format | `api-conventions` |
-| Prove it works before saying done | `principle-prove-it-works` |
+- [`references/patterns.md`](references/patterns.md) — open when writing a `Result<T>` or a validated value type (Thai national ID example, not compiled)
+
+
+## reference: patterns.md
+
+# C# patterns · stack-dotnet
+
+## Result<T> for expected failures
+
+```csharp
+public sealed record Result<T>(bool IsSuccess, T? Value, string? Error, string? Code)
+{
+    public static Result<T> Ok(T value) => new(true, value, null, null);
+    public static Result<T> Fail(string error, string? code = null) => new(false, default, error, code);
+}
+
+// service
+return stock < qty ? Result<Order>.Fail("สต็อกไม่พอ", "OUT_OF_STOCK") : Result<Order>.Ok(order);
+
+// endpoint — one code → status mapping for the whole system, then emit ProblemDetails
+return r.IsSuccess ? Results.Ok(r.Value) : Results.Problem(r.Error, statusCode: r.Code switch { "NOT_FOUND" => 404, "OUT_OF_STOCK" => 409, _ => 400 });
+```
+
+## Value type with private constructor (Thai national ID)
+
+```csharp
+// Thai national ID: 13 digits + check digit · money in satang (long), never double
+public readonly record struct ThaiNationalId
+{
+    public string Value { get; }
+    private ThaiNationalId(string v) => Value = v;
+    public static ThaiNationalId? Create(string s)
+    {
+        if (s.Length != 13 || !s.All(char.IsAsciiDigit)) return null;
+        var sum = s.Take(12).Select((c, i) => (c - '0') * (13 - i)).Sum();
+        return (11 - sum % 11) % 10 == s[12] - '0' ? new ThaiNationalId(s) : null;
+    }
+}
+```
+(This C# example has not been compiled · the check-digit formula is the same as in the TypeScript example that has been run)
 
 
 ---
@@ -1198,86 +1156,44 @@ Use when writing or reviewing TypeScript code
 
 > **One rule:** let the compiler catch bugs instead of people. `tsc` passing with 0 errors does not mean done, but failing means not started.
 
-This file covers only what is specific to TypeScript · Node · Angular. The general principles are in `lazy-coding` · `readable-code` · `principle-data-shape-first` · `principle-secure-by-default`.
+## Use when
+- Writing or reviewing TypeScript in a Node backend (Express · Fastify · NestJS), Angular, or React/Vite code.
 
-## 1 · Starting work — look at the repo before the first command
+Not for: least code → `lazy-coding` · names and layout → `readable-code` · types and data shape before writing → `principle-data-shape-first` · browser tests → `e2e-testing-patterns` · screens and tokens → `web-app-design`
 
-| Look at | It tells you | Do |
-|---|---|---|
-| `package-lock.json` · `pnpm-lock.yaml` · `yarn.lock` | package manager | Use that one only; never have 2 lockfiles |
-| `.nvmrc` · `engines` in `package.json` | Node version | Follow it. If absent, use the latest Long Term Support (LTS) — last checked 2026-10-14 · source: https://nodejs.org/en/about/previous-releases : LTS is 24 and 22 · 26 is still Current, so do not use it in production until this page lists it as LTS · the next one to expire is 22 (2027-04-30 (รอยืนยัน)) · re-check this page before use · Node 26 will probably become LTS in late Oct 2026 (รอยืนยัน); re-check this line right after that date |
-| `"type"` in `package.json` · `tsconfig` `module` | ECMAScript Modules (ESM) or CommonJS (CJS) | Follow what exists; never mix |
-| `scripts` in `package.json` | the repo's real commands | Use an existing script before guessing a command |
+## Steps
+1. Look at the repo before the first command. Use the package manager its lockfile shows (`package-lock.json` · `pnpm-lock.yaml` · `yarn.lock`), never 2 lockfiles. Follow `.nvmrc` or `engines` for Node; if absent use the latest Long Term Support (LTS), re-checking https://nodejs.org/en/about/previous-releases first (dated notes: `references/sources.md`). Follow the existing module system (`"type"` · `tsconfig` `module`), never mix ESM and CJS. Use an existing `package.json` script before guessing a command.
+2. Install and verify with the repo's commands: `npm ci` (pnpm `install --frozen-lockfile` · yarn `install --immutable`) · `npx tsc --noEmit` · `npm run lint && npm test && npm run build 2>&1 | tail -40` · one test: `npx vitest run <file> -t "<name>"`. Angular: `ng test --include=...` and check the bundle size at the end of `ng build`. `npm install <pkg>` changes the lockfile, so commit it in the same round.
+3. Write strict TypeScript. Instead of `any` use `unknown` then narrow (`typeof` · `in` · a type guard). Instead of `value!` to silence an error, check `if (!value) throw …` or fix the source type. Instead of `as Order` on outside data, parse with zod (or the repo's library). Instead of several booleans for a state, use a discriminated union. Instead of `const x: Config = {...}` that loses the literal, use `satisfies Config`.
+4. Set `tsconfig` `"strict": true` · `noUncheckedIndexedAccess` · `noImplicitOverride`. If an old repo has strict off, turn it on one folder at a time, not for the whole repo in one task. For `enum` vs string union follow the repo; a new repo uses `as const` + union. Keep API types shared by frontend and backend in one place.
+5. For types standing for a national ID number, an amount of money or a document number, apply 4 checks: hide the internals (one `parse` function creates values) · put the rules in the type (a rule-breaking value cannot be created) · validate once at the entrance · expose nothing mutable (`readonly` fields, never return an internal array). Examples: `references/examples.md`.
+6. Node backend: turn on `@typescript-eslint/no-floating-promises` and `no-misused-promises`; every `async` is `await`ed or has a `.catch` that does something real. Express 4 does not forward `async` handler errors: use Express 5 or wrap (Fastify and NestJS handle it). Parse `process.env` with a schema once at startup and refuse to start on a bad value (`config-and-secrets`). Shut down cleanly: on `SIGTERM` stop accepting requests → wait for pending → close the DB pool, with a force-exit timer (code in `references/examples.md`). Use `stream.pipeline` for large files, never `readFile` them whole. No `fs.*Sync` · heavy `crypto.*Sync` · big loops in a request path. Use parameterized queries (`$1` · `?`) or an ORM, never string-concatenated SQL. Use structured logs per `logging-standards`, no `console.log` in a server.
+7. Angular: standalone components · `inject()` · `signal`/`computed`/`input()`/`output()` · `OnPush` · `@if`/`@for (x of xs; track x.id)` · lazy routes · `async` pipe/`toSignal`/`takeUntilDestroyed()`. No new NgModule, no `*ngIf`/`*ngFor`, no `BehaviorSubject` state inside a component, no `subscribe` without unsubscribing. Keep logic in `computed`, never call a heavy function in a binding. Never use `DomSanitizer.bypassSecurityTrust*` on user data (if truly needed, comment why it is safe). In an old repo (v14–19) follow its style and do not migrate inside a feature task; propose migration separately. Full table, React/Vite notes and v22 facts: `references/angular.md`. For speed work on a React or Next.js repo read Vercel `react-best-practices` live (link in `references/angular.md`); on a conflict with step 3, follow this skill.
+8. Avoid the common traps (time zone: store ISO 8601 UTC · money: integer satang · `===` · no shared-object mutation · cancel subscriptions · narrow imports · `Intl.Collator('th')` for Thai sorting · schema-parse `JSON.parse` at the edge): `references/traps.md`.
+9. Test with the framework the repo has (Vitest and Angular examples: [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#node--typescript--vitest)). HTTP API: `supertest` (Express · NestJS) or `fastify.inject()`, no real port. Angular v21+ CLI uses Vitest, not Karma. For new logic or a bug fix, write a red test first, then fix to green. A snapshot alone is not a test; assert the values that matter. Read a signal directly (`component.unpaid()`); skip `fakeAsync` if nothing is really async.
+10. Security: before installing a new package check spelling (typosquat) · download count · maintainer · latest release date, and for an internal scope set the registry in `.npmrc`. Run `npm audit --omit=dev`; commit the lockfile and use `npm ci` in CI. Never use `innerHTML` · `[innerHTML]` · `dangerouslySetInnerHTML` with user data. Cookie login sets `HttpOnly` · `Secure` · `SameSite` and guards against Cross-Site Request Forgery (CSRF: token or `withXsrfConfiguration`). Cross-Origin Resource Sharing (CORS): list origins one by one, never `*` with `credentials`. No secrets in the frontend (`environment.ts` and `VITE_*` are readable by everyone). Security headers: `helmet` · `@fastify/helmet`.
 
-```bash
-npm ci                      # pnpm install --frozen-lockfile · yarn install --immutable
-npx tsc --noEmit            # ตรวจ type ทั้งโปรเจกต์
-npm run lint && npm test && npm run build 2>&1 | tail -40   # ดูแค่ท้ายผล
-npx vitest run src/order/order.service.test.ts -t "คืนเงินเกินยอด"   # รัน test เดียว
-```
+## Check before done
+- `tsc --noEmit` 0 errors · lint 0 warnings in the changed files
+- The whole test suite passes, and new behaviour has a test that was red before the fix
+- No `any` · `as` on external data · new `!` in the diff
+- No floating promise and no subscription left uncancelled
+- Frontend: bundle size compared before and after; if it grew more than 20 KB (gzip), give the reason in the report
+- If the lockfile changed, the new packages were checked per step 10
 
-- For Angular use `ng test --include=src/app/order/**` and check the bundle size at the end of the `ng build` output.
-- `npm install <pkg>` changes the lockfile, so commit the lockfile in the same round.
+## References
+- [`references/examples.md`](references/examples.md) — open for zod/union code, the branded ID type and the shutdown handler
+- [`references/angular.md`](references/angular.md) — open for an Angular or React/Vite task (full do/do-not table, v22 facts)
+- [`references/traps.md`](references/traps.md) — open when touching dates, money, equality, shared state, imports or sorting
+- [`references/sources.md`](references/sources.md) — dated sources (Node LTS status to re-check)
+- Also: `principle-secure-by-default` · `error-handling-patterns` · `i18n-and-locale` (Thai dates, Buddhist Era)
 
-## 2 · Strict TypeScript
 
-| Never | Use instead | Reason |
-|---|---|---|
-| `any` | `unknown`, then narrow with `typeof` · `in` · a type guard | `any` switches off the compiler along the whole chain |
-| `value!` just to silence an error | check `if (!value) throw …` or fix the source type | `!` is a lie to the compiler |
-| `as Order` on outside data | parse with zod (or the library the repo uses) | a cast checks nothing |
-| several booleans to hold a state | discriminated union | impossible states cannot be written |
-| `const x: Config = {...}` that loses the literal | `satisfies Config` | you get both the shape check and the narrow type |
+## reference: angular.md
 
-- `tsconfig`: `"strict": true` · `noUncheckedIndexedAccess` · `noImplicitOverride`. If an old repo has strict off, turn it on one folder at a time, not for the whole repo in one task.
-- For `enum` versus a union of strings, follow what the repo uses. A new repo uses `as const` + union (no runtime code is generated).
-- Keep API types shared by frontend and backend in one place (a shared package, or generated from OpenAPI).
+# Angular and React notes · stack-typescript
 
-```ts
-const Order = z.object({ id: z.uuid(), totalSatang: z.number().int().nonnegative() });
-type Order = z.infer<typeof Order>;
-
-type PayResult =
-  | { status: 'paid'; receiptId: string }
-  | { status: 'failed'; reason: 'declined' | 'timeout' };
-// switch (r.status) ครบทุกกรณี · default: const _never: never = r;
-```
-
-**4 new-type checks** (idea from the type-design-analyzer of pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10). Apply them to types that stand for a national ID number, an amount of money, a document number:
-
-1. **Hide the internals** — users of the type create a value in only one way (a `parse` function) and never edit fields directly.
-2. **The rules live in the type** — a value that breaks the rules cannot be created; the rules are not written only in a document.
-3. **Check at the entrance** — validate once at creation, and then the whole system can trust the type.
-4. **Expose nothing mutable** — `readonly` on every field, and never return an internal array for others to change.
-
-```ts
-type ThaiNationalId = string & { readonly __brand: 'ThaiNationalId' };  // 13 หลัก + ตรวจเลขท้าย
-const checkDigit = (d: string) => (11 - (d.slice(0, 12).split('').reduce((s, c, i) => s + Number(c) * (13 - i), 0) % 11)) % 10;
-const parseNationalId = (s: string): ThaiNationalId | null =>
-  /^\d{13}$/.test(s) && checkDigit(s) === Number(s[12]) ? (s as ThaiNationalId) : null;
-// จำนวนเงินเก็บเป็นสตางค์ (number เต็ม) ไม่ใช้ float · ตัวอย่างเลข 1234567890121 สร้างขึ้นเอง ไม่ใช่เลขของใคร
-```
-
-## 3 · Node backend (Express · Fastify · NestJS)
-
-- **No floating promises.** Turn on `@typescript-eslint/no-floating-promises` and `no-misused-promises`, and every `async` must be `await`ed or given a `.catch` that does something real.
-- Express 4 does not forward errors from an `async` handler by itself, so use Express 5 or wrap the handler. Fastify and NestJS already handle it.
-- **Validate config at startup.** Parse `process.env` with a schema once; if a value is missing or wrong, refuse to start (details in `config-and-secrets`).
-- **Shut the server down cleanly**: receive `SIGTERM` → stop accepting new requests → wait for pending requests → close the DB pool, and set a timer to force exit.
-- For large files use `stream.pipeline` from `node:stream/promises`; never `readFile` the whole file into memory.
-- No `fs.*Sync` · heavy `crypto.*Sync` · big loops in a request path, because the event loop would block the whole server.
-- DB access must always use parameterized queries (`$1` · `?`) or an ORM; never concatenate strings into SQL.
-- Use structured logs (pino in Fastify · the repo's logger) per `logging-standards`; no `console.log` in a server.
-
-```ts
-const server = app.listen(port);
-process.on('SIGTERM', () => {
-  server.close(async () => { await db.end(); process.exit(0); });
-  setTimeout(() => process.exit(1), 10_000).unref();
-});
-```
-
-## 4 · Angular
+Open when the repo is Angular (or React/Vite/Next.js) and you write or review components, state, forms, HTTP or routes.
 
 The latest is v22 (released 3 Jun 2026 · source: https://angular.dev/reference/releases · checked 22 Oct 2026): new apps are zoneless and `OnPush` is the default, and Signal Forms are production-ready (these last 3 points (รอยืนยัน) — the source page does not state them; check the v22 release notes before citing).
 
@@ -1306,7 +1222,66 @@ export class OrderList {
 // <ul>@for (o of unpaid(); track o.id) { <li>{{ o.id }}</li> } @empty { <li>ไม่มีรายการค้างจ่าย</li> }</ul>
 ```
 
-## 5 · Common traps
+
+## reference: examples.md
+
+# Code examples and new-type checks · stack-typescript
+
+Open when writing a zod parse, a discriminated union, a branded type for IDs or money, or the graceful-shutdown handler.
+
+## Parse and union
+
+```ts
+const Order = z.object({ id: z.uuid(), totalSatang: z.number().int().nonnegative() });
+type Order = z.infer<typeof Order>;
+
+type PayResult =
+  | { status: 'paid'; receiptId: string }
+  | { status: 'failed'; reason: 'declined' | 'timeout' };
+// switch (r.status) ครบทุกกรณี · default: const _never: never = r;
+```
+
+**4 new-type checks** (idea from the type-design-analyzer of pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10). Apply them to types that stand for a national ID number, an amount of money, a document number:
+
+1. **Hide the internals** — users of the type create a value in only one way (a `parse` function) and never edit fields directly.
+2. **The rules live in the type** — a value that breaks the rules cannot be created; the rules are not written only in a document.
+3. **Check at the entrance** — validate once at creation, and then the whole system can trust the type.
+4. **Expose nothing mutable** — `readonly` on every field, and never return an internal array for others to change.
+
+```ts
+type ThaiNationalId = string & { readonly __brand: 'ThaiNationalId' };  // 13 หลัก + ตรวจเลขท้าย
+const checkDigit = (d: string) => (11 - (d.slice(0, 12).split('').reduce((s, c, i) => s + Number(c) * (13 - i), 0) % 11)) % 10;
+const parseNationalId = (s: string): ThaiNationalId | null =>
+  /^\d{13}$/.test(s) && checkDigit(s) === Number(s[12]) ? (s as ThaiNationalId) : null;
+// จำนวนเงินเก็บเป็นสตางค์ (number เต็ม) ไม่ใช้ float · ตัวอย่างเลข 1234567890121 สร้างขึ้นเอง ไม่ใช่เลขของใคร
+```
+
+## Graceful shutdown
+
+```ts
+const server = app.listen(port);
+process.on('SIGTERM', () => {
+  server.close(async () => { await db.end(); process.exit(0); });
+  setTimeout(() => process.exit(1), 10_000).unref();
+});
+```
+
+
+## reference: sources.md
+
+# Sources · stack-typescript
+
+- Node LTS · https://nodejs.org/en/about/previous-releases · last checked 2026-10-14: LTS is 24 and 22 · 26 is still Current, so do not use it in production until this page lists it as LTS · the next one to expire is 22 (2027-04-30 (รอยืนยัน)) · re-check this page before use · Node 26 will probably become LTS in late Oct 2026 (รอยืนยัน); re-check this line right after that date
+- Angular releases · https://angular.dev/reference/releases · checked 22 Oct 2026 (v22 released 3 Jun 2026)
+- 4 new-type checks · idea from the type-design-analyzer of pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10
+- Vercel react-best-practices · https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices · licence not checked (checked 23 Oct 2026) · link only, no rules copied
+
+
+## reference: traps.md
+
+# Common traps · stack-typescript
+
+Open when the code touches dates and time zones, money, equality, shared objects, subscriptions, large imports, sorting Thai names or JSON parsing.
 
 | Trap | Symptom | Do this |
 |---|---|---|
@@ -1318,50 +1293,3 @@ export class OrderList {
 | big imports | bundle bloats by hundreds of KB | `import { debounce } from 'lodash-es'`, not all of lodash, and check the bundle after the build |
 | sorting Thai names | leading vowels sort wrong | use `new Intl.Collator('th').compare`, not bare `localeCompare` |
 | `JSON.parse` without checks | crash deep in the code | parse with a schema at the system edge (item 2) |
-
-## 6 · test
-
-Use the framework the repo has · for Vitest and Angular setup with examples, see [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#node--typescript--vitest) · for browsers see `e2e-testing-patterns`.
-
-- HTTP API: `supertest` (Express · NestJS) · `fastify.inject()` (Fastify) — no need to open a real port.
-- From Angular v21 the CLI uses Vitest by default, not Karma.
-
-- For new logic or a bug fix, write a test that is red first, then fix it until green.
-- A snapshot alone does not count as a test; it must assert the values that matter.
-- For a signal in a test, read the value directly, `component.unpaid()`; no need to wait with `fakeAsync` if nothing is really async.
-
-## 7 · Stack-specific security
-
-- **A new package** must be checked before installing: spelled correctly (typosquat) · download count · maintainer · latest release date. For an organisation-internal scope name, set the registry in `.npmrc` to prevent dependency confusion.
-- Run `npm audit --omit=dev` before sending · the lockfile must be committed and CI uses `npm ci`.
-- Cross-Site Scripting (XSS): never use `innerHTML` · `[innerHTML]` · `dangerouslySetInnerHTML` with user data. Angular escapes for you if you do not bypass.
-- Cookie login must set the cookie `HttpOnly` · `Secure` · `SameSite` + guard against Cross-Site Request Forgery (CSRF) (token or Angular's `withXsrfConfiguration`).
-- Cross-Origin Resource Sharing (CORS): list origins one by one; never use `*` together with `credentials`.
-- Secrets must never be in the frontend, because everything in `environment.ts` and `VITE_*` is built into the bundle for everyone to read.
-- For security headers use `helmet` (Express) · `@fastify/helmet` · in NestJS use `helmet` in `main.ts`.
-
-## 8 · Pre-submit checklist
-
-- [ ] `tsc --noEmit` 0 errors
-- [ ] lint 0 warnings in the files changed
-- [ ] the whole test suite passes, and the new behaviour has a test that was red before the fix
-- [ ] no `any` · `as` on external data · new `!` in the diff
-- [ ] no floating promise and no subscription left uncancelled
-- [ ] frontend work: bundle size compared before and after; if it grew more than 20 KB (gzip), give the reason in the report
-- [ ] if the lockfile changed, the new packages were checked per item 7
-
-## 9 · Link to other skills
-
-| Need | Use together with |
-|---|---|
-| the least code that works | `lazy-coding` |
-| names · file layout · comments | `readable-code` |
-| design types and data shape before writing | `principle-data-shape-first` |
-| where to catch errors · retry · timeout | `error-handling-patterns` |
-| log format and correlation id | `logging-standards` |
-| test proportions and naming | `testing-standards` |
-| tests through the browser | `e2e-testing-patterns` |
-| screens · color tokens · layout | `web-app-design` |
-| security rules for every diff | `principle-secure-by-default` |
-| env and secrets | `config-and-secrets` |
-| Thai dates · Buddhist Era · Thai word sorting | `i18n-and-locale` |

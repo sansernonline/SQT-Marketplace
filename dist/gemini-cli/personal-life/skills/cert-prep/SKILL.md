@@ -50,6 +50,8 @@ Worked gap map (AWS SAA-C03) and the week-by-week plan file to copy to `cert/<ex
 - Dumps (leaked real questions) breach the candidate agreement and can lead to the certification being revoked. Refuse to use them
 - Certifications prove a baseline. Pair each one with a small project (see `side-project-picker`) so the skill shows in a portfolio
 
-Source for the real-week check, the three phases, crash mode and supplement-or-replace: ideas from anthropics/claude-for-legal `law-student/skills/study-plan` steps 2–3 (Apache-2.0, rewritten for cert exams, viewed 2026-11-10).
-
 Related: `study-drill` (cards and drills), `learning-path` (for skills beyond the exam), `side-project-picker`, `english-tech-reading` (for long, conditional English questions), and `sprint-plan` in `software-development` for Scrum context.
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources

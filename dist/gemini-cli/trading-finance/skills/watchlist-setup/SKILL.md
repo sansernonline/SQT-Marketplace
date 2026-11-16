@@ -23,7 +23,6 @@ Turn "I want to watch some stocks" into a short list where every name has a reas
    - **alerts** — price above/below, % move, volume spike — set in the broker app (Streaming, Settrade) or via the `alert-dispatcher` agent
 4. **Check SET market signs** on each name before adding: the C signs `CB` `CS` `CC` `CF` (caution; there is no plain `C`), `SP` (suspended), `H` (halt), `NP` / `NR` (notice pending / received), and whether it is on the SET market surveillance lists (Cash Balance, Turnover List). A name under trading measures needs a cash account and is a red flag for a beginner.
 
-ตรวจล่าสุด 2026-10-26 · แหล่ง: เครื่องหมาย https://www.set.or.th/en/market/information/trading-procedure/trading-signs , https://www.set.or.th/en/listing/listed-company/simplified-regulations/disclosure/c-sign-posting , https://media.set.or.th/rulebook/circular-letter/attachment-file/237.pdf · กำหนดส่งงบ https://www.set.or.th/en/listing/listed-company/simplified-regulations/disclosure/periodic-disclosure , https://www.sec.or.th/TH/Documents/Report56/FAQ-FinancialStatement-issuer.pdf , https://publish.sec.or.th/nrs/10198s.pdf
 5. **Save** as `watchlist.md` (or `.csv`) in the finance folder; date the file.
 
 ## Scoring when over the limit
@@ -52,8 +51,6 @@ A one-line thesis is enough for a swing trade. A name held for years needs a rec
 
 No target price, no "upside", no buy or sell rating: the file records whether the reasons hold, the decision stays with the user.
 
-Idea: `thesis-tracker` in anthropics/financial-services equity-research (Apache-2.0, viewed 2026-11-10), with the institutional parts (short ideas, price targets) left out.
-
 ## Decision table — add, keep or drop
 
 | Situation | Action |
@@ -71,23 +68,6 @@ Idea: `thesis-tracker` in anthropics/financial-services equity-research (Apache-
 - One line per name in reviews — if it needs a paragraph, the thesis is not clear.
 - Data from whatever market-data plugin is installed; if none, say so and use free public pages (set.or.th company pages), always with the as-of date.
 
-## Worked example (illustrative)
-
-User: swing trader, 200,000 baht, SET only. Adds ABC.
-
-| Field | Value |
-|---|---|
-| Ticker / market / sector | ABC · SET · Commerce |
-| Thesis | Same-store sales growth turned positive for 2 quarters; price still in a 6-month range 44–48 |
-| Entry zone | Daily close above 48.00 on volume ≥ 1.5× 20-day average |
-| Invalidation | Close below 44.00, or next quarter same-store sales negative |
-| Liquidity | ~60 million baht/day — fine |
-| Calendar | Q3 results expected by mid-November; no XD this quarter |
-| Alerts | price ≥ 48.00 · price ≤ 44.00 · volume ≥ 2× average |
-| As of | 2026-10-06 |
-
-Command: `/trading-finance:watchlist-setup add|review|clean`. Next steps: read the chart with `technical-signals`, size with `position-sizing`.
-
 ## เรียกเป็นคำสั่ง
 
 `/trading-finance:watchlist-setup <add|review|clean> [symbol or notes]`
@@ -99,3 +79,8 @@ Manage the watchlist with the `watchlist-setup` skill: **$ARGUMENTS**
 - `clean` — delete names without a written thesis (default max 10 symbols)
 
 Always refresh data through installed market-data plugins and date every figure.
+
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open when you want a filled-in swing-trade example
+- [`references/sources.md`](references/sources.md) — open when you must re-check SET signs or financial-statement deadlines

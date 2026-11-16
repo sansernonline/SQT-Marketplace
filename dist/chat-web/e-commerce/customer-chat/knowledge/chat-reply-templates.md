@@ -4,8 +4,6 @@ Use when a Thai seller replies to buyer chat on marketplaces
 
 # Chat Reply Templates (Thai)
 
-Response time and chat rate count toward shop ratings on the big platforms, and a fast, polite answer is half of every sale. Templates make the answer fast; filling them with the order's real facts makes it right.
-
 ## 0 · Look for an existing format first (every time)
 
 Before using the structure or templates in this file, check whether the user, the client or the project already has its own format:
@@ -61,18 +59,14 @@ When chats pile up, answer by money at risk and deadline, not by arrival order:
 - Quotation or tax invoice for a business buyer → `doc-quotation`
 - LINE shop auto-replies → `line-oa-setup` · `line-chatbot` · rich menu image → `graphic-design:line-richmenu` (if installed)
 
-## Worked example
-
-Buyer (Shopee): "สั่งไปตั้งแต่วันที่ 2 ยังไม่ได้เลย ร้านโกงหรือเปล่า"
-Check: shipped 3 Oct with Flash, tracking shows "ถึงศูนย์คัดแยก ขอนแก่น" on 5 Oct, platform estimate 6–8 Oct.
-
-Reply (T3 filled):
-> สวัสดีค่ะคุณลูกค้า ขอโทษที่ทำให้รอนะคะ 🙏 แอดมินเช็กให้แล้วค่ะ พัสดุส่งออกวันที่ 3 ต.ค. เลขพัสดุ TH123456789 ตอนนี้อยู่ที่ศูนย์คัดแยกขอนแก่น (5 ต.ค.) ระบบประเมินว่าจะถึงภายใน 6–8 ต.ค. ค่ะ ถ้าถึงวันที่ 8 แล้วยังไม่ได้รับ ทักมาได้เลยนะคะ จะตามกับขนส่งให้ทันทีค่ะ
-
 ## Related
 
 - `returns-and-bad-reviews` — refunds and public review replies
 - `shipping-compare` — courier claims for lost parcels
+
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open when you want a filled-in late-parcel reply (T3)
 
 ## Run as a command
 
@@ -155,3 +149,14 @@ Not VAT-registered:
 
 ## Auto-reply after hours
 > สวัสดีค่ะ ขอบคุณที่ทักร้าน <ชื่อร้าน> นะคะ ตอนนี้นอกเวลาทำการ (<เวลาทำการ>) แอดมินจะตอบกลับภายใน <เวลา> ค่ะ ระหว่างนี้กดสั่งได้ตามปกติ ระบบจะจัดส่งตามรอบค่ะ
+
+
+## reference: worked-example.md
+
+# Worked example · chat-reply-templates
+
+Buyer (Shopee): "สั่งไปตั้งแต่วันที่ 2 ยังไม่ได้เลย ร้านโกงหรือเปล่า"
+Check: shipped 3 Oct with Flash, tracking shows "ถึงศูนย์คัดแยก ขอนแก่น" on 5 Oct, platform estimate 6–8 Oct.
+
+Reply (T3 filled):
+> สวัสดีค่ะคุณลูกค้า ขอโทษที่ทำให้รอนะคะ 🙏 แอดมินเช็กให้แล้วค่ะ พัสดุส่งออกวันที่ 3 ต.ค. เลขพัสดุ TH123456789 ตอนนี้อยู่ที่ศูนย์คัดแยกขอนแก่น (5 ต.ค.) ระบบประเมินว่าจะถึงภายใน 6–8 ต.ค. ค่ะ ถ้าถึงวันที่ 8 แล้วยังไม่ได้รับ ทักมาได้เลยนะคะ จะตามกับขนส่งให้ทันทีค่ะ

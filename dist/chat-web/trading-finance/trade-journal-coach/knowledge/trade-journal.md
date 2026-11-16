@@ -44,21 +44,9 @@ calm · confident · FOMO (กลัวตกรถ) · revenge (เอาคื
 - Screenshot optional; the written record is mandatory.
 - The `trade-journal-coach` agent quotes this file back in reviews — write it knowing someone will read it.
 
-### Worked example (one row, filled)
+### Worked example
 
-| Field | Entry |
-|---|---|
-| Date in | 2026-10-06 10:15 |
-| Symbol / side | ABC / buy |
-| Shares · entry · stop · target | 200 · 48.50 · 47.50 · 51.00 |
-| 1R (baht) | 200 |
-| Setup | breakout-volume |
-| Reason | Broke 3-month high 48.00 on 2.1× volume, trend up |
-| Emotion | calm |
-| Date out · exit · costs | 2026-10-14 · 50.25 · 40 |
-| P/L baht · R | +310 · +1.55R |
-| What happened | Stalled under 50.50, sold on plan rule "exit if no new high in 5 days" |
-| Plan followed | Y |
+One filled row (ABC, +1.55R): [references/worked-example.md](references/worked-example.md)
 
 Output (mode 1): append the row to `trade-journal.csv` (or the user's existing file) and reply with the R-multiple and one line — no commentary unless asked.
 
@@ -221,3 +209,22 @@ One table: sheet · cell or range · check number · what is wrong · effect on 
 ## Source
 
 Checks adapted from `audit-xls` step 2, anthropics/financial-services (Apache-2.0, viewed 2026-11-10) — reworded for personal sheets; model-integrity step dropped.
+
+
+## reference: worked-example.md
+
+# Worked example · trade-journal
+
+| Field | Entry |
+|---|---|
+| Date in | 2026-10-06 10:15 |
+| Symbol / side | ABC / buy |
+| Shares · entry · stop · target | 200 · 48.50 · 47.50 · 51.00 |
+| 1R (baht) | 200 |
+| Setup | breakout-volume |
+| Reason | Broke 3-month high 48.00 on 2.1× volume, trend up |
+| Emotion | calm |
+| Date out · exit · costs | 2026-10-14 · 50.25 · 40 |
+| P/L baht · R | +310 · +1.55R |
+| What happened | Stalled under 50.50, sold on plan rule "exit if no new high in 5 days" |
+| Plan followed | Y |

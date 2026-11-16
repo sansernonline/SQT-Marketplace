@@ -29,9 +29,7 @@ Record every baht that comes in or goes out, keep the paper that proves it, and 
 | VAT-registered (individual or juristic) | Sales tax report, purchase tax report, and goods and raw materials report (รายงานภาษีขาย · ภาษีซื้อ · สินค้าและวัตถุดิบ), plus tax invoices and copies |
 | Registered partnership, company limited (ห้างหุ้นส่วนจดทะเบียน · บริษัทจำกัด) | Full accounts under the Accounting Act B.E. 2543 (พ.ร.บ.การบัญชี พ.ศ. 2543), kept by a qualified bookkeeper, plus audited financial statements each year (`dbd-annual-filing`) |
 
-ตรวจล่าสุด 2026-10-25 · แหล่ง: https://www.rd.go.th/38625.html (กรมสรรพากร "ผู้มีหน้าที่จัดทำรายงานเงินสดรับ-จ่าย" · ผู้ไม่ได้จด VAT ที่มีเงินได้ 40(5)–(8)) · https://www.krungsri.com/th/krungsri-the-coach/taxes/tax-knowledge/income-expense-accounting-manual · https://flowaccount.com/blog/income-expense-accounting-record/ · the exact announcement number and how many days after a transaction an entry must be made (รอยืนยัน)
-
-The Department of Business Development (DBD) sets the time limits for posting entries in a company's books (cash, journals, ledger, stock). Figures often quoted online were not found in an official text (รอยืนยัน). Ask your bookkeeper; in practice, post weekly and never later than month end.
+The number of the Revenue Department announcement that sets the cash receipts and payments report format, and how many days after a transaction an entry must be made, are (รอยืนยัน). The Department of Business Development (DBD) sets the time limits for posting entries in a company's books (cash, journals, ledger, stock). Figures often quoted online were not found in an official text (รอยืนยัน). Ask your bookkeeper; in practice, post weekly and never later than month end.
 
 ## 2. How long to keep documents
 
@@ -42,8 +40,6 @@ The Department of Business Development (DBD) sets the time limits for posting en
 | Either authority may order longer | up to **7 years** | — |
 
 Keep **7 years** for anything about money: it covers both rules and the extension. Paper or clean scans both work for your own file; the original tax invoice is what backs an input VAT claim, so keep originals until your accountant says otherwise.
-
-Last checked 2026-10-25 · sources: https://rd.go.th/25306.html (Revenue Department ruling, citing the Accounting Act (พ.ร.บ.การบัญชี) section 14 · 5 years from the account closing date · extendable to at most 7 years) · https://rd.go.th/28312.html (กค 0706/4151 · 20 Apr 2007 (B.E. 2550) · section 87/3 · 5 years from the filing date · extendable to at most 7 years) · https://www.ofm.co.th/blog/organize-accounting-documents-2026/ · both rulings are old and have not been compared with the current text in the Royal Gazette
 
 ## 3. Separate personal and business money first
 
@@ -93,7 +89,7 @@ Do not move to the next step while the "to fix" list from steps 3 and 4 still ha
 
 **List missing receipts.** Every expense row above the owner's threshold with no document goes on a "ใบเสร็จขาด" list: date, payee, amount, what to ask for. The threshold is the owner's call (รอยืนยัน the amount with the owner or accountant). A missing receipt can cost the deduction: an individual seller who deducts actual expenses needs the document (`seller-tax-basics`); a payment that needed withholding tax also needs the 50 ทวิ (`tax-vat-th`).
 
-The 2-day, 1-baht and 5-day windows are starting values from Anthropic's month-end-prep skill (`anthropics/knowledge-work-plugins` small-business, Apache-2.0, read 2026-11-10; ideas only, no text copied), not measured on Thai payouts; widen the date window for a platform whose payouts you have seen land later.
+The 2-day, 1-baht and 5-day windows are starting values, not measured on Thai payouts; widen the date window for a platform whose payouts you have seen land later.
 
 ## 6. When to hire an accountant
 
@@ -123,3 +119,8 @@ Journal rows: income 18,500 and 4,200 · expenses 1,110, 555, 105, 9,000, 1,200 
 ## Related
 
 `cash-flow` (forecast from the same journal) · `seller-tax-basics` · `tax-vat-th` · `e-tax-invoice` · `doc-quotation` · `multi-shop-stock` · `marketplace-fees-pricing` · `payroll-th` · `dbd-annual-filing` · `thai-business-setup`
+
+## References
+
+- [`references/bookkeeping-sheet.md`](references/bookkeeping-sheet.md) — journal template (section 4)
+- [`references/sources.md`](references/sources.md) — sources and check dates (2026-10-25) for the legal facts in sections 1 and 2

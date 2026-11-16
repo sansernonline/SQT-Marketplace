@@ -15,7 +15,7 @@ description: Use when work has many steps to cut into pieces
 2. 1 piece changes 1 thing and ends in a checkable state (file opens · totals match · code: build and tests pass).
 3. Do one piece at a time, check it, and record it before moving to the next. For code, commit following the commit rules (`superuser` section 1 item 9 · for code work: `superuser` of plugin `software-development` section 6). If commits are not allowed or the work is not code, record the passed piece in the "ความคืบหน้า" (progress) table of `CONTEXT.md` instead (a project with `docs/BUILD-PLAN.md` uses that file).
 4. If a piece fails its check, stop and fix that piece. Do not skip to the next piece and come back later.
-5. Save every re-run into a new folder and never overwrite the baseline result. Keep the prompt actually used (`prompt-used.md`) and a copy of the plan after every piece finishes (`plans/after-T1.json`) so you can look back. The idea comes from the RUN RECORD in lab 04_Basic_AI_WORFLOW of the course (run in a single chat with simulated roles, so it is reference data, not a real measurement).
+5. Save every re-run into a new folder and never overwrite the baseline result. Keep the prompt actually used (`prompt-used.md`) and a copy of the plan after every piece finishes (`plans/after-T1.json`) so you can look back.
 
 ## Order
 

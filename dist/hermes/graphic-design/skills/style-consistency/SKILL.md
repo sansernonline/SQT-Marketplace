@@ -7,7 +7,7 @@ description: Use when a series of images must look like one set
 
 > **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
-Goal: 10 assets that look like one person made them. AI images drift by default: each generation picks its own light, palette and lens unless something fixes them.
+Goal: 10 assets that look like one person made them.
 
 ## Workflow
 
@@ -46,22 +46,6 @@ Goal: 10 assets that look like one person made them. AI images drift by default:
 
 Fail on any → reject or send to `image-editing-brief`; do not keep "because it is done".
 
-## Worked example — style block
-
-Sheet: "Matcha26 v1". Anchor: approved hero.
-
-**Style block (constant):**
-> Editorial food photography, soft window light from the right in late morning, 85mm lens, shallow depth of field, eye-level. Muted sage green, warm cream and pale oak palette with one small amber accent. Calm, natural, matte finish, fine film grain. Clean cream wall background with empty space in the upper right.
-
-**Negatives (constant):** text, logo, hands, straws, oversaturated colour, busy background.
-
-**Subject lines (variable):**
-- "A ceramic cup of hot matcha with a leaf of foam art."
-- "A matcha cheesecake slice on a small cream plate."
-- "A paper takeaway cup with a plain cream sleeve."
-
-Grid check of 6 images: #4 came out with blue-hour light → fails check 2 → regenerated with the same seed and "late morning" moved to the front of the block → accepted.
-
 ## Rules
 
 - Write the sheet before the first generation, not reverse-engineered after
@@ -73,9 +57,7 @@ Grid check of 6 images: #4 came out with blue-hour light → fails check 2 → r
 
 Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files. Lock the style against its section 4 so the whole series avoids the same AI defaults.
 
-## Related
+## References
 
-- `brief-to-image` — per-image briefs that start from the style block
-- `brand-kit` — the sheet must not break the kit
-- `design-review` — point 7 compares siblings
-- `campaign-set` — one sheet per campaign
+- [`references/style-lock-sheet.md`](references/style-lock-sheet.md) — the sheet to fill in (step 2)
+- [`references/worked-example.md`](references/worked-example.md) — open for a model style block with negatives and a grid check

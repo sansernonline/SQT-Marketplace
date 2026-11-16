@@ -35,7 +35,7 @@ Tick size (ช่วงราคา) for SET/mai shares, in force from 16 Nov 25
 |---|---|---|---|---|---|---|---|---|---|
 | Tick | 0.01 | 0.02 | 0.02 | 0.05 | 0.10 | 0.25 | 0.50 | 1.00 | 2.00 |
 
-Source: SET circular ปก.(ว) 4/2569 (15 Oct 2026, checked 2026-11-12) https://media.set.or.th/rulebook/circular-letter/attachment-file/379.pdf (unofficial English translation; Thai original not read) · SET tick page https://www.set.or.th/en/trading-units-tick-sizes-price-limits · SET changes ticks rarely (the SET tick page dated the previous table 30 Mar 2009), so check the SET page only when a user says the tick changed or a broker rejects a price, then update this table and `scripts/ticks.json` together.
+SET changes ticks rarely, so check the SET page only when a user says the tick changed or a broker rejects a price, then update this table and `scripts/ticks.json` together. Source and check date: [references/sources.md](references/sources.md)
 
 Why ticks matter: stop and entry must sit on a valid tick, and on a 9.90-baht stock one tick (0.02) is 0.2% — a "1-tick" stop is not a real stop.
 
@@ -66,17 +66,11 @@ Input file: `{ "type": "share", "capital": 100000, "riskPct": 1, "entry": 48.5, 
 
 ## Why the risk % stays small — drawdown and the way back
 
-Gain needed = drawdown ÷ (1 − drawdown): a 10% loss needs 11.1% back, 50% needs 100%. At 1% risk, 10 losses in a row cost about 9.6% (compounded) and need 10.6% back; at 5% risk the same streak costs 40% and needs 66.7%. Show the full table in [references/drawdown-recovery.md](references/drawdown-recovery.md) when a user asks to raise the risk %. (Arithmetic, computed here; no external source.)
+Gain needed = drawdown ÷ (1 − drawdown): a 10% loss needs 11.1% back, 50% needs 100%. At 1% risk, 10 losses in a row cost about 9.6% (compounded) and need 10.6% back; at 5% risk the same streak costs 40% and needs 66.7%. Show the full table in [references/drawdown-recovery.md](references/drawdown-recovery.md) when a user asks to raise the risk %.
 
 ## Worked example
 
-Capital 100,000 baht, risk 1% = **1,000 baht**. Entry 48.50, invalidation 48.00 → stop 0.50 below at **47.50** (on the 0.10 tick). Risk per share = 1.00. Round-trip cost ≈ 0.2% × 2 × 48.50 ≈ 0.19 → use **1.19**.
-
-- Raw size = 1,000 ÷ 1.19 = 840 → round down to board lot = **800 shares**
-- Position value = 800 × 48.50 = **38,800 baht = 38.8% of capital** → fails the 10% concentration check
-- Cap at 10% → 10,000 ÷ 48.50 = 206 → **200 shares** (9,700 baht); real risk = 200 × 1.19 = **238 baht (0.24%)**
-
-Size if the user takes the trade: 200 shares, stop 47.50; the concentration limit, not the stop, is the binding rule here. A wider stop at 45.50 (below the 46.00 swing low) would give risk 3.19/share → 313 → 300 shares, but still capped at 200 by concentration.
+Capital 100,000 baht · risk 1% · entry 48.50 · stop 47.50 gives 800 shares by risk but only **200 shares** after the 10% concentration cap, which is the binding rule. Full steps: [references/worked-example.md](references/worked-example.md).
 
 ## Output
 
@@ -183,3 +177,25 @@ Account 10,000 USD, risk 1% = **100 USD**. EURUSD long, entry 1.08500, stop 1.08
 - Real risk = 0.32 × 310 = **99.2 USD (0.99%)**
 - Margin at 1:100 = 0.32 × 100,000 × 1.085 ÷ 100 = **347 USD** — about 3.5% of the account; risk is still 1%
 - Held over a weekend → plan for a possible 150–200 USD loss on a gap
+
+
+## reference: sources.md
+
+# Sources · position-sizing
+
+Source: SET circular ปก.(ว) 4/2569 (15 Oct 2026, checked 2026-11-12) https://media.set.or.th/rulebook/circular-letter/attachment-file/379.pdf (unofficial English translation; Thai original not read) · SET tick page https://www.set.or.th/en/trading-units-tick-sizes-price-limits · SET changes ticks rarely (the SET tick page dated the previous table 30 Mar 2009), so check the SET page only when a user says the tick changed or a broker rejects a price, then update this table and `scripts/ticks.json` together.
+
+
+## reference: worked-example.md
+
+# Worked example · position-sizing
+
+## Worked example
+
+Capital 100,000 baht, risk 1% = **1,000 baht**. Entry 48.50, invalidation 48.00 → stop 0.50 below at **47.50** (on the 0.10 tick). Risk per share = 1.00. Round-trip cost ≈ 0.2% × 2 × 48.50 ≈ 0.19 → use **1.19**.
+
+- Raw size = 1,000 ÷ 1.19 = 840 → round down to board lot = **800 shares**
+- Position value = 800 × 48.50 = **38,800 baht = 38.8% of capital** → fails the 10% concentration check
+- Cap at 10% → 10,000 ÷ 48.50 = 206 → **200 shares** (9,700 baht); real risk = 200 × 1.19 = **238 baht (0.24%)**
+
+Size if the user takes the trade: 200 shares, stop 47.50; the concentration limit, not the stop, is the binding rule here. A wider stop at 45.50 (below the 46.00 swing low) would give risk 3.19/share → 313 → 300 shares, but still capped at 200 by concentration.

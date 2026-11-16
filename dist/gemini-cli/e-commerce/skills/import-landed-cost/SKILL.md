@@ -5,9 +5,9 @@ description: Use when importing goods from China and costing each unit
 
 # Landed cost per unit for goods imported from China
 
-Part of plugin `e-commerce`. The wording follows `human-writing`. This skill works out the true cost per unit of goods ordered from China. It was split out of `thai-business-setup` section 5 on 2026-10-28. The content is general information, not tax or legal advice. An accountant should recompute the tax figures of a real business.
+This skill works out the true cost per unit of goods ordered from China. The content is general information, not tax or legal advice. An accountant should recompute the tax figures of a real business.
 
-Abbreviations in this file: value added tax (VAT) · price of goods plus insurance and freight to the Thai customs border (CIF) · Harmonized System tariff code (HS code) · cubic metre (CBM, called "คิว" in Thai)
+CBM = cubic metre (called "คิว" in Thai).
 
 > **One rule:** there is no default duty rate. Look up the tariff code and enter the rate yourself for every lot, and let the script do the calculation, never by hand.
 
@@ -60,39 +60,9 @@ This table describes the general shape of the forwarding market (อนุมา
 4. How much is paid if goods are damaged or lost
 5. Is the price declared truthfully · declaring a price lower than the real one is a legal risk for the importer (รอยืนยัน, the sections and penalties in the Customs Act B.E. 2560 [2017], พ.ร.บ.ศุลกากร พ.ศ. 2560)
 
-Last checked 2026-10-23. Sources: Customs Department Notification No. 219/2568 (signed 4 Dec 2025 [B.E. 2568], effective 1 Jan 2026 [B.E. 2569]) https://www.customs.go.th/cont_strc_download_with_docno_date.php?lang=th&top_menu=menu_homepage&current_id=14232a32414d505f4a464b47464b4a · VAT on low-value imports starting 5 Jul 2024 (B.E. 2567): Customs Department revenue collection measures document for fiscal year 2026 (B.E. 2569) https://www.customs.go.th/data_files/8342f73dce85665090d55bb44eb9a0e4.pdf · Royal Decree No. 807 (Royal Gazette volume 143, part 50 ก, 23 Aug 2026 [B.E. 2569]) https://rd.go.th/fileadmin/user_upload/kormor/newlaw/dc807.pdf · VAT base on imports, Revenue Code section 79/2 https://www.rd.go.th/5205.html · Customs Department duty and VAT formula http://ccc.customs.go.th/data_files/bdab2d48d4dd6ac677eeecd215c82ba2.pdf · customs receipt as a tax invoice for the VAT part only https://www.rd.go.th/7047.html · Form E https://www.dft.go.th/th-th/DFT-Service/ServiceData-Information/dft-service-data-privilege/Detail-dft-service-data-privilege/ArticleId/23580/Test · definition of restricted goods https://www.customs.go.th/cont_strc_simple.php?ini_content=business_160426_03_160930_01_160930_01&ini_menu=menu_goods_control_permit&lang=th&left_menu=menu_goods_control_permit
-
 ## 5 · Example: 200 fabric bags from 1688 by truck
 
-Every figure in this section is an **example**, used only to show the method.
-
-| Assumption | Value used |
-|---|---|
-| Goods price | 25 yuan each × 200 = 5,000 yuan |
-| Exchange rate | 5.00 baht per yuan (use the real rate of the payment day) |
-| Shipping within China to the forwarder's warehouse | 100 yuan |
-| Freight China to Thailand by truck | 0.4 CBM × 6,000 baht per CBM |
-| Insurance | 1% of goods cost |
-| Duty rate | 20% (look up the real rate of the tariff code, and check Form E entitlement) |
-| Forwarder and clearance fee | 1,000 baht per lot |
-| Delivery within Thailand to the shop | 300 baht |
-
-| Line | How it is worked out | Baht |
-|---|---|---|
-| Goods cost | 5,000 × 5.00 | 25,000.00 |
-| Shipping within China | 100 × 5.00 | 500.00 |
-| Freight China to Thailand | 0.4 × 6,000 | 2,400.00 |
-| Insurance | 25,000 × 1% | 250.00 |
-| **CIF** | sum of the 4 lines above | **28,150.00** |
-| Import duty | 28,150 × 20% | 5,630.00 |
-| VAT | (28,150 + 5,630) × 7% | 2,364.60 |
-| Forwarder and clearance fee | | 1,000.00 |
-| Delivery within Thailand | | 300.00 |
-| **Total actually paid** | | **37,444.60** |
-| **Cost per bag (not VAT-registered)** | 37,444.60 ÷ 200 | **187.22** |
-| Cost per bag (VAT-registered, imported in own name) | (37,444.60 − 2,364.60) ÷ 200 | 175.40 |
-
-The web price of 25 yuan is 125 baht, but the cost delivered to the shop is 175–187 baht, 40–50% higher. Take this cost to set the resale price with `marketplace-fees-pricing`.
+Every figure in the example is only to show the method. The worked example (200 fabric bags from 1688 by truck: CIF 28,150.00 · duty 20% · VAT 7% · total paid 37,444.60 baht) gives 187.22 baht per bag when not VAT-registered and 175.40 when VAT-registered and imported in own name. It is in [`references/worked-example.md`](references/worked-example.md). The web price of 25 yuan is 125 baht, but the cost delivered to the shop is 40–50% higher: take the script's cost to set the resale price with `marketplace-fees-pricing`.
 
 ## 6 · Let the script calculate, never by hand
 
@@ -119,18 +89,17 @@ These cannot be undone or affect outside people. The agent prepares the informat
 
 ## 9 · Links to other skills
 
-| Need | Use |
-|---|---|
-| Set the selling price on Shopee Lazada TikTok Shop once the cost is known | `marketplace-fees-pricing` |
-| Choose a business form, register, and register for VAT | `thai-business-setup` |
-| File monthly VAT and input tax | `tax-vat-th` + agent `tax-helper` |
-| Compare domestic shipping | `shipping-compare` |
-| The wording of every line | `human-writing` |
+- Selling price on Shopee Lazada TikTok Shop once the cost is known: `marketplace-fees-pricing`
+- Choose a business form, register, and register for VAT: `thai-business-setup`
+- File monthly VAT and input tax: `tax-vat-th` + agent `tax-helper`
+- Compare domestic shipping: `shipping-compare`
 
 ## Check before sending
 
 1. The duty rate comes from the real tariff code of the goods, not from the example, and say whether Form E entitlement was checked
 2. Every figure comes from `landed-cost.mjs`, and the script's warnings (rates.json too old · duty rate in the wrong unit) are passed on to the user in full
 3. State the cost per unit both ways (VAT-registered or not), and say that import VAT is input tax only when the import is in the business's own name
+## References
 
-Origin of the idea: the landed cost calculation structure took its idea from https://github.com/Boom-Vitt/claude-thai-business-skills (MIT License · Copyright (c) 2026 Vittawat (boombignose) · LICENSE file checked 2026-10-23) · fully rewritten, no text copied, and every figure rechecked against official sources · the original still says parcels under 1,500 baht may pay no duty, which does not match the rules from 1 Jan 2026 (B.E. 2569)
+- [`references/worked-example.md`](references/worked-example.md) — open for the full 200-bag cost table
+- [`references/sources.md`](references/sources.md) — official sources and check date 2026-10-23 for sections 1 to 4

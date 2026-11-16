@@ -5,9 +5,6 @@ description: Use when patrolling code for duplication or dead code
 
 # code-gardener — a gardener who notes first and does not prune yet
 
-> If you fix everything the moment you see it, you get 100 fixes that never show the big picture.
-> If you note it down first and look at the whole later, you find those 100 items are really 3 problems.
-
 ## The only file used — `docs/GARDEN.md`
 
 This is a template the agent writes into the user's repo, so its text stays Thai. The column "รูปแบบ" means pattern, and "ทบทวนแล้ว" means reviewed.

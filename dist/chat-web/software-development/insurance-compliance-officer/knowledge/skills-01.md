@@ -28,19 +28,9 @@ An agent called in for this area opens its own role file before starting · read
 | building underwriting systems — risk assessment, rating models, eligibility rules, data enrichment from external sources, automated decisioning, manual review queues | [`references/agent-underwriting-analyst.md`](references/agent-underwriting-analyst.md) | `insurance-analyst` |
 | insurance regulatory compliance — US state filings, Solvency II, Thailand OIC, market conduct, insurance privacy, solvency and regulatory reporting | [`references/agent-insurance-compliance-officer.md`](references/agent-insurance-compliance-officer.md) | `insurance-compliance-officer` |
 
-## agent ของสายนี้
-
-`insurance-engineer` · `insurance-analyst` · `insurance-compliance-officer`
-
-## ที่มา
-
-Merged from plugin `software-development-insurtech` (formerly named claims-workflow-patterns → `references/claims-workflow-patterns.md` · underwriting-models → `references/underwriting-models.md` · insurance-compliance → `references/insurance-compliance.md` — no longer separate skills) into `software-development` in v2.0.0. The original content is all still in `references/`
-
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 
 `/software-development:insurance-systems <claims-flow-design | underwriting-model-design> <details>`
-
-> **Language:** write every line of wording in the resulting document per `human-writing`. This command gives the steps; human-writing gives the way to write so people understand.
 
 Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
 

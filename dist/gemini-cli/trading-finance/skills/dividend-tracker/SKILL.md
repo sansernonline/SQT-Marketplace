@@ -5,7 +5,7 @@ description: Use when asking about dividend income, XD dates or yield
 
 # Dividend Tracker (ติดตามเงินปันผล)
 
-Know the income before it arrives. Tracker template: [references/dividend-template.md](references/dividend-template.md). General information, not investment or tax advice — for the tax decision ask a นักบัญชี or RD 1161. Tax treatment of dividends: `tax-basics-th`.
+Tracker template: [references/dividend-template.md](references/dividend-template.md). General information, not investment or tax advice — for the tax decision ask a นักบัญชี or RD 1161. Tax treatment of dividends: `tax-basics-th`.
 
 ## The dates — SET (T+2 settlement)
 
@@ -20,7 +20,7 @@ Know the income before it arrives. Tracker template: [references/dividend-templa
 
 On the XD day the price usually opens lower by about the dividend — buying the day before XD just to "collect" it gains nothing before tax and loses 10% to withholding.
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.set.or.th/en/trading-units-tick-sizes-price-limits (T+2), https://media.set.or.th/set/Documents/2022/Jul/การจ่ายปันผล.pdf (XD/record date, payment within 1 month)
+ตรวจล่าสุด 2026-10-06 · sources: [`references/sources.md`](references/sources.md)
 
 ## Formulas
 
@@ -33,7 +33,7 @@ yield on cost         = annual DPS ÷ average cost per share
 portfolio yield       = expected annual net dividends ÷ current portfolio value
 ```
 
-Gross, withheld, net and yields per holding: `node money-calc.mjs dividend <file.json>` (script in `portfolio-snapshot`, see its Script path; the worked example below is `../portfolio-snapshot/scripts/examples/dividend.json` and gives 1,600 / 160 / 1,440 and 4.5%). `source` is `thai-listed` or `thai-fund` (10% withheld) or `foreign` (the script refuses until `withholdingPct` is given from a checked source).
+Gross, withheld, net and yields per holding: `node money-calc.mjs dividend <file.json>` (script in `portfolio-snapshot`, see its Script path; the worked example in [`references/worked-example.md`](references/worked-example.md) is `../portfolio-snapshot/scripts/examples/dividend.json` and gives 1,600 / 160 / 1,440 and 4.5%). `source` is `thai-listed` or `thai-fund` (10% withheld) or `foreign` (the script refuses until `withholdingPct` is given from a checked source).
 
 **Tax**: the 10% is withheld at source; the holder may leave it as final tax or include all such dividends in ภ.ง.ด.90 and claim the dividend tax credit (เครดิตภาษีเงินปันผล). Which is cheaper depends on the marginal rate — compute it with `tax-basics-th` (same plugin). Thai mutual fund dividends: 10% withheld, no credit. Foreign dividends (DRs, offshore): withholding differs by country — ask the user's situation, mark unknown rates (รอยืนยัน).
 
@@ -53,13 +53,9 @@ Gross, withheld, net and yields per holding: `node money-calc.mjs dividend <file
 - Shares bought on the XD day or later do not get this dividend — check the trade date, not the settlement date.
 - Stock dividends (หุ้นปันผล) and XR (rights) change share count; adjust shares before computing next DPS yield.
 
-## Worked example
-
-Hold 2,000 shares of ABC. Board declares interim DPS 0.80 baht. XD Tue 2026-10-20 → record date Wed 2026-10-21 → payment Fri 2026-11-06.
-
-- Last day to buy: Mon 2026-10-19
-- Gross = 0.80 × 2,000 = **1,600**; withheld 10% = 160; net = **1,440 baht**
-- Price 40.00, DPS last 12 months 1.80 → trailing yield = 1.80 ÷ 40.00 = **4.5%**
-- If the user buys 1,000 more on 2026-10-20 (XD day), those shares get **nothing** this round.
-
 Output: upcoming XD list (next 30 days), monthly net cash table, annual total with gross / withheld / net, and which figures are estimates.
+
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open when you want a filled-in dividend calculation
+- [`references/sources.md`](references/sources.md) — open when you must re-check settlement or payment rules

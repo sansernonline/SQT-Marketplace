@@ -24,7 +24,7 @@ The technical writer should:
    - New features (user-visible)
    - Improvements (existing features enhanced)
    - Bug fixes (with severity context)
-   - Breaking changes — every one carries 3 fields: **what changed** · **who is affected** (which users, integrations or versions) · **how to migrate** (steps or link); a field unknown → `(รอยืนยัน)`, never a one-line "X removed" (แนวคิดจาก keepachangelog / borghei release-notes · เขียนใหม่)
+   - Breaking changes — every one carries 3 fields: **what changed** · **who is affected** (which users, integrations or versions) · **how to migrate** (steps or link); a field unknown → `(รอยืนยัน)`, never a one-line "X removed"
    - Security updates (Common Vulnerabilities and Exposures (CVE) entries patched)
    - Documentation updates (if significant)
 

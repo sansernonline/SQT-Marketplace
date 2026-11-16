@@ -27,7 +27,6 @@ Use when a system imports or exports Excel or CSV
 | Masking personal data in export files | `pdpa-compliance` | Together |
 | Telling the user when an import finishes | `notifications` | Together |
 | Limits and constraints of the target table | `database-design` | Together |
-| Abbreviations in work people read | `spell-out-abbreviations` | Together |
 
 ---
 
@@ -119,22 +118,6 @@ split into batches of 500 rows, show progress, and allow cancel (see `background
 | File header | Put in the filter conditions used and the export time. Otherwise in 3 months nobody knows what data this file is |
 | Download link | Must expire (see `file-upload-and-storage`) |
 | Format | `.xlsx` for people to read · CSV for machines to read |
-
----
-
-## 6 · Anti-patterns
-
-- **"ไฟล์ไม่ถูกต้อง"** (file is invalid): the user cannot do anything next
-- **Stopping at the first bad row**: the user must upload 30 times
-- **Writing while validating**: if it fails midway, the data is left half-done
-- **No summary page before confirming**: real data is overwritten before anyone could look
-- **No template to download**: the user has to guess the headers
-- **Reading columns by position**: the user inserts one column and the whole file breaks
-- **Reading codes as numbers**: the leading 0 is lost every time
-- **Not asking whether the year is B.E. or C.E.**: years are off by 543 and nobody knows
-- **Exporting without escaping formulas**: opening the file runs a command
-- **Exporting more than the user's permission**: data leaks through a button we built ourselves
-- **Not keeping the original file**: when there is a problem, you cannot look back
 
 
 ## reference: thai-accounting-apis.md
@@ -304,7 +287,6 @@ queue_depth_jobs                 value at this moment
 
 - **Metric types:** a counter counts events (read it with `rate()`) · a gauge holds the value right now · a histogram holds durations when you need p95 · a summary is for when you do not need to aggregate across instances
 - **Units:** seconds · bytes · ratio 0 to 1 (`_seconds`, not `_milliseconds`)
-- **Never put `user_id` · a phone number · `call_id` in a label**, because every new value is a new series, until the metrics system cannot cope · these ids go in logs and traces
 - p95: `histogram_quantile(0.95, sum by (le) (rate(<name>_bucket[5m])))`
 - Every alert rule has `for:` · `severity` · a runbook link · alert on symptoms (latency · error), not on CPU or GPU
 - Keep dashboards as JSON in git and provision them from files · RED per service · USE per resource
@@ -337,7 +319,7 @@ queue_depth_jobs                 value at this moment
 
 ### 4.1 · Error budget and burn rate
 
-A system with an SLO uses this instead of a fixed error % threshold, because it says "if this goes on, when will the whole month's budget run out?" (idea from the Google SRE Workbook)
+A system with an SLO uses this instead of a fixed error % threshold, because it says "if this goes on, when will the whole month's budget run out?"
 
 - **Budget** = the time you may fail in 30 days → SLO 99.9% = 43 minutes · 99.5% = 3.6 hours · 99% = 7.2 hours
 - **Burn rate** = current error rate ÷ (1 − SLO) → burn 1 = the budget runs out exactly on day 30 · burn 10 = gone in 3 days
@@ -383,45 +365,11 @@ Technical metrics all green while the business has stalled really happens, and y
 
 ---
 
-## 7 · Anti-patterns
+## References
 
-- **Watching the average response time**: it hides the people who hit the problem every time
-- **Alerts that need no action**: they teach everyone to ignore alerts
-- **Alerting on CPU and memory**: a system at CPU 90% with normal users is not an incident
-- **Putting unbounded ids in labels**: the metrics system brings itself down
-- **A dashboard with 40 graphs**: nobody knows which one to look at
-- **Measuring only the technical side, not the business**: everything is green but nobody can place an order
-- **Tracing every request**: expensive for no extra gain, sampling is enough
-- **No line marking the deploy time**: you lose half an hour before you remember you just deployed
-- **Alerts with no link to a runbook**: the receiver starts searching from zero at 3 a.m.
-
----
-
-## 8 · Abbreviations
-
-- **metric**: a number collected over time
-- **trace**: following one request along the whole path it travels
-- **p95 / p99**: the 95th and 99th percentiles (only 5% or 1% of requests are slower than this)
-- **label / tag**: a tag attached to a metric, used to look at groups separately
-- **on-call**: the duty of receiving incident alerts outside working hours
-- **SLO**: Service Level Objective (a service-level target you set yourself, such as 99.5% success)
-- **error budget / burn rate**: the time you may fail per month under the SLO, and how fast you are using it up (item 4.1)
-
-## 9 · Links to other skills
-
-| Need | Use together with |
-|---|---|
-| Log format and correlation id | `logging-standards` |
-| Health checks the monitor uses | `web-service-essentials` |
-| Metrics for queues and background jobs | `background-jobs` |
-| Error rate and circuit breaking | `error-handling-patterns` |
-| Steps when an alert fires | `incident-runbook-template` |
-| Post-incident summary | `postmortem-template` |
-| Target numbers agreed with the customer | `srs-writing` |
-| PromQL · alert rules · Grafana provisioning · voice agent example | `references/prometheus-grafana.md` |
-| Let an agent read Prometheus or Grafana through MCP | `mcp-server` item 1.1 |
-
-Source of item 3.1: prometheus.io (metric types · naming · histograms · alerting) and grafana.com (dashboard best practices · provisioning), checked 2026-10-27 · full links are at the end of `references/prometheus-grafana.md`
+- [`references/prometheus-grafana.md`](references/prometheus-grafana.md) — open for PromQL · alert rules · Grafana provisioning · voice agent example
+- `mcp-server` item 1.1 — when an agent must read Prometheus or Grafana through MCP
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
 
 
 ## reference: prometheus-grafana.md
@@ -606,6 +554,13 @@ Checked 2026-10-27
 | `predict_linear` · `[5m]` range vs scrape interval · NaN behavior when dividing by 0 | General team knowledge (not yet checked against the official PromQL pages) |
 
 
+## reference: sources.md
+
+# Sources · observability-basics
+
+Source of item 3.1: prometheus.io (metric types · naming · histograms · alerting) and grafana.com (dashboard best practices · provisioning), checked 2026-10-27 · full links are at the end of `references/prometheus-grafana.md`
+
+
 ---
 
 # skill: i18n-and-locale
@@ -713,7 +668,7 @@ Show:   25 ก.ย. 2569 09:42                (viewer's Asia/Bangkok)
 
 **If the system has both kinds of users, let the user pick the calendar**, but the stored value stays the same.
 
-**Checker** — write a short script that sweeps the code for Thai text embedded in code outside the translation files · hard-coded year numbers 25xx · `new Date("…")` that takes a string with no time zone. Run it in CI before merge. (The idea comes from BV thai-date-format: a converter needs its own tests.)
+**Checker** — write a short script that sweeps the code for Thai text embedded in code outside the translation files · hard-coded year numbers 25xx · `new Date("…")` that takes a string with no time zone. Run it in CI before merge. A converter needs its own tests.
 
 ---
 
@@ -769,20 +724,17 @@ So let a library handle it. Do not write `if (count > 1)` yourself, because some
 
 ---
 
-## 7 · Anti-patterns
+## Links to other skills
 
-- **Text embedded in code** because "there is only one language for now"
-- **Building a sentence from fragments** — other languages order words differently
-- **Storing B.E. in the database** — every function will compute time spans wrongly
-- **Adding 7 hours by hand in code** — breaks the moment there are users outside the Thai time zone
-- **Sorting Thai names with the standard collation** — wrong order with no error
-- **Testing screens with Lorem ipsum** — you never see Thai line-breaking problems
-- **`if (count > 1) "s"`** — works only for English
-- **2-digit years** — "69" is 1969, 2069, or 2569
-- **Importing Excel without asking whether the year is B.E. or C.E.** — years are off by 543 with nothing to warn you
-- **A translation key that is missing and shows an empty value** — you get an empty button nobody notices
+`error-handling-patterns` (error messages that must be translated) · `presentation-design` (Thai fonts in slides) · `data-import-export` (B.E. years in imports · CSV that opens in Excel) · `notifications` (multi-language message templates) · `translate-th-en` (plugin `superuser`: translating whole documents, a glossary per project)
 
----
+## References
+
+- [`references/thai-text-tools.md`](references/thai-text-tools.md) — open for word segmentation · transliteration to Roman letters · validating national ID numbers in code
+- [`references/abbreviations.md`](references/abbreviations.md) — open when a term (i18n · collation · ICU · BCP 47 · ARB · BOM) must be explained
+
+
+## reference: abbreviations.md
 
 ## 8 · Abbreviations
 
@@ -794,20 +746,6 @@ So let a library handle it. Do not write `if (count > 1)` yourself, because some
 - **BCP 47** — Best Current Practice (BCP) 47, the standard for language codes such as `th-TH`, `en-US`
 - **ARB** — Application Resource Bundle (the JSON-style translation file that Flutter `gen-l10n` uses)
 - **BOM** — Byte Order Mark (the 3 bytes at the start of a file that tell Excel it is UTF-8)
-
-## 9 · Links to other skills
-
-| Need | Use with |
-|---|---|
-| Date and time data types and collation | `database-design` |
-| Date, time, and money format in JSON | `api-conventions` |
-| Error messages that must be translated | `error-handling-patterns` |
-| Thai fonts on screen | `ui-craft` + the platform skill |
-| Thai fonts in documents and slides | `branded-document-design` · `presentation-design` |
-| Importing files with B.E. years · exporting CSV that opens in Excel without garbled Thai | `data-import-export` |
-| Multi-language notification message templates | `notifications` |
-| Translating a whole set of documents or screen text, Thai↔English · a glossary per project | `translate-th-en` (plugin `superuser`) |
-| Word segmentation · transliteration to Roman letters · validating national ID numbers in code | [`references/thai-text-tools.md`](references/thai-text-tools.md) |
 
 
 ## reference: thai-text-tools.md
@@ -864,15 +802,7 @@ Use when starting a repository or setting up a new machine
 
 Starting a new repository · a newcomer needs half a day before the project runs · a pull request shows a whole-file diff because formatters disagree · nobody knows where the documents are
 
-## When **not** to use it
-
-| Task | Use this instead |
-|---|---|
-| Set up the build and deploy pipeline | `cicd-and-release` |
-| Per-environment settings and secrets | `config-and-secrets` |
-| Choose an architecture | `architecture-patterns` |
-| Set up a test framework | `testing-standards` |
-| Name documents | `document-naming` |
+Not for: build and deploy pipeline → `cicd-and-release` · per-environment settings and secrets → `config-and-secrets` · choosing an architecture → `architecture-patterns` · test framework → `testing-standards` · naming documents → `document-naming`
 
 ---
 
@@ -880,7 +810,7 @@ Starting a new repository · a newcomer needs half a day before the project runs
 
 **The root (the folder the user opens) follows `project-doc-set` item 1, layout B.** The root tree, the ecosystem layout and the SuperUser file locations (`.claude/superuser/`) are defined there and only there. Code lives in `<project-name>/`. Its inner layout is:
 
-Inside `<project-name>/` (lowercase project name, words joined by `-`): `README.md` (item 2) · `CHANGELOG.md` · `ARCHITECTURE.md` · `CONTRIBUTING.md` · `LICENSE` (these 3 only when the conditions in `references/readme-skeleton.md` section 2 apply) · `.env.example` (only when the project really reads environment variables · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · secrets · `_to_delete/`) · `src/` (unit tests sit beside the code files · `readable-code` item 7) · `tests/` (integration · e2e only, or stacks whose tools require it, see the table in this item) · `scripts/` (setup · seed · migrate). The annotated tree is in [`references/code-folder.md`](references/code-folder.md). ADRs (architecture decision records) and runbooks live in `docs/` at the root, not in the code folder (`project-doc-set` item 1).
+Inside `<project-name>/` (lowercase project name, words joined by `-`): `README.md` (item 2) · `CHANGELOG.md` · `ARCHITECTURE.md` · `CONTRIBUTING.md` · `LICENSE` (these 3 only when the conditions in `references/readme-skeleton.md` section 2 apply) · `.env.example` (only when the project really reads environment variables · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · secrets · `_to_delete/`) · `src/` (unit tests sit beside the code files · `readable-code` item 7) · `tests/` (integration · e2e only, or stacks whose tools require it, see "Exceptions by stack" below) · `scripts/` (setup · seed · migrate). The annotated tree is in [`references/code-folder.md`](references/code-folder.md). ADRs (architecture decision records) and runbooks live in `docs/` at the root, not in the code folder (`project-doc-set` item 1).
 
 **Code folder name.** Take the project folder name, lowercase it, and turn each run of spaces and punctuation into a single `-`:
 `Lumio - Light Meter/` → `lumio-light-meter/`
@@ -892,17 +822,7 @@ Run every build, test and run command from inside this folder. In languages that
 - If a build leaves a stray folder at the root (such as an empty `build/` or `lib/` after moving the code), a tool cache still remembers the old path. Clear the cache (`flutter clean` · delete `obj/`) and build again.
 - Folder and file names in the repo are lowercase with hyphens and no spaces. **The exception is a language with its own convention.** Follow that language.
 
-**Exceptions by stack.** The code folder name, the test folder and the file names in the repo follow what the language's tools expect.
-Do not force `src/`. Test files normally sit beside the code files. Use a separate test folder only for stacks whose tools require one (the cells marked **required**):
-
-| Stack | Code | Tests | File names |
-|---|---|---|---|
-| Node | `src/` | Unit tests beside the code files (`*.test.ts`) · integration and e2e in `tests/` | `kebab-case` |
-| .NET | `src/` | `tests/` **required** (a separate test `.csproj` project) | `PascalCase.cs` |
-| Python | `src/<package>/` | Unit tests beside the code files (`test_*.py`) · integration and e2e in `tests/` | `snake_case.py` |
-| Dart / Flutter | `lib/` | `test/` · `integration_test/` **required** (same layout as `lib/`) | `snake_case.dart` (lint `file_names`) · `android/` `ios/` stay in the repo |
-
-When another skill writes `tests/` or `test/`, read it as "the test folder of that stack". Pick one name and use it across the whole repo.
+**Exceptions by stack.** The code folder name, the test folder and the file names follow what the language's tools expect. Do not force `src/`. Test files normally sit beside the code files; use a separate test folder only for stacks whose tools require one (.NET: `tests/` with a separate test `.csproj` · Dart / Flutter: `lib/`, `test/` and `integration_test/` required). The full per-stack table is in [`references/code-folder.md`](references/code-folder.md). When another skill writes `tests/` or `test/`, read it as "the test folder of that stack". Pick one name and use it across the whole repo.
 
 **Layout A** (use only when the user asks · this item owns the layout). Add `<project-name>/docs/` inside the code folder, as plain markdown. The inner layout matches the `docs/` of layout B (`README.md` index · `decisions/ADR-NNNN-<slug>.md` · `runbook-<topic>.md` · `research/`). It has no `.docx` or PNG deliverables. The rest of the root still follows the `project-doc-set` item 1 layout, without a `docs/` at the root.
 
@@ -995,19 +915,12 @@ Tick `[x]` only for items you **ran or opened in this round**. For an item not y
 - [ ] **Have someone who did not set up the project follow the README, and time them**
 
 ---
+## References
 
-## 7 · Anti-patterns
-
-Wrong: a README with only a title · commands never run on a clean machine · "ask so-and-so for the `.env`" (no `.env.example`) · no committed lock file · no `.editorconfig` · a linter that argues about style · experiment files at the root (`test.js` `backup_final.zip`) · documents scattered across chats and Drive with no index · a CHANGELOG that copies the commit list
-
-
-## 8 · Abbreviations
-
-**lock file** a file that pins dependency versions · **linter** a checker that finds code likely to be wrong · **formatter** an automatic style fixer · **LF** Line Feed, the Unix line ending (Windows uses CRLF) · **CI** Continuous Integration, an automatic check on every code merge
-
-## 9 · Links to other skills
-
-Besides the "not for" table above: temp files → `temp-file-discipline` · commits that can build a CHANGELOG → `commit-message-format` · before adding a dependency → `lazy-coding` · `prior-art-review` · all file templates → `assets/starter-files.md`
+- [`references/code-folder.md`](references/code-folder.md) — annotated code-folder tree and the per-stack table (Node · .NET · Python · Dart / Flutter); open when choosing code, test and file-name layout
+- [`references/readme-skeleton.md`](references/readme-skeleton.md) · [`references/readme-by-stack.md`](references/readme-by-stack.md) — README section table and fallback commands by language; open at layer 3 of item 2
+- [`references/changelog-examples.md`](references/changelog-examples.md) — open when writing a CHANGELOG entry
+- Temp files → `temp-file-discipline` · commits that can build a CHANGELOG → `commit-message-format` · before adding a dependency → `lazy-coding`, `prior-art-review` · file templates → `assets/starter-files.md`
 
 
 ## reference: changelog-examples.md
@@ -1089,9 +1002,23 @@ The rules are in `SKILL.md` item 1. The root tree is in `project-doc-set` item 1
   .gitattributes
   .gitignore             ← build output · secrets · `_to_delete/`
   src/                   ← the real code (or the layout the stack expects, per `SKILL.md` item 1)
-  tests/                 ← required in .NET · Flutter (`test/`) · Node and Python keep only integration and e2e here (unit tests sit beside the code files) — the stack table is in `SKILL.md` item 1
+  tests/                 ← required in .NET · Flutter (`test/`) · Node and Python keep only integration and e2e here (unit tests sit beside the code files) — the stack table is at the end of this file
   scripts/               ← setup, seed, migrate — scripts a person has to run
 ```
+
+## Exceptions by stack
+
+**Exceptions by stack.** The code folder name, the test folder and the file names in the repo follow what the language's tools expect.
+Do not force `src/`. Test files normally sit beside the code files. Use a separate test folder only for stacks whose tools require one (the cells marked **required**):
+
+| Stack | Code | Tests | File names |
+|---|---|---|---|
+| Node | `src/` | Unit tests beside the code files (`*.test.ts`) · integration and e2e in `tests/` | `kebab-case` |
+| .NET | `src/` | `tests/` **required** (a separate test `.csproj` project) | `PascalCase.cs` |
+| Python | `src/<package>/` | Unit tests beside the code files (`test_*.py`) · integration and e2e in `tests/` | `snake_case.py` |
+| Dart / Flutter | `lib/` | `test/` · `integration_test/` **required** (same layout as `lib/`) | `snake_case.dart` (lint `file_names`) · `android/` `ios/` stay in the repo |
+
+When another skill writes `tests/` or `test/`, read it as "the test folder of that stack". Pick one name and use it across the whole repo.
 
 
 ## reference: readme-by-stack.md
@@ -1269,11 +1196,8 @@ Use when a project needs a Docker sandbox for untrusted code
 
 # docker-sandbox: one lab per project
 
-> Our machine gives the orders; the lab is where the work happens.
 > Inside, you can install, delete, run servers, and build test databases freely, because when something breaks you wipe it and rebuild with one command.
 > Outside (the real machine · real systems · real accounts) cannot be touched, because there is no way in from the inside.
-
-Use together with [`superuser`](../superuser/SKILL.md). In a project that has `.sandbox/`, all install and run work happens in this lab.
 
 Do not use when: writing a Dockerfile or image for a real deploy → [`kubernetes-helm`](../kubernetes-helm/SKILL.md), because the lab is a temporary place to run work, not an image that goes to production.
 
@@ -1283,7 +1207,7 @@ Do not use when: writing a Dockerfile or image for a real deploy → [`kubernete
 
 - **One lab per project**, named `sandbox-agent-<folder name>-<creation date>` (e.g. `sandbox-agent-sample-app-20260125`).
   - The name is set once at the first `up` and stored in the file `.sandbox/.name-<folder name>`. Later commands read the name from this file, so the name does not change with the date.
-  - The prefix `sandbox-agent-` says an agent created this lab, not a person. The creation date is also kept in the label `sqt.created`.
+  - The creation date is also kept in the label `sqt.created`.
   - If the project needs a database, cache, or browser, add it as a service in the **same lab** (one stack). Do not create a separate lab.
 - **The base image is shared across the whole machine.** `sqt-sandbox-base:1` (Node · Python · Git · Playwright Chromium · Claude Code) is built once. Each project's image adds only a thin layer the project needs, so disk is not used twice.
 - **A stopped lab uses no CPU or memory**, only disk. Run `stop` when you finish a task, and `stop-all` when you finish for the day.
@@ -1316,10 +1240,6 @@ You can add `-Locked` to either mode. It blocks outbound internet, leaving only 
 5. Start the lab with `.\.sandbox\sandbox.ps1 up` (or `up -Isolated` · `up -Browser`). The first project on a machine must build the base image first, which takes about 5–15 minutes. Later projects are much faster.
 6. **Prove it works:** `sandbox.ps1 exec "node -v && python3 --version && git status"`. If the project has a test command, run it once through `exec`. In `-Locked` mode you must see the line `check passed`.
 7. Record in the project's `docs/README.md`: the lab name (`sandbox-agent-<folder name>-<date>`) · mode · port · test command in the lab.
-
-**Tested for real** on Windows + Docker Desktop 4.46 (2026-10-05, project `sample-app`): the lab built · unit tests passed 15/15 · e2e on Chromium passed 14/14 in the lab.
-
-Bugs found during testing are already fixed in the script: PowerShell 5.1 with stderr · Playwright a different version from the base image · port collisions.
 
 If the script breaks on another machine, use the `bug-fix` playbook on the script itself.
 
@@ -1362,7 +1282,7 @@ If the script breaks on another machine, use the `bug-fix` playbook on the scrip
 
 - The browser in the lab has no accounts, cookies, or user passwords. Log in only with the project's test accounts.
 - Copy images and videos from tests out to `_to_delete/` with `docker compose cp`.
-- Playwright MCP in the lab (examples from teaching work, not yet a standard): running as root needs `--no-sandbox` · the `--browser` value must match the `--help` of the installed version (`chromium` or `chrome`; if it does not match, it cannot find the browser) · screenshots with a relative file name land in the process's working directory, not `--output-dir`, so move them yourself · a click that times out with "not visible/stable" may be a background tab; see `e2e-testing-patterns`.
+- Playwright MCP quirks (root, `--browser`, screenshot paths, click timeouts): [references/playwright-mcp.md](references/playwright-mcp.md).
 - The user's own browser on the machine (the logged-in Chrome) is for real websites that need a real account, and follows that tool's rules. It is not a place to test.
 
 ## 6 · CAPTCHA
@@ -1372,7 +1292,6 @@ If the script breaks on another machine, use the `bug-fix` playbook on the scrip
   - Or turn it off with a setting for the test environment only (`CAPTCHA_ENABLED=false`).
   - **Test values must never reach the real system.** Add a startup check that production must not use a test key (`config-and-secrets`).
 - **Other people's websites:** the agent **does not solve a CAPTCHA and does not look for a way around it** (no solving services, no pretending to be a person). If you meet a CAPTCHA, stop that step, tell the user to do it themselves, and continue with the other parts. If you need data from that site often, look for an official API instead.
-- Reason: a CAPTCHA is the site owner saying "no bots." Getting around it breaks their terms and gets the IP or account banned.
 
 ## 7 · What you may do freely in the lab
 
@@ -1396,11 +1315,9 @@ These still stay under "รออนุมัติ" (awaiting approval) even in
 | Opening a port like `"3000:3000"` (every network card) | People on the same network can reach it. Always use `127.0.0.1:` |
 | Putting real secrets in the `Dockerfile` or image | The secret stays in the image forever |
 | Removing or raising the limits `cpus` `mem_limit` `pids_limit` until the machine hangs | A lab stuck in a loop will eat the whole machine |
-| Mounting things from the machine as writable when the lab only needs to read (`ref/` · sample data · a shared SDK cache · the source folder of isolated mode) | Tricked code in the lab can write back to the machine. Add `:ro` to every mount that is not this round's work, and have the lab copy into its own space if it must edit (idea from anthropics/claude-code devcontainer and trailofbits/skills) |
+| Mounting things from the machine as writable when the lab only needs to read (`ref/` · sample data · a shared SDK cache · the source folder of isolated mode) | Tricked code in the lab can write back to the machine. Add `:ro` to every mount that is not this round's work, and have the lab copy into its own space if it must edit |
 
 The Claude Code documentation warns that even in a container, running without permission prompts (`--dangerously-skip-permissions`) cannot stop project code that deliberately steals what is in the lab, including Claude Code's own token. Use it only with a repo you trust, and use `-Locked` when unsure.
-
-So `sandbox.ps1 claude` runs only in isolated mode. In mount mode the script refuses, because `/work` is the user's real folder (§7, last item).
 
 **Limits of `-Locked`:** DNS can go out only through the resolver the lab was given (Docker's), not any DNS server. But that resolver still forwards queries outward, so data can still be smuggled out through DNS (DNS tunnelling). For work where data must never leak, run with no network at all.
 
@@ -1408,17 +1325,38 @@ So `sandbox.ps1 claude` runs only in isolated mode. In mount mode the script ref
 
 ## 9 · Windows notes
 
-- Docker Desktop uses WSL 2. Files on drive `C:` that are mounted in are slower than files in a volume. If build or test is very slow, use `-Isolated` (verified: `npm ci` for just 2 packages took 52 seconds on a OneDrive folder).
+- Docker Desktop uses WSL 2. Files on drive `C:` that are mounted in are slower than files in a volume. If build or test is very slow, use `-Isolated`.
 - **Projects in a OneDrive folder:** mount mode makes `node_modules` and build files sync to the cloud, so use `-Isolated` or move the project out of OneDrive.
 - If you cannot run `sandbox.ps1`, use `powershell -ExecutionPolicy Bypass -File .\.sandbox\sandbox.ps1 <command>`.
 - `-Locked` reads the host's IP once at startup. A service whose IP changes often may drop out; run `up -Locked` again.
 
 ## Links to other skills
 
-- `parallel-attempts-pick-best`: normally competitors use one git worktree each. Use one isolated lab each (`-Name <project>-a1` …) only for work that needs truly separate machines.
-- [`app-verifier-setup`](../app-verifier-setup/SKILL.md): the verify skill's `start` script runs in the lab.
 - `config-and-secrets`: put test values in a `.env` that stays out of git, and do not bake them into the image.
 - The `superuser` playbook `housekeeping`: cleans up old labs and images.
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
+
+
+## reference: playwright-mcp.md
+
+# Playwright MCP in the lab · docker-sandbox
+
+Open from SKILL.md section 5 when you run Playwright MCP inside the lab.
+
+- Playwright MCP in the lab (examples from teaching work, not yet a standard): running as root needs `--no-sandbox` · the `--browser` value must match the `--help` of the installed version (`chromium` or `chrome`; if it does not match, it cannot find the browser) · screenshots with a relative file name land in the process's working directory, not `--output-dir`, so move them yourself · a click that times out with "not visible/stable" may be a background tab; see `e2e-testing-patterns`.
+
+
+## reference: sources.md
+
+# Sources · docker-sandbox
+
+- Tested for real on Windows + Docker Desktop 4.46 (2026-10-05, project `sample-app`): the lab built · unit tests passed 15/15 · e2e on Chromium passed 14/14 in the lab.
+- Bugs found during testing were fixed in the script: PowerShell 5.1 with stderr · Playwright a different version from the base image · port collisions.
+- Verified: `npm ci` for just 2 packages took 52 seconds on a OneDrive folder (why `-Isolated` is advised on OneDrive).
+- The `:ro` mount rule is an idea from anthropics/claude-code devcontainer and trailofbits/skills.
 
 
 ---
@@ -1530,7 +1468,6 @@ All markdown. They **depend on what the project contains**, not on project size.
 
 - **Always:** `<project-name>/README.md` · `docs/BUILD-PLAN.md`
 - **Conditional:** USER-STORIES and `docs/sprints/sprint-NN.md` (work runs in sprints) · AGENT-LOOP (an agent writes code in rounds) · API-SPEC (an API that others call) · DATA-DICTIONARY (a database exists) · EVALUATION-POLICY and PROMPT-LIBRARY (LLM used) · `docs/decisions/ADR-NNNN-<slug>.md` (decisions that will be questioned again) · `docs/runbook-<topic>.md` (system in real use and someone on call)
-- People forget the 4 docs about LLM · API · database most often, and then must ask the agent every round which prompt is the real one.
 
 ---
 
@@ -1559,7 +1496,7 @@ python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE> 
 - It reads every `.docx` in `docs/`: question tables · tables of undecided assumptions · sign-off tables still "waiting" · labels in the body. It skips revision history, table of contents, label-explanation lines and `(รอบหลัง)` (later round).
 - The **สรุป** (summary) sheet counts by document × type with formulas. The **รายการค้าง** (open items) sheet has the heading in the doc · who answers · decide by · value used for now · cross-references · and "สถานะ" (status) and "คำตอบ" (answer) columns for people to fill in.
 - Types (ประเภทที่ต้องเลือก), shown in Thai in the sheet: **เจ้าของตัดสิน** (owner decides: a web search cannot close it) · **ทีมตัดสิน** (team decides: BA · SA) · **กฎหมาย** (legal) · **วัดจริง** (needs a real-world number: none is published) · **ลงนาม** (sign-off). A question that cites an owner question in another doc also counts as "เจ้าของตัดสิน".
-- **Before sending, read the list by eye.** The script matches wording. A row that was already answered but does not use the words "ตอบแล้ว · ปิดแล้ว · ตัดสินแล้ว" (answered · closed · decided) still gets through. In one sample set (6 docs) it found 75 items, and about 3 rows were like this.
+- **Before sending, read the list by eye.** The script matches wording. A row that was already answered but does not use the words "ตอบแล้ว · ปิดแล้ว · ตัดสินแล้ว" (answered · closed · decided) still gets through.
 - When the user fills in answers: write the answer into the source doc, remove the label, record it in the revision history, then rerun the script. This file is a work list, not a source. Do not edit answers in this file in place of the doc.
 
 **Technical track.** Write when you reach the point of need. No need to wait for anyone: README · BUILD-PLAN before the first line of code · DATA-DICTIONARY when designing the first table · API-SPEC at the first endpoint · PROMPT-LIBRARY at the first prompt really used · ADR at decision time (not in the final wrap-up, because the real reasons are gone by then) · Runbook before going live. Full table in [`references/technical-docs.md`](references/technical-docs.md).
@@ -1578,7 +1515,6 @@ Full table (agent · skill for each of 16 doc types): [`references/technical-doc
 - Quick figures in a README · PR · code notes → Mermaid (`software-diagrams`) embedded in `.md` (colours are random and meaningless, Thai overflows the boxes, and shrunk to A4 it is unreadable).
 
 **Every figure header needs all 6 items:** project logo · title · 1-line subtitle · figure number · version and date · owner (details in `diagram-figures` section 3).
-Architecture figures get copied into emails and slides and then live on for a year. **Nobody dares to edit a figure with no date.**
 
 ---
 
@@ -1621,15 +1557,9 @@ Wrong: `.docx` with no Heading style · keeping only the PNG and not the source 
 
 ---
 
-## 9 · Abbreviations
-
-ADR Architecture Decision Record · BRD Business Requirements Document · FSD Functional Specification Document · QA Quality Assurance · SRS Software Requirements Specification · TOC Table of Contents
-
----
-
 ## 10 · Links to other skills
 
-Besides the "not for" table above: drawing figures → `diagram-figures` (project docs) · `software-diagrams` (README · PR) · temporary items → `temp-file-discipline` · doc status in `docs/BUILD-PLAN.md` → `status-report` · checklist for the printed version → `assets/doc-set-checklist.md`
+Doc status in `docs/BUILD-PLAN.md` → `status-report` · checklist for the printed version → `assets/doc-set-checklist.md`
 
 **Read more when needed:** [`references/writer-templates.md`](references/writer-templates.md): `technical-writer` doc templates (tutorial · API reference · release notes · for README see `project-bootstrap`)
 

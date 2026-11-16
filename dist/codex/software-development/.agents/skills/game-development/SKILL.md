@@ -29,19 +29,9 @@ An agent called to work in this area opens its own role file before starting · 
 | designing game mechanics, balance, progression systems, level design, narrative structure, or onboarding. Focused on player experience and engagement, not implementation | [`references/agent-game-designer.md`](references/agent-game-designer.md) | `game-designer` |
 | running live-ops for games — events, battle passes, seasonal content, A/B testing, retention loops, monetization tuning, player segmentation. Combines game design, analytics, and product management for ongoing engagement | [`references/agent-live-ops-specialist.md`](references/agent-live-ops-specialist.md) | `game-designer` |
 
-## agent ของสายนี้
-
-`game-developer` · `game-designer`
-
-## ที่มา
-
-Moved from plugin `software-development-gaming` (formerly named game-architecture → `references/game-architecture.md` · multiplayer-netcode → `references/multiplayer-netcode.md` · live-ops-patterns → `references/live-ops-patterns.md` — no longer separate skills) and merged into `software-development` in v2.0.0. The original content is all still in `references/`
-
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 
 `/software-development:game-development <game-design | multiplayer-architecture> <details>`
-
-> **Language:** write every line of wording in the output per `human-writing`. This command gives the steps, while human-writing gives how to write so people can understand.
 
 Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
 

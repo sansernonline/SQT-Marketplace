@@ -2,22 +2,76 @@
 
 Use for a short video, Reel or TikTok ad, from hook to shot list
 
-# Video Script to Clip
+# video-script-to-clip — a short video from hook to shot list, readable with the sound off
 
 > **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the "ด่านก่อนลงมือ" section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search is for the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
-Viewers decide in the first 3 seconds, and most watch with the sound off. Write for both.
+## Use when
 
-## Workflow
+- Writing a short video, Reel, TikTok or Shorts ad from a message
+- Needing a hook, beat sheet, shot list, thumbnail storyboard or captions
 
-1. **One message, one action** — from the `campaign-set` card; if it will not fit one sentence, it is two videos
-2. **Pick length and platform** — 9:16, 1080 × 1920; 7–15 s for an offer, 15–30 s for a demo, up to 60 s for a story (safe zones from `social-formats`)
-3. **Write the hook** (0–3 s) using a pattern below; the product or problem is visible in the first frame
-4. **Beat sheet** — one idea per 2–5 s: hook → problem or desire → proof/demo → offer → call to action
-5. **Shot list** with [shot-list-template.md](references/shot-list-template.md): visual, camera, motion, on-screen text, voice-over, duration
-6. **Thumbnail storyboard** — one frame per shot in a grid; if the story does not read as stills, motion will not save it
-7. **Per-shot generation brief** (style block from `style-consistency`) or shooting notes for a phone shoot
-8. **Captions** — burned-in or SubRip Text (SRT) using the rules below; review on a phone with sound off
+Not for: a person speaking on camera → `speaking-script` · Thai subtitles as .srt → `subtitles-th` · Thai voice-over without recording → `narration-th`
+
+## Steps
+
+Viewers decide in the first 3 seconds, and most watch with the sound off: write for both.
+
+1. **One message, one action**, from the `campaign-set` card. If it will not fit one sentence, it is two videos.
+2. **Pick length and platform:** 9:16, 1080 × 1920; 7–15 s for an offer, 15–30 s for a demo, up to 60 s for a story (safe zones from `social-formats`).
+3. **Write the hook** (0–3 s) with a pattern: show the result · call out the viewer · problem first · surprising number · before → after · question (examples → [`references/hooks-and-example.md`](references/hooks-and-example.md)). The product or problem is visible in the first frame; no logo intro, no slow fade-in, no black frame at the start; movement or text in frame 1. If the hook cannot be said in one sentence, the video has none yet.
+4. **Beat sheet,** one idea per 2–5 s: hook → problem or desire → proof/demo → offer → call to action (CTA). One video = one CTA. Show the offer and the CTA as text.
+5. **Shot list** with [`references/shot-list-template.md`](references/shot-list-template.md): visual, camera, motion, on-screen text, voice-over, duration.
+6. **Thumbnail storyboard,** one frame per shot in a grid. If the story does not read as stills, motion will not save it. Generate or shoot only after the storyboard is approved.
+7. **Per-shot generation brief** (style block from `style-consistency`) or shooting notes for a phone shoot; fields → `references/hooks-and-example.md`.
+8. **Captions,** burned-in or SubRip Text (SRT), by the table below; review on a phone with sound off. Platform auto-captions mis-transcribe Thai names, prices and brand words: correct them by hand.
+9. **Music:** use the platform's licensed library or tracks you own a licence for; commercial accounts often have a narrower library than personal ones (รอยืนยัน per platform).
+10. Run the `no-ai-look` check (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files.
+
+## Caption and on-screen text rules
+
+| Rule | Value |
+|---|---|
+| Position | Inside the middle band, clear of the platform's UI zones; look up the safe-zone guide live (links in social-formats/references/platform-sizes.md) |
+| Lines | 1 line preferred, max 2; bottom-heavy pyramid when 2 lines |
+| Thai line length | ≤ 35 characters per line, not counting tone marks and above/below vowels |
+| Reading speed (Thai adult) | Captions and subtitles (they follow the voice-over): ≤ 17 characters per second. On-screen marketing text (headline, offer): characters ÷ 12, min 1.5 s, offers ≥ 2.5 s (see `motion-basics`) |
+| Duration per caption | 5/6 s minimum, 7 s maximum |
+| Thai punctuation | Subtitles: no full stops; separate sentences with a space; no question marks or dashes in dialogue; "…" as one character. On-screen hook text may use "?" once |
+| Size | Thai caption ≥ 48 px on a 1080 px canvas with dark outline or 60–70% box behind (house rule) |
+| Line breaks | Break between words or phrases; never inside a word; check every break by reading aloud |
+| Total on-screen marketing text | Under about 120 Thai characters across a 15 s clip (not counting tone marks and above/below vowels) |
+
+## Check before done
+
+- Hook in one sentence, product or problem visible in frame 1
+- One message and one CTA; offer and CTA shown as text
+- Captions pass the table above and were read on a phone with sound off
+- The line `ด่านก่อนลงมือ:` closes the work
+
+## References
+
+- [`references/hooks-and-example.md`](references/hooks-and-example.md) — open when writing the hook or per-shot briefs, or for a finished 12 s shot-list example
+- [`references/shot-list-template.md`](references/shot-list-template.md) — open when writing the shot list
+- [`references/production-tools.md`](references/production-tools.md) — open to pick an editor or code tool (CapCut, DaVinci Resolve, HyperFrames, Remotion), commercial-use terms, export settings, Thai subtitle fonts, music licences
+- Sources and check dates (caption rules): [`references/sources.md`](references/sources.md)
+
+Related: `motion-basics` (text timing) · `social-formats` (canvas, safe zones) · `style-consistency` · `campaign-set` (V rows in the matrix)
+
+## เรียกเป็นคำสั่ง
+
+`/graphic-design:video-script-to-clip <the message> [target platform and length]`
+
+Run `video-script-to-clip` for: **$ARGUMENTS** — `social-creator` writes the message, hook and script; `art-director` writes the shot list, motion timing and per-shot briefs.
+
+Review the storyboard as thumbnails before generating anything.
+
+
+## reference: hooks-and-example.md
+
+# Hook examples, per-shot brief and worked 12 s clip · video-script-to-clip
+
+Open when writing the hook, writing per-shot generation briefs, or wanting a finished shot-list example.
 
 ## Hook patterns (first 3 seconds)
 
@@ -30,25 +84,9 @@ Viewers decide in the first 3 seconds, and most watch with the sound off. Write 
 | Before → after | Plain glass → finished layered drink in one cut |
 | Question | "รู้ไหมทำไมมัทฉะต้องตีน้ำร้อน 80 องศา?" |
 
-Rules: no logo intro, no slow fade-in, no black frame at the start; movement or text in frame 1.
+## Per-shot generation brief
 
-## Caption and on-screen text rules
-
-| Rule | Value |
-|---|---|
-| Position | Inside the middle band — clear of the platform's UI zones; look up the platform's safe-zone guide live (links in social-formats/references/platform-sizes.md) |
-| Lines | 1 line preferred, max 2; bottom-heavy pyramid when 2 lines |
-| Thai line length | ≤ 35 characters per line, not counting tone marks and above/below vowels |
-| Reading speed (Thai adult) | Captions and subtitles (they follow the voice-over): ≤ 17 characters per second. On-screen marketing text (headline, offer): characters ÷ 12, min 1.5 s, offers ≥ 2.5 s (see `motion-basics`) |
-| Duration per caption | 5/6 s minimum, 7 s maximum |
-| Thai punctuation | Subtitles: no full stops; separate sentences with a space; no question marks or dashes in dialogue; "…" as one character. On-screen hook text may use "?" once |
-| Size | Thai caption ≥ 48 px on a 1080 px canvas with dark outline or 60–70% box behind (house rule) |
-| Line breaks | Break between words or phrases — Thai has no spaces between words, so never break inside a word; check every break by reading aloud |
-| Total on-screen marketing text | Under ~120 ตัวอักษรไทย across a 15 s clip (not counting tone marks and above/below vowels) |
-
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://partnerhelp.netflixstudios.com/hc/en-us/articles/220448308 (Thai Timed Text Style Guide) · https://partnerhelp.netflixstudios.com/hc/en-us/articles/215758617 (durations) · Meta safe zone: https://www.facebook.com/business/ads-guide/update/image/instagram-story
-
-Platform auto-captions mis-transcribe Thai names, prices and brand words — always correct them by hand.
+Subject · action/motion (what moves, how fast) · camera (static, pan, push-in, orbit) · duration · aspect ratio · style block reference · first-frame and last-frame description (for continuity between shots) · negatives (text, logos, warped hands).
 
 ## Worked example — 12 s offer clip
 
@@ -60,41 +98,6 @@ Platform auto-captions mis-transcribe Thai names, prices and brand words — alw
 | 4 | 9–12 s | Logo + LINE ID on cream background, glass beside | Static | "แอด LINE @matcha26 รับโค้ด" | "แอดไลน์รับโค้ดเลย" |
 
 Check shot 3 text (on-screen marketing text, read while watching, so ÷ 12 not ÷ 17): "ซื้อ 1 แถม 1 · 1–12 เม.ย." = 23 counted characters (base letters + digits + spaces + symbols) ÷ 12 ≈ 1.9 s; it is the offer, so hold ≥ 2.5 s → on screen 4 s, fine.
-
-## Per-shot generation brief
-
-Subject · action/motion (what moves, how fast) · camera (static, pan, push-in, orbit) · duration · aspect ratio · style block reference · first-frame and last-frame description (for continuity between shots) · negatives (text, logos, warped hands).
-
-## Rules
-
-- If the hook cannot be stated in one sentence, the video does not have one yet
-- One video = one call to action (CTA). With 2 CTAs, viewers follow neither
-- Show the offer and the CTA as text — most people watch without sound
-- Music: use the platform's licensed library or tracks you own a licence for; commercial accounts often have a narrower library than personal ones (รอยืนยัน per platform)
-- Generate or shoot only after the thumbnail storyboard is approved
-
-## Not an AI look
-
-Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files.
-
-## Related
-
-- [references/production-tools.md](references/production-tools.md) — which editor or code tool to cut with (CapCut, DaVinci Resolve, HyperFrames, Remotion), commercial-use terms, export settings, Thai subtitle fonts, music licences
-- `motion-basics` — timing and easing for text animation
-- `social-formats` — canvas and safe zones
-- `style-consistency` — one look across shots
-- `campaign-set` — the V rows in the matrix
-- `speaking-script` — the script when a person speaks on camera
-- `subtitles-th` — Thai subtitles as .srt or burned in
-- `narration-th` — Thai voice-over from a script without recording
-
-## เรียกเป็นคำสั่ง
-
-`/graphic-design:video-script-to-clip <the message> [target platform and length]`
-
-Run `video-script-to-clip` for: **$ARGUMENTS** — `social-creator` writes the message, hook and script; `art-director` writes the shot list, motion timing and per-shot briefs.
-
-Review the storyboard as thumbnails before generating anything.
 
 
 ## reference: production-tools.md
@@ -256,3 +259,10 @@ Save as UTF-8 so Thai characters survive upload.
 - [ ] Prices, dates, ID match the campaign card
 - [ ] Music licence recorded
 - [ ] Thumbnail / cover frame chosen and readable at small size
+
+
+## reference: sources.md
+
+# Sources · video-script-to-clip
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง (caption and on-screen text rules): https://partnerhelp.netflixstudios.com/hc/en-us/articles/220448308 (Thai Timed Text Style Guide) · https://partnerhelp.netflixstudios.com/hc/en-us/articles/215758617 (durations) · Meta safe zone: https://www.facebook.com/business/ads-guide/update/image/instagram-story

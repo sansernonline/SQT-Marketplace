@@ -5,8 +5,6 @@ description: Use when a Thai family wants a budget meal plan
 
 # Meal Plan and Grocery List
 
-Plan once on the weekend, shop once, cook twice. The plan is a budget tool as much as a menu.
-
 General information, not dietary advice — for diabetes, kidney disease or allergies, follow the doctor's or dietitian's list.
 
 ## Inputs to ask for (once)

@@ -2,113 +2,40 @@
 
 Use when an answer needs prose, a table or a diagram
 
-# The shape of an answer
+# The shape of an answer — pick prose, table, list or figure from the content
 
-This skill gives the shape and structure; every line of wording follows `human-writing` · lives only in plugin `superuser`; other plugins share it through `dependencies`
+> **One rule:** whatever structure the content has, the answer uses that shape. Comparison → table · connections → figure · one thing → sentences.
 
-> **One rule:** whatever structure the content has, the answer uses that shape.
-> Comparison → table · connections → figure · one thing → sentences
+## Use when
+- Deciding how to lay out an answer: prose, table, list or figure.
+- The question compares options, asks what connects to what, or you are blocked and must ask for something.
 
----
+## Steps
+1. Pick the shape from the signal in the question (quoted signals are Thai phrasings; English in brackets):
 
-## Pick the shape from signals in the question
+   | Signal | Shape |
+   |---|---|
+   | "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" (which is better · how they differ · what options) | **Comparison table** |
+   | "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" (what connects to what · how data flows · the sequence) | **Figure** |
+   | "มีอะไรบ้าง" (what are there) when the items are not compared | **Bullet list** |
+   | "ทำไม" · "แปลว่าอะไร" (why · what does it mean) · one thing with no branches | **Plain sentences** |
+   | Several numbers that must be seen together | **Table** |
+   | Steps that must be done in order | **Numbered list** |
+   | Cannot continue · must wait for something from the user | **Short list: what is blocking → what is needed** |
 
-The quoted signals are Thai user phrasings; English meanings are in brackets.
+   Having 2 or more "things being compared" is the strongest signal for a table, because in a paragraph the reader must hold the first one in their head while reading the second.
+2. **If you use a table:** the first column is the thing compared, the next columns the aspects · 3–5 columns, at most 8 rows in chat · every cell has content (no data → "ไม่มี"; a table where every cell says "it depends" has no content either) · at most 1 line per cell, longer goes below the table · rows ordered by weight (recommended or most used first, not alphabetical) · column headings are the reader's questions (`เร็วแค่ไหน` · `ต้องดูแลมากไหม`, not `ประสิทธิภาพ` · `ความซับซ้อน`) · always close with a 1-line conclusion.
+3. **If the relationship is the answer** (what connects to what, what sits inside what, a sequence with forks or loops, one thing in several states), draw a figure. In chat a small ASCII figure or a short Mermaid is enough (`กล้อง ──DICOM──▶ Orthanc ──▶ API ──▶ รายงาน`). A figure that must be a real file for a document or slides uses that plugin's figure-drawing skill, if there is one.
+4. **If the answer is shorter than 3 lines, is yes/no plus 1 sentence of reason, or the reason matters more than the options, use sentences.** A 1–2 row table, or a figure that draws what one sentence can say, is the wrong shape.
+5. **If you cannot continue,** list only 2 things: what is blocking, and what you need from the user. 1 line per item, at most 4 items. Do not tell the cause at length, answer side topics or plan ahead. If the user must choose among paths, 1 item per path, easiest first. Example:
+   ```
+   ติดอยู่ 1 เรื่อง:
+      - มองไม่เห็นไฟล์ — โฟลเดอร์ที่เชื่อมไว้ว่าง
+      ต้องการ 1 อย่าง:
+      - แนบ Mockup.html มา หรือบอก path ใหม่
+   ```
 
-| Signal | Shape |
-|---|---|
-| "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" ("which is better" · "how do they differ" · "what options are there") | **Comparison table** |
-| "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" ("what connects to what" · "how does data flow" · "what is the sequence") | **Figure** |
-| "มีอะไรบ้าง" ("what are there") when the items are not compared | **Bullet list** |
-| "ทำไม" · "แปลว่าอะไร" ("why" · "what does it mean") · one thing with no branches | **Plain sentences** |
-| Several numbers that must be seen together | **Table** |
-| Steps that must be done in order | **Numbered list** |
-| Cannot continue · must wait for something from the user | **Short list: what is blocking → what is needed** |
-
-**The most important signal is having 2 or more "things being compared"**; use a table then,
-because in a paragraph the reader must hold the first one in their head while reading the second.
-
----
-
-## A table that reads easily
-
-- **The first column is the thing being compared**, and the next columns are the aspects compared
-- **3–5 columns**; more than that cannot be read in time, and at most 8 rows in a chat answer
-- **Every cell must have content** — an empty cell means that column should not exist, or the data is incomplete; if there is no data, write "ไม่มี" (none) plainly · a table where every cell says "it depends" also has no content
-- **At most 1 line per cell**; if longer, move it below the table
-- **Order rows by weight**: the recommended one or the most used one on top, not alphabetical
-- **Column headings are the questions in the reader's head**, not names of academic fields
-
-```
-ผิด: | ตัวเลือก | ประสิทธิภาพ | ความซับซ้อน |
-ถูก: | ตัวเลือก | เร็วแค่ไหน | ต้องดูแลมากไหม |
-```
-
-(Gloss: wrong = "Option | Performance | Complexity" · right = "Option | How fast | Does it need much upkeep".)
-
-**Always close a table with a 1-line conclusion** — a table gives data; it does not say what to choose
-
----
-
-## When a figure beats a table
-
-Use a figure when **the relationship is the answer** — a table can give properties, but cannot say what connects to what.
-
-| Use a figure | Use a table |
-|---|---|
-| What connects to what · what sits inside what | Which is better than which, and in what respect |
-| A sequence with forks or loops back | A straight sequence of steps with no branches (a numbered list is enough) |
-| The same thing in several states | Different things on the same aspects |
-
-In chat, **a small ASCII figure or a short Mermaid is enough** — no need to open a drawing tool
-
-```
-กล้อง ──DICOM──▶ Orthanc ──▶ API ──▶ รายงาน
-                    │
-                    └──▶ ที่เก็บถาวร
-```
-
-(Gloss: กล้อง = camera/scanner · รายงาน = report · ที่เก็บถาวร = permanent storage.)
-
-A figure that must be a real file to go into a document or slides uses the figure-drawing skill of that plugin (if there is one)
-
----
-
-## When sentences beat both
-
-- The answer is shorter than 3 lines — a 2-row table is only decoration and explains nothing
-- A question answered "yes" or "no" followed by 1 sentence of reason
-- A matter where **the reason matters more than the options** — a table cuts the reason to fit the cell
-
-> A table with one row or 2 short rows means the wrong shape was used · a figure that draws what one sentence can say is the same
-
----
-
-## When you cannot continue
-
-Whenever you are blocked → list only 2 things: **what is blocking** and **what you need from the user**
-
-- 1 line per item · at most 4 items
-- Do not tell the cause at length, do not answer side topics, do not plan the work ahead — wait until you have the thing, then do it
-- If there are several paths for the user to choose → each path is 1 item, the easiest on top
-
-```
-ผิด: ย่อหน้ายาวเล่าว่า container ใหม่ · โฟลเดอร์ว่าง · OneDrive หาย · แล้ววางแผนแก้ 3 ข้อรอไว้
-ถูก: ติดอยู่ 1 เรื่อง:
-   - มองไม่เห็นไฟล์ — โฟลเดอร์ที่เชื่อมไว้ว่าง
-   ต้องการ 1 อย่าง:
-   - แนบ Mockup.html มา หรือบอก path ใหม่
-```
-
-(Gloss: wrong = a long paragraph telling that the container is new · the folder is empty · OneDrive is gone · and then planning 3 fixes while waiting · right = "Blocked on 1 thing: cannot see the file — the linked folder is empty. Need 1 thing: attach Mockup.html or give the new path.")
-
----
-
-## Abbreviations
-
-Abbreviations used in this file · rules for writing abbreviations → `spell-out-abbreviations`
-
-- **ASCII** — American Standard Code for Information Interchange (drawing figures with plain characters)
-- **Mermaid** — a language that writes diagrams as text and lets a program draw them
-- **DICOM** — Digital Imaging and Communications in Medicine (a standard for medical image files and transfer)
-- **API** — Application Programming Interface (the channel through which one program calls another)
+## Check before done
+- [ ] The shape matches the content's structure (not a table for one thing, not a paragraph for a comparison).
+- [ ] Every table has content in every cell and ends with a 1-line conclusion.
+- [ ] A blocked answer lists only what is blocking and what is needed.

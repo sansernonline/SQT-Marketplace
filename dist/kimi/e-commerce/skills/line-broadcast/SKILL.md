@@ -25,8 +25,6 @@ A message is counted **per recipient**: 1 broadcast to 4,000 friends = 4,000 mes
 | Basic 1,280 baht | 15,000 | 0.10 baht | 3 | 32,000 msgs → 17,000 extra × 0.10 = 1,700 + 1,280 = **2,980 baht** |
 | Pro 1,780 baht | 35,000 | 0.06 baht | 8 | 32,000 ≤ 35,000 → **1,780 baht** |
 
-ตรวจล่าสุด 2026-10-22 (หน้าทางการ LINE for Business ยืนยันตาราง Free 300 · Basic 15,000 · Pro 35,000 ข้อความ) · แหล่ง: https://lineforbusiness.com/th/service/line-oa-features/broadcast-message
-
 Formulas: `messages = reach × sends` · `extra cost = max(0, messages − free) × rate`. Basic becomes dearer than Pro above about **20,000 messages/month** (extra Basic spend passes the 500-baht price gap).
 
 Quota left: OA Manager → Insight, or the API `GET /v2/bot/message/quota` and `GET /v2/bot/message/quota/consumption`.
@@ -39,8 +37,6 @@ Quota left: OA Manager → Insight, or the API `GET /v2/bot/message/quota` and `
 | Retarget (clicked, chatted, joined via a QR) | OA Manager → audiences | best for promotions |
 | Narrowcast with `recipient` / `filter.demographic` | Messaging API | same 50-recipient minimum |
 | Multicast to a known `userId` list | Messaging API | up to 500 IDs per call; own CRM segment (e.g. bought in the last 90 days) |
-
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://developers.line.biz/en/reference/messaging-api/ (narrowcast: "the final number of recipients must be 50 or more")
 
 Quota cannot cover every segment → pick the set by value (people x click rate x baht per click) against message cost with `decision-scoring` command `knapsack`; rules and a worked example in [references/segment-knapsack.md](references/segment-knapsack.md).
 
@@ -64,18 +60,6 @@ If blocks pass about 1% of reach after 1 send, you are sending too often or to t
 6. **Wait for the user's approval** of the final message, segment and quota numbers; schedule or send only after they say yes, then write the log line.
 7. Next working day: opens, clicks, blocks into the log.
 
-## Worked example
-
-Café, Basic package, 5,200 friends, 4,600 target reach. Plan: 2 promos to everyone + 2 to "bought in 90 days" (1,850) this month.
-Messages = 2 × 4,600 + 2 × 1,850 = 12,900 ≤ 15,000 → no extra cost; 2,100 left for order pushes.
-
-Promo text for the first send (one `!` on the hook only, period and conditions stated, no "รีบ…เลย!"):
-> กาแฟเย็นทุกแก้วลด 20%!
-> 25–31 ต.ค. 2569 เฉพาะสั่งหน้าร้าน แสดงข้อความนี้ก่อนชำระเงิน
-> ไม่ร่วมกับโปรโมชันอื่น · สาขา <ชื่อสาขา> เปิด 07:00–18:00
-
-For Thai text → `human-writing` `references/thai-grammar.md`, section 4, shop-chat register.
-
 ## Rules
 
 - No false urgency ("วันสุดท้าย!" every week trains people to ignore you, and misleading ads are a consumer-protection risk).
@@ -86,3 +70,10 @@ For Thai text → `human-writing` `references/thai-grammar.md`, section 4, shop-
 ## Related
 
 `line-oa-setup` (packages · optional MCP for sending) · `line-chatbot` (reply keywords) · `thai-holidays` · `pdpa-workflow` · `live-selling-script` · if installed: `line-richmenu` (graphic-design).
+
+## References
+
+- [`references/broadcast-template.md`](references/broadcast-template.md) — open at workflow step 4 to write the message
+- [`references/segment-knapsack.md`](references/segment-knapsack.md) — open when quota cannot cover every segment
+- [`references/worked-example.md`](references/worked-example.md) — open for a café plan with quota math and promo text
+- [`references/sources.md`](references/sources.md) — sources and check dates for the quota table (2026-10-22) and segment rules (2026-10-06)

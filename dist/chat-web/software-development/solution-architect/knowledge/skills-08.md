@@ -4,8 +4,6 @@ Use when a task ends, to report status in a table
 
 # Report status when a task ends
 
-> **Language:** write the wording of every line following `human-writing`. This skill gives the format and structure, and human-writing says how to write so that people understand.
-
 > **The one rule:** every time a task ends, there must be a status table in the task's central file, and the same table in the reply.
 > A task with no status table is not finished.
 > **Exception:** read-only playbooks (`research` · `review` · software-development: `investigation`) put the table in the reply only and write no file.
@@ -71,19 +69,13 @@ Show "ภาพรวม" (overview, if any) + a table of only **the rows that c
 - [ ] You touched no other heading in the file
 - [ ] BUILD-PLAN form: the numbers in "ภาพรวม" match the table · 1 line is added to `## ประวัติสถานะ` · "ทีมตอนนี้" (current team) has no leftover `ทำอยู่` row for a task that has finished
 - [ ] BUILD-PLAN form: run the checker until it passes (the checker is in plugin `superuser`): `python <superuser folder>/skills/polished-document-style/scripts/check_outline.py assets/build-plan-status.md <path of docs/BUILD-PLAN.md>`. It catches missing headings, swapped headings, missing bold cells, changed table headers and cells not yet filled. Other headings in the file (the task table, `## ตัดสินใจเอง`) the checker lets pass.
-- [ ] The reply has a table of only the changed rows + pending + awaiting approval (if any) + proposals (if any) + next
-
 ---
 
 ## 6 · What not to do
 
-| Do not | Because |
-|---|---|
-| Write `เสร็จ` or `ผ่าน` without really checking | A status table that lies is worse than no table. |
-| Append to the table every round | The file keeps growing and nobody knows which row is current. |
-| Create a new status file (`STATUS.md` `progress.md`) | Status scatters across places and nobody knows where to look. |
-| Hide failing items in prose | A reader of the table will think everything passed. |
-| Let a subagent write the central file itself | Writes collide and the file breaks. |
+- Do not create a new status file (`STATUS.md` `progress.md`), because status then scatters across places.
+- Do not hide failing items in prose, because a reader of the table will think everything passed.
+- Do not append to the table every round, and do not let a subagent write the central file.
 
 ---
 
@@ -282,14 +274,9 @@ Use when work passes to a subagent, session or person
 
 # handoff — pass work on so the receiver does not have to guess
 
-Part of `superuser` · lives only in plugin `superuser`; other plugins share it through `dependencies` · wording follows `human-writing`
+> **One rule:** whoever receives the work (new subagent · session · model · person · bot) remembers nothing, so only what is written to a file can be passed on. Write it so someone who never saw the chat can start within 2 minutes.
 
-> **One principle:** whoever receives the work (a new subagent · a new session · a new model · a person · another bot) remembers nothing → only what is written to a file can be passed on. Write it so that someone who never saw the chat can open it and start work within 2 minutes.
-
----
-
-## 1 · When to hand off and what to use
-
+## 1 · Use when
 | Moment | Use | Who writes |
 |---|---|---|
 | Lead → worker | **Task sheet** (`ใบสั่งงาน`, section 3) | Lead |
@@ -297,34 +284,96 @@ Part of `superuser` · lives only in plugin `superuser`; other plugins share it 
 | This session → next session · switching model · context nearly full | **Resume** (`รับงานต่อ`) in `CONTEXT.md` (section 5) | Lead |
 | Team → a person · another bot · Quix · Agent Desk | **Hand-off package** (section 6) | Lead |
 
-> **Quix · Agent Desk** = optional external tools. Quix queues work for agents; Agent Desk is a task board for a team of agents. Both read the header of `handoff/*.md`. This skill is complete in every item without them installed.
+Quix (work queue) and Agent Desk (task board) are optional external tools that read the header of `handoff/*.md`. Everything here works without them.
 
----
+## 2 · `.claude/superuser/` — the team's shared store
+All files, first-time setup, inbox and log: [`team-memory`](references/team-memory.md). Commit rules: [`team-files`](../superuser/references/team-files.md).
 
-## 2 · `.claude/superuser` — the team's shared store
-
-Everything lives under `.claude/superuser/`. All the files, first-time setup, inbox and log are in [`team-memory`](references/team-memory.md). The commit rules are in [`team-files`](../superuser/references/team-files.md).
-
-```
-.claude/superuser/
-├─ CONTEXT.md            งาน · ความคืบหน้า · การตัดสินใจ · รับงานต่อ  ← ทุกคนอ่านก่อน
-├─ handoff/
-│  ├─ 2026-10-21-03-login-api.md     ใบสั่งงาน + ใบส่งงาน ของชิ้นนั้น (1 ชิ้น 1 ไฟล์)
-│  └─ 2026-10-21-03-login-api/       ผลยาวของชิ้นนั้น (รายงาน · ข้อมูล · ร่าง)
-├─ notes/ · ledger/ · out-of-scope/  สมุดงานของแผน · ledger · แนวคิดที่ปฏิเสธ (team-memory หัวข้อ 8)
-└─ log/ · inbox/ · learn/            ของเดิม (learn/drop/ = บทเรียนที่ทิ้งไว้ข้อละไฟล์)
-```
-
-- **Piece name** `<date>-<2-digit sequence>-<short English words>` · use the same name for the file, the folder and in the log.
-- **The real work product** (code · documents · images) lives in the project's normal folders. `handoff/` keeps only instructions, summaries and in-between material.
-- **Do not commit** `handoff/` `notes/` `ledger/` `out-of-scope/` (put them in `.gitignore` along with `log/`). Before writing to these, `git check-ignore <path>` must find it and the path must not be a symlink. If that fails, do not write; tell the user to add it to `.gitignore`. When the work is done, for any piece that still has value → move its substance up to `CONTEXT.md` or `HISTORY.md`.
+- Files: `CONTEXT.md` (everyone reads first) · `handoff/<piece>.md` (task sheet + delivery sheet, 1 piece per file) · `handoff/<piece>/` (long results) · `notes/` · `ledger/` · `out-of-scope/` · `log/` · `inbox/` · `learn/`.
+- **Piece name** `<date>-<2-digit sequence>-<short English words>`, the same for the file, the folder and the log.
+- The real work product (code · documents · images) lives in the project's normal folders. `handoff/` keeps only instructions, summaries and in-between material.
+- **Do not commit** `handoff/` `notes/` `ledger/` `out-of-scope/` (put them in `.gitignore` along with `log/`). Before writing to these, `git check-ignore <path>` must find it and the path must not be a symlink. If that fails, do not write; tell the user to add it to `.gitignore`. When work is done, move anything of lasting value up to `CONTEXT.md` or `HISTORY.md`.
 - **Never put in** secrets · ID card numbers · full account numbers · other people's data.
 
----
-
 ## 3 · Task sheet (`ใบสั่งงาน`)
+The header is machine-readable (Quix · Agent Desk read it); the content is human language. **All 5 sections must be there, or it is not sent yet.**
 
-The file header is machine-readable data (Quix · Agent Desk read these fields). The content is in human language. **All 5 sections must be there, or it is not sent yet.**
+Header fields: `id` · `from` · `to` · `tier` (ใหญ่ · กลาง · เล็ก + effort) · `status` (เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่) · `depends_on` · `files_allowed`. Sections in order: `## เป้า` (goal, with `ขนาด: <n>k`) · `## เสร็จเมื่อ` · `## ใช้อะไร` (files to read, skills) · `## ขอบเขต` (writable files, what not to do) · `## ส่งกลับแบบไหน` (delivery sheet appended, message back about 40 lines or fewer). Full example → [`references/sheet-examples.md`](references/sheet-examples.md).
+
+- Code work uses the same sheet: `to: software-development:developer` · `files_allowed: [src/auth/**]` · done-when = tests pass · skill = `stack-*`.
+- A normal piece puts the 5-item sheet in the message that sends the task (`superuser` section 5). Write a file only for a piece that crosses sessions or goes to another person or bot; then the instruction is one line: `ทำตาม .claude/superuser/handoff/<id>.md`. Pass the path, not the content.
+- A brief picked up several days later uses `superuser/templates/DURABLE-BRIEF.md`: write behavior and interface names, not paths or line numbers; include testable acceptance criteria and what is out of scope. A sheet for a piece done today may use paths.
+- State the intent of the rule, not only the condition. For a fix or retry round, add `## รอบก่อน` (previous worker's report + what must change) and send a new worker.
+- A sheet to `reviewer` has no lead opinion in it (`superuser` section 5).
+- **Workers that review or research:** a conclusion that something is "outdated", "wrong" or "contradictory" must attach `file:line` and say whether it checked that it was not on purpose (history sections · script-generated numbers · noted exceptions). Put this in every such sheet. The lead opens a few at random before believing them.
+
+## 4 · Delivery sheet (`ใบส่งงาน`)
+The worker appends it to its own task sheet, then edits `status:`. The message back = path + result + 1-line summary. Heading `## ส่ง — <date time> · <agent> · <model>`, then fields **ผล** · **ของที่ได้** · **ตรวจแล้วด้วย** · **ตัดสินใจเอง** · **ลองแล้วพัง** · **ค้างอยู่ · ไม่แน่ใจ** (example in `references/sheet-examples.md`).
+
+- **ผล** is 1 of 4 values (`superuser` section 5): `เสร็จ` · `เสร็จ มีข้อกังวล` · `ขาดบริบท` · `ติด`.
+- `เสร็จ` needs evidence in `ตรวจแล้วด้วย`. If there is none → `status: ติด` or `ค้างอยู่`.
+- **ลองแล้วพัง:** note every path tried that did not work, with a 1-line reason (`dead_ends` in the header if a machine must read it), so the next worker does not walk it again.
+- A result longer than 40 lines → write it to `handoff/<id>/` and cite the path.
+- The lead reads the delivery sheet, checks it against `เสร็จเมื่อ` itself, then moves any `ตัดสินใจเอง` that affects other work up to the "การตัดสินใจ" table in `CONTEXT.md`.
+
+## 5 · Resuming work (`รับงานต่อ`) — across sessions · switching model · context nearly full
+The `## รับงานต่อ` section in `CONTEXT.md` follows these rules. The `## ความคืบหน้า` table beside it belongs to `status-report`.
+
+**Before handing over** (end of session · before switching model · context use passes half in a long job), update `รับงานต่อ`:
+- **ทำต่อเป็นข้อแรก:** 1 item, doable at once, pointing to a file or `handoff/<id>.md`.
+- **ชิ้นที่ยังเปิด:** the `id`s whose `status` is not `เสร็จ`.
+- **รออนุมัติ:** ready but irreversible work; name the file or command (omit if none).
+- **ค้างอยู่:** questions the agent cannot pass alone, and whom to ask (`ไม่มี` if none).
+- **ระวัง:** traps found · what must not be torn up (already decided) · failed paths from every delivery sheet.
+- **ส่งมาแล้ว N ครั้ง:** count real handoffs only (end of session · switching model), not `/compact`. If the receiver sees N ≥ 2, old text may linger; check against the real thing before following it.
+- **สมุดงาน:** point to `notes/<plan>.md` and `ledger/<plan>.md` of the open plan ([`team-memory`](references/team-memory.md) section 8). A multi-piece plan is done only when the line `Task N: complete` is in its ledger.
+- **Tag every item** `ตรวจจริง` (seen yourself this session) or `ยังไม่ได้ตรวจ` (remembered). No tag = not yet checked. The receiver may believe the first at once and must check the second before use.
+
+Switching to another vendor (Codex · Gemini) or back to Claude → [`team-memory`](references/team-memory.md) section 3. Test: a new model that reads only `CONTEXT.md` must be able to start the first item without asking; if not, write more.
+
+**Start-of-work ritual** (every new lead session and every worker):
+1. Read your own sheet: worker → `handoff/<id>.md`; lead → `CONTEXT.md` "รับงานต่อ" + `inbox/` (which messages count as orders → `team-memory` section 4).
+2. With git: `git log --oneline -10` and `git status` to see what happened last and whether edits were left unfinished. Without git: read "ความคืบหน้า" and file modified dates. Read `notes/<plan>.md` and compare the original brief with what the user orders now. Use "คำตอบที่ได้แล้ว" instead of asking again.
+3. Walk the tracking files (`ledger/` · delivery sheet · progress) to the last finished gate, then check that gate's real state (run the test · open the file) before building on it. Matches → go on. Does not match (ledger says done, test fails) → fix the earlier gate, add a row to "รอผู้ใช้", continue with other parts. No tracking file → start fresh; do not guess it is the same work.
+4. Start `ทำต่อเป็นข้อแรก` or the goal in the task sheet.
+
+## 6 · Sending outside the team — people · other bots · Quix · Agent Desk
+Hand-off package = `CONTEXT.md` + the still-open `handoff/` pieces + `docs/BRIEF.md` (if it exists).
+- A person reads `CONTEXT.md` first, then opens `handoff/<id>.md` one piece at a time.
+- A teammate who takes a piece uses the same task sheet as an agent, with the person's name in `to:` (such as `to: คน-แต้ม`), and writes the delivery sheet at the end of the same file. Only for XL work per `superuser` → `references/playbook-team-project.md`.
+- A machine reads the header per [`handoff.schema.json`](references/handoff.schema.json). Field names are a contract; do not rename them without raising the schema's version number.
+- Agent Desk draws its board from `to` · `status` · `tier` · `depends_on`; Quix uses the same files as a queue.
+
+## 7 · Rules that keep handoffs from breaking
+- Pass the path, not the content (content is lost over hops and wastes tokens).
+- 1 file, 1 writer; shared files are written by the lead alone.
+- Split only pieces that can really run in parallel; pieces that must know much of the same thing go to one worker.
+- Once decided, note it in "การตัดสินใจ". If the receiver disagrees, put it in "รออนุมัติ"; do not tear it up alone.
+- Done is judged from the work product and the check result, not the word "done".
+- The reviewer gets only the work product + criteria, not the maker's context.
+
+## 8 · Our files versus Claude Code's built-in memory
+Unsure whether a note goes into `CONTEXT.md` · `CLAUDE.md` · `.claude/rules/` or auto memory → [`team-memory`](references/team-memory.md) section 7.
+
+## Check before done
+- Task sheet has all 5 sections; delivery sheet has evidence in `ตรวจแล้วด้วย`.
+- `รับงานต่อ` has an item at the top that a new model can start without asking, every item tagged.
+- Nothing under `handoff/` `notes/` `ledger/` is committed or holds secrets.
+
+## References
+- [`references/sheet-examples.md`](references/sheet-examples.md) — open when writing a task sheet or delivery sheet
+- [`references/team-memory.md`](references/team-memory.md) — open for first-time setup, vendor switch, inbox, log, workbooks, auto memory
+- [`references/handoff.schema.json`](references/handoff.schema.json) — open when a machine reads the header
+- [`references/sources.md`](references/sources.md) — sources and licences
+
+
+## reference: sheet-examples.md
+
+# Sheet examples · task sheet and delivery sheet
+
+Full examples for `handoff` SKILL.md sections 3 and 4. The headings and field names are the format; the content is an example.
+
+## Task sheet (`ใบสั่งงาน`)
 
 ```markdown
 ---
@@ -356,18 +405,9 @@ files_allowed: [research/shipping/**]
 ใบส่งงานต่อท้ายไฟล์นี้ · ข้อความกลับหัวหน้าทีมไม่เกินราว 40 บรรทัด (สิ่งที่เปลี่ยน · ผลตรวจ · สิ่งที่ไม่แน่ใจ)
 ```
 
-- **Code work** uses the same sheet, differing only in fields: `to: software-development:developer` · `files_allowed: [src/auth/**]` · done-when = `npm test` passes · skill = `stack-*` (plugin `software-development`).
-- **A normal piece puts the 5-item sheet in the message that sends the task** (the core of `superuser` section 5). Write a file only for a piece that crosses sessions or goes to another person or bot (module `handoff`); then the instruction reaches the agent as one line: `ทำตาม .claude/superuser/handoff/<id>.md`. Pass the path, not the content; the worker opens and reads it itself.
-- **A brief that will be picked up several days after it is written** uses the template `superuser/templates/DURABLE-BRIEF.md`: write behavior and interface names, not paths or line numbers (files move, then the old brief is stale). It has testable acceptance criteria and a list of what is out of scope. A normal task sheet for a piece done today may use paths.
-- **State the intent of the rule**, not only the condition. For a fix or retry round → add a `## รอบก่อน` (previous round) section (the previous worker's report + what must change) and send a new worker.
-- **A sheet to `reviewer`** has no lead opinion in it (rule in `superuser` section 5).
-- **Workers that review or research** — a conclusion that something in the work is "outdated", "wrong" or "contradictory" must attach `file:line` and say whether it looked and found it so on purpose (history sections · numbers a script generates · noted exceptions). Put this in every task sheet. The lead opens a few at random before believing them (lesson 2026-10-26: "PLUGINS.md is outdated" was a Roadmap section kept on purpose · "skill 49 is wrong" was a shared total).
+Code work uses the same sheet, differing only in fields: `to: software-development:developer` · `files_allowed: [src/auth/**]` · done-when = `npm test` passes · skill = `stack-*` (plugin `software-development`).
 
----
-
-## 4 · Delivery sheet (`ใบส่งงาน`)
-
-The worker appends it to its own task sheet, then edits `status:`. The message back to the lead = path + result + 1-line summary.
+## Delivery sheet (`ใบส่งงาน`)
 
 ```markdown
 ## ส่ง — 2026-10-21 14:20 · general-purpose · sonnet
@@ -379,71 +419,18 @@ The worker appends it to its own task sheet, then edits `status:`. The message b
 - **ค้างอยู่ · ไม่แน่ใจ:** เจ้าที่ 3 ไม่บอกค่าเก็บเงินปลายทาง (รอยืนยัน)
 ```
 
-- **ผล** (result) uses 1 of 4 values per `superuser` section 5: `เสร็จ` · `เสร็จ มีข้อกังวล` · `ขาดบริบท` · `ติด`
-- **"เสร็จ" needs evidence** in `ตรวจแล้วด้วย` (checked with). If there is none → `status: ติด` or `ค้างอยู่`.
-- **ลองแล้วพัง** (tried and failed): note every path tried that did not work, with a 1-line reason (the `dead_ends` field in the header if a machine must read it). A dead end that is not noted is a path the next worker will waste time walking again.
-- **A result longer than 40 lines** → write it to `handoff/<id>/` and cite the path.
-- **The lead is responsible for the result** — read the delivery sheet, check it against "เสร็จเมื่อ" (done-when) yourself, then move any `ตัดสินใจเอง` that affects other work up to the "การตัดสินใจ" (decisions) table in `CONTEXT.md`.
+## Lesson behind the review rule
 
----
+2026-10-26: "PLUGINS.md is outdated" was a Roadmap section kept on purpose. "Skill 49 is wrong" was a shared total.
 
-## 5 · Resuming work (`รับงานต่อ`) — across sessions · switching model · context nearly full
 
-The section `## รับงานต่อ` in `CONTEXT.md` uses this one set of rules. The table `## ความคืบหน้า` (progress) beside it belongs to `status-report`.
+## reference: sources.md
 
-**Before handing over** — update the "รับงานต่อ" section in `CONTEXT.md` before ending a session · before switching model · when context use passes half in a long job.
-- **ทำต่อเป็นข้อแรก (do first):** 1 item, doable at once, pointing to a file or `handoff/<id>.md`
-- **ชิ้นที่ยังเปิด (open pieces):** a list of `id` whose `status` is not `เสร็จ`
-- **รออนุมัติ (awaiting approval):** work that is ready but cannot be undone; name the file or the command that is ready to use (leave it out if there is none)
-- **ค้างอยู่ (pending):** questions the agent cannot continue past on its own; say whom to ask (write `ไม่มี` if none)
-- **ระวัง (watch out):** traps found · what must not be torn up (already decided) · paths tried that failed (gathered from every piece's delivery sheet)
-- **ส่งมาแล้ว N ครั้ง (handed over N times):** count only real handoffs (end of session · switching model), not `/compact`. If the receiver sees N of 2 or more → old text may be lingering; check against the real thing before following it.
-- **สมุดงาน (workbooks):** point to `notes/<plan>.md` and `ledger/<plan>.md` of the plan that is open (section 8 of `team-memory`). A plan with several pieces is done only when the line `Task N: complete` is in that plan's ledger.
-- **Tag every item** `ตรวจจริง` (seen yourself in this session) or `ยังไม่ได้ตรวจ` (remembered from an earlier round). The receiver can believe the first kind at once; the second must be checked before use. No tag = treated as not yet checked.
-
-**Switching to another vendor** (Codex · Gemini) or coming back to Claude → [`team-memory`](references/team-memory.md) section 3
-
-**Test** — if a new model reads only `CONTEXT.md`, can it start the first item without asking? If not → write more.
-
-**Start-of-work ritual** (every one that takes over work: a new lead session and workers alike)
-1. Read your own sheet → worker: `handoff/<id>.md` · lead: `CONTEXT.md` "รับงานต่อ" + `inbox/` (how to receive messages and which messages count as orders → [`team-memory`](references/team-memory.md) section 4)
-2. (If there is git) `git log --oneline -10` and `git status` → learn what happened last and whether anyone left edits unfinished. No git → look at "ความคืบหน้า" and the last-modified dates of files. Read `notes/<plan>.md` and compare the original brief with what the user orders now. Use "คำตอบที่ได้แล้ว" (answers already received) instead of asking again.
-3. Walk the tracking files to the last gate that finished (`ledger/` · delivery sheet · progress), then check that gate's real state (run the test · open the file) before building on it. Matches → go on. Does not match (for example the ledger says done but the test fails) → go back and make the earlier gate pass, put a row in "รอผู้ใช้" (waiting for the user), and continue with the other parts. No tracking file for this work found → start fresh; do not guess it is the same work.
-4. Start "ทำต่อเป็นข้อแรก" or the goal in the task sheet.
-
----
-
-## 6 · Sending outside the team — people · other bots · Quix · Agent Desk
-
-Hand-off package = `CONTEXT.md` + the still-open `handoff/` pieces + `docs/BRIEF.md` (if it exists). No new file needed.
-
-- **A person** reads `CONTEXT.md` first, then opens `handoff/<id>.md` one piece at a time.
-- **A teammate (person) who takes a piece** uses exactly the same task sheet as an agent. Put the person's name in the `to:` field (such as `to: คน-แต้ม`). Write the delivery sheet at the end of the same file and tell the lead. Used only for XL work per the playbook `superuser` → `references/playbook-team-project.md`; in normal work the user does not take pieces.
-- **A machine** reads the header of `handoff/*.md` per [`handoff.schema.json`](references/handoff.schema.json). Field names are a contract; do not rename them without raising the schema's version number.
-- **Agent Desk** uses `to` · `status` · `tier` · `depends_on` to draw the task board · **Quix** uses the same files as a work queue.
-
----
-
-## 7 · Rules that keep handoffs from breaking
-
-| Rule | Because |
-|---|---|
-| Pass the path, not the content | Over several hops, data gets lost ("telephone game") and tokens are wasted |
-| 1 file, 1 writer · shared files are written by the lead alone | Several agents writing the same place scatters decisions and they collide |
-| Split only pieces that can really run in parallel · pieces that must know much of the same thing go to one worker | Splitting context makes workers understand the brief differently |
-| Once decided, note it in "การตัดสินใจ" · if the receiver disagrees → put it in "รออนุมัติ", do not tear it up alone | Stops arguing the same thing every session |
-| Done is judged from the work product and the check result, not the word "done" | Words in a conversation cannot be checked |
-| The reviewer gets only the work product + criteria, not the maker's context | A reviewer who sees the maker's reasons tends to go along |
+# Sources · handoff
 
 Sources of the workbook and resume mechanisms: code-modernization (Apache-2.0) · mercadopago (Apache-2.0) · math-proof (Apache-2.0) · superpowers (MIT) · mattpocock-skills (MIT) · aws (Apache-2.0) · vsql-extension-builder (license not stated, mechanism only) · claude-remember (no redistribution, mechanism only) · seen 2026-11-10 · details per file in `team-memory` section 8
 
 Sources (`จากแหล่ง`): Anthropic — *How we built our multi-agent research system* (2025-06) · *Effective harnesses for long-running agents* (2025-11) · *Effective context engineering for AI agents* (2025-09) · Cognition — *Don't Build Multi-Agents* (2025-06) · *Multi-Agents: What's Actually Working* (2026-04)
-
----
-
-## 8 · Our files versus Claude Code's built-in memory
-
-If you want to note something and are unsure whether it goes into `CONTEXT.md` · `CLAUDE.md` · `.claude/rules/` or auto memory → open [`team-memory`](references/team-memory.md) section 7
 
 
 ## reference: team-memory.md
@@ -617,80 +604,58 @@ Use when ranking options by numbers, not gut feel
 
 # decision-scoring — decide with numbers, not feelings
 
-Lives only in plugin `superuser`; other plugins share it through `dependencies` · wording follows `human-writing`
-
-> **One rule:** for every decision with 2 or more options, put the numbers into a JSON file and let `decide.mjs` do the thinking · hard rules filter options out first and are never turned into scores · a result that is not stable, or that concerns money, law or health, is a proposal and a person decides
+> **One rule:** for every decision with 2 or more options, put the numbers into a JSON file and let `decide.mjs` do the thinking. Hard rules filter options out first and are never turned into scores. A result that is not stable, or that concerns money, law or health, is a proposal and a person decides.
 
 ## Use when
-
 - Choosing 1 from several options (funds · carriers · job offers · quotations · buy or build)
-- The result depends on an uncertain future (interest rates up or down · fight the claim or take the refund · buy the extended warranty or not)
-- Choosing several things under a budget, time or quota (tax deductions · flash-deal items · segments to broadcast to)
+- The result depends on an uncertain future (interest rates · fight the claim or take the refund · extended warranty or not)
+- Choosing several things under a budget, time or quota (tax deductions · flash-deal items · segments)
 - Ordering work (bugs · vulnerabilities · emails · daily tasks)
-- Picking the best result from several attempts already made · deciding whether to review one more round
+- Picking the best of several attempts already made · deciding whether to review one more round
 
-Do not use when: a direct formula already exists (loan installment · tax · position size) → use the formula in that task's skill · matters of taste (color, icon, tone) → a person looks · only one option, nothing to compare
+Not for: a direct formula exists (loan installment · tax · position size) → that task's skill · taste (color, icon, tone) → a person looks · only one option · option numbers not yet available → `research-with-sources` first · no options yet → `brainstormer` · splitting big work or order of pieces → `parallel-split-and-merge` (`plan.mjs`) · which model fits which step → `model-scorecard` · recording the decision → `decision-log` (paste this skill's result table in).
 
-## Use another skill instead, or together
+## Steps
+1. **Find the script.** Installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/superuser/*/skills/decision-scoring/scripts/decide.mjs | sort -V | tail -1`. In the SQT-Marketplace repo: `plugins/superuser/skills/decision-scoring/scripts/decide.mjs`. Node only, no dependencies.
+2. **Write the hard rules first** (over budget · risk above what is acceptable · illegal · on the awaiting-approval list). Put them in `must`. An item that fails is cut no matter how good its other scores are. Never convert a hard rule into a weight.
+3. **Choose at most 5–6 criteria** measurable as numbers, each with `better` (`high` or `low`). For an opinion criterion, score 1–5 and write who gave the score.
+4. **Weights come from the user.** If none, use the values that task's skill proposes and record it under **ตัดสินใจเอง**. If neither exists, weight equally.
+5. **Every number has a source.** A number that changes over time has the source and the date checked. If you do not know, ask or write `(รอยืนยัน)`; never guess into the file. If a criterion's value is missing, the script drops that option with the reason and does not fill in zero.
+6. **Pick the command** from the table, copy the matching `templates/` file, fill it, and run `node decide.mjs <command> <file.json>`. It gives a markdown table with a **ผล** line. Add `--json` for further calculation. Keep the input file in the work's `_to_delete/` (or attach it in `decision-log` if it must be checked later).
+7. **Read the result line.** If it says `ยังไม่นิ่ง` or `2 เกณฑ์ไม่ตรงกัน` or `สูสี`, give the person the top-ranked options with the criteria that cause the flip, and do not choose for them.
+8. **Answer** with the script's table + 1 line of result + the criteria that cause the flip (if any). For money, law, health, close by saying it is supporting information and the user decides.
 
-| Situation | Use | Reason |
-|---|---|---|
-| The options' numbers (price, rate, fee) are not available yet | `research-with-sources` first | However good the formula, wrong input numbers give a wrong result |
-| No options yet, need to think of paths first | `brainstormer` | This skill scores options that exist; it does not think of options |
-| Split big work, order, which piece first, how many sub-agents | `parallel-split-and-merge` (`plan.mjs`) | A task graph has its own Critical Path Method (CPM) formula |
-| Which model fits which step · size of a piece of work from old work | `model-scorecard` | Uses the project's real log |
-| Record what was decided and why | `decision-log` | You can paste this skill's result table straight into that table |
-
-## Find the script path
-
-Installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/superuser/*/skills/decision-scoring/scripts/decide.mjs | sort -V | tail -1` · working in the SQT-Marketplace repo: `plugins/superuser/skills/decision-scoring/scripts/decide.mjs` · Node only, no dependencies
-
-## 1 · Pick the command that matches the question
-
-| Question | Command | How it thinks | Example file |
+| Question | Command | How it thinks | Template |
 |---|---|---|---|
-| Which is best, on several criteria | `score` | Hard rules cut options → turn every criterion into a 0–1 scale (min-max) → apply weights → shift each criterion's weight ±20% one at a time to see whether rank 1 flips | `templates/score.json` |
-| The result depends on the future | `payoff` | Expected value (if the odds are known) and minimax regret (smallest worst-case regret) if the odds are unknown or the choice cannot be undone | `templates/payoff.json` |
-| Choose several things under a budget | `knapsack` | Up to 20 items: tries every set and gets the truly best answer, and tells you how far behind the **runner-up set** is, in % · more than that: sorts by value per cost, then compares with the single item of highest value (close, not guaranteed best) · `max_items` limits the count · `must` forces a pick · `groups` + `group` set a cost cap per group | `templates/knapsack.json` |
-| What to do first | `priority` | `rice` people affected × impact × confidence ÷ effort · `wsjf` (value + time urgency + risk reduction) ÷ size · `eisenhower` splits into 4 groups, then urgent × important ÷ minutes · an item that makes the result wrong or unsafe gets `"must_first": true` and goes to the top regardless of score · `rice` accepts impact 0.25–3 only · duplicate names raise a warning | `templates/priority.json` |
-| Which version is better, when scoring directly is hard | `pairwise` | Compare one pair at a time, swap positions in every pair, then compute strength with Bradley-Terry · a pair where the one placed first (or last) wins every time always counts | `templates/pairwise.json` |
-| Is one more review worth it | `review` | Value of the items expected to be found next round (this round's value × decay rate) against the price of 1 round · a remaining high item always needs a re-check · the round cap is a hard rule | `templates/review.json` |
+| Which is best, on several criteria | `score` | Hard rules cut options → every criterion to 0–1 (min-max) → apply weights → shift each weight ±20% one at a time to see if rank 1 flips | `templates/score.json` |
+| Result depends on the future | `payoff` | Expected value (odds known); minimax regret if odds unknown or the choice cannot be undone | `templates/payoff.json` |
+| Choose several under a budget | `knapsack` | Up to 20 items: tries every set, gives the best and how far the runner-up set is behind in %; more: value per cost, compared with the single highest-value item (close, not guaranteed best) · `max_items` limits count · `must` forces a pick · `groups` + `group` cap cost per group | `templates/knapsack.json` |
+| What to do first | `priority` | `rice` people × impact × confidence ÷ effort (impact 0.25–3 only) · `wsjf` (value + time urgency + risk reduction) ÷ size · `eisenhower` 4 groups, then urgent × important ÷ minutes · `"must_first": true` for an item that makes the result wrong or unsafe goes to the top regardless · duplicate names warn | `templates/priority.json` |
+| Which version is better, scoring directly is hard | `pairwise` | One pair at a time, positions swapped in every pair, strength by Bradley-Terry · a pair where the first (or last) placed always wins always counts | `templates/pairwise.json` |
+| Is one more review worth it | `review` | Expected value of items found next round (this round's value × decay) vs the price of 1 round · a remaining high item always needs a re-check · the round cap is a hard rule | `templates/review.json` |
 
-Run: `node decide.mjs <command> <file.json>` gives a markdown table with a **ผล** (result) line · add `--json` when you will use the result for further calculation · keep the input file in the work's `_to_delete/` (or attach it in `decision-log` if it must be checked later)
+## Traps
+- min-max with 2 options gives 0 and 100 on every criterion; a tiny difference looks big, so also look at the raw numbers in brackets.
+- Goodhart's law: a number used for control stops telling the truth. Use several criteria and have a person spot-check.
+- An LLM judge leans by position and favours long answers; `pairwise` must swap positions in every pair; direct scoring leans more.
+- Script defaults are self-set, not measured: high item 3 · medium item 1 · review round price 2 (adjust via `value` · `round_cost`); weight shift ±20% · too-close below 60% (pairwise) · runner-up closer than 10% (knapsack) are constants.
+- Never use the Kelly criterion with real money; position size uses `position-sizing`.
 
-## 2 · Steps
+## Check before done
+- `node decide.mjs --self-test` passes every case
+- Hard rules are in `must`, not mixed in as weights
+- Every input number has a source or `(รอยืนยัน)`
+- A result that is not stable, too close, or with 2 criteria in conflict went to a person to decide
 
-1. **Write the hard rules first** — an item that fails is cut right away no matter how good its other scores are (over budget · risk above what is acceptable · illegal · on the awaiting-approval list). Put them in `must` · never convert a hard rule into a weight, because other scores can drown it
-2. **Choose at most 5–6 criteria** that can be measured as numbers, and say `better` (`high` or `low`) · for a criterion that is an opinion, score 1–5 and write who gave the score
-3. **Weights come from the user.** If they give none, use the values that task's skill proposes and record it under **ตัดสินใจเอง** (decided on my own) · if neither exists, weight equally
-4. **Every number has a source** — a number that changes over time has a source and the date checked · if you do not know, ask or write `(รอยืนยัน)` (awaiting confirmation), never guess into the file · if a criterion's value is missing, the script drops that option and gives the reason, and does not fill in zero
-5. **Run, then read the result line** — `ยังไม่นิ่ง` (not stable) or `2 เกณฑ์ไม่ตรงกัน` (2 criteria disagree) or `สูสี` (too close to call) = give the person the top-ranked options with the criteria that cause the flip, and do not choose for them
-6. **Answer the user** with the script's table + 1 line of result + the criteria that cause the flip (if any) · for money, law, health, close by saying it is supporting information and the user decides
+## References
+- [`references/sources.md`](references/sources.md) — open when checking the source of a method, or to see the real example run
 
-## 3 · Traps to know
 
-- **min-max with 2 options** gives 0 and 100 on every criterion, so a tiny difference looks like a big deal; also look at the raw numbers in brackets
-- **Goodhart's law** — a number used for control stops telling the truth (Strathern 1997 summarized it: "when a measure becomes a target, it ceases to be a good measure"). People or agents will make the score good instead of doing the work well, so use several criteria and have a person spot-check now and then
-- **An LLM acting as judge leans by position and favours long answers** — `pairwise` must swap positions in every pair · direct scoring leans even more
-- **Defaults in the script are self-set, not measured** — high item 3 · medium item 1 · review round price 2 are adjustable in the input file (`value` · `round_cost`) · shifting weights ±20% · too-close below 60% (pairwise) · runner-up set closer than 10% (knapsack) are constants in the script
-- **Do not use the Kelly criterion with real money** — a slightly wrong estimate of the odds bets more than you can afford; position size uses `position-sizing`
+## reference: sources.md
 
-## Real example
+# Sources · decision-scoring
 
-**Task:** choose 1 fund of 3, accepting risk no higher than level 6, minimum purchase no more than 1,000 baht (hypothetical numbers in `templates/score.json`)
-**Do:** `node decide.mjs score templates/score.json`
-**Result (run 2026-10-27):** fund C was cut because its risk is level 8, though its return is the highest · fund A scored 60, B 40 · shifting each criterion's weight ±20%, A stayed at rank 1, so it is called stable
-
-## Check before sending
-
-- [ ] `node decide.mjs --self-test` passes every case (2026-10-27: 19/19)
-- [ ] Hard rules are in `must` and not mixed in as weights
-- [ ] Every number in the input has a source or is marked `(รอยืนยัน)` (awaiting confirmation)
-- [ ] A result that is not stable, too close, or where 2 criteria conflict goes to a person to decide, and you do not choose for them
-
-## Sources
-
-The main sources really opened on 2026-10-27 · each method has at least 3 independent sources, and the full list is kept in this work's research round · several originals (Savage 1951 · Fishburn 1967 · Malcolm 1959 · Bradley & Terry 1952 · Dantzig 1957) are under copyright, so they are cited through works that cite the original
+The main sources really opened on 2026-10-27. Each method has at least 3 independent sources, and the full list is kept in this work's research round. Several originals (Savage 1951 · Fishburn 1967 · Malcolm 1959 · Bradley & Terry 1952 · Dantzig 1957) are under copyright, so they are cited through works that cite the original.
 
 | Method | Main source | Note |
 |---|---|---|
@@ -699,12 +664,18 @@ The main sources really opened on 2026-10-27 · each method has at least 3 indep
 | Shifting weights to see sensitivity | [O'Shea et al. 2026 · weight stability intervals of WSM](https://research.ucc.ie/en/publications/weight-stability-intervals-for-multi-criteria-decision-analysis-u/) | Weak: only the abstract was seen · ±20% is self-set |
 | PERT 3-point (in `model-scorecard`) | [IBM · PERT General Information Manual E20-8067-1](https://bitsavers.org/pdf/ibm/generalInfo/E20-8067-1_PERT_A_Dynamic_Project_Planning_and_Control_Method.pdf) | |
 | Eisenhower | [Eisenhower 1954 · speech at Evanston](https://www.presidency.ucsb.edu/documents/address-the-second-assembly-the-world-council-churches-evanston-illinois) | He quoted someone else · the 4-box table came later from Covey |
-| Goodhart's law | [Strathern 1997 · Improving ratings](https://www.gwern.net/doc/statistics/decision/1997-strathern.pdf) · [Manheim & Garrabrant · arXiv 1803.04585](https://arxiv.org/pdf/1803.04585) | |
+| Goodhart's law | [Strathern 1997 · Improving ratings](https://www.gwern.net/doc/statistics/decision/1997-strathern.pdf) · [Manheim & Garrabrant · arXiv 1803.04585](https://arxiv.org/pdf/1803.04585) | Strathern 1997: "when a measure becomes a target, it ceases to be a good measure" |
 | Bradley-Terry + position bias | [Chatbot Arena · arXiv 2403.04132](https://arxiv.org/pdf/2403.04132) · [Zheng et al. · arXiv 2306.05685](https://arxiv.org/pdf/2306.05685) · [Wang et al. · arXiv 2305.17926](https://arxiv.org/pdf/2305.17926) | Computed with the MM method of Hunter 2004 (original not opened) |
 | WSJF | [SAFe · WSJF](https://framework.scaledagile.com/wsjf) | |
 | RICE | [Intercom · RICE](https://www.intercom.com/blog/rice-simple-prioritization-for-product-managers/) | Only one primary source, and it is by the method's inventor |
 | knapsack | [Duke CS 330 · Greedy Algorithm II](https://courses.cs.duke.edu/spring20/compsci330/lecture8scribe.pdf) | Greedy by best ratio is optimal only when fractions can be taken, so every set is tried when there are 20 items or fewer |
-| marginal value of a review round | — | Value and decay rate are self-set, not measured · the stop-when-no-progress rule comes from `team-roles` |
+| marginal value of a review round | none | Value and decay rate are self-set, not measured · the stop-when-no-progress rule comes from `team-roles` |
+
+## Real example (run 2026-10-27)
+
+Task: choose 1 fund of 3, accepting risk no higher than level 6, minimum purchase no more than 1,000 baht (hypothetical numbers in `templates/score.json`). Command: `node decide.mjs score templates/score.json`. Result: fund C was cut because its risk is level 8, though its return is the highest · fund A scored 60, B 40 · shifting each criterion's weight ±20%, A stayed at rank 1, so it is called stable.
+
+Self-test: `node decide.mjs --self-test` passed 19/19 on 2026-10-27.
 
 
 ---
@@ -715,44 +686,30 @@ Use to cut extras nobody needs yet. Not Claude Code simplify
 
 # simplify — make it simple so a first-time reader can follow
 
-Use on any work handed to people: code, documents, plans, designs, slides, tables and answers · `human-writing` controls **how it is written**, while this skill controls **what the work contains** · lives only in plugin `superuser`; other plugins share it through `dependencies`
+> **One rule:** someone not on this work, opening it 6 months from now, must understand it and continue it without asking anyone.
 
-## 1 · Main principles
+## Use when
+- Any work handed to people (code, documents, plans, designs, slides, tables, answers) may hold more than the task needs.
+- `human-writing` controls how it is written; this skill controls what the work contains.
 
-- **The test:** someone not on this work, opening it 6 months from now, must understand it and continue it without asking anyone
-- Do only what the task needs; do not provide for a future nobody has asked for
-- Cut before adding · if removing a part loses neither meaning nor function, cut it
-- Plain things people know beat clever things that need decoding
-- **Simple is not sloppy** — never cut correctness, safety, validation of data from outside, error handling that prevents data loss, or what the user asked for explicitly
-- **Simple is not one big pile** — reduce the number of things, but keep clear separation of duties, 1 part doing 1 thing, as professional work does
+Not for: Claude Code's own `/simplify` command · more detail on code and architecture (if installed) → `lazy-coding` · `readable-code` · `simplicity-first` in plugin `software-development`.
 
-## 2 · Ladder before starting — stop at the first step that works
+## Steps
+1. Climb the ladder and stop at the first step that works: (a) is this really needed? If not, do not do it and say in 1 line what you skipped; (b) is there an existing thing that works (file, template, function, tool, built-in feature)? Use it; (c) do the shortest version that is still complete and correct.
+2. Do only what the task needs; cut before adding (if removing a part loses neither meaning nor function, cut it); plain things people know beat clever things that need decoding.
+3. Apply by kind of work:
+   - **Code:** names say what it is and carry units · 1 function does 1 thing · return early instead of nesting `if` · at most 3 levels of indentation · comments say why · follow the project's style. Avoid an abstraction with one user, clever hard-to-read shortcuts, one big file, a pile-up `utils/`, a new dependency for a few lines.
+   - **Documents · reports:** conclusion first · 1 paragraph 1 topic · an example for abstract points · a table for compared data. Avoid repeats, empty headings, unknown terms.
+   - **Plans · procedures:** 3–5 key items, each with an owner and a way to measure done · fewest steps that work. Avoid a 20-item list with no priority.
+   - **Designs · slides · figures:** 1 page 1 point · shortest path to the user's goal · familiar patterns. Avoid cramming and decoration that does not help.
+   - **Tables · data:** only columns used to decide · short formulas. Avoid columns that repeat a meaning and long nested formulas.
+   - **Answers:** answer first, as long as the question needs.
+4. **Simple is not sloppy:** never cut correctness, safety, validation of data from outside, error handling that prevents data loss, or what the user asked for explicitly. **Simple is not one big pile:** keep clear separation of duties, 1 part doing 1 thing.
+5. When you take a deliberate shortcut, write how far it works and when it changes, for example `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process`, and put 1 line in the report: `ข้าม: X — เพิ่มเมื่อ Y`.
 
-1. Do we really need this · not needed → do not do it, and say in 1 line what you skipped
-2. Is there an existing thing that works (file, template, function, tool, a feature that comes with the system) · yes → use the existing thing
-3. Do the shortest version that is still complete and correct
-
-## 3 · By kind of work
-
-| Work | Do | Avoid |
-|---|---|---|
-| **Code** | Names say what it is and carry units · 1 function does 1 thing · return early instead of nesting `if` · at most 3 levels of indentation · comments say "why" · follow the project's style | An abstraction with a single user · a clever shortcut that is hard to read · one big file doing everything · a pile-up `utils/` folder · a new dependency for a few lines of work |
-| **Documents · reports** | Conclusion first · 1 paragraph 1 topic · an example for abstract points · a table for data that is compared | Repeating what was already said · headings with no content · terms the reader does not know |
-| **Plans · procedures** | 3–5 key items · every item has an owner and a way to measure done · the fewest steps that work | A list of 20 items with no priority · steps kept "just in case" |
-| **Designs · slides · figures** | 1 page 1 point · the shortest path to the user's goal · use patterns people are familiar with | Cramming data until people must squint · decoration that does not help understanding |
-| **Tables · data** | Only the columns used to decide · short formulas you can follow | Columns that repeat a meaning · long nested formulas in one line |
-| **Answers** | Answer first · as long as the question needs | An explanation longer than the work itself |
-
-Plugin `software-development` has more detail on code and architecture: `lazy-coding` (write less) · `readable-code` (names, function shape, file structure) · `simplicity-first` (documents, plans, architecture) · if installed, open them together
-
-## 4 · Say that you made it simple on purpose
-
-A deliberate shortcut should be written down with how far it works and when it changes, so it does not look forgotten, for example `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process` (gloss: simple: kept in memory — move to Redis when running more than 1 process) · in the report put 1 line `ข้าม: X — เพิ่มเมื่อ Y` (skipped: X — add when Y)
-
-## 5 · 5-point check before sending
-
-1. Can an outsider open it for the first time and understand within 30 seconds
-2. Is there any part, step or layer that can be cut with no loss? If so, cut it
-3. Does every part added have a reason it is needed now, not "just in case"
-4. Is it still complete on correctness, safety, and what the user asked for
-5. Are duties still clearly separated, and not several things squashed into one place to look short
+## Check before done
+- [ ] An outsider can open it for the first time and understand within 30 seconds.
+- [ ] No part, step or layer can be cut with no loss.
+- [ ] Every added part has a reason it is needed now, not "just in case".
+- [ ] Still complete on correctness, safety and what the user asked for.
+- [ ] Duties still clearly separated, not squashed into one place to look short.

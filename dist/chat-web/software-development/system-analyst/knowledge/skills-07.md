@@ -2,182 +2,92 @@
 
 Use when a task reads large material or writes long output
 
-# Context budget
+# context-budget — decide before you read what enters context
 
-> **One rule:** decide **before** you read, not regret it after.
-> Tokens that enter context cannot be removed, except by `/clear` (drops everything) · `/compact` (shrinks to a summary) · `/rewind` (cuts back to an earlier point).
+> **One rule:** decide **before** you read, not regret it after. Tokens that enter context cannot be removed, except by `/clear` (drops everything) · `/compact` (shrinks to a summary) · `/rewind` (cuts back to an earlier point). Things you read in (files · PDFs · web pages · search results · command output) are the biggest source, so be most disciplined about them. If a Command-Line Interface (CLI) can do what a Model Context Protocol (MCP) tool does, use the CLI.
 
-## When to use this skill
+## Use when
+- About to read something big: a folder of documents · a long PDF · several web pages · search results · a whole code project · command output that may be long.
+- Starting work on a folder or project whose structure you do not know.
+- Context fills unusually fast, or `/compact` triggers often.
+- Setting context rules for the whole team or every project.
 
-- About to read something big: a folder of documents · a long PDF · several web pages · search results · a whole code project · output of a command that may be long
-- Starting work on a folder or project whose structure you do not know yet
-- Context fills unusually fast, or `/compact` triggers often
-- Setting rules for the whole team or every project
+Not for: shorter **answers** → `answer-shape` · work summary across sessions → `handoff` · where temp files go → `temp-file-discipline` · a coding loop that must survive context loss → `spec-to-code-loop` (plugin `software-development`).
 
-## When to use another skill instead, or together
+## Steps
 
-| Task | Skill | |
-|---|---|---|
-| Make the **answer** shorter | `answer-shape` | instead |
-| Keep a work summary across sessions | `handoff` | instead |
-| Where to put temporary files | `temp-file-discipline` | instead |
-| A coding loop that must survive loss of context | `spec-to-code-loop` (plugin `software-development`) | instead |
-| Project map and folder layout | `project-bootstrap` (plugin `software-development`) | together |
-| Fix a bug at one spot without reading the whole project | `targeted-fix` | together |
-| Abbreviations in work people read | `spell-out-abbreviations` | together |
+### 2 · Before reading, choose the route
+- Know the file, page and line → read only that range (item 3); several items → read them together in one message.
+- Need to find where it is → bounded search (item 3).
+- Must search across many items whose location you do not know → send a subagent (item 4).
+- Must convert, merge or count a lot of data → write to a file and read only the summary (item 5).
 
----
+If you do not know how big the thing is, check the size first: PDF pages · file count and size in a folder (`ls -l`, `du -h`) · lines (`wc -l`).
 
-## 1 · What really eats context
-
-| Source | Rough size | Can you control it? |
-|---|---|---|
-| **Things you read in** (files · PDFs · web pages · search results · command output) | Biggest; one item can be tens of thousands of tokens | Fully. This whole page is about it |
-| Tools from a Model Context Protocol (MCP) server | Only tool names and the server's instructions load · the full schema loads when used | If a Command-Line Interface (CLI) can do it, use the CLI (no tool list at all) · turn off servers you do not use |
-| `CLAUDE.md` | As long as written | Write it short |
-| Skill descriptions | ~100 tokens per skill | Trim them |
-| Conversation history | Keeps growing | Careful: `/clear` when the topic changes |
-
-> **What to control first is clear**: trimming the descriptions of the whole skill set saves only a few thousand tokens,
-> but opening a 200-page PDF or running `cat` on a 3,000-line file once costs more than that.
-> **Be most disciplined about the top row of the table.**
-
----
-
-## 2 · Decision tree before reading
-
-```
-ต้องรู้อะไรจากของก้อนนี้
-├─ รู้แล้วว่าอยู่ไฟล์ไหน หน้าไหน บรรทัดไหน → อ่านเฉพาะช่วง (ข้อ 3) · หลายชิ้น → อ่านพร้อมกันในข้อความเดียว
-├─ ต้องหาว่าอยู่ตรงไหน                   → ค้นแบบมีขอบเขต (ข้อ 3)
-├─ ต้องค้นข้ามหลายชิ้นที่ยังไม่รู้ตำแหน่ง   → ส่ง subagent (ข้อ 4)
-└─ ต้องแปลง/รวม/นับข้อมูลจำนวนมาก        → เขียนลงไฟล์แล้วอ่านเฉพาะสรุป (ข้อ 5)
-```
-
-Tree, in English: what do you need from this item?
-- You know the file, page and line → read only that range (item 3) · several items → read them together in one message
-- You need to find where it is → bounded search (item 3)
-- You must search across many items whose location you do not know → send a subagent (item 4)
-- You must convert, merge or count a lot of data → write to a file and read only the summary (item 5)
-
-If you do not know how big the thing is, **always check the size first**: number of PDF pages · number and size of files in a folder (`ls -l`, `du -h`) · number of lines (`wc -l`).
-
----
-
-## 3 · Read only a range, and search with a boundary
-
-3 numeric rules: **read only a range of any file over 300 lines** · **add `--glob` to `grep`/`rg`** · **end with `| head -50`** (if the user's `CLAUDE.md` has no "งบ context" (context budget) section, use these 3 rules as they are). What goes beyond that:
+### 3 · Read only a range, and search with a boundary
+3 numeric rules (use them as they are if the user's `CLAUDE.md` has no "งบ context" section): **read only a range of any file over 300 lines** · **add `--glob` to `grep`/`rg`** · **end with `| head -50`**.
 
 | Thing | How to read it |
 |---|---|
-| Folder of documents | Look at names and sizes first, then open only files whose names match the question |
-| PDF · long report | Read the table of contents first, then name the pages or chapters you need |
-| Web page | Ask for only the part you need (a number, a date, one heading), do not pull the whole page |
-| Code | `rg -l` first to learn which file, then drill in · `-C2` of context is enough |
-| Session files · `.jsonl` logs | One line can be megabytes, so never `cat` · `wc -l -c <file>` first · find long lines with `awk 'length>100000{print NR": "length}' <file> \| head -20` · read one field at a time with `cut -c1-2000` or `jq` selecting a field |
+| Folder of documents | Names and sizes first, then open only files whose names match the question |
+| PDF · long report | Table of contents first, then name the pages or chapters |
+| Web page | Ask for only the part you need (a number, a date, one heading) |
+| Code | `rg -l` to learn which file, then drill in · `-C2` context is enough |
+| Session files · `.jsonl` logs | One line can be megabytes: never `cat` · `wc -l -c <file>` first · find long lines with `awk 'length>100000{print NR": "length}' <file> \| head -20` · read one field at a time with `cut -c1-2000` or `jq` |
 
-Read the whole file when: you are about to overwrite the whole file · the file is short · you must understand the whole file to edit it correctly, and it is under ~300 lines.
+Read the whole file when you are about to overwrite it, or it is short, or you must understand all of it to edit correctly and it is under ~300 lines.
 
----
-
-## 4 · Send a subagent instead
-
-**This is the biggest saving on this page.**
-
-A subagent has its own context, so it can read 20 items
-and send back only one paragraph to the main conversation, without the content it read coming along.
+### 4 · Send a subagent instead (the biggest saving)
+A subagent has its own context: it can read 20 items and send back one paragraph.
 
 | Use a subagent when | Do it yourself when |
 |---|---|
-| You expect to read over 20k tokens or over 5 files whose location you do not know (default, not measured · estimate the size from the step's PERT in `model-scorecard` if present) · you must search across many items to answer one question | You already know the files and locations, even 4–6 of them → read them together in one message, faster than starting a new subagent |
-| Exploring a folder or project you do not know | Editing the file that is already open |
-| Checking/reviewing across many files | Work that needs the full detail to continue |
+| You expect to read over 20k tokens or over 5 files whose location you do not know (default, not measured; estimate from the step's PERT in `model-scorecard` if present), or must search across many items to answer one question | You know the files and locations, even 4–6 of them: read them together in one message, faster than a new subagent |
+| Exploring an unknown folder or project · checking across many files | Editing the file already open · work that needs full detail to continue |
 
-**To brief it well, say what you want back:**
+**Always set the format and length of the result**, or the subagent returns a long report and you save nothing. Wrong: "Take a look at these 12 contracts". Right: "Find the expiry date, penalty and renewal terms of each contract. Return a table, 1 line per contract, with file:page. Do not paste contract text. At most 15 lines." Code work: "Return a list of file:line in call order, do not paste code".
 
-```
-ผิด: "ดูสัญญา 12 ฉบับนี้ให้หน่อย"
-   → มันอาจคืนมาทั้งเนื้อหา
-
-ถูก: "หาวันหมดอายุ ค่าปรับ และเงื่อนไขต่ออายุของสัญญาแต่ละฉบับ
-    คืนกลับมาเป็นตาราง 1 บรรทัดต่อฉบับ ระบุชื่อไฟล์:หน้า
-    ไม่ต้องแปะข้อความสัญญา ไม่เกิน 15 บรรทัด"
-```
-
-(The example above, in English: wrong = "Take a look at these 12 contracts" → it may return the whole content. Right = "Find the expiry date, penalty and renewal terms of each contract. Return a table, 1 line per contract, with file:page. Do not paste contract text. At most 15 lines.")
-
-(Code work is the same: "Return a list of file:line in call order, do not paste code")
-
-> 🚨 **Always set the format and length of the result.** If you do not say what you want,
-> the subagent sends back a long report, and you save nothing.
-
----
-
-## 5 · Write to a file instead of holding it in the conversation
-
+### 5 · Write to a file instead of holding it in the conversation
 ```bash
-# ผิด: output ทั้งหมดเข้า context
-<คำสั่งที่ output ยาว>
-
-# ถูก: เข้า context แค่บรรทัดสรุป
-<คำสั่งที่ output ยาว> > <โฟลเดอร์ชั่วคราว>/out.log 2>&1; tail -20 <โฟลเดอร์ชั่วคราว>/out.log
+<command with long output> > <temp folder>/out.log 2>&1; tail -20 <temp folder>/out.log
 ```
+Use it for text pulled from the web or PDFs · big data tables (filter or count with a script, do not read every row) · test results · logs · file conversions. Where to put these files → `temp-file-discipline`. Note what you find into a file on the first pass so you do not read it again.
 
-(Comments above: wrong = the whole output enters context · right = only the summary line enters context. `<คำสั่งที่ output ยาว>` = a command with long output · `<โฟลเดอร์ชั่วคราว>` = temp folder.)
+If it repeats on every task, let a hook filter long output before it enters context: coding example in `superuser` → `references/code-extensions.md` (the addition in plugin `software-development`).
 
-**Use it for**: text pulled from the web or PDFs · big data tables (filter or count with a script, do not read every row) · test run results · logs · results of file conversions
-Where to put these files → `temp-file-discipline` · note what you find into a file from the first pass, so you do not read it again
+### 6 · So the next session does not explore again
+Work you return to often needs a short map that **loads automatically**: where things are · what must not be read · commands used often. General work: the section "ของอยู่ที่ไหน" in `.claude/superuser/CONTEXT.md`, at most 40 lines. Files with other names (`notes.md`) do not load themselves, so they are wasted. An outdated map is worse than none: no full file list or change history in it. Code work (project and folder `CLAUDE.md`, example maps) → `superuser` → `references/code-extensions.md`.
 
-**Repeats on every task → let a hook filter instead of relying on discipline** — a hook can trim long output before it enters context (a log of tens of thousands of tokens becomes a few hundred) · coding example → the addition in plugin `software-development` → `superuser` → `references/code-extensions.md`
+### 7 · Other settings that help
+Turn off MCP servers and plugins you do not use · pick model and effort at the start · `/clear` when the topic changes · project `CLAUDE.md` at most 40 lines (table with reasons: [`references/settings.md`](references/settings.md)) · on Windows (Git Bash · PowerShell) see [`references/windows-shell.md`](references/windows-shell.md).
 
----
+**Compact yourself at about 70%, do not wait for the system** (70% is a default, not measured). When about 70% of context is used and a step has just finished (tests pass · file saved · check passed): first update "รับงานต่อ" in `CONTEXT.md` (`handoff` item 5), then `/compact` and say what to keep (files edited · decisions · next step). The system's own compaction often hits mid-step, before anything is written down.
 
-## 6 · So the next session does not explore again
-
-Work you return to often needs a short "map" that **loads automatically**: where things are · what must not be read · commands used often
-- General work: the section "ของอยู่ที่ไหน" (where things are) in `.claude/superuser/CONTEXT.md` (`superuser` reads it before every start), at most 40 lines
-- Files with other names (`notes.md`) do not load themselves and must be told to be read every time, so they are wasted
-- An outdated map is worse than no map, because it confidently leads you to the wrong place. Do not put a full file list or change history in it
-
-Code work (project and folder `CLAUDE.md`, example maps) → the addition in plugin `software-development` → `superuser` → `references/code-extensions.md`
-
----
-
-## 7 · Other settings that help
-
-Turn off MCP servers and plugins you do not use · pick the model and effort at the start · `/clear` when the topic changes · project `CLAUDE.md` at most 40 lines — the full table with reasons is in [`settings`](references/settings.md) · working on Windows (Git Bash · PowerShell) → traps that really happened are in [`windows-shell`](references/windows-shell.md)
-
-**Compact yourself at about 70%, do not wait for the system** — when about 70% of context is used and a step has just finished (tests pass · file saved · check passed) → first update "รับงานต่อ" (resume work) in `CONTEXT.md` (`handoff` item 5), then `/compact` and say what to keep (files edited · decisions · next step) · when the system compacts by itself, it often hits mid-step, when nothing has been written down yet (idea from strategic-compact in everything-claude-code · MIT · 70% is a default, not measured)
-
----
-
-## 7.1 · Seams between phases — continue · clear · handoff · subagent · compact
-
-When a phase ends and the next begins, ask in order from item 1. **The first question answered yes is the route you pick**, then stop asking:
+### 7.1 · Seams between phases
+Ask in order; **the first yes is the route**, then stop:
 
 | # | Ask | If yes |
 |---|---|---|
-| 1 | Does the next phase need what is in this context as its source, and is there room left (roughly over 150k tokens · default, not measured)? | **Continue** in the same session |
-| 2 | Will the next phase move to another vendor's tool, another model, or another repo? | **handoff** — update "รับงานต่อ" (resume work) and start in the new place (`handoff` item 5) |
-| 3 | Can the next phase be split off without talking to us (no wait for a user answer, no need to know this context beyond what a brief can say)? | **subagent** — send the 5-part brief |
-| 4 | Can this whole context be dropped (everything needed is already in files) and the new topic is unrelated to the old? | **clear** — cannot be undone; check that `notes/` and "รับงานต่อ" (resume work) are complete first |
-| 5 | None of the above | **compact** and say what to keep (item 7 above) |
+| 1 | Does the next phase need this context as its source, and is there room left (roughly over 150k tokens · default, not measured)? | **Continue** in the same session |
+| 2 | Will the next phase move to another vendor's tool, model, or repo? | **handoff**: update "รับงานต่อ" and start in the new place (`handoff` item 5) |
+| 3 | Can the next phase be split off without talking to us (no user answer to wait for, no context beyond what a brief can say)? | **subagent**: send the 5-part brief |
+| 4 | Can this whole context be dropped (everything needed is in files) and the new topic is unrelated? | **clear**: cannot be undone; check `notes/` and "รับงานต่อ" are complete first |
+| 5 | None of the above | **compact** and say what to keep (item 7) |
 
-Item 4 is the only one that cannot be undone, so answer yes only when there is evidence everything is in files · if unsure → go to item 5 · source: mattpocock-skills (MIT) · PHASE-BOUNDARIES · seen 2026-11-10
+Item 4 is the only one that cannot be undone: answer yes only with evidence everything is in files; if unsure, go to 5.
 
----
+## Check before done
+- Big things were read by range, bounded search, subagent or file, not opened whole.
+- Every subagent brief said the result format and length.
+- Long output went to a file with only a tail or summary read back.
 
-## 8 · Anti-patterns
+## Anti-patterns
+Opening the whole thing to "see what is in it" when the table of contents or `head -40` answers it · searching without a boundary (`rg` without `--glob`; opening every search link) · searching across 10 items yourself instead of a subagent · sending a subagent to read something whose location you know · letting long output in one lump · reading the same thing again because you forgot (note findings to a file) · a map file that does not load automatically · a 300-line `CLAUDE.md` · all MCP servers always on.
 
-- **Opening the whole big thing to "see what is in it first"** when the table of contents, the first page, or `head -40` answers the same question at 1% of the cost
-- **Searching without a boundary** (`rg` without `--glob` brings back unrelated folders in bulk · searching the web and opening every link)
-- **Searching across 10 items yourself to answer one question** when you should send a subagent
-- **Sending a subagent to read something whose location you already know** when reading in parallel yourself or a direct search is faster
-- **Briefing a subagent without saying what you want back**, which brings back a long report and saves nothing
-- **Letting long output (tests · logs · pulled text) into context in one lump**
-- **Reading the same thing again because you forgot you read it** — note what you find into a file from the first pass
-- **A map file that does not load automatically** · **a `CLAUDE.md` 300 lines long** that everyone on the team pays tokens for every session
-- **Keeping every MCP server on all the time**
+## References
+- [`references/settings.md`](references/settings.md) — open when setting rules for a team or project
+- [`references/windows-shell.md`](references/windows-shell.md) — open when working in Git Bash or PowerShell on Windows
+- [`references/sources.md`](references/sources.md) — sources and licences
 
 
 ## reference: settings.md
@@ -195,6 +105,14 @@ Moved from `SKILL.md` item 7. Open it when you are about to advise the user on s
 | `permissions.deny` in `.claude/settings.json` for folders that should not be read | The system guards it, so you do not depend on discipline |
 | `/clear` when the topic changes (costs nothing) · `/compact <what to keep>` at a rest point in the work, not when nearly full · on the wrong path → `/rewind` to an earlier point | Frees space · `/compact` while the cache is warm is cheap, but after a long pause the whole conversation is read again · `/rewind` cuts back to a point where the cache already exists |
 | Project `CLAUDE.md` at most 40 lines · `~/.claude/CLAUDE.md` (used by every project) at most 60 lines — this set's own cap, stricter than the official docs, which suggest at most 200 · the one shipped in `scripts/install/CLAUDE.global.md` is 84 lines (over the cap, waiting to be cut) | Every line costs tokens in every session |
+
+
+## reference: sources.md
+
+# Sources · context-budget
+
+- Compact yourself at about 70% (section 7): idea from strategic-compact in everything-claude-code (MIT). 70% is a default, not measured.
+- Seams between phases (section 7.1): mattpocock-skills (MIT) · PHASE-BOUNDARIES · seen 2026-11-10. The 150k token line is a default, not measured.
 
 
 ## reference: windows-shell.md
@@ -225,14 +143,9 @@ Use when work passes to a subagent, session or person
 
 # handoff — pass work on so the receiver does not have to guess
 
-Part of `superuser` · lives only in plugin `superuser`; other plugins share it through `dependencies` · wording follows `human-writing`
+> **One rule:** whoever receives the work (new subagent · session · model · person · bot) remembers nothing, so only what is written to a file can be passed on. Write it so someone who never saw the chat can start within 2 minutes.
 
-> **One principle:** whoever receives the work (a new subagent · a new session · a new model · a person · another bot) remembers nothing → only what is written to a file can be passed on. Write it so that someone who never saw the chat can open it and start work within 2 minutes.
-
----
-
-## 1 · When to hand off and what to use
-
+## 1 · Use when
 | Moment | Use | Who writes |
 |---|---|---|
 | Lead → worker | **Task sheet** (`ใบสั่งงาน`, section 3) | Lead |
@@ -240,34 +153,96 @@ Part of `superuser` · lives only in plugin `superuser`; other plugins share it 
 | This session → next session · switching model · context nearly full | **Resume** (`รับงานต่อ`) in `CONTEXT.md` (section 5) | Lead |
 | Team → a person · another bot · Quix · Agent Desk | **Hand-off package** (section 6) | Lead |
 
-> **Quix · Agent Desk** = optional external tools. Quix queues work for agents; Agent Desk is a task board for a team of agents. Both read the header of `handoff/*.md`. This skill is complete in every item without them installed.
+Quix (work queue) and Agent Desk (task board) are optional external tools that read the header of `handoff/*.md`. Everything here works without them.
 
----
+## 2 · `.claude/superuser/` — the team's shared store
+All files, first-time setup, inbox and log: [`team-memory`](references/team-memory.md). Commit rules: [`team-files`](../superuser/references/team-files.md).
 
-## 2 · `.claude/superuser` — the team's shared store
-
-Everything lives under `.claude/superuser/`. All the files, first-time setup, inbox and log are in [`team-memory`](references/team-memory.md). The commit rules are in [`team-files`](../superuser/references/team-files.md).
-
-```
-.claude/superuser/
-├─ CONTEXT.md            งาน · ความคืบหน้า · การตัดสินใจ · รับงานต่อ  ← ทุกคนอ่านก่อน
-├─ handoff/
-│  ├─ 2026-10-21-03-login-api.md     ใบสั่งงาน + ใบส่งงาน ของชิ้นนั้น (1 ชิ้น 1 ไฟล์)
-│  └─ 2026-10-21-03-login-api/       ผลยาวของชิ้นนั้น (รายงาน · ข้อมูล · ร่าง)
-├─ notes/ · ledger/ · out-of-scope/  สมุดงานของแผน · ledger · แนวคิดที่ปฏิเสธ (team-memory หัวข้อ 8)
-└─ log/ · inbox/ · learn/            ของเดิม (learn/drop/ = บทเรียนที่ทิ้งไว้ข้อละไฟล์)
-```
-
-- **Piece name** `<date>-<2-digit sequence>-<short English words>` · use the same name for the file, the folder and in the log.
-- **The real work product** (code · documents · images) lives in the project's normal folders. `handoff/` keeps only instructions, summaries and in-between material.
-- **Do not commit** `handoff/` `notes/` `ledger/` `out-of-scope/` (put them in `.gitignore` along with `log/`). Before writing to these, `git check-ignore <path>` must find it and the path must not be a symlink. If that fails, do not write; tell the user to add it to `.gitignore`. When the work is done, for any piece that still has value → move its substance up to `CONTEXT.md` or `HISTORY.md`.
+- Files: `CONTEXT.md` (everyone reads first) · `handoff/<piece>.md` (task sheet + delivery sheet, 1 piece per file) · `handoff/<piece>/` (long results) · `notes/` · `ledger/` · `out-of-scope/` · `log/` · `inbox/` · `learn/`.
+- **Piece name** `<date>-<2-digit sequence>-<short English words>`, the same for the file, the folder and the log.
+- The real work product (code · documents · images) lives in the project's normal folders. `handoff/` keeps only instructions, summaries and in-between material.
+- **Do not commit** `handoff/` `notes/` `ledger/` `out-of-scope/` (put them in `.gitignore` along with `log/`). Before writing to these, `git check-ignore <path>` must find it and the path must not be a symlink. If that fails, do not write; tell the user to add it to `.gitignore`. When work is done, move anything of lasting value up to `CONTEXT.md` or `HISTORY.md`.
 - **Never put in** secrets · ID card numbers · full account numbers · other people's data.
 
----
-
 ## 3 · Task sheet (`ใบสั่งงาน`)
+The header is machine-readable (Quix · Agent Desk read it); the content is human language. **All 5 sections must be there, or it is not sent yet.**
 
-The file header is machine-readable data (Quix · Agent Desk read these fields). The content is in human language. **All 5 sections must be there, or it is not sent yet.**
+Header fields: `id` · `from` · `to` · `tier` (ใหญ่ · กลาง · เล็ก + effort) · `status` (เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่) · `depends_on` · `files_allowed`. Sections in order: `## เป้า` (goal, with `ขนาด: <n>k`) · `## เสร็จเมื่อ` · `## ใช้อะไร` (files to read, skills) · `## ขอบเขต` (writable files, what not to do) · `## ส่งกลับแบบไหน` (delivery sheet appended, message back about 40 lines or fewer). Full example → [`references/sheet-examples.md`](references/sheet-examples.md).
+
+- Code work uses the same sheet: `to: software-development:developer` · `files_allowed: [src/auth/**]` · done-when = tests pass · skill = `stack-*`.
+- A normal piece puts the 5-item sheet in the message that sends the task (`superuser` section 5). Write a file only for a piece that crosses sessions or goes to another person or bot; then the instruction is one line: `ทำตาม .claude/superuser/handoff/<id>.md`. Pass the path, not the content.
+- A brief picked up several days later uses `superuser/templates/DURABLE-BRIEF.md`: write behavior and interface names, not paths or line numbers; include testable acceptance criteria and what is out of scope. A sheet for a piece done today may use paths.
+- State the intent of the rule, not only the condition. For a fix or retry round, add `## รอบก่อน` (previous worker's report + what must change) and send a new worker.
+- A sheet to `reviewer` has no lead opinion in it (`superuser` section 5).
+- **Workers that review or research:** a conclusion that something is "outdated", "wrong" or "contradictory" must attach `file:line` and say whether it checked that it was not on purpose (history sections · script-generated numbers · noted exceptions). Put this in every such sheet. The lead opens a few at random before believing them.
+
+## 4 · Delivery sheet (`ใบส่งงาน`)
+The worker appends it to its own task sheet, then edits `status:`. The message back = path + result + 1-line summary. Heading `## ส่ง — <date time> · <agent> · <model>`, then fields **ผล** · **ของที่ได้** · **ตรวจแล้วด้วย** · **ตัดสินใจเอง** · **ลองแล้วพัง** · **ค้างอยู่ · ไม่แน่ใจ** (example in `references/sheet-examples.md`).
+
+- **ผล** is 1 of 4 values (`superuser` section 5): `เสร็จ` · `เสร็จ มีข้อกังวล` · `ขาดบริบท` · `ติด`.
+- `เสร็จ` needs evidence in `ตรวจแล้วด้วย`. If there is none → `status: ติด` or `ค้างอยู่`.
+- **ลองแล้วพัง:** note every path tried that did not work, with a 1-line reason (`dead_ends` in the header if a machine must read it), so the next worker does not walk it again.
+- A result longer than 40 lines → write it to `handoff/<id>/` and cite the path.
+- The lead reads the delivery sheet, checks it against `เสร็จเมื่อ` itself, then moves any `ตัดสินใจเอง` that affects other work up to the "การตัดสินใจ" table in `CONTEXT.md`.
+
+## 5 · Resuming work (`รับงานต่อ`) — across sessions · switching model · context nearly full
+The `## รับงานต่อ` section in `CONTEXT.md` follows these rules. The `## ความคืบหน้า` table beside it belongs to `status-report`.
+
+**Before handing over** (end of session · before switching model · context use passes half in a long job), update `รับงานต่อ`:
+- **ทำต่อเป็นข้อแรก:** 1 item, doable at once, pointing to a file or `handoff/<id>.md`.
+- **ชิ้นที่ยังเปิด:** the `id`s whose `status` is not `เสร็จ`.
+- **รออนุมัติ:** ready but irreversible work; name the file or command (omit if none).
+- **ค้างอยู่:** questions the agent cannot pass alone, and whom to ask (`ไม่มี` if none).
+- **ระวัง:** traps found · what must not be torn up (already decided) · failed paths from every delivery sheet.
+- **ส่งมาแล้ว N ครั้ง:** count real handoffs only (end of session · switching model), not `/compact`. If the receiver sees N ≥ 2, old text may linger; check against the real thing before following it.
+- **สมุดงาน:** point to `notes/<plan>.md` and `ledger/<plan>.md` of the open plan ([`team-memory`](references/team-memory.md) section 8). A multi-piece plan is done only when the line `Task N: complete` is in its ledger.
+- **Tag every item** `ตรวจจริง` (seen yourself this session) or `ยังไม่ได้ตรวจ` (remembered). No tag = not yet checked. The receiver may believe the first at once and must check the second before use.
+
+Switching to another vendor (Codex · Gemini) or back to Claude → [`team-memory`](references/team-memory.md) section 3. Test: a new model that reads only `CONTEXT.md` must be able to start the first item without asking; if not, write more.
+
+**Start-of-work ritual** (every new lead session and every worker):
+1. Read your own sheet: worker → `handoff/<id>.md`; lead → `CONTEXT.md` "รับงานต่อ" + `inbox/` (which messages count as orders → `team-memory` section 4).
+2. With git: `git log --oneline -10` and `git status` to see what happened last and whether edits were left unfinished. Without git: read "ความคืบหน้า" and file modified dates. Read `notes/<plan>.md` and compare the original brief with what the user orders now. Use "คำตอบที่ได้แล้ว" instead of asking again.
+3. Walk the tracking files (`ledger/` · delivery sheet · progress) to the last finished gate, then check that gate's real state (run the test · open the file) before building on it. Matches → go on. Does not match (ledger says done, test fails) → fix the earlier gate, add a row to "รอผู้ใช้", continue with other parts. No tracking file → start fresh; do not guess it is the same work.
+4. Start `ทำต่อเป็นข้อแรก` or the goal in the task sheet.
+
+## 6 · Sending outside the team — people · other bots · Quix · Agent Desk
+Hand-off package = `CONTEXT.md` + the still-open `handoff/` pieces + `docs/BRIEF.md` (if it exists).
+- A person reads `CONTEXT.md` first, then opens `handoff/<id>.md` one piece at a time.
+- A teammate who takes a piece uses the same task sheet as an agent, with the person's name in `to:` (such as `to: คน-แต้ม`), and writes the delivery sheet at the end of the same file. Only for XL work per `superuser` → `references/playbook-team-project.md`.
+- A machine reads the header per [`handoff.schema.json`](references/handoff.schema.json). Field names are a contract; do not rename them without raising the schema's version number.
+- Agent Desk draws its board from `to` · `status` · `tier` · `depends_on`; Quix uses the same files as a queue.
+
+## 7 · Rules that keep handoffs from breaking
+- Pass the path, not the content (content is lost over hops and wastes tokens).
+- 1 file, 1 writer; shared files are written by the lead alone.
+- Split only pieces that can really run in parallel; pieces that must know much of the same thing go to one worker.
+- Once decided, note it in "การตัดสินใจ". If the receiver disagrees, put it in "รออนุมัติ"; do not tear it up alone.
+- Done is judged from the work product and the check result, not the word "done".
+- The reviewer gets only the work product + criteria, not the maker's context.
+
+## 8 · Our files versus Claude Code's built-in memory
+Unsure whether a note goes into `CONTEXT.md` · `CLAUDE.md` · `.claude/rules/` or auto memory → [`team-memory`](references/team-memory.md) section 7.
+
+## Check before done
+- Task sheet has all 5 sections; delivery sheet has evidence in `ตรวจแล้วด้วย`.
+- `รับงานต่อ` has an item at the top that a new model can start without asking, every item tagged.
+- Nothing under `handoff/` `notes/` `ledger/` is committed or holds secrets.
+
+## References
+- [`references/sheet-examples.md`](references/sheet-examples.md) — open when writing a task sheet or delivery sheet
+- [`references/team-memory.md`](references/team-memory.md) — open for first-time setup, vendor switch, inbox, log, workbooks, auto memory
+- [`references/handoff.schema.json`](references/handoff.schema.json) — open when a machine reads the header
+- [`references/sources.md`](references/sources.md) — sources and licences
+
+
+## reference: sheet-examples.md
+
+# Sheet examples · task sheet and delivery sheet
+
+Full examples for `handoff` SKILL.md sections 3 and 4. The headings and field names are the format; the content is an example.
+
+## Task sheet (`ใบสั่งงาน`)
 
 ```markdown
 ---
@@ -299,18 +274,9 @@ files_allowed: [research/shipping/**]
 ใบส่งงานต่อท้ายไฟล์นี้ · ข้อความกลับหัวหน้าทีมไม่เกินราว 40 บรรทัด (สิ่งที่เปลี่ยน · ผลตรวจ · สิ่งที่ไม่แน่ใจ)
 ```
 
-- **Code work** uses the same sheet, differing only in fields: `to: software-development:developer` · `files_allowed: [src/auth/**]` · done-when = `npm test` passes · skill = `stack-*` (plugin `software-development`).
-- **A normal piece puts the 5-item sheet in the message that sends the task** (the core of `superuser` section 5). Write a file only for a piece that crosses sessions or goes to another person or bot (module `handoff`); then the instruction reaches the agent as one line: `ทำตาม .claude/superuser/handoff/<id>.md`. Pass the path, not the content; the worker opens and reads it itself.
-- **A brief that will be picked up several days after it is written** uses the template `superuser/templates/DURABLE-BRIEF.md`: write behavior and interface names, not paths or line numbers (files move, then the old brief is stale). It has testable acceptance criteria and a list of what is out of scope. A normal task sheet for a piece done today may use paths.
-- **State the intent of the rule**, not only the condition. For a fix or retry round → add a `## รอบก่อน` (previous round) section (the previous worker's report + what must change) and send a new worker.
-- **A sheet to `reviewer`** has no lead opinion in it (rule in `superuser` section 5).
-- **Workers that review or research** — a conclusion that something in the work is "outdated", "wrong" or "contradictory" must attach `file:line` and say whether it looked and found it so on purpose (history sections · numbers a script generates · noted exceptions). Put this in every task sheet. The lead opens a few at random before believing them (lesson 2026-10-26: "PLUGINS.md is outdated" was a Roadmap section kept on purpose · "skill 49 is wrong" was a shared total).
+Code work uses the same sheet, differing only in fields: `to: software-development:developer` · `files_allowed: [src/auth/**]` · done-when = `npm test` passes · skill = `stack-*` (plugin `software-development`).
 
----
-
-## 4 · Delivery sheet (`ใบส่งงาน`)
-
-The worker appends it to its own task sheet, then edits `status:`. The message back to the lead = path + result + 1-line summary.
+## Delivery sheet (`ใบส่งงาน`)
 
 ```markdown
 ## ส่ง — 2026-10-21 14:20 · general-purpose · sonnet
@@ -322,71 +288,18 @@ The worker appends it to its own task sheet, then edits `status:`. The message b
 - **ค้างอยู่ · ไม่แน่ใจ:** เจ้าที่ 3 ไม่บอกค่าเก็บเงินปลายทาง (รอยืนยัน)
 ```
 
-- **ผล** (result) uses 1 of 4 values per `superuser` section 5: `เสร็จ` · `เสร็จ มีข้อกังวล` · `ขาดบริบท` · `ติด`
-- **"เสร็จ" needs evidence** in `ตรวจแล้วด้วย` (checked with). If there is none → `status: ติด` or `ค้างอยู่`.
-- **ลองแล้วพัง** (tried and failed): note every path tried that did not work, with a 1-line reason (the `dead_ends` field in the header if a machine must read it). A dead end that is not noted is a path the next worker will waste time walking again.
-- **A result longer than 40 lines** → write it to `handoff/<id>/` and cite the path.
-- **The lead is responsible for the result** — read the delivery sheet, check it against "เสร็จเมื่อ" (done-when) yourself, then move any `ตัดสินใจเอง` that affects other work up to the "การตัดสินใจ" (decisions) table in `CONTEXT.md`.
+## Lesson behind the review rule
 
----
+2026-10-26: "PLUGINS.md is outdated" was a Roadmap section kept on purpose. "Skill 49 is wrong" was a shared total.
 
-## 5 · Resuming work (`รับงานต่อ`) — across sessions · switching model · context nearly full
 
-The section `## รับงานต่อ` in `CONTEXT.md` uses this one set of rules. The table `## ความคืบหน้า` (progress) beside it belongs to `status-report`.
+## reference: sources.md
 
-**Before handing over** — update the "รับงานต่อ" section in `CONTEXT.md` before ending a session · before switching model · when context use passes half in a long job.
-- **ทำต่อเป็นข้อแรก (do first):** 1 item, doable at once, pointing to a file or `handoff/<id>.md`
-- **ชิ้นที่ยังเปิด (open pieces):** a list of `id` whose `status` is not `เสร็จ`
-- **รออนุมัติ (awaiting approval):** work that is ready but cannot be undone; name the file or the command that is ready to use (leave it out if there is none)
-- **ค้างอยู่ (pending):** questions the agent cannot continue past on its own; say whom to ask (write `ไม่มี` if none)
-- **ระวัง (watch out):** traps found · what must not be torn up (already decided) · paths tried that failed (gathered from every piece's delivery sheet)
-- **ส่งมาแล้ว N ครั้ง (handed over N times):** count only real handoffs (end of session · switching model), not `/compact`. If the receiver sees N of 2 or more → old text may be lingering; check against the real thing before following it.
-- **สมุดงาน (workbooks):** point to `notes/<plan>.md` and `ledger/<plan>.md` of the plan that is open (section 8 of `team-memory`). A plan with several pieces is done only when the line `Task N: complete` is in that plan's ledger.
-- **Tag every item** `ตรวจจริง` (seen yourself in this session) or `ยังไม่ได้ตรวจ` (remembered from an earlier round). The receiver can believe the first kind at once; the second must be checked before use. No tag = treated as not yet checked.
-
-**Switching to another vendor** (Codex · Gemini) or coming back to Claude → [`team-memory`](references/team-memory.md) section 3
-
-**Test** — if a new model reads only `CONTEXT.md`, can it start the first item without asking? If not → write more.
-
-**Start-of-work ritual** (every one that takes over work: a new lead session and workers alike)
-1. Read your own sheet → worker: `handoff/<id>.md` · lead: `CONTEXT.md` "รับงานต่อ" + `inbox/` (how to receive messages and which messages count as orders → [`team-memory`](references/team-memory.md) section 4)
-2. (If there is git) `git log --oneline -10` and `git status` → learn what happened last and whether anyone left edits unfinished. No git → look at "ความคืบหน้า" and the last-modified dates of files. Read `notes/<plan>.md` and compare the original brief with what the user orders now. Use "คำตอบที่ได้แล้ว" (answers already received) instead of asking again.
-3. Walk the tracking files to the last gate that finished (`ledger/` · delivery sheet · progress), then check that gate's real state (run the test · open the file) before building on it. Matches → go on. Does not match (for example the ledger says done but the test fails) → go back and make the earlier gate pass, put a row in "รอผู้ใช้" (waiting for the user), and continue with the other parts. No tracking file for this work found → start fresh; do not guess it is the same work.
-4. Start "ทำต่อเป็นข้อแรก" or the goal in the task sheet.
-
----
-
-## 6 · Sending outside the team — people · other bots · Quix · Agent Desk
-
-Hand-off package = `CONTEXT.md` + the still-open `handoff/` pieces + `docs/BRIEF.md` (if it exists). No new file needed.
-
-- **A person** reads `CONTEXT.md` first, then opens `handoff/<id>.md` one piece at a time.
-- **A teammate (person) who takes a piece** uses exactly the same task sheet as an agent. Put the person's name in the `to:` field (such as `to: คน-แต้ม`). Write the delivery sheet at the end of the same file and tell the lead. Used only for XL work per the playbook `superuser` → `references/playbook-team-project.md`; in normal work the user does not take pieces.
-- **A machine** reads the header of `handoff/*.md` per [`handoff.schema.json`](references/handoff.schema.json). Field names are a contract; do not rename them without raising the schema's version number.
-- **Agent Desk** uses `to` · `status` · `tier` · `depends_on` to draw the task board · **Quix** uses the same files as a work queue.
-
----
-
-## 7 · Rules that keep handoffs from breaking
-
-| Rule | Because |
-|---|---|
-| Pass the path, not the content | Over several hops, data gets lost ("telephone game") and tokens are wasted |
-| 1 file, 1 writer · shared files are written by the lead alone | Several agents writing the same place scatters decisions and they collide |
-| Split only pieces that can really run in parallel · pieces that must know much of the same thing go to one worker | Splitting context makes workers understand the brief differently |
-| Once decided, note it in "การตัดสินใจ" · if the receiver disagrees → put it in "รออนุมัติ", do not tear it up alone | Stops arguing the same thing every session |
-| Done is judged from the work product and the check result, not the word "done" | Words in a conversation cannot be checked |
-| The reviewer gets only the work product + criteria, not the maker's context | A reviewer who sees the maker's reasons tends to go along |
+# Sources · handoff
 
 Sources of the workbook and resume mechanisms: code-modernization (Apache-2.0) · mercadopago (Apache-2.0) · math-proof (Apache-2.0) · superpowers (MIT) · mattpocock-skills (MIT) · aws (Apache-2.0) · vsql-extension-builder (license not stated, mechanism only) · claude-remember (no redistribution, mechanism only) · seen 2026-11-10 · details per file in `team-memory` section 8
 
 Sources (`จากแหล่ง`): Anthropic — *How we built our multi-agent research system* (2025-06) · *Effective harnesses for long-running agents* (2025-11) · *Effective context engineering for AI agents* (2025-09) · Cognition — *Don't Build Multi-Agents* (2025-06) · *Multi-Agents: What's Actually Working* (2026-04)
-
----
-
-## 8 · Our files versus Claude Code's built-in memory
-
-If you want to note something and are unsure whether it goes into `CONTEXT.md` · `CLAUDE.md` · `.claude/rules/` or auto memory → open [`team-memory`](references/team-memory.md) section 7
 
 
 ## reference: team-memory.md
@@ -560,88 +473,80 @@ Use before writing anything people read, in Thai or English
 
 # human-writing — write like a person: smooth to read, easy to understand
 
-Applies to everything a person will read, from chat to labels in a diagram. This skill teaches good Thai and good English. Rules about Thai output stay as written. Examples of every rule and their sources → [`headings-and-examples`](references/headings-and-examples.md). Thai of 1 paragraph or more → [`thai-grammar`](references/thai-grammar.md) (sentence structure · register · example paragraphs in [`thai-examples`](references/thai-examples.md)). Research or work sent to outsiders → [`strict-review`](references/strict-review.md). Thai documents with justified alignment → [`thai-line-breaking`](references/thai-line-breaking.md). It lives only in plugin `superuser`; other plugins share it through `dependencies`.
+## Use when
+- Writing anything a person will read, from chat to labels in a diagram, in Thai or English.
 
-Boundary: this skill owns the wording. The look of kept documents (headings, tables, text boxes, theme) → `polished-document-style`. Abbreviations and glossaries → `spell-out-abbreviations`.
+Not for: the look of kept documents (headings, tables, text boxes, theme) → `polished-document-style` · abbreviations and glossaries → `spell-out-abbreviations`.
 
-## 1 · Core principles
+## Steps
 
+### 1 · Core principles
 - Write as if explaining to a skilled coworker who is not on the project. If it trips you up when read aloud, rewrite it.
 - Answer or conclusion first, then the reason. No preamble, no repeating the question.
 - 1 sentence, 1 idea. If you chain "ซึ่ง" "โดย" "จึง" several layers deep, split into several sentences.
 - English follows the same rules: sentences under 25 words · who does what (active voice) · plain words.
 
-## 2 · Symbols and numbers
-
-- `→` means order of steps or a consequence · `·` separates short nouns on one line · `:` introduces detail · write every kind of count as a numeral · the words around a symbol must be human language.
-- **Write conditions and instructions as full sentences with connectors** (ถ้า … ให้ … · แล้ว · ส่วน · เพราะ — that is, if … then … · and then · as for · because). Do not chain sentences into fragments with `→` or `·`.
-- In tables, short text is fine, but it must still read as human language, not code.
-- A symbol must never replace a word so far that the reader has to decode it. If an outsider must guess what the arrow means, add words.
-- **No emoji or icons** (📌 ✅ 💡 🚀 👀) in headings, body, tables, labels, or text boxes, because readers spot them at once as AI-written. Use bold words instead, such as **หมายเหตุ** (note). Yes/no cells in a table may use `✓` `✗`. Show severity with the words `วิกฤต · สูง · กลาง · ต่ำ`, never coloured dots. Do not delete emoji the owner wrote, and do not copy them. The one exception is customer chat text that the task's own skill prescribes.
+### 2 · Symbols and numbers
+- `→` means order of steps or a consequence · `·` separates short nouns on one line · `:` introduces detail · write every kind of count as a numeral.
+- **Write conditions and instructions as full sentences with connectors** (ถ้า … ให้ … · แล้ว · ส่วน · เพราะ). Do not chain sentences into fragments with `→` or `·`. If an outsider must guess what an arrow means, add words. In tables short text is fine, but it must read as human language, not code.
+- **No emoji or icons** (📌 ✅ 💡 🚀 👀) in headings, body, tables, labels, or text boxes. Use bold words instead, such as **หมายเหตุ**. Yes/no cells in a table may use `✓` `✗`. Show severity with the words `วิกฤต · สูง · กลาง · ต่ำ`, never coloured dots. Do not delete emoji the owner wrote, and do not copy them. The one exception is customer chat text that the task's own skill prescribes.
 - Say what every number means. Compare so it is easy to picture (times, easier to read than %). If a result is uncertain, say plainly why.
-- **Figures that change over time** (prices · tax rates · law · filing deadlines): give the source and the date checked. Cite only sources you actually opened, with a link or DOI. Mark hypothetical numbers or mock data with the label `ตัวอย่าง` (example) from the first place they appear.
-- **Dates** in Thai text use Buddhist Era (พ.ศ.) or Common Era (ค.ศ.), one style across the whole set. File names, codes, and machine-read data use Common Era `YYYY-MM-DD`.
-- **Task status** uses these 5 words in every document: `เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่` (done · in progress · blocked · awaiting approval · pending). Check results use `ผ่าน · ไม่ผ่าน` (pass · fail).
+- **Figures that change over time** (prices · tax rates · law · filing deadlines): give the source and the date checked. Cite only sources you actually opened, with a link or DOI. Mark hypothetical numbers or mock data with the label `ตัวอย่าง` from the first place they appear.
+- **Dates** in Thai text use พ.ศ. or ค.ศ., one style across the whole set. File names, codes, and machine-read data use `YYYY-MM-DD` in Common Era.
+- **Task status** uses these 5 words in every document: `เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่`. Check results use `ผ่าน · ไม่ผ่าน`.
 
-## 3 · Words
+### 3 · Words
+- Use words people actually say. No bureaucratic words or literal-translation jargon. Keep terms the field uses in English (token · prompt · API · OCR). Explain a coined or confusing term the first time. Abbreviations → `spell-out-abbreviations`.
+- Call one thing by one word across the whole set: chat, slides, documents, diagrams.
+- Two-language documents: pick 1 main language and put the other in brackets or a second column. Do not switch inside a sentence.
+- Cut padding words ("ทำการ" · "มีการ" · "ในส่วนของ" · "ได้มีการ" · "เป็นการ").
+- **Cut items, not function words.** Every length budget (words per bullet · characters per commit title · characters per subtitle) is met by dropping items, condensing, or moving content to the next piece. Never cut `จะ` `ให้` `ก็` `ด้วย` `แล้ว` `ต่างหาก` or polite words (`ขอ` `รบกวน` `นะ` and ครับ/ค่ะ, per register). They do work in the sentence; without them Thai turns curt and reads like a translation.
+- Avoid AI-looking moves: a quotable opener · the slogan "ไม่ใช่แค่… แต่ยัง…" for emphasis (a sentence that contrasts with something real or reframes the problem is fine, but it must close with "ด้วย") · grouping everything in threes · praising something as more important than it is · bold on every line · a closing recap · opening with "แน่นอน" · closing with "หวังว่าจะช่วยได้" · "หลาย" when you know the number · stacked hedges (hedge once, where you are truly unsure).
+- For work people look at (screens · slides · ads) also avoid: broad ad words (ยกระดับ · ไร้รอยต่อ · ล้ำสมัย · supercharge) · em dashes in every sentence · canned openers ("ในยุคดิจิทัลที่…") · short fragments split by full stops ("เร็ว. ง่าย. ครบ.") · claims a competitor could also make (put in a real name or number). For the look of the work, use `no-ai-look`.
 
-- Use words people actually say. No bureaucratic words or literal-translation jargon.
-- Keep terms the field already uses in English (token · prompt · API · OCR).
-- Abbreviations → follow `spell-out-abbreviations`. Explain a coined or confusing term the first time you use it.
-- Call one thing by one word across the whole set: chat, slides, documents, and diagrams.
-- Two-language documents: pick 1 main language and put the other in brackets or a second column. Do not switch back and forth inside a sentence.
-- Cut padding words ("ทำการ" · "มีการ" · "ในส่วนของ" · "ได้มีการ" · "เป็นการ" — empty Thai fillers such as "ทำการ" before a verb).
-- **Cut items, not function words.** Every kind of length budget (words per bullet · characters per commit title · characters per subtitle) is met by dropping items, condensing content, or moving it to the next piece. Never cut `จะ` `ให้` `ก็` `ด้วย` `แล้ว` `ต่างหาก` (Thai function words: future marker, "to/let", "also", "too", "then", emphatic particle) or polite words (`ขอ` `รบกวน` `นะ` and ครับ/ค่ะ, per register). These do work in the sentence. Cut them and Thai turns curt and reads like a translation.
-- Avoid moves that look AI-written: a quotable opener · the slogan "ไม่ใช่แค่… แต่ยัง…" (not just… but also…) used for emphasis (a sentence that contrasts with something real or reframes the problem is fine, but it must close with "ด้วย") · grouping everything in threes · praising something as more important than it is · bold on every line · a closing recap · opening with "แน่นอน" (certainly) · closing with "หวังว่าจะช่วยได้" (hope this helps) · using "หลาย" (several) when you know the number · stacked hedges (hedge once, at the point you are truly unsure).
-- For work people look at (screens · slides · ads) also avoid: broad ad words (ยกระดับ · ไร้รอยต่อ · ล้ำสมัย · supercharge — elevate · seamless · cutting-edge) · em dashes in every sentence · canned openers ("ในยุคดิจิทัลที่…" — "In the digital age where…") · short fragments split by full stops ("เร็ว. ง่าย. ครบ." — "Fast. Easy. Complete.") · claims a competitor could also make: put in a real name or number instead · for the look of the work, use `no-ai-look`.
-
-## 4 · Answering in chat
-
-- First sentence answers directly, then the reason.
-- Short question → short answer, 2–3 sentences, no headings or tables.
-- Use a table to compare 2 or more options or many numbers. Use a list when there are several items to scan. No nested bullets (split sub-topics into a new bold heading). 2–3 short items go on one line separated by ` · `. Include only what the reader needs.
+### 4 · Answering in chat
+- First sentence answers directly, then the reason. Short question → 2–3 sentences, no headings or tables.
+- Table to compare 2 or more options or many numbers; list for several items to scan. No nested bullets (use a new bold heading). 2–3 short items go on one line with ` · `. Include only what the reader needs.
 - Report finished work by its result, not by narrating the steps.
-- If you told them something wrong, say what was wrong and what is right. No long apology. If unsure, say where and how to check. Do not guess in a confident voice.
-- When the user must decide: offer options, name the recommended one and why, and close with 1 question that is easy to answer.
+- If you told them something wrong, say what was wrong and what is right, with no long apology. If unsure, say where and how to check; do not guess in a confident voice.
+- When the user must decide: offer options, name the recommended one and why, close with 1 easy question.
 - Longer than 1 screen: answer the important part first and offer the detailed version in 1 line (do not stop to ask).
-- If the user says "งง" (confused) or "พูดง่าย ๆ" (say it simply): rewrite the last answer at half the length, with no unexplained jargon and no new content.
-- End with 1 thing they can actually do next. No recap.
-- **Answering from a document or the web**: retell in your own words, never translate sentence by sentence · cause and effect in one paragraph · small exceptions in brackets · 2–3 bold labels are enough · put sources together at the end of the answer.
+- If the user says "งง" or "พูดง่าย ๆ": rewrite the last answer at half the length, no unexplained jargon, no new content.
+- End with 1 thing they can do next. No recap.
+- **Answering from a document or the web**: retell in your own words, never sentence-by-sentence translation · cause and effect in one paragraph · small exceptions in brackets · 2–3 bold labels are enough · sources together at the end.
 
-## 5 · Documents and reports
+### 5 · Documents and reports
+- The first paragraph is the conclusion; reading only it gives the point. Headings say what the content is, not the category name. At most 5 sentences per paragraph.
+- Column headings say what is measured · 1 column, 1 meaning. Footnotes are for definitions and number sources; never hide an important conclusion there.
+- Work summaries and status reports: bold headings only as needed, **ผล** → **ที่ทำ** → **ต่อไป** (add headings for real content, such as awaiting approval). Cut behind-the-scenes method, solved problems that do not affect the reader, and numbers not used for a decision. Tag every claim `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ` (meanings in `superuser` `references/evidence.md`).
+- Formal documents (official letters · contracts · tax invoices) use the wording the form requires; this skill covers only the parts you write yourself. Choose the register for each job (official · business · shop chat · job application · complaint · screen) from the table in `thai-grammar` section 4 before writing, and keep it through the piece.
 
-- The first paragraph is the conclusion. Reading only it must give the point.
-- Headings say what the content is, not the category name · at most 5 sentences per paragraph.
-- Column headings say what is measured · 1 column, 1 meaning.
-- Footnotes are for definitions and number sources · never hide an important conclusion in a footnote.
-- Work summaries and status reports: bold headings only as needed, **ผล** (result) → **ที่ทำ** (what was done) → **ต่อไป** (next) (add headings when there is real content, such as awaiting approval) · cut behind-the-scenes method, solved problems that do not affect the reader, and numbers not used for a decision · tag every claim `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ` (verified · from a source · inferred · not yet checked; meanings in `superuser` `references/evidence.md`).
-- Formal documents (official letters · contracts · tax invoices) use the wording the form requires. This file covers only the parts you write yourself. Choose the register for each job (official · business · shop chat · job application · complaint · screen) from the table in `thai-grammar` section 4 before writing, and keep it through the whole piece.
-
-## 6 · Slides and headings of every kind
-
-Applies to slide titles, figure titles, document headings, and box titles in a diagram. The full rules and the before → after table are in the same reference.
-
-- A slide title = the conclusion of the page, not the topic name · at most 2 lines (about 15 words) · detail goes in the page body.
-- **A title with 2 parts needs a connector that matches the real relationship** ("เพราะ" or "จึง" for reason · "ส่วน" for a split of roles · "แต่" for contrast — because or so · as for · but) · 1 title, 1 connector. If it needs 2, you crammed too much in.
-- Use phrases people actually say, not strings of nouns · choose words by reader.
-- The verb matches what the page shows · do not use "คน" (person) for things that are not people.
-- The caption under a picture must say what the picture does not. If it repeats the picture, cut it · page structure: problem → fix → result · write a speaking script the way it is actually spoken.
+### 6 · Slides and headings of every kind
+Applies to slide titles, figure titles, document headings, and box titles in a diagram.
+- A slide title = the conclusion of the page, not the topic name · at most 2 lines (about 15 words) · detail goes in the body.
+- **A title with 2 parts needs a connector that matches the real relationship** ("เพราะ" or "จึง" for reason · "ส่วน" for a split of roles · "แต่" for contrast) · 1 title, 1 connector. If it needs 2, you crammed too much in.
+- Use phrases people actually say, not strings of nouns · choose words by reader · the verb matches what the page shows · do not use "คน" for things that are not people.
+- The caption under a picture must say what the picture does not; if it repeats the picture, cut it · page structure: problem → fix → result · write a speaking script the way it is spoken.
 - **Test:** read the title once to an outsider. If they cannot retell it, rewrite it.
 
-## 7 · Diagrams
-
-- Box labels are short nouns of 1–4 words people understand · arrow labels are verbs · an unlabelled arrow must be impossible to misread.
+### 7 · Diagrams
+- Box labels are short nouns of 1–4 words · arrow labels are verbs · an unlabelled arrow must be impossible to misread.
 - Words in the figure match the document · the figure title is a conclusion, with 1 sentence under it saying what to look at · follow the house style if there is one.
 
-## 8 · 7-point check before sending
-
+## Check before sending
 1. Does it read smoothly aloud, and not like a translation?
 2. Can an outsider understand it without asking? Can every symbol be read?
-3. Does the first sentence already answer the question or give the conclusion?
+3. Does the first sentence already answer or give the conclusion?
 4. Do terms and numbers match across every file in the set?
-5. Is there any padding you can cut without changing the meaning? If so, cut it. But `จะ` `ให้` `ก็` `ด้วย` `แล้ว` and polite words are not padding (section 3). If cutting made a sentence curt, put them back.
-6. Does every heading pass section 6: 2 parts have a connector · a phrase people say · words fit the reader · the verb matches what the figure shows?
-7. Thai of 1 paragraph or more: run `python scripts/thai_tells.py <file>` (warns only, does not judge), then walk the 7 sentence-structure rules in `thai-grammar`. Passing every rule is not the same as reading smoothly. For language, taste, and looks, the final verdict belongs to the user, not to the model doing the check.
+5. Any padding to cut without changing meaning? Cut it, but `จะ` `ให้` `ก็` `ด้วย` `แล้ว` and polite words are not padding; if cutting made a sentence curt, put them back.
+6. Does every heading pass section 6?
+7. Thai of 1 paragraph or more: run `python scripts/thai_tells.py <file>` (warns only), then walk the 7 sentence-structure rules in `thai-grammar`. Passing every rule is not the same as reading smoothly. The final verdict on language, taste and looks belongs to the user.
+
+## References
+- [`references/headings-and-examples.md`](references/headings-and-examples.md) — open for examples of every rule, the before → after heading table, and their sources
+- [`references/thai-grammar.md`](references/thai-grammar.md) — open when writing Thai of 1 paragraph or more (sentence structure · register); example paragraphs in [`references/thai-examples.md`](references/thai-examples.md)
+- [`references/strict-review.md`](references/strict-review.md) — open for research or work sent to outsiders
+- [`references/thai-line-breaking.md`](references/thai-line-breaking.md) — open for Thai documents with justified alignment
 
 
 ## reference: headings-and-examples.md
@@ -1087,44 +992,30 @@ Use to cut extras nobody needs yet. Not Claude Code simplify
 
 # simplify — make it simple so a first-time reader can follow
 
-Use on any work handed to people: code, documents, plans, designs, slides, tables and answers · `human-writing` controls **how it is written**, while this skill controls **what the work contains** · lives only in plugin `superuser`; other plugins share it through `dependencies`
+> **One rule:** someone not on this work, opening it 6 months from now, must understand it and continue it without asking anyone.
 
-## 1 · Main principles
+## Use when
+- Any work handed to people (code, documents, plans, designs, slides, tables, answers) may hold more than the task needs.
+- `human-writing` controls how it is written; this skill controls what the work contains.
 
-- **The test:** someone not on this work, opening it 6 months from now, must understand it and continue it without asking anyone
-- Do only what the task needs; do not provide for a future nobody has asked for
-- Cut before adding · if removing a part loses neither meaning nor function, cut it
-- Plain things people know beat clever things that need decoding
-- **Simple is not sloppy** — never cut correctness, safety, validation of data from outside, error handling that prevents data loss, or what the user asked for explicitly
-- **Simple is not one big pile** — reduce the number of things, but keep clear separation of duties, 1 part doing 1 thing, as professional work does
+Not for: Claude Code's own `/simplify` command · more detail on code and architecture (if installed) → `lazy-coding` · `readable-code` · `simplicity-first` in plugin `software-development`.
 
-## 2 · Ladder before starting — stop at the first step that works
+## Steps
+1. Climb the ladder and stop at the first step that works: (a) is this really needed? If not, do not do it and say in 1 line what you skipped; (b) is there an existing thing that works (file, template, function, tool, built-in feature)? Use it; (c) do the shortest version that is still complete and correct.
+2. Do only what the task needs; cut before adding (if removing a part loses neither meaning nor function, cut it); plain things people know beat clever things that need decoding.
+3. Apply by kind of work:
+   - **Code:** names say what it is and carry units · 1 function does 1 thing · return early instead of nesting `if` · at most 3 levels of indentation · comments say why · follow the project's style. Avoid an abstraction with one user, clever hard-to-read shortcuts, one big file, a pile-up `utils/`, a new dependency for a few lines.
+   - **Documents · reports:** conclusion first · 1 paragraph 1 topic · an example for abstract points · a table for compared data. Avoid repeats, empty headings, unknown terms.
+   - **Plans · procedures:** 3–5 key items, each with an owner and a way to measure done · fewest steps that work. Avoid a 20-item list with no priority.
+   - **Designs · slides · figures:** 1 page 1 point · shortest path to the user's goal · familiar patterns. Avoid cramming and decoration that does not help.
+   - **Tables · data:** only columns used to decide · short formulas. Avoid columns that repeat a meaning and long nested formulas.
+   - **Answers:** answer first, as long as the question needs.
+4. **Simple is not sloppy:** never cut correctness, safety, validation of data from outside, error handling that prevents data loss, or what the user asked for explicitly. **Simple is not one big pile:** keep clear separation of duties, 1 part doing 1 thing.
+5. When you take a deliberate shortcut, write how far it works and when it changes, for example `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process`, and put 1 line in the report: `ข้าม: X — เพิ่มเมื่อ Y`.
 
-1. Do we really need this · not needed → do not do it, and say in 1 line what you skipped
-2. Is there an existing thing that works (file, template, function, tool, a feature that comes with the system) · yes → use the existing thing
-3. Do the shortest version that is still complete and correct
-
-## 3 · By kind of work
-
-| Work | Do | Avoid |
-|---|---|---|
-| **Code** | Names say what it is and carry units · 1 function does 1 thing · return early instead of nesting `if` · at most 3 levels of indentation · comments say "why" · follow the project's style | An abstraction with a single user · a clever shortcut that is hard to read · one big file doing everything · a pile-up `utils/` folder · a new dependency for a few lines of work |
-| **Documents · reports** | Conclusion first · 1 paragraph 1 topic · an example for abstract points · a table for data that is compared | Repeating what was already said · headings with no content · terms the reader does not know |
-| **Plans · procedures** | 3–5 key items · every item has an owner and a way to measure done · the fewest steps that work | A list of 20 items with no priority · steps kept "just in case" |
-| **Designs · slides · figures** | 1 page 1 point · the shortest path to the user's goal · use patterns people are familiar with | Cramming data until people must squint · decoration that does not help understanding |
-| **Tables · data** | Only the columns used to decide · short formulas you can follow | Columns that repeat a meaning · long nested formulas in one line |
-| **Answers** | Answer first · as long as the question needs | An explanation longer than the work itself |
-
-Plugin `software-development` has more detail on code and architecture: `lazy-coding` (write less) · `readable-code` (names, function shape, file structure) · `simplicity-first` (documents, plans, architecture) · if installed, open them together
-
-## 4 · Say that you made it simple on purpose
-
-A deliberate shortcut should be written down with how far it works and when it changes, so it does not look forgotten, for example `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process` (gloss: simple: kept in memory — move to Redis when running more than 1 process) · in the report put 1 line `ข้าม: X — เพิ่มเมื่อ Y` (skipped: X — add when Y)
-
-## 5 · 5-point check before sending
-
-1. Can an outsider open it for the first time and understand within 30 seconds
-2. Is there any part, step or layer that can be cut with no loss? If so, cut it
-3. Does every part added have a reason it is needed now, not "just in case"
-4. Is it still complete on correctness, safety, and what the user asked for
-5. Are duties still clearly separated, and not several things squashed into one place to look short
+## Check before done
+- [ ] An outsider can open it for the first time and understand within 30 seconds.
+- [ ] No part, step or layer can be cut with no loss.
+- [ ] Every added part has a reason it is needed now, not "just in case".
+- [ ] Still complete on correctness, safety and what the user asked for.
+- [ ] Duties still clearly separated, not squashed into one place to look short.

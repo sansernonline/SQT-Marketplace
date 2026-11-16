@@ -250,3 +250,25 @@ this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r))
 | security headers | `UseHsts()` (HTTP Strict Transport Security (HSTS) เท่านั้น) + middleware สั้น ๆ หรือ `NetEscapades.AspNetCore.SecurityHeaders` | `helmet` | `secure` middleware |
 | OpenAPI | `Microsoft.AspNetCore.OpenApi` (`AddOpenApi()` + `MapOpenApi()` · มากับ template ตั้งแต่ .NET 9) · ทางเลือก: Swashbuckle / NSwag | `swagger-jsdoc` | มีในตัว `/docs` |
 | rate limit | `AddRateLimiter` | `express-rate-limit` | `slowapi` |
+
+## Wiring the ready-made health router
+
+```js
+// Node
+app.use(createHealthRouter({
+  version: { name: 'orders-api', version: '1.4.0', commit: process.env.GIT_SHA },
+  checks: {
+    db:   async () => { await pool.query('SELECT 1'); },          // critical
+    mail: { critical: false, run: async () => { await smtp.verify(); } },
+  },
+}));
+```
+
+```python
+# Python
+app.include_router(make_health_router(
+    version={"name": "orders-api", "version": "1.4.0", "commit": os.getenv("GIT_SHA")},
+    checks={"db": lambda: db.execute("SELECT 1"),
+            "mail": {"critical": False, "run": smtp.verify}},
+))
+```

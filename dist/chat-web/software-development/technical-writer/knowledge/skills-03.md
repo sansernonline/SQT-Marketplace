@@ -6,8 +6,6 @@ Use when a Markdown doc needs an image, SVG or ASCII art
 
 > **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
-> **Language:** write every line of wording per `human-writing`. This skill gives the format and structure; human-writing gives the way to write so people understand.
-
 > **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
 > **Rule:** Every plan, process, design, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
@@ -169,15 +167,10 @@ For every visual:
 
 ## Anti-patterns
 
-- **Text-only design docs** — "the icon is in the top-right" with no picture
 - **Linking to Figma / external design tools as the only source** — visuals must render in the repo
 - **PNG screenshots of text** — use the text, in a code block
-- **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
-- **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
-- **ASCII art outside a code fence** — proportional fonts will mangle alignment
 - **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
 - **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
-- **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
 
 ## Quick-start recipe
 
@@ -192,24 +185,9 @@ When a markdown doc needs a design picture (clickable app screens go to the plat
 4. **Add a feature reference table** below the visuals — what each element means
 5. **Cross-check accessibility checklist** before delivery
 
-Not sure a visual will render? Preview it in the viewer the reader will use (GitHub, Notion, VS Code) before delivery.
-
-## Related skills
-
-- `polished-document-style` — overall doc formatting, figure captions, callout boxes
-- `simplicity-first` (plugin `software-development`) — don't over-design the diagram; show what's needed
-- `software-diagrams` (plugin `software-development`) — which diagram type answers which question, plus the shared Mermaid theme
-- `diagram-figures` — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
-- `ui-craft` (plugin `software-development`) — spacing, hierarchy and states when the picture is a screen
-
 ## ไม่ให้ดูเหมือน AI ทำ
 
 Before sending, go through item 3 of `no-ai-look` — for HTML work, run its script · every piece must also pass eye check 3.2 (a web page adds items 10–14), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for all media is there
-
-## ตัวย่อ
-
-Spell out each abbreviation in full on first use and put the short form in brackets — for example Model Context Protocol (MCP)
-After that, use the short form. Details are in the skill `spell-out-abbreviations`
 
 
 ## reference: ascii-patterns.md
@@ -466,15 +444,6 @@ Co-authored-by: ...      ← attribution
 - [ ] Breaking changes marked with `!` AND `BREAKING CHANGE:` footer
 - [ ] Linked to issue/ticket when applicable
 
-## Anti-patterns
-
-- `update code`
-- `fix bug`
-- `WIP`
-- `final commit` / `final final`
-- Past tense: `added feature` (use `add feature`)
-- Vague scope: `fix(misc): ...` (be specific)
-
 
 ---
 
@@ -486,12 +455,10 @@ Use when one Markdown file must become a Word report
 
 > **Pre-work gate "ด่านก่อนลงมือ" (every time):** read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for finding the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
-> **Language:** write every line of wording following `human-writing`. This skill gives the format and steps. human-writing says how to write so the reader understands.
-
 > **The one rule of this skill:** Markdown is the source. The .docx is the result built from the source.
 > Edit the .md and rerun the script every time. Never open Word and edit by hand, because the next run wipes it all out.
 
-The page style comes from the X Fitness project report (29 pages · used only as a style reference, with the colours of your own project): logo cover centred on the page · table of contents · tables with a light brand-colour header · note boxes · dark-background figures with captions · short tables that do not split across pages.
+Page style: logo cover centred on the page · table of contents · tables with a light brand-colour header · note boxes · dark-background figures with captions · short tables that do not split across pages.
 
 ## When to use
 
@@ -588,7 +555,6 @@ Open the image of every page (Read tool) and go through the checks:
 - **Using Word's List Number.** It continues counting across lists, which is why the script writes the numbers itself.
 - **A small screenshot enlarged to full page.** It breaks up. Retake it at width ≥ 1600 px.
 - **A table 7 columns wide or more on a portrait page.** Split it into 2 tables.
-- **Sending without opening the PDF.** See section 5.
 
 ## 7 · Links to other skills
 

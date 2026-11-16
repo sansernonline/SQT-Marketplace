@@ -5,7 +5,7 @@ description: Use when checking how many users a system holds
 
 # load-testing — load tests with a goal, a pass threshold and permission
 
-Lives in plugin `software-development` · wording in this file follows `human-writing` · every tool fact has a link and the check date 2026-10-28 in the "Sources" section · sample script [`assets/load-test.js`](assets/load-test.js) · sample workflow [`assets/k6-smoke.yml`](assets/k6-smoke.yml) · how to read results [`reading-results`](references/reading-results.md) · k6 MCP [`mcp-k6`](references/mcp-k6.md)
+Sample script [`assets/load-test.js`](assets/load-test.js) · sample workflow [`assets/k6-smoke.yml`](assets/k6-smoke.yml) · tool facts checked 2026-10-28, links in [`sources`](references/sources.md)
 
 > **One rule:** no pass threshold written before the run = no test result, only a graph · and never load a system that is not ours, or production, without a named person's written approval.
 
@@ -19,16 +19,13 @@ Lives in plugin `software-development` · wording in this file follows `human-wr
 
 Do not use when: one web page loads slowly in the browser (Lighthouse · Core Web Vitals) → [`web-quality-audit`](../web-quality-audit/SKILL.md) · the live system is slow right now and you must find where → [`observability-basics`](../observability-basics/SKILL.md) first · testing that a button click gives the right result → [`e2e-testing-patterns`](../e2e-testing-patterns/SKILL.md)
 
-## Use another skill instead, or together
+## Related skills
 
-| Situation | Use | How it relates to this skill |
-|---|---|---|
-| Browser-side speed of one page | [`web-quality-audit`](../web-quality-audit/SKILL.md) | This skill measures the server side when busy, not page paint time |
-| You must see which part of the system clogs during the run | [`observability-basics`](../observability-basics/SKILL.md) | Open the system's dashboards next to the k6 results (section 6) |
-| Adding a smoke test to a pipeline | [`cicd-and-release`](../cicd-and-release/SKILL.md) · [`jenkins-pipeline`](../jenkins-pipeline/SKILL.md) | Section 7 says what runs on every PR and what runs on a schedule |
-| A whole-release test plan with every kind of test | [`test-case-template`](../test-case-template/SKILL.md) | Put the load test in as one row of the plan, with the thresholds from section 1 |
-| After the run you must add machines or autoscale | [`kubernetes-helm`](../kubernetes-helm/SKILL.md) · [`infra-as-code`](../infra-as-code/SKILL.md) | Run again with the same script after the change and compare with the result before |
-| Test data contains names or phone numbers | [`pdpa-compliance`](../pdpa-compliance/SKILL.md) | Use fake data. Do not pull real customer data in to load the system |
+- `observability-basics`: open the system's dashboards next to the k6 results (section 6).
+- `cicd-and-release` · `jenkins-pipeline`: section 7 says what runs on every PR and what runs on a schedule.
+- `test-case-template`: for a whole-release test plan, put the load test in as one row, with the thresholds from section 1.
+- `kubernetes-helm` · `infra-as-code`: if you must add machines or autoscale after the run, run again with the same script and compare with the result before.
+- `pdpa-compliance`: if test data contains names or phone numbers, use fake data. Do not pull real customer data in to load the system.
 
 ## 1 · Goal and pass threshold — write before opening the tool
 
@@ -125,20 +122,6 @@ The k6 result says it is slow, but not why · during the run, open the dashboard
 - Do not wrap `k6 run` in a script that swallows the exit code (for example one with a trailing `echo`) · make `k6 run` the last command, or keep `$?` and `exit` with that value
 - `BASE_URL` and tokens come from CI secret variables (`config-and-secrets`), not written into the script
 
-## One worked example
-
-Label `ตัวอย่าง` (example): designed on paper, no real system has been loaded
-
-**Problem:** An online shop will run a flash sale at noon on Friday. It went down before because the connection pool filled up. They want to know whether it survives this time.
-
-| Step | What is done | Section |
-|---|---|---|
-| Goal | Volume from the previous campaign (รอยืนยัน) · path: browse products → add to cart → pay with a mock · p95 at most 500 ms · errors at most 1% (default, not measured) | 1 |
-| Permission | Load staging at production size · payment points at a mock · approver and time window noted in the script header | 2 |
-| Run | smoke → load (baseline) → spike | 4 |
-| Monitor | Dashboards of connection pool and database CPU during the run | 6 |
-| Result | Report which thresholds passed and failed at the volume really run, then add smoke to CI | 5 · 7 |
-
 ## Check before sending
 
 1. Expected volume, paths, and the p95 and error-rate thresholds exist before the run · guessed values carry the label "ค่าตั้งต้น ยังไม่ได้วัด" (default, not measured)
@@ -149,16 +132,9 @@ Label `ตัวอย่าง` (example): designed on paper, no real system ha
 6. The report states results against thresholds and the baseline at the volume really run, and does not conclude beyond what was run
 7. CI does not swallow the exit code · secrets come from secret variables · the k6 version is pinned
 
-## Sources
+## References
 
-Checked 2026-10-28 (opened through a web-fetch tool that summarises pages with a small model, so reopen the raw page before locking a value in production)
-
-- thresholds · `abortOnFail` · `delayAbortEval` · per-tag thresholds https://grafana.com/docs/k6/latest/using-k6/thresholds/
-- names of all 6 executors https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ · options of `ramping-arrival-rate` https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ramping-arrival-rate/
-- test types and their order https://grafana.com/docs/k6/latest/testing-guides/test-types/
-- CI · environment · production https://grafana.com/docs/k6/latest/testing-guides/automated-performance-testing/
-- exit codes 0 and 99 · scripts that swallow the exit code https://grafana.com/docs/learning-paths/automate-k6-cicd/handle-exit-code/
-- GitHub Actions https://github.com/grafana/run-k6-action
-- k6 licence https://github.com/grafana/k6 · versions https://api.github.com/repos/grafana/k6/releases
-- Locust https://docs.locust.io/en/stable/what-is-locust.html · JMeter https://jmeter.apache.org/ (the home page links to the Apache Software Foundation licence and does not state the latest version)
-- Not yet checked (`ยังไม่ได้ตรวจ`): Grafana Cloud k6 price and quota · latest versions of Locust and JMeter
+- [`references/reading-results.md`](references/reading-results.md) — open to read a k6 result (section 5)
+- [`references/mcp-k6.md`](references/mcp-k6.md) — open when using the k6 MCP server
+- [`references/worked-example.md`](references/worked-example.md) — open for a flash-sale example run through sections 1 to 7
+- [`references/sources.md`](references/sources.md) — links and check date 2026-10-28 for every tool fact

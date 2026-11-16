@@ -5,8 +5,6 @@ description: Use when text is heavy with abbreviations or jargon
 
 # Spell Out Abbreviations
 
-> **Language:** follow `human-writing` for the wording of every line. This skill gives the format and structure. `human-writing` says how to write so readers understand.
-
 > **Rule 1:** write every abbreviation in full the first time, with the abbreviation in brackets. After that you may use the abbreviation.
 > **Rule 2:** put a short explanation in brackets the first time you use any technical term, so readers from outside the field do not have to guess.
 
@@ -61,14 +59,6 @@ read it and guess the meaning? If they cannot guess, explain it.
 
 Every kind of document · slides · labels and on-screen text · sales copy · diagram descriptions · code comments ·
 chat answers — **anything a person reads**
-
-## Common examples
-
-Model Context Protocol (MCP) · Application Programming Interface (API) ·
-Key Performance Indicator (KPI) · Service Level Agreement (SLA) ·
-Return on Investment (ROI) · Stock Keeping Unit (SKU) · Value Added Tax (VAT) ·
-Cash on Delivery (COD) · Objectives and Key Results (OKR) ·
-Personally Identifiable Information (PII) · Proof of Concept (POC)
 
 Code-side abbreviations (RBAC · SSO · CI/CD · SRS · ADR and so on) → the extension in plugin `software-development` → `superuser` → `references/code-extensions.md`
 

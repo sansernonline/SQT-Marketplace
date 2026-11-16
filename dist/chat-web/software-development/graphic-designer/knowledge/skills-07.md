@@ -4,8 +4,6 @@ Use when a README or PR needs a quick Mermaid diagram
 
 # Software Diagrams
 
-> **Language:** every line of wording follows `human-writing`. This skill gives the format and structure, while human-writing says how to write so a reader understands.
-
 > **The one rule of this skill:** a diagram answers **one question**.
 > If it answers 2 questions, draw 2 pictures.
 
@@ -26,18 +24,12 @@ In a README · Pull Request · note in code:
 - Say what runs on which machine
 - Review a diagram someone else drew
 
-## When **not** to use
 
-| Job | Use this instead |
-|---|---|
-| Choose which kind of picture to use (SVG / ASCII / Mermaid) | `markdown-visuals` |
-| Screenshots · wireframes | `ui-craft` + the platform skill |
-| Data charts | `web-app-design` → `references/tokens.md` heading "สีข้อมูล (กราฟ)" (data colours, charts) |
-| Choose an architecture | `architecture-patterns` |
+Not for: choosing SVG / ASCII / Mermaid → `markdown-visuals` · screenshots and wireframes → `ui-craft` + the platform skill · data charts → `web-app-design` `references/tokens.md` heading "สีข้อมูล (กราฟ)" · choosing an architecture → `architecture-patterns`
 
 ## 1 · Which question, which diagram
 
-**Start from the question, not from the diagram type.** People draw wrongly because they pick the type first and then stuff content into it.
+**Start from the question, not from the diagram type.**
 
 | The question in the reader's head | Diagram |
 |---|---|
@@ -52,9 +44,7 @@ In a README · Pull Request · note in code:
 | "A cloud diagram in the repo with real AWS / Azure logos" | Infrastructure — section 3 |
 | "I want a nice picture for the client proposal" | Not the job of this skill — `diagram-figures` |
 
-> The **C4 model** is a way to draw architecture in layers, like zooming a map:
-> level 1 looks from outside the system · level 2 opens the lid and looks inside · level 3 zooms into a single box.
-> **Always draw levels 1 and 2 in full first.** Draw level 3 only for the parts that are truly complex.
+**Always draw C4 levels 1 and 2 in full first.** Draw level 3 only for the parts that are truly complex.
 
 ## 2 · Theme — one set for the whole project
 
@@ -63,7 +53,7 @@ The theme line, colour stand-ins, classes and rendered examples are in [`assets/
 
 > Warning: **`fontFamily` must sit outside `themeVariables`.** If you put it inside, it is silently ignored and Mermaid falls back to its default font.
 
-**Check with a tool before every send.** This rule is forgotten most often (one test project had 63 of 66 figures with no theme line, and nobody noticed):
+**Check with a tool before every send.** This rule is forgotten most often:
 
 The scripts are in the `scripts/` folder of this skill. Run them with the script's full path and the `docs` folder of the project being checked (`<path ของ skill>` = the folder where this skill is installed):
 
@@ -160,6 +150,7 @@ Then **open the image file and look at it with your eyes**. Go through this list
 - [ ] Does a label overlap a line or a box?
 - [ ] Is the Thai text complete, with no missing vowels?
 - [ ] Is the level of detail the same across the figure?
+- [ ] Does the diagram carry a date and an owner? (without them nobody dares to edit it after a year)
 - [ ] Can someone who has never seen this system read it and answer the original question?
 
 **Mermaid limits to know before you waste time:**
@@ -173,40 +164,11 @@ Then **open the image file and look at it with your eyes**. Go through this list
 
 If you truly cannot get the layout you want and the figure stays in a markdown document, draw an inline SVG per `markdown-visuals`. If the figure must look designed, go to `diagram-figures`.
 
-## 7 · Anti-patterns
-
-- **A 40-box architecture diagram** — nobody reads it. Split it into several C4 levels.
-- **Drawing past the cap and then saying so** — split as soon as you count that it is over.
-- **Stuffing command-line options into a box** — the box swells, the letters shrink, and the whole figure is unreadable.
-- **A line with no label** — the reader guesses what flows through, and guesses wrong.
-- **Mixing levels of detail** — `Kubernetes` sitting next to `UserService.validate()`.
-- **Rainbow colours** — colour must carry meaning. Do not add it to avoid boredom.
-- **Drawing every error case in one sequence** — draw the main path first, then split the special cases into separate figures.
-- **An ER diagram with every table in the system** — split by domain.
-- **A diagram with no date and no owner** — after a year nobody dares to edit it.
-- **Sending a diagram that was never rendered**
-- **A different theme in every figure of one document**
-
-## 8 · Link to other skills
-
-| Need | Use with |
-|---|---|
-| Choose the visual format in a markdown document | `markdown-visuals` |
-| The document around the diagram | `polished-document-style` |
-| Embed in a Word / PowerPoint file | `branded-document-design` |
-| A diagram in an SRS document | `srs-writing` |
-| Choose the architecture before drawing | `architecture-patterns` |
-| A figure that must look designed or needs sign-off | `diagram-figures` |
-| Record why this design was chosen | `adr-writer` |
+To record why a design was chosen, use `adr-writer`. A figure that must look designed or needs sign-off → `diagram-figures`.
 
 ## Do not look AI-made
 
-Before sending, walk through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass eye check 3.2 (web pages also answer items 10–14), because a script result of 0 items is not yet a pass. The bans in this file are specific to this kind of work. The full list for every medium is there.
-
-## Abbreviations
-
-Always spell an abbreviation out in full the first time, and put the abbreviation in brackets — for example Model Context Protocol (MCP).
-After that you can use the abbreviation. For details see the skill `spell-out-abbreviations`.
+Before sending, walk through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass eye check 3.2 (web pages also answer items 10–14), because a script result of 0 items is not yet a pass.
 
 
 ---
@@ -217,47 +179,33 @@ Use to cut extras nobody needs yet. Not Claude Code simplify
 
 # simplify — make it simple so a first-time reader can follow
 
-Use on any work handed to people: code, documents, plans, designs, slides, tables and answers · `human-writing` controls **how it is written**, while this skill controls **what the work contains** · lives only in plugin `superuser`; other plugins share it through `dependencies`
+> **One rule:** someone not on this work, opening it 6 months from now, must understand it and continue it without asking anyone.
 
-## 1 · Main principles
+## Use when
+- Any work handed to people (code, documents, plans, designs, slides, tables, answers) may hold more than the task needs.
+- `human-writing` controls how it is written; this skill controls what the work contains.
 
-- **The test:** someone not on this work, opening it 6 months from now, must understand it and continue it without asking anyone
-- Do only what the task needs; do not provide for a future nobody has asked for
-- Cut before adding · if removing a part loses neither meaning nor function, cut it
-- Plain things people know beat clever things that need decoding
-- **Simple is not sloppy** — never cut correctness, safety, validation of data from outside, error handling that prevents data loss, or what the user asked for explicitly
-- **Simple is not one big pile** — reduce the number of things, but keep clear separation of duties, 1 part doing 1 thing, as professional work does
+Not for: Claude Code's own `/simplify` command · more detail on code and architecture (if installed) → `lazy-coding` · `readable-code` · `simplicity-first` in plugin `software-development`.
 
-## 2 · Ladder before starting — stop at the first step that works
+## Steps
+1. Climb the ladder and stop at the first step that works: (a) is this really needed? If not, do not do it and say in 1 line what you skipped; (b) is there an existing thing that works (file, template, function, tool, built-in feature)? Use it; (c) do the shortest version that is still complete and correct.
+2. Do only what the task needs; cut before adding (if removing a part loses neither meaning nor function, cut it); plain things people know beat clever things that need decoding.
+3. Apply by kind of work:
+   - **Code:** names say what it is and carry units · 1 function does 1 thing · return early instead of nesting `if` · at most 3 levels of indentation · comments say why · follow the project's style. Avoid an abstraction with one user, clever hard-to-read shortcuts, one big file, a pile-up `utils/`, a new dependency for a few lines.
+   - **Documents · reports:** conclusion first · 1 paragraph 1 topic · an example for abstract points · a table for compared data. Avoid repeats, empty headings, unknown terms.
+   - **Plans · procedures:** 3–5 key items, each with an owner and a way to measure done · fewest steps that work. Avoid a 20-item list with no priority.
+   - **Designs · slides · figures:** 1 page 1 point · shortest path to the user's goal · familiar patterns. Avoid cramming and decoration that does not help.
+   - **Tables · data:** only columns used to decide · short formulas. Avoid columns that repeat a meaning and long nested formulas.
+   - **Answers:** answer first, as long as the question needs.
+4. **Simple is not sloppy:** never cut correctness, safety, validation of data from outside, error handling that prevents data loss, or what the user asked for explicitly. **Simple is not one big pile:** keep clear separation of duties, 1 part doing 1 thing.
+5. When you take a deliberate shortcut, write how far it works and when it changes, for example `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process`, and put 1 line in the report: `ข้าม: X — เพิ่มเมื่อ Y`.
 
-1. Do we really need this · not needed → do not do it, and say in 1 line what you skipped
-2. Is there an existing thing that works (file, template, function, tool, a feature that comes with the system) · yes → use the existing thing
-3. Do the shortest version that is still complete and correct
-
-## 3 · By kind of work
-
-| Work | Do | Avoid |
-|---|---|---|
-| **Code** | Names say what it is and carry units · 1 function does 1 thing · return early instead of nesting `if` · at most 3 levels of indentation · comments say "why" · follow the project's style | An abstraction with a single user · a clever shortcut that is hard to read · one big file doing everything · a pile-up `utils/` folder · a new dependency for a few lines of work |
-| **Documents · reports** | Conclusion first · 1 paragraph 1 topic · an example for abstract points · a table for data that is compared | Repeating what was already said · headings with no content · terms the reader does not know |
-| **Plans · procedures** | 3–5 key items · every item has an owner and a way to measure done · the fewest steps that work | A list of 20 items with no priority · steps kept "just in case" |
-| **Designs · slides · figures** | 1 page 1 point · the shortest path to the user's goal · use patterns people are familiar with | Cramming data until people must squint · decoration that does not help understanding |
-| **Tables · data** | Only the columns used to decide · short formulas you can follow | Columns that repeat a meaning · long nested formulas in one line |
-| **Answers** | Answer first · as long as the question needs | An explanation longer than the work itself |
-
-Plugin `software-development` has more detail on code and architecture: `lazy-coding` (write less) · `readable-code` (names, function shape, file structure) · `simplicity-first` (documents, plans, architecture) · if installed, open them together
-
-## 4 · Say that you made it simple on purpose
-
-A deliberate shortcut should be written down with how far it works and when it changes, so it does not look forgotten, for example `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process` (gloss: simple: kept in memory — move to Redis when running more than 1 process) · in the report put 1 line `ข้าม: X — เพิ่มเมื่อ Y` (skipped: X — add when Y)
-
-## 5 · 5-point check before sending
-
-1. Can an outsider open it for the first time and understand within 30 seconds
-2. Is there any part, step or layer that can be cut with no loss? If so, cut it
-3. Does every part added have a reason it is needed now, not "just in case"
-4. Is it still complete on correctness, safety, and what the user asked for
-5. Are duties still clearly separated, and not several things squashed into one place to look short
+## Check before done
+- [ ] An outsider can open it for the first time and understand within 30 seconds.
+- [ ] No part, step or layer can be cut with no loss.
+- [ ] Every added part has a reason it is needed now, not "just in case".
+- [ ] Still complete on correctness, safety and what the user asked for.
+- [ ] Duties still clearly separated, not squashed into one place to look short.
 
 
 ---
@@ -269,59 +217,45 @@ Use when making visuals so they do not look AI-made
 # no-ai-look — work that looks designed by a person, not by AI
 
 > **One rule:** every choice (color, font, layout, image, word) must be answerable as "chosen because of this project", not "because it is the default."
-> The defaults of models and frameworks are the average of everyone's work, so work that uses the average all looks the same, and viewers recognize at once that AI made it.
 
-**Last line of every answer that makes or reviews a visual piece, including a quick "is it OK to send?" check:** the `no-ai-look:` log line from section 3.3, filled with the real counts (eye check `ด่านตา n/9`, web pages add `(หน้าเว็บ n/14)`) · items you could not check count as not passed, so the line reads below 9/9 · A script result of 0 alone never makes the line pass, because the script reads only values in the code · Script not run (no shell in this session) → write `สคริปต์ ไม่ได้รัน` in its slot · When the `ด่านก่อนลงมือ:` line of `design-references` is also due, it goes right above this one
+**Last line of every answer that makes or reviews a visual piece, including a quick "is it OK to send?" check:** the `no-ai-look:` line from 3.3, with real counts (eye check `ด่านตา n/9`, web pages add `(หน้าเว็บ n/14)`). Items you could not check count as not passed. A script result of 0 never makes the line pass. Script not run (no shell) → write `สคริปต์ ไม่ได้รัน` in its slot. If the `ด่านก่อนลงมือ:` line of `design-references` is also due, put it right above this one.
 
-Lives only in plugin `superuser`; other plugins share it through `dependencies` · the full list for every medium with sources → [`references/catalog.md`](references/catalog.md)
+## Use when
+- Making or reviewing any visual: web page, slide, poster, post, image, logo, document cover, diagram.
+- Asked "is this OK to send?" for such work.
 
-## Use together with
+Not for: spacing, color system, fonts and components → the job's own skill (`ui-craft` · `presentation-design` · `graphic-design` · `brand-kit` · `brief-to-image` · `image-generation`). Words in the work → `human-writing`.
 
-This skill controls only "does it look like AI". Spacing, color, fonts and components still belong to that job's skill, such as `ui-craft` with the platform skills · `presentation-design` · `graphic-design` · `brand-kit` · `brief-to-image` · `image-generation` (plugin `graphic-design`). Words in the work use `human-writing`.
+**A look the project already approved wins** (brand kit · diagram house style · delivered theme). If it matches a ban below, keep it and note it as intentional.
 
-**A look the project has already approved always wins** (brand kit · a diagram's house style · a theme already delivered). If what is approved matches a ban here, keep it and note that it is intentional (item 3).
+## 1 · Before starting — decide 5 things and write them where the project keeps its look
+(`docs/README.md` field `doc-theme` · app tokens · brand kit; create no new file if a place exists.)
 
----
+1. **What the work is for**, choose 1: persuade · use · read · experience. Layout comes from this. Sketch 2–3 really different layouts in ASCII, pick one with a 1-line reason; the first idea is usually the default.
+2. **1 main color** tied to this business; derive neutrals from it. Never a framework default as the brand color (Tailwind indigo-500 `#6366f1` · shadcn/ui default dark gray button).
+3. **2 fonts**: 1 heading font with personality + 1 easy body font, 1-line reason each. Thai work needs full Thai coverage.
+4. **A real source of inspiration**: the product's own world or a named style (Swiss · risograph · 1960s travel posters), never floating adjectives ("พรีเมียม" "ทันสมัย"). Search references first with `design-references` (plugin `superuser`), then extract colors from the chosen work. Use the stored color library only when live search is impossible.
+5. **Real content**: names, numbers, dates, real screenshots. If missing, put `(รอยืนยัน)`; never invent.
 
-## 1 · Before starting — decide 5 things and write them down
+**Test:** remove the logo. If a competitor could still use the work, add what only this project has.
 
-Do this before drawing the first piece. Write them where the project already keeps its look (`docs/README.md` field `doc-theme` · app tokens · brand kit); do not create a new file if a place already exists.
+## 2 · Common signals — never the default
+Each is allowed if the project gives a reason. The fix for every signal and the sources: the catalog.
 
-1. **What the work is for** — choose 1: persuade (sales page · post) · use (app · dashboard) · read (document · article) · experience (game · showpiece). The layout comes from this item, not from a ready-made structure. Sketch 2–3 really different layouts in ASCII, then choose the one that fits this content and these users, with a 1-line reason; do not use the first one that comes to mind, because the first is usually the default (idea from anthropics/skills `frontend-design` section Process · Apache-2.0 · source code AN in `catalog`).
-2. **1 main color** tied to this business, then derive the neutrals from it. Never use a color that frameworks and tutorials use often as the brand color (Tailwind's indigo-500 `#6366f1` · shadcn/ui's default dark gray button).
-3. **2 fonts** — 1 heading font with personality + 1 body font that reads easily. Write the reason for each in 1 line. Thai work needs a family with full Thai coverage.
-4. **A real source of inspiration** — the product's own world (materials · shop signs · documents of the field) or a named style (Swiss · risograph · 1960s travel posters). Never order with floating adjectives ("พรีเมียม" "ทันสมัย" "สดใส"), because you get the average of that category. **Search references first:** take the project's words and search live per `design-references` (plugin `superuser`) with the type that fits the work, then extract colors from the chosen work. The stored color library is used when live search is impossible.
-5. **Real content** — names, numbers, dates, real screenshots, real people or clients. If you do not have it, put `(รอยืนยัน)` (awaiting confirmation); never invent it.
+- **Color/surface:** purple-blue-cyan gradient · gradient text · neon on dark · glow circle · frosted glass across the page · decorative grid or stripes · cream + terracotta + serif set · line + wide shadow on one box → 1 solid brand color; emphasis by size or weight.
+- **Cards/headings:** colored side bar on a rounded card · cards in cards · blob radius · grid of 3–6 identical cards · small badge or icon tile above a heading · 01/02/03 with no real sequence · giant italic serif · Inter/Geist everywhere → spacing and type; group by importance.
+- **Page structure:** hero → 3 cards → logos → pricing → FAQ · opening → feature list → how it works → install button · giant number + small label in 3 boxes · every slide title + 3–4 bullets → structure from the page's goal.
+- **Icons/motion:** emoji as icons · one thin-line set at 16 everywhere · fade-up on everything · blinking dot or cursor · self-scrolling · bouncy easing · zoom on hover → one chosen SVG set; move only what has meaning, 150–300 ms ease-out, transform/opacity.
+- **AI images:** plastic skin · golden or dramatic light everywhere · teal-orange · too-clean scene · average people · bad hands, teeth, text · clay 3D or glossy isometric → one reasoned light source, signs of use, edit the result.
+- **Logos:** gradient circle with a hole · circuits · infinity · swoosh · melting letters → shape from something specific; vector; test at favicon size.
+- **Documents:** emoji before headings · every bullet starts bold · Title Case everywhere · every section a list · 4 heading levels in a short note · summary ending every section · default Mermaid → short prose, house-style diagrams.
+- **Words:** broad ad words (supercharge · ยกระดับ · ไร้รอยต่อ) · "ไม่ใช่แค่ X แต่คือ Y" · sets of 3 · many long dashes · canned openers ("ในยุคดิจิทัลที่…") → `human-writing`, `thai-grammar`.
 
-**Test:** take the logo off; could this work still be used by a competitor? If yes, it is still too average; add what only this project has.
-
----
-
-## 2 · The most common signals — never use them as the default
-
-Each item is allowed if there is a reason from the project (item 3). Fixes and sources for every item are in the catalog.
-
-| Group | Signal | Use instead |
-|---|---|---|
-| Color | Purple-blue-cyan gradient · gradient text · neon on dark · a circular glow behind the content · cream background because it "looks tasteful" · the cream + terracotta + serif set that shows up on every "warm" job | 1 solid brand color · emphasis by size or weight |
-| Surface | Frosted glass across the page · decorative grid or stripes · thin line + wide shadow on one box | Plain background · pick either line or shadow |
-| Cards | A thick colored bar on the side of a rounded card · cards inside cards · corner radius so big it becomes a blob · a grid of 3–6 identical-looking cards | Spacing and type · group by importance |
-| Headings | A small badge above the heading ("Introducing") · an icon in a rounded tile above the heading · numbers 01/02/03 with no real sequence · giant italic serif · Inter/Geist on every job | Put the useful words in the heading itself · fonts per item 1 |
-| Page structure | Centered hero → 3 cards → customer logos → pricing → FAQ on every page · opening section → feature list → how it works 1–6 → install button · giant number + small label in 3 boxes · every slide is a title + 3–4 bullets | Structure from the page's goal · change the layout with the content |
-| Icons | Emoji in place of icons or in headings · one thin-line icon set at size 16 everywhere · icons bigger than the content | One deliberately chosen SVG icon set · real screenshots or charts instead of icons |
-| Motion | fade-up on every piece · a dot that blinks nonstop · a blinking cursor in still text · self-scrolling elements · bouncy easing · an image that zooms on hover | Move only what has meaning, 150–300 ms ease-out, using transform/opacity |
-| AI images | Plastic-smooth skin · golden or dramatic light in every scene · teal-orange tone · an unnaturally clean scene · average-looking people · hands, teeth, text that are off · clay 3D or glossy isometric | One light source with a reason · signs of use · specify style and color in the prompt · edit, never use the first image you get |
-| Logos | A gradient circle with a hole in the middle · circuit patterns · infinity · swoosh curves · melting letters · details lost at 16 px | A shape from something specific to the brand · deliver as vector · test at favicon size |
-| Documents | Emoji before headings · every bullet starts in bold · Title Case on every heading · every section a list · 4 levels of headings in a short note · ending every section with a summary · default-looking Mermaid | Short prose · only the headings needed · diagrams in the house style |
-| Words | Broad ad words (supercharge · ยกระดับ · ไร้รอยต่อ) · the slogan "ไม่ใช่แค่ X แต่คือ Y" · sets of 3 everywhere · frequent long dashes · canned opening sentences ("ในยุคดิจิทัลที่…") | Follow `human-writing` · say what the user can do, with numbers · check Thai with `thai-grammar`, not English rules (full stops, dashes, word breaks differ) |
-
-**Do not fix it by swapping one default for another** — dropping purple for cream + terracotta + serif (or + olive green) is still a formula. This set is "the default of someone who knows purple is the default". A bento grid and mesh-style gradient backgrounds are not signals in themselves; do not hunt to cut everything that looks modern.
-
----
+Do not swap one default for another (cream + terracotta + serif, or + olive, is still a formula). Bento grids and mesh gradients are not signals in themselves.
 
 ## 3 · Check before sending
 
-### 3.1 HTML/CSS work (mockup · web page · HTML deck · HTML document cover)
+### 3.1 HTML/CSS work (mockup · web page · HTML deck · HTML cover)
 
 ```bash
 python <path ของ skill นี้>/scripts/slop_scan.py <ไฟล์หรือโฟลเดอร์>          # ตาราง
@@ -330,64 +264,56 @@ python <path ของ skill นี้>/scripts/slop_scan.py --url https://...  
 python <path ของ skill นี้>/scripts/slop_scan.py --self-test                  # รันก่อน ถ้าแก้สคริปต์
 ```
 
-- **The `ui-scan` hook of plugin `superuser` runs this script by itself every time a UI file is Written/Edited** (`.html` `.css` `.scss` `.less` `.jsx` `.tsx` `.vue` `.svelte` `.astro`, including files in `_to_delete/` · it skips `node_modules` `dist` `build` `.claude` `vendor` and `.min.` files). P0/P1 are sent back to be fixed at once · P2 is passed as context · an unchanged result is not warned again · turn it off with `"ui_scan": false` in `.claude/superuser/config.json`. The hook checks one file at a time; before sending, still run the whole folder once.
-- A page drawn entirely by JavaScript (SPA): `--url` sees only the skeleton → check the source code, or save the page from the browser as .html and check that file.
+- The `ui-scan` hook runs this on every Write/Edit of a UI file (P0/P1 sent back to fix at once; off with `"ui_scan": false` in `.claude/superuser/config.json`). It checks one file at a time, so before sending still run the whole folder once.
+- Page drawn entirely by JavaScript: `--url` sees only the skeleton → check the source, or save the page as .html and scan that.
+- 43 rules from the code; nothing to install. Levels: P0 unusable · P1 hard to read · P2 clear AI signal · P3 look again (may be intentional). Any P0 or P1 → exit 1; 0 files checked → exit 2 (wrong, not a pass).
+- Fix P0/P1 first, then P2. For intentional items write `/* slop-ok: <rule> <reason> */` or `<!-- slop-ok: <rule> <reason> -->` in that file.
+- A script result is a reason to look again, not an order. It cannot see images, and it catches only defaults readable from code. **0 items is not a pass**: send only after both the script and the eye gate 3.2 pass.
 
-- Checks 43 rules from the code (colors, cards, type, motion, words, broken images, inputs with no label, contrast of Tailwind classes) · nothing extra to install
-- Levels: P0 unusable · P1 hard to read · P2 clear AI signal · P3 look again (may be intentional) · any P0 or P1 → exit 1
-- **Fix P0 and P1 first**, then P2. For things that are intentional, write `/* slop-ok: <rule> <reason> */` or `<!-- slop-ok: <rule> <reason> -->` in that file; the reason shows up in the report for the reviewer.
-- Checking 0 files = wrong, not a pass (the script exits 2)
-- A script result is a reason to look again, not an order to fix every item. The script does not see images; the items in 3.2 must always pass the eye gate.
-- **0 script items does not mean pass:** the script catches only defaults readable from code, and work whose whole page is the category average is invisible to it (a landing page really tried 2026-11-06 got 0 items but still looked AI-made). Work can be sent when it passes both the script and the eye gate 3.2.
+### 3.2 Eye gate (every medium: images, slides, posters, Word documents)
 
-### 3.2 Eye gate (every medium, including images, PPTX slides, posters, Word documents)
+Render to an image at real size and answer each item yes or no, by the criterion in the item (for some, "yes" means fail). An item with several questions passes only if every question passes. For a failed item, fix it, or give the reason it is kept under `## ตัดสินใจเอง`.
 
-Render to an image at real size and answer item by item, yes or no. Count pass or fail by the criterion written in that item (in some items "yes" means fail). An item with several questions must pass every question to count as 1. For any item that fails, fix it, or note the reason it is kept on purpose under `## ตัดสินใจเอง` (decided on my own).
+1. **Logo and product name covered, can you still tell whose it is?** No = fail. Also swap in a competitor's name: if every sentence and image is still true = fail.
+2. **Squint:** one dominant element, or everything shouting at once?
+3. **Count the item-2 signals:** 3 or more in one piece = looks AI-made.
+4. **Real content:** names, numbers, real images, or only generic words and stock photos?
+5. **One set:** every slide or post uses one system, but the layout does not repeat on every page. A single piece answers `ไม่ใช้` and counts as passed.
+6. **AI images:** check hands, teeth, text, shadows, light, real-world scale; zoom to 200% before use.
+7. **Blank space:** room for the important things to breathe, not packed edge to edge?
+8. **Words:** read headings aloud; a person telling a friend, or a slogan on a sign (slogan = fail)? Does a heading break mid-phrase (such as "ทำงานเป็น / ทีม")? Check web at width 375, slides/posts/covers at real size; if it breaks = fail, fix with `<wbr>` or `text-wrap: balance`. A heading the user worded themselves is used as given, noted as kept on purpose. **Large Thai type:** zoom on upper vowels and tone marks (ที่ · ทั้ง · ปี่) and lower vowels (ุ · ู); a collision with the neighbouring line = fail; raise line spacing per [`thai-line-breaking`](../human-writing/references/thai-line-breaking.md) (Thai headings no lower than 1.4).
+9. **Cut 1 piece before sending:** find something removable without loss (shadow · border · decorative icon · label above a heading · motion · gradient · summary paragraph) and really remove it; send only if nothing is found. Do not cut shadows, rounded corners, the hero image, or icons that the look's depth language or the owner's style requires (flat-to-the-bone is the opposite mistake).
 
-1. **With the logo and product name covered, can you still tell whose it is?** — if not = fail · extra test: replace the product name with one competitor's name; if every sentence and image is still true = fail
-2. **Squint** — is there one dominant element, or does everything demand attention at once?
-3. **Count the signals in item 2** — 3 or more in one piece = looks AI-made
-4. **Real content** — are there names, numbers, real images, or only generic words and stock photos?
-5. **One set** — every slide, every post uses one system, but the layout does not repeat on every page. A single piece (a 1-image post · a single cover) answers `ไม่ใช้` (not applicable) and counts this item as passed.
-6. **AI images** — look at hands, teeth, text, shadows, light, real-world scale; zoom to 200% before use
-7. **Blank space** — is there room for the important things to breathe, not packed edge to edge?
-8. **Words** — read the headings aloud; do they sound like a person telling a friend, or like a slogan on a sign? (a slogan = fail · `human-writing` item 8) · does a heading break a line in the middle of a phrase? (web pages: look at width 375; slides, posts, covers: look at the piece's real size) (such as "ทำงานเป็น / ทีม"); if it breaks = fail, set the break yourself with `<wbr>` or `text-wrap: balance` · a heading whose wording the user set themselves: use it as given, and note it as kept on purpose · **Large Thai type:** zoom in on upper vowels and tone marks (ที่ · ทั้ง · ปี่) to see that they do not collide with or overlap the line above, and that lower vowels (ุ · ู) do not overlap the line below · a collision = fail; increase the line spacing per the table in `human-writing` [`thai-line-breaking`](../human-writing/references/thai-line-breaking.md) (Thai headings no lower than 1.4) · real incident 2026-11-06: a post with tight heading line-height, where the tone marks of the lower line hit the upper line, but the maker reported that Thai type did not break
-9. **Cut 1 piece before sending** — find something that can be removed without the work losing anything (a shadow · a border line · a decorative icon · a label above a heading · motion · a gradient · a summary paragraph) and really remove it · send only if you find nothing · do not cut shadows, rounded corners, the hero image, or icons that the depth language of the look or the owner's chosen style requires, because cutting until it is flat is the mistake on the other side (user asked for rounded corners, shadows and icons back 2026-11-09) · AI work almost always has at least 1 extra piece, because models add more than they cut (idea from Anthropic's frontend-design · Apache-2.0)
+**Web pages, marketing landing pages and a product home page answer 5 more** (opening section = first screen before scrolling):
 
-**Web pages, marketing landing pages and a product's home page answer 5 more items** (posts, banners, covers and single images use only items 1–9) (opening section = the first screen seen before scrolling, or the hero):
+10. **Does the opening section have at least 1 real thing from the product** (screenshot of real use · real numbers with source · named real customer voice · real work done)? None = fail. At width 1440, unintended blank space over 1/3 of the screen = fail.
+11. **Is the section order built on this product's story**, not the formula opening → features → how it works → install or pricing? Write 1 sentence on how this product's story is told (start from the user's problem · from a real demo · from customer results) and order by it. Keep the usual formula only if that sentence leads to the same order, and note it.
+12. **Does a row of 3–6 equal cells have a reason from the content** (each really equally important and about equally long)? No reason = fail; enlarge the important cell or use a list, prose or one image. A sequence number on a cell heading is allowed only when the steps must be followed in order.
+13. **Does the page color have a source other than the logo or icon** (a reference searched this round · the product's materials or world · an approved brand)? Pulled from the icon alone = fail.
+14. **Is every mono font spot on code, commands, file names, or numbers that must align?** Mono on brand names, menus, table headers or captions to look "developer" = fail.
 
-10. **Does the opening section have at least 1 real thing from the product?** A screenshot of real use · real numbers with a source · a named real customer's voice · real work done · none = fail · at width 1440, does the opening section have unintended blank space over 1/3 of the screen? If yes = fail (that blank space is the place for the real thing)
-11. **Is the order of sections built on this product's story, not the formula opening → feature list → how it works → install button or pricing?** If not = fail. Write 1 sentence on how this product's story should be told (start from the problem the user meets · start from a demo of the real thing · start from customer results) and order the sections by that sentence · you may keep the usual formula when that sentence really leads to the same order, and you must note it.
-12. **Does a row of equal cells (3–6 cells of identical size and look) have a reason from the content?** The reason is that each cell is really equally important and about equally long. No reason = fail; make the more important cell bigger, or change to a list, prose or a single image. A small sequence number on a cell heading is allowed only when the steps must really be followed in order.
-13. **Does the page's color have a source other than the logo or icon?** Sources that count: a reference searched this round (`design-references`) · the product's materials or world · an approved brand. Pulled from the icon alone = fail.
-14. **Is every mono font spot on code, commands, file names, or numbers that must line up in columns?** Mono on brand names, menus, table headers or captions, to make it "look like a developer's", is costume = fail
-
-**Someone who did not make it must check by eye, on every job before sending** — the maker cannot see their own defaults (2026-11-06: the maker reported Thai type did not break, but another person opened the image and saw the tone marks hit the line above).
-- Send the **rendered image at real size** (not code) to a fresh subagent who did not take part: `design-critic` (graphic-design), or `reviewer` if there is none · send 3.2 with the job's brief, never the maker's answer or opinion, because reviewers tend to go along
-- Ask for 2 things: the item-by-item answers of 3.2 · 3 places that look AI-made with how to fix them; no praise
-- For an item where reviewer and maker disagree, use the reviewer's answer, then fix it or note the reason it is kept · after fixing, send the new image to a new reviewer to look only at the items fixed
-- If the maker is a subagent that cannot call other agents, send the image path back to the lead to call the reviewer, and write `รอหัวหน้า` (waiting for the lead) in the eye-check field
-- Skippable only for the reference board page (not yet our work) and work the owner ordered skipped · the 3 directions sent to the owner to pick at the end must pass the check before sending · if skipped, the result line says `ตรวจตา ข้าม เพราะ…` (eye check skipped because…)
+**Someone who did not make it must check by eye on every job before sending**; the maker cannot see their own defaults.
+- Send the **rendered image at real size** (not code) to a fresh subagent: `design-critic` (graphic-design), else `reviewer`. Send 3.2 with the job's brief, never the maker's answer or opinion.
+- Ask for the item-by-item answers of 3.2 and 3 places that look AI-made with fixes; no praise.
+- Where reviewer and maker disagree, use the reviewer's answer, then fix or note why kept. After fixing, send the new image to a new reviewer for the fixed items only.
+- A maker subagent that cannot call agents sends the image path back to the lead and writes `รอหัวหน้า` in the eye-check field.
+- Skippable only for the reference board page and work the owner ordered skipped (the 3 directions sent to the owner at the end must still pass). If skipped, the result line says `ตรวจตา ข้าม เพราะ…`.
 
 ### 3.3 Record the result
 
-1 line at the end of the answer or report: `no-ai-look: สคริปต์ P0 0 · P1 0 · P2 n (ตั้งใจ n) · ด่านตา 9/9 (หน้าเว็บ 14/14) · ตรวจตา <agent ที่ตรวจ> ไม่ตรงกับคนทำ n ข้อ · ตัดออก: <ชิ้นที่ตัด>` · an incomplete eye gate, or answers by the maker alone = not yet passed, even with 0 script items · items kept on purpose go under `## ตัดสินใจเอง` with the reason · new builds must have the `design-references` line `ด่านก่อนลงมือ:` alongside, all 7 fields per `design-references` gate item 6, because checking only at the end cannot catch work that did not search first
+1 line at the end: `no-ai-look: สคริปต์ P0 0 · P1 0 · P2 n (ตั้งใจ n) · ด่านตา 9/9 (หน้าเว็บ 14/14) · ตรวจตา <agent ที่ตรวจ> ไม่ตรงกับคนทำ n ข้อ · ตัดออก: <ชิ้นที่ตัด>`. An incomplete eye gate, or answers by the maker alone = not passed, even with 0 script items. Items kept on purpose go under `## ตัดสินใจเอง` with the reason. A new build also carries the `design-references` line `ด่านก่อนลงมือ:` with all 7 fields per its gate item 6.
 
----
+## 4 · Brief for an image tool or a subagent task sheet
 
-## 4 · Writing a brief for an image tool, or a task sheet for a subagent
+Always include, or you get the average:
+- A named style + 1–3 real reference images (not adjectives).
+- Brand hex colors · light source and time · lens or camera angle.
+- Details observed from the real thing (place, signs of use, season, kind of people).
+- What you do not want: teal-orange · plastic skin · golden light in every scene · text in the image (add text as a separate editable layer).
+- **Edit** the first image you get (crop, retouch, adjust light); never use it as is.
 
-Put these in every time, otherwise you get the average:
-
-- A named style + 1–3 real reference images (not adjectives)
-- The brand's hex colors · light source and time · lens or camera angle
-- Details observed from the real thing (place, signs of use, season, what kind of people)
-- What you do not want: teal-orange tone · plastic-smooth skin · golden light in every scene · text in the image (put text as a separate editable layer)
-- Once you get an image you must **edit** it: crop, retouch, adjust the light; never use the first image that comes out
-
----
-
-Rules for writing abbreviations → `spell-out-abbreviations`
+## References
+- [`references/catalog.md`](references/catalog.md) — open when the script reports an unfamiliar rule, for the fix and sources of any signal, or when checking media the script cannot see.
 
 
 ## reference: catalog.md

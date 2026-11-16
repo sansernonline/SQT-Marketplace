@@ -5,8 +5,6 @@ description: Use when a mid-task finding needs a decision before going on
 
 # Flag what you found, then propose a way forward
 
-> **Language:** write every line of wording following `human-writing`. This skill gives the format and structure. human-writing says how to write so the reader understands.
-
 > **The one rule:** open with the **impact**, close with **one question**.
 > The middle is evidence and proposals, not a story of how you found it.
 
@@ -24,11 +22,7 @@ description: Use when a mid-task finding needs a decision before going on
 | Answer a question the user asked | `answer-shape` | instead |
 | A reversible choice (can be changed later at no cost) | `principle-proceed-on-reversible-work`: do it now, then log it in `decision-log` | instead |
 | An unknown fact (number, name, date, budget) | Put `(รอยืนยัน)` (awaiting confirmation) and keep going; do not stop to ask | instead |
-| Report finished work | `human-writing` · `status-report` | instead |
-| Explain something complex so it is understood | `answer-shape` | instead |
-| Write a document for others to read | `polished-document-style` | instead |
 | Something is really broken and must be fixed now | `targeted-fix`: fix first, then report | instead |
-| Spell out abbreviations and jargon in the answer | `spell-out-abbreviations` | together |
 | What you found is a real system incident | `incident-runbook-template` · `postmortem-template` (plugin `software-development`) | together |
 
 ---
@@ -134,17 +128,3 @@ It also signals that you thought it through and did not forget.
 ## 7 · Full example
 
 A before-and-after example (a software requirements document and work plan) is in [`references/example.md`](references/example.md)
-
----
-
-
-## 8 · Anti-patterns
-
-- **Opening with "ระหว่างตรวจผมพบว่า…" (while checking I found…).** The reader must read to the end of the paragraph to learn what to do.
-- **Disagreeing numbers written as a sentence.** "เดิม 214 ตอนนี้ 245" (was 214, now 245) makes the eye jump back and forth.
-- **Explaining how the problem happened** when it does not change what must be done.
-- **A proposal that says how to do it instead of the benefit.** The reader still cannot decide.
-- **Three questions in one paragraph.** You get one answer and must ask again.
-- **Closing with "แจ้งได้เลยครับ" (just let me know).** It asks for no decision.
-- **A long apology for a mistake.** Say what was wrong and how you fix it. That is enough.
-- **Reporting without proposing.** It pushes all the thinking back to the user.

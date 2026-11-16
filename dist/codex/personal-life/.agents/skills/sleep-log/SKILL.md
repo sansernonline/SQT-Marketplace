@@ -5,15 +5,13 @@ description: Use when sleeping badly and keeping a sleep diary, no diagnosis
 
 # Sleep Log
 
-Two weeks of honest records tell a doctor more than "I sleep badly".
-
 General information, not medical advice — ask a doctor about persistent sleep problems; never start, stop or change sleep medicine on your own.
 
 ## How much sleep
 
 Adults generally need **7 or more hours** a night on a regular basis (American Academy of Sleep Medicine and Sleep Research Society consensus, 2015). Individual need varies.
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://aasm.org/resources/pdf/pressroom/adult-sleep-duration-consensus.pdf
+Sources and check date (2026-10-06): [references/sources.md](references/sources.md)
 
 ## Sleep diary — fill every morning (2 weeks)
 

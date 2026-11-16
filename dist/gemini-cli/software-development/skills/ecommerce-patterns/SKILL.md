@@ -30,14 +30,6 @@ An agent called in for this area opens its own role file before starting.
 | designing inventory management — stock control, multi-warehouse fulfillment, demand forecasting, replenishment, allocation across channels, or reducing oversells and stockouts | [`references/agent-inventory-specialist.md`](references/agent-inventory-specialist.md) | `ecommerce-engineer` |
 | building recommendation systems — collaborative, content-based, two-tower and hybrid models, cold start, two-stage serving, offline and online evaluation, diversity | [`references/agent-recommendation-engineer.md`](references/agent-recommendation-engineer.md) | `recommendation-engineer` |
 
-## agent ของสายนี้
-
-`growth-specialist` · `ecommerce-engineer` · `recommendation-engineer`
-
-## ที่มา
-
-Merged from plugin `software-development-ecommerce` (formerly named checkout-optimization → `references/checkout-optimization.md` · inventory-management → `references/inventory-management.md` · recommendation-systems → `references/recommendation-systems.md` — no longer separate skills) into `software-development` in v2.0.0 — the original content is all still in `references/`
-
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 
 `/software-development:ecommerce-patterns <checkout-audit | recommendation-design> <details>`

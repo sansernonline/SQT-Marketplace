@@ -30,10 +30,10 @@ General information, not medical or legal advice — ask the doctor or pharmacis
 | บัตรทอง / หลักประกันสุขภาพแห่งชาติ (Universal Coverage Scheme, UCS) | Thai citizens without another scheme | สปสช. hotline 1330; check or change the registered hospital in the สปสช. app / LINE @nhso |
 | สิทธิข้าราชการ (Civil Servant Medical Benefit Scheme, CSMBS) | Parents of a government officer are covered via the officer | กรมบัญชีกลาง; register the parents in the officer's family data |
 | ประกันสังคม | Insured under มาตรา 33 / 39 continue their own cover; pension or lump sum at 55+ after leaving work | สำนักงานประกันสังคม hotline 1506 — see `e-commerce` `social-security-th` (if installed) |
-| Children's tax deduction for parents | ลดหย่อนบิดามารดา 30,000 บาท/คน (parent 60+, income ≤ 30,000/yr); parents' health insurance premium up to 15,000 | `trading-finance` `tax-deduction-planner` (if installed) |
+| Children's tax deduction for parents | ลดหย่อนบิดามารดา 30,000 บาท/คน (parent 60+, income ≤ 30,000/yr; one child claims per parent); parents' health insurance premium up to 15,000 | `trading-finance` `tax-deduction-planner` (if installed) |
 | Other | ศูนย์ช่วยเหลือสังคม 1300; disability card (บัตรคนพิการ) if eligible; travel discounts (รอยืนยัน current list) | |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.dop.go.th · https://www.prd.go.th/th/content/category/detail/id/31/iid/484396 · https://www.thairath.co.th/lifestyle/lifestyle45plus/2717071 · https://www.rd.go.th
+Sources and check dates: [references/sources.md](references/sources.md)
 
 ## Home safety checklist (falls are the main risk)
 
@@ -45,10 +45,6 @@ General information, not medical or legal advice — ask the doctor or pharmacis
 - [ ] One named person in charge of medicines, checked against the table
 - [ ] Water heater temperature not scalding; gas stove with auto shut-off or switch to induction
 - [ ] Shoes with closed heels and non-slip soles; walking aid at the right height (ask the physiotherapist)
-
-## Worked example
-
-Mother, 78, Bangkok, บัตรทอง at a district hospital, blood pressure and diabetes, 5 medicines. Family set-up: medicine table copied from the hospital list; pill organiser filled Sunday by the eldest; appointments every 3 months — the second child drives and brings the medicine bag and the question list (dizzy when standing up, twice this month, dates noted). Rights: เบี้ยยังชีพ 700 บาท/เดือน (age 70–79) paid on the 10th; turns 80 next year → amount moves to 800 automatically by age band (confirm with the เขต office). Tax: the daughter who supports her claims ลดหย่อนบิดามารดา 30,000 (one child per parent).
 
 ## Related
 

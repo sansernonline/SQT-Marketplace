@@ -6,8 +6,6 @@ argument-hint: <product> <platform(s)> [key features, price, category]
 
 # Product Listing (Thai marketplaces)
 
-A listing is found by its title, chosen by its first photo, and bought because of its description. Each platform searches differently, so one copy pasted everywhere loses on all of them.
-
 ## Workflow
 
 1. **Collect facts** — product name, brand, model, size/volume/weight, colour/variants, material, who it is for, price, stock, เลข อย. (สำนักงานคณะกรรมการอาหารและยา) or เลขจดแจ้ง if food or cosmetic
@@ -31,19 +29,7 @@ A listing is found by its title, chosen by its first photo, and bought because o
 
 Never in a title: `ถูกที่สุด`, `อันดับ 1`, `ของแท้ 100%` without proof, emoji runs, ALL CAPS, `ส่งฟรี` (use the shipping setting instead), words from another category to catch traffic.
 
-Worked example — cotton tote bag, Shopee:
-`[ผ้าดี] กระเป๋าผ้า ใบใหญ่ ผ้าแคนวาส 12 ออนซ์ 38x42 ซม. มีซิป ช่องใส่โน้ตบุ๊ก 14 นิ้ว สำหรับนักศึกษา ทำงาน`
-
-Same product, TikTok Shop:
-`กระเป๋าผ้าใบใหญ่ ใส่โน้ตบุ๊กได้ มีซิป ผ้าหนา 12 ออนซ์ ผ้าดี`
-
-Description bullets — one benefit with a number per line, not a lifestyle list:
-
-| Weak | Strong |
-|---|---|
-| ไม่ว่าจะเป็นสายออกกำลังกาย สายแฟชั่น หรือสายชิล ตอบโจทย์ทุกไลฟ์สไตล์ | ซักเครื่องได้ 50 ครั้งสีไม่ตก · เนื้อผ้า 180 แกรม ใส่หน้าร้อนไม่ร้อน |
-
-For Thai text → `human-writing` `references/thai-grammar.md`, section 4, marketing register.
+Worked title examples (Shopee and TikTok Shop tote bag) and weak vs strong description bullets: [references/examples.md](references/examples.md). Description bullets: one benefit with a number per line, not a lifestyle list.
 
 ## Diagnose a listing that does not sell
 
@@ -84,7 +70,7 @@ When the owner asks to "check all listings" or a batch of listings needs fixing,
 
 ## Not an AI look
 
-Use real product photos — no AI-generated people and no text baked into images. The full list of AI tells lives in `no-ai-look`.
+Use real product photos — no AI-generated people and no text baked into images.
 
 ## Related
 

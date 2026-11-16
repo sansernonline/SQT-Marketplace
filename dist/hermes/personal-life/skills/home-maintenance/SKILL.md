@@ -6,8 +6,6 @@ argument-hint: <"schedule" | job to quote> [house type, aircon count, car detail
 
 # Home Maintenance (Thai climate)
 
-Small jobs on a schedule cost less than one emergency repair in the rainy season.
-
 General information, not engineering advice. Electrical, gas, structural and roof work goes to a licensed or insured technician.
 
 ## The Thai year in three seasons
@@ -45,7 +43,7 @@ General information, not engineering advice. Electrical, gas, structural and roo
 
 Costs vary by city and size — get 2 quotes; a figure marked (รอยืนยัน) is a planning guess, not a price.
 
-ตรวจล่าสุด 2026-10-26 · Season months: the กรมอุตุนิยมวิทยา (TMD) winter outlook runs mid-Oct 2569 to mid-Feb 2570, and TMD declared the rainy season on 15 May 2568 (news reports: https://www.naewna.com/n/?p=113925 · https://www.thairath.co.th/news/society/2787259 · https://www.thansettakij.com/general-news/641947); the hot season actually started late Feb to early Mar in recent years, so the table shows long-run averages — check the TMD seasonal outlook at https://www.tmd.go.th/forecast/seasonal each year. Prices and the aircon electricity figure have no official source and stay (รอยืนยัน).
+ตรวจล่าสุด 2026-10-26 · Season months are long-run averages (the hot season has started late Feb to early Mar in recent years); check the TMD seasonal outlook at https://www.tmd.go.th/forecast/seasonal each year. Prices and the aircon electricity figure have no official source and stay (รอยืนยัน). Details: [`references/sources.md`](references/sources.md).
 
 ## Contractor quote checklist
 
@@ -69,13 +67,14 @@ For a formal quotation format see `e-commerce` `doc-quotation` (if installed); f
 3. **Run:** `node decide.mjs score quotes.json`. Compare only quotes with the same scope; if scope differs, fix the scope first, because the cheapest quote is often the one that leaves things out.
 4. **Unstable or close** (`ยังไม่นิ่ง`, `สูสี`) → ask the top two contractors for the missing item (warranty in writing, a firm date), then rerun. The user picks; the score is supporting data.
 
-## Worked example
-
-House with 3 wall aircons (bedroom 9,000 BTU ×2, living room 18,000 BTU), cleaned last in March. Schedule: bedrooms in June and December, living room (runs longest) in June, September, December, March. Spread cleanings so no single month carries all three. Quotes for March: A 600/unit, no warranty; B 700/unit incl. coil chemical wash, 30-day re-clean if dripping. Choose B — the drip guarantee prevents a second call-out.
-
 ## Related
 
 `household-bills` (spike traced to aircon) · `vehicle-care` · `important-docs` · `trading-finance` `personal-budget` (if installed) (sinking fund: set aside 1% of house value a year for repairs — a common rule of thumb)
+
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open when you want a filled-in aircon schedule and quote comparison
+- [`references/sources.md`](references/sources.md) — open when you must re-check season dates
 
 ## เรียกเป็นคำสั่ง
 

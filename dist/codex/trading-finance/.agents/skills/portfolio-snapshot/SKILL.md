@@ -20,7 +20,7 @@ One page that answers "how am I doing?" honestly. Holdings template and the page
 
 ## Data checks — before any total
 
-Users hold money in several places (broker, fund app, PVD statement, crypto exchange), and the totals are only as good as the weakest file. Check these and list only what fires:
+Check these and list only what fires:
 
 | Check | Fires when | Do |
 |---|---|---|
@@ -31,7 +31,7 @@ Users hold money in several places (broker, fund app, PVD statement, crypto exch
 | Counted twice | The same fund appears in the fund app and again inside a PVD or RMF statement, or one account was exported twice | Keep one, say which |
 | Unreadable | A figure in a screenshot or PDF cannot be read clearly | Ask; never guess a number |
 
-When a check fires, say which conclusion depends on that number (for example "the cash % and the concentration warning both use the DEF row, which has no cost"). Checklist idea: `portfolio-rebalance-review` step 1 and `prospect-intake` step 2, anthropics/claude-for-financial-advisors (Apache-2.0, viewed 2026-11-10), reworded for Thai accounts.
+When a check fires, say which conclusion depends on that number (for example "the cash % and the concentration warning both use the DEF row, which has no cost").
 
 ## Formulas
 
@@ -55,7 +55,7 @@ node money-calc.mjs snapshot <file.json> [--json]     # also: attribution · dri
 
 One return figure hides which holding did the work. `node money-calc.mjs attribution <file.json>` splits each holding into price change (end − start − new money), dividends received, and its part of the portfolio return, using the same mid-period shortcut as the return above. New money is never counted as gain. When one holding accounts for more than half of all the movement (gains and losses added as sizes), the script names it: the month's result is that holding's result. The 50% line is a starting value, not measured.
 
-Example `scripts/examples/attribution.json` (illustrative): ABC +8,000 price and 1,440 dividend = +9,440, DEF −5,000, the index fund +10,000 of new money and 0 gain, the money market fund +200, cash 0; total +4,640 = +1.6% on 291,800. ABC is 64.5% of the movement, so it is named. A dividend paid into the cash account goes in `dividends` only: if the cash row's end value already includes it, take it out of that row, or it is counted twice. Idea: `variance-analysis`, anthropics/knowledge-work-plugins (Apache-2.0, viewed 2026-11-10), cut to price, new money and dividends; script written from scratch.
+Example `scripts/examples/attribution.json` (illustrative): ABC +8,000 price and 1,440 dividend = +9,440, DEF −5,000, the index fund +10,000 of new money and 0 gain, the money market fund +200, cash 0; total +4,640 = +1.6% on 291,800. ABC is 64.5% of the movement, so it is named. A dividend paid into the cash account goes in `dividends` only: if the cash row's end value already includes it, take it out of that row, or it is counted twice.
 
 ## Risk checks
 
@@ -70,20 +70,9 @@ Example `scripts/examples/attribution.json` (illustrative): ABC +8,000 price and
 | Emergency fund | invested money is also the emergency fund | Point to `emergency-fund` |
 | Lock-ups | RMF / ThaiESG / PVD counted as spendable | Separate locked from liquid |
 
-## Worked example (as of 2026-10-31, illustrative)
+## Worked example
 
-| Holding | Shares/units | Avg cost | Price | Value | P/L | Weight |
-|---|---|---|---|---|---|---|
-| ABC | 2,000 | 42.00 | 49.00 | 98,000 | +14,000 (+16.7%) | 32.7% |
-| DEF | 1,000 | 60.00 | 45.00 | 45,000 | −15,000 (−25.0%) | 15.0% |
-| SET50 index fund | 4,000 | 11.50 | 12.25 | 49,000 | +3,000 (+6.5%) | 16.3% |
-| Money market fund | — | — | — | 78,000 | — | 26.0% |
-| Cash at broker | — | — | — | 30,000 | — | 10.0% |
-| **Total** | | | | **300,000** | **+2,000** | 100% |
-
-Start of month 285,000, deposited 10,000 → return = (300,000 − 285,000 − 10,000) ÷ (285,000 + 5,000) = **+1.7%**.
-
-Checks firing: ABC 32.7% > 10% (a 30% fall = −29,400 baht ≈ −9.8% of portfolio); DEF −25% — thesis last reviewed when? Cash + money market 36% — intentional?
+Holdings table, return and firing checks (illustrative, as of 2026-10-31): [references/worked-example.md](references/worked-example.md)
 
 ## Output
 
@@ -96,3 +85,7 @@ Headline (total value, month return, as-of) · data checks that fired · holding
 Run the `portfolio-snapshot` skill: **$ARGUMENTS**
 
 If no portfolio file is known, ask where holdings are tracked. Mark stale prices honestly when a data plugin is missing for a market.
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources

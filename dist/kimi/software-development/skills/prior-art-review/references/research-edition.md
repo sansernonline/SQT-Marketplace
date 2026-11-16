@@ -1,6 +1,6 @@
 # Research edition
 
-Part of `prior-art-review` item 8 · use it when surveying research before setting the problem, instead of choosing a tool.
+Part of `prior-art-review` step 9 · use it when surveying research before setting the problem, instead of choosing a tool.
 
 The output is not "which one to use" but **"where the gap is"**.
 

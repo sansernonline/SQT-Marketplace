@@ -32,10 +32,6 @@ An agent called in for this area opens its own role file before starting.
 
 `legaltech-engineer` · `legal-compliance-officer`
 
-## ที่มา
-
-Merged from plugin `software-development-legaltech` (formerly named contract-parsing-patterns → `references/contract-parsing-patterns.md` · document-automation-patterns → `references/document-automation-patterns.md` · e-signature-compliance → `references/e-signature-compliance.md` — no longer separate skills) into `software-development` in v2.0.0. The original content is all still in `references/`
-
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 
 `/software-development:legal-document-systems <contract-analysis-design | esignature-audit> <details>`
@@ -2614,6 +2610,8 @@ It may be collected only when truly necessary, and needs stricter measures than 
 
 **Never use real data on development machines or staging.** Always mask it first (see `cicd-and-release`).
 
+**Do not export a full-data Excel file for someone who needs only the totals.**
+
 ---
 
 ## 6 · Retention
@@ -2658,22 +2656,6 @@ the notification message template · how to pull the list of affected people
 
 ---
 
-## 9 · Anti-patterns
-
-- **Asking consent for everything** — when they withdraw, the system cannot keep working
-- **Pre-ticked checkboxes** — they do not count as consent
-- **Storing consent as one value `accepted_terms = true`** — you cannot prove later what was agreed
-- **Soft delete, then saying it is deleted**
-- **A retention policy with no real deletion job**
-- **Real data on staging** — and copied onto developer machines
-- **Collecting the national ID number "just in case"**
-- **Personal data in logs and crash reports**
-- **No list of outside providers** — you cannot say where the data goes
-- **Exporting a full-data Excel file** for someone who needs only the totals
-- **A privacy policy that does not match what the system really does**
-
----
-
 ## 10 · Frequently cited sections, and abbreviations
 
 Use this when a customer or the legal team asks "which section is this?" (checked against the unofficial English translation of the 2019 Act, Royal Gazette 27 May 2019 (B.E. 2562), on 23 Oct 2026 (B.E. 2569))
@@ -2691,7 +2673,20 @@ Use this when a customer or the legal team asks "which section is this?" (checke
 | Compensation · punitive damages | 77 · 78 |
 | Administrative fines, maximum 1 · 3 · 5 million baht | 82 · 83 · 84 |
 
-**Sectors with a second layer of rules** — health · finance · telecom have their own regulators (กระทรวงสาธารณสุข (Ministry of Public Health) · ธปท. (Bank of Thailand, BOT) / ก.ล.ต. (Securities and Exchange Commission, SEC) / คปภ. (Office of Insurance Commission, OIC) · กสทช. (National Broadcasting and Telecommunications Commission, NBTC)) that add conditions on confidentiality, retention and breach notice. Check that sector's rules before designing, and do not rely on PDPA alone (idea from BV thai-pdpa (MIT))
+**Sectors with a second layer of rules** — health · finance · telecom have their own regulators (กระทรวงสาธารณสุข (Ministry of Public Health) · ธปท. (Bank of Thailand, BOT) / ก.ล.ต. (Securities and Exchange Commission, SEC) / คปภ. (Office of Insurance Commission, OIC) · กสทช. (National Broadcasting and Telecommunications Commission, NBTC)) that add conditions on confidentiality, retention and breach notice. Check that sector's rules before designing, and do not rely on PDPA alone
+
+## 11 · Links to other skills
+
+Also: `notifications` (sending and unsubscribing from marketing messages; consent stays here) · `data-import-export` (masking exported files) · `file-upload-and-storage` (retention of attached files) · `background-jobs` (jobs that delete expired data) · `incident-runbook-template` (after a leak).
+
+## References
+
+- [`references/glossary.md`](references/glossary.md) — open when a term (controller · processor · sensitive data) must be explained
+
+
+## reference: glossary.md
+
+# PDPA glossary
 
 - **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562)
 - **Personal data** — data that identifies a person, directly or indirectly
@@ -2699,18 +2694,3 @@ Use this when a customer or the legal team asks "which section is this?" (checke
 - **Data controller** — whoever decides how data is collected and used (usually the system owner)
 - **Data processor** — whoever processes data on the controller's instructions, such as a cloud provider
 - **Data subject** — the person the data belongs to
-
-## 11 · Links to other skills
-
-| Need | Use with |
-|---|---|
-| A trail of who viewed or changed data | `audit-trail` |
-| Tables, encryption and soft delete | `database-design` |
-| Masking data in logs | `logging-standards` |
-| Access rights and authentication | `auth-implementation-patterns` |
-| Masking real data before loading staging | `cicd-and-release` |
-| Sending and unsubscribing from marketing messages (consent stays in this skill) | `notifications` |
-| Masking data in exported files | `data-import-export` |
-| Retention of attached files | `file-upload-and-storage` |
-| Jobs that delete expired data | `background-jobs` |
-| Recording the incident after a leak | `postmortem-template` · `incident-runbook-template` |

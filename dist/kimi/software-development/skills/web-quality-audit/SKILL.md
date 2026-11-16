@@ -22,6 +22,8 @@ description: Use when auditing a page for accessibility or speed
 | Websites that tell a story through motion — reduced-motion rule from the build stage | `dynamic-website` |
 | Text, dates, numbers in Thai and English | `i18n-and-locale` |
 | Speed of an API or backend | playbook `performance` of `superuser` · `observability-basics` |
+| Putting pa11y or Lighthouse CI in the pipeline | `cicd-and-release` · `e2e-testing-patterns` |
+| Report format to send to a customer | `polished-document-style` or `branded-document-design` |
 
 ## Steps
 
@@ -142,32 +144,7 @@ Record every run: date · URL · tool and version · mobile or desktop · result
 
 ## 5 · Report template
 
-```markdown
-# Web Quality Audit — <เว็บ> · <วันที่> · ผู้ตรวจ <ชื่อ>
-
-ขอบเขต: <URL 5 หน้า> · mobile + desktop · เครื่องมือ: Lighthouse <รุ่น> · axe <รุ่น>
-
-## ตัวเลขรวม (mobile · ค่ากลาง 3 รอบ)
-| หน้า | Perf | A11y | LCP | CLS | TBT | axe error |
-|---|---|---|---|---|---|---|
-
-## สิ่งที่พบ
-| # | ความรุนแรง | เกณฑ์ WCAG / ตัวชี้วัด | หน้า | สิ่งที่เจอ (selector หรือภาพ) | วิธีแก้ | เจ้าของ | สถานะ |
-|---|---|---|---|---|---|---|---|
-| 1 | Critical | 2.1.2 | /checkout | date picker ออกด้วยคีย์บอร์ดไม่ได้ | ใส่ Esc ปิด + โฟกัสกลับปุ่มเปิด | frontend | ค้างอยู่ |
-
-## แก้เร็วได้ผลมาก (quick wins)
-## ยังไม่ได้ตรวจ
-```
-
-| Severity | Meaning | Example |
-|---|---|---|
-| **Critical** | the main task cannot be done, or the page is unusable on mobile | keyboard trap · form with no label · LCP > 4 seconds · reflow at 320px broken |
-| **High** | one group of users cannot succeed, or Core Web Vitals fail | contrast on body text · icon button with no name · CLS > 0.25 |
-| **Medium** | doable but hard | focus hard to see · "คลิกที่นี่" ("click here") link · oversized image |
-| **Low** | improves things, blocks nobody | `alt` on decorative images · incomplete `autocomplete` |
-
-Status uses the same set as `superuser`: `เสร็จ` · `ทำอยู่` · `ติด` · `รออนุมัติ` · `ค้างอยู่`
+Write the report from [`references/report-template.md`](references/report-template.md) (template, severity table, status words).
 
 ## 6 · 10 repeat findings on Thai websites
 
@@ -199,22 +176,7 @@ Status uses the same set as `superuser`: `เสร็จ` · `ทำอยู�
 - Turning off all animation on the site to pass, instead of adding a kill-switch for `prefers-reduced-motion`
 - Putting `aria-*` on an element that should already be a `<button>` — the right HTML element beats ARIA every time
 
-## Link to other skills
+## References
 
-| Need | Use |
-|---|---|
-| Contrast numbers and screen states from the design stage | `ui-craft` §5 · §6 |
-| Motion kill-switch · self-hosting large Thai heading fonts | `dynamic-website` rule 1 · §6 |
-| Line spacing and Thai word breaking | `human-writing` `references/thai-line-breaking.md` |
-| `lang` · dates · Thai and English numerals | `i18n-and-locale` |
-| An SEO check in the same pass | `seo-audit-checklist` |
-| Putting pa11y or Lighthouse CI in the pipeline | `cicd-and-release` · `e2e-testing-patterns` |
-| Report format to send to a customer | `polished-document-style` or `branded-document-design` |
-
-## Sources (checked 2026-10-23)
-
-- WCAG 2.2 — w3.org/TR/WCAG22 (Recommendation 2024-12-12) · 9 new criteria — w3.org/WAI/standards-guidelines/wcag/new-in-22 · quick reference — w3.org/WAI/WCAG22/quickref
-- Core Web Vitals — web.dev/articles/vitals (updated 2024-10-31)
-- Lighthouse — developer.chrome.com/docs/lighthouse/overview · github.com/GoogleChrome/lighthouse (Apache-2.0)
-- axe-core CLI — github.com/dequelabs/axe-core-npm/tree/develop/packages/cli (MPL-2.0) · pa11y — github.com/pa11y/pa11y (LGPL-3.0)
-- The grouping idea and the top 10 are adapted from the wshobson/agents plugin `accessibility-compliance` (MIT · rewritten, not copied) · for vercel-labs `web-design-guidelines` see github.com/vercel-labs/agent-skills (licence not yet checked → link only, no content taken)
+- [`references/report-template.md`](references/report-template.md) — open at step 4, when writing the report
+- [`references/sources.md`](references/sources.md) — open when re-checking dated WCAG or Core Web Vitals facts

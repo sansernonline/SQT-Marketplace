@@ -33,10 +33,6 @@ An agent called in for this area opens its own role file before starting.
 
 `growth-specialist` · `mobile-engineer`
 
-## ที่มา
-
-Merged from plugin `software-development-mobile` (formerly named mobile-architecture-patterns → `references/mobile-architecture-patterns.md` · mobile-performance → `references/mobile-performance.md` · app-store-optimization → `references/app-store-optimization.md` — no longer separate skills) into `software-development` in v2.0.0 — the original content is all still in `references/`
-
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 
 `/software-development:mobile-engineering <mobile-architecture | aso-audit> <details>`

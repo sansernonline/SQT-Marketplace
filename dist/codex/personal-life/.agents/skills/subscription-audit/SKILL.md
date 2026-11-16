@@ -54,18 +54,6 @@ The numbers are illustrative. Use the user's real prices.
 - Rule: a service the user has kept for **12 months or more** with steady use is a candidate for annual billing. Something new or seasonal stays monthly
 - Remember the opportunity cost: the annual plan locks in the money up front. With no refund on cancellation, and Apple and Google generally do not refund partial periods, a cancellation in month 4 loses about 8 months of value
 
-## Worked example — a quarterly audit
-
-| Service | Billed via | ฿/month | Uses | ฿/use | Decision |
-|---|---|---:|---:|---:|---|
-| Video streamer A | Credit card | 419 | 12 episodes | 35 | Keep |
-| Video streamer B | App Store | 299 | 1 | 299 | Rotate: cancel now, back in December for one series |
-| Music | Google Play | 149 | daily | ~5 | Keep, move to the family plan with a spouse who pays 149 separately |
-| Cloud storage 2 TB | App Store | 349 | uses 180 GB | — | Downgrade to the 200 GB tier |
-| Fitness app | Credit card, annual ÷ 12 | 125 | 0 | — | Cancel, and set a reminder for the renewal date |
-
-Rough saving: 299 (streamer B) + 149 (spouse's separate plan; the family plan adds only an assumed ~฿50, so net ~100) + (349 − tier price, say 349 − 59 = 290) + 125 ≈ 299 + 100 + 290 + 125 ≈ **฿800/month** (tier and family-plan prices are assumed; check yours). Last line in `subscriptions.md`: "next audit 2027-01-06".
-
 ## Rules
 
 - Uninstalling an app does **not** cancel its subscription. This is true on both Google Play and the App Store
@@ -75,6 +63,10 @@ Rough saving: 299 (streamer B) + 149 (spouse's separate plan; the family plan ad
 - Do not judge anyone's spending. Show the numbers and let the user decide
 
 Related: `weekly-review` (put the trial-end reminders there), `important-docs` (contract renewal dates), and `personal-budget` and `scam-check` in the `trading-finance` plugin.
+
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open for a filled-in quarterly audit table
 
 ## เรียกเป็นคำสั่ง
 

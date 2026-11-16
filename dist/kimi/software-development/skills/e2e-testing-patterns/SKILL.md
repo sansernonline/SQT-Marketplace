@@ -58,13 +58,11 @@ description: Use when writing end-to-end tests or fixing flaky ones
 
 | Framework | Best for | Avoid for |
 |-----------|----------|-----------|
-| **Playwright** (recommended) | Modern apps, cross-browser, parallel | Legacy apps with weird patterns |
+| **Playwright** (default recommendation: best developer experience, fast, cross-browser) | Modern apps, cross-browser, parallel | Legacy apps with weird patterns |
 | **Cypress** | Developer experience, easy to learn, single-app | Multi-tab, cross-origin tests |
 | **Selenium** | Legacy, language flexibility | Greenfield projects |
 | **Puppeteer** | Chrome-only, scraping | Cross-browser needs |
 | **WebDriverIO** | Mobile + web, BDD style | Simple use cases |
-
-> **Default recommendation: Playwright** — best developer experience, fast, cross-browser, made by Microsoft
 
 ## Test Structure: Page Object Model (POM)
 
@@ -144,7 +142,7 @@ Never use `page.waitForTimeout` for a fixed-time wait. Wait for a real event ins
 - **In CI:** retry at most 1 time, **only to collect a trace** (`retries: 1` + `trace: 'on-first-retry'`)
 - **Pass on retry = flaky, not a pass** — report it as flaky and fail the run (`failOnFlakyTests: true` in `playwright.config.ts`, Playwright 1.52+) — the same rule as "Expected Values and Failing Tests" above and `testing-standards` (flaky test: fix or delete, never retry until green)
 - **Track flakiness:** a test that fails > 5% of runs is a candidate for quarantine (pulled out of the blocking run)
-- **Quarantine has an expiry date** (idea from ECC e2e-testing): tag the test `@flaky` with an issue link and a date (`test('checkout total @flaky', { annotation: { type: 'quarantine', description: 'until 2026-11-15 · issue #123' } }, ...)`), run the `@flaky` set as a separate non-blocking job so the signal is not lost, and have CI fail when today is past the date — the test is then fixed or deleted, never extended twice
+- **Quarantine has an expiry date**: tag the test `@flaky` with an issue link and a date (`test('checkout total @flaky', { annotation: { type: 'quarantine', description: 'until 2026-11-15 · issue #123' } }, ...)`), run the `@flaky` set as a separate non-blocking job so the signal is not lost, and have CI fail when today is past the date — the test is then fixed or deleted, never extended twice
 - **Don't accept flaky tests:** investigate or delete them. Don't ignore them
 
 ## Authentication in E2E

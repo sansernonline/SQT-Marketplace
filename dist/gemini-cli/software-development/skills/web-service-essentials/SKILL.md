@@ -21,6 +21,7 @@ description: Use when building or reviewing an HTTP backend
 - For URL style · paging · dates · API ids, use `api-conventions`
 - For log format, use `logging-standards`
 - To choose an architecture, use `architecture-patterns`
+- To check responses against OpenAPI in CI or catch breaking changes, see `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md)
 
 ---
 
@@ -40,7 +41,7 @@ description: Use when building or reviewing an HTTP backend
 
 \* If you do not want the public to see the commit hash in `/version`, restrict it so only the internal network can call it.
 
-**Wire it to Kubernetes like this** (adapted from secondsky `health-check-endpoints` · MIT) — live and ready must point to different paths, or the point above means nothing.
+**Wire it to Kubernetes like this** — live and ready must point to different paths, or the point above means nothing.
 
 ```yaml
 livenessProbe:            # dead → restart the container
@@ -171,7 +172,7 @@ SIGTERM → 1. Stop accepting new requests (make /health/ready answer down at on
 
 ---
 
-## 6 · Ready-to-use code
+## 6 · Ready-made code
 
 | File | Stack | Status |
 |---|---|---|
@@ -179,25 +180,7 @@ SIGTERM → 1. Stop accepting new requests (make /health/ready answer down at on
 | `assets/health_py.py` | Python / FastAPI | ✓ run and tested the same way, results match on every field |
 | `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | Caution: not yet compiled or tested |
 
-```js
-// Node
-app.use(createHealthRouter({
-  version: { name: 'orders-api', version: '1.4.0', commit: process.env.GIT_SHA },
-  checks: {
-    db:   async () => { await pool.query('SELECT 1'); },          // critical
-    mail: { critical: false, run: async () => { await smtp.verify(); } },
-  },
-}));
-```
-
-```python
-# Python
-app.include_router(make_health_router(
-    version={"name": "orders-api", "version": "1.4.0", "commit": os.getenv("GIT_SHA")},
-    checks={"db": lambda: db.execute("SELECT 1"),
-            "mail": {"critical": False, "run": smtp.verify}},
-))
-```
+Usage snippets for the Node and Python routers: [`references/per-stack.md`](references/per-stack.md).
 
 ---
 
@@ -223,29 +206,3 @@ docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:808
 - [ ] After `SIGTERM`, in-flight requests finish before the app closes
 - [ ] `/ping` is not written to the log (or the file fills up with pings)
 
----
-
-## 8 · Anti-patterns
-
-- **A single `/health` that checks everything** — the orchestrator cannot tell whether to restart or only cut traffic
-- **liveness checks the DB** — a 10-second DB hiccup = every pod dies together
-- **A health check with no timeout** — a dependency hangs, and health hangs with it
-- **Sending a stack trace / connection string in health or in a 500 error**
-- **Health requires login** — the orchestrator has no token to give
-- **A different error format on every endpoint** — the client must write 5 kinds of parsing code
-- **`/ping` written to the log** — every second × 86400 = a file full of junk
-- **No graceful shutdown** — every deploy, customers see errors
-- **`Access-Control-Allow-Origin: *` together with cookies** — lets other sites send requests as the user
-
----
-
-## 9 · Links to other skills
-
-| Need | Use together with |
-|---|---|
-| Log format and correlation id | `logging-standards` |
-| Tests for these endpoints | `testing-standards` |
-| Check responses against OpenAPI in CI · contract with the frontend team · breaking-change check | `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md) |
-| Design business endpoints | command `/api-design` |
-| Runbook for when the service is down | `incident-runbook-template` |
-| Security review | `security-engineer` + command `/security-scan` (a shortcut to `security-audit` or `security-gate`) |

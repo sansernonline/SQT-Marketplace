@@ -90,17 +90,8 @@ Rules for the ladder:
 - Level 4 names a consequence the user **will really carry out**. An empty threat ruins level 5
 - Stay polite at every level. Firm means specific and dated, not rude
 
-## Worked example — chasing an unpaid invoice (LINE, to a small client)
-
-- Day +3 after the due date, level 1: "สวัสดีครับคุณเอ ขออนุญาตทวงถามใบแจ้งหนี้ INV-2026-031 ยอด 18,500 บาท ครบกำหนดวันที่ 30 ก.ย. ครับ อาจจะตกหล่นไป รบกวนช่วยตรวจสอบให้หน่อยนะครับ ขอบคุณครับ"
-- Day +7, level 2: "...ขอติดตามใบแจ้งหนี้ INV-2026-031 ยอด 18,500 บาท ซึ่งครบกำหนดวันที่ 30 ก.ย. ครับ ยังไม่เห็นยอดเข้า รบกวนแจ้งวันที่คาดว่าจะโอนด้วยนะครับ"
-- Day +10, level 3: "...ขอความกรุณาโอนชำระภายในวันศุกร์ที่ 16 ต.ค. นี้ครับ หากมีปัญหาเรื่องเอกสารแจ้งได้เลยครับ"
-- Day +20, level 4: "...หากไม่ได้รับชำระภายในวันที่ 31 ต.ค. ผมจำเป็นต้องหยุดงานส่วนที่เหลือไว้ก่อนจนกว่าจะเคลียร์ยอดนี้ครับ"
+Worked example (chasing an unpaid invoice, 4 levels) and sources: [references/worked-example.md](references/worked-example.md) · [references/sources.md](references/sources.md)
 
 Chasing several credit customers at once (check which payments already arrived, grade each payer, a summary table before any draft) → `doc-quotation` section 6 (plugin `e-commerce`, if installed). This skill then words each message.
 
 Related: `meeting` (plugin `personal-life`, Leg 2 — written follow-up after a meeting). Optional, if installed: `inbox-triage` (plugin `personal-life` — which messages to answer first) · `doc-thai-official` and `doc-quotation` (plugin `e-commerce` — formal letters and quotes).
-
-## Sources
-
-- Voice profile idea: anthropics/knowledge-work-plugins `small-business/shared/voice-profile.md` (Apache-2.0 · read 2026-11-10 · reworded, not copied) https://github.com/anthropics/knowledge-work-plugins/blob/main/small-business/shared/voice-profile.md

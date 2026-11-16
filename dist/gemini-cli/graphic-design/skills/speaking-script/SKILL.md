@@ -7,7 +7,7 @@ description: Use when writing a script for a person speaking on camera
 
 > **One rule of this skill:** write for the ear, not the eye — every line must survive being read aloud. The script is done when someone who did not write it can read it aloud once and sound like a person, not a document.
 
-This skill lives in plugin `graphic-design` · the wording of the script follows `human-writing` (plugin `superuser`), except where this file says otherwise, because spoken language has its own rules · a finished script goes on to filming or video generation with `video-script-to-clip` (shot list · captions · safe zones are there)
+A finished script goes on to filming or video generation with `video-script-to-clip` (shot list · captions · safe zones are there).
 
 ## When to use
 
@@ -32,7 +32,7 @@ This skill lives in plugin `graphic-design` · the wording of the script follows
 1. **One takeaway, one audience, one action** — sentence 1: who is the viewer, and what do you want them to know, feel or do when the clip ends · if you cannot write it in 1 sentence, it is 2 clips
 2. **Write the hook as the first spoken sentence** — patterns below · no "สวัสดีครับ วันนี้จะมา…" (Hello, today I will…) — the hook must carry the reason to stay
 3. **Beat sheet** — hook → setup (why listen · 1–2 sentences) → beats with 1 idea each → payoff (answers what the hook promised) → a single call to action · a 30–60 second clip needs only 3–5 beats
-4. **Write spoken Thai** — rules below · read every line aloud as you write it
+4. **Write spoken Thai** — rules below · short lines broken at breathing points, never paragraphs like an article (the eye reads faster than the mouth speaks) · read every line aloud as you write it
 5. **Time it with a stopwatch, not a word count** — read the whole script aloud once at show pace and time it · over time → cut the last beat first · everyone speaks at a different speed, so do not use someone else's words-per-minute figure
 6. **Add delivery cues sparingly** — `[หยุด]` (pause) only where silence has an effect · `[เน้น]` (stress) only on the word whose sentence changes meaning if it is not stressed · put pictures/B-roll as a note beside the line, not written as a scene (scenes are the job of `video-script-to-clip`)
 7. **Read-aloud pass by someone who did not write it** (or record yourself and listen) — a spot where you stumble is a spot to rewrite, not a spot where "it will be fine when I really say it"
@@ -72,22 +72,6 @@ Rules: no greeting to open the clip · no introducing yourself before the hook �
 - Big numbers must be easy to say: "1,250,000 บาท" → write it in the script as "ล้านสองแสนห้า" — so the speaker does not have to convert it in their head mid-air
 - Read every line aloud while you write — the eye cannot fix what the ear catches
 
-## Real example — a 45-second coffee shop review clip
-
-**Summary before writing:** viewer = people who work in the office area · by the end, they should know this shop is worth the queue · action = drop by and try it
-
-```
-HOOK    "กาแฟแก้วละ 120 บาท แต่คนยอมต่อคิว 40 นาที ผมเลยไปลองดูว่ามันดียังไง"
-SETUP   "ร้านนี้เปิดมา 8 เดือน ไม่มีที่นั่ง ไม่มีป้ายใหญ่ มีแค่เคาน์เตอร์เล็ก ๆ" [หยุด]
-BEAT 1  "จุดแรกที่ต่างจากร้านอื่นคือ เขาคั่วเมล็ดเองทุกสัปดาห์ กลิ่นแรงตั้งแต่หัวซอย"
-BEAT 2  "แก้วนี้คือซิกเนเจอร์ ผมสัมผัสได้ถึงรสผลไม้ก่อนความขม [เน้น]ก่อนความขม ซึ่งหายาก"
-BEAT 3  "จุดที่ควรรู้คือ คิวยาวจริงช่วง 8 โมงเช้า แนะนำไปหลัง 10 โมง"
-PAYOFF  "คำตอบคือ คุ้มครับ ถ้าคุณเป็นแฟนกาแฟจริง แต่ถ้าแค่อยากได้คาเฟอีน เซเว่นหน้าปากซอยพอ"
-CTA     "ใครไปแล้ว เมนูไหนดี คอมเมนต์บอกหน่อยครับ เดี๋ยวผมไปลองตาม"
-```
-
-Read aloud and timed at 43 seconds — pass · (example written by the team, not a script that was actually published)
-
 ## Check before sending
 
 - [ ] The first sentence is a hook from the table, not a greeting
@@ -99,14 +83,6 @@ Read aloud and timed at 43 seconds — pass · (example written by the team, not
 - [ ] ครับ/ค่ะ and pronouns are the same throughout and match `brand-kit` if it exists
 - [ ] Picture/B-roll notes are kept apart from spoken lines, not mixed
 
-## Anti-patterns
-
-- **Writing in paragraphs like an article** and having the person read it — the eye reads faster than the mouth speaks, so a script must be short lines broken at breathing points
-- **A hook of "สวัสดีครับ วันนี้…"** — the viewer swipes away before sentence two
-- **Counting words instead of timing** — speaking speed varies a lot, and a words-per-minute figure you did not measure yourself is an inference (ยังไม่ได้ตรวจ against the speaker's real voice)
-- **3 open loops in a 30-second clip** — the viewer cannot remember what they are waiting for, so they wait for nothing
-- **A script never read aloud before sending** — matches the rule `principle-prove-it-works`: "works" = someone read it aloud and it flowed, not "finished writing"
-
 ## Link to other skills
 
 | Need | Use |
@@ -114,13 +90,9 @@ Read aloud and timed at 43 seconds — pass · (example written by the team, not
 | Turn the script into a clip (shot list · subtitles · safe zone · editing tools) | `video-script-to-clip` + `skills/video-script-to-clip/references/production-tools.md` |
 | Pictures/scenes generated in the clip | `brief-to-image` · `image-generation` |
 | Language level and brand voice | `brand-kit` item Voice |
-| General wording (the script has its own exceptions above) | `human-writing` (plugin `superuser`) |
 | Find reference clips for step 0 | `research-with-sources` (plugin `superuser`) |
 
-## Sources
+## References
 
-| Topic | Source |
-|---|---|
-| Spoken-sentence hook · open loop · signposts · payoff must pay out | General video-script writing practice the team uses — team experience, no official source (ยังไม่ได้ตรวจ) |
-| Spoken language differs from written · do not cut function words · numbers written as spoken words | `human-writing` (plugin `superuser`) + the spoken-script rules in this file |
-| Viewers decide in the first 3 seconds · watch with sound off | `video-script-to-clip` (source checked 2026-10-06 there) |
+- [`references/worked-example.md`](references/worked-example.md) — open for a full 45-second coffee shop review script as a model
+- [`references/sources.md`](references/sources.md) — where each rule comes from

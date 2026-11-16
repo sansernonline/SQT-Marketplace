@@ -9,7 +9,7 @@ description: Use when facing a dispute or court summons
 
 **When the user asks straight out** "นับวันให้หน่อย" or "จะชนะไหม": say in one line that you do not count legal deadlines or predict the result, and why (a wrong count can lose the case; the result depends on evidence a judge weighs). Then give what does help: the urgency from section 3 (court papers → a lawyer this week), the facts table from section 2, the deadline row with `[ตรวจ]`, and a free legal-aid line from section 6. No pros-and-cons list of the case either; that is a forecast by another name.
 
-General information, not legal advice (ข้อมูลทั่วไป ไม่ใช่คำปรึกษากฎหมาย). A free first meeting with a lawyer or an agency goes much further when the user arrives with one page of facts, the documents in order and every date written down.
+General information, not legal advice (ข้อมูลทั่วไป ไม่ใช่คำปรึกษากฎหมาย).
 
 ## Use when / not when
 
@@ -84,7 +84,7 @@ Keep the reference number an agency gives. Never write ID or account numbers in 
 | กรมสวัสดิการและคุ้มครองแรงงาน | Unpaid wages, severance (form คร.7) | **1546** — details in `job-exit` section 6 | ✓ 2026-11-10 |
 | กองทุนยุติธรรม (Justice Fund, Ministry of Justice) | Said to help with lawyer fees, court fees and bail | official page did not open; the 1111 ext. 77 line seen only in news (รอยืนยัน) | ✗ |
 
-Sources, viewed 2026-11-10: https://www.lawyerscouncil.or.th/services · https://www.ago.go.th/oagservice/ · https://damrongdham.moi.go.th/news/7197a0f8-11b9-40f2-99bd-e820564ec9b1 · https://www.ocpb.go.th/faqs.php · https://complaint.ocpb.go.th/ · https://www.labour.go.th. Pick the place by the kind of dispute; when unsure, start with 1167 or 1157 and bring this brief.
+Pick the place by the kind of dispute; when unsure, start with 1167 or 1157 and bring this brief.
 
 ## 7 · What this brief does not do
 
@@ -106,6 +106,6 @@ End every brief with these lines, so the user and the next reader know its limit
 - [ ] Every hotline and agency has an official link and check date, or `(รอยืนยัน)`
 - [ ] The "does not do" lines and "not legal advice" are present
 
-## Source
+## References
 
-Ideas from anthropics/claude-for-legal `legal-clinic/skills/client-intake`, `legal-clinic/skills/deadlines` and `legal-clinic/skills/client-comms-log` (Apache-2.0, rewritten for a person preparing their own case in Thailand, viewed 2026-11-10).
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources

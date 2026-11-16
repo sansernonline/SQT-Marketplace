@@ -31,7 +31,7 @@ brand-assets/
 └── _inbox/                drop zone, emptied weekly
 ```
 
-Status lives in the folder, not the file name: drafts stay in `01-masters/`, only approved files reach `02-exports/`; the working version stays in `01-masters/`.
+Status lives in the folder, not the file name: drafts stay in `01-masters/`, only approved files reach `02-exports/`.
 
 ## Naming pattern
 
@@ -67,17 +67,9 @@ Example: `songkran26-hero-ig-feed45-v03-th.png` · with a matrix ID: `songkran26
 
 ## Rules
 
-- Every token is something people search for. A word that is not in the name cannot be found
 - Lowercase, hyphens only, no spaces or underscores mixed
 - 1 pattern per team. Changing it means a new brand-kit version
 - Review `04-archive/` every quarter. Nothing leaves the archive without a reason in the log
-
-## Related
-
-- `brand-kit` — the README where the pattern is written
-- `campaign-set` — the asset matrix uses the same file names
-- `social-formats` — source of the format codes
-- `document-naming` — naming for client documents (proposals, reports, contracts)
 
 
 ## reference: naming-and-tree.md

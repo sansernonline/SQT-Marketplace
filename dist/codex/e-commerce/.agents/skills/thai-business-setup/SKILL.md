@@ -7,8 +7,6 @@ description: Use when starting a Thai business
 
 This skill helps the user choose between trading as an individual, a partnership or a company. It walks them through registration, then through the checklist after registration. The content is general information, not tax or legal advice. An accountant should recalculate the tax figures for a real business.
 
-Abbreviations in this file: Department of Business Development (DBD) · value added tax (VAT) · small and medium enterprise (SME)
-
 ## 1 · Choosing a business form
 
 Compare 4 forms (individual + commercial registration (ทะเบียนพาณิชย์) · registered ordinary partnership (ห้างหุ้นส่วนสามัญนิติบุคคล) · limited partnership (ห้างหุ้นส่วนจำกัด) · limited company (บริษัทจำกัด)) by liability for debts, capital, where to register, fees and tax (progressive 0–35% for an individual, the juristic person rate for the others). The full table, the order of questions for choosing a form and the sources checked 2026-10-23 are in [`references/business-forms.md`](references/business-forms.md). Open that file before answering which form to register.
@@ -36,7 +34,7 @@ An individual registers commercial registration (anyone selling online must regi
 | Privacy notice for customers and staff | Before collecting data | `pdpa-workflow` |
 | Quotation, invoice, receipt · PromptPay QR | When sales open | `doc-quotation` · `promptpay-qr` |
 
-Last checked 2026-10-23 · Sources: VAT registration threshold https://www.rd.go.th/7061.html · bookkeeping duty, VAT registration with incorporation and automatic employer registration: the DBD manual for newly registered juristic persons (link in section 1) · employee registration within 30 days: Social Security Office news of 30 Oct 2024 (B.E. 2567) (link in `hiring-th/references/offer-letter-first-week.md` section 8)
+Last checked 2026-10-23 · sources: [`references/sources.md`](references/sources.md)
 
 ## 5 · Import cost from China
 
@@ -65,14 +63,7 @@ These steps cannot be undone or they affect outsiders. The agent prepares the da
 |---|---|
 | Tax for an online seller who is an individual (deducting expenses · ภ.ง.ด.90 (PND 90) and 94 (PND 94)) | `seller-tax-basics` |
 | Monthly filing of VAT, withholding tax and penalties | `tax-vat-th` + agent `tax-helper` |
-| Electronic tax invoice | `e-tax-invoice` |
-| Year-end close, financial statements, บอจ.5, ภ.ง.ด.50 | `dbd-annual-filing` |
-| Hiring the first employee | `hiring-th` · `social-security-th` · `payroll-th` |
 | Partnership, lease and work-for-hire contracts | `doc-contract-th` |
-| Quotation, invoice, receipt | `doc-quotation` |
 | Setting a selling price on Shopee, Lazada and TikTok Shop once the cost is known | `marketplace-fees-pricing` |
 | Comparing domestic carriers | `shipping-compare` |
 | Naming the business before reserving the name | `product-naming` (plugin `software-development`) |
-| Wording of every line | `human-writing` |
-
-Origin of the idea: the order of questions for choosing a business form took its idea from https://github.com/Boom-Vitt/claude-thai-business-skills (MIT License · Copyright (c) 2026 Vittawat (boombignose) · LICENSE file checked 2026-10-23). It was rewritten from scratch with no copied text, and every figure was rechecked against official sources.

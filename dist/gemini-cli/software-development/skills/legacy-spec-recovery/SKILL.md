@@ -9,8 +9,6 @@ allowed-tools: Read, Grep, Glob
 
 Turn an undocumented system into an as-is spec that a change request can be measured against. The code says **what** the system does; it cannot say whether that was **intended**. Every claim therefore carries a source and a confidence label, and everything the code cannot answer becomes a question for a person.
 
-Use `reverse-engineering` instead when there is no source code, only binaries.
-
 ## ไม่ใช้เมื่อ
 
 | งาน | ใช้ตัวนี้แทน |
@@ -121,8 +119,6 @@ For each request, fill [assets/change-request.md](assets/change-request.md):
 ## เรียกเป็นคำสั่ง
 
 `/software-development:legacy-spec-recovery <path to legacy code> [module to go deep on | CR text]`
-
-> **Shortcut into SuperUser:** open the `superuser` skill with the closest playbook, then copy the steps below into the todo first. The steps below give the work format and the output of this command. Use them together with the playbook, not in place of it.
 
 Recover the as-is spec of the legacy system at:
 

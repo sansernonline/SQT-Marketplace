@@ -1,6 +1,6 @@
 # Licences and contract terms
 
-Part of `prior-art-review` item 4 · check before you start using something, not after.
+Part of `prior-art-review` step 3 · check before you start using something, not after.
 
 **This hurts most when learned late**, because you have to tear things out close to delivery.
 

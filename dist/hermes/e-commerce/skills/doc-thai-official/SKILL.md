@@ -69,17 +69,6 @@ Word choice — swap the everyday word for the letter word:
 | ภายในวันที่ X / ภายใน X วัน | ภายใน X วัน นับจากวันที่ได้รับหนังสือฉบับนี้ |
 | เรา | บริษัทฯ (ไม่ใช้บุรุษที่ 1) |
 
-## 5. Body paragraph — before and after
-
-Draft (AI):
-> บริษัทได้ทำการตรวจสอบระบบแล้ว ซึ่งพบว่ามีความผิดพลาดในการบันทึกข้อมูลของเดือนกันยายน ดังนั้นจึงมีความจำเป็นต้องขอขยายระยะเวลาการยื่นเอกสารออกไป
-
-Clean (ด้วย → ข้อเท็จจริง → ในการนี้):
-> ด้วยบริษัทฯ ตรวจสอบระบบบัญชีแล้วพบว่าข้อมูลเดือนกันยายน 2569 บันทึกผิดพลาด ขณะนี้อยู่ระหว่างแก้ไข คาดว่าจะแล้วเสร็จวันที่ 10 พฤศจิกายน 2569
-> ในการนี้ บริษัทฯ ขอขยายระยะเวลายื่นเอกสารประกอบการตรวจสอบถึงวันที่ 15 พฤศจิกายน 2569
-
-What changed: ทำการตรวจสอบ → ตรวจสอบ · ซึ่ง/ดังนั้น/มีความจำเป็น cut · facts get dates · the request starts with ในการนี้ and names a date.
-
 ## Workflow
 
 1. Ask: sender, recipient position, purpose (inform / request / approve), deadline, enclosures, any letter being referred to.
@@ -88,10 +77,10 @@ What changed: ทำการตรวจสอบ → ตรวจสอบ · 
 4. Check: salutation and closing match; ที่ and date present; enclosures numbered and actually attached; signer's full name in brackets and position under it.
 5. Output .docx on letterhead (styling → `branded-document-design`, plugin `software-development`).
 
-## Worked example (company to Revenue Department)
-
-Salutation: เรียน อธิบดีกรมสรรพากร (Director-General of the Revenue Department) · subject: เรื่อง ขอขยายระยะเวลายื่นเอกสารประกอบการตรวจสอบ (request to extend the deadline for audit documents) · body: ตามที่ … ในการนี้ บริษัทฯ ขอขยายระยะเวลาถึงวันที่ 15 พฤศจิกายน 2569 · closing sentence: จึงเรียนมาเพื่อโปรดพิจารณา · closing: ขอแสดงความนับถือ.
-
 ## Related
 
 `doc-quotation` · `doc-contract-th` · `doc-leave` · `thai-holidays` (dates).
+
+## References
+
+- [`references/templates.md`](references/templates.md) — open at workflow step 3: the 3 templates, final checklist, before/after body paragraph (section 5), worked example, sources

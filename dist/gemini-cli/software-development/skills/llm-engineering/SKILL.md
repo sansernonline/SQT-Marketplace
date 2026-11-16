@@ -4,50 +4,24 @@ description: Use when a system calls an LLM with prompts or RAG
 argument-hint: <rag-design | llm-eval> <details>
 ---
 
-# llm-engineering
+# llm-engineering — route to the guide for prompts, RAG, agent systems, or LLM evaluation
 
-Everything about systems that call a Large Language Model (LLM): prompts · RAG (retrieval-augmented generation, which searches documents to ground the answer) · quality measurement · the roles of Machine Learning (ML) and LLM engineers
+## Use when
+- A system calls a Large Language Model (LLM): prompts, RAG (retrieval-augmented generation, which searches documents to ground the answer), agent systems, deep research agents, or quality measurement.
+- A role for ML or LLM engineering is needed (agents `ai-engineer` · `data-engineer`).
 
-**Open only the files that match the job.** Do not read every file, because each file is already the full guide to its topic.
+## Steps
+1. **Open only the one reference that matches the job** from the list below. Each file is already the full guide to its topic; do not read them all.
+2. **If an agent is called in for this area,** it opens its own role file (list below) before starting.
+3. **If run as a command** `/software-development:llm-engineering <rag-design | llm-eval> <details>`: read the first word of `$ARGUMENTS`. If it names a mode, run that mode on the rest; otherwise pick the mode that fits and say which one you chose. Modes: `rag-design` (production-grade RAG with the `ai-engineer` agent: ingestion · chunking · embeddings · retrieval · re-ranking · evaluation) · `llm-eval` (eval set · metrics · regression tests with the `ai-engineer` agent). Full steps per mode: [`references/design-modes.md`](references/design-modes.md).
 
-## หัวข้อ
+## Check before done
+- [ ] Only the matching reference was opened; if run as a command, the answer says which mode was used.
 
-| ใช้เมื่อ | อ่าน |
-|---|---|
-| designing or optimizing prompts for LLMs, building prompt templates, implementing few-shot learning, chain-of-thought reasoning, structured output, or improving prompts step by step. Production patterns with concrete examples | [`references/prompt-engineering-patterns.md`](references/prompt-engineering-patterns.md) |
-| building LLM evaluation systems, designing eval sets, choosing eval metrics, implementing LLM-as-judge, running A/B tests, or measuring how LLM quality changes. Needed for any LLM app in production | [`references/llm-evaluation-patterns.md`](references/llm-evaluation-patterns.md) |
-| building an agent system inside a product — whether to use an agent at all, Loop · Graph · Dynamic workflows, round caps, checkpoints and human approval, progress ledger and re-planning, choosing a framework by language (LangGraph, Microsoft Agent Framework, ADK, OpenAI Agents SDK, Temporal), token cost, field cases | [`references/agent-systems.md`](references/agent-systems.md) |
-| building a Deep Research Agent product — planner → queue (Kafka) → parallel workers (web · browser · PDF · vector DB) → citation check → writer, token budgets and quotas, browser-agent sandbox and prompt injection, scheduled re-runs, metrics | [`references/deep-research-system.md`](references/deep-research-system.md) |
-| designing Retrieval-Augmented Generation systems, choosing vector databases, designing chunking strategies, implementing hybrid search, evaluating retrieval quality, or scaling RAG. Production patterns from prototype to scale | [`references/rag-architecture.md`](references/rag-architecture.md) |
-
-## คู่มือบทบาท
-
-An agent called in for this area opens its own role file before starting.
-
-| บทบาท | อ่าน | agent |
-|---|---|---|
-| designing LLM-powered systems — choosing models, building RAG pipelines, designing agent systems, evaluation frameworks, multi-LLM routing, or large-scale LLM deployment. System design, not single prompts | [`references/agent-llm-architect.md`](references/agent-llm-architect.md) | `ai-engineer` |
-| designing prompts for LLMs, optimizing existing prompts, building prompt chains, implementing structured output, designing evaluation suites, or improving LLM app quality step by step. Prompts for production use | [`references/agent-prompt-engineer.md`](references/agent-prompt-engineer.md) | `ai-engineer` |
-| building machine learning models, training pipelines, feature engineering, model evaluation, hyperparameter tuning, or productionizing ML systems. Covers classical ML, deep learning, and the full model lifecycle | [`references/agent-ml-engineer.md`](references/agent-ml-engineer.md) | `ai-engineer` |
-| productionizing ML models, building model serving infrastructure, implementing CI/CD for ML, setting up model monitoring, managing model registry, or scaling ML systems. Links ML engineering with production operations | [`references/agent-mlops-engineer.md`](references/agent-mlops-engineer.md) | `ai-engineer` |
-
-## agent ของสายนี้
-
-`ai-engineer` · `data-engineer`
-
-## ที่มา
-
-Merged from plugin `software-development-ai` (formerly named prompt-engineering-patterns → `references/prompt-engineering-patterns.md` · llm-evaluation-patterns → `references/llm-evaluation-patterns.md` · rag-architecture → `references/rag-architecture.md` — no longer separate skills) into `software-development` in v2.0.0. The original content is all still in `references/`
-
-## โหมดออกแบบ (เรียกเป็นคำสั่ง)
-
-`/software-development:llm-engineering <rag-design | llm-eval> <details>`
-
-Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
-
-| Mode | What it does |
-|---|---|
-| `rag-design` | Design a production-grade RAG system using ai-engineer agent. Covers ingestion, chunking, embeddings, retrieval, re-ranking, and evaluation. |
-| `llm-eval` | Design or run LLM evaluation suite using ai-engineer agent. Builds eval set, defines metrics, and creates regression test framework. |
-
-ขั้นตอนเต็มของแต่ละโหมด → [references/design-modes.md](references/design-modes.md)
+## References
+- [`references/prompt-engineering-patterns.md`](references/prompt-engineering-patterns.md) — open when designing or optimizing prompts, templates, few-shot, chain-of-thought, structured output.
+- [`references/llm-evaluation-patterns.md`](references/llm-evaluation-patterns.md) — open when building eval sets and metrics, LLM-as-judge, A/B tests; needed for any production LLM app.
+- [`references/agent-systems.md`](references/agent-systems.md) — open when building an agent inside a product: whether to use an agent, Loop · Graph · Dynamic workflows, round caps, human approval, framework choice, token cost.
+- [`references/deep-research-system.md`](references/deep-research-system.md) — open when building a Deep Research Agent product: planner → queue → parallel workers → citation check → writer, budgets, sandbox, metrics.
+- [`references/rag-architecture.md`](references/rag-architecture.md) — open when designing RAG: vector databases, chunking, hybrid search, retrieval quality, scaling.
+- Role files, opened by the `ai-engineer` agent: [`agent-llm-architect.md`](references/agent-llm-architect.md) (LLM system design) · [`agent-prompt-engineer.md`](references/agent-prompt-engineer.md) (production prompts, eval suites) · [`agent-ml-engineer.md`](references/agent-ml-engineer.md) (ML models, training) · [`agent-mlops-engineer.md`](references/agent-mlops-engineer.md) (serving, CI/CD for ML, monitoring).

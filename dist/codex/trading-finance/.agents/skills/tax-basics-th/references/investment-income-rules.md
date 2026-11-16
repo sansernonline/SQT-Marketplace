@@ -2,8 +2,8 @@
 
 | Income | Withholding at source | Exempt? | Option to include in annual return | Notes |
 |---|---|---|---|---|
-| Gain selling shares on SET / mai through a Thai broker | none | **exempt** (gain on listed shares sold on the exchange) | — | Selling unlisted shares off-exchange is taxable under 40(4)(ช) |
-| Dividends from Thai companies | 10% | no | yes — include and claim dividend tax credit (เครดิตภาษีเงินปันผล) | Credit only for dividends paid from profit taxed at corporate level; BOI-exempt profit gives no credit |
+| Gain selling shares on SET / mai through a Thai broker | none | **exempt** (gain on listed shares sold on the exchange); a loss is not deductible | — | Selling unlisted shares off-exchange is taxable under 40(4)(ช) |
+| Dividends from Thai companies | 10% | no | yes — include and claim dividend tax credit (เครดิตภาษีเงินปันผล) | Credit only for dividends paid from profit taxed at corporate level; BOI-exempt profit gives no credit · choosing to include means including **all** such dividends that year · include when marginal rate is 25% or less |
 | Dividends from Thai mutual funds | 10% | no | yes, but **no** dividend tax credit | Redemption gain on Thai funds is exempt for individuals |
 | Savings account interest | 0 if total ≤ 20,000/yr across all banks and consent to share data | ≤ 20,000 exempt | — | If you refuse consent or exceed 20,000, 15% is withheld on all savings interest |
 | Fixed deposit, bonds, debentures interest | 15% | no | yes — include if marginal rate < 15% | Must include all interest of that kind if you choose to |

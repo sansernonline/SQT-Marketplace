@@ -158,25 +158,15 @@ grep "a3f9c1b2" logs/app-*.log          # does one request show every line?
 
 ---
 
-## 8 · Anti-patterns
+## 8 · Anti-patterns not covered above
 
-- **`console.log` / `print()` in real code** — no level, no time, no cid, not written to a file
-- **Logging everything** — the file grows so large you cannot find anything, and it is expensive and slow
 - **A silent `try { } catch (e) { }`** — log at least 1 line
 - **Log, then rethrow** — one problem shows up 3 times in the file. Log at the top layer that really handles the error instead.
-- **Variables embedded in the message** (`` `บันทึก order ${id} ไม่สำเร็จ` ``) — you cannot group the logs.
-  Use a fixed message + context instead.
 - **Logging inside a loop that runs thousands of times** — log one summary when the loop ends
-- **A timestamp with no timezone** — the server uses UTC but Thai readers read it as +07:00, so times are compared 7 hours off
-- **No retention** — one day the disk fills and the system goes down from its own logs
+- **Logging everything** — the file grows so large you cannot find anything, and it is expensive and slow
 
 ---
 
 ## 9 · Links to other skills
 
-| Need | Use with |
-|---|---|
-| health/ping/version endpoint | `web-service-essentials` |
-| Writing tests with full coverage | `testing-standards` |
-| Runbook during an incident | `incident-runbook-template` |
-| Postmortem after an incident | `postmortem-template` |
+`testing-standards` (tests with full coverage) · `incident-runbook-template` · `postmortem-template`

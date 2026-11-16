@@ -129,6 +129,8 @@ It may be collected only when truly necessary, and needs stricter measures than 
 
 **Never use real data on development machines or staging.** Always mask it first (see `cicd-and-release`).
 
+**Do not export a full-data Excel file for someone who needs only the totals.**
+
 ---
 
 ## 6 · Retention
@@ -173,22 +175,6 @@ the notification message template · how to pull the list of affected people
 
 ---
 
-## 9 · Anti-patterns
-
-- **Asking consent for everything** — when they withdraw, the system cannot keep working
-- **Pre-ticked checkboxes** — they do not count as consent
-- **Storing consent as one value `accepted_terms = true`** — you cannot prove later what was agreed
-- **Soft delete, then saying it is deleted**
-- **A retention policy with no real deletion job**
-- **Real data on staging** — and copied onto developer machines
-- **Collecting the national ID number "just in case"**
-- **Personal data in logs and crash reports**
-- **No list of outside providers** — you cannot say where the data goes
-- **Exporting a full-data Excel file** for someone who needs only the totals
-- **A privacy policy that does not match what the system really does**
-
----
-
 ## 10 · Frequently cited sections, and abbreviations
 
 Use this when a customer or the legal team asks "which section is this?" (checked against the unofficial English translation of the 2019 Act, Royal Gazette 27 May 2019 (B.E. 2562), on 23 Oct 2026 (B.E. 2569))
@@ -206,7 +192,20 @@ Use this when a customer or the legal team asks "which section is this?" (checke
 | Compensation · punitive damages | 77 · 78 |
 | Administrative fines, maximum 1 · 3 · 5 million baht | 82 · 83 · 84 |
 
-**Sectors with a second layer of rules** — health · finance · telecom have their own regulators (กระทรวงสาธารณสุข (Ministry of Public Health) · ธปท. (Bank of Thailand, BOT) / ก.ล.ต. (Securities and Exchange Commission, SEC) / คปภ. (Office of Insurance Commission, OIC) · กสทช. (National Broadcasting and Telecommunications Commission, NBTC)) that add conditions on confidentiality, retention and breach notice. Check that sector's rules before designing, and do not rely on PDPA alone (idea from BV thai-pdpa (MIT))
+**Sectors with a second layer of rules** — health · finance · telecom have their own regulators (กระทรวงสาธารณสุข (Ministry of Public Health) · ธปท. (Bank of Thailand, BOT) / ก.ล.ต. (Securities and Exchange Commission, SEC) / คปภ. (Office of Insurance Commission, OIC) · กสทช. (National Broadcasting and Telecommunications Commission, NBTC)) that add conditions on confidentiality, retention and breach notice. Check that sector's rules before designing, and do not rely on PDPA alone
+
+## 11 · Links to other skills
+
+Also: `notifications` (sending and unsubscribing from marketing messages; consent stays here) · `data-import-export` (masking exported files) · `file-upload-and-storage` (retention of attached files) · `background-jobs` (jobs that delete expired data) · `incident-runbook-template` (after a leak).
+
+## References
+
+- [`references/glossary.md`](references/glossary.md) — open when a term (controller · processor · sensitive data) must be explained
+
+
+## reference: glossary.md
+
+# PDPA glossary
 
 - **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562)
 - **Personal data** — data that identifies a person, directly or indirectly
@@ -214,21 +213,6 @@ Use this when a customer or the legal team asks "which section is this?" (checke
 - **Data controller** — whoever decides how data is collected and used (usually the system owner)
 - **Data processor** — whoever processes data on the controller's instructions, such as a cloud provider
 - **Data subject** — the person the data belongs to
-
-## 11 · Links to other skills
-
-| Need | Use with |
-|---|---|
-| A trail of who viewed or changed data | `audit-trail` |
-| Tables, encryption and soft delete | `database-design` |
-| Masking data in logs | `logging-standards` |
-| Access rights and authentication | `auth-implementation-patterns` |
-| Masking real data before loading staging | `cicd-and-release` |
-| Sending and unsubscribing from marketing messages (consent stays in this skill) | `notifications` |
-| Masking data in exported files | `data-import-export` |
-| Retention of attached files | `file-upload-and-storage` |
-| Jobs that delete expired data | `background-jobs` |
-| Recording the incident after a leak | `postmortem-template` · `incident-runbook-template` |
 
 
 ---
@@ -239,11 +223,8 @@ Use when a project needs a Docker sandbox for untrusted code
 
 # docker-sandbox: one lab per project
 
-> Our machine gives the orders; the lab is where the work happens.
 > Inside, you can install, delete, run servers, and build test databases freely, because when something breaks you wipe it and rebuild with one command.
 > Outside (the real machine · real systems · real accounts) cannot be touched, because there is no way in from the inside.
-
-Use together with [`superuser`](../superuser/SKILL.md). In a project that has `.sandbox/`, all install and run work happens in this lab.
 
 Do not use when: writing a Dockerfile or image for a real deploy → [`kubernetes-helm`](../kubernetes-helm/SKILL.md), because the lab is a temporary place to run work, not an image that goes to production.
 
@@ -253,7 +234,7 @@ Do not use when: writing a Dockerfile or image for a real deploy → [`kubernete
 
 - **One lab per project**, named `sandbox-agent-<folder name>-<creation date>` (e.g. `sandbox-agent-sample-app-20260125`).
   - The name is set once at the first `up` and stored in the file `.sandbox/.name-<folder name>`. Later commands read the name from this file, so the name does not change with the date.
-  - The prefix `sandbox-agent-` says an agent created this lab, not a person. The creation date is also kept in the label `sqt.created`.
+  - The creation date is also kept in the label `sqt.created`.
   - If the project needs a database, cache, or browser, add it as a service in the **same lab** (one stack). Do not create a separate lab.
 - **The base image is shared across the whole machine.** `sqt-sandbox-base:1` (Node · Python · Git · Playwright Chromium · Claude Code) is built once. Each project's image adds only a thin layer the project needs, so disk is not used twice.
 - **A stopped lab uses no CPU or memory**, only disk. Run `stop` when you finish a task, and `stop-all` when you finish for the day.
@@ -286,10 +267,6 @@ You can add `-Locked` to either mode. It blocks outbound internet, leaving only 
 5. Start the lab with `.\.sandbox\sandbox.ps1 up` (or `up -Isolated` · `up -Browser`). The first project on a machine must build the base image first, which takes about 5–15 minutes. Later projects are much faster.
 6. **Prove it works:** `sandbox.ps1 exec "node -v && python3 --version && git status"`. If the project has a test command, run it once through `exec`. In `-Locked` mode you must see the line `check passed`.
 7. Record in the project's `docs/README.md`: the lab name (`sandbox-agent-<folder name>-<date>`) · mode · port · test command in the lab.
-
-**Tested for real** on Windows + Docker Desktop 4.46 (2026-10-05, project `sample-app`): the lab built · unit tests passed 15/15 · e2e on Chromium passed 14/14 in the lab.
-
-Bugs found during testing are already fixed in the script: PowerShell 5.1 with stderr · Playwright a different version from the base image · port collisions.
 
 If the script breaks on another machine, use the `bug-fix` playbook on the script itself.
 
@@ -332,7 +309,7 @@ If the script breaks on another machine, use the `bug-fix` playbook on the scrip
 
 - The browser in the lab has no accounts, cookies, or user passwords. Log in only with the project's test accounts.
 - Copy images and videos from tests out to `_to_delete/` with `docker compose cp`.
-- Playwright MCP in the lab (examples from teaching work, not yet a standard): running as root needs `--no-sandbox` · the `--browser` value must match the `--help` of the installed version (`chromium` or `chrome`; if it does not match, it cannot find the browser) · screenshots with a relative file name land in the process's working directory, not `--output-dir`, so move them yourself · a click that times out with "not visible/stable" may be a background tab; see `e2e-testing-patterns`.
+- Playwright MCP quirks (root, `--browser`, screenshot paths, click timeouts): [references/playwright-mcp.md](references/playwright-mcp.md).
 - The user's own browser on the machine (the logged-in Chrome) is for real websites that need a real account, and follows that tool's rules. It is not a place to test.
 
 ## 6 · CAPTCHA
@@ -342,7 +319,6 @@ If the script breaks on another machine, use the `bug-fix` playbook on the scrip
   - Or turn it off with a setting for the test environment only (`CAPTCHA_ENABLED=false`).
   - **Test values must never reach the real system.** Add a startup check that production must not use a test key (`config-and-secrets`).
 - **Other people's websites:** the agent **does not solve a CAPTCHA and does not look for a way around it** (no solving services, no pretending to be a person). If you meet a CAPTCHA, stop that step, tell the user to do it themselves, and continue with the other parts. If you need data from that site often, look for an official API instead.
-- Reason: a CAPTCHA is the site owner saying "no bots." Getting around it breaks their terms and gets the IP or account banned.
 
 ## 7 · What you may do freely in the lab
 
@@ -366,11 +342,9 @@ These still stay under "รออนุมัติ" (awaiting approval) even in
 | Opening a port like `"3000:3000"` (every network card) | People on the same network can reach it. Always use `127.0.0.1:` |
 | Putting real secrets in the `Dockerfile` or image | The secret stays in the image forever |
 | Removing or raising the limits `cpus` `mem_limit` `pids_limit` until the machine hangs | A lab stuck in a loop will eat the whole machine |
-| Mounting things from the machine as writable when the lab only needs to read (`ref/` · sample data · a shared SDK cache · the source folder of isolated mode) | Tricked code in the lab can write back to the machine. Add `:ro` to every mount that is not this round's work, and have the lab copy into its own space if it must edit (idea from anthropics/claude-code devcontainer and trailofbits/skills) |
+| Mounting things from the machine as writable when the lab only needs to read (`ref/` · sample data · a shared SDK cache · the source folder of isolated mode) | Tricked code in the lab can write back to the machine. Add `:ro` to every mount that is not this round's work, and have the lab copy into its own space if it must edit |
 
 The Claude Code documentation warns that even in a container, running without permission prompts (`--dangerously-skip-permissions`) cannot stop project code that deliberately steals what is in the lab, including Claude Code's own token. Use it only with a repo you trust, and use `-Locked` when unsure.
-
-So `sandbox.ps1 claude` runs only in isolated mode. In mount mode the script refuses, because `/work` is the user's real folder (§7, last item).
 
 **Limits of `-Locked`:** DNS can go out only through the resolver the lab was given (Docker's), not any DNS server. But that resolver still forwards queries outward, so data can still be smuggled out through DNS (DNS tunnelling). For work where data must never leak, run with no network at all.
 
@@ -378,17 +352,38 @@ So `sandbox.ps1 claude` runs only in isolated mode. In mount mode the script ref
 
 ## 9 · Windows notes
 
-- Docker Desktop uses WSL 2. Files on drive `C:` that are mounted in are slower than files in a volume. If build or test is very slow, use `-Isolated` (verified: `npm ci` for just 2 packages took 52 seconds on a OneDrive folder).
+- Docker Desktop uses WSL 2. Files on drive `C:` that are mounted in are slower than files in a volume. If build or test is very slow, use `-Isolated`.
 - **Projects in a OneDrive folder:** mount mode makes `node_modules` and build files sync to the cloud, so use `-Isolated` or move the project out of OneDrive.
 - If you cannot run `sandbox.ps1`, use `powershell -ExecutionPolicy Bypass -File .\.sandbox\sandbox.ps1 <command>`.
 - `-Locked` reads the host's IP once at startup. A service whose IP changes often may drop out; run `up -Locked` again.
 
 ## Links to other skills
 
-- `parallel-attempts-pick-best`: normally competitors use one git worktree each. Use one isolated lab each (`-Name <project>-a1` …) only for work that needs truly separate machines.
-- [`app-verifier-setup`](../app-verifier-setup/SKILL.md): the verify skill's `start` script runs in the lab.
 - `config-and-secrets`: put test values in a `.env` that stays out of git, and do not bake them into the image.
 - The `superuser` playbook `housekeeping`: cleans up old labs and images.
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
+
+
+## reference: playwright-mcp.md
+
+# Playwright MCP in the lab · docker-sandbox
+
+Open from SKILL.md section 5 when you run Playwright MCP inside the lab.
+
+- Playwright MCP in the lab (examples from teaching work, not yet a standard): running as root needs `--no-sandbox` · the `--browser` value must match the `--help` of the installed version (`chromium` or `chrome`; if it does not match, it cannot find the browser) · screenshots with a relative file name land in the process's working directory, not `--output-dir`, so move them yourself · a click that times out with "not visible/stable" may be a background tab; see `e2e-testing-patterns`.
+
+
+## reference: sources.md
+
+# Sources · docker-sandbox
+
+- Tested for real on Windows + Docker Desktop 4.46 (2026-10-05, project `sample-app`): the lab built · unit tests passed 15/15 · e2e on Chromium passed 14/14 in the lab.
+- Bugs found during testing were fixed in the script: PowerShell 5.1 with stderr · Playwright a different version from the base image · port collisions.
+- Verified: `npm ci` for just 2 packages took 52 seconds on a OneDrive folder (why `-Isolated` is advised on OneDrive).
+- The `:ro` mount rule is an idea from anthropics/claude-code devcontainer and trailofbits/skills.
 
 
 ---
@@ -400,8 +395,6 @@ Use when a Markdown doc needs an image, SVG or ASCII art
 # Markdown Visuals
 
 > **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
-
-> **Language:** write every line of wording per `human-writing`. This skill gives the format and structure; human-writing gives the way to write so people understand.
 
 > **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
@@ -564,15 +557,10 @@ For every visual:
 
 ## Anti-patterns
 
-- **Text-only design docs** — "the icon is in the top-right" with no picture
 - **Linking to Figma / external design tools as the only source** — visuals must render in the repo
 - **PNG screenshots of text** — use the text, in a code block
-- **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
-- **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
-- **ASCII art outside a code fence** — proportional fonts will mangle alignment
 - **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
 - **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
-- **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
 
 ## Quick-start recipe
 
@@ -587,24 +575,9 @@ When a markdown doc needs a design picture (clickable app screens go to the plat
 4. **Add a feature reference table** below the visuals — what each element means
 5. **Cross-check accessibility checklist** before delivery
 
-Not sure a visual will render? Preview it in the viewer the reader will use (GitHub, Notion, VS Code) before delivery.
-
-## Related skills
-
-- `polished-document-style` — overall doc formatting, figure captions, callout boxes
-- `simplicity-first` (plugin `software-development`) — don't over-design the diagram; show what's needed
-- `software-diagrams` (plugin `software-development`) — which diagram type answers which question, plus the shared Mermaid theme
-- `diagram-figures` — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
-- `ui-craft` (plugin `software-development`) — spacing, hierarchy and states when the picture is a screen
-
 ## ไม่ให้ดูเหมือน AI ทำ
 
 Before sending, go through item 3 of `no-ai-look` — for HTML work, run its script · every piece must also pass eye check 3.2 (a web page adds items 10–14), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for all media is there
-
-## ตัวย่อ
-
-Spell out each abbreviation in full on first use and put the short form in brackets — for example Model Context Protocol (MCP)
-After that, use the short form. Details are in the skill `spell-out-abbreviations`
 
 
 ## reference: ascii-patterns.md
@@ -774,155 +747,54 @@ Use this pattern by default for showing UI feature states. On GitHub, save the S
 
 Use when a kept document needs headings, tables and theme
 
-# Polished Document Style
+# Polished Document Style — headings, tables, callouts, and theme for a kept document
 
-> **Gate before starting (every time):** read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (gate before starting) of `design-references` (plugin `superuser`) even when a brand exists (the brand controls color and font, while the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
+> **Gate before starting (every time):** read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand controls color and font, the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
-> **Boundary:** this skill handles the look (headings, tables, text boxes, theme) · every line of wording belongs to `human-writing` — open both for a document people keep to read
+> **Boundary:** this skill handles the look; the wording belongs to `human-writing`. Open both for a document people keep to read.
 
-## When to use this skill
+## Use when
+- Output is for general readers (managers, executives, clients), needs sign-off, or will be shared widely or converted to PDF/Word · any doc with 3+ sections or 500+ words
+- Laying out any document people keep to read (Markdown · Word · PDF), including Thai text in Office files
+- Not for: internal notes for the author's own team, scratch notes, code comments · a whole Markdown report that must come out as one .docx → `markdown-report-docx` · a rendered .docx/.pptx/.pdf → `branded-document-design` on top of this skill (this skill governs the markdown source)
 
-- Output is meant for **general readers** (managers, executives, clients, customers)
-- Document needs **sign-off** or formal review
-- Output will be **shared widely** or converted to PDF/Word later · any doc with 3+ sections or 500+ words
-- Laying out any kind of document people keep to read (Markdown · Word · PDF), including Thai text in Office files
+## Steps
+1. **Find an existing template first.** Check the client's or organization's standard: Word/Google Docs templates the client gave · earlier documents in the project (`docs/`, `ref/`) · format requirements in the TOR or contract. If found, use it (headings, order, field names, running numbers) and say which file it came from. If not, use this skill's structure and say no template was found. Readability applies either way.
+2. **Start with the header.** A plain-text H1, then a quote box with version, date, status, author, reviewer, tags, closed with `---` (example in [`references/markdown-patterns.md`](references/markdown-patterns.md)). Formal documents (proposal · formal report · contract · postmortem) open with a cover block: type, version, status, date, author, reviewer, related documents.
+   - Status takes only: **Draft** (ร่าง) · **Review** (กำลังรีวิว) · **Approved** (อนุมัติแล้ว) · **Archived** (เก็บถาวร) (`status-report` adds `ยังไม่เริ่ม` for work not begun) · in a Sign-off table the Status column is the signer's: **Approved** · **Review** · **Pending** · **Rejected**.
+3. **Headings.** One H1 · H2 numbered (`## 1. Section`) · H3 (`### 1.1 Sub-topic`) · H4 rare. 5+ sections → add a table of contents whose links reach the real headings.
+4. **Declare the theme once.** At the end of the header put `<!-- doc-theme: accent=… · ที่มา=… · ยืนยันเมื่อ=YYYY-MM-DD -->`; every tool (`diagram-figures` · `branded-document-design` · `presentation-design`) reads the color from there. To choose a color or put real colors into a figure, .docx, or slides, open [`references/theme-colors.md`](references/theme-colors.md).
+5. **Labels are words, never emoji** (emoji in headings and badges signal AI-made, `no-ai-look`):
 
-## When NOT to use
+   | Used for | Words |
+   |---|---|
+   | Importance | วิกฤต · สูง · กลาง · ต่ำ |
+   | Work status | เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่ |
+   | Check result | ผ่าน · ไม่ผ่าน |
+   | Text box type | ข้อแนะนำ (Tip) · ข้อควรจำ (Note) · ข้อควรระวัง (Warning) · อันตราย (Critical) · คำถามที่ยังเปิด (Open Question) |
 
-- Internal notes for the author's own team (keep them concise)
-- Quick scratch notes · code comments
-- A whole Markdown report that must come out as one .docx → `markdown-report-docx` (plugin `software-development`)
+   Yes/no cells may use `✓` `✗` or "ใช่" / "ไม่". Status badge = a bold word (`**Status:** Approved`).
+6. **Callouts** are blockquotes with a bold label · 1–3 sentences · one per topic, no stacking · at most 3–5 per page.
+7. **Tables** when items have 2+ attributes (bullets whose lines hold several comma-separated values become a table). Left-align text, center checkmarks and numbers, right-align money · `—` for not applicable · short cells (long content goes in paragraphs; cells over 2 sentences become headings) · bold key columns.
+   - Compare options or weigh pros and cons → comparison table with a Recommendation column · needs approval → end with a Sign-off table · 5+ abbreviations → glossary. Examples in `references/markdown-patterns.md`.
+8. **Figures** in project documents are drawn with `diagram-figures` (house style) and embedded as images; Mermaid (`software-diagrams`) only for quick figures in a README, PR, or code notes. Place the figure after the paragraph that says what question it answers · 1-line caption under it starting **รูปที่ N —** · never repeat a figure; refer to its number.
+9. **Lists and code.** Never nest bullets: use sub-headings or a table. Code blocks always name the language; long code gets the file name as a comment on line 1.
+10. **Thai in Word · Excel · PDF** (complex-script font · no justify · embed fonts · BOM CSV): open [`references/thai-office.md`](references/thai-office.md) before creating the file.
+11. If the skill that writes the document has a template in `assets/`, run `python scripts/check_outline.py <template.md> <document.md>` before sending. It checks headings are complete and in template order, bold fields complete, table headers match, no field unfilled. In a template, end an optional heading or field with `<!-- optional -->`. After editing the checker, run `--self-test` first.
 
-> **Note:** This skill governs the *markdown source*. When the deliverable is a
-> rendered **.docx / .pptx / .pdf** that a stakeholder will open, use
-> `branded-document-design` (plugin `software-development`) on top of it — that skill carries the design tokens,
-> the typography scale, Thai typography rules, and the `brandkit.py` builder.
+## Check before done
+- H1 in plain text · no emoji in any heading, callout, badge, or table
+- Header block with version, date, status, authors · TOC if 5+ sections · sections numbered consistently · TOC links work
+- Tables where data has 2+ attributes · every flow or relationship has a `diagram-figures` figure, not default Mermaid
+- Code blocks have language hints · glossary if 5+ abbreviations · terms used consistently ("user" vs "customer")
+- No placeholder text (TBD, TODO, Lorem ipsum); `(รอยืนยัน)` markers listed in the pending-confirmation list are not placeholders, keep them
+- Rendered once in the real viewer (Word · PDF · GitHub preview) · item 3 of `no-ai-look` passed
 
-## Read more when
-
-| File | Open when |
-|---|---|
-| [references/markdown-patterns.md](references/markdown-patterns.md) | When you will write a header, table of contents, text box, table, status badge, cover block, options comparison table, sign-off section, or glossary, open it to see the markdown examples and copy them |
-| [scripts/check_outline.py](scripts/check_outline.py) | If the skill that writes the document has a template in `assets/`, run `python scripts/check_outline.py <template.md> <document.md>` before sending — it checks that headings are complete and in the template's order, bold fields are complete, table headers match, and no field is left unfilled · in a template, put `<!-- optional -->` at the end of a heading or field that is not required · after editing the checker, run `--self-test` first |
-| [references/theme-colors.md](references/theme-colors.md) | When you must choose the document's main color, or put real colors into a figure, .docx file or slides, open it to see how to declare the theme, who controls the color of which part, and the house default colors |
-| [references/thai-office.md](references/thai-office.md) | When creating Word · Excel · PDF files that contain Thai, open it first for fonts, paragraph layout, and export |
-
-## 0 · Find an existing template first (every time)
-
-Before using a structure or template in this file, check whether the user, client or project already has its own:
-
-- **Where to look:** the client's or organization's document standard: Word/Google Docs templates the client gave · earlier documents in the project (`docs/` · `ref/`) · format requirements in the TOR (terms of reference) or contract
-- **Result:** found → use that template (headings, order, field names, running numbers) and say in the answer which file it came from · not found → use the template in this file as the fallback and say no existing template was found
-- **Still required for every template:** the document header, heading order and theme in this file are the fallback · readability (clear headings, readable tables) applies to every template
-
-## Document Header (Always)
-
-Every polished doc MUST start with the same header set: a plain-text H1, then a quote box giving version, date, status, author, reviewer and tags, closed with `---`. A full example is in [references/markdown-patterns.md](references/markdown-patterns.md)
-
-Status values:
-- **Draft** (ร่าง) — work in progress
-- **Review** (กำลังรีวิว) — under stakeholder review
-- **Approved** (อนุมัติแล้ว) — signed off
-- **Archived** (เก็บถาวร) — historical reference
-
-Only these 4 values, written the same in every skill (`status-report` uses the same set and adds `ยังไม่เริ่ม` (not started) for documents where work has not begun) · the Status column in the Sign-off table is the signer's status and uses **Approved** · **Review** · **Pending** (not yet sent for review) · **Rejected**
-
-## Section Hierarchy
-
-- **H1** — Document title (exactly one)
-- **H2** — Numbered sections (`## 1. Section`)
-- **H3** — Sub-sections (`### 1.1 Sub-topic`)
-- **H4** — Rare, use only if needed
-
-**Always add Table of Contents** for docs with 5+ sections, and clicking a link in the table of contents must reach the real heading. An example is in [references/markdown-patterns.md](references/markdown-patterns.md)
-
-## Document theme — decide once, use everywhere in that document
-
-One document passes through several skills (markdown · `diagram-figures` · `branded-document-design` · `presentation-design`), so choose the main color once, declare it as `<!-- doc-theme: accent=… · ที่มา=… · ยืนยันเมื่อ=YYYY-MM-DD -->` at the end of the document header, and every tool reads the value from there · when you must choose a color or put real colors into a .docx figure or slides → open [references/theme-colors.md](references/theme-colors.md) (where the color comes from, house default, status colors)
-
-## Labels — use words, not emoji
-
-**No emoji in documents**: not in headings, text boxes, status badges or tables, because emoji in headings and badges signal that an AI made it (`no-ai-look`) · use bold words that stay fixed across the whole document instead.
-
-| Used for | Words to use |
-|---|---|
-| Importance level | วิกฤต · สูง · กลาง · ต่ำ |
-| Work status | เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่ |
-| Check result | ผ่าน · ไม่ผ่าน |
-| Text box type | ข้อแนะนำ (Tip) · ข้อควรจำ (Note) · ข้อควรระวัง (Warning) · อันตราย (Critical) · คำถามที่ยังเปิด (Open Question) |
-
-For yes/no cells in a table, you may use the text characters `✓` `✗` (not colored emoji), or write "ใช่" (yes) / "ไม่" (no).
-
-## Callout Boxes
-
-Use blockquotes with a bold label (no emoji). There are 5 kinds: **Tip** (ข้อแนะนำ) · **Note** (ข้อควรจำ) · **Warning** (ข้อควรระวัง) · **Critical** (อันตราย) · **Open Question** (คำถามที่ยังเปิด). Examples are in [references/markdown-patterns.md](references/markdown-patterns.md)
-
-**Rules:**
-- Keep callouts to 1-3 sentences
-- One callout per topic — don't stack
-- Don't overuse — max 3-5 per page
-
-## Tables — When and How
-
-Use tables when items have **2+ attributes**. If you wrote bullets where each line has several values separated by commas, change them to a table. Side-by-side examples are in [references/markdown-patterns.md](references/markdown-patterns.md)
-
-- Left-align text, center checkmarks/numbers, right-align money
-- Use `—` (em dash) for "not applicable", not `-` or blank
-- Keep cells short — long content goes in body paragraphs
-- Bold key columns: `**email**`
-
-If the document must compare options or weigh pros and cons (strategy, vendor choice, plan options), use a comparison table with a Recommendation column. A document that needs approval ends with a Sign-off table, and a document with 5 or more abbreviations (the same threshold as `spell-out-abbreviations`) gets a glossary. Examples of all three are in [references/markdown-patterns.md](references/markdown-patterns.md)
-
-## Diagrams
-
-**Figures in project documents (reports · proposals · process flows · data flows) are drawn with `diagram-figures`, the single house style, and embedded as image files** · Mermaid (`software-diagrams` in plugin `software-development`) is only for quick figures in a README · PR · code notes
-This skill controls only how figures are placed in the document.
-
-- Place it **after the paragraph that explains what question the figure answers**, not floating in from nowhere
-- Every figure has a 1-line caption under it, starting with **รูปที่ N —** (Figure N —)
-- Do not put the same figure in several places in the document; refer to the figure number instead
-
-## Status Badges and Cover Block
-
-For important fields in the header or in a table, use a status badge as a bold word, such as `**Status:** Approved`. A formal document (proposal · formal report · contract · postmortem) opens with a cover block that gives the document type, version, status, date, author, reviewer, and related documents. An example is in [references/markdown-patterns.md](references/markdown-patterns.md)
-
-## Lists and Code Blocks
-
-**Rule:** never nest bullets. If a list needs sub-levels, split into sub-headings or use a table.
-Examples of a good list and an over-nested list are in [references/markdown-patterns.md](references/markdown-patterns.md)
-
-Code blocks must always specify the language (Always specify language), and if the code is long, put the file name as a comment on the first line. An example is in [references/markdown-patterns.md](references/markdown-patterns.md)
-
-## Thai Office documents
-
-Word · Excel · PDF files that contain Thai (complex-script font · no justify · embed fonts · BOM CSV) → open [references/thai-office.md](references/thai-office.md) before creating the file
-
-## Quality Checklist
-
-Before delivering any polished doc:
-
-- [ ] H1 title in plain text — no emoji in any heading, callout, badge or table
-- [ ] Header block with version, date, status, authors (cover block for formal documents only)
-- [ ] TOC if 5+ sections
-- [ ] All sections numbered consistently
-- [ ] Anchor links in TOC actually work
-- [ ] Status badges where applicable
-- [ ] Tables used (not bullets) where data has 2+ attributes
-- [ ] Every flow or relationship has a diagram drawn with `diagram-figures` (plugin `software-development` · house style), not default Mermaid
-- [ ] Callout boxes for tips/warnings (not just paragraphs)
-- [ ] Code blocks have language hints
-- [ ] Glossary for docs with 5+ abbreviations
-- [ ] No placeholder text (TBD, TODO, Lorem ipsum) — `(รอยืนยัน)` markers listed in the pending-confirmation list are not placeholders; keep them
-- [ ] Tested rendering in the real viewer (Word · PDF · GitHub preview)
-
-> Diagrams in project documents are in `diagram-figures` · code documents (quick Mermaid · software requirements) → the addition in plugin `software-development`
-
-## Anti-patterns
-
-- **Inconsistent terminology** — "user" in one section, "customer" in next
-- **Tables of paragraphs** — if cells are >2 sentences, use headings instead
-
-AI-looking style in any medium → before sending, go through item 3 of `no-ai-look` · rules for writing abbreviations → `spell-out-abbreviations`
+## References
+- [`references/markdown-patterns.md`](references/markdown-patterns.md) — open when writing a header, TOC, callout, table, badge, cover block, comparison table, sign-off, or glossary (copy the examples)
+- [`references/theme-colors.md`](references/theme-colors.md) — open when choosing the main color or putting colors into a figure, .docx, or slides
+- [`references/thai-office.md`](references/thai-office.md) — open when creating Word · Excel · PDF with Thai
+- Abbreviation writing → `spell-out-abbreviations`
 
 
 ## reference: markdown-patterns.md

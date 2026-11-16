@@ -30,11 +30,11 @@ A topic that cannot finish in the time left is the most common way a thesis or I
 4. **Fix one parameter, free the rest.** Lock one constraint (this dataset, this school, this method) and let the others move. Locking everything leaves no way out when one fails.
 5. **When stuck mid-way:** one or two hours a week looking from above. What did I learn this week · what should I do next · what is my backup data plan. Write the answers in the log the adviser sees.
 
-Step 4's outline check by the adviser is still needed; this test only decides whether the topic is worth outlining. Framework idea from anthropics/knowledge-work-plugins `bio-research/skills/scientific-problem-selection` and its `references/02-risk-assessment.md` (Apache-2.0, based on Fischbach & Walsh, Cell 2024; biology content not used, rewritten, viewed 2026-11-10).
+Step 4's outline check by the adviser is still needed; this test only decides whether the topic is worth outlining.
 
 ## Reader test (before the adviser, committee or journal sees it)
 
-Give the chapter or proposal, and nothing else, to a fresh reader: a subagent that has not seen this conversation, or the user in a new chat if no subagent is available. Ask it 5–10 questions a committee member would ask ("วัตถุประสงค์ข้อ 2 วัดด้วยอะไร" · "ทำไมเลือกกลุ่มตัวอย่างนี้"), plus three: which part is unclear · what the text assumes the reader already knows · where it contradicts itself. A wrong or missing answer marks the gap to fix. Idea from anthropics/skills `doc-coauthoring` (reader testing stage; licence of that repo not confirmed, so ideas only, viewed 2026-11-10).
+Give the chapter or proposal, and nothing else, to a fresh reader: a subagent that has not seen this conversation, or the user in a new chat if no subagent is available. Ask it 5–10 questions a committee member would ask ("วัตถุประสงค์ข้อ 2 วัดด้วยอะไร" · "ทำไมเลือกกลุ่มตัวอย่างนี้"), plus three: which part is unclear · what the text assumes the reader already knows · where it contradicts itself. A wrong or missing answer marks the gap to fix.
 
 ## What Claude does and does not do
 
@@ -68,6 +68,6 @@ When asked to cross a line in the right column, say which rule it breaks and off
 | Literature review | 25–35% of the text | 15–20% |
 | Discussion | Compares each finding with ≥ 1 earlier study | Same, shorter |
 
-ตรวจล่าสุด 2026-10-26 · The sizes above are planning defaults (แนวของเรา), not taken from any one manual — the university's thesis manual and the journal's author guide always win. อักขราวิสุทธิ์ is Chulalongkorn's Thai–English similarity checker (plag.grad.chula.ac.th) shared with partner universities that use institutional e-mail; universities set their own similarity limits and check before the proposal and before the defense (manuals: https://www.stou.ac.th/thai/grad_stdy/Masters/aka/file/คู่มือการใช้การใช้งานระบบอักขราวิสุทธิ์.pdf · https://ssed.nida.ac.th/images/PDF/PhD-website/3-Current-Student/FM-ESD-03-04-Verification-Thesis-Plagiarism-FormTH.pdf · https://postgrads.mfu.ac.th). Similarity thresholds, page counts and the TCI tier rule stay (รอยืนยัน) per programme.
+ตรวจล่าสุด 2026-10-26 · The sizes above are planning defaults (แนวของเรา), not taken from any one manual — the university's thesis manual and the journal's author guide always win. Universities set their own similarity limits. Similarity thresholds, page counts and the TCI tier rule stay (รอยืนยัน) per programme. Source notes and manual links: [`references/sources.md`](references/sources.md).
 
 Related: `paper-to-practice` (understand someone else's paper), `english-tech-reading` (read long English papers faster), `human-writing` (plain language for everything outside the thesis itself), and `presentation-design` for defense slides. Word output from Markdown → `markdown-report-docx` builds the .docx; keep the rules in [references/thai-typesetting.md](references/thai-typesetting.md).

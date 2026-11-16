@@ -2,177 +2,57 @@
 
 Use when a Word, PowerPoint or PDF must look designed
 
-# Branded Document Design
+# Branded Document Design — .docx / .pptx / .pdf that looks intentionally designed
 
-> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the owner's theme → search live for reference designs → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-references` (plugin `superuser`) even when a brand exists (the brand controls color and fonts; the search is for finding this piece's structure) · close the job with the line `ด่านก่อนลงมือ:`
+> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the owner's theme → search live for reference designs → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand controls color and fonts; the search is for this piece's structure) · close the job with the line `ด่านก่อนลงมือ:`
 
-> **Language:** write all wording per `human-writing`. This skill gives format and structure; human-writing gives how to write so people can understand.
+> **One rule:** an exported document has one color set, and one set of type sizes and spacing that is the same on every page. It must not look like someone opened Word and just typed.
 
-> **The one rule of this skill:** an exported document must look intentionally designed: one color set, one set of type sizes
-> and spacing that is the same on every page. It must not look like someone opened Word and just typed.
-
-## When to use this skill
-
-- The output is a **.docx / .pptx / .pdf** (quotation · business plan · report · contract · software document such as an SRS) that a customer, executive or another team will open
-- The document must be **signed off** or attached to a contract/proposal
-- Mixed Thai–English documents (they break very easily if fonts are not fully set)
+## Use when
+- The output is a .docx / .pptx / .pdf (quotation · business plan · report · contract · SRS) that a customer, executive, or another team will open, or that must be signed off or attached to a contract
+- Mixed Thai–English documents (they break easily if fonts are not fully set)
 - The same kind of document is issued repeatedly and every copy should look the same
+- Not for: markdown output → `polished-document-style` · reading or extracting a received Office file → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` · diagrams in markdown → `markdown-visuals` · a whole-book report from one Markdown file → `markdown-report-docx`
 
-## When **not** to use
+Order: write the content as markdown first (`polished-document-style`), then render it with this skill. Always fix content in the markdown (the source).
 
-- The output is markdown (in the repo or work folder): use `polished-document-style`
-- You only need to **read/extract** a received Office file: use `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
-- Diagrams in a markdown document: use `markdown-visuals`
-- A whole-book report from a single Markdown file (shared logo cover · table of contents · tables · figures): use `markdown-report-docx`, which has a ready md → docx script
+Install before use: `pip install python-docx python-pptx` · LibreOffice (`soffice`) to convert to PDF · `pdftoppm` (poppler) to convert to images.
 
-**The correct order:** write the content as markdown first (polished-document-style)
-→ then use this skill to render it into the deliverable file, and always fix content in the markdown (markdown is the source).
+## Steps
+1. **Colors.** If the source markdown has a `doc-theme`, use it: do not ask, do not set a new one (`polished-document-style`, "ธีมของเอกสาร"). Otherwise look in the order in `diagram-figures` item 5 (`doc-theme` → brand colors in code, logo, brand kit → nothing). If there is nothing, search live for reference designs per `design-references` (plugin `superuser`), type `document`, then extract colors from the chosen work (stored palette library when live search is impossible). If live search is impossible, use the house color `#2A78D6`, write `(รอยืนยัน)` in the report, and carry on without asking; put a tone suggested by the content in the report for the user to choose later ([`references/palette-examples.md`](references/palette-examples.md)). A customer's brand colors always win. Write the colors back into `doc-theme` in the markdown so document, figures, and slides match.
+   - **One main color.** All light and dark shades are computed from it. Only the status colors (success · warning · error) are independent and keep their meaning.
+2. **Continue the look of the brand or app, before the first render.** The skill's defaults (Tahoma · solid color band cover · lines in every table cell) are the floor, not the deliverable look.
+   - Is there an identity already? Check the brand kit (`graphic-design:brand-kit`), `assets/logo/`, `docs/design/`, a mockup that passed the beauty gate (score in `docs/BUILD-PLAN.md`), field `doc-theme` in `docs/README.md`. If yes, use the same logo (cover + page header), colors, and patterns as the app. If no, follow step 1.
+   - Do 1 direction first. Only if the user is not wowed or asks for several, do 3 directions, have 2 outside reviewers score them, and run the document beauty gate (`ด่านสวย`, ceiling 3 rounds, record every score in `docs/BUILD-PLAN.md`): [`references/identity-and-gate.md`](references/identity-and-gate.md).
+   - Work on the render script, not on .docx files one by one; render every copy.
+   - **Fonts:** the brand's Thai font installed and embedded (`embed_fonts`) · Tahoma when embedding is impossible · never set Thai text in a mono font (no Thai letters in Cascadia/Consolas); mono is for code, keys, and numbers.
+   - Figures in documents, beauty-gate rules, cover: [`references/word-layout.md`](references/word-layout.md), section at the end.
+3. **Cover for this document set.** If the default cover looks like another job's, do 1 direction first; only if the user is not wowed or asks for several, run the 3-direction, 2-of-3 vote in [`references/cover-vote.md`](references/cover-vote.md).
+4. **Tokens, never hardcode colors outside them.** `brand` · `brand_2` · `brand_deep` · `brand_tint` · `brand_tint_2` · `text` · `text_body` · `text_muted` · `line` + 6 status colors (success · info · warning · error · accent · neutral) that do not change with the brand. Set the values once with `use_brand(...)`.
+   - Choose colors by meaning (red = danger/real error only); same meaning set as diagrams.
+   - Contrast: body text and `text_muted` on the background ≥ 4.5:1 · H2 and table headers (`brand_deep`) ≥ 7:1 · H1 and KPI numbers (`brand`, large) ≥ 3:1 · `use_brand()` stops if it fails · in black and white the hierarchy must still read · if it fails, adjust darkness, not the color.
+   - Text is never pure black (use `text_body`) · no type size outside the scale (Word body 11pt · slides 17pt).
+   - Full token table, color meanings, type scale, elements: [`references/tokens-and-type.md`](references/tokens-and-type.md).
+5. **Fonts and Thai.** Word treats Thai as a complex script: never set font/size/bold by hand; use `style_run()` in `brandkit.py` (sets `w:szCs` `w:bCs` `w:iCs` and all 4 slots of `w:rFonts`). If Latin and Thai fonts differ, set `bk.FONT` and `bk.LATIN_FONT`, then call `bk.thai_runs(doc.element.body)` and on every header/footer before `save()`. Line spacing 1.3–1.35 (Tahoma) · never justify Thai paragraphs · to send a PDF, export from real Word or check by eye (LibreOffice breaks Thai differently) · Linux has no Tahoma, use Loma/Sarabun · ReportLab places tone marks wrongly. Traps and embedding: [`references/thai-fonts.md`](references/thai-fonts.md).
+6. **Word page structure.** Cover (project logo and mockup exist → project-specific cover per step 3; else the default) → table of contents → body (H1 numbered, keep-with-next on headings) → sign-off table · footer "หน้า N" centered, gray 9pt · A4, content width 17 cm = 9638 twips (`BODY_TWIPS`) so column widths add up. Full structure and dark cover (`doc.cover(..., style="night")`): [`references/word-layout.md`](references/word-layout.md).
+   - Cover background image and logo never go in the first-page header (Word shows them faded); anchor them to the cover's first paragraph. Inner-page table headers never use a full-width solid dark fill.
+7. **Use the elements** `cover()` · `table()` · `pill_table()` · `kpi_row()` · `callout()` · `figure()` · `code()` · `signoff()` (methods in `references/tokens-and-type.md`). At most 3–5 callouts per 10 pages · KPI strip of 3–5 cells · a table over 6 columns goes on a landscape page (`landscape_section()`).
+8. **Use brandkit.** `from brandkit import BrandDoc, use_brand, to_pdf` (put `scripts/` on the path) · slides → `brandkit_pptx.BrandDeck` · speaking deck → `brandkit_stage.StageDeck` (default: `accent`/`bg` from the source work per `presentation-design` `references/deck-theme.md`, `source_palette.py` prints the `StageDeck(...)` line; light `FFFFFF` with `block=True`, dark only if the source is dark; no color at all → `#2A78D6` on `FFFFFF` + `(รอยืนยัน)`). Sample code and methods: [`references/brandkit-usage.md`](references/brandkit-usage.md), `references/api.md`.
+9. **Look at every page before delivery.** Render to PDF, convert to images, open each page (Read tool): the code cannot show tables overflowing the margin, stranded headings, floating tone marks. Commands and the 7-point checklist: [`references/visual-check.md`](references/visual-check.md).
+10. Before sending, go through item 3 of `no-ai-look` (HTML work: run its script; the eye gate 3.2 must also pass, web pages answer items 10–14).
 
----
+## Check before done
+- Avoid: Word's built-in Heading styles (use `h1()/h2()/h3()`) · thick black default table lines (use 0.5pt `line`) · pure black text · bold table headers with no fill · letting Word choose column widths (`fixed_widths()`) · too many emoji · a file never rendered for a look · the skill's default look when the app already has an identity · a 2000px-wide figure on a 17 cm page (text ends near 5pt) · a decorative cover image nobody said wows · a .docx without the source markdown. Reasons: [`references/anti-patterns.md`](references/anti-patterns.md)
+- Every page was opened and looked at · colors written back to `doc-theme` · the line `ด่านก่อนลงมือ:` closes the job
 
-**Install before use:** `pip install python-docx python-pptx` · LibreOffice (`soffice`) to convert to PDF · `pdftoppm` (poppler) to convert to images
-
-## 0 · Colors come from the project — look in order, do not stop and wait
-
-**If the source markdown already has a `doc-theme`, use that value. Do not ask again, do not set a new one.**
-(See `polished-document-style`, section "ธีมของเอกสาร" (document theme).)
-
-If there is none yet, look in the order given in `diagram-figures` item 5, in that one place (`doc-theme` → brand colors in code, logo, brand kit → nothing at all).
-Nothing at all → **search for reference designs first:** take the project's keywords to a live search per `design-references` (plugin `superuser`), type `document`, then extract colors from the chosen work. The stored palette library is used when a live search is impossible. Live search impossible → use the house color `#2A78D6`, write `(รอยืนยัน)` (awaiting confirmation) in the report, and carry on without stopping to ask. Put a tone suggested by the content of the work (see the next line) in the report for the user to choose later.
-Once you have the colors, **write them back into `doc-theme`** in the markdown file so the document, figures and slides use the same colors.
-
-Tones suggested by the content of the work (medical · finance · government etc. · fallback library, used when live search is impossible) → [`references/palette-examples.md`](references/palette-examples.md) · if the customer already has a brand, always use the brand colors.
-
-**There is only one main color.** All light and dark shades are computed from it; do not pick more one by one.
-The only colors not tied to the main color are the status colors (success · warning · error), and they must always keep their meaning.
-
-
-## 0.1 · The document's look continues from the brand's or app's look — do this before the first render
-
-> This skill's defaults (Tahoma · solid color band cover · table with lines in every cell) are the **floor**, not the deliverable look.
-> Using the defaults as is = a document that looks printed from Word at every company, even though the brand or app of that job already passed a beauty gate.
-
-1. **Is there an identity already?** Look at the existing brand kit (`graphic-design:brand-kit` if installed; use the colors and fonts from that kit) · `assets/logo/` · `docs/design/` · software work: a mockup that passed the beauty gate (score in `docs/BUILD-PLAN.md`) · field `doc-theme` in `docs/README.md` → if there is: the document must use the same logo (cover + page header), brand colors and patterns as the app · if not: follow item 0
-2. **Do 1 direction first.** Only if the user is not wowed, or asks for several directions, do **3 directions in parallel** (3–5 times the labor · `parallel-attempts-pick-best` · a new agent with Bash per direction · for the cover use the 3-direction vote method in section 0.2). Each direction makes an HTML mock of A4 pages: cover · a content page with a real 4-row requirements table + callout · a table-of-contents page or a figure page · **1 figure redone for the direction** (use `diagram-figures`) · the file header says how to build each piece in real Word. When doing several directions they must really differ, for example a dark cover continuing from the app / a light editorial report / an engineering spec.
-3. **2 reviewers who did not do the work** (if there is only one direction, score that one only; no mixing) score 1–5 (pass = 4): first impression · continuity with the app · craftsmanship (a long Thai table of 60 rows without breaking mid-word · type scale · contrast) · figures readable when placed for real · really buildable in Word → **mixing is allowed** (cover from one direction, body from another) if the reviewers name the pieces clearly.
-4. Work on the render script (do not edit .docx files one by one) → render every copy → **document beauty gate (`ด่านสวย`)**: 2 new reviewers look at images of the real pages (cover · table of contents · chapter opener · long table page · figure page) using the 5 axes above, and take the lower score · ceiling **3 rounds** (more detail in `ui-craft/references/states-and-checks.md` in plugin `software-development` if installed) · record every round's score in `docs/BUILD-PLAN.md`
-5. **Fonts:** use the brand's Thai font installed on the machine and embedded in the file (`embed_fonts`) · Tahoma is the fallback when embedding is impossible · **never set Thai text in a mono font** (Cascadia/Consolas have no Thai letters). Mono is for code, keys and numbers only.
-6. **Figures in documents · rules the beauty gate often catches · cover** (minimum pixel sizes, rules in the render script's `check`, cover recipe) → [`references/word-layout.md`](references/word-layout.md), section at the end of the file
-
-## 0.2 · A cover that belongs to this document set — make 3 directions, then vote 2 of 3
-
-Use when a document set (proposal · report · business plan) needs its own cover and the default cover looks like another job's. Do one direction first; only if the user is not wowed, or asks for several directions, use this (3–5 times the labor). The full steps (find real examples to hold up · 3 designers · 3 reviewers · voting criteria · cover text) are in [`cover-vote`](references/cover-vote.md).
-
----
-
-## 1 · Design tokens — never hardcode colors outside this table
-
-This table defines each token's **role**, not the color value. The real values come from item 0, then are set once with `use_brand(...)`.
-
-- tokens: `brand` · `brand_2` · `brand_deep` · `brand_tint` · `brand_tint_2` · `text` · `text_body` · `text_muted` · `line` + 6 status colors (success · info · warning · error · accent · neutral) that **do not change with the brand**
-- Choose colors by meaning, not by looks (red = danger/real error only) · use the same meaning set as diagrams
-- Thresholds every color set must pass: body text and `text_muted` on the background ≥ 4.5:1 · H2 and table headers (`brand_deep`) ≥ 7:1 · H1 and KPI numbers (`brand`, large) ≥ 3:1 · `use_brand()` checks and stops if it fails · printed in black and white, the hierarchy must still be distinguishable · if it fails, adjust the darkness, do not change the color
-- Text is never pure black (use `text_body`) · **do not add type sizes outside the scale** (Word body 11pt · slides 17pt)
-
-Full token table · color meaning table · type scale (pt) · reusable elements + methods → [`references/tokens-and-type.md`](references/tokens-and-type.md). Open it when setting the theme or choosing sizes/colors · examples of color sets used before → [`references/palette-examples.md`](references/palette-examples.md)
-
----
-
-## 2 · Fonts and Thai — where it breaks most often
-
-Use the brand's Thai font per item 0.1 step 5 first · if absent or not embeddable, use **Tahoma** as the fallback · rules that must not be missed:
-
-- Word treats Thai as a *complex script*: **never set font/size/bold by hand.** Use `style_run()` in `brandkit.py` (it sets `w:szCs` `w:bCs` `w:iCs` and all 4 slots of `w:rFonts`)
-- When the Latin and Thai fonts differ → set `bk.FONT` and `bk.LATIN_FONT`, then call `bk.thai_runs(doc.element.body)` and on every header/footer before `save()`
-- Line spacing 1.3–1.35 (Tahoma) (the middle value is in `human-writing` `references/thai-line-breaking.md`) · **never justify** Thai paragraphs · to send a PDF, export it from real Word or check by eye first (LibreOffice breaks Thai words differently from Word)
-- Linux has no Tahoma → Loma/Sarabun · ReportLab places tone marks wrongly
-
-Details on dual-font traps · embedding fonts · variable fonts · Thai looking small on Linux → [`references/thai-fonts.md`](references/thai-fonts.md). Open it when setting fonts or when a PDF looks off.
-
----
-
-## 3 · Word page structure
-
-Document structure: cover page (project has a logo and mockup already → a project-specific cover per section 0.2 · no identity → use the default) → table of contents (TOC field) → body (H1 with section numbers · keep-with-next on every heading) → sign-off table · footer "หน้า N" (page N) centered, gray 9pt · full structure line by line → [`references/word-layout.md`](references/word-layout.md), section "Page structure"
-
-**Dark cover** (the app or brand uses a dark screen) → `doc.cover(..., style="night")` · example `scripts/example_srs.py` · image `examples/example_srs-preview.png` · details and lessons from the work's owner → [`references/word-layout.md`](references/word-layout.md). Rule to remember every time:
-- The cover background image and logo must not be in the first-page header (Word shows them faded while editing the file). Anchor them to the cover's first paragraph.
-
-**Inner-page table headers must not use a full-width solid dark fill.** Dark cover background · logo size · small text · glow line under the title → [`references/word-layout.md`](references/word-layout.md)
-
-Paper A4 · margins top/bottom 2.2 cm · left/right 2.0 cm give a content width of **17 cm = 9638 twips** (`BODY_TWIPS`)
-(use this number to set table column widths so they add up exactly)
-
----
-
-## 4 · Reusable elements
-
-Elements (`cover()` · `table()` · `pill_table()` · `kpi_row()` · `callout()` · `figure()` · `code()` · `signoff()`): full look and methods → [`references/tokens-and-type.md`](references/tokens-and-type.md)
-
-**Right proportions:** at most 3–5 callout boxes per 10 pages · KPI strip of 3–5 cells · a table over 6 columns should become a landscape page (`landscape_section()`)
-
----
-
-## 5 · How to use brandkit
-
-Import: `from brandkit import BrandDoc, use_brand, to_pdf` (put `scripts/` on the path or copy `brandkit.py` next to the work) · slides → `brandkit_pptx.BrandDeck` · speaking deck → `brandkit_stage.StageDeck`
-
-Full sample code (Word · slides · Stage deck) → [`references/brandkit-usage.md`](references/brandkit-usage.md) · all methods → `references/api.md` · runnable scripts `scripts/example_srs.py` · `scripts/example_deck.py`
-
-**Stage deck** (the default for a deck used for speaking): the colors `accent`/`bg` are extracted from the source work per `presentation-design` `references/deck-theme.md` (`source_palette.py` prints the `StageDeck(...)` line for you) · if the source has no color, look per `diagram-figures` item 5 · a light background `FFFFFF` with `block=True` (cover and chapter dividers in solid main color) is the default; use a dark background when the source work is dark · no color at all → use `#2A78D6` with background `FFFFFF` + `(รอยืนยัน)` (awaiting confirmation) · details → `references/brandkit-usage.md`
-
----
-
-## 6 · Check the work by eye — a step that must not be skipped
-
-A document that nobody has opened to look at the real pages is not finished, because there may be tables overflowing the margin, headings stranded at the page bottom,
-floating tone marks. These problems cannot be seen from the code.
-Render to PDF, convert to images, then **open and look at every page** (Read tool) before delivery · `soffice` and `pdftoppm` commands and the 7-point checklist → [`references/visual-check.md`](references/visual-check.md)
-
----
-
-## 7 · Anti-patterns
-
-- **Using Word's built-in Heading styles** → use `h1()/h2()/h3()`
-- **Thick black default table lines** → `line` 0.5pt lines
-- **Pure black text** → use `text_body`
-- **Bold table headers with no fill color**
-- **Letting Word decide column widths** → always `fixed_widths()`
-- **Too many emoji**
-- **Sending a file never rendered for a look**
-- **Using the skill's default look as the deliverable when the app already has an identity** → do item 0.1
-- **A 2000px-wide figure placed on a 17 cm portrait page without thinking about type size** → the text ends up around 5pt (item 0.1 step 6)
-- **A decorative image on the cover that nobody said wows** → cut it, let the type be the highlight (references/word-layout.md item 8)
-- **Creating a .docx without keeping the source markdown**
-
-Reasons and replacements for each item → [`references/anti-patterns.md`](references/anti-patterns.md)
-
----
-
-## 8 · Linking with other skills
-
-| Need | Use together with |
-|---------|-----------|
-| Content structure/wording of formal documents · **the document's color theme** | `polished-document-style` |
-| Diagrams to paste in as figures | `diagram-figures` (designed figures) · `software-diagrams` (plugin `software-development`) (Mermaid) → export PNG → `figure()` |
-| Read Office files a customer sent | `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` |
-| Spreadsheet deliverable | `anthropic-skills:xlsx` (the same color tokens can be used) |
-| Content and completeness of an SRS document | `srs-writing` (plugin `software-development`) |
-| Slide storyline and layout | `presentation-design` |
-| A presentation deck as a single .html file | `html-slide-deck` (when a .pptx exists, use the entry from .pptx in the same skill) |
-| Diagrams drawn in Mermaid with the same theme | `software-diagrams` (plugin `software-development`) |
-| Origin of the color and type system · logo | `graphic-design` (plugin `software-development`) |
-
----
-
-## Do not look AI-made
-
-Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye gate 3.2 (web pages answer items 10–14 in addition), because 0 script findings is not yet a pass. The prohibitions in this file are the parts specific to this work; the full list for all media is there.
-
-## Abbreviations
-
-Always spell out an abbreviation in full the first time, then put the abbreviation in brackets, for example Model Context Protocol (MCP).
-After that the abbreviation may be used. See the skill `spell-out-abbreviations` for details.
+## References
+- [`references/tokens-and-type.md`](references/tokens-and-type.md) — open when setting the theme or choosing sizes, colors, elements · [`references/palette-examples.md`](references/palette-examples.md) — fallback tones by kind of work
+- [`references/thai-fonts.md`](references/thai-fonts.md) — open when setting fonts or a PDF looks off
+- [`references/word-layout.md`](references/word-layout.md) — open for page structure, dark cover, figure rules
+- [`references/identity-and-gate.md`](references/identity-and-gate.md) — open when running several directions or the beauty gate · [`references/cover-vote.md`](references/cover-vote.md) — the 3-direction cover vote
+- [`references/brandkit-usage.md`](references/brandkit-usage.md) · [`references/api.md`](references/api.md) — open when writing the build script
+- [`references/visual-check.md`](references/visual-check.md) — open when rendering for the eye check · [`references/anti-patterns.md`](references/anti-patterns.md) — open when reviewing
+- Linked skills: slide story → `presentation-design` · SRS → `srs-writing` · diagrams → `diagram-figures` / `software-diagrams` · brand → `graphic-design` · .html deck → `html-slide-deck`
 
 
 ## reference: anti-patterns.md
@@ -431,6 +311,17 @@ Use when a document set (proposal · report · business plan) needs its own cove
 4. **Criteria scored 1–5, then vote:** wow compared with the old cover · not a repeat of other work · tells the truth of the work · fits the whole set · craftsmanship (Thai, contrast, smallest text) · buildable and repeatable in Word · the direction with **2 of 3 votes wins** · borrow at most 2 strong pieces from a losing direction · if the votes split 3 ways, "repeatable" decides.
 5. **Text on the cover is editable Word text** (title, version, date) · the background image has no lettering baked in · anchor the image to the first paragraph, not in the header.
 6. **Software document sets only** (BRD · SRS · FSD whose cover must come from the logo shape or a real mockup · uses the cover generator) → if plugin `software-development` is present, also see `doc-cover-design` · without it, items 1–5 are complete on their own.
+
+
+## reference: identity-and-gate.md
+
+# Identity continuation and the document beauty gate · branded-document-design
+
+Open this when the user is not wowed by the first direction, asks for several directions, or the job needs the document beauty gate (`ด่านสวย`). Moved from SKILL.md item 0.1, steps 2–4.
+
+2. **Do 1 direction first.** Only if the user is not wowed, or asks for several directions, do **3 directions in parallel** (3–5 times the labor · `parallel-attempts-pick-best` · a new agent with Bash per direction · for the cover use the 3-direction vote method in [`cover-vote.md`](cover-vote.md)). Each direction makes an HTML mock of A4 pages: cover · a content page with a real 4-row requirements table + callout · a table-of-contents page or a figure page · **1 figure redone for the direction** (use `diagram-figures`) · the file header says how to build each piece in real Word. When doing several directions they must really differ, for example a dark cover continuing from the app / a light editorial report / an engineering spec.
+3. **2 reviewers who did not do the work** (if there is only one direction, score that one only; no mixing) score 1–5 (pass = 4): first impression · continuity with the app · craftsmanship (a long Thai table of 60 rows without breaking mid-word · type scale · contrast) · figures readable when placed for real · really buildable in Word → **mixing is allowed** (cover from one direction, body from another) if the reviewers name the pieces clearly.
+4. Work on the render script (do not edit .docx files one by one) → render every copy → **document beauty gate (`ด่านสวย`)**: 2 new reviewers look at images of the real pages (cover · table of contents · chapter opener · long table page · figure page) using the 5 axes above, and take the lower score · ceiling **3 rounds** (more detail in `ui-craft/references/states-and-checks.md` in plugin `software-development` if installed) · record every round's score in `docs/BUILD-PLAN.md`
 
 
 ## reference: palette-examples.md
@@ -707,289 +598,69 @@ footer        "หน้า N" กลางหน้า สีเทา 9pt
 
 Use when writing a Software Requirements Specification
 
-# SRS Writing
+# SRS Writing — a Software Requirements Specification where every requirement can be tested
 
-> **Language:** write every line of wording by `human-writing` — this skill gives the format and structure, while human-writing says how to write so people can follow.
+> **One rule:** every requirement must let you write a **test case** from it right away. If you cannot, it is not a requirement, just a hope.
 
-> **The one rule of this skill:** every requirement must let you write a **test case** from it right away.
-> If you cannot, it is not a requirement, just a hope.
-
----
-
-## When to use this skill
-
+## Use when
 - Writing a Software Requirements Specification (SRS)
-- Reviewing an SRS someone else wrote, before signing off
+- Reviewing an SRS someone else wrote, before sign-off
 - Turning meeting notes into usable requirements
 - Preparing documents for a tender or statement of work (SOW)
 
-## When **not** to use
-
-| Task | Use this instead |
-|---|---|
-| User stories for a sprint | `user-story-writer` |
-| Record of why a technology was chosen | `adr-writer` |
-| Screen-level Functional Specification Document (FSD) | `fsd-writing` |
-| Look of the exported Word file | `branded-document-design` |
-| Figures in the document | `software-diagrams` · `diagram-figures` |
-
----
-
-## 0 · Find an existing format first (every time)
-
-Before using the structure or template in this file, check whether the user, customer, or project already has its own format:
-
-- **Where to look:** format requirements from the client: TOR (Terms of Reference) · scope of work in the contract · the agency's forms · the earlier SRS of the same system in `docs/` · if there is no file, ask the user one question: does the client require a document format?
-- **Result:** found → use that format (headings, order, field names, running numbers) and say in the reply which file it came from · not found → use the template in this file as the fallback and say that no earlier format was found.
-- **Every format still needs:** job size sets the depth: a small internal system drops sections that have nothing in them · a system with legal rules or an inspector uses everything the TOR orders · testable requirement IDs are needed in every format.
-
-## 1 · Order of work
-
-1. **Collect all the information before writing** — who uses it · how work is done now · what the problem is ·
-   how success is measured · other systems to connect · legal obligations
-2. **Draft the outline first** — use `assets/srs-outline.md` to lay out all the headings, no body text yet
-3. **Write scope and stakeholders before requirements** — if you do not yet know who uses it, you will write requirements for the wrong person
-4. **Write requirements by section 3**, one at a time, and assign the ID as soon as you write it
-5. **Build the traceability matrix** — every requirement needs a source
-6. **Review by section 8** and then send
-
-> Step 5 is the one people skip most, but it is what gives the document real value when a change request arrives
-
----
-
-## 2 · Document structure
-
-Based on ISO/IEC/IEEE 29148 (the international standard for requirements processes).
-The full version, with hints on what each section must contain, is in **`assets/srs-outline.md`**
-
-For the Business Requirements Document (BRD), which is often written before the SRS, use the template in [`references/brd-template.md`](references/brd-template.md)
-
-| # | Section | Answers the question | Can it be skipped |
-|---|---|---|---|
-| 1 | Introduction · purpose · scope · definitions | What this document covers and does not cover | No |
-| 2 | System overview · users · constraints · assumptions | Where the system sits in the world | No |
-| 3 | Functional requirements | What the system must be able to do | No |
-| 4 | Interface requirements | How it connects to other systems | If it connects to nothing |
-| 5 | Non-functional requirements | How fast, how secure | No |
-| 6 | Data and business rules | What the data looks like, which rules apply | No |
-| 7 | Acceptance criteria | When it counts as done | No |
-| 8 | Traceability matrix | Where this requirement came from | No |
-| 9 | Appendices · revision history | Who changed what, when | No |
-
-**Section 1.2 Scope must have both "in scope" and "out of scope"** —
-in the whole document, the "out of scope" list prevents the most disputes
-
-**2 subsections that ISO 29148 has but we often forget** (idea from jam01/SRS-Template, which states no licence, so it is rewritten in our own words, no text copied)
-
-| Subsection | What to put in | When it is needed |
-|---|---|---|
-| 2.6 Apportioning of requirements | A table of which release · milestone or subsystem each group of requirements goes to, and which items are **deferred to a later round** — for an item whose destination is not yet known, write "not yet apportioned" and track it as a pending task | More than 1 release or 1 team · matches the `milestone` column of `spec-to-code-loop` |
-| 3.6 Systems with AI/ML | 6 items: what the model does and which number measures a pass · where training data comes from, who consented, how it is stored · guardrails (check input · filter output · limit the actions it can take · fallback) · fairness and explainability · points where a person must check before it takes effect · release, monitoring, retraining, and retiring the model | Every system that calls an LLM or has a model — write it together with `llm-engineering` and `pdpa-compliance` |
-
-**Choose sections by project, do not fill every slot just because the template has it** — before writing, declare one line at the very top saying which section is `เขียน` (write) · `ข้าม (เหตุผล)` (skip (reason)) · `ตัดออก` (drop), following this set
-
-| Project | Write in addition to core 1 2 3 5 6 7 8 9 | Can drop |
-|---|---|---|
-| Internal web or app, no other systems | — | 4 interface · 2.6 · 3.6 |
-| Connects to an external API or device | 4 interface (both sides) | 3.6 |
-| Multiple releases or teams | 2.6 | 3.6 if no AI |
-| Has an LLM or model | 3.6 + the security and personal-data categories in 5 | — |
-| Regulated work (finance · health · insurance) | The compliance category in 5 as its own section, citing the law with the date checked | — |
-
----
-
-## 3 · How to write one requirement
-
-### Mandatory words
-
-| Word | Meaning | Contract effect |
-|---|---|---|
-| **ต้อง** (shall) | Mandatory | If missing, fails acceptance |
-| **ควร** (should) | Recommended | May be absent if the reason is recorded |
-| **อาจ** (may) | Optional | May be absent |
-
-**Do not mix "ต้อง" and "จะ" (will)** — pick one word and use it through the whole document
-
-### Sentence form
-
-```
-<รหัส> · <ผู้กระทำ> ต้อง <ทำอะไร> <เงื่อนไข/ขีดจำกัดที่วัดได้>
-```
-
-```
-ผิด: ระบบต้องค้นหาได้เร็ว
-ผิด: ระบบต้องใช้งานง่ายและรองรับผู้ใช้จำนวนมาก
-ถูก: FR-SRCH-010 · ระบบต้องคืนผลการค้นหาคำสั่งซื้อภายใน 2 วินาที
-   เมื่อฐานข้อมูลมีคำสั่งซื้อไม่เกิน 500,000 รายการ
-```
-
-### Seven rules
-
-1. **1 requirement per item** — when you see the word "and" (และ), suspect it should be split into 2 items
-2. **Always name the actor**, such as "the system" (ระบบ) · "the approver" (ผู้อนุมัติ) · "the scheduled job" (งานตามเวลา); never write a sentence with no subject
-3. **Numbers instead of adjectives** — "fast" "many" "easy" "stable" must each be converted to a number
-4. **Do not state the method** — a requirement says *what must be obtained*, not *how*
-   (`ต้องเก็บใน Redis` is wrong · `ต้องคืนผลภายใน 200ms` is right)
-5. **No "etc." (เป็นต้น, ฯลฯ) and no "and/or" (และ/หรือ)** — the contractor will always read it as narrowly as possible
-6. **Testable** — on reading it you must be able to say at once *how to prove it passes*
-7. **No conflict with other items** — after writing, go through and look for items that contradict each other
-
-### How to convert vague words
-
-| Customer says | Ask back | Write down |
-|---|---|---|
-| "ต้องเร็ว" (must be fast) | How fast, measured where, with how many users | Return results within 2 seconds at the 95th percentile with 200 concurrent users |
-| "ใช้ง่าย" (easy to use) | What must a new user be able to do, in how long, without training | A new user creates their first order within 5 minutes without opening the manual |
-| "ปลอดภัย" (secure) | Against whom, what must they be unable to do | A user with the "viewer" role must be unable to call an API that changes data, and gets code 403 |
-| "รองรับคนเยอะ" (supports many people) | How many at once, which period is heaviest | Supports 500 concurrent users during month-end closing |
-| "รายงานครบ" (complete reports) | Which reports, who views them, how often | List them item by item, one report per item |
-
----
-
-## 4 · IDs and traceability
-
-### ID scheme
-
-```
-FR-<โมดูล>-<เลข 3 หลัก>      ข้อกำหนดเชิงหน้าที่    FR-ORD-010
-NFR-<หมวด>-<เลข 3 หลัก>      ข้อกำหนดที่ไม่ใช่หน้าที่  NFR-PERF-010
-BR-<เลข 3 หลัก>              กฎทางธุรกิจ            BR-020
-IF-<ระบบปลายทาง>-<เลข>       ส่วนต่อประสาน           IF-LINE-010
-```
-
-**Number in steps of 10** — you can insert items later without renumbering the whole document
-
-**An ID that has been issued must never be reused.** Mark a cancelled item `(ยกเลิก v1.3)` (cancelled v1.3)
-in place — do not delete it, or people holding the old document will read different things
-
-### Traceability table
-
-| รหัส | ที่มา | โมดูล | ความสำคัญ | ทดสอบด้วย | สถานะ |
-|---|---|---|---|---|---|
-| FR-ORD-010 | ประชุม 12 ส.ค. ข้อ 3 | คำสั่งซื้อ | ต้องมี | TC-ORD-001..004 | ตกลงแล้ว |
-| NFR-PERF-010 | สัญญา ข้อ 7.2 | ทั้งระบบ | ต้องมี | TC-PERF-001 | ตกลงแล้ว |
-
-- **Every requirement needs a source** — an item with no source is one the team made up, and you must go ask to get an answer
-- **Every requirement needs at least 1 test case**
-- Priority uses MoSCoW: ต้องมี (Must) · ควรมี (Should) · มีก็ดี (Could) · ไว้ทีหลัง (Won't)
-  **If "ต้องมี" (Must) exceeds 60% of the total, the items have not really been prioritised**
-
-**The business-rule (BR) table gets a column "boundary values to test"** — for a rule with a number, write 3 values: below the boundary · at the boundary · over the boundary · and put the boundary numbers in a story's acceptance criteria too (for example ฿9,999 and ฿10,000), because the 3 bugs planted for testing in the training exercise were all at the boundaries (an example from that exercise, not a criterion)
-
-**Two-way traceability** — the table above traces one way, from requirement to source. At the end add a table story | functional requirement (FR) | business rule (BR) and set a pass rule of "nothing dropped": every story must be backed by an FR or BR, and for any that is not, mark it and fix it before sending (example from that exercise: 36 stories, 36/36 covered)
-
----
-
-## 5 · Non-functional requirements — categories to ask about every time
-
-The categories that hurt most when forgotten are **maintainability** and **backup** —
-nobody asks at contract signing, but everyone asks when the system goes down
-
-| Category | Must ask | Example that can be written |
-|---|---|---|
-| Performance | What is the slowest acceptable, at which percentile | หน้ารายการโหลดภายใน 1.5 วิ ที่ p95 |
-| Capacity | How much data grows per year, how many years it will be used | รองรับ 2 ล้านรายการใน 3 ปี |
-| Concurrent users | Which period is heaviest, how many people | 500 คน ช่วงปิดยอดสิ้นเดือน |
-| Availability | Can it be shut down for maintenance, when | 99.5% ต่อเดือน · ปิดได้คืนวันอาทิตย์ 01:00–03:00 |
-| Backup | How far back can it restore, how long does recovery take | สำรองทุกวัน · เก็บ 90 วัน · กู้คืนภายใน 4 ชม. |
-| Security | How many permission levels, which data is sensitive · for web apps and APIs, put in NFR-SEC per `security-gate/references/owasp-contract-clause.md` | 4 บทบาท · เลขบัตรประชาชนเข้ารหัสตอนพัก |
-| Audit trail | Must we know who changed what, when | บันทึกทุกการเปลี่ยนสถานะ เก็บ 2 ปี |
-| Compatibility | Which browsers, mobile or not | Chrome/Edge 2 รุ่นล่าสุด · จอ ≥ 360px |
-| Language | 2 languages, currency, time zone | ไทย/อังกฤษ · Asia/Bangkok · พ.ศ. ในรายงาน |
-| Maintenance | Who takes over, what is handed over | ส่งมอบซอร์สโค้ด · คู่มือติดตั้ง · อบรม 2 วัน |
-| Legal | Which regulations apply | พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA) |
-
-Every number must come from the **customer**, not from the document writer.
-If the customer does not know, propose a number and **record it as an assumption** in section 2
-
-**Facts the interviewee did not state must never be guessed silently** (for example the time or price of a service · whether discounts can stack · whether travel cost is charged per vehicle or per person). Flag that item "(รอยืนยัน)" (awaiting confirmation), write the assumption used, and give the number of the source question, then summarise in a table at the end of the document: question → assumption → business rule that uses that value (example from that exercise: 20 assumptions A1–A20)
-
-**Every NFR has a "how to measure" column** (for example `scrollWidth ≤ 375` · requests sending images off the device = 0) and put NFRs on "testability" in from the requirements stage: the AI part uses fixed rules (asking the same thing gets the same answer) · a button to reset test data · the system's "today" date can be locked · every button has a label so tools can find it (this is reported from the training exercise, not measured against how much it helps)
-
----
-
-## 6 · Figures in the document
-
-An SRS with no figures at all makes readers imagine the picture, and each imagines it differently.
-**Figures in the SRS itself use one house style:**
-
-| Which figure | Draw with |
-|---|---|
-| Every figure in the SRS itself (overview · flowchart · sequence · ER · state), whether delivered as markdown, .docx or PDF | `diagram-figures` — sharp image files, placement under your own control, source files kept in the repo so git can track them |
-| Quick figures in a README · PR · code note, outside the SRS itself | `software-diagrams` (Mermaid) |
-
-**Every figure in one document must use the same colour theme** — declare the theme at the top of the document per
-`polished-document-style` section "ธีมของเอกสาร" (Document theme), and every tool reads values from that one place
-
-Minimum figures to have:
-
-| Section | Figure |
-|---|---|
-| 2 System overview | C4 level 1 — who the system talks to |
-| 2 Users | Table of roles and permissions |
-| 3 Functional requirements | Work-flow chart of the main process |
-| 3 Complex processes | sequence diagram |
-| 6 Data | ER diagram + state diagram of the main document |
-
----
-
-## 7 · Bilingual documents
-
-- **Choose 1 main language** and put the other in brackets or in a 2nd column — never switch back and forth
-- **First time a technical term appears, write Thai (full English name: abbreviation)**, for example ปัญญาประดิษฐ์ (Artificial Intelligence: AI), per the rule "เอกสารภาษาไทย" (Thai-language documents) in `spell-out-abbreviations` · afterwards use the Thai or the abbreviation, one way through the document
-- Thai text → `human-writing` `references/thai-grammar.md` section 4, the business register
-- **Field names, API names, and status names in the database are always English** even if the document is Thai —
-  otherwise people will translate them differently when writing code
-- Complete the **glossary** in section 1.3: Thai term · English term · meaning · name in the system
-- For fonts and page layout of the Word file, see `branded-document-design`
-
----
-
-## 8 · Completeness review
-
-Go through the checklist in [`references/review-checklist.md`](references/review-checklist.md) in full before every send (scope · each requirement · category completeness · document)
-because items that fail become disputes at acceptance
-
-**Fresh-reader test** after the checklist: have a new agent that gets only the SRS file answer 8–10 questions a developer and QA would ask. An item answered wrong or answered "don't know" is a point to fix. If it has not passed, do not send to the customer → [`references/reader-test.md`](references/reader-test.md)
-
----
-
-## 9 · Anti-patterns
-
-- **Pasting meeting notes in as requirements** — different form, different level of detail
-- **"The system must be easy to use"** — nobody can accept this item
-- **Putting already-designed screens into the SRS** — locks the method before all requirements are known
-  (screen sketches belong in the FSD)
-- **No "out of scope" section** — the number 1 cause of unpaid extra work
-- **Every item is "Must"** — means priorities have not been discussed with the customer
-- **Non-functional requirements written together as one paragraph** — must be split into items with IDs
-- **Numbers the writer made up** without asking the customer and without saying they are assumptions
-- **No version number and revision history** — nobody knows whether they hold the latest version
-- **Reusing an ID of a cancelled item**
-- **Sending a Word file with the default look** — see `branded-document-design`
-
----
-
-## 10 · Connecting to other skills
-
-| Need | Use together with |
-|---|---|
-| Look of the exported .docx file | `branded-document-design` |
-| Markdown format while drafting | `polished-document-style` |
-| Figures in the document (see section 6 for which to choose) | `software-diagrams` · `diagram-figures` |
-| Colour theme of the whole document | `polished-document-style` section "ธีมของเอกสาร" (Document theme) |
-| Detail at a level a developer can start work from | `fsd-writing` |
-| Break into user stories when real work starts | `user-story-writer` |
-| Turn requirements into test cases | `test-case-template` |
-| Cut unnecessary things out of the document | `simplicity-first` |
-| Present the SRS to executives | `presentation-design` |
-
----
-
-## Abbreviations
-
-Always write the abbreviation in full the first time, then put the abbreviation in brackets — for example Model Context Protocol (MCP)
-After that you may use the abbreviation. See the skill `spell-out-abbreviations` for details.
+Not for: user stories → `user-story-writer` · why a technology was chosen → `adr-writer` · screen-level spec → `fsd-writing` · look of the Word file → `branded-document-design`
+
+## Steps
+1. **Find an existing format first.** Look for the client's TOR (Terms of Reference), the scope in the contract, the agency's forms, and the earlier SRS of the same system in `docs/`. If none is in files, ask the user one question: does the client require a document format? If found, use its headings, order, field names and running numbers, and say which file it came from. If not found, use this skill's template and say no earlier format was found. In every format: a small internal system drops sections with nothing in them; a system with legal rules or an inspector uses everything the TOR orders; testable requirement IDs are always needed.
+2. Collect before writing: who uses it · how work is done now · the problem · how success is measured · systems to connect · legal obligations.
+3. Draft the outline from `assets/srs-outline.md` (headings only). Declare one line at the top saying which section is `เขียน` · `ข้าม (เหตุผล)` · `ตัดออก`. Do not fill a slot just because the template has it.
+4. Write scope and stakeholders before requirements. Section 1.2 Scope must have both "in scope" and "out of scope".
+5. Write each requirement by "Requirement rules" below and assign its ID at once.
+6. Write non-functional requirements (NFRs) by "NFR rules" below.
+7. Build the traceability tables. This is the step people skip most, and it is what gives value when a change request arrives.
+8. Add figures. Figures in the SRS itself use `diagram-figures`; quick figures outside the SRS (README · PR) use `software-diagrams`. One colour theme per document, declared at the top per `polished-document-style`.
+9. Run the review, then send.
+
+## Structure
+Based on ISO/IEC/IEEE 29148. Sections: 1 Introduction · purpose · scope · definitions · 2 System overview · users · constraints · assumptions · 3 Functional requirements · 4 Interface requirements (skip only if it connects to nothing) · 5 Non-functional requirements · 6 Data and business rules · 7 Acceptance criteria · 8 Traceability matrix · 9 Appendices · revision history. All others cannot be skipped. A glossary goes in 1.3: Thai term · English term · meaning · name in the system.
+
+## Requirement rules
+- Mandatory words: **ต้อง** (shall) = mandatory, fails acceptance if missing · **ควร** (should) = may be absent if the reason is recorded · **อาจ** (may) = optional. Do not mix "ต้อง" and "จะ"; pick one for the whole document.
+- Sentence form: `<รหัส> · <ผู้กระทำ> ต้อง <ทำอะไร> <เงื่อนไข/ขีดจำกัดที่วัดได้>`
+  - ผิด: ระบบต้องค้นหาได้เร็ว
+  - ถูก: FR-SRCH-010 · ระบบต้องคืนผลการค้นหาคำสั่งซื้อภายใน 2 วินาที เมื่อฐานข้อมูลมีคำสั่งซื้อไม่เกิน 500,000 รายการ
+- 1 requirement per item. If you see "และ" (and), suspect it should be split.
+- Always name the actor (ระบบ · ผู้อนุมัติ · งานตามเวลา). No sentence without a subject.
+- Numbers instead of adjectives ("fast" "many" "easy" "stable" each become a number).
+- State what must be obtained, not how (`ต้องเก็บใน Redis` is wrong · `ต้องคืนผลภายใน 200ms` is right).
+- No "เป็นต้น" · "ฯลฯ" · "และ/หรือ".
+- Every item must show at once how to prove it passes. After writing, look for items that contradict each other.
+
+## IDs and traceability
+- ID scheme: `FR-<โมดูล>-<3 หลัก>` (FR-ORD-010) · `NFR-<หมวด>-<3 หลัก>` (NFR-PERF-010) · `BR-<3 หลัก>` business rule (BR-020) · `IF-<ระบบปลายทาง>-<เลข>` interface (IF-LINE-010). Number in steps of 10.
+- Never reuse an issued ID. Mark a cancelled item in place, such as `(ยกเลิก v1.3)`; do not delete it.
+- Traceability table columns: รหัส · ที่มา · โมดูล · ความสำคัญ · ทดสอบด้วย · สถานะ (for example `FR-ORD-010 | ประชุม 12 ส.ค. ข้อ 3 | คำสั่งซื้อ | ต้องมี | TC-ORD-001..004 | ตกลงแล้ว`).
+- Every requirement has a source (an item with none was made up by the team; go ask) and at least 1 test case.
+- Priority is MoSCoW: ต้องมี · ควรมี · มีก็ดี · ไว้ทีหลัง. If "ต้องมี" exceeds 60% of the total, the items are not really prioritised.
+- The BR table gets a column "boundary values to test": for a rule with a number, write 3 values (below · at · over the boundary), and put the boundary numbers into a story's acceptance criteria too (for example ฿9,999 and ฿10,000).
+- Two-way traceability: at the end add a table story | FR | BR. Pass rule "nothing dropped": every story is backed by an FR or BR; mark and fix any that is not before sending.
+
+## NFR rules
+- Ask every category in [`references/nfr-categories.md`](references/nfr-categories.md); forgotten maintenance and backup hurt most.
+- Every number comes from the customer, not the writer. If the customer does not know, propose a number and record it as an assumption in section 2.
+- Never guess silently a fact the interviewee did not state (service time or price · whether discounts stack · travel cost per vehicle or per person). Flag the item "(รอยืนยัน)", write the assumption used with the source question number, and summarise at the end of the document in a table: question → assumption → business rule that uses it.
+- Every NFR has a "how to measure" column (for example `scrollWidth ≤ 375` · requests sending images off the device = 0).
+
+## Check before done
+- Go through [`references/review-checklist.md`](references/review-checklist.md) in full before every send.
+- Fresh-reader test: a new agent that gets only the SRS file answers 8–10 questions a developer and QA would ask. A wrong or "don't know" answer is a point to fix. If it has not passed, do not send to the customer (see `references/reader-test.md`).
+- No "out of scope" list missing · not every item "Must" · no vague word left · IDs unique · version number and revision history present.
+
+## References
+- [`references/structure-options.md`](references/structure-options.md) — open when choosing sections by project type, writing 2.6 or 3.6 (AI/ML), adding figures, or writing a Thai/English document
+- [`references/nfr-categories.md`](references/nfr-categories.md) — open when writing section 5 or converting a vague customer word into a number
+- [`references/brd-template.md`](references/brd-template.md) — open when writing the Business Requirements Document before the SRS
+- [`references/reader-test.md`](references/reader-test.md) — open when running the fresh-reader test
 
 
 ## reference: brd-template.md
@@ -1119,6 +790,43 @@ Business Requirements Document (BRD) template, the version sent to stakeholders,
 ```
 
 
+## reference: nfr-categories.md
+
+# NFR categories and vague-word conversion
+
+Open this when writing section 5 (non-functional requirements) or when a customer's wording is vague.
+
+## How to convert vague words
+
+| Customer says | Ask back | Write down |
+|---|---|---|
+| "ต้องเร็ว" (must be fast) | How fast, measured where, with how many users | Return results within 2 seconds at the 95th percentile with 200 concurrent users |
+| "ใช้ง่าย" (easy to use) | What must a new user be able to do, in how long, without training | A new user creates their first order within 5 minutes without opening the manual |
+| "ปลอดภัย" (secure) | Against whom, what must they be unable to do | A user with the "viewer" role must be unable to call an API that changes data, and gets code 403 |
+| "รองรับคนเยอะ" (supports many people) | How many at once, which period is heaviest | Supports 500 concurrent users during month-end closing |
+| "รายงานครบ" (complete reports) | Which reports, who views them, how often | List them item by item, one report per item |
+
+## NFR categories to ask about every time
+
+The categories that hurt most when forgotten are **maintainability** and **backup**: nobody asks at contract signing, but everyone asks when the system goes down.
+
+| Category | Must ask | Example that can be written |
+|---|---|---|
+| Performance | What is the slowest acceptable, at which percentile | หน้ารายการโหลดภายใน 1.5 วิ ที่ p95 |
+| Capacity | How much data grows per year, how many years it will be used | รองรับ 2 ล้านรายการใน 3 ปี |
+| Concurrent users | Which period is heaviest, how many people | 500 คน ช่วงปิดยอดสิ้นเดือน |
+| Availability | Can it be shut down for maintenance, when | 99.5% ต่อเดือน · ปิดได้คืนวันอาทิตย์ 01:00–03:00 |
+| Backup | How far back can it restore, how long does recovery take | สำรองทุกวัน · เก็บ 90 วัน · กู้คืนภายใน 4 ชม. |
+| Security | How many permission levels, which data is sensitive · for web apps and APIs, put in NFR-SEC per `security-gate/references/owasp-contract-clause.md` | 4 บทบาท · เลขบัตรประชาชนเข้ารหัสตอนพัก |
+| Audit trail | Must we know who changed what, when | บันทึกทุกการเปลี่ยนสถานะ เก็บ 2 ปี |
+| Compatibility | Which browsers, mobile or not | Chrome/Edge 2 รุ่นล่าสุด · จอ ≥ 360px |
+| Language | 2 languages, currency, time zone | ไทย/อังกฤษ · Asia/Bangkok · พ.ศ. ในรายงาน |
+| Maintenance | Who takes over, what is handed over | ส่งมอบซอร์สโค้ด · คู่มือติดตั้ง · อบรม 2 วัน |
+| Legal | Which regulations apply | พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA) |
+
+NFR testability from the requirements stage (reported from a training exercise, not measured for effect): the AI part uses fixed rules (same question, same answer) · a button to reset test data · the system's "today" date can be locked · every button has a label so tools can find it.
+
+
 ## reference: reader-test.md
 
 # Fresh-reader test — for SRS · FSD · BRD before sending to the customer
@@ -1182,6 +890,77 @@ Use with `srs-writing` section 8. Go through all of it before every send. "Secti
 - [ ] Does the glossary cover every term used in the document?
 
 
+## reference: structure-options.md
+
+# SRS structure options, figures, bilingual rules
+
+Open this when choosing which sections to write, adding figures, or writing a Thai/English document.
+
+Structure is based on ISO/IEC/IEEE 29148. The full outline with hints per section is in `assets/srs-outline.md`. For the Business Requirements Document (BRD), written before the SRS, use [`brd-template.md`](brd-template.md).
+
+## Two subsections ISO 29148 has that people forget
+
+(Idea from jam01/SRS-Template, which states no licence, so this is rewritten in our own words.)
+
+| Subsection | What to put in | When it is needed |
+|---|---|---|
+| 2.6 Apportioning of requirements | A table of which release · milestone or subsystem each group of requirements goes to, and which items are **deferred to a later round**. For an item whose destination is not yet known, write "not yet apportioned" and track it as a pending task | More than 1 release or 1 team · matches the `milestone` column of `spec-to-code-loop` |
+| 3.6 Systems with AI/ML | 6 items: what the model does and which number measures a pass · where training data comes from, who consented, how it is stored · guardrails (check input · filter output · limit the actions it can take · fallback) · fairness and explainability · points where a person must check before it takes effect · release, monitoring, retraining, and retiring the model | Every system that calls an LLM or has a model; write it together with `llm-engineering` and `pdpa-compliance` |
+
+## Choosing sections by project
+
+| Project | Write in addition to core 1 2 3 5 6 7 8 9 | Can drop |
+|---|---|---|
+| Internal web or app, no other systems | none | 4 interface · 2.6 · 3.6 |
+| Connects to an external API or device | 4 interface (both sides) | 3.6 |
+| Multiple releases or teams | 2.6 | 3.6 if no AI |
+| Has an LLM or model | 3.6 + the security and personal-data categories in 5 | none |
+| Regulated work (finance · health · insurance) | The compliance category in 5 as its own section, citing the law with the date checked | none |
+
+## Figures
+
+An SRS with no figures makes each reader imagine a different picture.
+
+| Which figure | Draw with |
+|---|---|
+| Every figure in the SRS itself (overview · flowchart · sequence · ER · state), whether delivered as markdown, .docx or PDF | `diagram-figures` (sharp image files, placement under your own control, source files kept in the repo so git can track them) |
+| Quick figures in a README · PR · code note, outside the SRS | `software-diagrams` (Mermaid) |
+
+Every figure in one document uses the same colour theme. Declare the theme at the top per `polished-document-style` section "ธีมของเอกสาร" (Document theme); every tool reads values from that one place.
+
+Minimum figures:
+
+| Section | Figure |
+|---|---|
+| 2 System overview | C4 level 1 (who the system talks to) |
+| 2 Users | Table of roles and permissions |
+| 3 Functional requirements | Work-flow chart of the main process |
+| 3 Complex processes | Sequence diagram |
+| 6 Data | ER diagram + state diagram of the main document |
+
+## Bilingual documents
+
+- Choose 1 main language and put the other in brackets or a 2nd column; never switch back and forth.
+- First time a technical term appears, write Thai (full English name: abbreviation), for example ปัญญาประดิษฐ์ (Artificial Intelligence: AI), per the rule "เอกสารภาษาไทย" in `spell-out-abbreviations`. Afterwards use the Thai or the abbreviation, one way through the document.
+- Thai text: `human-writing` `references/thai-grammar.md` section 4, the business register.
+- Field names, API names, and status names in the database are always English even if the document is Thai; otherwise people translate them differently when writing code.
+- Complete the glossary in section 1.3: Thai term · English term · meaning · name in the system.
+- Fonts and page layout of the Word file: `branded-document-design`.
+
+## Anti-patterns
+
+- Pasting meeting notes in as requirements (different form, different level of detail).
+- Putting already-designed screens into the SRS (screen sketches belong in the FSD).
+- Non-functional requirements written together as one paragraph; split into items with IDs.
+- No version number and revision history.
+- Sending a Word file with the default look (see `branded-document-design`).
+- Every item "Must", no "out of scope" section, vague items, invented numbers, reused IDs: covered by the rules in `SKILL.md`.
+
+## Other skills to use together
+
+`polished-document-style` (markdown while drafting) · `fsd-writing` (detail a developer can start from) · `user-story-writer` (break into stories) · `test-case-template` (turn requirements into test cases) · `simplicity-first` (cut unneeded content) · `presentation-design` (present to executives).
+
+
 ---
 
 # skill: spell-out-abbreviations
@@ -1189,8 +968,6 @@ Use with `srs-writing` section 8. Go through all of it before every send. "Secti
 Use when text is heavy with abbreviations or jargon
 
 # Spell Out Abbreviations
-
-> **Language:** follow `human-writing` for the wording of every line. This skill gives the format and structure. `human-writing` says how to write so readers understand.
 
 > **Rule 1:** write every abbreviation in full the first time, with the abbreviation in brackets. After that you may use the abbreviation.
 > **Rule 2:** put a short explanation in brackets the first time you use any technical term, so readers from outside the field do not have to guess.
@@ -1246,14 +1023,6 @@ read it and guess the meaning? If they cannot guess, explain it.
 
 Every kind of document · slides · labels and on-screen text · sales copy · diagram descriptions · code comments ·
 chat answers — **anything a person reads**
-
-## Common examples
-
-Model Context Protocol (MCP) · Application Programming Interface (API) ·
-Key Performance Indicator (KPI) · Service Level Agreement (SLA) ·
-Return on Investment (ROI) · Stock Keeping Unit (SKU) · Value Added Tax (VAT) ·
-Cash on Delivery (COD) · Objectives and Key Results (OKR) ·
-Personally Identifiable Information (PII) · Proof of Concept (POC)
 
 Code-side abbreviations (RBAC · SSO · CI/CD · SRS · ADR and so on) → the extension in plugin `software-development` → `superuser` → `references/code-extensions.md`
 

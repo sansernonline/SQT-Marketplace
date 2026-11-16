@@ -5,8 +5,6 @@ description: Use when writing or fixing a Jenkinsfile
 
 # jenkins-pipeline — a Jenkinsfile that builds images, tests and deploys with Helm without leaking secrets
 
-Lives in plugin `software-development` · wording follows `human-writing` · every source checked on 2026-10-27 (links under "Sources").
-
 > **The one rule:** keep secrets in Jenkins credentials and let the shell read them from the environment (`sh '...'` with single quotes) · never let Groovy concatenate a secret into a command.
 > Groovy expands the value before it reaches the agent, so the secret ends up in the process arguments, where `ps` can see it ([Jenkins: Using a Jenkinsfile](https://www.jenkins.io/doc/book/pipeline/jenkinsfile/)).
 
@@ -18,18 +16,8 @@ Lives in plugin `software-development` · wording follows `human-writing` · eve
 
 Do not use when: the team uses GitHub Actions · GitLab CI · Azure DevOps → `cicd-and-release` (`references/per-platform.md`) · there is no chart to deploy yet → `kubernetes-helm` first
 
-## Other skills to use instead or alongside
+Alongside: `cicd-and-release` (read first · general pipeline principles) · `config-and-secrets` (store, rotate secrets) · `security-gate` (dependency, image, secret checks) · [`kubernetes-helm`](../kubernetes-helm/SKILL.md) (owns the chart · Dockerfile). Instead: agent drives Jenkins through MCP → `mcp-server` · untrusted-code containers → `docker-sandbox`
 
-| Job | Skill | How |
-|---|---|---|
-| General pipeline principles: stages · build once · branches · environments · migration · rollback | `cicd-and-release` | **Alongside (read first)**. This skill covers only the Jenkins part |
-| Where to store, rotate and separate secrets per environment | `config-and-secrets` | Alongside |
-| Check dependencies · secrets in code · images before release | `security-gate` | Alongside |
-| Write a chart · values · probes · resource limits · Dockerfile | [`kubernetes-helm`](../kubernetes-helm/SKILL.md) | Alongside (owns the chart) |
-| Services that send messages through Kafka | [`kafka-streaming`](../kafka-streaming/SKILL.md) | Alongside |
-| Let an agent drive Jenkins through MCP | `mcp-server` | Instead |
-| Containers that run untrusted code · sandbox | `docker-sandbox` | Instead |
-| Whole-system vulnerabilities | `security-audit` | Instead |
 
 ## 1 · Declarative Pipeline layout
 
@@ -124,23 +112,6 @@ helm upgrade --install clinic deploy/chart/clinic-voice -n clinic-production \
   - `curl -X POST --user "$JENKINS_AUTH" -F "jenkinsfile=<Jenkinsfile" "$JENKINS_URL/pipeline-model-converter/validate"` (`JENKINS_AUTH` = `user:api_token`) ([Pipeline Development Tools](https://www.jenkins.io/doc/book/pipeline/development/))
   - The linter checks only Declarative syntax. It does not run the pipeline and does not catch string interpolation → check section 3 yourself, or run `grep -nE 'sh +"|sh +\x27{3}' Jenkinsfile` and review every line it finds
 
-## Worked example: dental clinic voice agent
-
-**Problem:** a dental clinic voice agent system with 5 services (`web` · `api` · `voice-gateway` · `stt` · `tts`) in one chart `clinic-voice` · built as Docker images · staging is tested automatically · for production, a release manager clicks to approve · service names, namespaces and probes match `kubernetes-helm`
-
-**What was done:** the full Jenkinsfile is at [`references/jenkinsfile-voice-clinic.md`](references/jenkinsfile-voice-clinic.md) · decision summary
-
-| Topic | Choice | Reason |
-|---|---|---|
-| Clinic secrets (STT/TTS keys · Kafka · database) | In the chart's `ExternalSecret`, never through Jenkins | Jenkins knows only the kubeconfig and the registry · patient data stays out of the build log (`pdpa-compliance` · `logging-standards`) |
-| image | `registry.example.com/clinic/<service>:<sha12>` + digest | Every service has its own version |
-| digest | Written to `values-staging.yaml` and `values-production.yaml` in the build step | Production uses the same digest that passed staging |
-| Test staging | Hit `/health/live` and `/health/ready` of `web` `api` `voice-gateway` + 1 test call | Before the human gate |
-| Human gate | `input` `submitter: 'clinic-release-managers'` timeout 2 hours | A release window that does not collide with calls in progress `(รอยืนยัน)` |
-| Failure | release `clinic` in `clinic-production` · `--atomic --timeout 20m` rolls back by itself · if the post-deploy smoke fails → `helm rollback clinic` | stt/tts take long to load models, so the timeout is long `(ยังไม่ได้วัด)` · drill on staging every quarter |
-
-**Result:** secrets are not in the Jenkinsfile · production gets the same image that passed staging, traceable by digest `(ยังไม่ได้ตรวจ: not yet run against a real Jenkins)`
-
 ## Check before sending
 
 - [ ] No `sh "..."` or `"""` that contains a `$` for a secret · no `echo` of a secret
@@ -152,10 +123,7 @@ helm upgrade --install clinic deploy/chart/clinic-voice -n clinic-production \
 - [ ] Passes `declarative-linter` or the validate endpoint
 - [ ] Anything not yet checked is told to the user plainly
 
-## Sources (checked 2026-10-27)
+## References
 
-- Jenkins: [Pipeline Syntax](https://www.jenkins.io/doc/book/pipeline/syntax/) · [Using a Jenkinsfile](https://www.jenkins.io/doc/book/pipeline/jenkinsfile/) · [Shared Libraries](https://www.jenkins.io/doc/book/pipeline/shared-libraries/) · [Pipeline Development Tools](https://www.jenkins.io/doc/book/pipeline/development/) · [Security advisories](https://www.jenkins.io/security/advisories/) · [input step](https://www.jenkins.io/doc/pipeline/steps/pipeline-input-step/)
-- Plugins: [Credentials Binding](https://plugins.jenkins.io/credentials-binding/) · [Kubernetes](https://plugins.jenkins.io/kubernetes/) · [MCP Server](https://plugins.jenkins.io/mcp-server/) · [plugin-installation-manager-tool](https://github.com/jenkinsci/plugin-installation-manager-tool)
-- Helm: [upgrade 4.3.1](https://helm.sh/docs/helm/helm_upgrade/) · [upgrade 3.x](https://helm.sh/docs/v3/helm/helm_upgrade/) · [rollback](https://helm.sh/docs/helm/helm_rollback/)
-- Docker · Trivy: [buildx build](https://docs.docker.com/reference/cli/docker/buildx/build/) · [Docker security](https://docs.docker.com/engine/security/) · [Trivy image CLI](https://trivy.dev/latest/docs/references/configuration/cli/trivy_image/)
-- The Credentials Binding page shows how to use `withCredentials` only for `usernamePassword` and warns to use single quotes · the `file` and `sshUserPrivateKey` types are cited from the Using a Jenkinsfile page
+- [`references/jenkinsfile-voice-clinic.md`](references/jenkinsfile-voice-clinic.md) — open for the full Jenkinsfile and the worked example (dental clinic voice agent) decision table
+- [`references/sources.md`](references/sources.md) — sources checked 2026-10-27

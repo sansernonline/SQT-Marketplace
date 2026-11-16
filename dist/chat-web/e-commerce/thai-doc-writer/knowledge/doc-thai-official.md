@@ -68,17 +68,6 @@ Word choice — swap the everyday word for the letter word:
 | ภายในวันที่ X / ภายใน X วัน | ภายใน X วัน นับจากวันที่ได้รับหนังสือฉบับนี้ |
 | เรา | บริษัทฯ (ไม่ใช้บุรุษที่ 1) |
 
-## 5. Body paragraph — before and after
-
-Draft (AI):
-> บริษัทได้ทำการตรวจสอบระบบแล้ว ซึ่งพบว่ามีความผิดพลาดในการบันทึกข้อมูลของเดือนกันยายน ดังนั้นจึงมีความจำเป็นต้องขอขยายระยะเวลาการยื่นเอกสารออกไป
-
-Clean (ด้วย → ข้อเท็จจริง → ในการนี้):
-> ด้วยบริษัทฯ ตรวจสอบระบบบัญชีแล้วพบว่าข้อมูลเดือนกันยายน 2569 บันทึกผิดพลาด ขณะนี้อยู่ระหว่างแก้ไข คาดว่าจะแล้วเสร็จวันที่ 10 พฤศจิกายน 2569
-> ในการนี้ บริษัทฯ ขอขยายระยะเวลายื่นเอกสารประกอบการตรวจสอบถึงวันที่ 15 พฤศจิกายน 2569
-
-What changed: ทำการตรวจสอบ → ตรวจสอบ · ซึ่ง/ดังนั้น/มีความจำเป็น cut · facts get dates · the request starts with ในการนี้ and names a date.
-
 ## Workflow
 
 1. Ask: sender, recipient position, purpose (inform / request / approve), deadline, enclosures, any letter being referred to.
@@ -87,13 +76,13 @@ What changed: ทำการตรวจสอบ → ตรวจสอบ · 
 4. Check: salutation and closing match; ที่ and date present; enclosures numbered and actually attached; signer's full name in brackets and position under it.
 5. Output .docx on letterhead (styling → `branded-document-design`, plugin `software-development`).
 
-## Worked example (company to Revenue Department)
-
-Salutation: เรียน อธิบดีกรมสรรพากร (Director-General of the Revenue Department) · subject: เรื่อง ขอขยายระยะเวลายื่นเอกสารประกอบการตรวจสอบ (request to extend the deadline for audit documents) · body: ตามที่ … ในการนี้ บริษัทฯ ขอขยายระยะเวลาถึงวันที่ 15 พฤศจิกายน 2569 · closing sentence: จึงเรียนมาเพื่อโปรดพิจารณา · closing: ขอแสดงความนับถือ.
-
 ## Related
 
 `doc-quotation` · `doc-contract-th` · `doc-leave` · `thai-holidays` (dates).
+
+## References
+
+- [`references/templates.md`](references/templates.md) — open at workflow step 3: the 3 templates, final checklist, before/after body paragraph (section 5), worked example, sources
 
 
 ## reference: templates.md
@@ -202,3 +191,20 @@ Not used for important matters (policy, money, legal rights) — use หนั�
 - [ ] Contact line filled
 
 Last checked 2026-10-06 · Sources: https://www.arch.chula.ac.th/arch-cu/files/formcontentepost/%E0%B8%A3%E0%B8%B0%E0%B9%80%E0%B8%9A%E0%B8%B5%E0%B8%A2%E0%B8%9A%E0%B8%87%E0%B8%B2%E0%B8%99%E0%B8%AA%E0%B8%B2%E0%B8%A3%E0%B8%9A%E0%B8%A3%E0%B8%A3%E0%B8%93%20%E0%B8%89%E0%B8%9A%E0%B8%B1%E0%B8%9A%E0%B8%97%E0%B8%B5%E0%B9%88%204%20%E0%B8%9E.%E0%B8%A8.%202564.pdf · https://psdg.moe.go.th/wp-content/uploads/2023/06/คู่มืองานสารบรรณ-กพร.สป.pdf
+
+## 5. Worked examples
+
+### Body paragraph before and after
+
+Draft (AI):
+> บริษัทได้ทำการตรวจสอบระบบแล้ว ซึ่งพบว่ามีความผิดพลาดในการบันทึกข้อมูลของเดือนกันยายน ดังนั้นจึงมีความจำเป็นต้องขอขยายระยะเวลาการยื่นเอกสารออกไป
+
+Clean (ด้วย → ข้อเท็จจริง → ในการนี้):
+> ด้วยบริษัทฯ ตรวจสอบระบบบัญชีแล้วพบว่าข้อมูลเดือนกันยายน 2569 บันทึกผิดพลาด ขณะนี้อยู่ระหว่างแก้ไข คาดว่าจะแล้วเสร็จวันที่ 10 พฤศจิกายน 2569
+> ในการนี้ บริษัทฯ ขอขยายระยะเวลายื่นเอกสารประกอบการตรวจสอบถึงวันที่ 15 พฤศจิกายน 2569
+
+What changed: ทำการตรวจสอบ → ตรวจสอบ · ซึ่ง/ดังนั้น/มีความจำเป็น cut · facts get dates · the request starts with ในการนี้ and names a date.
+
+### Company to Revenue Department
+
+Salutation: เรียน อธิบดีกรมสรรพากร (Director-General of the Revenue Department) · subject: เรื่อง ขอขยายระยะเวลายื่นเอกสารประกอบการตรวจสอบ (request to extend the deadline for audit documents) · body: ตามที่ … ในการนี้ บริษัทฯ ขอขยายระยะเวลาถึงวันที่ 15 พฤศจิกายน 2569 · closing sentence: จึงเรียนมาเพื่อโปรดพิจารณา · closing: ขอแสดงความนับถือ.

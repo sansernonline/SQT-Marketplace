@@ -6,7 +6,6 @@ description: Use when designing or changing a database schema
 # Database design
 
 > **One rule:** the schema is the hardest thing in a system to change.
-> A code bug fixed today is done today, but a wrong schema stays for 3 years, with another 10 million real rows to migrate along with it.
 
 ## When to use this skill
 
@@ -15,18 +14,7 @@ description: Use when designing or changing a database schema
 - Writing a migration, especially once the system holds real data
 - A query is slow and you suspect the schema or an index
 
-## When to use another skill instead, or together
-
-| Task | Skill | |
-|---|---|---|
-| Choose the overall architecture | `architecture-patterns` | instead |
-| Design endpoints and JSON shapes | `api-conventions` | instead |
-| Store passwords, tokens, user permissions | `auth-implementation-patterns` | instead |
-| Where to keep connection strings | `config-and-secrets` | instead |
-| Run migrations in a pipeline | `cicd-and-release` | instead |
-| Draw an Entity-Relationship (ER) diagram | `diagram-figures` or `markdown-visuals` | together |
-| Record why this database was chosen | `adr-writer` | together |
-| Abbreviations in work people read | `spell-out-abbreviations` | together |
+Not for: overall architecture → `architecture-patterns` · endpoints and JSON shapes → `api-conventions` · passwords, tokens, permissions → `auth-implementation-patterns` · running migrations in a pipeline → `cicd-and-release`
 
 **Syntax specific to each database, data types compared, and the migration commands of each Object-Relational Mapping (ORM) tool** are in `references/per-stack.md`.
 
@@ -44,7 +32,6 @@ description: Use when designing or changing a database schema
 
 > **The default is relational.** Choose document only when you **can answer why**.
 > "More flexible" is not a reason. It means the design is not done yet.
-> Most systems that chose document for flexibility end up writing join code by hand in the app.
 
 **You can mix them**: use relational as the base, and store data of uncertain shape in a `jsonb` column.
 In almost every case this is better than running 2 separate databases.

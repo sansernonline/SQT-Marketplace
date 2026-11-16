@@ -6,8 +6,6 @@ Use when a Markdown doc needs an image, SVG or ASCII art
 
 > **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
-> **Language:** write every line of wording per `human-writing`. This skill gives the format and structure; human-writing gives the way to write so people understand.
-
 > **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
 > **Rule:** Every plan, process, design, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
@@ -169,15 +167,10 @@ For every visual:
 
 ## Anti-patterns
 
-- **Text-only design docs** — "the icon is in the top-right" with no picture
 - **Linking to Figma / external design tools as the only source** — visuals must render in the repo
 - **PNG screenshots of text** — use the text, in a code block
-- **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
-- **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
-- **ASCII art outside a code fence** — proportional fonts will mangle alignment
 - **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
 - **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
-- **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
 
 ## Quick-start recipe
 
@@ -192,24 +185,9 @@ When a markdown doc needs a design picture (clickable app screens go to the plat
 4. **Add a feature reference table** below the visuals — what each element means
 5. **Cross-check accessibility checklist** before delivery
 
-Not sure a visual will render? Preview it in the viewer the reader will use (GitHub, Notion, VS Code) before delivery.
-
-## Related skills
-
-- `polished-document-style` — overall doc formatting, figure captions, callout boxes
-- `simplicity-first` (plugin `software-development`) — don't over-design the diagram; show what's needed
-- `software-diagrams` (plugin `software-development`) — which diagram type answers which question, plus the shared Mermaid theme
-- `diagram-figures` — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
-- `ui-craft` (plugin `software-development`) — spacing, hierarchy and states when the picture is a screen
-
 ## ไม่ให้ดูเหมือน AI ทำ
 
 Before sending, go through item 3 of `no-ai-look` — for HTML work, run its script · every piece must also pass eye check 3.2 (a web page adds items 10–14), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for all media is there
-
-## ตัวย่อ
-
-Spell out each abbreviation in full on first use and put the short form in brackets — for example Model Context Protocol (MCP)
-After that, use the short form. Details are in the skill `spell-out-abbreviations`
 
 
 ## reference: ascii-patterns.md
@@ -397,6 +375,7 @@ Use when building or reviewing an HTTP backend
 - For URL style · paging · dates · API ids, use `api-conventions`
 - For log format, use `logging-standards`
 - To choose an architecture, use `architecture-patterns`
+- To check responses against OpenAPI in CI or catch breaking changes, see `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md)
 
 ---
 
@@ -416,7 +395,7 @@ Use when building or reviewing an HTTP backend
 
 \* If you do not want the public to see the commit hash in `/version`, restrict it so only the internal network can call it.
 
-**Wire it to Kubernetes like this** (adapted from secondsky `health-check-endpoints` · MIT) — live and ready must point to different paths, or the point above means nothing.
+**Wire it to Kubernetes like this** — live and ready must point to different paths, or the point above means nothing.
 
 ```yaml
 livenessProbe:            # dead → restart the container
@@ -547,7 +526,7 @@ SIGTERM → 1. Stop accepting new requests (make /health/ready answer down at on
 
 ---
 
-## 6 · Ready-to-use code
+## 6 · Ready-made code
 
 | File | Stack | Status |
 |---|---|---|
@@ -555,25 +534,7 @@ SIGTERM → 1. Stop accepting new requests (make /health/ready answer down at on
 | `assets/health_py.py` | Python / FastAPI | ✓ run and tested the same way, results match on every field |
 | `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | Caution: not yet compiled or tested |
 
-```js
-// Node
-app.use(createHealthRouter({
-  version: { name: 'orders-api', version: '1.4.0', commit: process.env.GIT_SHA },
-  checks: {
-    db:   async () => { await pool.query('SELECT 1'); },          // critical
-    mail: { critical: false, run: async () => { await smtp.verify(); } },
-  },
-}));
-```
-
-```python
-# Python
-app.include_router(make_health_router(
-    version={"name": "orders-api", "version": "1.4.0", "commit": os.getenv("GIT_SHA")},
-    checks={"db": lambda: db.execute("SELECT 1"),
-            "mail": {"critical": False, "run": smtp.verify}},
-))
-```
+Usage snippets for the Node and Python routers: [`references/per-stack.md`](references/per-stack.md).
 
 ---
 
@@ -598,33 +559,6 @@ docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:808
 - [ ] Trigger a 500 and confirm no stack trace / connection string leaks out
 - [ ] After `SIGTERM`, in-flight requests finish before the app closes
 - [ ] `/ping` is not written to the log (or the file fills up with pings)
-
----
-
-## 8 · Anti-patterns
-
-- **A single `/health` that checks everything** — the orchestrator cannot tell whether to restart or only cut traffic
-- **liveness checks the DB** — a 10-second DB hiccup = every pod dies together
-- **A health check with no timeout** — a dependency hangs, and health hangs with it
-- **Sending a stack trace / connection string in health or in a 500 error**
-- **Health requires login** — the orchestrator has no token to give
-- **A different error format on every endpoint** — the client must write 5 kinds of parsing code
-- **`/ping` written to the log** — every second × 86400 = a file full of junk
-- **No graceful shutdown** — every deploy, customers see errors
-- **`Access-Control-Allow-Origin: *` together with cookies** — lets other sites send requests as the user
-
----
-
-## 9 · Links to other skills
-
-| Need | Use together with |
-|---|---|
-| Log format and correlation id | `logging-standards` |
-| Tests for these endpoints | `testing-standards` |
-| Check responses against OpenAPI in CI · contract with the frontend team · breaking-change check | `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md) |
-| Design business endpoints | command `/api-design` |
-| Runbook for when the service is down | `incident-runbook-template` |
-| Security review | `security-engineer` + command `/security-scan` (a shortcut to `security-audit` or `security-gate`) |
 
 
 ## reference: per-stack.md
@@ -882,6 +816,28 @@ this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r))
 | OpenAPI | `Microsoft.AspNetCore.OpenApi` (`AddOpenApi()` + `MapOpenApi()` · มากับ template ตั้งแต่ .NET 9) · ทางเลือก: Swashbuckle / NSwag | `swagger-jsdoc` | มีในตัว `/docs` |
 | rate limit | `AddRateLimiter` | `express-rate-limit` | `slowapi` |
 
+## Wiring the ready-made health router
+
+```js
+// Node
+app.use(createHealthRouter({
+  version: { name: 'orders-api', version: '1.4.0', commit: process.env.GIT_SHA },
+  checks: {
+    db:   async () => { await pool.query('SELECT 1'); },          // critical
+    mail: { critical: false, run: async () => { await smtp.verify(); } },
+  },
+}));
+```
+
+```python
+# Python
+app.include_router(make_health_router(
+    version={"name": "orders-api", "version": "1.4.0", "commit": os.getenv("GIT_SHA")},
+    checks={"db": lambda: db.execute("SELECT 1"),
+            "mail": {"critical": False, "run": smtp.verify}},
+))
+```
+
 
 ---
 
@@ -902,18 +858,7 @@ Use when adding API endpoints or checking API consistency
 - Reviewing an API and feeling that its parts are not alike
 - Needing to answer "if we change it this way, will clients break?"
 
-## When to use another skill instead, or alongside
-
-| Task | Skill | |
-|---|---|---|
-| Design all the endpoints of one feature | command `/api-design` | instead |
-| Health check, error envelope, graceful shutdown | `web-service-essentials` | instead |
-| Tables, columns, relations | `database-design` | instead |
-| Tokens, scopes, permissions | `auth-implementation-patterns` | alongside |
-| Correlation id that appears in errors | `logging-standards` | alongside |
-| Contract tests between systems | `testing-standards` | alongside |
-| Recording why this convention was chosen | `adr-writer` | alongside |
-| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
+Not for: designing all the endpoints of one feature → command `/api-design` · health check, error envelope, graceful shutdown → `web-service-essentials` · tables and relations → `database-design`
 
 **A template of the conventions document that you can copy and use** → `assets/API-CONVENTIONS.md`
 
@@ -923,8 +868,6 @@ Use when adding API endpoints or checking API consistency
 
 Put the file `docs/API-CONVENTIONS.md` in place (the template is at `assets/API-CONVENTIONS.md`).
 Write every decision made from this page into that file, with the date and a short reason.
-
-> A convention that lives in one person's head is not a convention — someone who joins the team next month will do it another way.
 
 ---
 
@@ -1137,7 +1080,7 @@ A fitting period: for an internal API, 1 release cycle. For an API used by outsi
 
 ## 11 · Check before releasing a new endpoint
 
-Go through every item against the endpoint you added. Fail one and it is not merged yet (idea from ECC api-design).
+Go through every item against the endpoint you added. Fail one and it is not merged yet.
 
 - [ ] The URL is a plural noun per section 2 · sits under a version per section 3 · has no `GET` that changes data
 - [ ] Every list has pagination and a page-size ceiling (section 4) · filter and sort use the same parameter names as existing endpoints (section 5)
@@ -1229,7 +1172,6 @@ Use when writing code that can fail, with retry and timeout
 | Where a failed background job goes next | `background-jobs` | alongside |
 | Error messages that must be translated into several languages | `i18n-and-locale` | alongside |
 | Tests for failure cases | `testing-standards` | alongside |
-| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 
 ---
 
@@ -1360,31 +1302,30 @@ Use `finally` / `using` / `with` / `defer` instead of repeating it on every exit
 
 ## 7 · Check before sending
 
-Go through this against the diff every time you touch code that calls outside the process (idea from ECC error-handling)
+Go through this against the diff every time you touch code that calls outside the process
 
 - [ ] Every `catch` clearly does one of these: handles it and goes on · converts it to an error of its own layer and throws on · lets it pass to the outermost layer to log (section 1) — no `catch` that logs and rethrows
 - [ ] Every outside call (HTTP · DB · queue · file) has a deliberate timeout and retries only the transient types in section 3 · a write that retries has an idempotency key (section 4)
 - [ ] The message to the user says what to do next · no stack trace or table name goes out (section 2) · the log for the same error has a correlation id and enough data to reproduce it
 - [ ] Outcomes the business expects (not found · insufficient balance · duplicate) are return values or types the caller must handle, not exceptions
 - [ ] Each outside dependency has at least 1 failure-path test (timeout · 5xx · bad payload), and a test confirms that partial failure follows section 6 and does not fail the whole page
-- [ ] None of these 4 kinds of silent failure swallowing (adapted from silent-failure-hunter in pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10):
+- [ ] None of these 4 kinds of silent failure swallowing:
   - **optional chaining or `?? default`** that lets a missing value pass with nobody knowing (`order?.total ?? 0` turns an order that failed to load into a zero total)
   - **falling back to a mock or sample data outside tests** — the live system shows fake data and looks normal
   - **retries run out, then silence** — after the last try it returns empty or success, throws no error, and tells the caller nothing
   - **a catch that logs and carries on in the UI** — the user sees a normal screen although the data never arrived; show an error state they can see
 
-## 8 · Anti-patterns
+## References
 
-- **An empty `catch`** — the hardest problem to find is the one that leaves no trace
-- **Returning `null` instead of throwing an error** — the caller cannot tell "no data" from "the system broke"
-- **`catch (Exception)` in the innermost layer** — swallows your own bugs too
-- **Log and rethrow at every layer** — 1 error gets 10 lines
-- **"เกิดข้อผิดพลาด" ("an error occurred")** — does not say what to do next
-- **Sending a stack trace to the user** — shows the internal structure to someone hunting for a hole
-- **Retry with no delay** — hammering a system that is already down
-- **Retrying a write with no idempotency key** — you get duplicate records
-- **No timeout** — threads pile up until the system dies
-- **Using errors to control normal flow** — for example throwing an exception on "not found", which is a normal event
+- [`references/sources.md`](references/sources.md) — where the checklist ideas came from
+
+
+## reference: sources.md
+
+# Sources · error-handling-patterns
+
+- Section 7 checklist: idea from ECC error-handling.
+- The 4 silent-failure kinds in section 7: adapted from silent-failure-hunter in pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10.
 
 
 ---
@@ -1548,28 +1489,18 @@ grep "a3f9c1b2" logs/app-*.log          # does one request show every line?
 
 ---
 
-## 8 · Anti-patterns
+## 8 · Anti-patterns not covered above
 
-- **`console.log` / `print()` in real code** — no level, no time, no cid, not written to a file
-- **Logging everything** — the file grows so large you cannot find anything, and it is expensive and slow
 - **A silent `try { } catch (e) { }`** — log at least 1 line
 - **Log, then rethrow** — one problem shows up 3 times in the file. Log at the top layer that really handles the error instead.
-- **Variables embedded in the message** (`` `บันทึก order ${id} ไม่สำเร็จ` ``) — you cannot group the logs.
-  Use a fixed message + context instead.
 - **Logging inside a loop that runs thousands of times** — log one summary when the loop ends
-- **A timestamp with no timezone** — the server uses UTC but Thai readers read it as +07:00, so times are compared 7 hours off
-- **No retention** — one day the disk fills and the system goes down from its own logs
+- **Logging everything** — the file grows so large you cannot find anything, and it is expensive and slow
 
 ---
 
 ## 9 · Links to other skills
 
-| Need | Use with |
-|---|---|
-| health/ping/version endpoint | `web-service-essentials` |
-| Writing tests with full coverage | `testing-standards` |
-| Runbook during an incident | `incident-runbook-template` |
-| Postmortem after an incident | `postmortem-template` |
+`testing-standards` (tests with full coverage) · `incident-runbook-template` · `postmortem-template`
 
 
 ## reference: per-stack.md
@@ -1791,181 +1722,61 @@ export const correlationInterceptor: HttpInterceptorFn = (req, next) =>
 
 Use when building login with sessions, JWT, OAuth or SSO
 
-# Authentication Implementation Patterns
+# auth-implementation-patterns — secure login, token, MFA and authorization choices
 
-## When to use this skill
+## Use when
+- Building login/signup/logout or a password reset flow.
+- Adding multi-factor authentication (MFA): TOTP, SMS, WebAuthn.
+- Choosing session vs token authentication.
+- Integrating OAuth or OpenID Connect (OIDC) logins, or single sign-on (SSO) with SAML or OIDC.
+- Designing API authentication (API keys, JSON Web Token (JWT), OAuth).
+- Reviewing existing auth code for security issues.
 
-- Building login/signup/logout
-- Adding password reset flow
-- Adding multi-factor authentication (MFA): TOTP, SMS, WebAuthn
-- Choosing session vs token authentication
-- Integrating OAuth or OpenID Connect (OIDC) logins (Google, GitHub, etc.)
-- Implementing single sign-on (SSO) with SAML or OIDC
-- Designing API authentication (API keys, JSON Web Token (JWT), OAuth)
-- Reviewing existing auth code for security issues
+## Steps
 
-## อ่านเพิ่มเมื่อ
+1. **Choose the pattern by who is authenticating.**
+   - Browser user, first-party app → session cookies (`HttpOnly`, `Secure`, `SameSite`). Cross-domain → JWT in an `HttpOnly` cookie, never `localStorage`.
+   - Mobile app → OAuth 2.0 PKCE flow.
+   - Service-to-service → same org: mTLS or service mesh; external: OAuth 2.0 Client Credentials.
+   - Third-party developer → API keys (with rotation) or OAuth.
 
-| ไฟล์ | เปิดเมื่อ |
-|---|---|
-| [references/auth-flows.md](references/auth-flows.md) | When writing session, JWT, OAuth with PKCE or password reset code, open it for the step-by-step order |
-| [references/mfa.md](references/mfa.md) | When choosing or building MFA and you need TOTP setup steps, WebAuthn usage or the limits of SMS |
-| [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md) | Open this file if you are designing API authentication or API keys, or need RBAC and ABAC examples |
-| [references/libraries-and-code.md](references/libraries-and-code.md) | When choosing a library by language, or you need sample code for password hashing and rate limiting |
+2. **Sessions (server-rendered apps, monoliths, one domain).** Cookie `HttpOnly` + `Secure` + `SameSite=Lax` (or Strict). Session ID cryptographically random, ≥ 128 bits. Store in Redis with a time-to-live (TTL), not in app memory if more than one instance runs. Idle timeout 30 min, absolute timeout 8–12 hours. Issue a new session ID when privileges change (login, role change). On logout, delete the session from the store. Avoid: session inside a JWT (cannot revoke) · session token in `localStorage` (cross-site scripting (XSS) can steal it) · same ID after login (session fixation).
 
-## Choose the Right Pattern
+3. **JWT (microservices, mobile, single-page app (SPA) with a backend API).** JWT is overused: with a single backend, sessions are simpler and safer. Algorithm `RS256` or `ES256`, not `HS256` for distributed systems. Access token 5–15 min. Refresh token lives days, is stored separately, is revocable, and is replaced each time it is used. Required claims `sub`, `iat`, `exp`, `iss`, `aud`. Store in an `HttpOnly Secure` cookie. Have a way to cancel tokens (blocklist, short expiry). Avoid: accepting `alg: none` (check the algorithm explicitly) · skipping signature verification · sensitive data in the payload (base64, not encrypted).
 
-```
-What's authenticating?
-│
-├─ Browser user
-│  ├─ First-party app → Session cookies (HttpOnly, Secure, SameSite)
-│  └─ Need cross-domain → JWT with httpOnly cookie (NOT localStorage)
-│
-├─ Mobile app
-│  └─ Token-based: OAuth 2.0 PKCE flow
-│
-├─ Service-to-service
-│  ├─ Same org → mTLS or service mesh
-│  └─ External → OAuth 2.0 Client Credentials
-│
-└─ Third-party developer
-   └─ API keys (with rotation) OR OAuth
-```
+4. **OAuth 2.0 / OIDC ("Login with Google/GitHub", handing login to an identity provider (IdP)).** Always Authorization Code Flow with PKCE, even for confidential clients (steps in [`references/auth-flows.md`](references/auth-flows.md)). Validate the `id_token` signature with the IdP's JWKS, and validate `aud`, `iss`, `exp`, `nonce`. Use the `state` parameter against cross-site request forgery (CSRF) and validate it. Match `code_verifier` to `code_challenge`. Use a library (Auth0, Passport.js), do not write your own. Avoid: implicit flow · Resource Owner Password Credentials flow (both deprecated).
 
-## Pattern 1: Session-Based Auth (Most apps)
+5. **MFA.** For a new app use WebAuthn (passkeys) by default (no shared secret to steal). Use TOTP when users need easy standard 2FA. Use SMS or email only as a last resort (SMS is not safe against SIM swap). Details: [`references/mfa.md`](references/mfa.md).
 
-**When to use:** server-rendered apps, monoliths, one domain
+6. **Passwords.**
+   - Hash with **Argon2id** (preferred) or **bcrypt** with cost ≥ 12. Never MD5, SHA-1, raw SHA-256 or plain text.
+   - Policy per NIST SP 800-63B-4 (checked 2026-10-14): minimum **15 characters** when the password is the only factor, **8** when used only inside MFA. Check against breached passwords (Have I Been Pwned (HIBP) API). Allow long passphrases (any maximum at least 64) and special characters. No forced composition rules, no forced regular changes (only on suspected breach).
+   - Reset flow: the response is the same whether or not the email exists. Token random, ≥ 256 bits, stored as a hash, expires in 15 minutes. After the new password is set, revoke all old sessions and send a confirmation email. All 9 steps: [`references/auth-flows.md`](references/auth-flows.md).
 
-**Implementation requirements:**
-- Cookie: `HttpOnly`, `Secure`, `SameSite=Lax` (or Strict)
-- Session ID: cryptographically random, ≥ 128 bits
-- Session storage: Redis with a time-to-live (TTL). Not in app memory if you run more than one instance
-- Idle timeout: 30 min default
-- Absolute timeout: 8-12 hours
-- Issue a new session ID when privileges change (login, role change)
-- On logout, delete the session from the store
+7. **Lockout and rate limiting.** 5 failed attempts in 15 min → lock 15 min; 10 in 1 hour → lock 1 hour; key on IP + email together. Message "Too many failed attempts. Try again in 15 minutes." Never "Account locked." (reveals the account exists). Use existing tools: [`references/libraries-and-code.md`](references/libraries-and-code.md).
 
-**Pitfalls:**
-- ผิด: Storing session in JWT (can't revoke)
-- ผิด: Using `localStorage` for the session token (cross-site scripting (XSS) can steal it)
-- ผิด: Keeping the same ID after login (session fixation)
+8. **API authentication.** API key for simple server-to-server · OAuth 2.0 Client Credentials for service-to-service · mTLS for high-security internal · HMAC signing for webhooks. For an API key, show the secret once at creation, store it as a hash, let users revoke it at once. Table: [`references/api-auth-and-authorization.md`](references/api-auth-and-authorization.md).
 
-## Pattern 2: JWT (Stateless Token)
+9. **Authorization.** RBAC (Role-Based Access Control) as the main model; ABAC (Attribute-Based Access Control) when permissions depend on data attributes. Check at every endpoint, on the server, using the user from the session or token. Never trust a role sent by the client or JWT claims as the authorization source.
 
-**When to use:** microservices, mobile, single-page app (SPA) with a backend API
+## Check before done
+- [ ] Session ID regenerated on login (fixation)
+- [ ] CSRF token or SameSite cookie
+- [ ] Rate limiting (brute force) and HIBP check or MFA (credential stuffing)
+- [ ] Redirect URLs on an allowlist (open redirect)
+- [ ] Same error message every time (user enumeration)
+- [ ] Constant-time comparison (timing attacks)
+- [ ] No token in the URL; header or cookie only
+- [ ] Logout invalidates on the server
+- [ ] Authorization re-checked after a role change
+- [ ] No homemade crypto or auth; no reversible password storage
 
-> Caution: **JWT is overused.** If you have a single backend, sessions are simpler and safer.
-
-**Implementation requirements:**
-- Algorithm: `RS256` or `ES256` (NOT `HS256` for distributed systems)
-- Short-lived access token: 5-15 min
-- Refresh token: longer-lived (days), stored separately, revocable
-- Issue a new refresh token each time one is used
-- Required claims: `sub`, `iat`, `exp`, `iss`, `aud`
-- Store JWT in `HttpOnly Secure cookie` (NOT localStorage)
-- Have a way to cancel tokens (blocklist, short expiry, etc.)
-
-**Pitfalls:**
-- ผิด: `alg: none` attacks (check the algorithm explicitly)
-- ผิด: Storing JWT in `localStorage` (XSS-stealable)
-- ผิด: Long-lived access tokens (you can't cancel them)
-- ผิด: Putting sensitive data in JWT (it's base64, not encrypted)
-- ผิด: Skipping signature verification
-
-## Pattern 3: OAuth 2.0 / OIDC
-
-**When to use:** "Login with Google/GitHub", or handing login to an identity provider (IdP)
-
-Use Authorization Code Flow with PKCE (Proof Key for Code Exchange) always, because it stops a stolen code from being exchanged for a token. The steps are in [references/auth-flows.md](references/auth-flows.md)
-
-**Implementation requirements:**
-- **Always use PKCE** (even for confidential clients)
-- Validate `id_token` signature (use IdP's JWKS)
-- Validate `aud`, `iss`, `exp`, `nonce`
-- Use the `state` parameter to prevent cross-site request forgery (CSRF)
-- Match `code_verifier` to `code_challenge`
-- Use a library, don't write your own (Auth0, Passport.js, etc.)
-
-**Pitfalls:**
-- ผิด: Implicit flow (deprecated, insecure)
-- ผิด: Resource Owner Password Credentials flow (deprecated)
-- ผิด: Skipping `state` validation (CSRF risk)
-- ผิด: Trusting `id_token` without verifying signature
-
-## Pattern 4: Multi-Factor Authentication (MFA)
-
-There are 3 types. For a new app, use WebAuthn (passkeys) as the default, because there is no shared secret to steal. If you need 2FA that users can set up easily and that is standard, use TOTP. Use SMS or email only as a last resort, because SMS is not safe against SIM swap. Details of all 3 are in [references/mfa.md](references/mfa.md)
-
-## Pattern 5: Password Management
-
-### Storage
-- ถูก: **Argon2id** (preferred) or **bcrypt** (cost factor ≥ 12)
-- ผิด: Never: MD5, SHA-1, SHA-256 raw, plain text
-
-### Password policy (NIST SP 800-63B-4 §3.1.1.2, checked 2026-10-14 at pages.nist.gov/800-63-4/sp800-63b.html)
-- ถูก: Minimum **15 characters** when the password is the only factor · minimum **8** when it is used only inside multi-factor authentication (MFA)
-- ถูก: Check against a list of breached passwords (Have I Been Pwned (HIBP) API)
-- ถูก: Allow long passphrases (any maximum must be at least 64 chars)
-- ถูก: Allow special characters (don't restrict them)
-- Don't force composition rules (uppercase + digit + symbol)
-- Don't force regular password changes (only when you suspect a breach)
-
-### Password reset flow
-
-Must-haves for password reset: the response message must be the same whether or not the email exists in the system. The token must be random with at least 256 bits, stored as a hash, and expire in 15 minutes. After the new password is set, revoke all old sessions and send a confirmation email. All 9 steps in order are in [references/auth-flows.md](references/auth-flows.md)
-
-## Pattern 6: Account Lockout & Rate Limiting
-
-```
-Login attempts:
-- 5 failed attempts in 15 min → lock account 15 min
-- 10 failed attempts in 1 hour → lock 1 hour
-- Use IP + email combo, not just one
-
-Lockout messaging:
-ถูก: "Too many failed attempts. Try again in 15 minutes."
-ผิด: "Account locked." (reveals account exists)
-```
-
-Use existing tools instead of writing your own. The list of tools is in [references/libraries-and-code.md](references/libraries-and-code.md)
-
-## Pattern 7: API Authentication
-
-Choose by caller: API key for simple server-to-server · OAuth 2.0 Client Credentials for service-to-service · mTLS for internal systems that need high security · HMAC signing for verifying webhooks. For an API key, show the secret only once at creation, store it as a hash, and let users revoke it immediately. The comparison table and full principles are in [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md)
-
-## Authorization Patterns (after authentication)
-
-Use RBAC (Role-Based Access Control) as the main model, and use ABAC (Attribute-Based Access Control) when you need fine-grained permissions based on data attributes. Examples are in [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md)
-
-### Implementation tip
-- Check authorization at every endpoint
-- Don't trust a role sent by the client
-- Check on the server, using the user from the session or token
-
-## Common Vulnerabilities Checklist
-
-- [ ] Session fixation (regenerate ID on login)
-- [ ] CSRF (token or SameSite cookie)
-- [ ] Brute force (rate limiting)
-- [ ] Credential stuffing, i.e. logins with leaked passwords (HIBP check, MFA)
-- [ ] Open redirect (allowlist redirect URLs)
-- [ ] User enumeration, i.e. finding which accounts exist (same error message every time)
-- [ ] Timing attacks (compare in constant time)
-- [ ] Token in URL (use header or cookie)
-- [ ] Logout that does nothing on the server (invalidate server-side)
-- [ ] Privilege escalation (re-check after role change)
-
-## Anti-patterns
-
-- Writing your own crypto or auth (use libraries)
-- Storing passwords reversibly
-- JWT for sessions when you have one backend
-- Long-lived JWT without rotation
-- Authentication without authorization checks
-- Trusting JWT claims as authorization source
-- Logout that doesn't invalidate token server-side
-- Allowing weak passwords for compliance "convenience"
+## References
+- [`references/auth-flows.md`](references/auth-flows.md) — open when writing session, JWT, OAuth with PKCE or password reset code
+- [`references/mfa.md`](references/mfa.md) — open when building MFA (TOTP setup, WebAuthn, SMS limits)
+- [`references/api-auth-and-authorization.md`](references/api-auth-and-authorization.md) — open when designing API keys or RBAC/ABAC
+- [`references/libraries-and-code.md`](references/libraries-and-code.md) — open when choosing a library or needing hashing and rate-limit samples
+- [`references/sources.md`](references/sources.md) — NIST source and check date
 
 
 ## reference: api-auth-and-authorization.md
@@ -2133,3 +1944,10 @@ Verify:
 - Use only as a last resort, never as the main method
 - Use strict rate limits
 - Codes: 6 digits, 5 min expiry
+
+
+## reference: sources.md
+
+# Sources · auth-implementation-patterns
+
+- Password policy (minimum 15 characters as the only factor, 8 inside multi-factor authentication, breached-password check, no composition rules, no forced rotation, maximum at least 64): NIST SP 800-63B-4 §3.1.1.2, https://pages.nist.gov/800-63-4/sp800-63b.html, checked 2026-10-14.

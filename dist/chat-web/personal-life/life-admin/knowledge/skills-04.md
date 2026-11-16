@@ -33,11 +33,9 @@ Get to "nothing hiding in here" in ten minutes a day. This is a method; reading 
 | Receipts, e-Tax invoices, statements, bookings | **File** | Move to the matching folder (below), then archive |
 | Newsletters, CC, notifications | **Archive** | Archive; unsubscribe if unopened for 3 issues |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.bot.or.th/th/news-and-media/news/news-20230309.html
-
 ### Order the Today and This-week items by numbers (`decision-scoring`, command `priority`)
 
-When more than 3 items are in **Today** or **This week**, score each: **urgent 1–5** (5 = due today, 4 = tomorrow, 3 = this week, 2 = next week, 1 = no date) · **important 1–5** (the user's score: money, people, a promise) · **minutes** to answer. Run `node decide.mjs priority mail.json` with `{"method":"eisenhower","items":[{"name":"boss asks for figures","urgent":5,"important":5,"minutes":60},{"name":"school form due tomorrow","urgent":4,"important":4,"minutes":5},{"name":"landlord repair time","urgent":3,"important":3,"minutes":2},{"name":"vendor invoice query","urgent":2,"important":4,"minutes":20},{"name":"newsletter survey","urgent":2,"important":1,"minutes":15}]}`. The tool sorts into 4 groups (urgent and important both 3 or more = do now; important only = schedule; urgent only = delegate or reply short; neither = drop), then by `urgent × important ÷ minutes`.
+When more than 3 items are in **Today** or **This week**, score each: **urgent 1–5** (5 = due today, 4 = tomorrow, 3 = this week, 2 = next week, 1 = no date) · **important 1–5** (the user's score: money, people, a promise) · **minutes** to answer. Run `node decide.mjs priority mail.json` with `{"method":"eisenhower","items":[{"name":...,"urgent":1-5,"important":1-5,"minutes":N}]}` (full example: `references/worked-example.md`). The tool sorts into 4 groups (urgent and important both 3 or more = do now; important only = schedule; urgent only = delegate or reply short; neither = drop), then by `urgent × important ÷ minutes`.
 
 - **Iron rules (กฎเหล็ก) outside the score:** **Verify** mail is handled first; an item due today (`urgent` 5) is done before the others, because short tasks win the score inside a group and would push a long deadline task down (the boss's figures rank 3rd of 3 in the first group above).
 - Scores are the user's and untested (starting value, not yet measured). Two items with scores within about 20% of each other → the user picks the order.
@@ -73,6 +71,45 @@ Keep it in the **Waiting On** section of the user's `tasks.md` (`task-board`) wh
 
 Chase politely on the date (`polite-message-th-en` for the wording).
 
+## Rules
+
+- Daily habit, not a monthly marathon; skip a day → do two short sessions, never a backlog weekend
+- Never mark-read-and-forget — every kept item leaves with an owner and a date
+- Do not set up auto-delete rules on anything that could be a bill, a tax document or a government notice
+- **Report File and Archive as counts by kind**, not message by message ("45 ฉบับ: ใบเสร็จ 22 · จดหมายข่าว 9 · ขนส่ง 6 · อื่น ๆ 8"). Only Verify, Today, This week and Delegate are listed one by one
+- More than 20 items in Today + This week after one session means the tests are too loose; tighten them with the user before the next run
+
+## Connecting your mail
+
+This plugin ships no email connector. The user connects Gmail (or another mail app) themselves, from the connectors or MCP settings of the Claude app they use, and grants read and draft access only, not send. Not checked against an official Google page, so no link is given here. No connector → the user pastes the mail text, or the subject lines and senders, into the chat; the method is the same.
+
+Related: `weekly-review` (clears `Waiting for`) · `task-board` (one task file) · `digital-hygiene` (phishing, account takeover) · `subscription-audit` (newsletter and trial mail).
+
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open for a sample Monday session and a full `priority` input
+- [`references/sources.md`](references/sources.md) — bank notice source (checked 2026-10-06) and credits
+
+## เรียกเป็นคำสั่ง
+
+`/personal-life:inbox-triage [--days 7]`
+
+Run the `inbox-triage` skill over the user's email via their own email connector (setup: `inbox-triage`, "Connecting your mail"): **$ARGUMENTS**
+
+Output is six buckets with counts (Verify · Today · This week · Delegate · File · Archive; Verify holds suspected phishing and comes first); answer-today items get drafted replies one by one, only on request.
+
+
+## reference: sources.md
+
+# Sources · inbox-triage
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.bot.or.th/th/news-and-media/news/news-20230309.html
+
+Source for the promise scan, drafting rules and count report: ideas from anthropics/knowledge-work-plugins `small-business/skills/inbox-manager` and its `reference/gotchas.md` (Apache-2.0, rewritten, viewed 2026-11-10).
+
+
+## reference: worked-example.md
+
 ## Worked example
 
 Monday, 63 unread. Ten minutes:
@@ -83,30 +120,9 @@ Monday, 63 unread. Ten minutes:
 - 6 **file** — e-Tax invoices to `Receipts-Tax`
 - 45 **archive** — 4 newsletters unsubscribed
 
-## Rules
+## Priority scoring input
 
-- Daily habit, not a monthly marathon; skip a day → do two short sessions, never a backlog weekend
-- Never mark-read-and-forget — every kept item leaves with an owner and a date
-- Do not set up auto-delete rules on anything that could be a bill, a tax document or a government notice
-- Reply "received, will answer by …" beats silence for anything over 2 days
-- **Report File and Archive as counts by kind**, not message by message ("45 ฉบับ: ใบเสร็จ 22 · จดหมายข่าว 9 · ขนส่ง 6 · อื่น ๆ 8"). Only Verify, Today, This week and Delegate are listed one by one
-- More than 20 items in Today + This week after one session means the tests are too loose; tighten them with the user before the next run
-
-## Connecting your mail
-
-This plugin ships no email connector. The user connects Gmail (or another mail app) themselves, from the connectors or MCP settings of the Claude app they use, and grants read and draft access only, not send. Not checked against an official Google page, so no link is given here. No connector → the user pastes the mail text, or the subject lines and senders, into the chat; the method is the same.
-
-Related: `weekly-review` (clears `Waiting for`) · `task-board` (one task file) · `digital-hygiene` (phishing, account takeover) · `subscription-audit` (newsletter and trial mail).
-
-Source for the promise scan, drafting rules and count report: ideas from anthropics/knowledge-work-plugins `small-business/skills/inbox-manager` and its `reference/gotchas.md` (Apache-2.0, rewritten, viewed 2026-11-10).
-
-## เรียกเป็นคำสั่ง
-
-`/personal-life:inbox-triage [--days 7]`
-
-Run the `inbox-triage` skill over the user's email via their own email connector (setup: `inbox-triage`, "Connecting your mail"): **$ARGUMENTS**
-
-Output is six buckets with counts (Verify · Today · This week · Delegate · File · Archive; Verify holds suspected phishing and comes first); answer-today items get drafted replies one by one, only on request.
+Run `node decide.mjs priority mail.json` with `{"method":"eisenhower","items":[{"name":"boss asks for figures","urgent":5,"important":5,"minutes":60},{"name":"school form due tomorrow","urgent":4,"important":4,"minutes":5},{"name":"landlord repair time","urgent":3,"important":3,"minutes":2},{"name":"vendor invoice query","urgent":2,"important":4,"minutes":20},{"name":"newsletter survey","urgent":2,"important":1,"minutes":15}]}`
 
 
 ---
@@ -165,19 +181,6 @@ Per recurring meeting give: **urgent 1–5** (does a decision or deadline wait o
 - 25/50-minute default meeting lengths, leaving buffer between
 - Long weekends: check the Thai public-holiday calendar for next month and move deadlines that land on or after a วันหยุด
 
-## Worked example
-
-160 h available in September. Found: meetings 78 h (49%), focus 22 h (14%), admin 30 h (19%), reactive 22 h (14%), commute 8 h. Stated priority #1 "write the Q4 (fourth-quarter) plan" got 3 h.
-
-Worst three:
-| Meeting | Sessions | Person-hours | Decisions | Action |
-|---|---|---|---|---|
-| Weekly status sync (8 people) | 4 | 32 | 0 | Make async — written update in chat by Monday 10:00 |
-| Daily stand-up 30 min | 20 | 10 (own) | few | Shorten to 15 min |
-| Vendor call weekly | 4 | 4 | 1 | Every 2 weeks |
-
-Protect: Tue/Thu 09:00–11:00 focus "Q4 plan", Wednesday morning no meetings. Expected: focus to ~30 h (19%) next month.
-
 ## Rules
 
 - Name the worst offenders politely but concretely ("weekly sync, 4 sessions, zero decisions")
@@ -191,3 +194,25 @@ Output: split table vs target · worst three with action · events added · one-
 This plugin ships no calendar connector. The user connects Google Calendar (or another calendar) themselves, from the connectors or MCP settings of the Claude app they use, with read access first; adding focus blocks (step 7) needs write access and the user's OK. Not checked against an official Google page, so no link is given here. No connector → the user pastes a 4-week export or a screenshot.
 
 Related: `weekly-review` · `meeting` (Leg 1: meetings that stay should have a goal).
+
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open for a September audit with the worst three meetings and the actions chosen
+
+
+## reference: worked-example.md
+
+# Worked example · calendar-audit
+
+## Worked example
+
+160 h available in September. Found: meetings 78 h (49%), focus 22 h (14%), admin 30 h (19%), reactive 22 h (14%), commute 8 h. Stated priority #1 "write the Q4 (fourth-quarter) plan" got 3 h.
+
+Worst three:
+| Meeting | Sessions | Person-hours | Decisions | Action |
+|---|---|---|---|---|
+| Weekly status sync (8 people) | 4 | 32 | 0 | Make async — written update in chat by Monday 10:00 |
+| Daily stand-up 30 min | 20 | 10 (own) | few | Shorten to 15 min |
+| Vendor call weekly | 4 | 4 | 1 | Every 2 weeks |
+
+Protect: Tue/Thu 09:00–11:00 focus "Q4 plan", Wednesday morning no meetings. Expected: focus to ~30 h (19%) next month.

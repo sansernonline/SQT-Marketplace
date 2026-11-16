@@ -4,9 +4,6 @@ Use when an agent has no scripted way to run the app
 
 # app-verifier-setup — give the agent hands and eyes
 
-> If an agent cannot see its own work, it cannot adjust that work, and a person must keep relaying what is on the screen.
-> This skill builds the tool once, so every later agent can reuse it.
-
 **Output:** 2 things, a script that lives with the project's tests, and a skill that is only a short guide for agents.
 
 ```
@@ -17,9 +14,9 @@ Use when an agent has no scripted way to run the app
 └─ _to_delete/verify-runs/                  evidence from each run — the script finds paths from its own location, so it does not depend on the folder it runs from
 ```
 
-(Codex · Gemini use `.agents/skills/` · `skills/` instead of `.claude/skills/`.) Examples already built: the `calculator-demo` project (web) · the Flutter Android app `Lumio - Light Meter` → `lumio-light-meter/test/e2e/verify.mjs` (Node driving `adb`, summarized in [`references/android-native.md`](references/android-native.md)).
+(Codex · Gemini use `.agents/skills/` · `skills/` instead of `.claude/skills/`.) The Flutter Android example (`lumio-light-meter/test/e2e/verify.mjs`, Node driving `adb`) is summarized in [`references/android-native.md`](references/android-native.md).
 
-**Why not write the steps as a separate text file.** In the sample project, the steps in a `.md` file and in the script disagreed from the first round. So keep the information in the script only, and let the skill point to it.
+**Keep the steps in the script only.** A separate `.md` list of steps disagrees with the script from the first round, so the skill points to the script.
 
 ---
 
@@ -42,7 +39,7 @@ Use when an agent has no scripted way to run the app
    - For an app that reads hardware (sensor · camera · GPS), feed values known in advance, through the emulator (`adb emu sensor set light 420`, virtual camera) or a fake data source that can be turned on only in a debug build. Label every check `emulator` or `เครื่องจริง` (real device), because real sensor accuracy cannot be proven on an emulator. If it has not run on a real device, write "ยังไม่ได้ตรวจบนเครื่องจริง" (not yet checked on a real device).
 
 3. **Write `test/e2e/verify.*`** so it opens the app itself on a port that does not clash (mobile: install the APK and clear app data), seeds test data, and waits until ready **with a time limit** (web: if it is not up in 10 seconds, count it as failed · mobile: set separate times for build · emulator boot · app start · each check, see the reference). Always close the app at the end, and a second run must give the same result (`principle-build-a-tool-not-handwork`).
-   - **For a web app or API that needs a server started first**, use [`scripts/with_server.py`](scripts/with_server.py). It starts the server, waits for the port, runs the script, then shuts everything down. For example `python -I scripts/with_server.py --server "npm run dev" --port 5173 -- node test/e2e/verify.mjs` (start several servers by repeating `--server` and `--port` · logs go to `--log-dir`, default `_to_delete/with-server-logs`, created automatically if missing). Tested on Windows on 2026-11-10 with `python -m http.server`, and the port was really closed afterwards. For dynamic apps, wait for `networkidle` (Playwright `page.wait_for_load_state("networkidle")`) or `data-ready="true"` before reading the DOM. Never guess with `sleep`.
+   - **For a web app or API that needs a server started first**, use [`scripts/with_server.py`](scripts/with_server.py). It starts the server, waits for the port, runs the script, then shuts everything down. For example `python -I scripts/with_server.py --server "npm run dev" --port 5173 -- node test/e2e/verify.mjs` (start several servers by repeating `--server` and `--port` · logs go to `--log-dir`, default `_to_delete/with-server-logs`, created automatically if missing). For dynamic apps, wait for `networkidle` (Playwright `page.wait_for_load_state("networkidle")`) or `data-ready="true"` before reading the DOM. Never guess with `sleep`.
 
 4. **Keep the feature list as data in the script.** Go through the menu · routes · command list · SRS, and write 1 group per feature with 1 line per check (`what to do → what must be seen`). Cover at least 3 main features and 1 error case per feature. **Every check starts from a clean state**, can run alone or in a different order, and prints `PASS/FAIL` with expected and actual values.
 5. **The script must never pass emptily** (pass without really checking anything). If a feature name does not exist, exit 1. If the app does not come up, exit 1. If no check ran, exit 1 (checking 0 items counts as broken, not as a pass).
@@ -52,18 +49,9 @@ Use when an agent has no scripted way to run the app
 7. **Prove the skill works in practice** by sending a fresh `qa-tester` agent that has never seen the code. It uses only this skill to test 1 feature from opening the app to taking a screenshot of the result. Wherever it gets stuck, fix the skill at that point.
 8. **Keep the evidence in `_to_delete/verify-runs/<time>/`**, both screenshots and test logs, apart from the code (it is temporary, the user can delete it after delivery, and the agent never deletes it).
 
-## Testing contract — build it into the app from the first screen
+## Testing contract
 
-verify must depend on things the app provides, not guess from text or CSS. Write this contract into the feature map in the script, and have the developer follow it from the first feature.
-
-| What the app must have | What it is for | Rule |
-|---|---|---|
-| `data-testid="<page>-<thing>"` in kebab-case on every button, input, result, and error message | Find elements without tying to text or CSS, so checks do not break when language or design changes | For example `book-submit` · `summary-total` · `book-error` · no duplicates on one page · the full list of testids lives in the feature map |
-| `<html data-ready="false">` → `"true"` when the page has finished loading data | Wait on a condition instead of a guessed `sleep` (step 5) | Set `true` after the last batch of data arrives, not when the component mounts |
-| A reset endpoint such as `POST /api/test/reset` → clears and re-seeds within 5 seconds | Every check starts from a clean state (step 4) | Exists only when `ALLOW_TEST_RESET=1` is set · if not set, answer 404 · never enable in production |
-| Clock lock: reset accepts `{"now":"<ISO + offset>"}` and every rule reads "today" from one module (`clock`) | Test date-dependent rules (expiry · cancel at least 24 hours ahead) with the same result every time | If `now` is not sent, use the start date written in the seed · flag off, use real time · never call `Date.now()` / `DateTime.Now` directly in a rule |
-
-Non-web apps follow the same idea: Flutter → a `Key` / Semantics label with the same name · Android → `resource-id` · command line → a `--now` option or an `APP_NOW` variable · a reset on mobile can be enabled only in a debug build.
+verify must depend on things the app provides, not guess from text or CSS: `data-testid` on every control and result · `<html data-ready>` flipping to `"true"` · a reset endpoint enabled only with `ALLOW_TEST_RESET=1` · a clock lock for date rules. Write the contract into the feature map and have the developer follow it from the first feature. Full table: [`references/testing-contract.md`](references/testing-contract.md).
 
 ## What the SKILL.md of the verify skill must contain
 
@@ -73,21 +61,11 @@ Non-web apps follow the same idea: Flutter → a `Key` / Semantics label with th
 - A link to the feature map.
 - Prohibitions: do not touch the real database · do not call external APIs that cost money or send real messages.
 
-## What not to do
-
-| Do not | Because |
-|---|---|
-| Write test steps only in human language with no script | Each agent will invent its own way to run them every time, and no two runs are alike. |
-| Put in every feature from day one | A big map that has not been tested decays faster than a small map that really works. |
-| Point the verify skill at the real system (production) | Checking turns into editing customer data. |
-| Say it is done without doing step 7 | You do not yet know whether other agents can use it. |
-
-## Links to other skills
+## References
 
 - [`references/builtin-verify.md`](references/builtin-verify.md) — Claude Code ships with `/verify`: for a project running on Claude Code, create a skill named `verify` at `.claude/skills/verify/SKILL.md` in that format, instead of `verify-<project>`.
 - [`app-verifier-upkeep`](../app-verifier-upkeep/SKILL.md) — fix it when the app has changed so much that the map no longer matches.
-- `e2e-testing-patterns` — if you want to lift some steps into automated tests in continuous integration (CI).
-- [`superuser`](../superuser/SKILL.md) — the playbooks `bug-fix` and `feature` call the skill built here.
+- [`references/testing-contract.md`](references/testing-contract.md) — open at steps 4 and 5, when writing the feature map or telling the developer which hooks to add
 
 
 ## reference: android-native.md
@@ -185,6 +163,22 @@ Source: code.claude.com/docs/en/skills (read 2026-10-23) · the version numbers 
 - `app-verifier-upkeep` maintains this one file only and does not create a nested `verify-<project>`
 
 
+## reference: testing-contract.md
+
+# Testing contract · app-verifier-setup
+
+verify must depend on things the app provides, not guess from text or CSS. Write this contract into the feature map in the script, and have the developer follow it from the first feature.
+
+| What the app must have | What it is for | Rule |
+|---|---|---|
+| `data-testid="<page>-<thing>"` in kebab-case on every button, input, result, and error message | Find elements without tying to text or CSS, so checks do not break when language or design changes | For example `book-submit` · `summary-total` · `book-error` · no duplicates on one page · the full list of testids lives in the feature map |
+| `<html data-ready="false">` → `"true"` when the page has finished loading data | Wait on a condition instead of a guessed `sleep` (step 5) | Set `true` after the last batch of data arrives, not when the component mounts |
+| A reset endpoint such as `POST /api/test/reset` → clears and re-seeds within 5 seconds | Every check starts from a clean state (step 4) | Exists only when `ALLOW_TEST_RESET=1` is set · if not set, answer 404 · never enable in production |
+| Clock lock: reset accepts `{"now":"<ISO + offset>"}` and every rule reads "today" from one module (`clock`) | Test date-dependent rules (expiry · cancel at least 24 hours ahead) with the same result every time | If `now` is not sent, use the start date written in the seed · flag off, use real time · never call `Date.now()` / `DateTime.Now` directly in a rule |
+
+Non-web apps follow the same idea: Flutter → a `Key` / Semantics label with the same name · Android → `resource-id` · command line → a `--now` option or an `APP_NOW` variable · a reset on mobile can be enabled only in a debug build.
+
+
 ---
 
 # skill: app-verifier-upkeep
@@ -209,9 +203,7 @@ Use it with a skill built by [`app-verifier-setup`](../app-verifier-setup/SKILL.
 
 ## What not to do
 
-- Edit the steps to pass when the app behaves wrongly, because that hides the bug inside the checking tool.
 - Remove a feature from the map because it is hard to test.
-- Split the PR into many small pieces, because the reviewer needs to see the whole change in one round.
 
 
 ---
@@ -222,11 +214,8 @@ Use when a project needs a Docker sandbox for untrusted code
 
 # docker-sandbox: one lab per project
 
-> Our machine gives the orders; the lab is where the work happens.
 > Inside, you can install, delete, run servers, and build test databases freely, because when something breaks you wipe it and rebuild with one command.
 > Outside (the real machine · real systems · real accounts) cannot be touched, because there is no way in from the inside.
-
-Use together with [`superuser`](../superuser/SKILL.md). In a project that has `.sandbox/`, all install and run work happens in this lab.
 
 Do not use when: writing a Dockerfile or image for a real deploy → [`kubernetes-helm`](../kubernetes-helm/SKILL.md), because the lab is a temporary place to run work, not an image that goes to production.
 
@@ -236,7 +225,7 @@ Do not use when: writing a Dockerfile or image for a real deploy → [`kubernete
 
 - **One lab per project**, named `sandbox-agent-<folder name>-<creation date>` (e.g. `sandbox-agent-sample-app-20260125`).
   - The name is set once at the first `up` and stored in the file `.sandbox/.name-<folder name>`. Later commands read the name from this file, so the name does not change with the date.
-  - The prefix `sandbox-agent-` says an agent created this lab, not a person. The creation date is also kept in the label `sqt.created`.
+  - The creation date is also kept in the label `sqt.created`.
   - If the project needs a database, cache, or browser, add it as a service in the **same lab** (one stack). Do not create a separate lab.
 - **The base image is shared across the whole machine.** `sqt-sandbox-base:1` (Node · Python · Git · Playwright Chromium · Claude Code) is built once. Each project's image adds only a thin layer the project needs, so disk is not used twice.
 - **A stopped lab uses no CPU or memory**, only disk. Run `stop` when you finish a task, and `stop-all` when you finish for the day.
@@ -269,10 +258,6 @@ You can add `-Locked` to either mode. It blocks outbound internet, leaving only 
 5. Start the lab with `.\.sandbox\sandbox.ps1 up` (or `up -Isolated` · `up -Browser`). The first project on a machine must build the base image first, which takes about 5–15 minutes. Later projects are much faster.
 6. **Prove it works:** `sandbox.ps1 exec "node -v && python3 --version && git status"`. If the project has a test command, run it once through `exec`. In `-Locked` mode you must see the line `check passed`.
 7. Record in the project's `docs/README.md`: the lab name (`sandbox-agent-<folder name>-<date>`) · mode · port · test command in the lab.
-
-**Tested for real** on Windows + Docker Desktop 4.46 (2026-10-05, project `sample-app`): the lab built · unit tests passed 15/15 · e2e on Chromium passed 14/14 in the lab.
-
-Bugs found during testing are already fixed in the script: PowerShell 5.1 with stderr · Playwright a different version from the base image · port collisions.
 
 If the script breaks on another machine, use the `bug-fix` playbook on the script itself.
 
@@ -315,7 +300,7 @@ If the script breaks on another machine, use the `bug-fix` playbook on the scrip
 
 - The browser in the lab has no accounts, cookies, or user passwords. Log in only with the project's test accounts.
 - Copy images and videos from tests out to `_to_delete/` with `docker compose cp`.
-- Playwright MCP in the lab (examples from teaching work, not yet a standard): running as root needs `--no-sandbox` · the `--browser` value must match the `--help` of the installed version (`chromium` or `chrome`; if it does not match, it cannot find the browser) · screenshots with a relative file name land in the process's working directory, not `--output-dir`, so move them yourself · a click that times out with "not visible/stable" may be a background tab; see `e2e-testing-patterns`.
+- Playwright MCP quirks (root, `--browser`, screenshot paths, click timeouts): [references/playwright-mcp.md](references/playwright-mcp.md).
 - The user's own browser on the machine (the logged-in Chrome) is for real websites that need a real account, and follows that tool's rules. It is not a place to test.
 
 ## 6 · CAPTCHA
@@ -325,7 +310,6 @@ If the script breaks on another machine, use the `bug-fix` playbook on the scrip
   - Or turn it off with a setting for the test environment only (`CAPTCHA_ENABLED=false`).
   - **Test values must never reach the real system.** Add a startup check that production must not use a test key (`config-and-secrets`).
 - **Other people's websites:** the agent **does not solve a CAPTCHA and does not look for a way around it** (no solving services, no pretending to be a person). If you meet a CAPTCHA, stop that step, tell the user to do it themselves, and continue with the other parts. If you need data from that site often, look for an official API instead.
-- Reason: a CAPTCHA is the site owner saying "no bots." Getting around it breaks their terms and gets the IP or account banned.
 
 ## 7 · What you may do freely in the lab
 
@@ -349,11 +333,9 @@ These still stay under "รออนุมัติ" (awaiting approval) even in
 | Opening a port like `"3000:3000"` (every network card) | People on the same network can reach it. Always use `127.0.0.1:` |
 | Putting real secrets in the `Dockerfile` or image | The secret stays in the image forever |
 | Removing or raising the limits `cpus` `mem_limit` `pids_limit` until the machine hangs | A lab stuck in a loop will eat the whole machine |
-| Mounting things from the machine as writable when the lab only needs to read (`ref/` · sample data · a shared SDK cache · the source folder of isolated mode) | Tricked code in the lab can write back to the machine. Add `:ro` to every mount that is not this round's work, and have the lab copy into its own space if it must edit (idea from anthropics/claude-code devcontainer and trailofbits/skills) |
+| Mounting things from the machine as writable when the lab only needs to read (`ref/` · sample data · a shared SDK cache · the source folder of isolated mode) | Tricked code in the lab can write back to the machine. Add `:ro` to every mount that is not this round's work, and have the lab copy into its own space if it must edit |
 
 The Claude Code documentation warns that even in a container, running without permission prompts (`--dangerously-skip-permissions`) cannot stop project code that deliberately steals what is in the lab, including Claude Code's own token. Use it only with a repo you trust, and use `-Locked` when unsure.
-
-So `sandbox.ps1 claude` runs only in isolated mode. In mount mode the script refuses, because `/work` is the user's real folder (§7, last item).
 
 **Limits of `-Locked`:** DNS can go out only through the resolver the lab was given (Docker's), not any DNS server. But that resolver still forwards queries outward, so data can still be smuggled out through DNS (DNS tunnelling). For work where data must never leak, run with no network at all.
 
@@ -361,17 +343,38 @@ So `sandbox.ps1 claude` runs only in isolated mode. In mount mode the script ref
 
 ## 9 · Windows notes
 
-- Docker Desktop uses WSL 2. Files on drive `C:` that are mounted in are slower than files in a volume. If build or test is very slow, use `-Isolated` (verified: `npm ci` for just 2 packages took 52 seconds on a OneDrive folder).
+- Docker Desktop uses WSL 2. Files on drive `C:` that are mounted in are slower than files in a volume. If build or test is very slow, use `-Isolated`.
 - **Projects in a OneDrive folder:** mount mode makes `node_modules` and build files sync to the cloud, so use `-Isolated` or move the project out of OneDrive.
 - If you cannot run `sandbox.ps1`, use `powershell -ExecutionPolicy Bypass -File .\.sandbox\sandbox.ps1 <command>`.
 - `-Locked` reads the host's IP once at startup. A service whose IP changes often may drop out; run `up -Locked` again.
 
 ## Links to other skills
 
-- `parallel-attempts-pick-best`: normally competitors use one git worktree each. Use one isolated lab each (`-Name <project>-a1` …) only for work that needs truly separate machines.
-- [`app-verifier-setup`](../app-verifier-setup/SKILL.md): the verify skill's `start` script runs in the lab.
 - `config-and-secrets`: put test values in a `.env` that stays out of git, and do not bake them into the image.
 - The `superuser` playbook `housekeeping`: cleans up old labs and images.
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
+
+
+## reference: playwright-mcp.md
+
+# Playwright MCP in the lab · docker-sandbox
+
+Open from SKILL.md section 5 when you run Playwright MCP inside the lab.
+
+- Playwright MCP in the lab (examples from teaching work, not yet a standard): running as root needs `--no-sandbox` · the `--browser` value must match the `--help` of the installed version (`chromium` or `chrome`; if it does not match, it cannot find the browser) · screenshots with a relative file name land in the process's working directory, not `--output-dir`, so move them yourself · a click that times out with "not visible/stable" may be a background tab; see `e2e-testing-patterns`.
+
+
+## reference: sources.md
+
+# Sources · docker-sandbox
+
+- Tested for real on Windows + Docker Desktop 4.46 (2026-10-05, project `sample-app`): the lab built · unit tests passed 15/15 · e2e on Chromium passed 14/14 in the lab.
+- Bugs found during testing were fixed in the script: PowerShell 5.1 with stderr · Playwright a different version from the base image · port collisions.
+- Verified: `npm ci` for just 2 packages took 52 seconds on a OneDrive folder (why `-Isolated` is advised on OneDrive).
+- The `:ro` mount rule is an idea from anthropics/claude-code devcontainer and trailofbits/skills.
 
 
 ---
@@ -382,8 +385,7 @@ Use when about to ship or merge code, as a security check
 
 # security-gate — a security gate before shipping
 
-> Scanners find issues fast but raise many false alarms. Human reviewers understand context but are slow.
-> This gate lets the tools search first, then the agent confirms every finding against the real code, before it reaches a person.
+> Tools search first, then the agent confirms every finding against the real code, before it reaches a person.
 
 Use it together with [`principle-secure-by-default`](../principle-secure-by-default/SKILL.md). For an in-depth report, use the `security-engineer` agent.
 
@@ -401,11 +403,9 @@ Use it together with [`principle-secure-by-default`](../principle-secure-by-defa
    | Dockerfile · compose · IaC (if present) | trivy | `trivy config .` An Android app has none of these, so read `android/app/build.gradle*` by eye instead (signingConfig must not hard-code passwords, and release must enable minify) |
    | Android app (if present) | Check by eye with [`references/android.md`](references/android.md). For a deeper check, use MobSF (Mobile Security Framework) | — |
 
-   **Android checklist** → [`references/android.md`](references/android.md)
-
    Keep raw output in `_to_delete/security/`
-   - **Never use `--config auto` together with `--metrics=off`** — semgrep refuses to run (seen in a real sample project).
-   - **Choose semgrep rulesets by the languages found, not `p/default` alone** (idea from trailofbits/skills `semgrep` · CC-BY-SA, rewritten in our own words). For every project, run `p/security-audit` + `p/secrets` once over the whole repo. Then add per language: `p/python` (+`p/django` or `p/flask`) · `p/javascript` + `p/typescript` (+`p/react` · `p/nodejs`) · `p/csharp` · `p/dockerfile`. For several languages, pass several `--config` flags in one command. If a ruleset cannot load (no internet · wrong name), the report must say it did not run. It must not vanish silently.
+   - **Never use `--config auto` together with `--metrics=off`** — semgrep refuses to run.
+   - **Choose semgrep rulesets by the languages found, not `p/default` alone**. For every project, run `p/security-audit` + `p/secrets` once over the whole repo. Then add per language: `p/python` (+`p/django` or `p/flask`) · `p/javascript` + `p/typescript` (+`p/react` · `p/nodejs`) · `p/csharp` · `p/dockerfile`. For several languages, pass several `--config` flags in one command. If a ruleset cannot load (no internet · wrong name), the report must say it did not run. It must not vanish silently.
    - The offline set has 6 rules that almost never have a safe case (eval · HTML from a variable · shell from a variable · SQL built by concatenation · secrets in code), and it was proven to catch every one in files deliberately written wrong. If any tool cannot run, write `ยังไม่ได้ตรวจ` (not yet checked) with the reason in the report.
    - **semgrep supports Dart very poorly, and the offline rules were written for web and backend.** If semgrep finds nothing in a Flutter project, that does not mean it is safe. The report must say the Dart code is `ยังไม่ได้ตรวจด้วย static analysis` (not yet checked with static analysis) and rely on `flutter analyze` and reading the code instead. Never conclude `ผ่าน` from an empty result.
 3. **Confirm every finding** — open the real code and see whether it applies (for example, the vulnerability is in a function the project never calls). Then label it `ยืนยันแล้ว` (confirmed) / `แจ้งผิด` (false alarm) / `ยังไม่ยืนยัน` (not yet confirmed) with a reason. Give `ยังไม่ยืนยัน` no severity and say what evidence is missing. If the customer asks for a deep check of the whole system, or you find an item that needs tracing data flow across several files → [`security-audit`](../security-audit/SKILL.md) (the confirmer is a fresh agent, not the one that scanned).
@@ -438,6 +438,10 @@ Use it together with [`principle-secure-by-default`](../principle-secure-by-defa
 - Real penetration testing, or testing someone else's system, because this skill covers only this project's code and test environment.
 - Certifying 100% safety. The report says only what was checked, with what, and what was not checked.
 - Reviewing the logic and design of a diff → `code-review-checklist` (run both before merge).
+
+## References
+
+- [`references/sources.md`](references/sources.md) — origin notes for the semgrep ruleset choice
 
 
 ## reference: android.md
@@ -715,6 +719,14 @@ How to write it for the team's stacks (.NET · TypeScript/Node/Angular · Python
 - Mobile apps — use OWASP Mobile Top 10 together with [`android.md`](android.md) · the backend of a mobile app still uses this file
 
 
+## reference: sources.md
+
+# Sources · security-gate
+
+- Semgrep ruleset choice by language found: idea from trailofbits/skills `semgrep` (CC-BY-SA), rewritten in our own words.
+- gitleaks `detect`/`protect` deprecated since v8.19.0: github.com/gitleaks/gitleaks/releases/tag/v8.19.0 · checked 22 Oct 2026 (B.E. 2569).
+
+
 ---
 
 # skill: adversarial-review-panel
@@ -744,12 +756,12 @@ The line between this and [`parallel-attempts-pick-best`](../parallel-attempts-p
 
    **A reviewer from another vendor (if available)**: if the machine has the Command-Line Interface (CLI) of another vendor's model installed (such as `codex` · `gemini`), use it in place of reviewer C, with the same prompt and angle, in read-only mode, because models from different vendors may miss different things (no measured evidence yet that it beats a single vendor). But **the work content is sent out to that provider**, so use it only when permitted in advance in `~/.claude/superuser-style.md` or `docs/AGENT-LOOP.md`. If there is no CLI or no permission, use the single-vendor panel in the table.
 
-   Where independence comes from, worth knowing: in one recorded round of the CWN2026 course (2026-11-04), the Codex judge wrote 47 acceptance exam items before the app existed · 25 items (53%) were unusable when run against the real original · it caught 2 things the builder missed (pass 20/22 → 22/22) · data wrongly shared by both sides (matching the real screen 278/300) was caught because it was rerun against the real original, not because of the different vendor · so the line that matters is **the answer comes from the real original**, not the model brand · there was no control group, so the effect of the model brand cannot be separated out.
+   What matters for independence is that **the answer comes from the real original**, not the model brand (a judge that wrote its exam before the app existed still needed rerunning against the real original).
 
 4. **Launch all at once in one message, read-only**: everyone gets the same package and intent paths and differs only in angle (each person's angle is the lens in `review-lenses` item 2) · the prompt holds no opinion from the team lead on whether the work is good. Send results as a table `| ปัญหา | ที่ไหน (หน้า · ข้อ · ไฟล์:บรรทัด) | ทำให้พังอย่างไร (ขั้นตอนหรือ input) | ความรุนแรง |` (problem · where (page · item · file:line) · how it breaks (steps or input) · severity), at most 40 lines per person, and **no editing files.**
 5. **Verify every finding, one at a time**: 1 verifier per finding (a fresh `reviewer`, default `FALSE_POSITIVE`, confidence below 80 stays out of the report, per `review-lenses` item 3) who checks against the real original or runs it to show it. A finding that cannot be verified gets `PLAUSIBLE` (possible but not yet proven) or is dropped with a reason. For `PLAUSIBLE` items, decide yourself by choosing the path with the least impact and note it in the log, except matters on the `superuser` "awaiting approval" (`รออนุมัติ`) list (deleting or overwriting the user's things · commit/push · sending off the machine): prepare those and note them in the log, but do not do them yourself.
 6. **Cross-examination (only for high-risk work, or when the 3 tables contradict)**: the 3 voters are **always fixed at 3**, never reduced or increased by budget, so confidence is comparable across rounds · each holds a different lens: `security-reach` · `security-impact` · `security-defense` (or the lens that fits the item) · to confirm, a voter must cite the `file:line` of the entry point, the breaking spot and the missing guard, and an incomplete citation counts as not confirmed · merge the 3 tables into 1, strip the finders' names, and send it back to each reviewer (the same instance through `SendMessage`, no need to reread files), who answers item by item `ยืนยัน` (confirm) · `ค้าน` (object, with a reason or the step that makes it not break) · `ไม่รู้` (do not know) · `PLAUSIBLE` items from step 5 join this round too · normal work skips this step, because it is another 3 rounds of tokens.
-7. **Weight into 4 groups**: `ยืนยันข้าม` (cross-confirmed: 2 or more found it independently) > `เห็นพ้อง` (agreed: 1 found it, and after cross-examination others confirmed) > `คนเดียว` (single: nobody objected but nobody confirmed · true only when a clear breaking step exists) > `ขัดแย้ง` (disputed: someone objected, and the team lead decides from the original without counting votes) · with no cross-examination there are only `ยืนยันข้าม` and `คนเดียว` · opinions about taste are only observations in every group (idea from adverse by addyosmani · MIT).
+7. **Weight into 4 groups**: `ยืนยันข้าม` (cross-confirmed: 2 or more found it independently) > `เห็นพ้อง` (agreed: 1 found it, and after cross-examination others confirmed) > `คนเดียว` (single: nobody objected but nobody confirmed · true only when a clear breaking step exists) > `ขัดแย้ง` (disputed: someone objected, and the team lead decides from the original without counting votes) · with no cross-examination there are only `ยืนยันข้าม` and `คนเดียว` · opinions about taste are only observations in every group.
 8. **Verdict**: before writing, compare `head:` in the package with the real one. If it does not match, or a reviewer failed, is still running, or had its result cut, report it that way and never count it as clean · 1 line: `ส่งได้` (can ship) · `ส่งได้หลังแก้` (can ship after fixes) · `ยังไม่ควรส่ง` (should not ship yet), followed by the list: high · medium · low (by the definitions in `reviewer`), each item naming its group from step 7 · items dismissed are recorded in `ledger.md` with a reason from the list in `review-lenses` item 4.
 9. Ordering the fixes is the job of the user or a playbook. This skill stops at the verdict.
 
@@ -757,6 +769,15 @@ The line between this and [`parallel-attempts-pick-best`](../parallel-attempts-p
 
 - A panel uses about 3 times the tokens of a single `reviewer`. Choose a panel when the price of a miss × the chance of a miss is more than the cost of 2 extra reviewers (compute with `decision-scoring`, command `review`) · if you cannot estimate, use the default (not yet measured): work sent to outsiders, money, law, health, or choosing an irreversible path → a 3-angle panel · everything else → a single `reviewer` · for code work see `code-review-checklist` · `pr-description-template` (plugin `software-development`).
 - An Artificial Intelligence (AI) reviewer can also report problems that do not exist, so every finding must pass step 5 before entering the report.
+
+## References
+
+- [`references/sources.md`](references/sources.md) — where the mechanisms come from (viewed 2026-11-10); for other details see `review-lenses`, section "Sources"
+
+
+## reference: sources.md
+
+# Sources · adversarial-review-panel
 
 ## Sources
 

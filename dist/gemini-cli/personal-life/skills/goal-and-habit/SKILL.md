@@ -25,7 +25,7 @@ Few goals, measured honestly, carried by habits small enough to survive a bad we
 1. **Budget = real free hours per week**, not wished-for hours: 168 minus sleep, work, commute, family and chores, as the user counts it from last week's calendar. Write that number first.
 2. **For each brain-dump item** give: cost = hours per week it needs; value = **impact × desire**, each 1–5 by the user (impact = how much life changes if it happens; desire = how much the user wants it, not how much they should). Value is 1–25.
 3. **Iron rules:** an item with a fixed deadline outside the user's control (an exam date, a tax filing) goes in with `"must": true`. Cost over the whole budget → cut or shrink the item.
-4. **Run:** `node decide.mjs knapsack goals.json` — it tries every set and returns the best one for the budget · put `"max_items": 3` in the file so it never picks more than three goals. Example input (6 free hours a week; value = impact × desire):
+4. **Run:** `node decide.mjs knapsack goals.json` — it tries every set and returns the best one for the budget · put `"max_items": 3` in the file so it never picks more than three goals. 
 
 Example input (JSON for `knapsack`) and the result when run: [references/tracker-template.md](references/tracker-template.md)
 5. A close call (the "ชุดรองลงมา" line in the result is under 10% behind the best set, starting value, not yet measured; the line appears only with 20 items or fewer) or a goal the user refuses → the user decides. Impact and desire are the user's own scores; the tool only does the arithmetic. Time budget and scores are starting value, not yet measured until a quarter of weekly checks shows the real hours.
@@ -71,14 +71,10 @@ Markdown template (quarter goals table + weekly log): [references/tracker-templa
 
 ## Worked example
 
-- Goal: "Save ฿60,000 in the emergency account by 31 Dec 2026, checked on the 1st of each month"
-- Lead habit: move money on payday before spending. Cue: the salary notification. Routine: transfer ฿20,000. Reward: update the progress bar in the tracker
-- 2-minute version (bad-day minimum): transfer any amount, even ฿100, so the habit stays alive
-- Week 6 review: October ฿20,000 ✔, November only ฿8,000 (an unplanned car repair). Failure review: the routine worked, but there was no buffer. Change: lower to ฿15,000 a month and add December's bonus. Still on pace if the bonus is ≥ ฿17,000 (60,000 − 28,000 − 15,000 for December)
+Save ฿60,000 in the emergency account by 31 Dec (cue · routine · reward · week 6 review and failure review): [references/worked-example.md](references/worked-example.md)
 
 ## Rules
 
-- **Three goals maximum per quarter.** A fourth goal makes all of them weaker
 - Measure the habit weekly and the outcome monthly. Daily outcome-watching discourages people
 - Never shame a slip. Change the system first, then the goal
 - Health goals: set the habit and the measurement; ask a doctor before strict diets or intense training

@@ -5,7 +5,7 @@ description: Use when a Thai online seller starts the day
 
 # Shop Daily Briefing
 
-Part of plugin `e-commerce`. Wording follows `human-writing`. Turns this morning's order, chat and stock exports into 3–6 decisions for today, most money at risk first.
+Turns this morning's order, chat and stock exports into 3–6 decisions for today, most money at risk first.
 
 > **One rule:** every item comes from data pulled today, carries a number and a deadline, and ends with the next step. Yesterday's numbers are not today's briefing.
 
@@ -43,16 +43,7 @@ Ship-by and response deadlines differ by platform and change often. Read them fr
 
 ## Worked example
 
-Exports at 08:30 (illustrative numbers): Shopee 23 orders to ship, 4 of them past ship-by; Lazada 1 return request due tomorrow, ฿890; TikTok Shop 2 parcels with no tracking update for 5 days; master sheet shows `BAG-TOTE-BLK-L` available 12, reorder point 126; 14 unanswered chats, 1 says "จะแจ้ง สคบ.".
-
-Briefing:
-
-1. Shopee ออเดอร์ 4 ใบเลยเวลาเตรียมส่ง รวม ฿2,360 · แพ็กก่อน ส่งทันรอบรถ 17:00
-2. แชตลูกค้าขู่แจ้ง สคบ. (ออเดอร์ ฿1,250) · เจ้าของตอบเองภายในชั่วโมงนี้ ด้วยข้อเท็จจริงเท่านั้น
-3. Lazada คำขอคืน ฿890 ครบกำหนดตอบพรุ่งนี้ · ตัดสินตามตารางใน `returns-and-bad-reviews`
-4. `BAG-TOTE-BLK-L` เหลือ 12 ชิ้น ต่ำกว่าจุดสั่ง 126 · ขายแค่ช่องทางเดียว และสั่งของวันนี้ (รัน `stock-calc.mjs`)
-5. TikTok Shop พัสดุ 2 ชิ้นไม่ขยับ 5 วัน (฿640) · เปิดเคลมกับขนส่งและแจ้งลูกค้า
-6. อีก 13 แชตถามสินค้า · ตอบหลังข้อ 1–5
+Exports to briefing, 6 items (illustrative): [references/worked-example.md](references/worked-example.md)
 
 ## Check before handing over
 
@@ -61,6 +52,4 @@ Briefing:
 3. Every source used was exported today; missing sources are named.
 4. No platform deadline is stated as fact without the Seller Centre date checked.
 
-## Sources
-
-- Anthropic `anthropics/commerce-agents` (Apache-2.0) merchant-agent `inventory-operations` ("The daily briefing") and `anthropics/knowledge-work-plugins` (Apache-2.0) small-business `ticket-deflector` (proactive order triage), read 2026-11-10 through the lead's research notes. Ideas only, rewritten for Thai marketplaces; no text copied.
+Sources: [references/sources.md](references/sources.md)

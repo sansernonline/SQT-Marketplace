@@ -4,8 +4,6 @@ Use when a task ends, to report status in a table
 
 # Report status when a task ends
 
-> **Language:** write the wording of every line following `human-writing`. This skill gives the format and structure, and human-writing says how to write so that people understand.
-
 > **The one rule:** every time a task ends, there must be a status table in the task's central file, and the same table in the reply.
 > A task with no status table is not finished.
 > **Exception:** read-only playbooks (`research` · `review` · software-development: `investigation`) put the table in the reply only and write no file.
@@ -71,19 +69,13 @@ Show "ภาพรวม" (overview, if any) + a table of only **the rows that c
 - [ ] You touched no other heading in the file
 - [ ] BUILD-PLAN form: the numbers in "ภาพรวม" match the table · 1 line is added to `## ประวัติสถานะ` · "ทีมตอนนี้" (current team) has no leftover `ทำอยู่` row for a task that has finished
 - [ ] BUILD-PLAN form: run the checker until it passes (the checker is in plugin `superuser`): `python <superuser folder>/skills/polished-document-style/scripts/check_outline.py assets/build-plan-status.md <path of docs/BUILD-PLAN.md>`. It catches missing headings, swapped headings, missing bold cells, changed table headers and cells not yet filled. Other headings in the file (the task table, `## ตัดสินใจเอง`) the checker lets pass.
-- [ ] The reply has a table of only the changed rows + pending + awaiting approval (if any) + proposals (if any) + next
-
 ---
 
 ## 6 · What not to do
 
-| Do not | Because |
-|---|---|
-| Write `เสร็จ` or `ผ่าน` without really checking | A status table that lies is worse than no table. |
-| Append to the table every round | The file keeps growing and nobody knows which row is current. |
-| Create a new status file (`STATUS.md` `progress.md`) | Status scatters across places and nobody knows where to look. |
-| Hide failing items in prose | A reader of the table will think everything passed. |
-| Let a subagent write the central file itself | Writes collide and the file breaks. |
+- Do not create a new status file (`STATUS.md` `progress.md`), because status then scatters across places.
+- Do not hide failing items in prose, because a reader of the table will think everything passed.
+- Do not append to the table every round, and do not let a subagent write the central file.
 
 ---
 
@@ -283,7 +275,6 @@ Use when designing or changing a database schema
 # Database design
 
 > **One rule:** the schema is the hardest thing in a system to change.
-> A code bug fixed today is done today, but a wrong schema stays for 3 years, with another 10 million real rows to migrate along with it.
 
 ## When to use this skill
 
@@ -292,18 +283,7 @@ Use when designing or changing a database schema
 - Writing a migration, especially once the system holds real data
 - A query is slow and you suspect the schema or an index
 
-## When to use another skill instead, or together
-
-| Task | Skill | |
-|---|---|---|
-| Choose the overall architecture | `architecture-patterns` | instead |
-| Design endpoints and JSON shapes | `api-conventions` | instead |
-| Store passwords, tokens, user permissions | `auth-implementation-patterns` | instead |
-| Where to keep connection strings | `config-and-secrets` | instead |
-| Run migrations in a pipeline | `cicd-and-release` | instead |
-| Draw an Entity-Relationship (ER) diagram | `diagram-figures` or `markdown-visuals` | together |
-| Record why this database was chosen | `adr-writer` | together |
-| Abbreviations in work people read | `spell-out-abbreviations` | together |
+Not for: overall architecture → `architecture-patterns` · endpoints and JSON shapes → `api-conventions` · passwords, tokens, permissions → `auth-implementation-patterns` · running migrations in a pipeline → `cicd-and-release`
 
 **Syntax specific to each database, data types compared, and the migration commands of each Object-Relational Mapping (ORM) tool** are in `references/per-stack.md`.
 
@@ -321,7 +301,6 @@ Use when designing or changing a database schema
 
 > **The default is relational.** Choose document only when you **can answer why**.
 > "More flexible" is not a reason. It means the design is not done yet.
-> Most systems that chose document for flexibility end up writing join code by hand in the app.
 
 **You can mix them**: use relational as the base, and store data of uncertain shape in a `jsonb` column.
 In almost every case this is better than running 2 separate databases.
@@ -1152,18 +1131,7 @@ Use when adding API endpoints or checking API consistency
 - Reviewing an API and feeling that its parts are not alike
 - Needing to answer "if we change it this way, will clients break?"
 
-## When to use another skill instead, or alongside
-
-| Task | Skill | |
-|---|---|---|
-| Design all the endpoints of one feature | command `/api-design` | instead |
-| Health check, error envelope, graceful shutdown | `web-service-essentials` | instead |
-| Tables, columns, relations | `database-design` | instead |
-| Tokens, scopes, permissions | `auth-implementation-patterns` | alongside |
-| Correlation id that appears in errors | `logging-standards` | alongside |
-| Contract tests between systems | `testing-standards` | alongside |
-| Recording why this convention was chosen | `adr-writer` | alongside |
-| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
+Not for: designing all the endpoints of one feature → command `/api-design` · health check, error envelope, graceful shutdown → `web-service-essentials` · tables and relations → `database-design`
 
 **A template of the conventions document that you can copy and use** → `assets/API-CONVENTIONS.md`
 
@@ -1173,8 +1141,6 @@ Use when adding API endpoints or checking API consistency
 
 Put the file `docs/API-CONVENTIONS.md` in place (the template is at `assets/API-CONVENTIONS.md`).
 Write every decision made from this page into that file, with the date and a short reason.
-
-> A convention that lives in one person's head is not a convention — someone who joins the team next month will do it another way.
 
 ---
 
@@ -1387,7 +1353,7 @@ A fitting period: for an internal API, 1 release cycle. For an API used by outsi
 
 ## 11 · Check before releasing a new endpoint
 
-Go through every item against the endpoint you added. Fail one and it is not merged yet (idea from ECC api-design).
+Go through every item against the endpoint you added. Fail one and it is not merged yet.
 
 - [ ] The URL is a plural noun per section 2 · sits under a version per section 3 · has no `GET` that changes data
 - [ ] Every list has pagination and a page-size ceiling (section 4) · filter and sort use the same parameter names as existing endpoints (section 5)
@@ -1457,8 +1423,7 @@ Use when writing or reviewing a Functional Specification Document
 
 # Writing a Functional Specification Document (FSD)
 
-> **Language:** Write every line by `human-writing`. This skill gives the format and structure. `human-writing` says how to write so readers understand.
-> For Thai text, see `human-writing` `references/thai-grammar.md` section 4, business register.
+> For Thai text, use the business register (`human-writing` `references/thai-grammar.md` section 4).
 
 > **The one rule:** An FSD is done when a developer can read it and **write code without guessing or asking**.
 > Every point that forces a guess becomes rework after delivery.
@@ -1470,18 +1435,7 @@ Use when writing or reviewing a Functional Specification Document
 - Reviewing someone else's FSD, where you must say what is missing
 - A developer keeps asking the same questions while building. That means the FSD is incomplete.
 
-## When **not** to use it
-
-| Task | Use this instead |
-|---|---|
-| Requirements at the level a customer signs off | `srs-writing` |
-| User stories for a sprint | `user-story-writer` |
-| Designing the endpoints of one feature | command `/api-design` |
-| System-wide API agreements | `api-conventions` |
-| Tables, columns, relationships | `database-design` |
-| Screen look, spacing, states | `ui-craft` + the platform skill |
-| Markdown format and document theme | `polished-document-style` |
-| Look of the exported .docx file | `branded-document-design` |
+Not for: requirements a customer signs off → `srs-writing` · user stories for a sprint → `user-story-writer` · endpoints of one feature → command `/api-design` (system-wide agreements → `api-conventions`) · tables and columns → `database-design`
 
 ## Read more when
 
@@ -1519,7 +1473,7 @@ The SRS says what the system **must be able to do**. The FSD says **how** the sy
 3. Go use case by use case, not screen by screen. Screens come from use cases, not the other way around.
 4. Write the business rules separately first, then refer to them from the steps (item 7).
 5. Build the traceability matrix as you go, not at the end.
-6. **Draw, then collect questions.** While drawing the sequence diagram, cancellation flow, and ERD, you will find matters the stories and SRS do not answer (for example, whether a course deducts a session at booking or at attendance). Note them at the end of the document as questions with a proposed answer marked `(รอยืนยัน)`. Do not choose for the customer. (Example from that job: drawing 8 figures produced 15 new questions, and 10 of them were never in the original question set.)
+6. **Draw, then collect questions.** While drawing the sequence diagram, cancellation flow, and ERD, you will find matters the stories and SRS do not answer (for example, whether a course deducts a session at booking or at attendance). Note them at the end of the document as questions with a proposed answer marked `(รอยืนยัน)`. Do not choose for the customer.
 7. Review by item 11 before sending.
 
 ## 3 · Document outline
@@ -1640,33 +1594,11 @@ Mermaid through `software-diagrams` is only for drafts discussed in chat. Do not
 
 If nobody is free to read it, use a fresh agent that gets only the FSD file. Have it answer 8–10 questions that a developer and QA would ask (for example, "what happens on a duplicate booking?" and "which states can be reversed?"). Fix every answer that is wrong or says "I don't know" before sending. For the method and the Thai-specific questions (B.E. years · document number format), see [`../srs-writing/references/reader-test.md`](../srs-writing/references/reader-test.md).
 
-**Once code exists, compare the FSD with the real code.** Do this when you review the FSD after a build or before taking over a fix. The idea comes from trailofbits/skills and ECC intent-driven-development.
+**Once code exists, compare the FSD with the real code.** Do this when you review the FSD after a build or before taking over a fix.
 
 - Go code by code through item 9. Search the code and tests for use case codes and screen names (`rg -n "UC-0[0-9]+" --glob '!**/node_modules/**' | head -50`). A code that appears nowhere in the code or tests is a gap. Answer whether it is not built yet or built under another name.
 - Compare the 3 places that differ most often: field table (item 5) ↔ validation code · state transition table (item 6) ↔ the code that changes state (including "not allowed" rows) · error messages (item 8) ↔ strings in the code.
 - Record each difference as a table `| spec:line | file:line | who is right |` and let a person decide. During the review, do not change the FSD to match the code, and do not change the code to match the FSD.
-
-## 12 · Anti-patterns
-
-- **Copying the SRS and adding "the system will"** — you get two documents saying the same thing.
-- **A use case with only the smooth path** — the failing path is what an FSD exists to describe.
-- **"Show a warning message"** without saying what the message says.
-- **"The system calculates automatically"** without the formula and the rounding.
-- **A state diagram that is only a picture** — a picture cannot say who has permission or what side effects occur.
-- **Controlling permission by hiding a button** without specifying the server-side check.
-- **Business rules scattered through the steps** — a later change misses some of them.
-- **A screen that does not say where its data comes from** — the developer will guess the endpoint.
-- **A wireframe in place of requirements** — a picture cannot say what is mandatory or what the validation rule is.
-- **No traceability matrix** — then nobody knows whether the work is complete.
-
-## 13 · Abbreviations
-
-- **FSD** — Functional Specification Document (a requirements document detailed enough to build from)
-- **SRS** — Software Requirements Specification (a software requirements document at the level a customer signs off)
-- **BRD** — Business Requirements Document
-- **use case** — one user goal from start to finish
-- **state machine** — a state diagram showing which states an item can move between
-- **ETag** — Entity Tag (a version identifier for data, used to check whether someone else edited it first)
 
 
 ## reference: edge-cases.md

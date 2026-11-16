@@ -19,16 +19,11 @@ Use when work runs outside the request in queues or schedules
 | Task | Skill | |
 |---|---|---|
 | Timeouts and retries for ordinary requests | `error-handling-patterns` | instead |
+| Metrics and alerts | `observability-basics` | instead |
 | Events across several services through Kafka (several consumers read the same event · history is kept) | `kafka-streaming` | instead |
 | A job queue through RabbitMQ (several workers · retry · dead letter · needs a real broker) | `rabbitmq-messaging` | instead |
-| Metrics and alerts | `observability-basics` | instead |
-| Choosing the overall architecture | `architecture-patterns` | instead |
 | Importing Excel/CSV files as the main job | `data-import-export` | instead |
 | Sending email/SMS as the main job | `notifications` | instead |
-| The job table and indexes | `database-design` | alongside |
-| Worker logs and correlation id | `logging-standards` | alongside |
-| Jobs that delete expired data | `pdpa-compliance` | alongside |
-| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 | Designing an agent system (Loop · Graph · Dynamic · choosing a framework) | `llm-engineering` → [`agent-systems.md`](../llm-engineering/references/agent-systems.md) | alongside |
 
 ---
@@ -101,7 +96,7 @@ fail → wait 1 min → fail → wait 4 min → fail → wait 16 min → 4th fai
 **A job stuck because a worker died** needs an unlocker.
 If a job's `locked_at` is older than N minutes, treat it as having nobody working on it, and unlock it so another worker picks it up.
 
-**Job state is a state machine, not a boolean** (idea from wshobson python-background-jobs) — every mechanism in section 2 must be able to say which state a job is in: `queued → running → succeeded`, or `running → failed (attempts < cap) → queued`, or `failed → dead` · keep `attempts` · `locked_at` · `last_error` · `finished_at` with the job · move only along the arrows above (a `succeeded` job cannot go back to `running`; create a new job) · the admin screen and the dead letter read from this state in one place
+**Job state is a state machine, not a boolean** — every mechanism in section 2 must be able to say which state a job is in: `queued → running → succeeded`, or `running → failed (attempts < cap) → queued`, or `failed → dead` · keep `attempts` · `locked_at` · `last_error` · `finished_at` with the job · move only along the arrows above (a `succeeded` job cannot go back to `running`; create a new job) · the admin screen and the dead letter read from this state in one place
 
 ---
 
@@ -157,23 +152,26 @@ because a single 40-minute job that fails at minute 39 must start over from the 
 
 ---
 
-## 8 · Anti-patterns
+## 8 · Payload
 
-- **A job that repeats its effect when run again** — the queue will certainly run it again, not maybe
-- **Unlimited retry** — one broken job jams the whole queue
-- **No dead letter** — jobs vanish silently and nobody knows
-- **A dead letter that nobody watches** — the same as having none
-- **Scheduled jobs on several instances with no lock** — they run on top of each other
-- **Sending the whole data block in the payload** — send the id and let the job read it itself, so it gets the latest data too
-- **A long job that cannot be cancelled** — the user clicks wrong and waits 40 minutes
-- **A blind spinner that gives no progress** — the user clicks again and gets a duplicate job
-- **Not measuring the queue** — it jams and you find out when a customer calls
+- **Send the id, not the whole data block, in the payload** — the job reads it itself, so it gets the latest data too
 
 ---
 
 ## 9 · Durable workflow for agent jobs that run long or wait for human approval
 
-An agent job that runs for tens of minutes, calls an LLM and tools many times, or pauses for approval across days cannot use a plain queue, because a failure at step 8 of 10 means starting over and paying the token cost again · use an engine that records the result of every step and resumes from the same point
+An agent job that runs tens of minutes, calls an LLM and tools many times, or pauses for approval across days cannot use a plain queue, because a failure at step 8 of 10 means starting over and paying the token cost again · use an engine that records the result of every step and resumes from the same point
+
+- [`references/durable-workflow.md`](references/durable-workflow.md) — open before choosing an engine (Temporal · Step Functions · checkpointer) or writing replayable code
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
+
+
+## reference: durable-workflow.md
+
+# Durable workflow for agent jobs · background-jobs
 
 | Tool | Fits | Waits for human approval | Watch out for |
 |---|---|---|---|
@@ -188,7 +186,12 @@ An agent job that runs for tens of minutes, calls an LLM and tools many times, o
 - **The order of calls must be the same on every run** · changing the order of steps in code that still has jobs in flight makes the old jobs fail replay (Temporal calls this a nondeterminism error) · switch to the engine's versioning or patching
 - **The steps before a wait point must be safe to repeat** (section 3) · LangGraph re-runs the paused node from the start on resume, so move side effects to after the wait point
 - **Saved state carries no identity check** (the OpenAI docs warn about `RunState`) · load it only from a store we control
-- The cap on rounds, the token budget, and stopping when there is no improvement are still needed, as for jobs in a queue · details in [`agent-systems.md`](../llm-engineering/references/agent-systems.md) section 6
+- The cap on rounds, the token budget, and stopping when there is no improvement are still needed, as for jobs in a queue · details in [`agent-systems.md`](../../llm-engineering/references/agent-systems.md) section 6
+
+
+## reference: sources.md
+
+# Sources · background-jobs
 
 Sources (opened 2026-10-26): [Temporal · OpenAI Agents SDK](https://docs.temporal.io/ai-cookbook/openai-agents-sdk-python) · [Temporal announcement](https://temporal.io/blog/announcing-openai-agents-sdk-integration) · [Step Functions integration patterns](https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html) · [Step Functions Map](https://docs.aws.amazon.com/step-functions/latest/dg/state-map.html) · [LangGraph interrupts](https://docs.langchain.com/oss/python/langgraph/interrupts) · [OpenAI human in the loop](https://openai.github.io/openai-agents-python/human_in_the_loop/) · [Claude Code workflows](https://code.claude.com/docs/en/workflows)
 
@@ -221,7 +224,6 @@ Use when a system must record who did what and when
 | Permissions and identity verification | `auth-implementation-patterns` | instead |
 | Consent and data-subject rights | `pdpa-compliance` | instead |
 | Requirements on what to keep and for how many years | `srs-writing` | together |
-| Abbreviations in work that people read | `spell-out-abbreviations` | together |
 
 ---
 
@@ -344,20 +346,6 @@ Show it as a sentence people can read, not raw JSON (the sample below is the Tha
 ```
 
 Show the time in the viewer's time zone, but store it as UTC (see `i18n-and-locale`).
-
----
-
-## 8 · Anti-patterns
-
-- **Keeping the audit in general log files**: deleted by retention within a month
-- **Recording the actor's name instead of the id**: when they change their surname, the old history turns into a different person
-- **Recording only successes**: the denied attempts are what auditors look for
-- **Recording only "edited data"** without saying from what to what
-- **The app has UPDATE permission on the audit table**: a trail that can be edited is not a trail
-- **Writing the audit outside the transaction**: the transaction succeeds but there is no record
-- **Recording every click**: the important entries sink in a pile of data nobody uses
-- **Copying sensitive data into the audit**: it creates a new leak by accident
-- **No screen to view it**: the data exists, but a developer must run a query every time a customer asks
 
 
 ---
@@ -493,6 +481,8 @@ It may be collected only when truly necessary, and needs stricter measures than 
 
 **Never use real data on development machines or staging.** Always mask it first (see `cicd-and-release`).
 
+**Do not export a full-data Excel file for someone who needs only the totals.**
+
 ---
 
 ## 6 · Retention
@@ -537,22 +527,6 @@ the notification message template · how to pull the list of affected people
 
 ---
 
-## 9 · Anti-patterns
-
-- **Asking consent for everything** — when they withdraw, the system cannot keep working
-- **Pre-ticked checkboxes** — they do not count as consent
-- **Storing consent as one value `accepted_terms = true`** — you cannot prove later what was agreed
-- **Soft delete, then saying it is deleted**
-- **A retention policy with no real deletion job**
-- **Real data on staging** — and copied onto developer machines
-- **Collecting the national ID number "just in case"**
-- **Personal data in logs and crash reports**
-- **No list of outside providers** — you cannot say where the data goes
-- **Exporting a full-data Excel file** for someone who needs only the totals
-- **A privacy policy that does not match what the system really does**
-
----
-
 ## 10 · Frequently cited sections, and abbreviations
 
 Use this when a customer or the legal team asks "which section is this?" (checked against the unofficial English translation of the 2019 Act, Royal Gazette 27 May 2019 (B.E. 2562), on 23 Oct 2026 (B.E. 2569))
@@ -570,7 +544,20 @@ Use this when a customer or the legal team asks "which section is this?" (checke
 | Compensation · punitive damages | 77 · 78 |
 | Administrative fines, maximum 1 · 3 · 5 million baht | 82 · 83 · 84 |
 
-**Sectors with a second layer of rules** — health · finance · telecom have their own regulators (กระทรวงสาธารณสุข (Ministry of Public Health) · ธปท. (Bank of Thailand, BOT) / ก.ล.ต. (Securities and Exchange Commission, SEC) / คปภ. (Office of Insurance Commission, OIC) · กสทช. (National Broadcasting and Telecommunications Commission, NBTC)) that add conditions on confidentiality, retention and breach notice. Check that sector's rules before designing, and do not rely on PDPA alone (idea from BV thai-pdpa (MIT))
+**Sectors with a second layer of rules** — health · finance · telecom have their own regulators (กระทรวงสาธารณสุข (Ministry of Public Health) · ธปท. (Bank of Thailand, BOT) / ก.ล.ต. (Securities and Exchange Commission, SEC) / คปภ. (Office of Insurance Commission, OIC) · กสทช. (National Broadcasting and Telecommunications Commission, NBTC)) that add conditions on confidentiality, retention and breach notice. Check that sector's rules before designing, and do not rely on PDPA alone
+
+## 11 · Links to other skills
+
+Also: `notifications` (sending and unsubscribing from marketing messages; consent stays here) · `data-import-export` (masking exported files) · `file-upload-and-storage` (retention of attached files) · `background-jobs` (jobs that delete expired data) · `incident-runbook-template` (after a leak).
+
+## References
+
+- [`references/glossary.md`](references/glossary.md) — open when a term (controller · processor · sensitive data) must be explained
+
+
+## reference: glossary.md
+
+# PDPA glossary
 
 - **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562)
 - **Personal data** — data that identifies a person, directly or indirectly
@@ -578,21 +565,6 @@ Use this when a customer or the legal team asks "which section is this?" (checke
 - **Data controller** — whoever decides how data is collected and used (usually the system owner)
 - **Data processor** — whoever processes data on the controller's instructions, such as a cloud provider
 - **Data subject** — the person the data belongs to
-
-## 11 · Links to other skills
-
-| Need | Use with |
-|---|---|
-| A trail of who viewed or changed data | `audit-trail` |
-| Tables, encryption and soft delete | `database-design` |
-| Masking data in logs | `logging-standards` |
-| Access rights and authentication | `auth-implementation-patterns` |
-| Masking real data before loading staging | `cicd-and-release` |
-| Sending and unsubscribing from marketing messages (consent stays in this skill) | `notifications` |
-| Masking data in exported files | `data-import-export` |
-| Retention of attached files | `file-upload-and-storage` |
-| Jobs that delete expired data | `background-jobs` |
-| Recording the incident after a leak | `postmortem-template` · `incident-runbook-template` |
 
 
 ---
@@ -620,15 +592,12 @@ Use when setting up or fixing a CI/CD pipeline
 | Where secrets are stored and how they rotate | `config-and-secrets` | instead |
 | The pipeline runs on Jenkins (Jenkinsfile · credentials · approval input) | `jenkins-pipeline` | alongside |
 | Dockerfile · Helm chart · deploy to Kubernetes | `kubernetes-helm` | alongside |
-| Proportion and scope of tests | `testing-standards` | instead |
+| Proportion and scope of tests per layer | `testing-standards` · `e2e-testing-patterns` | alongside |
 | Writing a migration | `database-design` | instead |
-| Steps when the system is down | `incident-runbook-template` | instead |
+| Steps when the system is down or a deploy breaks it | `incident-runbook-template` (+ `postmortem-template` after) | instead |
 | Writing release notes for users to read | command `/release-notes` | instead |
-| Test proportion for each layer in the pipeline | `testing-standards` · `e2e-testing-patterns` | alongside |
 | Health check the pipeline uses to decide | `web-service-essentials` | alongside |
-| Steps when a deploy breaks the system | `incident-runbook-template` · `postmortem-template` | alongside |
 | Commit messages that can generate release notes automatically | `commit-message-format` | alongside |
-| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 
 **Working pipeline files for GitHub Actions, Azure DevOps and GitLab** are in `references/per-platform.md`.
 **Read more when needed:** [`references/deployment-plan-template.md`](references/deployment-plan-template.md) — plan template
@@ -804,6 +773,9 @@ During a 5% canary, when the 1-hour window is not yet full, you may use the shor
 
 > **A rollback that has never been rehearsed is the same as no rollback**, because you find out it does not work at the moment you need it.
 
+- No Friday-evening deploy while the team cannot yet roll back with a single command.
+- No manual deploy by following steps in a Word file: on the day the author is out sick, nobody can deploy.
+
 ---
 
 ## 10 · The pipeline must be fast and trustworthy
@@ -818,7 +790,7 @@ During a 5% canary, when the 1-hour window is not yet full, you may use the shor
 **Metrics worth watching:** how often you release · how long from commit to live ·
 what percentage of deploys break · how long recovery takes
 
-**Common symptoms and the first place to look** (idea from wshobson deployment-pipeline-design)
+**Common symptoms and the first place to look**
 
 | Symptom | Look here first |
 |---|---|
@@ -839,21 +811,6 @@ what percentage of deploys break · how long recovery takes
 | Staged release | production uses a staged rollout in % (for example 5 → 20 → 50 → 100) instead of a server canary · Play tracks stand in for the environments in section 5 |
 | Rollback | **you cannot roll back a version on Play**, because the versionCode cannot go down and devices that already installed it do not go back. Halt the rollout, then release a fix with a higher versionCode, and rehearse this procedure instead of section 9 |
 | Signing key | keep the upload key in the CI secret store as base64 + the password as a separate secret · `android/key.properties` and `*.jks` go in `.gitignore` · **back up the key outside CI in at least 1 place.** If you lose it, you cannot update the app until Play support resets it (use Play App Signing so Google holds the real key) |
-
----
-
-## 11 · Anti-patterns
-
-- **Rebuilding when going to production** means what was tested is not what is released
-- **Deploying by hand from steps in a Word file** · on the day the author is out sick, nobody can deploy
-- **Secrets in pipeline files** · anyone who can read the code can read the secrets
-- **Letting a failed test pass** once makes people stop trusting results for good
-- **Deploying on Friday evening** in a team that cannot yet roll back with a single command
-- **Server database migration run at app boot** · several instances collide (mobile on-device databases are the exception, see section 7)
-- **No artifact kept** turns a rollback into rebuilding from an old commit
-- **Environments whose config differs unpredictably** · "it passed on staging"
-- **A feature flag with no removal date**
-- **A pipeline that takes 45 minutes** · people start merging without waiting for the result
 
 
 ## reference: deployment-plan-template.md
@@ -1244,10 +1201,7 @@ Use when the same mistake gets corrected twice
 
 # repeated-mistakes-to-checks: a mistake that repeats must become impossible
 
-> The agent does not need to remember a hundred rules. If the path has guard rails at the right places, it hits one and gets stopped at the right moment on its own.
 > A warning in SKILL.md is the weakest guard rail. Use it as the last resort.
-
-This comes from pstack's correct command and rules-as-checks (not in this marketplace).
 
 ## Do not use when
 
@@ -1286,7 +1240,23 @@ For choosing among `session-lessons-to-skills` · `repeated-mistakes-to-checks` 
 - If you are about to write one more "never..." line when a machine could check it (grep · formula · CI), build a check instead.
 - A check's error message must say how to fix it, not just say it is wrong.
 
-Examples in this set:
+## What not to do
+
+- Add a "never..." text to SKILL.md when it could be a check.
+- Create a rule that was not proven with a real mistake, because a rule that misses its target makes everyone wrongly believe they are safe.
+- Check so broadly that it also catches correct things, because in the end everyone learns to skip it.
+
+## References
+
+- [`references/examples.md`](references/examples.md) — open when you want examples of rules already turned into checks in this set
+- [`references/sources.md`](references/sources.md) — origin notes
+
+
+## reference: examples.md
+
+# Examples · repeated-mistakes-to-checks
+
+Rules in this set that became checks:
 
 | Rule | Used to be | Now it is |
 |---|---|---|
@@ -1294,12 +1264,10 @@ Examples in this set:
 | Numbers in the README must match reality | Edited by hand | `scripts/sync/sync-docs.mjs --check` |
 | SuperUser shared files must be identical in every plugin | A text line "edit every copy" | `scripts/sync/sync-superuser.mjs --check` |
 
-## What not to do
 
-- Add a "never..." text to SKILL.md when it could be a check.
-- Create a rule that was not proven with a real mistake, because a rule that misses its target makes everyone wrongly believe they are safe.
-- Check so broadly that it also catches correct things, because in the end everyone learns to skip it.
+## reference: sources.md
 
-## Source
+# Sources · repeated-mistakes-to-checks
 
-hookify (Apache-2.0) · `agents/conversation-analyzer.md` · viewed 2026-11-10 (dig out the user's correction signals working back from the latest, rank by severity, draft regex-style rules).
+- Idea from pstack's correct command and rules-as-checks (not in this marketplace).
+- hookify (Apache-2.0) · `agents/conversation-analyzer.md` · viewed 2026-11-10 (dig out the user's correction signals working back from the latest, rank by severity, draft regex-style rules).

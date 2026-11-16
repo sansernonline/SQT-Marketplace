@@ -28,23 +28,13 @@ An agent called to work in this area opens its own role file before starting · 
 | analysing clinical data — cohorts, readmission and mortality rates, HEDIS/CMS measures, risk adjustment, small-cell suppression, clinical analysis reports | [`references/clinical-analytics.md`](references/clinical-analytics.md) | `clinical-data-analyst` |
 | HIPAA compliance work — rule map, patient rights, BAAs, breach response workflow, de-identification gotchas, risk analysis report | [`references/agent-hipaa-officer.md`](references/agent-hipaa-officer.md) | `hipaa-officer` |
 
-## agent ของสายนี้
-
-`healthcare-engineer` · `hipaa-officer` · `clinical-data-analyst`
-
 ## อ้างอิงภายนอก
 
 - anthropics/healthcare `fhir-developer` (github.com/anthropics/healthcare) — real validation code and value sets · ToS: link only, do not copy
 
-## ที่มา
-
-Merged from plugin `software-development-healthcare` (formerly named clinical-workflows → `references/clinical-workflows.md` · fhir-implementation → `references/fhir-implementation.md` · hipaa-compliance → `references/hipaa-compliance.md` — no longer separate skills) into `software-development` in v2.0.0. The original content is all still in `references/`
-
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 
 `/software-development:healthcare-systems <fhir-design | hipaa-audit> <details>`
-
-> **Language:** write every line of wording in the output per `human-writing`. This command gives the steps, while human-writing gives how to write so people can understand.
 
 Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
 
@@ -2217,14 +2207,6 @@ An agent called in for this area opens its own role file before starting work ·
 | financial regulation work — regulation map by region, applicability matrix, control mapping, audit readiness report, regulatory review and incident notification workflows | [`references/agent-fintech-compliance-officer.md`](references/agent-fintech-compliance-officer.md) | `fintech-compliance-officer` |
 | quantitative finance — credit scoring, VaR, fraud anomaly models, backtesting, model documentation card and backtest report | [`references/agent-quant-analyst.md`](references/agent-quant-analyst.md) | `quant-analyst` |
 
-## agent ของสายนี้
-
-`fintech-engineer` · `fintech-compliance-officer` · `quant-analyst`
-
-## ที่มา
-
-Moved from plugin `software-development-fintech` (formerly named payment-gateway-integration → `references/payment-gateway-integration.md` · kyc-aml-patterns → `references/kyc-aml-patterns.md` · pci-dss-compliance → `references/pci-dss-compliance.md` — no longer separate skills) and merged into `software-development` in v2.0.0. The original content is all still in `references/`
-
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 
 `/software-development:fintech-payments <transaction-flow-design | pci-audit> <details>`
@@ -4270,8 +4252,7 @@ Use when about to ship or merge code, as a security check
 
 # security-gate — a security gate before shipping
 
-> Scanners find issues fast but raise many false alarms. Human reviewers understand context but are slow.
-> This gate lets the tools search first, then the agent confirms every finding against the real code, before it reaches a person.
+> Tools search first, then the agent confirms every finding against the real code, before it reaches a person.
 
 Use it together with [`principle-secure-by-default`](../principle-secure-by-default/SKILL.md). For an in-depth report, use the `security-engineer` agent.
 
@@ -4289,11 +4270,9 @@ Use it together with [`principle-secure-by-default`](../principle-secure-by-defa
    | Dockerfile · compose · IaC (if present) | trivy | `trivy config .` An Android app has none of these, so read `android/app/build.gradle*` by eye instead (signingConfig must not hard-code passwords, and release must enable minify) |
    | Android app (if present) | Check by eye with [`references/android.md`](references/android.md). For a deeper check, use MobSF (Mobile Security Framework) | — |
 
-   **Android checklist** → [`references/android.md`](references/android.md)
-
    Keep raw output in `_to_delete/security/`
-   - **Never use `--config auto` together with `--metrics=off`** — semgrep refuses to run (seen in a real sample project).
-   - **Choose semgrep rulesets by the languages found, not `p/default` alone** (idea from trailofbits/skills `semgrep` · CC-BY-SA, rewritten in our own words). For every project, run `p/security-audit` + `p/secrets` once over the whole repo. Then add per language: `p/python` (+`p/django` or `p/flask`) · `p/javascript` + `p/typescript` (+`p/react` · `p/nodejs`) · `p/csharp` · `p/dockerfile`. For several languages, pass several `--config` flags in one command. If a ruleset cannot load (no internet · wrong name), the report must say it did not run. It must not vanish silently.
+   - **Never use `--config auto` together with `--metrics=off`** — semgrep refuses to run.
+   - **Choose semgrep rulesets by the languages found, not `p/default` alone**. For every project, run `p/security-audit` + `p/secrets` once over the whole repo. Then add per language: `p/python` (+`p/django` or `p/flask`) · `p/javascript` + `p/typescript` (+`p/react` · `p/nodejs`) · `p/csharp` · `p/dockerfile`. For several languages, pass several `--config` flags in one command. If a ruleset cannot load (no internet · wrong name), the report must say it did not run. It must not vanish silently.
    - The offline set has 6 rules that almost never have a safe case (eval · HTML from a variable · shell from a variable · SQL built by concatenation · secrets in code), and it was proven to catch every one in files deliberately written wrong. If any tool cannot run, write `ยังไม่ได้ตรวจ` (not yet checked) with the reason in the report.
    - **semgrep supports Dart very poorly, and the offline rules were written for web and backend.** If semgrep finds nothing in a Flutter project, that does not mean it is safe. The report must say the Dart code is `ยังไม่ได้ตรวจด้วย static analysis` (not yet checked with static analysis) and rely on `flutter analyze` and reading the code instead. Never conclude `ผ่าน` from an empty result.
 3. **Confirm every finding** — open the real code and see whether it applies (for example, the vulnerability is in a function the project never calls). Then label it `ยืนยันแล้ว` (confirmed) / `แจ้งผิด` (false alarm) / `ยังไม่ยืนยัน` (not yet confirmed) with a reason. Give `ยังไม่ยืนยัน` no severity and say what evidence is missing. If the customer asks for a deep check of the whole system, or you find an item that needs tracing data flow across several files → [`security-audit`](../security-audit/SKILL.md) (the confirmer is a fresh agent, not the one that scanned).
@@ -4326,6 +4305,10 @@ Use it together with [`principle-secure-by-default`](../principle-secure-by-defa
 - Real penetration testing, or testing someone else's system, because this skill covers only this project's code and test environment.
 - Certifying 100% safety. The report says only what was checked, with what, and what was not checked.
 - Reviewing the logic and design of a diff → `code-review-checklist` (run both before merge).
+
+## References
+
+- [`references/sources.md`](references/sources.md) — origin notes for the semgrep ruleset choice
 
 
 ## reference: android.md
@@ -4601,6 +4584,14 @@ How to write it for the team's stacks (.NET · TypeScript/Node/Angular · Python
 - Real penetration testing, or testing someone else's system — this file checks only this project's code and test environment
 - Other standards, such as OWASP API Security Top 10 · Application Security Verification Standard (ASVS) · Payment Card Industry Data Security Standard (PCI-DSS) · the Personal Data Protection Act (PDPA) — use the skill for that topic (`fintech-payments` · `pdpa-compliance`), but this report can be used as a common base
 - Mobile apps — use OWASP Mobile Top 10 together with [`android.md`](android.md) · the backend of a mobile app still uses this file
+
+
+## reference: sources.md
+
+# Sources · security-gate
+
+- Semgrep ruleset choice by language found: idea from trailofbits/skills `semgrep` (CC-BY-SA), rewritten in our own words.
+- gitleaks `detect`/`protect` deprecated since v8.19.0: github.com/gitleaks/gitleaks/releases/tag/v8.19.0 · checked 22 Oct 2026 (B.E. 2569).
 
 
 ---

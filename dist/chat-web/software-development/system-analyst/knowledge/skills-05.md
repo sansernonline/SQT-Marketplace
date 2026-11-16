@@ -6,8 +6,6 @@ Use when a legacy system has code but no spec
 
 Turn an undocumented system into an as-is spec that a change request can be measured against. The code says **what** the system does; it cannot say whether that was **intended**. Every claim therefore carries a source and a confidence label, and everything the code cannot answer becomes a question for a person.
 
-Use `reverse-engineering` instead when there is no source code, only binaries.
-
 ## ไม่ใช้เมื่อ
 
 | งาน | ใช้ตัวนี้แทน |
@@ -119,8 +117,6 @@ For each request, fill [assets/change-request.md](assets/change-request.md):
 
 `/software-development:legacy-spec-recovery <path to legacy code> [module to go deep on | CR text]`
 
-> **Shortcut into SuperUser:** open the `superuser` skill with the closest playbook, then copy the steps below into the todo first. The steps below give the work format and the output of this command. Use them together with the playbook, not in place of it.
-
 Recover the as-is spec of the legacy system at:
 
 **$ARGUMENTS**
@@ -227,8 +223,6 @@ Use when a mid-task finding needs a decision before going on
 
 # Flag what you found, then propose a way forward
 
-> **Language:** write every line of wording following `human-writing`. This skill gives the format and structure. human-writing says how to write so the reader understands.
-
 > **The one rule:** open with the **impact**, close with **one question**.
 > The middle is evidence and proposals, not a story of how you found it.
 
@@ -246,11 +240,7 @@ Use when a mid-task finding needs a decision before going on
 | Answer a question the user asked | `answer-shape` | instead |
 | A reversible choice (can be changed later at no cost) | `principle-proceed-on-reversible-work`: do it now, then log it in `decision-log` | instead |
 | An unknown fact (number, name, date, budget) | Put `(รอยืนยัน)` (awaiting confirmation) and keep going; do not stop to ask | instead |
-| Report finished work | `human-writing` · `status-report` | instead |
-| Explain something complex so it is understood | `answer-shape` | instead |
-| Write a document for others to read | `polished-document-style` | instead |
 | Something is really broken and must be fixed now | `targeted-fix`: fix first, then report | instead |
-| Spell out abbreviations and jargon in the answer | `spell-out-abbreviations` | together |
 | What you found is a real system incident | `incident-runbook-template` · `postmortem-template` (plugin `software-development`) | together |
 
 ---
@@ -356,20 +346,6 @@ It also signals that you thought it through and did not forget.
 ## 7 · Full example
 
 A before-and-after example (a software requirements document and work plan) is in [`references/example.md`](references/example.md)
-
----
-
-
-## 8 · Anti-patterns
-
-- **Opening with "ระหว่างตรวจผมพบว่า…" (while checking I found…).** The reader must read to the end of the paragraph to learn what to do.
-- **Disagreeing numbers written as a sentence.** "เดิม 214 ตอนนี้ 245" (was 214, now 245) makes the eye jump back and forth.
-- **Explaining how the problem happened** when it does not change what must be done.
-- **A proposal that says how to do it instead of the benefit.** The reader still cannot decide.
-- **Three questions in one paragraph.** You get one answer and must ask again.
-- **Closing with "แจ้งได้เลยครับ" (just let me know).** It asks for no decision.
-- **A long apology for a mistake.** Say what was wrong and how you fix it. That is enough.
-- **Reporting without proposing.** It pushes all the thinking back to the user.
 
 
 ## reference: example.md
@@ -483,12 +459,10 @@ Use when naming or filing a document others keep
 
 | Task | Skill | |
 |---|---|---|
-| The content inside the document | `human-writing` (code work: `srs-writing` · `fsd-writing` in plugin `software-development`) | instead |
 | Markdown formatting | `polished-document-style` | instead |
 | The look of the rendered file | `branded-document-design` (plugin `software-development`) | instead |
 | Temporary files during work | `superuser:temp-file-discipline` | instead |
 | Code work: commit messages · version of the **program** · the project document index | `commit-message-format` · `cicd-and-release` · `project-bootstrap` (plugin `software-development`) | instead / together |
-| Abbreviations in work people read | [`spell-out-abbreviations`](../spell-out-abbreviations/SKILL.md) | together |
 
 **The revision-history table template and the standard file-name list** are in `assets/naming-cheatsheet.md`.
 
@@ -506,7 +480,7 @@ Use when naming or filing a document others keep
 | Work procedures · internal guides · README · meeting notes · decision records (code work → plugin `software-development`) | **markdown** in the documents folder | It changes often, needs diffs, and is easy to search |
 
 > 🚨 **Markdown source that can be re-rendered is kept permanently in `docs/src/<topic>.md`, then rendered to docx into the documents folder (`docs/`).**
-> `docs/` holds exactly one deliverable for that topic, the .docx. No .md or .pdf of the same topic sits beside it. (The source lives in `docs/src/`, not `_to_delete/`, because it is needed every time you revise.)
+> `docs/` holds exactly one deliverable for that topic, the .docx. No .md or .pdf of the same topic sits beside it.
 > On the next revision, edit `docs/src/` and render again. Never open Word and edit by hand (matches `markdown-report-docx`). The "ต้นฉบับ" (source) line on the cover points to this file.
 
 **Make a PDF only for user manuals, or when the client asks.** Otherwise, one docx.
@@ -533,6 +507,7 @@ Use when naming or filing a document others keep
 - **The date is always ISO `YYYY-MM-DD`** and goes at the very end, so sorting by name also sorts by time. The one exception: meeting notes put the date first, because the `docs/meetings/` folder holds only meeting notes, so it sorts by date at once.
 - File names are in English even when the content is Thai. This avoids trouble when attaching to email and zipping across systems.
 - Never put a person's name in a file name. `-somchai-edit` is a sign that people are not working from one source.
+- Never name a file `final` · `final2` · `final_ล่าสุด` · `แก้แล้ว`: nobody can tell which is newer, or what was edited from which version. Use the version, status and revision history instead.
 
 **Check with the script:** `node <this skill's folder>/scripts/doc-name-check.mjs docs/*` → it lists wrong names with a proposed name. To rename many files, add `--plan _to_delete/renames.json` to get a plan without touching files, check or edit the plan, then run `--plan _to_delete/renames.json --apply`. The script does not rename `APPROVED` files, does not overwrite existing files, and does not put received files (`ref/`) in the plan.
 
@@ -592,14 +567,3 @@ Every exported document must have this table on the first page.
 | Received files | Keep their original name; never rename. They refer to that name |
 | Files mid-conversion | `_to_delete/` (see `superuser:temp-file-discipline`) |
 | Sending by chat or email | Always send a file with the version and status in the name. Never send `เอกสาร.docx` |
-
----
-
-## 7 · Anti-patterns
-
-- **`final.docx`, `final2.docx`, `final_ล่าสุด.docx`**: nobody knows which is newer.
-- **`ใบเสนอราคา แก้แล้ว.docx`**: edited from which version, and what was edited?
-- **Putting a version in the name of a file that a system keeps history for.** You get `spec-v1.md` and `spec-v2.md` side by side forever.
-- **Editing a file that is already `APPROVED`**, even a single typo.
-- **No revision-history table.** Then you must open and compare page by page.
-- **Dates like `25-09-2026` or `250926`.** They do not sort, and people read them differently.

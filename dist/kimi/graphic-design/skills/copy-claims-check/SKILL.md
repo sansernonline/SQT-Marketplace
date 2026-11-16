@@ -6,8 +6,6 @@ argument-hint: <path to the copy or the asset>
 
 # Copy Claims Check
 
-Part of plugin `graphic-design` · write the wording per `human-writing`
-
 > **One rule:** every statement that advertises a benefit or makes a comparison must have real evidence or be cut. This skill checks copy against announcements that were actually opened and read. It is **not legal advice**, and it is not approval from the Thai Food and Drug Administration (อย., FDA) or the Office of the Consumer Protection Board (สคบ., OCPB). For risky or high-value work, have someone responsible for legal matters, or the company's licence applicant, look at it before posting.
 
 Check the text on images, captions, scripts, and post pages before release. This is not a complete list of banned wording. Passing here does not mean the copy is legal.
@@ -31,7 +29,7 @@ The 2021 (B.E. 2564) FDA announcement was read from the Royal Gazette file. Whet
 
 ## 2 · Checklist of 6 items
 
-Reworked from the ideas in anthropics/knowledge-work-plugins `marketing/skills/brand-review` (Apache-2.0 · checked 2026-11-10 that no text was copied). The Thai rules in the right-hand column come only from the sources in section 1.
+The Thai rules in the right-hand column come only from the sources in section 1.
 
 | # | What to check | Rule actually read (food and supplements) | The rest |
 |---|---|---|---|
@@ -69,12 +67,6 @@ The columns are: the text · where it is · checklist item · level · how to fi
 
 Levels: `ต้องแก้` (must fix) = the text matches an item the announcement does not allow · `ดู` (take a look) = the decision maker should look at it · `(รอยืนยัน)` = no official source has been read. These levels belong to this skill and are not the wording of the law.
 
-## Worked example
-
-Task: a coffee shop selling slimming coffee sachets asks to post "กาแฟสุดยอด เบิร์นไขมันเร็ว ผอมใน 7 วัน ไม่มีผลข้างเคียง" with before and after photos.
-
-What to do: type = food (ready-made coffee) · item 1 finds "สุดยอด" and "ไม่มีผลข้างเคียง", which match list 1 item 1 · item 2 finds "เบิร์นไขมัน", "ผอม", and the before and after photos, which match list 1 item 2.5 · result: 5 items marked `ต้องแก้` · proposal: cut all 5 items and use facts such as "กาแฟสำเร็จรูป 1 กล่อง 10 ซอง ราคา 199 บาท" if the price and sachet count are correct · if the owner wants to talk about weight loss, ask the company's licence applicant first, because item 4(6) has an exception only for food under Ministry of Public Health Announcement no. 121 that the FDA has permitted, and item 6 requires permission before advertising (whether this case falls under the exception: รอยืนยัน)
-
 ## Check before sending
 
 1. Every statement the reader sees or hears is in the result table, not only the easy-to-spot ones.
@@ -82,11 +74,9 @@ What to do: type = food (ready-made coffee) · item 1 finds "สุดยอด"
 3. Non-food product types, sponsored reviews, copyright, and finance are written as (รอยืนยัน) and not guessed.
 4. The result says plainly that it is not legal advice and that the owner of the work decides.
 
-## Sources
+Related: to find or verify the source behind a claim, use `research-with-sources` (plugin `superuser`).
 
-- FDA announcement on food advertising criteria, B.E. 2564 (2021) · FDA fact sheet of 23 Nov 2022 · สคบ. pages nid=9759 and nid=16458 · all opened 2026-11-10 (links in section 1)
-- anthropics/knowledge-work-plugins `marketing/skills/brand-review` (Apache-2.0) · used only the ideas of the table (issue · location · level · proposal) and the 6-category checklist · checked 2026-11-10
+## References
 
-## Related
-
-`product-listing` · `marketplace-product-images` · `campaign-set` · `design-review` · `research-with-sources` (plugin `superuser`)
+- [`references/worked-example.md`](references/worked-example.md) — open for a filled-in example (slimming coffee sachets)
+- [`references/sources.md`](references/sources.md) — sources and check dates (2026-11-10)

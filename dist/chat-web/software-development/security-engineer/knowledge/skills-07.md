@@ -2,182 +2,92 @@
 
 Use when a task reads large material or writes long output
 
-# Context budget
+# context-budget — decide before you read what enters context
 
-> **One rule:** decide **before** you read, not regret it after.
-> Tokens that enter context cannot be removed, except by `/clear` (drops everything) · `/compact` (shrinks to a summary) · `/rewind` (cuts back to an earlier point).
+> **One rule:** decide **before** you read, not regret it after. Tokens that enter context cannot be removed, except by `/clear` (drops everything) · `/compact` (shrinks to a summary) · `/rewind` (cuts back to an earlier point). Things you read in (files · PDFs · web pages · search results · command output) are the biggest source, so be most disciplined about them. If a Command-Line Interface (CLI) can do what a Model Context Protocol (MCP) tool does, use the CLI.
 
-## When to use this skill
+## Use when
+- About to read something big: a folder of documents · a long PDF · several web pages · search results · a whole code project · command output that may be long.
+- Starting work on a folder or project whose structure you do not know.
+- Context fills unusually fast, or `/compact` triggers often.
+- Setting context rules for the whole team or every project.
 
-- About to read something big: a folder of documents · a long PDF · several web pages · search results · a whole code project · output of a command that may be long
-- Starting work on a folder or project whose structure you do not know yet
-- Context fills unusually fast, or `/compact` triggers often
-- Setting rules for the whole team or every project
+Not for: shorter **answers** → `answer-shape` · work summary across sessions → `handoff` · where temp files go → `temp-file-discipline` · a coding loop that must survive context loss → `spec-to-code-loop` (plugin `software-development`).
 
-## When to use another skill instead, or together
+## Steps
 
-| Task | Skill | |
-|---|---|---|
-| Make the **answer** shorter | `answer-shape` | instead |
-| Keep a work summary across sessions | `handoff` | instead |
-| Where to put temporary files | `temp-file-discipline` | instead |
-| A coding loop that must survive loss of context | `spec-to-code-loop` (plugin `software-development`) | instead |
-| Project map and folder layout | `project-bootstrap` (plugin `software-development`) | together |
-| Fix a bug at one spot without reading the whole project | `targeted-fix` | together |
-| Abbreviations in work people read | `spell-out-abbreviations` | together |
+### 2 · Before reading, choose the route
+- Know the file, page and line → read only that range (item 3); several items → read them together in one message.
+- Need to find where it is → bounded search (item 3).
+- Must search across many items whose location you do not know → send a subagent (item 4).
+- Must convert, merge or count a lot of data → write to a file and read only the summary (item 5).
 
----
+If you do not know how big the thing is, check the size first: PDF pages · file count and size in a folder (`ls -l`, `du -h`) · lines (`wc -l`).
 
-## 1 · What really eats context
-
-| Source | Rough size | Can you control it? |
-|---|---|---|
-| **Things you read in** (files · PDFs · web pages · search results · command output) | Biggest; one item can be tens of thousands of tokens | Fully. This whole page is about it |
-| Tools from a Model Context Protocol (MCP) server | Only tool names and the server's instructions load · the full schema loads when used | If a Command-Line Interface (CLI) can do it, use the CLI (no tool list at all) · turn off servers you do not use |
-| `CLAUDE.md` | As long as written | Write it short |
-| Skill descriptions | ~100 tokens per skill | Trim them |
-| Conversation history | Keeps growing | Careful: `/clear` when the topic changes |
-
-> **What to control first is clear**: trimming the descriptions of the whole skill set saves only a few thousand tokens,
-> but opening a 200-page PDF or running `cat` on a 3,000-line file once costs more than that.
-> **Be most disciplined about the top row of the table.**
-
----
-
-## 2 · Decision tree before reading
-
-```
-ต้องรู้อะไรจากของก้อนนี้
-├─ รู้แล้วว่าอยู่ไฟล์ไหน หน้าไหน บรรทัดไหน → อ่านเฉพาะช่วง (ข้อ 3) · หลายชิ้น → อ่านพร้อมกันในข้อความเดียว
-├─ ต้องหาว่าอยู่ตรงไหน                   → ค้นแบบมีขอบเขต (ข้อ 3)
-├─ ต้องค้นข้ามหลายชิ้นที่ยังไม่รู้ตำแหน่ง   → ส่ง subagent (ข้อ 4)
-└─ ต้องแปลง/รวม/นับข้อมูลจำนวนมาก        → เขียนลงไฟล์แล้วอ่านเฉพาะสรุป (ข้อ 5)
-```
-
-Tree, in English: what do you need from this item?
-- You know the file, page and line → read only that range (item 3) · several items → read them together in one message
-- You need to find where it is → bounded search (item 3)
-- You must search across many items whose location you do not know → send a subagent (item 4)
-- You must convert, merge or count a lot of data → write to a file and read only the summary (item 5)
-
-If you do not know how big the thing is, **always check the size first**: number of PDF pages · number and size of files in a folder (`ls -l`, `du -h`) · number of lines (`wc -l`).
-
----
-
-## 3 · Read only a range, and search with a boundary
-
-3 numeric rules: **read only a range of any file over 300 lines** · **add `--glob` to `grep`/`rg`** · **end with `| head -50`** (if the user's `CLAUDE.md` has no "งบ context" (context budget) section, use these 3 rules as they are). What goes beyond that:
+### 3 · Read only a range, and search with a boundary
+3 numeric rules (use them as they are if the user's `CLAUDE.md` has no "งบ context" section): **read only a range of any file over 300 lines** · **add `--glob` to `grep`/`rg`** · **end with `| head -50`**.
 
 | Thing | How to read it |
 |---|---|
-| Folder of documents | Look at names and sizes first, then open only files whose names match the question |
-| PDF · long report | Read the table of contents first, then name the pages or chapters you need |
-| Web page | Ask for only the part you need (a number, a date, one heading), do not pull the whole page |
-| Code | `rg -l` first to learn which file, then drill in · `-C2` of context is enough |
-| Session files · `.jsonl` logs | One line can be megabytes, so never `cat` · `wc -l -c <file>` first · find long lines with `awk 'length>100000{print NR": "length}' <file> \| head -20` · read one field at a time with `cut -c1-2000` or `jq` selecting a field |
+| Folder of documents | Names and sizes first, then open only files whose names match the question |
+| PDF · long report | Table of contents first, then name the pages or chapters |
+| Web page | Ask for only the part you need (a number, a date, one heading) |
+| Code | `rg -l` to learn which file, then drill in · `-C2` context is enough |
+| Session files · `.jsonl` logs | One line can be megabytes: never `cat` · `wc -l -c <file>` first · find long lines with `awk 'length>100000{print NR": "length}' <file> \| head -20` · read one field at a time with `cut -c1-2000` or `jq` |
 
-Read the whole file when: you are about to overwrite the whole file · the file is short · you must understand the whole file to edit it correctly, and it is under ~300 lines.
+Read the whole file when you are about to overwrite it, or it is short, or you must understand all of it to edit correctly and it is under ~300 lines.
 
----
-
-## 4 · Send a subagent instead
-
-**This is the biggest saving on this page.**
-
-A subagent has its own context, so it can read 20 items
-and send back only one paragraph to the main conversation, without the content it read coming along.
+### 4 · Send a subagent instead (the biggest saving)
+A subagent has its own context: it can read 20 items and send back one paragraph.
 
 | Use a subagent when | Do it yourself when |
 |---|---|
-| You expect to read over 20k tokens or over 5 files whose location you do not know (default, not measured · estimate the size from the step's PERT in `model-scorecard` if present) · you must search across many items to answer one question | You already know the files and locations, even 4–6 of them → read them together in one message, faster than starting a new subagent |
-| Exploring a folder or project you do not know | Editing the file that is already open |
-| Checking/reviewing across many files | Work that needs the full detail to continue |
+| You expect to read over 20k tokens or over 5 files whose location you do not know (default, not measured; estimate from the step's PERT in `model-scorecard` if present), or must search across many items to answer one question | You know the files and locations, even 4–6 of them: read them together in one message, faster than a new subagent |
+| Exploring an unknown folder or project · checking across many files | Editing the file already open · work that needs full detail to continue |
 
-**To brief it well, say what you want back:**
+**Always set the format and length of the result**, or the subagent returns a long report and you save nothing. Wrong: "Take a look at these 12 contracts". Right: "Find the expiry date, penalty and renewal terms of each contract. Return a table, 1 line per contract, with file:page. Do not paste contract text. At most 15 lines." Code work: "Return a list of file:line in call order, do not paste code".
 
-```
-ผิด: "ดูสัญญา 12 ฉบับนี้ให้หน่อย"
-   → มันอาจคืนมาทั้งเนื้อหา
-
-ถูก: "หาวันหมดอายุ ค่าปรับ และเงื่อนไขต่ออายุของสัญญาแต่ละฉบับ
-    คืนกลับมาเป็นตาราง 1 บรรทัดต่อฉบับ ระบุชื่อไฟล์:หน้า
-    ไม่ต้องแปะข้อความสัญญา ไม่เกิน 15 บรรทัด"
-```
-
-(The example above, in English: wrong = "Take a look at these 12 contracts" → it may return the whole content. Right = "Find the expiry date, penalty and renewal terms of each contract. Return a table, 1 line per contract, with file:page. Do not paste contract text. At most 15 lines.")
-
-(Code work is the same: "Return a list of file:line in call order, do not paste code")
-
-> 🚨 **Always set the format and length of the result.** If you do not say what you want,
-> the subagent sends back a long report, and you save nothing.
-
----
-
-## 5 · Write to a file instead of holding it in the conversation
-
+### 5 · Write to a file instead of holding it in the conversation
 ```bash
-# ผิด: output ทั้งหมดเข้า context
-<คำสั่งที่ output ยาว>
-
-# ถูก: เข้า context แค่บรรทัดสรุป
-<คำสั่งที่ output ยาว> > <โฟลเดอร์ชั่วคราว>/out.log 2>&1; tail -20 <โฟลเดอร์ชั่วคราว>/out.log
+<command with long output> > <temp folder>/out.log 2>&1; tail -20 <temp folder>/out.log
 ```
+Use it for text pulled from the web or PDFs · big data tables (filter or count with a script, do not read every row) · test results · logs · file conversions. Where to put these files → `temp-file-discipline`. Note what you find into a file on the first pass so you do not read it again.
 
-(Comments above: wrong = the whole output enters context · right = only the summary line enters context. `<คำสั่งที่ output ยาว>` = a command with long output · `<โฟลเดอร์ชั่วคราว>` = temp folder.)
+If it repeats on every task, let a hook filter long output before it enters context: coding example in `superuser` → `references/code-extensions.md` (the addition in plugin `software-development`).
 
-**Use it for**: text pulled from the web or PDFs · big data tables (filter or count with a script, do not read every row) · test run results · logs · results of file conversions
-Where to put these files → `temp-file-discipline` · note what you find into a file from the first pass, so you do not read it again
+### 6 · So the next session does not explore again
+Work you return to often needs a short map that **loads automatically**: where things are · what must not be read · commands used often. General work: the section "ของอยู่ที่ไหน" in `.claude/superuser/CONTEXT.md`, at most 40 lines. Files with other names (`notes.md`) do not load themselves, so they are wasted. An outdated map is worse than none: no full file list or change history in it. Code work (project and folder `CLAUDE.md`, example maps) → `superuser` → `references/code-extensions.md`.
 
-**Repeats on every task → let a hook filter instead of relying on discipline** — a hook can trim long output before it enters context (a log of tens of thousands of tokens becomes a few hundred) · coding example → the addition in plugin `software-development` → `superuser` → `references/code-extensions.md`
+### 7 · Other settings that help
+Turn off MCP servers and plugins you do not use · pick model and effort at the start · `/clear` when the topic changes · project `CLAUDE.md` at most 40 lines (table with reasons: [`references/settings.md`](references/settings.md)) · on Windows (Git Bash · PowerShell) see [`references/windows-shell.md`](references/windows-shell.md).
 
----
+**Compact yourself at about 70%, do not wait for the system** (70% is a default, not measured). When about 70% of context is used and a step has just finished (tests pass · file saved · check passed): first update "รับงานต่อ" in `CONTEXT.md` (`handoff` item 5), then `/compact` and say what to keep (files edited · decisions · next step). The system's own compaction often hits mid-step, before anything is written down.
 
-## 6 · So the next session does not explore again
-
-Work you return to often needs a short "map" that **loads automatically**: where things are · what must not be read · commands used often
-- General work: the section "ของอยู่ที่ไหน" (where things are) in `.claude/superuser/CONTEXT.md` (`superuser` reads it before every start), at most 40 lines
-- Files with other names (`notes.md`) do not load themselves and must be told to be read every time, so they are wasted
-- An outdated map is worse than no map, because it confidently leads you to the wrong place. Do not put a full file list or change history in it
-
-Code work (project and folder `CLAUDE.md`, example maps) → the addition in plugin `software-development` → `superuser` → `references/code-extensions.md`
-
----
-
-## 7 · Other settings that help
-
-Turn off MCP servers and plugins you do not use · pick the model and effort at the start · `/clear` when the topic changes · project `CLAUDE.md` at most 40 lines — the full table with reasons is in [`settings`](references/settings.md) · working on Windows (Git Bash · PowerShell) → traps that really happened are in [`windows-shell`](references/windows-shell.md)
-
-**Compact yourself at about 70%, do not wait for the system** — when about 70% of context is used and a step has just finished (tests pass · file saved · check passed) → first update "รับงานต่อ" (resume work) in `CONTEXT.md` (`handoff` item 5), then `/compact` and say what to keep (files edited · decisions · next step) · when the system compacts by itself, it often hits mid-step, when nothing has been written down yet (idea from strategic-compact in everything-claude-code · MIT · 70% is a default, not measured)
-
----
-
-## 7.1 · Seams between phases — continue · clear · handoff · subagent · compact
-
-When a phase ends and the next begins, ask in order from item 1. **The first question answered yes is the route you pick**, then stop asking:
+### 7.1 · Seams between phases
+Ask in order; **the first yes is the route**, then stop:
 
 | # | Ask | If yes |
 |---|---|---|
-| 1 | Does the next phase need what is in this context as its source, and is there room left (roughly over 150k tokens · default, not measured)? | **Continue** in the same session |
-| 2 | Will the next phase move to another vendor's tool, another model, or another repo? | **handoff** — update "รับงานต่อ" (resume work) and start in the new place (`handoff` item 5) |
-| 3 | Can the next phase be split off without talking to us (no wait for a user answer, no need to know this context beyond what a brief can say)? | **subagent** — send the 5-part brief |
-| 4 | Can this whole context be dropped (everything needed is already in files) and the new topic is unrelated to the old? | **clear** — cannot be undone; check that `notes/` and "รับงานต่อ" (resume work) are complete first |
-| 5 | None of the above | **compact** and say what to keep (item 7 above) |
+| 1 | Does the next phase need this context as its source, and is there room left (roughly over 150k tokens · default, not measured)? | **Continue** in the same session |
+| 2 | Will the next phase move to another vendor's tool, model, or repo? | **handoff**: update "รับงานต่อ" and start in the new place (`handoff` item 5) |
+| 3 | Can the next phase be split off without talking to us (no user answer to wait for, no context beyond what a brief can say)? | **subagent**: send the 5-part brief |
+| 4 | Can this whole context be dropped (everything needed is in files) and the new topic is unrelated? | **clear**: cannot be undone; check `notes/` and "รับงานต่อ" are complete first |
+| 5 | None of the above | **compact** and say what to keep (item 7) |
 
-Item 4 is the only one that cannot be undone, so answer yes only when there is evidence everything is in files · if unsure → go to item 5 · source: mattpocock-skills (MIT) · PHASE-BOUNDARIES · seen 2026-11-10
+Item 4 is the only one that cannot be undone: answer yes only with evidence everything is in files; if unsure, go to 5.
 
----
+## Check before done
+- Big things were read by range, bounded search, subagent or file, not opened whole.
+- Every subagent brief said the result format and length.
+- Long output went to a file with only a tail or summary read back.
 
-## 8 · Anti-patterns
+## Anti-patterns
+Opening the whole thing to "see what is in it" when the table of contents or `head -40` answers it · searching without a boundary (`rg` without `--glob`; opening every search link) · searching across 10 items yourself instead of a subagent · sending a subagent to read something whose location you know · letting long output in one lump · reading the same thing again because you forgot (note findings to a file) · a map file that does not load automatically · a 300-line `CLAUDE.md` · all MCP servers always on.
 
-- **Opening the whole big thing to "see what is in it first"** when the table of contents, the first page, or `head -40` answers the same question at 1% of the cost
-- **Searching without a boundary** (`rg` without `--glob` brings back unrelated folders in bulk · searching the web and opening every link)
-- **Searching across 10 items yourself to answer one question** when you should send a subagent
-- **Sending a subagent to read something whose location you already know** when reading in parallel yourself or a direct search is faster
-- **Briefing a subagent without saying what you want back**, which brings back a long report and saves nothing
-- **Letting long output (tests · logs · pulled text) into context in one lump**
-- **Reading the same thing again because you forgot you read it** — note what you find into a file from the first pass
-- **A map file that does not load automatically** · **a `CLAUDE.md` 300 lines long** that everyone on the team pays tokens for every session
-- **Keeping every MCP server on all the time**
+## References
+- [`references/settings.md`](references/settings.md) — open when setting rules for a team or project
+- [`references/windows-shell.md`](references/windows-shell.md) — open when working in Git Bash or PowerShell on Windows
+- [`references/sources.md`](references/sources.md) — sources and licences
 
 
 ## reference: settings.md
@@ -195,6 +105,14 @@ Moved from `SKILL.md` item 7. Open it when you are about to advise the user on s
 | `permissions.deny` in `.claude/settings.json` for folders that should not be read | The system guards it, so you do not depend on discipline |
 | `/clear` when the topic changes (costs nothing) · `/compact <what to keep>` at a rest point in the work, not when nearly full · on the wrong path → `/rewind` to an earlier point | Frees space · `/compact` while the cache is warm is cheap, but after a long pause the whole conversation is read again · `/rewind` cuts back to a point where the cache already exists |
 | Project `CLAUDE.md` at most 40 lines · `~/.claude/CLAUDE.md` (used by every project) at most 60 lines — this set's own cap, stricter than the official docs, which suggest at most 200 · the one shipped in `scripts/install/CLAUDE.global.md` is 84 lines (over the cap, waiting to be cut) | Every line costs tokens in every session |
+
+
+## reference: sources.md
+
+# Sources · context-budget
+
+- Compact yourself at about 70% (section 7): idea from strategic-compact in everything-claude-code (MIT). 70% is a default, not measured.
+- Seams between phases (section 7.1): mattpocock-skills (MIT) · PHASE-BOUNDARIES · seen 2026-11-10. The 150k token line is a default, not measured.
 
 
 ## reference: windows-shell.md
@@ -223,56 +141,56 @@ Open it when working on a Windows machine through Git Bash or PowerShell · ever
 
 Use when a task writes temporary files into a project
 
-# Temporary file discipline
+# Temporary file discipline — keep non-products in `_to_delete/<task folder>/`
 
-> **One rule:** anything that is not a real work product must live only in `_to_delete/`.
-> Never leave it in the project root, and never mix it with work files.
+> **One rule:** anything that is not a real work product must live only in `_to_delete/`. Never leave it in the project root, and never mix it with work files.
 
----
+## Use when
+- A task creates check images, logs, one-off scripts, backups, extracted zips, converted copies of documents (`.docx`/`.pdf` → `.md`), or replaces a file (the old one is now temporary).
+- Finishing work in a project: confirm the root holds no stray files.
 
-## Choose where to put it
+Not for: a work product the user keeps (goes in its own destination folder) · intermediate steps not tied to any project (use the session's workspace).
 
-| What the file is | Put it in |
-|---|---|
-| Temporary items of work in the user's project (check images · logs · one-off scripts · run results) | `_to_delete/<task folder>/` at the project root (section "How to use"), so the user can check back later |
-| An intermediate step not tied to any project (not working in the user's folder) | The session's workspace |
-| A work product the user will keep | The destination folder of that work |
+## Steps
+1. **Decide what is temporary:** check images, logs, one-off scripts, backups, extracted zips, converted copies, old versions, anything no longer in use. Not temporary: a work product the user asked for · the source file of a work product (keep it in a subfolder beside it) · files the user placed themselves (never move them without asking) · build output (leave it, check `.gitignore`). If unsure whether the user created or uses a file, do not move it; tell the user. Detail: [`references/layout.md`](references/layout.md).
+2. **Use one `_to_delete/` at the project root.** From inside a subfolder (such as the code folder), write to the project root's `_to_delete/`; do not nest one. A temporary file that landed in the root: move it into `_to_delete/` right away.
+3. **Make a task folder when the task starts**, before the first temporary file: `_to_delete/YYYY-MM-DD-<topic>/` (the day the task started; topic lowercase English joined by `-`, 2–5 words, such as `2026-11-06-temp-task-folders`, not `task1`). A task that spans rounds or sessions reuses its folder; a new topic gets a new folder. Sub-agents write into the lead's task folder; put the path in the brief.
+4. **Never place a file directly in `_to_delete/`**, except what a tool or hook creates at a fixed place (`superuser-lock/` · `STOP`) and `delete-plan.txt`.
+5. **When another skill writes `_to_delete/<x>`** (such as `_to_delete/screenshots/`), read it as `_to_delete/<task folder>/<x>`. For a script whose default is `_to_delete/...`, pass `--out` pointing into the task folder.
+6. **Use only these subfolder names inside the task folder:**
 
-**The project root must hold no temporary files at all.**
-- If an agent creates a temporary file and it lands in the root (log · image · trial script), move it into `_to_delete/` right away
-- If you are not sure whether the user created or is using that file, do not move it yourself; tell the user
-- When running from inside a subfolder (for example the code folder, see `project-bootstrap` in plugin `software-development`), write temporary things to the **project root's** `_to_delete/`, and do not create a nested one
+   | Subfolder | What goes in |
+   |---|---|
+   | `drafts/` | Temporary drafts that are not the original (a re-rendered markdown original lives at `docs/src/<topic>.md`; `superuser:document-naming`) |
+   | `attempts-<topic>/` | Work of each competing agent ([`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md)) |
+   | `screenshots/` | Rendered mockup images or images for checking work |
+   | `logs/` | Logs from a one-time run |
 
----
+   Code work (`verify-runs/` · `security/` · `check/`) → `superuser` → `references/code-extensions.md` in plugin `software-development`.
+7. **Add `_to_delete/` to `.gitignore`** in every git project (check first, add if missing). If the project README already names another temporary folder (`tmp/` `scratch/`), follow it and record 1 row in the "การตัดสินใจ" table. Never use `.cache/`.
+8. **At the end of the work,** say where this task's temporary things are in one line (`_to_delete/2026-11-06-login-page-redesign/`), with no long list. Then run `node <this skill's folder>/scripts/root-check.mjs <project root>`. It lists things in the root outside the allowed list (`ref` `docs` `mockup` `assets` `qa` `_to_delete` `.claude` the code folder, and things in `.gitignore`); for things the project keeps in the root on purpose, add `--allow README.md,LICENSE`.
+9. **Never delete on your own.** Delete only when the user orders it (deleting in the user's folder cannot be undone). When ordered, move into `_to_delete/` first, tell the user, and actually delete only things inside `_to_delete/` when the user orders that directly:
+   1. Write the plan into `_to_delete/delete-plan.txt`, 1 path per line from the project root (a whole task = its folder on one line).
+   2. Run `node <this skill's folder>/scripts/delete-plan-check.mjs _to_delete/delete-plan.txt`. It prints the delete list and the keep list to compare. A path that escapes `_to_delete/` (`..` · full path · a link pointing outside) makes it exit 1, and you must not delete.
+   3. Only after it passes, delete line by line from the "delete" list. The script does not delete. Never build the list from `ls` (on Windows names may end in `/`; see `context-budget` → [`windows-shell`](../context-budget/references/windows-shell.md)).
 
-## What counts as a temporary file
+## Check before done
+- [ ] Every temporary file is under `_to_delete/<task folder>/` using the standard subfolder names.
+- [ ] `root-check.mjs` shows nothing unexpected in the root.
+- [ ] `_to_delete/` is in `.gitignore`.
+- [ ] The reply says where the temporary things are, in one line, and nothing was deleted without the user's order.
 
-- A compressed file sent through chat to get files onto the machine, and the folder it was extracted to
-- Images rendered to check work · screenshots · sample files made for comparison
-- Backup copies of a file being edited · files `.bak` `.old` `.tmp` `ไฟล์ (1).xlsx` (`ไฟล์` = "file")
-- Scripts written for one use · log files from a one-time run
-- Intermediate-format files during a conversion, such as an `.svg` already converted to `.png`
-- **Documents converted to another format to make them easier to read or process** — a `.docx` or `.pdf` converted to `.md`
-  The original is the real thing and the converted one is temporary. **Never mix them in the documents folder**,
-  or in 3 months nobody knows which file is the version the client signed off
-- Old versions of a file that was just replaced
+## References
+- [`references/layout.md`](references/layout.md) — open when unsure whether a file is temporary, or for the example layout and anti-patterns.
 
-**A file no longer in use is a temporary file** — when you replace an old file with a new one, move the old one into `_to_delete/`
-and do not leave them side by side.
 
----
+## reference: layout.md
 
-## What does not count
+# Layout of `_to_delete/` and what counts as temporary
 
-- A work product the user asked for
-- Source files of a work product, such as design files `.psd` `.fig` · a `.py` that produces an image · an `.html` that is the source of an image —
-  **if you will edit next year, you need the source file**, so keep it in a subfolder beside the work product, not in `_to_delete/`
-- Files the user placed themselves, even if they look like junk — **never move the user's things without asking**
-- Output of build tools (`build/` · `node_modules/`) — leave it, check that it is in `.gitignore`, and never move it into `_to_delete/`
+Open when you are unsure whether a file is temporary, or when you need the example layout.
 
----
-
-## How to use
+## Example layout
 
 ```
 โปรเจกต์/
@@ -289,52 +207,31 @@ and do not leave them side by side.
 
 (Gloss: `โปรเจกต์/` = project · `ผลงานจริง` = real work products · `ของเครื่องมือ ไม่ใช่ของงาน` = belongs to the tool, not to a task.)
 
-- There is exactly one `_to_delete/` folder at the **project root** · inside, **1 folder per task**, so things do not mix and a whole task can be deleted at once
-- **Task folder name** `YYYY-MM-DD-<topic>` · the date is the day the task started · the topic is lowercase English joined by `-`, 2–5 words, saying what is being done (`2026-11-06-temp-task-folders`, not `2026-11-06-task1`) · sorting by name gives time order directly
-- **Create the folder when the task starts**, before writing the first temporary file · a task that continues over several rounds or across sessions uses the same folder (find it with `find _to_delete -mindepth 1 -maxdepth 1 -type d -printf '%f\n'`) · a new topic gets a new folder · when the task is split to sub-agents, they write into the lead's task folder, and the path is given in the brief
-- **Never place a file directly in `_to_delete/`** · except things a tool or hook creates itself at a fixed location (`superuser-lock/` · `STOP`) and the delete plan `delete-plan.txt` (the check script requires it directly in `_to_delete/`), which do not move
-- **When another skill writes `_to_delete/<x>`** (for example `_to_delete/screenshots/` · `_to_delete/deck-check`), always read it as `_to_delete/<task folder>/<x>` · for a script whose default is `_to_delete/...`, pass `--out` pointing into the task folder
-- Standard subfolders **inside the task folder** that other skills use — use only these names:
+## What counts as a temporary file
 
-  | Subfolder | What goes in | Skill that uses it |
-  |---|---|---|
-  | `drafts/` | Temporary drafts that are not the original (the markdown original that is re-rendered lives permanently at `docs/src/<topic>.md`) | `superuser:document-naming` |
-  | `attempts-<topic>/` | Work of each competing agent | [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md) |
-  | `screenshots/` | Rendered images of a design mockup or images for checking work | every design skill |
-  | `logs/` | Logs from a one-time run | every skill |
+- A compressed file sent through chat to get files onto the machine, and the folder it was extracted to
+- Images rendered to check work · screenshots · sample files made for comparison
+- Backup copies of a file being edited · files `.bak` `.old` `.tmp` `ไฟล์ (1).xlsx` (`ไฟล์` = "file")
+- Scripts written for one use · log files from a one-time run
+- Intermediate-format files during a conversion, such as an `.svg` already converted to `.png`
+- **Documents converted to another format to make them easier to read or process** (a `.docx` or `.pdf` converted to `.md`). The original is the real thing and the converted one is temporary. Never mix them in the documents folder, or in 3 months nobody knows which file is the version the client signed off
+- Old versions of a file that was just replaced. A file no longer in use is a temporary file: when you replace an old file with a new one, move the old one into `_to_delete/` and do not leave them side by side
 
-  Code work (`verify-runs/` · `security/` · `check/`) → the addition in plugin `software-development` → `superuser` → `references/code-extensions.md`
-- Put `_to_delete/` into `.gitignore` in every project that uses git — check first, and add it if missing
-- A project whose README already names another temporary folder (for example `tmp/` `scratch/`) → follow that, then record 1 row in the "การตัดสินใจ" (decisions) table · none named → `_to_delete/` · never use `.cache/` (it belongs to tools and can mix with tool state)
+## What does not count
 
----
-
-## At the end of the work
-
-1. **Say where this task's temporary things are**, in one line (`_to_delete/2026-11-06-login-page-redesign/`), with no long list
-2. **Never delete on your own** — delete only when the user orders it; deletion in the user's folder cannot be undone
-3. **When the user orders deletion** → move into `_to_delete/` first (per the central rule), then tell the user · actually delete only things inside `_to_delete/` when the user orders it directly, in 3 steps:
-   1. Write the plan into the file `_to_delete/delete-plan.txt`, 1 path per line, counted from the project root (`_to_delete/2026-11-06-login-page-redesign`) · to delete a whole task, put the task folder on one line
-   2. Run `node <this skill's folder>/scripts/delete-plan-check.mjs _to_delete/delete-plan.txt` → it prints the delete list and the keep list to compare · any path that escapes `_to_delete/` (`..` · full path · a link pointing outside) makes it exit 1, and you must not delete
-   3. Only after it passes, delete line by line from the "delete" list; the script does not delete by itself · never build the list from `ls` (on Windows names may end in `/`, see `context-budget` → [`windows-shell`](../context-budget/references/windows-shell.md))
-4. **Before saying the work is finished**, run `node <this skill's folder>/scripts/root-check.mjs <project root>` → it lists things in the root outside the allowed list (`ref` `docs` `mockup` `assets` `qa` `_to_delete` `.claude` the code folder, and things in `.gitignore`) · for things the project deliberately keeps in the root, add `--allow README.md,LICENSE`
-
----
+- A work product the user asked for
+- Source files of a work product, such as design files `.psd` `.fig` · a `.py` that produces an image · an `.html` that is the source of an image. If you will edit next year, you need the source file, so keep it in a subfolder beside the work product, not in `_to_delete/`
+- Files the user placed themselves, even if they look like junk. Never move the user's things without asking
+- Output of build tools (`build/` · `node_modules/`): leave it, check that it is in `.gitignore`, and never move it into `_to_delete/`
 
 ## Anti-patterns
 
-- **Extracting a zip into the project root** and cleaning up later — later never comes
-- **Naming files `file-v2` `file-final` `file-really-new`** (Thai: `ไฟล์-v2` `ไฟล์-final` `ไฟล์-ใหม่จริง`) and leaving them beside the original
-- **Deleting a user's file because you think it is no longer used**
-- **Leaving a project task's temporary files in the session workspace** — after the session ends the user cannot check back
-- **Making a new subfolder name for an existing kind of thing** (`shots/` `img-check/`) — use the names in the table above
-- **Placing files directly in `_to_delete/` or sharing `screenshots/` across several tasks** — a week later nobody knows which image belongs to which task, and you cannot delete one task alone
-- **Keeping a work product's source file in `_to_delete/`** — that is not temporary
-- **Leaving stray files without telling anyone** — the user will find them on their own months later
-
----
-
-Abbreviations and technical terms in messages to the user follow `spell-out-abbreviations`.
+- Extracting a zip into the project root and cleaning up later
+- Naming files `file-v2` `file-final` `file-really-new` (Thai: `ไฟล์-v2` `ไฟล์-final` `ไฟล์-ใหม่จริง`) and leaving them beside the original
+- Leaving a project task's temporary files in the session workspace, so the user cannot check back after the session ends
+- Making a new subfolder name for an existing kind of thing (`shots/` `img-check/`)
+- Placing files directly in `_to_delete/` or sharing `screenshots/` across tasks
+- Leaving stray files without telling anyone
 
 
 ---
@@ -344,8 +241,6 @@ Abbreviations and technical terms in messages to the user follow `spell-out-abbr
 Use when a task ends, to report status in a table
 
 # Report status when a task ends
-
-> **Language:** write the wording of every line following `human-writing`. This skill gives the format and structure, and human-writing says how to write so that people understand.
 
 > **The one rule:** every time a task ends, there must be a status table in the task's central file, and the same table in the reply.
 > A task with no status table is not finished.
@@ -412,19 +307,13 @@ Show "ภาพรวม" (overview, if any) + a table of only **the rows that c
 - [ ] You touched no other heading in the file
 - [ ] BUILD-PLAN form: the numbers in "ภาพรวม" match the table · 1 line is added to `## ประวัติสถานะ` · "ทีมตอนนี้" (current team) has no leftover `ทำอยู่` row for a task that has finished
 - [ ] BUILD-PLAN form: run the checker until it passes (the checker is in plugin `superuser`): `python <superuser folder>/skills/polished-document-style/scripts/check_outline.py assets/build-plan-status.md <path of docs/BUILD-PLAN.md>`. It catches missing headings, swapped headings, missing bold cells, changed table headers and cells not yet filled. Other headings in the file (the task table, `## ตัดสินใจเอง`) the checker lets pass.
-- [ ] The reply has a table of only the changed rows + pending + awaiting approval (if any) + proposals (if any) + next
-
 ---
 
 ## 6 · What not to do
 
-| Do not | Because |
-|---|---|
-| Write `เสร็จ` or `ผ่าน` without really checking | A status table that lies is worse than no table. |
-| Append to the table every round | The file keeps growing and nobody knows which row is current. |
-| Create a new status file (`STATUS.md` `progress.md`) | Status scatters across places and nobody knows where to look. |
-| Hide failing items in prose | A reader of the table will think everything passed. |
-| Let a subagent write the central file itself | Writes collide and the file breaks. |
+- Do not create a new status file (`STATUS.md` `progress.md`), because status then scatters across places.
+- Do not hide failing items in prose, because a reader of the table will think everything passed.
+- Do not append to the table every round, and do not let a subagent write the central file.
 
 ---
 
@@ -623,14 +512,9 @@ Use when work passes to a subagent, session or person
 
 # handoff — pass work on so the receiver does not have to guess
 
-Part of `superuser` · lives only in plugin `superuser`; other plugins share it through `dependencies` · wording follows `human-writing`
+> **One rule:** whoever receives the work (new subagent · session · model · person · bot) remembers nothing, so only what is written to a file can be passed on. Write it so someone who never saw the chat can start within 2 minutes.
 
-> **One principle:** whoever receives the work (a new subagent · a new session · a new model · a person · another bot) remembers nothing → only what is written to a file can be passed on. Write it so that someone who never saw the chat can open it and start work within 2 minutes.
-
----
-
-## 1 · When to hand off and what to use
-
+## 1 · Use when
 | Moment | Use | Who writes |
 |---|---|---|
 | Lead → worker | **Task sheet** (`ใบสั่งงาน`, section 3) | Lead |
@@ -638,34 +522,96 @@ Part of `superuser` · lives only in plugin `superuser`; other plugins share it 
 | This session → next session · switching model · context nearly full | **Resume** (`รับงานต่อ`) in `CONTEXT.md` (section 5) | Lead |
 | Team → a person · another bot · Quix · Agent Desk | **Hand-off package** (section 6) | Lead |
 
-> **Quix · Agent Desk** = optional external tools. Quix queues work for agents; Agent Desk is a task board for a team of agents. Both read the header of `handoff/*.md`. This skill is complete in every item without them installed.
+Quix (work queue) and Agent Desk (task board) are optional external tools that read the header of `handoff/*.md`. Everything here works without them.
 
----
+## 2 · `.claude/superuser/` — the team's shared store
+All files, first-time setup, inbox and log: [`team-memory`](references/team-memory.md). Commit rules: [`team-files`](../superuser/references/team-files.md).
 
-## 2 · `.claude/superuser` — the team's shared store
-
-Everything lives under `.claude/superuser/`. All the files, first-time setup, inbox and log are in [`team-memory`](references/team-memory.md). The commit rules are in [`team-files`](../superuser/references/team-files.md).
-
-```
-.claude/superuser/
-├─ CONTEXT.md            งาน · ความคืบหน้า · การตัดสินใจ · รับงานต่อ  ← ทุกคนอ่านก่อน
-├─ handoff/
-│  ├─ 2026-10-21-03-login-api.md     ใบสั่งงาน + ใบส่งงาน ของชิ้นนั้น (1 ชิ้น 1 ไฟล์)
-│  └─ 2026-10-21-03-login-api/       ผลยาวของชิ้นนั้น (รายงาน · ข้อมูล · ร่าง)
-├─ notes/ · ledger/ · out-of-scope/  สมุดงานของแผน · ledger · แนวคิดที่ปฏิเสธ (team-memory หัวข้อ 8)
-└─ log/ · inbox/ · learn/            ของเดิม (learn/drop/ = บทเรียนที่ทิ้งไว้ข้อละไฟล์)
-```
-
-- **Piece name** `<date>-<2-digit sequence>-<short English words>` · use the same name for the file, the folder and in the log.
-- **The real work product** (code · documents · images) lives in the project's normal folders. `handoff/` keeps only instructions, summaries and in-between material.
-- **Do not commit** `handoff/` `notes/` `ledger/` `out-of-scope/` (put them in `.gitignore` along with `log/`). Before writing to these, `git check-ignore <path>` must find it and the path must not be a symlink. If that fails, do not write; tell the user to add it to `.gitignore`. When the work is done, for any piece that still has value → move its substance up to `CONTEXT.md` or `HISTORY.md`.
+- Files: `CONTEXT.md` (everyone reads first) · `handoff/<piece>.md` (task sheet + delivery sheet, 1 piece per file) · `handoff/<piece>/` (long results) · `notes/` · `ledger/` · `out-of-scope/` · `log/` · `inbox/` · `learn/`.
+- **Piece name** `<date>-<2-digit sequence>-<short English words>`, the same for the file, the folder and the log.
+- The real work product (code · documents · images) lives in the project's normal folders. `handoff/` keeps only instructions, summaries and in-between material.
+- **Do not commit** `handoff/` `notes/` `ledger/` `out-of-scope/` (put them in `.gitignore` along with `log/`). Before writing to these, `git check-ignore <path>` must find it and the path must not be a symlink. If that fails, do not write; tell the user to add it to `.gitignore`. When work is done, move anything of lasting value up to `CONTEXT.md` or `HISTORY.md`.
 - **Never put in** secrets · ID card numbers · full account numbers · other people's data.
 
----
-
 ## 3 · Task sheet (`ใบสั่งงาน`)
+The header is machine-readable (Quix · Agent Desk read it); the content is human language. **All 5 sections must be there, or it is not sent yet.**
 
-The file header is machine-readable data (Quix · Agent Desk read these fields). The content is in human language. **All 5 sections must be there, or it is not sent yet.**
+Header fields: `id` · `from` · `to` · `tier` (ใหญ่ · กลาง · เล็ก + effort) · `status` (เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่) · `depends_on` · `files_allowed`. Sections in order: `## เป้า` (goal, with `ขนาด: <n>k`) · `## เสร็จเมื่อ` · `## ใช้อะไร` (files to read, skills) · `## ขอบเขต` (writable files, what not to do) · `## ส่งกลับแบบไหน` (delivery sheet appended, message back about 40 lines or fewer). Full example → [`references/sheet-examples.md`](references/sheet-examples.md).
+
+- Code work uses the same sheet: `to: software-development:developer` · `files_allowed: [src/auth/**]` · done-when = tests pass · skill = `stack-*`.
+- A normal piece puts the 5-item sheet in the message that sends the task (`superuser` section 5). Write a file only for a piece that crosses sessions or goes to another person or bot; then the instruction is one line: `ทำตาม .claude/superuser/handoff/<id>.md`. Pass the path, not the content.
+- A brief picked up several days later uses `superuser/templates/DURABLE-BRIEF.md`: write behavior and interface names, not paths or line numbers; include testable acceptance criteria and what is out of scope. A sheet for a piece done today may use paths.
+- State the intent of the rule, not only the condition. For a fix or retry round, add `## รอบก่อน` (previous worker's report + what must change) and send a new worker.
+- A sheet to `reviewer` has no lead opinion in it (`superuser` section 5).
+- **Workers that review or research:** a conclusion that something is "outdated", "wrong" or "contradictory" must attach `file:line` and say whether it checked that it was not on purpose (history sections · script-generated numbers · noted exceptions). Put this in every such sheet. The lead opens a few at random before believing them.
+
+## 4 · Delivery sheet (`ใบส่งงาน`)
+The worker appends it to its own task sheet, then edits `status:`. The message back = path + result + 1-line summary. Heading `## ส่ง — <date time> · <agent> · <model>`, then fields **ผล** · **ของที่ได้** · **ตรวจแล้วด้วย** · **ตัดสินใจเอง** · **ลองแล้วพัง** · **ค้างอยู่ · ไม่แน่ใจ** (example in `references/sheet-examples.md`).
+
+- **ผล** is 1 of 4 values (`superuser` section 5): `เสร็จ` · `เสร็จ มีข้อกังวล` · `ขาดบริบท` · `ติด`.
+- `เสร็จ` needs evidence in `ตรวจแล้วด้วย`. If there is none → `status: ติด` or `ค้างอยู่`.
+- **ลองแล้วพัง:** note every path tried that did not work, with a 1-line reason (`dead_ends` in the header if a machine must read it), so the next worker does not walk it again.
+- A result longer than 40 lines → write it to `handoff/<id>/` and cite the path.
+- The lead reads the delivery sheet, checks it against `เสร็จเมื่อ` itself, then moves any `ตัดสินใจเอง` that affects other work up to the "การตัดสินใจ" table in `CONTEXT.md`.
+
+## 5 · Resuming work (`รับงานต่อ`) — across sessions · switching model · context nearly full
+The `## รับงานต่อ` section in `CONTEXT.md` follows these rules. The `## ความคืบหน้า` table beside it belongs to `status-report`.
+
+**Before handing over** (end of session · before switching model · context use passes half in a long job), update `รับงานต่อ`:
+- **ทำต่อเป็นข้อแรก:** 1 item, doable at once, pointing to a file or `handoff/<id>.md`.
+- **ชิ้นที่ยังเปิด:** the `id`s whose `status` is not `เสร็จ`.
+- **รออนุมัติ:** ready but irreversible work; name the file or command (omit if none).
+- **ค้างอยู่:** questions the agent cannot pass alone, and whom to ask (`ไม่มี` if none).
+- **ระวัง:** traps found · what must not be torn up (already decided) · failed paths from every delivery sheet.
+- **ส่งมาแล้ว N ครั้ง:** count real handoffs only (end of session · switching model), not `/compact`. If the receiver sees N ≥ 2, old text may linger; check against the real thing before following it.
+- **สมุดงาน:** point to `notes/<plan>.md` and `ledger/<plan>.md` of the open plan ([`team-memory`](references/team-memory.md) section 8). A multi-piece plan is done only when the line `Task N: complete` is in its ledger.
+- **Tag every item** `ตรวจจริง` (seen yourself this session) or `ยังไม่ได้ตรวจ` (remembered). No tag = not yet checked. The receiver may believe the first at once and must check the second before use.
+
+Switching to another vendor (Codex · Gemini) or back to Claude → [`team-memory`](references/team-memory.md) section 3. Test: a new model that reads only `CONTEXT.md` must be able to start the first item without asking; if not, write more.
+
+**Start-of-work ritual** (every new lead session and every worker):
+1. Read your own sheet: worker → `handoff/<id>.md`; lead → `CONTEXT.md` "รับงานต่อ" + `inbox/` (which messages count as orders → `team-memory` section 4).
+2. With git: `git log --oneline -10` and `git status` to see what happened last and whether edits were left unfinished. Without git: read "ความคืบหน้า" and file modified dates. Read `notes/<plan>.md` and compare the original brief with what the user orders now. Use "คำตอบที่ได้แล้ว" instead of asking again.
+3. Walk the tracking files (`ledger/` · delivery sheet · progress) to the last finished gate, then check that gate's real state (run the test · open the file) before building on it. Matches → go on. Does not match (ledger says done, test fails) → fix the earlier gate, add a row to "รอผู้ใช้", continue with other parts. No tracking file → start fresh; do not guess it is the same work.
+4. Start `ทำต่อเป็นข้อแรก` or the goal in the task sheet.
+
+## 6 · Sending outside the team — people · other bots · Quix · Agent Desk
+Hand-off package = `CONTEXT.md` + the still-open `handoff/` pieces + `docs/BRIEF.md` (if it exists).
+- A person reads `CONTEXT.md` first, then opens `handoff/<id>.md` one piece at a time.
+- A teammate who takes a piece uses the same task sheet as an agent, with the person's name in `to:` (such as `to: คน-แต้ม`), and writes the delivery sheet at the end of the same file. Only for XL work per `superuser` → `references/playbook-team-project.md`.
+- A machine reads the header per [`handoff.schema.json`](references/handoff.schema.json). Field names are a contract; do not rename them without raising the schema's version number.
+- Agent Desk draws its board from `to` · `status` · `tier` · `depends_on`; Quix uses the same files as a queue.
+
+## 7 · Rules that keep handoffs from breaking
+- Pass the path, not the content (content is lost over hops and wastes tokens).
+- 1 file, 1 writer; shared files are written by the lead alone.
+- Split only pieces that can really run in parallel; pieces that must know much of the same thing go to one worker.
+- Once decided, note it in "การตัดสินใจ". If the receiver disagrees, put it in "รออนุมัติ"; do not tear it up alone.
+- Done is judged from the work product and the check result, not the word "done".
+- The reviewer gets only the work product + criteria, not the maker's context.
+
+## 8 · Our files versus Claude Code's built-in memory
+Unsure whether a note goes into `CONTEXT.md` · `CLAUDE.md` · `.claude/rules/` or auto memory → [`team-memory`](references/team-memory.md) section 7.
+
+## Check before done
+- Task sheet has all 5 sections; delivery sheet has evidence in `ตรวจแล้วด้วย`.
+- `รับงานต่อ` has an item at the top that a new model can start without asking, every item tagged.
+- Nothing under `handoff/` `notes/` `ledger/` is committed or holds secrets.
+
+## References
+- [`references/sheet-examples.md`](references/sheet-examples.md) — open when writing a task sheet or delivery sheet
+- [`references/team-memory.md`](references/team-memory.md) — open for first-time setup, vendor switch, inbox, log, workbooks, auto memory
+- [`references/handoff.schema.json`](references/handoff.schema.json) — open when a machine reads the header
+- [`references/sources.md`](references/sources.md) — sources and licences
+
+
+## reference: sheet-examples.md
+
+# Sheet examples · task sheet and delivery sheet
+
+Full examples for `handoff` SKILL.md sections 3 and 4. The headings and field names are the format; the content is an example.
+
+## Task sheet (`ใบสั่งงาน`)
 
 ```markdown
 ---
@@ -697,18 +643,9 @@ files_allowed: [research/shipping/**]
 ใบส่งงานต่อท้ายไฟล์นี้ · ข้อความกลับหัวหน้าทีมไม่เกินราว 40 บรรทัด (สิ่งที่เปลี่ยน · ผลตรวจ · สิ่งที่ไม่แน่ใจ)
 ```
 
-- **Code work** uses the same sheet, differing only in fields: `to: software-development:developer` · `files_allowed: [src/auth/**]` · done-when = `npm test` passes · skill = `stack-*` (plugin `software-development`).
-- **A normal piece puts the 5-item sheet in the message that sends the task** (the core of `superuser` section 5). Write a file only for a piece that crosses sessions or goes to another person or bot (module `handoff`); then the instruction reaches the agent as one line: `ทำตาม .claude/superuser/handoff/<id>.md`. Pass the path, not the content; the worker opens and reads it itself.
-- **A brief that will be picked up several days after it is written** uses the template `superuser/templates/DURABLE-BRIEF.md`: write behavior and interface names, not paths or line numbers (files move, then the old brief is stale). It has testable acceptance criteria and a list of what is out of scope. A normal task sheet for a piece done today may use paths.
-- **State the intent of the rule**, not only the condition. For a fix or retry round → add a `## รอบก่อน` (previous round) section (the previous worker's report + what must change) and send a new worker.
-- **A sheet to `reviewer`** has no lead opinion in it (rule in `superuser` section 5).
-- **Workers that review or research** — a conclusion that something in the work is "outdated", "wrong" or "contradictory" must attach `file:line` and say whether it looked and found it so on purpose (history sections · numbers a script generates · noted exceptions). Put this in every task sheet. The lead opens a few at random before believing them (lesson 2026-10-26: "PLUGINS.md is outdated" was a Roadmap section kept on purpose · "skill 49 is wrong" was a shared total).
+Code work uses the same sheet, differing only in fields: `to: software-development:developer` · `files_allowed: [src/auth/**]` · done-when = `npm test` passes · skill = `stack-*` (plugin `software-development`).
 
----
-
-## 4 · Delivery sheet (`ใบส่งงาน`)
-
-The worker appends it to its own task sheet, then edits `status:`. The message back to the lead = path + result + 1-line summary.
+## Delivery sheet (`ใบส่งงาน`)
 
 ```markdown
 ## ส่ง — 2026-10-21 14:20 · general-purpose · sonnet
@@ -720,71 +657,18 @@ The worker appends it to its own task sheet, then edits `status:`. The message b
 - **ค้างอยู่ · ไม่แน่ใจ:** เจ้าที่ 3 ไม่บอกค่าเก็บเงินปลายทาง (รอยืนยัน)
 ```
 
-- **ผล** (result) uses 1 of 4 values per `superuser` section 5: `เสร็จ` · `เสร็จ มีข้อกังวล` · `ขาดบริบท` · `ติด`
-- **"เสร็จ" needs evidence** in `ตรวจแล้วด้วย` (checked with). If there is none → `status: ติด` or `ค้างอยู่`.
-- **ลองแล้วพัง** (tried and failed): note every path tried that did not work, with a 1-line reason (the `dead_ends` field in the header if a machine must read it). A dead end that is not noted is a path the next worker will waste time walking again.
-- **A result longer than 40 lines** → write it to `handoff/<id>/` and cite the path.
-- **The lead is responsible for the result** — read the delivery sheet, check it against "เสร็จเมื่อ" (done-when) yourself, then move any `ตัดสินใจเอง` that affects other work up to the "การตัดสินใจ" (decisions) table in `CONTEXT.md`.
+## Lesson behind the review rule
 
----
+2026-10-26: "PLUGINS.md is outdated" was a Roadmap section kept on purpose. "Skill 49 is wrong" was a shared total.
 
-## 5 · Resuming work (`รับงานต่อ`) — across sessions · switching model · context nearly full
 
-The section `## รับงานต่อ` in `CONTEXT.md` uses this one set of rules. The table `## ความคืบหน้า` (progress) beside it belongs to `status-report`.
+## reference: sources.md
 
-**Before handing over** — update the "รับงานต่อ" section in `CONTEXT.md` before ending a session · before switching model · when context use passes half in a long job.
-- **ทำต่อเป็นข้อแรก (do first):** 1 item, doable at once, pointing to a file or `handoff/<id>.md`
-- **ชิ้นที่ยังเปิด (open pieces):** a list of `id` whose `status` is not `เสร็จ`
-- **รออนุมัติ (awaiting approval):** work that is ready but cannot be undone; name the file or the command that is ready to use (leave it out if there is none)
-- **ค้างอยู่ (pending):** questions the agent cannot continue past on its own; say whom to ask (write `ไม่มี` if none)
-- **ระวัง (watch out):** traps found · what must not be torn up (already decided) · paths tried that failed (gathered from every piece's delivery sheet)
-- **ส่งมาแล้ว N ครั้ง (handed over N times):** count only real handoffs (end of session · switching model), not `/compact`. If the receiver sees N of 2 or more → old text may be lingering; check against the real thing before following it.
-- **สมุดงาน (workbooks):** point to `notes/<plan>.md` and `ledger/<plan>.md` of the plan that is open (section 8 of `team-memory`). A plan with several pieces is done only when the line `Task N: complete` is in that plan's ledger.
-- **Tag every item** `ตรวจจริง` (seen yourself in this session) or `ยังไม่ได้ตรวจ` (remembered from an earlier round). The receiver can believe the first kind at once; the second must be checked before use. No tag = treated as not yet checked.
-
-**Switching to another vendor** (Codex · Gemini) or coming back to Claude → [`team-memory`](references/team-memory.md) section 3
-
-**Test** — if a new model reads only `CONTEXT.md`, can it start the first item without asking? If not → write more.
-
-**Start-of-work ritual** (every one that takes over work: a new lead session and workers alike)
-1. Read your own sheet → worker: `handoff/<id>.md` · lead: `CONTEXT.md` "รับงานต่อ" + `inbox/` (how to receive messages and which messages count as orders → [`team-memory`](references/team-memory.md) section 4)
-2. (If there is git) `git log --oneline -10` and `git status` → learn what happened last and whether anyone left edits unfinished. No git → look at "ความคืบหน้า" and the last-modified dates of files. Read `notes/<plan>.md` and compare the original brief with what the user orders now. Use "คำตอบที่ได้แล้ว" (answers already received) instead of asking again.
-3. Walk the tracking files to the last gate that finished (`ledger/` · delivery sheet · progress), then check that gate's real state (run the test · open the file) before building on it. Matches → go on. Does not match (for example the ledger says done but the test fails) → go back and make the earlier gate pass, put a row in "รอผู้ใช้" (waiting for the user), and continue with the other parts. No tracking file for this work found → start fresh; do not guess it is the same work.
-4. Start "ทำต่อเป็นข้อแรก" or the goal in the task sheet.
-
----
-
-## 6 · Sending outside the team — people · other bots · Quix · Agent Desk
-
-Hand-off package = `CONTEXT.md` + the still-open `handoff/` pieces + `docs/BRIEF.md` (if it exists). No new file needed.
-
-- **A person** reads `CONTEXT.md` first, then opens `handoff/<id>.md` one piece at a time.
-- **A teammate (person) who takes a piece** uses exactly the same task sheet as an agent. Put the person's name in the `to:` field (such as `to: คน-แต้ม`). Write the delivery sheet at the end of the same file and tell the lead. Used only for XL work per the playbook `superuser` → `references/playbook-team-project.md`; in normal work the user does not take pieces.
-- **A machine** reads the header of `handoff/*.md` per [`handoff.schema.json`](references/handoff.schema.json). Field names are a contract; do not rename them without raising the schema's version number.
-- **Agent Desk** uses `to` · `status` · `tier` · `depends_on` to draw the task board · **Quix** uses the same files as a work queue.
-
----
-
-## 7 · Rules that keep handoffs from breaking
-
-| Rule | Because |
-|---|---|
-| Pass the path, not the content | Over several hops, data gets lost ("telephone game") and tokens are wasted |
-| 1 file, 1 writer · shared files are written by the lead alone | Several agents writing the same place scatters decisions and they collide |
-| Split only pieces that can really run in parallel · pieces that must know much of the same thing go to one worker | Splitting context makes workers understand the brief differently |
-| Once decided, note it in "การตัดสินใจ" · if the receiver disagrees → put it in "รออนุมัติ", do not tear it up alone | Stops arguing the same thing every session |
-| Done is judged from the work product and the check result, not the word "done" | Words in a conversation cannot be checked |
-| The reviewer gets only the work product + criteria, not the maker's context | A reviewer who sees the maker's reasons tends to go along |
+# Sources · handoff
 
 Sources of the workbook and resume mechanisms: code-modernization (Apache-2.0) · mercadopago (Apache-2.0) · math-proof (Apache-2.0) · superpowers (MIT) · mattpocock-skills (MIT) · aws (Apache-2.0) · vsql-extension-builder (license not stated, mechanism only) · claude-remember (no redistribution, mechanism only) · seen 2026-11-10 · details per file in `team-memory` section 8
 
 Sources (`จากแหล่ง`): Anthropic — *How we built our multi-agent research system* (2025-06) · *Effective harnesses for long-running agents* (2025-11) · *Effective context engineering for AI agents* (2025-09) · Cognition — *Don't Build Multi-Agents* (2025-06) · *Multi-Agents: What's Actually Working* (2026-04)
-
----
-
-## 8 · Our files versus Claude Code's built-in memory
-
-If you want to note something and are unsure whether it goes into `CONTEXT.md` · `CLAUDE.md` · `.claude/rules/` or auto memory → open [`team-memory`](references/team-memory.md) section 7
 
 
 ## reference: team-memory.md

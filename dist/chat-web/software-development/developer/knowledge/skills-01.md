@@ -4,9 +4,6 @@ Use before changing code you have not yet read
 
 # code-orientation — understand the existing code before touching it
 
-> Most code an agent writes breaks not because the agent cannot write, but because it does not know how the old code works or why it was written that way.
-> 10 minutes of reading saves several rounds of fixes.
-
 Use it before every `feature` · `bug-fix` · `refactor` · `review` playbook, whenever you have not yet read that part of the code in this session.
 
 Skip it when you change one piece of text or one constant, or when you write a new file that nothing calls.
@@ -48,7 +45,7 @@ If you cannot find the reason, do not delete the code yet. Note it as `(รอ�
 Read 2–3 files similar to the one you will write, then note:
 - **Commands** — install · build · test · lint · format · run a single test (from README · `package.json` · `*.csproj` · `pyproject.toml` · CI config)
 - **Structure** — how files are placed · how things are named · how errors and logs are handled · how tests are written
-- **Convention checklist** (note only what differs from the language default · idea from ECC codebase-onboarding)
+- **Convention checklist** (note only what differs from the language default)
 
   | Look at | Evidence to open |
   |---|---|
@@ -84,10 +81,6 @@ Tests that lock the behaviour: <file> · none → write before the change
 - Tracing the whole repo until the context is full, when you should read only the path of this task.
 - "Cleaning up" along the way without a test. That should be a separate refactor task.
 
-## 6 · Link to other skills
-
-`context-budget` (heavy reading) · `blast-radius` (changing shared code) · `principle-fix-root-cause` (bug) · `readable-code` · `lazy-coding` · `testing-standards` · the stack skill
-
 
 ---
 
@@ -95,34 +88,67 @@ Tests that lock the behaviour: <file> · none → write before the change
 
 Use when writing or reviewing code for readability
 
-# Code that people can read and understand
+# readable-code — names, functions, comments and file layout that people can read
 
-> **The one rule:** a name you must open up to understand is a badly chosen name
+> **One rule:** a name you must open up to understand is a badly chosen name
 
----
-
-## When to use this skill
+## Use when
 
 - Writing new code · naming variables, functions, files, or folders
 - Reviewing code that feels "correct but hard to read"
 - A newcomer joins the project and cannot find files
 - The `utils/` folder is starting to become a junk drawer
 
-## When **not** to use
+Not for: writing **less** code → `lazy-coding` · repo-level folder structure, README, linter → `project-bootstrap` · correctness, security, testing → `code-review-checklist` · documentation file names → `document-naming` · product or brand names → `product-naming`
 
-| Situation | Use instead |
-|---|---|
-| You want to write **less** code | `lazy-coding` |
-| **Repo-level** folder structure · README · linter | `project-bootstrap` |
-| Reviewing for correctness, security, testing | `code-review-checklist` |
-| Naming **documentation files** | `document-naming` |
-| Naming a **product or brand** | `product-naming` |
+## Steps
 
----
+1. **Name it so it answers what it is · what unit · when it can be used.** A number with a unit has the unit in its name, always (`timeoutMs` · `priceSatang` · `Seconds` · `Bytes` · `Percent` · `Ratio`). Examples → [`references/examples.md`](references/examples.md).
+2. **Use one word for one meaning across the whole project.** Function prefixes (10 groups: what each promises, can it fail, side effects; for example `get` never hits the network, `validate` throws, `ensure` can be called repeatedly) are in [`assets/naming-reference.md`](assets/naming-reference.md) step 2.
+3. **Apply the naming rules:**
+   - Never name a boolean in the negative (`isNotReady` gives `if (!isNotReady)`). A boolean starts with `is` `has` `should` `can`.
+   - A collection is plural and says the type inside (`userIds`, not `users`, if it holds numbers).
+   - A function name containing `and` is 2 functions: split it.
+   - Constants use upper case only for values truly set once; a value read from config is not a constant.
+   - Order function names verb → big context → small context (`getUserMessages` · `shouldDisplayBanner`).
+   - Do not repeat context the surrounding name gives (`user.userName` → `user.name`).
+4. **Set the name length by distance from declaration to last use.** 5 lines or fewer (a loop counter): 1 character is enough. Within one function: 1–2 words. Whole class or file: 2–3 words. Exported outside the file: full words, no abbreviations.
+5. **Do not use `data` `info` `manager` `helper` `util` `do` `temp` or self-invented abbreviations** in names you choose yourself. Replacement words → [`assets/naming-reference.md`](assets/naming-reference.md) step 4. Exceptions: abbreviations the whole field uses (`id` · `url` · `http` · `db` · `api` · `ui`) and names a platform or framework already set (`SensorManager` · Android `Service` · `ChangeNotifier`).
+6. **Shape the function:**
+   - One level of abstraction per function.
+   - At most 3 parameters; beyond that, take an object with named fields.
+   - No boolean parameter (`render(true)` hides what `true` is): split into `renderDraft()` and `renderFinal()`, or take `{ mode: "draft" }`. A named parameter whose call site shows the name (`TextField(obscureText: true)` · `enabled: true`) is fine.
+   - Return early rather than nest `else`.
+   - If indentation goes past 3 levels, split the function.
+7. **Write comments for "why", not "what".** A comment that explains what the code does means the name is wrong: fix the name and delete the comment. Keep a comment only for: an external constraint (API · law · hardware) · a deliberate decision that looks odd · a formula or business rule with its source (cite the clause number) · a `TODO(owner)` with a condition. If you change code, change its comment in the same round.
+8. **Before review, sort every comment the diff adds or edits:** delete (translates code · outdated · commented-out code) · rename then delete (explains what a name is) · turn into a type, assert, test or lint then delete (states a constraint; `repeated-mistakes-to-checks`) · keep (the 4 kinds in step 7). If the diff is large, have a mid-level subagent read only and make the list, while the main agent decides. Report counts: deleted · renamed · became checks · kept.
+9. **Lay out files by feature, not by file type.** The test: a newcomer gets "the save-invoice button does not work" and must guess the right folder within 30 seconds. Layout example → `references/examples.md`.
+   - A file name is the name of what it mainly exports (`InvoiceRenderer` in `invoice-renderer.ts`); letter case follows the language (Dart/Python snake_case, .NET `InvoiceRenderer.cs`).
+   - A test file sits beside the file it tests, except where tooling forces a test folder (Flutter `test/` · .NET `tests/`; table in `project-bootstrap` step 1), where `test/` mirrors `lib/` exactly.
+   - No single `utils/` lump: `shared/` is fine only if split by topic. A folder with a single file should not exist yet.
+   - An `index` that re-exports a whole folder breaks "go to definition": use it only where truly needed.
+10. **Order inside a file:** import → constants → types → what is exported → private helpers. A called function sits below its caller, so it reads top to bottom. A file over about 300 lines is a signal, not a rule.
+11. **Language in code:** names of variables, functions, classes, files, folders, tables and columns are always English. Comments may be Thai if the team reads Thai. User-facing text is Thai but not embedded in code (`i18n-and-locale`). Never mix half-words (`checkบัตร`). For a Thai term with no English word, look for the closest English word first (`taxId` · `withholdingTax`); otherwise transliterate in full words and explain it in `DATA-DICTIONARY.md`.
 
-## 1 · A name must answer three questions without opening it
+## Check before done
 
-**What is it · what unit · when can it be used**
+- Use the 12-item checklist in [`assets/naming-reference.md`](assets/naming-reference.md) step 5; fix any failed item by the matching step above.
+- No rename of a whole file in the same commit as a logic change (split the commits).
+- No `utils.ts` with unrelated functions · no commented-out code · no `@author` `@version` header · no name by pattern instead of role (`InvoiceFactoryStrategyImpl`) · no change of naming style midway · no name cut short because the line is long (wrap the line).
+
+## References
+
+- [`references/examples.md`](references/examples.md) — open for name, comment and folder-layout examples, and for related skills
+- [`assets/naming-reference.md`](assets/naming-reference.md) — open for prefix groups, forbidden-word replacements and the 12-item checklist
+
+
+## reference: examples.md
+
+# Examples · readable-code
+
+Open when you need a worked example for a name, a comment, a folder layout, or the comment sorting pass.
+
+## Names that answer what / unit / when
 
 | ✗ | ✓ | The difference |
 |---|---|---|
@@ -137,68 +163,20 @@ Use when writing or reviewing code for readability
 | `process()` | `normalizePhoneNumber()` | `process` can mean anything |
 | `getUser()` that calls an API | `fetchUser()` | `get` means fast and never fails |
 
-> **A number with a unit must have the unit in its name, always** — `Ms` · `Seconds` · `Bytes` · `Satang` · `Percent` · `Ratio`
-> Nobody sees a unit bug at review, but they will see it when the customer calls
+Nobody sees a unit bug at review, but they will see it when the customer calls. Units: `Ms` · `Seconds` · `Bytes` · `Satang` · `Percent` · `Ratio`.
 
----
+## Name length by distance from declaration to last use
 
-## 2 · Function prefixes — one word, one meaning
-
-**Pick a word and use it consistently across the whole project.** If some `get` calls hit the network, readers stop trusting every name.
-
-The table of all 10 prefix groups (what each promises · can it fail · does it have side effects) is at [`assets/naming-reference.md`](assets/naming-reference.md) step 2 — for example `get` never hits the network · `validate` throws an error · `ensure` can be called repeatedly
-
-**Combining rules:**
-
-- **Never name a boolean in the negative** — `isNotReady` produces `if (!isNotReady)`, which nobody can read
-- **A collection is plural and says the type inside** — `userIds`, not `users`, if what is inside is numbers
-- **A function name containing `and` is 2 functions** — `saveAndNotify()` should be split into 2
-- **Constants use upper case only for values truly set once**; a value read from config is not a constant
-- **Order function names verb → big context → small context** — `getUserMessages` (get · user · messages) · `shouldDisplayBanner` · with the same order across the project, readers can guess names they have never seen
-- **A boolean starts with `is` `has` `should` `can`** — it reads as a question that can be answered only yes or no (`hasUnpaidBalance` · `canRetry`)
-- **Do not repeat context the surrounding name already gives** — `user.userName` → `user.name` · `Invoice.invoiceTotal` → `Invoice.total`
-
-(The last 3 — idea from kettanaito/naming-cheatsheet (MIT), rewritten in our own words)
-
----
-
-## 3 · How long a name is depends on how many lines it lives
-
-| Distance from declaration to last use | Suitable name length | Example |
+| Distance | Suitable name length | Example |
 |---|---|---|
 | ≤ 5 lines (a loop counter) | 1 character is enough | `i` · `r` · `x` |
 | Within one function | 1–2 words | `total` · `rawRows` |
 | Whole class or whole file | 2–3 words | `pendingApprovals` |
 | Exported outside the file | Full, no abbreviations | `calculateWithholdingTax` |
 
-> **A name gets longer as the distance between declaration and use grows** — `i` in a 3-line loop is clearer than `currentIndex`
-> but an `i` that is a class field is a name nobody can follow
+`i` in a 3-line loop is clearer than `currentIndex`, but an `i` that is a class field is a name nobody can follow.
 
----
-
-## 4 · Forbidden words — adding them removes no meaning at all
-
-**Do not use `data` `info` `manager` `helper` `util` `do` `temp` or self-invented abbreviations** — everything in a program is data; a name that can do anything is a name that says nothing · the full table with replacement words is at [`assets/naming-reference.md`](assets/naming-reference.md) step 4
-
-**Exception:** abbreviations the whole field uses — `id` · `url` · `http` · `db` · `api` · `ui` — are fine, no need to spell out
-and names already set by a platform or framework (`SensorManager` · Android `Service` · `ChangeNotifier`) are used as they are,
-because the forbidden words apply only to names **we choose ourselves**
-
----
-
-## 5 · The shape of a function
-
-- **One function, one level of abstraction** — a function holding both "send email" and "concatenate an SQL string" is hard to read because the brain must switch levels
-- **No more than 3 parameters**; beyond that, take an object with named fields
-- **Never take a boolean as a parameter** — at the call site, `render(true)` does not show what `true` is
-  split into `renderDraft()` and `renderFinal()`, or take `{ mode: "draft" }`
-  **except a named parameter** where the call site shows the name, such as `TextField(obscureText: true)` in Dart or `enabled: true`, which already reads clearly
-- **Return early rather than nest `else`** — a condition that can end the function should `return` at once, so the main path is not indented
-- **If indentation goes past 3 levels, split the function** — not because of a rule, but because the brain cannot follow conditions nested 4 deep
-
----
-
-## 6 · Comments — write "why", not "what"
+## Comments
 
 ```ts
 // ผิด: เพิ่มค่า i ทีละ 1
@@ -209,9 +187,7 @@ because the forbidden words apply only to names **we choose ourselves**
 // ถูก: ต้องเรียงลำดับนี้เท่านั้น — เรียก validate ก่อน normalize จะได้เบอร์ที่ผิดรูปแบบ
 ```
 
-**A comment that explains what the code does is a sign the name is wrong.** Fix the name and delete the comment.
-
-**4 kinds that should have a comment:**
+The 4 kinds that should have a comment:
 
 | Kind | Example |
 |---|---|
@@ -220,11 +196,9 @@ because the forbidden words apply only to names **we choose ourselves**
 | A formula or business rule with a source | Cite the clause number in the document; do not retell the formula |
 | A `TODO` with an owner and a condition | `TODO(somchai): ย้ายไป Redis เมื่อรันเกิน 1 process` (move to Redis when running more than 1 process) |
 
-> **A lying comment is more dangerous than no comment.** If you change the code, change the comment in the same round.
+## Comment sorting pass (before review)
 
-### Comment sorting pass before review
-
-Before sending for review, go through every comment the diff adds or edits, and put each into 1 of the 4 ways in this table. If the diff is large, have a mid-level subagent read only and make the list, while the main agent decides.
+Go through every comment the diff adds or edits, and put each into 1 of 4 ways. If the diff is large, have a mid-level subagent read only and make the list, while the main agent decides.
 
 | Comment | Do |
 |---|---|
@@ -233,16 +207,9 @@ Before sending for review, go through every comment the diff adds or edits, and 
 | States a constraint ("no null" · "must be called after init" · "value at most 100") | Turn it into something checkable, such as a type · assert · test · lint (`repeated-mistakes-to-checks`), then delete |
 | The 4 kinds in the table above | Keep |
 
-Report the result as numbers: how many deleted · how many renamed · how many became checks · how many kept
+Report the result as numbers: how many deleted · how many renamed · how many became checks · how many kept.
 
----
-
-## 7 · File structure a newcomer can find their way in
-
-**The test:** a person who just joined the project gets a bug report: *"The save-invoice button does not work"*
-They must guess the right folder **within 30 seconds** without asking anyone.
-
-### Organize by feature, not by file type
+## Folder layout: by feature, not by file type
 
 ```
 ผิด: จัดตามชนิด — แก้ฟีเจอร์เดียวต้องเปิด 5 โฟลเดอร์
@@ -260,80 +227,16 @@ src/
   shared/        money.ts  thai-date.ts  http-client.ts
 ```
 
-**Rules:**
+Test-folder stacks: Flutter (`flutter test` looks in `test/`, and a test in `lib/` drags `flutter_test` into the app) · .NET (a separate test project in `tests/`) — table in `project-bootstrap` step 1. Mirror the layout exactly, e.g. `lib/invoice/renderer.dart` ↔ `test/invoice/renderer_test.dart`.
 
-- **A file name is the name of what it mainly exports** — `InvoiceRenderer` lives in `invoice-renderer.ts`
-  Letter case follows the language's convention: Dart/Python use snake_case (`invoice_renderer.dart`), while .NET uses `InvoiceRenderer.cs`
-- **A test file sits beside the file it tests**, not in a `tests/` folder where you must hunt for its pair
-  **except stacks where the tooling forces a test folder**, such as Flutter (`flutter test` looks in `test/`, and a test in `lib/` drags `flutter_test` into the app) · .NET (a separate test project in `tests/`) — table in `project-bootstrap` step 1
-  use a folder layout in `test/` that mirrors `lib/` exactly, e.g. `lib/invoice/renderer.dart` ↔ `test/invoice/renderer_test.dart`
-- **No single `utils/` lump**, because if 2 things are unrelated, they should not be in the same file
-  `shared/` is acceptable, but inside it must split by topic, not be a heap
-- **An `index` that re-exports a whole folder breaks "go to definition" in code editors**, so use it only where truly needed
-- **A folder with a single file is a folder that should not exist yet**
+## Thai terms in code
 
----
+`เลขประจำตัวผู้เสียภาษี` → `taxId` · `ภาษีหัก ณ ที่จ่าย` → `withholdingTax`. If there really is no English word, use a full-word transliteration and explain it in `DATA-DICTIONARY.md`.
 
-## 8 · File size and order inside the file
-
-- **A file over ~300 lines is a signal, not a rule.** If you can scroll and find things easily, leave it.
-- **Order in a file: import → constants → types → what is exported → private helpers**
-- **A function that is called sits below the function that calls it**, so it reads from top to bottom like an article
-  the important parts on top, the details below; wherever the reader stops, they already understand the overall picture
-
----
-
-## 9 · Thai and English in code
-
-| What | Language |
-|---|---|
-| Names of variables, functions, classes, files, folders, tables, columns | **Always English** |
-| Comments | Thai is fine if the team reads Thai |
-| Text users see | Thai, but not embedded in code (`i18n-and-locale`) |
-| Commit message · branch name | As the team agrees; pick one and use it consistently across the team |
-
-- **Never mix half-words** — `checkบัตร` · `userชื่อ` are hard to read and break in some terminals
-- **For Thai technical terms with no direct English word**, look for the closest English word first
-  (`เลขประจำตัวผู้เสียภาษี` → `taxId` · `ภาษีหัก ณ ที่จ่าย` → `withholdingTax`)
-  if there really is none, use a full-word transliteration and explain it in `DATA-DICTIONARY.md`
-
----
-
-## 10 · Checklist before submitting code
-
-Use the 12-item checklist in [`assets/naming-reference.md`](assets/naming-reference.md) step 5 — go through every item before sending; for any item that fails, go back and fix it by the matching step of this skill.
-
----
-
-## 11 · Anti-patterns
-
-- **Renaming a whole file in the same commit as a logic change** — reviewers cannot tell what really changed; split the commits
-- **A `utils.ts` with 40 unrelated functions**
-- **A generated file-header comment that nobody updates** — `@author` `@version`, which git tells better
-- **Code commented out "in case it's needed"** — git keeps it already; delete it
-- **Naming by pattern instead of by role** — `InvoiceFactoryStrategyImpl` says which pattern is used, not what it does
-- **Changing the naming style midway through a project** — inconsistency is worse than a style that is not pretty
-- **Abbreviating a name because the line is too long** — wrap the line; do not cut the name
-
----
-
-## 12 · Abbreviations
-
-- **API** — Application Programming Interface
-- **SQL** — Structured Query Language
-- **SMS** — Short Message Service
-- **TODO** — something not yet done that you intend to do
-- **YAGNI** — You Aren't Gonna Need It
-
----
-
-## 13 · Connecting to other skills
+## Related skills
 
 | Need | Use together with |
 |---|---|
-| Write less code | `lazy-coding` |
-| Repo structure · README · linter | `project-bootstrap` |
-| Review for correctness and security | `code-review-checklist` |
 | Log format and field names in logs | `logging-standards` |
 | Table and column names in a database | `database-design` |
 | Endpoint names and fields in an API | `api-conventions` |
@@ -347,65 +250,69 @@ Use the 12-item checklist in [`assets/naming-reference.md`](assets/naming-refere
 
 Use when writing or reviewing code, for the simplest that works
 
-# Lazy Coding
+# lazy-coding — the least code that works, still easy to find and to read
 
-You write code like a senior dev who has been paged at 3 AM for someone else's
-clever abstraction. Lazy means efficient, not careless. The best code is the
-code you never had to write.
+> **One rule:** a tired teammate must understand it in 6 months, with no context. If they can't, simplify until they can. The best code is the code you never had to write.
 
-**Team rule:** a tired teammate must understand it in 6 months, with no
-context. If they can't, simplify until they can.
+## Use when
 
-## Active every response
+- Writing or reviewing any code. On by default at **full** in every response; switch with `lazy lite | full | ultra`; off only on "stop lazy" / "normal mode".
 
-On by default at **full**. Don't drift back to over-building — still on even
-when you're unsure. Switch with `lazy lite | full | ultra`. Off only on
-"stop lazy" / "normal mode".
+Not for: names, function shape and file layout → `readable-code` (**always load together**: lazy decides how much code, readable-code decides how it looks) · the repo skeleton → `project-bootstrap` · docs, plans, architecture → `simplicity-first`
 
-## The ladder — stop at the first rung that holds
+## Steps
 
-1. **Does this need to exist?** Speculative need → skip it, say so in one line. (YAGNI)
-2. **Stdlib does it?** Use it.
-3. **Native platform feature covers it?** `<input type="date">` over a picker lib, CSS over JS, a DB constraint over app code. On mobile (Flutter, React Native) "native" means writing a platform channel in Kotlin/Swift — the costly rung; a maintained plugin or a framework widget comes first.
-4. **An already-installed dependency solves it?** Use it. Never add a new dependency for what a few lines can do.
-5. **Can it be one line?** One line.
-6. **Only then:** the smallest code that works.
+1. **Climb the ladder and stop at the first rung that holds** (a reflex, not a research project; if two rungs work, take the higher one):
+   1. Does this need to exist? Speculative need → skip it, say so in one line (YAGNI).
+   2. Does the stdlib do it? Use it.
+   3. Does a native platform feature cover it? (`<input type="date">` over a picker lib, CSS over JS, a DB constraint over app code.) On mobile (Flutter, React Native) "native" means a platform channel in Kotlin/Swift, the costly rung: a maintained plugin or framework widget comes first.
+   4. Does an already-installed dependency solve it? Use it. Never add a dependency for what a few lines can do.
+   5. Can it be one line? One line.
+   6. Only then: the smallest code that works.
+2. **Apply the rules:**
+   - No unrequested abstractions (no interface with one implementation, no factory for one product, no config for a value that never changes). No scaffolding "for later".
+   - Delete before you add. Boring before clever.
+   - Deletion test: remove the piece, run the tests; still green → it stays deleted.
+   - Shortest working diff wins, but never by merging concerns into one file: fewest files **that still keep one concern per file**.
+   - Match the repo: read 2–3 nearby files and copy their style.
+   - Two stdlib options the same size → take the one correct on edge cases.
+3. **Keep it simple, not scattered.** Lazy cuts how much code exists, never where it lives: one concern per file · feature folders, not type folders (no `utils/`) · names carry meaning · signatures and data shapes between layers written out · config and secrets outside code (but domain constant tables stay in code) · tests beside the code · new project → `project-bootstrap` first. Details and the cold-open test → [`references/structure.md`](references/structure.md).
+4. **Mark a deliberate shortcut** with a comment naming the ceiling and the upgrade path (`# simple: in-memory dict cache — swap for Redis if we run more than one process`). Examples → [`references/examples.md`](references/examples.md).
+5. **Never be lazy about:** input validation at trust boundaries, error handling that prevents data loss, security, accessibility basics, or anything explicitly requested. If the user insists on the full version, build it; no re-arguing.
+6. **Non-trivial logic** (a branch, loop, parser, or money/security path) leaves ONE runnable check: an `assert`-based self-check or one small `test_*`. No frameworks or fixtures unless asked. Trivial one-liners need no test.
+7. **Output:** code first, then at most three short lines on what you skipped and when to add it: `[code] → skipped: [X] — add when [Y].` If the explanation is longer than the code, delete the explanation.
 
-Two rungs both work → take the higher one and move on. The ladder is a reflex,
-not a research project. The first lazy solution that works is the right one.
+## Intensity
 
-## Rules
+| Level | What changes |
+|---|---|
+| **lite** | Build what's asked, but name the lazier option in one line. The user picks. |
+| **full** | The ladder enforced. Stdlib and native first. Shortest diff, shortest explanation. Default. |
+| **ultra** | YAGNI extremist. Ship the one-liner and challenge the rest of the requirement in the same breath. |
 
-- No unrequested abstractions — no interface with one implementation, no factory for one product, no config for a value that never changes.
-- No scaffolding "for later." Later can scaffold for itself.
-- Delete before you add. Boring before clever — clever is what someone decodes at 3 AM.
-- Deletion test: remove the piece, run the tests — still green? It stays deleted. (idea from mattpocock codebase-design)
-- Shortest working diff wins — but never by merging concerns into one file. Fewest files **that still keep one concern per file**.
-- Match the repo — read 2-3 nearby files first and copy their style.
-- Two stdlib options the same size? Take the one that's correct on edge cases. Lazy means less code, not a flimsier algorithm.
+## Check before done
 
-## Simple is not scattered
+- Each rung of the ladder was considered; nothing added that was not asked
+- One concern per file; config outside code; one runnable check for non-trivial logic
+- Output is code plus at most three short lines
 
-Lazy cuts *how much* code exists. It never cuts *where code lives*. A 40-line
-project still looks like software engineering, not a scratchpad:
+## References
 
-- **One concern per file.** Entry point, logic, config and I/O each have their own place. A `main.py` that also parses, validates, talks to the database and prints is not lazy — it is a god-file nobody can test.
-- **Feature folders, not type folders.** `invoice/` holds everything about invoices (`readable-code` §7). No `utils/` dumping ground.
-- **Names carry meaning.** Lazy is not `tmp`, `data`, `handle()`. Follow `readable-code` §1–4.
-- **Boundaries stay explicit.** Function signatures, module exports and the data shape between layers are written out, not implied — fewer lines inside each box, never fewer boxes.
-- **Config and secrets outside code.** Even one environment variable goes in `.env.example`, not inline. A project that reads no environment variables (an offline mobile app) has no `.env.example` — do not invent one.
-- **Domain constant tables are code, not config.** Values that change only with a code release (thresholds, unit tables, lux ranges) go in one named constants file next to the feature, not in env vars or a settings screen. "Config outside code" means values that differ per environment or per deployment.
-- **Tests sit next to the code they test** — one small check per non-trivial path (see "When NOT to be lazy"). Where the toolchain fixes the test folder (Flutter `test/` mirroring `lib/`), follow it — "next to" then means the same relative path.
-- **New project → `project-bootstrap` first.** Lazy code lands in a repo that already has its skeleton (README, folder layout, lint, test command). Never scatter files at the root to save a minute.
+- [`references/structure.md`](references/structure.md) — open when deciding where code, config, constants and tests live
+- [`references/examples.md`](references/examples.md) — open for shortcut-marking examples and the 3 intensity levels answering the same request
 
-Test: a tired teammate opens the repo cold. Can they guess which file holds a
-given behaviour in 30 seconds? If not, the structure is not too complex — it
-is *missing*.
+Pairs with: `simplify` · `readable-code` · `project-bootstrap` · `code-review-checklist` (a lazy diff still gets reviewed)
+
+
+## reference: examples.md
+
+# Examples · lazy-coding
+
+Open when you need to see how a simplification is marked, or how the 3 intensity levels answer the same request.
 
 ## Mark your simplifications
 
-A deliberate shortcut reads as intent, not ignorance, when you label it. Name
-the ceiling and the upgrade path:
+A deliberate shortcut reads as intent, not ignorance, when you label it. Name the ceiling and the upgrade path:
 
 ```python
 # simple: in-memory dict cache — swap for Redis if we run more than one process
@@ -415,45 +322,28 @@ the ceiling and the upgrade path:
 // simple: O(n) scan, fine under ~1k items — index it if the list grows
 ```
 
-## Output
-
-Code first. Then at most three short lines: what you skipped and when to add
-it. If the explanation is longer than the code, delete the explanation.
-
-Pattern: `[code] → skipped: [X] — add when [Y].`
-
-## Intensity
-
-| Level | What changes |
-|-------|------------|
-| **lite** | Build what's asked, but name the lazier option in one line. The user picks. |
-| **full** | The ladder enforced. Stdlib and native first. Shortest diff, shortest explanation. Default. |
-| **ultra** | YAGNI extremist. Ship the one-liner and challenge the rest of the requirement in the same breath. |
-
-Example — "Add a cache for these API responses."
+## Intensity example — "Add a cache for these API responses."
 
 - **lite:** "Done. FYI `functools.lru_cache` does this in one line if you'd rather not own a cache class."
 - **full:** "`@lru_cache(maxsize=1000)` on the fetch function. Skipped a custom cache class — add when lru_cache measurably falls short."
 - **ultra:** "`@lru_cache` on the fetch function — done, since you asked. Do you have a profile showing these calls are slow? If not, this line can go. A hand-rolled TTL cache is a bug farm with a hit rate."
 
-## When NOT to be lazy
 
-Never simplify away: input validation at trust boundaries, error handling that
-prevents data loss, security, accessibility basics, or anything explicitly
-requested. If the user insists on the full version, build it — no re-arguing.
+## reference: structure.md
 
-Non-trivial logic (a branch, loop, parser, or money/security path) leaves ONE
-runnable check behind — the smallest thing that fails if the logic breaks: an
-`assert`-based self-check or one small `test_*`. No frameworks or fixtures
-unless asked. Trivial one-liners need no test.
+# Simple is not scattered · lazy-coding
 
-## Pairs with
+Open when deciding where code, config, constants and tests live. Lazy cuts how much code exists, never where it lives.
 
-- `simplify` — the suite-wide rule for every kind of work; this skill is its detail for code.
-- `readable-code` — **always load together**. Lazy decides how much code; readable-code decides names, function shape and file layout. One without the other gives either bloat or a scratchpad.
-- `project-bootstrap` — the repo skeleton lazy code lands in.
-- `simplicity-first` — same spirit, for docs, plans, and architecture.
-- `code-review-checklist` — the lazy diff still gets reviewed.
+- One concern per file: entry point, logic, config and I/O each have their own place.
+- Feature folders, not type folders; no `utils/` dumping ground (`readable-code`).
+- Names carry meaning (not `tmp`, `data`, `handle()`).
+- Boundaries stay explicit: signatures, module exports and the data shape between layers are written out.
+- Config and secrets outside code: even one environment variable goes in `.env.example`. A project that reads none (an offline mobile app) has no `.env.example`; do not invent one.
+- Domain constant tables (thresholds, unit tables, lux ranges) change only with a code release: one named constants file next to the feature, not env vars. "Config outside code" means values that differ per environment or deployment.
+- Tests sit next to the code they test; where the toolchain fixes the test folder (Flutter `test/` mirroring `lib/`), follow it.
+- New project → `project-bootstrap` first; never scatter files at the root to save a minute.
+- Test: can a tired teammate opening the repo cold guess which file holds a behaviour in 30 seconds? If not, the structure is missing, not too complex.
 
 
 ---
@@ -462,200 +352,73 @@ unless asked. Trivial one-liners need no test.
 
 Use when setting up automated tests or fixing flaky ones
 
-# Testing Standards
+# Testing Standards — tests the team trusts: fast, deterministic, tied to behavior
 
-> **One rule:** a test nobody trusts is worse than no test.
-> A test that flips between red and green on its own gets `skip`ped within 2 weeks, and then the whole suite dies with it.
+> **One rule:** a test nobody trusts is worse than no test. A test that flips between red and green on its own gets `skip`ped within 2 weeks, and then the whole suite dies with it.
 
-## When to use this skill
-
+## Use when
 - Starting tests in a new project, or adding tests to existing code
-- Someone asks "have unit tests / automate the tests"
+- Someone asks for unit tests or to automate the tests
 - The existing suite is slow, flips red and green, or nobody maintains it
 
-## When **not** to use it
+Not for: browser E2E (Playwright/Cypress) → `e2e-testing-patterns` · a real mobile app on an emulator → `app-verifier-setup` (`references/android-native.md`) · business-level test cases before writing → `test-case-template`.
 
-- E2E through a browser (Playwright/Cypress): use `e2e-testing-patterns`
-- Driving a real mobile app on an emulator: use `app-verifier-setup` (`references/android-native.md`)
-- Designing business-level test cases before writing: use `test-case-template`
+## Steps
 
----
+### 1 · Use what exists; ask only when a new one must be added
+- If the project already has a framework, or the stack ships one with its SDK (Flutter `flutter_test` · Angular CLI), use it. Do not ask; 2 systems in one project is worse than one you do not like.
+- If a new test package must be installed, put the question in the single round of questions before starting (use `AskUserQuestion` if available), covering **framework** (options per stack in [`references/per-stack.md`](references/per-stack.md)) and **scope now**: unit only · unit + integration (real DB through Testcontainers of the same type as production; in-memory SQLite only when production is SQLite) · full set including E2E (continue to `e2e-testing-patterns`).
+- If the need appears mid-work, pick the recommended option (first in the table) and record it under "ตัดสินใจเอง" in the report. Do not stop to ask.
 
-## 1 · First: use what exists; ask only when a new one must be added
+### 2 · Keep the pyramid: unit 75% · integration 20% · E2E 5%
+- Unit touches nothing outside and runs in under 100 ms each. E2E only for the paths that make money.
+- A mobile app has a widget test layer (Flutter) or component test layer (React Native) between unit and E2E; use it as the main middle layer.
+- **The whole unit suite finishes in 10 seconds** (Flutter: count after compilation; this number is รอยืนยัน on a real machine). Slower, and people stop running it before commit.
 
-- **If the project already has a framework, or the stack ships a test library with its SDK** (Flutter `flutter_test` · Angular CLI), use it. Do not ask.
-- **If a new test package must be installed**, put this question into the single round of questions before starting (if the tool has a picker for answers, such as `AskUserQuestion`, use it), because switching later after a wrong choice is very expensive.
-- If you only discover mid-work that a choice is needed, pick the **recommended** one in the table and continue, then record it under the "ตัดสินใจเอง" (decided on my own) heading of the report. Do not stop to ask midway.
+### 3 · Decide what needs a test
+- **Must have:** business logic (calculations, permission conditions, state transitions) · every edge case (empty, zero, negative, bounds, duplicates) · **every bug that has happened** (write the red test first, then fix) · contracts others depend on (API response shape, event schema).
+- **Not needed:** getters/setters, DTOs, direct mappings · framework code · other people's libraries · display-only UI.
+- Coverage target is 70–80% of business logic, not 100% overall. A gate of "must not drop below the current level" beats a target number.
 
-2 things to settle:
+### 4 · Write the tests
+- **Name** so the name says what broke: `MethodName_Scenario_ExpectedResult` (`CreateOrder_WhenStockIsZero_ThrowsOutOfStock`). Where the name is a string (Dart · Vitest · Jest), use `group('<what is tested>')` + `test('<scenario> → <expected result>')` as a sentence.
+- **AAA** (Arrange · Act · Assert), 3 parts separated by blank lines; Act is one line.
+- **1 test = 1 reason to break.** 5 unrelated asserts → 5 tests.
+- **Before writing, say which code change turns this test red.** Cannot say → it does not catch behavior; rewrite to catch an observable result. The answer is "the text in the source file changes" → you test characters; run the real thing instead. It goes red only when someone changes a value on purpose (a label color) → it is a change detector; test what that value affects.
+- **No logic in tests** (no `if`, no loop computing the expected value). Several cases → parameterized test (`[Theory]` / `test.each` / `@pytest.mark.parametrize`).
+- **Same result every run:** inject time (`TimeProvider` on .NET 8+, or `now()`) and never call `DateTime.Now` in the code under test · fix the random seed · tests run in any order, never relying on a previous test's state · **no `sleep`** for async; use a fake timer or a real signal.
+- **Mock only boundaries outside the system** (HTTP, queues, time, files), not your own pure computation. Too many mocks tie the test to the code layout, and one refactor turns the suite red.
+- Test data is never real customer data; use a fake-data generator.
+- Do not write tests after the work only to pass the gate, assert only "does not throw", or chase 100% coverage.
 
-**Item 1 — framework**
+### 5 · Integration tests
+- Use a **real DB of the same type as production** (Testcontainers); SQL that passes on SQLite may break on PostgreSQL.
+- Each test starts from a known state (transaction rollback or truncate).
+- Separate the commands (`npm run test:unit` / `test:integration`).
+- Test the API **contract**: status code, JSON shape, important headers, not just "no error".
 
-| Stack | Options to offer |
-|---|---|
-| .NET | **xUnit** (recommended · the standard of modern .NET) · NUnit (a team coming from NUnit) · MSTest (organizations tied to VS) |
-| Node/TS | **Vitest** (recommended · fast, little setup, ESM/TS work out of the box) · Jest (largest ecosystem) · `node:test` (when you want to install nothing) |
-| Python | **pytest** (recommended) · `unittest` (pure stdlib; no extra packages allowed) |
-| Angular | **Vitest that ships with Angular CLI** (`ng test` · recommended · default for new projects) + Testing Library if wanted · Jasmine + Karma (the old default, still usable) · very old versions use Analog |
-| Flutter · Dart | **`flutter_test`** (ships with the SDK, no need to ask) · fake with a class that `implements` the real one, before installing `mocktail` |
-
-**Item 2 — the scope wanted now**
-
-- unit only (fast, touches no DB/network)
-- unit + integration (touches a real DB through Testcontainers, using the same DB type as production · in-memory SQLite is allowed only when production is also SQLite)
-- the full set including E2E (continue to `e2e-testing-patterns`)
-
-> If the project **already has a framework**, do not ask; use the existing one, because having 2 systems in one project
-> is worse than using one you do not quite like.
-
----
-
-## 2 · The pyramid — a ratio that lasts
-
-```
-        ▲  E2E  5%      ช้า เปราะ แพง — เอาไว้ทดสอบ "เส้นทางที่ทำเงิน" เท่านั้น
-       ╱ ╲
-      ╱   ╲ Integration 20%   ต่อ DB/API จริง ทดสอบว่าชิ้นส่วนคุยกันรู้เรื่อง
-     ╱     ╲
-    ╱       ╲ Unit 75%        ไม่แตะอะไรข้างนอก รันจบใน < 100ms ต่อตัว
-   ╱_________╲
-```
-
-**A mobile app has a widget test layer (Flutter) or component test layer (React Native)** between unit and E2E. This layer builds the real screen in memory, then taps and reads it without an emulator. Most mobile apps have no integration tests that connect to a DB, so this layer is used as the main middle layer instead.
-
-**The whole unit suite must finish in 10 seconds** (Flutter: count after compilation finishes, because merely starting `flutter test` takes several seconds · this number is รอยืนยัน (to be confirmed) on a real machine).
-If it takes longer, people stop running it before commit, and a broken test is only found in CI, which is too late.
-
----
-
-## 3 · What needs a test / what does not
-
-**Must have**
-- Business logic: calculations, permission conditions, state transitions
-- Every edge case: empty value, zero, negative, lower/upper bound, duplicates
-- **Every bug that has happened** — write a test that is red first, then fix (regression test)
-- Contracts others depend on: the API response shape, the event schema
-
-**Not needed**
-- getters/setters, DTOs, direct mappings
-- framework code (no need to test whether EF Core can save)
-- other people's libraries
-- UI that only displays with no logic
-
-> **Honest coverage: 70–80% of business logic**, not 100% of the whole project.
-> Chasing 100% gives you fake tests written just to make the number look good.
-> A gate of "must not drop below the current level" is more useful than a target number.
-
----
-
-## 4 · How to write
-
-**Naming** — reading the name must tell you what broke, without opening the code
-
-```
-MethodName_Scenario_ExpectedResult
-
-CalculateDiscount_WhenMemberIsGold_Returns15Percent
-CreateOrder_WhenStockIsZero_ThrowsOutOfStock
-ParseDate_WhenInputIsEmpty_ReturnsNull
-```
-
-In languages where the test name is a string (Dart · Vitest · Jest), use `group('<what is tested>')` + `test('<scenario> → <expected result>')` as a sentence, e.g. `group('verdict')` · `test('below 50 lux is too dark for reading')`
-
-**AAA structure** — separate the 3 parts with blank lines so they are clearly visible
-
-```
-// Arrange   เตรียมข้อมูลและ dependency
-// Act       เรียกสิ่งที่ทดสอบ — บรรทัดเดียว
-// Assert    ตรวจผล
-```
-
-**1 test = 1 reason to break.** If there are 5 unrelated asserts, split into 5 tests.
-
-**Be able to say, before writing, which code change makes this test go red** (adapted from superpowers `test-driven-development` · MIT)
-- Cannot say → this test does not catch behavior. Rewrite it to catch an observable result.
-- The answer is "the text in the source file changes" → you are testing characters. Run the real thing and check the result instead.
-- It goes red only when someone deliberately changes a value (e.g. changes a label color) → it is a change detector, not a behavior test. Move to testing what that value affects.
-
-**No logic in tests** — no `if`, no loop that computes the expected value.
-To run several cases, use a parameterized test (`[Theory]` / `test.each` / `@pytest.mark.parametrize`).
-
-**Make results the same every time**
-- Time: inject `TimeProvider` (.NET 8+) or `now()`; do not call `DateTime.Now` directly in the code under test.
-- Randomness: fix the seed.
-- Order: tests must run in any order; never depend on state a previous test left behind.
-- **No `sleep`** to wait for async — use a fake timer or wait for a real signal.
-
-**Mock only what is necessary** — mock boundaries outside the system (HTTP, queues, time, files).
-Do not mock your own purely computational classes. If you mock too much, the test is tied to how the code is written;
-one refactor turns the whole suite red even though behavior did not change.
-
----
-
-## 5 · Integration test
-
-- Use a **real DB of the same type as production** (Testcontainers), not SQLite instead of PostgreSQL,
-  because SQL that passes on SQLite may break on the real one.
-- Each test starts from a known state — transaction rollback or truncate every time.
-- Separate the command from unit so they can run separately (`npm run test:unit` / `test:integration`).
-- Test the API **contract**: status code, JSON shape, important headers — not just "no error".
-
----
-
-## 6 · CI
-
-```
-push / PR → lint → unit (< 10 วินาที) → integration → build
-```
-
+### 6 · CI
+`push / PR → lint → unit (< 10 s) → integration → build`
 - **Red test = cannot merge**, no exceptions.
-- No `skip`/`ignore` left in the main branch — to skip, an issue link must be attached.
-- A flaky test (flips red and green on its own) must be **fixed or deleted**; never retry until green, because that hides a bug.
-- Show the coverage report on the PR page so it is visible whether it rose or fell.
+- No `skip`/`ignore` on the main branch; to skip, attach an issue link.
+- A flaky test must be **fixed or deleted**; never retry until green, because that hides a real bug.
+- Show the coverage report on the PR so a rise or fall is visible.
 
-Command details and config files for each framework are in `references/per-stack.md`.
-
----
-
-## 7 · Review
-
-- [ ] Used the existing framework or the one that ships with the stack; if a new one was installed, it was asked or recorded under "ตัดสินใจเอง"
+## Check before done
+- [ ] Existing or SDK-shipped framework used; a newly installed one was asked or recorded under "ตัดสินใจเอง"
 - [ ] `npm test` / `dotnet test` / `pytest` / `flutter test` passes from a clean machine with no extra setup (long output → `> _to_delete/test.txt 2>&1` then `tail -20`)
 - [ ] The unit suite finishes in 10 seconds
-- [ ] Shuffling the test order still gives all green (pytest: install `pytest-randomly` then run plain `pytest` · Vitest: `--sequence.shuffle` · Jest: `--randomize` · Flutter: `--test-randomize-ordering-seed random`)
-- [ ] 3 repeated runs give the same result (not flaky)
-- [ ] Break the code deliberately in 1 spot, and the test **must go red** — if still green, the test tests nothing
-- [ ] **Try breaking it in your head before closing the test file** — go through 5 ways: wrong constant or argument · entering the wrong branch · forgetting to change state or a side effect · returning empty or a default · not checking 0 · empty · null · no permission · wrong format — any way that makes no test red means that behavior is not yet protected by anyone
-- [ ] Reading the test name tells you what broke, without opening the code
-- [ ] No `sleep` / `Thread.Sleep` in the test suite
-- [ ] No test left skipped without a reason attached
+- [ ] Shuffled order still all green (pytest: `pytest-randomly` then plain `pytest` · Vitest: `--sequence.shuffle` · Jest: `--randomize` · Flutter: `--test-randomize-ordering-seed random`)
+- [ ] 3 repeated runs give the same result
+- [ ] Break the code deliberately in 1 spot: the test **must go red**; if still green it tests nothing
+- [ ] **Try breaking it in your head before closing the test file**, 5 ways: wrong constant or argument · wrong branch · forgotten state change or side effect · empty or default return · unchecked 0 · empty · null · no permission · wrong format. Any way that turns no test red is behavior nobody protects.
+- [ ] Reading the test name tells what broke, without opening the code
+- [ ] No `sleep` / `Thread.Sleep` in the suite · no test skipped without a reason
 
----
+Related: health/ping endpoints → `web-service-essentials` · logs to trace a red test → `logging-standards` · reviewing test code → `code-review-checklist`.
 
-## 8 · Anti-patterns
-
-- **Writing tests after the work is done just to pass the gate** — you get tests that confirm the code does what it does,
-  not what it should do
-- **Asserting only "does not throw"** — tests nothing at all
-- **A test that depends on the previous test** — red at once when run alone
-- **Mocking everything until the test tests only the mock**
-- **`sleep(1000)` to wait for async** — slow and still brittle
-- **Retrying a flaky test until green** — you just hid a bug that really happens in production
-- **Chasing 100% coverage** — writing tests for getters for the number
-- **Test data that is real customer data** — illegal and easy to leak; use a fake-data generator
-
----
-
-## 9 · Link to other skills
-
-| Need | Use together with |
-|---|---|
-| E2E through a browser | `e2e-testing-patterns` |
-| E2E for a mobile app (`integration_test` · `adb`) | `app-verifier-setup` |
-| Design test cases before writing code | `test-case-template` |
-| Test health/ping endpoints | `web-service-essentials` |
-| Logs that help trace a problem when a test is red | `logging-standards` |
-| Review test code | `code-review-checklist` |
+## References
+- [`references/per-stack.md`](references/per-stack.md) — open for framework options per stack, command details and config files for .NET, Node/TS, Python, Angular, Flutter.
 
 
 ## reference: per-stack.md
@@ -981,6 +744,16 @@ flutter test integration_test/            # needs an emulator or a real device c
 | coverage | `--collect:"XPlat Code Coverage"` | `--coverage` | `--cov` | `--coverage` | `--coverage` |
 | Shuffle order | Not built in | `--sequence.shuffle` | `pytest-randomly` | `--sequence.shuffle` | `--test-randomize-ordering-seed random` |
 
+## Framework options to offer (moved from SKILL.md)
+
+| Stack | Options to offer |
+|---|---|
+| .NET | **xUnit** (recommended · the standard of modern .NET) · NUnit (a team coming from NUnit) · MSTest (organizations tied to VS) |
+| Node/TS | **Vitest** (recommended · fast, little setup, ESM/TS work out of the box) · Jest (largest ecosystem) · `node:test` (when you want to install nothing) |
+| Python | **pytest** (recommended) · `unittest` (pure stdlib; no extra packages allowed) |
+| Angular | **Vitest that ships with Angular CLI** (`ng test` · recommended · default for new projects) + Testing Library if wanted · Jasmine + Karma (the old default, still usable) · very old versions use Analog |
+| Flutter · Dart | **`flutter_test`** (ships with the SDK, no need to ask) · fake with a class that `implements` the real one, before installing `mocktail` |
+
 
 ---
 
@@ -988,113 +761,49 @@ flutter test integration_test/            # needs an emulator or a real device c
 
 Use when reviewing a pull request or your own code
 
-> **In SuperUser:** start a review from the playbook [`review`](../superuser/references/playbook-review.md) then use this checklist for ordinary reviews. For high-risk work or a large diff, use `adversarial-review-panel`
+# Code Review Checklist — review a pull request or your own code, with actionable comments
 
-# Code Review Checklist
+> **In SuperUser:** start from the playbook [`review`](../superuser/references/playbook-review.md), then use this checklist for ordinary reviews. High-risk work or a large diff → `adversarial-review-panel`.
 
-## When to use this skill
+## Use when
+- Reviewing a pull request, self-reviewing before submitting, or auditing an existing module
+- Not for: a second look inside a team → a new `reviewer` agent (it applies this checklist) · contested design, large or high-risk diff, "stress test" → `adversarial-review-panel` · reviewing a visual → `graphic-design:design-review` if installed, else `ui-craft` · writing the PR description → `pr-description-template` · hunting misleading patterns across the codebase → `code-gardener` · scanners, secrets, dependency check, OWASP Top 10:2025 → `security-gate` (run both before merge; `references/owasp-top10.md`, `references/owasp-stack-checks.md`)
 
-- Reviewing a pull request
-- Self-review before submitting code
-- Onboarding new code reviewers
-- Auditing code quality of existing modules
+## Steps
+1. **Understand the intent:** read the PR description and linked ticket. For a branch or PR, pin the range first (`BASE=$(git merge-base main HEAD)` · `HEAD=$(git rev-parse HEAD)` · review `git diff $BASE..$HEAD`) and write both SHAs in the report.
+2. **Skim the diff** for the overall shape.
+3. **Review against the checklist.** House checks first; each skill holds the full rules, so link it in the comment:
+   - Security: run [`security-gate`](../security-gate/SKILL.md) on the diff (input checked at the boundary, parameterized SQL, server-side permission check, no secrets in code or logs)
+   - Simple enough: [`lazy-coding`](../lazy-coding/SKILL.md) · readable: [`readable-code`](../readable-code/SKILL.md) · tests next to the code and proving the change: [`testing-standards`](../testing-standards/SKILL.md)
+   - Shared code touched → [`blast-radius`](../blast-radius/SKILL.md) list is in the PR · commit message follows [`commit-message-format`](../commit-message-format/SKILL.md)
+   - The generic list (correctness, design, performance, documentation, maintainability): [`references/full-checklist.md`](references/full-checklist.md)
+4. **Verify before posting:** hand every `blocking:` finding to a fresh agent (or second reader) with only the diff and the finding, and ask if it is real. Drop it if they cannot reproduce or point to the line.
+5. **Do not flag:** a problem that existed before this PR · what the linter or compiler already catches · a nitpick a senior reviewer would skip · behaviour that looks wrong but is right (check context first) · a rule the team silenced on purpose with a lint-ignore comment · a problem only for an input that cannot occur here.
+6. **Run the code** if non-trivial; do not just read.
+7. **Leave actionable comments:** a concrete fix for each, not just the problem. Prefixes:
 
-## When NOT to use
+   | Prefix | Meaning | Example |
+   |---|---|---|
+   | `blocking:` | Must fix before merge | `blocking: This will cause Y in production because Z.` then `Suggest: <concrete fix>` |
+   | `important:` | Should fix, can be follow-up if urgent | |
+   | `nit:` | Minor, optional | `nit: Consider X for readability` |
+   | `q:` | Question, not necessarily a change | `q: Why did you choose X over Y here?` |
+   | `praise:` | Acknowledge good work | `Nice approach with X — much cleaner than the previous version.` |
 
-| Task | Use instead |
-|---|---|
-| Second look at a finished piece inside a team | a new `reviewer` agent (it applies this checklist to code) |
-| Contested design, large or high-risk diff, "stress test" / "find blind spots" | `adversarial-review-panel` (several `reviewer` agents) |
-| Reviewing a visual (image, poster, screen look) | (if plugin `graphic-design` is installed) `graphic-design:design-review`, else `ui-craft` checks |
-| Writing or updating the PR description itself | `pr-description-template` |
-| Hunting misleading patterns across the codebase, not one diff | `code-gardener` |
-| Scanners, secrets or dependency check before ship or after adding a dependency | `security-gate` (run both before merge) |
-| Web app or API that must meet OWASP Top 10:2025 | `security-gate` (`references/owasp-top10.md` · per-stack checks in `references/owasp-stack-checks.md`) |
+   These prefixes are for comments on a pull request. A review report uses the `reviewer` scale: `blocking:` = สูง · `important:` = กลาง · `nit:` = ต่ำ, verdict ผ่าน / ไม่ผ่าน with counts per level.
+8. **Avoid:** bikeshedding when there is no convention · "why not MY way" · only criticism · vague comments ("this is wrong": say why and suggest a fix) · reviewing too much at once (ask for PRs under 400 lines).
 
-## Review Process
+## Run as a command
+`/software-development:code-review-checklist <file path or PR description>` — use a new read-only `reviewer` agent to review **$ARGUMENTS** (high-stakes or contested → `adversarial-review-panel`). Open `superuser` with the playbook `review` and copy its steps into the todo first; use both together. The reviewer: reads the file(s) or diff and pins the range (step 1) · applies this skill · rates each finding **สูง** (must fix before merge) · **กลาง** (should fix) · **ต่ำ** (optional) · gives a concrete fix for each · outputs verdict **ผ่าน** / **ไม่ผ่าน** with counts per level (not the `blocking:`/`nit:` prefixes).
 
-1. **Understand the intent** — read PR description and linked ticket
-2. **Skim the diff** — get overall sense of changes
-3. **Deep review** — go through each section of checklist below
-   - **Verify before posting:** hand every `blocking:` finding to a fresh agent (or a second reader) with only the diff and the finding, and ask whether it is real. Drop it if they cannot reproduce or point to the line. For a contested diff use `adversarial-review-panel`.
-   - **Do not flag** (adapted from the `code-review` command of claude-plugins-official · Apache-2.0 · opened 2026-11-10): a problem that existed before this PR · something the linter or compiler already catches · a nitpick a senior reviewer would skip · behaviour that looks wrong but is right (check the context first) · a rule the team silenced on purpose with a lint-ignore comment · a problem that only appears for an input that cannot occur here
-4. **Run the code** if non-trivial — don't just read
-5. **Leave actionable comments** — suggest fixes, not just point out problems
+The author does not fix every finding on sight: a finding can be wrong (misread code, or the "bug" is covered by a test). Push back with evidence (`file:line` · test name · command output), not opinion · fix what stands · list each rejected finding and its evidence in the report so the lead can judge.
 
-## Checklist
+## Check before done
+- Every finding has a severity and a concrete fix · every `blocking:` was verified by a second reader
+- Both SHAs are in the report · none of the "do not flag" kinds is in the findings
 
-House checks first. Each skill holds the full rules, so link to it in the comment:
-
-- [ ] Security: run [`security-gate`](../security-gate/SKILL.md) on the diff (input checked at the boundary, parameterized SQL, server-side permission check, no secrets in code or logs)
-- [ ] Simple enough: [`lazy-coding`](../lazy-coding/SKILL.md) (no unused layers, standard library first, one concern per file)
-- [ ] Readable: [`readable-code`](../readable-code/SKILL.md) (names, file and folder layout, config outside code)
-- [ ] Tests sit next to the code and prove the change: [`testing-standards`](../testing-standards/SKILL.md)
-- [ ] Shared code touched → [`blast-radius`](../blast-radius/SKILL.md) list is in the PR
-- [ ] Commit message follows [`commit-message-format`](../commit-message-format/SKILL.md)
-
-The generic list (correctness, design, performance, documentation, maintainability) is in [`references/full-checklist.md`](references/full-checklist.md).
-
-## Comment Templates
-
-### Suggestion (non-blocking)
-```
-nit: Consider X for readability
-```
-
-### Question
-```
-q: Why did you choose X over Y here?
-```
-
-### Blocking issue
-```
-blocking: This will cause Y in production because Z.
-Suggest: <concrete fix>
-```
-
-### Praise
-```
-Nice approach with X — much cleaner than the previous version.
-```
-
-## Review Severity Levels
-
-| Prefix | Meaning |
-|--------|---------|
-| `blocking:` | Must fix before merge |
-| `important:` | Should fix, can be follow-up if urgent |
-| `nit:` | Minor improvement, optional |
-| `q:` | Question, not necessarily a change |
-| `praise:` | Acknowledge good work |
-
-These prefixes are for comments on a pull request. A review report uses the `reviewer` scale: `blocking:` = สูง (high) · `important:` = กลาง (medium) · `nit:` = ต่ำ (low), verdict ผ่าน / ไม่ผ่าน
-
-## Anti-patterns to Avoid
-
-As a reviewer:
-- Bikeshedding — don't fight over trivial style if there's no convention
-- "Why didn't you do it MY way?" — there are often multiple valid approaches
-- Only criticism — acknowledge good things too
-- Vague comments like "this is wrong" — explain WHY and suggest fix
-- Reviewing too much at once — request smaller PRs (under 400 lines)
-
-## เรียกเป็นคำสั่ง
-
-`/software-development:code-review-checklist <file path or PR description>`
-
-> **Shortcut into SuperUser:** open the skill `superuser` with the playbook `review`, then copy the playbook steps into the todo first · the steps below describe the shape of the work and the output of this command · use them together with the playbook, not in place of it
-
-Use a new `reviewer` agent (read-only) to perform a thorough code review of: **$ARGUMENTS** · high-stakes or contested change → `adversarial-review-panel`
-
-The reviewer should:
-
-1. Read the file(s) or diff to understand the change · for a branch or PR, pin the exact range first (`BASE=$(git merge-base main HEAD)` · `HEAD=$(git rev-parse HEAD)` · review `git diff $BASE..$HEAD`) and write both SHAs in the report so author and reviewer talk about the same code
-2. Apply the `code-review-checklist` skill systematically
-3. Rate each finding with the reviewer's own scale: **สูง** (must fix before merge) · **กลาง** (should fix) · **ต่ำ** (optional)
-4. Give a concrete fix for each finding, not just criticism
-5. Use the reviewer's output format: verdict **ผ่าน** / **ไม่ผ่าน** with counts per level. The `blocking:`/`nit:` prefixes in `code-review-checklist` are only for comments posted on a pull request
-
-The author does not fix every finding on sight: a finding can be wrong (reviewer misread the code, or the "bug" is covered by a test). Push back with evidence (`file:line` · test name · command output), not opinion · fix what stands · list each rejected finding and its evidence in the report so the lead can judge · idea from superpowers requesting-code-review
+## References
+- [`references/full-checklist.md`](references/full-checklist.md) — open when the diff needs the generic checks (correctness, design, performance, documentation, maintainability)
 
 
 ## reference: full-checklist.md
@@ -1265,12 +974,3 @@ Co-authored-by: ...      ← attribution
 - [ ] Body explains WHY (if change isn't obvious)
 - [ ] Breaking changes marked with `!` AND `BREAKING CHANGE:` footer
 - [ ] Linked to issue/ticket when applicable
-
-## Anti-patterns
-
-- `update code`
-- `fix bug`
-- `WIP`
-- `final commit` / `final final`
-- Past tense: `added feature` (use `add feature`)
-- Vague scope: `fix(misc): ...` (be specific)

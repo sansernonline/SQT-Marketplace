@@ -4,7 +4,7 @@ Use when a shop wants lapsed regular customers back
 
 # Win Back Customers
 
-Part of plugin `e-commerce`. Wording follows `human-writing`. Finds regular customers who stopped buying, ranks them by what they used to spend, and drafts one message per person that the owner approves before it goes out.
+Finds regular customers who stopped buying, ranks them by what they used to spend, and drafts one message per person that the owner approves before it goes out.
 
 > **One rule:** only contact people on the shop's own list who agreed to hear from it. Marketplace buyers belong to the platform; never message them outside it.
 
@@ -35,12 +35,7 @@ Part of plugin `e-commerce`. Wording follows `human-writing`. Finds regular cust
 6. **Draft one message per person** that names their real history ("ครีมกันแดดสูตรเดิมที่สั่งประจำ") and, if they complained, what changed since. Any offer must be one the owner already runs or approves now; never invent a discount. Each message ends with how to stop receiving messages.
 7. **The owner approves each message** before sending. Log who was contacted, the date, and whether they bought within 30 days, so the next round knows what worked.
 
-## Worked example
-
-Own LINE shop, 12 months of orders (illustrative). คุณเอ: 9 orders, median gap 21 days, last order 58 days ago, ฿6,300 in 12 months, left a 2-star chat complaint about a leaking bottle 60 days ago → lapsed (58 > 42), ranked first. คุณบี: 3 orders, gap 95 days, last order 70 days ago → not lapsed.
-
-Draft for คุณเอ (owner approves first):
-> สวัสดีค่ะคุณเอ ร้าน{ร้าน}ค่ะ ครั้งก่อนขวดเซรั่มที่ส่งไปรั่ว ต้องขออภัยอีกครั้งนะคะ ตอนนี้ร้านเปลี่ยนเป็นขวดฝาล็อกและห่อกันกระแทก 2 ชั้นแล้วค่ะ ถ้าจะสั่งสูตรเดิมอีก ทักมาได้เลยนะคะ (ไม่อยากรับข้อความจากร้าน พิมพ์ "หยุด" ได้เลยค่ะ)
+The 2 × median-gap line and the 15-person cap are starting values, not measured on Thai shops.
 
 ## Check before handing over
 
@@ -49,7 +44,24 @@ Draft for คุณเอ (owner approves first):
 3. No more than 15 people; each message names real history and ends with a way to stop receiving messages.
 4. No offer that the owner has not approved; nothing sent before approval.
 
-## Sources
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open for a worked example with a draft message
+- [`references/sources.md`](references/sources.md) — credits
+
+
+## reference: sources.md
+
+# Sources · win-back-customers
 
 - Anthropic `anthropics/knowledge-work-plugins` (Apache-2.0) small-business `reactivate` and `review-reputation` (lapse = gap beyond the customer's own rhythm, rank by value, approve each message), read 2026-11-10 through the lead's research notes. Ideas only, rewritten for Thai sellers; no text copied.
-- The 2 × median-gap line and the 15-person cap are starting values, not measured on Thai shops.
+
+
+## reference: worked-example.md
+
+# Worked example
+
+Own LINE shop, 12 months of orders (illustrative). คุณเอ: 9 orders, median gap 21 days, last order 58 days ago, ฿6,300 in 12 months, left a 2-star chat complaint about a leaking bottle 60 days ago → lapsed (58 > 42), ranked first. คุณบี: 3 orders, gap 95 days, last order 70 days ago → not lapsed.
+
+Draft for คุณเอ (owner approves first):
+> สวัสดีค่ะคุณเอ ร้าน{ร้าน}ค่ะ ครั้งก่อนขวดเซรั่มที่ส่งไปรั่ว ต้องขออภัยอีกครั้งนะคะ ตอนนี้ร้านเปลี่ยนเป็นขวดฝาล็อกและห่อกันกระแทก 2 ชั้นแล้วค่ะ ถ้าจะสั่งสูตรเดิมอีก ทักมาได้เลยนะคะ (ไม่อยากรับข้อความจากร้าน พิมพ์ "หยุด" ได้เลยค่ะ)

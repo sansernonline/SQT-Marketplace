@@ -5,9 +5,6 @@ description: Use when writing user stories with acceptance criteria
 
 # User Story Writer
 
-> **Language:** write every line of wording following `human-writing`. This skill sets the format and structure, and human-writing sets how to write so readers understand.
-> Thai text → `human-writing` `references/thai-grammar.md` section 4, business register
-
 ## When to use this skill
 
 - The user asks for a new user story
@@ -63,8 +60,8 @@ Every story lives in the single file **`docs/USER-STORIES.md`**, starting from t
 
 - **Cover everyone who spoke.** Go person by person. Every person needs at least 1 story, or a reason why there is none.
 - **Never drop statements that contradict each other.** Write the story that respects the shop's rule first, then raise the conflict as a question. (Example from that job: the shop forbids storing customers' face photos, but customers want to upload selfies → the story analyzes on the device without storing, then asks the shop whether it accepts.)
-- **Close the file with a section "คำถามที่ยังไม่ชัด" (open questions).** Every item has a number, the proposed options and the story it blocks. (Example from that job: 36 stories · 19 questions)
-- **Users nobody mentioned.** The shop owner always needs their own story (for example, mark a service as finished). Anything the builders added on their own that nobody asked for (an admin page · an owner account) goes in a list "ระบบมีแต่ร้านไม่ได้ขอ" (things the system has that the shop did not ask for), and you ask back whether the shop accepts it. Never leave it to be treated as agreed. (Example from that job: 6 items)
+- **Close the file with a section "คำถามที่ยังไม่ชัด" (open questions).** Every item has a number, the proposed options and the story it blocks.
+- **Users nobody mentioned.** The shop owner always needs their own story (for example, mark a service as finished). Anything the builders added on their own that nobody asked for (an admin page · an owner account) goes in a list "ระบบมีแต่ร้านไม่ได้ขอ" (things the system has that the shop did not ask for), and you ask back whether the shop accepts it. Never leave it to be treated as agreed.
 
 ## INVEST Checklist (check before sending)
 
@@ -105,7 +102,7 @@ AC2: <scenario name>
 **Notes:** extra information / business rules
 ```
 
-**List in Blocked by only real blockers** (adapted from mattpocock `to-tickets` · MIT). Story A blocks B when B cannot start until A is done (it needs A's table, API or screen), not merely when A "should come first". Order `USER-STORIES.md` so a blocker comes before the story it blocks. The team or agent picks work from the set "every story whose blockers are all done", which is the set that can run in parallel. If you use a real tracker (GitHub · Linear), use its blocking relationship, not only text in the description.
+**List in Blocked by only real blockers**. Story A blocks B when B cannot start until A is done (it needs A's table, API or screen), not merely when A "should come first". Order `USER-STORIES.md` so a blocker comes before the story it blocks. The team or agent picks work from the set "every story whose blockers are all done", which is the set that can run in parallel. If you use a real tracker (GitHub · Linear), use its blocking relationship, not only text in the description.
 
 ## Example
 
@@ -131,4 +128,6 @@ Load the skill that matches the destination before you start writing, not after 
 | A `.docx` / `.pptx` / PDF that stakeholders sign off | `branded-document-design` |
 | Needs a picture to be understood | `diagram-figures` (the house style of project documents) |
 
-Leaving the default format in place does not make it look neutral. Readers will see the work as unfinished.
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources

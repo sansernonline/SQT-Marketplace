@@ -25,7 +25,7 @@ General information, not legal or insurance advice — กรมการขน�
 | พ.ร.บ. premium | private car ≤7 seats 645.21 บาท/ปี; private motorbike ≤75 cc 161.57 · 75–125 cc 323.14 · 125–150 cc 430.14 · >150 cc 645.21 (sellers and banks agree; no OIC premium table found — รอยืนยัน) | |
 | พ.ร.บ. cover | **Paid at once, no fault needed (ค่าเสียหายเบื้องต้น):** medical up to 30,000 บาท/คน; death or permanent disability 35,000. **After fault is settled:** medical up to 80,000; death or total permanent disability 500,000; loss of organs 200,000–500,000; inpatient 200 บาท/วัน up to 20 days; total up to 504,000/คน. A driver at fault gets the initial amount only (คปภ. order 51/2568, confirmed 2026-10-26) | |
 
-ตรวจล่าสุด 2026-10-26 · แหล่ง: คปภ. คำสั่งนายทะเบียน 51/2568 https://www.oic.or.th/web-upload/1xff0d34e409a13ef56eea54c52a291126/202508/m_news/217/69225/file_download/cdc3a5e370cf49e506d383261f6d0eb7.pdf · DLT https://nma.dlt.go.th/th/m_page_1679 · https://www.ktc.co.th/article/knowledge/things-car-owner-over-7-years-should-know-atpb · https://www.thansettakij.com/news/general-news/579209
+Sources and check dates: [references/sources.md](references/sources.md)
 
 ## Ways to pay annual tax
 
@@ -53,7 +53,7 @@ Bring: registration book copy (สำเนาเล่มทะเบียน)
 3. **Run:** `node decide.mjs score insurance.json`. Unstable or close (`ยังไม่นิ่ง`, `สูสี`) → the user decides. Insurance money is the user's decision; the score is supporting data.
 4. **Class step-up has a direct formula, no script:** ชั้น 1 is worth it over ชั้น 2+ when `extra premium per year < chance of a single-vehicle claim per year × average repair cost`. The chance comes from the user's own history (starting value, not yet measured; ask, do not guess).
 
-Compare quotes on: sum insured (ทุนประกัน — not above market value), excess/deductible (ค่าเสียหายส่วนแรก), garage type (อู่ห้าง dealer vs. อู่ประกัน network), named drivers, roadside assistance. Check the insurer is licensed on oic.or.th.
+Compare quotes on: sum insured (ทุนประกัน — not above market value), excess/deductible (ค่าเสียหายส่วนแรก), garage type (อู่ห้าง dealer vs. อู่ประกัน network), named drivers, roadside assistance.
 
 ## Before buying a car (compare 5-year cost)
 
@@ -96,7 +96,7 @@ If the licence has already expired (the same bands apply to both types; รอ�
 | 1–3 years | Physical tests + training + the written test again; no driving test |
 | Over 3 years | Physical tests + 5-hour training + written test + driving test, almost like a new licence |
 
-ตรวจล่าสุด 2026-10-22 · แหล่ง: https://www.ktc.co.th/article/knowledge/driving-license-expired-over-a-year-atpb · https://www.grab.com/th/blog/driver/ใบขับขี่หมดอายุ/ · https://www.autospinn.com/2021/04/driver-s-license-82416 (3 secondary sources agree on 6 months; the DLT site did not load on the check date, so the numbers stay รอยืนยัน) — confirm the current steps on dlt.go.th or the DLT Smart Queue app before going.
+Confirm the current steps on dlt.go.th or the DLT Smart Queue app before going; the DLT site was not reachable on the check date, so the numbers stay รอยืนยัน (sources: [references/sources.md](references/sources.md)).
 
 ## Workflow
 
@@ -108,11 +108,20 @@ If the licence has already expired (the same bands apply to both types; รอ�
 
 ## Worked example
 
-Honda City first registered 15 Feb 2018, tax expires 14 Feb 2027. On the tax expiry date (14 Feb 2027) the car is 8 full years old → ตรอ. needed. Plan: book ตรอ. mid-Dec 2026 (inside the 90-day window from 16 Nov 2026), renew พ.ร.บ. 645.21 บาท at the same ตรอ., pay tax there or online. Voluntary policy: car is 8 years old, market value has fallen → compare ชั้น 2+ against ชั้น 1 with the step-up formula above: for example extra premium 4,000/year against a 10% yearly chance of a 30,000 repair = 3,000 expected, so ชั้น 2+ is cheaper on average (the 10% and 30,000 are assumed figures; use the user's).
+Honda City (8 full years old on tax expiry, so ตรอ. needed; step-up formula gives ชั้น 2+): [references/worked-example.md](references/worked-example.md)
 
 ## Related
 
 `home-maintenance` (one calendar for house and cars) · `household-bills` · `important-docs` (registration book, policies, licences) · `trading-finance` `personal-budget` (if installed)
+
+
+## reference: sources.md
+
+# Sources · vehicle-care
+
+ตรวจล่าสุด 2026-10-26 · แหล่ง: คปภ. คำสั่งนายทะเบียน 51/2568 https://www.oic.or.th/web-upload/1xff0d34e409a13ef56eea54c52a291126/202508/m_news/217/69225/file_download/cdc3a5e370cf49e506d383261f6d0eb7.pdf · DLT https://nma.dlt.go.th/th/m_page_1679 · https://www.ktc.co.th/article/knowledge/things-car-owner-over-7-years-should-know-atpb · https://www.thansettakij.com/news/general-news/579209
+
+ตรวจล่าสุด 2026-10-22 · แหล่ง: https://www.ktc.co.th/article/knowledge/driving-license-expired-over-a-year-atpb · https://www.grab.com/th/blog/driver/ใบขับขี่หมดอายุ/ · https://www.autospinn.com/2021/04/driver-s-license-82416 (3 secondary sources agree on 6 months; the DLT site did not load on the check date, so the numbers stay รอยืนยัน) — confirm the current steps on dlt.go.th or the DLT Smart Queue app before going.
 
 
 ## reference: vehicle-record.md
@@ -143,3 +152,10 @@ Honda City first registered 15 Feb 2018, tax expires 14 Feb 2027. On the tax exp
 - พ.ร.บ. (compulsory motor insurance) policy no.: ______
 - Emergency 191 (police) · 1669 (ambulance) · 1193 (ตำรวจทางหลวง, highway police)
 - At the scene: photos of all cars, plates, road, damage; do not move vehicles before photos unless blocking traffic and safe; wait for the insurer's surveyor (เคลมสด, on-the-spot claim)
+
+
+## reference: worked-example.md
+
+# Worked example · vehicle-care
+
+Honda City first registered 15 Feb 2018, tax expires 14 Feb 2027. On the tax expiry date (14 Feb 2027) the car is 8 full years old → ตรอ. needed. Plan: book ตรอ. mid-Dec 2026 (inside the 90-day window from 16 Nov 2026), renew พ.ร.บ. 645.21 บาท at the same ตรอ., pay tax there or online. Voluntary policy: car is 8 years old, market value has fallen → compare ชั้น 2+ against ชั้น 1 with the step-up formula above: for example extra premium 4,000/year against a 10% yearly chance of a 30,000 repair = 3,000 expected, so ชั้น 2+ is cheaper on average (the 10% and 30,000 are assumed figures; use the user's).

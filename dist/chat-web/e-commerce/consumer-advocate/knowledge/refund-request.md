@@ -81,13 +81,7 @@ Watch the clock: a defect lawsuit is barred 1 year after discovering the defect 
 
 Evidence list, workflow, tone rules, letter templates (to the seller, platform, สคบ., English, follow-up) → [references/complaint-letter.md](references/complaint-letter.md)
 
-## Worked example
-
-Bought a skincare set through a Facebook advertiser's own website (direct marketing), received 2026-10-01, changed mind on 2026-10-04:
-1. Day 3 of 7 — the มาตรา 33 right applies. Send the cancellation notice by email and registered mail on 2026-10-04.
-2. Keep the set unopened for 21 days or return per the company's instructions.
-3. Refund due by 15 days from the company receiving the notice (≈ 2026-10-21 if received 2026-10-06).
-4. No refund by then → "Step 2 — refund refused?", rung 3 (สคบ. 1166), attaching the notice and postal receipt.
+Worked example (direct-marketing cancellation, with dates): [references/worked-example.md](references/worked-example.md)
 
 Related: `warranty-tracker` · `scam-check` in `trading-finance` (if installed) · `polite-message-th-en` (plugin `superuser`) · `important-docs` in `personal-life` (if installed).
 
@@ -244,3 +238,16 @@ Regards,
 ข้าพเจ้าจึงได้ยื่นเรื่องร้องเรียนต่อ [แพลตฟอร์ม / สคบ.] เลขที่เรื่อง [เลข] เมื่อวันที่ [วันที่]
 หากท่านประสงค์จะแก้ไขโดยตรง ยังสามารถติดต่อข้าพเจ้าได้ที่ [เบอร์]
 ```
+
+
+## reference: worked-example.md
+
+# Worked example · refund-request
+
+## Worked example
+
+Bought a skincare set through a Facebook advertiser's own website (direct marketing), received 2026-10-01, changed mind on 2026-10-04:
+1. Day 3 of 7 — the มาตรา 33 right applies. Send the cancellation notice by email and registered mail on 2026-10-04.
+2. Keep the set unopened for 21 days or return per the company's instructions.
+3. Refund due by 15 days from the company receiving the notice (≈ 2026-10-21 if received 2026-10-06).
+4. No refund by then → "Step 2 — refund refused?", rung 3 (สคบ. 1166), attaching the notice and postal receipt.

@@ -5,11 +5,8 @@ description: Use when cutting a spec or architecture to fewest parts
 
 # Simplicity First
 
-> The best architecture has the fewest moving parts. The best plan is the one a
-> teammate can follow with no context.
-
 This skill covers **non-code outputs** — documents, plans, architecture, and
-designs. For code, use `lazy-coding`. The suite-wide rule for every kind of work is `simplify`; this skill is its detail for documents, plans and architecture.
+designs. For code, use `lazy-coding`.
 
 ## Check before submitting — 5 items
 
@@ -57,32 +54,6 @@ across screens, defaults that work for 80%, progressive disclosure.
 Avoid: novel interactions where a standard one works, 10-step flows when 3
 work, required fields with no smart default, hidden features needing tutorials.
 
-## Examples
-
-**API description**
-
-Wrong: "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
-authentication to facilitate the seamless retrieval of user profile data."
-
-Right: "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
-`?fields=name,email` to limit the response."
-
-**Sprint goal**
-
-Wrong: "Improve overall product quality and customer satisfaction through various
-initiatives."
-
-Right: "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
-transient errors (1d), clearer error messages (1d)."
-
-**Architecture for a new feature**
-
-Wrong: "Event-sourced microservice with Command Query Responsibility Segregation (CQRS), Kafka ingestion, Redis cache, and a
-dedicated auth service."
-
-Right: "Add an endpoint to the existing API. One Postgres table for state. Standard
-auth middleware. Log to the existing system."
-
 ## Anti-patterns to reject
 
 - **Future-proofing** — abstractions for needs that never arrive.
@@ -90,3 +61,7 @@ auth middleware. Log to the existing system."
 - **Layer cake** — 6 layers where 90% just pass through.
 - **Resume-driven design** — fancy tech to look sophisticated.
 - **Buzzword stacking** — "cloud-native event-driven AI-powered".
+
+## References
+
+- [`references/examples.md`](references/examples.md) — open for wrong/right pairs: API description, sprint goal, architecture

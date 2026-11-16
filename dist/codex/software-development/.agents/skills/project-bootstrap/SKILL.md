@@ -12,15 +12,7 @@ description: Use when starting a repository or setting up a new machine
 
 Starting a new repository · a newcomer needs half a day before the project runs · a pull request shows a whole-file diff because formatters disagree · nobody knows where the documents are
 
-## When **not** to use it
-
-| Task | Use this instead |
-|---|---|
-| Set up the build and deploy pipeline | `cicd-and-release` |
-| Per-environment settings and secrets | `config-and-secrets` |
-| Choose an architecture | `architecture-patterns` |
-| Set up a test framework | `testing-standards` |
-| Name documents | `document-naming` |
+Not for: build and deploy pipeline → `cicd-and-release` · per-environment settings and secrets → `config-and-secrets` · choosing an architecture → `architecture-patterns` · test framework → `testing-standards` · naming documents → `document-naming`
 
 ---
 
@@ -28,7 +20,7 @@ Starting a new repository · a newcomer needs half a day before the project runs
 
 **The root (the folder the user opens) follows `project-doc-set` item 1, layout B.** The root tree, the ecosystem layout and the SuperUser file locations (`.claude/superuser/`) are defined there and only there. Code lives in `<project-name>/`. Its inner layout is:
 
-Inside `<project-name>/` (lowercase project name, words joined by `-`): `README.md` (item 2) · `CHANGELOG.md` · `ARCHITECTURE.md` · `CONTRIBUTING.md` · `LICENSE` (these 3 only when the conditions in `references/readme-skeleton.md` section 2 apply) · `.env.example` (only when the project really reads environment variables · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · secrets · `_to_delete/`) · `src/` (unit tests sit beside the code files · `readable-code` item 7) · `tests/` (integration · e2e only, or stacks whose tools require it, see the table in this item) · `scripts/` (setup · seed · migrate). The annotated tree is in [`references/code-folder.md`](references/code-folder.md). ADRs (architecture decision records) and runbooks live in `docs/` at the root, not in the code folder (`project-doc-set` item 1).
+Inside `<project-name>/` (lowercase project name, words joined by `-`): `README.md` (item 2) · `CHANGELOG.md` · `ARCHITECTURE.md` · `CONTRIBUTING.md` · `LICENSE` (these 3 only when the conditions in `references/readme-skeleton.md` section 2 apply) · `.env.example` (only when the project really reads environment variables · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · secrets · `_to_delete/`) · `src/` (unit tests sit beside the code files · `readable-code` item 7) · `tests/` (integration · e2e only, or stacks whose tools require it, see "Exceptions by stack" below) · `scripts/` (setup · seed · migrate). The annotated tree is in [`references/code-folder.md`](references/code-folder.md). ADRs (architecture decision records) and runbooks live in `docs/` at the root, not in the code folder (`project-doc-set` item 1).
 
 **Code folder name.** Take the project folder name, lowercase it, and turn each run of spaces and punctuation into a single `-`:
 `Lumio - Light Meter/` → `lumio-light-meter/`
@@ -40,17 +32,7 @@ Run every build, test and run command from inside this folder. In languages that
 - If a build leaves a stray folder at the root (such as an empty `build/` or `lib/` after moving the code), a tool cache still remembers the old path. Clear the cache (`flutter clean` · delete `obj/`) and build again.
 - Folder and file names in the repo are lowercase with hyphens and no spaces. **The exception is a language with its own convention.** Follow that language.
 
-**Exceptions by stack.** The code folder name, the test folder and the file names in the repo follow what the language's tools expect.
-Do not force `src/`. Test files normally sit beside the code files. Use a separate test folder only for stacks whose tools require one (the cells marked **required**):
-
-| Stack | Code | Tests | File names |
-|---|---|---|---|
-| Node | `src/` | Unit tests beside the code files (`*.test.ts`) · integration and e2e in `tests/` | `kebab-case` |
-| .NET | `src/` | `tests/` **required** (a separate test `.csproj` project) | `PascalCase.cs` |
-| Python | `src/<package>/` | Unit tests beside the code files (`test_*.py`) · integration and e2e in `tests/` | `snake_case.py` |
-| Dart / Flutter | `lib/` | `test/` · `integration_test/` **required** (same layout as `lib/`) | `snake_case.dart` (lint `file_names`) · `android/` `ios/` stay in the repo |
-
-When another skill writes `tests/` or `test/`, read it as "the test folder of that stack". Pick one name and use it across the whole repo.
+**Exceptions by stack.** The code folder name, the test folder and the file names follow what the language's tools expect. Do not force `src/`. Test files normally sit beside the code files; use a separate test folder only for stacks whose tools require one (.NET: `tests/` with a separate test `.csproj` · Dart / Flutter: `lib/`, `test/` and `integration_test/` required). The full per-stack table is in [`references/code-folder.md`](references/code-folder.md). When another skill writes `tests/` or `test/`, read it as "the test folder of that stack". Pick one name and use it across the whole repo.
 
 **Layout A** (use only when the user asks · this item owns the layout). Add `<project-name>/docs/` inside the code folder, as plain markdown. The inner layout matches the `docs/` of layout B (`README.md` index · `decisions/ADR-NNNN-<slug>.md` · `runbook-<topic>.md` · `research/`). It has no `.docx` or PNG deliverables. The rest of the root still follows the `project-doc-set` item 1 layout, without a `docs/` at the root.
 
@@ -143,16 +125,9 @@ Tick `[x]` only for items you **ran or opened in this round**. For an item not y
 - [ ] **Have someone who did not set up the project follow the README, and time them**
 
 ---
+## References
 
-## 7 · Anti-patterns
-
-Wrong: a README with only a title · commands never run on a clean machine · "ask so-and-so for the `.env`" (no `.env.example`) · no committed lock file · no `.editorconfig` · a linter that argues about style · experiment files at the root (`test.js` `backup_final.zip`) · documents scattered across chats and Drive with no index · a CHANGELOG that copies the commit list
-
-
-## 8 · Abbreviations
-
-**lock file** a file that pins dependency versions · **linter** a checker that finds code likely to be wrong · **formatter** an automatic style fixer · **LF** Line Feed, the Unix line ending (Windows uses CRLF) · **CI** Continuous Integration, an automatic check on every code merge
-
-## 9 · Links to other skills
-
-Besides the "not for" table above: temp files → `temp-file-discipline` · commits that can build a CHANGELOG → `commit-message-format` · before adding a dependency → `lazy-coding` · `prior-art-review` · all file templates → `assets/starter-files.md`
+- [`references/code-folder.md`](references/code-folder.md) — annotated code-folder tree and the per-stack table (Node · .NET · Python · Dart / Flutter); open when choosing code, test and file-name layout
+- [`references/readme-skeleton.md`](references/readme-skeleton.md) · [`references/readme-by-stack.md`](references/readme-by-stack.md) — README section table and fallback commands by language; open at layer 3 of item 2
+- [`references/changelog-examples.md`](references/changelog-examples.md) — open when writing a CHANGELOG entry
+- Temp files → `temp-file-discipline` · commits that can build a CHANGELOG → `commit-message-format` · before adding a dependency → `lazy-coding`, `prior-art-review` · file templates → `assets/starter-files.md`

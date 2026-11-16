@@ -35,11 +35,9 @@ Get to "nothing hiding in here" in ten minutes a day. This is a method; reading 
 | Receipts, e-Tax invoices, statements, bookings | **File** | Move to the matching folder (below), then archive |
 | Newsletters, CC, notifications | **Archive** | Archive; unsubscribe if unopened for 3 issues |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.bot.or.th/th/news-and-media/news/news-20230309.html
-
 ### Order the Today and This-week items by numbers (`decision-scoring`, command `priority`)
 
-When more than 3 items are in **Today** or **This week**, score each: **urgent 1–5** (5 = due today, 4 = tomorrow, 3 = this week, 2 = next week, 1 = no date) · **important 1–5** (the user's score: money, people, a promise) · **minutes** to answer. Run `node decide.mjs priority mail.json` with `{"method":"eisenhower","items":[{"name":"boss asks for figures","urgent":5,"important":5,"minutes":60},{"name":"school form due tomorrow","urgent":4,"important":4,"minutes":5},{"name":"landlord repair time","urgent":3,"important":3,"minutes":2},{"name":"vendor invoice query","urgent":2,"important":4,"minutes":20},{"name":"newsletter survey","urgent":2,"important":1,"minutes":15}]}`. The tool sorts into 4 groups (urgent and important both 3 or more = do now; important only = schedule; urgent only = delegate or reply short; neither = drop), then by `urgent × important ÷ minutes`.
+When more than 3 items are in **Today** or **This week**, score each: **urgent 1–5** (5 = due today, 4 = tomorrow, 3 = this week, 2 = next week, 1 = no date) · **important 1–5** (the user's score: money, people, a promise) · **minutes** to answer. Run `node decide.mjs priority mail.json` with `{"method":"eisenhower","items":[{"name":...,"urgent":1-5,"important":1-5,"minutes":N}]}` (full example: `references/worked-example.md`). The tool sorts into 4 groups (urgent and important both 3 or more = do now; important only = schedule; urgent only = delegate or reply short; neither = drop), then by `urgent × important ÷ minutes`.
 
 - **Iron rules (กฎเหล็ก) outside the score:** **Verify** mail is handled first; an item due today (`urgent` 5) is done before the others, because short tasks win the score inside a group and would push a long deadline task down (the boss's figures rank 3rd of 3 in the first group above).
 - Scores are the user's and untested (starting value, not yet measured). Two items with scores within about 20% of each other → the user picks the order.
@@ -75,22 +73,11 @@ Keep it in the **Waiting On** section of the user's `tasks.md` (`task-board`) wh
 
 Chase politely on the date (`polite-message-th-en` for the wording).
 
-## Worked example
-
-Monday, 63 unread. Ten minutes:
-- 2 **verify** — "KBank: account suspended, click to confirm" (phish — report and delete) · courier "fee unpaid" SMS-style mail (delete)
-- 3 **today** — boss asks for figures by 15:00 (slot 13:00–14:00) · school form due tomorrow (signed, replied) · landlord asks repair time (2-minute reply)
-- 5 **this week** — dated tasks Wed/Thu
-- 2 **delegate** — IT access request to the admin, logged
-- 6 **file** — e-Tax invoices to `Receipts-Tax`
-- 45 **archive** — 4 newsletters unsubscribed
-
 ## Rules
 
 - Daily habit, not a monthly marathon; skip a day → do two short sessions, never a backlog weekend
 - Never mark-read-and-forget — every kept item leaves with an owner and a date
 - Do not set up auto-delete rules on anything that could be a bill, a tax document or a government notice
-- Reply "received, will answer by …" beats silence for anything over 2 days
 - **Report File and Archive as counts by kind**, not message by message ("45 ฉบับ: ใบเสร็จ 22 · จดหมายข่าว 9 · ขนส่ง 6 · อื่น ๆ 8"). Only Verify, Today, This week and Delegate are listed one by one
 - More than 20 items in Today + This week after one session means the tests are too loose; tighten them with the user before the next run
 
@@ -100,7 +87,10 @@ This plugin ships no email connector. The user connects Gmail (or another mail a
 
 Related: `weekly-review` (clears `Waiting for`) · `task-board` (one task file) · `digital-hygiene` (phishing, account takeover) · `subscription-audit` (newsletter and trial mail).
 
-Source for the promise scan, drafting rules and count report: ideas from anthropics/knowledge-work-plugins `small-business/skills/inbox-manager` and its `reference/gotchas.md` (Apache-2.0, rewritten, viewed 2026-11-10).
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open for a sample Monday session and a full `priority` input
+- [`references/sources.md`](references/sources.md) — bank notice source (checked 2026-10-06) and credits
 
 ## เรียกเป็นคำสั่ง
 

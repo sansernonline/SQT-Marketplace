@@ -4,11 +4,9 @@ Use when a Thai employer hires staff
 
 # Hiring one position (Thai employer side)
 
-This skill walks through hiring one position, from drafting the job ad to the new employee finishing the first week. Every applicant gets the same questions and criteria. Applicant data is kept under the personal data protection law. The offer letter does not conflict with labour law. For the applicant side (CV · interview practice · salary negotiation), use `resume-th-en` `interview-prep` `salary-negotiation` in plugin `personal-life`.
+This skill walks through hiring one position, from drafting the job ad to the new employee finishing the first week. Every applicant gets the same questions and criteria. Applicant data is kept under the personal data protection law. The offer letter does not conflict with labour law.
 
 This content is general information, not legal advice. For disputes, ask a labour inspector (hotline 1506 press 3, or 1546) or a labour lawyer.
-
-Abbreviations in this file: Act (พ.ร.บ.) · Section (ม.) · Personal Data Protection Act B.E. 2562 (2019) (PDPA).
 
 ## 0 · Find the existing template first (every time)
 
@@ -44,7 +42,7 @@ Steps 2 · 5 · 6 · 7 contain work that needs approval first (section 10).
 | PDPA Section 26 | Religion, health, disability, criminal record, biometric data and the other sensitive data in this section can be collected only with the data subject's explicit consent, or under an exception that the section states |
 | Age | No law found that directly bans a private employer from stating an age range in a job ad · Constitution B.E. 2560 (2017) Section 27 paragraph 3 bans unjust discrimination because of age, sex, disability, religion and other grounds, but how far it binds private employers is not yet checked (`รอยืนยัน`, awaiting confirmation) |
 
-Last checked 2026-10-23 · Sources: labour.go.th (Section 15 · Section 53) · Gender Equality Act guide (tmd.go.th) · PDPA text (mdes.go.th) · Constitution Section 27 (senate.go.th) — full URLs in [references/sources.md](references/sources.md)
+Last checked 2026-10-23 · sources: [references/sources.md](references/sources.md)
 
 ### Wording to fix before posting
 
@@ -112,7 +110,6 @@ These cannot be undone or affect people outside. The agent prepares drafts but d
 | Privacy notice, ROPA and data subject requests | `pdpa-workflow` + agent `compliance-helper` |
 | Result letters or letters to agencies | `doc-thai-official` + agent `thai-doc-writer` |
 | Applicant side: CV · interview practice · salary negotiation | `resume-th-en` · `interview-prep` · `salary-negotiation` (plugin `personal-life`) |
-| Wording of every line | `human-writing` |
 
 
 ## reference: example-accountant.md
@@ -382,8 +379,6 @@ Use when starting a Thai business
 
 This skill helps the user choose between trading as an individual, a partnership or a company. It walks them through registration, then through the checklist after registration. The content is general information, not tax or legal advice. An accountant should recalculate the tax figures for a real business.
 
-Abbreviations in this file: Department of Business Development (DBD) · value added tax (VAT) · small and medium enterprise (SME)
-
 ## 1 · Choosing a business form
 
 Compare 4 forms (individual + commercial registration (ทะเบียนพาณิชย์) · registered ordinary partnership (ห้างหุ้นส่วนสามัญนิติบุคคล) · limited partnership (ห้างหุ้นส่วนจำกัด) · limited company (บริษัทจำกัด)) by liability for debts, capital, where to register, fees and tax (progressive 0–35% for an individual, the juristic person rate for the others). The full table, the order of questions for choosing a form and the sources checked 2026-10-23 are in [`references/business-forms.md`](references/business-forms.md). Open that file before answering which form to register.
@@ -411,7 +406,7 @@ An individual registers commercial registration (anyone selling online must regi
 | Privacy notice for customers and staff | Before collecting data | `pdpa-workflow` |
 | Quotation, invoice, receipt · PromptPay QR | When sales open | `doc-quotation` · `promptpay-qr` |
 
-Last checked 2026-10-23 · Sources: VAT registration threshold https://www.rd.go.th/7061.html · bookkeeping duty, VAT registration with incorporation and automatic employer registration: the DBD manual for newly registered juristic persons (link in section 1) · employee registration within 30 days: Social Security Office news of 30 Oct 2024 (B.E. 2567) (link in `hiring-th/references/offer-letter-first-week.md` section 8)
+Last checked 2026-10-23 · sources: [`references/sources.md`](references/sources.md)
 
 ## 5 · Import cost from China
 
@@ -440,17 +435,10 @@ These steps cannot be undone or they affect outsiders. The agent prepares the da
 |---|---|
 | Tax for an online seller who is an individual (deducting expenses · ภ.ง.ด.90 (PND 90) and 94 (PND 94)) | `seller-tax-basics` |
 | Monthly filing of VAT, withholding tax and penalties | `tax-vat-th` + agent `tax-helper` |
-| Electronic tax invoice | `e-tax-invoice` |
-| Year-end close, financial statements, บอจ.5, ภ.ง.ด.50 | `dbd-annual-filing` |
-| Hiring the first employee | `hiring-th` · `social-security-th` · `payroll-th` |
 | Partnership, lease and work-for-hire contracts | `doc-contract-th` |
-| Quotation, invoice, receipt | `doc-quotation` |
 | Setting a selling price on Shopee, Lazada and TikTok Shop once the cost is known | `marketplace-fees-pricing` |
 | Comparing domestic carriers | `shipping-compare` |
 | Naming the business before reserving the name | `product-naming` (plugin `software-development`) |
-| Wording of every line | `human-writing` |
-
-Origin of the idea: the order of questions for choosing a business form took its idea from https://github.com/Boom-Vitt/claude-thai-business-skills (MIT License · Copyright (c) 2026 Vittawat (boombignose) · LICENSE file checked 2026-10-23). It was rewritten from scratch with no copied text, and every figure was rechecked against official sources.
 
 
 ## reference: business-forms.md
@@ -588,3 +576,12 @@ From 1 Jul 2026 (B.E. 2569), new partnerships and companies register only throug
 The 50% discount for online filing under the 2020 (B.E. 2563) ministerial regulation was valid only until 31 Dec 2023. Today online filing costs the same as the rates in the table. DBD has a draft of a new fee regulation that was open for comment in Mar–Apr 2026 (รอยืนยัน (awaiting confirmation) whether it has been issued). So check the rate in the system before every payment.
 
 Last checked 2026-10-23 · Sources: DBD news of 23 Oct 2026 (B.E. 2569) on online-only service from 1 Nov 2026 https://www.dbd.go.th/news/37630092569 · Lopburi Provincial Commerce Office announcement of 29 May 2026 on ending paper registration on 1 Jul 2026 https://lopburi.moc.go.th/th/content/category/detail/id/161/iid/166937 · fees and steps: the 3 DBD manuals and the ministerial regulation listed in section 1
+
+
+## reference: sources.md
+
+# Sources · thai-business-setup
+
+Last checked 2026-10-23 · Sources: VAT registration threshold https://www.rd.go.th/7061.html · bookkeeping duty, VAT registration with incorporation and automatic employer registration: the DBD manual for newly registered juristic persons (link in section 1) · employee registration within 30 days: Social Security Office news of 30 Oct 2024 (B.E. 2567) (link in `hiring-th/references/offer-letter-first-week.md` section 8)
+
+Origin of the idea: the order of questions for choosing a business form took its idea from https://github.com/Boom-Vitt/claude-thai-business-skills (MIT License · Copyright (c) 2026 Vittawat (boombignose) · LICENSE file checked 2026-10-23). It was rewritten from scratch with no copied text, and every figure was rechecked against official sources.

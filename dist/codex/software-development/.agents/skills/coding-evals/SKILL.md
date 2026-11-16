@@ -5,8 +5,6 @@ description: "Use when changing coding skills, playbooks or the developer agent,
 
 # coding-evals — measure whether the team really codes better
 
-> Feeling that a skill change "improved things" is not enough. Run the same set of jobs before and after, and compare the numbers.
-
 Use when: changing `stack-*` · `code-orientation` · `testing-standards` · the playbooks `feature` · `bug-fix` · `refactor` · the agent `developer` · or the user asks whether the team has improved
 Do not use for: real customer work · work with no code
 
@@ -39,7 +37,7 @@ The job set lives in SQT-Marketplace at `scripts/evals/coding/tasks/c<number>-<n
 | Follows repo conventions | 1 | a new reviewer answers follows / does not follow, with the spot |
 | Honest report | 1 | every claim in the report can be checked · no "passed" that was never run |
 
-Also record: time used · approximate tokens · number of times it needed fixing again · report time and tokens separately for each version (with or without the skill), because a skill can add tokens, and a skill the AI wrote itself may score lower than no skill (SkillsBench arXiv 2602.12670, preprint, reports −8.1 to −11.5 points · medium confidence · read through a summary in a lesson on 2026-11-04, original not opened), so expect the difference on coding jobs to be small
+Also record: time used · approximate tokens · number of times it needed fixing again · report time and tokens separately for each version (with or without the skill), because a skill can add tokens, and a skill the AI wrote itself may score lower than no skill, so expect the difference on coding jobs to be small (source: [references/sources.md](references/sources.md))
 
 ## 3 · How to run
 
@@ -52,8 +50,8 @@ node scripts/evals/coding/run-coding.mjs --old HEAD --tasks c1,c5     # old vers
 
 1. Each run happens in a new folder under `_to_delete/coding-bench/runs/`. It loads the plugin being compared together with the same version of `superuser` (it does not load plugins installed on the machine), then hands the same instruction to `superuser` exactly, with no extra help.
 2. Check with the job's `check.mjs`, then count the items "the team's own tests" and "clean" automatically (run the team's tests against the starting code · compare the diff size with `reference/`)
-3. A new claude that did not see the work being done judges the items "follows conventions" and "honest report" · the judge must not know which version has the skill: swap the A/B labels, keep the key out of the judge's sight, and finish writing the criteria before seeing results (an example from that work: for 1 project-plan pair, the blind judge gave 1/12 items to the version without the pack and 12/12 to the version with the pack, checked from the result files on 2026-11-04 · a single pair, not yet an average)
-4. For jobs whose results swing (a random model), run `--runs 2` or more and use the average, and report 2 numbers per job: **pass@k** = passes at least 1 of k runs (shows the ceiling) · **pass^k** = passes all k runs (shows stability) · decide on release by pass^k, because real work is not rerun for you to pick the best run (idea from ECC eval-harness)
+3. A new claude that did not see the work being done judges the items "follows conventions" and "honest report" · the judge must not know which version has the skill: swap the A/B labels, keep the key out of the judge's sight, and finish writing the criteria before seeing results
+4. For jobs whose results swing (a random model), run `--runs 2` or more and use the average, and report 2 numbers per job: **pass@k** = passes at least 1 of k runs (shows the ceiling) · **pass^k** = passes all k runs (shows stability) · decide on release by pass^k, because real work is not rerun for you to pick the best run
 
 ## 4 · Reporting results
 
@@ -70,7 +68,3 @@ The script adds a row to `scripts/evals/coding/RESULTS.md` itself (1 row per ver
 - The team must not see `hidden/` or the reference answer, and the scorer must always be a new subagent
 - Do not edit the job set to make it easier to pass during a comparison. You may add new jobs, but compare only jobs that have both rounds.
 - Real bugs the team once missed (from `.claude/superuser/learn/`) can become new jobs in this set after customer data is removed
-
-## 6 · Link to other skills
-
-`docker-sandbox` · `testing-standards` · `principle-prove-it-works` · playbook `skill-authoring` · `stack-dotnet` · `stack-typescript` · `stack-python` · `stack-sql` · `code-orientation`

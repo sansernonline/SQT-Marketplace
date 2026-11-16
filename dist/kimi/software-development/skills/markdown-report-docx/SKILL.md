@@ -7,12 +7,10 @@ description: Use when one Markdown file must become a Word report
 
 > **Pre-work gate "ด่านก่อนลงมือ" (every time):** read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for finding the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
-> **Language:** write every line of wording following `human-writing`. This skill gives the format and steps. human-writing says how to write so the reader understands.
-
 > **The one rule of this skill:** Markdown is the source. The .docx is the result built from the source.
 > Edit the .md and rerun the script every time. Never open Word and edit by hand, because the next run wipes it all out.
 
-The page style comes from the X Fitness project report (29 pages · used only as a style reference, with the colours of your own project): logo cover centred on the page · table of contents · tables with a light brand-colour header · note boxes · dark-background figures with captions · short tables that do not split across pages.
+Page style: logo cover centred on the page · table of contents · tables with a light brand-colour header · note boxes · dark-background figures with captions · short tables that do not split across pages.
 
 ## When to use
 
@@ -109,7 +107,6 @@ Open the image of every page (Read tool) and go through the checks:
 - **Using Word's List Number.** It continues counting across lists, which is why the script writes the numbers itself.
 - **A small screenshot enlarged to full page.** It breaks up. Retake it at width ≥ 1600 px.
 - **A table 7 columns wide or more on a portrait page.** Split it into 2 tables.
-- **Sending without opening the PDF.** See section 5.
 
 ## 7 · Links to other skills
 

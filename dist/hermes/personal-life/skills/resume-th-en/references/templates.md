@@ -91,3 +91,8 @@ Thai:
 ขอแสดงความนับถือ
 [ชื่อ นามสกุล] · โทร [เบอร์]
 ```
+
+## Worked example — summary line
+
+> Before: "Hard-working accountant with good teamwork skills."
+> After: "Accountant with 6 years in manufacturing; closed month-end in 5 working days instead of 9 and passed 3 Revenue Department audits with no adjustments. Seeking a senior accounting role with ERP responsibility."

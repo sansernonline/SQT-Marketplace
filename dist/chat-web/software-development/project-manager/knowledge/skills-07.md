@@ -4,10 +4,7 @@ Use when the same mistake gets corrected twice
 
 # repeated-mistakes-to-checks: a mistake that repeats must become impossible
 
-> The agent does not need to remember a hundred rules. If the path has guard rails at the right places, it hits one and gets stopped at the right moment on its own.
 > A warning in SKILL.md is the weakest guard rail. Use it as the last resort.
-
-This comes from pstack's correct command and rules-as-checks (not in this marketplace).
 
 ## Do not use when
 
@@ -46,7 +43,23 @@ For choosing among `session-lessons-to-skills` · `repeated-mistakes-to-checks` 
 - If you are about to write one more "never..." line when a machine could check it (grep · formula · CI), build a check instead.
 - A check's error message must say how to fix it, not just say it is wrong.
 
-Examples in this set:
+## What not to do
+
+- Add a "never..." text to SKILL.md when it could be a check.
+- Create a rule that was not proven with a real mistake, because a rule that misses its target makes everyone wrongly believe they are safe.
+- Check so broadly that it also catches correct things, because in the end everyone learns to skip it.
+
+## References
+
+- [`references/examples.md`](references/examples.md) — open when you want examples of rules already turned into checks in this set
+- [`references/sources.md`](references/sources.md) — origin notes
+
+
+## reference: examples.md
+
+# Examples · repeated-mistakes-to-checks
+
+Rules in this set that became checks:
 
 | Rule | Used to be | Now it is |
 |---|---|---|
@@ -54,15 +67,13 @@ Examples in this set:
 | Numbers in the README must match reality | Edited by hand | `scripts/sync/sync-docs.mjs --check` |
 | SuperUser shared files must be identical in every plugin | A text line "edit every copy" | `scripts/sync/sync-superuser.mjs --check` |
 
-## What not to do
 
-- Add a "never..." text to SKILL.md when it could be a check.
-- Create a rule that was not proven with a real mistake, because a rule that misses its target makes everyone wrongly believe they are safe.
-- Check so broadly that it also catches correct things, because in the end everyone learns to skip it.
+## reference: sources.md
 
-## Source
+# Sources · repeated-mistakes-to-checks
 
-hookify (Apache-2.0) · `agents/conversation-analyzer.md` · viewed 2026-11-10 (dig out the user's correction signals working back from the latest, rank by severity, draft regex-style rules).
+- Idea from pstack's correct command and rules-as-checks (not in this marketplace).
+- hookify (Apache-2.0) · `agents/conversation-analyzer.md` · viewed 2026-11-10 (dig out the user's correction signals working back from the latest, rank by severity, draft regex-style rules).
 
 
 ---
@@ -72,9 +83,6 @@ hookify (Apache-2.0) · `agents/conversation-analyzer.md` · viewed 2026-11-10 (
 Use when a big task ends and lessons should be kept
 
 # session-lessons-to-skills — every big task leaves its lessons in the tools
-
-> A past conversation is valuable because it really happened, not because someone imagined it.
-> But a lesson that lives only in the conversation disappears with the conversation.
 
 ## Skip when
 
@@ -94,7 +102,7 @@ This table is shared by `session-lessons-to-skills` · `repeated-mistakes-to-che
 
 Use this as the review step of the playbook [`learn-from-session`](../superuser/references/playbook-learn-from-session.md). Gathering, showing the result to the user, and closing the items follow that playbook and are not repeated here.
 
-0. **Read the `learn/drop/` folder first** (if it exists). These are lessons dropped one per file during the work, and they were never judged when written. Read all the files together and group them by topic. Merge items that repeat or are of the same kind into one item, then put it in the digest. After use, move them to `learn/drop/used/` (source: claude-remember · do not redistribute, take only the mechanism · see 2026-11-10)
+0. **Read the `learn/drop/` folder first** (if it exists). These are lessons dropped one per file during the work, and they were never judged when written. Read all the files together and group them by topic. Merge items that repeat or are of the same kind into one item, then put it in the digest. After use, move them to `learn/drop/used/`
 1. **Make a digest.** From what the playbook gathered, write `_to_delete/session-digest.md`: the order of events · where the user corrected · where it got stuck for long · which skills were called and the result. Then hand this file to the subagent. Do not hand over the raw conversation.
 2. **Launch the reviewers for 3 angles at the same time** (each reads the digest and the related skill files)
 
@@ -106,10 +114,10 @@ Use this as the review step of the playbook [`learn-from-session`](../superuser/
 
    Each reviewer returns a table `| บทเรียน | ชนิดพลาด | หลักฐานในบทสนทนา | แก้ที่ไฟล์ไหน | ข้อความเดิม → ข้อความใหม่ |` (lesson · mistake type · evidence in the conversation · file to fix · old text → new text), at most 40 lines per reviewer. The mistake type takes 3 values per agent `learning-reviewer`: `ไม่ได้เปิด skill` (did not open the skill; fix how the skill is advertised, not its content) · `เปิดแต่ไม่ทำตาม` (opened but did not follow it; fix the wording or position, or add a checker) · `ไม่มีกฎ` (no rule; paired example first).
    **Paired examples come before rules.** A lesson about wording, tone, or looks goes in as a `ก่อน → หลัง` (before → after) pair in the references file of that skill (the "after" must be text the user wrote). Write it as a rule only when a pair of the same shape appears at least 2 times.
-   **Categories the reviewers must go through every round** (besides the 3 angles above): (a) signposts: skill names or descriptions that make the agent open the wrong skill or not open it · (b) automatic gates: items that should be a test, lint, or hook instead of a warning text (send to `repeated-mistakes-to-checks`) · (c) a `CLAUDE.md` or `CONTEXT.md` so large that nobody reads it to the end · (d) instructions written down that have no effect (the log shows they were ignored or could not be done). The result for every category must meet the same standard: evidence from the digest (source: mattpocock-skills · MIT · see 2026-11-10)
-3. **Filter.** Keep only items that (a) have real evidence, (b) will happen again, (c) can point to which file to fix, and (d) have a scope saying which work they apply to and expire when the source wording changes. A lesson from one task should not make another task wrong. (Example from course CWN2026: the old answer was tied to the plan name, the URL, and the wording in the plan; when the wording changes it expires. The "expires" test was reported by Claude itself and has not been rerun, 2026-11-04.) For example, "the customer report used old figures because the skill did not say to open the latest file", not "be more careful with figures". A lesson that can become an automatic check goes to [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) instead.
+   **Categories the reviewers must go through every round** (besides the 3 angles above): (a) signposts: skill names or descriptions that make the agent open the wrong skill or not open it · (b) automatic gates: items that should be a test, lint, or hook instead of a warning text (send to `repeated-mistakes-to-checks`) · (c) a `CLAUDE.md` or `CONTEXT.md` so large that nobody reads it to the end · (d) instructions written down that have no effect (the log shows they were ignored or could not be done). The result for every category must meet the same standard: evidence from the digest
+3. **Filter.** Keep only items that (a) have real evidence, (b) will happen again, (c) can point to which file to fix, and (d) have a scope saying which work they apply to and expire when the source wording changes. A lesson from one task should not make another task wrong. For example, "the customer report used old figures because the skill did not say to open the latest file", not "be more careful with figures". A lesson that can become an automatic check goes to [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) instead.
 4. **Fix what exists before creating new, and fix one paragraph at a time.** Do not rewrite the whole SKILL.md, because the parts that already work will be lost. Most of the time, edit a paragraph in an existing SKILL.md or agent file. Create a new skill only for work that no skill covers yet.
-5. **Test the fix before and after.** Take the situation from the digest that caused the mistake and write it as a short task of 3–5 lines (no answer given). Send a fresh small-level subagent to do this task with the **old version** of the skill. It must make the same mistake as in the digest (if it does not, this lesson did not come from the skill; drop it). Fix the skill, then send another fresh subagent to do the same task. It must not make the mistake (if it still does, the fixed wording is not clear enough or is in the wrong place; fix it again). Record both rounds in the table shown to the user (idea from writing-skills in obra/superpowers · MIT)
+5. **Test the fix before and after.** Take the situation from the digest that caused the mistake and write it as a short task of 3–5 lines (no answer given). Send a fresh small-level subagent to do this task with the **old version** of the skill. It must make the same mistake as in the digest (if it does not, this lesson did not come from the skill; drop it). Fix the skill, then send another fresh subagent to do the same task. It must not make the mistake (if it still does, the fixed wording is not clear enough or is in the wrong place; fix it again). Record both rounds in the table shown to the user
 6. Send the filtered table back to the propose-to-user step of the playbook `learn-from-session`. The digest is already in `_to_delete/`, so it does not need to be moved.
 
 ## What not to do
@@ -141,12 +149,10 @@ Use when naming or filing a document others keep
 
 | Task | Skill | |
 |---|---|---|
-| The content inside the document | `human-writing` (code work: `srs-writing` · `fsd-writing` in plugin `software-development`) | instead |
 | Markdown formatting | `polished-document-style` | instead |
 | The look of the rendered file | `branded-document-design` (plugin `software-development`) | instead |
 | Temporary files during work | `superuser:temp-file-discipline` | instead |
 | Code work: commit messages · version of the **program** · the project document index | `commit-message-format` · `cicd-and-release` · `project-bootstrap` (plugin `software-development`) | instead / together |
-| Abbreviations in work people read | [`spell-out-abbreviations`](../spell-out-abbreviations/SKILL.md) | together |
 
 **The revision-history table template and the standard file-name list** are in `assets/naming-cheatsheet.md`.
 
@@ -164,7 +170,7 @@ Use when naming or filing a document others keep
 | Work procedures · internal guides · README · meeting notes · decision records (code work → plugin `software-development`) | **markdown** in the documents folder | It changes often, needs diffs, and is easy to search |
 
 > 🚨 **Markdown source that can be re-rendered is kept permanently in `docs/src/<topic>.md`, then rendered to docx into the documents folder (`docs/`).**
-> `docs/` holds exactly one deliverable for that topic, the .docx. No .md or .pdf of the same topic sits beside it. (The source lives in `docs/src/`, not `_to_delete/`, because it is needed every time you revise.)
+> `docs/` holds exactly one deliverable for that topic, the .docx. No .md or .pdf of the same topic sits beside it.
 > On the next revision, edit `docs/src/` and render again. Never open Word and edit by hand (matches `markdown-report-docx`). The "ต้นฉบับ" (source) line on the cover points to this file.
 
 **Make a PDF only for user manuals, or when the client asks.** Otherwise, one docx.
@@ -191,6 +197,7 @@ Use when naming or filing a document others keep
 - **The date is always ISO `YYYY-MM-DD`** and goes at the very end, so sorting by name also sorts by time. The one exception: meeting notes put the date first, because the `docs/meetings/` folder holds only meeting notes, so it sorts by date at once.
 - File names are in English even when the content is Thai. This avoids trouble when attaching to email and zipping across systems.
 - Never put a person's name in a file name. `-somchai-edit` is a sign that people are not working from one source.
+- Never name a file `final` · `final2` · `final_ล่าสุด` · `แก้แล้ว`: nobody can tell which is newer, or what was edited from which version. Use the version, status and revision history instead.
 
 **Check with the script:** `node <this skill's folder>/scripts/doc-name-check.mjs docs/*` → it lists wrong names with a proposed name. To rename many files, add `--plan _to_delete/renames.json` to get a plan without touching files, check or edit the plan, then run `--plan _to_delete/renames.json --apply`. The script does not rename `APPROVED` files, does not overwrite existing files, and does not put received files (`ref/`) in the plan.
 
@@ -250,14 +257,3 @@ Every exported document must have this table on the first page.
 | Received files | Keep their original name; never rename. They refer to that name |
 | Files mid-conversion | `_to_delete/` (see `superuser:temp-file-discipline`) |
 | Sending by chat or email | Always send a file with the version and status in the name. Never send `เอกสาร.docx` |
-
----
-
-## 7 · Anti-patterns
-
-- **`final.docx`, `final2.docx`, `final_ล่าสุด.docx`**: nobody knows which is newer.
-- **`ใบเสนอราคา แก้แล้ว.docx`**: edited from which version, and what was edited?
-- **Putting a version in the name of a file that a system keeps history for.** You get `spec-v1.md` and `spec-v2.md` side by side forever.
-- **Editing a file that is already `APPROVED`**, even a single typo.
-- **No revision-history table.** Then you must open and compare page by page.
-- **Dates like `25-09-2026` or `250926`.** They do not sort, and people read them differently.

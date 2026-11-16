@@ -20,16 +20,11 @@ description: Use when work runs outside the request in queues or schedules
 | Task | Skill | |
 |---|---|---|
 | Timeouts and retries for ordinary requests | `error-handling-patterns` | instead |
+| Metrics and alerts | `observability-basics` | instead |
 | Events across several services through Kafka (several consumers read the same event · history is kept) | `kafka-streaming` | instead |
 | A job queue through RabbitMQ (several workers · retry · dead letter · needs a real broker) | `rabbitmq-messaging` | instead |
-| Metrics and alerts | `observability-basics` | instead |
-| Choosing the overall architecture | `architecture-patterns` | instead |
 | Importing Excel/CSV files as the main job | `data-import-export` | instead |
 | Sending email/SMS as the main job | `notifications` | instead |
-| The job table and indexes | `database-design` | alongside |
-| Worker logs and correlation id | `logging-standards` | alongside |
-| Jobs that delete expired data | `pdpa-compliance` | alongside |
-| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 | Designing an agent system (Loop · Graph · Dynamic · choosing a framework) | `llm-engineering` → [`agent-systems.md`](../llm-engineering/references/agent-systems.md) | alongside |
 
 ---
@@ -102,7 +97,7 @@ fail → wait 1 min → fail → wait 4 min → fail → wait 16 min → 4th fai
 **A job stuck because a worker died** needs an unlocker.
 If a job's `locked_at` is older than N minutes, treat it as having nobody working on it, and unlock it so another worker picks it up.
 
-**Job state is a state machine, not a boolean** (idea from wshobson python-background-jobs) — every mechanism in section 2 must be able to say which state a job is in: `queued → running → succeeded`, or `running → failed (attempts < cap) → queued`, or `failed → dead` · keep `attempts` · `locked_at` · `last_error` · `finished_at` with the job · move only along the arrows above (a `succeeded` job cannot go back to `running`; create a new job) · the admin screen and the dead letter read from this state in one place
+**Job state is a state machine, not a boolean** — every mechanism in section 2 must be able to say which state a job is in: `queued → running → succeeded`, or `running → failed (attempts < cap) → queued`, or `failed → dead` · keep `attempts` · `locked_at` · `last_error` · `finished_at` with the job · move only along the arrows above (a `succeeded` job cannot go back to `running`; create a new job) · the admin screen and the dead letter read from this state in one place
 
 ---
 
@@ -158,37 +153,18 @@ because a single 40-minute job that fails at minute 39 must start over from the 
 
 ---
 
-## 8 · Anti-patterns
+## 8 · Payload
 
-- **A job that repeats its effect when run again** — the queue will certainly run it again, not maybe
-- **Unlimited retry** — one broken job jams the whole queue
-- **No dead letter** — jobs vanish silently and nobody knows
-- **A dead letter that nobody watches** — the same as having none
-- **Scheduled jobs on several instances with no lock** — they run on top of each other
-- **Sending the whole data block in the payload** — send the id and let the job read it itself, so it gets the latest data too
-- **A long job that cannot be cancelled** — the user clicks wrong and waits 40 minutes
-- **A blind spinner that gives no progress** — the user clicks again and gets a duplicate job
-- **Not measuring the queue** — it jams and you find out when a customer calls
+- **Send the id, not the whole data block, in the payload** — the job reads it itself, so it gets the latest data too
 
 ---
 
 ## 9 · Durable workflow for agent jobs that run long or wait for human approval
 
-An agent job that runs for tens of minutes, calls an LLM and tools many times, or pauses for approval across days cannot use a plain queue, because a failure at step 8 of 10 means starting over and paying the token cost again · use an engine that records the result of every step and resumes from the same point
+An agent job that runs tens of minutes, calls an LLM and tools many times, or pauses for approval across days cannot use a plain queue, because a failure at step 8 of 10 means starting over and paying the token cost again · use an engine that records the result of every step and resumes from the same point
 
-| Tool | Fits | Waits for human approval | Watch out for |
-|---|---|---|---|
-| **Temporal** | Python and other languages · the agent loop lives in a workflow, while LLM and tool calls are activities · has `OpenAIAgentsPlugin` · `activity_as_tool` | (`ยังไม่ได้ตรวจ` · see the signal page) | the integration with the OpenAI Agents SDK is still in Public Preview |
-| **AWS Step Functions** | fixed steps on AWS · fan-out with `Map` (Inline in parallel 40 · Distributed 10,000 child jobs) | `.waitForTaskToken` can wait up to 1 year until `SendTaskSuccess` / `SendTaskFailure` arrives · set `HeartbeatSeconds` to prevent a silent hang | when an LLM must choose the route, let Lambda or Bedrock decide, then use `Choice` |
-| **Agent framework checkpointer** | you do not want to add an engine · LangGraph `PostgresSaver` · Microsoft Agent Framework `CheckpointManager` · OpenAI `RunState.to_json()` | LangGraph `interrupt()` · OpenAI `needs_approval` · Microsoft Agent Framework `RequestInfoExecutor` | an in-memory store is lost when the process restarts · use a database-backed store in production |
+- [`references/durable-workflow.md`](references/durable-workflow.md) — open before choosing an engine (Temporal · Step Functions · checkpointer) or writing replayable code
 
-**Rules for code that must be replayable** (Temporal · Google ADK · Claude Code workflows use the same principle · checked against [Temporal: Workflow Definition](https://docs.temporal.io/workflow-definition) 2026-10-26)
+## References
 
-- **Never read the time or draw a random value in code that controls the order of work** (`Date.now()` · `datetime.now()` · `Math.random()` · `uuid4()`) · on replay the value differs from the first run, the order drifts, and the old result cannot be reused · do anything that needs time or randomness in an activity, or use the SDK's own API for it
-- **All LLM calls, tool calls, and outside reads and writes go in activities.** The result is recorded once, and replay reads the record instead of calling again.
-- **The order of calls must be the same on every run** · changing the order of steps in code that still has jobs in flight makes the old jobs fail replay (Temporal calls this a nondeterminism error) · switch to the engine's versioning or patching
-- **The steps before a wait point must be safe to repeat** (section 3) · LangGraph re-runs the paused node from the start on resume, so move side effects to after the wait point
-- **Saved state carries no identity check** (the OpenAI docs warn about `RunState`) · load it only from a store we control
-- The cap on rounds, the token budget, and stopping when there is no improvement are still needed, as for jobs in a queue · details in [`agent-systems.md`](../llm-engineering/references/agent-systems.md) section 6
-
-Sources (opened 2026-10-26): [Temporal · OpenAI Agents SDK](https://docs.temporal.io/ai-cookbook/openai-agents-sdk-python) · [Temporal announcement](https://temporal.io/blog/announcing-openai-agents-sdk-integration) · [Step Functions integration patterns](https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html) · [Step Functions Map](https://docs.aws.amazon.com/step-functions/latest/dg/state-map.html) · [LangGraph interrupts](https://docs.langchain.com/oss/python/langgraph/interrupts) · [OpenAI human in the loop](https://openai.github.io/openai-agents-python/human_in_the_loop/) · [Claude Code workflows](https://code.claude.com/docs/en/workflows)
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources

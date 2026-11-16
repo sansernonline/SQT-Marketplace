@@ -4,13 +4,51 @@ Use before saying work is done, fixed or working
 
 # principle · prove it works — prove it against the real thing
 
-> A "done" with no evidence throws the checking onto someone else.
+> **One rule:** before using the words done (`เสร็จ`) · fixed · passed (`ผ่าน`) · works · sent, you must have seen the result from the real thing yourself in this round.
 
-## Rule
+## Use when
+- You are about to report work as done, fixed, passed, working, or sent
+- A sub-agent reports done, or a draft for an outsider says "fixed"
 
-Before using the words done (`เสร็จ`) · fixed · passed (`ผ่าน`) · works · sent, you must have seen the result from the real thing yourself in this round.
+## Steps
+1. Before starting, write "how will I know it is done" in a checkable form.
+2. After the work, check against that on the real thing and record the raw result (numbers · images · output). Use the evidence column below.
+3. If you truly cannot check (no environment · needs a real account), say plainly `ยังไม่ได้ตรวจ` and what is missing; never write `ผ่าน`.
+4. For an item whose result you have not seen, write what was done and what the result is separately, e.g. "CSV: code changed, not yet opened in Excel". Do not write "fixed, but not tried yet": readers remember done and forget but.
+5. If a draft for a customer or outsider says "fixed" while the check is unfinished (even with "now testing"), write 1 version to send after the result is seen. The version that can be sent now must not contain "แก้แล้ว", "แก้ไขแล้ว" or "เรียบร้อย" in any form; it may say only "ได้รับเรื่องแล้ว ทีมกำลังตรวจ จะแจ้งผลภายใน (เวลา)".
 
-For an item whose result you have not seen, write separately what was done and what the result is, for example "CSV: code changed, not yet opened in Excel" · do not write "fixed, but not tried yet", because readers remember the word done and forget the word but (eval 2026-11-09: the arm with the skill wrote it this way in 2 of 3 rounds)
+| Work | Evidence that counts |
+|---|---|
+| Document · report | A fresh reviewer opens the rendered file and checks the requirements one by one (the writer does not reread its own work) |
+| Numbers · formulas · amounts | Recompute another way on 2–3 rows; the total matches the source (receipt · statement) |
+| Message to a customer · email · booking | Read against the original question; name · amount · date match the real data; for a booking, see the confirmation page |
+| Feature in an app | Click it in the running app using the app-checking skill and see the criteria met (compiling or reading code does not count) |
+| Fix of a bug | Repeat the case that failed before, by the same path, and it passes |
+| Test · check | Pass/fail numbers come from this round's summary line (or `node scripts/test-verdict.mjs <TAP or JUnit result file> --expect <count>` → PROVEN · PARTLY · NOT PROVEN), never from memory · then break 1 line in a copy (invert a condition · return early); the test covering it must fail, otherwise the test proves nothing yet |
+| Screenshot · render | Judge from the pixels of an image you opened yourself, looking for failure signs first (red or blank screen, a box covering content), then compare with the log · ambiguous counts as failed · name the image file in the evidence |
+| Mockup | Open in a browser and click every button; no fake buttons |
+| Measured values (sensor · lux · distance · weight) | Compare with a calibrated instrument · an emulator proves only the work path (label `emulator`); accuracy needs the real thing (label `เครื่องจริง <รุ่น>`) · no instrument → `ยังไม่ได้ตรวจ` |
+| Works on another system (Windows · macOS · another machine) | Label every claim `observed` (ran it there) or `reasoned` (worked out); a pass on your own machine is the weakest evidence for another system |
+| Sub-agent work | Read the work and run it yourself |
+
+**Not evidence:** hedge words ("น่าจะใช้ได้" · "ควรจะผ่าน" · "ในทางทฤษฎี" · "เหมือนครั้งก่อน": in a final report they are a red flag, go back and check) · "test ผ่านแล้ว" with no output · "ไม่มี error" (no error is not the wanted result) · exit 0 or status `running` (exit 0 says only the program ended) · a sub-agent's own report · sending the user a command to run when you could run it · checking only the easy part. Full table with reasons and the `vastai` exit-0 case: [`references/evidence-table.md`](references/evidence-table.md).
+
+## Check before done
+- Every "done" word in the report has a raw result from this round behind it
+- Anything not seen is labelled `ยังไม่ได้ตรวจ`, with what is missing
+- No hedge word survives in the final report
+
+## References
+- [`references/evidence-table.md`](references/evidence-table.md) — open when judging a test, screenshot, measured value, cross-system claim, or sub-agent result, or when a claim of yours sounds like one on the "not evidence" list; also holds the sources
+
+
+## reference: evidence-table.md
+
+# Evidence by kind of work, and claims that do not count · principle-prove-it-works
+
+Open this when the work is a test, a screenshot, a measured value, a cross-system claim, a message to a customer, or a sub-agent result, or when a claim in your own report sounds like one in the second table.
+
+## Evidence by kind of work (full wording)
 
 | Work | Evidence that counts | Does not count |
 |---|---|---|
@@ -26,12 +64,6 @@ For an item whose result you have not seen, write separately what was done and w
 | A claim that it works on another system (Windows · macOS · another machine) in a PR or report | Label every claim: `observed` (ran it and saw the result on that system) or `reasoned` (worked out by thought) · a pass on your own machine is the weakest evidence for another system | Writing "works on every system" with no label |
 | Sub-agent work | Read the work and run it yourself | The sub-agent reports it is done |
 
-## How to do it
-
-1. Before starting, write "how will I know it is done" in a checkable form
-2. After the work, check against that on the real thing, and record the raw result (numbers · images · output)
-3. If you truly cannot check (no environment · needs a real account), say plainly `ยังไม่ได้ตรวจ` (not yet checked) and what is missing; never write `ผ่าน` (pass)
-
 ## Claims that do not count as evidence
 
 The first column quotes Thai claims as examples; English meanings are in brackets.
@@ -46,7 +78,9 @@ The first column quotes Thai claims as examples; English meanings are in bracket
 | Sending the user a command to run themselves when we could run it · checking only the easy part and concluding everything passed | Throws the checking onto someone else | Run it all yourself before using the word done |
 | Drafting a message to a customer or outsider saying "fixed" so it can be sent right away, while the check is not finished (even with a trailing note that testing is in progress, such as "ทีมเราแก้ไขในระบบแล้ว ตอนนี้กำลังทดสอบอีกรอบ" ("our team fixed it in the system, now testing once more"), seen in eval 3 of 3 rounds 2026-11-09) | The recipient believes the word fixed at once, and if the check fails the words must be withdrawn | Draft 1 version with the condition that it is sent after the check result is seen · the version that can be sent now must not contain "แก้แล้ว" (fixed), "แก้ไขแล้ว" (has been fixed) or "เรียบร้อย" (all done) in any form; it may say only "ได้รับเรื่องแล้ว ทีมกำลังตรวจ จะแจ้งผลภายใน (เวลา)" (received, the team is checking, will report within (time)) |
 
-Sources of the screenshot row · expo · .claude/skills/expo-skill-eval/agents/visual-grader.md · seen 2026-11-10 · the test row (verdict script + break one line of code) · code-modernization · commands/modernize-verify.md · seen 2026-11-10 · the observed/reasoned row · claude-remember (do not redistribute · took the mechanism only) · CONTRIBUTING.md · seen 2026-11-10 · reviewer lenses and packages → [`review-lenses`](../superuser/references/review-lenses.md)
+## Sources
+
+Sources of the screenshot row · expo · .claude/skills/expo-skill-eval/agents/visual-grader.md · seen 2026-11-10 · the test row (verdict script + break one line of code) · code-modernization · commands/modernize-verify.md · seen 2026-11-10 · the observed/reasoned row · claude-remember (do not redistribute · took the mechanism only) · CONTRIBUTING.md · seen 2026-11-10 · reviewer lenses and packages → [`review-lenses`](../../superuser/references/review-lenses.md)
 
 Source of the claims-table idea: skill `verification-before-completion` in obra/superpowers (MIT) · rewritten to cover work outside code.
 
@@ -81,14 +115,6 @@ An agent called to work in this area opens its own role file before starting.
 | designing B2B SaaS systems — multi-tenancy patterns, tenant isolation, scalability strategies, region deployment, or evaluating tenant data architectures | [`references/agent-saas-architect.md`](references/agent-saas-architect.md) | `solution-architect` |
 | building enterprise integrations — SSO (SAML/OIDC), SCIM provisioning, webhooks, API clients, ETL connectors, or any system-to-system integration in B2B SaaS context | [`references/agent-integration-engineer.md`](references/agent-integration-engineer.md) | `solution-architect` |
 | designing subscription billing, pricing tiers, usage metering, revenue recognition and SaaS revenue metrics (MRR, ARR, NRR, churn) | [`references/agent-revops-analyst.md`](references/agent-revops-analyst.md) | `revops-analyst` |
-
-## agent ของสายนี้
-
-`growth-specialist` · `solution-architect` · `revops-analyst`
-
-## ที่มา
-
-Merged from plugin `software-development-saas-b2b` (formerly named multi-tenancy-patterns → `references/multi-tenancy-patterns.md` · enterprise-integration → `references/enterprise-integration.md` · subscription-billing → `references/subscription-billing.md` — no longer separate skills) into `software-development` in v2.0.0. The original content is all still in `references/`
 
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 
@@ -2161,11 +2187,8 @@ Use when cutting a spec or architecture to fewest parts
 
 # Simplicity First
 
-> The best architecture has the fewest moving parts. The best plan is the one a
-> teammate can follow with no context.
-
 This skill covers **non-code outputs** — documents, plans, architecture, and
-designs. For code, use `lazy-coding`. The suite-wide rule for every kind of work is `simplify`; this skill is its detail for documents, plans and architecture.
+designs. For code, use `lazy-coding`.
 
 ## Check before submitting — 5 items
 
@@ -2213,7 +2236,23 @@ across screens, defaults that work for 80%, progressive disclosure.
 Avoid: novel interactions where a standard one works, 10-step flows when 3
 work, required fields with no smart default, hidden features needing tutorials.
 
-## Examples
+## Anti-patterns to reject
+
+- **Future-proofing** — abstractions for needs that never arrive.
+- **"It might scale"** — infra for 1M users while you have 1k.
+- **Layer cake** — 6 layers where 90% just pass through.
+- **Resume-driven design** — fancy tech to look sophisticated.
+- **Buzzword stacking** — "cloud-native event-driven AI-powered".
+
+## References
+
+- [`references/examples.md`](references/examples.md) — open for wrong/right pairs: API description, sprint goal, architecture
+
+
+## reference: examples.md
+
+# Examples · simplicity-first
+
 
 **API description**
 
@@ -2239,13 +2278,6 @@ dedicated auth service."
 Right: "Add an endpoint to the existing API. One Postgres table for state. Standard
 auth middleware. Log to the existing system."
 
-## Anti-patterns to reject
-
-- **Future-proofing** — abstractions for needs that never arrive.
-- **"It might scale"** — infra for 1M users while you have 1k.
-- **Layer cake** — 6 layers where 90% just pass through.
-- **Resume-driven design** — fancy tech to look sophisticated.
-- **Buzzword stacking** — "cloud-native event-driven AI-powered".
 
 
 ---
@@ -2257,8 +2289,6 @@ Use when a Markdown doc needs an image, SVG or ASCII art
 # Markdown Visuals
 
 > **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
-
-> **Language:** write every line of wording per `human-writing`. This skill gives the format and structure; human-writing gives the way to write so people understand.
 
 > **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
@@ -2421,15 +2451,10 @@ For every visual:
 
 ## Anti-patterns
 
-- **Text-only design docs** — "the icon is in the top-right" with no picture
 - **Linking to Figma / external design tools as the only source** — visuals must render in the repo
 - **PNG screenshots of text** — use the text, in a code block
-- **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
-- **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
-- **ASCII art outside a code fence** — proportional fonts will mangle alignment
 - **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
 - **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
-- **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
 
 ## Quick-start recipe
 
@@ -2444,24 +2469,9 @@ When a markdown doc needs a design picture (clickable app screens go to the plat
 4. **Add a feature reference table** below the visuals — what each element means
 5. **Cross-check accessibility checklist** before delivery
 
-Not sure a visual will render? Preview it in the viewer the reader will use (GitHub, Notion, VS Code) before delivery.
-
-## Related skills
-
-- `polished-document-style` — overall doc formatting, figure captions, callout boxes
-- `simplicity-first` (plugin `software-development`) — don't over-design the diagram; show what's needed
-- `software-diagrams` (plugin `software-development`) — which diagram type answers which question, plus the shared Mermaid theme
-- `diagram-figures` — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
-- `ui-craft` (plugin `software-development`) — spacing, hierarchy and states when the picture is a screen
-
 ## ไม่ให้ดูเหมือน AI ทำ
 
 Before sending, go through item 3 of `no-ai-look` — for HTML work, run its script · every piece must also pass eye check 3.2 (a web page adds items 10–14), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for all media is there
-
-## ตัวย่อ
-
-Spell out each abbreviation in full on first use and put the short form in brackets — for example Model Context Protocol (MCP)
-After that, use the short form. Details are in the skill `spell-out-abbreviations`
 
 
 ## reference: ascii-patterns.md
@@ -2631,222 +2641,72 @@ Use this pattern by default for showing UI feature states. On GitHub, save the S
 
 Use when a document or slide needs a designed diagram
 
-> **The figure's main colour = the project's main colour.** Look for it in the order given in item 5. Only if nothing is found, use the house palette `#2A78D6` from `polished-document-style/references/theme-colors.md` ("ค่าตั้งต้นประจำบ้าน", the house default).
-
-# Diagram Figures
-
-> **Pre-work gate (every time):** read the owner's theme → search live for a reference → 3 genuinely different directions → check `no-ai-look` before sending. Follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for finding this piece's structure). Close the work with a line `ด่านก่อนลงมือ:` (pre-work gate:).
-
-> **Language:** write every line of wording per `human-writing`. This skill gives the format and structure; human-writing gives the way to write so people understand.
-
-This skill is the single house style for figures that must look "designed", not "generated". It has 3 engines that share one set of colours, icons and rules.
-
-## Choose a route
-
-| Need | Go to |
-|---|---|
-| A figure in any work document (business plan · shop process chart · family money chart · research summary · software documents such as Business Requirements Document (BRD) · Software Requirements Specification (SRS) · Entity-Relationship (ER) diagram) and figures that must look designed, for client proposals · slides · print · sign-off documents, including cloud diagrams that need real logos | **This skill: HTML layout engine** (default · item 2) |
-| The same style, but generated from data or code, for example re-issued every time the data changes, or needing coordinates controlled on a grid | **This skill: SVG/Python engine** ([references/engine-svg-python.md](references/engine-svg-python.md)) |
-| Dozens of Mermaid blocks (sequence · state · ER · gantt) that must go into a Word or Portable Document Format (PDF) file looking like hand-drawn figures | **This skill: Mermaid engine** ([references/engine-mermaid.md](references/engine-mermaid.md)) |
-| A quick diagram in a README · Pull Request · code note (not a project document) | `software-diagrams` (plugin `software-development`) (Mermaid with the house theme; for a cloud diagram in a repo that needs logos, use the `diagrams` library in the same skill) |
-| Deciding how to embed a figure in a markdown file (inline SVG · image file · ASCII · Mermaid) | [`markdown-visuals`](../markdown-visuals/SKILL.md) |
-
-**Routing rule (matches `software-diagrams` and `markdown-visuals`):** markdown in a repo the team reads (README · Pull Request · code note) → Mermaid via `software-diagrams` · project documents (BRD · SRS · Functional Specification Document (FSD) · Architecture Decision Record (ADR) · ER · process charts) or anything read by people outside the team → this skill.
-
-The cost of this skill is **time**, because 1 figure needs several rounds of fixes.
-So use it only for figures that people outside the team will see, and see repeatedly.
-
-## 1 · Answer three questions before opening a file
-
-1. **Where does this figure go?** Slide 16:9 · A4 page · screen.
-   Then set `.sheet{width:...}` to match: slide 1600px · A4 portrait 1240px · A4 landscape 1750px
-2. **Who is the reader?** For a non-technical client, write box names in Thai. A technical team reads the real service names.
-3. **What is the one question this figure answers?** 1 figure answers 1 question (same rule as `software-diagrams` (plugin `software-development`))
-
-## 2 · Choose a template
-
-There are 4 templates in the `assets/` folder. **Copy one and edit it; do not start writing your own.** Details of each template are in the linked files.
-
-| Question the figure answers | Template | Details |
-|---|---|---|
-| "Who outside does this system, shop or organisation talk to?" — the top-level overview (software calls it C4 model (Context · Containers · Components · Code) level 1) | [`figure-context.html`](assets/figure-context.html) | [layout-context.md](references/layout-context.md) |
-| "Where is the real thing, and what is inside?" — departments · places · machines (in software: deployment · container) | [`figure-template.html`](assets/figure-template.html) | [layout-deployment.md](references/layout-deployment.md) |
-| "Which cloud services are used?" — must have real Amazon Web Services (AWS) · Azure · Google Cloud logos | [`figure-cloud.html`](assets/figure-cloud.html) | [layout-cloud.md](references/layout-cloud.md) |
-| "What does 1 item (a message · an order · money) pass through, and in what order?" — a chart with sequence numbers ①–⑥ · user → channel → internal layer → external services and data | [`figure-flow.html`](assets/figure-flow.html) · [example](assets/figure-flow-example.png) | [layout-flow.md](references/layout-flow.md) |
-
-Every template uses the same colours, sizes, fonts and line-drawing script. They differ only in layout.
-
-## 3 · The figure header needs all six parts
-
-Project logo · title · 1-line sub-title · figure number · version and date · owner
-
-The logo goes before the figure title (`<img class="logo">` points to the project's `assets/logo/`; if there is no logo, note in the report that it is missing). The sub-title says "what the real thing is", not an expansion of the title. **A figure with no date is one nobody dares edit and nobody dares trust.**
-
-Full reasoning and the wrong/right example of the sub-title → [`references/design-system.md`](references/design-system.md), section "Figure header".
-
-## 4 · Size system
-
-**Sizes, spacing and corners are already in `:root` of `assets/figure-template.html`. Do not set new values yourself.**
-These numbers were tuned until figures look deliberate. If you move them, figures in the same document will look uneven.
-
-Icon frame 66px or more (below 56px the figure looks hollow) · connectors vertical or horizontal only, bent with rounded corners, no diagonal lines
-
-Full value table (text · icon · box · `.focus` · line · spacing) → [`references/design-system.md`](references/design-system.md), section "Size system". Open it when adjusting a template or writing a new one.
-
-> **Text size depends on where the figure will be placed, not on the canvas.** The table above suits slides and screens. A figure placed in an A4 document must be worked back from the placed size: the smallest text after placing must be ≥ 7 points (pt) → `minimum px = 0.247 × canvas width(px) ÷ placed width(cm)`. A 2000px canvas on a 17 cm portrait page = 29px; on a 25.7 cm landscape page = 20px. After enlarging the font, boxes must be wide enough that Thai names are not cut mid-word.
-> **2 versions from one source file:** the full version (with all 6 header parts, for standalone or slide use) and the in-document version (`?embed=1` hides the header because the document's caption already says it; a repeated header makes the figure smaller and cluttered). Make the aspect ratio wide enough to fill a landscape page (width ÷ height ≥ 1.46).
-> **The whole set of figures uses one CSS file** (`figure-theme.css` next to the source files) that pulls colour, font and logo from the project's identity (`assets/logo/` · mockup tokens). Change it in one place and every figure follows.
-> **The beauty gate for figures** runs together with the beauty gate for documents (`branded-document-design` item 0.1): main path is a solid line in the strong colour · secondary lines grey · a legend · flow order numbered when there are more than 3 steps.
-
-## 5 · Colour system
-
-**The figure's main colour is the project's main colour (or the shop's, the family's, that job's).** Never use a colour from an example or a reference image. Look in this order and stop at the first hit:
-
-1. `doc-theme` in the project's documents (see `polished-document-style`, section "ธีมของเอกสาร" (document theme))
-2. The brand colour the project actually uses: main colour variables in code (`--primary` · `--brand` · `--accent` in CSS · `primary` in Tailwind / UI theme · `colorPrimary` in a mobile app) · brand kit · main colour in the logo
-   Read the background colour from the same places (`--background` · `--bg` · `background` in Tailwind · the dark or light mode the app mainly uses), because figures and decks use the background that follows the project's design.
-3. Nothing at all yet → **search for a reference first:** take the project's words and search live per `design-references` (plugin `superuser`), type `document`, then extract colours from the chosen work. The stored colour library is used when live search is not possible.
-4. Live search not possible → use the house palette `#2A78D6`, write `(รอยืนยัน)` (to be confirmed) in the report, and carry on without stopping to ask. Put a tone from [references/colour-by-domain.md](references/colour-by-domain.md) in the report to choose later.
-
-If you found a colour in item 2 but there is no `doc-theme` yet, declare a `doc-theme` with that value, so the project's figures, documents and slides use the same colour.
-
-In the HTML templates, change `--accent` in `:root` in one place (SVG/Python engine: change `ACCENT` in `theme.py`) · background that follows the project's design → append `#accent=<main colour>&bg=<background colour>` to the file name · exceptions that do not change with the brand (provider logo colours · structural grey) and the **7 icon colour groups** (`t-neutral` · `t-edge` · `t-app` · `t-view` · `t-data` · `t-alert` · `t-warn`) with their meanings → [`references/design-system.md`](references/design-system.md), section "Colour system". An 8th colour means colour is used for looks.
-
-**Limit the number of colours, not the weight of colour.** In a figure that must look designed, the main colour must be visible across the whole figure, not only in the header bar. Labels that must be found fast (step number · owner · status) use a solid fill · card headers are a full-width solid colour band (do not use a thick colour stripe beside a rounded card, because that is an AI signal in `no-ai-look`) · summary boxes use a dark fill · pastel colours are allowed only as a fill that has text or a dark border with it · check with the "colour power" axis in the beauty gate of `ui-craft` (`ui-craft/references/states-and-checks.md` (plugin `software-development`)).
-
-### 5.1 · A figure needs a focal point, not flatness
-
-A figure that is readable but flat = white cards that all look alike · all lines the same thickness · nothing draws the eye. The user will say "ดีขึ้นแต่ไม่ว้าว" (better but not wow). Ways that pass the beauty gate:
-
-| Part | What to do |
-|---|---|
-| Canvas | Use the same background as the app's identity. A dark app gets a figure that is dark all over (not a white frame around a dark image) · faint dot-grid pattern, at most 8% opaque, for depth |
-| Main path | 6px thick in the brand colour + glow (`filter: drop-shadow(0 0 8px <brand colour 75%>)`) · secondary lines thin, grey, no glow. The difference is clear enough that the legend need not be read |
-| Focal point | 1 `.focus` card per figure: 3px brand-colour border + surrounding glow + icon with brand-colour fill · other cards' fill blends into the canvas |
-| Sequence badge | Brand-colour fill, text in the canvas colour + a light glow |
-| Contrast | Secondary text on a dark fill ≥ 7:1 (light grey, not mid grey) |
-| Theme | Every colour is a variable in a single css file · arrowheads read colour from the variable (`getComputedStyle`), no values hard-coded in JavaScript (JS) · meaning colours (`t-app` `t-alert` `t-warn`) have a dark-background pair · no colour in `style=""` of figure files |
-
-**Dot grid + glowing lines = an approved house style** (the exception "an approved look always wins" in `no-ai-look`) · when scanning with `slop_scan.py`, add `slop-ok` at `grid-bg` and `neon-glow` of these figures, with a short reason.
-
-**How to choose a direction:** write 3 directions as override css, inject them into 2 real figures at render time (`add_init_script` before the line-drawing script runs) → place them next to the original → have a reviewer who did not do the work score them → edit the one theme css file and render the whole set. A dark figure in a white-page document must be a recorded decision (for example, chapter-opening pages and the cover are dark too), not an accident.
-
-## 6 · Icons: use official ones from the library, and draw your own only when there is none
-
-**Whether an official icon of that service exists** decides it.
-
-- **If it exists** (AWS · Azure · Google Cloud · Kubernetes · most open-source tools), use the official one from `assets/`.
-  That means the 205 selected in `assets/icons/`, or the full library through `python assets/find-icon.py <name>`. These sets are published for drawing architecture diagrams. Group lists, commands and licences are in [references/icons.md](references/icons.md).
-- **If it does not exist**, or it is something we built ourselves, draw a line icon yourself, and write in the footnote that
-  the icon is not an official logo (the `figure-template.html` template already has this line).
-- **Never mix** them in one figure, because brightly coloured logos next to thin line icons make the figure look unfinished.
-
-Hand-drawn line icons: `viewBox 0 0 24 24` · `stroke-width 1.6` · no fill · round line caps · must be readable at 24px (detail beyond 3 strokes turns into a black blob)
-
-## 7 · Wires
-
-**Within the same column** use the down arrow `.down`. **Across columns** use the `WIRES` list at the end of the file (`{from, fs, to, ts, tp, label}`) and let the script draw after layout. Never write fixed coordinates.
-
-**Rules you must not miss:**
-
-- Vertical or horizontal lines only, bent with rounded corners via `elbow()` (use `mx` when several lines share one channel) · no diagonal lines
-- A label must be narrower than the gap between columns (longer label → increase `gap` of `.stage`)
-- **No more than 5** cross-column lines per figure · connect to the smallest box that is correct
-- A label says **what flows through** (`HTTPS 443`), not `เชื่อมต่อ` (connect) · if there is nothing to say, put no label · a line not yet really connected uses `planned:true` with a footnote
-
-`WIRES` code example · where each rule comes from · `lp` · `tp` → [`references/wires.md`](references/wires.md). Open it when writing `WIRES`.
-
-### 7.1 · Layout: process charts and team charts
-
-The user set this rule after seeing a real figure (2026-10-28), because a figure with wandering curved lines and boxes scattered out of rows is confusing to read.
-
-- **Read top to bottom**, 1 level per tier: entry → middle → receiver → result · use left to right only when there is a time axis (Gantt)
-- **The middle element sits in the centre of the figure** (team lead · main system · `.focus` box), and the whole figure is centred as a rule, not pushed left leaving the other side empty
-- **Things at the same level go in the same frame, in the same row**, with a group name on the border line, such as "ทางเข้า" (entry) or "agent 8 ตัว" (8 agents)
-  - The frame is a single line, no fill, no shadow
-  - Cards in the same frame have equal height
-  - If there are too many for one row, split into several rows in the same frame and centre the last row
-- **If every box in a group receives the same thing, draw one line into the frame**, do not branch a line to every box · if each box is a different choice, draw a separate line per box and move the group name to the bottom border so the line does not cross the name
-- **Line channels are outside the frame.** Lines leaving or entering a group bend in the gap between frames and do not cross a group name or a card
-- **Keep it soft.** Straight runs of a line are still vertical or horizontal, but every bend is a curve of radius about 12 px (runs shorter than 24 px reduce the radius accordingly) · cards have 14 px corners · group frames have 20 px corners · labels are capsules · no sharp corners on boxes or lines
-- **Thai words must not break mid-word.** The browser's word breaker splits some words wrongly, and the pieces may not fall on word boundaries (for example `เช็|กมิจฉา|ชีพ`). Keep a list of these words (ทีละ · สต็อก · ร้านค้า · เช็ก) and never break a line at any point that is inside a word in the list (wrap with `white-space:nowrap`) · for a long text not in the list, put `<br>` yourself per item 8 · open the figure and look at every card
-- **Every box has a name and a 1-line description**, not only an icon · steps connected in a sequence (1 → 2 → 3) need no frame, because they are not the same level
-
-## 8 · Thai language
-
-- **`line-height` cannot go below 1.5**, because upper vowels and tone marks stacked in 2 layers get cut off. For the same reason, **never set a fixed height on a text box**.
-- Font order is `"Noto Sans Thai","IBM Plex Sans Thai",Tahoma,Loma`, already set in the templates.
-For a figure to be embedded in a deck (`StageDeck` · `html-slide-deck`), move `"IBM Plex Sans Thai"` to the first position · a Word document uses the brand's Thai font and falls back to Tahoma if it is missing (`branded-document-design` item 2); a figure inside it may use a different font · if the machine has no Thai font at all, vowels silently end up in the wrong position, so **always render and look**.
-- **Thai has no spaces between words**, so the browser breaks a line mid-word. If the text is long, put `<br>` yourself.
-- Thai characters look smaller than English at the same size, so keep descriptions at 12px or more.
-
-## 9 · Render and look. Never skip
-
-```bash
-pip install playwright && playwright install chromium
-cp <skill>/assets/render-figure.py docs/figures/render.py     # ครั้งแรกของโปรเจกต์
-python docs/figures/render.py                  # ทุกรูปใน docs/figures/src/ → docs/figures/*.png + docs/figures/doc/*.png
-python docs/figures/render.py arch-01 --min-px 20             # เฉพาะรูปที่ระบุ · ตัวอักษรขั้นต่ำตามขนาดที่วาง (ข้อ 4)
-python assets/render-figure.py figure.html figure.png 2       # ไฟล์เดียว (สไลด์ · ลองแนว)
-```
-
-- **The render script lives at `docs/figures/render.py`, next to the `src/` folder.** It is a project tool needed every time a figure is edited. Never keep it in `_to_delete/` or a scratchpad (when the temp folder is cleared you are left with sources that cannot be rendered) · never delete `docs/figures/src/`, because .png files are only output
-- The folder mode produces 2 versions per figure (full version + in-document version `?embed=1` per item 4) and checks the text for you: text smaller than `--min-px` · a name or label that wrapped · text overflowing a box or the canvas · overlapping labels → `problems: 0` and exit 0 means pass
-
-Always use multiplier **2**, because multiplier 1 gives a blurry image when enlarged in a slide.
-
-Then run the geometry checker, which catches diagonal lines, corners that are not rounded, overlapping labels, and lines crossing text:
-
-```bash
-python scripts/check-figure-geometry.py docs/figures/src     # exit 0 = ผ่าน
-python scripts/check-figure-source.py docs/figures/src       # ทุกรูปเริ่มจากโครงของ skill นี้
-```
-
-Then open the image file and look with your own eyes, going through this list:
-
-- [ ] Does every cross-column wire have an arrowhead? Does any line cross a box or text?
-- [ ] Are the labels on lines readable, and do they not overlap each other?
-- [ ] Is the Thai text complete? Are any vowels or tone marks missing? Is any word cut mid-word?
-- [ ] Is there really only one `.focus` box? Does the header have all 6 parts? Does the logo actually show?
-- [ ] Shrink the figure to 25% width. Can you still tell what is where?
-- [ ] Measure the smallest text in the HTML and convert it to pt at the real placed size (item 4): is it ≥ 7pt?
-- [ ] Can someone who has never seen this system answer the original question?
-
-## 10 · Pitfalls found in practice
-
-If a figure comes out wrong, for example a missing arrowhead, a line drawn to the wrong box, missing Thai vowels, or a label overlapping a box, open the table of symptom → cause → fix in [references/pitfalls.md](references/pitfalls.md) before fixing it yourself.
-
-## 11 · Anti-patterns
-
-- **Using this skill for in-team figures.** It wastes several rounds on beauty nobody needs.
-- **Using an official logo in a way that looks like the provider endorses it.** Item 6 and [icons.md](references/icons.md)
-- **2 `.focus` boxes.** It means the figure answers 2 questions
-- **Sending an HTML file to the client.** Send a PNG; the HTML file is the source, keep it in the repo
-- **Not keeping the HTML file.** Next year the figure needs editing and must be redrawn from scratch
-- **A figure with no date and owner**
-- **Diagonal lines or sharp corners.** Lines must be vertical or horizontal, bent with rounded corners (items 4 and 7)
-- **Same-level things scattered across rows or without a frame · the middle element pushed to the figure's edge.** Lay out per item 7.1
-- **Mixed icon styles.** Thin lines mixed with thick lines, mixed with solid icons
-- **A flat figure: all cards white and alike, all lines equally thin.** Readable but with no focal point. Follow item 5.1
-
-## 12 · Connect to other skills
-
-| Need | Use with |
-|---|---|
-| A quick diagram in markdown of a repo the team reads (README · Pull Request · code note) | `software-diagrams` (plugin `software-development`) |
-| Choose how to embed a figure in a markdown file | `markdown-visuals` |
-| Put a figure in a slide | `presentation-design` |
-| Put a figure in a Word / PDF file | `branded-document-design` |
-| A figure in an SRS document | `srs-writing` (plugin `software-development`) |
-| Colour and spacing of app screens (a different system from this figure) | `ui-craft` (plugin `software-development`) |
-
-## Not looking AI-made
-
-Before sending, go through item 3 of `no-ai-look`: for HTML work, run its script · every job must also pass the eye gate 3.2 (web pages also answer items 10–14), because 0 findings from the script is not yet a pass · the prohibitions in this file are specific to this work; the full list for every medium is there.
-
-## Abbreviations
-
-HTML — HyperText Markup Language · PNG — Portable Network Graphics · SVG — Scalable Vector Graphics · CSS — Cascading Style Sheets
+# Diagram Figures — designed figures (HTML template → PNG) for documents, slides and print
+
+> **One rule:** the figure's main colour = the project's main colour. Look for it in the order in step 5. Only if nothing is found, use the house palette `#2A78D6` from `polished-document-style/references/theme-colors.md` ("ค่าตั้งต้นประจำบ้าน", the house default).
+
+> **Pre-work gate (every time):** read the owner's theme → search live for a reference → 3 genuinely different directions → check `no-ai-look` before sending. Follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search finds this piece's structure). Close the work with a line `ด่านก่อนลงมือ:`.
+
+## Use when
+- A figure in a work document (business plan · process chart · research summary · BRD · SRS · ER diagram) or any figure that must look designed: client proposals · slides · print · sign-off documents, including cloud diagrams with real logos.
+- The same style generated from data or code (re-issued when data changes, coordinates on a grid) → SVG/Python engine, [`references/engine-svg-python.md`](references/engine-svg-python.md).
+- Dozens of Mermaid blocks (sequence · state · ER · gantt) going into Word or PDF as hand-drawn-looking figures → Mermaid engine, [`references/engine-mermaid.md`](references/engine-mermaid.md).
+
+Not for: a quick diagram in a README · Pull Request · code note → `software-diagrams` (plugin `software-development`; for logos in a repo use its `diagrams` library) · how to embed a figure in markdown → `markdown-visuals`. Anything read by people outside the team → this skill. This skill costs time (several rounds of fixes per figure), so skip it for in-team figures.
+
+## Steps
+1. **Answer 3 questions first.** Where does the figure go (slide 16:9 · A4 page · screen)? Set `.sheet{width:...}` to match: slide 1600px · A4 portrait 1240px · A4 landscape 1750px. Who reads it (non-technical client → box names in Thai; technical team → real service names)? What single question does it answer (1 figure, 1 question)?
+2. **Copy one template from `assets/` and edit it; never write your own.** All share colours, sizes, fonts and the line-drawing script.
+
+   | Question the figure answers | Template | Details |
+   |---|---|---|
+   | Who outside does this system, shop or organisation talk to? (top-level overview, C4 level 1) | [`figure-context.html`](assets/figure-context.html) | [layout-context.md](references/layout-context.md) |
+   | Where is the real thing, and what is inside? (departments · places · machines; deployment) | [`figure-template.html`](assets/figure-template.html) | [layout-deployment.md](references/layout-deployment.md) |
+   | Which cloud services are used? (real AWS · Azure · Google Cloud logos) | [`figure-cloud.html`](assets/figure-cloud.html) | [layout-cloud.md](references/layout-cloud.md) |
+   | What does 1 item (message · order · money) pass through, in what order? (numbered ①–⑥, user → channel → internal → external) | [`figure-flow.html`](assets/figure-flow.html) · [example](assets/figure-flow-example.png) | [layout-flow.md](references/layout-flow.md) |
+
+3. **Header needs all 6 parts:** project logo (`<img class="logo">` → the project's `assets/logo/`; if there is none, say so in the report) · title · 1-line sub-title (what the real thing is, not an expansion of the title) · figure number · version and date · owner. Wrong/right sub-title example: [`references/design-system.md`](references/design-system.md), "Figure header".
+4. **Sizes.** Sizes, spacing and corners are already in `:root` of `assets/figure-template.html`; do not set new values. Icon frame ≥ 66px (below 56px looks hollow). Connectors vertical or horizontal only, bent with rounded corners; no diagonals. Full table: [`references/design-system.md`](references/design-system.md), "Size system" (open when adjusting or writing a template). Text size follows the placed size: for a figure placed in an A4 document, smallest text after placing must be ≥ 7 pt → `minimum px = 0.247 × canvas width(px) ÷ placed width(cm)` (2000px canvas: 29px on a 17 cm page, 20px on 25.7 cm). Make boxes wide enough that Thai names are not cut mid-word. In-document version uses `?embed=1` (hides header); aspect ratio width ÷ height ≥ 1.46 for a landscape page; one `figure-theme.css` for the whole set.
+5. **Colour.** Stop at the first hit:
+   1. `doc-theme` in the project's documents (`polished-document-style`, section "ธีมของเอกสาร").
+   2. The project's brand colour: `--primary` · `--brand` · `--accent` in CSS · `primary` in Tailwind / UI theme · `colorPrimary` in a mobile app · brand kit · logo. Read the background colour from the same places (`--background` · `--bg` · dark or light mode), because figures follow the project's design.
+   3. Nothing yet → search live per `design-references` (plugin `superuser`), type `document`, then extract colours from the chosen work. Use the stored colour library only if live search is not possible.
+   4. Live search not possible → use `#2A78D6`, write `(รอยืนยัน)` in the report, carry on without asking, and list a tone from [references/colour-by-domain.md](references/colour-by-domain.md) for later.
+
+   Never use a colour from an example or reference image. In HTML templates change `--accent` in `:root` (SVG/Python: `ACCENT` in `theme.py`); background that follows the project → append `#accent=<main colour>&bg=<background colour>` to the file name. The 7 icon colour groups (`t-neutral` · `t-edge` · `t-app` · `t-view` · `t-data` · `t-alert` · `t-warn`) and provider/structural exceptions: [`references/design-system.md`](references/design-system.md), "Colour system". An 8th colour means colour is used for looks. The main colour must show across the whole figure, with 1 `.focus` card (brand border + glow), a 6px glowing main path and thin grey secondary lines. Full rules: [`references/focal-point-and-layout.md`](references/focal-point-and-layout.md).
+6. **Icons.** If an official icon exists (AWS · Azure · Google Cloud · Kubernetes · most open-source tools), use it from `assets/icons/` (205 selected) or `python assets/find-icon.py <name>`; groups, commands, licences in [references/icons.md](references/icons.md). If not, or it is our own system, draw a line icon (`viewBox 0 0 24 24` · `stroke-width 1.6` · no fill · round caps · readable at 24px, max 3 strokes of detail) and footnote that it is not an official logo (the template has this line). Never mix official and hand-drawn icons in one figure. Never use a logo so that it looks like the provider endorses it.
+7. **Wires.** Same column → down arrow `.down`. Across columns → the `WIRES` list at the end of the file (`{from, fs, to, ts, tp, label}`); the script draws after layout; never write fixed coordinates. Vertical or horizontal only, rounded bends via `elbow()` (use `mx` when lines share a channel). A label must be narrower than the column gap (longer → raise `gap` of `.stage`). At most 5 cross-column lines per figure, to the smallest correct box. A label says what flows (`HTTPS 443`), not `เชื่อมต่อ`; no label if nothing to say; a not-yet-real connection uses `planned:true` with a footnote. Code example: [`references/wires.md`](references/wires.md) (open when writing `WIRES`).
+8. **Layout of process and team charts.** Read top to bottom, 1 level per tier (left to right only with a time axis). Middle element (`.focus`) in the centre, whole figure centred. Same-level things in one frame and one row, with a group name on the border; frame is a single line, no fill; equal card height. One line into a frame if all boxes receive the same thing. Line channels outside frames. Bends are curves (~12px radius), cards 14px corners, frames 20px. Every box has a name and a 1-line description. Details: [`references/focal-point-and-layout.md`](references/focal-point-and-layout.md).
+9. **Thai.** `line-height` ≥ 1.5 and never a fixed height on a text box (upper vowels and tone marks get cut). Description text ≥ 12px. Thai has no word spaces, so put `<br>` yourself in long text, and never break inside words like ทีละ · สต็อก · ร้านค้า · เช็ก (`white-space:nowrap`). Font order `"Noto Sans Thai","IBM Plex Sans Thai",Tahoma,Loma` is set in the templates; if the machine has no Thai font vowels land wrong, so always render and look.
+10. **Render and look. Never skip.**
+    ```bash
+    pip install playwright && playwright install chromium
+    cp <skill>/assets/render-figure.py docs/figures/render.py     # first time in the project
+    python docs/figures/render.py                  # every figure in docs/figures/src/ → docs/figures/*.png + docs/figures/doc/*.png
+    python docs/figures/render.py arch-01 --min-px 20             # chosen figures · smallest text by placed size (step 4)
+    python assets/render-figure.py figure.html figure.png 2       # single file (slide · trying a direction)
+    python scripts/check-figure-geometry.py docs/figures/src     # exit 0 = pass: diagonals, square corners, overlapping labels, lines over text
+    python scripts/check-figure-source.py docs/figures/src       # every figure starts from this skill's skeleton
+    ```
+    Always use multiplier 2 (1 is blurry when enlarged). Folder mode makes 2 versions per figure (full + `?embed=1`) and checks text smaller than `--min-px`, wrapped names or labels, overflow, overlapping labels: `problems: 0` and exit 0 = pass. Keep `render.py` at `docs/figures/render.py` next to `src/`, never in `_to_delete/` or a scratchpad; never delete `docs/figures/src/` (.png files are only output). Send the client a PNG; keep the HTML source in the repo.
+11. If a figure comes out wrong (missing arrowhead, line to the wrong box, missing Thai vowels, label over a box), open the symptom → cause → fix table [references/pitfalls.md](references/pitfalls.md) before fixing it yourself.
+12. Run `no-ai-look` item 3 (for HTML, run its script; also eye gate 3.2; 0 findings from the script is not yet a pass). Hand-off by medium: slide → `presentation-design` · Word / PDF → `branded-document-design` · SRS → `srs-writing` · app screens → `ui-craft`.
+
+## Check before done
+- [ ] Every cross-column wire has an arrowhead; no line crosses a box or text; labels readable and not overlapping.
+- [ ] Thai text complete (no missing vowels or tone marks, no word cut mid-word).
+- [ ] Exactly one `.focus` box; header has all 6 parts; logo shows; figure has a date and owner.
+- [ ] Shrunk to 25% width, you can still tell what is where.
+- [ ] Smallest text converted to pt at the placed size is ≥ 7 pt.
+- [ ] Someone who has never seen the system can answer the original question.
+- [ ] Icons are all official or all hand-drawn; no diagonal lines or sharp corners.
+- [ ] The line `ด่านก่อนลงมือ:` closes the work.
+
+## References
+- [`references/focal-point-and-layout.md`](references/focal-point-and-layout.md) — open when styling a figure, laying out a process chart, or sizing for a placed page
+- [`references/design-system.md`](references/design-system.md) — open for header example, size table, colour groups
+- [`references/colour-by-domain.md`](references/colour-by-domain.md) — open when the colour step falls to the house palette
+- [`references/icons.md`](references/icons.md) · [`references/wires.md`](references/wires.md) · [`references/pitfalls.md`](references/pitfalls.md) — open for icons, `WIRES` code, a wrong-looking figure
 
 
 ## reference: colour-by-domain.md
@@ -3199,6 +3059,63 @@ After it come 2–4 lines of notes. These include the trademark line and referen
 - **SVG** — Scalable Vector Graphics
 - **PNG** — Portable Network Graphics
 - **PIL** — Python Imaging Library
+
+
+## reference: focal-point-and-layout.md
+
+# Focal point, layout of process charts, placed size · diagram-figures
+
+Open when you build or restyle a figure and need the full rules behind the short lines in SKILL.md.
+
+## Placed size, two versions, one theme file
+
+- **Text size depends on where the figure will be placed, not on the canvas.** A figure placed in an A4 document must be worked back from the placed size: the smallest text after placing must be ≥ 7 pt → `minimum px = 0.247 × canvas width(px) ÷ placed width(cm)`. A 2000px canvas on a 17 cm portrait page = 29px; on a 25.7 cm landscape page = 20px. After enlarging the font, boxes must be wide enough that Thai names are not cut mid-word.
+- **2 versions from one source file:** the full version (all 6 header parts, for standalone or slide use) and the in-document version (`?embed=1` hides the header because the document's caption already says it; a repeated header makes the figure smaller and cluttered). Make the aspect ratio wide enough to fill a landscape page (width ÷ height ≥ 1.46).
+- **The whole set of figures uses one CSS file** (`figure-theme.css` next to the source files) that pulls colour, font and logo from the project's identity (`assets/logo/` · mockup tokens). Change it in one place and every figure follows.
+- **The beauty gate for figures** runs together with the beauty gate for documents (`branded-document-design` step 2): main path is a solid line in the strong colour · secondary lines grey · a legend · flow order numbered when there are more than 3 steps.
+
+## Colour weight
+
+Limit the number of colours, not the weight of colour. The main colour must be visible across the whole figure, not only in the header bar. Labels that must be found fast (step number · owner · status) use a solid fill · card headers are a full-width solid colour band (a thick colour stripe beside a rounded card is an AI signal in `no-ai-look`) · summary boxes use a dark fill · pastel colours only as a fill that has text or a dark border with it · check with the "colour power" axis in the beauty gate of `ui-craft` (`ui-craft/references/states-and-checks.md`, plugin `software-development`).
+
+If you found a colour in step 5 item 2 but there is no `doc-theme` yet, declare a `doc-theme` with that value so the project's figures, documents and slides share it.
+
+## A figure needs a focal point, not flatness
+
+A readable but flat figure (white cards that all look alike, all lines the same thickness) draws the user's "ดีขึ้นแต่ไม่ว้าว" (better but not wow). Ways that pass the beauty gate:
+
+| Part | What to do |
+|---|---|
+| Canvas | Use the same background as the app's identity. A dark app gets a figure that is dark all over (not a white frame around a dark image) · faint dot-grid pattern, at most 8% opaque, for depth |
+| Main path | 6px thick in the brand colour + glow (`filter: drop-shadow(0 0 8px <brand colour 75%>)`) · secondary lines thin, grey, no glow. The difference is clear enough that the legend need not be read |
+| Focal point | 1 `.focus` card per figure: 3px brand-colour border + surrounding glow + icon with brand-colour fill · other cards' fill blends into the canvas |
+| Sequence badge | Brand-colour fill, text in the canvas colour + a light glow |
+| Contrast | Secondary text on a dark fill ≥ 7:1 (light grey, not mid grey) |
+| Theme | Every colour is a variable in a single css file · arrowheads read colour from the variable (`getComputedStyle`), no values hard-coded in JavaScript · meaning colours (`t-app` `t-alert` `t-warn`) have a dark-background pair · no colour in `style=""` of figure files |
+
+**Dot grid + glowing lines = an approved house style** (the exception "an approved look always wins" in `no-ai-look`). When scanning with `slop_scan.py`, add `slop-ok` at `grid-bg` and `neon-glow` of these figures, with a short reason.
+
+**How to choose a direction:** write 3 directions as override css, inject them into 2 real figures at render time (`add_init_script` before the line-drawing script runs) → place them next to the original → have a reviewer who did not do the work score them → edit the one theme css file and render the whole set. A dark figure in a white-page document must be a recorded decision (for example, chapter-opening pages and the cover are dark too), not an accident.
+
+## Layout: process charts and team charts
+
+Rule set by the user after seeing a real figure (2026-10-28): a figure with wandering curved lines and boxes scattered out of rows is confusing to read.
+
+- **Read top to bottom**, 1 level per tier: entry → middle → receiver → result · use left to right only when there is a time axis (Gantt)
+- **The middle element sits in the centre of the figure** (team lead · main system · `.focus` box), and the whole figure is centred, not pushed left leaving the other side empty
+- **Things at the same level go in the same frame, in the same row**, with a group name on the border line, such as "ทางเข้า" (entry) or "agent 8 ตัว" (8 agents)
+  - The frame is a single line, no fill, no shadow
+  - Cards in the same frame have equal height
+  - If there are too many for one row, split into several rows in the same frame and centre the last row
+- **If every box in a group receives the same thing, draw one line into the frame**, do not branch a line to every box · if each box is a different choice, draw a separate line per box and move the group name to the bottom border so the line does not cross the name
+- **Line channels are outside the frame.** Lines leaving or entering a group bend in the gap between frames and do not cross a group name or a card
+- **Keep it soft.** Straight runs of a line are still vertical or horizontal, but every bend is a curve of radius about 12 px (runs shorter than 24 px reduce the radius accordingly) · cards have 14 px corners · group frames have 20 px corners · labels are capsules · no sharp corners on boxes or lines
+- **Thai words must not break mid-word.** The browser's word breaker splits some words wrongly (for example `เช็|กมิจฉา|ชีพ`). Keep a list of these words (ทีละ · สต็อก · ร้านค้า · เช็ก) and never break a line inside a word in the list (wrap with `white-space:nowrap`) · for a long text not in the list, put `<br>` yourself · open the figure and look at every card
+- **Every box has a name and a 1-line description**, not only an icon · steps connected in a sequence (1 → 2 → 3) need no frame, because they are not the same level
+
+## Thai fonts
+
+Font order is `"Noto Sans Thai","IBM Plex Sans Thai",Tahoma,Loma`, already set in the templates. For a figure embedded in a deck (`StageDeck` · `html-slide-deck`), move `"IBM Plex Sans Thai"` to the first position. A Word document uses the brand's Thai font and falls back to Tahoma if it is missing (`branded-document-design` item 2); a figure inside it may use a different font. If the machine has no Thai font at all, vowels silently end up in the wrong position, so always render and look.
 
 
 ## reference: icons.md

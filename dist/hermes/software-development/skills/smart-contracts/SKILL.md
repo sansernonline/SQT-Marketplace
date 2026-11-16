@@ -20,8 +20,6 @@ Blockchain work — smart contracts · security · testing · DeFi · tokenomics
 
 ## The 5-step security review order — follow it in order, never jump to step 5 first
 
-The idea comes from Trail of Bits `secure-workflow-guide` (CC-BY-SA 4.0 — rewritten in our own words, no text copied; for command details see github.com/trailofbits/skills)
-
 | Step | What to do | Passes when |
 |---|---|---|
 | 1 What tools can find | Run Slither on the whole repo and go through every finding: fix it, or record it as a false alarm with the reason | The report is empty, or every finding has a verdict |
@@ -43,14 +41,6 @@ An agent called in for this area opens its own role file before starting.
 | building DeFi protocols — DEX/AMM, lending, staking, yield farming, derivatives, stablecoins. Covers economic mechanism design and implementation patterns | [`references/agent-defi-engineer.md`](references/agent-defi-engineer.md) | `blockchain-engineer` |
 | designing token economics — supply curves, distribution, vesting, utility, governance, sustainable incentives. Covers fungible (ERC-20) and NFT tokenomics | [`references/agent-tokenomics-designer.md`](references/agent-tokenomics-designer.md) | `blockchain-engineer` |
 
-## Agents for this area
-
-`blockchain-engineer`
-
-## Origin
-
-Merged from the plugin `software-development-web3` (formerly solidity-security → `references/solidity-security.md` · smart-contract-testing → `references/smart-contract-testing.md` · defi-patterns → `references/defi-patterns.md`, which are no longer separate skills) into `software-development` in v2.0.0. The original content is fully kept in `references/`.
-
 ## Design modes (called as a command)
 
 `/software-development:smart-contracts <smart-contract-audit | tokenomics-design> <details>`
@@ -63,3 +53,7 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 | `tokenomics-design` | Design tokenomics using blockchain-engineer agent. |
 
 The full steps of each mode → [references/design-modes.md](references/design-modes.md)
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to see where the 5-step review order comes from

@@ -6,8 +6,6 @@ Use when reading or tracking electricity and water bills
 
 Know what each line on the bill means, log it every month, and catch a spike in the month it happens rather than 3 months later.
 
-General information, not financial advice. Tariffs change — the utility's own page is the authority.
-
 ## Who bills you
 
 | Service | Bangkok, Nonthaburi, Samut Prakan | Rest of the country | App to check and pay |
@@ -33,8 +31,6 @@ Units used = เลขอ่านครั้งนี้ − เลขอ่�
 | Average all-in tariff, Ft period (base 3.78 + Ft, before VAT) | 3.95 บาท/หน่วย | งวด ก.ย.–ธ.ค. 2569 |
 | Average all-in tariff, new tiered home tariff, all users | 3.86 บาท/หน่วย (≈ 4.13 incl. VAT 7%) | tiered tariff from Sep 2569 bills |
 | Residential tier rates and service charge | (รอยืนยัน) — read your type's table on mea.or.th / pea.co.th | คณะกรรมการกำกับกิจการพลังงาน (กกพ.) announced a new progressive home tariff on 13 ส.ค. 2569 for bills from ก.ย. 2569; tier rates not checked (รอยืนยัน) |
-
-ตรวจล่าสุด 2026-10-14 · แหล่ง: https://www.erc.or.th/th/news-release/3458 (ค่า Ft งวด ก.ย.–ธ.ค. 2569) · https://erc.or.th/th/news-release/3472 (อัตราแบบขั้นบันได 3.86) · https://www.naewna.com/business/979048
 
 Ft is reset every 4 months (ม.ค.–เม.ย., พ.ค.–ส.ค., ก.ย.–ธ.ค.). When comparing months across a reset, compare **units**, not baht.
 
@@ -88,7 +84,7 @@ The output is information; check it against the printed bill before acting.
 
 ## Worked example
 
-A Bangkok house used 412 units in May against 318 / 305 / 330 in Feb–Apr (average 318). 412 / 318 = +30% → spike. Billing period 30 days, read not estimated. Night leak test: meter still. May is peak heat and 2 aircons were last cleaned 9 months ago. Action: clean both aircons (see `home-maintenance`), set them to 26 °C, re-check June units. June came in at 352 — the residual over April is seasonal.
+A May bill of 412 units against a 318-unit average (+30%) is a spike; the full investigation is in [references/worked-example.md](references/worked-example.md) — open it when you want a model for the write-up.
 
 ## Internet and mobile
 
@@ -100,8 +96,6 @@ A Bangkok house used 412 units in May against 318 / 305 / 330 in Feb–Apr (aver
 
 `home-maintenance` · `trading-finance` `personal-budget` (if installed) · `important-docs` (keep the meter number, electricity customer number CA/รหัสผู้ใช้ไฟ, and water account number there)
 
-The money check before paying and the "old debit is not approval" rule in step 4 are ideas from anthropics/knowledge-work-plugins `small-business/skills/pay-the-bills` (Apache-2.0, rewritten, viewed 2026-11-10).
-
 ## เรียกเป็นคำสั่ง
 
 `/personal-life:household-bills <bill figures or "tracker"> [month]`
@@ -109,6 +103,10 @@ The money check before paying and the "old debit is not approval" rule in step 4
 Run `household-bills` with the `home-manager` agent for: **$ARGUMENTS**
 
 Use the units and amounts printed on the bill, not estimates. Check the current Ft and tariff with การไฟฟ้านครหลวง (กฟน.) / การไฟฟ้าส่วนภูมิภาค (กฟภ.) / คณะกรรมการกำกับกิจการพลังงาน (กกพ.) before splitting the bill into its parts; anything unconfirmed is written as the official value + `(รอยืนยัน)`. If this month's units are more than 20% above the 3-month average in units (20% is a default, not measured), run the spike checklist. Get the percentage from `power-bill.mjs --history` (see `household-bills`), not by hand.
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
 
 
 ## reference: bill-tracker-template.md
@@ -158,3 +156,19 @@ Compare units (column D), never baht — the Ft changes every four months. Copy 
 | ไฟฟ้า | | | | 1130 (กฟน.) / 1129 (กฟภ.) |
 | น้ำประปา | | | | 1125 (กปน.) / 1662 (กปภ.) |
 | อินเทอร์เน็ต | | – | | |
+
+
+## reference: sources.md
+
+# Sources · household-bills
+
+ตรวจล่าสุด 2026-10-14 · แหล่ง: https://www.erc.or.th/th/news-release/3458 (ค่า Ft งวด ก.ย.–ธ.ค. 2569) · https://erc.or.th/th/news-release/3472 (อัตราแบบขั้นบันได 3.86) · https://www.naewna.com/business/979048
+
+
+## reference: worked-example.md
+
+# Worked example · household-bills
+
+## Worked example
+
+A Bangkok house used 412 units in May against 318 / 305 / 330 in Feb–Apr (average 318). 412 / 318 = +30% → spike. Billing period 30 days, read not estimated. Night leak test: meter still. May is peak heat and 2 aircons were last cleaned 9 months ago. Action: clean both aircons (see `home-maintenance`), set them to 26 °C, re-check June units. June came in at 352 — the residual over April is seasonal.

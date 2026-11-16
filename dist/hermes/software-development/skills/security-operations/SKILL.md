@@ -37,10 +37,6 @@ An agent called in for this area opens its own role file before starting.
 
 `security-analyst`
 
-## ที่มา
-
-Merged from plugin `software-development-cybersecurity` (formerly named security-incident-response → `references/security-incident-response.md` · soc-operations → `references/soc-operations.md` · threat-detection-patterns → `references/threat-detection-patterns.md` — no longer separate skills) into `software-development` in v2.0.0. The original content is all still in `references/`
-
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 
 `/software-development:security-operations <soc-design | threat-hunt> <details>`

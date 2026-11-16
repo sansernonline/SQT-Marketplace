@@ -28,7 +28,6 @@ description: Use when a system imports or exports Excel or CSV
 | Masking personal data in export files | `pdpa-compliance` | Together |
 | Telling the user when an import finishes | `notifications` | Together |
 | Limits and constraints of the target table | `database-design` | Together |
-| Abbreviations in work people read | `spell-out-abbreviations` | Together |
 
 ---
 
@@ -120,19 +119,3 @@ split into batches of 500 rows, show progress, and allow cancel (see `background
 | File header | Put in the filter conditions used and the export time. Otherwise in 3 months nobody knows what data this file is |
 | Download link | Must expire (see `file-upload-and-storage`) |
 | Format | `.xlsx` for people to read · CSV for machines to read |
-
----
-
-## 6 · Anti-patterns
-
-- **"ไฟล์ไม่ถูกต้อง"** (file is invalid): the user cannot do anything next
-- **Stopping at the first bad row**: the user must upload 30 times
-- **Writing while validating**: if it fails midway, the data is left half-done
-- **No summary page before confirming**: real data is overwritten before anyone could look
-- **No template to download**: the user has to guess the headers
-- **Reading columns by position**: the user inserts one column and the whole file breaks
-- **Reading codes as numbers**: the leading 0 is lost every time
-- **Not asking whether the year is B.E. or C.E.**: years are off by 543 and nobody knows
-- **Exporting without escaping formulas**: opening the file runs a command
-- **Exporting more than the user's permission**: data leaks through a button we built ourselves
-- **Not keeping the original file**: when there is a problem, you cannot look back

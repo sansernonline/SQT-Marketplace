@@ -19,8 +19,6 @@ Which form, which date, how much to withhold, and what filing late costs. This i
 - VAT rate: **7%** (6.3% + local tax 0.7%), reduced from the statutory 10%, extended by พ.ร.ฎ. (ฉบับที่ 807) พ.ศ. 2569 to **30 Sep 2570**.
 - Registration is online through RD e-Registration (rd.go.th).
 
-ตรวจล่าสุด 2026-10-25 (พ.ร.ฎ. ฉบับที่ 807 ลงราชกิจจานุเบกษา 23 ส.ค. 2569 ใช้ 1 ต.ค. 2569 – 30 ก.ย. 2570) · แหล่ง: https://www.rd.go.th/1603.html · https://www.thaipbs.or.th/news/content/509779 · https://www.thansettakij.com/economy/667217 · https://www.prd.go.th/th/content/category/detail/id/33/iid/526275
-
 ## 2. Monthly and yearly calendar
 
 | Form | What | Paper deadline |
@@ -62,8 +60,6 @@ Full table with legal basis and edge cases: [references/wht-rates.md](references
 
 Pay through a bank that supports e-WHT and the bank deducts, files and remits — no ภ.ง.ด.3/53 for those payments and no paper 50 ทวิ. The rate for services, rent, advertising, professional fees and commission is cut to **1%**. Cabinet approved extending this from 1 Jan 2569 to **31 Dec 2570** (รอยืนยัน — check the พ.ร.ฎ. was published in ราชกิจจานุเบกษา).
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.infoquest.co.th/?p=601636 · https://www.kasikornbank.com/th/business/sme/financial-services/ecertificate/Pages/e-withholding-tax.aspx
-
 ## 4. Late filing and late payment
 
 | Item | Rule |
@@ -72,8 +68,6 @@ Pay through a bank that supports e-WHT and the bank deducts, files and remits �
 | เบี้ยปรับ VAT (penalty) | Up to 2× the tax (ม.89); late ภ.พ.30 filed with payment before any written notice is cut to a share **of the penalty**: 2% if paid within 15 days of the due date, 5% within 15–30 days, 10% within 30–60 days, 20% after 60 days (คำสั่ง ท.ป.81/2542 ข้อ 5(1), amended by ท.ป.369/2569 from 3 Jul 2569) |
 | ค่าปรับอาญา for a late return | Up to 2,000 baht (ม.35); usual settlement 100–200 baht per WHT return and 300–500 baht per ภ.พ.30 (รอยืนยัน) |
 | Under-estimated ภ.ง.ด.51 | Estimate more than 25% below actual profit without reasonable cause: 20% surcharge on the shortfall |
-
-Last checked 2026-10-25 (VAT surcharge) · sources: https://www.rd.go.th/3361.html , https://www.prosofterp.com/Article/Detail/141129 , https://www.auditorasia.com/th/process_add_money · criminal fines of 100/200 and 300/500 baht (filing late by no more than 7 days / more than 7 days) were found only in secondary sources; no official regulation found yet
 
 ## Workflow
 
@@ -84,14 +78,9 @@ Last checked 2026-10-25 (VAT surcharge) · sources: https://www.rd.go.th/3361.ht
 5. If anything is late, compute the surcharge from section 4 and tell the user to file now. The cost grows every month.
 6. End with the handoff list for the accountant.
 
-## Worked example — a service payment
+## Worked example
 
-Company pays a design agency (บริษัท) 20,000 baht + VAT 7% = 21,400.
-
-- WHT 3% × 20,000 = **600** → pay the agency 21,400 − 600 = **20,800**
-- Issue 50 ทวิ for 600; file ภ.ง.ด.53 and remit 600 by the 7th of next month on paper, or by the e-Filing deadline online (section 2).
-- Through e-WHT at 1%: withhold 200, pay 21,200, the bank files.
-- Paid 2 months late: surcharge 600 × 1.5% × 2 = 18 baht plus the settlement fine.
+A 20,000 baht + VAT service payment to a company: WHT 600, pay 20,800, file ภ.ง.ด.53. Full calculation (including e-WHT and late surcharge): [references/worked-example.md](references/worked-example.md).
 
 ## Related
 
@@ -104,6 +93,21 @@ Company pays a design agency (บริษัท) 20,000 baht + VAT 7% = 21,400.
 Run `tax-vat-th` with the `tax-helper` agent for: **$ARGUMENTS**
 
 Verifies dates against current RD announcements rather than reusing last year's calendar, and ends with the accountant handoff checklist.
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
+
+
+## reference: sources.md
+
+# Sources · tax-vat-th
+
+Last checked 2026-10-25 (VAT surcharge) · sources: https://www.rd.go.th/3361.html , https://www.prosofterp.com/Article/Detail/141129 , https://www.auditorasia.com/th/process_add_money · criminal fines of 100/200 and 300/500 baht (filing late by no more than 7 days / more than 7 days) were found only in secondary sources; no official regulation found yet
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.infoquest.co.th/?p=601636 · https://www.kasikornbank.com/th/business/sme/financial-services/ecertificate/Pages/e-withholding-tax.aspx
+
+ตรวจล่าสุด 2026-10-25 (พ.ร.ฎ. ฉบับที่ 807 ลงราชกิจจานุเบกษา 23 ส.ค. 2569 ใช้ 1 ต.ค. 2569 – 30 ก.ย. 2570) · แหล่ง: https://www.rd.go.th/1603.html · https://www.thaipbs.or.th/news/content/509779 · https://www.thansettakij.com/economy/667217 · https://www.prd.go.th/th/content/category/detail/id/33/iid/526275
 
 
 ## reference: wht-rates.md
@@ -154,61 +158,73 @@ Legal basis: ประมวลรัษฎากร ม.3 เตรส, ม.50,
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.rd.go.th (คำสั่ง ท.ป.4/2528) · https://www.infoquest.co.th/?p=601636 (e-WHT)
 
 
+## reference: worked-example.md
+
+# Worked example · tax-vat-th
+
+## Worked example — a service payment
+
+Company pays a design agency (บริษัท) 20,000 baht + VAT 7% = 21,400.
+
+- WHT 3% × 20,000 = **600** → pay the agency 21,400 − 600 = **20,800**
+- Issue 50 ทวิ for 600; file ภ.ง.ด.53 and remit 600 by the 7th of next month on paper, or by the e-Filing deadline online (section 2).
+- Through e-WHT at 1%: withhold 200, pay 21,200, the bank files.
+- Paid 2 months late: surcharge 600 × 1.5% × 2 = 18 baht plus the settlement fine.
+
+
 ---
 
 # skill: payroll-th
 
 Use when running Thai monthly payroll
 
-# Thai Payroll
+# payroll-th — Thai monthly payroll: gross to net pay, filing and remittance
 
-Gross pay minus social security (SSO), provident fund (PVD) and personal income tax (PIT) = net pay. Then file and remit. This is general information, not tax advice. Check unusual cases (bonus, stock, foreign staff) with an accountant.
+General information, not tax advice. Check unusual cases (bonus, stock, foreign staff) with an accountant.
 
-## 1. Monthly payroll steps
+## Use when
+- Running monthly payroll: gross pay − social security (SSO) − provident fund (PVD) − personal income tax (PIT) = net pay, then file and remit.
+- Year-end filing (ภ.ง.ด.1ก, 50 ทวิ).
+
+Not for: SSO rules → `social-security-th` · OT rates and leave → `labour-law-basics` · VAT and other tax calendar → `tax-vat-th` · pay day falling on a holiday → `thai-holidays`.
+
+## Steps
 
 | # | Step | Output | Deadline |
 |---|---|---|---|
-| 1 | Close attendance: OT, unpaid leave, new joiners, leavers (see `labour-law-basics` for OT rates), then run the 9 checks in section 1a | timesheet | before cut-off |
-| 2 | Compute gross: salary + OT + allowances + commission + taxable benefits | payroll register | |
-| 3 | SSO 5% on wage capped at 17,500 → max 875 (see `social-security-th`) | employee + employer share | |
+| 1 | Close attendance: OT, unpaid leave, new joiners, leavers, then run the 9 checks below | timesheet | before cut-off |
+| 2 | Gross = salary + OT + allowances + commission + taxable benefits | payroll register | |
+| 3 | SSO 5% on wage capped at 17,500 → max 875 (`social-security-th`) | employee + employer share | |
 | 4 | PVD employee % and employer % (if the company has a fund) | | |
-| 5 | PIT withholding by annualisation (section 2) | withholding tax (WHT) per head | |
+| 5 | PIT withholding by annualisation (below) | withholding tax (WHT) per head | |
 | 6 | Net pay = gross − SSO − PVD − PIT − other agreed deductions | payslip | pay day per contract (at least once a month, ม.70) |
-| 7 | File **ภ.ง.ด.1** and remit WHT | RD receipt | 7th next month (paper); e-Filing = paper deadline + the current e-Filing extension (look it up live, see `tax-vat-th` section 2) |
+| 7 | File **ภ.ง.ด.1** and remit WHT | RD receipt | 7th next month (paper); e-Filing = paper deadline + the current e-Filing extension (look it up live, `tax-vat-th` section 2) |
 | 8 | File **สปส.1-10** and remit SSO (both shares) | SSO receipt | 15th next month |
 | 9 | Remit PVD to the fund manager | | per fund rules |
-| 10 | Archive register, payslips, receipts — keep 5 years minimum, 7 recommended (`sme-bookkeeping` section 2 — per a Revenue Department ruling, not yet checked against the current statute) | | |
+| 10 | Archive register, payslips, receipts: keep 5 years minimum, 7 recommended (`sme-bookkeeping` section 2; per a Revenue Department ruling, not yet checked against the current statute) | | |
 
 Year end: **ภ.ง.ด.1ก** (annual summary per employee) by end of February; give every employee **50 ทวิ** for the year (by February, รอยืนยัน exact day) and within 1 month after anyone leaves (รอยืนยัน).
 
-## 1a. Check the inputs before computing tax
-
-Most payroll errors are in the timesheet and the employee list, not in the tax maths. Before step 5, run these 9 checks against the attendance file and last month's register:
-
-| # | Flag | Usual cause |
-|---|---|---|
-| 1 | Clock-in with no clock-out | forgot to scan; hours unknown |
-| 2 | OT far above this person's normal month | real peak, or a typing error; OT also needs the employee's consent (`labour-law-basics` section 1) and pays 1.5× or 3× (section 2) |
-| 3 | Zero hours for someone who normally works | unrecorded leave, left the job, or missing file |
-| 4 | Wage rate differs from last month | a raise not yet approved in writing, or a wrong row |
-| 5 | Duplicate or overlapping rows | same day entered twice |
-| 6 | Leave beyond entitlement | paid sick or personal leave over the yearly days in `labour-law-basics` section 3 |
-| 7 | Someone paid last month is missing | resigned (final pay, `labour-law-basics` section 4) or dropped by mistake |
-| 8 | New joiner with no starting documents | no ล.ย.01, no social security registration (`social-security-th`) |
-| 9 | Total payroll differs from last month by more than 10% | explain it in 1 line (new staff, OT, bonus) before paying |
+### Check the inputs before step 5
+Most errors are in the timesheet and employee list, not the tax maths. Run these 9 checks against the attendance file and last month's register:
+1. Clock-in with no clock-out.
+2. OT far above this person's normal month (real peak or typo; OT needs the employee's consent, `labour-law-basics` section 1, and pays 1.5× or 3×).
+3. Zero hours for someone who normally works (unrecorded leave, left, or missing file).
+4. Wage rate differs from last month (raise not approved in writing, or wrong row).
+5. Duplicate or overlapping rows.
+6. Leave beyond entitlement (`labour-law-basics` section 3).
+7. Someone paid last month is missing (resigned, final pay per `labour-law-basics` section 4, or dropped by mistake).
+8. New joiner with no starting documents (no ล.ย.01, no SSO registration).
+9. Total payroll differs from last month by more than 10%: explain it in 1 line (new staff, OT, bonus) before paying.
 
 - Never guess a missing time or fix a row quietly. Ask the owner one person and one issue at a time, and write the answer next to the row.
-- Social security uses the wage floor and cap in `social-security-th`; a wage above the cap still pays the capped amount.
-- The 10% line is a starting value from Anthropic's payroll-prep skill (`anthropics/knowledge-work-plugins` small-business, Apache-2.0, read 2026-11-10; ideas only, no text copied), not measured on Thai payrolls.
+- SSO uses the wage floor and cap in `social-security-th`; a wage above the cap still pays the capped amount.
 - The check summary lists names and issues only, never ID card numbers or bank account numbers (`pdpa-workflow`).
 
-## 2. PIT withholding on salary (ม.40(1)) — annualisation
-
-Method from ม.50(1) ประมวลรัษฎากร:
-
-1. Annual income = monthly taxable pay × number of pay periods in the year (12, or remaining months for a mid-year joiner + income already paid).
+### PIT withholding on salary (ม.40(1)), annualisation per ม.50(1) ประมวลรัษฎากร
+1. Annual income = monthly taxable pay × pay periods in the year (12, or remaining months for a mid-year joiner + income already paid).
 2. Less expense deduction: 50% of income, max **100,000**.
-3. Less allowances the employee declared on ล.ย.01: personal **60,000**; spouse with no income 60,000; child 30,000 each (60,000 for 2nd+ child born 2561 or later); parents 30,000 each (aged 60+, income under 30,000); **SSO contributions actually paid** (up to 875 × 12 = 10,500 in 2569, รอยืนยัน); PVD employee contributions (within 15% of wage, overall retirement cap 500,000); life/health insurance as declared.
+3. Less allowances declared on ล.ย.01: personal **60,000**; spouse with no income 60,000; child 30,000 each (60,000 for 2nd+ child born 2561 or later); parents 30,000 each (aged 60+, income under 30,000); **SSO actually paid** (up to 875 × 12 = 10,500 in 2569, รอยืนยัน); PVD employee contributions (within 15% of wage, overall retirement cap 500,000); life/health insurance as declared.
 4. Apply the progressive rates → annual tax.
 5. Monthly WHT = annual tax ÷ 12. Recalculate when salary changes or a bonus is paid.
 
@@ -223,64 +239,31 @@ Method from ม.50(1) ประมวลรัษฎากร:
 | 2,000,001 – 5,000,000 | 30% | 900,000 | 1,265,000 |
 | over 5,000,000 | 35% | | |
 
-Last checked 2026-10-06 · Sources: https://www.rd.go.th (personal income tax rates, section 48) · SSO cap: https://www.infoquest.co.th/2025/550753
+Last checked 2026-10-06 (sources in [`references/sources.md`](references/sources.md)).
 
-### Script
+**Bonus month:** compute tax on (annual salary + bonus) and on annual salary alone; the difference is withheld in the bonus month on top of the normal monthly WHT.
 
-`payroll.mjs` runs all the steps in section 2: annual income → deduct expenses → allowances → progressive tax → divide by 12 periods, together with social security (5% of wages, floor base 1,650 up to the cap, rounded to whole baht) and the employee's PVD (provident fund) contribution · it gives the monthly withholding tax and the net pay per person
+**Script:** `node payroll.mjs <file.json> [--json]` runs steps 3–6 per person (input format, path and warnings: [`references/script-and-example.md`](references/script-and-example.md)). Rates live in `scripts/rates.json`; before the January run, check rd.go.th and edit it. The result is supporting information, not tax advice.
 
-```
-node payroll.mjs <file.json> [--json]     # example file: scripts/example.json
-node payroll.mjs --self-test
-```
+### ภ.ง.ด.1 and ภ.ง.ด.1ก
+- **ภ.ง.ด.1** monthly: 1 line per employee paid (tax ID, name, pay date, amount paid, tax withheld). No return needed in a month where nothing was paid.
+- **ภ.ง.ด.1ก** yearly: totals per employee for the calendar year; must agree with the 12 ภ.ง.ด.1 returns and the 50 ทวิ issued (the usual audit question).
+- 50 ทวิ certificate fields and template: [`references/50-tawi.md`](references/50-tawi.md).
 
-Input file: `{ "employees": [ { "name": "...", "gross": 50000, "pvd_employee_pct": 0, "pvd_employer_pct": 0, "spouse": false, "children": 0, "children_2nd_plus": 0, "parents": 0, "other_deductions": 0, "periods": 12 } ] }` · `name` and `gross` alone are enough to run, and the rest default to 0 / false / 12 · a wrong field makes the script stop with a message that names the field · social security is computed from the average monthly wage (`gross` × `periods` ÷ 12) and spread across periods, so the annual allowance always equals 12 months · if the employee PVD exceeds 15% of wages, the script warns and allows only 15% as a deduction
-
-The tax brackets, the social security cap and the allowances live in `scripts/rates.json` (it carries the date checked and the source; the script prints them in the result and warns when they are older than 90 days) · the social security cap and the top rate are checked against `scripts/check/facts.json` at the root of the SQT-Marketplace repo (it does not ship with the plugin) · negative net pay, and a PVD value below 1 (for example 0.05 instead of 5), raise a warning · when the tax year changes, edit `rates.json` before running in January · bonuses, mid-year hires and income already paid are not included, so work them out yourself using the bonus section below
-
-**Script path:** Installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/payroll-th/scripts/payroll.mjs | sort -V | tail -1` · In the SQT-Marketplace repo: `plugins/e-commerce/skills/payroll-th/scripts/payroll.mjs` · Node only, no dependencies
-
-The result is supporting information, not tax advice.
-
-### Worked example
-
-Single employee, salary 50,000/month, no PVD.
-
-| Line | Baht |
-|---|---|
-| Annual income 50,000 × 12 | 600,000 |
-| Expense 50% capped | −100,000 |
-| Personal allowance | −60,000 |
-| SSO 875 × 12 | −10,500 |
-| **Net income** | **429,500** |
-| Tax: 7,500 + (429,500 − 300,000) × 10% | 7,500 + 12,950 = **20,450** |
-| **Monthly WHT** 20,450 ÷ 12 | **1,704.17** |
-
-Payslip: gross 50,000 − SSO 875 − WHT 1,704.17 = **net 47,420.83**.
-
-### Bonus month
-
-Compute tax on (annual salary + bonus) and on annual salary alone; the difference is withheld in the bonus month on top of the normal monthly WHT.
-
-## 3. ภ.ง.ด.1 and ภ.ง.ด.1ก
-
-- **ภ.ง.ด.1** monthly — 1 line per employee paid: tax ID, name, pay date, amount paid, tax withheld. Nil months: no return needed if nothing was paid.
-- **ภ.ง.ด.1ก** yearly — totals per employee for the calendar year; must agree with the 12 ภ.ง.ด.1 returns and the 50 ทวิ issued. Differences are the usual audit question.
-
-## 4. Withholding tax certificate (หนังสือรับรองการหักภาษี ณ ที่จ่าย, 50 ทวิ)
-
-Field list and fill-in template: [references/50-tawi.md](references/50-tawi.md).
-
-## Rules
-
-- Collect ล.ย.01 (allowance declaration) from each employee at hiring and each January — no form, only personal allowance.
+### Rules
+- Collect ล.ย.01 (allowance declaration) from each employee at hiring and each January; no form means personal allowance only.
 - Never pay salary in cash without a signed receipt; bank transfer is the record.
-- Payroll data is personal data — access-limited, see `pdpa-workflow`.
-- Rates and allowances change by law each tax year; check rd.go.th before the January run.
+- Payroll data is personal data: access-limited (`pdpa-workflow`).
 
-## Related
+## Check before done
+- The 9 input checks were run and any flag was resolved with the owner.
+- Net pay = gross − SSO − PVD − PIT − other deductions, and ภ.ง.ด.1 and สปส.1-10 dates are stated.
+- Tax year rates in `rates.json` match rd.go.th for the current year.
 
-`social-security-th` · `labour-law-basics` · `tax-vat-th` (calendar, ภ.ง.ด.3/53) · `thai-holidays` (pay day on holidays).
+## References
+- [`references/script-and-example.md`](references/script-and-example.md) — open when running `payroll.mjs` or checking a worked example
+- [`references/50-tawi.md`](references/50-tawi.md) — open when issuing a 50 ทวิ
+- [`references/sources.md`](references/sources.md) — sources and check dates
 
 ## เรียกเป็นคำสั่ง
 
@@ -338,3 +321,56 @@ The official form is on rd.go.th (แบบฟอร์ม 50 ทวิ). Many a
 - Payments through e-WHT: the bank issues an electronic certificate — no paper 50 ทวิ.
 
 Last checked 2026-10-06 · Sources: https://www.rd.go.th (แบบ 50 ทวิ)
+
+
+## reference: script-and-example.md
+
+# payroll.mjs details and worked example
+
+## Script
+
+`payroll.mjs` runs all the steps of the annualisation method: annual income → deduct expenses → allowances → progressive tax → divide by 12 periods, together with social security (5% of wages, floor base 1,650 up to the cap, rounded to whole baht) and the employee's provident fund (PVD) contribution. It gives the monthly withholding tax and the net pay per person.
+
+```
+node payroll.mjs <file.json> [--json]     # example file: scripts/example.json
+node payroll.mjs --self-test
+```
+
+Input file: `{ "employees": [ { "name": "...", "gross": 50000, "pvd_employee_pct": 0, "pvd_employer_pct": 0, "spouse": false, "children": 0, "children_2nd_plus": 0, "parents": 0, "other_deductions": 0, "periods": 12 } ] }`
+
+- `name` and `gross` alone are enough to run; the rest default to 0 / false / 12.
+- A wrong field makes the script stop with a message that names the field.
+- Social security is computed from the average monthly wage (`gross` × `periods` ÷ 12) and spread across periods, so the annual allowance always equals 12 months.
+- If the employee PVD exceeds 15% of wages, the script warns and allows only 15% as a deduction.
+- The tax brackets, the social security cap and the allowances live in `scripts/rates.json` (it carries the date checked and the source; the script prints them in the result and warns when they are older than 90 days).
+- The social security cap and the top rate are checked against `scripts/check/facts.json` at the root of the SQT-Marketplace repo (it does not ship with the plugin).
+- Negative net pay, and a PVD value below 1 (for example 0.05 instead of 5), raise a warning.
+- When the tax year changes, edit `rates.json` before running in January.
+- Bonuses, mid-year hires and income already paid are not included; work them out yourself with the bonus rule in SKILL.md.
+
+**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/payroll-th/scripts/payroll.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/e-commerce/skills/payroll-th/scripts/payroll.mjs` · Node only, no dependencies.
+
+## Worked example
+
+Single employee, salary 50,000/month, no PVD.
+
+| Line | Baht |
+|---|---|
+| Annual income 50,000 × 12 | 600,000 |
+| Expense 50% capped | −100,000 |
+| Personal allowance | −60,000 |
+| SSO 875 × 12 | −10,500 |
+| **Net income** | **429,500** |
+| Tax: 7,500 + (429,500 − 300,000) × 10% | 7,500 + 12,950 = **20,450** |
+| **Monthly WHT** 20,450 ÷ 12 | **1,704.17** |
+
+Payslip: gross 50,000 − SSO 875 − WHT 1,704.17 = **net 47,420.83**.
+
+
+## reference: sources.md
+
+# Sources · payroll-th
+
+- PIT rates (section 2 table): https://www.rd.go.th (personal income tax rates, section 48) · last checked 2026-10-06.
+- SSO cap: https://www.infoquest.co.th/2025/550753 · last checked 2026-10-06.
+- The 10% payroll-change line (check 9 in section 1a) is a starting value from Anthropic's payroll-prep skill (`anthropics/knowledge-work-plugins` small-business, Apache-2.0, read 2026-11-10; ideas only, no text copied), not measured on Thai payrolls.

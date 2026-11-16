@@ -2,13 +2,56 @@
 
 Use when a Thai business needs a PromptPay QR
 
-# PromptPay QR (Thai QR Payment)
+# PromptPay QR (Thai QR Payment) — a correct payload string for a QR, placed on a quotation or invoice
 
-A PromptPay QR is a text string in EMVCo QR Code Specification for Payment Systems — Merchant-Presented Mode, rendered as a QR image. If even 1 field is wrong, banking apps reject it as "QR ไม่ถูกต้อง".
+> **One rule:** if even 1 field is wrong, banking apps reject the QR as "QR ไม่ถูกต้อง". Never type fields, lengths or CRC by hand; generate the payload with `promptpay.mjs`.
 
-## 1. Payload structure
+## Use when
+- A Thai business needs a PromptPay QR for a person, shop or company (mobile number · 13-digit national/tax ID · 15-digit e-Wallet ID · biller ID).
+- Putting a QR on a quotation or invoice, or debugging a QR a bank app rejects.
+- Checking that a customer's payment really arrived before shipping.
 
-Every field is **ID (2 digits) + length (2 digits) + value**. ID 00 first, 63 last; the rest in any order (the examples use 58 · 53 · 54).
+Not for: quotation template → `doc-quotation` · tax invoice fields → `e-tax-invoice` · VAT and withholding → `tax-vat-th` · sending the QR in LINE → `line-chatbot` · web checkout with automatic confirmation → the bank's or payment gateway's API, not a home-made QR.
+
+## Steps
+1. **Choose the tag.** Tag 29 (credit transfer, `A000000677010111`) needs only a PromptPay ID; reconcile by amount and time. Tag 30 (bill payment, `A000000677010112`, Biller ID 15 digits + Ref1 up to 20 chars + optional Ref2) needs a bill-payment agreement with a bank, but the bank reports Ref1 for automatic reconciliation. Static (`01`=`11`) has no amount; dynamic (`01`=`12`) has a fixed amount in tag 54. Field tables, CRC and byte-by-byte examples: [`references/field-tables.md`](references/field-tables.md), code: [`references/payload.md`](references/payload.md).
+2. **Run the script** for every real payload. It builds tag 29 (mobile, 13-digit ID, or 15-digit e-Wallet ID) or tag 30 (biller ID with Ref1/Ref2) and appends the CRC16 (CRC-16/CCITT-FALSE, poly `0x1021`, init `0xFFFF`, computed over the payload including the literal `6304`). A 13-digit ID must pass the check digit (mod 11) or the script stops: the number is probably mistyped. Leave `amount` out for a static QR.
+   ```
+   node promptpay.mjs <file.json> [--json]     # example file: scripts/example.json
+   node promptpay.mjs --self-test
+   ```
+   Input: `{ "id": "081-234-5678", "amount": 1500 }` · tag 30: `{ "billerId": "<15 digits>", "ref1": "IV26100001", "ref2": "", "name": "SHOP", "amount": 1500 }`. Dashes and spaces in `id` are ignored. A bad field stops the script with a message naming it (wrong length, non-ASCII text in `name` or a reference, amount with more than 2 decimals, Ref1 missing). A Ref1 outside A–Z 0–9 only warns, because banks differ. The self-test checks the CRC of `123456789` (`29B1`) and both worked examples. The script does not draw the QR: render the payload with a QR library (error correction M is common).
+   **Script path:** installed: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/promptpay-qr/scripts/promptpay.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/e-commerce/skills/promptpay-qr/scripts/promptpay.mjs` · Node only, no dependencies.
+3. **Put it on a quotation or invoice.**
+   - Use a dynamic QR with the exact amount due, after withholding tax if the customer withholds (for example 21,400 − 600 = 20,800; see `tax-vat-th`).
+   - Place it near the total, at least 2.5 × 2.5 cm printed, with a quiet zone of 4 modules; label "สแกนชำระผ่าน PromptPay" and the account name the payer will see.
+   - Print the invoice number next to it and ask payers to send the slip (tag 29 carries no reference).
+   - On a quotation the amount may change: use a static QR, or regenerate on the invoice.
+   - Re-scan the printed PDF with 2 different bank apps before sending and read out the account name each shows; it must match the business name on the invoice. A QR that scans but shows another name goes to someone else: stop and recheck the ID.
+4. **If a bank app rejects the QR,** the usual causes are a wrong CRC (computed without `6304`, or lowercase hex), mobile left as `081…` instead of `0066 81…`, or point of initiation `11` with tag 54 present. Table in [`references/payload.md`](references/payload.md).
+5. **Before shipping, check the money arrived, not the slip** (a slip is a picture that can be edited or reused). Open the shop's bank app or statement and find the transfer: amount, time and payer name match the order. One transfer pays one order; the same slip on two orders means the second has not paid. Never ship on a slip alone, even for a regular customer, and do not accept "the bank is slow, I'll send proof later". Suggest turning on the bank's incoming-transfer notification. For many orders a day, use a payment gateway or the bank's API with a payment callback instead of reading slips.
+
+## Check before done
+- [ ] The payload came from `promptpay.mjs` (or matches the reference implementations in `references/sources.md` byte for byte), and `--self-test` passes.
+- [ ] Amount format: dot decimal, no comma, max 13 chars; mobile converted to `0066…`, national ID stays 13 digits.
+- [ ] The QR image was regenerated from the payload, never altered by hand.
+- [ ] The printed PDF was scanned with 2 bank apps and the account name matches the invoice.
+
+## References
+- [`references/field-tables.md`](references/field-tables.md) — open to read or check a payload by hand (tags, sub-fields, CRC, worked examples)
+- [`references/payload.md`](references/payload.md) — open for generator code, byte-by-byte breakdown, reject debugging
+- [`references/sources.md`](references/sources.md) — open to compare against reference implementations and re-check standard sources (checked 2026-10-06 to 2026-10-23)
+
+
+## reference: field-tables.md
+
+# Field tables and worked examples · promptpay-qr
+
+Open when you must read or check a payload by hand, or explain why a bank app rejects it. For code and a byte-by-byte breakdown see [payload.md](payload.md).
+
+## Payload structure
+
+A PromptPay QR is a text string in EMVCo QR Code Specification for Payment Systems — Merchant-Presented Mode, rendered as a QR image. Every field is **ID (2 digits) + length (2 digits) + value**. ID 00 first, 63 last; the rest in any order (the examples use 58 · 53 · 54).
 
 | ID | Name | Value |
 |---|---|---|
@@ -43,18 +86,13 @@ Every field is **ID (2 digits) + length (2 digits) + value**. ID 00 first, 63 la
 
 Tag 30 needs a bill-payment agreement with a bank, but reconciliation is automatic (the bank reports Ref1). Tag 29 needs nothing but a PromptPay ID — reconcile by amount and time.
 
-## 2. CRC16
+## CRC16
 
 - Algorithm **CRC-16/CCITT-FALSE**: polynomial `0x1021`, initial `0xFFFF`, no reflection, no final XOR.
 - Computed over the whole payload **including the literal `6304`** (ID and length of the CRC field), then the 4 hex digits are appended.
 - Self-test: CRC of `123456789` must be `29B1`.
 
-Code and a full byte-by-byte breakdown: [references/payload.md](references/payload.md).
-
-Reference implementations to compare output against (do not copy without reading): **dtinth/promptpay-qr** (MIT, tag 29 only, long established) · **uunw/thai-qr-payment** (MIT, TypeScript, tag 29 and tag 30, CLI and SVG renderer — new repo with 0 stars at check, so read the tests before trusting it). Your payload for the same number and amount must match theirs byte for byte.
-ตรวจล่าสุด 2026-10-23 (uunw) · 2026-10-22 (dtinth) · แหล่ง: https://github.com/dtinth/promptpay-qr · https://github.com/uunw/thai-qr-payment
-
-## 3. Worked example (ตรวจด้วย `promptpay.mjs --self-test`)
+## Worked example (ตรวจด้วย `promptpay.mjs --self-test`)
 
 Mobile 081-234-5678.
 
@@ -69,51 +107,6 @@ Dynamic, 1,500.00 baht:
 ```
 
 Breakdown of the dynamic one: `000201` · `010212` · `2937` [`0016A000000677010111` `01130066812345678`] · `5802TH` · `5303764` · `54071500.00` · `6304` + `6960`.
-
-## 4. Putting it on a quotation or invoice
-
-1. Dynamic QR with the **exact amount due** (after withholding tax if the customer withholds — e.g. 21,400 − 600 = 20,800; see `tax-vat-th`).
-2. Place it near the total, at least **2.5 × 2.5 cm** printed, with a quiet zone of 4 modules; label "สแกนชำระผ่าน PromptPay" and the account name the payer will see.
-3. Print the invoice number next to it and ask payers to send the slip — for tag 29 there is no reference in the transfer.
-4. Quotations: amount may change — use a static QR or regenerate on the invoice. Template in `doc-quotation`; tax invoice fields in `e-tax-invoice`.
-5. Re-scan the printed PDF with 2 different bank apps before sending, and read out the account name each app shows: it must match the business name on the invoice. A QR that scans but shows another name goes to someone else — stop and recheck the ID.
-
-## 5. Before shipping: check the money arrived, not the slip
-
-A slip is a picture; it can be edited or reused from an older transfer. Ship only when the money shows in the shop's own account.
-
-1. Open the shop's bank app or statement and find the transfer: amount, time and payer name match the order.
-2. One transfer pays one order — when two orders show the same slip, the second one has not paid.
-3. Never ship on a slip alone, even for a regular customer, and do not accept "the bank is slow, I'll send proof later" as payment.
-4. Turn on the bank's incoming-transfer notification for the shop account so checking takes seconds.
-5. For many orders a day, use a payment gateway or the bank's API with a payment callback instead of reading slips (Rules).
-
-## Script
-
-Run `promptpay.mjs` whenever you need a real payload string: do not type the fields, lengths or CRC by hand. It builds the payload for a mobile number, a 13-digit national/tax ID or a 15-digit e-Wallet ID (tag 29), or for a biller ID with Ref1/Ref2 (tag 30), and appends the CRC16. A 13-digit ID must pass the check digit (mod 11), otherwise the script stops and says the number was probably mistyped. Leave `amount` out for a static QR; put it in for a dynamic QR. Its self-test checks the CRC of `123456789` (29B1) and both worked examples in section 3 character by character.
-
-```
-node promptpay.mjs <file.json> [--json]     # example file: scripts/example.json
-node promptpay.mjs --self-test
-```
-
-Input file: `{ "id": "081-234-5678", "amount": 1500 }` · for tag 30: `{ "billerId": "<15 digits>", "ref1": "IV26100001", "ref2": "", "name": "SHOP", "amount": 1500 }`. Dashes and spaces in `id` are ignored. A bad field stops the script with a message naming it (wrong length, Thai or other non-ASCII text in `name` or a reference, amount with more than 2 decimals, Ref1 missing). A Ref1 that is not A–Z 0–9 only gives a warning, because banks differ. The script does not draw the QR: render the payload with a QR library, then scan the printed result with 2 bank apps (section 4).
-
-**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/promptpay-qr/scripts/promptpay.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/e-commerce/skills/promptpay-qr/scripts/promptpay.mjs` · Node only, no dependencies.
-
-## Rules
-
-- Never alter a QR image by hand; regenerate from the payload.
-- Amount format: dot decimal, no comma, max 13 chars.
-- Mobile numbers are converted to `0066…`; a national ID stays 13 digits as is.
-- PromptPay ID owner name shown in the app is the bank account name — make sure it matches the company name on the invoice to avoid "is this a scam?" calls.
-- For web checkout with automatic confirmation use the bank's or payment gateway's API (callback on payment), not a home-made QR.
-
-ตรวจล่าสุด 2026-10-06 · แหล่ง: Thai QR Code Payment Standard (Bank of Thailand / Thai Bankers' Association) https://www.bot.or.th · EMVCo QRCPS-MPM v1.1 https://www.emvco.com · CRC values computed locally.
-
-## Related
-
-`doc-quotation` · `e-tax-invoice` · `line-chatbot` (send the QR in LINE) · `tax-vat-th`.
 
 
 ## reference: payload.md
@@ -184,6 +177,17 @@ Biller ID and allowed reference formats come from the company's bank — ask for
 | Works in one bank only | Length byte miscounted on a nested sub-field (tag 29/30 length must equal the total of its sub-fields) |
 
 
+## reference: sources.md
+
+# Sources · promptpay-qr
+
+Reference implementations to compare output against (do not copy without reading): **dtinth/promptpay-qr** (MIT, tag 29 only, long established) · **uunw/thai-qr-payment** (MIT, TypeScript, tag 29 and tag 30, CLI and SVG renderer — new repo with 0 stars at check, so read the tests before trusting it). Your payload for the same number and amount must match theirs byte for byte.
+
+ตรวจล่าสุด 2026-10-23 (uunw) · 2026-10-22 (dtinth) · แหล่ง: https://github.com/dtinth/promptpay-qr · https://github.com/uunw/thai-qr-payment
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: Thai QR Code Payment Standard (Bank of Thailand / Thai Bankers' Association) https://www.bot.or.th · EMVCo QRCPS-MPM v1.1 https://www.emvco.com · CRC values computed locally.
+
+
 ---
 
 # skill: human-writing
@@ -192,88 +196,80 @@ Use before writing anything people read, in Thai or English
 
 # human-writing — write like a person: smooth to read, easy to understand
 
-Applies to everything a person will read, from chat to labels in a diagram. This skill teaches good Thai and good English. Rules about Thai output stay as written. Examples of every rule and their sources → [`headings-and-examples`](references/headings-and-examples.md). Thai of 1 paragraph or more → [`thai-grammar`](references/thai-grammar.md) (sentence structure · register · example paragraphs in [`thai-examples`](references/thai-examples.md)). Research or work sent to outsiders → [`strict-review`](references/strict-review.md). Thai documents with justified alignment → [`thai-line-breaking`](references/thai-line-breaking.md). It lives only in plugin `superuser`; other plugins share it through `dependencies`.
+## Use when
+- Writing anything a person will read, from chat to labels in a diagram, in Thai or English.
 
-Boundary: this skill owns the wording. The look of kept documents (headings, tables, text boxes, theme) → `polished-document-style`. Abbreviations and glossaries → `spell-out-abbreviations`.
+Not for: the look of kept documents (headings, tables, text boxes, theme) → `polished-document-style` · abbreviations and glossaries → `spell-out-abbreviations`.
 
-## 1 · Core principles
+## Steps
 
+### 1 · Core principles
 - Write as if explaining to a skilled coworker who is not on the project. If it trips you up when read aloud, rewrite it.
 - Answer or conclusion first, then the reason. No preamble, no repeating the question.
 - 1 sentence, 1 idea. If you chain "ซึ่ง" "โดย" "จึง" several layers deep, split into several sentences.
 - English follows the same rules: sentences under 25 words · who does what (active voice) · plain words.
 
-## 2 · Symbols and numbers
-
-- `→` means order of steps or a consequence · `·` separates short nouns on one line · `:` introduces detail · write every kind of count as a numeral · the words around a symbol must be human language.
-- **Write conditions and instructions as full sentences with connectors** (ถ้า … ให้ … · แล้ว · ส่วน · เพราะ — that is, if … then … · and then · as for · because). Do not chain sentences into fragments with `→` or `·`.
-- In tables, short text is fine, but it must still read as human language, not code.
-- A symbol must never replace a word so far that the reader has to decode it. If an outsider must guess what the arrow means, add words.
-- **No emoji or icons** (📌 ✅ 💡 🚀 👀) in headings, body, tables, labels, or text boxes, because readers spot them at once as AI-written. Use bold words instead, such as **หมายเหตุ** (note). Yes/no cells in a table may use `✓` `✗`. Show severity with the words `วิกฤต · สูง · กลาง · ต่ำ`, never coloured dots. Do not delete emoji the owner wrote, and do not copy them. The one exception is customer chat text that the task's own skill prescribes.
+### 2 · Symbols and numbers
+- `→` means order of steps or a consequence · `·` separates short nouns on one line · `:` introduces detail · write every kind of count as a numeral.
+- **Write conditions and instructions as full sentences with connectors** (ถ้า … ให้ … · แล้ว · ส่วน · เพราะ). Do not chain sentences into fragments with `→` or `·`. If an outsider must guess what an arrow means, add words. In tables short text is fine, but it must read as human language, not code.
+- **No emoji or icons** (📌 ✅ 💡 🚀 👀) in headings, body, tables, labels, or text boxes. Use bold words instead, such as **หมายเหตุ**. Yes/no cells in a table may use `✓` `✗`. Show severity with the words `วิกฤต · สูง · กลาง · ต่ำ`, never coloured dots. Do not delete emoji the owner wrote, and do not copy them. The one exception is customer chat text that the task's own skill prescribes.
 - Say what every number means. Compare so it is easy to picture (times, easier to read than %). If a result is uncertain, say plainly why.
-- **Figures that change over time** (prices · tax rates · law · filing deadlines): give the source and the date checked. Cite only sources you actually opened, with a link or DOI. Mark hypothetical numbers or mock data with the label `ตัวอย่าง` (example) from the first place they appear.
-- **Dates** in Thai text use Buddhist Era (พ.ศ.) or Common Era (ค.ศ.), one style across the whole set. File names, codes, and machine-read data use Common Era `YYYY-MM-DD`.
-- **Task status** uses these 5 words in every document: `เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่` (done · in progress · blocked · awaiting approval · pending). Check results use `ผ่าน · ไม่ผ่าน` (pass · fail).
+- **Figures that change over time** (prices · tax rates · law · filing deadlines): give the source and the date checked. Cite only sources you actually opened, with a link or DOI. Mark hypothetical numbers or mock data with the label `ตัวอย่าง` from the first place they appear.
+- **Dates** in Thai text use พ.ศ. or ค.ศ., one style across the whole set. File names, codes, and machine-read data use `YYYY-MM-DD` in Common Era.
+- **Task status** uses these 5 words in every document: `เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่`. Check results use `ผ่าน · ไม่ผ่าน`.
 
-## 3 · Words
+### 3 · Words
+- Use words people actually say. No bureaucratic words or literal-translation jargon. Keep terms the field uses in English (token · prompt · API · OCR). Explain a coined or confusing term the first time. Abbreviations → `spell-out-abbreviations`.
+- Call one thing by one word across the whole set: chat, slides, documents, diagrams.
+- Two-language documents: pick 1 main language and put the other in brackets or a second column. Do not switch inside a sentence.
+- Cut padding words ("ทำการ" · "มีการ" · "ในส่วนของ" · "ได้มีการ" · "เป็นการ").
+- **Cut items, not function words.** Every length budget (words per bullet · characters per commit title · characters per subtitle) is met by dropping items, condensing, or moving content to the next piece. Never cut `จะ` `ให้` `ก็` `ด้วย` `แล้ว` `ต่างหาก` or polite words (`ขอ` `รบกวน` `นะ` and ครับ/ค่ะ, per register). They do work in the sentence; without them Thai turns curt and reads like a translation.
+- Avoid AI-looking moves: a quotable opener · the slogan "ไม่ใช่แค่… แต่ยัง…" for emphasis (a sentence that contrasts with something real or reframes the problem is fine, but it must close with "ด้วย") · grouping everything in threes · praising something as more important than it is · bold on every line · a closing recap · opening with "แน่นอน" · closing with "หวังว่าจะช่วยได้" · "หลาย" when you know the number · stacked hedges (hedge once, where you are truly unsure).
+- For work people look at (screens · slides · ads) also avoid: broad ad words (ยกระดับ · ไร้รอยต่อ · ล้ำสมัย · supercharge) · em dashes in every sentence · canned openers ("ในยุคดิจิทัลที่…") · short fragments split by full stops ("เร็ว. ง่าย. ครบ.") · claims a competitor could also make (put in a real name or number). For the look of the work, use `no-ai-look`.
 
-- Use words people actually say. No bureaucratic words or literal-translation jargon.
-- Keep terms the field already uses in English (token · prompt · API · OCR).
-- Abbreviations → follow `spell-out-abbreviations`. Explain a coined or confusing term the first time you use it.
-- Call one thing by one word across the whole set: chat, slides, documents, and diagrams.
-- Two-language documents: pick 1 main language and put the other in brackets or a second column. Do not switch back and forth inside a sentence.
-- Cut padding words ("ทำการ" · "มีการ" · "ในส่วนของ" · "ได้มีการ" · "เป็นการ" — empty Thai fillers such as "ทำการ" before a verb).
-- **Cut items, not function words.** Every kind of length budget (words per bullet · characters per commit title · characters per subtitle) is met by dropping items, condensing content, or moving it to the next piece. Never cut `จะ` `ให้` `ก็` `ด้วย` `แล้ว` `ต่างหาก` (Thai function words: future marker, "to/let", "also", "too", "then", emphatic particle) or polite words (`ขอ` `รบกวน` `นะ` and ครับ/ค่ะ, per register). These do work in the sentence. Cut them and Thai turns curt and reads like a translation.
-- Avoid moves that look AI-written: a quotable opener · the slogan "ไม่ใช่แค่… แต่ยัง…" (not just… but also…) used for emphasis (a sentence that contrasts with something real or reframes the problem is fine, but it must close with "ด้วย") · grouping everything in threes · praising something as more important than it is · bold on every line · a closing recap · opening with "แน่นอน" (certainly) · closing with "หวังว่าจะช่วยได้" (hope this helps) · using "หลาย" (several) when you know the number · stacked hedges (hedge once, at the point you are truly unsure).
-- For work people look at (screens · slides · ads) also avoid: broad ad words (ยกระดับ · ไร้รอยต่อ · ล้ำสมัย · supercharge — elevate · seamless · cutting-edge) · em dashes in every sentence · canned openers ("ในยุคดิจิทัลที่…" — "In the digital age where…") · short fragments split by full stops ("เร็ว. ง่าย. ครบ." — "Fast. Easy. Complete.") · claims a competitor could also make: put in a real name or number instead · for the look of the work, use `no-ai-look`.
-
-## 4 · Answering in chat
-
-- First sentence answers directly, then the reason.
-- Short question → short answer, 2–3 sentences, no headings or tables.
-- Use a table to compare 2 or more options or many numbers. Use a list when there are several items to scan. No nested bullets (split sub-topics into a new bold heading). 2–3 short items go on one line separated by ` · `. Include only what the reader needs.
+### 4 · Answering in chat
+- First sentence answers directly, then the reason. Short question → 2–3 sentences, no headings or tables.
+- Table to compare 2 or more options or many numbers; list for several items to scan. No nested bullets (use a new bold heading). 2–3 short items go on one line with ` · `. Include only what the reader needs.
 - Report finished work by its result, not by narrating the steps.
-- If you told them something wrong, say what was wrong and what is right. No long apology. If unsure, say where and how to check. Do not guess in a confident voice.
-- When the user must decide: offer options, name the recommended one and why, and close with 1 question that is easy to answer.
+- If you told them something wrong, say what was wrong and what is right, with no long apology. If unsure, say where and how to check; do not guess in a confident voice.
+- When the user must decide: offer options, name the recommended one and why, close with 1 easy question.
 - Longer than 1 screen: answer the important part first and offer the detailed version in 1 line (do not stop to ask).
-- If the user says "งง" (confused) or "พูดง่าย ๆ" (say it simply): rewrite the last answer at half the length, with no unexplained jargon and no new content.
-- End with 1 thing they can actually do next. No recap.
-- **Answering from a document or the web**: retell in your own words, never translate sentence by sentence · cause and effect in one paragraph · small exceptions in brackets · 2–3 bold labels are enough · put sources together at the end of the answer.
+- If the user says "งง" or "พูดง่าย ๆ": rewrite the last answer at half the length, no unexplained jargon, no new content.
+- End with 1 thing they can do next. No recap.
+- **Answering from a document or the web**: retell in your own words, never sentence-by-sentence translation · cause and effect in one paragraph · small exceptions in brackets · 2–3 bold labels are enough · sources together at the end.
 
-## 5 · Documents and reports
+### 5 · Documents and reports
+- The first paragraph is the conclusion; reading only it gives the point. Headings say what the content is, not the category name. At most 5 sentences per paragraph.
+- Column headings say what is measured · 1 column, 1 meaning. Footnotes are for definitions and number sources; never hide an important conclusion there.
+- Work summaries and status reports: bold headings only as needed, **ผล** → **ที่ทำ** → **ต่อไป** (add headings for real content, such as awaiting approval). Cut behind-the-scenes method, solved problems that do not affect the reader, and numbers not used for a decision. Tag every claim `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ` (meanings in `superuser` `references/evidence.md`).
+- Formal documents (official letters · contracts · tax invoices) use the wording the form requires; this skill covers only the parts you write yourself. Choose the register for each job (official · business · shop chat · job application · complaint · screen) from the table in `thai-grammar` section 4 before writing, and keep it through the piece.
 
-- The first paragraph is the conclusion. Reading only it must give the point.
-- Headings say what the content is, not the category name · at most 5 sentences per paragraph.
-- Column headings say what is measured · 1 column, 1 meaning.
-- Footnotes are for definitions and number sources · never hide an important conclusion in a footnote.
-- Work summaries and status reports: bold headings only as needed, **ผล** (result) → **ที่ทำ** (what was done) → **ต่อไป** (next) (add headings when there is real content, such as awaiting approval) · cut behind-the-scenes method, solved problems that do not affect the reader, and numbers not used for a decision · tag every claim `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ` (verified · from a source · inferred · not yet checked; meanings in `superuser` `references/evidence.md`).
-- Formal documents (official letters · contracts · tax invoices) use the wording the form requires. This file covers only the parts you write yourself. Choose the register for each job (official · business · shop chat · job application · complaint · screen) from the table in `thai-grammar` section 4 before writing, and keep it through the whole piece.
-
-## 6 · Slides and headings of every kind
-
-Applies to slide titles, figure titles, document headings, and box titles in a diagram. The full rules and the before → after table are in the same reference.
-
-- A slide title = the conclusion of the page, not the topic name · at most 2 lines (about 15 words) · detail goes in the page body.
-- **A title with 2 parts needs a connector that matches the real relationship** ("เพราะ" or "จึง" for reason · "ส่วน" for a split of roles · "แต่" for contrast — because or so · as for · but) · 1 title, 1 connector. If it needs 2, you crammed too much in.
-- Use phrases people actually say, not strings of nouns · choose words by reader.
-- The verb matches what the page shows · do not use "คน" (person) for things that are not people.
-- The caption under a picture must say what the picture does not. If it repeats the picture, cut it · page structure: problem → fix → result · write a speaking script the way it is actually spoken.
+### 6 · Slides and headings of every kind
+Applies to slide titles, figure titles, document headings, and box titles in a diagram.
+- A slide title = the conclusion of the page, not the topic name · at most 2 lines (about 15 words) · detail goes in the body.
+- **A title with 2 parts needs a connector that matches the real relationship** ("เพราะ" or "จึง" for reason · "ส่วน" for a split of roles · "แต่" for contrast) · 1 title, 1 connector. If it needs 2, you crammed too much in.
+- Use phrases people actually say, not strings of nouns · choose words by reader · the verb matches what the page shows · do not use "คน" for things that are not people.
+- The caption under a picture must say what the picture does not; if it repeats the picture, cut it · page structure: problem → fix → result · write a speaking script the way it is spoken.
 - **Test:** read the title once to an outsider. If they cannot retell it, rewrite it.
 
-## 7 · Diagrams
-
-- Box labels are short nouns of 1–4 words people understand · arrow labels are verbs · an unlabelled arrow must be impossible to misread.
+### 7 · Diagrams
+- Box labels are short nouns of 1–4 words · arrow labels are verbs · an unlabelled arrow must be impossible to misread.
 - Words in the figure match the document · the figure title is a conclusion, with 1 sentence under it saying what to look at · follow the house style if there is one.
 
-## 8 · 7-point check before sending
-
+## Check before sending
 1. Does it read smoothly aloud, and not like a translation?
 2. Can an outsider understand it without asking? Can every symbol be read?
-3. Does the first sentence already answer the question or give the conclusion?
+3. Does the first sentence already answer or give the conclusion?
 4. Do terms and numbers match across every file in the set?
-5. Is there any padding you can cut without changing the meaning? If so, cut it. But `จะ` `ให้` `ก็` `ด้วย` `แล้ว` and polite words are not padding (section 3). If cutting made a sentence curt, put them back.
-6. Does every heading pass section 6: 2 parts have a connector · a phrase people say · words fit the reader · the verb matches what the figure shows?
-7. Thai of 1 paragraph or more: run `python scripts/thai_tells.py <file>` (warns only, does not judge), then walk the 7 sentence-structure rules in `thai-grammar`. Passing every rule is not the same as reading smoothly. For language, taste, and looks, the final verdict belongs to the user, not to the model doing the check.
+5. Any padding to cut without changing meaning? Cut it, but `จะ` `ให้` `ก็` `ด้วย` `แล้ว` and polite words are not padding; if cutting made a sentence curt, put them back.
+6. Does every heading pass section 6?
+7. Thai of 1 paragraph or more: run `python scripts/thai_tells.py <file>` (warns only), then walk the 7 sentence-structure rules in `thai-grammar`. Passing every rule is not the same as reading smoothly. The final verdict on language, taste and looks belongs to the user.
+
+## References
+- [`references/headings-and-examples.md`](references/headings-and-examples.md) — open for examples of every rule, the before → after heading table, and their sources
+- [`references/thai-grammar.md`](references/thai-grammar.md) — open when writing Thai of 1 paragraph or more (sentence structure · register); example paragraphs in [`references/thai-examples.md`](references/thai-examples.md)
+- [`references/strict-review.md`](references/strict-review.md) — open for research or work sent to outsiders
+- [`references/thai-line-breaking.md`](references/thai-line-breaking.md) — open for Thai documents with justified alignment
 
 
 ## reference: headings-and-examples.md

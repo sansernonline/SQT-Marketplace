@@ -25,9 +25,7 @@ Use when settings differ by environment or secrets need hiding
 | Designing login, tokens, user permissions | `auth-implementation-patterns` | instead |
 | Keeping sensitive values out of logs | `logging-standards` | instead |
 | Database connection strings | `database-design` | together |
-| Recording the incident after a secret leak | `postmortem-template` | together |
-| Steps during an incident | `incident-runbook-template` | together |
-| Abbreviations in work people read | `spell-out-abbreviations` | together |
+| Recording a secret leak · steps during the incident | `postmortem-template` · `incident-runbook-template` | together |
 
 **How to do it in each language and framework** is in `references/per-stack.md`.
 
@@ -69,18 +67,7 @@ For example `DEBUG=false` · `ALLOWED_ORIGINS=` empty · Transport Layer Securit
 > A system that boots with wrong config will break at 2 a.m. in a function that is rarely used.
 > A system that **refuses to boot** on wrong config tells you at deploy time, when you can still roll back.
 
-```ts
-// Node — zod
-const Env = z.object({
-  NODE_ENV:      z.enum(['development', 'staging', 'production']),
-  PORT:          z.coerce.number().int().positive().default(3000),
-  DATABASE_URL:  z.string().url(),
-  JWT_SECRET:    z.string().min(32),
-  LOG_LEVEL:     z.enum(['debug','info','warn','error']).default('info'),
-});
-
-export const env = Env.parse(process.env);   // invalid = the process dies and says which value is wrong
-```
+Node zod example: `references/per-stack.md` section 2. The pattern is a schema that parses `process.env` once at boot, so an invalid value kills the process and names the value.
 
 **What to check:** every value is present · types are right · values are in the accepted range ·
 keys are long enough · values banned on production (`JWT_SECRET=dev-secret` must fail).
@@ -139,7 +126,7 @@ Otherwise the next person who clones hits an error nobody can explain.
 > **A `.env` added to `.gitignore` too late:** once the file has been tracked, even once,
 > adding it to `.gitignore` later **does not remove it from history.** Run `git rm --cached` and treat the secret as leaked.
 
-**Pre-commit gate** (idea from wshobson secrets-management): `.gitignore` blocks only files you know by name, but a key pasted by mistake into code or YAML needs a scanner. Install gitleaks as a pre-commit hook in every repo (`gitleaks git --pre-commit --staged` in gitleaks 8.19 and later · earlier versions use `gitleaks protect --staged`) and rerun it in CI over the whole history with `gitleaks git --redact`. If the hook fails, never use `--no-verify`; move the value out first. If you find one in history, go to step 8 at once, not just delete the line.
+**Pre-commit gate**: `.gitignore` blocks only files you know by name, but a key pasted by mistake into code or YAML needs a scanner. Install gitleaks as a pre-commit hook in every repo (`gitleaks git --pre-commit --staged` in gitleaks 8.19 and later · earlier versions use `gitleaks protect --staged`) and rerun it in CI over the whole history with `gitleaks git --redact`. If the hook fails, never use `--no-verify`; move the value out first. If you find one in history, go to step 8 at once, not just delete the line.
 
 ---
 
@@ -219,18 +206,6 @@ you can still verify old tokens that have not expired.
 instead of embedding the value at build time (`import.meta.env`), which locks the value into the built files.
 
 ---
-
-## 11 · Anti-patterns
-
-- **A connection string in code**, even a dev one, because one day someone will copy it for production.
-- **A production `.env` placed on the server.** Anyone who can enter the machine can read it, and nothing records who read it.
-- **The same secret in every environment.** When staging leaks, production leaks too.
-- **Sending secrets by chat or email.** The value stays there forever, and is searchable.
-- **No `.env.example`.** A new person wastes half a day guessing which values are needed.
-- **Booting successfully with incomplete config,** then breaking in real use.
-- **Printing the whole config to the log at boot,** secrets included.
-- **`ALLOWED_ORIGINS=*` on production** because "it was blocked by Cross-Origin Resource Sharing (CORS) in dev."
-- **A key that has never changed since the first year.**
 
 
 ## reference: per-stack.md
@@ -498,7 +473,6 @@ Use when a system must record who did what and when
 | Permissions and identity verification | `auth-implementation-patterns` | instead |
 | Consent and data-subject rights | `pdpa-compliance` | instead |
 | Requirements on what to keep and for how many years | `srs-writing` | together |
-| Abbreviations in work that people read | `spell-out-abbreviations` | together |
 
 ---
 
@@ -622,20 +596,6 @@ Show it as a sentence people can read, not raw JSON (the sample below is the Tha
 
 Show the time in the viewer's time zone, but store it as UTC (see `i18n-and-locale`).
 
----
-
-## 8 · Anti-patterns
-
-- **Keeping the audit in general log files**: deleted by retention within a month
-- **Recording the actor's name instead of the id**: when they change their surname, the old history turns into a different person
-- **Recording only successes**: the denied attempts are what auditors look for
-- **Recording only "edited data"** without saying from what to what
-- **The app has UPDATE permission on the audit table**: a trail that can be edited is not a trail
-- **Writing the audit outside the transaction**: the transaction succeeds but there is no record
-- **Recording every click**: the important entries sink in a pile of data nobody uses
-- **Copying sensitive data into the audit**: it creates a new leak by accident
-- **No screen to view it**: the data exists, but a developer must run a query every time a customer asks
-
 
 ---
 
@@ -662,11 +622,6 @@ Use when users upload files or an app serves stored files
 | Import Excel/CSV and load the data into the system | `data-import-export` | instead |
 | Permissions: who may access what | `auth-implementation-patterns` | instead |
 | Process large files as a background job | `background-jobs` | instead |
-| The file metadata table | `database-design` | together |
-| Upload endpoints and errors | `api-conventions` · `web-service-essentials` | together |
-| Retention of files that hold personal data | `pdpa-compliance` | together |
-| Storage used and alerts | `observability-basics` | together |
-| Abbreviations in anything a person reads | `spell-out-abbreviations` | together |
 
 ---
 
@@ -772,21 +727,6 @@ Right: 2026/09/25/01J9Z8K7X2M4.xlsx         random · split into folders by date
 | Retention | Set it per file type · a file with personal data needs an expiry date (see `pdpa-compliance`). |
 | Backup | Files belong in the backup plan just like the database, **and a restore must have been tested for real.** |
 
----
-
-## 7 · Anti-patterns
-
-- **Trusting the file extension.** Anyone can rename a file to `.jpg`.
-- **Checking size only in the browser.** It is bypassed in 3 seconds.
-- **Using the user's file name as the real path.** `../` leads anywhere.
-- **Keeping files in the folder the web serves.** Someone uploads a script and runs it.
-- **A "hard-to-guess link" instead of a permission check.**
-- **Accepting SVG without sanitising it.** The script runs in other people's browsers.
-- **Sending an 8 MB original image to a phone.**
-- **Not stripping EXIF.** The coordinates of the user's home leak out and nobody meant it to.
-- **Files outside the backup plan.** The database can be restored, but every document is gone.
-- **Reading the whole file into memory.** A large file kills the process.
-
 
 ---
 
@@ -818,7 +758,6 @@ Use when writing code that can fail, with retry and timeout
 | Where a failed background job goes next | `background-jobs` | alongside |
 | Error messages that must be translated into several languages | `i18n-and-locale` | alongside |
 | Tests for failure cases | `testing-standards` | alongside |
-| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 
 ---
 
@@ -949,28 +888,27 @@ Use `finally` / `using` / `with` / `defer` instead of repeating it on every exit
 
 ## 7 · Check before sending
 
-Go through this against the diff every time you touch code that calls outside the process (idea from ECC error-handling)
+Go through this against the diff every time you touch code that calls outside the process
 
 - [ ] Every `catch` clearly does one of these: handles it and goes on · converts it to an error of its own layer and throws on · lets it pass to the outermost layer to log (section 1) — no `catch` that logs and rethrows
 - [ ] Every outside call (HTTP · DB · queue · file) has a deliberate timeout and retries only the transient types in section 3 · a write that retries has an idempotency key (section 4)
 - [ ] The message to the user says what to do next · no stack trace or table name goes out (section 2) · the log for the same error has a correlation id and enough data to reproduce it
 - [ ] Outcomes the business expects (not found · insufficient balance · duplicate) are return values or types the caller must handle, not exceptions
 - [ ] Each outside dependency has at least 1 failure-path test (timeout · 5xx · bad payload), and a test confirms that partial failure follows section 6 and does not fail the whole page
-- [ ] None of these 4 kinds of silent failure swallowing (adapted from silent-failure-hunter in pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10):
+- [ ] None of these 4 kinds of silent failure swallowing:
   - **optional chaining or `?? default`** that lets a missing value pass with nobody knowing (`order?.total ?? 0` turns an order that failed to load into a zero total)
   - **falling back to a mock or sample data outside tests** — the live system shows fake data and looks normal
   - **retries run out, then silence** — after the last try it returns empty or success, throws no error, and tells the caller nothing
   - **a catch that logs and carries on in the UI** — the user sees a normal screen although the data never arrived; show an error state they can see
 
-## 8 · Anti-patterns
+## References
 
-- **An empty `catch`** — the hardest problem to find is the one that leaves no trace
-- **Returning `null` instead of throwing an error** — the caller cannot tell "no data" from "the system broke"
-- **`catch (Exception)` in the innermost layer** — swallows your own bugs too
-- **Log and rethrow at every layer** — 1 error gets 10 lines
-- **"เกิดข้อผิดพลาด" ("an error occurred")** — does not say what to do next
-- **Sending a stack trace to the user** — shows the internal structure to someone hunting for a hole
-- **Retry with no delay** — hammering a system that is already down
-- **Retrying a write with no idempotency key** — you get duplicate records
-- **No timeout** — threads pile up until the system dies
-- **Using errors to control normal flow** — for example throwing an exception on "not found", which is a normal event
+- [`references/sources.md`](references/sources.md) — where the checklist ideas came from
+
+
+## reference: sources.md
+
+# Sources · error-handling-patterns
+
+- Section 7 checklist: idea from ECC error-handling.
+- The 4 silent-failure kinds in section 7: adapted from silent-failure-hunter in pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10.

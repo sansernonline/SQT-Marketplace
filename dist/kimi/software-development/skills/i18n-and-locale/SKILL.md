@@ -104,7 +104,7 @@ Show:   25 ก.ย. 2569 09:42                (viewer's Asia/Bangkok)
 
 **If the system has both kinds of users, let the user pick the calendar**, but the stored value stays the same.
 
-**Checker** — write a short script that sweeps the code for Thai text embedded in code outside the translation files · hard-coded year numbers 25xx · `new Date("…")` that takes a string with no time zone. Run it in CI before merge. (The idea comes from BV thai-date-format: a converter needs its own tests.)
+**Checker** — write a short script that sweeps the code for Thai text embedded in code outside the translation files · hard-coded year numbers 25xx · `new Date("…")` that takes a string with no time zone. Run it in CI before merge. A converter needs its own tests.
 
 ---
 
@@ -160,42 +160,11 @@ So let a library handle it. Do not write `if (count > 1)` yourself, because some
 
 ---
 
-## 7 · Anti-patterns
+## Links to other skills
 
-- **Text embedded in code** because "there is only one language for now"
-- **Building a sentence from fragments** — other languages order words differently
-- **Storing B.E. in the database** — every function will compute time spans wrongly
-- **Adding 7 hours by hand in code** — breaks the moment there are users outside the Thai time zone
-- **Sorting Thai names with the standard collation** — wrong order with no error
-- **Testing screens with Lorem ipsum** — you never see Thai line-breaking problems
-- **`if (count > 1) "s"`** — works only for English
-- **2-digit years** — "69" is 1969, 2069, or 2569
-- **Importing Excel without asking whether the year is B.E. or C.E.** — years are off by 543 with nothing to warn you
-- **A translation key that is missing and shows an empty value** — you get an empty button nobody notices
+`error-handling-patterns` (error messages that must be translated) · `presentation-design` (Thai fonts in slides) · `data-import-export` (B.E. years in imports · CSV that opens in Excel) · `notifications` (multi-language message templates) · `translate-th-en` (plugin `superuser`: translating whole documents, a glossary per project)
 
----
+## References
 
-## 8 · Abbreviations
-
-- **i18n** — internationalization (making software support many languages and locales; abbreviated this way because 18 letters sit between i and n)
-- **locale** — the set of local conventions: language, date format, numbers, and currency
-- **collation** — a database's rules for ordering and comparing text
-- **UTC** — Coordinated Universal Time (the world standard time; Thailand is UTC+7)
-- **ICU** — International Components for Unicode (the standard library for language rules and sorting)
-- **BCP 47** — Best Current Practice (BCP) 47, the standard for language codes such as `th-TH`, `en-US`
-- **ARB** — Application Resource Bundle (the JSON-style translation file that Flutter `gen-l10n` uses)
-- **BOM** — Byte Order Mark (the 3 bytes at the start of a file that tell Excel it is UTF-8)
-
-## 9 · Links to other skills
-
-| Need | Use with |
-|---|---|
-| Date and time data types and collation | `database-design` |
-| Date, time, and money format in JSON | `api-conventions` |
-| Error messages that must be translated | `error-handling-patterns` |
-| Thai fonts on screen | `ui-craft` + the platform skill |
-| Thai fonts in documents and slides | `branded-document-design` · `presentation-design` |
-| Importing files with B.E. years · exporting CSV that opens in Excel without garbled Thai | `data-import-export` |
-| Multi-language notification message templates | `notifications` |
-| Translating a whole set of documents or screen text, Thai↔English · a glossary per project | `translate-th-en` (plugin `superuser`) |
-| Word segmentation · transliteration to Roman letters · validating national ID numbers in code | [`references/thai-text-tools.md`](references/thai-text-tools.md) |
+- [`references/thai-text-tools.md`](references/thai-text-tools.md) — open for word segmentation · transliteration to Roman letters · validating national ID numbers in code
+- [`references/abbreviations.md`](references/abbreviations.md) — open when a term (i18n · collation · ICU · BCP 47 · ARB · BOM) must be explained

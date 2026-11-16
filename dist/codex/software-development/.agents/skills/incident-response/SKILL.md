@@ -46,7 +46,7 @@ The DevOps engineer should follow this structured response:
    - What pattern do logs show?
    - Could it be capacity? Network? Bug? Config?
 
-   **Label every hypothesis with a confidence tag** that follows the evidence, not how tidy the report looks (adapted from `incident-investigate` in claude-tag-plugins · opened 2026-11-10). No percentages. Keep at most 3 suspects in the report.
+   **Label every hypothesis with a confidence tag** that follows the evidence, not how tidy the report looks. No percentages. Keep at most 3 suspects in the report.
 
    | Tag | Means |
    |---|---|
@@ -58,7 +58,7 @@ The DevOps engineer should follow this structured response:
 
    Every claim carries the query or link so a person can re-check it. These tags pair with `จากแหล่ง` and `อนุมาน` in `superuser` evidence labels.
 
-3. **Communicate updates** every 15-30 min even if "still investigating" — one message per audience, the Communications lead sends them (แนวคิดจาก borghei incident-commander (MIT+Commons Clause → เขียนใหม่)):
+3. **Communicate updates** every 15-30 min even if "still investigating" — one message per audience, the Communications lead sends them:
 
    | Audience | When | Says (and nothing more) |
    |---|---|---|
