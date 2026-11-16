@@ -11,7 +11,7 @@ A calm second look before an irreversible transfer — and a first-hour plan if 
 
 ## Before transfer — 6 checks
 
-1. **The return** — if the return is guaranteed, fixed or "risk-free" and above bank deposit rates (e.g. 1–3% a week, 10% a month), stop. Real investments cannot guarantee returns. Thai wording to stop at: **การันตีกำไร · รับประกันผลตอบแทน · ไม่มีความเสี่ยง · ไม่ขาดทุนแน่นอน · ปลอดภัย 100% · กำไรทุกวัน · ปันผลทุกสัปดาห์ · ทุนคืนแน่นอน**. Also stop at a licence used as a badge ("ได้รับอนุญาตจาก ก.ล.ต.", a SEC or SET logo on the ad): a licence lets a company operate, it does not make any return safe, and the claim itself must be checked in step 2. Scam reports on sec.or.th list a guaranteed or no-risk return and claims of SEC or BOT approval as warning signs, and say SEC does not solicit investment in any product (https://www.sec.or.th/TH/Pages/SCAMCENTER-01-01.aspx · seen only as a search result 2026-11-10, the page returned 403 · รอยืนยัน).
+1. **The return** — if the return is guaranteed, fixed or "risk-free" and above bank deposit rates (e.g. 1–3% a week, 10% a month), stop. Real investments cannot guarantee returns. Thai wording to stop at: **การันตีกำไร · รับประกันผลตอบแทน · ไม่มีความเสี่ยง · ไม่ขาดทุนแน่นอน · ปลอดภัย 100% · กำไรทุกวัน · ปันผลทุกสัปดาห์ · ทุนคืนแน่นอน**. Also stop at a licence used as a badge ("ได้รับอนุญาตจาก ก.ล.ต.", a SEC or SET logo on the ad): a licence lets a company operate, it does not make any return safe, and the claim itself must be checked in step 2.
    - **Reviews and rankings** — ask whether the person posting profits or a review is paid by, or part of, the seller; a "No. 1 platform" ranking or award needs a named giver and a date that can be checked. No giver or no date = treat as advertising.
 2. **The licence**
    | Offer | Check at | Pass if |
@@ -50,7 +50,7 @@ A calm second look before an irreversible transfer — and a first-hour plan if 
 6. **Never pay a "recovery" service** — anyone asking for money to get money back is the second scam.
 7. Investment scams also: report to SEC **1207** (press 22); Ponzi schemes: DSI (กรมสอบสวนคดีพิเศษ) **1202**. Bank complaints go to BOT ศคง. **1213** (office hours, not for a same-day hold — the bank hotline in step 1 is).
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.thaipoliceonline.go.th (official online report, with 1441), https://www.infoquest.co.th/?p=378031 (AOC 1441 one channel only), https://www.bot.or.th/content/dam/bot/documents/th/news-and-media/media-gallery/infographic/2023_04_05_tech_crime_act.pdf (bank hold, 72 hours), https://market.sec.or.th/public/idisc/th/InvestorAlert (SEC Investor Alert, SEC Check First, 1207). ตรวจซ้ำ 2026-10-26: 1441 · 1207 กด 22 · ธปท. 1213 เวลาทำการ · DSI 1202 ครบ 3 แหล่งรวมแหล่งทางการ ลิงก์อยู่ใน [references/red-flags-and-evidence.md](references/red-flags-and-evidence.md)
+Sources and check dates (2026-10-06 · re-checked 2026-10-26): [references/sources.md](references/sources.md)
 
 ## Worked example
 
