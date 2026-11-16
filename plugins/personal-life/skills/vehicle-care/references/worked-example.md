@@ -1,0 +1,3 @@
+# Worked example · vehicle-care
+
+Honda City first registered 15 Feb 2018, tax expires 14 Feb 2027. On the tax expiry date (14 Feb 2027) the car is 8 full years old → ตรอ. needed. Plan: book ตรอ. mid-Dec 2026 (inside the 90-day window from 16 Nov 2026), renew พ.ร.บ. 645.21 บาท at the same ตรอ., pay tax there or online. Voluntary policy: car is 8 years old, market value has fallen → compare ชั้น 2+ against ชั้น 1 with the step-up formula above: for example extra premium 4,000/year against a 10% yearly chance of a 30,000 repair = 3,000 expected, so ชั้น 2+ is cheaper on average (the 10% and 30,000 are assumed figures; use the user's).

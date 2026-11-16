@@ -30,17 +30,7 @@ Pick the project you will finish. A shipped small project teaches more than an a
 
 **Score by script, not by hand** (`decision-scoring`, command `score`): `node decide.mjs score ideas.json` (a copy of [references/score-example.json](references/score-example.json) with the user's ideas). Weights 3:3:2:1 divided by 9 are a default, not yet measured; the user may change them. Iron rule (กฎเหล็ก): an idea with F below 2 is dropped, not scored. The script also moves each weight ±20% and says whether rank 1 is stable (`นิ่ง`) or not (`ยังไม่นิ่ง`, `สูสี`); if not stable, the user decides between the top two. A second iron rule (กฎเหล็ก) stays from the old hand formula: the script's 0–100 is relative among the candidates only, so also add 3L+3F+2U+1P from the raw 1–5 scores (max 45) for the winner. Below 25 = no idea is good enough, pick other ideas, even if it ranks 1 (both ideas that pass above score 39 and 35). The same formula gave the same winner as the script on the example below.
 
-## Worked example
-
-Goal: learn Go and REST API design. 16 hours. Knows Python.
-
-| Idea | L | F | U | P | Score |
-|---|---:|---:|---:|---:|---:|
-| A Go clone of a full social network | 4 | 1 | 1 | 2 | 19 |
-| A Go CLI that converts Thai bank-statement CSV into a monthly summary | 3 | 5 | 4 | 3 | 35 |
-| A Go REST API for the family's shared shopping list + a tiny web page | 5 | 4 | 4 | 4 | **39** |
-
-→ The shopping-list API. Scope cuts: no accounts (1 shared secret link), no real-time updates (refresh the page), SQLite instead of Postgres, deployed on a free tier. Done definition: see the template below.
+Worked example (Go REST API, 16 hours, scored table): [references/worked-example.md](references/worked-example.md)
 
 ## Scope-cutting rules
 

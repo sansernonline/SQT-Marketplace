@@ -72,10 +72,8 @@ Ask for 2–3, from a manager, a client and a peer — one each. Make it easy: s
 - Location: city (e.g. Bangkok, Thailand) — recruiters filter by it
 - Open to work: "Recruiters only" if still employed (your employer's recruiters may still see it — LinkedIn says it tries to hide it but cannot guarantee)
 - Custom URL: linkedin.com/in/firstname-lastname
-- Photo: face filling ~60% of the frame, plain background; banner 1,584 × 396 px with domain or city — keep the left third clear where the photo overlaps on desktop (banner size as commonly published; LinkedIn help page for personal profiles not found on 2026-10-23 → รอยืนยัน)
+- Photo: face filling ~60% of the frame, plain background; banner 1,584 × 396 px with domain or city — keep the left third clear where the photo overlaps on desktop (banner size as commonly published; LinkedIn help page for personal profiles not found on 2026-10-23 → รอยืนยัน — tell the user it is the commonly published size, not an official one; see [references/sources.md](references/sources.md))
 - Contact: email you check; no phone number in public fields
-
-ตรวจล่าสุด 2026-10-26 · banner 1,584 × 396 px (4:1, JPG or PNG under 8 MB) agrees across secondary guides (https://linearity.io/blog/linkedin-size-guide/ · https://magicstudio.com/blog/linkedin-background-photo/) · the official LinkedIn help page found (https://www.linkedin.com/help/linkedin/answer/a563309) covers company Pages only (cover 1,512 × 256 px), so the personal banner size stays (รอยืนยัน) — tell the user it is the commonly published size, not an official one
 
 ## Checklist
 
@@ -85,7 +83,5 @@ Ask for 2–3, from a manager, a client and a peer — one each. Make it easy: s
 - [ ] Top 5 skills match job-post keywords
 - [ ] Profile and CV dates and titles match exactly
 - [ ] No confidential numbers (client names, unpublished revenue) without permission
-
-For Thai text (the Thai paragraph at the end of About) → `human-writing` `references/thai-grammar.md` section 4, level "job application"
 
 Related: `resume-th-en` · `salary-negotiation` · `interview-prep`.

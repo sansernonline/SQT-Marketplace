@@ -53,19 +53,6 @@ Per recurring meeting give: **urgent 1–5** (does a decision or deadline wait o
 - 25/50-minute default meeting lengths, leaving buffer between
 - Long weekends: check the Thai public-holiday calendar for next month and move deadlines that land on or after a วันหยุด
 
-## Worked example
-
-160 h available in September. Found: meetings 78 h (49%), focus 22 h (14%), admin 30 h (19%), reactive 22 h (14%), commute 8 h. Stated priority #1 "write the Q4 (fourth-quarter) plan" got 3 h.
-
-Worst three:
-| Meeting | Sessions | Person-hours | Decisions | Action |
-|---|---|---|---|---|
-| Weekly status sync (8 people) | 4 | 32 | 0 | Make async — written update in chat by Monday 10:00 |
-| Daily stand-up 30 min | 20 | 10 (own) | few | Shorten to 15 min |
-| Vendor call weekly | 4 | 4 | 1 | Every 2 weeks |
-
-Protect: Tue/Thu 09:00–11:00 focus "Q4 plan", Wednesday morning no meetings. Expected: focus to ~30 h (19%) next month.
-
 ## Rules
 
 - Name the worst offenders politely but concretely ("weekly sync, 4 sessions, zero decisions")
@@ -79,3 +66,7 @@ Output: split table vs target · worst three with action · events added · one-
 This plugin ships no calendar connector. The user connects Google Calendar (or another calendar) themselves, from the connectors or MCP settings of the Claude app they use, with read access first; adding focus blocks (step 7) needs write access and the user's OK. Not checked against an official Google page, so no link is given here. No connector → the user pastes a 4-week export or a screenshot.
 
 Related: `weekly-review` · `meeting` (Leg 1: meetings that stay should have a goal).
+
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open for a September audit with the worst three meetings and the actions chosen

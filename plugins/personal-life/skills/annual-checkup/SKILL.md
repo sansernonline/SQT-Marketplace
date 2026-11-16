@@ -40,9 +40,9 @@ Preventive and health-promotion (P&P) services from สปสช. are generally 
 | Colorectal cancer — FIT (faecal immunochemical test, replaces FOBT) | 50+ · yearly |
 | Chest X-ray | 15+ · every 3 years |
 
-Age bands and intervals match the official SSO infographic (sso.go.th, undated) and PPTV; ThaiPBS and Bangkokbiznews confirm the 14 items but not the bands. Rows with only 2 sources — HPV DNA, chest X-ray, CBC, UA, FBS, kidney, cholesterol, hepatitis B, hearing, breast, eye — stay (รอยืนยัน): tell the user and confirm with the hospital or 1506 before booking. Pap smear 30+ every 3 years and FIT 50+ yearly have 3 sources. The 14 items and the start date (1 Jan 2567 / 2024) are confirmed by a government Public Relations Department (PRD) page that quotes the Social Security Office (SSO).
+Rows with only 2 sources — HPV DNA, chest X-ray, CBC, UA, FBS, kidney, cholesterol, hepatitis B, hearing, breast, eye — stay (รอยืนยัน): tell the user and confirm with the hospital or 1506 before booking.
 
-ตรวจล่าสุด 2026-10-26 · SSO infographic https://www.sso.go.th/wpr/assets/upload/images/sso/77cfae7b318fe6606167326d27a6c43f.jpg · แหล่งเดิม (ตรวจ 2026-10-22): https://radiochiangrai.prd.go.th/th/content/category/detail/id/36/iid/251114 (กรมประชาสัมพันธ์ ยืนยันกับสำนักงานประกันสังคม 17 ม.ค. 2567 — รายการ 14 ข้อ) · https://www.prachachat.net/hilight-prachachat/news-1566620 (17 พ.ค. 2567 — ช่วงอายุ) · https://www.thaipbs.or.th/news/content/340054 (16 พ.ค. 2567 — ช่วงอายุ) · https://www.ktc.co.th/article/healthy-beauty/healthy/social-security-health-care (อัปเดต 13 ส.ค. 2569) · official page to verify: sso.go.th
+Sources and check dates: [references/sources.md](references/sources.md)
 
 ## Step 3 — gold card (บัตรทอง) preventive services, working age
 
@@ -56,7 +56,7 @@ Cancer screening rows — nhso.go.th pages did not open on 2026-10-26, so all th
 
 Other working-age preventive services the สปสช. lists (age and interval not confirmed for this check — ask 1330) (รอยืนยัน): blood pressure check · diabetes blood screening · cardiovascular risk screening · smoking, alcohol and substance risk screening · HIV screening · diphtheria–tetanus vaccine · breast self-exam teaching · family planning and contraception · iron supplement for women of reproductive age · health counselling.
 
-ตรวจล่าสุด 2026-10-26 (nhso.go.th returned 404/500; search snippets from nhso.go.th agree on FIT 50–70 every 2 years) · แหล่ง (cancer rows): https://www.thansettakij.com/health/wellbeing/557796 (2 มี.ค. 2566, สปสช.) · https://www.hfocus.org/content/2026/07/38619 (6 ก.ค. 2569, FIT) · https://www.khaosod.co.th/politics/news_7500428 (9 ก.พ. 2566) · nhso.go.th could not list the full working-age items, so verify with สปสช. 1330 or the สปสช. app / LINE @nhso.
+Sources and check dates: [references/sources.md](references/sources.md)
 
 ## Step 4 — general items by band (to discuss with the doctor)
 
@@ -94,3 +94,8 @@ Run the `health-organizer` agent with the `annual-checkup` skill: **$ARGUMENTS**
 - `trend` — show the results table across years and list questions for the doctor; never label a result normal or abnormal
 
 Emergency symptoms → 1669 first.
+
+## References
+
+- [`references/results-tracker.md`](references/results-tracker.md) — results table template (Step 5)
+- [`references/sources.md`](references/sources.md) — sources and check dates for Steps 2–3; open before citing a right or an interval
