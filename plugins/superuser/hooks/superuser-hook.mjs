@@ -243,9 +243,9 @@ export function parseVerdict(text) {
 // บรรทัดแรกของรายงานลูกทีมเป็น 1 ใน 4 ค่า (superuser หัวข้อ 5) · ผลที่ลูกทีมบอกเอง ไม่ใช่ผลตรวจ · log 2026-11-16: ผลผู้ตรวจผูกกับงานได้แค่ 9% ค่านี้จึงเป็นผลของทุกงาน
 const WORKER_STATUS = { "เสร็จ มีข้อกังวล": "done_concerns", "เสร็จ": "done", "ขาดบริบท": "missing_context", "ติด": "blocked" };
 export function workerStatus(text) {
-  const first = String(text ?? "").replace(/^\s*<agent-message[^>]*>/, "").split("\n").map((l) => l.replace(/[#*`_>\s]/g, " ").trim()).find(Boolean) ?? "";
-  // คำต้องจบตรงนั้น: "ติดตั้งแล้ว" ไม่ใช่ ติด
-  const hit = Object.keys(WORKER_STATUS).find((k) => first.startsWith(k) && /^($|[\s:：—–(·-])/.test(first.slice(k.length)));
+  const first = String(text ?? "").replace(/^\s*<agent-message[^>]*>/, "").split("\n").map((l) => l.replace(/[#*`_>\s]/g, " ").trim()).find(Boolean)?.replace(/^ผล\s*[:：]?\s*/, "") ?? "";
+  // คำต้องจบตรงนั้น: "ติดตั้งแล้ว" ไม่ใช่ ติด · ใบส่งงานของ handoff ขึ้นต้น "ผล: เสร็จ"
+  const hit = Object.keys(WORKER_STATUS).find((k) => first.startsWith(k) && /^($|[\s:：—–(·.-])/.test(first.slice(k.length)));
   return hit ? WORKER_STATUS[hit] : null;
 }
 
@@ -1905,7 +1905,8 @@ ${rows}
     ["runs: บรรทัดแรกของรายงานลูกทีม → status (เสร็จ · เสร็จ มีข้อกังวล · ขาดบริบท · ติด)", [], true, () =>
       workerStatus("<agent-message from=\"a1\">\nเสร็จ\nแก้ 3 ไฟล์") === "done" && workerStatus("<agent-message from=\"a1\">**เสร็จ มีข้อกังวล** — x") === "done_concerns"
       && workerStatus("<agent-message from=\"a1\">\n\n## ขาดบริบท") === "missing_context" && workerStatus("ติด: ไม่มีสิทธิ์") === "blocked"
-      && workerStatus("<agent-message from=\"a1\">แก้เสร็จแล้ว") === null && workerStatus("ติดตั้งแล้ว") === null && workerStatus(null) === null],
+      && workerStatus("<agent-message from=\"a1\">แก้เสร็จแล้ว") === null && workerStatus("ติดตั้งแล้ว") === null && workerStatus(null) === null
+      && workerStatus("**ผล:** เสร็จ") === "done" && workerStatus("## ผล: เสร็จ มีข้อกังวล") === "done_concerns" && workerStatus("เสร็จ.") === "done" && workerStatus("## ผล: ผ่าน") === null],
     ["runs: หัวหน้าเขียน คาด: ลง CONTEXT.md → บรรทัด expect · บรรทัดเดิมใน old_string ไม่นับซ้ำ · ไฟล์อื่นไม่นับ", [], true, () => {
       const line = "| 2026-11-08 | แบ่ง 3 ชิ้น | คาด: ขนาด กลาง · ลูกทีม 3 · รอบตรวจ 2 · ระดับ กลาง · สายวิกฤต 40k · กว้างสุด 2 · เร็วขึ้น 1.5 เท่า |";
       const ed = (file_path, new_string, old_string = "") => ({ hook_event_name: "PostToolUse", tool_name: "Edit", tool_input: { file_path, new_string, old_string }, tool_response: {} });
