@@ -5,8 +5,6 @@ description: Use when recording why an architecture choice was made
 
 # Architecture Decision Record (ADR) Writer
 
-> **Language:** write every line of wording following `human-writing`. This skill gives the format and structure. `human-writing` says how to write so readers understand.
-
 ## When to use this skill
 
 - Choosing between two or more technical options
@@ -67,9 +65,6 @@ Before finalizing:
 ## Anti-patterns
 
 - Writing ADR after implementation is done (write BEFORE)
-- Listing only the chosen option (need real alternatives)
-- Vague titles like "Database Decision" (be specific: "Use PostgreSQL over MongoDB for user data")
-- Skipping "Negative consequences" (every decision has trade-offs)
 - Editing accepted ADRs (create new one that supersedes it instead)
 
 ---
@@ -84,5 +79,3 @@ load the matching skill before writing, not after:
 | Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
 | A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
 | The point needs a picture to land | `markdown-visuals`, then `diagram-figures` for project documents (`software-diagrams` only for README / PR notes) |
-
-Default formatting is not neutral — it reads as unfinished work.

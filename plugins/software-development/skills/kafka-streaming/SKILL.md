@@ -5,8 +5,6 @@ description: Use when services pass events via Kafka
 
 # kafka-streaming — design Apache Kafka topics, producers and consumers so events are never silently lost or duplicated
 
-Part of the `software-development` plugin. Follow `human-writing` for the wording of this file and of documents made from it. Every setting and version has a link and the check date 2026-10-27 in the "Sources" section and in [`config-table`](references/config-table.md).
-
 > **One rule:** Kafka delivers "at least once", not "exactly once". The sender must not drop events (confirm every send, plus an outbox). The receiver must be safe to repeat (check `event_id`) and must commit the offset only after the work is done. If either side is missing, events are lost or duplicated and nobody sees it.
 
 ## Use when
@@ -18,18 +16,14 @@ Part of the `software-development` plugin. Follow `human-writing` for the wordin
 
 Do not use when: the work is a background job of a single service (send mail, build a report, run a timer) with one receiver and no need to read again → [`background-jobs`](../background-jobs/SKILL.md) is enough · you are choosing the architecture of the whole system → [`architecture-patterns`](../architecture-patterns/SKILL.md) first · the data comes from IoT devices → `iot-systems`
 
-## Use something else instead, or alongside
+## Hand-offs
 
-| Situation | Use | How it relates to this skill |
-|---|---|---|
-| A plain job queue with one receiver | [`background-jobs`](../background-jobs/SKILL.md) | Section 1 decides whether you really need Kafka |
-| A job queue that hands work to workers with retry and dead letter, using RabbitMQ | [`rabbitmq-messaging`](../rabbitmq-messaging/SKILL.md) | Section 1 of that file compares the 2 |
-| Work that may run twice or stop halfway | [`principle-safe-to-rerun`](../principle-safe-to-rerun/SKILL.md) | Every consumer must pass this principle (section 4) |
-| The destination is email, LINE push or SMS | [`notifications`](../notifications/SKILL.md) | A notification consumer follows that skill's channel and quota rules |
-| Choosing event-driven against other styles | [`architecture-patterns`](../architecture-patterns/SKILL.md) | Kafka is a tool, not an architecture choice |
-| Events contain phone numbers, names or voice | [`pdpa-compliance`](../pdpa-compliance/SKILL.md) | Section 6 is a short version. The data subject's rights are covered there |
-| Setting up lag monitoring and alerts | [`observability-basics`](../observability-basics/SKILL.md) | Section 7 says what to watch |
-| Designing a whole data pipeline | agent `data-engineer` | This skill gives the Kafka rules that agent must use |
+- Single receiver, plain job queue → `background-jobs` (section 1 decides). RabbitMQ work queue with retry and dead letter → `rabbitmq-messaging` (its section 1 compares the 2).
+- Every consumer must pass `principle-safe-to-rerun` (section 4).
+- Email, LINE push or SMS destination → `notifications` (a notification consumer follows its channel and quota rules).
+- Phone numbers, names or voice in events → `pdpa-compliance` (section 6 is the short version; data subject rights are there).
+- Lag monitoring and alerts → `observability-basics` (section 7 says what to watch).
+- Whole data pipeline → agent `data-engineer` (it must use this skill's Kafka rules).
 
 ## 1 · When to use Kafka
 
@@ -102,23 +96,6 @@ PDPA is the Personal Data Protection Act. Kafka's log is append-only, so deletin
 
 Monitor following `observability-basics`: **consumer lag** per group and partition (`kafka-consumer-groups.sh --describe --group <กลุ่ม>` gives the LAG value) · number of events in the DLQ · age of the oldest unsent `outbox` row · number of rebalances · set alert thresholds from the system's real volume `(รอยืนยัน)`.
 
-## One real example
-
-Label `ตัวอย่าง` (example) — designed on paper, not yet run on real Kafka.
-
-**Task:** a dental clinic's voice agent sends call events (start · end · summary) and appointment events (book · reschedule · cancel) to a service that writes the summary to the CRM (Customer Relationship Management, the customer data system) and to a service that sends LINE notifications.
-
-| Item | Choice | Reason |
-|---|---|---|
-| Is Kafka needed | Yes · 2 receivers, the CRM must be refillable by replay, order matters | Matches the table in section 1 · if only 1 receiver is left, go back to `background-jobs` |
-| Topics | `clinic.call.events.v1` key `call_id` · `clinic.appointment.events.v1` key `appointment_id` | Order per call and per appointment |
-| Topic settings | RF 3 · `min.insync.replicas=2` · retention 7 days · 3 partitions | Section 2 |
-| Send | The voice agent writes the call summary and an outbox row in one DB transaction · the relay sends with `acks=all` | Section 3 |
-| Receive | The CRM and LINE use separate consumer groups · `processed_events` · commit after the write · one DLQ per topic | Section 4 |
-| Data in the event | `call_id` · `patient_id` · type · time · no phone number, name or audio | Receivers fetch details from the source system under their own permission |
-
-The event structure · outbox SQL · short consumer code · full properties are in [`clinic-example`](references/clinic-example.md).
-
 ## Check before sending
 
 1. There is an answer to "do we really need Kafka" with reasons, not chosen to follow a trend.
@@ -130,13 +107,8 @@ The event structure · outbox SQL · short consumer code · full properties are 
 7. The 4 test cases pass on real Kafka · there are alerts for consumer lag and the DLQ.
 8. Every value cited has a link or the label `(ยังไม่ได้ตรวจ)` · nothing claims exactly-once across external systems.
 
-## Sources
+## References
 
-Checked 2026-10-27 (opened with a web page fetch tool; figures are copied from the fetched pages).
-
-- Apache Kafka 4.4 · producer settings https://kafka.apache.org/44/configuration/producer-configs/ · consumer https://kafka.apache.org/44/configuration/consumer-configs/ · topic https://kafka.apache.org/44/configuration/topic-configs/ · broker https://kafka.apache.org/44/configuration/broker-configs/
-- Delivery guarantees, order, idempotent producer, transaction, offset https://kafka.apache.org/44/design/design/ · key and partition https://kafka.apache.org/44/getting-started/introduction/ · adding partitions and viewing lag https://kafka.apache.org/44/operations/basic-kafka-operations/
-- Confluent Schema Registry https://docs.confluent.io/platform/current/schema-registry/fundamentals/schema-evolution.html · delivery semantics https://docs.confluent.io/kafka/design/delivery-semantics.html · consumer group coordination https://docs.confluent.io/kafka/design/consumer-design.html · DLQ (the Kafka Connect one, used as a reference idea, not the one for ordinary consumers) https://docs.confluent.io/platform/current/connect/index.html#dead-letter-queue
-- Choosing the number of partitions (a 2015 article; check newer versions before using its numbers) https://www.confluent.io/blog/how-choose-number-topics-partitions-kafka-cluster/
-- Transactional outbox https://microservices.io/patterns/data/transactional-outbox.html
-- Testcontainers Kafka https://java.testcontainers.org/modules/kafka/
+- [`references/clinic-example.md`](references/clinic-example.md) — open for the event structure, outbox SQL, consumer code, properties, and the worked clinic example (topic table)
+- [`references/config-table.md`](references/config-table.md) — open to check a default value and its version
+- [`references/sources.md`](references/sources.md) — sources and check dates (2026-10-27); open before citing a setting or version

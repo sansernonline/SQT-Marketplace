@@ -22,15 +22,12 @@ description: Use when setting up or fixing a CI/CD pipeline
 | Where secrets are stored and how they rotate | `config-and-secrets` | instead |
 | The pipeline runs on Jenkins (Jenkinsfile · credentials · approval input) | `jenkins-pipeline` | alongside |
 | Dockerfile · Helm chart · deploy to Kubernetes | `kubernetes-helm` | alongside |
-| Proportion and scope of tests | `testing-standards` | instead |
+| Proportion and scope of tests per layer | `testing-standards` · `e2e-testing-patterns` | alongside |
 | Writing a migration | `database-design` | instead |
-| Steps when the system is down | `incident-runbook-template` | instead |
+| Steps when the system is down or a deploy breaks it | `incident-runbook-template` (+ `postmortem-template` after) | instead |
 | Writing release notes for users to read | command `/release-notes` | instead |
-| Test proportion for each layer in the pipeline | `testing-standards` · `e2e-testing-patterns` | alongside |
 | Health check the pipeline uses to decide | `web-service-essentials` | alongside |
-| Steps when a deploy breaks the system | `incident-runbook-template` · `postmortem-template` | alongside |
 | Commit messages that can generate release notes automatically | `commit-message-format` | alongside |
-| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 
 **Working pipeline files for GitHub Actions, Azure DevOps and GitLab** are in `references/per-platform.md`.
 **Read more when needed:** [`references/deployment-plan-template.md`](references/deployment-plan-template.md) — plan template
@@ -206,6 +203,9 @@ During a 5% canary, when the 1-hour window is not yet full, you may use the shor
 
 > **A rollback that has never been rehearsed is the same as no rollback**, because you find out it does not work at the moment you need it.
 
+- No Friday-evening deploy while the team cannot yet roll back with a single command.
+- No manual deploy by following steps in a Word file: on the day the author is out sick, nobody can deploy.
+
 ---
 
 ## 10 · The pipeline must be fast and trustworthy
@@ -220,7 +220,7 @@ During a 5% canary, when the 1-hour window is not yet full, you may use the shor
 **Metrics worth watching:** how often you release · how long from commit to live ·
 what percentage of deploys break · how long recovery takes
 
-**Common symptoms and the first place to look** (idea from wshobson deployment-pipeline-design)
+**Common symptoms and the first place to look**
 
 | Symptom | Look here first |
 |---|---|
@@ -241,18 +241,3 @@ what percentage of deploys break · how long recovery takes
 | Staged release | production uses a staged rollout in % (for example 5 → 20 → 50 → 100) instead of a server canary · Play tracks stand in for the environments in section 5 |
 | Rollback | **you cannot roll back a version on Play**, because the versionCode cannot go down and devices that already installed it do not go back. Halt the rollout, then release a fix with a higher versionCode, and rehearse this procedure instead of section 9 |
 | Signing key | keep the upload key in the CI secret store as base64 + the password as a separate secret · `android/key.properties` and `*.jks` go in `.gitignore` · **back up the key outside CI in at least 1 place.** If you lose it, you cannot update the app until Play support resets it (use Play App Signing so Google holds the real key) |
-
----
-
-## 11 · Anti-patterns
-
-- **Rebuilding when going to production** means what was tested is not what is released
-- **Deploying by hand from steps in a Word file** · on the day the author is out sick, nobody can deploy
-- **Secrets in pipeline files** · anyone who can read the code can read the secrets
-- **Letting a failed test pass** once makes people stop trusting results for good
-- **Deploying on Friday evening** in a team that cannot yet roll back with a single command
-- **Server database migration run at app boot** · several instances collide (mobile on-device databases are the exception, see section 7)
-- **No artifact kept** turns a rollback into rebuilding from an old commit
-- **Environments whose config differs unpredictably** · "it passed on staging"
-- **A feature flag with no removal date**
-- **A pipeline that takes 45 minutes** · people start merging without waiting for the result

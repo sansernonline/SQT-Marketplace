@@ -21,6 +21,4 @@ Use it with a skill built by [`app-verifier-setup`](../app-verifier-setup/SKILL.
 
 ## What not to do
 
-- Edit the steps to pass when the app behaves wrongly, because that hides the bug inside the checking tool.
 - Remove a feature from the map because it is hard to test.
-- Split the PR into many small pieces, because the reviewer needs to see the whole change in one round.
