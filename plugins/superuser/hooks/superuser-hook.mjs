@@ -240,6 +240,15 @@ export function parseVerdict(text) {
   return { verdict: loose ? toVerdict(loose) : null, round: Number(t.match(/รอบที่\s*(\d+)/)?.[1]) || null, ...severityCounts(t) };
 }
 
+// บรรทัดแรกของรายงานลูกทีมเป็น 1 ใน 4 ค่า (superuser หัวข้อ 5) · ผลที่ลูกทีมบอกเอง ไม่ใช่ผลตรวจ · log 2026-11-16: ผลผู้ตรวจผูกกับงานได้แค่ 9% ค่านี้จึงเป็นผลของทุกงาน
+const WORKER_STATUS = { "เสร็จ มีข้อกังวล": "done_concerns", "เสร็จ": "done", "ขาดบริบท": "missing_context", "ติด": "blocked" };
+export function workerStatus(text) {
+  const first = String(text ?? "").replace(/^\s*<agent-message[^>]*>/, "").split("\n").map((l) => l.replace(/[#*`_>\s]/g, " ").trim()).find(Boolean) ?? "";
+  // คำต้องจบตรงนั้น: "ติดตั้งแล้ว" ไม่ใช่ ติด
+  const hit = Object.keys(WORKER_STATUS).find((k) => first.startsWith(k) && /^($|[\s:：—–(·-])/.test(first.slice(k.length)));
+  return hit ? WORKER_STATUS[hit] : null;
+}
+
 // บรรทัด "คาด:" ที่หัวหน้าเพิ่งเขียนลง CONTEXT.md → ตัวเลขที่เทียบกับจริงได้ (ลูกทีม · รอบตรวจ) และคำจัดขนาด · เก็บแค่ค่าที่แยกได้ ไม่เก็บข้อความ
 const EXPECT_LINE = /คาด\s*[:：]([^\n|]*)/g;
 
@@ -304,7 +313,7 @@ export function runEvents(input, entry, rules) {
   const base = { ts: entry.ts, session: entry.session };
   if (entry.event === "UserPromptSubmit") {
     const from = String(input.prompt ?? "").match(AGENT_MESSAGE)?.[1];
-    if (from) return [{ ...base, event: "result", spawned_id: shortId(from), ...parseVerdict(input.prompt) }];
+    if (from) return [{ ...base, event: "result", spawned_id: shortId(from), ...parseVerdict(input.prompt), status: workerStatus(input.prompt) }];
     const done = taskDone(input.prompt);
     if (done) return [{ ...base, event: "result", ...done }];
     const feedback = userFeedback(input.prompt);
@@ -1891,8 +1900,12 @@ ${rows}
       const ev = runEvents({ hook_event_name: "UserPromptSubmit", prompt: "<agent-message from=\"abcdef1234\">\n## ผล: ผ่าน (รอบที่ 1 · สูง 0 · กลาง 0 · ต่ำ 4)" }, { ts: "t", session: "s", event: "UserPromptSubmit" }, null)[0];
       return a.verdict === "fail" && a.round === 2 && a.high === 1 && a.mid === 3 && a.low === 4
         && b.verdict === "pass" && b.high === null && b.low === null
-        && ev.event === "result" && ev.verdict === "pass" && ev.high === 0 && ev.mid === 0 && ev.low === 4 && ev.round === 1;
+        && ev.event === "result" && ev.verdict === "pass" && ev.high === 0 && ev.mid === 0 && ev.low === 4 && ev.round === 1 && ev.status === null;
     }],
+    ["runs: บรรทัดแรกของรายงานลูกทีม → status (เสร็จ · เสร็จ มีข้อกังวล · ขาดบริบท · ติด)", [], true, () =>
+      workerStatus("<agent-message from=\"a1\">\nเสร็จ\nแก้ 3 ไฟล์") === "done" && workerStatus("<agent-message from=\"a1\">**เสร็จ มีข้อกังวล** — x") === "done_concerns"
+      && workerStatus("<agent-message from=\"a1\">\n\n## ขาดบริบท") === "missing_context" && workerStatus("ติด: ไม่มีสิทธิ์") === "blocked"
+      && workerStatus("<agent-message from=\"a1\">แก้เสร็จแล้ว") === null && workerStatus("ติดตั้งแล้ว") === null && workerStatus(null) === null],
     ["runs: หัวหน้าเขียน คาด: ลง CONTEXT.md → บรรทัด expect · บรรทัดเดิมใน old_string ไม่นับซ้ำ · ไฟล์อื่นไม่นับ", [], true, () => {
       const line = "| 2026-11-08 | แบ่ง 3 ชิ้น | คาด: ขนาด กลาง · ลูกทีม 3 · รอบตรวจ 2 · ระดับ กลาง · สายวิกฤต 40k · กว้างสุด 2 · เร็วขึ้น 1.5 เท่า |";
       const ed = (file_path, new_string, old_string = "") => ({ hook_event_name: "PostToolUse", tool_name: "Edit", tool_input: { file_path, new_string, old_string }, tool_response: {} });
