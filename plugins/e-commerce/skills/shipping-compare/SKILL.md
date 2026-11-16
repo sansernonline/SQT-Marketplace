@@ -5,7 +5,7 @@ description: Use when a Thai seller compares couriers
 
 # Shipping Compare
 
-The cheapest courier on a rate card is often not the cheapest on your parcels. Compare on your own last month of orders: real weights, real sizes, real destinations, real cash on delivery (COD) share.
+Compare on your own last month of orders: real weights, real sizes, real destinations, real cash on delivery (COD) share.
 
 ## Where the choice actually exists
 
@@ -54,7 +54,7 @@ Divisor is usually 5,000 or 6,000 depending on the courier and service — confi
 
 Context: Flash, Kerry (KEX) and J&T reportedly raised base prices by ฿3 per parcel from 1 April 2026 (fuel costs) (รอยืนยัน — one news source). COD maximum per parcel at Flash reported ฿50,000 (รอยืนยัน).
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://zortout.com/en/docs/how-to-register-and-ship-cash-on-delivery-cod-packages-via-flash-express · https://www.car250.com/?p=463590 · courier rate pages — every rate (รอยืนยัน) in the courier's own app
+Sources and check date (2026-10-06): [references/sources.md](references/sources.md) · every rate stays (รอยืนยัน) until read in the courier's own app
 
 ## Worked example — LINE shop, 300 orders a month
 
@@ -74,7 +74,7 @@ Ranking by cost alone hides a courier that breaks 3% of parcels. Use `decision-s
 | Default weights (starting value, not yet measured · change to fit the shop) | cost 0.40 · damage rate 0.25 · delivery days 0.20 · COD payout days 0.15 |
 | Read the result line | `ยังไม่นิ่ง` or `สูสี` (a near tie, like the worked example below) → show the top 2 and the criterion that flips them; you choose, the score does not |
 
-Cost per order must already include chargeable weight, COD fee and remote-area surcharge. With only 2 couriers, min-max scoring gives 0 and 100 on every criterion, so read the raw numbers in brackets too. Trial run 2026-10-27 (illustrative numbers, 4 couriers, input file [references/score-example.json](references/score-example.json) — copy it, replace the values with your own, run `decide.mjs score <file>`): a courier with a 3 kg limit was dropped by the hard rule; the other 3 scored 50 / 48 / 40 and the line said `ยังไม่นิ่ง` (delivery days flips first place), so the choice went to the owner.
+Cost per order must already include chargeable weight, COD fee and remote-area surcharge. With only 2 couriers, min-max scoring gives 0 and 100 on every criterion, so read the raw numbers in brackets too. Input file: [references/score-example.json](references/score-example.json) (illustrative; copy it, replace the values with your own, run `decide.mjs score <file>`).
 
 No damage data yet → use the claim count from the courier's app, or leave that criterion out and say so.
 

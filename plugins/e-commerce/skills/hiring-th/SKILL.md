@@ -5,11 +5,9 @@ description: Use when a Thai employer hires staff
 
 # Hiring one position (Thai employer side)
 
-This skill walks through hiring one position, from drafting the job ad to the new employee finishing the first week. Every applicant gets the same questions and criteria. Applicant data is kept under the personal data protection law. The offer letter does not conflict with labour law. For the applicant side (CV · interview practice · salary negotiation), use `resume-th-en` `interview-prep` `salary-negotiation` in plugin `personal-life`.
+This skill walks through hiring one position, from drafting the job ad to the new employee finishing the first week. Every applicant gets the same questions and criteria. Applicant data is kept under the personal data protection law. The offer letter does not conflict with labour law.
 
 This content is general information, not legal advice. For disputes, ask a labour inspector (hotline 1506 press 3, or 1546) or a labour lawyer.
-
-Abbreviations in this file: Act (พ.ร.บ.) · Section (ม.) · Personal Data Protection Act B.E. 2562 (2019) (PDPA).
 
 ## 0 · Find the existing template first (every time)
 
@@ -45,7 +43,7 @@ Steps 2 · 5 · 6 · 7 contain work that needs approval first (section 10).
 | PDPA Section 26 | Religion, health, disability, criminal record, biometric data and the other sensitive data in this section can be collected only with the data subject's explicit consent, or under an exception that the section states |
 | Age | No law found that directly bans a private employer from stating an age range in a job ad · Constitution B.E. 2560 (2017) Section 27 paragraph 3 bans unjust discrimination because of age, sex, disability, religion and other grounds, but how far it binds private employers is not yet checked (`รอยืนยัน`, awaiting confirmation) |
 
-Last checked 2026-10-23 · Sources: labour.go.th (Section 15 · Section 53) · Gender Equality Act guide (tmd.go.th) · PDPA text (mdes.go.th) · Constitution Section 27 (senate.go.th) — full URLs in [references/sources.md](references/sources.md)
+Last checked 2026-10-23 · sources: [references/sources.md](references/sources.md)
 
 ### Wording to fix before posting
 
@@ -113,4 +111,3 @@ These cannot be undone or affect people outside. The agent prepares drafts but d
 | Privacy notice, ROPA and data subject requests | `pdpa-workflow` + agent `compliance-helper` |
 | Result letters or letters to agencies | `doc-thai-official` + agent `thai-doc-writer` |
 | Applicant side: CV · interview practice · salary negotiation | `resume-th-en` · `interview-prep` · `salary-negotiation` (plugin `personal-life`) |
-| Wording of every line | `human-writing` |

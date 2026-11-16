@@ -21,8 +21,6 @@ Which form, which date, how much to withhold, and what filing late costs. This i
 - VAT rate: **7%** (6.3% + local tax 0.7%), reduced from the statutory 10%, extended by พ.ร.ฎ. (ฉบับที่ 807) พ.ศ. 2569 to **30 Sep 2570**.
 - Registration is online through RD e-Registration (rd.go.th).
 
-ตรวจล่าสุด 2026-10-25 (พ.ร.ฎ. ฉบับที่ 807 ลงราชกิจจานุเบกษา 23 ส.ค. 2569 ใช้ 1 ต.ค. 2569 – 30 ก.ย. 2570) · แหล่ง: https://www.rd.go.th/1603.html · https://www.thaipbs.or.th/news/content/509779 · https://www.thansettakij.com/economy/667217 · https://www.prd.go.th/th/content/category/detail/id/33/iid/526275
-
 ## 2. Monthly and yearly calendar
 
 | Form | What | Paper deadline |
@@ -64,8 +62,6 @@ Full table with legal basis and edge cases: [references/wht-rates.md](references
 
 Pay through a bank that supports e-WHT and the bank deducts, files and remits — no ภ.ง.ด.3/53 for those payments and no paper 50 ทวิ. The rate for services, rent, advertising, professional fees and commission is cut to **1%**. Cabinet approved extending this from 1 Jan 2569 to **31 Dec 2570** (รอยืนยัน — check the พ.ร.ฎ. was published in ราชกิจจานุเบกษา).
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.infoquest.co.th/?p=601636 · https://www.kasikornbank.com/th/business/sme/financial-services/ecertificate/Pages/e-withholding-tax.aspx
-
 ## 4. Late filing and late payment
 
 | Item | Rule |
@@ -74,8 +70,6 @@ Pay through a bank that supports e-WHT and the bank deducts, files and remits �
 | เบี้ยปรับ VAT (penalty) | Up to 2× the tax (ม.89); late ภ.พ.30 filed with payment before any written notice is cut to a share **of the penalty**: 2% if paid within 15 days of the due date, 5% within 15–30 days, 10% within 30–60 days, 20% after 60 days (คำสั่ง ท.ป.81/2542 ข้อ 5(1), amended by ท.ป.369/2569 from 3 Jul 2569) |
 | ค่าปรับอาญา for a late return | Up to 2,000 baht (ม.35); usual settlement 100–200 baht per WHT return and 300–500 baht per ภ.พ.30 (รอยืนยัน) |
 | Under-estimated ภ.ง.ด.51 | Estimate more than 25% below actual profit without reasonable cause: 20% surcharge on the shortfall |
-
-Last checked 2026-10-25 (VAT surcharge) · sources: https://www.rd.go.th/3361.html , https://www.prosofterp.com/Article/Detail/141129 , https://www.auditorasia.com/th/process_add_money · criminal fines of 100/200 and 300/500 baht (filing late by no more than 7 days / more than 7 days) were found only in secondary sources; no official regulation found yet
 
 ## Workflow
 
@@ -86,14 +80,9 @@ Last checked 2026-10-25 (VAT surcharge) · sources: https://www.rd.go.th/3361.ht
 5. If anything is late, compute the surcharge from section 4 and tell the user to file now. The cost grows every month.
 6. End with the handoff list for the accountant.
 
-## Worked example — a service payment
+## Worked example
 
-Company pays a design agency (บริษัท) 20,000 baht + VAT 7% = 21,400.
-
-- WHT 3% × 20,000 = **600** → pay the agency 21,400 − 600 = **20,800**
-- Issue 50 ทวิ for 600; file ภ.ง.ด.53 and remit 600 by the 7th of next month on paper, or by the e-Filing deadline online (section 2).
-- Through e-WHT at 1%: withhold 200, pay 21,200, the bank files.
-- Paid 2 months late: surcharge 600 × 1.5% × 2 = 18 baht plus the settlement fine.
+A 20,000 baht + VAT service payment to a company: WHT 600, pay 20,800, file ภ.ง.ด.53. Full calculation (including e-WHT and late surcharge): [references/worked-example.md](references/worked-example.md).
 
 ## Related
 
@@ -106,3 +95,7 @@ Company pays a design agency (บริษัท) 20,000 baht + VAT 7% = 21,400.
 Run `tax-vat-th` with the `tax-helper` agent for: **$ARGUMENTS**
 
 Verifies dates against current RD announcements rather than reusing last year's calendar, and ends with the accountant handoff checklist.
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
