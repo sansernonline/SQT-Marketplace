@@ -32,7 +32,6 @@ No setup and no API key needed → generate with the session's tool → draw a f
 Before the first image, write **1 paragraph on what this set of images is** (at most 4 sentences) at the top of `image-style.md`: who views it · what they should feel · what this set will never be (for example "not a glossy ad"). Every prompt and every chosen image is compared against this paragraph, not against your taste at the moment.
 Write `image-style.md` (kept in `docs/design/` or the work's own folder): style · 3–5 colours (from the brand colours · with no brand → **search for references first:** take the project's keywords and search live following `design-references` (plugin `superuser`), type `illustration`, then extract the colours from the chosen work · the stored palette library is for when live search is impossible) · light · camera angle · what must not appear
 → append this block to every image's prompt → even 20 images still look like one set
-(How to write the brief and prompt → `brief-to-image`)
 
 ## Write the brief and prompt
 
