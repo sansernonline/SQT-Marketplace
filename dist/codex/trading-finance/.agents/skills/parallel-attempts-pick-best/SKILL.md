@@ -5,17 +5,13 @@ description: Use when one attempt may lock in a wrong design or plan
 
 # parallel-attempts-pick-best — try several ways, pick the best
 
-> The first way you think of is often not the best, but once you start building, nobody comes back to try another.
-
-Comes from `arena` in pstack.
-
 If you only want options on paper before starting, with nothing built, use the agent `brainstormer`.
 
 The line between this and [`adversarial-review-panel`](../adversarial-review-panel/SKILL.md): this skill builds several versions before choosing (no work yet, or the form is not settled) · the panel attacks 1 finished piece before shipping · they chain: pick the winning version, then send it to the panel.
 
 ## 1 · Set the task
 
-0. **For work decided by taste (icons · logos · looks · colors), ask for 2–3 examples the user likes before the contest**, and put them in every contestant's task · with no examples, every direction guesses the taste on its own and the user will like none (3 plugin icon directions were all rejected on 2026-10-26) · before asking, search real work in the same category yourself, the way a designer would, by `design-references`, the type that fits the work (things that will sit side by side · the destination's rules · directions that are overused), then offer 3–4 directions with links for the user to choose from. Do not offer directions from a gut feeling (the user asked for this on 2026-10-26).
+0. **For work decided by taste (icons · logos · looks · colors), ask for 2–3 examples the user likes before the contest**, and put them in every contestant's task · with no examples, every direction guesses the taste on its own and the user will like none · before asking, search real work in the same category yourself, the way a designer would, by `design-references`, the type that fits the work (things that will sit side by side · the destination's rules · directions that are overused), then offer 3–4 directions with links for the user to choose from. Do not offer directions from a gut feeling.
 1. Say clearly what every contestant must deliver (a draft proposal · sales copy · a slide page · a plan · a function). Every contestant gets the same task, because the task is the contract.
 2. Write 3–6 checkable scoring criteria, such as (writing) reads smoothly aloud · meets the requirements · cheaper than X · (code) passes tests — **keep the criteria with the chooser and do not give them to the contestants** · for the Thai language quality of writing, do not let models vote a ranking. The owner chooses, and a model can only list the `human-writing` rule codes it finds in each entry.
 3. Choose the number. Normally 3 contestants, and at most 4 for big or costly work.
@@ -41,7 +37,7 @@ Read every entry to the end before deciding. Score criterion by criterion, not b
 - If the scores agree, treat it as confirmed.
 - If they disagree, the criteria are ambiguous or one side is biased. Read both sides' reasons before deciding.
 - If scores are close, choose the entry that is easiest to keep working on, meaning clearer scope and fewer parts (`lazy-coding` (plugin `software-development`)).
-- **Fewer than 2 entries pass the criteria → fall back to a single piece of work.** There is nothing to compare. Skip step 5, take the entry closest to passing as the draft, and fix it by the normal review round of `superuser`. Do not launch a new round, because every entry failing together usually means the task or criteria are unclear, not that the contestants are weak. Note in `decision-log` why the bake-off did not work (idea from best-of-n by paulingham).
+- **Fewer than 2 entries pass the criteria → fall back to a single piece of work.** There is nothing to compare. Skip step 5, take the entry closest to passing as the draft, and fix it by the normal review round of `superuser`. Do not launch a new round, because every entry failing together usually means the task or criteria are unclear, not that the contestants are weak. Note in `decision-log` why the bake-off did not work.
 
 ## 5 · Lift the strong parts in
 

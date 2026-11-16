@@ -41,16 +41,7 @@ Change only what the brief names. AI edits drift: ask for a new cup and the ligh
 
 ## Worked example
 
-**Image:** story background, iced matcha on a counter; text area top-right.
-**Problem:** a straw appears (brand rule: no straws in photos), a stray cup on the right, and the image is 4:5 but the story needs 9:16.
-
-| Round | Change | Mask / setting | Result |
-|---|---|---|---|
-| 1 | Remove straw — "glass rim with no straw, same condensation" | Mask straw + 10 px | Pass; keep list intact |
-| 2 | Remove right cup — "continue the oak counter and blurred shop interior" | Mask cup and its shadow | Pass after 1 retry (first try left a shadow) |
-| 3 | Extend top by 42% for 9:16 — "continue the cream wall, no objects" | Outpaint top only | Pass; top area is clean text space |
-
-Verification: face of glass, layer colours, light from right, palette — all unchanged. Saved as `matcha26-bg-v04.png`.
+A story background run through 3 rounds (remove straw · remove stray cup · extend canvas 4:5 to 9:16): [`references/worked-example.md`](references/worked-example.md)
 
 ## Rules
 
@@ -120,6 +111,24 @@ To go from one ratio to another with the same width W:
 Decide where the new pixels go (top for text space, bottom only if it stays outside the story UI zone).
 
 
+## reference: worked-example.md
+
+# Worked example · image-editing-brief
+
+## Worked example
+
+**Image:** story background, iced matcha on a counter; text area top-right.
+**Problem:** a straw appears (brand rule: no straws in photos), a stray cup on the right, and the image is 4:5 but the story needs 9:16.
+
+| Round | Change | Mask / setting | Result |
+|---|---|---|---|
+| 1 | Remove straw — "glass rim with no straw, same condensation" | Mask straw + 10 px | Pass; keep list intact |
+| 2 | Remove right cup — "continue the oak counter and blurred shop interior" | Mask cup and its shadow | Pass after 1 retry (first try left a shadow) |
+| 3 | Extend top by 42% for 9:16 — "continue the cream wall, no objects" | Outpaint top only | Pass; top area is clean text space |
+
+Verification: face of glass, layer colours, light from right, palette — all unchanged. Saved as `matcha26-bg-v04.png`.
+
+
 ---
 
 # skill: brand-kit
@@ -130,7 +139,7 @@ Use when starting a brand or needing a style guideline
 
 > **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
-One folder, one README, everything the brand needs to look like itself. A small shop needs a kit it can read in 5 minutes, not a 60-page brand book.
+One folder, one README, everything the brand needs to look like itself.
 
 For app or product screens, the `software-development` plugin's `design-system` skill (if installed) covers writing tokens for code (CSS variables, Tailwind theme) and `ui-craft` covers reading existing screens; without it, keep to this skill. This skill is for marketing, social and print. A software project's one-off visuals (logo, poster, LINE art) are lighter work in `software-development:graphic-design`; once the brand needs a full kit or campaign, work here.
 
@@ -158,23 +167,7 @@ For app or product screens, the `software-development` plugin's `design-system` 
 
 **Contrast check (Web Content Accessibility Guidelines (WCAG) 2.2 AA, criterion 1.4.3):** normal text ≥ **4.5:1**; large text (≥ 18 pt, or ≥ 14 pt bold) ≥ **3:1**. Logos are exempt but should still be legible. Check pairs with any WCAG contrast checker (WebAIM Contrast Checker, a Figma or Canva contrast plugin, browser DevTools).
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html
-
-### Worked example — contrast matrix
-
-Palette for a Thai café: primary `#0F5C4D` (deep teal), accent `#F2A93B` (amber), text `#1F2328`, background `#FAF7F2`, muted text `#6B7280`.
-
-| Text on background | Ratio | Body text (4.5) | Headline ≥ 18 pt (3.0) |
-|---|---|---|---|
-| `#1F2328` on `#FAF7F2` | 14.78 | Pass | Pass |
-| `#0F5C4D` on `#FAF7F2` | 7.39 | Pass | Pass |
-| `#FFFFFF` on `#0F5C4D` | 7.90 | Pass | Pass |
-| `#6B7280` on `#FAF7F2` | 4.52 | Pass (just) | Pass |
-| `#1F2328` on `#F2A93B` | 7.91 | Pass | Pass |
-| `#FFFFFF` on `#F2A93B` | 2.00 | **Fail** | **Fail** |
-| `#F2A93B` on `#FAF7F2` | 1.87 | **Fail** | **Fail** |
-
-Ratios computed with the WCAG relative-luminance formula. Decision written into the kit: amber buttons carry **dark** text, never white; amber is never used for text on the light background.
+Worked example (a Thai café palette with 7 pairs, where white on amber fails and amber buttons carry dark text): [references/contrast-example.md](references/contrast-example.md)
 
 ## Type scale
 
@@ -211,10 +204,6 @@ Use this when an organisation or team needs a full guide (tone of voice, key mes
 - Sync tokens: `node scripts/sync-brand-to-tokens.cjs` · check a file: `scripts/validate-asset.cjs` · compare image colours: `scripts/extract-colors.cjs` · brand summary to paste into a prompt: `scripts/inject-brand-context.cjs`
 - Full steps, topic/source-file table, limits and checklist: [references/brand-guidelines.md](references/brand-guidelines.md)
 
-## Not an AI look
-
-Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files.
-
 ## Related
 
 - `style-consistency` — the per-campaign style lock that sits under the kit
@@ -228,6 +217,10 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 Run `brand-kit` with the `brand-keeper` agent for: **$ARGUMENTS**
 
 Ends with a README you can read in 5 minutes and a v1 version tag.
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
 
 
 ## reference: brand-guidelines.md
@@ -288,6 +281,27 @@ All 4 scripts are in `scripts/` of skill `brand-kit`, written in Node, installin
 ## Sources
 
 - nextlevelbuilder/ui-ux-pro-max-skill `.claude/skills/brand` · MIT · commit `b7d5353` · viewed 2026-11-05 · files in `data/upstream/` `scripts/` `templates/` copied without changes
+
+
+## reference: contrast-example.md
+
+# Worked example · contrast matrix · brand-kit
+
+### Worked example — contrast matrix
+
+Palette for a Thai café: primary `#0F5C4D` (deep teal), accent `#F2A93B` (amber), text `#1F2328`, background `#FAF7F2`, muted text `#6B7280`.
+
+| Text on background | Ratio | Body text (4.5) | Headline ≥ 18 pt (3.0) |
+|---|---|---|---|
+| `#1F2328` on `#FAF7F2` | 14.78 | Pass | Pass |
+| `#0F5C4D` on `#FAF7F2` | 7.39 | Pass | Pass |
+| `#FFFFFF` on `#0F5C4D` | 7.90 | Pass | Pass |
+| `#6B7280` on `#FAF7F2` | 4.52 | Pass (just) | Pass |
+| `#1F2328` on `#F2A93B` | 7.91 | Pass | Pass |
+| `#FFFFFF` on `#F2A93B` | 2.00 | **Fail** | **Fail** |
+| `#F2A93B` on `#FAF7F2` | 1.87 | **Fail** | **Fail** |
+
+Ratios computed with the WCAG relative-luminance formula. Decision written into the kit: amber buttons carry **dark** text, never white; amber is never used for text on the light background.
 
 
 ## reference: kit-template.md
@@ -366,6 +380,13 @@ v1 · <date> · owner <name>
 ## CMYK note
 
 Screen hex values do not convert one-to-one to print. Ask the print shop (โรงพิมพ์) for a proof of the primary and accent, then record the CMYK they matched — not the number a converter guessed.
+
+
+## reference: sources.md
+
+# Sources · brand-kit
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html
 
 
 ## reference: thai-fonts.md

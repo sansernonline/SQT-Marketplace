@@ -5,7 +5,6 @@ Use when designing or changing a database schema
 # Database design
 
 > **One rule:** the schema is the hardest thing in a system to change.
-> A code bug fixed today is done today, but a wrong schema stays for 3 years, with another 10 million real rows to migrate along with it.
 
 ## When to use this skill
 
@@ -14,18 +13,7 @@ Use when designing or changing a database schema
 - Writing a migration, especially once the system holds real data
 - A query is slow and you suspect the schema or an index
 
-## When to use another skill instead, or together
-
-| Task | Skill | |
-|---|---|---|
-| Choose the overall architecture | `architecture-patterns` | instead |
-| Design endpoints and JSON shapes | `api-conventions` | instead |
-| Store passwords, tokens, user permissions | `auth-implementation-patterns` | instead |
-| Where to keep connection strings | `config-and-secrets` | instead |
-| Run migrations in a pipeline | `cicd-and-release` | instead |
-| Draw an Entity-Relationship (ER) diagram | `diagram-figures` or `markdown-visuals` | together |
-| Record why this database was chosen | `adr-writer` | together |
-| Abbreviations in work people read | `spell-out-abbreviations` | together |
+Not for: overall architecture → `architecture-patterns` · endpoints and JSON shapes → `api-conventions` · passwords, tokens, permissions → `auth-implementation-patterns` · running migrations in a pipeline → `cicd-and-release`
 
 **Syntax specific to each database, data types compared, and the migration commands of each Object-Relational Mapping (ORM) tool** are in `references/per-stack.md`.
 
@@ -43,7 +31,6 @@ Use when designing or changing a database schema
 
 > **The default is relational.** Choose document only when you **can answer why**.
 > "More flexible" is not a reason. It means the design is not done yet.
-> Most systems that chose document for flexibility end up writing join code by hand in the app.
 
 **You can mix them**: use relational as the base, and store data of uncertain shape in a `jsonb` column.
 In almost every case this is better than running 2 separate databases.
@@ -884,9 +871,7 @@ Use when settings differ by environment or secrets need hiding
 | Designing login, tokens, user permissions | `auth-implementation-patterns` | instead |
 | Keeping sensitive values out of logs | `logging-standards` | instead |
 | Database connection strings | `database-design` | together |
-| Recording the incident after a secret leak | `postmortem-template` | together |
-| Steps during an incident | `incident-runbook-template` | together |
-| Abbreviations in work people read | `spell-out-abbreviations` | together |
+| Recording a secret leak · steps during the incident | `postmortem-template` · `incident-runbook-template` | together |
 
 **How to do it in each language and framework** is in `references/per-stack.md`.
 
@@ -928,18 +913,7 @@ For example `DEBUG=false` · `ALLOWED_ORIGINS=` empty · Transport Layer Securit
 > A system that boots with wrong config will break at 2 a.m. in a function that is rarely used.
 > A system that **refuses to boot** on wrong config tells you at deploy time, when you can still roll back.
 
-```ts
-// Node — zod
-const Env = z.object({
-  NODE_ENV:      z.enum(['development', 'staging', 'production']),
-  PORT:          z.coerce.number().int().positive().default(3000),
-  DATABASE_URL:  z.string().url(),
-  JWT_SECRET:    z.string().min(32),
-  LOG_LEVEL:     z.enum(['debug','info','warn','error']).default('info'),
-});
-
-export const env = Env.parse(process.env);   // invalid = the process dies and says which value is wrong
-```
+Node zod example: `references/per-stack.md` section 2. The pattern is a schema that parses `process.env` once at boot, so an invalid value kills the process and names the value.
 
 **What to check:** every value is present · types are right · values are in the accepted range ·
 keys are long enough · values banned on production (`JWT_SECRET=dev-secret` must fail).
@@ -998,7 +972,7 @@ Otherwise the next person who clones hits an error nobody can explain.
 > **A `.env` added to `.gitignore` too late:** once the file has been tracked, even once,
 > adding it to `.gitignore` later **does not remove it from history.** Run `git rm --cached` and treat the secret as leaked.
 
-**Pre-commit gate** (idea from wshobson secrets-management): `.gitignore` blocks only files you know by name, but a key pasted by mistake into code or YAML needs a scanner. Install gitleaks as a pre-commit hook in every repo (`gitleaks git --pre-commit --staged` in gitleaks 8.19 and later · earlier versions use `gitleaks protect --staged`) and rerun it in CI over the whole history with `gitleaks git --redact`. If the hook fails, never use `--no-verify`; move the value out first. If you find one in history, go to step 8 at once, not just delete the line.
+**Pre-commit gate**: `.gitignore` blocks only files you know by name, but a key pasted by mistake into code or YAML needs a scanner. Install gitleaks as a pre-commit hook in every repo (`gitleaks git --pre-commit --staged` in gitleaks 8.19 and later · earlier versions use `gitleaks protect --staged`) and rerun it in CI over the whole history with `gitleaks git --redact`. If the hook fails, never use `--no-verify`; move the value out first. If you find one in history, go to step 8 at once, not just delete the line.
 
 ---
 
@@ -1078,18 +1052,6 @@ you can still verify old tokens that have not expired.
 instead of embedding the value at build time (`import.meta.env`), which locks the value into the built files.
 
 ---
-
-## 11 · Anti-patterns
-
-- **A connection string in code**, even a dev one, because one day someone will copy it for production.
-- **A production `.env` placed on the server.** Anyone who can enter the machine can read it, and nothing records who read it.
-- **The same secret in every environment.** When staging leaks, production leaks too.
-- **Sending secrets by chat or email.** The value stays there forever, and is searchable.
-- **No `.env.example`.** A new person wastes half a day guessing which values are needed.
-- **Booting successfully with incomplete config,** then breaking in real use.
-- **Printing the whole config to the log at boot,** secrets included.
-- **`ALLOWED_ORIGINS=*` on production** because "it was blocked by Cross-Origin Resource Sharing (CORS) in dev."
-- **A key that has never changed since the first year.**
 
 
 ## reference: per-stack.md
@@ -1352,16 +1314,11 @@ Use when work runs outside the request in queues or schedules
 | Task | Skill | |
 |---|---|---|
 | Timeouts and retries for ordinary requests | `error-handling-patterns` | instead |
+| Metrics and alerts | `observability-basics` | instead |
 | Events across several services through Kafka (several consumers read the same event · history is kept) | `kafka-streaming` | instead |
 | A job queue through RabbitMQ (several workers · retry · dead letter · needs a real broker) | `rabbitmq-messaging` | instead |
-| Metrics and alerts | `observability-basics` | instead |
-| Choosing the overall architecture | `architecture-patterns` | instead |
 | Importing Excel/CSV files as the main job | `data-import-export` | instead |
 | Sending email/SMS as the main job | `notifications` | instead |
-| The job table and indexes | `database-design` | alongside |
-| Worker logs and correlation id | `logging-standards` | alongside |
-| Jobs that delete expired data | `pdpa-compliance` | alongside |
-| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 | Designing an agent system (Loop · Graph · Dynamic · choosing a framework) | `llm-engineering` → [`agent-systems.md`](../llm-engineering/references/agent-systems.md) | alongside |
 
 ---
@@ -1434,7 +1391,7 @@ fail → wait 1 min → fail → wait 4 min → fail → wait 16 min → 4th fai
 **A job stuck because a worker died** needs an unlocker.
 If a job's `locked_at` is older than N minutes, treat it as having nobody working on it, and unlock it so another worker picks it up.
 
-**Job state is a state machine, not a boolean** (idea from wshobson python-background-jobs) — every mechanism in section 2 must be able to say which state a job is in: `queued → running → succeeded`, or `running → failed (attempts < cap) → queued`, or `failed → dead` · keep `attempts` · `locked_at` · `last_error` · `finished_at` with the job · move only along the arrows above (a `succeeded` job cannot go back to `running`; create a new job) · the admin screen and the dead letter read from this state in one place
+**Job state is a state machine, not a boolean** — every mechanism in section 2 must be able to say which state a job is in: `queued → running → succeeded`, or `running → failed (attempts < cap) → queued`, or `failed → dead` · keep `attempts` · `locked_at` · `last_error` · `finished_at` with the job · move only along the arrows above (a `succeeded` job cannot go back to `running`; create a new job) · the admin screen and the dead letter read from this state in one place
 
 ---
 
@@ -1490,23 +1447,26 @@ because a single 40-minute job that fails at minute 39 must start over from the 
 
 ---
 
-## 8 · Anti-patterns
+## 8 · Payload
 
-- **A job that repeats its effect when run again** — the queue will certainly run it again, not maybe
-- **Unlimited retry** — one broken job jams the whole queue
-- **No dead letter** — jobs vanish silently and nobody knows
-- **A dead letter that nobody watches** — the same as having none
-- **Scheduled jobs on several instances with no lock** — they run on top of each other
-- **Sending the whole data block in the payload** — send the id and let the job read it itself, so it gets the latest data too
-- **A long job that cannot be cancelled** — the user clicks wrong and waits 40 minutes
-- **A blind spinner that gives no progress** — the user clicks again and gets a duplicate job
-- **Not measuring the queue** — it jams and you find out when a customer calls
+- **Send the id, not the whole data block, in the payload** — the job reads it itself, so it gets the latest data too
 
 ---
 
 ## 9 · Durable workflow for agent jobs that run long or wait for human approval
 
-An agent job that runs for tens of minutes, calls an LLM and tools many times, or pauses for approval across days cannot use a plain queue, because a failure at step 8 of 10 means starting over and paying the token cost again · use an engine that records the result of every step and resumes from the same point
+An agent job that runs tens of minutes, calls an LLM and tools many times, or pauses for approval across days cannot use a plain queue, because a failure at step 8 of 10 means starting over and paying the token cost again · use an engine that records the result of every step and resumes from the same point
+
+- [`references/durable-workflow.md`](references/durable-workflow.md) — open before choosing an engine (Temporal · Step Functions · checkpointer) or writing replayable code
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
+
+
+## reference: durable-workflow.md
+
+# Durable workflow for agent jobs · background-jobs
 
 | Tool | Fits | Waits for human approval | Watch out for |
 |---|---|---|---|
@@ -1521,7 +1481,12 @@ An agent job that runs for tens of minutes, calls an LLM and tools many times, o
 - **The order of calls must be the same on every run** · changing the order of steps in code that still has jobs in flight makes the old jobs fail replay (Temporal calls this a nondeterminism error) · switch to the engine's versioning or patching
 - **The steps before a wait point must be safe to repeat** (section 3) · LangGraph re-runs the paused node from the start on resume, so move side effects to after the wait point
 - **Saved state carries no identity check** (the OpenAI docs warn about `RunState`) · load it only from a store we control
-- The cap on rounds, the token budget, and stopping when there is no improvement are still needed, as for jobs in a queue · details in [`agent-systems.md`](../llm-engineering/references/agent-systems.md) section 6
+- The cap on rounds, the token budget, and stopping when there is no improvement are still needed, as for jobs in a queue · details in [`agent-systems.md`](../../llm-engineering/references/agent-systems.md) section 6
+
+
+## reference: sources.md
+
+# Sources · background-jobs
 
 Sources (opened 2026-10-26): [Temporal · OpenAI Agents SDK](https://docs.temporal.io/ai-cookbook/openai-agents-sdk-python) · [Temporal announcement](https://temporal.io/blog/announcing-openai-agents-sdk-integration) · [Step Functions integration patterns](https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html) · [Step Functions Map](https://docs.aws.amazon.com/step-functions/latest/dg/state-map.html) · [LangGraph interrupts](https://docs.langchain.com/oss/python/langgraph/interrupts) · [OpenAI human in the loop](https://openai.github.io/openai-agents-python/human_in_the_loop/) · [Claude Code workflows](https://code.claude.com/docs/en/workflows)
 
@@ -1554,7 +1519,6 @@ Use when a system must record who did what and when
 | Permissions and identity verification | `auth-implementation-patterns` | instead |
 | Consent and data-subject rights | `pdpa-compliance` | instead |
 | Requirements on what to keep and for how many years | `srs-writing` | together |
-| Abbreviations in work that people read | `spell-out-abbreviations` | together |
 
 ---
 
@@ -1678,20 +1642,6 @@ Show it as a sentence people can read, not raw JSON (the sample below is the Tha
 
 Show the time in the viewer's time zone, but store it as UTC (see `i18n-and-locale`).
 
----
-
-## 8 · Anti-patterns
-
-- **Keeping the audit in general log files**: deleted by retention within a month
-- **Recording the actor's name instead of the id**: when they change their surname, the old history turns into a different person
-- **Recording only successes**: the denied attempts are what auditors look for
-- **Recording only "edited data"** without saying from what to what
-- **The app has UPDATE permission on the audit table**: a trail that can be edited is not a trail
-- **Writing the audit outside the transaction**: the transaction succeeds but there is no record
-- **Recording every click**: the important entries sink in a pile of data nobody uses
-- **Copying sensitive data into the audit**: it creates a new leak by accident
-- **No screen to view it**: the data exists, but a developer must run a query every time a customer asks
-
 
 ---
 
@@ -1718,11 +1668,6 @@ Use when users upload files or an app serves stored files
 | Import Excel/CSV and load the data into the system | `data-import-export` | instead |
 | Permissions: who may access what | `auth-implementation-patterns` | instead |
 | Process large files as a background job | `background-jobs` | instead |
-| The file metadata table | `database-design` | together |
-| Upload endpoints and errors | `api-conventions` · `web-service-essentials` | together |
-| Retention of files that hold personal data | `pdpa-compliance` | together |
-| Storage used and alerts | `observability-basics` | together |
-| Abbreviations in anything a person reads | `spell-out-abbreviations` | together |
 
 ---
 
@@ -1827,21 +1772,6 @@ Right: 2026/09/25/01J9Z8K7X2M4.xlsx         random · split into folders by date
 | An uploaded file never linked to anything | Delete it after 24 hours. |
 | Retention | Set it per file type · a file with personal data needs an expiry date (see `pdpa-compliance`). |
 | Backup | Files belong in the backup plan just like the database, **and a restore must have been tested for real.** |
-
----
-
-## 7 · Anti-patterns
-
-- **Trusting the file extension.** Anyone can rename a file to `.jpg`.
-- **Checking size only in the browser.** It is bypassed in 3 seconds.
-- **Using the user's file name as the real path.** `../` leads anywhere.
-- **Keeping files in the folder the web serves.** Someone uploads a script and runs it.
-- **A "hard-to-guess link" instead of a permission check.**
-- **Accepting SVG without sanitising it.** The script runs in other people's browsers.
-- **Sending an 8 MB original image to a phone.**
-- **Not stripping EXIF.** The coordinates of the user's home leak out and nobody meant it to.
-- **Files outside the backup plan.** The database can be restored, but every document is gone.
-- **Reading the whole file into memory.** A large file kills the process.
 
 
 ---
@@ -1958,7 +1888,7 @@ into one message ("มี 12 รายการใหม่", not 12 messages).
 
 - Settings table: `user_id` · `notification_type` · `channel` · `enabled`
 - **Every non-transactional message must have an unsubscribe link**, and it must take effect within 24 hours (our own internal target, stricter than the 2 days that Gmail and Yahoo set)
-- **High-volume marketing email** must also carry a one-click unsubscribe header: `List-Unsubscribe: <https://...>` (an HTTPS URL) together with `List-Unsubscribe-Post: List-Unsubscribe=One-Click` per the RFC 8058 standard, and the email must pass SPF + DKIM (Gmail applies this to senders above about 5,000 messages per day · it applies to marketing email, not transactional · without it the email is more likely to land in spam) — sources: support.google.com/a/answer/14229414 · senders.yahooinc.com/best-practices checked 22 Oct 2026 (B.E. 2569)
+- **High-volume marketing email** must also carry a one-click unsubscribe header: `List-Unsubscribe: <https://...>` (an HTTPS URL) together with `List-Unsubscribe-Post: List-Unsubscribe=One-Click` per the RFC 8058 standard, and the email must pass SPF + DKIM (Gmail applies this to senders above about 5,000 messages per day · it applies to marketing email, not transactional · without it the email is more likely to land in spam). Sources: [`references/sources.md`](references/sources.md)
 - Unsubscribing must work without logging in — use a token in the link
 - Respect "quiet hours" — never send non-urgent push or SMS at 2 a.m. (by the recipient's time zone)
 
@@ -1980,40 +1910,18 @@ into one message ("มี 12 รายการใหม่", not 12 messages).
 
 ---
 
-## 7 · Anti-patterns
+## 7 · Link to other skills
 
-- **Sending the message in the same request as the transaction** — the email provider is slow and the screen hangs
-- **Sending before commit** — rolled back, but the customer already got the email
-- **Messages in code** — every wording change needs a new deploy
-- **No duplicate prevention** — the customer gets 5 receipts
-- **Sending on every channel at once** — the user turns everything off within a week
-- **No unsubscribe link** — the user clicks "this is spam" instead and our domain loses reputation
-- **Putting sensitive data in the message body**
-- **Continuing to send to a hard bounce** — the domain gets blacklisted
-- **Not counting the length of Thai SMS** — costs balloon without anyone noticing
-- **No send log** — you cannot tell the customer whether it was sent
+- Retry queue and dead letter: `background-jobs`
+- Settings table and send log: `database-design`
+- Attachments and expiring links: `file-upload-and-storage`
+- Delivery success rate metrics: `observability-basics`
+- Alerting the team when the system has a problem: `observability-basics` · `incident-runbook-template`
+- Broadcast to LINE OA friends (quota · target group · frequency): `e-commerce:line-broadcast` (if installed)
 
----
 
-## 8 · Abbreviations
+## reference: sources.md
 
-- **OTP** — One-Time Password
-- **RFC** — Request for Comments (internet standards documents) · RFC 8058 = the standard for the one-click unsubscribe header
-- **push notification** — a notification that pops up on the user's device
-- **bounce** — an email that did not arrive and was returned
-- **SPF · DKIM · DMARC** — standards that prove an email was really sent from that domain
-- **opt-in / opt-out** — asking to receive / asking to stop receiving
-- **LINE Official Account** — a business's official account on LINE, used to send messages to customers
+# Sources · notifications
 
-## 9 · Link to other skills
-
-| Need | Use together with |
-|---|---|
-| Retry queue and dead letter | `background-jobs` |
-| Multi-language messages | `i18n-and-locale` |
-| Marketing consent | `pdpa-compliance` |
-| Settings table and send log | `database-design` |
-| Delivery success rate metrics | `observability-basics` |
-| Attachments and expiring links | `file-upload-and-storage` |
-| Alerting the team when the system has a problem | `observability-basics` · `incident-runbook-template` |
-| Broadcast to LINE OA friends (quota · target group · frequency) | `e-commerce:line-broadcast` (if installed) |
+One-click unsubscribe header and SPF + DKIM for high-volume senders: support.google.com/a/answer/14229414 · senders.yahooinc.com/best-practices · checked 22 Oct 2026 (B.E. 2569). The standard is RFC 8058.

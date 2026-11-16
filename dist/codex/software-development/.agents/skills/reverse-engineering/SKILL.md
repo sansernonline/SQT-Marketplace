@@ -8,7 +8,7 @@ allowed-tools: Read, Grep, Glob, Bash(python -I *), Bash(node *check-tools.mjs*)
 
 The work order is **triage → extract → understand → use the result**. Every conclusion ties to evidence in the evidence ledger. Never claim to have recovered the original source. Report only what the evidence shows, and write down what is still unknown.
 
-Everything runs on local tools: the Python scripts in `scripts/` (standard library only, no `pip install`), the tool checker `scripts/check-tools.mjs` (plain Node), and tools the user installs from the official developers. It uses no MCP (Model Context Protocol) server and pulls no npm packages at run time. Some of the approach is adapted from REA (Reverse Engineer Anything). See [NOTICE](NOTICE).
+Everything runs on local tools: the Python scripts in `scripts/` (standard library only, no `pip install`), the tool checker `scripts/check-tools.mjs` (plain Node), and tools the user installs from the official developers. No MCP (Model Context Protocol) server, no npm packages at run time.
 
 ## Do not use when
 
@@ -76,8 +76,6 @@ Always take the cheapest route first: strings and metadata → imports and symbo
 
 To watch it at run time (any target) → [runtime-observation](references/runtime-observation.md), and you need permission under section 2.
 
-Real trial (2026-10 · an ASP.NET MVC system of about 55,000 lines): `ilspycmd` produced a C# project of 51,700 lines in 9 seconds. Compared with the real source, the cancel-order method matched on every statement, and all 1,431 method names matched.
-
 ## 5 · Tools that are not on the machine
 
 Always ask the user first. The user installs them. The agent does not download tools from other places and does not use `npx` to pull packages at run time. While you wait, do what the kit's scripts can do, and record the missing part as `ยังไม่ได้ตรวจ` (not yet checked).
@@ -91,19 +89,7 @@ node scripts/check-tools.mjs --self-test                                       #
 The checker reads the list from [`tools.json`](tools.json), then looks for the command in PATH, the standard install locations and Node packages. It does not open the target and installs nothing. A result of `missing` means not found. It does not confirm the tool is absent (it may be outside PATH, in WSL or in a container). Each group does not need every tool. For native work, Ghidra alone is enough.
 
 
-| Tool | Used for | Install from (official) | Needs first |
-|---|---|---|---|
-| Ghidra | native decompile · headless analysis | github.com/NationalSecurityAgency/ghidra/releases | JDK 21 (adoptium.net) |
-| jadx | DEX → Java | github.com/skylot/jadx/releases | Java 11 or later |
-| apktool | decode APK resources and manifest | apktool.org | Java 8 or later |
-| `aapt2` · `apksigner` | read the manifest · view the APK certificate | Android SDK Build-Tools (developer.android.com/tools) | — |
-| `ilspycmd` | .NET → C# | `dotnet tool install ilspycmd` from nuget.org (ICSharpCode) into the work folder | A matching .NET SDK |
-| Wireshark · tshark | read pcap files | wireshark.org | — |
-| mitmproxy | capture a test app's traffic through a proxy (must ask) | mitmproxy.org | — |
-| adb | control an Android device (must ask) | Android SDK Platform-Tools (developer.android.com/tools) | — |
-| Binwalk · Unblob | find and extract sections in firmware | github.com/ReFirmLabs/binwalk · unblob.org | Linux or WSL |
-| Playwright Core | drive a browser through agreed steps (must ask) | playwright.dev, installed in the project | Chrome or Edge |
-| 7-Zip | extract installers and archives | 7-zip.org | — |
+Table of tools, what each is used for, the official install source and prerequisites: [tools](references/tools.md).
 
 `check-tools.mjs` checks only the 12 tools in `tools.json`. `ilspycmd` · `aapt2` · `apksigner` · 7-Zip are not in the list yet, so check them yourself with `where` (Windows) or `which`. `ilspycmd` installs into the work folder, so it is not in PATH.
 
@@ -137,7 +123,7 @@ Follow the trail from the trace to the code that uses it: who references this st
 |---|---|
 | Explain a feature | A narrative plus an evidence table (section 8) |
 | Recover lost source | Give the user the extracted project, labelled as recovered and not the original, then use `legacy-spec-recovery` to write the spec |
-| **Does the deployed build differ from the repo (drift check)** | Extract the deployed binary, then run `python -I scripts/compare_members.py <โฟลเดอร์ที่แกะ> <ซอร์ส>`. It lists methods that exist only in the binary (an uncommitted hot-fix) or only in the source (not yet deployed). Then diff the bodies of the flagged methods. Tried in both directions: a matching build gave 1,431 methods with no difference, and it caught a method renamed in a copy |
+| **Does the deployed build differ from the repo (drift check)** | Extract the deployed binary, then run `python -I scripts/compare_members.py <โฟลเดอร์ที่แกะ> <ซอร์ส>`. It lists methods that exist only in the binary (an uncommitted hot-fix) or only in the source (not yet deployed). Then diff the bodies of the flagged methods. |
 | Rebuild in our own language | Only after the user confirms the understanding. Separate the behaviour you saw from our own design. Rewrite with our own code and do not copy. Algorithms and standard formats (JSON · zlib · AES) can be reused |
 
 A decoder or parser you write must check the size before every read (header shorter than expected → a clear error), and only then check the magic number, the version and the length. Never trust input.
@@ -180,7 +166,9 @@ Before closing, go back over every question and label it `ตอบแล้ว`
 
 ## Short rules
 
-- The cheapest evidence that is enough to answer wins · static first · never run an unknown file
-- Recovered code is evidence, not the original source. Label it that way everywhere you pass it on.
 - If triage finds an obfuscator, stop and tell the user first how much harder the work will be.
 - Write long output (strings · dumps · recovered code) to files under `_to_delete/re/…` and read only the parts you need. Every script has `--self-test`, so try it the first time on a new machine.
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources

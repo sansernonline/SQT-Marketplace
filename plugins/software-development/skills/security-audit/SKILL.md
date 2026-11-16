@@ -5,7 +5,7 @@ description: Use when auditing a whole codebase before handover
 
 # security-audit — hunt for vulnerabilities across the whole system from code, and verify every item before reporting
 
-Part of the `software-development` plugin. Wording in this file, in reports and in sub-agent briefs follows `human-writing`. This is a multi-step job, and the team lead (`superuser`) runs it.
+This is a multi-step job, and the team lead (`superuser`) runs it.
 
 > **The one rule:** if you cannot yet say who is harmed, how, and through which entry point, the item is not yet a vulnerability. Something that "should exist but does not", with no provable affected party, is hardening advice, not a finding.
 
@@ -16,7 +16,7 @@ Part of the `software-development` plugin. Wording in this file, in reports and 
 - You take over someone else's code and need to know which vulnerabilities are still open
 - A previous round already audited, and you want to confirm the fixed items are really closed and find new problems in the parts that changed
 
-Do not use when: a pre-merge or pre-ship gate that must be fast → `security-gate` · a question about the security of a single piece of code → answer directly from `principle-secure-by-default` without opening the 6 steps · penetration testing a live deployed system, or a system that is not our customer's → do not do it (this skill reads code and runs only in a lab).
+Do not use when: a pre-merge or pre-ship gate that must be fast → `security-gate` · a question about the security of a single piece of code → answer directly from `principle-secure-by-default` without opening the 6 steps · penetration testing a live deployed system, or a system that is not our customer's → do not do it (this skill reads code and runs only in a lab) · already breached, tracing an incident, SIEM rules → `security-operations` · only an exe, APK or firmware with no source → `reverse-engineering` (continue here once you have decompiled source) · the short command `/security-scan` is a shortcut that points here (whole codebase) or to `security-gate` (diff before ship).
 
 ## Use another skill instead, or alongside
 
@@ -26,9 +26,6 @@ Do not use when: a pre-merge or pre-ship gate that must be fast → `security-ga
 | Terraform · compose · Kubernetes · Helm is present, or an infra review is requested | [`infra-checklist`](references/infra-checklist.md) | The hunting list for the infrastructure family (ports · IAM · buckets · encryption · images) serves as work units in step 2 |
 | The contract names OWASP Top 10 | [`security-gate` OWASP section](../security-gate/references/owasp-top10.md) | Every finding has an `owasp` field, so the report can summarize rows A01–A10 right away |
 | Designing a new feature with no code yet | [`threat-model`](../threat-model/SKILL.md) | If a threat model already exists, the recon step starts from its DFD and non-capabilities |
-| The short command `/security-scan` | [`security-scan`](../security-scan/SKILL.md) | A shortcut that points here (whole codebase) or to `security-gate` (diff before ship) |
-| Already breached · tracing an incident · SIEM rules | `security-operations` | An audit finds holes before an incident, and security-operations handles the aftermath |
-| No source, only an exe · APK · firmware | `reverse-engineering` | Continue here once you have decompiled source |
 | A finding touches personal data | [`pdpa-compliance`](../pdpa-compliance/SKILL.md) | For a confirmed item that may already have leaked, open section 8 (the first 72 hours) |
 | Running the target code to prove something | [`docker-sandbox`](../docker-sandbox/SKILL.md) | `-Isolated -Locked` lab only |
 
@@ -157,30 +154,11 @@ The 2 validators and `render_report.mjs` have `--self-test` (`fingerprint.mjs` i
 
 - **A confirmed item that touches personal data** (`pdpa.personal_data` is true) and shows signs it may already have been exploited → open `pdpa-compliance` section 8 at once. Count 72 hours from when you learned of it, not from when the report is finished. If there are no signs, state in the report that past logs should be checked.
 - **Every confirmed item** → playbook `bug-fix` (find the root cause · write a test that fails before the fix, with a name starting with the OWASP code such as `A01_other_user_order_returns_404` · search for other places written the same way). Critical and high must not be delivered until fixed, or until the customer accepts the risk in writing in the `decision-log`.
-- **Before merging a patch for a confirmed critical or high item**, send a fresh `reviewer` that gets only the diff and the finding (not the explanation of how the vulnerability works) to answer 4 questions: (1) does the patch touch only the path of this finding (2) does it fix the root cause or mask the symptom, such as an empty `try/except`, a removed check, or a lowered log level (3) does it add new attack surface (4) can you think of any input that still reaches the original state without hitting the patch. Any question that fails goes back for a fix first. (The idea comes from the patch-review step of defending-code-reference-harness. That repo's license is NOASSERTION, so only the idea is used and the text is our own. See 2026-11-10.)
+- **Before merging a patch for a confirmed critical or high item**, send a fresh `reviewer` that gets only the diff and the finding (not the explanation of how the vulnerability works) to answer 4 questions: (1) does the patch touch only the path of this finding (2) does it fix the root cause or mask the symptom, such as an empty `try/except`, a removed check, or a lowered log level (3) does it add new attack surface (4) can you think of any input that still reaches the original state without hitting the patch. Any question that fails goes back for a fix first.
 - **needs_validation** → send `NEEDS-VALIDATION.md` to someone who can reach the deployment. They check by `check_plan` and come back to close it in the next round.
 - **Next round** → read the whole previous `findings.json` and `ledger.json` before planning. A confirmed item whose code has not changed carries over with the same fingerprint but must be re-verified. If the code changed, recheck that unit. If it was fixed, have the verifier rerun the test that failed before the fix, and write `ปิดแล้ว` (closed) only when it passes. `blocked` units and `needs_validation` items are this round's work. One round can never cover everything, so the report must not say it is complete.
 - **Delivering to a standard** (PDPA · GDPR · PCI-DSS · SOC 2 · HIPAA) → state in the report which finding hits which requirement, and the evidence already collected. Attach a 30/60/90-day fix plan, ordered by the level of the confirmed items.
 - Summarize status with `status-report` of the `ตรวจ` type. If delivering under an OWASP contract, attach rows A01–A10 from this report to the OWASP report from `security-gate`.
-
-## One worked example
-
-Label `ตัวอย่าง` (example). Built from this skill's test scenario and not yet run against a real customer system.
-
-**Scenario:** "ลูกค้าจะรับระบบสั่งของสัปดาห์หน้า ช่วยไล่หาช่องโหว่ทั้งโปรเจกต์ให้หน่อย" · an Express repo of about 3,000 lines with a LINE webhook · no `.sandbox/`
-
-**What was done:** Asked everything once. The user chose `quick` · whole repo · read-only. 4 recon agents found 9 entry points → ledger of 31 rows → 6 hunters → the gap check found `GET /orders/export.csv` had no row, so 2 rows were added and 1 more hunter ran → 5 candidates, verified by 5 fresh `reviewer` agents
-
-**Result:**
-
-| id | Verdict | Subject | Reason |
-|---|---|---|---|
-| F-001 | `confirmed` · `high` · A01 | `GET /orders/:id` does not filter by owner, so a customer can open another person's order with their phone number | The query uses only `id`, with no `customerId` · `pdpa` is true |
-| F-002 | `needs_validation` | `/webhook/line` does not check `x-line-signature` | The code really does not check, but the README says a reverse proxy checks it, and that proxy is not in the repo · `check_plan`: send a request with a wrong signature to the test URL and expect 401 |
-| F-003 | `rejected` | semgrep warns about `exec()` in `scripts/seed.js` | The file runs only at machine setup and has no entry point from users |
-| — | hardening | No CSP | The API returns JSON only and has no HTML pages |
-
-F-001 goes to playbook `bug-fix`. The test `A01_other_user_order_returns_404` fails before the fix and passes after. The report states that the review was `quick` and names the units not yet checked.
 
 ## Check before sending
 
@@ -192,8 +170,7 @@ F-001 goes to playbook `bug-fix`. The test `A01_other_user_order_returns_404` fa
 6. A finding whose `pdpa.personal_data` is true has a line giving the next step under `pdpa-compliance`
 7. The words "100% secure" or "certified" do not appear
 
-## Sources
+## References
 
-- The 6-step idea · verification by a fresh agent that tries to refute · the 3 verdicts · 5 levels not higher than what is proven · the coverage ledger · the list of attack classes — from cloudflare/security-audit-skill https://github.com/cloudflare/security-audit-skill (MIT · viewed 2026-10-26). Used as a coverage checklist. The text, tables and prompts in this folder are all newly written.
-- Added by us: scanner results as candidates · the `owasp` · `pdpa` · `owner_impact_th` fields · Thai systems in [`classes-thai`](references/classes-thai.md) · the hand-off to `bug-fix` and `pdpa-compliance` · validators that run on Windows
-- OWASP Top 10:2025 — per the [`security-gate` OWASP section](../security-gate/references/owasp-top10.md)
+- [`references/worked-example.md`](references/worked-example.md) — open when you want a full run-through of a `quick` audit
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources

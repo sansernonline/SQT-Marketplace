@@ -28,8 +28,6 @@ A practice account that only works if it is treated as real. General information
 | Gaps | If the open is beyond the stop, fill at the open, not at the stop |
 | Liquidity | Do not paper-trade a size above 5% of the stock's average daily value |
 
-ตรวจล่าสุด 2026-10-26 · ล็อต 100 หุ้น (50 หุ้นเมื่อราคา ≥ 500 บาทติดกัน 6 เดือน) · ราคาสูงต่ำสุด ±30% · ชำระราคา T+2 · แหล่ง: https://www.set.or.th/en/market/information/trading-procedure/trading-units , https://www.set.or.th/en/trading-units-tick-sizes-price-limits , https://www.set.or.th/annualreport/en/2017/41 (T+2) , https://www.clearstream.com (ข่าวลูกค้า 1280838 เรื่องล็อต) , https://www.mondovisione.com (SET คืนเพดาน ±30% 25 มิ.ย. 2568) · ค่าคอมมิชชันยังไม่ได้ตรวจ ใช้อัตราจากใบยืนยันของโบรกเกอร์ผู้ใช้
-
 ## Honesty rules
 
 - **Log before the trade, not after** — entry, stop, target, reason written first, with a timestamp.
@@ -57,15 +55,6 @@ All must be true:
 
 Then start live at **one quarter** of the planned risk (0.25% instead of 1%) for the next 20 trades. That call stays the user's.
 
-## Worked example
-
-Capital 100,000 · rule `pullback-50ma` only · risk 1%. Trade #12: XYZ limit buy 31.50, stop 30.00.
-- Size: risk/share 1.50 + costs ≈ 0.13 = 1.63 → 1,000 ÷ 1.63 = 613 → **600 shares** (18,900 baht = 18.9% of capital)
-- Cap: 10% concentration limit (from `position-sizing`) → 300 shares, 9,450 baht
-- Fill: low of the day was 31.50 exactly — touched, not traded through → **no fill**, logged `no-fill`
-- Next day: it opened at 31.00, but the limit was a day order and had expired, so there is still no trade
-- Lesson: counting this as a fill at 31.50 is exactly the "almost trade" that makes paper results look better than live ones
-
 ## Reporting
 
 Monthly: trades, win rate, avg R, expectancy, max drawdown, violations, passed/no-fill count, one lesson — using `trade-journal` Mode 2 (Review). Command: `/trading-finance:paper-trading`.
@@ -79,3 +68,8 @@ Run the virtual trading account with the `paper-trading` skill: **$ARGUMENTS**
 - `log` — record a planned trade (entry, stop, target, thesis) BEFORE it happens
 - `stats` — monthly summary: trades, win rate, expectancy, rule violations
 - `setup` — create or reset the ledger with virtual capital and rules
+
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open for a sizing and no-fill example
+- [`references/sources.md`](references/sources.md) — sources and check date (2026-10-26) for lot, ceiling and settlement rules

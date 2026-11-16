@@ -33,10 +33,6 @@ An agent called in for this area opens its own role file before starting.
 
 `devrel-engineer`
 
-## ที่มา
-
-Merged from plugin `software-development-devtools` (formerly named developer-experience → `references/developer-experience.md` · sdk-design-patterns → `references/sdk-design-patterns.md` · technical-content → `references/technical-content.md` — no longer separate skills) into `software-development` in v2.0.0, and the original content is all still in `references/`
-
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 
 `/software-development:developer-experience <dx-audit | sdk-design> <details>`
@@ -49,3 +45,7 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 | `sdk-design` | Design SDK using devrel-engineer agent. Covers multi-language, idioms, types, errors. |
 
 ขั้นตอนเต็มของแต่ละโหมด → [references/design-modes.md](references/design-modes.md)
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources

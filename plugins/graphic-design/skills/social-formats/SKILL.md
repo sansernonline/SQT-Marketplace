@@ -47,22 +47,9 @@ Keep text and logos out of the areas the platform UI covers. The areas differ pe
 - Keep file sizes under the platform's current limit (look it up; the LINE rich menu limit is in `line-richmenu`)
 - Facebook link previews and LinkedIn link posts crop to 1.91:1 — a 1:1 image there loses top and bottom
 
-## Worked example
-
-Brief: a café promotes a new drink on IG feed, IG story, TikTok and LINE OA.
-
-| Placement | Canvas | Export name |
-|---|---|---|
-| IG feed | 1080 × 1350 (4:5) | `matcha26-hero-ig-feed45-v01-th.jpg` |
-| IG story | 1080 × 1920, text inside the middle band from Meta's current safe-zone guide | `matcha26-hero-ig-story-v01-th.jpg` |
-| TikTok video | 1080 × 1920, captions above the bottom caption area | `matcha26-clip-tt-video-v01-th.mp4` |
-| LINE OA rich message | 1040 × 1040 | `matcha26-hero-line-richmsg-v01-th.jpg` |
-
-Story middle band: turn Meta's current top and bottom percentages into pixels on the 1920 px height, for example 14% → 269 px (illustrative, look up the current figure).
-
 ## Number posts (infographic in a post)
 
-1 image = 1 conclusion: the title states the finding ("ยอดขายเดือนนี้เพิ่ม 20%"), the line under it gives the period, the source goes small at the bottom. Sort bars by value, label the bars directly when there are about 12 or fewer, mark only what the reader must see. Full chart rules (Thai font, colours): `software-development` `data-analysis` (if installed). Idea from anthropics `claude-tag-data-viz` graphing (rewritten, no code copied · ตรวจ 2026-11-10).
+1 image = 1 conclusion: the title states the finding ("ยอดขายเดือนนี้เพิ่ม 20%"), the line under it gives the period, the source goes small at the bottom. Sort bars by value, label the bars directly when there are about 12 or fewer, mark only what the reader must see. Full chart rules (Thai font, colours): `software-development` `data-analysis` (if installed).
 
 ## Not an AI look
 
@@ -70,14 +57,12 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 
 ## Related
 
-- `campaign-set` — which placements, in what order
-- `asset-organize` — format codes in file names
-- `video-script-to-clip` — captions and safe zones in video
-- `banner-design` — banners and cover headers (event, web hero, display ad)
-- `youtube-thumbnail` — thumbnails for YouTube
-- `marketplace-product-images` — product photos for Shopee, Lazada, TikTok Shop
-- `line-richmenu` — LINE rich menu image sizes, tap areas and JSON
-- `print-ready-files` — files that go to a print shop (CMYK, bleed)
+`campaign-set` (which placements, in what order) · `asset-organize` (format codes in file names) · `video-script-to-clip` (captions and safe zones in video) · `banner-design` (banners, cover headers) · `youtube-thumbnail` · `marketplace-product-images` · `line-richmenu` (image sizes, tap areas, JSON) · `print-ready-files` (CMYK, bleed)
+
+## References
+
+- [`references/platform-sizes.md`](references/platform-sizes.md) — links to each platform's own size and safe-zone pages
+- [`references/worked-example.md`](references/worked-example.md) — a café campaign across 4 placements with export names
 
 ## เรียกเป็นคำสั่ง
 

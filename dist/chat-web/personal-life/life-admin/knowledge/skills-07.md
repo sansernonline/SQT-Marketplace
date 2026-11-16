@@ -44,24 +44,16 @@ Amounts are family and social custom — there is no correct number; follow what
 - Track sizes with the date measured — children's sizes go stale in six months
 - Never put the price tag or receipt in the box, but keep the receipt (exchange) in the registry note
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.sec.or.th/TH/Documents/AboutUs/SEC-NACC-Guidelines-On-Ethical-Gifts-2020.pdf · https://www.prachachat.net/?p=1112842
-
-## Worked example
-
-Mother-in-law, 64, birthday 3 November, budget 2,000 บาท. Record: 2024 scarf (fine), 2025 blender (loved — uses daily); wish noted 2026-07-20: "เข่าไม่ค่อยดี อยากเดินสวนแต่ไม่มีรองเท้าดีๆ"; dislikes perfume.
-
-Shortlist:
-1. Walking shoes with good cushioning, size 38 (measured 2026-07) — 1,890 บาท — straight from her wish, practical.
-2. Morning ทำบุญ at her favourite temple + breakfast together — about 1,200 บาท — experience she values.
-3. Herbal compress set + Thai massage voucher — 1,500 บาท — supports the knee comment without being medical.
-
-Chosen: 1 + a handwritten card. Log reaction after the day.
-
 ## Output
 
 Shortlist table (idea · price · where to buy · why it fits · lead time) · updated person block · next reminders.
 
 Related: `polite-message-th-en` (thank-you and declining messages) · `weekly-review` (upcoming occasions in the next 14 days).
+
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open for a sample shortlist (birthday, budget 2,000 บาท)
+- [`references/sources.md`](references/sources.md) — gift-limit sources (checked 2026-10-06)
 
 
 ## reference: gift-registry-template.md
@@ -107,6 +99,27 @@ Gift: ___  Total: ___ บาท  People: ___  Each: ___ บาท
 Collector: ___  PromptPay/account: ___  Paid by date: ___
 Bought by: ___  Card signed by: ___
 ```
+
+
+## reference: sources.md
+
+# Sources · gift-idea-tracker
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.sec.or.th/TH/Documents/AboutUs/SEC-NACC-Guidelines-On-Ethical-Gifts-2020.pdf · https://www.prachachat.net/?p=1112842
+
+
+## reference: worked-example.md
+
+# Worked example
+
+Mother-in-law, 64, birthday 3 November, budget 2,000 บาท. Record: 2024 scarf (fine), 2025 blender (loved — uses daily); wish noted 2026-07-20: "เข่าไม่ค่อยดี อยากเดินสวนแต่ไม่มีรองเท้าดีๆ"; dislikes perfume.
+
+Shortlist:
+1. Walking shoes with good cushioning, size 38 (measured 2026-07) — 1,890 บาท — straight from her wish, practical.
+2. Morning ทำบุญ at her favourite temple + breakfast together — about 1,200 บาท — experience she values.
+3. Herbal compress set + Thai massage voucher — 1,500 บาท — supports the knee comment without being medical.
+
+Chosen: 1 + a handwritten card. Log reaction after the day.
 
 
 ---

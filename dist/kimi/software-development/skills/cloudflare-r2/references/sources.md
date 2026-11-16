@@ -1,0 +1,3 @@
+# Sources · cloudflare-r2
+
+Cloudflare R2 docs read 2026-11-05: [S3 API](https://developers.cloudflare.com/r2/api/s3/api/) · [API tokens](https://developers.cloudflare.com/r2/api/tokens/) · [Pricing](https://developers.cloudflare.com/r2/pricing/) · [Public buckets](https://developers.cloudflare.com/r2/buckets/public-buckets/) · [Presigned URLs](https://developers.cloudflare.com/r2/api/s3/presigned-urls/) · [CORS](https://developers.cloudflare.com/r2/buckets/cors/) · [Wrangler commands](https://developers.cloudflare.com/r2/reference/wrangler-commands/) · Not yet read: Workers binding · object size and multipart limits · API rate limit · event notifications · Super Slurper · path-style vs virtual-hosted · full fields of the lifecycle JSON and of wrangler-style CORS

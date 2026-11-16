@@ -29,17 +29,7 @@ Pick the project you will finish. A shipped small project teaches more than an a
 
 **Score by script, not by hand** (`decision-scoring`, command `score`): `node decide.mjs score ideas.json` (a copy of [references/score-example.json](references/score-example.json) with the user's ideas). Weights 3:3:2:1 divided by 9 are a default, not yet measured; the user may change them. Iron rule (กฎเหล็ก): an idea with F below 2 is dropped, not scored. The script also moves each weight ±20% and says whether rank 1 is stable (`นิ่ง`) or not (`ยังไม่นิ่ง`, `สูสี`); if not stable, the user decides between the top two. A second iron rule (กฎเหล็ก) stays from the old hand formula: the script's 0–100 is relative among the candidates only, so also add 3L+3F+2U+1P from the raw 1–5 scores (max 45) for the winner. Below 25 = no idea is good enough, pick other ideas, even if it ranks 1 (both ideas that pass above score 39 and 35). The same formula gave the same winner as the script on the example below.
 
-## Worked example
-
-Goal: learn Go and REST API design. 16 hours. Knows Python.
-
-| Idea | L | F | U | P | Score |
-|---|---:|---:|---:|---:|---:|
-| A Go clone of a full social network | 4 | 1 | 1 | 2 | 19 |
-| A Go CLI that converts Thai bank-statement CSV into a monthly summary | 3 | 5 | 4 | 3 | 35 |
-| A Go REST API for the family's shared shopping list + a tiny web page | 5 | 4 | 4 | 4 | **39** |
-
-→ The shopping-list API. Scope cuts: no accounts (1 shared secret link), no real-time updates (refresh the page), SQLite instead of Postgres, deployed on a free tier. Done definition: see the template below.
+Worked example (Go REST API, 16 hours, scored table): [references/worked-example.md](references/worked-example.md)
 
 ## Scope-cutting rules
 
@@ -100,6 +90,23 @@ Each idea is sized to be finishable in about 2 weekends after the scope cuts. Sw
 | CLI tools | A CLI that renames photos by date taken and sorts them into folders | File I/O, metadata, flags | GUI |
 
 
+## reference: worked-example.md
+
+# Worked example · side-project-picker
+
+## Worked example
+
+Goal: learn Go and REST API design. 16 hours. Knows Python.
+
+| Idea | L | F | U | P | Score |
+|---|---:|---:|---:|---:|---:|
+| A Go clone of a full social network | 4 | 1 | 1 | 2 | 19 |
+| A Go CLI that converts Thai bank-statement CSV into a monthly summary | 3 | 5 | 4 | 3 | 35 |
+| A Go REST API for the family's shared shopping list + a tiny web page | 5 | 4 | 4 | 4 | **39** |
+
+→ The shopping-list API. Scope cuts: no accounts (1 shared secret link), no real-time updates (refresh the page), SQLite instead of Postgres, deployed on a free tier. Done definition: see the template below.
+
+
 ---
 
 # skill: thesis-writing
@@ -133,11 +140,11 @@ A topic that cannot finish in the time left is the most common way a thesis or I
 4. **Fix one parameter, free the rest.** Lock one constraint (this dataset, this school, this method) and let the others move. Locking everything leaves no way out when one fails.
 5. **When stuck mid-way:** one or two hours a week looking from above. What did I learn this week · what should I do next · what is my backup data plan. Write the answers in the log the adviser sees.
 
-Step 4's outline check by the adviser is still needed; this test only decides whether the topic is worth outlining. Framework idea from anthropics/knowledge-work-plugins `bio-research/skills/scientific-problem-selection` and its `references/02-risk-assessment.md` (Apache-2.0, based on Fischbach & Walsh, Cell 2024; biology content not used, rewritten, viewed 2026-11-10).
+Step 4's outline check by the adviser is still needed; this test only decides whether the topic is worth outlining.
 
 ## Reader test (before the adviser, committee or journal sees it)
 
-Give the chapter or proposal, and nothing else, to a fresh reader: a subagent that has not seen this conversation, or the user in a new chat if no subagent is available. Ask it 5–10 questions a committee member would ask ("วัตถุประสงค์ข้อ 2 วัดด้วยอะไร" · "ทำไมเลือกกลุ่มตัวอย่างนี้"), plus three: which part is unclear · what the text assumes the reader already knows · where it contradicts itself. A wrong or missing answer marks the gap to fix. Idea from anthropics/skills `doc-coauthoring` (reader testing stage; licence of that repo not confirmed, so ideas only, viewed 2026-11-10).
+Give the chapter or proposal, and nothing else, to a fresh reader: a subagent that has not seen this conversation, or the user in a new chat if no subagent is available. Ask it 5–10 questions a committee member would ask ("วัตถุประสงค์ข้อ 2 วัดด้วยอะไร" · "ทำไมเลือกกลุ่มตัวอย่างนี้"), plus three: which part is unclear · what the text assumes the reader already knows · where it contradicts itself. A wrong or missing answer marks the gap to fix.
 
 ## What Claude does and does not do
 
@@ -171,7 +178,7 @@ When asked to cross a line in the right column, say which rule it breaks and off
 | Literature review | 25–35% of the text | 15–20% |
 | Discussion | Compares each finding with ≥ 1 earlier study | Same, shorter |
 
-ตรวจล่าสุด 2026-10-26 · The sizes above are planning defaults (แนวของเรา), not taken from any one manual — the university's thesis manual and the journal's author guide always win. อักขราวิสุทธิ์ is Chulalongkorn's Thai–English similarity checker (plag.grad.chula.ac.th) shared with partner universities that use institutional e-mail; universities set their own similarity limits and check before the proposal and before the defense (manuals: https://www.stou.ac.th/thai/grad_stdy/Masters/aka/file/คู่มือการใช้การใช้งานระบบอักขราวิสุทธิ์.pdf · https://ssed.nida.ac.th/images/PDF/PhD-website/3-Current-Student/FM-ESD-03-04-Verification-Thesis-Plagiarism-FormTH.pdf · https://postgrads.mfu.ac.th). Similarity thresholds, page counts and the TCI tier rule stay (รอยืนยัน) per programme.
+ตรวจล่าสุด 2026-10-26 · The sizes above are planning defaults (แนวของเรา), not taken from any one manual — the university's thesis manual and the journal's author guide always win. Universities set their own similarity limits. Similarity thresholds, page counts and the TCI tier rule stay (รอยืนยัน) per programme. Source notes and manual links: [`references/sources.md`](references/sources.md).
 
 Related: `paper-to-practice` (understand someone else's paper), `english-tech-reading` (read long English papers faster), `human-writing` (plain language for everything outside the thesis itself), and `presentation-design` for defense slides. Word output from Markdown → `markdown-report-docx` builds the .docx; keep the rules in [references/thai-typesetting.md](references/thai-typesetting.md).
 
@@ -322,6 +329,15 @@ Fill this before writing chapter 2. Keep it in `thesis/literature-matrix.md` or 
 > หลายงานวิจัยพบว่าการรับรู้ประโยชน์มีผลต่อความตั้งใจใช้งานมากกว่าการรับรู้ความง่าย (Davis, 1989; สมชาย ใจดี, 2565; Venkatesh & Davis, 2000) อย่างไรก็ตาม งานส่วนใหญ่ศึกษากลุ่มพนักงานในองค์กร ยังไม่มีงานที่ศึกษากลุ่มผู้สูงอายุในชุมชน ซึ่งเป็นกลุ่มเป้าหมายของงานวิจัยนี้
 
 Topic → combined evidence → the gap → why it matters here.
+
+
+## reference: sources.md
+
+# Sources · thesis-writing
+
+- Topic test: framework idea from anthropics/knowledge-work-plugins `bio-research/skills/scientific-problem-selection` and its `references/02-risk-assessment.md` (Apache-2.0, based on Fischbach & Walsh, Cell 2024; biology content not used, rewritten, viewed 2026-11-10).
+- Reader test: idea from anthropics/skills `doc-coauthoring` (reader testing stage; licence of that repo not confirmed, so ideas only, viewed 2026-11-10).
+- Quick sizes: ตรวจล่าสุด 2026-10-26 · The sizes above are planning defaults (แนวของเรา), not taken from any one manual — the university's thesis manual and the journal's author guide always win. อักขราวิสุทธิ์ is Chulalongkorn's Thai–English similarity checker (plag.grad.chula.ac.th) shared with partner universities that use institutional e-mail; universities set their own similarity limits and check before the proposal and before the defense (manuals: https://www.stou.ac.th/thai/grad_stdy/Masters/aka/file/คู่มือการใช้การใช้งานระบบอักขราวิสุทธิ์.pdf · https://ssed.nida.ac.th/images/PDF/PhD-website/3-Current-Student/FM-ESD-03-04-Verification-Thesis-Plagiarism-FormTH.pdf · https://postgrads.mfu.ac.th). Similarity thresholds, page counts and the TCI tier rule stay (รอยืนยัน) per programme.
 
 
 ## reference: thai-academic-language.md

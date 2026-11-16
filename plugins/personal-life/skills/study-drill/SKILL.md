@@ -7,7 +7,7 @@ description: Use when making flashcards or quizzes for an exam
 
 > **One rule:** fewer cards that are right beat many cards that are guessed. A card with no source the agent is unsure of is marked `(ยังไม่ได้ตรวจ)`, and 8 sure cards are better than 20 with 5 wrong.
 
-Two tools for the same goal: cards to remember, and a question drill to understand. Works for cloud certifications, English for work, Thai professional licence exams and school or university exams.
+Two tools for the same goal: cards to remember, and a question drill to understand.
 
 ## Use when / not when
 
@@ -30,7 +30,7 @@ Two tools for the same goal: cards to remember, and a question drill to understa
 
 ## 2 · Box schedule without an app
 
-Five boxes (default intervals, not yet measured; from the source below):
+Five boxes (default intervals, not yet measured):
 
 | Answer | Card moves to | Next review |
 |---|---|---|
@@ -51,7 +51,7 @@ A card that falls back down more than twice is not a memory problem; it goes to 
 
 ## Worked example
 
-The user pastes 2 pages of AWS VPC notes and asks for cards. Output: 9 cards, each with `src: note p.1` or `p.2`; 2 cards added from general knowledge are marked `(ยังไม่ได้ตรวจ)` with the AWS docs page to check. The next day the user misses "NAT gateway vs internet gateway" twice → a drill: "instance ใน private subnet ต้องโหลดแพตช์จากเน็ต ต้องผ่านอะไร" → the user answers "internet gateway" → asked back "แล้วจากเน็ตจะเปิด connection เข้ามาที่ instance ได้ไหม" → the user reaches NAT on the second question → card rewritten from the user's own words.
+Notes to 9 cards and a Socratic drill on NAT gateway: [references/worked-example.md](references/worked-example.md)
 
 ## Check before sending
 
@@ -59,8 +59,6 @@ The user pastes 2 pages of AWS VPC notes and asks for cards. Output: 9 cards, ea
 - [ ] Unsourced cards marked `(ยังไม่ได้ตรวจ)` · no card count padded to a target
 - [ ] In a drill, no answer given before the user reached it or three narrowing questions passed
 
-## Source
-
-Ideas from anthropics/claude-for-legal `law-student/skills/flashcards` and `law-student/skills/socratic-drill` (Apache-2.0, rewritten without the US law examples, viewed 2026-11-10). Box intervals are that skill's defaults, not measured by us.
+Sources and where the box intervals come from: [references/sources.md](references/sources.md)
 
 Related: `cert-prep` · `english-tech-reading` · `personal-kb`

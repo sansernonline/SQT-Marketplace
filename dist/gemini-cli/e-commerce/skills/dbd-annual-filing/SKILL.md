@@ -28,8 +28,6 @@ Each year end brings 4 deadlines from 2 authorities (DBD and the Revenue Departm
 | Statements to DBD | 1 month after the AGM (AGM 28 Apr → by 28 May 2570) |
 | ภ.ง.ด.50 | by 30 May 2570 (Sun) → next working day, Mon 31 May 2570 (RD Order ป.117/2545, https://www.rd.go.th/10514.html, checked 22 ต.ค. 2569) — on e-Filing, add the current e-Filing extension (look it up live, see `tax-vat-th` section 2) |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://efiling.dbd.go.th · https://www.dbd.go.th · https://www.infoproff.com/en/open-data/thailand/114/financial-reporting-obligations-for-companies-in-thailand
-
 ## 2. Partnerships and others
 
 | Entity | AGM | Shareholder list | Financial statements to DBD | ภ.ง.ด.50 |
@@ -69,6 +67,10 @@ Each year end brings 4 deadlines from 2 authorities (DBD and the Revenue Departm
 ## Related
 
 `tax-vat-th` (ภ.ง.ด.50/51, surcharge) · `payroll-th` (ภ.ง.ด.1ก in February) · `doc-thai-official` (AGM notice, letters) · `thai-holidays`.
+
+## References
+
+- [`references/sources.md`](references/sources.md) — sources and check dates for section 1; open when re-checking a deadline
 
 ## เรียกเป็นคำสั่ง
 

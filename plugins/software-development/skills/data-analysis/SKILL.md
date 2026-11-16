@@ -6,7 +6,7 @@ description: Use when a CSV, Excel or SQL export must answer a question
 # data-analysis · answer business questions from data with numbers you can trace back
 
 > **The one rule:** every number in a finding must point back to one line in the script's output.
-> A number worked out in your head or typed by hand cannot be re-checked, and cannot be repeated when next month's data arrives (evidence in the style of `principle-prove-it-works`).
+> A number worked out in your head or typed by hand cannot be re-checked, and cannot be repeated when next month's data arrives.
 
 ## When to use this skill
 
@@ -165,35 +165,11 @@ Attach `analyse.py` and `output.txt` to the report every time, so anyone who dou
 
 ## 9 · Real example: monthly sales (sample) → 3 findings
 
-**Data:** `assets/sales-sample.csv` is sample data made by `assets/make_sample.py`, not real sales. It has 72 rows (24 months × 3 channels) and all the usual Thai-file problems: "ม.ค. 2567" · "1,295,500" · Thai digits in the LINE rows for 2025 (B.E. 2568) · 3 blank rows · 1 `-` row. Years in the sample are B.E.: 2567 = 2024 and 2568 = 2025.
-
-**Question:** should ad budget move from the shop to online? (section 1)
-
-**Run:** download `Sarabun-Regular.ttf` from google/fonts into `fonts/` first, then run `python assets/analyse_sales.py assets/sales-sample.csv --out _to_delete/sales --font fonts/Sarabun-Regular.ttf > output.txt`
-
-```text
-[ไฟล์] sales-sample.csv · utf-8-sig · 72 แถว · 3 ช่องทาง · 24 เดือน (ม.ค. 2567 – ธ.ค. 2568)
-[ว่าง] 3 แถว ไม่นับเป็น 0: LINE มี.ค. 2568, LINE เม.ย. 2568, LINE พ.ค. 2568
-[ศูนย์] 1 แถว ยอด 0 จริง: หน้าร้าน ส.ค. 2568
-[F1] สัดส่วนออนไลน์ (Shopee + LINE) ของยอดรวม: 2567 = 36.3% · 2568 = 48.0%
-[F2] หน้าร้าน 11 เดือนที่เปิดทั้ง 2 ปี: 2567 = 13,177,600 บาท · 2568 = 11,951,900 บาท · เปลี่ยน -9.3%
-[F3] Shopee ปี 2568: พ.ย. + ธ.ค. = 2,514,900 บาท = 27.0% ของทั้งปี
-[กราฟ] chart-f1-online-share.png · เว้นช่อง 4 เดือนที่ข้อมูลไม่ครบหรือร้านปิด
-```
-
-**Findings in the report**
-
-1. Online sales rose from 36.3% to 48.0% of the total `[F1]`. The figure for 2025 (B.E. 2568) is still lower than real, because LINE has no sales for 3 months `[ว่าง]`.
-2. The shop fell 9.3%, from 13,177,600 to 11,951,900 baht, comparing only the 11 months it was open in both years `[F2]`. In August 2025 the shop was closed, so that month is not counted `[ศูนย์]`.
-3. Shopee got 27.0% of the whole year's sales from November and December `[F3]`. So the online ad budget should follow the campaign rounds, not be spread evenly over every month (`อนุมาน`).
-
-**Limits:** 24 months of data from one shop, and no customer ID, so it cannot say that people who used to buy at the shop moved to buying online.
-
-**Check:** a recount with plain `csv` gave 36.3 · 48.0 · −9.3 · 27.0, matching on every one. The same file saved as cp874 and re-run gave the same F1–F3 results. The chart was opened and "เพิ่ม" has all its tone marks on matplotlib 3.11.2 (ตรวจจริง 2026-10-23 · pandas 3.0.3 and 3.1.0).
+Worked example with sample data, the run command, the output lines and 3 findings: [references/worked-example.md](references/worked-example.md).
 
 ## 10 · Check before sending
 
-**8 traps where numbers go wrong without an error** (reworded from validate-data in knowledge-work-plugins · Apache-2.0 · seen 2026-11-10)
+**8 traps where numbers go wrong without an error**
 
 | Trap | Symptom | How to check | How to prevent |
 |---|---|---|---|
@@ -223,35 +199,7 @@ A date column that mixes B.E. and C.E. years is trap 9, specific to Thai files: 
 - [ ] The limits are complete: sample size, missing data, and correlation that is not cause
 - [ ] No personal data in the report, in the prompt, or in git
 
-## 11 · Anti-patterns
+## References
 
-- **A number in the report with no output line behind it.** It cannot be traced back, and next month it cannot be repeated.
-- **`fillna(0)` on the whole table.** Unknown cells become zero sales and the average drops silently.
-- **A notebook that runs only in the order the author clicked.**
-- **Reading CSV with `errors="ignore"`.** Thai characters vanish and nobody sees it.
-- **One chart carrying several messages,** or a chart title that is a column name.
-- **Sending a Thai chart with boxes or lost tone marks** because nobody opened it before sending.
-- **Comparing a month when the shop was closed with a normal month** and concluding that sales fell.
-- **Concluding that X caused Y** from 2 lines on a chart that rise and fall together.
-- **Pasting a customer list into an AI chat** to get help analysing it.
-
-## Link to other skills
-
-| Need | Use |
-|---|---|
-| Excel and CSV file traps · export-file rules | `data-import-export` sections 4–5 |
-| pandas · repeatable results · Thai CSV | `stack-python` section 4 |
-| B.E. years · Thai-style numbers and money | `i18n-and-locale` sections 3 · 5 |
-| Personal data · keep only what is needed | `pdpa-compliance` section 5 |
-| .docx report from Markdown | `markdown-report-docx` |
-| Evidence before saying it is done | `principle-prove-it-works` |
-| Language in the report and chart titles | `human-writing` |
-
-## Sources (checked 2026-10-23)
-
-- knowledge-work-plugins `data/skills/validate-data` (Apache-2.0 · reworded, not translated directly · seen 2026-11-10): github.com/anthropics/knowledge-work-plugins
-
-- matplotlib 3.11.0 (2026-06-11) section "Complex text layout with libraqm": matplotlib.org/stable/release/prev_whats_new/whats_new_3.11.0
-- Tested ourselves on Windows 11 · Python 3.13.5: matplotlib 3.10.6 and 3.11.2 · pandas 3.0.3 and 3.1.0 · Sarabun and Noto Sans Thai fonts from google/fonts · TH SarabunPSK · Tahoma · Leelawadee
-- Sarabun: github.com/google/fonts/tree/main/ofl/sarabun (OFL) · Noto Sans Thai: github.com/google/fonts/tree/main/ofl/notosansthai (OFL)
-- The data in section 9 was made with `assets/make_sample.py` (seed 2568) and is all sample data.
+- [`references/worked-example.md`](references/worked-example.md) — open when you need a model of the output lines and findings (section 9)
+- [`references/sources.md`](references/sources.md) — sources and check dates

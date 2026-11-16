@@ -22,8 +22,6 @@ Months × **essential** monthly spending (rent or mortgage, food, transport, uti
 
 Adjust up for: health conditions, older parents depending on you, older car, single-industry town. Adjust down slightly if the employer offers strong severance and the user is ม.33 (social security unemployment benefit when laid off: 60% of the capped wage for up to 180 days per government news from 28 Jun 2568, but SSO's own page dated 3 Oct 2567 still says 50% (รอยืนยัน which rate SSO pays now); wage cap 15,000 on SSO's page, and whether the 17,500 cap from 1 Jan 2569 applies to this benefit is (รอยืนยัน); resigned or contract ended: 30% for up to 90 days. Sources and dates → `e-commerce:social-security-th` (section 2, Unemployment row, checked 2026-11-10), or ask sso.go.th or 1506. Plan the fund without counting on the higher figure).
 
-Last checked 2026-10-06 · source: https://www.thaipbs.or.th/news/content/353742 (Ministerial Regulation No. 2 B.E. 2568 · 60% · 180 days · effective 28 Jun 2025 (B.E. 2568) · re-checked 2026-10-22; resignation 30% · 90 days was not changed) · wage ceiling 17,500 from 1 Jan 2026 (B.E. 2569), re-checked 2026-10-22 (infoquest.co.th/2025/550753)
-
 ## Where to park — the ladder
 
 | Layer | Share | Product | Access | Protected by the Deposit Protection Agency (DPA)? |
@@ -39,8 +37,6 @@ Never in stocks, crypto, long-term funds, Retirement Mutual Fund (RMF) / ThaiESG
 - Covers **up to 1,000,000 baht per depositor per bank** — all accounts and branches at that bank combined, principal plus interest. In force since 11 Aug 2564.
 - Covers Thai-baht savings, current, fixed deposits and certificates of deposit at member banks. Does **not** cover mutual funds, bonds, bills of exchange (ตั๋วแลกเงิน), insurance, or co-operatives (สหกรณ์ออมทรัพย์).
 - Above 1 million: split across banks. Money beyond the emergency tier (deposits vs bonds vs money market funds) → `bonds-and-deposits`.
-
-Last checked 2026-11-10 · source (Deposit Protection Agency): https://www.dpa.or.th/News/kar-prab-wngngein-khumkhrxng-thi-1-lan-bath (1 million baht from 11 Aug 2021 (B.E. 2564)) · https://www.dpa.or.th/Protected-Financial-Products (not protected: foreign currency, instruments, SSF/RMF funds, cooperative deposits, bills of exchange, savings insurance, crypto)
 
 ## Workflow
 
@@ -68,3 +64,7 @@ Freelance designer, essential spending 22,000/month, has 60,000 in savings, high
 - Interest rate is the last criterion; access and safety come first. E-savings promo rates change often — check the bank page (รอยืนยัน on any quoted rate).
 - "Emergency" = job loss, medical not covered by insurance, urgent home/car repair, family crisis. A sale is not an emergency.
 - The emergency fund is built before RMF/ThaiESG top-ups, except the employer PVD match, which comes first.
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources

@@ -16,18 +16,7 @@ description: Use when adding API endpoints or checking API consistency
 - Reviewing an API and feeling that its parts are not alike
 - Needing to answer "if we change it this way, will clients break?"
 
-## When to use another skill instead, or alongside
-
-| Task | Skill | |
-|---|---|---|
-| Design all the endpoints of one feature | command `/api-design` | instead |
-| Health check, error envelope, graceful shutdown | `web-service-essentials` | instead |
-| Tables, columns, relations | `database-design` | instead |
-| Tokens, scopes, permissions | `auth-implementation-patterns` | alongside |
-| Correlation id that appears in errors | `logging-standards` | alongside |
-| Contract tests between systems | `testing-standards` | alongside |
-| Recording why this convention was chosen | `adr-writer` | alongside |
-| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
+Not for: designing all the endpoints of one feature → command `/api-design` · health check, error envelope, graceful shutdown → `web-service-essentials` · tables and relations → `database-design`
 
 **A template of the conventions document that you can copy and use** → `assets/API-CONVENTIONS.md`
 
@@ -37,8 +26,6 @@ description: Use when adding API endpoints or checking API consistency
 
 Put the file `docs/API-CONVENTIONS.md` in place (the template is at `assets/API-CONVENTIONS.md`).
 Write every decision made from this page into that file, with the date and a short reason.
-
-> A convention that lives in one person's head is not a convention — someone who joins the team next month will do it another way.
 
 ---
 
@@ -251,7 +238,7 @@ A fitting period: for an internal API, 1 release cycle. For an API used by outsi
 
 ## 11 · Check before releasing a new endpoint
 
-Go through every item against the endpoint you added. Fail one and it is not merged yet (idea from ECC api-design).
+Go through every item against the endpoint you added. Fail one and it is not merged yet.
 
 - [ ] The URL is a plural noun per section 2 · sits under a version per section 3 · has no `GET` that changes data
 - [ ] Every list has pagination and a page-size ceiling (section 4) · filter and sort use the same parameter names as existing endpoints (section 5)

@@ -7,8 +7,6 @@ description: Use when writing or fixing C# and .NET code
 
 Use whenever the work touches C# code of any kind: ASP.NET Core (Web API · Model-View-Controller (MVC) · minimal API) · Entity Framework (EF) Core · ASP.NET MVC 5 on .NET Framework 4.x that is still maintained.
 
-This file covers only what is specific to .NET. The general rules live in `lazy-coding` · `readable-code` · `testing-standards` · `logging-standards` · `error-handling-patterns` · `database-design` · `principle-secure-by-default`.
-
 ---
 
 ## 1 · Start: read the version first, then run the same commands every time
@@ -73,41 +71,9 @@ builder.Services.AddOptions<SmtpOptions>()
     .ValidateOnStart();
 ```
 
-An outcome that is "unsuccessful but expected" (not found · duplicate · out of stock) is returned as a value, not thrown. Keep exceptions for what the code does not expect (adapted from wshobson `dotnet-backend-patterns` · MIT):
+An outcome that is "unsuccessful but expected" (not found · duplicate · out of stock) is returned as a value (a `Result<T>` record with `IsSuccess`, `Value`, `Error`, `Code`), not thrown. Keep exceptions for what the code does not expect. Use one code → status mapping for the whole system, then emit `ProblemDetails`. If the repo already has `FluentResults` or `ErrorOr`, use that one and do not add a second record on top. Code: [`references/patterns.md`](references/patterns.md).
 
-```csharp
-public sealed record Result<T>(bool IsSuccess, T? Value, string? Error, string? Code)
-{
-    public static Result<T> Ok(T value) => new(true, value, null, null);
-    public static Result<T> Fail(string error, string? code = null) => new(false, default, error, code);
-}
-
-// service
-return stock < qty ? Result<Order>.Fail("สต็อกไม่พอ", "OUT_OF_STOCK") : Result<Order>.Ok(order);
-
-// endpoint — one code → status mapping for the whole system, then emit ProblemDetails
-return r.IsSuccess ? Results.Ok(r.Value) : Results.Problem(r.Error, statusCode: r.Code switch { "NOT_FOUND" => 404, "OUT_OF_STOCK" => 409, _ => 400 });
-```
-
-If the repo already has `FluentResults` or `ErrorOr`, use that one and do not add a second record on top.
-
-**4 checks for a new type** (idea from type-design-analyzer · claude-plugins-official · Apache-2.0 · viewed 2026-11-10): (1) hide the internals: use a `record` whose constructor is `private` and give it a `Create` factory (2) the rules live in the type, so an invalid value cannot be built (3) validate once, in the constructor or factory (4) expose no setter: use `init` or a `readonly record struct`
-
-```csharp
-// Thai national ID: 13 digits + check digit · money in satang (long), never double
-public readonly record struct ThaiNationalId
-{
-    public string Value { get; }
-    private ThaiNationalId(string v) => Value = v;
-    public static ThaiNationalId? Create(string s)
-    {
-        if (s.Length != 13 || !s.All(char.IsAsciiDigit)) return null;
-        var sum = s.Take(12).Select((c, i) => (c - '0') * (13 - i)).Sum();
-        return (11 - sum % 11) % 10 == s[12] - '0' ? new ThaiNationalId(s) : null;
-    }
-}
-```
-(This C# example has not been compiled · the check-digit formula is the same as in the TypeScript example that has been run)
+**4 checks for a new type**: (1) hide the internals: use a `record` whose constructor is `private` and give it a `Create` factory (2) the rules live in the type, so an invalid value cannot be built (3) validate once, in the constructor or factory (4) expose no setter: use `init` or a `readonly record struct`
 
 ## 3 · EF Core
 
@@ -185,18 +151,6 @@ For the full xUnit setup and a `WebApplicationFactory` example, see [`testing-st
 - [ ] The migration has an `--idempotent` script, you read it, and it has no unintended `DROP`
 - [ ] If you cannot build .NET Framework on this machine, write in the report that it was not built. Do not say it passed.
 
-## 8 · Link to other skills
+## References
 
-| Need | Use |
-|---|---|
-| Do the least that still works | `lazy-coding` |
-| Names · file layout · comments | `readable-code` |
-| Test levels · coverage · tests that go red then green | `testing-standards` |
-| Log format · Serilog | `logging-standards` |
-| Catching exceptions · retry · timeout | `error-handling-patterns` |
-| Tables · indexes · expand-and-contract migrations | `database-design` |
-| Secure defaults | `principle-secure-by-default` |
-| Connection strings · secret store | `config-and-secrets` |
-| Thai dates · Buddhist Era · Thai sorting | `i18n-and-locale` |
-| API URLs · error format | `api-conventions` |
-| Prove it works before saying done | `principle-prove-it-works` |
+- [`references/patterns.md`](references/patterns.md) — open when writing a `Result<T>` or a validated value type (Thai national ID example, not compiled)

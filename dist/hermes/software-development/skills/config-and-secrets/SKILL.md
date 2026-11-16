@@ -26,9 +26,7 @@ description: Use when settings differ by environment or secrets need hiding
 | Designing login, tokens, user permissions | `auth-implementation-patterns` | instead |
 | Keeping sensitive values out of logs | `logging-standards` | instead |
 | Database connection strings | `database-design` | together |
-| Recording the incident after a secret leak | `postmortem-template` | together |
-| Steps during an incident | `incident-runbook-template` | together |
-| Abbreviations in work people read | `spell-out-abbreviations` | together |
+| Recording a secret leak · steps during the incident | `postmortem-template` · `incident-runbook-template` | together |
 
 **How to do it in each language and framework** is in `references/per-stack.md`.
 
@@ -70,18 +68,7 @@ For example `DEBUG=false` · `ALLOWED_ORIGINS=` empty · Transport Layer Securit
 > A system that boots with wrong config will break at 2 a.m. in a function that is rarely used.
 > A system that **refuses to boot** on wrong config tells you at deploy time, when you can still roll back.
 
-```ts
-// Node — zod
-const Env = z.object({
-  NODE_ENV:      z.enum(['development', 'staging', 'production']),
-  PORT:          z.coerce.number().int().positive().default(3000),
-  DATABASE_URL:  z.string().url(),
-  JWT_SECRET:    z.string().min(32),
-  LOG_LEVEL:     z.enum(['debug','info','warn','error']).default('info'),
-});
-
-export const env = Env.parse(process.env);   // invalid = the process dies and says which value is wrong
-```
+Node zod example: `references/per-stack.md` section 2. The pattern is a schema that parses `process.env` once at boot, so an invalid value kills the process and names the value.
 
 **What to check:** every value is present · types are right · values are in the accepted range ·
 keys are long enough · values banned on production (`JWT_SECRET=dev-secret` must fail).
@@ -140,7 +127,7 @@ Otherwise the next person who clones hits an error nobody can explain.
 > **A `.env` added to `.gitignore` too late:** once the file has been tracked, even once,
 > adding it to `.gitignore` later **does not remove it from history.** Run `git rm --cached` and treat the secret as leaked.
 
-**Pre-commit gate** (idea from wshobson secrets-management): `.gitignore` blocks only files you know by name, but a key pasted by mistake into code or YAML needs a scanner. Install gitleaks as a pre-commit hook in every repo (`gitleaks git --pre-commit --staged` in gitleaks 8.19 and later · earlier versions use `gitleaks protect --staged`) and rerun it in CI over the whole history with `gitleaks git --redact`. If the hook fails, never use `--no-verify`; move the value out first. If you find one in history, go to step 8 at once, not just delete the line.
+**Pre-commit gate**: `.gitignore` blocks only files you know by name, but a key pasted by mistake into code or YAML needs a scanner. Install gitleaks as a pre-commit hook in every repo (`gitleaks git --pre-commit --staged` in gitleaks 8.19 and later · earlier versions use `gitleaks protect --staged`) and rerun it in CI over the whole history with `gitleaks git --redact`. If the hook fails, never use `--no-verify`; move the value out first. If you find one in history, go to step 8 at once, not just delete the line.
 
 ---
 
@@ -220,15 +207,3 @@ you can still verify old tokens that have not expired.
 instead of embedding the value at build time (`import.meta.env`), which locks the value into the built files.
 
 ---
-
-## 11 · Anti-patterns
-
-- **A connection string in code**, even a dev one, because one day someone will copy it for production.
-- **A production `.env` placed on the server.** Anyone who can enter the machine can read it, and nothing records who read it.
-- **The same secret in every environment.** When staging leaks, production leaks too.
-- **Sending secrets by chat or email.** The value stays there forever, and is searchable.
-- **No `.env.example`.** A new person wastes half a day guessing which values are needed.
-- **Booting successfully with incomplete config,** then breaking in real use.
-- **Printing the whole config to the log at boot,** secrets included.
-- **`ALLOWED_ORIGINS=*` on production** because "it was blocked by Cross-Origin Resource Sharing (CORS) in dev."
-- **A key that has never changed since the first year.**

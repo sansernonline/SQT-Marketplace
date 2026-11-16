@@ -7,7 +7,6 @@ description: Use when a project docx set needs its own cover
 
 > **Gate before starting (every time):** read the owner's theme → search live for references → 3 truly different styles → check `no-ai-look` before sending. Follow the "ด่านก่อนลงมือ" (gate before starting) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls color and fonts; the search is for the structure of this piece). Close the work with a `ด่านก่อนลงมือ:` line.
 
-> **Language:** write every line of wording on the cover following `human-writing`.
 > **The one rule:** the cover must say which project it belongs to at a glance, without reading the name. Do it with the logo's shapes or the app's real screen, not with color alone.
 
 This skill makes the **cover page** only. The whole document body (color set, Thai fonts, tables, headers and footers) lives in `branded-document-design`. The cover uses the same `anchor_picture()` from `brandkit.py`.
@@ -18,12 +17,9 @@ This skill makes the **cover page** only. The whole document body (color set, Th
 - The user says "ปกไม่ว้าว" · "อยากได้ปกที่ไม่ซ้ำ" · "ปกทุกโปรเจกต์หน้าตาเหมือนกัน" (the cover is not wow · I want a cover that is not repeated · every project's cover looks the same).
 - Do not use when: the project has no logo or mockup yet → make the logo first (`graphic-design`), then come back. A single report from markdown that needs no identity → `markdown-report-docx`.
 
-## The lesson behind this skill (3-style bake-off · 2026-10-15 · 3 projects · 3 reviewers)
+## Default path
 
-The old covers of the 3 projects used one formula: black background, glow in the brand color, mono badge, data row at the bottom of the page. Only the color differed, which is the look AI produces for everything.
-We tried 3 styles in parallel and had 3 reviewers vote. **The logo-shape style won 2 of 3.** The real-screen style won only for Telex (a plain T_ logo does not say it is a terminal). The art-from-real-data style had a few standout covers (LiteNet got 1 vote) but is the hardest to repeat on a new project.
-Round 2 (the user said much more should change, and to learn from other people's real work): we collected 35 real covers, then made 3 new styles to compare with the round 1 cover. **The round 1 cover scored lowest on "learned from real work" from every reviewer.** The winner, 2 of 3, was the style that builds on round 1 with lessons from real covers (Thai title largest · version as a separate badge · logo-shape image bleeding off the edge like Stripe Press · real screen layered under a title bar like O'Reilly). SwipeOS won with a grid of 12 real hand gestures (in the style of the Microsoft Inclusive Design pictogram set).
-→ The default path is logo shapes. The fallbacks are the real screen, or a pictogram of what the app really does. Every style uses the same page system (step 3). **Always look at other people's real covers first (step 1.0).**
+The default path is logo shapes. The fallbacks are the real screen, or a pictogram of what the app really does. Every style uses the same page system (step 3). **Always look at other people's real covers first (step 1.0).** The bake-off history is at the end of [`references/cover-bakeoff.md`](references/cover-bakeoff.md).
 
 ---
 
@@ -90,8 +86,8 @@ Same shapes and positions; only the theme swaps: light paper (about `#F7F7F5`) �
 ## 7 · Make 3 styles, then vote 2 of 3: use it when steps 1–6 did not pass step 8, or the user asks for several styles (normally do one style from step 1 first · 3–5 times the work)
 
 Follow [`references/cover-bakeoff.md`](references/cover-bakeoff.md): 3 designers with different styles (same brief) → 3 reviewers with different angles (art director · brand and client · production in Word) → the style with 2 of 3 votes wins · you may choose per project · you may take at most 2 standout pieces from the losing styles.
-- **Designers must be able to run render and look at their own images.** Before launching, check that the installed agent has Bash. (History: at the 2026-10-15 bake-off, the installed `graphic-designer` in plugin version 2.3.0 did not, so it sent work it had never seen. The current version in the repo has Bash, but a machine that has not updated may still have the old one.) If not → use `general-purpose` with the designer role attached, or have the team lead render and send the fix round to an agent that has Bash.
-- **Team members cannot launch agents themselves.** The designers make the 3 covers as files and send them back; the team lead launches the 3 reviewers to vote. (History: Speak Go 2026-10-15.)
+- **Designers must be able to run render and look at their own images.** Before launching, check that the installed agent has Bash. If not → use `general-purpose` with the designer role attached, or have the team lead render and send the fix round to an agent that has Bash.
+- **Team members cannot launch agents themselves.** The designers make the 3 covers as files and send them back; the team lead launches the 3 reviewers to vote.
 
 ## 8 · Check before sending: the render script must print `checks.json`, and you must open every image yourself
 
@@ -114,4 +110,4 @@ If the user says the cover is not beautiful → cut things before adding (matche
 
 ## Do not look AI-made
 
-Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye check 3.2 ("ด่านตา 3.2" in `no-ai-look`; web pages add items 10–14), because 0 hits from the script is not yet a pass. The bans in this file are specific to this job; the full list for every medium is there.
+Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye check 3.2 ("ด่านตา 3.2" in `no-ai-look`; web pages add items 10–14), because 0 hits from the script is not yet a pass.

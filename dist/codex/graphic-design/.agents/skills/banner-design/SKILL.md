@@ -7,7 +7,7 @@ description: Use when making a banner, event cover or web hero
 
 > **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
-Part of the `graphic-design` plugin. Follow `human-writing` for wording. The owner is the agent `social-creator`. The ideas and reference file come from the skill `banner-design` of nextlevelbuilder/ui-ux-pro-max-skill (MIT · see the Sources section).
+The owner is the agent `social-creator`.
 
 > **One rule:** deliver 3 banner directions rendered as real-size PNGs and laid side by side. Each direction has a real reference opened in this round, not a direction you made up.
 
@@ -56,7 +56,7 @@ Do not use when:
 - [ ] The fresh reviewer has scored it, and you told the user plainly where it still loses to the reference
 - [ ] Unknown data is marked `(รอยืนยัน)` and not invented
 
-## Sources
+## References
 
-- The idea of the steps (brief → reference → 3 directions → HTML → export → compare) and the file [`references/uipro-banner-sizes-and-styles.md`](references/uipro-banner-sizes-and-styles.md) (copied, unedited) come from [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) commit `28b3b8d` · MIT · Copyright (c) 2024 Next Level Builder · the full licence text is in [`references/LICENSE-uipro`](references/LICENSE-uipro) · viewed 2026-10-29
-- Added by us: references from theme shops and Pinterest on the owner's order of 2026-10-29 · Thai language and Thai fonts · the script `render_banner.py` · the `no-ai-look` check and the fresh reviewer (from the trial banner of 2026-10-28, where the reviewer gave ours 6/10 and the reference 8.5/10)
+- [`references/uipro-banner-sizes-and-styles.md`](references/uipro-banner-sizes-and-styles.md) — the 22 art directions, sizes and example queries (steps 2 and 3)
+- [`references/sources.md`](references/sources.md) — credit and licence of the reference file (MIT, `references/LICENSE-uipro`)

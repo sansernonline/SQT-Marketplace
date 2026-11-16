@@ -16,7 +16,7 @@ General information, not medical advice — with a health condition, ask your do
 | Adults 65+ | Same as above | ≥ 2 days | Varied balance + strength activity ≥ 3 days, to prevent falls |
 | Pregnancy / postpartum (no contraindication) | ≥ 150 min moderate | Include gentle strengthening | Follow the obstetrician's advice |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: WHO guidelines on physical activity and sedentary behaviour (2020) https://www.who.int/publications/i/item/9789240015128
+Sources and check date: [references/sources.md](references/sources.md)
 
 Intensity without a watch — **talk test**: moderate = you can talk but not sing; vigorous = only a few words between breaths.
 
@@ -78,3 +78,10 @@ Habit tracker template:
 |---|---|---|---|---|---|---|---|---|---|
 
 Related: `sleep-log` (sleep affects recovery) · `doctor-visit-prep` · `annual-checkup`.
+
+
+## reference: sources.md
+
+# Sources · exercise-plan
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: WHO guidelines on physical activity and sedentary behaviour (2020) https://www.who.int/publications/i/item/9789240015128

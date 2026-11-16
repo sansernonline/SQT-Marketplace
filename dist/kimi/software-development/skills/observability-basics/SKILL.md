@@ -79,7 +79,6 @@ queue_depth_jobs                 value at this moment
 
 - **Metric types:** a counter counts events (read it with `rate()`) · a gauge holds the value right now · a histogram holds durations when you need p95 · a summary is for when you do not need to aggregate across instances
 - **Units:** seconds · bytes · ratio 0 to 1 (`_seconds`, not `_milliseconds`)
-- **Never put `user_id` · a phone number · `call_id` in a label**, because every new value is a new series, until the metrics system cannot cope · these ids go in logs and traces
 - p95: `histogram_quantile(0.95, sum by (le) (rate(<name>_bucket[5m])))`
 - Every alert rule has `for:` · `severity` · a runbook link · alert on symptoms (latency · error), not on CPU or GPU
 - Keep dashboards as JSON in git and provision them from files · RED per service · USE per resource
@@ -112,7 +111,7 @@ queue_depth_jobs                 value at this moment
 
 ### 4.1 · Error budget and burn rate
 
-A system with an SLO uses this instead of a fixed error % threshold, because it says "if this goes on, when will the whole month's budget run out?" (idea from the Google SRE Workbook)
+A system with an SLO uses this instead of a fixed error % threshold, because it says "if this goes on, when will the whole month's budget run out?"
 
 - **Budget** = the time you may fail in 30 days → SLO 99.9% = 43 minutes · 99.5% = 3.6 hours · 99% = 7.2 hours
 - **Burn rate** = current error rate ÷ (1 − SLO) → burn 1 = the budget runs out exactly on day 30 · burn 10 = gone in 3 days
@@ -158,42 +157,8 @@ Technical metrics all green while the business has stalled really happens, and y
 
 ---
 
-## 7 · Anti-patterns
+## References
 
-- **Watching the average response time**: it hides the people who hit the problem every time
-- **Alerts that need no action**: they teach everyone to ignore alerts
-- **Alerting on CPU and memory**: a system at CPU 90% with normal users is not an incident
-- **Putting unbounded ids in labels**: the metrics system brings itself down
-- **A dashboard with 40 graphs**: nobody knows which one to look at
-- **Measuring only the technical side, not the business**: everything is green but nobody can place an order
-- **Tracing every request**: expensive for no extra gain, sampling is enough
-- **No line marking the deploy time**: you lose half an hour before you remember you just deployed
-- **Alerts with no link to a runbook**: the receiver starts searching from zero at 3 a.m.
-
----
-
-## 8 · Abbreviations
-
-- **metric**: a number collected over time
-- **trace**: following one request along the whole path it travels
-- **p95 / p99**: the 95th and 99th percentiles (only 5% or 1% of requests are slower than this)
-- **label / tag**: a tag attached to a metric, used to look at groups separately
-- **on-call**: the duty of receiving incident alerts outside working hours
-- **SLO**: Service Level Objective (a service-level target you set yourself, such as 99.5% success)
-- **error budget / burn rate**: the time you may fail per month under the SLO, and how fast you are using it up (item 4.1)
-
-## 9 · Links to other skills
-
-| Need | Use together with |
-|---|---|
-| Log format and correlation id | `logging-standards` |
-| Health checks the monitor uses | `web-service-essentials` |
-| Metrics for queues and background jobs | `background-jobs` |
-| Error rate and circuit breaking | `error-handling-patterns` |
-| Steps when an alert fires | `incident-runbook-template` |
-| Post-incident summary | `postmortem-template` |
-| Target numbers agreed with the customer | `srs-writing` |
-| PromQL · alert rules · Grafana provisioning · voice agent example | `references/prometheus-grafana.md` |
-| Let an agent read Prometheus or Grafana through MCP | `mcp-server` item 1.1 |
-
-Source of item 3.1: prometheus.io (metric types · naming · histograms · alerting) and grafana.com (dashboard best practices · provisioning), checked 2026-10-27 · full links are at the end of `references/prometheus-grafana.md`
+- [`references/prometheus-grafana.md`](references/prometheus-grafana.md) — open for PromQL · alert rules · Grafana provisioning · voice agent example
+- `mcp-server` item 1.1 — when an agent must read Prometheus or Grafana through MCP
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources

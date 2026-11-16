@@ -25,8 +25,6 @@ Read charts for retail traders — plain language, honest confidence, no magic. 
 | Volume | 20-day average volume | Breakout day volume ≥ 1.5× the 20-day average = participation; below average = suspicious |
 | Support / resistance | Last 2 swing highs and lows, prior consolidation zones, round numbers | Mark the nearest 2 of each; the line is a zone (± 1–2%), not a single price |
 
-These are the common platform defaults (Streaming, TradingView, Settrade charts all ship RSI 14 and MACD 12-26-9 by default).
-
 ## Plain-Thai meaning and false-signal warnings
 
 8 signals (MA, golden cross, RSI 70/30, divergence, MACD cross, breakout on high or low volume) with ภาษาง่าย, the common false signal and what would prove it wrong: [references/signal-meanings.md](references/signal-meanings.md) section 1. Read it for the plain-Thai line of the answer.
@@ -64,7 +62,6 @@ EMA and Wilder averages start from the simple average of the first n bars, so ea
 3. Mark the nearest 2 supports and 2 resistances.
 4. State the read in one line each, then **the invalidation** — the price that makes the read wrong.
 5. Hand the invalidation price to `position-sizing` as the stop (same plugin).
-6. End with: technicals describe odds, not certainty.
 
 ## Worked example
 

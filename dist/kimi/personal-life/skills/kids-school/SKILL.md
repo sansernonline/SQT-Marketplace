@@ -57,8 +57,6 @@ Before paying for tutoring, or when homework comes back wrong, find out what the
 4. **Positive, specific words only.** Say what the child did ("นับชิ้นถูก แต่ยังไม่ได้ดูว่าชิ้นเท่ากันไหม"), never อ่อน · โง่ · ตามไม่ทัน.
 5. Same gap in 2 checks a week apart → that gap is what tutoring is for (decision questions above). The agent does not make up exam questions "from the real test".
 
-Idea from anthropics/k12-teacher-skills `plugin/skills/k12-check-for-understanding` (Apache-2.0, US math standards not used, rewritten, viewed 2026-11-10).
-
 ## Tax and grants pointer
 
 | Item | Amount | Notes |
@@ -68,7 +66,7 @@ Idea from anthropics/k12-teacher-skills `plugin/skills/k12-check-for-understandi
 | Pregnancy and childbirth (ฝากครรภ์และคลอดบุตร) | up to 60,000 บาท/ครรภ์ | Receipts from hospital |
 | เงินอุดหนุนเพื่อการเลี้ยงดูเด็กแรกเกิด (child support grant) | 600 บาท/เดือน to age 6 (รอยืนยัน) | Household income test; register at the local administrative organisation (องค์กรปกครองส่วนท้องถิ่น · อปท.) / district (รอยืนยัน current criteria) |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.rd.go.th · https://www.dailynews.co.th/news/5278292/ — for planning which parent claims which child, and the full list, use `trading-finance` `tax-deduction-planner` (if installed).
+For planning which parent claims which child, and the full list, use `trading-finance` `tax-deduction-planner` (if installed).
 
 ## Workflow
 
@@ -79,9 +77,10 @@ Idea from anthropics/k12-teacher-skills `plugin/skills/k12-check-for-understandi
 5. **Tutoring** — use the decision questions; review at the end of each block
 6. **Tax** — at year end, collect birth certificates and hospital receipts for `trading-finance` `tax-deduction-planner` (if installed)
 
-## Worked example
+## References
 
-2 children, public school, ป.3 and ม.1 (EP programme). Term 1 May: EP fee for ม.1 15,000 (example, รอยืนยัน the school's figure) + uniforms 2,500 + supplies 1,500; ป.3 extras 1,200. Monthly sinking fund: (15,000 × 2 terms + 4,000 extras × 2 + tutoring 8 weeks × 800 × 2) ÷ 12 ≈ 4,233 บาท/เดือน put aside from June. Tax: older child born 2557 → 30,000; younger born 2562 (second child, after 2561) → 60,000.
+- [`references/school-year-planner.md`](references/school-year-planner.md) — fee planner by month and a worked example for 2 children
+- [`references/sources.md`](references/sources.md) — tax deduction sources (checked 2026-10-06) and credits
 
 ## Related
 

@@ -74,10 +74,6 @@ Related: [[other note]]
 5. **Retrieval** — decode the words with `names.md` first, then search by file name, then tags, then full text. When a note was hard to find, rename it or add the alias you searched for — that is the maintenance loop.
 6. **Answering from notes** — every answer names the note and its date ("จาก `2025-05-11 notes.md`"). A note used for a status (who is doing what, a balance, a booking) that is older than 1 month, or for a fact older than 1 year, gets the line "โน้ตนี้อายุ … อาจเปลี่ยนแล้ว". **Two notes that disagree → show both with their dates**; never pick one silently.
 
-## Worked example
-
-User: "I wrote down how to reset the water pump last year." Search `pump` → nothing; full-text `ปั๊ม` → 14 hits in chat exports. Found it in `2025-05-11 notes.md`, mixed with a shopping list. Fix: move into `reference/water pump – reset and service.md`, tags `#home #ปั๊มน้ำ #pump`, alias "Mitsubishi pump", link from `index.md` under Home. Next search: 2 seconds.
-
 ## Rules
 
 - Capture is fast; organisation happens weekly, not at capture time
@@ -85,6 +81,9 @@ User: "I wrote down how to reset the water pump last year." Search `pump` → no
 - Notes about other people: facts and preferences they shared with you, not gossip or health details they did not want written
 - Back up the `kb/` folder with the rest of the user's files (3-2-1 rule in `digital-hygiene`)
 
-Source for `names.md` and the answering rules: ideas from anthropics/knowledge-work-plugins `productivity/skills/memory-management` and `enterprise-search/skills/knowledge-synthesis` (Apache-2.0, rewritten, viewed 2026-11-10).
-
 Related: `meeting` (Leg 2 summaries file into `journal/`) · `important-docs` (documents, not notes) · `weekly-review`.
+
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open for a model fix of a hard-to-find note
+- [`references/sources.md`](references/sources.md) — where the `names.md` and answering rules came from

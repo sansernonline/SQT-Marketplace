@@ -74,3 +74,13 @@ Self-rating: [level] — because [one-sentence justification]
 Opening line for the conversation:
 - EN: "I'd like to talk about my path to [level]. Here's where I think I already meet the criteria, and one gap I'm working on. What else would you need to see?"
 - TH: "อยากขอคุยเรื่องการเติบโตไปตำแหน่ง [ระดับ] ครับ/ค่ะ ได้เตรียมหลักฐานว่าส่วนไหนทำได้แล้ว และส่วนที่ยังต้องพัฒนา อยากทราบว่าพี่/คุณอยากเห็นอะไรเพิ่มอีกบ้าง"
+
+## Worked example — top-3 summary
+
+## Worked example — top-3 summary
+
+> 1. Cut month-end close from 9 to 5 working days (Jan–Apr), freeing 4 days a month for analysis — KPI: reporting timeliness.
+> 2. Led the audit preparation; zero adjustments from the auditor for the first time in 3 years — KPI: compliance.
+> 3. Trained 2 juniors who now close 3 entities independently — KPI: team capability.
+> Growth area: presenting to the board — enrolled in a presentation course (Q3), presented the Q3 results myself.
+> Ask: scope to own the consolidation process next year, with promotion to Senior Accountant as the goal.

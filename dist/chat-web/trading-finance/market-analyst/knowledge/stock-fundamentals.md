@@ -4,7 +4,7 @@ Use when reading a Thai stock's financials or ratios
 
 # Stock Fundamentals (reading statements and basic figures of SET stocks)
 
-General information, not investment advice. This skill turns a company's filed statements into a handful of ratios and the places worth a second look. It never says buy, sell or hold, even when asked straight out (see "Check before sending").
+This skill turns a company's filed statements into a handful of ratios and the places worth a second look. It never says buy, sell or hold, even when asked straight out (see "Check before sending").
 
 > **One rule:** every ratio comes from a `ratios.mjs` run on figures the user (or a data plugin) took from the filed statement, with the statement date and the price date beside it — a ratio without both dates is not shown.
 
@@ -72,7 +72,35 @@ The script lists these. A flag is "go read the notes to the statement", not a ve
 
 Put several companies in `companies` and a `screen` (`maxPE` · `minROE` · `maxDE` · `minYield`). A name passes only if it meets every limit **and** has no flag. Passing means "worth reading the statement", never "worth buying"; the script prints that line and the answer keeps it. Screen limits are the user's; this skill has no default limits.
 
-## Worked example (illustrative, not a real company)
+## Check before sending
+
+- Every ratio came from a `ratios.mjs` run this session; statement date and price date are shown
+- Profit and equity are the owners-of-the-parent lines; 12 months, not one quarter
+- Every flag the script printed is passed on with what to read in the notes
+- Banks and insurers have no D/E; the note about NIM, NPL or CAR is passed on
+- No buy, sell or "cheap/expensive" verdict; a screen pass is called a candidate
+- Asked "ควรขายไหม" or "ควรซื้อไหม": no "ไม่ควรขาย", no hold call and no "sell when …" list. Say the decision is the user's, give the figures to check, and hand the sell conditions to `watchlist-setup` (its invalidation line, written by the user)
+
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open for a model run with figures and reading
+- [`references/sources.md`](references/sources.md) — sources and check dates
+
+
+## reference: sources.md
+
+# Sources · stock-fundamentals
+
+- Ratio groups (profitability, liquidity, leverage, efficiency, valuation) follow the idea of `analyzing-financial-statements` in anthropics/claude-cookbooks (MIT, viewed 2026-11-10) — formulas are textbook ones, the script is written from scratch in Node, no code copied
+- Flag idea (growth over 100%, margins out of range) from `audit-xls` step 3f, anthropics/financial-services (Apache-2.0, viewed 2026-11-10); thresholds here are our own starting values
+- Statement deadlines (45 days after a quarter, 2–3 months for the year): see `watchlist-setup`, checked 2026-10-26 with SET and SEC links
+
+
+## reference: worked-example.md
+
+# Worked example · stock-fundamentals
+
+Illustrative, not a real company.
 
 `scripts/example.json`: AAA, statement 30 Sep 2026, price 40 baht on 7 Nov 2026, figures in thousand baht.
 
@@ -88,18 +116,3 @@ Put several companies in `companies` and a `screen` (`maxPE` · `minROE` · `max
 | Core P/E | land sale 500,000 thousand removed → EPS 2.00 | 20.0 |
 
 Reading: on reported profit P/E is 16; without the land sale it is 20, so the lower figure came from a one-off. BBB in the same file is a loss maker with D/E 3 and interest coverage 0.75, paying a dividend anyway: five flags, and it fails the screen.
-
-## Check before sending
-
-- Every ratio came from a `ratios.mjs` run this session; statement date and price date are shown
-- Profit and equity are the owners-of-the-parent lines; 12 months, not one quarter
-- Every flag the script printed is passed on with what to read in the notes
-- Banks and insurers have no D/E; the note about NIM, NPL or CAR is passed on
-- No buy, sell or "cheap/expensive" verdict; a screen pass is called a candidate
-- Asked "ควรขายไหม" or "ควรซื้อไหม": no "ไม่ควรขาย", no hold call and no "sell when …" list. Say the decision is the user's, give the figures to check, and hand the sell conditions to `watchlist-setup` (its invalidation line, written by the user)
-
-## Sources
-
-- Ratio groups (profitability, liquidity, leverage, efficiency, valuation) follow the idea of `analyzing-financial-statements` in anthropics/claude-cookbooks (MIT, viewed 2026-11-10) — formulas are textbook ones, the script is written from scratch in Node, no code copied
-- Flag idea (growth over 100%, margins out of range) from `audit-xls` step 3f, anthropics/financial-services (Apache-2.0, viewed 2026-11-10); thresholds here are our own starting values
-- Statement deadlines (45 days after a quarter, 2–3 months for the year): see `watchlist-setup`, checked 2026-10-26 with SET and SEC links

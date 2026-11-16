@@ -4,88 +4,80 @@ Use before writing anything people read, in Thai or English
 
 # human-writing — write like a person: smooth to read, easy to understand
 
-Applies to everything a person will read, from chat to labels in a diagram. This skill teaches good Thai and good English. Rules about Thai output stay as written. Examples of every rule and their sources → [`headings-and-examples`](references/headings-and-examples.md). Thai of 1 paragraph or more → [`thai-grammar`](references/thai-grammar.md) (sentence structure · register · example paragraphs in [`thai-examples`](references/thai-examples.md)). Research or work sent to outsiders → [`strict-review`](references/strict-review.md). Thai documents with justified alignment → [`thai-line-breaking`](references/thai-line-breaking.md). It lives only in plugin `superuser`; other plugins share it through `dependencies`.
+## Use when
+- Writing anything a person will read, from chat to labels in a diagram, in Thai or English.
 
-Boundary: this skill owns the wording. The look of kept documents (headings, tables, text boxes, theme) → `polished-document-style`. Abbreviations and glossaries → `spell-out-abbreviations`.
+Not for: the look of kept documents (headings, tables, text boxes, theme) → `polished-document-style` · abbreviations and glossaries → `spell-out-abbreviations`.
 
-## 1 · Core principles
+## Steps
 
+### 1 · Core principles
 - Write as if explaining to a skilled coworker who is not on the project. If it trips you up when read aloud, rewrite it.
 - Answer or conclusion first, then the reason. No preamble, no repeating the question.
 - 1 sentence, 1 idea. If you chain "ซึ่ง" "โดย" "จึง" several layers deep, split into several sentences.
 - English follows the same rules: sentences under 25 words · who does what (active voice) · plain words.
 
-## 2 · Symbols and numbers
-
-- `→` means order of steps or a consequence · `·` separates short nouns on one line · `:` introduces detail · write every kind of count as a numeral · the words around a symbol must be human language.
-- **Write conditions and instructions as full sentences with connectors** (ถ้า … ให้ … · แล้ว · ส่วน · เพราะ — that is, if … then … · and then · as for · because). Do not chain sentences into fragments with `→` or `·`.
-- In tables, short text is fine, but it must still read as human language, not code.
-- A symbol must never replace a word so far that the reader has to decode it. If an outsider must guess what the arrow means, add words.
-- **No emoji or icons** (📌 ✅ 💡 🚀 👀) in headings, body, tables, labels, or text boxes, because readers spot them at once as AI-written. Use bold words instead, such as **หมายเหตุ** (note). Yes/no cells in a table may use `✓` `✗`. Show severity with the words `วิกฤต · สูง · กลาง · ต่ำ`, never coloured dots. Do not delete emoji the owner wrote, and do not copy them. The one exception is customer chat text that the task's own skill prescribes.
+### 2 · Symbols and numbers
+- `→` means order of steps or a consequence · `·` separates short nouns on one line · `:` introduces detail · write every kind of count as a numeral.
+- **Write conditions and instructions as full sentences with connectors** (ถ้า … ให้ … · แล้ว · ส่วน · เพราะ). Do not chain sentences into fragments with `→` or `·`. If an outsider must guess what an arrow means, add words. In tables short text is fine, but it must read as human language, not code.
+- **No emoji or icons** (📌 ✅ 💡 🚀 👀) in headings, body, tables, labels, or text boxes. Use bold words instead, such as **หมายเหตุ**. Yes/no cells in a table may use `✓` `✗`. Show severity with the words `วิกฤต · สูง · กลาง · ต่ำ`, never coloured dots. Do not delete emoji the owner wrote, and do not copy them. The one exception is customer chat text that the task's own skill prescribes.
 - Say what every number means. Compare so it is easy to picture (times, easier to read than %). If a result is uncertain, say plainly why.
-- **Figures that change over time** (prices · tax rates · law · filing deadlines): give the source and the date checked. Cite only sources you actually opened, with a link or DOI. Mark hypothetical numbers or mock data with the label `ตัวอย่าง` (example) from the first place they appear.
-- **Dates** in Thai text use Buddhist Era (พ.ศ.) or Common Era (ค.ศ.), one style across the whole set. File names, codes, and machine-read data use Common Era `YYYY-MM-DD`.
-- **Task status** uses these 5 words in every document: `เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่` (done · in progress · blocked · awaiting approval · pending). Check results use `ผ่าน · ไม่ผ่าน` (pass · fail).
+- **Figures that change over time** (prices · tax rates · law · filing deadlines): give the source and the date checked. Cite only sources you actually opened, with a link or DOI. Mark hypothetical numbers or mock data with the label `ตัวอย่าง` from the first place they appear.
+- **Dates** in Thai text use พ.ศ. or ค.ศ., one style across the whole set. File names, codes, and machine-read data use `YYYY-MM-DD` in Common Era.
+- **Task status** uses these 5 words in every document: `เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่`. Check results use `ผ่าน · ไม่ผ่าน`.
 
-## 3 · Words
+### 3 · Words
+- Use words people actually say. No bureaucratic words or literal-translation jargon. Keep terms the field uses in English (token · prompt · API · OCR). Explain a coined or confusing term the first time. Abbreviations → `spell-out-abbreviations`.
+- Call one thing by one word across the whole set: chat, slides, documents, diagrams.
+- Two-language documents: pick 1 main language and put the other in brackets or a second column. Do not switch inside a sentence.
+- Cut padding words ("ทำการ" · "มีการ" · "ในส่วนของ" · "ได้มีการ" · "เป็นการ").
+- **Cut items, not function words.** Every length budget (words per bullet · characters per commit title · characters per subtitle) is met by dropping items, condensing, or moving content to the next piece. Never cut `จะ` `ให้` `ก็` `ด้วย` `แล้ว` `ต่างหาก` or polite words (`ขอ` `รบกวน` `นะ` and ครับ/ค่ะ, per register). They do work in the sentence; without them Thai turns curt and reads like a translation.
+- Avoid AI-looking moves: a quotable opener · the slogan "ไม่ใช่แค่… แต่ยัง…" for emphasis (a sentence that contrasts with something real or reframes the problem is fine, but it must close with "ด้วย") · grouping everything in threes · praising something as more important than it is · bold on every line · a closing recap · opening with "แน่นอน" · closing with "หวังว่าจะช่วยได้" · "หลาย" when you know the number · stacked hedges (hedge once, where you are truly unsure).
+- For work people look at (screens · slides · ads) also avoid: broad ad words (ยกระดับ · ไร้รอยต่อ · ล้ำสมัย · supercharge) · em dashes in every sentence · canned openers ("ในยุคดิจิทัลที่…") · short fragments split by full stops ("เร็ว. ง่าย. ครบ.") · claims a competitor could also make (put in a real name or number). For the look of the work, use `no-ai-look`.
 
-- Use words people actually say. No bureaucratic words or literal-translation jargon.
-- Keep terms the field already uses in English (token · prompt · API · OCR).
-- Abbreviations → follow `spell-out-abbreviations`. Explain a coined or confusing term the first time you use it.
-- Call one thing by one word across the whole set: chat, slides, documents, and diagrams.
-- Two-language documents: pick 1 main language and put the other in brackets or a second column. Do not switch back and forth inside a sentence.
-- Cut padding words ("ทำการ" · "มีการ" · "ในส่วนของ" · "ได้มีการ" · "เป็นการ" — empty Thai fillers such as "ทำการ" before a verb).
-- **Cut items, not function words.** Every kind of length budget (words per bullet · characters per commit title · characters per subtitle) is met by dropping items, condensing content, or moving it to the next piece. Never cut `จะ` `ให้` `ก็` `ด้วย` `แล้ว` `ต่างหาก` (Thai function words: future marker, "to/let", "also", "too", "then", emphatic particle) or polite words (`ขอ` `รบกวน` `นะ` and ครับ/ค่ะ, per register). These do work in the sentence. Cut them and Thai turns curt and reads like a translation.
-- Avoid moves that look AI-written: a quotable opener · the slogan "ไม่ใช่แค่… แต่ยัง…" (not just… but also…) used for emphasis (a sentence that contrasts with something real or reframes the problem is fine, but it must close with "ด้วย") · grouping everything in threes · praising something as more important than it is · bold on every line · a closing recap · opening with "แน่นอน" (certainly) · closing with "หวังว่าจะช่วยได้" (hope this helps) · using "หลาย" (several) when you know the number · stacked hedges (hedge once, at the point you are truly unsure).
-- For work people look at (screens · slides · ads) also avoid: broad ad words (ยกระดับ · ไร้รอยต่อ · ล้ำสมัย · supercharge — elevate · seamless · cutting-edge) · em dashes in every sentence · canned openers ("ในยุคดิจิทัลที่…" — "In the digital age where…") · short fragments split by full stops ("เร็ว. ง่าย. ครบ." — "Fast. Easy. Complete.") · claims a competitor could also make: put in a real name or number instead · for the look of the work, use `no-ai-look`.
-
-## 4 · Answering in chat
-
-- First sentence answers directly, then the reason.
-- Short question → short answer, 2–3 sentences, no headings or tables.
-- Use a table to compare 2 or more options or many numbers. Use a list when there are several items to scan. No nested bullets (split sub-topics into a new bold heading). 2–3 short items go on one line separated by ` · `. Include only what the reader needs.
+### 4 · Answering in chat
+- First sentence answers directly, then the reason. Short question → 2–3 sentences, no headings or tables.
+- Table to compare 2 or more options or many numbers; list for several items to scan. No nested bullets (use a new bold heading). 2–3 short items go on one line with ` · `. Include only what the reader needs.
 - Report finished work by its result, not by narrating the steps.
-- If you told them something wrong, say what was wrong and what is right. No long apology. If unsure, say where and how to check. Do not guess in a confident voice.
-- When the user must decide: offer options, name the recommended one and why, and close with 1 question that is easy to answer.
+- If you told them something wrong, say what was wrong and what is right, with no long apology. If unsure, say where and how to check; do not guess in a confident voice.
+- When the user must decide: offer options, name the recommended one and why, close with 1 easy question.
 - Longer than 1 screen: answer the important part first and offer the detailed version in 1 line (do not stop to ask).
-- If the user says "งง" (confused) or "พูดง่าย ๆ" (say it simply): rewrite the last answer at half the length, with no unexplained jargon and no new content.
-- End with 1 thing they can actually do next. No recap.
-- **Answering from a document or the web**: retell in your own words, never translate sentence by sentence · cause and effect in one paragraph · small exceptions in brackets · 2–3 bold labels are enough · put sources together at the end of the answer.
+- If the user says "งง" or "พูดง่าย ๆ": rewrite the last answer at half the length, no unexplained jargon, no new content.
+- End with 1 thing they can do next. No recap.
+- **Answering from a document or the web**: retell in your own words, never sentence-by-sentence translation · cause and effect in one paragraph · small exceptions in brackets · 2–3 bold labels are enough · sources together at the end.
 
-## 5 · Documents and reports
+### 5 · Documents and reports
+- The first paragraph is the conclusion; reading only it gives the point. Headings say what the content is, not the category name. At most 5 sentences per paragraph.
+- Column headings say what is measured · 1 column, 1 meaning. Footnotes are for definitions and number sources; never hide an important conclusion there.
+- Work summaries and status reports: bold headings only as needed, **ผล** → **ที่ทำ** → **ต่อไป** (add headings for real content, such as awaiting approval). Cut behind-the-scenes method, solved problems that do not affect the reader, and numbers not used for a decision. Tag every claim `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ` (meanings in `superuser` `references/evidence.md`).
+- Formal documents (official letters · contracts · tax invoices) use the wording the form requires; this skill covers only the parts you write yourself. Choose the register for each job (official · business · shop chat · job application · complaint · screen) from the table in `thai-grammar` section 4 before writing, and keep it through the piece.
 
-- The first paragraph is the conclusion. Reading only it must give the point.
-- Headings say what the content is, not the category name · at most 5 sentences per paragraph.
-- Column headings say what is measured · 1 column, 1 meaning.
-- Footnotes are for definitions and number sources · never hide an important conclusion in a footnote.
-- Work summaries and status reports: bold headings only as needed, **ผล** (result) → **ที่ทำ** (what was done) → **ต่อไป** (next) (add headings when there is real content, such as awaiting approval) · cut behind-the-scenes method, solved problems that do not affect the reader, and numbers not used for a decision · tag every claim `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ` (verified · from a source · inferred · not yet checked; meanings in `superuser` `references/evidence.md`).
-- Formal documents (official letters · contracts · tax invoices) use the wording the form requires. This file covers only the parts you write yourself. Choose the register for each job (official · business · shop chat · job application · complaint · screen) from the table in `thai-grammar` section 4 before writing, and keep it through the whole piece.
-
-## 6 · Slides and headings of every kind
-
-Applies to slide titles, figure titles, document headings, and box titles in a diagram. The full rules and the before → after table are in the same reference.
-
-- A slide title = the conclusion of the page, not the topic name · at most 2 lines (about 15 words) · detail goes in the page body.
-- **A title with 2 parts needs a connector that matches the real relationship** ("เพราะ" or "จึง" for reason · "ส่วน" for a split of roles · "แต่" for contrast — because or so · as for · but) · 1 title, 1 connector. If it needs 2, you crammed too much in.
-- Use phrases people actually say, not strings of nouns · choose words by reader.
-- The verb matches what the page shows · do not use "คน" (person) for things that are not people.
-- The caption under a picture must say what the picture does not. If it repeats the picture, cut it · page structure: problem → fix → result · write a speaking script the way it is actually spoken.
+### 6 · Slides and headings of every kind
+Applies to slide titles, figure titles, document headings, and box titles in a diagram.
+- A slide title = the conclusion of the page, not the topic name · at most 2 lines (about 15 words) · detail goes in the body.
+- **A title with 2 parts needs a connector that matches the real relationship** ("เพราะ" or "จึง" for reason · "ส่วน" for a split of roles · "แต่" for contrast) · 1 title, 1 connector. If it needs 2, you crammed too much in.
+- Use phrases people actually say, not strings of nouns · choose words by reader · the verb matches what the page shows · do not use "คน" for things that are not people.
+- The caption under a picture must say what the picture does not; if it repeats the picture, cut it · page structure: problem → fix → result · write a speaking script the way it is spoken.
 - **Test:** read the title once to an outsider. If they cannot retell it, rewrite it.
 
-## 7 · Diagrams
-
-- Box labels are short nouns of 1–4 words people understand · arrow labels are verbs · an unlabelled arrow must be impossible to misread.
+### 7 · Diagrams
+- Box labels are short nouns of 1–4 words · arrow labels are verbs · an unlabelled arrow must be impossible to misread.
 - Words in the figure match the document · the figure title is a conclusion, with 1 sentence under it saying what to look at · follow the house style if there is one.
 
-## 8 · 7-point check before sending
-
+## Check before sending
 1. Does it read smoothly aloud, and not like a translation?
 2. Can an outsider understand it without asking? Can every symbol be read?
-3. Does the first sentence already answer the question or give the conclusion?
+3. Does the first sentence already answer or give the conclusion?
 4. Do terms and numbers match across every file in the set?
-5. Is there any padding you can cut without changing the meaning? If so, cut it. But `จะ` `ให้` `ก็` `ด้วย` `แล้ว` and polite words are not padding (section 3). If cutting made a sentence curt, put them back.
-6. Does every heading pass section 6: 2 parts have a connector · a phrase people say · words fit the reader · the verb matches what the figure shows?
-7. Thai of 1 paragraph or more: run `python scripts/thai_tells.py <file>` (warns only, does not judge), then walk the 7 sentence-structure rules in `thai-grammar`. Passing every rule is not the same as reading smoothly. For language, taste, and looks, the final verdict belongs to the user, not to the model doing the check.
+5. Any padding to cut without changing meaning? Cut it, but `จะ` `ให้` `ก็` `ด้วย` `แล้ว` and polite words are not padding; if cutting made a sentence curt, put them back.
+6. Does every heading pass section 6?
+7. Thai of 1 paragraph or more: run `python scripts/thai_tells.py <file>` (warns only), then walk the 7 sentence-structure rules in `thai-grammar`. Passing every rule is not the same as reading smoothly. The final verdict on language, taste and looks belongs to the user.
+
+## References
+- [`references/headings-and-examples.md`](references/headings-and-examples.md) — open for examples of every rule, the before → after heading table, and their sources
+- [`references/thai-grammar.md`](references/thai-grammar.md) — open when writing Thai of 1 paragraph or more (sentence structure · register); example paragraphs in [`references/thai-examples.md`](references/thai-examples.md)
+- [`references/strict-review.md`](references/strict-review.md) — open for research or work sent to outsiders
+- [`references/thai-line-breaking.md`](references/thai-line-breaking.md) — open for Thai documents with justified alignment
 
 
 ## reference: headings-and-examples.md
@@ -529,116 +521,43 @@ Thai has upper vowels, lower vowels and tone marks that can stack 2 levels, so i
 
 Use when an answer needs prose, a table or a diagram
 
-# The shape of an answer
+# The shape of an answer — pick prose, table, list or figure from the content
 
-This skill gives the shape and structure; every line of wording follows `human-writing` · lives only in plugin `superuser`; other plugins share it through `dependencies`
+> **One rule:** whatever structure the content has, the answer uses that shape. Comparison → table · connections → figure · one thing → sentences.
 
-> **One rule:** whatever structure the content has, the answer uses that shape.
-> Comparison → table · connections → figure · one thing → sentences
+## Use when
+- Deciding how to lay out an answer: prose, table, list or figure.
+- The question compares options, asks what connects to what, or you are blocked and must ask for something.
 
----
+## Steps
+1. Pick the shape from the signal in the question (quoted signals are Thai phrasings; English in brackets):
 
-## Pick the shape from signals in the question
+   | Signal | Shape |
+   |---|---|
+   | "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" (which is better · how they differ · what options) | **Comparison table** |
+   | "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" (what connects to what · how data flows · the sequence) | **Figure** |
+   | "มีอะไรบ้าง" (what are there) when the items are not compared | **Bullet list** |
+   | "ทำไม" · "แปลว่าอะไร" (why · what does it mean) · one thing with no branches | **Plain sentences** |
+   | Several numbers that must be seen together | **Table** |
+   | Steps that must be done in order | **Numbered list** |
+   | Cannot continue · must wait for something from the user | **Short list: what is blocking → what is needed** |
 
-The quoted signals are Thai user phrasings; English meanings are in brackets.
+   Having 2 or more "things being compared" is the strongest signal for a table, because in a paragraph the reader must hold the first one in their head while reading the second.
+2. **If you use a table:** the first column is the thing compared, the next columns the aspects · 3–5 columns, at most 8 rows in chat · every cell has content (no data → "ไม่มี"; a table where every cell says "it depends" has no content either) · at most 1 line per cell, longer goes below the table · rows ordered by weight (recommended or most used first, not alphabetical) · column headings are the reader's questions (`เร็วแค่ไหน` · `ต้องดูแลมากไหม`, not `ประสิทธิภาพ` · `ความซับซ้อน`) · always close with a 1-line conclusion.
+3. **If the relationship is the answer** (what connects to what, what sits inside what, a sequence with forks or loops, one thing in several states), draw a figure. In chat a small ASCII figure or a short Mermaid is enough (`กล้อง ──DICOM──▶ Orthanc ──▶ API ──▶ รายงาน`). A figure that must be a real file for a document or slides uses that plugin's figure-drawing skill, if there is one.
+4. **If the answer is shorter than 3 lines, is yes/no plus 1 sentence of reason, or the reason matters more than the options, use sentences.** A 1–2 row table, or a figure that draws what one sentence can say, is the wrong shape.
+5. **If you cannot continue,** list only 2 things: what is blocking, and what you need from the user. 1 line per item, at most 4 items. Do not tell the cause at length, answer side topics or plan ahead. If the user must choose among paths, 1 item per path, easiest first. Example:
+   ```
+   ติดอยู่ 1 เรื่อง:
+      - มองไม่เห็นไฟล์ — โฟลเดอร์ที่เชื่อมไว้ว่าง
+      ต้องการ 1 อย่าง:
+      - แนบ Mockup.html มา หรือบอก path ใหม่
+   ```
 
-| Signal | Shape |
-|---|---|
-| "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" ("which is better" · "how do they differ" · "what options are there") | **Comparison table** |
-| "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" ("what connects to what" · "how does data flow" · "what is the sequence") | **Figure** |
-| "มีอะไรบ้าง" ("what are there") when the items are not compared | **Bullet list** |
-| "ทำไม" · "แปลว่าอะไร" ("why" · "what does it mean") · one thing with no branches | **Plain sentences** |
-| Several numbers that must be seen together | **Table** |
-| Steps that must be done in order | **Numbered list** |
-| Cannot continue · must wait for something from the user | **Short list: what is blocking → what is needed** |
-
-**The most important signal is having 2 or more "things being compared"**; use a table then,
-because in a paragraph the reader must hold the first one in their head while reading the second.
-
----
-
-## A table that reads easily
-
-- **The first column is the thing being compared**, and the next columns are the aspects compared
-- **3–5 columns**; more than that cannot be read in time, and at most 8 rows in a chat answer
-- **Every cell must have content** — an empty cell means that column should not exist, or the data is incomplete; if there is no data, write "ไม่มี" (none) plainly · a table where every cell says "it depends" also has no content
-- **At most 1 line per cell**; if longer, move it below the table
-- **Order rows by weight**: the recommended one or the most used one on top, not alphabetical
-- **Column headings are the questions in the reader's head**, not names of academic fields
-
-```
-ผิด: | ตัวเลือก | ประสิทธิภาพ | ความซับซ้อน |
-ถูก: | ตัวเลือก | เร็วแค่ไหน | ต้องดูแลมากไหม |
-```
-
-(Gloss: wrong = "Option | Performance | Complexity" · right = "Option | How fast | Does it need much upkeep".)
-
-**Always close a table with a 1-line conclusion** — a table gives data; it does not say what to choose
-
----
-
-## When a figure beats a table
-
-Use a figure when **the relationship is the answer** — a table can give properties, but cannot say what connects to what.
-
-| Use a figure | Use a table |
-|---|---|
-| What connects to what · what sits inside what | Which is better than which, and in what respect |
-| A sequence with forks or loops back | A straight sequence of steps with no branches (a numbered list is enough) |
-| The same thing in several states | Different things on the same aspects |
-
-In chat, **a small ASCII figure or a short Mermaid is enough** — no need to open a drawing tool
-
-```
-กล้อง ──DICOM──▶ Orthanc ──▶ API ──▶ รายงาน
-                    │
-                    └──▶ ที่เก็บถาวร
-```
-
-(Gloss: กล้อง = camera/scanner · รายงาน = report · ที่เก็บถาวร = permanent storage.)
-
-A figure that must be a real file to go into a document or slides uses the figure-drawing skill of that plugin (if there is one)
-
----
-
-## When sentences beat both
-
-- The answer is shorter than 3 lines — a 2-row table is only decoration and explains nothing
-- A question answered "yes" or "no" followed by 1 sentence of reason
-- A matter where **the reason matters more than the options** — a table cuts the reason to fit the cell
-
-> A table with one row or 2 short rows means the wrong shape was used · a figure that draws what one sentence can say is the same
-
----
-
-## When you cannot continue
-
-Whenever you are blocked → list only 2 things: **what is blocking** and **what you need from the user**
-
-- 1 line per item · at most 4 items
-- Do not tell the cause at length, do not answer side topics, do not plan the work ahead — wait until you have the thing, then do it
-- If there are several paths for the user to choose → each path is 1 item, the easiest on top
-
-```
-ผิด: ย่อหน้ายาวเล่าว่า container ใหม่ · โฟลเดอร์ว่าง · OneDrive หาย · แล้ววางแผนแก้ 3 ข้อรอไว้
-ถูก: ติดอยู่ 1 เรื่อง:
-   - มองไม่เห็นไฟล์ — โฟลเดอร์ที่เชื่อมไว้ว่าง
-   ต้องการ 1 อย่าง:
-   - แนบ Mockup.html มา หรือบอก path ใหม่
-```
-
-(Gloss: wrong = a long paragraph telling that the container is new · the folder is empty · OneDrive is gone · and then planning 3 fixes while waiting · right = "Blocked on 1 thing: cannot see the file — the linked folder is empty. Need 1 thing: attach Mockup.html or give the new path.")
-
----
-
-## Abbreviations
-
-Abbreviations used in this file · rules for writing abbreviations → `spell-out-abbreviations`
-
-- **ASCII** — American Standard Code for Information Interchange (drawing figures with plain characters)
-- **Mermaid** — a language that writes diagrams as text and lets a program draw them
-- **DICOM** — Digital Imaging and Communications in Medicine (a standard for medical image files and transfer)
-- **API** — Application Programming Interface (the channel through which one program calls another)
+## Check before done
+- [ ] The shape matches the content's structure (not a table for one thing, not a paragraph for a comparison).
+- [ ] Every table has content in every cell and ends with a 1-line conclusion.
+- [ ] A blocked answer lists only what is blocking and what is needed.
 
 
 ---
@@ -648,8 +567,6 @@ Abbreviations used in this file · rules for writing abbreviations → `spell-ou
 Use when text is heavy with abbreviations or jargon
 
 # Spell Out Abbreviations
-
-> **Language:** follow `human-writing` for the wording of every line. This skill gives the format and structure. `human-writing` says how to write so readers understand.
 
 > **Rule 1:** write every abbreviation in full the first time, with the abbreviation in brackets. After that you may use the abbreviation.
 > **Rule 2:** put a short explanation in brackets the first time you use any technical term, so readers from outside the field do not have to guess.
@@ -706,14 +623,6 @@ read it and guess the meaning? If they cannot guess, explain it.
 Every kind of document · slides · labels and on-screen text · sales copy · diagram descriptions · code comments ·
 chat answers — **anything a person reads**
 
-## Common examples
-
-Model Context Protocol (MCP) · Application Programming Interface (API) ·
-Key Performance Indicator (KPI) · Service Level Agreement (SLA) ·
-Return on Investment (ROI) · Stock Keeping Unit (SKU) · Value Added Tax (VAT) ·
-Cash on Delivery (COD) · Objectives and Key Results (OKR) ·
-Personally Identifiable Information (PII) · Proof of Concept (POC)
-
 Code-side abbreviations (RBAC · SSO · CI/CD · SRS · ADR and so on) → the extension in plugin `software-development` → `superuser` → `references/code-extensions.md`
 
 ## Anti-patterns
@@ -731,182 +640,92 @@ Code-side abbreviations (RBAC · SSO · CI/CD · SRS · ADR and so on) → the e
 
 Use when a task reads large material or writes long output
 
-# Context budget
+# context-budget — decide before you read what enters context
 
-> **One rule:** decide **before** you read, not regret it after.
-> Tokens that enter context cannot be removed, except by `/clear` (drops everything) · `/compact` (shrinks to a summary) · `/rewind` (cuts back to an earlier point).
+> **One rule:** decide **before** you read, not regret it after. Tokens that enter context cannot be removed, except by `/clear` (drops everything) · `/compact` (shrinks to a summary) · `/rewind` (cuts back to an earlier point). Things you read in (files · PDFs · web pages · search results · command output) are the biggest source, so be most disciplined about them. If a Command-Line Interface (CLI) can do what a Model Context Protocol (MCP) tool does, use the CLI.
 
-## When to use this skill
+## Use when
+- About to read something big: a folder of documents · a long PDF · several web pages · search results · a whole code project · command output that may be long.
+- Starting work on a folder or project whose structure you do not know.
+- Context fills unusually fast, or `/compact` triggers often.
+- Setting context rules for the whole team or every project.
 
-- About to read something big: a folder of documents · a long PDF · several web pages · search results · a whole code project · output of a command that may be long
-- Starting work on a folder or project whose structure you do not know yet
-- Context fills unusually fast, or `/compact` triggers often
-- Setting rules for the whole team or every project
+Not for: shorter **answers** → `answer-shape` · work summary across sessions → `handoff` · where temp files go → `temp-file-discipline` · a coding loop that must survive context loss → `spec-to-code-loop` (plugin `software-development`).
 
-## When to use another skill instead, or together
+## Steps
 
-| Task | Skill | |
-|---|---|---|
-| Make the **answer** shorter | `answer-shape` | instead |
-| Keep a work summary across sessions | `handoff` | instead |
-| Where to put temporary files | `temp-file-discipline` | instead |
-| A coding loop that must survive loss of context | `spec-to-code-loop` (plugin `software-development`) | instead |
-| Project map and folder layout | `project-bootstrap` (plugin `software-development`) | together |
-| Fix a bug at one spot without reading the whole project | `targeted-fix` | together |
-| Abbreviations in work people read | `spell-out-abbreviations` | together |
+### 2 · Before reading, choose the route
+- Know the file, page and line → read only that range (item 3); several items → read them together in one message.
+- Need to find where it is → bounded search (item 3).
+- Must search across many items whose location you do not know → send a subagent (item 4).
+- Must convert, merge or count a lot of data → write to a file and read only the summary (item 5).
 
----
+If you do not know how big the thing is, check the size first: PDF pages · file count and size in a folder (`ls -l`, `du -h`) · lines (`wc -l`).
 
-## 1 · What really eats context
-
-| Source | Rough size | Can you control it? |
-|---|---|---|
-| **Things you read in** (files · PDFs · web pages · search results · command output) | Biggest; one item can be tens of thousands of tokens | Fully. This whole page is about it |
-| Tools from a Model Context Protocol (MCP) server | Only tool names and the server's instructions load · the full schema loads when used | If a Command-Line Interface (CLI) can do it, use the CLI (no tool list at all) · turn off servers you do not use |
-| `CLAUDE.md` | As long as written | Write it short |
-| Skill descriptions | ~100 tokens per skill | Trim them |
-| Conversation history | Keeps growing | Careful: `/clear` when the topic changes |
-
-> **What to control first is clear**: trimming the descriptions of the whole skill set saves only a few thousand tokens,
-> but opening a 200-page PDF or running `cat` on a 3,000-line file once costs more than that.
-> **Be most disciplined about the top row of the table.**
-
----
-
-## 2 · Decision tree before reading
-
-```
-ต้องรู้อะไรจากของก้อนนี้
-├─ รู้แล้วว่าอยู่ไฟล์ไหน หน้าไหน บรรทัดไหน → อ่านเฉพาะช่วง (ข้อ 3) · หลายชิ้น → อ่านพร้อมกันในข้อความเดียว
-├─ ต้องหาว่าอยู่ตรงไหน                   → ค้นแบบมีขอบเขต (ข้อ 3)
-├─ ต้องค้นข้ามหลายชิ้นที่ยังไม่รู้ตำแหน่ง   → ส่ง subagent (ข้อ 4)
-└─ ต้องแปลง/รวม/นับข้อมูลจำนวนมาก        → เขียนลงไฟล์แล้วอ่านเฉพาะสรุป (ข้อ 5)
-```
-
-Tree, in English: what do you need from this item?
-- You know the file, page and line → read only that range (item 3) · several items → read them together in one message
-- You need to find where it is → bounded search (item 3)
-- You must search across many items whose location you do not know → send a subagent (item 4)
-- You must convert, merge or count a lot of data → write to a file and read only the summary (item 5)
-
-If you do not know how big the thing is, **always check the size first**: number of PDF pages · number and size of files in a folder (`ls -l`, `du -h`) · number of lines (`wc -l`).
-
----
-
-## 3 · Read only a range, and search with a boundary
-
-3 numeric rules: **read only a range of any file over 300 lines** · **add `--glob` to `grep`/`rg`** · **end with `| head -50`** (if the user's `CLAUDE.md` has no "งบ context" (context budget) section, use these 3 rules as they are). What goes beyond that:
+### 3 · Read only a range, and search with a boundary
+3 numeric rules (use them as they are if the user's `CLAUDE.md` has no "งบ context" section): **read only a range of any file over 300 lines** · **add `--glob` to `grep`/`rg`** · **end with `| head -50`**.
 
 | Thing | How to read it |
 |---|---|
-| Folder of documents | Look at names and sizes first, then open only files whose names match the question |
-| PDF · long report | Read the table of contents first, then name the pages or chapters you need |
-| Web page | Ask for only the part you need (a number, a date, one heading), do not pull the whole page |
-| Code | `rg -l` first to learn which file, then drill in · `-C2` of context is enough |
-| Session files · `.jsonl` logs | One line can be megabytes, so never `cat` · `wc -l -c <file>` first · find long lines with `awk 'length>100000{print NR": "length}' <file> \| head -20` · read one field at a time with `cut -c1-2000` or `jq` selecting a field |
+| Folder of documents | Names and sizes first, then open only files whose names match the question |
+| PDF · long report | Table of contents first, then name the pages or chapters |
+| Web page | Ask for only the part you need (a number, a date, one heading) |
+| Code | `rg -l` to learn which file, then drill in · `-C2` context is enough |
+| Session files · `.jsonl` logs | One line can be megabytes: never `cat` · `wc -l -c <file>` first · find long lines with `awk 'length>100000{print NR": "length}' <file> \| head -20` · read one field at a time with `cut -c1-2000` or `jq` |
 
-Read the whole file when: you are about to overwrite the whole file · the file is short · you must understand the whole file to edit it correctly, and it is under ~300 lines.
+Read the whole file when you are about to overwrite it, or it is short, or you must understand all of it to edit correctly and it is under ~300 lines.
 
----
-
-## 4 · Send a subagent instead
-
-**This is the biggest saving on this page.**
-
-A subagent has its own context, so it can read 20 items
-and send back only one paragraph to the main conversation, without the content it read coming along.
+### 4 · Send a subagent instead (the biggest saving)
+A subagent has its own context: it can read 20 items and send back one paragraph.
 
 | Use a subagent when | Do it yourself when |
 |---|---|
-| You expect to read over 20k tokens or over 5 files whose location you do not know (default, not measured · estimate the size from the step's PERT in `model-scorecard` if present) · you must search across many items to answer one question | You already know the files and locations, even 4–6 of them → read them together in one message, faster than starting a new subagent |
-| Exploring a folder or project you do not know | Editing the file that is already open |
-| Checking/reviewing across many files | Work that needs the full detail to continue |
+| You expect to read over 20k tokens or over 5 files whose location you do not know (default, not measured; estimate from the step's PERT in `model-scorecard` if present), or must search across many items to answer one question | You know the files and locations, even 4–6 of them: read them together in one message, faster than a new subagent |
+| Exploring an unknown folder or project · checking across many files | Editing the file already open · work that needs full detail to continue |
 
-**To brief it well, say what you want back:**
+**Always set the format and length of the result**, or the subagent returns a long report and you save nothing. Wrong: "Take a look at these 12 contracts". Right: "Find the expiry date, penalty and renewal terms of each contract. Return a table, 1 line per contract, with file:page. Do not paste contract text. At most 15 lines." Code work: "Return a list of file:line in call order, do not paste code".
 
-```
-ผิด: "ดูสัญญา 12 ฉบับนี้ให้หน่อย"
-   → มันอาจคืนมาทั้งเนื้อหา
-
-ถูก: "หาวันหมดอายุ ค่าปรับ และเงื่อนไขต่ออายุของสัญญาแต่ละฉบับ
-    คืนกลับมาเป็นตาราง 1 บรรทัดต่อฉบับ ระบุชื่อไฟล์:หน้า
-    ไม่ต้องแปะข้อความสัญญา ไม่เกิน 15 บรรทัด"
-```
-
-(The example above, in English: wrong = "Take a look at these 12 contracts" → it may return the whole content. Right = "Find the expiry date, penalty and renewal terms of each contract. Return a table, 1 line per contract, with file:page. Do not paste contract text. At most 15 lines.")
-
-(Code work is the same: "Return a list of file:line in call order, do not paste code")
-
-> 🚨 **Always set the format and length of the result.** If you do not say what you want,
-> the subagent sends back a long report, and you save nothing.
-
----
-
-## 5 · Write to a file instead of holding it in the conversation
-
+### 5 · Write to a file instead of holding it in the conversation
 ```bash
-# ผิด: output ทั้งหมดเข้า context
-<คำสั่งที่ output ยาว>
-
-# ถูก: เข้า context แค่บรรทัดสรุป
-<คำสั่งที่ output ยาว> > <โฟลเดอร์ชั่วคราว>/out.log 2>&1; tail -20 <โฟลเดอร์ชั่วคราว>/out.log
+<command with long output> > <temp folder>/out.log 2>&1; tail -20 <temp folder>/out.log
 ```
+Use it for text pulled from the web or PDFs · big data tables (filter or count with a script, do not read every row) · test results · logs · file conversions. Where to put these files → `temp-file-discipline`. Note what you find into a file on the first pass so you do not read it again.
 
-(Comments above: wrong = the whole output enters context · right = only the summary line enters context. `<คำสั่งที่ output ยาว>` = a command with long output · `<โฟลเดอร์ชั่วคราว>` = temp folder.)
+If it repeats on every task, let a hook filter long output before it enters context: coding example in `superuser` → `references/code-extensions.md` (the addition in plugin `software-development`).
 
-**Use it for**: text pulled from the web or PDFs · big data tables (filter or count with a script, do not read every row) · test run results · logs · results of file conversions
-Where to put these files → `temp-file-discipline` · note what you find into a file from the first pass, so you do not read it again
+### 6 · So the next session does not explore again
+Work you return to often needs a short map that **loads automatically**: where things are · what must not be read · commands used often. General work: the section "ของอยู่ที่ไหน" in `.claude/superuser/CONTEXT.md`, at most 40 lines. Files with other names (`notes.md`) do not load themselves, so they are wasted. An outdated map is worse than none: no full file list or change history in it. Code work (project and folder `CLAUDE.md`, example maps) → `superuser` → `references/code-extensions.md`.
 
-**Repeats on every task → let a hook filter instead of relying on discipline** — a hook can trim long output before it enters context (a log of tens of thousands of tokens becomes a few hundred) · coding example → the addition in plugin `software-development` → `superuser` → `references/code-extensions.md`
+### 7 · Other settings that help
+Turn off MCP servers and plugins you do not use · pick model and effort at the start · `/clear` when the topic changes · project `CLAUDE.md` at most 40 lines (table with reasons: [`references/settings.md`](references/settings.md)) · on Windows (Git Bash · PowerShell) see [`references/windows-shell.md`](references/windows-shell.md).
 
----
+**Compact yourself at about 70%, do not wait for the system** (70% is a default, not measured). When about 70% of context is used and a step has just finished (tests pass · file saved · check passed): first update "รับงานต่อ" in `CONTEXT.md` (`handoff` item 5), then `/compact` and say what to keep (files edited · decisions · next step). The system's own compaction often hits mid-step, before anything is written down.
 
-## 6 · So the next session does not explore again
-
-Work you return to often needs a short "map" that **loads automatically**: where things are · what must not be read · commands used often
-- General work: the section "ของอยู่ที่ไหน" (where things are) in `.claude/superuser/CONTEXT.md` (`superuser` reads it before every start), at most 40 lines
-- Files with other names (`notes.md`) do not load themselves and must be told to be read every time, so they are wasted
-- An outdated map is worse than no map, because it confidently leads you to the wrong place. Do not put a full file list or change history in it
-
-Code work (project and folder `CLAUDE.md`, example maps) → the addition in plugin `software-development` → `superuser` → `references/code-extensions.md`
-
----
-
-## 7 · Other settings that help
-
-Turn off MCP servers and plugins you do not use · pick the model and effort at the start · `/clear` when the topic changes · project `CLAUDE.md` at most 40 lines — the full table with reasons is in [`settings`](references/settings.md) · working on Windows (Git Bash · PowerShell) → traps that really happened are in [`windows-shell`](references/windows-shell.md)
-
-**Compact yourself at about 70%, do not wait for the system** — when about 70% of context is used and a step has just finished (tests pass · file saved · check passed) → first update "รับงานต่อ" (resume work) in `CONTEXT.md` (`handoff` item 5), then `/compact` and say what to keep (files edited · decisions · next step) · when the system compacts by itself, it often hits mid-step, when nothing has been written down yet (idea from strategic-compact in everything-claude-code · MIT · 70% is a default, not measured)
-
----
-
-## 7.1 · Seams between phases — continue · clear · handoff · subagent · compact
-
-When a phase ends and the next begins, ask in order from item 1. **The first question answered yes is the route you pick**, then stop asking:
+### 7.1 · Seams between phases
+Ask in order; **the first yes is the route**, then stop:
 
 | # | Ask | If yes |
 |---|---|---|
-| 1 | Does the next phase need what is in this context as its source, and is there room left (roughly over 150k tokens · default, not measured)? | **Continue** in the same session |
-| 2 | Will the next phase move to another vendor's tool, another model, or another repo? | **handoff** — update "รับงานต่อ" (resume work) and start in the new place (`handoff` item 5) |
-| 3 | Can the next phase be split off without talking to us (no wait for a user answer, no need to know this context beyond what a brief can say)? | **subagent** — send the 5-part brief |
-| 4 | Can this whole context be dropped (everything needed is already in files) and the new topic is unrelated to the old? | **clear** — cannot be undone; check that `notes/` and "รับงานต่อ" (resume work) are complete first |
-| 5 | None of the above | **compact** and say what to keep (item 7 above) |
+| 1 | Does the next phase need this context as its source, and is there room left (roughly over 150k tokens · default, not measured)? | **Continue** in the same session |
+| 2 | Will the next phase move to another vendor's tool, model, or repo? | **handoff**: update "รับงานต่อ" and start in the new place (`handoff` item 5) |
+| 3 | Can the next phase be split off without talking to us (no user answer to wait for, no context beyond what a brief can say)? | **subagent**: send the 5-part brief |
+| 4 | Can this whole context be dropped (everything needed is in files) and the new topic is unrelated? | **clear**: cannot be undone; check `notes/` and "รับงานต่อ" are complete first |
+| 5 | None of the above | **compact** and say what to keep (item 7) |
 
-Item 4 is the only one that cannot be undone, so answer yes only when there is evidence everything is in files · if unsure → go to item 5 · source: mattpocock-skills (MIT) · PHASE-BOUNDARIES · seen 2026-11-10
+Item 4 is the only one that cannot be undone: answer yes only with evidence everything is in files; if unsure, go to 5.
 
----
+## Check before done
+- Big things were read by range, bounded search, subagent or file, not opened whole.
+- Every subagent brief said the result format and length.
+- Long output went to a file with only a tail or summary read back.
 
-## 8 · Anti-patterns
+## Anti-patterns
+Opening the whole thing to "see what is in it" when the table of contents or `head -40` answers it · searching without a boundary (`rg` without `--glob`; opening every search link) · searching across 10 items yourself instead of a subagent · sending a subagent to read something whose location you know · letting long output in one lump · reading the same thing again because you forgot (note findings to a file) · a map file that does not load automatically · a 300-line `CLAUDE.md` · all MCP servers always on.
 
-- **Opening the whole big thing to "see what is in it first"** when the table of contents, the first page, or `head -40` answers the same question at 1% of the cost
-- **Searching without a boundary** (`rg` without `--glob` brings back unrelated folders in bulk · searching the web and opening every link)
-- **Searching across 10 items yourself to answer one question** when you should send a subagent
-- **Sending a subagent to read something whose location you already know** when reading in parallel yourself or a direct search is faster
-- **Briefing a subagent without saying what you want back**, which brings back a long report and saves nothing
-- **Letting long output (tests · logs · pulled text) into context in one lump**
-- **Reading the same thing again because you forgot you read it** — note what you find into a file from the first pass
-- **A map file that does not load automatically** · **a `CLAUDE.md` 300 lines long** that everyone on the team pays tokens for every session
-- **Keeping every MCP server on all the time**
+## References
+- [`references/settings.md`](references/settings.md) — open when setting rules for a team or project
+- [`references/windows-shell.md`](references/windows-shell.md) — open when working in Git Bash or PowerShell on Windows
+- [`references/sources.md`](references/sources.md) — sources and licences
 
 
 ## reference: settings.md
@@ -924,6 +743,14 @@ Moved from `SKILL.md` item 7. Open it when you are about to advise the user on s
 | `permissions.deny` in `.claude/settings.json` for folders that should not be read | The system guards it, so you do not depend on discipline |
 | `/clear` when the topic changes (costs nothing) · `/compact <what to keep>` at a rest point in the work, not when nearly full · on the wrong path → `/rewind` to an earlier point | Frees space · `/compact` while the cache is warm is cheap, but after a long pause the whole conversation is read again · `/rewind` cuts back to a point where the cache already exists |
 | Project `CLAUDE.md` at most 40 lines · `~/.claude/CLAUDE.md` (used by every project) at most 60 lines — this set's own cap, stricter than the official docs, which suggest at most 200 · the one shipped in `scripts/install/CLAUDE.global.md` is 84 lines (over the cap, waiting to be cut) | Every line costs tokens in every session |
+
+
+## reference: sources.md
+
+# Sources · context-budget
+
+- Compact yourself at about 70% (section 7): idea from strategic-compact in everything-claude-code (MIT). 70% is a default, not measured.
+- Seams between phases (section 7.1): mattpocock-skills (MIT) · PHASE-BOUNDARIES · seen 2026-11-10. The 150k token line is a default, not measured.
 
 
 ## reference: windows-shell.md
@@ -952,56 +779,56 @@ Open it when working on a Windows machine through Git Bash or PowerShell · ever
 
 Use when a task writes temporary files into a project
 
-# Temporary file discipline
+# Temporary file discipline — keep non-products in `_to_delete/<task folder>/`
 
-> **One rule:** anything that is not a real work product must live only in `_to_delete/`.
-> Never leave it in the project root, and never mix it with work files.
+> **One rule:** anything that is not a real work product must live only in `_to_delete/`. Never leave it in the project root, and never mix it with work files.
 
----
+## Use when
+- A task creates check images, logs, one-off scripts, backups, extracted zips, converted copies of documents (`.docx`/`.pdf` → `.md`), or replaces a file (the old one is now temporary).
+- Finishing work in a project: confirm the root holds no stray files.
 
-## Choose where to put it
+Not for: a work product the user keeps (goes in its own destination folder) · intermediate steps not tied to any project (use the session's workspace).
 
-| What the file is | Put it in |
-|---|---|
-| Temporary items of work in the user's project (check images · logs · one-off scripts · run results) | `_to_delete/<task folder>/` at the project root (section "How to use"), so the user can check back later |
-| An intermediate step not tied to any project (not working in the user's folder) | The session's workspace |
-| A work product the user will keep | The destination folder of that work |
+## Steps
+1. **Decide what is temporary:** check images, logs, one-off scripts, backups, extracted zips, converted copies, old versions, anything no longer in use. Not temporary: a work product the user asked for · the source file of a work product (keep it in a subfolder beside it) · files the user placed themselves (never move them without asking) · build output (leave it, check `.gitignore`). If unsure whether the user created or uses a file, do not move it; tell the user. Detail: [`references/layout.md`](references/layout.md).
+2. **Use one `_to_delete/` at the project root.** From inside a subfolder (such as the code folder), write to the project root's `_to_delete/`; do not nest one. A temporary file that landed in the root: move it into `_to_delete/` right away.
+3. **Make a task folder when the task starts**, before the first temporary file: `_to_delete/YYYY-MM-DD-<topic>/` (the day the task started; topic lowercase English joined by `-`, 2–5 words, such as `2026-11-06-temp-task-folders`, not `task1`). A task that spans rounds or sessions reuses its folder; a new topic gets a new folder. Sub-agents write into the lead's task folder; put the path in the brief.
+4. **Never place a file directly in `_to_delete/`**, except what a tool or hook creates at a fixed place (`superuser-lock/` · `STOP`) and `delete-plan.txt`.
+5. **When another skill writes `_to_delete/<x>`** (such as `_to_delete/screenshots/`), read it as `_to_delete/<task folder>/<x>`. For a script whose default is `_to_delete/...`, pass `--out` pointing into the task folder.
+6. **Use only these subfolder names inside the task folder:**
 
-**The project root must hold no temporary files at all.**
-- If an agent creates a temporary file and it lands in the root (log · image · trial script), move it into `_to_delete/` right away
-- If you are not sure whether the user created or is using that file, do not move it yourself; tell the user
-- When running from inside a subfolder (for example the code folder, see `project-bootstrap` in plugin `software-development`), write temporary things to the **project root's** `_to_delete/`, and do not create a nested one
+   | Subfolder | What goes in |
+   |---|---|
+   | `drafts/` | Temporary drafts that are not the original (a re-rendered markdown original lives at `docs/src/<topic>.md`; `superuser:document-naming`) |
+   | `attempts-<topic>/` | Work of each competing agent ([`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md)) |
+   | `screenshots/` | Rendered mockup images or images for checking work |
+   | `logs/` | Logs from a one-time run |
 
----
+   Code work (`verify-runs/` · `security/` · `check/`) → `superuser` → `references/code-extensions.md` in plugin `software-development`.
+7. **Add `_to_delete/` to `.gitignore`** in every git project (check first, add if missing). If the project README already names another temporary folder (`tmp/` `scratch/`), follow it and record 1 row in the "การตัดสินใจ" table. Never use `.cache/`.
+8. **At the end of the work,** say where this task's temporary things are in one line (`_to_delete/2026-11-06-login-page-redesign/`), with no long list. Then run `node <this skill's folder>/scripts/root-check.mjs <project root>`. It lists things in the root outside the allowed list (`ref` `docs` `mockup` `assets` `qa` `_to_delete` `.claude` the code folder, and things in `.gitignore`); for things the project keeps in the root on purpose, add `--allow README.md,LICENSE`.
+9. **Never delete on your own.** Delete only when the user orders it (deleting in the user's folder cannot be undone). When ordered, move into `_to_delete/` first, tell the user, and actually delete only things inside `_to_delete/` when the user orders that directly:
+   1. Write the plan into `_to_delete/delete-plan.txt`, 1 path per line from the project root (a whole task = its folder on one line).
+   2. Run `node <this skill's folder>/scripts/delete-plan-check.mjs _to_delete/delete-plan.txt`. It prints the delete list and the keep list to compare. A path that escapes `_to_delete/` (`..` · full path · a link pointing outside) makes it exit 1, and you must not delete.
+   3. Only after it passes, delete line by line from the "delete" list. The script does not delete. Never build the list from `ls` (on Windows names may end in `/`; see `context-budget` → [`windows-shell`](../context-budget/references/windows-shell.md)).
 
-## What counts as a temporary file
+## Check before done
+- [ ] Every temporary file is under `_to_delete/<task folder>/` using the standard subfolder names.
+- [ ] `root-check.mjs` shows nothing unexpected in the root.
+- [ ] `_to_delete/` is in `.gitignore`.
+- [ ] The reply says where the temporary things are, in one line, and nothing was deleted without the user's order.
 
-- A compressed file sent through chat to get files onto the machine, and the folder it was extracted to
-- Images rendered to check work · screenshots · sample files made for comparison
-- Backup copies of a file being edited · files `.bak` `.old` `.tmp` `ไฟล์ (1).xlsx` (`ไฟล์` = "file")
-- Scripts written for one use · log files from a one-time run
-- Intermediate-format files during a conversion, such as an `.svg` already converted to `.png`
-- **Documents converted to another format to make them easier to read or process** — a `.docx` or `.pdf` converted to `.md`
-  The original is the real thing and the converted one is temporary. **Never mix them in the documents folder**,
-  or in 3 months nobody knows which file is the version the client signed off
-- Old versions of a file that was just replaced
+## References
+- [`references/layout.md`](references/layout.md) — open when unsure whether a file is temporary, or for the example layout and anti-patterns.
 
-**A file no longer in use is a temporary file** — when you replace an old file with a new one, move the old one into `_to_delete/`
-and do not leave them side by side.
 
----
+## reference: layout.md
 
-## What does not count
+# Layout of `_to_delete/` and what counts as temporary
 
-- A work product the user asked for
-- Source files of a work product, such as design files `.psd` `.fig` · a `.py` that produces an image · an `.html` that is the source of an image —
-  **if you will edit next year, you need the source file**, so keep it in a subfolder beside the work product, not in `_to_delete/`
-- Files the user placed themselves, even if they look like junk — **never move the user's things without asking**
-- Output of build tools (`build/` · `node_modules/`) — leave it, check that it is in `.gitignore`, and never move it into `_to_delete/`
+Open when you are unsure whether a file is temporary, or when you need the example layout.
 
----
-
-## How to use
+## Example layout
 
 ```
 โปรเจกต์/
@@ -1018,49 +845,28 @@ and do not leave them side by side.
 
 (Gloss: `โปรเจกต์/` = project · `ผลงานจริง` = real work products · `ของเครื่องมือ ไม่ใช่ของงาน` = belongs to the tool, not to a task.)
 
-- There is exactly one `_to_delete/` folder at the **project root** · inside, **1 folder per task**, so things do not mix and a whole task can be deleted at once
-- **Task folder name** `YYYY-MM-DD-<topic>` · the date is the day the task started · the topic is lowercase English joined by `-`, 2–5 words, saying what is being done (`2026-11-06-temp-task-folders`, not `2026-11-06-task1`) · sorting by name gives time order directly
-- **Create the folder when the task starts**, before writing the first temporary file · a task that continues over several rounds or across sessions uses the same folder (find it with `find _to_delete -mindepth 1 -maxdepth 1 -type d -printf '%f\n'`) · a new topic gets a new folder · when the task is split to sub-agents, they write into the lead's task folder, and the path is given in the brief
-- **Never place a file directly in `_to_delete/`** · except things a tool or hook creates itself at a fixed location (`superuser-lock/` · `STOP`) and the delete plan `delete-plan.txt` (the check script requires it directly in `_to_delete/`), which do not move
-- **When another skill writes `_to_delete/<x>`** (for example `_to_delete/screenshots/` · `_to_delete/deck-check`), always read it as `_to_delete/<task folder>/<x>` · for a script whose default is `_to_delete/...`, pass `--out` pointing into the task folder
-- Standard subfolders **inside the task folder** that other skills use — use only these names:
+## What counts as a temporary file
 
-  | Subfolder | What goes in | Skill that uses it |
-  |---|---|---|
-  | `drafts/` | Temporary drafts that are not the original (the markdown original that is re-rendered lives permanently at `docs/src/<topic>.md`) | `superuser:document-naming` |
-  | `attempts-<topic>/` | Work of each competing agent | [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md) |
-  | `screenshots/` | Rendered images of a design mockup or images for checking work | every design skill |
-  | `logs/` | Logs from a one-time run | every skill |
+- A compressed file sent through chat to get files onto the machine, and the folder it was extracted to
+- Images rendered to check work · screenshots · sample files made for comparison
+- Backup copies of a file being edited · files `.bak` `.old` `.tmp` `ไฟล์ (1).xlsx` (`ไฟล์` = "file")
+- Scripts written for one use · log files from a one-time run
+- Intermediate-format files during a conversion, such as an `.svg` already converted to `.png`
+- **Documents converted to another format to make them easier to read or process** (a `.docx` or `.pdf` converted to `.md`). The original is the real thing and the converted one is temporary. Never mix them in the documents folder, or in 3 months nobody knows which file is the version the client signed off
+- Old versions of a file that was just replaced. A file no longer in use is a temporary file: when you replace an old file with a new one, move the old one into `_to_delete/` and do not leave them side by side
 
-  Code work (`verify-runs/` · `security/` · `check/`) → the addition in plugin `software-development` → `superuser` → `references/code-extensions.md`
-- Put `_to_delete/` into `.gitignore` in every project that uses git — check first, and add it if missing
-- A project whose README already names another temporary folder (for example `tmp/` `scratch/`) → follow that, then record 1 row in the "การตัดสินใจ" (decisions) table · none named → `_to_delete/` · never use `.cache/` (it belongs to tools and can mix with tool state)
+## What does not count
 
----
-
-## At the end of the work
-
-1. **Say where this task's temporary things are**, in one line (`_to_delete/2026-11-06-login-page-redesign/`), with no long list
-2. **Never delete on your own** — delete only when the user orders it; deletion in the user's folder cannot be undone
-3. **When the user orders deletion** → move into `_to_delete/` first (per the central rule), then tell the user · actually delete only things inside `_to_delete/` when the user orders it directly, in 3 steps:
-   1. Write the plan into the file `_to_delete/delete-plan.txt`, 1 path per line, counted from the project root (`_to_delete/2026-11-06-login-page-redesign`) · to delete a whole task, put the task folder on one line
-   2. Run `node <this skill's folder>/scripts/delete-plan-check.mjs _to_delete/delete-plan.txt` → it prints the delete list and the keep list to compare · any path that escapes `_to_delete/` (`..` · full path · a link pointing outside) makes it exit 1, and you must not delete
-   3. Only after it passes, delete line by line from the "delete" list; the script does not delete by itself · never build the list from `ls` (on Windows names may end in `/`, see `context-budget` → [`windows-shell`](../context-budget/references/windows-shell.md))
-4. **Before saying the work is finished**, run `node <this skill's folder>/scripts/root-check.mjs <project root>` → it lists things in the root outside the allowed list (`ref` `docs` `mockup` `assets` `qa` `_to_delete` `.claude` the code folder, and things in `.gitignore`) · for things the project deliberately keeps in the root, add `--allow README.md,LICENSE`
-
----
+- A work product the user asked for
+- Source files of a work product, such as design files `.psd` `.fig` · a `.py` that produces an image · an `.html` that is the source of an image. If you will edit next year, you need the source file, so keep it in a subfolder beside the work product, not in `_to_delete/`
+- Files the user placed themselves, even if they look like junk. Never move the user's things without asking
+- Output of build tools (`build/` · `node_modules/`): leave it, check that it is in `.gitignore`, and never move it into `_to_delete/`
 
 ## Anti-patterns
 
-- **Extracting a zip into the project root** and cleaning up later — later never comes
-- **Naming files `file-v2` `file-final` `file-really-new`** (Thai: `ไฟล์-v2` `ไฟล์-final` `ไฟล์-ใหม่จริง`) and leaving them beside the original
-- **Deleting a user's file because you think it is no longer used**
-- **Leaving a project task's temporary files in the session workspace** — after the session ends the user cannot check back
-- **Making a new subfolder name for an existing kind of thing** (`shots/` `img-check/`) — use the names in the table above
-- **Placing files directly in `_to_delete/` or sharing `screenshots/` across several tasks** — a week later nobody knows which image belongs to which task, and you cannot delete one task alone
-- **Keeping a work product's source file in `_to_delete/`** — that is not temporary
-- **Leaving stray files without telling anyone** — the user will find them on their own months later
-
----
-
-Abbreviations and technical terms in messages to the user follow `spell-out-abbreviations`.
+- Extracting a zip into the project root and cleaning up later
+- Naming files `file-v2` `file-final` `file-really-new` (Thai: `ไฟล์-v2` `ไฟล์-final` `ไฟล์-ใหม่จริง`) and leaving them beside the original
+- Leaving a project task's temporary files in the session workspace, so the user cannot check back after the session ends
+- Making a new subfolder name for an existing kind of thing (`shots/` `img-check/`)
+- Placing files directly in `_to_delete/` or sharing `screenshots/` across tasks
+- Leaving stray files without telling anyone

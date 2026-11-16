@@ -4,68 +4,117 @@ Use when writing or testing Python code
 
 # stack-python — Python that is easy to read, correctly typed, and safe to rerun
 
-Use the same tools the repo already uses, and every diff must pass ruff · type check · pytest before sending. This file holds only Python-specific matters.
-General matters are elsewhere: writing less → `lazy-coding` · naming → `readable-code` · logging → `logging-standards` · catching errors → `error-handling-patterns`
+## Use when
+- Writing, changing or testing Python (scripts · FastAPI · Django · pandas · pytest) in any repo.
 
-## 1 · Getting started: see what the repo uses, then use that
+Not for: writing less → `lazy-coding` · naming → `readable-code` · logging → `logging-standards` · catching errors → `error-handling-patterns` · test framework choice → `testing-standards` · LLM calls → `llm-engineering` · schema and migrations → `database-design` · background jobs → `background-jobs`.
 
-| File found | Install | Run a command |
+## Steps
+1. Find what the repo uses and use that; never mix tools (for example no `uv.lock` in a poetry repo).
+
+   | File found | Install | Run a command |
+   |---|---|---|
+   | `uv.lock` | `uv sync` | `uv run <cmd>` |
+   | `poetry.lock` | `poetry install` | `poetry run <cmd>` |
+   | `pdm.lock` | `pdm install` | `pdm run <cmd>` |
+   | `requirements*.txt` only | `python -m venv .venv` then `pip install -r requirements.txt` | Activate `.venv` first |
+   | Nothing (new project) | `uv init` then `uv add` | `uv run <cmd>` |
+
+   Always use a virtual environment, never `pip install` into the system Python. Read `requires-python` in `pyproject.toml` and use no newer syntax. Versions (checked 2026-10-14 · https://devguide.python.org/versions/): newest 3.15 · 3.14 bug fixes · 3.11–3.13 security only · 3.10 end of life · a new project starts at 3.14 or 3.15 if its libraries support it; check the page again before relying on this.
+2. Write code with these patterns:
+   - Type hints on every function and method called from outside the file, using `list[str]` · `X | None` (no `List` · `Optional` in new code).
+   - Inside, `@dataclass(frozen=True)`; at the system edge, pydantic; never a bare `dict` across modules.
+   - `pathlib.Path` (not `+ "/"`) · f-strings (no `%` or `.format()` in new code) · `with ...:` for files, locks, connections.
+   - Logging: `log.info("ส่งแล้ว order_id=%s", oid)`, never an f-string in a log call.
+   - Default value `None`, then build inside the function (never `def f(items=[])`).
+   - Thai text files: `open(p, encoding="utf-8")` / `p.read_text(encoding="utf-8")`; Windows otherwise reads cp874 or cp1252.
+   - Scripts: logic in functions, `if __name__ == "__main__": raise SystemExit(main())`; no code that runs at import.
+   - CLI: what the repo uses; otherwise `argparse` before typer; never parse `sys.argv` yourself.
+   - Money: `int` satang or `Decimal` from a string, never float; datetimes timezone-aware (`datetime.now(timezone.utc)`, show with `ZoneInfo("Asia/Bangkok")`, never `utcnow()`).
+3. FastAPI or Django: pydantic at the edge (never a raw `request.json()` into a service) · `Depends` + `dependency_overrides` for DB session, clients, clock · `async def` only if the whole chain is async, otherwise plain `def` · 1 DB session per request via a `yield` dependency · Django: `select_related` / `prefetch_related` with a query-count test, and read each `makemigrations` file before commit. Details and code: [`references/web-and-data.md`](references/web-and-data.md).
+4. pandas or numpy: `df.loc[mask, "col"] = x` (pandas 3.x Copy-on-Write), whole-column operations before `apply`, Thai CSV `utf-8-sig` then `cp874` with codes as `str`, seeded `np.random.default_rng(42)`. More: [`references/web-and-data.md`](references/web-and-data.md).
+5. Run the routine commands (prefix with `uv run` / `poetry run` per the repo's tool):
+   ```bash
+   ruff check .                      # lint
+   ruff format --check .             # รูปแบบโค้ด · แก้ด้วย ruff format .
+   pyright                           # หรือ mypy . · ดูว่า repo ตั้งตัวไหนใน pyproject.toml
+   pytest -q 2>&1 | tail -40         # ทั้งชุด · ดูแค่ท้ายผล (สรุปและ test ที่ล้ม)
+   pytest -q tests/test_order.py::test_refund_over_limit   # test เดียวด้วย node id
+   pytest -q -k "refund and not slow"                      # เลือกตามชื่อ
+   ```
+   Type checker: `[tool.pyright]` or `pyrightconfig.json` → pyright; `[tool.mypy]` or `mypy.ini` → mypy; neither → ask once; Astral's ty only if the repo already set it up. If the repo uses black · isort · flake8, keep them; do not move to ruff in the same task.
+6. Tests: for new logic and bugs write the failing test first, then fix. `tmp_path` for files, `monkeypatch.setenv` for env, pass the clock in as a parameter (else `time-machine`; keep `freezegun` if the repo has it), `respx` / `responses` for HTTP (no real network), `testcontainers` of the production database type (not SQLite for Postgres). Setup and examples: [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#python--pytest).
+7. Security (principles in `principle-secure-by-default`): lock and commit dependencies; scan with `pip-audit`; check a new package's exact PyPI name before adding; SQL by parameters, never an f-string; resolve user file names and check `.is_relative_to(base.resolve())`; secrets from the environment; `shell=True`, `pickle.load` of outside data and `yaml.load` are forbidden. Add dependencies only with `uv add` in a uv repo. Full list and the traps table: [`references/traps-and-security.md`](references/traps-and-security.md).
+
+## Check before done
+- [ ] `ruff check` and `ruff format --check` (or the repo's formatter) pass.
+- [ ] The repo's type checker gives 0 errors in the files you changed.
+- [ ] `pytest -q` is green for the whole suite (long output → `> _to_delete/test.txt 2>&1` then `tail -20`).
+- [ ] Every new behavior has a test that was red before the fix.
+- [ ] No blocking I/O (`requests` · `time.sleep` · sync driver) inside `async def`.
+- [ ] Every text-file open gives `encoding="utf-8"`; stored datetimes have a timezone.
+- [ ] Added dependencies are in the lock file and pass `pip-audit`.
+- [ ] Confirm it really works before saying done → `principle-prove-it-works`; before sending, `security-gate`.
+
+## References
+- [`references/web-and-data.md`](references/web-and-data.md) — open for FastAPI, Django, pandas, numpy, torch, notebooks
+- [`references/traps-and-security.md`](references/traps-and-security.md) — open when debugging a strange failure, writing tests, or reviewing security
+
+
+## reference: traps-and-security.md
+
+# Common traps, tests and security details · stack-python
+
+Open when debugging a strange Python failure, writing tests, or reviewing a diff for security.
+
+## Common traps
+
+| Trap | Symptom | Fix |
 |---|---|---|
-| `uv.lock` | `uv sync` | `uv run <cmd>` |
-| `poetry.lock` | `poetry install` | `poetry run <cmd>` |
-| `pdm.lock` | `pdm install` | `pdm run <cmd>` |
-| `requirements*.txt` only | `python -m venv .venv` then `pip install -r requirements.txt` | Activate `.venv` first |
-| Nothing at all (new project) | `uv init` then `uv add` | `uv run <cmd>` |
+| datetime without timezone | Time is off by 7 hours, or comparing gives a `TypeError` | Create with `datetime.now(timezone.utc)` (3.11+ can use `datetime.UTC`), store as UTC, display with `ZoneInfo("Asia/Bangkok")`, and never use `utcnow()` |
+| Money as float | `0.1 + 0.2 != 0.3` and the total is short by 1 satang | Use `int` satang, or `Decimal("0.10")` from a string |
+| Closure in a loop | Every callback gets the last value of the loop | Bind the value at creation `lambda i=i: ...` or `functools.partial` |
+| A broad `except Exception:` | Real errors are swallowed | Catch only known types, per `error-handling-patterns` |
+| Circular imports | `ImportError` of the partially initialized kind | Move shared things into a third module, and put imports used only for types under `if TYPE_CHECKING:` |
+| CPU-heavy work in threads | Using several threads does not speed it up, because of the Global Interpreter Lock (GIL) | Use `ProcessPoolExecutor`; threads are for I/O waiting |
+| `subprocess(..., shell=True)` | User input becomes a shell command | Pass a list `["git", "log", ref]`, add `check=True` and set a `timeout` |
+| `pickle.load` of outside data | Runs someone else's code the moment it loads | Use JSON or parquet; for models use `safetensors`; for torch add `weights_only=True` |
+| `yaml.load` | Builds any object from the file | `yaml.safe_load` |
+| The repo uses `uv` but packages are added with `uv pip install` or by hand-editing `pyproject.toml` | `uv.lock` is not updated, other machines run `uv sync` and lack the package | Only `uv add <pkg>` / `uv remove <pkg>` · dev things go in with `uv add --group dev` (`[dependency-groups]`) · run everything through `uv run`, do not activate the venv yourself (idea from trailofbits `modern-python` · CC-BY-SA, rewritten) |
+| A single-file script with a separate `requirements.txt` | The runner forgets to install · versions do not match | Put the dependencies in the file header in PEP 723 form (`# /// script` … `# dependencies = ["httpx"]` … `# ///`), then `uv run script.py` builds the env itself |
+| Blocking inside `async def` | The whole server stalls at the pace of the slowest request | See [web-and-data.md](web-and-data.md), "Web" |
 
-- Always use a virtual environment; never `pip install` into the system Python
-- Never mix tools; for example if the repo uses poetry, do not add a `uv.lock`
-- Read `requires-python` in `pyproject.toml` and never use syntax newer than it
-- Versions (last checked 2026-10-14 · source: https://devguide.python.org/versions/): the newest is 3.15 (released 2026-10-09) · 3.14 still gets bug fixes · 3.11–3.13 get security fixes only · 3.10 has reached end of life (2026-10-01) · the next to end is 3.11 (Oct 2027) · a new project starts at 3.14 or 3.15 if the libraries it uses already support it · check this page again before using
+## Tests
 
-Routine commands (prefix with `uv run` or `poetry run` according to the repo's tool):
+For pytest setup · fixtures · `parametrize` and examples, see [`testing-standards/references/per-stack.md`](../../testing-standards/references/per-stack.md#python--pytest); this section keeps only Python-specific traps.
 
-```bash
-ruff check .                      # lint
-ruff format --check .             # รูปแบบโค้ด · แก้ด้วย ruff format .
-pyright                           # หรือ mypy . · ดูว่า repo ตั้งตัวไหนใน pyproject.toml
-pytest -q 2>&1 | tail -40         # ทั้งชุด · ดูแค่ท้ายผล (สรุปและ test ที่ล้ม)
-pytest -q tests/test_order.py::test_refund_over_limit   # test เดียวด้วย node id
-pytest -q -k "refund and not slow"                      # เลือกตามชื่อ
-```
+- Temporary files use `tmp_path`; never write into the repo's folders · environment values use `monkeypatch.setenv`
+- Time: pass the clock into the function as a parameter first; if you cannot change it, use `time-machine`, but if the repo already uses `freezegun`, keep using it
+- External HTTP: httpx uses `respx` · requests uses `responses` · never hit the real network in a unit test
+- For a real database, use `testcontainers` of the same kind as production; do not use SQLite in place of Postgres
+- For new logic and bugs, write a test that fails (red) first, then fix until it passes (green)
+- Look at coverage only for changed lines: `pytest --cov --cov-report=term-missing`, then go through the lines in the diff that did not run
 
-- type checker: if the repo has `[tool.pyright]` or `pyrightconfig.json`, use pyright; if it has `[tool.mypy]` or `mypy.ini`, use mypy; if it has neither, ask once; Astral's ty is used only when the repo has already set it up
-- If the repo still uses black · isort · flake8, use them as they are; do not move to ruff in the same task
+## Python-specific security
 
-## 2 · Standard patterns
+The 10 principles are in `principle-secure-by-default`; this is how to do them in Python.
 
-| Topic | Do this | Do not |
-|---|---|---|
-| type hint | Add to every function and method called from outside the file, using `list[str]` · `X \| None` | `List` · `Optional` from `typing` in new code |
-| Data shape | Inside, use `@dataclass(frozen=True)`; at the system edge use pydantic | A bare `dict` passed across modules |
-| path | `pathlib.Path` | Joining strings with `+ "/"` |
-| Text | f-string | `%` or `.format()` in new code |
-| log | `log.info("ส่งแล้ว order_id=%s", oid)` letting the logger substitute the value | An f-string in a log call (builds the string every time even if the level is off) |
-| File · lock · connection | `with ...:` | Opening and waiting to `close()` yourself |
-| Default value | `None`, then create it new inside the function | `def f(items=[])` (one list shared across every call) |
-| Thai text files | `open(p, encoding="utf-8")` · `p.read_text(encoding="utf-8")` | Not specifying (Windows reads as cp874 or cp1252) |
-| Scripts | Logic in functions, with `if __name__ == "__main__":` calling `main()` | Code that runs at import |
-| Command Line Interface (CLI) | Use what the repo uses; if none, start with `argparse` before typer | Parsing `sys.argv` yourself |
+- Always lock dependencies (`uv.lock` · `poetry.lock` · `pip-compile --generate-hashes`) and commit the lock file
+- Vulnerability scanning: `pip-audit` (works with every tool); uv has `uv audit` but it is still a preview (the version that first has it (รอยืนยัน) (pending confirmation) · source: https://github.com/astral-sh/uv/blob/main/CHANGELOG.md · checked 22 Oct 2569 BE), so it may be used, but Continuous Integration (CI) still relies on `pip-audit`
+- Before `uv add` or `pip install` of a new package, spell the name exactly as on its PyPI page, check the maintainers and the latest release date, and beware of look-alike names (`reqeusts` · `python-dateutil` versus `dateutil`)
+- SQL passes values through parameters: `cur.execute("... WHERE id = %s", (oid,))`; with SQLAlchemy use `text(...)` with `:name`, and never an f-string
+- File names from users: `(base / name).resolve()` then check `.is_relative_to(base.resolve())`; for uploads see `file-upload-and-storage`
+- Secrets are read from the environment (`os.environ["KEY"]` or pydantic-settings) and checked at startup; keep `.env` in `.gitignore` (see `config-and-secrets`)
+- Django production: `DEBUG = False` · `ALLOWED_HOSTS` with real names · `SECRET_KEY` from the environment · run `python manage.py check --deploy` before release
 
-```python
-@dataclass(frozen=True)
-class Refund:
-    order_id: int
-    amount_satang: int
 
-def main() -> int:
-    args = parse_args()
-    return run(args.input_path)
+## reference: web-and-data.md
 
-if __name__ == "__main__":
-    raise SystemExit(main())
-```
+# Web (FastAPI, Django) and data/AI details · stack-python
 
-## 3 · Web: FastAPI and Django
+Open when the task touches FastAPI · Django · pandas · numpy · torch · notebooks.
+
+## Web: FastAPI and Django
 
 - Data in and out goes through pydantic models at the edge, while inside you use domain types; never pass a raw `request.json()` into a service
 - FastAPI: things that must change during tests (DB session · external client · clock) are taken through `Depends` and swapped with `app.dependency_overrides`
@@ -85,7 +134,7 @@ def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
     return refund_service.create(db, body.to_domain())
 ```
 
-## 4 · Data and AI
+## Data and AI
 
 | Topic | Do this |
 |---|---|
@@ -100,72 +149,6 @@ def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
 - For LLM calls · prompts · RAG · evaluation, see `llm-engineering`
 - For importing or exporting Excel and Buddhist Era years, see `data-import-export`
 
-## 5 · Common traps
-
-| Trap | Symptom | Fix |
-|---|---|---|
-| datetime without timezone | Time is off by 7 hours, or comparing gives a `TypeError` | Create with `datetime.now(timezone.utc)` (3.11+ can use `datetime.UTC`), store as UTC, display with `ZoneInfo("Asia/Bangkok")`, and never use `utcnow()` |
-| Money as float | `0.1 + 0.2 != 0.3` and the total is short by 1 satang | Use `int` satang, or `Decimal("0.10")` from a string |
-| Closure in a loop | Every callback gets the last value of the loop | Bind the value at creation `lambda i=i: ...` or `functools.partial` |
-| A broad `except Exception:` | Real errors are swallowed | Catch only known types, per `error-handling-patterns` |
-| Circular imports | `ImportError` of the partially initialized kind | Move shared things into a third module, and put imports used only for types under `if TYPE_CHECKING:` |
-| CPU-heavy work in threads | Using several threads does not speed it up, because of the Global Interpreter Lock (GIL) | Use `ProcessPoolExecutor`; threads are for I/O waiting |
-| `subprocess(..., shell=True)` | User input becomes a shell command | Pass a list `["git", "log", ref]`, add `check=True` and set a `timeout` |
-| `pickle.load` of outside data | Runs someone else's code the moment it loads | Use JSON or parquet; for models use `safetensors`; for torch add `weights_only=True` |
-| `yaml.load` | Builds any object from the file | `yaml.safe_load` |
-| The repo uses `uv` but packages are added with `uv pip install` or by hand-editing `pyproject.toml` | `uv.lock` is not updated, other machines run `uv sync` and lack the package | Only `uv add <pkg>` / `uv remove <pkg>` · dev things go in with `uv add --group dev` (`[dependency-groups]`) · run everything through `uv run`, do not activate the venv yourself (idea from trailofbits `modern-python` · CC-BY-SA, rewritten) |
-| A single-file script with a separate `requirements.txt` | The runner forgets to install · versions do not match | Put the dependencies in the file header in PEP 723 form (`# /// script` … `# dependencies = ["httpx"]` … `# ///`), then `uv run script.py` builds the env itself |
-| Blocking inside `async def` | The whole server stalls at the pace of the slowest request | See section 3 |
-
-## 6 · Tests
-
-For pytest setup · fixtures · `parametrize` and examples, see [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#python--pytest); this section keeps only Python-specific traps
-
-- Temporary files use `tmp_path`; never write into the repo's folders · environment values use `monkeypatch.setenv`
-- Time: pass the clock into the function as a parameter first; if you cannot change it, use `time-machine`, but if the repo already uses `freezegun`, keep using it
-- External HTTP: httpx uses `respx` · requests uses `responses` · never hit the real network in a unit test
-- For a real database, use `testcontainers` of the same kind as production; do not use SQLite in place of Postgres
-- For new logic and bugs, write a test that fails (red) first, then fix until it passes (green)
-- Look at coverage only for changed lines: `pytest --cov --cov-report=term-missing`, then go through the lines in the diff that did not run
-
-## 7 · Python-specific security
-
-The 10 principles are in `principle-secure-by-default`; this section is how to do them in Python
-
-- Always lock dependencies (`uv.lock` · `poetry.lock` · `pip-compile --generate-hashes`) and commit the lock file
-- Vulnerability scanning: `pip-audit` (works with every tool); uv has `uv audit` but it is still a preview (the version that first has it (รอยืนยัน) (pending confirmation) · source: https://github.com/astral-sh/uv/blob/main/CHANGELOG.md · checked 22 Oct 2569 BE), so it may be used, but Continuous Integration (CI) still relies on `pip-audit`
-- Before `uv add` or `pip install` of a new package, spell the name exactly as on its PyPI page, check the maintainers and the latest release date, and beware of look-alike names (`reqeusts` · `python-dateutil` versus `dateutil`)
-- SQL passes values through parameters: `cur.execute("... WHERE id = %s", (oid,))`; with SQLAlchemy use `text(...)` with `:name`, and never an f-string
-- File names from users: `(base / name).resolve()` then check `.is_relative_to(base.resolve())`; for uploads see `file-upload-and-storage`
-- Secrets are read from the environment (`os.environ["KEY"]` or pydantic-settings) and checked at startup; keep `.env` in `.gitignore` (see `config-and-secrets`)
-- Django production: `DEBUG = False` · `ALLOWED_HOSTS` with real names · `SECRET_KEY` from the environment · run `python manage.py check --deploy` before release
-
-## 8 · Check before sending
-
-- [ ] `ruff check` has no errors
-- [ ] `ruff format --check` passes (or the formatter the repo uses)
-- [ ] The repo's type checker gives 0 errors in the files you changed
-- [ ] `pytest -q` is green for the whole suite, not just the changed files (long output → `> _to_delete/test.txt 2>&1` then `tail -20`)
-- [ ] Every new behavior has a test that was red before the fix
-- [ ] No `requests` · `time.sleep` · sync driver or blocking I/O inside `async def`
-- [ ] Every place that opens a text file gives `encoding="utf-8"` and stored datetimes have a timezone
-- [ ] Added dependencies are in the lock file and pass `pip-audit`
-
-## 9 · Connecting to other skills
-
-| Task | Open |
-|---|---|
-| Write less, add nothing extra | `lazy-coding` |
-| Names · function shape · where files live | `readable-code` |
-| Choosing a test framework · proportions · test names | `testing-standards` |
-| Log format · correlation id · ready-made Python logger | `logging-standards` |
-| Catching errors · retry · timeout | `error-handling-patterns` |
-| Security rules for every diff | `principle-secure-by-default`, and before sending use `security-gate` |
-| LLM calls · RAG · evaluation | `llm-engineering` |
-| schema · migration | `database-design` |
-| Background jobs (Celery · RQ · cron) | `background-jobs` |
-| Confirm it really works before saying it is done | `principle-prove-it-works` |
-
 
 ---
 
@@ -177,95 +160,51 @@ Use when writing or reviewing SQL queries
 
 > **The one rule:** a query that has never run against a realistic amount of data is not finished
 
-Table design, naming, data types, and expand-and-contract migrations → `database-design`
+## Use when
+- Writing, reviewing or tuning SQL (SQL Server · PostgreSQL · MySQL), or changing data with a script.
 
-## 1 · Getting started: know the database before writing the first line
+Not for: table design, naming, data types, expand-and-contract migrations → `database-design` · Excel/CSV → `data-import-export` · Thai dates and sorting in the app → `i18n-and-locale`.
 
-- engine and version: `SELECT @@VERSION` (SQL Server) · `SELECT version()` (PostgreSQL) · `SELECT VERSION()` (MySQL) · on SQL Server also check `SERVERPROPERTY('Edition')`, because many features exist only in Enterprise
-- what the repo runs migrations with: `Migrations/` (EF Core) · `db/migration/V1__*.sql` (Flyway) · Liquibase `changelog` · `alembic/` · `prisma/migrations/` · raw scripts in `sql/`
-- the server's collation and time zone: `SERVERPROPERTY('Collation')` · `SHOW timezone`
+## Steps
+1. **Know the database first.** Engine and version: `SELECT @@VERSION` (SQL Server; also `SERVERPROPERTY('Edition')`, many features are Enterprise-only) · `SELECT version()` (PostgreSQL) · `SELECT VERSION()` (MySQL). Find what runs migrations (`Migrations/` EF Core · `db/migration/V1__*.sql` Flyway · Liquibase `changelog` · `alembic/` · `prisma/migrations/` · `sql/`) and use that tool; never add a second one or change the schema by hand. Check server collation and time zone (`SERVERPROPERTY('Collation')` · `SHOW timezone`).
+2. **Never run anything on production**; prepare the commands for a person to approve (`principle-proceed-on-reversible-work`). Use a local or sandbox database with row count close to real (100 rows hides every speed problem); if none, generate mock data so volume and value distribution are close to real.
+3. **Write correct queries:**
 
-- Use the migration tool the repo already uses; never add a second one and never change the schema by hand outside the tool
-- Never run anything on production; prepare the commands for a person to approve instead (see `principle-proceed-on-reversible-work`)
-- Use a local or sandbox database whose row count is close to real (a 100-row table hides every speed problem); if you have none, generate mock data with a script so the volume and value distribution are close to real
+   | Topic | Do this | Trap |
+   |---|---|---|
+   | Values from users | Always a parameter | String concatenation → SQL injection |
+   | Columns | Full column names | `SELECT *` pulls too much, breaks on a new column, blocks covering index |
+   | NULL | `IS NULL` · `NOT EXISTS` | `= NULL` never true · `NOT IN (subquery)` with one NULL → 0 rows |
+   | JOIN | Count rows before and after | Join the 1-to-many side then `SUM` → doubled totals; sum before the join |
+   | GROUP BY | Every non-aggregate column in it | MySQL with `ONLY_FULL_GROUP_BY` off → random value |
+   | Division | `CAST(a AS decimal(18,4)) / b`, guard `NULLIF(b, 0)` | SQL Server and PostgreSQL: `5/2 = 2`; MySQL: `2.5000` |
+   | Data types | Parameter of the same type as the column | SQL Server sends `nvarchar` against `varchar` → `CONVERT_IMPLICIT` → full scan |
+   | Date range | `>= start AND < end` | `BETWEEN '2026-01-01' AND '2026-01-31'` drops the 31st after midnight |
+   | Time zone | Store UTC, convert to Asia/Bangkok on display (SQL Server `AT TIME ZONE 'UTC' AT TIME ZONE 'SE Asia Standard Time'` · PostgreSQL `AT TIME ZONE 'Asia/Bangkok'` on `timestamptz`) | Thai time with no offset → 7 hours off when merging |
+   | Buddhist Era year | Always store Common Era (ค.ศ.), convert on display | Storing 2569 breaks age, sorting, export |
+   | Money | `decimal(19,4)` · `numeric(19,4)` | `float` · `real` → 0.1 + 0.2 ≠ 0.3 |
+   | Sorting Thai names | SQL Server `Thai_100_CI_AS` · PostgreSQL `COLLATE "th-TH-x-icu"` | General collation → leading vowels (เ แ โ ใ ไ) sort wrong silently |
 
-## 2 · Write queries that are correct
+   A Thai collation is not on every server; check before choosing (commands in [`references/snippets.md`](references/snippets.md)).
+4. **Make it fast by reading the real plan on near-real data, never guessing.** Conditions sargable (no function around an indexed column) · every index can say which query it serves · deep paging uses keyset · count N+1 from the ORM log · big UPDATE/DELETE in batches. Commands per engine, keyset example, batches, parameter sniffing: [`references/performance.md`](references/performance.md).
+5. **Change data safely.** Scripts can be rerun · back up before a big change · count rows first and check before `COMMIT` · upsert in the engine's own form · touch tables in the same order (deadlocks) · `ALTER TABLE` on a big table needs `lock_timeout`. Isolation levels, upsert, non-locking index creation, row-count checks: [`references/safe-changes.md`](references/safe-changes.md).
+6. **Avoid the usual traps** (`MERGE` without `HOLDLOCK` · triggers with business rules · cursors · `NOLOCK` → use RCSI · collation mismatch in joins · gaps in ids · partial-index candidates · bloat after big deletes): [`references/traps.md`](references/traps.md).
+7. **Test** against a real database of the production kind, never SQLite or in-memory (NULL, collation, locks differ). Fresh database every run with Testcontainers and seed script; stored procedures use tSQLt (SQL Server) or pgTAP (PostgreSQL). Check row counts and values: NULL · midnight date edges · Thai names · fractional money. Run a new migration on a production-like copy with near-real volume, time it, watch the locks. For a bug, write the failing test first (`principle-fix-root-cause`); framework → `testing-standards`.
+8. **Security.** 1 app, 1 database user with only needed permissions; never `sa` · `postgres` · `root`, and migrations run as a separate user. Dynamic SQL with user values: pass values as parameters, choose table or column names from an allowlist and quote them (`sp_executesql` · `QUOTENAME` · plpgsql `format('%I')` in [`references/snippets.md`](references/snippets.md)). Several companies in one table → consider row-level security (SQL Server `CREATE SECURITY POLICY` · PostgreSQL `CREATE POLICY`; the table owner bypasses unless `FORCE ROW LEVEL SECURITY`). Do not pull personal data columns unless used; Dynamic Data Masking is not access control (`pdpa-compliance`). Changes to important data leave a trace of who (`audit-trail`). Injection and permissions → `principle-secure-by-default`.
 
-| Topic | Do this | Trap |
-|---|---|---|
-| Values from users | Always pass as a parameter | Concatenating strings → SQL injection |
-| Columns | Write the full column names | `SELECT *` → pulls too much · a new column breaks code · cannot use a covering index |
-| NULL | `IS NULL` · `NOT EXISTS` | `= NULL` is never true · `NOT IN (subquery)` with a single NULL → 0 rows |
-| JOIN | Count rows before and after the join | Join on the 1-to-many side then `SUM` → doubled totals; fix by summing before the join |
-| GROUP BY | Every non-aggregate column must be in `GROUP BY` | MySQL with `ONLY_FULL_GROUP_BY` off → silently picks a random value |
-| Division | `CAST(a AS decimal(18,4)) / b` and guard against divide by 0 with `NULLIF(b, 0)` | SQL Server and PostgreSQL give `5/2 = 2`, while MySQL gives `5/2 = 2.5000` |
-| Mismatched data types | A parameter of the same type as the column | SQL Server sends `nvarchar` to compare with a `varchar` column → `CONVERT_IMPLICIT` → scans the whole table |
-| Date range | `>= start AND < end` (half-open) | `BETWEEN '2026-01-01' AND '2026-01-31'` → drops all of the 31st after midnight |
-| time zone | Store UTC, convert to Asia/Bangkok when displaying | Storing Thai time with no offset → merging data across systems is off by 7 hours |
-| Buddhist Era (พ.ศ.) year | Always store Common Era (ค.ศ.), convert when displaying | Storing 2569 → age calculation, sorting and export all break |
-| Money | `decimal(19,4)` · `numeric(19,4)` | `float` · `real` → 0.1 + 0.2 does not equal 0.3 |
-| Sorting Thai names | SQL Server `Thai_100_CI_AS` · PostgreSQL `COLLATE "th-TH-x-icu"` | A general collation → leading vowels (เ แ โ ใ ไ) sort wrong with no error |
+## Check before done
+- [ ] Every outside value is a parameter · no `SELECT *`.
+- [ ] Checked NULL · half-open date ranges · division · parameter types match the columns.
+- [ ] Looked at the real plan on near-real data, noted logical reads or time before/after.
+- [ ] Scripts can be rerun and big data goes in batches (`principle-safe-to-rerun`).
+- [ ] Transaction + row counts checked before `COMMIT` · the way back written and a backup confirmed.
+- [ ] A test runs against the same kind of database as production.
 
-Convert UTC to Thai time when displaying: SQL Server `AT TIME ZONE 'UTC' AT TIME ZONE 'SE Asia Standard Time'` · PostgreSQL `AT TIME ZONE 'Asia/Bangkok'` (a `timestamptz` column)
-
-- A Thai collation is not on every server, so check before choosing (commands in [`references/snippets.md`](references/snippets.md)) · showing Thai dates and accepting Buddhist Era years from a form → `i18n-and-locale`
-
-## 3 · Make it fast: read the real plan, do not guess
-
-Commands to see the real plan by engine · what to look for in a plan · keyset example · deleting in batches · parameter sniffing fixes step by step → [`references/performance.md`](references/performance.md)
-
-- Short rules: look at the real plan on data close to real volume, do not guess · conditions must be sargable (do not wrap an indexed column in a function) · every index must answer which query it serves · deep paging uses keyset · count N+1 from the Object-Relational Mapper (ORM) log · big UPDATE/DELETE goes in batches — details and examples are only in [`references/performance.md`](references/performance.md)
-
-## 4 · Change data safely
-
-A table of isolation levels · upsert · creating an index without locking the table, by engine, with examples that check row counts → [`references/safe-changes.md`](references/safe-changes.md)
-
-- Short rules: scripts can be rerun · back up before changing a big batch of data · count rows first and check before `COMMIT` · upsert uses the engine's own form · touch tables in the same order to prevent deadlocks · `ALTER TABLE` on a big table needs `lock_timeout` set — details and examples are only in [`references/safe-changes.md`](references/safe-changes.md)
-
-## 5 · Common traps
-
-- `MERGE` (SQL Server) has several bugs, and without `HOLDLOCK` 2 sessions insert duplicates → separate `UPDATE` + `INSERT`, or `MERGE ... WITH (HOLDLOCK)` with a test
-- A trigger hides business rules and breaks on multi-row inserts → keep rules in app code; use triggers only for audit · a cursor/row-by-row loop → a set-based statement
-- `WITH (NOLOCK)` reads uncommitted data, rows go missing or repeat → turn on Read Committed Snapshot Isolation (RCSI) instead · building SQL by string concatenation → parameters (section 7)
-- A collation mismatch in a join → set them equal on the column (putting `COLLATE` in the query stops it using the index)
-- Ids are not always consecutive (identity jumps · a sequence does not go back on rollback) → document numbers that must have no gaps are issued by yourself in a counter table
-- A timestamp with no time zone → PostgreSQL `timestamptz` · SQL Server `datetime2` agreed to be UTC, or `datetimeoffset`
-- A query that always filters a small share of rows (`WHERE status = 'pending'` · `deleted_at IS NULL`) but the index covers every row → the index is big and the planner does not pick it → put that condition into the index itself: PostgreSQL `CREATE INDEX ... WHERE status = 'pending'` · SQL Server filtered index `CREATE INDEX ... WHERE status = 'pending'` (the query must write the same condition for it to be used · idea from supabase/agent-skills · MIT)
-- After deleting or updating many rows, queries get slower though the plan did not change → table and index bloat (dead tuples · split pages) → in PostgreSQL look at `pg_stat_user_tables.n_dead_tup` then `VACUUM (ANALYZE)` or `REINDEX CONCURRENTLY` · in SQL Server look at `sys.dm_db_index_physical_stats` then `ALTER INDEX ... REORGANIZE` (below 30%) or `REBUILD` · check this before blaming the query
-
-Example commands for both of these → [`references/performance.md`](references/performance.md)
-
-## 6 · Tests
-
-- Test queries against a real database of the same kind as production; never use SQLite or in-memory in place of SQL Server/PostgreSQL, because NULL, collation and lock behavior differ
-- Start a fresh database every run with Testcontainers and load seed data with a script · logic in stored procedures uses tSQLt (SQL Server) or pgTAP (PostgreSQL)
-- Check both row counts and values: cases with NULL · date ranges right at the midnight edge · Thai names · money amounts with fractions
-- Run a new migration on a copy of a production-like schema with data close to real volume, then time it and watch the locks
-- To fix a bug, write a test that fails first, then fix it (`principle-fix-root-cause`); for the general test framework see `testing-standards`
-
-## 7 · Database-specific security
-
-- 1 app, 1 database user, with only the permissions it uses; the app must never use `sa` · `postgres` · `root`, and the user that runs migrations must be separate from the user the app uses at run time
-- For dynamic SQL with values from users, pass the values as parameters, and choose table or column names from an allowlist and then quote them
-
-Examples of `sp_executesql` · `QUOTENAME` · plpgsql `format('%I')` → [`references/snippets.md`](references/snippets.md)
-
-- If the data of several companies is in one table, consider row-level security: SQL Server `CREATE SECURITY POLICY` · PostgreSQL `CREATE POLICY` (the table owner bypasses the policy unless `FORCE ROW LEVEL SECURITY`)
-- Personal data columns (national ID number · phone number · address) are not pulled unless used; SQL Server's Dynamic Data Masking helps hide values on display but is not access control; for details see `pdpa-compliance`
-- Changes to important data must leave a trace of who did it (`audit-trail`)
-
-## 8 · Check before sending
-
-- [ ] Every outside value is a parameter · no `SELECT *`
-- [ ] Checked NULL · half-open date ranges · division · parameter types match the columns
-- [ ] Looked at the real plan on near-real data, noted logical reads or time before/after · every new index can say which query it serves
-- [ ] Scripts can be rerun and big data goes in batches
-- [ ] Transaction + check row counts before `COMMIT` · wrote the way back and confirmed a backup exists
-- [ ] There is a test that runs against the same kind of database as production
-
-## 9 · Connecting to other skills
-
-Table design and expand-and-contract migrations → `database-design` · rerunnable scripts → `principle-safe-to-rerun` · Excel/CSV → `data-import-export` · who changed what → `audit-trail` · injection and permissions → `principle-secure-by-default` · Thai Buddhist Era dates, Thai sorting → `i18n-and-locale` · connection string → `config-and-secrets` · migrations in the pipeline → `cicd-and-release`
+## References
+- [`references/performance.md`](references/performance.md) — open when reading a plan, paging, batching, parameter sniffing, bloat commands
+- [`references/safe-changes.md`](references/safe-changes.md) — open when changing data, upsert, isolation, creating an index on a live table
+- [`references/snippets.md`](references/snippets.md) — open for collation checks and dynamic-SQL examples
+- [`references/traps.md`](references/traps.md) — open when a query behaves oddly or during review
 
 
 ## reference: performance.md
@@ -408,6 +347,22 @@ EXECUTE format('SELECT id, name FROM %I WHERE email = $1', tbl) USING p_email;
 - For MySQL, check which Thai collations exist with `SHOW COLLATION LIKE '%thai%'` before choosing
 
 
+## reference: traps.md
+
+# Common SQL traps · stack-sql
+
+Open when a query behaves oddly, or when reviewing SQL for the usual mistakes. Example commands for the last two traps are in [performance.md](performance.md).
+
+- `MERGE` (SQL Server) has several bugs, and without `HOLDLOCK` 2 sessions insert duplicates → separate `UPDATE` + `INSERT`, or `MERGE ... WITH (HOLDLOCK)` with a test
+- A trigger hides business rules and breaks on multi-row inserts → keep rules in app code; use triggers only for audit · a cursor/row-by-row loop → a set-based statement
+- `WITH (NOLOCK)` reads uncommitted data, rows go missing or repeat → turn on Read Committed Snapshot Isolation (RCSI) instead · building SQL by string concatenation → parameters
+- A collation mismatch in a join → set them equal on the column (putting `COLLATE` in the query stops it using the index)
+- Ids are not always consecutive (identity jumps · a sequence does not go back on rollback) → document numbers that must have no gaps are issued by yourself in a counter table
+- A timestamp with no time zone → PostgreSQL `timestamptz` · SQL Server `datetime2` agreed to be UTC, or `datetimeoffset`
+- A query that always filters a small share of rows (`WHERE status = 'pending'` · `deleted_at IS NULL`) but the index covers every row → the index is big and the planner does not pick it → put that condition into the index itself: PostgreSQL `CREATE INDEX ... WHERE status = 'pending'` · SQL Server filtered index `CREATE INDEX ... WHERE status = 'pending'` (the query must write the same condition for it to be used · idea from supabase/agent-skills · MIT)
+- After deleting or updating many rows, queries get slower though the plan did not change → table and index bloat (dead tuples · split pages) → in PostgreSQL look at `pg_stat_user_tables.n_dead_tup` then `VACUUM (ANALYZE)` or `REINDEX CONCURRENTLY` · in SQL Server look at `sys.dm_db_index_physical_stats` then `ALTER INDEX ... REORGANIZE` (below 30%) or `REBUILD` · check this before blaming the query
+
+
 ---
 
 # skill: api-conventions
@@ -427,18 +382,7 @@ Use when adding API endpoints or checking API consistency
 - Reviewing an API and feeling that its parts are not alike
 - Needing to answer "if we change it this way, will clients break?"
 
-## When to use another skill instead, or alongside
-
-| Task | Skill | |
-|---|---|---|
-| Design all the endpoints of one feature | command `/api-design` | instead |
-| Health check, error envelope, graceful shutdown | `web-service-essentials` | instead |
-| Tables, columns, relations | `database-design` | instead |
-| Tokens, scopes, permissions | `auth-implementation-patterns` | alongside |
-| Correlation id that appears in errors | `logging-standards` | alongside |
-| Contract tests between systems | `testing-standards` | alongside |
-| Recording why this convention was chosen | `adr-writer` | alongside |
-| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
+Not for: designing all the endpoints of one feature → command `/api-design` · health check, error envelope, graceful shutdown → `web-service-essentials` · tables and relations → `database-design`
 
 **A template of the conventions document that you can copy and use** → `assets/API-CONVENTIONS.md`
 
@@ -448,8 +392,6 @@ Use when adding API endpoints or checking API consistency
 
 Put the file `docs/API-CONVENTIONS.md` in place (the template is at `assets/API-CONVENTIONS.md`).
 Write every decision made from this page into that file, with the date and a short reason.
-
-> A convention that lives in one person's head is not a convention — someone who joins the team next month will do it another way.
 
 ---
 
@@ -662,7 +604,7 @@ A fitting period: for an internal API, 1 release cycle. For an API used by outsi
 
 ## 11 · Check before releasing a new endpoint
 
-Go through every item against the endpoint you added. Fail one and it is not merged yet (idea from ECC api-design).
+Go through every item against the endpoint you added. Fail one and it is not merged yet.
 
 - [ ] The URL is a plural noun per section 2 · sits under a version per section 3 · has no `GET` that changes data
 - [ ] Every list has pagination and a page-size ceiling (section 4) · filter and sort use the same parameter names as existing endpoints (section 5)
@@ -755,7 +697,6 @@ Use when a system imports or exports Excel or CSV
 | Masking personal data in export files | `pdpa-compliance` | Together |
 | Telling the user when an import finishes | `notifications` | Together |
 | Limits and constraints of the target table | `database-design` | Together |
-| Abbreviations in work people read | `spell-out-abbreviations` | Together |
 
 ---
 
@@ -847,22 +788,6 @@ split into batches of 500 rows, show progress, and allow cancel (see `background
 | File header | Put in the filter conditions used and the export time. Otherwise in 3 months nobody knows what data this file is |
 | Download link | Must expire (see `file-upload-and-storage`) |
 | Format | `.xlsx` for people to read · CSV for machines to read |
-
----
-
-## 6 · Anti-patterns
-
-- **"ไฟล์ไม่ถูกต้อง"** (file is invalid): the user cannot do anything next
-- **Stopping at the first bad row**: the user must upload 30 times
-- **Writing while validating**: if it fails midway, the data is left half-done
-- **No summary page before confirming**: real data is overwritten before anyone could look
-- **No template to download**: the user has to guess the headers
-- **Reading columns by position**: the user inserts one column and the whole file breaks
-- **Reading codes as numbers**: the leading 0 is lost every time
-- **Not asking whether the year is B.E. or C.E.**: years are off by 543 and nobody knows
-- **Exporting without escaping formulas**: opening the file runs a command
-- **Exporting more than the user's permission**: data leaks through a button we built ourselves
-- **Not keeping the original file**: when there is a problem, you cannot look back
 
 
 ## reference: thai-accounting-apis.md
@@ -980,7 +905,6 @@ Use when writing code that can fail, with retry and timeout
 | Where a failed background job goes next | `background-jobs` | alongside |
 | Error messages that must be translated into several languages | `i18n-and-locale` | alongside |
 | Tests for failure cases | `testing-standards` | alongside |
-| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 
 ---
 
@@ -1111,28 +1035,27 @@ Use `finally` / `using` / `with` / `defer` instead of repeating it on every exit
 
 ## 7 · Check before sending
 
-Go through this against the diff every time you touch code that calls outside the process (idea from ECC error-handling)
+Go through this against the diff every time you touch code that calls outside the process
 
 - [ ] Every `catch` clearly does one of these: handles it and goes on · converts it to an error of its own layer and throws on · lets it pass to the outermost layer to log (section 1) — no `catch` that logs and rethrows
 - [ ] Every outside call (HTTP · DB · queue · file) has a deliberate timeout and retries only the transient types in section 3 · a write that retries has an idempotency key (section 4)
 - [ ] The message to the user says what to do next · no stack trace or table name goes out (section 2) · the log for the same error has a correlation id and enough data to reproduce it
 - [ ] Outcomes the business expects (not found · insufficient balance · duplicate) are return values or types the caller must handle, not exceptions
 - [ ] Each outside dependency has at least 1 failure-path test (timeout · 5xx · bad payload), and a test confirms that partial failure follows section 6 and does not fail the whole page
-- [ ] None of these 4 kinds of silent failure swallowing (adapted from silent-failure-hunter in pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10):
+- [ ] None of these 4 kinds of silent failure swallowing:
   - **optional chaining or `?? default`** that lets a missing value pass with nobody knowing (`order?.total ?? 0` turns an order that failed to load into a zero total)
   - **falling back to a mock or sample data outside tests** — the live system shows fake data and looks normal
   - **retries run out, then silence** — after the last try it returns empty or success, throws no error, and tells the caller nothing
   - **a catch that logs and carries on in the UI** — the user sees a normal screen although the data never arrived; show an error state they can see
 
-## 8 · Anti-patterns
+## References
 
-- **An empty `catch`** — the hardest problem to find is the one that leaves no trace
-- **Returning `null` instead of throwing an error** — the caller cannot tell "no data" from "the system broke"
-- **`catch (Exception)` in the innermost layer** — swallows your own bugs too
-- **Log and rethrow at every layer** — 1 error gets 10 lines
-- **"เกิดข้อผิดพลาด" ("an error occurred")** — does not say what to do next
-- **Sending a stack trace to the user** — shows the internal structure to someone hunting for a hole
-- **Retry with no delay** — hammering a system that is already down
-- **Retrying a write with no idempotency key** — you get duplicate records
-- **No timeout** — threads pile up until the system dies
-- **Using errors to control normal flow** — for example throwing an exception on "not found", which is a normal event
+- [`references/sources.md`](references/sources.md) — where the checklist ideas came from
+
+
+## reference: sources.md
+
+# Sources · error-handling-patterns
+
+- Section 7 checklist: idea from ECC error-handling.
+- The 4 silent-failure kinds in section 7: adapted from silent-failure-hunter in pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10.

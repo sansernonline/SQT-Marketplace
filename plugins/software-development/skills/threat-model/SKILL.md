@@ -15,7 +15,7 @@ The security engineer should:
    - Regulatory scope (Personal Data Protection Act (PDPA), General Data Protection Regulation (GDPR), Payment Card Industry Data Security Standard (PCI DSS), etc.)
    - Existing security controls
    - **Incremental mode** — if `docs/threat-model*.md` or `qa/security/` already holds a model for this system, do not start over: diff the new feature against it, list only the components, flows and boundaries that are new or changed, carry forward unchanged threats with their status, and mark each threat `new` / `changed` / `unchanged` in the table
-   - **Non-capabilities** — write down what the system must *not* be able to do even when fully compromised (e.g. "the web tier cannot read raw card numbers", "a tenant's token cannot list another tenant's rows"); each becomes a check in step 4 and a line in the residual-risk section (idea from github/awesome-copilot `threat-model-analyst`, MIT, rewritten)
+   - **Non-capabilities** — write down what the system must *not* be able to do even when fully compromised (e.g. "the web tier cannot read raw card numbers", "a tenant's token cannot list another tenant's rows"); each becomes a check in step 4 and a line in the residual-risk section
 
 2. **Create Data Flow Diagram (DFD)** as a house-style figure with the `diagram-figures` skill (not raw Mermaid):
    - Show all components

@@ -149,3 +149,21 @@ pipeline {
 - Stashing the values files across agents, then running `unstash` over the checked-out files, works as written (`ยังไม่ได้ตรวจ`: not tried)
 - The one-line forms: `yamlFile` + `defaultContainer` separated by `;`, and `when { branch 'main'; beforeAgent true }` (the docs show a multi-line form) · let `declarative-linter` decide
 - The `--timeout 20m` value for stt/tts has not been measured
+
+## Worked example: dental clinic voice agent
+
+**Problem:** a dental clinic voice agent system with 5 services (`web` · `api` · `voice-gateway` · `stt` · `tts`) in one chart `clinic-voice` · built as Docker images · staging is tested automatically · for production, a release manager clicks to approve · service names, namespaces and probes match `kubernetes-helm`
+
+**What was done:** the full Jenkinsfile is the part above in this file · decision summary
+
+| Topic | Choice | Reason |
+|---|---|---|
+| Clinic secrets (STT/TTS keys · Kafka · database) | In the chart's `ExternalSecret`, never through Jenkins | Jenkins knows only the kubeconfig and the registry · patient data stays out of the build log (`pdpa-compliance` · `logging-standards`) |
+| image | `registry.example.com/clinic/<service>:<sha12>` + digest | Every service has its own version |
+| digest | Written to `values-staging.yaml` and `values-production.yaml` in the build step | Production uses the same digest that passed staging |
+| Test staging | Hit `/health/live` and `/health/ready` of `web` `api` `voice-gateway` + 1 test call | Before the human gate |
+| Human gate | `input` `submitter: 'clinic-release-managers'` timeout 2 hours | A release window that does not collide with calls in progress `(รอยืนยัน)` |
+| Failure | release `clinic` in `clinic-production` · `--atomic --timeout 20m` rolls back by itself · if the post-deploy smoke fails → `helm rollback clinic` | stt/tts take long to load models, so the timeout is long `(ยังไม่ได้วัด)` · drill on staging every quarter |
+
+**Result:** secrets are not in the Jenkinsfile · production gets the same image that passed staging, traceable by digest `(ยังไม่ได้ตรวจ: not yet run against a real Jenkins)`
+

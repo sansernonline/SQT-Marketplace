@@ -27,7 +27,6 @@ description: Use when writing code that can fail, with retry and timeout
 | Where a failed background job goes next | `background-jobs` | alongside |
 | Error messages that must be translated into several languages | `i18n-and-locale` | alongside |
 | Tests for failure cases | `testing-standards` | alongside |
-| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 
 ---
 
@@ -158,28 +157,19 @@ Use `finally` / `using` / `with` / `defer` instead of repeating it on every exit
 
 ## 7 · Check before sending
 
-Go through this against the diff every time you touch code that calls outside the process (idea from ECC error-handling)
+Go through this against the diff every time you touch code that calls outside the process
 
 - [ ] Every `catch` clearly does one of these: handles it and goes on · converts it to an error of its own layer and throws on · lets it pass to the outermost layer to log (section 1) — no `catch` that logs and rethrows
 - [ ] Every outside call (HTTP · DB · queue · file) has a deliberate timeout and retries only the transient types in section 3 · a write that retries has an idempotency key (section 4)
 - [ ] The message to the user says what to do next · no stack trace or table name goes out (section 2) · the log for the same error has a correlation id and enough data to reproduce it
 - [ ] Outcomes the business expects (not found · insufficient balance · duplicate) are return values or types the caller must handle, not exceptions
 - [ ] Each outside dependency has at least 1 failure-path test (timeout · 5xx · bad payload), and a test confirms that partial failure follows section 6 and does not fail the whole page
-- [ ] None of these 4 kinds of silent failure swallowing (adapted from silent-failure-hunter in pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10):
+- [ ] None of these 4 kinds of silent failure swallowing:
   - **optional chaining or `?? default`** that lets a missing value pass with nobody knowing (`order?.total ?? 0` turns an order that failed to load into a zero total)
   - **falling back to a mock or sample data outside tests** — the live system shows fake data and looks normal
   - **retries run out, then silence** — after the last try it returns empty or success, throws no error, and tells the caller nothing
   - **a catch that logs and carries on in the UI** — the user sees a normal screen although the data never arrived; show an error state they can see
 
-## 8 · Anti-patterns
+## References
 
-- **An empty `catch`** — the hardest problem to find is the one that leaves no trace
-- **Returning `null` instead of throwing an error** — the caller cannot tell "no data" from "the system broke"
-- **`catch (Exception)` in the innermost layer** — swallows your own bugs too
-- **Log and rethrow at every layer** — 1 error gets 10 lines
-- **"เกิดข้อผิดพลาด" ("an error occurred")** — does not say what to do next
-- **Sending a stack trace to the user** — shows the internal structure to someone hunting for a hole
-- **Retry with no delay** — hammering a system that is already down
-- **Retrying a write with no idempotency key** — you get duplicate records
-- **No timeout** — threads pile up until the system dies
-- **Using errors to control normal flow** — for example throwing an exception on "not found", which is a normal event
+- [`references/sources.md`](references/sources.md) — where the checklist ideas came from

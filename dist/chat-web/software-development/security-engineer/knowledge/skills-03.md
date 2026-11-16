@@ -4,7 +4,7 @@ Use when auditing a whole codebase before handover
 
 # security-audit — hunt for vulnerabilities across the whole system from code, and verify every item before reporting
 
-Part of the `software-development` plugin. Wording in this file, in reports and in sub-agent briefs follows `human-writing`. This is a multi-step job, and the team lead (`superuser`) runs it.
+This is a multi-step job, and the team lead (`superuser`) runs it.
 
 > **The one rule:** if you cannot yet say who is harmed, how, and through which entry point, the item is not yet a vulnerability. Something that "should exist but does not", with no provable affected party, is hardening advice, not a finding.
 
@@ -15,7 +15,7 @@ Part of the `software-development` plugin. Wording in this file, in reports and 
 - You take over someone else's code and need to know which vulnerabilities are still open
 - A previous round already audited, and you want to confirm the fixed items are really closed and find new problems in the parts that changed
 
-Do not use when: a pre-merge or pre-ship gate that must be fast → `security-gate` · a question about the security of a single piece of code → answer directly from `principle-secure-by-default` without opening the 6 steps · penetration testing a live deployed system, or a system that is not our customer's → do not do it (this skill reads code and runs only in a lab).
+Do not use when: a pre-merge or pre-ship gate that must be fast → `security-gate` · a question about the security of a single piece of code → answer directly from `principle-secure-by-default` without opening the 6 steps · penetration testing a live deployed system, or a system that is not our customer's → do not do it (this skill reads code and runs only in a lab) · already breached, tracing an incident, SIEM rules → `security-operations` · only an exe, APK or firmware with no source → `reverse-engineering` (continue here once you have decompiled source) · the short command `/security-scan` is a shortcut that points here (whole codebase) or to `security-gate` (diff before ship).
 
 ## Use another skill instead, or alongside
 
@@ -25,9 +25,6 @@ Do not use when: a pre-merge or pre-ship gate that must be fast → `security-ga
 | Terraform · compose · Kubernetes · Helm is present, or an infra review is requested | [`infra-checklist`](references/infra-checklist.md) | The hunting list for the infrastructure family (ports · IAM · buckets · encryption · images) serves as work units in step 2 |
 | The contract names OWASP Top 10 | [`security-gate` OWASP section](../security-gate/references/owasp-top10.md) | Every finding has an `owasp` field, so the report can summarize rows A01–A10 right away |
 | Designing a new feature with no code yet | [`threat-model`](../threat-model/SKILL.md) | If a threat model already exists, the recon step starts from its DFD and non-capabilities |
-| The short command `/security-scan` | [`security-scan`](../security-scan/SKILL.md) | A shortcut that points here (whole codebase) or to `security-gate` (diff before ship) |
-| Already breached · tracing an incident · SIEM rules | `security-operations` | An audit finds holes before an incident, and security-operations handles the aftermath |
-| No source, only an exe · APK · firmware | `reverse-engineering` | Continue here once you have decompiled source |
 | A finding touches personal data | [`pdpa-compliance`](../pdpa-compliance/SKILL.md) | For a confirmed item that may already have leaked, open section 8 (the first 72 hours) |
 | Running the target code to prove something | [`docker-sandbox`](../docker-sandbox/SKILL.md) | `-Isolated -Locked` lab only |
 
@@ -156,30 +153,11 @@ The 2 validators and `render_report.mjs` have `--self-test` (`fingerprint.mjs` i
 
 - **A confirmed item that touches personal data** (`pdpa.personal_data` is true) and shows signs it may already have been exploited → open `pdpa-compliance` section 8 at once. Count 72 hours from when you learned of it, not from when the report is finished. If there are no signs, state in the report that past logs should be checked.
 - **Every confirmed item** → playbook `bug-fix` (find the root cause · write a test that fails before the fix, with a name starting with the OWASP code such as `A01_other_user_order_returns_404` · search for other places written the same way). Critical and high must not be delivered until fixed, or until the customer accepts the risk in writing in the `decision-log`.
-- **Before merging a patch for a confirmed critical or high item**, send a fresh `reviewer` that gets only the diff and the finding (not the explanation of how the vulnerability works) to answer 4 questions: (1) does the patch touch only the path of this finding (2) does it fix the root cause or mask the symptom, such as an empty `try/except`, a removed check, or a lowered log level (3) does it add new attack surface (4) can you think of any input that still reaches the original state without hitting the patch. Any question that fails goes back for a fix first. (The idea comes from the patch-review step of defending-code-reference-harness. That repo's license is NOASSERTION, so only the idea is used and the text is our own. See 2026-11-10.)
+- **Before merging a patch for a confirmed critical or high item**, send a fresh `reviewer` that gets only the diff and the finding (not the explanation of how the vulnerability works) to answer 4 questions: (1) does the patch touch only the path of this finding (2) does it fix the root cause or mask the symptom, such as an empty `try/except`, a removed check, or a lowered log level (3) does it add new attack surface (4) can you think of any input that still reaches the original state without hitting the patch. Any question that fails goes back for a fix first.
 - **needs_validation** → send `NEEDS-VALIDATION.md` to someone who can reach the deployment. They check by `check_plan` and come back to close it in the next round.
 - **Next round** → read the whole previous `findings.json` and `ledger.json` before planning. A confirmed item whose code has not changed carries over with the same fingerprint but must be re-verified. If the code changed, recheck that unit. If it was fixed, have the verifier rerun the test that failed before the fix, and write `ปิดแล้ว` (closed) only when it passes. `blocked` units and `needs_validation` items are this round's work. One round can never cover everything, so the report must not say it is complete.
 - **Delivering to a standard** (PDPA · GDPR · PCI-DSS · SOC 2 · HIPAA) → state in the report which finding hits which requirement, and the evidence already collected. Attach a 30/60/90-day fix plan, ordered by the level of the confirmed items.
 - Summarize status with `status-report` of the `ตรวจ` type. If delivering under an OWASP contract, attach rows A01–A10 from this report to the OWASP report from `security-gate`.
-
-## One worked example
-
-Label `ตัวอย่าง` (example). Built from this skill's test scenario and not yet run against a real customer system.
-
-**Scenario:** "ลูกค้าจะรับระบบสั่งของสัปดาห์หน้า ช่วยไล่หาช่องโหว่ทั้งโปรเจกต์ให้หน่อย" · an Express repo of about 3,000 lines with a LINE webhook · no `.sandbox/`
-
-**What was done:** Asked everything once. The user chose `quick` · whole repo · read-only. 4 recon agents found 9 entry points → ledger of 31 rows → 6 hunters → the gap check found `GET /orders/export.csv` had no row, so 2 rows were added and 1 more hunter ran → 5 candidates, verified by 5 fresh `reviewer` agents
-
-**Result:**
-
-| id | Verdict | Subject | Reason |
-|---|---|---|---|
-| F-001 | `confirmed` · `high` · A01 | `GET /orders/:id` does not filter by owner, so a customer can open another person's order with their phone number | The query uses only `id`, with no `customerId` · `pdpa` is true |
-| F-002 | `needs_validation` | `/webhook/line` does not check `x-line-signature` | The code really does not check, but the README says a reverse proxy checks it, and that proxy is not in the repo · `check_plan`: send a request with a wrong signature to the test URL and expect 401 |
-| F-003 | `rejected` | semgrep warns about `exec()` in `scripts/seed.js` | The file runs only at machine setup and has no entry point from users |
-| — | hardening | No CSP | The API returns JSON only and has no HTML pages |
-
-F-001 goes to playbook `bug-fix`. The test `A01_other_user_order_returns_404` fails before the fix and passes after. The report states that the review was `quick` and names the units not yet checked.
 
 ## Check before sending
 
@@ -191,11 +169,10 @@ F-001 goes to playbook `bug-fix`. The test `A01_other_user_order_returns_404` fa
 6. A finding whose `pdpa.personal_data` is true has a line giving the next step under `pdpa-compliance`
 7. The words "100% secure" or "certified" do not appear
 
-## Sources
+## References
 
-- The 6-step idea · verification by a fresh agent that tries to refute · the 3 verdicts · 5 levels not higher than what is proven · the coverage ledger · the list of attack classes — from cloudflare/security-audit-skill https://github.com/cloudflare/security-audit-skill (MIT · viewed 2026-10-26). Used as a coverage checklist. The text, tables and prompts in this folder are all newly written.
-- Added by us: scanner results as candidates · the `owasp` · `pdpa` · `owner_impact_th` fields · Thai systems in [`classes-thai`](references/classes-thai.md) · the hand-off to `bug-fix` and `pdpa-compliance` · validators that run on Windows
-- OWASP Top 10:2025 — per the [`security-gate` OWASP section](../security-gate/references/owasp-top10.md)
+- [`references/worked-example.md`](references/worked-example.md) — open when you want a full run-through of a `quick` audit
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
 
 
 ## reference: attack-classes.md
@@ -969,6 +946,17 @@ The team lead writes it personally, about 1,000 words at most, in this order:
 7. Information from the previous round (if any): the earlier audit folder · items still open
 
 
+## reference: sources.md
+
+# Sources · security-audit
+
+## Sources
+
+- The 6-step idea · verification by a fresh agent that tries to refute · the 3 verdicts · 5 levels not higher than what is proven · the coverage ledger · the list of attack classes — from cloudflare/security-audit-skill https://github.com/cloudflare/security-audit-skill (MIT · viewed 2026-10-26). Used as a coverage checklist. The text, tables and prompts in this folder are all newly written.
+- Added by us: scanner results as candidates · the `owasp` · `pdpa` · `owner_impact_th` fields · Thai systems in [`classes-thai`](classes-thai.md) · the hand-off to `bug-fix` and `pdpa-compliance` · validators that run on Windows
+- OWASP Top 10:2025 — per the [`security-gate` OWASP section](../../security-gate/references/owasp-top10.md)
+
+
 ## reference: verify.md
 
 # Step 5 verify and step 6 final record check: a fresh agent that tries to refute
@@ -1059,119 +1047,79 @@ Return a single JSON block: {"agent": "...", "id": "F-001", "ok": true|false, "c
 Use the step 5 brief on the existing record, with 1 added line: "This item is reported as fixed at commit <hash> · confirm that the old path no longer works, and that the test that failed before the fix now passes." Keep the original fingerprint. When it passes, the report says `ปิดแล้ว` (closed) and the record stays in history.
 
 
+## reference: worked-example.md
+
+# Worked example · security-audit
+
+## One worked example
+
+Label `ตัวอย่าง` (example). Built from this skill's test scenario and not yet run against a real customer system.
+
+**Scenario:** "ลูกค้าจะรับระบบสั่งของสัปดาห์หน้า ช่วยไล่หาช่องโหว่ทั้งโปรเจกต์ให้หน่อย" · an Express repo of about 3,000 lines with a LINE webhook · no `.sandbox/`
+
+**What was done:** Asked everything once. The user chose `quick` · whole repo · read-only. 4 recon agents found 9 entry points → ledger of 31 rows → 6 hunters → the gap check found `GET /orders/export.csv` had no row, so 2 rows were added and 1 more hunter ran → 5 candidates, verified by 5 fresh `reviewer` agents
+
+**Result:**
+
+| id | Verdict | Subject | Reason |
+|---|---|---|---|
+| F-001 | `confirmed` · `high` · A01 | `GET /orders/:id` does not filter by owner, so a customer can open another person's order with their phone number | The query uses only `id`, with no `customerId` · `pdpa` is true |
+| F-002 | `needs_validation` | `/webhook/line` does not check `x-line-signature` | The code really does not check, but the README says a reverse proxy checks it, and that proxy is not in the repo · `check_plan`: send a request with a wrong signature to the test URL and expect 401 |
+| F-003 | `rejected` | semgrep warns about `exec()` in `scripts/seed.js` | The file runs only at machine setup and has no entry point from users |
+| — | hardening | No CSP | The API returns JSON only and has no HTML pages |
+
+F-001 goes to playbook `bug-fix`. The test `A01_other_user_order_returns_404` fails before the fix and passes after. The report states that the review was `quick` and names the units not yet checked.
+
+
 ---
 
 # skill: code-review-checklist
 
 Use when reviewing a pull request or your own code
 
-> **In SuperUser:** start a review from the playbook [`review`](../superuser/references/playbook-review.md) then use this checklist for ordinary reviews. For high-risk work or a large diff, use `adversarial-review-panel`
+# Code Review Checklist — review a pull request or your own code, with actionable comments
 
-# Code Review Checklist
+> **In SuperUser:** start from the playbook [`review`](../superuser/references/playbook-review.md), then use this checklist for ordinary reviews. High-risk work or a large diff → `adversarial-review-panel`.
 
-## When to use this skill
+## Use when
+- Reviewing a pull request, self-reviewing before submitting, or auditing an existing module
+- Not for: a second look inside a team → a new `reviewer` agent (it applies this checklist) · contested design, large or high-risk diff, "stress test" → `adversarial-review-panel` · reviewing a visual → `graphic-design:design-review` if installed, else `ui-craft` · writing the PR description → `pr-description-template` · hunting misleading patterns across the codebase → `code-gardener` · scanners, secrets, dependency check, OWASP Top 10:2025 → `security-gate` (run both before merge; `references/owasp-top10.md`, `references/owasp-stack-checks.md`)
 
-- Reviewing a pull request
-- Self-review before submitting code
-- Onboarding new code reviewers
-- Auditing code quality of existing modules
+## Steps
+1. **Understand the intent:** read the PR description and linked ticket. For a branch or PR, pin the range first (`BASE=$(git merge-base main HEAD)` · `HEAD=$(git rev-parse HEAD)` · review `git diff $BASE..$HEAD`) and write both SHAs in the report.
+2. **Skim the diff** for the overall shape.
+3. **Review against the checklist.** House checks first; each skill holds the full rules, so link it in the comment:
+   - Security: run [`security-gate`](../security-gate/SKILL.md) on the diff (input checked at the boundary, parameterized SQL, server-side permission check, no secrets in code or logs)
+   - Simple enough: [`lazy-coding`](../lazy-coding/SKILL.md) · readable: [`readable-code`](../readable-code/SKILL.md) · tests next to the code and proving the change: [`testing-standards`](../testing-standards/SKILL.md)
+   - Shared code touched → [`blast-radius`](../blast-radius/SKILL.md) list is in the PR · commit message follows [`commit-message-format`](../commit-message-format/SKILL.md)
+   - The generic list (correctness, design, performance, documentation, maintainability): [`references/full-checklist.md`](references/full-checklist.md)
+4. **Verify before posting:** hand every `blocking:` finding to a fresh agent (or second reader) with only the diff and the finding, and ask if it is real. Drop it if they cannot reproduce or point to the line.
+5. **Do not flag:** a problem that existed before this PR · what the linter or compiler already catches · a nitpick a senior reviewer would skip · behaviour that looks wrong but is right (check context first) · a rule the team silenced on purpose with a lint-ignore comment · a problem only for an input that cannot occur here.
+6. **Run the code** if non-trivial; do not just read.
+7. **Leave actionable comments:** a concrete fix for each, not just the problem. Prefixes:
 
-## When NOT to use
+   | Prefix | Meaning | Example |
+   |---|---|---|
+   | `blocking:` | Must fix before merge | `blocking: This will cause Y in production because Z.` then `Suggest: <concrete fix>` |
+   | `important:` | Should fix, can be follow-up if urgent | |
+   | `nit:` | Minor, optional | `nit: Consider X for readability` |
+   | `q:` | Question, not necessarily a change | `q: Why did you choose X over Y here?` |
+   | `praise:` | Acknowledge good work | `Nice approach with X — much cleaner than the previous version.` |
 
-| Task | Use instead |
-|---|---|
-| Second look at a finished piece inside a team | a new `reviewer` agent (it applies this checklist to code) |
-| Contested design, large or high-risk diff, "stress test" / "find blind spots" | `adversarial-review-panel` (several `reviewer` agents) |
-| Reviewing a visual (image, poster, screen look) | (if plugin `graphic-design` is installed) `graphic-design:design-review`, else `ui-craft` checks |
-| Writing or updating the PR description itself | `pr-description-template` |
-| Hunting misleading patterns across the codebase, not one diff | `code-gardener` |
-| Scanners, secrets or dependency check before ship or after adding a dependency | `security-gate` (run both before merge) |
-| Web app or API that must meet OWASP Top 10:2025 | `security-gate` (`references/owasp-top10.md` · per-stack checks in `references/owasp-stack-checks.md`) |
+   These prefixes are for comments on a pull request. A review report uses the `reviewer` scale: `blocking:` = สูง · `important:` = กลาง · `nit:` = ต่ำ, verdict ผ่าน / ไม่ผ่าน with counts per level.
+8. **Avoid:** bikeshedding when there is no convention · "why not MY way" · only criticism · vague comments ("this is wrong": say why and suggest a fix) · reviewing too much at once (ask for PRs under 400 lines).
 
-## Review Process
+## Run as a command
+`/software-development:code-review-checklist <file path or PR description>` — use a new read-only `reviewer` agent to review **$ARGUMENTS** (high-stakes or contested → `adversarial-review-panel`). Open `superuser` with the playbook `review` and copy its steps into the todo first; use both together. The reviewer: reads the file(s) or diff and pins the range (step 1) · applies this skill · rates each finding **สูง** (must fix before merge) · **กลาง** (should fix) · **ต่ำ** (optional) · gives a concrete fix for each · outputs verdict **ผ่าน** / **ไม่ผ่าน** with counts per level (not the `blocking:`/`nit:` prefixes).
 
-1. **Understand the intent** — read PR description and linked ticket
-2. **Skim the diff** — get overall sense of changes
-3. **Deep review** — go through each section of checklist below
-   - **Verify before posting:** hand every `blocking:` finding to a fresh agent (or a second reader) with only the diff and the finding, and ask whether it is real. Drop it if they cannot reproduce or point to the line. For a contested diff use `adversarial-review-panel`.
-   - **Do not flag** (adapted from the `code-review` command of claude-plugins-official · Apache-2.0 · opened 2026-11-10): a problem that existed before this PR · something the linter or compiler already catches · a nitpick a senior reviewer would skip · behaviour that looks wrong but is right (check the context first) · a rule the team silenced on purpose with a lint-ignore comment · a problem that only appears for an input that cannot occur here
-4. **Run the code** if non-trivial — don't just read
-5. **Leave actionable comments** — suggest fixes, not just point out problems
+The author does not fix every finding on sight: a finding can be wrong (misread code, or the "bug" is covered by a test). Push back with evidence (`file:line` · test name · command output), not opinion · fix what stands · list each rejected finding and its evidence in the report so the lead can judge.
 
-## Checklist
+## Check before done
+- Every finding has a severity and a concrete fix · every `blocking:` was verified by a second reader
+- Both SHAs are in the report · none of the "do not flag" kinds is in the findings
 
-House checks first. Each skill holds the full rules, so link to it in the comment:
-
-- [ ] Security: run [`security-gate`](../security-gate/SKILL.md) on the diff (input checked at the boundary, parameterized SQL, server-side permission check, no secrets in code or logs)
-- [ ] Simple enough: [`lazy-coding`](../lazy-coding/SKILL.md) (no unused layers, standard library first, one concern per file)
-- [ ] Readable: [`readable-code`](../readable-code/SKILL.md) (names, file and folder layout, config outside code)
-- [ ] Tests sit next to the code and prove the change: [`testing-standards`](../testing-standards/SKILL.md)
-- [ ] Shared code touched → [`blast-radius`](../blast-radius/SKILL.md) list is in the PR
-- [ ] Commit message follows [`commit-message-format`](../commit-message-format/SKILL.md)
-
-The generic list (correctness, design, performance, documentation, maintainability) is in [`references/full-checklist.md`](references/full-checklist.md).
-
-## Comment Templates
-
-### Suggestion (non-blocking)
-```
-nit: Consider X for readability
-```
-
-### Question
-```
-q: Why did you choose X over Y here?
-```
-
-### Blocking issue
-```
-blocking: This will cause Y in production because Z.
-Suggest: <concrete fix>
-```
-
-### Praise
-```
-Nice approach with X — much cleaner than the previous version.
-```
-
-## Review Severity Levels
-
-| Prefix | Meaning |
-|--------|---------|
-| `blocking:` | Must fix before merge |
-| `important:` | Should fix, can be follow-up if urgent |
-| `nit:` | Minor improvement, optional |
-| `q:` | Question, not necessarily a change |
-| `praise:` | Acknowledge good work |
-
-These prefixes are for comments on a pull request. A review report uses the `reviewer` scale: `blocking:` = สูง (high) · `important:` = กลาง (medium) · `nit:` = ต่ำ (low), verdict ผ่าน / ไม่ผ่าน
-
-## Anti-patterns to Avoid
-
-As a reviewer:
-- Bikeshedding — don't fight over trivial style if there's no convention
-- "Why didn't you do it MY way?" — there are often multiple valid approaches
-- Only criticism — acknowledge good things too
-- Vague comments like "this is wrong" — explain WHY and suggest fix
-- Reviewing too much at once — request smaller PRs (under 400 lines)
-
-## เรียกเป็นคำสั่ง
-
-`/software-development:code-review-checklist <file path or PR description>`
-
-> **Shortcut into SuperUser:** open the skill `superuser` with the playbook `review`, then copy the playbook steps into the todo first · the steps below describe the shape of the work and the output of this command · use them together with the playbook, not in place of it
-
-Use a new `reviewer` agent (read-only) to perform a thorough code review of: **$ARGUMENTS** · high-stakes or contested change → `adversarial-review-panel`
-
-The reviewer should:
-
-1. Read the file(s) or diff to understand the change · for a branch or PR, pin the exact range first (`BASE=$(git merge-base main HEAD)` · `HEAD=$(git rev-parse HEAD)` · review `git diff $BASE..$HEAD`) and write both SHAs in the report so author and reviewer talk about the same code
-2. Apply the `code-review-checklist` skill systematically
-3. Rate each finding with the reviewer's own scale: **สูง** (must fix before merge) · **กลาง** (should fix) · **ต่ำ** (optional)
-4. Give a concrete fix for each finding, not just criticism
-5. Use the reviewer's output format: verdict **ผ่าน** / **ไม่ผ่าน** with counts per level. The `blocking:`/`nit:` prefixes in `code-review-checklist` are only for comments posted on a pull request
-
-The author does not fix every finding on sight: a finding can be wrong (reviewer misread the code, or the "bug" is covered by a test). Push back with evidence (`file:line` · test name · command output), not opinion · fix what stands · list each rejected finding and its evidence in the report so the lead can judge · idea from superpowers requesting-code-review
+## References
+- [`references/full-checklist.md`](references/full-checklist.md) — open when the diff needs the generic checks (correctness, design, performance, documentation, maintainability)
 
 
 ## reference: full-checklist.md
@@ -1258,47 +1206,33 @@ Use to cut extras nobody needs yet. Not Claude Code simplify
 
 # simplify — make it simple so a first-time reader can follow
 
-Use on any work handed to people: code, documents, plans, designs, slides, tables and answers · `human-writing` controls **how it is written**, while this skill controls **what the work contains** · lives only in plugin `superuser`; other plugins share it through `dependencies`
+> **One rule:** someone not on this work, opening it 6 months from now, must understand it and continue it without asking anyone.
 
-## 1 · Main principles
+## Use when
+- Any work handed to people (code, documents, plans, designs, slides, tables, answers) may hold more than the task needs.
+- `human-writing` controls how it is written; this skill controls what the work contains.
 
-- **The test:** someone not on this work, opening it 6 months from now, must understand it and continue it without asking anyone
-- Do only what the task needs; do not provide for a future nobody has asked for
-- Cut before adding · if removing a part loses neither meaning nor function, cut it
-- Plain things people know beat clever things that need decoding
-- **Simple is not sloppy** — never cut correctness, safety, validation of data from outside, error handling that prevents data loss, or what the user asked for explicitly
-- **Simple is not one big pile** — reduce the number of things, but keep clear separation of duties, 1 part doing 1 thing, as professional work does
+Not for: Claude Code's own `/simplify` command · more detail on code and architecture (if installed) → `lazy-coding` · `readable-code` · `simplicity-first` in plugin `software-development`.
 
-## 2 · Ladder before starting — stop at the first step that works
+## Steps
+1. Climb the ladder and stop at the first step that works: (a) is this really needed? If not, do not do it and say in 1 line what you skipped; (b) is there an existing thing that works (file, template, function, tool, built-in feature)? Use it; (c) do the shortest version that is still complete and correct.
+2. Do only what the task needs; cut before adding (if removing a part loses neither meaning nor function, cut it); plain things people know beat clever things that need decoding.
+3. Apply by kind of work:
+   - **Code:** names say what it is and carry units · 1 function does 1 thing · return early instead of nesting `if` · at most 3 levels of indentation · comments say why · follow the project's style. Avoid an abstraction with one user, clever hard-to-read shortcuts, one big file, a pile-up `utils/`, a new dependency for a few lines.
+   - **Documents · reports:** conclusion first · 1 paragraph 1 topic · an example for abstract points · a table for compared data. Avoid repeats, empty headings, unknown terms.
+   - **Plans · procedures:** 3–5 key items, each with an owner and a way to measure done · fewest steps that work. Avoid a 20-item list with no priority.
+   - **Designs · slides · figures:** 1 page 1 point · shortest path to the user's goal · familiar patterns. Avoid cramming and decoration that does not help.
+   - **Tables · data:** only columns used to decide · short formulas. Avoid columns that repeat a meaning and long nested formulas.
+   - **Answers:** answer first, as long as the question needs.
+4. **Simple is not sloppy:** never cut correctness, safety, validation of data from outside, error handling that prevents data loss, or what the user asked for explicitly. **Simple is not one big pile:** keep clear separation of duties, 1 part doing 1 thing.
+5. When you take a deliberate shortcut, write how far it works and when it changes, for example `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process`, and put 1 line in the report: `ข้าม: X — เพิ่มเมื่อ Y`.
 
-1. Do we really need this · not needed → do not do it, and say in 1 line what you skipped
-2. Is there an existing thing that works (file, template, function, tool, a feature that comes with the system) · yes → use the existing thing
-3. Do the shortest version that is still complete and correct
-
-## 3 · By kind of work
-
-| Work | Do | Avoid |
-|---|---|---|
-| **Code** | Names say what it is and carry units · 1 function does 1 thing · return early instead of nesting `if` · at most 3 levels of indentation · comments say "why" · follow the project's style | An abstraction with a single user · a clever shortcut that is hard to read · one big file doing everything · a pile-up `utils/` folder · a new dependency for a few lines of work |
-| **Documents · reports** | Conclusion first · 1 paragraph 1 topic · an example for abstract points · a table for data that is compared | Repeating what was already said · headings with no content · terms the reader does not know |
-| **Plans · procedures** | 3–5 key items · every item has an owner and a way to measure done · the fewest steps that work | A list of 20 items with no priority · steps kept "just in case" |
-| **Designs · slides · figures** | 1 page 1 point · the shortest path to the user's goal · use patterns people are familiar with | Cramming data until people must squint · decoration that does not help understanding |
-| **Tables · data** | Only the columns used to decide · short formulas you can follow | Columns that repeat a meaning · long nested formulas in one line |
-| **Answers** | Answer first · as long as the question needs | An explanation longer than the work itself |
-
-Plugin `software-development` has more detail on code and architecture: `lazy-coding` (write less) · `readable-code` (names, function shape, file structure) · `simplicity-first` (documents, plans, architecture) · if installed, open them together
-
-## 4 · Say that you made it simple on purpose
-
-A deliberate shortcut should be written down with how far it works and when it changes, so it does not look forgotten, for example `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process` (gloss: simple: kept in memory — move to Redis when running more than 1 process) · in the report put 1 line `ข้าม: X — เพิ่มเมื่อ Y` (skipped: X — add when Y)
-
-## 5 · 5-point check before sending
-
-1. Can an outsider open it for the first time and understand within 30 seconds
-2. Is there any part, step or layer that can be cut with no loss? If so, cut it
-3. Does every part added have a reason it is needed now, not "just in case"
-4. Is it still complete on correctness, safety, and what the user asked for
-5. Are duties still clearly separated, and not several things squashed into one place to look short
+## Check before done
+- [ ] An outsider can open it for the first time and understand within 30 seconds.
+- [ ] No part, step or layer can be cut with no loss.
+- [ ] Every added part has a reason it is needed now, not "just in case".
+- [ ] Still complete on correctness, safety and what the user asked for.
+- [ ] Duties still clearly separated, not squashed into one place to look short.
 
 
 ---
@@ -1307,181 +1241,61 @@ A deliberate shortcut should be written down with how far it works and when it c
 
 Use when building login with sessions, JWT, OAuth or SSO
 
-# Authentication Implementation Patterns
+# auth-implementation-patterns — secure login, token, MFA and authorization choices
 
-## When to use this skill
+## Use when
+- Building login/signup/logout or a password reset flow.
+- Adding multi-factor authentication (MFA): TOTP, SMS, WebAuthn.
+- Choosing session vs token authentication.
+- Integrating OAuth or OpenID Connect (OIDC) logins, or single sign-on (SSO) with SAML or OIDC.
+- Designing API authentication (API keys, JSON Web Token (JWT), OAuth).
+- Reviewing existing auth code for security issues.
 
-- Building login/signup/logout
-- Adding password reset flow
-- Adding multi-factor authentication (MFA): TOTP, SMS, WebAuthn
-- Choosing session vs token authentication
-- Integrating OAuth or OpenID Connect (OIDC) logins (Google, GitHub, etc.)
-- Implementing single sign-on (SSO) with SAML or OIDC
-- Designing API authentication (API keys, JSON Web Token (JWT), OAuth)
-- Reviewing existing auth code for security issues
+## Steps
 
-## อ่านเพิ่มเมื่อ
+1. **Choose the pattern by who is authenticating.**
+   - Browser user, first-party app → session cookies (`HttpOnly`, `Secure`, `SameSite`). Cross-domain → JWT in an `HttpOnly` cookie, never `localStorage`.
+   - Mobile app → OAuth 2.0 PKCE flow.
+   - Service-to-service → same org: mTLS or service mesh; external: OAuth 2.0 Client Credentials.
+   - Third-party developer → API keys (with rotation) or OAuth.
 
-| ไฟล์ | เปิดเมื่อ |
-|---|---|
-| [references/auth-flows.md](references/auth-flows.md) | When writing session, JWT, OAuth with PKCE or password reset code, open it for the step-by-step order |
-| [references/mfa.md](references/mfa.md) | When choosing or building MFA and you need TOTP setup steps, WebAuthn usage or the limits of SMS |
-| [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md) | Open this file if you are designing API authentication or API keys, or need RBAC and ABAC examples |
-| [references/libraries-and-code.md](references/libraries-and-code.md) | When choosing a library by language, or you need sample code for password hashing and rate limiting |
+2. **Sessions (server-rendered apps, monoliths, one domain).** Cookie `HttpOnly` + `Secure` + `SameSite=Lax` (or Strict). Session ID cryptographically random, ≥ 128 bits. Store in Redis with a time-to-live (TTL), not in app memory if more than one instance runs. Idle timeout 30 min, absolute timeout 8–12 hours. Issue a new session ID when privileges change (login, role change). On logout, delete the session from the store. Avoid: session inside a JWT (cannot revoke) · session token in `localStorage` (cross-site scripting (XSS) can steal it) · same ID after login (session fixation).
 
-## Choose the Right Pattern
+3. **JWT (microservices, mobile, single-page app (SPA) with a backend API).** JWT is overused: with a single backend, sessions are simpler and safer. Algorithm `RS256` or `ES256`, not `HS256` for distributed systems. Access token 5–15 min. Refresh token lives days, is stored separately, is revocable, and is replaced each time it is used. Required claims `sub`, `iat`, `exp`, `iss`, `aud`. Store in an `HttpOnly Secure` cookie. Have a way to cancel tokens (blocklist, short expiry). Avoid: accepting `alg: none` (check the algorithm explicitly) · skipping signature verification · sensitive data in the payload (base64, not encrypted).
 
-```
-What's authenticating?
-│
-├─ Browser user
-│  ├─ First-party app → Session cookies (HttpOnly, Secure, SameSite)
-│  └─ Need cross-domain → JWT with httpOnly cookie (NOT localStorage)
-│
-├─ Mobile app
-│  └─ Token-based: OAuth 2.0 PKCE flow
-│
-├─ Service-to-service
-│  ├─ Same org → mTLS or service mesh
-│  └─ External → OAuth 2.0 Client Credentials
-│
-└─ Third-party developer
-   └─ API keys (with rotation) OR OAuth
-```
+4. **OAuth 2.0 / OIDC ("Login with Google/GitHub", handing login to an identity provider (IdP)).** Always Authorization Code Flow with PKCE, even for confidential clients (steps in [`references/auth-flows.md`](references/auth-flows.md)). Validate the `id_token` signature with the IdP's JWKS, and validate `aud`, `iss`, `exp`, `nonce`. Use the `state` parameter against cross-site request forgery (CSRF) and validate it. Match `code_verifier` to `code_challenge`. Use a library (Auth0, Passport.js), do not write your own. Avoid: implicit flow · Resource Owner Password Credentials flow (both deprecated).
 
-## Pattern 1: Session-Based Auth (Most apps)
+5. **MFA.** For a new app use WebAuthn (passkeys) by default (no shared secret to steal). Use TOTP when users need easy standard 2FA. Use SMS or email only as a last resort (SMS is not safe against SIM swap). Details: [`references/mfa.md`](references/mfa.md).
 
-**When to use:** server-rendered apps, monoliths, one domain
+6. **Passwords.**
+   - Hash with **Argon2id** (preferred) or **bcrypt** with cost ≥ 12. Never MD5, SHA-1, raw SHA-256 or plain text.
+   - Policy per NIST SP 800-63B-4 (checked 2026-10-14): minimum **15 characters** when the password is the only factor, **8** when used only inside MFA. Check against breached passwords (Have I Been Pwned (HIBP) API). Allow long passphrases (any maximum at least 64) and special characters. No forced composition rules, no forced regular changes (only on suspected breach).
+   - Reset flow: the response is the same whether or not the email exists. Token random, ≥ 256 bits, stored as a hash, expires in 15 minutes. After the new password is set, revoke all old sessions and send a confirmation email. All 9 steps: [`references/auth-flows.md`](references/auth-flows.md).
 
-**Implementation requirements:**
-- Cookie: `HttpOnly`, `Secure`, `SameSite=Lax` (or Strict)
-- Session ID: cryptographically random, ≥ 128 bits
-- Session storage: Redis with a time-to-live (TTL). Not in app memory if you run more than one instance
-- Idle timeout: 30 min default
-- Absolute timeout: 8-12 hours
-- Issue a new session ID when privileges change (login, role change)
-- On logout, delete the session from the store
+7. **Lockout and rate limiting.** 5 failed attempts in 15 min → lock 15 min; 10 in 1 hour → lock 1 hour; key on IP + email together. Message "Too many failed attempts. Try again in 15 minutes." Never "Account locked." (reveals the account exists). Use existing tools: [`references/libraries-and-code.md`](references/libraries-and-code.md).
 
-**Pitfalls:**
-- ผิด: Storing session in JWT (can't revoke)
-- ผิด: Using `localStorage` for the session token (cross-site scripting (XSS) can steal it)
-- ผิด: Keeping the same ID after login (session fixation)
+8. **API authentication.** API key for simple server-to-server · OAuth 2.0 Client Credentials for service-to-service · mTLS for high-security internal · HMAC signing for webhooks. For an API key, show the secret once at creation, store it as a hash, let users revoke it at once. Table: [`references/api-auth-and-authorization.md`](references/api-auth-and-authorization.md).
 
-## Pattern 2: JWT (Stateless Token)
+9. **Authorization.** RBAC (Role-Based Access Control) as the main model; ABAC (Attribute-Based Access Control) when permissions depend on data attributes. Check at every endpoint, on the server, using the user from the session or token. Never trust a role sent by the client or JWT claims as the authorization source.
 
-**When to use:** microservices, mobile, single-page app (SPA) with a backend API
+## Check before done
+- [ ] Session ID regenerated on login (fixation)
+- [ ] CSRF token or SameSite cookie
+- [ ] Rate limiting (brute force) and HIBP check or MFA (credential stuffing)
+- [ ] Redirect URLs on an allowlist (open redirect)
+- [ ] Same error message every time (user enumeration)
+- [ ] Constant-time comparison (timing attacks)
+- [ ] No token in the URL; header or cookie only
+- [ ] Logout invalidates on the server
+- [ ] Authorization re-checked after a role change
+- [ ] No homemade crypto or auth; no reversible password storage
 
-> Caution: **JWT is overused.** If you have a single backend, sessions are simpler and safer.
-
-**Implementation requirements:**
-- Algorithm: `RS256` or `ES256` (NOT `HS256` for distributed systems)
-- Short-lived access token: 5-15 min
-- Refresh token: longer-lived (days), stored separately, revocable
-- Issue a new refresh token each time one is used
-- Required claims: `sub`, `iat`, `exp`, `iss`, `aud`
-- Store JWT in `HttpOnly Secure cookie` (NOT localStorage)
-- Have a way to cancel tokens (blocklist, short expiry, etc.)
-
-**Pitfalls:**
-- ผิด: `alg: none` attacks (check the algorithm explicitly)
-- ผิด: Storing JWT in `localStorage` (XSS-stealable)
-- ผิด: Long-lived access tokens (you can't cancel them)
-- ผิด: Putting sensitive data in JWT (it's base64, not encrypted)
-- ผิด: Skipping signature verification
-
-## Pattern 3: OAuth 2.0 / OIDC
-
-**When to use:** "Login with Google/GitHub", or handing login to an identity provider (IdP)
-
-Use Authorization Code Flow with PKCE (Proof Key for Code Exchange) always, because it stops a stolen code from being exchanged for a token. The steps are in [references/auth-flows.md](references/auth-flows.md)
-
-**Implementation requirements:**
-- **Always use PKCE** (even for confidential clients)
-- Validate `id_token` signature (use IdP's JWKS)
-- Validate `aud`, `iss`, `exp`, `nonce`
-- Use the `state` parameter to prevent cross-site request forgery (CSRF)
-- Match `code_verifier` to `code_challenge`
-- Use a library, don't write your own (Auth0, Passport.js, etc.)
-
-**Pitfalls:**
-- ผิด: Implicit flow (deprecated, insecure)
-- ผิด: Resource Owner Password Credentials flow (deprecated)
-- ผิด: Skipping `state` validation (CSRF risk)
-- ผิด: Trusting `id_token` without verifying signature
-
-## Pattern 4: Multi-Factor Authentication (MFA)
-
-There are 3 types. For a new app, use WebAuthn (passkeys) as the default, because there is no shared secret to steal. If you need 2FA that users can set up easily and that is standard, use TOTP. Use SMS or email only as a last resort, because SMS is not safe against SIM swap. Details of all 3 are in [references/mfa.md](references/mfa.md)
-
-## Pattern 5: Password Management
-
-### Storage
-- ถูก: **Argon2id** (preferred) or **bcrypt** (cost factor ≥ 12)
-- ผิด: Never: MD5, SHA-1, SHA-256 raw, plain text
-
-### Password policy (NIST SP 800-63B-4 §3.1.1.2, checked 2026-10-14 at pages.nist.gov/800-63-4/sp800-63b.html)
-- ถูก: Minimum **15 characters** when the password is the only factor · minimum **8** when it is used only inside multi-factor authentication (MFA)
-- ถูก: Check against a list of breached passwords (Have I Been Pwned (HIBP) API)
-- ถูก: Allow long passphrases (any maximum must be at least 64 chars)
-- ถูก: Allow special characters (don't restrict them)
-- Don't force composition rules (uppercase + digit + symbol)
-- Don't force regular password changes (only when you suspect a breach)
-
-### Password reset flow
-
-Must-haves for password reset: the response message must be the same whether or not the email exists in the system. The token must be random with at least 256 bits, stored as a hash, and expire in 15 minutes. After the new password is set, revoke all old sessions and send a confirmation email. All 9 steps in order are in [references/auth-flows.md](references/auth-flows.md)
-
-## Pattern 6: Account Lockout & Rate Limiting
-
-```
-Login attempts:
-- 5 failed attempts in 15 min → lock account 15 min
-- 10 failed attempts in 1 hour → lock 1 hour
-- Use IP + email combo, not just one
-
-Lockout messaging:
-ถูก: "Too many failed attempts. Try again in 15 minutes."
-ผิด: "Account locked." (reveals account exists)
-```
-
-Use existing tools instead of writing your own. The list of tools is in [references/libraries-and-code.md](references/libraries-and-code.md)
-
-## Pattern 7: API Authentication
-
-Choose by caller: API key for simple server-to-server · OAuth 2.0 Client Credentials for service-to-service · mTLS for internal systems that need high security · HMAC signing for verifying webhooks. For an API key, show the secret only once at creation, store it as a hash, and let users revoke it immediately. The comparison table and full principles are in [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md)
-
-## Authorization Patterns (after authentication)
-
-Use RBAC (Role-Based Access Control) as the main model, and use ABAC (Attribute-Based Access Control) when you need fine-grained permissions based on data attributes. Examples are in [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md)
-
-### Implementation tip
-- Check authorization at every endpoint
-- Don't trust a role sent by the client
-- Check on the server, using the user from the session or token
-
-## Common Vulnerabilities Checklist
-
-- [ ] Session fixation (regenerate ID on login)
-- [ ] CSRF (token or SameSite cookie)
-- [ ] Brute force (rate limiting)
-- [ ] Credential stuffing, i.e. logins with leaked passwords (HIBP check, MFA)
-- [ ] Open redirect (allowlist redirect URLs)
-- [ ] User enumeration, i.e. finding which accounts exist (same error message every time)
-- [ ] Timing attacks (compare in constant time)
-- [ ] Token in URL (use header or cookie)
-- [ ] Logout that does nothing on the server (invalidate server-side)
-- [ ] Privilege escalation (re-check after role change)
-
-## Anti-patterns
-
-- Writing your own crypto or auth (use libraries)
-- Storing passwords reversibly
-- JWT for sessions when you have one backend
-- Long-lived JWT without rotation
-- Authentication without authorization checks
-- Trusting JWT claims as authorization source
-- Logout that doesn't invalidate token server-side
-- Allowing weak passwords for compliance "convenience"
+## References
+- [`references/auth-flows.md`](references/auth-flows.md) — open when writing session, JWT, OAuth with PKCE or password reset code
+- [`references/mfa.md`](references/mfa.md) — open when building MFA (TOTP setup, WebAuthn, SMS limits)
+- [`references/api-auth-and-authorization.md`](references/api-auth-and-authorization.md) — open when designing API keys or RBAC/ABAC
+- [`references/libraries-and-code.md`](references/libraries-and-code.md) — open when choosing a library or needing hashing and rate-limit samples
+- [`references/sources.md`](references/sources.md) — NIST source and check date
 
 
 ## reference: api-auth-and-authorization.md
@@ -1649,3 +1463,10 @@ Verify:
 - Use only as a last resort, never as the main method
 - Use strict rate limits
 - Codes: 6 digits, 5 min expiry
+
+
+## reference: sources.md
+
+# Sources · auth-implementation-patterns
+
+- Password policy (minimum 15 characters as the only factor, 8 inside multi-factor authentication, breached-password check, no composition rules, no forced rotation, maximum at least 64): NIST SP 800-63B-4 §3.1.1.2, https://pages.nist.gov/800-63-4/sp800-63b.html, checked 2026-10-14.

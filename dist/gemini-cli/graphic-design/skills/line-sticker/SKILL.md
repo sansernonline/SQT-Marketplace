@@ -7,8 +7,6 @@ description: Use when making LINE stickers that must pass file limits
 
 > **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists · close the work with the line `ด่านก่อนลงมือ:`
 
-Lives in plugin `graphic-design` · write the wording by `human-writing`
-
 > **The one rule:** check the files with `scripts/sticker_check.py` before every upload, and re-open LINE's official pages to confirm the limits once the check date has passed · the limits below were checked on 2026-11-10
 
 A sticker is read on a chat background, small, in half a second. One feeling per sticker, one short Thai phrase, a thick outline, no detail that vanishes at 100 px.
@@ -32,7 +30,7 @@ A sticker is read on a chat background, small, in half a second. One feeling per
 | ZIP of everything | ≤ 60 MB | ≤ 60 MB | < 20 MB |
 | Margin | about 10 px between the drawing and the image edge | not stated | not stated |
 
-Sources, read 2026-11-10: https://creator.line.me/en/guideline/sticker/ · https://creator.line.me/en/guideline/animationsticker/ · https://creator.line.me/en/guideline/emoji/ · the animated page also says the size is "within 320 × 270, with width or height at least 270 px" (read through a page summary, (รอยืนยัน) the exact wording) · re-check by 2027-05-10 · the same numbers live in [references/sticker-limits.json](references/sticker-limits.json)
+Sources and read dates: [references/sources.md](references/sources.md) · re-check by 2027-05-10 · the same numbers live in [references/sticker-limits.json](references/sticker-limits.json) · the animated page also says the size is "within 320 × 270, with width or height at least 270 px" (read through a page summary, (รอยืนยัน) the exact wording)
 
 Not read yet: LINE's content rules (what is rejected), the review time, the sales split and the copyright terms. Open the Creators Market guideline pages for those before promising an approval. (รอยืนยัน)
 
@@ -52,10 +50,6 @@ Asked "will it be approved" or "what share do I get": the script checks file num
 
 Uploading to a Creators Market account, accepting terms, or publishing a set for sale needs the owner's own yes · never use a login or token that was not handed over for this.
 
-## Worked example
-
-Task: a dessert shop makes a set of 8 static stickers from an existing cartoon cat · Do: list 8 situations, draw all 8 images at 370 × 320 with a transparent background, make `main.png` 240 × 240 and `tab.png` 96 × 74, then run `python scripts/sticker_check.py sticker-set --kind static` · Result: if one image is 371 × 320, the script answers `ไม่ผ่าน: 03.png: 371×320 ...`. Fix it and rerun until it shows `ผ่านทุกข้อ`
-
 ## Check before sending
 
 1. The script shows `ผ่านทุกข้อ` on the real folder
@@ -63,10 +57,10 @@ Task: a dessert shop makes a set of 8 static stickers from an existing cartoon c
 3. The whole set uses the same character in every image (`design-review` item 7)
 4. The line `ด่านก่อนลงมือ:` is present and the work passes the eye check of `no-ai-look`
 
-## Sources
+## References
 
-- The 3 LINE Creators Market guideline pages above · read 2026-11-10
-- The checker script follows the pattern of `line-richmenu/scripts/richmenu_check.py` · the idea of "report pass/fail per item" comes from anthropics/skills `slack-gif-creator` `core/validators.py` (checked 2026-11-10: it was rewritten entirely and no code was copied)
+- [`references/worked-example.md`](references/worked-example.md) — open for a worked example of a set of 8 static stickers
+- [`references/sources.md`](references/sources.md) — LINE guideline pages and read dates
 
 ## Related
 

@@ -25,7 +25,6 @@ description: Use when a system must record who did what and when
 | Permissions and identity verification | `auth-implementation-patterns` | instead |
 | Consent and data-subject rights | `pdpa-compliance` | instead |
 | Requirements on what to keep and for how many years | `srs-writing` | together |
-| Abbreviations in work that people read | `spell-out-abbreviations` | together |
 
 ---
 
@@ -148,17 +147,3 @@ Show it as a sentence people can read, not raw JSON (the sample below is the Tha
 ```
 
 Show the time in the viewer's time zone, but store it as UTC (see `i18n-and-locale`).
-
----
-
-## 8 · Anti-patterns
-
-- **Keeping the audit in general log files**: deleted by retention within a month
-- **Recording the actor's name instead of the id**: when they change their surname, the old history turns into a different person
-- **Recording only successes**: the denied attempts are what auditors look for
-- **Recording only "edited data"** without saying from what to what
-- **The app has UPDATE permission on the audit table**: a trail that can be edited is not a trail
-- **Writing the audit outside the transaction**: the transaction succeeds but there is no record
-- **Recording every click**: the important entries sink in a pile of data nobody uses
-- **Copying sensitive data into the audit**: it creates a new leak by accident
-- **No screen to view it**: the data exists, but a developer must run a query every time a customer asks

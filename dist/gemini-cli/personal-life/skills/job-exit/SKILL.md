@@ -65,8 +65,6 @@ Write the expected amount next to each row, and the section from the "Rule lives
 - **Keep social security under section 39:** possible if you paid under section 33 for at least 12 months; apply within 6 months of leaving (form สปส. 1-20). sso.go.th, section 39 page, viewed 2026-11-10.
 - **Tax on severance:** severance under the labour law for leaving not by choice is exempt up to the last 400 days' wages and no more than 600,000 บาท; with 5 years of service or more you may choose to tax it separately from other income on the ภ.ง.ด.91 attachment. Revenue Department, PND 91 instructions for tax year 2568, viewed 2026-11-10. Details → `labour-law-basics` `references/leave-and-severance.md` item 9 (e-commerce, if installed); working it out with your own figures and the withholding → an accountant.
 
-Sources: https://www.sso.go.th/wpr/ (hotline 1506; unemployment and section 39 detail pages under "สิทธิประโยชน์") · https://www.rd.go.th/fileadmin/tax_pdf/pit/2568/Ins91_241268.pdf · https://rd.go.th/65809.html · viewed 2026-11-10.
-
 ## 6 · Where to complain
 
 | Channel | What it does | Contact |
@@ -74,8 +72,6 @@ Sources: https://www.sso.go.th/wpr/ (hotline 1506; unemployment and section 39 d
 | Department of Labour Protection and Welfare (กรมสวัสดิการและคุ้มครองแรงงาน) | Questions about rights; complaints about unpaid money | hotline **1546** (or 1506 then 3) |
 | Labour inspector (พนักงานตรวจแรงงาน), form **คร.7** | When the employer does not pay wages, overtime, holiday pay, severance or a deposit owed. File with the inspector where you worked or where the employer is based, or online; decided within 60 days, extendable by 30 | provincial labour office · online via s90.labour.go.th/e_request |
 | Free legal aid | Before signing a release, or when going to the labour court | see `legal-help-prep`, section 6 |
-
-Sources: https://www.labour.go.th (hotline line in the page footer) · https://nakhonsawan.labour.go.th/การยื่นคำร้อง/469-work-25657 (คร.7, a provincial office page) · viewed 2026-11-10. The labour court itself was not checked for this skill (ยังไม่ได้ตรวจ).
 
 Preparing the visit (facts table, deadlines, contact log) → `legal-help-prep`.
 
@@ -86,10 +82,6 @@ Preparing the visit (facts table, deadlines, contact log) → `legal-help-prep`.
 3. Ask for the work certificate and the 50 ทวิ for the year.
 4. Unemployment and section 39 → section 5.
 
-## Worked example
-
-`ตัวอย่าง` Salary 30,000 a month, started 2022-03-01, HR hands over a "mutual agreement" on 2026-11-10 offering one month's pay and asks for a signature today. Steps: the user asks for 3 days to read · saves the contract, 12 payslips, the agreement and the LINE message from HR · rights table: 4 years 8 months of service → the band for 3 to under 6 years in `labour-law-basics` §5 gives far more than one month · no notice given → pay in lieu also due · 4 days of annual leave left · the agreement has a clause giving up all claims → the user does not sign, takes the table to the labour office (section 6) and books a visit with `legal-help-prep`. No ruling on whether the termination is fair.
-
 ## Check before sending
 
 - [ ] The first line tells the user not to sign today
@@ -98,6 +90,7 @@ Preparing the visit (facts table, deadlines, contact log) → `legal-help-prep`.
 - [ ] Every row the agent could not compute is `[ตรวจ]`
 - [ ] Says it is not legal advice, and no ruling on fairness
 
-## Source
+## References
 
-Ideas from anthropics/claude-for-legal `employment-legal/skills/termination-review` (employer's side, Apache-2.0, turned to the employee's side and rewritten, viewed 2026-11-10).
+- [`references/worked-example.md`](references/worked-example.md) — open for a full example of a "mutual agreement" offer
+- [`references/sources.md`](references/sources.md) — official pages viewed 2026-11-10 (SSO · Revenue Department · labour office)

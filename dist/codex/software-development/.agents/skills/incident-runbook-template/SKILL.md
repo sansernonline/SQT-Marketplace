@@ -5,8 +5,6 @@ description: Use when writing a runbook or on-call guide
 
 # Incident Runbook Template
 
-> **Language:** write every line per `human-writing`. This skill gives the format and the structure, while human-writing says how to write so a person can follow it.
-
 ## When to use this skill
 
 - Writing a runbook for a known failure mode
@@ -40,19 +38,7 @@ Before using the structure or template in this file, check whether the user, cus
 
 ## What's a Runbook?
 
-A **runbook** answers: "Alert X fired. What do I do?"
-
-It's NOT:
-- A postmortem (that analyses the incident afterwards)
-- Architecture documentation (that explains the bigger picture)
-- Training material (that goes into too much detail)
-
-It IS:
-- Step-by-step actions
-- Decision flowcharts
-- Commands to copy-paste
-- Escalation paths
-
+A **runbook** answers: "Alert X fired. What do I do?" It is not architecture documentation (the bigger picture) or training material (too much detail).
 ## Runbook Quality Standards
 
 A good runbook is:
@@ -116,11 +102,8 @@ Test a runbook by deliberately simulating a failure. Each quarter, pick one runb
 ## Anti-patterns
 
 - **Theoretical runbooks** written by someone who never saw the failure
-- **Long background text** before the first action
 - **"Contact the team"** without saying who or how
 - **Treating mitigation as the root-cause fix** (mitigation should be FAST; the fix comes later)
-- **Runbook in a wiki nobody can find** — link from alert
-- **Update postmortems but not runbooks** — every postmortem should lead to a runbook update
 
 ## Document Look
 
@@ -132,5 +115,3 @@ load the matching skill before writing, not after:
 | Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
 | A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
 | The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
-
-Default formatting is not neutral — it reads as unfinished work.

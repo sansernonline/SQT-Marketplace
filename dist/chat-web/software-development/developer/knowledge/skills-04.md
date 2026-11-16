@@ -2,17 +2,98 @@
 
 Use when writing MQL4 or MQL5 code for MetaTrader
 
-# stack · MQL — an Expert Advisor (EA) that sends orders correctly, on every broker, every time
+# stack-mql — an Expert Advisor (EA) that sends orders correctly on every broker
 
 > **One rule:** every order goes through the pre-send checker and every returned result is read · an EA that "works in the tester" but does not check is not done.
 
-For EAs · indicators · scripts on MetaTrader 4 (MT4) and MetaTrader 5 (MT5) · strategy, risk and backtest criteria live in the project's trading spec (if using the repo's prompt set: `prompt/software-development/prompt-trading-system.md` — someone who installed only the plugin will not have this file; ask the owner for the spec) · general principles are in `lazy-coding` · `readable-code` · `testing-standards` · `logging-standards` · `error-handling-patterns`
+## Use when
 
-## 1 · Start: know which platform you are writing for
+- Writing or reviewing an EA, indicator or script for MetaTrader 4 (MT4) or MetaTrader 5 (MT5)
+- Porting between MT4 and MT5
+- Preparing an EA for the MQL5 Market or for self-sale
 
-- `.mq4` file = MQL4 (MT4) · `.mq5` = MQL5 (MT5) · `.mqh` = an include that can be shared if the differing parts are separated behind `#ifdef __MQL5__`
-- In MQL4 put `#property strict` in every file (without it the compiler lets data-type bugs through)
-- Compiling and testing need a terminal (Windows, or the Wine build MetaQuotes distributes for macOS / Linux) · on a machine without one → write in the report "ยังไม่ได้ compile" (not yet compiled); never say it passed
+Not for: strategy, risk and backtest criteria → the project's trading spec (repo prompt set: `prompt/software-development/prompt-trading-system.md`; someone with only the plugin does not have it, so ask the owner for the spec) · backtest formulas → agent `quant-analyst` · only a `.ex5` and no source → `reverse-engineering` (`references/mql5-ex5.md`; extract behaviour in the Strategy Tester and rewrite, do not decompile)
+
+## Steps
+
+1. **Know the platform:** `.mq4` = MQL4 (MT4) · `.mq5` = MQL5 (MT5) · `.mqh` = an include, shareable if the differing parts sit behind `#ifdef __MQL5__`. In MQL4 put `#property strict` in every file. Differences that break a port, return codes, compile and command-line backtest → [`references/platform.md`](references/platform.md).
+2. **Compile when a terminal exists.** On a machine without one, write "ยังไม่ได้ compile" in the report; never say it passed.
+3. **Pass every order through the pre-send checker:**
+
+| Check | Do this |
+|---|---|
+| volume | round down to `SYMBOL_VOLUME_STEP` · between `SYMBOL_VOLUME_MIN` and `SYMBOL_VOLUME_MAX` |
+| price | `NormalizeDouble(price, _Digits)` |
+| Stop Loss (SL) / Take Profit (TP) | at least `SYMBOL_TRADE_STOPS_LEVEL` × `_Point` away from the current price |
+| modifying | not when the price is within `SYMBOL_TRADE_FREEZE_LEVEL` · do not resend the same values |
+| margin | `OrderCalcMargin` (MT5) · `AccountFreeMarginCheck` (MT4) before sending |
+| order count | less than `ACCOUNT_LIMIT_ORDERS` (0 = unlimited) |
+| symbol | `SYMBOL_TRADE_MODE` is not disabled · market is open |
+| MT5 whole set | `OrderCheck()` before `OrderSend()` |
+
+4. **Read every returned result.** Requote / off quotes → retry at most 3 times, with a new price each time. Not enough money / invalid stops → do not retry; log and stop that trade.
+5. **Convert pips at one place only:** a 5-digit price (3-digit for JPY pairs) → 1 pip = 10 points.
+6. **Structure the EA:**
+   - `OnInit` validates every input (wrong value → `INIT_PARAMETERS_INCORRECT`), creates handles; `OnDeinit` releases them. MT5 indicators: handle once in `OnInit`, then `CopyBuffer`.
+   - Do heavy logic once per new bar (compare `iTime(_Symbol, _Period, 0)` with a remembered value), not on every tick.
+   - A magic number per EA + symbol + strategy; manage only orders whose magic matches, never manual orders or another EA's.
+   - Never keep important state only in a variable: `OnInit` rebuilds state from positions/orders with a matching magic; values that cannot be rebuilt (such as today's loss total) go in `GlobalVariableSet` or a file in `MQL5\Files` / `MQL4\Files`.
+   - Use server time (`TimeCurrent`) for bars and sessions; it is not Thai time and shifts with daylight saving. In the tester `TimeGMT()` equals the simulated server time (https://www.mql5.com/en/docs/dateandtime/timegmt), so news and session filters based on GMT take the offset as an input.
+   - Keep signal · lot size · order sending · managing open orders separate; the signal is a pure function from bar data to a result.
+   - Log every decision to send or not send: server time · symbol · reason · price · spread · returned result. Do not log every tick.
+7. **Test:**
+   - Script test: feed fixed data to the signal and lot-size functions and compare (MQL has no standard test framework).
+   - Backtest: MT5 "Every tick based on real ticks" for results used to decide; MT4 reports modelling quality every time; spread · commission · swap set to the real account, not 0.
+   - Cover at least 3 symbols with different digits (EURUSD · USDJPY · XAUUSD), at least 2 timeframes, netting and hedging (MT5), and a capital so small the minimum lot cannot be sent.
+   - Never judge from optimized results: use MT5's forward period or split in-sample / out-of-sample yourself; report the period not used for optimizing.
+   - `OnTester()` returns the criterion the spec defines.
+8. **Security:** passwords, API keys and license keys never go in code or `.set`. `WebRequest` works only with URLs the user added to the terminal's allow list; say in the manual which URLs to add.
+9. **If selling:** MQL5 Market rules (no DLL, no account lock, the check must see real orders, no profit promise) and self-sale license lock → [`references/market-and-license.md`](references/market-and-license.md).
+
+## Check before done
+
+- Compiles with 0 errors 0 warnings (or the report says it was not compiled because there is no terminal)
+- Every order passes the checker · every returned result is read and logged
+- Magic number · state can be rebuilt after a restart · orders with a non-matching magic are untouched
+- Every input has a default and a range checked in `OnInit`
+- Backtest uses real spread · commission · swap · the reported result comes from a period not used for optimizing
+- Cases cover at least 3 symbols · 2 timeframes (· netting and hedging for MT5)
+- Selling on the Market: no DLL · no account or symbol lock · the description promises no profit
+
+## References
+
+- [`references/platform.md`](references/platform.md) — open when compiling, backtesting from the command line, porting MT4 ↔ MT5, reading result codes, or hunting a trap (double compare, index shift, ECN SL/TP)
+- [`references/market-and-license.md`](references/market-and-license.md) — open when the EA will be sold
+
+General principles: `lazy-coding` · `readable-code` · `testing-standards` · `logging-standards` · `error-handling-patterns` · `config-and-secrets`
+
+
+## reference: market-and-license.md
+
+# Selling on the MQL5 Market and self-sale · stack-mql
+
+Open when the EA will be sold, or when it needs a license lock.
+
+## MQL5 Market
+
+Last checked 2026-10-20 · source: https://www.metatrader5.com/en/terminal/help/market/market_sell · the rules can change; re-check before submitting
+
+- Submit a single compiled file (`.ex5` / `.ex4`) · indicators · sounds · images embedded as resources · **no Dynamic Link Library (DLL)**
+- **Do not restrict by account number or account type** · the Market locks machines and the number of activations itself · our license system below is for self-sale channels only.
+- The automatic check runs the EA in the tester on several symbols and timeframes · the EA must really send orders in every one of those conditions (sending none = fail) · having every item of the pre-send checker is what makes it pass.
+- Do not promise profit in the description · the product name in Latin letters is at most 50 characters with no version number · state it if it works only with hedging or netting.
+
+## Self-sale (not through the Market)
+
+- Lock the license with the account number (`ACCOUNT_LOGIN`) + an expiry date, checked in `OnInit`.
+- Do not give the customer the `.mq4` / `.mq5` · `.ex4` / `.ex5` files can be partly decompiled, so do not put secret rules only inside the EA.
+
+
+## reference: platform.md
+
+# MT4 and MT5: compile, backtest and port differences · stack-mql
+
+Open when compiling or backtesting from the command line, porting between MT4 and MT5, or reading a returned result code.
 
 | Step | MT5 | MT4 |
 |---|---|---|
@@ -22,7 +103,9 @@ For EAs · indicators · scripts on MetaTrader 4 (MT4) and MetaTrader 5 (MT5) ·
 
 Last checked 2026-10-20 · source: https://www.metatrader5.com/en/terminal/help/start_advanced/start · re-check this page before use
 
-## 2 · Differences that break a port between MT4 and MT5
+Compiling and testing need a terminal (Windows, or the Wine build MetaQuotes distributes for macOS / Linux).
+
+## Differences that break a port
 
 | Topic | MT4 | MT5 |
 |---|---|---|
@@ -33,73 +116,18 @@ Last checked 2026-10-20 · source: https://www.metatrader5.com/en/terminal/help/
 | order send result | `GetLastError()` (130 invalid stops · 134 not enough money · 138 requote · 146 trade context busy) | `MqlTradeResult.retcode` (10009 done · 10008 placed (pending order) · 10010 done partial = success · 10004 requote · 10014 invalid volume · 10015 invalid price · 10016 invalid stops · 10018 market closed · 10019 not enough money · 10030 invalid filling) |
 | order events | none; you must poll | `OnTradeTransaction` |
 
-## 3 · The pre-send order checker (every order, every time)
+## Traps where the code looks right but really breaks
 
-| Check | Do this | What you hit if you skip it |
-|---|---|---|
-| volume | round down to `SYMBOL_VOLUME_STEP` · between `SYMBOL_VOLUME_MIN` and `SYMBOL_VOLUME_MAX` | 10014 · error 131 |
-| price | `NormalizeDouble(price, _Digits)` | 10015 |
-| Stop Loss (SL) / Take Profit (TP) | at least `SYMBOL_TRADE_STOPS_LEVEL` × `_Point` away from the current price | 10016 · error 130 |
-| modifying an order | do not modify when the price is within `SYMBOL_TRADE_FREEZE_LEVEL` · do not resend the same values | rejected · 10025 no changes |
-| margin | `OrderCalcMargin` (MT5) · `AccountFreeMarginCheck` (MT4) before sending | 10019 · error 134 |
-| order count | less than `ACCOUNT_LIMIT_ORDERS` (0 = unlimited) | rejected |
-| symbol | `SYMBOL_TRADE_MODE` is not disabled · market is open | 10018 |
-| MT5 whole set | `OrderCheck()` before `OrderSend()` | an error that cannot tell which item is wrong |
+Adapted from ThomasPraun/mql-developer · MIT.
 
-- Read every returned result · requote / off quotes → retry at most 3 times, with a new price each time · not enough money / invalid stops → do not retry; log and stop that trade.
-- pip and point are not equal: a 5-digit price (or 3-digit for JPY pairs) → 1 pip = 10 points · if the user enters input in pips, convert at a single place.
-- **Traps where the code looks right but really breaks** (adapted from ThomasPraun/mql-developer · MIT): `double` cannot be compared with `==`; `NormalizeDouble` both sides or compare against a tolerance · in MT4, closing several orders must loop from `OrdersTotal()-1` down to 0 because the index shifts after a close · some ECN brokers do not accept SL/TP in `OrderSend`, so send first and then `OrderModify` · `WebRequest` blocks until it gets a reply and cannot be used in indicators and the tester · one MT4 terminal can trade with only one EA at a time (error 146); wait and retry, do not resend at once · a series array has index 0 = the latest bar; always mark with `ArraySetAsSeries`, never guess the direction.
+- `double` cannot be compared with `==`; `NormalizeDouble` both sides or compare against a tolerance.
+- In MT4, closing several orders must loop from `OrdersTotal()-1` down to 0 because the index shifts after a close.
+- Some ECN brokers do not accept SL/TP in `OrderSend`, so send first and then `OrderModify`.
+- `WebRequest` blocks until it gets a reply and cannot be used in indicators and the tester.
+- One MT4 terminal can trade with only one EA at a time (error 146); wait and retry, do not resend at once.
+- A series array has index 0 = the latest bar; always mark with `ArraySetAsSeries`, never guess the direction.
 
 Sample code for each checker item → https://www.mql5.com/en/articles/23204 (read it and write your own; do not copy the whole file)
-
-## 4 · An EA structure that is easy to read and recoverable
-
-- `OnInit` validates every input (wrong value → `INIT_PARAMETERS_INCORRECT`) · create handles · `OnDeinit` releases the handles.
-- Do heavy logic once per new bar (compare `iTime(_Symbol, _Period, 0)` with a remembered value), not on every tick.
-- A magic number per EA + symbol + strategy · count and manage only orders whose magic matches; never touch manual orders or another EA's.
-- **Never keep important state only in a variable:** a terminal restart → state is lost · `OnInit` rebuilds state from the positions/orders with a matching magic · values that cannot be rebuilt (such as today's loss total) are stored with `GlobalVariableSet` or a file in `MQL5\Files` / `MQL4\Files`.
-- Time: use server time (`TimeCurrent`) to decide bars and sessions · each broker's server time is not Thai time and shifts with daylight saving · in the tester `TimeGMT()` always equals the simulated server time (source: https://www.mql5.com/en/docs/dateandtime/timegmt) → news and session filters based on Greenwich Mean Time (GMT) must take the offset as an input.
-- 1 function, 1 job: signal · lot size · sending the order · managing open orders are kept separate · the signal is a pure function that takes bar data and returns a result (testable in a script).
-- Log every decision to send or not send an order: server time · symbol · reason · price · spread · returned result · do not log every tick.
-
-## 5 · test
-
-- **script test:** test the signal and lot-size functions with a script that feeds fixed data and compares the result (MQL has no standard test framework).
-- **backtest:** MT5 uses the "Every tick based on real ticks" mode for results used to decide · MT4 reports modelling quality every time · spread · commission · swap are set to the real account, not 0.
-- **Test under several conditions:** at least 3 symbols with different digits (such as EURUSD · USDJPY · XAUUSD) · at least 2 timeframes · netting and hedging accounts (MT5) · a capital so small the minimum lot cannot be sent.
-- **Do not judge from optimized results:** use MT5's forward period or split in-sample / out-of-sample yourself · the reported numbers are the results of the period not used for optimizing.
-- `OnTester()` returns the criterion the spec defines (such as profit factor with drawdown under the limit) so the optimizer picks by the real criterion, not maximum profit.
-
-## 6 · Selling on the MQL5 Market
-
-Last checked 2026-10-20 · source: https://www.metatrader5.com/en/terminal/help/market/market_sell · the rules can change; re-check before submitting
-
-- Submit a single compiled file (`.ex5` / `.ex4`) · indicators · sounds · images embedded as resources · **no Dynamic Link Library (DLL)**
-- **Do not restrict by account number or account type** · the Market locks machines and the number of activations itself · our license system (item 7) is for self-sale channels only.
-- The automatic check runs the EA in the tester on several symbols and timeframes · the EA must really send orders in every one of those conditions (sending none = fail) · having every item of the item 3 checker is what makes it pass.
-- Do not promise profit in the description · the product name in Latin letters is at most 50 characters with no version number · state it if it works only with hedging or netting.
-
-## 7 · Security and self-sale
-
-- Trading account passwords · API keys · license keys never go in the code or `.set` · for values that must be kept, use an input the user types on their own machine.
-- `WebRequest` works only with URLs the user added to the terminal's own allow list · say in the manual which URLs must be added.
-- Self-sale (not through the Market): lock the license with the account number (`ACCOUNT_LOGIN`) + an expiry date, checked in `OnInit` · do not give the customer the `.mq4` / `.mq5` · `.ex4` / `.ex5` files can be partly decompiled, so do not put secret rules only inside the EA.
-
-## 8 · Pre-submit checklist
-
-- [ ] compiles with 0 errors 0 warnings (or the report says it was not compiled because there is no terminal)
-- [ ] every order passes the item 3 checker · every returned result is read and logged
-- [ ] magic number · state can be rebuilt after a restart · orders with a non-matching magic are untouched
-- [ ] every input has a default and a range checked in `OnInit`
-- [ ] backtest uses real spread · commission · swap · the reported result comes from a period not used for optimizing
-- [ ] tested on at least 3 symbols · 2 timeframes (· netting and hedging for MT5)
-- [ ] selling on the Market: no DLL · no account or symbol lock · the description promises no profit
-
-## 9 · Link to other skills
-
-Only a `.ex5` and no `.mq5` (the source is lost, or you want one that trades the same way) → `reverse-engineering`, file `references/mql5-ex5.md`: extract the behavior in the Strategy Tester and rewrite it under the rules of this file · do not decompile.
-
-Backtest formulas and statistics → agent `quant-analyst` · general tests → `testing-standards` · logs → `logging-standards` · secrets → `config-and-secrets` · small checkable steps → `principle-small-verifiable-steps` · selling and pricing → the repo's `prompt/software-development/prompt-sell-product.md` (if using the prompt set)
 
 
 ---
@@ -163,13 +191,11 @@ Use when writing end-to-end tests or fixing flaky ones
 
 | Framework | Best for | Avoid for |
 |-----------|----------|-----------|
-| **Playwright** (recommended) | Modern apps, cross-browser, parallel | Legacy apps with weird patterns |
+| **Playwright** (default recommendation: best developer experience, fast, cross-browser) | Modern apps, cross-browser, parallel | Legacy apps with weird patterns |
 | **Cypress** | Developer experience, easy to learn, single-app | Multi-tab, cross-origin tests |
 | **Selenium** | Legacy, language flexibility | Greenfield projects |
 | **Puppeteer** | Chrome-only, scraping | Cross-browser needs |
 | **WebDriverIO** | Mobile + web, BDD style | Simple use cases |
-
-> **Default recommendation: Playwright** — best developer experience, fast, cross-browser, made by Microsoft
 
 ## Test Structure: Page Object Model (POM)
 
@@ -249,7 +275,7 @@ Never use `page.waitForTimeout` for a fixed-time wait. Wait for a real event ins
 - **In CI:** retry at most 1 time, **only to collect a trace** (`retries: 1` + `trace: 'on-first-retry'`)
 - **Pass on retry = flaky, not a pass** — report it as flaky and fail the run (`failOnFlakyTests: true` in `playwright.config.ts`, Playwright 1.52+) — the same rule as "Expected Values and Failing Tests" above and `testing-standards` (flaky test: fix or delete, never retry until green)
 - **Track flakiness:** a test that fails > 5% of runs is a candidate for quarantine (pulled out of the blocking run)
-- **Quarantine has an expiry date** (idea from ECC e2e-testing): tag the test `@flaky` with an issue link and a date (`test('checkout total @flaky', { annotation: { type: 'quarantine', description: 'until 2026-11-15 · issue #123' } }, ...)`), run the `@flaky` set as a separate non-blocking job so the signal is not lost, and have CI fail when today is past the date — the test is then fixed or deleted, never extended twice
+- **Quarantine has an expiry date**: tag the test `@flaky` with an issue link and a date (`test('checkout total @flaky', { annotation: { type: 'quarantine', description: 'until 2026-11-15 · issue #123' } }, ...)`), run the `@flaky` set as a separate non-blocking job so the signal is not lost, and have CI fail when today is past the date — the test is then fixed or deleted, never extended twice
 - **Don't accept flaky tests:** investigate or delete them. Don't ignore them
 
 ## Authentication in E2E
@@ -660,261 +686,68 @@ Mixed: Requires DB tooling
 
 Use when building test-first from a spec and mockups
 
+# The loop from requirements to code — one requirement per round, test first
+
 > **In SuperUser:** this loop is the core of the playbooks [`feature`](../superuser/references/playbook-feature.md) and [`new-project`](../superuser/references/playbook-new-project.md). If superuser is open, follow the playbook and use this file as the detail of the loop.
 
-# The loop from requirements to code
-
-> **The one rule:** the loop needs a stop condition that **gives a result the moment you run it**.
-> "Finish implementing the requirements" cannot be checked by a machine, while "all 47 tests are green" can.
-
----
-
-## What you must have before starting
-
-| What you need | If missing |
-|---|---|
-| Requirements that are each testable, with an ID such as `FR-AUTH-010` (FR = Functional Requirement) | Stop and use `srs-writing` to make them testable first |
-| A 1-line test command that really runs | Stop and set up the test skeleton first, using `testing-standards` |
-| A command to run the app and look at it (if there are screens) | Skip the image-comparison step for now, and tell the user it was skipped |
-| Mockup images named to match the screens | Ask the user, otherwise the UI will never match |
-
-**Starting without all of these amounts to writing code that nobody can tell is right or wrong**
-
----
-
-## 1 · Round zero — plan, no code yet
-
-Read the requirements and mockups in full, then break them into sub-tasks, **1 requirement per task**
-and write them to `docs/BUILD-PLAN.md`
-
-```markdown
-| # | รหัส | milestone | สิ่งที่ต้องได้ | ไฟล์ที่จะแตะ | test ที่จะเขียน | สถานะ | commit |
-|---|---|---|---|---|---|---|---|
-| 1 | FR-AUTH-010 | M2 | ล็อกอินด้วยอีเมลและรหัสผ่าน | auth/login.ts · auth/session.ts | login_FR-AUTH-010 | ค้างอยู่ | |
-| 2 | FR-AUTH-020 | M2 | ล็อกผู้ใช้หลังผิด 5 ครั้ง | auth/lockout.ts | lockout_FR-AUTH-020 | ค้างอยู่ | |
-```
-
-The `milestone` column takes an `M…` ID from the project plan or the timeline in `BUILD-PLAN.md` (playbook `new-project` step 1) · no timeline → may be empty
-
-**Documents conflict → follow the order, do not guess** — write a 1-line priority order of the documents at the very top of `BUILD-PLAN.md` before splitting the work, for example `ลำดับเอกสาร: TEST-DATA.md > REQUIREMENTS.md > DESIGN.md > mockup` (document order: …)
-- The user has already set an order → use it
-- Not set → use the default: test data with expected values (the clearest numbers) > requirements (Software Requirements Specification — SRS) > design document > mockup, and log it in `decision-log` with `(รอยืนยัน)` (awaiting confirmation)
-- A real conflict found → follow the higher-ranked document, and record the conflicting pair (file · section · both values) under "ค้างอยู่" (pending) for the owner to fix the source · never edit the source documents yourself
-
-**If an item is so ambiguous that you cannot write a test, do not guess** — collect it into a list of questions at the end of the file, put it under the heading **"ค้างอยู่"** (pending) once, and carry on with the other items
-
-> Questions to ask instead of guessing: what is the boundary value · what must happen on failure ·
-> who may see this data · if the item already exists, overwrite or warn
-
-**Check the plan yourself before sending — 5 items, do it yourself, no need to send an agent** (adapted from superpowers `writing-plans` · MIT)
-
-| Item | Ask | If found, do |
-|---|---|---|
-| Complete | Going through every requirement in the SRS or FSD, can you point to a row in the table | Cannot point → add a row |
-| Size | Each row gives a writer 1 sensible thing, not so wide they must guess, not so detailed it becomes code | Wide → split · detailed → leave the signature and the test name |
-| Names match | The types · functions · columns that later rows reference are spelled as the first row set them | Different → fix to one name |
-| Biting cases | Each kind of input and failure path the requirement implies: which row has a test for it | None → add a test name to the owning row |
-| Proportion | A plan many times longer than the requirements = pre-written code, not a plan | Cut the code body to signatures and assertions |
-
-Fix in place when found, no need to check again
-
-At the end of round zero you **must stop** and let the user read the plan first — do not flow on to write code yourself
-
-If building from a single build prompt: read the prompt through before pasting, fix anything that does not match the requirements first, then paste in a fresh session with empty memory to prove the prompt is really complete (reported from the training exercise, not measured against a baseline)
-
----
-
-## 2 · The loop per requirement
-
-```
-อ่าน BUILD-PLAN.md  →  หยิบข้อแรกที่ยังไม่ทำ
-  1. เขียน test ก่อน  ชื่อ test มีรหัสข้อกำหนดอยู่ในชื่อ
-  2. รัน test ให้เห็นว่า "แดง"        ← ข้ามขั้นนี้ไม่ได้
-  3. เขียนโค้ดจน test เขียว
-  4. รัน test ทั้งชุด                  ← กันของเดิมพัง
-  5. หน้าจอ: ถ่ายภาพจริงเทียบ mockup   ← ข้อ 5 ข้างล่าง
-  6. อัปเดตสถานะใน BUILD-PLAN.md + commit หนึ่งข้อต่อหนึ่ง commit (เมื่อได้รับอนุญาตเท่านั้น — ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำในคอลัมน์ commit พร้อม `(รอ commit)`)
-  →  วนข้อถัดไป
-```
-
-**Step 2 is the one people skip most, and the costliest to get wrong** — a test that has never been seen red
-may pass forever whether the code is right or wrong
-
-**If the user says TDD · test-driven · "write the test first"** — that is this very loop, no need to look for another way: red = steps 1–2 (a test named with the requirement ID, which must really be seen red) · green = step 3 (the least code that makes it green, per `lazy-coding`) · refactor = done during step 4 with the whole test set still green, adding no new behaviour in that round · the unit of 1 round is 1 requirement, not 1 function, so it is smaller than people think and larger than textbook TDD · for test skeleton · run command · ratio of unit to integration see `testing-standards` · no testable requirement → you cannot do TDD yet, go back to "What you must have before starting"
-
----
-
-## 3 · Iron rules
-
-1. **Never edit or delete a test to make it pass** — a red test means the code is wrong, not the test
-   A test may be edited only when you can prove it was written wrongly against the requirement, and you must tell the user every time
-2. **1 requirement per round** — never bundle several because "they are similar"
-3. **A single requirement may be tried at most 3 rounds** — fails 2 rounds → split into sub-steps, do not retry the same way · 3 rounds reached → **mark it `ติด` (blocked) and follow "After stuck" below**, do not keep trying on and on
-4. **Never mock the thing under test** — you may mock external things, you may not mock yourself
-5. **Never skip to an easier requirement** before trying 3 rounds — the order in the plan is the real order, and only items already marked `ติด` (blocked) may be skipped
-
-### After stuck — 5 steps
-
-1. **Record why it is stuck** under "ค้างอยู่" (pending): what was tried across all 3 rounds · where you think the problem is · what you need to go on (an answer · data · permission)
-2. **Go back to the last point where tests were green** — keep the pending work in a branch `stuck/<ID>` (if not permitted to commit → keep it as a patch at `_to_delete/patches/stuck-<ID>.patch` instead) and return the line of work to where the whole test set is green. The test of the stuck item stays in that branch or patch too, never delete it
-3. **Items that wait on the stuck item** are marked `ติด` (blocked) with the reason `รอ <ID>` (waiting for <ID>) without trying, then go to the next item in plan order that does not wait on it
-4. **Try 1 more round at the end** — once everything else is done, have a new agent on a larger model try 1 round from branch `stuck/<ID>` (or the kept patch) and record it in step 1 · if an answer is already in the inbox (`.claude/superuser/inbox/`) → start from that answer
-5. **Still stuck** → keep `ติด` (blocked) in the closing report, stating what is needed from the user · if the user answers later → continue from that item per the playbook `pickup-and-pause`
-
----
-
-## 4 · The status file — context will certainly run out
-
-A loop is always longer than one conversation can remember. **State must live in a file, not in the head**
-
-- `docs/BUILD-PLAN.md` — the plan and status. **Read this file before starting every round**
-  This is the only file this loop adds to the main documents folder
-- Status has only 5 values (the same set as `superuser`): `เสร็จ` (done) · `ทำอยู่` (in progress) · `ติด` (blocked) · `รออนุมัติ` (awaiting approval) · `ค้างอยู่` (pending) — work not yet started uses `ค้างอยู่`
-- `ติด` must have a 1-line reason after it
-- Every `เสร็จ` item must have a commit number — no number means not really done · except when not yet permitted to commit (commit only when permitted): put the recommended commit message + `(รอ commit)` (awaiting commit) and test evidence (test name + run result) in place of the number, and it may count as `เสร็จ`
-- At the end of each round, update the headings `## สถานะล่าสุด` (latest status) and `## ประวัติสถานะ` (status history) at the top of the file per `status-report` — the task table and the status table are in the same file under different headings
-
-**Starting a new round without reading this file first is the number 1 cause of rework**
-
-### Files the loop creates along the way — all go to `_to_delete/`
-
-Requirements documents are often `.docx` or `.pdf` and must be converted to text before they can be re-read correctly.
-**A converted file is not a document**, it is a temporary working item of the loop
-
-```
-_to_delete/
-  extracted/       ← .docx .pdf ที่แปลงเป็น .md แล้ว
-  check/           ← ภาพหน้าจอที่ถ่ายไว้เทียบ mockup
-  logs/            ← ผลรัน test ที่เก็บไว้ดูย้อนหลัง
-```
-
-| File | Goes where |
-|---|---|
-| Documents converted to a readable format | `_to_delete/extracted/` |
-| Screenshots taken for checking | `_to_delete/check/` |
-| Test run results · logs | `_to_delete/logs/` |
-| The plan and status `BUILD-PLAN.md` | `docs/` — it is a real document |
-| Code and tests | The project folder |
-
-**Never write converted files into `docs/` mixed with the original documents** — in 3 months nobody will know
-which file is the real one the customer signed and which a machine converted
-
-Full detail is in `temp-file-discipline`
-
----
-
-## 5 · Compare to the mockup with a real image
-
-Reading the code and saying "it matches" does not work. You must really open it and look
-
-```python
-page.set_viewport_size({"width": 1280, "height": 900})   # ให้เท่ากับความกว้าง mockup
-page.goto(url); page.wait_for_timeout(500)
-page.screenshot(path="_to_delete/check/login.png")
-```
-
-Then open both images and compare by these 5 items:
-
-- [ ] Do the order and grouping of elements match
-- [ ] Are spacing and font size close (not pixel-exact)
-- [ ] Are all the states the mockup shows present — empty · loading · error
-- [ ] Does the text match the mockup, or was it made up
-- [ ] Does Thai wrap badly or lose vowels
-
-Wherever they differ, **say so as a list**; do not stay silent and claim done
-Screenshots taken for checking are temporary files — they go to `_to_delete/` per `temp-file-discipline`
-
----
-
-## 6 · Traceability
-
-A test name must contain the requirement ID, for example `test_lockout_after_5_failures_FR_AUTH_020`
-so one command can search which requirement has no test covering it
-
-Close the job with a traceability table: every requirement → the test that covers it → the latest result
-
-> **For any requirement with no test covering it, say plainly that there is none** — never write a shallow test to fill the table
-> A table that is full because you filled it yourself is more dangerous than a table with gaps
-
----
-
-## 7 · When to split into multiple agents
-
-**One criterion: the files to be touched must not overlap at all** — see the "files to touch" column in the plan
-
-| Can split | Cannot split |
-|---|---|
-| Different modules, different screens, files that do not overlap | Touching the same file, even just one — the work will overwrite each other |
-| A **read-only** checking agent running alongside an agent that writes code | Work that already has to wait for the result of another task |
-| Turning requirements into tests for several modules at once | When there is no plan yet — you need a plan first to know where you can split |
-
-**Each agent that writes files must get its own worktree**, per the recipe in `superuser/references/code-extensions.md` section "parallel-split-and-merge" (including how to handle uncommitted work)
-
-Every agent that is split off must receive: the IDs of the requirements it owns · the list of files it may touch ·
-the test command · and all of rule 3
-
-**Never let a split-off agent edit `BUILD-PLAN.md` itself** — have it report back, and the main agent writes the one file
-otherwise the status file breaks before the code does
-
----
-
-## 8 · Signs the loop is breaking
-
-| Symptom | What it really means |
-|---|---|
-| All tests green from the first round without ever being red | The tests test nothing |
-| The number of tests grows faster than the number of requirements closed | Writing tests to make itself pass |
-| One commit touches 15 files | Several requirements bundled, cannot be reverted when it breaks |
-| The same item loops past 3 rounds | The requirement is ambiguous, not the code hard, so go back and ask |
-| Nobody has updated `BUILD-PLAN.md` for 2 rounds | State is in the head, the next round will redo work |
-| Numbers improve but people cannot use it (text off-screen, pale colours, input fields cutting words) | The loop is chasing the metric, not solving the problem → item 10 on guards |
-| The remaining items can be fixed only by adding fake data or hiding content | The ceiling of the data has been reached → item 10 on stop rules |
-
----
-
-## 9 · Anti-patterns
-
-- **Throwing the whole requirements document in one round** — the number 1 cause of messy code
-- **Writing the code first and the tests after** — you get tests that confirm what was just written, not what is needed
-- **Guessing when a requirement is ambiguous** — wrong from the start, but discovered at delivery
-- **Editing a test to make it pass** and then reporting done
-- **Splitting parallel agents on the same file**
-- **Claiming the UI matches the mockup without ever opening it**
-- **Closing the job with no traceability table** — nobody knows what is not yet done
-- **Faking data, hiding content, or relaxing the criteria** to make numbers look good
-
----
-
-## 10 · A loop that adjusts by numbers
-
-Use it when the loop chases a metric (match the existing system · match the mockup · a measurable score) rather than closing requirement by requirement · the loop's contract, the guards against gaming the numbers, the stop rules, and a real measured example are in [`references/metric-loop.md`](references/metric-loop.md) · it must be opened and read before starting this kind of loop
-
----
-
-## 11 · Connecting to other skills
-
-| Need | Use together with |
-|---|---|
-| Make requirements testable first | `srs-writing` |
-| Turn requirements into test cases | `test-case-template` |
-| Test skeleton, test framework, names, coverage | `testing-standards` |
-| Tests that open a real browser | `e2e-testing-patterns` |
-| Write the simplest code that works | `lazy-coding` |
-| Fix when a test is red or the result does not match | `targeted-fix` |
-| Commit message format | `commit-message-format` |
-| Screenshot files taken for checking | `temp-file-discipline` |
-| Test sets and metrics for a number-chasing loop | `test-evidence` item 5 · `e2e-testing-patterns` (oracle-and-mutation) |
-| Record state across conversation rounds | `handoff` |
-| Status summary table at the end of a round | `status-report` |
-
----
-
-## Abbreviations
-
-- **test** — an automated test suite
-- **mockup** — a prototype image of a screen
-- **commit** — recording a change into the version control system
-- **UI** — User Interface
+> **One rule:** the loop needs a stop condition that gives a result the moment you run it. "Finish implementing the requirements" cannot be checked by a machine; "all 47 tests are green" can.
+
+## Use when
+- Building code test-first from a spec (SRS or FSD) and mockups
+- The user says TDD · test-driven · "write the test first": this is that loop. Red = steps 1–2 (test named with the requirement ID, seen red). Green = step 3 (least code, per `lazy-coding`). Refactor = during step 4 with the whole set green and no new behaviour. One round = 1 requirement. Test skeleton, run command and unit/integration ratio: `testing-standards`.
+- A loop that chases a metric (match an existing system or mockup, a measurable score): open `references/metric-loop.md` before starting.
+
+## Steps
+1. **Check prerequisites.** Requirements must each be testable with an ID such as `FR-AUTH-010`; if not, stop and use `srs-writing`. A 1-line test command must really run; if not, stop and set up the test skeleton with `testing-standards`. If there are screens, a command to run the app is needed; if missing, skip image comparison and tell the user. Mockup images must be named to match the screens; if not, ask the user.
+2. **Round zero, no code.** Read requirements and mockups in full. Split into sub-tasks, 1 requirement per task, in `docs/BUILD-PLAN.md` (row format in [`references/plan-and-files.md`](references/plan-and-files.md)): รหัส · milestone · สิ่งที่ต้องได้ · ไฟล์ที่จะแตะ · test ที่จะเขียน · สถานะ · commit.
+3. **Set document order before splitting.** Write one line at the top of `BUILD-PLAN.md`, such as `ลำดับเอกสาร: TEST-DATA.md > REQUIREMENTS.md > DESIGN.md > mockup`. If the user set an order, use it. Otherwise use that default (test data with expected values > SRS > design document > mockup) and log it in `decision-log` with `(รอยืนยัน)`. On a real conflict, follow the higher-ranked document, record the conflicting pair (file · section · both values) under "ค้างอยู่", and never edit the source documents.
+4. **Ambiguous item** (you cannot write a test): do not guess. List it as a question at the end of the file under **"ค้างอยู่"** and carry on with the others.
+5. **Check the plan yourself** (no agent needed) on 5 items; fix in place, no re-check: complete (every requirement has a row) · size (1 sensible thing per row; wide → split, detailed → leave signature and test name) · names match across rows · biting cases (each input and failure path has a test) · proportion (a plan many times longer than the requirements is pre-written code; cut to signatures and assertions). Table in the reference.
+6. **Stop** at the end of round zero and let the user read the plan. Do not flow on into code.
+7. **Per requirement.** Read `BUILD-PLAN.md` first, take the first item not done, then:
+   1. Write the test first, with the requirement ID in its name.
+   2. Run it and see it **red**. Never skip this: a test never seen red may pass whether the code is right or wrong.
+   3. Write code until green.
+   4. Run the whole suite, so old things do not break.
+   5. If there is a screen, take a real screenshot and compare with the mockup (5-item check in the reference). List every difference; never claim done in silence.
+   6. Update status in `BUILD-PLAN.md`, then commit 1 requirement per commit only if permitted. If not permitted, put the recommended commit message with `(รอ commit)` in the commit column.
+8. **Close** with a traceability table: every requirement → the test that covers it → latest result. For a requirement with no test, say plainly there is none; never write a shallow test to fill the table.
+
+## Iron rules
+1. Never edit or delete a test to make it pass. A red test means the code is wrong. Edit a test only when you can prove it was written wrongly against the requirement, and tell the user every time.
+2. 1 requirement per round; never bundle because "they are similar".
+3. At most 3 rounds per requirement. If 2 rounds fail, split into sub-steps instead of retrying the same way. At 3, mark it `ติด` and follow "After stuck".
+4. Never mock the thing under test; only external things.
+5. Never skip to an easier requirement before trying 3 rounds. Only items already `ติด` may be skipped; the plan order is the real order.
+
+### After stuck
+1. Record why under "ค้างอยู่": what was tried in all 3 rounds · where you think the problem is · what you need (answer · data · permission).
+2. Return to the last point where tests were green. Keep the pending work in branch `stuck/<ID>`; if not permitted to commit, keep a patch at `_to_delete/patches/stuck-<ID>.patch`. The stuck item's test stays there too, never deleted.
+3. Items waiting on it are marked `ติด` with reason `รอ <ID>`, untried. Go on to the next item that does not wait on it.
+4. After everything else is done, have a new agent on a larger model try 1 more round from `stuck/<ID>` (or the patch) and record it in step 1. If an answer is already in `.claude/superuser/inbox/`, start from it.
+5. Still stuck: keep `ติด` in the closing report with what is needed from the user. If the user answers later, continue per playbook `pickup-and-pause`.
+
+## The status file
+State lives in `docs/BUILD-PLAN.md`, not in the head. Read it before every round; starting without reading it is the number 1 cause of rework.
+- Status has 5 values: `เสร็จ` · `ทำอยู่` · `ติด` · `รออนุมัติ` · `ค้างอยู่` (not yet started = `ค้างอยู่`). `ติด` needs a 1-line reason.
+- Every `เสร็จ` item has a commit number. If commit is not yet permitted, put the recommended commit message + `(รอ commit)` and the test evidence (test name + run result) in its place; it may then count as `เสร็จ`.
+- At the end of each round update `## สถานะล่าสุด` and `## ประวัติสถานะ` at the top of the file per `status-report`.
+- Converted `.docx`/`.pdf` text, screenshots and logs are temporary: put them in `_to_delete/extracted/` · `_to_delete/check/` · `_to_delete/logs/`, never in `docs/` (see `temp-file-discipline`).
+
+## Parallel agents
+Split only when the files to touch do not overlap at all. Each writing agent gets its own worktree. A split-off agent never edits `BUILD-PLAN.md`; it reports back and the main agent writes it. Recipe and handover list in the reference.
+
+## Check before done
+- Every test name has a requirement ID, and one command can list requirements with no test.
+- Every item in `BUILD-PLAN.md` has a status; every `เสร็จ` has a commit number or `(รอ commit)` plus test evidence.
+- No test was edited to pass without telling the user.
+- Screens were opened and compared with the mockups, or the user was told it was skipped.
+- The traceability table is in the closing report.
+- Loop going wrong (all green with never red · tests growing faster than requirements closed · one commit touching 15 files · same item past 3 rounds · `BUILD-PLAN.md` stale for 2 rounds · fake data or hidden content to lift numbers): stop and see the signs table in the reference.
+
+## References
+- [`references/plan-and-files.md`](references/plan-and-files.md) — open when writing `BUILD-PLAN.md` the first time, running the plan check table, comparing a mockup, splitting agents, or when the loop looks wrong
+- [`references/metric-loop.md`](references/metric-loop.md) — open before any loop that adjusts by a number
 
 
 ## reference: metric-loop.md
@@ -975,6 +808,119 @@ Reason: structure moves the number by about 18 points, and the look by about 2�
 The tests and metrics of a loop like this must be trustworthy first → `test-evidence` item 5
 
 
+## reference: plan-and-files.md
+
+# BUILD-PLAN template, mockup check, parallel split, loop-failure signs
+
+Open this when writing `docs/BUILD-PLAN.md` for the first time, comparing a screen to a mockup, splitting work across agents, or when a loop looks like it is going wrong.
+
+Contents:
+- [BUILD-PLAN.md row format](#build-planmd-row-format)
+- [Where the loop's files go](#where-the-loops-files-go)
+- [Compare to the mockup with a real image](#compare-to-the-mockup-with-a-real-image)
+- [Splitting into multiple agents](#splitting-into-multiple-agents)
+- [Signs the loop is breaking](#signs-the-loop-is-breaking)
+- [Other skills to use together](#other-skills-to-use-together)
+
+## BUILD-PLAN.md row format
+
+```markdown
+| # | รหัส | milestone | สิ่งที่ต้องได้ | ไฟล์ที่จะแตะ | test ที่จะเขียน | สถานะ | commit |
+|---|---|---|---|---|---|---|---|
+| 1 | FR-AUTH-010 | M2 | ล็อกอินด้วยอีเมลและรหัสผ่าน | auth/login.ts · auth/session.ts | login_FR-AUTH-010 | ค้างอยู่ | |
+| 2 | FR-AUTH-020 | M2 | ล็อกผู้ใช้หลังผิด 5 ครั้ง | auth/lockout.ts | lockout_FR-AUTH-020 | ค้างอยู่ | |
+```
+
+The `milestone` column takes an `M…` ID from the project plan or the timeline in `BUILD-PLAN.md` (playbook `new-project` step 1). No timeline: it may be empty.
+
+Questions to ask instead of guessing: what is the boundary value · what must happen on failure · who may see this data · if the item already exists, overwrite or warn.
+
+Plan check, 5 items (adapted from superpowers `writing-plans`, MIT):
+
+| Item | Ask | If found, do |
+|---|---|---|
+| Complete | Going through every requirement in the SRS or FSD, can you point to a row in the table | Cannot point: add a row |
+| Size | Each row gives a writer 1 sensible thing, not so wide they must guess, not so detailed it becomes code | Wide: split · detailed: leave the signature and the test name |
+| Names match | The types · functions · columns that later rows reference are spelled as the first row set them | Different: fix to one name |
+| Biting cases | Each kind of input and failure path the requirement implies: which row has a test for it | None: add a test name to the owning row |
+| Proportion | A plan many times longer than the requirements is pre-written code, not a plan | Cut the code body to signatures and assertions |
+
+Building from a single build prompt: read the prompt through before pasting, fix anything that does not match the requirements first, then paste in a fresh session with empty memory to prove the prompt is complete (reported from a training exercise, not measured against a baseline).
+
+## Where the loop's files go
+
+Requirements documents are often `.docx` or `.pdf` and must be converted to text before they can be re-read. A converted file is a temporary working item, not a document.
+
+```
+_to_delete/
+  extracted/       ← .docx .pdf ที่แปลงเป็น .md แล้ว
+  check/           ← ภาพหน้าจอที่ถ่ายไว้เทียบ mockup
+  logs/            ← ผลรัน test ที่เก็บไว้ดูย้อนหลัง
+```
+
+| File | Goes where |
+|---|---|
+| Documents converted to a readable format | `_to_delete/extracted/` |
+| Screenshots taken for checking | `_to_delete/check/` |
+| Test run results · logs | `_to_delete/logs/` |
+| The plan and status `BUILD-PLAN.md` | `docs/` (a real document) |
+| Code and tests | The project folder |
+
+Never write converted files into `docs/` mixed with the originals; in 3 months nobody will know which file the customer signed. Full detail: `temp-file-discipline`.
+
+## Compare to the mockup with a real image
+
+Reading the code and saying "it matches" does not work. Open it and look.
+
+```python
+page.set_viewport_size({"width": 1280, "height": 900})   # ให้เท่ากับความกว้าง mockup
+page.goto(url); page.wait_for_timeout(500)
+page.screenshot(path="_to_delete/check/login.png")
+```
+
+Open both images and compare 5 items:
+
+- [ ] Do the order and grouping of elements match
+- [ ] Are spacing and font size close (not pixel-exact)
+- [ ] Are all the states the mockup shows present: empty · loading · error
+- [ ] Does the text match the mockup, or was it made up
+- [ ] Does Thai wrap badly or lose vowels
+
+Wherever they differ, say so as a list. Do not stay silent and claim done.
+
+## Splitting into multiple agents
+
+One criterion: the files to be touched must not overlap at all (see the "files to touch" column).
+
+| Can split | Cannot split |
+|---|---|
+| Different modules, different screens, files that do not overlap | Touching the same file, even just one |
+| A **read-only** checking agent running alongside an agent that writes code | Work that already has to wait for the result of another task |
+| Turning requirements into tests for several modules at once | When there is no plan yet |
+
+- Each agent that writes files gets its own worktree, per `superuser/references/code-extensions.md` section "parallel-split-and-merge" (including how to handle uncommitted work).
+- Every split-off agent receives: the IDs of the requirements it owns · the list of files it may touch · the test command · all of the iron rules (especially rule 3).
+- Never let a split-off agent edit `BUILD-PLAN.md`. It reports back, and the main agent writes the one file.
+
+## Signs the loop is breaking
+
+| Symptom | What it really means |
+|---|---|
+| All tests green from the first round without ever being red | The tests test nothing |
+| The number of tests grows faster than the number of requirements closed | Writing tests to make itself pass |
+| One commit touches 15 files | Several requirements bundled, cannot be reverted when it breaks |
+| The same item loops past 3 rounds | The requirement is ambiguous, not the code hard: go back and ask |
+| Nobody has updated `BUILD-PLAN.md` for 2 rounds | State is in the head, the next round will redo work |
+| Numbers improve but people cannot use it (text off-screen, pale colours, input fields cutting words) | The loop is chasing the metric: see `metric-loop.md` guards |
+| The remaining items can be fixed only by adding fake data or hiding content | The ceiling of the data has been reached: see `metric-loop.md` stop rules |
+
+Anti-patterns: throwing the whole requirements document in one round · writing code first and tests after · guessing on an ambiguous requirement · editing a test to make it pass · parallel agents on the same file · claiming the UI matches without opening it · closing with no traceability table · faking data, hiding content or relaxing criteria to make numbers look good.
+
+## Other skills to use together
+
+`srs-writing` (testable requirements) · `test-case-template` · `testing-standards` (skeleton, framework, names, coverage) · `e2e-testing-patterns` (real browser) · `lazy-coding` · `targeted-fix` (red test) · `commit-message-format` · `temp-file-discipline` · `test-evidence` item 5 and `e2e-testing-patterns` (oracle-and-mutation) for number-chasing loops · `handoff` · `status-report`.
+
+
 ---
 
 # skill: app-verifier-setup
@@ -982,9 +928,6 @@ The tests and metrics of a loop like this must be trustworthy first → `test-ev
 Use when an agent has no scripted way to run the app
 
 # app-verifier-setup — give the agent hands and eyes
-
-> If an agent cannot see its own work, it cannot adjust that work, and a person must keep relaying what is on the screen.
-> This skill builds the tool once, so every later agent can reuse it.
 
 **Output:** 2 things, a script that lives with the project's tests, and a skill that is only a short guide for agents.
 
@@ -996,9 +939,9 @@ Use when an agent has no scripted way to run the app
 └─ _to_delete/verify-runs/                  evidence from each run — the script finds paths from its own location, so it does not depend on the folder it runs from
 ```
 
-(Codex · Gemini use `.agents/skills/` · `skills/` instead of `.claude/skills/`.) Examples already built: the `calculator-demo` project (web) · the Flutter Android app `Lumio - Light Meter` → `lumio-light-meter/test/e2e/verify.mjs` (Node driving `adb`, summarized in [`references/android-native.md`](references/android-native.md)).
+(Codex · Gemini use `.agents/skills/` · `skills/` instead of `.claude/skills/`.) The Flutter Android example (`lumio-light-meter/test/e2e/verify.mjs`, Node driving `adb`) is summarized in [`references/android-native.md`](references/android-native.md).
 
-**Why not write the steps as a separate text file.** In the sample project, the steps in a `.md` file and in the script disagreed from the first round. So keep the information in the script only, and let the skill point to it.
+**Keep the steps in the script only.** A separate `.md` list of steps disagrees with the script from the first round, so the skill points to the script.
 
 ---
 
@@ -1021,7 +964,7 @@ Use when an agent has no scripted way to run the app
    - For an app that reads hardware (sensor · camera · GPS), feed values known in advance, through the emulator (`adb emu sensor set light 420`, virtual camera) or a fake data source that can be turned on only in a debug build. Label every check `emulator` or `เครื่องจริง` (real device), because real sensor accuracy cannot be proven on an emulator. If it has not run on a real device, write "ยังไม่ได้ตรวจบนเครื่องจริง" (not yet checked on a real device).
 
 3. **Write `test/e2e/verify.*`** so it opens the app itself on a port that does not clash (mobile: install the APK and clear app data), seeds test data, and waits until ready **with a time limit** (web: if it is not up in 10 seconds, count it as failed · mobile: set separate times for build · emulator boot · app start · each check, see the reference). Always close the app at the end, and a second run must give the same result (`principle-build-a-tool-not-handwork`).
-   - **For a web app or API that needs a server started first**, use [`scripts/with_server.py`](scripts/with_server.py). It starts the server, waits for the port, runs the script, then shuts everything down. For example `python -I scripts/with_server.py --server "npm run dev" --port 5173 -- node test/e2e/verify.mjs` (start several servers by repeating `--server` and `--port` · logs go to `--log-dir`, default `_to_delete/with-server-logs`, created automatically if missing). Tested on Windows on 2026-11-10 with `python -m http.server`, and the port was really closed afterwards. For dynamic apps, wait for `networkidle` (Playwright `page.wait_for_load_state("networkidle")`) or `data-ready="true"` before reading the DOM. Never guess with `sleep`.
+   - **For a web app or API that needs a server started first**, use [`scripts/with_server.py`](scripts/with_server.py). It starts the server, waits for the port, runs the script, then shuts everything down. For example `python -I scripts/with_server.py --server "npm run dev" --port 5173 -- node test/e2e/verify.mjs` (start several servers by repeating `--server` and `--port` · logs go to `--log-dir`, default `_to_delete/with-server-logs`, created automatically if missing). For dynamic apps, wait for `networkidle` (Playwright `page.wait_for_load_state("networkidle")`) or `data-ready="true"` before reading the DOM. Never guess with `sleep`.
 
 4. **Keep the feature list as data in the script.** Go through the menu · routes · command list · SRS, and write 1 group per feature with 1 line per check (`what to do → what must be seen`). Cover at least 3 main features and 1 error case per feature. **Every check starts from a clean state**, can run alone or in a different order, and prints `PASS/FAIL` with expected and actual values.
 5. **The script must never pass emptily** (pass without really checking anything). If a feature name does not exist, exit 1. If the app does not come up, exit 1. If no check ran, exit 1 (checking 0 items counts as broken, not as a pass).
@@ -1031,18 +974,9 @@ Use when an agent has no scripted way to run the app
 7. **Prove the skill works in practice** by sending a fresh `qa-tester` agent that has never seen the code. It uses only this skill to test 1 feature from opening the app to taking a screenshot of the result. Wherever it gets stuck, fix the skill at that point.
 8. **Keep the evidence in `_to_delete/verify-runs/<time>/`**, both screenshots and test logs, apart from the code (it is temporary, the user can delete it after delivery, and the agent never deletes it).
 
-## Testing contract — build it into the app from the first screen
+## Testing contract
 
-verify must depend on things the app provides, not guess from text or CSS. Write this contract into the feature map in the script, and have the developer follow it from the first feature.
-
-| What the app must have | What it is for | Rule |
-|---|---|---|
-| `data-testid="<page>-<thing>"` in kebab-case on every button, input, result, and error message | Find elements without tying to text or CSS, so checks do not break when language or design changes | For example `book-submit` · `summary-total` · `book-error` · no duplicates on one page · the full list of testids lives in the feature map |
-| `<html data-ready="false">` → `"true"` when the page has finished loading data | Wait on a condition instead of a guessed `sleep` (step 5) | Set `true` after the last batch of data arrives, not when the component mounts |
-| A reset endpoint such as `POST /api/test/reset` → clears and re-seeds within 5 seconds | Every check starts from a clean state (step 4) | Exists only when `ALLOW_TEST_RESET=1` is set · if not set, answer 404 · never enable in production |
-| Clock lock: reset accepts `{"now":"<ISO + offset>"}` and every rule reads "today" from one module (`clock`) | Test date-dependent rules (expiry · cancel at least 24 hours ahead) with the same result every time | If `now` is not sent, use the start date written in the seed · flag off, use real time · never call `Date.now()` / `DateTime.Now` directly in a rule |
-
-Non-web apps follow the same idea: Flutter → a `Key` / Semantics label with the same name · Android → `resource-id` · command line → a `--now` option or an `APP_NOW` variable · a reset on mobile can be enabled only in a debug build.
+verify must depend on things the app provides, not guess from text or CSS: `data-testid` on every control and result · `<html data-ready>` flipping to `"true"` · a reset endpoint enabled only with `ALLOW_TEST_RESET=1` · a clock lock for date rules. Write the contract into the feature map and have the developer follow it from the first feature. Full table: [`references/testing-contract.md`](references/testing-contract.md).
 
 ## What the SKILL.md of the verify skill must contain
 
@@ -1052,21 +986,11 @@ Non-web apps follow the same idea: Flutter → a `Key` / Semantics label with th
 - A link to the feature map.
 - Prohibitions: do not touch the real database · do not call external APIs that cost money or send real messages.
 
-## What not to do
-
-| Do not | Because |
-|---|---|
-| Write test steps only in human language with no script | Each agent will invent its own way to run them every time, and no two runs are alike. |
-| Put in every feature from day one | A big map that has not been tested decays faster than a small map that really works. |
-| Point the verify skill at the real system (production) | Checking turns into editing customer data. |
-| Say it is done without doing step 7 | You do not yet know whether other agents can use it. |
-
-## Links to other skills
+## References
 
 - [`references/builtin-verify.md`](references/builtin-verify.md) — Claude Code ships with `/verify`: for a project running on Claude Code, create a skill named `verify` at `.claude/skills/verify/SKILL.md` in that format, instead of `verify-<project>`.
 - [`app-verifier-upkeep`](../app-verifier-upkeep/SKILL.md) — fix it when the app has changed so much that the map no longer matches.
-- `e2e-testing-patterns` — if you want to lift some steps into automated tests in continuous integration (CI).
-- [`superuser`](../superuser/SKILL.md) — the playbooks `bug-fix` and `feature` call the skill built here.
+- [`references/testing-contract.md`](references/testing-contract.md) — open at steps 4 and 5, when writing the feature map or telling the developer which hooks to add
 
 
 ## reference: android-native.md
@@ -1164,6 +1088,22 @@ Source: code.claude.com/docs/en/skills (read 2026-10-23) · the version numbers 
 - `app-verifier-upkeep` maintains this one file only and does not create a nested `verify-<project>`
 
 
+## reference: testing-contract.md
+
+# Testing contract · app-verifier-setup
+
+verify must depend on things the app provides, not guess from text or CSS. Write this contract into the feature map in the script, and have the developer follow it from the first feature.
+
+| What the app must have | What it is for | Rule |
+|---|---|---|
+| `data-testid="<page>-<thing>"` in kebab-case on every button, input, result, and error message | Find elements without tying to text or CSS, so checks do not break when language or design changes | For example `book-submit` · `summary-total` · `book-error` · no duplicates on one page · the full list of testids lives in the feature map |
+| `<html data-ready="false">` → `"true"` when the page has finished loading data | Wait on a condition instead of a guessed `sleep` (step 5) | Set `true` after the last batch of data arrives, not when the component mounts |
+| A reset endpoint such as `POST /api/test/reset` → clears and re-seeds within 5 seconds | Every check starts from a clean state (step 4) | Exists only when `ALLOW_TEST_RESET=1` is set · if not set, answer 404 · never enable in production |
+| Clock lock: reset accepts `{"now":"<ISO + offset>"}` and every rule reads "today" from one module (`clock`) | Test date-dependent rules (expiry · cancel at least 24 hours ahead) with the same result every time | If `now` is not sent, use the start date written in the seed · flag off, use real time · never call `Date.now()` / `DateTime.Now` directly in a rule |
+
+Non-web apps follow the same idea: Flutter → a `Key` / Semantics label with the same name · Android → `resource-id` · command line → a `--now` option or an `APP_NOW` variable · a reset on mobile can be enabled only in a debug build.
+
+
 ---
 
 # skill: principle-build-a-tool-not-handwork
@@ -1209,8 +1149,7 @@ Use when about to ship or merge code, as a security check
 
 # security-gate — a security gate before shipping
 
-> Scanners find issues fast but raise many false alarms. Human reviewers understand context but are slow.
-> This gate lets the tools search first, then the agent confirms every finding against the real code, before it reaches a person.
+> Tools search first, then the agent confirms every finding against the real code, before it reaches a person.
 
 Use it together with [`principle-secure-by-default`](../principle-secure-by-default/SKILL.md). For an in-depth report, use the `security-engineer` agent.
 
@@ -1228,11 +1167,9 @@ Use it together with [`principle-secure-by-default`](../principle-secure-by-defa
    | Dockerfile · compose · IaC (if present) | trivy | `trivy config .` An Android app has none of these, so read `android/app/build.gradle*` by eye instead (signingConfig must not hard-code passwords, and release must enable minify) |
    | Android app (if present) | Check by eye with [`references/android.md`](references/android.md). For a deeper check, use MobSF (Mobile Security Framework) | — |
 
-   **Android checklist** → [`references/android.md`](references/android.md)
-
    Keep raw output in `_to_delete/security/`
-   - **Never use `--config auto` together with `--metrics=off`** — semgrep refuses to run (seen in a real sample project).
-   - **Choose semgrep rulesets by the languages found, not `p/default` alone** (idea from trailofbits/skills `semgrep` · CC-BY-SA, rewritten in our own words). For every project, run `p/security-audit` + `p/secrets` once over the whole repo. Then add per language: `p/python` (+`p/django` or `p/flask`) · `p/javascript` + `p/typescript` (+`p/react` · `p/nodejs`) · `p/csharp` · `p/dockerfile`. For several languages, pass several `--config` flags in one command. If a ruleset cannot load (no internet · wrong name), the report must say it did not run. It must not vanish silently.
+   - **Never use `--config auto` together with `--metrics=off`** — semgrep refuses to run.
+   - **Choose semgrep rulesets by the languages found, not `p/default` alone**. For every project, run `p/security-audit` + `p/secrets` once over the whole repo. Then add per language: `p/python` (+`p/django` or `p/flask`) · `p/javascript` + `p/typescript` (+`p/react` · `p/nodejs`) · `p/csharp` · `p/dockerfile`. For several languages, pass several `--config` flags in one command. If a ruleset cannot load (no internet · wrong name), the report must say it did not run. It must not vanish silently.
    - The offline set has 6 rules that almost never have a safe case (eval · HTML from a variable · shell from a variable · SQL built by concatenation · secrets in code), and it was proven to catch every one in files deliberately written wrong. If any tool cannot run, write `ยังไม่ได้ตรวจ` (not yet checked) with the reason in the report.
    - **semgrep supports Dart very poorly, and the offline rules were written for web and backend.** If semgrep finds nothing in a Flutter project, that does not mean it is safe. The report must say the Dart code is `ยังไม่ได้ตรวจด้วย static analysis` (not yet checked with static analysis) and rely on `flutter analyze` and reading the code instead. Never conclude `ผ่าน` from an empty result.
 3. **Confirm every finding** — open the real code and see whether it applies (for example, the vulnerability is in a function the project never calls). Then label it `ยืนยันแล้ว` (confirmed) / `แจ้งผิด` (false alarm) / `ยังไม่ยืนยัน` (not yet confirmed) with a reason. Give `ยังไม่ยืนยัน` no severity and say what evidence is missing. If the customer asks for a deep check of the whole system, or you find an item that needs tracing data flow across several files → [`security-audit`](../security-audit/SKILL.md) (the confirmer is a fresh agent, not the one that scanned).
@@ -1265,6 +1202,10 @@ Use it together with [`principle-secure-by-default`](../principle-secure-by-defa
 - Real penetration testing, or testing someone else's system, because this skill covers only this project's code and test environment.
 - Certifying 100% safety. The report says only what was checked, with what, and what was not checked.
 - Reviewing the logic and design of a diff → `code-review-checklist` (run both before merge).
+
+## References
+
+- [`references/sources.md`](references/sources.md) — origin notes for the semgrep ruleset choice
 
 
 ## reference: android.md
@@ -1540,3 +1481,11 @@ How to write it for the team's stacks (.NET · TypeScript/Node/Angular · Python
 - Real penetration testing, or testing someone else's system — this file checks only this project's code and test environment
 - Other standards, such as OWASP API Security Top 10 · Application Security Verification Standard (ASVS) · Payment Card Industry Data Security Standard (PCI-DSS) · the Personal Data Protection Act (PDPA) — use the skill for that topic (`fintech-payments` · `pdpa-compliance`), but this report can be used as a common base
 - Mobile apps — use OWASP Mobile Top 10 together with [`android.md`](android.md) · the backend of a mobile app still uses this file
+
+
+## reference: sources.md
+
+# Sources · security-gate
+
+- Semgrep ruleset choice by language found: idea from trailofbits/skills `semgrep` (CC-BY-SA), rewritten in our own words.
+- gitleaks `detect`/`protect` deprecated since v8.19.0: github.com/gitleaks/gitleaks/releases/tag/v8.19.0 · checked 22 Oct 2026 (B.E. 2569).

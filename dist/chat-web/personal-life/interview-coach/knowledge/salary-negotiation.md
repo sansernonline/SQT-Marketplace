@@ -21,8 +21,6 @@ General information, not professional advice — for tax effects ask a นัก
 | LinkedIn job posts and Salary insights | Ranges where disclosed | Thin data for Thailand |
 | Peers, recruiters, alumni groups | Real offers | Ask for ranges, not exact salaries |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.robertwalters.co.th/salarysurvey.html · https://adecco.co.th/en/knowledge-center/detail/salary-guide/download-adecco-thailand-salary-guide-2025
-
 Use 3 sources (name + year); write the range as low / mid / high with source and year. Fewer than 3 → mark the range `(รอยืนยัน)`. Salary surveys have no official source, so named recruiter guides count as the source for this case. Recruiter guides skew to multinationals — Thai SMEs often pay below the range.
 
 ## Step 2 — total compensation
@@ -40,21 +38,11 @@ Use 3 sources (name + year); write the range as low / mid / high with source and
 | Stock / restricted stock units (RSU) | Only count what vests within the period you will realistically stay |
 | Sign-on bonus | One-off; check claw-back if you leave within 12 months |
 
-ตรวจล่าสุด 22 ต.ค. 2569 · กองทุนสำรองเลี้ยงชีพ: https://www.sec.or.th/TH/Template3/Articles/2566/160566.pdf · ประกันสังคม: https://www.krungsri.com/th/krungsri-the-coach/life/good-life/sso-section-33-rate-increase · https://www.thansettakij.com/general-news/646834 (ข่าววันที่ 18 ธ.ค. 2568 รายงานว่ากฎกระทรวงลงราชกิจจานุเบกษาแล้ว ไม่ได้ระบุวันประกาศ) · https://www.bakermckenzie.com/en/insight/publications/alerts/2025/12/thailand-higher-wage-base-for-ssf-contributions
-
 Social security ceiling steps under the ministerial regulation (B.E. 2568): 17,500 baht (2569–2571) → 20,000 baht (2572–2574) → 23,000 baht (2575 onward). Several independent sources agree on the numbers, but the Royal Gazette (ราชกิจจานุเบกษา) text itself has not been opened — `(รอยืนยัน)` until the official link is added.
 
 ## Worked example — two offers
 
-| | Offer A | Offer B |
-|---|---|---|
-| Base | 60,000 × 12 = 720,000 | 66,000 × 12 = 792,000 |
-| Bonus | 2 months avg = 120,000 | 1 month avg = 66,000 |
-| Allowance | 3,000 × 12 = 36,000 | 0 |
-| PVD employer match | 5% × 60,000 × 12 = 36,000 | none |
-| **Total cash + PVD** | **912,000** | **858,000** |
-
-Offer B's base is 10% higher but A is worth 54,000 more a year — before insurance. Show this table before any discussion of "which is better".
+Two offers (A: 60,000 base · 2 months bonus · 3,000 allowance · 5% PVD match; B: 66,000 base · 1 month bonus) come to 912,000 vs 858,000 a year: B's base is 10% higher but A is worth 54,000 more, before insurance. Full table: [references/worked-example-two-offers.md](references/worked-example-two-offers.md). Show a table like it before any discussion of "which is better".
 
 ### Compare offers by numbers (`decision-scoring`, command `score`)
 
@@ -97,8 +85,6 @@ Asking for a raise (internal):
 
 Then **stop talking** and wait.
 
-ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ สมัครงาน
-
 ## Step 5 — timeline after the offer and the levers besides base
 
 | Day | Do |
@@ -126,8 +112,6 @@ Many Thai companies, and most large ones, have a salary band (กรอบเง
 - Probation: under the Labour Protection Act §118, severance starts after 120 days of continuous work regardless of probation label — check the offer letter does not imply otherwise.
 - Keep every offer letter in `important-docs`.
 
-Related: `performance-self-review` (evidence for a raise) · `interview-prep` · `personal-budget` in `trading-finance` (what the raise does to the monthly budget).
-
 ## เรียกเป็นคำสั่ง
 
 `/personal-life:salary-negotiation <offer|raise|counter> [offer details]`
@@ -137,6 +121,10 @@ Run the `career-coach` agent with the `salary-negotiation` skill: **$ARGUMENTS**
 - `offer` — build the total-compensation table for the offer (and the current job), find the gap, draft the reply in Thai and English
 - `raise` — build the case from `performance-self-review`, pick the number, draft the meeting opener
 - `counter` — the current employer counter-offered; run the counter-offer checklist before answering
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
 
 
 ## reference: offer-scoring-example.md
@@ -152,3 +140,25 @@ Run the `career-coach` agent with the `salary-negotiation` skill: **$ARGUMENTS**
 ```
 
 Result when run: C is dropped by the iron rule, B 60 and A 40, B stays first when each weight moves ±20%. With only 2 options every criterion becomes 0 or 100, so read the raw numbers in brackets too.
+
+
+## reference: sources.md
+
+# Sources · salary-negotiation
+
+ตรวจล่าสุด 22 ต.ค. 2569 · กองทุนสำรองเลี้ยงชีพ: https://www.sec.or.th/TH/Template3/Articles/2566/160566.pdf · ประกันสังคม: https://www.krungsri.com/th/krungsri-the-coach/life/good-life/sso-section-33-rate-increase · https://www.thansettakij.com/general-news/646834 (ข่าววันที่ 18 ธ.ค. 2568 รายงานว่ากฎกระทรวงลงราชกิจจานุเบกษาแล้ว ไม่ได้ระบุวันประกาศ) · https://www.bakermckenzie.com/en/insight/publications/alerts/2025/12/thailand-higher-wage-base-for-ssf-contributions
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.robertwalters.co.th/salarysurvey.html · https://adecco.co.th/en/knowledge-center/detail/salary-guide/download-adecco-thailand-salary-guide-2025
+
+
+## reference: worked-example-two-offers.md
+
+# Worked example · two offers
+
+| | Offer A | Offer B |
+|---|---|---|
+| Base | 60,000 × 12 = 720,000 | 66,000 × 12 = 792,000 |
+| Bonus | 2 months avg = 120,000 | 1 month avg = 66,000 |
+| Allowance | 3,000 × 12 = 36,000 | 0 |
+| PVD employer match | 5% × 60,000 × 12 = 36,000 | none |
+| **Total cash + PVD** | **912,000** | **858,000** |

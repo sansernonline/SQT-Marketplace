@@ -89,16 +89,16 @@ Rules for the ladder:
 - Level 4 names a consequence the user **will really carry out**. An empty threat ruins level 5
 - Stay polite at every level. Firm means specific and dated, not rude
 
-## Worked example — chasing an unpaid invoice (LINE, to a small client)
-
-- Day +3 after the due date, level 1: "สวัสดีครับคุณเอ ขออนุญาตทวงถามใบแจ้งหนี้ INV-2026-031 ยอด 18,500 บาท ครบกำหนดวันที่ 30 ก.ย. ครับ อาจจะตกหล่นไป รบกวนช่วยตรวจสอบให้หน่อยนะครับ ขอบคุณครับ"
-- Day +7, level 2: "...ขอติดตามใบแจ้งหนี้ INV-2026-031 ยอด 18,500 บาท ซึ่งครบกำหนดวันที่ 30 ก.ย. ครับ ยังไม่เห็นยอดเข้า รบกวนแจ้งวันที่คาดว่าจะโอนด้วยนะครับ"
-- Day +10, level 3: "...ขอความกรุณาโอนชำระภายในวันศุกร์ที่ 16 ต.ค. นี้ครับ หากมีปัญหาเรื่องเอกสารแจ้งได้เลยครับ"
-- Day +20, level 4: "...หากไม่ได้รับชำระภายในวันที่ 31 ต.ค. ผมจำเป็นต้องหยุดงานส่วนที่เหลือไว้ก่อนจนกว่าจะเคลียร์ยอดนี้ครับ"
+Worked example (chasing an unpaid invoice, 4 levels) and sources: [references/worked-example.md](references/worked-example.md) · [references/sources.md](references/sources.md)
 
 Chasing several credit customers at once (check which payments already arrived, grade each payer, a summary table before any draft) → `doc-quotation` section 6 (plugin `e-commerce`, if installed). This skill then words each message.
 
 Related: `meeting` (plugin `personal-life`, Leg 2 — written follow-up after a meeting). Optional, if installed: `inbox-triage` (plugin `personal-life` — which messages to answer first) · `doc-thai-official` and `doc-quotation` (plugin `e-commerce` — formal letters and quotes).
+
+
+## reference: sources.md
+
+# Sources · polite-message-th-en
 
 ## Sources
 
@@ -243,6 +243,18 @@ I understand things may be busy — a reply by [date] would help, since [reason]
 Third follow-up with no reply: change the channel (from email to a phone call) rather than sending a fourth message.
 
 
+## reference: worked-example.md
+
+# Worked example · polite-message-th-en
+
+## Worked example — chasing an unpaid invoice (LINE, to a small client)
+
+- Day +3 after the due date, level 1: "สวัสดีครับคุณเอ ขออนุญาตทวงถามใบแจ้งหนี้ INV-2026-031 ยอด 18,500 บาท ครบกำหนดวันที่ 30 ก.ย. ครับ อาจจะตกหล่นไป รบกวนช่วยตรวจสอบให้หน่อยนะครับ ขอบคุณครับ"
+- Day +7, level 2: "...ขอติดตามใบแจ้งหนี้ INV-2026-031 ยอด 18,500 บาท ซึ่งครบกำหนดวันที่ 30 ก.ย. ครับ ยังไม่เห็นยอดเข้า รบกวนแจ้งวันที่คาดว่าจะโอนด้วยนะครับ"
+- Day +10, level 3: "...ขอความกรุณาโอนชำระภายในวันศุกร์ที่ 16 ต.ค. นี้ครับ หากมีปัญหาเรื่องเอกสารแจ้งได้เลยครับ"
+- Day +20, level 4: "...หากไม่ได้รับชำระภายในวันที่ 31 ต.ค. ผมจำเป็นต้องหยุดงานส่วนที่เหลือไว้ก่อนจนกว่าจะเคลียร์ยอดนี้ครับ"
+
+
 ---
 
 # skill: important-docs
@@ -311,25 +323,16 @@ Dates on Thai papers are often พ.ศ. — subtract 543 before entering (2572 �
 - Passport expiring within 6 months of a planned trip (see `travel-prep`)
 - No scan of anything — fire, flood or theft takes the only copy
 
-## Worked example
-
-Household of two adults. Sweep finds 23 documents. Monthly check on 2026-10-06 shows:
-
-| item | holder | end_date | lead | Warning |
-|---|---|---|---|---|
-| Passport | Nok | 2027-03-14 | 120 | Inside 6-month rule for the January Japan trip → book qpassport now; old book at `physical: ตู้เอกสาร ลิ้นชัก 2` |
-| Car tax + พ.ร.บ. | Tom | 2026-11-30 | 90 | Can pay now (inside 90 days) — Department of Land Transport (DLT) app / ห้างที่รับชำระ |
-| Health policy | Tom | 2026-12-01 | 30 | Premium notice due; compare before auto-renew |
-| Air purifier (warranty) | Nok | 2026-11-20 | 30 | Test the unit this week while still covered |
-
 ## Rules
 
 - Never store full ID, passport, account or policy numbers, passwords or OTPs — last 4 digits at most
 - Expiry warnings always include location and the renewal step, not just a date
-- The registry is updated in place; a second list is a bug
 - Cadence: 5-minute monthly check, full sweep each January and after any move, marriage, birth or death
 
-Related: `travel-prep` (passport timing) · `digital-hygiene` (where secrets go) · `warranty-tracker` in e-commerce and `vehicle-care` (plugin เดียวกัน).
+## References
+
+- [`references/registry-template.md`](references/registry-template.md) — renewal rules for Thai documents and the fill-in CSV
+- [`references/worked-example.md`](references/worked-example.md) — open for a model monthly check
 
 
 ## reference: registry-template.md
@@ -372,3 +375,17 @@ Open in any spreadsheet; sort by `end_date`. Do not add columns per section — 
 ## Monthly check prompt
 
 > Read `important-docs.csv`. List rows where end_date minus today is within renew_lead_days, or within 60 / 30 / 7 days. For each give item, holder, days left, location, and the renewal step from the table. Then list rows with `unknown` dates.
+
+
+## reference: worked-example.md
+
+# Worked example · important-docs
+
+Household of two adults. Sweep finds 23 documents. Monthly check on 2026-10-06 shows:
+
+| item | holder | end_date | lead | Warning |
+|---|---|---|---|---|
+| Passport | Nok | 2027-03-14 | 120 | Inside 6-month rule for the January Japan trip → book qpassport now; old book at `physical: ตู้เอกสาร ลิ้นชัก 2` |
+| Car tax + พ.ร.บ. | Tom | 2026-11-30 | 90 | Can pay now (inside 90 days) — Department of Land Transport (DLT) app / ห้างที่รับชำระ |
+| Health policy | Tom | 2026-12-01 | 30 | Premium notice due; compare before auto-renew |
+| Air purifier (warranty) | Nok | 2026-11-20 | 30 | Test the unit this week while still covered |

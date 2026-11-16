@@ -5,8 +5,7 @@ description: Use when writing a pull request description
 
 # Pull Request Description Template
 
-> **Language:** write every line of wording per `human-writing`. This skill gives the format and structure; human-writing gives the way to write so people understand.
-> ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ ธุรกิจ
+ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ ธุรกิจ
 
 ## When to use this skill
 
@@ -102,8 +101,6 @@ Before using the structure or templates in this file, check whether the user, th
 <anything reviewer should pay attention to, gotchas, alternative approaches considered>
 ```
 
-> ส่วน Evidence และ Merge Danger — แนวคิดจาก mattpocock/skills pr (เครดิต HumanLayer) เขียนใหม่ด้วยคำเรา
-
 ## Size Guidelines
 
 | Lines changed | Review difficulty | Recommendation |
@@ -120,53 +117,8 @@ If your PR is huge, split into:
 
 ## Summary Writing
 
-Bad summaries:
-- "Fixes bug"
-- "Updates code"
-- "See ticket"
+**Structure:** What changed + Why it matters + Brief how. Bad and good summary examples, screenshot tips and reviewer-friendly tips are in [`references/writing-tips.md`](references/writing-tips.md).
 
-Good summaries:
-- "Prevents double-charging customers when payment provider times out, by adding idempotency key to charge API calls"
-- "Adds email verification step during signup to reduce spam accounts; sends 6-digit code via existing email service"
+## References
 
-**Structure:** What changed + Why it matters + Brief how
-
-## Screenshots Best Practices
-
-- Always for UI changes
-- Show before AND after side-by-side
-- Highlight the actual change with arrows/circles
-- Include mobile view if responsive
-- Use GIFs for interactions (max 30 sec)
-
-## Reviewer-Friendly Tips
-
-- Tag specific people for areas they know
-- Mention if breaking change requires coordination
-- Note non-obvious decisions in code comments
-- Reply to your own PR with "Self-review notes" for tricky parts
-- Mark draft PRs as Draft until ready
-
-## Anti-patterns
-
-- Empty description: "see code"
-- Linking ticket without explanation in PR
-- Massive PR with 1000+ lines mixed concerns
-- No screenshots for UI changes
-- "Testing: tested locally" with no detail
-- Pushing right before merge deadline with no time to review
-
----
-
-## Document Look
-
-This skill decides **what goes in** the document. It does not decide **how it looks** —
-load the matching skill before writing, not after:
-
-| What is being handed over | Load |
-|---|---|
-| Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
-| A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
-| The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
-
-Default formatting is not neutral — it reads as unfinished work.
+- [`references/writing-tips.md`](references/writing-tips.md) — open for summary examples, screenshot tips and reviewer-friendly tips

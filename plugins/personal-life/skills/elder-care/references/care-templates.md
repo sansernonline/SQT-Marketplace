@@ -53,3 +53,9 @@ Symptom diary (for the questions column): date · what happened · how long · w
 บัตรประชาชน/บัตรโรงพยาบาล/ถุงยาอยู่ที่: ______
 ห้ามลืม: ______
 ```
+
+## Worked example
+
+## Worked example
+
+Mother, 78, Bangkok, บัตรทอง at a district hospital, blood pressure and diabetes, 5 medicines. Family set-up: medicine table copied from the hospital list; pill organiser filled Sunday by the eldest; appointments every 3 months — the second child drives and brings the medicine bag and the question list (dizzy when standing up, twice this month, dates noted). Rights: เบี้ยยังชีพ 700 บาท/เดือน (age 70–79) paid on the 10th; turns 80 next year → amount moves to 800 automatically by age band (confirm with the เขต office). Tax: the daughter who supports her claims ลดหย่อนบิดามารดา 30,000 (one child per parent).

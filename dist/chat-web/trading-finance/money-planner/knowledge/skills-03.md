@@ -2,20 +2,77 @@
 
 Use when checking if insurance cover is enough
 
-# Insurance Review (ทบทวนประกันภัย)
+# Insurance Review (ทบทวนประกันภัย) — have / need / gap per policy type, and the questions to ask the agent
 
-General information, not insurance advice — a licensed agent or broker sells; check their licence at oic.or.th. This skill organises and asks the right questions; it does not pick a product.
+General information, not insurance advice. A licensed agent or broker sells; check their licence at oic.or.th. This skill organises and asks the right questions; it does not pick a product.
 
-## Workflow
+## Use when
+- The user asks whether their insurance is enough, has overlapping policies, compares quotes, or wants to check who is named as beneficiary.
 
-1. **List every policy**: insurer, type, sum insured, rider, yearly premium, renewal date, who is covered, group (employer) or personal. Employer group cover ends when the job ends — mark it.
-2. **List what is at risk**: dependants, debts, monthly spending, existing savings, which hospital the user would actually use.
+Not for: wills and inheritance → `estate-and-will`.
+
+## Steps
+1. **List every policy**: insurer, type, sum insured, rider, yearly premium, renewal date, who is covered, group (employer) or personal. Employer group cover ends when the job ends; mark it.
+2. **List what is at risk**: dependants, debts, monthly spending, savings, which hospital the user would actually use.
 3. **Size each need** with the table below.
 4. **Gap and overlap**: show have / need / gap per type; flag duplicate riders and savings-type policies with low cover per baht.
-5. **Premium check**: total protection premium at most 10% of yearly income. This is the `must` filter in "Comparing quotes" below. The 10% is a starting value (starting value, not yet measured); the user may raise or lower it for dependants.
-6. **Prepare questions** for the agent (end of file).
-7. **Tax**: premiums deductible — life + health max 100,000, own health 25,000, parents' health 15,000 (`tax-deduction-planner`). Never buy cover for the deduction alone.
-8. **Beneficiaries**: check who is named now against who the user wants (section below), especially after marriage, divorce, a birth or a death in the family.
+5. **Premium check**: total protection premium at most 10% of yearly income (starting value, not yet measured; the user may raise or lower it for dependants). This is the `must` filter when comparing quotes.
+6. **Beneficiaries**: check who is named now against who the user wants, especially after marriage, divorce, a birth or a death. Table and flag order (high · medium · low) in the reference. Changing a beneficiary is the user's own step with the insurer or fund.
+7. **Tax**: premiums deductible: life + health max 100,000, own health 25,000, parents' health 15,000 (`tax-deduction-planner`). Never buy cover for the deduction alone.
+8. **Prepare questions** for the agent (below).
+
+## Sizing rules of thumb
+
+| Type | What it pays | Rule of thumb |
+|---|---|---|
+| Life (term) | lump sum on death | debts + (yearly spending of dependants × years until they are independent) + education fund − liquid assets. Shortcut 5–10 × annual income. With no dependants and no debt, little or none is needed |
+| Health — in-patient department (IPD) | hospital bills | room rate per day = the room at the hospital you would use; yearly or per-illness cap able to cover a major surgery there (private hospital major case often 1–3 million (รอยืนยัน)) |
+| Health — out-patient department (OPD) | outpatient visits | usually poor value; pay from budget |
+| Critical illness (โรคร้ายแรง) | lump sum on diagnosis | 1–3 years of spending to cover lost income during treatment |
+| Personal accident (PA) | death / disability / treatment from accident | cheap top-up for riders, drivers, manual work; not a substitute for health |
+| Disability income | monthly if unable to work | consider for self-employed with no sick-pay |
+
+Social security ม.33 already covers medical care at the registered hospital; count it as the base layer.
+
+## Comparing quotes
+
+Use `decision-scoring`, command `score`, when 2 or more plans fill the same gap. Get every figure from the agent's benefit table in writing. Script path: see `decision-scoring` (superuser plugin).
+
+| Step | Value |
+|---|---|
+| Hard rules (`must`) | Total premium of all policies after purchase at most 10% of yearly income · health cover must be the new standard form · no purchase for the tax deduction alone |
+| Criterion 1 | Yearly premium, baht · `low` · proposed weight 0.30 |
+| Criterion 2 | Gap this plan fills, baht · `high` · 0.30 |
+| Criterion 3 | Room limit per night (IPD), baht · `high` · 0.12 |
+| Criterion 4 | Limit per illness or per year (IPD), baht · `high` · 0.13 |
+| Criterion 5 | Premium at age 60 per the insurer's table, baht · `low` · 0.15 |
+
+Weights are starting values the user can change (starting value, not yet measured). Order the gaps to fix by gap size in baht, largest first. If the result reads `ยังไม่นิ่ง` or `สูสี`, the user decides.
+
+## Rules that changed recently
+- **New Health Standard** (มาตรฐานใหม่สัญญาประกันสุขภาพ; new policies from 8 Nov 2564, existing from 1 Jul 2565): renewal guaranteed except for fraud, claims for unnecessary treatment, or non-disclosure; premium rises only by age band or portfolio-wide cost trend.
+- **Co-payment** (ส่วนร่วมจ่าย) for health policies with cover starting **from 20 March 2568**: next year 30% after 3+ claims for simple illness (โรคทั่วไปไม่รุนแรง) totalling ≥ 200% of premium, or 30% after 3+ claims for general illness (excluding major surgery and serious illness) totalling ≥ 400% of premium; 50% when both apply. Triggers, lifting rule and exclusions: reference.
+
+## Questions to ask the agent
+1. Is this policy under the New Health Standard? Does co-payment apply?
+2. Room rate, per-illness cap, yearly cap, and what is excluded?
+3. Premium at age 50, 60, 70 — show the table.
+4. Guaranteed renewable to what age?
+5. For life: how much of the premium is pure protection?
+
+Before signing (free-look period, disclosure, waiting periods) and complaints (OIC hotline **1186**): reference.
+
+## Output format
+Table of policies → have / need / gap per type → overlap and overspend → questions for the agent → one-line priority (the gap with the largest baht amount first, for example "fix IPD cap first").
+
+## References
+- [`references/beneficiaries-and-rules.md`](references/beneficiaries-and-rules.md) — open for the beneficiary table, co-payment triggers, free-look and waiting periods, the complaints line, and savings or unit-linked policies (ask the cover-only cost, compare with term + fund).
+- [`references/sources.md`](references/sources.md) — sources and check dates.
+
+
+## reference: beneficiaries-and-rules.md
+
+# Beneficiaries, recent rules, before signing, complaints · insurance-review
 
 ## Beneficiaries — does the paper match the intent
 
@@ -32,34 +89,6 @@ Put the result in one table: account · named now · intended · matches? Flag i
 
 Idea: `estate-and-tax-brief` steps 5–6, anthropics/claude-for-financial-advisors (Apache-2.0, viewed 2026-11-10); US account types and legal terms left out.
 
-## Sizing rules of thumb
-
-| Type | What it pays | Rule of thumb |
-|---|---|---|
-| Life (term) | lump sum on death | debts + (yearly spending of dependants × years until they are independent) + education fund − liquid assets. Shortcut 5–10 × annual income. With no dependants and no debt, little or none is needed |
-| Health — in-patient department (IPD) | hospital bills | room rate per day = the room at the hospital you would use; yearly or per-illness cap able to cover a major surgery there (private hospital major case often 1–3 million (รอยืนยัน)) |
-| Health — out-patient department (OPD) | outpatient visits | usually poor value; pay from budget |
-| Critical illness (โรคร้ายแรง) | lump sum on diagnosis | 1–3 years of spending to cover lost income during treatment |
-| Personal accident (PA) | death / disability / treatment from accident | cheap top-up for riders, drivers, manual work; not a substitute for health |
-| Disability income | monthly if unable to work | consider for self-employed with no sick-pay |
-
-Social security ม.33 already covers medical care at the registered hospital — count it as the base layer.
-
-## Comparing quotes
-
-Use `decision-scoring`, command `score`, when 2 or more plans fill the same gap. Get every figure from the agent's benefit table in writing. Script path: see `decision-scoring` (superuser plugin).
-
-| Step | Value |
-|---|---|
-| Hard rules (`must`) | Total premium of all policies after purchase at most 10% of yearly income · health cover must be the new standard form · no purchase for the tax deduction alone |
-| Criterion 1 | Yearly premium, baht · `low` · proposed weight 0.30 |
-| Criterion 2 | Gap this plan fills, baht · `high` · 0.30 |
-| Criterion 3 | Room limit per night (IPD), baht · `high` · 0.12 |
-| Criterion 4 | Limit per illness or per year (IPD), baht · `high` · 0.13 |
-| Criterion 5 | Premium at age 60 per the insurer's table, baht · `low` · 0.15 |
-
-Weights are starting values the user can change (starting value, not yet measured). Order the gaps to fix by gap size in baht, largest first. If the result reads `ยังไม่นิ่ง` (not stable) or `สูสี` (too close), the user decides. Insurance output is information; this skill does not pick a plan (see the line at the top).
-
 ## Rules that changed recently
 
 **New Health Standard (มาตรฐานใหม่สัญญาประกันสุขภาพ)** — new policies from 8 Nov 2564, existing policies from 1 Jul 2565: standard coverage categories, renewal guaranteed except for fraud, claims for unnecessary treatment, or non-disclosure; premium increases only by age band or medical cost trend for the whole portfolio, not one person.
@@ -74,8 +103,6 @@ Weights are starting values the user can change (starting value, not yet measure
 
 Co-pay is lifted when the following year's claims fall below the trigger. Policies held before 20 March 2568 and renewed continuously are not affected. Exact exclusions per policy (รอยืนยัน in the policy wording).
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.thairath.co.th/money/personal_finance/insurance/2840568 , https://www.thaipost.net/public-relations-news/182924/
-
 ## Before signing
 
 - **Free-look period**: return a new life or health policy within 15 days of receiving it for a refund (30 days when sold by phone) (รอยืนยัน per policy)
@@ -87,17 +114,13 @@ Co-pay is lifted when the following year's claims fall below the trigger. Polici
 
 Office of Insurance Commission (สำนักงาน คปภ.) hotline **1186**, oic.or.th, or any provincial OIC office. Bring policy, claim letters, receipts, and the timeline.
 
-## Questions to ask the agent
 
-1. Is this policy under the New Health Standard? Does co-payment apply?
-2. Room rate, per-illness cap, yearly cap, and what is excluded?
-3. Premium at age 50, 60, 70 — show the table.
-4. Guaranteed renewable to what age?
-5. For life: how much of the premium is pure protection?
+## reference: sources.md
 
-## Output format
+# Sources · insurance-review
 
-Table of policies → have / need / gap per type → overlap and overspend → questions for the agent → one-line priority (the gap with the largest baht amount first, for example "fix IPD cap first").
+- New Health Standard and co-payment rules (ตรวจล่าสุด 2026-10-06): https://www.thairath.co.th/money/personal_finance/insurance/2840568 · https://www.thaipost.net/public-relations-news/182924/
+- Beneficiary check idea: `estate-and-tax-brief` steps 5–6, anthropics/claude-for-financial-advisors (Apache-2.0, viewed 2026-11-10); US account types and legal terms left out.
 
 
 ---
@@ -106,9 +129,55 @@ Table of policies → have / need / gap per type → overlap and overspend → q
 
 Use when picking Thai funds, RMF or ThaiESG, or a factsheet
 
-# Mutual Fund Picker (เลือกกองทุนรวม)
+# Mutual Fund Picker (เลือกกองทุนรวม) — a scored shortlist of 3 Thai funds with trade-offs, not "the best"
 
 General information, not investment advice — a licensed investment consultant (IC) at the bank or broker can give personal advice. Never recommend a specific fund as "the best"; shortlist and explain trade-offs.
+
+## Use when
+- Picking a Thai mutual fund, RMF or ThaiESG fund, or reading a factsheet.
+- Comparing an index fund with active funds, or checking what a fund really costs.
+
+Not for: emergency money → `emergency-fund` · tax rules of RMF/ThaiESG → `tax-deduction-planner` · monthly schedule, rebalancing, pre-order checks → `rebalance-and-dca` · deposits and bonds → `bonds-and-deposits` · a fund promising a high fixed return → `scam-check`
+
+## Steps
+1. Set the goal, the time horizon (under 3 years means no equity; money needed within 3 years stays in risk levels 1–4) and the fund's role in the portfolio.
+2. Pick the type from the table in `references/fund-types-and-fees.md` (money market, government/short-term, fixed income, mixed, Thai equity, foreign feeder, sector, RMF/ThaiESG, with the SEC risk level 1–8 of each).
+3. Shortlist 3 funds in that Association of Investment Management Companies (AIMC) category. Read each factsheet in this order: (1) policy and benchmark, is it a feeder and of which master fund · (2) risk level 1–8 and currency hedging (hedged / partly / unhedged) · (3) fees: front, back, Total Expense Ratio (TER); a feeder adds the master fund's TER · (4) performance vs benchmark for 3, 5, 10 years and percentile in its peer group · (5) maximum drawdown and standard deviation: "could I hold through this?" · (6) fund size and age: very small or new funds may close or merge · (7) top holdings and concentration · (8) dividend policy: dividend-paying funds trigger 10% tax with no credit; accumulation is more tax-efficient for most individuals (`tax-basics-th`). Where to compare: SEC fund search (https://market.sec.or.th/public/mfeds/), Morningstar Thailand (morningstarthailand.com), AIMC category returns (aimc.or.th), the AMC's own factsheet PDF.
+4. Build the comparison table: TER, front/back fee, 5-year return vs benchmark, max drawdown, size, hedging, dividend policy. Compare a low-cost index fund with active funds side by side (a 1.5% fee gap compounds to roughly 30% less money over 25 years; example in `references/worked-examples.md`). An active fund earns its fee only when its excess return over the benchmark (5-year and 10-year return after fees − benchmark return) is above 0 in both windows and above the peer median, and the manager team is stable. Never pick on 1-year return alone.
+5. Score the shortlist with `decision-scoring`, command `score` (its `templates/score.json` is already a fund example; script path: see `decision-scoring`, superuser plugin).
+6. Lay out the shapes side by side ("low-cost SET50 index" vs "global index feeder" vs active) with fees and risk; the user picks.
+7. Check fund-level tax: RMF/ThaiESG holding rules before buying for tax.
+8. Set the DCA plan and a yearly review date; monthly schedule, rebalancing and pre-order checks → `rebalance-and-dca`. For the user's own fees run `node money-calc.mjs fee <file.json>` (script in `portfolio-snapshot`, see its Script path).
+
+## Scoring the shortlist
+
+| Step | Value |
+|---|---|
+| Hard rules (`must`, filter out first, not scored) | Risk level not above what the user accepts · money needed within 3 years → level 4 or lower · minimum purchase not above what the user can invest · a fund promising a high fixed return → `scam-check`, not shortlisted |
+| Criterion 1 | Total cost, TER % (feeder fund plus the master fund's TER) · `low` · proposed weight 0.35 |
+| Criterion 2 | 5-year return after fees minus benchmark return, % · `high` · 0.35 |
+| Criterion 3 | Maximum drawdown, % · `low` · 0.30 |
+
+Weights are starting values the user can change (not yet measured). Every figure comes from the factsheet with its date. If the result reads `ยังไม่นิ่ง` (not stable) or `สูสี` (too close), show every ranked fund and let the user choose. The score is information; past returns do not guarantee the future. Fee ranges in the reference are rules of thumb, not regulated caps (รอยืนยัน per fund).
+
+## Check before done
+- 3 funds shortlisted from one AIMC category, every figure from the factsheet with its date
+- Feeder funds show the master fund's TER added
+- Horizon matches risk (within 3 years → levels 1–4)
+- A fund promising fixed high returns went to `scam-check`
+- No fund called "the best"
+
+## References
+- [`references/fund-types-and-fees.md`](references/fund-types-and-fees.md) — open to choose a fund type or explain fees (front-end, back-end, switching, management, TER)
+- [`references/worked-examples.md`](references/worked-examples.md) — open to show fee drag over 25 years or DCA unit buying
+- [`references/sources.md`](references/sources.md) — sources and check dates (2026-10-26) for risk levels 1–8 and the 10% dividend tax
+
+
+## reference: fund-types-and-fees.md
+
+# Fund types and fees · mutual-fund-picker
+
+Open when picking the fund type for the user's goal, or explaining what each fee costs.
 
 ## Fund types (Thai market)
 
@@ -137,47 +206,21 @@ Feeder funds have a second layer: the master fund's own expense ratio — add it
 
 Ranges are rules of thumb, not regulated caps (รอยืนยัน per fund).
 
-## Reading a factsheet — in this order
 
-1. **Policy and benchmark** — what it actually buys; is it a feeder (which master fund)?
-2. **Risk level 1–8** and currency hedging policy (hedged / partly / unhedged)
-3. **Fees** — front, back, TER; feeder adds master TER
-4. **Performance vs benchmark** for 3, 5, 10 years, and percentile in its peer group (Association of Investment Management Companies (AIMC) category)
-5. **Maximum drawdown** and standard deviation — "could I hold through this?"
-6. **Fund size and age** — very small or new funds may close or merge
-7. **Top holdings and concentration**
-8. **Dividend policy** — dividend-paying funds trigger 10% tax with no credit; accumulation is more tax-efficient for most individuals (`tax-basics-th`)
+## reference: sources.md
+
+# Sources · mutual-fund-picker
 
 ตรวจล่าสุด 2026-10-26 · ระดับความเสี่ยง 1–8 (เอกสารบางกองมีระดับ 8+ สำหรับกองซับซ้อน) แหล่ง: https://www.sec.or.th/TH/Template3/Articles/2567/310767.pdf , https://publish.sec.or.th/nrs/5777a2.doc , https://wealthythai.com/th/updates/where-to-put-your-money/19210 · ภาษีเงินปันผล 10% หัก ณ ที่จ่าย แหล่ง: https://www.rd.go.th/24745.html , https://www.finnomena.com/?p=124799 , https://www.thairath.co.th/money/personal_finance/finance_banking/2857794 · ส่วน "กองทุนเครดิตภาษีไม่ได้" มีแต่แหล่งไม่ทางการ (รอยืนยัน)
 
 Where to compare: SEC fund search (https://market.sec.or.th/public/mfeds/), Morningstar Thailand (morningstarthailand.com) for star rating and peer rank, AIMC category returns (aimc.or.th), the AMC's own factsheet PDF.
 
-## Passive vs active
 
-- Compare a low-TER index fund with active funds side by side; a 1.5% fee gap compounds to roughly 30% less money over 25 years (see example).
-- An active fund earns its fee only when its excess return over the benchmark (5-year and 10-year return after fees − benchmark return) is above 0 in both windows and above the peer median, and the manager team is stable. The 5-year excess return is a scoring criterion below.
-- Never pick on 1-year return alone — last year's top theme fund is a common trap.
+## reference: worked-examples.md
 
-## Workflow
+# Worked examples · mutual-fund-picker
 
-1. Set the goal, the time horizon (under 3 years means no equity) and the fund's role in the portfolio.
-2. Pick the type from the table.
-3. Shortlist 3 funds in that AIMC category; build the comparison table: TER, front/back fee, 5-yr return vs benchmark, max drawdown, size, hedging, dividend policy.
-4. Score the shortlist (section "Scoring the shortlist" below), then lay out the shapes side by side ("low-cost SET50 index" vs "global index feeder" vs active) with fees and risk; the user picks.
-5. Set the DCA plan and a yearly review date. Monthly schedule, rebalancing and the pre-order checks → `rebalance-and-dca`.
-
-## Scoring the shortlist
-
-Use `decision-scoring`, command `score`. Its `templates/score.json` is already a fund example. Script path: see `decision-scoring` (superuser plugin).
-
-| Step | Value |
-|---|---|
-| Hard rules (`must`, filter out first, not scored) | Risk level not above what the user accepts · money needed within 3 years → level 4 or lower (Rules below) · minimum purchase not above what the user can invest · a fund promising a high fixed return → `scam-check`, not shortlisted |
-| Criterion 1 | Total cost, TER % (feeder fund plus the master fund's TER) · `low` · proposed weight 0.35 |
-| Criterion 2 | 5-year return after fees minus benchmark return, % · `high` · 0.35 |
-| Criterion 3 | Maximum drawdown, % · `low` · 0.30 |
-
-Weights are starting values the user can change (starting value, not yet measured). Every figure comes from the factsheet with its date. If the result reads `ยังไม่นิ่ง` (not stable) or `สูสี` (too close), show every ranked fund and let the user choose. The score is information; past returns do not guarantee the future.
+Open when showing the user fee drag over 25 years or how dollar-cost averaging (DCA) buys units.
 
 ## Worked example — fee drag
 
@@ -204,9 +247,3 @@ For the user's own funds run `node money-calc.mjs fee <file.json>` (script in `p
 | Total | — | 1,525 units for 15,000 |
 
 Average cost 9.84 per unit, below the simple average NAV 10.17 — DCA buys more units when prices fall. It does not prevent losses; it removes timing decisions. Set it as a bank auto-debit right after payday (`personal-budget`).
-
-## Rules
-
-- Match horizon to risk: money needed within 3 years stays in levels 1–4.
-- Check fund-level tax: RMF/ThaiESG holding rules before buying for tax.
-- If the user names a fund promising fixed high returns, run `scam-check`.

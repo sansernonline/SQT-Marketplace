@@ -3,34 +3,34 @@ name: principle-data-shape-first
 description: Use when logic crosses functions or modules
 ---
 
-# principle · data shape first — get the data shape first and the code follows
+# principle-data-shape-first — get the data shape first and the code follows
 
-> Most messy code does not come from hard logic but from the wrong data shape from the start
-> With the right types and data structure, most `if`s disappear by themselves
+> **One rule:** most messy code comes from the wrong data shape from the start; with the right types and data structure, most `if`s disappear by themselves.
 
-## Before writing the first line, be able to answer 4 questions
+## Use when
 
-| Ask | What you get |
-|---|---|
-| What is the main data of this work, and what fields does it have | a type or schema actually written out, not in your head |
-| How many possible states are there | one union or enum, instead of several booleans that can contradict each other |
-| Where does data enter from outside the system | a single point that parses and validates, then trust the types inside |
-| Who writes this data at the same time | separate them so they do not have to share, then use a lock or queue only when there truly must be a single writer |
+- Logic crosses functions or modules
+- Starting a feature or new project: the `feature` and `new-project` playbooks write the data shape into the todo before starting
 
-## Rules
+Not for: a one-off script, or a change inside a single function that does not change the data shape · a new table → `database-design` · APIs → `api-conventions`
 
-- **An invalid state must be impossible to create** — `{ status: 'paid', paidAt }`, not `isPaid` + `paidAt?` that can contradict
-- **A value with meaning gets its own type** — `OrderId`, not a bare `string` · for money use an exact decimal type and never float · in the database use `decimal(19,4)` per `stack-sql` · integer satang is allowed only in memory or in JSON sent to a payment gateway that asks for it
-- **Business rules live in the structure, not scattered as `if`s** — use a map table · state machine · lookup instead of repeating `if (type === ...)` across files
-- **Validate when data enters the system, then trust it inside** — data from the CLI · config · requests · files · external APIs: convert with a schema the moment it arrives, so inner code does not re-check null
-- **Do not lie to the compiler** — no `any` · `as` · `!` just to make it compile, and a `switch` must cover every case with an exhaustive check
-- **Types come from one source** — generate from the database schema or OpenAPI, do not rewrite them by hand
-- **A new requirement does not fit the old data shape** — design the new shape as if you had known from day one, do not bolt on another flag
+## Steps
 
-## In the work
+1. **Before the first line, answer 4 questions** and write the answers as a real type or schema, not in your head:
+   - What is the main data of this work, and what fields does it have?
+   - How many possible states are there? Use one union or enum instead of several booleans that can contradict each other.
+   - Where does data enter from outside the system? Use a single point that parses and validates, then trust the types inside.
+   - Who writes this data at the same time? Separate them so they do not share; use a lock or queue only when there truly must be a single writer.
+2. **Make an invalid state impossible to create:** `{ status: 'paid', paidAt }`, not `isPaid` + `paidAt?` that can contradict.
+3. **Give a value with meaning its own type:** `OrderId`, not a bare `string`. For money use an exact decimal type, never float; in the database `decimal(19,4)` per `stack-sql`; integer satang only in memory or in JSON sent to a payment gateway that asks for it.
+4. **Put business rules in the structure:** a map table, state machine or lookup instead of repeating `if (type === ...)` across files.
+5. **Validate when data enters** (CLI · config · requests · files · external APIs): convert with a schema on arrival so inner code does not re-check null.
+6. **Do not lie to the compiler:** no `any` · `as` · `!` just to make it compile; a `switch` covers every case with an exhaustive check.
+7. **Take types from one source:** generate from the database schema or OpenAPI, do not rewrite by hand.
+8. **When a new requirement does not fit the old shape,** design the new shape as if you had known from day one; do not bolt on another flag.
 
-The `feature` and `new-project` playbooks say to write the data shape into the todo before starting · for a new table use `database-design`, and for APIs use `api-conventions`
+## Check before done
 
-## When not to do this
-
-A one-off script, or a change inside a single function that does not change the data shape
+- The 4 questions have written answers (type or schema)
+- No pair of booleans can contradict each other; no `any` · `as` · `!` added to compile
+- Outside data is parsed at a single entry point

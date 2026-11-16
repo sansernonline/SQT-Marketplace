@@ -7,7 +7,6 @@ Use for a one-off logo or poster, not a full brand kit
 > **Pre-work gate "ด่านก่อนลงมือ" (every time):** read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for finding the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
 > **The one rule of this skill:** write the direction into a file first, then touch the first pixel.
-> A direction that is not written down gets forgotten by the third sheet.
 
 ---
 
@@ -79,7 +78,7 @@ If the whole category looks boring, playfulness is the difference. If the whole 
 - **Neutrals take 80% of the area** of the piece. The rest is brand colour.
 - Record every value as **Hex · RGB · CMYK · Pantone** if there is print work.
 - Contrast between text and background must pass **4.5:1** for normal text and **3:1** for large or bold text.
-- About 8% of men are colour blind. **Never let colour alone carry the meaning.**
+- **Never let colour alone carry the meaning.**
 
 **2 type families are enough.** One family with many weights is even better.
 
@@ -129,8 +128,6 @@ Instagram, print (bleed, resolution, colour mode).
 
 ## 6 · Thai in graphic work
 
-**No international design handbook covers this part,** and it is where Thai work breaks most often.
-
 ### Stacked vowels and tone marks
 
 Rules you must not miss:
@@ -146,8 +143,6 @@ Full explanation of each topic → [`references/thai-in-graphics.md`](references
 ---
 
 ## 7 · What not to do, with what to use instead
-
-A bare "don't" does not work. Say what to use instead.
 
 | ✗ Don't | ✓ Use instead |
 |---|---|
@@ -168,9 +163,6 @@ or like it could have come out of any machine?
 
 ## 8 · Review
 
-**The second round must cut, not add.** If your hand is about to draw something new, stop and ask how
-to improve what is already there.
-
 - [ ] Open it at **real use size**, not the working size. For a poster, view from 2 metres. For a post, view on a phone screen.
 - [ ] Squint: does only one thing pop out first?
 - [ ] Thai text is complete, with no tone marks clipped (test with ที่ ปั๊ม ปุ่ม สื่อ ตื้น)
@@ -181,28 +173,11 @@ to improve what is already there.
 - [ ] Compare with the direction file: does anything contradict it?
 - [ ] Read the list of things to avoid, and check whether you slipped any in
 
----
-
-## 9 · Links to other skills
-
-| Need | Use together with |
-|---|---|
-| Spacing, visual hierarchy, 5 states | `ui-craft` |
-| Apply the colour system in documents | `branded-document-design` |
-| Use it in slides | `presentation-design` |
-| Use it on app screens | `web-app-design` · `mobile-app-design` · `windows-app-design` |
-| Cut out what is not needed | `simplicity-first` |
-
----
 
 ## Do not look AI-made
 
 Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script. Every piece must also pass the eye check (ด่านตา) 3.2 (web pages answer items 10–14 as well), because a script result of 0 items does not yet mean a pass. The bans in this file are specific to this work. The full list for every medium is there.
 
-## Abbreviations
-
-Always spell out an abbreviation in full the first time, then put the abbreviation in brackets, for example Model Context Protocol (MCP).
-After that you can use the abbreviation. For details see the skill `spell-out-abbreviations`.
 
 **Read more when needed:** [`references/designer-outputs.md`](references/designer-outputs.md) — formats for a designer's deliverables
 

@@ -29,41 +29,7 @@ Describe what you feel ("pressure behind the eyes", "burning when urinating"), n
 
 Useful OLDCARTS prompts for the description: **O**nset · **L**ocation · **D**uration · **C**haracter · **A**ggravating / relieving · **R**adiation (spreads where) · **T**iming · **S**everity.
 
-## Question bank — pick three
-
-About the problem
-- What do you think is causing this, and what else could it be?
-- Do I need any tests? What will they show, and when do I get the results?
-- What should I watch for that means I must come back sooner or go to the emergency room?
-
-About treatment
-- What is this medicine for, how long do I take it, and what side effects should I report?
-- Does it interact with anything on my list (show the list)?
-- What happens if I don't treat it now?
-- Are there non-medicine options?
-
-About cost and rights
-- Is this covered under my scheme (ประกันสังคม / บัตรทอง / ข้าราชการ / insurance)?
-- Is there an equivalent covered option or a generic?
-- Do I need a referral letter (ใบส่งตัว) to see a specialist under my scheme?
-
-Thai phrasing if needed: "ขอถามคำถามสั้น ๆ 3 ข้อได้ไหมคะ/ครับ" · "อาการแบบไหนที่ต้องรีบกลับมาหรือไปห้องฉุกเฉินคะ/ครับ" · "ยานี้ทานนานแค่ไหน และต้องระวังอะไรบ้างคะ/ครับ"
-
-## Emergency card — one page, kept separately
-
-Not the visit card: this one lives in the wallet, in the phone's lock-screen medical info (Medical ID on iPhone, Emergency information on Android), and with the person who would ride in the ambulance. Update it whenever `medication-schedule` changes.
-
-```
-Name · date of birth · blood group (from a lab result, not memory)
-Conditions: ___            Allergies (medicine / food / latex) and reaction: ___
-Current medicines — name, strength, how often (copied from labels): ___
-Implants, pacemaker, pregnancy possible: ___
-Scheme and chosen hospital: ประกันสังคม / บัตรทอง / ข้าราชการ / insurer + policy number
-Emergency contacts (2): name · relation · phone
-Language the person is most comfortable with: ___
-```
-
-No ID-card number on it — the card itself is in the same wallet. Half a page in Thai, half in English if the person travels.
+Question bank (pick three): [`references/question-bank.md`](references/question-bank.md). Emergency card (separate one-page card, not the visit card): [`references/emergency-card.md`](references/emergency-card.md).
 
 ## During the visit
 
@@ -89,13 +55,6 @@ No ID-card number on it — the card itself is in the same wallet. Half a page i
 
 Then update `medication-schedule` and the `annual-checkup` results table, and store papers in `important-docs`.
 
-## Worked example — top 3 questions
-
-Visit for morning headaches, 3 weeks, home blood pressure (BP) readings 150/95 on 4 mornings:
-1. "My home blood pressure readings are on this sheet — could they be connected to the headaches, and do I need more checks?"
-2. "Is any medicine or supplement on my list a possible cause?"
-3. "Which signs mean I should go to the emergency room instead of waiting?"
-
 Related: `medication-schedule` · `annual-checkup` · `sleep-log` · `meeting`.
 
 ## เรียกเป็นคำสั่ง
@@ -108,3 +67,8 @@ Run the `health-organizer` agent with the `doctor-visit-prep` skill: **$ARGUMENT
 - `after` — fill the after-visit summary: what the doctor said, new prescriptions copied exactly, tests ordered, follow-up date, warning signs to watch
 
 Never diagnose or suggest doses. Emergency symptoms → 1669 first.
+
+## References
+
+- [`references/question-bank.md`](references/question-bank.md) — open to pick the top 3 questions for the doctor
+- [`references/emergency-card.md`](references/emergency-card.md) — open when the user asks for an emergency card

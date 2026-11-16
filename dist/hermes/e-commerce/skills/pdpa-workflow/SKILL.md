@@ -18,8 +18,6 @@ argument-hint: <consent|breach|request|vendor> [details]
 | Withdraw consent | as easy as giving it; stop processing for that purpose | ม.19 |
 | Keep the record of processing (ROPA) | continuously; show the regulator on request | ม.39 |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.thansettakij.com/technology/660448 · https://muic.mahidol.ac.th/th/news/siththikaarekhaathuengkh-muulswnbukhkhl-right-to-access-maatraa-30 · official text: https://www.pdpc.or.th
-
 ## 2. Lawful basis before consent
 
 Consent is the weakest basis — it can be withdrawn. Pick the basis first (ม.24); ask for consent only when nothing else fits.
@@ -67,8 +65,6 @@ Consent is the weakest basis — it can be withdrawn. Pick the basis first (ม.
 6. **Reply in writing by day 30**: what was found, what was done, what was refused and why, and how to complain to สคส.
 7. **We only process the data for someone else** (for example, we pack orders for another brand): forward the request to that controller the same day and tell the person who will answer.
 
-The 2-letter flow (acknowledge, then answer) and the system checklist follow Anthropic's dsar-response skill (`anthropics/claude-for-legal` privacy-legal, Apache-2.0, read 2026-11-10), rewritten for Thai sellers; no text copied.
-
 ### D. Breach response (clock starts when you become aware)
 | Hour | Action |
 |---|---|
@@ -102,6 +98,7 @@ Health data is sensitive, so the risk is high. Contain: delete the message, ask 
 
 ## Rules
 
+- General information, not legal advice; incidents with legal exposure go to a Thai lawyer.
 - Collect the minimum; delete on schedule — data you do not hold cannot leak.
 - Do not copy national ID cards unless a law requires it; if needed, write the purpose on the copy.
 - Penalties include administrative fines up to millions of baht and criminal penalties for some offences (ม.79–90) — treat deadlines as real.
@@ -116,4 +113,6 @@ Health data is sensitive, so the risk is high. Contain: delete the message, ask 
 
 Run `pdpa-workflow` with the `compliance-helper` agent for: **$ARGUMENTS**
 
-General information, not legal advice; incidents with legal exposure go to a Thai lawyer.
+## References
+
+- [`references/sources.md`](references/sources.md) — open when you must re-check the deadlines in section 1

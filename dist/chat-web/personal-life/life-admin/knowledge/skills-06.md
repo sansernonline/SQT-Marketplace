@@ -73,10 +73,6 @@ Related: [[other note]]
 5. **Retrieval** — decode the words with `names.md` first, then search by file name, then tags, then full text. When a note was hard to find, rename it or add the alias you searched for — that is the maintenance loop.
 6. **Answering from notes** — every answer names the note and its date ("จาก `2025-05-11 notes.md`"). A note used for a status (who is doing what, a balance, a booking) that is older than 1 month, or for a fact older than 1 year, gets the line "โน้ตนี้อายุ … อาจเปลี่ยนแล้ว". **Two notes that disagree → show both with their dates**; never pick one silently.
 
-## Worked example
-
-User: "I wrote down how to reset the water pump last year." Search `pump` → nothing; full-text `ปั๊ม` → 14 hits in chat exports. Found it in `2025-05-11 notes.md`, mixed with a shopping list. Fix: move into `reference/water pump – reset and service.md`, tags `#home #ปั๊มน้ำ #pump`, alias "Mitsubishi pump", link from `index.md` under Home. Next search: 2 seconds.
-
 ## Rules
 
 - Capture is fast; organisation happens weekly, not at capture time
@@ -84,9 +80,26 @@ User: "I wrote down how to reset the water pump last year." Search `pump` → no
 - Notes about other people: facts and preferences they shared with you, not gossip or health details they did not want written
 - Back up the `kb/` folder with the rest of the user's files (3-2-1 rule in `digital-hygiene`)
 
-Source for `names.md` and the answering rules: ideas from anthropics/knowledge-work-plugins `productivity/skills/memory-management` and `enterprise-search/skills/knowledge-synthesis` (Apache-2.0, rewritten, viewed 2026-11-10).
-
 Related: `meeting` (Leg 2 summaries file into `journal/`) · `important-docs` (documents, not notes) · `weekly-review`.
+
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open for a model fix of a hard-to-find note
+- [`references/sources.md`](references/sources.md) — where the `names.md` and answering rules came from
+
+
+## reference: sources.md
+
+# Sources · personal-kb
+
+- Source for `names.md` and the answering rules: ideas from anthropics/knowledge-work-plugins `productivity/skills/memory-management` and `enterprise-search/skills/knowledge-synthesis` (Apache-2.0, rewritten, viewed 2026-11-10).
+
+
+## reference: worked-example.md
+
+# Worked example · personal-kb
+
+User: "I wrote down how to reset the water pump last year." Search `pump` → nothing; full-text `ปั๊ม` → 14 hits in chat exports. Found it in `2025-05-11 notes.md`, mixed with a shopping list. Fix: move into `reference/water pump – reset and service.md`, tags `#home #ปั๊มน้ำ #pump`, alias "Mitsubishi pump", link from `index.md` under Home. Next search: 2 seconds.
 
 
 ---
@@ -96,8 +109,6 @@ Related: `meeting` (Leg 2 summaries file into `journal/`) · `important-docs` (d
 Use when a trip is near or a passport expires
 
 # Travel Prep (เตรียมเดินทาง)
-
-One checklist, one itinerary file, no airport surprises. Written for Thai passport holders; works for anyone by swapping the entry-rule lookup.
 
 Entry rules, passport facts, plug table and the fill-in checklist: [references/travel-facts.md](references/travel-facts.md) · [references/checklist-template.md](references/checklist-template.md).
 
@@ -143,14 +154,6 @@ Current visa-free list for Thai passports: [references/travel-facts.md](referenc
 - Passport photo page and visa page scanned into the important-docs folder (`important-docs`) and available offline
 - Travelling with a foreign spouse or friend into Thailand: they fill the **TDAC** (Thailand Digital Arrival Card) online before arrival; Thai citizens do not
 
-## Worked example
-
-Nok (Thai, 34) and her German husband, Tokyo 10–17 January 2027. Check on 2026-10-06:
-- Nok's passport expires 2027-03-14 — Japan wants it valid for the stay, but the airline and future trips make 6 months the safe rule → book a 10-year passport now (1,500 บาท).
-- Japan visa exemption for Thai ordinary passports: 15 days, temporary measure to 30 June 2027 → covers 7 days; recheck in December.
-- Husband: German passport, Japan visa-free; returning to Bangkok he fills TDAC online before arrival.
-- Insurance: annual Asia plan; Japan 100 V, plug A/B — Thai two-flat-pin chargers fit, check the device says 100–240 V.
-
 ## Output
 
 Trip card · entry decision per traveller with source and date · checklist from the template · itinerary file `YYYY-MM-DD-destination-itinerary.md`.
@@ -163,7 +166,9 @@ Related: `important-docs` (passport expiry) · `polite-message-th-en` (hotel or 
 
 Run the `travel-prep` skill for: **$ARGUMENTS**
 
-Produces the checklist plus an itinerary file with every confirmation number, and a day-before four-thing check list.
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open when you want a filled-in trip (Tokyo, Thai and German travellers)
 
 
 ## reference: checklist-template.md
@@ -287,3 +292,14 @@ Thailand: A, B, C, O · 230 V · 50 Hz. Most phone/laptop chargers are 100–240
 | Australia | I | 230 V |
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.worldstandards.eu/electricity/plug-voltage-by-country/
+
+
+## reference: worked-example.md
+
+# Worked example · travel-prep
+
+Nok (Thai, 34) and her German husband, Tokyo 10–17 January 2027. Check on 2026-10-06:
+- Nok's passport expires 2027-03-14 — Japan wants it valid for the stay, but the airline and future trips make 6 months the safe rule → book a 10-year passport now (1,500 บาท).
+- Japan visa exemption for Thai ordinary passports: 15 days, temporary measure to 30 June 2027 → covers 7 days; recheck in December.
+- Husband: German passport, Japan visa-free; returning to Bangkok he fills TDAC online before arrival.
+- Insurance: annual Asia plan; Japan 100 V, plug A/B — Thai two-flat-pin chargers fit, check the device says 100–240 V.

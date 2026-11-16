@@ -8,7 +8,6 @@ description: Use when building a native-looking Windows 11 app
 > **Gate before starting (every time):** read the owner's theme → search live references → 3 genuinely different directions → run `no-ai-look` before sending · follow the "Gate before starting" (`ด่านก่อนลงมือ`) section of `design-references` (plugin `superuser`) even when a brand already exists (the brand controls color and fonts, while the search is for finding the structure of this piece) · close the job with the line `ด่านก่อนลงมือ:`
 
 > **One rule:** the app you make must look like something that ships with Windows 11, not a web page stuffed into a window.
-> Windows users know at once what is not genuine: wrong corner radius, wrong button height, a menu in the wrong place.
 >
 > **Native does not mean the default theme.** Standout apps on Windows 11 (Windows Terminal · Dev Home · the Files app) follow native rules (sizes · corners · buttons · title bar) but have an identity of their own: a chosen default theme (dark is fine) · the brand accent color on data and the primary button · a logo in the title bar · a hero screen.
 > **The window frame is neutral.** The title bar · nav · rail · command bar · status bar · borders use Mica/Acrylic with no tint, and lines and icons are gray-black following the Windows theme. The accent may appear only in the 3×16px selection bar, the primary button, data (KPI numbers · charts), and links. Tint the frame only when the user asks. Choose the identity per `ui-craft` item 0.1 before starting. `fluent.css` is the base, not the final look.
@@ -45,13 +44,7 @@ description: Use when building a native-looking Windows 11 app
 7. Convert to real code only after the whole set is approved — use the same tokens and do not redesign
 ```
 
-**Why do 3 pages first:** if you do every page in one round (for example 32 pages), each page gets little attention to how it looks.
-The work shifts to covering every requirement, and ends up as a wireframe with color. A good-looking main page becomes the model the other pages copy.
-
 **Deliver the mockup as a single file** (`mockup/<code>-mockup.html`, every screen as a section) → embed the contents of `fluent.css` in `<style>` instead of `<link>` before sending · while working, keeping them side by side is fine.
-
-**Why a mockup first:** editing HTML takes minutes, but editing Extensible Application Markup Language (XAML) that is already bound to a ViewModel
-takes hours, and once code is written, a talk about looks turns into a talk about cost.
 
 ---
 
@@ -79,8 +72,6 @@ Values to remember without opening the table:
 | Button background | `#333333` | `#FFFFFF` |
 
 > **The neutral values (background, text, lines, shadows) are Fluent 2 measured from real Windows 11. Do not invent them and do not adjust them to look nicer.**
-> An app whose neutral colors do not match the operating system looks foreign the moment it sits next to another app.
->
 > **The only color that changes with the job is the accent.** Use the customer's brand color. If there is none, use the Windows default in the table above, write `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask. Suggest a tone from the subject matter in the report.
 > (The table for choosing a color tone by subject matter is in `colour-by-domain` (`diagram-figures` → `references/colour-by-domain.md`).)
 > The accent value in the table above is the Windows default, a safe choice when there is no brand.
@@ -196,9 +187,4 @@ Fix the points you agree with (a critique that is wrong because the image was mi
 
 ## Do not look AI-made
 
-Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye gate 3.2 (web pages answer items 10–14 as well), because 0 items from the script is not yet a pass. The prohibitions in this file are the part specific to this work. The full list for every medium is there.
-
-## Abbreviations
-
-Always write an abbreviation in full the first time, then put the abbreviation in brackets — for example Model Context Protocol (MCP)
-After that you may use the abbreviation. See the skill `spell-out-abbreviations` for details.
+Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye gate 3.2 (web pages answer items 10–14 as well), because 0 items from the script is not yet a pass.

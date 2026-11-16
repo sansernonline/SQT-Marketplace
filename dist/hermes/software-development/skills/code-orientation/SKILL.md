@@ -5,9 +5,6 @@ description: Use before changing code you have not yet read
 
 # code-orientation — understand the existing code before touching it
 
-> Most code an agent writes breaks not because the agent cannot write, but because it does not know how the old code works or why it was written that way.
-> 10 minutes of reading saves several rounds of fixes.
-
 Use it before every `feature` · `bug-fix` · `refactor` · `review` playbook, whenever you have not yet read that part of the code in this session.
 
 Skip it when you change one piece of text or one constant, or when you write a new file that nothing calls.
@@ -49,7 +46,7 @@ If you cannot find the reason, do not delete the code yet. Note it as `(รอ�
 Read 2–3 files similar to the one you will write, then note:
 - **Commands** — install · build · test · lint · format · run a single test (from README · `package.json` · `*.csproj` · `pyproject.toml` · CI config)
 - **Structure** — how files are placed · how things are named · how errors and logs are handled · how tests are written
-- **Convention checklist** (note only what differs from the language default · idea from ECC codebase-onboarding)
+- **Convention checklist** (note only what differs from the language default)
 
   | Look at | Evidence to open |
   |---|---|
@@ -84,7 +81,3 @@ Tests that lock the behaviour: <file> · none → write before the change
 - Trusting an old comment that no longer matches the code, when the code and tests are the truth.
 - Tracing the whole repo until the context is full, when you should read only the path of this task.
 - "Cleaning up" along the way without a test. That should be a separate refactor task.
-
-## 6 · Link to other skills
-
-`context-budget` (heavy reading) · `blast-radius` (changing shared code) · `principle-fix-root-cause` (bug) · `readable-code` · `lazy-coding` · `testing-standards` · the stack skill

@@ -1,0 +1,3 @@
+# Sources · estate-and-will
+
+ตรวจล่าสุด 2026-10-26 · แหล่ง: กรมการปกครอง ทะเบียนพินัยกรรม https://www.bora.dopa.go.th/wp-content/uploads/2024/01/4.pdf · คู่มือ 1548 https://callcenter1548.bora.dopa.go.th/wp-content/uploads/2025/09/250108.pdf · พ.ร.บ.ภาษีการรับมรดก 2558 https://www.rd.go.th/fileadmin/user_upload/kormor/newlaw/deathduty.pdf · https://www.rd.go.th/56657.html · ศาลแพ่งพระโขนง https://civilpkc.coj.go.th/th/content/category/detail/id/22/iid/294474 · ป.พ.พ. wording from legardy.com (krisdika.go.th did not open on the check date, so section shares and deadlines without an official page stay รอยืนยัน)

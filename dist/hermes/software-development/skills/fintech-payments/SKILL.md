@@ -30,14 +30,6 @@ An agent called in for this area opens its own role file before starting work ·
 | financial regulation work — regulation map by region, applicability matrix, control mapping, audit readiness report, regulatory review and incident notification workflows | [`references/agent-fintech-compliance-officer.md`](references/agent-fintech-compliance-officer.md) | `fintech-compliance-officer` |
 | quantitative finance — credit scoring, VaR, fraud anomaly models, backtesting, model documentation card and backtest report | [`references/agent-quant-analyst.md`](references/agent-quant-analyst.md) | `quant-analyst` |
 
-## agent ของสายนี้
-
-`fintech-engineer` · `fintech-compliance-officer` · `quant-analyst`
-
-## ที่มา
-
-Moved from plugin `software-development-fintech` (formerly named payment-gateway-integration → `references/payment-gateway-integration.md` · kyc-aml-patterns → `references/kyc-aml-patterns.md` · pci-dss-compliance → `references/pci-dss-compliance.md` — no longer separate skills) and merged into `software-development` in v2.0.0. The original content is all still in `references/`
-
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 
 `/software-development:fintech-payments <transaction-flow-design | pci-audit> <details>`

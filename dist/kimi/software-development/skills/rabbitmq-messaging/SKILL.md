@@ -5,8 +5,6 @@ description: Use when work goes through RabbitMQ queues
 
 # rabbitmq-messaging — design RabbitMQ queues so messages are not lost or duplicated silently
 
-It lives in plugin `software-development` · wording in this file follows `human-writing` · every setting and version has a link and the check date 2026-10-27 in the "Sources" section · how to connect MCP is in [`mcp-rabbitmq`](references/mcp-rabbitmq.md) · the code and settings of the example are in [`email-queue-example`](references/email-queue-example.md)
-
 > **One rule:** RabbitMQ delivers "at least once", not "exactly once" · the sender must wait for confirms and learn when a message cannot be routed · the receiver must ack by itself after finishing, and be safe to repeat (check `message_id`) · a message that cannot be handled must go to a dead letter queue, not loop or be dropped silently.
 
 ## When to use
@@ -16,18 +14,6 @@ It lives in plugin `software-development` · wording in this file follows `human
 - The user says RabbitMQ · queue · exchange · binding · ack · prefetch · DLX · dead letter · quorum · "ข้อความหาย" (message lost) · "ข้อความซ้ำ" (message duplicated)
 
 Do not use when: several receivers must read the same set at their own pace and replay it → [`kafka-streaming`](../kafka-streaming/SKILL.md) (a RabbitMQ stream can also replay, see section 2) · background work of a single service where a database queue or the framework's queue is enough → [`background-jobs`](../background-jobs/SKILL.md)
-
-## Use another skill instead, or together
-
-| Situation | Use | How it relates to this skill |
-|---|---|---|
-| Work queue of a single service, low volume | [`background-jobs`](../background-jobs/SKILL.md) | Section 1 decides whether you really need a broker |
-| Events with several receivers, replay, ordered by key | [`kafka-streaming`](../kafka-streaming/SKILL.md) | Section 1 compares the 2 |
-| Work that may run twice or stop halfway | [`principle-safe-to-rerun`](../principle-safe-to-rerun/SKILL.md) | Every consumer must follow this principle (section 5) |
-| Destination is email, LINE, SMS | [`notifications`](../notifications/SKILL.md) | The consumer uses that skill's channel and quota rules |
-| Let an agent look at broker status | [`mcp-server`](../mcp-server/SKILL.md) | [`mcp-rabbitmq`](references/mcp-rabbitmq.md) names the chosen server and permissions |
-| Messages hold phone numbers, names | [`pdpa-compliance`](../pdpa-compliance/SKILL.md) | Put only ids, as in section 6 of `kafka-streaming` |
-| Watch queue length and alerts | [`observability-basics`](../observability-basics/SKILL.md) | Section 8 says what to watch |
 
 ## 1 · Choose RabbitMQ or Kafka
 
@@ -60,7 +46,7 @@ If the answer is "a single service, hundreds per hour" → try `background-jobs`
 
 1. **Manual ack** sent after the work is done (email sent, result saved) · auto-ack is unsafe according to the docs: if the consumer dies mid-work, the message is lost
 2. **Prefetch** set explicitly · 100–300 gives good throughput (1 is safest but slow) · quorum limits it at 2,000 · for work that is slow per message (calling an external email service), start low and measure
-   - Heavy work that waits on another backend (for example a GPU model server): set prefetch equal to the number of jobs the backend can really run at the same time · example from a teaching exercise, not a rule: a batch backend that takes 8 jobs at once gained 44% more work when prefetch went from 4 to 8 · a backend that does one job at a time gains nothing from more prefetch, it only moves the queue to wait at the consumer (see `load-testing` section 5)
+   - Heavy work that waits on another backend (for example a GPU model server): set prefetch equal to the number of jobs the backend can really run at the same time · a backend that does one job at a time gains nothing from more prefetch, it only moves the queue to wait at the consumer (see `load-testing` section 5)
 3. **Do not requeue in a loop** on a temporary error: it wastes bandwidth and CPU according to the docs · do a retry with a delay, or count the rounds and send it to dead letter · on a quorum queue, version 4.3 and above, for a temporary failure use `basic.reject` (requeue), not `basic.nack`, because only reject counts toward `delivery-limit` and makes `delayed-retry-type: failed` add the delay · nack does not count, so it can loop forever (section 6)
 4. A message that cannot be decoded or fails validation (poison) → reject without requeue so it goes to dead letter at once, and do not let the consumer crash and receive it again and again
 5. The default acknowledgement timeout of the consumer `(ยังไม่ได้ตรวจ ไม่ได้เปิดหน้า consumers)` (not yet checked, the consumers page was not opened) · if work is longer than the timeout, check before use
@@ -89,28 +75,11 @@ The confirms docs say redelivery can cause duplicates and a message may reach an
 
 ## 8 · Versions and monitoring
 
-Versions checked 2026-10-27 · series 4.4 is the current series according to the release-information page · 4.3 is supported until 31 Jan 2027 · 4.4 until 31 Jul 2027 · 4.2 and below are out of community support (the table says 4.2 ends 31 Jul 2026, but also lists release 4.2.11 on 16 Sep 2026, which contradicts itself) · the minor version numbers on the release-information page and on GitHub do not match (GitHub: v4.4.0 on 2026-10-19 and v4.3.7 on 2026-10-20 · release-information page: 4.4.0 on 20 Oct and 4.3.6) · before locking a version in production, open both pages and choose the one you can actually install
+Versions checked 2026-10-27 · series 4.4 is the current series according to the release-information page · 4.3 is supported until 31 Jan 2027 · 4.4 until 31 Jul 2027 · 4.2 and below are out of community support · the version numbers on the release-information page and on GitHub do not match (details in `references/sources.md`) · before locking a version in production, open both pages and choose the one you can actually install
 
 Watch: queue length · age of the oldest message · number of messages in the DLX · connections that drop often · disk of streams · set alert thresholds from real volume `(รอยืนยัน)` (awaiting confirmation) · follow `observability-basics`
 
-A backend that the consumer calls may fail silently under high load (example from a teaching exercise: a model server answered 503 for about 35 minutes and did not come back by itself) · the messages stay in the queue and are not lost · add a watchdog, a small script that checks `/health` every 10 seconds and restarts after 3 failures in a row
-
-## One real example
-
-Label `ตัวอย่าง` (example): designed on paper, not yet run against a real RabbitMQ
-
-**Problem:** an ordering web app must send an order confirmation email, no email may be lost when a worker dies, and a resend must not give the customer 2 emails.
-
-| Topic | Choice | Reason |
-|---|---|---|
-| broker | Use it · needs retry and dead letter at the broker | Section 1 · if volume is very low, go back to `background-jobs` |
-| Queue | `order.email.send` as a quorum queue through the exchange `order.events` (direct) | Section 2 |
-| Send | An outbox row in the order transaction · a relay sends with `mandatory=true` · waits for confirm, then marks it · `message_id` = order id + type | Section 3 |
-| Receive | Manual ack after sending the email and writing `processed_messages` · prefetch starts low, then measure | Sections 4 and 5 |
-| Failure | A temporary failure uses delayed retry · an undecodable message is rejected without requeue · DLX set by policy with a delivery limit | Section 6 |
-| Security | User `order-app` in its own vhost `shop` · TLS 5671 · messages hold only the order id | Section 7 |
-
-The Python code and the policy command are in [`email-queue-example`](references/email-queue-example.md)
+A backend that the consumer calls may fail silently under high load (a model server once answered 503 for about 35 minutes and did not come back by itself) · the messages stay in the queue and are not lost · add a watchdog, a small script that checks `/health` every 10 seconds and restarts after 3 failures in a row
 
 ## Check before sending
 
@@ -122,14 +91,8 @@ The Python code and the policy command are in [`email-queue-example`](references
 6. No `guest` · one user per app per vhost · TLS 1.2+ on 5671
 7. The version in use is still supported · every value cited has a link or the label `(ยังไม่ได้ตรวจ)` · nowhere does it say exactly-once
 
-## Sources
+## References
 
-Checked 2026-10-27 (opened through a web-fetch tool that summarises pages with a small model, so open the raw page again before locking values in production)
-
-- Versions and support period https://www.rabbitmq.com/release-information · https://api.github.com/repos/rabbitmq/rabbitmq-server/releases (read only the first 2 entries)
-- quorum queue · delivery limit https://www.rabbitmq.com/docs/quorum-queues · stream https://www.rabbitmq.com/docs/streams
-- publisher · confirms https://www.rabbitmq.com/docs/publishers · https://www.rabbitmq.com/docs/confirms · DLX https://www.rabbitmq.com/docs/dlx
-- the 4 exchanges https://www.rabbitmq.com/tutorials/amqp-concepts · Kafka comparison (written by RabbitMQ itself) https://www.rabbitmq.com/docs/compare/kafka
-- permissions and guest https://www.rabbitmq.com/docs/access-control · management https://www.rabbitmq.com/docs/management · TLS https://www.rabbitmq.com/docs/ssl (read up to character 100000 of 118213)
-- Checked 2026-10-27 (https://www.rabbitmq.com/docs/quorum-queues): the policy key `delivery-limit` · default 20 since 4.0 · delayed retry since 4.3 with the keys `delayed-retry-type` `delayed-retry-min` `delayed-retry-max`
-- Not yet checked (ยังไม่ได้ตรวจ): the default acknowledgement timeout · the async confirm API of the Python client
+- [`references/email-queue-example.md`](references/email-queue-example.md) — open when building the order-email queue: code, policy command, design decisions table
+- [`references/mcp-rabbitmq.md`](references/mcp-rabbitmq.md) — open when an agent must look at broker status
+- [`references/sources.md`](references/sources.md) — open when re-checking dated versions and settings (checked 2026-10-27)

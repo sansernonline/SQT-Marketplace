@@ -59,16 +59,7 @@ Source rules:
 5. **Write raw notes to `_to_delete/research/<app name>/`** (URL · quoted text · date). Do not keep them in your head, because this job is longer than one conversation round can remember.
 6. For a big job, **split into subagents by dimension** (features · UI/UX · user voice · competitors). Each writes a table in the format of step 4, with sources, into a file in `_to_delete/`, then returns only the path and a summary of at most 10 lines. The main agent merges them and writes the document.
 
-**If you actually used the app** (explored it yourself, not read reviews), these are lessons from exploring 6 real web chapters (Week 03 of Teaching_CWN2026):
-
-- **A read-only source shows only the first state** (22 of 300 items; rules and duties that appear after a click all vanish). "Could not find it" does not mean "it does not exist". You must really click too.
-- **Set a charter before exploring** (who · what · scope · lines not to cross) and finish with an honest list of "not tried". Note oddities as questions, do not conclude on your own.
-- **Tag every item with its evidence**: [O] seen in person · [R] common sense not yet tried · [E] evidence from the system. An item that agrees from 2 angles (the button cannot be pressed + the minimum value in the DOM) can be trusted. One angle is half trusted, and you write that down.
-- **5 exploration techniques**: normal path · edge values · combined conditions · go and come back · odd things (found a rule whose conditions are AND, and found that pressing load-more and coming back made the list disappear).
-- **Numbers are tied to time.** Note the date collected. For data that changes over time, compare structure and rules, not numbers. When explorers conflict, put in both values with the time, then move the item to a question. Do not guess.
-- **Split the exploration in parallel**: each explorer uses its own charter · folder · browser · a results table of the same schema (with a column for the text seen on screen as a common language). Then the lead merges. Count a duplicate once and credit every source (in the real round, 4 parts took 94 minutes in total, 53 minutes of real waiting).
-- **1 explorer = 1 browser.** Subagents that run at the same time must not use the same Playwright MCP: they get the same browser and tab, results mix, and even an identical inline MCP setup may be merged into one process. Give each its own browser, for example `playwright-cli -s=<agent name>` (cited from an issue document the instructor keeps, not yet tried ourselves).
-- **If the builder and the examiner use the same notes, the result is biased.** The exam will use the same button names as the app.
+**If you actually used the app** (explored it yourself, not read reviews): open [`references/exploring-the-app.md`](references/exploring-the-app.md) first. It holds the lessons from exploring 6 real web chapters.
 
 Stop searching when 3 new sources in a row give no new information, or when every topic in step 4 is covered. Do not keep searching to look thorough.
 
@@ -145,7 +136,7 @@ Then add 2 short lists:
 6. Competitor comparison (4.5)
 7. Improvement proposals (4.6) + do not copy + unknown
 8. Hand-off to the next documents (table below)
-9. Source register: one table, every row has number [n] · page title · URL · group (step 2) · date fetched · what was taken from this source (feature / review / image). A row with no fetch date does not yet count as evidence (idea from daymade competitors-analysis · MIT)
+9. Source register: one table, every row has number [n] · page title · URL · group (step 2) · date fetched · what was taken from this source (feature / review / image). A row with no fetch date does not yet count as evidence
 ```
 
 ### Hand-off table — make the research usable in the next documents
@@ -209,15 +200,21 @@ The next documents cite back with the code (`IMP-03` · `[7]`) so you can trace 
 | Raw notes during the search | `temp-file-discipline` |
 | Report status at the end | `status-report` |
 
----
 
-## Abbreviations
+## reference: exploring-the-app.md
 
-- **UI** — User Interface (the look of the screens)
-- **UX** — User Experience (how easy or hard it is to use)
-- **BRD** — Business Requirements Document · **SRS** — Software Requirements Specification
-- **BR / FR / NFR** — business / functional / non-functional requirements
-- **PDPA** — Personal Data Protection Act
+# Exploring the app yourself · reference-app-research
+
+Lessons if you actually used the app (explored it yourself, not read reviews). They come from exploring 6 real web chapters (Week 03 of Teaching_CWN2026):
+
+- **A read-only source shows only the first state** (22 of 300 items; rules and duties that appear after a click all vanish). "Could not find it" does not mean "it does not exist". You must really click too.
+- **Set a charter before exploring** (who · what · scope · lines not to cross) and finish with an honest list of "not tried". Note oddities as questions, do not conclude on your own.
+- **Tag every item with its evidence**: [O] seen in person · [R] common sense not yet tried · [E] evidence from the system. An item that agrees from 2 angles (the button cannot be pressed + the minimum value in the DOM) can be trusted. One angle is half trusted, and you write that down.
+- **5 exploration techniques**: normal path · edge values · combined conditions · go and come back · odd things (found a rule whose conditions are AND, and found that pressing load-more and coming back made the list disappear).
+- **Numbers are tied to time.** Note the date collected. For data that changes over time, compare structure and rules, not numbers. When explorers conflict, put in both values with the time, then move the item to a question. Do not guess.
+- **Split the exploration in parallel**: each explorer uses its own charter · folder · browser · a results table of the same schema (with a column for the text seen on screen as a common language). Then the lead merges. Count a duplicate once and credit every source (in the real round, 4 parts took 94 minutes in total, 53 minutes of real waiting).
+- **1 explorer = 1 browser.** Subagents that run at the same time must not use the same Playwright MCP: they get the same browser and tab, results mix, and even an identical inline MCP setup may be merged into one process. Give each its own browser, for example `playwright-cli -s=<agent name>` (cited from an issue document the instructor keeps, not yet tried ourselves).
+- **If the builder and the examiner use the same notes, the result is biased.** The exam will use the same button names as the app.
 
 
 ---
@@ -242,12 +239,10 @@ Use when naming or filing a document others keep
 
 | Task | Skill | |
 |---|---|---|
-| The content inside the document | `human-writing` (code work: `srs-writing` · `fsd-writing` in plugin `software-development`) | instead |
 | Markdown formatting | `polished-document-style` | instead |
 | The look of the rendered file | `branded-document-design` (plugin `software-development`) | instead |
 | Temporary files during work | `superuser:temp-file-discipline` | instead |
 | Code work: commit messages · version of the **program** · the project document index | `commit-message-format` · `cicd-and-release` · `project-bootstrap` (plugin `software-development`) | instead / together |
-| Abbreviations in work people read | [`spell-out-abbreviations`](../spell-out-abbreviations/SKILL.md) | together |
 
 **The revision-history table template and the standard file-name list** are in `assets/naming-cheatsheet.md`.
 
@@ -265,7 +260,7 @@ Use when naming or filing a document others keep
 | Work procedures · internal guides · README · meeting notes · decision records (code work → plugin `software-development`) | **markdown** in the documents folder | It changes often, needs diffs, and is easy to search |
 
 > 🚨 **Markdown source that can be re-rendered is kept permanently in `docs/src/<topic>.md`, then rendered to docx into the documents folder (`docs/`).**
-> `docs/` holds exactly one deliverable for that topic, the .docx. No .md or .pdf of the same topic sits beside it. (The source lives in `docs/src/`, not `_to_delete/`, because it is needed every time you revise.)
+> `docs/` holds exactly one deliverable for that topic, the .docx. No .md or .pdf of the same topic sits beside it.
 > On the next revision, edit `docs/src/` and render again. Never open Word and edit by hand (matches `markdown-report-docx`). The "ต้นฉบับ" (source) line on the cover points to this file.
 
 **Make a PDF only for user manuals, or when the client asks.** Otherwise, one docx.
@@ -292,6 +287,7 @@ Use when naming or filing a document others keep
 - **The date is always ISO `YYYY-MM-DD`** and goes at the very end, so sorting by name also sorts by time. The one exception: meeting notes put the date first, because the `docs/meetings/` folder holds only meeting notes, so it sorts by date at once.
 - File names are in English even when the content is Thai. This avoids trouble when attaching to email and zipping across systems.
 - Never put a person's name in a file name. `-somchai-edit` is a sign that people are not working from one source.
+- Never name a file `final` · `final2` · `final_ล่าสุด` · `แก้แล้ว`: nobody can tell which is newer, or what was edited from which version. Use the version, status and revision history instead.
 
 **Check with the script:** `node <this skill's folder>/scripts/doc-name-check.mjs docs/*` → it lists wrong names with a proposed name. To rename many files, add `--plan _to_delete/renames.json` to get a plan without touching files, check or edit the plan, then run `--plan _to_delete/renames.json --apply`. The script does not rename `APPROVED` files, does not overwrite existing files, and does not put received files (`ref/`) in the plan.
 
@@ -352,17 +348,6 @@ Every exported document must have this table on the first page.
 | Files mid-conversion | `_to_delete/` (see `superuser:temp-file-discipline`) |
 | Sending by chat or email | Always send a file with the version and status in the name. Never send `เอกสาร.docx` |
 
----
-
-## 7 · Anti-patterns
-
-- **`final.docx`, `final2.docx`, `final_ล่าสุด.docx`**: nobody knows which is newer.
-- **`ใบเสนอราคา แก้แล้ว.docx`**: edited from which version, and what was edited?
-- **Putting a version in the name of a file that a system keeps history for.** You get `spec-v1.md` and `spec-v2.md` side by side forever.
-- **Editing a file that is already `APPROVED`**, even a single typo.
-- **No revision-history table.** Then you must open and compare page by page.
-- **Dates like `25-09-2026` or `250926`.** They do not sort, and people read them differently.
-
 
 ---
 
@@ -382,14 +367,7 @@ Use when naming a product, shop, app or brand
 - There are several products and the names should form one family
 - You must choose from a brainstormed list of names and cannot decide
 
-## When **not** to use it
-
-| Job | Use this instead |
-|---|---|
-| Logo, colours, brand typography | `graphic-design` (plugin `software-development`) |
-| Naming document files | `document-naming` |
-| Naming tables and columns (software work) | `database-design` (plugin `software-development`) |
-| Naming endpoints (software work) | `api-conventions` (plugin `software-development`) |
+Not for: logo, colours, brand typography → `graphic-design` · naming document files → `document-naming` · naming tables and columns → `database-design` · naming endpoints → `api-conventions`
 
 ---
 
@@ -406,9 +384,8 @@ Test before you think further. If a name fails any one, cut it. Do not feel sorr
 | 5 | **Meaning in other languages** | It means something bad in a language your customers speak |
 | 6 | **Thai speakers can pronounce it** | It has a consonant cluster Thai speakers avoid, or ends in a sound that gets swallowed |
 
-> **Test 1 kills the most names**, because a name spelled oddly to get a domain
-> means every customer mistypes it forever.
->
+**Also cut:** a number in the name (`App360` · `Pro24` go stale when the version changes) · 3 or more words (nobody says the whole thing, so it gets shortened until it cannot be recognised).
+
 > **People often forget test 6.** If the name has `th`, `v` or `z` at the end of a word, or a cluster like `str-` or `spl-`,
 > Thai speakers will pronounce it off and type what they heard.
 
@@ -448,9 +425,6 @@ A short, modern name does not have to be meaningless, because meaning can arrive
 |---|---|---|
 | **Built in from birth** | 4 Latin/Greek roots · 7 real words borrowed across contexts | `Aurio` from *aurum*, gold · `Anchor`, stability |
 | **Added later** | 6 short meaningless words | `Quix` is chosen first, then tied to speed |
-
-> **Way 2 works in practice and is safer.** Look at Kodak, Häagen-Dazs, Apple: no name says what is sold.
-> The meaning was built entirely afterward.
 
 **Rule for meaning:** find the root from **what the user gets**, not from what the system does.
 For example, for a gold inventory system, use the root "gold", not the root "warehouse".
@@ -529,43 +503,11 @@ If even 1 person types it differently, the name fails.
 | 4 | Survives when the scope grows | A name with the word "gold" breaks the day you also sell silver |
 | 5 | Resists teasing | Try making up jokes about your own name. If they come too easily, beware |
 
-**Test 4 matters most for anything that will keep growing (a product, shop, brand).** A name that states today's ability
-becomes a cage when the product grows. A meaningless name is therefore safer in the long run.
+**Test 4 matters most for anything that will keep growing.** A meaningless name is safer in the long run.
 
----
+## Related skills
 
-## 8 · Anti-patterns
-
-- **Odd spelling to get a domain**: `Kleen` `Fyre` `Qwik`. Customers mistype forever
-- **Ending with `-soft` `-tech` `-sys` `-solutions`**: looks like 2005
-- **Numbers in the name**: `App360` `Pro24` become outdated as soon as the version changes
-- **A name that states one specific ability**: `InvoiceMaster`, and then the day you do something else too
-- **3 or more words**: nobody says the whole thing, so it gets shortened until it cannot be recognised
-- **A Thai transliteration that foreigners cannot read**, if you plan to sell abroad
-- **A name you must explain the reason for**: customers have no time to listen
-- **Choosing the name before checking domains and trademarks**: wastes 2 rounds
-- **Brainstorming alone in your head**: you get names from a single angle. Walk through the 9 formulas instead
-
----
-
-## 9 · Abbreviations
-
-- **portmanteau**: a word made by cutting 2 words and joining them
-- **handle**: an account name on social media, such as `@quixapp`
-- **WIPO**: World Intellectual Property Organization
-- **npm · PyPI · NuGet**: package registries for Node, Python and .NET respectively
-
-## 10 · Links to other skills
-
-| Need | Use together with |
-|---|---|
-| Logo, colours, typography for the chosen name | `graphic-design` (plugin `software-development`) |
-| Check whether someone already makes the same thing under this name | `prior-art-review` |
-| Names used in documents and deliverable files | `document-naming` |
-| Terms for features inside the product | `i18n-and-locale` (plugin `software-development`) |
-| Present the shortlisted names to the decision maker | `presentation-design` |
-
-**A shortlist table you can fill in right away** → `assets/name-shortlist.md`
+Logo, colours, typography → `graphic-design` · same product already exists under this name → `prior-art-review` · names in documents → `document-naming` · feature terms inside the product → `i18n-and-locale` · presenting the shortlist → `presentation-design`. A shortlist table you can fill in right away → `assets/name-shortlist.md`
 
 
 ## reference: formula-9-deep-dive.md

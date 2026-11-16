@@ -5,7 +5,7 @@ description: Use when building a realtime voice agent or phone bot
 
 # voice-agent — design and build Thai voice agents that answer fast and never lie to the customer
 
-Part of the plugin `software-development`. Follow `human-writing` for the wording of this file, the design documents and the agent's spoken script. The tables of providers, prices and framework values are in [`thai-speech-options`](references/thai-speech-options.md).
+Provider, price and framework tables: [`thai-speech-options`](references/thai-speech-options.md).
 
 > **The one rule:** every stage of the call must stream into the next, and each stage's time must be measurable on its own. The agent must never say that something succeeded (booked · cancelled · transferred) until the tool replies that it succeeded. A fast answer that says something untrue is worse than a slow one.
 
@@ -17,18 +17,6 @@ Part of the plugin `software-development`. Follow `human-writing` for the wordin
 - The user says "voice bot" · "AI รับโทรศัพท์" · "callbot" · "ให้ AI คุยกับลูกค้าทางโทรศัพท์"
 
 Do not use for: narration from a script into a file → `graphic-design:narration-th` · transcribing a recorded clip → `graphic-design:subtitles-th` · a text chatbot in LINE → `e-commerce:line-chatbot` · general prompt design, RAG and LLM evals with no voice → `llm-engineering`
-
-## Use another skill instead or alongside
-
-| Situation | Use | How it relates to this skill |
-|---|---|---|
-| Agent prompt · tool schema · answer evals | [`llm-engineering`](../llm-engineering/SKILL.md) | This skill sets that the prompt must be short so the first token is fast, and what shape tool results must take. How to write them is there. |
-| Storing voice, phone numbers, health symptoms | [`pdpa-compliance`](../pdpa-compliance/SKILL.md) | Step 7 lists what a voice agent needs. The data inventory and the legal basis follow that skill. |
-| Sending call and appointment events to a CRM | [`kafka-streaming`](../kafka-streaming/SKILL.md) | Step 9 sets the event names and what must stay out of the payload. |
-| STT and TTS running on a GPU node pool | [`kubernetes-helm`](../kubernetes-helm/SKILL.md) | Step 4 says when to self-host. Node pool · autoscale · chart are there. |
-| Per-stage timing · per-call trace · p95 alerts | [`observability-basics`](../observability-basics/SKILL.md) | Step 8 says what to measure. The collection and alert tools are there. |
-| Appointment reminders over LINE or SMS | [`notifications`](../notifications/SKILL.md) | The agent does not send them. It emits an event and the notification system picks it up. |
-| STT · TTS · SIP keys | [`config-and-secrets`](../config-and-secrets/SKILL.md) | Every key lives in a secret store, never in code or logs. |
 
 ## 1 · Ask everything once, at the start
 
@@ -128,31 +116,7 @@ Open [`thai-speech-options`](references/thai-speech-options.md) and filter by th
 - Emit per-call events of at least `call.started` · `call.ended` · `appointment.booked` · `appointment.failed` · `call.handed_off`. Every event carries an `event_id` so the receiver can drop duplicates, because events can be delivered twice.
 - The payload holds the call id, appointment id, time, result and last 4 digits of the number. It holds no audio file, full transcript or symptoms.
 - `appointment.booked` is sent only after the appointment system replies with success. The LINE notification system and the CRM take their input from this event, not from what the agent says.
-- Topic · partition key · retry follow `kafka-streaming`. Notifications follow `notifications`.
-
-## Worked example
-
-Label `ตัวอย่าง`: a real request from a user. It has not been built or measured on a live system. Every number in this section must be replaced by a measured value.
-
-**Request:** a dental clinic wants an AI to answer appointment calls in Thai in realtime. It takes calls over a SIP trunk and WebRTC · the customer can interrupt · it answers within 800 ms · it sends call and appointment events through Kafka to the CRM and LINE notifications · STT and TTS run on a GPU node pool.
-
-**What was done:**
-
-1. Asked everything once and got these answers: voice must not leave the country · 800 ms is measured at p95 · outside business hours, take a callback number and promise a call back.
-2. Chose LiveKit Agents because it has SIP trunk · dispatch rule · cold and warm transfer built in. Set `turn_detection="vad"` with Silero VAD because the turn detector does not support Thai. Lowered Silero `min_silence_duration` from 0.55 and `endpointing.min_delay` from 0.5, both to 0.2 seconds, because `vad` mode waits for the larger value. Then measured the mid-sentence cut rate while customers give phone numbers. If it is high, widen the wait and cut the LLM budget instead.
-3. STT uses Typhoon ASR Real-time on a GPU node pool in Thailand. No self-hostable streaming Thai TTS is confirmed, so offered the user 2 options: (a) measure self-hosted TTS on GPU against the 110 ms first-byte budget first, or (b) use Azure TTS `th-TH-PremwadeeNeural` and have `pdpa-compliance` decide on sending text abroad. The LLM receives transcripts that may contain names and symptoms, so it must stay in Thailand like STT: either run an open model on the same GPU node pool, or use a provider with a region in Thailand (model and provider `(รอยืนยัน)`). Recorded as an item awaiting approval.
-4. 2 tools: `check_slots(service, date_from, date_to)` is read-only and may be cancelled when interrupted · `book_appointment(slot_id, patient_name, phone, idempotency_key)` always runs to completion and a repeat gives the same result.
-5. First sentence: "คลินิกทันตกรรม ... สวัสดีค่ะ สายนี้เป็นระบบอัตโนมัติและมีการบันทึกเสียงเพื่อการนัดหมาย รายละเอียดอ่านได้ที่ ... ค่ะ"
-
-**Expected result in the conversation:**
-
-> ลูกค้า: "ขอนัดขูดหินปูนพฤหัสหน้า บ่ายสองค่ะ"
-> agent: "ขอเช็กตารางคุณหมอสักครู่นะคะ" ← filler during `check_slots`
-> agent: "วันพฤหัสบดีที่ 5 พฤศจิกายน บ่ายสองโมง ว่างค่ะ ขอชื่อผู้นัด…"
-> ลูกค้า (interrupts): "ขอเป็นบ่ายสามได้ไหมคะ"
-> The agent stops at once, clears the audio queue, drops the old answer, then checks 3 p.m. again
-> ... repeats name, day, time → the customer agrees → `book_appointment` replies with success and an appointment number → "จองเรียบร้อยแล้วค่ะ"
-> The system emits `appointment.booked` → the CRM records it → the notification system sends the LINE appointment confirmation
+- Topic · partition key · retry follow `kafka-streaming`. Reminders over LINE or SMS follow `notifications`; the agent never sends them itself.
 
 ## Check before sending
 
@@ -165,15 +129,7 @@ Label `ตัวอย่าง`: a real request from a user. It has not been bu
 7. STT · TTS · SIP keys are in a secret store · logs and events hold no full number, audio file or symptoms.
 8. There is a measurement plan following the step 8 table, including a test audio set of Thai dates and times.
 
-## Sources
+## References
 
-All links viewed on 2026-10-27. The full provider tables with links are in [`thai-speech-options`](references/thai-speech-options.md).
-
-- The measured latency table totaling 1,293 ms and the 1,500 ms target for general conversation: [Voice AI & Voice Agents (Pipecat)](https://voiceaiandvoiceagents.com/) viewed 2026-10-27. The 800 ms budget in step 3 is a budget this skill adjusted itself.
-- LiveKit: [telephony](https://docs.livekit.io/telephony/) · [turns and interruptions](https://docs.livekit.io/agents/build/turns/) · [turn detector supported languages](https://docs.livekit.io/agents/build/turns/turn-detector/) · [preemptive generation and endpointing](https://docs.livekit.io/agents/logic/turns/tuning/)
-- Pipecat: [VAD and speech input](https://docs.pipecat.ai/guides/learn/speech-input) · [interruptions](https://docs.pipecat.ai/pipecat/fundamentals/interruptions)
-- Silero VAD: [GitHub](https://github.com/snakers4/silero-vad)
-- Gemini Live API interruptions and VAD: [Live API guide](https://ai.google.dev/gemini-api/docs/live-guide) · OpenAI Realtime VAD: [realtime-vad](https://developers.openai.com/api/docs/guides/realtime-vad)
-- Azure on lowering TTS latency: [how-to-lower-speech-synthesis-latency](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/how-to-lower-speech-synthesis-latency)
-- พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (Personal Data Protection Act, B.E. 2562 [2019]) sections 23 · 26 · 28 · 37: [unofficial translation, Ministry of Digital Economy and Society](https://www.mdes.go.th/law/detail/3577-Personal-Data-Protection-Act-B-E--2562-2019-)
-- SIP trunk and number licensing in Thailand: (ยังไม่ได้ตรวจ)
+- [`references/worked-example.md`](references/worked-example.md) — open when you want a full dental-clinic example of the steps
+- [`references/sources.md`](references/sources.md) — open when you must re-check a dated fact or link

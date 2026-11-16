@@ -70,13 +70,7 @@ The values of the job live in a single `theme.css` (template `assets/theme-templ
 
 All tokens are in `assets/speakgo.css`, and the full table is in **`references/tokens.md`**.
 
-| Token | Role | Comes from |
-|---|---|---|
-| screen / card background | The background is **light grey, not white**, so cards lift up without needing a shadow | very light grey / white |
-| 3 text levels | primary · secondary · faint | from dark to light; primary text needs contrast ≥ 4.5:1 |
-| `--signal` (accent) | selected tab · progress · primary button | `doc-theme` → brand colour → if none, `#2A78D6` + `(รอยืนยัน)` |
-| gradient tile | the two ends of the gradient | main colour → a neighbouring colour on the colour wheel |
-| content status colours | needs fixing · hint · liked: **each has a matching soft background** | by meaning, not by brand |
+The role summary of the main tokens (background · 3 text levels · `--signal` · gradient tile · content status colours) is at the end of [`references/tokens.md`](references/tokens.md).
 
 **Status colours do not change with the brand.** Red marks a place that needs fixing, whatever colour the brand is.
 If the brand colour clashes with a status colour, avoid using the brand in that context. Do not change the status colour.
@@ -173,23 +167,15 @@ The 3 limits are in [`references/review.md`](references/review.md): the React Na
 
 ## 10 · Links to other skills
 
-| Need | Use with |
-|---|---|
-| user flow / IA before colouring | agent `ux-designer` |
-| desktop web app of the same system | `web-app-design` |
-| hardcoded colour checker in CI | `web-app-design` → `scripts/check-design-tokens.mjs` |
-| spec document of the screens | `polished-document-style` + `branded-document-design` |
-| App Store Optimization | `mobile-engineering` |
-| spacing rules, eye order and the 5 screen states | `ui-craft` |
-| architecture diagrams | `software-diagrams` |
+- User flow or information architecture before colouring: agent `ux-designer`
+- Desktop web app of the same system, and the hardcoded colour checker in CI (`scripts/check-design-tokens.mjs`): `web-app-design`
+- Spec document of the screens: `polished-document-style` + `branded-document-design`
+- App Store Optimization: `mobile-engineering`
+- Spacing rules, eye order and the 5 screen states: `ui-craft`
+- Architecture diagrams: `software-diagrams`
 
 ---
 
 ## Do not look AI-made
 
-Before sending, walk through section 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye gate 3.2 (web pages answer items 10–14 as well), because a script score of 0 is not yet a pass. The prohibitions in this file are specific to this work, and the full list for every medium is there.
-
-## Abbreviations
-
-Always spell out an abbreviation the first time, then put the abbreviation in brackets, for example Model Context Protocol (MCP).
-After that you may use the abbreviation. See the `spell-out-abbreviations` skill for details.
+Before sending, walk through section 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye gate 3.2 (web pages answer items 10–14 as well), because a script score of 0 is not yet a pass.

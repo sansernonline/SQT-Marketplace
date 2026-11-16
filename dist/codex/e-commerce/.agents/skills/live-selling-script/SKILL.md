@@ -6,8 +6,6 @@ argument-hint: <platform> <length in minutes> <products with price and stock>
 
 # Live Selling Script
 
-Viewers arrive and leave every few seconds. A live that works repeats a short loop — hook, show, prove, price, call to action — so a viewer who joins at minute 23 can still buy within a minute. Unscripted lives drift into greetings and dead air.
-
 ## 0 · Look for an existing format first (every time)
 
 Before using the structure or templates in this file, check whether the user, the client or the project already has its own format:
@@ -69,18 +67,12 @@ Read the line "ชุดรองลงมา" in the result (items, total value
 
 ## Compliance
 
-General information, not legal advice.
-
 - Claims: the same อย. (สำนักงานคณะกรรมการอาหารและยา) / สคบ. (สำนักงานคณะกรรมการคุ้มครองผู้บริโภค) rules as listings — no treat/cure, no "เห็นผลใน 7 วัน", no before/after body shots (`product-listing` [prohibited claims](../product-listing/references/prohibited-claims.md))
 - Price: "ลดจาก X" only if X was a real recent selling price; spoken price must equal the system price
 - Scarcity: units left and time left must be true — false urgency is misleading advertising
 - Giveaways by draw (จับรางวัล/ชิงโชค) may need a permit under the gambling law; a giveaway to everyone who buys (ของแถมทุกออเดอร์) usually does not — check with the local district office before a draw (รอยืนยัน)
 - Alcohol: selling alcoholic drinks through electronic channels has been banned since Dec 2020 (รอยืนยัน current status); tobacco and e-cigarettes cannot be sold
 - Never show a buyer's full name, phone or address on screen when reading orders aloud — first name or username only
-
-## Related
-
-- `live-seller` agent, `marketplace-fees-pricing` (live price still above the campaign floor), `chat-reply-templates` (after-live questions)
 
 ## เรียกเป็นคำสั่ง
 

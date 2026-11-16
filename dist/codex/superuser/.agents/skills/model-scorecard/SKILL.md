@@ -5,8 +5,6 @@ description: Use when comparing which model fits which step
 
 # model-scorecard — which model fits which step, judged from the project's real work
 
-It lives only in plugin `superuser`; other plugins share it through `dependencies` · wording follows `human-writing`
-
 > **One rule:** the data stays in its own project (`.claude/superuser/log/`) and is never written outside the project · combining several projects happens only when a person asks and names the folders.
 
 ## Use when
@@ -29,12 +27,7 @@ Do not use when: the person only tells you to change the model for this task →
 
 The `superuser` hook records it by itself in `log/<date>/runs.jsonl` (you do nothing, if the `log` module is on):
 
-| Line | What you get |
-|---|---|
-| `run` | When an Agent is ordered: agent type · the `model` ordered (not given = `inherit`) · the `resolved_model` actually used · `effort` (not given = `null`) · the step `step` · `async` · time · tokens if tool_response has them · `estimate_tokens` · `brief_sections` = how many of the 5 headings the brief has (goal · scope · done-when · rules or what to use · what to send back) · for work that waits for a result, it records `verdict` `round` `high` `mid` `low` |
-| `result` | A subagent sends its report back: `verdict` (pass · fail · conditional) · `round` · `high` `mid` `low` = counts of high, medium, low items from the reviewer's report header line (not on that line = `null`) · the task-finished message gives the real total tokens (`total_tokens`) |
-| `feedback` | The user rejects or accepts (`reject` · `accept`), inferred from wording, tagged `inferred` |
-| `expect` | The team lead adds a `คาด:` (expected) line to `CONTEXT.md`: `size` · `workers` · `review_rounds` · `level` · `critical_k` · `width` (parsed from the words, the text is not stored) · caught from Edit and MultiEdit (new lines only) · Write and Bash commands that contain both `superuser/CONTEXT.md` and `คาด:` count only lines that carry today's date, so a `คาด:` line with no date written through these 2 routes is not recorded · the heading "คุ้มแค่ไหน" (how worthwhile) in `SUMMARY.md` is compared with the number of subagents and review rounds actually ordered after that line on the same day |
+Fields of each line type (`run` · `result` · `feedback` · `expect`): [references/log-format.md](references/log-format.md) · open it when you read or debug the log.
 
 - The step (`plan` `code` `review` `research` `design` `write` `test` `other`) is assigned from the word rules in `hooks/step-rules.json` · you can edit that file without touching code
 - A brief that has the line `ขนาด: <N>k` (size) → the `run` line gets `estimate_tokens` · the report heading **ขนาดจริงต่อที่ประเมิน** (actual size per estimate) gives the k value per step (k ← 0.6k + 0.4 × actual ÷ estimated) · the team lead multiplies k by the size estimated when splitting the next job (`superuser` → `references/team-roles.md` "แบ่งงาน" (splitting work) item 2) · actual size = `subagent_tokens` from the background task-finished message, or the sum of the 4 token fields (input · output · cache read · cache write) of work that waits for the result · whether these 2 routes count the same way is `ยังไม่ได้ตรวจ` (not yet checked) against a real log · until checked, use the k from the same kind of work you are about to estimate
@@ -72,7 +65,7 @@ Across projects (`--all`) only when a person asks · test: `node scripts/log-too
 
 ## Real example
 
-Problem (made-up numbers): "Is using Opus for the reviewer too expensive?" · Done: ran step 1 · Result: the `review` step table has `opus` and `sonnet`, and the first finding says "opus costs 4.0 times more per task than sonnet · passed the first round 80% vs 80% (12 tasks vs 9 tasks)" → suggest trying a Sonnet reviewer on low-risk work, keep Opus for security review, and look at the report again once each cell has 5 tasks
+A made-up case: is Opus for the reviewer too expensive → [references/example.md](references/example.md)
 
 ## Check before sending
 
@@ -80,6 +73,4 @@ Problem (made-up numbers): "Is using Opus for the reviewer too expensive?" · Do
 - [ ] No combined result file was written into a project that was read
 - [ ] Price figures come from `references/prices.json`, which has a source and a date checked
 
-## Sources
-
-The log format and the step rules belong to the `superuser` hook (`hooks/superuser-hook.mjs` · `hooks/step-rules.json`) · the `--rollup` command and the data boundary follow what the user ordered on 2026-10-27 · the transcript-reading tools took ideas from duckdb-skills · vercel · claude-remember · session-report (names, licences and files are at the end of `references/log-tools.md`)
+Sources: [references/sources.md](references/sources.md)

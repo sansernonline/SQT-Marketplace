@@ -27,8 +27,6 @@ A "freelancer" who works fixed hours under the company's orders is legally an em
 | ค้ำประกัน | 1 / 5 / 10 baht by amount (รอยืนยัน) | |
 | สัญญาจ้างแรงงาน | none | |
 
-Last checked 2026-10-22 · sources: https://rd.go.th/67218.html (contract for work, paid by the contractor, ≥ 1 million baht paid in cash) · https://www.rd.go.th/23006.html and https://www.rd.go.th/6162.html (stamp duty rate schedule: contract for work 1 per 1,000 · loan 1 per 2,000, maximum 10,000 · lease 1 per 1,000 — confirmed)
-
 Stamp at signing, or pay through **e-Stamp Duty** on rd.go.th within 15 days of signing. An unstamped contract **cannot be used as evidence in a civil case** until duty plus surcharge (เงินเพิ่มอากร, several times the duty — รอยืนยัน multiple) is paid.
 
 Worked example: office lease 25,000/month × 36 months = 900,000 → 900 baht stamp duty, paid by the lessor (often passed on by agreement — write who bears it).
@@ -98,7 +96,9 @@ Sellers sign more contracts than they draft: distributor or reseller deals, ad a
 
 Run `doc-contract-th` with the `thai-doc-writer` agent for: **$ARGUMENTS**
 
-Every flagged clause stays flagged until a Thai lawyer clears it. The draft sets out what the parties want; the lawyer makes sure it protects them.
+## References
+
+- [`references/sources.md`](references/sources.md) — stamp duty sources and check date 2026-10-22
 
 
 ## reference: clause-checklists.md
@@ -158,3 +158,10 @@ Tick each item. `{…}` = must be filled. [ให้ทนายตรวจ] = 
 - [ ] Termination for convenience (with payment for work done) and for breach
 - [ ] Insurance if work is on site
 - [ ] Stamp duty by contractor; signatures; 2 witnesses
+
+
+## reference: sources.md
+
+# Sources · doc-contract-th
+
+Last checked 2026-10-22 · sources: https://rd.go.th/67218.html (contract for work, paid by the contractor, ≥ 1 million baht paid in cash) · https://www.rd.go.th/23006.html and https://www.rd.go.th/6162.html (stamp duty rate schedule: contract for work 1 per 1,000 · loan 1 per 2,000, maximum 10,000 · lease 1 per 1,000 — confirmed)

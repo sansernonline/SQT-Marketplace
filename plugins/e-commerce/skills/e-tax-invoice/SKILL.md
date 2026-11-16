@@ -51,8 +51,6 @@ Retail to consumers only, with permission. Must show: "ใบกำกับภ�
 - e-Receipt is also how a buyer gets an "e-Receipt" for tax incentives (e.g. Easy e-Receipt for individuals) — paper invoices do not qualify for those.
 - Keep electronic records for at least 5 years, 7 recommended (`sme-bookkeeping` section 2 — per a Revenue Department ruling, not yet checked against the current statute), in the original format.
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.rd.go.th/27659.html · https://etda.or.th/en/Our-Service/Digital-Trusted-services-Infrastructure/TEDA/ETAX.aspx · https://www.ktc.co.th/article/knowledge/what-is-etax-invoice
-
 ## Workflow
 
 1. Confirm VAT registration (ภ.พ.20) and annual revenue → pick the scheme from section 4.
@@ -75,20 +73,11 @@ Input file: `{ "ids": ["1234567890139", "1-2345-67890-13-9"] }` · dashes and sp
 
 **Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/e-tax-invoice/scripts/thai-id.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/e-commerce/skills/e-tax-invoice/scripts/thai-id.mjs` · Node only, no dependencies.
 
-
-## Worked example (header block)
-
-```
-ใบแจ้งหนี้/ใบกำกับภาษี  (ต้นฉบับ)                 เลขที่ TX2610-0153
-บริษัท ตัวอย่าง จำกัด (สำนักงานใหญ่)  เลขประจำตัวผู้เสียภาษี 0105xxxxxxxxx
-ที่อยู่ ...                                       วันที่ 6 ตุลาคม 2569
-ลูกค้า: บริษัท ลูกค้า จำกัด สาขาที่ 00002  เลขประจำตัวผู้เสียภาษี 0105yyyyyyyyy  ที่อยู่ ...
-100 กล่องบรรจุภัณฑ์ ตามใบเสนอราคา QT2610-0077   200.00   20,000.00
-                            รวมเป็นเงิน 20,000.00
-                    ภาษีมูลค่าเพิ่ม 7%   1,400.00
-                         จำนวนเงินรวมทั้งสิ้น 21,400.00 (สองหมื่นหนึ่งพันสี่ร้อยบาทถ้วน)
-```
-
 ## Related
 
 `doc-quotation` · `tax-vat-th` (ภ.พ.30, WHT on the payment) · `promptpay-qr` · `dbd-annual-filing`.
+
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open for a sample invoice header block with every required field
+- [`references/sources.md`](references/sources.md) — sources and check date 2026-10-06 for section 4

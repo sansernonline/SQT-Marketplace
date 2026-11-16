@@ -26,7 +26,7 @@ Who pays how much, what the money buys, and what the employer must file by when.
 The 5% employee share covers: sickness, maternity, disability, death 1.5% · child allowance and old age 3% · unemployment 0.5%.
 Minimum base 1,650 baht (ข่าวอ้างข้อความกฎกระทรวง "ไม่ต่ำกว่า 1,650 ไม่เกิน 17,500 ใช้ตั้งแต่ 1 ม.ค. 2569" ตรวจ 2026-10-22 · รอยืนยัน กับราชกิจจานุเบกษา).
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.infoquest.co.th/2025/550753 · https://www.krungsri.com/th/krungsri-the-coach/life/good-life/sso-section-33-rate-increase · https://www.bangkokbiznews.com/health/labour/1136027
+Sources and check dates: [references/sources.md](references/sources.md)
 
 ## 2. Benefits (มาตรา 33 — seven cases)
 
@@ -40,7 +40,7 @@ Minimum base 1,650 baht (ข่าวอ้างข้อความกฎก�
 | Old age | Pension 20% of the average last-60-months wage, +1.5% per year beyond 15 years — if 180+ months paid; otherwise lump sum | 180 months for pension |
 | Unemployment | Laid off: **60%** of wage for up to 180 days from 28 Jun 2568 per the government news agency (กฎกระทรวง ฉบับที่ 2 พ.ศ. 2568), but SSO's own page (dated 3 Oct 2567, before the change) still says **50%** (รอยืนยัน which rate SSO pays now; gazette text not opened). Wage is the capped wage: SSO's page uses the 15,000 cap (ceiling 9,000/month at 60%, 7,500 at 50%); whether the 17,500 cap from 1 Jan 2569 applies to this benefit is (รอยืนยัน) · resigned or contract ended: 30% for up to 90 days · register online at e-service.doe.go.th (กรมการจัดหางาน) within 30 days; registered in time, pay starts from day 8 | 6 months within the last 15 |
 
-Unemployment sources, checked 2026-11-10: [thainews.prd.go.th news 1231742](https://thainews.prd.go.th/thainews/news/view/1231742/?bid=1) (60%, 180 days, from 28 Jun; page shows no publication date) · [sso.go.th unemployment conditions](https://www.sso.go.th/wpr/main/service/%E0%B8%81%E0%B8%AD%E0%B8%87%E0%B8%97%E0%B8%B8%E0%B8%99%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%81%E0%B8%B1%E0%B8%99%E0%B8%AA%E0%B8%B1%E0%B8%87%E0%B8%84%E0%B8%A1_detail_detail_1_125_696/236_236) (dated 3 Oct 2567: 50% · 30% · cap 15,000 · floor 1,650 · e-service.doe.go.th). The 17,500 cap from 1 Jan 2569 in section 1 still rests on news sources, no official page found (รอยืนยัน).
+The 17,500 cap from 1 Jan 2569 in section 1 still rests on news sources, no official page found (รอยืนยัน). Sources, checked 2026-11-10: [references/sources.md](references/sources.md)
 
 มาตรา 39 gets the same except unemployment. มาตรา 40 benefits depend on the plan (70 = sickness, disability, death · 100 = + old-age lump sum · 300 = + child allowance).
 
@@ -82,6 +82,19 @@ Salary 30,000. Base capped at 17,500 → employee 875, employer 875. Salary 12,0
 ## Related
 
 `payroll-th` (deduction in the payslip) · `labour-law-basics` (leave, maternity) · `tax-vat-th` · `thai-holidays`.
+
+
+## reference: sources.md
+
+# Sources · social-security-th
+
+## Unemployment benefit (section 2)
+
+Unemployment sources, checked 2026-11-10: [thainews.prd.go.th news 1231742](https://thainews.prd.go.th/thainews/news/view/1231742/?bid=1) (60%, 180 days, from 28 Jun; page shows no publication date) · [sso.go.th unemployment conditions](https://www.sso.go.th/wpr/main/service/%E0%B8%81%E0%B8%AD%E0%B8%87%E0%B8%97%E0%B8%B8%E0%B8%99%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%81%E0%B8%B1%E0%B8%99%E0%B8%AA%E0%B8%B1%E0%B8%87%E0%B8%84%E0%B8%A1_detail_detail_1_125_696/236_236) (dated 3 Oct 2567: 50% · 30% · cap 15,000 · floor 1,650 · e-service.doe.go.th). The 17,500 cap from 1 Jan 2569 in section 1 still rests on news sources, no official page found (รอยืนยัน).
+
+## Wage cap (section 1)
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.infoquest.co.th/2025/550753 · https://www.krungsri.com/th/krungsri-the-coach/life/good-life/sso-section-33-rate-increase · https://www.bangkokbiznews.com/health/labour/1136027
 
 
 ---
@@ -138,8 +151,6 @@ Retail to consumers only, with permission. Must show: "ใบกำกับภ�
 - e-Receipt is also how a buyer gets an "e-Receipt" for tax incentives (e.g. Easy e-Receipt for individuals) — paper invoices do not qualify for those.
 - Keep electronic records for at least 5 years, 7 recommended (`sme-bookkeeping` section 2 — per a Revenue Department ruling, not yet checked against the current statute), in the original format.
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.rd.go.th/27659.html · https://etda.or.th/en/Our-Service/Digital-Trusted-services-Infrastructure/TEDA/ETAX.aspx · https://www.ktc.co.th/article/knowledge/what-is-etax-invoice
-
 ## Workflow
 
 1. Confirm VAT registration (ภ.พ.20) and annual revenue → pick the scheme from section 4.
@@ -162,6 +173,26 @@ Input file: `{ "ids": ["1234567890139", "1-2345-67890-13-9"] }` · dashes and sp
 
 **Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/e-tax-invoice/scripts/thai-id.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/e-commerce/skills/e-tax-invoice/scripts/thai-id.mjs` · Node only, no dependencies.
 
+## Related
+
+`doc-quotation` · `tax-vat-th` (ภ.พ.30, WHT on the payment) · `promptpay-qr` · `dbd-annual-filing`.
+
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open for a sample invoice header block with every required field
+- [`references/sources.md`](references/sources.md) — sources and check date 2026-10-06 for section 4
+
+
+## reference: sources.md
+
+# Sources · e-tax-invoice
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.rd.go.th/27659.html · https://etda.or.th/en/Our-Service/Digital-Trusted-services-Infrastructure/TEDA/ETAX.aspx · https://www.ktc.co.th/article/knowledge/what-is-etax-invoice
+
+
+## reference: worked-example.md
+
+# Worked example · e-tax-invoice
 
 ## Worked example (header block)
 
@@ -175,7 +206,3 @@ Input file: `{ "ids": ["1234567890139", "1-2345-67890-13-9"] }` · dashes and sp
                     ภาษีมูลค่าเพิ่ม 7%   1,400.00
                          จำนวนเงินรวมทั้งสิ้น 21,400.00 (สองหมื่นหนึ่งพันสี่ร้อยบาทถ้วน)
 ```
-
-## Related
-
-`doc-quotation` · `tax-vat-th` (ภ.พ.30, WHT on the payment) · `promptpay-qr` · `dbd-annual-filing`.

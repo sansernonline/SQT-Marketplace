@@ -53,14 +53,14 @@ python "<โฟลเดอร์ skill test-evidence>/scripts/make_evidence.py"
 
 GIF look (set in the script, do not adjust by hand):
 
-| Part | Value | Reason |
-|---|---|---|
-| Width | Every image scaled to 1280 px | Cases differ but text size stays the same |
-| Top bar | Case id · case title · `ขั้น n/N` (step n of N) · badge PASS green / FAIL red / BLOCKED orange · 24 px text | You know at once which case and what result |
-| Caption bar | Under the image, not over the screen · 28 px text · black background, white text | Still readable (~17 px) when shrunk to 800 px |
-| Time per step | 2–6 seconds, by caption length | Time to read, no need to pause the image |
-| Closing image | Big result + problem + expected / actual | The last image alone tells the story |
-| Font | Sarabun (Thai + English) and the ✓ ✗ symbol set are in `assets/fonts/` | Looks the same on every machine |
+| Part | Value |
+|---|---|
+| Width | Every image scaled to 1280 px |
+| Top bar | Case id · case title · `ขั้น n/N` (step n of N) · badge PASS green / FAIL red / BLOCKED orange · 24 px text |
+| Caption bar | Under the image, not over the screen · 28 px text · black background, white text |
+| Time per step | 2–6 seconds, by caption length |
+| Closing image | Big result + problem + expected / actual |
+| Font | Sarabun (Thai + English) and the ✓ ✗ symbol set are in `assets/fonts/` |
 
 - A `Fail` or `Blocked` case also gets `<id>-fail.png` = the failed step in full color (a GIF has only 256 colors), used to attach to the bug
 - If the script warns `no raqm`, Thai vowels and tone marks will stack on each other · run it in the project's Docker sandbox (`docker-sandbox`) and it goes away
@@ -80,26 +80,10 @@ GIF look (set in the script, do not adjust by hand):
 
 ## 5 · Make the numbers believable
 
-Use this when test results decide whether an app got better or worse (against the old system, across versions, or as a loop's criterion) · source: a real measurement of 6 versions of a web clone app (Week 03 of Teaching_CWN2026) · the numbers are examples from that job
-
-| Problem | Do |
-|---|---|
-| The exam itself is wrong, so the app loses points | **Run the exam against the old system before counting** · pass = valid · fail because it was written wrong = fix and rerun once · fail because it cannot be checked through the screen or the old system changed = invalid, not counted, with a reason (in the real run 22 of 47 items were usable. Without this, 25 items would have cut the app's score although the app was not wrong) |
-| Answer key written by hand is old or wrong | **Compute the expected value from the old system at run time** and do not hardcode numbers in the comparison code, except parameters that come from the task · the answer key and the data must be frozen at the same time (in the real run prices changed on 22 tickets within 1 hour) · collect the app's data and the answer screen in the same run (data collected at 17:07 matched the answer screen at 18:34 only 278/300 · recollecting in the same run gave 300/300) |
-| An answer key you inferred yourself (filtered or counted yourself) | Prove the method first on cases that have a real answer · if the order cannot be trusted, judge by count and data set · say plainly that the criterion is weaker, and add a "ที่มาของเฉลย" (source of the answer key) table per scenario |
-| Results are only pass/fail | Use a 3-value verdict **ผ่าน · ไม่ผ่าน · ยืนยันไม่ได้ในขอบเขตนี้** (cannot be confirmed within this scope), and count "cannot be confirmed" clearly as a fail, never guess it passed · in the report, say where a difference is: position, row or field ("airlines differ at 6 positions, starting at #13"), not just fail |
-| 0 for the whole set | Check whether a single setup broke (in the real run 0/82 because every item started from a form that did not exist) · report "failed at setup" separately from "failed at the check step" · 0% does not mean the feature is absent |
-| The exam's expected numbers contradict each other | Before use, check that the expected numbers do not contradict each other and match the real data (example from that job: the total was 299 but must be 300 · 35 versus 33 · 76 versus 77 came from different surveys) · the builder must not bend the app to fit an exam that contradicts itself. Conclude it is a ceiling and send it back to the exam owner to fix |
-| A loose pass criterion | Write the criterion as an exact number ("must be 300," not "main part works") · if you use a loose criterion, also report the result under the strict one (real run: 4/35 loose became 2/35 strict) |
-| Comparing scores across exam sets | Not possible if the author, scope, criterion or setup differ (in the real run the same version got 94.3% on the old set and 62.2% on the new set) · when the exam and the app come from the same recording, button names match and the score is inflated |
-| One measure can mislead | Read several together (in the real run visual diff was 27% although there was no form at all, because the white backgrounds matched, while structure scored 3.8%) · an item you accept you cannot fix makes that measure blind (74/82 could not tell two versions apart), so bring in a different kind of measure to help |
-| The measure itself may be wrong | Prove it before use: measure the answer key against itself, which must score full · plant a bug and see whether the relaxed criterion still catches it · simulate a "perfectly correct app" to learn whether the criterion or the app is wrong · keep the SHA-256 of the exam files before and after the run to prove they were not edited |
-| Repeated measurement gives different values | Explain it with an experiment, then separate "confirmed" (removing the sentence gave 27.36%) from "not yet confirmed" (the remainder, about 0.5 points) · for data that changes over time, compare structure and rules, not numbers, and note the date collected |
-| An agent's report | The file is the evidence, the summary is an opinion (in the real run the agent said a full pass of 16 items, but the real file had 14) · re-measure yourself with the same set before believing it |
+Use this when test results decide whether an app got better or worse (against the old system, across versions, or as a loop's criterion). The table of problems and fixes is in [`references/trustworthy-numbers.md`](references/trustworthy-numbers.md): open it before you count or compare scores. The short rules:
 
 - The runner should keep evidence for every item, passed and failed, and use separate exit codes: 0 = all passed · 1 = some items failed · 2 = the runner crashed
 - Raw data recorded from the network contains cookies and tokens. Never commit it and never take it off the machine.
-- The numbers above come from a single job, and the version-comparison example has 3–4 points. Use them to see direction, not as statistical proof.
 
 ## Check before sending
 
@@ -110,3 +94,7 @@ Use this when test results decide whether an app got better or worse (against th
 - [ ] No real data or passwords in the images
 - [ ] Raw images are in `_to_delete/`, none left in `qa/`
 - [ ] The scripts' own tests pass: `python "<โฟลเดอร์ skill test-evidence>/scripts/make_evidence.py" --self-test` · `python "<โฟลเดอร์ skill test-evidence>/scripts/record_results.py" --self-test`
+
+## References
+
+- [`references/trustworthy-numbers.md`](references/trustworthy-numbers.md) — open when test results decide whether an app got better or worse (item 5)

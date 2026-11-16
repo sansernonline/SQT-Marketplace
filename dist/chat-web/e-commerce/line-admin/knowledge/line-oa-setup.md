@@ -35,8 +35,6 @@ Since 4 Sep 2024 a Messaging API channel can **no longer be created directly** i
 | v2.1 (JWT assertion) | you set, up to 30 days | 30 per channel | production — key pair, rotate on schedule |
 | Stateless | 15 minutes | unlimited, cannot be revoked | serverless / per-request |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://developers.line.biz/en/docs/basics/channel-access-token/
-
 ## 4. Webhook requirements
 
 - **HTTPS** with a certificate from a widely trusted CA — self-signed is rejected.
@@ -54,25 +52,11 @@ Minimal Node (Express) handler: [references/webhook-node.md](references/webhook-
 | Basic | 1,280 baht | 15,000 | 0.10 baht |
 | Pro | 1,780 baht | 35,000 | 0.06 baht |
 
-ตรวจล่าสุด 2026-10-22 (หน้าทางการ LINE for Business ยืนยัน 1,280 / 1,780 บาท ไม่รวม VAT 7%) · แหล่ง: https://lineforbusiness.com/th/service/line-oa-features/broadcast-message
-
 Counted messages = push, multicast, narrowcast, broadcast — **per recipient**. Reply messages (using a reply token) and 1:1 chat typed by staff are not counted. Quota math: `line-broadcast`.
 
 ## 6. Let Claude send messages (optional MCP)
 
-LY Corporation publishes an MCP server for the Messaging API: `@line/line-bot-mcp-server` ([github.com/line/line-bot-mcp-server](https://github.com/line/line-bot-mcp-server)). Its README calls it a **preview**. Checked on npm 2026-10-28: version 0.5.0. It can push text and flex messages from the OA.
-
-This plugin does not ship it, because nothing here downloads code at run time. If the user wants it, they add it to their **user** scope with the version pinned, so the token lands in their own Claude Code settings and not in the project:
-
-```bash
-claude mcp add line-bot --scope user -e CHANNEL_ACCESS_TOKEN=<from the Developers Console> -e DESTINATION_USER_ID=<optional default user> -- npx -y @line/line-bot-mcp-server@0.5.0
-```
-
-Do not put the server with a real token into the project's `.mcp.json`, because that file is meant to be committed and shared. If a project must declare it, write `"CHANNEL_ACCESS_TOKEN": "${LINE_CHANNEL_ACCESS_TOKEN}"` and keep the real value in an environment variable.
-
-- The token stays in the user's own settings or environment. It never goes into project files or git.
-- A push message counts against the monthly quota. Run the quota math in `line-broadcast` before sending to many people.
-- Read the tool list in the README of the pinned version before relying on it, because a preview can change between versions.
+Not shipped with this plugin, because nothing here downloads code at run time. If the user wants it, they add it to their **user** scope with the version pinned, and the token never goes into the project `.mcp.json` or git. Details and the command: [references/mcp-line-bot.md](references/mcp-line-bot.md).
 
 ## Rules
 
@@ -92,6 +76,39 @@ Do not put the server with a real token into the project's `.mcp.json`, because 
 Run `line-oa-setup` with the `line-admin` agent for: **$ARGUMENTS**
 
 Ends with a verified echo test. Credentials stay in the user's LINE Developers console and environment variables, never in chat or code.
+
+## References
+
+- [`references/mcp-line-bot.md`](references/mcp-line-bot.md) — open when the user asks to let Claude send LINE messages through MCP
+- [`references/sources.md`](references/sources.md) — open when re-checking token types and package prices (checked 2026-10-06 and 2026-10-22)
+
+
+## reference: mcp-line-bot.md
+
+# Optional MCP server for the Messaging API · line-oa-setup
+
+LY Corporation publishes an MCP server for the Messaging API: `@line/line-bot-mcp-server` ([github.com/line/line-bot-mcp-server](https://github.com/line/line-bot-mcp-server)). Its README calls it a **preview**. Checked on npm 2026-10-28: version 0.5.0. It can push text and flex messages from the OA.
+
+This plugin does not ship it, because nothing here downloads code at run time. If the user wants it, they add it to their **user** scope with the version pinned, so the token lands in their own Claude Code settings and not in the project:
+
+```bash
+claude mcp add line-bot --scope user -e CHANNEL_ACCESS_TOKEN=<from the Developers Console> -e DESTINATION_USER_ID=<optional default user> -- npx -y @line/line-bot-mcp-server@0.5.0
+```
+
+Do not put the server with a real token into the project's `.mcp.json`, because that file is meant to be committed and shared. If a project must declare it, write `"CHANNEL_ACCESS_TOKEN": "${LINE_CHANNEL_ACCESS_TOKEN}"` and keep the real value in an environment variable.
+
+- The token stays in the user's own settings or environment. It never goes into project files or git.
+- A push message counts against the monthly quota. Run the quota math in `line-broadcast` before sending to many people.
+- Read the tool list in the README of the pinned version before relying on it, because a preview can change between versions.
+
+
+## reference: sources.md
+
+# Sources · line-oa-setup
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://developers.line.biz/en/docs/basics/channel-access-token/
+ตรวจล่าสุด 2026-10-22 (หน้าทางการ LINE for Business ยืนยัน 1,280 / 1,780 บาท ไม่รวม VAT 7%) · แหล่ง: https://lineforbusiness.com/th/service/line-oa-features/broadcast-message
+- Checked on npm 2026-10-28: `@line/line-bot-mcp-server` version 0.5.0 — github.com/line/line-bot-mcp-server
 
 
 ## reference: webhook-node.md

@@ -46,9 +46,6 @@ description: Use when designing a web app screen or mockup
 
 **The mockup is delivered as one file** (`mockup/<code>-mockup.html`, every screen a section) → before sending, embed the contents of `appstrack.css` followed by `theme.css` in `<style>` instead of `<link>` · check tokens with the mockup file as its own token file: `node scripts/check-design-tokens.mjs mockup/<code>-mockup.html mockup --ext html`
 
-Step 6 matters more than it seems. A design system with no enforcing checker slowly drifts because of
-"just one hardcode, please" within 3 weeks, and nobody notices until a theme change breaks it.
-
 ---
 
 ## 2 · Design tokens
@@ -87,24 +84,9 @@ Switch them with `body[data-theme]`, and switch sidebar light/dark with `body[da
 
 ## 3 · Screen layout
 
-The diagram below is the fallback structure, sidebar + top bar · for apps with few menu items (≤ 5) or a single-page job, choose the structure from the prototypes you found, such as top bar only or a 2-side split · the sizes in the diagram are fallback values, and the real values live in `theme.css`.
+The fallback structure is sidebar + top bar · for apps with few menu items (≤ 5) or a single-page job, choose the structure from the prototypes you found, such as top bar only or a 2-side split.
 
-```
-┌──────────┬─────────────────────────────────────────────────┐
-│ 232px    │ topbar 56px · solid background · sticky          │
-│ sidebar  ├─────────────────────────────────────────────────┤
-│          │  Page title h1 22px  [secondary btn] [primary]   │
-│ • menu   │  Description 12px, secondary color               │
-│ • menu   │                                                 │
-│          │  ┌─ stat-grid: number cards auto-fit 190px ────┐ │
-│  ─────   │  └─────────────────────────────────────────────┘ │
-│ Group 2  │  ┌─ card ────────────────┐ ┌─ card ──────────┐  │
-│ • menu   │  │ table / form          │ │ activity/summary│  │
-│          │  └───────────────────────┘ └─────────────────┘  │
-│ ⚙ Settings│        ← content max 1160px, centered →         │
-└──────────┴─────────────────────────────────────────────────┘
-```
-
+- Fallback diagram (sidebar 232px · topbar 56px · content max 1160px · stat-grid · cards): `references/layout-diagram.md`
 - **The settings menu sits at the bottom of the sidebar** (`.foot` has `margin-top:auto`)
 - **1 h1 per page**, always with a description under the h1. A page that does not say what it does is a page that is not finished.
 - **1 primary button per page** (`.btn-primary`, solid brand color, no gradient, no shadow). The rest are `.btn` or `.btn-ghost`.
@@ -197,8 +179,3 @@ Then open the images and check:
 ## Do not look AI-made
 
 Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script · every job must also pass the eye gate 3.2 (web pages answer items 10–14 too), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for every medium lives there.
-
-## Abbreviations
-
-Always spell out an abbreviation in full the first time, then put the abbreviation in brackets, such as Model Context Protocol (MCP).
-After that you may use the abbreviation. See the skill `spell-out-abbreviations` for details.

@@ -4,7 +4,7 @@ Use when asking about dividend income, XD dates or yield
 
 # Dividend Tracker (ติดตามเงินปันผล)
 
-Know the income before it arrives. Tracker template: [references/dividend-template.md](references/dividend-template.md). General information, not investment or tax advice — for the tax decision ask a นักบัญชี or RD 1161. Tax treatment of dividends: `tax-basics-th`.
+Tracker template: [references/dividend-template.md](references/dividend-template.md). General information, not investment or tax advice — for the tax decision ask a นักบัญชี or RD 1161. Tax treatment of dividends: `tax-basics-th`.
 
 ## The dates — SET (T+2 settlement)
 
@@ -19,7 +19,7 @@ Know the income before it arrives. Tracker template: [references/dividend-templa
 
 On the XD day the price usually opens lower by about the dividend — buying the day before XD just to "collect" it gains nothing before tax and loses 10% to withholding.
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.set.or.th/en/trading-units-tick-sizes-price-limits (T+2), https://media.set.or.th/set/Documents/2022/Jul/การจ่ายปันผล.pdf (XD/record date, payment within 1 month)
+ตรวจล่าสุด 2026-10-06 · sources: [`references/sources.md`](references/sources.md)
 
 ## Formulas
 
@@ -32,7 +32,7 @@ yield on cost         = annual DPS ÷ average cost per share
 portfolio yield       = expected annual net dividends ÷ current portfolio value
 ```
 
-Gross, withheld, net and yields per holding: `node money-calc.mjs dividend <file.json>` (script in `portfolio-snapshot`, see its Script path; the worked example below is `../portfolio-snapshot/scripts/examples/dividend.json` and gives 1,600 / 160 / 1,440 and 4.5%). `source` is `thai-listed` or `thai-fund` (10% withheld) or `foreign` (the script refuses until `withholdingPct` is given from a checked source).
+Gross, withheld, net and yields per holding: `node money-calc.mjs dividend <file.json>` (script in `portfolio-snapshot`, see its Script path; the worked example in [`references/worked-example.md`](references/worked-example.md) is `../portfolio-snapshot/scripts/examples/dividend.json` and gives 1,600 / 160 / 1,440 and 4.5%). `source` is `thai-listed` or `thai-fund` (10% withheld) or `foreign` (the script refuses until `withholdingPct` is given from a checked source).
 
 **Tax**: the 10% is withheld at source; the holder may leave it as final tax or include all such dividends in ภ.ง.ด.90 and claim the dividend tax credit (เครดิตภาษีเงินปันผล). Which is cheaper depends on the marginal rate — compute it with `tax-basics-th` (same plugin). Thai mutual fund dividends: 10% withheld, no credit. Foreign dividends (DRs, offshore): withholding differs by country — ask the user's situation, mark unknown rates (รอยืนยัน).
 
@@ -52,16 +52,12 @@ Gross, withheld, net and yields per holding: `node money-calc.mjs dividend <file
 - Shares bought on the XD day or later do not get this dividend — check the trade date, not the settlement date.
 - Stock dividends (หุ้นปันผล) and XR (rights) change share count; adjust shares before computing next DPS yield.
 
-## Worked example
-
-Hold 2,000 shares of ABC. Board declares interim DPS 0.80 baht. XD Tue 2026-10-20 → record date Wed 2026-10-21 → payment Fri 2026-11-06.
-
-- Last day to buy: Mon 2026-10-19
-- Gross = 0.80 × 2,000 = **1,600**; withheld 10% = 160; net = **1,440 baht**
-- Price 40.00, DPS last 12 months 1.80 → trailing yield = 1.80 ÷ 40.00 = **4.5%**
-- If the user buys 1,000 more on 2026-10-20 (XD day), those shares get **nothing** this round.
-
 Output: upcoming XD list (next 30 days), monthly net cash table, annual total with gross / withheld / net, and which figures are estimates.
+
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open when you want a filled-in dividend calculation
+- [`references/sources.md`](references/sources.md) — open when you must re-check settlement or payment rules
 
 
 ## reference: dividend-template.md
@@ -101,19 +97,49 @@ Portfolio value ______   Portfolio net yield ____%
 - [ ] Hand totals to `tax-basics-th` to compare "final 10%" vs "include and claim credit"
 
 
+## reference: sources.md
+
+# Sources · dividend-tracker
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.set.or.th/en/trading-units-tick-sizes-price-limits (T+2), https://media.set.or.th/set/Documents/2022/Jul/การจ่ายปันผล.pdf (XD/record date, payment within 1 month)
+
+
+## reference: worked-example.md
+
+# Worked example · dividend-tracker
+
+Hold 2,000 shares of ABC. Board declares interim DPS 0.80 baht. XD Tue 2026-10-20 → record date Wed 2026-10-21 → payment Fri 2026-11-06.
+
+- Last day to buy: Mon 2026-10-19
+- Gross = 0.80 × 2,000 = **1,600**; withheld 10% = 160; net = **1,440 baht**
+- Price 40.00, DPS last 12 months 1.80 → trailing yield = 1.80 ÷ 40.00 = **4.5%**
+- If the user buys 1,000 more on 2026-10-20 (XD day), those shares get **nothing** this round.
+
+
 ---
 
 # skill: tax-basics-th
 
 Use when asking how Thai tax applies to gains or dividends
 
-# Thai Tax Basics for Investors
+# Thai Tax Basics for Investors — which form, by when, and how each investment income is taxed
 
-General information, not tax advice — for a real filing ask a นักบัญชี / tax agent or the Revenue Department (RD) call centre 1161.
+General information, not tax advice. For a real filing ask a นักบัญชี / tax agent or the Revenue Department (RD) call centre 1161.
 
-Per-income-type table and the dividend credit formula: [references/investment-income-rules.md](references/investment-income-rules.md). Year-end deductions: `tax-deduction-planner`. Dividend dates and income tracking: `dividend-tracker`. Income from selling online (40(8)) → `e-commerce:seller-tax-basics` (if installed).
+## Use when
+- A Thai resident asks how tax applies to share gains, dividends, fund income, deposit interest, crypto, or foreign income.
+- Choosing between leaving withheld tax as final or including the income in the annual return.
+- Picking the return form and deadline.
 
-## Which form, by when
+Not for: year-end deductions → `tax-deduction-planner` · dividend dates and income tracking → `dividend-tracker` · income from selling online (40(8)) → `e-commerce:seller-tax-basics` (if installed).
+
+## Steps
+1. **Confirm the tax year and residence** (180-day rule). State the tax year in every answer; numbers change yearly.
+2. **List every income source** with gross amount and tax withheld, and sort each into the table in [`references/investment-income-rules.md`](references/investment-income-rules.md). A number not in that table is `(รอยืนยัน)` until checked on rd.go.th. Before relying on the crypto exemption, check the platform on the SEC licence list (sec.or.th). For foreign income, track the earn date and remit date of every transfer.
+3. **For each optional item, compute both ways and pick the cheaper.** Dividends: final 10% withheld, or include in ภ.ง.ด.90 and claim the credit (worth it at a marginal rate of 25% or less; including means including **all** such dividends that year). Re-check the band after adding the income; if it crosses into 30%, final tax wins. `tax-deduction-planner` script `tax.mjs` with a `dividends` field prints both ways. Fixed deposit or bond interest (15% withheld): include only if the marginal rate is below 15%. Savings interest: exempt up to 20,000 a year across all banks if the banks may send data to RD.
+4. **Run `tax-deduction-planner` for deductions** and combine into one net-income calculation.
+5. **Pick the form and deadline** from the table below, and list the documents to keep.
+6. **Hand complex cases** (foreign income, business income, large crypto) to a licensed tax agent. This skill prepares and explains.
 
 | Form | Who | Paper deadline | Online (e-filing / D-MyTax) |
 |---|---|---|---|
@@ -121,58 +147,36 @@ Per-income-type table and the dividend credit formula: [references/investment-in
 | ภ.ง.ด.90 | any other income: freelance, rent, business, dividends or interest you choose to include, foreign remitted income | 31 March | same extension |
 | ภ.ง.ด.94 | half-year return for rent, business, 40(5)–(8) income Jan–Jun | 30 September | about 8 October |
 
-Tax year 2569 (income 2026): paper by 31 March 2570; the online extension date is announced each year (รอยืนยัน, expect about 8 April 2570). Refunds go to PromptPay linked to the national ID — register before filing. Late filing: surcharge 1.5% per month on tax due plus a fine.
+Tax year 2569 (income 2026): paper by 31 March 2570; the online extension date is announced each year (รอยืนยัน, expect about 8 April 2570). Refunds go to PromptPay linked to the national ID, so register before filing. Late filing: surcharge 1.5% per month on tax due plus a fine. Form dates checked 2026-10-06 (sources in [`references/sources.md`](references/sources.md)).
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.infoquest.co.th/?p=576625 , https://www.thaipbs.or.th/news/content/501063
+Documents to keep (50 ทวิ · dividend and interest certificates · broker and crypto statements · foreign remittance records): [`references/documents-to-keep.md`](references/documents-to-keep.md).
 
-## Rules per income type (short form)
+## Check before done
+- [ ] The tax year is stated.
+- [ ] Every income source is sorted, and each optional item was computed both ways.
+- [ ] The form is ภ.ง.ด.90 if any dividend or interest is included, not 91.
+- [ ] Unverified numbers are marked `(รอยืนยัน)`.
 
-- **Thai listed shares sold on SET/mai** — gain exempt, loss not deductible. Nothing to file for the gain.
-- **Dividends** — 10% withheld. Either leave it as final tax, or include in ภ.ง.ด.90 and claim the dividend credit (1/4 of the dividend when the company paid 20% corporate tax). Worth it when your marginal rate is 25% or less. Choosing to include means including **all** such dividends that year.
-- **Mutual funds** — redemption gain exempt; fund dividends 10% withheld with no credit.
-- **Savings interest** — exempt if all savings-account interest across all banks is 20,000 or less in the year and you let banks send data to RD; otherwise 15% withheld.
-- **Fixed deposit / bond interest** — 15% withheld; include only if marginal rate is below 15%.
-- **Crypto and digital tokens** — gains on SEC-licensed Thai exchanges, brokers or dealers are exempt for 1 Jan 2568 – 31 Dec 2572. Gains on foreign or unlicensed venues remain taxable at progressive rates. Check the platform on the SEC licence list (sec.or.th) before relying on the exemption.
-- **Foreign income** — from 2567, foreign income earned from 1 Jan 2567 is taxed in the year you bring it into Thailand, if you were in Thailand 180 days or more that year. Track the earn date and remit date of every transfer; claim treaty credit for foreign tax paid.
+## References
+- [`references/investment-income-rules.md`](references/investment-income-rules.md) — open at step 2: per-income-type table, staking and airdrops, dividend credit formula.
+- [`references/worked-example.md`](references/worked-example.md) — open to see a full comparison of final tax versus including income.
+- [`references/documents-to-keep.md`](references/documents-to-keep.md) — open at step 5 for the full document list.
+- [`references/sources.md`](references/sources.md) — sources and check dates for form deadlines.
 
-## Workflow
 
-1. Confirm tax year and residence (180-day rule).
-2. List every income source with gross amount and tax withheld; sort into the table in the reference file.
-3. For each optional item (dividends, deposit interest) compute both ways and pick the cheaper. Dividends: `tax-deduction-planner` script `tax.mjs` with a `dividends` field prints both ways.
-4. Run `tax-deduction-planner` for deductions; combine into one net-income calculation.
-5. Pick the form and deadline; list the documents below.
+## reference: documents-to-keep.md
 
-## Worked example — tax year 2568 (filed 2569)
+# Documents to keep
 
-Salary net income after all deductions 350,000 (marginal rate 10%). Investment income: SET share trading gain 120,000; dividends from listed companies 40,000 (4,000 withheld); savings interest 8,000; 12-month fixed deposit interest 10,000 (1,500 withheld); BTC gain 30,000 on a Thai licensed exchange.
+Open at step 5 to list documents for the user.
 
-| Item | Treatment | Tax effect |
-|---|---|---|
-| Share trading gain 120,000 | exempt | 0 |
-| Savings interest 8,000 | exempt (≤ 20,000) | 0 |
-| BTC gain 30,000 (licensed exchange, 2568) | exempt | 0 |
-| Dividends — option A: final | 10% withheld | cost 4,000 |
-| Dividends — option B: include | add 40,000 + credit 10,000 = 50,000 at 10% = 5,000; minus credit 10,000; minus withheld 4,000 | net **refund 9,000** versus option A's cost 4,000 → B better by 9,000 |
-| Deposit interest — include | 10,000 at 10% = 1,000 minus withheld 1,500 | refund 500 |
-
-Result: file ภ.ง.ด.90 (not 91, because dividends and interest are included). Net income becomes 350,000 + 50,000 + 10,000 = 410,000, still inside the 10% band — check this every time; if the added income crossed into 30%, option A would win.
-
-## Documents to keep
-
-- 50 ทวิ from employer
-- Dividend withholding certificates (หนังสือรับรองการหักภาษี ณ ที่จ่าย) — issued by the registrar (TSD) or via the broker's annual tax report
-- Bank interest certificates for deposit interest
-- Broker annual statements (even for exempt gains)
-- Crypto exchange annual statement and transaction history (CSV); for foreign venues, the transfers that moved money into Thailand
-- Foreign broker statements, foreign tax withheld, remittance records with dates
-- Deduction certificates listed in `tax-deduction-planner`
-
-## Rules
-
-- State the tax year in every answer; numbers change yearly.
-- A number not on the reference table is (รอยืนยัน) until checked on rd.go.th.
-- This skill prepares and explains; a licensed tax agent files complex cases (foreign income, business income, large crypto).
+- 50 ทวิ from the employer
+- dividend withholding certificates (หนังสือรับรองการหักภาษี ณ ที่จ่าย, from the registrar TSD or the broker's annual tax report)
+- bank interest certificates
+- broker annual statements (even for exempt gains)
+- crypto exchange annual statement and transaction CSV (for foreign venues, the transfers into Thailand)
+- foreign broker statements, foreign tax withheld, dated remittance records
+- deduction certificates listed in `tax-deduction-planner`.
 
 
 ## reference: investment-income-rules.md
@@ -181,8 +185,8 @@ Result: file ภ.ง.ด.90 (not 91, because dividends and interest are included
 
 | Income | Withholding at source | Exempt? | Option to include in annual return | Notes |
 |---|---|---|---|---|
-| Gain selling shares on SET / mai through a Thai broker | none | **exempt** (gain on listed shares sold on the exchange) | — | Selling unlisted shares off-exchange is taxable under 40(4)(ช) |
-| Dividends from Thai companies | 10% | no | yes — include and claim dividend tax credit (เครดิตภาษีเงินปันผล) | Credit only for dividends paid from profit taxed at corporate level; BOI-exempt profit gives no credit |
+| Gain selling shares on SET / mai through a Thai broker | none | **exempt** (gain on listed shares sold on the exchange); a loss is not deductible | — | Selling unlisted shares off-exchange is taxable under 40(4)(ช) |
+| Dividends from Thai companies | 10% | no | yes — include and claim dividend tax credit (เครดิตภาษีเงินปันผล) | Credit only for dividends paid from profit taxed at corporate level; BOI-exempt profit gives no credit · choosing to include means including **all** such dividends that year · include when marginal rate is 25% or less |
 | Dividends from Thai mutual funds | 10% | no | yes, but **no** dividend tax credit | Redemption gain on Thai funds is exempt for individuals |
 | Savings account interest | 0 if total ≤ 20,000/yr across all banks and consent to share data | ≤ 20,000 exempt | — | If you refuse consent or exceed 20,000, 15% is withheld on all savings interest |
 | Fixed deposit, bonds, debentures interest | 15% | no | yes — include if marginal rate < 15% | Must include all interest of that kind if you choose to |
@@ -207,3 +211,34 @@ credit = dividend × t ÷ (100 − t), where t = corporate tax rate the payer pa
 | 0% (BOI-exempt profit) | 0 |
 
 Break-even: with t = 20% and 10% withheld, including dividends wins when your marginal rate is **25% or lower**; at 30% and 35% keep the 10% as final tax. Including can push net income into a higher band — compute both ways.
+
+
+## reference: sources.md
+
+# Sources · tax-basics-th
+
+Form deadlines and extension dates, checked 2026-10-06:
+- https://www.infoquest.co.th/?p=576625
+- https://www.thaipbs.or.th/news/content/501063
+
+Per-income-type sources and check dates are at the end of `investment-income-rules.md`.
+
+
+## reference: worked-example.md
+
+# Worked example — tax year 2568 (filed 2569)
+
+Open when you want a worked comparison of final tax versus including dividends and interest.
+
+Salary net income after all deductions 350,000 (marginal rate 10%). Investment income: SET share trading gain 120,000; dividends from listed companies 40,000 (4,000 withheld); savings interest 8,000; 12-month fixed deposit interest 10,000 (1,500 withheld); BTC gain 30,000 on a Thai licensed exchange.
+
+| Item | Treatment | Tax effect |
+|---|---|---|
+| Share trading gain 120,000 | exempt | 0 |
+| Savings interest 8,000 | exempt (≤ 20,000) | 0 |
+| BTC gain 30,000 (licensed exchange, 2568) | exempt | 0 |
+| Dividends — option A: final | 10% withheld | cost 4,000 |
+| Dividends — option B: include | add 40,000 + credit 10,000 = 50,000 at 10% = 5,000; minus credit 10,000; minus withheld 4,000 | net **refund 9,000** versus option A's cost 4,000 → B better by 9,000 |
+| Deposit interest — include | 10,000 at 10% = 1,000 minus withheld 1,500 | refund 500 |
+
+Result: file ภ.ง.ด.90 (not 91, because dividends and interest are included). Net income becomes 350,000 + 50,000 + 10,000 = 410,000, still inside the 10% band — check this every time; if the added income crossed into 30%, option A would win.

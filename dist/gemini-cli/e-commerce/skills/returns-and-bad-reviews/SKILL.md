@@ -5,7 +5,7 @@ description: Use when a Thai seller gets a return or bad review
 
 # Returns and Bad Reviews
 
-A return handled fast costs one order. A return fought badly costs the shop rating, and a rude public reply costs every future buyer who reads it. Decide by rule, not by mood.
+Decide by rule, not by mood.
 
 ## Return windows (buyer side)
 
@@ -16,7 +16,7 @@ A return handled fast costs one order. A return fought badly costs the shop rati
 | TikTok Shop | 7 days after delivery (ทั่วไป); 15 days with free return for Mall (รอยืนยัน — no official Thai page found; check Seller Center) | "No longer needed" return reasons exist on some items (รอยืนยัน) |
 | LINE / Facebook | Whatever the shop states | State it in the description and the chat auto-reply; consumer law still protects against defective goods |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.bigseller.com/blog/articleDetails/tiktok-shop-launches-no-longer-needed-return-policy.2213.htm · the windows above are from one third-party source, not an official page — confirm each window and response deadline in the platform's own Seller Centre help page before relying on it (รอยืนยัน)
+The windows above are from one third-party source, not an official page — confirm each window and response deadline in the platform's own Seller Centre help page before relying on it (รอยืนยัน). Sources and check dates: [references/sources.md](references/sources.md)
 
 ## Workflow — return or refund request
 
@@ -87,3 +87,4 @@ Low-review replies still follow the rules above; the monthly review never offers
 ## Related
 
 - `chat-reply-templates` (T4, T5), `shipping-compare` (claims), `multi-shop-stock` (damaged stock), `product-listing` (fix the cause in the listing)
+- [`references/review-replies.md`](references/review-replies.md) — reply templates · [`references/sources.md`](references/sources.md) — sources and check dates for the return windows

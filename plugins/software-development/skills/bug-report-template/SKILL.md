@@ -6,8 +6,6 @@ argument-hint: <brief description of the bug>
 
 # Bug Report Template
 
-> **Language:** write all wording per `human-writing`. This skill gives format and structure; human-writing gives how to write so people can understand.
-
 ## Where bug reports live
 
 One file per bug in `qa/bugs/BUG-<NNNN>-<slug>.md` at the project root. Attach screenshots and logs under `qa/bugs/BUG-<NNNN>/` — redact personal data first.
@@ -107,15 +105,8 @@ Before submitting:
 - [ ] At least one piece of evidence attached
 - [ ] Environment info complete
 - [ ] Searched for duplicates first
+- [ ] One bug per report · no proposed fix in the title
 - [ ] `check_outline.py` passes
-
-## Anti-patterns
-
-- "Same as last week's bug" — describe it fully
-- Multiple bugs in one report — split them
-- "Bug" without steps — give steps to reproduce
-- Putting a proposed fix in the title — the developer decides the fix
-- Marking everything as P1 — be honest about priority
 
 ---
 
@@ -149,7 +140,7 @@ The tester should:
    - Expected vs actual behavior
    - Frequency
    - Evidence (screenshots, logs)
-3. Reproduce once yourself from the reporter's steps before trusting them, and reject these excuses before scoring (idea from trailofbits/skills):
+3. Reproduce once yourself from the reporter's steps before trusting them, and reject these excuses before scoring:
    - "cannot reproduce, so not a bug" → try another environment, data set or timing first, then file as `ทำซ้ำไม่ได้` with what was tried
    - "user did it wrong" → then it is a usability or validation bug, still filed
    - "edge case nobody hits" → count who can hit it; file with the number

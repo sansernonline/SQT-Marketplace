@@ -22,11 +22,6 @@ description: Use when users upload files or an app serves stored files
 | Import Excel/CSV and load the data into the system | `data-import-export` | instead |
 | Permissions: who may access what | `auth-implementation-patterns` | instead |
 | Process large files as a background job | `background-jobs` | instead |
-| The file metadata table | `database-design` | together |
-| Upload endpoints and errors | `api-conventions` · `web-service-essentials` | together |
-| Retention of files that hold personal data | `pdpa-compliance` | together |
-| Storage used and alerts | `observability-basics` | together |
-| Abbreviations in anything a person reads | `spell-out-abbreviations` | together |
 
 ---
 
@@ -131,18 +126,3 @@ Right: 2026/09/25/01J9Z8K7X2M4.xlsx         random · split into folders by date
 | An uploaded file never linked to anything | Delete it after 24 hours. |
 | Retention | Set it per file type · a file with personal data needs an expiry date (see `pdpa-compliance`). |
 | Backup | Files belong in the backup plan just like the database, **and a restore must have been tested for real.** |
-
----
-
-## 7 · Anti-patterns
-
-- **Trusting the file extension.** Anyone can rename a file to `.jpg`.
-- **Checking size only in the browser.** It is bypassed in 3 seconds.
-- **Using the user's file name as the real path.** `../` leads anywhere.
-- **Keeping files in the folder the web serves.** Someone uploads a script and runs it.
-- **A "hard-to-guess link" instead of a permission check.**
-- **Accepting SVG without sanitising it.** The script runs in other people's browsers.
-- **Sending an 8 MB original image to a phone.**
-- **Not stripping EXIF.** The coordinates of the user's home leak out and nobody meant it to.
-- **Files outside the backup plan.** The database can be restored, but every document is gone.
-- **Reading the whole file into memory.** A large file kills the process.

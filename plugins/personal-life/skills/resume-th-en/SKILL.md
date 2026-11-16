@@ -82,20 +82,17 @@ English verbs: Led · Built · Cut · Grew · Launched · Automated · Negotiate
 - [ ] Thai CV uses พ.ศ. or ค.ศ. consistently (ค.ศ. = พ.ศ. − 543), never both
 - [ ] **Reader test** passed: a fresh reader (a subagent that has not seen this chat, or the user in a new chat) gets only the CV and the job post, reads for 6 seconds as the HR screener would, then answers "what role is this person for · their 2 strongest results · which must-have is missing". A wrong answer marks what to fix. Method: `thesis-writing`, "Reader test"
 
-## Worked example — summary line
-
-> Before: "Hard-working accountant with good teamwork skills."
-> After: "Accountant with 6 years in manufacturing; closed month-end in 5 working days instead of 9 and passed 3 Revenue Department audits with no adjustments. Seeking a senior accounting role with ERP responsibility."
-
-Fill-in templates (English, Thai, cover email) → [references/templates.md](references/templates.md)
-
 Thai text (CV, cover email) → `human-writing` `references/thai-grammar.md` section 4, the job-application register · no long dash (—) in text that will be sent; use a space, "โดย" or brackets instead
 
 ## Not an AI look
 
-Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files. The full list of AI tells for every medium lives there. CVs are usually PDF or .docx, so for those only the eye check (3.2) applies — the script is for HTML/CSS files. For a resume that means: no emoji headings, no bold-first bullets, no generic claims without numbers.
+Before handing over, run `no-ai-look` section 3. CVs are usually PDF or .docx, so only the eye check (3.2) applies; the script is for HTML/CSS. For a resume that means: no emoji headings, no bold-first bullets, no generic claims without numbers.
 
 Related: `linkedin-profile` (keep CV and profile consistent) · `interview-prep` (every bullet becomes a Situation, Task, Action, Result (STAR) story) · `important-docs` in `personal-life` (store certificates and transcripts).
+
+## References
+
+- [`references/templates.md`](references/templates.md) — fill-in templates (English, Thai, cover email) and a worked example of a summary line; open when drafting
 
 ## เรียกเป็นคำสั่ง
 

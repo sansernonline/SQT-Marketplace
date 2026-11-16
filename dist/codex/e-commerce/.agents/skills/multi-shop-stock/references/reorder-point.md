@@ -23,3 +23,8 @@ Worked example — `BAG-TOTE-BLK-L`, all channels together:
 | Days of cover wanted | 45 |
 | Reorder qty when available = 126, nothing on order | 4 × 45 − (126 − 126) = **180** |
 | Reorder qty when available = 126, 30 on order | position 156 > 126, so no order yet |
+
+## Campaigns, seasons, and stock-outs
+
+- Before a big campaign (9.9 · 10.10 · 11.11 · 12.12 · payday), raise average daily sales for the window from last year's numbers, not this month's. Adjust for season only with a full year of history; with less, ask the owner what last year's peak looked like.
+- Days the SKU was out of stock are not zero-demand days. Leave them out of average daily sales.

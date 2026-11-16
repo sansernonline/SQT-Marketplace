@@ -20,7 +20,7 @@ The product manager should:
 2. **Define strategic themes** (3-5 max):
    - Each theme = a focus area for the period
    - Each theme has a measurable success criterion, written as an outcome: **จาก X เป็น Y ภายใน Z สำหรับใคร** (e.g. "checkout completion from 62% to 75% by end of Q3 for mobile buyers") — a feature list is not an outcome
-   - Each outcome names one counter-metric that must not get worse while chasing it (e.g. refund rate while pushing conversion) (แนวคิดจาก borghei outcome-roadmap · เขียนใหม่)
+   - Each outcome names one counter-metric that must not get worse while chasing it (e.g. refund rate while pushing conversion)
    - Themes should align with company strategy
 
 3. **Generate candidate features:**
@@ -65,3 +65,7 @@ The product manager should:
    - Delivery planning → `project-manager`
 
 **อ่านเพิ่มเมื่อต้องใช้:** [`references/product-doc-templates.md`](references/product-doc-templates.md) — แม่แบบเอกสารผลิตภัณฑ์
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources

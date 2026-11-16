@@ -64,25 +64,16 @@ Dates on Thai papers are often พ.ศ. — subtract 543 before entering (2572 �
 - Passport expiring within 6 months of a planned trip (see `travel-prep`)
 - No scan of anything — fire, flood or theft takes the only copy
 
-## Worked example
-
-Household of two adults. Sweep finds 23 documents. Monthly check on 2026-10-06 shows:
-
-| item | holder | end_date | lead | Warning |
-|---|---|---|---|---|
-| Passport | Nok | 2027-03-14 | 120 | Inside 6-month rule for the January Japan trip → book qpassport now; old book at `physical: ตู้เอกสาร ลิ้นชัก 2` |
-| Car tax + พ.ร.บ. | Tom | 2026-11-30 | 90 | Can pay now (inside 90 days) — Department of Land Transport (DLT) app / ห้างที่รับชำระ |
-| Health policy | Tom | 2026-12-01 | 30 | Premium notice due; compare before auto-renew |
-| Air purifier (warranty) | Nok | 2026-11-20 | 30 | Test the unit this week while still covered |
-
 ## Rules
 
 - Never store full ID, passport, account or policy numbers, passwords or OTPs — last 4 digits at most
 - Expiry warnings always include location and the renewal step, not just a date
-- The registry is updated in place; a second list is a bug
 - Cadence: 5-minute monthly check, full sweep each January and after any move, marriage, birth or death
 
-Related: `travel-prep` (passport timing) · `digital-hygiene` (where secrets go) · `warranty-tracker` in e-commerce and `vehicle-care` (plugin เดียวกัน).
+## References
+
+- [`references/registry-template.md`](references/registry-template.md) — renewal rules for Thai documents and the fill-in CSV
+- [`references/worked-example.md`](references/worked-example.md) — open for a model monthly check
 
 
 ## reference: registry-template.md
@@ -125,3 +116,17 @@ Open in any spreadsheet; sort by `end_date`. Do not add columns per section — 
 ## Monthly check prompt
 
 > Read `important-docs.csv`. List rows where end_date minus today is within renew_lead_days, or within 60 / 30 / 7 days. For each give item, holder, days left, location, and the renewal step from the table. Then list rows with `unknown` dates.
+
+
+## reference: worked-example.md
+
+# Worked example · important-docs
+
+Household of two adults. Sweep finds 23 documents. Monthly check on 2026-10-06 shows:
+
+| item | holder | end_date | lead | Warning |
+|---|---|---|---|---|
+| Passport | Nok | 2027-03-14 | 120 | Inside 6-month rule for the January Japan trip → book qpassport now; old book at `physical: ตู้เอกสาร ลิ้นชัก 2` |
+| Car tax + พ.ร.บ. | Tom | 2026-11-30 | 90 | Can pay now (inside 90 days) — Department of Land Transport (DLT) app / ห้างที่รับชำระ |
+| Health policy | Tom | 2026-12-01 | 30 | Premium notice due; compare before auto-renew |
+| Air purifier (warranty) | Nok | 2026-11-20 | 30 | Test the unit this week while still covered |

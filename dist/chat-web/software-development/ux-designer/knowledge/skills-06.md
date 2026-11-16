@@ -4,8 +4,6 @@ Use when a mid-task finding needs a decision before going on
 
 # Flag what you found, then propose a way forward
 
-> **Language:** write every line of wording following `human-writing`. This skill gives the format and structure. human-writing says how to write so the reader understands.
-
 > **The one rule:** open with the **impact**, close with **one question**.
 > The middle is evidence and proposals, not a story of how you found it.
 
@@ -23,11 +21,7 @@ Use when a mid-task finding needs a decision before going on
 | Answer a question the user asked | `answer-shape` | instead |
 | A reversible choice (can be changed later at no cost) | `principle-proceed-on-reversible-work`: do it now, then log it in `decision-log` | instead |
 | An unknown fact (number, name, date, budget) | Put `(รอยืนยัน)` (awaiting confirmation) and keep going; do not stop to ask | instead |
-| Report finished work | `human-writing` · `status-report` | instead |
-| Explain something complex so it is understood | `answer-shape` | instead |
-| Write a document for others to read | `polished-document-style` | instead |
 | Something is really broken and must be fixed now | `targeted-fix`: fix first, then report | instead |
-| Spell out abbreviations and jargon in the answer | `spell-out-abbreviations` | together |
 | What you found is a real system incident | `incident-runbook-template` · `postmortem-template` (plugin `software-development`) | together |
 
 ---
@@ -133,20 +127,6 @@ It also signals that you thought it through and did not forget.
 ## 7 · Full example
 
 A before-and-after example (a software requirements document and work plan) is in [`references/example.md`](references/example.md)
-
----
-
-
-## 8 · Anti-patterns
-
-- **Opening with "ระหว่างตรวจผมพบว่า…" (while checking I found…).** The reader must read to the end of the paragraph to learn what to do.
-- **Disagreeing numbers written as a sentence.** "เดิม 214 ตอนนี้ 245" (was 214, now 245) makes the eye jump back and forth.
-- **Explaining how the problem happened** when it does not change what must be done.
-- **A proposal that says how to do it instead of the benefit.** The reader still cannot decide.
-- **Three questions in one paragraph.** You get one answer and must ask again.
-- **Closing with "แจ้งได้เลยครับ" (just let me know).** It asks for no decision.
-- **A long apology for a mistake.** Say what was wrong and how you fix it. That is enough.
-- **Reporting without proposing.** It pushes all the thinking back to the user.
 
 
 ## reference: example.md
@@ -345,7 +325,7 @@ Show:   25 ก.ย. 2569 09:42                (viewer's Asia/Bangkok)
 
 **If the system has both kinds of users, let the user pick the calendar**, but the stored value stays the same.
 
-**Checker** — write a short script that sweeps the code for Thai text embedded in code outside the translation files · hard-coded year numbers 25xx · `new Date("…")` that takes a string with no time zone. Run it in CI before merge. (The idea comes from BV thai-date-format: a converter needs its own tests.)
+**Checker** — write a short script that sweeps the code for Thai text embedded in code outside the translation files · hard-coded year numbers 25xx · `new Date("…")` that takes a string with no time zone. Run it in CI before merge. A converter needs its own tests.
 
 ---
 
@@ -401,20 +381,17 @@ So let a library handle it. Do not write `if (count > 1)` yourself, because some
 
 ---
 
-## 7 · Anti-patterns
+## Links to other skills
 
-- **Text embedded in code** because "there is only one language for now"
-- **Building a sentence from fragments** — other languages order words differently
-- **Storing B.E. in the database** — every function will compute time spans wrongly
-- **Adding 7 hours by hand in code** — breaks the moment there are users outside the Thai time zone
-- **Sorting Thai names with the standard collation** — wrong order with no error
-- **Testing screens with Lorem ipsum** — you never see Thai line-breaking problems
-- **`if (count > 1) "s"`** — works only for English
-- **2-digit years** — "69" is 1969, 2069, or 2569
-- **Importing Excel without asking whether the year is B.E. or C.E.** — years are off by 543 with nothing to warn you
-- **A translation key that is missing and shows an empty value** — you get an empty button nobody notices
+`error-handling-patterns` (error messages that must be translated) · `presentation-design` (Thai fonts in slides) · `data-import-export` (B.E. years in imports · CSV that opens in Excel) · `notifications` (multi-language message templates) · `translate-th-en` (plugin `superuser`: translating whole documents, a glossary per project)
 
----
+## References
+
+- [`references/thai-text-tools.md`](references/thai-text-tools.md) — open for word segmentation · transliteration to Roman letters · validating national ID numbers in code
+- [`references/abbreviations.md`](references/abbreviations.md) — open when a term (i18n · collation · ICU · BCP 47 · ARB · BOM) must be explained
+
+
+## reference: abbreviations.md
 
 ## 8 · Abbreviations
 
@@ -426,20 +403,6 @@ So let a library handle it. Do not write `if (count > 1)` yourself, because some
 - **BCP 47** — Best Current Practice (BCP) 47, the standard for language codes such as `th-TH`, `en-US`
 - **ARB** — Application Resource Bundle (the JSON-style translation file that Flutter `gen-l10n` uses)
 - **BOM** — Byte Order Mark (the 3 bytes at the start of a file that tell Excel it is UTF-8)
-
-## 9 · Links to other skills
-
-| Need | Use with |
-|---|---|
-| Date and time data types and collation | `database-design` |
-| Date, time, and money format in JSON | `api-conventions` |
-| Error messages that must be translated | `error-handling-patterns` |
-| Thai fonts on screen | `ui-craft` + the platform skill |
-| Thai fonts in documents and slides | `branded-document-design` · `presentation-design` |
-| Importing files with B.E. years · exporting CSV that opens in Excel without garbled Thai | `data-import-export` |
-| Multi-language notification message templates | `notifications` |
-| Translating a whole set of documents or screen text, Thai↔English · a glossary per project | `translate-th-en` (plugin `superuser`) |
-| Word segmentation · transliteration to Roman letters · validating national ID numbers in code | [`references/thai-text-tools.md`](references/thai-text-tools.md) |
 
 
 ## reference: thai-text-tools.md

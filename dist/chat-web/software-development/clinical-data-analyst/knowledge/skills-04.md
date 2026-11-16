@@ -129,6 +129,8 @@ It may be collected only when truly necessary, and needs stricter measures than 
 
 **Never use real data on development machines or staging.** Always mask it first (see `cicd-and-release`).
 
+**Do not export a full-data Excel file for someone who needs only the totals.**
+
 ---
 
 ## 6 · Retention
@@ -173,22 +175,6 @@ the notification message template · how to pull the list of affected people
 
 ---
 
-## 9 · Anti-patterns
-
-- **Asking consent for everything** — when they withdraw, the system cannot keep working
-- **Pre-ticked checkboxes** — they do not count as consent
-- **Storing consent as one value `accepted_terms = true`** — you cannot prove later what was agreed
-- **Soft delete, then saying it is deleted**
-- **A retention policy with no real deletion job**
-- **Real data on staging** — and copied onto developer machines
-- **Collecting the national ID number "just in case"**
-- **Personal data in logs and crash reports**
-- **No list of outside providers** — you cannot say where the data goes
-- **Exporting a full-data Excel file** for someone who needs only the totals
-- **A privacy policy that does not match what the system really does**
-
----
-
 ## 10 · Frequently cited sections, and abbreviations
 
 Use this when a customer or the legal team asks "which section is this?" (checked against the unofficial English translation of the 2019 Act, Royal Gazette 27 May 2019 (B.E. 2562), on 23 Oct 2026 (B.E. 2569))
@@ -206,7 +192,20 @@ Use this when a customer or the legal team asks "which section is this?" (checke
 | Compensation · punitive damages | 77 · 78 |
 | Administrative fines, maximum 1 · 3 · 5 million baht | 82 · 83 · 84 |
 
-**Sectors with a second layer of rules** — health · finance · telecom have their own regulators (กระทรวงสาธารณสุข (Ministry of Public Health) · ธปท. (Bank of Thailand, BOT) / ก.ล.ต. (Securities and Exchange Commission, SEC) / คปภ. (Office of Insurance Commission, OIC) · กสทช. (National Broadcasting and Telecommunications Commission, NBTC)) that add conditions on confidentiality, retention and breach notice. Check that sector's rules before designing, and do not rely on PDPA alone (idea from BV thai-pdpa (MIT))
+**Sectors with a second layer of rules** — health · finance · telecom have their own regulators (กระทรวงสาธารณสุข (Ministry of Public Health) · ธปท. (Bank of Thailand, BOT) / ก.ล.ต. (Securities and Exchange Commission, SEC) / คปภ. (Office of Insurance Commission, OIC) · กสทช. (National Broadcasting and Telecommunications Commission, NBTC)) that add conditions on confidentiality, retention and breach notice. Check that sector's rules before designing, and do not rely on PDPA alone
+
+## 11 · Links to other skills
+
+Also: `notifications` (sending and unsubscribing from marketing messages; consent stays here) · `data-import-export` (masking exported files) · `file-upload-and-storage` (retention of attached files) · `background-jobs` (jobs that delete expired data) · `incident-runbook-template` (after a leak).
+
+## References
+
+- [`references/glossary.md`](references/glossary.md) — open when a term (controller · processor · sensitive data) must be explained
+
+
+## reference: glossary.md
+
+# PDPA glossary
 
 - **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562)
 - **Personal data** — data that identifies a person, directly or indirectly
@@ -214,21 +213,6 @@ Use this when a customer or the legal team asks "which section is this?" (checke
 - **Data controller** — whoever decides how data is collected and used (usually the system owner)
 - **Data processor** — whoever processes data on the controller's instructions, such as a cloud provider
 - **Data subject** — the person the data belongs to
-
-## 11 · Links to other skills
-
-| Need | Use with |
-|---|---|
-| A trail of who viewed or changed data | `audit-trail` |
-| Tables, encryption and soft delete | `database-design` |
-| Masking data in logs | `logging-standards` |
-| Access rights and authentication | `auth-implementation-patterns` |
-| Masking real data before loading staging | `cicd-and-release` |
-| Sending and unsubscribing from marketing messages (consent stays in this skill) | `notifications` |
-| Masking data in exported files | `data-import-export` |
-| Retention of attached files | `file-upload-and-storage` |
-| Jobs that delete expired data | `background-jobs` |
-| Recording the incident after a leak | `postmortem-template` · `incident-runbook-template` |
 
 
 ---
@@ -240,8 +224,6 @@ Use when a Markdown doc needs an image, SVG or ASCII art
 # Markdown Visuals
 
 > **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
-
-> **Language:** write every line of wording per `human-writing`. This skill gives the format and structure; human-writing gives the way to write so people understand.
 
 > **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
@@ -404,15 +386,10 @@ For every visual:
 
 ## Anti-patterns
 
-- **Text-only design docs** — "the icon is in the top-right" with no picture
 - **Linking to Figma / external design tools as the only source** — visuals must render in the repo
 - **PNG screenshots of text** — use the text, in a code block
-- **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
-- **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
-- **ASCII art outside a code fence** — proportional fonts will mangle alignment
 - **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
 - **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
-- **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
 
 ## Quick-start recipe
 
@@ -427,24 +404,9 @@ When a markdown doc needs a design picture (clickable app screens go to the plat
 4. **Add a feature reference table** below the visuals — what each element means
 5. **Cross-check accessibility checklist** before delivery
 
-Not sure a visual will render? Preview it in the viewer the reader will use (GitHub, Notion, VS Code) before delivery.
-
-## Related skills
-
-- `polished-document-style` — overall doc formatting, figure captions, callout boxes
-- `simplicity-first` (plugin `software-development`) — don't over-design the diagram; show what's needed
-- `software-diagrams` (plugin `software-development`) — which diagram type answers which question, plus the shared Mermaid theme
-- `diagram-figures` — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
-- `ui-craft` (plugin `software-development`) — spacing, hierarchy and states when the picture is a screen
-
 ## ไม่ให้ดูเหมือน AI ทำ
 
 Before sending, go through item 3 of `no-ai-look` — for HTML work, run its script · every piece must also pass eye check 3.2 (a web page adds items 10–14), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for all media is there
-
-## ตัวย่อ
-
-Spell out each abbreviation in full on first use and put the short form in brackets — for example Model Context Protocol (MCP)
-After that, use the short form. Details are in the skill `spell-out-abbreviations`
 
 
 ## reference: ascii-patterns.md

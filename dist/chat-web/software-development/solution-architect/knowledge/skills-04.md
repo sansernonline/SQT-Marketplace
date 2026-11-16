@@ -5,7 +5,6 @@ Use when designing or changing a database schema
 # Database design
 
 > **One rule:** the schema is the hardest thing in a system to change.
-> A code bug fixed today is done today, but a wrong schema stays for 3 years, with another 10 million real rows to migrate along with it.
 
 ## When to use this skill
 
@@ -14,18 +13,7 @@ Use when designing or changing a database schema
 - Writing a migration, especially once the system holds real data
 - A query is slow and you suspect the schema or an index
 
-## When to use another skill instead, or together
-
-| Task | Skill | |
-|---|---|---|
-| Choose the overall architecture | `architecture-patterns` | instead |
-| Design endpoints and JSON shapes | `api-conventions` | instead |
-| Store passwords, tokens, user permissions | `auth-implementation-patterns` | instead |
-| Where to keep connection strings | `config-and-secrets` | instead |
-| Run migrations in a pipeline | `cicd-and-release` | instead |
-| Draw an Entity-Relationship (ER) diagram | `diagram-figures` or `markdown-visuals` | together |
-| Record why this database was chosen | `adr-writer` | together |
-| Abbreviations in work people read | `spell-out-abbreviations` | together |
+Not for: overall architecture → `architecture-patterns` · endpoints and JSON shapes → `api-conventions` · passwords, tokens, permissions → `auth-implementation-patterns` · running migrations in a pipeline → `cicd-and-release`
 
 **Syntax specific to each database, data types compared, and the migration commands of each Object-Relational Mapping (ORM) tool** are in `references/per-stack.md`.
 
@@ -43,7 +31,6 @@ Use when designing or changing a database schema
 
 > **The default is relational.** Choose document only when you **can answer why**.
 > "More flexible" is not a reason. It means the design is not done yet.
-> Most systems that chose document for flexibility end up writing join code by hand in the app.
 
 **You can mix them**: use relational as the base, and store data of uncertain shape in a `jsonb` column.
 In almost every case this is better than running 2 separate databases.
@@ -874,18 +861,7 @@ Use when adding API endpoints or checking API consistency
 - Reviewing an API and feeling that its parts are not alike
 - Needing to answer "if we change it this way, will clients break?"
 
-## When to use another skill instead, or alongside
-
-| Task | Skill | |
-|---|---|---|
-| Design all the endpoints of one feature | command `/api-design` | instead |
-| Health check, error envelope, graceful shutdown | `web-service-essentials` | instead |
-| Tables, columns, relations | `database-design` | instead |
-| Tokens, scopes, permissions | `auth-implementation-patterns` | alongside |
-| Correlation id that appears in errors | `logging-standards` | alongside |
-| Contract tests between systems | `testing-standards` | alongside |
-| Recording why this convention was chosen | `adr-writer` | alongside |
-| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
+Not for: designing all the endpoints of one feature → command `/api-design` · health check, error envelope, graceful shutdown → `web-service-essentials` · tables and relations → `database-design`
 
 **A template of the conventions document that you can copy and use** → `assets/API-CONVENTIONS.md`
 
@@ -895,8 +871,6 @@ Use when adding API endpoints or checking API consistency
 
 Put the file `docs/API-CONVENTIONS.md` in place (the template is at `assets/API-CONVENTIONS.md`).
 Write every decision made from this page into that file, with the date and a short reason.
-
-> A convention that lives in one person's head is not a convention — someone who joins the team next month will do it another way.
 
 ---
 
@@ -1109,7 +1083,7 @@ A fitting period: for an internal API, 1 release cycle. For an API used by outsi
 
 ## 11 · Check before releasing a new endpoint
 
-Go through every item against the endpoint you added. Fail one and it is not merged yet (idea from ECC api-design).
+Go through every item against the endpoint you added. Fail one and it is not merged yet.
 
 - [ ] The URL is a plural noun per section 2 · sits under a version per section 3 · has no `GET` that changes data
 - [ ] Every list has pagination and a page-size ceiling (section 4) · filter and sort use the same parameter names as existing endpoints (section 5)
@@ -1195,6 +1169,7 @@ Use when building or reviewing an HTTP backend
 - For URL style · paging · dates · API ids, use `api-conventions`
 - For log format, use `logging-standards`
 - To choose an architecture, use `architecture-patterns`
+- To check responses against OpenAPI in CI or catch breaking changes, see `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md)
 
 ---
 
@@ -1214,7 +1189,7 @@ Use when building or reviewing an HTTP backend
 
 \* If you do not want the public to see the commit hash in `/version`, restrict it so only the internal network can call it.
 
-**Wire it to Kubernetes like this** (adapted from secondsky `health-check-endpoints` · MIT) — live and ready must point to different paths, or the point above means nothing.
+**Wire it to Kubernetes like this** — live and ready must point to different paths, or the point above means nothing.
 
 ```yaml
 livenessProbe:            # dead → restart the container
@@ -1345,7 +1320,7 @@ SIGTERM → 1. Stop accepting new requests (make /health/ready answer down at on
 
 ---
 
-## 6 · Ready-to-use code
+## 6 · Ready-made code
 
 | File | Stack | Status |
 |---|---|---|
@@ -1353,25 +1328,7 @@ SIGTERM → 1. Stop accepting new requests (make /health/ready answer down at on
 | `assets/health_py.py` | Python / FastAPI | ✓ run and tested the same way, results match on every field |
 | `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | Caution: not yet compiled or tested |
 
-```js
-// Node
-app.use(createHealthRouter({
-  version: { name: 'orders-api', version: '1.4.0', commit: process.env.GIT_SHA },
-  checks: {
-    db:   async () => { await pool.query('SELECT 1'); },          // critical
-    mail: { critical: false, run: async () => { await smtp.verify(); } },
-  },
-}));
-```
-
-```python
-# Python
-app.include_router(make_health_router(
-    version={"name": "orders-api", "version": "1.4.0", "commit": os.getenv("GIT_SHA")},
-    checks={"db": lambda: db.execute("SELECT 1"),
-            "mail": {"critical": False, "run": smtp.verify}},
-))
-```
+Usage snippets for the Node and Python routers: [`references/per-stack.md`](references/per-stack.md).
 
 ---
 
@@ -1396,33 +1353,6 @@ docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:808
 - [ ] Trigger a 500 and confirm no stack trace / connection string leaks out
 - [ ] After `SIGTERM`, in-flight requests finish before the app closes
 - [ ] `/ping` is not written to the log (or the file fills up with pings)
-
----
-
-## 8 · Anti-patterns
-
-- **A single `/health` that checks everything** — the orchestrator cannot tell whether to restart or only cut traffic
-- **liveness checks the DB** — a 10-second DB hiccup = every pod dies together
-- **A health check with no timeout** — a dependency hangs, and health hangs with it
-- **Sending a stack trace / connection string in health or in a 500 error**
-- **Health requires login** — the orchestrator has no token to give
-- **A different error format on every endpoint** — the client must write 5 kinds of parsing code
-- **`/ping` written to the log** — every second × 86400 = a file full of junk
-- **No graceful shutdown** — every deploy, customers see errors
-- **`Access-Control-Allow-Origin: *` together with cookies** — lets other sites send requests as the user
-
----
-
-## 9 · Links to other skills
-
-| Need | Use together with |
-|---|---|
-| Log format and correlation id | `logging-standards` |
-| Tests for these endpoints | `testing-standards` |
-| Check responses against OpenAPI in CI · contract with the frontend team · breaking-change check | `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md) |
-| Design business endpoints | command `/api-design` |
-| Runbook for when the service is down | `incident-runbook-template` |
-| Security review | `security-engineer` + command `/security-scan` (a shortcut to `security-audit` or `security-gate`) |
 
 
 ## reference: per-stack.md
@@ -1680,6 +1610,28 @@ this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r))
 | OpenAPI | `Microsoft.AspNetCore.OpenApi` (`AddOpenApi()` + `MapOpenApi()` · มากับ template ตั้งแต่ .NET 9) · ทางเลือก: Swashbuckle / NSwag | `swagger-jsdoc` | มีในตัว `/docs` |
 | rate limit | `AddRateLimiter` | `express-rate-limit` | `slowapi` |
 
+## Wiring the ready-made health router
+
+```js
+// Node
+app.use(createHealthRouter({
+  version: { name: 'orders-api', version: '1.4.0', commit: process.env.GIT_SHA },
+  checks: {
+    db:   async () => { await pool.query('SELECT 1'); },          // critical
+    mail: { critical: false, run: async () => { await smtp.verify(); } },
+  },
+}));
+```
+
+```python
+# Python
+app.include_router(make_health_router(
+    version={"name": "orders-api", "version": "1.4.0", "commit": os.getenv("GIT_SHA")},
+    checks={"db": lambda: db.execute("SELECT 1"),
+            "mail": {"critical": False, "run": smtp.verify}},
+))
+```
+
 
 ---
 
@@ -1711,7 +1663,6 @@ Use when writing code that can fail, with retry and timeout
 | Where a failed background job goes next | `background-jobs` | alongside |
 | Error messages that must be translated into several languages | `i18n-and-locale` | alongside |
 | Tests for failure cases | `testing-standards` | alongside |
-| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 
 ---
 
@@ -1842,31 +1793,30 @@ Use `finally` / `using` / `with` / `defer` instead of repeating it on every exit
 
 ## 7 · Check before sending
 
-Go through this against the diff every time you touch code that calls outside the process (idea from ECC error-handling)
+Go through this against the diff every time you touch code that calls outside the process
 
 - [ ] Every `catch` clearly does one of these: handles it and goes on · converts it to an error of its own layer and throws on · lets it pass to the outermost layer to log (section 1) — no `catch` that logs and rethrows
 - [ ] Every outside call (HTTP · DB · queue · file) has a deliberate timeout and retries only the transient types in section 3 · a write that retries has an idempotency key (section 4)
 - [ ] The message to the user says what to do next · no stack trace or table name goes out (section 2) · the log for the same error has a correlation id and enough data to reproduce it
 - [ ] Outcomes the business expects (not found · insufficient balance · duplicate) are return values or types the caller must handle, not exceptions
 - [ ] Each outside dependency has at least 1 failure-path test (timeout · 5xx · bad payload), and a test confirms that partial failure follows section 6 and does not fail the whole page
-- [ ] None of these 4 kinds of silent failure swallowing (adapted from silent-failure-hunter in pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10):
+- [ ] None of these 4 kinds of silent failure swallowing:
   - **optional chaining or `?? default`** that lets a missing value pass with nobody knowing (`order?.total ?? 0` turns an order that failed to load into a zero total)
   - **falling back to a mock or sample data outside tests** — the live system shows fake data and looks normal
   - **retries run out, then silence** — after the last try it returns empty or success, throws no error, and tells the caller nothing
   - **a catch that logs and carries on in the UI** — the user sees a normal screen although the data never arrived; show an error state they can see
 
-## 8 · Anti-patterns
+## References
 
-- **An empty `catch`** — the hardest problem to find is the one that leaves no trace
-- **Returning `null` instead of throwing an error** — the caller cannot tell "no data" from "the system broke"
-- **`catch (Exception)` in the innermost layer** — swallows your own bugs too
-- **Log and rethrow at every layer** — 1 error gets 10 lines
-- **"เกิดข้อผิดพลาด" ("an error occurred")** — does not say what to do next
-- **Sending a stack trace to the user** — shows the internal structure to someone hunting for a hole
-- **Retry with no delay** — hammering a system that is already down
-- **Retrying a write with no idempotency key** — you get duplicate records
-- **No timeout** — threads pile up until the system dies
-- **Using errors to control normal flow** — for example throwing an exception on "not found", which is a normal event
+- [`references/sources.md`](references/sources.md) — where the checklist ideas came from
+
+
+## reference: sources.md
+
+# Sources · error-handling-patterns
+
+- Section 7 checklist: idea from ECC error-handling.
+- The 4 silent-failure kinds in section 7: adapted from silent-failure-hunter in pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10.
 
 
 ---
@@ -1951,7 +1901,6 @@ queue_depth_jobs                 value at this moment
 
 - **Metric types:** a counter counts events (read it with `rate()`) · a gauge holds the value right now · a histogram holds durations when you need p95 · a summary is for when you do not need to aggregate across instances
 - **Units:** seconds · bytes · ratio 0 to 1 (`_seconds`, not `_milliseconds`)
-- **Never put `user_id` · a phone number · `call_id` in a label**, because every new value is a new series, until the metrics system cannot cope · these ids go in logs and traces
 - p95: `histogram_quantile(0.95, sum by (le) (rate(<name>_bucket[5m])))`
 - Every alert rule has `for:` · `severity` · a runbook link · alert on symptoms (latency · error), not on CPU or GPU
 - Keep dashboards as JSON in git and provision them from files · RED per service · USE per resource
@@ -1984,7 +1933,7 @@ queue_depth_jobs                 value at this moment
 
 ### 4.1 · Error budget and burn rate
 
-A system with an SLO uses this instead of a fixed error % threshold, because it says "if this goes on, when will the whole month's budget run out?" (idea from the Google SRE Workbook)
+A system with an SLO uses this instead of a fixed error % threshold, because it says "if this goes on, when will the whole month's budget run out?"
 
 - **Budget** = the time you may fail in 30 days → SLO 99.9% = 43 minutes · 99.5% = 3.6 hours · 99% = 7.2 hours
 - **Burn rate** = current error rate ÷ (1 − SLO) → burn 1 = the budget runs out exactly on day 30 · burn 10 = gone in 3 days
@@ -2030,45 +1979,11 @@ Technical metrics all green while the business has stalled really happens, and y
 
 ---
 
-## 7 · Anti-patterns
+## References
 
-- **Watching the average response time**: it hides the people who hit the problem every time
-- **Alerts that need no action**: they teach everyone to ignore alerts
-- **Alerting on CPU and memory**: a system at CPU 90% with normal users is not an incident
-- **Putting unbounded ids in labels**: the metrics system brings itself down
-- **A dashboard with 40 graphs**: nobody knows which one to look at
-- **Measuring only the technical side, not the business**: everything is green but nobody can place an order
-- **Tracing every request**: expensive for no extra gain, sampling is enough
-- **No line marking the deploy time**: you lose half an hour before you remember you just deployed
-- **Alerts with no link to a runbook**: the receiver starts searching from zero at 3 a.m.
-
----
-
-## 8 · Abbreviations
-
-- **metric**: a number collected over time
-- **trace**: following one request along the whole path it travels
-- **p95 / p99**: the 95th and 99th percentiles (only 5% or 1% of requests are slower than this)
-- **label / tag**: a tag attached to a metric, used to look at groups separately
-- **on-call**: the duty of receiving incident alerts outside working hours
-- **SLO**: Service Level Objective (a service-level target you set yourself, such as 99.5% success)
-- **error budget / burn rate**: the time you may fail per month under the SLO, and how fast you are using it up (item 4.1)
-
-## 9 · Links to other skills
-
-| Need | Use together with |
-|---|---|
-| Log format and correlation id | `logging-standards` |
-| Health checks the monitor uses | `web-service-essentials` |
-| Metrics for queues and background jobs | `background-jobs` |
-| Error rate and circuit breaking | `error-handling-patterns` |
-| Steps when an alert fires | `incident-runbook-template` |
-| Post-incident summary | `postmortem-template` |
-| Target numbers agreed with the customer | `srs-writing` |
-| PromQL · alert rules · Grafana provisioning · voice agent example | `references/prometheus-grafana.md` |
-| Let an agent read Prometheus or Grafana through MCP | `mcp-server` item 1.1 |
-
-Source of item 3.1: prometheus.io (metric types · naming · histograms · alerting) and grafana.com (dashboard best practices · provisioning), checked 2026-10-27 · full links are at the end of `references/prometheus-grafana.md`
+- [`references/prometheus-grafana.md`](references/prometheus-grafana.md) — open for PromQL · alert rules · Grafana provisioning · voice agent example
+- `mcp-server` item 1.1 — when an agent must read Prometheus or Grafana through MCP
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
 
 
 ## reference: prometheus-grafana.md
@@ -2251,3 +2166,10 @@ Checked 2026-10-27
 | `DCGM_FI_DEV_GPU_UTIL` | github.com/NVIDIA/dcgm-exporter → etc/default-counters.csv |
 | `kafka_consumergroup_lag` | github.com/danielqsj/kafka_exporter (not official to Kafka) |
 | `predict_linear` · `[5m]` range vs scrape interval · NaN behavior when dividing by 0 | General team knowledge (not yet checked against the official PromQL pages) |
+
+
+## reference: sources.md
+
+# Sources · observability-basics
+
+Source of item 3.1: prometheus.io (metric types · naming · histograms · alerting) and grafana.com (dashboard best practices · provisioning), checked 2026-10-27 · full links are at the end of `references/prometheus-grafana.md`

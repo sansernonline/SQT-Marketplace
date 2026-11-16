@@ -4,8 +4,7 @@ Use when writing or reviewing a Functional Specification Document
 
 # Writing a Functional Specification Document (FSD)
 
-> **Language:** Write every line by `human-writing`. This skill gives the format and structure. `human-writing` says how to write so readers understand.
-> For Thai text, see `human-writing` `references/thai-grammar.md` section 4, business register.
+> For Thai text, use the business register (`human-writing` `references/thai-grammar.md` section 4).
 
 > **The one rule:** An FSD is done when a developer can read it and **write code without guessing or asking**.
 > Every point that forces a guess becomes rework after delivery.
@@ -17,18 +16,7 @@ Use when writing or reviewing a Functional Specification Document
 - Reviewing someone else's FSD, where you must say what is missing
 - A developer keeps asking the same questions while building. That means the FSD is incomplete.
 
-## When **not** to use it
-
-| Task | Use this instead |
-|---|---|
-| Requirements at the level a customer signs off | `srs-writing` |
-| User stories for a sprint | `user-story-writer` |
-| Designing the endpoints of one feature | command `/api-design` |
-| System-wide API agreements | `api-conventions` |
-| Tables, columns, relationships | `database-design` |
-| Screen look, spacing, states | `ui-craft` + the platform skill |
-| Markdown format and document theme | `polished-document-style` |
-| Look of the exported .docx file | `branded-document-design` |
+Not for: requirements a customer signs off → `srs-writing` · user stories for a sprint → `user-story-writer` · endpoints of one feature → command `/api-design` (system-wide agreements → `api-conventions`) · tables and columns → `database-design`
 
 ## Read more when
 
@@ -66,7 +54,7 @@ The SRS says what the system **must be able to do**. The FSD says **how** the sy
 3. Go use case by use case, not screen by screen. Screens come from use cases, not the other way around.
 4. Write the business rules separately first, then refer to them from the steps (item 7).
 5. Build the traceability matrix as you go, not at the end.
-6. **Draw, then collect questions.** While drawing the sequence diagram, cancellation flow, and ERD, you will find matters the stories and SRS do not answer (for example, whether a course deducts a session at booking or at attendance). Note them at the end of the document as questions with a proposed answer marked `(รอยืนยัน)`. Do not choose for the customer. (Example from that job: drawing 8 figures produced 15 new questions, and 10 of them were never in the original question set.)
+6. **Draw, then collect questions.** While drawing the sequence diagram, cancellation flow, and ERD, you will find matters the stories and SRS do not answer (for example, whether a course deducts a session at booking or at attendance). Note them at the end of the document as questions with a proposed answer marked `(รอยืนยัน)`. Do not choose for the customer.
 7. Review by item 11 before sending.
 
 ## 3 · Document outline
@@ -187,33 +175,11 @@ Mermaid through `software-diagrams` is only for drafts discussed in chat. Do not
 
 If nobody is free to read it, use a fresh agent that gets only the FSD file. Have it answer 8–10 questions that a developer and QA would ask (for example, "what happens on a duplicate booking?" and "which states can be reversed?"). Fix every answer that is wrong or says "I don't know" before sending. For the method and the Thai-specific questions (B.E. years · document number format), see [`../srs-writing/references/reader-test.md`](../srs-writing/references/reader-test.md).
 
-**Once code exists, compare the FSD with the real code.** Do this when you review the FSD after a build or before taking over a fix. The idea comes from trailofbits/skills and ECC intent-driven-development.
+**Once code exists, compare the FSD with the real code.** Do this when you review the FSD after a build or before taking over a fix.
 
 - Go code by code through item 9. Search the code and tests for use case codes and screen names (`rg -n "UC-0[0-9]+" --glob '!**/node_modules/**' | head -50`). A code that appears nowhere in the code or tests is a gap. Answer whether it is not built yet or built under another name.
 - Compare the 3 places that differ most often: field table (item 5) ↔ validation code · state transition table (item 6) ↔ the code that changes state (including "not allowed" rows) · error messages (item 8) ↔ strings in the code.
 - Record each difference as a table `| spec:line | file:line | who is right |` and let a person decide. During the review, do not change the FSD to match the code, and do not change the code to match the FSD.
-
-## 12 · Anti-patterns
-
-- **Copying the SRS and adding "the system will"** — you get two documents saying the same thing.
-- **A use case with only the smooth path** — the failing path is what an FSD exists to describe.
-- **"Show a warning message"** without saying what the message says.
-- **"The system calculates automatically"** without the formula and the rounding.
-- **A state diagram that is only a picture** — a picture cannot say who has permission or what side effects occur.
-- **Controlling permission by hiding a button** without specifying the server-side check.
-- **Business rules scattered through the steps** — a later change misses some of them.
-- **A screen that does not say where its data comes from** — the developer will guess the endpoint.
-- **A wireframe in place of requirements** — a picture cannot say what is mandatory or what the validation rule is.
-- **No traceability matrix** — then nobody knows whether the work is complete.
-
-## 13 · Abbreviations
-
-- **FSD** — Functional Specification Document (a requirements document detailed enough to build from)
-- **SRS** — Software Requirements Specification (a software requirements document at the level a customer signs off)
-- **BRD** — Business Requirements Document
-- **use case** — one user goal from start to finish
-- **state machine** — a state diagram showing which states an item can move between
-- **ETag** — Entity Tag (a version identifier for data, used to check whether someone else edited it first)
 
 
 ## reference: edge-cases.md
@@ -678,8 +644,6 @@ Use when a legacy system has code but no spec
 
 Turn an undocumented system into an as-is spec that a change request can be measured against. The code says **what** the system does; it cannot say whether that was **intended**. Every claim therefore carries a source and a confidence label, and everything the code cannot answer becomes a question for a person.
 
-Use `reverse-engineering` instead when there is no source code, only binaries.
-
 ## ไม่ใช้เมื่อ
 
 | งาน | ใช้ตัวนี้แทน |
@@ -791,8 +755,6 @@ For each request, fill [assets/change-request.md](assets/change-request.md):
 
 `/software-development:legacy-spec-recovery <path to legacy code> [module to go deep on | CR text]`
 
-> **Shortcut into SuperUser:** open the `superuser` skill with the closest playbook, then copy the steps below into the todo first. The steps below give the work format and the output of this command. Use them together with the playbook, not in place of it.
-
 Recover the as-is spec of the legacy system at:
 
 **$ARGUMENTS**
@@ -899,8 +861,6 @@ Use when a mid-task finding needs a decision before going on
 
 # Flag what you found, then propose a way forward
 
-> **Language:** write every line of wording following `human-writing`. This skill gives the format and structure. human-writing says how to write so the reader understands.
-
 > **The one rule:** open with the **impact**, close with **one question**.
 > The middle is evidence and proposals, not a story of how you found it.
 
@@ -918,11 +878,7 @@ Use when a mid-task finding needs a decision before going on
 | Answer a question the user asked | `answer-shape` | instead |
 | A reversible choice (can be changed later at no cost) | `principle-proceed-on-reversible-work`: do it now, then log it in `decision-log` | instead |
 | An unknown fact (number, name, date, budget) | Put `(รอยืนยัน)` (awaiting confirmation) and keep going; do not stop to ask | instead |
-| Report finished work | `human-writing` · `status-report` | instead |
-| Explain something complex so it is understood | `answer-shape` | instead |
-| Write a document for others to read | `polished-document-style` | instead |
 | Something is really broken and must be fixed now | `targeted-fix`: fix first, then report | instead |
-| Spell out abbreviations and jargon in the answer | `spell-out-abbreviations` | together |
 | What you found is a real system incident | `incident-runbook-template` · `postmortem-template` (plugin `software-development`) | together |
 
 ---
@@ -1028,20 +984,6 @@ It also signals that you thought it through and did not forget.
 ## 7 · Full example
 
 A before-and-after example (a software requirements document and work plan) is in [`references/example.md`](references/example.md)
-
----
-
-
-## 8 · Anti-patterns
-
-- **Opening with "ระหว่างตรวจผมพบว่า…" (while checking I found…).** The reader must read to the end of the paragraph to learn what to do.
-- **Disagreeing numbers written as a sentence.** "เดิม 214 ตอนนี้ 245" (was 214, now 245) makes the eye jump back and forth.
-- **Explaining how the problem happened** when it does not change what must be done.
-- **A proposal that says how to do it instead of the benefit.** The reader still cannot decide.
-- **Three questions in one paragraph.** You get one answer and must ask again.
-- **Closing with "แจ้งได้เลยครับ" (just let me know).** It asks for no decision.
-- **A long apology for a mistake.** Say what was wrong and how you fix it. That is enough.
-- **Reporting without proposing.** It pushes all the thinking back to the user.
 
 
 ## reference: example.md

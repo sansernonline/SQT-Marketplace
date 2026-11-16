@@ -34,7 +34,7 @@ Ask the organizer (HR or the team lead) 6 questions in one go, then write the an
 6. How is it measured? Do you need to submit scores or issue certificates?
 
 - **Prerequisites** are written as things the learner can do, never "has a background." Example: "can open a terminal and move folders with cd." Send a 5-item check 3 days ahead. If results differ widely, pair a fluent learner with a beginner, or open a 30-minute warm-up before the real day (แนวของเรา).
-- **The learner's goal**: record the reason the learners need this skill in one place in `brief.md`, then use it to decide which content stays and which is cut (idea from `teach` in mattpocock/skills · MIT · rewritten).
+- **The learner's goal**: record the reason the learners need this skill in one place in `brief.md`, then use it to decide which content stays and which is cut.
 
 ## 2 · Learning outcomes use visible verbs
 
@@ -53,7 +53,7 @@ Pick verbs from the revised Bloom's taxonomy, cognitive process dimension, 6 lev
 | 5 Evaluate | Judge against a criterion or standard | check against criteria · choose with reasons · critique | Choose between undoing a whole commit and editing one file, with reasons |
 | 6 Create | Put parts together into a new whole that works | design · plan · build | Design the team's branch naming rules |
 
-- **Never use "understand," "know," "be aware of," or "be familiar with" as the verb of an outcome**, because they cannot be checked. Ask "If they truly understood, what would they do differently?" and write that instead (Eberly Center, Carnegie Mellon). Krathwohl notes that when teachers say they want learners to "really understand," the meaning ranges from the understand level up to creating new work, so the word gives no level.
+- **Never use "understand," "know," "be aware of," or "be familiar with" as the verb of an outcome**, because they cannot be checked. Ask "If they truly understood, what would they do differently?" and write that instead (Eberly Center, Carnegie Mellon).
 - A 1-day course has 3–5 outcomes, mostly at levels 3–4, and at most 1 at level 6, because creating something new takes long hands-on time (แนวของเรา).
 - Map every outcome to its teaching session, exercise and assessment in one table. An outcome with no exercise means you taught it but never let learners try it (the alignment table is in section 10).
 
@@ -71,7 +71,7 @@ Rules for arranging sessions (แนวของเรา):
 - A skills course uses about 30% talking and about 70% hands-on.
 - The session after lunch is hands-on work, not lecture.
 - Keep a 10% buffer in every session for machine problems and questions.
-- Open every session with 3 review questions from the previous session, answered without notes (retrieval practice). Near the end of the day, loop back to use the first session's skill once more (spaced review, or spacing). These 2 principles come from `teach` (rewritten).
+- Open every session with 3 review questions from the previous session, answered without notes (retrieval practice). Near the end of the day, loop back to use the first session's skill once more (spaced review, or spacing).
 - Use the last 20 minutes of the day to review, fill in the feedback form (section 7) and say where to keep practicing.
 
 ## 4 · Exercises, from guided to alone
@@ -88,8 +88,8 @@ Every skill goes through 4 stages. Do not jump from watching the teacher straigh
 **Each exercise has all 7 parts:** which outcome · starter files · steps or task · **เสร็จเมื่อ** (done when: a checkable result, such as which command must show what) · a 3-step hint (point the direction, then name the command, then say almost all of it) · an answer key in a separate file · an extension task for those who finish early.
 
 - **Use topics the learners meet at work.** The accounting team uses a financial statement file, the testing team uses test cases. Do not use bare names like `foo` and `bar` (same principle as the real-project rule of `learning-path`).
-- **Exercise folders**: number the prefix by session order. Each exercise splits into `problem/` (a task with gaps to fill) · `solution/` (the answer) · `explainer/` (the explanation), with a short README in every folder. Move or renumber with `git mv` so file history is not lost (idea from `scaffold-exercises` in mattpocock/skills · MIT · rewritten).
-- **Multiple-choice questions**: make all options similar in length and shuffle the position of the correct one, so learners cannot guess from how the options look (idea from `teach`).
+- **Exercise folders**: number the prefix by session order. Each exercise splits into `problem/` (a task with gaps to fill) · `solution/` (the answer) · `explainer/` (the explanation), with a short README in every folder. Move or renumber with `git mv` so file history is not lost.
+- **Multiple-choice questions**: make all options similar in length and shuffle the position of the correct one, so learners cannot guess from how the options look.
 - **Try every exercise yourself before teaching**, on the same machine type as the learners, and note the time it takes. Multiply by 3 for a beginner's time (แนวของเรา).
 
 ## 5 · Assessment: a rubric with 3–4 levels and sample work
@@ -150,17 +150,11 @@ The full example is at [references/git-one-day-example.md](references/git-one-da
 
 | Need | Use |
 |---|---|
-| Learner side: planning your own learning path | `learning-path` |
-| Slides someone will present (storyline, slide titles, Thai fonts) | `presentation-design` (software-development) |
-| Single-file HTML slides that open offline, with speaker notes | `html-slide-deck` (software-development) |
+| Slides someone will present | `presentation-design` (software-development) |
 | Handouts as Word from Markdown | `markdown-report-docx` (software-development) |
-| Thai in handouts, slides and feedback forms | `human-writing` · Thai word breaking in exported files: `references/thai-line-breaking.md` |
-| Learners who want to go on to a certification exam | `cert-prep` |
 | Collecting learners' names or emails · recording teaching video | `pdpa-workflow` (e-commerce) |
 | Teaching contract and rights in the materials | `doc-contract-th` (e-commerce) |
-| Quotation for training fees | `doc-quotation` (e-commerce) |
-| Short clip promoting the course | `video-script-to-clip` (graphic-design) |
 
-## Sources (checked 2026-10-23)
+## References
 
-The full table of sources (Bloom · rubric · Kirkpatrick · copyright · Creative Commons · Git): [references/sources.md](references/sources.md)
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources

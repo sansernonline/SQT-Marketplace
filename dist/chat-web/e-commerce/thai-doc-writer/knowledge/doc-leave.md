@@ -34,21 +34,6 @@ pro-rata entitlement = annual entitlement × full months in service this year ÷
 paid days used     = min(days taken of this type, paid cap from labour-law-basics); excess = unpaid
 ```
 
-### Worked example (company policy numbers, not the legal minimum)
-
-Company policy: 10 days annual leave a year, carry forward up to 5 days, pro-rata in the year of joining, round down to 0.5.
-Employee joined 1 Apr 2568. In 2569 she carried forward 3 days.
-
-| Item | Days |
-|---|---|
-| Carried forward from 2568 | 3.0 |
-| Entitlement 2569 (full year) | 10.0 |
-| Taken Jan–Sep | 6.5 |
-| This request: Wed 30 Sep – Fri 2 Oct (3 working days) | 3.0 |
-| **Balance after** | **3.5** |
-
-Check the legal floor separately: the company's 10 days must be at least the statutory annual leave in `labour-law-basics`, and unused leave is paid out on termination per that skill.
-
 ## 3. Approval flow
 
 | Step | Who | Within | Record |
@@ -66,7 +51,7 @@ Rules for supervisors: annual leave dates may be set or agreed by the employer, 
 
 ## 4. Templates
 
-Leave form, leave ledger and annual summary: [references/leave-forms.md](references/leave-forms.md).
+Leave form, leave ledger and annual summary, plus the worked balance example: [references/leave-forms.md](references/leave-forms.md).
 
 ## Rules
 
@@ -123,3 +108,18 @@ Leave form, leave ledger and annual summary: [references/leave-forms.md](referen
 | พักผ่อน | | | | | | |
 | ป่วย (ได้รับค่าจ้าง) | — | | | — | — | — |
 | กิจ | — | | | — | — | — |
+
+## Worked example (company policy numbers, not the legal minimum)
+
+Company policy: 10 days annual leave a year, carry forward up to 5 days, pro-rata in the year of joining, round down to 0.5.
+Employee joined 1 Apr 2568. In 2569 she carried forward 3 days.
+
+| Item | Days |
+|---|---|
+| Carried forward from 2568 | 3.0 |
+| Entitlement 2569 (full year) | 10.0 |
+| Taken Jan–Sep | 6.5 |
+| This request: Wed 30 Sep – Fri 2 Oct (3 working days) | 3.0 |
+| **Balance after** | **3.5** |
+
+Check the legal floor separately: the company's 10 days must be at least the statutory annual leave in `labour-law-basics`, and unused leave is paid out on termination per that skill.

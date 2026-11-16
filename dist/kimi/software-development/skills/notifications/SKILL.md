@@ -111,7 +111,7 @@ into one message ("มี 12 รายการใหม่", not 12 messages).
 
 - Settings table: `user_id` · `notification_type` · `channel` · `enabled`
 - **Every non-transactional message must have an unsubscribe link**, and it must take effect within 24 hours (our own internal target, stricter than the 2 days that Gmail and Yahoo set)
-- **High-volume marketing email** must also carry a one-click unsubscribe header: `List-Unsubscribe: <https://...>` (an HTTPS URL) together with `List-Unsubscribe-Post: List-Unsubscribe=One-Click` per the RFC 8058 standard, and the email must pass SPF + DKIM (Gmail applies this to senders above about 5,000 messages per day · it applies to marketing email, not transactional · without it the email is more likely to land in spam) — sources: support.google.com/a/answer/14229414 · senders.yahooinc.com/best-practices checked 22 Oct 2026 (B.E. 2569)
+- **High-volume marketing email** must also carry a one-click unsubscribe header: `List-Unsubscribe: <https://...>` (an HTTPS URL) together with `List-Unsubscribe-Post: List-Unsubscribe=One-Click` per the RFC 8058 standard, and the email must pass SPF + DKIM (Gmail applies this to senders above about 5,000 messages per day · it applies to marketing email, not transactional · without it the email is more likely to land in spam). Sources: [`references/sources.md`](references/sources.md)
 - Unsubscribing must work without logging in — use a token in the link
 - Respect "quiet hours" — never send non-urgent push or SMS at 2 a.m. (by the recipient's time zone)
 
@@ -133,40 +133,11 @@ into one message ("มี 12 รายการใหม่", not 12 messages).
 
 ---
 
-## 7 · Anti-patterns
+## 7 · Link to other skills
 
-- **Sending the message in the same request as the transaction** — the email provider is slow and the screen hangs
-- **Sending before commit** — rolled back, but the customer already got the email
-- **Messages in code** — every wording change needs a new deploy
-- **No duplicate prevention** — the customer gets 5 receipts
-- **Sending on every channel at once** — the user turns everything off within a week
-- **No unsubscribe link** — the user clicks "this is spam" instead and our domain loses reputation
-- **Putting sensitive data in the message body**
-- **Continuing to send to a hard bounce** — the domain gets blacklisted
-- **Not counting the length of Thai SMS** — costs balloon without anyone noticing
-- **No send log** — you cannot tell the customer whether it was sent
-
----
-
-## 8 · Abbreviations
-
-- **OTP** — One-Time Password
-- **RFC** — Request for Comments (internet standards documents) · RFC 8058 = the standard for the one-click unsubscribe header
-- **push notification** — a notification that pops up on the user's device
-- **bounce** — an email that did not arrive and was returned
-- **SPF · DKIM · DMARC** — standards that prove an email was really sent from that domain
-- **opt-in / opt-out** — asking to receive / asking to stop receiving
-- **LINE Official Account** — a business's official account on LINE, used to send messages to customers
-
-## 9 · Link to other skills
-
-| Need | Use together with |
-|---|---|
-| Retry queue and dead letter | `background-jobs` |
-| Multi-language messages | `i18n-and-locale` |
-| Marketing consent | `pdpa-compliance` |
-| Settings table and send log | `database-design` |
-| Delivery success rate metrics | `observability-basics` |
-| Attachments and expiring links | `file-upload-and-storage` |
-| Alerting the team when the system has a problem | `observability-basics` · `incident-runbook-template` |
-| Broadcast to LINE OA friends (quota · target group · frequency) | `e-commerce:line-broadcast` (if installed) |
+- Retry queue and dead letter: `background-jobs`
+- Settings table and send log: `database-design`
+- Attachments and expiring links: `file-upload-and-storage`
+- Delivery success rate metrics: `observability-basics`
+- Alerting the team when the system has a problem: `observability-basics` · `incident-runbook-template`
+- Broadcast to LINE OA friends (quota · target group · frequency): `e-commerce:line-broadcast` (if installed)

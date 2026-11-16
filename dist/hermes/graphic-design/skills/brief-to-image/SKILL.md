@@ -8,13 +8,13 @@ argument-hint: <what the image must show> [where it will be used]
 
 > **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
-Write the brief before making the first image. Vague prompts give vague images. A brief gives every retry the same target.
+Write the brief before making the first image.
 
 This skill writes the brief and prompt. Generation happens in whatever image tool or plugin the user has. No generation tool → the fallback order (Scalable Vector Graphics (SVG) set, then Openverse photos) lives in `image-generation`; this skill owns the brief and the prompt.
 
 ## Workflow
 
-0. **Find reference work before writing the brief** — do this every time (owner's rule 2026-11-06, see the "ด่านก่อนลงมือ" section of `design-references`); when a style lock sheet or brand kit already fixes the look, keep its palette and light and search only for composition and staging: research 3–5 pieces of strong real work in the same category (**ค้นต้นแบบก่อน:** run the project's keywords through a live search per `design-references` (plugin `superuser`), type `illustration` or `social`, then pull the colours from the chosen work · use the stored palette bank only when live search is unavailable · award archives · competitor campaigns) · write 1 line per piece on *why it works* (composition · light · palette · type) · save links beside the brief in `briefs/<asset-name>.md` under "References" · the style, palette and light lines of the brief then cite these benchmarks, and tools that accept reference images get 1–2 of them · **references are a bar to clear, not a piece to copy** — the concept must stand at their level without imitating any one of them
+0. **Find reference work before writing the brief** — every time; when a style lock sheet or brand kit already fixes the look, keep its palette and light and search only for composition and staging: research 3–5 pieces of strong real work in the same category (**ค้นต้นแบบก่อน:** run the project's keywords through a live search per `design-references` (plugin `superuser`), type `illustration` or `social`, then pull the colours from the chosen work · use the stored palette bank only when live search is unavailable · award archives · competitor campaigns) · write 1 line per piece on *why it works* (composition · light · palette · type) · save links beside the brief in `briefs/<asset-name>.md` under "References" · the style, palette and light lines of the brief then cite these benchmarks, and tools that accept reference images get 1–2 of them · **references are a bar to clear, not a piece to copy** — the concept must stand at their level without imitating any one of them
 1. **Ask 5 things** if missing: image style (`photo` · `flat` · `3d` · `watercolor` · `line` · `isometric` — one style per set; unattended → pick from the use and log why; references from step 0 outrank the default list) · what must the image show · where it will be used (placement → aspect ratio, from `social-formats`) · what text goes on it (usually none in the image — add text in layout) · brand kit or style lock sheet to follow
 2. **Fill the brief** with the anatomy below; save it as `briefs/<asset-name>.md` using [prompt-anatomy.md](references/prompt-anatomy.md)
 3. **Assemble the prompt** in anatomy order, most important first
@@ -38,8 +38,6 @@ This skill writes the brief and prompt. Generation happens in whatever image too
 | 9 | Negatives | What must not appear | → "no text, no logo, no hands, no straw, no extra glasses" |
 | 10 | Format | Aspect ratio, resolution | → "4:5 portrait" (set as a parameter if the tool has one) |
 
-This skill writes the brief and the prompt once the AI-generation route is chosen. Choosing the route (generate, draw SVG, or free stock photo) and the image list → `image-generation`.
-
 Lens and light vocabulary: see [prompt-anatomy.md](references/prompt-anatomy.md).
 One tactile 3D object as the hero (paper cut, clay, felt): use the 8-line template (subject · material · light · shadow · lens · background · one colour · negatives) and its worked example in [prompt-anatomy.md](references/prompt-anatomy.md), section "Tactile 3D hero object".
 
@@ -61,14 +59,7 @@ Write the 1–5 scores and who gave them next to the brief (`briefs/<asset-name>
 
 ## Model differences (general, check your tool's docs)
 
-| Behaviour | What to do |
-|---|---|
-| Some models read full sentences best; others prefer comma-separated phrases | Write the brief as sentences; keep a phrase version if the tool responds better |
-| Some tools have a separate negative-prompt field; others ignore "no X" or even add X | If no negative field, describe what *is* there instead ("plain cream wall" rather than "no clutter") |
-| Aspect ratio is a parameter in most tools; typed ratios in the prompt are often ignored | Set the parameter; do not rely on the words |
-| Text inside images is unreliable, worst for Thai script | Generate without text; add Thai copy in a layout tool with the brand font |
-| Reference image, style reference or seed features exist in many tools | Use them for series work (`style-consistency`) |
-| Models change between versions | Record the version; re-test a saved prompt after an update |
+Model and tool differences (sentences vs phrases, negative field, aspect ratio, Thai text, version changes): [references/model-differences.md](references/model-differences.md).
 
 ## Failure modes — what to change when the image misses
 
@@ -87,17 +78,7 @@ Gemini API users: Imagen models are being retired and the Gemini image model nam
 
 ## Worked example — brief to prompt
 
-**Request:** "Need a picture for our new matcha drink post, make it nice."
-
-**Brief (after asking):** Instagram (IG) feed 4:5 · headline will be added in layout top-right · brand kit: sage, cream, amber accent, natural editorial style.
-
-**Prompt:**
-
-> Editorial food photograph of a tall glass of iced matcha latte with distinct green and milk layers, condensation on the glass, standing on a pale oak café counter. Eye-level view, glass in the left third of the frame, clean cream wall with empty space in the upper right. 85mm lens, shallow depth of field, soft window light from the right in late morning, gentle shadows. Muted sage green, warm cream and pale wood palette with one small amber accent from a ceramic coaster. Natural and calm, not glossy advertising.
-
-**Negative / settings:** text, logo, watermark, hands, straw, extra glasses, oversaturated colour · aspect ratio 4:5.
-
-**Review:** variation 2 had the best layers but the glass was centred → only the composition line changed ("glass placed far left, edge of frame") → round 2 accepted.
+Request → brief → prompt → review for a matcha drink post: [references/worked-example.md](references/worked-example.md).
 
 ## Rules
 
@@ -108,7 +89,7 @@ Gemini API users: Imagen models are being retired and the Gemini image model nam
 
 ## Not an AI look
 
-Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files. Every prompt carries the items in its section 4 (named style, hex, light, what to avoid).
+Every prompt carries the items in `no-ai-look` section 4 (named style, hex, light, what to avoid); the eye check (3.2) covers images.
 
 ## Related
 

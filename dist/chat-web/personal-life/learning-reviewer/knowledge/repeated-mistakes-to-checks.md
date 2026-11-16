@@ -4,10 +4,7 @@ Use when the same mistake gets corrected twice
 
 # repeated-mistakes-to-checks: a mistake that repeats must become impossible
 
-> The agent does not need to remember a hundred rules. If the path has guard rails at the right places, it hits one and gets stopped at the right moment on its own.
 > A warning in SKILL.md is the weakest guard rail. Use it as the last resort.
-
-This comes from pstack's correct command and rules-as-checks (not in this marketplace).
 
 ## Do not use when
 
@@ -46,7 +43,23 @@ For choosing among `session-lessons-to-skills` · `repeated-mistakes-to-checks` 
 - If you are about to write one more "never..." line when a machine could check it (grep · formula · CI), build a check instead.
 - A check's error message must say how to fix it, not just say it is wrong.
 
-Examples in this set:
+## What not to do
+
+- Add a "never..." text to SKILL.md when it could be a check.
+- Create a rule that was not proven with a real mistake, because a rule that misses its target makes everyone wrongly believe they are safe.
+- Check so broadly that it also catches correct things, because in the end everyone learns to skip it.
+
+## References
+
+- [`references/examples.md`](references/examples.md) — open when you want examples of rules already turned into checks in this set
+- [`references/sources.md`](references/sources.md) — origin notes
+
+
+## reference: examples.md
+
+# Examples · repeated-mistakes-to-checks
+
+Rules in this set that became checks:
 
 | Rule | Used to be | Now it is |
 |---|---|---|
@@ -54,12 +67,10 @@ Examples in this set:
 | Numbers in the README must match reality | Edited by hand | `scripts/sync/sync-docs.mjs --check` |
 | SuperUser shared files must be identical in every plugin | A text line "edit every copy" | `scripts/sync/sync-superuser.mjs --check` |
 
-## What not to do
 
-- Add a "never..." text to SKILL.md when it could be a check.
-- Create a rule that was not proven with a real mistake, because a rule that misses its target makes everyone wrongly believe they are safe.
-- Check so broadly that it also catches correct things, because in the end everyone learns to skip it.
+## reference: sources.md
 
-## Source
+# Sources · repeated-mistakes-to-checks
 
-hookify (Apache-2.0) · `agents/conversation-analyzer.md` · viewed 2026-11-10 (dig out the user's correction signals working back from the latest, rank by severity, draft regex-style rules).
+- Idea from pstack's correct command and rules-as-checks (not in this marketplace).
+- hookify (Apache-2.0) · `agents/conversation-analyzer.md` · viewed 2026-11-10 (dig out the user's correction signals working back from the latest, rank by severity, draft regex-style rules).

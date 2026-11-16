@@ -6,8 +6,6 @@ argument-hint: <destination> <dates> [travelers]
 
 # Travel Prep (เตรียมเดินทาง)
 
-One checklist, one itinerary file, no airport surprises. Written for Thai passport holders; works for anyone by swapping the entry-rule lookup.
-
 Entry rules, passport facts, plug table and the fill-in checklist: [references/travel-facts.md](references/travel-facts.md) · [references/checklist-template.md](references/checklist-template.md).
 
 General information — entry rules are set by the destination and change often; confirm on the embassy or official e-visa site before booking.
@@ -52,14 +50,6 @@ Current visa-free list for Thai passports: [references/travel-facts.md](referenc
 - Passport photo page and visa page scanned into the important-docs folder (`important-docs`) and available offline
 - Travelling with a foreign spouse or friend into Thailand: they fill the **TDAC** (Thailand Digital Arrival Card) online before arrival; Thai citizens do not
 
-## Worked example
-
-Nok (Thai, 34) and her German husband, Tokyo 10–17 January 2027. Check on 2026-10-06:
-- Nok's passport expires 2027-03-14 — Japan wants it valid for the stay, but the airline and future trips make 6 months the safe rule → book a 10-year passport now (1,500 บาท).
-- Japan visa exemption for Thai ordinary passports: 15 days, temporary measure to 30 June 2027 → covers 7 days; recheck in December.
-- Husband: German passport, Japan visa-free; returning to Bangkok he fills TDAC online before arrival.
-- Insurance: annual Asia plan; Japan 100 V, plug A/B — Thai two-flat-pin chargers fit, check the device says 100–240 V.
-
 ## Output
 
 Trip card · entry decision per traveller with source and date · checklist from the template · itinerary file `YYYY-MM-DD-destination-itinerary.md`.
@@ -72,4 +62,6 @@ Related: `important-docs` (passport expiry) · `polite-message-th-en` (hotel or 
 
 Run the `travel-prep` skill for: **$ARGUMENTS**
 
-Produces the checklist plus an itinerary file with every confirmation number, and a day-before four-thing check list.
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open when you want a filled-in trip (Tokyo, Thai and German travellers)

@@ -43,22 +43,8 @@ argument-hint: <campaign idea in one sentence>
 | 4 | Carousel and secondary posts | Same style, new content |
 | 5 | Motion and video | Animate approved stills. Changing the look in video breaks the set |
 
-## Worked example — small matrix
-
-| ID | Placement | Canvas | Type | Copy on image | Due | Status |
-|---|---|---|---|---|---|---|
-| M1 | IG feed (master) | 1080 × 1350 | Still | "มัทฉะเย็น ซื้อ 1 แถม 1" + dates | 25 Mar | Approved |
-| D1 | IG/Facebook (FB) story | 1080 × 1920 | Still | Same + LINE ID | 26 Mar | In review |
-| D2 | LINE OA rich message | 1040 × 1040 | Still | Same + "แตะเพื่อรับโค้ด" | 26 Mar | To do |
-| D3 | LINE rich menu large | 2500 × 1686 | Still | Menu labels | 27 Mar | To do |
-| D4 | FB cover | 851 × 315 | Still | Headline only | 27 Mar | To do |
-| V1 | TikTok / Reels 12 s | 1080 × 1920 | Video | Hook + offer, captions | 29 Mar | To do |
-
-File for D1: `matcha26-d1-hero-ig-story-v01-th.jpg` (campaign · matrix ID · asset · platform · format · version · language).
-
 ## Rules
 
-- The campaign sentence is the filter for every row and every element
 - Derive, do not redesign. Keep the same type, colours, subject and layout logic across rows
 - Mandatory items (price, terms, ID) appear identically on every asset — copy them from the card, never retype them
 - Thai promo text: check numbers and dates against the card on every row. A wrong date on 1 platform is the most common campaign error
@@ -85,3 +71,7 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 Run `campaign-set` with the `social-creator` and `brand-keeper` agents for: **$ARGUMENTS**
 
 Delivers the asset matrix as a checklist. An asset counts as done only after it passes design-review.
+
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open to see a 6-row matrix and a file name

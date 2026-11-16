@@ -152,3 +152,13 @@ CSS is the source. The same values work everywhere — what needs care is the me
 | Conversation | `#thread` `.turn(.ai/.me)` `.who` `.bub(.masked)` `.repair` `del` `ins` `.note` `.tag` `.clean` `.hintbox` `.acts > .actbtn(.hintb)` `.sys` `.dots` |
 | Mic bar | `.dock` `#interim` `.dockrow` `#mic(.live/.busy)` `.typerow(.on)` `.txtbtn` |
 | Result summary | `.report` `.score` `.mini` `.bar` `.verdict` `.wk` `.stat` `.g4` `.drillrow` `.fixrow` `.dnote` |
+
+## Role summary of the main tokens
+
+| Token | Role | Comes from |
+|---|---|---|
+| screen / card background | The background is **light grey, not white**, so cards lift up without needing a shadow | very light grey / white |
+| 3 text levels | primary · secondary · faint | from dark to light; primary text needs contrast ≥ 4.5:1 |
+| `--signal` (accent) | selected tab · progress · primary button | `doc-theme` → brand colour → if none, `#2A78D6` + `(รอยืนยัน)` |
+| gradient tile | the two ends of the gradient | main colour → a neighbouring colour on the colour wheel |
+| content status colours | needs fixing · hint · liked: **each has a matching soft background** | by meaning, not by brand |

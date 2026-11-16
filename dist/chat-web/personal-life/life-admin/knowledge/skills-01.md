@@ -26,7 +26,7 @@ Steps 1–3 often read mail, chat, calendar and notes together. Write what comes
 3. **A source that could not be opened** (connector down, export missing) is named at the end ("ไม่ได้อ่าน: LINE กลุ่มบ้าน"). The rest of the summary still goes out.
 4. **Last line counts:** to-dos · decisions made · sources scanned · the dates covered ("งาน 7 · ตัดสินใจ 2 · แหล่ง 4 · 3–9 พ.ย.").
 
-Works the same when the user pastes text instead of connecting sources. Idea from anthropics/knowledge-work-plugins `enterprise-search/skills/digest` (Apache-2.0, rewritten, viewed 2026-11-10).
+Works the same when the user pastes text instead of connecting sources.
 
 ## Money and admin checklist (step 4)
 
@@ -54,7 +54,6 @@ Template (append to `weekly-reviews.md`, newest on top) and a filled week: [refe
 - Twenty minutes — when it grows, the review has become the procrastination
 - Scan the record before asking memory — steps 2 and 3 start from the calendar, sent mail, chat threads and the task list (developers: git log and merged pull requests), and the user is asked only about what the record does not show; memory keeps the loud week and drops the promises
 - Write it even when the week felt like nothing; boring weeks are data
-- Three priorities, not five; everything else is the queue
 - End with the three visible where the user will see them Monday morning (calendar, phone widget, sticky note)
 
 Related: `inbox-triage` · `task-board` (the task file steps 1–3 read and update) · `calendar-audit` (monthly) · `goal-and-habit` (quarterly) · `important-docs` · `subscription-audit` · `gift-idea-tracker` (occasions in the next 14 days).
@@ -66,6 +65,17 @@ Related: `inbox-triage` · `task-board` (the task file steps 1–3 read and upda
 Run the `weekly-review` skill: **$ARGUMENTS**
 
 --deep adds a calendar-audit pass and a look at money/admin due next week.
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
+
+
+## reference: sources.md
+
+# Sources · weekly-review
+
+- The summary shape for several sources: Idea from anthropics/knowledge-work-plugins `enterprise-search/skills/digest` (Apache-2.0, rewritten, viewed 2026-11-10).
 
 
 ## reference: template-and-example.md
@@ -155,18 +165,6 @@ The numbers are illustrative. Use the user's real prices.
 - Rule: a service the user has kept for **12 months or more** with steady use is a candidate for annual billing. Something new or seasonal stays monthly
 - Remember the opportunity cost: the annual plan locks in the money up front. With no refund on cancellation, and Apple and Google generally do not refund partial periods, a cancellation in month 4 loses about 8 months of value
 
-## Worked example — a quarterly audit
-
-| Service | Billed via | ฿/month | Uses | ฿/use | Decision |
-|---|---|---:|---:|---:|---|
-| Video streamer A | Credit card | 419 | 12 episodes | 35 | Keep |
-| Video streamer B | App Store | 299 | 1 | 299 | Rotate: cancel now, back in December for one series |
-| Music | Google Play | 149 | daily | ~5 | Keep, move to the family plan with a spouse who pays 149 separately |
-| Cloud storage 2 TB | App Store | 349 | uses 180 GB | — | Downgrade to the 200 GB tier |
-| Fitness app | Credit card, annual ÷ 12 | 125 | 0 | — | Cancel, and set a reminder for the renewal date |
-
-Rough saving: 299 (streamer B) + 149 (spouse's separate plan; the family plan adds only an assumed ~฿50, so net ~100) + (349 − tier price, say 349 − 59 = 290) + 125 ≈ 299 + 100 + 290 + 125 ≈ **฿800/month** (tier and family-plan prices are assumed; check yours). Last line in `subscriptions.md`: "next audit 2027-01-06".
-
 ## Rules
 
 - Uninstalling an app does **not** cancel its subscription. This is true on both Google Play and the App Store
@@ -176,6 +174,10 @@ Rough saving: 299 (streamer B) + 149 (spouse's separate plan; the family plan ad
 - Do not judge anyone's spending. Show the numbers and let the user decide
 
 Related: `weekly-review` (put the trial-end reminders there), `important-docs` (contract renewal dates), and `personal-budget` and `scam-check` in the `trading-finance` plugin.
+
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open for a filled-in quarterly audit table
 
 ## เรียกเป็นคำสั่ง
 
@@ -272,3 +274,18 @@ Merchant text varies by bank and by card network. Match on the **stable part** o
 | Card foreign-transaction / currency-conversion fee | About 1–2.5% depending on issuer and card (รอยืนยัน with the user's card issuer) | Shown as a separate line or built into the exchange rate |
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.thaipost.net/economy-news/23941/ (VES collection) · https://marketeeronline.co/archives/344124 (card FX fee, not an issuer's own page, hence รอยืนยัน)
+
+
+## reference: worked-example.md
+
+## Worked example — a quarterly audit
+
+| Service | Billed via | ฿/month | Uses | ฿/use | Decision |
+|---|---|---:|---:|---:|---|
+| Video streamer A | Credit card | 419 | 12 episodes | 35 | Keep |
+| Video streamer B | App Store | 299 | 1 | 299 | Rotate: cancel now, back in December for one series |
+| Music | Google Play | 149 | daily | ~5 | Keep, move to the family plan with a spouse who pays 149 separately |
+| Cloud storage 2 TB | App Store | 349 | uses 180 GB | — | Downgrade to the 200 GB tier |
+| Fitness app | Credit card, annual ÷ 12 | 125 | 0 | — | Cancel, and set a reminder for the renewal date |
+
+Rough saving: 299 (streamer B) + 149 (spouse's separate plan; the family plan adds only an assumed ~฿50, so net ~100) + (349 − tier price, say 349 − 59 = 290) + 125 ≈ 299 + 100 + 290 + 125 ≈ **฿800/month** (tier and family-plan prices are assumed; check yours). Last line in `subscriptions.md`: "next audit 2027-01-06".

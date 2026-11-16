@@ -69,11 +69,9 @@ Typical pay in practice: employer 60 days full wage + SSO 50% for 90 days — as
 
 Source: WHO Thailand EPI factsheet 2024; the กรมควบคุมโรค PDF is an image only, so the table stays (รอยืนยัน) — **the pink book and the clinic's schedule win**. Optional (paid) vaccines: ask the paediatrician. Put each due date in the family calendar 7 days ahead.
 
-ตรวจล่าสุด 2026-10-26 · แหล่ง: SSO maternity https://www.sso.go.th (หน้ากรณีคลอดบุตร) · birth registration https://www.bora.dopa.go.th/?p=36845 · EPI https://iris.who.int/server/api/core/bitstreams/3c016051-dc1e-4feb-b8bc-577b3f2e7927/content · HPV https://ddc.moph.go.th/uploads/publish/1607620240902103035.pdf · ANC 8 ครั้ง กรมอนามัย https://wellnesshospitalhpc7kk.anamai.moph.go.th/th/c-ebook/215344 · labour law, child allowance and newborn grant: prd.go.th news (pages returned 404 to the checker) with PPTV · Thansettakij · Bangkokbiznews · ThaiPBS
-
 ## Worked example
 
-Office worker, มาตรา 33, positive test at 7 weeks, due 20 Jun 2570. Plan: book first ANC this week (before 12 weeks) at the hospital where she will deliver; 8 visits into the calendar; pink book in the work bag. Money: 15,000 lump sum + SSO 50% for 90 days (wage base 17,500 → 8,750 a month) + employer 60 days full pay; check the SSO contribution count (needs 5 of the last 15 months). After birth: register at the เขต of the hospital within 15 days (by 5 Jul 2570), claim สปส. 2-01, child allowance 1,000/month, ask the เขต about the 600-baht grant. Vaccine calendar from the pink book.
+[references/worked-example.md](references/worked-example.md) — open when you want a model plan for an office worker (ANC calendar · pay · registration).
 
 ## Check before sending
 
@@ -83,3 +81,7 @@ Office worker, มาตรา 33, positive test at 7 weeks, due 20 Jun 2570. Pl
 - [ ] Dates are real dates in the user's calendar, not just "week 20"
 
 Related: `doctor-visit-prep` · `medication-schedule` · `important-docs` (สูติบัตร, pink book photo) · `kids-school` · `trading-finance` `tax-deduction-planner` (if installed — ลดหย่อนฝากครรภ์และคลอดบุตร)
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources

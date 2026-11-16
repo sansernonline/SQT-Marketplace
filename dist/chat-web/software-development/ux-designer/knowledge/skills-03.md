@@ -45,9 +45,6 @@ Use when designing a web app screen or mockup
 
 **The mockup is delivered as one file** (`mockup/<code>-mockup.html`, every screen a section) → before sending, embed the contents of `appstrack.css` followed by `theme.css` in `<style>` instead of `<link>` · check tokens with the mockup file as its own token file: `node scripts/check-design-tokens.mjs mockup/<code>-mockup.html mockup --ext html`
 
-Step 6 matters more than it seems. A design system with no enforcing checker slowly drifts because of
-"just one hardcode, please" within 3 weeks, and nobody notices until a theme change breaks it.
-
 ---
 
 ## 2 · Design tokens
@@ -86,24 +83,9 @@ Switch them with `body[data-theme]`, and switch sidebar light/dark with `body[da
 
 ## 3 · Screen layout
 
-The diagram below is the fallback structure, sidebar + top bar · for apps with few menu items (≤ 5) or a single-page job, choose the structure from the prototypes you found, such as top bar only or a 2-side split · the sizes in the diagram are fallback values, and the real values live in `theme.css`.
+The fallback structure is sidebar + top bar · for apps with few menu items (≤ 5) or a single-page job, choose the structure from the prototypes you found, such as top bar only or a 2-side split.
 
-```
-┌──────────┬─────────────────────────────────────────────────┐
-│ 232px    │ topbar 56px · solid background · sticky          │
-│ sidebar  ├─────────────────────────────────────────────────┤
-│          │  Page title h1 22px  [secondary btn] [primary]   │
-│ • menu   │  Description 12px, secondary color               │
-│ • menu   │                                                 │
-│          │  ┌─ stat-grid: number cards auto-fit 190px ────┐ │
-│  ─────   │  └─────────────────────────────────────────────┘ │
-│ Group 2  │  ┌─ card ────────────────┐ ┌─ card ──────────┐  │
-│ • menu   │  │ table / form          │ │ activity/summary│  │
-│          │  └───────────────────────┘ └─────────────────┘  │
-│ ⚙ Settings│        ← content max 1160px, centered →         │
-└──────────┴─────────────────────────────────────────────────┘
-```
-
+- Fallback diagram (sidebar 232px · topbar 56px · content max 1160px · stat-grid · cards): `references/layout-diagram.md`
 - **The settings menu sits at the bottom of the sidebar** (`.foot` has `margin-top:auto`)
 - **1 h1 per page**, always with a description under the h1. A page that does not say what it does is a page that is not finished.
 - **1 primary button per page** (`.btn-primary`, solid brand color, no gradient, no shadow). The rest are `.btn` or `.btn-ghost`.
@@ -197,10 +179,28 @@ Then open the images and check:
 
 Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script · every job must also pass the eye gate 3.2 (web pages answer items 10–14 too), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for every medium lives there.
 
-## Abbreviations
 
-Always spell out an abbreviation in full the first time, then put the abbreviation in brackets, such as Model Context Protocol (MCP).
-After that you may use the abbreviation. See the skill `spell-out-abbreviations` for details.
+## reference: layout-diagram.md
+
+# Screen layout diagram · web-app-design
+
+Fallback structure, sidebar + top bar. Real sizes live in `theme.css`.
+
+```
+┌──────────┬─────────────────────────────────────────────────┐
+│ 232px    │ topbar 56px · solid background · sticky          │
+│ sidebar  ├─────────────────────────────────────────────────┤
+│          │  Page title h1 22px  [secondary btn] [primary]   │
+│ • menu   │  Description 12px, secondary color               │
+│ • menu   │                                                 │
+│          │  ┌─ stat-grid: number cards auto-fit 190px ────┐ │
+│  ─────   │  └─────────────────────────────────────────────┘ │
+│ Group 2  │  ┌─ card ────────────────┐ ┌─ card ──────────┐  │
+│ • menu   │  │ table / form          │ │ activity/summary│  │
+│          │  └───────────────────────┘ └─────────────────┘  │
+│ ⚙ Settings│        ← content max 1160px, centered →         │
+└──────────┴─────────────────────────────────────────────────┘
+```
 
 
 ## reference: tokens.md
@@ -426,13 +426,7 @@ The values of the job live in a single `theme.css` (template `assets/theme-templ
 
 All tokens are in `assets/speakgo.css`, and the full table is in **`references/tokens.md`**.
 
-| Token | Role | Comes from |
-|---|---|---|
-| screen / card background | The background is **light grey, not white**, so cards lift up without needing a shadow | very light grey / white |
-| 3 text levels | primary · secondary · faint | from dark to light; primary text needs contrast ≥ 4.5:1 |
-| `--signal` (accent) | selected tab · progress · primary button | `doc-theme` → brand colour → if none, `#2A78D6` + `(รอยืนยัน)` |
-| gradient tile | the two ends of the gradient | main colour → a neighbouring colour on the colour wheel |
-| content status colours | needs fixing · hint · liked: **each has a matching soft background** | by meaning, not by brand |
+The role summary of the main tokens (background · 3 text levels · `--signal` · gradient tile · content status colours) is at the end of [`references/tokens.md`](references/tokens.md).
 
 **Status colours do not change with the brand.** Red marks a place that needs fixing, whatever colour the brand is.
 If the brand colour clashes with a status colour, avoid using the brand in that context. Do not change the status colour.
@@ -529,26 +523,18 @@ The 3 limits are in [`references/review.md`](references/review.md): the React Na
 
 ## 10 · Links to other skills
 
-| Need | Use with |
-|---|---|
-| user flow / IA before colouring | agent `ux-designer` |
-| desktop web app of the same system | `web-app-design` |
-| hardcoded colour checker in CI | `web-app-design` → `scripts/check-design-tokens.mjs` |
-| spec document of the screens | `polished-document-style` + `branded-document-design` |
-| App Store Optimization | `mobile-engineering` |
-| spacing rules, eye order and the 5 screen states | `ui-craft` |
-| architecture diagrams | `software-diagrams` |
+- User flow or information architecture before colouring: agent `ux-designer`
+- Desktop web app of the same system, and the hardcoded colour checker in CI (`scripts/check-design-tokens.mjs`): `web-app-design`
+- Spec document of the screens: `polished-document-style` + `branded-document-design`
+- App Store Optimization: `mobile-engineering`
+- Spacing rules, eye order and the 5 screen states: `ui-craft`
+- Architecture diagrams: `software-diagrams`
 
 ---
 
 ## Do not look AI-made
 
-Before sending, walk through section 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye gate 3.2 (web pages answer items 10–14 as well), because a script score of 0 is not yet a pass. The prohibitions in this file are specific to this work, and the full list for every medium is there.
-
-## Abbreviations
-
-Always spell out an abbreviation the first time, then put the abbreviation in brackets, for example Model Context Protocol (MCP).
-After that you may use the abbreviation. See the `spell-out-abbreviations` skill for details.
+Before sending, walk through section 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye gate 3.2 (web pages answer items 10–14 as well), because a script score of 0 is not yet a pass.
 
 
 ## reference: review.md
@@ -822,6 +808,16 @@ CSS is the source. The same values work everywhere — what needs care is the me
 | Mic bar | `.dock` `#interim` `.dockrow` `#mic(.live/.busy)` `.typerow(.on)` `.txtbtn` |
 | Result summary | `.report` `.score` `.mini` `.bar` `.verdict` `.wk` `.stat` `.g4` `.drillrow` `.fixrow` `.dnote` |
 
+## Role summary of the main tokens
+
+| Token | Role | Comes from |
+|---|---|---|
+| screen / card background | The background is **light grey, not white**, so cards lift up without needing a shadow | very light grey / white |
+| 3 text levels | primary · secondary · faint | from dark to light; primary text needs contrast ≥ 4.5:1 |
+| `--signal` (accent) | selected tab · progress · primary button | `doc-theme` → brand colour → if none, `#2A78D6` + `(รอยืนยัน)` |
+| gradient tile | the two ends of the gradient | main colour → a neighbouring colour on the colour wheel |
+| content status colours | needs fixing · hint · liked: **each has a matching soft background** | by meaning, not by brand |
+
 
 ---
 
@@ -834,7 +830,6 @@ Use when building a native-looking Windows 11 app
 > **Gate before starting (every time):** read the owner's theme → search live references → 3 genuinely different directions → run `no-ai-look` before sending · follow the "Gate before starting" (`ด่านก่อนลงมือ`) section of `design-references` (plugin `superuser`) even when a brand already exists (the brand controls color and fonts, while the search is for finding the structure of this piece) · close the job with the line `ด่านก่อนลงมือ:`
 
 > **One rule:** the app you make must look like something that ships with Windows 11, not a web page stuffed into a window.
-> Windows users know at once what is not genuine: wrong corner radius, wrong button height, a menu in the wrong place.
 >
 > **Native does not mean the default theme.** Standout apps on Windows 11 (Windows Terminal · Dev Home · the Files app) follow native rules (sizes · corners · buttons · title bar) but have an identity of their own: a chosen default theme (dark is fine) · the brand accent color on data and the primary button · a logo in the title bar · a hero screen.
 > **The window frame is neutral.** The title bar · nav · rail · command bar · status bar · borders use Mica/Acrylic with no tint, and lines and icons are gray-black following the Windows theme. The accent may appear only in the 3×16px selection bar, the primary button, data (KPI numbers · charts), and links. Tint the frame only when the user asks. Choose the identity per `ui-craft` item 0.1 before starting. `fluent.css` is the base, not the final look.
@@ -871,13 +866,7 @@ Use when building a native-looking Windows 11 app
 7. Convert to real code only after the whole set is approved — use the same tokens and do not redesign
 ```
 
-**Why do 3 pages first:** if you do every page in one round (for example 32 pages), each page gets little attention to how it looks.
-The work shifts to covering every requirement, and ends up as a wireframe with color. A good-looking main page becomes the model the other pages copy.
-
 **Deliver the mockup as a single file** (`mockup/<code>-mockup.html`, every screen as a section) → embed the contents of `fluent.css` in `<style>` instead of `<link>` before sending · while working, keeping them side by side is fine.
-
-**Why a mockup first:** editing HTML takes minutes, but editing Extensible Application Markup Language (XAML) that is already bound to a ViewModel
-takes hours, and once code is written, a talk about looks turns into a talk about cost.
 
 ---
 
@@ -905,8 +894,6 @@ Values to remember without opening the table:
 | Button background | `#333333` | `#FFFFFF` |
 
 > **The neutral values (background, text, lines, shadows) are Fluent 2 measured from real Windows 11. Do not invent them and do not adjust them to look nicer.**
-> An app whose neutral colors do not match the operating system looks foreign the moment it sits next to another app.
->
 > **The only color that changes with the job is the accent.** Use the customer's brand color. If there is none, use the Windows default in the table above, write `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask. Suggest a tone from the subject matter in the report.
 > (The table for choosing a color tone by subject matter is in `colour-by-domain` (`diagram-figures` → `references/colour-by-domain.md`).)
 > The accent value in the table above is the Windows default, a safe choice when there is no brand.
@@ -1022,12 +1009,7 @@ Fix the points you agree with (a critique that is wrong because the image was mi
 
 ## Do not look AI-made
 
-Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye gate 3.2 (web pages answer items 10–14 as well), because 0 items from the script is not yet a pass. The prohibitions in this file are the part specific to this work. The full list for every medium is there.
-
-## Abbreviations
-
-Always write an abbreviation in full the first time, then put the abbreviation in brackets — for example Model Context Protocol (MCP)
-After that you may use the abbreviation. See the skill `spell-out-abbreviations` for details.
+Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye gate 3.2 (web pages answer items 10–14 as well), because 0 items from the script is not yet a pass.
 
 
 ## reference: frame-and-components.md

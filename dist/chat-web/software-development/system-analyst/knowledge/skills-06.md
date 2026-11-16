@@ -103,7 +103,7 @@ Show:   25 ก.ย. 2569 09:42                (viewer's Asia/Bangkok)
 
 **If the system has both kinds of users, let the user pick the calendar**, but the stored value stays the same.
 
-**Checker** — write a short script that sweeps the code for Thai text embedded in code outside the translation files · hard-coded year numbers 25xx · `new Date("…")` that takes a string with no time zone. Run it in CI before merge. (The idea comes from BV thai-date-format: a converter needs its own tests.)
+**Checker** — write a short script that sweeps the code for Thai text embedded in code outside the translation files · hard-coded year numbers 25xx · `new Date("…")` that takes a string with no time zone. Run it in CI before merge. A converter needs its own tests.
 
 ---
 
@@ -159,20 +159,17 @@ So let a library handle it. Do not write `if (count > 1)` yourself, because some
 
 ---
 
-## 7 · Anti-patterns
+## Links to other skills
 
-- **Text embedded in code** because "there is only one language for now"
-- **Building a sentence from fragments** — other languages order words differently
-- **Storing B.E. in the database** — every function will compute time spans wrongly
-- **Adding 7 hours by hand in code** — breaks the moment there are users outside the Thai time zone
-- **Sorting Thai names with the standard collation** — wrong order with no error
-- **Testing screens with Lorem ipsum** — you never see Thai line-breaking problems
-- **`if (count > 1) "s"`** — works only for English
-- **2-digit years** — "69" is 1969, 2069, or 2569
-- **Importing Excel without asking whether the year is B.E. or C.E.** — years are off by 543 with nothing to warn you
-- **A translation key that is missing and shows an empty value** — you get an empty button nobody notices
+`error-handling-patterns` (error messages that must be translated) · `presentation-design` (Thai fonts in slides) · `data-import-export` (B.E. years in imports · CSV that opens in Excel) · `notifications` (multi-language message templates) · `translate-th-en` (plugin `superuser`: translating whole documents, a glossary per project)
 
----
+## References
+
+- [`references/thai-text-tools.md`](references/thai-text-tools.md) — open for word segmentation · transliteration to Roman letters · validating national ID numbers in code
+- [`references/abbreviations.md`](references/abbreviations.md) — open when a term (i18n · collation · ICU · BCP 47 · ARB · BOM) must be explained
+
+
+## reference: abbreviations.md
 
 ## 8 · Abbreviations
 
@@ -184,20 +181,6 @@ So let a library handle it. Do not write `if (count > 1)` yourself, because some
 - **BCP 47** — Best Current Practice (BCP) 47, the standard for language codes such as `th-TH`, `en-US`
 - **ARB** — Application Resource Bundle (the JSON-style translation file that Flutter `gen-l10n` uses)
 - **BOM** — Byte Order Mark (the 3 bytes at the start of a file that tell Excel it is UTF-8)
-
-## 9 · Links to other skills
-
-| Need | Use with |
-|---|---|
-| Date and time data types and collation | `database-design` |
-| Date, time, and money format in JSON | `api-conventions` |
-| Error messages that must be translated | `error-handling-patterns` |
-| Thai fonts on screen | `ui-craft` + the platform skill |
-| Thai fonts in documents and slides | `branded-document-design` · `presentation-design` |
-| Importing files with B.E. years · exporting CSV that opens in Excel without garbled Thai | `data-import-export` |
-| Multi-language notification message templates | `notifications` |
-| Translating a whole set of documents or screen text, Thai↔English · a glossary per project | `translate-th-en` (plugin `superuser`) |
-| Word segmentation · transliteration to Roman letters · validating national ID numbers in code | [`references/thai-text-tools.md`](references/thai-text-tools.md) |
 
 
 ## reference: thai-text-tools.md
@@ -267,7 +250,6 @@ Use when a system must record who did what and when
 | Permissions and identity verification | `auth-implementation-patterns` | instead |
 | Consent and data-subject rights | `pdpa-compliance` | instead |
 | Requirements on what to keep and for how many years | `srs-writing` | together |
-| Abbreviations in work that people read | `spell-out-abbreviations` | together |
 
 ---
 
@@ -391,20 +373,6 @@ Show it as a sentence people can read, not raw JSON (the sample below is the Tha
 
 Show the time in the viewer's time zone, but store it as UTC (see `i18n-and-locale`).
 
----
-
-## 8 · Anti-patterns
-
-- **Keeping the audit in general log files**: deleted by retention within a month
-- **Recording the actor's name instead of the id**: when they change their surname, the old history turns into a different person
-- **Recording only successes**: the denied attempts are what auditors look for
-- **Recording only "edited data"** without saying from what to what
-- **The app has UPDATE permission on the audit table**: a trail that can be edited is not a trail
-- **Writing the audit outside the transaction**: the transaction succeeds but there is no record
-- **Recording every click**: the important entries sink in a pile of data nobody uses
-- **Copying sensitive data into the audit**: it creates a new leak by accident
-- **No screen to view it**: the data exists, but a developer must run a query every time a customer asks
-
 
 ---
 
@@ -520,7 +488,7 @@ into one message ("มี 12 รายการใหม่", not 12 messages).
 
 - Settings table: `user_id` · `notification_type` · `channel` · `enabled`
 - **Every non-transactional message must have an unsubscribe link**, and it must take effect within 24 hours (our own internal target, stricter than the 2 days that Gmail and Yahoo set)
-- **High-volume marketing email** must also carry a one-click unsubscribe header: `List-Unsubscribe: <https://...>` (an HTTPS URL) together with `List-Unsubscribe-Post: List-Unsubscribe=One-Click` per the RFC 8058 standard, and the email must pass SPF + DKIM (Gmail applies this to senders above about 5,000 messages per day · it applies to marketing email, not transactional · without it the email is more likely to land in spam) — sources: support.google.com/a/answer/14229414 · senders.yahooinc.com/best-practices checked 22 Oct 2026 (B.E. 2569)
+- **High-volume marketing email** must also carry a one-click unsubscribe header: `List-Unsubscribe: <https://...>` (an HTTPS URL) together with `List-Unsubscribe-Post: List-Unsubscribe=One-Click` per the RFC 8058 standard, and the email must pass SPF + DKIM (Gmail applies this to senders above about 5,000 messages per day · it applies to marketing email, not transactional · without it the email is more likely to land in spam). Sources: [`references/sources.md`](references/sources.md)
 - Unsubscribing must work without logging in — use a token in the link
 - Respect "quiet hours" — never send non-urgent push or SMS at 2 a.m. (by the recipient's time zone)
 
@@ -542,43 +510,21 @@ into one message ("มี 12 รายการใหม่", not 12 messages).
 
 ---
 
-## 7 · Anti-patterns
+## 7 · Link to other skills
 
-- **Sending the message in the same request as the transaction** — the email provider is slow and the screen hangs
-- **Sending before commit** — rolled back, but the customer already got the email
-- **Messages in code** — every wording change needs a new deploy
-- **No duplicate prevention** — the customer gets 5 receipts
-- **Sending on every channel at once** — the user turns everything off within a week
-- **No unsubscribe link** — the user clicks "this is spam" instead and our domain loses reputation
-- **Putting sensitive data in the message body**
-- **Continuing to send to a hard bounce** — the domain gets blacklisted
-- **Not counting the length of Thai SMS** — costs balloon without anyone noticing
-- **No send log** — you cannot tell the customer whether it was sent
+- Retry queue and dead letter: `background-jobs`
+- Settings table and send log: `database-design`
+- Attachments and expiring links: `file-upload-and-storage`
+- Delivery success rate metrics: `observability-basics`
+- Alerting the team when the system has a problem: `observability-basics` · `incident-runbook-template`
+- Broadcast to LINE OA friends (quota · target group · frequency): `e-commerce:line-broadcast` (if installed)
 
----
 
-## 8 · Abbreviations
+## reference: sources.md
 
-- **OTP** — One-Time Password
-- **RFC** — Request for Comments (internet standards documents) · RFC 8058 = the standard for the one-click unsubscribe header
-- **push notification** — a notification that pops up on the user's device
-- **bounce** — an email that did not arrive and was returned
-- **SPF · DKIM · DMARC** — standards that prove an email was really sent from that domain
-- **opt-in / opt-out** — asking to receive / asking to stop receiving
-- **LINE Official Account** — a business's official account on LINE, used to send messages to customers
+# Sources · notifications
 
-## 9 · Link to other skills
-
-| Need | Use together with |
-|---|---|
-| Retry queue and dead letter | `background-jobs` |
-| Multi-language messages | `i18n-and-locale` |
-| Marketing consent | `pdpa-compliance` |
-| Settings table and send log | `database-design` |
-| Delivery success rate metrics | `observability-basics` |
-| Attachments and expiring links | `file-upload-and-storage` |
-| Alerting the team when the system has a problem | `observability-basics` · `incident-runbook-template` |
-| Broadcast to LINE OA friends (quota · target group · frequency) | `e-commerce:line-broadcast` (if installed) |
+One-click unsubscribe header and SPF + DKIM for high-volume senders: support.google.com/a/answer/14229414 · senders.yahooinc.com/best-practices · checked 22 Oct 2026 (B.E. 2569). The standard is RFC 8058.
 
 
 ---
@@ -714,6 +660,8 @@ It may be collected only when truly necessary, and needs stricter measures than 
 
 **Never use real data on development machines or staging.** Always mask it first (see `cicd-and-release`).
 
+**Do not export a full-data Excel file for someone who needs only the totals.**
+
 ---
 
 ## 6 · Retention
@@ -758,22 +706,6 @@ the notification message template · how to pull the list of affected people
 
 ---
 
-## 9 · Anti-patterns
-
-- **Asking consent for everything** — when they withdraw, the system cannot keep working
-- **Pre-ticked checkboxes** — they do not count as consent
-- **Storing consent as one value `accepted_terms = true`** — you cannot prove later what was agreed
-- **Soft delete, then saying it is deleted**
-- **A retention policy with no real deletion job**
-- **Real data on staging** — and copied onto developer machines
-- **Collecting the national ID number "just in case"**
-- **Personal data in logs and crash reports**
-- **No list of outside providers** — you cannot say where the data goes
-- **Exporting a full-data Excel file** for someone who needs only the totals
-- **A privacy policy that does not match what the system really does**
-
----
-
 ## 10 · Frequently cited sections, and abbreviations
 
 Use this when a customer or the legal team asks "which section is this?" (checked against the unofficial English translation of the 2019 Act, Royal Gazette 27 May 2019 (B.E. 2562), on 23 Oct 2026 (B.E. 2569))
@@ -791,7 +723,20 @@ Use this when a customer or the legal team asks "which section is this?" (checke
 | Compensation · punitive damages | 77 · 78 |
 | Administrative fines, maximum 1 · 3 · 5 million baht | 82 · 83 · 84 |
 
-**Sectors with a second layer of rules** — health · finance · telecom have their own regulators (กระทรวงสาธารณสุข (Ministry of Public Health) · ธปท. (Bank of Thailand, BOT) / ก.ล.ต. (Securities and Exchange Commission, SEC) / คปภ. (Office of Insurance Commission, OIC) · กสทช. (National Broadcasting and Telecommunications Commission, NBTC)) that add conditions on confidentiality, retention and breach notice. Check that sector's rules before designing, and do not rely on PDPA alone (idea from BV thai-pdpa (MIT))
+**Sectors with a second layer of rules** — health · finance · telecom have their own regulators (กระทรวงสาธารณสุข (Ministry of Public Health) · ธปท. (Bank of Thailand, BOT) / ก.ล.ต. (Securities and Exchange Commission, SEC) / คปภ. (Office of Insurance Commission, OIC) · กสทช. (National Broadcasting and Telecommunications Commission, NBTC)) that add conditions on confidentiality, retention and breach notice. Check that sector's rules before designing, and do not rely on PDPA alone
+
+## 11 · Links to other skills
+
+Also: `notifications` (sending and unsubscribing from marketing messages; consent stays here) · `data-import-export` (masking exported files) · `file-upload-and-storage` (retention of attached files) · `background-jobs` (jobs that delete expired data) · `incident-runbook-template` (after a leak).
+
+## References
+
+- [`references/glossary.md`](references/glossary.md) — open when a term (controller · processor · sensitive data) must be explained
+
+
+## reference: glossary.md
+
+# PDPA glossary
 
 - **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562)
 - **Personal data** — data that identifies a person, directly or indirectly
@@ -799,18 +744,3 @@ Use this when a customer or the legal team asks "which section is this?" (checke
 - **Data controller** — whoever decides how data is collected and used (usually the system owner)
 - **Data processor** — whoever processes data on the controller's instructions, such as a cloud provider
 - **Data subject** — the person the data belongs to
-
-## 11 · Links to other skills
-
-| Need | Use with |
-|---|---|
-| A trail of who viewed or changed data | `audit-trail` |
-| Tables, encryption and soft delete | `database-design` |
-| Masking data in logs | `logging-standards` |
-| Access rights and authentication | `auth-implementation-patterns` |
-| Masking real data before loading staging | `cicd-and-release` |
-| Sending and unsubscribing from marketing messages (consent stays in this skill) | `notifications` |
-| Masking data in exported files | `data-import-export` |
-| Retention of attached files | `file-upload-and-storage` |
-| Jobs that delete expired data | `background-jobs` |
-| Recording the incident after a leak | `postmortem-template` · `incident-runbook-template` |

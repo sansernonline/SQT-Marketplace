@@ -5,7 +5,7 @@ description: Use when writing a self-review or promotion case
 
 # Performance Self-Review
 
-Managers forget most of what you did by review season. Your record is the evidence.
+Your record is the evidence.
 
 Not for: negotiating the raise number or an offer → `salary-negotiation`.
 
@@ -67,13 +67,5 @@ Promotion is usually "already doing the next level's work", not "deserve it for 
 6. Re-check monthly in 1:1s.
 
 Promotion case template (Thai and English) → [references/templates.md](references/templates.md).
-
-## Worked example — top-3 summary
-
-> 1. Cut month-end close from 9 to 5 working days (Jan–Apr), freeing 4 days a month for analysis — KPI: reporting timeliness.
-> 2. Led the audit preparation; zero adjustments from the auditor for the first time in 3 years — KPI: compliance.
-> 3. Trained 2 juniors who now close 3 entities independently — KPI: team capability.
-> Growth area: presenting to the board — enrolled in a presentation course (Q3), presented the Q3 results myself.
-> Ask: scope to own the consolidation process next year, with promotion to Senior Accountant as the goal.
 
 Related: `salary-negotiation` (turning the review into a raise) · `resume-th-en` (brag doc becomes CV bullets) · `weekly-review` in `personal-life` (the Friday habit).

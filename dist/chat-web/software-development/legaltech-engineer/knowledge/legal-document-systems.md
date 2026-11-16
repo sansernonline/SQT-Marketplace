@@ -32,10 +32,6 @@ An agent called in for this area opens its own role file before starting.
 
 `legaltech-engineer` · `legal-compliance-officer`
 
-## ที่มา
-
-Merged from plugin `software-development-legaltech` (formerly named contract-parsing-patterns → `references/contract-parsing-patterns.md` · document-automation-patterns → `references/document-automation-patterns.md` · e-signature-compliance → `references/e-signature-compliance.md` — no longer separate skills) into `software-development` in v2.0.0. The original content is all still in `references/`
-
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 
 `/software-development:legal-document-systems <contract-analysis-design | esignature-audit> <details>`

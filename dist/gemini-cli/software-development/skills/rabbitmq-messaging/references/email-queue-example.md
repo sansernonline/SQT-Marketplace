@@ -8,6 +8,7 @@ Part of `rabbitmq-messaging` · label `ตัวอย่าง` (example): writ
 - [2 · Producer (outbox relay)](#2--producer-outbox-relay)
 - [3 · Consumer](#3--consumer)
 - [4 · What this example does not cover](#4--what-this-example-does-not-cover)
+- [5 · Design decisions (on paper)](#5--design-decisions-on-paper)
 
 ## 1 · Broker-side setup
 
@@ -100,3 +101,17 @@ ch.basic_consume("order.email.send", on_message, auto_ack=False)
 
 - Tests: use a real RabbitMQ in Testcontainers or docker compose · 4 cases: the same message arrives twice, only one email goes out · the consumer dies before ack and restarts, no message is lost · a bad message goes to the DLX and the queue does not jam · it cannot be routed, and the sender knows
 - Reconnecting when the connection drops · monitoring · the full code is not included
+
+## 5 · Design decisions (on paper)
+
+**Problem:** an ordering web app must send an order confirmation email, no email may be lost when a worker dies, and a resend must not give the customer 2 emails.
+
+| Topic | Choice | Reason |
+|---|---|---|
+| broker | Use it · needs retry and dead letter at the broker | Section 1 · if volume is very low, go back to `background-jobs` |
+| Queue | `order.email.send` as a quorum queue through the exchange `order.events` (direct) | Section 2 |
+| Send | An outbox row in the order transaction · a relay sends with `mandatory=true` · waits for confirm, then marks it · `message_id` = order id + type | Section 3 |
+| Receive | Manual ack after sending the email and writing `processed_messages` · prefetch starts low, then measure | Sections 4 and 5 |
+| Failure | A temporary failure uses delayed retry · an undecodable message is rejected without requeue · DLX set by policy with a delivery limit | Section 6 |
+| Security | User `order-app` in its own vhost `shop` · TLS 5671 · messages hold only the order id | Section 7 |
+

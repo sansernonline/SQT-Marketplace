@@ -5,7 +5,7 @@ description: Use for a multi-step prompt to paste into a chat app
 
 # chat-prompt-workflows — multi-step Loop · Graph · Dynamic prompts the user can copy straight into a chat
 
-Part of the `superuser` plugin. Follow `human-writing` for wording. Templates are in [`templates/loop.md`](templates/loop.md) · [`templates/graph.md`](templates/graph.md) · [`templates/dynamic.md`](templates/dynamic.md). The user writes no code. They fill in the `{{...}}` slots and paste.
+Templates are in [`templates/loop.md`](templates/loop.md) · [`templates/graph.md`](templates/graph.md) · [`templates/dynamic.md`](templates/dynamic.md). The user writes no code. They fill in the `{{...}}` slots and paste.
 
 > **One rule:** every prompt you hand the user has check criteria that can be proved from data the user pastes themselves, and 3 stop conditions. A checker with no real material to compare against often turns right answers into wrong ones, and a loop with no ceiling never ends.
 
@@ -82,33 +82,15 @@ If you cannot answer either question, start with Loop because it is the simplest
 3. For criteria the user did not give, draft them as items that can be counted or found, and say they are criteria you set that can be changed. For unknown facts (names · numbers · dates), leave a `{{...}}` slot and do not guess.
 4. Close with how to check independently (limit 1) in 1–2 lines. Do not explain the theory at length.
 
-## A real example
-
-**Task:** "ร้านเบเกอรี่อยากให้ ChatGPT เขียนคำบรรยายเค้กกล้วยหอมลงเพจ ไม่เกิน 80 คำ ต้องมีราคา 85 บาท สั่งล่วงหน้า 1 วัน และไม่อ้างว่าไม่มีน้ำตาล เพราะมีน้ำตาล" (a bakery wants ChatGPT to write a banana cake description for its page: at most 80 words, must show the price 85 baht and 1 day advance order, and must not claim it is sugar-free because it has sugar)
-
-**What was done:** question 1: the path is known · question 2: a single piece of output → Loop · filled in `templates/loop.md`:
-- Task: 1 post describing the banana cake, at most 80 words
-- Source data: price 85 baht · order 1 day ahead · ingredients include brown sugar
-- C1 at most 80 words (the checker counts and states the number) · C2 the price and advance-order condition match the source data (quote the text) · C3 does not contain the words "ไม่มีน้ำตาล" "ไร้น้ำตาล" "หวานน้อยเพื่อสุขภาพ"
-
-**Result (what is sent to the user):** first line "ใช้ Loop เพราะเป็นโพสต์ชิ้นเดียวที่มีเกณฑ์ชัด" → 1 block of the filled-in prompt (stop conditions: all pass · 3 rounds · the same item fails 2 rounds in a row) → last 2 lines: "C3 เป็นเกณฑ์ที่ตั้งให้ แก้ได้ · ก่อนโพสต์ เปิดแชตใหม่วาง prompt ตรวจอิสระพร้อมเกณฑ์และข้อมูลต้นทางชุดเดิม" · it does not write that the cake is "ดีต่อสุขภาพ" (good for health) on the shop's behalf, because that is not in the source data
-
 ## Check before sending
 
 1. The pattern is chosen with the 2 questions and the reason is stated.
 2. The prompt has everything: source data · criteria that can be proved · the checker quotes evidence and counts not-found as fail · 3 stop conditions · no invented facts, with `(รอยืนยัน)` used instead.
 3. Graph has the shared-data-format piece and the conflict-piece rule · Dynamic has the 3 reasons, 4 fields, the ceiling of 3 and the 5-question progress log.
 4. The chat limits and the independent check in a new chat have been told.
-5. No emoji · no guessing of the user's facts.
+5. No guessing of the user's facts.
 
-## Sources
+## References
 
-- The Loop · Graph · Dynamic templates and the work-check sheet from the AI Workflow course (CWN2026) of the repo owner · shortened and adapted to the team's terms · read 2026-10-26
-- Team rules the templates match: `agent-patterns` and [`pattern-details`](../agent-patterns/references/pattern-details.md) section 1 plan adjustment · 3 Reflection · 4 Multi-Agent
-- [Anthropic · Building effective agents](https://www.anthropic.com/engineering/building-effective-agents) (start from the simplest pattern · evaluator-optimizer · round ceiling) · opened 2026-10-26
-- [Huang et al. · LLMs Cannot Self-Correct Reasoning Yet (ICLR 2024)](https://arxiv.org/abs/2310.01798) (self-correcting with no real material to compare against gets worse) · opened 2026-10-26
-- [Madaan et al. · Self-Refine](https://arxiv.org/abs/2303.17651) (the first rounds give the most · the checker often answers "fine" on math items) · opened 2026-10-26
-- [Google ADK · Loop agents](https://adk.dev/agents/workflow-agents/loop-agents/) (a loop needs its own round ceiling) · opened 2026-10-26
-- [Claude Code docs · Dynamic workflows](https://code.claude.com/docs/en/workflows) (stop when 2 rounds in a row make no progress) · opened 2026-10-26
-- [Microsoft Research · Magentic-One](https://www.microsoft.com/en-us/research/articles/magentic-one-a-generalist-multi-agent-system-for-solving-complex-tasks/) and [AutoGen · Magentic-One](https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/magentic-one.html) (progress ledger: is it done · is it repeating · is it moving forward · who continues · what to order) · opened 2026-10-26
-- [Kim et al. · LLMCompiler](https://arxiv.org/abs/2312.04511) (a flow chart where pieces partly depend on each other) · opened 2026-10-26
+- [`references/example.md`](references/example.md) — open when you need a worked example of a filled-in Loop prompt
+- [`references/sources.md`](references/sources.md) — sources and check dates

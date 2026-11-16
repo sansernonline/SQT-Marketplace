@@ -2,201 +2,40 @@
 
 Use when writing test cases or a test plan
 
-# Test Case Template
+# Test Case Template — test cases (`TC-<MODULE>-<NUMBER>`) that trace to requirements, with a coverage matrix
 
-## When to use this skill
+## Use when
+- Converting a user story / acceptance criteria into test cases, or designing scenarios for a new feature.
+- Building a regression suite, or reviewing coverage gaps.
 
-- Converting user story / acceptance criteria into test cases
-- Designing test scenarios for a new feature
-- Building a regression test suite
-- Reviewing test coverage gaps
+Not for: 1 defect already found → `bug-report-template` · running cases and collecting evidence (GIF), pass/fail report → `test-evidence` · sorting a pile of bug reports → `bug-inbox-triage` · unit/integration/E2E ratio or test code → `testing-standards` · `e2e-testing-patterns`.
 
-## When not to use
+## Steps
+1. **Look for an existing format first.** Check the customer's or QA team's format: Excel/CSV in `docs/` or `ref/` · the tool in use (TestRail · Zephyr · Xray · Azure Test Plans) and its mandatory fields · the project's earlier test case set (columns, ID system, priority levels). If found, use it and say which file it came from; if not, use the template below and say none was found. In every format, IDs continue from the existing set and expected results still come from the requirements.
+2. **Place the file.** Test cases go in `qa/<project-code>-test-cases.md` (never in `docs/`; `.xlsx` on large projects → [`references/workbook-xlsx.md`](references/workbook-xlsx.md)). `docs/test-plan.md` holds only the plan and links here (template: [`references/test-plan-template.md`](references/test-plan-template.md)). Bugs found go in `qa/bugs/`. User stories and AC live in `docs/USER-STORIES.md`; the **Related** line cites those IDs exactly (`US-012, AC2`).
+3. **Write each case from [`assets/test-case.md`](assets/test-case.md)**, one copy per case, ID `TC-<MODULE>-<NUMBER>` (`TC-LOGIN-001`). Do not write the outline from memory. One file holds many cases (the checker finds each `## TC-` block). Do not add, remove or reorder headings and `**fields:**`; a section marked `<!-- optional -->` may be deleted whole. An unknown value → `(รอยืนยัน)`, never a guess or the template placeholder.
+4. **Cover every category for each feature** and note which do not apply and why: Functional/Happy path · Boundary (every numeric BR at 3 values) · Negative · Equivalence classes · State transitions · Integration · Concurrency · Security · Performance · Accessibility (UI). What to test in each: [`references/categories.md`](references/categories.md).
+5. **Set the oracle** (the **Oracle** field says who the expected result comes from):
 
-| Task | Use this instead |
-|---|---|
-| A report of 1 defect that was already found | `bug-report-template` |
-| Running the cases and collecting evidence (GIF) · pass/fail report | `test-evidence` |
-| Sorting bug reports piled up in an inbox | `bug-inbox-triage` |
-| Deciding the ratio of unit · integration · end-to-end (E2E) tests, or writing test code | `testing-standards` · `e2e-testing-patterns` |
+   | Label | Heard from | Trust |
+   |---|---|---|
+   | `[D]` the work owner | customer · system owner → `docs/USER-STORIES.md` · REQUIREMENTS · test data they confirmed | ✓ highest |
+   | `[R]` general rule | mathematics · law · standards · common sense → write the reason beside it | good |
+   | `[A]` the builder | SPEC · README · claims of whoever wrote the system | low — checks its own work |
+   | `[O]` the screen | what was seen exploring the system | lowest |
 
-## Where test cases live
-
-Test cases go in the `qa/` folder at the project root, never inside `docs/`. Use `qa/<project-code>-test-cases.md`, or `.xlsx` on large projects where quality assurance (QA) testers fill in results. `docs/test-plan.md` holds only the plan and links here. Bugs found while testing go in `qa/bugs/`. User stories (US) and their acceptance criteria (AC) live in `docs/USER-STORIES.md` — the **Related** line cites those IDs exactly (`US-012, AC2`), so a changed AC there points to the test cases that must change.
-
-**The `.xlsx` workbook** — build it with `<โฟลเดอร์ skill test-case-template>/scripts/build-test-workbook.py` from one flat table (columns `id, module, fr (functional requirement, FR), title, type, result`, others kept):
-- An **Overview** tab, then **one tab per module**. With `--mockup`, tabs follow the mockup screen order, every row gets a `screen` column, and each tab lists its mockup screens under the title. Use the same topics as the mockup start page (`ui-craft` → `references/mockup-start-page.md`).
-- Overview counts Pass / Fail / Blocked / Not run per tab with formulas. **No "all cases" tab** — a result typed in two places drifts.
-- Header: light brand fill, dark brand text, one brand-colour rule under it (the same table look as `branded-document-design`). Pass `--brand --head-fill --ink` from the project's `doc-theme`.
-- Columns `test_result` (what actually happened) and `evidence` (GIF link) follow `result`, added empty if the table lacks them. After a run, `--results qa/evidence/<run-id>/results.csv` fills all three — see `test-evidence`. A workbook the user made themselves → `test-evidence/scripts/record_results.py`.
-- Check: open it in Excel; the Overview totals must equal the source row count.
-
-## 0 · Look for an existing format first (every time)
-
-Before using the structure or template in this file, check whether the user, the customer, or the project already has its own format:
-
-- **Where to look:** the test case format of the customer or QA team: Excel/CSV files in `docs/` or `ref/` · the tool in use (TestRail · Zephyr · Xray · Azure Test Plans) and its mandatory fields · the project's earlier test case set → look at the columns, the ID system, and the priority levels
-- **Result:** found → use that format (headings, order, field names, run numbers) and say in the answer which file the format came from · not found → use the template in this file as a fallback and say that no existing format was found
-- **Still required in every format:** IDs must continue from the existing set · expected results must still come from the requirements
-
-## Test Case ID Convention
-
-```
-TC-<MODULE>-<NUMBER>
-Example: TC-LOGIN-001, TC-CHECKOUT-042
-```
-
-## Output Template
-
-Copy **[`assets/test-case.md`](assets/test-case.md)** once per test case and fill it in. Do not write the outline from memory. One file holds many test cases; the checker finds each `## TC-` block and checks every one.
-
-- Do not add, remove or reorder headings and `**fields:**`. A section marked `<!-- optional -->` may be deleted whole when it does not apply.
-- A value you do not know yet → `(รอยืนยัน)`, never a guess and never the template's placeholder.
-- Before handing over, run the shared checker until it passes (paths from this skill's folder):
-
-  ```bash
-  python <โฟลเดอร์ skill polished-document-style ใน plugin superuser>/scripts/check_outline.py assets/test-case.md <your test-case file>
-  ```
-
-  It flags missing or reordered headings, missing fields, changed table headers, and anything still unfilled (`<...>`, `YYYY-MM-DD`, `XXXX`, `...`, a field still listing every option).
-
-## Where the expected result comes from (oracle)
-
-Every TC says in the **Oracle** field who the expected result comes from.
-
-| Label | Heard from | Trust |
-|---|---|---|
-| `[D]` the work owner | the customer · the system owner → `docs/USER-STORIES.md` · REQUIREMENTS · test data they confirmed | ✓ highest |
-| `[R]` general rule | mathematics · law · standards · common sense → write the reason beside it | good |
-| `[A]` the builder | SPEC · README · claims of the person or AI who wrote the system | low — it checks its own work |
-| `[O]` the screen | what was seen while exploring the system | lowest — the system may already be wrong |
-
-- Every TC needs `[D]` or `[R]`. If it has only `[A]` / `[O]`, put `[O-ยังไม่ยืนยัน]` (observed, not confirmed) and add it as a question to the work owner (through the BA or the team lead).
-- Every `[O-ยังไม่ยืนยัน]` must carry a question number (for example `Q7`). Never use the label by itself.
-- **Priority:** a Security TC (XSS · open redirect · IDOR · calling the API around the web page's checks · changing price/stock on the client and still being able to order) is always P1, whichever feature it sits in. Other TCs use the same priority as the feature.
-- **The system is already wrong today:** write the expected result as the correct behavior, then append `(ตอนนี้ล้ม: …)` (currently failing: …) with what the system returns. Count the items with this label and split them by priority, to forecast how many items will fail the exit criteria in the first round (example from that work: 88 items had the label, 39 of them P1).
-- `[A]` is fine for details the work owner does not care about, such as the exact wording of an error message. But a "must not / must warn" rule needs `[D]` or `[R]` behind it.
-- **Do not bake the bug into the expected result.** Work out money, points, and totals from `[D]` + `[R]` **before opening the system**, and write the working (`฿800 − 5% (฿40) = ฿760`). Never copy a value from the screen, because if the system is already wrong, the test will pass forever.
-
-**Boundary values tied to rules.** A business rule (BR) with a number gives 3 values: below the edge · at the edge · over the edge. For example `free delivery ≤ 5 km` → 4.9 · 5.0 · 5.1. The Related field cites the BR too.
-
-**When to check.** A TC that changes data (booking · cancelling · points · stock · permissions) gets **Check when** = `ทันที` (immediately) · `หลังรีโหลด` (after reload) · `ทั้งสอง` (both). Right at once but gone after a reload = it was not really saved.
-
-**Coverage and tracing back.** At the end of the test case file there are 2 tables.
-
-| Table | Looks like | Rule |
-|---|---|---|
-| Coverage matrix | feature × technique (Happy · Negative · Boundary · Equivalence · State · Security/API) | A cell that should have a case but is empty → `ระวัง` (watch out) + the reason · not relevant → `—` |
-| Traceability | FR / BR → TC ID | Every BR has ≥ 1 TC · if none → `ระวัง`, then add a TC |
-
-## Test Case Categories (Coverage Guide)
-
-For every feature, create test cases in these categories:
-
-### 1. Functional / Happy Path
-Valid inputs producing expected outputs.
-
-### 2. Boundary
-- Minimum valid value
-- Maximum valid value
-- Just below minimum
-- Just above maximum
-- Empty / null
-- Single item / first / last
-- Every BR with a number → just below · at · just above the limit (see oracle section)
-
-### 3. Negative
-- Invalid format (wrong type, regex mismatch)
-- Missing required fields
-- Extra unexpected fields
-- Special characters / SQL injection patterns
-- Very long strings
-
-### 4. Equivalence Classes
-Pick one value from each class:
-- Valid class
-- Invalid class - too small
-- Invalid class - too large
-- Invalid class - wrong format
-
-### 5. State Transitions
-For features with states (e.g., order: draft → submitted → paid → shipped):
-- Each valid transition
-- Each invalid transition attempt
-
-### 6. Integration
-- Interaction with other modules
-- External API calls (success, failure, timeout)
-- Database state after operation
-
-### 7. Concurrency
-- Two users acting simultaneously
-- Same user multiple tabs
-- Race conditions
-
-### 8. Security
-- Unauthorized access
-- Privilege escalation attempts
-- Input sanitization (cross-site scripting (XSS), SQL injection)
-- Rate limiting
-
-### 9. Performance
-- Response time under normal load
-- Behavior under peak load
-- Memory/CPU usage
-
-### 10. Accessibility (UI features)
-- Keyboard-only navigation
-- Screen reader compatibility
-- Color contrast
-- Focus management
-
-## Example
-
-Worked example with 3 login cases (happy path · empty field · lockout): [`references/example-login.md`](references/example-login.md)
-
-## Quality Checklist
-
-Each test case should:
-- [ ] Have one clear purpose
-- [ ] Be reproducible by anyone reading it
-- [ ] Have clear expected results
-- [ ] Be independent (doesn't rely on TC-XXX running first)
-- [ ] Be deterministic (same result every run)
-- [ ] Trace back to a requirement (user story, AC)
-- [ ] **Oracle** has `[D]` or `[R]` (or `[O-ยังไม่ยืนยัน]` + a question sent)
-- [ ] Money and totals show their sum, worked out before opening the system
-- [ ] Every BR has a TC · every BR with a number has its 3 boundary values
-- [ ] Coverage matrix and traceability tables at the end, gaps marked "GAP"
-- [ ] `check_outline.py` passes on the whole file
-
-## Anti-patterns
-
-- "Test the login page" — too vague. Test what, exactly?
-- Combining 10 actions into one test case — split them
-- Expected result = "It works" — be specific
-- Test cases that depend on previous test cases passing
-- Only happy-path tests (must include negative + boundary)
-- Tests with no traceability to requirements
-- Expected result copied from the screen or the builder's SPEC — it bakes the bug into the test
-- Test fails → expected result edited to match the system. Triage first (`qa-tester` → "when the result does not match")
-
----
-
-## Document Look
-
-This skill decides **what goes in** the document. It does not decide **how it looks** —
-load the matching skill before writing, not after:
-
-| What is being handed over | Load |
-|---|---|
-| Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
-| A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
-| The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
-
-Default formatting is not neutral — it reads as unfinished work.
-
-**Read more when needed:** [`references/test-plan-template.md`](references/test-plan-template.md) — template
+   - Every TC needs `[D]` or `[R]`. With only `[A]` / `[O]`, put `[O-ยังไม่ยืนยัน]` plus a question number (`Q7`, never the label alone) and add the question to the work owner (through the BA or team lead). `[A]` is fine for details the owner does not care about (exact error wording), but a "must not / must warn" rule needs `[D]` or `[R]`.
+   - **Priority:** a Security TC (XSS · open redirect · IDOR · calling the API around the page's checks · changing price/stock on the client and still ordering) is always P1. Others take the feature's priority.
+   - **Do not bake the bug in.** Work out money, points and totals from `[D]` + `[R]` before opening the system and show the working (`฿800 − 5% (฿40) = ฿760`); never copy a value from the screen.
+   - **System already wrong today:** write the correct behaviour, then append `(ตอนนี้ล้ม: …)` with what the system returns. Count items with this label and split by priority to forecast first-round failures against exit criteria.
+   - **Boundary values:** a BR with a number gives 3 values: below · at · over the edge (`free delivery ≤ 5 km` → 4.9 · 5.0 · 5.1); Related cites the BR.
+   - **Check when:** a TC that changes data (booking · cancelling · points · stock · permissions) gets `ทันที` · `หลังรีโหลด` · `ทั้งสอง`.
+6. **End the file with 2 tables.** Coverage matrix: feature × technique (Happy · Negative · Boundary · Equivalence · State · Security/API); a cell that should have a case but is empty → `ระวัง` + reason, not relevant → `—`. Traceability: FR / BR → TC ID; every BR has ≥ 1 TC, if none → `ระวัง`, then add a TC.
+7. **Run the shared checker until it passes:**
+   ```bash
+   python <โฟลเดอร์ skill polished-document-style ใน plugin superuser>/scripts/check_outline.py assets/test-case.md <your test-case file>
+   ```
+   It flags missing or reordered headings, missing fields, changed table headers, and anything unfilled (`<...>`, `YYYY-MM-DD`, `XXXX`, `...`, a field still listing every option). Worked example of 3 login cases: [`references/example-login.md`](references/example-login.md). Look of the document: markdown someone reads → `polished-document-style` · rendered .docx/.pptx/PDF for sign-off → `branded-document-design` · a picture to land the point → `markdown-visuals`.
 
 ## Run as a command
 
@@ -204,14 +43,46 @@ Default formatting is not neutral — it reads as unfinished work.
 
 Use the `qa-tester` agent to design test cases for: **$ARGUMENTS**
 
-The tester should:
-
 1. Review the feature / user story / acceptance criteria
 2. Apply the `test-case-template` skill
-3. Cover every category in `test-case-template` (Test Case Categories), noting which ones do not apply and why
+3. Cover every category in step 4, noting which do not apply and why
 4. Mark each test case with priority (P1-P4)
 5. Indicate automation candidacy
 6. Produce a coverage summary table at the end
+
+## Check before done
+- [ ] Each case has one clear purpose, is reproducible by anyone, independent of other TCs, deterministic, with a specific expected result (never "It works").
+- [ ] Each case traces to a requirement (user story, AC); no vague "test the login page"; one case is not 10 actions; negative and boundary cases exist, not only happy path.
+- [ ] **Oracle** has `[D]` or `[R]` (or `[O-ยังไม่ยืนยัน]` + a question sent).
+- [ ] Money and totals show their sum, worked out before opening the system; expected results never copied from the screen or the builder's SPEC.
+- [ ] A failing test is triaged first (`qa-tester` → "when the result does not match"), never "fixed" by editing the expected result to match.
+- [ ] Every BR has a TC · every BR with a number has its 3 boundary values.
+- [ ] Coverage matrix and traceability tables at the end, gaps marked.
+- [ ] `check_outline.py` passes on the whole file.
+
+## References
+- [`references/categories.md`](references/categories.md) — open when listing what to test per category
+- [`references/example-login.md`](references/example-login.md) — open for a worked example
+- [`references/test-plan-template.md`](references/test-plan-template.md) — open when writing the test plan
+- [`references/workbook-xlsx.md`](references/workbook-xlsx.md) — open when building the `.xlsx` workbook
+
+
+## reference: categories.md
+
+# Test case categories (coverage guide) · test-case-template
+
+Open when listing what to test for a feature. For every feature, create test cases in these categories.
+
+1. **Functional / Happy path** — valid inputs producing expected outputs.
+2. **Boundary** — minimum valid value · maximum valid value · just below minimum · just above maximum · empty / null · single item / first / last · every BR with a number → just below · at · just above the limit.
+3. **Negative** — invalid format (wrong type, regex mismatch) · missing required fields · extra unexpected fields · special characters / SQL injection patterns · very long strings.
+4. **Equivalence classes** — one value from each class: valid · invalid too small · invalid too large · invalid wrong format.
+5. **State transitions** — for features with states (for example order: draft → submitted → paid → shipped): each valid transition · each invalid transition attempt.
+6. **Integration** — interaction with other modules · external API calls (success, failure, timeout) · database state after the operation.
+7. **Concurrency** — two users acting simultaneously · same user in multiple tabs · race conditions.
+8. **Security** — unauthorized access · privilege escalation attempts · input sanitization (cross-site scripting (XSS), SQL injection) · rate limiting.
+9. **Performance** — response time under normal load · behavior under peak load · memory/CPU usage.
+10. **Accessibility (UI features)** — keyboard-only navigation · screen reader compatibility · color contrast · focus management.
 
 
 ## reference: example-login.md
@@ -523,6 +394,21 @@ A break with no case that fails → add a case, then add the row again.
 ```
 
 
+## reference: workbook-xlsx.md
+
+# The `.xlsx` test workbook · test-case-template
+
+Open when the project is large and QA testers fill in results in Excel.
+
+Build it with `<โฟลเดอร์ skill test-case-template>/scripts/build-test-workbook.py` from one flat table (columns `id, module, fr (functional requirement, FR), title, type, result`, others kept):
+
+- An **Overview** tab, then **one tab per module**. With `--mockup`, tabs follow the mockup screen order, every row gets a `screen` column, and each tab lists its mockup screens under the title. Use the same topics as the mockup start page (`ui-craft` → `references/mockup-start-page.md`).
+- Overview counts Pass / Fail / Blocked / Not run per tab with formulas. **No "all cases" tab** — a result typed in two places drifts.
+- Header: light brand fill, dark brand text, one brand-colour rule under it (the same table look as `branded-document-design`). Pass `--brand --head-fill --ink` from the project's `doc-theme`.
+- Columns `test_result` (what actually happened) and `evidence` (GIF link) follow `result`, added empty if the table lacks them. After a run, `--results qa/evidence/<run-id>/results.csv` fills all three — see `test-evidence`. A workbook the user made themselves → `test-evidence/scripts/record_results.py`.
+- Check: open it in Excel; the Overview totals must equal the source row count.
+
+
 ---
 
 # skill: test-evidence
@@ -579,14 +465,14 @@ python "<โฟลเดอร์ skill test-evidence>/scripts/make_evidence.py"
 
 GIF look (set in the script, do not adjust by hand):
 
-| Part | Value | Reason |
-|---|---|---|
-| Width | Every image scaled to 1280 px | Cases differ but text size stays the same |
-| Top bar | Case id · case title · `ขั้น n/N` (step n of N) · badge PASS green / FAIL red / BLOCKED orange · 24 px text | You know at once which case and what result |
-| Caption bar | Under the image, not over the screen · 28 px text · black background, white text | Still readable (~17 px) when shrunk to 800 px |
-| Time per step | 2–6 seconds, by caption length | Time to read, no need to pause the image |
-| Closing image | Big result + problem + expected / actual | The last image alone tells the story |
-| Font | Sarabun (Thai + English) and the ✓ ✗ symbol set are in `assets/fonts/` | Looks the same on every machine |
+| Part | Value |
+|---|---|
+| Width | Every image scaled to 1280 px |
+| Top bar | Case id · case title · `ขั้น n/N` (step n of N) · badge PASS green / FAIL red / BLOCKED orange · 24 px text |
+| Caption bar | Under the image, not over the screen · 28 px text · black background, white text |
+| Time per step | 2–6 seconds, by caption length |
+| Closing image | Big result + problem + expected / actual |
+| Font | Sarabun (Thai + English) and the ✓ ✗ symbol set are in `assets/fonts/` |
 
 - A `Fail` or `Blocked` case also gets `<id>-fail.png` = the failed step in full color (a GIF has only 256 colors), used to attach to the bug
 - If the script warns `no raqm`, Thai vowels and tone marks will stack on each other · run it in the project's Docker sandbox (`docker-sandbox`) and it goes away
@@ -606,7 +492,31 @@ GIF look (set in the script, do not adjust by hand):
 
 ## 5 · Make the numbers believable
 
-Use this when test results decide whether an app got better or worse (against the old system, across versions, or as a loop's criterion) · source: a real measurement of 6 versions of a web clone app (Week 03 of Teaching_CWN2026) · the numbers are examples from that job
+Use this when test results decide whether an app got better or worse (against the old system, across versions, or as a loop's criterion). The table of problems and fixes is in [`references/trustworthy-numbers.md`](references/trustworthy-numbers.md): open it before you count or compare scores. The short rules:
+
+- The runner should keep evidence for every item, passed and failed, and use separate exit codes: 0 = all passed · 1 = some items failed · 2 = the runner crashed
+- Raw data recorded from the network contains cookies and tokens. Never commit it and never take it off the machine.
+
+## Check before sending
+
+- [ ] A case marked `Pass` was really run this round (`principle-prove-it-works`) · one not run gets `Not run` with a reason
+- [ ] Open the GIF of at least 1 failed case by eye: the caption reads clearly, and the red frame sits on the spot
+- [ ] The count in the report's summary table = the number of cases in `run.json` = the results in Excel
+- [ ] If the results judge an app or a loop: the exam was run against the old system · every uncounted item has a reason · "failed at setup" is separated from "fail" (item 5)
+- [ ] No real data or passwords in the images
+- [ ] Raw images are in `_to_delete/`, none left in `qa/`
+- [ ] The scripts' own tests pass: `python "<โฟลเดอร์ skill test-evidence>/scripts/make_evidence.py" --self-test` · `python "<โฟลเดอร์ skill test-evidence>/scripts/record_results.py" --self-test`
+
+## References
+
+- [`references/trustworthy-numbers.md`](references/trustworthy-numbers.md) — open when test results decide whether an app got better or worse (item 5)
+
+
+## reference: trustworthy-numbers.md
+
+# Make the numbers believable · test-evidence item 5
+
+Source: a real measurement of 6 versions of a web clone app (Week 03 of Teaching_CWN2026). The numbers are examples from that job, from a single job, and the version-comparison example has 3–4 points. Use them to see direction, not as statistical proof.
 
 | Problem | Do |
 |---|---|
@@ -623,20 +533,6 @@ Use this when test results decide whether an app got better or worse (against th
 | Repeated measurement gives different values | Explain it with an experiment, then separate "confirmed" (removing the sentence gave 27.36%) from "not yet confirmed" (the remainder, about 0.5 points) · for data that changes over time, compare structure and rules, not numbers, and note the date collected |
 | An agent's report | The file is the evidence, the summary is an opinion (in the real run the agent said a full pass of 16 items, but the real file had 14) · re-measure yourself with the same set before believing it |
 
-- The runner should keep evidence for every item, passed and failed, and use separate exit codes: 0 = all passed · 1 = some items failed · 2 = the runner crashed
-- Raw data recorded from the network contains cookies and tokens. Never commit it and never take it off the machine.
-- The numbers above come from a single job, and the version-comparison example has 3–4 points. Use them to see direction, not as statistical proof.
-
-## Check before sending
-
-- [ ] A case marked `Pass` was really run this round (`principle-prove-it-works`) · one not run gets `Not run` with a reason
-- [ ] Open the GIF of at least 1 failed case by eye: the caption reads clearly, and the red frame sits on the spot
-- [ ] The count in the report's summary table = the number of cases in `run.json` = the results in Excel
-- [ ] If the results judge an app or a loop: the exam was run against the old system · every uncounted item has a reason · "failed at setup" is separated from "fail" (item 5)
-- [ ] No real data or passwords in the images
-- [ ] Raw images are in `_to_delete/`, none left in `qa/`
-- [ ] The scripts' own tests pass: `python "<โฟลเดอร์ skill test-evidence>/scripts/make_evidence.py" --self-test` · `python "<โฟลเดอร์ skill test-evidence>/scripts/record_results.py" --self-test`
-
 
 ---
 
@@ -645,8 +541,6 @@ Use this when test results decide whether an app got better or worse (against th
 Use when writing up one software defect
 
 # Bug Report Template
-
-> **Language:** write all wording per `human-writing`. This skill gives format and structure; human-writing gives how to write so people can understand.
 
 ## Where bug reports live
 
@@ -747,15 +641,8 @@ Before submitting:
 - [ ] At least one piece of evidence attached
 - [ ] Environment info complete
 - [ ] Searched for duplicates first
+- [ ] One bug per report · no proposed fix in the title
 - [ ] `check_outline.py` passes
-
-## Anti-patterns
-
-- "Same as last week's bug" — describe it fully
-- Multiple bugs in one report — split them
-- "Bug" without steps — give steps to reproduce
-- Putting a proposed fix in the title — the developer decides the fix
-- Marking everything as P1 — be honest about priority
 
 ---
 
@@ -789,7 +676,7 @@ The tester should:
    - Expected vs actual behavior
    - Frequency
    - Evidence (screenshots, logs)
-3. Reproduce once yourself from the reporter's steps before trusting them, and reject these excuses before scoring (idea from trailofbits/skills):
+3. Reproduce once yourself from the reporter's steps before trusting them, and reject these excuses before scoring:
    - "cannot reproduce, so not a bug" → try another environment, data set or timing first, then file as `ทำซ้ำไม่ได้` with what was tried
    - "user did it wrong" → then it is a usability or validation bug, still filed
    - "edge case nobody hits" → count who can hit it; file with the number
@@ -2579,65 +2466,69 @@ claude-security (All rights reserved · mechanism only, no text copied) · `skil
 
 Use when writing or reviewing code, for the simplest that works
 
-# Lazy Coding
+# lazy-coding — the least code that works, still easy to find and to read
 
-You write code like a senior dev who has been paged at 3 AM for someone else's
-clever abstraction. Lazy means efficient, not careless. The best code is the
-code you never had to write.
+> **One rule:** a tired teammate must understand it in 6 months, with no context. If they can't, simplify until they can. The best code is the code you never had to write.
 
-**Team rule:** a tired teammate must understand it in 6 months, with no
-context. If they can't, simplify until they can.
+## Use when
 
-## Active every response
+- Writing or reviewing any code. On by default at **full** in every response; switch with `lazy lite | full | ultra`; off only on "stop lazy" / "normal mode".
 
-On by default at **full**. Don't drift back to over-building — still on even
-when you're unsure. Switch with `lazy lite | full | ultra`. Off only on
-"stop lazy" / "normal mode".
+Not for: names, function shape and file layout → `readable-code` (**always load together**: lazy decides how much code, readable-code decides how it looks) · the repo skeleton → `project-bootstrap` · docs, plans, architecture → `simplicity-first`
 
-## The ladder — stop at the first rung that holds
+## Steps
 
-1. **Does this need to exist?** Speculative need → skip it, say so in one line. (YAGNI)
-2. **Stdlib does it?** Use it.
-3. **Native platform feature covers it?** `<input type="date">` over a picker lib, CSS over JS, a DB constraint over app code. On mobile (Flutter, React Native) "native" means writing a platform channel in Kotlin/Swift — the costly rung; a maintained plugin or a framework widget comes first.
-4. **An already-installed dependency solves it?** Use it. Never add a new dependency for what a few lines can do.
-5. **Can it be one line?** One line.
-6. **Only then:** the smallest code that works.
+1. **Climb the ladder and stop at the first rung that holds** (a reflex, not a research project; if two rungs work, take the higher one):
+   1. Does this need to exist? Speculative need → skip it, say so in one line (YAGNI).
+   2. Does the stdlib do it? Use it.
+   3. Does a native platform feature cover it? (`<input type="date">` over a picker lib, CSS over JS, a DB constraint over app code.) On mobile (Flutter, React Native) "native" means a platform channel in Kotlin/Swift, the costly rung: a maintained plugin or framework widget comes first.
+   4. Does an already-installed dependency solve it? Use it. Never add a dependency for what a few lines can do.
+   5. Can it be one line? One line.
+   6. Only then: the smallest code that works.
+2. **Apply the rules:**
+   - No unrequested abstractions (no interface with one implementation, no factory for one product, no config for a value that never changes). No scaffolding "for later".
+   - Delete before you add. Boring before clever.
+   - Deletion test: remove the piece, run the tests; still green → it stays deleted.
+   - Shortest working diff wins, but never by merging concerns into one file: fewest files **that still keep one concern per file**.
+   - Match the repo: read 2–3 nearby files and copy their style.
+   - Two stdlib options the same size → take the one correct on edge cases.
+3. **Keep it simple, not scattered.** Lazy cuts how much code exists, never where it lives: one concern per file · feature folders, not type folders (no `utils/`) · names carry meaning · signatures and data shapes between layers written out · config and secrets outside code (but domain constant tables stay in code) · tests beside the code · new project → `project-bootstrap` first. Details and the cold-open test → [`references/structure.md`](references/structure.md).
+4. **Mark a deliberate shortcut** with a comment naming the ceiling and the upgrade path (`# simple: in-memory dict cache — swap for Redis if we run more than one process`). Examples → [`references/examples.md`](references/examples.md).
+5. **Never be lazy about:** input validation at trust boundaries, error handling that prevents data loss, security, accessibility basics, or anything explicitly requested. If the user insists on the full version, build it; no re-arguing.
+6. **Non-trivial logic** (a branch, loop, parser, or money/security path) leaves ONE runnable check: an `assert`-based self-check or one small `test_*`. No frameworks or fixtures unless asked. Trivial one-liners need no test.
+7. **Output:** code first, then at most three short lines on what you skipped and when to add it: `[code] → skipped: [X] — add when [Y].` If the explanation is longer than the code, delete the explanation.
 
-Two rungs both work → take the higher one and move on. The ladder is a reflex,
-not a research project. The first lazy solution that works is the right one.
+## Intensity
 
-## Rules
+| Level | What changes |
+|---|---|
+| **lite** | Build what's asked, but name the lazier option in one line. The user picks. |
+| **full** | The ladder enforced. Stdlib and native first. Shortest diff, shortest explanation. Default. |
+| **ultra** | YAGNI extremist. Ship the one-liner and challenge the rest of the requirement in the same breath. |
 
-- No unrequested abstractions — no interface with one implementation, no factory for one product, no config for a value that never changes.
-- No scaffolding "for later." Later can scaffold for itself.
-- Delete before you add. Boring before clever — clever is what someone decodes at 3 AM.
-- Deletion test: remove the piece, run the tests — still green? It stays deleted. (idea from mattpocock codebase-design)
-- Shortest working diff wins — but never by merging concerns into one file. Fewest files **that still keep one concern per file**.
-- Match the repo — read 2-3 nearby files first and copy their style.
-- Two stdlib options the same size? Take the one that's correct on edge cases. Lazy means less code, not a flimsier algorithm.
+## Check before done
 
-## Simple is not scattered
+- Each rung of the ladder was considered; nothing added that was not asked
+- One concern per file; config outside code; one runnable check for non-trivial logic
+- Output is code plus at most three short lines
 
-Lazy cuts *how much* code exists. It never cuts *where code lives*. A 40-line
-project still looks like software engineering, not a scratchpad:
+## References
 
-- **One concern per file.** Entry point, logic, config and I/O each have their own place. A `main.py` that also parses, validates, talks to the database and prints is not lazy — it is a god-file nobody can test.
-- **Feature folders, not type folders.** `invoice/` holds everything about invoices (`readable-code` §7). No `utils/` dumping ground.
-- **Names carry meaning.** Lazy is not `tmp`, `data`, `handle()`. Follow `readable-code` §1–4.
-- **Boundaries stay explicit.** Function signatures, module exports and the data shape between layers are written out, not implied — fewer lines inside each box, never fewer boxes.
-- **Config and secrets outside code.** Even one environment variable goes in `.env.example`, not inline. A project that reads no environment variables (an offline mobile app) has no `.env.example` — do not invent one.
-- **Domain constant tables are code, not config.** Values that change only with a code release (thresholds, unit tables, lux ranges) go in one named constants file next to the feature, not in env vars or a settings screen. "Config outside code" means values that differ per environment or per deployment.
-- **Tests sit next to the code they test** — one small check per non-trivial path (see "When NOT to be lazy"). Where the toolchain fixes the test folder (Flutter `test/` mirroring `lib/`), follow it — "next to" then means the same relative path.
-- **New project → `project-bootstrap` first.** Lazy code lands in a repo that already has its skeleton (README, folder layout, lint, test command). Never scatter files at the root to save a minute.
+- [`references/structure.md`](references/structure.md) — open when deciding where code, config, constants and tests live
+- [`references/examples.md`](references/examples.md) — open for shortcut-marking examples and the 3 intensity levels answering the same request
 
-Test: a tired teammate opens the repo cold. Can they guess which file holds a
-given behaviour in 30 seconds? If not, the structure is not too complex — it
-is *missing*.
+Pairs with: `simplify` · `readable-code` · `project-bootstrap` · `code-review-checklist` (a lazy diff still gets reviewed)
+
+
+## reference: examples.md
+
+# Examples · lazy-coding
+
+Open when you need to see how a simplification is marked, or how the 3 intensity levels answer the same request.
 
 ## Mark your simplifications
 
-A deliberate shortcut reads as intent, not ignorance, when you label it. Name
-the ceiling and the upgrade path:
+A deliberate shortcut reads as intent, not ignorance, when you label it. Name the ceiling and the upgrade path:
 
 ```python
 # simple: in-memory dict cache — swap for Redis if we run more than one process
@@ -2647,42 +2538,25 @@ the ceiling and the upgrade path:
 // simple: O(n) scan, fine under ~1k items — index it if the list grows
 ```
 
-## Output
-
-Code first. Then at most three short lines: what you skipped and when to add
-it. If the explanation is longer than the code, delete the explanation.
-
-Pattern: `[code] → skipped: [X] — add when [Y].`
-
-## Intensity
-
-| Level | What changes |
-|-------|------------|
-| **lite** | Build what's asked, but name the lazier option in one line. The user picks. |
-| **full** | The ladder enforced. Stdlib and native first. Shortest diff, shortest explanation. Default. |
-| **ultra** | YAGNI extremist. Ship the one-liner and challenge the rest of the requirement in the same breath. |
-
-Example — "Add a cache for these API responses."
+## Intensity example — "Add a cache for these API responses."
 
 - **lite:** "Done. FYI `functools.lru_cache` does this in one line if you'd rather not own a cache class."
 - **full:** "`@lru_cache(maxsize=1000)` on the fetch function. Skipped a custom cache class — add when lru_cache measurably falls short."
 - **ultra:** "`@lru_cache` on the fetch function — done, since you asked. Do you have a profile showing these calls are slow? If not, this line can go. A hand-rolled TTL cache is a bug farm with a hit rate."
 
-## When NOT to be lazy
 
-Never simplify away: input validation at trust boundaries, error handling that
-prevents data loss, security, accessibility basics, or anything explicitly
-requested. If the user insists on the full version, build it — no re-arguing.
+## reference: structure.md
 
-Non-trivial logic (a branch, loop, parser, or money/security path) leaves ONE
-runnable check behind — the smallest thing that fails if the logic breaks: an
-`assert`-based self-check or one small `test_*`. No frameworks or fixtures
-unless asked. Trivial one-liners need no test.
+# Simple is not scattered · lazy-coding
 
-## Pairs with
+Open when deciding where code, config, constants and tests live. Lazy cuts how much code exists, never where it lives.
 
-- `simplify` — the suite-wide rule for every kind of work; this skill is its detail for code.
-- `readable-code` — **always load together**. Lazy decides how much code; readable-code decides names, function shape and file layout. One without the other gives either bloat or a scratchpad.
-- `project-bootstrap` — the repo skeleton lazy code lands in.
-- `simplicity-first` — same spirit, for docs, plans, and architecture.
-- `code-review-checklist` — the lazy diff still gets reviewed.
+- One concern per file: entry point, logic, config and I/O each have their own place.
+- Feature folders, not type folders; no `utils/` dumping ground (`readable-code`).
+- Names carry meaning (not `tmp`, `data`, `handle()`).
+- Boundaries stay explicit: signatures, module exports and the data shape between layers are written out.
+- Config and secrets outside code: even one environment variable goes in `.env.example`. A project that reads none (an offline mobile app) has no `.env.example`; do not invent one.
+- Domain constant tables (thresholds, unit tables, lux ranges) change only with a code release: one named constants file next to the feature, not env vars. "Config outside code" means values that differ per environment or deployment.
+- Tests sit next to the code they test; where the toolchain fixes the test folder (Flutter `test/` mirroring `lib/`), follow it.
+- New project → `project-bootstrap` first; never scatter files at the root to save a minute.
+- Test: can a tired teammate opening the repo cold guess which file holds a behaviour in 30 seconds? If not, the structure is missing, not too complex.

@@ -28,7 +28,7 @@ Steps 1–3 often read mail, chat, calendar and notes together. Write what comes
 3. **A source that could not be opened** (connector down, export missing) is named at the end ("ไม่ได้อ่าน: LINE กลุ่มบ้าน"). The rest of the summary still goes out.
 4. **Last line counts:** to-dos · decisions made · sources scanned · the dates covered ("งาน 7 · ตัดสินใจ 2 · แหล่ง 4 · 3–9 พ.ย.").
 
-Works the same when the user pastes text instead of connecting sources. Idea from anthropics/knowledge-work-plugins `enterprise-search/skills/digest` (Apache-2.0, rewritten, viewed 2026-11-10).
+Works the same when the user pastes text instead of connecting sources.
 
 ## Money and admin checklist (step 4)
 
@@ -56,7 +56,6 @@ Template (append to `weekly-reviews.md`, newest on top) and a filled week: [refe
 - Twenty minutes — when it grows, the review has become the procrastination
 - Scan the record before asking memory — steps 2 and 3 start from the calendar, sent mail, chat threads and the task list (developers: git log and merged pull requests), and the user is asked only about what the record does not show; memory keeps the loud week and drops the promises
 - Write it even when the week felt like nothing; boring weeks are data
-- Three priorities, not five; everything else is the queue
 - End with the three visible where the user will see them Monday morning (calendar, phone widget, sticky note)
 
 Related: `inbox-triage` · `task-board` (the task file steps 1–3 read and update) · `calendar-audit` (monthly) · `goal-and-habit` (quarterly) · `important-docs` · `subscription-audit` · `gift-idea-tracker` (occasions in the next 14 days).
@@ -68,3 +67,7 @@ Related: `inbox-triage` · `task-board` (the task file steps 1–3 read and upda
 Run the `weekly-review` skill: **$ARGUMENTS**
 
 --deep adds a calendar-audit pass and a look at money/admin due next week.
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources

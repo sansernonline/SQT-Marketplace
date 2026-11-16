@@ -4,11 +4,8 @@ Use when a project needs a Docker sandbox for untrusted code
 
 # docker-sandbox: one lab per project
 
-> Our machine gives the orders; the lab is where the work happens.
 > Inside, you can install, delete, run servers, and build test databases freely, because when something breaks you wipe it and rebuild with one command.
 > Outside (the real machine · real systems · real accounts) cannot be touched, because there is no way in from the inside.
-
-Use together with [`superuser`](../superuser/SKILL.md). In a project that has `.sandbox/`, all install and run work happens in this lab.
 
 Do not use when: writing a Dockerfile or image for a real deploy → [`kubernetes-helm`](../kubernetes-helm/SKILL.md), because the lab is a temporary place to run work, not an image that goes to production.
 
@@ -18,7 +15,7 @@ Do not use when: writing a Dockerfile or image for a real deploy → [`kubernete
 
 - **One lab per project**, named `sandbox-agent-<folder name>-<creation date>` (e.g. `sandbox-agent-sample-app-20260125`).
   - The name is set once at the first `up` and stored in the file `.sandbox/.name-<folder name>`. Later commands read the name from this file, so the name does not change with the date.
-  - The prefix `sandbox-agent-` says an agent created this lab, not a person. The creation date is also kept in the label `sqt.created`.
+  - The creation date is also kept in the label `sqt.created`.
   - If the project needs a database, cache, or browser, add it as a service in the **same lab** (one stack). Do not create a separate lab.
 - **The base image is shared across the whole machine.** `sqt-sandbox-base:1` (Node · Python · Git · Playwright Chromium · Claude Code) is built once. Each project's image adds only a thin layer the project needs, so disk is not used twice.
 - **A stopped lab uses no CPU or memory**, only disk. Run `stop` when you finish a task, and `stop-all` when you finish for the day.
@@ -51,10 +48,6 @@ You can add `-Locked` to either mode. It blocks outbound internet, leaving only 
 5. Start the lab with `.\.sandbox\sandbox.ps1 up` (or `up -Isolated` · `up -Browser`). The first project on a machine must build the base image first, which takes about 5–15 minutes. Later projects are much faster.
 6. **Prove it works:** `sandbox.ps1 exec "node -v && python3 --version && git status"`. If the project has a test command, run it once through `exec`. In `-Locked` mode you must see the line `check passed`.
 7. Record in the project's `docs/README.md`: the lab name (`sandbox-agent-<folder name>-<date>`) · mode · port · test command in the lab.
-
-**Tested for real** on Windows + Docker Desktop 4.46 (2026-10-05, project `sample-app`): the lab built · unit tests passed 15/15 · e2e on Chromium passed 14/14 in the lab.
-
-Bugs found during testing are already fixed in the script: PowerShell 5.1 with stderr · Playwright a different version from the base image · port collisions.
 
 If the script breaks on another machine, use the `bug-fix` playbook on the script itself.
 
@@ -97,7 +90,7 @@ If the script breaks on another machine, use the `bug-fix` playbook on the scrip
 
 - The browser in the lab has no accounts, cookies, or user passwords. Log in only with the project's test accounts.
 - Copy images and videos from tests out to `_to_delete/` with `docker compose cp`.
-- Playwright MCP in the lab (examples from teaching work, not yet a standard): running as root needs `--no-sandbox` · the `--browser` value must match the `--help` of the installed version (`chromium` or `chrome`; if it does not match, it cannot find the browser) · screenshots with a relative file name land in the process's working directory, not `--output-dir`, so move them yourself · a click that times out with "not visible/stable" may be a background tab; see `e2e-testing-patterns`.
+- Playwright MCP quirks (root, `--browser`, screenshot paths, click timeouts): [references/playwright-mcp.md](references/playwright-mcp.md).
 - The user's own browser on the machine (the logged-in Chrome) is for real websites that need a real account, and follows that tool's rules. It is not a place to test.
 
 ## 6 · CAPTCHA
@@ -107,7 +100,6 @@ If the script breaks on another machine, use the `bug-fix` playbook on the scrip
   - Or turn it off with a setting for the test environment only (`CAPTCHA_ENABLED=false`).
   - **Test values must never reach the real system.** Add a startup check that production must not use a test key (`config-and-secrets`).
 - **Other people's websites:** the agent **does not solve a CAPTCHA and does not look for a way around it** (no solving services, no pretending to be a person). If you meet a CAPTCHA, stop that step, tell the user to do it themselves, and continue with the other parts. If you need data from that site often, look for an official API instead.
-- Reason: a CAPTCHA is the site owner saying "no bots." Getting around it breaks their terms and gets the IP or account banned.
 
 ## 7 · What you may do freely in the lab
 
@@ -131,11 +123,9 @@ These still stay under "รออนุมัติ" (awaiting approval) even in
 | Opening a port like `"3000:3000"` (every network card) | People on the same network can reach it. Always use `127.0.0.1:` |
 | Putting real secrets in the `Dockerfile` or image | The secret stays in the image forever |
 | Removing or raising the limits `cpus` `mem_limit` `pids_limit` until the machine hangs | A lab stuck in a loop will eat the whole machine |
-| Mounting things from the machine as writable when the lab only needs to read (`ref/` · sample data · a shared SDK cache · the source folder of isolated mode) | Tricked code in the lab can write back to the machine. Add `:ro` to every mount that is not this round's work, and have the lab copy into its own space if it must edit (idea from anthropics/claude-code devcontainer and trailofbits/skills) |
+| Mounting things from the machine as writable when the lab only needs to read (`ref/` · sample data · a shared SDK cache · the source folder of isolated mode) | Tricked code in the lab can write back to the machine. Add `:ro` to every mount that is not this round's work, and have the lab copy into its own space if it must edit |
 
 The Claude Code documentation warns that even in a container, running without permission prompts (`--dangerously-skip-permissions`) cannot stop project code that deliberately steals what is in the lab, including Claude Code's own token. Use it only with a repo you trust, and use `-Locked` when unsure.
-
-So `sandbox.ps1 claude` runs only in isolated mode. In mount mode the script refuses, because `/work` is the user's real folder (§7, last item).
 
 **Limits of `-Locked`:** DNS can go out only through the resolver the lab was given (Docker's), not any DNS server. But that resolver still forwards queries outward, so data can still be smuggled out through DNS (DNS tunnelling). For work where data must never leak, run with no network at all.
 
@@ -143,17 +133,38 @@ So `sandbox.ps1 claude` runs only in isolated mode. In mount mode the script ref
 
 ## 9 · Windows notes
 
-- Docker Desktop uses WSL 2. Files on drive `C:` that are mounted in are slower than files in a volume. If build or test is very slow, use `-Isolated` (verified: `npm ci` for just 2 packages took 52 seconds on a OneDrive folder).
+- Docker Desktop uses WSL 2. Files on drive `C:` that are mounted in are slower than files in a volume. If build or test is very slow, use `-Isolated`.
 - **Projects in a OneDrive folder:** mount mode makes `node_modules` and build files sync to the cloud, so use `-Isolated` or move the project out of OneDrive.
 - If you cannot run `sandbox.ps1`, use `powershell -ExecutionPolicy Bypass -File .\.sandbox\sandbox.ps1 <command>`.
 - `-Locked` reads the host's IP once at startup. A service whose IP changes often may drop out; run `up -Locked` again.
 
 ## Links to other skills
 
-- `parallel-attempts-pick-best`: normally competitors use one git worktree each. Use one isolated lab each (`-Name <project>-a1` …) only for work that needs truly separate machines.
-- [`app-verifier-setup`](../app-verifier-setup/SKILL.md): the verify skill's `start` script runs in the lab.
 - `config-and-secrets`: put test values in a `.env` that stays out of git, and do not bake them into the image.
 - The `superuser` playbook `housekeeping`: cleans up old labs and images.
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
+
+
+## reference: playwright-mcp.md
+
+# Playwright MCP in the lab · docker-sandbox
+
+Open from SKILL.md section 5 when you run Playwright MCP inside the lab.
+
+- Playwright MCP in the lab (examples from teaching work, not yet a standard): running as root needs `--no-sandbox` · the `--browser` value must match the `--help` of the installed version (`chromium` or `chrome`; if it does not match, it cannot find the browser) · screenshots with a relative file name land in the process's working directory, not `--output-dir`, so move them yourself · a click that times out with "not visible/stable" may be a background tab; see `e2e-testing-patterns`.
+
+
+## reference: sources.md
+
+# Sources · docker-sandbox
+
+- Tested for real on Windows + Docker Desktop 4.46 (2026-10-05, project `sample-app`): the lab built · unit tests passed 15/15 · e2e on Chromium passed 14/14 in the lab.
+- Bugs found during testing were fixed in the script: PowerShell 5.1 with stderr · Playwright a different version from the base image · port collisions.
+- Verified: `npm ci` for just 2 packages took 52 seconds on a OneDrive folder (why `-Isolated` is advised on OneDrive).
+- The `:ro` mount rule is an idea from anthropics/claude-code devcontainer and trailofbits/skills.
 
 
 ---
@@ -164,13 +175,51 @@ Use before saying work is done, fixed or working
 
 # principle · prove it works — prove it against the real thing
 
-> A "done" with no evidence throws the checking onto someone else.
+> **One rule:** before using the words done (`เสร็จ`) · fixed · passed (`ผ่าน`) · works · sent, you must have seen the result from the real thing yourself in this round.
 
-## Rule
+## Use when
+- You are about to report work as done, fixed, passed, working, or sent
+- A sub-agent reports done, or a draft for an outsider says "fixed"
 
-Before using the words done (`เสร็จ`) · fixed · passed (`ผ่าน`) · works · sent, you must have seen the result from the real thing yourself in this round.
+## Steps
+1. Before starting, write "how will I know it is done" in a checkable form.
+2. After the work, check against that on the real thing and record the raw result (numbers · images · output). Use the evidence column below.
+3. If you truly cannot check (no environment · needs a real account), say plainly `ยังไม่ได้ตรวจ` and what is missing; never write `ผ่าน`.
+4. For an item whose result you have not seen, write what was done and what the result is separately, e.g. "CSV: code changed, not yet opened in Excel". Do not write "fixed, but not tried yet": readers remember done and forget but.
+5. If a draft for a customer or outsider says "fixed" while the check is unfinished (even with "now testing"), write 1 version to send after the result is seen. The version that can be sent now must not contain "แก้แล้ว", "แก้ไขแล้ว" or "เรียบร้อย" in any form; it may say only "ได้รับเรื่องแล้ว ทีมกำลังตรวจ จะแจ้งผลภายใน (เวลา)".
 
-For an item whose result you have not seen, write separately what was done and what the result is, for example "CSV: code changed, not yet opened in Excel" · do not write "fixed, but not tried yet", because readers remember the word done and forget the word but (eval 2026-11-09: the arm with the skill wrote it this way in 2 of 3 rounds)
+| Work | Evidence that counts |
+|---|---|
+| Document · report | A fresh reviewer opens the rendered file and checks the requirements one by one (the writer does not reread its own work) |
+| Numbers · formulas · amounts | Recompute another way on 2–3 rows; the total matches the source (receipt · statement) |
+| Message to a customer · email · booking | Read against the original question; name · amount · date match the real data; for a booking, see the confirmation page |
+| Feature in an app | Click it in the running app using the app-checking skill and see the criteria met (compiling or reading code does not count) |
+| Fix of a bug | Repeat the case that failed before, by the same path, and it passes |
+| Test · check | Pass/fail numbers come from this round's summary line (or `node scripts/test-verdict.mjs <TAP or JUnit result file> --expect <count>` → PROVEN · PARTLY · NOT PROVEN), never from memory · then break 1 line in a copy (invert a condition · return early); the test covering it must fail, otherwise the test proves nothing yet |
+| Screenshot · render | Judge from the pixels of an image you opened yourself, looking for failure signs first (red or blank screen, a box covering content), then compare with the log · ambiguous counts as failed · name the image file in the evidence |
+| Mockup | Open in a browser and click every button; no fake buttons |
+| Measured values (sensor · lux · distance · weight) | Compare with a calibrated instrument · an emulator proves only the work path (label `emulator`); accuracy needs the real thing (label `เครื่องจริง <รุ่น>`) · no instrument → `ยังไม่ได้ตรวจ` |
+| Works on another system (Windows · macOS · another machine) | Label every claim `observed` (ran it there) or `reasoned` (worked out); a pass on your own machine is the weakest evidence for another system |
+| Sub-agent work | Read the work and run it yourself |
+
+**Not evidence:** hedge words ("น่าจะใช้ได้" · "ควรจะผ่าน" · "ในทางทฤษฎี" · "เหมือนครั้งก่อน": in a final report they are a red flag, go back and check) · "test ผ่านแล้ว" with no output · "ไม่มี error" (no error is not the wanted result) · exit 0 or status `running` (exit 0 says only the program ended) · a sub-agent's own report · sending the user a command to run when you could run it · checking only the easy part. Full table with reasons and the `vastai` exit-0 case: [`references/evidence-table.md`](references/evidence-table.md).
+
+## Check before done
+- Every "done" word in the report has a raw result from this round behind it
+- Anything not seen is labelled `ยังไม่ได้ตรวจ`, with what is missing
+- No hedge word survives in the final report
+
+## References
+- [`references/evidence-table.md`](references/evidence-table.md) — open when judging a test, screenshot, measured value, cross-system claim, or sub-agent result, or when a claim of yours sounds like one on the "not evidence" list; also holds the sources
+
+
+## reference: evidence-table.md
+
+# Evidence by kind of work, and claims that do not count · principle-prove-it-works
+
+Open this when the work is a test, a screenshot, a measured value, a cross-system claim, a message to a customer, or a sub-agent result, or when a claim in your own report sounds like one in the second table.
+
+## Evidence by kind of work (full wording)
 
 | Work | Evidence that counts | Does not count |
 |---|---|---|
@@ -186,12 +235,6 @@ For an item whose result you have not seen, write separately what was done and w
 | A claim that it works on another system (Windows · macOS · another machine) in a PR or report | Label every claim: `observed` (ran it and saw the result on that system) or `reasoned` (worked out by thought) · a pass on your own machine is the weakest evidence for another system | Writing "works on every system" with no label |
 | Sub-agent work | Read the work and run it yourself | The sub-agent reports it is done |
 
-## How to do it
-
-1. Before starting, write "how will I know it is done" in a checkable form
-2. After the work, check against that on the real thing, and record the raw result (numbers · images · output)
-3. If you truly cannot check (no environment · needs a real account), say plainly `ยังไม่ได้ตรวจ` (not yet checked) and what is missing; never write `ผ่าน` (pass)
-
 ## Claims that do not count as evidence
 
 The first column quotes Thai claims as examples; English meanings are in brackets.
@@ -206,7 +249,9 @@ The first column quotes Thai claims as examples; English meanings are in bracket
 | Sending the user a command to run themselves when we could run it · checking only the easy part and concluding everything passed | Throws the checking onto someone else | Run it all yourself before using the word done |
 | Drafting a message to a customer or outsider saying "fixed" so it can be sent right away, while the check is not finished (even with a trailing note that testing is in progress, such as "ทีมเราแก้ไขในระบบแล้ว ตอนนี้กำลังทดสอบอีกรอบ" ("our team fixed it in the system, now testing once more"), seen in eval 3 of 3 rounds 2026-11-09) | The recipient believes the word fixed at once, and if the check fails the words must be withdrawn | Draft 1 version with the condition that it is sent after the check result is seen · the version that can be sent now must not contain "แก้แล้ว" (fixed), "แก้ไขแล้ว" (has been fixed) or "เรียบร้อย" (all done) in any form; it may say only "ได้รับเรื่องแล้ว ทีมกำลังตรวจ จะแจ้งผลภายใน (เวลา)" (received, the team is checking, will report within (time)) |
 
-Sources of the screenshot row · expo · .claude/skills/expo-skill-eval/agents/visual-grader.md · seen 2026-11-10 · the test row (verdict script + break one line of code) · code-modernization · commands/modernize-verify.md · seen 2026-11-10 · the observed/reasoned row · claude-remember (do not redistribute · took the mechanism only) · CONTRIBUTING.md · seen 2026-11-10 · reviewer lenses and packages → [`review-lenses`](../superuser/references/review-lenses.md)
+## Sources
+
+Sources of the screenshot row · expo · .claude/skills/expo-skill-eval/agents/visual-grader.md · seen 2026-11-10 · the test row (verdict script + break one line of code) · code-modernization · commands/modernize-verify.md · seen 2026-11-10 · the observed/reasoned row · claude-remember (do not redistribute · took the mechanism only) · CONTRIBUTING.md · seen 2026-11-10 · reviewer lenses and packages → [`review-lenses`](../../superuser/references/review-lenses.md)
 
 Source of the claims-table idea: skill `verification-before-completion` in obra/superpowers (MIT) · rewritten to cover work outside code.
 
@@ -221,7 +266,7 @@ Use when a binary, firmware or format has no source
 
 The work order is **triage → extract → understand → use the result**. Every conclusion ties to evidence in the evidence ledger. Never claim to have recovered the original source. Report only what the evidence shows, and write down what is still unknown.
 
-Everything runs on local tools: the Python scripts in `scripts/` (standard library only, no `pip install`), the tool checker `scripts/check-tools.mjs` (plain Node), and tools the user installs from the official developers. It uses no MCP (Model Context Protocol) server and pulls no npm packages at run time. Some of the approach is adapted from REA (Reverse Engineer Anything). See [NOTICE](NOTICE).
+Everything runs on local tools: the Python scripts in `scripts/` (standard library only, no `pip install`), the tool checker `scripts/check-tools.mjs` (plain Node), and tools the user installs from the official developers. No MCP (Model Context Protocol) server, no npm packages at run time.
 
 ## Do not use when
 
@@ -289,8 +334,6 @@ Always take the cheapest route first: strings and metadata → imports and symbo
 
 To watch it at run time (any target) → [runtime-observation](references/runtime-observation.md), and you need permission under section 2.
 
-Real trial (2026-10 · an ASP.NET MVC system of about 55,000 lines): `ilspycmd` produced a C# project of 51,700 lines in 9 seconds. Compared with the real source, the cancel-order method matched on every statement, and all 1,431 method names matched.
-
 ## 5 · Tools that are not on the machine
 
 Always ask the user first. The user installs them. The agent does not download tools from other places and does not use `npx` to pull packages at run time. While you wait, do what the kit's scripts can do, and record the missing part as `ยังไม่ได้ตรวจ` (not yet checked).
@@ -304,19 +347,7 @@ node scripts/check-tools.mjs --self-test                                       #
 The checker reads the list from [`tools.json`](tools.json), then looks for the command in PATH, the standard install locations and Node packages. It does not open the target and installs nothing. A result of `missing` means not found. It does not confirm the tool is absent (it may be outside PATH, in WSL or in a container). Each group does not need every tool. For native work, Ghidra alone is enough.
 
 
-| Tool | Used for | Install from (official) | Needs first |
-|---|---|---|---|
-| Ghidra | native decompile · headless analysis | github.com/NationalSecurityAgency/ghidra/releases | JDK 21 (adoptium.net) |
-| jadx | DEX → Java | github.com/skylot/jadx/releases | Java 11 or later |
-| apktool | decode APK resources and manifest | apktool.org | Java 8 or later |
-| `aapt2` · `apksigner` | read the manifest · view the APK certificate | Android SDK Build-Tools (developer.android.com/tools) | — |
-| `ilspycmd` | .NET → C# | `dotnet tool install ilspycmd` from nuget.org (ICSharpCode) into the work folder | A matching .NET SDK |
-| Wireshark · tshark | read pcap files | wireshark.org | — |
-| mitmproxy | capture a test app's traffic through a proxy (must ask) | mitmproxy.org | — |
-| adb | control an Android device (must ask) | Android SDK Platform-Tools (developer.android.com/tools) | — |
-| Binwalk · Unblob | find and extract sections in firmware | github.com/ReFirmLabs/binwalk · unblob.org | Linux or WSL |
-| Playwright Core | drive a browser through agreed steps (must ask) | playwright.dev, installed in the project | Chrome or Edge |
-| 7-Zip | extract installers and archives | 7-zip.org | — |
+Table of tools, what each is used for, the official install source and prerequisites: [tools](references/tools.md).
 
 `check-tools.mjs` checks only the 12 tools in `tools.json`. `ilspycmd` · `aapt2` · `apksigner` · 7-Zip are not in the list yet, so check them yourself with `where` (Windows) or `which`. `ilspycmd` installs into the work folder, so it is not in PATH.
 
@@ -350,7 +381,7 @@ Follow the trail from the trace to the code that uses it: who references this st
 |---|---|
 | Explain a feature | A narrative plus an evidence table (section 8) |
 | Recover lost source | Give the user the extracted project, labelled as recovered and not the original, then use `legacy-spec-recovery` to write the spec |
-| **Does the deployed build differ from the repo (drift check)** | Extract the deployed binary, then run `python -I scripts/compare_members.py <โฟลเดอร์ที่แกะ> <ซอร์ส>`. It lists methods that exist only in the binary (an uncommitted hot-fix) or only in the source (not yet deployed). Then diff the bodies of the flagged methods. Tried in both directions: a matching build gave 1,431 methods with no difference, and it caught a method renamed in a copy |
+| **Does the deployed build differ from the repo (drift check)** | Extract the deployed binary, then run `python -I scripts/compare_members.py <โฟลเดอร์ที่แกะ> <ซอร์ส>`. It lists methods that exist only in the binary (an uncommitted hot-fix) or only in the source (not yet deployed). Then diff the bodies of the flagged methods. |
 | Rebuild in our own language | Only after the user confirms the understanding. Separate the behaviour you saw from our own design. Rewrite with our own code and do not copy. Algorithms and standard formats (JSON · zlib · AES) can be reused |
 
 A decoder or parser you write must check the size before every read (header shorter than expected → a clear error), and only then check the magic number, the version and the length. Never trust input.
@@ -393,10 +424,12 @@ Before closing, go back over every question and label it `ตอบแล้ว`
 
 ## Short rules
 
-- The cheapest evidence that is enough to answer wins · static first · never run an unknown file
-- Recovered code is evidence, not the original source. Label it that way everywhere you pass it on.
 - If triage finds an obfuscator, stop and tell the user first how much harder the work will be.
 - Write long output (strings · dumps · recovered code) to files under `_to_delete/re/…` and read only the parts you need. Every script has `--self-test`, so try it the first time on a new machine.
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
 
 
 ## reference: android-apk.md
@@ -1001,6 +1034,36 @@ Every tool in this table needs asking every time, and the user installs it from 
 
 - Never attach to a process the user is currently using (for example a browser logged in to a bank), even if the user permits. Start a new one in a sandbox instead.
 - Label results seen at runtime `ตรวจจริง` (verified) with the command, time and where it ran. For secrets seen in memory or logs, report only the name.
+
+
+## reference: sources.md
+
+# Sources · reverse-engineering
+
+- Some of the approach is adapted from REA (Reverse Engineer Anything). See [NOTICE](../NOTICE).
+- Real trial (2026-10 · an ASP.NET MVC system of about 55,000 lines): `ilspycmd` produced a C# project of 51,700 lines in 9 seconds. Compared with the real source, the cancel-order method matched on every statement, and all 1,431 method names matched.
+- Drift check tried in both directions: a matching build gave 1,431 methods with no difference, and it caught a method renamed in a copy.
+
+
+## reference: tools.md
+
+# Tools that are not on the machine · reverse-engineering
+
+Open from SKILL.md section 5 when you must tell the user which tool to install.
+
+| Tool | Used for | Install from (official) | Needs first |
+|---|---|---|---|
+| Ghidra | native decompile · headless analysis | github.com/NationalSecurityAgency/ghidra/releases | JDK 21 (adoptium.net) |
+| jadx | DEX → Java | github.com/skylot/jadx/releases | Java 11 or later |
+| apktool | decode APK resources and manifest | apktool.org | Java 8 or later |
+| `aapt2` · `apksigner` | read the manifest · view the APK certificate | Android SDK Build-Tools (developer.android.com/tools) | — |
+| `ilspycmd` | .NET → C# | `dotnet tool install ilspycmd` from nuget.org (ICSharpCode) into the work folder | A matching .NET SDK |
+| Wireshark · tshark | read pcap files | wireshark.org | — |
+| mitmproxy | capture a test app's traffic through a proxy (must ask) | mitmproxy.org | — |
+| adb | control an Android device (must ask) | Android SDK Platform-Tools (developer.android.com/tools) | — |
+| Binwalk · Unblob | find and extract sections in firmware | github.com/ReFirmLabs/binwalk · unblob.org | Linux or WSL |
+| Playwright Core | drive a browser through agreed steps (must ask) | playwright.dev, installed in the project | Chrome or Edge |
+| 7-Zip | extract installers and archives | 7-zip.org | — |
 
 
 ## reference: web-and-network.md

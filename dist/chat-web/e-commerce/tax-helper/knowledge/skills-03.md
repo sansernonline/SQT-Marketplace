@@ -26,8 +26,6 @@ Each year end brings 4 deadlines from 2 authorities (DBD and the Revenue Departm
 | Statements to DBD | 1 month after the AGM (AGM 28 Apr → by 28 May 2570) |
 | ภ.ง.ด.50 | by 30 May 2570 (Sun) → next working day, Mon 31 May 2570 (RD Order ป.117/2545, https://www.rd.go.th/10514.html, checked 22 ต.ค. 2569) — on e-Filing, add the current e-Filing extension (look it up live, see `tax-vat-th` section 2) |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://efiling.dbd.go.th · https://www.dbd.go.th · https://www.infoproff.com/en/open-data/thailand/114/financial-reporting-obligations-for-companies-in-thailand
-
 ## 2. Partnerships and others
 
 | Entity | AGM | Shareholder list | Financial statements to DBD | ภ.ง.ด.50 |
@@ -68,6 +66,10 @@ Each year end brings 4 deadlines from 2 authorities (DBD and the Revenue Departm
 
 `tax-vat-th` (ภ.ง.ด.50/51, surcharge) · `payroll-th` (ภ.ง.ด.1ก in February) · `doc-thai-official` (AGM notice, letters) · `thai-holidays`.
 
+## References
+
+- [`references/sources.md`](references/sources.md) — sources and check dates for section 1; open when re-checking a deadline
+
 ## เรียกเป็นคำสั่ง
 
 `/e-commerce:dbd-annual-filing [company|partnership] [--year-end <date>]`
@@ -75,6 +77,13 @@ Each year end brings 4 deadlines from 2 authorities (DBD and the Revenue Departm
 Run `dbd-annual-filing` with the `tax-helper` agent for: **$ARGUMENTS**
 
 Shifts dates for weekends and holidays with `thai-holidays`, lists the documents per step, flags late-filing fines, and ends with the auditor and accountant handoff checklist.
+
+
+## reference: sources.md
+
+# Sources · dbd-annual-filing
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://efiling.dbd.go.th · https://www.dbd.go.th · https://www.infoproff.com/en/open-data/thailand/114/financial-reporting-obligations-for-companies-in-thailand
 
 
 ---
@@ -125,14 +134,11 @@ Full table with pay, documents and the 2568 changes: [references/leave-and-sever
 
 Changes in force from **7 Dec 2568** (พ.ร.บ.คุ้มครองแรงงาน (ฉบับที่ 9) พ.ศ. 2568).
 
-Last checked 2026-10-06 · Sources: https://www.infoquest.co.th/?p=551748 · https://www.pptvhd36.com/news/ข่าวในพระราชสำนัก/261050
-
 ## 4. Probation, notice, pay in lieu
 
 - **Probation** — the Act sets no length. A probationer is an employee: dismissal still needs notice (ม.17). Service of **120 days or more** earns severance even during probation — hence "119-day probation" contracts.
 - **Notice (ม.17)** — a fixed-term contract ends on its date without notice (para 1). For a contract with no fixed term, either side gives written notice **on or before a pay day** so the contract ends on the **next pay day**; no more than 3 months' notice is required (para 2). If the employer gives no reason in the dismissal letter, it cannot rely on ม.119 grounds afterwards (para 3). Paras 1-3 checked against the gazette text of the 2541 Act.
 - **Pay in lieu (ม.17 para 4 · ม.17/1)** — the employer may pay the wages due up to the notice end date and let the employee leave at once (ม.17 para 4). If it dismisses without notice, ม.17/1 requires a sum equal to the wages the employee would have earned from the leaving date to the date the termination would have taken effect, paid on the leaving date.
-- Sources, checked 2026-10-26: ม.17 — Royal Gazette vol. 115 part 8 ก, 20 Feb 2541, p. 6 (copy of ratchakitcha.soc.go.th held by web.archive.org); ม.17/1 — Labour Protection Act (No. 7) B.E. 2562 as quoted by the Secretariat of the Senate, senate.go.th/assets/portals/93/fileups/272/files/Sub_Jun/12know/k147.pdf p. 141. Not yet checked: the gazette of No. 7 itself, and that Nos. 8 and 9 left ม.17 unchanged.
 - On termination also pay: unused annual leave pro rata (ม.67), outstanding wages and OT within 3 days (ม.70).
 
 ## 5. Severance pay (ม.118)
@@ -168,8 +174,6 @@ Run these 7 checks **before** the decision is made, not after the letter is writ
 
 Even a dismissal that pays full severance can be unfair. The Labour Court may order the employer to take the employee back at the same wage, or order compensation instead (พ.ร.บ.จัดตั้งศาลแรงงานและวิธีพิจารณาคดีแรงงาน ม.49). An employee who is part of a pending labour demand has extra protection under the Labour Relations Act (รอยืนยัน the section and its conditions).
 
-Sources, checked 2026-11-10: ม.43 — Labour Protection Act consolidated text by the Office of the Council of State (สำนักงานคณะกรรมการกฤษฎีกา), amendments up to No. 4 B.E. 2553, hosted at [senate.go.th](https://www.senate.go.th/assets/portals/28/fileups/146/files/%E0%B8%9E%E0%B8%A3%E0%B8%9A.%E0%B8%84%E0%B8%B8%E0%B9%89%E0%B8%A1%E0%B8%84%E0%B8%A3%E0%B8%AD%E0%B8%87%E0%B9%81%E0%B8%A3%E0%B8%87%E0%B8%87%E0%B8%B2%E0%B8%99%20%E0%B8%9E.%E0%B8%A8.2541_1.pdf); not yet checked that Nos. 5–9 left ม.43 unchanged (รอยืนยัน). ม.49 — Nakhon Phanom provincial labour protection office, [nakhonphanom.labour.go.th](https://nakhonphanom.labour.go.th/2067-new-npm20062565-1) (20 Jun 2565, summary of the section and Supreme Court ruling 7213/2546, not the section text itself).
-
 ## 5b. Employee or freelancer
 
 Shops often pay admins, live hosts and video editors as "freelancers". What the contract calls them does not decide it; how the work is done does (`doc-contract-th` section 1: จ้างแรงงาน ม.575 vs จ้างทำของ ม.587).
@@ -188,8 +192,6 @@ These signs are general guidance, not a legal test (รอยืนยัน wit
 
 Set by the Wage Committee (คณะกรรมการค่าจ้าง) by province. From 1 Jul 2568 (ประกาศฉบับที่ 14) the top rate is **400 baht/day** (Bangkok, Chonburi, Rayong, Chachoengsao, Phuket, Ko Samui district, and hotels and service venues nationwide) and the lowest is **337 baht/day**. The committee met 17 มี.ค. 2569 and postponed any 2569 raise, so these rates are still in force. Always look up the current announcement (ประกาศคณะกรรมการค่าจ้าง เรื่อง อัตราค่าจ้างขั้นต่ำ) on mol.go.th / wage.mol.go.th before quoting — a round for 2570 may come (รอยืนยัน).
 
-ตรวจล่าสุด 2026-10-22 · แหล่ง: https://www.prd.go.th/th/content/category/detail/id/39/iid/402570 · https://www.thaipbs.or.th/news/content/503458 (เลื่อนปรับ มี.ค. 2569) · https://thestandard.co/new-minimum-wage-rates-explained-july-2025/
-
 ## Rules of thumb
 
 - 10+ employees → must have Thai-language work rules (ข้อบังคับเกี่ยวกับการทำงาน, ม.108) announced within 15 days of reaching 10 employees and posted at the workplace. No filing with the labour office since 2560 (NCPO Order 21/2560; sources: https://www.ilct.co.th/amendment-to-labour-protection-act/ · https://legardy.com/thai-law/labor-law/labor-law-section-9 — รอยืนยัน on mol.go.th / krisdika.go.th, checked 22 ต.ค. 2569).
@@ -199,6 +201,11 @@ Set by the Wage Committee (คณะกรรมการค่าจ้าง) 
 ## Related
 
 `payroll-th` (OT in payroll) · `social-security-th` (maternity cash, unemployment) · `doc-leave` · `doc-contract-th` · `thai-holidays`.
+
+## References
+
+- [`references/leave-and-severance.md`](references/leave-and-severance.md) — open for the full leave table with pay, documents and the 2568 changes
+- [`references/sources.md`](references/sources.md) — sources and check dates for sections 3, 4, 5a and 6
 
 
 ## reference: leave-and-severance.md
@@ -235,3 +242,16 @@ General information under พ.ร.บ.คุ้มครองแรงงาน
 7. 50 ทวิ for the year to date (see `payroll-th`).
 8. Work certificate (หนังสือรับรองการทำงาน) on request — required by ป.พ.พ. ม.585.
 9. Severance under labour law is tax-exempt only when the employee was let go involuntarily (not retirement, not a contract that simply ended), and only up to the wages of the last 400 days, capped at **600,000 baht**; the rest is taxable. With 5 years of service or more, the employee may instead tax the one-off termination pay separately from other income. Checked 2026-11-10: Revenue Department guide to ภ.ง.ด.91, tax year 2568, [rd.go.th/fileadmin/tax_pdf/pit/2568/Ins91_241268.pdf](https://www.rd.go.th/fileadmin/tax_pdf/pit/2568/Ins91_241268.pdf). Withholding on the severance → the accountant.
+
+
+## reference: sources.md
+
+# Sources · labour-law-basics
+
+Last checked 2026-10-06 · Sources: https://www.infoquest.co.th/?p=551748 · https://www.pptvhd36.com/news/ข่าวในพระราชสำนัก/261050
+
+- Sources, checked 2026-10-26: ม.17 — Royal Gazette vol. 115 part 8 ก, 20 Feb 2541, p. 6 (copy of ratchakitcha.soc.go.th held by web.archive.org); ม.17/1 — Labour Protection Act (No. 7) B.E. 2562 as quoted by the Secretariat of the Senate, senate.go.th/assets/portals/93/fileups/272/files/Sub_Jun/12know/k147.pdf p. 141. Not yet checked: the gazette of No. 7 itself, and that Nos. 8 and 9 left ม.17 unchanged.
+
+Sources, checked 2026-11-10: ม.43 — Labour Protection Act consolidated text by the Office of the Council of State (สำนักงานคณะกรรมการกฤษฎีกา), amendments up to No. 4 B.E. 2553, hosted at [senate.go.th](https://www.senate.go.th/assets/portals/28/fileups/146/files/%E0%B8%9E%E0%B8%A3%E0%B8%9A.%E0%B8%84%E0%B8%B8%E0%B9%89%E0%B8%A1%E0%B8%84%E0%B8%A3%E0%B8%AD%E0%B8%87%E0%B9%81%E0%B8%A3%E0%B8%87%E0%B8%87%E0%B8%B2%E0%B8%99%20%E0%B8%9E.%E0%B8%A8.2541_1.pdf); not yet checked that Nos. 5–9 left ม.43 unchanged (รอยืนยัน). ม.49 — Nakhon Phanom provincial labour protection office, [nakhonphanom.labour.go.th](https://nakhonphanom.labour.go.th/2067-new-npm20062565-1) (20 Jun 2565, summary of the section and Supreme Court ruling 7213/2546, not the section text itself).
+
+ตรวจล่าสุด 2026-10-22 · แหล่ง: https://www.prd.go.th/th/content/category/detail/id/39/iid/402570 · https://www.thaipbs.or.th/news/content/503458 (เลื่อนปรับ มี.ค. 2569) · https://thestandard.co/new-minimum-wage-rates-explained-july-2025/

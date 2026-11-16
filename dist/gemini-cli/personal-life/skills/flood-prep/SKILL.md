@@ -65,12 +65,6 @@ Do not act on forwarded LINE messages alone — check one official source.
 - Car: class 1 covers flood; class 2, 3 and 3+ usually do not unless a flood rider was added; some 2+ policies include it — check yours (รอยืนยัน). พ.ร.บ. does not pay for the car.
 - Claim: call the insurer before cleaning or repairing, send the before and after photos, keep damaged items until the surveyor sees them. Insurer refuses → คปภ. 1186.
 
-ตรวจล่าสุด 2026-10-26 · แหล่ง: relief payment https://www.thaigov.go.th/th/news/169925 · MEA flood advice https://www.mea.or.th · PEA https://www.pea.co.th/news/corporate-news/943 · hotlines https://www.disaster.go.th · Cell Broadcast: ThaiPBS · Bangkokbiznews · Thansettakij · insurance: OIC statement via Matichon, Tokio Marine, Thairath, Dailynews
-
-## Worked example
-
-Pathum Thani, one-storey house, warning 2 days ahead. Day 1: photos of every room, documents in zip bags to a relative in town, fridge and TV onto blocks, car to a mall car park. Day 2 evening, water at the gate: main breaker off, gas valve closed and cylinder tied up high, family to the relative's house. After 9 days: electrician checks before power on; the policy pays natural perils up to 20,000; register at the อบต. with photos for repair relief (actual cost, up to 88,600); check the latest Cabinet resolution covers this flood, then register on ทางรัฐ.
-
 ## Check before sending
 
 - [ ] 1669 / 1784 line is in any answer where someone is trapped, hurt or in water
@@ -79,3 +73,8 @@ Pathum Thani, one-storey house, warning 2 days ahead. Day 1: photos of every roo
 - [ ] Photos-before step is in the checklist
 
 Related: `home-maintenance` · `vehicle-care` · `important-docs` · `elder-care` · `pet-care`
+
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open to see a 2-day-warning case from photos to relief registration
+- [`references/sources.md`](references/sources.md) — open when re-checking relief amounts, hotlines and insurance facts (checked 2026-10-26)

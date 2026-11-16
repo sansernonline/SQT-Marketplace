@@ -19,16 +19,11 @@ Use when work runs outside the request in queues or schedules
 | Task | Skill | |
 |---|---|---|
 | Timeouts and retries for ordinary requests | `error-handling-patterns` | instead |
+| Metrics and alerts | `observability-basics` | instead |
 | Events across several services through Kafka (several consumers read the same event · history is kept) | `kafka-streaming` | instead |
 | A job queue through RabbitMQ (several workers · retry · dead letter · needs a real broker) | `rabbitmq-messaging` | instead |
-| Metrics and alerts | `observability-basics` | instead |
-| Choosing the overall architecture | `architecture-patterns` | instead |
 | Importing Excel/CSV files as the main job | `data-import-export` | instead |
 | Sending email/SMS as the main job | `notifications` | instead |
-| The job table and indexes | `database-design` | alongside |
-| Worker logs and correlation id | `logging-standards` | alongside |
-| Jobs that delete expired data | `pdpa-compliance` | alongside |
-| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 | Designing an agent system (Loop · Graph · Dynamic · choosing a framework) | `llm-engineering` → [`agent-systems.md`](../llm-engineering/references/agent-systems.md) | alongside |
 
 ---
@@ -101,7 +96,7 @@ fail → wait 1 min → fail → wait 4 min → fail → wait 16 min → 4th fai
 **A job stuck because a worker died** needs an unlocker.
 If a job's `locked_at` is older than N minutes, treat it as having nobody working on it, and unlock it so another worker picks it up.
 
-**Job state is a state machine, not a boolean** (idea from wshobson python-background-jobs) — every mechanism in section 2 must be able to say which state a job is in: `queued → running → succeeded`, or `running → failed (attempts < cap) → queued`, or `failed → dead` · keep `attempts` · `locked_at` · `last_error` · `finished_at` with the job · move only along the arrows above (a `succeeded` job cannot go back to `running`; create a new job) · the admin screen and the dead letter read from this state in one place
+**Job state is a state machine, not a boolean** — every mechanism in section 2 must be able to say which state a job is in: `queued → running → succeeded`, or `running → failed (attempts < cap) → queued`, or `failed → dead` · keep `attempts` · `locked_at` · `last_error` · `finished_at` with the job · move only along the arrows above (a `succeeded` job cannot go back to `running`; create a new job) · the admin screen and the dead letter read from this state in one place
 
 ---
 
@@ -157,23 +152,26 @@ because a single 40-minute job that fails at minute 39 must start over from the 
 
 ---
 
-## 8 · Anti-patterns
+## 8 · Payload
 
-- **A job that repeats its effect when run again** — the queue will certainly run it again, not maybe
-- **Unlimited retry** — one broken job jams the whole queue
-- **No dead letter** — jobs vanish silently and nobody knows
-- **A dead letter that nobody watches** — the same as having none
-- **Scheduled jobs on several instances with no lock** — they run on top of each other
-- **Sending the whole data block in the payload** — send the id and let the job read it itself, so it gets the latest data too
-- **A long job that cannot be cancelled** — the user clicks wrong and waits 40 minutes
-- **A blind spinner that gives no progress** — the user clicks again and gets a duplicate job
-- **Not measuring the queue** — it jams and you find out when a customer calls
+- **Send the id, not the whole data block, in the payload** — the job reads it itself, so it gets the latest data too
 
 ---
 
 ## 9 · Durable workflow for agent jobs that run long or wait for human approval
 
-An agent job that runs for tens of minutes, calls an LLM and tools many times, or pauses for approval across days cannot use a plain queue, because a failure at step 8 of 10 means starting over and paying the token cost again · use an engine that records the result of every step and resumes from the same point
+An agent job that runs tens of minutes, calls an LLM and tools many times, or pauses for approval across days cannot use a plain queue, because a failure at step 8 of 10 means starting over and paying the token cost again · use an engine that records the result of every step and resumes from the same point
+
+- [`references/durable-workflow.md`](references/durable-workflow.md) — open before choosing an engine (Temporal · Step Functions · checkpointer) or writing replayable code
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
+
+
+## reference: durable-workflow.md
+
+# Durable workflow for agent jobs · background-jobs
 
 | Tool | Fits | Waits for human approval | Watch out for |
 |---|---|---|---|
@@ -188,7 +186,12 @@ An agent job that runs for tens of minutes, calls an LLM and tools many times, o
 - **The order of calls must be the same on every run** · changing the order of steps in code that still has jobs in flight makes the old jobs fail replay (Temporal calls this a nondeterminism error) · switch to the engine's versioning or patching
 - **The steps before a wait point must be safe to repeat** (section 3) · LangGraph re-runs the paused node from the start on resume, so move side effects to after the wait point
 - **Saved state carries no identity check** (the OpenAI docs warn about `RunState`) · load it only from a store we control
-- The cap on rounds, the token budget, and stopping when there is no improvement are still needed, as for jobs in a queue · details in [`agent-systems.md`](../llm-engineering/references/agent-systems.md) section 6
+- The cap on rounds, the token budget, and stopping when there is no improvement are still needed, as for jobs in a queue · details in [`agent-systems.md`](../../llm-engineering/references/agent-systems.md) section 6
+
+
+## reference: sources.md
+
+# Sources · background-jobs
 
 Sources (opened 2026-10-26): [Temporal · OpenAI Agents SDK](https://docs.temporal.io/ai-cookbook/openai-agents-sdk-python) · [Temporal announcement](https://temporal.io/blog/announcing-openai-agents-sdk-integration) · [Step Functions integration patterns](https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html) · [Step Functions Map](https://docs.aws.amazon.com/step-functions/latest/dg/state-map.html) · [LangGraph interrupts](https://docs.langchain.com/oss/python/langgraph/interrupts) · [OpenAI human in the loop](https://openai.github.io/openai-agents-python/human_in_the_loop/) · [Claude Code workflows](https://code.claude.com/docs/en/workflows)
 
@@ -275,7 +278,6 @@ queue_depth_jobs                 value at this moment
 
 - **Metric types:** a counter counts events (read it with `rate()`) · a gauge holds the value right now · a histogram holds durations when you need p95 · a summary is for when you do not need to aggregate across instances
 - **Units:** seconds · bytes · ratio 0 to 1 (`_seconds`, not `_milliseconds`)
-- **Never put `user_id` · a phone number · `call_id` in a label**, because every new value is a new series, until the metrics system cannot cope · these ids go in logs and traces
 - p95: `histogram_quantile(0.95, sum by (le) (rate(<name>_bucket[5m])))`
 - Every alert rule has `for:` · `severity` · a runbook link · alert on symptoms (latency · error), not on CPU or GPU
 - Keep dashboards as JSON in git and provision them from files · RED per service · USE per resource
@@ -308,7 +310,7 @@ queue_depth_jobs                 value at this moment
 
 ### 4.1 · Error budget and burn rate
 
-A system with an SLO uses this instead of a fixed error % threshold, because it says "if this goes on, when will the whole month's budget run out?" (idea from the Google SRE Workbook)
+A system with an SLO uses this instead of a fixed error % threshold, because it says "if this goes on, when will the whole month's budget run out?"
 
 - **Budget** = the time you may fail in 30 days → SLO 99.9% = 43 minutes · 99.5% = 3.6 hours · 99% = 7.2 hours
 - **Burn rate** = current error rate ÷ (1 − SLO) → burn 1 = the budget runs out exactly on day 30 · burn 10 = gone in 3 days
@@ -354,45 +356,11 @@ Technical metrics all green while the business has stalled really happens, and y
 
 ---
 
-## 7 · Anti-patterns
+## References
 
-- **Watching the average response time**: it hides the people who hit the problem every time
-- **Alerts that need no action**: they teach everyone to ignore alerts
-- **Alerting on CPU and memory**: a system at CPU 90% with normal users is not an incident
-- **Putting unbounded ids in labels**: the metrics system brings itself down
-- **A dashboard with 40 graphs**: nobody knows which one to look at
-- **Measuring only the technical side, not the business**: everything is green but nobody can place an order
-- **Tracing every request**: expensive for no extra gain, sampling is enough
-- **No line marking the deploy time**: you lose half an hour before you remember you just deployed
-- **Alerts with no link to a runbook**: the receiver starts searching from zero at 3 a.m.
-
----
-
-## 8 · Abbreviations
-
-- **metric**: a number collected over time
-- **trace**: following one request along the whole path it travels
-- **p95 / p99**: the 95th and 99th percentiles (only 5% or 1% of requests are slower than this)
-- **label / tag**: a tag attached to a metric, used to look at groups separately
-- **on-call**: the duty of receiving incident alerts outside working hours
-- **SLO**: Service Level Objective (a service-level target you set yourself, such as 99.5% success)
-- **error budget / burn rate**: the time you may fail per month under the SLO, and how fast you are using it up (item 4.1)
-
-## 9 · Links to other skills
-
-| Need | Use together with |
-|---|---|
-| Log format and correlation id | `logging-standards` |
-| Health checks the monitor uses | `web-service-essentials` |
-| Metrics for queues and background jobs | `background-jobs` |
-| Error rate and circuit breaking | `error-handling-patterns` |
-| Steps when an alert fires | `incident-runbook-template` |
-| Post-incident summary | `postmortem-template` |
-| Target numbers agreed with the customer | `srs-writing` |
-| PromQL · alert rules · Grafana provisioning · voice agent example | `references/prometheus-grafana.md` |
-| Let an agent read Prometheus or Grafana through MCP | `mcp-server` item 1.1 |
-
-Source of item 3.1: prometheus.io (metric types · naming · histograms · alerting) and grafana.com (dashboard best practices · provisioning), checked 2026-10-27 · full links are at the end of `references/prometheus-grafana.md`
+- [`references/prometheus-grafana.md`](references/prometheus-grafana.md) — open for PromQL · alert rules · Grafana provisioning · voice agent example
+- `mcp-server` item 1.1 — when an agent must read Prometheus or Grafana through MCP
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
 
 
 ## reference: prometheus-grafana.md
@@ -575,3 +543,10 @@ Checked 2026-10-27
 | `DCGM_FI_DEV_GPU_UTIL` | github.com/NVIDIA/dcgm-exporter → etc/default-counters.csv |
 | `kafka_consumergroup_lag` | github.com/danielqsj/kafka_exporter (not official to Kafka) |
 | `predict_linear` · `[5m]` range vs scrape interval · NaN behavior when dividing by 0 | General team knowledge (not yet checked against the official PromQL pages) |
+
+
+## reference: sources.md
+
+# Sources · observability-basics
+
+Source of item 3.1: prometheus.io (metric types · naming · histograms · alerting) and grafana.com (dashboard best practices · provisioning), checked 2026-10-27 · full links are at the end of `references/prometheus-grafana.md`

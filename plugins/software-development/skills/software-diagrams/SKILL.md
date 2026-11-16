@@ -5,8 +5,6 @@ description: Use when a README or PR needs a quick Mermaid diagram
 
 # Software Diagrams
 
-> **Language:** every line of wording follows `human-writing`. This skill gives the format and structure, while human-writing says how to write so a reader understands.
-
 > **The one rule of this skill:** a diagram answers **one question**.
 > If it answers 2 questions, draw 2 pictures.
 
@@ -27,18 +25,12 @@ In a README · Pull Request · note in code:
 - Say what runs on which machine
 - Review a diagram someone else drew
 
-## When **not** to use
 
-| Job | Use this instead |
-|---|---|
-| Choose which kind of picture to use (SVG / ASCII / Mermaid) | `markdown-visuals` |
-| Screenshots · wireframes | `ui-craft` + the platform skill |
-| Data charts | `web-app-design` → `references/tokens.md` heading "สีข้อมูล (กราฟ)" (data colours, charts) |
-| Choose an architecture | `architecture-patterns` |
+Not for: choosing SVG / ASCII / Mermaid → `markdown-visuals` · screenshots and wireframes → `ui-craft` + the platform skill · data charts → `web-app-design` `references/tokens.md` heading "สีข้อมูล (กราฟ)" · choosing an architecture → `architecture-patterns`
 
 ## 1 · Which question, which diagram
 
-**Start from the question, not from the diagram type.** People draw wrongly because they pick the type first and then stuff content into it.
+**Start from the question, not from the diagram type.**
 
 | The question in the reader's head | Diagram |
 |---|---|
@@ -53,9 +45,7 @@ In a README · Pull Request · note in code:
 | "A cloud diagram in the repo with real AWS / Azure logos" | Infrastructure — section 3 |
 | "I want a nice picture for the client proposal" | Not the job of this skill — `diagram-figures` |
 
-> The **C4 model** is a way to draw architecture in layers, like zooming a map:
-> level 1 looks from outside the system · level 2 opens the lid and looks inside · level 3 zooms into a single box.
-> **Always draw levels 1 and 2 in full first.** Draw level 3 only for the parts that are truly complex.
+**Always draw C4 levels 1 and 2 in full first.** Draw level 3 only for the parts that are truly complex.
 
 ## 2 · Theme — one set for the whole project
 
@@ -64,7 +54,7 @@ The theme line, colour stand-ins, classes and rendered examples are in [`assets/
 
 > Warning: **`fontFamily` must sit outside `themeVariables`.** If you put it inside, it is silently ignored and Mermaid falls back to its default font.
 
-**Check with a tool before every send.** This rule is forgotten most often (one test project had 63 of 66 figures with no theme line, and nobody noticed):
+**Check with a tool before every send.** This rule is forgotten most often:
 
 The scripts are in the `scripts/` folder of this skill. Run them with the script's full path and the `docs` folder of the project being checked (`<path ของ skill>` = the folder where this skill is installed):
 
@@ -161,6 +151,7 @@ Then **open the image file and look at it with your eyes**. Go through this list
 - [ ] Does a label overlap a line or a box?
 - [ ] Is the Thai text complete, with no missing vowels?
 - [ ] Is the level of detail the same across the figure?
+- [ ] Does the diagram carry a date and an owner? (without them nobody dares to edit it after a year)
 - [ ] Can someone who has never seen this system read it and answer the original question?
 
 **Mermaid limits to know before you waste time:**
@@ -174,37 +165,8 @@ Then **open the image file and look at it with your eyes**. Go through this list
 
 If you truly cannot get the layout you want and the figure stays in a markdown document, draw an inline SVG per `markdown-visuals`. If the figure must look designed, go to `diagram-figures`.
 
-## 7 · Anti-patterns
-
-- **A 40-box architecture diagram** — nobody reads it. Split it into several C4 levels.
-- **Drawing past the cap and then saying so** — split as soon as you count that it is over.
-- **Stuffing command-line options into a box** — the box swells, the letters shrink, and the whole figure is unreadable.
-- **A line with no label** — the reader guesses what flows through, and guesses wrong.
-- **Mixing levels of detail** — `Kubernetes` sitting next to `UserService.validate()`.
-- **Rainbow colours** — colour must carry meaning. Do not add it to avoid boredom.
-- **Drawing every error case in one sequence** — draw the main path first, then split the special cases into separate figures.
-- **An ER diagram with every table in the system** — split by domain.
-- **A diagram with no date and no owner** — after a year nobody dares to edit it.
-- **Sending a diagram that was never rendered**
-- **A different theme in every figure of one document**
-
-## 8 · Link to other skills
-
-| Need | Use with |
-|---|---|
-| Choose the visual format in a markdown document | `markdown-visuals` |
-| The document around the diagram | `polished-document-style` |
-| Embed in a Word / PowerPoint file | `branded-document-design` |
-| A diagram in an SRS document | `srs-writing` |
-| Choose the architecture before drawing | `architecture-patterns` |
-| A figure that must look designed or needs sign-off | `diagram-figures` |
-| Record why this design was chosen | `adr-writer` |
+To record why a design was chosen, use `adr-writer`. A figure that must look designed or needs sign-off → `diagram-figures`.
 
 ## Do not look AI-made
 
-Before sending, walk through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass eye check 3.2 (web pages also answer items 10–14), because a script result of 0 items is not yet a pass. The bans in this file are specific to this kind of work. The full list for every medium is there.
-
-## Abbreviations
-
-Always spell an abbreviation out in full the first time, and put the abbreviation in brackets — for example Model Context Protocol (MCP).
-After that you can use the abbreviation. For details see the skill `spell-out-abbreviations`.
+Before sending, walk through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass eye check 3.2 (web pages also answer items 10–14), because a script result of 0 items is not yet a pass.

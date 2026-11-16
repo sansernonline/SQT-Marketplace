@@ -2,53 +2,27 @@
 
 Use when a system calls an LLM with prompts or RAG
 
-# llm-engineering
+# llm-engineering — route to the guide for prompts, RAG, agent systems, or LLM evaluation
 
-Everything about systems that call a Large Language Model (LLM): prompts · RAG (retrieval-augmented generation, which searches documents to ground the answer) · quality measurement · the roles of Machine Learning (ML) and LLM engineers
+## Use when
+- A system calls a Large Language Model (LLM): prompts, RAG (retrieval-augmented generation, which searches documents to ground the answer), agent systems, deep research agents, or quality measurement.
+- A role for ML or LLM engineering is needed (agents `ai-engineer` · `data-engineer`).
 
-**Open only the files that match the job.** Do not read every file, because each file is already the full guide to its topic.
+## Steps
+1. **Open only the one reference that matches the job** from the list below. Each file is already the full guide to its topic; do not read them all.
+2. **If an agent is called in for this area,** it opens its own role file (list below) before starting.
+3. **If run as a command** `/software-development:llm-engineering <rag-design | llm-eval> <details>`: read the first word of `$ARGUMENTS`. If it names a mode, run that mode on the rest; otherwise pick the mode that fits and say which one you chose. Modes: `rag-design` (production-grade RAG with the `ai-engineer` agent: ingestion · chunking · embeddings · retrieval · re-ranking · evaluation) · `llm-eval` (eval set · metrics · regression tests with the `ai-engineer` agent). Full steps per mode: [`references/design-modes.md`](references/design-modes.md).
 
-## หัวข้อ
+## Check before done
+- [ ] Only the matching reference was opened; if run as a command, the answer says which mode was used.
 
-| ใช้เมื่อ | อ่าน |
-|---|---|
-| designing or optimizing prompts for LLMs, building prompt templates, implementing few-shot learning, chain-of-thought reasoning, structured output, or improving prompts step by step. Production patterns with concrete examples | [`references/prompt-engineering-patterns.md`](references/prompt-engineering-patterns.md) |
-| building LLM evaluation systems, designing eval sets, choosing eval metrics, implementing LLM-as-judge, running A/B tests, or measuring how LLM quality changes. Needed for any LLM app in production | [`references/llm-evaluation-patterns.md`](references/llm-evaluation-patterns.md) |
-| building an agent system inside a product — whether to use an agent at all, Loop · Graph · Dynamic workflows, round caps, checkpoints and human approval, progress ledger and re-planning, choosing a framework by language (LangGraph, Microsoft Agent Framework, ADK, OpenAI Agents SDK, Temporal), token cost, field cases | [`references/agent-systems.md`](references/agent-systems.md) |
-| building a Deep Research Agent product — planner → queue (Kafka) → parallel workers (web · browser · PDF · vector DB) → citation check → writer, token budgets and quotas, browser-agent sandbox and prompt injection, scheduled re-runs, metrics | [`references/deep-research-system.md`](references/deep-research-system.md) |
-| designing Retrieval-Augmented Generation systems, choosing vector databases, designing chunking strategies, implementing hybrid search, evaluating retrieval quality, or scaling RAG. Production patterns from prototype to scale | [`references/rag-architecture.md`](references/rag-architecture.md) |
-
-## คู่มือบทบาท
-
-An agent called in for this area opens its own role file before starting.
-
-| บทบาท | อ่าน | agent |
-|---|---|---|
-| designing LLM-powered systems — choosing models, building RAG pipelines, designing agent systems, evaluation frameworks, multi-LLM routing, or large-scale LLM deployment. System design, not single prompts | [`references/agent-llm-architect.md`](references/agent-llm-architect.md) | `ai-engineer` |
-| designing prompts for LLMs, optimizing existing prompts, building prompt chains, implementing structured output, designing evaluation suites, or improving LLM app quality step by step. Prompts for production use | [`references/agent-prompt-engineer.md`](references/agent-prompt-engineer.md) | `ai-engineer` |
-| building machine learning models, training pipelines, feature engineering, model evaluation, hyperparameter tuning, or productionizing ML systems. Covers classical ML, deep learning, and the full model lifecycle | [`references/agent-ml-engineer.md`](references/agent-ml-engineer.md) | `ai-engineer` |
-| productionizing ML models, building model serving infrastructure, implementing CI/CD for ML, setting up model monitoring, managing model registry, or scaling ML systems. Links ML engineering with production operations | [`references/agent-mlops-engineer.md`](references/agent-mlops-engineer.md) | `ai-engineer` |
-
-## agent ของสายนี้
-
-`ai-engineer` · `data-engineer`
-
-## ที่มา
-
-Merged from plugin `software-development-ai` (formerly named prompt-engineering-patterns → `references/prompt-engineering-patterns.md` · llm-evaluation-patterns → `references/llm-evaluation-patterns.md` · rag-architecture → `references/rag-architecture.md` — no longer separate skills) into `software-development` in v2.0.0. The original content is all still in `references/`
-
-## โหมดออกแบบ (เรียกเป็นคำสั่ง)
-
-`/software-development:llm-engineering <rag-design | llm-eval> <details>`
-
-Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
-
-| Mode | What it does |
-|---|---|
-| `rag-design` | Design a production-grade RAG system using ai-engineer agent. Covers ingestion, chunking, embeddings, retrieval, re-ranking, and evaluation. |
-| `llm-eval` | Design or run LLM evaluation suite using ai-engineer agent. Builds eval set, defines metrics, and creates regression test framework. |
-
-ขั้นตอนเต็มของแต่ละโหมด → [references/design-modes.md](references/design-modes.md)
+## References
+- [`references/prompt-engineering-patterns.md`](references/prompt-engineering-patterns.md) — open when designing or optimizing prompts, templates, few-shot, chain-of-thought, structured output.
+- [`references/llm-evaluation-patterns.md`](references/llm-evaluation-patterns.md) — open when building eval sets and metrics, LLM-as-judge, A/B tests; needed for any production LLM app.
+- [`references/agent-systems.md`](references/agent-systems.md) — open when building an agent inside a product: whether to use an agent, Loop · Graph · Dynamic workflows, round caps, human approval, framework choice, token cost.
+- [`references/deep-research-system.md`](references/deep-research-system.md) — open when building a Deep Research Agent product: planner → queue → parallel workers → citation check → writer, budgets, sandbox, metrics.
+- [`references/rag-architecture.md`](references/rag-architecture.md) — open when designing RAG: vector databases, chunking, hybrid search, retrieval quality, scaling.
+- Role files, opened by the `ai-engineer` agent: [`agent-llm-architect.md`](references/agent-llm-architect.md) (LLM system design) · [`agent-prompt-engineer.md`](references/agent-prompt-engineer.md) (production prompts, eval suites) · [`agent-ml-engineer.md`](references/agent-ml-engineer.md) (ML models, training) · [`agent-mlops-engineer.md`](references/agent-mlops-engineer.md) (serving, CI/CD for ML, monitoring).
 
 
 ## reference: agent-llm-architect.md
@@ -3273,7 +3247,6 @@ queue_depth_jobs                 value at this moment
 
 - **Metric types:** a counter counts events (read it with `rate()`) · a gauge holds the value right now · a histogram holds durations when you need p95 · a summary is for when you do not need to aggregate across instances
 - **Units:** seconds · bytes · ratio 0 to 1 (`_seconds`, not `_milliseconds`)
-- **Never put `user_id` · a phone number · `call_id` in a label**, because every new value is a new series, until the metrics system cannot cope · these ids go in logs and traces
 - p95: `histogram_quantile(0.95, sum by (le) (rate(<name>_bucket[5m])))`
 - Every alert rule has `for:` · `severity` · a runbook link · alert on symptoms (latency · error), not on CPU or GPU
 - Keep dashboards as JSON in git and provision them from files · RED per service · USE per resource
@@ -3306,7 +3279,7 @@ queue_depth_jobs                 value at this moment
 
 ### 4.1 · Error budget and burn rate
 
-A system with an SLO uses this instead of a fixed error % threshold, because it says "if this goes on, when will the whole month's budget run out?" (idea from the Google SRE Workbook)
+A system with an SLO uses this instead of a fixed error % threshold, because it says "if this goes on, when will the whole month's budget run out?"
 
 - **Budget** = the time you may fail in 30 days → SLO 99.9% = 43 minutes · 99.5% = 3.6 hours · 99% = 7.2 hours
 - **Burn rate** = current error rate ÷ (1 − SLO) → burn 1 = the budget runs out exactly on day 30 · burn 10 = gone in 3 days
@@ -3352,45 +3325,11 @@ Technical metrics all green while the business has stalled really happens, and y
 
 ---
 
-## 7 · Anti-patterns
+## References
 
-- **Watching the average response time**: it hides the people who hit the problem every time
-- **Alerts that need no action**: they teach everyone to ignore alerts
-- **Alerting on CPU and memory**: a system at CPU 90% with normal users is not an incident
-- **Putting unbounded ids in labels**: the metrics system brings itself down
-- **A dashboard with 40 graphs**: nobody knows which one to look at
-- **Measuring only the technical side, not the business**: everything is green but nobody can place an order
-- **Tracing every request**: expensive for no extra gain, sampling is enough
-- **No line marking the deploy time**: you lose half an hour before you remember you just deployed
-- **Alerts with no link to a runbook**: the receiver starts searching from zero at 3 a.m.
-
----
-
-## 8 · Abbreviations
-
-- **metric**: a number collected over time
-- **trace**: following one request along the whole path it travels
-- **p95 / p99**: the 95th and 99th percentiles (only 5% or 1% of requests are slower than this)
-- **label / tag**: a tag attached to a metric, used to look at groups separately
-- **on-call**: the duty of receiving incident alerts outside working hours
-- **SLO**: Service Level Objective (a service-level target you set yourself, such as 99.5% success)
-- **error budget / burn rate**: the time you may fail per month under the SLO, and how fast you are using it up (item 4.1)
-
-## 9 · Links to other skills
-
-| Need | Use together with |
-|---|---|
-| Log format and correlation id | `logging-standards` |
-| Health checks the monitor uses | `web-service-essentials` |
-| Metrics for queues and background jobs | `background-jobs` |
-| Error rate and circuit breaking | `error-handling-patterns` |
-| Steps when an alert fires | `incident-runbook-template` |
-| Post-incident summary | `postmortem-template` |
-| Target numbers agreed with the customer | `srs-writing` |
-| PromQL · alert rules · Grafana provisioning · voice agent example | `references/prometheus-grafana.md` |
-| Let an agent read Prometheus or Grafana through MCP | `mcp-server` item 1.1 |
-
-Source of item 3.1: prometheus.io (metric types · naming · histograms · alerting) and grafana.com (dashboard best practices · provisioning), checked 2026-10-27 · full links are at the end of `references/prometheus-grafana.md`
+- [`references/prometheus-grafana.md`](references/prometheus-grafana.md) — open for PromQL · alert rules · Grafana provisioning · voice agent example
+- `mcp-server` item 1.1 — when an agent must read Prometheus or Grafana through MCP
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
 
 
 ## reference: prometheus-grafana.md
@@ -3573,3 +3512,10 @@ Checked 2026-10-27
 | `DCGM_FI_DEV_GPU_UTIL` | github.com/NVIDIA/dcgm-exporter → etc/default-counters.csv |
 | `kafka_consumergroup_lag` | github.com/danielqsj/kafka_exporter (not official to Kafka) |
 | `predict_linear` · `[5m]` range vs scrape interval · NaN behavior when dividing by 0 | General team knowledge (not yet checked against the official PromQL pages) |
+
+
+## reference: sources.md
+
+# Sources · observability-basics
+
+Source of item 3.1: prometheus.io (metric types · naming · histograms · alerting) and grafana.com (dashboard best practices · provisioning), checked 2026-10-27 · full links are at the end of `references/prometheus-grafana.md`

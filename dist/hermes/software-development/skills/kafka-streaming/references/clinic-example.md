@@ -110,3 +110,20 @@ max.poll.interval.ms=300000
 ```
 
 `max.poll.records=50` is an assumed value for a consumer that calls LINE once per record `(ประมาณ ยังไม่ได้วัด` — estimate, not yet measured`)` · for the other values see [`config-table`](config-table.md)
+
+## One real example
+
+Label `ตัวอย่าง` (example) — designed on paper, not yet run on real Kafka.
+
+**Task:** a dental clinic's voice agent sends call events (start · end · summary) and appointment events (book · reschedule · cancel) to a service that writes the summary to the CRM (Customer Relationship Management, the customer data system) and to a service that sends LINE notifications.
+
+| Item | Choice | Reason |
+|---|---|---|
+| Is Kafka needed | Yes · 2 receivers, the CRM must be refillable by replay, order matters | Matches the table in section 1 · if only 1 receiver is left, go back to `background-jobs` |
+| Topics | `clinic.call.events.v1` key `call_id` · `clinic.appointment.events.v1` key `appointment_id` | Order per call and per appointment |
+| Topic settings | RF 3 · `min.insync.replicas=2` · retention 7 days · 3 partitions | Section 2 |
+| Send | The voice agent writes the call summary and an outbox row in one DB transaction · the relay sends with `acks=all` | Section 3 |
+| Receive | The CRM and LINE use separate consumer groups · `processed_events` · commit after the write · one DLQ per topic | Section 4 |
+| Data in the event | `call_id` · `patient_id` · type · time · no phone number, name or audio | Receivers fetch details from the source system under their own permission |
+
+The event structure · outbox SQL · short consumer code · full properties are in [`clinic-example`](clinic-example.md).

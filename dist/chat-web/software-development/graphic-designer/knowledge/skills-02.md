@@ -4,13 +4,51 @@ Use before saying work is done, fixed or working
 
 # principle · prove it works — prove it against the real thing
 
-> A "done" with no evidence throws the checking onto someone else.
+> **One rule:** before using the words done (`เสร็จ`) · fixed · passed (`ผ่าน`) · works · sent, you must have seen the result from the real thing yourself in this round.
 
-## Rule
+## Use when
+- You are about to report work as done, fixed, passed, working, or sent
+- A sub-agent reports done, or a draft for an outsider says "fixed"
 
-Before using the words done (`เสร็จ`) · fixed · passed (`ผ่าน`) · works · sent, you must have seen the result from the real thing yourself in this round.
+## Steps
+1. Before starting, write "how will I know it is done" in a checkable form.
+2. After the work, check against that on the real thing and record the raw result (numbers · images · output). Use the evidence column below.
+3. If you truly cannot check (no environment · needs a real account), say plainly `ยังไม่ได้ตรวจ` and what is missing; never write `ผ่าน`.
+4. For an item whose result you have not seen, write what was done and what the result is separately, e.g. "CSV: code changed, not yet opened in Excel". Do not write "fixed, but not tried yet": readers remember done and forget but.
+5. If a draft for a customer or outsider says "fixed" while the check is unfinished (even with "now testing"), write 1 version to send after the result is seen. The version that can be sent now must not contain "แก้แล้ว", "แก้ไขแล้ว" or "เรียบร้อย" in any form; it may say only "ได้รับเรื่องแล้ว ทีมกำลังตรวจ จะแจ้งผลภายใน (เวลา)".
 
-For an item whose result you have not seen, write separately what was done and what the result is, for example "CSV: code changed, not yet opened in Excel" · do not write "fixed, but not tried yet", because readers remember the word done and forget the word but (eval 2026-11-09: the arm with the skill wrote it this way in 2 of 3 rounds)
+| Work | Evidence that counts |
+|---|---|
+| Document · report | A fresh reviewer opens the rendered file and checks the requirements one by one (the writer does not reread its own work) |
+| Numbers · formulas · amounts | Recompute another way on 2–3 rows; the total matches the source (receipt · statement) |
+| Message to a customer · email · booking | Read against the original question; name · amount · date match the real data; for a booking, see the confirmation page |
+| Feature in an app | Click it in the running app using the app-checking skill and see the criteria met (compiling or reading code does not count) |
+| Fix of a bug | Repeat the case that failed before, by the same path, and it passes |
+| Test · check | Pass/fail numbers come from this round's summary line (or `node scripts/test-verdict.mjs <TAP or JUnit result file> --expect <count>` → PROVEN · PARTLY · NOT PROVEN), never from memory · then break 1 line in a copy (invert a condition · return early); the test covering it must fail, otherwise the test proves nothing yet |
+| Screenshot · render | Judge from the pixels of an image you opened yourself, looking for failure signs first (red or blank screen, a box covering content), then compare with the log · ambiguous counts as failed · name the image file in the evidence |
+| Mockup | Open in a browser and click every button; no fake buttons |
+| Measured values (sensor · lux · distance · weight) | Compare with a calibrated instrument · an emulator proves only the work path (label `emulator`); accuracy needs the real thing (label `เครื่องจริง <รุ่น>`) · no instrument → `ยังไม่ได้ตรวจ` |
+| Works on another system (Windows · macOS · another machine) | Label every claim `observed` (ran it there) or `reasoned` (worked out); a pass on your own machine is the weakest evidence for another system |
+| Sub-agent work | Read the work and run it yourself |
+
+**Not evidence:** hedge words ("น่าจะใช้ได้" · "ควรจะผ่าน" · "ในทางทฤษฎี" · "เหมือนครั้งก่อน": in a final report they are a red flag, go back and check) · "test ผ่านแล้ว" with no output · "ไม่มี error" (no error is not the wanted result) · exit 0 or status `running` (exit 0 says only the program ended) · a sub-agent's own report · sending the user a command to run when you could run it · checking only the easy part. Full table with reasons and the `vastai` exit-0 case: [`references/evidence-table.md`](references/evidence-table.md).
+
+## Check before done
+- Every "done" word in the report has a raw result from this round behind it
+- Anything not seen is labelled `ยังไม่ได้ตรวจ`, with what is missing
+- No hedge word survives in the final report
+
+## References
+- [`references/evidence-table.md`](references/evidence-table.md) — open when judging a test, screenshot, measured value, cross-system claim, or sub-agent result, or when a claim of yours sounds like one on the "not evidence" list; also holds the sources
+
+
+## reference: evidence-table.md
+
+# Evidence by kind of work, and claims that do not count · principle-prove-it-works
+
+Open this when the work is a test, a screenshot, a measured value, a cross-system claim, a message to a customer, or a sub-agent result, or when a claim in your own report sounds like one in the second table.
+
+## Evidence by kind of work (full wording)
 
 | Work | Evidence that counts | Does not count |
 |---|---|---|
@@ -26,12 +64,6 @@ For an item whose result you have not seen, write separately what was done and w
 | A claim that it works on another system (Windows · macOS · another machine) in a PR or report | Label every claim: `observed` (ran it and saw the result on that system) or `reasoned` (worked out by thought) · a pass on your own machine is the weakest evidence for another system | Writing "works on every system" with no label |
 | Sub-agent work | Read the work and run it yourself | The sub-agent reports it is done |
 
-## How to do it
-
-1. Before starting, write "how will I know it is done" in a checkable form
-2. After the work, check against that on the real thing, and record the raw result (numbers · images · output)
-3. If you truly cannot check (no environment · needs a real account), say plainly `ยังไม่ได้ตรวจ` (not yet checked) and what is missing; never write `ผ่าน` (pass)
-
 ## Claims that do not count as evidence
 
 The first column quotes Thai claims as examples; English meanings are in brackets.
@@ -46,7 +78,9 @@ The first column quotes Thai claims as examples; English meanings are in bracket
 | Sending the user a command to run themselves when we could run it · checking only the easy part and concluding everything passed | Throws the checking onto someone else | Run it all yourself before using the word done |
 | Drafting a message to a customer or outsider saying "fixed" so it can be sent right away, while the check is not finished (even with a trailing note that testing is in progress, such as "ทีมเราแก้ไขในระบบแล้ว ตอนนี้กำลังทดสอบอีกรอบ" ("our team fixed it in the system, now testing once more"), seen in eval 3 of 3 rounds 2026-11-09) | The recipient believes the word fixed at once, and if the check fails the words must be withdrawn | Draft 1 version with the condition that it is sent after the check result is seen · the version that can be sent now must not contain "แก้แล้ว" (fixed), "แก้ไขแล้ว" (has been fixed) or "เรียบร้อย" (all done) in any form; it may say only "ได้รับเรื่องแล้ว ทีมกำลังตรวจ จะแจ้งผลภายใน (เวลา)" (received, the team is checking, will report within (time)) |
 
-Sources of the screenshot row · expo · .claude/skills/expo-skill-eval/agents/visual-grader.md · seen 2026-11-10 · the test row (verdict script + break one line of code) · code-modernization · commands/modernize-verify.md · seen 2026-11-10 · the observed/reasoned row · claude-remember (do not redistribute · took the mechanism only) · CONTRIBUTING.md · seen 2026-11-10 · reviewer lenses and packages → [`review-lenses`](../superuser/references/review-lenses.md)
+## Sources
+
+Sources of the screenshot row · expo · .claude/skills/expo-skill-eval/agents/visual-grader.md · seen 2026-11-10 · the test row (verdict script + break one line of code) · code-modernization · commands/modernize-verify.md · seen 2026-11-10 · the observed/reasoned row · claude-remember (do not redistribute · took the mechanism only) · CONTRIBUTING.md · seen 2026-11-10 · reviewer lenses and packages → [`review-lenses`](../../superuser/references/review-lenses.md)
 
 Source of the claims-table idea: skill `verification-before-completion` in obra/superpowers (MIT) · rewritten to cover work outside code.
 
@@ -57,280 +91,145 @@ Source of the claims-table idea: skill `verification-before-completion` in obra/
 
 Use with a platform skill when a task produces a screen or mockup
 
-# UI Craft
+# ui-craft — spacing, type, order and state rules that make a screen or mockup consistent
 
-> **Pre-start gate `ด่านก่อนลงมือ` (every time):** read the owner's theme → search live for reference designs → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (pre-start gate) of `design-references` (plugin `superuser`) even when a brand exists (the brand fixes color and font; the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
+> **Pre-start gate `ด่านก่อนลงมือ` (every time):** read the owner's theme → search live for reference designs → 3 genuinely different directions → check `no-ai-look` before sending. Follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand fixes color and font; the search finds the structure of this piece). Close the work with the line `ด่านก่อนลงมือ:`
 
-> **The one rule of this skill:** a good-looking screen does not come from pretty colors. It comes from **consistency**.
-> Spacing comes from one scale, font sizes come from one scale, and each page has only one most-important thing.
->
-> **But consistency alone gives "not wrong", not "wow"** — a mockup that someone will approve needs a visual direction (section 0.1) and must pass the beauty gate `ด่านสวย` (section 9) too.
-> **"Don't overuse color" means few colors, not pale colors** — the brand color must carry weight and be visible across the whole page **in the data and the primary buttons** (the "color power" axis of the beauty gate)
-> **The app frame is neutral** — title bar · header bar · toolbar · rail · nav · borders use gray-black lines and icons in the Windows theme style, not tinted with the brand color · the brand color lives in the data, primary buttons, small selection bars and the logo · tint the frame only when the user says so
+> **One rule:** a good-looking screen comes from **consistency**, not pretty colors: one spacing scale, one font-size scale, one most-important thing per page.
+> Consistency alone gives "not wrong", not "wow": a mockup someone will approve needs a visual direction (section 0.1) and must pass the beauty gate `ด่านสวย` (section 9).
+> "Don't overuse color" means few colors, not pale ones: the brand color must carry weight across the whole page, in the data and the primary buttons.
+> The app frame is neutral: title bar · header bar · toolbar · rail · nav · borders use gray-black lines and icons in the Windows theme style. The brand color lives in the data, primary buttons, small selection bars and the logo. Tint the frame only when the user says so.
 
----
+## Use when
+- Building any user interface (UI), together with a platform skill, not instead of it.
+- A screen "looks off" and you cannot say why, or you review a UI someone else made.
+- The platform has no dedicated skill yet (TV app · kiosk · smart watch).
 
-## When to use this skill
+Not for: real colors, fonts, components (also chart colors) → `web-app-design` · `windows-app-design` · `mobile-app-design` (this skill sets no colors or fonts, only spacing, size, order and states) · printed documents → `branded-document-design` · slides → `presentation-design`. User flow before drawing → agent `ux-designer` (template: [`references/ux-spec-outputs.md`](references/ux-spec-outputs.md)).
 
-- Every time you build a user interface (UI) — use it **together with** a platform skill, not instead of it
-- A screen "looks off" but you cannot say what is wrong
-- Reviewing a UI that someone else made
-- Platforms that have no dedicated skill yet (for example TV apps, kiosk, smart watch)
+## Steps
 
-## When **not** to use it
+### 0 · Before creating a new page, check whether the project already has a look
+The project's own look beats the platform skill's starter theme (the `assets/` templates are for projects with no screens yet). **Two exceptions, where you redo section 0.1 instead of copying:** (1) the user or prompt orders a new design, or says the current look is not nice (2) the current look is a mockup that has not passed the beauty gate (section 9; no beauty-gate score recorded in `docs/BUILD-PLAN.md` = not passed). Move the old files to `_to_delete/`, do not delete them. A look that is real delivered code still wins unless there is a new-design order.
 
-| Task | Use this instead |
-|---|---|
-| Need real colors, fonts, components | `web-app-design` · `windows-app-design` · `mobile-app-design` |
-| Charts and data graphs | `web-app-design` section chart colors |
-| Printed documents | `branded-document-design` |
-| Slides | `presentation-design` |
+Look in: `mockup/**/*.html` · `*.css` · `styles.css` · `theme.*` · `tokens.*` · `tailwind.config.*` · `lib/core/theme.dart` · `*.xaml` · `docs/deck/` · `docs/*.html` · the project README (a line saying which file the look comes from).
 
-**This skill sets no colors and no fonts** — take them from the platform skill.
-It controls only *spacing, size, order and states*.
+**Found** → run `python -I scripts/design_tokens.py <folder found> --out docs/DESIGN.md` (draft of the values the code uses, with the places off the scale; it does not overwrite an existing file), then:
+1. Copy the whole structure of the nearest sibling page (same group): `<head>` fonts, top bar, side menu, margins.
+2. `<link>` the existing css file; do not copy tokens into a new file. A new file holds only what is unique to the page and uses the existing `var(--…)`. Mockup: a new page = a new `<section>` in the existing `mockup/<code>-mockup.html`, not a new file. Link the css while working; at delivery embed it in `<style>` per the single-file rule of the platform skill.
+3. Use existing classes for existing components (button · card · table · pill).
+4. Screenshot the old and new page at the same width side by side: background, top bar, heading font and buttons must be indistinguishable.
+5. If a value in this skill conflicts with the project's, use the project's and note it under `ตัดสินใจเอง`. Do not restyle old pages unless told to.
 
----
+**Not found** → use the platform skill's template, then write 1 line in the project README: `หน้าตา: mockup/<code>-mockup.html`.
 
-## 0 · Before creating a new page — does the project already have a look
+New project → pick 1 of 6 app characters before the first page: [`references/app-character.md`](references/app-character.md). Customer sends a Figma file → read it through the Figma MCP server, convert variables to tokens, then make the HTML mockup per this section; when to skip Figma → [`references/figma-to-code.md`](references/figma-to-code.md).
 
-> **The project's own look always beats the skill's starter theme**
-> The templates and css in the platform skill's `assets/` are for projects that have **no screens at all yet**
->
-> **Two exceptions — do not copy the existing look; redo section 0.1:** (1) the user or the prompt orders a new design, or says the current look is not nice (2) the current look is a mockup that has not passed the beauty gate (section 9 · **no beauty-gate score recorded in `docs/BUILD-PLAN.md` = not passed**) — copying something that failed gives another set that fails · move the old files to `_to_delete/`, do not delete them · a look that is **real delivered code** still always wins, unless there is a new-design order
+### 0.1 · Visual direction, before the first screen of a new project or new design
+Full text: [`references/visual-direction.md`](references/visual-direction.md). In short:
+1. **1 hero screen**: 1 sentence on the wow moment, and the page shows it (not a settings page or form).
+2. **Reference app**: take screenshots of 2–3 official pages into `_to_delete/ref-shots/`, note 5 things that make it look good. Always search live, even with a reference app.
+3. **3 directions in parallel** (one new subagent each; cannot call sub-agents → make them yourself one at a time, never a single direction), genuinely different, each with 1 point of boldness. Start from [`design-direction-lookup`](../design-direction-lookup/SKILL.md) with `--palette`.
+4. **Comparison page** `docs/design/<code>-design-directions.html`.
+5. **Choose 1**: ask the user once at the start whether they want to choose; otherwise a new beauty-gate reviewer scores per section 9 and the highest wins, recorded under `## ตัดสินใจเอง`.
+6. **Identity**: logo in the title bar, brand color written to `docs/README.md` field `doc-theme`.
 
-Before copying anything from the skill, look in the project first:
+Sample content must look real: realistic data, real images per `image-generation`, no gray placeholder boxes, no "ตัวอย่าง" or "Lorem", team notes only in the mockup's control box.
 
-| Look at | Look for |
-|---|---|
-| `mockup/**/*.html` · `*.css` | pages already made · the css files those pages `<link>` |
-| Code folders: `styles.css` · `theme.*` · `tokens.*` · `tailwind.config.*` · `lib/core/theme.dart` · `*.xaml` | the tokens and components the app really uses |
-| `docs/deck/` · `docs/*.html` | decks or document pages that already have a theme |
-| The project README | a line saying which file the look is taken from |
+### 1 · Spacing scale: `4 8 12 16 24 32 48 64`
+Every padding · margin · gap is a value in this scale, even when the platform skill conflicts, **except values measured from the real system and named in the exception list of `references/scales.md`** (for example Windows: content edge 36 · gap between sections 40). Things that belong together sit closer than things that do not. Card padding ≥ the gap inside. Details → [`references/scales.md`](references/scales.md).
 
-**Found** → first run `python -I scripts/design_tokens.py <folder found> --out docs/DESIGN.md` to get a draft of the values the code really uses (token · color · font · size · spacing · radius · shadow) with the places that fall off the scale · the script does not overwrite an existing file · then do the following, and do not copy the skill's template:
+### 2 · Type scale
+At most 5 sizes per screen (web: lg 22 · md 15 · base 13 · sm 12 · xs 11) · smallest 11 · 2 weights · lines of 45–75 characters · Thai line-height +0.1. A marketing or landing page without motion uses the type scale and rhythm in [`references/scales.md`](references/scales.md#3--หน้าการตลาดและ-landing-ที่ไม่มี-motion) (with motion → `dynamic-website`).
 
-1. Pick the **nearest sibling page** (same group, for example a new page in the admin section → copy an admin page) and copy the whole page structure: `<head>` fonts, top bar, side menu, margins
-2. **`<link>` the existing css file; do not copy tokens into a new file** — the new file may hold only the parts unique to this page, and must use the `var(--…)` of the existing file · if you copy tokens, the day the old file changes color the new page will not follow
-   **mockup:** a new page = a new `<section>` in the existing `mockup/<code>-mockup.html` file, not a new file · while working, `<link>` the css · at delivery, embed the css content in `<style>` per the single-file rule of the platform skill
-3. For components that already exist (button, card, table, pill), use the existing class; do not write a new one that looks similar
-4. Open the old page and the new page, take screenshots at the same width, and put them side by side — background color, top bar, heading font, buttons must be so alike that you cannot tell who made which
-5. A value in this skill (spacing scale, font size) conflicts with the project's existing one → **use the existing one** and note it at the end of the answer under `ตัดสินใจเอง` (decided on my own) · do not change the whole old set of pages to match this skill unless told to
+### 3 · Visual order: one screen, one important thing
+Ask what the user opened this page to do. That item gets level 1.
 
-**Not found** → use the platform skill's template, then write 1 line in the project README saying which file the look is taken from (for example `หน้าตา: mockup/<code>-mockup.html`)
-
-**New project: pick 1 of 6 app characters before drawing the first page** → [`references/app-character.md`](references/app-character.md) (the project's existing look always wins)
-
-**The customer sends a Figma file** → read it through the Figma MCP server, convert variables to tokens, then make the HTML mockup per this section · when to skip Figma → [`references/figma-to-code.md`](references/figma-to-code.md)
-
----
-
-## 0.1 · Visual direction — before drawing the first screen of a new project or a new design
-
-> The platform skill's defaults are the **floor**, not the **ceiling** · using the starter theme as is = a look like the maker's sample app, which nobody remembers
-
-1. **1 hero screen** — write 1 sentence on which moment, when the product works, makes the viewer say wow, then make that page show that moment (camera app → the camera image with the analysis overlay · terminal → a session with real colored logs · dashboard → numbers with a story) · **the hero screen is not a settings page or a form** · marketing page or landing: the hero screen is the opening section; it must have at least 1 real thing from the product (a screenshot in use · real numbers · a real customer voice) and at 1440 width must leave no unintended empty space over 1/3 of the screen (eye gate `ด่านตา` of `no-ai-look`, items 3.2 and 10)
-2. **Reference app** — read it from `docs/README.md` or the request (local path · app name · description) · take screenshots or capture images from 2–3 official pages into `_to_delete/ref-shots/` (use for comparison during review only; never put them in the deliverable), then note 5 things that make it look good (theme · color · density · window frame or header bar · sample content) · do not copy the logo or images
-   **Always search live, even if the customer has a reference app** (pre-start gate) · has a reference app → use that app's colors, and use the search for structure and elements · **customer has no reference app** → **search for prototypes first:** take the project's keywords and search live per `design-references` (plugin `superuser`), type `web` · `app` · `dashboard` as the work needs, then extract colors from the chosen work · the stored palette library is for when live search is not possible · pick 2–3 works and note the same 5 things for each
-3. **3 directions, made in parallel** (`parallel-attempts-pick-best` · one new subagent per direction) — the starting point of each direction (a 2-mode palette that passes contrast · a Thai-Latin font pair · look) uses the colors extracted from the prototypes in step 2; pass them into [`design-direction-lookup`](../design-direction-lookup/SKILL.md) via `--palette` before choosing by yourself · each direction makes only the hero screen + 1 main working page, in both themes (return only the file paths and a summary of at most 15 lines per direction) · the directions must be genuinely different: (a) close to the reference app (no reference app → close to the chosen character) (b) platform-native but lifted (c) bolder · every direction states the app character (`references/app-character.md`) · brand color · font and type character chosen from the project basics (soft round · fast angular · plain modern · formal · classic luxury · handwriting, per [`references/font-voice.md`](references/font-voice.md), then pass `--voice` into `design_draft.py`) · corner radius · density
-   Every direction states its starting look ([`references/web-looks.md`](references/web-looks.md) · no 2 directions may use the same look) and the **1 point of boldness** it commits to (for example a full-width real image in the hero screen · a heading font with character), and the rest stays quiet · the idea of committing boldness to a single point comes from anthropics/skills `frontend-design` (Apache-2.0 · checked 2026-10-23), rewritten in our own words
-   **The owner has a preferred style** (`~/.claude/superuser-style.md`, section "สไตล์ออกแบบที่ชอบ" (preferred design style)) → direction (a) starts from that style instead of the industry look: corners, shadows, softness of color, icons, and the type of hero image per the prototypes the owner chose (the nearest look in `web-looks.md`, for example soft SaaS) · the industry sets only the content and the prohibitions · reason: the trial page on 2026-11-06 came out as an industry-standard quiet utility, and the user answered on 2026-11-09 that the layout was better but lacked rounded corners, shadows, soft colors, graphics and icons
-   **Cannot call sub-agents** (no subagent tool · subagent fails · budget not enough) → minimum path, never skip to a single direction: make the 3 directions yourself, only for the opening section or the hero screen, at 1440 and 375 width in one file · take screenshots and critique one direction at a time with the eye gate `ด่านตา` of `no-ai-look` item 3.2 and the beauty gate section 9 · record that direction's score before opening the next one · choose the highest score and note it under `## ตัดสินใจเอง` (decided on my own) that there was no separate reviewer
-4. **Comparison page** `docs/design/<code>-design-directions.html` — the 3 directions side by side + the reference app image · under each direction, the main tokens and 1 line of pros/cons
-5. **Choose 1 direction** — at the start of the work, ask the user once "do you want to choose the direction yourself?" · yes → stop and let them choose at this step · no → a new beauty-gate reviewer (order: `graphic-design:design-critic` if installed → `graphic-designer` → `general-purpose` told to critique only) scores per section 9, then choose the highest score and record it under `## ตัดสินใจเอง`
-6. **Complete identity** — the logo (`graphic-design` · works at 16px) sits in the title bar/app icon · write the chosen direction's brand color back into `docs/README.md`, field `doc-theme`, so documents use the same color
-
-**Sample content must look real** — realistic data · photos and main illustrations (hero · product or service cards · people) use real images per `image-generation` (plugin `graphic-design` · agent `image-artist` · order: generate with the session's tool → draw a full-scene SVG illustration → free stock photo · no setup needed) · ask about the image direction once at the start · no basic shapes (triangle, circle, square) placed in place of the real thing · no empty gray boxes in place of content, no "ตัวอย่าง" (example) or "Lorem" · team notes (requirement codes · "รอยืนยัน" (awaiting confirmation)) live only in the mockup's control box; never mix them into program text
-
----
-
-## 1 · Spacing scale — one set for the whole app
-
-```
-4  8  12  16  24  32  48  64
-```
-
-Every padding · margin · gap must be a value in this scale. If the platform skill conflicts, use this scale — **except values measured from the real system and named in the exception list of `references/scales.md`** (for example Windows: content edge 36 · gap between sections 40) · things that belong together sit closer than things that do not · card padding ≥ the gap inside
-Examples and the full reason → [`references/scales.md`](references/scales.md)
-
-## 2 · Type scale
-
-No more than 5 sizes per screen (lg 22 · md 15 · base 13 · sm 12 · xs 11 for web) · smallest 11 · 2 weights per screen · lines of 45–75 characters · Thai line-height +0.1
-Line-height table and the full reason → [`references/scales.md`](references/scales.md)
-This scale is for apps · a marketing page or landing page without motion uses the type scale and rhythm of the marketing page → [`references/scales.md`](references/scales.md#3--หน้าการตลาดและ-landing-ที่ไม่มี-motion) (with motion section by section → `dynamic-website`)
-
----
-
-## 3 · Visual order — one screen, one important thing
-
-Ask yourself before placing elements: **what did the user open this page to do**
-That item gets prominence level 1, and the rest step down
-
-| Level | How to make it stand out | How many per page |
+| Level | How | How many per page |
 |---|---|---|
 | 1 | Solid brand color + largest size | **1** |
 | 2 | Bold text or light background | 2–3 |
 | 3 | Normal text color | Unlimited |
 | 4 | Faded text color | Unlimited |
 
-**2-second eye test:** squint at the screen. What jumps out first?
-If 4 things jump out together, there is no order yet.
+2-second eye test: squint; if 4 things jump out together, there is no order yet. Only one primary button per screen; the rest are outline or text-only. A delete button is a red secondary button, never solid red. Buttons repeated on every row (open · edit · delete) are never solid brand color; 3 alternatives in [`references/states-and-checks.md`](references/states-and-checks.md).
 
-**There may be only one primary button per screen**; the rest are secondary buttons (outline) or empty buttons (text only)
-A dangerous (delete) button is a red secondary button, not a solid red button — otherwise it steals prominence from the main task
-
-**Buttons repeated on every row of a list** (open · edit · delete) must not be solid brand-color buttons — 8 rows means 8 primary buttons · the 3 alternatives are in [`references/states-and-checks.md`](references/states-and-checks.md)
-
----
-
-## 4 · What separates sections — lines, shadows, or backgrounds
-
-There are 3 choices, but **use only one method per depth level**, because mixing them makes it messy at once
-
+### 4 · Separating sections: one method per depth level
 | Method | Use when | Watch out |
 |---|---|---|
 | Spacing only | Separating groups in the same area | **Always try this first** |
-| 1px light line | Tables · lists · section dividers | The line must be lighter than you think |
-| Background of a different shade | Card on the page background | A 2–4% difference is enough |
-| Shadow | Things that **really float** · cards on a persuasion page of the soft SaaS look (soft 2-layer shadow) | modal · dropdown · toast · app pages used all day get no card shadow |
+| 1px light line | Tables · lists · dividers | Lighter than you think |
+| Background of a different shade | Card on page background | A 2–4% difference is enough |
+| Shadow | Things that **really float** · cards on a persuasion page of the soft SaaS look (soft 2-layer shadow) | modal · dropdown · toast only; app pages used all day get no card shadow |
 
-> A shadow is not decoration. It means "this sits above the others, and you can click elsewhere to close it"
-> A card sitting still on an app page is not floating — it needs no shadow · a landing page follows the depth language of the chosen look
+A card sitting still on an app page needs no shadow; a landing page follows the depth language of the chosen look. 3 depth levels are enough: page background → card → floating thing. Use 2–3 corner radius values, and the inside item always has a smaller radius than the outside (card 14 → inner image 8–10). One depth language per project (realistic shadows · paper · clay · torn edges) → [`references/depth-and-flourish.md`](references/depth-and-flourish.md).
 
-**3 depth levels are enough:** page background → card → floating thing
-Beyond that the eye cannot tell them apart
+### 5 · Color contrast (WCAG 2.2 AA)
+Normal text 4.5 : 1 · large text (≥ 24px regular or ≥ 18.7px bold) 3 : 1 · input borders and meaningful icons 3 : 1 · decorative dividers no threshold. Check with browser DevTools; Flutter and native: calculate from the tokens in light and dark mode (formula and test in [`references/states-and-checks.md`](references/states-and-checks.md)). Never: faint gray text "because it looks clean" · color as the only status signal (add an icon or text) · placeholder in place of a label.
 
-**Corner radius:** use 2–3 values, and **the inside item must always have a smaller radius than the outside one**
-A card with radius 14 and an image inside with radius 14 shows triangular gaps at the corners — the inside should be 8–10
-
-**Realistic shadows · paper surface, clay, torn edges · choose one depth language per project** → [`references/depth-and-flourish.md`](references/depth-and-flourish.md)
-
----
-
-## 5 · Color contrast — numbers that must pass
-
-| Item | Minimum ratio |
-|---|---|
-| Normal text | 4.5 : 1 |
-| Large text: ≥ 24px regular or ≥ 18.7px bold | 3 : 1 |
-| Input borders · icons that carry meaning | 3 : 1 |
-| Decorative divider lines | No threshold |
-
-Thresholds follow Web Content Accessibility Guidelines (WCAG) 2.2 level AA (w3.org/TR/WCAG22 · checked 22 Oct 2569 BE) · check with the browser DevTools · Flutter and native: calculate from the tokens in both light and dark mode (formula and how to write the test in [`references/states-and-checks.md`](references/states-and-checks.md))
-
-**Commonly missed:**
-
-- Wrong: faint gray text on a white background because it "looks clean" — unreadable on a laptop screen in the sun
-- Wrong: **color as the only status signal** — color-blind people cannot see it; always pair it with an icon or text
-- Wrong: placeholder in place of a label — once the user types, they forget what the field is
-
----
-
-## 6 · The five states every screen must have
-
-Designing only the "full of data and beautiful" state = 20% of the work done
-
-| State | What it must have | Common miss |
+### 6 · The five states every screen must have
+| State | Must have | Common miss |
 |---|---|---|
-| **Empty** | Say why it is empty + a button for what to do next | Shows only "No data" |
-| **Loading** | A gray outline (skeleton) in the shape of the real thing | A spinner in the middle of the screen = the screen flickers |
-| **Error** | What happened + what to do next + a retry button | Throwing the system error at the user to read |
-| **Partial** | The parts that loaded show right away; the broken part says so only at that spot | The whole page breaks because one widget crashes |
-| **Success** | Let the user know, then disappear by itself | A modal popping up to press "OK" |
+| **Empty** | Why it is empty + a button for what next | Only "No data" |
+| **Loading** | Gray skeleton in the shape of the real thing | Centered spinner |
+| **Error** | What happened + what to do + retry button | System error shown raw |
+| **Partial** | Loaded parts show at once; the broken part says so only there | Whole page breaks for one widget |
+| **Success** | Tell the user, then disappear by itself | A modal needing "OK" |
 
-**First-time empty state ≠ empty because the search found nothing** — different message, different button
+First-time empty ≠ empty because the search found nothing: different message, different button. Apps reading hardware use the same 5 states (light-meter example in `references/states-and-checks.md`). An error message says what happened, why, and what to do, never a bare `Error 500`. Right: "บันทึกไม่สำเร็จ เพราะเลขที่เอกสารนี้มีอยู่แล้ว ลองเลขอื่น".
 
-**Apps that read hardware use the same 5 states, only the root cause differs** — an example with a light meter is in [`references/states-and-checks.md`](references/states-and-checks.md)
+On-screen wording (full rules: `human-writing` `references/thai-grammar.md` section 4, level "screen"): pronoun `คุณ` or none, never ท่าน · do not stack ครับ/ค่ะ ท่าน กรุณา in one message (usually none) · buttons start with a verb (บันทึก · ส่ง · ลบรายการนี้), not a bare ตกลง/ยืนยัน.
 
-**An error message says what happened, why, and what to do next**, not a bare `Error 500` or "an error occurred" — right (a Thai on-screen message, keep as is): "บันทึกไม่สำเร็จ เพราะเลขที่เอกสารนี้มีอยู่แล้ว ลองเลขอื่น" (more examples in the references)
-
-**On-screen wording (microcopy)** — the full rules are in `human-writing` `references/thai-grammar.md` section 4, level "screen"
-
-| Topic | Rule |
-|---|---|
-| Pronoun | `คุณ` (you) or no pronoun · do not use ท่าน |
-| Polite words | Do not stack ครับ/ค่ะ ท่าน กรุณา in one message · usually have none at all |
-| Buttons | Start with a verb (บันทึก · ส่ง · ลบรายการนี้), not a bare ตกลง/ยืนยัน |
-| Error | What happened + what to do next, in one message |
-
----
-
-## 7 · Motion budget
-
-| Type | Time | Easing curve |
+### 7 · Motion budget
+| Type | Time | Easing |
 |---|---|---|
 | hover · color change | 100–150ms | `ease-out` |
-| open/close dropdown · toast | 150–250ms | `ease-out` |
+| dropdown · toast | 150–250ms | `ease-out` |
 | modal · page change | 250–350ms | `ease-in-out` |
 
-**Over 400ms = the user feels the app is slow**, not that the app is luxurious
+- Over 400ms feels slow. Entering is never faster than leaving. Do not animate something the user is about to press.
+- **A moment to smile: 1 per flow**, only when a task succeeds (quote sent · payment passed · full set done), not at loading or hover; ≤ 400ms, never covers the next button or blocks pressing it. Surface flourishes per [`references/depth-and-flourish.md`](references/depth-and-flourish.md).
+- Respect `prefers-reduced-motion` (Flutter: if `MediaQuery.disableAnimationsOf(context)` is `true`, skip the animation).
+- Do not redraw when the displayed value has not changed: notify the UI only when the value on screen really changes (jittery sensor: change over ~1 %) and update slowly drifting secondary values about once per second (redraws drain the battery, make screen readers repeat, and block test tools).
 
-- Things **entering** must not be faster than things **leaving** — leaving should be faster or equal
-- Do not animate something the user is about to press (a button moving away from the finger)
-- **A moment to smile: 1 per flow** — only when a task succeeds (quote sent · payment passed · full set done), not at loading or hover · no more than 400ms · does not cover the next button, and no need to wait for it to finish before pressing · off under `prefers-reduced-motion` · use surface flourishes (multi-layer shadow · grain · duotone) per [`references/depth-and-flourish.md`](references/depth-and-flourish.md); do not add them just to look expensive
-- Respect `prefers-reduced-motion` — some people really get dizzy (Flutter: if `MediaQuery.disableAnimationsOf(context)` is `true`, skip the animation)
-- **Do not redraw when the displayed value has not changed** — notify the UI only when the value on screen really changes (a jittery sensor value: change over ~1 %) and update slowly drifting secondary values about once per second, because endless redrawing drains the battery, makes the screen reader repeat itself, and keeps test tools from reading the screen
+### 8 · Density: choose once and stay with it
+Dense 32–36px (data tables · all-day users) · Normal 40–44px (general apps) · Airy 48–56px (marketing · occasional use). Tap target ≥ 44×44 pt iOS · ≥ 48×48 dp Android, enlarged with padding or a pseudo-element, not a bigger icon. No airy rows mixed into dense.
 
----
+### 9 · Check the work
+1. Render and look (the platform skill says how), then go through the 3 checklists in [`references/states-and-checks.md`](references/states-and-checks.md): correctness (squint · spacing scale · ≤ 5 sizes · 1 solid button · 5 states · contrast · shrink the window) · countable beauty (icons · content ≥ 60 % of the screen · equal row heights · boxes ≤ 3 · hide the mockup's controls) · **beauty gate `ด่านสวย`** (score 7 axes against the reference app image; pass when every axis ≥ 4). Passing the first 2 can still be ugly; a mockup sent for approval must pass the beauty gate.
+2. Send the image to a subagent that did not make it, **with the reference app image at the same size**, and ask for the 7-axis score, 2–3 problems per page with CSS-level fixes, no praise, and 1 more answer: **bolder or quieter**, with the single point to fix. Reviewer order: `graphic-design:design-critic` if installed → `graphic-designer` → `general-purpose`; none callable → minimum path in 0.1 step 3. The correctness reviewer (clicks · Functional Requirement (FR) · contrast) and the beauty reviewer are different ones. Public web pages (marketing · landing) always also go to `design-critic` of plugin `graphic-design`; not installed → say so in the report.
+3. After fixing, take new screenshots. The number of rounds follows the beauty-gate cap in `references/states-and-checks.md`, in that one place only (sample commands: platform skill, for example `windows-app-design` section 6 and `references/review.md`).
+4. The page passed but one piece does not fit → try live values in the browser or make 3 variants for the reviewer: [`references/live-and-variants.md`](references/live-and-variants.md).
+5. Multi-page work: get the 3 main pages to pass first, then the rest.
+6. The first page of a single-file mockup (`#s-start`) is a table of contents for the reviewer, not an app page: build it with `scripts/mockup-start-page.py` per [`references/mockup-start-page.md`](references/mockup-start-page.md).
 
-## 8 · Density — choose once and stay with it
+### 10 · Anti-patterns
+17 prohibitions (relabeling an old mockup as new · starter theme as final look · adding colors to fix "not pretty" · solid buttons on every row · dividers on everything · a shadow under every card · 600ms animation, etc.) are in [`references/states-and-checks.md`](references/states-and-checks.md).
 
-| Type | Row height | Suits |
-|---|---|---|
-| Dense | 32–36px | Data tables · all-day users · need to see a lot at once |
-| Normal | 40–44px | General apps |
-| Airy | 48–56px | Marketing pages · apps used occasionally for long stretches |
+### Do not look AI-made
+Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script (with plugin `superuser`, the `ui-scan` hook runs it on every UI file edit; for a live page use `--url`). Every piece also passes eye gate item 3.2 (web pages items 10–14 too), because 0 script findings does not mean pass. If 2 or more AI signs show on one page (gradient buttons · centered hero + 2 pills · 3 equal cards with circle icons · emoji icons · "Welcome back, John" · radius 16px+ everywhere · "AI-powered" badges), fix them first: table in [`references/ai-signs.md`](references/ai-signs.md).
 
-**A finger tap target must be ≥ 44×44 pt on iOS (Apple) · ≥ 48×48 dp on Android (Material)**, even if the icon is smaller than that
-(enlarge with padding or a pseudo-element, not by enlarging the icon)
+For a web page whose code is HTML/React, also go through the Vercel Web Interface Guidelines, fetched live from `https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md` (link only; do not copy its text in).
 
-**Once you choose dense, no airy rows may be mixed in** — inconsistent density makes a
-screen "look unsystematic" the most, and people overlook it the most
+## Check before done
+- Spacing from the scale, at most 5 font sizes, 1 primary button, the 5 states present, contrast passes.
+- Rendered and looked at; beauty gate scored by a reviewer who did not make it (mockups).
+- `no-ai-look` item 3 and eye gate 3.2 done; the work closes with the line `ด่านก่อนลงมือ:`.
 
----
+## References
+- [`references/visual-direction.md`](references/visual-direction.md) — open at section 0.1, before the first screen of a new project or design
+- [`references/ai-signs.md`](references/ai-signs.md) — open when checking for AI-made signs
+- [`references/scales.md`](references/scales.md) · [`references/states-and-checks.md`](references/states-and-checks.md) · [`references/depth-and-flourish.md`](references/depth-and-flourish.md) — open at the section that points to each
+- [`references/app-character.md`](references/app-character.md) · [`references/font-voice.md`](references/font-voice.md) · [`references/web-looks.md`](references/web-looks.md) — open when choosing a direction
+- [`references/figma-to-code.md`](references/figma-to-code.md) · [`references/live-and-variants.md`](references/live-and-variants.md) · [`references/mockup-start-page.md`](references/mockup-start-page.md) · [`references/ux-spec-outputs.md`](references/ux-spec-outputs.md) — open when the section points to them
+- [`references/sources.md`](references/sources.md) — licences and check dates
 
-## 9 · Check the work
 
-Always render and look (the platform skill says how), then go through the 3 checklists in [`references/states-and-checks.md`](references/states-and-checks.md): the correctness set (squint · spacing scale · ≤ 5 sizes · 1 solid button · 5 states · contrast · shrink the window) · the countable beauty set (icons · content ≥ 60 % of the screen · equal row heights · boxes ≤ 3 · hide the mockup's controls) · and the **beauty gate `ด่านสวย`** (score 7 axes against the reference app image, pass when every axis ≥ 4) — **passing the first 2 sets can still be ugly · a mockup sent for approval must pass the beauty gate too**
+## reference: ai-signs.md
 
-**Have someone who did not make it critique it:** send the image to a subagent that did not make this piece, **together with the reference app image at the same size**, and ask for the 7-axis beauty-gate score and 2–3 problems per page with CSS-level fixes; no praise · beauty-gate reviewer order: `graphic-design:design-critic` if installed → `graphic-designer` → `general-purpose` → cannot call anyone at all, use the minimum path in section 0.1 step 3 · the correctness reviewer (button clicks · Functional Requirement (FR) · contrast) and the beauty reviewer are different ones, because a correctness reviewer will pass work that is correct but bland
-The beauty-gate reviewer answers 1 more question: **should this work be bolder or quieter**, with the single point to fix (the question comes from the bolder/quieter commands of pbakaus/impeccable · Apache-2.0 · checked 2026-10-23) · public web pages (marketing page · landing page) always go to the `design-critic` agent of plugin `graphic-design` too, even when the main reviewer is another · not installed → say so in the report
-After fixing, take new screenshots · the number of rounds uses the beauty-gate cap in `references/states-and-checks.md` in that one place only (sample commands are in the platform skill, for example `windows-app-design` section 6 and `references/review.md`)
-The person who made it always sees their own work as better than the truth.
+# Signs that give away AI drawing · fix to
 
-**The page passed but one piece still does not fit** → try live values in the browser, or make 3 variants of that piece for the reviewer to choose from → [`references/live-and-variants.md`](references/live-and-variants.md)
-
-**Multi-page work:** get the 3 main pages to pass first, then extend to the rest — doing every page in one round gives each page less attention
-
-**The first page of a single-file mockup (`#s-start`) is a table of contents for the reviewer, not a page in the app** → build it with `scripts/mockup-start-page.py` per the rules in [`references/mockup-start-page.md`](references/mockup-start-page.md)
-
----
-
-## 10 · Anti-patterns
-
-17 prohibitions (including relabeling an old mockup as new · the starter theme as the final look · adding colors to fix "not pretty" · solid buttons on every row · dividers on everything · a shadow under every card · 600ms animation, etc.) are in [`references/states-and-checks.md`](references/states-and-checks.md)
-
----
-
-## 11 · Link to other skills
-
-| Need | Use together with |
-|---|---|
-| Colors, fonts, real web components | `web-app-design` |
-| Windows apps | `windows-app-design` |
-| Mobile apps | `mobile-app-design` |
-| User flow before drawing | agent `ux-designer` · user-flow and interaction-spec template → [`references/ux-spec-outputs.md`](references/ux-spec-outputs.md) |
-| Diagrams to go with a spec | `software-diagrams` |
-| Presentation slides | `presentation-design` |
-| Cut out what is not needed | `simplicity-first` |
-| Logo · poster · post · print work | `graphic-design` |
-
----
-
-## Do not look AI-made
-
-Before sending, go through item 3 of `no-ai-look` — for HTML work, run its script (with plugin `superuser` installed, the `ui-scan` hook runs it automatically every time a UI file is edited · for a page that is already on the web use `--url`) · every piece also passes the eye gate item 3.2 (web pages answer items 10–14 too), because 0 script findings does not mean pass · the prohibitions in this file are specific to this work; the full list for every medium is there
-
-**Signs that give away AI drawing — if you find 2 or more on one page, fix them before sending**
+If you find 2 or more on one page, fix them before sending. The full list for every medium is in `no-ai-look`.
 
 | Sign | Fix to |
 |---|---|
@@ -340,13 +239,6 @@ Before sending, go through item 3 of `no-ai-look` — for HTML work, run its scr
 | emoji in place of icons · sample text like "Welcome back, John" · round numbers like 1,234 | The platform's icon set · sample data from the real domain (Thai names · non-round numbers) |
 | Radius 16px+ on everything · fuzzy shadows on every layer · equally wide spacing everywhere | Corners and shadows per the platform · density per section 8 |
 | "AI-powered" badge · sparkle stars · a "Get started" button that does not say what to start | Badges and buttons written as verbs of the real task |
-
-For a web page whose code is HTML/React, also go through the lint-style rules of the Vercel Web Interface Guidelines one more round (fetch live from `https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md` — the repo is MIT (checked 2026-10-23) but use it as a link only; do not copy its text in, so you always get the latest version)
-
-## Abbreviations
-
-Always write an abbreviation in full the first time, then put the abbreviation in brackets — for example Model Context Protocol (MCP)
-After that you may use the abbreviation. See the skill `spell-out-abbreviations` for details.
 
 
 ## reference: app-character.md
@@ -958,6 +850,16 @@ The values in the table are starting values, set from the real page trial of 202
 - Density uses the airy type per section 8 of `SKILL.md`
 
 
+## reference: sources.md
+
+# Sources · ui-craft
+
+- Committing boldness to a single point (section 0.1 step 3): anthropics/skills `frontend-design` (Apache-2.0 · checked 2026-10-23), rewritten in our own words.
+- The "bolder or quieter" reviewer question (section 9): bolder/quieter commands of pbakaus/impeccable (Apache-2.0 · checked 2026-10-23).
+- Contrast thresholds (section 5): Web Content Accessibility Guidelines (WCAG) 2.2 level AA, w3.org/TR/WCAG22 (checked 22 Oct 2569 BE).
+- Web page lint rules: Vercel Web Interface Guidelines, `https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md` (MIT, checked 2026-10-23). Used as a link only; do not copy its text in.
+
+
 ## reference: states-and-checks.md
 
 # State examples, motion, checklists and prohibitions — an extension of `ui-craft`
@@ -1151,6 +1053,26 @@ Text parts of a UX spec that sit beside the clickable HTML mockup (`mockup/<CODE
 ```
 
 
+## reference: visual-direction.md
+
+# Visual direction · full steps of SKILL.md section 0.1
+
+Open this before drawing the first screen of a new project or a new design. The platform skill's defaults are the floor, not the ceiling: using the starter theme as is gives a look like the maker's sample app, which nobody remembers.
+
+1. **1 hero screen.** Write 1 sentence on which moment, when the product works, makes the viewer say wow, then make that page show that moment (camera app → the camera image with the analysis overlay · terminal → a session with real colored logs · dashboard → numbers with a story). The hero screen is not a settings page or a form. Marketing page or landing: the hero screen is the opening section. It must have at least 1 real thing from the product (a screenshot in use · real numbers · a real customer voice) and at 1440 width must leave no unintended empty space over 1/3 of the screen (eye gate `ด่านตา` of `no-ai-look`, items 3.2 and 10).
+2. **Reference app.** Read it from `docs/README.md` or the request (local path · app name · description). Take screenshots from 2–3 official pages into `_to_delete/ref-shots/` (for comparison during review only; never put them in the deliverable), then note 5 things that make it look good (theme · color · density · window frame or header bar · sample content). Do not copy the logo or images.
+   Always search live, even if the customer has a reference app (pre-start gate). Has a reference app → use that app's colors, and use the search for structure and elements. No reference app → search for prototypes first: take the project's keywords and search live per `design-references` (plugin `superuser`), type `web` · `app` · `dashboard` as the work needs, then extract colors from the chosen work. The stored palette library is for when live search is not possible. Pick 2–3 works and note the same 5 things for each.
+3. **3 directions, made in parallel** (`parallel-attempts-pick-best` · one new subagent per direction). The starting point of each direction (a 2-mode palette that passes contrast · a Thai-Latin font pair · look) uses the colors extracted from the prototypes in step 2; pass them into [`design-direction-lookup`](../../design-direction-lookup/SKILL.md) via `--palette` before choosing by yourself. Each direction makes only the hero screen + 1 main working page, in both themes (return only the file paths and a summary of at most 15 lines per direction). The directions must be genuinely different: (a) close to the reference app (no reference app → close to the chosen character) (b) platform-native but lifted (c) bolder. Every direction states the app character ([`app-character.md`](app-character.md)) · brand color · font and type character chosen from the project basics (soft round · fast angular · plain modern · formal · classic luxury · handwriting, per [`font-voice.md`](font-voice.md), then pass `--voice` into `design_draft.py`) · corner radius · density.
+   Every direction states its starting look ([`web-looks.md`](web-looks.md) · no 2 directions may use the same look) and the **1 point of boldness** it commits to (for example a full-width real image in the hero screen · a heading font with character), and the rest stays quiet.
+   **The owner has a preferred style** (`~/.claude/superuser-style.md`, section "สไตล์ออกแบบที่ชอบ") → direction (a) starts from that style instead of the industry look: corners, shadows, softness of color, icons, and the type of hero image per the prototypes the owner chose (the nearest look in `web-looks.md`, for example soft SaaS). The industry sets only the content and the prohibitions. Reason: the trial page on 2026-11-06 came out as an industry-standard quiet utility, and the user answered on 2026-11-09 that the layout was better but lacked rounded corners, shadows, soft colors, graphics and icons.
+   **Cannot call sub-agents** (no subagent tool · subagent fails · budget not enough) → minimum path, never skip to a single direction: make the 3 directions yourself, only for the opening section or the hero screen, at 1440 and 375 width in one file. Take screenshots and critique one direction at a time with the eye gate `ด่านตา` of `no-ai-look` item 3.2 and the beauty gate section 9. Record that direction's score before opening the next one. Choose the highest score and note under `## ตัดสินใจเอง` that there was no separate reviewer.
+4. **Comparison page** `docs/design/<code>-design-directions.html`: the 3 directions side by side + the reference app image. Under each direction, the main tokens and 1 line of pros/cons.
+5. **Choose 1 direction.** At the start of the work, ask the user once "do you want to choose the direction yourself?". Yes → stop and let them choose at this step. No → a new beauty-gate reviewer (order: `graphic-design:design-critic` if installed → `graphic-designer` → `general-purpose` told to critique only) scores per section 9, then choose the highest score and record it under `## ตัดสินใจเอง`.
+6. **Complete identity.** The logo (`graphic-design` · works at 16px) sits in the title bar/app icon. Write the chosen direction's brand color back into `docs/README.md`, field `doc-theme`, so documents use the same color.
+
+**Sample content must look real.** Realistic data. Photos and main illustrations (hero · product or service cards · people) use real images per `image-generation` (plugin `graphic-design` · agent `image-artist` · order: generate with the session's tool → draw a full-scene SVG illustration → free stock photo · no setup needed). Ask about the image direction once at the start. No basic shapes (triangle, circle, square) placed in place of the real thing. No empty gray boxes in place of content, no "ตัวอย่าง" or "Lorem". Team notes (requirement codes · "รอยืนยัน") live only in the mockup's control box; never mix them into program text.
+
+
 ## reference: web-looks.md
 
 # 12 web looks
@@ -1212,261 +1134,52 @@ Fonts in the table: Trirong · Taviraj · Itim are Thai faces with heads by Cads
 
 Use when planning a slide deck story and layouts
 
-# Presentation Design
-
-> **Pre-work gate (every time):** read the owner's theme → search live for a reference → 3 genuinely different directions → check `no-ai-look` before sending. Follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for finding this piece's structure). Close the work with a line `ด่านก่อนลงมือ:` (pre-work gate:).
-
-> **Language:** write every line of wording per `human-writing`. This skill gives the format and structure; human-writing gives the way to write so people understand.
-
-> **The one rule of this skill:** a slide title must be a **conclusion**, not a **topic name**.
-> If the audience reads only the slide titles of every slide and understands the whole story, the deck is usable.
-
----
-
-> **The deck must be bright and look like it came from the source work.** Extract colours from the source work (the file, logo or website the user gave) with `scripts/source_palette.py` first · if the source has no colour, use the project's colour per `diagram-figures` item 5 · choose the deck's mood from the content · light background by default, and section-change pages are full-slide main colour · all rules are in [`deck-theme`](references/deck-theme.md), the central file for every slide skill · only when live search is really not possible, use the house colour `#2A78D6` and write `(รอยืนยัน)` (to be confirmed) · if the work already has colours, do not pick new colours for the deck.
->
-> **Delivered file: the models are the X Fitness Chatbot deck and the IS "Few-shot KIE" deck (.pptx converted to .html)**
->
-> | User asks | Gets file | Use |
-> |---|---|---|
-> | "ทำ slide deck" · "ทำสไลด์" · "ทำ presentation" (type not stated) | **.pptx** | `branded-document-design` · `StageDeck` |
-> | "slide deck html" · "เด็ค html" · "มี animation" · "นำเสนอจากเบราว์เซอร์" | **One .html file with animation** | `html-slide-deck` |
-> | Already has a .pptx · "แปลง pptx เป็น html" · "animation แบบเด็ค IS" · has a .pptx and wants interactive pages or click-by-click reveal | **One .html file that looks like the .pptx on every page** | `html-slide-deck` (`references/from-pptx.md`) |
-> | Asks for both | .pptx + .html from one source | Build the .pptx with `StageDeck`, then convert it with the .pptx entry of `html-slide-deck`. The look matches on every page; edit the .pptx in one place |
->
-> Do not ask again which type they want: not stated = .pptx · at the end of the answer, say in 1 line that an .html version with animation is possible too
->
-> **Choose the deck's style in this order and stop at the first hit:** the source work being turned into a deck → the design the project already has → a reference the user attached → direction from research (item 1 step 0) → the house default "Stage" (`branded-document-design` · `brandkit_stage.py`). **Stage is the fallback when there is no information at all, not the answer for every deck.** Two decks for different work should look different. Page structure and the text budget still follow this skill, while background colour · fonts · density · image style change with the chosen direction. Diagram figures from `diagram-figures` are rendered with the same background colour as the deck (`#bg=`)
-
-## When to use this skill
-
-- Making a presentation deck: client proposal · business plan · research summary · progress report · training · design review
-- Reviewing a deck someone else made
-- Converting a long document into a deck
-
-## When **not** to use
-
-| Task | Use this instead |
-|---|---|
-| Creating a real `.pptx` file (python-pptx, fonts, cover page) | `branded-document-design` |
-| Chart colour palette | `diagram-figures` → `references/colour-by-domain.md` (app screens: `web-app-design` in plugin `software-development` → `references/tokens.md` "สีข้อมูล (กราฟ)" (data colours, charts)) |
-| A document read alone, with no one speaking | `polished-document-style` + `branded-document-design` |
-| Diagrams, processes or architecture on a slide | `diagram-figures` (for software, `software-diagrams` (plugin `software-development`) works too) |
-
-> **A deck sent to be read alone is not a deck.** It is a document; make it a document.
-> If you must do both, make a deck for speaking and attach a separate document. Do not stuff everything onto slides.
-
----
-
-## 1 · Work order: research first, then write the story before opening the program
-
-0. **2 kinds of research, done only for what is missing, not for every deck**
-   - **Content.** The deck must cite facts, numbers, a market, competitors, or something we are not strong in → collect facts with sources per `research-with-sources` (plugin `superuser`) before writing slide titles · a slide title that is a conclusion must stand on real facts, not the model's memory
-   - **Theme from the source work.** Do this for every deck: run `python scripts/source_palette.py <source file>` to get colours, then choose the mood from the table in [`deck-theme`](references/deck-theme.md) item 2 · write the head-of-work line: which file the colour came from · which mood row · light or dark background
-   - **Visual direction.** Search for every deck per the pre-work gate · if the source work has colours, the project has a design, or the user attached a reference → use that for colour and fonts, and search only for page structure and storytelling · if there is nothing at all → **search for a reference first:** take the project's words and search live per `design-references` (plugin `superuser`), type `slide`, then extract colours from the chosen work · the stored colour library is used when live search is not possible · pick 2–3 decks of the same kind of work (pitches in the same field · events on the same stage · competitors') and choose 1 direction: light or dark background · font · density · image style · write a 1-line reason with the sources you looked at at the head of the work. **This direction belongs to this deck alone, not a permanent value.** The next deck must not start from the previous deck's direction without checking whether the work differs
-1. **Write every slide title as plain text first**, one line per slide
-2. **Read them all in order.** If they do not yet form one story, reorder here, because it is much cheaper than reordering later
-3. **Cut slides that do not move the story forward**
-4. **Choose a layout for each slide** from item 4
-5. **Put in content,** then trim bullets to fit the line budget in item 3
-6. **Render and view as thumbnails of the whole deck** per item 7
-
-Steps 1–3 take under 20 minutes and decide whether the deck is good or bad.
-Most people skip them and open the program straight away, then waste time laying out a story that is still in the wrong order.
-
----
-
-## 2 · Order the story by purpose
-
-**First ask what this deck needs from the audience,** then choose the order
-
-| Purpose | Order |
-|---|---|
-| **Ask for approval / a decision** | Conclusion and the ask → 3 reasons → alternatives considered → risks → the ask again |
-| **Progress report** | Overall status (green/yellow/red) → what is done → what is blocked and what is needed from whom → next period's plan |
-| **Review a plan or design** | Problem solved → constraints → chosen design → why others were not chosen → points where you want opinions |
-| **Training** | What they can do after learning → concepts → demo → let them try → summary and what to study next |
-| **Selling work** | Customer's problem (in their words) → results they will get → our method → evidence → price and next step |
-
-**For executives: the conclusion goes on the first slide,** not the last.
-They may have only the first 5 minutes, and may decide on the spot if the information is enough.
-
----
-
-## 3 · One slide, one idea
-
-### The slide title is the conclusion
-
-```
-ผิด: ผลการวิเคราะห์เวลาดำเนินการ
-ถูก: ขั้นอนุมัติกินเวลาสองในสามของทั้งหมด
-
-ผิด: สถานะโครงการ
-ถูก: ส่งทันกำหนด ยกเว้นงานเชื่อมระบบบัญชีที่ช้า 1 สัปดาห์
-```
-
-A slide title may run up to 2 lines. **Do not shorten it into a topic name,** and do not shorten it until it reads badly: a title with 2 parts needs a connector, use phrases people actually say, and choose words by who is listening (full rules in `human-writing` item 6)
-
-```
-ผิด: ทุกข้อความผ่าน 8 ขั้น: Artificial Intelligence (AI) ทำงานภาษา โค้ดตัดสินเรื่องสำคัญ
-ถูก: ทุกข้อความผ่าน 8 ขั้น: AI ช่วยเขียนคำตอบ ส่วนเรื่องสำคัญให้ระบบตัดสิน
-```
-
-### Budget per slide, counted in lines
-
-| Item | At most |
-|---|---|
-| Slide title | 2 lines |
-| Bullets | 6 items |
-| Lines per bullet | 2 lines |
-
-Thai words cannot be counted, so count lines on the real slide instead.
-
-**If over budget, cut whole bullets or move them to the next slide,** because slides cost nothing per page; speaking time is what is limited · **never cut function words** (จะ ให้ ก็ แล้ว, polite words) to make a line fit; cut only items (the rule "cut items, not function words" is in `human-writing` item 3)
-
-**Bullets must be gist, not full sentences.** If written as full sentences, the audience reads instead of listening
-(people read faster than a speaker talks; the audience finishes reading first and then loses interest).
-
----
-
-## 4 · Six layouts that are enough for almost every deck
-
-An overview of all 6 is at `assets/slide-mockup-preview.webp` · the file `assets/slide-mockup.html` has all 6 **rendered at 1280×720 and checked by eye**.
-Open it in a browser to see the real thing, or use it as the model when building a `.pptx`.
-
-| # | Layout | Use when |
-|---|---|---|
-| 1 | **Cover**: big title + divider line + description | First slide |
-| 2 | **Title + bullets + side strip** | General content, with the side strip holding the source of the numbers |
-| 3 | **3 number boxes** | Results · metrics · before-after |
-| 4 | **Chart + explanation beside the chart** | Data slides |
-| 5 | **Chapter divider**: solid main-colour fill, full slide (a dark deck may use a dark fill) | Starting a new section · giving the audience a break |
-| 6 | **One statement in the middle of the slide** | The ask · conclusion · customer quote |
-
-**Side strip rule (layouts 2 and 4):** put what the audience **might ask**: the source of the numbers, how to read the chart,
-limits of the data. Not extra content.
-
-**Every slide has the same footer:** section name on the left, page number on the right.
-Page numbers matter more than you think, because the audience can say "ขอย้อนกลับแผ่น 9" (please go back to slide 9).
-
----
-
-## 5 · Text size
-
-A 16:9 slide 13.333 inches wide = **960 pt** in slide software, and equals 1280 px in a browser.
-Conversion: **1 px = 0.75 pt**
-
-| Item | In the mockup | In the .pptx file |
-|---|---|---|
-| Cover title | 54 px | **40 pt** |
-| Big number | 46 px | **34 pt** |
-| Slide title | 34 px | **26 pt** |
-| Bullet | 24 px | **18 pt** |
-| Description | 22 px | **17 pt** |
-| Side strip | 19 px | **14 pt** |
-| Lead-in · label | 16 px | **12 pt** |
-| Footer | 14 px | **11 pt** |
-| Page margin | 64 px | **48 pt** (0.67 inch) |
-
-**Exception for the Stage deck:** the "ตัวอย่าง" (example) line · the sub-text in a process table · Q/A under numbers may use 12–14 pt, because the audience reads them later. Slide titles, step names and the main gist must still be ≥ 18 pt.
-
-**18 pt is the smallest content size in a meeting room.** Below it, people in the back row cannot read.
-If the content does not fit at 18 pt, the problem is too much content, not text that is too big.
-**Never reduce the size to make content fit.** Cut content instead.
-
-**2 weights are enough** (regular + bold). Slide titles should be bold; body text should not.
-
----
-
-## 6 · Data slides
-
-**1 chart, 1 conclusion.** If a chart says 2 things, split it into 2 slides.
-
-- **The slide title is the conclusion from the chart,** not the chart's name
-- **Highlight the bar/line that is the point with the brand colour, and make the rest grey.**
-  Colour alone says the point with no explanation needed
-- **Put the numbers on the bars directly.** Do not make the audience sweep their eyes over to read the axis
-- **Remove gridlines, unnecessary axes and the legend** if you can label the data directly
-- **Always state the data source:** period, sample size, source (put it in the side strip or footer)
-- **A table over 5 rows by 4 columns should not be on a slide.** Make it a chart, or move it to an attachment
-
-The chart colour palette in slides comes from `diagram-figures` → `references/colour-by-domain.md` · for charts that must also be used with app screens, see `web-app-design` (plugin `software-development`) → `references/tokens.md` "สีข้อมูล (กราฟ)" (data colours, charts)
-
----
-
-## 7 · Check the work
-
-### View the whole deck as thumbnails
-
-Open the slide sorter view, or render every slide as an image and lay them out together.
-
-- [ ] Reading only the slide titles of every slide, do you understand the whole story?
-- [ ] Is any slide visibly denser than the others (= over the text budget)?
-- [ ] Do the page margins match on every slide?
-- [ ] Is the slide title in the same position on every slide?
-
-### The three-metre test
-
-Shrink the slide to 25% and look from a distance. If you cannot read the slide title, the back row cannot either.
-
-### Go through slide by slide
-
-- [ ] The slide title is a conclusion, not a topic name
-- [ ] No more than 6 bullets, each no more than 2 lines on the real slide (per the table "Budget per slide"; Thai words cannot be counted)
-- [ ] Smallest text in the content ≥ 18 pt
-- [ ] Every chart has a conclusion and a data source
-- [ ] Every slide has a page number
-- [ ] Opened on the real projector or the screen that will actually be used, at least once
-
----
-
-## 8 · Thai on slides
-
-- **Line height at least 1.4** for slide titles and **1.5** for body text,
-  because below that, the upper vowels and lower vowels of 2 lines collide (the middle value is in `human-writing` `references/thai-line-breaking.md`)
-- **For a long Thai slide title, break the line yourself** at the point where the thought ends.
-  Do not let the program break it, because Thai has no spaces between words and the program breaks mid-word
-- **A font with both a real regular and a real bold weight.** A fake bold generated by the program blurs the vowels
-- **Thai mixed with English on the same line: use one font family that has both languages.**
-  Otherwise letter heights differ and the line looks tilted
-- Font settings in a real `.pptx` file (including the complex script problem) are in `branded-document-design`
-
----
-
-## 9 · Anti-patterns
-
-A list of 13 common ones (slide title is a topic name · slide is a document · shrinking text to fit · no page numbers, etc.) is in [`anti-patterns`](references/anti-patterns.md). Open it when checking item 7.
-
-**Things that make a deck look off-the-shelf: avoid** (idea from anthropics/skills pptx): a colour line under the title of every slide · cream/beige background as the default · the same 3-column icons on every slide · gradient text · long centred paragraphs
-
-**Flat decks: avoid:** dark or all-white background across the whole deck when the source work is vividly coloured · the main colour appearing only as thin lines · more than 3 text-only slides in a row · colours not in the source work (the fix is in [`deck-theme`](references/deck-theme.md) item 3)
-
----
-
-## 10 · Connect to other skills
-
-| Need | Use with |
-|---|---|
-| Create a real `.pptx` file | `branded-document-design` |
-| A single .html deck presented from a browser (menu · notes · clock · click for detail) | `html-slide-deck` |
-| Convert .pptx to .html with animation · click-by-click reveal · insert interactive pages | `html-slide-deck` (`references/from-pptx.md`) |
-| Chart colour palette | The work's main colour + secondary colour per `diagram-figures` → `references/colour-by-domain.md` (app screens: `web-app-design` in plugin `software-development`) |
-| Diagrams on slides | `diagram-figures` (for software, `software-diagrams` (plugin `software-development`) works too) |
-| Spacing rules and eye order (app screens) | `ui-craft` (plugin `software-development`) |
-| Content comes from a Software Requirements Specification (SRS) document | `srs-writing` (plugin `software-development`) |
-| Cut content down to what is necessary | `simplicity-first` (plugin `software-development`) |
-| Brand colour and type system · illustration | `graphic-design` (plugin `software-development`) |
-
----
-
-## Not looking AI-made
-
-Before sending, go through item 3 of `no-ai-look`: for HTML work, run its script · every job must also pass the eye gate 3.2 (web pages also answer items 10–14), because 0 findings from the script is not yet a pass · the prohibitions in this file are specific to this work; the full list for every medium is there.
-
-## Abbreviations
-
-Always spell out an abbreviation in full the first time, and put the abbreviation in brackets, for example Model Context Protocol (MCP).
-After that you may use the abbreviation. See the skill `spell-out-abbreviations` for details.
+# Presentation Design — slide deck story, layouts, and checks
+
+> **Pre-work gate (every time):** read the owner's theme → search live for a reference → 3 genuinely different directions → check `no-ai-look` before sending. Follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for this piece's structure). Close the work with a line `ด่านก่อนลงมือ:`.
+
+> **One rule:** a slide title is a **conclusion**, not a **topic name**. If the audience reads only the titles and understands the whole story, the deck is usable.
+
+## Use when
+- Making a deck: client proposal · business plan · research summary · progress report · training · design review
+- Reviewing a deck someone else made, or converting a long document into a deck
+- Not for: a real `.pptx` file (python-pptx, fonts, cover) → `branded-document-design` · chart palette → `diagram-figures` (`references/colour-by-domain.md`) · diagrams on a slide → `diagram-figures` · a document read alone → `polished-document-style` + `branded-document-design` (a deck sent to be read alone is a document: make a deck for speaking and attach a document)
+
+## Steps
+1. **Choose the delivered file.** Do not ask which type: not stated = .pptx · at the end say in 1 line that an .html version with animation is possible.
+
+   | User asks | Gets | Use |
+   |---|---|---|
+   | "ทำ slide deck" · "ทำสไลด์" · "ทำ presentation" (type not stated) | **.pptx** | `branded-document-design` · `StageDeck` |
+   | "slide deck html" · "เด็ค html" · "มี animation" · "นำเสนอจากเบราว์เซอร์" | One .html file with animation | `html-slide-deck` |
+   | Has a .pptx · "แปลง pptx เป็น html" · "animation แบบเด็ค IS" · wants interactive pages or click-by-click reveal | One .html that looks like the .pptx on every page | `html-slide-deck` (`references/from-pptx.md`) |
+   | Both | .pptx + .html from one source | Build the .pptx with `StageDeck`, then convert with the .pptx entry of `html-slide-deck` |
+
+2. **Research only what is missing.** If the deck cites facts, numbers, a market, or competitors, collect them with sources per `research-with-sources` (plugin `superuser`) before writing titles: a conclusion title must stand on real facts, not memory.
+3. **Take the theme from the source work, for every deck.** Run `python scripts/source_palette.py <source file>` on the file, logo, or website the user gave, then choose the mood from the table in [`deck-theme`](references/deck-theme.md) item 2 · if the source has no colour, use the project's colour per `diagram-figures` item 5 · light background by default, section-change pages full-slide main colour · only when live search is really impossible, use the house colour `#2A78D6` and write `(รอยืนยัน)` · if the work already has colours, do not pick new ones. Write a head-of-work line: which file the colour came from · which mood row · light or dark.
+4. **Choose the visual direction, stopping at the first hit:** the source work → the design the project already has → a reference the user attached → research (search live per `design-references`, type `slide`, then extract colours from the chosen work; pick 2–3 decks of the same kind and choose light or dark · font · density · image style; write a 1-line reason with sources) → the house default "Stage" (`branded-document-design` · `brandkit_stage.py`). Stage is the fallback when there is no information at all, not the answer for every deck: two decks for different work look different. If the source, project, or user reference supplies colour and fonts, search only for page structure and storytelling. The direction belongs to this deck alone: do not reuse the last deck's without checking the work differs. Render diagram figures with the deck's background colour (`#bg=`).
+5. **Write every slide title as plain text, one line per slide.** Read them in order; if they do not form one story, reorder now (much cheaper than later), then cut slides that do not move the story. This step takes under 20 minutes and decides good or bad. Order by purpose: [`references/deck-details.md`](references/deck-details.md). For executives, put the conclusion on slide 1.
+6. **Choose a layout per slide** from the 6 in the reference, then put in content and trim to the budget. Every slide has the same footer: section name left, page number right.
+7. **Budget per slide, counted in lines on the real slide** (Thai words cannot be counted): title at most 2 lines · at most 6 bullets · at most 2 lines per bullet · bullets are gist, not full sentences. If over, cut whole bullets or move them to the next slide. Never cut function words (จะ ให้ ก็ แล้ว, polite words) to fit; cut items.
+8. **Text size.** Smallest content text 18 pt (40 cover · 26 title · 18 bullet in .pptx; table and the Stage-deck exception in the reference). If content does not fit at 18 pt, cut content; never shrink text. 2 weights only; titles bold, body not.
+9. **Data slides:** 1 chart, 1 conclusion (a chart saying 2 things becomes 2 slides) · the title is the conclusion · highlight the point in the brand colour and grey the rest · numbers on bars, no gridlines or legend if data can be labelled · state period, sample size, and source · a table over 5 rows by 4 columns becomes a chart or an attachment.
+10. **Thai type:** line height at least 1.4 for titles and 1.5 for body · break long Thai titles yourself where the thought ends · a font with real regular and bold · one family for Thai and English on a line (details in the reference).
+11. **Render and view the whole deck as thumbnails**, then run the checks below. Before sending, go through item 3 of `no-ai-look` (for HTML work run its script; the eye gate 3.2 must also pass, and web pages answer items 10–14).
+
+## Check before done
+- Reading only the titles gives the whole story · every title is a conclusion
+- No slide visibly denser than the others · margins and title position match on every slide
+- Three-metre test: at 25% size the title is still readable
+- At most 6 bullets, each at most 2 lines · smallest content text at least 18 pt
+- Every chart has a conclusion and a data source · every slide has a page number
+- Opened once on the real projector or screen
+- The list of 13 anti-patterns checked ([`references/anti-patterns.md`](references/anti-patterns.md))
+- The line `ด่านก่อนลงมือ:` closes the work
+
+## References
+- [`references/deck-details.md`](references/deck-details.md) — open when ordering the story, choosing a layout, setting text sizes, building a data slide, or setting Thai type
+- [`references/deck-theme.md`](references/deck-theme.md) — open for colours and mood (central file for every slide skill)
+- [`references/anti-patterns.md`](references/anti-patterns.md) — open when checking the work
 
 
 ## reference: anti-patterns.md
@@ -1488,6 +1201,127 @@ Use when checking a deck before sending.
 - **Brand colour on everything.** Use the brand colour only for what you want people to look at
 - **No page numbers.** The audience cannot refer to a slide
 - **Sending the deck without ever viewing the whole set as thumbnails**
+
+
+## reference: deck-details.md
+
+# Deck details · presentation-design
+
+Open this when ordering a story, choosing layouts, setting text sizes, building data slides, or setting Thai type.
+
+- [Story order by purpose](#story-order-by-purpose)
+- [Slide title examples](#slide-title-examples)
+- [Six layouts](#six-layouts)
+- [Text size](#text-size)
+- [Data slides](#data-slides)
+- [Thai on slides](#thai-on-slides)
+- [Off-the-shelf look: avoid](#off-the-shelf-look-avoid)
+- [Related skills](#related-skills)
+
+## Story order by purpose
+
+First ask what the deck needs from the audience, then choose the order.
+
+| Purpose | Order |
+|---|---|
+| **Ask for approval / a decision** | Conclusion and the ask → 3 reasons → alternatives considered → risks → the ask again |
+| **Progress report** | Overall status (green/yellow/red) → what is done → what is blocked and what is needed from whom → next period's plan |
+| **Review a plan or design** | Problem solved → constraints → chosen design → why others were not chosen → points where you want opinions |
+| **Training** | What they can do after learning → concepts → demo → let them try → summary and what to study next |
+| **Selling work** | Customer's problem (in their words) → results they will get → our method → evidence → price and next step |
+
+For executives the conclusion goes on the first slide, not the last: they may have only the first 5 minutes.
+
+## Slide title examples
+
+```
+ผิด: ผลการวิเคราะห์เวลาดำเนินการ
+ถูก: ขั้นอนุมัติกินเวลาสองในสามของทั้งหมด
+
+ผิด: สถานะโครงการ
+ถูก: ส่งทันกำหนด ยกเว้นงานเชื่อมระบบบัญชีที่ช้า 1 สัปดาห์
+
+ผิด: ทุกข้อความผ่าน 8 ขั้น: Artificial Intelligence (AI) ทำงานภาษา โค้ดตัดสินเรื่องสำคัญ
+ถูก: ทุกข้อความผ่าน 8 ขั้น: AI ช่วยเขียนคำตอบ ส่วนเรื่องสำคัญให้ระบบตัดสิน
+```
+
+A title may run up to 2 lines. Do not shorten it into a topic name or until it reads badly: a title with 2 parts needs a connector, use phrases people say, choose words by who is listening (`human-writing` item 6).
+
+Bullets are gist, not full sentences: people read faster than a speaker talks, so full sentences make the audience read instead of listen.
+
+## Six layouts
+
+Overview: `assets/slide-mockup-preview.webp` · `assets/slide-mockup.html` has all 6 rendered at 1280×720 and checked by eye (open in a browser, or use as the model for a `.pptx`).
+
+| # | Layout | Use when |
+|---|---|---|
+| 1 | **Cover**: big title + divider line + description | First slide |
+| 2 | **Title + bullets + side strip** | General content, with the side strip holding the source of the numbers |
+| 3 | **3 number boxes** | Results · metrics · before-after |
+| 4 | **Chart + explanation beside the chart** | Data slides |
+| 5 | **Chapter divider**: solid main-colour fill, full slide (a dark deck may use a dark fill) | Starting a new section · giving the audience a break |
+| 6 | **One statement in the middle of the slide** | The ask · conclusion · customer quote |
+
+Side strip (layouts 2 and 4): put what the audience might ask: source of the numbers, how to read the chart, limits of the data. Not extra content.
+
+Every slide has the same footer: section name on the left, page number on the right (so the audience can say "ขอย้อนกลับแผ่น 9").
+
+## Text size
+
+A 16:9 slide 13.333 inches wide = 960 pt = 1280 px in a browser. 1 px = 0.75 pt.
+
+| Item | In the mockup | In the .pptx file |
+|---|---|---|
+| Cover title | 54 px | **40 pt** |
+| Big number | 46 px | **34 pt** |
+| Slide title | 34 px | **26 pt** |
+| Bullet | 24 px | **18 pt** |
+| Description | 22 px | **17 pt** |
+| Side strip | 19 px | **14 pt** |
+| Lead-in · label | 16 px | **12 pt** |
+| Footer | 14 px | **11 pt** |
+| Page margin | 64 px | **48 pt** (0.67 inch) |
+
+Exception for the Stage deck: the "ตัวอย่าง" (example) line · the sub-text in a process table · Q/A under numbers may use 12–14 pt, because the audience reads them later. Slide titles, step names and the main gist stay at 18 pt or more.
+
+18 pt is the smallest content size in a meeting room. If content does not fit at 18 pt, there is too much content: never reduce the size, cut content. 2 weights are enough (regular + bold): slide titles bold, body text not.
+
+## Data slides
+
+1 chart, 1 conclusion. If a chart says 2 things, split it into 2 slides.
+
+- The slide title is the conclusion from the chart, not the chart's name
+- Highlight the bar/line that is the point with the brand colour, and make the rest grey
+- Put the numbers on the bars directly
+- Remove gridlines, unnecessary axes and the legend if you can label the data directly
+- Always state the data source: period, sample size, source (side strip or footer)
+- A table over 5 rows by 4 columns should not be on a slide: make it a chart, or move it to an attachment
+
+Chart colour palette: `diagram-figures` → `references/colour-by-domain.md` · for charts that must also be used with app screens, `web-app-design` (plugin `software-development`) → `references/tokens.md` "สีข้อมูล (กราฟ)" (data colours, charts).
+
+## Thai on slides
+
+- Line height at least 1.4 for slide titles and 1.5 for body text, because below that the upper and lower vowels of 2 lines collide (middle value in `human-writing` `references/thai-line-breaking.md`)
+- For a long Thai slide title, break the line yourself where the thought ends: the program breaks mid-word because Thai has no spaces between words
+- A font with both a real regular and a real bold weight: fake bold blurs the vowels
+- Thai mixed with English on the same line: one font family that has both languages, otherwise letter heights differ and the line looks tilted
+- Font settings in a real `.pptx` file (including the complex script problem): `branded-document-design`
+
+## Off-the-shelf look: avoid
+
+- Things that make a deck look off-the-shelf: a colour line under the title of every slide · cream/beige background as the default · the same 3-column icons on every slide · gradient text · long centred paragraphs
+- Flat decks: dark or all-white background across the whole deck when the source work is vividly coloured · the main colour appearing only as thin lines · more than 3 text-only slides in a row · colours not in the source work (fix in [`deck-theme`](deck-theme.md) item 3)
+
+## Related skills
+
+| Need | Use with |
+|---|---|
+| A single .html deck presented from a browser (menu · notes · clock · click for detail) | `html-slide-deck` |
+| Convert .pptx to .html with animation · click-by-click reveal | `html-slide-deck` (`references/from-pptx.md`) |
+| Spacing rules and eye order (app screens) | `ui-craft` (plugin `software-development`) |
+| Content comes from a Software Requirements Specification (SRS) | `srs-writing` (plugin `software-development`) |
+| Cut content down to what is necessary | `simplicity-first` (plugin `software-development`) |
+| Brand colour and type system · illustration | `graphic-design` (plugin `software-development`) |
 
 
 ## reference: deck-theme.md

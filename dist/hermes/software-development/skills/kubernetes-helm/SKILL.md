@@ -5,8 +5,6 @@ description: Use when writing a Dockerfile, Kubernetes manifest or Helm chart
 
 # kubernetes-helm: Dockerfile, manifest, Helm chart and deploy staging → production
 
-Part of plugin `software-development`. The wording of this file and of its reports follows `human-writing`. Every version and command was checked against the official docs on 2026-10-27, with links in the `references/` files. Items not yet checked carry the label `(ยังไม่ได้ตรวจ)` (not yet checked).
-
 > **One rule:** production runs the same image that passed staging (identified by digest, never rebuilt), and every manifest passes `helm lint` and `helm template | kubeconform` before touching a cluster. Secrets are not in the image and not in values.
 
 ## Use when
@@ -140,23 +138,6 @@ GPU node pools and load balancers cost money. Do this:
 3. After deleting, check again with list commands (`kubectl get`, `helm list`, the cloud's node pool list command), then summarise the cost actually incurred.
 4. Scaling to 0 is not deleting: things that are only stopped may still charge for space (disk · load balancer) `(ยังไม่ได้ตรวจ)` with the cloud in use.
 
-## Worked example: voice agent for a dental clinic
-
-Task: a web app (customer page + back office) · several services talk through Kafka · STT/TTS on GPU · Jenkins build → staging → production
-
-| Piece | How |
-|---|---|
-| image | `web` `api` `voice-gateway` `stt` `tts`, all multi-stage · non-root · digest · Jenkins builds once and records the digest |
-| chart | 1 chart `clinic-voice` · `services.web` `api` `voiceGateway` `stt` `tts` · values split by environment · secrets (Kafka · database · STT/TTS keys) via `ExternalSecret` |
-| web · api · gateway | probes point at `/health/live` `/health/ready` · PDB `maxUnavailable: 1` · HPA at CPU 60% |
-| stt · tts | `nodeSelector` + toleration + `limits.nvidia.com/gpu: 1` · separate namespace or NetworkPolicy · long `startupProbe` for model loading |
-| consumer that processes after the call | KEDA watches topic lag · max not above the number of partitions |
-| NetworkPolicy | open only ingress → web · web → api · gateway → stt/tts · api → Kafka |
-| metric | the pod exposes `/metrics` for Prometheus (per `observability-basics`) |
-| staging → production | test real voice on staging · record the digest · approve · `helm upgrade` production with that digest · no new build |
-
-Result: `helm lint` and `helm template | kubeconform` pass for both environments · the production image `@sha256` matches staging · no secrets in the repo or values
-
 ## Check before sending
 
 1. Dockerfile: multi-stage · digest · non-root · has `.dockerignore` · no secrets in layers (check with `docker history`)
@@ -167,12 +148,7 @@ Result: `helm lint` and `helm template | kubeconform` pass for both environments
 6. GPU: no web pod on a GPU node · stt/tts really land on a GPU node (`-o wide`)
 7. Items not checked or not runnable are listed in the report
 
-## Sources
+## References
 
-Checked 2026-10-27 (details per item are in references):
-
-- Docker: [Build best practices](https://docs.docker.com/build/building/best-practices/) · [Build secrets](https://docs.docker.com/build/building/secrets/)
-- Kubernetes: [Pod Security Standards](https://kubernetes.io/docs/concepts/security/pod-security-standards/) · [Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) · [Resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) · [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) · [PDB](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) · [HPA](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) · [NetworkPolicy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) · [Images](https://kubernetes.io/docs/concepts/containers/images/) · [Schedule GPUs](https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/) · [Secrets good practices](https://kubernetes.io/docs/concepts/security/secrets-good-practices/)
-- Helm: [upgrade](https://helm.sh/docs/helm/helm_upgrade/) · [lint](https://helm.sh/docs/helm/helm_lint/) · [values](https://helm.sh/docs/chart_best_practices/values/) · [registries](https://helm.sh/docs/topics/registries/) · [rollback](https://helm.sh/docs/helm/helm_rollback/)
-- Tools: [kubeconform](https://github.com/yannh/kubeconform) · [External Secrets](https://external-secrets.io/latest/introduction/overview/) · [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets) · [KEDA](https://keda.sh/docs/latest/concepts/) · [NVIDIA GPU Operator](https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/overview.html)
-- Cloud GPU: [GKE](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/gpus) · [AKS](https://learn.microsoft.com/en-us/azure/aks/use-nvidia-gpu) · [EKS](https://docs.aws.amazon.com/eks/latest/userguide/ml-eks-optimized-ami.html)
+- [`references/worked-example-voice-agent.md`](references/worked-example-voice-agent.md) — open for a full example (web + api + Kafka + GPU STT/TTS, staging to production)
+- [`references/sources.md`](references/sources.md) — official docs checked 2026-10-27; open when re-checking a version or command

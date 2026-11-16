@@ -5,7 +5,7 @@ description: Use when learning trading techniques step by step
 
 # Trading Technique Course (a trading technique course with gates)
 
-A course with levels. Each level teaches one technique as written rules, tests it on past charts, practises it on paper, and measures it in the journal. The next level opens only when the gate is met. General information, not investment advice. Wording follows `human-writing`.
+A course with levels. Each level teaches one technique as written rules, tests it on past charts, practises it on paper, and measures it in the journal. The next level opens only when the gate is met. General information, not investment advice.
 
 > **One rule:** risk first, one technique at a time, and no level or real money before its gate is met in the user's own numbers. The course never names a stock or pair to trade and never says a technique will make money.
 
@@ -71,14 +71,6 @@ Fail a gate → stay on the level and run another 20 paper trades; do not skip a
 
 Once a week: run `trade-stats.mjs` on the current level, update `course-progress.md`, and hand the journal to `trade-journal` mode 2 (Review) for one pattern and one rule. Report in 4 lines: level · trades so far / needed · expectancy and violations · what is left before the gate.
 
-## Worked example (ตัวอย่าง, numbers made up)
-
-**Ask:** "I passed level 0. Level 1 trend: backtest gave 34 signals on 3 SET stocks, expectancy +0.18R. Paper: 20 trades, 8 wins averaging 2.1R, 12 losses averaging 1.05R, 1 moved stop. Can I go to breakout, and can I start with real money?"
-
-**Did:** ran `trade-stats.mjs` on the 20 paper rows (2026-11-10): win rate 40% (95% interval 21.9%–61.3%) · expectancy 0.4 × 2.1 − 0.6 × 1.05 = **+0.21R** · average loss 1.05R · violations 5% · max drawdown 6.3R. Checked the level 1 → 2 gate: 20 trades ✓ · above 0R ✓ · violations 5% ✓ · average loss ✓ · drawdown 6.3R inside the user's 10R ✓ · paper +0.21R is above half of +0.18R ✓. Real-money gate: only 20 of 30 trades and 6 weeks of 8 → not yet.
-
-**Result:** "Level 1 passed; level 2 (breakout) opens. Real money with the trend setup is not open yet: 10 more paper trades and 2 more weeks, still above +0.2R. Keep the trend setup on paper alongside level 2 so its count keeps growing. The moved stop on trade 14 is the one habit to watch."
-
 ## Check before sending
 
 - [ ] Level 0 done before any technique; no level skipped
@@ -87,8 +79,7 @@ Once a week: run `trade-stats.mjs` on the current level, update `course-progress
 - [ ] Rules used as written in `levels.md`, or the user's change is written down before the backtest
 - [ ] Real money only after the `paper-trading` graduation gate, at one quarter risk, and the decision is the user's
 
-## Sources
+## References
 
-- Gates, minimum trade counts, quarter-risk start, violation limit: `paper-trading` graduation gate and `trade-journal` (this plugin) · indicator defaults and the breakout failure rule: `technical-signals` · the 2-retest limit borrows the multiple-testing idea of [Harvey, Liu and Zhu (NBER w20592)](https://www.nber.org/papers/w20592) already cited in `copy-trade-check`; the number 2 is ours (starting value, not yet measured)
-- Level rules in `levels.md` are common textbook forms written as countable rules for this course; they are teaching material, not tested strategies (not yet measured on Thai data)
-- Red/green test of this skill with a fresh agent: not yet run (ยังไม่ได้รัน); eval cases are in `plugins/trading-finance/evals/trading-technique-course-*`
+- [`references/worked-example.md`](references/worked-example.md) — open for a gate check done on made-up numbers
+- [`references/sources.md`](references/sources.md) — where the gate numbers come from

@@ -6,8 +6,6 @@ Use when a Markdown doc needs an image, SVG or ASCII art
 
 > **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
-> **Language:** write every line of wording per `human-writing`. This skill gives the format and structure; human-writing gives the way to write so people understand.
-
 > **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
 > **Rule:** Every plan, process, design, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
@@ -169,15 +167,10 @@ For every visual:
 
 ## Anti-patterns
 
-- **Text-only design docs** — "the icon is in the top-right" with no picture
 - **Linking to Figma / external design tools as the only source** — visuals must render in the repo
 - **PNG screenshots of text** — use the text, in a code block
-- **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
-- **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
-- **ASCII art outside a code fence** — proportional fonts will mangle alignment
 - **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
 - **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
-- **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
 
 ## Quick-start recipe
 
@@ -192,24 +185,9 @@ When a markdown doc needs a design picture (clickable app screens go to the plat
 4. **Add a feature reference table** below the visuals — what each element means
 5. **Cross-check accessibility checklist** before delivery
 
-Not sure a visual will render? Preview it in the viewer the reader will use (GitHub, Notion, VS Code) before delivery.
-
-## Related skills
-
-- `polished-document-style` — overall doc formatting, figure captions, callout boxes
-- `simplicity-first` (plugin `software-development`) — don't over-design the diagram; show what's needed
-- `software-diagrams` (plugin `software-development`) — which diagram type answers which question, plus the shared Mermaid theme
-- `diagram-figures` — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
-- `ui-craft` (plugin `software-development`) — spacing, hierarchy and states when the picture is a screen
-
 ## ไม่ให้ดูเหมือน AI ทำ
 
 Before sending, go through item 3 of `no-ai-look` — for HTML work, run its script · every piece must also pass eye check 3.2 (a web page adds items 10–14), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for all media is there
-
-## ตัวย่อ
-
-Spell out each abbreviation in full on first use and put the short form in brackets — for example Model Context Protocol (MCP)
-After that, use the short form. Details are in the skill `spell-out-abbreviations`
 
 
 ## reference: ascii-patterns.md
@@ -381,8 +359,6 @@ Use when a README or PR needs a quick Mermaid diagram
 
 # Software Diagrams
 
-> **Language:** every line of wording follows `human-writing`. This skill gives the format and structure, while human-writing says how to write so a reader understands.
-
 > **The one rule of this skill:** a diagram answers **one question**.
 > If it answers 2 questions, draw 2 pictures.
 
@@ -403,18 +379,12 @@ In a README · Pull Request · note in code:
 - Say what runs on which machine
 - Review a diagram someone else drew
 
-## When **not** to use
 
-| Job | Use this instead |
-|---|---|
-| Choose which kind of picture to use (SVG / ASCII / Mermaid) | `markdown-visuals` |
-| Screenshots · wireframes | `ui-craft` + the platform skill |
-| Data charts | `web-app-design` → `references/tokens.md` heading "สีข้อมูล (กราฟ)" (data colours, charts) |
-| Choose an architecture | `architecture-patterns` |
+Not for: choosing SVG / ASCII / Mermaid → `markdown-visuals` · screenshots and wireframes → `ui-craft` + the platform skill · data charts → `web-app-design` `references/tokens.md` heading "สีข้อมูล (กราฟ)" · choosing an architecture → `architecture-patterns`
 
 ## 1 · Which question, which diagram
 
-**Start from the question, not from the diagram type.** People draw wrongly because they pick the type first and then stuff content into it.
+**Start from the question, not from the diagram type.**
 
 | The question in the reader's head | Diagram |
 |---|---|
@@ -429,9 +399,7 @@ In a README · Pull Request · note in code:
 | "A cloud diagram in the repo with real AWS / Azure logos" | Infrastructure — section 3 |
 | "I want a nice picture for the client proposal" | Not the job of this skill — `diagram-figures` |
 
-> The **C4 model** is a way to draw architecture in layers, like zooming a map:
-> level 1 looks from outside the system · level 2 opens the lid and looks inside · level 3 zooms into a single box.
-> **Always draw levels 1 and 2 in full first.** Draw level 3 only for the parts that are truly complex.
+**Always draw C4 levels 1 and 2 in full first.** Draw level 3 only for the parts that are truly complex.
 
 ## 2 · Theme — one set for the whole project
 
@@ -440,7 +408,7 @@ The theme line, colour stand-ins, classes and rendered examples are in [`assets/
 
 > Warning: **`fontFamily` must sit outside `themeVariables`.** If you put it inside, it is silently ignored and Mermaid falls back to its default font.
 
-**Check with a tool before every send.** This rule is forgotten most often (one test project had 63 of 66 figures with no theme line, and nobody noticed):
+**Check with a tool before every send.** This rule is forgotten most often:
 
 The scripts are in the `scripts/` folder of this skill. Run them with the script's full path and the `docs` folder of the project being checked (`<path ของ skill>` = the folder where this skill is installed):
 
@@ -537,6 +505,7 @@ Then **open the image file and look at it with your eyes**. Go through this list
 - [ ] Does a label overlap a line or a box?
 - [ ] Is the Thai text complete, with no missing vowels?
 - [ ] Is the level of detail the same across the figure?
+- [ ] Does the diagram carry a date and an owner? (without them nobody dares to edit it after a year)
 - [ ] Can someone who has never seen this system read it and answer the original question?
 
 **Mermaid limits to know before you waste time:**
@@ -550,40 +519,11 @@ Then **open the image file and look at it with your eyes**. Go through this list
 
 If you truly cannot get the layout you want and the figure stays in a markdown document, draw an inline SVG per `markdown-visuals`. If the figure must look designed, go to `diagram-figures`.
 
-## 7 · Anti-patterns
-
-- **A 40-box architecture diagram** — nobody reads it. Split it into several C4 levels.
-- **Drawing past the cap and then saying so** — split as soon as you count that it is over.
-- **Stuffing command-line options into a box** — the box swells, the letters shrink, and the whole figure is unreadable.
-- **A line with no label** — the reader guesses what flows through, and guesses wrong.
-- **Mixing levels of detail** — `Kubernetes` sitting next to `UserService.validate()`.
-- **Rainbow colours** — colour must carry meaning. Do not add it to avoid boredom.
-- **Drawing every error case in one sequence** — draw the main path first, then split the special cases into separate figures.
-- **An ER diagram with every table in the system** — split by domain.
-- **A diagram with no date and no owner** — after a year nobody dares to edit it.
-- **Sending a diagram that was never rendered**
-- **A different theme in every figure of one document**
-
-## 8 · Link to other skills
-
-| Need | Use with |
-|---|---|
-| Choose the visual format in a markdown document | `markdown-visuals` |
-| The document around the diagram | `polished-document-style` |
-| Embed in a Word / PowerPoint file | `branded-document-design` |
-| A diagram in an SRS document | `srs-writing` |
-| Choose the architecture before drawing | `architecture-patterns` |
-| A figure that must look designed or needs sign-off | `diagram-figures` |
-| Record why this design was chosen | `adr-writer` |
+To record why a design was chosen, use `adr-writer`. A figure that must look designed or needs sign-off → `diagram-figures`.
 
 ## Do not look AI-made
 
-Before sending, walk through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass eye check 3.2 (web pages also answer items 10–14), because a script result of 0 items is not yet a pass. The bans in this file are specific to this kind of work. The full list for every medium is there.
-
-## Abbreviations
-
-Always spell an abbreviation out in full the first time, and put the abbreviation in brackets — for example Model Context Protocol (MCP).
-After that you can use the abbreviation. For details see the skill `spell-out-abbreviations`.
+Before sending, walk through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass eye check 3.2 (web pages also answer items 10–14), because a script result of 0 items is not yet a pass.
 
 
 ---
@@ -593,8 +533,6 @@ After that you can use the abbreviation. For details see the skill `spell-out-ab
 Use when writing a runbook or on-call guide
 
 # Incident Runbook Template
-
-> **Language:** write every line per `human-writing`. This skill gives the format and the structure, while human-writing says how to write so a person can follow it.
 
 ## When to use this skill
 
@@ -629,19 +567,7 @@ Before using the structure or template in this file, check whether the user, cus
 
 ## What's a Runbook?
 
-A **runbook** answers: "Alert X fired. What do I do?"
-
-It's NOT:
-- A postmortem (that analyses the incident afterwards)
-- Architecture documentation (that explains the bigger picture)
-- Training material (that goes into too much detail)
-
-It IS:
-- Step-by-step actions
-- Decision flowcharts
-- Commands to copy-paste
-- Escalation paths
-
+A **runbook** answers: "Alert X fired. What do I do?" It is not architecture documentation (the bigger picture) or training material (too much detail).
 ## Runbook Quality Standards
 
 A good runbook is:
@@ -705,11 +631,8 @@ Test a runbook by deliberately simulating a failure. Each quarter, pick one runb
 ## Anti-patterns
 
 - **Theoretical runbooks** written by someone who never saw the failure
-- **Long background text** before the first action
 - **"Contact the team"** without saying who or how
 - **Treating mitigation as the root-cause fix** (mitigation should be FAST; the fix comes later)
-- **Runbook in a wiki nobody can find** — link from alert
-- **Update postmortems but not runbooks** — every postmortem should lead to a runbook update
 
 ## Document Look
 
@@ -721,8 +644,6 @@ load the matching skill before writing, not after:
 | Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
 | A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
 | The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
-
-Default formatting is not neutral — it reads as unfinished work.
 
 
 ## reference: game-days.md
@@ -1147,28 +1068,18 @@ grep "a3f9c1b2" logs/app-*.log          # does one request show every line?
 
 ---
 
-## 8 · Anti-patterns
+## 8 · Anti-patterns not covered above
 
-- **`console.log` / `print()` in real code** — no level, no time, no cid, not written to a file
-- **Logging everything** — the file grows so large you cannot find anything, and it is expensive and slow
 - **A silent `try { } catch (e) { }`** — log at least 1 line
 - **Log, then rethrow** — one problem shows up 3 times in the file. Log at the top layer that really handles the error instead.
-- **Variables embedded in the message** (`` `บันทึก order ${id} ไม่สำเร็จ` ``) — you cannot group the logs.
-  Use a fixed message + context instead.
 - **Logging inside a loop that runs thousands of times** — log one summary when the loop ends
-- **A timestamp with no timezone** — the server uses UTC but Thai readers read it as +07:00, so times are compared 7 hours off
-- **No retention** — one day the disk fills and the system goes down from its own logs
+- **Logging everything** — the file grows so large you cannot find anything, and it is expensive and slow
 
 ---
 
 ## 9 · Links to other skills
 
-| Need | Use with |
-|---|---|
-| health/ping/version endpoint | `web-service-essentials` |
-| Writing tests with full coverage | `testing-standards` |
-| Runbook during an incident | `incident-runbook-template` |
-| Postmortem after an incident | `postmortem-template` |
+`testing-standards` (tests with full coverage) · `incident-runbook-template` · `postmortem-template`
 
 
 ## reference: per-stack.md
@@ -1408,6 +1319,7 @@ Use when building or reviewing an HTTP backend
 - For URL style · paging · dates · API ids, use `api-conventions`
 - For log format, use `logging-standards`
 - To choose an architecture, use `architecture-patterns`
+- To check responses against OpenAPI in CI or catch breaking changes, see `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md)
 
 ---
 
@@ -1427,7 +1339,7 @@ Use when building or reviewing an HTTP backend
 
 \* If you do not want the public to see the commit hash in `/version`, restrict it so only the internal network can call it.
 
-**Wire it to Kubernetes like this** (adapted from secondsky `health-check-endpoints` · MIT) — live and ready must point to different paths, or the point above means nothing.
+**Wire it to Kubernetes like this** — live and ready must point to different paths, or the point above means nothing.
 
 ```yaml
 livenessProbe:            # dead → restart the container
@@ -1558,7 +1470,7 @@ SIGTERM → 1. Stop accepting new requests (make /health/ready answer down at on
 
 ---
 
-## 6 · Ready-to-use code
+## 6 · Ready-made code
 
 | File | Stack | Status |
 |---|---|---|
@@ -1566,25 +1478,7 @@ SIGTERM → 1. Stop accepting new requests (make /health/ready answer down at on
 | `assets/health_py.py` | Python / FastAPI | ✓ run and tested the same way, results match on every field |
 | `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | Caution: not yet compiled or tested |
 
-```js
-// Node
-app.use(createHealthRouter({
-  version: { name: 'orders-api', version: '1.4.0', commit: process.env.GIT_SHA },
-  checks: {
-    db:   async () => { await pool.query('SELECT 1'); },          // critical
-    mail: { critical: false, run: async () => { await smtp.verify(); } },
-  },
-}));
-```
-
-```python
-# Python
-app.include_router(make_health_router(
-    version={"name": "orders-api", "version": "1.4.0", "commit": os.getenv("GIT_SHA")},
-    checks={"db": lambda: db.execute("SELECT 1"),
-            "mail": {"critical": False, "run": smtp.verify}},
-))
-```
+Usage snippets for the Node and Python routers: [`references/per-stack.md`](references/per-stack.md).
 
 ---
 
@@ -1609,33 +1503,6 @@ docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:808
 - [ ] Trigger a 500 and confirm no stack trace / connection string leaks out
 - [ ] After `SIGTERM`, in-flight requests finish before the app closes
 - [ ] `/ping` is not written to the log (or the file fills up with pings)
-
----
-
-## 8 · Anti-patterns
-
-- **A single `/health` that checks everything** — the orchestrator cannot tell whether to restart or only cut traffic
-- **liveness checks the DB** — a 10-second DB hiccup = every pod dies together
-- **A health check with no timeout** — a dependency hangs, and health hangs with it
-- **Sending a stack trace / connection string in health or in a 500 error**
-- **Health requires login** — the orchestrator has no token to give
-- **A different error format on every endpoint** — the client must write 5 kinds of parsing code
-- **`/ping` written to the log** — every second × 86400 = a file full of junk
-- **No graceful shutdown** — every deploy, customers see errors
-- **`Access-Control-Allow-Origin: *` together with cookies** — lets other sites send requests as the user
-
----
-
-## 9 · Links to other skills
-
-| Need | Use together with |
-|---|---|
-| Log format and correlation id | `logging-standards` |
-| Tests for these endpoints | `testing-standards` |
-| Check responses against OpenAPI in CI · contract with the frontend team · breaking-change check | `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md) |
-| Design business endpoints | command `/api-design` |
-| Runbook for when the service is down | `incident-runbook-template` |
-| Security review | `security-engineer` + command `/security-scan` (a shortcut to `security-audit` or `security-gate`) |
 
 
 ## reference: per-stack.md
@@ -1892,3 +1759,25 @@ this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r))
 | security headers | `UseHsts()` (HTTP Strict Transport Security (HSTS) เท่านั้น) + middleware สั้น ๆ หรือ `NetEscapades.AspNetCore.SecurityHeaders` | `helmet` | `secure` middleware |
 | OpenAPI | `Microsoft.AspNetCore.OpenApi` (`AddOpenApi()` + `MapOpenApi()` · มากับ template ตั้งแต่ .NET 9) · ทางเลือก: Swashbuckle / NSwag | `swagger-jsdoc` | มีในตัว `/docs` |
 | rate limit | `AddRateLimiter` | `express-rate-limit` | `slowapi` |
+
+## Wiring the ready-made health router
+
+```js
+// Node
+app.use(createHealthRouter({
+  version: { name: 'orders-api', version: '1.4.0', commit: process.env.GIT_SHA },
+  checks: {
+    db:   async () => { await pool.query('SELECT 1'); },          // critical
+    mail: { critical: false, run: async () => { await smtp.verify(); } },
+  },
+}));
+```
+
+```python
+# Python
+app.include_router(make_health_router(
+    version={"name": "orders-api", "version": "1.4.0", "commit": os.getenv("GIT_SHA")},
+    checks={"db": lambda: db.execute("SELECT 1"),
+            "mail": {"critical": False, "run": smtp.verify}},
+))
+```
