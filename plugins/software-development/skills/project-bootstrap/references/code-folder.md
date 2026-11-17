@@ -16,6 +16,8 @@ The rules are in `SKILL.md` item 1. The root tree is in `project-doc-set` item 1
   src/                   ← the real code (or the layout the stack expects, per `SKILL.md` item 1)
   tests/                 ← required in .NET · Flutter (`test/`) · Node and Python keep only integration and e2e here (unit tests sit beside the code files) — the stack table is at the end of this file
   scripts/               ← setup, seed, migrate — scripts a person has to run
+  extension/             ← add-ons and sub-programs of this app, 1 folder each: browser extension · plugin · CLI · hook client · SDK (`SKILL.md` item 1) · only when one exists
+    <name>/              ← own README · own build and tests in that stack's layout
 ```
 
 ## Exceptions by stack
