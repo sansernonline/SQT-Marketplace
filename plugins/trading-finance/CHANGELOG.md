@@ -1,5 +1,9 @@
 # Changelog — trading-finance
 
+## 0.23.2 — 2026-11-17
+
+- ลบเคส eval `stock-fundamentals-behaviour` (ผู้ใช้สั่ง 2026-11-17) · เคสนี้ต้องรัน Bash ใน WSL2 หรือ Linux ซึ่งเครื่องนี้ไม่มี จึงค้างมาตลอด · stock-fundamentals ยังเหลือเคส `-trigger` และ `-guard`
+
 ## 0.23.1 — 2026-11-17
 
 - ของกลางจาก superuser 3.45.0: config แม่แบบมีโมดูล `resume_check` (เตือนข้อเก่าใน "รับงานต่อ" และเตือนให้อัปเดตก่อนจบ) · แม่แบบ CONTEXT มีกฎ `รับโดย:` และป้าย `ขัดกัน` จาก superuser 3.44.0 ซึ่งรอบนั้นไม่ได้ขึ้นรุ่น plugin นี้
