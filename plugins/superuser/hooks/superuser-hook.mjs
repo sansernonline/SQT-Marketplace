@@ -662,10 +662,10 @@ export function reviewGate(s) {
 // คืนเหตุผลที่ไม่ให้จบ (หรือ "") · ด่านรีวิวก่อน แล้วกฎ stop ใน guard-rules.json (R7) · บล็อกได้ครั้งเดียวต่อการหยุด (stop_hook_active)
 function stopGate(input, teamDir, root) {
   if (input.stop_hook_active || !input.transcript_path || !existsSync(input.transcript_path)) return "";
-  const review = moduleOn(teamDir, "review_gate"), rules = modOn(teamDir, "stop_rules");
-  if (!review && !rules) return "";
+  const review = moduleOn(teamDir, "review_gate"), rules = modOn(teamDir, "stop_rules"), resume = moduleOn(teamDir, "resume_check");
+  if (!review && !rules && !resume) return "";
   const s = gateState(teamDir, input.transcript_path);
-  return (review && reviewGate(s)) || (rules && stopRules(s, teamDir, root, HERE, input)) || "";
+  return (review && reviewGate(s)) || (resume && resumeGate(s, !!contextFile(teamDir, root))) || (rules && stopRules(s, teamDir, root, HERE, input)) || "";
 }
 
 // ── ด่านแตกงาน (PreToolUse ของหัวหน้าทีม) ───────────────────────────────
@@ -720,7 +720,7 @@ export function splitGate(s, target, currentId = null, current = { name: "Write"
 // session ยาวหลาย MB → ไม่ parse ทั้งไฟล์ทุกครั้ง · จำ byte ที่อ่านถึงและตัวนับของด่านไว้ ต่อ transcript_path แล้วอ่านเฉพาะส่วนที่เพิ่ม
 // ไฟล์เล็กลง = ถูกเขียนใหม่ → นับใหม่ · ไม่อ่านบรรทัดท้ายที่ยังเขียนไม่จบ
 const GATE_KEEP = 20;
-const freshGate = () => ({ offset: 0, line: 0, usedSuperuser: false, workers: 0, pieces: [], edited: [], lastEdit: -1, lastCheck: -1, lastText: "", pending: [], agentCalls: [], lastTest: -1, lastCodeEdit: -1 });
+const freshGate = () => ({ offset: 0, line: 0, usedSuperuser: false, workers: 0, pieces: [], edited: [], lastEdit: -1, lastCheck: -1, lastText: "", pending: [], agentCalls: [], lastTest: -1, lastCodeEdit: -1, sinceResume: [] });
 
 // ลูกทีมเบื้องหลัง: ผลของคำสั่ง Agent ขึ้นว่า "Async agent launched" (มี agentId) = เริ่ม
 // ข้อความ <task-notification> ที่มี <tool-use-id> หรือ <task-id> ตรงกัน = จบ (บางฉบับมีแค่ task-id)
@@ -757,7 +757,7 @@ export function readNew(file, from = 0) {
 export function foldTranscript(s, lines) {
   for (const line of lines) {
     const i = s.line++;
-    s.pending ??= []; s.agentCalls ??= [];   // สถานะที่บันทึกไว้ก่อนมีช่องนี้
+    s.pending ??= []; s.agentCalls ??= []; s.sinceResume ??= [];   // สถานะที่บันทึกไว้ก่อนมีช่องนี้
     if (!line.includes('"assistant"') && !line.includes(LAUNCHED) && !line.includes("task-notification")) continue;
     let m; try { m = JSON.parse(line); } catch { continue; }
     if (m.message?.role !== "assistant") { if (!m.isSidechain) foldBackground(s, m); continue; }
@@ -768,13 +768,15 @@ export function foldTranscript(s, lines) {
         s.lastText = b.text;
         // บรรทัด ข้ามรีวิว: นับเป็นจุดตรวจ · รอบถัดไปจะบล็อกอีกก็ต่อเมื่อแก้ไฟล์งานหลังจุดนี้ (เดิมดูแค่ข้อความล่าสุด จึงบล็อกซ้ำทุกรอบ · บทเรียน 2026-11-11)
         if (/(^|\n)\s*ข้ามรีวิว\s*:\s*\S/.test(b.text)) s.lastCheck = i;   // ต้องขึ้นต้นบรรทัด · ข้อความที่แค่อ้างถึงกลางประโยคไม่นับ
+        if (/(^|\n)\s*ข้ามรับงานต่อ\s*:\s*\S/.test(b.text)) s.sinceResume = [];
       }
       if (b.type !== "tool_use") continue;
       const inp = b.input ?? {};
       if (b.name === "Skill" && /(^|:)superuser$/.test(inp.skill ?? "")) s.usedSuperuser = true;
       foldTestState(s, b.name, inp, i);   // ข้อ stop-no-test: รัน test ครั้งสุดท้ายกับแก้โค้ดครั้งสุดท้าย (lib/rules.mjs)
       const p = String(inp.file_path ?? inp.notebook_path ?? "");
-      if (EDIT_TOOLS.has(b.name) && p && !SKIP_PATH.test(p)) { if (!s.edited.includes(p)) s.edited.push(p); s.lastEdit = i; }
+      if (EDIT_TOOLS.has(b.name) && p && !SKIP_PATH.test(p)) { if (!s.edited.includes(p)) s.edited.push(p); s.lastEdit = i; if (!s.sinceResume.includes(p)) s.sinceResume.push(p); }
+      if (EDIT_TOOLS.has(b.name) && /(^|[\\/])CONTEXT\.md$/.test(p)) s.sinceResume = [];   // แตะ CONTEXT.md = อัปเดตรับงานต่อแล้ว
       if (["Agent", "Task"].includes(b.name)) {
         if (b.id) s.agentCalls = [...s.agentCalls, b.id].slice(-50);   // ใช้จับคู่ผล "Async agent launched"
         if (CHECKER.test(inp.subagent_type ?? "")) s.lastCheck = i;
@@ -1090,6 +1092,48 @@ export function recompactNotice(teamDir, root = dirname(teamDir)) {
   if (!parts.length) return "";
   const lines = parts.join("\n\n").split("\n").slice(0, RECOMPACT_MAX_LINES);
   return `Context was just compacted — latest work position from ${relative(root, file).replace(/\\/g, "/")} (read the whole file when you need other sections):\n${lines.join("\n")}`;
+}
+
+// ── ข้อเก่าใน "รับงานต่อ" (โมดูล resume_check) ──────────────────────────
+// ยืมแนวคิด "ความจำเสื่อมตามเวลา" จาก ai-memory (MIT · README อ่าน 2026-11-16) แบบไม่มีเซิร์ฟเวอร์: SessionStart อ่านวันที่ในแต่ละข้อ
+// ข้อที่วันที่ล่าสุดเก่าเกิน 14 วัน หรือ รับโดย: เกิน 24 ชั่วโมง → เตือนให้ตรวจกับของจริงก่อนทำตาม (handoff หัวข้อ 5) · ข้อที่ไม่มีวันที่ไม่ตัดสิน
+export const RESUME_STALE_DAYS = 14;
+export const CLAIM_STALE_HOURS = 24;
+const contextFile = (teamDir, root) => [join(teamDir, "CONTEXT.md"), join(root, "CONTEXT.md")].find((f) => existsSync(f));
+const CLAIM = /รับโดย:\s*([^·\n]+?)\s*·\s*(\d{4}-\d{2}-\d{2})(?:\s+(\d{2}:\d{2}))?/;
+export function staleResume(text, now = new Date()) {
+  const sec = text.replace(/\r\n/g, "\n").match(/(?:^|\n)## รับงานต่อ[^\n]*((?:\n(?!## )[^\n]*)*)/)?.[1] ?? "";
+  // ข้อหลัก = บรรทัด "- " ไม่เยื้อง · ข้อย่อยและบรรทัดต่อรวมเข้าข้อแม่ (ผู้ตรวจ 2026-11-17: แม่ใหม่แต่ลูกเก่าถูกเตือนแยก)
+  const items = [];
+  for (const l of sec.split("\n")) if (/^-\s/.test(l)) items.push(l); else if (items.length && l.trim()) items[items.length - 1] += ` ${l.trim()}`;
+  const old = [], claims = [];
+  for (const l of items) {
+    const dates = l.match(/\b20\d{2}-\d{2}-\d{2}\b/g);
+    if (dates && (now - new Date(`${dates.sort().at(-1)}T23:59`)) / 86400000 > RESUME_STALE_DAYS) old.push(l);
+    const c = l.match(CLAIM);
+    if (c && (now - new Date(`${c[2]}T${c[3] ?? "23:59"}`)) / 3600000 > CLAIM_STALE_HOURS) claims.push(`${c[1]} (${c[2]})`);
+  }
+  return { old, claims };
+}
+const short = (l) => l.replace(/^\s*-\s*/, "").replace(/\*\*/g, "").slice(0, 60);
+export function resumeAgeNotice(teamDir, root = dirname(teamDir), now = new Date()) {
+  const file = contextFile(teamDir, root);
+  if (!file) return "";
+  let text = ""; try { text = readFileSync(file, "utf8"); } catch { return ""; }
+  const { old, claims } = staleResume(text, now);
+  const where = relative(root, file).replace(/\\/g, "/");
+  const out = [];
+  if (old.length) out.push(`"รับงานต่อ" in ${where} has ${old.length} item(s) whose latest date is over ${RESUME_STALE_DAYS} days old (e.g. "${short(old[0])}…") — check each against the real thing before acting on it; rewrite or close it per handoff section 5`);
+  if (claims.length) out.push(`Claims over ${CLAIM_STALE_HOURS} h old in "รับงานต่อ": ${claims.join(" · ")} — may be taken over only if their branch or log shows no work since (handoff section 5)`);
+  return out.join("\n");
+}
+
+// Stop: แก้ไฟล์งาน ≥ 3 ไฟล์หลังครั้งล่าสุดที่แตะ CONTEXT.md และโปรเจกต์มี CONTEXT.md → เตือนให้อัปเดต "รับงานต่อ" ก่อนจบ 1 ครั้ง
+// แนวคิด "สรุปความจำตอนจบ session" จาก ai-memory · ข้ามได้ด้วยบรรทัด `ข้ามรับงานต่อ: <เหตุผล>` (นับเป็นจุดอัปเดตเหมือนแก้ CONTEXT.md)
+export function resumeGate(s, hasContext) {
+  const n = s.sinceResume?.length ?? 0;
+  if (!hasContext || n < REVIEW_MIN_FILES || s.pending?.length) return null;
+  return `Resume gate (SuperUser): ${n} work file(s) edited since "รับงานต่อ" in CONTEXT.md was last touched — update it per handoff section 5 before finishing (close done items · remove your own claim · add what the next session must do first) · if nothing changed for the next session, put the line \`ข้ามรับงานต่อ: <เหตุผล>\` in the final answer`;
 }
 
 // ── สรุป log ให้คนอ่าน (Stop ของหัวหน้าทีม) ─────────────────────────────
@@ -1457,6 +1501,9 @@ function main() {
   try { notice = logAndNotice(input, raw, root, teamDir, event); } catch { /* log ล้มต้องไม่ทำให้กฎหาย */ }
   if (event === "SessionStart" && input.source === "compact" && moduleOn(teamDir, "recompact", false)) {
     try { back = recompactNotice(teamDir, root); } catch { /* CONTEXT.md พังต้องไม่ทำให้กฎหาย */ }
+  }
+  if (event === "SessionStart" && !input.agent_id && moduleOn(teamDir, "resume_check")) {
+    try { back = [back, resumeAgeNotice(teamDir, root)].filter(Boolean).join("\n"); } catch { /* CONTEXT.md พังต้องไม่ทำให้กฎหาย */ }
   }
   say([notice, back, more, lead].filter(Boolean).join("\n\n"));   // ข้อความ inbox และตำแหน่งงานสั้นและสำคัญ วางก่อนกฎ จะได้ไม่ถูกตัดท้าย
 }
@@ -2133,6 +2180,25 @@ ${rows}
       const n = recompactNotice(gTeam, proj).split("\n").length; unlinkSync(join(gTeam, "CONTEXT.md"));
       return n === RECOMPACT_MAX_LINES + 1;
     }],
+    // ข้อเก่าใน รับงานต่อ (resume_check) · วันอ้างอิง 2026-11-17 12:00
+    ["resume_check: ข้อเก่าเกิน 14 วัน และ รับโดย: เกิน 24 ชม. ถูกเตือน · ข้อใหม่ ไม่มีวันที่ และหัวข้ออื่นไม่โดน", [], true, () => {
+      const now = new Date("2026-11-17T12:00");
+      const text = "## ความคืบหน้า\n- งานเก่า 2026-01-01\n\n## รับงานต่อ\n- **เก่า:** ทำเมื่อ 2026-10-25\n- **ใหม่:** เริ่ม 2026-10-01 แก้ล่าสุด 2026-11-16\n- ไม่มีวันที่\n- **จอง:** รับโดย: codex/x · 2026-11-15 09:00\n- **จองใหม่:** รับโดย: claude/y · 2026-11-17 08:00\n- **แม่ใหม่:** 2026-11-16\n  - ลูกเก่า 2026-01-01\n- **จองไม่มีเวลา:** รับโดย: z · 2026-11-16\n- แม่แบบ `รับโดย: <เครื่องมือ> · <วันที่ เวลา>`\n\n## ไฟล์อื่น\n- 2020-01-01\n";
+      const { old, claims } = staleResume(text, now);
+      return old.length === 1 && old[0].includes("เก่า") && claims.length === 1 && claims[0] === "codex/x (2026-11-15)";
+    }],
+    ["resume_check: ข้อความ SessionStart บอกจำนวนและตัวอย่าง · ไม่มีข้อเก่า = ไม่พูด · ไม่มี CONTEXT.md = ไม่พูด", [], true, () => {
+      const now = new Date("2026-11-17T12:00");
+      writeFileSync(join(gTeam, "CONTEXT.md"), "## รับงานต่อ\n- **เก่า:** 2026-10-01\n");
+      const t = resumeAgeNotice(gTeam, proj, now);
+      writeFileSync(join(gTeam, "CONTEXT.md"), "## รับงานต่อ\n- **ใหม่:** 2026-11-16\n");
+      const quiet = resumeAgeNotice(gTeam, proj, now);
+      unlinkSync(join(gTeam, "CONTEXT.md"));
+      return /1 item\(s\)/.test(t) && t.includes("เก่า:") && quiet === "" && resumeAgeNotice(gTeam, proj, now) === "";
+    }],
+    ["resume_check: แก้ไฟล์งาน 3 ไฟล์ ไม่แตะ CONTEXT.md → เตือนก่อนจบ", [skill, edit("a"), edit("b"), edit("c")], true, (l) => resumeGate(fold(l), true)],
+    ["resume_check: แตะ CONTEXT.md หลังแก้ → ไม่เตือน · แก้ต่ออีก 2 ไฟล์ยังไม่ถึงเกณฑ์", [edit("a"), edit("b"), edit("c"), T({ type: "tool_use", name: "Edit", input: { file_path: "/p/.claude/superuser/CONTEXT.md" } }), edit("d"), edit("e")], false, (l) => resumeGate(fold(l), true)],
+    ["resume_check: บรรทัด ข้ามรับงานต่อ: นับเป็นจุดอัปเดต · ไม่มี CONTEXT.md ไม่เตือน", [edit("a"), edit("b"), edit("c"), say("เสร็จ\nข้ามรับงานต่อ: งานทดลอง")], false, (l) => resumeGate(fold(l), true) || resumeGate(fold([edit("a"), edit("b"), edit("c")]), false)],
     ["hooks.json: parse ได้ · PreToolUse จับ Bash · มี SessionStart และ PostCompact", [], true, () => {
       const h = readJson(join(HERE, "hooks.json"), null)?.hooks;
       return Boolean(h?.SessionStart && h.PostCompact) && h.PreToolUse.some((e) => new RegExp(e.matcher).test("Bash"));
