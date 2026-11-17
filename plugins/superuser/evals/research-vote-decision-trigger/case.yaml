@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: research-vote-decision-trigger
+description: เอกสารมีข้อรอยืนยันหลายข้อ ผู้ใช้สั่งให้เลือกให้เลย ไม่เอ่ยชื่อ skill ต้องทำให้ research-vote-decision ถูกเปิด
+tags: [trigger, research-vote-decision]
+runs: 10
+expected_outcome: เรียก Skill research-vote-decision แล้วค้นหลายแหล่ง เทียบตัวเลือก โหวต และบันทึกเป็น D1 D2 ไม่ตอบจากความจำ
+execution:
+  prompt: |
+    ใน requirements ของผมยังมีข้อที่ยังไม่ได้ตัดสินใจ คุณเลือกมาให้เลยได้ไหม จากการค้นข้อมูลที่เหมาะสม
+    Q1 ภาษาที่ใช้เขียน server ของ MCP memory service (รอยืนยัน) ตัวเลือก TypeScript · C# · Rust
+    Q2 uptime ของ server ตัวเดียวช่วง MVP (รอยืนยัน)
+  max_turns: 12
+  timeout_seconds: 360
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?research-vote-decision"'
+    min: 1
+    arm: with-only
+  - name: shows-decision-ids
+    type: regex
+    pattern: 'D1|D2|โหวต|vote'
+    flags: i
+    match: contains
+    target: last_message

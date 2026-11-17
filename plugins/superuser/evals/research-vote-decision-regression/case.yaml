@@ -1,0 +1,32 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# อาการที่กัน: ตัดสินข้อเดียวแล้วแก้ค่าที่จุดเดียว ส่วนตารางกฎธุรกิจที่ใช้ค่าเดิมยังค้าง (พบ 2026-11-17 ตอนตัดสิน briefing ของ AnyMemory ต้องแก้ทั้ง FR และ BR)
+schema_version: "1.1"
+name: research-vote-decision-regression
+description: ค่าที่ตัดสินแล้วต้องถูกแทนทุกจุดในเอกสาร รวมตารางกฎธุรกิจ ไม่ใช่แก้แค่บรรทัดที่ติดป้ายรอยืนยัน
+tags: [regression, research-vote-decision]
+runs: 10
+expected_outcome: เลือกขนาด briefing ใหม่จากแหล่งที่บอกเพดาน 10,000 ตัวอักษรของ hook ใน Claude Code แล้วแก้ทั้ง FR-RET-010 และ BR-010 ให้ตรงกัน และไม่เหลือ 20,000 ในเอกสาร
+execution:
+  prompt: |
+    ช่วยตัดสินข้อรอยืนยันในไฟล์นี้ให้เลยโดยค้นข้อมูลประกอบ แล้วส่งไฟล์ที่แก้แล้วกลับมา
+
+    ## 3 ความต้องการ
+    | FR-RET-010 | briefing ตอนเริ่ม session ของ Claude Code ยาวไม่เกิน 20,000 ตัวอักษร (รอยืนยัน) |
+
+    ## 6 กฎธุรกิจ
+    | BR-010 | briefing ยาวไม่เกิน 20,000 ตัวอักษร | 19,999 · 20,000 · 20,001 |
+  max_turns: 12
+  timeout_seconds: 360
+graders:
+  - name: both-rows-updated
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย · ผ่านเมื่อค่าใหม่ต่ำกว่า 10,000 ตัวอักษร (เพราะ Claude Code ตัด hook output ที่เกิน 10,000)
+      และทั้ง FR-RET-010 กับ BR-010 รวมค่าขอบทดสอบ ใช้ค่าใหม่เดียวกัน
+      ไม่ผ่านถ้ายังเหลือ 20,000 ในแถวใดแถวหนึ่ง หรือแก้แค่แถว FR
+  - name: no-old-value
+    type: regex
+    pattern: '20,000 ตัวอักษร'
+    match: not_contains
+    target: last_message
