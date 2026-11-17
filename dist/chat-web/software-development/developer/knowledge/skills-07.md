@@ -812,6 +812,8 @@ Not for: build and deploy pipeline → `cicd-and-release` · per-environment set
 
 Inside `<project-name>/` (lowercase project name, words joined by `-`): `README.md` (item 2) · `CHANGELOG.md` · `ARCHITECTURE.md` · `CONTRIBUTING.md` · `LICENSE` (these 3 only when the conditions in `references/readme-skeleton.md` section 2 apply) · `.env.example` (only when the project really reads environment variables · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · secrets · `_to_delete/`) · `src/` (unit tests sit beside the code files · `readable-code` item 7) · `tests/` (integration · e2e only, or stacks whose tools require it, see "Exceptions by stack" below) · `scripts/` (setup · seed · migrate). The annotated tree is in [`references/code-folder.md`](references/code-folder.md). ADRs (architecture decision records) and runbooks live in `docs/` at the root, not in the code folder (`project-doc-set` item 1).
 
+**Extensions and sub-programs go in `extension/`.** When the app ships add-ons or small companion programs that belong to it (a browser extension · an IDE or app plugin · a hook client or CLI · an SDK · a tray helper · a worker that cannot run alone), put each one in `<project-name>/extension/<name>/`, named lowercase with `-` (`extension/chrome/` · `extension/hook-client/` · `extension/sdk-python/`). The folder is always named `extension/` (never `plugins/` `addons/` `packages/` `tools/`), so whoever opens the repo sees the main app first and every add-on in one place. Each `extension/<name>/` has its own README (what it extends · how to build and run · how it talks to the main app) and its own build and tests in its own stack's layout; CI builds and tests every one, and a workspace tool (pnpm · npm · Cargo · .NET solution) lists `extension/*`. The main app's code stays in `src/` (or the stack's folder). Create `extension/` when the first add-on is written, not in advance. An add-on that grows its own doc set (SRS · mockup · its own release cycle) is a sub-project: move it to `ecosystem/` per `project-doc-set` item 1.
+
 **Code folder name.** Take the project folder name, lowercase it, and turn each run of spaces and punctuation into a single `-`:
 `Lumio - Light Meter/` → `lumio-light-meter/`
 Run every build, test and run command from inside this folder. In languages that force a package-name format (Dart `name:` in pubspec · Python package), keep naming the package by the language's rules, because this rule governs only the folder name.
@@ -905,6 +907,7 @@ Tick `[x]` only for items you **ran or opened in this round**. For an item not y
 
 - [ ] `README.md` answers the layer 1 questions the project has content for · sections and commands come from the layer 2 survey results (`_to_delete/readme-survey.md` exists) · commands have been run on a clean machine
 - [ ] The root matches the layout in `project-doc-set` item 1 (repo named as the lowercase project name joined by `-` · an ecosystem uses `ecosystem/`) and has no temp files or `.docx` at the root
+- [ ] Add-ons and sub-programs of the app live in `<project-name>/extension/<name>/`, each with its own README and a CI build, or `N/A` when the app has none
 - [ ] `.env.example` lists every value with comments. If the project reads no environment variables at all (for example an offline mobile app), do not create it, but write "ไม่มีค่าตั้งภายนอก" (no external settings) in the README
 - [ ] `.editorconfig` · `.gitattributes` · formatter · linter are set up, and CI checks them
 - [ ] `.gitignore` covers `.env` · build folders · `_to_delete/` · Android: `key.properties` · `*.jks` · `*.keystore`
@@ -1004,6 +1007,8 @@ The rules are in `SKILL.md` item 1. The root tree is in `project-doc-set` item 1
   src/                   ← the real code (or the layout the stack expects, per `SKILL.md` item 1)
   tests/                 ← required in .NET · Flutter (`test/`) · Node and Python keep only integration and e2e here (unit tests sit beside the code files) — the stack table is at the end of this file
   scripts/               ← setup, seed, migrate — scripts a person has to run
+  extension/             ← add-ons and sub-programs of this app, 1 folder each: browser extension · plugin · CLI · hook client · SDK (`SKILL.md` item 1) · only when one exists
+    <name>/              ← own README · own build and tests in that stack's layout
 ```
 
 ## Exceptions by stack
@@ -1423,7 +1428,7 @@ Use it when: opening a new project and deciding which docs it needs · docs are 
 
 **Create folders when real content exists, not in advance:** `ref/` when you get files from the client or the old system (never mix them into `docs/`) · `docs/figures/` when a delivered doc has a self-drawn figure (otherwise the figure is stuck inside the `.docx` and cannot be edited) · `docs/decisions/` when a decision needs explaining later · `docs/research/` when the user wants an app like an existing one · `qa/` when test cases exist (test cases always live here; `docs/test-plan.md` holds only the plan) · `assets/` when there is a logo or icon.
 
-**Ecosystem project** (2 or more sub-projects, each with its own doc set): the folder is always named `ecosystem/` (never `projects/` `modules/` `apps/`). `ecosystem/<code>-<SUB>/` holds `docs/` `mockup/` `qa/` and its own repo. Docs that cover all sub-projects live in one place, the root `docs/`. Full layout and rules: [`references/ecosystem.md`](references/ecosystem.md).
+**Ecosystem project** (2 or more sub-projects, each with its own doc set): the folder is always named `ecosystem/` (never `projects/` `modules/` `apps/`). `ecosystem/<code>-<SUB>/` holds `docs/` `mockup/` `qa/` and its own repo. Docs that cover all sub-projects live in one place, the root `docs/`. Full layout and rules: [`references/ecosystem.md`](references/ecosystem.md). An add-on or sub-program of one app (browser extension · plugin · CLI · hook client · SDK) with no doc set of its own is not a sub-project: it lives in the code repo under `<project-name>/extension/<name>/` (`project-bootstrap` item 1).
 
 
 **Folder rules (both types):**
@@ -1681,6 +1686,7 @@ Use it when the project is a product suite with 2 or more sub-projects, and each
 - Sub-project folder name = project code + sub-project name in capitals (`QTN-CONNECT`). Use the same code the docs cite.
 - If a project already uses `projects/`, rename it to `ecosystem/` and fix the paths in every doc and script in the same pass.
 - A project with a single product does not need `ecosystem/`. Use type B as usual.
+- An add-on or sub-program of one app (browser extension · plugin · CLI · hook client · SDK) without its own doc set is not a sub-project. It stays in that app's repo under `extension/<name>/` (`project-bootstrap` item 1). Move it here only when it gets its own SRS, mockup or release cycle.
 
 
 ## reference: technical-docs.md
