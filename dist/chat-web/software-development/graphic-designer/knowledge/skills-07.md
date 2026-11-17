@@ -253,6 +253,8 @@ Each is allowed if the project gives a reason. The fix for every signal and the 
 
 Do not swap one default for another (cream + terracotta + serif, or + olive, is still a formula). Bento grids and mesh gradients are not signals in themselves.
 
+When the owner's theme asks for depth (`มีมิติ` · `แสงเงา` · `ลูกเล่น`), soft shadows, one glow and glass over photos are the reason, not a signal, as long as the piece stays inside the limits in `design-references` `references/depth-and-light.md` section 4. The eye checker judges against those limits: 3 layers at most, one light direction, flat text, glow on 1 item.
+
 ## 3 · Check before sending
 
 ### 3.1 HTML/CSS work (mockup · web page · HTML deck · HTML cover)
@@ -276,7 +278,7 @@ Render to an image at real size and answer each item yes or no, by the criterion
 
 1. **Logo and product name covered, can you still tell whose it is?** No = fail. Also swap in a competitor's name: if every sentence and image is still true = fail.
 2. **Squint:** one dominant element, or everything shouting at once?
-3. **Count the item-2 signals:** 3 or more in one piece = looks AI-made.
+3. **Count the item-2 signals:** 3 or more in one piece = looks AI-made. If the piece uses the depth exception (section 2, last paragraph), first answer the 5 checks in `design-references` `references/depth-and-light.md` section 5 and write the result in the `no-ai-look:` field; only signals inside those limits are left out of the count, anything past them counts.
 4. **Real content:** names, numbers, real images, or only generic words and stock photos?
 5. **One set:** every slide or post uses one system, but the layout does not repeat on every page. A single piece answers `ไม่ใช้` and counts as passed.
 6. **AI images:** check hands, teeth, text, shadows, light, real-world scale; zoom to 200% before use.
