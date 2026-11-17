@@ -1127,28 +1127,35 @@ Goal: the page reads as 3 layers with one light source, and has 1–2 moving ele
 | Layer | What goes there | How it looks |
 |---|---|---|
 | Back | photo, soft gradient, 1–3 faint diagonal light streaks (not a repeating stripe pattern), a big curved ribbon at one corner | low contrast, slightly blurred or faded into the background colour |
-| Middle | white cards, panels, the bottom strip | solid surface with a soft shadow, large corner radius |
+| Middle | white cards, panels, the bottom strip | solid surface with a soft shadow, large corner radius (on 1920 px slides use 24–27 px, which the `no-ai-look` script accepts; only a really large panel may go to 28 px or more, with `slop-ok: huge-radius` and the reason) |
 | Front | icon tiles, number tabs, labels, buttons, the product | brand colour with its own gradient and a tighter shadow; **crosses the edge** of the card behind it. An icon tile earns its place by that overlap and by meaning something; a tile parked above every card heading is the `no-ai-look` "icon tile above a heading" signal |
 
 In the owner's deck the overlaps carry most of the depth, more than the shadows (eye read 2026-11-17, not measured): an icon tile sitting half over a photo edge, a photo bleeding off the page edge, a label sticking out past a card. Plan at least 2 overlaps per page.
+
+**The back layer needs one strong thing.** A test without photos (2026-11-17, fictional company, 3 slides + 1 banner) came out clean but flatter than the owner's deck: faded line icons in card headers read as filler. Give the back layer one of: a real photo (light agrees with the page) · a large dark or brand-colour block cut on a diagonal (the test cover did this and had the most depth) · a product screen or document mock-up. A faint icon is not enough.
+
+**Break the identical-card grid.** 4 cards that are the same shape with an icon tile each still look like a template (same test). Make one card the lead (larger, darker, or with the photo), or give each card a real number or image instead of a decorative icon.
 
 ## 2 · One light source
 
 - Pick one light direction for the whole set (default: from the top left) and write it in the style lock. Every shadow falls the other way; every highlight sits on the lit edge.
 - Shadow = 2 layers: a tight contact shadow plus a wide soft one, low opacity, tinted toward the background colour, never pure black.
 - Starting point in CSS, not measured, tune by eye:
-  `box-shadow: 0 1px 2px rgb(20 30 40 / .08), 0 12px 32px -8px rgb(20 30 40 / .14);`
-  Front items get a coloured shadow from their own fill, e.g. a red tile `0 8px 20px -6px rgb(200 8 8 / .35)` (also unmeasured).
+  `box-shadow: 1px 1px 2px rgb(20 30 40 / .08), 6px 12px 32px -8px rgb(20 30 40 / .14);`
+  Front items get a coloured shadow from their own fill, e.g. a red tile `4px 8px 20px -6px rgb(200 8 8 / .35)` (also unmeasured). The positive x offset is what makes the shadow fall away from a top-left light; with x = 0 the light is straight above.
 - Accent shapes get a 2-stop gradient of the same hue, lit corner lighter (e.g. `#e81018 → #c00808`, top left to bottom right; the 2 reds were sampled from the owner's deck ± 8, the rest is a starting point). The gradient makes the lit edge; do not add a 1 px border on a box with a wide shadow (`no-ai-look` signal "line + wide shadow", script rule `hairline-shadow`).
 - Photos: light in the photo should agree with the page light. Fade a photo into the background with a gradient mask so the photo and the layout become one picture.
 
 ## 3 · Flourish (1–2 per page, not more)
 
+How to count: a frame that repeats unchanged on every page of a set counts as **one** flourish, because the eye learns it after page 2, but only if it has at most 2 decorative pieces (e.g. slanted heading bar + slanted label in the bottom strip). A third piece such as a corner ribbon on every page makes the frame count as 2, leaving no room for the page's own. Otherwise the page may add 1 more of its own. Glow is counted separately under its own limit (1 item). A single piece (no set) counts every flourish.
+
 - **Diagonals:** slanted bars before headings, parallelogram labels, a photo cut on a diagonal. They give movement without clutter.
 - **Ribbon or sweep:** one large curved band in the brand colour at a page corner, partly behind the content.
 - **Light trail with nodes:** a thin glowing line that links 3–5 items, with small bright dots where it meets them. Good on covers and hub diagrams.
 - **Glass tile:** a frosted, semi-clear tile only where it sits over a photo, holding one icon.
-- **Glow:** only on the single focal item (the hero product, the hub centre). Never on text.
+- **Glow:** only on the single focal item (the hero product, the hub centre). Never on text. It must be visible: on a screenshot, the glow's ring around the item is clearly lighter or more coloured than the background a short way off, so you can see where it ends. A glow hidden behind a white card does nothing, so drop it or move it.
+- **Colour on colour:** a line, node or icon that crosses a band of the same colour vanishes (test banner: crimson line over the crimson corner). Switch it to white or the light tint where it crosses.
 
 ## 4 · Limits (so it does not turn into an AI look)
 
@@ -1166,8 +1173,9 @@ In the owner's deck the overlaps carry most of the depth, more than the shadows 
 1. Squint test: blur the page; you can still tell back, middle and front apart.
 2. Every shadow points the same way (look at 3 random items).
 3. At least 2 overlaps on the page; the page is not all boxes side by side.
-4. Count flourishes: 1–2, and glow on at most 1 item.
+4. Count flourishes per the counting rule in section 3 (frame of at most 2 pieces = 1, plus at most 1 of the page's own); glow on at most 1 item, and visible.
 5. Read every line of text at 50% zoom; nothing is lost in a glow, glass or photo.
+6. Put it next to the owner's liked example (deck in `corporate-profile-deck.md`): if yours is clearly flatter, the back layer is missing its strong thing.
 
 ## Tools
 
