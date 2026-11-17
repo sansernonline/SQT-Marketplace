@@ -48,6 +48,7 @@
     { "pattern": "(สรุป|บันทึก|รายงาน)[^\\n]{0,15}ประชุม|meeting (notes|minutes|summary)", "skills": ["meeting"] },
     { "pattern": "(^|\\n)\\s*(ช่วย\\s*)?(?![^\\n]*(คืออะไร|ต่างกัน))(\\bcommit\\b|คอมมิต)|(^|\\n)(?![^\\n]*(ต่างกัน|ยังไง|อย่างไร|คืออะไร|difference|what is|\\?))[^\\n]*(\\bcommit\\b|คอมมิต)", "skills": ["commit-log"] },
     { "pattern": "ส่งงานต่อ|รับงานต่อ|ส่งต่องาน|ใบสั่งงาน|\\bhand-?off\\b|สลับโมเดล", "skills": ["handoff"] },
+    { "pattern": "ข้อ(ที่)?\\s*รอยืนยัน|ยังไม่ได้ตัดสินใจ|เลือก(มา)?\\s*ให้\\s*(เลย|หน่อย)|ตัดสิน(ใจ)?\\s*ให้\\s*(เลย|หน่อย|ด้วย)|research\\s*\\+\\s*compare|pick (one )?for me|decide (it )?for me", "skills": ["research-vote-decision"] },
     { "pattern": "หาข้อมูล|ค้นข้อมูล|\\bresearch\\b|เช็กให้หน่อย|ยังจริงไหม", "skills": ["research-with-sources"] },
     { "pattern": "(สร้าง|เขียน|แก้|ปรับ|ทำ)[^\\n]{0,12}(skill|agent|playbook)\\b|\\b(new|write|create|fix|improve)[^\\n]{0,12}(skill|subagent|playbook)\\b|\\bevals?\\b|case\\.yaml|skill-doctor|plugin eval", "skills": ["skill-authoring"] },
     { "pattern": "แปล(เป็น|ภาษา)?(ไทย|อังกฤษ)|แปลภาษา|แปลเอกสาร|แปลข้อความ|\\btranslat(e|ion|ed|ing)\\b|สองภาษา|\\bbilingual\\b|\\b(th|en)[- ](to|→)[- ](th|en)\\b", "skills": ["translate-th-en", "human-writing"] },

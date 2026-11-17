@@ -17,6 +17,7 @@ Skill descriptions are often cut down to just the name. **When the task matches 
 | Write or edit code | `superuser:simplify` (not Claude Code's `/simplify`) + `software-development:lazy-coding` + `software-development:readable-code` + `software-development:stack-python` (or stack-typescript · stack-dotnet · stack-sql · stack-mql by language) |
 | Fix a bug · something broken | `superuser:principle-fix-root-cause` + `superuser:targeted-fix` |
 | Find information that needs sources (prices · rules · rates · compare options) | `superuser:research-with-sources` |
+| Settle open items (รอยืนยัน · TBD) or "เลือกให้เลย" by research · compare · vote | `superuser:research-vote-decision` |
 | About to say done · passed · fixed | `superuser:principle-prove-it-works` |
 | Large or risky work (≥ 5 items · whole repo · search then edit · money · law · health · personal data · delete or overwrite · live system · sent to outsiders) | `<plugin>:superuser` of the matching branch (`superuser:superuser` · `software-development:superuser` · `e-commerce:superuser` · `trading-finance:superuser` · `personal-life:superuser` · `graphic-design:superuser`) |
 | Brief a worker · hand off or take over work · switch model | `superuser:handoff` |

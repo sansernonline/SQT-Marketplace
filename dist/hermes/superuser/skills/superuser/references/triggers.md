@@ -55,4 +55,5 @@ The main document skills (`polished-document-style` · `document-naming` · `spe
 | A skill that is wrong, out of date, or broken mid-job | Record in `IMPROVEMENTS.md` and propose the fix (old → new) in the report; never quietly work around it |
 | Asking which model suits which step · comparing tokens, speed, and value per model from the log · someone ordering that results from several projects be merged to tune the plugin | `model-scorecard` |
 | Choosing 1 of several options · the result depends on an uncertain future · choosing several things within a budget · ordering work · picking the best result from several variants · is another check round worth it | `decision-scoring` |
+| Open items in a document (`(รอยืนยัน)` · TBD · Q1..Qn) · the user says "เลือกให้เลย" or "ตัดสินให้หน่อย" and the choice needs research · settling several spec values at once | `research-vote-decision` (it calls `research-with-sources` · `decision-scoring` · `voting.md` · `decision-log`) |
 | Creating or fixing a skill · agent · playbook of this marketplace · writing an eval for a skill · `/skill-doctor` says a skill was never used | `skill-authoring` |

@@ -1,5 +1,10 @@
 # Changelog — software-development
 
+## 3.7.0 — 2026-11-17
+
+- project-bootstrap: ส่วนขยายและโปรแกรมย่อยของแอป (browser extension · plugin · CLI · hook client · SDK · ตัวช่วยที่รันเดี่ยวไม่ได้) อยู่ที่ `<project-name>/extension/<name>/` เสมอ (ผู้ใช้ขอ 2026-11-17 "ถ้ามี app ไหนมีส่วนขยาย หรือโปรแกรมย่อยให้ใส่ใน extension folder") · แต่ละตัวมี README · build และเทสต์ของตัวเอง · CI build ทุกตัว · สร้างเมื่อมีตัวแรก · ตัวที่โตจนมีชุดเอกสารเองย้ายไป `ecosystem/` · เพิ่มในผังโค้ด `code-folder.md` และเช็กลิสต์เปิดโปรเจกต์
+- project-doc-set: แยกให้ชัดว่าส่วนขยายของแอปเดียวไม่ใช่โปรเจกต์ย่อยของ `ecosystem/` (ทั้ง SKILL.md และ `references/ecosystem.md`)
+
 ## 3.6.2 — 2026-11-17
 
 - ของกลางจาก superuser 3.45.0: config แม่แบบมีโมดูล `resume_check` (เตือนข้อเก่าใน "รับงานต่อ" และเตือนให้อัปเดตก่อนจบ)

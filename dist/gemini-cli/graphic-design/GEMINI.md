@@ -4,7 +4,7 @@
 
 Creative design beyond product UI — brand kits, AI image generation and briefs with style consistency, social media formats, marketplace product images, YouTube thumbnails, print-ready files, campaign sets, LINE rich menus, app and UI icons, video editing with Thai subtitles and narration, speaking scripts, motion basics, and a design-review checklist.
 
-ชุดนี้มี skill 61 ตัว · บทบาท 10 บทบาท · คำสั่งสำเร็จรูป 0 คำสั่ง
+ชุดนี้มี skill 62 ตัว · บทบาท 10 บทบาท · คำสั่งสำเร็จรูป 0 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `/ชื่อคำสั่ง`

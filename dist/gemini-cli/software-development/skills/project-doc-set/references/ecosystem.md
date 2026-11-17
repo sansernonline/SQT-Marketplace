@@ -22,3 +22,4 @@ Use it when the project is a product suite with 2 or more sub-projects, and each
 - Sub-project folder name = project code + sub-project name in capitals (`QTN-CONNECT`). Use the same code the docs cite.
 - If a project already uses `projects/`, rename it to `ecosystem/` and fix the paths in every doc and script in the same pass.
 - A project with a single product does not need `ecosystem/`. Use type B as usual.
+- An add-on or sub-program of one app (browser extension · plugin · CLI · hook client · SDK) without its own doc set is not a sub-project. It stays in that app's repo under `extension/<name>/` (`project-bootstrap` item 1). Move it here only when it gets its own SRS, mockup or release cycle.
