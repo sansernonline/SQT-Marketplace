@@ -29,7 +29,7 @@ Goal: 10 assets that look like one person made them.
 | Same seed | Composition family for similar prompts | Breaks when the subject changes a lot |
 | Same model version | Everything | A model update changes the look — re-test the sheet |
 | Post-processing preset (Look-up table (LUT), Lightroom preset, same grain) | Colour and finish across all images | Cannot fix wrong light direction |
-| Shared layout template | Text position, logo, margins | — |
+| Shared layout template | Text position, logo, margins | — · a full page system for decks: [corporate-profile-deck.md](references/corporate-profile-deck.md) |
 
 ## Consistency checklist (per image)
 
@@ -61,3 +61,4 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 
 - [`references/style-lock-sheet.md`](references/style-lock-sheet.md) — the sheet to fill in (step 2)
 - [`references/worked-example.md`](references/worked-example.md) — open for a model style block with negatives and a grid check
+- [`references/corporate-profile-deck.md`](references/corporate-profile-deck.md) — open for a company profile or capability deck: the owner's picked page system (red · white · charcoal, header + body pattern + bottom strip), measured colours and fonts
