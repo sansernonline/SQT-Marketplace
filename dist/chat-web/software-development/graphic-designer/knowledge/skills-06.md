@@ -367,6 +367,7 @@ The `## รับงานต่อ` section in `CONTEXT.md` follows these rules
 - **ส่งมาแล้ว N ครั้ง:** count real handoffs only (end of session · switching model), not `/compact`. If the receiver sees N ≥ 2, old text may linger; check against the real thing before following it.
 - **สมุดงาน:** point to `notes/<plan>.md` and `ledger/<plan>.md` of the open plan ([`team-memory`](references/team-memory.md) section 8). A multi-piece plan is done only when the line `Task N: complete` is in its ledger.
 - **Tag every item** `ตรวจจริง` (seen yourself this session) or `ยังไม่ได้ตรวจ` (remembered). No tag = not yet checked. The receiver may believe the first at once and must check the second before use.
+- **Date every item** (`YYYY-MM-DD`, updated when the item changes). The hook module `resume_check` uses it: at session start it names items over 14 days old and claims over 24 hours old; at the end it blocks once when 3+ work files were edited but `CONTEXT.md` was not touched (`ข้ามรับงานต่อ: <reason>` passes it).
 - **Close what is done in the same round:** a finished item leaves `รับงานต่อ` at once; write 1 line with its evidence (PR · commit · file) in `HISTORY.md`. A done item left in the list gets picked up again by the next reader.
 
 **Claim before starting (1 item, 1 taker).** Two sessions or vendors reading the same `CONTEXT.md` will otherwise start the same item.

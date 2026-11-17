@@ -13,6 +13,7 @@
     "dispatch_gate": true,
     "guard": false,
     "recompact": false,
+    "resume_check": true,
     "ui_scan": true,
     "code_patterns": true,
     "pii_gate": true,
