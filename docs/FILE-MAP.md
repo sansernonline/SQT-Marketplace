@@ -9,7 +9,7 @@
 | plugin | ทำอะไร | agent | skill | คำสั่ง | playbook | ไฟล์ทั้งหมด |
 |---|---|---|---|---|---|---|
 | [`e-commerce`](#e-commerce) | ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย | 8 | 35 | 1 | 18 | 250 |
-| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 24 | 0 | 9 | 227 |
+| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 24 | 0 | 9 | 228 |
 | [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 47 | 1 | 30 | 267 |
 | [`software-development`](#software-development) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 104 | 12 | 17 | 1149 |
 | [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 4 | 40 | 0 | 7 | 309 |
@@ -259,7 +259,7 @@ plugins/<plugin>/
 | `print-ready-files` | เตรียมไฟล์ส่งโรงพิมพ์และร้านป้าย: CMYK ระยะตัดตก ความละเอียด ฟอนต์ไทย PDF/X | `references/print-specs.json` · `references/print-specs.md` · `references/sources.md` · `scripts/print_check.py` |
 | `social-formats` | ขนาด สัดส่วน และพื้นที่ปลอดภัยของ Facebook · IG · TikTok · YouTube · LINE OA · X | `references/platform-sizes.md` · `references/worked-example.md` |
 | `speaking-script` | เขียนสคริปต์พูดหน้ากล้อง: hook ก่อนทักทาย · ภาษาพูด · จับเวลาด้วยนาฬิกา | `references/sources.md` · `references/worked-example.md` |
-| `style-consistency` | ทำภาพหลายภาพให้ดูเป็นชุดเดียวกัน | `references/style-lock-sheet.md` · `references/worked-example.md` |
+| `style-consistency` | ทำภาพหลายภาพให้ดูเป็นชุดเดียวกัน | `references/corporate-profile-deck.md` · `references/style-lock-sheet.md` · `references/worked-example.md` |
 | `subtitles-th` | ซับไทยเป็นไฟล์: ถอดเสียงเป็น .srt · ตรวจความยาวบรรทัดและเวลา · ฝังซับด้วยฟอนต์ไทย | `references/burn-in-details.md` · `references/sources.md` · `references/transcription-options.md` · `scripts/srt_check.py` |
 | `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-asset-cleanup.md` · `references/playbook-brand-setup.md` · `references/playbook-campaign.md` · `references/playbook-image-series.md` · `references/playbook-learn-from-session.md` · `references/playbook-review.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-video.md` · `references/review-lenses.md` · `references/safety.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/DURABLE-BRIEF.md` · `templates/LEDGER.md` · `templates/NOTES.md` · `templates/OUT-OF-SCOPE.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 | `video-editing` | ตัด ต่อ ตัดช่วงเงียบ ปรับความดัง ส่งออก และต่อสไลด์กับเสียงเป็นวิดีโอ · เสียงบรรยายจากสคริปต์อยู่ที่ narration-th | `references/ffmpeg-recipes.md` · `references/loudness-and-slides.md` · `references/sources.md` · `scripts/loudnorm2.py` · `scripts/outguard.py` · `scripts/silences.py` · `scripts/slides_to_video.py` |

@@ -1,5 +1,9 @@
 # Changelog — superuser
 
+## 3.45.1 — 2026-11-17
+
+- skill-router: เพิ่มแถวสำหรับคำว่า company profile, โปรไฟล์บริษัท, โปรไฟล์องค์กร และ capability deck ให้เปิด style-consistency, design-references และ no-ai-look · ลองกับ 7 ประโยค (2026-11-17): จับได้ 5 จาก 5 ประโยคที่ควรจับ และไม่จับ 2 ประโยคที่ไม่เกี่ยว (โปรไฟล์ LinkedIn และ schema ฐานข้อมูล)
+
 ## 3.45.0 — 2026-11-17
 
 - โมดูลใหม่ `resume_check` (เปิดเป็นค่าเริ่ม) กัน "รับงานต่อ" ใน CONTEXT.md ไม่ให้เก่าค้าง:
