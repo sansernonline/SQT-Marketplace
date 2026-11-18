@@ -985,7 +985,7 @@ export function dispatchGate(ti = {}) {
   if (!fields.length && !lacking.length && !noSentence) return "";
   const why = [fields.length && `missing ${fields.join(" and ")}`, lacking.length && `brief lacks headings ${lacking.join(" · ")}`,
     noSentence && `brief lacks the required sentence under กติกา: "${NO_EXTRA_CHECKS_TEXT}"`].filter(Boolean).join(" · ");
-  return `Dispatch gate (SuperUser): ${why} — resend it complete: (1) \`model\` + \`effort\` by the level of this piece (opus + high for money, law, sent to outsiders, irreversible · haiku + low for mechanical work that has a pattern to follow · the rest sonnet + medium · superuser section 5) (2) a brief with one line per heading **1 · เป้า** · **2 · ขอบเขต** · **3 · เสร็จเมื่อ** · **4 · กติกา** · **5 · ส่งกลับ** (the first line of the report is one of เสร็จ · เสร็จ มีข้อกังวล · ขาดบริบท · ติด) · turn this gate off in .claude/superuser/config.json {"modules": {"dispatch_gate": false}}`;
+  return `Dispatch gate (SuperUser): ${why} — resend it complete: (1) \`model\` + \`effort\` by the level of this piece (opus + medium for money, law, sent to outsiders, irreversible · opus + high only for the final review of risky work · haiku + low for mechanical work that has a pattern to follow · the rest sonnet + medium · superuser section 5) (2) a brief with one line per heading **1 · เป้า** · **2 · ขอบเขต** · **3 · เสร็จเมื่อ** · **4 · กติกา** · **5 · ส่งกลับ** (the first line of the report is one of เสร็จ · เสร็จ มีข้อกังวล · ขาดบริบท · ติด) · turn this gate off in .claude/superuser/config.json {"modules": {"dispatch_gate": false}}`;
 }
 // โควตาที่เหลือของบัญชีนี้ (k token) · ต้องมีทั้งไฟล์โควตาที่ status line จด และขนาดถังใน accounts.json · ขาดอย่างใดอย่างหนึ่ง หรือข้อมูลเก่ากว่า 1 ชม. → null ไม่ตรวจ
 export function accountLeft({ home = homedir(), env = process.env, now = new Date() } = {}) {
@@ -1544,7 +1544,7 @@ function logAndNotice(input, raw, root, teamDir, event) {
     }
     if (event === "PostToolUse" && ["Agent", "Task"].includes(input.tool_name) && state.effortWarned !== today && missingEffort(input.tool_input)) {
       state.effortWarned = today;
-      extra.push(`Agent called with model "${input.tool_input.model}" but no effort — superuser section 5 says to send them together (opus + high · sonnet + medium · haiku + low)`);
+      extra.push(`Agent called with model "${input.tool_input.model}" but no effort — superuser section 5 says to send them together (opus + medium for risky pieces · opus + high for their final review · sonnet + medium · haiku + low)`);
     }
     if (event === "PostToolUse" && input.tool_name === "Bash") {
       const broken = heredocBrokenFiles(input.tool_input?.command, input.cwd ?? root);
