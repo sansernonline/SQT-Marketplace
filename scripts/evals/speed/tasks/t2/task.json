@@ -1,0 +1,11 @@
+{
+  "size": "กลาง",
+  "kind": "โค้ด (เงิน)",
+  "about": "คำนวณใบเสร็จตาม spec ส่งลูกค้า",
+  "checks": [
+    {
+      "name": "ทัก discount_pct ที่ spec ไม่บอกชนิด",
+      "pattern": "(discount_pct[\\s\\S]{0,300}(ทศนิยม|float|decimal|ชนิด|type|ไม่ได้ระบุ|ไม่ระบุ))|((ทศนิยม|float|decimal)[\\s\\S]{0,300}discount_pct)"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * stats.mjs — สถิติของ run-bench และ skill-grades: ค่ากลาง · อัตราส่วนจับคู่ · ช่วง 95% แบบ bootstrap · pass^k · Wilson · ผลต่างสัดส่วน
+ * stats.mjs — สถิติของ run-bench และ skill-grades: ค่ากลาง · อัตราส่วนจับคู่และไม่จับคู่ · ช่วง 95% แบบ bootstrap · pass^k · Wilson · ผลต่างสัดส่วน
  *
  *   node scripts/evals/speed/stats.mjs --self-test
  *
@@ -38,6 +38,18 @@ export function ratioCI(ratios, { iters = 2000, seed = 1 } = {}) {
   meds.sort((a, b) => a - b);
   const at = (q) => Math.exp(meds[Math.min(meds.length - 1, Math.floor(q * meds.length))]);
   return { ratio: Math.exp(median(logs)), lo: at(0.025), hi: at(0.975), n: ratios.length };
+}
+
+/** ช่วง 95% ของ ค่ากลาง(a) ÷ ค่ากลาง(b) แบบไม่จับคู่: สุ่มซ้ำแต่ละแขนแยกกัน · ใช้แทน pairRatios เมื่อรอบของ 2 แขนไม่ได้เกี่ยวกัน
+ *  (รอบที่ 1 ของแขน A ไม่ได้คู่กับรอบที่ 1 ของแขน B · จับคู่ตามเลขรอบทำให้ช่วงแคบหรือกว้างเกินจริงโดยบังเอิญ) · n = รอบของแขนที่น้อยกว่า */
+export function medianRatioCI(a, b, { iters = 2000, seed = 1 } = {}) {
+  const A = a.filter((x) => x > 0), B = b.filter((x) => x > 0);
+  if (!A.length || !B.length) return null;
+  const next = rng(seed), pick = (xs) => xs.map(() => xs[Math.floor(next() * xs.length)]), logs = [];
+  for (let i = 0; i < iters; i++) logs.push(Math.log(median(pick(A)) / median(pick(B))));
+  logs.sort((x, y) => x - y);
+  const at = (q) => Math.exp(logs[Math.min(logs.length - 1, Math.floor(q * logs.length))]);
+  return { ratio: median(A) / median(B), lo: at(0.025), hi: at(0.975), n: Math.min(A.length, B.length) };
 }
 
 const choose = (n, k) => { let r = 1; for (let i = 0; i < k; i++) r = (r * (n - i)) / (i + 1); return r; };
@@ -90,6 +102,10 @@ function selfTest() {
     ["Wilson n = 0", wilson(0, 0) === null],
     ["ผลต่าง 10/10 กับ 0/10 ขอบล่าง > 0", diffCI(10, 10, 0, 10).lo > 0],
     ["ผลต่าง 2/3 กับ 2/3 คร่อม 0", diffCI(2, 3, 2, 3).lo < 0 && diffCI(2, 3, 2, 3).hi > 0],
+    ["ไม่จับคู่: ค่ากลาง 2 เท่า", Math.abs(medianRatioCI([2, 4, 6], [1, 2, 3]).ratio - 2) < 1e-9],
+    ["ไม่จับคู่: แขนห่างกันมากช่วงไม่คร่อม 1", medianRatioCI([10, 11, 12, 13, 14], [1, 1.1, 1.2, 1.3, 1.4]).lo > 1],
+    ["ไม่จับคู่: แขนเหมือนกันช่วงคร่อม 1", (() => { const c = medianRatioCI([1, 2, 3, 4, 5], [1, 2, 3, 4, 5]); return c.lo <= 1 && c.hi >= 1; })()],
+    ["ไม่จับคู่: แขนว่าง", medianRatioCI([], [1]) === null],
   ];
   let ok = 0;
   for (const [name, pass] of cases) { console.log(`${pass ? "ผ่าน" : "ไม่ผ่าน"}  ${name}`); if (pass) ok++; }
