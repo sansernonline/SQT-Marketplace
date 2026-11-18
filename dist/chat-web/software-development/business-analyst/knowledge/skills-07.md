@@ -1,42 +1,3 @@
-# skill: principle-proceed-on-reversible-work
-
-Use before asking to continue on undoable work
-
-# principle · proceed on reversible work: if it can be undone, do it
-
-> Every question that stops and waits for an answer is time when both the person and the agent are not working.
-> If the work is reversible, doing it and letting them look is faster than asking and waiting.
-
-## Tell them apart
-
-| Reversible: do it now | Irreversible: prepare it in "รออนุมัติ" (awaiting approval) and carry on with the rest |
-|---|---|
-| Edit a file that has a copy or history (document file · sheet · git) | Edit or delete real data (database · master sheet · the user's files) |
-| Draft a document · draft an email or customer reply (not yet sent) · draft a mockup | Send an email, message or post to outsiders |
-| Run tests · calculate · try in a copy | Release to the real system (deploy · announce a price · publish) |
-| Choose between 2 paths that can be changed later | Pay money · book · accept terms · enter a real secret |
-| Move a temporary file to `_to_delete/` | Delete permanently |
-| Code: commit on the work branch, when the user allows it | Code: merge into the main branch · force-push |
-
-## Before you ask, pass these three gates
-
-1. **Can an experiment show it?** If the answer is behaviour, speed, looks or output, try a draft (code work: playbook `prototype` in plugin `software-development`) instead of asking.
-2. **Is it reversible?** If so, pick the path with the least impact, do it, and note it in [`decision-log`](../decision-log/SKILL.md).
-3. **Is it a fact or the user's taste?** Numbers, names, dates and budgets must never be guessed: put `(รอยืนยัน)` (awaiting confirmation) and carry on with the rest. If the brand colour is missing, use that skill's default with `(รอยืนยัน)` and collect the question into "ค้างอยู่" (pending) once.
-
-If you pass all 3 gates and still must ask, do not stop and wait. Collect every question into "ค้างอยู่" once, with your recommended path, and carry on with the rest. For irreversible work, prepare the command, the diff or the draft message in "รออนุมัติ" and do not do it yourself.
-
-**The one exception where you may ask first:** at the start of the job, if the brief can be read in so many ways that the whole output would differ, ask once, putting every question of that round together as multiple choice, with evidence for every option (skill `superuser` section 6 → `autonomy`). After you start, do not ask again. For a fork that is irreversible, costly or reaches outsiders, use [`flag-and-propose`](../flag-and-propose/SKILL.md).
-
-## What not to do
-
-- Ask "ให้ทำต่อไหม" (shall I continue?) after each step of a job that was already ordered
-- Offer a plan and wait for approval when the work is clear and reversible
-- Use this principle as an excuse to do things the user did not ask for, because "continue" means finishing the ordered work, not widening the scope yourself
-
-
----
-
 # skill: document-naming
 
 Use when naming or filing a document others keep
@@ -384,3 +345,212 @@ Also: `notifications` (sending and unsubscribing from marketing messages; consen
 - **Data controller** — whoever decides how data is collected and used (usually the system owner)
 - **Data processor** — whoever processes data on the controller's instructions, such as a cloud provider
 - **Data subject** — the person the data belongs to
+
+
+---
+
+# skill: data-import-export
+
+Use when a system imports or exports Excel or CSV
+
+# Importing and exporting data
+
+> **The one rule:** validate everything first, then write.
+> If you write halfway and then find a bad row, the data is left half-done and nobody knows what to fix.
+
+## When to use this skill
+
+- A screen lets users upload Excel or CSV to bring data into the system
+- A button exports to Excel or CSV
+- Moving data from an old system into a new one
+- A user uploads and gets the message "ไฟล์ไม่ถูกต้อง" (file is invalid) without knowing what is wrong
+
+## When to use another skill instead, or together
+
+| Job | skill | |
+|---|---|---|
+| Receiving general file uploads (images, documents) | `file-upload-and-storage` | Instead |
+| Building a nicely formatted Excel file | `anthropic-skills:xlsx` | Instead |
+| Queue mechanics and progress | `background-jobs` | Instead |
+| Buddhist Era (B.E.) years and Thai sorting order | `i18n-and-locale` | Instead |
+| Sending documents into Thai accounting software (PEAK · FlowAccount) through an API instead of a file | [`references/thai-accounting-apis.md`](references/thai-accounting-apis.md) | Instead |
+| Recording who imported or exported what | `audit-trail` | Together |
+| Masking personal data in export files | `pdpa-compliance` | Together |
+| Telling the user when an import finishes | `notifications` | Together |
+| Limits and constraints of the target table | `database-design` | Together |
+
+---
+
+## 1 · Give a template, do not make people guess
+
+**Every import screen needs a button to download a template.** The template contains
+
+- Column headers that match exactly what the system needs
+- **1–2 correct sample rows**
+- A row explaining which columns are required, what format, and which values are accepted
+- A separate sheet for lists of selectable values (status, type, unit)
+
+| How the file differs from the template | Do this |
+|---|---|
+| Column order swapped | ✓ Read by header name, not by position |
+| Header has extra spaces or different letter case | ✓ Trim spaces and compare case-insensitively |
+| Extra unknown columns | ✓ Skip them, but **tell the user what was skipped** |
+| A required column is missing | ✗ Stop at once and say which column is missing |
+
+---
+
+## 2 · Three layers of validation before writing anything
+
+| Layer | Checks | Example message |
+|:--:|---|---|
+| 1 · File | Opens · has the needed sheet · all required columns present · within the maximum row count | "ไม่พบคอลัมน์ 'รหัสสินค้า'" (column 'product code' not found) |
+| 2 · Per row | Data type · required values · in the allowed list · number range | "แถว 42 คอลัมน์ 'จำนวน' ต้องเป็นตัวเลขมากกว่า 0 (พบ '-5')" (row 42, column 'quantity' must be a number above 0, found '-5') |
+| 3 · Relationships | The code exists in the system · no duplicates within the file · business rules | "แถว 88 ไม่พบลูกค้ารหัส C-1042" (row 88, customer code C-1042 not found) |
+
+**An error report must state: row · column · value found · value expected**
+
+```
+Wrong: "ไฟล์ไม่ถูกต้อง"
+Wrong: "พบข้อผิดพลาด 37 รายการ"
+Right: a table of check results, with a button to download the original file with an "ข้อผิดพลาด" (error) column appended
+```
+
+> **Report all errors in one pass. Do not stop at the first bad row.**
+> The user then fixes everything in one round, instead of uploading 37 times.
+
+---
+
+## 3 · Writing into the system
+
+| Mode | Use when |
+|---|---|
+| **All or nothing** | The default. The file must be fully correct to be imported |
+| Do what passes, skip the bad rows | The file is very large and the rows are unrelated, and **the user must choose this, the system does not decide for them** |
+
+- **Always show a summary page before confirming**, such as "จะเพิ่ม 120 · แก้ 45 · ข้าม 3 · ผิด 0" (will add 120 · update 45 · skip 3 · error 0), then have the user click confirm
+- If the file has duplicate rows, stop and say so. Do not silently use the last row
+- If the data already exists in the system, let the user choose: skip · overwrite · stop
+- **Every import must be recorded in the audit log**: who imported, which file, how many rows affected (see `audit-trail`)
+- **Keep the original file**, so when there is a problem you can look back at what the submitted file really looked like
+- Make it reversible: store a batch id (the id of the import run) on every imported row
+
+**Large files run as background jobs.** Above roughly 1,000 rows, put them in a queue,
+split into batches of 500 rows, show progress, and allow cancel (see `background-jobs`).
+
+---
+
+## 4 · Excel and CSV traps
+
+| Trap | What happens | Fix |
+|---|---|---|
+| **Thai in CSV garbled** | Opened in Excel, the characters are unreadable | Save as UTF-8 **with a BOM**, or recommend .xlsx |
+| **Codes starting with 0 lose it** | `0812345678` becomes `812345678` | Always read as text, and on export set the cell format to text |
+| **Long numbers turn into scientific notation** | A 13-digit ID card number → `1.23457E+12` | Same as above |
+| **Dates interpreted automatically** | Is `03/04/2026` March or April | Force `YYYY-MM-DD` in the template |
+| **B.E. and C.E. years mixed** | Silently off by 543 years | **Ask on the import screen which year style the file uses** |
+| Trailing spaces in a value | Code matching fails | Trim leading and trailing spaces on every value |
+| Cells that are formulas | You get the formula instead of the value | Read the calculated value |
+| **Values starting with `=` `+` `-` `@` in an export file** | Excel runs a command when the user opens it | Prefix with `'` any value that starts with these characters |
+
+> **A vulnerability people rarely know about:** a customer name of `=cmd|'/c calc'!A1`, if exported raw
+> and someone opens it in Excel, will try to run the command for real. So always escape on export.
+
+---
+
+## 5 · Export
+
+| Topic | Rule |
+|---|---|
+| Size | Above roughly 50,000 rows, run it as a background job and send a download link |
+| Permission | **Export only data that this user already has permission to see**, because this is the most common leak |
+| audit | Record every time who exported what data, which period, how many rows |
+| Personal data | Mask columns that are not needed (see `pdpa-compliance`) |
+| File name | `<เรื่อง>-<ช่วงวันที่>-<เวลาที่ส่งออก>.xlsx` |
+| File header | Put in the filter conditions used and the export time. Otherwise in 3 months nobody knows what data this file is |
+| Download link | Must expire (see `file-upload-and-storage`) |
+| Format | `.xlsx` for people to read · CSV for machines to read |
+
+
+## reference: thai-accounting-apis.md
+
+# Connecting to Thai SME accounting software through API
+
+Use when our system must push sales or purchase documents into the customer's accounting software, instead of exporting Excel for them to re-key. The rules of `SKILL.md` still apply: validate everything before writing · summary page before confirming · batch id · audit.
+Every fact comes from the vendors' documents, opened 2026-10-23. Prices and API fees were rechecked 2026-10-26 (table "Sources"). Prices and terms change often: confirm with the vendor before quoting a customer.
+Abbreviations: small and medium enterprises (SME) · Application Programming Interface (API) · User Acceptance Testing (UAT) is the test system · Hash-based Message Authentication Code (HMAC) is a signature made from a secret key · Software Development Kit (SDK).
+
+## 1 · Choose a route
+
+| Route | Use when |
+|---|---|
+| Send a file using the accounting software's import template (file format of each vendor not yet checked) | Few documents · the customer's package has no API |
+| Connect to the API directly (sections 2–3) | Hundreds of documents per month · need status back, such as paid |
+| Through a partner app the accounting software certifies (PEAK: menu ตั้งค่า > การเชื่อมต่อแอปพลิเคชันภายนอก, i.e. Settings > External application connections) | Online shop that already uses a back-office system → `ecommerce-patterns` `references/thai-marketplace-apis.md` |
+
+## 2 · PEAK
+
+| Topic | Information |
+|---|---|
+| Docs | developers.peakaccount.com (API Integration Guide · file `llms.txt` links every page) · has a Postman collection |
+| Package | PEAK PRO Plus (12,000 baht/year) or higher · PEAK PRO Plus price per the developers page on 2026-10-26 · API fee is paid before go-live under the agreed package terms; the docs state no amount (`รอยืนยัน`, pending confirmation · per the go-live document, confirm the API fee, the number of items, and the trial terms with the PEAK team before putting them in a quotation) |
+| Get access | Fill in the form, the team replies within 3 working days · you get Connect ID + Application Code · UAT and production credentials are separate |
+| Authentication | Client Token valid 24 hours (`POST /api/v1/ClientToken`) · User Token per business, the customer creates it in the menu เชื่อมต่อแอปพลิเคชันภายนอก (External application connections) with the Application Code · header `Time-Stamp` (yyyyMMddHHmmss, UTC) · `Time-Signature` = HMAC-SHA1 of the Time-Stamp, with connectId as the key |
+| What it can do | contacts · products (has adjust) · services · quotations · invoices · billing notes · receipts · credit notes · purchase orders · expenses · daily journals · receive payment · void · approve · attach files |
+| e-Tax | Has an endpoint to send e-Tax Invoice for invoice and receipt · sends e-Receipt |
+| UAT | `http://peakengineapidev.azurewebsites.net/api/v1` (http, not https) · free for 3 months · open Mon–Fri 08:00–22:00 |
+| Production | `https://api.peakaccount.com/api/v1` · before go-live must pass the Final UAT Review (test case · error case · duplicate case · accounting result) |
+| rate limit | ClientToken request 10 times/minute/IP · trial balance report (`GET /api/v1/FinancialReports/trialbalance`) 10 times/minute and 1 concurrent · per User Token: GET 20 concurrent · POST 10 concurrent · file attach 10 concurrent · over the limit → HTTP 429 `RATE_LIMITED` with `retryAfterSeconds` |
+| Billed by | Only successful POST Create (invoice · receipt · quotation · billing note · purchase order · expense · daily journal) |
+| webhook | Events Create · Edit · Void · PaidPayment · VoidPayment of the main documents (contact · product only Create · Edit) · can set a custom header per endpoint, such as `x-api-key` · the docs say nothing about signatures or redelivery |
+
+## 3 · FlowAccount
+
+| Topic | Information |
+|---|---|
+| Docs | developers.flowaccount.com · the spec actually in use `https://developers.flowaccount.com/swagger.yml` (OpenAPI 3.0.2 · 130 paths) · SDKs in several languages at github.com/flowaccount |
+| Package | Only Pro Business has Open API (price page 2026-10-26: ฿457/month · ฿5,490/year) · Free · Standard (฿1,990/year) · Pro (฿2,990/year) have no API · the price page lists no separate API fee · import up to 5,000 items/month, beyond that special pricing · the API page says "Pay when you go live" and gives no amount (`รอยืนยัน`, pending confirmation) |
+| Get access | Form request-openapi · team replies within 1–2 working days · sandbox usable for 30 days · real credentials are emailed to the business owner within 3 working days after the package is confirmed |
+| Authentication | OAuth 2.0 · Client Credentials = 1 client per business · OpenID = partner with 1 client for many businesses (scope `flowaccount-api offline_access` · refresh token about 30 days from the last use) · token at `https://openapi.flowaccount.com/{test or v1}/token` valid 86,400 seconds · sent in header `Authorization: Bearer` |
+| base URL | sandbox `https://openapi.flowaccount.com/test` · production `https://openapi.flowaccount.com/v1` |
+| What it can do | contacts · products · quotations · billing-notes · tax-invoices · receipts · cash-invoices · purchases · purchases-orders · expenses · withholding-taxes · journal-entries · chart-of-accounts · change status · receive payment · attach files · export PDF · send email |
+| Cross-system reference | Field `externalDocumentId` "รหัสเอกสารอ้างอิงจากระบบภายนอก" (document id referenced from an external system) |
+| e-Tax · rate limit · webhook | Not found in swagger.yml (searching webhook · etax · rate limit · 429 gave 0 hits) nor on the pages developers.flowaccount.com · flowaccount.com/en/developers on 2026-10-26 (not yet checked with the vendor · contact developer_support@flowaccount.com) |
+
+## 4 · Other vendors
+
+| Software | What was found |
+|---|---|
+| TRCLOUD | The vendor's API page says it has a RESTful API · create an API Key from the settings menu · has Custom API & Webhook · no public developer docs found, ask the sales team for the manual |
+| AccRevo | No public API found · the website has a launch article about AccRevoX × MCP (works with Claude) |
+| Express | Searched twice, found no vendor website and no public API |
+
+## 5 · e-Tax Invoice
+
+- Pick one system to issue the tax invoice number · our system and the accounting software must not both issue numbers
+- Send into the accounting software as the source document, then let the accounting software issue the e-Tax · PEAK has an endpoint to send e-Tax · FlowAccount not found in the spec, ask the vendor
+- Tax invoice rules (section 86/4 · e-Tax Invoice & e-Receipt vs by Email) → `e-commerce:e-tax-invoice` (if installed)
+
+## 6 · Prevent duplicates and reconcile
+
+- Keep a mapping table: our id ↔ the accounting software's id · PEAK recommends keeping External Reference and a mapping to prevent duplicate documents · FlowAccount uses `externalDocumentId` to hold our id
+- Neither vendor's docs have an idempotency key → look up the mapping before every POST create (`principle-safe-to-rerun`)
+- A timeout does not mean failure · pull the list by date range and compare before resending
+- On 429 → wait per `retryAfterSeconds` or back off exponentially (1 · 2 · 4 · 8 seconds, as PEAK recommends)
+- Reconcile every day: the document count and total of the 2 systems must match → `fintech-payments` (`references/agent-payment-integration.md`, section Settlement Reconciliation)
+- Log every send to audit: who sent · which document · destination id · result → `audit-trail`
+- Client Token · client secret · connectId stay outside the code → `config-and-secrets` · PEAK UAT is http, so use test data only
+
+## Sources
+
+| Topic | URL (opened 2026-10-23) |
+|---|---|
+| PEAK packages · UAT free 3 months · guide | https://www.peakaccount.com/developers · https://developers.peakaccount.com/reference/api-integration-guide |
+| PEAK list of all API pages | https://developers.peakaccount.com/llms.txt |
+| PEAK token · signature | https://developers.peakaccount.com/reference/peak-api-client-token-guide.md |
+| PEAK rate limit · billing count · go-live | https://developers.peakaccount.com/reference/copy-of-api-rate-limiting-concurrency-control.md · .../peak-api-transaction-counting.md · .../peak-api-implementation-go-live-guide.md |
+| PEAK webhook · API access rights | https://developers.peakaccount.com/reference/webhook.md · .../api-access-rights.md |
+| PEAK help center (packages · User Token) | https://intercom.help/peak/en/articles/13176287 · https://intercom.help/peak/en/articles/10078711 |
+| FlowAccount API page · price (rechecked 2026-10-26) | https://flowaccount.com/en/developers · https://flowaccount.com/en/pricing |
+| FlowAccount connection · token | https://developers.flowaccount.com/tutorial/connect-open-api · .../tutorial/connect/client-credentials-flow · .../tutorial/connect/open-id-flow |
+| FlowAccount spec · SDK | https://developers.flowaccount.com/swagger.yml · https://github.com/flowaccount/open-api (README says swagger.yml is the spec in actual use) |
+| TRCLOUD · AccRevo | https://www.trcloud.co/api.php · https://www.accrevo.com/ |

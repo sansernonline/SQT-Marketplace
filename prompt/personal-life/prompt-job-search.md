@@ -32,7 +32,7 @@
 
 ## 1. สมัครงาน 1 ตำแหน่งครบชุด
 
-playbook `job-application` · agent `career-coach` · skill `resume-th-en` · `linkedin-profile`
+playbook `job-application` · agent `career-coach` · skill `resume-th-en`
 **ผลลัพธ์:** โฟลเดอร์ `applications/<บริษัท>-<ตำแหน่ง>/` · **รออนุมัติ:** กดส่งใบสมัคร
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -106,7 +106,7 @@ playbook `offer-negotiation` · agent `career-coach` · skill `salary-negotiatio
 
 ## 4. จบใหม่ หางานแรก
 
-playbook `profile-refresh` · agent `career-coach` · skill `resume-th-en` · `linkedin-profile` · `interview-prep`
+playbook `profile-refresh` · agent `career-coach` · skill `resume-th-en` · `interview-prep`
 **ผลลัพธ์:** `cv/CV_<ชื่อ>_TH.md` · `cv/CV_<ชื่อ>_EN.md` (+ `.docx`) · `linkedin.md` · `first-job-plan.md` · **รออนุมัติ:** กดส่งใบสมัคร · ส่งข้อความหาผู้สรรหา
 
 ### ข้อมูล (ผู้ใช้กรอก)

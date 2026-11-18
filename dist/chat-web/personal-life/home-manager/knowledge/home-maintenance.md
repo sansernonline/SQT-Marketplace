@@ -76,7 +76,7 @@ For a formal quotation format see `e-commerce` `doc-quotation` (if installed); f
 
 ## เรียกเป็นคำสั่ง
 
-`/personal-life:home-maintenance <"schedule" | job to quote> [house type, aircon count, car details]`
+`/personal-life:home-maintenance <"schedule" | job to quote> [house type, aircon count]`
 
 Run `home-maintenance` with the `home-manager` agent for: **$ARGUMENTS**
 

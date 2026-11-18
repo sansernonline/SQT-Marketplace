@@ -184,7 +184,7 @@ The next documents cite back with the code (`IMP-03` · `[7]`) so you can trace 
 | "Should make the UI more modern" | It cannot be checked or done. Say which page, what problem, what evidence, how to fix it. |
 | A proposal that comes from the agent's own taste | Without evidence it is not a proposal. Move it to "Unknown". |
 | Conclude from a single review or thread | A loud voice does not mean a majority problem. |
-| Copy every feature to be "as complete as theirs" | Our first app would grow too big to finish. Cut with `simplicity-first`. |
+| Copy every feature to be "as complete as theirs" | Our first app would grow too big to finish. Cut with `superuser:simplify`. |
 | Use old-edition data without checking the date | The feature may have been changed or removed. |
 
 ---
@@ -196,7 +196,7 @@ The next documents cite back with the code (`IMP-03` · `[7]`) so you can trace 
 | Decide whether to adopt a ready-made product or build | `prior-art-review` |
 | Turn proposals into BR / FR | `user-story-writer` · `srs-writing` |
 | Assess their UI and design ours | `ui-craft` · the platform skill |
-| Cut proposals down to what the first app needs | `simplicity-first` |
+| Cut proposals down to what the first app needs | `superuser:simplify` |
 | Name our app so it does not collide with theirs | `product-naming` |
 | Raw notes during the search | `temp-file-discipline` |
 | Report status at the end | `status-report` |

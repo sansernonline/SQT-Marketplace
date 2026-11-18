@@ -173,8 +173,7 @@ What still needs agreement is the **field-level error**:
 - **Return the errors for all fields at once**, not one at a time, so users do not have to submit 5 times.
 - If several languages are supported, choose Thai or English text from `Accept-Language`.
 
-**Pick the status to match:** `400` malformed request · `401` not authenticated · `403` authenticated but not permitted ·
-`404` does not exist, or you do not want to reveal that it exists · `409` conflicts with the current state · `422` well-formed but the data fails the rules · `429` too many calls
+**Pick the status to match** the table in `web-service-essentials` section 2. One addition for this skill: return `404` also when you do not want to reveal that the thing exists.
 
 ---
 

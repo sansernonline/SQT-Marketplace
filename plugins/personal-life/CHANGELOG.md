@@ -1,5 +1,12 @@
 # Changelog — personal-life
 
+## 0.26.0 — 2026-11-18
+
+- รวม skill ที่ซ้อนกัน 3 คู่ จาก 44 เหลือ 41 skill: `linkedin-profile` เข้า `resume-th-en` (ขั้นตอน LinkedIn อยู่ที่ `references/linkedin.md` · argument-hint เพิ่ม `linkedin`) · `study-drill` เข้า `cert-prep` (รูปแบบบัตรคำและการซ้อมถามตอบอยู่ที่ `references/cards-and-drills.md`) · `paper-to-practice` เข้า `learning-path` (`references/paper-to-practice.md`)
+- ตารางทบทวนบัตรเหลือแบบเดียว คือแบบกล่อง 5 ใบ (+1 · +3 · +7 · +21 วัน) เพราะปรับตามคำตอบถูกผิดและตรงกับช่อง `box:` และ `next:` ของบัตร · ตัดรอบวันที่ 1 · 3 · 7 · 14 · 30 ของ `cert-prep` เดิมออกเพราะขัดกัน
+- eval `study-drill-*` 3 เคส เปลี่ยนชื่อเป็น `cert-prep-*` พร้อมสถานะเดิมใน `evals/RESULTS.md` (`behaviour` ยังไม่ผ่าน) · แก้อ้างอิงใน agent `career-coach` `tech-mentor` และ skill ที่เกี่ยวข้อง
+- แก้ argument-hint ของ `home-maintenance` ที่ลงท้าย "car details" ผิด (เรื่องรถอยู่ที่ `vehicle-care`)
+
 ## 0.25.1 — 2026-11-17
 
 - ของกลางจาก superuser 3.45.0: config แม่แบบมีโมดูล `resume_check` (เตือนข้อเก่าใน "รับงานต่อ" และเตือนให้อัปเดตก่อนจบ) · แม่แบบ CONTEXT มีกฎ `รับโดย:` และป้าย `ขัดกัน` จาก superuser 3.44.0 ซึ่งรอบนั้นไม่ได้ขึ้นรุ่น plugin นี้

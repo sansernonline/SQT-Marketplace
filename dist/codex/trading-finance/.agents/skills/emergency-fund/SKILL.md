@@ -35,7 +35,8 @@ Never in stocks, crypto, long-term funds, Retirement Mutual Fund (RMF) / ThaiESG
 ## Deposit protection (สถาบันคุ้มครองเงินฝาก)
 
 - Covers **up to 1,000,000 baht per depositor per bank** — all accounts and branches at that bank combined, principal plus interest. In force since 11 Aug 2564.
-- Covers Thai-baht savings, current, fixed deposits and certificates of deposit at member banks. Does **not** cover mutual funds, bonds, bills of exchange (ตั๋วแลกเงิน), insurance, or co-operatives (สหกรณ์ออมทรัพย์).
+- Covers Thai-baht savings, current, fixed deposits, certificates of deposit and deposit receipts at member banks. Does **not** cover foreign-currency deposits, mutual funds (including money market funds), bonds and corporate bonds, bills of exchange (ตั๋วแลกเงิน), insurance, or co-operatives (สหกรณ์ออมทรัพย์).
+- This is the one copy of the protection rules; `personal-budget` and `bonds-and-deposits` link here.
 - Above 1 million: split across banks. Money beyond the emergency tier (deposits vs bonds vs money market funds) → `bonds-and-deposits`.
 
 ## Workflow

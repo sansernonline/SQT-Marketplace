@@ -27,4 +27,4 @@ Source: code.claude.com/docs/en/skills (read 2026-10-23) · the version numbers 
 - Before writing, read `.claude/skills/verify/SKILL.md` or `run-<name>/` that `/verify` already recorded (if any), then continue in the same format — the frontmatter fields the bundled one uses have not been checked against the docs (`ยังไม่ได้ตรวจ`, not yet checked)
 - monorepo → place it in the package folder that was touched, following the bundled one's rule
 - Codex · Gemini or Claude Code before v2.1.145 (`ยังไม่ได้ตรวจ` — not yet checked which version `/verify` started in) → use the old name `verify-<project>` in `.claude/skills/` · `.agents/skills/` · `skills/`
-- `app-verifier-upkeep` maintains this one file only and does not create a nested `verify-<project>`
+- Upkeep (`upkeep.md`) maintains this one file only and does not create a nested `verify-<project>`

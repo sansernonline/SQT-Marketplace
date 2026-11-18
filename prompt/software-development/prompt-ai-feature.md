@@ -39,7 +39,7 @@
 
 ## 1. ออกแบบฟีเจอร์ AI และเลือก model
 
-playbook `project-docs` · agent `ai-engineer` + `product-manager` · skill `llm-engineering` · `simplicity-first` · `architecture-patterns` · `adr-writer`
+playbook `project-docs` · agent `ai-engineer` + `product-manager` · skill `llm-engineering` · `superuser:simplify` · `architecture-patterns` · `adr-writer`
 **ผลลัพธ์:** `docs/ai/AI-DESIGN.md` · ADR การเลือก model ใน `docs/decisions/`
 
 ### โจทย์ (ผู้ใช้กรอก)

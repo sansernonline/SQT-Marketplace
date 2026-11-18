@@ -194,12 +194,12 @@ Not for: SSO rules → `social-security-th` · OT rates and leave → `labour-la
 |---|---|---|---|
 | 1 | Close attendance: OT, unpaid leave, new joiners, leavers, then run the 9 checks below | timesheet | before cut-off |
 | 2 | Gross = salary + OT + allowances + commission + taxable benefits | payroll register | |
-| 3 | SSO 5% on wage capped at 17,500 → max 875 (`social-security-th`) | employee + employer share | |
-| 4 | PVD employee % and employer % (if the company has a fund) | | |
+| 3 | SSO employee and employer share at the rate, floor and cap in `social-security-th` section 1 | employee + employer share | |
+| 4 | PVD employee % and employer % (if the company has a fund; rules in "Provident fund (PVD) basics" below) | | |
 | 5 | PIT withholding by annualisation (below) | withholding tax (WHT) per head | |
 | 6 | Net pay = gross − SSO − PVD − PIT − other agreed deductions | payslip | pay day per contract (at least once a month, ม.70) |
 | 7 | File **ภ.ง.ด.1** and remit WHT | RD receipt | 7th next month (paper); e-Filing = paper deadline + the current e-Filing extension (look it up live, `tax-vat-th` section 2) |
-| 8 | File **สปส.1-10** and remit SSO (both shares) | SSO receipt | 15th next month |
+| 8 | File **สปส.1-10** and remit SSO (both shares) | SSO receipt | deadline in `social-security-th` section 5 |
 | 9 | Remit PVD to the fund manager | | per fund rules |
 | 10 | Archive register, payslips, receipts: keep 5 years minimum, 7 recommended (`sme-bookkeeping` section 2; per a Revenue Department ruling, not yet checked against the current statute) | | |
 
@@ -224,26 +224,21 @@ Most errors are in the timesheet and employee list, not the tax maths. Run these
 ### PIT withholding on salary (ม.40(1)), annualisation per ม.50(1) ประมวลรัษฎากร
 1. Annual income = monthly taxable pay × pay periods in the year (12, or remaining months for a mid-year joiner + income already paid).
 2. Less expense deduction: 50% of income, max **100,000**.
-3. Less allowances declared on ล.ย.01: personal **60,000**; spouse with no income 60,000; child 30,000 each (60,000 for 2nd+ child born 2561 or later); parents 30,000 each (aged 60+, income under 30,000); **SSO actually paid** (up to 875 × 12 = 10,500 in 2569, รอยืนยัน); PVD employee contributions (within 15% of wage, overall retirement cap 500,000); life/health insurance as declared.
-4. Apply the progressive rates → annual tax.
+3. Less allowances declared on ล.ย.01: personal **60,000**; spouse with no income 60,000; child 30,000 each (60,000 for 2nd+ child born 2561 or later); parents 30,000 each (aged 60+, income under 30,000); **SSO actually paid** (up to 12 × the monthly maximum in `social-security-th` section 1 = 10,500 in 2569, รอยืนยัน); PVD employee contributions (within 15% of wage, overall retirement cap 500,000); life/health insurance as declared.
+4. Apply the progressive rates → annual tax. Bracket table: `seller-tax-basics` "Income tax brackets"; the script reads the same rates from `scripts/rates.json`.
 5. Monthly WHT = annual tax ÷ 12. Recalculate when salary changes or a bonus is paid.
-
-| Net income (baht/year) | Rate | Tax on band | Cumulative at top |
-|---|---|---|---|
-| 0 – 150,000 | exempt | 0 | 0 |
-| 150,001 – 300,000 | 5% | 7,500 | 7,500 |
-| 300,001 – 500,000 | 10% | 20,000 | 27,500 |
-| 500,001 – 750,000 | 15% | 37,500 | 65,000 |
-| 750,001 – 1,000,000 | 20% | 50,000 | 115,000 |
-| 1,000,001 – 2,000,000 | 25% | 250,000 | 365,000 |
-| 2,000,001 – 5,000,000 | 30% | 900,000 | 1,265,000 |
-| over 5,000,000 | 35% | | |
 
 Last checked 2026-10-06 (sources in [`references/sources.md`](references/sources.md)).
 
 **Bonus month:** compute tax on (annual salary + bonus) and on annual salary alone; the difference is withheld in the bonus month on top of the normal monthly WHT.
 
 **Script:** `node payroll.mjs <file.json> [--json]` runs steps 3–6 per person (input format, path and warnings: [`references/script-and-example.md`](references/script-and-example.md)). Rates live in `scripts/rates.json`; before the January run, check rd.go.th and edit it. The result is supporting information, not tax advice.
+
+### Provident fund (PVD) basics
+- Voluntary, set up by the employer with an asset manager under พ.ร.บ.กองทุนสำรองเลี้ยงชีพ 2530. Separate from SSO.
+- Employee saves 2–15% of wage; employer contributes at least the employee's rate and not more than 15%.
+- Employer's share can vest by years of service (e.g. 0% under 1 year → 100% at 5 years) — the fund's rules say.
+- Tax: the employee contribution is an allowance; its limits are in PIT step 3 above.
 
 ### ภ.ง.ด.1 and ภ.ง.ด.1ก
 - **ภ.ง.ด.1** monthly: 1 line per employee paid (tax ID, name, pay date, amount paid, tax withheld). No return needed in a month where nothing was paid.
@@ -271,7 +266,7 @@ Last checked 2026-10-06 (sources in [`references/sources.md`](references/sources
 
 Run `payroll-th` with the `tax-helper` agent for: **$ARGUMENTS**
 
-Uses `social-security-th` for the SSO cap and `labour-law-basics` for OT rates. Produces the payroll register, payslip figures, and the filing dates for ภ.ง.ด.1 (7th on paper; e-Filing = paper deadline + the current extension, looked up live per `tax-vat-th` section 2) and สปส.1-10 (15th), ending with the accountant handoff checklist.
+Uses `social-security-th` for the SSO cap and `labour-law-basics` for OT rates. Produces the payroll register, payslip figures, and the filing dates for ภ.ง.ด.1 (7th on paper; e-Filing = paper deadline + the current extension, looked up live per `tax-vat-th` section 2) and สปส.1-10 (deadline in `social-security-th` section 5), ending with the accountant handoff checklist.
 
 
 ## reference: 50-tawi.md

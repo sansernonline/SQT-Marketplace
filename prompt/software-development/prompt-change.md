@@ -27,7 +27,7 @@
 
 ## 1. วิเคราะห์คำขอเปลี่ยน (Change Request)
 
-agent `business-analyst` + `system-analyst` · skill `srs-writing` · `simplicity-first` · `polished-document-style`
+agent `business-analyst` + `system-analyst` · skill `srs-writing` · `superuser:simplify` · `polished-document-style`
 **ผลลัพธ์:** `docs/change/CR-<เลข 3 หลัก>-<เรื่อง>.md` ไฟล์เดียว — **ไม่แก้** SRS / FSD / mockup / โค้ด
 
 ### คำขอเปลี่ยน (ผู้ใช้กรอก)

@@ -35,7 +35,7 @@
 
 ## 1. อ่าน TOR และหาช่องโหว่
 
-agent `business-analyst` · skill `srs-writing` · `simplicity-first`
+agent `business-analyst` · skill `srs-writing` · `superuser:simplify`
 **ผลลัพธ์:** `docs/proposal/tor-analysis.md`
 
 ### ข้อมูลงาน (ผู้ใช้กรอก)
@@ -61,7 +61,7 @@ agent `business-analyst` · skill `srs-writing` · `simplicity-first`
 
 ## 2. ประเมินงาน เวลา และราคา
 
-agent `project-manager` + `solution-architect` · skill `architecture-patterns` · `simplicity-first`
+agent `project-manager` + `solution-architect` · skill `architecture-patterns` · `superuser:simplify`
 **ต้องมีก่อน:** `docs/proposal/tor-analysis.md` · ไม่มี TOR แต่ทำ POC แล้ว (`prompt-poc.md`) → ใช้ `docs/poc/poc-plan.md` + `docs/poc/poc-report.md` แทน โดยข้ามฉบับ 1 · ทุกที่ที่ให้อ้างเลขข้อ TOR ให้อ้างหัวข้อของ POC แทน เช่น `POC-plan 3` · `POC-report 4`
 **ผลลัพธ์:** `docs/proposal/estimate.md` · `docs/proposal/estimate.xlsx`
 

@@ -21,10 +21,10 @@ You are a **technical mentor** for a working developer. You respect that their t
 |---|---|
 | Weekly catch-up on followed tools | `tech-radar` |
 | Learn a technology against the user's project | `learning-path` |
-| Paper, Request for Comments (RFC) or article into running code | `paper-to-practice` |
+| Paper, Request for Comments (RFC) or article into running code | `learning-path` (paper flow: `references/paper-to-practice.md`) |
 | English errors, RFCs and documentation | `english-tech-reading` |
 | Amazon Web Services (AWS) / Azure / Google Cloud Platform (GCP) / Certified Kubernetes Administrator (CKA) / Certified Kubernetes Application Developer (CKAD) / Scrum exam plans | `cert-prep` |
-| Flashcards from notes, quiz me without the answer | `study-drill` |
+| Flashcards from notes, quiz me without the answer | `cert-prep` (cards and drills: `references/cards-and-drills.md`) |
 | Choose and scope a practice project | `side-project-picker` |
 | Thesis, independent study (IS) or journal paper — structure, citations, defense | `thesis-writing` |
 | Teach or run a course — outcomes, schedule, exercises, rubric | `course-builder` |

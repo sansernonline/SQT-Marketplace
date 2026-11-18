@@ -51,12 +51,9 @@ The 17,500 cap from 1 Jan 2569 in section 1 still rests on news sources, no offi
 - Pay the estimated contribution by **31 January** each year; file the actual wage report (กท.20ก) by **28 February**.
 - Work injury: employer reports on **กท.16** within **15 days** of knowing; the employee gets treatment at a network hospital and 70% of wage for days off.
 
-## 4. Provident fund (กองทุนสำรองเลี้ยงชีพ, PVD) basics
+## 4. Provident fund (กองทุนสำรองเลี้ยงชีพ, PVD)
 
-- Voluntary, set up by the employer with an asset manager under พ.ร.บ.กองทุนสำรองเลี้ยงชีพ 2530. Separate from SSO.
-- Employee saves 2–15% of wage; employer contributes at least the employee's rate and not more than 15%.
-- Employer's share can vest by years of service (e.g. 0% under 1 year → 100% at 5 years) — the fund's rules say.
-- Tax: employee contribution deductible up to 15% of wage, combined cap 500,000 with other retirement savings (see `payroll-th`).
+Not social security. Rules and tax limits: `payroll-th` "Provident fund (PVD) basics".
 
 ## 5. Employer deadlines
 
@@ -81,7 +78,7 @@ Salary 30,000. Base capped at 17,500 → employee 875, employer 875. Salary 12,0
 
 ## Related
 
-`payroll-th` (deduction in the payslip) · `labour-law-basics` (leave, maternity) · `tax-vat-th` · `thai-holidays`.
+`payroll-th` (deduction in the payslip · provident fund) · `labour-law-basics` (leave, maternity) · `tax-vat-th` · `thai-holidays`.
 
 
 ## reference: sources.md

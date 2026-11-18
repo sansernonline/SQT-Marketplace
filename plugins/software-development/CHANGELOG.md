@@ -1,5 +1,15 @@
 # Changelog — software-development
 
+## 3.8.0 — 2026-11-18
+
+- รวม skill 4 ตัวเข้าตัวที่ใกล้ที่สุด ลดจำนวน skill ลง 4 · ไม่ตัดกฎ ตัวเลข หรือสคริปต์ใด ย้ายไปไว้ที่ตัวรวม
+  - `app-verifier-upkeep` → `app-verifier-setup` (`references/upkeep.md`)
+  - `cloudflare-r2` → `backblaze-b2` (`references/cloudflare-r2.md` · `cloudflare-r2-example.md` · `cloudflare-r2-sources.md` · `assets/r2-presign.mjs` · `assets/r2-cors.json`) · description และขั้นตอนของ `backblaze-b2` ครอบคลุมทั้ง 2 ผู้ให้บริการ
+  - `doc-cover-design` → `branded-document-design` (`references/cover-design.md` และ `cover-*.md` อีก 4 ไฟล์ · `scripts/cover-engine/`) · ส่วนโหวต 3 แบบที่ซ้ำกับ `cover-vote.md` ตัดออกแล้วชี้ไปที่ไฟล์นั้น
+  - `simplicity-first` ลบ · ส่วนที่ไม่ซ้ำย้ายไป `superuser:simplify` (ทำแยกใน plugin superuser) · ทุกที่ใน plugin นี้ชี้ไป `superuser:simplify`
+- api-conventions §7: รายการ status code ซ้ำกับ `web-service-essentials` §2 จึงเปลี่ยนเป็นลิงก์ (เก็บข้อ 404 ที่ต่างไว้)
+- evals: เปลี่ยนชื่อเคส `cloudflare-r2-*` เป็น `backblaze-b2-r2-*` และแก้ field skill เป็น `backblaze-b2` · agents (qa-tester · devops-engineer · อีก 6 ตัว) อัปเดตชื่อ skill
+
 ## 3.7.0 — 2026-11-17
 
 - project-bootstrap: ส่วนขยายและโปรแกรมย่อยของแอป (browser extension · plugin · CLI · hook client · SDK · ตัวช่วยที่รันเดี่ยวไม่ได้) อยู่ที่ `<project-name>/extension/<name>/` เสมอ (ผู้ใช้ขอ 2026-11-17 "ถ้ามี app ไหนมีส่วนขยาย หรือโปรแกรมย่อยให้ใส่ใน extension folder") · แต่ละตัวมี README · build และเทสต์ของตัวเอง · CI build ทุกตัว · สร้างเมื่อมีตัวแรก · ตัวที่โตจนมีชุดเอกสารเองย้ายไป `ecosystem/` · เพิ่มในผังโค้ด `code-folder.md` และเช็กลิสต์เปิดโปรเจกต์

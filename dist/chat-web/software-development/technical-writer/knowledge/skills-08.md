@@ -883,7 +883,7 @@ The main principles are in `human-writing` item 3. This table keeps only what sh
 | Wrong physics: shadows not matching light, wrong reflections, bent lines, unrealistic scale | Check by eye before use | KR · MF |
 | Hands, teeth, garbled text, crowds with repeated faces | Zoom to 200% to check · put text in a separate layer | KR · FL · MR |
 | Using the first image you get without editing | Crop, edit, adjust (1 source, but matches the principle "edit, do not just accept") | CP |
-| Clay 3D / isometric / glossy | A style that fits the brand · real photos | 2S · MF · doc-cover-design item 9 |
+| Clay 3D / isometric / glossy | A style that fits the brand · real photos | 2S · MF · branded-document-design `cover-design.md` item 9 |
 | Prompting with adjectives ("premium" · "vibrant") | A named style + reference image + hex | MR · VP · CP |
 | A gradient circle logo with a hole in the middle · swoosh curves · infinity · circuit patterns | A shape from something specific (DeepSeek's whale · Midjourney's sailboat) | QW · BU |
 | Letters that are almost letters, melting, off symmetry, details lost at small size, raster file only | Vector · test at favicon size · real lettering | BU · KR · MR |

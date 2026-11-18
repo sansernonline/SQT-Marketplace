@@ -1,7 +1,7 @@
 # playbook · profile-refresh — refresh the CV and LinkedIn as a set
 
 Use when: the user has no target job yet but wants to be ready · the CV is several years old · changing career track
-Main skills: `resume-th-en` · `linkedin-profile`
+Main skills: `resume-th-en`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 

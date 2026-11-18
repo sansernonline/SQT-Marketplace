@@ -9,9 +9,10 @@ description: Use to cut extras nobody needs yet. Not Claude Code simplify
 
 ## Use when
 - Any work handed to people (code, documents, plans, designs, slides, tables, answers) may hold more than the task needs.
+- Cutting a spec, plan or architecture to the fewest parts: also open [`references/architecture-and-anti-patterns.md`](references/architecture-and-anti-patterns.md).
 - `human-writing` controls how it is written; this skill controls what the work contains.
 
-Not for: Claude Code's own `/simplify` command · more detail on code and architecture (if installed) → `lazy-coding` · `readable-code` · `simplicity-first` in plugin `software-development`.
+Not for: Claude Code's own `/simplify` command · more detail on code (if installed) → `lazy-coding` · `readable-code` in plugin `software-development`.
 
 ## Steps
 1. Climb the ladder and stop at the first step that works: (a) is this really needed? If not, do not do it and say in 1 line what you skipped; (b) is there an existing thing that works (file, template, function, tool, built-in feature)? Use it; (c) do the shortest version that is still complete and correct.
@@ -32,3 +33,6 @@ Not for: Claude Code's own `/simplify` command · more detail on code and archit
 - [ ] Every added part has a reason it is needed now, not "just in case".
 - [ ] Still complete on correctness, safety and what the user asked for.
 - [ ] Duties still clearly separated, not squashed into one place to look short.
+
+## References
+- [`references/architecture-and-anti-patterns.md`](references/architecture-and-anti-patterns.md) — open for architecture, specs, plans or designs: architecture do and avoid, extra checks per output type, anti-patterns to reject (future-proofing · layer cake · resume-driven design), wrong and right examples

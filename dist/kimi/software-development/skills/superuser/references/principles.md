@@ -34,7 +34,7 @@ To use an item, open that item's SKILL.md and read the whole file first.
 
 **Simplicity**
 - `lazy-coding` — the least code that really works
-- `simplicity-first` — documents · designs · plans that are as simple as possible but usable
+- `simplify` — documents · designs · plans that are as simple as possible but usable
 - `readable-code` — a newcomer can read and keep up
 
 **Working**

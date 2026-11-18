@@ -113,5 +113,5 @@ Chart colour palette: `diagram-figures` → `references/colour-by-domain.md` · 
 | Convert .pptx to .html with animation · click-by-click reveal | `html-slide-deck` (`references/from-pptx.md`) |
 | Spacing rules and eye order (app screens) | `ui-craft` (plugin `software-development`) |
 | Content comes from a Software Requirements Specification (SRS) | `srs-writing` (plugin `software-development`) |
-| Cut content down to what is necessary | `simplicity-first` (plugin `software-development`) |
+| Cut content down to what is necessary | `superuser:simplify` |
 | Brand colour and type system · illustration | `graphic-design` (plugin `software-development`) |

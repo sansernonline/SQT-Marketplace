@@ -169,7 +169,7 @@ Weights are starting values the user can change (not yet measured). Every figure
 
 ## References
 - [`references/fund-types-and-fees.md`](references/fund-types-and-fees.md) — open to choose a fund type or explain fees (front-end, back-end, switching, management, TER)
-- [`references/worked-examples.md`](references/worked-examples.md) — open to show fee drag over 25 years or DCA unit buying
+- [`references/worked-examples.md`](references/worked-examples.md) — open to show fee drag over 25 years (DCA unit buying: `rebalance-and-dca`)
 - [`references/sources.md`](references/sources.md) — sources and check dates (2026-10-26) for risk levels 1–8 and the 10% dividend tax
 
 
@@ -220,7 +220,7 @@ Where to compare: SEC fund search (https://market.sec.or.th/public/mfeds/), Morn
 
 # Worked examples · mutual-fund-picker
 
-Open when showing the user fee drag over 25 years or how dollar-cost averaging (DCA) buys units.
+Open when showing the user fee drag over 25 years.
 
 ## Worked example — fee drag
 
@@ -237,13 +237,4 @@ For the user's own funds run `node money-calc.mjs fee <file.json>` (script in `p
 
 ## Worked example — DCA (ลงทุนสม่ำเสมอ)
 
-5,000 baht a month for 3 months; NAV 10.00, 8.00, 12.50.
-
-| Month | NAV | Units |
-|---|---|---|
-| 1 | 10.00 | 500 |
-| 2 | 8.00 | 625 |
-| 3 | 12.50 | 400 |
-| Total | — | 1,525 units for 15,000 |
-
-Average cost 9.84 per unit, below the simple average NAV 10.17 — DCA buys more units when prices fall. It does not prevent losses; it removes timing decisions. Set it as a bank auto-debit right after payday (`personal-budget`).
+Moved to `rebalance-and-dca` (`references/dca-example.md`).

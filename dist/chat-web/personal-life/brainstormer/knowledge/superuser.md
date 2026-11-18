@@ -253,7 +253,7 @@ If unsure whether something is out of scope, treat it as out of scope and send i
 | criterion | passes when | skill |
 |---|---|---|
 | **True** | every title, date and figure comes from the user or a document. If missing, put `[ใส่ตัวเลข]` | `resume-th-en` |
-| **On target** | matches the set job or reader, has all keywords from the posting, and irrelevant material is cut | `resume-th-en` · `linkedin-profile` |
+| **On target** | matches the set job or reader, has all keywords from the posting, and irrelevant material is cut | `resume-th-en` |
 | **Ready to use** | the user can copy it to send or say it at once · both Thai and English when readers could be either · the Applicant Tracking System (ATS) can read the file | `interview-prep` · `salary-negotiation` |
 
 Answer money questions as a table of total yearly income, never base salary alone.
@@ -262,7 +262,7 @@ Answer money questions as a table of total yearly income, never base salary alon
 
 | criterion | passes when | skill |
 |---|---|---|
-| **Runs** | every code example is really run, with command and result · every milestone ends with something that runs | `paper-to-practice` · `learning-path` |
+| **Runs** | every code example is really run, with command and result · every milestone ends with something that runs | `learning-path` |
 | **Cites official sources** | version, feature and exam information comes from official docs, release notes or exam guides, with link and date | `tech-radar` · `cert-prep` |
 | **Fits the time** | the plan fits the time the user really has per week and has a checkpoint to continue or stop | `learning-path` |
 
@@ -932,7 +932,7 @@ There is a 1-page interview prep card, a 10-question practice set with a scoring
 # playbook · job-application — apply for one position with a complete set
 
 Use when: there is a job ad to apply to · "ช่วยสมัครงานนี้" · changing jobs with a clear target
-Main skills: `resume-th-en` · `linkedin-profile` · `interview-prep`
+Main skills: `resume-th-en` · `interview-prep`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
@@ -940,7 +940,7 @@ Main skills: `resume-th-en` · `linkedin-profile` · `interview-prep`
 2. Read the job ad and split it into 3 groups: must-haves · nice-to-haves · keywords the Applicant Tracking System (ATS) will search for. Write them as a short table in the reply · ใคร: `career-coach` ตัวใหม่
 3. Match the experience to each must-have, one by one. For a must-have with no evidence, put it in the "ช่องว่าง" (gap) column and do not invent anything · ใคร: `career-coach` ตัวใหม่
 4. Write the CV for this job with `resume-th-en`. Every bullet needs an action + a result + a number, and uses the language of the reader (Thai · English · both) · ใคร: `career-coach` ตัวใหม่
-5. Adjust the LinkedIn headline and About section to match the CV with `linkedin-profile`. Positions and dates must not conflict · ใคร: `career-coach` ตัวใหม่
+5. Adjust the LinkedIn headline and About section to match the CV with `resume-th-en` (`references/linkedin.md`). Positions and dates must not conflict · ใคร: `career-coach` ตัวใหม่
 6. Draft a short application message or cover letter that speaks to 2–3 must-haves with evidence · ใคร: `career-coach` ตัวใหม่
 7. Check (ตรวจ) that every keyword from step 2 appears in the CV, that dates and positions match in every document, and that the ATS can read the file (no tables, text boxes, or images in place of text) · ใคร: `reviewer` ตัวใหม่
 8. If the user wants, prepare for the first-round interview with the playbook `interview`. Submitting the application sits under "รออนุมัติ" (awaiting approval) · ใคร: หัวหน้าทีม (submit: the user)
@@ -1092,7 +1092,7 @@ There is a yearly total income table that has been recalculated, and a negotiati
 # playbook · paper-to-practice — from a paper or article to code that runs
 
 Use when: the user wants to understand a paper · RFC · long article well enough to use it.
-Main skill: `paper-to-practice` · `english-tech-reading`
+Main skill: `learning-path` · `english-tech-reading`
 
 ## ขั้นตอน (Steps — copy into the todo as written)
 
@@ -1100,7 +1100,7 @@ Main skill: `paper-to-practice` · `english-tech-reading`
 2. If there is a hard term or sentence, use `english-tech-reading`. When reading an RFC, watch the difference between MUST · SHOULD · MAY · ใคร: `tech-mentor` ตัวใหม่
 3. Write the smallest sample code that shows the main idea, using the standard library first · ใคร: `tech-mentor` ตัวใหม่
 4. Run it for real, and try 1 case where the idea does not work, to see its limits · ใคร: `tech-mentor` ตัวใหม่ writes and runs the failing case · `reviewer` ตัวใหม่ reruns it and ตรวจ the result
-5. Write a short note using the `paper-to-practice` template — when to use it, when not to · ใคร: `tech-mentor` ตัวใหม่ · `reviewer` ตัวใหม่ checks it against the real run
+5. Write a short note using the `learning-path` paper-to-practice template — when to use it, when not to · ใคร: `tech-mentor` ตัวใหม่ · `reviewer` ตัวใหม่ checks it against the real run
 
 ## Done when
 
@@ -1112,7 +1112,7 @@ The sample code runs and passes with its output, and there is a 1-page note.
 # playbook · profile-refresh — refresh the CV and LinkedIn as a set
 
 Use when: the user has no target job yet but wants to be ready · the CV is several years old · changing career track
-Main skills: `resume-th-en` · `linkedin-profile`
+Main skills: `resume-th-en`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
@@ -1153,7 +1153,7 @@ The self-review and the talk are ready to use, and every claim has evidence
 
 Use when: checking work before it is sent or really used · "can you look for anything I missed" · the user did it themselves and wants it checked.
 Result: a verdict with a list of confirmed problems. **Does not fix anything automatically**, and it is read-only work that does not create `CONTEXT.md`.
-Main skill: `weekly-review` · `meeting` · `important-docs` · `household-bills` · `medication-schedule` · `resume-th-en` · `learning-path` · `paper-to-practice` · `cert-prep`
+Main skill: `weekly-review` · `meeting` · `important-docs` · `household-bills` · `medication-schedule` · `resume-th-en` · `learning-path` · `cert-prep`
 
 ## ขั้นตอน (Steps — copy into the todo as written)
 
@@ -1804,7 +1804,7 @@ Moved from `SKILL.md` section 3. Open it when unsure which skill to call, or whe
 | Situation | Call |
 |---|---|
 | Has a job ad, needs to write or adjust a CV | `resume-th-en` |
-| Adjusting a LinkedIn profile | `linkedin-profile` |
+| Adjusting a LinkedIn profile | `resume-th-en` (`references/linkedin.md`) |
 | Has an interview · wants to rehearse | `interview-prep` + agent `interview-coach` |
 | Got an offer · asked for expected salary · asking for a raise | `salary-negotiation` |
 | Performance review · asking for promotion | `performance-self-review` |
@@ -1816,7 +1816,7 @@ Moved from `SKILL.md` section 3. Open it when unsure which skill to call, or whe
 | Situation | Call |
 |---|---|
 | Wants to learn a new technology | `learning-path` + agent `tech-mentor` |
-| Has a paper, RFC or long article | `paper-to-practice` |
+| Has a paper, RFC or long article | `learning-path` (`references/paper-to-practice.md`) |
 | Hits an error message or hard-to-read English documentation | `english-tech-reading` |
 | Following weekly library news | `tech-radar` |
 | Preparing for a certification exam | `cert-prep` |

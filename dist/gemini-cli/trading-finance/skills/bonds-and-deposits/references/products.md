@@ -13,4 +13,4 @@ Open when comparing deposit products, savings bonds, corporate bonds or money ma
 | Corporate bond (หุ้นกู้) | The company only | **No** | Sell before maturity only if a buyer exists; often hard and at a loss | 15% withheld |
 | Money market fund (กองทุนรวมตลาดเงิน) | The fund's assets (short deposits, bills) | **No** — no mutual fund unit is | Usually next business day (T+1), check the prospectus | Gains on fund units: see `tax-basics-th` |
 
-DPA covers up to **1,000,000 baht per depositor per bank**, all Thai-baht savings, current, fixed deposits, certificates of deposit and deposit receipts at that bank combined. It does **not** cover foreign-currency deposits, bills of exchange (ตั๋วแลกเงิน), bonds, corporate bonds or fund units. Above 1 million, spread across banks.
+DPA limit and what it covers: `emergency-fund` "Deposit protection".

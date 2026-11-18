@@ -19,13 +19,9 @@ Before using the structure or templates in this file, check whether the user, cu
 
 A message is counted **per recipient**: 1 broadcast to 4,000 friends = 4,000 messages, whatever its length (1 send can hold up to 5 message objects). "Target reach" (friends who have not blocked the OA) is the number that counts, not total friends.
 
-| Package (ex VAT 7%) | Free/month | Extra | Sends to 4,000 reach that fit free | Cost of 8 sends to 4,000 reach |
-|---|---|---|---|---|
-| Free | 300 | not available | 0 (sending stops at quota) | — |
-| Basic 1,280 baht | 15,000 | 0.10 baht | 3 | 32,000 msgs → 17,000 extra × 0.10 = 1,700 + 1,280 = **2,980 baht** |
-| Pro 1,780 baht | 35,000 | 0.06 baht | 8 | 32,000 ≤ 35,000 → **1,780 baht** |
+Package prices, free messages and extra-message rates: `line-oa-setup` section 5 (the one table to update when LINE changes prices).
 
-Formulas: `messages = reach × sends` · `extra cost = max(0, messages − free) × rate`. Basic becomes dearer than Pro above about **20,000 messages/month** (extra Basic spend passes the 500-baht price gap).
+Formulas: `messages = reach × sends` · `extra cost = max(0, messages − free) × rate`. Example with those prices: 8 sends to 4,000 reach = 32,000 messages, which costs **2,980 baht** on Basic and **1,780 baht** on Pro; free quota alone fits 0 sends on Free, 3 on Basic, 8 on Pro. Basic becomes dearer than Pro above about **20,000 messages/month** (extra Basic spend passes the 500-baht price gap).
 
 Quota left: OA Manager → Insight, or the API `GET /v2/bot/message/quota` and `GET /v2/bot/message/quota/consumption`.
 
@@ -76,4 +72,4 @@ If blocks pass about 1% of reach after 1 send, you are sending too often or to t
 - [`references/broadcast-template.md`](references/broadcast-template.md) — open at workflow step 4 to write the message
 - [`references/segment-knapsack.md`](references/segment-knapsack.md) — open when quota cannot cover every segment
 - [`references/worked-example.md`](references/worked-example.md) — open for a café plan with quota math and promo text
-- [`references/sources.md`](references/sources.md) — sources and check dates for the quota table (2026-10-22) and segment rules (2026-10-06)
+- [`references/sources.md`](references/sources.md) — sources and check dates for the quota example (2026-10-22) and segment rules (2026-10-06)

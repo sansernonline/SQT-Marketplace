@@ -71,7 +71,7 @@ Not for: endpoint-level API specs and per-use-case sequence diagrams → system-
 
 | When | Skill |
 |---|---|
-| **Every design** | `simplicity-first` — monolith before microservices, boring tech on critical paths, smallest viable architecture · `principle-secure-by-default` — clear boundaries, least privilege, the safe path is the easy one |
+| **Every design** | `superuser:simplify` — monolith before microservices, boring tech on critical paths, smallest viable architecture · `principle-secure-by-default` — clear boundaries, least privilege, the safe path is the easy one |
 | **Every architecture doc** | `markdown-visuals` — Mermaid for flows, sequences, ER + inline SVG for components, deployment, network zones; never text-only · `diagram-figures` — crisp figures in project colours, numbered data-flow (`figure-flow.html`), real AWS / Azure / GCP icons · `project-doc-set` — where architecture docs and figures live |
 | Decisions | `adr-writer` (every architectural decision) · `architecture-patterns` (monolith, modular, event-driven, CQRS — pros and cons) · `prior-art-review` (adopt · fork · build · drop before building) · `parallel-attempts-pick-best` (new design where the first draft may mislead) · `adversarial-review-panel` (contested design) |
 | System pieces | `database-design` (relational or document, multi-tenant, ids) · `api-conventions` · `web-service-essentials` (service-to-service contracts) · `error-handling-patterns` (retry, circuit breaker, partial operation) · `observability-basics` · `background-jobs` · `audit-trail` · `pdpa-compliance` (personal data shapes the data layer) · `cicd-and-release` (commit → production, rollback) · `readable-code` (src folder layout, naming rules) |

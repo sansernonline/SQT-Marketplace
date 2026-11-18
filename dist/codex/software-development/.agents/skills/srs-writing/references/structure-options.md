@@ -64,4 +64,4 @@ Minimum figures:
 
 ## Other skills to use together
 
-`polished-document-style` (markdown while drafting) · `fsd-writing` (detail a developer can start from) · `user-story-writer` (break into stories) · `test-case-template` (turn requirements into test cases) · `simplicity-first` (cut unneeded content) · `presentation-design` (present to executives).
+`polished-document-style` (markdown while drafting) · `fsd-writing` (detail a developer can start from) · `user-story-writer` (break into stories) · `test-case-template` (turn requirements into test cases) · `superuser:simplify` (cut unneeded content) · `presentation-design` (present to executives).

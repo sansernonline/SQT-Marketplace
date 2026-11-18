@@ -197,7 +197,7 @@
 
 ---
 
-## 🛠️ Skills (104)
+## 🛠️ Skills (100)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst, product-manager
@@ -291,22 +291,14 @@
 
 ---
 
-### 14. simplicity-first
-**ใช้กับ:** business-analyst, developer, devops-engineer, graphic-designer, product-manager, solution-architect, system-analyst
-**Output:** N/A — this is a quality filter
-**Core Test:** "Could a tired junior teammate understand this in 6 months, at 3 AM during an incident?" If no → simplify.
-**Includes:** 5 universal principles, by-output-type guidance (code/docs/architecture/plans/designs), 3-question filter for new abstractions, common anti-patterns (resume-driven design, future-proofing, premature DRY, etc.), pre-submit checklist
-
----
-
-### 15. lazy-coding
+### 14. lazy-coding
 **ใช้กับ:** ai-engineer, blockchain-engineer, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-engineer, game-designer, game-developer, growth-specialist, healthcare-engineer, insurance-analyst, insurance-engineer, iot-engineer, legaltech-engineer, mobile-engineer, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, security-analyst, security-engineer, solution-architect
 **Output:** N/A — quality filter สำหรับโค้ด
 **Core Test:** "จำเป็นต้องมีสิ่งนี้ไหม" (YAGNI) → stdlib ก่อน → native platform ก่อน → ค่อยเขียนเอง
 
 ---
 
-### 16. windows-app-design
+### 15. windows-app-design
 **ใช้กับ:** ux-designer
 **Stack ที่รองรับ:** WinUI 3 / Windows App SDK · Avalonia 11 · .NET MAUI · Electron / Tauri / WebView2
 **Output:** HTML mockup ก่อน แล้วค่อยเป็นโค้ด style จริง (`fluent.css` / `FluentTokens.xaml` / `FluentTokens.axaml`)
@@ -315,7 +307,7 @@
 
 ---
 
-### 17. web-app-design
+### 16. web-app-design
 **ใช้กับ:** ux-designer
 **เฟรมเวิร์ก:** Angular · React · Vue · Svelte · HTML เปล่า (เป็น CSS ล้วน ไม่ผูกเฟรมเวิร์ก)
 **Output:** HTML mockup ก่อน แล้วค่อยเป็นคอมโพเนนต์จริงที่ใช้คลาสเดิม
@@ -324,7 +316,7 @@
 
 ---
 
-### 18. mobile-app-design
+### 17. mobile-app-design
 **ใช้กับ:** ux-designer
 **สแต็ก:** PWA · เว็บห่อเป็นแอป (Capacitor / Cordova / WebView) · React Native · Flutter
 **Output:** HTML mockup ที่โชว์เป็นกรอบเครื่อง แล้วค่อยแปลงเป็นโค้ดจริง
@@ -333,7 +325,7 @@
 
 ---
 
-### 19. logging-standards
+### 18. logging-standards
 **ใช้กับ:** developer, devops-engineer
 **สแต็ก:** .NET (Serilog) · Node/TS (winston) · Python (stdlib logging) · Angular
 **Output:** logger ที่ให้บรรทัดรูปแบบเดียวกันทุกภาษา + ไฟล์ log ที่หมุนและมี retention
@@ -343,7 +335,7 @@
 
 ---
 
-### 20. testing-standards
+### 19. testing-standards
 **ใช้กับ:** developer, qa-tester
 **สแต็ก:** xUnit · Vitest/Jest · pytest · Angular (Vitest หรือ Jasmine/Karma)
 **พิเศษ:** **ขั้นแรกคือถามผู้ใช้ว่าจะใช้ framework ไหน** ไม่เลือกให้เอง (เว้นแต่โปรเจกต์มีอยู่แล้ว)
@@ -352,7 +344,7 @@
 
 ---
 
-### 21. web-service-essentials
+### 20. web-service-essentials
 **ใช้กับ:** developer, devops-engineer, solution-architect
 **สแต็ก:** ASP.NET Core · Node/Express · Python/FastAPI · Angular (ฝั่งเรียกใช้)
 **Output:** endpoint พื้นฐาน 4 ตัว + รูปแบบ error ที่เหมือนกันทั้งระบบ
@@ -362,7 +354,7 @@
 
 ---
 
-### 22. ui-craft
+### 21. ui-craft
 **ใช้กับ:** graphic-designer, ux-designer
 **ไม่กำหนดสีและฟอนต์** — คุมเฉพาะระยะ ขนาด ลำดับ และสถานะ
 **Includes:** สเกลระยะห่าง `4 8 12 16 24 32 48 64`, สเกลตัวอักษร 5 ขั้นพร้อม line-height สำหรับไทย, ลำดับความเด่น 4 ระดับ (ปุ่มหลัก 1 ปุ่มต่อหน้า), เลือกระหว่างระยะห่าง/เส้น/พื้นหลัง/เงา, ตัวเลข contrast ที่ต้องผ่าน, **5 สถานะที่ทุกหน้าจอต้องมี** (ว่าง กำลังโหลด ผิดพลาด มีบางส่วน สำเร็จ), งบเวลา animation, ความหนาแน่น 3 แบบ
@@ -370,7 +362,7 @@
 
 ---
 
-### 23. software-diagrams
+### 22. software-diagrams
 **ใช้กับ:** business-analyst, devops-engineer, graphic-designer, system-analyst
 **ครอบคลุม:** C4 3 ระดับ · sequence · state · entity relationship · deployment
 **Output:** ตารางบอกว่า**คำถามแบบไหนวาดแบบไหน** + ธีม Mermaid ชุดเดียวทั้งโปรเจกต์ + 3 classDef (focus/ext/store)
@@ -380,7 +372,7 @@
 
 ---
 
-### 24. srs-writing
+### 23. srs-writing
 **ใช้กับ:** business-analyst, system-analyst
 **อิงมาตรฐาน:** ISO/IEC/IEEE 29148
 **Output:** โครง SRS 9 หัวข้อ + `assets/srs-outline.md` ที่กรอกต่อได้ทันที
@@ -389,7 +381,7 @@
 
 ---
 
-### 25. graphic-design
+### 24. graphic-design
 **ใช้กับ:** graphic-designer
 **ครอบคลุม:** โลโก้ · ระบบสีและตัวอักษรของแบรนด์ · โปสเตอร์ · ใบปลิว · โพสต์โซเชียล · LINE OA rich menu · ฉลากสินค้า · นามบัตร
 **Includes:** แกนตัดสินใจ 4 แกน, ทดสอบโลโก้ 7 บริบท (favicon/ปัก/ขาวดำ/กลับสี/ป้าย/โปรไฟล์), กฎภาษาไทยบนงานกราฟิก, ตารางขนาดงานโซเชียลและงานพิมพ์พร้อมตัดตก, `assets/brand-direction.md` ที่กรอกต่อได้
@@ -397,7 +389,7 @@
 
 ---
 
-### 26. spec-to-code-loop
+### 25. spec-to-code-loop
 **ใช้กับ:** developer
 **Output:** prompt สำหรับ agent loop ที่หยุดเองได้ + ไฟล์สถานะที่รอดจากการสูญเสียบริบท
 **Includes:** เงื่อนไขหยุดที่เครื่องตรวจได้, 1 ข้อกำหนดต่อ 1 รอบ, test ต้องแดงก่อน, ใส่รหัส FR/TC ในชื่อ test, เพดาน retry 3 ครั้ง, กฎห้ามแก้ test ให้ผ่าน, การแบ่งงานให้ agent ขนานเฉพาะไฟล์ที่ไม่ทับกัน, โฟลเดอร์ `_to_delete/` สำหรับไฟล์แปลงและ log
@@ -405,7 +397,7 @@
 
 ---
 
-### 27. database-design
+### 26. database-design
 **ใช้กับ:** data-engineer, developer, solution-architect, system-analyst
 **ฐานข้อมูล:** PostgreSQL · SQL Server · MySQL · MongoDB · EF Core / Prisma / Alembic
 **Includes:** เกณฑ์เลือก relational กับ document, กฎตั้งชื่อชุดเดียว, คอลัมน์ที่ทุกตารางต้องมี, เปรียบเทียบชนิด id (กับดัก UUIDv4 ทำ index แตก), ชนิดข้อมูล 4 ชนิดที่พลาดบ่อย (เงิน/เวลา/enum/boolean), กฎวาง index และลำดับคอลัมน์ใน composite index, constraint ที่ต้องอยู่ที่ฐานข้อมูล, **migration แบบ expand/contract ใน 3 รอบ deploy**, ระบบหลายผู้เช่า (multi-tenant) 3 แบบ, ข้อมูลส่วนบุคคลตาม PDPA
@@ -413,7 +405,7 @@
 
 ---
 
-### 28. api-conventions
+### 27. api-conventions
 **ใช้กับ:** developer, qa-tester, solution-architect, system-analyst
 **Output:** `API-CONVENTIONS.md` ที่รากโปรเจกต์ (แม่แบบพร้อมกรอกใน `assets/`)
 **Includes:** กฎตั้งชื่อ URL, การระบุเวอร์ชันและ **ตารางว่าอะไรคือ breaking change**, pagination แบบ cursor พร้อมรูปร่าง response, การกรอง/เรียง/เลือกฟิลด์, รูปแบบวันเวลา เงิน identifier และ null, error ระดับฟิลด์, idempotency key, ETag + If-Match, header ของ rate limit, ขั้นตอนเลิกใช้ endpoint ด้วย Deprecation/Sunset
@@ -421,7 +413,7 @@
 
 ---
 
-### 29. cicd-and-release
+### 28. cicd-and-release
 **ใช้กับ:** devops-engineer, solution-architect
 **แพลตฟอร์ม:** GitHub Actions · Azure DevOps · GitLab CI (ไฟล์ตั้งต้นที่ใช้ได้จริงทั้ง 3 ตัว)
 **กฎหลัก:** build ครั้งเดียว แล้วเอา artifact ตัวเดิมไปทุก environment
@@ -430,7 +422,7 @@
 
 ---
 
-### 30. config-and-secrets
+### 29. config-and-secrets
 **ใช้กับ:** developer, devops-engineer, security-engineer
 **สแต็ก:** .NET (user-secrets + Key Vault) · Node (zod) · Python (pydantic-settings) · Angular · Docker · Kubernetes
 **กฎ 2 ข้อ:** โค้ดชุดเดียวรันได้ทุก environment · secret ไม่เคยอยู่ใน git ใน log หรือในไฟล์ที่เบราว์เซอร์โหลด
@@ -439,7 +431,7 @@
 
 ---
 
-### 31. fsd-writing
+### 30. fsd-writing
 **ใช้กับ:** business-analyst, developer, qa-tester, system-analyst
 **อยู่ระดับไหน:** ต่ำกว่า `srs-writing` 1 ขั้น — SRS ตอบว่า "ต้องทำอะไรได้" · FSD ตอบว่า "ทำอย่างไร"
 **Output:** โครง FSD 11 หัวข้อ + `assets/fsd-outline.md` ที่กรอกต่อได้ทันที
@@ -448,7 +440,7 @@
 
 ---
 
-### 32. error-handling-patterns
+### 31. error-handling-patterns
 **ใช้กับ:** developer, qa-tester, security-engineer, solution-architect
 **กฎเดียว:** จับ error เฉพาะตอนที่ทำอะไรกับมันได้จริง
 **Includes:** จับที่ชั้นไหนปล่อยที่ชั้นไหน, **ข้อความถึงผู้ใช้ ≠ ข้อความใน log** พร้อมรหัสอ้างอิงเชื่อม 2 ฝั่ง, ตารางแยกประเภทความล้มเหลว 5 แบบว่าอันไหน retry ได้, ตัวเลข timeout ต่อชนิดการเรียก, สูตร retry แบบทวีคูณ+สุ่ม, circuit breaker, การล้มบางส่วน, งานทำความสะอาดที่ต้องรันเสมอ
@@ -456,7 +448,7 @@
 
 ---
 
-### 33. audit-trail
+### 32. audit-trail
 **ใช้กับ:** developer, fintech-compliance-officer, hipaa-officer, insurance-compliance-officer, legal-compliance-officer, security-engineer, solution-architect, system-analyst
 **กฎเดียว:** ร่องรอยย้อนหลังสร้างไม่ได้
 **Includes:** ตารางเทียบ audit log กับ application log 6 มิติ, 11 ฟิลด์ที่ทุกรายการต้องมี, **กฎว่าต้องบันทึกครั้งที่ถูกปฏิเสธด้วย**, รายการเหตุการณ์ที่ควรและไม่ควรเก็บ, การเก็บ from/to เฉพาะฟิลด์ที่เปลี่ยน, append-only และสิทธิ์ที่ฐานข้อมูล, ข้อมูลที่ห้ามคัดลอกลง audit, หน้าจอที่คนอ่านรู้เรื่อง
@@ -464,7 +456,7 @@
 
 ---
 
-### 34. project-bootstrap
+### 33. project-bootstrap
 **ใช้กับ:** developer, devops-engineer, technical-writer
 **เป้าหมายที่วัดได้:** คนที่ไม่เคยเห็นโปรเจกต์ ต้องรันได้ใน **30 นาที** โดยอ่านแค่ README
 **Includes:** โครงโฟลเดอร์มาตรฐาน, README ที่ตอบ 5 คำถาม, `docs/README.md` เป็นสารบัญพร้อมเจ้าของ, CHANGELOG, `.editorconfig` + `.gitattributes` (**`eol=lf` ที่กัน diff ทั้งไฟล์**), นโยบาย dependency และ lock file, รายการตรวจ 9 ข้อ, `assets/starter-files.md` ที่คัดลอกไปใช้ได้ทั้งชุด
@@ -472,7 +464,7 @@
 
 ---
 
-### 35. i18n-and-locale
+### 34. i18n-and-locale
 **ใช้กับ:** developer, system-analyst, ux-designer
 **กฎเดียว:** เก็บเป็นค่ากลาง แปลงตอนแสดงผล — เวลา UTC · ปี ค.ศ. · เงินเป็นตัวเลข+รหัสสกุล
 **Includes:** คีย์แปลตั้งตามที่อยู่ไม่ใช่ตามเนื้อความ, กฎห้ามต่อประโยคจากชิ้นส่วน, **พ.ศ. แปลงตอนแสดงเท่านั้น** + กับดักปี 2 หลักและ Excel, collation ภาษาไทยที่การเรียงมาตรฐานทำผิด, **ภาษาไทยไม่มีเว้นวรรคจึงกระทบการค้นหา ตัดบรรทัด และตัดข้อความ**, เงินและเบอร์โทร, ที่ว่างบนหน้าจอที่ต้องเผื่อ
@@ -480,7 +472,7 @@
 
 ---
 
-### 36. observability-basics
+### 35. observability-basics
 **ใช้กับ:** data-engineer, developer, devops-engineer, recommendation-engineer, solution-architect
 **กฎเดียว:** ถ้าลูกค้าเป็นคนบอกเราว่าระบบล่ม แปลว่าการเฝ้าระวังล้มเหลว
 **Includes:** ตารางว่า metric/log/trace ตอบคนละคำถามยังไง, 4 สัญญาณที่ต้องวัด, **ห้ามดูค่าเฉลี่ยของเวลาตอบสนอง ให้ดู p95/p99**, กฎตั้งชื่อตัวชี้วัดและ label ที่ห้ามมีค่าไม่จำกัด, ตารางเทียบการแจ้งเตือนที่ผิดกับที่ถูก, การแจ้งเตือน 3 ระดับ, แดชบอร์ด 2 หน้าพร้อมเส้นบอกเวลา deploy, ตัวชี้วัดทางธุรกิจ
@@ -488,7 +480,7 @@
 
 ---
 
-### 37. background-jobs
+### 36. background-jobs
 **ใช้กับ:** data-engineer, developer, devops-engineer, solution-architect
 **กฎเดียว:** งานเบื้องหลังทุกตัวต้องรันซ้ำได้โดยไม่เกิดผลซ้ำ เพราะมันจะถูกรันซ้ำแน่นอน
 **Includes:** เกณฑ์ว่าอะไรควรไปเบื้องหลัง, เทียบกลไก 4 แบบ (ตารางใน DB · คิวจริง · cron ในแอป · ตัวตั้งเวลาของแพลตฟอร์ม), 4 วิธีกันผลซ้ำ, retry ที่มีเพดานและ dead letter ที่ต้องมีคนดู, การปลดล็อกงานที่ค้างเพราะ worker ตาย, **งานตามเวลาบนหลาย instance ที่รันซ้อนกัน**, งานยาวที่ต้องบอกความคืบหน้าและยกเลิกได้, ตัวชี้วัด 6 ตัว
@@ -496,7 +488,7 @@
 
 ---
 
-### 38. file-upload-and-storage
+### 37. file-upload-and-storage
 **ใช้กับ:** developer, security-engineer
 **กฎเดียว:** ชื่อไฟล์ นามสกุล ชนิด และขนาดที่ผู้ใช้ส่งมา ปลอมได้ทั้งหมด
 **Includes:** ตรวจชนิดจาก magic bytes, รายการที่อนุญาตไม่ใช่รายการที่ห้าม, **SVG คือ HTML ที่รันสคริปต์ได้**, เทียบที่เก็บ 3 แบบ, ชื่อไฟล์สุ่มแยกโฟลเดอร์ตามวันที่, **"ลิงก์เดายาก" ไม่ใช่การควบคุมสิทธิ์** — ใช้ signed URL ที่หมดอายุ, การย่อรูปและลบ EXIF, ลำดับการลบที่ไม่ทิ้ง metadata กำพร้า
@@ -504,7 +496,7 @@
 
 ---
 
-### 39. notifications
+### 38. notifications
 **ใช้กับ:** developer, system-analyst
 **กฎเดียว:** ผู้ใช้จะเลิกอ่านทั้งหมด ถ้าได้รับสิ่งที่ไม่ต้องอ่านมากพอ
 **Includes:** เลือกช่องทางตามความเร่งด่วน (**SMS ภาษาไทยได้ 70 ตัวอักษร ไม่ใช่ 160**), แม่แบบข้อความนอกโค้ด, ส่งเป็นงานเบื้องหลังหลัง commit เท่านั้น, การกันส่งซ้ำและกันถล่ม, รายการที่ห้ามใส่ในตัวข้อความ, ตารางประเภทที่ปิดได้/ปิดไม่ได้ + การยกเลิกรับ, การติดตามผลส่งและ hard bounce ที่ต้องหยุดส่งทันที, SPF/DKIM/DMARC
@@ -512,7 +504,7 @@
 
 ---
 
-### 40. data-import-export
+### 39. data-import-export
 **ใช้กับ:** business-analyst, data-engineer, developer, qa-tester
 **กฎเดียว:** ตรวจให้จบก่อน แล้วค่อยเขียน
 **Includes:** แม่แบบให้ดาวน์โหลดพร้อมแถวตัวอย่าง, ตรวจ 3 ชั้น (ไฟล์ · รายแถว · ความสัมพันธ์) พร้อมข้อความที่ระบุแถวและคอลัมน์, หน้าตัวอย่างก่อนยืนยัน, **ตารางกับดัก Excel 8 ข้อ** — ภาษาไทยเพี้ยน, ศูนย์นำหน้าหาย, เลขยกกำลัง, ปี พ.ศ. ปนกัน, **CSV injection ที่ทำให้ Excel รันคำสั่ง**, กฎการส่งออกที่ห้ามเกินสิทธิ์
@@ -520,7 +512,7 @@
 
 ---
 
-### 41. pdpa-compliance
+### 40. pdpa-compliance
 **ใช้กับ:** business-analyst, clinical-data-analyst, fintech-compliance-officer, hipaa-officer, insurance-compliance-officer, legal-compliance-officer, security-engineer, solution-architect, system-analyst
 **กฎเดียว:** ข้อมูลที่ไม่ได้เก็บ คือข้อมูลที่ไม่รั่ว ไม่ต้องดูแล และไม่ต้องลบ
 **หมายเหตุ:** เป็นแนวทางสำหรับคนทำระบบ ไม่ใช่คำแนะนำทางกฎหมาย
@@ -529,7 +521,7 @@
 
 ---
 
-### 42. project-doc-set
+### 41. project-doc-set
 **ใช้กับ:** developer, project-manager, solution-architect, technical-writer
 **กฎเดียว:** เอกสารทุกชิ้นต้องตอบได้ว่าใครอ่าน และอ่านแล้วตัดสินใจอะไร — ตอบไม่ได้ก็ไม่ต้องเขียน
 **Includes:** **ตารางตัดสินว่าเอกสารอยู่ใน repo (แบบ A) หรืออยู่นอก repo (แบบ B)** พร้อมโครงโฟลเดอร์ของแบบ B และตารางว่าโฟลเดอร์ไหนเป็นทางเลือก (`figures/` · `decisions/` · `qa/`) พร้อมคำตอบว่าถ้าไม่มีแล้วของไปอยู่ไหน, **ชุดเอกสารแยก 2 กลุ่ม** — กลุ่มส่งมอบ 9 ชิ้นเลือกตามขนาดงาน S/M/L และ**กลุ่มเชิงเทคนิค 9 ชิ้นที่เลือกตามเงื่อนไขไม่ใช่ตามขนาด** (README · BUILD-PLAN · AGENT-LOOP · API-SPEC · DATA-DICTIONARY · EVALUATION-POLICY · PROMPT-LIBRARY · ADR · Runbook), สายลำดับการเขียนแยกสายส่งมอบกับสายเทคนิค, ตารางว่า agent ไหนเขียนชิ้นไหนด้วย skill อะไร 16 แถว, เกณฑ์เลือกว่ารูปนี้ใช้ Mermaid หรือ `diagram-figures`, การประกาศ `doc-theme` ครั้งเดียวต่อโปรเจกต์, รายการตรวจ 9 ข้อก่อนส่งมอบ
@@ -538,7 +530,7 @@
 
 ---
 
-### 43. readable-code
+### 42. readable-code
 **ใช้กับ:** ai-engineer, blockchain-engineer, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-engineer, game-designer, game-developer, growth-specialist, healthcare-engineer, insurance-analyst, insurance-engineer, iot-engineer, legaltech-engineer, mobile-engineer, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, security-analyst, security-engineer, solution-architect
 **กฎเดียว:** ชื่อที่ต้องเปิดดูข้างในถึงจะเข้าใจ คือชื่อที่ตั้งผิด
 **Includes:** ตารางชื่อแย่→ดี 10 คู่พร้อมเหตุผล, **กฎว่าเลขที่มีหน่วยต้องมีหน่วยในชื่อเสมอ** (`timeoutMs` · `priceSatang`), **ตารางคำนำหน้าฟังก์ชัน 10 คำที่แต่ละคำสัญญาคนละอย่าง** — `get` ห้ามยิงเน็ต · `validate` ต้องโยน error · `ensure` เรียกซ้ำได้, ความยาวชื่อแปรตามระยะที่ตัวแปรมีชีวิต 4 ระดับ, **ตารางคำต้องห้าม 6 กลุ่ม** (`data` `manager` `helper` `do` `temp` ตัวย่อที่คิดเอง) พร้อมตัวแทน, รูปร่างฟังก์ชันรวม**กฎห้ามรับ boolean เป็นพารามิเตอร์**, คอมเมนต์ที่เขียน "ทำไม" ไม่ใช่ "ทำอะไร" พร้อม4 แบบที่ควรมี, **จัดโฟลเดอร์ตามฟีเจอร์ไม่ใช่ตามชนิดไฟล์** พร้อมบททดสอบว่าคนใหม่ต้องเดาโฟลเดอร์ถูกใน 30 วินาที, ลำดับข้างในไฟล์, กติกาภาษาไทย-อังกฤษในโค้ด, รายการตรวจ 9 ข้อ
@@ -548,13 +540,13 @@
 
 ---
 
-### 44. reference-app-research
+### 43. reference-app-research
 **ใช้กับ:** product-manager, reverse-engineer
 **Description:** Use when someone wants an app like another app
 
 ---
 
-### 45. superuser
+### 44. superuser
 **ใช้กับ:** ai-engineer, blockchain-engineer, business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-compliance-officer, fintech-engineer, game-designer, game-developer, graphic-designer, growth-specialist, healthcare-engineer, hipaa-officer, insurance-analyst, insurance-compliance-officer, insurance-engineer, iot-engineer, legal-compliance-officer, legaltech-engineer, mobile-engineer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, revops-analyst, security-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
 **Description:** Use at the start of any non-trivial task — a feature, a bug, a refactor, an investigation, a project document set, a review, or a long run the user will check later — or whenever the user types superuser. Picks one playbook, copies its steps into the todo list, routes each step to the right skill and agent, applies the principle index, and proves the result against the real thing before calling it done. Stays on for the rest of the session until the user turns it off.
 **หัวหน้าทีม:** ตัวที่คุยกับผู้ใช้ มี 1 ตัวต่อโปรเจกต์ · สั่งงานและตรวจงาน subagent · เป็นคนเดียวที่เขียนไฟล์กลาง (`CONTEXT.md` · `docs/BUILD-PLAN.md` · `IMPROVEMENTS.md` · inbox) · เลือกขนาดโมเดลใหญ่/กลาง/เล็ก (opus · sonnet · haiku) ตามงาน · สลับโมเดลกลางทางได้ หลังเขียนจุดส่งต่อไว้ใน `CONTEXT.md`
@@ -564,348 +556,331 @@
 
 ---
 
-### 46. app-verifier-setup
+### 45. app-verifier-setup
 **ใช้กับ:** developer, qa-tester
-**Description:** Use when an agent has no scripted way to run the app
+**Description:** Use when no scripted way to run the app, or verify is stale
 
 ---
 
-### 47. app-verifier-upkeep
-**ใช้กับ:** qa-tester
-**Description:** Use when a project verify skill no longer matches the app
-
----
-
-### 48. docker-sandbox
+### 46. docker-sandbox
 **ใช้กับ:** developer, devops-engineer, qa-tester, reverse-engineer, security-engineer
 **Description:** Use when a project needs a Docker sandbox for untrusted code
 
 ---
 
-### 49. bug-inbox-triage
+### 47. bug-inbox-triage
 **ใช้กับ:** qa-tester
 **Description:** Use when software bug reports pile up and need triage
 
 ---
 
-### 50. code-gardener
+### 48. code-gardener
 **ใช้กับ:** developer
 **Description:** Use when patrolling code for duplication or dead code
 
 ---
 
-### 51. principle-secure-by-default
+### 49. principle-secure-by-default
 **ใช้กับ:** ai-engineer, blockchain-engineer, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-engineer, game-designer, game-developer, growth-specialist, healthcare-engineer, insurance-analyst, insurance-engineer, iot-engineer, legaltech-engineer, mobile-engineer, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, security-analyst, security-engineer, solution-architect
 **Description:** Use when writing or reviewing code for security basics
 
 ---
 
-### 52. security-gate
+### 50. security-gate
 **ใช้กับ:** developer, qa-tester, security-engineer
 **Description:** Use when about to ship or merge code, as a security check
 
 ---
 
-### 53. reverse-engineering
+### 51. reverse-engineering
 **ใช้กับ:** developer, reverse-engineer, solution-architect
 **Description:** Use when a binary, firmware or format has no source
 
 ---
 
-### 54. developer-experience
+### 52. developer-experience
 **ใช้กับ:** devrel-engineer
 **Description:** Use when the users are developers
 
 ---
 
-### 55. ecommerce-patterns
+### 53. ecommerce-patterns
 **ใช้กับ:** ecommerce-engineer, growth-specialist, recommendation-engineer
 **Description:** Use when building shop software with cart and checkout
 
 ---
 
-### 56. fintech-payments
+### 54. fintech-payments
 **ใช้กับ:** fintech-compliance-officer, fintech-engineer, quant-analyst, revops-analyst, security-engineer
 **Description:** Use when money moves through software via Stripe or PromptPay
 
 ---
 
-### 57. game-development
+### 55. game-development
 **ใช้กับ:** game-designer, game-developer
 **Description:** Use when building a game
 
 ---
 
-### 58. healthcare-systems
+### 56. healthcare-systems
 **ใช้กับ:** clinical-data-analyst, healthcare-engineer, hipaa-officer, security-engineer
 **Description:** Use when software handles patient or clinical data
 
 ---
 
-### 59. insurance-systems
+### 57. insurance-systems
 **ใช้กับ:** insurance-analyst, insurance-compliance-officer, insurance-engineer
 **Description:** Use when building insurance policy, quote or claims software
 
 ---
 
-### 60. iot-systems
+### 58. iot-systems
 **ใช้กับ:** iot-engineer
 **Description:** Use when building connected devices with MQTT or OTA updates
 
 ---
 
-### 61. legal-document-systems
+### 59. legal-document-systems
 **ใช้กับ:** legal-compliance-officer, legaltech-engineer
 **Description:** Use when software handles legal documents or Thai ETA
 
 ---
 
-### 62. llm-engineering
+### 60. llm-engineering
 **ใช้กับ:** ai-engineer, data-engineer, recommendation-engineer
 **Description:** Use when a system calls an LLM with prompts or RAG
 
 ---
 
-### 63. mobile-engineering
+### 61. mobile-engineering
 **ใช้กับ:** growth-specialist, mobile-engineer
 **Description:** Use when building a mobile app in code
 
 ---
 
-### 64. saas-platform
+### 62. saas-platform
 **ใช้กับ:** growth-specialist, revops-analyst, solution-architect
 **Description:** Use when building B2B SaaS with tenants and billing
 
 ---
 
-### 65. security-operations
+### 63. security-operations
 **ใช้กับ:** security-analyst, security-engineer
 **Description:** Use when running SOC, SIEM rules or threat hunting
 
 ---
 
-### 66. smart-contracts
+### 64. smart-contracts
 **ใช้กับ:** blockchain-engineer
 **Description:** Use when building on a blockchain
 
 ---
 
-### 67. blast-radius
+### 65. blast-radius
 **Description:** Use before merging a small-looking change to shared code (helper, type, config, schema, CSS class, query) or when someone asks what else this could break. Lists every reach of the change and proves the riskiest one with a real run.
 **เรียกโดย:** หัวหน้าทีม SuperUser (ดัชนี principle) · ทุก agent ที่แก้โค้ดที่ใช้ร่วมผ่าน superuser
 
 ---
 
-### 68. principle-data-shape-first
+### 66. principle-data-shape-first
 **Description:** Use before writing logic that crosses a function or module (new feature, new table, API, state, concurrent work). Settle types and data shape first, encode the domain in structure, parse outside data at the edge.
 **เรียกโดย:** หัวหน้าทีม SuperUser (ดัชนี principle) · ทุก agent ที่เขียนโค้ดผ่าน superuser
 
 ---
 
-### 69. principle-replace-then-delete
+### 67. principle-replace-then-delete
 **Description:** Use when replacing an API, function, table, component or pattern, or during a planned migration or rewrite. Clear dead weight first, move every caller in the same wave, delete the old path, leave no compatibility layer.
 **เรียกโดย:** หัวหน้าทีม SuperUser (ดัชนี principle) · ทุก agent ที่เขียนโค้ดผ่าน superuser
 
 ---
 
-### 70. principle-safe-to-rerun
+### 68. principle-safe-to-rerun
 **Description:** Use when writing anything that may run twice or stop halfway (migrations, scripts, setup, imports, sync, webhook handlers, retried jobs). Same end state whether it runs once, twice or again after a crash.
 **เรียกโดย:** หัวหน้าทีม SuperUser (ดัชนี principle) · ทุก agent ที่เขียนโค้ดหรือสคริปต์ผ่าน superuser
 
 ---
 
-### 71. code-orientation
+### 69. code-orientation
 **ใช้กับ:** developer
 **Description:** Use before changing code you have not yet read
 
 ---
 
-### 72. stack-dotnet
+### 70. stack-dotnet
 **ใช้กับ:** developer, qa-tester
 **Description:** Use when writing or fixing C# and .NET code
 
 ---
 
-### 73. stack-python
+### 71. stack-python
 **ใช้กับ:** developer, qa-tester
 **Description:** Use when writing or testing Python code
 
 ---
 
-### 74. stack-sql
+### 72. stack-sql
 **ใช้กับ:** developer, qa-tester
 **Description:** Use when writing or reviewing SQL queries
 
 ---
 
-### 75. stack-typescript
+### 73. stack-typescript
 **ใช้กับ:** developer, qa-tester
 **Description:** Use when writing or reviewing TypeScript code
 
 ---
 
-### 76. legacy-spec-recovery
+### 74. legacy-spec-recovery
 **ใช้กับ:** business-analyst, reverse-engineer, system-analyst
 **Description:** Use when a legacy system has code but no spec
 
 ---
 
-### 77. doc-cover-design
-**Description:** Use when a project docx set needs its own cover
-
----
-
-### 78. test-evidence
+### 75. test-evidence
 **ใช้กับ:** qa-tester
 **Description:** Use when running test cases and keeping proof
 
 ---
 
-### 79. stack-mql
+### 76. stack-mql
 **ใช้กับ:** developer, quant-analyst
 **Description:** Use when writing MQL4 or MQL5 code for MetaTrader
 
 ---
 
-### 80. dynamic-website
+### 77. dynamic-website
 **Description:** Use when a marketing website needs scroll motion or 3D
 
 ---
 
-### 81. branded-document-design
+### 78. branded-document-design
 **ใช้กับ:** business-analyst, devops-engineer, fintech-compliance-officer, graphic-designer, hipaa-officer, insurance-compliance-officer, legal-compliance-officer, product-manager, project-manager, qa-tester, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer
-**Description:** Use when a Word, PowerPoint or PDF must look designed
+**Description:** Use when a Word, PowerPoint or PDF or its cover must look designed
 
 ---
 
-### 82. diagram-figures
+### 79. diagram-figures
 **ใช้กับ:** business-analyst, devops-engineer, solution-architect, system-analyst, ux-designer
 **Description:** Use when a document or slide needs a designed diagram
 
 ---
 
-### 83. html-slide-deck
+### 80. html-slide-deck
 **ใช้กับ:** technical-writer
 **Description:** Use when the deck must be HTML or animated, or pptx as HTML
 
 ---
 
-### 84. markdown-report-docx
+### 81. markdown-report-docx
 **ใช้กับ:** technical-writer
 **Description:** Use when one Markdown file must become a Word report
 
 ---
 
-### 85. markdown-visuals
+### 82. markdown-visuals
 **ใช้กับ:** business-analyst, clinical-data-analyst, developer, devops-engineer, product-manager, project-manager, qa-tester, quant-analyst, reverse-engineer, revops-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
 **Description:** Use when a Markdown doc needs an image, SVG or ASCII art
 
 ---
 
-### 86. presentation-design
+### 83. presentation-design
 **ใช้กับ:** business-analyst, graphic-designer, product-manager, project-manager, technical-writer
 **Description:** Use when planning a slide deck story and layouts
 
 ---
 
-### 87. product-naming
+### 84. product-naming
 **ใช้กับ:** graphic-designer, product-manager, technical-writer
 **Description:** Use when naming a product, shop, app or brand
 
 ---
 
-### 88. mcp-server
+### 85. mcp-server
 **ใช้กับ:** devops-engineer
 **Description:** Use when an agent must reach a real system via MCP
 
 ---
 
-### 89. web-quality-audit
+### 86. web-quality-audit
 **Description:** Use when auditing a page for accessibility or speed
 
 ---
 
-### 90. worktree-and-branch
+### 87. worktree-and-branch
 **Description:** Use when 2+ agents edit one repo or a branch must merge
 
 ---
 
-### 91. data-analysis
+### 88. data-analysis
 **Description:** Use when a CSV, Excel or SQL export must answer a question
 
 ---
 
-### 92. infra-as-code
+### 89. infra-as-code
 **Description:** Use when building servers or networks with Terraform
 
 ---
 
-### 93. design-direction-lookup
+### 90. design-direction-lookup
 **ใช้กับ:** ux-designer
 **Description:** Use for a starting palette and Thai-Latin fonts on a new screen
 
 ---
 
-### 94. security-audit
+### 91. security-audit
 **ใช้กับ:** security-engineer
 **Description:** Use when auditing a whole codebase before handover
 
 ---
 
-### 95. jenkins-pipeline
+### 92. jenkins-pipeline
 **ใช้กับ:** devops-engineer
 **Description:** Use when writing or fixing a Jenkinsfile
 
 ---
 
-### 96. kafka-streaming
+### 93. kafka-streaming
 **ใช้กับ:** devops-engineer
 **Description:** Use when services pass events via Kafka
 
 ---
 
-### 97. kubernetes-helm
+### 94. kubernetes-helm
 **ใช้กับ:** devops-engineer
 **Description:** Use when writing a Dockerfile, Kubernetes manifest or Helm chart
 
 ---
 
-### 98. voice-agent
+### 95. voice-agent
 **ใช้กับ:** ai-engineer
 **Description:** Use when building a realtime voice agent or phone bot
 
 ---
 
-### 99. rabbitmq-messaging
+### 96. rabbitmq-messaging
 **ใช้กับ:** devops-engineer
 **Description:** Use when work goes through RabbitMQ queues
 
 ---
 
-### 100. load-testing
+### 97. load-testing
 **ใช้กับ:** devops-engineer, qa-tester
 **Description:** Use when checking how many users a system holds
 
 ---
 
-### 101. design-system
+### 98. design-system
 **Description:** Use when authoring design tokens or a Tailwind theme
 
 ---
 
-### 102. backblaze-b2
+### 99. backblaze-b2
 **ใช้กับ:** devops-engineer
-**Description:** Use when storing files or a static site on Backblaze B2
+**Description:** Use when storing files or a static site on Backblaze B2 or R2
 
 ---
 
-### 103. cloudflare-r2
-**ใช้กับ:** devops-engineer
-**Description:** Use when an app stores files in Cloudflare R2
-
----
-
-### 104. render-deploy
+### 100. render-deploy
 **ใช้กับ:** devops-engineer
 **Description:** Use when deploying to Render
 

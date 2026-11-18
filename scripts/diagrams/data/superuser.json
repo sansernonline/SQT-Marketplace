@@ -1,9 +1,11 @@
 {
  "plugin": "superuser",
- "version": "3.34.1",
+ "version": "3.48.0",
  "description": "SuperUser — a team lead agent. Sizes the task and picks a budget, writes a 5-point brief for every piece, dispatches low-effort subagents in parallel, scores them, and re-checks with a fresh reviewer until done. Optional modules (shared context, logs, improvements, learning loop, inbox, hook gates) switch on and off per project. Use it alone or as the core other plugins extend.",
  "cross": [],
- "skills": [],
+ "skills": [
+  "quick"
+ ],
  "core_skills": [
   "superuser",
   "adversarial-review-panel",
@@ -35,6 +37,7 @@
   "principle-user-experience-first",
   "prior-art-review",
   "repeated-mistakes-to-checks",
+  "research-vote-decision",
   "research-with-sources",
   "session-lessons-to-skills",
   "simplify",
@@ -64,7 +67,7 @@
    "name": "learning-reviewer",
    "model": "sonnet",
    "core": true,
-   "description": "Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.",
+   "description": "Use at the end of a multi-step SuperUser task to review how the team worked.",
    "skills": [
     "superuser",
     "agent-patterns",
@@ -88,9 +91,9 @@
   },
   {
    "name": "worker",
-   "model": "sonnet",
+   "model": "haiku",
    "core": false,
-   "description": "Use when the lead hands out a self-contained slice needing no special role. Writes files, replies one line.",
+   "description": "Use when the lead hands out a self-contained slice needing no special role (code slice with its test, file to fill).",
    "skills": [
     "human-writing",
     "simplify"
@@ -100,13 +103,13 @@
  "playbooks": [
   {
    "name": "document",
-   "title": "ทำเอกสารที่คนอื่นจะอ่าน",
-   "when": "รายงาน · แผน · สรุป · จดหมาย · ข้อความสำคัญ · เอกสารที่ต้องส่งต่อ",
-   "done": "ผู้อ่านเป้าหมายใช้เอกสารได้โดยไม่ต้องถามกลับ และตัวเลขทุกตัวตรงกับต้นทาง",
+   "title": "write a document that other people will read",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "ระบุผู้อ่าน · เขาจะทำอะไรหลังอ่าน · รูปแบบไฟล์ที่ต้องส่ง · ใคร: หัวหน้าทีม",
+     "text": "Identify the reader · what they will do after reading · the file format to deliver · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -122,7 +125,7 @@
     },
     {
      "n": 2,
-     "text": "รวบรวมข้อเท็จจริงก่อนเขียน — ของที่ไม่มีหลักฐาน ใส่ `(รอยืนยัน)` ไม่แต่ง · ใคร: `general-purpose` ตัวใหม่",
+     "text": "Gather the facts before writing. Anything with no evidence gets `(รอยืนยัน)` (awaiting confirmation) and is never made up · ใคร: `general-purpose` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -138,7 +141,7 @@
     },
     {
      "n": 3,
-     "text": "วางโครง: ข้อสรุปก่อน → เหตุผล → รายละเอียด → สิ่งที่ผู้อ่านต้องทำ · ใคร: หัวหน้าทีม",
+     "text": "Lay out the structure: conclusion first → reasons → details → what the reader must do · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -154,7 +157,7 @@
     },
     {
      "n": 4,
-     "text": "ร่างทีละส่วนตามโครง · ตัวเลขเป็นเลข · 1 เรื่อง 1 คำ · ใคร: `general-purpose` ตัวใหม่",
+     "text": "Draft one section at a time following the structure · numbers as numerals · 1 topic, 1 term · ใคร: `general-purpose` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -170,7 +173,7 @@
     },
     {
      "n": 5,
-     "text": "ตรวจ — subagent ตัวใหม่อ่านแบบผู้อ่านจริง: เข้าใจไหม · ทำต่อได้ไหม · มีอะไรขาด · เทียบตัวเลขกับต้นทาง · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ): a fresh subagent reads as the real reader would: can they understand it · can they act on it · is anything missing · compare the numbers against the source · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -188,7 +191,7 @@
     },
     {
      "n": 6,
-     "text": "แก้ข้อที่หัวหน้าทีมยืนยันแล้ว · ใคร: `general-purpose` ตัวใหม่",
+     "text": "Fix the points the team lead has confirmed · ใคร: `general-purpose` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -204,7 +207,7 @@
     },
     {
      "n": 7,
-     "text": "รอบตรวจ — ดูข้อเดิมทุกข้อและจุดที่เปลี่ยน แล้วเปิดไฟล์จริงดูอีกรอบ (หัวข้อ ตาราง ลิงก์ รูป) ตาม [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) again: look at every earlier finding and every changed spot, then open the real file and look once more (headings · tables · links · images) per [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -222,14 +225,14 @@
     },
     {
      "n": 8,
-     "text": "ส่ง — ถ้าต้องส่งถึงคนอื่น ให้เตรียมไว้ใน \"รออนุมัติ\" ไม่ส่งเอง · ใคร: หัวหน้าทีม (กดส่ง: ผู้ใช้)",
+     "text": "Send: if it must go to other people, prepare it in \"รออนุมัติ\" (awaiting approval) and do not send it yourself · ใคร: หัวหน้าทีม (sends: ผู้ใช้)",
      "sub": [],
      "phase": "",
      "who": {
       "lead": true,
       "user": true,
       "agents": [],
-      "raw": "หัวหน้าทีม (กดส่ง: ผู้ใช้)"
+      "raw": "หัวหน้าทีม (sends: ผู้ใช้)"
      },
      "skills": [],
      "commands": [],
@@ -241,18 +244,18 @@
   },
   {
    "name": "learn-from-session",
-   "title": "ทำให้ทีมเก่งขึ้นทุกรอบ",
-   "when": "ผู้ใช้สั่ง \"รวมบทเรียน\" หรือ \"reflect\" เท่านั้น ถ้าผู้ใช้แก้ทีมเรื่องเดิมเป็นครั้งที่สอง หรือ `.claude/superuser/learn/` มีบันทึกรอเกิน 5 ไฟล์ ให้บอกผู้ใช้ในรายงานว่าควรสั่ง \"รวมบทเรียน\" แต่ไม่เริ่มเอง",
-   "done": "ทุกบทเรียนชี้ได้ว่าไปอยู่ที่ไฟล์ไหน · ความผิดที่ทำซ้ำมีตัวตรวจที่พิสูจน์แล้วว่าจับกรณีจริงได้ · ช่อง \"ควรรวมไหม\" และ \"รวมแล้ว\" ในคิวกลางตรงกับที่ทำจริง",
+   "title": "make the team better every round",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "**รวบรวม** ตามลำดับ · ใคร: หัวหน้าทีม",
+     "text": "**Gather**, in this order · ใคร: หัวหน้าทีม",
      "sub": [
-      "คิวกลาง `~/.claude/superuser/IMPROVEMENTS.md` และ `IMPROVEMENTS.md` — แถวที่ \"รวมแล้ว\" = `ยัง` และ \"ควรรวมไหม\" ≠ `ไม่รวม` เรียงตาม \"ครั้ง\" มากไปน้อย แล้วเปิดหลักฐานตาม \"ที่มา\" · แถวในคิวกลาง (ช่องนี้มีเฉพาะในคิวกลาง) ที่รวมแล้วและถึง \"ตรวจวันที่\" ให้ดู log แล้วใส่ \"ผลหลังรวม\" · เกิดอีก 2 ครั้ง → แถวนั้นกลับมาเป็นงานรอบนี้: ทำเป็นตัวตรวจหรือถอยการแก้กลับ",
-      "`.claude/superuser/learn/*.md` ของโปรเจกต์ที่เปิดอยู่ — ตาราง \"ควรปรับทีม\" (บันทึกเก่า: \"ควรปรับ skill\") เรื่องเดียวกันรวมเป็นแถวเดียวแล้วนับครั้ง"
+      "The central queue `~/.claude/superuser/IMPROVEMENTS.md` and `IMPROVEMENTS.md`: rows where \"รวมแล้ว\" (merged) = `ยัง` (not yet) and \"ควรรวมไหม\" (should merge?) ≠ `ไม่รวม` (do not merge), sorted by \"ครั้ง\" (times) high to low, then open the evidence under \"ที่มา\" (source). For a central-queue row (this column exists only in the central queue) that is merged and has reached its \"ตรวจวันที่\" (check date), look at the log and fill \"ผลหลังรวม\" (result after merge). It happened again 2 times → that row comes back as this round's job: make it a checker or roll the fix back.",
+      "`.claude/superuser/learn/*.md` of the open projects: the \"ควรปรับทีม\" (team should change) table (older notes: \"ควรปรับ skill\"). Merge rows about the same issue into one row and count the times."
      ],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -266,25 +269,20 @@
     },
     {
      "n": 2,
-     "text": "**แยกประเภท** · ใคร: หัวหน้าทีม",
+     "text": "**Classify**, ใคร: หัวหน้าทีม",
      "sub": [
-      "**นับชนิดพลาดก่อน** — ทุกแถวติดป้าย `ไม่ได้เปิด skill` · `เปิดแต่ไม่ทำตาม` · `ไม่มีกฎ` (นิยามใน agent `learning-reviewer`) แล้วนับ · ส่วนใหญ่เป็น `ไม่ได้เปิด` → งานรอบนี้คือแก้การบอก skill (`triggers.md` · `hooks/skill-router.json`) ไม่ใช่เขียนข้อความเพิ่มใน skill",
-      "**skill ที่รับบทเรียนรวมแล้ว 3 ข้อแต่พลาดไม่ลด** — หยุดเพิ่มข้อความ เสนอตัวตรวจ ตัวอย่างคู่ (ก่อน → หลัง) หรือถอยการแก้กลับ อย่างใดอย่างหนึ่ง",
-      "**ความผิดที่ทำซ้ำ** (เจอ 2 ครั้งขึ้นไป · `correction: true` ใน log เรื่องเดียวกัน) ทำเป็นตัวตรวจ ไม่เขียนเตือนเพิ่ม (`repeated-mistakes-to-checks` ถ้ามี ไม่งั้นสคริปต์ตรวจหรือข้อในรายการตรวจก่อนส่ง)",
-      "**วิธีที่ได้ผล หรือ skill ที่บอกผิด** แก้ย่อหน้าใน SKILL.md (`session-lessons-to-skills` ถ้ามี)",
-      "**playbook ที่ประกอบเองแล้วใช้ซ้ำ 2 ครั้งขึ้นไป** ให้เสนอเป็น playbook ถาวรตาม [`playbook-template`](playbook-template.md)",
-      "**แก้ agent หรือ playbook** — แก้ย่อหน้าแบบเดียวกัน · playbook ต้องยังผ่าน `validate-marketplace.mjs`",
-      "**กฎผู้ใช้** — 1 บรรทัดใน `~/.claude/superuser-style.md` ทำได้จากทุกโปรเจกต์",
-      "**ตัด** — ลบบรรทัดที่ตัวตรวจจับได้แล้ว หรือที่ซ้ำกับไฟล์อื่น",
-      "**skill หรือ agent ใหม่** — เฉพาะแถวที่ผู้ใช้ `รับ` แล้ว และแก้ของเดิมไม่ได้ · agent ใหม่ต้องมีเหตุผลเรื่อง context เครื่องมือ หรือโมเดล ไม่งั้นทำเป็น skill"
+      "**Count the mistake types first.** Tag every row `ไม่ได้เปิด skill` (did not open the skill) · `เปิดแต่ไม่ทำตาม` (opened but did not follow) · `ไม่มีกฎ` (no rule) (definitions in the agent `learning-reviewer`), then count. Mostly `ไม่ได้เปิด` → this round's job is to fix how skills are signalled (`triggers.md` · `hooks/skill-router.json`), not to write more text in the skill.",
+      "**A skill that has absorbed 3 merged lessons but mistakes did not drop.** Stop adding text. Propose one of: a checker, a paired example (before → after), or rolling the fix back.",
+      "**A repeated mistake** (found 2 or more times · `correction: true` in the log for the same issue): make it a checker, do not write more warnings (`repeated-mistakes-to-checks` if present, otherwise a check script or an item in the pre-send checklist).",
+      "**A method that worked, or a skill that says something wrong:** fix the paragraph in SKILL.md (`session-lessons-to-skills` if present).",
+      "**A playbook assembled on the spot and reused 2 or more times:** propose it as a permanent playbook per [`playbook-template`](playbook-template.md).",
+      "**Fixing an agent or playbook:** fix the matching paragraph · a playbook must still pass `validate-marketplace.mjs`.",
+      "**A user rule:** 1 line in `~/.claude/superuser-style.md`, which works from every project.",
+      "**Cut:** delete lines a checker already catches, or that duplicate another file.",
+      "**A new skill or agent:** only for rows the user has `รับ` (accepted) and that cannot be fixed by changing the existing one · a new agent needs a reason about context, tools, or model, otherwise make it a skill."
      ],
-     "phase": "",
-     "who": {
-      "lead": true,
-      "user": false,
-      "agents": [],
-      "raw": "หัวหน้าทีม"
-     },
+     "phase": "Steps",
+     "who": null,
      "skills": [
       "repeated-mistakes-to-checks",
       "session-lessons-to-skills"
@@ -295,9 +293,9 @@
     },
     {
      "n": 3,
-     "text": "**ทิ้งเรื่องที่เกิดครั้งเดียว** — ครั้งเดียวยังไม่ใช่บทเรียน · ใคร: หัวหน้าทีม",
+     "text": "**Drop one-off events.** Once is not yet a lesson · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -311,9 +309,9 @@
     },
     {
      "n": 4,
-     "text": "**ทุกบทเรียนต้องจบเป็นการแก้ที่จับต้องได้** — ตัวตรวจ · สคริปต์ · ย่อหน้าที่แก้ ถ้าแก้ของเดิมได้ก็ไม่สร้างใหม่ ถ้าข้อใหม่ขัดกับข้อเดิม ให้แก้ข้อเดิม ไม่ต่อท้าย · ใคร: หัวหน้าทีม",
+     "text": "**Every lesson must end as a concrete fix:** a checker · a script · a corrected paragraph. If the existing thing can be fixed, do not create a new one. If a new item contradicts an old one, fix the old one, do not append · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -327,9 +325,9 @@
     },
     {
      "n": 5,
-     "text": "**เสนอผู้ใช้** — ตาราง: ชนิด · ที่ไหน · เดิม → ใหม่ · หลักฐาน · ครั้ง · คาดว่า · ตรวจวันที่ ให้ตอบทีละข้อ `รับ` · `ไม่รับ` · `ไว้ทีหลัง` · ข้อที่ยังไม่ `รับ` ลง \"รออนุมัติ\" และยังไม่แก้ไฟล์ · ใคร: หัวหน้าทีม",
+     "text": "**Propose to the user.** A table: type · where · old → new · evidence · times · expected · check date. Ask them to answer item by item `รับ` (accept) · `ไม่รับ` (decline) · `ไว้ทีหลัง` (later). Items not yet `รับ` go under \"รออนุมัติ\" and the files are not edited yet · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -339,20 +337,20 @@
      "skills": [],
      "commands": [],
      "playbooks": [],
-     "approval": true
+     "approval": false
     },
     {
      "n": 6,
-     "text": "**แก้เฉพาะข้อที่ `รับ` แล้ว** (ตอบมา หรือ `ควรรวม` ในคิว) ทีละย่อหน้า ไม่เขียนทั้งไฟล์ใหม่ · ตัวตรวจใหม่ต้องรันกับเหตุการณ์เดิมให้เห็นว่า**ล้มก่อนแก้ และผ่านหลังแก้** แล้วเก็บเหตุการณ์นั้นไว้เป็นกรณีทดสอบ (self-test หรือ test ของสคริปต์) · ของกลางแก้ที่ plugin `superuser` แล้วรัน `node scripts/sync/sync-superuser.mjs` กับ `validate-marketplace.mjs` (ติดตั้ง plugin เดี่ยว: เสนอ เดิม → ใหม่ ให้ผู้ใช้แก้ใน repo SQT-Marketplace) · ใคร: หัวหน้าทีมแก้ · `reviewer` ตัวใหม่ตรวจกับหลักฐาน",
+     "text": "**Fix only items that are `รับ`** (answered, or `ควรรวม` (should merge) in the queue), one paragraph at a time, never rewriting the whole file. A new checker must be run against the original event to show that it **fails before the fix and passes after**, then keep that event as a test case (a self-test or the script's test). Shared things are fixed in plugin `superuser`, then run `node scripts/sync/sync-superuser.mjs` and `validate-marketplace.mjs` (single-plugin install: propose old → new for the user to fix in the SQT-Marketplace repo) · ใคร: หัวหน้าทีม fixes · `reviewer` ตัวใหม่ checks against the evidence",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
       "agents": [
        "reviewer"
       ],
-      "raw": "หัวหน้าทีมแก้ · `reviewer` ตัวใหม่ตรวจกับหลักฐาน"
+      "raw": "หัวหน้าทีม fixes · `reviewer` ตัวใหม่ checks against the evidence"
      },
      "skills": [
       "superuser"
@@ -363,9 +361,9 @@
     },
     {
      "n": 7,
-     "text": "**ปิดรายการ** — ย้ายบันทึกที่จัดการแล้วไป `.claude/superuser/learn/done/` แล้วใน `IMPROVEMENTS.md` และคิวกลาง ใส่ช่อง \"ควรรวมไหม\" เป็น `ควรรวม` หรือ `ไม่รวม (<เหตุผล>)` และใส่ช่อง \"รวมแล้ว\" เป็น `แล้ว <วันที่> (<ไฟล์>)` เฉพาะแถวที่แก้ไฟล์จริงแล้ว · ใคร: หัวหน้าทีม",
+     "text": "**Close the list.** Move handled notes to `.claude/superuser/learn/done/`, then in `IMPROVEMENTS.md` and the central queue set the \"ควรรวมไหม\" field to `ควรรวม` or `ไม่รวม (<reason>)` and the \"รวมแล้ว\" field to `แล้ว <date> (<file>)` (done <date> (<file>)), only for rows where files were really fixed · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -382,17 +380,17 @@
   },
   {
    "name": "pickup-and-pause",
-   "title": "รับงานที่ค้างต่อ · หยุดงานให้คนอื่นรับต่อได้",
-   "when": "\"ทำต่อจากเมื่อวาน\" · \"ค้างไว้ตรงไหน\" · รับงานต่อจาก agent หรือค่ายอื่น · \"พอก่อน เดี๋ยวมาทำต่อ\"",
-   "done": "คนหรือ bot ที่มารับต่อ จากค่ายไหนก็ได้ อ่านแค่ `CONTEXT.md` แล้วเริ่มงานต่อได้ โดยไม่ต้องถาม",
+   "title": "pick up unfinished work · pause so others can take over",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "อ่านหัวข้อ \"รับงานต่อ\" ใน `CONTEXT.md` · `notes/<แผน>.md` (เทียบโจทย์เดิมกับที่ผู้ใช้สั่งตอนนี้ · ใช้ \"คำตอบที่ได้แล้ว\" แทนการถามซ้ำ) · `ledger/<แผน>.md` · ข้อความค้างใน `.claude/superuser/inbox/` · ใบส่งงานที่ยังเปิดใน `.claude/superuser/handoff/` (`status` ไม่ใช่ `เสร็จ`) · log ล่าสุดว่าตัวก่อนทำอะไรไปจริง · ใคร: หัวหน้าทีม",
+     "text": "Read the \"รับงานต่อ\" section in `CONTEXT.md` · `notes/<plan>.md` (compare the original brief with what the user orders now · use \"คำตอบที่ได้แล้ว\" (answers already received) instead of asking again) · `ledger/<plan>.md` · messages waiting in `.claude/superuser/inbox/` · handover notes still open in `.claude/superuser/handoff/` (`status` is not `เสร็จ`) · the latest log for what the previous agent really did · ใคร: หัวหน้าทีม",
      "sub": [
-      "อ่านตาราง \"รอผู้ใช้\" ใน `CONTEXT.md` ด้วย — แถวที่มีคำตอบแล้วใน inbox หรือข้อความล่าสุด → ลบแถวแล้วเริ่มจากงานที่ปลดล็อก"
+      "Also read the \"รอผู้ใช้\" (waiting on the user) table in `CONTEXT.md`: a row that already has an answer in the inbox or the latest message → delete the row and start from the work it unlocks."
      ],
-     "phase": "รับงานต่อ",
+     "phase": "Steps — picking up",
      "who": {
       "lead": true,
       "user": false,
@@ -406,9 +404,9 @@
     },
     {
      "n": 2,
-     "text": "ดูของจริง ไม่เชื่อบันทึกอย่างเดียว · ตรวจด่านที่เสร็จล่าสุดตามไฟล์ติดตาม (รัน test · เปิดไฟล์ของด่านนั้น) · เปิดไฟล์งาน · ตรวจตัวเลขหรือข้อมูลที่บันทึกอ้าง · วันที่แก้ไฟล์ล่าสุด · (ถ้ามี git) `git status` และ `git log --oneline -10` · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) the real thing, do not trust the notes alone. Check the most recently finished gate according to the tracking file (run tests · open that gate's files) · open the work files · check numbers or data the notes claim · the last file-edit date · (if there is git) `git status` and `git log --oneline -10` · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
-     "phase": "รับงานต่อ",
+     "phase": "Steps — picking up",
      "who": {
       "lead": false,
       "user": false,
@@ -424,48 +422,53 @@
     },
     {
      "n": 3,
-     "text": "เขียนสรุปสถานะไม่เกิน 10 บรรทัด — เสร็จอะไร · ค้างอะไร · ขัดกับบันทึกตรงไหน · ใคร: หัวหน้าทีม",
+     "text": "Write a status summary of no more than 10 lines: what is done · what is left · where it conflicts with the notes · ใคร: หัวหน้าทีม",
      "sub": [
-      "ผลตรวจด่านล่าสุดไม่ตรงกับบันทึก → กลับไปทำด่านก่อนหน้าให้ผ่าน ลงแถวใน \"รอผู้ใช้\" แล้วทำส่วนอื่นต่อ · ไม่พบไฟล์ติดตามของงานนี้ → เริ่มใหม่ ไม่ resume เอง"
+      "A note that does not match the real thing → rewrite the note to what was seen, or tag `ขัดกัน` when it cannot be checked now (`handoff` section 5 \"Flag contradictions\").",
+      "The latest gate's check result does not match the notes → go back and make the earlier gate pass, add a row in \"รอผู้ใช้\", then continue with other parts · no tracking file for this work is found → start over, do not resume on your own."
      ],
-     "phase": "รับงานต่อ",
+     "phase": "Steps — picking up",
      "who": {
       "lead": true,
       "user": false,
       "agents": [],
       "raw": "หัวหน้าทีม"
      },
-     "skills": [],
+     "skills": [
+      "handoff"
+     ],
      "commands": [],
      "playbooks": [],
      "approval": false
     },
     {
      "n": 4,
-     "text": "เริ่ม \"ทำต่อเป็นข้อแรก\" แล้วเลือกหรือประกอบ playbook ของงานที่เหลือ · ใคร: หัวหน้าทีม",
+     "text": "Claim the item (`รับโดย:` per `handoff` section 5; an item already claimed by someone else → take another), start with \"ทำต่อเป็นข้อแรก\" (continue first with), then choose or assemble a playbook for the remaining work · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "รับงานต่อ",
+     "phase": "Steps — picking up",
      "who": {
       "lead": true,
       "user": false,
       "agents": [],
       "raw": "หัวหน้าทีม"
      },
-     "skills": [],
+     "skills": [
+      "handoff"
+     ],
      "commands": [],
      "playbooks": [],
      "approval": false
     },
     {
      "n": 1,
-     "text": "ทำชิ้นที่กำลังทำให้ถึงจุดที่ตรวจได้ หรือถอยไปจุดตรวจได้ล่าสุด — ไม่ทิ้งงานครึ่งทางโดยไม่บอก · ใคร: ตัวเดิม (ถือชิ้นที่ยังไม่บันทึก)",
+     "text": "Bring the piece in progress to a point that can be checked, or roll back to the last checkable point. Do not leave work half-done without saying so · ใคร: ตัวเดิม (ถือ: the piece not yet saved)",
      "sub": [],
-     "phase": "หยุดงาน",
+     "phase": "Steps — pausing",
      "who": {
       "lead": false,
       "user": false,
       "agents": [],
-      "raw": "ตัวเดิม (ถือชิ้นที่ยังไม่บันทึก)"
+      "raw": "ตัวเดิม (ถือ: the piece not yet saved)"
      },
      "skills": [],
      "commands": [],
@@ -474,9 +477,9 @@
     },
     {
      "n": 2,
-     "text": "ของที่ยังไม่บันทึกถาวร (ไฟล์ร่าง · การแก้ที่ยังไม่ commit) — ถ้าทำเก็บไม่ได้ ให้สำเนาลง `_to_delete/pause-<วันที่>/` แล้วบอกในรายงาน · ใคร: หัวหน้าทีม",
+     "text": "Things not yet saved permanently (draft files · uncommitted edits): if they cannot be saved properly, copy them to `_to_delete/pause-<date>/` and say so in the report · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "หยุดงาน",
+     "phase": "Steps — pausing",
      "who": {
       "lead": true,
       "user": false,
@@ -490,9 +493,9 @@
     },
     {
      "n": 3,
-     "text": "`status-report` อัปเดต \"ความคืบหน้า\" · `decision-log` จดการตัดสินใจที่ยังไม่จด · ใคร: หัวหน้าทีม",
+     "text": "`status-report` updates \"ความคืบหน้า\" (progress) · `decision-log` records decisions not yet recorded · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "หยุดงาน",
+     "phase": "Steps — pausing",
      "who": {
       "lead": true,
       "user": false,
@@ -509,16 +512,16 @@
     },
     {
      "n": 4,
-     "text": "ปิดใบส่งงานที่เสร็จ (ลง `Task N: complete` ใน ledger ของแผน) แล้วเขียนหัวข้อ \"รับงานต่อ\" ใน `CONTEXT.md` ใหม่ผ่าน `handoff` — ส่งมาแล้ว N ครั้ง (บวก 1) · ทำต่อเป็นข้อแรก · ชิ้นที่ยังเปิด · สิ่งที่ต้องระวัง · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ตรวจกับของจริง",
+     "text": "Close completed handover notes (write `Task N: complete` in the plan's ledger) · remove finished items from \"รับงานต่อ\" (1 line each to `HISTORY.md`) and your own unfinished `รับโดย:` (or mark it `ค้างอยู่`), then rewrite the \"รับงานต่อ\" section in `CONTEXT.md` through `handoff`: handed over N times (add 1) · continue first with · pieces still open · what to watch out for · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ checks against the real thing",
      "sub": [],
-     "phase": "หยุดงาน",
+     "phase": "Steps — pausing",
      "who": {
       "lead": true,
       "user": false,
       "agents": [
        "reviewer"
       ],
-      "raw": "หัวหน้าทีม · `reviewer` ตัวใหม่ตรวจกับของจริง"
+      "raw": "หัวหน้าทีม · `reviewer` ตัวใหม่ checks against the real thing"
      },
      "skills": [
       "handoff"
@@ -532,15 +535,15 @@
   },
   {
    "name": "research",
-   "title": "หาข้อมูลที่ยืนยันได้",
-   "when": "ต้องหาคำตอบที่ต้องมีหลักฐาน · เทียบตัวเลือก · \"ช่วยหาข้อมูล\" · ตัวเลขหรือกฎที่อาจเปลี่ยนแล้ว",
-   "done": "ทุกตัวเลขและข้ออ้างในคำตอบมีแหล่ง วันที่ และป้ายกำกับ",
+   "title": "find information that can be confirmed",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "เขียนคำถามให้ชัด 1–3 ข้อ แล้วระบุว่าผู้ใช้จะเอาคำตอบไปทำอะไร และตอบได้แค่ไหนถึงพอ · ใคร: หัวหน้าทีม",
+     "text": "Write 1–3 clear questions, then state what the user will do with the answer and how much of an answer is enough · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -554,14 +557,14 @@
     },
     {
      "n": 2,
-     "text": "รวบรวมกว้าง 10–30 แหล่ง — แหล่งทางการก่อน แล้วมาตรฐาน แล้วผู้ดูแลเครื่องมือหรือผู้เชี่ยวชาญที่ระบุชื่อ · ใคร: `general-purpose` ตัวใหม่ · ส่งกลับตาราง แหล่ง · ลิงก์ · ข้อสรุป ไม่เกินราว 40 บรรทัด ผลยาวเขียนลงไฟล์แล้วส่ง path",
+     "text": "Gather widely, 10–30 sources: official sources first, then standards, then named tool maintainers or experts · ใคร: `general-purpose` ตัวใหม่ · return a table of source · link · conclusion of no more than about 40 lines; a long result is written to a file and the path is sent",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": false,
       "user": false,
       "agents": [],
-      "raw": "`general-purpose` ตัวใหม่ · ส่งกลับตาราง แหล่ง · ลิงก์ · ข้อสรุป ไม่เกินราว 40 บรรทัด ผลยาวเขียนลงไฟล์แล้วส่ง path"
+      "raw": "`general-purpose` ตัวใหม่ · return a table of source · link · conclusion of no more than about 40 lines; a long result is written to a file and the path is sent"
      },
      "skills": [],
      "commands": [],
@@ -570,14 +573,14 @@
     },
     {
      "n": 3,
-     "text": "ให้คะแนนแต่ละแหล่ง 0–3 ใน 4 ข้อ: ตรงคำถาม · น่าเชื่อถือ · ใหม่พอ · ครบ ถ้าแหล่งเยอะ ให้ subagent ระดับเล็กคัดรอบแรก · ใคร: `general-purpose` ตัวใหม่ (ระดับเล็ก)",
+     "text": "Score each source 0–3 on 4 items: matches the question · credible · recent enough · complete. If there are many sources, have a small-tier subagent do the first cut · ใคร: `general-purpose` ตัวใหม่ (small tier)",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": false,
       "user": false,
       "agents": [],
-      "raw": "`general-purpose` ตัวใหม่ (ระดับเล็ก)"
+      "raw": "`general-purpose` ตัวใหม่ (small tier)"
      },
      "skills": [],
      "commands": [],
@@ -586,9 +589,9 @@
     },
     {
      "n": 4,
-     "text": "อ่านเต็มเฉพาะ 3–5 แหล่งที่คะแนนสูงสุด แล้วจดคำตอบพร้อมลิงก์และวันที่ · ใคร: `general-purpose` ตัวใหม่",
+     "text": "Read in full only the 3–5 top-scoring sources, then record the answer with link and date · ใคร: `general-purpose` ตัวใหม่",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": false,
       "user": false,
@@ -602,9 +605,9 @@
     },
     {
      "n": 5,
-     "text": "ตัดสิน — ถ้ามีแหล่งอิสระตรงกัน ≥ 3 แหล่ง ให้ติดป้าย `จากแหล่ง` (มั่นใจสูงเมื่อมีแหล่งทางการ) · ข้อที่คิดต่อจากแหล่ง ติด `อนุมาน` · ถ้าไม่ถึง 3 หรือขัดกัน ให้ใช้ค่าจากแหล่งทางการ ติด `จากแหล่ง` ลดความมั่นใจ 1 ระดับ ต่อท้าย `(รอยืนยัน)` และบอกว่าขัดกันตรงไหน · ใคร: หัวหน้าทีม",
+     "text": "Decide. If ≥ 3 independent sources agree, label it `จากแหล่ง` (high confidence when an official source is among them) · what you reasoned from a source gets `อนุมาน` · if fewer than 3 or they conflict, use the value from the official source, label it `จากแหล่ง`, lower the confidence 1 level, append `(รอยืนยัน)`, and say where they conflict · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -618,9 +621,9 @@
     },
     {
      "n": 6,
-     "text": "ตรวจ — subagent ตัวใหม่สุ่มตรวจตัวเลขสำคัญ 3 ตัวกับแหล่งจริง · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ): a fresh subagent spot-checks 3 important numbers against the real source · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": false,
       "user": false,
@@ -636,9 +639,9 @@
     },
     {
      "n": 7,
-     "text": "รายงาน — คำตอบขึ้นก่อน ตารางคะแนนแหล่งไว้ท้าย ส่วนเรื่องที่ยังไม่รู้ให้บอกตรง ๆ · ใคร: หัวหน้าทีม",
+     "text": "Report: answer first, the source scoring table at the end, and say plainly what is still unknown · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -655,15 +658,15 @@
   },
   {
    "name": "review",
-   "title": "ตรวจงานก่อนส่ง",
-   "when": "ตรวจงานก่อนส่งหรือก่อนใช้จริง · \"ช่วยดูหน่อยว่ามีอะไรพลาด\" · ผู้ใช้ทำมาเองแล้วอยากให้ตรวจ",
-   "done": "ทุกข้อในรายงานชี้จุดในชิ้นงานได้ และผ่านการยืนยันแล้ว",
+   "title": "check work before delivery",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "กำหนดขอบเขต — ชิ้นงานที่ตรวจ และต้นทางที่ต้องเทียบ · ใคร: หัวหน้าทีม",
+     "text": "Set the scope: the piece to check, and the source to compare against · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -677,9 +680,9 @@
     },
     {
      "n": 2,
-     "text": "เตรียมแพ็กเกจรีวิวตาม [`review-lenses`](review-lenses.md) ข้อ 1 — เจตนาของงาน 1 ย่อหน้า (ใครใช้ ใช้ทำอะไร ถ้าไม่แน่ใจ เลือกการตีความที่กระทบน้อยสุด ไม่หยุดถาม) · diff เป็นไฟล์ · เงื่อนไขจาก spec คัดตรงตัว · รหัส `head:` · เหตุผลของผู้ทำแยกไว้ใน `author-notes.md` ไม่ใส่ความเห็นว่าผ่านหรือไม่ผ่านลงใน prompt · ใคร: หัวหน้าทีม",
+     "text": "Prepare the review package per [`review-lenses`](review-lenses.md) item 1: the intent of the work in 1 paragraph (who uses it, for what; if unsure, choose the interpretation with the least impact and do not stop to ask) · the diff as a file · the spec's conditions quoted exactly · the `head:` id · the author's reasoning kept separate in `author-notes.md`, with no opinion on pass or fail put in the prompt · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -693,9 +696,9 @@
     },
     {
      "n": 3,
-     "text": "เลือกเลนส์ตามชนิดงานจาก [`review-lenses`](review-lenses.md) ข้อ 2 (ทุกงานมี `spec` กับ `quality`) แล้วตามเช็กลิสต์ของ skill หลักของ playbook นี้ (ไม่มี → skill ที่เกี่ยว) · ใคร: หัวหน้าทีม",
+     "text": "Choose lenses by the kind of work from [`review-lenses`](review-lenses.md) item 2 (every job has `spec` and `quality`), then follow the checklist of this playbook's main skill (none → a related skill) · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -709,16 +712,16 @@
     },
     {
      "n": 4,
-     "text": "ตรวจตามเลนส์ที่เลือก ตอบเช็กลิสต์ `PASS` · `FAIL` พร้อมไฟล์:บรรทัด และให้คำตัดสิน 2 ด้านแยกกัน: ตรงเงื่อนไขของ spec ไหม · คุณภาพพอใช้ไหม · แต่ละตัวถือ 1–3 เลนส์ ไม่เกิน 15 ไฟล์ใหญ่สุดต่อตัวและบอกว่าข้ามกี่ไฟล์ · งานใหญ่หรือเสี่ยงสูง เพิ่มตัวที่ไม่เคยเห็นงานอีกตัวด้วยโมเดลระดับใหญ่ (`model: opus`) · สั่งผู้ตรวจทุกตัวว่า \"ห้ามแก้ชิ้นงาน (เขียนรายงานของตัวเองใน `_to_delete/` ได้)\" · ใคร: `reviewer` ตัวใหม่ (อ่านอย่างเดียว · งานใหญ่ `model: opus`)",
+     "text": "Check (ตรวจ) by the chosen lenses. Answer the checklist `PASS` · `FAIL` with file:line, and give a verdict on 2 sides separately: does it meet the spec's conditions · is the quality good enough. Each checker holds 1–3 lenses, at most the 15 largest files per checker, and says how many files it skipped · for large or high-risk work, add one more checker that has never seen the work, on the large tier (`model: opus`) · tell every checker \"do not edit the work (you may write your own report in `_to_delete/`)\" · ใคร: `reviewer` ตัวใหม่ (read-only · large work `model: opus`)",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": false,
       "user": false,
       "agents": [
        "reviewer"
       ],
-      "raw": "`reviewer` ตัวใหม่ (อ่านอย่างเดียว · งานใหญ่ `model: opus`)"
+      "raw": "`reviewer` ตัวใหม่ (read-only · large work `model: opus`)"
      },
      "skills": [],
      "commands": [],
@@ -727,16 +730,16 @@
     },
     {
      "n": 5,
-     "text": "ยืนยันทีละข้อ — ข้อพบแต่ละข้อไปที่ผู้ยืนยัน 1 ตัวต่อ 1 ข้อ ที่ไม่รู้ว่าใครพบ ค่าตั้งต้นคือ `FALSE_POSITIVE` ต้องมีหลักฐานและมั่นใจอย่างน้อย 80 จึงเป็น `ยืนยัน` ตามข้อ 3 ของ `review-lenses` · ใคร: `reviewer` ตัวใหม่ (อ่านอย่างเดียว)",
+     "text": "Confirm (ยืนยัน) item by item. Each finding goes to 1 confirmer per finding, who does not know who found it. The default is `FALSE_POSITIVE`; it becomes `ยืนยัน` (confirmed) only with evidence and confidence of at least 80, per item 3 of `review-lenses` · ใคร: `reviewer` ตัวใหม่ (read-only)",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": false,
       "user": false,
       "agents": [
        "reviewer"
       ],
-      "raw": "`reviewer` ตัวใหม่ (อ่านอย่างเดียว)"
+      "raw": "`reviewer` ตัวใหม่ (read-only)"
      },
      "skills": [],
      "commands": [],
@@ -745,9 +748,9 @@
     },
     {
      "n": 6,
-     "text": "แยก 3 กลุ่ม: สูง · กลาง · ต่ำ (ตามนิยามใน `reviewer`) ข้อที่ยืนยันไม่ได้ให้ติด `ยังไม่ได้ตรวจ` แล้วบันทึกทุกข้อที่ปัดทิ้งลง `ledger.md` พร้อมเหตุผลจากรายการ (`false_positive` · `intentional` · `deferred` · `rejected` · `มีมาก่อน`) แล้วอ่านไฟล์กลับนับให้ตรงกับจำนวนที่ปัด · รอบ 2 ขึ้นไป เทียบข้อรอบก่อนกับ diff ว่าแก้จริง · ใคร: หัวหน้าทีม",
+     "text": "Split into 3 groups: สูง · กลาง · ต่ำ (high · medium · low, as defined in `reviewer`). Items that cannot be confirmed get `ยังไม่ได้ตรวจ`. Record every item you dismiss in `ledger.md` with a reason from the list (`false_positive` · `intentional` · `deferred` · `rejected` · `มีมาก่อน` (pre-existing)), then read the file back and count so it matches the number dismissed. Round 2 and later: compare the previous round's items with the diff to see they were really fixed · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -761,9 +764,9 @@
     },
     {
      "n": 7,
-     "text": "ตรวจความสดก่อนรายงาน — เทียบ `head:` ในแพ็กเกจกับของจริงตอนนี้ ไม่ตรง หรือมีผู้ตรวจที่ยังรัน ล้ม ถูกตัดผล → รายงานว่าผลเก่าหรือไม่ครบ ไม่นับเป็นสะอาด · ใคร: หัวหน้าทีม",
+     "text": "Check freshness before reporting. Compare `head:` in the package with the real current state. Mismatch, or a checker still running, failed, or had its result cut → report that the result is stale or incomplete and do not count it as clean · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -777,9 +780,9 @@
     },
     {
      "n": 8,
-     "text": "รายงาน — คำตัดสิน 1 บรรทัด (`ส่งได้` · `ส่งได้หลังแก้` · `ยังไม่ควรส่ง`) แล้วตามด้วยรายการและสรุปงานตาม `superuser` หัวข้อ 7 · ใคร: หัวหน้าทีม",
+     "text": "Report: a 1-line verdict (`ส่งได้` (ready to deliver) · `ส่งได้หลังแก้` (deliver after fixes) · `ยังไม่ควรส่ง` (not yet ready to deliver)), then the list and a work summary per `superuser` section 7 · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -798,15 +801,15 @@
   },
   {
    "name": "team-project",
-   "title": "งาน XL หลายวัน มีคนและ agent ร่วมทีม",
-   "when": "งานใหญ่ที่จบไม่ได้ใน session เดียว · มี milestone หลายอัน · มีคนจริง (เพื่อนร่วมทีม) รับชิ้นงานไปทำคู่กับ agent · \"โปรเจกต์นี้ทำกับทีม\" · \"งานเป็นเดือน\"",
-   "done": "ทุก milestone ในตาราง \"สถานะล่าสุด\" เป็น `เสร็จ` พร้อมหลักฐานตรวจ และคนหรือ bot ตัวใหม่อ่าน `CONTEXT.md` ไฟล์เดียวแล้วรับงานต่อได้โดยไม่ถาม\n\n---\n\nกฎเฉพาะงาน XL · **ตรวจต่อ milestone ไม่ใช่ตอนท้ายงาน** — งานเป็นเดือนที่ตรวจครั้งเดียวตอนจบ ค้นจุดพังช้าเกินแก้ · **ชิ้นของคนกับ agent อย่าแตะไฟล์เดียวกัน** — ตารางแบ่งงานต้องระบุ `files_allowed` ไม่ทับกันเด็ดขาด · ไฟล์กลางหัวหน้าเขียนคนเดียว (`team-files`) · **คนส่งงานช้ากว่า agent** — ออกแบบให้ชิ้นของคนไม่ขวางชิ้นของ agent (คนรับชิ้นที่ต้องการดุลยพินิจ · agent รับชิ้นกลไก) · ชิ้นของคนที่ `ติด` หรือเกินกำหนด → หัวหน้าเสนอรับมาทำเองหรือส่งลูกทีมใน \"รออนุมัติ\" · **ทุกวันต้องจบที่จุดรับต่อได้** — ไม่มีวันไหนที่งานค้างอยู่ในแชตล้วน ๆ",
+   "title": "XL multi-day work with people and agents on the team",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "เข้าใจ — อ่านโจทย์ · ของเดิมในโปรเจกต์ · ข้อจำกัด (งบ · คน · เวลา) · ถามเจ้าของงานแบบเลือกคำตอบครั้งเดียว · ใคร: หัวหน้าทีม",
+     "text": "Understand: read the brief · what already exists in the project · constraints (budget · people · time) · ask the owner once, with answer choices · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -820,16 +823,16 @@
     },
     {
      "n": 2,
-     "text": "วางทาง — `brainstormer` ตัวใหม่เสนอ 2–3 ทาง (ทางสำคัญมากใช้ MoA) → หัวหน้าเลือก 1 → เขียน brief ตาม `brief-template` ลง `docs/BRIEF.md` · ใคร: `brainstormer` ตัวใหม่ → หัวหน้าทีม",
+     "text": "Choose a path: `brainstormer` ตัวใหม่ proposes 2–3 paths (a very important path uses MoA) → the lead picks 1 → write the brief per `brief-template` into `docs/BRIEF.md` · ใคร: `brainstormer` ตัวใหม่ → the lead",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
-      "lead": true,
+      "lead": false,
       "user": false,
       "agents": [
        "brainstormer"
       ],
-      "raw": "`brainstormer` ตัวใหม่ → หัวหน้าทีม"
+      "raw": "`brainstormer` ตัวใหม่ → the lead"
      },
      "skills": [],
      "commands": [],
@@ -838,9 +841,9 @@
     },
     {
      "n": 3,
-     "text": "แตก milestone — แต่ละ milestone ต้องจบด้วยของที่ตรวจได้และส่งให้เจ้าของงานดูได้ · ลงตาราง \"สถานะล่าสุด\" ใน `docs/BUILD-PLAN.md` ตาม `status-report` · ใคร: หัวหน้าทีม",
+     "text": "Split into milestones: each milestone must end in something checkable that can be shown to the owner · record in the \"สถานะล่าสุด\" (latest status) table in `docs/BUILD-PLAN.md` per `status-report` · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -856,9 +859,9 @@
     },
     {
      "n": 4,
-     "text": "วางของกลาง + ตารางแบ่งงาน — โครงเรื่อง · รูปข้อมูล · แม่แบบ · กติการ่วม (ภาษา · ตั้งชื่อ · commit) หัวหน้าทำคนเดียว · ตาราง `ชิ้น | ไฟล์ที่แตะ | ขนาด | ต้องรอชิ้นไหน | ใคร (คน/agent) · ระดับ` ชี้ชัดว่าชิ้นไหนให้ผู้ร่วมทีมคนไหน · ใคร: หัวหน้าทีม",
+     "text": "Lay out the shared things + the work split table: outline · data shape · templates · shared conventions (language · naming · commit), done by the lead alone · a table `ชิ้น | ไฟล์ที่แตะ | ขนาด | ต้องรอชิ้นไหน | ใคร (คน/agent) · ระดับ` (piece | files touched | size | must wait for which piece | who (person/agent) · tier) makes clear which piece goes to which teammate · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -872,9 +875,9 @@
     },
     {
      "n": 5,
-     "text": "เขียนใบทุกชิ้น — งาน XL ทุกชิ้นต้องเป็นไฟล์ `handoff/<id>.md` ตาม skill `handoff` (เพราะข้าม session แน่) ไม่ใช่แค่ข้อความในแชต · ใคร: หัวหน้าทีม",
+     "text": "Write a note for every piece: every XL piece must be a file `handoff/<id>.md` per the skill `handoff` (because it surely crosses sessions), not just a chat message · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -890,14 +893,14 @@
     },
     {
      "n": 6,
-     "text": "ลงมือ — ชิ้นของ agent ส่งพร้อมกันในข้อความเดียว ตาม rank และความกว้างของกราฟ (`team-roles` \"แบ่งงาน\" · พร้อมกันเกิน 8 → `parallel-split-and-merge`) · ชิ้นของคนส่ง path ใบให้ผู้ร่วมทีมพร้อมกำหนดส่งใบกลับ · ชิ้นที่ต้องรอกันลงรอบถัดไป · ใคร: ลูกทีมตัวใหม่ต่อชิ้น · ผู้ร่วมทีมตามใบ",
+     "text": "Do the work: agent pieces are sent together in one message, by rank and graph width (`team-roles` \"แบ่งงาน\" (splitting the work) · more than 8 at once → `parallel-split-and-merge`) · for a person's piece, send the note's path to the teammate with a due date for the returned note · pieces that must wait on others go in the next round · ใคร: ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": false,
       "user": false,
       "agents": [],
-      "raw": "ลูกทีมตัวใหม่ต่อชิ้น · ผู้ร่วมทีมตามใบ"
+      "raw": "ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note"
      },
      "skills": [
       "parallel-split-and-merge"
@@ -908,9 +911,9 @@
     },
     {
      "n": 7,
-     "text": "พิสูจน์ ต่อ milestone — รวมชิ้นของ milestone แล้ว `reviewer` ตัวใหม่ตรวจทั้ง milestone รวดเดียวกับ \"เสร็จเมื่อ\" ใน brief · งานเสี่ยง (เงิน · กฎหมาย · สุขภาพ · ส่งคนนอก) ใช้ `adversarial-review-panel` · ไม่ผ่าน → แก้ → ตรวจซ้ำ ตามเพดานรอบใน `team-roles` · ใคร: `reviewer` ตัวใหม่",
+     "text": "Prove (พิสูจน์), per milestone: merge the milestone's pieces, then `reviewer` ตัวใหม่ checks the whole milestone in one go against the brief's \"เสร็จเมื่อ\" (done when) · risky work (money · law · health · sent to outsiders) uses `adversarial-review-panel` · fail → fix → recheck, up to the round ceiling in `team-roles` · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": false,
       "user": false,
@@ -928,9 +931,9 @@
     },
     {
      "n": 8,
-     "text": "sync ปิดวัน — เก็บใบส่งงานที่เข้ามา (คนและ agent เท่ากัน) · อัปเดต BUILD-PLAN + \"ความคืบหน้า\" และ \"รับงานต่อ\" ใน `CONTEXT.md` ตาม playbook `pickup-and-pause` · การตัดสินใจลง `decision-log` · ใคร: หัวหน้าทีม",
+     "text": "End-of-day sync: collect incoming handover notes (people and agents equal) · update BUILD-PLAN + \"ความคืบหน้า\" (progress) and \"รับงานต่อ\" (pick up the work) in `CONTEXT.md` per playbook `pickup-and-pause` · record decisions in `decision-log` · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -948,9 +951,14 @@
     },
     {
      "n": 9,
-     "text": "รายงานเจ้าของงาน — จบ milestone หรือจบสัปดาห์ด้วย `status-report` · รายการที่ใช้เงินหรือย้อนไม่ได้ลง \"รออนุมัติ\" ไม่ขวางชิ้นอื่น · ใคร: หัวหน้าทีม",
-     "sub": [],
-     "phase": "",
+     "text": "Report to the owner: at the end of a milestone or week, with `status-report` · items that cost money or cannot be reversed go under \"รออนุมัติ\" without blocking other pieces · ใคร: หัวหน้าทีม",
+     "sub": [
+      "**Check per milestone, not at the end of the job.** For month-long work checked only once at the end, finding the break point is too late to fix.",
+      "**A person's and an agent's pieces must not touch the same file.** The split table must state `files_allowed` with no overlap at all · shared files are written by the lead alone (`team-files`).",
+      "**People deliver slower than agents.** Design so a person's piece does not block an agent's piece (people take pieces needing judgement · agents take mechanical pieces) · a person's piece that is `ติด` or overdue → the lead proposes, under \"รออนุมัติ\", taking it over or sending it to a worker.",
+      "**Every day must end at a point where work can be picked up.** No day leaves work sitting purely in chat."
+     ],
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -962,22 +970,22 @@
      ],
      "commands": [],
      "playbooks": [],
-     "approval": true
+     "approval": false
     }
    ],
    "shared": false
   },
   {
    "name": "unattended-run",
-   "title": "งานยาวที่ผู้ใช้ไม่อยู่ดู",
-   "when": "\"ทำให้เสร็จ เดี๋ยวกลับมาดู\" · \"ไม่ต้องถาม\" · งานหลายขั้นที่ผู้ใช้จะมาตรวจทีเดียว",
-   "done": "เงื่อนไขข้อ 1 ผ่านทั้งหมด หรือชิ้นที่เหลือทุกชิ้นมีเหตุผลว่าทำไมติด",
+   "title": "long work the user is not watching",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "เขียนเงื่อนไขจบที่ตรวจได้ — ไฟล์ไหนต้องมี · ตารางไหนต้องครบ · ร่างไหนต้องพร้อมส่ง · รันด้วย `claude -p` → ใส่ `--max-budget-usd <งบ>` เสมอ (ไม่รู้งบ → ถามรวมในคำถามครั้งเดียวตอนเริ่ม) ชนเพดาน = `ติด` แล้วรายงานว่าทำถึงไหน · ใคร: หัวหน้าทีม",
+     "text": "Write a checkable end condition: which file must exist · which table must be complete · which draft must be ready to send · running with `claude -p` → always add `--max-budget-usd <budget>` (budget unknown → ask in the single set of questions at the start). Hitting the ceiling = `ติด`, then report how far it got · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -991,11 +999,11 @@
     },
     {
      "n": 2,
-     "text": "แตกงานเป็นชิ้นที่แต่ละชิ้นจบด้วยการตรวจ ลงตาราง \"ความคืบหน้า\" ใน `CONTEXT.md` เลือก playbook ย่อยให้แต่ละชิ้น แล้วแจกให้ subagent ตัวใหม่ทีละชิ้น · ใคร: หัวหน้าทีม",
+     "text": "Split the work into pieces that each end with a check, record them in the \"ความคืบหน้า\" (progress) table in `CONTEXT.md`, choose a sub-playbook for each piece, and hand them out to fresh subagents one piece at a time · ใคร: หัวหน้าทีม",
      "sub": [
-      "**ตรวจเครื่องมือภายนอกก่อนแจกชิ้นแรก** — ชิ้นไหนต้องใช้ MCP (Model Context Protocol) tool ให้โหลด tool นั้นตามชื่อด้วย ToolSearch แล้วเรียกทดสอบ 1 ครั้งตอนนี้ (ก่อนผู้ใช้ออกไป) · เรียกไม่ได้ → ชิ้นนั้นลง `ติด` ทันที พร้อมวิธีแก้ที่เขียนเป็นขั้น ๆ (ต่อ server ไหน · ล็อกอินอย่างไร) แล้วทำชิ้นอื่นต่อ · ไม่เรียก API ตรงด้วย curl หรือ token ในคำสั่งแทน เพราะคือการทำเกินสิทธิ์ที่ผู้ใช้ให้ไว้"
+      "**Check external tools before handing out the first piece.** For any piece that needs an MCP (Model Context Protocol) tool, load that tool by name with ToolSearch and call it once to test now (before the user leaves). Cannot call it → mark that piece `ติด` at once, with the fix written step by step (which server to connect · how to log in), then carry on with other pieces. Do not call the API directly with curl or a token in a command instead, because that goes beyond the permission the user gave."
      ],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -1009,20 +1017,20 @@
     },
     {
      "n": 3,
-     "text": "ทำทีละชิ้น — ผ่านเกณฑ์หัวข้อ 4 แล้วค่อยไปชิ้นถัดไป พัง 2 รอบ → แตกเป็นขั้นย่อย ไม่ลองแบบเดิมซ้ำ · ครบ 3 รอบ → ลงเป็น `ติด` แล้วไปชิ้นอื่น · ใคร: ลูกทีมตามบรรทัด `ลูกทีมต่อชิ้น` ด้านบน ตัวใหม่ต่อชิ้น · ตรวจ: ตามบรรทัด `ผู้ตรวจต่อชิ้น` ด้านบน",
+     "text": "Do one piece at a time. Pass the section 4 criteria, then go to the next piece. Breaks twice → split into sub-steps, do not retry the same way · after 3 rounds → record it as `ติด` and go to other pieces · ใคร: workers per the `ลูกทีมต่อชิ้น` line above, a fresh one per piece · check (ตรวจ): per the `ผู้ตรวจต่อชิ้น` line above",
      "sub": [
-      "**หลังติด** — จดใน \"ค้างอยู่\" ว่าลองอะไรไปแล้ว · ปัญหาน่าจะอยู่ตรงไหน · ต้องได้อะไรถึงไปต่อ · เก็บงานค้างแยกไว้เป็นร่าง ไม่ทับชิ้นที่ผ่านแล้ว",
-      "**ชิ้นที่ต้องรอชิ้นที่ติด** — ลงเป็น `ติด` เหตุผล `รอ <ชิ้น>` โดยไม่ต้องลอง",
-      "**ทำชิ้นอื่นหมดแล้ว** — ให้ agent ตัวใหม่ที่ใช้โมเดลขนาดใหญ่ขึ้นลองอีก 1 รอบจากบันทึกนั้น (มีคำตอบใน inbox → เริ่มจากคำตอบ)",
-      "**ยังติด** — คงไว้ในรายงานพร้อมบอกว่าต้องการอะไรจากผู้ใช้ · ผู้ใช้ตอบทีหลัง → session ใหม่อ่าน `CONTEXT.md` แล้วทำต่อจากชิ้นนั้น",
-      "**ติดเพราะต้องเป็นผู้ใช้** (ตัดสิน · ตรวจด้วยตาหรือหู · ใช้เงินหรือ token · รับรองข้อความที่ agent เขียนแทน) — เพิ่มแถวในตาราง \"รอผู้ใช้\" ของ `CONTEXT.md` แล้วไปทำชิ้นอื่นต่อ ไม่หยุดรอ"
+      "**After getting stuck.** Record in \"ค้างอยู่\" (pending) what was tried · where the problem probably is · what is needed to go on. Keep the unfinished work separately as a draft, not over pieces that already passed.",
+      "**A piece that must wait for a stuck piece.** Record it as `ติด` with reason `รอ <piece>` (waiting for <piece>), without trying.",
+      "**All other pieces are done.** Have a fresh agent on a larger model try once more from that note (an answer in the inbox → start from the answer).",
+      "**Still stuck.** Keep it in the report with what is needed from the user · the user answers later → a new session reads `CONTEXT.md` and continues from that piece.",
+      "**Stuck because it must be the user** (a decision · a check by eye or ear · spending money or tokens · endorsing text an agent wrote on their behalf): add a row to the \"รอผู้ใช้\" (waiting on the user) table of `CONTEXT.md` and go on to other pieces, without stopping to wait."
      ],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": false,
       "user": false,
       "agents": [],
-      "raw": "ลูกทีมตามบรรทัด `ลูกทีมต่อชิ้น` ด้านบน ตัวใหม่ต่อชิ้น · ตรวจ: ตามบรรทัด `ผู้ตรวจต่อชิ้น` ด้านบน"
+      "raw": "workers per the `ลูกทีมต่อชิ้น` line above, a fresh one per piece · check (ตรวจ): per the `ผู้ตรวจต่อชิ้น` line above"
      },
      "skills": [],
      "commands": [],
@@ -1031,9 +1039,9 @@
     },
     {
      "n": 4,
-     "text": "ทุกการเลือกทางเอง จดในตาราง \"การตัดสินใจ\" ทันที ไม่รวบไปเขียนตอนจบ · ใคร: หัวหน้าทีม",
+     "text": "Every time you choose a path on your own, record it in the \"การตัดสินใจ\" (decisions) table at once, do not bundle it to write at the end · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -1047,29 +1055,29 @@
     },
     {
      "n": 5,
-     "text": "ถ้าเจอรายการ \"รออนุมัติ\" (ตัวอย่างในบรรทัด `รออนุมัติที่เจอบ่อย` ด้านบน · รายการเต็มใน `autonomy` หัวข้อ \"รออนุมัติ — ทุกสาขา\" ของ `superuser`) ให้เตรียมให้พร้อมกด ห้ามทำเอง ส่วนคำถามที่ผู้ใช้ต้องตอบให้ใส่ไว้ใน \"ค้างอยู่\" · ใคร: หัวหน้าทีม (อนุมัติ: ผู้ใช้)",
+     "text": "If you meet an item that is \"รออนุมัติ\" (example in the `รออนุมัติที่เจอบ่อย` line above · full list in `autonomy`, section \"รออนุมัติ — ทุกสาขา\" of `superuser`), prepare it ready to press, never do it yourself; put questions the user must answer under \"ค้างอยู่\" · ใคร: หัวหน้าทีม (approval: the user)",
      "sub": [
-      "**ข้อความถึงคนนอกเขียนเป็นร่างในกล่องขาออก** — ร่างอีเมล คำตอบ รีวิว หรือโพสต์ ลงไฟล์ `.claude/superuser/outbound/<วันที่>-<เรื่อง>.md` (ผู้รับ · ช่องทาง · เนื้อความที่พร้อมส่ง · เหตุที่ส่ง) แล้วทำชิ้นต่อไป ไม่หยุดรอคน · การร่างไม่ต้องขออนุมัติ การส่งจริงต้องขอ · ผู้ใช้ส่งเองหรือสั่งส่งทีหลังในนามของเขา · ลงรายการกล่องขาออกในแถว \"รอผู้ใช้\" ของ `CONTEXT.md` 1 แถวต่อไฟล์"
+      "**Messages to outsiders are written as drafts in the outbox.** An email draft, a reply, a review, or a post goes into a file `.claude/superuser/outbound/<date>-<topic>.md` (recipient · channel · ready-to-send text · reason for sending), then move on to the next piece without stopping to wait for a person · drafting needs no approval, actually sending does · the user sends it, or orders it sent later on their behalf · list the outbox item in the \"รอผู้ใช้\" table of `CONTEXT.md`, 1 row per file."
      ],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
-      "user": true,
+      "user": false,
       "agents": [],
-      "raw": "หัวหน้าทีม (อนุมัติ: ผู้ใช้)"
+      "raw": "หัวหน้าทีม (approval: the user)"
      },
      "skills": [
       "superuser"
      ],
      "commands": [],
      "playbooks": [],
-     "approval": true
+     "approval": false
     },
     {
      "n": 6,
-     "text": "จบแต่ละชิ้นแล้วอัปเดต \"ความคืบหน้า\" และ \"รับงานต่อ\" แล้วดู `.claude/superuser/inbox/` ผู้ใช้กลับมากลางทางจะได้เห็นสถานะล่าสุด · เริ่ม session ใหม่กลางงาน → รันตัวตรวจ \"เสร็จเมื่อ\" ของชิ้นล่าสุดที่ `เสร็จ` 1 ครั้งก่อนทำชิ้นถัดไป ไม่ผ่าน → แก้ชิ้นนั้นก่อน · ใคร: หัวหน้าทีม",
+     "text": "After finishing each piece, update \"ความคืบหน้า\" and \"รับงานต่อ\" (pick up the work), then look in `.claude/superuser/inbox/`, so a user coming back midway sees the latest status · starting a new session mid-job → run the \"เสร็จเมื่อ\" (done when) checker of the latest `เสร็จ` piece once before the next piece; fail → fix that piece first · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -1083,18 +1091,18 @@
     },
     {
      "n": 7,
-     "text": "จบงานแล้วตรวจเงื่อนไขข้อ 1 ทั้งหมดอีกรอบ ทำรอบเรียนรู้ แล้วรายงานครั้งเดียว: เสร็จอะไร · ติดอะไร · ตัดสินใจเองกี่ข้อ · รออนุมัติอะไร · ค้างอะไร · ใคร: หัวหน้าทีม (ตรวจเงื่อนไขซ้ำ: `reviewer` ตัวใหม่)",
+     "text": "When the job is finished, check all the step 1 conditions once more, run the learning round, then report once: what is done · what is stuck · how many decisions made on your own · what awaits approval · what is pending · ใคร: หัวหน้าทีม (re-checking the conditions: `reviewer` ตัวใหม่)",
      "sub": [
-      "รายงานปิดด้วยตาราง `ขั้น | ผล | หลักฐาน` 1 แถวต่อเงื่อนไขในข้อ 1 · หลักฐานคือ path ไฟล์ · ลิงก์ · ผลตรวจ · สรุปเป็น **\"ผ่าน X / N\"** นับจากตัวตรวจจริง ไม่ใช่จากที่ลูกทีมบอก · ข้อที่ต้องใช้ตาคนตรวจไม่นับว่าผ่าน แยกเป็นแถว `ต้องให้คนดู` · ข้อที่ไม่ผ่านให้ใส่สาเหตุ 1 บรรทัด"
+      "End the report with a table `ขั้น | ผล | หลักฐาน` (step | result | evidence), 1 row per condition in step 1 · evidence is a file path · link · check result · summarise as **\"ผ่าน X / N\"** (passed X of N) counted from the real checker, not from what workers say · an item that needs a human eye does not count as passed, put it in a separate row `ต้องให้คนดู` (needs a person to look) · for items that failed, give the cause in 1 line."
      ],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
       "agents": [
        "reviewer"
       ],
-      "raw": "หัวหน้าทีม (ตรวจเงื่อนไขซ้ำ: `reviewer` ตัวใหม่)"
+      "raw": "หัวหน้าทีม (re-checking the conditions: `reviewer` ตัวใหม่)"
      },
      "skills": [],
      "commands": [],

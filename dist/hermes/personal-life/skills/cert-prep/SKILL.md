@@ -1,6 +1,6 @@
 ---
 name: cert-prep
-description: Use when preparing for a cloud or developer certification
+description: Use when preparing for an exam or a cloud or developer certification, or making flashcards and quizzes for one
 ---
 
 # Certification Prep
@@ -18,7 +18,15 @@ Study what the exam guide weighs, prove it with practice scores, and book the da
    - **Supplement or replace?** If the user already follows a course with its own calendar (Udemy, a bootcamp, a tutoring school), ask whether this plan adds to it or replaces it. Never run two full syllabi side by side
    - **Crash mode when under 4 weeks remain:** say plainly there will be gaps. Study only the highest-weight domains from the exam guide, take a practice set every day, and keep the last 2–3 days light (review cards, no new full exams)
 5. **Each study session**: read or watch (40%) → hands-on lab (40%) → write flashcards from your mistakes (20%) (default split, not yet measured)
-6. **Spaced repetition**: review cards on day 1, 3, 7, 14 and 30 after they are written (Anki or any spaced repetition system (SRS) app). 15 minutes a day beats a 3-hour weekend cram. How to write good cards, the box schedule without an app, and question drills in chat → `study-drill`
+6. **Cards and review** (one schedule only: the box schedule below). Write cards from the user's notes and mistakes as one line each: `Q: … | A: … | src: … | box: 1 | next: 2026-11-11`. One idea per card, a question on the front, a source on every card, and unsourced facts marked `(ยังไม่ได้ตรวจ)`. 8 sure cards beat 20 guessed ones. 15 minutes a day beats a 3-hour weekend cram. Review with five boxes (default intervals, not yet measured):
+
+   | Answer | Card moves to | Next review |
+   |---|---|---|
+   | Right | one box up | box 2 → +1 day · 3 → +3 · 4 → +7 · 5 → +21 |
+   | Half right | stays | +1 day |
+   | Wrong | one box down | again in about 4 hours |
+
+   Anki or any spaced repetition system (SRS) app may use its own schedule instead; do not fight it. Full card rules and the Socratic question drill ("quiz me, don't tell me the answer") → [references/cards-and-drills.md](references/cards-and-drills.md)
 7. **Practice-exam loop**: 1 full timed exam per week. For **every** wrong *and* every guessed answer, write why the right answer is right and why yours was wrong, then make 1 card. Track the score per domain
 8. **Booking rule**: book the exam when **2 practice exams in a row** score at least **10 points above** the pass mark (default margin, not yet measured) (for example ≥ 82% where 72% is needed), with no domain below the pass mark. Book 2–3 weeks out, so the date creates focus
 9. **Final week**: no new topics. Weak-domain review, 1 last practice exam 3 days before, then the exam-day checklist below
@@ -50,8 +58,10 @@ Worked gap map (AWS SAA-C03) and the week-by-week plan file to copy to `cert/<ex
 - Dumps (leaked real questions) breach the candidate agreement and can lead to the certification being revoked. Refuse to use them
 - Certifications prove a baseline. Pair each one with a small project (see `side-project-picker`) so the skill shows in a portfolio
 
-Related: `study-drill` (cards and drills), `learning-path` (for skills beyond the exam), `side-project-picker`, `english-tech-reading` (for long, conditional English questions), and `sprint-plan` in `software-development` for Scrum context.
+Related: `learning-path` (for skills beyond the exam), `side-project-picker`, `english-tech-reading` (for long, conditional English questions), and `sprint-plan` in `software-development` for Scrum context.
 
 ## References
 
+- [`references/cards-and-drills.md`](references/cards-and-drills.md) — card rules, box schedule notes, question drill; open when making cards or quizzing
+- [`references/cards-example.md`](references/cards-example.md) — worked example, notes to cards and a drill
 - [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources

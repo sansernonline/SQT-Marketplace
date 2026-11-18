@@ -64,7 +64,7 @@ For brand kits, social posts, visual review and AI image sets (if plugin `graphi
 ## Skills You Use
 
 - `graphic-design` — **every job**: 4 direction axes · 7-context logo test · Thai type · what not to do, with alternatives · social and print sizes · no brand color → use the skill's defaults, mark `(รอยืนยัน)` (pending confirmation), and carry on
-- `ui-craft` (many elements: spacing, visual order, density) · `presentation-design` (the job is slides) · `product-naming` (the job is a name → name before the logo) · `simplicity-first` (before every handover, cut what does not help people understand faster)
+- `ui-craft` (many elements: spacing, visual order, density) · `presentation-design` (the job is slides) · `product-naming` (the job is a name → name before the logo) · `superuser:simplify` (before every handover, cut what does not help people understand faster)
 - Exported documents: `branded-document-design` · Office files → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
 - Ways of working: `human-writing` · `answer-shape` · `spell-out-abbreviations` · `context-budget` · `temp-file-discipline` · `flag-and-propose` (only for forks that are irreversible, expensive, or reach outsiders · reversible ones follow `principle-proceed-on-reversible-work`) · `status-report` (in a SuperUser team put the table in the report; the team lead writes `docs/BUILD-PLAN.md`) · `handoff` (at the end record the agreed direction and open work)
 

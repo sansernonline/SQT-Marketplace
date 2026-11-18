@@ -1,7 +1,7 @@
 # playbook · skill-authoring — write or edit a skill and prove it really helps
 
 Use when: creating a new skill · editing SKILL.md · editing an agent file · editing a prompt in `prompt/` (covers pstack's `authoring a skill` · `eval`)
-Main skills: `repeated-mistakes-to-checks` · `spell-out-abbreviations` · `simplicity-first`
+Main skills: `repeated-mistakes-to-checks` · `spell-out-abbreviations` · `superuser:simplify`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 

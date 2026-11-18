@@ -48,7 +48,7 @@ Review with the manager at day 30 and day 60, not only at day 90. A goal that tu
 - Start the brag document on day 1 (`performance-self-review`, weekly entry). Probation reviews are decided on evidence from these 90 days.
 - Two weeks before the review date, send the manager a one-page summary: the day-90 answer from question 1 · what was done against it · one thing still to learn.
 - When severance starts to count during probation, and what notice the employer must give, are rules of the Labour Protection Act → `labour-law-basics` section 4. This skill does not restate them. Asked "what do I get if let go in probation": name the Act (พ.ร.บ.คุ้มครองแรงงาน), point to `labour-law-basics` and to the rights table in `job-exit` section 3, and do not say "nothing" from memory.
-- After passing: update LinkedIn (`linkedin-profile`) and file the confirmation letter in `important-docs`.
+- After passing: update LinkedIn (`resume-th-en`, `references/linkedin.md`) and file the confirmation letter in `important-docs`.
 
 ## Check before sending
 

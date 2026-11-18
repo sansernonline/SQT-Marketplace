@@ -1,849 +1,3 @@
-# skill: database-design
-
-Use when designing or changing a database schema
-
-# Database design
-
-> **One rule:** the schema is the hardest thing in a system to change.
-
-## When to use this skill
-
-- Designing the database of a new system or a new module
-- Adding or changing a table, column, relationship or index
-- Writing a migration, especially once the system holds real data
-- A query is slow and you suspect the schema or an index
-
-Not for: overall architecture → `architecture-patterns` · endpoints and JSON shapes → `api-conventions` · passwords, tokens, permissions → `auth-implementation-patterns` · running migrations in a pipeline → `cicd-and-release`
-
-**Syntax specific to each database, data types compared, and the migration commands of each Object-Relational Mapping (ORM) tool** are in `references/per-stack.md`.
-
----
-
-## 1 · Choose the database type first
-
-| Criterion | Relational (PostgreSQL, SQL Server, MySQL) | Document (MongoDB) |
-|---|---|---|
-| Data has clear relationships and needs joins | ✓ | ✗ must be done by hand |
-| Data shape is uncertain and differs per record | Careful: use a JSON column | ✓ |
-| Needs transactions across several tables | ✓ | Careful: possible but costlier |
-| Reports, totals, analysis | ✓ | ✗ |
-| Very heavy writes, log/telemetry | Careful | ✓ or use a time-series database |
-
-> **The default is relational.** Choose document only when you **can answer why**.
-> "More flexible" is not a reason. It means the design is not done yet.
-
-**You can mix them**: use relational as the base, and store data of uncertain shape in a `jsonb` column.
-In almost every case this is better than running 2 separate databases.
-
----
-
-## 2 · Naming rules — choose once, use across the whole system
-
-| What you name | Format | Example |
-|---|---|---|
-| Table | `snake_case` **plural** | `orders`, `order_items` |
-| Column | `snake_case` singular | `created_at`, `total_amount` |
-| primary key | `id` | `id` |
-| foreign key | `<singular table>_id` | `customer_id` |
-| Join table | `<a>_<b>` in alphabetical order | `role_users` ✓ (not `user_roles`) |
-| index | `ix_<table>_<column>` | `ix_orders_customer_id` |
-| unique | `ux_<table>_<column>` | `ux_users_email` |
-| foreign key constraint | `fk_<table>_<target table>` | `fk_orders_customers` |
-| check constraint | `ck_<table>_<topic>` | `ck_orders_total_non_negative` |
-
-**Do not:**
-
-- Wrong: put the data type in the name, such as `name_varchar`, `is_active_bit`
-- Wrong: prefix a column with the table name, such as `order_order_date` (it is already in the `orders` table)
-- Wrong: use reserved words such as `user`, `order`, `group`, `key`, which need quotes every time. Use `users`, `orders` instead.
-- Wrong: use abbreviations people cannot read, such as `cst_nm`. It saves 8 characters but costs 3 years of confusion.
-
-> SQL Server may use `PascalCase` if the existing project already does.
-> **Using one style across the whole system matters more than which style is right.** Do not switch midway.
-
----
-
-## 3 · Columns every table must have
-
-```sql
-id           bigint / uuid   PRIMARY KEY
-created_at   timestamptz     NOT NULL DEFAULT now()
-updated_at   timestamptz     NOT NULL DEFAULT now()
-```
-
-Add these as needed:
-
-| Column | Add when | Note |
-|---|---|---|
-| `deleted_at timestamptz` | Data must be recoverable, or the law requires keeping it | **Every query must filter on it**, or deleted data shows up |
-| `created_by` / `updated_by` | You must be able to say who changed it | Store the user id, not the name |
-| `row_version` / `xmin` | Several people can edit at the same time | Use with the ETag in `api-conventions` |
-| `tenant_id` | Multi-tenant system | See section 10 |
-
-> **soft delete (delete by only setting a flag) has a cost**: every unique constraint must be rethought.
-> `ux_users_email` will block signing up with the same email again, even though the old account was deleted.
-> Fix it with a partial index: `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL`
-
----
-
-## 4 · Choose the identifier type
-
-| Type | Pros | Cons | Use when |
-|---|---|---|---|
-| `bigint` auto-increment | Small, fast, index does not fragment, easy to read when tracing problems | Next id can be guessed · ids collide when merging data from several places | Default, single system, single database |
-| **UUIDv7 / ULID** | Sorted by time · can be generated on the app side · no collisions | 16 bytes · hard to read by eye | Distributed system · id needed before saving · id appears in a URL |
-| `UUIDv4` fully random | No collisions, cannot be guessed | **index fragments, and writes get clearly slower with lots of data** | Avoid if you can |
-
-> **UUIDv4 as a primary key is the most common trap.**
-> Fully random values make every insert land in the middle of the index structure.
-> You do not feel it at tens of thousands of rows, but at tens of millions it gets so slow you must rebuild.
-> If you must use a UUID, use **v7**, which starts with the time, so it grows in order like bigint.
-
-**A number people see is not the primary key**: a purchase order number such as `SO-2026-00042` that the customer refers to
-should be stored as a separate column with a unique constraint, and the primary key should not be shown.
-
----
-
-## 5 · How much normalisation is enough
-
-**Always start at Third Normal Form (3NF)**: each fact is stored in one place.
-
-You may denormalise (accept duplicated data) only when all 3 of these hold:
-
-1. You measured and it is truly slow (with numbers, not a feeling).
-2. You know how the duplicated data will be updated so that the copies match.
-3. You wrote the reason in the table comment.
-
-**A commonly accepted exception**: data that must be "frozen" at a point in time.
-The product price in a purchase order must be copied into `order_items.unit_price`
-and not joined to `products.price`, because today's price is not the price on the day the customer bought.
-
----
-
-## 6 · Four data types people get wrong all the time
-
-Details of the 4 data types people get wrong all the time (money · time · enum or status · boolean), with examples, are in [`data-types`](references/data-types.md).
-
-## 7 · index — where to put one so it works
-
-**Must have:**
-
-- Every foreign key (most databases **do not create it automatically**)
-- Columns in the `WHERE` of frequently run queries
-- Columns used in `ORDER BY` together with pagination
-
-**composite index (an index on several columns): column order matters**
-
-```sql
--- query: WHERE tenant_id = ? AND status = ? ORDER BY created_at DESC
-CREATE INDEX ix_orders_tenant_status_created
-  ON orders (tenant_id, status, created_at DESC);
-```
-
-Order the columns by condition type: **equals → range → sort**.
-An index `(a, b)` works for a query that filters on `a` alone, but **not** for one that filters on `b` alone.
-
-**Do not add an index when:**
-
-- The table has fewer than a few thousand rows, because the database reads the whole table faster
-- The column has many repeated values, such as `is_active` where 95% are true
-- The table is written far more often than read, because every index adds cost on every write
-
-> **Measure before guessing**: `EXPLAIN ANALYZE` (PostgreSQL) or the execution plan (SQL Server)
-> tells you whether the index is really used. Guessing that it "should help" is wrong more often than right.
-
----
-
-## 8 · Constraints live in the database, not only in the app
-
-| Rule | Where it should live |
-|---|---|
-| Email must not repeat | `UNIQUE` in the database **and** a check in the app so the error message looks nice |
-| Amount must not be negative | `CHECK (total_amount >= 0)` |
-| A purchase order must have a real customer | `FOREIGN KEY` |
-| Status must be one of the defined values | `CHECK` or a lookup table |
-
-> **Reason:** the app is not the only thing that touches the data. There are also urgent data-fix scripts,
-> import jobs at 3 a.m., and a 2nd service written later.
-> A constraint in the database is the last gate that nobody can skip.
-
-**Choose `ON DELETE` on purpose:**
-
-| Option | Meaning | Use with |
-|---|---|---|
-| `RESTRICT` (the default you should use) | Cannot delete while children exist | Almost every case |
-| `CASCADE` | Delete all the children too | True components, such as `order_items` |
-| `SET NULL` | Child becomes parentless | Optional relationships |
-
-If you put `CASCADE` in the wrong place just once, deleting 1 customer wipes 10 years of purchase history with it.
-
----
-
-## 9 · migration — change the schema without taking the system down
-
-The expand-and-contract steps, and example migrations that deploy without downtime, are in [`migrations`](references/migrations.md).
-
-Data warehouses for analysis (star schema · SCD · ELT) are in [`warehouse-modeling`](references/warehouse-modeling.md) · pipelines that can rerun safely (incremental · backfill · data quality tests · checklist before going to production) are in [`data-pipeline-patterns`](references/data-pipeline-patterns.md).
-
-## 10 · Multi-tenant systems
-
-| Style | How separate | Cost | Fits |
-|---|---|---|---|
-| A `tenant_id` column in every table | Low: one slip and data leaks across tenants | Cheapest | Many tenants, small data per tenant |
-| A separate schema per tenant | Medium | Migrations must loop over every schema | Tens to hundreds of tenants |
-| A separate database per tenant | Highest | Most expensive | Enterprise customers who require separation |
-
-> **Important:** if you choose the `tenant_id` style, **enforce it at the lowest layer, not by adding it to each query**.
-> Use the database's row-level security, or the ORM's global filter.
-> A single query that forgets `WHERE tenant_id = ?` shows one customer's data to another,
-> and no error appears at all.
-
----
-
-## 11 · Personal data
-
-- Keep a list of **which columns are personal data**. Without this list you cannot answer the question "where is my data?".
-- National ID numbers, credit card numbers and health data: encrypt at the column level, or do not store them at all if not needed.
-- Set a **retention period** per table, and have a real job that deletes accordingly.
-- Data must be deletable when the owner asks, and soft delete alone does not count as deleting.
-- Never copy real data onto a developer machine without masking it.
-
----
-
-## 12 · Anti-patterns
-
-- **One table that stores everything** (`entity` / `attribute` / `value`): every query becomes hard.
-- **`varchar(255)` on every column**: this number means nothing. Set it from real data.
-- **Several values in one column**, such as `"1,4,7"`: cannot search it, cannot add a constraint. Use a join table.
-- **No foreign key because "the app takes care of it"**: one day you will have orphan rows.
-- **An index on every column just in case**: writes get slower and storage bloats, with no one benefiting.
-- **`SELECT *` in real code**: the code breaks every time a column is added.
-- **Business logic in triggers**: problems are untraceable, because nobody sees it running.
-- **A migration that also writes data**, mixed with the structure change: on rollback the data is lost.
-- **Changing the schema on production by hand**: at the next deploy the schema will not match.
-
-
-## reference: data-pipeline-patterns.md
-
-# Data pipeline patterns — incremental, backfill, quality, catalog
-
-Every pipeline must give the same result when run again (`principle-safe-to-rerun`) and must always pass values into SQL as parameters.
-
-**สารบัญ:**
-
-- [Pipeline Patterns](#pipeline-patterns)
-- [Data Catalog Pattern](#data-catalog-pattern)
-- [Production Pipeline Checklist](#production-pipeline-checklist)
-
-## Pipeline Patterns
-
-### Pattern 1: Incremental Loading
-
-```sql
--- dbt incremental model
-{{ config(materialized='incremental', unique_key='id') }}
-
-SELECT
-    id,
-    user_id,
-    event_type,
-    created_at
-FROM {{ source('raw', 'events') }}
-WHERE 1=1
-{% if is_incremental() %}
-    -- Only new since last run
-    AND created_at > (SELECT MAX(created_at) FROM {{ this }})
-{% endif %}
-```
-
-### Pattern 2: Late-arriving Data
-
-```sql
--- Don't just look at last 1 hour, look back further for late events
-WHERE created_at > NOW() - INTERVAL '7 days'  -- buffer
-  AND created_at > (SELECT MAX(created_at) - INTERVAL '1 day' FROM target)
-```
-
-### Pattern 3: Data Quality Tests (dbt)
-
-```yaml
-# models/marts/orders.yml
-version: 2
-
-models:
-  - name: orders
-    description: One row per order
-    columns:
-      - name: order_id
-        tests:
-          - unique
-          - not_null
-      - name: customer_id
-        tests:
-          - not_null
-          - relationships:
-              to: ref('customers')
-              field: customer_id
-      - name: amount
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: ">= 0"
-```
-
-### Pattern 4: Idempotent Backfills
-
-```python
-# Backfill should be safe to re-run
-async def backfill(start_date: date, end_date: date):
-    for d in date_range(start_date, end_date):
-        # DELETE then INSERT in one transaction (idempotent); value passed as a parameter, never in the SQL string
-        async with db.transaction():
-            await db.execute("DELETE FROM target WHERE date = $1", d)
-            await load_for_date(d)
-```
-
-### Pattern 5: Real-time Pipeline
-
-```python
-# Kafka consumer pattern
-from kafka import KafkaConsumer
-
-consumer = KafkaConsumer(
-    'events',
-    bootstrap_servers='kafka:9092',
-    enable_auto_commit=False,  # ← manual commit = at-least-once (not exactly-once)
-    isolation_level='read_committed',
-)
-
-batch = []
-for message in consumer:
-    batch.append(parse(message))
-
-    if len(batch) >= 1000:
-        # Write first, commit the offset after. Kafka and the DB share no
-        # transaction, so a crash between the two replays this batch
-        # (at-least-once). Make the write idempotent so a replay is harmless.
-        with db.transaction():
-            db.bulk_upsert('events', batch, key=('topic', 'partition', 'offset'))  # unique key + ON CONFLICT DO NOTHING
-        consumer.commit()  # only after the DB write succeeds
-        batch = []
-```
-
-For exactly-once effect: idempotent upsert as above, or store the offsets in the
-same DB transaction as the data and seek to them on start (skip `consumer.commit()`).
-
-## Data Catalog Pattern
-
-For every table, document:
-
-```yaml
-- table: dim_customer
-  description: Slowly-changing customer master
-  owner: data-team
-  freshness: hourly
-  source: postgres.app.users (CDC)
-  pii: yes
-  retention: 7 years
-  columns:
-    - name: customer_key
-      description: Surrogate key
-    - name: customer_id
-      description: Natural key from source system
-    - name: email
-      pii: yes
-```
-
-## Production Pipeline Checklist
-
-- [ ] Schema validation at ingestion
-- [ ] Schema evolution handled (additive only)
-- [ ] Tests on critical columns (uniqueness, not-null, ranges)
-- [ ] Monitoring on row counts, freshness, error rates
-- [ ] Alerting (PagerDuty / Slack) on failures
-- [ ] Backfill procedure documented + tested
-- [ ] Idempotency verified
-- [ ] Lineage visible (dbt docs, OpenLineage)
-- [ ] PII tagged
-- [ ] Access controls per dataset
-- [ ] Cost monitored (query / storage)
-
-
-## reference: data-types.md
-
-# 6 · Four data types that are routinely got wrong
-
-### Money
-
-```sql
-total_amount   numeric(19,4)   NOT NULL      -- ถูก:
-currency       char(3)         NOT NULL      -- ถูก: ISO 4217 เช่น THB
-total_amount   float / double                -- ผิด: 0.1 + 0.2 ไม่เท่ากับ 0.3
-```
-
-> Wrong: **float for money is a bug you cannot find.** The total drifts by 1 satang per line
-> You only learn at month-end close, and cannot trace back where it drifted
-
-### Time
-
-| Store | Use | Reason |
-|---|---|---|
-| Time an event happened | `timestamptz` (SQL Server uses `datetimeoffset`) stored as UTC | Thailand has no daylight saving, but systems sold abroad do |
-| Birth date, due date | `date` | no time, no time zone |
-| Shop opening hours | `time` + a separate time zone column | |
-
-**Rule:** store UTC and convert to `+07:00` only at display time; never store raw Thai time in a `timestamp` that has no zone
-
-**Buddhist Era (BE)**: always store Common Era (CE), then convert to BE at display time
-If you store the year 2569 in the database, every function will compute durations wrongly
-
-### enum / status
-
-| Approach | Good when | Bad when |
-|---|---|---|
-| Lookup table + foreign key | values can be added without a deploy, has Thai/English names, and has a display order | needs a join |
-| `check constraint` as text | constant values that rarely change | adding a value needs a migration |
-| PostgreSQL `enum` type | fast, small | **a value cannot be removed** and the order cannot be changed |
-| raw `int` | — | ✗ reading `status = 3`, nobody knows what it means |
-
-### boolean
-
-- Name it as a positive statement: `is_active` (right) · `is_not_disabled` (wrong)
-- **If a third state might appear in the future, do not use boolean**, because `is_approved` will become `approval_status`
-  within 6 months, once "รออนุมัติ" (awaiting approval) is added
-
----
-
-
-## reference: migrations.md
-
-# 9 · migration — change the schema without taking the system down
-
-**3 rules:**
-
-1. **Forward only**: a migration that has been merged must not be edited; if it is wrong, write a new one over it
-2. **1 migration does one thing**: easy to trace problems, and rollback is exact
-3. **Old-version code and the new-version schema must work together**, because during a deploy both versions of the code always run at the same time
-
-### expand / contract — the standard steps for a change that destroys something existing
-
-Example: rename the column `name` → `full_name`
-
-| Deploy round | Database | Code |
-|:--:|---|---|
-| **1 · Expand** | add `full_name` (nullable) | write to both columns · read from `name` |
-| **2 · Migrate** | copy old data in batches | read from `full_name`, fall back to `name` if it has no value |
-| **3 · Contract** | set `NOT NULL` · drop `name` | read and write only `full_name` |
-
-3 rounds looks slow, but every round can roll back without losing data
-If you do it in one round, you must accept that the system has to go down
-
-**Commands that lock the table until the system hangs** (be extra careful on large tables):
-
-- Adding a column with both `DEFAULT` and `NOT NULL` at once — newer PostgreSQL does this fast, and MySQL 8.0.12 and up can add a column as INSTANT (changing a data type still rewrites the table)
-- Changing a data type
-- Creating a plain index; use `CREATE INDEX CONCURRENTLY` instead (PostgreSQL) or `ONLINE = ON` (SQL Server)
-
-**Always test a migration against a copy of real data**, because a migration that runs in 0.2 seconds on your own machine
-may take 40 minutes on production and hold the table lock the whole time
-
----
-
-
-## reference: per-stack.md
-
-# Syntax and tools per database and ORM
-
-**Contents:** 1 Data types compared · 2 PostgreSQL · 3 SQL Server · 4 MySQL / MariaDB · 5 MongoDB · 6 Entity Framework Core (.NET) · 7 Prisma / Drizzle (Node) · 8 Alembic (Python) · 9 Slow query commands
-
-1. [Data types compared](#1--data-types-compared)
-2. [PostgreSQL](#2--postgresql)
-3. [SQL Server](#3--sql-server)
-4. [MySQL / MariaDB](#4--mysql--mariadb)
-5. [MongoDB](#5--mongodb)
-6. [Entity Framework Core (.NET)](#6--entity-framework-core-net)
-7. [Prisma / Drizzle (Node)](#7--prisma--drizzle-node)
-8. [Alembic (Python)](#8--alembic-python)
-9. [Slow query commands](#9--slow-query-commands)
-
----
-
-## 1 · Data types compared
-
-| To store | PostgreSQL | SQL Server | MySQL |
-|---|---|---|---|
-| Auto-increment id | `bigint GENERATED ALWAYS AS IDENTITY` | `bigint IDENTITY(1,1)` | `BIGINT AUTO_INCREMENT` |
-| UUID | `uuid` | `uniqueidentifier` | `BINARY(16)` or `CHAR(36)` |
-| Money | `numeric(19,4)` | `decimal(19,4)` | `DECIMAL(19,4)` |
-| Time + time zone | `timestamptz` | `datetimeoffset(3)` | `TIMESTAMP` (store UTC) |
-| Date only | `date` | `date` | `DATE` |
-| Unlimited-length text | `text` | `nvarchar(max)` | `TEXT` / `LONGTEXT` |
-| Thai text | `text` (already UTF-8) | **`nvarchar` only** | `utf8mb4` |
-| True/false | `boolean` | `bit` | `TINYINT(1)` |
-| JSON | `jsonb` (can be indexed) | `nvarchar(max)` + `JSON_VALUE` | `JSON` |
-| Binary file | `bytea` (or store outside the database) | `varbinary(max)` | `BLOB` |
-
-> **SQL Server + Thai**: `varchar` turns Thai characters into `?`.
-> Use `nvarchar` and always write literals as `N'ข้อความ'`.
->
-> **MySQL must use `utf8mb4`**, because MySQL's character set named plain `utf8`
-> stores only 3 bytes per character, so emoji and some other characters are lost.
-
----
-
-## 2 · PostgreSQL
-
-```sql
-CREATE TABLE orders (
-  id            bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  order_no      varchar(20)  NOT NULL,
-  customer_id   bigint       NOT NULL REFERENCES customers(id) ON DELETE RESTRICT,
-  status        varchar(20)  NOT NULL DEFAULT 'draft',
-  total_amount  numeric(19,4) NOT NULL DEFAULT 0,
-  currency      char(3)      NOT NULL DEFAULT 'THB',
-  meta          jsonb,
-  created_at    timestamptz  NOT NULL DEFAULT now(),
-  updated_at    timestamptz  NOT NULL DEFAULT now(),
-  deleted_at    timestamptz,
-  CONSTRAINT ck_orders_total_non_negative CHECK (total_amount >= 0),
-  CONSTRAINT ck_orders_status CHECK (status IN ('draft','confirmed','shipped','cancelled'))
-);
-
-CREATE UNIQUE INDEX ux_orders_order_no ON orders (order_no) WHERE deleted_at IS NULL;
-CREATE INDEX ix_orders_customer_id ON orders (customer_id);
-CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC);
-```
-
-**Create an index without locking the table:**
-
-```sql
-CREATE INDEX CONCURRENTLY ix_orders_status ON orders (status);
--- Must not run inside a transaction · if it fails it leaves an index in invalid state: DROP it and redo
-```
-
-**Update `updated_at` automatically:**
-
-```sql
-CREATE OR REPLACE FUNCTION touch_updated_at() RETURNS trigger AS $$
-BEGIN NEW.updated_at = now(); RETURN NEW; END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trg_orders_touch BEFORE UPDATE ON orders
-FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
-```
-
-**Row-level security for multi-tenant systems:**
-
-```sql
-ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
-CREATE POLICY tenant_isolation ON orders
-  USING (tenant_id = current_setting('app.tenant_id')::bigint);
--- The app sets this per connection: SET app.tenant_id = '42';
-```
-
-**Common PostgreSQL traps** (ideas from wshobson postgresql-table-design · version numbers are the version where the behaviour began)
-
-| Trap | Do this instead |
-|---|---|
-| `timestamp` (no time zone) silently drops the offset, so a `+07:00` machine and UTC store values with different meanings | Always `timestamptz` |
-| `serial` creates a separate sequence whose permissions and `DROP` do not follow the table | `GENERATED ALWAYS AS IDENTITY` (PG 10+) |
-| `ADD COLUMN ... NOT NULL` on a big table risks a long lock | With a constant `DEFAULT` the table is no longer rewritten (PG 11+) · a function DEFAULT such as `now()` still rewrites the whole table |
-| `ADD CONSTRAINT` (FK · CHECK) scans the whole table while holding the lock | Use `... NOT VALID` first, then run `VALIDATE CONSTRAINT` as a separate statement (lighter lock) |
-| DDL queues behind a long transaction, and every query after it waits too | Run `SET lock_timeout = '5s'` before every DDL, and rerun if it times out |
-| A unique index lets `NULL` repeat on many rows | `UNIQUE NULLS NOT DISTINCT` (PG 15+) or a partial index `WHERE col IS NOT NULL` |
-| `LIKE '%คำ%'` and `ILIKE` do not use a btree index | Extension `pg_trgm` + GIN index · for serious text search use `tsvector` |
-| `jsonb` search with `->>` does not use an index | GIN index on the column (`@>` · `?`) or an expression index on `(meta->>'key')` |
-| `count(*)` over the whole table to show a page count | Use the estimate from `pg_class.reltuples`, or drop the total count (cursor pagination) |
-
----
-
-## 3 · SQL Server
-
-```sql
-CREATE TABLE orders (
-  id            bigint IDENTITY(1,1) PRIMARY KEY,
-  order_no      nvarchar(20)   NOT NULL,
-  customer_id   bigint         NOT NULL,
-  status        nvarchar(20)   NOT NULL CONSTRAINT df_orders_status DEFAULT N'draft',
-  total_amount  decimal(19,4)  NOT NULL CONSTRAINT df_orders_total DEFAULT 0,
-  created_at    datetimeoffset(3) NOT NULL CONSTRAINT df_orders_created DEFAULT sysdatetimeoffset(),
-  updated_at    datetimeoffset(3) NOT NULL CONSTRAINT df_orders_updated DEFAULT sysdatetimeoffset(),
-  row_version   rowversion,
-  CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers(id),
-  CONSTRAINT ck_orders_total_non_negative CHECK (total_amount >= 0)
-);
-
-CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC)
-  WITH (ONLINE = ON);   -- Enterprise / Azure SQL only
-```
-
-- `rowversion` works directly as an ETag to detect conflicting edits.
-- To sort Thai correctly, set the collation `Thai_100_CI_AS` at the column or database level.
-- The old `datetime` has a precision of only 3.33 milliseconds. Use `datetime2` / `datetimeoffset` instead.
-
----
-
-## 4 · MySQL / MariaDB
-
-```sql
-CREATE TABLE orders (
-  id           BIGINT AUTO_INCREMENT PRIMARY KEY,
-  order_no     VARCHAR(20)   NOT NULL,
-  customer_id  BIGINT        NOT NULL,
-  total_amount DECIMAL(19,4) NOT NULL DEFAULT 0,
-  created_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  UNIQUE KEY ux_orders_order_no (order_no),
-  KEY ix_orders_customer_id (customer_id),
-  CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-```
-
-- From MySQL 8.0.12, `ADD COLUMN` can use `ALGORITHM=INSTANT` (before 8.0.29 it could add only at the end of the table). Changing a data type still rewrites the table (dev.mysql.com online DDL, checked 22 Oct 2026 (B.E. 2569)). For big tables that need a rebuild, use `pt-online-schema-change` or `gh-ost`.
-- Set the server time to UTC (`default_time_zone = '+00:00'`).
-
----
-
-## 5 · MongoDB
-
-```js
-db.createCollection("orders", {
-  validator: { $jsonSchema: {
-    bsonType: "object",
-    required: ["orderNo", "customerId", "totalAmount", "createdAt"],
-    properties: {
-      orderNo:     { bsonType: "string" },
-      customerId:  { bsonType: "objectId" },
-      totalAmount: { bsonType: "decimal" },   // wrong: do not use double for money
-      createdAt:   { bsonType: "date" }
-    }
-  }}
-});
-db.orders.createIndex({ orderNo: 1 }, { unique: true });
-db.orders.createIndex({ customerId: 1, createdAt: -1 });
-```
-
-- Embed when the child data is **always read together with the parent and does not grow without limit**. Otherwise use references.
-- One document has a 16 MB ceiling, so an array that keeps growing will hit it one day.
-- Use `Decimal128` for money, and nothing else.
-
----
-
-## 6 · Entity Framework Core (.NET)
-
-```bash
-dotnet ef migrations add AddOrderStatus
-dotnet ef migrations script <from> <to> -o migrate.sql   # right: review the SQL before the real run
-dotnet ef database update                                # dev only
-```
-
-> **On production, run the reviewed script, not `database update`.**
-> That command needs the app's connection to have permission to change the schema, which it should not have in the first place.
-
-```csharp
-modelBuilder.Entity<Order>(e => {
-    e.ToTable("orders");
-    e.Property(x => x.TotalAmount).HasColumnType("decimal(19,4)");
-    e.HasIndex(x => new { x.Status, x.CreatedAt }).HasDatabaseName("ix_orders_status_created");
-    e.HasQueryFilter(x => x.DeletedAt == null);          // soft delete across the whole system
-    e.Property(x => x.RowVersion).IsRowVersion();        // detect conflicting edits
-});
-```
-
----
-
-## 7 · Prisma / Drizzle (Node)
-
-```prisma
-model Order {
-  id          BigInt   @id @default(autoincrement())
-  orderNo     String   @unique @map("order_no") @db.VarChar(20)
-  totalAmount Decimal  @map("total_amount") @db.Decimal(19, 4)
-  status      String   @db.VarChar(20)
-  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
-  customer    Customer @relation(fields: [customerId], references: [id])
-  customerId  BigInt   @map("customer_id")
-
-  @@index([status, createdAt], name: "ix_orders_status_created")
-  @@map("orders")
-}
-```
-
-```bash
-npx prisma migrate dev --name add_order_status   # dev — creates the migration file
-npx prisma migrate deploy                        # production — runs only the existing ones
-```
-
-- Prisma's `Decimal` returns an object, not a number. Calculate with `decimal.js` and do not convert to float.
-- `BigInt` cannot be converted to JSON directly. Convert it to a string at the API layer.
-
----
-
-## 8 · Alembic (Python)
-
-```bash
-alembic revision --autogenerate -m "add order status"
-alembic upgrade head
-alembic downgrade -1
-```
-
-Split into 3 migrations (1 migration does one thing):
-
-```python
-# 1) schema: add a nullable column
-def upgrade():
-    op.add_column("orders", sa.Column("status", sa.String(20), nullable=True))
-
-# 2) data: backfill existing values (on a big table, do it in small batches)
-def upgrade():
-    op.execute("UPDATE orders SET status = 'draft' WHERE status IS NULL")
-
-# 3) schema: enforce NOT NULL and create the index
-def upgrade():
-    op.alter_column("orders", "status", nullable=False)
-    # CREATE INDEX CONCURRENTLY must not run inside a transaction, so step out of Alembic's transaction
-    with op.get_context().autocommit_block():
-        op.create_index("ix_orders_status_created", "orders", ["status", "created_at"],
-                        postgresql_concurrently=True)
-```
-
-> `--autogenerate` **does not see** renames (it reads them as a drop plus a new add, so the data is lost).
-> Always read the file it generates before you commit.
-
----
-
-## 9 · Slow query commands
-
-| Database | Command |
-|---|---|
-| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) <query>;` · extension `pg_stat_statements` |
-| SQL Server | Turn on "Include Actual Execution Plan" · `sys.dm_exec_query_stats` |
-| MySQL | `EXPLAIN ANALYZE <query>;` · `performance_schema` |
-| MongoDB | `db.orders.find(...).explain("executionStats")` |
-
-**Danger signs to fix:** `Seq Scan` / `Table Scan` on a big table ·
-estimated row count differs from the actual by more than 10 times · a `Nested Loop` that runs hundreds of thousands of times
-
-
-## reference: warehouse-modeling.md
-
-# Warehouse modeling — ELT, stack, star schema, SCD
-
-For an analytics warehouse, not an application database.
-
-**สารบัญ:**
-
-- [ELT vs ETL (Modern Default: ELT)](#elt-vs-etl-modern-default-elt)
-- [Tech Stack (2026 Recommendations)](#tech-stack-2026-recommendations)
-- [Schema Design: Star/Snowflake](#schema-design-starsnowflake)
-- [SCD (Slowly Changing Dimensions)](#scd-slowly-changing-dimensions)
-
-## ELT vs ETL (Modern Default: ELT)
-
-```
-ETL (old way):
-Source → Transform → Warehouse
-        ↑
-        Limited compute, slow
-
-ELT (modern):
-Source → Load raw → Transform in warehouse
-                    ↑
-                    Snowflake/BigQuery scale
-```
-
-> **2026 default: ELT with dbt** — load raw to warehouse, transform with SQL via dbt
-
-## Tech Stack (2026 Recommendations)
-
-> The tool list comes from model knowledge and has not been checked against official websites (รอยืนยัน, awaiting confirmation). Check before recommending.
-
-### Warehouse / Lake
-| Tool | Best for | Cost |
-|------|----------|------|
-| **Snowflake** | Pure warehouse, separation of compute/storage | $$|
-| **BigQuery** | Serverless, ad-hoc, GCP shops | $$|
-| **Databricks** | Unified lake + warehouse, ML-heavy | $$$|
-| **DuckDB** | Local dev, embedded analytics | $free |
-| **Redshift** | AWS-native, legacy | $$|
-| **Postgres** | Small data (<1TB), simplicity | $|
-
-### Transformation
-- **dbt** — SQL-based, version controlled, tested (industry default)
-- **SQLMesh** — newer alternative to dbt, stronger features
-
-### Orchestration
-- **Airflow** — most popular, mature
-- **Prefect** — modern Python-native
-- **Dagster** — software-engineering approach to pipelines
-
-### Stream Processing
-- **Kafka + Flink** — high throughput, exactly-once
-- **Kinesis Streams + Flink** — AWS-native
-- **Pub/Sub + Dataflow** — GCP-native
-- **Materialized views** (Snowflake, BigQuery) — for simple cases
-
-### Ingestion
-- **Airbyte** — open source, many connectors
-- **Fivetran** — managed, expensive but reliable
-- **Estuary** — modern, streaming-first
-- **Custom** — for sources not covered
-
-## Schema Design: Star/Snowflake
-
-```sql
--- Fact table (events / measurements)
-CREATE TABLE fact_orders (
-    order_key BIGINT PRIMARY KEY,
-    customer_key BIGINT,
-    product_key BIGINT,
-    date_key INT,
-    quantity INT,
-    amount NUMERIC(19,4)
-    -- foreign keys to dimensions
-);
-
--- Dimension tables (descriptive context)
-CREATE TABLE dim_customer (
-    customer_key BIGINT PRIMARY KEY,
-    customer_id VARCHAR,        -- natural key
-    name VARCHAR,
-    email VARCHAR,
-    country VARCHAR,
-    -- SCD Type 2 tracking:
-    valid_from DATE,
-    valid_to DATE,
-    is_current BOOLEAN
-);
-```
-
-> **Star = denormalized, query-fast**
-> **Snowflake = normalized dims, save storage**
-> **Wide tables / OBT (One Big Table) = even faster for analytics**
-
-## SCD (Slowly Changing Dimensions)
-
-### Type 1: Overwrite
-```
-Customer Bob lived in Bangkok. Moved to Phuket.
-→ Update row, lose Bangkok history
-```
-
-### Type 2: New row per change (most common)
-```
-| customer_key | id | name | city    | valid_from | valid_to   | is_current |
-| 1            | 42 | Bob  | Bangkok | 2024-01-01 | 2025-06-30 | false      |
-| 2            | 42 | Bob  | Phuket  | 2025-07-01 | 9999-12-31 | true       |
-```
-
-### Type 3: Add column
-```
-Customer table: current_city, previous_city
-→ Only most recent change preserved
-```
-
-
----
-
 # skill: api-conventions
 
 Use when adding API endpoints or checking API consistency
@@ -1018,8 +172,7 @@ What still needs agreement is the **field-level error**:
 - **Return the errors for all fields at once**, not one at a time, so users do not have to submit 5 times.
 - If several languages are supported, choose Thai or English text from `Accept-Language`.
 
-**Pick the status to match:** `400` malformed request · `401` not authenticated · `403` authenticated but not permitted ·
-`404` does not exist, or you do not want to reveal that it exists · `409` conflicts with the current state · `422` well-formed but the data fails the rules · `429` too many calls
+**Pick the status to match** the table in `web-service-essentials` section 2. One addition for this skill: return `404` also when you do not want to reveal that the thing exists.
 
 ---
 
@@ -2173,3 +1326,203 @@ Checked 2026-10-27
 # Sources · observability-basics
 
 Source of item 3.1: prometheus.io (metric types · naming · histograms · alerting) and grafana.com (dashboard best practices · provisioning), checked 2026-10-27 · full links are at the end of `references/prometheus-grafana.md`
+
+
+---
+
+# skill: background-jobs
+
+Use when work runs outside the request in queues or schedules
+
+# Background jobs
+
+> **The one rule:** every background job must be **safe to run again without repeating its effect**,
+> because it will certainly run again: the machine dies halfway · a person clicks again · the system retries by itself.
+
+## When to use this skill
+
+- Work the user should not have to sit and wait for: sending email, building a report, importing a file
+- Scheduled work: a daily summary, month-end closing, deleting expired data
+- Calling an external system that is slow or often down
+- A jammed queue, or jobs that vanish with nobody noticing
+
+## When to use another skill, or use it alongside
+
+| Task | Skill | |
+|---|---|---|
+| Timeouts and retries for ordinary requests | `error-handling-patterns` | instead |
+| Metrics and alerts | `observability-basics` | instead |
+| Events across several services through Kafka (several consumers read the same event · history is kept) | `kafka-streaming` | instead |
+| A job queue through RabbitMQ (several workers · retry · dead letter · needs a real broker) | `rabbitmq-messaging` | instead |
+| Importing Excel/CSV files as the main job | `data-import-export` | instead |
+| Sending email/SMS as the main job | `notifications` | instead |
+| Designing an agent system (Loop · Graph · Dynamic · choosing a framework) | `llm-engineering` → [`agent-systems.md`](../llm-engineering/references/agent-systems.md) | alongside |
+
+---
+
+## 1 · What belongs in the background
+
+| Send to the background | Do inside the request |
+|---|---|
+| Takes more than 1–2 seconds | Fast, and the user must see the result at once |
+| Calls an external system that can fail | Permission checks · data validation |
+| The user does not wait for the result (email, notification) | The result is what they clicked to see |
+| Many items done as a batch | |
+
+> **Do not move work to the background just because it is slow.** If the user must see the result before moving on,
+> moving it adds a waiting screen, a notification, and a place to store results.
+> Sometimes making it faster is much cheaper (see `lazy-coding`).
+
+---
+
+## 2 · Choose a mechanism
+
+| Mechanism | Fits | Watch out for |
+|---|---|---|
+| **Job table in the database** | small to medium systems · up to a few thousand jobs a day | you must write the job picker yourself · watch for workers fighting over jobs |
+| **A real queue** (Redis · RabbitMQ · Amazon Simple Queue Service (SQS)) | many jobs · need built-in retry and dead letter | one more thing to look after |
+| In-app scheduler (cron in code) | scheduled work with a single instance | **several instances will run it at the same time** · see section 5 |
+| Platform scheduler | scheduled work on the cloud | |
+
+**If the system is still small, always start with a table in the database,** because PostgreSQL's `SELECT ... FOR UPDATE SKIP LOCKED`
+lets several workers pick jobs at once safely, with no new system to add.
+
+**Every job needs at least:** `id` · `type` · `payload` · `status` · `attempts` ·
+`run_after` · `locked_by` · `locked_at` · `last_error` · `created_at`
+
+---
+
+## 3 · Running again must not repeat the effect
+
+Almost every queue system guarantees only "delivered at least once", **not exactly once**.
+
+| Method | How to use it |
+|---|---|
+| **Duplicate-blocking key** | a unique constraint on `(job_type, business_key)` makes a duplicate job fail to insert |
+| **Check state before acting** | "if the email for this purchase order was already sent, stop" |
+| **Pass on an idempotency key** | when calling an external API (see `api-conventions`) |
+| **Set a new value, do not add to the old one** | `set status = 'paid'` is safer than `balance = balance + 100` |
+
+> **A job that adds to a value or sends something outside costs real money if it runs twice.**
+> Two emails are only annoying, but two money transfers are a big problem.
+
+---
+
+## 4 · Retry and dead jobs
+
+These numbers are for jobs in a queue · for retries outside a queue use [`error-handling-patterns`](../error-handling-patterns/SKILL.md) §4: service-to-service calls use 3 tries at 1/2/4 seconds · when a person waits on the screen → at most 1 retry, then let them press again
+
+```
+fail → wait 1 min → fail → wait 4 min → fail → wait 16 min → 4th failure → dead letter
+```
+
+| Rule | Detail |
+|---|---|
+| **Always set a cap** | 3–5 tries · with unlimited retries a single job can jam the queue |
+| Increase the wait each round (a fixed multiple such as ×4) + a little randomness | same as `error-handling-patterns` |
+| Bad data needs no retry | a malformed payload stays the same however many times you try |
+| **A job that has run out of tries goes to one place** | dead letter (where jobs that failed until they ran out of tries are kept), keeping the full payload and the last error |
+| A person must watch the dead letter | **alert when a new job arrives there**, do not wait for a customer to complain |
+| It can be run again | after fixing the cause, you can re-run from the dead letter without writing a script |
+
+**A job stuck because a worker died** needs an unlocker.
+If a job's `locked_at` is older than N minutes, treat it as having nobody working on it, and unlock it so another worker picks it up.
+
+**Job state is a state machine, not a boolean** — every mechanism in section 2 must be able to say which state a job is in: `queued → running → succeeded`, or `running → failed (attempts < cap) → queued`, or `failed → dead` · keep `attempts` · `locked_at` · `last_error` · `finished_at` with the job · move only along the arrows above (a `succeeded` job cannot go back to `running`; create a new job) · the admin screen and the dead letter read from this state in one place
+
+---
+
+## 5 · Scheduled jobs
+
+> **With several instances, a scheduled job runs several times at once.**
+> A summary report sent 3 times, or money charged 3 times, comes from this.
+
+| Method | Use when |
+|---|---|
+| Lock in the database (advisory lock) | you can do it right away with nothing added |
+| The platform scheduler calls an endpoint | on the cloud · Kubernetes CronJob |
+| A scheduler that supports several instances directly | Quartz · Hangfire |
+
+**Rules for scheduled jobs:**
+
+- **Take the time range as a parameter**, so you can re-run missed dates without changing code
+- If a run is missed, you must be able to catch up, not skip it for good
+- State the time zone clearly: "every midnight" in which zone (see `i18n-and-locale`)
+- **Record which runs succeeded**, do not infer it from logs
+
+---
+
+## 6 · Long jobs the user waits on
+
+| Needed | Detail |
+|---|---|
+| Job id | return it the moment the job is accepted · the user uses it to ask about progress |
+| State | `queued` · `running` · `succeeded` · `failed` · `cancelled` |
+| Progress | "340 of 1,200 items done" (ทำแล้ว 340 จาก 1,200 รายการ), not a blind spinner |
+| Cancellable | the job must check for a cancel signal regularly |
+| Result | keep it available to download, with an expiry date |
+| Notify when done | email or an in-system notification (see `notifications`) |
+
+**Split a big job into small pieces.** For example, import 50,000 rows as sub-jobs of 500 rows each,
+because a single 40-minute job that fails at minute 39 must start over from the beginning.
+
+---
+
+## 7 · What to measure
+
+| Metric | Alert when |
+|---|---|
+| Jobs waiting in the queue | keeps growing and does not fall |
+| Wait time in the queue (p95 · 95% of jobs wait no longer than this) | above what was promised |
+| Failure rate | above the threshold |
+| **Count in the dead letter** | **rises, even by just one** |
+| Scheduled runs that did not run | a run was skipped |
+| Jobs stuck in the running state for an unusual time | more than N times the normal |
+
+> **A jammed queue is completely silent.** The API still answers 200 to every request and the health checks are all green,
+> but no email has gone out for 3 hours. You see it only if you measure.
+
+---
+
+## 8 · Payload
+
+- **Send the id, not the whole data block, in the payload** — the job reads it itself, so it gets the latest data too
+
+---
+
+## 9 · Durable workflow for agent jobs that run long or wait for human approval
+
+An agent job that runs tens of minutes, calls an LLM and tools many times, or pauses for approval across days cannot use a plain queue, because a failure at step 8 of 10 means starting over and paying the token cost again · use an engine that records the result of every step and resumes from the same point
+
+- [`references/durable-workflow.md`](references/durable-workflow.md) — open before choosing an engine (Temporal · Step Functions · checkpointer) or writing replayable code
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
+
+
+## reference: durable-workflow.md
+
+# Durable workflow for agent jobs · background-jobs
+
+| Tool | Fits | Waits for human approval | Watch out for |
+|---|---|---|---|
+| **Temporal** | Python and other languages · the agent loop lives in a workflow, while LLM and tool calls are activities · has `OpenAIAgentsPlugin` · `activity_as_tool` | (`ยังไม่ได้ตรวจ` · see the signal page) | the integration with the OpenAI Agents SDK is still in Public Preview |
+| **AWS Step Functions** | fixed steps on AWS · fan-out with `Map` (Inline in parallel 40 · Distributed 10,000 child jobs) | `.waitForTaskToken` can wait up to 1 year until `SendTaskSuccess` / `SendTaskFailure` arrives · set `HeartbeatSeconds` to prevent a silent hang | when an LLM must choose the route, let Lambda or Bedrock decide, then use `Choice` |
+| **Agent framework checkpointer** | you do not want to add an engine · LangGraph `PostgresSaver` · Microsoft Agent Framework `CheckpointManager` · OpenAI `RunState.to_json()` | LangGraph `interrupt()` · OpenAI `needs_approval` · Microsoft Agent Framework `RequestInfoExecutor` | an in-memory store is lost when the process restarts · use a database-backed store in production |
+
+**Rules for code that must be replayable** (Temporal · Google ADK · Claude Code workflows use the same principle · checked against [Temporal: Workflow Definition](https://docs.temporal.io/workflow-definition) 2026-10-26)
+
+- **Never read the time or draw a random value in code that controls the order of work** (`Date.now()` · `datetime.now()` · `Math.random()` · `uuid4()`) · on replay the value differs from the first run, the order drifts, and the old result cannot be reused · do anything that needs time or randomness in an activity, or use the SDK's own API for it
+- **All LLM calls, tool calls, and outside reads and writes go in activities.** The result is recorded once, and replay reads the record instead of calling again.
+- **The order of calls must be the same on every run** · changing the order of steps in code that still has jobs in flight makes the old jobs fail replay (Temporal calls this a nondeterminism error) · switch to the engine's versioning or patching
+- **The steps before a wait point must be safe to repeat** (section 3) · LangGraph re-runs the paused node from the start on resume, so move side effects to after the wait point
+- **Saved state carries no identity check** (the OpenAI docs warn about `RunState`) · load it only from a store we control
+- The cap on rounds, the token budget, and stopping when there is no improvement are still needed, as for jobs in a queue · details in [`agent-systems.md`](../../llm-engineering/references/agent-systems.md) section 6
+
+
+## reference: sources.md
+
+# Sources · background-jobs
+
+Sources (opened 2026-10-26): [Temporal · OpenAI Agents SDK](https://docs.temporal.io/ai-cookbook/openai-agents-sdk-python) · [Temporal announcement](https://temporal.io/blog/announcing-openai-agents-sdk-integration) · [Step Functions integration patterns](https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html) · [Step Functions Map](https://docs.aws.amazon.com/step-functions/latest/dg/state-map.html) · [LangGraph interrupts](https://docs.langchain.com/oss/python/langgraph/interrupts) · [OpenAI human in the loop](https://openai.github.io/openai-agents-python/human_in_the_loop/) · [Claude Code workflows](https://code.claude.com/docs/en/workflows)

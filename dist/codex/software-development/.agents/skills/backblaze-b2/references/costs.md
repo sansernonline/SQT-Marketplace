@@ -21,12 +21,12 @@ There is no minimum storage-period fee and no minimum file size · yearly contra
 
 ## Compared with R2
 
-B2's figures are from the pricing page, which shows no date · R2's figures are in `cloudflare-r2`, not copied here.
+B2's figures are from the pricing page, which shows no date · R2's figures are in [`cloudflare-r2.md`](cloudflare-r2.md), not copied here.
 
 | Topic | B2 | R2 |
 |---|---|---|
-| Storage price | 6.95 USD per TB per month · first 10 GB free | See `cloudflare-r2` |
-| egress | Free up to 3 times the average data stored per month, beyond that 0.01 USD per GB · free through CDN partners | See `cloudflare-r2` |
-| Minimum storage period | None · no minimum file size | See `cloudflare-r2` |
-| File versions | Yes · by default keeps every version | See `cloudflare-r2` |
-| Per-object ACL | Not supported · controlled at bucket level | See `cloudflare-r2` |
+| Storage price | 6.95 USD per TB per month · first 10 GB free | See `cloudflare-r2.md` |
+| egress | Free up to 3 times the average data stored per month, beyond that 0.01 USD per GB · free through CDN partners | See `cloudflare-r2.md` |
+| Minimum storage period | None · no minimum file size | See `cloudflare-r2.md` |
+| File versions | Yes · by default keeps every version | See `cloudflare-r2.md` |
+| Per-object ACL | Not supported · controlled at bucket level | See `cloudflare-r2.md` |

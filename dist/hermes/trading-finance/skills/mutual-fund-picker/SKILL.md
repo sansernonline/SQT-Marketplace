@@ -43,5 +43,5 @@ Weights are starting values the user can change (not yet measured). Every figure
 
 ## References
 - [`references/fund-types-and-fees.md`](references/fund-types-and-fees.md) — open to choose a fund type or explain fees (front-end, back-end, switching, management, TER)
-- [`references/worked-examples.md`](references/worked-examples.md) — open to show fee drag over 25 years or DCA unit buying
+- [`references/worked-examples.md`](references/worked-examples.md) — open to show fee drag over 25 years (DCA unit buying: `rebalance-and-dca`)
 - [`references/sources.md`](references/sources.md) — sources and check dates (2026-10-26) for risk levels 1–8 and the 10% dividend tax

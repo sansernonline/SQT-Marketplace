@@ -1,7 +1,7 @@
 # playbook · paper-to-practice — from a paper or article to code that runs
 
 Use when: the user wants to understand a paper · RFC · long article well enough to use it.
-Main skill: `paper-to-practice` · `english-tech-reading`
+Main skill: `learning-path` · `english-tech-reading`
 
 ## ขั้นตอน (Steps — copy into the todo as written)
 
@@ -9,7 +9,7 @@ Main skill: `paper-to-practice` · `english-tech-reading`
 2. If there is a hard term or sentence, use `english-tech-reading`. When reading an RFC, watch the difference between MUST · SHOULD · MAY · ใคร: `tech-mentor` ตัวใหม่
 3. Write the smallest sample code that shows the main idea, using the standard library first · ใคร: `tech-mentor` ตัวใหม่
 4. Run it for real, and try 1 case where the idea does not work, to see its limits · ใคร: `tech-mentor` ตัวใหม่ writes and runs the failing case · `reviewer` ตัวใหม่ reruns it and ตรวจ the result
-5. Write a short note using the `paper-to-practice` template — when to use it, when not to · ใคร: `tech-mentor` ตัวใหม่ · `reviewer` ตัวใหม่ checks it against the real run
+5. Write a short note using the `learning-path` paper-to-practice template — when to use it, when not to · ใคร: `tech-mentor` ตัวใหม่ · `reviewer` ตัวใหม่ checks it against the real run
 
 ## Done when
 

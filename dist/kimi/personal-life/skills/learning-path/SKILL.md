@@ -1,12 +1,14 @@
 ---
 name: learning-path
-description: Use when learning a new language or framework properly
+description: Use when learning a new language or framework properly, or turning a paper, RFC or article into a working example
 argument-hint: <technology or paper> [--depth skim|working|mastery]
 ---
 
 # Learning Path
 
 Learn on your own real project, in small wins.
+
+Paper, RFC or article → follow [references/paper-to-practice.md](references/paper-to-practice.md) (brief, smallest runnable example, run, one-page note) instead of the steps below.
 
 Not for: a certification exam → `cert-prep` · choosing a practice or portfolio project → `side-project-picker`.
 
@@ -20,7 +22,7 @@ Not for: a certification exam → `cert-prep` · choosing a practice or portfoli
 
 ## Template
 
-Use [references/path-template.md](references/path-template.md) for the plan file and the `learning-log.md` entry. A full worked example (Docker to working knowledge, with milestone table and checkpoints) is in [references/worked-example.md](references/worked-example.md); open it before writing the first milestone table.
+Use [references/path-template.md](references/path-template.md) for the plan file and the `learning-log.md` entry. The paper flow has its own steps in [references/paper-to-practice.md](references/paper-to-practice.md); its worked example (bloom filter) is a separate file, [references/bloom-filter-example.md](references/bloom-filter-example.md). A full worked example (Docker to working knowledge, with milestone table and checkpoints) is in [references/worked-example.md](references/worked-example.md); open it before writing the first milestone table.
 
 ## Rules
 
@@ -33,6 +35,6 @@ Use [references/path-template.md](references/path-template.md) for the plan file
 
 `/personal-life:learning-path <technology or paper> [--depth skim|working|mastery]`
 
-With `--depth` or a technology: run `learning-path`. With a paper, RFC, or article: run `paper-to-practice`. Both with the `tech-mentor` agent: **$ARGUMENTS**
+With `--depth` or a technology: run the steps above. With a paper, RFC, or article: follow `references/paper-to-practice.md`. Both with the `tech-mentor` agent: **$ARGUMENTS**
 
 Every path ends in something runnable in the user's own project.

@@ -1083,7 +1083,7 @@ The PR is green · every comment has an answer · it passed an independent check
 # playbook · skill-authoring — write or edit a skill and prove it really helps
 
 Use when: creating a new skill · editing SKILL.md · editing an agent file · editing a prompt in `prompt/` (covers pstack's `authoring a skill` · `eval`)
-Main skills: `repeated-mistakes-to-checks` · `spell-out-abbreviations` · `simplicity-first`
+Main skills: `repeated-mistakes-to-checks` · `spell-out-abbreviations` · `superuser:simplify`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
@@ -1310,7 +1310,7 @@ To use an item, open that item's SKILL.md and read the whole file first.
 
 **Simplicity**
 - `lazy-coding` — the least code that really works
-- `simplicity-first` — documents · designs · plans that are as simple as possible but usable
+- `simplify` — documents · designs · plans that are as simple as possible but usable
 - `readable-code` — a newcomer can read and keep up
 
 **Working**
@@ -1684,13 +1684,13 @@ The trigger table lives only in this file (`superuser` section 3 points here). O
 | The user says TDD · test-driven · "เขียน test ก่อน" (write tests first) | [`spec-to-code-loop`](../../spec-to-code-loop/SKILL.md) (red→green per requirement) + [`testing-standards`](../../testing-standards/SKILL.md) (test structure · run commands) |
 | Can the system take many people at once · before a campaign or launch · load · stress · spike · soak test · k6 · a postmortem orders more load tests | [`load-testing`](../../load-testing/SKILL.md) — p95 and error-rate criteria before firing · permission gate (never hit someone else's system or production without an approver) · k6 thresholds · smoke in CI · speed of a single web page uses `web-quality-audit` |
 | Deploy an app to Render · render.com · render.yaml · Blueprint · a deploy fails on Render · rollback · is the free plan enough | [`render-deploy`](../../render-deploy/SKILL.md) — listen on `0.0.0.0:$PORT` · every service in `render.yaml` writes a `plan` · secrets use `sync: false` · 4-point money gate · the free plan (Postgres expires in 30 days) is not for real work · check HTTP 200 after release · Kubernetes uses `kubernetes-helm` |
-| Connect an app to Cloudflare R2 · R2 bucket · S3-style file storage · presigned URL · upload from the browser · migrate from S3 to R2 · r2.dev · bucket CORS | [`cloudflare-r2`](../../cloudflare-r2/SKILL.md) — token with Object Read & Write permission scoped to the bucket · endpoint with region `auto` · presigned PUT (POST and custom domains are not supported) · r2.dev for development only · 4-point money gate · general rules for user-uploaded files use `file-upload-and-storage` |
-| Connect an app to Backblaze B2 · B2 bucket · store files on Backblaze · application key · migrate from S3 to B2 · deleted files in B2 but storage charges do not stop · B2 file versions · B2 lifecycle | [`backblaze-b2`](../../backblaze-b2/SKILL.md) — standard key limited to the bucket (do not use the master key) · endpoint `s3.<region>.backblazeb2.com` · signature v4 · presigned PUT (POST not supported) · uploading again creates a new version and does not overwrite · by default every version is kept · a lifecycle rule with an empty prefix deletes the whole bucket · 4-point money gate · to compare with R2 use `cloudflare-r2` |
+| Connect an app to Cloudflare R2 · R2 bucket · S3-style file storage · presigned URL · upload from the browser · migrate from S3 to R2 · r2.dev · bucket CORS | [`backblaze-b2` R2 section](../../backblaze-b2/references/cloudflare-r2.md) — token with Object Read & Write permission scoped to the bucket · endpoint with region `auto` · presigned PUT (POST and custom domains are not supported) · r2.dev for development only · 4-point money gate · general rules for user-uploaded files use `file-upload-and-storage` |
+| Connect an app to Backblaze B2 · B2 bucket · store files on Backblaze · application key · migrate from S3 to B2 · deleted files in B2 but storage charges do not stop · B2 file versions · B2 lifecycle | [`backblaze-b2`](../../backblaze-b2/SKILL.md) — standard key limited to the bucket (do not use the master key) · endpoint `s3.<region>.backblazeb2.com` · signature v4 · presigned PUT (POST not supported) · uploading again creates a new version and does not overwrite · by default every version is kept · a lifecycle rule with an empty prefix deletes the whole bucket · 4-point money gate · to compare with R2 see `references/cloudflare-r2.md` |
 | Deploy a static website to Backblaze · deploy to B2 · host a site on B2 · b2 sync · a built Vite or React site you want to put on Backblaze · domain through Cloudflare | [`backblaze-b2` deploy section](../../backblaze-b2/references/deploy.md) — static sites only (B2 cannot run server-side code) · the first `b2 sync` without `--delete` · a Cloudflare Transform Rule is required · do not sync `.env` or source maps to a public bucket · 4-point money gate · if there is a backend use `render-deploy` · for the app's file storage use `backblaze-b2` |
 | Check a website before launch: accessibility (WCAG) · speed (Lighthouse · Core Web Vitals) | [`web-quality-audit`](../../web-quality-audit/SKILL.md) · SEO uses `seo-audit-checklist` in the same round |
 | The project has no way for an agent to run the app and click through the results itself | [`app-verifier-setup`](../../app-verifier-setup/SKILL.md) — do it before anything else · on a Claude Code that has `/verify` built in, the skill you create is named `verify` per `references/builtin-verify.md` |
 | Must install things, run builds · tests · servers · a test database | If the project has `.sandbox/`, do it in the sandbox through `sandbox.ps1 exec`. If it does not yet and the work needs more to be installed, propose [`docker-sandbox`](../../docker-sandbox/SKILL.md) · `.sandbox/` at the root is an exception declared in the README of the code folder (`project-doc-set` item 1) |
-| The app-checking skill starts to drift from the real app | [`app-verifier-upkeep`](../../app-verifier-upkeep/SKILL.md) |
+| The app-checking skill starts to drift from the real app | [`app-verifier-setup` upkeep](../../app-verifier-setup/references/upkeep.md) |
 | Trying only one path might lock in the wrong form and be hard to fix (new design · new API) | `parallel-attempts-pick-best` |
 | The work splits into several independent pieces | `parallel-split-and-merge` |
 | 2 or more agents will edit files in the same repo · a spike that might break the main checkout · a finished branch must be closed (merge · PR · discard) | [`worktree-and-branch`](../../worktree-and-branch/SKILL.md) — one worktree per agent as sibling folders · a branch-closing table with evidence · merge into main and push stay under "รออนุมัติ" (awaiting approval) |
@@ -1714,7 +1714,7 @@ The trigger table lives only in this file (`superuser` section 3 points here). O
 | Writing temporary files into the user's folder | `temp-file-discipline` |
 | Write an answer, report, document, or a label in a diagram | `human-writing` · `spell-out-abbreviations` · `answer-shape` |
 | Slides · deck · presentation (any file type) | `presentation-design` (the top table chooses .pptx · .html · conversion from .pptx) · do it as a job with `technical-writer` |
-| A BRD · SRS · FSD document set needs its own cover derived from the logo shape or a real mockup | [`doc-cover-design`](../../doc-cover-design/SKILL.md) · covers and general documents use the document row in the core's table (`branded-document-design`) |
+| A BRD · SRS · FSD document set needs its own cover derived from the logo shape or a real mockup | [`branded-document-design` cover section](../../branded-document-design/references/cover-design.md) |
 | Write a commit or open a PR | `commit-message-format` · `pr-description-template` |
 | The work touches login · permissions · outside input · files · money · personal data | [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md) + the specialist skills in its table. For a feature exposed to the outside, send a fresh `security-engineer` to do STRIDE per `threat-model/references/security-templates.md` before writing (or ask the user to run `/software-development:threat-model` themselves, because only the user can call that skill) |
 | Before `ship` · handover · adding a dependency | [`security-gate`](../../security-gate/SKILL.md) |

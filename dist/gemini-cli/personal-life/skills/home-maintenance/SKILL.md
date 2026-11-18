@@ -1,7 +1,7 @@
 ---
 name: home-maintenance
 description: Use when a Thai home needs a maintenance schedule
-argument-hint: <"schedule" | job to quote> [house type, aircon count, car details]
+argument-hint: <"schedule" | job to quote> [house type, aircon count]
 ---
 
 # Home Maintenance (Thai climate)
@@ -78,7 +78,7 @@ For a formal quotation format see `e-commerce` `doc-quotation` (if installed); f
 
 ## เรียกเป็นคำสั่ง
 
-`/personal-life:home-maintenance <"schedule" | job to quote> [house type, aircon count, car details]`
+`/personal-life:home-maintenance <"schedule" | job to quote> [house type, aircon count]`
 
 Run `home-maintenance` with the `home-manager` agent for: **$ARGUMENTS**
 

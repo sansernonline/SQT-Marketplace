@@ -39,7 +39,7 @@
 
 ## 1. ร่าง TOR
 
-agent `business-analyst` + `solution-architect` · skill `srs-writing` · `simplicity-first` · `pdpa-compliance` · `polished-document-style`
+agent `business-analyst` + `solution-architect` · skill `srs-writing` · `superuser:simplify` · `pdpa-compliance` · `polished-document-style`
 **ผลลัพธ์:** `docs/tor/tor.md` (ยังไม่ render · render ท้ายฉบับ 3 หลังแก้ตามผลตรวจแล้ว)
 
 ### ข้อมูลงาน (ผู้ใช้กรอก)
@@ -78,7 +78,7 @@ agent `business-analyst` + `solution-architect` · skill `srs-writing` · `simpl
 
 ## 2. ราคากลางและเกณฑ์ให้คะแนน
 
-agent `project-manager` + `solution-architect` · skill `simplicity-first`
+agent `project-manager` + `solution-architect` · skill `superuser:simplify`
 **ต้องมีก่อน:** `docs/tor/tor.md`
 **ผลลัพธ์:** `docs/tor/reference-price.md` · `docs/tor/reference-price.xlsx` · `docs/tor/evaluation.md` · หัวข้อ 12 ใน `tor.md` (สรุปเกณฑ์ผ่านขั้นต่ำและน้ำหนักคะแนนจาก `evaluation.md` แทนข้อความ `(รอฉบับ 2)`)
 

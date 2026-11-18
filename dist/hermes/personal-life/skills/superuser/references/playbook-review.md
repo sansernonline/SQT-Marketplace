@@ -2,7 +2,7 @@
 
 Use when: checking work before it is sent or really used · "can you look for anything I missed" · the user did it themselves and wants it checked.
 Result: a verdict with a list of confirmed problems. **Does not fix anything automatically**, and it is read-only work that does not create `CONTEXT.md`.
-Main skill: `weekly-review` · `meeting` · `important-docs` · `household-bills` · `medication-schedule` · `resume-th-en` · `learning-path` · `paper-to-practice` · `cert-prep`
+Main skill: `weekly-review` · `meeting` · `important-docs` · `household-bills` · `medication-schedule` · `resume-th-en` · `learning-path` · `cert-prep`
 
 ## ขั้นตอน (Steps — copy into the todo as written)
 

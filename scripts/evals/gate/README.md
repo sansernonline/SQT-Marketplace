@@ -20,7 +20,7 @@
 
 ```json
 { "costMetric": "cost_usd",
-  "splits": { "job-exit-behaviour": "train", "study-drill-behaviour": "val", "task-board-behaviour": "test" } }
+  "splits": { "job-exit-behaviour": "train", "cert-prep-behaviour": "val", "task-board-behaviour": "test" } }
 ```
 
 - เคสที่ไม่อยู่ในรายการนับเป็น train · ไม่มีเคส val เลย gate จะไม่รับ เพราะตัดสินไม่ได้ว่า skill จำโจทย์ · เคส val น้อยกว่า 3 gate เตือนว่าเชื่อได้เฉพาะส่วนต่างที่ใหญ่

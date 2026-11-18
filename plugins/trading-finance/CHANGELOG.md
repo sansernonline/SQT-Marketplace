@@ -1,5 +1,10 @@
 # Changelog — trading-finance
 
+## 0.23.3 — 2026-11-18
+
+- กฎคุ้มครองเงินฝาก (1 ล้านบาทต่อผู้ฝากต่อธนาคาร และสิ่งที่คุ้มครองหรือไม่คุ้มครอง) อยู่ที่ `emergency-fund` ที่เดียว · `personal-budget` และ `bonds-and-deposits` ชี้ไปหา · ตัวเลขคงเดิม
+- ตัวอย่าง DCA (ลงทุน 3 เดือน ได้ 1,525 หน่วย) ย้ายจาก `mutual-fund-picker` ไป `rebalance-and-dca/references/dca-example.md`
+
 ## 0.23.2 — 2026-11-17
 
 - ลบเคส eval `stock-fundamentals-behaviour` (ผู้ใช้สั่ง 2026-11-17) · เคสนี้ต้องรัน Bash ใน WSL2 หรือ Linux ซึ่งเครื่องนี้ไม่มี จึงค้างมาตลอด · stock-fundamentals ยังเหลือเคส `-trigger` และ `-guard`

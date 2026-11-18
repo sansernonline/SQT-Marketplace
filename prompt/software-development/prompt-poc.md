@@ -37,7 +37,7 @@
 
 ## 1. วางแผน POC และเกณฑ์ผ่าน
 
-playbook `project-docs` · agent `solution-architect` + `project-manager` · skill `simplicity-first` · `principle-small-verifiable-steps` · `architecture-patterns`
+playbook `project-docs` · agent `solution-architect` + `project-manager` · skill `superuser:simplify` · `principle-small-verifiable-steps` · `architecture-patterns`
 **ผลลัพธ์:** `docs/poc/poc-plan.md`
 
 ### โจทย์ (ผู้ใช้กรอก)

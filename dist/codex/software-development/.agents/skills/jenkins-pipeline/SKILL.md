@@ -97,7 +97,7 @@ helm upgrade --install clinic deploy/chart/clinic-voice -n clinic-production \
 
 ## 7 · Shared library
 
-- **Create one when** the same build/scan/deploy block has been copied into more than 3 Jenkinsfiles `(our own criterion)` · below that, copying is easier (`simplicity-first`)
+- **Create one when** the same build/scan/deploy block has been copied into more than 3 Jenkinsfiles `(our own criterion)` · below that, copying is easier (`superuser:simplify`)
 - Always pin the version: `@Library('clinic-pipeline@v1.2.0') _` · a version can be a branch · tag · commit hash ([Shared Libraries](https://www.jenkins.io/doc/book/pipeline/shared-libraries/)) · never rely on the default, because one push changes every pipeline
 - Layout: `vars/` functions that a Jenkinsfile calls · `src/` Groovy classes · `resources/` files loaded with `libraryResource`
 - A trusted library can call all of Jenkins's internal methods. **Anyone who can push a commit to the library repo controls Jenkins** → protect its branches and tags as strictly as production · global variables must hold no state (it is lost when the controller restarts)

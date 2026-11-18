@@ -34,7 +34,7 @@ A budget that survives contact with real life. Worksheet: [references/budget-wor
 ## Where to park each envelope
 
 - Spending: main account linked to the debit card / PromptPay.
-- Emergency and sinking funds: separate high-interest savings account; deposits are protected up to **1 million baht per depositor per bank** — above that, spread across banks (details in `emergency-fund`).
+- Emergency and sinking funds: separate high-interest savings account; deposit protection limit and rules: `emergency-fund` "Deposit protection".
 - Investment: broker / fund account, auto-debited.
 
 ตรวจล่าสุด 2026-10-26 · ประกันสังคม 5% ค่าจ้าง 1,650–17,500 สูงสุด 875 บาทต่อเดือนตั้งแต่ 1 ม.ค. 2569 (2572 เพดาน 20,000) แหล่ง: https://www.sso.go.th (ข่าวนนทบุรี 35688 · 27 ธ.ค. 2568 และหน้าบริการ 605_605) , https://www.krungsri.com/th/krungsri-the-coach/life/good-life/sso-section-33-rate-increase · คุ้มครองเงินฝาก 1 ล้านบาทต่อคนต่อสถาบัน แหล่ง: https://www.dpa.or.th/News/kar-prab-wngngein-khumkhrxng-thi-1-lan-bath , https://www.bangkokbank.com/th-TH/Personal/Grow-Club/DPA , https://www.bangkokbiznews.com/news/952780

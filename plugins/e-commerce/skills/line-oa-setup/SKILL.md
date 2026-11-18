@@ -54,7 +54,7 @@ Minimal Node (Express) handler: [references/webhook-node.md](references/webhook-
 | Basic | 1,280 baht | 15,000 | 0.10 baht |
 | Pro | 1,780 baht | 35,000 | 0.06 baht |
 
-Counted messages = push, multicast, narrowcast, broadcast — **per recipient**. Reply messages (using a reply token) and 1:1 chat typed by staff are not counted. Quota math: `line-broadcast`.
+This is the only copy of the package table; other skills link here. Counted messages = push, multicast, narrowcast, broadcast — **per recipient**. Reply messages (using a reply token) and 1:1 chat typed by staff are not counted. Quota math: `line-broadcast`.
 
 ## 6. Let Claude send messages (optional MCP)
 

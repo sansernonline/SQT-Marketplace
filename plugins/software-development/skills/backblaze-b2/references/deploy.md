@@ -23,13 +23,13 @@ Extension of [`SKILL.md`](../SKILL.md) · Use when deploying the build output of
 - Setting up a script or CI that runs `b2 sync` of the build output to a bucket
 - Needing to roll back the site, or asking whether B2 is better value than elsewhere for a small-file site
 
-Do not use when: an app with a backend (API · server · database · SSR) → [`render-deploy`](../../render-deploy/SKILL.md) · storing app files, such as user uploads → [`backblaze-b2`](../SKILL.md) or [`cloudflare-r2`](../../cloudflare-r2/SKILL.md)
+Do not use when: an app with a backend (API · server · database · SSR) → [`render-deploy`](../../render-deploy/SKILL.md) · storing app files, such as user uploads → [`backblaze-b2`](../SKILL.md) (covers Cloudflare R2 too)
 
 | Job | Destination | Skill |
 |---|---|---|
 | A static site already built | B2 + Cloudflare | This deploy part |
 | An app with a backend | Render | `render-deploy` |
-| App files (user uploads, backups) | B2 or R2 | `backblaze-b2` · `cloudflare-r2` |
+| App files (user uploads, backups) | B2 or R2 | `backblaze-b2` (R2 in `references/cloudflare-r2.md`) |
 
 ## Use something else, or alongside
 

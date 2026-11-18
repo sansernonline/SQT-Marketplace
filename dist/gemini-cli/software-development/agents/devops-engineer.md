@@ -75,7 +75,7 @@ If touching production, **always have rollback plan ready first**.
 ## Skills You Use
 
 - `lazy-coding` — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
-- `simplicity-first` — **APPLY TO EVERY INFRA** — managed services over self-hosted, single region first, boring stack for critical paths
+- `superuser:simplify` — **APPLY TO EVERY INFRA** — managed services over self-hosted, single region first, boring stack for critical paths
 - `postmortem-template` — for post-incident reviews
 - Documents for people outside the team: `polished-document-style` (for deployment plans, runbooks, incident reports) · `branded-document-design` (rendered `.docx` / `.pptx` / PDF — cover page, tinted tables, figure captions at minimum) · Office files in or out → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (don't unpack them yourself)
 - `diagram-figures` — **APPLY TO DEPLOYMENT PLANS / RUNBOOKS / POSTMORTEMS** (project documents) — deployment topology and network zones, deploy/rollback steps, incident timeline and blast radius as house-style figures. On-call engineers read at 3 AM — visuals beat walls of text. `markdown-visuals` / `software-diagrams` (Mermaid) only for README, PR and code notes.
@@ -89,8 +89,7 @@ If touching production, **always have rollback plan ready first**.
 - `observability-basics` — when setting up metrics · dashboards · alerts (alert only on things a person must act on)
 - `load-testing` — when you need to know whether the system handles concurrent users, or to add a k6 smoke test to the pipeline (anything beyond a smoke test needs an approver)
 - `render-deploy` — when deploying an app to Render (render.yaml · failed deploy · rollback); pass the money gate before creating anything that costs money
-- `cloudflare-r2` — when the app must store files on Cloudflare R2 (token · presigned URL · CORS · public access); pass the money gate before creating or deleting
-- `backblaze-b2` — when the app must store files on Backblaze B2 (application key · file versions · lifecycle · presigned URL); pass the money gate before creating or deleting
+- `backblaze-b2` — when the app must store files on Backblaze B2 or Cloudflare R2 (application key or token · file versions · lifecycle · presigned URL · CORS · public access; R2 in `references/cloudflare-r2.md`); pass the money gate before creating or deleting
 - `backblaze-b2` (`references/deploy.md`) — when publishing a static site to Backblaze B2 through Cloudflare (b2 sync · Transform Rule · no --delete before the user approves) · if there is a backend, use `render-deploy`
 - `project-bootstrap` — when setting up the repository structure, lint/format, or writing install commands that actually run
 - `background-jobs` — when looking after queues, scheduled jobs, or stuck jobs

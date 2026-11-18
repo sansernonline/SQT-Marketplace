@@ -77,7 +77,7 @@ agent `solution-architect` (อ่านอย่างเดียว) + `syste
 
 ## 2. เป้าหมายรุ่นใหม่ + แนวทางรื้อ + stack
 
-agent `product-manager` + `solution-architect` + `brainstormer` · skill `architecture-patterns` · `adr-writer` · `prior-art-review` · `simplicity-first` · `reference-app-research` (เมื่อผู้ใช้บอกว่า "อยากได้แบบแอป X")
+agent `product-manager` + `solution-architect` + `brainstormer` · skill `architecture-patterns` · `adr-writer` · `prior-art-review` · `superuser:simplify` · `reference-app-research` (เมื่อผู้ใช้บอกว่า "อยากได้แบบแอป X")
 **ต้องมีก่อน:** `INVENTORY.md` และ `PARITY.md` (ฉบับ 1)
 **ผลลัพธ์:** `docs/rebuild/VISION.md` · ADR ที่ `docs/decisions/ADR-NNNN-<เรื่อง>.md`
 
