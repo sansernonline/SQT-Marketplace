@@ -1012,9 +1012,10 @@ export function quotaGate(ti = {}, left) {
   return `Quota gate (SuperUser): this piece is about ${k(need / 1000)}k × ${left.safety} = ${k(needK)}k but ${where} — the worker would run out of quota midway and need a handoff · pick 1 way: cut the piece to no more than ${k(left.left_k / left.safety)}k · wait for the reset · or send it to another account (plan.mjs --accounts --quota of parallel-split-and-merge)`;
 }
 function agentGate(input, teamDir) {
-  if (!teamDir || input.agent_id || !moduleOn(teamDir, "dispatch_gate")) return "";
+  if (input.agent_id || (teamDir && !moduleOn(teamDir, "dispatch_gate"))) return "";
   if (!input.transcript_path || !existsSync(input.transcript_path)) return "";
-  if (!gateState(teamDir, input.transcript_path).usedSuperuser) return "";
+  // โปรเจกต์ที่ยังไม่มี .claude/superuser/ ด่านก็ทำงาน เหมือนด่านแตกงาน · สถานะเก็บที่ ~/.claude/superuser/log (bench 2026-11-18: t5 ส่งลูกทีม 7 ตัวไม่ระบุ effort ผ่าน)
+  if (!gateState(teamDir ?? join(configDirOf(), "superuser"), input.transcript_path).usedSuperuser) return "";
   return dispatchGate(input.tool_input ?? {}) || quotaGate(input.tool_input ?? {}, accountLeft());
 }
 
@@ -1643,6 +1644,19 @@ function selfTest() {
     const ok = /Split gate/.test(out) && existsSync(join(cfg, "superuser", "log", "gate-state.json"));
     rmSync(base, { recursive: true, force: true });
     return ok;
+  }]);
+  gates.push(["ด่านส่งงาน: โปรเจกต์ไม่มี .claude/superuser/ → ส่งลูกทีมไม่ระบุ effort ถูกบล็อก · ยังไม่เปิด superuser → ผ่าน", [], true, () => {
+    const base = join(tmpdir(), `sqt-dispatch-${process.pid}`), proj = join(base, "_to_delete", "bench", "t5"), cfg = join(base, "cfg");
+    const txOn = join(base, "on.jsonl"), txOff = join(base, "off.jsonl");
+    mkdirSync(proj, { recursive: true }); writeFileSync(txOn, skill + "\n"); writeFileSync(txOff, "\n");
+    const old = process.env.CLAUDE_CONFIG_DIR; process.env.CLAUDE_CONFIG_DIR = cfg;
+    const w = process.stdout.write; let out = ""; process.stdout.write = (s) => { out += s; return true; };
+    const call = (tx) => { out = ""; preWriteGate({ hook_event_name: "PreToolUse", tool_name: "Agent", cwd: proj, transcript_path: tx, tool_input: { subagent_type: "superuser:worker", model: "sonnet", prompt: "Build csv.js" } }); return out; };
+    let on = "", off = "";
+    try { on = call(txOn); off = call(txOff); }
+    finally { process.stdout.write = w; if (old === undefined) delete process.env.CLAUDE_CONFIG_DIR; else process.env.CLAUDE_CONFIG_DIR = old; }
+    rmSync(base, { recursive: true, force: true });
+    return /Dispatch gate/.test(on) && off === "";
   }]);
   // สรุป log: 1 วัน · หัวหน้าทีมส่ง developer 2 งาน (ล้ม 1) · developer ทำ 3 อย่าง (ล้ม 1) · ผู้ใช้แก้ 1 ครั้ง
   const day = { prompts: 2, corrections: 1, actions: 5, failed: 1,
