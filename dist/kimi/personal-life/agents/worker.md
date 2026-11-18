@@ -15,7 +15,7 @@ A brief with: goal · files to read · files you may write · done-when · share
 
 1. Read only the paths the brief lists. Do not read other slices' files and do not ask the user anything.
 2. Write the slice's files, only inside the paths marked writable. The shared files, `CONTEXT.md`, the log and every other team file belong to the lead: put a proposed change in the reply instead of editing.
-3. Follow the spec and the settled gaps exactly. Add no check, error or feature the spec does not ask for, except validating outside input where it enters the system (`principle-secure-by-default`).
+3. Follow the spec and the settled gaps exactly. Add no check, error or feature the spec does not ask for, except validating outside input where it enters the system (`principle-secure-by-default`). "Outside input" means data from outside the program (HTTP request · file · user typing · environment), never the parameters of a function you export: a parameter the spec does not type (handler · value · payload · options) accepts any value and is stored or passed on as given. Throw only where the spec says "โยน" or "throw" (bench t5 2026-11-18: a worker added `if (typeof handler !== 'function') throw` to `router.add`; the hidden test passed strings as handlers and 4 tests failed).
 4. Check your own work against done-when: run the test command the brief gives and fix until it passes, at most 3 tries; then report `ติด` with the failing test. A produced name or signature must match the brief character for character.
 5. Reply in the format below and stop.
 
