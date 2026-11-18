@@ -2137,14 +2137,17 @@ The situation → shared skill list is in [`triggers`](references/triggers.md) �
 
 The lead alone talks to the user and writes the shared team files · Workers do their own piece and report back · The general-purpose worker is `worker`
 
-**The 5-item brief, about 15 lines at most per brief:**
-1. **Goal**: what this piece delivers
-2. **Scope**: paths and line ranges to touch · what not to touch · **name the spec as a file and heading; never copy the spec text in**
-3. **Done-when**: how it is checked
-4. **Shared rules**: names, formats · **spec gaps**: hunt for them before splitting (data types · empty values · formats), pick the option that accepts the widest values, and put the same choice in every brief · **Put this sentence in every brief: "ห้ามเพิ่มการตรวจ error หรือเปลี่ยนรูปค่าที่คืน (เช่น object ไม่มี prototype · class) ที่ spec ไม่ได้สั่ง ยกเว้นตรวจ input ที่ขอบระบบ"** (Do not add error checks or change the shape of returned values (e.g. prototype-less objects · classes) that the spec did not ask for, except input validation at the system edge.) Reason: t5 failed this way repeatedly (2026-10-20 · 2026-11-11: briefs without this sentence failed 2 of 3 rounds)
-5. **Report back**: the first line is 1 of 4 values · about 40 lines at most · no story of the process
-
-Template: [`brief-template`](references/brief-template.md) "short brief"
+**The 5-item brief, about 15 lines at most per brief.** Copy this shape exactly: the hook's dispatch gate rejects the call unless the Agent call sets `model` + `effort`, each Thai label starts a line, `ขนาด:` is on its own line, and the กติกา line holds the Thai sentence word for word (bench t5 2026-11-18: English labels, a missing `effort` and `ขนาด` at the end of a line made the lead resend every worker 3 times):
+```
+เป้า: <what this piece delivers> — 1 of <N> pieces of <task>
+ขอบเขต: write <path> · do not touch <other pieces> · spec = <file> section <N> (point to it, never copy spec text in)
+เสร็จเมื่อ: `<test command>` passes in full
+กติกา: <spec gap → the broadest accepted choice, the same in every brief> · ห้ามเพิ่มการตรวจ error หรือเปลี่ยนรูปค่าที่คืน (เช่น object ไม่มี prototype · class) ที่ spec ไม่ได้สั่ง ยกเว้นตรวจ input ที่ขอบระบบ
+ขนาด: <N>k
+ส่งกลับ: first line เสร็จ | เสร็จ มีข้อกังวล | ขาดบริบท | ติด · at most 15 lines · no story of the process
+```
+- **Spec gaps**: hunt for them before splitting (data types · empty values · formats). The Thai sentence keeps workers from over-checking (t5 2026-10-20 · 2026-11-11: briefs without it failed 2 of 3 rounds)
+- Full version with `ใช้จาก · ให้ชิ้นอื่น`: [`brief-template`](references/brief-template.md) "short brief" · `reviewer` · `brainstormer` skip the 5 headings but still need `model` + `effort` and a `ขนาด: <N>k` line of its own (the quota gate checks every agent; bench t5 2026-11-18: every reviewer was sent twice without it)
 
 **Dispatch**
 - The lead does small tasks alone · medium and up are split at planning time (the hook's split gate blocks the 2nd code file once the total reaches ≥ 200 lines and nothing was sent to a worker) · send independent pieces together in one message · 1 unit of the task = 1 worker, at most 8 per wave · do not split code and the tests of a single unit · a graph of width 1 → one worker does the whole chain
@@ -2385,14 +2388,14 @@ The section "ข้อจำกัดทั้งงาน" (task-wide constrain
 
 ## Short brief for `worker`
 
-Use it for every piece sent to a worker per `superuser` section 5 (the 5-field brief). For non-code tasks, change the `เสร็จเมื่อ:` line to that task's way of checking. Send it in the agent-call message, not as a brief for the user. **The whole brief stays within about 15 lines.** **Point to the spec by file and heading. Never copy spec text in.** The worker opens it. Start each field at the beginning of a line exactly as below, because the hook counts the brief fields and reads `ขนาด:` from the line start. Keep the Thai labels; the placeholders are English.
+Use it for every piece sent to a worker per `superuser` section 5 (the 5-field brief). For non-code tasks, change the `เสร็จเมื่อ:` line to that task's way of checking. Send it in the agent-call message, not as a brief for the user. **The whole brief stays within about 15 lines.** **Point to the spec by file and heading. Never copy spec text in.** The worker opens it. Start each field at the beginning of a line exactly as below, because the hook counts the brief fields and reads `ขนาด:` from the line start. Keep the Thai labels and the Thai sentence on the `กติกา:` line word for word (the dispatch gate matches them); the placeholders are English. The Agent call itself sets `model` + `effort` (`superuser` section 5), or the gate rejects it.
 
 ```
 เป้า: <what this piece does> — 1 of <N> pieces of <task>
 ขอบเขต: write <path> · read <path:line range, only shared pieces it needs> · do not touch <other pieces · shared team files> · read no other file
 spec: <file> section <N> · point only, never copy text in · spec not yet in a file (only in chat) → the lead writes it to a file once first, then points to that file
 ใช้จาก · ให้ชิ้นอื่น: <name · signature exactly as written>
-กติกา: <spec gap → the decided path> · no checks or errors the spec did not ask for, except input checks at the system edge
+กติกา: <spec gap → the decided path> · ห้ามเพิ่มการตรวจ error หรือเปลี่ยนรูปค่าที่คืน (เช่น object ไม่มี prototype · class) ที่ spec ไม่ได้สั่ง ยกเว้นตรวจ input ที่ขอบระบบ
 เสร็จเมื่อ: `<test command for this piece>` passes in full
 ขนาด: <N>k
 ส่งกลับ: at most 15 lines · first line เสร็จ | เสร็จ มีข้อกังวล | ขาดบริบท | ติด · files changed · test result (ผ่าน/total) · what is unsure
