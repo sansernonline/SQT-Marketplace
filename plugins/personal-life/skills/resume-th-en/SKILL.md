@@ -88,6 +88,9 @@ Thai text (CV, cover email) → `human-writing` `references/thai-grammar.md` sec
 
 For a LinkedIn profile (argument `linkedin`), use the CV bullets from Step 3 and the keywords from the Workflow, then follow [references/linkedin.md](references/linkedin.md): target roles, 10–15 keywords from 5 real job posts, headline formula (up to 220 characters), About in 4 paragraphs, Skills, Featured, Recommendations, settings and its own checklist. Profile and CV dates and titles must match exactly.
 
+**Hard rules (LinkedIn):** No confidential employer or client data on LinkedIn without the user's permission. Leave the phone number out of public LinkedIn fields.
+If the user is still employed, set Open to work to Recruiters only, and say it cannot be fully hidden.
+
 ## Not an AI look
 
 Before handing over, run `no-ai-look` section 3. CVs are usually PDF or .docx, so only the eye check (3.2) applies; the script is for HTML/CSS. For a resume that means: no emoji headings, no bold-first bullets, no generic claims without numbers.
