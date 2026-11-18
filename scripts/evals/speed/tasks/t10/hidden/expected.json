@@ -1,0 +1,80 @@
+{
+  "branches": {
+    "bangna": {
+      "total": 72865,
+      "jul": 22935,
+      "aug": 27230,
+      "sep": 22700,
+      "growth_sep_vs_jul_pct": -1.0,
+      "top_product": "เค้กส้ม"
+    },
+    "rangsit": {
+      "total": 72775,
+      "jul": 23080,
+      "aug": 26610,
+      "sep": 23085,
+      "growth_sep_vs_jul_pct": 0.0,
+      "top_product": "เค้กส้ม"
+    },
+    "chonburi": {
+      "total": 67340,
+      "jul": 26700,
+      "aug": 19010,
+      "sep": 21630,
+      "growth_sep_vs_jul_pct": -19.0,
+      "top_product": "ครัวซองต์"
+    },
+    "rayong": {
+      "total": 74565,
+      "jul": 24365,
+      "aug": 24010,
+      "sep": 26190,
+      "growth_sep_vs_jul_pct": 7.5,
+      "top_product": "เค้กส้ม"
+    }
+  },
+  "issues": [
+    {
+      "file": "bangna.csv",
+      "line": 16,
+      "type": "duplicate"
+    },
+    {
+      "file": "bangna.csv",
+      "line": 33,
+      "type": "duplicate"
+    },
+    {
+      "file": "bangna.csv",
+      "line": 69,
+      "type": "duplicate"
+    },
+    {
+      "file": "bangna.csv",
+      "line": 153,
+      "type": "duplicate"
+    },
+    {
+      "file": "rangsit.csv",
+      "line": 57,
+      "type": "missing_price"
+    },
+    {
+      "file": "rangsit.csv",
+      "line": 142,
+      "type": "missing_price"
+    },
+    {
+      "file": "chonburi.csv",
+      "line": 68,
+      "type": "duplicate"
+    },
+    {
+      "file": "rayong.csv",
+      "line": 37,
+      "type": "duplicate"
+    }
+  ],
+  "grand_total": 287545,
+  "top_branch": "rayong"
+}

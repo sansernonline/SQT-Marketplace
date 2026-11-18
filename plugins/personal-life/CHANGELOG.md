@@ -1,5 +1,9 @@
 # Changelog — personal-life
 
+## 0.26.3 — 2026-11-18
+
+- เคส eval ใหม่ 4 เคส: `learning-path-behaviour` และ `resume-th-en-behaviour` ตรวจกฎห้ามที่ย้ายขึ้น SKILL.md ในรุ่น 0.26.2 · `learning-path-trigger` · `resume-th-en-trigger`
+
 ## 0.26.2 — 2026-11-18
 
 - ย้ายกฎห้ามและกฎบังคับที่เหลืออยู่ใน reference อย่างเดียวขึ้นมาเป็นบล็อก "Hard rules" สั้น ๆ ใน `SKILL.md` เพื่อให้กฎมีผลแม้โมเดลไม่เปิด reference: `resume-th-en` (LinkedIn) · `learning-path` (ขั้น paper) · ไม่ตัดกฎออกจาก reference

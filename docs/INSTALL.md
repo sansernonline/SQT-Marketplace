@@ -235,7 +235,7 @@ hook เขียน log เฉพาะโปรเจกต์ที่มี 
 
 `dist/claude-web/<plugin>.zip` คือ plugin ที่บีบอัดไว้ 1 ไฟล์ต่อ 1 plugin · **อัปโหลดเข้า claude.ai** แล้วใช้ skill ได้ใน Cowork และแชทบนเว็บหรือเดสก์ท็อปด้วย ไม่ใช่แค่ใน Claude Code
 
-**`software-development.zip`:** 100 skills · 38 agents · 12 commands · `plugin.json` v3.8.2 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-development/`
+**`software-development.zip`:** 100 skills · 38 agents · 12 commands · `plugin.json` v3.8.3 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-development/`
 
 ---
 
@@ -384,7 +384,7 @@ skills:
 - `HERMES.md` เป็นบริบทของโปรเจกต์ คัดไปรากโปรเจกต์ถ้าต้องการ · Hermes อ่านไฟล์บริบทได้ทีละไฟล์ (`.hermes.md` หรือ `HERMES.md` → `AGENTS.override.md` → `AGENTS.md` → `CLAUDE.md`) ถ้าโปรเจกต์มี `AGENTS.md` อยู่แล้ว ไฟล์ `HERMES.md` จะถูกอ่านแทน
 - Hermes ไม่รัน hook ของเรา → ช่วงที่ใช้ Hermes จะไม่มี log ใน `.claude/superuser/log/`
 
-> รูปแบบตรวจจากเอกสารทางการ hermes-agent.nousresearch.com เมื่อ 2026-11-15 · ลองกับ Hermes v0.23.1 ในเครื่อง: ชุด e-commerce โหลดได้ 84 จาก 85 skill (ตัวที่ไม่ขึ้นคือ `superuser` ตอนวางในโปรเจกต์ ตามข้อบน) · ยังไม่ได้ลองแบบ `external_dirs` กับ Hermes จริง (อ่านจากโค้ดของ Hermes ว่าไม่สแกน)
+> รูปแบบตรวจจากเอกสารทางการ hermes-agent.nousresearch.com เมื่อ 2026-11-15 · ลองกับ Hermes v0.23.1 ในเครื่อง: ชุด e-commerce โหลดได้ 84 จาก 85 skill (ตัวที่ไม่ขึ้นคือ `superuser` ตอนวางในโปรเจกต์ ตามข้อบน) · ลองแบบ `external_dirs` กับ Hermes v0.23.1 จริงเมื่อ 2026-11-18: ชุด software-development โหลดได้ครบ 192 skill รวม `superuser` และ `role-*` 42 ตัว (`hermes skills list` · `hermes doctor` ไม่มี error) · ยังไม่ได้ลองเรียก skill ในหน้าแชต
 
 ### ChatGPT Custom GPT และ Gemini Gem
 

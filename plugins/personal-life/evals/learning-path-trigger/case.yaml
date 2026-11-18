@@ -1,0 +1,26 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เขียน 2026-11-18 ยังไม่ได้รัน
+schema_version: "1.1"
+name: learning-path-trigger
+description: ผู้ใช้อยากเรียน Docker ให้ใช้งานได้จริงกับโปรเจกต์ของตัวเอง ไม่เอ่ยชื่อ skill ต้องทำให้ learning-path ถูกเปิด
+tags: [trigger, learning-path]
+runs: 3
+expected_outcome: เรียก Skill learning-path แล้วถามเป้าหมายและระดับ ถามชั่วโมงต่อสัปดาห์ และวางขั้นเล็กที่แตะโปรเจกต์ของผู้ใช้
+execution:
+  prompt: |
+    อยากเรียน Docker ให้ใช้เป็นจริง ๆ ไม่ใช่แค่ดูคลิป ตอนนี้มีเว็บ Flask ที่ทำเองอยู่ 1 ตัว
+    ช่วยวางแผนการเรียนให้หน่อย ว่างประมาณสัปดาห์ละ 5 ชั่วโมง
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?learning-path"'
+    min: 1
+    arm: with-only
+  - name: mentions-project
+    type: regex
+    pattern: 'Flask'
+    match: contains
+    target: last_message

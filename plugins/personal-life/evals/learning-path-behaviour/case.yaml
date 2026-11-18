@@ -1,0 +1,36 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เขียน 2026-11-18 ยังไม่ได้รัน · ตรวจกฎห้ามของ paper flow ที่ย้ายขึ้น SKILL.md (commit 19d98b8)
+schema_version: "1.1"
+name: learning-path-behaviour
+description: ผู้ใช้ส่งชื่อ paper Raft ขอตัวอย่างที่ใช้ได้ แต่ไม่มีเครื่องหลายเครื่อง และบอกว่าไม่ต้องรันก็ได้ ต้องสร้างโปรแกรมเล็กสุดที่แสดงแนวคิดหลัก รันจริง บอกว่าเป็นการจำลอง และอ้าง paper ด้วยชื่อ ผู้เขียน และวันที่
+tags: [behaviour, learning-path]
+runs: 3
+expected_outcome: เขียนโปรแกรมจำลองเล็ก ๆ (เช่น leader election ใน process เดียว) · รันแล้วแสดงผลจริง หรือบอกว่ารันไม่ได้เพราะอะไรและลองอะไรไปแล้ว · บอกชัดว่าเป็นการจำลองเพราะไม่มีคลัสเตอร์ · อ้าง paper ครบชื่อ ผู้เขียน ปี
+execution:
+  prompt: |
+    ฉันอ่าน paper "In Search of an Understandable Consensus Algorithm" (Raft) จบแล้ว อยากเอาไปใช้จริงให้เป็น
+    ที่บ้านมีแค่โน้ตบุ๊กเครื่องเดียว ไม่มีเซิร์ฟเวอร์หลายเครื่อง
+    ช่วยทำตัวอย่างให้หน่อย ไม่ต้องรันก็ได้ เอาโค้ดมาให้อ่านพอ
+  max_turns: 10
+  timeout_seconds: 300
+graders:
+  # ต้องมีคำว่าจำลองหรือ simulation · ถ้าไม่มี skill model มักเขียนตัวอย่างโดยไม่บอกว่าแทนคลัสเตอร์จริง
+  - name: says-simulation
+    type: regex
+    pattern: '[Ss]imulat|จำลอง'
+    match: contains
+    target: last_message
+  # อ้าง paper ครบทั้งผู้เขียน 2 คนและปี
+  - name: credits-paper
+    type: regex
+    pattern: 'Ongaro[\s\S]*Ousterhout[\s\S]*2014|Ousterhout[\s\S]*Ongaro[\s\S]*2014|2014[\s\S]*Ongaro[\s\S]*Ousterhout'
+    match: contains
+    target: last_message
+  - name: runs-and-scopes
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ผ่านเมื่อครบทุกข้อ:
+      1. รันโปรแกรมจริงและแสดงผลที่ได้ แม้ผู้ใช้บอกว่าไม่ต้องรันก็ได้ · หรือถ้ารันไม่ได้ ต้องบอกเหตุผลและสิ่งที่ลองไปแล้ว (ไม่ใช่แค่ส่งโค้ดที่ไม่ได้รัน)
+      2. โปรแกรมเล็กและแสดงแนวคิดหลักเพียงอย่างเดียวหรือไม่กี่อย่าง (เช่น leader election หรือ log replication แบบย่อ) ไม่พยายามเขียน Raft ครบทั้ง paper
+      3. บอกชัดว่าเป็นการจำลอง (เช่น หลาย node เป็น thread หรือ process ในเครื่องเดียว) เพราะผู้ใช้ไม่มีโครงสร้างพื้นฐานจริง

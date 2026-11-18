@@ -1,0 +1,26 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เขียน 2026-11-18 ยังไม่ได้รัน
+schema_version: "1.1"
+name: resume-th-en-trigger
+description: ผู้ใช้ขอให้เขียน CV ภาษาอังกฤษสำหรับสมัครงานในไทย ไม่เอ่ยชื่อ skill ต้องทำให้ resume-th-en ถูกเปิด
+tags: [trigger, resume-th-en]
+runs: 3
+expected_outcome: เรียก Skill resume-th-en แล้วขอประกาศงานหรือข้อมูลที่จำเป็น และเขียน CV แบบผ่าน ATS (หัวข้อมาตรฐาน ตัวเลขผลงาน)
+execution:
+  prompt: |
+    ช่วยทำ CV ภาษาอังกฤษให้หน่อย จะสมัคร Data Analyst ที่บริษัทในกรุงเทพ
+    ฉันทำ Excel กับ SQL มา 3 ปี ทำรายงานยอดขายรายสัปดาห์ให้ทีมขาย 20 คน
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?resume-th-en"'
+    min: 1
+    arm: with-only
+  - name: mentions-ats
+    type: regex
+    pattern: 'ATS|applicant tracking'
+    match: contains
+    target: last_message

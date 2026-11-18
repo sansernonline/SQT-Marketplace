@@ -10,8 +10,10 @@
 | `code` | `speed/tasks/t1` แก้บั๊กวันที่ไทย | test ที่ซ่อนผ่านกี่ข้อ ÷ ทั้งหมด |
 | `code-quality` | `coding/tasks/c5-csv-import` | `run-coding.mjs --score --no-judge` (ถูกต้อง · test ของทีม · สะอาด เต็ม 8) ปรับเป็นเต็ม 10 |
 | `code-hard` | `coding/tasks/c4-subscription-leak` (ตัวให้คะแนนเดียวกับ code-quality) | เหมือน `code-quality` |
+| `code-harder` | `coding/tasks/c9-bill-split` (ตัวให้คะแนนเดียวกับ code-quality) | เหมือน `code-quality` |
 | `review` | `review-recall` เคส r1–r8 (เลือกด้วย `--review-cases`) | ข้อผิดที่ฝังไว้ที่ reviewer เจอ ÷ ทั้งหมด (เทียบข้อความ ไม่ใช้ผู้ตัดสิน) |
 | `plan` | spec สั้นให้แตกงาน ([`plan-task.mjs`](plan-task.mjs)) | checklist 5 ข้อ ข้อละ 2: 3–6 ขั้น · ทุกขั้นมี "เสร็จเมื่อ" · ทุกขั้นระบุไฟล์ · ครอบคลุม csv เกณฑ์ รายงาน test README · ไม่เกิน 60 บรรทัด |
+| `plan-hard` | spec ย้ายตาราง `orders` จาก SQLite ไปฐานใหม่โดยไม่ปิดระบบ ([`plan-task.mjs`](plan-task.mjs)) | checklist 5 ข้อ ข้อละ 2: 4–6 ขั้น · ทุกขั้นมีไฟล์และ "เสร็จเมื่อ" เป็นคำสั่งใน `...` · "ขึ้นกับ" ชี้เฉพาะขั้นก่อนหน้า · ครอบคลุมเขียนคู่ คัดลอก เทียบ สลับ ถอย · เทียบก่อนสลับและเตรียมทางถอยก่อนหรือพร้อมสลับ และไม่เกิน 60 บรรทัด |
 
 model: `claude-haiku-5-5` · `claude-sonnet-5-5` · `claude-opus-5-5` · `claude-fable-5-1` (ราคาจาก `plugins/superuser/skills/model-scorecard/references/prices.json`) · ทุกรอบส่ง `--model` และ `--effort` (ค่าเริ่ม `medium`) ไม่โหลด plugin จึงวัดตัว model ไม่ใช่ทีม · **ข้อยกเว้น: ขั้น `review`** รันผ่าน `run-review-recall.mjs` ซึ่งโหลด plugin superuser และเรียก agent `superuser:reviewer` จึงวัดทีมรีวิว ไม่ใช่ model เปล่า
 
@@ -26,7 +28,7 @@ node scripts/evals/models/run-models.mjs --run      # เสียเงิน: 
 | ตัวเลือก | ค่าเริ่ม | ความหมาย |
 |---|---|---|
 | `--models` | ทั้ง 4 | เลือก model คั่นด้วย `,` |
-| `--steps` | ทั้ง 5 | เลือกขั้น |
+| `--steps` | ทั้ง 7 | เลือกขั้น |
 | `--runs` | 1 | รันซ้ำกี่รอบต่อช่อง · แนะนำ 3 |
 | `--review-cases` | `r1`–`r8` | เคสของขั้น `review` |
 | `--skip` | — | ตัดบางช่อง เช่น `claude-fable-5-1:code-quality` (`--plan` พิมพ์ชุดแนะนำให้) |
@@ -56,6 +58,23 @@ node scripts/evals/models/run-models.mjs --run      # เสียเงิน: 
 4. ทุก model ผ่านหมดทุกรอบ → เขียน "แยกไม่ออก (ชนเพดาน)"
 
 เกณฑ์ 8 กับ 0.6 เป็นค่าตั้งต้น ยังไม่ได้วัดว่าเหมาะกับงานชุดนี้
+
+## ขั้น code-harder และ plan-hard: เพิ่มเพราะผลเก่าชนเพดาน
+
+ผลรอบ 2026-11-09 (RESULTS.md) ทุกขั้นชนเพดาน แยก model ไม่ออก (code-hard ก็ได้ 8.8–10 ทั้ง 3 ตัว) จึงเพิ่ม 2 ขั้นที่ยากขึ้น ยังไม่เคยรันจริง ว่ายากพอแยก model ได้หรือไม่ต้องรอผล
+
+| ขั้น | ยากตรงไหน | ตรวจก่อนรันโดยไม่เรียก model |
+|---|---|---|
+| `code-harder` (c9 แบ่งบิล) | กฎเศษสตางค์ต้องทำถูกพร้อมกัน: ปัด 0.5 ขึ้น (`round()` ของ Python ปัดเข้าเลขคู่ จึงผิด) · แบ่งตามสัดส่วนแบบเศษมากสุดก่อน เท่ากันให้คนก่อนหน้า · ส่วนลดเกินบิล · บิลยอด 0 หารศูนย์ · ลำดับ key ใน dict | โค้ดตั้งต้นผ่าน test ซ่อน 4/9 ได้ 2.5/10 · คำตอบอ้างอิงผ่าน 9/9 ได้ 10/10 (`run-coding.mjs --score --no-judge`) |
+| `plan-hard` (ย้ายฐานข้อมูล) | แผนต้องเรียงถูก: เทียบข้อมูลก่อนสลับ · มีทางถอยก่อนสลับ · "ขึ้นกับ" ห้ามชี้ขั้นข้างหน้า · "เสร็จเมื่อ" ต้องเป็นคำสั่งที่รันได้ | แผนตัวอย่างที่ดีได้ 10 · แผนจาก spec ง่ายได้ไม่เกิน 4 · แผนที่ขึ้นกับขั้นข้างหน้าได้ไม่เกิน 8 (ตรวจใน `selfTest`) |
+
+รันเฉพาะ 2 ขั้นนี้ (ตัวอย่าง 3 รอบ ไม่รวม fable ประมาณ $9.90 จาก `--plan`):
+
+```powershell
+node scripts/evals/models/run-models.mjs --run --runs 3 --steps code-harder,plan-hard --models claude-haiku-5-5,claude-sonnet-5-5,claude-opus-5-5 --budget-total 15
+```
+
+ตัวเลขประมาณของ 2 ขั้นนี้เป็นค่าสมมุติ ผิดได้เป็นเท่าตัว (เพดานช่องและ `--budget-total` กันไม่ให้เกิน)
 
 ## ขั้น code-hard: ทำไมเลือก c4
 
