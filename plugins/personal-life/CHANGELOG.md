@@ -1,5 +1,9 @@
 # Changelog — personal-life
 
+## 0.26.4 — 2026-11-18
+
+- sync `brief-template` จาก superuser 3.50.2: บรรทัด `กติกา:` ใช้ประโยคบังคับฉบับไทยที่ด่านส่งงานตรวจ และบอกให้ใส่ `model` + `effort` ในคำสั่งเรียก
+
 ## 0.26.3 — 2026-11-18
 
 - เคส eval ใหม่ 4 เคส: `learning-path-behaviour` และ `resume-th-en-behaviour` ตรวจกฎห้ามที่ย้ายขึ้น SKILL.md ในรุ่น 0.26.2 · `learning-path-trigger` · `resume-th-en-trigger`

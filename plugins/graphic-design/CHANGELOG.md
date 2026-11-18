@@ -1,5 +1,9 @@
 # Changelog — graphic-design
 
+## 0.32.3 — 2026-11-18
+
+- sync `brief-template` จาก superuser 3.50.2: บรรทัด `กติกา:` ใช้ประโยคบังคับฉบับไทยที่ด่านส่งงานตรวจ และบอกให้ใส่ `model` + `effort` ในคำสั่งเรียก
+
 ## 0.32.2 — 2026-11-18
 
 - ตัดข้อความซ้ำ ไม่รวมหรือเปลี่ยนชื่อ skill: brief-to-image ชี้ไปรายการ style 6 แบบที่ `image-generation/references/styles.md` แทนการเขียนรายการซ้ำ · ตาราง hook แบบพูดหน้ากล้อง (6 แถว) และกฎของมัน ย้ายจาก speaking-script ไปอยู่ที่ `video-script-to-clip/references/hooks-and-example.md` หัวข้อ Spoken hook patterns แล้ว speaking-script ชี้ไปหา (เทียบทีละแถวแล้ว ตารางทั้งสองเป็นคนละชุดแถว เก็บไว้ครบทุกแถว) · ตัวเลข caption (≤ 35 ตัวอักษรต่อบรรทัด · ≤ 17 ตัวอักษรต่อวินาที) ไม่ถูกแตะ

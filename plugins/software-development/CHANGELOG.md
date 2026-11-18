@@ -1,5 +1,9 @@
 # Changelog — software-development
 
+## 3.8.4 — 2026-11-18
+
+- sync `brief-template` จาก superuser 3.50.2: บรรทัด `กติกา:` ใช้ประโยคบังคับฉบับไทยที่ด่านส่งงานตรวจ และบอกให้ใส่ `model` + `effort` ในคำสั่งเรียก
+
 ## 3.8.3 — 2026-11-18
 
 - eval `app-verifier-setup-behaviour` และ `branded-document-design-behaviour` มี fixture แล้ว (เดิมโฟลเดอร์ทดสอบว่าง grader `rules-followed` จึงตกทั้ง 2 แขน) และตรวจกฎห้ามที่ย้ายขึ้น SKILL.md ในรุ่น 3.8.2

@@ -59,14 +59,14 @@ The section "ข้อจำกัดทั้งงาน" (task-wide constrain
 
 ## Short brief for `worker`
 
-Use it for every piece sent to a worker per `superuser` section 5 (the 5-field brief). For non-code tasks, change the `เสร็จเมื่อ:` line to that task's way of checking. Send it in the agent-call message, not as a brief for the user. **The whole brief stays within about 15 lines.** **Point to the spec by file and heading. Never copy spec text in.** The worker opens it. Start each field at the beginning of a line exactly as below, because the hook counts the brief fields and reads `ขนาด:` from the line start. Keep the Thai labels; the placeholders are English.
+Use it for every piece sent to a worker per `superuser` section 5 (the 5-field brief). For non-code tasks, change the `เสร็จเมื่อ:` line to that task's way of checking. Send it in the agent-call message, not as a brief for the user. **The whole brief stays within about 15 lines.** **Point to the spec by file and heading. Never copy spec text in.** The worker opens it. Start each field at the beginning of a line exactly as below, because the hook counts the brief fields and reads `ขนาด:` from the line start. Keep the Thai labels and the Thai sentence on the `กติกา:` line word for word (the dispatch gate matches them); the placeholders are English. The Agent call itself sets `model` + `effort` (`superuser` section 5), or the gate rejects it.
 
 ```
 เป้า: <what this piece does> — 1 of <N> pieces of <task>
 ขอบเขต: write <path> · read <path:line range, only shared pieces it needs> · do not touch <other pieces · shared team files> · read no other file
 spec: <file> section <N> · point only, never copy text in · spec not yet in a file (only in chat) → the lead writes it to a file once first, then points to that file
 ใช้จาก · ให้ชิ้นอื่น: <name · signature exactly as written>
-กติกา: <spec gap → the decided path> · no checks or errors the spec did not ask for, except input checks at the system edge
+กติกา: <spec gap → the decided path> · ห้ามเพิ่มการตรวจ error หรือเปลี่ยนรูปค่าที่คืน (เช่น object ไม่มี prototype · class) ที่ spec ไม่ได้สั่ง ยกเว้นตรวจ input ที่ขอบระบบ
 เสร็จเมื่อ: `<test command for this piece>` passes in full
 ขนาด: <N>k
 ส่งกลับ: at most 15 lines · first line เสร็จ | เสร็จ มีข้อกังวล | ขาดบริบท | ติด · files changed · test result (ผ่าน/total) · what is unsure
