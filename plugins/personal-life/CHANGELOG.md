@@ -1,5 +1,11 @@
 # Changelog — personal-life
 
+## 0.26.1 — 2026-11-18
+
+- `cert-prep` มีหัวข้อใหม่ "Quiz or cards only" ต้นไฟล์ รวมกฎ 3 ข้อจาก `study-drill` เดิม: ตอบผิดห้ามเฉลย · ห้ามใส่คำตอบในบัตรก่อนผู้ใช้หาเจอ · ห้ามแต่งบัตรให้ครบจำนวน
+- ที่ต้องย้ายขึ้นมา เพราะรุ่น 0.26.0 เก็บกฎนี้ไว้ใน reference อย่างเดียว eval `cert-prep-behaviour` จึงได้ 0.00 หลังย้ายขึ้น SKILL.md ได้ 1.00 (ไม่มี skill ได้ 0.00)
+- `evals/RESULTS.md` ใส่ผลรันจริงของ `cert-prep-*` ทั้ง 3 เคส
+
 ## 0.26.0 — 2026-11-18
 
 - รวม skill ที่ซ้อนกัน 3 คู่ จาก 44 เหลือ 41 skill: `linkedin-profile` เข้า `resume-th-en` (ขั้นตอน LinkedIn อยู่ที่ `references/linkedin.md` · argument-hint เพิ่ม `linkedin`) · `study-drill` เข้า `cert-prep` (รูปแบบบัตรคำและการซ้อมถามตอบอยู่ที่ `references/cards-and-drills.md`) · `paper-to-practice` เข้า `learning-path` (`references/paper-to-practice.md`)
