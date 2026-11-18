@@ -1,0 +1,9 @@
+[
+ {"store": "Siam Square", "sold_at": "2026-10-01T10:00:00+07:00", "amount_satang": 120010, "status": "ok"},
+ {"store": " siam square ", "sold_at": "2026-10-03T11:00:00+07:00", "amount_satang": 30, "status": "ok"},
+ {"store": "Siam Square", "sold_at": "2026-10-04T11:00:00+07:00", "amount_satang": 999900, "status": "void"},
+ {"store": "Central Lat Phrao", "sold_at": "2026-10-01T09:00:00+07:00", "amount_satang": 55055, "status": "ok"},
+ {"store": "Thonglor", "sold_at": "2026-10-02T09:00:00+07:00", "amount_satang": 50000, "status": "refund"},
+ {"store": "Thonglor", "sold_at": "2026-10-05T09:00:00+07:00", "amount_satang": 70001, "status": "ok"},
+ {"store": "Ekkamai", "sold_at": "2026-10-05T09:00:00+07:00", "amount_satang": 10010, "status": "ok"}
+]

@@ -1,0 +1,12 @@
+import { test } from "node:test"; import assert from "node:assert/strict";
+import { readFileSync, existsSync } from "node:fs";
+const md = existsSync("reply.md") ? readFileSync("reply.md", "utf8") : "";
+test("มีไฟล์ reply.md ที่ไม่ว่าง", () => assert.ok(md.trim().length > 0));
+test("ระบุวันนัดใหม่ 25 พฤศจิกายน", () => assert.match(md, /25\s*(พ\.ย\.|พฤศจิกายน)/));
+test("ระบุเวลาใหม่ 10:30", () => assert.match(md, /10[:.]30/));
+test("ขอให้ยืนยันภายในวันที่ 21", () => assert.match(md, /21\s*(พ\.ย\.|พฤศจิกายน)|วันศุกร์/));
+test("ขออภัย", () => assert.match(md, /ขออภัย|ขอโทษ/));
+test("เรียกชื่อลูกค้า", () => assert.match(md, /สุดา/));
+test("ไม่สัญญาส่วนลด ชดเชย ฟรี คืนเงิน", () => assert.ok(!/ส่วนลด|ชดเชย|ฟรี|คืนเงิน|ไม่คิด/.test(md)));
+test("ไม่เสนอเวลาอื่นที่ไม่มีในบันทึก", () => assert.ok(!/\b(9|11|13|15|16)[:.][0-5]\d\s*น/.test(md)));
+test("สั้น ไม่เกิน 25 บรรทัด", () => assert.ok(md.trimEnd().split("\n").length <= 25));
