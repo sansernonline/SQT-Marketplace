@@ -774,8 +774,9 @@ Template: [`brief-template`](references/brief-template.md) "short brief"
 - Fresh workers for every task · always a fresh reviewer · add `ขนาด: Nk` (size: N thousand tokens) so it ends within quota
 
 **Level: set `model` and `effort` on every piece.** The first match wins:
-0. The whole task is risky (money, tax, law, health, irreversible) → every piece `opus` + `high`
-1. `opus` + `high`: a piece touching money, law, health, permissions, messages to outsiders, or architecture
+0. The whole task is risky (money, tax, law, health, irreversible) → every piece `opus` + `medium`
+1. `opus` + `medium`: a piece touching money, law, health, permissions, messages to outsiders, or architecture
+- Workers on risky pieces stay at `medium` because the final review of risky work is `opus` + `high` and catches what they miss (user's call 2026-11-18: high effort belongs in the check, not the build)
 2. `haiku` + `low`: mechanical work where the brief has a template, checkable at once, needs no own decision
 3. `sonnet` + `medium`: everything else
 - On failure → raise effort first, then haiku → sonnet → opus → fable

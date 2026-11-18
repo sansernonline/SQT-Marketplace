@@ -432,3 +432,43 @@ Claude Code หยุด bench เพราะหน่วยความจำ�
 | t4-new-2 | opus · $0.90 | 6 · $1.05 | worker · sonnet/medium · phone.js with tests · $0.05<br>worker · opus/high · bahtText.js with tests · $0.22<br>worker · sonnet/medium · thaiId.js with tests · $0.08<br>worker · opus/high · receipt.py calc_receipt · $0.20<br>reviewer · opus/high · Review receipt toolkit diff · $0.46<br>worker · sonnet/medium · buddhist.js with tests · $0.05 |
 
 อ่านทีม: หัวหน้า (opus) ใช้เงินเองราว $0.5–0.9 ต่อรอบ เท่ากับทั้งรอบของแขนไม่มี plugin · t4 รอบ 1 หัวหน้าตีว่าทั้งงานเป็นงานเงิน (กฎข้อ 0 ของ superuser หัวข้อ 5) ทุกชิ้นจึงเป็น opus/high แม้ thaiId · phone · buddhist ไม่เกี่ยวกับเงิน · รอบ 2 ให้ sonnet/medium กับ 3 ชิ้นนั้น ลูกทีม sonnet ใช้ $0.05–0.08 ต่อตัว เทียบ opus $0.13–0.23 · ผู้ตรวจเป็น opus/high ทุกรอบ ($0.20–0.49) เพราะงานแตะเงินและส่งลูกค้า
+
+## 2026-11-18 10:58 · old=origin/main · new=HEAD · prompt=natural · 3 รอบ/แขน
+
+- Claude Code 2.1.327 (Claude Code) · model ที่ถูกใช้: claude-opus-5-5 · claude-sonnet-5-5 · plugin ที่โหลดในแขนที่มี: superuser อย่างเดียว · เพดาน $8 ต่อรอบ
+
+| ขนาด | งาน | ชนิด | แขน | เวลา (วินาที) | เวลา API | ค่าใช้จ่าย ($) | token | ลูกทีม | เปิด superuser | test ที่ซ่อนไว้ | ผ่านครบ | $ ต่องานที่ผ่าน | ไฟล์ที่แก้ · รอบที่แก้นอกขอบเขต | อ้างเกินจริง | ข้อตรวจเพิ่ม | ล้ม · ถูกปฏิเสธ |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| กลาง | t2 | โค้ด (เงิน) | old | 163 | 141 | 0.77 | 493099 | 1.0 | – | 15/15 · 15/15 · 14/15 | 2/3 | 1.12 | 2 | 1/3 | ทัก discount_pct ที่ spec ไม่บอกชนิด 1/3 | 0 · 5 |
+| กลาง | t2 | โค้ด (เงิน) | new | 202 | 178 | 0.83 | 526078 | 1.0 | 3/3 | 15/15 · 15/15 · 15/15 | 3/3 | 0.85 | 2 | 0/3 | ทัก discount_pct ที่ spec ไม่บอกชนิด 1/3 | 0 · 9 |
+| ใหญ่ | t4 | โค้ด (เงิน) | old | 386 | 414 | 1.90 | 1644525 | 2.3 | – | 39/39 · 39/39 · 39/39 | 3/3 | 1.69 | 10 | 0/3 | ทัก discount_pct ที่ spec ไม่บอกชนิด 0/3 | 0 · 12 |
+| ใหญ่ | t4 | โค้ด (เงิน) | new | 356 | 393 | 1.85 | 1419133 | 4.0 | 3/3 | 39/39 · 39/39 · 39/39 | 3/3 | 1.72 | 10 | 0/3 | ทัก discount_pct ที่ spec ไม่บอกชนิด 0/3 | 0 · 8 |
+
+**แยกตามขนาด** (new ÷ old · ค่ากลาง · ช่วง 95% แบบ bootstrap ไม่จับคู่ · ผ่านครบ = ทุก test ที่ซ่อนไว้ผ่าน · ผลต่างผ่านครบใช้ช่วง Newcombe)
+
+| ขนาด | งาน | ผ่านครบ new · old | ผลต่าง (ช่วง 95%) | คุณภาพ | ค่าใช้จ่าย | เวลา | token | เปิด superuser | อ้างเกินจริง new · old | รอบที่แก้นอกขอบเขต new · old |
+|---|---|---|---|---|---|---|---|---|---|---|
+| กลาง | t2 | 3/3 · 2/3 | 33% (-29% ถึง 79%) | แยกไม่ออก | 1.08 (0.86–1.54) แยกไม่ออก · ตัวอย่างน้อย ช่วงหยาบ · แยกไม่ออก | 1.24 (0.77–1.96) แยกไม่ออก · ตัวอย่างน้อย ช่วงหยาบ · แยกไม่ออก | 1.07 (0.86–1.40) แยกไม่ออก · ตัวอย่างน้อย ช่วงหยาบ | 3/3 | 0 · 1 | 0 · 0 |
+| ใหญ่ | t4 | 3/3 · 3/3 | 0% (-56% ถึง 56%) | แยกไม่ออก | 0.97 (0.69–1.63) แยกไม่ออก · ตัวอย่างน้อย ช่วงหยาบ · แยกไม่ออก | 0.92 (0.68–1.46) แยกไม่ออก · ตัวอย่างน้อย ช่วงหยาบ · แยกไม่ออก | 0.86 (0.56–2.08) แยกไม่ออก · ตัวอย่างน้อย ช่วงหยาบ | 3/3 | 0 · 0 | 0 · 0 |
+| ทุกงาน | t2 t4 | 6/6 · 5/6 | 17% (-25% ถึง 56%) | แยกไม่ออก | 1.00 (0.80–1.34) แยกไม่ออก · แยกไม่ออก | 1.01 (0.80–1.46) แยกไม่ออก · แยกไม่ออก | 0.99 (0.71–1.41) แยกไม่ออก | 6/6 | 0 · 1 | 0 · 0 |
+
+- 3 รอบต่อแขน ช่วงยังกว้าง · ตัดสินจริงใช้ 5 รอบขึ้นไป
+
+**ทีมรายรอบ** (ค่าใช้จ่ายรายตัวคิดจาก token × ราคา · ประมาณ)
+
+| รอบ | หัวหน้า | ลูกทีม | ลูกทีมแต่ละตัว: ชนิด · model/effort · งาน · $ |
+|---|---|---|---|
+| t2-old-1 | opus · $0.56 | 1 · $0.24 | reviewer · opus/(ไม่ระบุ) · Review receipt calc vs spec · $0.24 |
+| t2-new-1 | opus · $0.52 | 1 · $0.17 | reviewer · opus/(ไม่ระบุ) · Review calc_receipt against spec · $0.17 |
+| t2-old-2 | opus · $0.46 | 1 · $0.21 | reviewer · opus/(ไม่ระบุ) · Review receipt calc vs spec · $0.21 |
+| t2-new-2 | opus · $0.58 | 1 · $0.45 | reviewer · opus/high · Review receipt calc · $0.45 |
+| t2-old-3 | opus · $0.52 | 1 · $0.26 | reviewer · opus/high · Review receipt calc · $0.26 |
+| t2-new-3 | opus · $0.49 | 1 · $0.34 | reviewer · opus/high · Review receipt calc vs spec · $0.34 |
+| t4-old-1 | opus · $0.80 | 1 · $0.39 | reviewer · opus/(ไม่ระบุ) · Review receipt toolkit · $0.39 |
+| t4-new-1 | opus · $0.89 | 5 · $0.97 | reviewer · opus/high · Opus review of all 5 pieces · $0.42<br>worker · opus/medium · phone.js + test · $0.12<br>worker · opus/medium · thaiId.js + test · $0.14<br>worker · opus/medium · buddhist.js + test · $0.10<br>worker · opus/medium · bahtText.js + test · $0.18 |
+| t4-old-2 | opus · $1.04 | 3 · $0.94 | worker · opus/high · Tests for thaiId/phone/buddhist · $0.24<br>worker · opus/high · bahtText impl + test · $0.28<br>reviewer · opus/high · Fresh review of all 5 pieces · $0.42 |
+| t4-new-2 | opus · $0.93 | 1 · $0.43 | reviewer · opus/high · Opus review of receipt toolkit · $0.43 |
+| t4-old-3 | opus · $1.04 | 3 · $0.86 | worker · opus/high · bahtText + unit test · $0.25<br>worker · sonnet/medium · Unit tests for 3 JS utils · $0.12<br>reviewer · opus/high · Fresh review of receipt toolkit · $0.49 |
+| t4-new-3 | opus · $0.81 | 6 · $1.13 | worker · opus/medium · phone.js + test · $0.10<br>reviewer · opus/high · Final review of 5 pieces · $0.42<br>worker · opus/medium · thaiId.js + test · $0.14<br>worker · opus/medium · buddhist.js + test · $0.11<br>worker · opus/medium · receipt.py calc_receipt · $0.20<br>worker · opus/medium · bahtText.js + test · $0.17 |
+
+อ่านผลรอบนี้ (superuser 3.48.0 เทียบ 3.49.0 ที่ลูกทีมงานเสี่ยงใช้ opus + medium): คุณภาพเท่าเดิม (t4 39/39 ทุกรอบทั้ง 2 รุ่น · t2 รุ่นใหม่ 15/15 ทุกรอบ รุ่นเก่าตก 1 รอบ) · ลูกทีม opus/medium ใช้ $0.10–0.14 ต่อตัว เทียบ opus/high $0.24–0.28 · แต่ยอดรวมต่อรอบแยกไม่ออก (t4 0.97 เท่า) เพราะเงินก้อนใหญ่อยู่ที่หัวหน้า opus ($0.8–1.0 ต่อรอบ) กับผู้ตรวจ opus/high (~$0.42) และจำนวนลูกทีมแกว่ง 1–6 ตัวในงานเดียวกัน · หัวหน้ารุ่นเก่าส่งผู้ตรวจโดยไม่ระบุ effort 3 จาก 6 รอบ
