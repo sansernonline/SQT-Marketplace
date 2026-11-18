@@ -1,6 +1,6 @@
 ---
 name: branded-document-design
-description: Use when a Word, PowerPoint or PDF must look designed
+description: Use when a Word, PowerPoint or PDF or its cover must look designed
 ---
 
 # Branded Document Design — .docx / .pptx / .pdf that looks intentionally designed
@@ -11,6 +11,7 @@ description: Use when a Word, PowerPoint or PDF must look designed
 
 ## Use when
 - The output is a .docx / .pptx / .pdf (quotation · business plan · report · contract · SRS) that a customer, executive, or another team will open, or that must be signed off or attached to a contract
+- A document set needs its own cover from the logo shape or a real mockup, or covers look alike across projects → step 3 and `references/cover-design.md`
 - Mixed Thai–English documents (they break easily if fonts are not fully set)
 - The same kind of document is issued repeatedly and every copy should look the same
 - Not for: markdown output → `polished-document-style` · reading or extracting a received Office file → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` · diagrams in markdown → `markdown-visuals` · a whole-book report from one Markdown file → `markdown-report-docx`
@@ -28,7 +29,7 @@ Install before use: `pip install python-docx python-pptx` · LibreOffice (`soffi
    - Work on the render script, not on .docx files one by one; render every copy.
    - **Fonts:** the brand's Thai font installed and embedded (`embed_fonts`) · Tahoma when embedding is impossible · never set Thai text in a mono font (no Thai letters in Cascadia/Consolas); mono is for code, keys, and numbers.
    - Figures in documents, beauty-gate rules, cover: [`references/word-layout.md`](references/word-layout.md), section at the end.
-3. **Cover for this document set.** If the default cover looks like another job's, do 1 direction first; only if the user is not wowed or asks for several, run the 3-direction, 2-of-3 vote in [`references/cover-vote.md`](references/cover-vote.md).
+3. **Cover for this document set.** For a software document set (BRD · SRS · FSD · ARCH) whose cover must come from the logo shape or a real mockup, follow [`references/cover-design.md`](references/cover-design.md) (page system · registry · checks · cover engine `scripts/cover-engine/`). If the default cover looks like another job's, do 1 direction first; only if the user is not wowed or asks for several, run the 3-direction, 2-of-3 vote in [`references/cover-vote.md`](references/cover-vote.md).
 4. **Tokens, never hardcode colors outside them.** `brand` · `brand_2` · `brand_deep` · `brand_tint` · `brand_tint_2` · `text` · `text_body` · `text_muted` · `line` + 6 status colors (success · info · warning · error · accent · neutral) that do not change with the brand. Set the values once with `use_brand(...)`.
    - Choose colors by meaning (red = danger/real error only); same meaning set as diagrams.
    - Contrast: body text and `text_muted` on the background ≥ 4.5:1 · H2 and table headers (`brand_deep`) ≥ 7:1 · H1 and KPI numbers (`brand`, large) ≥ 3:1 · `use_brand()` stops if it fails · in black and white the hierarchy must still read · if it fails, adjust darkness, not the color.
@@ -50,6 +51,7 @@ Install before use: `pip install python-docx python-pptx` · LibreOffice (`soffi
 - [`references/tokens-and-type.md`](references/tokens-and-type.md) — open when setting the theme or choosing sizes, colors, elements · [`references/palette-examples.md`](references/palette-examples.md) — fallback tones by kind of work
 - [`references/thai-fonts.md`](references/thai-fonts.md) — open when setting fonts or a PDF looks off
 - [`references/word-layout.md`](references/word-layout.md) — open for page structure, dark cover, figure rules
+- [`references/cover-design.md`](references/cover-design.md) — open for a software document set's own cover (logo shapes or real screen) · with [`cover-real-examples.md`](references/cover-real-examples.md) · [`cover-structural-ideas.md`](references/cover-structural-ideas.md) · [`cover-word-build.md`](references/cover-word-build.md) · [`cover-bakeoff.md`](references/cover-bakeoff.md)
 - [`references/identity-and-gate.md`](references/identity-and-gate.md) — open when running several directions or the beauty gate · [`references/cover-vote.md`](references/cover-vote.md) — the 3-direction cover vote
 - [`references/brandkit-usage.md`](references/brandkit-usage.md) · [`references/api.md`](references/api.md) — open when writing the build script
 - [`references/visual-check.md`](references/visual-check.md) — open when rendering for the eye check · [`references/anti-patterns.md`](references/anti-patterns.md) — open when reviewing

@@ -2181,107 +2181,6 @@ await stripe.subscriptions.create({
 
 ---
 
-# skill: simplicity-first
-
-Use when cutting a spec or architecture to fewest parts
-
-# Simplicity First
-
-This skill covers **non-code outputs** — documents, plans, architecture, and
-designs. For code, use `lazy-coding`.
-
-## Check before submitting — 5 items
-
-1. **A tired teammate gets it** in 6 months with no prior context.
-2. **Simplest thing that works** — fewest moving parts, boring proven patterns; add complexity only when something breaks.
-3. **Every new component, option or layer has evidence it is needed now**, and leaving it out would cost something real.
-4. **Nothing can be deleted without losing meaning** — deleting beats adding.
-5. **Reads in one pass** — no jargon the audience lacks, an example for every abstract claim, the whole thing fits in two sentences.
-
-Any "no" or "not sure" → simplify before delivering.
-
-## By output type
-
-### Documents (BRD, FSD, ADR)
-
-Business Requirements Document (BRD) · Software Requirements Specification (SRS) · Functional Specification Document (FSD) · Architecture Decision Record (ADR).
-
-Do: short sentences (≤ 20 words), plain English, one idea per paragraph, an
-example for every abstract point, tables for structured data.
-
-Avoid: marketing-speak ("revolutionary", "best-in-class", "synergy"), undefined
-jargon, walls of text, hedging ("might possibly potentially"), acronym soup.
-
-### Architecture
-
-Do: monolith first (split only when a bottleneck is proven), familiar stack,
-standard patterns (Representational State Transfer (REST), queues, caches), single source of truth per data type.
-
-Avoid: microservices for small teams, distributed-everything, multi-master
-databases before you must, event-driven by default (sync is simpler).
-
-### Plans
-
-Do: 3-5 priorities (not 20), a named owner per item, measurable success
-criteria, realistic timelines with buffer, cut scope to fit time.
-
-Avoid: vague goals ("improve quality"), 50-item lists (= no priority),
-aspirational dates with no buffer, plans without success metrics.
-
-### Designs (user experience (UX), application programming interface (API))
-
-Do: fewest steps to the user's goal, reuse existing patterns, stay consistent
-across screens, defaults that work for 80%, progressive disclosure.
-
-Avoid: novel interactions where a standard one works, 10-step flows when 3
-work, required fields with no smart default, hidden features needing tutorials.
-
-## Anti-patterns to reject
-
-- **Future-proofing** — abstractions for needs that never arrive.
-- **"It might scale"** — infra for 1M users while you have 1k.
-- **Layer cake** — 6 layers where 90% just pass through.
-- **Resume-driven design** — fancy tech to look sophisticated.
-- **Buzzword stacking** — "cloud-native event-driven AI-powered".
-
-## References
-
-- [`references/examples.md`](references/examples.md) — open for wrong/right pairs: API description, sprint goal, architecture
-
-
-## reference: examples.md
-
-# Examples · simplicity-first
-
-
-**API description**
-
-Wrong: "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
-authentication to facilitate the seamless retrieval of user profile data."
-
-Right: "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
-`?fields=name,email` to limit the response."
-
-**Sprint goal**
-
-Wrong: "Improve overall product quality and customer satisfaction through various
-initiatives."
-
-Right: "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
-transient errors (1d), clearer error messages (1d)."
-
-**Architecture for a new feature**
-
-Wrong: "Event-sourced microservice with Command Query Responsibility Segregation (CQRS), Kafka ingestion, Redis cache, and a
-dedicated auth service."
-
-Right: "Add an endpoint to the existing API. One Postgres table for state. Standard
-auth middleware. Log to the existing system."
-
-
-
----
-
 # skill: markdown-visuals
 
 Use when a Markdown doc needs an image, SVG or ASCII art
@@ -3327,3 +3226,615 @@ If you write fixed coordinates, one text edit knocks the lines off across the wh
 - **No more than 5** cross-column lines per figure, because beyond that the figure turns into a spider web.
 - Connect to the **smallest box that is correct**, not the large box around it. If a box is very tall, set `tp` so the line does not aim at the middle of the box.
 - A label on a line says **what flows through**, such as `HTTPS 443`, not `เชื่อมต่อ` (connect). If there is nothing to say about a line, leave the label off rather than writing "use".
+
+
+---
+
+# skill: project-doc-set
+
+Use when choosing a project doc set or open-items Excel
+
+# Project doc set
+
+> **One rule:** every doc must answer **who reads it** and **what they decide after reading**.
+> If it cannot answer, do not write it.
+
+---
+
+## When to use this skill
+
+Use it when: opening a new project and deciding which docs it needs · docs are scattered and nobody knows which is the real one · a client asks what will be delivered · about to write a doc but unsure what must come first.
+
+## When **not** to use it
+
+| Situation | Use instead |
+|---|---|
+| Folder layout of the **code** (including the `docs/` inside code in type A) · README · CHANGELOG · linter | `project-bootstrap` |
+| Naming **files** and version numbers of docs | `document-naming` |
+| Actually writing one doc | The skill for that doc (table in section 4) |
+| Making document pages look good | `branded-document-design` |
+
+---
+
+## 1 · Docs inside or outside the repo
+
+**Decide this first** (moving later means fixing links across the whole project). **The default is type B**, even when the docs are pure markdown. The code lives in `<project-name>/` (lowercase, joined with `-`). Use type A only when the user asks.
+
+- **Type B** (docs outside the repo): use it for every set size (S · M · L). `.docx` / `.xlsx` / mockups / PNGs that the client must see stay out of pull requests. The root layout is below (this section owns the root layout).
+- **Type A** (docs inside the repo): only when the user asks and the docs are pure markdown. Docs and code change in the same pull request. The root looks like type B but has no root `docs/`. The `docs/` folder sits inside the code folder, and its inner layout belongs to `project-bootstrap` section 1.
+- A type A project that grows deliverable docs moves to type B **as a whole set in one go**. A doc that lives in 2 places means 2 versions.
+
+### Type B layout
+
+```
+<project-name>/
+├─ ref/                 things received — TOR · meeting notes · screenshots of the old system · client files  **read-only, never edit**
+├─ docs/                every doc we write — delivered .docx and technical .md live together
+│  ├─ figures/          exported figures — .png only        [exists when delivered docs have figures]
+│  │  └─ src/           source files of the figures (.html · .mmd · .drawio)
+│  ├─ decisions/        ADR-NNNN-<slug>.md, one decision per file  [optional]
+│  ├─ runbook-<topic>.md  guide for when the system has problems, one topic per file  [optional]
+│  └─ research/         research on a reference app (`reference-app-research`) [optional]
+├─ mockup/              .html that opens and really clicks
+├─ qa/                  test cases · test results · bugs/ bug reports
+├─ assets/              logos · icons in all sizes · favicon · wordmark (.svg source + exports)
+├─ _to_delete/          every kind of temporary item
+├─ .claude/            project skills (such as verify) — must sit where Claude Code is opened
+│  └─ superuser/        SuperUser working files — CONTEXT.md · HISTORY.md · IMPROVEMENTS.md · log/ · inbox/ · learn/
+└─ <project-name>/      code repo, project name lowercase joined with `-` — inner layout belongs to `project-bootstrap`
+```
+
+**SuperUser files** (`.claude/superuser/` · `docs/BRIEF.md` · `AGENTS.md`/`GEMINI.md`): the single source is [`superuser/references/team-files.md`](../superuser/references/team-files.md).
+
+**ADRs and runbooks live in the root `docs/`, not in `<project-name>/docs/`.** Type A moves the whole `docs/` into the code folder, with the same inner layout. Paths: `docs/decisions/ADR-NNNN-<slug>.md` · `docs/runbook-<topic>.md`. This section is the only place that defines this.
+
+**Root exceptions:** `.sandbox/` may sit at the root when you use `docker-sandbox` · `AGENTS.md` / `GEMINI.md` under the conditions above. Declare every exception in the README of the code folder.
+
+**Create folders when real content exists, not in advance:** `ref/` when you get files from the client or the old system (never mix them into `docs/`) · `docs/figures/` when a delivered doc has a self-drawn figure (otherwise the figure is stuck inside the `.docx` and cannot be edited) · `docs/decisions/` when a decision needs explaining later · `docs/research/` when the user wants an app like an existing one · `qa/` when test cases exist (test cases always live here; `docs/test-plan.md` holds only the plan) · `assets/` when there is a logo or icon.
+
+**Ecosystem project** (2 or more sub-projects, each with its own doc set): the folder is always named `ecosystem/` (never `projects/` `modules/` `apps/`). `ecosystem/<code>-<SUB>/` holds `docs/` `mockup/` `qa/` and its own repo. Docs that cover all sub-projects live in one place, the root `docs/`. Full layout and rules: [`references/ecosystem.md`](references/ecosystem.md). An add-on or sub-program of one app (browser extension · plugin · CLI · hook client · SDK) with no doc set of its own is not a sub-project: it lives in the code repo under `<project-name>/extension/<name>/` (`project-bootstrap` item 1).
+
+
+**Folder rules (both types):**
+
+- **`.docx` and `.md` may share one `docs/`.** No need for separate folders, because the extension already says who reads it.
+- **Never lose the source files of figures.** If a figure must change next year and only the PNG is left, the whole figure must be redrawn.
+- **Every button in a mockup must really click**, because a fake button makes the review wrong.
+- **`.docx` / `.xlsx` live only in `docs/` and `qa/`.** Do not scatter them to the project root.
+- **Temporary items go to `_to_delete/`** (`temp-file-discipline`).
+- **`docs/README.md` is the index.** It says what to read first and who owns what (template in `project-bootstrap` → `assets/starter-files.md`).
+
+---
+
+## 2 · Choose the doc set by project size
+
+Size is measured by **duration × number of people who must agree**, not by lines of code.
+
+**S** ≤ 2 weeks · one team · nobody outside the team signs — **M** 1–3 months · internal client · delivered in rounds — **L** > 3 months · external client signs off · contractual obligations
+
+### 2.1 · Deliverable docs: people read and sign them
+
+| Doc | Format | Readers | S | M | L |
+|---|---|---|:-:|:-:|:-:|
+| Project Plan | `.docx` | client · team | ○ | ● | ● |
+| SRS | `.docx` | dev · client | ○ | ● | ● |
+| Architecture | `.docx` | dev · ops | ○ | ● | ● |
+| Test Plan | `.docx` | QA · client | ○ | ● | ● |
+| User guide (`MAN`) | `.docx` → `.pdf` | end users | ○ | ● | ● |
+| FSD | `.docx` | dev · QA | ○ | ○ | ● |
+| BRD | `.docx` | business side | ○ | ○ | ● |
+| Document Checklist | `.docx` | everyone | ○ | ○ | ● |
+| Test Cases | `.xlsx` | QA | ○ | ○ | ● |
+
+● required · ○ not needed unless there is a specific reason
+**Set S has none of these docs.** That is correct.
+
+---
+
+### 2.2 · Technical docs: the team and agents use them while building
+
+All markdown. They **depend on what the project contains**, not on project size. Full table (file · question answered): [`references/technical-docs.md`](references/technical-docs.md).
+
+- **Always:** `<project-name>/README.md` · `docs/BUILD-PLAN.md`
+- **Conditional:** USER-STORIES and `docs/sprints/sprint-NN.md` (work runs in sprints) · AGENT-LOOP (an agent writes code in rounds) · API-SPEC (an API that others call) · DATA-DICTIONARY (a database exists) · EVALUATION-POLICY and PROMPT-LIBRARY (LLM used) · `docs/decisions/ADR-NNNN-<slug>.md` (decisions that will be questioned again) · `docs/runbook-<topic>.md` (system in real use and someone on call)
+
+---
+
+## 3 · Writing order
+
+**Delivery track.** Never skip a step that belongs to the set for that size. Skip steps that are not in the set, such as BRD · FSD in set M.
+
+```
+Project Plan ─► BRD ─► SRS ─┬─► mockup
+                            └─► Architecture ─► FSD
+                                                 │
+              User Guide ◄─ Test Cases ◄─ Test Plan
+```
+
+**The next doc may build on the DRAFT of the previous one.** Put `(รอยืนยัน)` (awaiting confirmation) on every unconfirmed item in both docs. Never set the next doc to APPROVED before the previous one, because if the upstream doc changes, the whole chain must be redone.
+The one exception: **the mockup may run in parallel with the SRS**, because screenshots help the SRS get confirmed faster.
+
+### 3.1 · Open-items register: when the user asks "what is still stuck", answer with an Excel file, not chat text
+
+Labels such as `(รอยืนยัน)` · `(รอวัดใน Phase 0)` (awaiting measurement in Phase 0) and question tables are spread over every doc, so the decision maker sees no overall picture. Merge them into one file with the script. Do not read them all by hand:
+
+```
+python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE>    # test the script: --self-test
+```
+
+- It reads every `.docx` in `docs/`: question tables · tables of undecided assumptions · sign-off tables still "waiting" · labels in the body. It skips revision history, table of contents, label-explanation lines and `(รอบหลัง)` (later round).
+- The **สรุป** (summary) sheet counts by document × type with formulas. The **รายการค้าง** (open items) sheet has the heading in the doc · who answers · decide by · value used for now · cross-references · and "สถานะ" (status) and "คำตอบ" (answer) columns for people to fill in.
+- Types (ประเภทที่ต้องเลือก), shown in Thai in the sheet: **เจ้าของตัดสิน** (owner decides: a web search cannot close it) · **ทีมตัดสิน** (team decides: BA · SA) · **กฎหมาย** (legal) · **วัดจริง** (needs a real-world number: none is published) · **ลงนาม** (sign-off). A question that cites an owner question in another doc also counts as "เจ้าของตัดสิน".
+- **Before sending, read the list by eye.** The script matches wording. A row that was already answered but does not use the words "ตอบแล้ว · ปิดแล้ว · ตัดสินแล้ว" (answered · closed · decided) still gets through.
+- When the user fills in answers: write the answer into the source doc, remove the label, record it in the revision history, then rerun the script. This file is a work list, not a source. Do not edit answers in this file in place of the doc.
+
+**Technical track.** Write when you reach the point of need. No need to wait for anyone: README · BUILD-PLAN before the first line of code · DATA-DICTIONARY when designing the first table · API-SPEC at the first endpoint · PROMPT-LIBRARY at the first prompt really used · ADR at decision time (not in the final wrap-up, because the real reasons are gone by then) · Runbook before going live. Full table in [`references/technical-docs.md`](references/technical-docs.md).
+
+---
+
+## 4 · Who writes which doc, with which skill
+
+Full table (agent · skill for each of 16 doc types): [`references/technical-docs.md`](references/technical-docs.md). Main ones: SRS → `srs-writing` · FSD → `fsd-writing` · ADR → `adr-writer` · Test → `test-case-template` · mockup → `web-app-design` + `ui-craft` · README → `project-bootstrap`
+
+---
+
+## 5 · Figures in docs: choose correctly from the start
+
+- Figures in every kind of project doc (BRD · SRS · FSD · ADR · ER · flowcharts) · slides · print work → `diagram-figures` (one house style). Keep them in `docs/figures/` with sources in `src/`. **Default Mermaid is banned from project docs.**
+- Quick figures in a README · PR · code notes → Mermaid (`software-diagrams`) embedded in `.md` (colours are random and meaningless, Thai overflows the boxes, and shrunk to A4 it is unreadable).
+
+**Every figure header needs all 6 items:** project logo · title · 1-line subtitle · figure number · version and date · owner (details in `diagram-figures` section 3).
+
+---
+
+## 6 · Colour theme of the doc set
+
+Declare it once per project, at the top of every doc's source file:
+
+```markdown
+<!-- doc-theme: accent=#2A78D6 -->
+```
+
+(The example uses the house colour `#2A78D6`. Replace it with the project's main colour.)
+
+`branded-document-design` · `presentation-design` · `diagram-figures`
+read this value instead of picking colours themselves, so docs, slides and every figure form one set.
+
+**Colour comes from the work, not from taste.** If there is a brand colour, use it. If not, use the house colour of `branded-document-design`, write `(รอยืนยัน)`, and carry on without stopping to ask.
+Exceptions that do not follow the theme: service provider logo colours · grey structural lines · green = pass / red = fail
+
+---
+
+## 7 · Checklist before delivering the doc set
+
+- [ ] In every `.docx`, open the Navigation Pane and **see all headings** (use real Heading styles, not bold text)
+- [ ] Every doc has a revision history page · version number · date · author
+- [ ] Every figure has a figure number and is cited in the body at least once
+- [ ] The source file of every figure is in `docs/figures/src/` (if this folder exists)
+- [ ] Technical docs that meet the conditions in section 2.2 are all present. For example, if there is an API there must be an API-SPEC, and if an LLM is used there must be a PROMPT-LIBRARY
+- [ ] Every abbreviation is spelled out at first appearance
+- [ ] File names follow `document-naming`: no `final2`, no `ล่าสุด` ("latest")
+- [ ] Docs in the set cite each other's versions consistently
+- [ ] Run `scripts/open_items.py`, and the open-items register has no row with status "เปิด" (open), or the client knows about every row still open
+- [ ] Tell the user what is left in `_to_delete/` (do not delete it yourself; delete only when the user says so)
+
+---
+
+## 8 · Anti-patterns
+
+Wrong: `.docx` with no Heading style · keeping only the PNG and not the source · `.docx` and mockups inside the code repo (at this point move to type B) · a doc in 2 places (= 2 versions) · FSD before the SRS is confirmed · using an LLM with no PROMPT-LIBRARY · sub-projects named `projects/` `modules/` `apps/` · empty folders created in advance · one doc that answers every question
+
+---
+
+## 10 · Links to other skills
+
+Doc status in `docs/BUILD-PLAN.md` → `status-report` · checklist for the printed version → `assets/doc-set-checklist.md`
+
+**Read more when needed:** [`references/writer-templates.md`](references/writer-templates.md): `technical-writer` doc templates (tutorial · API reference · release notes · for README see `project-bootstrap`)
+
+**When the guide must go on the web, be searchable and have many versions:** [`references/docs-site.md`](references/docs-site.md): choosing MkDocs Material · Docusaurus · Starlight · VitePress · Thai search test results · hosting · Thai fonts
+
+
+## reference: docs-site.md
+
+# Docs site
+
+Pick a docs-site generator when a manual or developer documentation must go on the web, be searchable, and have several versions · use with `SKILL.md` item 1 (where the documents live) and the templates in [`writer-templates.md`](writer-templates.md).
+Facts checked 2026-10-23 from official docs · npm · PyPI · GitHub and real tests (section "Sources").
+Abbreviations: Application Programming Interface (API) · Software Development Kit (SDK) · Architecture Decision Record (ADR) · SIL Open Font License (OFL) · Software as a Service (SaaS) · user interface (UI)
+
+## 1 · Is a docs site needed
+
+| Situation | Use |
+|---|---|
+| People outside the team read often (public API · SDK · a manual updated every release) · search needed · several versions at once | a docs site (this file) |
+| The team reads it themselves | `README.md` + `docs/*.md` on GitHub is enough |
+| The customer signs for acceptance | `.docx` per `SKILL.md` item 2.1 · a docs site does not replace the handover document |
+
+## 2 · Comparing the 4 generators
+
+| | MkDocs Material | Docusaurus | Starlight | VitePress |
+|---|---|---|---|---|
+| Requires | Python | Node · React | Node · Astro | Node · Vue |
+| Latest version | 9.7.7 | 3.10.2 | 0.42.6 (not yet 1.0) | 1.6.4 · 2.0 is still alpha |
+| Built-in search | yes · lunr.js + lunr-languages (can set `lang: th`) | no · the official one is Algolia DocSearch · local search uses a community plugin | yes · Pagefind is on by default, no setup | yes · MiniSearch (`provider: 'local'`) or Algolia |
+| Versioning | via `mike`, an external tool | built in, `docusaurus docs:version` | community plugin `starlight-versions` | none · issue #109 is still open |
+| Multiple languages (i18n) | the UI can be translated (`th` exists) · a multilingual site = one project per language + a language switcher | built in | built in · a Thai UI is included | built in |
+| licence | MIT | MIT | MIT | MIT |
+
+MkDocs Material: the maintainers announced they will maintain only critical fixes until 5 May 2027 and told users to move to Zensical (version 0.0.71 · status Alpha · MIT) · a new project that must live for years should record this in an ADR.
+Quick pick: Python team → MkDocs Material (plan a move) · need built-in versioning → Docusaurus · want a light site with little setup → Starlight · Vue team → VitePress
+
+## 3 · Thai search, tested for real
+
+Thai has no spaces between words, so a search engine that splits words on spaces cannot find a word in the middle of a sentence · tested 2026-10-23 with 2 Thai pages, searching 9 words: ภาษี · กำกับ · สต็อก · สินค้า · ร้านค้า · ภาษีมูลค่าเพิ่ม · อิเล็กทรอนิกส์ · ตัดสต็อก · ทะเบียน
+
+| Search engine (version tested) | Used in | What the docs say about Thai | Found |
+|---|---|---|---|
+| Pagefind 1.5.2 (builds an index, searches in the browser) | Starlight | has `th` · no stemming · the word-segmentation section mentions only Chinese, Japanese, Korean | 6/9 · missed กำกับ · ทะเบียน · ภาษีมูลค่าเพิ่ม |
+| lunr 2.3.9 + lunr-languages 1.23.0 `th` (word splitting with wordcut · tested in Node, not in the theme) | MkDocs Material · plugin `@easyops-cn/docusaurus-search-local` (accepts every lunr-languages language) | Material accepts `lang: th` | 6/9 · missed ร้านค้า · ตัดสต็อก · ภาษีมูลค่าเพิ่ม |
+| MiniSearch 7.2.0 defaults (prefix + fuzzy as in VitePress) | VitePress | VitePress segments with `Intl.Segmenter` only for Chinese and Japanese | 0/9 |
+| MiniSearch + a `tokenize` that uses `Intl.Segmenter('th', { granularity: 'word' })` | VitePress (`options.miniSearch.options.tokenize`) | `tokenize` can be set by yourself | 9/9 (tested in Node 22 · not yet tested in a whole VitePress site) |
+| Algolia DocSearch | Docusaurus · Starlight · VitePress | Algolia's language table: Thai segmentation "Not supported" | not tested |
+
+- Results depend on the project's vocabulary → before delivery, search 20 real terms and record the results in the docs site's README.
+- DocSearch is free only for technical documentation and technical blogs that are public. The site must be live and have no non-technical content.
+
+## 4 · Hosting
+
+| | GitHub Pages | Cloudflare |
+|---|---|---|
+| Price | free · a free account needs a public repo | Pages has a free plan · Workers static assets: static file requests are free and unlimited |
+| Limits | site ≤ 1 GB · bandwidth 100 GB/month (soft) · build 10 times/hour (soft · builds through GitHub Actions do not count) · a deploy over 10 minutes fails | Pages free plan: 500 builds/month · 1 build at a time · max 20 minutes · 20,000 files · each file ≤ 25 MiB |
+| Conditions | must not be used as free hosting for an online business or SaaS · the site is public even if the repo is private | the Pages page tells new projects to start on Workers |
+
+A document that outsiders must not see does not go on a public site. Keep it as `docs/*.md` in the repo (how each host restricts readers has not been checked).
+
+## 5 · Thai fonts
+
+- Use the same fonts as the app: `Inter` + `Noto Sans Thai` (`web-app-design` → `references/tokens.md`) · other Google Fonts choices that have Thai letters and are OFL: Sarabun · IBM Plex Sans Thai · Anuphan
+- Load through the Google Fonts CSS2 API with `display=swap` · the API splits out the `/* thai */` block with `unicode-range: U+0E01-0E5B …` by itself, so the browser loads only the parts the page uses (seen in the CSS the API returned 2026-10-23)
+- Thai line-height is the English value plus 0.1 (`ui-craft` item 2)
+- Set the font in the slot the theme exposes · the setting names and CSS variables of each theme have not been checked
+
+## 6 · Content lives in the repo beside the code
+
+- The docs site source lives in the code folder `<project-name>/docs/` with the generator's config file (layout A of `project-bootstrap` item 1) · code and manual change in the same pull request
+- Type B projects: the handover `.docx` · ADR · runbook · BUILD-PLAN stay in `docs/` at the root · the docs site takes only what outsiders read (manual · tutorial · API reference · release notes) · the same content must never live in 2 places
+- Build in Continuous Integration (CI) on every pull request and deploy on merge (`cicd-and-release`)
+- An exception to the root is declared in the code folder's README (`SKILL.md` item 1)
+
+## Sources
+
+| Topic | URL or evidence (2026-10-23) |
+|---|---|
+| MkDocs Material | https://squidfunk.github.io/mkdocs-material/ (status · Zensical) · .../plugins/search/ · .../setup/changing-the-language/ · .../setup/setting-up-versioning/ |
+| Docusaurus | https://docusaurus.io/docs/search · https://docusaurus.io/docs/versioning · https://docusaurus.io/docs/i18n/introduction |
+| Starlight | https://starlight.astro.build/guides/site-search/ · .../guides/i18n/ · .../resources/plugins/ |
+| VitePress | https://vitepress.dev/reference/default-theme-search · https://vitepress.dev/guide/i18n · https://github.com/vuejs/vitepress/issues/109 |
+| Pagefind | https://pagefind.app/docs/multilingual/ |
+| lunr-languages | https://github.com/MihaiValentin/lunr-languages (file `lunr.th.js` uses wordcut) |
+| MiniSearch | https://lucaong.github.io/minisearch/types/MiniSearch.Options.html |
+| Algolia | https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/ · https://docsearch.algolia.com/docs/who-can-apply/ |
+| Docusaurus local-search plugin | https://github.com/easyops-cn/docusaurus-search-local |
+| Versions and licence | registry.npmjs.org · pypi.org · api.github.com (Zensical: GitHub = MIT · PyPI = Alpha) |
+| GitHub Pages | https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits · .../creating-a-github-pages-site |
+| Cloudflare | https://developers.cloudflare.com/pages/platform/limits/ · https://developers.cloudflare.com/pages/ · https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/ |
+| Google Fonts | https://developers.google.com/fonts/docs/css2 · `METADATA.pb` in https://github.com/google/fonts · real CSS from fonts.googleapis.com |
+| Thai search test | Pagefind via `npx pagefind@1.5.2` + a browser · lunr and MiniSearch via Node 22 · 2 test pages, the 9 search words in item 3 |
+
+
+## reference: ecosystem.md
+
+# Ecosystem project: 1 system split into several sub-projects
+
+Read this when a project has 2 or more sub-projects and each one has its own doc set. The short rule is in `SKILL.md` section 1.
+
+Use it when the project is a product suite with 2 or more sub-projects, and each has its own doc set (SRS · mockup · architecture). Example: Quanton, split into CONNECT · LAB · INTEL · DESK.
+**The folder must always be named `ecosystem/`.** Never use `projects/`, `modules/` or `apps/`. When someone opens the folder, they must see at once that everything inside is a piece of one system.
+
+```
+<project-name>/
+├─ docs/                ecosystem-level docs — README (index) · BUILD-PLAN · project-plan · BRD · figures/
+├─ ecosystem/
+│  └─ <code>-<SUB>/     1 folder per sub-project, e.g. QTN-CONNECT
+│     ├─ docs/          srs.md · architecture.md · decisions/ · figures/ · fsd-*.md · test-plan.md
+│     ├─ mockup/
+│     ├─ qa/
+│     └─ <sub-name>/    code repo of this sub-project (lowercase, joined with `-`)
+├─ ref/ · assets/ · _to_delete/ · .claude/   shared by the whole ecosystem (same rules as type B)
+```
+
+- Docs that cover every sub-project (BRD · project plan · BUILD-PLAN) live in one place, the root `docs/`. Never copy them into each sub-project.
+- Create a sub-project folder when you start writing that sub-project's docs. Do not create folders in advance.
+- Sub-project folder name = project code + sub-project name in capitals (`QTN-CONNECT`). Use the same code the docs cite.
+- If a project already uses `projects/`, rename it to `ecosystem/` and fix the paths in every doc and script in the same pass.
+- A project with a single product does not need `ecosystem/`. Use type B as usual.
+- An add-on or sub-program of one app (browser extension · plugin · CLI · hook client · SDK) without its own doc set is not a sub-project. It stays in that app's repo under `extension/<name>/` (`project-bootstrap` item 1). Move it here only when it gets its own SRS, mockup or release cycle.
+
+
+## reference: technical-docs.md
+
+# Technical docs: table, writing order and who writes what
+
+Read this when choosing the technical doc set or about to write one of them. The summary is in `SKILL.md` sections 2.2–4.
+
+## Technical docs (section 2.2)
+
+This group is **all markdown** and **does not depend on project size**. It depends on what the project contains.
+
+| Doc | File | Answers the question | Needed when |
+|---|---|---|---|
+| README | `<project-name>/README.md` | How to install and run | **Always** |
+| BUILD-PLAN | `docs/BUILD-PLAN.md` | What to build first and next · where we are now | **Always** |
+| USER-STORIES | `docs/USER-STORIES.md` | What to build for whom · which story is ready for a sprint · what the AC (acceptance criteria) are | Work runs in sprints or there is a backlog (`user-story-writer`) |
+| Sprint plan | `docs/sprints/sprint-NN.md` | Which stories this sprint takes · what the goal is · what the risks are | Work runs in sprints (`/sprint-plan`). One file per sprint; never overwrite old ones |
+| AGENT-LOOP | `docs/AGENT-LOOP.md` | How the agent works in a cycle · what the stop condition is | An agent writes code in rounds (`spec-to-code-loop`) |
+| API-SPEC | `docs/API-SPEC.md` | What each endpoint accepts, returns and how it fails | There is an API that others call (`api-conventions`) |
+| DATA-DICTIONARY | `docs/DATA-DICTIONARY.md` | What a field means · what values it can take | There is a database or data schema (`database-design`) |
+| EVALUATION-POLICY | `docs/EVALUATION-POLICY.md` | What measures whether the output is good enough · what the pass threshold is | Output comes from a model or LLM that is not always right |
+| PROMPT-LIBRARY | `docs/PROMPT-LIBRARY.md` | Which prompt is the real one · which version · what changed | An LLM sits on the system's main path |
+| ADR | `docs/decisions/ADR-*.md` | Why we chose this way and not the other | A decision will be questioned again (`adr-writer`) |
+| Runbook | `docs/runbook-<topic>.md`, one topic per file | What to do when the system goes down at 2 a.m. | A system is really running and someone is on call |
+
+> **The 4 conditional docs (LLM · API · database) are the ones people forget most often.**
+> The team then ends up asking the agent every round "which prompt is the real one" or "what does this field mean".
+
+## Technical track: when to write (section 3)
+
+| Write when | Doc |
+|---|---|
+| Before the first line of code | README · BUILD-PLAN |
+| Before letting an agent work in rounds | AGENT-LOOP |
+| When designing the first table | DATA-DICTIONARY |
+| When designing the first endpoint | API-SPEC |
+| When writing the first prompt that will really be used | PROMPT-LIBRARY · EVALUATION-POLICY |
+| When deciding something that will be questioned again | ADR |
+| Before going live | Runbook |
+
+> **Write the ADR and DATA-DICTIONARY at decision time, not in the project wrap-up.**
+> You can write them afterwards, but the real reasons are gone by then.
+
+## Who writes which doc, with which skill (section 4)
+
+| Doc | agent | skill used |
+|---|---|---|
+| README · CHANGELOG | `technical-writer` | `project-bootstrap` |
+| Project Plan | `project-manager` | `branded-document-design` |
+| BRD · user story | `business-analyst` | `user-story-writer` |
+| SRS | `system-analyst` | `srs-writing` |
+| FSD | `system-analyst` | `fsd-writing` |
+| Architecture | `solution-architect` | `architecture-patterns` · `diagram-figures` |
+| ADR | `solution-architect` | `adr-writer` |
+| Test Plan · Test Cases | `qa-tester` | `test-case-template` |
+| mockups | `ux-designer` | `web-app-design` · `ui-craft` |
+| User guide (`MAN`) | `technical-writer` | `polished-document-style` |
+| Runbook | `devops-engineer` | `incident-runbook-template` |
+| BUILD-PLAN | `project-manager` | `superuser:simplify` |
+| AGENT-LOOP | `developer` | `spec-to-code-loop` |
+| API-SPEC | `system-analyst` | `api-conventions` |
+| DATA-DICTIONARY | `system-analyst` | `database-design` |
+| PROMPT-LIBRARY · EVALUATION-POLICY | `developer` | none (pairs with skill `llm-engineering`) |
+
+
+## reference: writer-templates.md
+
+# technical-writer templates — README · tutorial · API reference · release notes
+
+**Contents:** README · Tutorial Template · API Reference Template · Release Notes Template
+
+Open when you actually have to write this kind of document · put `(รอยืนยัน)` (to be confirmed) on any part you do not know.
+
+## Standard Outputs
+
+### README
+
+There is no README template here — use the single template of `project-bootstrap` (`SKILL.md` item 2 and `assets/starter-files.md`). The 15-section skeleton (9 always present · 6 present when the project has that thing) is in `references/readme-skeleton.md` · commands per language are in `references/readme-by-stack.md`.
+
+### Tutorial Template
+
+````markdown
+# Tutorial: Build Your First X in 10 Minutes
+
+> **What you'll learn:** by the end, you'll have built Y and understand Z.
+
+## What You'll Need
+
+- Node.js 22+ (Node 18 หมดอายุ 30 เม.ย. 2568, Node 20 หมด 30 เม.ย. 2569 — endoflife.date ตรวจ 22 ต.ค. 2569)
+- A free account at example.com
+- 10 minutes
+
+## Step 1: Set Up
+
+Run:
+```bash
+npx create-thing my-project
+cd my-project
+```
+
+> **What just happened?** Brief explanation.
+
+You should see:
+```
+✓ Project created
+```
+
+## Step 2: Configure
+
+...
+
+## Step 3: Run It
+
+...
+
+## Congratulations!
+
+You've built X. Try these next:
+
+- [Add feature A](#how-to-add-a) (how-to)
+- [Understand B](#concept-b) (explanation)
+- [Full API](#reference) (reference)
+````
+
+### API Reference Template (per endpoint)
+
+````markdown
+## POST `/api/v1/resource`
+
+Create a new resource.
+
+### Authentication
+
+Required. Bearer token in `Authorization` header.
+
+### Request
+
+```http
+POST /api/v1/resource HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <token>
+
+{
+  "name": "string (required)",
+  "tags": ["string (optional)"]
+}
+```
+
+### Parameters
+
+| Field | Type | Required | Description |
+|-------|------|:--------:|-------------|
+| `name` | string | ✓ | Display name, 1-100 chars |
+| `tags` | string[] | ✗ | Up to 10 tags |
+
+### Response: 201 Created
+
+```json
+{
+  "id": "res_abc123",
+  "name": "...",
+  "created_at": "2025-01-15T10:30:00Z"
+}
+```
+
+### Errors
+
+| Code | When |
+|:----:|------|
+| 400 | Validation failed (see body) |
+| 401 | Missing/invalid token |
+| 429 | Rate limit (60 req/min) |
+
+### Code Examples
+
+```typescript
+const res = await fetch('/api/v1/resource', {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ name: 'My Resource' })
+});
+```
+````
+
+### Release Notes Template
+
+> Breaking Changes must always come before the other sections (right after Highlights) — the full release notes rules are in the skill `release-notes`.
+
+````markdown
+# Release v2.1.0 — YYYY-MM-DD
+
+## Highlights
+
+> The TL;DR for busy readers.
+
+- **New:** X feature — try it: `command`
+- **Improved:** Y is faster — <measured number only, e.g. p95 login 1.2 s → 0.7 s; drop the number if not measured>
+- **Fixed:** Z bug affecting users on platform A
+
+## Breaking Changes
+
+### `api.oldMethod()` removed
+
+**Before:**
+```typescript
+api.oldMethod(arg)
+```
+
+**After:**
+```typescript
+api.newMethod({ arg })
+```
+
+[Migration guide](#)
+
+## New Features
+
+### Feature Name
+
+Description with user-facing benefit.
+
+```bash
+# Example usage
+command --new-flag
+```
+
+[Read the docs](#)
+
+## Improvements
+
+- Faster initial load time
+- Better error messages for X
+
+## Bug Fixes
+
+- Fix issue where ... ([#1234](#))
+- Resolve crash when ... ([#5678](#))
+
+## Contributors
+
+Thanks to: @alice, @bob, @charlie
+````
+
+### Release Notes Template (Thai)
+
+> Same structure as the English version · wording at news register (`human-writing` `references/thai-grammar.md` section 4): no first person · each line has subject + verb + object · numbers must be measured, and if there are none, leave them out · right/wrong examples are in the skill `release-notes` item 4.
+
+````markdown
+# เวอร์ชัน 2.1.0 — YYYY-MM-DD
+
+## สรุป
+
+- **ใหม่:** ส่งออกรายงานเป็น CSV ได้แล้ว — เมนู รายงาน → ส่งออก
+- **เร็วขึ้น:** ส่งออกรายงาน 1,000 แถวใช้เวลา 3 วินาที จาก 12 วินาที
+- **แก้แล้ว:** ลบสินค้าชิ้นสุดท้ายในตะกร้าแล้วแอปไม่ปิดตัวเองอีก
+
+## สิ่งที่ต้องแก้ก่อนอัปเดต
+
+### `api.oldMethod()` ถูกถอดออก
+
+**เดิม:** `api.oldMethod(arg)` · **ใหม่:** `api.newMethod({ arg })` · [วิธีย้าย](#)
+
+## ฟีเจอร์ใหม่
+
+### ชื่อฟีเจอร์
+
+ผู้ใช้ทำอะไรได้ 1 ประโยค แล้วตามด้วยตัวอย่างคำสั่งหรือภาพหน้าจอ
+
+## ปรับปรุง
+
+- หน้าแรกโหลดเสร็จใน 1.2 วินาที จาก 2.8 วินาที
+- ข้อความแจ้งเตือนตอนอัปโหลดไฟล์ผิดชนิด บอกชนิดที่รับได้แล้ว
+
+## แก้บั๊ก
+
+- ยอดรวมในใบเสนอราคาไม่เพี้ยนเมื่อมีส่วนลดเป็นเปอร์เซ็นต์ ([#1234](#))
+
+## ผู้ร่วมพัฒนา
+
+ขอบคุณ @alice @bob @charlie
+
+เวอร์ชัน 2.1.0 · ออก YYYY-MM-DD
+````

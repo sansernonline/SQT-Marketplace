@@ -18,13 +18,9 @@ Before using the structure or templates in this file, check whether the user, cu
 
 A message is counted **per recipient**: 1 broadcast to 4,000 friends = 4,000 messages, whatever its length (1 send can hold up to 5 message objects). "Target reach" (friends who have not blocked the OA) is the number that counts, not total friends.
 
-| Package (ex VAT 7%) | Free/month | Extra | Sends to 4,000 reach that fit free | Cost of 8 sends to 4,000 reach |
-|---|---|---|---|---|
-| Free | 300 | not available | 0 (sending stops at quota) | — |
-| Basic 1,280 baht | 15,000 | 0.10 baht | 3 | 32,000 msgs → 17,000 extra × 0.10 = 1,700 + 1,280 = **2,980 baht** |
-| Pro 1,780 baht | 35,000 | 0.06 baht | 8 | 32,000 ≤ 35,000 → **1,780 baht** |
+Package prices, free messages and extra-message rates: `line-oa-setup` section 5 (the one table to update when LINE changes prices).
 
-Formulas: `messages = reach × sends` · `extra cost = max(0, messages − free) × rate`. Basic becomes dearer than Pro above about **20,000 messages/month** (extra Basic spend passes the 500-baht price gap).
+Formulas: `messages = reach × sends` · `extra cost = max(0, messages − free) × rate`. Example with those prices: 8 sends to 4,000 reach = 32,000 messages, which costs **2,980 baht** on Basic and **1,780 baht** on Pro; free quota alone fits 0 sends on Free, 3 on Basic, 8 on Pro. Basic becomes dearer than Pro above about **20,000 messages/month** (extra Basic spend passes the 500-baht price gap).
 
 Quota left: OA Manager → Insight, or the API `GET /v2/bot/message/quota` and `GET /v2/bot/message/quota/consumption`.
 
@@ -75,7 +71,7 @@ If blocks pass about 1% of reach after 1 send, you are sending too often or to t
 - [`references/broadcast-template.md`](references/broadcast-template.md) — open at workflow step 4 to write the message
 - [`references/segment-knapsack.md`](references/segment-knapsack.md) — open when quota cannot cover every segment
 - [`references/worked-example.md`](references/worked-example.md) — open for a café plan with quota math and promo text
-- [`references/sources.md`](references/sources.md) — sources and check dates for the quota table (2026-10-22) and segment rules (2026-10-06)
+- [`references/sources.md`](references/sources.md) — sources and check dates for the quota example (2026-10-22) and segment rules (2026-10-06)
 
 
 ## reference: broadcast-template.md
@@ -118,7 +114,7 @@ Use `decision-scoring` command `knapsack` (`node decide.mjs knapsack <file.json>
 | Cost of a segment | messages = people x sends |
 | Value of a segment | people x click rate x value per click (baht). Click rate from this OA's last broadcast to that segment; none yet → `(รอยืนยัน)` and use the lowest rate seen. Value per click = margin per order x orders per click |
 
-Example: 15,000 messages left. Segment A 4,600 people, 3% click, ฿12 per click = ฿1,656 for 4,600 messages. Segment B 1,850 people, 8% click, ฿12 per click = ฿1,776 for 1,850 messages. B is worth more and costs less, so it goes first. The script finds the best set that fits the budget. Drop a segment when its extra message cost (SKILL.md section 1, extra rate) is above its value. The inputs are estimates: read the line "ชุดรองลงมา" in the result (shown only when there are 20 segments or fewer): if its gap from the best set is under 10% (starting value, not yet measured), the owner picks.
+Example: 15,000 messages left. Segment A 4,600 people, 3% click, ฿12 per click = ฿1,656 for 4,600 messages. Segment B 1,850 people, 8% click, ฿12 per click = ฿1,776 for 1,850 messages. B is worth more and costs less, so it goes first. The script finds the best set that fits the budget. Drop a segment when its extra message cost (extra-message rate in `line-oa-setup` section 5) is above its value. The inputs are estimates: read the line "ชุดรองลงมา" in the result (shown only when there are 20 segments or fewer): if its gap from the best set is under 10% (starting value, not yet measured), the owner picks.
 
 
 ## reference: sources.md

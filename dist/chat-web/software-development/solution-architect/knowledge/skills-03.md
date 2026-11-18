@@ -1,615 +1,3 @@
-# skill: project-doc-set
-
-Use when choosing a project doc set or open-items Excel
-
-# Project doc set
-
-> **One rule:** every doc must answer **who reads it** and **what they decide after reading**.
-> If it cannot answer, do not write it.
-
----
-
-## When to use this skill
-
-Use it when: opening a new project and deciding which docs it needs · docs are scattered and nobody knows which is the real one · a client asks what will be delivered · about to write a doc but unsure what must come first.
-
-## When **not** to use it
-
-| Situation | Use instead |
-|---|---|
-| Folder layout of the **code** (including the `docs/` inside code in type A) · README · CHANGELOG · linter | `project-bootstrap` |
-| Naming **files** and version numbers of docs | `document-naming` |
-| Actually writing one doc | The skill for that doc (table in section 4) |
-| Making document pages look good | `branded-document-design` |
-
----
-
-## 1 · Docs inside or outside the repo
-
-**Decide this first** (moving later means fixing links across the whole project). **The default is type B**, even when the docs are pure markdown. The code lives in `<project-name>/` (lowercase, joined with `-`). Use type A only when the user asks.
-
-- **Type B** (docs outside the repo): use it for every set size (S · M · L). `.docx` / `.xlsx` / mockups / PNGs that the client must see stay out of pull requests. The root layout is below (this section owns the root layout).
-- **Type A** (docs inside the repo): only when the user asks and the docs are pure markdown. Docs and code change in the same pull request. The root looks like type B but has no root `docs/`. The `docs/` folder sits inside the code folder, and its inner layout belongs to `project-bootstrap` section 1.
-- A type A project that grows deliverable docs moves to type B **as a whole set in one go**. A doc that lives in 2 places means 2 versions.
-
-### Type B layout
-
-```
-<project-name>/
-├─ ref/                 things received — TOR · meeting notes · screenshots of the old system · client files  **read-only, never edit**
-├─ docs/                every doc we write — delivered .docx and technical .md live together
-│  ├─ figures/          exported figures — .png only        [exists when delivered docs have figures]
-│  │  └─ src/           source files of the figures (.html · .mmd · .drawio)
-│  ├─ decisions/        ADR-NNNN-<slug>.md, one decision per file  [optional]
-│  ├─ runbook-<topic>.md  guide for when the system has problems, one topic per file  [optional]
-│  └─ research/         research on a reference app (`reference-app-research`) [optional]
-├─ mockup/              .html that opens and really clicks
-├─ qa/                  test cases · test results · bugs/ bug reports
-├─ assets/              logos · icons in all sizes · favicon · wordmark (.svg source + exports)
-├─ _to_delete/          every kind of temporary item
-├─ .claude/            project skills (such as verify) — must sit where Claude Code is opened
-│  └─ superuser/        SuperUser working files — CONTEXT.md · HISTORY.md · IMPROVEMENTS.md · log/ · inbox/ · learn/
-└─ <project-name>/      code repo, project name lowercase joined with `-` — inner layout belongs to `project-bootstrap`
-```
-
-**SuperUser files** (`.claude/superuser/` · `docs/BRIEF.md` · `AGENTS.md`/`GEMINI.md`): the single source is [`superuser/references/team-files.md`](../superuser/references/team-files.md).
-
-**ADRs and runbooks live in the root `docs/`, not in `<project-name>/docs/`.** Type A moves the whole `docs/` into the code folder, with the same inner layout. Paths: `docs/decisions/ADR-NNNN-<slug>.md` · `docs/runbook-<topic>.md`. This section is the only place that defines this.
-
-**Root exceptions:** `.sandbox/` may sit at the root when you use `docker-sandbox` · `AGENTS.md` / `GEMINI.md` under the conditions above. Declare every exception in the README of the code folder.
-
-**Create folders when real content exists, not in advance:** `ref/` when you get files from the client or the old system (never mix them into `docs/`) · `docs/figures/` when a delivered doc has a self-drawn figure (otherwise the figure is stuck inside the `.docx` and cannot be edited) · `docs/decisions/` when a decision needs explaining later · `docs/research/` when the user wants an app like an existing one · `qa/` when test cases exist (test cases always live here; `docs/test-plan.md` holds only the plan) · `assets/` when there is a logo or icon.
-
-**Ecosystem project** (2 or more sub-projects, each with its own doc set): the folder is always named `ecosystem/` (never `projects/` `modules/` `apps/`). `ecosystem/<code>-<SUB>/` holds `docs/` `mockup/` `qa/` and its own repo. Docs that cover all sub-projects live in one place, the root `docs/`. Full layout and rules: [`references/ecosystem.md`](references/ecosystem.md). An add-on or sub-program of one app (browser extension · plugin · CLI · hook client · SDK) with no doc set of its own is not a sub-project: it lives in the code repo under `<project-name>/extension/<name>/` (`project-bootstrap` item 1).
-
-
-**Folder rules (both types):**
-
-- **`.docx` and `.md` may share one `docs/`.** No need for separate folders, because the extension already says who reads it.
-- **Never lose the source files of figures.** If a figure must change next year and only the PNG is left, the whole figure must be redrawn.
-- **Every button in a mockup must really click**, because a fake button makes the review wrong.
-- **`.docx` / `.xlsx` live only in `docs/` and `qa/`.** Do not scatter them to the project root.
-- **Temporary items go to `_to_delete/`** (`temp-file-discipline`).
-- **`docs/README.md` is the index.** It says what to read first and who owns what (template in `project-bootstrap` → `assets/starter-files.md`).
-
----
-
-## 2 · Choose the doc set by project size
-
-Size is measured by **duration × number of people who must agree**, not by lines of code.
-
-**S** ≤ 2 weeks · one team · nobody outside the team signs — **M** 1–3 months · internal client · delivered in rounds — **L** > 3 months · external client signs off · contractual obligations
-
-### 2.1 · Deliverable docs: people read and sign them
-
-| Doc | Format | Readers | S | M | L |
-|---|---|---|:-:|:-:|:-:|
-| Project Plan | `.docx` | client · team | ○ | ● | ● |
-| SRS | `.docx` | dev · client | ○ | ● | ● |
-| Architecture | `.docx` | dev · ops | ○ | ● | ● |
-| Test Plan | `.docx` | QA · client | ○ | ● | ● |
-| User guide (`MAN`) | `.docx` → `.pdf` | end users | ○ | ● | ● |
-| FSD | `.docx` | dev · QA | ○ | ○ | ● |
-| BRD | `.docx` | business side | ○ | ○ | ● |
-| Document Checklist | `.docx` | everyone | ○ | ○ | ● |
-| Test Cases | `.xlsx` | QA | ○ | ○ | ● |
-
-● required · ○ not needed unless there is a specific reason
-**Set S has none of these docs.** That is correct.
-
----
-
-### 2.2 · Technical docs: the team and agents use them while building
-
-All markdown. They **depend on what the project contains**, not on project size. Full table (file · question answered): [`references/technical-docs.md`](references/technical-docs.md).
-
-- **Always:** `<project-name>/README.md` · `docs/BUILD-PLAN.md`
-- **Conditional:** USER-STORIES and `docs/sprints/sprint-NN.md` (work runs in sprints) · AGENT-LOOP (an agent writes code in rounds) · API-SPEC (an API that others call) · DATA-DICTIONARY (a database exists) · EVALUATION-POLICY and PROMPT-LIBRARY (LLM used) · `docs/decisions/ADR-NNNN-<slug>.md` (decisions that will be questioned again) · `docs/runbook-<topic>.md` (system in real use and someone on call)
-
----
-
-## 3 · Writing order
-
-**Delivery track.** Never skip a step that belongs to the set for that size. Skip steps that are not in the set, such as BRD · FSD in set M.
-
-```
-Project Plan ─► BRD ─► SRS ─┬─► mockup
-                            └─► Architecture ─► FSD
-                                                 │
-              User Guide ◄─ Test Cases ◄─ Test Plan
-```
-
-**The next doc may build on the DRAFT of the previous one.** Put `(รอยืนยัน)` (awaiting confirmation) on every unconfirmed item in both docs. Never set the next doc to APPROVED before the previous one, because if the upstream doc changes, the whole chain must be redone.
-The one exception: **the mockup may run in parallel with the SRS**, because screenshots help the SRS get confirmed faster.
-
-### 3.1 · Open-items register: when the user asks "what is still stuck", answer with an Excel file, not chat text
-
-Labels such as `(รอยืนยัน)` · `(รอวัดใน Phase 0)` (awaiting measurement in Phase 0) and question tables are spread over every doc, so the decision maker sees no overall picture. Merge them into one file with the script. Do not read them all by hand:
-
-```
-python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE>    # test the script: --self-test
-```
-
-- It reads every `.docx` in `docs/`: question tables · tables of undecided assumptions · sign-off tables still "waiting" · labels in the body. It skips revision history, table of contents, label-explanation lines and `(รอบหลัง)` (later round).
-- The **สรุป** (summary) sheet counts by document × type with formulas. The **รายการค้าง** (open items) sheet has the heading in the doc · who answers · decide by · value used for now · cross-references · and "สถานะ" (status) and "คำตอบ" (answer) columns for people to fill in.
-- Types (ประเภทที่ต้องเลือก), shown in Thai in the sheet: **เจ้าของตัดสิน** (owner decides: a web search cannot close it) · **ทีมตัดสิน** (team decides: BA · SA) · **กฎหมาย** (legal) · **วัดจริง** (needs a real-world number: none is published) · **ลงนาม** (sign-off). A question that cites an owner question in another doc also counts as "เจ้าของตัดสิน".
-- **Before sending, read the list by eye.** The script matches wording. A row that was already answered but does not use the words "ตอบแล้ว · ปิดแล้ว · ตัดสินแล้ว" (answered · closed · decided) still gets through.
-- When the user fills in answers: write the answer into the source doc, remove the label, record it in the revision history, then rerun the script. This file is a work list, not a source. Do not edit answers in this file in place of the doc.
-
-**Technical track.** Write when you reach the point of need. No need to wait for anyone: README · BUILD-PLAN before the first line of code · DATA-DICTIONARY when designing the first table · API-SPEC at the first endpoint · PROMPT-LIBRARY at the first prompt really used · ADR at decision time (not in the final wrap-up, because the real reasons are gone by then) · Runbook before going live. Full table in [`references/technical-docs.md`](references/technical-docs.md).
-
----
-
-## 4 · Who writes which doc, with which skill
-
-Full table (agent · skill for each of 16 doc types): [`references/technical-docs.md`](references/technical-docs.md). Main ones: SRS → `srs-writing` · FSD → `fsd-writing` · ADR → `adr-writer` · Test → `test-case-template` · mockup → `web-app-design` + `ui-craft` · README → `project-bootstrap`
-
----
-
-## 5 · Figures in docs: choose correctly from the start
-
-- Figures in every kind of project doc (BRD · SRS · FSD · ADR · ER · flowcharts) · slides · print work → `diagram-figures` (one house style). Keep them in `docs/figures/` with sources in `src/`. **Default Mermaid is banned from project docs.**
-- Quick figures in a README · PR · code notes → Mermaid (`software-diagrams`) embedded in `.md` (colours are random and meaningless, Thai overflows the boxes, and shrunk to A4 it is unreadable).
-
-**Every figure header needs all 6 items:** project logo · title · 1-line subtitle · figure number · version and date · owner (details in `diagram-figures` section 3).
-
----
-
-## 6 · Colour theme of the doc set
-
-Declare it once per project, at the top of every doc's source file:
-
-```markdown
-<!-- doc-theme: accent=#2A78D6 -->
-```
-
-(The example uses the house colour `#2A78D6`. Replace it with the project's main colour.)
-
-`branded-document-design` · `presentation-design` · `diagram-figures`
-read this value instead of picking colours themselves, so docs, slides and every figure form one set.
-
-**Colour comes from the work, not from taste.** If there is a brand colour, use it. If not, use the house colour of `branded-document-design`, write `(รอยืนยัน)`, and carry on without stopping to ask.
-Exceptions that do not follow the theme: service provider logo colours · grey structural lines · green = pass / red = fail
-
----
-
-## 7 · Checklist before delivering the doc set
-
-- [ ] In every `.docx`, open the Navigation Pane and **see all headings** (use real Heading styles, not bold text)
-- [ ] Every doc has a revision history page · version number · date · author
-- [ ] Every figure has a figure number and is cited in the body at least once
-- [ ] The source file of every figure is in `docs/figures/src/` (if this folder exists)
-- [ ] Technical docs that meet the conditions in section 2.2 are all present. For example, if there is an API there must be an API-SPEC, and if an LLM is used there must be a PROMPT-LIBRARY
-- [ ] Every abbreviation is spelled out at first appearance
-- [ ] File names follow `document-naming`: no `final2`, no `ล่าสุด` ("latest")
-- [ ] Docs in the set cite each other's versions consistently
-- [ ] Run `scripts/open_items.py`, and the open-items register has no row with status "เปิด" (open), or the client knows about every row still open
-- [ ] Tell the user what is left in `_to_delete/` (do not delete it yourself; delete only when the user says so)
-
----
-
-## 8 · Anti-patterns
-
-Wrong: `.docx` with no Heading style · keeping only the PNG and not the source · `.docx` and mockups inside the code repo (at this point move to type B) · a doc in 2 places (= 2 versions) · FSD before the SRS is confirmed · using an LLM with no PROMPT-LIBRARY · sub-projects named `projects/` `modules/` `apps/` · empty folders created in advance · one doc that answers every question
-
----
-
-## 10 · Links to other skills
-
-Doc status in `docs/BUILD-PLAN.md` → `status-report` · checklist for the printed version → `assets/doc-set-checklist.md`
-
-**Read more when needed:** [`references/writer-templates.md`](references/writer-templates.md): `technical-writer` doc templates (tutorial · API reference · release notes · for README see `project-bootstrap`)
-
-**When the guide must go on the web, be searchable and have many versions:** [`references/docs-site.md`](references/docs-site.md): choosing MkDocs Material · Docusaurus · Starlight · VitePress · Thai search test results · hosting · Thai fonts
-
-
-## reference: docs-site.md
-
-# Docs site
-
-Pick a docs-site generator when a manual or developer documentation must go on the web, be searchable, and have several versions · use with `SKILL.md` item 1 (where the documents live) and the templates in [`writer-templates.md`](writer-templates.md).
-Facts checked 2026-10-23 from official docs · npm · PyPI · GitHub and real tests (section "Sources").
-Abbreviations: Application Programming Interface (API) · Software Development Kit (SDK) · Architecture Decision Record (ADR) · SIL Open Font License (OFL) · Software as a Service (SaaS) · user interface (UI)
-
-## 1 · Is a docs site needed
-
-| Situation | Use |
-|---|---|
-| People outside the team read often (public API · SDK · a manual updated every release) · search needed · several versions at once | a docs site (this file) |
-| The team reads it themselves | `README.md` + `docs/*.md` on GitHub is enough |
-| The customer signs for acceptance | `.docx` per `SKILL.md` item 2.1 · a docs site does not replace the handover document |
-
-## 2 · Comparing the 4 generators
-
-| | MkDocs Material | Docusaurus | Starlight | VitePress |
-|---|---|---|---|---|
-| Requires | Python | Node · React | Node · Astro | Node · Vue |
-| Latest version | 9.7.7 | 3.10.2 | 0.42.6 (not yet 1.0) | 1.6.4 · 2.0 is still alpha |
-| Built-in search | yes · lunr.js + lunr-languages (can set `lang: th`) | no · the official one is Algolia DocSearch · local search uses a community plugin | yes · Pagefind is on by default, no setup | yes · MiniSearch (`provider: 'local'`) or Algolia |
-| Versioning | via `mike`, an external tool | built in, `docusaurus docs:version` | community plugin `starlight-versions` | none · issue #109 is still open |
-| Multiple languages (i18n) | the UI can be translated (`th` exists) · a multilingual site = one project per language + a language switcher | built in | built in · a Thai UI is included | built in |
-| licence | MIT | MIT | MIT | MIT |
-
-MkDocs Material: the maintainers announced they will maintain only critical fixes until 5 May 2027 and told users to move to Zensical (version 0.0.71 · status Alpha · MIT) · a new project that must live for years should record this in an ADR.
-Quick pick: Python team → MkDocs Material (plan a move) · need built-in versioning → Docusaurus · want a light site with little setup → Starlight · Vue team → VitePress
-
-## 3 · Thai search, tested for real
-
-Thai has no spaces between words, so a search engine that splits words on spaces cannot find a word in the middle of a sentence · tested 2026-10-23 with 2 Thai pages, searching 9 words: ภาษี · กำกับ · สต็อก · สินค้า · ร้านค้า · ภาษีมูลค่าเพิ่ม · อิเล็กทรอนิกส์ · ตัดสต็อก · ทะเบียน
-
-| Search engine (version tested) | Used in | What the docs say about Thai | Found |
-|---|---|---|---|
-| Pagefind 1.5.2 (builds an index, searches in the browser) | Starlight | has `th` · no stemming · the word-segmentation section mentions only Chinese, Japanese, Korean | 6/9 · missed กำกับ · ทะเบียน · ภาษีมูลค่าเพิ่ม |
-| lunr 2.3.9 + lunr-languages 1.23.0 `th` (word splitting with wordcut · tested in Node, not in the theme) | MkDocs Material · plugin `@easyops-cn/docusaurus-search-local` (accepts every lunr-languages language) | Material accepts `lang: th` | 6/9 · missed ร้านค้า · ตัดสต็อก · ภาษีมูลค่าเพิ่ม |
-| MiniSearch 7.2.0 defaults (prefix + fuzzy as in VitePress) | VitePress | VitePress segments with `Intl.Segmenter` only for Chinese and Japanese | 0/9 |
-| MiniSearch + a `tokenize` that uses `Intl.Segmenter('th', { granularity: 'word' })` | VitePress (`options.miniSearch.options.tokenize`) | `tokenize` can be set by yourself | 9/9 (tested in Node 22 · not yet tested in a whole VitePress site) |
-| Algolia DocSearch | Docusaurus · Starlight · VitePress | Algolia's language table: Thai segmentation "Not supported" | not tested |
-
-- Results depend on the project's vocabulary → before delivery, search 20 real terms and record the results in the docs site's README.
-- DocSearch is free only for technical documentation and technical blogs that are public. The site must be live and have no non-technical content.
-
-## 4 · Hosting
-
-| | GitHub Pages | Cloudflare |
-|---|---|---|
-| Price | free · a free account needs a public repo | Pages has a free plan · Workers static assets: static file requests are free and unlimited |
-| Limits | site ≤ 1 GB · bandwidth 100 GB/month (soft) · build 10 times/hour (soft · builds through GitHub Actions do not count) · a deploy over 10 minutes fails | Pages free plan: 500 builds/month · 1 build at a time · max 20 minutes · 20,000 files · each file ≤ 25 MiB |
-| Conditions | must not be used as free hosting for an online business or SaaS · the site is public even if the repo is private | the Pages page tells new projects to start on Workers |
-
-A document that outsiders must not see does not go on a public site. Keep it as `docs/*.md` in the repo (how each host restricts readers has not been checked).
-
-## 5 · Thai fonts
-
-- Use the same fonts as the app: `Inter` + `Noto Sans Thai` (`web-app-design` → `references/tokens.md`) · other Google Fonts choices that have Thai letters and are OFL: Sarabun · IBM Plex Sans Thai · Anuphan
-- Load through the Google Fonts CSS2 API with `display=swap` · the API splits out the `/* thai */` block with `unicode-range: U+0E01-0E5B …` by itself, so the browser loads only the parts the page uses (seen in the CSS the API returned 2026-10-23)
-- Thai line-height is the English value plus 0.1 (`ui-craft` item 2)
-- Set the font in the slot the theme exposes · the setting names and CSS variables of each theme have not been checked
-
-## 6 · Content lives in the repo beside the code
-
-- The docs site source lives in the code folder `<project-name>/docs/` with the generator's config file (layout A of `project-bootstrap` item 1) · code and manual change in the same pull request
-- Type B projects: the handover `.docx` · ADR · runbook · BUILD-PLAN stay in `docs/` at the root · the docs site takes only what outsiders read (manual · tutorial · API reference · release notes) · the same content must never live in 2 places
-- Build in Continuous Integration (CI) on every pull request and deploy on merge (`cicd-and-release`)
-- An exception to the root is declared in the code folder's README (`SKILL.md` item 1)
-
-## Sources
-
-| Topic | URL or evidence (2026-10-23) |
-|---|---|
-| MkDocs Material | https://squidfunk.github.io/mkdocs-material/ (status · Zensical) · .../plugins/search/ · .../setup/changing-the-language/ · .../setup/setting-up-versioning/ |
-| Docusaurus | https://docusaurus.io/docs/search · https://docusaurus.io/docs/versioning · https://docusaurus.io/docs/i18n/introduction |
-| Starlight | https://starlight.astro.build/guides/site-search/ · .../guides/i18n/ · .../resources/plugins/ |
-| VitePress | https://vitepress.dev/reference/default-theme-search · https://vitepress.dev/guide/i18n · https://github.com/vuejs/vitepress/issues/109 |
-| Pagefind | https://pagefind.app/docs/multilingual/ |
-| lunr-languages | https://github.com/MihaiValentin/lunr-languages (file `lunr.th.js` uses wordcut) |
-| MiniSearch | https://lucaong.github.io/minisearch/types/MiniSearch.Options.html |
-| Algolia | https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/ · https://docsearch.algolia.com/docs/who-can-apply/ |
-| Docusaurus local-search plugin | https://github.com/easyops-cn/docusaurus-search-local |
-| Versions and licence | registry.npmjs.org · pypi.org · api.github.com (Zensical: GitHub = MIT · PyPI = Alpha) |
-| GitHub Pages | https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits · .../creating-a-github-pages-site |
-| Cloudflare | https://developers.cloudflare.com/pages/platform/limits/ · https://developers.cloudflare.com/pages/ · https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/ |
-| Google Fonts | https://developers.google.com/fonts/docs/css2 · `METADATA.pb` in https://github.com/google/fonts · real CSS from fonts.googleapis.com |
-| Thai search test | Pagefind via `npx pagefind@1.5.2` + a browser · lunr and MiniSearch via Node 22 · 2 test pages, the 9 search words in item 3 |
-
-
-## reference: ecosystem.md
-
-# Ecosystem project: 1 system split into several sub-projects
-
-Read this when a project has 2 or more sub-projects and each one has its own doc set. The short rule is in `SKILL.md` section 1.
-
-Use it when the project is a product suite with 2 or more sub-projects, and each has its own doc set (SRS · mockup · architecture). Example: Quanton, split into CONNECT · LAB · INTEL · DESK.
-**The folder must always be named `ecosystem/`.** Never use `projects/`, `modules/` or `apps/`. When someone opens the folder, they must see at once that everything inside is a piece of one system.
-
-```
-<project-name>/
-├─ docs/                ecosystem-level docs — README (index) · BUILD-PLAN · project-plan · BRD · figures/
-├─ ecosystem/
-│  └─ <code>-<SUB>/     1 folder per sub-project, e.g. QTN-CONNECT
-│     ├─ docs/          srs.md · architecture.md · decisions/ · figures/ · fsd-*.md · test-plan.md
-│     ├─ mockup/
-│     ├─ qa/
-│     └─ <sub-name>/    code repo of this sub-project (lowercase, joined with `-`)
-├─ ref/ · assets/ · _to_delete/ · .claude/   shared by the whole ecosystem (same rules as type B)
-```
-
-- Docs that cover every sub-project (BRD · project plan · BUILD-PLAN) live in one place, the root `docs/`. Never copy them into each sub-project.
-- Create a sub-project folder when you start writing that sub-project's docs. Do not create folders in advance.
-- Sub-project folder name = project code + sub-project name in capitals (`QTN-CONNECT`). Use the same code the docs cite.
-- If a project already uses `projects/`, rename it to `ecosystem/` and fix the paths in every doc and script in the same pass.
-- A project with a single product does not need `ecosystem/`. Use type B as usual.
-- An add-on or sub-program of one app (browser extension · plugin · CLI · hook client · SDK) without its own doc set is not a sub-project. It stays in that app's repo under `extension/<name>/` (`project-bootstrap` item 1). Move it here only when it gets its own SRS, mockup or release cycle.
-
-
-## reference: technical-docs.md
-
-# Technical docs: table, writing order and who writes what
-
-Read this when choosing the technical doc set or about to write one of them. The summary is in `SKILL.md` sections 2.2–4.
-
-## Technical docs (section 2.2)
-
-This group is **all markdown** and **does not depend on project size**. It depends on what the project contains.
-
-| Doc | File | Answers the question | Needed when |
-|---|---|---|---|
-| README | `<project-name>/README.md` | How to install and run | **Always** |
-| BUILD-PLAN | `docs/BUILD-PLAN.md` | What to build first and next · where we are now | **Always** |
-| USER-STORIES | `docs/USER-STORIES.md` | What to build for whom · which story is ready for a sprint · what the AC (acceptance criteria) are | Work runs in sprints or there is a backlog (`user-story-writer`) |
-| Sprint plan | `docs/sprints/sprint-NN.md` | Which stories this sprint takes · what the goal is · what the risks are | Work runs in sprints (`/sprint-plan`). One file per sprint; never overwrite old ones |
-| AGENT-LOOP | `docs/AGENT-LOOP.md` | How the agent works in a cycle · what the stop condition is | An agent writes code in rounds (`spec-to-code-loop`) |
-| API-SPEC | `docs/API-SPEC.md` | What each endpoint accepts, returns and how it fails | There is an API that others call (`api-conventions`) |
-| DATA-DICTIONARY | `docs/DATA-DICTIONARY.md` | What a field means · what values it can take | There is a database or data schema (`database-design`) |
-| EVALUATION-POLICY | `docs/EVALUATION-POLICY.md` | What measures whether the output is good enough · what the pass threshold is | Output comes from a model or LLM that is not always right |
-| PROMPT-LIBRARY | `docs/PROMPT-LIBRARY.md` | Which prompt is the real one · which version · what changed | An LLM sits on the system's main path |
-| ADR | `docs/decisions/ADR-*.md` | Why we chose this way and not the other | A decision will be questioned again (`adr-writer`) |
-| Runbook | `docs/runbook-<topic>.md`, one topic per file | What to do when the system goes down at 2 a.m. | A system is really running and someone is on call |
-
-> **The 4 conditional docs (LLM · API · database) are the ones people forget most often.**
-> The team then ends up asking the agent every round "which prompt is the real one" or "what does this field mean".
-
-## Technical track: when to write (section 3)
-
-| Write when | Doc |
-|---|---|
-| Before the first line of code | README · BUILD-PLAN |
-| Before letting an agent work in rounds | AGENT-LOOP |
-| When designing the first table | DATA-DICTIONARY |
-| When designing the first endpoint | API-SPEC |
-| When writing the first prompt that will really be used | PROMPT-LIBRARY · EVALUATION-POLICY |
-| When deciding something that will be questioned again | ADR |
-| Before going live | Runbook |
-
-> **Write the ADR and DATA-DICTIONARY at decision time, not in the project wrap-up.**
-> You can write them afterwards, but the real reasons are gone by then.
-
-## Who writes which doc, with which skill (section 4)
-
-| Doc | agent | skill used |
-|---|---|---|
-| README · CHANGELOG | `technical-writer` | `project-bootstrap` |
-| Project Plan | `project-manager` | `branded-document-design` |
-| BRD · user story | `business-analyst` | `user-story-writer` |
-| SRS | `system-analyst` | `srs-writing` |
-| FSD | `system-analyst` | `fsd-writing` |
-| Architecture | `solution-architect` | `architecture-patterns` · `diagram-figures` |
-| ADR | `solution-architect` | `adr-writer` |
-| Test Plan · Test Cases | `qa-tester` | `test-case-template` |
-| mockups | `ux-designer` | `web-app-design` · `ui-craft` |
-| User guide (`MAN`) | `technical-writer` | `polished-document-style` |
-| Runbook | `devops-engineer` | `incident-runbook-template` |
-| BUILD-PLAN | `project-manager` | `simplicity-first` |
-| AGENT-LOOP | `developer` | `spec-to-code-loop` |
-| API-SPEC | `system-analyst` | `api-conventions` |
-| DATA-DICTIONARY | `system-analyst` | `database-design` |
-| PROMPT-LIBRARY · EVALUATION-POLICY | `developer` | none (pairs with skill `llm-engineering`) |
-
-
-## reference: writer-templates.md
-
-# technical-writer templates — README · tutorial · API reference · release notes
-
-**Contents:** README · Tutorial Template · API Reference Template · Release Notes Template
-
-Open when you actually have to write this kind of document · put `(รอยืนยัน)` (to be confirmed) on any part you do not know.
-
-## Standard Outputs
-
-### README
-
-There is no README template here — use the single template of `project-bootstrap` (`SKILL.md` item 2 and `assets/starter-files.md`). The 15-section skeleton (9 always present · 6 present when the project has that thing) is in `references/readme-skeleton.md` · commands per language are in `references/readme-by-stack.md`.
-
-### Tutorial Template
-
-````markdown
-# Tutorial: Build Your First X in 10 Minutes
-
-> **What you'll learn:** by the end, you'll have built Y and understand Z.
-
-## What You'll Need
-
-- Node.js 22+ (Node 18 หมดอายุ 30 เม.ย. 2568, Node 20 หมด 30 เม.ย. 2569 — endoflife.date ตรวจ 22 ต.ค. 2569)
-- A free account at example.com
-- 10 minutes
-
-## Step 1: Set Up
-
-Run:
-```bash
-npx create-thing my-project
-cd my-project
-```
-
-> **What just happened?** Brief explanation.
-
-You should see:
-```
-✓ Project created
-```
-
-## Step 2: Configure
-
-...
-
-## Step 3: Run It
-
-...
-
-## Congratulations!
-
-You've built X. Try these next:
-
-- [Add feature A](#how-to-add-a) (how-to)
-- [Understand B](#concept-b) (explanation)
-- [Full API](#reference) (reference)
-````
-
-### API Reference Template (per endpoint)
-
-````markdown
-## POST `/api/v1/resource`
-
-Create a new resource.
-
-### Authentication
-
-Required. Bearer token in `Authorization` header.
-
-### Request
-
-```http
-POST /api/v1/resource HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer <token>
-
-{
-  "name": "string (required)",
-  "tags": ["string (optional)"]
-}
-```
-
-### Parameters
-
-| Field | Type | Required | Description |
-|-------|------|:--------:|-------------|
-| `name` | string | ✓ | Display name, 1-100 chars |
-| `tags` | string[] | ✗ | Up to 10 tags |
-
-### Response: 201 Created
-
-```json
-{
-  "id": "res_abc123",
-  "name": "...",
-  "created_at": "2025-01-15T10:30:00Z"
-}
-```
-
-### Errors
-
-| Code | When |
-|:----:|------|
-| 400 | Validation failed (see body) |
-| 401 | Missing/invalid token |
-| 429 | Rate limit (60 req/min) |
-
-### Code Examples
-
-```typescript
-const res = await fetch('/api/v1/resource', {
-  method: 'POST',
-  headers: {
-    Authorization: `Bearer ${token}`,
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({ name: 'My Resource' })
-});
-```
-````
-
-### Release Notes Template
-
-> Breaking Changes must always come before the other sections (right after Highlights) — the full release notes rules are in the skill `release-notes`.
-
-````markdown
-# Release v2.1.0 — YYYY-MM-DD
-
-## Highlights
-
-> The TL;DR for busy readers.
-
-- **New:** X feature — try it: `command`
-- **Improved:** Y is faster — <measured number only, e.g. p95 login 1.2 s → 0.7 s; drop the number if not measured>
-- **Fixed:** Z bug affecting users on platform A
-
-## Breaking Changes
-
-### `api.oldMethod()` removed
-
-**Before:**
-```typescript
-api.oldMethod(arg)
-```
-
-**After:**
-```typescript
-api.newMethod({ arg })
-```
-
-[Migration guide](#)
-
-## New Features
-
-### Feature Name
-
-Description with user-facing benefit.
-
-```bash
-# Example usage
-command --new-flag
-```
-
-[Read the docs](#)
-
-## Improvements
-
-- Faster initial load time
-- Better error messages for X
-
-## Bug Fixes
-
-- Fix issue where ... ([#1234](#))
-- Resolve crash when ... ([#5678](#))
-
-## Contributors
-
-Thanks to: @alice, @bob, @charlie
-````
-
-### Release Notes Template (Thai)
-
-> Same structure as the English version · wording at news register (`human-writing` `references/thai-grammar.md` section 4): no first person · each line has subject + verb + object · numbers must be measured, and if there are none, leave them out · right/wrong examples are in the skill `release-notes` item 4.
-
-````markdown
-# เวอร์ชัน 2.1.0 — YYYY-MM-DD
-
-## สรุป
-
-- **ใหม่:** ส่งออกรายงานเป็น CSV ได้แล้ว — เมนู รายงาน → ส่งออก
-- **เร็วขึ้น:** ส่งออกรายงาน 1,000 แถวใช้เวลา 3 วินาที จาก 12 วินาที
-- **แก้แล้ว:** ลบสินค้าชิ้นสุดท้ายในตะกร้าแล้วแอปไม่ปิดตัวเองอีก
-
-## สิ่งที่ต้องแก้ก่อนอัปเดต
-
-### `api.oldMethod()` ถูกถอดออก
-
-**เดิม:** `api.oldMethod(arg)` · **ใหม่:** `api.newMethod({ arg })` · [วิธีย้าย](#)
-
-## ฟีเจอร์ใหม่
-
-### ชื่อฟีเจอร์
-
-ผู้ใช้ทำอะไรได้ 1 ประโยค แล้วตามด้วยตัวอย่างคำสั่งหรือภาพหน้าจอ
-
-## ปรับปรุง
-
-- หน้าแรกโหลดเสร็จใน 1.2 วินาที จาก 2.8 วินาที
-- ข้อความแจ้งเตือนตอนอัปโหลดไฟล์ผิดชนิด บอกชนิดที่รับได้แล้ว
-
-## แก้บั๊ก
-
-- ยอดรวมในใบเสนอราคาไม่เพี้ยนเมื่อมีส่วนลดเป็นเปอร์เซ็นต์ ([#1234](#))
-
-## ผู้ร่วมพัฒนา
-
-ขอบคุณ @alice @bob @charlie
-
-เวอร์ชัน 2.1.0 · ออก YYYY-MM-DD
-````
-
-
----
-
 # skill: architecture-patterns
 
 Use when choosing monolith, microservices or serverless
@@ -1413,3 +801,849 @@ The line between this and [`parallel-attempts-pick-best`](../parallel-attempts-p
 ## Sources
 
 3-lens voters, default false positive · claude-security (All rights reserved · mechanism only) · agents/scan-verifier.md · viewed 2026-11-10 · one-by-one verifiers · code-review (Anthropic) · viewed 2026-11-10 · freshness of review results · qodo · skills/qodo-review-resolver/SKILL.md · viewed 2026-11-10 · for other details see `review-lenses`, section "Sources"
+
+
+---
+
+# skill: database-design
+
+Use when designing or changing a database schema
+
+# Database design
+
+> **One rule:** the schema is the hardest thing in a system to change.
+
+## When to use this skill
+
+- Designing the database of a new system or a new module
+- Adding or changing a table, column, relationship or index
+- Writing a migration, especially once the system holds real data
+- A query is slow and you suspect the schema or an index
+
+Not for: overall architecture → `architecture-patterns` · endpoints and JSON shapes → `api-conventions` · passwords, tokens, permissions → `auth-implementation-patterns` · running migrations in a pipeline → `cicd-and-release`
+
+**Syntax specific to each database, data types compared, and the migration commands of each Object-Relational Mapping (ORM) tool** are in `references/per-stack.md`.
+
+---
+
+## 1 · Choose the database type first
+
+| Criterion | Relational (PostgreSQL, SQL Server, MySQL) | Document (MongoDB) |
+|---|---|---|
+| Data has clear relationships and needs joins | ✓ | ✗ must be done by hand |
+| Data shape is uncertain and differs per record | Careful: use a JSON column | ✓ |
+| Needs transactions across several tables | ✓ | Careful: possible but costlier |
+| Reports, totals, analysis | ✓ | ✗ |
+| Very heavy writes, log/telemetry | Careful | ✓ or use a time-series database |
+
+> **The default is relational.** Choose document only when you **can answer why**.
+> "More flexible" is not a reason. It means the design is not done yet.
+
+**You can mix them**: use relational as the base, and store data of uncertain shape in a `jsonb` column.
+In almost every case this is better than running 2 separate databases.
+
+---
+
+## 2 · Naming rules — choose once, use across the whole system
+
+| What you name | Format | Example |
+|---|---|---|
+| Table | `snake_case` **plural** | `orders`, `order_items` |
+| Column | `snake_case` singular | `created_at`, `total_amount` |
+| primary key | `id` | `id` |
+| foreign key | `<singular table>_id` | `customer_id` |
+| Join table | `<a>_<b>` in alphabetical order | `role_users` ✓ (not `user_roles`) |
+| index | `ix_<table>_<column>` | `ix_orders_customer_id` |
+| unique | `ux_<table>_<column>` | `ux_users_email` |
+| foreign key constraint | `fk_<table>_<target table>` | `fk_orders_customers` |
+| check constraint | `ck_<table>_<topic>` | `ck_orders_total_non_negative` |
+
+**Do not:**
+
+- Wrong: put the data type in the name, such as `name_varchar`, `is_active_bit`
+- Wrong: prefix a column with the table name, such as `order_order_date` (it is already in the `orders` table)
+- Wrong: use reserved words such as `user`, `order`, `group`, `key`, which need quotes every time. Use `users`, `orders` instead.
+- Wrong: use abbreviations people cannot read, such as `cst_nm`. It saves 8 characters but costs 3 years of confusion.
+
+> SQL Server may use `PascalCase` if the existing project already does.
+> **Using one style across the whole system matters more than which style is right.** Do not switch midway.
+
+---
+
+## 3 · Columns every table must have
+
+```sql
+id           bigint / uuid   PRIMARY KEY
+created_at   timestamptz     NOT NULL DEFAULT now()
+updated_at   timestamptz     NOT NULL DEFAULT now()
+```
+
+Add these as needed:
+
+| Column | Add when | Note |
+|---|---|---|
+| `deleted_at timestamptz` | Data must be recoverable, or the law requires keeping it | **Every query must filter on it**, or deleted data shows up |
+| `created_by` / `updated_by` | You must be able to say who changed it | Store the user id, not the name |
+| `row_version` / `xmin` | Several people can edit at the same time | Use with the ETag in `api-conventions` |
+| `tenant_id` | Multi-tenant system | See section 10 |
+
+> **soft delete (delete by only setting a flag) has a cost**: every unique constraint must be rethought.
+> `ux_users_email` will block signing up with the same email again, even though the old account was deleted.
+> Fix it with a partial index: `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL`
+
+---
+
+## 4 · Choose the identifier type
+
+| Type | Pros | Cons | Use when |
+|---|---|---|---|
+| `bigint` auto-increment | Small, fast, index does not fragment, easy to read when tracing problems | Next id can be guessed · ids collide when merging data from several places | Default, single system, single database |
+| **UUIDv7 / ULID** | Sorted by time · can be generated on the app side · no collisions | 16 bytes · hard to read by eye | Distributed system · id needed before saving · id appears in a URL |
+| `UUIDv4` fully random | No collisions, cannot be guessed | **index fragments, and writes get clearly slower with lots of data** | Avoid if you can |
+
+> **UUIDv4 as a primary key is the most common trap.**
+> Fully random values make every insert land in the middle of the index structure.
+> You do not feel it at tens of thousands of rows, but at tens of millions it gets so slow you must rebuild.
+> If you must use a UUID, use **v7**, which starts with the time, so it grows in order like bigint.
+
+**A number people see is not the primary key**: a purchase order number such as `SO-2026-00042` that the customer refers to
+should be stored as a separate column with a unique constraint, and the primary key should not be shown.
+
+---
+
+## 5 · How much normalisation is enough
+
+**Always start at Third Normal Form (3NF)**: each fact is stored in one place.
+
+You may denormalise (accept duplicated data) only when all 3 of these hold:
+
+1. You measured and it is truly slow (with numbers, not a feeling).
+2. You know how the duplicated data will be updated so that the copies match.
+3. You wrote the reason in the table comment.
+
+**A commonly accepted exception**: data that must be "frozen" at a point in time.
+The product price in a purchase order must be copied into `order_items.unit_price`
+and not joined to `products.price`, because today's price is not the price on the day the customer bought.
+
+---
+
+## 6 · Four data types people get wrong all the time
+
+Details of the 4 data types people get wrong all the time (money · time · enum or status · boolean), with examples, are in [`data-types`](references/data-types.md).
+
+## 7 · index — where to put one so it works
+
+**Must have:**
+
+- Every foreign key (most databases **do not create it automatically**)
+- Columns in the `WHERE` of frequently run queries
+- Columns used in `ORDER BY` together with pagination
+
+**composite index (an index on several columns): column order matters**
+
+```sql
+-- query: WHERE tenant_id = ? AND status = ? ORDER BY created_at DESC
+CREATE INDEX ix_orders_tenant_status_created
+  ON orders (tenant_id, status, created_at DESC);
+```
+
+Order the columns by condition type: **equals → range → sort**.
+An index `(a, b)` works for a query that filters on `a` alone, but **not** for one that filters on `b` alone.
+
+**Do not add an index when:**
+
+- The table has fewer than a few thousand rows, because the database reads the whole table faster
+- The column has many repeated values, such as `is_active` where 95% are true
+- The table is written far more often than read, because every index adds cost on every write
+
+> **Measure before guessing**: `EXPLAIN ANALYZE` (PostgreSQL) or the execution plan (SQL Server)
+> tells you whether the index is really used. Guessing that it "should help" is wrong more often than right.
+
+---
+
+## 8 · Constraints live in the database, not only in the app
+
+| Rule | Where it should live |
+|---|---|
+| Email must not repeat | `UNIQUE` in the database **and** a check in the app so the error message looks nice |
+| Amount must not be negative | `CHECK (total_amount >= 0)` |
+| A purchase order must have a real customer | `FOREIGN KEY` |
+| Status must be one of the defined values | `CHECK` or a lookup table |
+
+> **Reason:** the app is not the only thing that touches the data. There are also urgent data-fix scripts,
+> import jobs at 3 a.m., and a 2nd service written later.
+> A constraint in the database is the last gate that nobody can skip.
+
+**Choose `ON DELETE` on purpose:**
+
+| Option | Meaning | Use with |
+|---|---|---|
+| `RESTRICT` (the default you should use) | Cannot delete while children exist | Almost every case |
+| `CASCADE` | Delete all the children too | True components, such as `order_items` |
+| `SET NULL` | Child becomes parentless | Optional relationships |
+
+If you put `CASCADE` in the wrong place just once, deleting 1 customer wipes 10 years of purchase history with it.
+
+---
+
+## 9 · migration — change the schema without taking the system down
+
+The expand-and-contract steps, and example migrations that deploy without downtime, are in [`migrations`](references/migrations.md).
+
+Data warehouses for analysis (star schema · SCD · ELT) are in [`warehouse-modeling`](references/warehouse-modeling.md) · pipelines that can rerun safely (incremental · backfill · data quality tests · checklist before going to production) are in [`data-pipeline-patterns`](references/data-pipeline-patterns.md).
+
+## 10 · Multi-tenant systems
+
+| Style | How separate | Cost | Fits |
+|---|---|---|---|
+| A `tenant_id` column in every table | Low: one slip and data leaks across tenants | Cheapest | Many tenants, small data per tenant |
+| A separate schema per tenant | Medium | Migrations must loop over every schema | Tens to hundreds of tenants |
+| A separate database per tenant | Highest | Most expensive | Enterprise customers who require separation |
+
+> **Important:** if you choose the `tenant_id` style, **enforce it at the lowest layer, not by adding it to each query**.
+> Use the database's row-level security, or the ORM's global filter.
+> A single query that forgets `WHERE tenant_id = ?` shows one customer's data to another,
+> and no error appears at all.
+
+---
+
+## 11 · Personal data
+
+- Keep a list of **which columns are personal data**. Without this list you cannot answer the question "where is my data?".
+- National ID numbers, credit card numbers and health data: encrypt at the column level, or do not store them at all if not needed.
+- Set a **retention period** per table, and have a real job that deletes accordingly.
+- Data must be deletable when the owner asks, and soft delete alone does not count as deleting.
+- Never copy real data onto a developer machine without masking it.
+
+---
+
+## 12 · Anti-patterns
+
+- **One table that stores everything** (`entity` / `attribute` / `value`): every query becomes hard.
+- **`varchar(255)` on every column**: this number means nothing. Set it from real data.
+- **Several values in one column**, such as `"1,4,7"`: cannot search it, cannot add a constraint. Use a join table.
+- **No foreign key because "the app takes care of it"**: one day you will have orphan rows.
+- **An index on every column just in case**: writes get slower and storage bloats, with no one benefiting.
+- **`SELECT *` in real code**: the code breaks every time a column is added.
+- **Business logic in triggers**: problems are untraceable, because nobody sees it running.
+- **A migration that also writes data**, mixed with the structure change: on rollback the data is lost.
+- **Changing the schema on production by hand**: at the next deploy the schema will not match.
+
+
+## reference: data-pipeline-patterns.md
+
+# Data pipeline patterns — incremental, backfill, quality, catalog
+
+Every pipeline must give the same result when run again (`principle-safe-to-rerun`) and must always pass values into SQL as parameters.
+
+**สารบัญ:**
+
+- [Pipeline Patterns](#pipeline-patterns)
+- [Data Catalog Pattern](#data-catalog-pattern)
+- [Production Pipeline Checklist](#production-pipeline-checklist)
+
+## Pipeline Patterns
+
+### Pattern 1: Incremental Loading
+
+```sql
+-- dbt incremental model
+{{ config(materialized='incremental', unique_key='id') }}
+
+SELECT
+    id,
+    user_id,
+    event_type,
+    created_at
+FROM {{ source('raw', 'events') }}
+WHERE 1=1
+{% if is_incremental() %}
+    -- Only new since last run
+    AND created_at > (SELECT MAX(created_at) FROM {{ this }})
+{% endif %}
+```
+
+### Pattern 2: Late-arriving Data
+
+```sql
+-- Don't just look at last 1 hour, look back further for late events
+WHERE created_at > NOW() - INTERVAL '7 days'  -- buffer
+  AND created_at > (SELECT MAX(created_at) - INTERVAL '1 day' FROM target)
+```
+
+### Pattern 3: Data Quality Tests (dbt)
+
+```yaml
+# models/marts/orders.yml
+version: 2
+
+models:
+  - name: orders
+    description: One row per order
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('customers')
+              field: customer_id
+      - name: amount
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+```
+
+### Pattern 4: Idempotent Backfills
+
+```python
+# Backfill should be safe to re-run
+async def backfill(start_date: date, end_date: date):
+    for d in date_range(start_date, end_date):
+        # DELETE then INSERT in one transaction (idempotent); value passed as a parameter, never in the SQL string
+        async with db.transaction():
+            await db.execute("DELETE FROM target WHERE date = $1", d)
+            await load_for_date(d)
+```
+
+### Pattern 5: Real-time Pipeline
+
+```python
+# Kafka consumer pattern
+from kafka import KafkaConsumer
+
+consumer = KafkaConsumer(
+    'events',
+    bootstrap_servers='kafka:9092',
+    enable_auto_commit=False,  # ← manual commit = at-least-once (not exactly-once)
+    isolation_level='read_committed',
+)
+
+batch = []
+for message in consumer:
+    batch.append(parse(message))
+
+    if len(batch) >= 1000:
+        # Write first, commit the offset after. Kafka and the DB share no
+        # transaction, so a crash between the two replays this batch
+        # (at-least-once). Make the write idempotent so a replay is harmless.
+        with db.transaction():
+            db.bulk_upsert('events', batch, key=('topic', 'partition', 'offset'))  # unique key + ON CONFLICT DO NOTHING
+        consumer.commit()  # only after the DB write succeeds
+        batch = []
+```
+
+For exactly-once effect: idempotent upsert as above, or store the offsets in the
+same DB transaction as the data and seek to them on start (skip `consumer.commit()`).
+
+## Data Catalog Pattern
+
+For every table, document:
+
+```yaml
+- table: dim_customer
+  description: Slowly-changing customer master
+  owner: data-team
+  freshness: hourly
+  source: postgres.app.users (CDC)
+  pii: yes
+  retention: 7 years
+  columns:
+    - name: customer_key
+      description: Surrogate key
+    - name: customer_id
+      description: Natural key from source system
+    - name: email
+      pii: yes
+```
+
+## Production Pipeline Checklist
+
+- [ ] Schema validation at ingestion
+- [ ] Schema evolution handled (additive only)
+- [ ] Tests on critical columns (uniqueness, not-null, ranges)
+- [ ] Monitoring on row counts, freshness, error rates
+- [ ] Alerting (PagerDuty / Slack) on failures
+- [ ] Backfill procedure documented + tested
+- [ ] Idempotency verified
+- [ ] Lineage visible (dbt docs, OpenLineage)
+- [ ] PII tagged
+- [ ] Access controls per dataset
+- [ ] Cost monitored (query / storage)
+
+
+## reference: data-types.md
+
+# 6 · Four data types that are routinely got wrong
+
+### Money
+
+```sql
+total_amount   numeric(19,4)   NOT NULL      -- ถูก:
+currency       char(3)         NOT NULL      -- ถูก: ISO 4217 เช่น THB
+total_amount   float / double                -- ผิด: 0.1 + 0.2 ไม่เท่ากับ 0.3
+```
+
+> Wrong: **float for money is a bug you cannot find.** The total drifts by 1 satang per line
+> You only learn at month-end close, and cannot trace back where it drifted
+
+### Time
+
+| Store | Use | Reason |
+|---|---|---|
+| Time an event happened | `timestamptz` (SQL Server uses `datetimeoffset`) stored as UTC | Thailand has no daylight saving, but systems sold abroad do |
+| Birth date, due date | `date` | no time, no time zone |
+| Shop opening hours | `time` + a separate time zone column | |
+
+**Rule:** store UTC and convert to `+07:00` only at display time; never store raw Thai time in a `timestamp` that has no zone
+
+**Buddhist Era (BE)**: always store Common Era (CE), then convert to BE at display time
+If you store the year 2569 in the database, every function will compute durations wrongly
+
+### enum / status
+
+| Approach | Good when | Bad when |
+|---|---|---|
+| Lookup table + foreign key | values can be added without a deploy, has Thai/English names, and has a display order | needs a join |
+| `check constraint` as text | constant values that rarely change | adding a value needs a migration |
+| PostgreSQL `enum` type | fast, small | **a value cannot be removed** and the order cannot be changed |
+| raw `int` | — | ✗ reading `status = 3`, nobody knows what it means |
+
+### boolean
+
+- Name it as a positive statement: `is_active` (right) · `is_not_disabled` (wrong)
+- **If a third state might appear in the future, do not use boolean**, because `is_approved` will become `approval_status`
+  within 6 months, once "รออนุมัติ" (awaiting approval) is added
+
+---
+
+
+## reference: migrations.md
+
+# 9 · migration — change the schema without taking the system down
+
+**3 rules:**
+
+1. **Forward only**: a migration that has been merged must not be edited; if it is wrong, write a new one over it
+2. **1 migration does one thing**: easy to trace problems, and rollback is exact
+3. **Old-version code and the new-version schema must work together**, because during a deploy both versions of the code always run at the same time
+
+### expand / contract — the standard steps for a change that destroys something existing
+
+Example: rename the column `name` → `full_name`
+
+| Deploy round | Database | Code |
+|:--:|---|---|
+| **1 · Expand** | add `full_name` (nullable) | write to both columns · read from `name` |
+| **2 · Migrate** | copy old data in batches | read from `full_name`, fall back to `name` if it has no value |
+| **3 · Contract** | set `NOT NULL` · drop `name` | read and write only `full_name` |
+
+3 rounds looks slow, but every round can roll back without losing data
+If you do it in one round, you must accept that the system has to go down
+
+**Commands that lock the table until the system hangs** (be extra careful on large tables):
+
+- Adding a column with both `DEFAULT` and `NOT NULL` at once — newer PostgreSQL does this fast, and MySQL 8.0.12 and up can add a column as INSTANT (changing a data type still rewrites the table)
+- Changing a data type
+- Creating a plain index; use `CREATE INDEX CONCURRENTLY` instead (PostgreSQL) or `ONLINE = ON` (SQL Server)
+
+**Always test a migration against a copy of real data**, because a migration that runs in 0.2 seconds on your own machine
+may take 40 minutes on production and hold the table lock the whole time
+
+---
+
+
+## reference: per-stack.md
+
+# Syntax and tools per database and ORM
+
+**Contents:** 1 Data types compared · 2 PostgreSQL · 3 SQL Server · 4 MySQL / MariaDB · 5 MongoDB · 6 Entity Framework Core (.NET) · 7 Prisma / Drizzle (Node) · 8 Alembic (Python) · 9 Slow query commands
+
+1. [Data types compared](#1--data-types-compared)
+2. [PostgreSQL](#2--postgresql)
+3. [SQL Server](#3--sql-server)
+4. [MySQL / MariaDB](#4--mysql--mariadb)
+5. [MongoDB](#5--mongodb)
+6. [Entity Framework Core (.NET)](#6--entity-framework-core-net)
+7. [Prisma / Drizzle (Node)](#7--prisma--drizzle-node)
+8. [Alembic (Python)](#8--alembic-python)
+9. [Slow query commands](#9--slow-query-commands)
+
+---
+
+## 1 · Data types compared
+
+| To store | PostgreSQL | SQL Server | MySQL |
+|---|---|---|---|
+| Auto-increment id | `bigint GENERATED ALWAYS AS IDENTITY` | `bigint IDENTITY(1,1)` | `BIGINT AUTO_INCREMENT` |
+| UUID | `uuid` | `uniqueidentifier` | `BINARY(16)` or `CHAR(36)` |
+| Money | `numeric(19,4)` | `decimal(19,4)` | `DECIMAL(19,4)` |
+| Time + time zone | `timestamptz` | `datetimeoffset(3)` | `TIMESTAMP` (store UTC) |
+| Date only | `date` | `date` | `DATE` |
+| Unlimited-length text | `text` | `nvarchar(max)` | `TEXT` / `LONGTEXT` |
+| Thai text | `text` (already UTF-8) | **`nvarchar` only** | `utf8mb4` |
+| True/false | `boolean` | `bit` | `TINYINT(1)` |
+| JSON | `jsonb` (can be indexed) | `nvarchar(max)` + `JSON_VALUE` | `JSON` |
+| Binary file | `bytea` (or store outside the database) | `varbinary(max)` | `BLOB` |
+
+> **SQL Server + Thai**: `varchar` turns Thai characters into `?`.
+> Use `nvarchar` and always write literals as `N'ข้อความ'`.
+>
+> **MySQL must use `utf8mb4`**, because MySQL's character set named plain `utf8`
+> stores only 3 bytes per character, so emoji and some other characters are lost.
+
+---
+
+## 2 · PostgreSQL
+
+```sql
+CREATE TABLE orders (
+  id            bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  order_no      varchar(20)  NOT NULL,
+  customer_id   bigint       NOT NULL REFERENCES customers(id) ON DELETE RESTRICT,
+  status        varchar(20)  NOT NULL DEFAULT 'draft',
+  total_amount  numeric(19,4) NOT NULL DEFAULT 0,
+  currency      char(3)      NOT NULL DEFAULT 'THB',
+  meta          jsonb,
+  created_at    timestamptz  NOT NULL DEFAULT now(),
+  updated_at    timestamptz  NOT NULL DEFAULT now(),
+  deleted_at    timestamptz,
+  CONSTRAINT ck_orders_total_non_negative CHECK (total_amount >= 0),
+  CONSTRAINT ck_orders_status CHECK (status IN ('draft','confirmed','shipped','cancelled'))
+);
+
+CREATE UNIQUE INDEX ux_orders_order_no ON orders (order_no) WHERE deleted_at IS NULL;
+CREATE INDEX ix_orders_customer_id ON orders (customer_id);
+CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC);
+```
+
+**Create an index without locking the table:**
+
+```sql
+CREATE INDEX CONCURRENTLY ix_orders_status ON orders (status);
+-- Must not run inside a transaction · if it fails it leaves an index in invalid state: DROP it and redo
+```
+
+**Update `updated_at` automatically:**
+
+```sql
+CREATE OR REPLACE FUNCTION touch_updated_at() RETURNS trigger AS $$
+BEGIN NEW.updated_at = now(); RETURN NEW; END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_orders_touch BEFORE UPDATE ON orders
+FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
+```
+
+**Row-level security for multi-tenant systems:**
+
+```sql
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation ON orders
+  USING (tenant_id = current_setting('app.tenant_id')::bigint);
+-- The app sets this per connection: SET app.tenant_id = '42';
+```
+
+**Common PostgreSQL traps** (ideas from wshobson postgresql-table-design · version numbers are the version where the behaviour began)
+
+| Trap | Do this instead |
+|---|---|
+| `timestamp` (no time zone) silently drops the offset, so a `+07:00` machine and UTC store values with different meanings | Always `timestamptz` |
+| `serial` creates a separate sequence whose permissions and `DROP` do not follow the table | `GENERATED ALWAYS AS IDENTITY` (PG 10+) |
+| `ADD COLUMN ... NOT NULL` on a big table risks a long lock | With a constant `DEFAULT` the table is no longer rewritten (PG 11+) · a function DEFAULT such as `now()` still rewrites the whole table |
+| `ADD CONSTRAINT` (FK · CHECK) scans the whole table while holding the lock | Use `... NOT VALID` first, then run `VALIDATE CONSTRAINT` as a separate statement (lighter lock) |
+| DDL queues behind a long transaction, and every query after it waits too | Run `SET lock_timeout = '5s'` before every DDL, and rerun if it times out |
+| A unique index lets `NULL` repeat on many rows | `UNIQUE NULLS NOT DISTINCT` (PG 15+) or a partial index `WHERE col IS NOT NULL` |
+| `LIKE '%คำ%'` and `ILIKE` do not use a btree index | Extension `pg_trgm` + GIN index · for serious text search use `tsvector` |
+| `jsonb` search with `->>` does not use an index | GIN index on the column (`@>` · `?`) or an expression index on `(meta->>'key')` |
+| `count(*)` over the whole table to show a page count | Use the estimate from `pg_class.reltuples`, or drop the total count (cursor pagination) |
+
+---
+
+## 3 · SQL Server
+
+```sql
+CREATE TABLE orders (
+  id            bigint IDENTITY(1,1) PRIMARY KEY,
+  order_no      nvarchar(20)   NOT NULL,
+  customer_id   bigint         NOT NULL,
+  status        nvarchar(20)   NOT NULL CONSTRAINT df_orders_status DEFAULT N'draft',
+  total_amount  decimal(19,4)  NOT NULL CONSTRAINT df_orders_total DEFAULT 0,
+  created_at    datetimeoffset(3) NOT NULL CONSTRAINT df_orders_created DEFAULT sysdatetimeoffset(),
+  updated_at    datetimeoffset(3) NOT NULL CONSTRAINT df_orders_updated DEFAULT sysdatetimeoffset(),
+  row_version   rowversion,
+  CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers(id),
+  CONSTRAINT ck_orders_total_non_negative CHECK (total_amount >= 0)
+);
+
+CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC)
+  WITH (ONLINE = ON);   -- Enterprise / Azure SQL only
+```
+
+- `rowversion` works directly as an ETag to detect conflicting edits.
+- To sort Thai correctly, set the collation `Thai_100_CI_AS` at the column or database level.
+- The old `datetime` has a precision of only 3.33 milliseconds. Use `datetime2` / `datetimeoffset` instead.
+
+---
+
+## 4 · MySQL / MariaDB
+
+```sql
+CREATE TABLE orders (
+  id           BIGINT AUTO_INCREMENT PRIMARY KEY,
+  order_no     VARCHAR(20)   NOT NULL,
+  customer_id  BIGINT        NOT NULL,
+  total_amount DECIMAL(19,4) NOT NULL DEFAULT 0,
+  created_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY ux_orders_order_no (order_no),
+  KEY ix_orders_customer_id (customer_id),
+  CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+- From MySQL 8.0.12, `ADD COLUMN` can use `ALGORITHM=INSTANT` (before 8.0.29 it could add only at the end of the table). Changing a data type still rewrites the table (dev.mysql.com online DDL, checked 22 Oct 2026 (B.E. 2569)). For big tables that need a rebuild, use `pt-online-schema-change` or `gh-ost`.
+- Set the server time to UTC (`default_time_zone = '+00:00'`).
+
+---
+
+## 5 · MongoDB
+
+```js
+db.createCollection("orders", {
+  validator: { $jsonSchema: {
+    bsonType: "object",
+    required: ["orderNo", "customerId", "totalAmount", "createdAt"],
+    properties: {
+      orderNo:     { bsonType: "string" },
+      customerId:  { bsonType: "objectId" },
+      totalAmount: { bsonType: "decimal" },   // wrong: do not use double for money
+      createdAt:   { bsonType: "date" }
+    }
+  }}
+});
+db.orders.createIndex({ orderNo: 1 }, { unique: true });
+db.orders.createIndex({ customerId: 1, createdAt: -1 });
+```
+
+- Embed when the child data is **always read together with the parent and does not grow without limit**. Otherwise use references.
+- One document has a 16 MB ceiling, so an array that keeps growing will hit it one day.
+- Use `Decimal128` for money, and nothing else.
+
+---
+
+## 6 · Entity Framework Core (.NET)
+
+```bash
+dotnet ef migrations add AddOrderStatus
+dotnet ef migrations script <from> <to> -o migrate.sql   # right: review the SQL before the real run
+dotnet ef database update                                # dev only
+```
+
+> **On production, run the reviewed script, not `database update`.**
+> That command needs the app's connection to have permission to change the schema, which it should not have in the first place.
+
+```csharp
+modelBuilder.Entity<Order>(e => {
+    e.ToTable("orders");
+    e.Property(x => x.TotalAmount).HasColumnType("decimal(19,4)");
+    e.HasIndex(x => new { x.Status, x.CreatedAt }).HasDatabaseName("ix_orders_status_created");
+    e.HasQueryFilter(x => x.DeletedAt == null);          // soft delete across the whole system
+    e.Property(x => x.RowVersion).IsRowVersion();        // detect conflicting edits
+});
+```
+
+---
+
+## 7 · Prisma / Drizzle (Node)
+
+```prisma
+model Order {
+  id          BigInt   @id @default(autoincrement())
+  orderNo     String   @unique @map("order_no") @db.VarChar(20)
+  totalAmount Decimal  @map("total_amount") @db.Decimal(19, 4)
+  status      String   @db.VarChar(20)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  customer    Customer @relation(fields: [customerId], references: [id])
+  customerId  BigInt   @map("customer_id")
+
+  @@index([status, createdAt], name: "ix_orders_status_created")
+  @@map("orders")
+}
+```
+
+```bash
+npx prisma migrate dev --name add_order_status   # dev — creates the migration file
+npx prisma migrate deploy                        # production — runs only the existing ones
+```
+
+- Prisma's `Decimal` returns an object, not a number. Calculate with `decimal.js` and do not convert to float.
+- `BigInt` cannot be converted to JSON directly. Convert it to a string at the API layer.
+
+---
+
+## 8 · Alembic (Python)
+
+```bash
+alembic revision --autogenerate -m "add order status"
+alembic upgrade head
+alembic downgrade -1
+```
+
+Split into 3 migrations (1 migration does one thing):
+
+```python
+# 1) schema: add a nullable column
+def upgrade():
+    op.add_column("orders", sa.Column("status", sa.String(20), nullable=True))
+
+# 2) data: backfill existing values (on a big table, do it in small batches)
+def upgrade():
+    op.execute("UPDATE orders SET status = 'draft' WHERE status IS NULL")
+
+# 3) schema: enforce NOT NULL and create the index
+def upgrade():
+    op.alter_column("orders", "status", nullable=False)
+    # CREATE INDEX CONCURRENTLY must not run inside a transaction, so step out of Alembic's transaction
+    with op.get_context().autocommit_block():
+        op.create_index("ix_orders_status_created", "orders", ["status", "created_at"],
+                        postgresql_concurrently=True)
+```
+
+> `--autogenerate` **does not see** renames (it reads them as a drop plus a new add, so the data is lost).
+> Always read the file it generates before you commit.
+
+---
+
+## 9 · Slow query commands
+
+| Database | Command |
+|---|---|
+| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) <query>;` · extension `pg_stat_statements` |
+| SQL Server | Turn on "Include Actual Execution Plan" · `sys.dm_exec_query_stats` |
+| MySQL | `EXPLAIN ANALYZE <query>;` · `performance_schema` |
+| MongoDB | `db.orders.find(...).explain("executionStats")` |
+
+**Danger signs to fix:** `Seq Scan` / `Table Scan` on a big table ·
+estimated row count differs from the actual by more than 10 times · a `Nested Loop` that runs hundreds of thousands of times
+
+
+## reference: warehouse-modeling.md
+
+# Warehouse modeling — ELT, stack, star schema, SCD
+
+For an analytics warehouse, not an application database.
+
+**สารบัญ:**
+
+- [ELT vs ETL (Modern Default: ELT)](#elt-vs-etl-modern-default-elt)
+- [Tech Stack (2026 Recommendations)](#tech-stack-2026-recommendations)
+- [Schema Design: Star/Snowflake](#schema-design-starsnowflake)
+- [SCD (Slowly Changing Dimensions)](#scd-slowly-changing-dimensions)
+
+## ELT vs ETL (Modern Default: ELT)
+
+```
+ETL (old way):
+Source → Transform → Warehouse
+        ↑
+        Limited compute, slow
+
+ELT (modern):
+Source → Load raw → Transform in warehouse
+                    ↑
+                    Snowflake/BigQuery scale
+```
+
+> **2026 default: ELT with dbt** — load raw to warehouse, transform with SQL via dbt
+
+## Tech Stack (2026 Recommendations)
+
+> The tool list comes from model knowledge and has not been checked against official websites (รอยืนยัน, awaiting confirmation). Check before recommending.
+
+### Warehouse / Lake
+| Tool | Best for | Cost |
+|------|----------|------|
+| **Snowflake** | Pure warehouse, separation of compute/storage | $$|
+| **BigQuery** | Serverless, ad-hoc, GCP shops | $$|
+| **Databricks** | Unified lake + warehouse, ML-heavy | $$$|
+| **DuckDB** | Local dev, embedded analytics | $free |
+| **Redshift** | AWS-native, legacy | $$|
+| **Postgres** | Small data (<1TB), simplicity | $|
+
+### Transformation
+- **dbt** — SQL-based, version controlled, tested (industry default)
+- **SQLMesh** — newer alternative to dbt, stronger features
+
+### Orchestration
+- **Airflow** — most popular, mature
+- **Prefect** — modern Python-native
+- **Dagster** — software-engineering approach to pipelines
+
+### Stream Processing
+- **Kafka + Flink** — high throughput, exactly-once
+- **Kinesis Streams + Flink** — AWS-native
+- **Pub/Sub + Dataflow** — GCP-native
+- **Materialized views** (Snowflake, BigQuery) — for simple cases
+
+### Ingestion
+- **Airbyte** — open source, many connectors
+- **Fivetran** — managed, expensive but reliable
+- **Estuary** — modern, streaming-first
+- **Custom** — for sources not covered
+
+## Schema Design: Star/Snowflake
+
+```sql
+-- Fact table (events / measurements)
+CREATE TABLE fact_orders (
+    order_key BIGINT PRIMARY KEY,
+    customer_key BIGINT,
+    product_key BIGINT,
+    date_key INT,
+    quantity INT,
+    amount NUMERIC(19,4)
+    -- foreign keys to dimensions
+);
+
+-- Dimension tables (descriptive context)
+CREATE TABLE dim_customer (
+    customer_key BIGINT PRIMARY KEY,
+    customer_id VARCHAR,        -- natural key
+    name VARCHAR,
+    email VARCHAR,
+    country VARCHAR,
+    -- SCD Type 2 tracking:
+    valid_from DATE,
+    valid_to DATE,
+    is_current BOOLEAN
+);
+```
+
+> **Star = denormalized, query-fast**
+> **Snowflake = normalized dims, save storage**
+> **Wide tables / OBT (One Big Table) = even faster for analytics**
+
+## SCD (Slowly Changing Dimensions)
+
+### Type 1: Overwrite
+```
+Customer Bob lived in Bangkok. Moved to Phuket.
+→ Update row, lose Bangkok history
+```
+
+### Type 2: New row per change (most common)
+```
+| customer_key | id | name | city    | valid_from | valid_to   | is_current |
+| 1            | 42 | Bob  | Bangkok | 2024-01-01 | 2025-06-30 | false      |
+| 2            | 42 | Bob  | Phuket  | 2025-07-01 | 9999-12-31 | true       |
+```
+
+### Type 3: Add column
+```
+Customer table: current_city, previous_city
+→ Only most recent change preserved
+```

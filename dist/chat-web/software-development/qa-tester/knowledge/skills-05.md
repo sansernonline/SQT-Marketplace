@@ -1,6 +1,6 @@
 # skill: app-verifier-setup
 
-Use when an agent has no scripted way to run the app
+Use when no scripted way to run the app, or verify is stale
 
 # app-verifier-setup — give the agent hands and eyes
 
@@ -64,7 +64,7 @@ verify must depend on things the app provides, not guess from text or CSS: `data
 ## References
 
 - [`references/builtin-verify.md`](references/builtin-verify.md) — Claude Code ships with `/verify`: for a project running on Claude Code, create a skill named `verify` at `.claude/skills/verify/SKILL.md` in that format, instead of `verify-<project>`.
-- [`app-verifier-upkeep`](../app-verifier-upkeep/SKILL.md) — fix it when the app has changed so much that the map no longer matches.
+- [`references/upkeep.md`](references/upkeep.md) — open when the app has changed so much that the map no longer matches: re-check the verify skill and fix only what is proven (maintain the one file, no second `verify-<project>`).
 - [`references/testing-contract.md`](references/testing-contract.md) — open at steps 4 and 5, when writing the feature map or telling the developer which hooks to add
 
 
@@ -160,7 +160,7 @@ Source: code.claude.com/docs/en/skills (read 2026-10-23) · the version numbers 
 - Before writing, read `.claude/skills/verify/SKILL.md` or `run-<name>/` that `/verify` already recorded (if any), then continue in the same format — the frontmatter fields the bundled one uses have not been checked against the docs (`ยังไม่ได้ตรวจ`, not yet checked)
 - monorepo → place it in the package folder that was touched, following the bundled one's rule
 - Codex · Gemini or Claude Code before v2.1.145 (`ยังไม่ได้ตรวจ` — not yet checked which version `/verify` started in) → use the old name `verify-<project>` in `.claude/skills/` · `.agents/skills/` · `skills/`
-- `app-verifier-upkeep` maintains this one file only and does not create a nested `verify-<project>`
+- Upkeep (`upkeep.md`) maintains this one file only and does not create a nested `verify-<project>`
 
 
 ## reference: testing-contract.md
@@ -179,17 +179,13 @@ verify must depend on things the app provides, not guess from text or CSS. Write
 Non-web apps follow the same idea: Flutter → a `Key` / Semantics label with the same name · Android → `resource-id` · command line → a `--now` option or an `APP_NOW` variable · a reset on mobile can be enabled only in a debug build.
 
 
----
+## reference: upkeep.md
 
-# skill: app-verifier-upkeep
-
-Use when a project verify skill no longer matches the app
-
-# app-verifier-upkeep — keep the hands and eyes in step with the app
+# Upkeep — keep the hands and eyes in step with the app
 
 > A verify skill that gives wrong steps is more dangerous than none, because the agent will trust it and report a pass.
 
-Use it with a skill built by [`app-verifier-setup`](../app-verifier-setup/SKILL.md). On Claude Code that file is `.claude/skills/verify/SKILL.md` (see [`app-verifier-setup/references/builtin-verify.md`](../app-verifier-setup/references/builtin-verify.md)). Maintain that one file and do not create a second `verify-<project>`.
+Use it when a verify skill built by [`app-verifier-setup`](../SKILL.md) no longer matches the app. On Claude Code that file is `.claude/skills/verify/SKILL.md` (see [`builtin-verify.md`](builtin-verify.md)). Maintain that one file and do not create a second `verify-<project>`.
 
 ## Steps
 
@@ -782,3 +778,152 @@ The line between this and [`parallel-attempts-pick-best`](../parallel-attempts-p
 ## Sources
 
 3-lens voters, default false positive · claude-security (All rights reserved · mechanism only) · agents/scan-verifier.md · viewed 2026-11-10 · one-by-one verifiers · code-review (Anthropic) · viewed 2026-11-10 · freshness of review results · qodo · skills/qodo-review-resolver/SKILL.md · viewed 2026-11-10 · for other details see `review-lenses`, section "Sources"
+
+
+---
+
+# skill: parallel-split-and-merge
+
+Use when work splits into independent slices to fan out
+
+# parallel-split-and-merge — split the work, run it in parallel, merge into one report
+
+## Use when
+- Work divides into independent pieces (chapters · product categories · research questions · modules · files) that different workers can do at the same time.
+- Many files need the same check or edit, or a review is split by viewpoint.
+
+Not for: a race where every worker does the same piece → `parallel-attempts-pick-best` · splitting code work by git worktree → `worktree-and-branch` (software-development) · a small piece under 1 page (the main session does it faster itself).
+Use together with `principle-build-a-tool-not-handwork` (script repeated work) and `principle-small-verifiable-steps`.
+
+## Steps
+0. **Get the overall picture and lay down shared things before splitting.** Scan cheaply with one script run (manifest · structure · size in lines · who refers to whom) and fill a table of piece · type · thickness. Give thick pieces a high enough model level; give thin or mechanical merge pieces to `haiku`. Method in `superuser` → `references/team-roles.md` "แบ่งงาน" item 0; `model` + `effort` follow the ladder in `superuser` section 5. Then the main session alone writes the shared things: storyline · data shape · template · shared files (report outline · product-table columns · a code interface).
+1. **Split with no overlap.** Write `| ชิ้น | ขอบเขต (บท · หมวดสินค้า · คำถามวิจัย · ไฟล์) | worker |`. Every part sits in exactly one piece, none repeated, none dropped. With the planner, give a `scope` and `covers` per piece; the script flags dropped or repeated items.
+2. **Fix one report format for every worker**, such as `| สิ่งที่พบ | ที่มา (หน้า · ลิงก์ · ไฟล์:บรรทัด) | ความรุนแรง | หลักฐาน |`, so reports merge without interpretation.
+3. **Never write to the same place.** Read-only work can be released at once. For work that edits files, give each worker its own file or folder (code work: one git worktree per worker, see `superuser` → `references/code-extensions.md`). The combined summary file is written by the main session alone.
+4. **Size pieces and workers.** Each piece fits what a subagent finishes in one round (about 5 modules · 10 screens · 5 short chapters). Workers = pieces that can run at once, within budget. Pieces that wait on each other are released by rank (`team-roles.md` "แบ่งงาน" items 4–6). If more than 8 at once, see "dynamic workflow" below.
+5. **Release every worker in one message**, in the background, passing file locations instead of content. Pick the agent by job (`reviewer` checks · `general-purpose` does or fixes · `brainstormer` options · an installed specialist such as `developer` if it fits). Same kind of work → same agent type + model + effort. Every brief uses the same form:
+
+   ```
+   ชิ้น: <ชื่อชิ้นจากตารางแบ่งงาน> — ส่วนหนึ่งของ <งานใหญ่>
+   อ่าน: <path ของกลาง> · <path ที่เกี่ยวกับชิ้นนี้เท่านั้น>   เขียนได้: <ไฟล์หรือโฟลเดอร์ของชิ้นนี้> · ห้ามแตะ: <ของกลาง · ชิ้นอื่น>
+   ผลิต: <ชื่อ · รูป · signature ที่ชิ้นอื่นจะใช้ ตรงตัว>   ใช้: <ของที่รับจากชิ้นอื่น รูปเดียวกัน คัดจากตารางความขัดแย้ง>
+   เสร็จเมื่อ: <สิ่งที่ตรวจได้ 1–3 ข้อ>   กติกาเดียวกัน: <skill หรือแม่แบบที่ทุกชิ้นต้องตาม>   ข้อจำกัดทั้งงาน: <คัดจาก docs/BRIEF.md>
+   ส่งกลับ: ตามรูปแบบข้อ 2 ไม่เกิน 40 บรรทัด · บรรทัดแรกบอกผล เสร็จ · เสร็จ มีข้อกังวล · ขาดบริบท · ติด
+   ```
+6. **Wait for all.** Never conclude from the ones that finished first. If a worker fails, release a new one once; if it fails again, record that the piece was not checked.
+7. **Merge.** Drop repeats, group items that are the same issue (slightly different reports often share one root cause), and confirm serious items yourself. It passes when every serious item has a `file:line` (or page · link) that the main session opened.
+   - **Referee:** for work split by module where each worker reports a list (rule extraction · defect finding · survey · transcript analysis by viewpoint), send a fresh agent to check that every item has a `file:line` that was opened and matches. The main session drops items with no reference or a mismatch; it does not repair them.
+   - **High-stakes items:** send 2 independent fresh judges; keep the item only if both agree. If they disagree, the main session opens that spot and decides.
+   - **Estimate agents and tokens before release** (pieces × size per piece). If the total passes about 12 pieces, tell the user in the opening question; below that, just release. Mark any item not yet opened `(ยังไม่ยืนยัน)` in the report.
+8. **One report:** a 1-paragraph summary · a combined table · pieces not checked (if any) · `status-report`.
+
+## planner
+For about 5 pieces or more, or pieces that wait on each other through several steps, write `plan.json` (`tasks` with `id` · `title` · `size` in thousands of tokens · `needs` · `owns` · `solo` · `step`; optional `max_agents` and `scope`/`covers`) and run `node scripts/plan.mjs plan.json`. It uses no tokens. A smaller graph can be worked out in the table.
+- It exits with code 1 and a list to fix for a cyclic graph, a missing piece, a duplicate id, 2 pieces owning the same file without waiting on each other, or a `scope` item in no piece or in several.
+- Output: a `คาด:` line · critical path · total work · minimum time · release-order table. If parallelism speeds things up by less than 1.3 times, it recommends a single worker. The critical path sets the time, not the number of pieces; when it is the limit, cut dependencies instead of adding workers.
+- JSON example, all fields, `--json` · `--mermaid` · `--html` · `--actual` · `queue.json` input: [`references/planner.md`](references/planner.md).
+
+## dynamic workflow
+Claude Code's workflow script commands many subagents (not the Dynamic pattern of `agent-patterns`). It fits checking every file against one criterion, converting tens to hundreds of files, looping fixes until a checker passes, or searching until nothing new appears.
+- **Start only when the user asks** (the word `ultracode`, "use a workflow", or `/effort ultracode`). The lead offers it in the opening question and never starts on its own. If the user declines, split into rounds of at most 8 workers. All rules above still apply. Limits and source: [`references/dynamic-workflow.md`](references/dynamic-workflow.md).
+
+## Check before done
+- [ ] A split table exists and every part of the work is in exactly 1 piece.
+- [ ] Every worker used the same report format and the same brief form.
+- [ ] No 2 workers write the same file; the summary file was written by the main session.
+- [ ] The main session waited for all workers and opened every serious item itself.
+- [ ] Failed pieces were redone once or recorded as not checked.
+
+## References
+- [`references/planner.md`](references/planner.md) — open when using the planner beyond the basics (all fields, pictures, `--actual`, `queue.json`).
+- [`references/dynamic-workflow.md`](references/dynamic-workflow.md) — open when the user asks for a workflow or more than 8 pieces run at once.
+- [`references/multi-account-and-orchestrator.md`](references/multi-account-and-orchestrator.md) — open when several sessions run under different accounts, the main session runs many workers over a long time, or workers run with `claude -p`.
+- [`references/sources.md`](references/sources.md) — sources.
+
+
+## reference: dynamic-workflow.md
+
+# dynamic workflow — more than 8 pieces at once, or repeated file-by-file work
+
+This section is about Claude Code's workflow script (a script that commands many subagents), which is a different thing from the Dynamic pattern that adjusts the plan along the way (`agent-patterns` section 1).
+
+Use when: checking every file in a folder against one criterion · converting or moving tens to hundreds of files · looping fixes until the checker passes, or 2 rounds in a row make no progress · searching again until a new round finds nothing more · research that must compare sources (`/deep-research`)
+
+- Claude writes a script that commands many subagents and runs it in the background. Intermediate results stay in the script's variables → the lead's context keeps only the final answer. You can stop and resume in the same session.
+- **Start only when the user asks** — the request contains the word `ultracode` or "use a workflow", or the user turned on `/effort ultracode`. On the Pro plan, Dynamic workflows must be turned on in `/config` first → the lead offers it in the opening question and does not start on its own. For unattended runs (`claude -p`), the word `ultracode` in the prompt does not start a workflow. If the user declines → split into rounds of no more than 8 workers per the steps above.
+- Up to 16 at once (a machine with fewer Central Processing Unit (CPU) cores gets fewer) · at most 1,000 workers per run · a `Large workflow` warning appears above 25 agents or when more than 1.5 million tokens are expected · it uses more tokens than doing it in the conversation and draws on the same quota → try a small piece first (one folder), then expand.
+- For work that edits files, tell each piece to work in its own separate copy (for code work see the next section).
+- The rules on this page still all apply: shared things before splitting · split table · one report format · confirm serious items yourself · a fresh `reviewer` checks the merged result.
+- Source: [Claude Code: dynamic workflows](https://code.claude.com/docs/en/workflows) (checked 21 Oct 2026)
+
+
+## reference: multi-account-and-orchestrator.md
+
+# Multiple LLM accounts · event-driven orchestrator · `claude -p`
+
+## Multiple LLM accounts — hand out work across accounts by quota
+
+Use this when several Claude Code or Codex sessions run under different accounts (each in its own worktree per `team-files`). A subagent always uses the same account as its caller, so splitting work across accounts means splitting it between sessions. The idea comes from KC-QUEST in lab `03_KC_QUEST` of the CWN2026 course; rewritten, no code copied.
+
+1. **Name the accounts:** run each account with its own `CLAUDE_CONFIG_DIR` (or `CODEX_HOME`). The account name is that folder's name (if unset, `.claude` or `.codex`), or set `SQT_ACCOUNT` yourself. Names in `accounts.json` must match this name, otherwise that account always gets a full bucket of quota. The hook records the account name on every team task.
+2. **Give the bucket sizes:** copy `superuser/templates/accounts.json` to `~/.claude/superuser/accounts.json` and edit `cap_k` (full-bucket quota, roughly, in k tokens) · `speed_k_per_hour` · `max_parallel` · `window_hours`. Values in the template are examples, not measured. Also set `week_cap_k` (weekly bucket, in k tokens): the splitter and the hook use the smaller of the 2 buckets and refill the 5-hour bucket no more than the week has left. If not set, the weekly cycle is counted as a % of the 5-hour bucket as before. Values in the template are examples, not measured.
+3. **Read the remaining quota (local read only, never touch credentials):**
+   - Claude: set each account's status line to call `node <plugin>/skills/parallel-split-and-merge/scripts/quota.mjs record`. Claude Code passes the fields `rate_limits.five_hour` and `seven_day` (`used_percentage` · `resets_at`) to the status line only on Pro/Max plans and after the first response of a session ([status line](https://code.claude.com/docs/en/statusline) · checked 2026-10-27). The script writes to `~/.claude/superuser/quota/<account>.json`.
+   - Codex: read `rate_limits` from the `token_count` event in session files under `$CODEX_HOME/sessions` (checked against real local files 2026-10-27 · no doc page, format may change).
+   - Merge into one file: `node quota.mjs snapshot --out quota.json`. Never use an endpoint that needs an account's OAuth token pulled out to call the API yourself, because it risks breaking the terms of use.
+4. **First hand-out (① rank ② filter ③ score ④ pick then reserve):** `node scripts/plan.mjs plan.json --accounts ~/.claude/superuser/accounts.json --quota quota.json --html plan.html`. Ready pieces are sorted by rank. ② Drop accounts that break a hard rule first (slots full · remaining quota less than size × `safety` · `tool` does not match the piece's `tool` field). ③ Score = 0.4U + 0.2F + 0.15R + 0.15V − 0.1L (U = 24/(24 + hours before reset) · F fits the bucket · R bucket is empty · V fast account takes a critical piece · L backlog · weights can be changed in the `weights` field). ④ Reserve quota at once so the next piece in the same round sees what is really left. If no account can take a piece, it waits for the reset.
+5. **During the work (⑤ forecast and move ⑥ learn ✦ pass the baton):** `node scripts/plan.mjs plan.json --accounts … --quota quota.json --actual`. ⑤ An account whose remaining quota is not enough for its backlog × `safety` appears in a "should move" list with a target account. ✦ Pass the baton with a `handoff` sheet (how far it got · what was committed · where to continue) and open the continuing work on the new account, not start over. ⑥ Actual speed per account as an EMA (exponential moving average), used to correct `speed_k_per_hour`.
+- The weights and formula are the course's values, not yet measured on our work. With the starting weights, F scores a small, snug bucket high, so a critical piece may get a slower account when the fast account has a large bucket. To let speed win, raise the weight V. If quota data is older than 1 cycle, the `--actual` table warns you to read it again. With no accounts file, the planner works in single-account mode as before.
+
+## Orchestrator that loops on events (example from `04_Multi_Agent_Orchestra` of the CWN2026 course)
+
+Use this when the main session must run many workers over a long time across several accounts. Checked against `ORCHESTRA_RECIPE.md` and `tools/orch.py` (orch.py has every event in the table and the 4-round cap; the rule after the table is only in the recipe).
+
+| event | what the orchestrator does |
+|---|---|
+| `DONE` · `HANDOFF` · `LIMIT_HANDOFF` (quota ran out mid-task, hand to another account) · `MERGE_CONFLICT` · `INCOMPLETE` (did not finish, let it continue) | Report to the user briefly, then keep looping |
+| `FAILED` (tried all 4 rounds) | Analyse, fix the prompt or re-split the work, then release it once more |
+| `ORCH_LOW` (the orchestrator's own account is low) | Write the status and what is left to do into `NOTES.md`, then stop |
+
+- The orchestrator does not write code itself (except very small fixes) and hands out work only through brief files. Its memory is `NOTES.md` + `BOARD.md` so the next orchestrator can read on from there. Let the account with the most quota left be the orchestrator.
+- The recipe tells workers (this is not code in orch.py): queue or database names that are shared must not collide between tasks tested at the same time (give each task a prefix such as `MQ_PREFIX=<id>_`) · the working folder is outside the Windows bind mount (several `node_modules` sets are very slow) · lock the `@playwright/test` version to match the Chromium the image has at `/ms-playwright`.
+
+## Run workers with `claude -p` and read the result
+
+- Pass `< /dev/null` and `--no-session-persistence` on every call · put the prompt before flags that take many values (`--allowedTools` `--add-dir` `--mcp-config`), otherwise the flag swallows the prompt · exit 0 does not mean success, read `is_error` in the JSON result · source: skill `yolo` in the course folder `00_resource/Remote` (tested by the instructor).
+- Pass the path of the data and tell the worker to compute it itself (item 5 under the "ขั้นตอน" (steps) heading of SKILL.md) · the one example from the course: stuffing the data into the prompt was 4 times slower and once gave a wrong answer.
+- Several workers using Playwright MCP must not share one server (they get the same browser and tabs, and identical inline configs are merged into one process) · give 1 explorer per browser · cited from an issue document the instructor kept, not yet tried ourselves.
+- Measure the peak number running at once from the log and report what the log shows, not what was ordered · the one example (lab1 of the course): ordered 8, peak was 6, because they started one at a time about 15 seconds apart and the small modules finished before the last ones started.
+
+
+## reference: planner.md
+
+# planner — full field list, output, pictures, `--actual`
+
+For a graph of about 5 pieces or more, or with pieces that wait on each other through several steps, write a `plan.json` and run `node scripts/plan.mjs plan.json` (uses no tokens · no outside library). A smaller graph can be worked out in the table yourself.
+
+```json
+{ "name": "เพิ่มระบบสมาชิก", "max_agents": 6, "tasks": [
+  { "id": "a", "title": "ออกแบบตาราง", "size": 20, "owns": ["db/schema.sql"], "step": "design" },
+  { "id": "b", "title": "API", "size": 30, "needs": ["a"], "step": "code" },
+  { "id": "d", "title": "ทดสอบรวม", "size": 15, "needs": ["b"], "solo": true, "step": "test" } ] }
+```
+
+- `size` = total tokens, roughly, in thousands · `scope` (plan level, optional) = the full list of scopes, such as `["บท 1", "บท 2"]` · `covers` = items from `scope` that this piece takes · `needs` = pieces that must finish first · `owns` = files this piece owns · `solo` = done by one worker alone · `step` uses the same step names as `model-scorecard` (plan · research · design · write · code · test · review · other); any other name gets k = 1 with no warning · used to pull the k value from the log (`--log`, default `.claude/superuser/log`) · `max_agents` or `--agents N` = the cap from the budget
+- **Checked before computing:** tasks empty or not a list · needs or owns not a list · size not greater than 0 · cyclic graph · waiting on a piece that does not exist · duplicate id · 2 pieces own the same file but do not wait on each other · with a `scope`, any item that is in no piece's `covers`, in several, or a `covers` that names an item not in `scope` → exits with code 1 with the list to fix
+- **Output:** a `คาด:` (estimate) line · critical path · total work · minimum time · release-order table (rank · slack by the CPM method (critical path method) computed as if workers were unlimited · worker number · start → end · timeline) · `--json` for machines · if parallelism speeds things up by less than 1.3 times, the script recommends a single worker (self-set value, not measured)
+- **The lab format and the deep research queue work as they are:** `research/<งาน>/queue.json` can go to the planner directly · the file may be an empty array · `depends_on` = `needs` · `exclusive` = `solo` · `size` may be the labels `S` `M` `L` (default 20k · 50k · 100k are self-set values, not measured; change with the field `"sizes": { "S": 30 }`, and the k value from the log adjusts further)
+- **Pictures:** `--mermaid` prints a flowchart of the DAG (directed acyclic graph) to paste into markdown (GitHub shows it as a picture · thick orange line = critical path) · `--html <file.html>` writes one page with an SVG of the DAG and a Gantt of the plan; open it in a browser, nothing to install; for a PNG, capture the page.
+- **Compare with the real work:** `--actual` reads `runs.jsonl` in superuser's log and ties worker tasks to plan pieces by a **task description that starts with the piece's id** (the description field of the Agent tool, such as `a: ออกแบบตาราง`). You get a table of who ran which model, when it started and how many minutes it took, real tokens against the estimate, check results, pieces not yet released, and pieces that used more than 1.5 times the estimated tokens. Add it with `--html` for one more picture, a Gantt of what really happened.
+- **The length of the critical path sets the time, not the number of pieces.** Example from `02_DAG_Planner` of the course (a calculation tool, not measured on real work): 2 briefs with the same 22 pieces gave 131 minutes and 194 minutes because their critical paths differ. When the critical path is the limit, adding workers does not help; cut dependencies (such as testing with text instead of voice) and move the deploy layer off the critical path.
+- A full example of all 3 steps with files and pictures: [`docs/examples/planner`](https://github.com/sansernonline/SQT-Marketplace/tree/main/docs/examples/planner) · `--now <ISO time>` fixes the time used when computing quota so the example gives the same result every time.
+- Test: `node scripts/plan.mjs --self-test` · idea from labs `02_DAG_Planner` and `04_Multi_Agent_Orchestra` of the CWN2026 course, rewritten, no code copied.
+
+
+## reference: sources.md
+
+# Sources · parallel-split-and-merge
+
+Overall picture before splitting: lesson from this project 2026-11-10 (not from outside) · produces/consumes exactly and whole-job limits: superpowers (MIT) · `skills/writing-plans` · referee, 2 judges and estimating the number of agents: code-modernization (LICENSE exists, type not yet identified) · `commands/modernize-extract-rules.md` · seen 2026-11-10
+
+From pstack `swarm` · planner idea from labs `02_DAG_Planner` and `04_Multi_Agent_Orchestra` of the CWN2026 course, rewritten, no code copied · dynamic workflows: [Claude Code: dynamic workflows](https://code.claude.com/docs/en/workflows) (checked 21 Oct 2026)

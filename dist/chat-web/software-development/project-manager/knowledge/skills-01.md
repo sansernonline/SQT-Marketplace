@@ -1083,7 +1083,7 @@ The PR is green · every comment has an answer · it passed an independent check
 # playbook · skill-authoring — write or edit a skill and prove it really helps
 
 Use when: creating a new skill · editing SKILL.md · editing an agent file · editing a prompt in `prompt/` (covers pstack's `authoring a skill` · `eval`)
-Main skills: `repeated-mistakes-to-checks` · `spell-out-abbreviations` · `simplicity-first`
+Main skills: `repeated-mistakes-to-checks` · `spell-out-abbreviations` · `superuser:simplify`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
@@ -1310,7 +1310,7 @@ To use an item, open that item's SKILL.md and read the whole file first.
 
 **Simplicity**
 - `lazy-coding` — the least code that really works
-- `simplicity-first` — documents · designs · plans that are as simple as possible but usable
+- `simplify` — documents · designs · plans that are as simple as possible but usable
 - `readable-code` — a newcomer can read and keep up
 
 **Working**
@@ -1684,13 +1684,13 @@ The trigger table lives only in this file (`superuser` section 3 points here). O
 | The user says TDD · test-driven · "เขียน test ก่อน" (write tests first) | [`spec-to-code-loop`](../../spec-to-code-loop/SKILL.md) (red→green per requirement) + [`testing-standards`](../../testing-standards/SKILL.md) (test structure · run commands) |
 | Can the system take many people at once · before a campaign or launch · load · stress · spike · soak test · k6 · a postmortem orders more load tests | [`load-testing`](../../load-testing/SKILL.md) — p95 and error-rate criteria before firing · permission gate (never hit someone else's system or production without an approver) · k6 thresholds · smoke in CI · speed of a single web page uses `web-quality-audit` |
 | Deploy an app to Render · render.com · render.yaml · Blueprint · a deploy fails on Render · rollback · is the free plan enough | [`render-deploy`](../../render-deploy/SKILL.md) — listen on `0.0.0.0:$PORT` · every service in `render.yaml` writes a `plan` · secrets use `sync: false` · 4-point money gate · the free plan (Postgres expires in 30 days) is not for real work · check HTTP 200 after release · Kubernetes uses `kubernetes-helm` |
-| Connect an app to Cloudflare R2 · R2 bucket · S3-style file storage · presigned URL · upload from the browser · migrate from S3 to R2 · r2.dev · bucket CORS | [`cloudflare-r2`](../../cloudflare-r2/SKILL.md) — token with Object Read & Write permission scoped to the bucket · endpoint with region `auto` · presigned PUT (POST and custom domains are not supported) · r2.dev for development only · 4-point money gate · general rules for user-uploaded files use `file-upload-and-storage` |
-| Connect an app to Backblaze B2 · B2 bucket · store files on Backblaze · application key · migrate from S3 to B2 · deleted files in B2 but storage charges do not stop · B2 file versions · B2 lifecycle | [`backblaze-b2`](../../backblaze-b2/SKILL.md) — standard key limited to the bucket (do not use the master key) · endpoint `s3.<region>.backblazeb2.com` · signature v4 · presigned PUT (POST not supported) · uploading again creates a new version and does not overwrite · by default every version is kept · a lifecycle rule with an empty prefix deletes the whole bucket · 4-point money gate · to compare with R2 use `cloudflare-r2` |
+| Connect an app to Cloudflare R2 · R2 bucket · S3-style file storage · presigned URL · upload from the browser · migrate from S3 to R2 · r2.dev · bucket CORS | [`backblaze-b2` R2 section](../../backblaze-b2/references/cloudflare-r2.md) — token with Object Read & Write permission scoped to the bucket · endpoint with region `auto` · presigned PUT (POST and custom domains are not supported) · r2.dev for development only · 4-point money gate · general rules for user-uploaded files use `file-upload-and-storage` |
+| Connect an app to Backblaze B2 · B2 bucket · store files on Backblaze · application key · migrate from S3 to B2 · deleted files in B2 but storage charges do not stop · B2 file versions · B2 lifecycle | [`backblaze-b2`](../../backblaze-b2/SKILL.md) — standard key limited to the bucket (do not use the master key) · endpoint `s3.<region>.backblazeb2.com` · signature v4 · presigned PUT (POST not supported) · uploading again creates a new version and does not overwrite · by default every version is kept · a lifecycle rule with an empty prefix deletes the whole bucket · 4-point money gate · to compare with R2 see `references/cloudflare-r2.md` |
 | Deploy a static website to Backblaze · deploy to B2 · host a site on B2 · b2 sync · a built Vite or React site you want to put on Backblaze · domain through Cloudflare | [`backblaze-b2` deploy section](../../backblaze-b2/references/deploy.md) — static sites only (B2 cannot run server-side code) · the first `b2 sync` without `--delete` · a Cloudflare Transform Rule is required · do not sync `.env` or source maps to a public bucket · 4-point money gate · if there is a backend use `render-deploy` · for the app's file storage use `backblaze-b2` |
 | Check a website before launch: accessibility (WCAG) · speed (Lighthouse · Core Web Vitals) | [`web-quality-audit`](../../web-quality-audit/SKILL.md) · SEO uses `seo-audit-checklist` in the same round |
 | The project has no way for an agent to run the app and click through the results itself | [`app-verifier-setup`](../../app-verifier-setup/SKILL.md) — do it before anything else · on a Claude Code that has `/verify` built in, the skill you create is named `verify` per `references/builtin-verify.md` |
 | Must install things, run builds · tests · servers · a test database | If the project has `.sandbox/`, do it in the sandbox through `sandbox.ps1 exec`. If it does not yet and the work needs more to be installed, propose [`docker-sandbox`](../../docker-sandbox/SKILL.md) · `.sandbox/` at the root is an exception declared in the README of the code folder (`project-doc-set` item 1) |
-| The app-checking skill starts to drift from the real app | [`app-verifier-upkeep`](../../app-verifier-upkeep/SKILL.md) |
+| The app-checking skill starts to drift from the real app | [`app-verifier-setup` upkeep](../../app-verifier-setup/references/upkeep.md) |
 | Trying only one path might lock in the wrong form and be hard to fix (new design · new API) | `parallel-attempts-pick-best` |
 | The work splits into several independent pieces | `parallel-split-and-merge` |
 | 2 or more agents will edit files in the same repo · a spike that might break the main checkout · a finished branch must be closed (merge · PR · discard) | [`worktree-and-branch`](../../worktree-and-branch/SKILL.md) — one worktree per agent as sibling folders · a branch-closing table with evidence · merge into main and push stay under "รออนุมัติ" (awaiting approval) |
@@ -1714,7 +1714,7 @@ The trigger table lives only in this file (`superuser` section 3 points here). O
 | Writing temporary files into the user's folder | `temp-file-discipline` |
 | Write an answer, report, document, or a label in a diagram | `human-writing` · `spell-out-abbreviations` · `answer-shape` |
 | Slides · deck · presentation (any file type) | `presentation-design` (the top table chooses .pptx · .html · conversion from .pptx) · do it as a job with `technical-writer` |
-| A BRD · SRS · FSD document set needs its own cover derived from the logo shape or a real mockup | [`doc-cover-design`](../../doc-cover-design/SKILL.md) · covers and general documents use the document row in the core's table (`branded-document-design`) |
+| A BRD · SRS · FSD document set needs its own cover derived from the logo shape or a real mockup | [`branded-document-design` cover section](../../branded-document-design/references/cover-design.md) |
 | Write a commit or open a PR | `commit-message-format` · `pr-description-template` |
 | The work touches login · permissions · outside input · files · money · personal data | [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md) + the specialist skills in its table. For a feature exposed to the outside, send a fresh `security-engineer` to do STRIDE per `threat-model/references/security-templates.md` before writing (or ask the user to run `/software-development:threat-model` themselves, because only the user can call that skill) |
 | Before `ship` · handover · adding a dependency | [`security-gate`](../../security-gate/SKILL.md) |
@@ -1870,9 +1870,10 @@ Use to cut extras nobody needs yet. Not Claude Code simplify
 
 ## Use when
 - Any work handed to people (code, documents, plans, designs, slides, tables, answers) may hold more than the task needs.
+- Cutting a spec, plan or architecture to the fewest parts: also open [`references/architecture-and-anti-patterns.md`](references/architecture-and-anti-patterns.md).
 - `human-writing` controls how it is written; this skill controls what the work contains.
 
-Not for: Claude Code's own `/simplify` command · more detail on code and architecture (if installed) → `lazy-coding` · `readable-code` · `simplicity-first` in plugin `software-development`.
+Not for: Claude Code's own `/simplify` command · more detail on code (if installed) → `lazy-coding` · `readable-code` in plugin `software-development`.
 
 ## Steps
 1. Climb the ladder and stop at the first step that works: (a) is this really needed? If not, do not do it and say in 1 line what you skipped; (b) is there an existing thing that works (file, template, function, tool, built-in feature)? Use it; (c) do the shortest version that is still complete and correct.
@@ -1893,3 +1894,87 @@ Not for: Claude Code's own `/simplify` command · more detail on code and archit
 - [ ] Every added part has a reason it is needed now, not "just in case".
 - [ ] Still complete on correctness, safety and what the user asked for.
 - [ ] Duties still clearly separated, not squashed into one place to look short.
+
+## References
+- [`references/architecture-and-anti-patterns.md`](references/architecture-and-anti-patterns.md) — open for architecture, specs, plans or designs: architecture do and avoid, extra checks per output type, anti-patterns to reject (future-proofing · layer cake · resume-driven design), wrong and right examples
+
+
+## reference: architecture-and-anti-patterns.md
+
+# Architecture, specs and anti-patterns · simplify
+
+Open this file for architecture, a spec, a plan or a design that keeps growing parts. It holds the rules not already in `SKILL.md`; each section ends with a line naming the rules `SKILL.md` covers.
+
+## Extra checks before submitting
+
+- **Simplest thing that works:** fewest moving parts, boring proven patterns. Add complexity only when something breaks.
+- **Reads in one pass:** no jargon the audience lacks, and the whole thing fits in 2 sentences.
+- Any "no" or "not sure" on these or on the `SKILL.md` checklist means: simplify before delivering.
+
+Already in `SKILL.md`: a tired teammate gets it in 6 months (the One rule) · every new component, option or layer has evidence it is needed now (checklist) · nothing can be deleted without losing meaning, deleting beats adding (step 2 and checklist) · an example for every abstract claim (step 3, documents).
+
+## Architecture
+
+Do:
+- Monolith first. Split only when a bottleneck is proven.
+- A familiar stack and standard patterns: Representational State Transfer (REST), queues, caches.
+- 1 source of truth per data type.
+
+Avoid:
+- Microservices for small teams · distributed-everything.
+- Multi-master databases before you must.
+- Event-driven by default. A synchronous call is simpler.
+
+## Documents (BRD · SRS · FSD · ADR)
+
+Business Requirements Document (BRD) · Software Requirements Specification (SRS) · Functional Specification Document (FSD) · Architecture Decision Record (ADR).
+
+Do: sentences of at most 20 words · plain English.
+
+Avoid: marketing-speak ("revolutionary", "best-in-class", "synergy") · walls of text · hedging ("might possibly potentially") · acronym soup.
+
+Already in `SKILL.md`: 1 idea per paragraph · an example for every abstract point · tables for structured data · no undefined jargon (step 3, documents).
+
+## Plans
+
+Do: realistic timelines with buffer · cut scope to fit the time.
+
+Avoid: vague goals ("improve quality") · aspirational dates with no buffer · plans without success metrics.
+
+Already in `SKILL.md`: 3–5 priorities, a named owner per item, measurable success criteria · no 20- or 50-item list with no priority (step 3, plans).
+
+## Designs (user experience (UX) · application programming interface (API))
+
+Do: stay consistent across screens · defaults that work for 80% of users · progressive disclosure (show advanced options only when asked).
+
+Avoid: a novel interaction where a standard one works · a 10-step flow when 3 steps work · required fields with no smart default · hidden features that need a tutorial.
+
+Already in `SKILL.md`: fewest steps to the user's goal · reuse familiar patterns (step 3, designs).
+
+## Anti-patterns to reject
+
+- **Future-proofing:** abstractions for needs that never arrive.
+- **"It might scale":** infrastructure for 1M users while you have 1k.
+- **Layer cake:** 6 layers where 90% just pass the call through.
+- **Resume-driven design:** fancy tech chosen to look sophisticated.
+- **Buzzword stacking:** "cloud-native event-driven AI-powered".
+
+## Wrong and right examples
+
+**API description**
+
+Wrong: "This sophisticated, enterprise-grade endpoint leverages state-of-the-art authentication to facilitate the seamless retrieval of user profile data."
+
+Right: "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use `?fields=name,email` to limit the response."
+
+**Sprint goal**
+
+Wrong: "Improve overall product quality and customer satisfaction through various initiatives."
+
+Right: "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on transient errors (1d), clearer error messages (1d)."
+
+**Architecture for a new feature**
+
+Wrong: "Event-sourced microservice with Command Query Responsibility Segregation (CQRS), Kafka ingestion, Redis cache, and a dedicated auth service."
+
+Right: "Add an endpoint to the existing API. One Postgres table for state. Standard auth middleware. Log to the existing system."

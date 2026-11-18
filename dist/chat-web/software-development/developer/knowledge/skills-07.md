@@ -1746,7 +1746,7 @@ This group is **all markdown** and **does not depend on project size**. It depen
 | mockups | `ux-designer` | `web-app-design` · `ui-craft` |
 | User guide (`MAN`) | `technical-writer` | `polished-document-style` |
 | Runbook | `devops-engineer` | `incident-runbook-template` |
-| BUILD-PLAN | `project-manager` | `simplicity-first` |
+| BUILD-PLAN | `project-manager` | `superuser:simplify` |
 | AGENT-LOOP | `developer` | `spec-to-code-loop` |
 | API-SPEC | `system-analyst` | `api-conventions` |
 | DATA-DICTIONARY | `system-analyst` | `database-design` |

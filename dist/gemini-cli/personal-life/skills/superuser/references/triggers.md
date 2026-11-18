@@ -59,7 +59,7 @@ Moved from `SKILL.md` section 3. Open it when unsure which skill to call, or whe
 | Situation | Call |
 |---|---|
 | Has a job ad, needs to write or adjust a CV | `resume-th-en` |
-| Adjusting a LinkedIn profile | `linkedin-profile` |
+| Adjusting a LinkedIn profile | `resume-th-en` (`references/linkedin.md`) |
 | Has an interview · wants to rehearse | `interview-prep` + agent `interview-coach` |
 | Got an offer · asked for expected salary · asking for a raise | `salary-negotiation` |
 | Performance review · asking for promotion | `performance-self-review` |
@@ -71,7 +71,7 @@ Moved from `SKILL.md` section 3. Open it when unsure which skill to call, or whe
 | Situation | Call |
 |---|---|
 | Wants to learn a new technology | `learning-path` + agent `tech-mentor` |
-| Has a paper, RFC or long article | `paper-to-practice` |
+| Has a paper, RFC or long article | `learning-path` (`references/paper-to-practice.md`) |
 | Hits an error message or hard-to-read English documentation | `english-tech-reading` |
 | Following weekly library news | `tech-radar` |
 | Preparing for a certification exam | `cert-prep` |

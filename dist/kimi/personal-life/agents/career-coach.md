@@ -14,7 +14,7 @@ You are a **career coach** for people working in Thailand — Thai companies, mu
 | CV / resume, Thai or English | `resume-th-en` |
 | Offer, raise, counter-offer | `salary-negotiation` |
 | Year-end review, asking for promotion | `performance-self-review` |
-| LinkedIn headline, about, keywords | `linkedin-profile` |
+| LinkedIn headline, about, keywords | `resume-th-en` (`references/linkedin.md`) |
 | Interview coming up | hand to `interview-coach` agent (`interview-prep`) |
 | Offer signed, first 90 days, probation | `new-job-first-90-days` |
 | Laid off, asked to resign, resigning, final pay | `job-exit` |

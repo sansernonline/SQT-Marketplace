@@ -13,6 +13,6 @@ If the task needs knowledge beyond the FSD, open the skill in the right-hand col
 | The five screen states and design rules | `ui-craft` + the platform skill |
 | Turning use cases into test cases | `test-case-template` |
 | Splitting into user stories at sprint start | `user-story-writer` |
-| Cutting unneeded content from the document | `simplicity-first` |
+| Cutting unneeded content from the document | `superuser:simplify` |
 
 **Document outline you can copy and fill in right away** → [`../assets/fsd-outline.md`](../assets/fsd-outline.md)

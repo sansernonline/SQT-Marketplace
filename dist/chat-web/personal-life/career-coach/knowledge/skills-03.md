@@ -1,194 +1,3 @@
-# skill: interview-prep
-
-Use when preparing for a job interview
-
-# Interview Prep
-
-Prepare for **this** interview: this company, this role, this round.
-
-## Workflow
-
-1. **Collect** — job post, company, round type, language, interviewer names if known, date and format (on-site, Teams/Zoom, phone).
-2. **Research (15 minutes)** — what the company sells, who the customers are, one recent news item, size and parent company. Write 3 facts the user can mention.
-3. **Map requirements** — take the job post's top 6–8 requirements and match one story to each.
-4. **Build the story bank** (Situation, Task, Action, Result (STAR), below).
-5. **Prepare the hard answers** — the Thai human resources (HR) list below.
-6. **Mock round** — the `interview-coach` agent prepares a 10-question practice set with a scoring rubric; the lead runs the live round with the user after the task.
-7. **Logistics** — route and travel time + 20 minutes buffer; for online, test camera, mic, name display and a quiet room the day before.
-8. **After** — thank-you note within 24 hours; debrief notes.
-
-## STAR story bank
-
-**S**ituation (1 sentence) · **T**ask (1 sentence) · **A**ction (3–4 sentences — what *you* did, say "I", not "we") · **R**esult (1–2 sentences with a number + what you learned).
-
-Aim for 60–120 seconds spoken. Keep each story in 3 lengths, because rounds differ: a **30-second headline** (situation + result, for the HR screen and "give me an example" follow-ups) · the **90-second STAR** (the default) · a **3-minute deep version** with the trade-offs, numbers and what you would do differently, for a technical or final round that probes. Write the 90-second one first; the other two are cut and expanded from it.
-
-Build 6–8 stories that together cover:
-
-| Theme | Typical question |
-|---|---|
-| Biggest achievement | Tell me about something you are proud of |
-| Conflict | A time you disagreed with your manager or a colleague |
-| Failure | A time something went wrong — what did you do |
-| Pressure / deadline | A time you had too much to do |
-| Leadership / influence without authority | A time you convinced others |
-| Learning fast | A time you had to learn something new quickly |
-| Customer | A difficult customer or stakeholder |
-| Initiative | Something you improved without being asked |
-
-One story can answer several themes — tag each story with the themes it covers. Story bank template → [references/question-bank.md](references/question-bank.md).
-
-## The questions Thai HR always asks
-
-| Question | What they really check | How to answer |
-|---|---|---|
-| แนะนำตัวเอง / Tell me about yourself | Can you summarise | 60–90 s: present role → 2 results → why this job. Not your life story |
-| ทำไมถึงอยากออกจากงานปัจจุบัน / Why are you leaving | Will you badmouth us later | Pull, not push: "looking for X which this role offers". Never criticise the current employer |
-| เงินเดือนที่คาดหวัง / Expected salary | Fit with budget | Give a researched range, top end above target; see `salary-negotiation`. "Based on the scope and market data, I'm looking at 65,000–72,000 baht base, open to discussing the total package" |
-| เงินเดือนปัจจุบันเท่าไร / Current salary | Anchor you low | You may share base honestly or redirect to expected; never inflate (they may ask for a payslip or 50 ทวิ) |
-| เริ่มงานได้เมื่อไร / Notice period | Timeline | State your contract notice. Under the Civil and Commercial Code §582 the default is one pay period ahead — check your own contract, which may say 30 days or more |
-| จุดอ่อน / Weakness | Self-awareness | Real but non-fatal weakness + what you do about it + evidence it is improving |
-| มีแฟน / แต่งงานหรือยัง / วางแผนมีลูกไหม | (Not job-related; using it to decide may be unfair discrimination under the Gender Equality Act B.E. 2558) | You may answer briefly or redirect: "That won't affect my availability for this role" |
-| ทำไมเลือกบริษัทเรา / Why us | Did you research | Use the 3 facts from Step 2 |
-| เห็นตัวเองอีก 5 ปีเป็นอย่างไร | Will you stay | Growth inside this kind of role, not "your job" or "my own business" |
-| มีคำถามไหม / Any questions | Interest | Always ask 2–3 (below) |
-
-## Technical round
-
-- Re-read the job post's tools list; for each, prepare one sentence of what you did with it and one result.
-- Coding / analysis tests: talk while you think; state assumptions; do the simple working version first, then improve.
-- Case or presentation: structure (problem → options → recommendation → risks); time-box to the slot minus 5 minutes for questions.
-- "I don't know" answer: "I haven't used X directly; the closest is Y where I …; I would start by …".
-- Portfolio / GitHub / work samples: remove confidential client data before showing anything (non-disclosure agreements still apply).
-
-## Questions to ask them
-
-Pick 2–3; never ask about salary or leave in the first round unless they raise it.
-
-1. What does success look like in this role after 6 months?
-2. What is the biggest challenge the team faces this year?
-3. How is performance reviewed, and how often?
-4. Why is the position open — new role or replacement?
-5. What do you enjoy about working here? (good for building rapport)
-6. What are the next steps and the timeline?
-
-Thai versions are in the question bank reference.
-
-## Thank-you note (within 24 hours)
-
-Short, specific, one thing you discussed. Templates in Thai and English → [references/question-bank.md](references/question-bank.md).
-
-## Rules
-
-- Never claim a skill or result that is not real — it collapses in the next round or on reference check.
-- Do not memorise scripts word for word; know the story beats.
-- Inappropriate personal questions (religion, pregnancy plans) — answer briefly or redirect; the user decides. Note it for later if it reflects the culture.
-
-ข้อความภาษาไทย (thank-you note, follow-up) → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ สมัครงาน
-
-Related: `resume-th-en` (stories must match the CV) · `salary-negotiation` · `polite-message-th-en` (follow-up messages) · `meeting`.
-
-## เรียกเป็นคำสั่ง
-
-`/personal-life:interview-prep <company> <role> [round — hr|manager|technical|final] [th|en]`
-
-Run the `interview-coach` agent with the `interview-prep` skill: **$ARGUMENTS**
-
-Follow the Workflow above, in this order: confirm the inputs · build the stories · list the 10 most likely questions for this round · offer the mock round · prepare 3 questions to ask and the thank-you template.
-
-
-## reference: question-bank.md
-
-# Interview Question Bank and Templates
-
-Contents
-1. STAR story bank template
-2. Common questions by round
-3. Questions to ask — Thai versions
-4. Thank-you notes
-5. Debrief template
-
-## 1. STAR story bank template
-
-| # | Story title | Situation | Task | Action (I …) | Result + number | Themes covered |
-|---|---|---|---|---|---|---|
-| 1 | | | | | | achievement, initiative |
-| 2 | | | | | | conflict, customer |
-| 3 | | | | | | failure, learning |
-| 4 | | | | | | pressure |
-| 5 | | | | | | leadership |
-| 6 | | | | | | |
-
-Worked example (story 1):
-- S — Month-end close took 9 working days and auditors flagged late accruals.
-- T — I was asked to cut close time before the next audit.
-- A — I mapped every close task, moved 14 recurring journal entries to templates in SAP, set a cut-off calendar with sales and purchasing, and trained two juniors.
-- R — Close dropped to 5 days within 3 months; the next audit had no adjustments. I learned to fix the upstream process, not just work faster.
-
-## 2. Common questions by round
-
-HR screen: tell me about yourself · why leaving · expected salary · notice period · why this company · willing to travel / work on-site.
-
-Hiring manager: walk me through your current role · biggest achievement · a failure · how you prioritise · how you handle a difficult stakeholder · what would you do in your first 90 days.
-
-Technical: role-specific tools · walk through a past project end to end · a problem you could not solve · test or case exercise.
-
-Final (director / MD): why should we hire you · long-term goals · what you know about our business · culture fit · questions for me.
-
-## 3. Questions to ask — Thai versions
-
-1. ใน 6 เดือนแรก ความสำเร็จของตำแหน่งนี้วัดจากอะไรครับ/คะ
-2. ทีมกำลังเจอความท้าทายอะไรมากที่สุดในปีนี้
-3. การประเมินผลงานทำอย่างไร ปีละกี่ครั้ง
-4. ตำแหน่งนี้เปิดใหม่ หรือแทนคนเดิม
-5. ขั้นตอนถัดไปและระยะเวลาประมาณเท่าไร
-
-## 4. Thank-you notes
-
-English:
-```
-Subject: Thank you — [Role] interview
-
-Dear [Name],
-
-Thank you for your time today. I enjoyed hearing about [specific topic they mentioned],
-and it made me more excited about the role — especially [one thing].
-[Optional: one line adding something you forgot to say.]
-I look forward to hearing about the next steps.
-
-Best regards,
-[Name]
-```
-
-Thai (email or LINE to HR):
-```
-เรียน คุณ[ชื่อ]
-
-ขอบคุณที่สละเวลาสัมภาษณ์วันนี้ครับ/ค่ะ ได้ฟังเรื่อง [หัวข้อที่คุยกัน] แล้วยิ่งสนใจตำแหน่งนี้มากขึ้น
-โดยเฉพาะ [สิ่งหนึ่งที่ชอบ] หากต้องการข้อมูลเพิ่มเติมยินดีส่งให้ครับ/ค่ะ
-รอฟังข่าวในขั้นตอนถัดไป
-
-ขอแสดงความนับถือ
-[ชื่อ นามสกุล]
-```
-
-If there is no reply 3 working days after the stated timeline, send one polite follow-up, then move on.
-
-## 5. Debrief template
-
-| Field | Notes |
-|---|---|
-| Date / round / interviewers | |
-| Questions asked | |
-| Answers that went well | |
-| Answers to improve | |
-| What I learned about the role and team | |
-| Red flags | |
-| Next step and date | |
-
-
----
-
 # skill: new-job-first-90-days
 
 Use when starting a new job or probation
@@ -238,7 +47,7 @@ Review with the manager at day 30 and day 60, not only at day 90. A goal that tu
 - Start the brag document on day 1 (`performance-self-review`, weekly entry). Probation reviews are decided on evidence from these 90 days.
 - Two weeks before the review date, send the manager a one-page summary: the day-90 answer from question 1 · what was done against it · one thing still to learn.
 - When severance starts to count during probation, and what notice the employer must give, are rules of the Labour Protection Act → `labour-law-basics` section 4. This skill does not restate them. Asked "what do I get if let go in probation": name the Act (พ.ร.บ.คุ้มครองแรงงาน), point to `labour-law-basics` and to the rights table in `job-exit` section 3, and do not say "nothing" from memory.
-- After passing: update LinkedIn (`linkedin-profile`) and file the confirmation letter in `important-docs`.
+- After passing: update LinkedIn (`resume-th-en`, `references/linkedin.md`) and file the confirmation letter in `important-docs`.
 
 ## Check before sending
 
@@ -259,3 +68,120 @@ Review with the manager at day 30 and day 60, not only at day 90. A goal that tu
 ## Worked example
 
 Starts as a data analyst on 1 Dec, 119-day probation in the contract. Before day 1: documents sent with ID number blacked out in the chat copy, tax allowance form filled for 1 child and parents, provident fund question sent to both HR teams. Week 1: manager answers "ภายใน 3 เดือน dashboard ยอดขายรายสัปดาห์ต้องออกเองได้โดยไม่ต้องให้ทีม IT ทำ". 30/60/90 goals all point at that dashboard. Day 30 check-in moves one goal (data source changed). The brag document has 11 entries by day 100; the summary goes to the manager 2 weeks before the review.
+
+
+---
+
+# skill: job-exit
+
+Use when laid off, resigning or signing an exit agreement
+
+# Job Exit — the employee's side (ถูกเลิกจ้าง · ถูกขอให้ลาออก · ลาออกเอง)
+
+> **One rule:** sign nothing on the day. Ask for time to read, keep the evidence, and compare every number with the rights table below first. This skill puts facts and documents in order; it never decides whether a dismissal was fair.
+
+General information, not legal advice (ข้อมูลทั่วไป ไม่ใช่คำปรึกษากฎหมาย). The law behind the numbers is the Labour Protection Act (พ.ร.บ.คุ้มครองแรงงาน พ.ศ. 2541 and amendments). Its sections, the severance table and notice rules live in `labour-law-basics` (e-commerce) and are **not restated here**, so there is one copy to keep current.
+
+## Use when / not when
+
+| Situation | Use |
+|---|---|
+| HR calls a meeting and hands over a termination letter · asked to sign a resignation or a "mutual agreement" · quitting and wants final pay right | this skill |
+| How many days of severance, notice rules, section numbers | `labour-law-basics` (e-commerce, if installed) sections 4–5 |
+| The employer's side: how to terminate correctly | `labour-law-basics`, "Termination checklist" in its reference |
+| Unemployment benefit details, section 39 contributions | `social-security-th` (e-commerce, if installed) |
+| Preparing a complaint or a visit to a lawyer | `legal-help-prep` |
+| Starting the next job | `new-job-first-90-days` |
+| Is the dismissal fair, how much to sue for | a labour lawyer or the labour office — this skill only lists the facts to bring |
+
+## 1 · On the day — step back
+
+Say, in writing if possible: "ขอรับเอกสารกลับไปอ่านก่อนนะครับ/คะ จะตอบภายในวันที่ …". Pressure to sign today ("ถ้าไม่เซ็นวันนี้จะไม่ได้อะไรเลย") is a reason to slow down, not to hurry. Ask for copies of everything shown in the meeting.
+
+## 2 · Keep the evidence (before access is cut)
+
+- [ ] Employment contract, offer letter, job description, work rules (ข้อบังคับเกี่ยวกับการทำงาน)
+- [ ] Payslips for the last 12 months, bonus and commission terms
+- [ ] The termination letter, or the resignation or agreement form they want signed — note whether a reason is written in it
+- [ ] Warning letters, if any, with dates
+- [ ] Chats and emails about the exit, as screenshots with date and time
+- [ ] Time records if overtime is unpaid
+
+Keep only your own employment papers. Copying company data you have no right to take can create a new problem.
+
+## 3 · Rights table — check every row before signing
+
+| Item | What to check | Rule lives in |
+|---|---|---|
+| Severance (ค่าชดเชย) | Days of service from the start date (probation counts) × the band in the table | `labour-law-basics` §5 (ม.118, ม.119 exceptions) |
+| Pay in lieu of notice (สินจ้างแทนการบอกกล่าวล่วงหน้า) | Was notice given on or before a pay day? If not, how much is owed | `labour-law-basics` §4 (ม.17, ม.17/1) |
+| Wages, overtime, commission still owed | Amounts and the pay date | `labour-law-basics` §4 (ม.70) |
+| Unused annual leave | Days left this year, paid out | `labour-law-basics` §4 (ม.67) |
+| Bonus and benefits in the contract | Pro-rata rules in the contract or work rules | the contract |
+| Provident fund (กองทุนสำรองเลี้ยงชีพ) | Vesting of the employer's share, keep or move | the fund's rules · `retirement-plan` (trading-finance, if installed) |
+| Unemployment benefit | Laid off and resigned are paid differently; register in time (section 5) | `social-security-th` · sso.go.th |
+| Tax on the final pay | Severance under the labour law has its own tax treatment | section 5 · `labour-law-basics` `references/leave-and-severance.md` item 9 (e-commerce, if installed) or an accountant |
+| Work certificate (หนังสือรับรองการทำงาน) | Ask for it; the employer must issue one on request | `labour-law-basics` termination checklist |
+
+Write the expected amount next to each row, and the section from the "Rule lives in" column (ม.118 · ม.17 · ม.67 …) so the user can check it, even when `labour-law-basics` is not installed. A row you cannot work out stays `[ตรวจ]` and goes to the labour office or a lawyer; do not guess it.
+
+## 4 · Papers they ask you to sign
+
+- **Resignation letter (ใบลาออก) when you did not choose to leave:** severance in the table is for a termination by the employer. Signing a resignation can be read as leaving by choice, which changes severance and the unemployment rate. Ask the labour office before signing (section 6) (รอยืนยัน).
+- **Mutual agreement or release (ข้อตกลงเลิกจ้าง · หนังสือสละสิทธิ์/ปลดเปลื้อง):** compare the sum with the rights table first. A clause saying you give up all further claims needs a lawyer or the labour office to read it before you sign.
+- Sign only the version you read. Write the date. Keep a copy or a photo of the signed page.
+
+## 5 · The first 30 days after leaving
+
+- **Register as unemployed within 30 days** of the last working day, on the Department of Employment's site (the SSO page names e-service.doe.go.th). Registering later still works, but the benefit counts only from the day you register. The benefit needs at least 6 months of contributions within the 15 months before leaving. sso.go.th, unemployment benefit page, viewed 2026-11-10.
+- **How much is paid** differs for laid off and for resigned or contract ended. The figures and the wage cap are kept in `social-security-th`. The SSO page viewed 2026-11-10 still shows 50% for up to 180 days (laid off), 30% for up to 90 days (resigned) and a 15,000 บาท cap, while `social-security-th` records a newer rate and cap from 2568–2569. Ask 1506 which one applies to you (รอยืนยัน).
+- **Keep social security under section 39:** possible if you paid under section 33 for at least 12 months; apply within 6 months of leaving (form สปส. 1-20). sso.go.th, section 39 page, viewed 2026-11-10.
+- **Tax on severance:** severance under the labour law for leaving not by choice is exempt up to the last 400 days' wages and no more than 600,000 บาท; with 5 years of service or more you may choose to tax it separately from other income on the ภ.ง.ด.91 attachment. Revenue Department, PND 91 instructions for tax year 2568, viewed 2026-11-10. Details → `labour-law-basics` `references/leave-and-severance.md` item 9 (e-commerce, if installed); working it out with your own figures and the withholding → an accountant.
+
+## 6 · Where to complain
+
+| Channel | What it does | Contact |
+|---|---|---|
+| Department of Labour Protection and Welfare (กรมสวัสดิการและคุ้มครองแรงงาน) | Questions about rights; complaints about unpaid money | hotline **1546** (or 1506 then 3) |
+| Labour inspector (พนักงานตรวจแรงงาน), form **คร.7** | When the employer does not pay wages, overtime, holiday pay, severance or a deposit owed. File with the inspector where you worked or where the employer is based, or online; decided within 60 days, extendable by 30 | provincial labour office · online via s90.labour.go.th/e_request |
+| Free legal aid | Before signing a release, or when going to the labour court | see `legal-help-prep`, section 6 |
+
+Preparing the visit (facts table, deadlines, contact log) → `legal-help-prep`.
+
+## Quitting by choice (ลาออกเอง)
+
+1. Give written notice following the contract; the minimum notice rule is in `labour-law-basics` §4.
+2. Before the last day, list the final pay items from the rights table (wages, leave, bonus terms, provident fund) and ask HR for the pay date in writing.
+3. Ask for the work certificate and the 50 ทวิ for the year.
+4. Unemployment and section 39 → section 5.
+
+## Check before sending
+
+- [ ] The first line tells the user not to sign today
+- [ ] Every number points to `labour-law-basics` or an official page with date; none restated from memory
+- [ ] Every rights row names its section (ม.118 severance · ม.17 notice · ม.67 leave)
+- [ ] Every row the agent could not compute is `[ตรวจ]`
+- [ ] Says it is not legal advice, and no ruling on fairness
+
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open for a full example of a "mutual agreement" offer
+- [`references/sources.md`](references/sources.md) — official pages viewed 2026-11-10 (SSO · Revenue Department · labour office)
+
+
+## reference: sources.md
+
+# Sources · job-exit
+
+Ideas from anthropics/claude-for-legal `employment-legal/skills/termination-review` (employer's side, Apache-2.0, turned to the employee's side and rewritten, viewed 2026-11-10).
+
+Sources: https://www.sso.go.th/wpr/ (hotline 1506; unemployment and section 39 detail pages under "สิทธิประโยชน์") · https://www.rd.go.th/fileadmin/tax_pdf/pit/2568/Ins91_241268.pdf · https://rd.go.th/65809.html · viewed 2026-11-10.
+
+Sources: https://www.labour.go.th (hotline line in the page footer) · https://nakhonsawan.labour.go.th/การยื่นคำร้อง/469-work-25657 (คร.7, a provincial office page) · viewed 2026-11-10. The labour court itself was not checked for this skill (ยังไม่ได้ตรวจ).
+
+
+## reference: worked-example.md
+
+## Worked example
+
+`ตัวอย่าง` Salary 30,000 a month, started 2022-03-01, HR hands over a "mutual agreement" on 2026-11-10 offering one month's pay and asks for a signature today. Steps: the user asks for 3 days to read · saves the contract, 12 payslips, the agreement and the LINE message from HR · rights table: 4 years 8 months of service → the band for 3 to under 6 years in `labour-law-basics` §5 gives far more than one month · no notice given → pay in lieu also due · 4 days of annual leave left · the agreement has a clause giving up all claims → the user does not sign, takes the table to the labour office (section 6) and books a visit with `legal-help-prep`. No ruling on whether the termination is fair.

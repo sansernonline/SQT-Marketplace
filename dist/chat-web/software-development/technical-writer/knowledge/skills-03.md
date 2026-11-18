@@ -564,4 +564,4 @@ Open the image of every page (Read tool) and go through the checks:
 | Slides paired with the same report, same colours | [`presentation-design`](../presentation-design/SKILL.md) (its top table chooses .pptx · .html · convert) |
 | File names and versions | `document-naming` (plugin `superuser`) |
 | Figures in the report | [`diagram-figures`](../diagram-figures/SKILL.md) |
-| A project-specific cover (logo and mockup already exist) | `doc-cover-design` (plugin `software-development`) |
+| A project-specific cover (logo and mockup already exist) | `branded-document-design` `references/cover-design.md` |

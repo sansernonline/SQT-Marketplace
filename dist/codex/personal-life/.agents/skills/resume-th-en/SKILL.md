@@ -1,10 +1,10 @@
 ---
 name: resume-th-en
-description: Use when writing a Thai or English CV or resume
-argument-hint: <th|en|both> [job post URL or text]
+description: Use when writing a Thai or English CV or resume, or improving a LinkedIn profile for a Thai job search
+argument-hint: <th|en|both|linkedin> [job post URL or text]
 ---
 
-# Resume — Thai and International
+# Resume and LinkedIn — Thai and International
 
 A CV gets a few seconds of a recruiter's first look, and it has to survive 2 readers: the applicant tracking system (ATS) that parses it, and the person who skims it.
 
@@ -84,21 +84,26 @@ English verbs: Led · Built · Cut · Grew · Launched · Automated · Negotiate
 
 Thai text (CV, cover email) → `human-writing` `references/thai-grammar.md` section 4, the job-application register · no long dash (—) in text that will be sent; use a space, "โดย" or brackets instead
 
+## LinkedIn profile
+
+For a LinkedIn profile (argument `linkedin`), use the CV bullets from Step 3 and the keywords from the Workflow, then follow [references/linkedin.md](references/linkedin.md): target roles, 10–15 keywords from 5 real job posts, headline formula (up to 220 characters), About in 4 paragraphs, Skills, Featured, Recommendations, settings and its own checklist. Profile and CV dates and titles must match exactly.
+
 ## Not an AI look
 
 Before handing over, run `no-ai-look` section 3. CVs are usually PDF or .docx, so only the eye check (3.2) applies; the script is for HTML/CSS. For a resume that means: no emoji headings, no bold-first bullets, no generic claims without numbers.
 
-Related: `linkedin-profile` (keep CV and profile consistent) · `interview-prep` (every bullet becomes a Situation, Task, Action, Result (STAR) story) · `important-docs` in `personal-life` (store certificates and transcripts).
+Related: `interview-prep` (every bullet becomes a Situation, Task, Action, Result (STAR) story) · `important-docs` in `personal-life` (store certificates and transcripts).
 
 ## References
 
 - [`references/templates.md`](references/templates.md) — fill-in templates (English, Thai, cover email) and a worked example of a summary line; open when drafting
+- [`references/linkedin.md`](references/linkedin.md) — LinkedIn headline, About, Thai keyword table, settings, checklist and banner-size source; open for a LinkedIn profile
 
 ## เรียกเป็นคำสั่ง
 
-`/personal-life:resume-th-en <th|en|both> [job post URL or text]`
+`/personal-life:resume-th-en <th|en|both|linkedin> [job post URL or text]`
 
-Run the `career-coach` agent with the `resume-th-en` skill: **$ARGUMENTS**
+Run the `career-coach` agent with the `resume-th-en` skill: **$ARGUMENTS** (with `linkedin`, work from the LinkedIn reference instead of the CV steps)
 
 1. Ask for the current CV (or work history) and the target job post if not given.
 2. Decide Thai-company vs international convention from the job post (see the skill's decision table).

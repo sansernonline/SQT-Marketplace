@@ -15,6 +15,8 @@ Decide by rule, not by mood.
 | TikTok Shop | 7 days after delivery (ทั่วไป); 15 days with free return for Mall (รอยืนยัน — no official Thai page found; check Seller Center) | "No longer needed" return reasons exist on some items (รอยืนยัน) |
 | LINE / Facebook | Whatever the shop states | State it in the description and the chat auto-reply; consumer law still protects against defective goods |
 
+Count every window from the date the parcel was actually delivered (tracking), not the order date; if only an estimate is known, say the count is from the estimated date.
+
 The windows above are from one third-party source, not an official page — confirm each window and response deadline in the platform's own Seller Centre help page before relying on it (รอยืนยัน). Sources and check dates: [references/sources.md](references/sources.md)
 
 ## Workflow — return or refund request

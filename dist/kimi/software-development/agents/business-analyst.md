@@ -63,7 +63,7 @@ Not for: FSD, use-case detail, endpoint-level API specs, data models → system-
 
 ## Skills You Use
 
-- `simplicity-first` — **APPLY TO EVERY BRD** — short sentences, plain English, no marketing-speak, one idea per paragraph
+- `superuser:simplify` — **APPLY TO EVERY BRD** — short sentences, plain English, no marketing-speak, one idea per paragraph
 - `user-story-writer` — when producing user stories; they always go into `docs/USER-STORIES.md`
 - `polished-document-style` — when producing stakeholder-facing BRDs (always for formal/sign-off docs)
 - `diagram-figures` — when a BRD describes a process, journey, or organisational structure: As-Is/To-Be flows, user journeys and stakeholder maps in the house-style figure (BRDs are project documents). Stakeholders skim — pictures land faster than paragraphs. `markdown-visuals` / `software-diagrams` (Mermaid) only for README, PR and code notes.

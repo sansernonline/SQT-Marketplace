@@ -30,7 +30,7 @@ A finished script goes on to filming or video generation with `video-script-to-c
 
 0. **Watch what works first** — do this when the niche or format is new and no proven script of the series exists: find 3–5 clips in the same niche and format that perform (views/comments relative to the account size), write 1 line per clip on *why people keep watching* (the hook sentence · how fast the point starts · what keeps it open) · save links beside the script file · **these are a bar to clear, not a script to copy** — same lesson as `brief-to-image` step 0
 1. **One takeaway, one audience, one action** — sentence 1: who is the viewer, and what do you want them to know, feel or do when the clip ends · if you cannot write it in 1 sentence, it is 2 clips
-2. **Write the hook as the first spoken sentence** — patterns below · no "สวัสดีครับ วันนี้จะมา…" (Hello, today I will…) — the hook must carry the reason to stay
+2. **Write the hook as the first spoken sentence** — patterns in the section Hook patterns below · no "สวัสดีครับ วันนี้จะมา…" (Hello, today I will…) — the hook must carry the reason to stay
 3. **Beat sheet** — hook → setup (why listen · 1–2 sentences) → beats with 1 idea each → payoff (answers what the hook promised) → a single call to action · a 30–60 second clip needs only 3–5 beats
 4. **Write spoken Thai** — rules below · short lines broken at breathing points, never paragraphs like an article (the eye reads faster than the mouth speaks) · read every line aloud as you write it
 5. **Time it with a stopwatch, not a word count** — read the whole script aloud once at show pace and time it · over time → cut the last beat first · everyone speaks at a different speed, so do not use someone else's words-per-minute figure
@@ -39,16 +39,7 @@ A finished script goes on to filming or video generation with `video-script-to-c
 
 ## Hook patterns (first spoken sentence)
 
-| Pattern | Example |
-|---|---|
-| Go against a popular idea | "ทุกคนบอกให้ลงคลิปทุกวัน ผมหยุดลงไป 2 สัปดาห์แล้วยอดดูขึ้น" |
-| Confession | "ผมเคยเสียเงิน 30,000 กับคอร์สที่สอนสิ่งที่เดี๋ยวบอกฟรีในคลิปนี้" |
-| A number that looks odd | "ร้านนี้ขายกาแฟแก้วละ 45 แต่คนต่อคิว 40 นาที" |
-| A question the viewer is already asking | "เคยไหม ซื้อของออนไลน์แล้วได้ของไม่ตรงปก คืนก็ไม่ได้" |
-| Promise a payoff | "ฟังจบคลิปนี้ เขียนสคริปต์พูดของตัวเองได้ใน 10 นาที" |
-| Start in the middle of the event | "ตอนนั้นผมยืนอยู่หน้าร้าน มือถือกุมใบเสร็จ แล้วรู้ว่าโดนแล้ว" |
-
-Rules: no greeting to open the clip · no introducing yourself before the hook · the hook must make the viewer ask "so what happens next?" — if the viewer has no open question after the first sentence, the hook has not passed
+The spoken-hook table and its rules live in [`video-script-to-clip` → `references/hooks-and-example.md`](../video-script-to-clip/references/hooks-and-example.md), section Spoken hook patterns.
 
 ## Retention — keep them to the end
 

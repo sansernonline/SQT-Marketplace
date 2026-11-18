@@ -483,18 +483,9 @@ Part of the skill `thai-business-setup`. `seller-tax-basics/scripts/tax-compare.
 
 **Individual** (tax year 2025 (B.E. 2568), per the ภ.ง.ด.90 (PND 90, individual income tax return) instructions)
 
-| Net income (baht/year) | Rate | Cumulative tax up to the top of the band |
-|---|---|---|
-| Up to 150,000 | Exempt | 0 |
-| 150,001–300,000 | 5% | 7,500 |
-| 300,001–500,000 | 10% | 27,500 |
-| 500,001–750,000 | 15% | 65,000 |
-| 750,001–1,000,000 | 20% | 115,000 |
-| 1,000,001–2,000,000 | 25% | 365,000 |
-| 2,000,001–5,000,000 | 30% | 1,265,000 |
-| Over 5,000,000 | 35% | |
+Bracket table with the cumulative tax at the top of each band: `seller-tax-basics` "Income tax brackets".
 
-Someone with income other than salary of 120,000 baht or more must also use a second method: assessable income (excluding salary) × 0.5%. They pay whichever method gives more tax. If the second method comes to 5,000 baht or less, they pay by the table above. The personal allowance is 60,000 baht. For how a seller deducts expenses, use `seller-tax-basics`.
+Someone with income other than salary of 120,000 baht or more must also use a second method: assessable income (excluding salary) × 0.5%. They pay whichever method gives more tax. If the second method comes to 5,000 baht or less, they pay by the bracket table in `seller-tax-basics`. The personal allowance is 60,000 baht. For how a seller deducts expenses, use `seller-tax-basics`.
 
 **Juristic person**
 

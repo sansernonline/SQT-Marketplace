@@ -1,6 +1,6 @@
 ---
 name: app-verifier-setup
-description: Use when an agent has no scripted way to run the app
+description: Use when no scripted way to run the app, or verify is stale
 ---
 
 # app-verifier-setup — give the agent hands and eyes
@@ -65,5 +65,5 @@ verify must depend on things the app provides, not guess from text or CSS: `data
 ## References
 
 - [`references/builtin-verify.md`](references/builtin-verify.md) — Claude Code ships with `/verify`: for a project running on Claude Code, create a skill named `verify` at `.claude/skills/verify/SKILL.md` in that format, instead of `verify-<project>`.
-- [`app-verifier-upkeep`](../app-verifier-upkeep/SKILL.md) — fix it when the app has changed so much that the map no longer matches.
+- [`references/upkeep.md`](references/upkeep.md) — open when the app has changed so much that the map no longer matches: re-check the verify skill and fix only what is proven (maintain the one file, no second `verify-<project>`).
 - [`references/testing-contract.md`](references/testing-contract.md) — open at steps 4 and 5, when writing the feature map or telling the developer which hooks to add

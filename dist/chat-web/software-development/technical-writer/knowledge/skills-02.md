@@ -8,9 +8,10 @@ Use to cut extras nobody needs yet. Not Claude Code simplify
 
 ## Use when
 - Any work handed to people (code, documents, plans, designs, slides, tables, answers) may hold more than the task needs.
+- Cutting a spec, plan or architecture to the fewest parts: also open [`references/architecture-and-anti-patterns.md`](references/architecture-and-anti-patterns.md).
 - `human-writing` controls how it is written; this skill controls what the work contains.
 
-Not for: Claude Code's own `/simplify` command · more detail on code and architecture (if installed) → `lazy-coding` · `readable-code` · `simplicity-first` in plugin `software-development`.
+Not for: Claude Code's own `/simplify` command · more detail on code (if installed) → `lazy-coding` · `readable-code` in plugin `software-development`.
 
 ## Steps
 1. Climb the ladder and stop at the first step that works: (a) is this really needed? If not, do not do it and say in 1 line what you skipped; (b) is there an existing thing that works (file, template, function, tool, built-in feature)? Use it; (c) do the shortest version that is still complete and correct.
@@ -31,6 +32,90 @@ Not for: Claude Code's own `/simplify` command · more detail on code and archit
 - [ ] Every added part has a reason it is needed now, not "just in case".
 - [ ] Still complete on correctness, safety and what the user asked for.
 - [ ] Duties still clearly separated, not squashed into one place to look short.
+
+## References
+- [`references/architecture-and-anti-patterns.md`](references/architecture-and-anti-patterns.md) — open for architecture, specs, plans or designs: architecture do and avoid, extra checks per output type, anti-patterns to reject (future-proofing · layer cake · resume-driven design), wrong and right examples
+
+
+## reference: architecture-and-anti-patterns.md
+
+# Architecture, specs and anti-patterns · simplify
+
+Open this file for architecture, a spec, a plan or a design that keeps growing parts. It holds the rules not already in `SKILL.md`; each section ends with a line naming the rules `SKILL.md` covers.
+
+## Extra checks before submitting
+
+- **Simplest thing that works:** fewest moving parts, boring proven patterns. Add complexity only when something breaks.
+- **Reads in one pass:** no jargon the audience lacks, and the whole thing fits in 2 sentences.
+- Any "no" or "not sure" on these or on the `SKILL.md` checklist means: simplify before delivering.
+
+Already in `SKILL.md`: a tired teammate gets it in 6 months (the One rule) · every new component, option or layer has evidence it is needed now (checklist) · nothing can be deleted without losing meaning, deleting beats adding (step 2 and checklist) · an example for every abstract claim (step 3, documents).
+
+## Architecture
+
+Do:
+- Monolith first. Split only when a bottleneck is proven.
+- A familiar stack and standard patterns: Representational State Transfer (REST), queues, caches.
+- 1 source of truth per data type.
+
+Avoid:
+- Microservices for small teams · distributed-everything.
+- Multi-master databases before you must.
+- Event-driven by default. A synchronous call is simpler.
+
+## Documents (BRD · SRS · FSD · ADR)
+
+Business Requirements Document (BRD) · Software Requirements Specification (SRS) · Functional Specification Document (FSD) · Architecture Decision Record (ADR).
+
+Do: sentences of at most 20 words · plain English.
+
+Avoid: marketing-speak ("revolutionary", "best-in-class", "synergy") · walls of text · hedging ("might possibly potentially") · acronym soup.
+
+Already in `SKILL.md`: 1 idea per paragraph · an example for every abstract point · tables for structured data · no undefined jargon (step 3, documents).
+
+## Plans
+
+Do: realistic timelines with buffer · cut scope to fit the time.
+
+Avoid: vague goals ("improve quality") · aspirational dates with no buffer · plans without success metrics.
+
+Already in `SKILL.md`: 3–5 priorities, a named owner per item, measurable success criteria · no 20- or 50-item list with no priority (step 3, plans).
+
+## Designs (user experience (UX) · application programming interface (API))
+
+Do: stay consistent across screens · defaults that work for 80% of users · progressive disclosure (show advanced options only when asked).
+
+Avoid: a novel interaction where a standard one works · a 10-step flow when 3 steps work · required fields with no smart default · hidden features that need a tutorial.
+
+Already in `SKILL.md`: fewest steps to the user's goal · reuse familiar patterns (step 3, designs).
+
+## Anti-patterns to reject
+
+- **Future-proofing:** abstractions for needs that never arrive.
+- **"It might scale":** infrastructure for 1M users while you have 1k.
+- **Layer cake:** 6 layers where 90% just pass the call through.
+- **Resume-driven design:** fancy tech chosen to look sophisticated.
+- **Buzzword stacking:** "cloud-native event-driven AI-powered".
+
+## Wrong and right examples
+
+**API description**
+
+Wrong: "This sophisticated, enterprise-grade endpoint leverages state-of-the-art authentication to facilitate the seamless retrieval of user profile data."
+
+Right: "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use `?fields=name,email` to limit the response."
+
+**Sprint goal**
+
+Wrong: "Improve overall product quality and customer satisfaction through various initiatives."
+
+Right: "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on transient errors (1d), clearer error messages (1d)."
+
+**Architecture for a new feature**
+
+Wrong: "Event-sourced microservice with Command Query Responsibility Segregation (CQRS), Kafka ingestion, Redis cache, and a dedicated auth service."
+
+Right: "Add an endpoint to the existing API. One Postgres table for state. Standard auth middleware. Log to the existing system."
 
 
 ---
@@ -384,7 +469,7 @@ Once a work-specific accent is declared, use it in place of brand, and compute t
 
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF must look designed
+Use when a Word, PowerPoint or PDF or its cover must look designed
 
 # Branded Document Design — .docx / .pptx / .pdf that looks intentionally designed
 
@@ -394,6 +479,7 @@ Use when a Word, PowerPoint or PDF must look designed
 
 ## Use when
 - The output is a .docx / .pptx / .pdf (quotation · business plan · report · contract · SRS) that a customer, executive, or another team will open, or that must be signed off or attached to a contract
+- A document set needs its own cover from the logo shape or a real mockup, or covers look alike across projects → step 3 and `references/cover-design.md`
 - Mixed Thai–English documents (they break easily if fonts are not fully set)
 - The same kind of document is issued repeatedly and every copy should look the same
 - Not for: markdown output → `polished-document-style` · reading or extracting a received Office file → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` · diagrams in markdown → `markdown-visuals` · a whole-book report from one Markdown file → `markdown-report-docx`
@@ -411,7 +497,7 @@ Install before use: `pip install python-docx python-pptx` · LibreOffice (`soffi
    - Work on the render script, not on .docx files one by one; render every copy.
    - **Fonts:** the brand's Thai font installed and embedded (`embed_fonts`) · Tahoma when embedding is impossible · never set Thai text in a mono font (no Thai letters in Cascadia/Consolas); mono is for code, keys, and numbers.
    - Figures in documents, beauty-gate rules, cover: [`references/word-layout.md`](references/word-layout.md), section at the end.
-3. **Cover for this document set.** If the default cover looks like another job's, do 1 direction first; only if the user is not wowed or asks for several, run the 3-direction, 2-of-3 vote in [`references/cover-vote.md`](references/cover-vote.md).
+3. **Cover for this document set.** For a software document set (BRD · SRS · FSD · ARCH) whose cover must come from the logo shape or a real mockup, follow [`references/cover-design.md`](references/cover-design.md) (page system · registry · checks · cover engine `scripts/cover-engine/`). If the default cover looks like another job's, do 1 direction first; only if the user is not wowed or asks for several, run the 3-direction, 2-of-3 vote in [`references/cover-vote.md`](references/cover-vote.md).
 4. **Tokens, never hardcode colors outside them.** `brand` · `brand_2` · `brand_deep` · `brand_tint` · `brand_tint_2` · `text` · `text_body` · `text_muted` · `line` + 6 status colors (success · info · warning · error · accent · neutral) that do not change with the brand. Set the values once with `use_brand(...)`.
    - Choose colors by meaning (red = danger/real error only); same meaning set as diagrams.
    - Contrast: body text and `text_muted` on the background ≥ 4.5:1 · H2 and table headers (`brand_deep`) ≥ 7:1 · H1 and KPI numbers (`brand`, large) ≥ 3:1 · `use_brand()` stops if it fails · in black and white the hierarchy must still read · if it fails, adjust darkness, not the color.
@@ -433,6 +519,7 @@ Install before use: `pip install python-docx python-pptx` · LibreOffice (`soffi
 - [`references/tokens-and-type.md`](references/tokens-and-type.md) — open when setting the theme or choosing sizes, colors, elements · [`references/palette-examples.md`](references/palette-examples.md) — fallback tones by kind of work
 - [`references/thai-fonts.md`](references/thai-fonts.md) — open when setting fonts or a PDF looks off
 - [`references/word-layout.md`](references/word-layout.md) — open for page structure, dark cover, figure rules
+- [`references/cover-design.md`](references/cover-design.md) — open for a software document set's own cover (logo shapes or real screen) · with [`cover-real-examples.md`](references/cover-real-examples.md) · [`cover-structural-ideas.md`](references/cover-structural-ideas.md) · [`cover-word-build.md`](references/cover-word-build.md) · [`cover-bakeoff.md`](references/cover-bakeoff.md)
 - [`references/identity-and-gate.md`](references/identity-and-gate.md) — open when running several directions or the beauty gate · [`references/cover-vote.md`](references/cover-vote.md) — the 3-direction cover vote
 - [`references/brandkit-usage.md`](references/brandkit-usage.md) · [`references/api.md`](references/api.md) — open when writing the build script
 - [`references/visual-check.md`](references/visual-check.md) — open when rendering for the eye check · [`references/anti-patterns.md`](references/anti-patterns.md) — open when reviewing
@@ -681,6 +768,307 @@ d.save("deck.pptx")
 - For printing, build another set with `bg="FFFFFF"` instead of using a dark background that wastes ink · `BrandDeck` (color bar on top) is still usable for reports sent to be read on their own
 
 
+## reference: cover-bakeoff.md
+
+# Make 3 styles, then vote 2 of 3
+
+Used with `cover-design.md` step 7. It is a variant of `parallel-attempts-pick-best` that swaps "1 middleman agent" for "3 reviewers who vote".
+Cost: about 3–5 times the work of a single style. Use it when you set a project's look for the first time, not at every version bump.
+
+## 1 · Prepare before launching
+
+1. **Survey** (1 middleman agent, read-only) → `_to_delete/cover-lab/survey/SURVEY.md`: app description · main verbs · logo files · colors · fonts · main-screen images from the mockup · image of the current cover, page 1 (Word through COM, the Windows automation interface → PDF → `pdftoppm`) with critique.
+2. **Research** (1 middleman agent, in parallel with step 1) → `research/RESEARCH.md`: good-looking tech-company covers · trends · cheap-looking things · image techniques done in code · Word limits · every claim has a URL.
+3. **Same brief for every designer**, `BRIEF.md`. Every designer reads `EXAMPLES.md` and looks at the overview sheet of real covers first (`cover-real-examples.md`). Start from the cover builder that already builds in Word; do not rewrite it. The brief lists the deliverables (an SRS cover for every project · the image set for BRD/SRS/ARCH · at least 1 print cover · repeatable `src/` · `METHOD.md` ≤ 90 lines), the hard rules (items 3 and 9 of cover-design.md), and a ban on opening other designers' folders.
+4. **The team lead keeps the voting criteria** and does not send them to designers (put them in the scratchpad, not in `cover-lab/`).
+
+## 2 · 3 designers — they differ by style, not just by random draw
+
+| Designer | Style (constraint sent) |
+|---|---|
+| A | The app's behavior drawn as art from real data · Swiss grid |
+| B | The app as hero, magazine-cover style · real mockup screens placed with intent |
+| C | Logo shapes as architecture · type as structure · no illustration, screenshot, or glow |
+
+- Use a large-tier model · launch all 3 in one message · one folder each: `_to_delete/cover-lab/attempt-<A|B|C>/`.
+- **Each agent needs Bash** so it can render and look at its own images (cap of 3 fix rounds). Before launching, check the tool list of the agent as **installed**. History: in the real bake-off (2026-10-15), the installed `graphic-designer` of plugin version 2.3.0 had no Bash (the current version in the repo has it). All 3 designers therefore sent code they had never seen rendered. The team lead had to render it and send a fresh `general-purpose` agent to do the fix round. If there is no Bash, use `general-purpose` and attach the designer role in the instruction.
+
+## 3 · 3 reviewers — read-only, different angles, same criteria
+
+| Reviewer | Angle |
+|---|---|
+| 1 | Art director: is it a real wow, does it look AI-made? |
+| 2 | Brand strategist + Thai client who reads the BRD: can they remember the app, do they know what it does, does a set of 6–15 documents go together? |
+| 3 | Production engineer + skill author: can an agent repeat it on a new project, how many numbers are project-specific, do the background images for Word hide all the text, is the version embedded in the image? |
+
+The options voted on must always include the **current cover** (if there is one).
+
+Score each of 7 criteria from 1 to 5: wow compared with the old cover · no repeats between projects · tells the truth about the app · document-set system · polish (Thai · contrast · smallest text · print cover · Word matches the sample image) · learned from real covers (borrow structure, do not copy) · buildable in Word and repeatable.
+Then vote: `overall` 1 style · `per_project` the best style for each project · `steal` at most 2 pieces from losing styles.
+
+## 4 · Count the votes
+
+- The style with **2 of 3** wins, for both `overall` and per project (per-project winners may differ from overall).
+- If the vote splits 3 ways, the team lead reads the total score per criterion. The "repeatable" criterion decides when scores are close. Then log it in `decision-log`.
+- The team lead looks at all the images before reading the votes, then compares. If they disagree, read both sides' reasons before deciding.
+
+## 5 · Merge the results
+
+1 new agent (with Bash) works in `_to_delete/cover-lab/final/`: use the per-project winning style · bring in the voted `steal` pieces · fix what reviewers flagged · make 300 dpi background images for every document · build a sample .docx with `brandkit.py` and render it in real Word to look at it · write `NOTES.md`.
+Do not overwrite the user's .docx. Build a new render from the source markdown. (Origin of this rule: SQT-Marketplace prompt set `prompt/software-development/prompt-new-project.md`, version 14, which lives outside this plugin.)
+
+## First real result (2026-10-15 · the full reviewer report was in `_to_delete/cover-lab/votes.md` of the repo at the time, a temporary file)
+
+| | A real data | B real screens | C logo shapes |
+|---|---|---|---|
+| Total score, reviewer 1 / 2 / 3 | 23.5 / 21 / 23 | 23 / 24 / 24 | 27 / 27 / 22 |
+| overall | — | 1 vote | **2 votes** |
+| LiteNet · Telex · SwipeOS | 1 · 0 · 0 | 0 · **2** · 0 | **2** · 1 · **3** |
+
+### Round 2: learned from 35 real covers, then compared with the round 1 cover (R1)
+
+| | R1 | X institutional set | Y editorial art | Z builds on R1 |
+|---|---|---|---|---|
+| Total score, reviewer 1 / 2 / 3 (7 criteria) | 26 / 24 / 24 | 24 / 24 / 24 | 26 / 26 / 30 | 31 / 29 / 28 |
+| overall | — | — | 1 | **2** |
+| LiteNet · Telex · SwipeOS | 0 · 0 · 0 | 0 · 0 · 0 | 0 · 1 · **2** | **3** · **2** · 1 |
+
+Lesson: **put the old cover in the vote every time**, so you know whether the new one is really better. Add criterion 7, "learned from real covers". Pieces taken: the series-name line (X) · version as Word text in a badge (X) · one color per document type in the brand family (Y).
+
+Pieces taken in round 1: the sentence under the title saying what the app does (from B) · the truth test for every image (from A) · `checks.json` (from C, put into B).
+
+## The lesson behind this skill (3-style bake-off · 2026-10-15 · 3 projects · 3 reviewers)
+
+The old covers of the 3 projects used one formula: black background, glow in the brand color, mono badge, data row at the bottom of the page. Only the color differed, which is the look AI produces for everything.
+We tried 3 styles in parallel and had 3 reviewers vote. **The logo-shape style won 2 of 3.** The real-screen style won only for Telex (a plain T_ logo does not say it is a terminal). The art-from-real-data style had a few standout covers (LiteNet got 1 vote) but is the hardest to repeat on a new project.
+Round 2 (the user said much more should change, and to learn from other people's real work): we collected 35 real covers, then made 3 new styles to compare with the round 1 cover. **The round 1 cover scored lowest on "learned from real work" from every reviewer.** The winner, 2 of 3, was the style that builds on round 1 with lessons from real covers (Thai title largest · version as a separate badge · logo-shape image bleeding off the edge like Stripe Press · real screen layered under a title bar like O'Reilly). SwipeOS won with a grid of 12 real hand gestures (in the style of the Microsoft Inclusive Design pictogram set).
+
+
+## reference: cover-design.md
+
+# Cover design for a software document set: cover pages that are memorable and unlike other projects
+
+- [When to use (software document sets: logo shape or real mockup cover)](#when-to-use-software-document-sets-logo-shape-or-real-mockup-cover)
+- [Default path](#default-path)
+- [1 · Find the idea from real things: write it in `docs/design/cover-direction.md` before drawing anything](#1--find-the-idea-from-real-things-write-it-in-docsdesigncover-directionmd-before-drawing-anything)
+- [2 · Stop 2 projects from looking alike](#2--stop-2-projects-from-looking-alike)
+- [3 · Page system: the same for every project, so there is only one method](#3--page-system-the-same-for-every-project-so-there-is-only-one-method)
+- [4 · Document type in the set = a frame of the same motion](#4--document-type-in-the-set--a-frame-of-the-same-motion)
+- [5 · Background image vs Word text](#5--background-image-vs-word-text)
+- [6 · Covers for print](#6--covers-for-print)
+- [7 · Make 3 styles, then vote 2 of 3 (only when steps 1–6 did not pass step 8, or the user asks for several styles · 3–5 times the work)](#7--make-3-styles-then-vote-2-of-3-only-when-steps-16-did-not-pass-step-8-or-the-user-asks-for-several-styles--35-times-the-work)
+- [8 · Check before sending: the render script must print `checks.json`, and you must open every image yourself](#8--check-before-sending-the-render-script-must-print-checksjson-and-you-must-open-every-image-yourself)
+- [9 · Do not want (from research and the bake-off)](#9--do-not-want-from-research-and-the-bake-off)
+- [Do not look AI-made](#do-not-look-ai-made)
+
+
+> **Gate before starting (every time):** read the owner's theme → search live for references → 3 truly different styles → check `no-ai-look` before sending. Follow the "ด่านก่อนลงมือ" (gate before starting) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls color and fonts; the search is for the structure of this piece). Close the work with a `ด่านก่อนลงมือ:` line.
+
+> **The one rule:** the cover must say which project it belongs to at a glance, without reading the name. Do it with the logo's shapes or the app's real screen, not with color alone.
+
+This file covers the **cover page** only. The whole document body (color set, Thai fonts, tables, headers and footers) lives in [`../SKILL.md`](../SKILL.md). The cover uses the same `anchor_picture()` from `brandkit.py`.
+
+## When to use (software document sets: logo shape or real mockup cover)
+
+- A project's document set (BRD, the business requirements document · SRS, the software requirements specification · FSD, the functional specification · ARCH, architecture · PLAN, the project plan · TESTPLAN, the test plan) will go to a client or executives, and the current cover looks like another project's.
+- The user says "ปกไม่ว้าว" · "อยากได้ปกที่ไม่ซ้ำ" · "ปกทุกโปรเจกต์หน้าตาเหมือนกัน" (the cover is not wow · I want a cover that is not repeated · every project's cover looks the same).
+- Do not use when: the project has no logo or mockup yet → make the logo first (`graphic-design`), then come back. A single report from markdown that needs no identity → `markdown-report-docx`.
+
+## Default path
+
+The default path is logo shapes. The fallbacks are the real screen, or a pictogram of what the app really does. Every style uses the same page system (step 3). **Always look at other people's real covers first (step 1.0).** The bake-off history is at the end of [`cover-bakeoff.md`](cover-bakeoff.md).
+
+---
+
+## 1 · Find the idea from real things: write it in `docs/design/cover-direction.md` before drawing anything
+
+0. **Look at other people's real covers first.** **Search for references first:** take the project's keywords and search live following `design-references` (plugin `superuser`), type `document`, then pull the colors from the chosen work. The stored color library is for when live search is not possible. Collect at least 6 real document or book covers close to this work (same field as the app · tech publishers · Thai examples), then choose which series system to borrow, following [`cover-real-examples.md`](cover-real-examples.md). For every idea on the cover, you must be able to say which cover it came from.
+
+1. **Open the logo's SVG file (vector image) as text** and note the basic shapes with unit coordinates (e.g. 2 L shapes on a 64 grid · T bar + cursor · 2 dots + arrow). Do not count the glow and gradient background of the icon file.
+2. **Find the app's main verb** from the first paragraph of the README (if none → the introduction of the BRD or SRS): connect · type · swipe.
+3. **Ask what the shapes do when that verb happens**: L shapes join · cursor moves · dots run into an arrow. Write it as 1 sentence. This is the "motion" of the whole set.
+4. **Pick 1 structure style** that shows that motion best, from [`cover-structural-ideas.md`](cover-structural-ideas.md) (tiling · giant crop · sequence · real screen · etc.).
+5. **Truth test:** every line and every shape on the cover must point back to a shape in the logo file or to real app data. Anything that cannot is decoration → cut it.
+6. **The logo alone does not say what the app does** (e.g. just an initial) → use the real-screen style: take a screenshot of a clickable mockup, choose the screen that says the most about the app's work, not the index page. Never draw a fake UI.
+
+## 2 · Stop 2 projects from looking alike
+
+Keep a registry of 1 row per project in each project's `cover-direction.md` and in the central registry `<parent folder of the projects>/cover-registry.md`. This file lives **outside the project**, so ask the user before creating or editing it every time. (No answer yet → write only `cover-direction.md` and put the open question in the report. Do not know where the other projects are → put the open question in the report.)
+
+| Structure style | Background brightness (dark · mid · light) | Accent color | Font pair |
+|---|---|---|---|
+
+- A new project must **differ in structure style, and in at least 1 more column.** Two projects with a dark background + green accent collide → move one to the app's own light theme.
+- **Thumbnail test:** put every project's cover side by side at 150 px wide. With the logo hidden, you can still tell which cover belongs to whom. If you cannot → redo.
+
+## 3 · Page system: the same for every project, so there is only one method
+
+- A4 at 150 dots per inch (dpi) = 1240 × 1754 pixels (px) (the sample image). The background image for Word is made at 300 dpi = 2480 × 3508 px. Margin 96 px (16 mm).
+- **The image zone is on top, with a hard floor line** and nothing spills below it. **The text zone is at the bottom on a flat color**, so every text box has a known contrast.
+- The shapes' unit grid must land on the 96 px margin. For giant type, make the **"ink" of the first letter** touch the margin. Measure it with canvas `actualBoundingBoxLeft`, not SVG `getBBox`, which measures the letter-spacing box and will be off by about 14 px.
+- 2 type families + 1 monospace (mono) font. **Thai never goes in mono.** Thai line spacing 1.4 · no letter-spacing on Thai · smallest text 18 px at 150 dpi (≈ 8.6pt · pt = px × 0.48).
+- **There is only one accent color, and it sits on a shape** (a joined L · the cursor · the active frame), not on a block of text.
+- Text on the cover: logo · **series-name line** ("LiteNet Document Series · LITENET-SRS", NIST style) · Thai title (**the largest text on the cover**, larger than the document code) · English title, smaller and lighter · **one sentence saying what the app does**, in the document's language · data row (document code · date), with one date format across the whole set.
+- **Version and status are one separate badge, in 1 place** (corner ribbon · round badge · rounded pill like "ฉบับร่าง 0.3"). The badge shape is in the background image, but **the badge's text is Word text**, so the version can change without rebuilding the image. Never show the version in a 2nd place.
+
+## 4 · Document type in the set = a frame of the same motion
+
+Each document type is 1 frame of the motion in step 1.3, not just a changed label. The text zone does not move between documents.
+
+| | Tiling (LiteNet) | Giant crop / real screen (Telex) | Sequence (SwipeOS) |
+|---|---|---|---|
+| BRD | 2 cells joined | Welcome screen · close-up | Frames 1–2 solid |
+| SRS | 5 cells | Main screen · logo must be readable | Frames 1–4 |
+| ARCH | 11 cells | Screen split into many areas · pulled back to show everything | Frame 6 shoots off the page |
+
+- **The SRS (the main document) must show the logo clearly.** Secondary documents may crop to abstraction, but must still read when placed beside the others.
+- All randomness uses a random seed computed from the project code → a rerun gives the same page, and a later document contains the state of the earlier one.
+- Document type must read at thumbnail size: clearly different frames + the document code (top right, or in a round badge). A color per document type may use only shades within the brand color family (off-brand colors such as pink or teal on a purple brand get rejected by reviewers). Do not rely on color alone, because colors run out before the 6th document.
+- **Large set of 6–15 documents:** order the documents in the sequence they are really made (PLAN → BRD → SRS → FSD → ARCH → TESTPLAN …), then divide the motion into equal stages. A sequence of 6 frames stretches to the number of documents; do not fix it at 6.
+
+## 5 · Background image vs Word text
+
+| Drawn into the background image (`layer=bg`) | Editable Word text |
+|---|---|
+| Logo shapes · logo · thin lines · giant document code · screenshots · version badge shape (no lettering) | Thai title · English title · series-name line · sentence saying what the app does · data row · **lettering inside the version and status badge** |
+
+- Anchor the background image to the cover's first paragraph with `anchor_picture()`. **Never put it in the header** (Word shows it faded). Compute text positions from px: `px ÷ 1240 × 21.0 = cm`.
+- **The sample cover engine** `scripts/cover-engine/` (in `branded-document-design`) builds the covers of all 3 prototype projects in one command (sample image · 300 dpi background image · `checks.json` · SRS cover .docx · check image from Word). **Using it for a new project needs more edits than `projects.js`:** the logo lines and drawing functions in `cover.js` · the project list in `render.py`, `calibrate.py`, `docx_build.py` · the fonts in `fonts.py`. The full list is in cover-word-build.md.
+- The Word build recipe (spacing · z-order · fonts · image compression), how to use the cover engine, and the traps → [`cover-word-build.md`](cover-word-build.md). Install fonts on the user's machine only when `COVER_INSTALL_FONTS=1` is set, and ask the user first every time.
+
+## 6 · Covers for print
+
+Same shapes and positions; only the theme swaps: light paper (about `#F7F7F5`) · white shapes become ink color · the accent uses the light-theme color the app already has · thin lines get darker so they survive the printer · **never invert the whole page with a filter** · the real-screen style uses the image from the mockup's light theme.
+
+## 7 · Make 3 styles, then vote 2 of 3 (only when steps 1–6 did not pass step 8, or the user asks for several styles · 3–5 times the work)
+
+The procedure (3 designers · 3 reviewers · 2 of 3 votes · at most 2 pieces borrowed · Bash for designers · the lead launches reviewers) is in [`cover-vote.md`](cover-vote.md); the full bake-off steps are in [`cover-bakeoff.md`](cover-bakeoff.md).
+
+## 8 · Check before sending: the render script must print `checks.json`, and you must open every image yourself
+
+1. Text contrast of every box against the flat background ≥ 4.5:1 (round down) · smallest text ≥ 18 px · text sits below the image's floor line · nothing crosses the 96 px margin.
+2. All 3 Thai tone-mark levels (ที่ ปั๊ม ปุ่ม สื่อ) are complete · line breaks follow meaning · no half-cut words at the edge of a screenshot.
+3. Squint test: you see the shape first and the document title second · print in black and white and the accent colors can still be told apart.
+4. The set of images (BRD · SRS · ARCH side by side) reads as one motion · each project's set reads as a different idea (step 2).
+5. Render in real Word → PDF → PNG: the background image is not faded · page 2 is not empty · text matches the position in the sample image.
+6. The "do not want" list in step 9: if you find any, cut it; do not add.
+
+## 9 · Do not want (from research and the bake-off)
+
+- Glow, or a gradient with no light source · gradient type · fuzzy purple blobs · frosted glass: the default look of AI work.
+- Everything centered · more than 2 font families + mono · stock icons · stock images · fake device frames · 3D isometric.
+- The same cover for every document, differing only in the label · every project's cover on one structure, differing only in color.
+- A main image that makes people misunderstand the app (e.g. SwipeOS laid over a sales-chart slide, so viewers think it is a reporting app).
+- So much data that it becomes a chart (hex numbers · rotated machine names): a client who reads the BRD is not an engineer.
+
+If the user says the cover is not beautiful → cut things before adding (matches `word-layout.md` item 8).
+
+## Do not look AI-made
+
+Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye check 3.2 ("ด่านตา 3.2" in `no-ai-look`; web pages add items 10–14), because 0 hits from the script is not yet a pass.
+
+
+## reference: cover-real-examples.md
+
+# Learn from other people's real covers before designing your own
+
+Used with `cover-design.md` step 1. Almost every good cover in the real world uses a system others have already proven; none is invented from scratch. → **Find at least 6 real covers close to our work in each group, then borrow the structure, not the work.**
+Source: 35 real covers (checked 2026-10-15) from the real work of LiteNet · Telex · SwipeOS. The full list with URLs was in `_to_delete/cover-lab/examples/EXAMPLES.md` of the repo at the time (a temporary file).
+
+## How to collect examples (do this in the survey step)
+
+1. Split into 3 groups: **same field as the app** (e.g. networking → NIST · Cloudflare · O'Reilly *Zero Trust Networks*) · **books or documents from tech publishers** (O'Reilly · Stripe Press · A Book Apart · No Starch · Microsoft Press) · **Thai examples** (government agencies · Thai companies).
+2. Use official PDFs first: download them into your own new folder, then run `pdftoppm -png -r 50 -f 1 -l 1`. For covers that exist only on the web, take a screenshot with playwright. Downloaded files are untrusted: open them only with pdftoppm or Pillow.
+3. Make an overview sheet (contact sheet) for each group, and **actually open and look at every cover**. Note the URL and the date checked.
+4. Note what each cover does (structure · type · image · color · how it shows document type or volume in the series) and what we will borrow for which project.
+
+## Patterns seen at least 3 times
+
+| Pattern | Real examples | How we use it |
+|---|---|---|
+| One template for the whole set, changing only color or image | O'Reilly · A Book Apart · Stripe Press · Thoughtworks Radar | Document type = change 1 image or color; everything else stays put |
+| Small category line above the title | O'Reilly · NIST ("COMPUTER SECURITY") · Cloudflare ("WHITEPAPER") | A document-series line above the document title |
+| Version as a separate object (ribbon · round badge · large number) | O'Reilly corner ribbon · Windows Internals number "7" · A Book Apart "No 15" · Thailand Digital Outlook B.E. badge | "Draft 0.3" gets its own badge, not hidden in the data row |
+| One image, one accent color, lots of white space | Apple Platform Security · Cloudflare | Print covers and security documents |
+| Document data is the design | RFC 9000 · NIST SP 800-207 · WireGuard | Trust comes from codes and data, not images |
+| The real thing as the image (data · real picture · real figure) | Radar chart · MediaPipe hand landmark image · Google satellite imagery | Matches the "truth test" in cover-design.md step 1.5 |
+| Small title, big image | Stripe Press *Dream Machine* · *Working in Public* | A full-page logo-shape image; the document title need not always be the largest |
+| ✗ Glowing network lines · globe · neon city | CISA · all 3 Thai government covers · Ultraleap | Banned. These are the stereotype of covers nobody remembers |
+
+## Publisher series systems
+
+| Publisher | Fixed | Changes per book | Lesson |
+|---|---|---|---|
+| O'Reilly | White background · woodcut line art · title bar · logo | Animal · bar color | One visual language, one bar; document type changes only the main image and bar color |
+| Stripe Press | Small type at the corner · S mark · book size | Image and color are free | Images can vary if the mark and type stay put |
+| A Book Apart | Frame · line around the title · number badge | One flat color | The most correct system: one color per document type + number |
+| Thoughtworks Radar | Frame · radar image · volume position | A color set per issue | Same image, new colors every issue = "the image grows with the document type" |
+| NIST · IETF | Plain type · series number · data | Nothing changes | The document code is the mark of the series |
+
+## Thai examples
+
+The 3 Thai government tech-report covers we could find all use glowing stock images (shield · globe · neon city). → Only 2 things are worth borrowing: **a colored badge for the year (B.E.) or edition**, and **the Thai title on top with a smaller, lighter English title below**.
+
+## Rules for borrowing
+
+- Borrow structure and ideas. Never copy images, trademarks, or layouts one-to-one.
+- For every idea on the cover, write which real cover it was borrowed from and what changed (the `ADAPTED.md` file of each style).
+- For examples you could not get (403 · dead link · file too large), say so plainly. Do not guess how they look.
+
+
+## reference: cover-structural-ideas.md
+
+# Cover structure styles: pick 1 per project
+
+Read this when doing `cover-design.md` step 1.4. Every style uses the same page system (step 3). Projects on the same machine must not use the same style (step 2).
+
+## Logo-shape style (the default path, won the 2-of-3 vote)
+
+The cover image has only shapes from the real logo's SVG file, enlarged, repeated, cut, or arranged. No illustration, no screenshot, no glow.
+
+| Structure | What it shows | Fits apps that | How to build it | Document type = |
+|---|---|---|---|---|
+| **Tiling** | Many pieces forming one system | Network · platform · multi-user system | The whole page is a grid of cells the size of the logo tile. A thin-line cell = not joined yet · a solid cell = joined · the giant document code takes 2–3 cells | Number of solid cells (2 → 5 → 11 · order from a seed) |
+| **Giant crop** | One thing, its scale and focal point | Single tool · app with one clear symbol | Enlarge the shape until it overflows the page, with the shape's edge landing on a 96 px edge · construction lines and dimension lines from the logo's real units | Camera angle: close-up → whole shape → pulled back to show construction lines |
+| **Sequence (chronophotograph, a multiple-exposure image of motion)** | Change over time | Apps with movement, gestures, steps | The logo 6+ times stacked on one line. Past frames are flat colors stepping down one level at a time (not a gradient), the current frame is solid, future frames are thin lines. A frame-number ruler sits under the line | Which frame is solid |
+| **Slice / lift layers** | Layers of the system | Systems with many layers (keep for the next project) | Cut the logo into horizontal strips and shift each strip | Number of layers shifted |
+| **Stack** | Accumulation | Data · logs · storage | Logos stacked, each offset slightly | Number of pieces in the stack |
+| **Fan rotation** | Multiple options | Settings · routing | The logo rotated about one point at equal angles | Angle of the spread |
+
+## Real-screen style (the fallback, wins only for projects where the logo does not say what the app does)
+
+Use it when the logo alone does not say what the app does and the project has a clickable mockup. Take screenshots with playwright at 2x. Hide the mockup's toolbar before shooting.
+
+| Layout | How to do it | Watch out for |
+|---|---|---|
+| **Oversize crop** (Telex won) | Enlarge the screen 2x so it overflows the top and right edges of the paper. The left column is a magazine masthead. End the document title with the logo's cursor | Crop offsets are in screen pixels (1440 × 900), then multiplied by the scale. No half-cut words at the edge |
+| **Tilted plane** | The screen lies tilted as if on a desk, running off the bottom edge | It can easily look like a generic SaaS web page. It must fade out before the data row |
+| **Specimen in a frame + magnifier** | The screen is mounted on white paper like a museum piece. The key part is enlarged in a separate frame, pointed to with a CSS selector, not coordinates | The big image must not make people misunderstand the app |
+
+Document type = a different screen each (BRD welcome screen · SRS main screen · ARCH screen showing many parts at once) + a document code that stays readable in the thumbnail.
+
+## Pictogram of what the app really does (won SwipeOS in round 2)
+
+A pictogram grid of the app's whole set of commands or gestures, e.g. hand gestures G01–G12 from the data dictionary, drawn on MediaPipe's 21-point hand landmark skeleton. The cell for the gesture this document discusses is solid. Borrowed from the Microsoft Inclusive Design toolkit. It tells the client "a hand-gesture app" at a glance. Watch out: gestures with bent fingers need real hand proportions, or they look like claws or a broken hand.
+
+## Institutional document-set style (lost round 2 but the easiest to repeat)
+
+In the style of NIST SP · IETF RFC · Apple Platform Security: the document data is the design · thick lines · letter-spaced category bar · lots of white background. Reviewers said: trustworthy but so quiet that every project looks the same. → Use it for print covers or government/security documents, and borrow only the series-name line.
+
+## Art-from-real-data style (a few standout covers, but hard to repeat)
+
+Draw the app's behavior from real data, e.g. 11 real machines on an arc with a tick for each key rotation every 120 seconds · real protocol bytes · 21 hand points passing a real gesture threshold.
+Use it when the user wants a single cover with a big "wow" and accepts project-specific code (~200 lines). Watch out for: rotated text labels too tight · numbers a BRD client cannot read · a data row floating in the middle of the page.
+
+## Tried and cut
+
+- Diagonal staircase sequence of thin-line frames → the page looks empty. Changed to one line of solid stacked frames.
+- Extruding the square logo into an isometric block → it became a clip-art "tech" 3D image, and the diagonal lines fought the grid.
+- A pink-purple-blue gradient cursor following the logo file → a gradient on a dark background is the fingerprint of AI work. Use one flat color.
+- A laptop frame around the screenshot · pins pointing at parts of the screen → fake and cluttered.
+- A random connection-dot graph on top with the document title at the bottom → the same structure as the old cover.
+
+
 ## reference: cover-vote.md
 
 # A cover that belongs to this document set — make 3 directions, then vote 2 of 3
@@ -694,7 +1082,69 @@ Use when a document set (proposal · report · business plan) needs its own cove
 3. **3 new reviewers who have not seen the work, each from a different angle:** art director (is it truly wow, does it look AI-made) · brand and customer (is it memorable, does it show what the work is about, does it go with the whole set) · Word production (is it repeatable, can the text be edited) · include the old cover as an option too.
 4. **Criteria scored 1–5, then vote:** wow compared with the old cover · not a repeat of other work · tells the truth of the work · fits the whole set · craftsmanship (Thai, contrast, smallest text) · buildable and repeatable in Word · the direction with **2 of 3 votes wins** · borrow at most 2 strong pieces from a losing direction · if the votes split 3 ways, "repeatable" decides.
 5. **Text on the cover is editable Word text** (title, version, date) · the background image has no lettering baked in · anchor the image to the first paragraph, not in the header.
-6. **Software document sets only** (BRD · SRS · FSD whose cover must come from the logo shape or a real mockup · uses the cover generator) → if plugin `software-development` is present, also see `doc-cover-design` · without it, items 1–5 are complete on their own.
+6. **Team members cannot launch agents themselves.** The designers save the 3 covers as files and send them back; the team lead launches the 3 reviewers to vote. Before launching, check that the installed designer agent has Bash; if not, use `general-purpose` with the designer role attached, or have the lead render and send the fix round to an agent that has Bash.
+7. **Software document sets** (BRD · SRS · FSD whose cover must come from the logo shape or a real mockup, using the cover generator `scripts/cover-engine/`) → also read [`cover-design.md`](cover-design.md) (page system · registry · checks) and [`cover-bakeoff.md`](cover-bakeoff.md) (full bake-off steps).
+
+
+## reference: cover-word-build.md
+
+# Building a cover in real Word — the recipe that passed, and the reusable cover builder
+
+Used with `cover-design.md` item 5 · proven 2026-10-15 (cover builder, round 2) only for Software Requirements Specification (SRS) covers: the text in the version badge is Word text on the badge shape in the background image · the vertical position of the Word text matches the preview image (median per style 0 px · horizontal not corrected) · the background image does not fade · comes out as exactly 2 pages (Word 365 on Windows 11 · Word via Component Object Model (COM) → PDF → `pdftoppm`)
+
+## Cover builder `scripts/cover-engine/`
+
+```
+cover-engine/src/
+├─ build_all.py    สั่งทั้งหมดในคำสั่งเดียว
+├─ fonts.py        (รันเมื่อ COVER_INSTALL_FONTS=1) ตัดฟอนต์ variable เป็นไฟล์ static แล้วติดตั้งให้ผู้ใช้คนเดียว (ไม่ใช้ admin)
+├─ capture.py      ถ่ายจอจาก mockup จริงที่ 2x (แนวหน้าจอจริง)
+├─ render.py       HTML → ภาพตัวอย่าง 150 จุดต่อนิ้ว (dots per inch, dpi) · ภาพพื้น 300 dpi (ซ่อนข้อความ) · ตำแหน่งกล่องข้อความ → build/layout/*.json · checks.json
+├─ docx_build.py   ภาพพื้น + ข้อความ Word ในกรอบยึดกับหน้า ด้วย brandkit.py
+├─ word_pdf.py     Word COM → PDF → PNG
+├─ calibrate.py    วัดระยะเหลื่อมระหว่าง Word กับภาพตัวอย่าง แก้รอบถัดไป
+└─ web/            cover.html · cover.js (3 หน้า pageTile · pageShot · pageGrid + ป้ายเวอร์ชัน `pill` · บรรทัดชื่อชุด `seriesLine`) · projects.js (ข้อมูลโปรเจกต์ — แก้ที่นี่) · set.html
+```
+
+How to use it on a new project:
+1. Copy the whole `cover-engine/` folder to the project's render folder (for example `docs/design/cover/`)
+2. Put each project's logo SVG in `cover-engine/assets/<project>/` (screenshots that can be captured go to `build/shots/shot-<screen>.png`), then edit `src/web/projects.js`: logo SVG path · colors · fonts · Thai/English document title · the sentence that states the job · code, version, date · layout style (the 3 sample projects in the file are LiteNet tiled grid · Telex real screen · SwipeOS hand-pose table)
+3. **Edit the parts still tied to the 3 prototype projects** (the builder does not yet read everything from `projects.js`):
+   - `web/cover.js`: add the logo shape path to `GEO` and make the page function of the chosen style (`pageTile` tiled grid of logo shapes · `pageShot` real screen with a title bar overlaid · `pageGrid` grid of hand-pose symbol images) use the new project's data · number of cells and color per document type
+   - `render.py`: the lists `PROJECTS` · `DOCS` · the print-cover condition (`if p == "litenet"`)
+   - `calibrate.py`: the project list · `docx_build.py`: `PAGE2` (colors and page 2 content) · `fonts.py`: `SOURCES` and `NEEDED`
+   - `web/set.html`: the document types in the set image (currently BRD · SRS · ARCH)
+   - Remove the 3 sample projects from `projects.js` (their SVG files do not come along)
+4. Set `BRANDKIT_DIR` = the folder `branded-document-design/scripts` in plugin `software-development` (if not set, the script finds the neighboring skill folder itself) · for the real-screen style set `COVER_MOCKUP` = path of the mockup file (1 project per run) · to use a Chrome installed on the machine → `COVER_CHROME` (not set = Playwright's Chromium)
+5. Run `python src/build_all.py`, then open every image in `covers/*-set.png` and `build/qa/*-80-1.png`
+- Requires: Python + `python-docx` `pillow` `numpy` `playwright` `fontTools` `pywin32` · Chrome · Word (for the PDF) · `pdftoppm` · internet (Google Fonts at render time · fonts from GitHub)
+- **`fonts.py` installs fonts on the user's machine** (`%LOCALAPPDATA%\Microsoft\Windows\Fonts` + registry HKCU) and downloads files from the `main` branch of google/fonts without checking a hash — run it only when `COVER_INSTALL_FONTS=1` is set after the user allows it · say in the report what was installed · **to remove:** delete the installed `.ttf` files in `%LOCALAPPDATA%\Microsoft\Windows\Fonts` and the values `<font name> (TrueType)` in `HKCU\Software\Microsoft\Windows NT\CurrentVersion\Fonts`
+- `docx_build.py` currently builds only the SRS cover (the BRD and ARCH covers have background images and positions, but are not yet tested in Word)
+
+## Word recipe
+
+1. **Background image** 2480 × 3508 (300 dpi) with the editable text hidden · **the logo is in the background image** (not a separate Word picture) · `anchor_picture(first paragraph, png, 0, 0, 21.0, 29.7, z=251658240)` → positioned relative to the page · `behindDoc=1` · that paragraph has 0 line spacing, exact 1pt · no header
+2. **Text** 1 box in the HTML = 1 Word paragraph in a page-anchored frame (`w:framePr hAnchor=page vAnchor=page x y w`) · exact line spacing · break lines with `<br>` only · the frame is 80 px wider than the real box so Word does not wrap lines itself
+3. **Unit conversion (150 dpi):** twips = px × 9.6 · pt = px × 0.48 · English Metric Unit (EMU) = px × 6096 · cm = px ÷ 1240 × 21 · `w:line` = line-height(px) × 9.6
+4. **Fonts:** `style_run(font=...)` on every run, then `thai_runs(paragraph)` with `bk.FONT` set to that box's font (setting one value for the whole file → a SemiBold name becomes Regular) · body and footer call `thai_runs` too
+5. **Page 2:** set `pageBreakBefore` on the first heading, do not add an empty page-break paragraph · hide the cover footer with `different_first_page_header_footer`
+6. **Images not compressed:** put `<w:doNotAutoCompressPictures/>` in the position required by the `settings.xml` schema · the .docx keeps the full image, but the PDF from Word is still reduced to 200 ppi (no switch in COM)
+7. **Word COM:** open its own instance with `DispatchEx` (do not touch a Word the user has open) · `EmbedTrueTypeFonts=True` `SaveSubsetFonts=False` → file about 5 MB · `ExportAsFixedFormat(..., 17, OptimizeFor=0)`
+8. **Position adjustment:** `calibrate.py` shifts the ink of each box against the Word 150 dpi image (±14 px) and keeps the median per style (font | weight | size | line spacing) in `build/calib.json` · round 1 had a worst offset of 8 px, round 2 reduced it to 0
+
+## Traps found
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| PDF shows font name "…SemiBold,Bold" (fake bold) | Weight 700 is not installed | Install the static file of every weight used |
+| Thai text is BrowalliaNew | The Latin font (Space Grotesk) has no Thai glyphs, and `thai_runs` was not called | Split the footer by language · call `thai_runs` in every part · check with `pdffonts` |
+| A variable font becomes Calibri in the PDF | Word only knows Regular/Bold per family | Cut it into static files with `fontTools.varLib.instancer` and give each its own family name |
+| The cover background image looks faded when editing in Word | The image was placed in the header | Anchor it to the first paragraph (item 1) |
+| The giant document code collides with the table cells | Fixed size, but the cell size changes | Compute the size from the width of 3 cells and the cap height |
+
+## ยังไม่ได้ตรวจ (not yet checked)
+
+Opening on a machine without the fonts (fonts are embedded, but not yet tried) · printing the print cover on a real printer · the reading order of the text frames with a screen reader
 
 
 ## reference: identity-and-gate.md
@@ -973,4 +1423,4 @@ footer        "หน้า N" กลางหน้า สีเทา 9pt
 
 6. **Figures in documents:** the smallest text after real placement ≥ 7pt → minimum pixels on the canvas = `0.247 × canvas width(px) ÷ placed width(cm)` (a 2000px canvas placed 17 cm wide = 29px · placed on a 25.7 cm landscape page = 20px · use 26px to get 9pt) · a wide figure should go on a landscape page at the full column width (≥ 95%) · use the **version placed in the document without a figure title**, because the Word caption already gives the number and the figure's name · figure caption ≥ 9pt in body text color · after a figure, start a new section; the next paragraph must not flow onto the figure's page.
 7. **What the beauty gate (`ด่านสวย`) often catches (put them as rules in the render script's `check`):** stray markdown marks (`**` · backtick) · Thai text in a mono font · a table overflowing a text column · a table of contents with a single entry stranded on the next page · a code list cut in the middle of a code (one code per line, one font for the whole column) · the "(รอยืนยัน)" tag uses the warning color, not the brand color · identity lost after the cover (chapter opener pages use the app's brand color bar) · a light cover available to print alongside the dark cover.
-8. **Cover — plain lettering first, images later** (a project-specific cover that uses the logo shape or a real screen instead of decorative images → `doc-cover-design` (plugin `software-development`))**:** an illustration on the cover is optional, and an open cover with well-set lettering always beats an image that does not wow · a design that passed the gate: the document type (SRS · FSD · ARCH) large at 150–200px in the brand color as the only highlight (width at most ~85% of the column · a name over 5 letters such as TESTPLAN splits into 2 lines, never shrunk smaller than other copies, since the whole set must look the same size) → a short brand-colored line → Thai title → English title → a 1-sentence summary line (≥ 12pt, narrow column) → an info row at the page foot (labels ≥ 10pt) · leave the rest empty · parts with fixed positions (logo · document type · line · status tag) are drawn into the cover background image, while the title and info are Word text that can be searched and edited · the `(รอยืนยัน)` (awaiting confirmation) tag on a dark background uses a bright warning color, with no highlight fill · **if the user says the cover is not beautiful → cut the decorative images first** (curves, glowing dots, gradients), then make 3 plain-lettering covers to choose from (project has a logo or mockup → use `doc-cover-design` item 7 instead)
+8. **Cover — plain lettering first, images later** (a project-specific cover that uses the logo shape or a real screen instead of decorative images → [`cover-design.md`](cover-design.md))**:** an illustration on the cover is optional, and an open cover with well-set lettering always beats an image that does not wow · a design that passed the gate: the document type (SRS · FSD · ARCH) large at 150–200px in the brand color as the only highlight (width at most ~85% of the column · a name over 5 letters such as TESTPLAN splits into 2 lines, never shrunk smaller than other copies, since the whole set must look the same size) → a short brand-colored line → Thai title → English title → a 1-sentence summary line (≥ 12pt, narrow column) → an info row at the page foot (labels ≥ 10pt) · leave the rest empty · parts with fixed positions (logo · document type · line · status tag) are drawn into the cover background image, while the title and info are Word text that can be searched and edited · the `(รอยืนยัน)` (awaiting confirmation) tag on a dark background uses a bright warning color, with no highlight fill · **if the user says the cover is not beautiful → cut the decorative images first** (curves, glowing dots, gradients), then make 3 plain-lettering covers to choose from (project has a logo or mockup → use `cover-design.md` item 7 instead)

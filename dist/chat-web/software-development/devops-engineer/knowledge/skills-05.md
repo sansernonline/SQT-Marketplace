@@ -1,186 +1,3 @@
-# skill: flag-and-propose
-
-Use when a mid-task finding needs a decision before going on
-
-# Flag what you found, then propose a way forward
-
-> **The one rule:** open with the **impact**, close with **one question**.
-> The middle is evidence and proposals, not a story of how you found it.
-
-## When to use this skill
-
-- You find something that makes the original plan unusable while working on something else.
-- Numbers, files or documents disagree, and you must know which to follow. Only when a wrong choice cannot be undone. If it can be undone, choose yourself and log it in [`decision-log`](../decision-log/SKILL.md).
-- There are several ways forward that cannot be undone, cost a lot of money or time, or go out to outsiders, and the user must choose first. In SuperUser, finish the other parts first, then write this under **รออนุมัติ** (awaiting approval) at the end. Do not stop to ask mid-task.
-- You propose adding or changing something the user has not asked for.
-
-## When to use something else, or use it together
-
-| Work | Skill | |
-|---|---|---|
-| Answer a question the user asked | `answer-shape` | instead |
-| A reversible choice (can be changed later at no cost) | `principle-proceed-on-reversible-work`: do it now, then log it in `decision-log` | instead |
-| An unknown fact (number, name, date, budget) | Put `(รอยืนยัน)` (awaiting confirmation) and keep going; do not stop to ask | instead |
-| Something is really broken and must be fixed now | `targeted-fix`: fix first, then report | instead |
-| What you found is a real system incident | `incident-runbook-template` · `postmortem-template` (plugin `software-development`) | together |
-
----
-
-## 1 · The 4-block answer
-
-| Block | Length | Rule |
-|---|---|---|
-| 1 · What you found + the result if not fixed | 1–2 lines | **Always first.** No lead-in, no repeating the question |
-| 2 · Evidence | Table, at most 5 rows | Only the numbers that disagree. Do not tell how you checked |
-| 3 · Proposal | Table, at most 5 rows | Do what → **get what**, not do what → how |
-| 4 · Closing question | 1 question | One question, multiple choice, every option backed by evidence (section 6) |
-
-Block 2 can be cut if there are no numbers. Block 3 can be cut if you have no real proposal yet.
-**Blocks 1 and 4 cannot be cut.**
-
-**The whole answer should end within 1 screen.** Longer than that means you are explaining a process, not asking for a decision.
-
----
-
-## 2 · Block 1: the one-sentence formula
-
-```
-<อะไรผิด> เพราะ <สาเหตุสั้น ๆ> · ต้อง <ทำอะไร> ก่อน <ขั้นถัดไป> ไม่งั้น <ผลเสียที่เป็นรูปธรรม>
-```
-
-| Wrong: written as a story | Right: written opening with the impact |
-|---|---|
-| "ระหว่างทำสรุปยอดผมพบว่าไฟล์ยอดขายที่ดึงมาเมื่อเช้านี้นั้นเป็นฉบับก่อนที่ร้านจะแก้ราคา…" | "**สรุปยอดขายใช้ราคาเก่า** เพราะดึงจากไฟล์ก่อนร้านแก้ราคา ต้องดึงใหม่ก่อนส่งบัญชี ไม่งั้นภาษีคำนวณผิด 38 รายการ" |
-
-- **The "ไม่งั้น…" (otherwise…) part must be concrete.** "ข้าม FR-14.x (Functional Requirement — ความต้องการเชิงฟังก์ชัน ข้อ 14.x) ทั้งชุด" (skips the whole FR-14.x set), not "อาจมีปัญหาตามมา" (may cause problems later).
-- Do not say when or how you found it, unless how you found it changes what must be done.
-- Use bold only for **words that change the decision**, not every important word.
-
----
-
-## 3 · Numbers that disagree: always a comparison table
-
-Two or more values that do not match are always harder to read in a sentence than in a table.
-
-```markdown
-| | ที่บันทึกไว้ | ของจริง |
-|---|---|---|
-| ออเดอร์ที่ดึงมา | 214 | **245** |
-| ราคา SKU-07 | 390 | **420** |
-| ค่าส่งต่างประเทศ | ไม่มี | **มี** |
-```
-
-- Column headings say **which value can be trusted**: "ที่บันทึกไว้ / ของจริง" (recorded / actual), not "เก่า / ใหม่" (old / new).
-- Bold the correct side, so a glance shows what to follow.
-- Rows that already match: **leave them out.**
-
-**Drop an old question or assumption that new data made obsolete, in one line,**
-such as "คำถามข้อ 1 เรื่องยอดไม่ตรง — ตกไปเอง" (question 1 about the mismatched total, dropped by itself), and move on. Do not explain why it dropped.
-
----
-
-## 4 · Proposals as a "do what → get what" table
-
-```markdown
-| ไฟล์ | ได้อะไร |
-|---|---|
-| สารบัญของโฟลเดอร์งาน (`README`) | รู้ว่าอ่านอะไรก่อน ใครเป็นเจ้าของ |
-| วันที่และฉบับบนหน้าแรกของแต่ละไฟล์ | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอ |
-```
-
-- The right column is the **benefit**, not the steps. The reader is deciding whether it is worth it, not doing it.
-- Order from most worthwhile downward, not in the order of doing. "Worthwhile" is measured by the formula: people or files that benefit × impact × confidence ÷ effort. With 3 or more items, fill in numbers using the template [`templates/priority.json`](templates/priority.json) and run `node <plugin>/skills/decision-scoring/scripts/decide.mjs priority priority.json`. Put `"first": true` on any item that makes the result wrong or unsafe so it always comes first. If time is limited, use `knapsack` instead (`decision-scoring`).
-- **Tie the proposal to the problem you just found, if you can.** It is the strongest reason you have.
-- More than 5 rows means you are proposing several things mixed together. Split them into separate rounds.
-
----
-
-## 5 · Also say what you will **not** do
-
-One line, with the reason and when to do it instead.
-
-> รายงานย้อนหลังรายปีไม่ทำตอนนี้ — ทำหลังยอดเดือนนี้ยืนยัน
-
-This line heads off **"แล้วอันนั้นล่ะ ทำไมไม่ทำ"** (what about that one, why not do it), which is the question that follows almost every time.
-It also signals that you thought it through and did not forget.
-
----
-
-## 6 · Close with one question
-
-```
-เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วยดึงไฟล์ใหม่ + อัปเดตสรุป
-```
-
-| Rule | Reason |
-|---|---|
-| **One question** per answer | If you ask two or more, you get an answer to only one |
-| Answerable in a few words | "ทั้ง 4" · "เริ่มข้อ 2" |
-| Offer an "all of them" option | Most users pick it. Typing their own answer costs them time |
-| If there is a recommended order, put it in the question | They can answer "ตามนั้น" in one word |
-| **Ask as multiple choice, every option backed by evidence** per `superuser` §6: 2–4 options · the recommended one on top, ending with `(แนะนำ)` (recommended) and 1 line of reason | They can just pick, and do not choose from options you made up |
-
-**Never close by asking "มีอะไรให้ช่วยเพิ่มไหม" (anything else I can help with)**. It does not ask for a decision.
-
----
-
-## 7 · Full example
-
-A before-and-after example (a software requirements document and work plan) is in [`references/example.md`](references/example.md)
-
-
-## reference: example.md
-
-# flag-and-propose — full example
-
-Moved from [SKILL.md](../SKILL.md) §7
-
-Abbreviations in the example: Functional Requirement (FR) · Non-Functional Requirement (NFR) · Test Case (TC) · Architecture Decision Record (ADR) · Functional Specification Document (FSD) · Application Programming Interface (API)
-
-**Before: 1 long paragraph with 3 lumps. After reading it, you still do not know what to answer.**
-
-> เรื่องด่วนที่เจอระหว่างตรวจ — BUILD-PLAN.md ที่สร้างเมื่อเช้านี้อ่านจาก
-> `_to_delete/extracted/*.md` ซึ่งเป็นฉบับก่อนที่ผมจะแก้ มันจึงบันทึกไว้ว่า
-> "FR ถึง FR-13.9 · TC 214 ข้อ · ไม่มี NFR" และตั้งคำถามข้อ 1 ว่าเลข 239 ไม่ตรง
-> ตอนนี้เอกสารจริงเป็น FR-14.12 และ 245 กรณีแล้ว ต้อง extract ใหม่แล้วอัปเดต
-> BUILD-PLAN ก่อนให้ agent เขียนโค้ดต่อ ไม่งั้นมันจะสร้างระบบตามสเปกเก่าและข้าม
-> FR-14.x กับ NFR ทั้งหมด … ถ้าจะทำให้ชุดนี้เป็นตัวอย่างของโปรเจกต์ถัดไป ผมเสนอให้
-> เติม 4 ไฟล์ที่คุ้มที่สุดก่อน คือ docs/README.md เป็นสารบัญบอกว่าอ่านอะไรก่อนและ
-> ใครเป็นเจ้าของ, เพิ่มตารางประวัติการแก้ไขในหน้าแรกของทั้ง 4 docx, …
-
-**After: the same structure in 4 blocks**
-
-> **ด่วน — `BUILD-PLAN.md` ตัวเลขเก่า** เพราะอ่านจาก `_to_delete/extracted/` ฉบับก่อนคุณแก้
-> ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันสร้างตามสเปกเก่าและข้าม FR-14.x กับ NFR ทั้งชุด
->
-> | | ที่บันทึกไว้ | ของจริง |
-> |---|---|---|
-> | FR ถึง | 13.9 | **14.12** |
-> | Test case | 214 | **245** |
-> | NFR | ไม่มี | **มี** |
->
-> คำถามข้อ 1 ที่ตั้งไว้ว่าเลข 239 ไม่ตรง — ตกไปเอง
->
-> **ทำเป็นแม่แบบ: 4 ไฟล์ที่คุ้มสุด**
->
-> | ไฟล์ | ได้อะไร |
-> |---|---|
-> | `docs/README.md` | สารบัญ — อ่านอะไรก่อน ใครเป็นเจ้าของ |
-> | ประวัติการแก้ไข หน้าแรกของ docx ทั้ง 4 | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอพอดี |
-> | `docs/DESIGN-SYSTEM.md` | ดึง token ออกจาก mockup มาเขียนเป็นเอกสาร |
-> | `docs/decisions/` | แยก ADR-1..12 เป็นไฟล์ละข้อ |
->
-> FSD กับ API spec ไม่ทำตอนนี้ — ทำตอนเริ่มเขียนโค้ดของแต่ละหน้าจอ
->
-> เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วย re-extract + อัปเดต BUILD-PLAN
-
-**What disappeared, though the information is just as complete:** the lead-in · the story of how it was found ·
-full file names that do not help the decision · the explanation of why the old question dropped ·
-the how-to details of each proposal
-
-
----
-
 # skill: principle-proceed-on-reversible-work
 
 Use before asking to continue on undoable work
@@ -1001,3 +818,629 @@ Open from SKILL.md section 5 when you run Playwright MCP inside the lab.
 - Bugs found during testing were fixed in the script: PowerShell 5.1 with stderr · Playwright a different version from the base image · port collisions.
 - Verified: `npm ci` for just 2 packages took 52 seconds on a OneDrive folder (why `-Isolated` is advised on OneDrive).
 - The `:ro` mount rule is an idea from anthropics/claude-code devcontainer and trailofbits/skills.
+
+
+---
+
+# skill: cicd-and-release
+
+Use when setting up or fixing a CI/CD pipeline
+
+# Continuous Integration / Continuous Delivery (CI/CD) and releasing
+
+> **The one rule:** build once, then carry the **same artifact** to every environment.
+> If you rebuild when going to production, what passed testing and what the customer runs are not the same thing.
+
+## When to use this skill
+
+- Setting up a pipeline for a new project, or rebuilding an old one that is slow or gives untrustworthy results
+- Deciding about branches, versions, environments, or how to release
+- Deploys often break, or you cannot roll back
+- Someone asks "which version and which commit is production running right now?"
+
+## When to use another skill, or use it alongside
+
+| Task | Skill | |
+|---|---|---|
+| Where secrets are stored and how they rotate | `config-and-secrets` | instead |
+| The pipeline runs on Jenkins (Jenkinsfile · credentials · approval input) | `jenkins-pipeline` | alongside |
+| Dockerfile · Helm chart · deploy to Kubernetes | `kubernetes-helm` | alongside |
+| Proportion and scope of tests per layer | `testing-standards` · `e2e-testing-patterns` | alongside |
+| Writing a migration | `database-design` | instead |
+| Steps when the system is down or a deploy breaks it | `incident-runbook-template` (+ `postmortem-template` after) | instead |
+| Writing release notes for users to read | command `/release-notes` | instead |
+| Health check the pipeline uses to decide | `web-service-essentials` | alongside |
+| Commit messages that can generate release notes automatically | `commit-message-format` | alongside |
+
+**Working pipeline files for GitHub Actions, Azure DevOps and GitLab** are in `references/per-platform.md`.
+**Read more when needed:** [`references/deployment-plan-template.md`](references/deployment-plan-template.md) — plan template
+
+---
+
+## 1 · Pipeline stages
+
+| Order | Stage | Blocks when | Acceptable time |
+|:--:|---|---|---|
+| 1 | Check code format + lint | a rule is broken | < 1 minute |
+| 2 | Build | compile fails · a warning set as an error appears | < 3 minutes |
+| 3 | Unit test | a test fails · coverage is below the threshold | < 5 minutes |
+| 4 | Check dependencies + secrets leaked into git | a high-severity vulnerability or a secret is found | < 2 minutes |
+| 5 | Create the artifact + stamp the version | — | < 2 minutes |
+| 6 | Deploy to staging | — | |
+| 7 | Integration + end-to-end test | a test fails | < 15 minutes |
+| 8 | **Human gate** (production only) | nobody has clicked approve yet | |
+| 9 | Deploy to production | — | |
+| 10 | Post-deploy check | a failed health check triggers an automatic rollback | < 2 minutes |
+
+**Stages 1–5 are CI. They must run on every pull request**, not only at merge.
+**Stages 1–5 together should finish within 10 minutes.** If they take longer, people start looking for ways to skip them.
+
+---
+
+## 2 · Build once, then promote
+
+```
+commit → build → artifact v1.4.0+abc1234 ─┬→ staging  (this one)
+                                           ├→ uat      (same one)
+                                           └→ production (same one)
+```
+
+- An artifact is a file that can really be deployed: a container image · a published zip file · a package
+- **Environments may differ only in the config applied at run time**, not in a new build
+- Keep artifacts for at least 30 days so you can go back, because a rollback means deploying an old artifact, not rebuilding from an old commit
+
+> Wrong: **running `git pull` on the production machine and building there.** Nobody then knows which commit is running,
+> and the dependencies pulled at that moment may not be the set that was tested.
+
+---
+
+## 3 · A version must trace back to a commit
+
+Use Semantic Versioning (SemVer): `MAJOR.MINOR.PATCH`
+
+| Which number goes up | When |
+|---|---|
+| MAJOR | a change that breaks the callers (see the table in `api-conventions`) |
+| MINOR | a new capability; old behavior still works |
+| PATCH | a bug fix |
+
+- **The git tag is the source of truth.** `v1.4.0` points to exactly one commit.
+- Attach the commit hash to the artifact too, for example `1.4.0+abc1234`
+- The `/version` endpoint must return the same value (see `web-service-essentials`). A mobile app with no endpoint shows it on the "About" page instead.
+- **Exception for Flutter / Android:** the number after `+` in `pubspec.yaml` is the versionCode, which must be an integer, so it cannot hold a hash (see the section "Android / Flutter apps")
+- Before 1.0.0, use `0.x` and treat big changes as still allowed
+
+---
+
+## 4 · Branches
+
+| Style | How | Fits |
+|---|---|---|
+| **trunk-based** (recommended) | short-lived branches of 1–2 days, merged into `main` often · unfinished work hidden behind a feature flag | most teams · frequent releases |
+| release branch | `main` + `release/1.4` for urgent fixes | software that customers install themselves · several versions to maintain at once |
+| gitflow | `develop` + `feature` + `release` + `hotfix` | big releases, rarely · usually more complex than needed |
+
+**Rules that hold whichever style you pick:**
+
+- `main` must be deployable at all times
+- Protect `main`: require a pull request and a green CI, and never push directly
+- Expect merge conflicts on any branch older than 1 week
+- Delete the branch right after merging (`gh pr merge --delete-branch`) · turn on "Automatically delete head branches" in the repo's Settings → General on GitHub so it deletes after every PR · a deleted branch can be restored from the PR page
+
+---
+
+## 5 · Environments and gates
+
+| Environment | Data | Who deploys | What it must pass |
+|---|---|---|---|
+| dev | fake | automatic on every commit | build passes |
+| staging | production-like (masked) | automatic on merge into `main` | unit + integration |
+| uat | production-like | the team clicks | users pass their testing |
+| production | real | **a person clicks approve** | everything above |
+
+- Staging must be as close to production as possible: database version, operating system, config values
+- **Never copy real data into staging without masking personal data**
+- If you have only one environment because of budget, say so plainly in the documents and use feature flags to help
+
+---
+
+## 6 · Secrets in the pipeline
+
+- Store them in the platform's secret store, not in pipeline files
+- Grant only the permissions that stage needs. For example, the build stage does not need the production database password.
+- A pipeline that runs from an outsider's fork **must not see secrets**
+- The tool that detects secrets leaked into git must sit at stage 4, not run once a year
+
+Full detail is in `config-and-secrets`.
+
+---
+
+## 7 · Database migration in the pipeline
+
+```
+deploy schema (expand) → deploy code → check → deploy schema (contract) in the next round
+```
+
+- Run the migration as **its own stage** before the code deploy, not when the app boots
+  (if several app instances boot at once, the migrations collide and can corrupt data)
+- Use an account that can change the schema only in this stage. The account the app runs with must not be able to change the schema.
+- A migration must work with the previous code version too, or rolling back the code will break the system
+- Always back up first, and **test that the restore really works**
+- **Exception: databases on the user's device** (SQLite · sqflite · drift on mobile) must migrate when the app opens, because there is no other way.
+  The rules above apply to server databases shared by several instances. For an on-device migration, write tests that start from every schema version ever released.
+
+For the expand/contract method, see `database-design` item 9.
+
+---
+
+## 8 · Release methods
+
+| Method | How it works | Needs | Fits |
+|---|---|---|---|
+| stop and replace | shut down → replace → start | nothing | internal systems · can shut down at night |
+| **rolling** | replace machines one at a time | a reliable health check · both versions can run together | the default for systems that run several instances |
+| blue-green | bring up the whole new set, then switch traffic | 2 times the resources, temporarily | must roll back within seconds |
+| canary | release to 5% of users first, then widen 5 → 25 → 100% by the numeric criteria below | metrics that split by version | large systems · high risk |
+
+> **Rolling has a point people often forget:** during the deploy, the old and new versions serve at the same time.
+> The API and schema must therefore work with both versions. If you did not design for this, some users will hit errors on every deploy.
+
+**Criteria for widening a canary (numeric, agreed before the deploy).** Use burn rate (the rate at which the error budget is spent) by the formula in [`observability-basics`](../observability-basics/SKILL.md) section 4.1, measured on the new version's traffic only. Do not copy the formula here.
+
+| Step | Traffic | Hold at least | Widen when (all must pass) |
+|---|---|---|---|
+| 1 | 5% | 30 minutes and at least 1,000 requests | short-window burn rate < 1 · p95 (95th percentile) latency no more than 1.2 times the old version (starting value, not yet measured) · health check passes on every machine |
+| 2 | 25% | 1 hour | same criteria again |
+| 3 | 100% | watch the first hour | short-window burn rate < 1 |
+
+The hold time and the minimum request count are starting values, not yet measured. Adjust them to real traffic. If traffic is too low to reach 1,000 requests in 30 minutes, hold longer until it does. Do not lower the criteria. For a system with no SLO (Service Level Objective), use this criterion instead: the new version's errors ≤ max(2 times the old version, the old version + 0.5 percentage points) (starting value, not yet measured).
+
+A **feature flag** (a switch that turns a feature on or off) separates "releasing the code" from "turning the feature on".
+
+- You can merge unfinished code into `main` with the flag off
+- Turn it on for some groups first, and turn it off instantly without a deploy
+- **A flag needs an expiry date**, because a flag left for 1 year becomes two code paths that nobody dares to delete.
+  Remove it within 2 sprints after it reaches 100%.
+
+---
+
+## 9 · Rollback
+
+**Set the criteria in advance.** Do not decide while everyone is panicking and arguing over whether to wait a little longer. Use the burn rate from [`observability-basics`](../observability-basics/SKILL.md) section 4.1 instead of "errors above X%":
+
+| Condition (new version's traffic) | Action |
+|---|---|
+| burn rate ≥ 14.4 over both the 1-hour and the 5-minute windows | roll back at once, without waiting for anyone |
+| burn rate ≥ 6 over both the 6-hour and the 30-minute windows | roll back and open an incident |
+| burn rate 1–6 | stop widening, stay at the current step, have a person look |
+| p95 latency above 2 times the old version for 10 minutes (starting value, not yet measured) or the health check fails | roll back |
+
+During a 5% canary, when the 1-hour window is not yet full, you may use the short window (5 minutes) with the 14.4 criterion. But the request count must first reach the minimum for that step before you trust the number.
+
+| Required | Criterion |
+|---|---|
+| Rollback command | works with a single command |
+| Time taken | under 5 minutes |
+| **Real rehearsal** | at least once a quarter, on staging |
+| Data | a migration already applied must not break the old code |
+
+> **A rollback that has never been rehearsed is the same as no rollback**, because you find out it does not work at the moment you need it.
+
+- No Friday-evening deploy while the team cannot yet roll back with a single command.
+- No manual deploy by following steps in a Word file: on the day the author is out sick, nobody can deploy.
+
+---
+
+## 10 · The pipeline must be fast and trustworthy
+
+| Problem | Fix |
+|---|---|
+| Slow | cache dependencies · run several test sets in parallel · move slow tests to a nightly run |
+| Tests with unstable results (flaky) | **quarantine at once** and open a task to fix, because a test that sometimes fails and sometimes passes makes people stop reading results |
+| Everyone waits in the queue | add runners · let pull requests run only the relevant parts |
+| The build is not the same every time | lock dependency versions (lock file) · pin image versions by digest |
+
+**Metrics worth watching:** how often you release · how long from commit to live ·
+what percentage of deploys break · how long recovery takes
+
+**Common symptoms and the first place to look**
+
+| Symptom | Look here first |
+|---|---|
+| Passes on the machine, fails on CI | lock file not committed · environment variables that exist only locally · file name letter case (Linux tells them apart) · the runner's time zone is UTC |
+| Fails sometimes | flaky tests (row above) · jobs running at the same time fight over the same port or database · runner out of memory |
+| Slower every week | the cache key changes every time so it never hits · an unpinned image is pulled again · one test suite grows and is not split |
+| Deploy is green but nothing changes on the server | reusing an old artifact or the `latest` tag · CDN or reverse proxy cache · an old instance still receives traffic |
+| permission denied or an empty secret on a branch or PR | a PR from a fork gets no secrets · environment protection rule · the token expired or its scope is too small |
+
+---
+
+## Android / Flutter apps — differences from servers
+
+| Topic | Rule |
+|---|---|
+| Version number | `pubspec.yaml` `version: X.Y.Z+N` · `X.Y.Z` follows SemVer · **`N` is the versionCode, an integer that only goes up** (for example the CI run number) · pass the commit hash through `--dart-define=GIT_SHA=<hash>` and show it on the "About" page |
+| Build once | `flutter build appbundle --release` gives one Android App Bundle (AAB) file, then promote that same file through the Play tracks: internal → closed → production · do not rebuild per track |
+| Staged release | production uses a staged rollout in % (for example 5 → 20 → 50 → 100) instead of a server canary · Play tracks stand in for the environments in section 5 |
+| Rollback | **you cannot roll back a version on Play**, because the versionCode cannot go down and devices that already installed it do not go back. Halt the rollout, then release a fix with a higher versionCode, and rehearse this procedure instead of section 9 |
+| Signing key | keep the upload key in the CI secret store as base64 + the password as a separate secret · `android/key.properties` and `*.jks` go in `.gitignore` · **back up the key outside CI in at least 1 place.** If you lose it, you cannot update the app until Play support resets it (use Play App Signing so Google holds the real key) |
+
+
+## reference: deployment-plan-template.md
+
+# แม่แบบแผน deploy
+
+Open when you actually need to write this kind of document · put `(รอยืนยัน)` on anything you do not know
+
+## Standard Output: Polished Deployment Plan
+
+```markdown
+# Deployment Plan: <Release vX.Y.Z>
+
+| | |
+|--|--|
+| **Release** | vX.Y.Z |
+| **Type** | Routine \| Major \| Hotfix |
+| **Status** | Planned |
+| **Deploy Lead** | @name |
+| **Maintenance Window** | YYYY-MM-DD HH:MM-HH:MM UTC |
+| **Expected Downtime** | Zero / 5 min |
+
+---
+
+## Pre-Deployment Checklist
+
+| # | Item | Owner | Status |
+|:-:|------|:------|:------:|
+| 1 | All tests passing in CI | @dev | Done |
+| 2 | Security scan passed | @security | Done |
+| 3 | Database migrations reviewed | @dba | Pending |
+| 4 | Rollback plan documented | @devops | Pending |
+| 5 | Stakeholders notified | @pm | Pending |
+| 6 | On-call engineer briefed | @oncall | Pending |
+| 7 | Status page prepared | @devops | Pending |
+
+## Deployment Flow
+
+_[รูปขั้นตอน deploy: Tag release → CI สุดท้าย → ผ่านทั้งหมด? (ไม่ผ่าน = หยุดและตรวจ) → canary 5% → ปกติหลัง 10 นาที? (ไม่ = rollback) → 50% → ปกติ? (ไม่ = rollback) → 100% → smoke test → เสร็จ. วาดด้วย skill `diagram-figures`]_
+
+## Deployment Steps
+
+| Step | Action | Command/Link | Owner |
+|:----:|--------|--------------|:------|
+| 1 | Tag release | `git tag vX.Y.Z && git push --tags` | @devops |
+| 2 | Trigger CD pipeline | [Pipeline link](#) | @devops |
+| 3 | Deploy canary | Auto via pipeline | — |
+| 4 | Monitor canary | [Grafana](#) | @oncall |
+| 5 | Approve full deploy | Slack `/deploy approve` | @lead |
+| 6 | Verify production | Smoke test suite | @qa |
+
+## Verification
+
+### Health Checks
+- [ ] `/health` returns 200
+- [ ] All pods/instances running
+- [ ] Database connections OK
+- [ ] No spike in 5xx errors (Grafana dashboard X)
+
+### Smoke Tests
+- [ ] User login works
+- [ ] Critical user journey #1 works
+- [ ] Critical API endpoints return expected response
+
+### Key Metrics (15 min post-deploy)
+| Metric | Baseline | Threshold | Current |
+|--------|---------:|----------:|--------:|
+| p95 latency | 150ms | < 200ms | — |
+| Error rate | 0.1% | < 0.5% | — |
+| Throughput | 1000 RPS | > 800 RPS | — |
+
+## Rollback Plan
+
+> **Triggers:** Any of the following requires immediate rollback
+> - 5xx error rate > 2% sustained for 5 min
+> - p95 latency > 500ms sustained for 5 min
+> - Customer-impacting bug confirmed
+
+### Rollback Steps
+1. Run: `./scripts/rollback.sh vX.Y.Z-1`
+2. Verify health checks
+3. Post in #incidents channel
+4. Schedule post-mortem within 48h
+
+## Post-Deployment
+
+- Monitor for 1 hour post-deploy
+- Update changelog with release notes
+- Send announcement to #releases
+- Close release ticket
+```
+
+
+## reference: per-platform.md
+
+# Starter pipeline files by platform
+
+**Contents:** 1 GitHub Actions · 2 Azure DevOps · 3 GitLab CI · 4 Multi-stage Dockerfile · 5 Capability comparison table
+
+1. [GitHub Actions](#1--github-actions)
+2. [Azure DevOps](#2--azure-devops)
+3. [GitLab CI](#3--gitlab-ci)
+4. [Multi-stage Dockerfile](#4--multi-stage-dockerfile)
+5. [Capability comparison table](#5--capability-comparison-table)
+
+---
+
+## 1 · GitHub Actions
+
+`.github/workflows/ci.yml` runs on every pull request.
+
+```yaml
+name: ci
+on:
+  pull_request:
+  push: { branches: [main] }
+
+concurrency:                       # cancel the older run when a new push arrives
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions: { contents: read }
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }   # full history is needed to compute the version
+
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: 'npm' }
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+      - run: npm test -- --coverage
+
+      - name: ตรวจ dependency
+        run: npm audit --audit-level=high
+
+      - name: ตรวจ secret รั่วใน repo
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }} # required when the repo belongs to an organization; not needed for a personal account (gitleaks-action README, checked 22 Oct 2026 (B.E. 2569))
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app-${{ github.sha }}
+          path: dist/
+          retention-days: 30
+```
+
+`.github/workflows/deploy.yml` takes the same artifact from ci and deploys it to one environment at a time.
+
+```yaml
+name: deploy
+on:
+  workflow_run:
+    workflows: [ci]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  staging:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4             # scripts/deploy.sh comes from the repo
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - uses: actions/download-artifact@v4    # the build output comes from the artifact (dist/)
+        with:
+          name: app-${{ github.event.workflow_run.head_sha }}
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - run: ./scripts/deploy.sh staging
+
+  production:
+    needs: staging
+    runs-on: ubuntu-latest
+    environment: production        # <- set required reviewers here = the human gate
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - uses: actions/download-artifact@v4   # same artifact as staging
+        with:
+          name: app-${{ github.event.workflow_run.head_sha }}
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - run: ./scripts/deploy.sh production
+      - name: ตรวจหลัง deploy
+        run: |
+          for i in $(seq 1 10); do
+            curl -fsS https://api.example.co/health/ready && exit 0
+            sleep 6
+          done
+          ./scripts/rollback.sh && exit 1
+```
+
+**Cautions:**
+
+- `pull_request_target` can see secrets and runs code from forks, so **do not use it** unless you know exactly what you are doing.
+- Set `permissions` as narrow as possible in every workflow, because some organizations default to write access on the whole repo.
+- The versions in the examples (`@v4`, Node 22, .NET 8.x) are only examples. Check the latest versions before use (`รอยืนยัน`, awaiting confirmation).
+- Pin each action at least by version tag (`@v4`). For stricter control, pin by commit hash.
+- `environment:` is where you set approvers (required reviewers) and secrets that belong to one environment.
+
+---
+
+## 2 · Azure DevOps
+
+`azure-pipelines.yml`
+
+```yaml
+trigger:
+  branches: { include: [main] }
+
+variables:
+  buildConfiguration: Release
+
+stages:
+- stage: build
+  jobs:
+  - job: build
+    pool: { vmImage: ubuntu-latest }
+    steps:
+    - task: UseDotNet@2
+      inputs: { version: '8.x' }
+    - script: dotnet restore
+    - script: dotnet build -c $(buildConfiguration) --no-restore
+    - script: dotnet test -c $(buildConfiguration) --no-build --collect:"XPlat Code Coverage"
+    - script: dotnet publish -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory) --no-build
+    - publish: $(Build.ArtifactStagingDirectory)
+      artifact: app
+
+- stage: staging
+  dependsOn: build
+  jobs:
+  - deployment: staging
+    environment: staging
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: app
+          - script: ./scripts/deploy.sh staging
+
+- stage: production
+  dependsOn: staging
+  jobs:
+  - deployment: production
+    environment: production        # <- set approval on the Environments page
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: app          # same artifact from the build stage
+          - script: ./scripts/deploy.sh production
+```
+
+- A `deployment` job differs from a plain `job` because it binds to an environment, so it gets deploy history and an approval step.
+- Keep secrets in a variable group linked to Azure Key Vault. Do not write them into files.
+- Secret variables are **not passed into scripts automatically**. Map them one by one through `env:`.
+
+---
+
+## 3 · GitLab CI
+
+`.gitlab-ci.yml`
+
+```yaml
+stages: [test, build, deploy]
+
+default:
+  interruptible: true
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  key: { files: [requirements.txt] }
+  paths: [.cache/pip]
+
+test:
+  stage: test
+  image: python:3.12
+  script:
+    - pip install -r requirements.txt
+    - ruff check .
+    - pytest --cov --cov-fail-under=70
+  coverage: '/TOTAL.*\s+(\d+%)$/'
+
+build:
+  stage: build
+  image: docker:27
+  services: [docker:27-dind]
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  script:
+    - echo "$CI_JOB_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+deploy:staging:
+  stage: deploy
+  environment: { name: staging, url: https://staging.example.co }
+  script: ./scripts/deploy.sh staging $CI_COMMIT_SHA
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+deploy:production:
+  stage: deploy
+  environment: { name: production, url: https://example.co }
+  when: manual                     # <- human gate
+  script: ./scripts/deploy.sh production $CI_COMMIT_SHA
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+```
+
+- Mark secret variables `Masked` and `Protected` under Settings → CI/CD.
+- Use `when: manual` together with a protected environment. Only then is it an approval gate that really blocks.
+
+---
+
+## 4 · Multi-stage Dockerfile
+
+```dockerfile
+# ---- build stage ----
+FROM node:22-alpine AS build
+WORKDIR /src
+COPY package*.json ./
+# this layer stays cached as long as the lock file does not change
+RUN npm ci
+COPY . .
+RUN npm run build
+
+# ---- run stage ----
+FROM node:22-alpine
+ENV NODE_ENV=production
+WORKDIR /app
+COPY --from=build /src/dist ./dist
+COPY --from=build /src/node_modules ./node_modules
+# do not run as root
+USER node
+EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=3s CMD node dist/healthcheck.js
+CMD ["node", "dist/main.js"]
+```
+
+**Rules:**
+
+- Copy the files that change least first, so the early layers reuse the cache.
+- Do not copy `.env`, `.git` or `node_modules` into the image. Block them with `.dockerignore`.
+- For a build that gives the same result every time, pin the base image by digest.
+- Always name the tag with the commit hash. `latest` may serve as an alias, but never deploy with `latest`.
+
+---
+
+## 5 · Capability comparison table
+
+| Need | GitHub Actions | Azure DevOps | GitLab CI |
+|---|---|---|---|
+| Human approval gate | Environment + required reviewers | Environment approvals | `when: manual` + protected env |
+| Store artifacts | `upload/download-artifact` | `publish` / `download` | `artifacts:` |
+| Cache dependencies | `actions/cache` or `cache:` in setup | `Cache@2` | `cache:` |
+| Secrets per environment | Environment secrets | Variable group + Key Vault | Protected variables per environment |
+| Cancel older runs | `concurrency` | `batch: true` (merges triggers that arrive while a run is active; it does not cancel the older run) | `interruptible: true` |
+| Run in parallel | `strategy.matrix` | `strategy.matrix` | `parallel:` |
+| Self-hosted runners | Yes | Yes | Yes |
+
+> **Every platform can do the same things**, so do not choose by feature list.
+> Pick the one that lives where the repo lives, and put your effort into the content of the pipeline instead.

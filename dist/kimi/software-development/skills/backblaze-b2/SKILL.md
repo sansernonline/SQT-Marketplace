@@ -1,9 +1,9 @@
 ---
 name: backblaze-b2
-description: Use when storing files or a static site on Backblaze B2
+description: Use when storing files or a static site on Backblaze B2 or R2
 ---
 
-# backblaze-b2 — connect an app to Backblaze B2 with a private bucket, least privilege, and no old versions left billing
+# backblaze-b2 — connect an app to Backblaze B2 or Cloudflare R2 with a private bucket, least privilege, and no old versions left billing
 
 Matters not yet opened carry the label `(ยังไม่ได้ตรวจ)` (not yet checked) · conclusions that did not come from the docs are written as "our conclusion".
 
@@ -16,14 +16,15 @@ Matters not yet opened carry the label `(ยังไม่ได้ตรวจ
 - Restoring file versions, or setting a rule to delete old versions (lifecycle)
 - Opening files for anyone to download from a Public bucket
 - Asking whether B2 is free enough, or why storage cost grows by itself
+- The user picks Cloudflare R2 (or asks R2 vs B2): follow the same steps, the R2 specifics are in [`references/cloudflare-r2.md`](references/cloudflare-r2.md)
 - Deploying a static site or an SPA build to B2 behind Cloudflare (`b2 sync` · rollback) → read [`references/deploy.md`](references/deploy.md)
 
-Not for: file types and virus scanning → `file-upload-and-storage` · an app with a backend → `render-deploy` · R2 vs B2 → [`cloudflare-r2`](../cloudflare-r2/SKILL.md) · S3 features B2 lacks (see `references/s3-and-presign.md`) → other storage
+Not for: file types and virus scanning → `file-upload-and-storage` · an app with a backend → `render-deploy` · S3 features B2 lacks (see `references/s3-and-presign.md`) → other storage
 
 ## Steps
 
-1. Search the repo first: the S3 library in use · `B2_*` or `AWS_*` variables · existing upload code · `b2 --version` · the existing bucket list (read only). Then ask once together: monthly money cap · upload from browser or server · must files be public · must version history be kept.
-2. If the user does not answer: bucket Private · stay within the free 10 GB · create nothing that costs money until you get the money cap · upload through the server · not public. Note in `decision-log` that you chose it yourself and put `(รอยืนยัน)` (to be confirmed) on the unanswered matters.
+1. Search the repo first: the S3 library in use · `B2_*` `R2_*` or `AWS_*` variables · `wrangler.toml` (R2) · existing upload code · `b2 --version` · the existing bucket list (read only). Then ask once together: monthly money cap · upload from browser or server · must files be public · must version history be kept.
+2. Pick the provider (B2 or R2). For R2, read [`references/cloudflare-r2.md`](references/cloudflare-r2.md) and use its token, endpoint, CORS, public-access, lifecycle and money-gate sections in place of the B2 ones below; its rules are equally binding. If the user does not answer: bucket Private · stay within the free 10 GB · create nothing that costs money until you get the money cap · upload through the server · not public. Note in `decision-log` that you chose it yourself and put `(รอยืนยัน)` (to be confirmed) on the unanswered matters.
 3. Use the S3 SDK by default (B2 CLI `b2` for creating buckets and lifecycle). Prices, routes and the R2 comparison → `references/costs.md`. Endpoint, signature v4, HTTPS only, and what B2 does not support (object ACL · tagging · website configuration) → `references/s3-and-presign.md`.
 4. Create the bucket as Private, after passing the money gate. If the name collides with something existing, stop and ask.
 5. Use a standard application key, never the master key, limited by `bucketIds` and `namePrefix`, with only `listFiles` `readFiles` `writeFiles` (no `deleteFiles` if the app does not delete), and a short `validDurationSeconds` for CI or one-off jobs. The key is shown once at creation: the user puts it in a secret manager at once. Secrets never go into git, chat, or logs. Check it is set without printing the value: `[ -n "$B2_APPLICATION_KEY" ] && echo OK || echo MISSING`.
@@ -51,6 +52,7 @@ Not for: file types and virus scanning → `file-upload-and-storage` · an app w
 - No call to features B2 does not support · signature v4 and HTTPS
 - There is an answer on old versions (keep all, or a lifecycle rule the user approved with a non-empty prefix)
 - Passed the 4-item money gate
+- On R2: also the checks at the end of `references/cloudflare-r2.md`
 
 ## References
 
@@ -58,6 +60,7 @@ Not for: file types and virus scanning → `file-upload-and-storage` · an app w
 - [`references/s3-and-presign.md`](references/s3-and-presign.md) — open when wiring an S3 client, narrowing a key, issuing a presigned URL, setting CORS, or making a bucket public
 - [`references/versions-lifecycle.md`](references/versions-lifecycle.md) — open when the app overwrites or deletes files or a lifecycle rule is set
 - [`references/deploy.md`](references/deploy.md) — open when deploying a static site to B2
+- [`references/cloudflare-r2.md`](references/cloudflare-r2.md) — open when the provider is Cloudflare R2 (bucket · token · endpoint · presign · public access · lifecycle · money gate) · with [`cloudflare-r2-example.md`](references/cloudflare-r2-example.md) and [`cloudflare-r2-sources.md`](references/cloudflare-r2-sources.md)
 - [`references/example.md`](references/example.md) — open for a worked example (profile pictures upload)
 - Sources and check dates: [`references/sources.md`](references/sources.md)
-- Examples: [`assets/b2-presign.mjs`](assets/b2-presign.mjs) · [`assets/lifecycle-keep-last.json`](assets/lifecycle-keep-last.json)
+- Examples: [`assets/r2-presign.mjs`](assets/r2-presign.mjs) · [`assets/r2-cors.json`](assets/r2-cors.json) · [`assets/b2-presign.mjs`](assets/b2-presign.mjs) · [`assets/lifecycle-keep-last.json`](assets/lifecycle-keep-last.json)

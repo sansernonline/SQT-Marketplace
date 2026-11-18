@@ -129,7 +129,7 @@ Not for: which fund to buy, factsheets → `mutual-fund-picker` · RMF / ThaiESG
 
 ## Steps
 1. **Target mix.** Per pot of money, set goal and horizon (retirement 20 years, house down payment 4 years); money needed within 3 years does not go into equity. One simple mix per pot (for example equity 60 / bonds 40; equity may split Thai / global; 2–4 lines in all). Write mix, trigger and review date in the user's notes (`CONTEXT.md` or the finance folder). Review the mix at least once a year and after a change in goal, income or horizon.
-2. **DCA (ลงทุนสม่ำเสมอ).** Amount = the fixed investment line from `personal-budget`, moved on payday by standing order. Split it by the target mix, or send all of it to the line under target (this rebalances for free). Thai funds: most asset management companies and bank apps offer a monthly auto-buy (ตั้งซื้ออัตโนมัติ); check the fund's minimum and front-end fee in the factsheet. Thai stocks: many brokers offer a stock DCA service; check commission and minimums (รอยืนยัน per broker). RMF and ThaiESG count toward this year's deduction only if paid by 31 December and within the caps in `tax-deduction-planner`; prefer DCA over one lump in December if cash flow allows. DCA lowers average cost only when prices move both ways and does not prevent losses (worked numbers: `mutual-fund-picker`, DCA example).
+2. **DCA (ลงทุนสม่ำเสมอ).** Amount = the fixed investment line from `personal-budget`, moved on payday by standing order. Split it by the target mix, or send all of it to the line under target (this rebalances for free). Thai funds: most asset management companies and bank apps offer a monthly auto-buy (ตั้งซื้ออัตโนมัติ); check the fund's minimum and front-end fee in the factsheet. Thai stocks: many brokers offer a stock DCA service; check commission and minimums (รอยืนยัน per broker). RMF and ThaiESG count toward this year's deduction only if paid by 31 December and within the caps in `tax-deduction-planner`; prefer DCA over one lump in December if cash flow allows. DCA lowers average cost only when prices move both ways and does not prevent losses (worked numbers: [`references/dca-example.md`](references/dca-example.md)).
 3. **Pick one rebalance rule.** Calendar: once a year on a fixed date (for example the first week of December, before tax-fund cut-offs), good for most people. Band: deviation = actual share − target share (percentage points, may be negative); act when the absolute deviation is above the band, default 5 points (starting value, not yet measured), for larger portfolios checked monthly. Both: look once a year, act only if the band is broken, which keeps fees low. Never rebalance on news or after one bad month; 5 points is a rule of thumb, not a regulation.
 4. **When the deviation is above the band, close it with new money first** (redirecting new money costs nothing, so it is always allowed). Months to close = gap in baht ÷ (monthly DCA × (1 − target share of the underweight asset)), where gap in baht = target share × total portfolio value − current value of the underweight asset (the `(1 − target share)` part is there because new money also grows the whole portfolio). At most N months (N = 12, starting value, not yet measured): close it with DCA, do not sell. More than N months: selling or switching is allowed, but tell the user the cost (selling, switching and buying fees + tax on what is sold + broker commission) and the months DCA alone would take; the user decides. If DCA and selling are close, show both in baht; if the months are near N, say so.
    - Compute deviation, gap and months with `node money-calc.mjs drift <file.json>` (script in `portfolio-snapshot`, see its Script path; worked example `../portfolio-snapshot/scripts/examples/drift.json` gives 10.9 points and 20 months). `bandPoints` and `maxMonths` default to 5 and 12.
@@ -150,6 +150,7 @@ Not for: which fund to buy, factsheets → `mutual-fund-picker` · RMF / ThaiESG
 
 ## References
 - [`references/rebalance-example.md`](references/rebalance-example.md) — open for the worked example (options A/B/C), band source and the `score` command run
+- [`references/dca-example.md`](references/dca-example.md) — open to show how DCA buys units (3-month NAV example)
 - [`references/rebalance-score.json`](references/rebalance-score.json) — input for `decision-scoring score`
 - [`references/before-order-and-tax-wrappers.md`](references/before-order-and-tax-wrappers.md) — open before any order, and for RMF / ThaiESG / SSF switching and DCA rules
 - [`references/sources.md`](references/sources.md) — open to re-check RMF, band and source dates (RMF checked 2026-10-26)
@@ -183,6 +184,24 @@ When DCA and selling are close, show both in baht: the cost of selling or switch
 - RMF DCA must not lapse: the 3% / 5,000 baht minimum was dropped from 1 Jan 2563, but the user must keep buying every year until age 55 and may skip at most 1 year in a row (a year with no income does not count as a skip).
 
 Sources and check dates: [sources.md](sources.md).
+
+
+## reference: dca-example.md
+
+# Worked example — DCA (ลงทุนสม่ำเสมอ) · rebalance-and-dca
+
+Open when showing the user how dollar-cost averaging (DCA) buys units.
+
+5,000 baht a month for 3 months; NAV 10.00, 8.00, 12.50.
+
+| Month | NAV | Units |
+|---|---|---|
+| 1 | 10.00 | 500 |
+| 2 | 8.00 | 625 |
+| 3 | 12.50 | 400 |
+| Total | — | 1,525 units for 15,000 |
+
+Average cost 9.84 per unit, below the simple average NAV 10.17 — DCA buys more units when prices fall. It does not prevent losses; it removes timing decisions. Set it as a bank auto-debit right after payday (`personal-budget`).
 
 
 ## reference: rebalance-example.md
