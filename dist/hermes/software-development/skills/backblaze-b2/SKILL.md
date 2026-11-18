@@ -54,6 +54,12 @@ Not for: file types and virus scanning → `file-upload-and-storage` · an app w
 - Passed the 4-item money gate
 - On R2: also the checks at the end of `references/cloudflare-r2.md`
 
+**Hard rules (R2):**
+- The R2 app token is Object Read & Write limited to its own bucket, never Admin.
+- Disabling r2.dev does not close a custom domain, and deleting a bucket does not revoke its token. Say which one you did.
+- Open an R2 bucket to the public only on the user's word. r2.dev is for development only.
+- Ask before moving R2 objects to Infrequent Access (30-day minimum billing).
+
 ## References
 
 - [`references/costs.md`](references/costs.md) — open when stating prices and the free allowance, choosing a route, or comparing with R2

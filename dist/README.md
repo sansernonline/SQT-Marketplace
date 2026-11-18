@@ -17,8 +17,8 @@
 |---|---|---:|---:|---:|---:|
 | `e-commerce` | 1.11.2 | 73 | 12 | 1 | 1.2 MB |
 | `graphic-design` | 0.32.2 | 62 | 10 | 0 | 1.2 MB |
-| `personal-life` | 0.26.1 | 82 | 13 | 1 | 1.3 MB |
-| `software-development` | 3.8.1 | 138 | 42 | 12 | 7.7 MB |
+| `personal-life` | 0.26.2 | 82 | 13 | 1 | 1.3 MB |
+| `software-development` | 3.8.2 | 138 | 42 | 12 | 7.7 MB |
 | `superuser` | 3.48.0 | 40 | 4 | 0 | 1.0 MB |
 | `trading-finance` | 0.23.3 | 63 | 9 | 1 | 1.2 MB |
 

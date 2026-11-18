@@ -42,6 +42,12 @@ Install before use: `pip install python-docx python-pptx` · LibreOffice (`soffi
 9. **Look at every page before delivery.** Render to PDF, convert to images, open each page (Read tool): the code cannot show tables overflowing the margin, stranded headings, floating tone marks. Commands and the 7-point checklist: [`references/visual-check.md`](references/visual-check.md).
 10. Before sending, go through item 3 of `no-ai-look` (HTML work: run its script; the eye gate 3.2 must also pass, web pages answer items 10–14).
 
+**Hard rules (covers):**
+- A project cover shows its project by logo shape or a real screen at a glance, not by colour alone.
+- Never draw a fake UI on a cover. Use a real mockup screenshot. No logo or mockup yet: stop and make the logo first.
+- Ask before creating or editing files outside the project (e.g. `cover-registry.md`).
+- Install fonts only after asking, and only with `COVER_INSTALL_FONTS=1`.
+
 ## Check before done
 - Avoid: Word's built-in Heading styles (use `h1()/h2()/h3()`) · thick black default table lines (use 0.5pt `line`) · pure black text · bold table headers with no fill · letting Word choose column widths (`fixed_widths()`) · too many emoji · a file never rendered for a look · the skill's default look when the app already has an identity · a 2000px-wide figure on a 17 cm page (text ends near 5pt) · a decorative cover image nobody said wows · a .docx without the source markdown. Reasons: [`references/anti-patterns.md`](references/anti-patterns.md)
 - Every page was opened and looked at · colors written back to `doc-theme` · the line `ด่านก่อนลงมือ:` closes the job
