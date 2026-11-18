@@ -662,3 +662,41 @@ Claude Code หยุด bench เพราะหน่วยความจำ�
 
 - effort ของลูกทีมที่รันจริงเป็น `sonnet/medium` ครบทุกชุด ต่างกันแค่จำนวนครั้งที่ต้องส่งซ้ำ
 - รอบ 15:58 new-3 ตก 4 ข้อของ router: worker เพิ่ม `TypeError('handler must be a function')` ใน `add()` ทั้งที่ใบสั่งงานมีประโยคห้ามตรวจเกินครบ (ตีความ `add()` เป็นขอบระบบ) · reviewer ไม่จับ · เป็นปัญหาเดิมของ t5 ไม่ได้มาจากแม่แบบ
+
+## 2026-11-18 17:11 · old=none · new=worktree · prompt=natural · 5 รอบ/แขน
+
+- Claude Code 2.1.327 (Claude Code) · model ที่ถูกใช้: claude-opus-5-5 · claude-sonnet-5-5 · plugin ที่โหลดในแขนที่มี: superuser อย่างเดียว · เพดาน $8 ต่อรอบ
+
+| ขนาด | งาน | ชนิด | แขน | เวลา (วินาที) | เวลา API | ค่าใช้จ่าย ($) | token | ลูกทีม | เปิด superuser | test ที่ซ่อนไว้ | ผ่านครบ | $ ต่องานที่ผ่าน | ไฟล์ที่แก้ · รอบที่แก้นอกขอบเขต | อ้างเกินจริง | ข้อตรวจเพิ่ม | ล้ม · ถูกปฏิเสธ |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ใหญ่ | t5 | โค้ด | none | 226 | 217 | 0.96 | 450838 | 0.0 | – | 28/32 · 28/32 · 32/32 · 28/32 · 28/32 | 1/5 | 4.91 | 12 | 2/5 | – | 0 · 6 |
+| ใหญ่ | t5 | โค้ด | new | 231 | 393 | 1.47 | 1575371 | 7.0 | 5/5 | 32/32 · 32/32 · 32/32 · 32/32 · 32/32 | 5/5 | 1.54 | 12 | 0/5 | – | 0 · 17 |
+
+**แยกตามขนาด** (new ÷ none · ค่ากลาง · ช่วง 95% แบบ bootstrap ไม่จับคู่ · ผ่านครบ = ทุก test ที่ซ่อนไว้ผ่าน · ผลต่างผ่านครบใช้ช่วง Newcombe)
+
+| ขนาด | งาน | ผ่านครบ new · none | ผลต่าง (ช่วง 95%) | คุณภาพ | ค่าใช้จ่าย | เวลา | token | เปิด superuser | อ้างเกินจริง new · none | รอบที่แก้นอกขอบเขต new · none |
+|---|---|---|---|---|---|---|---|---|---|---|
+| ใหญ่ | t5 | 5/5 · 1/5 | 80% (19% ถึง 96%) | **ดีขึ้นจริง** | 1.53 (1.33–1.78) · แพงขึ้นจริง | 1.02 (0.84–1.30) แยกไม่ออก · แยกไม่ออก | 3.49 (2.55–5.10) | 5/5 | 0 · 2 | 0 · 0 |
+| ทุกงาน | t5 | 5/5 · 1/5 | 80% (19% ถึง 96%) | **ดีขึ้นจริง** | 1.53 (1.33–1.78) · แพงขึ้นจริง | 1.02 (0.84–1.30) แยกไม่ออก · แยกไม่ออก | 3.49 (2.55–5.10) | 5/5 | 0 · 2 | 0 · 0 |
+
+- ไม่มีข้อสังเกตผิดปกติ
+
+**ทีมรายรอบ** (ค่าใช้จ่ายรายตัวคิดจาก token × ราคา · ประมาณ)
+
+| รอบ | หัวหน้า | ลูกทีม | ลูกทีมแต่ละตัว: ชนิด · model/effort · งาน · $ |
+|---|---|---|---|
+| t5-new-1 | opus · $0.70 | 7 · $0.77 | worker · sonnet/medium · lru module + tests · $0.07<br>worker · sonnet/medium · cron module + tests · $0.14<br>worker · sonnet/medium · slots module + tests · $0.08<br>worker · sonnet/medium · router module + tests · $0.08<br>worker · sonnet/medium · semver module + tests · $0.13<br>worker · sonnet/medium · csv module + tests · $0.09<br>reviewer · sonnet/medium · Review 6 modules vs spec · $0.18 |
+| t5-new-2 | opus · $0.86 | 7 · $0.79 | reviewer · sonnet/medium · Review 6 modules vs spec · $0.29<br>worker · sonnet/medium · csv module + test · $0.07<br>worker · sonnet/medium · lru module + test · $0.06<br>worker · sonnet/medium · cron module + test · $0.11<br>worker · sonnet/medium · semver module + test · $0.11<br>worker · sonnet/medium · slots module + test · $0.07<br>worker · sonnet/medium · router module + test · $0.08 |
+| t5-new-3 | opus · $0.73 | 7 · $0.69 | worker · sonnet/medium · semver module + tests · $0.13<br>worker · sonnet/medium · router module + tests · $0.08<br>worker · sonnet/medium · lru module + tests · $0.07<br>worker · sonnet/medium · cron module + tests · $0.10<br>reviewer · sonnet/medium · Review 6 modules vs spec · $0.16<br>worker · sonnet/medium · slots module + tests · $0.07<br>worker · sonnet/medium · csv module + tests · $0.08 |
+| t5-new-4 | opus · $1.00 | 7 · $0.70 | worker · sonnet/medium · cron module + tests · $0.17<br>worker · sonnet/medium · semver module + tests · $0.11<br>worker · sonnet/medium · slots module + tests · $0.08<br>reviewer · sonnet/medium · Review 6 shop modules · $0.12<br>worker · sonnet/medium · lru module + tests · $0.07<br>worker · sonnet/medium · csv module + tests · $0.08<br>worker · sonnet/medium · router module + tests · $0.07 |
+| t5-new-5 | opus · $0.65 | 7 · $0.81 | worker · sonnet/medium · lru module + tests · $0.06<br>worker · sonnet/medium · cron module + tests · $0.14<br>worker · sonnet/medium · csv module + tests · $0.07<br>reviewer · sonnet/medium · Review 6 modules vs spec · $0.26<br>worker · sonnet/medium · router module + tests · $0.07<br>worker · sonnet/medium · slots module + tests · $0.09<br>worker · sonnet/medium · semver module + tests · $0.12 |
+
+### t5 หลังแก้ worker และ reviewer เรื่องตรวจเกิน spec (2026-11-19 · 5 รอบ/แขน)
+
+| แขน | test ที่ซ่อนไว้ | ผ่านครบ | ถูกตีกลับต่อรอบ | ค่าใช้จ่าย |
+|---|---|---|---|---|
+| มี superuser | 32 · 32 · 32 · 32 · 32 | 5/5 | 0 · 0 · 0 · 0 · 0 | $1.43–1.70 |
+| ไม่มี plugin | 28 · 28 · 32 · 28 · 28 | 1/5 (อ้างเกินจริง 2 รอบ) | – | $0.87–1.11 |
+
+- worker นิยาม "input จากนอกระบบ" = ข้อมูลที่เข้ามาจากนอกโปรแกรม ไม่ใช่พารามิเตอร์ของฟังก์ชันที่ export · reviewer ไล่ `throw` `typeof` เทียบกับบรรทัดใน spec
+- ก่อนแก้ (ชุด 15:58) ตก 1 ใน 3 รอบด้วยการตรวจ handler ใน `router.add` · 5 รอบยังน้อย ถ้าตกแบบเดิมอีกให้ดูว่า reviewer จับได้ไหม
