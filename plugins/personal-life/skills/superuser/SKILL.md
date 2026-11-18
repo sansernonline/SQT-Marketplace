@@ -139,7 +139,7 @@ If unsure whether something is out of scope, treat it as out of scope and send i
 | criterion | passes when | skill |
 |---|---|---|
 | **True** | every title, date and figure comes from the user or a document. If missing, put `[ใส่ตัวเลข]` | `resume-th-en` |
-| **On target** | matches the set job or reader, has all keywords from the posting, and irrelevant material is cut | `resume-th-en` · `linkedin-profile` |
+| **On target** | matches the set job or reader, has all keywords from the posting, and irrelevant material is cut | `resume-th-en` |
 | **Ready to use** | the user can copy it to send or say it at once · both Thai and English when readers could be either · the Applicant Tracking System (ATS) can read the file | `interview-prep` · `salary-negotiation` |
 
 Answer money questions as a table of total yearly income, never base salary alone.
@@ -148,7 +148,7 @@ Answer money questions as a table of total yearly income, never base salary alon
 
 | criterion | passes when | skill |
 |---|---|---|
-| **Runs** | every code example is really run, with command and result · every milestone ends with something that runs | `paper-to-practice` · `learning-path` |
+| **Runs** | every code example is really run, with command and result · every milestone ends with something that runs | `learning-path` |
 | **Cites official sources** | version, feature and exam information comes from official docs, release notes or exam guides, with link and date | `tech-radar` · `cert-prep` |
 | **Fits the time** | the plan fits the time the user really has per week and has a checkpoint to continue or stop | `learning-path` |
 
