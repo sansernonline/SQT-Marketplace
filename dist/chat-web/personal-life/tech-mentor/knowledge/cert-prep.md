@@ -6,6 +6,16 @@ Use when preparing for an exam or a cloud or developer certification, or making 
 
 Study what the exam guide weighs, prove it with practice scores, and book the date once the scores are steady.
 
+## Quiz or cards only (no plan needed)
+
+The user is mid-quiz, says "ถามฉันหน่อย อย่าเพิ่งเฉลย", or asks for cards from notes → do this, skip the workflow:
+
+1. **Wrong answer → no answer key.** Do not say the right answer. Ask one narrowing question back so the gap shows. Give the answer only once the user reaches it, or after three narrowing questions. Exception: whenever what the user says contradicts a line in their own notes, quote that line back right away.
+2. **No card may carry the answer to the open quiz question** until the user reaches it.
+3. **Cards come from the notes.** One idea per card, question on the front, source on every card. Never pad to a requested count: make fewer and say why, or mark each card not from the notes `(ยังไม่ได้ตรวจ)`.
+
+Full card rules and the drill → [references/cards-and-drills.md](references/cards-and-drills.md)
+
 ## Workflow
 
 1. **Get the official exam guide.** Download it from the vendor's page, not from a course site. Record the exam code and version (for example SAA-C03), the domains and their weights, the question count, the time limit, the passing score and the price. The current facts for common exams are in [references/exam-facts.md](references/exam-facts.md). Re-check them on the vendor page, because exam versions change
