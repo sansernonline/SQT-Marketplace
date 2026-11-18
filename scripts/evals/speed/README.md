@@ -23,6 +23,7 @@ node scripts/evals/speed/run-bench.mjs --old f105afc --new HEAD --tasks t1,t2,t3
 | `--parallel` | `4` | รันพร้อมกันกี่รอบ |
 | `--prompt` | `lead` | `lead` = แขน new ได้ประโยค "ใช้ skill `superuser`" นำหน้า · `natural` = ทุกแขนได้แค่เนื้อ `TASK.md` ไม่สั่งให้ใช้ superuser (แขน new ยังโหลด plugin) ใช้วัดว่างานเล็กหลบ superuser เองจริงไหม |
 | `--dry-run` | ไม่ใส่ | พิมพ์คำสั่งที่แต่ละแขนจะได้แล้วจบ ไม่เรียก `claude` ไม่เสียเงิน |
+| `--from-runs` | ไม่ใส่ | ไม่รันใหม่ · สรุปจากผลรายรอบที่บันทึกไว้ใน `_to_delete/bench/runs/` ใช้เมื่อ bench ถูกหยุดกลางทาง · ใส่ `--old` `--tasks` `--runs` `--prompt` ให้ตรงกับรอบที่รันจริง |
 | `--save-ratios` | ไม่ใส่ | ใช้คู่กับ `--old none` · เขียนอัตราส่วนลง `plugins/superuser/hooks/bench-ratios.json` ให้ hook ประมาณค่า "ถ้าไม่ใช้ superuser" ใน `log/SUMMARY.md` |
 
 - ใช้ `claude` ที่ล็อกอินอยู่ในเครื่อง · ค่าใช้จ่ายตัดจากบัญชีนั้น (รอบหนึ่งของ t4 ราว $0.5–1.2)

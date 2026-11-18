@@ -3,10 +3,11 @@
  * run-bench.mjs — เทียบ superuser 2 รุ่น (หรือกับไม่มี plugin) บนงานชุดเดียวกัน: เวลา · จำนวนรอบ · ค่าใช้จ่าย · ลูกทีม · test ที่ซ่อนไว้
  *
  *   node scripts/evals/speed/run-bench.mjs --old <git ref>|none [--new <git ref>|worktree] [--tasks all|t1,t4] [--runs 3]
- *        [--budget 8] [--parallel 4] [--save-ratios] [--prompt lead|natural] [--dry-run]
+ *        [--budget 8] [--parallel 4] [--save-ratios] [--prompt lead|natural] [--dry-run] [--from-runs]
  *
  *   --old    รุ่นก่อน เป็น git ref เช่น HEAD หรือ f105afc · none = ไม่โหลด plugin เลย (แขนเทียบ "ไม่ใช้ superuser")
  *   --new    รุ่นหลัง ค่าเริ่ม = ไฟล์ในโฟลเดอร์ตอนนี้ (worktree) · ใส่ git ref ก็ได้
+ *   --from-runs  ไม่รันใหม่ · สรุปจาก _to_delete/bench/runs/*.json ที่มี (bench ถูกหยุดกลางทาง)
  *   --save-ratios  ใช้กับ --old none · เขียนอัตราส่วน (มี ÷ ไม่มี) ลง plugins/superuser/hooks/bench-ratios.json ให้ hook ใช้ประมาณใน SUMMARY.md
  *   ผลรายรอบอยู่ใน _to_delete/bench/ · ตารางสรุปต่อท้าย scripts/evals/speed/RESULTS.md
  *
@@ -202,11 +203,19 @@ if (args["dry-run"]) {
   process.exit(0);
 }
 mkdirSync(join(OUT, "runs"), { recursive: true });
-const versions = [[OLD, pluginDirs("old", args.old)], ["new", pluginDirs("new", args.new)]];
-for (const [label, dirs] of versions) console.log(`${label}: โหลด ${dirs.map((d) => d.replace(ROOT, ".")).join(" · ") || "ไม่มี plugin"}`);
+// --from-runs: สรุปจากผลรายรอบที่บันทึกไว้แล้ว ไม่รันใหม่ (ใช้เมื่อ bench ถูกหยุดกลางทาง)
+const FROM_RUNS = Boolean(args["from-runs"]);
+const versions = FROM_RUNS ? [[OLD, []], ["new", []]] : [[OLD, pluginDirs("old", args.old)], ["new", pluginDirs("new", args.new)]];
+if (!FROM_RUNS) for (const [label, dirs] of versions) console.log(`${label}: โหลด ${dirs.map((d) => d.replace(ROOT, ".")).join(" · ") || "ไม่มี plugin"}`);
 const jobs = TASKS.flatMap((task) => Array.from({ length: RUNS }, (_, i) => versions.map(([label, plugin]) => ({ task, label, plugin, n: i + 1 }))).flat());
 const rows = [];
-for (let i = 0; i < jobs.length; i += PARALLEL) rows.push(...(await Promise.all(jobs.slice(i, i + PARALLEL).map(one))));
+if (FROM_RUNS) {
+  for (const { task, label, n } of jobs) {
+    const file = join(OUT, "runs", `${task}-${label}-${n}.json`);
+    if (existsSync(file)) rows.push(JSON.parse(readFileSync(file, "utf8")));
+  }
+} else for (let i = 0; i < jobs.length; i += PARALLEL) rows.push(...(await Promise.all(jobs.slice(i, i + PARALLEL).map(one))));
+const missing = jobs.length - rows.length;
 
 // รอบที่ไม่ได้ทำงานเลย (ล็อกอินไม่ได้ · เครือข่าย · claude ไม่ตอบ: error และไม่มีค่าใช้จ่าย) ไม่ใช่ผลของ superuser
 // นับเป็นตกจะทำให้ผลเพี้ยน จึงหยุด ไม่เขียน RESULTS.md
@@ -273,6 +282,7 @@ const broke = rows.filter((r) => r.error || (r.subtype && r.subtype !== "success
 if (broke.length) notes.push(`รอบที่ล้มหรือชนเพดาน (นับเป็นไม่ผ่าน): ${broke.map((r) => `${r.id}${r.subtype && r.subtype !== "success" ? ` ${r.subtype}` : ""}`).join(" · ")}`);
 const slept = rows.filter((r) => r.api && r.wall > 3 * r.api && r.wall - r.api > 600);
 if (slept.length) notes.push(`เวลาจริงเกินเวลา API มาก (เครื่องอาจพัก) ใช้คอลัมน์เวลา API แทน: ${slept.map((r) => r.id).join(" ")}`);
+if (missing) notes.push(`ขาด ${missing}/${jobs.length} รอบ (bench ถูกหยุดกลางทาง · สรุปจากรอบที่มี)`);
 if (RUNS < 5) notes.push(`${RUNS} รอบต่อแขน ช่วงยังกว้าง · ตัดสินจริงใช้ 5 รอบขึ้นไป`);
 lines.push("", notes.length ? notes.map((x) => `- ${x}`).join("\n") : "- ไม่มีข้อสังเกตผิดปกติ");
 lines.push(...teamLines(rows.filter((r) => r.team?.members.length)));
@@ -296,4 +306,4 @@ if (args["save-ratios"]) {
     console.log(`เขียน ${file.replace(ROOT, ".")}`);
   }
 }
-for (const [label] of versions) { const d = join(OUT, `src-${label}`); if (existsSync(d)) try { git("worktree", "remove", "--force", d); } catch { /* ลบเองทีหลัง */ } }
+if (!FROM_RUNS) for (const [label] of versions) { const d = join(OUT, `src-${label}`); if (existsSync(d)) try { git("worktree", "remove", "--force", d); } catch { /* ลบเองทีหลัง */ } }
