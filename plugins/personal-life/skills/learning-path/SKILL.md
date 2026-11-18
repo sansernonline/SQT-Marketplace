@@ -10,6 +10,9 @@ Learn on your own real project, in small wins.
 
 Paper, RFC or article → follow [references/paper-to-practice.md](references/paper-to-practice.md) (brief, smallest runnable example, run, one-page note) instead of the steps below.
 
+**Hard rules (paper flow):** Run the example for real. If it cannot run, say why and what was tried. Build only the smallest program that shows the core idea.
+If infrastructure is lacking, use a simulation and say so. Credit the paper with title, authors and date.
+
 Not for: a certification exam → `cert-prep` · choosing a practice or portfolio project → `side-project-picker`.
 
 ## Steps

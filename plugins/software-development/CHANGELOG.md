@@ -1,5 +1,9 @@
 # Changelog — software-development
 
+## 3.8.2 — 2026-11-18
+
+- ย้ายกฎห้ามและกฎบังคับที่เหลืออยู่ใน reference อย่างเดียวขึ้นมาเป็นบล็อก "Hard rules" สั้น ๆ ใน `SKILL.md` เพื่อให้กฎมีผลแม้โมเดลไม่เปิด reference: `app-verifier-setup` (upkeep) · `backblaze-b2` (R2) · `branded-document-design` (ปก) · ไม่ตัดกฎออกจาก reference
+
 ## 3.8.1 — 2026-11-18
 
 - `evals/RESULTS.md` ใส่ผลรันจริงของ `backblaze-b2-r2-*` 3 เคสหลังรวม `cloudflare-r2` เข้า `backblaze-b2`: ผ่านทุกเคส แต่ไม่มี skill ก็ผ่าน จึงยังวัดไม่ได้ว่า skill ช่วยอะไร

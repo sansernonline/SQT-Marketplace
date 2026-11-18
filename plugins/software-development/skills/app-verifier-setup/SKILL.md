@@ -62,6 +62,9 @@ verify must depend on things the app provides, not guess from text or CSS: `data
 - A link to the feature map.
 - Prohibitions: do not touch the real database · do not call external APIs that cost money or send real messages.
 
+**Hard rules (upkeep):** Never edit verify steps just to make them pass. If the app is broken, file a bug with `bug-report-template`.
+Never drop a feature from the map because it is hard to test. Prepare upkeep fixes as one commit or PR, and commit only when the user says so.
+
 ## References
 
 - [`references/builtin-verify.md`](references/builtin-verify.md) — Claude Code ships with `/verify`: for a project running on Claude Code, create a skill named `verify` at `.claude/skills/verify/SKILL.md` in that format, instead of `verify-<project>`.
