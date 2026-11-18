@@ -21,7 +21,7 @@ node scripts/evals/coding/run-coding.mjs --old f105afc --new HEAD --runs 2 --bud
 | `--verify` | — | ตรวจชุดงานอย่างเดียว |
 | `--old` | (ต้องใส่) | รุ่นก่อน เป็น git ref |
 | `--new` | ไฟล์ในโฟลเดอร์ตอนนี้ | รุ่นหลัง ใส่ git ref ก็ได้ |
-| `--tasks` | ทั้ง 8 งาน | ใส่แค่เลขก็ได้ เช่น `c1,c5` |
+| `--tasks` | ทั้ง 9 งาน | ใส่แค่เลขก็ได้ เช่น `c1,c5` |
 | `--runs` | `1` | รันกี่รอบต่อรุ่น · ผลแกว่ง ตัดสินจริงใช้ 2 รอบขึ้นไป |
 | `--plugin` | `software-development` | plugin ที่เทียบ |
 | `--budget` | `8` | เพดานค่าใช้จ่ายต่อรอบ (ดอลลาร์) |
@@ -49,6 +49,7 @@ node scripts/evals/coding/run-coding.mjs --old f105afc --new HEAD --runs 2 --bud
 | `c6-fastapi-blocking` | Python | endpoint ช้าเพราะเรียกงานที่บล็อกใน async | ยิงพร้อมกัน 10 ครั้ง วัดเวลารวม |
 | `c7-slow-monthly-report` | SQL | รายงานยอดขายรายเดือนช้าเกิน 2 วินาทีบน 1 ล้านแถว | เวลารัน · query plan · ผลตรงคำตอบ |
 | `c8-not-null-migration` | SQL | migration เพิ่มคอลัมน์ NOT NULL บนตารางใหญ่โดยไม่ล็อกนาน | รันซ้ำได้ · UPDATE ครั้งละไม่เกิน 10,000 แถว · CHECK แบบ NOT VALID |
+| `c9-bill-split` | Python | แบ่งบิลตามคน ส่วนลด ค่าบริการ VAT ปัดเศษเป็นสตางค์ | test ที่ซ่อนไว้ 9 ข้อ · ยอดรวมทุกคนต้องตรงยอดบิลเป๊ะ (ใช้ในขั้น `code-harder` ของ `models/`) |
 
 ## คะแนนต่องาน (เต็ม 10)
 

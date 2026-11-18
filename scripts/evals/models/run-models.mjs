@@ -7,7 +7,7 @@
  *   node scripts/evals/models/run-models.mjs --run [--steps code,review] [--models claude-haiku-5-5,...] [--skip model:step,...]
  *        [--effort medium|none|low|high|...] [--budget-total 20] [--runs 3] [--review-cases r1,r2,...]
  *
- * ขั้น: code = speed t1 · code-quality = coding c5 · code-hard = coding c4 · review = review-recall (ค่าเริ่ม r1–r8) · plan = งานวางแผนใน plan-task.mjs
+ * ขั้น: code = speed t1 · code-quality = coding c5 · code-hard = coding c4 · code-harder = coding c9 (แบ่งบิล) · plan-hard = แผนย้ายฐานข้อมูล · review = review-recall (ค่าเริ่ม r1–r8) · plan = งานวางแผนใน plan-task.mjs
  * --runs N = รันซ้ำ N รอบต่อช่อง (ค่าเริ่ม 1 · แนะนำ 3) · ผ่าน = คะแนนรอบนั้น ≥ 8 · เลือกตัวถูกสุดที่ขอบล่าง Wilson ≥ 0.6 (ดู summary.mjs)
  * ไม่ใส่ --run ตัวรันจะไม่เรียก claude เลย กันเผลอเสียเงิน · รันจากถูกไปแพง หยุดเมื่อใช้ครบ --budget-total
  * ทุกรอบรัน `claude -p --model <model>` ในโฟลเดอร์ชั่วคราวนอก repo โดยไม่โหลด plugin (วัดตัว model ไม่ใช่ทีม)
@@ -21,7 +21,7 @@ import { join, dirname, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { run, prepare, cleanup, parseNodeTest } from "../coding/lib.mjs";
-import { PLAN_PROMPT, scorePlan, selfTest } from "./plan-task.mjs";
+import { PLAN_PROMPT, PLAN_HARD_PROMPT, scorePlan, scorePlanHard, selfTest } from "./plan-task.mjs";
 import { PASS_SCORE, MIN_LOWER, modelStats, recommendation, uncountedModels } from "./summary.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -32,6 +32,7 @@ const WORK = join(tmpdir(), "sqt-models-bench");
 const T1 = join(EVALS, "speed", "tasks", "t1");
 const C5 = join(EVALS, "coding", "tasks", "c5-csv-import");
 const C4 = join(EVALS, "coding", "tasks", "c4-subscription-leak");
+const C9 = join(EVALS, "coding", "tasks", "c9-bill-split");
 const RUN_CODING = join(EVALS, "coding", "run-coding.mjs");
 const RUN_REVIEW = join(EVALS, "review-recall", "run-review-recall.mjs");
 
@@ -75,6 +76,8 @@ const STEPS = {
   "code-hard": { what: "coding c4 (subscription ค้าง · test ซ่อน 8 ข้อ ตั้งต้นผ่านแค่ 2)", calls: 1, measured: () => [], assumed: 1.5 },
   review: { what: `review-recall ${REVIEW_CASES}`, calls: REVIEW_CASE_LIST.length, measured: () => [], assumed: 0.1 },
   plan: { what: "แตกงานจาก spec สั้น", calls: 1, measured: () => [], assumed: 0.05 },
+  "code-harder": { what: "coding c9 (แบ่งบิล ปัดเศษสตางค์ · test ซ่อน 9 ข้อ ตั้งต้นผ่านแค่ 4)", calls: 1, measured: () => [], assumed: 1.0 },
+  "plan-hard": { what: "แตกงานย้ายฐานข้อมูลแบบไม่ปิดระบบ (ลำดับพึ่งพา · ทางถอย)", calls: 1, measured: () => [], assumed: 0.08 },
 };
 const stepList = csv(args.steps).length ? csv(args.steps) : Object.keys(STEPS);
 
@@ -196,9 +199,10 @@ async function runReview(model, runNo) {
     note: `เจอ ${sum("found")}/${planted} · ${rs.length}/${caseCount} เคสรันได้` };
 }
 
-async function runPlan(model) {
-  const a = await ask(model, freshDir(`plan-${model}`), PLAN_PROMPT, capPerCall("plan", model), ["--tools", ""]);
-  const s = scorePlan(a.result);
+async function runPlan(model, _runNo, step = "plan") {
+  const hard = step === "plan-hard";
+  const a = await ask(model, freshDir(`${step}-${model}`), hard ? PLAN_HARD_PROMPT : PLAN_PROMPT, capPerCall(step, model), ["--tools", ""]);
+  const s = (hard ? scorePlanHard : scorePlan)(a.result);
   return { ...a, score: s.score, note: s.checks.filter((c) => !c.points).map((c) => `ตก: ${c.name}`).join(" · ") || "ผ่านครบ" };
 }
 
@@ -208,6 +212,8 @@ const RUNNERS = {
   "code-hard": (model) => runCodingTask("code-hard", model, C4, "c4"),
   review: runReview,
   plan: runPlan,
+  "code-harder": (model) => runCodingTask("code-harder", model, C9, "c9"),
+  "plan-hard": (model, runNo) => runPlan(model, runNo, "plan-hard"),
 };
 
 async function paidRun() {
@@ -284,6 +290,7 @@ async function check() {
   }
   if ((await run("node", [RUN_CODING, "--verify", "--tasks", "c5"], { cwd: ROOT })).code !== 0) bad("coding c5: --verify ไม่ผ่าน (รัน node scripts/evals/coding/run-coding.mjs --verify --tasks c5 ดูเหตุ)");
   if ((await run("node", [RUN_CODING, "--verify", "--tasks", "c4"], { cwd: ROOT })).code !== 0) bad("coding c4: --verify ไม่ผ่าน (รัน node scripts/evals/coding/run-coding.mjs --verify --tasks c4 ดูเหตุ)");
+  if ((await run("node", [RUN_CODING, "--verify", "--tasks", "c9"], { cwd: ROOT })).code !== 0) bad("coding c9: --verify ไม่ผ่าน (รัน node scripts/evals/coding/run-coding.mjs --verify --tasks c9 ดูเหตุ)");
   if ((await run("node", [RUN_REVIEW, "--verify", "--cases", REVIEW_CASES], { cwd: ROOT })).code !== 0) bad(`review-recall: --verify --cases ${REVIEW_CASES} ไม่ผ่าน`);
   return [...problems, ...selfTest().map((m) => `- ${m}`)];
 }
@@ -292,8 +299,8 @@ async function verify() {
   const problems = await check();
   console.log("| ส่วน | ตรวจอะไร |\n|---|---|");
   console.log("| claude · prices.json | มีคำสั่ง claude · ทุก model ที่เลือกมีราคา |\n| code (t1) | มี repo · TASK.md · test ซ่อน และโค้ดตั้งต้นตก test |");
-  console.log("| code-quality (c5) | `run-coding.mjs --verify --tasks c5` ผ่าน |\n| code-hard (c4) | `run-coding.mjs --verify --tasks c4` ผ่าน |");
-  console.log(`| review (${REVIEW_CASES}) | \`run-review-recall.mjs --verify --cases ${REVIEW_CASES}\` ผ่าน |\n| plan | ตัวให้คะแนน: แผนดีได้ 10 · แผนเสียได้ไม่เกิน 2 |`);
+  console.log("| code-quality (c5) | `run-coding.mjs --verify --tasks c5` ผ่าน |\n| code-hard (c4) | `run-coding.mjs --verify --tasks c4` ผ่าน |\n| code-harder (c9) | `run-coding.mjs --verify --tasks c9` ผ่าน |");
+  console.log(`| review (${REVIEW_CASES}) | \`run-review-recall.mjs --verify --cases ${REVIEW_CASES}\` ผ่าน |\n| plan · plan-hard | ตัวให้คะแนน: แผนดีได้ 10 · แผนเสียได้ต่ำ (plan ≤ 2 · plan-hard ≤ 4) |`);
   console.log(problems.length ? `\nใช้ไม่ได้ ${problems.length} จุด\n${problems.join("\n")}` : `\nพร้อมรัน · ${cells().length} ช่อง · ดูค่าใช้จ่ายด้วย --plan · รันจริงด้วย --run (เสียเงิน)`);
   process.exit(problems.length ? 1 : 0);
 }
