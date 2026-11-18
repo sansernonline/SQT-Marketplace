@@ -29,8 +29,10 @@ function usageOf(file) {
     const p = PRICES[m.model];
     if (!p) continue;
     const u = m.usage;
-    costUsd += ((u.input_tokens ?? 0) * p.input + (u.output_tokens ?? 0) * p.output
-      + (u.cache_read_input_tokens ?? 0) * p.cache_read + (u.cache_creation_input_tokens ?? 0) * p.cache_write) / 1e6;
+    const write1h = u.cache_creation?.ephemeral_1h_input_tokens ?? 0;
+    const write5m = (u.cache_creation_input_tokens ?? 0) - write1h;
+    costUsd += ((u.input_tokens ?? 0) * p.input + (u.output_tokens ?? 0) * p.output + (u.cache_read_input_tokens ?? 0) * p.cache_read
+      + write5m * p.cache_write + write1h * p.cache_write_1h) / 1e6;
   }
   return { model, costUsd, turns: ids.size };
 }
@@ -40,7 +42,8 @@ export function teamOf(sessionId) {
   if (!sessionId || !existsSync(PROJECTS)) return null;
   for (const d of readdirSync(PROJECTS)) {
     const main = join(PROJECTS, d, `${sessionId}.jsonl`);
-    if (existsSync(main)) return teamFromFile(main);
+    // transcript เสียครึ่งไฟล์ต้องไม่ทำให้ผลของรอบที่จ่ายเงินไปแล้วหาย → คืน null แทน throw
+    if (existsSync(main)) try { return teamFromFile(main); } catch { return null; }
   }
   return null;
 }
