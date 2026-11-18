@@ -1,17 +1,26 @@
----
-name: doc-cover-design
-description: Use when a project docx set needs its own cover
----
+# Cover design for a software document set: cover pages that are memorable and unlike other projects
 
-# doc-cover-design: cover pages that are memorable and unlike other projects
+- [When to use (software document sets: logo shape or real mockup cover)](#when-to-use-software-document-sets-logo-shape-or-real-mockup-cover)
+- [Default path](#default-path)
+- [1 · Find the idea from real things: write it in `docs/design/cover-direction.md` before drawing anything](#1--find-the-idea-from-real-things-write-it-in-docsdesigncover-directionmd-before-drawing-anything)
+- [2 · Stop 2 projects from looking alike](#2--stop-2-projects-from-looking-alike)
+- [3 · Page system: the same for every project, so there is only one method](#3--page-system-the-same-for-every-project-so-there-is-only-one-method)
+- [4 · Document type in the set = a frame of the same motion](#4--document-type-in-the-set--a-frame-of-the-same-motion)
+- [5 · Background image vs Word text](#5--background-image-vs-word-text)
+- [6 · Covers for print](#6--covers-for-print)
+- [7 · Make 3 styles, then vote 2 of 3 (only when steps 1–6 did not pass step 8, or the user asks for several styles · 3–5 times the work)](#7--make-3-styles-then-vote-2-of-3-only-when-steps-16-did-not-pass-step-8-or-the-user-asks-for-several-styles--35-times-the-work)
+- [8 · Check before sending: the render script must print `checks.json`, and you must open every image yourself](#8--check-before-sending-the-render-script-must-print-checksjson-and-you-must-open-every-image-yourself)
+- [9 · Do not want (from research and the bake-off)](#9--do-not-want-from-research-and-the-bake-off)
+- [Do not look AI-made](#do-not-look-ai-made)
+
 
 > **Gate before starting (every time):** read the owner's theme → search live for references → 3 truly different styles → check `no-ai-look` before sending. Follow the "ด่านก่อนลงมือ" (gate before starting) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls color and fonts; the search is for the structure of this piece). Close the work with a `ด่านก่อนลงมือ:` line.
 
 > **The one rule:** the cover must say which project it belongs to at a glance, without reading the name. Do it with the logo's shapes or the app's real screen, not with color alone.
 
-This skill makes the **cover page** only. The whole document body (color set, Thai fonts, tables, headers and footers) lives in `branded-document-design`. The cover uses the same `anchor_picture()` from `brandkit.py`.
+This file covers the **cover page** only. The whole document body (color set, Thai fonts, tables, headers and footers) lives in [`../SKILL.md`](../SKILL.md). The cover uses the same `anchor_picture()` from `brandkit.py`.
 
-## When to use
+## When to use (software document sets: logo shape or real mockup cover)
 
 - A project's document set (BRD, the business requirements document · SRS, the software requirements specification · FSD, the functional specification · ARCH, architecture · PLAN, the project plan · TESTPLAN, the test plan) will go to a client or executives, and the current cover looks like another project's.
 - The user says "ปกไม่ว้าว" · "อยากได้ปกที่ไม่ซ้ำ" · "ปกทุกโปรเจกต์หน้าตาเหมือนกัน" (the cover is not wow · I want a cover that is not repeated · every project's cover looks the same).
@@ -19,18 +28,18 @@ This skill makes the **cover page** only. The whole document body (color set, Th
 
 ## Default path
 
-The default path is logo shapes. The fallbacks are the real screen, or a pictogram of what the app really does. Every style uses the same page system (step 3). **Always look at other people's real covers first (step 1.0).** The bake-off history is at the end of [`references/cover-bakeoff.md`](references/cover-bakeoff.md).
+The default path is logo shapes. The fallbacks are the real screen, or a pictogram of what the app really does. Every style uses the same page system (step 3). **Always look at other people's real covers first (step 1.0).** The bake-off history is at the end of [`cover-bakeoff.md`](cover-bakeoff.md).
 
 ---
 
 ## 1 · Find the idea from real things: write it in `docs/design/cover-direction.md` before drawing anything
 
-0. **Look at other people's real covers first.** **Search for references first:** take the project's keywords and search live following `design-references` (plugin `superuser`), type `document`, then pull the colors from the chosen work. The stored color library is for when live search is not possible. Collect at least 6 real document or book covers close to this work (same field as the app · tech publishers · Thai examples), then choose which series system to borrow, following [`references/real-examples.md`](references/real-examples.md). For every idea on the cover, you must be able to say which cover it came from.
+0. **Look at other people's real covers first.** **Search for references first:** take the project's keywords and search live following `design-references` (plugin `superuser`), type `document`, then pull the colors from the chosen work. The stored color library is for when live search is not possible. Collect at least 6 real document or book covers close to this work (same field as the app · tech publishers · Thai examples), then choose which series system to borrow, following [`cover-real-examples.md`](cover-real-examples.md). For every idea on the cover, you must be able to say which cover it came from.
 
 1. **Open the logo's SVG file (vector image) as text** and note the basic shapes with unit coordinates (e.g. 2 L shapes on a 64 grid · T bar + cursor · 2 dots + arrow). Do not count the glow and gradient background of the icon file.
 2. **Find the app's main verb** from the first paragraph of the README (if none → the introduction of the BRD or SRS): connect · type · swipe.
 3. **Ask what the shapes do when that verb happens**: L shapes join · cursor moves · dots run into an arrow. Write it as 1 sentence. This is the "motion" of the whole set.
-4. **Pick 1 structure style** that shows that motion best, from [`references/structural-ideas.md`](references/structural-ideas.md) (tiling · giant crop · sequence · real screen · etc.).
+4. **Pick 1 structure style** that shows that motion best, from [`cover-structural-ideas.md`](cover-structural-ideas.md) (tiling · giant crop · sequence · real screen · etc.).
 5. **Truth test:** every line and every shape on the cover must point back to a shape in the logo file or to real app data. Anything that cannot is decoration → cut it.
 6. **The logo alone does not say what the app does** (e.g. just an initial) → use the real-screen style: take a screenshot of a clickable mockup, choose the screen that says the most about the app's work, not the index page. Never draw a fake UI.
 
@@ -76,18 +85,16 @@ Each document type is 1 frame of the motion in step 1.3, not just a changed labe
 | Logo shapes · logo · thin lines · giant document code · screenshots · version badge shape (no lettering) | Thai title · English title · series-name line · sentence saying what the app does · data row · **lettering inside the version and status badge** |
 
 - Anchor the background image to the cover's first paragraph with `anchor_picture()`. **Never put it in the header** (Word shows it faded). Compute text positions from px: `px ÷ 1240 × 21.0 = cm`.
-- **The sample cover engine** `scripts/cover-engine/` builds the covers of all 3 prototype projects in one command (sample image · 300 dpi background image · `checks.json` · SRS cover .docx · check image from Word). **Using it for a new project needs more edits than `projects.js`:** the logo lines and drawing functions in `cover.js` · the project list in `render.py`, `calibrate.py`, `docx_build.py` · the fonts in `fonts.py`. The full list is in word-build.md.
-- The Word build recipe (spacing · z-order · fonts · image compression), how to use the cover engine, and the traps → [`references/word-build.md`](references/word-build.md). Install fonts on the user's machine only when `COVER_INSTALL_FONTS=1` is set, and ask the user first every time.
+- **The sample cover engine** `scripts/cover-engine/` (in `branded-document-design`) builds the covers of all 3 prototype projects in one command (sample image · 300 dpi background image · `checks.json` · SRS cover .docx · check image from Word). **Using it for a new project needs more edits than `projects.js`:** the logo lines and drawing functions in `cover.js` · the project list in `render.py`, `calibrate.py`, `docx_build.py` · the fonts in `fonts.py`. The full list is in cover-word-build.md.
+- The Word build recipe (spacing · z-order · fonts · image compression), how to use the cover engine, and the traps → [`cover-word-build.md`](cover-word-build.md). Install fonts on the user's machine only when `COVER_INSTALL_FONTS=1` is set, and ask the user first every time.
 
 ## 6 · Covers for print
 
 Same shapes and positions; only the theme swaps: light paper (about `#F7F7F5`) · white shapes become ink color · the accent uses the light-theme color the app already has · thin lines get darker so they survive the printer · **never invert the whole page with a filter** · the real-screen style uses the image from the mockup's light theme.
 
-## 7 · Make 3 styles, then vote 2 of 3: use it when steps 1–6 did not pass step 8, or the user asks for several styles (normally do one style from step 1 first · 3–5 times the work)
+## 7 · Make 3 styles, then vote 2 of 3 (only when steps 1–6 did not pass step 8, or the user asks for several styles · 3–5 times the work)
 
-Follow [`references/cover-bakeoff.md`](references/cover-bakeoff.md): 3 designers with different styles (same brief) → 3 reviewers with different angles (art director · brand and client · production in Word) → the style with 2 of 3 votes wins · you may choose per project · you may take at most 2 standout pieces from the losing styles.
-- **Designers must be able to run render and look at their own images.** Before launching, check that the installed agent has Bash. If not → use `general-purpose` with the designer role attached, or have the team lead render and send the fix round to an agent that has Bash.
-- **Team members cannot launch agents themselves.** The designers make the 3 covers as files and send them back; the team lead launches the 3 reviewers to vote.
+The procedure (3 designers · 3 reviewers · 2 of 3 votes · at most 2 pieces borrowed · Bash for designers · the lead launches reviewers) is in [`cover-vote.md`](cover-vote.md); the full bake-off steps are in [`cover-bakeoff.md`](cover-bakeoff.md).
 
 ## 8 · Check before sending: the render script must print `checks.json`, and you must open every image yourself
 
@@ -106,7 +113,7 @@ Follow [`references/cover-bakeoff.md`](references/cover-bakeoff.md): 3 designers
 - A main image that makes people misunderstand the app (e.g. SwipeOS laid over a sales-chart slide, so viewers think it is a reporting app).
 - So much data that it becomes a chart (hex numbers · rotated machine names): a client who reads the BRD is not an engineer.
 
-If the user says the cover is not beautiful → cut things before adding (matches `branded-document-design` references/word-layout.md item 8).
+If the user says the cover is not beautiful → cut things before adding (matches `word-layout.md` item 8).
 
 ## Do not look AI-made
 

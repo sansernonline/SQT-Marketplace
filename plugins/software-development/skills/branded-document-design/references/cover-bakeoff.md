@@ -1,13 +1,13 @@
 # Make 3 styles, then vote 2 of 3
 
-Used with `SKILL.md` step 7. It is a variant of `parallel-attempts-pick-best` that swaps "1 middleman agent" for "3 reviewers who vote".
+Used with `cover-design.md` step 7. It is a variant of `parallel-attempts-pick-best` that swaps "1 middleman agent" for "3 reviewers who vote".
 Cost: about 3–5 times the work of a single style. Use it when you set a project's look for the first time, not at every version bump.
 
 ## 1 · Prepare before launching
 
 1. **Survey** (1 middleman agent, read-only) → `_to_delete/cover-lab/survey/SURVEY.md`: app description · main verbs · logo files · colors · fonts · main-screen images from the mockup · image of the current cover, page 1 (Word through COM, the Windows automation interface → PDF → `pdftoppm`) with critique.
 2. **Research** (1 middleman agent, in parallel with step 1) → `research/RESEARCH.md`: good-looking tech-company covers · trends · cheap-looking things · image techniques done in code · Word limits · every claim has a URL.
-3. **Same brief for every designer**, `BRIEF.md`. Every designer reads `EXAMPLES.md` and looks at the overview sheet of real covers first (`real-examples.md`). Start from the cover builder that already builds in Word; do not rewrite it. The brief lists the deliverables (an SRS cover for every project · the image set for BRD/SRS/ARCH · at least 1 print cover · repeatable `src/` · `METHOD.md` ≤ 90 lines), the hard rules (items 3 and 9 of SKILL.md), and a ban on opening other designers' folders.
+3. **Same brief for every designer**, `BRIEF.md`. Every designer reads `EXAMPLES.md` and looks at the overview sheet of real covers first (`cover-real-examples.md`). Start from the cover builder that already builds in Word; do not rewrite it. The brief lists the deliverables (an SRS cover for every project · the image set for BRD/SRS/ARCH · at least 1 print cover · repeatable `src/` · `METHOD.md` ≤ 90 lines), the hard rules (items 3 and 9 of cover-design.md), and a ban on opening other designers' folders.
 4. **The team lead keeps the voting criteria** and does not send them to designers (put them in the scratchpad, not in `cover-lab/`).
 
 ## 2 · 3 designers — they differ by style, not just by random draw

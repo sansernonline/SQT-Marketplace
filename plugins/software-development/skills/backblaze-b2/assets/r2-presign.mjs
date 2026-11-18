@@ -1,4 +1,4 @@
-// แม่แบบออก presigned PUT URL ของ Cloudflare R2 สำหรับอัปโหลดจากเบราว์เซอร์ · skill cloudflare-r2
+// แม่แบบออก presigned PUT URL ของ Cloudflare R2 สำหรับอัปโหลดจากเบราว์เซอร์ · skill backblaze-b2 (references/cloudflare-r2.md)
 // เขียนตามเอกสาร R2 ตรวจ 2026-11-05 · ยังไม่ได้รันกับ bucket จริง
 //
 // ติดตั้งเองในโปรเจกต์ของผู้ใช้: npm install @aws-sdk/client-s3 @aws-sdk/s3-request-presigner
@@ -10,7 +10,7 @@
 //   - presigned URL เป็น bearer token: ใครถือก็อัปโหลดได้จนหมดอายุ จึงตั้งอายุสั้น
 //   - ใช้กับ custom domain ไม่ได้ ใช้ได้เฉพาะ <ACCOUNT_ID>.r2.cloudflarestorage.com
 //   - ไม่รองรับ POST (HTML form upload) ใช้ PUT เท่านั้น
-//   - เบราว์เซอร์ต้องมี CORS ที่ bucket (ดู cors.json)
+//   - เบราว์เซอร์ต้องมี CORS ที่ bucket (ดู r2-cors.json)
 
 import { randomUUID } from 'node:crypto';
 import { pathToFileURL } from 'node:url';

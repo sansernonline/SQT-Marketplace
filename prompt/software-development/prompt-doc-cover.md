@@ -16,7 +16,7 @@
 **วนจนเสร็จ (agent loop):** ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ จนผ่านทุกข้อที่ฉบับนั้นต้องมี · ตรวจด้วยหลักฐานจริง (เปิดไฟล์ · รันคำสั่ง · เทียบแหล่ง) ไม่ใช่คำบอกของตัวที่ทำ · รอบตรวจใช้ `reviewer` ตัวใหม่ทุกรอบ · ไม่ผ่าน → แก้ที่ต้นเหตุแล้วตรวจซ้ำทั้งข้อเดิมและจุดที่แก้ · เหลือแค่ข้อระดับต่ำ → ปิดได้แล้วลงรายงาน · ครบเพดานรอบ (งานกลาง 3 · งานใหญ่หรืองานเสี่ยง 5) ยังไม่ผ่าน → ติดป้าย `ติด` ทำส่วนอื่นให้จบ แล้วรายงานข้อที่เหลือ · รายละเอียดอยู่ใน skill `superuser` กฎข้อ 3
 <!-- rules:end -->
 
-**skill หลัก:** `doc-cover-design` (วิธีทำปก) · `branded-document-design` (`brandkit.py` · ฟอนต์ไทย · ตัวเอกสาร) · `parallel-attempts-pick-best` · `human-writing`
+**skill หลัก:** `branded-document-design` (วิธีทำปก · `brandkit.py` · ฟอนต์ไทย · ตัวเอกสาร) · `parallel-attempts-pick-best` · `human-writing`
 
 | # | งาน | playbook | ได้ไฟล์ |
 |---|---|---|---|
@@ -28,7 +28,7 @@
 
 - **ไม่เขียนทับ .docx ที่มีอยู่** — สร้างชุดใหม่จาก markdown ต้นฉบับแล้วขึ้นเลขเวอร์ชันตาม `document-naming` · ไม่มี markdown ต้นฉบับ → ทำแค่ปกตัวอย่างใน `_to_delete/cover-lab/final/` แล้วลงคำถามค้าง
 - ติดตั้งฟอนต์ลงเครื่องผู้ใช้ อยู่ใน "รออนุมัติ" (`COVER_INSTALL_FONTS=1`)
-- ผู้ออกแบบและผู้รวมผลต้องเป็น agent ที่มี Bash เพื่อ render แล้วเปิดดูภาพเอง (`doc-cover-design` ข้อ 7)
+- ผู้ออกแบบและผู้รวมผลต้องเป็น agent ที่มี Bash เพื่อ render แล้วเปิดดูภาพเอง (`branded-document-design` `references/cover-vote.md` ข้อ 6)
 - ภาพหน้าจอมาจาก mockup จริงของโปรเจกต์เท่านั้น · โลโก้ใช้ไฟล์จริง ไม่วาดใหม่ ไม่เปลี่ยนสีไฟล์โลโก้
 - ส่งปกหรือเอกสารให้ลูกค้าจริง อยู่ใน "รออนุมัติ" เสมอ
 
@@ -36,7 +36,7 @@
 
 ## 1. สำรวจโปรเจกต์ + research ปก
 
-playbook `investigation` · agent `general-purpose` 2 ตัวขนานกัน (สำรวจ · research) · skill `doc-cover-design` · `prior-art-review`
+playbook `investigation` · agent `general-purpose` 2 ตัวขนานกัน (สำรวจ · research) · skill `branded-document-design` · `prior-art-review`
 **ผลลัพธ์:** `_to_delete/cover-lab/survey/SURVEY.md` · `_to_delete/cover-lab/research/RESEARCH.md`
 
 ### โจทย์ (ผู้ใช้กรอก)
@@ -50,16 +50,16 @@ playbook `investigation` · agent `general-purpose` 2 ตัวขนานก�
 
 1. **SURVEY.md** ต่อโปรเจกต์: คำอธิบาย 1 ย่อหน้า · กริยาหลักของแอป · ไฟล์โลโก้ (SVG) · สีและฟอนต์ · แนวดีไซน์ที่เลือกแล้วใน `docs/design/` · ภาพจอหลักจาก mockup (ไม่ใช่หน้า index) · ภาพปกเดิมหน้า 1 (Word COM → PDF → `pdftoppm`) พร้อมคำติตรง ๆ · ตัวสร้างปกเดิมอยู่ไฟล์ไหน
 2. **RESEARCH.md**: ปกเอกสารของบริษัทเทคที่ดูดี · แนวโน้ม · ของที่ทำให้ดูเป็นงาน AI · เทคนิคภาพจากโค้ด · ข้อจำกัดของ Word · ทุกข้ออ้างมี URL และระดับความน่าเชื่อถือ · ปิดท้ายด้วยแนวคิดตั้งต้น 3 แนวต่อโปรเจกต์
-3. **EXAMPLES.md + ภาพรวมปกจริง** (`_to_delete/cover-lab/examples/`) — ปกเอกสารหรือหนังสือจริง ≥ 6 ใบต่อกลุ่ม (กลุ่มเดียวกับแอป · สำนักพิมพ์สายเทค · ไทย) เปิดดูทุกใบ จด URL และวันที่ แล้วเขียนว่าจะยืมอะไรไปใช้กับโปรเจกต์ไหน ตาม `doc-cover-design` references/real-examples.md
+3. **EXAMPLES.md + ภาพรวมปกจริง** (`_to_delete/cover-lab/examples/`) — ปกเอกสารหรือหนังสือจริง ≥ 6 ใบต่อกลุ่ม (กลุ่มเดียวกับแอป · สำนักพิมพ์สายเทค · ไทย) เปิดดูทุกใบ จด URL และวันที่ แล้วเขียนว่าจะยืมอะไรไปใช้กับโปรเจกต์ไหน ตาม `branded-document-design` `references/cover-real-examples.md`
 4. **บอกว่าปกเดิมของทุกโปรเจกต์ใช้สูตรเดียวกันไหม** — ถ้าใช่ นี่คือปัญหาหลักที่ฉบับ 2 ต้องแก้
 
 ---
 
 ## 2. ออกแบบ 3 แนว แล้วโหวต 2 ใน 3
 
-playbook `prototype` · ผู้ออกแบบ `general-purpose` 3 ตัว (โมเดลใหญ่ · แนบบทบาทนักออกแบบ) · ผู้ตรวจ `general-purpose` 3 ตัว (อ่านอย่างเดียว) · skill `doc-cover-design` ข้อ 7 + `references/cover-bakeoff.md`
+playbook `prototype` · ผู้ออกแบบ `general-purpose` 3 ตัว (โมเดลใหญ่ · แนบบทบาทนักออกแบบ) · ผู้ตรวจ `general-purpose` 3 ตัว (อ่านอย่างเดียว) · skill `branded-document-design` `references/cover-design.md` ข้อ 7 + `references/cover-bakeoff.md`
 **ต้องมีก่อน:** SURVEY.md · RESEARCH.md
-**ทำเมื่อ:** ผู้ใช้ขอหลายแนว · หรือทำแนวเดียวตาม `doc-cover-design` ข้อ 1–6 แล้วไม่ผ่านข้อ 8 — ไม่เข้าเงื่อนไข → ข้ามไปฉบับ 3 ด้วยแนวรูปทรงโลโก้ แล้วลง decision-log
+**ทำเมื่อ:** ผู้ใช้ขอหลายแนว · หรือทำแนวเดียวตาม `branded-document-design` `references/cover-design.md` ข้อ 1–6 แล้วไม่ผ่านข้อ 8 — ไม่เข้าเงื่อนไข → ข้ามไปฉบับ 3 ด้วยแนวรูปทรงโลโก้ แล้วลง decision-log
 **ผลลัพธ์:** `_to_delete/cover-lab/BRIEF.md` · `attempt-A/` `attempt-B/` `attempt-C/` (ปก SRS ทุกโปรเจกต์ · ภาพชุด BRD/SRS/ARCH · ปกพิมพ์ · `src/` · `METHOD.md`) · ตารางคะแนนและผลโหวตลง `docs/BUILD-PLAN.md`
 
 ### สิ่งที่ต้องได้
@@ -74,9 +74,9 @@ playbook `prototype` · ผู้ออกแบบ `general-purpose` 3 ตั�
 
 ## 3. รวมผลและสร้างปกใน Word ทั้งชุด
 
-playbook `feature` · agent `general-purpose` (มี Bash) · skill `doc-cover-design` · `branded-document-design` · `principle-prove-it-works`
+playbook `feature` · agent `general-purpose` (มี Bash) · skill `branded-document-design` · `principle-prove-it-works`
 **ต้องมีก่อน:** ผลโหวตจากฉบับ 2
-**ผลลัพธ์:** `docs/design/cover-direction.md` (แนวคิด · ทะเบียนกันซ้ำ · ตารางชนิดเอกสาร = เฟรม) · ตัวสร้างปกที่รันซ้ำได้ในโฟลเดอร์ render ของโปรเจกต์ · ภาพพื้น 300 dpi ทุกฉบับ · .docx + .pdf ชุดใหม่ (เวอร์ชันใหม่) · ภาพตรวจทุกปก · เครื่องสร้างปกตัวอย่างทดสอบใน Word แล้วเฉพาะปก SRS → ฉบับอื่นต้องต่อปกเข้ากับตัว render เอกสารจริงและตรวจใน Word เอง (`doc-cover-design` references/word-build.md)
+**ผลลัพธ์:** `docs/design/cover-direction.md` (แนวคิด · ทะเบียนกันซ้ำ · ตารางชนิดเอกสาร = เฟรม) · ตัวสร้างปกที่รันซ้ำได้ในโฟลเดอร์ render ของโปรเจกต์ · ภาพพื้น 300 dpi ทุกฉบับ · .docx + .pdf ชุดใหม่ (เวอร์ชันใหม่) · ภาพตรวจทุกปก · เครื่องสร้างปกตัวอย่างทดสอบใน Word แล้วเฉพาะปก SRS → ฉบับอื่นต้องต่อปกเข้ากับตัว render เอกสารจริงและตรวจใน Word เอง (`branded-document-design` `references/cover-word-build.md`)
 
 - [ ] อนุญาตให้แก้ตัว render ของโปรเจกต์และสร้างเอกสารชุดใหม่ (ไม่ติ๊ก → ทำแค่ `_to_delete/cover-lab/final/` พร้อม .docx ตัวอย่าง 1 ฉบับต่อโปรเจกต์)
 
@@ -85,5 +85,5 @@ playbook `feature` · agent `general-purpose` (มี Bash) · skill `doc-cover-
 1. **ใช้แนวที่ชนะรายโปรเจกต์** + ส่วนที่โหวตให้ยกมา + แก้จุดที่ผู้ตรวจทัก
 2. **ภาพพื้นซ่อนข้อความที่ต้องแก้ได้ครบ** · ชื่อ ประโยคบอกงาน และแถวข้อมูลเป็นข้อความ Word จริง · ภาพพื้นยึดกับย่อหน้าแรก ไม่อยู่ใน header
 3. **render ใน Word จริงทุกฉบับ** → PDF → PNG แล้วเปิดดูหน้า 1–2: ภาพไม่จาง · ข้อความตรงตำแหน่ง · หน้า 2 ไม่ว่าง · ผ่าน `checks.json`
-4. **ภาพชุดของทุกโปรเจกต์วางเรียงกัน** แล้วตรวจตาม `doc-cover-design` ข้อ 2 ว่าไม่ซ้ำกัน (ทะเบียนกลาง `<โฟลเดอร์แม่ของโปรเจกต์>/cover-registry.md`)
+4. **ภาพชุดของทุกโปรเจกต์วางเรียงกัน** แล้วตรวจตาม `branded-document-design` `references/cover-design.md` ข้อ 2 ว่าไม่ซ้ำกัน (ทะเบียนกลาง `<โฟลเดอร์แม่ของโปรเจกต์>/cover-registry.md`)
 5. บอกในรายงานว่าฉบับ 14 ของ `prompt-new-project.md` ต้องเรียกตัวสร้างปกนี้อย่างไรในรอบ render ถัดไป

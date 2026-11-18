@@ -57,7 +57,7 @@
 
 ## 0. Research แอปต้นแบบ
 
-agent `product-manager` (มีเครื่องมือค้นเว็บ) · skill `reference-app-research` · `ui-craft` · `simplicity-first`
+agent `product-manager` (มีเครื่องมือค้นเว็บ) · skill `reference-app-research` · `ui-craft` · `superuser:simplify`
 **ใช้เมื่อ:** ผู้ใช้บอกว่าอยากได้แอปแบบเดียวกับแอปที่มีอยู่แล้ว — ไม่มีแอปต้นแบบ ข้ามฉบับนี้
 **ผลลัพธ์:** `docs/research/<ชื่อแอป>-research.md` ไฟล์เดียว · บันทึกดิบใน `_to_delete/research/`
 
@@ -85,7 +85,7 @@ agent `product-manager` (มีเครื่องมือค้นเว็�
 
 ## 1. เขียนแผนโครงการ (Project Plan)
 
-agent `project-manager` · skill `simplicity-first` · `polished-document-style`
+agent `project-manager` · skill `superuser:simplify` · `polished-document-style`
 **ต้องมีก่อน:** `docs/README.md` (ถ้ามี)
 **ผลลัพธ์:** `docs/<รหัส>-PLAN-v<M.m>-<สถานะ>.docx` (ร่าง `_to_delete/drafts/plan.md` → render ตามฉบับ 14)
 
@@ -112,7 +112,7 @@ agent `project-manager` · skill `simplicity-first` · `polished-document-style`
 
 ## 2. เขียน Business Requirements Document (BRD)
 
-agent `business-analyst` · skill `user-story-writer` · `simplicity-first` · `polished-document-style` · ขนาด L (M ถ้าจำเป็น)
+agent `business-analyst` · skill `user-story-writer` · `superuser:simplify` · `polished-document-style` · ขนาด L (M ถ้าจำเป็น)
 **ต้องมีก่อน:** `docs/README.md` · ไฟล์อ้างอิงของผู้ว่าจ้างใน `ref/` (ถ้ามี)
 **ผลลัพธ์:** `docs/<รหัส>-BRD-v<M.m>-<สถานะ>.docx` (ร่าง `_to_delete/drafts/brd.md` → render ตามฉบับ 14)
 
@@ -186,7 +186,7 @@ agent `business-analyst` หรือ `system-analyst` · skill `srs-writing` ·
 
 ## 7. เขียนสถาปัตยกรรมและ ADR
 
-agent `solution-architect` · skill `architecture-patterns` · `adr-writer` · `software-diagrams` · `simplicity-first` · `polished-document-style`
+agent `solution-architect` · skill `architecture-patterns` · `adr-writer` · `software-diagrams` · `superuser:simplify` · `polished-document-style`
 **ต้องมีก่อน:** `docs/README.md` · `docs/<รหัส>-SRS-*.docx`
 **ผลลัพธ์:** `docs/<รหัส>-ARCH-v<M.m>-<สถานะ>.docx` (ร่าง `_to_delete/drafts/arch.md` → render ตามฉบับ 14) · ADR `docs/decisions/ADR-NNNN-<เรื่อง>.md` สำหรับทุกการตัดสินใจที่จะถูกถามภายหลังว่า "ทำไมเลือกแบบนี้"
 
@@ -299,7 +299,7 @@ agent `technical-writer` หรือ `system-analyst` · skill `polished-docume
 
 ## 11. สร้าง prompt agent-loop ของโปรเจกต์นี้
 
-agent `solution-architect` + `project-manager` · skill `superuser` (อ่าน playbook `unattended-run` `feature` `bug-fix` `visual-parity` `pickup-and-pause` ก่อนเขียน) · `spec-to-code-loop` · `app-verifier-setup` · `testing-standards` · `simplicity-first`
+agent `solution-architect` + `project-manager` · skill `superuser` (อ่าน playbook `unattended-run` `feature` `bug-fix` `visual-parity` `pickup-and-pause` ก่อนเขียน) · `spec-to-code-loop` · `app-verifier-setup` · `testing-standards` · `superuser:simplify`
 **ต้องมีก่อน:** `docs/<รหัส>-SRS-*.docx` · `mockup/<รหัส>-mockup.html` (ถ้ามีหน้าจอ) · `docs/<รหัส>-ARCH-*.docx` · `docs/<รหัส>-FSD-*.docx` · `docs/<รหัส>-TESTPLAN-*.docx` (เท่าที่ขนาดงานมี) — ชื่อไฟล์จริงดูจากสารบัญ `docs/README.md` ถ้าโปรเจกต์ตั้งชื่อต่างจากนี้ · **render .docx ที่อ้างให้มีจริงก่อนเริ่มฉบับนี้**
 **ผลลัพธ์:** `docs/AGENT-LOOP.md` ไฟล์เดียว — prompt สำเร็จรูปที่ผู้ใช้จะเอาไปสั่งให้ agent เขียนโปรแกรมของโปรเจกต์นี้ทีละข้อกำหนด · **ฉบับนี้เขียน prompt อย่างเดียว ห้ามเริ่มเขียนโค้ด ห้ามรัน loop**
 

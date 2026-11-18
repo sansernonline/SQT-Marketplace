@@ -51,7 +51,7 @@ agent `product-manager` · skill `product-naming`
 
 ## 2. roadmap ผลิตภัณฑ์
 
-skill `product-roadmap` · agent `product-manager` · skill `user-story-writer` · `simplicity-first`
+skill `product-roadmap` · agent `product-manager` · skill `user-story-writer` · `superuser:simplify`
 **ผลลัพธ์:** `docs/roadmap.md` · **ไม่แก้** SRS · ไม่เพิ่มแถวงานใน BUILD-PLAN (สถานะและตัดสินใจเองยังลงได้)
 
 ### โจทย์ (ผู้ใช้กรอก)

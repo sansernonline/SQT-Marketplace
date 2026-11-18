@@ -1,13 +1,24 @@
----
-name: cloudflare-r2
-description: Use when an app stores files in Cloudflare R2
----
+# Cloudflare R2 — connect an app to Cloudflare R2 with a private bucket, least privilege, and a money limit
 
-# cloudflare-r2 — connect an app to Cloudflare R2 with a private bucket, least privilege, and a money limit
+- [Use when](#use-when)
+- [Related skills](#related-skills)
+- [1 · Search first, then ask once](#1--search-first-then-ask-once)
+- [2 · Choose the route](#2--choose-the-route)
+- [3 · Create the bucket and token](#3--create-the-bucket-and-token)
+- [4 · Connect with an S3 client](#4--connect-with-an-s3-client)
+- [5 · Upload from the browser with a presigned PUT](#5--upload-from-the-browser-with-a-presigned-put)
+- [6 · Make files public](#6--make-files-public)
+- [7 · Lifecycle and Infrequent Access (IA)](#7--lifecycle-and-infrequent-access-ia)
+- [Money and things outside the machine (เงินและของนอกเครื่อง)](#money-and-things-outside-the-machine-เงนและของนอกเครอง)
+- [Check before sending](#check-before-sending)
+- [References](#references)
+
 
 R2 facts come from the official docs read on 2026-11-05. Anything not yet read carries the label `(ยังไม่ได้ตรวจ)` (not yet checked).
 
 > **One rule:** the bucket stays private until the user says to open it, and the app holds only a token that can read and write its own bucket. Before you create anything that costs money, make anything public, or delete something that exists, pass the gate in the section "Money and things outside the machine (เงินและของนอกเครื่อง)".
+
+> Read from `backblaze-b2` when the user picks Cloudflare R2. Sections below keep their own numbering.
 
 ## Use when
 
@@ -93,9 +104,9 @@ The server creates a URL, and the browser PUTs the file straight into the bucket
 2. **Check type and size on the server** before issuing the URL · bind `Content-Type` when signing (this is our own conclusion, not confirmed from the presigned page `(ยังไม่ได้ตรวจ)`) · the type and size rules live in `file-upload-and-storage`.
 3. **Short lifetime.** R2 supports 1 second to 7 days (604,800 seconds). A URL is a bearer token: whoever holds it can use it until it expires. Set a few minutes.
 4. Limits of presigned URLs in R2: **POST is not supported** (HTML form), use PUT · **custom domains do not work**, only `<ACCOUNT_ID>.r2.cloudflarestorage.com`.
-5. **Set CORS on the bucket**, or the browser blocks the upload. Use [`assets/cors.json`](assets/cors.json) (Dashboard format). **Run `cors list` and keep a copy of the existing rules first**, because `cors set` may replace the whole existing set `(ยังไม่ได้ตรวจ)`. Set it with wrangler: `npx wrangler r2 bucket cors set <BUCKET> --file cors.json` · check: `npx wrangler r2 bucket cors list <BUCKET>`. wrangler uses a different JSON shape from the Dashboard (`{"rules":[...]}`), full fields `(ยังไม่ได้ตรวจ)` → if wrangler rejects the file, paste it into the Dashboard. Browsers may cap `MaxAgeSeconds` at 2 hours.
+5. **Set CORS on the bucket**, or the browser blocks the upload. Use [`assets/r2-cors.json`](../assets/r2-cors.json) (Dashboard format). **Run `cors list` and keep a copy of the existing rules first**, because `cors set` may replace the whole existing set `(ยังไม่ได้ตรวจ)`. Set it with wrangler: `npx wrangler r2 bucket cors set <BUCKET> --file r2-cors.json` · check: `npx wrangler r2 bucket cors list <BUCKET>`. wrangler uses a different JSON shape from the Dashboard (`{"rules":[...]}`), full fields `(ยังไม่ได้ตรวจ)` → if wrangler rejects the file, paste it into the Dashboard. Browsers may cap `MaxAgeSeconds` at 2 hours.
 6. **When a URL has expired, the browser cannot read the cause.** R2 answers 403 `ExpiredRequest` without CORS headers, so the browser sees an ordinary CORS error. Have the page request a new URL before the old one expires, instead of waiting for the failure.
-7. Sample code that creates the URL: [`assets/r2-presign.mjs`](assets/r2-presign.mjs)
+7. Sample code that creates the URL: [`assets/r2-presign.mjs`](../assets/r2-presign.mjs)
 
 ## 6 · Make files public
 
@@ -149,5 +160,5 @@ This skill can create things that cost money and expose files to the internet. A
 
 ## References
 
-- [`references/worked-example.md`](references/worked-example.md) — open to see a full run for a shop that takes payment slips
-- [`references/sources.md`](references/sources.md) — official docs read on 2026-11-05 and what was not read
+- [`cloudflare-r2-example.md`](cloudflare-r2-example.md) — open to see a full run for a shop that takes payment slips
+- [`cloudflare-r2-sources.md`](cloudflare-r2-sources.md) — official docs read on 2026-11-05 and what was not read

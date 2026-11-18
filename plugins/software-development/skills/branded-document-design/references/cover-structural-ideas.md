@@ -1,6 +1,6 @@
 # Cover structure styles: pick 1 per project
 
-Read this when doing `SKILL.md` step 1.4. Every style uses the same page system (step 3). Projects on the same machine must not use the same style (step 2).
+Read this when doing `cover-design.md` step 1.4. Every style uses the same page system (step 3). Projects on the same machine must not use the same style (step 2).
 
 ## Logo-shape style (the default path, won the 2-of-3 vote)
 

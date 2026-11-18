@@ -43,7 +43,7 @@
 
 ## 1. EA Spec: กลยุทธ์ · ความเสี่ยง · ตาราง input
 
-playbook `project-docs` · agent `quant-analyst` + `business-analyst` · skill `stack-mql` · `simplicity-first` · `spell-out-abbreviations`
+playbook `project-docs` · agent `quant-analyst` + `business-analyst` · skill `stack-mql` · `superuser:simplify` · `spell-out-abbreviations`
 **ผลลัพธ์:** `docs/ea/EA-SPEC.md`
 
 ### โจทย์ (ผู้ใช้กรอก)

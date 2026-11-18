@@ -38,7 +38,7 @@
 
 ## 1. ตั้งราคาและแพ็กเกจ
 
-playbook `project-docs` · agent `revops-analyst` + `product-manager` · skill `saas-platform` · `simplicity-first`
+playbook `project-docs` · agent `revops-analyst` + `product-manager` · skill `saas-platform` · `superuser:simplify`
 **ผลลัพธ์:** `docs/sell/pricing.md`
 
 ### โจทย์ (ผู้ใช้กรอก)

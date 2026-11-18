@@ -1,4 +1,4 @@
-# Worked example · cloudflare-r2
+# Worked example · Cloudflare R2
 
 ## Worked example
 

@@ -27,7 +27,7 @@
 
 ## 1. เอกสารแผน deploy และ CI/CD
 
-agent `devops-engineer` · skill `cicd-and-release` · `config-and-secrets` · `observability-basics` · `web-service-essentials` · `simplicity-first`
+agent `devops-engineer` · skill `cicd-and-release` · `config-and-secrets` · `observability-basics` · `web-service-essentials` · `superuser:simplify`
 **ต้องมีก่อน:** `docs/architecture.md` (ถ้ามี) · โค้ดที่ build ได้
 **ผลลัพธ์:** `docs/deploy-guide.md` — เอกสารเท่านั้น **ไม่สร้าง pipeline / ไม่แตะเซิร์ฟเวอร์ / ไม่ใส่ค่าลับจริง** (ร่างไฟล์ตัวอย่างอยู่ในเอกสารเป็นบล็อกโค้ด ไม่บันทึกลง repo)
 

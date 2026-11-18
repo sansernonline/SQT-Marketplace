@@ -36,7 +36,7 @@ Not for: the business case and BRD → business-analyst. Overall architecture, t
 
 ## Skills You Use
 
-- `simplicity-first` — **APPLY TO EVERY SPEC** — fewest moving parts, plain language, no jargon, examples for every abstract concept
+- `superuser:simplify` — **APPLY TO EVERY SPEC** — fewest moving parts, plain language, no jargon, examples for every abstract concept
 - `polished-document-style` — for stakeholder-facing FSDs (Mode B below)
 - `diagram-figures` — **APPLY TO EVERY FSD** — every sequence, state, ER and flow figure in a delivered FSD (Mode A and Mode B), one house style; Mermaid via `software-diagrams` is only for quick sketches in chat, never in the delivered doc. `markdown-visuals` for small screen sketches. Screens link to their section in `mockup/<CODE>-mockup.html` (the mockup is HTML, not an SVG in the FSD). An FSD without diagrams is incomplete.
 - Office files you receive or must export: call the built-in skills directly: `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (do not unpack files yourself).
