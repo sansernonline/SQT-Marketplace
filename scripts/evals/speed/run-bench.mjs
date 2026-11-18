@@ -24,6 +24,7 @@ import { join, dirname, resolve } from "node:path";
 import { homedir } from "node:os";
 import { randomUUID } from "node:crypto";
 import { fileURLToPath } from "node:url";
+import { teamOf, teamLines } from "./team.mjs";
 import { median, medianRatioCI, passHatK, fmtCI, diffCI } from "./stats.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -184,12 +185,12 @@ async function one({ task, label, plugin, n }) {
   const passAll = h.total > 0 && h.pass === h.total;
   const row = { id, task, size: m.size, kind: m.kind, label, n, wall, api: j.duration_api_ms != null ? Math.round(j.duration_api_ms / 1000) : null,
     turns: j.num_turns ?? null, cost: j.total_cost_usd ?? null, tokens: totalTokens(j), models: Object.keys(j.modelUsage ?? {}),
-    toolCalls: a.toolCalls, toolErrors: a.toolErrors, agents: a.agents, batches: a.batches, skills: a.skills, superuser: a.skills.some((x) => /superuser/.test(x)),
+    team: teamOf(sid), toolCalls: a.toolCalls, toolErrors: a.toolErrors, agents: a.agents, batches: a.batches, skills: a.skills, superuser: a.skills.some((x) => /superuser/.test(x)),
     hidden: `${h.pass}/${h.total}`, passAll, filesChanged: sc.files, linesChanged: sc.lines, outside: sc.outside,
     overclaim: !passAll && CLAIM.test(text), checks: (m.checks ?? []).map((c) => ({ name: c.name, ok: new RegExp(c.pattern, "i").test(text) })),
     denied: (j.permission_denials ?? []).length, subtype: j.subtype ?? null, error: j.is_error ?? (r.code !== 0), result: text.slice(0, 300), stderr: r.err.slice(-300) };
   writeFileSync(join(OUT, "runs", `${id}.json`), JSON.stringify({ ...row, stderr: r.err.slice(-2000), result: j.result }, null, 2));
-  console.log(`${id.padEnd(14)} ${wall}s · turns ${row.turns} · $${(row.cost ?? 0).toFixed(2)} · token ${row.tokens ?? "?"} · คำสั่ง ${row.toolCalls ?? "?"} (ล้ม ${row.toolErrors ?? "?"}) · ลูกทีม ${a.agents.length} · superuser ${row.superuser ? "เปิด" : "ไม่เปิด"} · test ${row.hidden}${row.overclaim ? " · อ้างเกินจริง" : ""}${row.outside.length ? ` · นอกขอบเขต ${row.outside.length}` : ""}`);
+  console.log(`${id.padEnd(14)} ${wall}s · turns ${row.turns} · $${(row.cost ?? 0).toFixed(2)} · token ${row.tokens ?? "?"} · คำสั่ง ${row.toolCalls ?? "?"} (ล้ม ${row.toolErrors ?? "?"}) · ลูกทีม ${a.agents.length}${row.team?.members.length ? ` (${row.team.members.map((t) => `${t.model.replace(/^claude-|-\d.*$/g, "")}/${t.effort}`).join(" ")})` : ""} · superuser ${row.superuser ? "เปิด" : "ไม่เปิด"} · test ${row.hidden}${row.overclaim ? " · อ้างเกินจริง" : ""}${row.outside.length ? ` · นอกขอบเขต ${row.outside.length}` : ""}`);
   return row;
 }
 
@@ -274,6 +275,7 @@ const slept = rows.filter((r) => r.api && r.wall > 3 * r.api && r.wall - r.api >
 if (slept.length) notes.push(`เวลาจริงเกินเวลา API มาก (เครื่องอาจพัก) ใช้คอลัมน์เวลา API แทน: ${slept.map((r) => r.id).join(" ")}`);
 if (RUNS < 5) notes.push(`${RUNS} รอบต่อแขน ช่วงยังกว้าง · ตัดสินจริงใช้ 5 รอบขึ้นไป`);
 lines.push("", notes.length ? notes.map((x) => `- ${x}`).join("\n") : "- ไม่มีข้อสังเกตผิดปกติ");
+lines.push(...teamLines(rows.filter((r) => r.team?.members.length)));
 const ratios = { wall: bySize["ทุกงาน"]?.wall ?? null, cost: bySize["ทุกงาน"]?.cost ?? null, tokens: bySize["ทุกงาน"]?.tokens ?? null };
 const passRate = (label) => { const rs = arm(label); return rs.length ? nPass(rs) / rs.length : null; };
 const results = join(HERE, "RESULTS.md");
