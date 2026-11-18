@@ -11,7 +11,7 @@ The rules, model names, and mid-task switching are in `SKILL.md` section 5 (hand
 | **Large** `opus` | Design the whole user-permission system · compute payroll amounts sent to the bank · draft an email telling customers about a data leak · final check of risky work | A piece writing the manual for the user-permission system → large, not medium, because the whole job is risky |
 | **Medium** `sonnet` (default) | Add a product search page · fix a calendar bug · draft an install guide · search and compare libraries · first-round check | Move callbacks to async/await → medium even with tests, because a way to fix must be chosen |
 | **Small** `haiku` | Fill postal codes into a table from a given list · convert a book list from CSV to JSON in a given structure · search a word in documents and report the lines | Trim trailing spaces from every file → write a script, do not send a worker |
-| **`fable`** (not the default) | A piece where opus + high failed twice and the account has credit | Using fable from the start on a hard task → start with opus first |
+| **`fable`** (not the default) | A piece where opus failed twice, even after raising effort to high and the account has credit | Using fable from the start on a hard task → start with opus first |
 
 ## Team patterns — how each is used in this work (section 9)
 
