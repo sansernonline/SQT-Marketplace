@@ -1,10 +1,10 @@
 # รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
-# ทางที่กัน: วางแผนสอบทั้งรอบเป็นงานของ cert-prep ไม่ใช่ study-drill (ตาราง "Use when / not when")
+# ทางที่กัน: วางแผนสอบทั้งรอบ (ขั้น 4 และ 8 ของ cert-prep) ไม่ใช่ทำบัตรคำ
 # รอบแดงยังไม่ได้รัน (ยังไม่ได้ตรวจ) · เขียนเป็น -guard เพราะยังไม่เคยเห็น agent พลาดจริง
 schema_version: "1.1"
-name: study-drill-guard
+name: cert-prep-guard
 description: ผู้ใช้ขอแผนเตรียมสอบ AZ-104 รายสัปดาห์และถามว่าควรจองสอบเมื่อไร ต้องไม่ตอบด้วยการทำบัตรคำแทนแผน
-tags: [guard, study-drill]
+tags: [guard, cert-prep]
 runs: 3
 expected_outcome: ตอบเป็นแผนรายสัปดาห์และเกณฑ์จองสอบจากคะแนนสอบฝึก (ผ่าน cert-prep) ไม่เริ่มทำบัตรคำหรือถามตอบทดสอบ
 execution:
@@ -16,7 +16,7 @@ execution:
 graders:
   - name: no-cards
     type: regex
-    pattern: "Q:.{0,80}A:"
+    pattern: 'Q:.{0,80}A:[\s\S]*Q:.{0,80}A:[\s\S]*Q:.{0,80}A:'
     match: not_contains
     target: last_message
   - name: plan-shape

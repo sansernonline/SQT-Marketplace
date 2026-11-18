@@ -1,9 +1,6 @@
----
-name: linkedin-profile
-description: Use when improving a LinkedIn profile for Thai job search
----
-
 # LinkedIn Profile (Thai market)
+
+Open when the user asks to improve a LinkedIn profile. Keep CV and profile consistent: same dates, titles and bullet formula as the CV (SKILL.md Step 3).
 
 Recruiters in Thailand search LinkedIn mostly in English, by job title + skill + location. The profile must match those searches and then convince in the first 2 lines.
 
@@ -13,7 +10,7 @@ Recruiters in Thailand search LinkedIn mostly in English, by job title + skill +
 2. Collect 10–15 **keywords** from 5 real job posts for those roles (JobsDB + LinkedIn). Count which words repeat.
 3. Write the **headline** (formula below).
 4. Write the **About** section.
-5. Rewrite **Experience** bullets — copy from `resume-th-en` (action + result + number).
+5. Rewrite **Experience** bullets — copy from the CV (SKILL.md Step 3: action + result + number).
 6. Fill **Skills** — top 5 pinned should be the post keywords.
 7. Add **Featured** items.
 8. Set **location, open-to-work and contact** settings.
@@ -72,7 +69,7 @@ Ask for 2–3, from a manager, a client and a peer — one each. Make it easy: s
 - Location: city (e.g. Bangkok, Thailand) — recruiters filter by it
 - Open to work: "Recruiters only" if still employed (your employer's recruiters may still see it — LinkedIn says it tries to hide it but cannot guarantee)
 - Custom URL: linkedin.com/in/firstname-lastname
-- Photo: face filling ~60% of the frame, plain background; banner 1,584 × 396 px with domain or city — keep the left third clear where the photo overlaps on desktop (banner size as commonly published; LinkedIn help page for personal profiles not found on 2026-10-23 → รอยืนยัน — tell the user it is the commonly published size, not an official one; see [references/sources.md](references/sources.md))
+- Photo: face filling ~60% of the frame, plain background; banner 1,584 × 396 px with domain or city — keep the left third clear where the photo overlaps on desktop (banner size as commonly published; LinkedIn help page for personal profiles not found on 2026-10-23 → รอยืนยัน — tell the user it is the commonly published size, not an official one; see the Sources section at the end of this file)
 - Contact: email you check; no phone number in public fields
 
 ## Checklist
@@ -84,4 +81,8 @@ Ask for 2–3, from a manager, a client and a peer — one each. Make it easy: s
 - [ ] Profile and CV dates and titles match exactly
 - [ ] No confidential numbers (client names, unpublished revenue) without permission
 
-Related: `resume-th-en` · `salary-negotiation` · `interview-prep`.
+Related: `salary-negotiation` · `interview-prep`.
+
+## Sources
+
+ตรวจล่าสุด 2026-10-26 · banner 1,584 × 396 px (4:1, JPG or PNG under 8 MB) agrees across secondary guides (https://linearity.io/blog/linkedin-size-guide/ · https://magicstudio.com/blog/linkedin-background-photo/) · the official LinkedIn help page found (https://www.linkedin.com/help/linkedin/answer/a563309) covers company Pages only (cover 1,512 × 256 px), so the personal banner size stays (รอยืนยัน) — tell the user it is the commonly published size, not an official one

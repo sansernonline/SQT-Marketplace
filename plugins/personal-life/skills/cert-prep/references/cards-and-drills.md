@@ -1,23 +1,16 @@
----
-name: study-drill
-description: Use when making flashcards or quizzes for an exam
----
+# Cards and question drills (for exam notes)
 
-# Study Drill (บัตรคำและซ้อมถามตอบ)
+Open when the user asks for flashcards, a quiz without the answer, or a deck keeps failing the same cards. This covers certification exams and other exams (school and university notes).
 
 > **One rule:** fewer cards that are right beat many cards that are guessed. A card with no source the agent is unsure of is marked `(ยังไม่ได้ตรวจ)`, and 8 sure cards are better than 20 with 5 wrong.
 
 Two tools for the same goal: cards to remember, and a question drill to understand.
 
-## Use when / not when
+## Not for
 
-| Situation | Use |
-|---|---|
-| "ทำบัตรคำจากโน้ตนี้ให้หน่อย" · "ถามฉันหน่อย อย่าเพิ่งเฉลย" · a deck keeps failing the same cards | this skill |
-| Planning the weeks before a cert exam, booking rule, exam day | `cert-prep` (sends card writing here) |
-| Learning a new technology through a real project | `learning-path` |
-| Understanding one English paragraph or error message | `english-tech-reading` |
-| A child's homework check at home | `kids-school` |
+- Learning a new technology through a real project → `learning-path`
+- Understanding one English paragraph or error message → `english-tech-reading`
+- A child's homework check at home → `kids-school`
 
 ## 1 · Writing cards
 
@@ -30,15 +23,7 @@ Two tools for the same goal: cards to remember, and a question drill to understa
 
 ## 2 · Box schedule without an app
 
-Five boxes (default intervals, not yet measured):
-
-| Answer | Card moves to | Next review |
-|---|---|---|
-| Right | one box up | box 2 → +1 day · 3 → +3 · 4 → +7 · 5 → +21 |
-| Half right | stays | +1 day |
-| Wrong | one box down | again in about 4 hours |
-
-A card that falls back down more than twice is not a memory problem; it goes to the drill in section 3. The user's SRS app (Anki) may use its own schedule instead; do not fight it.
+The intervals are in `cert-prep` step 6 (the only review schedule in this skill). A card that falls back down more than twice is not a memory problem; it goes to the drill in section 3. The user's spaced repetition system (SRS) app (Anki) may use its own schedule instead; do not fight it.
 
 ## 3 · Question drill (Socratic)
 
@@ -49,16 +34,10 @@ A card that falls back down more than twice is not a memory problem; it goes to 
 5. **One exception:** if the user says something that contradicts the notes they gave, quote the line from their notes back right away.
 6. Stop after 10–15 questions or 20 minutes. Close with: what was solid, the 2–3 gaps, the cards made.
 
-## Worked example
-
-Notes to 9 cards and a Socratic drill on NAT gateway: [references/worked-example.md](references/worked-example.md)
-
 ## Check before sending
 
 - [ ] Every card: one idea, question on the front, 1–2 sentence back, source named
 - [ ] Unsourced cards marked `(ยังไม่ได้ตรวจ)` · no card count padded to a target
 - [ ] In a drill, no answer given before the user reached it or three narrowing questions passed
 
-Sources and where the box intervals come from: [references/sources.md](references/sources.md)
-
-Related: `cert-prep` · `english-tech-reading` · `personal-kb`
+Worked example (notes to 9 cards and a drill on NAT gateway): [cards-example.md](cards-example.md)

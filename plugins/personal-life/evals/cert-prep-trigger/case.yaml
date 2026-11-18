@@ -1,11 +1,11 @@
 # รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
 # เขียน 2026-11-10 ยังไม่ได้รัน
 schema_version: "1.1"
-name: study-drill-trigger
-description: ผู้ใช้วางโน้ตเรื่อง VPC แล้วขอให้ทำบัตรคำและถามทดสอบโดยยังไม่เฉลย ไม่เอ่ยชื่อ skill ต้องทำให้ study-drill ถูกเปิด
-tags: [trigger, study-drill]
+name: cert-prep-trigger
+description: ผู้ใช้วางโน้ตเรื่อง VPC แล้วขอให้ทำบัตรคำและถามทดสอบโดยยังไม่เฉลย ไม่เอ่ยชื่อ skill ต้องทำให้ cert-prep ถูกเปิด
+tags: [trigger, cert-prep]
 runs: 3
-expected_outcome: เรียก Skill study-drill แล้วทำบัตรคำที่หน้าบัตรเป็นคำถาม หลังบัตรสั้น และมีแหล่งของแต่ละใบ
+expected_outcome: เรียก Skill cert-prep แล้วทำบัตรคำที่หน้าบัตรเป็นคำถาม หลังบัตรสั้น และมีแหล่งของแต่ละใบ
 execution:
   prompt: |
     อาทิตย์หน้าสอบ AWS SAA ข้างล่างคือโน้ตเรื่อง VPC ที่จดไว้
@@ -20,7 +20,7 @@ graders:
   - name: skill-opened
     type: tool_used
     tool: Skill
-    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?study-drill"'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?cert-prep"'
     min: 1
     arm: with-only
   - name: card-has-question

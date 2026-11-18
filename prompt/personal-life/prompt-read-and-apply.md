@@ -20,9 +20,9 @@
 
 | # | งาน | playbook | ได้ไฟล์ |
 |---|---|---|---|
-| 1 | จาก paper หรือบทความ สู่โค้ดที่รันได้ | `paper-to-practice` | `notes/<short-title>.md` + `examples/<short-title>/` |
+| 1 | จาก paper หรือบทความ สู่โค้ดที่รันได้ | `learning-path` | `notes/<short-title>.md` + `examples/<short-title>/` |
 | 2 | อ่านเอกสารอังกฤษยาก ๆ ให้เข้าใจ | — (เล็ก ทำเลย) | ตอบในแชต · บันทึกลง `notes/` ถ้าขอ |
-| 3 | สรุปเรื่องที่เรียนไปเล่าให้ทีมฟัง | `paper-to-practice` (ขั้น 1–4) | `talks/<short-title>/outline.md` + `talks/<short-title>/demo/` |
+| 3 | สรุปเรื่องที่เรียนไปเล่าให้ทีมฟัง | `learning-path` (`references/paper-to-practice.md` ขั้น 1–4) | `talks/<short-title>/outline.md` + `talks/<short-title>/demo/` |
 
 ใช้ต่อกัน: อ่านแล้วอยากเอาไปเล่าในทีม → 1 → 3 · ติดประโยคยากระหว่างทำ 1 → 2 · ตรวจก่อนใช้ → `prompt-start-learning.md` ฉบับ 4
 
@@ -30,7 +30,7 @@
 
 ## 1. จาก paper หรือบทความ สู่โค้ดที่รันได้
 
-playbook `paper-to-practice` · agent `tech-mentor` · skill `paper-to-practice` · `english-tech-reading`
+playbook `paper-to-practice` · agent `tech-mentor` · skill `learning-path` · `english-tech-reading`
 **ผลลัพธ์:** `notes/<short-title>.md` · `examples/<short-title>/` (โค้ดขั้นต่ำที่รันได้)
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -70,7 +70,7 @@ skill `english-tech-reading` · งานเล็ก ทำเลยไม่�
 
 ## 3. สรุปเรื่องที่เรียนไปเล่าให้ทีมฟัง
 
-playbook `paper-to-practice` (ขั้น 1–4 ตามเดิม · ขั้น 5 เขียนเป็นโครงเล่าแทนบันทึก) · agent `tech-mentor` · skill `paper-to-practice` · `answer-shape`
+playbook `paper-to-practice` (ขั้น 1–4 ตามเดิม · ขั้น 5 เขียนเป็นโครงเล่าแทนบันทึก) · agent `tech-mentor` · skill `learning-path` · `answer-shape`
 **ผลลัพธ์:** `talks/<short-title>/outline.md` (โครงเล่า + คำถามที่น่าจะโดนถาม) · `talks/<short-title>/demo/` (โค้ด demo ที่รันได้) · **รออนุมัติ:** ส่งเข้ากลุ่มทีม · โพสต์ในช่องทางของบริษัท
 
 ### ข้อมูล (ผู้ใช้กรอก)

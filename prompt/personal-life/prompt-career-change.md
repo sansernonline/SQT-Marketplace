@@ -30,7 +30,7 @@
 
 ## 1. ปรับ CV และ LinkedIn ทั้งชุด
 
-playbook `profile-refresh` · agent `career-coach` · skill `resume-th-en` · `linkedin-profile`
+playbook `profile-refresh` · agent `career-coach` · skill `resume-th-en`
 **ผลลัพธ์:** `cv/CV_<ชื่อ>_TH.md` · `cv/CV_<ชื่อ>_EN.md` (+ `.docx`) · `linkedin.md`
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -53,7 +53,7 @@ playbook `profile-refresh` · agent `career-coach` · skill `resume-th-en` · `l
 
 ## 2. เปลี่ยนสายงาน
 
-playbook `profile-refresh` (ขั้น 2 ทำ 2 รอบ: สายเดิมกับสายใหม่ เพื่อหาทักษะที่ใช้ข้ามสายได้) · agent `career-coach` · skill `resume-th-en` · `linkedin-profile` · `salary-negotiation`
+playbook `profile-refresh` (ขั้น 2 ทำ 2 รอบ: สายเดิมกับสายใหม่ เพื่อหาทักษะที่ใช้ข้ามสายได้) · agent `career-coach` · skill `resume-th-en` · `salary-negotiation`
 **ผลลัพธ์:** `career-change/<สายใหม่>-plan.md` · CV ฉบับสายใหม่ใน `cv/` · **รออนุมัติ:** สมัครคอร์สหรือสอบที่ต้องจ่ายเงิน · ลาออกจากงานเดิม
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -83,7 +83,7 @@ playbook `profile-refresh` (ขั้น 2 ทำ 2 รอบ: สายเด�
 
 ## 3. กลับมาทำงานหลังหยุดไปนาน
 
-playbook `profile-refresh` · agent `career-coach` + `interview-coach` · skill `resume-th-en` · `linkedin-profile` · `interview-prep`
+playbook `profile-refresh` · agent `career-coach` + `interview-coach` · skill `resume-th-en` · `interview-prep`
 **ผลลัพธ์:** `return-to-work.md` · CV ฉบับใหม่ใน `cv/` · **รออนุมัติ:** กดส่งใบสมัคร · ติดต่อที่ทำงานเก่า
 
 ### ข้อมูล (ผู้ใช้กรอก)

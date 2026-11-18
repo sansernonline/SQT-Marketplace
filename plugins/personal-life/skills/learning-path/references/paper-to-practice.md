@@ -1,11 +1,6 @@
----
-name: paper-to-practice
-description: Use when applying a paper or RFC with a working example
----
-
 # Paper to Practice
 
-From "I read it" to "it runs on my machine".
+Open when the user brings a paper, RFC or article and wants to apply it. From "I read it" to "it runs on my machine". Used with the `tech-mentor` agent.
 
 Not for: only understanding English wording in a paper or RFC → `english-tech-reading` · writing it up as a thesis or report → `thesis-writing`.
 
@@ -17,11 +12,11 @@ Not for: only understanding English wording in a paper or RFC → `english-tech-
 4. **Run and verify** — actually run it. The output is part of the deliverable
 5. **Note** — 1 page: the idea, the example, where it applies in the user's world, where it does not
 
-Worked example — "bloom filters" from the original idea to running code (brief → scope → Python code → run → note): [references/bloom-filter-example.md](references/bloom-filter-example.md)
+Worked example — "bloom filters" from the original idea to running code (brief → scope → Python code → run → note): [bloom-filter-example.md](bloom-filter-example.md)
 
 ## Template
 
-Use [references/practice-note-template.md](references/practice-note-template.md) for the one-page note.
+Use [practice-note-template.md](practice-note-template.md) for the one-page note.
 
 ## Rules
 
