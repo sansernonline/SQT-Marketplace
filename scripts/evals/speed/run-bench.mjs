@@ -306,4 +306,4 @@ if (args["save-ratios"]) {
     console.log(`เขียน ${file.replace(ROOT, ".")}`);
   }
 }
-for (const [label] of versions) { const d = join(OUT, `src-${label}`); if (existsSync(d)) try { git("worktree", "remove", "--force", d); } catch { /* ลบเองทีหลัง */ } }
+if (!FROM_RUNS) for (const [label] of versions) { const d = join(OUT, `src-${label}`); if (existsSync(d)) try { git("worktree", "remove", "--force", d); } catch { /* ลบเองทีหลัง */ } }
