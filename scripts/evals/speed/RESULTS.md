@@ -419,3 +419,16 @@ Claude Code หยุด bench เพราะหน่วยความจำ�
 | t4 กลาง โค้ด 3 โมดูล | $0.69 · 170 วินาที | $1.92 · 318 วินาที · ลูกทีม 5–6 | 39/39 ครบทั้งคู่ | 2/2 |
 
 อ่านผล: t2 คือที่ superuser ดีขึ้นจริง (จับช่องโหว่ `discount_pct` ได้ทุกรอบ) แลกกับค่าใช้จ่ายราว 3 เท่า · t4 แพงขึ้นราว 2.8 เท่าโดยคุณภาพไม่ดีขึ้น เพราะแตกงานให้ลูกทีม 5–6 ตัวกับงานที่ทำคนเดียวก็ผ่าน · งานเล็กค่าใช้จ่ายเท่ากันแต่ช้ากว่า · ยังไม่ได้วัด t5–t11 (งานใหญ่ · เอกสาร · ข้อมูล · งานเสี่ยง) · รอบละ 3 รอบ น้อยกว่าที่ README แนะนำ (5)
+
+
+**ทีมรายรอบของ bench นี้ (เพิ่มทีหลังด้วย `team.mjs`)** (ค่าใช้จ่ายรายตัวคิดจาก token × ราคา · ประมาณ)
+
+| รอบ | หัวหน้า | ลูกทีม | ลูกทีมแต่ละตัว: ชนิด · model/effort · งาน · $ |
+|---|---|---|---|
+| t2-new-1 | opus · $0.47 | 1 · $0.49 | reviewer · opus/high · Review calc_receipt diff · $0.49 |
+| t2-new-2 | opus · $0.38 | 1 · $0.20 | reviewer · opus/high · Review receipt calc diff · $0.20 |
+| t2-new-3 | opus · $0.52 | 1 · $0.21 | reviewer · opus/high · Review receipt calc vs spec · $0.21 |
+| t4-new-1 | opus · $0.63 | 5 · $1.11 | worker · opus/high · buddhist.js + test · $0.14<br>reviewer · opus/high · Fresh review of 5 pieces · $0.42<br>worker · opus/high · thaiId.js + test · $0.18<br>worker · opus/high · bahtText.js + test · $0.23<br>worker · opus/high · phone.js + test · $0.13 |
+| t4-new-2 | opus · $0.76 | 6 · $1.05 | worker · sonnet/medium · phone.js with tests · $0.05<br>worker · opus/high · bahtText.js with tests · $0.22<br>worker · sonnet/medium · thaiId.js with tests · $0.08<br>worker · opus/high · receipt.py calc_receipt · $0.20<br>reviewer · opus/high · Review receipt toolkit diff · $0.46<br>worker · sonnet/medium · buddhist.js with tests · $0.05 |
+
+อ่านทีม: หัวหน้า (opus) ใช้เงินเองราว $0.4–0.8 ต่อรอบ เท่ากับทั้งรอบของแขนไม่มี plugin · t4 รอบ 1 หัวหน้าตีว่าทั้งงานเป็นงานเงิน (กฎข้อ 0 ของ superuser หัวข้อ 5) ทุกชิ้นจึงเป็น opus/high แม้ thaiId · phone · buddhist ไม่เกี่ยวกับเงิน · รอบ 2 ให้ sonnet/medium กับ 3 ชิ้นนั้น ลูกทีม sonnet ใช้ $0.05–0.08 ต่อตัว เทียบ opus $0.13–0.23 · ผู้ตรวจเป็น opus/high ทุกรอบ ($0.20–0.49) เพราะงานแตะเงินและส่งลูกค้า
