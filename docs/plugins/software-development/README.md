@@ -4,7 +4,7 @@
 
 ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ
 
-agent 38 · skill 143 (ของ plugin 104 · ของกลางจาก superuser 39) · คำสั่ง 11 · playbook 17 · ส่งงานต่อให้ —
+agent 38 · skill 139 (ของ plugin 99 · ของกลางจาก superuser 40) · คำสั่ง 12 · playbook 17 · ส่งงานต่อให้ —
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/software-development/`](../../../plugins/software-development/)
 

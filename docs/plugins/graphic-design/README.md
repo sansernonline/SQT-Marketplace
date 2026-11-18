@@ -4,7 +4,7 @@
 
 ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน
 
-agent 6 · skill 62 (ของ plugin 23 · ของกลางจาก superuser 39) · คำสั่ง 0 · playbook 9 · ส่งงานต่อให้ [`software-development`](../software-development/README.md) · [`e-commerce`](../e-commerce/README.md)
+agent 6 · skill 63 (ของ plugin 23 · ของกลางจาก superuser 40) · คำสั่ง 0 · playbook 9 · ส่งงานต่อให้ —
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/graphic-design/`](../../../plugins/graphic-design/)
 

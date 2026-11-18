@@ -63,7 +63,7 @@ superuser = แม่แบบ + skill 6 ตัว           superuser = แก�
 จำลองบริษัทซอฟต์แวร์ครบทุกขั้นของ Software Development Life Cycle (SDLC) ตั้งแต่ทีมหลัก (product · analysis · architecture · design · development · QA · DevOps · security) ไปจนถึงผู้เชี่ยวชาญเฉพาะสาขา
 
 ### มีอะไรบ้าง
-**38 agents · 104 skills · 12 commands** (ไม่นับ skill กลาง 32 ตัวจาก `superuser`)
+**38 agents · 100 skills · 12 commands** (ไม่นับ skill กลาง 32 ตัวจาก `superuser`)
 
 ### ติดตั้ง
 ```
@@ -274,7 +274,7 @@ _ร่างเมื่อ 6 ต.ค. 2569 · software-development ครอ�
 
 **เหตุผล:** programmer ต้องตามข่าวตลอด แต่ skill ที่มีมากับระบบ (scholar, deep-research) ครอบคลุมพอสมควรแล้ว จึงไว้ลำดับท้าย
 
-**Skills ที่วางไว้:** tech-radar (สรุป release notes/library ที่ตามอยู่รายสัปดาห์), paper-to-practice (แปลง paper/blogs เป็นโค้ดตัวอย่าง), learning-path (แผนเรียนเทคใหม่จากโปรเจกต์จริง), english-tech-reading (อ่านเอกสารอังกฤษให้เข้าใจเร็ว)
+**Skills ที่วางไว้:** tech-radar (สรุป release notes/library ที่ตามอยู่รายสัปดาห์), learning-path (แผนเรียนเทคใหม่จากโปรเจกต์จริง), english-tech-reading (อ่านเอกสารอังกฤษให้เข้าใจเร็ว)
 
 ---
 
@@ -309,7 +309,7 @@ _ร่างเมื่อ 6 ต.ค. 2569 · software-development ครอ�
 |---|---|---|---|
 | 6 | **online-seller** | แม่ค้าออนไลน์ Shopee · Lazada · TikTok Shop · LINE | `product-listing` · `marketplace-fees-pricing` · `multi-shop-stock` · `chat-reply-templates` · `live-selling-script` · `shipping-compare` · `returns-and-bad-reviews` · `seller-tax-basics` |
 | 7 | **home-family** | ทุกบ้าน | `household-bills` · `home-maintenance` · `vehicle-care` · `meal-plan-grocery` · `kids-school` · `elder-care` · `pet-care` |
-| 8 | **career** | คนทำงาน | `resume-th-en` · `interview-prep` · `salary-negotiation` · `performance-self-review` · `linkedin-profile` |
+| 8 | **career** | คนทำงาน | `resume-th-en` · `interview-prep` · `salary-negotiation` · `performance-self-review` |
 | 9 | **health-wellness** | ทุกคน — จัดระเบียบและเตรียมคำถาม ไม่วินิจฉัย ไม่สั่งยา | `exercise-plan` · `sleep-log` · `annual-checkup` · `medication-schedule` · `doctor-visit-prep` |
 | 10 | **consumer-rights** | ผู้ซื้อ | `buy-compare` · `warranty-tracker` · `complaint-letter-th` · `refund-request` |
 

@@ -79,7 +79,7 @@ grader `tool_used: Skill` ไม่ผ่าน** · แปลว่า Claude �
 ต้องแก้ที่ `description` ไม่ใช่ที่เนื้อหา
 
 **เริ่มยังไง** — อย่าทำทั้ง 73 ตัว เลือก 5 ตัวที่ใช้บ่อยสุดก่อน (`lazy-coding`,
-`simplicity-first`, `web-app-design`, `testing-standards`, `srs-writing`)
+`superuser:simplify`, `web-app-design`, `testing-standards`, `srs-writing`)
 
 ```bash
 claude plugin eval init      # สัมภาษณ์แล้วสร้างชุดทดสอบให้
@@ -97,7 +97,7 @@ skill 1 ตัวใช้ 20 คำถาม — 8-10 คำถามที่*
 
 ### 2 · กฎ "พิสูจน์ก่อนเคลม"
 
-**ช่องว่างที่ใหญ่ที่สุดของเรา** — เรามี `simplicity-first`, `lazy-coding`, `targeted-fix`,
+**ช่องว่างที่ใหญ่ที่สุดของเรา** — เรามี `superuser:simplify`, `lazy-coding`, `targeted-fix`,
 `short-answers`, `spell-out-abbreviations` แต่**ไม่มีตัวไหนห้ามเคลมว่าอะไรผ่านโดยไม่ได้รัน**
 
 ตัวอย่างที่ดีที่สุดคือ [`verification-before-completion`](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md)
@@ -379,7 +379,7 @@ Split rule, going forward:
 | Output | Skill |
 |--------|-------|
 | Code (write / fix / refactor / review) | `lazy-coding` |
-| Docs, plans, architecture, UX/API design | `simplicity-first` |
+| Docs, plans, architecture, UX/API design | `superuser:simplify` |
 | Anything a person reads — first mention of an abbreviation | `spell-out-abbreviations` |
 | Anything a person reads — length and plainness | `short-answers` |
 | Any interface, on any platform | `ui-craft` (**with** the platform skill, not instead of it) |

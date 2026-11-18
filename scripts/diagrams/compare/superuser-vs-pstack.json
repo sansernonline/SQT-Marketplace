@@ -24,7 +24,7 @@
         ["โค้ดน้อย อ่านง่าย", "`laziness-protocol` · `minimize-reader-load`", "`lazy-coding` · `readable-code`"],
         ["ลองหลายทาง แบ่งงานขนาน รีวิวหลายมุม", "`/arena` · `/swarm` · `/interrogate`", "`parallel-attempts-pick-best` · `parallel-split-and-merge` · `adversarial-review-panel`"],
         ["เรียนจากงานที่จบ · จำสไตล์เจ้าของ", "`/reflect` · `/automate-me`", "`session-lessons-to-skills` · `owner-style-capture` · `learning-reviewer` ทุกงาน · คิวกลาง"],
-        ["skill ตรวจแอปของโปรเจกต์", "`/create-verification-skill` · `/maintain-verification-skill`", "`app-verifier-setup` · `app-verifier-upkeep`"],
+        ["skill ตรวจแอปของโปรเจกต์", "`/create-verification-skill` · `/maintain-verification-skill`", "`app-verifier-setup`"],
         ["บันทึกการตัดสินใจ", "`/show-me-your-work`", "`decision-log`"],
         ["คัดบั๊กที่แจ้งเข้ามา", "automation `benny`", "`bug-inbox-triage`"],
         ["อธิบายระบบ · ไล่หาเหตุผล · สอน", "`/how` · `/why` · `/teach`", "playbook `investigation` — ไล่หลักฐานจาก git · PR · issue · connector · โหมดสอนต่อชั้น"],

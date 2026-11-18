@@ -1,14 +1,8 @@
 {
  "plugin": "e-commerce",
- "version": "1.9.2",
+ "version": "1.11.2",
  "description": "Thai online selling, buying and small-business back office — sell on Shopee, Lazada, TikTok Shop, LINE and Facebook (listings, pricing, stock, chat, live, returns), buy with confidence (total cost, warranty, OCPB 1166 complaints, refunds), and run the company (quotations, contracts, VAT and withholding tax, payroll, social security, year-end filing, labour law, PDPA, LINE OA, PromptPay). General information only, not tax or legal advice.",
- "cross": [
-  "graphic-design",
-  "software-development",
-  "trading-finance",
-  "superuser",
-  "personal-life"
- ],
+ "cross": [],
  "skills": [
   "buy-compare",
   "cash-flow",
@@ -76,6 +70,7 @@
   "principle-user-experience-first",
   "prior-art-review",
   "repeated-mistakes-to-checks",
+  "research-vote-decision",
   "research-with-sources",
   "session-lessons-to-skills",
   "simplify",
@@ -200,13 +195,13 @@
  "playbooks": [
   {
    "name": "business-doc",
-   "title": "เอกสารธุรกิจภาษาไทย",
-   "when": "ใบเสนอราคา ใบแจ้งหนี้ ใบเสร็จ ใบกำกับภาษี · หนังสือราชการ · สัญญา · ใบลา",
-   "done": "เอกสารพร้อมส่ง ช่องบังคับครบ ยอดตรง และจุดที่ต้องให้ผู้เชี่ยวชาญดูติดธงแล้ว",
+   "title": "Thai business documents",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "เลือกชนิดเอกสารให้ถูกกับเหตุการณ์ตาม `doc-quotation` (เสนอราคา · วางบิล · รับเงิน · ใบกำกับภาษี) · ใคร: หัวหน้าทีม",
+     "text": "Pick the document type that fits the event, per `doc-quotation` (quote · billing · payment received · tax invoice) · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -224,7 +219,7 @@
     },
     {
      "n": 2,
-     "text": "เก็บข้อมูลคู่สัญญาและรายการจากของจริง · เลขผู้เสียภาษีและที่อยู่ใส่ตามที่ผู้ใช้ให้ · ใคร: หัวหน้าทีม",
+     "text": "Collect the parties' details and line items from real sources · put the tax ID and address exactly as the user gave them · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -240,7 +235,7 @@
     },
     {
      "n": 3,
-     "text": "ร่างตามรูปแบบของ skill — ใบกำกับภาษีมีช่องครบตามกฎหมาย · หนังสือราชการตามระเบียบงานสารบรรณ · สัญญาตามเช็กลิสต์ข้อสัญญา · ใคร: `thai-doc-writer` ตัวใหม่",
+     "text": "Draft in the skill's format — a tax invoice has every field the law requires · an official letter follows the correspondence regulations · a contract follows the contract-clause checklist · ใคร: `thai-doc-writer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -258,7 +253,7 @@
     },
     {
      "n": 4,
-     "text": "คำนวณ VAT ภาษีหัก ณ ที่จ่าย และยอดรวมเป็นตัวหนังสือไทยด้วยสูตร · ใคร: `thai-doc-writer` ตัวใหม่",
+     "text": "Calculate VAT, withholding tax, and the total in Thai words using the formulas · ใคร: `thai-doc-writer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -276,7 +271,7 @@
     },
     {
      "n": 5,
-     "text": "ตรวจ — ช่องบังคับครบ · ตัวเลขและตัวหนังสือตรงกัน · ข้อสัญญาที่ต้องให้ทนายดูติดธงแล้ว · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) — mandatory fields are complete · figures and words match · contract clauses that need a lawyer are flagged · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -295,13 +290,13 @@
   },
   {
    "name": "buy-decision",
-   "title": "ตัดสินใจซื้อของชิ้นใหญ่",
-   "when": "จะซื้อเครื่องใช้ไฟฟ้า มือถือ รถ คอร์ส หรือบริการราคาสูง · ลังเลระหว่างหลายตัวเลือก",
-   "done": "มีตารางตัดสินใจที่คำนวณซ้ำแล้ว ทุกราคามีแหล่งและวันที่ และมีคำแนะนำ 1 ตัวพร้อมเหตุผล",
+   "title": "deciding on a big purchase",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "เก็บความต้องการ — ใช้ทำอะไร งบเท่าไร ต้องมีอะไร ห้ามมีอะไร ข้อไหนไม่รู้ให้ใส่ `(รอยืนยัน)` ไม่เดาค่า · ใคร: หัวหน้าทีม",
+     "text": "Gather the needs — what it is for, the budget, what it must have, what it must not have. For any item you do not know, put `(รอยืนยัน)` (to be confirmed) and do not guess a value · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -317,7 +312,7 @@
     },
     {
      "n": 2,
-     "text": "คัดตัวเลือก 2–4 ตัว แล้วเอาสเปกและราคาจากเว็บผู้ผลิตหรือร้านทางการ พร้อมวันที่ดู · ใคร: `consumer-advocate` ตัวใหม่",
+     "text": "Shortlist 2–4 options, then take the specs and prices from the maker's website or an official shop, with the date viewed · ใคร: `consumer-advocate` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -335,7 +330,7 @@
     },
     {
      "n": 3,
-     "text": "ทำตารางตัดสินใจถ่วงน้ำหนัก และคำนวณค่าใช้จ่ายรวมตลอดอายุใช้งาน (ราคา · ไฟ · ค่าซ่อม · ของสิ้นเปลือง) · ใคร: `consumer-advocate` ตัวใหม่",
+     "text": "Build a weighted decision table and work out the total cost over the useful life (price · electricity · repairs · consumables) · ใคร: `consumer-advocate` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -353,7 +348,7 @@
     },
     {
      "n": 4,
-     "text": "ตรวจรีวิวด้วยเกณฑ์รีวิวปลอมของ `buy-compare` ทิ้งรีวิวที่ไม่ผ่าน แล้วบอกว่าทิ้งกี่รีวิวเพราะอะไร · ใคร: `consumer-advocate` ตัวใหม่คัดรีวิว · `reviewer` ตัวใหม่ตรวจว่าการคัดตรงเกณฑ์",
+     "text": "Check (ตรวจ) the reviews with the fake-review criteria in `buy-compare`. Drop reviews that fail, and say how many were dropped and why · ใคร: `consumer-advocate` ตัวใหม่ picks the reviews · `reviewer` ตัวใหม่ checks that the picking follows the criteria",
      "sub": [],
      "phase": "",
      "who": {
@@ -362,7 +357,7 @@
       "agents": [
        "consumer-advocate"
       ],
-      "raw": "`consumer-advocate` ตัวใหม่คัดรีวิว · `reviewer` ตัวใหม่ตรวจว่าการคัดตรงเกณฑ์"
+      "raw": "`consumer-advocate` ตัวใหม่ picks the reviews · `reviewer` ตัวใหม่ checks that the picking follows the criteria"
      },
      "skills": [
       "buy-compare"
@@ -373,7 +368,7 @@
     },
     {
      "n": 5,
-     "text": "เทียบเงื่อนไขรับประกันและช่องทางเคลมด้วย `warranty-tracker` · ใคร: `consumer-advocate` ตัวใหม่",
+     "text": "Compare the warranty terms and claim channels with `warranty-tracker` · ใคร: `consumer-advocate` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -393,14 +388,14 @@
     },
     {
      "n": 6,
-     "text": "แนะนำ 1 ตัวพร้อมเหตุผล และตัวสำรอง 1 ตัว ส่วนการกดสั่งซื้ออยู่ใน \"รออนุมัติ\" · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ตรวจทั้งชุดก่อนถึงผู้ใช้ (กดสั่งซื้อ: ผู้ใช้)",
+     "text": "Recommend 1 option with the reason, and 1 backup. Placing the order goes under \"รออนุมัติ\" (awaiting approval) · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ checks the whole set before it reaches the user (placing the order: ผู้ใช้)",
      "sub": [],
      "phase": "",
      "who": {
       "lead": true,
       "user": true,
       "agents": [],
-      "raw": "หัวหน้าทีม · `reviewer` ตัวใหม่ตรวจทั้งชุดก่อนถึงผู้ใช้ (กดสั่งซื้อ: ผู้ใช้)"
+      "raw": "หัวหน้าทีม · `reviewer` ตัวใหม่ checks the whole set before it reaches the user (placing the order: ผู้ใช้)"
      },
      "skills": [],
      "commands": [],
@@ -412,13 +407,13 @@
   },
   {
    "name": "complaint",
-   "title": "ร้องเรียนตามขั้นบันได",
-   "when": "ร้านไม่แก้ ไม่ส่งของ หรือไม่ทำตามที่สัญญา · บริการแย่และอยากร้องเรียน",
-   "done": "ไทม์ไลน์ รายการหลักฐาน และร่างทุกขั้นพร้อมส่ง ส่วนการส่งจริงอยู่ใน \"รออนุมัติ\"",
+   "title": "complaining up the ladder",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "เรียงเหตุการณ์เป็นไทม์ไลน์พร้อมวันที่ และทำรายการหลักฐาน ถ้าขาดชิ้นไหนให้บอกผู้ใช้ว่าต้องเก็บอะไร · ใคร: หัวหน้าทีม",
+     "text": "Put the events in a timeline with dates, and make an evidence list. If a piece is missing, tell the user what to collect · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -434,7 +429,7 @@
     },
     {
      "n": 2,
-     "text": "ระบุสิ่งที่ต้องการให้ชัด — ซ่อม · เปลี่ยน · คืนเงิน · ขอโทษ · ชดเชย ใช้คำตอบตอนเริ่ม ไม่มีให้เลือกตามความเสียหายแล้วติด `(รอยืนยัน)` · ใคร: หัวหน้าทีม",
+     "text": "State clearly what is wanted — repair · replacement · refund · apology · compensation. Use the answer given at the start. If there is none, choose according to the damage and mark it `(รอยืนยัน)` (to be confirmed) · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -450,7 +445,7 @@
     },
     {
      "n": 3,
-     "text": "วางขั้นบันไดตาม `refund-request` (`references/complaint-letter.md`) — ร้าน → แพลตฟอร์ม → หน่วยงานรับเรื่อง → ศาลคดีผู้บริโภค แล้วตรวจช่องทางและกรอบเวลาของแต่ละขั้นจากเว็บทางการ · ใคร: `consumer-advocate` ตัวใหม่",
+     "text": "Lay out the ladder following `refund-request` (`references/complaint-letter.md`) — shop → platform → the agency that takes complaints → consumer court. Then check the channel and time limit of each rung on official websites · ใคร: `consumer-advocate` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -470,7 +465,7 @@
     },
     {
      "n": 4,
-     "text": "ร่างจดหมายหรือข้อความของขั้นแรกเป็นภาษาไทยสุภาพ ชัด มีกำหนดวันตอบ · ใคร: `consumer-advocate` ตัวใหม่",
+     "text": "Draft the letter or message for the first rung in polite, clear Thai, with a reply deadline · ใคร: `consumer-advocate` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -488,7 +483,7 @@
     },
     {
      "n": 5,
-     "text": "เตรียมร่างของขั้นถัดไปไว้ล่วงหน้า พร้อมเงื่อนไขว่าจะขึ้นขั้นเมื่อไร · ใคร: `consumer-advocate` ตัวใหม่",
+     "text": "Prepare drafts for the next rungs in advance, with the condition for when to move up a rung · ใคร: `consumer-advocate` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -506,7 +501,7 @@
     },
     {
      "n": 6,
-     "text": "ตรวจว่าทุกข้ออ้างชี้หลักฐานได้ วันที่ตรงกับไทม์ไลน์ และไม่มีถ้อยคำข่มขู่หรือหมิ่นประมาท · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) that every claim points to evidence, the dates match the timeline, and there are no threatening or defamatory words · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -525,13 +520,13 @@
   },
   {
    "name": "customer-issue",
-   "title": "เรื่องลูกค้า คืนสินค้า และรีวิวแย่",
-   "when": "ลูกค้าถามหรือบ่น · ของส่งช้า ผิด หรือเสีย · ขอคืนเงิน · ได้รีวิว 1–3 ดาว",
-   "done": "ร่างคำตอบและทางที่เลือกพร้อมส่ง โดยการส่งและคืนเงินอยู่ใน \"รออนุมัติ\"",
+   "title": "customer cases, returns, and bad reviews",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "อ่านแชตหรือรีวิวและข้อมูลคำสั่งซื้อจริง — สถานะพัสดุ วันที่ นโยบายร้าน · ใคร: หัวหน้าทีม",
+     "text": "Read the chat or review and the real order data — parcel status, dates, shop policy · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -547,7 +542,7 @@
     },
     {
      "n": 2,
-     "text": "แยกประเภทกรณี แล้วเลือกทางตาม `returns-and-bad-reviews`: ตอบ · เปลี่ยน · คืนเงิน · โต้แย้งกับแพลตฟอร์ม · ใคร: `customer-chat` ตัวใหม่",
+     "text": "Classify the case, then choose the route per `returns-and-bad-reviews`: reply · exchange · refund · dispute with the platform · ใคร: `customer-chat` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -567,7 +562,7 @@
     },
     {
      "n": 3,
-     "text": "ร่างคำตอบภาษาไทยสุภาพในน้ำเสียงของร้าน และอยู่ในนโยบายแพลตฟอร์ม · ใคร: `customer-chat` ตัวใหม่",
+     "text": "Draft a polite Thai reply in the shop's tone of voice, within platform policy · ใคร: `customer-chat` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -585,7 +580,7 @@
     },
     {
      "n": 4,
-     "text": "ถ้าเป็นรีวิวสาธารณะ ให้ร่างคำตอบที่ไม่เถียง และไม่เปิดเผยข้อมูลลูกค้า · ใคร: `customer-chat` ตัวใหม่",
+     "text": "For a public review, draft a reply that does not argue and does not reveal customer data · ใคร: `customer-chat` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -603,7 +598,7 @@
     },
     {
      "n": 5,
-     "text": "ตรวจว่าไม่มีสัญญาที่ร้านทำไม่ได้ และข้อเท็จจริงตรงกับคำสั่งซื้อ · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) that the reply promises nothing the shop cannot do and that the facts match the order · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -622,18 +617,18 @@
   },
   {
    "name": "learn-from-session",
-   "title": "ทำให้ทีมเก่งขึ้นทุกรอบ",
-   "when": "ผู้ใช้สั่ง \"รวมบทเรียน\" หรือ \"reflect\" เท่านั้น ถ้าผู้ใช้แก้ทีมเรื่องเดิมเป็นครั้งที่สอง หรือ `.claude/superuser/learn/` มีบันทึกรอเกิน 5 ไฟล์ ให้บอกผู้ใช้ในรายงานว่าควรสั่ง \"รวมบทเรียน\" แต่ไม่เริ่มเอง",
-   "done": "ทุกบทเรียนชี้ได้ว่าไปอยู่ที่ไฟล์ไหน · ความผิดที่ทำซ้ำมีตัวตรวจที่พิสูจน์แล้วว่าจับกรณีจริงได้ · ช่อง \"ควรรวมไหม\" และ \"รวมแล้ว\" ในคิวกลางตรงกับที่ทำจริง",
+   "title": "make the team better every round",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "**รวบรวม** ตามลำดับ · ใคร: หัวหน้าทีม",
+     "text": "**Gather**, in this order · ใคร: หัวหน้าทีม",
      "sub": [
-      "คิวกลาง `~/.claude/superuser/IMPROVEMENTS.md` และ `IMPROVEMENTS.md` — แถวที่ \"รวมแล้ว\" = `ยัง` และ \"ควรรวมไหม\" ≠ `ไม่รวม` เรียงตาม \"ครั้ง\" มากไปน้อย แล้วเปิดหลักฐานตาม \"ที่มา\" · แถวในคิวกลาง (ช่องนี้มีเฉพาะในคิวกลาง) ที่รวมแล้วและถึง \"ตรวจวันที่\" ให้ดู log แล้วใส่ \"ผลหลังรวม\" · เกิดอีก 2 ครั้ง → แถวนั้นกลับมาเป็นงานรอบนี้: ทำเป็นตัวตรวจหรือถอยการแก้กลับ",
-      "`.claude/superuser/learn/*.md` ของโปรเจกต์ที่เปิดอยู่ — ตาราง \"ควรปรับทีม\" (บันทึกเก่า: \"ควรปรับ skill\") เรื่องเดียวกันรวมเป็นแถวเดียวแล้วนับครั้ง"
+      "The central queue `~/.claude/superuser/IMPROVEMENTS.md` and `IMPROVEMENTS.md`: rows where \"รวมแล้ว\" (merged) = `ยัง` (not yet) and \"ควรรวมไหม\" (should merge?) ≠ `ไม่รวม` (do not merge), sorted by \"ครั้ง\" (times) high to low, then open the evidence under \"ที่มา\" (source). For a central-queue row (this column exists only in the central queue) that is merged and has reached its \"ตรวจวันที่\" (check date), look at the log and fill \"ผลหลังรวม\" (result after merge). It happened again 2 times → that row comes back as this round's job: make it a checker or roll the fix back.",
+      "`.claude/superuser/learn/*.md` of the open projects: the \"ควรปรับทีม\" (team should change) table (older notes: \"ควรปรับ skill\"). Merge rows about the same issue into one row and count the times."
      ],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -647,25 +642,20 @@
     },
     {
      "n": 2,
-     "text": "**แยกประเภท** · ใคร: หัวหน้าทีม",
+     "text": "**Classify**, ใคร: หัวหน้าทีม",
      "sub": [
-      "**นับชนิดพลาดก่อน** — ทุกแถวติดป้าย `ไม่ได้เปิด skill` · `เปิดแต่ไม่ทำตาม` · `ไม่มีกฎ` (นิยามใน agent `learning-reviewer`) แล้วนับ · ส่วนใหญ่เป็น `ไม่ได้เปิด` → งานรอบนี้คือแก้การบอก skill (`triggers.md` · `hooks/skill-router.json`) ไม่ใช่เขียนข้อความเพิ่มใน skill",
-      "**skill ที่รับบทเรียนรวมแล้ว 3 ข้อแต่พลาดไม่ลด** — หยุดเพิ่มข้อความ เสนอตัวตรวจ ตัวอย่างคู่ (ก่อน → หลัง) หรือถอยการแก้กลับ อย่างใดอย่างหนึ่ง",
-      "**ความผิดที่ทำซ้ำ** (เจอ 2 ครั้งขึ้นไป · `correction: true` ใน log เรื่องเดียวกัน) ทำเป็นตัวตรวจ ไม่เขียนเตือนเพิ่ม (`repeated-mistakes-to-checks` ถ้ามี ไม่งั้นสคริปต์ตรวจหรือข้อในรายการตรวจก่อนส่ง)",
-      "**วิธีที่ได้ผล หรือ skill ที่บอกผิด** แก้ย่อหน้าใน SKILL.md (`session-lessons-to-skills` ถ้ามี)",
-      "**playbook ที่ประกอบเองแล้วใช้ซ้ำ 2 ครั้งขึ้นไป** ให้เสนอเป็น playbook ถาวรตาม [`playbook-template`](playbook-template.md)",
-      "**แก้ agent หรือ playbook** — แก้ย่อหน้าแบบเดียวกัน · playbook ต้องยังผ่าน `validate-marketplace.mjs`",
-      "**กฎผู้ใช้** — 1 บรรทัดใน `~/.claude/superuser-style.md` ทำได้จากทุกโปรเจกต์",
-      "**ตัด** — ลบบรรทัดที่ตัวตรวจจับได้แล้ว หรือที่ซ้ำกับไฟล์อื่น",
-      "**skill หรือ agent ใหม่** — เฉพาะแถวที่ผู้ใช้ `รับ` แล้ว และแก้ของเดิมไม่ได้ · agent ใหม่ต้องมีเหตุผลเรื่อง context เครื่องมือ หรือโมเดล ไม่งั้นทำเป็น skill"
+      "**Count the mistake types first.** Tag every row `ไม่ได้เปิด skill` (did not open the skill) · `เปิดแต่ไม่ทำตาม` (opened but did not follow) · `ไม่มีกฎ` (no rule) (definitions in the agent `learning-reviewer`), then count. Mostly `ไม่ได้เปิด` → this round's job is to fix how skills are signalled (`triggers.md` · `hooks/skill-router.json`), not to write more text in the skill.",
+      "**A skill that has absorbed 3 merged lessons but mistakes did not drop.** Stop adding text. Propose one of: a checker, a paired example (before → after), or rolling the fix back.",
+      "**A repeated mistake** (found 2 or more times · `correction: true` in the log for the same issue): make it a checker, do not write more warnings (`repeated-mistakes-to-checks` if present, otherwise a check script or an item in the pre-send checklist).",
+      "**A method that worked, or a skill that says something wrong:** fix the paragraph in SKILL.md (`session-lessons-to-skills` if present).",
+      "**A playbook assembled on the spot and reused 2 or more times:** propose it as a permanent playbook per [`playbook-template`](playbook-template.md).",
+      "**Fixing an agent or playbook:** fix the matching paragraph · a playbook must still pass `validate-marketplace.mjs`.",
+      "**A user rule:** 1 line in `~/.claude/superuser-style.md`, which works from every project.",
+      "**Cut:** delete lines a checker already catches, or that duplicate another file.",
+      "**A new skill or agent:** only for rows the user has `รับ` (accepted) and that cannot be fixed by changing the existing one · a new agent needs a reason about context, tools, or model, otherwise make it a skill."
      ],
-     "phase": "",
-     "who": {
-      "lead": true,
-      "user": false,
-      "agents": [],
-      "raw": "หัวหน้าทีม"
-     },
+     "phase": "Steps",
+     "who": null,
      "skills": [],
      "commands": [],
      "playbooks": [],
@@ -673,9 +663,9 @@
     },
     {
      "n": 3,
-     "text": "**ทิ้งเรื่องที่เกิดครั้งเดียว** — ครั้งเดียวยังไม่ใช่บทเรียน · ใคร: หัวหน้าทีม",
+     "text": "**Drop one-off events.** Once is not yet a lesson · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -689,9 +679,9 @@
     },
     {
      "n": 4,
-     "text": "**ทุกบทเรียนต้องจบเป็นการแก้ที่จับต้องได้** — ตัวตรวจ · สคริปต์ · ย่อหน้าที่แก้ ถ้าแก้ของเดิมได้ก็ไม่สร้างใหม่ ถ้าข้อใหม่ขัดกับข้อเดิม ให้แก้ข้อเดิม ไม่ต่อท้าย · ใคร: หัวหน้าทีม",
+     "text": "**Every lesson must end as a concrete fix:** a checker · a script · a corrected paragraph. If the existing thing can be fixed, do not create a new one. If a new item contradicts an old one, fix the old one, do not append · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -705,9 +695,9 @@
     },
     {
      "n": 5,
-     "text": "**เสนอผู้ใช้** — ตาราง: ชนิด · ที่ไหน · เดิม → ใหม่ · หลักฐาน · ครั้ง · คาดว่า · ตรวจวันที่ ให้ตอบทีละข้อ `รับ` · `ไม่รับ` · `ไว้ทีหลัง` · ข้อที่ยังไม่ `รับ` ลง \"รออนุมัติ\" และยังไม่แก้ไฟล์ · ใคร: หัวหน้าทีม",
+     "text": "**Propose to the user.** A table: type · where · old → new · evidence · times · expected · check date. Ask them to answer item by item `รับ` (accept) · `ไม่รับ` (decline) · `ไว้ทีหลัง` (later). Items not yet `รับ` go under \"รออนุมัติ\" and the files are not edited yet · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -717,18 +707,18 @@
      "skills": [],
      "commands": [],
      "playbooks": [],
-     "approval": true
+     "approval": false
     },
     {
      "n": 6,
-     "text": "**แก้เฉพาะข้อที่ `รับ` แล้ว** (ตอบมา หรือ `ควรรวม` ในคิว) ทีละย่อหน้า ไม่เขียนทั้งไฟล์ใหม่ · ตัวตรวจใหม่ต้องรันกับเหตุการณ์เดิมให้เห็นว่า**ล้มก่อนแก้ และผ่านหลังแก้** แล้วเก็บเหตุการณ์นั้นไว้เป็นกรณีทดสอบ (self-test หรือ test ของสคริปต์) · ของกลางแก้ที่ plugin `superuser` แล้วรัน `node scripts/sync/sync-superuser.mjs` กับ `validate-marketplace.mjs` (ติดตั้ง plugin เดี่ยว: เสนอ เดิม → ใหม่ ให้ผู้ใช้แก้ใน repo SQT-Marketplace) · ใคร: หัวหน้าทีมแก้ · `reviewer` ตัวใหม่ตรวจกับหลักฐาน",
+     "text": "**Fix only items that are `รับ`** (answered, or `ควรรวม` (should merge) in the queue), one paragraph at a time, never rewriting the whole file. A new checker must be run against the original event to show that it **fails before the fix and passes after**, then keep that event as a test case (a self-test or the script's test). Shared things are fixed in plugin `superuser`, then run `node scripts/sync/sync-superuser.mjs` and `validate-marketplace.mjs` (single-plugin install: propose old → new for the user to fix in the SQT-Marketplace repo) · ใคร: หัวหน้าทีม fixes · `reviewer` ตัวใหม่ checks against the evidence",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
       "agents": [],
-      "raw": "หัวหน้าทีมแก้ · `reviewer` ตัวใหม่ตรวจกับหลักฐาน"
+      "raw": "หัวหน้าทีม fixes · `reviewer` ตัวใหม่ checks against the evidence"
      },
      "skills": [
       "superuser"
@@ -739,9 +729,9 @@
     },
     {
      "n": 7,
-     "text": "**ปิดรายการ** — ย้ายบันทึกที่จัดการแล้วไป `.claude/superuser/learn/done/` แล้วใน `IMPROVEMENTS.md` และคิวกลาง ใส่ช่อง \"ควรรวมไหม\" เป็น `ควรรวม` หรือ `ไม่รวม (<เหตุผล>)` และใส่ช่อง \"รวมแล้ว\" เป็น `แล้ว <วันที่> (<ไฟล์>)` เฉพาะแถวที่แก้ไฟล์จริงแล้ว · ใคร: หัวหน้าทีม",
+     "text": "**Close the list.** Move handled notes to `.claude/superuser/learn/done/`, then in `IMPROVEMENTS.md` and the central queue set the \"ควรรวมไหม\" field to `ควรรวม` or `ไม่รวม (<reason>)` and the \"รวมแล้ว\" field to `แล้ว <date> (<file>)` (done <date> (<file>)), only for rows where files were really fixed · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -758,13 +748,13 @@
   },
   {
    "name": "line-oa",
-   "title": "ตั้งและดูแล LINE Official Account",
-   "when": "สร้าง LINE OA · เปิด Messaging API · ทำ chatbot · rich menu · broadcast",
-   "done": "ข้อความทดสอบผ่านจริง ค่าลับไม่อยู่ในโค้ดหรือแชต และโควตาคำนวณแล้ว",
+   "title": "setting up and running a LINE Official Account",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "ตรวจแพ็กเกจและโควตาข้อความของบัญชีจากหน้าทางการของ LINE · ใคร: `line-admin` ตัวใหม่",
+     "text": "Check the account's plan and message quota on LINE's official pages · ใคร: `line-admin` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -782,27 +772,27 @@
     },
     {
      "n": 2,
-     "text": "ตั้ง channel และ webhook ตาม `line-oa-setup` — ตรวจลายเซ็น X-Line-Signature และเก็บค่าลับไว้ในไฟล์ตั้งค่าที่ผู้ใช้ใส่เอง · ใคร: `line-admin` ตัวใหม่ (ผู้ใช้ใส่ค่าลับเอง)",
+     "text": "Set up the channel and webhook following `line-oa-setup` — verify the X-Line-Signature signature, and keep secrets in a config file that the user fills in personally · ใคร: `line-admin` ตัวใหม่ (the user fills in the secrets personally)",
      "sub": [],
      "phase": "",
      "who": {
       "lead": false,
-      "user": true,
+      "user": false,
       "agents": [
        "line-admin"
       ],
-      "raw": "`line-admin` ตัวใหม่ (ผู้ใช้ใส่ค่าลับเอง)"
+      "raw": "`line-admin` ตัวใหม่ (the user fills in the secrets personally)"
      },
      "skills": [
       "line-oa-setup"
      ],
      "commands": [],
      "playbooks": [],
-     "approval": true
+     "approval": false
     },
     {
      "n": 3,
-     "text": "chatbot — จัดกลุ่มคำถามจริงของลูกค้าตามเจตนา (intent) แล้วตอบจากฐานความรู้ ถ้าไม่มั่นใจให้ส่งต่อให้พนักงาน และไม่แต่งราคาหรือสต็อก · ใคร: `line-admin` ตัวใหม่",
+     "text": "Chatbot — group real customer questions by intent, then answer from the knowledge base. If unsure, hand over to staff, and never invent prices or stock · ใคร: `line-admin` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -820,7 +810,7 @@
     },
     {
      "n": 4,
-     "text": "rich menu — ทำขนาดภาพและพื้นที่กดตาม `graphic-design:line-richmenu` (ไม่ได้ติดตั้ง → ใช้ขนาดจากเอกสารทางการของ LINE แล้วติดป้าย `ยังไม่ได้ตรวจ`) · ใคร: `line-admin` ตัวใหม่",
+     "text": "Rich menu — build the image size and tap areas following `graphic-design:line-richmenu` (not installed → use the sizes from LINE's official documents and tag them `ยังไม่ได้ตรวจ` (not yet checked)) · ใคร: `line-admin` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -838,7 +828,7 @@
     },
     {
      "n": 5,
-     "text": "broadcast — คำนวณโควตาก่อนส่ง ส่วนการส่งจริงต้องรออนุมัติ · ใคร: `line-admin` ตัวใหม่คำนวณโควตา แล้วผู้ใช้อนุมัติการส่งจริง",
+     "text": "Broadcast — calculate the quota before sending. The actual send must wait for approval · ใคร: `line-admin` ตัวใหม่ calculates the quota, then ผู้ใช้อนุมัติ the actual send (the user approves)",
      "sub": [],
      "phase": "",
      "who": {
@@ -847,7 +837,7 @@
       "agents": [
        "line-admin"
       ],
-      "raw": "`line-admin` ตัวใหม่คำนวณโควตา แล้วผู้ใช้อนุมัติการส่งจริง"
+      "raw": "`line-admin` ตัวใหม่ calculates the quota, then ผู้ใช้อนุมัติ the actual send (the user approves)"
      },
      "skills": [],
      "commands": [],
@@ -856,7 +846,7 @@
     },
     {
      "n": 6,
-     "text": "ทดสอบ echo หรือข้อความทดสอบกับบัญชีทดสอบ · ใคร: `line-admin` ตัวใหม่ส่งไปบัญชีทดสอบ · `reviewer` ตัวใหม่ตรวจผลกับ log และการคำนวณโควตา",
+     "text": "Test (ทดสอบ) with an echo or a test message to a test account · ใคร: `line-admin` ตัวใหม่ sends to the test account · `reviewer` ตัวใหม่ checks the result against the log and the quota calculation",
      "sub": [],
      "phase": "",
      "who": {
@@ -865,7 +855,7 @@
       "agents": [
        "line-admin"
       ],
-      "raw": "`line-admin` ตัวใหม่ส่งไปบัญชีทดสอบ · `reviewer` ตัวใหม่ตรวจผลกับ log และการคำนวณโควตา"
+      "raw": "`line-admin` ตัวใหม่ sends to the test account · `reviewer` ตัวใหม่ checks the result against the log and the quota calculation"
      },
      "skills": [],
      "commands": [],
@@ -877,13 +867,13 @@
   },
   {
    "name": "live-session",
-   "title": "เตรียมไลฟ์ขายของ",
-   "when": "จะไลฟ์บน TikTok Shop · Shopee Live · Lazada Live · Facebook Live",
-   "done": "run sheet และเช็กลิสต์พร้อมใช้ ผ่านการตรวจคำต้องห้ามทุกบรรทัด",
+   "title": "prepare a live sales stream",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "เลือกสินค้าและดีลของไลฟ์ ตรวจสต็อกและราคาว่ายังมีกำไร · ใคร: `shop-manager` ตัวใหม่",
+     "text": "Choose the products and deals for the live, and check that stock and prices still leave a profit · ใคร: `shop-manager` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -901,7 +891,7 @@
     },
     {
      "n": 2,
-     "text": "ทำ run sheet รายนาทีตาม `live-selling-script` — hook เปิด · ลำดับสินค้า · จังหวะ flash deal · ประโยคปิดการขาย · ใคร: `live-seller` ตัวใหม่",
+     "text": "Make a minute-by-minute run sheet per `live-selling-script` — opening hook · product order · flash deal timing · closing lines · ใคร: `live-seller` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -921,7 +911,7 @@
     },
     {
      "n": 3,
-     "text": "ทำเช็กลิสต์หลังบ้าน — คนตอบแชต สต็อกที่ล็อกไว้ ลิงก์สินค้า · ใคร: `live-seller` ตัวใหม่",
+     "text": "Make the back-office checklist — who answers chat, which stock is locked, product links · ใคร: `live-seller` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -939,7 +929,7 @@
     },
     {
      "n": 4,
-     "text": "ตรวจคำพูดทุกบรรทัดกับรายการคำโฆษณาต้องห้าม และเช็กลิสต์กับสต็อกจริง · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) every spoken line against the list of banned advertising words, and check the checklist against real stock · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -958,13 +948,13 @@
   },
   {
    "name": "monthly-close",
-   "title": "ปิดเดือน — เงินเดือน ภาษี ประกันสังคม",
-   "when": "ทำเงินเดือนประจำเดือน · ยื่นภาษีหัก ณ ที่จ่าย ภาษีมูลค่าเพิ่ม และประกันสังคม",
-   "done": "ตารางเงินเดือนที่คำนวณซ้ำแล้ว และชุดยื่นทุกแบบของเดือนพร้อมยื่นก่อนวันครบกำหนด",
+   "title": "month-end close — payroll, tax, social security",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "เก็บข้อมูลจริงของเดือน — รายชื่อพนักงาน เงินเดือน OT เบี้ยขยัน หักขาดลา กองทุนสำรองเลี้ยงชีพ ถ้าข้อมูลไม่ครบให้ใส่ `(รอยืนยัน)` · ใคร: หัวหน้าทีม",
+     "text": "Collect the real data for the month — employee list, salary, overtime, attendance bonus, absence and leave deductions, provident fund. If the data is incomplete, put `(รอยืนยัน)` (to be confirmed) · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -980,7 +970,7 @@
     },
     {
      "n": 2,
-     "text": "ตรวจอัตราและเพดานปีนี้จากเว็บทางการ — ฐานค่าจ้างประกันสังคม อัตราภาษี · ใคร: `tax-helper` ตัวใหม่",
+     "text": "Check this year's rates and caps on official websites — the social security wage base and tax rates · ใคร: `tax-helper` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -998,7 +988,7 @@
     },
     {
      "n": 3,
-     "text": "คำนวณ gross → net ต่อคนด้วยสูตรในสเปรดชีตตาม `payroll-th` (ภาษีหักแบบประมาณทั้งปี) · ใคร: `tax-helper` ตัวใหม่",
+     "text": "Calculate gross → net per person with spreadsheet formulas following `payroll-th` (tax withheld by the annualised estimate) · ใคร: `tax-helper` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1018,7 +1008,7 @@
     },
     {
      "n": 4,
-     "text": "ทำรายการแบบที่ต้องยื่นเดือนนี้พร้อมวันครบกำหนด ตาม `tax-vat-th` และ `social-security-th` · ใคร: `tax-helper` ตัวใหม่",
+     "text": "Make the list of forms due this month with their due dates, following `tax-vat-th` and `social-security-th` · ใคร: `tax-helper` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1039,25 +1029,25 @@
     },
     {
      "n": 5,
-     "text": "เตรียมไฟล์ยื่นและขั้นตอนทีละคลิกบนระบบ e-Filing — การยื่นและชำระจริงต้องรออนุมัติ · ใคร: `tax-helper` ตัวใหม่เตรียม แล้วผู้ใช้ยื่นและชำระเอง",
+     "text": "Prepare the filing files and click-by-click steps on the e-Filing system — the actual filing and payment must wait for approval · ใคร: `tax-helper` ตัวใหม่ prepares, then the user files and pays personally",
      "sub": [],
      "phase": "",
      "who": {
       "lead": false,
-      "user": true,
+      "user": false,
       "agents": [
        "tax-helper"
       ],
-      "raw": "`tax-helper` ตัวใหม่เตรียม แล้วผู้ใช้ยื่นและชำระเอง"
+      "raw": "`tax-helper` ตัวใหม่ prepares, then the user files and pays personally"
      },
      "skills": [],
      "commands": [],
      "playbooks": [],
-     "approval": true
+     "approval": false
     },
     {
      "n": 6,
-     "text": "ตรวจ — ยอดรวมในแบบและไฟล์ยื่นต้องตรงกับตารางเงินเดือน และคำนวณซ้ำด้วยมือ 1 คน · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) — the totals in the forms and filing files must match the payroll table, and recalculate 1 person by hand · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1076,13 +1066,13 @@
   },
   {
    "name": "new-product",
-   "title": "ลงสินค้าใหม่ครบชุด",
-   "when": "มีสินค้าใหม่จะลงขาย 1 หรือหลายแพลตฟอร์ม",
-   "done": "ตารางราคาที่คำนวณซ้ำแล้ว · listing ทุกแพลตฟอร์มผ่านการตรวจคำต้องห้าม · SKU อยู่ในไฟล์สต็อก · การลงขายจริงอยู่ใน \"รออนุมัติ\"",
+   "title": "list a new product with the full set",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "เก็บข้อมูล — สินค้า ต้นทุนต่อชิ้น แพลตฟอร์ม ประเภทร้าน หมวด น้ำหนักและขนาดพัสดุ ข้อไหนไม่มีให้ใส่ `(รอยืนยัน)` · ใคร: หัวหน้าทีม",
+     "text": "Collect the data — product, cost per unit, platforms, shop type, category, parcel weight and size. Mark any missing item `(รอยืนยัน)` (awaiting confirmation) · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1098,7 +1088,7 @@
     },
     {
      "n": 2,
-     "text": "คิดค่าส่งจริงจากขนาดพัสดุตาม `shipping-compare` (รวมน้ำหนักตามปริมาตร) · ใคร: `shop-manager` ตัวใหม่",
+     "text": "Work out the real shipping cost from the parcel size per `shipping-compare` (including volumetric weight) · ใคร: `shop-manager` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1118,7 +1108,7 @@
     },
     {
      "n": 3,
-     "text": "ตั้งราคาต่อแพลตฟอร์มด้วยสูตรของ `marketplace-fees-pricing` เป็นตาราง แล้วบอกให้ตรวจอัตรากับ Seller Centre · ใคร: `shop-manager` ตัวใหม่",
+     "text": "Set the price per platform with the formula in `marketplace-fees-pricing`, as a table, and tell the user to check the rates against Seller Centre · ใคร: `shop-manager` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1138,7 +1128,7 @@
     },
     {
      "n": 4,
-     "text": "เขียนชื่อสินค้า คำค้น คำบรรยาย และเช็กลิสต์รูป ต่อแพลตฟอร์มตาม `product-listing` · ใคร: `shop-manager` ตัวใหม่",
+     "text": "Write the product name, search keywords, description, and image checklist per platform, following `product-listing` · ใคร: `shop-manager` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1158,7 +1148,7 @@
     },
     {
      "n": 5,
-     "text": "ตั้ง SKU และใส่ในไฟล์สต็อกหลักตาม `multi-shop-stock` พร้อมจุดสั่งซื้อซ้ำ · ใคร: `shop-manager` ตัวใหม่",
+     "text": "Set the SKU and enter it in the master stock file per `multi-shop-stock`, with a reorder point · ใคร: `shop-manager` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1178,7 +1168,7 @@
     },
     {
      "n": 6,
-     "text": "ตรวจคำโฆษณาต้องห้าม SKU และขนาดรูปตามแพลตฟอร์ม (`social-formats` ใน graphic-design ถ้าติดตั้ง) · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) banned advertising words, the SKU, and image sizes for each platform (`social-formats` in graphic-design, ถ้าติดตั้ง) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1197,31 +1187,31 @@
   },
   {
    "name": "pdpa-setup",
-   "title": "ตั้งระบบ PDPA ของ SME",
-   "when": "เริ่มทำ PDPA · ทำแบบขอความยินยอม · มีคำขอจากเจ้าของข้อมูล · ข้อมูลรั่ว",
-   "done": "ชุดเอกสาร PDPA พร้อมใช้ และขั้นตอนรับคำขอและเหตุละเมิดที่มีกรอบเวลาชัด",
+   "title": "set up PDPA (Personal Data Protection Act) for an SME",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "ถ้ามีข้อมูลรั่วอยู่ตอนนี้ ให้ทำขั้นตอนรับมือเหตุละเมิดใน `pdpa-workflow` ก่อนอย่างอื่น และเริ่มนับเวลาที่ต้องแจ้งหน่วยงาน · ใคร: หัวหน้าทีม (คุยกับผู้ใช้ทันที)",
+     "text": "If data is leaking right now, run the breach-response steps in `pdpa-workflow` before anything else, and start the clock for notifying the authority · ใคร: หัวหน้าทีม (talk to the user at once)",
      "sub": [],
      "phase": "",
      "who": {
       "lead": true,
-      "user": true,
+      "user": false,
       "agents": [],
-      "raw": "หัวหน้าทีม (คุยกับผู้ใช้ทันที)"
+      "raw": "หัวหน้าทีม (talk to the user at once)"
      },
      "skills": [
       "pdpa-workflow"
      ],
      "commands": [],
      "playbooks": [],
-     "approval": true
+     "approval": false
     },
     {
      "n": 2,
-     "text": "ทำรายการข้อมูลส่วนบุคคลที่บริษัทเก็บ — เก็บอะไร ของใคร เพื่ออะไร ฐานทางกฎหมาย เก็บนานเท่าไร · ใคร: `compliance-helper` ตัวใหม่",
+     "text": "List the personal data the company keeps — what, whose, why, the legal basis, and how long · ใคร: `compliance-helper` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1239,7 +1229,7 @@
     },
     {
      "n": 3,
-     "text": "ร่างแบบขอความยินยอม ประกาศความเป็นส่วนตัว และบันทึกรายการกิจกรรมประมวลผล · ใคร: `compliance-helper` ตัวใหม่",
+     "text": "Draft the consent form, the privacy notice, and the record of processing activities · ใคร: `compliance-helper` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1257,7 +1247,7 @@
     },
     {
      "n": 4,
-     "text": "วางขั้นตอนรับคำขอจากเจ้าของข้อมูลพร้อมกรอบเวลา · ใคร: `compliance-helper` ตัวใหม่",
+     "text": "Set out the steps for handling data subject requests, with deadlines · ใคร: `compliance-helper` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1275,7 +1265,7 @@
     },
     {
      "n": 5,
-     "text": "ตรวจ — ทุกกิจกรรมต้องมีฐานทางกฎหมาย และจุดที่ต้องให้ทนายดูติดธงแล้ว · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) — every activity has a legal basis, and every point that needs a lawyer is flagged · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1294,13 +1284,13 @@
   },
   {
    "name": "pricing-check",
-   "title": "ตรวจกำไรและตั้งราคาใหม่",
-   "when": "ขายแล้วไม่เหลือกำไร · ค่าธรรมเนียมเปลี่ยน · จะจัดโปรลดราคา",
-   "done": "ตารางกำไรต่อ SKU ต่อแพลตฟอร์ม และราคาใหม่ที่ผ่านเป้า margin",
+   "title": "checking profit and repricing",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "คัดต้นทุนและราคาขายปัจจุบันของทุก SKU ที่เกี่ยว · ใคร: `shop-manager` ตัวใหม่",
+     "text": "Pull the current cost and selling price of every SKU involved · ใคร: `shop-manager` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1318,7 +1308,7 @@
     },
     {
      "n": 2,
-     "text": "คิดกำไรจริงต่อชิ้นต่อแพลตฟอร์มหลังหักค่าธรรมเนียมทุกตัว ค่าส่ง และส่วนลด · ใคร: `shop-manager` ตัวใหม่",
+     "text": "Work out the real profit per item per platform after every fee, shipping and discounts · ใคร: `shop-manager` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1336,7 +1326,7 @@
     },
     {
      "n": 3,
-     "text": "ทำราคาใหม่หรือเพดานส่วนลดที่ยังได้กำไรตามเป้า (margin) · ใคร: `shop-manager` ตัวใหม่",
+     "text": "Make the new price or the discount cap that still meets the target margin · ใคร: `shop-manager` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1354,7 +1344,7 @@
     },
     {
      "n": 4,
-     "text": "ถ้ายอดขายใกล้เกณฑ์จด VAT ให้ชี้ไป `seller-tax-basics` · ใคร: หัวหน้าทีม",
+     "text": "If sales are near the VAT registration threshold, point to `seller-tax-basics` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1372,7 +1362,7 @@
     },
     {
      "n": 5,
-     "text": "ตรวจโดยคำนวณซ้ำด้วยสูตรในสเปรดชีต ตัวเลขต้องตรงกันทุกแถว · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) by recalculating with the spreadsheet formulas. The numbers must match on every row · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1391,13 +1381,13 @@
   },
   {
    "name": "refund",
-   "title": "ขอเงินคืน",
-   "when": "อยากได้เงินคืน — เปลี่ยนใจหลังซื้อแบบขายตรง · ของผิด ปลอม หรือพัง · จ่ายแล้วไม่ได้ของ · รายการบัตรที่ไม่รู้จักหรือซ้ำ",
-   "done": "คำขอพร้อมส่งก่อนวันหมดเขต พร้อมแผนสำรองถ้าถูกปฏิเสธ",
+   "title": "requesting a refund",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "แยกประเภทกรณีตาม `refund-request` และนับวันหมดเขตของสิทธิ์แต่ละทาง แล้วทำทางที่ใกล้หมดเขตก่อน · ใคร: `consumer-advocate` ตัวใหม่",
+     "text": "Classify the case following `refund-request` and count the deadline of each route's right, then take the route closest to its deadline first · ใคร: `consumer-advocate` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1417,7 +1407,7 @@
     },
     {
      "n": 2,
-     "text": "รวบรวมหลักฐานการจ่ายเงินและสภาพสินค้า · ใคร: หัวหน้าทีม",
+     "text": "Gather the payment evidence and the condition of the goods · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1433,7 +1423,7 @@
     },
     {
      "n": 3,
-     "text": "เลือกทาง — ขอร้าน · เปิดข้อพิพาทกับแพลตฟอร์ม · ขอธนาคารปฏิเสธรายการ · ร้องเรียน แล้วลงเหตุผลในตาราง \"การตัดสินใจ\" · ใคร: หัวหน้าทีม",
+     "text": "Choose the route — ask the shop · open a dispute with the platform · ask the bank to reject the charge · complain. Then write the reason in the \"การตัดสินใจ\" (decisions) table · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1449,7 +1439,7 @@
     },
     {
      "n": 4,
-     "text": "ร่างคำขอ แบบฟอร์ม และข้อความที่ต้องใช้ พร้อมขั้นตอนทีละคลิกในแอปของแพลตฟอร์มหรือธนาคาร · ใคร: `consumer-advocate` ตัวใหม่",
+     "text": "Draft the request, forms and messages needed, with click-by-click steps in the platform's or bank's app · ใคร: `consumer-advocate` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1467,7 +1457,7 @@
     },
     {
      "n": 5,
-     "text": "ตรวจว่ายอดเงิน วันที่ และเลขคำสั่งซื้อตรงกับหลักฐาน · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) that the amount, dates and order number match the evidence · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1486,13 +1476,13 @@
   },
   {
    "name": "review",
-   "title": "ตรวจงานซื้อขายออนไลน์และงานหลังบ้านก่อนส่ง",
-   "when": "ตรวจงานก่อนส่งหรือก่อนใช้จริง · \"ช่วยดูหน่อยว่ามีอะไรพลาด\" · ผู้ใช้ทำมาเองแล้วอยากให้ตรวจ",
-   "done": "ทุกข้อในรายงานชี้จุดในชิ้นงานได้ และผ่านการยืนยันแล้ว",
+   "title": "checking online-selling and back-office work before it goes out",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "กำหนดขอบเขต — ชิ้นงานที่ตรวจ และเอกสารต้นทางที่ต้องเทียบ (ต้นทุน · ค่าธรรมเนียมใน Seller Centre · นโยบายแพลตฟอร์ม · ไฟล์สต็อก · หลักฐาน · ไทม์ไลน์ · เงื่อนไขของร้านหรือแพลตฟอร์ม · อัตราจากเว็บทางการ · ตารางเงินเดือน · แบบฟอร์มทางการ) · ใคร: หัวหน้าทีม",
+     "text": "Set the scope — the piece to check, and the source documents to compare against (cost · fees in Seller Centre · platform policy · stock file · evidence · timeline · shop or platform terms · rates from official websites · payroll table · official forms) · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1508,7 +1498,7 @@
     },
     {
      "n": 2,
-     "text": "เตรียมแพ็กเกจรีวิวตาม [`review-lenses`](review-lenses.md) ข้อ 1 — เจตนาของงาน 1 ย่อหน้า (ใครใช้ ใช้ทำอะไร ถ้าไม่แน่ใจ เลือกการตีความที่กระทบน้อยสุด ไม่หยุดถาม) · diff เป็นไฟล์ · เงื่อนไขจาก spec คัดตรงตัว · รหัส `head:` · เหตุผลของผู้ทำแยกไว้ใน `author-notes.md` ไม่ใส่ความเห็นว่าผ่านหรือไม่ผ่านลงใน prompt · ใคร: หัวหน้าทีม",
+     "text": "Prepare the review package per [`review-lenses`](review-lenses.md) item 1: the intent of the work in 1 paragraph (who uses it, for what; if unsure, choose the interpretation with the least impact and do not stop to ask) · the diff as a file · the spec's conditions quoted exactly · the `head:` id · the author's reasoning kept separate in `author-notes.md`, with no opinion on pass or fail put in the prompt · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1524,7 +1514,7 @@
     },
     {
      "n": 3,
-     "text": "เลือกเลนส์ตามชนิดงานจาก [`review-lenses`](review-lenses.md) ข้อ 2 (ทุกงานมี `spec` กับ `quality`) แล้วตามเช็กลิสต์ของ skill หลักของ playbook นี้ (ไม่มี → skill ที่เกี่ยว) · ใคร: หัวหน้าทีม",
+     "text": "Choose lenses by the kind of work from [`review-lenses`](review-lenses.md) item 2 (every job has `spec` and `quality`), then follow the checklist of this playbook's main skill (none → a related skill) · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1540,14 +1530,14 @@
     },
     {
      "n": 4,
-     "text": "ตรวจตามเลนส์ที่เลือก ตอบเช็กลิสต์ `PASS` · `FAIL` พร้อมไฟล์:บรรทัด และให้คำตัดสิน 2 ด้านแยกกัน: ตรงเงื่อนไขของ spec ไหม · คุณภาพพอใช้ไหม · แต่ละตัวถือ 1–3 เลนส์ ไม่เกิน 15 ไฟล์ใหญ่สุดต่อตัวและบอกว่าข้ามกี่ไฟล์ · งานใหญ่หรือเสี่ยงสูง เพิ่มตัวที่ไม่เคยเห็นงานอีกตัวด้วยโมเดลระดับใหญ่ (`model: opus`) · สั่งผู้ตรวจทุกตัวว่า \"ห้ามแก้ชิ้นงาน (เขียนรายงานของตัวเองใน `_to_delete/` ได้)\" · ใคร: `reviewer` ตัวใหม่ (อ่านอย่างเดียว · งานใหญ่ `model: opus`)",
+     "text": "Check (ตรวจ) by the chosen lenses. Answer the checklist `PASS` · `FAIL` with file:line, and give a verdict on 2 sides separately: does it meet the spec's conditions · is the quality good enough. Each checker holds 1–3 lenses, at most the 15 largest files per checker, and says how many files it skipped · for large or high-risk work, add one more checker that has never seen the work, on the large tier (`model: opus`) · tell every checker \"do not edit the work (you may write your own report in `_to_delete/`)\" · ใคร: `reviewer` ตัวใหม่ (read-only · large work `model: opus`)",
      "sub": [],
      "phase": "",
      "who": {
       "lead": false,
       "user": false,
       "agents": [],
-      "raw": "`reviewer` ตัวใหม่ (อ่านอย่างเดียว · งานใหญ่ `model: opus`)"
+      "raw": "`reviewer` ตัวใหม่ (read-only · large work `model: opus`)"
      },
      "skills": [],
      "commands": [],
@@ -1556,14 +1546,14 @@
     },
     {
      "n": 5,
-     "text": "ยืนยันทีละข้อ — ข้อพบแต่ละข้อไปที่ผู้ยืนยัน 1 ตัวต่อ 1 ข้อ ที่ไม่รู้ว่าใครพบ ค่าตั้งต้นคือ `FALSE_POSITIVE` ต้องมีหลักฐานและมั่นใจอย่างน้อย 80 จึงเป็น `ยืนยัน` ตามข้อ 3 ของ `review-lenses` · ใคร: `reviewer` ตัวใหม่ (อ่านอย่างเดียว)",
+     "text": "Confirm (ยืนยัน) item by item. Each finding goes to 1 confirmer per finding, who does not know who found it. The default is `FALSE_POSITIVE`; it becomes `ยืนยัน` (confirmed) only with evidence and confidence of at least 80, per item 3 of `review-lenses` · ใคร: `reviewer` ตัวใหม่ (read-only)",
      "sub": [],
      "phase": "",
      "who": {
       "lead": false,
       "user": false,
       "agents": [],
-      "raw": "`reviewer` ตัวใหม่ (อ่านอย่างเดียว)"
+      "raw": "`reviewer` ตัวใหม่ (read-only)"
      },
      "skills": [],
      "commands": [],
@@ -1572,7 +1562,7 @@
     },
     {
      "n": 6,
-     "text": "แยก 3 กลุ่ม: สูง · กลาง · ต่ำ (ตามนิยามใน `reviewer`) ข้อที่ยืนยันไม่ได้ให้ติด `ยังไม่ได้ตรวจ` แล้วบันทึกทุกข้อที่ปัดทิ้งลง `ledger.md` พร้อมเหตุผลจากรายการ (`false_positive` · `intentional` · `deferred` · `rejected` · `มีมาก่อน`) แล้วอ่านไฟล์กลับนับให้ตรงกับจำนวนที่ปัด · รอบ 2 ขึ้นไป เทียบข้อรอบก่อนกับ diff ว่าแก้จริง · ใคร: หัวหน้าทีม",
+     "text": "Split into 3 groups: สูง · กลาง · ต่ำ (high · medium · low, as defined in `reviewer`). Items that cannot be confirmed get `ยังไม่ได้ตรวจ`. Record every item you dismiss in `ledger.md` with a reason from the list (`false_positive` · `intentional` · `deferred` · `rejected` · `มีมาก่อน` (pre-existing)), then read the file back and count so it matches the number dismissed. Round 2 and later: compare the previous round's items with the diff to see they were really fixed · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1588,7 +1578,7 @@
     },
     {
      "n": 7,
-     "text": "ตรวจความสดก่อนรายงาน — เทียบ `head:` ในแพ็กเกจกับของจริงตอนนี้ ไม่ตรง หรือมีผู้ตรวจที่ยังรัน ล้ม ถูกตัดผล → รายงานว่าผลเก่าหรือไม่ครบ ไม่นับเป็นสะอาด · ใคร: หัวหน้าทีม",
+     "text": "Check freshness before reporting. Compare `head:` in the package with the real current state. Mismatch, or a checker still running, failed, or had its result cut → report that the result is stale or incomplete and do not count it as clean · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1604,7 +1594,7 @@
     },
     {
      "n": 8,
-     "text": "รายงาน — คำตัดสิน 1 บรรทัด (`ส่งได้` · `ส่งได้หลังแก้` · `ยังไม่ควรส่ง`) แล้วตามด้วยรายการและสรุปงานตาม `superuser` หัวข้อ 7 · ใคร: หัวหน้าทีม",
+     "text": "Report: a 1-line verdict (`ส่งได้` (ready to deliver) · `ส่งได้หลังแก้` (deliver after fixes) · `ยังไม่ควรส่ง` (not yet ready to deliver)), then the list and a work summary per `superuser` section 7 · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1625,13 +1615,13 @@
   },
   {
    "name": "stock-sync",
-   "title": "สต็อกหลายร้านให้ตรงกัน",
-   "when": "ขายของชุดเดียวกันหลายแพลตฟอร์มแล้วขายเกิน · นับของไม่ตรง",
-   "done": "ไฟล์สต็อกหลักตรงกับของจริง · ยอดโชว์ทุกร้านไม่เกิน available − บัฟเฟอร์ และรายการปรับยอดพร้อมทำ",
+   "title": "keep stock the same across several shops",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "รวมยอดสต็อกจากทุกร้านและของจริงในคลังลงไฟล์หลักเดียว · ใคร: `shop-manager` ตัวใหม่",
+     "text": "Merge the stock figures from every shop and the real goods in the warehouse into one master file · ใคร: `shop-manager` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1649,7 +1639,7 @@
     },
     {
      "n": 2,
-     "text": "ตั้งชื่อ SKU ให้เป็นแบบเดียวกันทุกร้าน · ใคร: `shop-manager` ตัวใหม่",
+     "text": "Give SKUs the same naming style in every shop · ใคร: `shop-manager` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1667,7 +1657,7 @@
     },
     {
      "n": 3,
-     "text": "ตั้งกฎซิงก์สต็อก บัฟเฟอร์ (ของที่กันไว้ไม่ขาย) ต่อร้าน และจุดสั่งซื้อซ้ำ ตาม `multi-shop-stock` · ใคร: `shop-manager` ตัวใหม่",
+     "text": "Set the stock sync rules, a buffer (stock held back from sale) per shop, and the reorder point, per `multi-shop-stock` · ใคร: `shop-manager` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1687,7 +1677,7 @@
     },
     {
      "n": 4,
-     "text": "ทำรายการปรับยอดต่อร้าน (ร้านไหน SKU ไหน จากเท่าไรเป็นเท่าไร) ส่วนการแก้ในร้านจริงให้อยู่ใน \"รออนุมัติ\" · ใคร: `shop-manager` ตัวใหม่ · ผู้ใช้อนุมัติการแก้ในร้านจริง",
+     "text": "Make an adjustment list per shop (which shop, which SKU, from how many to how many), and keep the edits in the live shops under \"รออนุมัติ\" (awaiting approval) · ใคร: `shop-manager` ตัวใหม่ · ผู้ใช้อนุมัติการแก้ในร้านจริง",
      "sub": [],
      "phase": "",
      "who": {
@@ -1705,7 +1695,7 @@
     },
     {
      "n": 5,
-     "text": "ตรวจว่ายอดที่โชว์แต่ละร้านไม่เกิน available − บัฟเฟอร์ (ของจริงในคลัง − ของที่จองแล้ว − บัฟเฟอร์) และกำหนดรอบซิงก์ไว้แล้ว · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) that the quantity shown in each shop does not exceed available − buffer (real stock in the warehouse − reserved stock − buffer) and that a sync cadence is set · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1724,15 +1714,15 @@
   },
   {
    "name": "team-project",
-   "title": "งาน XL หลายวัน มีคนและ agent ร่วมทีม",
-   "when": "งานใหญ่ที่จบไม่ได้ใน session เดียว · มี milestone หลายอัน · มีคนจริง (เพื่อนร่วมทีม) รับชิ้นงานไปทำคู่กับ agent · \"โปรเจกต์นี้ทำกับทีม\" · \"งานเป็นเดือน\"",
-   "done": "ทุก milestone ในตาราง \"สถานะล่าสุด\" เป็น `เสร็จ` พร้อมหลักฐานตรวจ และคนหรือ bot ตัวใหม่อ่าน `CONTEXT.md` ไฟล์เดียวแล้วรับงานต่อได้โดยไม่ถาม\n\n---\n\nกฎเฉพาะงาน XL · **ตรวจต่อ milestone ไม่ใช่ตอนท้ายงาน** — งานเป็นเดือนที่ตรวจครั้งเดียวตอนจบ ค้นจุดพังช้าเกินแก้ · **ชิ้นของคนกับ agent อย่าแตะไฟล์เดียวกัน** — ตารางแบ่งงานต้องระบุ `files_allowed` ไม่ทับกันเด็ดขาด · ไฟล์กลางหัวหน้าเขียนคนเดียว (`team-files`) · **คนส่งงานช้ากว่า agent** — ออกแบบให้ชิ้นของคนไม่ขวางชิ้นของ agent (คนรับชิ้นที่ต้องการดุลยพินิจ · agent รับชิ้นกลไก) · ชิ้นของคนที่ `ติด` หรือเกินกำหนด → หัวหน้าเสนอรับมาทำเองหรือส่งลูกทีมใน \"รออนุมัติ\" · **ทุกวันต้องจบที่จุดรับต่อได้** — ไม่มีวันไหนที่งานค้างอยู่ในแชตล้วน ๆ",
+   "title": "XL multi-day work with people and agents on the team",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "เข้าใจ — อ่านโจทย์ · ของเดิมในโปรเจกต์ · ข้อจำกัด (งบ · คน · เวลา) · ถามเจ้าของงานแบบเลือกคำตอบครั้งเดียว · ใคร: หัวหน้าทีม",
+     "text": "Understand: read the brief · what already exists in the project · constraints (budget · people · time) · ask the owner once, with answer choices · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -1746,14 +1736,14 @@
     },
     {
      "n": 2,
-     "text": "วางทาง — `brainstormer` ตัวใหม่เสนอ 2–3 ทาง (ทางสำคัญมากใช้ MoA) → หัวหน้าเลือก 1 → เขียน brief ตาม `brief-template` ลง `docs/BRIEF.md` · ใคร: `brainstormer` ตัวใหม่ → หัวหน้าทีม",
+     "text": "Choose a path: `brainstormer` ตัวใหม่ proposes 2–3 paths (a very important path uses MoA) → the lead picks 1 → write the brief per `brief-template` into `docs/BRIEF.md` · ใคร: `brainstormer` ตัวใหม่ → the lead",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
-      "lead": true,
+      "lead": false,
       "user": false,
       "agents": [],
-      "raw": "`brainstormer` ตัวใหม่ → หัวหน้าทีม"
+      "raw": "`brainstormer` ตัวใหม่ → the lead"
      },
      "skills": [],
      "commands": [],
@@ -1762,9 +1752,9 @@
     },
     {
      "n": 3,
-     "text": "แตก milestone — แต่ละ milestone ต้องจบด้วยของที่ตรวจได้และส่งให้เจ้าของงานดูได้ · ลงตาราง \"สถานะล่าสุด\" ใน `docs/BUILD-PLAN.md` ตาม `status-report` · ใคร: หัวหน้าทีม",
+     "text": "Split into milestones: each milestone must end in something checkable that can be shown to the owner · record in the \"สถานะล่าสุด\" (latest status) table in `docs/BUILD-PLAN.md` per `status-report` · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -1778,9 +1768,9 @@
     },
     {
      "n": 4,
-     "text": "วางของกลาง + ตารางแบ่งงาน — โครงเรื่อง · รูปข้อมูล · แม่แบบ · กติการ่วม (ภาษา · ตั้งชื่อ · commit) หัวหน้าทำคนเดียว · ตาราง `ชิ้น | ไฟล์ที่แตะ | ขนาด | ต้องรอชิ้นไหน | ใคร (คน/agent) · ระดับ` ชี้ชัดว่าชิ้นไหนให้ผู้ร่วมทีมคนไหน · ใคร: หัวหน้าทีม",
+     "text": "Lay out the shared things + the work split table: outline · data shape · templates · shared conventions (language · naming · commit), done by the lead alone · a table `ชิ้น | ไฟล์ที่แตะ | ขนาด | ต้องรอชิ้นไหน | ใคร (คน/agent) · ระดับ` (piece | files touched | size | must wait for which piece | who (person/agent) · tier) makes clear which piece goes to which teammate · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -1794,9 +1784,9 @@
     },
     {
      "n": 5,
-     "text": "เขียนใบทุกชิ้น — งาน XL ทุกชิ้นต้องเป็นไฟล์ `handoff/<id>.md` ตาม skill `handoff` (เพราะข้าม session แน่) ไม่ใช่แค่ข้อความในแชต · ใคร: หัวหน้าทีม",
+     "text": "Write a note for every piece: every XL piece must be a file `handoff/<id>.md` per the skill `handoff` (because it surely crosses sessions), not just a chat message · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -1810,14 +1800,14 @@
     },
     {
      "n": 6,
-     "text": "ลงมือ — ชิ้นของ agent ส่งพร้อมกันในข้อความเดียว ตาม rank และความกว้างของกราฟ (`team-roles` \"แบ่งงาน\" · พร้อมกันเกิน 8 → `parallel-split-and-merge`) · ชิ้นของคนส่ง path ใบให้ผู้ร่วมทีมพร้อมกำหนดส่งใบกลับ · ชิ้นที่ต้องรอกันลงรอบถัดไป · ใคร: ลูกทีมตัวใหม่ต่อชิ้น · ผู้ร่วมทีมตามใบ",
+     "text": "Do the work: agent pieces are sent together in one message, by rank and graph width (`team-roles` \"แบ่งงาน\" (splitting the work) · more than 8 at once → `parallel-split-and-merge`) · for a person's piece, send the note's path to the teammate with a due date for the returned note · pieces that must wait on others go in the next round · ใคร: ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": false,
       "user": false,
       "agents": [],
-      "raw": "ลูกทีมตัวใหม่ต่อชิ้น · ผู้ร่วมทีมตามใบ"
+      "raw": "ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note"
      },
      "skills": [],
      "commands": [],
@@ -1826,9 +1816,9 @@
     },
     {
      "n": 7,
-     "text": "พิสูจน์ ต่อ milestone — รวมชิ้นของ milestone แล้ว `reviewer` ตัวใหม่ตรวจทั้ง milestone รวดเดียวกับ \"เสร็จเมื่อ\" ใน brief · งานเสี่ยง (เงิน · กฎหมาย · สุขภาพ · ส่งคนนอก) ใช้ `adversarial-review-panel` · ไม่ผ่าน → แก้ → ตรวจซ้ำ ตามเพดานรอบใน `team-roles` · ใคร: `reviewer` ตัวใหม่",
+     "text": "Prove (พิสูจน์), per milestone: merge the milestone's pieces, then `reviewer` ตัวใหม่ checks the whole milestone in one go against the brief's \"เสร็จเมื่อ\" (done when) · risky work (money · law · health · sent to outsiders) uses `adversarial-review-panel` · fail → fix → recheck, up to the round ceiling in `team-roles` · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": false,
       "user": false,
@@ -1842,9 +1832,9 @@
     },
     {
      "n": 8,
-     "text": "sync ปิดวัน — เก็บใบส่งงานที่เข้ามา (คนและ agent เท่ากัน) · อัปเดต BUILD-PLAN + \"ความคืบหน้า\" และ \"รับงานต่อ\" ใน `CONTEXT.md` ตาม playbook `pickup-and-pause` · การตัดสินใจลง `decision-log` · ใคร: หัวหน้าทีม",
+     "text": "End-of-day sync: collect incoming handover notes (people and agents equal) · update BUILD-PLAN + \"ความคืบหน้า\" (progress) and \"รับงานต่อ\" (pick up the work) in `CONTEXT.md` per playbook `pickup-and-pause` · record decisions in `decision-log` · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -1858,9 +1848,14 @@
     },
     {
      "n": 9,
-     "text": "รายงานเจ้าของงาน — จบ milestone หรือจบสัปดาห์ด้วย `status-report` · รายการที่ใช้เงินหรือย้อนไม่ได้ลง \"รออนุมัติ\" ไม่ขวางชิ้นอื่น · ใคร: หัวหน้าทีม",
-     "sub": [],
-     "phase": "",
+     "text": "Report to the owner: at the end of a milestone or week, with `status-report` · items that cost money or cannot be reversed go under \"รออนุมัติ\" without blocking other pieces · ใคร: หัวหน้าทีม",
+     "sub": [
+      "**Check per milestone, not at the end of the job.** For month-long work checked only once at the end, finding the break point is too late to fix.",
+      "**A person's and an agent's pieces must not touch the same file.** The split table must state `files_allowed` with no overlap at all · shared files are written by the lead alone (`team-files`).",
+      "**People deliver slower than agents.** Design so a person's piece does not block an agent's piece (people take pieces needing judgement · agents take mechanical pieces) · a person's piece that is `ติด` or overdue → the lead proposes, under \"รออนุมัติ\", taking it over or sending it to a worker.",
+      "**Every day must end at a point where work can be picked up.** No day leaves work sitting purely in chat."
+     ],
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -1870,22 +1865,22 @@
      "skills": [],
      "commands": [],
      "playbooks": [],
-     "approval": true
+     "approval": false
     }
    ],
    "shared": true
   },
   {
    "name": "unattended-run",
-   "title": "งานยาวที่ผู้ใช้ไม่อยู่ดู",
-   "when": "\"ทำให้เสร็จ เดี๋ยวกลับมาดู\" · \"ไม่ต้องถาม\" · งานหลายขั้นที่ผู้ใช้จะมาตรวจทีเดียว — เช่น ลงสินค้า 20 SKU ครบชุดทุกแพลตฟอร์ม · ตรวจกำไรทั้งร้าน · เตรียมชุดร้องเรียนทุกขั้น · จัดทะเบียนใบเสร็จทั้งบ้าน · ทำเงินเดือนและชุดยื่นทั้งเดือน · เตรียมเอกสารปิดปีทั้งชุด",
-   "done": "เงื่อนไขข้อ 1 ผ่านทั้งหมด หรือชิ้นที่เหลือทุกชิ้นมีเหตุผลว่าทำไมติด",
+   "title": "long jobs the user is not watching",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "เขียนเงื่อนไขจบที่ตรวจได้ — ไฟล์ไหนต้องมี · ตารางไหนต้องครบ · ร่างไหนต้องพร้อมส่ง · รันด้วย `claude -p` → ใส่ `--max-budget-usd <งบ>` เสมอ (ไม่รู้งบ → ถามรวมในคำถามครั้งเดียวตอนเริ่ม) ชนเพดาน = `ติด` แล้วรายงานว่าทำถึงไหน · ใคร: หัวหน้าทีม",
+     "text": "Write a checkable end condition: which file must exist · which table must be complete · which draft must be ready to send · running with `claude -p` → always add `--max-budget-usd <budget>` (budget unknown → ask in the single set of questions at the start). Hitting the ceiling = `ติด`, then report how far it got · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -1899,11 +1894,11 @@
     },
     {
      "n": 2,
-     "text": "แตกงานเป็นชิ้นที่แต่ละชิ้นจบด้วยการตรวจ ลงตาราง \"ความคืบหน้า\" ใน `CONTEXT.md` เลือก playbook ย่อยให้แต่ละชิ้น แล้วแจกให้ subagent ตัวใหม่ทีละชิ้น · ใคร: หัวหน้าทีม",
+     "text": "Split the work into pieces that each end with a check, record them in the \"ความคืบหน้า\" (progress) table in `CONTEXT.md`, choose a sub-playbook for each piece, and hand them out to fresh subagents one piece at a time · ใคร: หัวหน้าทีม",
      "sub": [
-      "**ตรวจเครื่องมือภายนอกก่อนแจกชิ้นแรก** — ชิ้นไหนต้องใช้ MCP (Model Context Protocol) tool ให้โหลด tool นั้นตามชื่อด้วย ToolSearch แล้วเรียกทดสอบ 1 ครั้งตอนนี้ (ก่อนผู้ใช้ออกไป) · เรียกไม่ได้ → ชิ้นนั้นลง `ติด` ทันที พร้อมวิธีแก้ที่เขียนเป็นขั้น ๆ (ต่อ server ไหน · ล็อกอินอย่างไร) แล้วทำชิ้นอื่นต่อ · ไม่เรียก API ตรงด้วย curl หรือ token ในคำสั่งแทน เพราะคือการทำเกินสิทธิ์ที่ผู้ใช้ให้ไว้"
+      "**Check external tools before handing out the first piece.** For any piece that needs an MCP (Model Context Protocol) tool, load that tool by name with ToolSearch and call it once to test now (before the user leaves). Cannot call it → mark that piece `ติด` at once, with the fix written step by step (which server to connect · how to log in), then carry on with other pieces. Do not call the API directly with curl or a token in a command instead, because that goes beyond the permission the user gave."
      ],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -1917,20 +1912,20 @@
     },
     {
      "n": 3,
-     "text": "ทำทีละชิ้น — ผ่านเกณฑ์หัวข้อ 4 แล้วค่อยไปชิ้นถัดไป พัง 2 รอบ → แตกเป็นขั้นย่อย ไม่ลองแบบเดิมซ้ำ · ครบ 3 รอบ → ลงเป็น `ติด` แล้วไปชิ้นอื่น · ใคร: ลูกทีมตามบรรทัด `ลูกทีมต่อชิ้น` ด้านบน ตัวใหม่ต่อชิ้น · ตรวจ: ตามบรรทัด `ผู้ตรวจต่อชิ้น` ด้านบน",
+     "text": "Do one piece at a time. Pass the section 4 criteria, then go to the next piece. Breaks twice → split into sub-steps, do not retry the same way · after 3 rounds → record it as `ติด` and go to other pieces · ใคร: workers per the `ลูกทีมต่อชิ้น` line above, a fresh one per piece · check (ตรวจ): per the `ผู้ตรวจต่อชิ้น` line above",
      "sub": [
-      "**หลังติด** — จดใน \"ค้างอยู่\" ว่าลองอะไรไปแล้ว · ปัญหาน่าจะอยู่ตรงไหน · ต้องได้อะไรถึงไปต่อ · เก็บงานค้างแยกไว้เป็นร่าง ไม่ทับชิ้นที่ผ่านแล้ว",
-      "**ชิ้นที่ต้องรอชิ้นที่ติด** — ลงเป็น `ติด` เหตุผล `รอ <ชิ้น>` โดยไม่ต้องลอง",
-      "**ทำชิ้นอื่นหมดแล้ว** — ให้ agent ตัวใหม่ที่ใช้โมเดลขนาดใหญ่ขึ้นลองอีก 1 รอบจากบันทึกนั้น (มีคำตอบใน inbox → เริ่มจากคำตอบ)",
-      "**ยังติด** — คงไว้ในรายงานพร้อมบอกว่าต้องการอะไรจากผู้ใช้ · ผู้ใช้ตอบทีหลัง → session ใหม่อ่าน `CONTEXT.md` แล้วทำต่อจากชิ้นนั้น",
-      "**ติดเพราะต้องเป็นผู้ใช้** (ตัดสิน · ตรวจด้วยตาหรือหู · ใช้เงินหรือ token · รับรองข้อความที่ agent เขียนแทน) — เพิ่มแถวในตาราง \"รอผู้ใช้\" ของ `CONTEXT.md` แล้วไปทำชิ้นอื่นต่อ ไม่หยุดรอ"
+      "**After getting stuck.** Record in \"ค้างอยู่\" (pending) what was tried · where the problem probably is · what is needed to go on. Keep the unfinished work separately as a draft, not over pieces that already passed.",
+      "**A piece that must wait for a stuck piece.** Record it as `ติด` with reason `รอ <piece>` (waiting for <piece>), without trying.",
+      "**All other pieces are done.** Have a fresh agent on a larger model try once more from that note (an answer in the inbox → start from the answer).",
+      "**Still stuck.** Keep it in the report with what is needed from the user · the user answers later → a new session reads `CONTEXT.md` and continues from that piece.",
+      "**Stuck because it must be the user** (a decision · a check by eye or ear · spending money or tokens · endorsing text an agent wrote on their behalf): add a row to the \"รอผู้ใช้\" (waiting on the user) table of `CONTEXT.md` and go on to other pieces, without stopping to wait."
      ],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": false,
       "user": false,
       "agents": [],
-      "raw": "ลูกทีมตามบรรทัด `ลูกทีมต่อชิ้น` ด้านบน ตัวใหม่ต่อชิ้น · ตรวจ: ตามบรรทัด `ผู้ตรวจต่อชิ้น` ด้านบน"
+      "raw": "workers per the `ลูกทีมต่อชิ้น` line above, a fresh one per piece · check (ตรวจ): per the `ผู้ตรวจต่อชิ้น` line above"
      },
      "skills": [],
      "commands": [],
@@ -1939,9 +1934,9 @@
     },
     {
      "n": 4,
-     "text": "ทุกการเลือกทางเอง จดในตาราง \"การตัดสินใจ\" ทันที ไม่รวบไปเขียนตอนจบ · ใคร: หัวหน้าทีม",
+     "text": "Every time you choose a path on your own, record it in the \"การตัดสินใจ\" (decisions) table at once, do not bundle it to write at the end · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -1955,29 +1950,29 @@
     },
     {
      "n": 5,
-     "text": "ถ้าเจอรายการ \"รออนุมัติ\" (ตัวอย่างในบรรทัด `รออนุมัติที่เจอบ่อย` ด้านบน · รายการเต็มใน `autonomy` หัวข้อ \"รออนุมัติ — ทุกสาขา\" ของ `superuser`) ให้เตรียมให้พร้อมกด ห้ามทำเอง ส่วนคำถามที่ผู้ใช้ต้องตอบให้ใส่ไว้ใน \"ค้างอยู่\" · ใคร: หัวหน้าทีม (อนุมัติ: ผู้ใช้)",
+     "text": "If you meet an item that is \"รออนุมัติ\" (example in the `รออนุมัติที่เจอบ่อย` line above · full list in `autonomy`, section \"รออนุมัติ — ทุกสาขา\" of `superuser`), prepare it ready to press, never do it yourself; put questions the user must answer under \"ค้างอยู่\" · ใคร: หัวหน้าทีม (approval: the user)",
      "sub": [
-      "**ข้อความถึงคนนอกเขียนเป็นร่างในกล่องขาออก** — ร่างอีเมล คำตอบ รีวิว หรือโพสต์ ลงไฟล์ `.claude/superuser/outbound/<วันที่>-<เรื่อง>.md` (ผู้รับ · ช่องทาง · เนื้อความที่พร้อมส่ง · เหตุที่ส่ง) แล้วทำชิ้นต่อไป ไม่หยุดรอคน · การร่างไม่ต้องขออนุมัติ การส่งจริงต้องขอ · ผู้ใช้ส่งเองหรือสั่งส่งทีหลังในนามของเขา · ลงรายการกล่องขาออกในแถว \"รอผู้ใช้\" ของ `CONTEXT.md` 1 แถวต่อไฟล์"
+      "**Messages to outsiders are written as drafts in the outbox.** An email draft, a reply, a review, or a post goes into a file `.claude/superuser/outbound/<date>-<topic>.md` (recipient · channel · ready-to-send text · reason for sending), then move on to the next piece without stopping to wait for a person · drafting needs no approval, actually sending does · the user sends it, or orders it sent later on their behalf · list the outbox item in the \"รอผู้ใช้\" table of `CONTEXT.md`, 1 row per file."
      ],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
-      "user": true,
+      "user": false,
       "agents": [],
-      "raw": "หัวหน้าทีม (อนุมัติ: ผู้ใช้)"
+      "raw": "หัวหน้าทีม (approval: the user)"
      },
      "skills": [
       "superuser"
      ],
      "commands": [],
      "playbooks": [],
-     "approval": true
+     "approval": false
     },
     {
      "n": 6,
-     "text": "จบแต่ละชิ้นแล้วอัปเดต \"ความคืบหน้า\" และ \"รับงานต่อ\" แล้วดู `.claude/superuser/inbox/` ผู้ใช้กลับมากลางทางจะได้เห็นสถานะล่าสุด · เริ่ม session ใหม่กลางงาน → รันตัวตรวจ \"เสร็จเมื่อ\" ของชิ้นล่าสุดที่ `เสร็จ` 1 ครั้งก่อนทำชิ้นถัดไป ไม่ผ่าน → แก้ชิ้นนั้นก่อน · ใคร: หัวหน้าทีม",
+     "text": "After finishing each piece, update \"ความคืบหน้า\" and \"รับงานต่อ\" (pick up the work), then look in `.claude/superuser/inbox/`, so a user coming back midway sees the latest status · starting a new session mid-job → run the \"เสร็จเมื่อ\" (done when) checker of the latest `เสร็จ` piece once before the next piece; fail → fix that piece first · ใคร: หัวหน้าทีม",
      "sub": [],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
@@ -1991,16 +1986,16 @@
     },
     {
      "n": 7,
-     "text": "จบงานแล้วตรวจเงื่อนไขข้อ 1 ทั้งหมดอีกรอบ ทำรอบเรียนรู้ แล้วรายงานครั้งเดียว: เสร็จอะไร · ติดอะไร · ตัดสินใจเองกี่ข้อ · รออนุมัติอะไร · ค้างอะไร · ใคร: หัวหน้าทีม (ตรวจเงื่อนไขซ้ำ: `reviewer` ตัวใหม่)",
+     "text": "When the job is finished, check all the step 1 conditions once more, run the learning round, then report once: what is done · what is stuck · how many decisions made on your own · what awaits approval · what is pending · ใคร: หัวหน้าทีม (re-checking the conditions: `reviewer` ตัวใหม่)",
      "sub": [
-      "รายงานปิดด้วยตาราง `ขั้น | ผล | หลักฐาน` 1 แถวต่อเงื่อนไขในข้อ 1 · หลักฐานคือ path ไฟล์ · ลิงก์ · ผลตรวจ · สรุปเป็น **\"ผ่าน X / N\"** นับจากตัวตรวจจริง ไม่ใช่จากที่ลูกทีมบอก · ข้อที่ต้องใช้ตาคนตรวจไม่นับว่าผ่าน แยกเป็นแถว `ต้องให้คนดู` · ข้อที่ไม่ผ่านให้ใส่สาเหตุ 1 บรรทัด"
+      "End the report with a table `ขั้น | ผล | หลักฐาน` (step | result | evidence), 1 row per condition in step 1 · evidence is a file path · link · check result · summarise as **\"ผ่าน X / N\"** (passed X of N) counted from the real checker, not from what workers say · an item that needs a human eye does not count as passed, put it in a separate row `ต้องให้คนดู` (needs a person to look) · for items that failed, give the cause in 1 line."
      ],
-     "phase": "",
+     "phase": "Steps",
      "who": {
       "lead": true,
       "user": false,
       "agents": [],
-      "raw": "หัวหน้าทีม (ตรวจเงื่อนไขซ้ำ: `reviewer` ตัวใหม่)"
+      "raw": "หัวหน้าทีม (re-checking the conditions: `reviewer` ตัวใหม่)"
      },
      "skills": [],
      "commands": [],
@@ -2012,13 +2007,13 @@
   },
   {
    "name": "warranty-claim",
-   "title": "ทะเบียนรับประกันและการเคลม",
-   "when": "เพิ่งซื้อของที่มีประกัน · อยากเก็บใบเสร็จให้เป็นระบบ · ของเสียและอยากรู้ว่ายังอยู่ในประกันไหม",
-   "done": "ทะเบียนตรงกับเอกสารจริงทุกแถว และชุดเคลมพร้อมส่ง (ถ้ามี)",
+   "title": "warranty register and claims",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "สร้างหรือเปิดทะเบียนตาม `warranty-tracker` — สินค้า · วันที่ซื้อ · ร้าน · หมดประกัน · ที่เก็บใบเสร็จ · ใคร: `consumer-advocate` ตัวใหม่",
+     "text": "Create or open the register per `warranty-tracker` — product · purchase date · shop · warranty end · where the receipt is kept · ใคร: `consumer-advocate` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2038,7 +2033,7 @@
     },
     {
      "n": 2,
-     "text": "เพิ่มของที่ผู้ใช้ส่งมา โดยอ่านจากใบเสร็จหรือใบรับประกันจริง · ใคร: `consumer-advocate` ตัวใหม่",
+     "text": "Add the items the user sent, reading from the real receipt or warranty card · ใคร: `consumer-advocate` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2056,7 +2051,7 @@
     },
     {
      "n": 3,
-     "text": "ถ้าจะเคลม ให้ตรวจว่ายังอยู่ในประกัน อ่านเงื่อนไขยกเว้น แล้วเตรียมเอกสารและข้อความแจ้งศูนย์ · ใคร: `consumer-advocate` ตัวใหม่ตรวจสิทธิ์และเตรียมเอกสาร",
+     "text": "If a claim is planned, check that the item is still under warranty, read the exclusion terms, and prepare the documents and the message to the service center · ใคร: `consumer-advocate` ตัวใหม่ checks eligibility and prepares the documents",
      "sub": [],
      "phase": "",
      "who": {
@@ -2065,7 +2060,7 @@
       "agents": [
        "consumer-advocate"
       ],
-      "raw": "`consumer-advocate` ตัวใหม่ตรวจสิทธิ์และเตรียมเอกสาร"
+      "raw": "`consumer-advocate` ตัวใหม่ checks eligibility and prepares the documents"
      },
      "skills": [],
      "commands": [],
@@ -2074,7 +2069,7 @@
     },
     {
      "n": 4,
-     "text": "ตั้งเตือนก่อนหมดประกัน 30 วันสำหรับของที่ควรตรวจก่อนหมด · ใคร: หัวหน้าทีม",
+     "text": "Set a reminder 30 days before the warranty ends for items worth checking before then · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -2090,7 +2085,7 @@
     },
     {
      "n": 5,
-     "text": "ตรวจทะเบียน การตั้งเตือน และชุดเคลม (ถ้ามี) ก่อนถึงผู้ใช้ · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) the register, the reminders, and the claim pack (if any) before it reaches the user · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2109,13 +2104,13 @@
   },
   {
    "name": "year-end",
-   "title": "งานปิดปี — งบการเงิน ประชุมผู้ถือหุ้น ภ.ง.ด.50 และ 50 ทวิ",
-   "when": "หลังวันสิ้นรอบบัญชี · ทำหนังสือรับรองหักภาษีและ ภ.ง.ด.1ก ให้พนักงาน",
-   "done": "ไทม์ไลน์ปิดปีที่ตรวจกับแหล่งทางการแล้ว และ 50 ทวิทุกคนตรงกับยอดรวม",
+   "title": "year-end close: financial statements, shareholder meeting, ภ.ง.ด.50 (PND 50, corporate income tax return) and 50 ทวิ (withholding tax certificate)",
+   "when": "",
+   "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "นับย้อนจากวันสิ้นรอบบัญชีตาม `dbd-annual-filing` — ประชุมผู้ถือหุ้น · งบการเงินผ่านผู้สอบ · บอจ.5 · ภ.ง.ด.50 · ใคร: `tax-helper` ตัวใหม่",
+     "text": "Count back from the period end date per `dbd-annual-filing` — shareholder meeting · financial statements audited · บอจ.5 (Bor Or Jor 5, shareholder list) · ภ.ง.ด.50 · ใคร: `tax-helper` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2135,7 +2130,7 @@
     },
     {
      "n": 2,
-     "text": "ตรวจกำหนดวันและค่าปรับจากเว็บกรมพัฒนาธุรกิจการค้าและกรมสรรพากร · ใคร: `tax-helper` ตัวใหม่",
+     "text": "Check the deadlines and penalties on the websites of the Department of Business Development and the Revenue Department · ใคร: `tax-helper` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2153,7 +2148,7 @@
     },
     {
      "n": 3,
-     "text": "เตรียม ภ.ง.ด.1ก และ 50 ทวิ จากตารางเงินเดือนทั้งปี · ใคร: `tax-helper` ตัวใหม่",
+     "text": "Prepare ภ.ง.ด.1ก and 50 ทวิ from the full-year payroll table · ใคร: `tax-helper` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2171,7 +2166,7 @@
     },
     {
      "n": 4,
-     "text": "ทำรายการเอกสารที่ต้องได้จากผู้สอบบัญชีและกรรมการ พร้อมวันที่ต้องได้ · ใคร: `tax-helper` ตัวใหม่",
+     "text": "List the documents needed from the auditor and the directors, with the date each is needed · ใคร: `tax-helper` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2189,7 +2184,7 @@
     },
     {
      "n": 5,
-     "text": "ตรวจ — ยอดทั้งปีใน 50 ทวิ ต้องตรงกับผลรวม 12 เดือน · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) — the full-year amounts in each 50 ทวิ must match the 12-month totals · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
