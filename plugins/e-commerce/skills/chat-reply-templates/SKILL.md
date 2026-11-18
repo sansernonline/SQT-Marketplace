@@ -50,7 +50,7 @@ When chats pile up, answer by money at risk and deadline, not by arrival order:
 ## Rules
 
 - **Reply from the shop's written policy.** If the buyer asks for something the policy does not give (return after the window, extra compensation), draft a polite no with what the shop *can* do. If the policy says nothing or contradicts itself, ask the owner before drafting; do not invent a policy in the reply. Never offer a refund or exchange while a dispute is open on the platform; the platform's process decides
-- Return windows count from the date the parcel was actually delivered (tracking), not the order date; if only an estimate is known, say the count is from the estimated date
+- Return windows and how to count their days: `returns-and-bad-reviews` "Return windows"
 - Answer within the platform's expected window during shop hours; set an auto-reply for after hours that says when a person will answer
 - Never send a buyer to pay outside Shopee, Lazada or TikTok Shop, or give a LINE ID or phone number there — it breaks platform rules and removes buyer protection
 - Never blame the courier or the buyer; state facts and the fix

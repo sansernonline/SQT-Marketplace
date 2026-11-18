@@ -8,7 +8,6 @@
       "files": [
         "plugins/personal-life/skills/salary-negotiation/SKILL.md",
         "plugins/personal-life/skills/pregnancy-and-baby/SKILL.md",
-        "plugins/e-commerce/skills/payroll-th/SKILL.md",
         "plugins/e-commerce/skills/payroll-th/scripts/rates.json",
         "plugins/e-commerce/skills/social-security-th/SKILL.md",
         "plugins/trading-finance/skills/emergency-fund/SKILL.md",
@@ -33,7 +32,6 @@
       "checked": "2026-11-10",
       "note": "จดทะเบียน VAT เมื่อรายได้เกิน 1.8 ล้านบาท/ปี",
       "files": [
-        "plugins/e-commerce/skills/seller-tax-basics/SKILL.md",
         "plugins/e-commerce/skills/doc-quotation/SKILL.md",
         "plugins/e-commerce/skills/tax-vat-th/SKILL.md",
         "plugins/e-commerce/skills/thai-business-setup/SKILL.md"
@@ -67,7 +65,6 @@
       "note": "อัตราภาษีเงินได้บุคคลธรรมดาขั้นสูงสุด 35% (เงินได้สุทธิเกิน 5 ล้าน)",
       "files": [
         "plugins/e-commerce/skills/seller-tax-basics/SKILL.md",
-        "plugins/e-commerce/skills/payroll-th/SKILL.md",
         "plugins/trading-finance/skills/tax-deduction-planner/references/deductions-2569.md",
         "plugins/e-commerce/skills/thai-business-setup/SKILL.md",
         "plugins/trading-finance/skills/tax-deduction-planner/scripts/rates-2569.json"
