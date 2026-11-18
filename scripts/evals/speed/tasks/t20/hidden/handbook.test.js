@@ -33,25 +33,39 @@ test("บท 3 รหัสผ่าน 12 ตัว เปลี่ยนทุ
   has("03-it-setup", /รหัสผ่าน[\s\S]{0,60}\b12\b/); has("03-it-setup", /\b90\b/); lacks("03-it-setup", /\b180\b/); lacks("03-it-setup", /\b10 ตัว/);
 });
 test("บท 3 บังคับยืนยันตัวตน 2 ชั้น", () => has("03-it-setup", /ยืนยันตัวตน 2 ชั้น/));
-test("บท 3 VPN ใช้ WireGuard ไม่ใช่ Cisco", () => { has("03-it-setup", /WireGuard/); lacks("03-it-setup", /Cisco/i); });
+test("บท 3 VPN ใช้ WireGuard ไม่ใช่ Cisco", () => {
+  has("03-it-setup", /WireGuard/);
+  // ไฟล์ต้นทางเขียนว่า "เลิกใช้ Cisco AnyConnect แล้ว" · เอ่ยชื่อได้ แต่ห้ามสั่งให้ใช้หรือให้ติดตั้ง
+  const bad = ch["03-it-setup"].split("\n").filter((l) => /Cisco/i.test(l) && !/เลิกใช้|ไม่ใช้|ห้ามใช้|ยกเลิก|ไม่ต้อง|แทน|เดิม|เก่า/.test(l));
+  assert.deepEqual(bad, [], "ห้ามสั่งให้ใช้ Cisco");
+});
 test("บท 3 เบอร์ไอที 4100 ไม่ใช่ 2200", () => { has("03-it-setup", /4100/); lacks("03-it-setup", /2200/); });
 test("บท 4 ประกันผู้ป่วยนอก 1500 บาท 15 ครั้ง", () => { has("04-benefits", /1500/); has("04-benefits", /\b15 ครั้ง/); });
 test("บท 4 ผู้ป่วยใน 100000 ไม่ใช่ 50000", () => { has("04-benefits", /100000/); lacks("04-benefits", /50000/); });
 test("บท 4 ค่าอาหาร 60 ไม่ใช่ 50", () => { has("04-benefits", /ค่าอาหาร[\s\S]{0,30}\b60\b/); lacks("04-benefits", /ค่าอาหาร[\s\S]{0,30}\b50\b/); });
 test("บท 4 กองทุนสำรองเลี้ยงชีพสมทบ 5", () => has("04-benefits", /กองทุนสำรองเลี้ยงชีพ[\s\S]{0,60}\b5\b/));
 test("บท 4 บอกว่าสิทธิ์เริ่มหลังผ่านทดลองงาน", () => has("04-benefits", /ผ่านทดลองงาน/));
+// หัวข้อทุกระดับ (# ถึง ######) · ตรวจแค่ว่าไม่แต่งวันจ่ายเงินเดือนหรืออัตราค่าล่วงเวลา · เบอร์ 4001 และวันที่ออกเอกสารอ้างได้
+const MONTHS = "มกราคม|กุมภาพันธ์|มีนาคม|เมษายน|พฤษภาคม|มิถุนายน|กรกฎาคม|สิงหาคม|กันยายน|ตุลาคม|พฤศจิกายน|ธันวาคม";
+const sectionOf = (re) => ch["05-faq"].split(/^#{1,6}\s+/m).find((s) => re.test(s.split("\n")[0])) ?? "";
+const noInventedFigures = (sec) => {
+  const t = sec.replace(/\b4001\b/g, "").replace(new RegExp(`\\d+\\s*(${MONTHS})(\\s*\\d{4})?`, "g"), "");
+  assert.ok(!/(วันที่|ทุกวันที่|ภายในวันที่|ก่อนวันที่)\s*\d|\d+(\.\d+)?\s*(เท่า|เปอร์เซ็นต์|%|บาท|ชั่วโมง|ครั้ง|วัน)|สิ้นเดือน|เดือนละ|\d+\s*x\b/i.test(t), "ห้ามแต่งวันจ่ายเงินเดือนหรืออัตราค่าล่วงเวลา");
+};
 test("บท 5 วันเงินเดือนไม่มีข้อมูล ให้ถามฝ่ายบุคคล", () => {
-  const sec = ch["05-faq"].split(/^##\s+/m).find((s) => /เงินเดือน/.test(s.split("\n")[0])) ?? "";
+  const sec = sectionOf(/เงินเดือน/);
   assert.ok(sec, "ไม่มีหัวข้อเงินเดือน"); assert.match(sec, /ไม่มีข้อมูล|ไม่ได้ระบุ|ไม่ระบุ|ไม่มีในเอกสาร/); assert.match(sec, /ฝ่ายบุคคล|HR/);
-  assert.ok(!/\d/.test(sec.replace(/\b4001\b/g, "")), "ห้ามมีตัวเลขในคำตอบที่ไม่มีข้อมูล");
+  noInventedFigures(sec);
 });
 test("บท 5 ค่าล่วงเวลาไม่มีข้อมูล ให้ถามฝ่ายบุคคล", () => {
-  const sec = ch["05-faq"].split(/^##\s+/m).find((s) => /ล่วงเวลา|OT/.test(s.split("\n")[0])) ?? "";
+  const sec = sectionOf(/ล่วงเวลา|OT/);
   assert.ok(sec, "ไม่มีหัวข้อค่าล่วงเวลา"); assert.match(sec, /ไม่มีข้อมูล|ไม่ได้ระบุ|ไม่ระบุ|ไม่มีในเอกสาร/); assert.match(sec, /ฝ่ายบุคคล|HR/);
-  assert.ok(!/\d/.test(sec.replace(/\b4001\b/g, "")), "ห้ามมีตัวเลขในคำตอบที่ไม่มีข้อมูล");
+  noInventedFigures(sec);
 });
 test("ไม่มีเลขที่ไม่ได้มาจากฉบับล่าสุด (แต่งเลข หรือใช้เลขฉบับเก่า)", () => {
   const ALLOWED = new Set(["9", "0", "18", "8", "30", "119", "12", "90", "4100", "4001", "15", "1500", "100000", "60", "14", "2569"]);
+  // เลขที่มีอยู่ในไฟล์ต้นทาง (รวมฉบับเก่าและวันที่ออกเอกสาร) ไม่นับว่าแต่ง · ฉบับเก่าที่ผิดจับด้วย test เฉพาะข้างบน
+  for (const f of SRC) if (existsSync(`sources/${f}`)) for (const t of norm(readFileSync(`sources/${f}`, "utf8")).match(/\d+(?:\.\d+)?/g) ?? []) ALLOWED.add(String(Number(t)));
   const bad = new Set();
   for (const f of FILES) {
     const text = ch[f].replace(/^ที่มา:.*$/gm, "");

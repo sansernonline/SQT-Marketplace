@@ -2,5 +2,5 @@
   "size": "กลาง",
   "kind": "ข้อมูล + โค้ด Python",
   "about": "รวมยอดขายรายสาขาจาก JSON 2 ระบบ (ฟิลด์ต่าง · ชื่อสาขาสะกดต่าง · หน่วยเงินต่าง)",
-  "touch": "^(summarize\\.py|summary\\.csv|test_.*\\.py)$"
+  "touch": "^(summarize\\.py|summary\\.csv|tests?/.*|test_.*\\.py)$"
 }

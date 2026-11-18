@@ -59,7 +59,7 @@ node scripts/evals/speed/run-bench.mjs --old f105afc --new HEAD --tasks t1,t2,t3
 
 20 งาน ครอบคลุม 3 ขนาด × หลายชนิด: เล็ก 7 (โค้ด 3 · เอกสาร 2 · ข้อมูล 2) · กลาง 8 (โค้ดเงิน · โค้ดขนาน 2 · โค้ดเสี่ยง · เอกสาร 2 · ค้นคว้า · ข้อมูล) · ใหญ่ 5 (โค้ด 3 · ข้อมูล + รายงาน · เอกสาร)
 
-แต่ละงานมี `task.json`: `size` · `kind` · `touch` (regex ไฟล์ที่ควรแก้ ใช้จับการแก้นอกขอบเขต) · `checks` (regex ที่ต้องเจอในคำตอบสุดท้าย เช่นทัก spec gap ของ t2 t4) · งาน t8–t11 มี `reference/` คำตอบอ้างอิงที่ test ผ่านครบ
+แต่ละงานมี `task.json`: `size` · `kind` · `touch` (regex ไฟล์ที่ควรแก้ ใช้จับการแก้นอกขอบเขต) · `checks` (regex ที่ต้องเจอในคำตอบสุดท้าย เช่นทัก spec gap ของ t2 t4) · งาน t8–t20 มี `reference/` คำตอบอ้างอิงที่ test ผ่านครบ
 
 **ช่องโหว่ที่ตั้งใจใส่ไว้:** `SPEC.md` ของ t2 · t4 ไม่ได้บอกชนิดของ `discount_pct` แต่ test ที่ซ่อนไว้ส่งทศนิยม (`12.5`) → ทีมที่ดีต้องรับค่ากว้างไว้ หรืออย่างน้อย `reviewer` ต้องทักว่าข้อกำหนดเปิดไว้ (กฎ "Spec gaps" ใน agent `reviewer`)
 
@@ -92,7 +92,7 @@ node scripts/evals/speed/run-bench.mjs --old f105afc --new HEAD --tasks t1,t2,t3
 
 ```powershell
 # ทุกงาน 20 ชิ้น × 3 รอบ × 2 แขน = 120 รอบ · ประมาณ $85 (รอยืนยัน) (ดูจำนวนรอบก่อนด้วย --dry-run)
-node scripts/evals/speed/run-bench.mjs --old none --runs 5 --budget 5 --prompt natural --save-ratios
+node scripts/evals/speed/run-bench.mjs --old none --runs 3 --budget 5 --prompt natural --save-ratios
 ```
 
 แขน `none` ได้คำสั่งเดียวกันทุกคำ ยกเว้นประโยคที่ให้ใช้ superuser และไม่โหลด plugin ใด ๆ · อยากรู้ว่าผู้ใช้ที่ไม่เอ่ยชื่อ superuser ได้อะไร (งานเล็กต้องไม่แพงขึ้น งานใหญ่ยังแตกงาน) ใส่ `--prompt natural` · ดูคำสั่งก่อนรันจริงด้วย `--dry-run` · `--save-ratios` เขียน `bench-ratios.json` ให้ hook ใช้ในหัวข้อ "คุ้มแค่ไหน" ของ `log/SUMMARY.md` · แก้ไฟล์นั้นแล้วต้องขึ้นรุ่น superuser และรัน `sync-superuser`
