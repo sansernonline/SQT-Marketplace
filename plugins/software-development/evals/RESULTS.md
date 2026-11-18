@@ -1,5 +1,17 @@
 # ผล eval ของ software-development
 
+## 2026-11-18 · backblaze-b2-r2 (เดิม cloudflare-r2 รวมเข้า backblaze-b2) · behaviour 3 รอบ · trigger 5 รอบ
+
+รันด้วย `plugin-eval.mjs` · 2 แขน (มี · ไม่มี plugin) · รวม $3.62
+
+| เคส | มี skill | ไม่มี skill | Δ | ผล |
+|---|---|---|---|---|
+| `backblaze-b2-r2-behaviour` | 1.00 | 1.00 | +0.00 | ผ่าน |
+| `backblaze-b2-r2-trigger` | 1.00 | 1.00 | +0.00 | ผ่าน |
+| `backblaze-b2-r2-trigger-negative` | 1.00 | 1.00 | +0.00 | ผ่าน |
+
+ไม่มี skill ก็ได้ 1.00 ทุกเคส แปลว่าเคสชุดนี้ยังวัดไม่ได้ว่า skill ช่วยอะไร
+
 ## 2026-11-12 · security-audit และ design-direction-lookup · เคสละ 3 รอบ (trigger 5 รอบ)
 
 รันด้วย `scripts/evals/plugin-eval.mjs` บนสำเนาที่ลบ `dependencies` · รอบแรกตัวให้คะแนนหลายตัว error เพราะเขียน `(?i)` ในตัว regex (JavaScript ไม่รับ) จึงแก้แล้วรันซ้ำ
