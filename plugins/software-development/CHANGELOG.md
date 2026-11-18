@@ -1,5 +1,10 @@
 # Changelog — software-development
 
+## 3.8.3 — 2026-11-18
+
+- eval `app-verifier-setup-behaviour` และ `branded-document-design-behaviour` มี fixture แล้ว (เดิมโฟลเดอร์ทดสอบว่าง grader `rules-followed` จึงตกทั้ง 2 แขน) และตรวจกฎห้ามที่ย้ายขึ้น SKILL.md ในรุ่น 3.8.2
+- eval `backblaze-b2-r2-behaviour` เขียนใหม่ให้วัดกฎห้ามของ R2 ที่มีแค่ใน skill (รุ่นเดิมผ่านแม้ไม่มี skill)
+
 ## 3.8.2 — 2026-11-18
 
 - ย้ายกฎห้ามและกฎบังคับที่เหลืออยู่ใน reference อย่างเดียวขึ้นมาเป็นบล็อก "Hard rules" สั้น ๆ ใน `SKILL.md` เพื่อให้กฎมีผลแม้โมเดลไม่เปิด reference: `app-verifier-setup` (upkeep) · `backblaze-b2` (R2) · `branded-document-design` (ปก) · ไม่ตัดกฎออกจาก reference
