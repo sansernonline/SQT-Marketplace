@@ -995,28 +995,56 @@ export function accountLeft({ home = homedir(), env = process.env, now = new Dat
   const q = readJson(join(home, ".claude", "superuser", "quota", `${name.replace(/[^\w.-]/g, "_")}.json`), null);
   if (!acc?.cap_k || !q?.at || now - Date.parse(q.at) > 3600000) return null;
   const [a] = applyQuota([acc], { accounts: [q] }, now);
-  return a.remaining_k == null ? null : { name, left_k: a.remaining_k, reset_in_hours: a.reset_in_hours ?? null, week_left_k: a.week_left_k ?? null, safety: conf.safety ?? 1.2 };
+  return a.remaining_k == null ? null : { name, left_k: a.remaining_k, reset_in_hours: a.reset_in_hours ?? null, week_left_k: a.week_left_k ?? null,
+    week_reset_in_hours: a.week_reset_in_hours ?? null, limited_by: a.limited_by ?? null, safety: conf.safety ?? 1.2 };
+}
+// ขนาดรวม (token) ของลูกทีมเบื้องหลังที่ส่งไปแล้วแต่ยังไม่ส่งงานกลับ ภายใน 6 ชม. ล่าสุด · ด่านหักออกก่อนเทียบ
+// เดิมด่านเทียบกับยอดเต็มทุกครั้ง ส่ง 2 ตัวติดกันจึงผ่านทั้งคู่ (ชุด 3 2026-11-20: 300k 2 ตัว ตอนเหลือ 260k) · หักเต็มขนาดแม้ลูกทีมใช้ไปบ้างแล้ว = ประเมินแบบระวังไว้ก่อน
+export const RUNNING_WINDOW_H = 6;
+// account = นับเฉพาะลูกทีมของบัญชีนี้ (บัญชีอื่นที่ใช้โฟลเดอร์ทีมเดียวกันกินโควตาของตัวเอง) · บรรทัดเก่าที่ไม่มี account นับรวม
+export function runningTokens(runs, now = new Date(), account = null) {
+  const back = new Set(runs.filter((r) => r.event === "result").flatMap((r) => [r.tool_use_id, r.spawned_id]).filter(Boolean));
+  return runs.filter((r) => r.event === "run" && r.async && r.estimate_tokens > 0 && (now - Date.parse(r.ts)) / 3600000 <= RUNNING_WINDOW_H
+    && (!account || !r.account || r.account === account)
+    && !back.has(r.tool_use_id) && !back.has(r.spawned_id)).reduce((s, r) => s + r.estimate_tokens, 0);
+}
+function recentRuns(teamDir, now = new Date()) {
+  const day = (d) => join(teamDir, "log", localDay(d), RUNS_FILE);
+  const files = [...new Set([day(new Date(now - 86400000)), day(now)])];
+  return files.flatMap(readLines);
+}
+const localDay = (d) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+// เวลารอให้ถังที่รั้งรีเซ็ต · ผู้สั่งงานตั้งเวลาปลุกครั้งเดียวตามนี้ (handoff หัวข้อ 5 "โควตาหมด")
+export function resetNote(left) {
+  const k = (x) => Math.round(x * 10) / 10;
+  if (left.limited_by === "week") return `the weekly window is the binding limit; ${left.week_reset_in_hours != null ? `it resets in ${k(left.week_reset_in_hours)} h` : "its reset time is unknown"}, so a 5-hour reset will not help`;
+  return left.reset_in_hours != null ? `the 5-hour window is the binding limit; it resets in ${k(left.reset_in_hours)} h` : "reset time unknown";
 }
 // ด่านโควตา: ลูกทีมต้องทำชิ้นนี้จบในโควตาที่เหลือ ไม่งั้นหยุดกลางทางแล้วต้องส่งต่อ (ผู้ใช้สั่ง 2026-11-10)
-// ไม่มีบรรทัด "ขนาด: Nk" → ขอให้ประเมิน · ขนาด × safety เกินที่เหลือ → ไม่ให้ส่ง
-export function quotaGate(ti = {}, left) {
+// ไม่มีบรรทัด "ขนาด: Nk" → ขอให้ประเมิน · ขนาด × safety เกินที่เหลือหลังหักลูกทีมที่ยังรันอยู่ → ไม่ให้ส่ง
+export function quotaGate(ti = {}, left, runningK = 0) {
   if (!left || DISPATCH_SKIP.test(String(ti.subagent_type ?? ""))) return "";
   const k = (x) => Math.round(x * 10) / 10;
-  const reset = left.reset_in_hours != null ? ` (5-hour window resets in ${k(left.reset_in_hours)} h)` : "";
+  const freeK = Math.max(0, left.left_k - runningK * left.safety);
+  const running = runningK > 0 ? ` minus ${k(runningK)}k × ${left.safety} for workers still running = ${k(freeK)}k free` : "";
   const week = left.week_left_k != null ? ` · week left ${k(left.week_left_k)}k` : "";
-  const where = `account ${left.name} has about ${k(left.left_k)}k left${reset}${week}`;
+  const where = `account ${left.name} has about ${k(left.left_k)}k left${running}${week} · ${resetNote(left)}`;
   const need = estimateTokens(ti.prompt);
   if (need == null) return `Quota gate (SuperUser): the brief has no "ขนาด: Nk" line — ${where} · estimate the size of the piece (rough total tokens) and put it in the brief so the worker is sure to finish within the remaining quota`;
   const needK = (need / 1000) * left.safety;
-  if (needK <= left.left_k) return "";
-  return `Quota gate (SuperUser): this piece is about ${k(need / 1000)}k × ${left.safety} = ${k(needK)}k but ${where} — the worker would run out of quota midway and need a handoff · pick 1 way: cut the piece to no more than ${k(left.left_k / left.safety)}k · wait for the reset · or send it to another account (plan.mjs --accounts --quota of parallel-split-and-merge)`;
+  if (needK <= freeK) return "";
+  return `Quota gate (SuperUser): this piece is about ${k(need / 1000)}k × ${left.safety} = ${k(needK)}k but ${where} — the worker would run out of quota midway · pick 1 way: cut the piece to no more than ${k(freeK / left.safety)}k · wait (save the work per handoff section 5 "quota out" and set one wake-up at that reset) · or send it to another account (plan.mjs --accounts --quota of parallel-split-and-merge)`;
 }
 function agentGate(input, teamDir) {
   if (input.agent_id || (teamDir && !moduleOn(teamDir, "dispatch_gate"))) return "";
   if (!input.transcript_path || !existsSync(input.transcript_path)) return "";
   // โปรเจกต์ที่ยังไม่มี .claude/superuser/ ด่านก็ทำงาน เหมือนด่านแตกงาน · สถานะเก็บที่ ~/.claude/superuser/log (bench 2026-11-18: t5 ส่งลูกทีม 7 ตัวไม่ระบุ effort ผ่าน)
   if (!gateState(teamDir ?? join(configDirOf(), "superuser"), input.transcript_path).usedSuperuser) return "";
-  return dispatchGate(input.tool_input ?? {}) || quotaGate(input.tool_input ?? {}, accountLeft());
+  const dir = teamDir ?? join(configDirOf(), "superuser");
+  let runningK = 0;
+  const left = accountLeft();
+  try { runningK = runningTokens(recentRuns(dir), new Date(), left?.name) / 1000; } catch { /* runs.jsonl พัง = ไม่หัก */ }
+  return dispatchGate(input.tool_input ?? {}) || quotaGate(input.tool_input ?? {}, left, runningK);
 }
 
 const PRE_TOOLS = ["Write", "Edit", "MultiEdit", "NotebookEdit", "Bash", "Agent", "Task", "Skill", "Read"];
@@ -1107,23 +1135,27 @@ export function staleResume(text, now = new Date()) {
   // ข้อหลัก = บรรทัด "- " ไม่เยื้อง · ข้อย่อยและบรรทัดต่อรวมเข้าข้อแม่ (ผู้ตรวจ 2026-11-17: แม่ใหม่แต่ลูกเก่าถูกเตือนแยก)
   const items = [];
   for (const l of sec.split("\n")) if (/^-\s/.test(l)) items.push(l); else if (items.length && l.trim()) items[items.length - 1] += ` ${l.trim()}`;
-  const old = [], claims = [];
+  const old = [], claims = [], due = [];
   for (const l of items) {
+    // ข้อที่รอโควตา (handoff หัวข้อ 5 "Quota runs out") และเลยเวลารีเซ็ตแล้ว → บอกให้ทำต่อ · ตัวตั้งเวลาใน session ตายไปพร้อม session ข้อนี้จึงเป็นทางต่องานหลักฐาน
+    const w = l.match(/รอโควตา:[^\n]*?รีเซ็ต\s*(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2})/);
+    if (w && now >= new Date(`${w[1]}T${w[2]}`)) due.push(l);
     const dates = l.match(/\b20\d{2}-\d{2}-\d{2}\b/g);
     if (dates && (now - new Date(`${dates.sort().at(-1)}T23:59`)) / 86400000 > RESUME_STALE_DAYS) old.push(l);
     const c = l.match(CLAIM);
     if (c && (now - new Date(`${c[2]}T${c[3] ?? "23:59"}`)) / 3600000 > CLAIM_STALE_HOURS) claims.push(`${c[1]} (${c[2]})`);
   }
-  return { old, claims };
+  return { old, claims, due };
 }
 const short = (l) => l.replace(/^\s*-\s*/, "").replace(/\*\*/g, "").slice(0, 60);
 export function resumeAgeNotice(teamDir, root = dirname(teamDir), now = new Date()) {
   const file = contextFile(teamDir, root);
   if (!file) return "";
   let text = ""; try { text = readFileSync(file, "utf8"); } catch { return ""; }
-  const { old, claims } = staleResume(text, now);
+  const { old, claims, due } = staleResume(text, now);
   const where = relative(root, file).replace(/\\/g, "/");
   const out = [];
+  if (due.length) out.push(`"รับงานต่อ" in ${where} has ${due.length} item(s) waiting for quota whose reset time has passed (e.g. "${short(due[0])}…") — run budget.mjs start, then resume them per handoff section 5 "Quota runs out"`);
   if (old.length) out.push(`"รับงานต่อ" in ${where} has ${old.length} item(s) whose latest date is over ${RESUME_STALE_DAYS} days old (e.g. "${short(old[0])}…") — check each against the real thing before acting on it; rewrite or close it per handoff section 5`);
   if (claims.length) out.push(`Claims over ${CLAIM_STALE_HOURS} h old in "รับงานต่อ": ${claims.join(" · ")} — may be taken over only if their branch or log shows no work since (handoff section 5)`);
   return out.join("\n");
@@ -2015,6 +2047,31 @@ ${rows}
         && quotaGate({ subagent_type: "Explore", prompt: "x" }, left) === ""
         && Math.abs(fresh.left_k - 40) < 1e-9 && Math.abs(fresh.week_left_k - 700) < 1e-9 && stale === null;
     }],
+    ["ด่านโควตา: หักลูกทีมที่ยังรันอยู่ · ส่งงานกลับแล้วหรือเกิน 6 ชม. ไม่หัก · บอกถังที่รั้งและเวลารีเซ็ต", [], true, () => {
+      const now = new Date("2026-11-20T01:00:00+07:00"), at = (h) => new Date(now - h * 3600000).toISOString();
+      const runs = [
+        { event: "run", ts: at(0.5), async: true, tool_use_id: "t1", spawned_id: "a1", estimate_tokens: 300000 },
+        { event: "run", ts: at(0.4), async: true, tool_use_id: "t2", spawned_id: "a2", estimate_tokens: 300000 },
+        { event: "result", ts: at(0.1), spawned_id: "a2" },
+        { event: "run", ts: at(7), async: true, tool_use_id: "t3", spawned_id: "a3", estimate_tokens: 100000 },
+        { event: "run", ts: at(0.2), async: false, tool_use_id: "t4", estimate_tokens: 50000 },
+        { event: "run", ts: at(0.2), async: true, tool_use_id: "t5", spawned_id: "a5", estimate_tokens: 80000, account: "other" },
+      ];
+      const running = runningTokens(runs, now, ".claude") / 1000;
+      if (runningTokens(runs, now) / 1000 !== 380) return false;
+      const left = { name: ".claude", left_k: 620, reset_in_hours: 4, week_reset_in_hours: 40, limited_by: "week", safety: 1.2 };
+      const alone = quotaGate({ prompt: "ขนาด: 300k" }, left), busy = quotaGate({ prompt: "ขนาด: 300k" }, left, running);
+      return running === 300 && alone === "" && busy.includes("still running") && busy.includes("weekly window") && busy.includes("40 h")
+        && resetNote({ ...left, limited_by: "five_hour" }).includes("resets in 4 h");
+    }],
+    ["applyQuota: บอกถังที่รั้ง (limited_by) ทั้งแบบมีและไม่มี week_cap_k", [], true, () => {
+      const now = new Date("2026-11-20T00:00:00Z"), iso = (hr) => new Date(now.getTime() + hr * 3600000).toISOString();
+      const snap = (five, week) => ({ accounts: [{ account: "x", at: iso(0), five_hour: { used: five, reset: iso(4) }, week: { used: week, reset: iso(40) } }] });
+      const [a] = applyQuota([{ name: "x", cap_k: 2000 }], snap(0, 89), now), [b] = applyQuota([{ name: "x", cap_k: 2000 }], snap(80, 10), now);
+      const [c] = applyQuota([{ name: "x", cap_k: 100, week_cap_k: 1000 }], snap(0, 95), now);
+      return a.limited_by === "week" && Math.abs(a.remaining_k - 220) < 1e-6 && Math.abs(a.week_reset_in_hours - 40) < 1e-6
+        && b.limited_by === "five_hour" && c.limited_by === "week";
+    }],
     ["ด่านส่งงาน: ขาด model/effort · ใบไม่ครบ 5 ข้อ · ขาดประโยคห้ามเพิ่มการตรวจ → ไม่ให้ส่ง · ครบ · fork · Explore · ผู้ตรวจไม่ต้องมีใบ 5 ข้อ", [], true, () => {
       const brief = `**1 · เป้า** — a\n**2 · ขอบเขต** — b\n**3 · เสร็จเมื่อ** — c\n**4 · กติกา** — ${NO_EXTRA_CHECKS_TEXT}\n**5 · ส่งกลับ** — e`;
       const ok = { model: "sonnet", effort: "medium", prompt: brief };
@@ -2209,6 +2266,11 @@ ${rows}
       const quiet = resumeAgeNotice(gTeam, proj, now);
       unlinkSync(join(gTeam, "CONTEXT.md"));
       return /1 item\(s\)/.test(t) && t.includes("เก่า:") && quiet === "" && resumeAgeNotice(gTeam, proj, now) === "";
+    }],
+    ["resume_check: ข้อ รอโควตา ที่เลยเวลารีเซ็ตถูกเตือน · ยังไม่ถึงเวลาไม่เตือน", [], true, () => {
+      const ctx = "## รับงานต่อ\n- ชุด 3 build รอโควตา: รายสัปดาห์ รีเซ็ต 2026-11-22 03:00 · ตรวจจริง 2026-11-20\n- อื่น 2026-11-20\n";
+      const before = staleResume(ctx, new Date("2026-11-21T12:00")).due, after = staleResume(ctx, new Date("2026-11-22T03:05")).due;
+      return before.length === 0 && after.length === 1 && after[0].includes("build");
     }],
     ["resume_check: แก้ไฟล์งาน 3 ไฟล์ ไม่แตะ CONTEXT.md → เตือนก่อนจบ", [skill, edit("a"), edit("b"), edit("c")], true, (l) => resumeGate(fold(l), true)],
     ["resume_check: แตะ CONTEXT.md หลังแก้ → ไม่เตือน · แก้ต่ออีก 2 ไฟล์ยังไม่ถึงเกณฑ์", [edit("a"), edit("b"), edit("c"), T({ type: "tool_use", name: "Edit", input: { file_path: "/p/.claude/superuser/CONTEXT.md" } }), edit("d"), edit("e")], false, (l) => resumeGate(fold(l), true)],
