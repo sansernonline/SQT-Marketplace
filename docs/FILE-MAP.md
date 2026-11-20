@@ -12,7 +12,7 @@
 | [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 24 | 0 | 9 | 228 |
 | [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 44 | 1 | 30 | 269 |
 | [`software-development`](#software-development) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 100 | 12 | 17 | 1157 |
-| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 4 | 41 | 0 | 7 | 315 |
+| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 4 | 41 | 0 | 7 | 316 |
 | [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 25 | 1 | 10 | 190 |
 
 ## โครงของทุก plugin
@@ -116,6 +116,7 @@ plugins/<plugin>/
 | `references/team-roles.md` | บทบาทในทีม วิธีแบ่งงาน และรอบตรวจซ้ำจนไม่เหลือข้อสูงและกลาง | ทุก plugin |
 | `references/triggers.md` | คำพูดแบบไหนเปิด playbook ไหน | ทุก plugin |
 | `references/voting.md` | ขั้นตอนเต็มของการตัดสินด้วยการค้นและโหวต 3 มุม | ทุก plugin |
+| `scripts/budget.mjs` | พิมพ์บรรทัดโควตาคงเหลือ ประมาณการ และสรุปการใช้งาน ตอนเริ่มและจบงาน | `superuser` |
 | `templates/CONTEXT.md` | แบบไฟล์ CONTEXT.md กลางของโปรเจกต์ | `superuser` |
 | `templates/DURABLE-BRIEF.md` | แม่แบบใบสั่งงานที่ใช้ได้เป็นสัปดาห์ บอกพฤติกรรมกับ interface ไม่ใส่ path | ทุก plugin |
 | `templates/HISTORY.md` | แบบไฟล์ประวัติงาน | `superuser` |
@@ -668,7 +669,7 @@ plugins/<plugin>/
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/autonomy.md` · `references/brief-template.md` · `references/deep-research.md` · `references/dispatch.md` · `references/evidence.md` · `references/examples.md` · `references/final-answer.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/modules.md` · `references/playbook-document.md` · `references/playbook-learn-from-session.md` · `references/playbook-pickup-and-pause.md` · `references/playbook-research.md` · `references/playbook-review.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/review-gate.md` · `references/review-lenses.md` · `references/safety.md` · `references/sizing.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/CONTEXT.md` · `templates/DURABLE-BRIEF.md` · `templates/HISTORY.md` · `templates/IMPROVEMENTS.md` · `templates/LEDGER.md` · `templates/NOTES.md` · `templates/OUT-OF-SCOPE.md` · `templates/TEAM.md` · `templates/accounts.json` · `templates/config.json` · `templates/improvements-queue.md` · `templates/research-queue.json` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/autonomy.md` · `references/brief-template.md` · `references/deep-research.md` · `references/dispatch.md` · `references/evidence.md` · `references/examples.md` · `references/final-answer.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/modules.md` · `references/playbook-document.md` · `references/playbook-learn-from-session.md` · `references/playbook-pickup-and-pause.md` · `references/playbook-research.md` · `references/playbook-review.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/review-gate.md` · `references/review-lenses.md` · `references/safety.md` · `references/sizing.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `scripts/budget.mjs` · `templates/CONTEXT.md` · `templates/DURABLE-BRIEF.md` · `templates/HISTORY.md` · `templates/IMPROVEMENTS.md` · `templates/LEDGER.md` · `templates/NOTES.md` · `templates/OUT-OF-SCOPE.md` · `templates/TEAM.md` · `templates/accounts.json` · `templates/config.json` · `templates/improvements-queue.md` · `templates/research-queue.json` |
 
 ### playbook (7) — `skills/superuser/references/`
 

@@ -549,6 +549,8 @@ Use when software work is big or risky
 
 **Budget**: if the user gives none, use `สมดุล` (balanced) · **Expect**: 1 line in "การตัดสินใจ" before dispatch, `คาด: size · workers · review rounds · level`, then compare at the end · The 7 playbooks and the budget table are in `sizing`
 
+**Quota in the chat (medium and up)**: before the first dispatch run `node <plugin>/skills/superuser/scripts/budget.mjs start --estimate <total k> --hours <N> --workers <N> --pieces <N>` and paste its 3 lines (`โควตาคงเหลือ` · `ประมาณการใช้งาน` · `ความเพียงพอ`) at the top of the answer; after the last piece run `budget.mjs end` and paste its 2 lines (`สรุปการใช้งาน` · `โควตาคงเหลือ`) at the end. Per-agent detail stays in `log/` and `log/SUMMARY.md`, not in the chat. Not enough quota → do the pieces that fit, then save the rest per `handoff` section 5 "Quota runs out" (user asked 2026-11-20)
+
 ---
 
 ## 3 · Triggers

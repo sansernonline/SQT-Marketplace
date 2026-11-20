@@ -49,7 +49,7 @@ The worker appends it to its own task sheet, then edits `status:`. The message b
 ## 5 · Resuming work (`รับงานต่อ`) — across sessions · switching model · context nearly full
 The `## รับงานต่อ` section in `CONTEXT.md` follows these rules. The `## ความคืบหน้า` table beside it belongs to `status-report`.
 
-**Before handing over** (end of session · before switching model · context use passes half in a long job), update `รับงานต่อ`:
+**Before handing over** (end of session · before switching model · context use passes half in a long job · quota runs out, below), update `รับงานต่อ`:
 - **ทำต่อเป็นข้อแรก:** 1 item, doable at once, pointing to a file or `handoff/<id>.md`.
 - **ชิ้นที่ยังเปิด:** the `id`s whose `status` is not `เสร็จ`.
 - **รออนุมัติ:** ready but irreversible work; name the file or command (omit if none).
@@ -57,9 +57,16 @@ The `## รับงานต่อ` section in `CONTEXT.md` follows these rules
 - **ระวัง:** traps found · what must not be torn up (already decided) · failed paths from every delivery sheet.
 - **ส่งมาแล้ว N ครั้ง:** count real handoffs only (end of session · switching model), not `/compact`. If the receiver sees N ≥ 2, old text may linger; check against the real thing before following it.
 - **สมุดงาน:** point to `notes/<plan>.md` and `ledger/<plan>.md` of the open plan ([`team-memory`](references/team-memory.md) section 8). A multi-piece plan is done only when the line `Task N: complete` is in its ledger.
-- **Tag every item** `ตรวจจริง` (seen yourself this session) or `ยังไม่ได้ตรวจ` (remembered). No tag = not yet checked. The receiver may believe the first at once and must check the second before use.
+- **Tag every item** `ตรวจจริง` (seen yourself this session) or `ยังไม่ได้ตรวจ` (remembered). No tag = not yet checked. The receiver may believe the first at once and must check the second before use. The same applies to any status file a task keeps outside `CONTEXT.md` (such as `_to_delete/<task>/status.md`), and above all to a line that says the user decided or forbade something: write where they said it, or tag it `ยังไม่ได้ตรวจ` (2026-11-20: "the owner banned Canva and Pinterest" was the agent's own rule written as the owner's, and the next session repeated it to the user).
 - **Date every item** (`YYYY-MM-DD`, updated when the item changes). The hook module `resume_check` uses it: at session start it names items over 14 days old and claims over 24 hours old; at the end it blocks once when 3+ work files were edited but `CONTEXT.md` was not touched (`ข้ามรับงานต่อ: <reason>` passes it).
 - **Close what is done in the same round:** a finished item leaves `รับงานต่อ` at once; write 1 line with its evidence (PR · commit · file) in `HISTORY.md`. A done item left in the list gets picked up again by the next reader.
+
+**Quota runs out** (the quota gate blocks, `budget.mjs start` says `ไม่เพียงพอ`, or the remaining quota drops below the next piece). The user's order still stands, so save and continue later instead of stopping silently:
+1. Finish or stop the piece in hand at a clean point; do not send a worker that will not fit.
+2. Write `รับงานต่อ` (or the task's status file): `รอโควตา: <binding window> รีเซ็ต <YYYY-MM-DD HH:MM>` · what is done (with evidence) · what is left, in order · the exact order to resume with (the user's words, or the task's brief path).
+3. If the session stays open, set one one-shot wake-up (`CronCreate`, `recurring: false`) a few minutes after that reset, with the resume order as its prompt. Do not poll every 5 hours: when the weekly window binds, a 5-hour reset does not help. A session-only timer dies with the session, so the note in step 2 is what a new session resumes from; the SessionStart hook names `รอโควตา` items whose reset has passed.
+4. Tell the user in the answer, in one line, what was done, what is waiting and when it resumes.
+This is also why the quota gate exists: workers chained one after another are checked before each send so none stops halfway.
 
 **Claim before starting (1 item, 1 taker).** Two sessions or vendors reading the same `CONTEXT.md` will otherwise start the same item.
 - Re-read `รับงานต่อ` just before starting, then add to the item `รับโดย: <tool>/<branch or session> · <YYYY-MM-DD HH:MM>`. A `handoff/<id>.md` gets `claimed_by` and `claimed_at` in its header and `status: ทำอยู่`.
