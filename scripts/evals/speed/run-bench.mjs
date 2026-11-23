@@ -191,7 +191,7 @@ async function one({ task, label, plugin, n }) {
     overclaim: !passAll && CLAIM.test(text), checks: (m.checks ?? []).map((c) => ({ name: c.name, ok: new RegExp(c.pattern, "i").test(text) })),
     denied: (j.permission_denials ?? []).length, subtype: j.subtype ?? null, error: j.is_error ?? (r.code !== 0), result: text.slice(0, 300), stderr: r.err.slice(-300) };
   writeFileSync(join(OUT, "runs", `${id}.json`), JSON.stringify({ ...row, stderr: r.err.slice(-2000), result: j.result }, null, 2));
-  console.log(`${id.padEnd(14)} ${wall}s · turns ${row.turns} · $${(row.cost ?? 0).toFixed(2)} · token ${row.tokens ?? "?"} · คำสั่ง ${row.toolCalls ?? "?"} (ล้ม ${row.toolErrors ?? "?"}) · ลูกทีม ${row.team?.members.length ?? a.agents.length}${row.team?.members.length ? ` (${row.team.members.map((t) => `${t.model.replace(/^claude-|-\d.*$/g, "")}/${t.effort}`).join(" ")}) · ${dispatchText(row.team.dispatch)}` : ""} · superuser ${row.superuser ? "เปิด" : "ไม่เปิด"} · test ${row.hidden}${row.overclaim ? " · อ้างเกินจริง" : ""}${row.outside.length ? ` · นอกขอบเขต ${row.outside.length}` : ""}`);
+  console.log(`${id.padEnd(14)} ${wall}s · turns ${row.turns} · $${(row.cost ?? 0).toFixed(2)} · token ${row.tokens ?? "?"} · คำสั่ง ${row.toolCalls ?? "?"} (ล้ม ${row.toolErrors ?? "?"}) · ลูกทีม ${row.team?.members.length ?? a.agents.length}${row.team?.members.length ? ` (${row.team.members.map((t) => `${t.model.replace(/^claude-|-\d.*$/g, "")}/${t.effort}`).join(" ")})` : ""}${row.team ? ` · ${dispatchText(row.team.dispatch)}` : ""} · superuser ${row.superuser ? "เปิด" : "ไม่เปิด"} · test ${row.hidden}${row.overclaim ? " · อ้างเกินจริง" : ""}${row.outside.length ? ` · นอกขอบเขต ${row.outside.length}` : ""}`);
   return row;
 }
 
