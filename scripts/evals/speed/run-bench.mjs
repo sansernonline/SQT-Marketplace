@@ -25,7 +25,7 @@ import { join, dirname, resolve } from "node:path";
 import { homedir } from "node:os";
 import { randomUUID } from "node:crypto";
 import { fileURLToPath } from "node:url";
-import { teamOf, teamLines } from "./team.mjs";
+import { teamOf, teamLines, dispatchText } from "./team.mjs";
 import { median, medianRatioCI, passHatK, fmtCI, diffCI } from "./stats.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -191,7 +191,7 @@ async function one({ task, label, plugin, n }) {
     overclaim: !passAll && CLAIM.test(text), checks: (m.checks ?? []).map((c) => ({ name: c.name, ok: new RegExp(c.pattern, "i").test(text) })),
     denied: (j.permission_denials ?? []).length, subtype: j.subtype ?? null, error: j.is_error ?? (r.code !== 0), result: text.slice(0, 300), stderr: r.err.slice(-300) };
   writeFileSync(join(OUT, "runs", `${id}.json`), JSON.stringify({ ...row, stderr: r.err.slice(-2000), result: j.result }, null, 2));
-  console.log(`${id.padEnd(14)} ${wall}s · turns ${row.turns} · $${(row.cost ?? 0).toFixed(2)} · token ${row.tokens ?? "?"} · คำสั่ง ${row.toolCalls ?? "?"} (ล้ม ${row.toolErrors ?? "?"}) · ลูกทีม ${a.agents.length}${row.team?.members.length ? ` (${row.team.members.map((t) => `${t.model.replace(/^claude-|-\d.*$/g, "")}/${t.effort}`).join(" ")})` : ""} · superuser ${row.superuser ? "เปิด" : "ไม่เปิด"} · test ${row.hidden}${row.overclaim ? " · อ้างเกินจริง" : ""}${row.outside.length ? ` · นอกขอบเขต ${row.outside.length}` : ""}`);
+  console.log(`${id.padEnd(14)} ${wall}s · turns ${row.turns} · $${(row.cost ?? 0).toFixed(2)} · token ${row.tokens ?? "?"} · คำสั่ง ${row.toolCalls ?? "?"} (ล้ม ${row.toolErrors ?? "?"}) · ลูกทีม ${row.team?.members.length ?? a.agents.length}${row.team?.members.length ? ` (${row.team.members.map((t) => `${t.model.replace(/^claude-|-\d.*$/g, "")}/${t.effort}`).join(" ")})` : ""}${row.team ? ` · ${dispatchText(row.team.dispatch)}` : ""} · superuser ${row.superuser ? "เปิด" : "ไม่เปิด"} · test ${row.hidden}${row.overclaim ? " · อ้างเกินจริง" : ""}${row.outside.length ? ` · นอกขอบเขต ${row.outside.length}` : ""}`);
   return row;
 }
 
@@ -245,7 +245,7 @@ for (const task of bySizeOrder) for (const [label] of versions) {
   const checks = (m.checks ?? []).map((ck) => `${ck.name} ${rs.filter((r) => r.checks.find((x) => x.name === ck.name)?.ok).length}/${rs.length}`).join(" · ") || "–";
   const out = rs.filter((r) => r.outside.length).length;
   const fails = rs.filter((r) => r.error || (r.subtype && r.subtype !== "success")).length, denied = rs.reduce((s, r) => s + r.denied, 0);
-  lines.push(`| ${m.size} | ${task} | ${m.kind} | ${label} | ${f0(median(pick(rs, "wall")))} | ${f0(median(pick(rs, "api")))} | ${f2(median(pick(rs, "cost")))} | ${f0(median(pick(rs, "tokens")))} | ${(rs.reduce((s, r) => s + r.agents.length, 0) / (rs.length || 1)).toFixed(1)} | ${label === "new" ? `${rs.filter((r) => r.superuser).length}/${rs.length}` : "–"} | ${rs.map((r) => r.hidden).join(" · ")} | ${c}/${rs.length} | ${c ? f2(costSum / c) : "ไม่มีรอบผ่าน"} | ${f0(median(pick(rs, "filesChanged")))}${m.touch ? ` · ${out}/${rs.length}` : ""} | ${rs.filter((r) => r.overclaim).length}/${rs.length} | ${checks} | ${fails} · ${denied} |`);
+  lines.push(`| ${m.size} | ${task} | ${m.kind} | ${label} | ${f0(median(pick(rs, "wall")))} | ${f0(median(pick(rs, "api")))} | ${f2(median(pick(rs, "cost")))} | ${f0(median(pick(rs, "tokens")))} | ${(rs.reduce((s, r) => s + (r.team?.members.length ?? r.agents.length), 0) / (rs.length || 1)).toFixed(1)} | ${label === "new" ? `${rs.filter((r) => r.superuser).length}/${rs.length}` : "–"} | ${rs.map((r) => r.hidden).join(" · ")} | ${c}/${rs.length} | ${c ? f2(costSum / c) : "ไม่มีรอบผ่าน"} | ${f0(median(pick(rs, "filesChanged")))}${m.touch ? ` · ${out}/${rs.length}` : ""} | ${rs.filter((r) => r.overclaim).length}/${rs.length} | ${checks} | ${fails} · ${denied} |`);
 }
 
 // ต่อขนาด: ทำให้ทุกงานอยู่สเกลเดียวกันก่อนรวม (หารด้วยค่ากลางของแขนเทียบในงานนั้น) แล้วหาช่วงของ ค่ากลางแขนใหม่ ÷ ค่ากลางแขนเทียบ

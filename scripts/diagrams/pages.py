@@ -32,8 +32,11 @@ def plugin_page(plugin, data, labels):
     flow = "\n\n".join(f"![SuperUser ขั้น {f[:-4].replace('-', ' ', 1)}](flow/{f})" for f in series(plugin, "flow"))
     pb_imgs = "\n\n".join(f'<a id="pb-{p["name"]}"></a>\n\n### {short(p)} · `{p["name"]}`\n\n![{short(p)}](playbooks/{p["name"]}.png)'
                           for p in data["playbooks"] if f"{p['name']}.png" in pngs)
+    # dispatch.md เขียนมือ (ไม่ได้สร้างจากสคริปต์) · มีไฟล์เมื่อไรค่อยลิงก์
+    dispatch = ("\n\nขั้นแจกงานแบบละเอียดเป็น algorithm พร้อมด่านของ hook: [แจกงานอย่างไร](dispatch.md)"
+                if os.path.exists(os.path.join(DOCS, plugin, "dispatch.md")) else "")
     images = (f"## แผนผัง plugin\n\nเรื่องเข้ามาทางไหน ไปถึง agent ไหน ใช้ skill อะไร\n\n![แผนผัง plugin](map.png)\n\n"
-              f"## SuperUser ทำงานอย่างไร\n\nหัวหน้าทีมรับงาน → จัดขนาด → แจกงาน → ตรวจซ้ำจนผ่าน → ส่งมอบ → เรียนรู้\n\n{flow}")
+              f"## SuperUser ทำงานอย่างไร\n\nหัวหน้าทีมรับงาน → จัดขนาด → แจกงาน → ตรวจซ้ำจนผ่าน → ส่งมอบ → เรียนรู้{dispatch}\n\n{flow}")
     cross = " · ".join(f"[`{c}`](../{c}/README.md)" for c in data["cross"]) or "—"
     return (f"{NOTE}# {plugin}\n\n{labels.get('tagline', '')}\n\n"
             f"agent {len(data['agents'])} · skill {len(data['skills']) + len(data['core_skills'])}"
