@@ -6,8 +6,7 @@ Why this file exists: on 2026-11-23 a builder logo round was made from 2 news pa
 
 ## A · Where to search
 
-For brand, logo and identity jobs these rules replace the general minimum in `SKILL.md` step 2 (1 `theme` + 1 `social` site): theme stores hold no logos, and social sites (Pinterest · Dribbble · Behance) are view-only leads that must be traced to the studio's page (rule 2) before they count. Competitor names from search set (b) go to the swap test, not the board (rule 25).
-
+For brand, logo and identity jobs these rules replace the general minimum in `SKILL.md` "Steps" step 2 (1 `theme` + 1 `social` site): theme stores hold no logos, and social sites (Pinterest · Dribbble · Behance) are view-only leads that must be traced to the studio's page (rule 2) before they count. Competitor names from search set (b) go to the swap test, not the board (rule 25).
 
 1. **Curated sources first**: sites with an editor or jury (Brand New "Reviewed" · The Brand Identity · World Brand Design Society · Creative Boom · award pages such as DEmark, RGD, iF), then studio portfolio pages. General image search and SEO listicles never count. Check: every piece names the curated source it came from. `จากแหล่ง`
 2. **Open the studio's own project page**, not a repost, a Pinterest pin or an aggregator thumbnail. Check: the board link points to the studio, the photographer or the award page. `จากแหล่ง`
