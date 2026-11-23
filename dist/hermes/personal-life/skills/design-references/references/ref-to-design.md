@@ -11,13 +11,13 @@ One row per picked reference, in the job's working notes:
 | Column | Fill with |
 |---|---|
 | Reference | name · studio · year · link |
-| Works for its client because | one mechanism, not an adjective (A4) |
-| Craft to borrow | measured: proportion ratios · negative space · stroke contrast · corner radius · colour ratio by area · material and finish · light direction and softness · letter construction (A1–A6) |
-| Role in our piece | exactly one of: form · type · colour · finish · scene (E2) |
-| What we change, because | each change tied to a fact about our client (C3) |
-| Must not copy | its outline · its distinctive element · its whole layout (B1) |
+| Works for its client because | one mechanism, not an adjective (rule 4) |
+| Craft to borrow | measured: proportion ratios · negative space · stroke contrast · corner radius · colour ratio by area · material and finish · light direction and softness · letter construction (rules 1–6) |
+| Role in our piece | exactly one of: form · type · colour · finish · scene (rule 30) |
+| What we change, because | each change tied to a fact about our client (rule 15) |
+| Must not copy | its outline · its distinctive element · its whole layout (rule 7) |
 
-Then write the **one idea** sentence (C2) and which references feed it. No sheet = do not draw.
+Then write the **one idea** sentence (rule 14) and which references feed it. No sheet = do not draw.
 
 ## A · Analyse the reference
 
@@ -51,7 +51,7 @@ Then write the **one idea** sentence (C2) and which references feed it. No sheet
 19. **Reads at 16 px and at about 1 inch.** Export 16 · 32 · 64 px and check the key shape and gap at 100 %. `จากแหล่ง`
 20. **Minimum feature**: no stroke, gap or counter thinner than 1/16 of the mark height; at 16 px drop what does not survive, or make a small-size master. `อนุมาน`
 21. **Squint / blur test**: after blur a distinct silhouette and main gap remain, unlike the competitor set. `จากแหล่ง`
-22. **2–3 basic shapes with deliberate, unusual proportions**; more than about 4 primitives → simplify. `จากแหล่ง`
+22. **2–3 basic shapes with deliberate, unusual proportions**; more than about 4 primitives → simplify. `จากแหล่ง` · the number `อนุมาน`
 23. **One stroke weight, one corner radius, one terminal style** across the mark and its companions (at most 2 values each). `อนุมาน`
 24. **Optical corrections**: round shapes overshoot flat ones by about 1–3 % of the height; fix by eye what the grid gets wrong. `จากแหล่ง`
 25. **Reversed version a touch lighter**: white on dark looks heavier. `อนุมาน`
@@ -61,10 +61,10 @@ Then write the **one idea** sentence (C2) and which references feed it. No sheet
 
 ## E · Combine references
 
-29. **One dominant idea; at most 2 borrowed principles + 1 client twist.** The idea sentence has no "and also". `จากแหล่ง`
+29. **One dominant idea; at most 2 borrowed principles + 1 client twist.** The idea sentence has no "and also". `จากแหล่ง` · the numeric cap `อนุมาน`
 30. **Give each picked reference one role** (form · type · colour · finish · scene) and do not average them; averaging gives the generic middle. `อนุมาน`
-31. **Many rough silhouettes, few finished directions**: at least 12 quick silhouette variants (an SVG agent's sketch sheet) before refining 3. Keep the sheet in the job folder. `จากแหล่ง` (practitioners sketch 30+; 12 is our floor)
-32. **Silhouettes before detail**: first round is flat shapes only, no gradients or shadows. `จากแหล่ง`
+31. **Many rough silhouettes, few finished directions**: at least 12 quick silhouette variants (an SVG agent's sketch sheet) before refining 3. Keep the sheet in the job folder; it is a working file, not something to show the owner. `จากแหล่ง` that practitioners sketch 30+ before refining · the SVG silhouette form and the floor of 12 `อนุมาน`
+32. **Silhouettes before detail**: first round is flat shapes only, no gradients or shadows (the agent's form of "pencil first"). `จากแหล่ง` for rough-first · the flat-SVG form `อนุมาน`
 33. **Stay with a promising idea** for 3+ rounds before switching; switch references only when it stalls, and log why. `อนุมาน`
 
 ## F · Colour and type
@@ -77,7 +77,7 @@ Then write the **one idea** sentence (C2) and which references feed it. No sheet
 
 ## G · Depth, material, light
 
-39. **The flat master passes rules 18–21 first; the dimensional version is the hero.** Depth never rescues a weak form. (Sources say keep the master flat; this owner asks for depth, so both exist and the flat one is tested.) `จากแหล่ง`
+39. **The flat master passes rules 18–21 first; the dimensional version is the hero.** Depth never rescues a weak form. `จากแหล่ง` for "flat master first" · the dimensional hero comes from the owner's taste ("มีมิติ แสงเงา" 2026-11-17, OnNing wallet 10/10 2026-11-23), not from the sources, which keep the master flat and render material only on mockups
 40. **Copy material from a real photo**, not from a generic gradient: highlight shape, bevel width, roughness, shadow softness, side by side with the photo. Prefer compositing a real licensed texture or photo over code gradients for stone, metal, paper. `อนุมาน`
 41. **One light for the whole scene**: same direction, warmth and softness on mark, object and background ([`depth-and-light.md`](depth-and-light.md)). `อนุมาน`
 42. **Set depth numbers**: extrusion depth, mounting distance, cast-shadow offset; check at the final size. `อนุมาน`
@@ -86,8 +86,8 @@ Then write the **one idea** sentence (C2) and which references feed it. No sheet
 
 43. **Real touchpoints at believable scale** (sign, card, cup, app icon, favicon); note the real size. `จากแหล่ง`
 44. **Straight-on or flat-lay mockups**, not dramatic angles. `จากแหล่ง`
-45. **The scene light and palette match the lead reference's photography** (A6); composited signs get a contact shadow, the wall's texture and the photo's light direction. `อนุมาน`
-46. **Craft check against each reference**: a row per A1 property, ours versus the reference, pass or fail. A fail on proportion, letter construction or material sends the piece back before the eye gate. `อนุมาน`
+45. **The scene light and palette match the lead reference's photography** (rule 6); composited signs get a contact shadow, the wall's texture and the photo's light direction. `อนุมาน`
+46. **Craft check against each reference**: a row per rule-1 property, ours versus the reference, pass or fail. A fail on proportion, letter construction or material sends the piece back before the eye gate. `อนุมาน`
 47. **Performance before taste**: one idea · 16 px · one colour · squint · swap · similarity, scored per candidate before anyone's opinion. `จากแหล่ง`
 48. **Memory test**: a fresh reviewer sees the mark once, then sketches its main shape from memory; the main shape must match. `อนุมาน`
 

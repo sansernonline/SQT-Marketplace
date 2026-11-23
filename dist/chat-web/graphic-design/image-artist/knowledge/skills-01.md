@@ -211,7 +211,7 @@ Not for: 3 screen directions from colors you already have → `design-direction-
 Every design skill points to this section. If you skip any item, write the reason in the evidence line.
 
 1. **Read the theme**: the section "สไตล์ออกแบบที่ชอบ" (preferred design styles) in `~/.claude/superuser-style.md` (including its subsection "บันทึกการเลือก", the choice log) and anything already locked in the project (brand guide · `DESIGN.md` · style lock · sibling pages). If that section does not exist, note `ไม่มี` (none) and carry on; do not stop to ask. If the theme asks for depth (`มีมิติ` · `แสงเงา` · `ลูกเล่น`) or the owner calls a piece flat (`แบน` · `จืด`), open [`references/depth-and-light.md`](references/depth-and-light.md) and apply it to every direction in item 4.
-2. **Search live references** per "Steps" below, **even when a brand or sibling page exists**, and before asking the owner anything. What is locked controls colors and fonts; the search is for the structure, elements and storytelling. A reference counts only if its structure is clearly visible at the size you opened it. **Brand, logo or identity jobs: every candidate passes the checks in [`references/ref-criteria.md`](references/ref-criteria.md)** (curated sources · ≥ 3 Thai pieces for the Thai market · terms from the brief and the owner's traits · scored ≥ 4 of 5 · best image, not the page top · 3 lines under each image). If a theme store blocks bots, try one that opens (wordpress.org/themes) and note which site would not open.
+2. **Search live references** per "Steps" below, **even when a brand or sibling page exists**, and before asking the owner anything. What is locked controls colors and fonts; the search is for the structure, elements and storytelling. A reference counts only if its structure is clearly visible at the size you opened it. **Brand, logo or identity jobs: every candidate passes the checks in [`references/ref-criteria.md`](references/ref-criteria.md)** (curated sources · ≥ 3 Thai pieces for the Thai market · terms from the brief and the owner's traits · scored ≥ 4 of 5 · best image, not the page top · 3 lines under each image · 6–8 pieces in 3 directions; curated sources replace the theme + social minimum of step 2; competitors go to the swap test, not the board). If a theme store blocks bots, try one that opens (wordpress.org/themes) and note which site would not open.
 3. **Let the owner pick references from images.** Select 4–8 references that open and really differ, run `board`, open every image, then ask with `AskUserQuestion` (multi-select, no `(แนะนำ)` option). Do not ask when the owner says don't ask, when the owner is away (`unattended-run`), or when the owner already chose this style; then still build the board page as evidence and pick references yourself, noting them under **ตัดสินใจเอง** (decided on my own). A subagent without `AskUserQuestion` sends the board path to the lead. Full rules (option split, liked vs disliked, the 2 allowed asking points) → `references/owner-pick.md`. Once the owner answers, record it per "Remember the owner's taste".
 4. **Make 3 really different directions**, different in structure and elements, not only color. Each cites 1 reference opened this round (the owner's picks first). **Before the first shape, fill the borrow sheet and follow [`references/ref-to-design.md`](references/ref-to-design.md)**: borrow the craft (measured proportion · letter construction · material · light), not only the concept; one idea sentence per direction; the flat master passes 16 px · squint · swap before depth; craft check against each reference. Every redo round goes back to the picked references, never to the maker's own idea (2026-11-23: a redo drawn from the agent's own idea got "ไม่สวยเลย นี้ research มายัง"). If the owner is present, pick in the end-of-job question, after the 3 directions pass the eye check in item 5. If not, pick yourself per `parallel-attempts-pick-best` and note it under **ตัดสินใจเอง**. You may make 1 direction when the look is already locked (a piece split off a master · a set with a passed style lock · editing an existing image · reviewing work) and write the reason.
 5. **Before sending, check per `no-ai-look`**: the script on HTML/CSS files, and the eye gate on every job. The eye gate needs a fresh agent that did not do this piece to open the real image (`no-ai-look` paragraph "คนที่ไม่ได้ทำต้องตรวจด้วยตา" in item 3.2). The maker's own check does not count. A subagent that cannot call another agent sends the image back to the lead to call `design-critic`, and writes `รอหัวหน้า` (waiting for the lead) in the eye-check field.
@@ -366,6 +366,9 @@ Why this file exists: on 2026-11-23 a builder logo round was made from 2 news pa
 
 ## A · Where to search
 
+For brand, logo and identity jobs these rules replace the general minimum in `SKILL.md` step 2 (1 `theme` + 1 `social` site): theme stores hold no logos, and social sites (Pinterest · Dribbble · Behance) are view-only leads that must be traced to the studio's page (rule 2) before they count. Competitor names from search set (b) go to the swap test, not the board (rule 25).
+
+
 1. **Curated sources first**: sites with an editor or jury (Brand New "Reviewed" · The Brand Identity · World Brand Design Society · Creative Boom · award pages such as DEmark, RGD, iF), then studio portfolio pages. General image search and SEO listicles never count. Check: every piece names the curated source it came from. `จากแหล่ง`
 2. **Open the studio's own project page**, not a repost, a Pinterest pin or an aggregator thumbnail. Check: the board link points to the studio, the photographer or the award page. `จากแหล่ง`
 3. **At least 3 of 6–8 pieces come from Thai work or the Thai market** when the client sells in Thailand (Thai studios, DEmark winners, Thai brands). Check: count them; fewer than 3 → search again in Thai before building the board. `จากแหล่ง` that Thai context changes the look · the number 3 `อนุมาน`
@@ -374,7 +377,7 @@ Why this file exists: on 2026-11-23 a builder logo round was made from 2 news pa
 
 ## B · Search terms
 
-6. **Terms come from the brief, not only the industry.** Each set holds 4 parts: business type + 4–5 mood words + market or language + mark type (wordmark · monogram · symbol · emblem · mascot). Check: every term traces back to a sentence in the brief or the owner's words; write the terms under the board. `จากแหล่ง`
+6. **Terms come from the brief, not only the industry.** Each set holds 4 parts: business type + 4–5 mood words + market or language + mark type (wordmark · monogram · symbol · emblem · mascot). Check: every term traces back to a sentence in the brief or the owner's words; write the terms under the board. `จากแหล่ง` for "terms come from the brief" · the 4-part formula `อนุมาน`
 7. **Put the owner's taste into the terms**: traits the owner chose twice or more in "บันทึกการเลือก" (choice log) of `~/.claude/superuser-style.md` (for example "dimensional", "real material", "premium") become mood words. A trait the owner disliked becomes a "not" filter. Check: the mood words include at least 1 owner trait. `อนุมาน` (2026-11-23: terms held only the industry, the owner's "มีมิติ" was missing)
 8. **Search in Thai and English.** When the name is Thai, add Thai type terms (แบบมีหัว / ไม่มีหัว · ป้ายเขียนมือ · ลายไทยร่วมสมัย). Check: at least 1 result set came from a Thai query. `อนุมาน`
 9. **Search the mark type the brief needs, not just "logo".** A builder that wants a premium letter mark searches "monogram stone", "lettermark construction"; a shop that sells one product searches the product as an object. Check: at least 2 queries name a mark type. `อนุมาน` (2026-11-23: the owner picked letter marks for the builder but objects for payment and delivery)
@@ -394,7 +397,7 @@ Why this file exists: on 2026-11-23 a builder logo round was made from 2 news pa
 
 ## E · Diversity of the set
 
-17. **2–3 really different directions, 2–3 pieces each**, every piece in exactly one direction; pieces inside a direction share one tone (never serious mixed with playful). Directions differ in at least 2 of form, colour, type. `จากแหล่ง`
+17. **At least 3 really different directions**, every piece in exactly one direction; pieces inside a direction share one tone (never serious mixed with playful). Directions differ in at least 2 of form, colour, type. `จากแหล่ง` · 2–3 pieces per direction `อนุมาน`
 18. **If 3 of the first 4 look the same, search a 2nd round** from the product's world or a neighbouring category, and use at least 1 piece from it (rule already in `search-steps.md` step 3). `จากแหล่ง`
 19. **Include at least one direction of the kind the owner has rewarded before** for a similar business (choice log), and at least one the owner has not seen, so taste can move. `อนุมาน`
 
@@ -420,8 +423,8 @@ Why this file exists: on 2026-11-23 a builder logo round was made from 2 news pa
 
 ## J · How the board is shown
 
-28. **6–8 pieces, 2–3 named directions.** `อนุมาน`
-29. **Three lines under every image**: source (studio · client · year · link) · why it was chosen (rule 15) · what makes it beautiful (rule 16). After the owner ticks, ask once "ชอบตรงไหน" (what part) only if the board question allowed a free note; record it. `จากแหล่ง`
+28. **6–8 pieces in 3 named directions** for brand, logo and identity jobs; this overrides the general 4–8 in `SKILL.md` and `owner-pick.md`, which still applies to other design jobs. `อนุมาน`
+29. **Three lines under every image**: source (studio · client · year · link) · why it was chosen (rule 15) · what makes it beautiful and what we would borrow (rule 16: colour, shape, type or finish). Ask "ชอบตรงไหน" (which part do you like) inside the same board question as a free note, never as a separate question (`owner-pick.md` allows 2 asking points); record the answer. `จากแหล่ง` for captions with reasons · the craft wording `อนุมาน`
 30. **Evidence line**: add `เกณฑ์ต้นแบบ: ไทย n/8 · คะแนน ≥4 n/8 · ทิศทาง n · ต่างอุตสาหกรรม n · เปิดไม่ได้ <list>` (reference criteria: Thai n of 8 · score ≥ 4 n of 8 · directions n · other-industry n · could not open) to the `ด่านก่อนลงมือ:` line. No line = gate item 2 not passed.
 
 
@@ -440,13 +443,13 @@ One row per picked reference, in the job's working notes:
 | Column | Fill with |
 |---|---|
 | Reference | name · studio · year · link |
-| Works for its client because | one mechanism, not an adjective (A4) |
-| Craft to borrow | measured: proportion ratios · negative space · stroke contrast · corner radius · colour ratio by area · material and finish · light direction and softness · letter construction (A1–A6) |
-| Role in our piece | exactly one of: form · type · colour · finish · scene (E2) |
-| What we change, because | each change tied to a fact about our client (C3) |
-| Must not copy | its outline · its distinctive element · its whole layout (B1) |
+| Works for its client because | one mechanism, not an adjective (rule 4) |
+| Craft to borrow | measured: proportion ratios · negative space · stroke contrast · corner radius · colour ratio by area · material and finish · light direction and softness · letter construction (rules 1–6) |
+| Role in our piece | exactly one of: form · type · colour · finish · scene (rule 30) |
+| What we change, because | each change tied to a fact about our client (rule 15) |
+| Must not copy | its outline · its distinctive element · its whole layout (rule 7) |
 
-Then write the **one idea** sentence (C2) and which references feed it. No sheet = do not draw.
+Then write the **one idea** sentence (rule 14) and which references feed it. No sheet = do not draw.
 
 ## A · Analyse the reference
 
@@ -480,7 +483,7 @@ Then write the **one idea** sentence (C2) and which references feed it. No sheet
 19. **Reads at 16 px and at about 1 inch.** Export 16 · 32 · 64 px and check the key shape and gap at 100 %. `จากแหล่ง`
 20. **Minimum feature**: no stroke, gap or counter thinner than 1/16 of the mark height; at 16 px drop what does not survive, or make a small-size master. `อนุมาน`
 21. **Squint / blur test**: after blur a distinct silhouette and main gap remain, unlike the competitor set. `จากแหล่ง`
-22. **2–3 basic shapes with deliberate, unusual proportions**; more than about 4 primitives → simplify. `จากแหล่ง`
+22. **2–3 basic shapes with deliberate, unusual proportions**; more than about 4 primitives → simplify. `จากแหล่ง` · the number `อนุมาน`
 23. **One stroke weight, one corner radius, one terminal style** across the mark and its companions (at most 2 values each). `อนุมาน`
 24. **Optical corrections**: round shapes overshoot flat ones by about 1–3 % of the height; fix by eye what the grid gets wrong. `จากแหล่ง`
 25. **Reversed version a touch lighter**: white on dark looks heavier. `อนุมาน`
@@ -490,10 +493,10 @@ Then write the **one idea** sentence (C2) and which references feed it. No sheet
 
 ## E · Combine references
 
-29. **One dominant idea; at most 2 borrowed principles + 1 client twist.** The idea sentence has no "and also". `จากแหล่ง`
+29. **One dominant idea; at most 2 borrowed principles + 1 client twist.** The idea sentence has no "and also". `จากแหล่ง` · the numeric cap `อนุมาน`
 30. **Give each picked reference one role** (form · type · colour · finish · scene) and do not average them; averaging gives the generic middle. `อนุมาน`
-31. **Many rough silhouettes, few finished directions**: at least 12 quick silhouette variants (an SVG agent's sketch sheet) before refining 3. Keep the sheet in the job folder. `จากแหล่ง` (practitioners sketch 30+; 12 is our floor)
-32. **Silhouettes before detail**: first round is flat shapes only, no gradients or shadows. `จากแหล่ง`
+31. **Many rough silhouettes, few finished directions**: at least 12 quick silhouette variants (an SVG agent's sketch sheet) before refining 3. Keep the sheet in the job folder; it is a working file, not something to show the owner. `จากแหล่ง` that practitioners sketch 30+ before refining · the SVG silhouette form and the floor of 12 `อนุมาน`
+32. **Silhouettes before detail**: first round is flat shapes only, no gradients or shadows (the agent's form of "pencil first"). `จากแหล่ง` for rough-first · the flat-SVG form `อนุมาน`
 33. **Stay with a promising idea** for 3+ rounds before switching; switch references only when it stalls, and log why. `อนุมาน`
 
 ## F · Colour and type
@@ -506,7 +509,7 @@ Then write the **one idea** sentence (C2) and which references feed it. No sheet
 
 ## G · Depth, material, light
 
-39. **The flat master passes rules 18–21 first; the dimensional version is the hero.** Depth never rescues a weak form. (Sources say keep the master flat; this owner asks for depth, so both exist and the flat one is tested.) `จากแหล่ง`
+39. **The flat master passes rules 18–21 first; the dimensional version is the hero.** Depth never rescues a weak form. `จากแหล่ง` for "flat master first" · the dimensional hero comes from the owner's taste ("มีมิติ แสงเงา" 2026-11-17, OnNing wallet 10/10 2026-11-23), not from the sources, which keep the master flat and render material only on mockups
 40. **Copy material from a real photo**, not from a generic gradient: highlight shape, bevel width, roughness, shadow softness, side by side with the photo. Prefer compositing a real licensed texture or photo over code gradients for stone, metal, paper. `อนุมาน`
 41. **One light for the whole scene**: same direction, warmth and softness on mark, object and background ([`depth-and-light.md`](depth-and-light.md)). `อนุมาน`
 42. **Set depth numbers**: extrusion depth, mounting distance, cast-shadow offset; check at the final size. `อนุมาน`
@@ -515,8 +518,8 @@ Then write the **one idea** sentence (C2) and which references feed it. No sheet
 
 43. **Real touchpoints at believable scale** (sign, card, cup, app icon, favicon); note the real size. `จากแหล่ง`
 44. **Straight-on or flat-lay mockups**, not dramatic angles. `จากแหล่ง`
-45. **The scene light and palette match the lead reference's photography** (A6); composited signs get a contact shadow, the wall's texture and the photo's light direction. `อนุมาน`
-46. **Craft check against each reference**: a row per A1 property, ours versus the reference, pass or fail. A fail on proportion, letter construction or material sends the piece back before the eye gate. `อนุมาน`
+45. **The scene light and palette match the lead reference's photography** (rule 6); composited signs get a contact shadow, the wall's texture and the photo's light direction. `อนุมาน`
+46. **Craft check against each reference**: a row per rule-1 property, ours versus the reference, pass or fail. A fail on proportion, letter construction or material sends the piece back before the eye gate. `อนุมาน`
 47. **Performance before taste**: one idea · 16 px · one colour · squint · swap · similarity, scored per candidate before anyone's opinion. `จากแหล่ง`
 48. **Memory test**: a fresh reviewer sees the mark once, then sketches its main shape from memory; the main shape must match. `อนุมาน`
 

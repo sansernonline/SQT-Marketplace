@@ -6,6 +6,9 @@ Why this file exists: on 2026-11-23 a builder logo round was made from 2 news pa
 
 ## A · Where to search
 
+For brand, logo and identity jobs these rules replace the general minimum in `SKILL.md` step 2 (1 `theme` + 1 `social` site): theme stores hold no logos, and social sites (Pinterest · Dribbble · Behance) are view-only leads that must be traced to the studio's page (rule 2) before they count. Competitor names from search set (b) go to the swap test, not the board (rule 25).
+
+
 1. **Curated sources first**: sites with an editor or jury (Brand New "Reviewed" · The Brand Identity · World Brand Design Society · Creative Boom · award pages such as DEmark, RGD, iF), then studio portfolio pages. General image search and SEO listicles never count. Check: every piece names the curated source it came from. `จากแหล่ง`
 2. **Open the studio's own project page**, not a repost, a Pinterest pin or an aggregator thumbnail. Check: the board link points to the studio, the photographer or the award page. `จากแหล่ง`
 3. **At least 3 of 6–8 pieces come from Thai work or the Thai market** when the client sells in Thailand (Thai studios, DEmark winners, Thai brands). Check: count them; fewer than 3 → search again in Thai before building the board. `จากแหล่ง` that Thai context changes the look · the number 3 `อนุมาน`
@@ -14,7 +17,7 @@ Why this file exists: on 2026-11-23 a builder logo round was made from 2 news pa
 
 ## B · Search terms
 
-6. **Terms come from the brief, not only the industry.** Each set holds 4 parts: business type + 4–5 mood words + market or language + mark type (wordmark · monogram · symbol · emblem · mascot). Check: every term traces back to a sentence in the brief or the owner's words; write the terms under the board. `จากแหล่ง`
+6. **Terms come from the brief, not only the industry.** Each set holds 4 parts: business type + 4–5 mood words + market or language + mark type (wordmark · monogram · symbol · emblem · mascot). Check: every term traces back to a sentence in the brief or the owner's words; write the terms under the board. `จากแหล่ง` for "terms come from the brief" · the 4-part formula `อนุมาน`
 7. **Put the owner's taste into the terms**: traits the owner chose twice or more in "บันทึกการเลือก" (choice log) of `~/.claude/superuser-style.md` (for example "dimensional", "real material", "premium") become mood words. A trait the owner disliked becomes a "not" filter. Check: the mood words include at least 1 owner trait. `อนุมาน` (2026-11-23: terms held only the industry, the owner's "มีมิติ" was missing)
 8. **Search in Thai and English.** When the name is Thai, add Thai type terms (แบบมีหัว / ไม่มีหัว · ป้ายเขียนมือ · ลายไทยร่วมสมัย). Check: at least 1 result set came from a Thai query. `อนุมาน`
 9. **Search the mark type the brief needs, not just "logo".** A builder that wants a premium letter mark searches "monogram stone", "lettermark construction"; a shop that sells one product searches the product as an object. Check: at least 2 queries name a mark type. `อนุมาน` (2026-11-23: the owner picked letter marks for the builder but objects for payment and delivery)
@@ -34,7 +37,7 @@ Why this file exists: on 2026-11-23 a builder logo round was made from 2 news pa
 
 ## E · Diversity of the set
 
-17. **2–3 really different directions, 2–3 pieces each**, every piece in exactly one direction; pieces inside a direction share one tone (never serious mixed with playful). Directions differ in at least 2 of form, colour, type. `จากแหล่ง`
+17. **At least 3 really different directions**, every piece in exactly one direction; pieces inside a direction share one tone (never serious mixed with playful). Directions differ in at least 2 of form, colour, type. `จากแหล่ง` · 2–3 pieces per direction `อนุมาน`
 18. **If 3 of the first 4 look the same, search a 2nd round** from the product's world or a neighbouring category, and use at least 1 piece from it (rule already in `search-steps.md` step 3). `จากแหล่ง`
 19. **Include at least one direction of the kind the owner has rewarded before** for a similar business (choice log), and at least one the owner has not seen, so taste can move. `อนุมาน`
 
@@ -60,6 +63,6 @@ Why this file exists: on 2026-11-23 a builder logo round was made from 2 news pa
 
 ## J · How the board is shown
 
-28. **6–8 pieces, 2–3 named directions.** `อนุมาน`
-29. **Three lines under every image**: source (studio · client · year · link) · why it was chosen (rule 15) · what makes it beautiful (rule 16). After the owner ticks, ask once "ชอบตรงไหน" (what part) only if the board question allowed a free note; record it. `จากแหล่ง`
+28. **6–8 pieces in 3 named directions** for brand, logo and identity jobs; this overrides the general 4–8 in `SKILL.md` and `owner-pick.md`, which still applies to other design jobs. `อนุมาน`
+29. **Three lines under every image**: source (studio · client · year · link) · why it was chosen (rule 15) · what makes it beautiful and what we would borrow (rule 16: colour, shape, type or finish). Ask "ชอบตรงไหน" (which part do you like) inside the same board question as a free note, never as a separate question (`owner-pick.md` allows 2 asking points); record the answer. `จากแหล่ง` for captions with reasons · the craft wording `อนุมาน`
 30. **Evidence line**: add `เกณฑ์ต้นแบบ: ไทย n/8 · คะแนน ≥4 n/8 · ทิศทาง n · ต่างอุตสาหกรรม n · เปิดไม่ได้ <list>` (reference criteria: Thai n of 8 · score ≥ 4 n of 8 · directions n · other-industry n · could not open) to the `ด่านก่อนลงมือ:` line. No line = gate item 2 not passed.
