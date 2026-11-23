@@ -12,7 +12,7 @@
 | [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 24 | 0 | 9 | 228 |
 | [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 44 | 1 | 30 | 269 |
 | [`software-development`](#software-development) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 100 | 12 | 17 | 1157 |
-| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 4 | 41 | 0 | 7 | 316 |
+| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 4 | 41 | 0 | 7 | 318 |
 | [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 25 | 1 | 10 | 190 |
 
 ## โครงของทุก plugin
@@ -48,7 +48,7 @@ plugins/<plugin>/
 | skill | `context-budget` | ประหยัด context เมื่อต้องอ่านไฟล์เยอะหรือรันคำสั่งที่พิมพ์ผลยาว | `references/settings.md` · `references/sources.md` · `references/windows-shell.md` |
 | skill | `decision-log` | จดทุกครั้งที่ agent ตัดสินใจเองในงานยาวหรืองานที่ไม่มีคนดู | `templates/score.json` |
 | skill | `decision-scoring` | ตัดสินด้วยตัวเลข: ให้คะแนนตัวเลือก · ค่าคาดหวังและเสียดายน้อยสุด · เลือกในงบ · จัดลำดับ · เทียบเป็นคู่ · ตรวจอีกรอบไหม | `references/sources.md` · `scripts/decide.mjs` · `scripts/decide.test.mjs` · `scripts/lib/check.mjs` · `scripts/lib/knapsack.mjs` · `scripts/lib/pairwise.mjs` · `scripts/lib/payoff.mjs` · `scripts/lib/priority.mjs` · `scripts/lib/review.mjs` · `scripts/lib/score.mjs` · `templates/knapsack.json` · `templates/pairwise.json` · `templates/payoff.json` · `templates/priority.json` · `templates/review.json` · `templates/score.json` |
-| skill | `design-references` | ค้นงานออกแบบจริงด้วยคำของโปรเจกต์ในเว็บที่เก่งงานแต่ละประเภท แล้วถอดสี 8 หน้าที่จากงานที่เลือก · เก็บแค่รายชื่อเว็บ คลังสีใช้เมื่อค้นสดไม่ได้ | `data/palettes-fallback-LICENSE.md` · `data/palettes-fallback.csv` · `data/sites.csv` · `references/depth-and-light.md` · `references/owner-pick.md` · `references/search-steps.md` · `references/sources.md` · `references/usage-rules.md` · `scripts/build_fallback.py` · `scripts/find_refs.py` |
+| skill | `design-references` | ค้นงานออกแบบจริงด้วยคำของโปรเจกต์ในเว็บที่เก่งงานแต่ละประเภท แล้วถอดสี 8 หน้าที่จากงานที่เลือก · เก็บแค่รายชื่อเว็บ คลังสีใช้เมื่อค้นสดไม่ได้ | `data/palettes-fallback-LICENSE.md` · `data/palettes-fallback.csv` · `data/sites.csv` · `references/depth-and-light.md` · `references/owner-pick.md` · `references/ref-criteria.md` · `references/ref-to-design.md` · `references/search-steps.md` · `references/sources.md` · `references/usage-rules.md` · `scripts/build_fallback.py` · `scripts/find_refs.py` |
 | skill | `document-naming` | ตั้งชื่อไฟล์เอกสาร รุ่น และสถานะ | `assets/naming-cheatsheet.md` · `scripts/doc-name-check.mjs` · `scripts/doc-name-check.test.mjs` |
 | skill | `flag-and-propose` | เจอเรื่องกลางงานที่ต้องให้คนตัดสิน → แจ้งพร้อมทางเลือก | `references/example.md` · `templates/priority.json` |
 | skill | `handoff` | ใบสั่งงาน · ใบส่งงาน · รับงานต่อ ให้ agent คน และ bot ส่งงานต่อกันโดยไม่ต้องเดา | `references/handoff.schema.json` · `references/sheet-examples.md` · `references/sources.md` · `references/team-memory.md` · `scripts/log-to-md.mjs` · `scripts/log-to-md.test.mjs` |

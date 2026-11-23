@@ -22,11 +22,11 @@ Not for: 3 screen directions from colors you already have → `design-direction-
 Every design skill points to this section. If you skip any item, write the reason in the evidence line.
 
 1. **Read the theme**: the section "สไตล์ออกแบบที่ชอบ" (preferred design styles) in `~/.claude/superuser-style.md` (including its subsection "บันทึกการเลือก", the choice log) and anything already locked in the project (brand guide · `DESIGN.md` · style lock · sibling pages). If that section does not exist, note `ไม่มี` (none) and carry on; do not stop to ask. If the theme asks for depth (`มีมิติ` · `แสงเงา` · `ลูกเล่น`) or the owner calls a piece flat (`แบน` · `จืด`), open [`references/depth-and-light.md`](references/depth-and-light.md) and apply it to every direction in item 4.
-2. **Search live references** per "Steps" below, **even when a brand or sibling page exists**, and before asking the owner anything. What is locked controls colors and fonts; the search is for the structure, elements and storytelling. A reference counts only if its structure is clearly visible at the size you opened it. If a theme store blocks bots, try one that opens (wordpress.org/themes) and note which site would not open.
+2. **Search live references** per "Steps" below, **even when a brand or sibling page exists**, and before asking the owner anything. What is locked controls colors and fonts; the search is for the structure, elements and storytelling. A reference counts only if its structure is clearly visible at the size you opened it. **Brand, logo or identity jobs: every candidate passes the checks in [`references/ref-criteria.md`](references/ref-criteria.md)** (curated sources · ≥ 3 Thai pieces for the Thai market · terms from the brief and the owner's traits · scored ≥ 4 of 5 · best image, not the page top · 3 lines under each image · 6–8 pieces in 3 directions; curated sources replace the theme + social minimum of "Steps" step 2; competitors go to the swap test, not the board). If a theme store blocks bots, try one that opens (wordpress.org/themes) and note which site would not open.
 3. **Let the owner pick references from images.** Select 4–8 references that open and really differ, run `board`, open every image, then ask with `AskUserQuestion` (multi-select, no `(แนะนำ)` option). Do not ask when the owner says don't ask, when the owner is away (`unattended-run`), or when the owner already chose this style; then still build the board page as evidence and pick references yourself, noting them under **ตัดสินใจเอง** (decided on my own). A subagent without `AskUserQuestion` sends the board path to the lead. Full rules (option split, liked vs disliked, the 2 allowed asking points) → `references/owner-pick.md`. Once the owner answers, record it per "Remember the owner's taste".
-4. **Make 3 really different directions**, different in structure and elements, not only color. Each cites 1 reference opened this round (the owner's picks first). If the owner is present, pick in the end-of-job question, after the 3 directions pass the eye check in item 5. If not, pick yourself per `parallel-attempts-pick-best` and note it under **ตัดสินใจเอง**. You may make 1 direction when the look is already locked (a piece split off a master · a set with a passed style lock · editing an existing image · reviewing work) and write the reason.
+4. **Make 3 really different directions**, different in structure and elements, not only color. Each cites 1 reference opened this round (the owner's picks first). **Before the first shape, fill the borrow sheet and follow [`references/ref-to-design.md`](references/ref-to-design.md)**: borrow the craft (measured proportion · letter construction · material · light), not only the concept; one idea sentence per direction; the flat master passes 16 px · squint · swap before depth; craft check against each reference. Every redo round goes back to the picked references, never to the maker's own idea (2026-11-23: a redo drawn from the agent's own idea got "ไม่สวยเลย นี้ research มายัง"). If the owner is present, pick in the end-of-job question, after the 3 directions pass the eye check in item 5. If not, pick yourself per `parallel-attempts-pick-best` and note it under **ตัดสินใจเอง**. You may make 1 direction when the look is already locked (a piece split off a master · a set with a passed style lock · editing an existing image · reviewing work) and write the reason.
 5. **Before sending, check per `no-ai-look`**: the script on HTML/CSS files, and the eye gate on every job. The eye gate needs a fresh agent that did not do this piece to open the real image (`no-ai-look` paragraph "คนที่ไม่ได้ทำต้องตรวจด้วยตา" in item 3.2). The maker's own check does not count. A subagent that cannot call another agent sends the image back to the lead to call `design-critic`, and writes `รอหัวหน้า` (waiting for the lead) in the eye-check field.
-6. **Evidence line** at the end of the answer: `ด่านก่อนลงมือ: ธีม <อ่านแล้ว · ไม่มี> · ต้นแบบ <n> ชิ้น <ลิงก์> · เลือกโดย <เจ้าของ ชิ้น n · agent เพราะ…> · แนว <3 · 1 เพราะ…> · no-ai-look <ผล> · ตรวจตา <ชื่อ agent ที่ตรวจ · รอหัวหน้า · ข้าม เพราะ…> · จดรสนิยม <n บรรทัด · ไม่มีการเลือก>` (keep this line in Thai). No such line = the gate has not passed.
+6. **Evidence line** at the end of the answer: `ด่านก่อนลงมือ: ธีม <อ่านแล้ว · ไม่มี> · ต้นแบบ <n> ชิ้น <ลิงก์> · เลือกโดย <เจ้าของ ชิ้น n · agent เพราะ…> · แนว <3 · 1 เพราะ…> · no-ai-look <ผล> · ตรวจตา <ชื่อ agent ที่ตรวจ · รอหัวหน้า · ข้าม เพราะ…> · จดรสนิยม <n บรรทัด · ไม่มีการเลือก>` (keep this line in Thai). Brand, logo or identity jobs append the `เกณฑ์ต้นแบบ:` field from `ref-criteria.md` and the `ประกอบชิ้นงาน:` field from `ref-to-design.md`. No such line = the gate has not passed.
 
 ## Steps
 
@@ -60,6 +60,7 @@ Never let a script crawl sites where people post work (Pinterest · Dribbble · 
 - All 3 search-term sets used; every reference has a link, a page opened this round, and a noted source of the name; not 3 of 4 look the same (else round 2 searched and used)
 - Colors come from reference work searched this round (fallback library → user told); main and accent hex match no reference
 - No signal banned in `no-ai-look` item 2 unless the owner ordered it and `slop-ok` exists; no one else's images except licensed and credited sets
+- Brand, logo or identity job: references scored per `ref-criteria.md`; borrow sheet, idea sentences, silhouette sheet and craft check per `ref-to-design.md` are in the job folder
 - `python scripts/find_refs.py --self-test` passes
 
 ## References
@@ -67,6 +68,8 @@ Never let a script crawl sites where people post work (Pinterest · Dribbble · 
 - [`references/search-steps.md`](references/search-steps.md) — open before the first search of a session, or when the owner has no preferred styles yet
 - [`references/owner-pick.md`](references/owner-pick.md) — open when asking the owner to pick from the board, or when skipping that question
 - [`references/depth-and-light.md`](references/depth-and-light.md) — open on every visual job when the owner's theme asks for depth or calls work flat: 3 layers, one light source, 1–2 flourishes, and the limits that keep it from looking AI-made
+- [`references/ref-criteria.md`](references/ref-criteria.md) — open before searching for any brand, logo or identity job and before building the pick board: 30 checks on sources, terms, credibility, quality, diversity, Thai market fit, owner taste, timelessness, ethics and board layout
+- [`references/ref-to-design.md`](references/ref-to-design.md) — open after the owner picks and before drawing: the borrow sheet and 51 rules on analysing, borrowing without copying, mapping to the client, mark craft, combining, colour and type, depth and material, mockups and checks, presenting
 - [`references/usage-rules.md`](references/usage-rules.md) — open when fetching from sites that post work, reusing any asset, or using the fallback library · has a real example
 - Sources and check dates: [`references/sources.md`](references/sources.md)
 
@@ -164,6 +167,179 @@ Why: an agent picking from thumbnails on its own tends to land on a middle-of-th
 A reference only counts if its structure is clearly visible at the size you opened it. A thumbnail that shows only color, or a blank space where the image has not loaded, does not count. Theme stores blocking bots is normal (ThemeForest · TemplateMonster blocked bots 2026-11-06); try a store that opens, such as wordpress.org/themes, and note which site would not open.
 
 
+## reference: ref-criteria.md
+
+# Criteria for finding and choosing references · design-references
+
+Open before searching for any brand, logo or identity job, and again before building the pick board (gate items 2–3 in `SKILL.md`). Every rule below is a check: run it, write the result under the board, drop or replace what fails.
+
+Why this file exists: on 2026-11-23 a builder logo round was made from 2 news pages plus the agent's own idea, and the owner asked "ไม่สวยเลย นี้ research มายัง" (not beautiful at all, did you research?). The next board of 7 real studio pages, picked by the owner, lifted the scores from 5–6 to 6–7. The old filter was "the page loaded and looks different", which keeps weak work. Labels: `จากแหล่ง` = 2+ independent sources opened agree · `อนุมาน` = one source or our own inference (numbers are starting points; tune them from owner scores). Sources: [`sources.md`](sources.md) section "Reference criteria".
+
+## A · Where to search
+
+For brand, logo and identity jobs these rules replace the general minimum in `SKILL.md` "Steps" step 2 (1 `theme` + 1 `social` site): theme stores hold no logos, and social sites (Pinterest · Dribbble · Behance) are view-only leads that must be traced to the studio's page (rule 2) before they count. Competitor names from search set (b) go to the swap test, not the board (rule 25).
+
+1. **Curated sources first**: sites with an editor or jury (Brand New "Reviewed" · The Brand Identity · World Brand Design Society · Creative Boom · award pages such as DEmark, RGD, iF), then studio portfolio pages. General image search and SEO listicles never count. Check: every piece names the curated source it came from. `จากแหล่ง`
+2. **Open the studio's own project page**, not a repost, a Pinterest pin or an aggregator thumbnail. Check: the board link points to the studio, the photographer or the award page. `จากแหล่ง`
+3. **At least 3 of 6–8 pieces come from Thai work or the Thai market** when the client sells in Thailand (Thai studios, DEmark winners, Thai brands). Check: count them; fewer than 3 → search again in Thai before building the board. `จากแหล่ง` that Thai context changes the look · the number 3 `อนุมาน`
+4. **One piece from a different industry** that solves the same feeling (a builder board may hold a luxury watch or a stone-cladding supplier). Check: at least 1 piece outside the client's category. `จากแหล่ง`
+5. **A blocked page is not a reason to drop the best piece.** If the strongest result blocks scripts (Cloudflare · 403), note it, open it another way (a browser screenshot by the owner, the studio's own site, an award page about the same project), or say on the board which strong piece could not be shown. `อนุมาน` (2026-11-23: DesignRush, Design Week and iF blocked the script; three candidates vanished silently)
+
+## B · Search terms
+
+6. **Terms come from the brief, not only the industry.** Each set holds 4 parts: business type + 4–5 mood words + market or language + mark type (wordmark · monogram · symbol · emblem · mascot). Check: every term traces back to a sentence in the brief or the owner's words; write the terms under the board. `จากแหล่ง` for "terms come from the brief" · the 4-part formula `อนุมาน`
+7. **Put the owner's taste into the terms**: traits the owner chose twice or more in "บันทึกการเลือก" (choice log) of `~/.claude/superuser-style.md` (for example "dimensional", "real material", "premium") become mood words. A trait the owner disliked becomes a "not" filter. Check: the mood words include at least 1 owner trait. `อนุมาน` (2026-11-23: terms held only the industry, the owner's "มีมิติ" was missing)
+8. **Search in Thai and English.** When the name is Thai, add Thai type terms (แบบมีหัว / ไม่มีหัว · ป้ายเขียนมือ · ลายไทยร่วมสมัย). Check: at least 1 result set came from a Thai query. `อนุมาน`
+9. **Search the mark type the brief needs, not just "logo".** A builder that wants a premium letter mark searches "monogram stone", "lettermark construction"; a shop that sells one product searches the product as an object. Check: at least 2 queries name a mark type. `อนุมาน` (2026-11-23: the owner picked letter marks for the builder but objects for payment and delivery)
+
+## C · Is the source credible
+
+10. **Keep only work that names the studio, the client and the year.** Missing any of the 3 → drop it. `จากแหล่ง`
+11. **Prefer work that is in real use** and shows at least 2 real applications (sign · cup · package · app · vehicle) over a single concept render. `อนุมาน`
+12. **Score every candidate before the board**, 0/1 each: (1) studio, client and year named (2) came through a curated source (3) shows real use (4) fits the brief (5) the type or lettering is well made. Keep 4 or more; rank by score and then by fit to the owner's taste. Write the scores under the board. `อนุมาน`
+
+## D · Quality of one reference
+
+13. **Use the best image of the work**, a close-up of the mark or the strongest application, cropped clean with no website menu. Never the page-top screenshot. Check: the board image shows the mark large and clear. `อนุมาน` (2026-11-23: boards showed page headers and cookie bars)
+14. **Simple, memorable, fast to read**: after 5 seconds with the name covered, you can sketch the main shape. Cannot → drop. `จากแหล่ง`
+15. **Judge "right for its own client" before "pretty"**, then ask whether our client has the same conditions. Write 1 line per piece: "works for <client> because …; ours has / lacks the same …". `จากแหล่ง`
+16. **Name what makes it beautiful**, in craft words, not adjectives: proportion, negative space, stroke contrast, colour ratio, material, photography and light, letter construction. This line goes under the image and is the seed of the borrow sheet in [`ref-to-design.md`](ref-to-design.md). Check: no line is only "clean" or "modern". `จากแหล่ง`
+
+## E · Diversity of the set
+
+17. **At least 3 really different directions**, every piece in exactly one direction; pieces inside a direction share one tone (never serious mixed with playful). Directions differ in at least 2 of form, colour, type. `จากแหล่ง` · 2–3 pieces per direction `อนุมาน`
+18. **If 3 of the first 4 look the same, search a 2nd round** from the product's world or a neighbouring category, and use at least 1 piece from it (rule already in `search-steps.md` step 3). `จากแหล่ง`
+19. **Include at least one direction of the kind the owner has rewarded before** for a similar business (choice log), and at least one the owner has not seen, so taste can move. `อนุมาน`
+
+## F · Fit to the business and market
+
+20. **Thai-ness is contemporary, not ornament.** Say where the Thai feel sits (colour · words · story · letterforms); a piece whose only Thai element is a decorative pattern gets lower weight. `จากแหล่ง`
+21. **Thai lettering must be well made**: zoom on upper and lower vowels and tone marks; no collisions, readable small. `จากแหล่ง`
+22. **Works for a small business's real touchpoints**: storefront sign, cup or bag, LINE / social avatar. Check: the mark still reads at 48 px. `อนุมาน`
+
+## G · Fit to the owner's taste
+
+23. **Show the owner's words as 4–5 mood words** at the top of the board, and let the owner tick "keep" and type "avoid". Record both per "Remember the owner's taste" in `SKILL.md`. `จากแหล่ง`
+
+## H · Timeless versus trend
+
+24. **Most pieces should be marks still in use after about 5 years; at most 1 trend piece**, and only with a reason for this client. Write the year of each piece. `จากแหล่ง` · numbers `อนุมาน`
+25. **Keep competitor analysis off the pick board.** Competitors go in a separate swap test ([`ref-to-design.md`](ref-to-design.md) rule 11); the board shows inspiration only. `จากแหล่ง`
+
+## I · Law and ethics
+
+26. **Inspiration for direction only**: the final piece must differ clearly; never trace an outline or a layout. `จากแหล่ง` (not legal advice; Thai law not checked)
+27. **Keep the link and credit of every image; the board is an internal document**, never part of a delivery or a public post. `อนุมาน`
+
+## J · How the board is shown
+
+28. **6–8 pieces in 3 named directions** for brand, logo and identity jobs; this overrides the general 4–8 in `SKILL.md` and `owner-pick.md`, which still applies to other design jobs. `อนุมาน`
+29. **Three lines under every image**: source (studio · client · year · link) · why it was chosen (rule 15) · what makes it beautiful and what we would borrow (rule 16: colour, shape, type or finish). Ask "ชอบตรงไหน" (which part do you like) inside the same board question as a free note, never as a separate question (`owner-pick.md` allows 2 asking points); record the answer. `จากแหล่ง` for captions with reasons · the craft wording `อนุมาน`
+30. **Evidence line**: add `เกณฑ์ต้นแบบ: ไทย n/8 · คะแนน ≥4 n/8 · ทิศทาง n · ต่างอุตสาหกรรม n · เปิดไม่ได้ <list>` (reference criteria: Thai n of 8 · score ≥ 4 n of 8 · directions n · other-industry n · could not open) to the `ด่านก่อนลงมือ:` line. No line = gate item 2 not passed.
+
+
+## reference: ref-to-design.md
+
+# Turning chosen references into the piece · design-references
+
+Open after the owner picks references and before drawing anything (gate item 4 in `SKILL.md`). Fill the **borrow sheet** (section 0), then follow the rules while drawing, then run the checks in section H before the eye gate.
+
+Why this file exists: on 2026-11-23 three logo rounds borrowed only the concept of each reference (an H made of stone bars, a chiselled corner) and lost the craft that made the reference beautiful: proportion, letter construction, real material and photographed light. The results read as generic icons and scored 5–7 of 10. Labels: `จากแหล่ง` = 2+ independent sources opened agree · `อนุมาน` = one source or our own inference. Sources: [`sources.md`](sources.md) section "Reference to design".
+
+## 0 · Borrow sheet (write it before the first shape)
+
+One row per picked reference, in the job's working notes:
+
+| Column | Fill with |
+|---|---|
+| Reference | name · studio · year · link |
+| Works for its client because | one mechanism, not an adjective (rule 4) |
+| Craft to borrow | measured: proportion ratios · negative space · stroke contrast · corner radius · colour ratio by area · material and finish · light direction and softness · letter construction (rules 1–6) |
+| Role in our piece | exactly one of: form · type · colour · finish · scene (rule 30) |
+| What we change, because | each change tied to a fact about our client (rule 15) |
+| Must not copy | its outline · its distinctive element · its whole layout (rule 7) |
+
+Then write the **one idea** sentence (rule 14) and which references feed it. No sheet = do not draw.
+
+## A · Analyse the reference
+
+1. **Split each reference into named craft properties** before drawing: proportion, construction, negative space, stroke contrast, colour ratio, finish, type pairing. `จากแหล่ง`
+2. **Measure, do not eyeball**: stroke to gap, counter to stroke, symbol to wordmark height, gap to cap height. Record the numbers. `อนุมาน`
+3. **Record the negative space**: invert or fill the gaps and note which gaps carry meaning. `อนุมาน`
+4. **One sentence per reference: "it works because ___"**, naming a mechanism (coin and vault), never "clean" or "modern". `จากแหล่ง`
+5. **Study letters at letter level**: stroke contrast, terminals, joins, tracking, baseline, not just the typeface name. `อนุมาน`
+6. **Record photography and material**: light direction, softness, shadow density, surface (matte stone · brushed metal · paper), palette of the scene. `อนุมาน`
+
+## B · Borrow the thinking, not the shape
+
+7. **Never reproduce an outline, a letter shape or the distinctive element.** Overlay ours on each reference at the same size; no shared dominant shape. `จากแหล่ง`
+8. **Test similarity 4 ways**: looks alike · sounds alike · means alike · same overall impression. A "yes" on the dominant element means redesign (USPTO test; not legal advice; flag a trademark search for a real client). `จากแหล่ง`
+9. **At most one reference per element; never a whole composition from one reference.** The borrow sheet shows one source per element. `อนุมาน`
+10. **Drop category clichés** even if a reference uses them: list the 5 most common symbols in the category (house roof for builders, arrows for delivery, coins for payment); use none unless twisted with a reason. `จากแหล่ง`
+11. **Swap test against 5 real competitors**: put ours among them in grey at equal size; it must be found at a glance. Competitors stay off the owner's board. `จากแหล่ง`
+12. **Keep credit** of every reference in the notes; never trace or auto-vectorise one. `อนุมาน`
+
+## C · Map to the client
+
+13. **Start from the name.** Use a wordmark or lettermark unless the business has one everyday object people recognise instantly (a wallet for payment, a parcel for delivery); then the object may lead. Write the reason for any symbol. `จากแหล่ง` · object exception from owner scores 2026-11-23 (wallet 10 · parcel 8 · pin 8)
+14. **Write the one idea in one sentence** ("the crossbar is a gold ingot between two stones"). The mark expresses that sentence and no second idea. `จากแหล่ง`
+15. **Tie every change from a reference to a client fact** (initial, meaning of the name, product, place). `จากแหล่ง`
+16. **Appropriate in tone, not a literal picture of the product.** Literal pictograms drift to clip art. `จากแหล่ง`
+17. **A second reading only if planned** (H that is also a house); never claim one that is not drawn. `อนุมาน`
+
+## D · Mark craft
+
+18. **Black on white first**; colour and depth come after the form passes. `จากแหล่ง`
+19. **Reads at 16 px and at about 1 inch.** Export 16 · 32 · 64 px and check the key shape and gap at 100 %. `จากแหล่ง`
+20. **Minimum feature**: no stroke, gap or counter thinner than 1/16 of the mark height; at 16 px drop what does not survive, or make a small-size master. `อนุมาน`
+21. **Squint / blur test**: after blur a distinct silhouette and main gap remain, unlike the competitor set. `จากแหล่ง`
+22. **2–3 basic shapes with deliberate, unusual proportions**; more than about 4 primitives → simplify. `จากแหล่ง` · the number `อนุมาน`
+23. **One stroke weight, one corner radius, one terminal style** across the mark and its companions (at most 2 values each). `อนุมาน`
+24. **Optical corrections**: round shapes overshoot flat ones by about 1–3 % of the height; fix by eye what the grid gets wrong. `จากแหล่ง`
+25. **Reversed version a touch lighter**: white on dark looks heavier. `อนุมาน`
+26. **Grids and ratios guide construction; never add golden-ratio overlays afterwards** to justify a mark. `อนุมาน`
+27. **Customise at least one letter with a reason** (cut, join, reshape), then re-space by eye. `จากแหล่ง`
+28. **Space letters by area, not equal gaps**; blur the word and the texture looks even. `อนุมาน`
+
+## E · Combine references
+
+29. **One dominant idea; at most 2 borrowed principles + 1 client twist.** The idea sentence has no "and also". `จากแหล่ง` · the numeric cap `อนุมาน`
+30. **Give each picked reference one role** (form · type · colour · finish · scene) and do not average them; averaging gives the generic middle. `อนุมาน`
+31. **Many rough silhouettes, few finished directions**: at least 12 quick silhouette variants (an SVG agent's sketch sheet) before refining 3. Keep the sheet in the job folder; it is a working file, not something to show the owner. `จากแหล่ง` that practitioners sketch 30+ before refining · the SVG silhouette form and the floor of 12 `อนุมาน`
+32. **Silhouettes before detail**: first round is flat shapes only, no gradients or shadows (the agent's form of "pencil first"). `จากแหล่ง` for rough-first · the flat-SVG form `อนุมาน`
+33. **Stay with a promising idea** for 3+ rounds before switching; switch references only when it stalls, and log why. `อนุมาน`
+
+## F · Colour and type
+
+34. **1–3 colours; make full-colour, one-colour and reversed versions.** `อนุมาน`
+35. **Keep the reference's colour ratio by area** (dominant · accent · neutral within about 10 points); change hue only for a client reason, and never copy a reference's brand hex (rule in `search-steps.md` step 6). `อนุมาน`
+36. **Contrast 3:1 or more** for mark colours on light and dark backgrounds (WCAG 1.4.11). `อนุมาน`
+37. **Type pairs are concord or contrast, never conflict**: one family in clearly different weights, or clearly different faces. `จากแหล่ง`
+38. **At most 2 typefaces; one carries the personality.** Thai and Latin faces are chosen as a pair (matching weight and x-height feel). `อนุมาน`
+
+## G · Depth, material, light
+
+39. **The flat master passes rules 18–21 first; the dimensional version is the hero.** Depth never rescues a weak form. `จากแหล่ง` for "flat master first" · the dimensional hero comes from the owner's taste ("มีมิติ แสงเงา" 2026-11-17, OnNing wallet 10/10 2026-11-23), not from the sources, which keep the master flat and render material only on mockups
+40. **Copy material from a real photo**, not from a generic gradient: highlight shape, bevel width, roughness, shadow softness, side by side with the photo. Prefer compositing a real licensed texture or photo over code gradients for stone, metal, paper. `อนุมาน`
+41. **One light for the whole scene**: same direction, warmth and softness on mark, object and background ([`depth-and-light.md`](depth-and-light.md)). `อนุมาน`
+42. **Set depth numbers**: extrusion depth, mounting distance, cast-shadow offset; check at the final size. `อนุมาน`
+
+## H · Mockups and checks
+
+43. **Real touchpoints at believable scale** (sign, card, cup, app icon, favicon); note the real size. `จากแหล่ง`
+44. **Straight-on or flat-lay mockups**, not dramatic angles. `จากแหล่ง`
+45. **The scene light and palette match the lead reference's photography** (rule 6); composited signs get a contact shadow, the wall's texture and the photo's light direction. `อนุมาน`
+46. **Craft check against each reference**: a row per rule-1 property, ours versus the reference, pass or fail. A fail on proportion, letter construction or material sends the piece back before the eye gate. `อนุมาน`
+47. **Performance before taste**: one idea · 16 px · one colour · squint · swap · similarity, scored per candidate before anyone's opinion. `จากแหล่ง`
+48. **Memory test**: a fresh reviewer sees the mark once, then sketches its main shape from memory; the main shape must match. `อนุมาน`
+
+## I · Presenting to the owner
+
+49. **3 directions spanning risk** (safe · adventurous · bold), each fully crafted: mono mark, reversed mark, 16 px view, 2+ mockups. `อนุมาน`
+50. **Lead with the strongest; one paragraph of story per direction**, naming which reference fed it and what was borrowed. `จากแหล่ง`
+51. **Evidence line**: add `ประกอบชิ้นงาน: ตารางยืม <มี · ไม่มี> · แนวคิดหนึ่งประโยค <n/3> · ร่างเงา <n> แบบ · ตรวจฝีมือเทียบต้นแบบ <ผ่าน n/3> · swap <ผ่าน n/3>` (composition: borrow sheet yes/no · idea sentence n of 3 · silhouettes n · craft check passed n of 3 · swap passed n of 3) to the `ด่านก่อนลงมือ:` line. No line = gate item 4 not passed.
+
+
 ## reference: search-steps.md
 
 # design-references — full reference-search steps
@@ -219,6 +395,14 @@ A reference only counts if its structure is clearly visible at the size you open
 - Contrast thresholds 4.5:1 and 3:1: WCAG 2.2 items 1.4.3 and 1.4.11
 - Fallback library: mattdesl/dictionary-of-colour-combinations (MIT) · huggingface-projects/color-palettes-sd (CC BY 4.0) · see file `data/palettes-fallback-LICENSE.md`
 - Decision dates: no design from memory or a stored library (user's decision 2026-10-27) · search before every creative job (owner's order 2026-11-06) · eval 2026-11-10: drew SVG or picked colours before searching 3/3 in every case
+
+## Reference criteria (`ref-criteria.md`) · opened 2026-11-23
+
+[NN/g mood boards](https://www.nngroup.com/articles/mood-boards/) · [Armin Vit on effective logo design](https://ebaqdesign.com/podcast/effective-logo-design) · [Brand New about](https://www.underconsideration.com/brandnew/archives/about.php) · [Chermayeff, Geismar, Haviv in Print](https://www.printmag.com/branding-identity-design/marks-men-an-interview-with-ivan-chermayeff-tom-geismar-and-sagi-haviv-of-chermayeff-geisma/) · [Bierut (Intapp)](https://www.intapp.com/blog/michael-bierut-visual-brand/) · [Bierut (It's Nice That)](https://www.itsnicethat.com/features/michael-bierut-logo-design) · [Draplin (Creative Boom)](https://www.creativeboom.com/work/aaron-draplin-on-hard-work-keeping-things-small-and-fun-and-his-honest-design-process/) · [Airey brand identity process](https://www.logodesignlove.com/brand-identity-process) · [Thai design in focus (Branding in Asia)](https://www.brandinginasia.com/thai-design-in-focus-an-interview-with-thitiwat-rungsarityotin-tantip-manomaiphan/) · [Cadson Demak (Granshan)](https://granshan.com/insights/very-well-selected-cadson-demak-and-the-modern-thai-typeface) · [YouMakeMe Mango Tree](https://youmakeme.com/projects/mango-tree/) · [WOLF BKK and Punthai (Hakuhodo)](https://www.hakuhodo-global.com/news/wolf-bkk-and-punthai-coffee-brew-a-stronger-connection-between-thais-and-their-coffee.html) · [DEmark](https://designwanted.com/design-excellence-award-demark-royal-thai-government/) · [Mood board myopia](https://whatsanu.substack.com/p/mood-board-myopia-and-creative-stagnation) · [Moodboard is not copying (Kluwer, French case 2021)](https://legalblogs.wolterskluwer.com/trademark-blog/using-the-inspiration-of-a-moodboard-is-not-copying/) · [Illinois library: finding images](https://guides.library.illinois.edu/GD_Resources/finding_images) · [Design fixation (AI EDAM abstract)](https://www.cambridge.org/core/journals/ai-edam/article/abs/overcoming-design-fixation-design-by-analogy-studies-and-nonintuitive-findings/038760839BBBEFC08F146457A77BBE51) · Not opened: AIGA standards (403) · Monocle (403) · 99% Invisible on Geismar (timeout) · Thai law on using references not checked.
+
+## Reference to design (`ref-to-design.md`) · opened 2026-11-23
+
+[Airey logo design tips](https://www.logodesignlove.com/logo-design-tips) · [Airey on sketching](https://archive.davidairey.com/?p=393) · [Sagi Haviv interview](https://www.logodesignlove.com/sagi-haviv-interview) · [CGH 60 years](https://www.logodesignlove.com/chermayeff-geismar-haviv-60-years) · [Rand: logos, flags and escutcheons](https://www.paulrand.design/writing/articles/1991-logos-flags-and-escutcheons.html) · [Rand ID interview 1988](https://www.paulrand.design/life/interviews/1988-id-magazine.html) · [Bierut (Azure)](https://www.azuremagazine.com/article/the-lazy-designers-guide-to-success/) · [Bierut talking logos](https://www.logodesignlove.com/michael-bierut-talking-logos) · [USPTO likelihood of confusion](https://www.uspto.gov/trademarks/search/likelihood-confusion) · [Optical corrections (Logo Geek)](https://logogeek.uk/?p=2617) · [Logo blur test (Jim Nielsen)](https://blog.jim-nielsen.com/2014/logo-integrity/) · [Five-second test (Smashing)](https://smashingmagazine.com/2023/12/five-second-testing-case-study) · [Design workflow (Smashing)](https://smashingmagazine.com/2016/02/design-workflow/) · [How many options (Logo Design Love)](https://www.logodesignlove.com/how-many-options) · [Lettering tips (Lattice)](https://design.lattice.com/articles/lettering-tips-for-drawing-letters) · Seen only in search results, not opened: Kleon "Steal Like an Artist" · Hische talk · Lupton on type pairing · vendor mockup pages on material and light. Rules on photography, material and colour ratio are `อนุมาน`: no practitioner source was found.
 
 
 ## reference: usage-rules.md
