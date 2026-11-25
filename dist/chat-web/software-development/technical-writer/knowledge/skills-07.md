@@ -303,7 +303,7 @@ The plugin's hook (`hooks/superuser-hook.mjs`) writes 1 line per event, for the 
 | `ok` | ✓ succeeded · ✗ failed · empty = unknown |
 | `correction` | `true` when the user's message sounds like correcting the work (ไม่ใช่ · ผิด · อย่า · บอกแล้ว · แก้ใหม่) · `learning-reviewer` reads it at the end of a job |
 
-- **Several plugins installed** — every plugin in SQT-Marketplace has the same hook and gets the same events. The first one records and the others skip, so the log has no duplicates. The lock is an empty file the hook creates itself in `_to_delete/superuser-lock/` and the hook deletes it itself after 2 minutes. This is the one exception to the "never delete" rule, because it is the hook's internal file, not the user's work. Agents delete no file in `_to_delete/`.
+- **Several plugins installed** — every plugin in SQT-Marketplace has the same hook and gets the same events. The first one records and the others skip, so the log has no duplicates. The lock is an empty file the hook creates itself in `_to_delete/superuser-lock/` and the hook deletes it itself after 2 minutes. Agents leave this lock alone; the hook manages it. Agents delete other things in `_to_delete/` only per `temp-file-discipline` step 9.
 - **Not stored:** file contents and tool output; values that look like secrets are replaced with `[ตัด]` (cut) before writing.
 - **Read** — if the user asks to "look at today's log", run `node <skill handoff folder>/scripts/log-to-md.mjs <date>` at the project root to get a Markdown table of all agents in time order. Add `--agent=<name>` to see just one, or `--out` to write `.claude/superuser/log/<date>.md`. `--out` writes `.claude/superuser/log/<date>.md`; if the file already exists you must add `--force`. Check the script with `--self-test`.
 - **Search** — `.jsonl` files can be searched with `grep` directly, and `learn-from-session` uses them to find repeated failures.
@@ -677,7 +677,7 @@ Exceptions that do not follow the theme: service provider logo colours · grey s
 - [ ] File names follow `document-naming`: no `final2`, no `ล่าสุด` ("latest")
 - [ ] Docs in the set cite each other's versions consistently
 - [ ] Run `scripts/open_items.py`, and the open-items register has no row with status "เปิด" (open), or the client knows about every row still open
-- [ ] Tell the user what is left in `_to_delete/` (do not delete it yourself; delete only when the user says so)
+- [ ] Tell the user what is left in `_to_delete/` (delete only what `temp-file-discipline` step 9 allows: old task folders nothing else still uses)
 
 ---
 

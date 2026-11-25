@@ -1489,6 +1489,7 @@ The main document skills (`polished-document-style` · `document-naming` · `spe
 | The work has steps, layers, or options not yet needed · a newcomer must be able to follow | `simplify` (not Claude Code's `/simplify`) |
 | Starting any design work (web · app · slides · documents · icons · logos · posts), or must choose colours and a theme | `design-references`: search real work using the project's words, then extract the 8 role colours from the chosen work · the colour library is used when a live search is not possible |
 | Work people must look at (screens · slides · posters · images) | `no-ai-look` |
+| Making a logo · poster · banner · document cover · slide deck, or the owner says work looks stiff (`แข็ง`) | `design-by-type` (plugin `graphic-design`): the type's beauty rules, 2–3 popular references per direction blended into 3 directions for the owner to pick |
 | Finished 1 step in a folder that has git | `commit-log` |
 | Something broke or is wrong → cause not yet known / cause known, fix a single spot | `principle-fix-root-cause` / `targeted-fix` |
 | The hook says the work is small (single file · single-spot fix · single question) | `quick`, run in a `haiku` subagent · send the full request with full paths and the data from chat in args, because it cannot see the chat · if it returns `เกินงานเล็ก` (beyond small work) or `ขาดบริบท` (missing context) → do it yourself |

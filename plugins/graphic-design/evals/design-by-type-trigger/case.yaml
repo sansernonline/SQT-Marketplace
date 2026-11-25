@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: design-by-type-trigger
+description: ขอโปสเตอร์งานสัมมนาโดยไม่เอ่ยชื่อ skill ต้องทำให้ design-by-type ถูกเปิด (เตรียมไว้ 2026-11-19 ยังไม่ได้รัน)
+tags: [trigger, design-by-type]
+runs: 3
+expected_outcome: เรียก Skill design-by-type แล้วบอกประเภทงาน (โปสเตอร์) อ่านบริบทโปรเจกต์ก่อนเลือกแนว และวางแผนหาต้นแบบจริงที่มียอดนิยม
+execution:
+  prompt: |
+    ช่วยทำโปสเตอร์ A3 งานสัมมนาฟรีสำหรับเจ้าของร้านค้าออนไลน์ เรื่องจัดการสต็อกหลายแพลตฟอร์ม
+    บ่ายวันเสาร์ ที่ขอนแก่น อยากได้แบบสวยๆ หลายแบบให้เลือก
+  max_turns: 8
+  timeout_seconds: 300
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?design-by-type"'
+    min: 1
+    arm: with-only
+  - name: popular-refs-planned
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย · ผ่านเมื่อมีครบ 2 เรื่อง:
+      1. บอกหรือใช้ประเภทงานว่าเป็นโปสเตอร์ และบอกว่าแนวเลือกจากบริบทงาน (สัมมนาร้านค้าออนไลน์ ขอนแก่น) ไม่ใช่คำคุณศัพท์ลอยๆ
+      2. หาหรือวางแผนหาต้นแบบจริงจากเว็บ พร้อมยอดดู ยอดถูกใจ หรือหลักฐานความนิยมอื่น และไม่แต่งวันที่ สถานที่ หรือวิทยากรเอง

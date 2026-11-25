@@ -1,5 +1,9 @@
 # Changelog — software-development
 
+## 3.9.1 — 2026-11-25
+
+- `project-doc-set`: ตอนปิดงาน ลบโฟลเดอร์งานเก่าใน `_to_delete/` ที่ไม่มีใครใช้แล้วได้เอง ตามกฎถังขยะใหม่ของ superuser 3.51.0 (เดิมห้ามลบเอง)
+
 ## 3.9.0 — 2026-11-25
 
 - ทุก skill/agent ด้าน design: ด่านก่อนลงมือเริ่มด้วยการอ่านเนื้อหาแล้วเขียนบรีฟ `เนื้อหา:` · `deck-theme.md` และ `colour-by-domain.md` ชี้ไป `content-to-theme.md` ใน superuser

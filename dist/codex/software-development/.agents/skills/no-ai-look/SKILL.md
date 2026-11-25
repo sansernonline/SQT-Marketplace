@@ -38,6 +38,7 @@ Each is allowed if the project gives a reason. The fix for every signal and the 
 - **AI images:** plastic skin · golden or dramatic light everywhere · teal-orange · too-clean scene · average people · bad hands, teeth, text · clay 3D or glossy isometric → one reasoned light source, signs of use, edit the result.
 - **Logos:** gradient circle with a hole · circuits · infinity · swoosh · melting letters → shape from something specific; vector; test at favicon size.
 - **Documents:** emoji before headings · every bullet starts bold · Title Case everywhere · every section a list · 4 heading levels in a short note · summary ending every section · default Mermaid → short prose, house-style diagrams.
+- **Stiffness:** nothing crosses an edge · equal spacing everywhere · unequal things drawn equal · decoration with no meaning · no light direction · lifeless default type → the 6 questions and fixes in [`references/stiffness.md`](references/stiffness.md) (owner: "ยังดูแข็งๆ เหมือน ai look", 2026-11-18).
 - **Words:** broad ad words (supercharge · ยกระดับ · ไร้รอยต่อ) · "ไม่ใช่แค่ X แต่คือ Y" · sets of 3 · many long dashes · canned openers ("ในยุคดิจิทัลที่…") → `human-writing`, `thai-grammar`.
 
 Do not swap one default for another (cream + terracotta + serif, or + olive, is still a formula). Bento grids and mesh gradients are not signals in themselves. A multi-hue gradient built from the brand hue and its neighbours, on 1 focal place and never on text, is the owner's taste, not the `ai-palette` signal (rules in `design-references` `references/depth-and-light.md` section 3b, 2026-11-24).
@@ -104,4 +105,5 @@ Always include, or you get the average:
 - **Edit** the first image you get (crop, retouch, adjust light); never use it as is.
 
 ## References
+- [`references/stiffness.md`](references/stiffness.md) — open on every eye gate of a visual piece, or when the owner says work looks stiff (`แข็ง`)
 - [`references/catalog.md`](references/catalog.md) — open when the script reports an unfamiliar rule, for the fix and sources of any signal, or when checking media the script cannot see.

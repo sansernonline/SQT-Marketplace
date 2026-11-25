@@ -1552,7 +1552,7 @@ Exceptions that do not follow the theme: service provider logo colours · grey s
 - [ ] File names follow `document-naming`: no `final2`, no `ล่าสุด` ("latest")
 - [ ] Docs in the set cite each other's versions consistently
 - [ ] Run `scripts/open_items.py`, and the open-items register has no row with status "เปิด" (open), or the client knows about every row still open
-- [ ] Tell the user what is left in `_to_delete/` (do not delete it yourself; delete only when the user says so)
+- [ ] Tell the user what is left in `_to_delete/` (delete only what `temp-file-discipline` step 9 allows: old task folders nothing else still uses)
 
 ---
 

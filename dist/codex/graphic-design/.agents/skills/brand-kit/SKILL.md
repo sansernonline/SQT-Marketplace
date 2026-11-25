@@ -14,7 +14,7 @@ For app or product screens, the `software-development` plugin's `design-system` 
 
 ## Workflow
 
-0. **Search for references first:** take the project's keywords and search live as `design-references` (plugin `superuser`) says, type `logo` (use `color` for colours), then pull the colours from the piece you choose · use the stored palette library only when a live search is not possible
+0. **Search for references first:** take the project's keywords and search live as `design-references` (plugin `superuser`) says, type `logo` (use `color` for colours), then pull the colours from the piece you choose · design the logo itself by the route in `design-by-type` `references/logo.md` (marks built from a licensed font's letterforms, never hand-drawn paths) · use the stored palette library only when a live search is not possible
 1. **Collect** — brand name (Thai and English), 1-sentence positioning, audience, 3 personality adjectives, existing logo files, and 2 competitors to look different from
 2. **Copy the folder template** in [kit-template.md](references/kit-template.md) to `brand-kit/v1/`
 3. **Logo** — collect or request the 4 versions (full colour · reversed white · solid black · solid white), set clear space and minimum size (below)

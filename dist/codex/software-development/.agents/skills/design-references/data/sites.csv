@@ -135,3 +135,19 @@ product,Dribbble · packaging,บรรจุภัณฑ์และฉลา�
 banner,Behance · banner,แบนเนอร์โฆษณาและเว็บ,https://www.behance.net/search/projects?search={q}%20banner,ดูเป็นต้นแบบ,yes
 banner,Dribbble · banner,แบนเนอร์และหัวเว็บ,https://dribbble.com/search/{q}%20banner,ดูเป็นต้นแบบ,yes
 banner,Pinterest · banner,แบนเนอร์จากหลายแหล่ง,https://www.pinterest.com/search/pins/?q={q}%20banner,ดูเป็นต้นแบบ,yes
+logo,Identity Designed,โปรเจกต์แบรนด์ 365 ชิ้นแยกตามอุตสาหกรรม,https://identitydesigned.com/,ดูเป็นต้นแบบ,no
+logo,Mindsparkle Mag,บทความงานแบรนด์และบรรจุภัณฑ์,https://mindsparklemag.com/,ดูเป็นต้นแบบ,no
+logo,World Brand Design Society,โปรเจกต์แบรนด์จากทั่วโลก,https://worldbranddesign.com/,ดูเป็นต้นแบบ,no
+poster,Typographic Posters,โปสเตอร์ตัวอักษร,https://typographicposters.com/,ดูเป็นต้นแบบ,no
+poster,Posterlad,โปสเตอร์แนวกราฟิก,https://posterlad.com/,ดูเป็นต้นแบบ,no
+social,Creative Boom,ข่าวแบรนด์และโฆษณาพร้อมชื่อเอเจนซี,https://www.creativeboom.com/,ดูเป็นต้นแบบ,no
+social,Design Week,ข่าวและงานออกแบบจากอังกฤษ (บล็อกบอต 403),https://www.designweek.co.uk/,ดูเป็นต้นแบบ,no
+social,The Inspiration Grid,รวมงานแบรนด์และภาพประกอบรายวัน,https://theinspirationgrid.com/?s={q},ดูเป็นต้นแบบ,yes
+social,Eye on Design,บทความเชิงลึกจาก AIGA,https://eyeondesign.aiga.org/,ดูเป็นต้นแบบ,no
+document,GDUSA Design Retrieval,รายงานประจำปีที่ได้รางวัล 322 ชิ้น,https://gallery.gdusa.com/category/annual-and-corporate-reports,ดูเป็นต้นแบบ,no
+document,100 Archive,งานออกแบบสื่อสาร 100 ชิ้นต่อปี,https://100archive.com/,ดูเป็นต้นแบบ,no
+illustration,Pexels,ภาพถ่ายฟรี,https://www.pexels.com/search/{q}/,ใช้ได้ตามใบอนุญาตต่อชิ้น,yes
+illustration,Unsplash,ภาพถ่ายฟรี (บางภาพเป็น Unsplash+ เสียเงิน),https://unsplash.com/s/photos/{q},ใช้ได้ตามใบอนุญาตต่อชิ้น,yes
+illustration,Pixabay,ภาพถ่ายและภาพประกอบฟรี,https://pixabay.com/images/search/{q}/,ใช้ได้ตามใบอนุญาตต่อชิ้น,yes
+illustration,Wikimedia Commons,ภาพถ่ายและไฟล์สื่อแต่ละไฟล์มีใบอนุญาตของตัวเอง,https://commons.wikimedia.org/w/index.php?search={q}&ns6=1&title=Special:MediaSearch&type=image,ใช้ได้ตามใบอนุญาตต่อชิ้น,yes
+illustration,rawpixel,ภาพโดเมนสาธารณะและภาพขาย (บล็อกบอต 403),https://www.rawpixel.com/search/{q},ใช้ได้ตามใบอนุญาตต่อชิ้น,no
