@@ -30,7 +30,7 @@ Deep mode uses several times more tokens than plain mode (section 8). If the use
 
 The lead does this alone, before releasing the first worker (the rule "lay out the whole task graph first" in [`team-roles`](team-roles.md), section "แบ่งงาน" (splitting the work)).
 
-1. Ask yourself first: what will the user do with the report · how much of an answer is enough · if it is unclear and readings differ so much that the whole job differs → ask the user once before starting.
+1. Ask yourself first: what will the user do with the report · how much of an answer is enough · if it is unclear and readings differ so much that the whole job differs → pick the reading by research + vote ([`autonomy`](autonomy.md)), state it in the plan, and start; do not ask.
 2. Split the topic into **4–12 sub-questions**. Cover the whole topic with no overlap and no gap (the split table of `parallel-split-and-merge`).
 3. Each one has 4 fields.
 
