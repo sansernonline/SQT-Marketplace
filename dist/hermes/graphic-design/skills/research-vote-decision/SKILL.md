@@ -14,7 +14,7 @@ This skill is the end-to-end flow. It reuses the parts that already exist and do
 - The user says "เลือกมาให้เลย" · "ตัดสินให้หน่อย" · "pick for me" · "decide from research"
 - Choosing a language · framework · host · vendor · limit · target · policy value for a spec
 
-Not for: one fact with no options → `research-with-sources` · options already have numbers and only need ranking → `decision-scoring` · a small reversible detail (a file name · heading order) → choose yourself and log it per `decision-log` · taste (color · tone) → the user looks.
+Not for: one fact with no options → `research-with-sources` · options already have numbers and only need ranking → `decision-scoring` · a small reversible detail (a file name · heading order) → choose yourself and log it per `decision-log` · taste (color · tone · layout · report format) → vote it like any other item; the owner reviews the result and may answer `คงไว้` or change it.
 
 ## Steps
 1. **Collect every open item in one pass.** Search the document (and files that cite it) loosely for `รอยืนยัน` · `TBD` · `Q<n>`; count matches against your list before going on. One decision sheet covers all items.
@@ -27,7 +27,7 @@ Not for: one fact with no options → `research-with-sources` · options already
 8. **Apply everywhere.** Replace the value in every place it appears (requirements · business rules · test-case ranges · traceability · open-item table), then search again for the old value: 0 hits outside the history line. Add a version line. "Everywhere" also means the things built from the docs: change the mockup screens themselves (a to-do list written into the spec is not applied; prove it in a browser) · update test-case workbooks · re-render kept deliverables (.docx/.pdf) whose source changed, under the new version number, and view every page.
 9. **Record** each item as `D<n>` in the document's decision section (format below) and add 1 row per item to `decision-log`.
 10. **Report** 1 table: `D<n>` · choice · 1-line reason · `ยืนยันก่อน` if the user must confirm. Not the full research.
-11. **Ask for the owner facts that are left, as numbered questions.** Facts only the user knows (their machine · accounts · broker · hours · budget · real files) are not voted. Listing them as IDs in the report gives the user nothing to act on, so end with a numbered list, 1 question per line, only for facts that block a milestone or keep a number unusable for acceptance:
+11. **Ask almost nothing; the default is to decide.** Task order · feature scope · format · screens · numbers · policy (license) are voted, not asked; "where is X" is searched on the machine and the real system read-only, not asked; a stricter option that removes the concern beats a question. Ask only: a fact truly absent from the machine and the web (password · account · business intent with no trace in the docs) · real spending or a looser money or risk limit · law or irreversible — and even then apply a safe stand-in marked `ยืนยันก่อน` and keep going. Put what is left in one numbered list at the end, 0–3 lines; before sending, check each line "can a search or a vote settle this?" and if yes, do it and drop the line. Each line:
     - the question in plain words · the answer form (a number with its unit · a choice from options found in the docs · a file to send)
     - what it unlocks (the IDs or milestone) · the stand-in in use until the answer comes (a value with a source in the docs, still labelled `(รอยืนยัน)`; never a guess)
     - merge questions that share one answer (one machine spec, not 3 questions) · leave out values that will be measured on the real system later; say they wait for the measurement
@@ -53,4 +53,4 @@ Sources (≥ 3 pointing the same way):
 - Old values: 0 hits outside the history line · version line added
 - Items marked `ยืนยันก่อน` are listed for the user at the end
 - Mockups, test-case workbooks and rendered deliverables that use a changed value were updated and checked, not only the .md
-- Owner facts still open are asked as numbered questions, each with its answer form and what it unlocks
+- Questions left: 0–3, each one of the 3 allowed kinds and checked against "can a search or a vote settle this?", numbered with its answer form, what it unlocks and the stand-in

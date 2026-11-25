@@ -27,7 +27,7 @@ description: Use before asking to continue on undoable work
 
 If you pass all 3 gates and still must ask, do not stop and wait. Collect every question into "ค้างอยู่" once, with your recommended path, and carry on with the rest. For irreversible work, prepare the command, the diff or the draft message in "รออนุมัติ" and do not do it yourself.
 
-**The one exception where you may ask first:** at the start of the job, if the brief can be read in so many ways that the whole output would differ, ask once, putting every question of that round together as multiple choice, with evidence for every option (skill `superuser` section 6 → `autonomy`). After you start, do not ask again. For a fork that is irreversible, costly or reaches outsiders, use [`flag-and-propose`](../flag-and-propose/SKILL.md).
+**No question at the start either:** a brief that reads several ways → take the reading the evidence supports best (tie → the easiest to undo), say it in line 1, and keep going · questions left go in one list at the end, 0–3, only the kinds in skill `superuser` section 6 → `autonomy`. For a fork that is irreversible, costly or reaches outsiders, use [`flag-and-propose`](../flag-and-propose/SKILL.md).
 
 ## What not to do
 
