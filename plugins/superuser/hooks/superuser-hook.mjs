@@ -15,6 +15,10 @@ import { isBashGuard, preRules, promptRules, postRules, stopRules, foldTestState
 import { scoredRoutes, fixHomonyms, homonymWarn, installedSkills, suggestSkill, toolRoute, markSkillOpened, replayRoutes, cacheDiff, qualify } from "./lib/router.mjs";
 import { parseLoopRequest, loopCancelRequested, loopStart, loopCancel, loopStartNotice, loopStopGate } from "./lib/loop.mjs";
 import { extraGates } from "./lib/selftest.mjs";
+// pickup.mjs หายหรือพัง → ข้ามการ์ดร่างและการนับข้อปิด ด่านอื่นยังทำงาน (reviewer 2026-11-25)
+let pickup = {};
+try { pickup = await import("../skills/handoff/scripts/pickup.mjs"); } catch { /* ไม่มีไฟล์ */ }
+const draftCard = (root) => pickup.draftCard(root), countClosed = (text) => pickup.countClosed?.(text) ?? 0;
 import { ESCAPE_CLAUSE, scopeOk, versionNotice, digestNotice, lintHint, bashChecks, sessionStartListener } from "./lib/notices.mjs";
 export { moduleOn };
 
@@ -665,7 +669,7 @@ function stopGate(input, teamDir, root) {
   const review = moduleOn(teamDir, "review_gate"), rules = modOn(teamDir, "stop_rules"), resume = moduleOn(teamDir, "resume_check");
   if (!review && !rules && !resume) return "";
   const s = gateState(teamDir, input.transcript_path);
-  return (review && reviewGate(s)) || (resume && resumeGate(s, !!contextFile(teamDir, root))) || (rules && stopRules(s, teamDir, root, HERE, input)) || "";
+  return (review && reviewGate(s)) || (resume && resumeGate(s, !!contextFile(teamDir, root), root)) || (rules && stopRules(s, teamDir, root, HERE, input)) || "";
 }
 
 // ── ด่านแตกงาน (PreToolUse ของหัวหน้าทีม) ───────────────────────────────
@@ -1158,15 +1162,18 @@ export function resumeAgeNotice(teamDir, root = dirname(teamDir), now = new Date
   if (due.length) out.push(`"รับงานต่อ" in ${where} has ${due.length} item(s) waiting for quota whose reset time has passed (e.g. "${short(due[0])}…") — run budget.mjs start, then resume them per handoff section 5 "Quota runs out"`);
   if (old.length) out.push(`"รับงานต่อ" in ${where} has ${old.length} item(s) whose latest date is over ${RESUME_STALE_DAYS} days old (e.g. "${short(old[0])}…") — check each against the real thing before acting on it; rewrite or close it per handoff section 5`);
   if (claims.length) out.push(`Claims over ${CLAIM_STALE_HOURS} h old in "รับงานต่อ": ${claims.join(" · ")} — may be taken over only if their branch or log shows no work since (handoff section 5)`);
+  const closed = countClosed(text);
+  if (closed >= 3) out.push(`"รับงานต่อ" in ${where} has ${closed} closed item(s) — run \`node ${join(HERE, "..", "skills", "handoff", "scripts", "pickup.mjs")} archive\` to move them to CONTEXT-archive.md`);
   return out.join("\n");
 }
 
 // Stop: แก้ไฟล์งาน ≥ 3 ไฟล์หลังครั้งล่าสุดที่แตะ CONTEXT.md และโปรเจกต์มี CONTEXT.md → เตือนให้อัปเดต "รับงานต่อ" ก่อนจบ 1 ครั้ง
 // แนวคิด "สรุปความจำตอนจบ session" จาก ai-memory · ข้ามได้ด้วยบรรทัด `ข้ามรับงานต่อ: <เหตุผล>` (นับเป็นจุดอัปเดตเหมือนแก้ CONTEXT.md)
-export function resumeGate(s, hasContext) {
+export function resumeGate(s, hasContext, root) {
   const n = s.sinceResume?.length ?? 0;
   if (!hasContext || n < REVIEW_MIN_FILES || s.pending?.length) return null;
-  return `Resume gate (SuperUser): ${n} work file(s) edited since "รับงานต่อ" in CONTEXT.md was last touched — update it per handoff section 5 before finishing (close done items · remove your own claim · add what the next session must do first) · if nothing changed for the next session, put the line \`ข้ามรับงานต่อ: <เหตุผล>\` in the final answer`;
+  let card = ""; try { if (root) card = `\nDraft card (check, edit, paste): ${draftCard(root)}`; } catch { /* ร่างการ์ดไม่ได้ก็ข้ามเงียบ ๆ */ }
+  return `Resume gate (SuperUser): ${n} work file(s) edited since "รับงานต่อ" in CONTEXT.md was last touched — update it per handoff section 5 before finishing (close done items · remove your own claim · add what the next session must do first) · if nothing changed for the next session, put the line \`ข้ามรับงานต่อ: <เหตุผล>\` in the final answer${card}`;
 }
 
 // ── สรุป log ให้คนอ่าน (Stop ของหัวหน้าทีม) ─────────────────────────────
@@ -2271,6 +2278,12 @@ ${rows}
       const ctx = "## รับงานต่อ\n- ชุด 3 build รอโควตา: รายสัปดาห์ รีเซ็ต 2026-11-22 03:00 · ตรวจจริง 2026-11-20\n- อื่น 2026-11-20\n";
       const before = staleResume(ctx, new Date("2026-11-21T12:00")).due, after = staleResume(ctx, new Date("2026-11-22T03:05")).due;
       return before.length === 0 && after.length === 1 && after[0].includes("build");
+    }],
+    ["resume_check: เตือนก่อนจบแนบการ์ดร่าง · root ที่ไม่มีอยู่ยังเตือนได้ · SessionStart เตือนเมื่อมีข้อปิด ≥ 3", [skill, edit("a"), edit("b"), edit("c")], true, (l) => {
+      const g = resumeGate(fold(l), true, proj), bad = resumeGate(fold(l), true, join(proj, "no-such-dir"));
+      writeFileSync(join(gTeam, "CONTEXT.md"), "## รับงานต่อ\n- **(ปิด) a**\n- **(เสร็จ) b**\n- (เดิม) c\n- **d**\n");
+      const t = resumeAgeNotice(gTeam, proj, new Date("2026-11-17T12:00")); unlinkSync(join(gTeam, "CONTEXT.md"));
+      return g.includes("Draft card (check, edit, paste): - **") && !!bad && /3 closed item/.test(t) && t.includes("pickup.mjs");
     }],
     ["resume_check: แก้ไฟล์งาน 3 ไฟล์ ไม่แตะ CONTEXT.md → เตือนก่อนจบ", [skill, edit("a"), edit("b"), edit("c")], true, (l) => resumeGate(fold(l), true)],
     ["resume_check: แตะ CONTEXT.md หลังแก้ → ไม่เตือน · แก้ต่ออีก 2 ไฟล์ยังไม่ถึงเกณฑ์", [edit("a"), edit("b"), edit("c"), T({ type: "tool_use", name: "Edit", input: { file_path: "/p/.claude/superuser/CONTEXT.md" } }), edit("d"), edit("e")], false, (l) => resumeGate(fold(l), true)],
