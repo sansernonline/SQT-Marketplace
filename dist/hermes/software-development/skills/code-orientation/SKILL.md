@@ -81,3 +81,5 @@ Tests that lock the behaviour: <file> · none → write before the change
 - Trusting an old comment that no longer matches the code, when the code and tests are the truth.
 - Tracing the whole repo until the context is full, when you should read only the path of this task.
 - "Cleaning up" along the way without a test. That should be a separate refactor task.
+
+- Project map: if `docs/FILE-MAP.md` exists, read it first; else generate it with `node plugins/superuser/skills/context-budget/scripts/map-folder.mjs`.

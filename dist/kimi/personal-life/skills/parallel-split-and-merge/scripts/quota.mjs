@@ -26,7 +26,10 @@ export function fromStatusLine(input, env = process.env, now = new Date()) {
   const rl = input?.rate_limits;
   if (!rl) return null;
   const win = (w) => (w ? { used: Number(w.used_percentage ?? 0), reset: iso(w.resets_at) } : null);
-  return { account: accountName(env, "claude"), tool: "claude", at: now.toISOString(), five_hour: win(rl.five_hour), week: win(rl.seven_day) };
+  const q = { account: accountName(env, "claude"), tool: "claude", at: now.toISOString(), five_hour: win(rl.five_hour), week: win(rl.seven_day) };
+  const ctx = input?.context_window?.used_percentage;
+  if (ctx != null) q.context = Number(ctx);
+  return q;
 }
 
 // event token_count ใน session ของ Codex (rate_limits.primary/secondary · used_percent · window_minutes · resets_at) · ตรวจกับไฟล์จริงในเครื่อง 2026-10-27

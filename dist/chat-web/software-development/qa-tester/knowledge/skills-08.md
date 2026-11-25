@@ -320,6 +320,7 @@ Use when work passes to a subagent, session or person
 |---|---|---|
 | Lead → worker | **Task sheet** (`ใบสั่งงาน`, section 3) | Lead |
 | Worker → lead | **Delivery sheet** (`ใบส่งงาน`) appended to the task sheet (section 4) | Worker (a worker that cannot write files sends it in the message and the lead places it) |
+| Playbook step → next step (new worker · session · model) | **Stage card** (`การ์ดขั้น`, section 4b) | Whoever finished the step |
 | This session → next session · switching model · context nearly full | **Resume** (`รับงานต่อ`) in `CONTEXT.md` (section 5) | Lead |
 | Team → a person · another bot · Quix · Agent Desk | **Hand-off package** (section 6) | Lead |
 
@@ -355,6 +356,13 @@ The worker appends it to its own task sheet, then edits `status:`. The message b
 - A result longer than 40 lines → write it to `handoff/<id>/` and cite the path.
 - The lead reads the delivery sheet, checks it against `เสร็จเมื่อ` itself, then moves any `ตัดสินใจเอง` that affects other work up to the "การตัดสินใจ" table in `CONTEXT.md`.
 
+## 4b · Stage card (`การ์ดขั้น`) — between playbook steps
+Each step hands the next one a fixed file, so the next step never has to dig through the chat or redo the survey (idea from the define → plan → build → test → review → ship commands of addyosmani/agent-skills and BMAD's per-role documents, both read 2026-11-25).
+- A step whose output goes to a new worker, a new session or another model ends by writing `handoff/<task-id>/<NN>-<step>.md` (`NN` = step number · `step` = understand · plan · do · prove · report). Steps the lead finishes alone in one sitting may skip the file.
+- At most 20 lines, 4 headings: **ได้อะไร** (what was produced, with paths) · **ตัดสินใจ** (choices later steps must keep) · **ยังเปิด** (open questions, `(รอยืนยัน)`) · **ขั้นต่อไปต้องรู้** (inputs and done-when for the next step).
+- The next step's brief points to the newest card only (`ใช้จาก: handoff/<task-id>/02-plan.md`); it opens earlier cards only when that card names them.
+- On pause, `รับงานต่อ` points to the newest card instead of repeating its content.
+
 ## 5 · Resuming work (`รับงานต่อ`) — across sessions · switching model · context nearly full
 The `## รับงานต่อ` section in `CONTEXT.md` follows these rules. The `## ความคืบหน้า` table beside it belongs to `status-report`.
 
@@ -369,6 +377,8 @@ The `## รับงานต่อ` section in `CONTEXT.md` follows these rules
 - **Tag every item** `ตรวจจริง` (seen yourself this session) or `ยังไม่ได้ตรวจ` (remembered). No tag = not yet checked. The receiver may believe the first at once and must check the second before use. The same applies to any status file a task keeps outside `CONTEXT.md` (such as `_to_delete/<task>/status.md`), and above all to a line that says the user decided or forbade something: write where they said it, or tag it `ยังไม่ได้ตรวจ` (2026-11-20: "the owner banned Canva and Pinterest" was the agent's own rule written as the owner's, and the next session repeated it to the user).
 - **Date every item** (`YYYY-MM-DD`, updated when the item changes). The hook module `resume_check` uses it: at session start it names items over 14 days old and claims over 24 hours old; at the end it blocks once when 3+ work files were edited but `CONTEXT.md` was not touched (`ข้ามรับงานต่อ: <reason>` passes it).
 - **Close what is done in the same round:** a finished item leaves `รับงานต่อ` at once; write 1 line with its evidence (PR · commit · file) in `HISTORY.md`. A done item left in the list gets picked up again by the next reader.
+- **Draft card:** when the resume gate fires, it appends a drafted card (`node scripts/pickup.mjs draft`: date · branch · changed files · last commit · `ต่อไป: (รอยืนยัน)`). Check it, edit it, then paste it into `รับงานต่อ`; never paste it unread.
+- **Archive closed items:** `node scripts/pickup.mjs archive [--context <path>]` moves items whose bold head carries a status in brackets starting with `ปิด` or `เสร็จ` (e.g. `(ปิด · …)`, `(เสร็จ 2026-11-23)`; not `(ปิดบางส่วน)` and not when the head also says `ติด` or `ทำอยู่`), and items starting `(เดิม)`, to `CONTEXT-archive.md` under today's date. At session start the hook says so when 3+ such items sit in `รับงานต่อ`.
 
 **Quota runs out** (the quota gate blocks, `budget.mjs start` says `ไม่เพียงพอ`, or the remaining quota drops below the next piece). The user's order still stands, so save and continue later instead of stopping silently:
 1. Finish or stop the piece in hand at a clean point; do not send a worker that will not fit.
