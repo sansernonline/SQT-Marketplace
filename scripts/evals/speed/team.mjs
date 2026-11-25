@@ -57,7 +57,39 @@ function teamFromFile(main) {
     return { type: meta.agentType ?? "?", task: meta.description ?? "", model: used.model ?? meta.pickedEffortModel ?? meta.model ?? "?",
       asked: meta.model ?? "(ไม่ระบุ)", effort: meta.effort ?? "(ไม่ระบุ)", costUsd: used.costUsd, turns: used.turns };
   });
-  return { lead: usageOf(main), members };
+  return { lead: usageOf(main), members, dispatch: dispatchOf(main) };
+}
+
+// ด่านของ hook ที่ตีกลับคำสั่งเรียก Agent · จับจากข้อความ error ที่ hook คืน
+const GATES = [["ด่านส่งงาน", /Dispatch gate/], ["ด่านโควตา", /Quota gate/]];
+
+/** หัวหน้าเรียก Agent กี่ครั้ง · ถูกตีกลับกี่ครั้ง แยกตามด่าน
+ *  เหตุที่ต้องนับ: bench t5 2026-11-18 ได้ลูกทีม 7 ตัว แต่เรียก Agent 19 ครั้ง (ด่านตีกลับ 12) และตารางเดิมไม่บอก
+ *  transcript บันทึก tool_use ซ้ำได้ → นับตาม tool_use_id ครั้งเดียว */
+function dispatchOf(main) {
+  const agentIds = new Set(), seen = new Set(), rejected = {};
+  for (const line of readFileSync(main, "utf8").split("\n")) {
+    let o; try { o = JSON.parse(line); } catch { continue; }
+    const content = Array.isArray(o?.message?.content) ? o.message.content : [];
+    for (const b of content) {
+      if (b.type === "tool_use" && (b.name === "Agent" || b.name === "Task")) agentIds.add(b.id);
+      if (b.type !== "tool_result" || !agentIds.has(b.tool_use_id) || seen.has(b.tool_use_id)) continue;
+      seen.add(b.tool_use_id);
+      if (!b.is_error) continue;
+      const text = JSON.stringify(b.content);
+      const gate = GATES.find(([, re]) => re.test(text))?.[0] ?? "อื่น";
+      rejected[gate] = (rejected[gate] ?? 0) + 1;
+    }
+  }
+  return { sent: agentIds.size, rejected };
+}
+
+/** "ส่ง 19 · ตีกลับ 12 (ด่านส่งงาน 6 · ด่านโควตา 6)" · ไม่มีตีกลับ → "ส่ง 7 · ตีกลับ 0" */
+export function dispatchText(d) {
+  if (!d) return "–";
+  const parts = Object.entries(d.rejected).map(([gate, n]) => `${gate} ${n}`);
+  const total = Object.values(d.rejected).reduce((s, n) => s + n, 0);
+  return `ส่ง ${d.sent} · ตีกลับ ${total}${parts.length ? ` (${parts.join(" · ")})` : ""}`;
 }
 
 const short = (model) => String(model).replace(/^claude-/, "").replace(/-\d+(-\d+)*$/, "");
@@ -68,11 +100,11 @@ export function teamLines(rows) {
   const withTeam = rows.filter((r) => r.team);
   if (!withTeam.length) return [];
   const lines = ["", "**ทีมรายรอบ** (ค่าใช้จ่ายรายตัวคิดจาก token × ราคา · ประมาณ)", "",
-    "| รอบ | หัวหน้า | ลูกทีม | ลูกทีมแต่ละตัว: ชนิด · model/effort · งาน · $ |", "|---|---|---|---|"];
+    "| รอบ | หัวหน้า | ลูกทีม | เรียก Agent | ลูกทีมแต่ละตัว: ชนิด · model/effort · งาน · $ |", "|---|---|---|---|---|"];
   for (const r of withTeam) {
-    const { lead, members } = r.team;
+    const { lead, members, dispatch } = r.team;
     const each = members.map((m) => `${m.type.replace(/^superuser:/, "")} · ${short(m.model)}/${m.effort} · ${m.task} · ${usd(m.costUsd)}`).join("<br>") || "–";
-    lines.push(`| ${r.id} | ${short(lead.model ?? "?")} · ${usd(lead.costUsd)} | ${members.length} · ${usd(members.reduce((s, m) => s + m.costUsd, 0))} | ${each} |`);
+    lines.push(`| ${r.id} | ${short(lead.model ?? "?")} · ${usd(lead.costUsd)} | ${members.length} · ${usd(members.reduce((s, m) => s + m.costUsd, 0))} | ${dispatchText(dispatch)} | ${each} |`);
   }
   return lines;
 }

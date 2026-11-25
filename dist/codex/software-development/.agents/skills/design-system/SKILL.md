@@ -5,7 +5,7 @@ description: Use when authoring design tokens or a Tailwind theme
 
 # Design System — 3-layer tokens and component specs
 
-> **Gate before starting (every time):** read the owner's theme → search live references → 3 genuinely different directions → run `no-ai-look` before sending · follow the "Gate before starting" (`ด่านก่อนลงมือ`) section of `design-references` (plugin `superuser`) even when a brand already exists (the brand controls color and fonts, while the search is for finding the structure of this piece) · close the job with the line `ด่านก่อนลงมือ:`
+> **Gate before starting (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run `no-ai-look` before sending · follow the "Gate before starting" (`ด่านก่อนลงมือ`) section of `design-references` (plugin `superuser`) even when a brand already exists (the brand controls color and fonts, while the search is for finding the structure of this piece) · close the job with the line `ด่านก่อนลงมือ:`
 
 > **One rule:** screen code must have no raw colors or spacing. Every value references a token · tokens have 3 layers: **primitive** (raw value `--color-blue-600`) → **semantic** (role `--color-primary`) → **component** (`--button-bg`) · to change the theme, edit the middle layer in one place
 

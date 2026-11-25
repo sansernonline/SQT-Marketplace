@@ -26,7 +26,10 @@ export function fromStatusLine(input, env = process.env, now = new Date()) {
   const rl = input?.rate_limits;
   if (!rl) return null;
   const win = (w) => (w ? { used: Number(w.used_percentage ?? 0), reset: iso(w.resets_at) } : null);
-  return { account: accountName(env, "claude"), tool: "claude", at: now.toISOString(), five_hour: win(rl.five_hour), week: win(rl.seven_day) };
+  const q = { account: accountName(env, "claude"), tool: "claude", at: now.toISOString(), five_hour: win(rl.five_hour), week: win(rl.seven_day) };
+  const ctx = input?.context_window?.used_percentage;
+  if (ctx != null) q.context = Number(ctx);
+  return q;
 }
 
 // event token_count ใน session ของ Codex (rate_limits.primary/secondary · used_percent · window_minutes · resets_at) · ตรวจกับไฟล์จริงในเครื่อง 2026-10-27
@@ -71,18 +74,21 @@ export function applyQuota(accounts, snap, now = new Date()) {
     if (!q) return a;
     const five = q.five_hour && hours(q.five_hour.reset) > 0 ? q.five_hour : null;
     const week = q.week && hours(q.week.reset) > 0 ? q.week : null;
-    if (week && week.used >= 100) return { ...a, remaining_k: 0, week_left_k: 0, reset_in_hours: hours(week.reset), quota_at: q.at };
+    if (week && week.used >= 100) return { ...a, remaining_k: 0, week_left_k: 0, reset_in_hours: hours(week.reset), week_reset_in_hours: hours(week.reset), limited_by: "week", quota_at: q.at };
     // รู้ขนาดถังรายสัปดาห์ (week_cap_k) → คิดเป็น token ทั้ง 2 ถังแล้วเอาตัวที่น้อยกว่า · plan-assign หักถังสัปดาห์ด้วยและเติมถัง 5 ชม. ได้ไม่เกินที่สัปดาห์เหลือ
     if (a.week_cap_k) {
       const weekLeft = a.week_cap_k * (week ? 1 - week.used / 100 : 1);
       const fiveLeft = five ? a.cap_k * (1 - five.used / 100) : a.cap_k;
       return { ...a, remaining_k: Math.max(0, Math.min(fiveLeft, weekLeft)), week_left_k: weekLeft,
-        reset_in_hours: five ? hours(five.reset) : a.reset_in_hours, week_reset_in_hours: week ? hours(week.reset) : null, quota_at: q.at };
+        reset_in_hours: five ? hours(five.reset) : a.reset_in_hours, week_reset_in_hours: week ? hours(week.reset) : null,
+        limited_by: weekLeft < fiveLeft ? "week" : "five_hour", quota_at: q.at };
     }
     if (!five) return { ...a, quota_at: q.at };
     // ใช้ส่วนที่เหลือน้อยกว่าระหว่างรอบ 5 ชม. กับรอบยาว · รอบยาวใกล้เต็มแล้ว รอบ 5 ชม. ที่ยังว่างก็ใช้ได้ไม่เต็ม
-    const share = Math.max(0, Math.min(1 - five.used / 100, week ? 1 - week.used / 100 : 1));
-    return { ...a, remaining_k: a.cap_k * share, reset_in_hours: hours(five.reset), quota_at: q.at };
+    const fiveShare = 1 - five.used / 100, weekShare = week ? 1 - week.used / 100 : 1;
+    // limited_by บอกว่าถังไหนรั้ง ผู้สั่งงานจะได้รอถึงรีเซ็ตของถังนั้นครั้งเดียว (ชุด 3 2026-11-20: ถังสัปดาห์รั้ง แต่ตั้งเวลาเช็กทุก 5 ชม.)
+    return { ...a, remaining_k: a.cap_k * Math.max(0, Math.min(fiveShare, weekShare)), reset_in_hours: hours(five.reset),
+      week_reset_in_hours: week ? hours(week.reset) : null, limited_by: weekShare < fiveShare ? "week" : "five_hour", quota_at: q.at };
   });
 }
 

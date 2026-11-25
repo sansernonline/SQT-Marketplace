@@ -17,6 +17,7 @@ import { spawn } from "node:child_process";
 import { readFileSync, writeFileSync, appendFileSync, mkdirSync, cpSync, rmSync, readdirSync, existsSync } from "node:fs";
 import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { wilson } from "../speed/stats.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "..", "..", "..");
@@ -88,7 +89,7 @@ const cost = results.reduce((a, r) => a + r.cost, 0);
 const budgetLine = results.find((r) => r.overBudget)?.overBudget ?? "ไม่เกินงบ";
 const fractionNote = FRACTION ? ` · skillListingBudgetFraction ${FRACTION}` : "";
 const table = [
-  "", `## ${new Date().toISOString().slice(0, 16).replace("T", " ")} · ${LABEL} · ผ่าน ${passed}/${results.length} · $${cost.toFixed(2)}`, "",
+  "", `## ${new Date().toISOString().slice(0, 16).replace("T", " ")} · ${LABEL} · ผ่าน ${passed}/${results.length}${(() => { const w = wilson(passed, results.length); return w ? ` (ช่วง 95% Wilson ${Math.round(100 * w.lo)}–${Math.round(100 * w.hi)}%)` : ""; })()} · $${cost.toFixed(2)}`, "",
   `- plugin: ${plugins.length} ตัวจาก \`${SRC}\`${fractionNote} · listing: ${budgetLine}`, "",
   "| เคส | ผ่าน | skill ที่เปิด |", "|---|---|---|", ...byCase, "",
 ].join("\n");

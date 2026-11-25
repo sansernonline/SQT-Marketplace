@@ -1,0 +1,8 @@
+{
+  "size": "กลาง",
+  "kind": "โค้ด (ขึ้นระบบจริง)",
+  "about": "retry แบบ backoff + token bucket 2 ไฟล์อิสระ",
+  "split": "fresh",
+  "width": 2,
+  "touch": "^(src/|test|.*\\.test\\.m?js$|package\\.json$)"
+}

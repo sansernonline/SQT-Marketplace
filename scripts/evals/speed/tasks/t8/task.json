@@ -2,5 +2,19 @@
   "size": "เล็ก",
   "kind": "เอกสาร",
   "about": "แก้ยอด 3 บรรทัดในใบเสนอราคา ห้ามแตะบรรทัดอื่น",
-  "touch": "^quotation\\.md$"
+  "touch": "^quotation\\.md$",
+  "variants": [
+    {
+      "id": "en",
+      "lang": "en",
+      "file": "TASK.en.md"
+    },
+    {
+      "id": "casual",
+      "lang": "th",
+      "file": "TASK.casual.md"
+    }
+  ],
+  "split": "dev",
+  "width": 0
 }

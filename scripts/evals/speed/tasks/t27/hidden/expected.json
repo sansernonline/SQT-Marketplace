@@ -1,0 +1,17 @@
+{
+  "missing_in_ledger": [
+    "R-1006"
+  ],
+  "missing_in_bank": [
+    "R-1004"
+  ],
+  "amount_mismatch": [
+    {
+      "ref": "R-1003",
+      "bank": 800050,
+      "ledger": 800005
+    }
+  ],
+  "bank_total": 1956677,
+  "ledger_total": 2166505
+}

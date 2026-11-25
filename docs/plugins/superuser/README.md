@@ -18,6 +18,8 @@ agent 4 · skill 41 (ของ plugin 1 · ของกลางจาก superu
 
 หัวหน้าทีมรับงาน → จัดขนาด → แจกงาน → ตรวจซ้ำจนผ่าน → ส่งมอบ → เรียนรู้
 
+ขั้นแจกงานแบบละเอียดเป็น algorithm พร้อมด่านของ hook: [แจกงานอย่างไร](dispatch.md)
+
 ![SuperUser ขั้น 1 intake](flow/1-intake.png)
 
 ![SuperUser ขั้น 2 size](flow/2-size.png)

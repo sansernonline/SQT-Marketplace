@@ -76,6 +76,13 @@ Ask in order; **the first yes is the route**, then stop:
 
 Item 4 is the only one that cannot be undone: answer yes only with evidence everything is in files; if unsure, go to 5.
 
+## Project map
+- Workers read `docs/FILE-MAP.md` instead of exploring the repo.
+- Generate it: `node scripts/map-folder.mjs [dir=.] [--out docs/FILE-MAP.md] [--max 400] [--stdout]`.
+- It lists each file with a role line and its relative imports, then a Mermaid folder graph.
+- Over `--max` files it lists folders with file counts only.
+- It never copies file contents beyond the role line. Regenerate after big changes.
+
 ## Check before done
 - Big things were read by range, bounded search, subagent or file, not opened whole.
 - Every subagent brief said the result format and length.
@@ -88,6 +95,11 @@ Opening the whole thing to "see what is in it" when the table of contents or `he
 - [`references/settings.md`](references/settings.md) — open when setting rules for a team or project
 - [`references/windows-shell.md`](references/windows-shell.md) — open when working in Git Bash or PowerShell on Windows
 - [`references/sources.md`](references/sources.md) — sources and licences
+
+## Squeeze logs
+- Run long test or build logs through `node scripts/squeeze-log.mjs [file] [--max 100] [--context 3]` (stdin if no file) before reading them or handing them to another agent.
+- It keeps the first 10 and last 20 lines, every error/fail/warn line with context, and collapses repeated lines as `(×N)`.
+- The first output line says `squeeze-log: <in> → <out> lines · errors <k>`.
 
 
 ## reference: settings.md
@@ -154,7 +166,7 @@ Not for: a work product the user keeps (goes in its own destination folder) · i
 ## Steps
 1. **Decide what is temporary:** check images, logs, one-off scripts, backups, extracted zips, converted copies, old versions, anything no longer in use. Not temporary: a work product the user asked for · the source file of a work product (keep it in a subfolder beside it) · files the user placed themselves (never move them without asking) · build output (leave it, check `.gitignore`). If unsure whether the user created or uses a file, do not move it; tell the user. Detail: [`references/layout.md`](references/layout.md).
 2. **Use one `_to_delete/` at the project root.** From inside a subfolder (such as the code folder), write to the project root's `_to_delete/`; do not nest one. A temporary file that landed in the root: move it into `_to_delete/` right away.
-3. **Make a task folder when the task starts**, before the first temporary file: `_to_delete/YYYY-MM-DD-<topic>/` (the day the task started; topic lowercase English joined by `-`, 2–5 words, such as `2026-11-06-temp-task-folders`, not `task1`). A task that spans rounds or sessions reuses its folder; a new topic gets a new folder. Sub-agents write into the lead's task folder; put the path in the brief.
+3. **Clear old trash first, then make a task folder when the task starts.** Before the first temporary file, list the folders in `_to_delete/` and delete those nothing uses any more, by step 9 (owner's order 2026-11-19: "ก่อนเริ่มงาน อ่านก่อนว่ามีไฟล์ไหนต้องใช้ต่อไหม ถ้าไม่ใช้ก็ควร clear ของเก่า"). Then make the task folder: `_to_delete/YYYY-MM-DD-<topic>/` (the day the task started; topic lowercase English joined by `-`, 2–5 words, such as `2026-11-06-temp-task-folders`, not `task1`). A task that spans rounds or sessions reuses its folder; a new topic gets a new folder. Sub-agents write into the lead's task folder; put the path in the brief.
 4. **Never place a file directly in `_to_delete/`**, except what a tool or hook creates at a fixed place (`superuser-lock/` · `STOP`) and `delete-plan.txt`.
 5. **When another skill writes `_to_delete/<x>`** (such as `_to_delete/screenshots/`), read it as `_to_delete/<task folder>/<x>`. For a script whose default is `_to_delete/...`, pass `--out` pointing into the task folder.
 6. **Use only these subfolder names inside the task folder:**
@@ -169,7 +181,7 @@ Not for: a work product the user keeps (goes in its own destination folder) · i
    Code work (`verify-runs/` · `security/` · `check/`) → `superuser` → `references/code-extensions.md` in plugin `software-development`.
 7. **Add `_to_delete/` to `.gitignore`** in every git project (check first, add if missing). If the project README already names another temporary folder (`tmp/` `scratch/`), follow it and record 1 row in the "การตัดสินใจ" table. Never use `.cache/`.
 8. **At the end of the work,** say where this task's temporary things are in one line (`_to_delete/2026-11-06-login-page-redesign/`), with no long list. Then run `node <this skill's folder>/scripts/root-check.mjs <project root>`. It lists things in the root outside the allowed list (`ref` `docs` `mockup` `assets` `qa` `_to_delete` `.claude` the code folder, and things in `.gitignore`); for things the project keeps in the root on purpose, add `--allow README.md,LICENSE`.
-9. **Never delete on your own.** Delete only when the user orders it (deleting in the user's folder cannot be undone). When ordered, move into `_to_delete/` first, tell the user, and actually delete only things inside `_to_delete/` when the user orders that directly:
+9. **`_to_delete/` is the trash bin.** Anything already inside it may be deleted for good without asking (owner's order 2026-11-19: "ถ้าไฟล์อยู่ในนี้ลบจากถังขยะได้เลย"), for example to free disk space or at the end of a task. Leave every folder still in use: one made in this session (its path may be in your report) · one a file outside `_to_delete/` still names (`CONTEXT.md` · `BUILD-PLAN.md` · a committed file) · one from another session, worktree or AI · `_to_delete/superuser-lock/`. Unsure → keep it. Say what you deleted in one line. Outside `_to_delete/`, never delete on your own: deleting in the user's folder cannot be undone, so move the files into `_to_delete/` first and tell the user. Delete inside `_to_delete/` this way:
    1. Write the plan into `_to_delete/delete-plan.txt`, 1 path per line from the project root (a whole task = its folder on one line).
    2. Run `node <this skill's folder>/scripts/delete-plan-check.mjs _to_delete/delete-plan.txt`. It prints the delete list and the keep list to compare. A path that escapes `_to_delete/` (`..` · full path · a link pointing outside) makes it exit 1, and you must not delete.
    3. Only after it passes, delete line by line from the "delete" list. The script does not delete. Never build the list from `ls` (on Windows names may end in `/`; see `context-budget` → [`windows-shell`](../context-budget/references/windows-shell.md)).
@@ -178,7 +190,7 @@ Not for: a work product the user keeps (goes in its own destination folder) · i
 - [ ] Every temporary file is under `_to_delete/<task folder>/` using the standard subfolder names.
 - [ ] `root-check.mjs` shows nothing unexpected in the root.
 - [ ] `_to_delete/` is in `.gitignore`.
-- [ ] The reply says where the temporary things are, in one line, and nothing was deleted without the user's order.
+- [ ] The reply says where the temporary things are, in one line, and nothing outside `_to_delete/` was deleted without the user's order.
 
 ## References
 - [`references/layout.md`](references/layout.md) — open when unsure whether a file is temporary, or for the example layout and anti-patterns.
@@ -519,6 +531,7 @@ Use when work passes to a subagent, session or person
 |---|---|---|
 | Lead → worker | **Task sheet** (`ใบสั่งงาน`, section 3) | Lead |
 | Worker → lead | **Delivery sheet** (`ใบส่งงาน`) appended to the task sheet (section 4) | Worker (a worker that cannot write files sends it in the message and the lead places it) |
+| Playbook step → next step (new worker · session · model) | **Stage card** (`การ์ดขั้น`, section 4b) | Whoever finished the step |
 | This session → next session · switching model · context nearly full | **Resume** (`รับงานต่อ`) in `CONTEXT.md` (section 5) | Lead |
 | Team → a person · another bot · Quix · Agent Desk | **Hand-off package** (section 6) | Lead |
 
@@ -554,10 +567,17 @@ The worker appends it to its own task sheet, then edits `status:`. The message b
 - A result longer than 40 lines → write it to `handoff/<id>/` and cite the path.
 - The lead reads the delivery sheet, checks it against `เสร็จเมื่อ` itself, then moves any `ตัดสินใจเอง` that affects other work up to the "การตัดสินใจ" table in `CONTEXT.md`.
 
+## 4b · Stage card (`การ์ดขั้น`) — between playbook steps
+Each step hands the next one a fixed file, so the next step never has to dig through the chat or redo the survey (idea from the define → plan → build → test → review → ship commands of addyosmani/agent-skills and BMAD's per-role documents, both read 2026-11-25).
+- A step whose output goes to a new worker, a new session or another model ends by writing `handoff/<task-id>/<NN>-<step>.md` (`NN` = step number · `step` = understand · plan · do · prove · report). Steps the lead finishes alone in one sitting may skip the file.
+- At most 20 lines, 4 headings: **ได้อะไร** (what was produced, with paths) · **ตัดสินใจ** (choices later steps must keep) · **ยังเปิด** (open questions, `(รอยืนยัน)`) · **ขั้นต่อไปต้องรู้** (inputs and done-when for the next step).
+- The next step's brief points to the newest card only (`ใช้จาก: handoff/<task-id>/02-plan.md`); it opens earlier cards only when that card names them.
+- On pause, `รับงานต่อ` points to the newest card instead of repeating its content.
+
 ## 5 · Resuming work (`รับงานต่อ`) — across sessions · switching model · context nearly full
 The `## รับงานต่อ` section in `CONTEXT.md` follows these rules. The `## ความคืบหน้า` table beside it belongs to `status-report`.
 
-**Before handing over** (end of session · before switching model · context use passes half in a long job), update `รับงานต่อ`:
+**Before handing over** (end of session · before switching model · context use passes half in a long job · quota runs out, below), update `รับงานต่อ`:
 - **ทำต่อเป็นข้อแรก:** 1 item, doable at once, pointing to a file or `handoff/<id>.md`.
 - **ชิ้นที่ยังเปิด:** the `id`s whose `status` is not `เสร็จ`.
 - **รออนุมัติ:** ready but irreversible work; name the file or command (omit if none).
@@ -565,9 +585,18 @@ The `## รับงานต่อ` section in `CONTEXT.md` follows these rules
 - **ระวัง:** traps found · what must not be torn up (already decided) · failed paths from every delivery sheet.
 - **ส่งมาแล้ว N ครั้ง:** count real handoffs only (end of session · switching model), not `/compact`. If the receiver sees N ≥ 2, old text may linger; check against the real thing before following it.
 - **สมุดงาน:** point to `notes/<plan>.md` and `ledger/<plan>.md` of the open plan ([`team-memory`](references/team-memory.md) section 8). A multi-piece plan is done only when the line `Task N: complete` is in its ledger.
-- **Tag every item** `ตรวจจริง` (seen yourself this session) or `ยังไม่ได้ตรวจ` (remembered). No tag = not yet checked. The receiver may believe the first at once and must check the second before use.
+- **Tag every item** `ตรวจจริง` (seen yourself this session) or `ยังไม่ได้ตรวจ` (remembered). No tag = not yet checked. The receiver may believe the first at once and must check the second before use. The same applies to any status file a task keeps outside `CONTEXT.md` (such as `_to_delete/<task>/status.md`), and above all to a line that says the user decided or forbade something: write where they said it, or tag it `ยังไม่ได้ตรวจ` (2026-11-20: "the owner banned Canva and Pinterest" was the agent's own rule written as the owner's, and the next session repeated it to the user).
 - **Date every item** (`YYYY-MM-DD`, updated when the item changes). The hook module `resume_check` uses it: at session start it names items over 14 days old and claims over 24 hours old; at the end it blocks once when 3+ work files were edited but `CONTEXT.md` was not touched (`ข้ามรับงานต่อ: <reason>` passes it).
 - **Close what is done in the same round:** a finished item leaves `รับงานต่อ` at once; write 1 line with its evidence (PR · commit · file) in `HISTORY.md`. A done item left in the list gets picked up again by the next reader.
+- **Draft card:** when the resume gate fires, it appends a drafted card (`node scripts/pickup.mjs draft`: date · branch · changed files · last commit · `ต่อไป: (รอยืนยัน)`). Check it, edit it, then paste it into `รับงานต่อ`; never paste it unread.
+- **Archive closed items:** `node scripts/pickup.mjs archive [--context <path>]` moves items whose bold head carries a status in brackets starting with `ปิด` or `เสร็จ` (e.g. `(ปิด · …)`, `(เสร็จ 2026-11-23)`; not `(ปิดบางส่วน)` and not when the head also says `ติด` or `ทำอยู่`), and items starting `(เดิม)`, to `CONTEXT-archive.md` under today's date. At session start the hook says so when 3+ such items sit in `รับงานต่อ`.
+
+**Quota runs out** (the quota gate blocks, `budget.mjs start` says `ไม่เพียงพอ`, or the remaining quota drops below the next piece). The user's order still stands, so save and continue later instead of stopping silently:
+1. Finish or stop the piece in hand at a clean point; do not send a worker that will not fit.
+2. Write `รับงานต่อ` (or the task's status file): `รอโควตา: <binding window> รีเซ็ต <YYYY-MM-DD HH:MM>` · what is done (with evidence) · what is left, in order · the exact order to resume with (the user's words, or the task's brief path).
+3. If the session stays open, set one one-shot wake-up (`CronCreate`, `recurring: false`) a few minutes after that reset, with the resume order as its prompt. Do not poll every 5 hours: when the weekly window binds, a 5-hour reset does not help. A session-only timer dies with the session, so the note in step 2 is what a new session resumes from; the SessionStart hook names `รอโควตา` items whose reset has passed.
+4. Tell the user in the answer, in one line, what was done, what is waiting and when it resumes.
+This is also why the quota gate exists: workers chained one after another are checked before each send so none stops halfway.
 
 **Claim before starting (1 item, 1 taker).** Two sessions or vendors reading the same `CONTEXT.md` will otherwise start the same item.
 - Re-read `รับงานต่อ` just before starting, then add to the item `รับโดย: <tool>/<branch or session> · <YYYY-MM-DD HH:MM>`. A `handoff/<id>.md` gets `claimed_by` and `claimed_at` in its header and `status: ทำอยู่`.
@@ -794,7 +823,7 @@ The plugin's hook (`hooks/superuser-hook.mjs`) writes 1 line per event, for the 
 | `ok` | ✓ succeeded · ✗ failed · empty = unknown |
 | `correction` | `true` when the user's message sounds like correcting the work (ไม่ใช่ · ผิด · อย่า · บอกแล้ว · แก้ใหม่) · `learning-reviewer` reads it at the end of a job |
 
-- **Several plugins installed** — every plugin in SQT-Marketplace has the same hook and gets the same events. The first one records and the others skip, so the log has no duplicates. The lock is an empty file the hook creates itself in `_to_delete/superuser-lock/` and the hook deletes it itself after 2 minutes. This is the one exception to the "never delete" rule, because it is the hook's internal file, not the user's work. Agents delete no file in `_to_delete/`.
+- **Several plugins installed** — every plugin in SQT-Marketplace has the same hook and gets the same events. The first one records and the others skip, so the log has no duplicates. The lock is an empty file the hook creates itself in `_to_delete/superuser-lock/` and the hook deletes it itself after 2 minutes. Agents leave this lock alone; the hook manages it. Agents delete other things in `_to_delete/` only per `temp-file-discipline` step 9.
 - **Not stored:** file contents and tool output; values that look like secrets are replaced with `[ตัด]` (cut) before writing.
 - **Read** — if the user asks to "look at today's log", run `node <skill handoff folder>/scripts/log-to-md.mjs <date>` at the project root to get a Markdown table of all agents in time order. Add `--agent=<name>` to see just one, or `--out` to write `.claude/superuser/log/<date>.md`. `--out` writes `.claude/superuser/log/<date>.md`; if the file already exists you must add `--force`. Check the script with `--self-test`.
 - **Search** — `.jsonl` files can be searched with `grep` directly, and `learn-from-session` uses them to find repeated failures.

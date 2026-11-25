@@ -5,7 +5,7 @@ description: Use when building a native-looking Windows 11 app
 
 # Windows App Design
 
-> **Gate before starting (every time):** read the owner's theme → search live references → 3 genuinely different directions → run `no-ai-look` before sending · follow the "Gate before starting" (`ด่านก่อนลงมือ`) section of `design-references` (plugin `superuser`) even when a brand already exists (the brand controls color and fonts, while the search is for finding the structure of this piece) · close the job with the line `ด่านก่อนลงมือ:`
+> **Gate before starting (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run `no-ai-look` before sending · follow the "Gate before starting" (`ด่านก่อนลงมือ`) section of `design-references` (plugin `superuser`) even when a brand already exists (the brand controls color and fonts, while the search is for finding the structure of this piece) · close the job with the line `ด่านก่อนลงมือ:`
 
 > **One rule:** the app you make must look like something that ships with Windows 11, not a web page stuffed into a window.
 >

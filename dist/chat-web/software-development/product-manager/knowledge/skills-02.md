@@ -1186,6 +1186,8 @@ You must still open and look at the script result once: the main colour it gives
 
 ## 2 · Mood comes from the content
 
+Start from the `เนื้อหา:` brief (gate item 0 of `design-references`, file `references/content-to-theme.md`): its **อารมณ์** and **ธีม** pick the row below. That file holds the same table for every kind of work, plus what colours tend to carry.
+
 Look at what the source work is about and who is listening, then choose from the table. Material used for visuals must come from that work's own world (real product photos · real screens · materials · signs of the trade), not ready-made icons.
 
 | Content | Mood | Background | Shapes and images | Density |

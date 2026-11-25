@@ -1,0 +1,8 @@
+{
+  "size": "เล็ก",
+  "kind": "โค้ด (แก้ช่องโหว่ความปลอดภัย)",
+  "about": "path traversal · SQL injection · XSS ใน 3 ฟังก์ชัน ใช้งานปกติต้องเหมือนเดิม",
+  "split": "domain",
+  "width": 0,
+  "touch": "^(src/handlers\\.mjs|.*\\.test\\.m?js)$"
+}

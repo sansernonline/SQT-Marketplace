@@ -1,0 +1,8 @@
+{
+  "size": "เล็ก",
+  "kind": "โค้ด frontend (accessibility)",
+  "about": "แก้ฟอร์ม HTML ให้โปรแกรมอ่านหน้าจอใช้ได้ ห้ามเปลี่ยนชื่อช่อง",
+  "split": "domain",
+  "touch": "^signup\\.html$",
+  "width": 0
+}

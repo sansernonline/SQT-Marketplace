@@ -2,5 +2,14 @@
   "size": "เล็ก",
   "kind": "โค้ด",
   "about": "แก้บั๊กวันที่ไทย 1 ไฟล์",
-  "touch": "^(src/|test|.*\\.test\\.js$|package(-lock)?\\.json$)"
+  "touch": "^(src/|test|.*\\.test\\.js$|package(-lock)?\\.json$)",
+  "variants": [
+    {
+      "id": "en",
+      "lang": "en",
+      "file": "TASK.en.md"
+    }
+  ],
+  "split": "dev",
+  "width": 0
 }

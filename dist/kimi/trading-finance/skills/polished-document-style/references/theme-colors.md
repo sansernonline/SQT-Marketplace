@@ -16,7 +16,7 @@ If each one picks its own color, the reader gets a document with figures in one 
 
 (Keys: `accent` = main color · `ที่มา` = source (client brand / proposed from the work's content) · `ยืนยันเมื่อ` = confirmed on.)
 
-**The main color comes from the work's content, not from a tool's default.**
+**The main color comes from the work's content, not from a tool's default.** Read the content and write the `เนื้อหา:` brief first (`design-references` `references/content-to-theme.md`); the tone you propose must carry its reason from that brief.
 If a brand color already exists, use it. If not, search for references per `design-references` (plugin `superuser`) of type `document` and extract the color from the chosen work · if live search is not possible, use the house default, write `(รอยืนยัน)` (awaiting confirmation), carry on without stopping to ask, and propose a tone that fits the work's content in the report.
 (Backup: the table matching work content to color tones is in `colour-by-domain` of skill `diagram-figures` (plugin `software-development`).)
 

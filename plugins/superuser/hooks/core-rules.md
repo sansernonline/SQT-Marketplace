@@ -1,4 +1,4 @@
-<!-- สำเนาที่ scripts/sync/sync-superuser.mjs สร้างจาก scripts/install/CLAUDE.global.md · ห้ามแก้ไฟล์นี้ แก้ที่ต้นฉบับ · sha256:7ba9c82fefef -->
+<!-- สำเนาที่ scripts/sync/sync-superuser.mjs สร้างจาก scripts/install/CLAUDE.global.md · ห้ามแก้ไฟล์นี้ แก้ที่ต้นฉบับ · sha256:0eb4af9aafaf -->
 <!-- sqt-core-rules -->
 # Personal rules (all projects)
 
@@ -33,12 +33,12 @@ The hook announces `skill ที่ต้องเปิด` (skills to open) �
 - **`grep`/`rg` always get `--glob` and end with `| head -50`**
 - **Write intermediate results to `_to_delete/`** and read only what you use · output may be long → `wc -l` first · `test` `build` `install` go to a file, then `tail`
 - **Edit in place, never overwrite the whole file** · **do not re-read a file after editing** · **do not paste what you just wrote into the answer**, name the edited lines only
-- **If unclear, ask once before starting, as a multiple-choice question**, only when different readings change the whole result; once started, do not ask again · **every option comes from evidence, never assumed** (how to ask → `superuser` `references/autonomy.md`)
+- **Ask the owner nothing; decide**: order · scope · format · screens · numbers · price · budget · license · law → research + 3-agent vote (+ `payoff` for money), unclear → loses least if wrong · "where is X" → search the machine · only owner-only actions (card · key · sign · login) and approval of irreversible actions (`ยืนยันก่อน`) reach the owner, as notices · no closing questions or "tell me if you want a change" (→ `superuser` `references/autonomy.md`)
 
 ## Finish the job
 
 - **Once told, finish the whole set in one go**, never ask "continue?" · several prompts run back to back, one report at the end
-- **If you must decide midway, decide yourself**: take the lowest-impact path, then summarize under **ตัดสินใจเอง** at the end of the answer · for a decision that changes the work, **research first, then a 3-agent vote**, and at the end let the user pick `คงไว้` (keep) or change (`decision-log` · `superuser` section 6)
+- **If you must decide midway, decide yourself**: take the lowest-impact path, then summarize under **ตัดสินใจเอง** at the end of the answer · for a decision that changes the work, **research first, then a 3-agent vote**, and list it with its `D<n>` so the user can change it later, no closing question (`decision-log` · `superuser` section 6)
 - **The owner's defaults live in `~/.claude/superuser-style.md`**, use them without asking (person names for empty roles · free first, then cheapest)
 - **Unknown facts with no default (numbers, names, dates, budget) are not decisions, never guess** · write `(รอยืนยัน)` and continue
 - You may stop early only for: deleting or overwriting user files not asked for · push or commit outside the conditions in the files-and-git section · sending off the machine · truly stuck with no way forward, after finishing the other parts and saying what is stuck

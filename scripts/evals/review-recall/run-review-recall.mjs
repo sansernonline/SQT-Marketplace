@@ -9,6 +9,9 @@
  * 1 เคส 1 รอบ = claude -p --agent superuser:reviewer ตัวใหม่ ในโฟลเดอร์ชั่วคราวนอก repo ที่มีแค่ไฟล์งาน (ไม่มี case.json)
  * reviewer ได้คำขอ · จบเมื่อ · รายชื่อไฟล์ · skill ที่งานต้องทำตาม — ไม่เห็นรายการข้อผิด
  * เจอ = แถวปัญหาในรายงานอ้าง ไฟล์:บรรทัด ของข้อนั้น · ยกข้อความที่ฝังมาตรงตัว · หรือมีคำสำคัญของข้อนั้นตั้งแต่ 2 คำในแถวเดียวกัน
+ * ความแม่น (precision) = แถวปัญหาที่ตรงข้อที่ฝังอย่างน้อย 1 ข้อ ÷ แถวปัญหาทั้งหมด (เป็นขอบล่าง: แถวที่ชี้ปัญหาจริงที่ไม่ได้ฝังก็ถูกนับว่าไม่ตรง)
+ * เคสควบคุม (case.json → control: true · planted ว่าง) = งานที่ถูกครบ · ทักผิด = รายงานให้ "ไม่ผ่าน" หรือมีแถวระดับสูง · อัตราทักผิดมีช่วง Wilson
+ * F1 = 2PR ÷ (P + R) · recall มีช่วง Wilson · กันผู้ตรวจที่ทักทุกบรรทัดแล้วได้ recall เต็ม
  * ไม่นับหัวข้อ "ตรวจแล้วไม่เจอปัญหา" · ผลรายรอบ → _to_delete/review-recall/<label>/ · สรุปต่อท้าย RESULTS.md
  */
 import { spawn } from "node:child_process";
@@ -16,6 +19,7 @@ import { appendFileSync, cpSync, existsSync, mkdirSync, readdirSync, readFileSyn
 import { basename, dirname, join, relative, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
+import { wilson } from "../speed/stats.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "..", "..", "..");
@@ -125,23 +129,31 @@ function lineRefs(row, file) {
 }
 
 /** ข้อผิดแต่ละข้อของเคส: เจอไหม เจอทางไหน · เคสที่มีไฟล์เดียว แถวที่อ้างแค่ "บรรทัด 12" ก็นับ */
+/** แถว 1 แถวตรงข้อผิด p ทางไหน ("" = ไม่ตรง) · ใช้ทั้งนับ recall (ต่อข้อ) และ precision (ต่อแถว) */
+function matchRow(p, row, single) {
+  const w = p.where ?? {};
+  const file = basename(w.file ?? "").toLowerCase();
+  const range = rangeOf(w.line);
+  const low = row.toLowerCase(), n = norm(row);
+  const byPlace = range && file && (single || low.includes(file)) && lineRefs(low, file).some(([a, z]) => a <= range[1] && z >= range[0]);
+  const byQuote = w.quote && n.includes(norm(w.quote));
+  const words = [...new Set((p.keywords ?? []).map(norm))];
+  const byWords = words.filter((k) => n.includes(k)).length >= 2;
+  return byPlace ? "ที่อยู่" : byQuote ? "ข้อความ" : byWords ? "คำสำคัญ" : "";
+}
 function score(c, report) {
   const rows = issueLines(report);
-  const lowRows = rows.map((r) => r.toLowerCase());
-  const normRows = rows.map(norm);
   const single = deliverables(c.dir).length === 1;
   return (c.planted ?? []).map((p) => {
-    const w = p.where ?? {};
-    const file = basename(w.file ?? "").toLowerCase();
-    const range = rangeOf(w.line);
-    const byPlace = range && file && lowRows.some((r) => (single || r.includes(file))
-      && lineRefs(r, file).some(([a, z]) => a <= range[1] && z >= range[0]));
-    const byQuote = w.quote && normRows.some((r) => r.includes(norm(w.quote)));
-    const words = [...new Set((p.keywords ?? []).map(norm))];
-    const byWords = normRows.some((r) => words.filter((k) => r.includes(k)).length >= 2);
-    const how = byPlace ? "ที่อยู่" : byQuote ? "ข้อความ" : byWords ? "คำสำคัญ" : "";
+    const how = ["ที่อยู่", "ข้อความ", "คำสำคัญ"].find((k) => rows.some((r) => matchRow(p, r, single) === k)) ?? "";
     return { type: p.type, hit: Boolean(how), how };
   });
+}
+/** ความแม่น: แถวปัญหาที่มีระดับ (สูง/กลาง/ต่ำ) ที่ตรงข้อที่ฝังอย่างน้อย 1 ข้อ ÷ แถวปัญหาที่มีระดับทั้งหมด */
+function precisionOf(c, report) {
+  const rows = issueLines(report).filter((l) => SEVERITY.test(l));
+  const single = deliverables(c.dir).length === 1;
+  return { matched: rows.filter((r) => (c.planted ?? []).some((p) => matchRow(p, r, single))).length, rows: rows.length };
 }
 
 // ---- ตรวจชุดเคส (ฟรี) ----
@@ -194,11 +206,12 @@ function check(cases) {
     if (!files.length) bad(c.id, "ไม่มีไฟล์งาน");
     if (size > 60) bad(c.id, `ไฟล์งานรวม ${size} บรรทัด เกิน 60`);
     const planted = Array.isArray(c.planted) ? c.planted : [];
-    if (planted.length < 1 || planted.length > 2) bad(c.id, `ฝังข้อผิด ${planted.length} ข้อ ต้อง 1–2 ข้อ`);
+    if (c.control) { if (planted.length) bad(c.id, "เคสควบคุมต้องไม่มีข้อผิดที่ฝัง"); }
+    else if (planted.length < 1 || planted.length > 2) bad(c.id, `ฝังข้อผิด ${planted.length} ข้อ ต้อง 1–2 ข้อ`);
     const prompt = norm(promptOf(c));
     planted.forEach((p, i) => checkPlanted(c, p, i, files, prompt, bad));
     const where = (p) => `\`${p.where?.file}:${[].concat(p.where?.line ?? "?").join("-")}\``;
-    table.push(`| ${c.id} | ${c.kind} | ${files.join(" · ")} | ${size} | ${planted.map((p) => `${TYPES[p.type] ?? p.type} ${where(p)}`).join(" · ")} |`);
+    table.push(`| ${c.id} | ${c.kind} | ${files.join(" · ")} | ${size} | ${c.control ? "ไม่มี (เคสควบคุม)" : planted.map((p) => `${TYPES[p.type] ?? p.type} ${where(p)}`).join(" · ")} |`);
   }
   if (!ONLY.length) {
     const seen = new Set(ALL.flatMap((c) => (c.planted ?? []).map((p) => p.type)));
@@ -258,7 +271,10 @@ function runOne(c, n, dirs) {
       const hits = score(c, report);
       // reviewer เห็น path ของ plugin ใน repo จึงเดินไปหาคำเฉลยได้ในทางทฤษฎี · เครื่องมือแตะ scripts/evals/review-recall หรือ case.json = รอบนี้ใช้ไม่ได้
       const peeked = out.split("\n").some((l) => l.includes('"tool_use"') && /evals[\\/]+review-recall|case\.json/.test(l));
-      const r = { id: c.id, run: n, kind: c.kind, found: hits.filter((h) => h.hit).length, planted: hits.length, hits, peeked,
+      const pr = precisionOf(c, report);
+      // ทักผิดในเคสควบคุม: ให้ผลไม่ผ่าน หรือมีแถวระดับสูง (ข้อเล็กระดับกลาง/ต่ำ เช่นสำนวน ไม่นับ เพราะงานจริงก็ปรับได้เสมอ)
+      const falseAlarm = c.control ? /ผล\s*:\s*\**\s*ไม่ผ่าน/.test(report) || issueLines(report).some((l) => /สูง|\bhigh\b/i.test(l)) : null;
+      const r = { id: c.id, run: n, kind: c.kind, found: hits.filter((h) => h.hit).length, planted: hits.length, hits, peeked, matchedRows: pr.matched, control: Boolean(c.control), falseAlarm,
         rows: issueLines(report).filter((l) => SEVERITY.test(l)).length, cost: res.total_cost_usd ?? 0,
         seconds: Math.round((Date.now() - t0) / 1000), turns: res.num_turns ?? null, status: /hit your .*limit|usage limit reached|requires usage credits/i.test(res.result ?? err) ? "โควตาบัญชีหมด ไม่ได้รัน ต้องรันซ้ำ" : (res.subtype ?? "ไม่มีผล"),
         model: init.model ?? "", models: Object.keys(res.modelUsage ?? {}), tools: init.tools ?? [], stderr: err.slice(-2000), report };
@@ -280,6 +296,11 @@ function runOne(c, n, dirs) {
 function summarize(cases, results, dirs) {
   const sum = (rs, k) => rs.reduce((s, r) => s + (r[k] ?? 0), 0);
   const found = sum(results, "found"), planted = sum(results, "planted");
+  const matched = sum(results, "matchedRows"), allRows = sum(results, "rows");
+  const rec = wilson(found, planted), P = allRows ? matched / allRows : null, Rr = planted ? found / planted : null;
+  const f1 = P != null && Rr != null && P + Rr > 0 ? (2 * P * Rr) / (P + Rr) : null;
+  const pc = (x) => (x == null ? "–" : `${Math.round(x * 100)}%`);
+  const ctl = results.filter((r) => r.control), fa = wilson(ctl.filter((r) => r.falseAlarm).length, ctl.length);
   const models = [...new Set(results.flatMap((r) => r.models))].join(", ") || "ไม่มีข้อมูล";
   const perType = Object.entries(TYPES).map(([t, name]) => {
     const hs = results.flatMap((r) => r.hits.filter((h) => h.type === t));
@@ -294,7 +315,9 @@ function summarize(cases, results, dirs) {
   const block = [
     "", `## ${new Date().toISOString().slice(0, 16).replace("T", " ")} · ${LABEL} · เจอ ${found}/${planted} (${planted ? Math.round((100 * found) / planted) : 0}%) · ${MODEL} · ${EFFORT} · $${sum(results, "cost").toFixed(2)}`, "",
     `- agent \`${AGENT}\` · plugin: ${dirs.map((d) => basename(d)).join(", ")} · เคสละ ${RUNS} รอบ · เพดาน $${BUDGET} ต่อครั้ง · โมเดลที่ใช้จริง: ${models}`,
+    `- recall ${pc(rec?.p)} (ช่วง 95% Wilson ${pc(rec?.lo)}–${pc(rec?.hi)}) · ความแม่น ${pc(P)} (${matched}/${allRows} แถว · ขอบล่าง) · F1 ${f1?.toFixed(2) ?? "–"}`,
     `- แยกตามชนิด: ${perType}`,
+    ...(ctl.length ? [`- เคสควบคุม (งานถูกครบ): ทักผิด ${ctl.filter((r) => r.falseAlarm).length}/${ctl.length} รอบ (${pc(fa?.p)} · ช่วง 95% ${pc(fa?.lo)}–${pc(fa?.hi)}) · ต่ำ = ผู้ตรวจไม่ทักมั่ว`] : []),
     ...results.filter((r) => r.peeked).map((r) => `- ⚠ ${r.id} รอบ ${r.run} แตะ scripts/evals/review-recall หรือ case.json ระหว่างตรวจ ผลของรอบนี้ใช้ไม่ได้`), "",
     "| เคส | งาน | เจอ | ข้อที่พลาด | แถวปัญหาที่รายงาน | ค่าใช้จ่าย |", "|---|---|---|---|---|---|", ...rows, "",
   ].join("\n");
