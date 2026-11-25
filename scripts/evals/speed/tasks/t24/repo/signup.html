@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>สมัครสมาชิก</title></head>
+<body>
+  <img src="logo.png">
+  <h3>สมัครสมาชิก</h3>
+  <form action="/signup" method="post">
+    <div>ชื่อ</div>
+    <input type="text" name="full_name">
+    <div>อีเมล</div>
+    <input type="text" name="email">
+    <div>รหัสผ่าน</div>
+    <input type="password" name="password">
+    <input type="checkbox" name="accept_terms"> ยอมรับเงื่อนไข
+    <img src="captcha.png">
+    <input type="text" name="captcha">
+    <input type="hidden" name="ref" value="home">
+    <div class="btn" onclick="this.closest('form').submit()">ส่ง</div>
+  </form>
+</body>
+</html>

@@ -161,7 +161,7 @@ Each is allowed if the project gives a reason. The fix for every signal and the 
 - **Documents:** emoji before headings · every bullet starts bold · Title Case everywhere · every section a list · 4 heading levels in a short note · summary ending every section · default Mermaid → short prose, house-style diagrams.
 - **Words:** broad ad words (supercharge · ยกระดับ · ไร้รอยต่อ) · "ไม่ใช่แค่ X แต่คือ Y" · sets of 3 · many long dashes · canned openers ("ในยุคดิจิทัลที่…") → `human-writing`, `thai-grammar`.
 
-Do not swap one default for another (cream + terracotta + serif, or + olive, is still a formula). Bento grids and mesh gradients are not signals in themselves.
+Do not swap one default for another (cream + terracotta + serif, or + olive, is still a formula). Bento grids and mesh gradients are not signals in themselves. A multi-hue gradient built from the brand hue and its neighbours, on 1 focal place and never on text, is the owner's taste, not the `ai-palette` signal (rules in `design-references` `references/depth-and-light.md` section 3b, 2026-11-24).
 
 When the owner's theme asks for depth (`มีมิติ` · `แสงเงา` · `ลูกเล่น`), soft shadows, one glow and glass over photos are the reason, not a signal, as long as the piece stays inside the limits in `design-references` `references/depth-and-light.md` section 4. The eye checker judges against those limits: 3 layers at most, one light direction, flat text, glow on 1 item.
 

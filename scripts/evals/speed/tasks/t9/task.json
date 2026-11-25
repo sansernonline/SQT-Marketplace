@@ -2,5 +2,14 @@
   "size": "เล็ก",
   "kind": "ข้อมูล",
   "about": "คำถามเร็วจาก CSV ตอบบรรทัดเดียว",
-  "touch": "^answer\\.md$"
+  "touch": "^answer\\.md$",
+  "variants": [
+    {
+      "id": "en",
+      "lang": "en",
+      "file": "TASK.en.md"
+    }
+  ],
+  "split": "dev",
+  "width": 0
 }

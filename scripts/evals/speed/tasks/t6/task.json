@@ -2,5 +2,10 @@
   "size": "กลาง",
   "kind": "เอกสาร",
   "about": "สรุปประชุมส่งผู้บริหารจากบันทึก + CSV",
-  "touch": "^report\\.md$"
+  "touch": "^report\\.md$",
+  "split": "dev",
+  "blind": [
+    "report.md"
+  ],
+  "width": 1
 }

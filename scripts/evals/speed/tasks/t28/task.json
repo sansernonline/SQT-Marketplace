@@ -1,0 +1,8 @@
+{
+  "size": "เล็ก",
+  "kind": "โค้ด (git merge conflict)",
+  "about": "แก้ conflict ให้ได้ทั้ง 2 ฝั่ง: VAT + ปัดทศนิยม",
+  "split": "domain",
+  "width": 0,
+  "touch": "^(src/price\\.js|.*\\.test\\.m?js)$"
+}

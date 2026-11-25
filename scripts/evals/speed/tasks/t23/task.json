@@ -1,0 +1,8 @@
+{
+  "size": "เล็ก",
+  "kind": "โค้ด SQL",
+  "about": "SQL 1 คำสั่งจาก SQLite · คืนเงิน · ยกเลิก · วันขอบ · เรียงเมื่อยอดเท่ากัน",
+  "split": "domain",
+  "touch": "^query\\.sql$",
+  "width": 0
+}

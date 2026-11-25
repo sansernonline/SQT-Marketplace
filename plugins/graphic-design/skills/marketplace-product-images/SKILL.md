@@ -5,7 +5,7 @@ description: Use when product photos go on Shopee, Lazada or TikTok Shop
 
 # marketplace-product-images — product images for Shopee · Lazada · TikTok Shop
 
-> **Gate before starting (every time):** read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the "ด่านก่อนลงมือ" (pre-start gate) section of `design-references` (plugin `superuser`), even when a brand exists (the brand sets colours and fonts, and the search is for the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
+> **Gate before starting (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the "ด่านก่อนลงมือ" (pre-start gate) section of `design-references` (plugin `superuser`), even when a brand exists (the brand sets colours and fonts, and the search is for the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
 The owner is agent `social-creator` · text on the product page (name · description · banned ad claims) lives in `e-commerce:product-listing`
 

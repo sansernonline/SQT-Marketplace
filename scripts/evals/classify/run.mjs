@@ -6,6 +6,7 @@
  * ชุดข้อความจริงของผู้ใช้ไม่อยู่ใน git (มีคำขอส่วนตัว) · เก็บที่ .claude/superuser/ ของโฟลเดอร์หลัก
  */
 import { readFileSync } from "node:fs";
+import { wilson } from "../speed/stats.mjs";
 import { looksSmall, looksBig } from "../../../plugins/superuser/hooks/superuser-hook.mjs";
 
 const [file, flag] = process.argv.slice(2);
@@ -19,7 +20,8 @@ for (const r of rows) {
   m[`${r.label}>${got}`] = (m[`${r.label}>${got}`] ?? 0) + 1;
   if (got === r.label) hit++; else console.log(`ป้าย ${r.label} · ได้ ${got} · ${r.text.replace(/\s+/g, " ").slice(0, 110)}`);
 }
-console.log(`\nตรง ${hit}/${rows.length} (${Math.round((100 * hit) / rows.length)}%)\nป้าย\ได้  ${labels.join("  ")}`);
+const w = wilson(hit, rows.length);
+console.log(`\nตรง ${hit}/${rows.length} (${Math.round((100 * hit) / rows.length)}% · ช่วง 95% Wilson ${Math.round(100 * w.lo)}–${Math.round(100 * w.hi)}%)\nป้าย\ได้  ${labels.join("  ")}`);
 for (const a of labels) console.log(`${a.padEnd(8)} ${labels.map((b) => String(m[`${a}>${b}`] ?? 0).padStart(5)).join(" ")}`);
 // งานใหญ่ที่หลุดเป็นเล็กหรือกลางแพงที่สุด (ไม่มีหัวหน้า ไม่มีผู้ตรวจ) · exit 1 เมื่อมี
 const missBig = rows.filter((r) => r.label === "big" && size(r.text) !== "big").length;

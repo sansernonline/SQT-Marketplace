@@ -1,5 +1,9 @@
 # Changelog — software-development
 
+## 3.9.0 — 2026-11-25
+
+- ทุก skill/agent ด้าน design: ด่านก่อนลงมือเริ่มด้วยการอ่านเนื้อหาแล้วเขียนบรีฟ `เนื้อหา:` · `deck-theme.md` และ `colour-by-domain.md` ชี้ไป `content-to-theme.md` ใน superuser
+
 ## 3.8.4 — 2026-11-18
 
 - sync `brief-template` จาก superuser 3.50.2: บรรทัด `กติกา:` ใช้ประโยคบังคับฉบับไทยที่ด่านส่งงานตรวจ และบอกให้ใส่ `model` + `effort` ในคำสั่งเรียก

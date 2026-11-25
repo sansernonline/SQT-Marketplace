@@ -6,7 +6,7 @@ argument-hint: <the message> [target platform and length]
 
 # video-script-to-clip — a short video from hook to shot list, readable with the sound off
 
-> **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the "ด่านก่อนลงมือ" section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search is for the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the "ด่านก่อนลงมือ" section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search is for the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
 ## Use when
 
