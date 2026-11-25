@@ -312,7 +312,7 @@
     "evals/promptpay-qr-trigger-negative-3/case.yaml": "เคส eval: บอตตอบแชต LINE เป็นเรื่อง LINE OA ไม่ใช่การสร้าง payload · ต้องไม่เปิด promptpay-qr",
     "evals/promptpay-qr-trigger-negative/case.yaml": "เคส eval: ทวงเงินที่โอนขาด เป็นเรื่องแชตกับลูกค้า ไม่ใช่การทำ QR · ต้องไม่เปิด promptpay-qr",
     "evals/promptpay-qr-trigger/case.yaml": "เคส eval: QR หน้าร้านแบบลูกค้าใส่ยอดเอง ต้องเปิด promptpay-qr และบอกว่าเป็น QR แบบไม่ระบุยอด · ไม่เอ่ยชื่อ skill",
-    "evals/research-vote-decision-behaviour/case.yaml": "เคส eval: ตัดสินที่วาง server ซึ่งมีค่ารายเดือน ต้องมีแหล่ง 3 แห่งขึ้นไปและติดป้ายยืนยันก่อน ให้ผู้ใช้อนุมัติก่อนสมัคร",
+    "evals/research-vote-decision-behaviour/case.yaml": "เคส eval: ตัดสินที่วาง server ซึ่งมีค่ารายเดือน ต้องมีแหล่ง 3 แห่งขึ้นไป ตัดสินเองไม่ถาม และแจ้งว่าการสมัครกับผูกบัตรเจ้าของต้องทำเอง",
     "evals/research-vote-decision-regression/case.yaml": "เคส eval: ค่าที่ตัดสินแล้วต้องแทนทุกจุด รวมตารางกฎธุรกิจและค่าขอบทดสอบ ไม่ใช่แค่บรรทัดที่ติดป้ายรอยืนยัน",
     "evals/research-vote-decision-trigger/case.yaml": "เคส eval: เอกสารมีข้อรอยืนยันและผู้ใช้สั่งเลือกให้เลย ต้องทำให้ research-vote-decision ถูกเปิด · ไม่เอ่ยชื่อ skill",
     "evals/research-with-sources-behaviour-compare/case.yaml": "เคส eval: เทียบราคาบริการ 3 เจ้า ต้องตอบก่อน ใช้ตาราง และท้ายคำตอบมีรายการแหล่งพร้อมวันที่ดู (research-with-sources หั …",
