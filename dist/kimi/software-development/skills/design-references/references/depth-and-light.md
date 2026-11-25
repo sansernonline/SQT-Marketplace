@@ -39,6 +39,30 @@ How to count: a frame that repeats unchanged on every page of a set counts as **
 - **Glow:** only on the single focal item (the hero product, the hub centre). Never on text. It must be visible: on a screenshot, the glow's ring around the item is clearly lighter or more coloured than the background a short way off, so you can see where it ends. A glow hidden behind a white card does nothing, so drop it or move it.
 - **Colour on colour:** a line, node or icon that crosses a band of the same colour vanishes (test banner: crimson line over the crimson corner). Switch it to white or the light tint where it crosses.
 
+## 3b · Colour gradients
+
+The owner asked for colour gradients on design work (2026-11-24: "เพิ่ม skill design ให้ใช้สี gradient ด้วยก็ดีนะ"). Earlier picks point the same way: the Stripe gradient wave and the Bindplane `#522db3 → #5584c5` buttons (2026-10-28), and the gradient ribbon on a cover (2026-11-18). So each design job should have **one multi-hue gradient chosen on purpose**, not just a flat brand colour.
+
+Where it goes (pick 1 focal place per page):
+- the back layer's strong thing (section 1): a full-bleed field, a wave or a mesh behind the hero;
+- one large shape: a corner ribbon, a diagonal brand block, the hero card;
+- the main button or the one highlighted number tile;
+- a logo mark's surface, but only when the flat one-colour master already passes 16 px and squint (rule 39 of `ref-to-design.md`).
+
+How to build it:
+- Start from the brand's main hex and move to a neighbour hue 20–60° away on the colour wheel (analogous). Add a 3rd stop only if it stays in that family. A complementary pair needs a light middle stop, or it turns muddy.
+- Interpolate in OKLCH so the middle does not go grey: `background: linear-gradient(135deg in oklch, #e81018, #ff7a1a);`. Canva and PowerPoint have no OKLCH, so add a mid stop by hand instead.
+- Run the light the same way as the shadows (section 2): lighter stop at the lit corner, top left by default.
+- Add 2–4 % grain (SVG `feTurbulence` or a noise PNG at low opacity) to large gradient fields. It stops banding and the plastic look `(อนุมาน)`.
+- Mesh or blob gradient backgrounds are fine (`no-ai-look` does not count them as signals).
+
+Keep out:
+- Purple → blue → cyan and pink → purple are framework defaults (the `no-ai-look` `ai-palette` signal). Use them only when the brand colour is already in that family, and write the source hex.
+- No gradient on text or body copy (the `gradient-text` signal), no gradient circle with a hole as a logo, and not more than one multi-hue gradient focal per page. Same-hue 2-stop gradients for lit edges (section 2) are not counted.
+- Text on a gradient gets the contrast check at both the lightest and the darkest point under the text.
+
+Counting: a gradient field that is the back layer's strong thing is not a flourish; a gradient ribbon or sweep counts as 1 flourish (section 3).
+
 ## 4 · Limits (so it does not turn into an AI look)
 
 `no-ai-look` section 2 lists glow circles, frosted glass across the page and line + wide shadow as default signals. The owner's taste is the reason to use depth, but only inside these limits:
@@ -48,7 +72,7 @@ How to count: a frame that repeats unchanged on every page of a set counts as **
 - Glow on 1 item per page; glass only over photos, never as the page background.
 - Shadows soft and tinted; if a shadow is the first thing you notice, halve it.
 - Text on glass or photo keeps contrast 4.5:1 or more (sample the darkest and lightest pixel behind the text on a screenshot and compute the ratio).
-- Keep the colour count: depth comes from light and dark of the same hue, not new colours.
+- Keep the colour count: depth comes from light and dark of the same hue, not new colours. The one exception is the multi-hue gradient in section 3b, built from the brand hue and its neighbours.
 
 ## 5 · Check before sending
 
@@ -57,9 +81,12 @@ How to count: a frame that repeats unchanged on every page of a set counts as **
 3. At least 2 overlaps on the page; the page is not all boxes side by side.
 4. Count flourishes per the counting rule in section 3 (frame of at most 2 pieces = 1, plus at most 1 of the page's own); glow on at most 1 item, and visible.
 5. Read every line of text at 50% zoom; nothing is lost in a glow, glass or photo.
-6. Put it next to the owner's liked example (deck in `corporate-profile-deck.md`): if yours is clearly flatter, the back layer is missing its strong thing.
+6. One multi-hue gradient chosen on purpose (section 3b): its hexes come from the brand hue, it sits on 1 focal place, and it is not on text.
+7. Put it next to the owner's liked example (deck in `corporate-profile-deck.md`): if yours is clearly flatter, the back layer is missing its strong thing.
 
 ## Tools
+
+Stone, metal, paper or concrete surfaces come from a real photo, not a gradient: [`photo-texture.md`](photo-texture.md).
 
 | Tool | Depth | Light | Flourish |
 |---|---|---|---|

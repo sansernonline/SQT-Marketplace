@@ -11,7 +11,8 @@ For brand, logo and identity jobs these rules replace the general minimum in `SK
 1. **Curated sources first**: sites with an editor or jury (Brand New "Reviewed" · The Brand Identity · World Brand Design Society · Creative Boom · award pages such as DEmark, RGD, iF), then studio portfolio pages. General image search and SEO listicles never count. Check: every piece names the curated source it came from. `จากแหล่ง`
 2. **Open the studio's own project page**, not a repost, a Pinterest pin or an aggregator thumbnail. Check: the board link points to the studio, the photographer or the award page. `จากแหล่ง`
 3. **At least 3 of 6–8 pieces come from Thai work or the Thai market** when the client sells in Thailand (Thai studios, DEmark winners, Thai brands). Check: count them; fewer than 3 → search again in Thai before building the board. `จากแหล่ง` that Thai context changes the look · the number 3 `อนุมาน`
-4. **One piece from a different industry** that solves the same feeling (a builder board may hold a luxury watch or a stone-cladding supplier). Check: at least 1 piece outside the client's category. `จากแหล่ง`
+4. **Same industry first, then one from outside.** At least half the board comes from the client's own industry (real companies in that business, from any country). If curated sources hold none, search the industry directly (official sites, rebrand news, photos of uniforms, vehicles, signs) and accept the lower source score. Then add at least 1 piece from a different industry that solves the same feeling (a builder board may hold a luxury watch). Check: same-industry pieces ≥ half · other-industry ≥ 1. `จากแหล่ง` · same-industry rule from the owner 2026-11-25 after FaoDee (security) got 0/10 from a board of banks and insurers: "เราทำโปรเจกต์แนวไหน ควรไปหา ref แนวนั้นมา"
+4a. **Write what each piece communicates.** Under every piece name the values it makes you feel for this business (for security: strength · safety · stability · vigilance · fast response) and the design choice that carries each one (heavy weight and wide base → strength · an enclosing shape → safety · a level base and symmetry → stability · an eye or aperture → vigilance · a slant → speed). Pick directions by the values the brief needs, not by look alone. Check: every piece has the values line. `จากแหล่ง` · owner 2026-11-25
 5. **A blocked page is not a reason to drop the best piece.** If the strongest result blocks scripts (Cloudflare · 403), note it, open it another way (a browser screenshot by the owner, the studio's own site, an award page about the same project), or say on the board which strong piece could not be shown. `อนุมาน` (2026-11-23: DesignRush, Design Week and iF blocked the script; three candidates vanished silently)
 
 ## B · Search terms
@@ -53,7 +54,7 @@ For brand, logo and identity jobs these rules replace the general minimum in `SK
 ## H · Timeless versus trend
 
 24. **Most pieces should be marks still in use after about 5 years; at most 1 trend piece**, and only with a reason for this client. Write the year of each piece. `จากแหล่ง` · numbers `อนุมาน`
-25. **Keep competitor analysis off the pick board.** Competitors go in a separate swap test ([`ref-to-design.md`](ref-to-design.md) rule 11); the board shows inspiration only. `จากแหล่ง`
+25. **Keep direct local competitors off the pick board.** The 4–5 rivals in the same market go to a separate swap test ([`ref-to-design.md`](ref-to-design.md) rule 11). Strong brands of the same industry from other markets do belong on the board (rule 4). `จากแหล่ง`
 
 ## I · Law and ethics
 
@@ -64,4 +65,4 @@ For brand, logo and identity jobs these rules replace the general minimum in `SK
 
 28. **6–8 pieces in 3 named directions** for brand, logo and identity jobs; this overrides the general 4–8 in `SKILL.md` and `owner-pick.md`, which still applies to other design jobs. `อนุมาน`
 29. **Three lines under every image**: source (studio · client · year · link) · why it was chosen (rule 15) · what makes it beautiful and what we would borrow (rule 16: colour, shape, type or finish). Ask "ชอบตรงไหน" (which part do you like) inside the same board question as a free note, never as a separate question (`owner-pick.md` allows 2 asking points); record the answer. `จากแหล่ง` for captions with reasons · the craft wording `อนุมาน`
-30. **Evidence line**: add `เกณฑ์ต้นแบบ: ไทย n/8 · คะแนน ≥4 n/8 · ทิศทาง n · ต่างอุตสาหกรรม n · เปิดไม่ได้ <list>` (reference criteria: Thai n of 8 · score ≥ 4 n of 8 · directions n · other-industry n · could not open) to the `ด่านก่อนลงมือ:` line. No line = gate item 2 not passed.
+30. **Evidence line**: add `เกณฑ์ต้นแบบ: ไทย n/8 · อุตสาหกรรมเดียวกัน n/8 · คะแนน ≥4 n/8 · ทิศทาง n · ต่างอุตสาหกรรม n · เปิดไม่ได้ <list>` (reference criteria: Thai n of 8 · same industry n of 8 · score ≥ 4 n of 8 · directions n · other-industry n · could not open) to the `ด่านก่อนลงมือ:` line. No line = gate item 2 not passed.

@@ -2,6 +2,8 @@
 
 Open after the owner picks references and before drawing anything (gate item 4 in `SKILL.md`). Fill the **borrow sheet** (section 0), then follow the rules while drawing, then run the checks in section H before the eye gate.
 
+- Contents: [0 Borrow sheet](#0--borrow-sheet-write-it-before-the-first-shape) · [A Analyse](#a--analyse-the-reference) · [B Borrow](#b--borrow-the-thinking-not-the-shape) · [C Map](#c--map-to-the-client) · [D Mark craft](#d--mark-craft) · [E Combine](#e--combine-references) · [F Colour and type](#f--colour-and-type) · [G Depth](#g--depth-material-light) · [H Checks](#h--mockups-and-checks) · [I Presenting](#i--presenting-to-the-owner)
+
 Why this file exists: on 2026-11-23 three logo rounds borrowed only the concept of each reference (an H made of stone bars, a chiselled corner) and lost the craft that made the reference beautiful: proportion, letter construction, real material and photographed light. The results read as generic icons and scored 5–7 of 10. Labels: `จากแหล่ง` = 2+ independent sources opened agree · `อนุมาน` = one source or our own inference. Sources: [`sources.md`](sources.md) section "Reference to design".
 
 ## 0 · Borrow sheet (write it before the first shape)
@@ -40,9 +42,11 @@ Then write the **one idea** sentence (rule 14) and which references feed it. No 
 ## C · Map to the client
 
 13. **Start from the name.** Use a wordmark or lettermark unless the business has one everyday object people recognise instantly (a wallet for payment, a parcel for delivery); then the object may lead. Write the reason for any symbol. `จากแหล่ง` · object exception from owner scores 2026-11-23 (wallet 10 · parcel 8 · pin 8)
+    **When the name itself names an object** (ตะกร้า = basket, กระเป๋า = wallet), at least 2 of the 3 directions show that object or its closest everyday cousin (basket → shopping cart), so a viewer gets what the shop sells without the name. Keep it drawn with the same craft as the letters, not as clip art. Owner 2026-11-24 on TakraDee: "อยากให้สื่อถึงตะกร้า หรือรถเข็นด้วย" after letter-only directions.
+    **When the name names no object, use the industry's own symbol** that customers already read as the promise: security → shield, CCTV camera, lock; clinic → cross; logistics → box, truck. At least 2 of the 3 directions carry it, inside a closed silhouette (shield, badge) or standing alone, drawn in the brand palette with one accent. Make it ours with the Thai name inside, a cut or a detail from the brand (rank chevron, recording light), because a bare symbol fails the swap test. Owner 2026-11-25 on FaoDee: three rounds of abstract marks (lens ring, name disc, faceted letters) scored 3–6; shield + name, shield + lens, shield + camera drew "ดีขึ้นนะ" after "ให้มีกล้อง หรือ โล่ หรือ อะไรที่ดูแข็งแกร่ง".
 14. **Write the one idea in one sentence** ("the crossbar is a gold ingot between two stones"). The mark expresses that sentence and no second idea. `จากแหล่ง`
 15. **Tie every change from a reference to a client fact** (initial, meaning of the name, product, place). `จากแหล่ง`
-16. **Appropriate in tone, not a literal picture of the product.** Literal pictograms drift to clip art. `จากแหล่ง`
+16. **Appropriate in tone, not a literal picture of the product.** Literal pictograms drift to clip art. `จากแหล่ง` The exception is the named object in rule 13: show it, but build it from the brand's own letters, material or construction so it is not a stock icon.
 17. **A second reading only if planned** (H that is also a house); never claim one that is not drawn. `อนุมาน`
 
 ## D · Mark craft
@@ -78,7 +82,7 @@ Then write the **one idea** sentence (rule 14) and which references feed it. No 
 ## G · Depth, material, light
 
 39. **The flat master passes rules 18–21 first; the dimensional version is the hero.** Depth never rescues a weak form. `จากแหล่ง` for "flat master first" · the dimensional hero comes from the owner's taste ("มีมิติ แสงเงา" 2026-11-17, OnNing wallet 10/10 2026-11-23), not from the sources, which keep the master flat and render material only on mockups
-40. **Copy material from a real photo**, not from a generic gradient: highlight shape, bevel width, roughness, shadow softness, side by side with the photo. Prefer compositing a real licensed texture or photo over code gradients for stone, metal, paper. `อนุมาน`
+40. **Copy material from a real photo**, not from a generic gradient: highlight shape, bevel width, roughness, shadow softness, side by side with the photo. Prefer compositing a real licensed texture or photo over code gradients for stone, metal, paper; how to fetch, recolour and composite: [`photo-texture.md`](photo-texture.md). `อนุมาน` (2026-11-24: photo stone and gold leaf on HinThong C, owner accepted all 3 directions)
 41. **One light for the whole scene**: same direction, warmth and softness on mark, object and background ([`depth-and-light.md`](depth-and-light.md)). `อนุมาน`
 42. **Set depth numbers**: extrusion depth, mounting distance, cast-shadow offset; check at the final size. `อนุมาน`
 
