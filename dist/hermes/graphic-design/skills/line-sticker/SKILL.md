@@ -5,7 +5,7 @@ description: Use when making LINE stickers that must pass file limits
 
 # LINE Sticker and Emoji
 
-> **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists · close the work with the line `ด่านก่อนลงมือ:`
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists · close the work with the line `ด่านก่อนลงมือ:`
 
 > **The one rule:** check the files with `scripts/sticker_check.py` before every upload, and re-open LINE's official pages to confirm the limits once the check date has passed · the limits below were checked on 2026-11-10
 
