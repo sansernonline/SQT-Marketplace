@@ -2,6 +2,7 @@
 import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
+import { wilson } from "../speed/stats.mjs";
 
 export const sha1 = (s) => createHash("sha1").update(s).digest("hex");
 
@@ -59,10 +60,13 @@ export function compare(base, next) {
   return next.cases.map((n) => {
     const b = base.cases.find((x) => x.id === n.id);
     const bp = b ? passRate(b.rows) : NaN, np = passRate(n.rows);
-    return { id: n.id, baseline: bp, next: np, delta: np - bp, runs: n.rows.length };
+    const cnt = (rows) => [rows.filter((r) => r.passed).length, rows.length];
+    return { id: n.id, baseline: bp, next: np, delta: np - bp, runs: n.rows.length, baseCount: b ? cnt(b.rows) : null, nextCount: cnt(n.rows) };
   });
 }
 
 const f2 = (x) => (Number.isNaN(x) ? "-" : x.toFixed(2));
+// ช่วง 95% Wilson ต่อแขน · รอบน้อยช่วงกว้าง Δ ที่ช่วงทับกันยังสรุปไม่ได้
+const wci = (c) => { const w = c && wilson(c[0], c[1]); return w ? ` (${f2(w.lo)}–${f2(w.hi)})` : ""; };
 export const fmtTable = (rows) => ["| เคส | baseline | ใหม่ | Δ |", "|---|---|---|---|",
-  ...rows.map((r) => `| ${r.id} | ${f2(r.baseline)} | ${f2(r.next)} | ${Number.isNaN(r.delta) ? "-" : (r.delta >= 0 ? "+" : "") + r.delta.toFixed(2)} |`)].join("\n");
+  ...rows.map((r) => `| ${r.id} | ${f2(r.baseline)}${wci(r.baseCount)} | ${f2(r.next)}${wci(r.nextCount)} | ${Number.isNaN(r.delta) ? "-" : (r.delta >= 0 ? "+" : "") + r.delta.toFixed(2)} |`)].join("\n");

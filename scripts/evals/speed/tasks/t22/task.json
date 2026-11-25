@@ -1,0 +1,12 @@
+{
+  "size": "กลาง",
+  "kind": "โค้ด (รับงานต่อข้าม session)",
+  "about": "ช่วง 1 ทำ 2 ใน 4 ฟังก์ชันแล้วเขียนบันทึกส่งต่อ · ช่วง 2 session ใหม่ทำต่อจากไฟล์อย่างเดียว",
+  "split": "fresh",
+  "phases": [
+    "PHASE1.md",
+    "PHASE2.md"
+  ],
+  "touch": "^(src/|test|.*\\.test\\.js$|.*\\.md$|package\\.json$)",
+  "width": 1
+}

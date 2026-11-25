@@ -6,6 +6,7 @@
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
+import { wilson } from "../speed/stats.mjs";
 
 const HELP = `ใช้: node scripts/evals/judge/calibrate.mjs <labels.csv|labels.json> [ตัวเลือก]
 
@@ -90,7 +91,9 @@ export function calibrate(rows, { bar = 0.85, minPerClass = 20 } = {}) {
 }
 
 const pct = (x) => (Number.isNaN(x) ? "-" : `${(x * 100).toFixed(1)}%`);
-const row = (name, m) => `| ${name} | ${m.n} | ${pct(m.tpr)} | ${pct(m.tnr)} | ${pct(m.accuracy)} |`;
+// ช่วง 95% Wilson ต่อค่า · 20 ข้อที่ 85% มีขอบล่างแค่ราว 64% จึงต้องเห็นช่วงก่อนเชื่อ
+const ci = (c, n) => { const w = wilson(c, n); return w ? ` (${pct(w.lo)}–${pct(w.hi)})` : ""; };
+const row = (name, m) => `| ${name} | ${m.n} | ${pct(m.tpr)}${ci(m.tp, m.tp + m.fn)} | ${pct(m.tnr)}${ci(m.tn, m.tn + m.fp)} | ${pct(m.accuracy)}${ci(m.tp + m.tn, m.n)} |`;
 
 export function report(r) {
   const out = ["| กลุ่ม | ข้อ | TPR | TNR | accuracy |", "|---|---|---|---|---|", row("ทั้งหมด", r.all),
@@ -100,6 +103,8 @@ export function report(r) {
   lines.push(r.reached ? `ถึงเกณฑ์ ${pct(r.bar)} (ตัดสินจาก ${r.gateOn}) · judge เชื่อได้เท่าที่ป้ายชุดนี้ครอบคลุม`
     : `ยังไม่ถึงเกณฑ์ ${pct(r.bar)} (ตัดสินจาก ${r.gateOn}) · อย่าเชื่อคะแนนจาก judge นี้ · เสนอ prompt ใหม่ให้ผู้ใช้อนุมัติก่อนแก้ แล้วรันซ้ำ (ห้ามปรับเกณฑ์หรือป้ายให้ผ่าน)`);
   for (const p of r.problems) lines.push(`- ${p}`);
+  const g = r.bySplit[r.gateOn] ?? r.all, lo = wilson(g.tp + g.tn, g.n)?.lo;
+  if (r.reached && lo != null && lo < r.bar) lines.push(`- ขอบล่าง Wilson ของ accuracy ${pct(lo)} ต่ำกว่าเกณฑ์ ${pct(r.bar)} · ตัวเลขผ่านเกณฑ์ แต่ป้ายยังน้อยเกินจะยืนยัน ควรเพิ่มป้าย`);
   if (r.mismatches.length) {
     lines.push("", "ข้อที่ judge ไม่ตรงคน", "", "| id | split | หมวด | คน | judge | ชนิด |", "|---|---|---|---|---|---|",
       ...r.mismatches.map((m) => `| ${m.id} | ${m.split} | ${m.category || "-"} | ${m.human} | ${m.judge} | ${m.kind} |`));

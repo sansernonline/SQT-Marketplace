@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" role="img">
+<title>ยอดขายรายเดือน มิ.ย.–ต.ค. 2569</title>
+<rect data-month="2026-06" x="40" y="103.11000000000001" width="50" height="146.89" fill="#555"/>
+<text x="65" y="270" text-anchor="middle" font-size="12">มิ.ย.</text>
+<text x="65" y="97.11000000000001" text-anchor="middle" font-size="11">182,000</text>
+<rect data-month="2026-07" x="125" y="84.13999999999999" width="50" height="165.86" fill="#555"/>
+<text x="150" y="270" text-anchor="middle" font-size="12">ก.ค.</text>
+<text x="150" y="78.13999999999999" text-anchor="middle" font-size="11">205,500</text>
+<rect data-month="2026-08" x="210" y="114.21000000000001" width="50" height="135.79" fill="#555"/>
+<text x="235" y="270" text-anchor="middle" font-size="12">ส.ค.</text>
+<text x="235" y="108.21000000000001" text-anchor="middle" font-size="11">168,250</text>
+<rect data-month="2026-09" x="295" y="63.56" width="50" height="186.44" fill="#555"/>
+<text x="320" y="270" text-anchor="middle" font-size="12">ก.ย.</text>
+<text x="320" y="57.56" text-anchor="middle" font-size="11">231,000</text>
+<rect data-month="2026-10" x="380" y="50.0" width="50" height="200.0" fill="#555"/>
+<text x="405" y="270" text-anchor="middle" font-size="12">ต.ค.</text>
+<text x="405" y="44.0" text-anchor="middle" font-size="11">247,800</text>
+</svg>

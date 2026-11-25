@@ -2,5 +2,7 @@
   "size": "เล็ก",
   "kind": "โค้ด",
   "about": "เพิ่มฟังก์ชันแปลงเลขไทยเป็นอารบิก 1 ตัวใน Python ตาม docstring",
-  "touch": "^(text_utils\\.py|tests?/.*|test_.*\\.py)$"
+  "touch": "^(text_utils\\.py|tests?/.*|test_.*\\.py)$",
+  "split": "dev",
+  "width": 0
 }

@@ -2,5 +2,10 @@
   "size": "กลาง",
   "kind": "ค้นคว้า",
   "about": "หาคำตอบจากแหล่งที่ขัดกัน",
-  "touch": "^answer\\.md$"
+  "touch": "^answer\\.md$",
+  "split": "dev",
+  "blind": [
+    "answer.md"
+  ],
+  "width": 1
 }

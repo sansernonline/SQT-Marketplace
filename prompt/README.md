@@ -59,6 +59,7 @@ prompt/
 | งานเฉพาะสาขา | `software-development/prompt-mcp-server.md` | agent ต้องใช้ระบบจริงของลูกค้า (ฐานข้อมูล · ERP · API ภายใน) ผ่าน Model Context Protocol (MCP) server | 1 ออกแบบ tool และเลือกสร้างเองหรือใช้ของผู้ผลิต · 2 สร้างแบบ stdio อ่านอย่างเดียว + eval 3 กรณี · 3 เพิ่ม tool ที่เขียนข้อมูล · 4 ส่งมอบให้ลูกค้า · 5 ยกเป็น remote HTTP + OAuth |
 | งานเฉพาะสาขา | `software-development/prompt-dynamic-website.md` | เว็บการตลาด หน้างานสัมมนา หรือหน้าเปิดตัว ที่เล่าเรื่องทีละบทด้วยการเคลื่อนไหว | 1 ทิศทางภาพ 3 แนวให้ผู้ใช้เลือก · 2 บทเต็มจอ (deck-mode) · 3 หน้าเลื่อนและหน้าลงทะเบียน (page-mode) · 4 ตรวจคุณภาพ · 5 ขึ้นใช้งานจริง |
 | งานเฉพาะสาขา | `software-development/prompt-trading-system.md` | เขียน Expert Advisor (EA) หรือ indicator บน MetaTrader 4/5 | 1 EA Spec · 2 EA Design · 3 เขียนโค้ด + ตัวตรวจออร์เดอร์ · 4 backtest + ความทนทาน · 5 forward test + VPS · 6 เตรียมขาย MQL5 Market |
+| งานเฉพาะสาขา | `software-development/prompt-ea-research-loop.md` | ยังไม่มีกลยุทธ์ชัด อยากให้ agent research และวนลองผิดลองถูกแบบ Reinforcement Learning (RL) หา EA ที่ดีที่สุด โดยผู้ใช้ไกด์ทิศทาง | 1 โจทย์ · reward · ล็อกข้อมูล · 2 research แนวคิด · 3 เครื่องมือวน · 4 วนทดลอง · 5 จุดตรวจและรับไกด์ · 6 ตัดสินผู้ชนะด้วย holdout |
 
 ## เลือกจากสถานการณ์
 
@@ -99,6 +100,7 @@ prompt/
 | จะเพิ่มแชตบอตหรือฟีเจอร์ AI ในแอป | `prompt-ai-feature.md` ฉบับ 1 → 2 → (ตอบจากเอกสาร → 3) → 4 → 5 · ยังไม่แน่ใจว่าทำได้ → `prompt-poc.md` ก่อน |
 | เปลี่ยน model AI หรือแก้ prompt ในระบบจริง | `prompt-ai-feature.md` ฉบับ 2 → 4 |
 | ลูกค้าอยากให้ AI ดูข้อมูลในระบบของเขา โดยไม่เปิดฐานข้อมูลให้ตรง ๆ | `prompt-mcp-server.md` ฉบับ 1 → 2 → (ต้องเขียนข้อมูล → 3) → 4 · ใช้บน claude.ai หรือทั้งทีม → 5 |
+| อยากได้ EA แนวหนึ่ง แต่ยังไม่รู้กฎเข้าออก ให้ agent ไปหาและทดลองเอง | `prompt-ea-research-loop.md` ทั้งหมด → ผ่านฉบับ 6 → `prompt-trading-system.md` ฉบับ 1 → 4 → 5 |
 | จะเขียน EA ใหม่ หรือ port MT4 ไป MT5 | `prompt-trading-system.md` ทั้งหมด (port → ฉบับ 1 → 2 → 3 → 4) |
 | มี EA แล้ว อยากขายบน MQL5 Market | `prompt-trading-system.md` ฉบับ 1 → 4 → 5 → `prompt-sell-product.md` ฉบับ 1 → `prompt-trading-system.md` ฉบับ 6 |
 | จะขายแอปหรือ API ของเราเอง ยังไม่รู้จะตั้งราคาเท่าไร | `prompt-sell-product.md` ทั้งหมด · ยังไม่มีชื่อ → `prompt-product.md` ฉบับ 1 ก่อน |
@@ -150,7 +152,7 @@ prompt/
 
 ## หมายเหตุ
 
-- ฉบับส่วนใหญ่สร้างเอกสารอย่างเดียว ไม่แก้โค้ด · ฉบับที่แก้โค้ดมีช่องให้ติ๊กอนุญาตก่อนเสมอ: bugfix ใน `prompt-change.md` · ฉบับ 2–6 ใน `prompt-existing-dev.md` · ฉบับ 5–6 ใน `prompt-rebuild.md` · ฉบับ 3–5 ใน `prompt-test-automation.md` · ฉบับ 4 ใน `prompt-explore.md` · ฉบับ 3 และ 7 ใน `prompt-operations.md` · ฉบับ 2 ใน `prompt-poc.md` · ฉบับ 3 ใน `prompt-trading-system.md` · ฉบับ 4 ใน `prompt-ai-feature.md` · ฉบับ 2 ใน `prompt-sell-product.md` · ฉบับ 2–5 ใน `prompt-mcp-server.md` · ฉบับ 2 · 3 · 5 ใน `prompt-dynamic-website.md`
+- ฉบับส่วนใหญ่สร้างเอกสารอย่างเดียว ไม่แก้โค้ด · ฉบับที่แก้โค้ดมีช่องให้ติ๊กอนุญาตก่อนเสมอ: bugfix ใน `prompt-change.md` · ฉบับ 2–6 ใน `prompt-existing-dev.md` · ฉบับ 5–6 ใน `prompt-rebuild.md` · ฉบับ 3–5 ใน `prompt-test-automation.md` · ฉบับ 4 ใน `prompt-explore.md` · ฉบับ 3 และ 7 ใน `prompt-operations.md` · ฉบับ 2 ใน `prompt-poc.md` · ฉบับ 3 ใน `prompt-trading-system.md` · ฉบับ 3–4 ใน `prompt-ea-research-loop.md` · ฉบับ 4 ใน `prompt-ai-feature.md` · ฉบับ 2 ใน `prompt-sell-product.md` · ฉบับ 2–5 ใน `prompt-mcp-server.md` · ฉบับ 2 · 3 · 5 ใน `prompt-dynamic-website.md`
 - ทุกไฟล์ prompt มีบรรทัด **วนจนเสร็จ (agent loop)** — ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ (`reviewer` ตัวใหม่ทุกรอบ · งานกลางไม่เกิน 3 รอบ · งานใหญ่หรืองานเสี่ยงไม่เกิน 5 รอบ) จนผ่าน · ต้นฉบับกฎคือ skill `superuser` กฎข้อ 3 · ของ `software-development` อยู่ในบล็อกที่ `sync-prompt-rules.mjs` เขียนให้
 - กฎการทำงานร่วม (ตัดสินใจเอง · พิสูจน์ผล · รายงานสถานะ) อยู่ใน skill `superuser` · `decision-log` · `principle-prove-it-works` · `status-report` · ไม่เขียนซ้ำในไฟล์ prompt · จะแก้กฎ → แก้ที่ skill ที่เดียว
 - คู่มือผู้ใช้มีที่เดียวคือ `prompt-manual.md` ฉบับ 1 · `prompt-new-project.md` ฉบับ 12 ชี้ไปที่นั่น

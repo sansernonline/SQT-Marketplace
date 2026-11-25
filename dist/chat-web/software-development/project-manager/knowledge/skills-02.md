@@ -4,7 +4,7 @@ Use when a kept document needs headings, tables and theme
 
 # Polished Document Style — headings, tables, callouts, and theme for a kept document
 
-> **Gate before starting (every time):** read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand controls color and font, the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
+> **Gate before starting (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand controls color and font, the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
 > **Boundary:** this skill handles the look; the wording belongs to `human-writing`. Open both for a document people keep to read.
 
@@ -306,7 +306,7 @@ If each one picks its own color, the reader gets a document with figures in one 
 
 (Keys: `accent` = main color · `ที่มา` = source (client brand / proposed from the work's content) · `ยืนยันเมื่อ` = confirmed on.)
 
-**The main color comes from the work's content, not from a tool's default.**
+**The main color comes from the work's content, not from a tool's default.** Read the content and write the `เนื้อหา:` brief first (`design-references` `references/content-to-theme.md`); the tone you propose must carry its reason from that brief.
 If a brand color already exists, use it. If not, search for references per `design-references` (plugin `superuser`) of type `document` and extract the color from the chosen work · if live search is not possible, use the house default, write `(รอยืนยัน)` (awaiting confirmation), carry on without stopping to ask, and propose a tone that fits the work's content in the report.
 (Backup: the table matching work content to color tones is in `colour-by-domain` of skill `diagram-figures` (plugin `software-development`).)
 
@@ -351,7 +351,7 @@ Use when a Markdown doc needs an image, SVG or ASCII art
 
 # Markdown Visuals
 
-> **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
 > **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
@@ -920,6 +920,8 @@ You must still open and look at the script result once: the main colour it gives
 **Never invent a secondary colour.** The secondary colour must come from the source work. If the source has one colour, use one colour, and make it vivid with item 3 instead.
 
 ## 2 · Mood comes from the content
+
+Start from the `เนื้อหา:` brief (gate item 0 of `design-references`, file `references/content-to-theme.md`): its **อารมณ์** and **ธีม** pick the row below. That file holds the same table for every kind of work, plus what colours tend to carry.
 
 Look at what the source work is about and who is listening, then choose from the table. Material used for visuals must come from that work's own world (real product photos · real screens · materials · signs of the trade), not ready-made icons.
 

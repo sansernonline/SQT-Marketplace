@@ -5,7 +5,7 @@ description: Use when a YouTube video needs a thumbnail
 
 # youtube-thumbnail — YouTube video thumbnails that stay readable on a phone screen
 
-> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the owner's theme → search live references → 3 truly different directions → check `no-ai-look` before sending. Follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colours and fonts; the search is for this piece's layout). Close the work with the line `ด่านก่อนลงมือ:`.
+> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 truly different directions → check `no-ai-look` before sending. Follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colours and fonts; the search is for this piece's layout). Close the work with the line `ด่านก่อนลงมือ:`.
 
 > **One rule:** a thumbnail must be understood at stamp size. Shrink the image to 168 px wide (about the size in the recommended list on mobile; our own value, not yet measured on every app version). If you can still read the words and tell what the video is about, it can be sent.
 

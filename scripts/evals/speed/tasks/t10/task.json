@@ -2,5 +2,10 @@
   "size": "ใหญ่",
   "kind": "ข้อมูล + รายงาน",
   "about": "4 ไฟล์ วันที่ 4 แบบ ข้อมูลเสีย สรุปส่งผู้บริหาร",
-  "touch": "^(summary\\.json|report\\.md|.*\\.(mjs|js|py))$"
+  "touch": "^(summary\\.json|report\\.md|.*\\.(mjs|js|py))$",
+  "split": "dev",
+  "blind": [
+    "report.md"
+  ],
+  "width": 4
 }

@@ -52,6 +52,16 @@ export function medianRatioCI(a, b, { iters = 2000, seed = 1 } = {}) {
   return { ratio: median(A) / median(B), lo: at(0.025), hi: at(0.975), n: Math.min(A.length, B.length) };
 }
 
+/** ช่วง 95% ของค่าเฉลี่ยแบบ bootstrap percentile (สุ่มซ้ำ 2,000 ครั้ง seed คงที่) · ใช้กับคะแนน 0–1 ต่อรอบ เช่น รายขั้น · รวม */
+export function meanCI(xs, { iters = 2000, seed = 1 } = {}) {
+  const v = xs.filter((x) => x != null && Number.isFinite(x));
+  if (!v.length) return null;
+  const mean = (a) => a.reduce((s, x) => s + x, 0) / a.length, next = rng(seed), ms = [];
+  for (let i = 0; i < iters; i++) ms.push(mean(v.map(() => v[Math.floor(next() * v.length)])));
+  ms.sort((a, b) => a - b);
+  return { mean: mean(v), lo: ms[Math.floor(0.025 * iters)], hi: ms[Math.min(iters - 1, Math.floor(0.975 * iters))], n: v.length };
+}
+
 const choose = (n, k) => { let r = 1; for (let i = 0; i < k; i++) r = (r * (n - i)) / (i + 1); return r; };
 /** pass^k = โอกาสที่ k รอบผ่านครบทุกรอบ ประมาณจาก c รอบที่ผ่านใน n รอบ (C(c,k)/C(n,k) ตาม τ-bench) */
 export const passHatK = (c, n, k) => (k > n ? null : choose(c, k) / choose(n, k));
@@ -106,6 +116,8 @@ function selfTest() {
     ["ไม่จับคู่: แขนห่างกันมากช่วงไม่คร่อม 1", medianRatioCI([10, 11, 12, 13, 14], [1, 1.1, 1.2, 1.3, 1.4]).lo > 1],
     ["ไม่จับคู่: แขนเหมือนกันช่วงคร่อม 1", (() => { const c = medianRatioCI([1, 2, 3, 4, 5], [1, 2, 3, 4, 5]); return c.lo <= 1 && c.hi >= 1; })()],
     ["ไม่จับคู่: แขนว่าง", medianRatioCI([], [1]) === null],
+    ["ค่าเฉลี่ย bootstrap: ค่าคงที่ช่วงแคบเป็นจุด", (() => { const c = meanCI([0.5, 0.5, 0.5]); return c.mean === 0.5 && c.lo === 0.5 && c.hi === 0.5; })()],
+    ["ค่าเฉลี่ย bootstrap: ช่วงครอบค่าเฉลี่ย", (() => { const c = meanCI([0, 1, 0, 1, 1]); return c.lo <= 0.6 && c.hi >= 0.6 && c.n === 5; })()],
   ];
   let ok = 0;
   for (const [name, pass] of cases) { console.log(`${pass ? "ผ่าน" : "ไม่ผ่าน"}  ${name}`); if (pass) ok++; }
