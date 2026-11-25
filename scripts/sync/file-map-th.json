@@ -401,7 +401,8 @@
     "evals/test-case-template-existing/fixture.sh": "สคริปต์เตรียมเคส eval: คัดลอกโฟลเดอร์ resources ลงโฟลเดอร์ที่รัน (รันเมื่อส่ง --scaffold)"
   },
   "superuser_files": {
-    "scripts/budget.mjs": "พิมพ์บรรทัดโควตาคงเหลือ ประมาณการ และสรุปการใช้งาน ตอนเริ่มและจบงาน",
+    "scripts/budget.mjs": "พิมพ์โควตาเป็น % ความเร็วการใช้ วันที่คาดว่าจะหมด ตอนเริ่มและจบงาน · status --json ให้เครื่องมืออื่นอ่าน",
+    "scripts/budget.test.mjs": "ทดสอบ budget.mjs ด้วยข้อมูลโควตาสมมติ",
     "references/code-extensions.md": "ส่วนที่ใช้เฉพาะงานโค้ดของ skill กลางใน plugin superuser",
     "SKILL.md": "หัวหน้าทีม: รับงาน วัดขนาด เลือก playbook แจกงาน ตรวจ รายงาน",
     "references/agents.md": "รายชื่อ agent ของ plugin และงานที่แต่ละตัวรับ",

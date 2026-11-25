@@ -50,7 +50,7 @@ Use when daily-life admin spans several steps
 
 **Budget**: if the user gives none, use `สมดุล` (balanced) · **Expect**: 1 line in "การตัดสินใจ" before dispatch, `คาด: size · workers · review rounds · level`, then compare at the end · The 7 playbooks and the budget table are in `sizing`
 
-**Quota in the chat (medium and up)**: before the first dispatch run `node <plugin>/skills/superuser/scripts/budget.mjs start --estimate <total k> --hours <N> --workers <N> --pieces <N>` and paste its 3 lines (`โควตาคงเหลือ` · `ประมาณการใช้งาน` · `ความเพียงพอ`) at the top of the answer; after the last piece run `budget.mjs end` and paste its 2 lines (`สรุปการใช้งาน` · `โควตาคงเหลือ`) at the end. Per-agent detail stays in `log/` and `log/SUMMARY.md`, not in the chat. Not enough quota → do the pieces that fit, then save the rest per `handoff` section 5 "Quota runs out" (user asked 2026-11-20)
+**Quota in the chat (medium and up)**: before the first dispatch run `node <plugin>/skills/superuser/scripts/budget.mjs start --estimate <total k> --hours <N> --workers <N> --pieces <N>` and paste its output at the top of the answer (`โควตา` · `รอบ 5 ชม.` · `รายสัปดาห์` · `ความเร็ว` · `งบที่เหลือ` · `งานนี้` · `ความเพียงพอ`); after the last piece run `budget.mjs end` and paste its 2 lines (`ใช้จริง` · `เหลือ`) at the end. `budget.mjs status [--json]` prints the same numbers without a task estimate. Per-agent detail stays in `log/` and `log/SUMMARY.md`, not in the chat. Not enough quota → do the pieces that fit, then save the rest per `handoff` section 5 "Quota runs out" (user asked 2026-11-20)
 
 ---
 
@@ -1307,6 +1307,7 @@ How to use this template
 - **Detail only the next 2–3 steps.** Further steps get only a heading · a step that breaks twice → split into sub-steps, do not retry the same way (the ADaPT idea — As-needed Decomposition and Planning: split the task when it fails).
 - **A step that cannot be undone locally** (migration · overwriting a file · deleting) → back up or dry-run first within the same step · a step that affects outsiders still goes to "รออนุมัติ" (awaiting approval) as before.
 - **Building something new.** The first doing step is a thin path that works end to end, 1 line from start to finish, then fill in part by part.
+- **A step handed to someone new ends with a stage card** `handoff/<task-id>/<NN>-<step>.md` (`handoff` section 4b) · the next step's brief points to that card only, not to the chat.
 - **Every step says `ใคร:` (who:)** at the end of the line: the lead · a real agent name in backticks (or `general-purpose` · `Explore` · `Plan`) · a fresh agent every step, except holding something hard to transfer, "the same one (holding …)" · the user is not the one doing a middle step (ask together at the start, or "รออนุมัติ").
 - **The check step sits after the last doing step.** A fresh `reviewer` (or a specialist reviewer such as `design-critic` · `qa-tester`) · the lead confirms every finding itself · the user choosing a path does not count as a check · `validate-marketplace.mjs` checks all of this.
 

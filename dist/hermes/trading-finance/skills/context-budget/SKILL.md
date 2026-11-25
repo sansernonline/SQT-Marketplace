@@ -77,6 +77,13 @@ Ask in order; **the first yes is the route**, then stop:
 
 Item 4 is the only one that cannot be undone: answer yes only with evidence everything is in files; if unsure, go to 5.
 
+## Project map
+- Workers read `docs/FILE-MAP.md` instead of exploring the repo.
+- Generate it: `node scripts/map-folder.mjs [dir=.] [--out docs/FILE-MAP.md] [--max 400] [--stdout]`.
+- It lists each file with a role line and its relative imports, then a Mermaid folder graph.
+- Over `--max` files it lists folders with file counts only.
+- It never copies file contents beyond the role line. Regenerate after big changes.
+
 ## Check before done
 - Big things were read by range, bounded search, subagent or file, not opened whole.
 - Every subagent brief said the result format and length.
@@ -89,3 +96,8 @@ Opening the whole thing to "see what is in it" when the table of contents or `he
 - [`references/settings.md`](references/settings.md) — open when setting rules for a team or project
 - [`references/windows-shell.md`](references/windows-shell.md) — open when working in Git Bash or PowerShell on Windows
 - [`references/sources.md`](references/sources.md) — sources and licences
+
+## Squeeze logs
+- Run long test or build logs through `node scripts/squeeze-log.mjs [file] [--max 100] [--context 3]` (stdin if no file) before reading them or handing them to another agent.
+- It keeps the first 10 and last 20 lines, every error/fail/warn line with context, and collapses repeated lines as `(×N)`.
+- The first output line says `squeeze-log: <in> → <out> lines · errors <k>`.
