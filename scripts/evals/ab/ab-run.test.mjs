@@ -49,7 +49,7 @@ test("runArm + compare: เรียก run ตามจำนวนรอบ �
   assert.equal(row.next, 1);
   assert.equal(row.baseline, 0.5);
   assert.equal(row.delta, 0.5);
-  assert.match(fmtTable([row]), /\| c1 \| 0\.50 \| 1\.00 \| \+0\.50 \|/);
+  assert.match(fmtTable([row]), /\| c1 \| 0\.50 \(\d\.\d\d–\d\.\d\d\) \| 1\.00 \(\d\.\d\d–\d\.\d\d\) \| \+0\.50 \|/);
 });
 
 test("runArm หยุดและตั้ง partial เมื่อชนเพดานเงิน", () => {

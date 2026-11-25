@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="th">
+<head><meta charset="utf-8"><title>สมัครสมาชิก</title></head>
+<body>
+  <img src="logo.png" alt="โลโก้ร้าน">
+  <h1>สมัครสมาชิก</h1>
+  <form action="/signup" method="post">
+    <label for="full_name">ชื่อ</label>
+    <input type="text" id="full_name" name="full_name" autocomplete="name" required>
+    <label for="email">อีเมล</label>
+    <input type="email" id="email" name="email" autocomplete="email" required>
+    <label for="password">รหัสผ่าน</label>
+    <input type="password" id="password" name="password" autocomplete="new-password" required>
+    <input type="checkbox" id="accept_terms" name="accept_terms" required> <label for="accept_terms">ยอมรับเงื่อนไข</label>
+    <img src="captcha.png" alt="รหัสยืนยัน อ่านตัวอักษรในภาพ">
+    <label for="captcha">พิมพ์รหัสยืนยัน</label>
+    <input type="text" id="captcha" name="captcha">
+    <input type="hidden" name="ref" value="home">
+    <button type="submit">ส่ง</button>
+  </form>
+</body>
+</html>
