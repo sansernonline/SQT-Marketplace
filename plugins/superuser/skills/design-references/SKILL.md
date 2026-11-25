@@ -35,7 +35,7 @@ Commands, examples and bot-blocking cases are in [`references/search-steps.md`](
 
 1. **Make 3 sets of search terms**, Thai and English: exact · competitor or close · mood (from the owner's "สไตล์ออกแบบที่ชอบ" if any). Style vs ban conflict order: approved brand guide → the owner's direct instruction for this job → `no-ai-look` ban → preferred style.
 2. **Search live** with `python scripts/find_refs.py links <ประเภท> "<คำค้น>"`. **Search at least 1 `theme` site and 1 `social` site every time.** **If you cannot run the script, still search** with `WebSearch` `site:<site> <search term>`. **0 references while web search is possible fails the gate**, even if the user says just do it or asks only for a plan.
-3. **Pick 4–8 pieces from real work pages opened this round**, noting each name's source (a search link, or `จากความรู้ของ agent`). If 3 of the first 4 look the same, search a 2nd round from the product's world or a neighbouring category and use at least 1 reference from it.
+3. **Pick 4–8 pieces from real work pages opened this round**, noting each name's source (a search link, or `จากความรู้ของ agent`). If 3 of the first 4 look the same, search a 2nd round from the product's world or a neighbouring category and use at least 1 reference from it. For a logo, poster, banner, document cover or slide deck, also record each work's popularity number and blend 2–3 works per direction per graphic-design `design-by-type` (if installed).
 4. **Extract the 8-role colors** with `python scripts/find_refs.py palette-from <URL หรือภาพหน้าจอ>` from each work's page, not the results page; open the captured image every time.
 5. **Make a board page** with `python scripts/find_refs.py board <ประเภท> "<คำค้น>" --ref <URL> ...` for gate item 3.
 6. **Design it as our own.** **Never copy a reference's brand colors as they are**: shift the hue until the eye can tell them apart, then check contrast again.
@@ -65,6 +65,7 @@ Never let a script crawl sites where people post work (Pinterest · Dribbble · 
 
 ## References
 
+- [`references/working-sources.md`](references/working-sources.md) — open first, to pick which sites actually open (tested 2026-11-19); then `search-steps.md` for how to search
 - [`references/search-steps.md`](references/search-steps.md) — open before the first search of a session, or when the owner has no preferred styles yet
 - [`references/owner-pick.md`](references/owner-pick.md) — open when asking the owner to pick from the board, or when skipping that question
 - [`references/depth-and-light.md`](references/depth-and-light.md) — open on every visual job when the owner's theme asks for depth or calls work flat: 3 layers, one light source, 1–2 flourishes, and the limits that keep it from looking AI-made
