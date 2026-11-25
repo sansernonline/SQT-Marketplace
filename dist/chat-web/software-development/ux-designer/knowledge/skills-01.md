@@ -1068,17 +1068,17 @@ Every design skill points to this section. If you skip any item, write the reaso
 1. **Read the owner's style and locks**: the section "สไตล์ออกแบบที่ชอบ" (preferred design styles) in `~/.claude/superuser-style.md` (including its subsection "บันทึกการเลือก", the choice log) and anything already locked in the project (brand guide · `DESIGN.md` · style lock · sibling pages). If that section does not exist, note `ไม่มี` (none) and carry on; do not stop to ask. If the owner's style asks for depth (`มีมิติ` · `แสงเงา` · `ลูกเล่น`) or the owner calls a piece flat (`แบน` · `จืด`), open [`references/depth-and-light.md`](references/depth-and-light.md) and apply it to every direction in item 4.
 2. **Search live references** per "Steps" below, **even when a brand or sibling page exists**, and before asking the owner anything. What is locked controls colors and fonts; the search is for the structure, elements and storytelling. A reference counts only if its structure is clearly visible at the size you opened it. **Brand, logo or identity jobs: every candidate passes the checks in [`references/ref-criteria.md`](references/ref-criteria.md)** (curated sources · ≥ 3 Thai pieces for the Thai market · terms from the brief and the owner's traits · scored ≥ 4 of 5 · best image, not the page top · 3 lines under each image · 6–8 pieces in 3 directions; curated sources replace the theme + social minimum of "Steps" step 2; competitors go to the swap test, not the board). If a theme store blocks bots, try one that opens (wordpress.org/themes) and note which site would not open.
 3. **Let the owner pick references from images.** Select 4–8 references that open and really differ, run `board`, open every image, then ask with `AskUserQuestion` (multi-select, no `(แนะนำ)` option). Do not ask when the owner says don't ask, when the owner is away (`unattended-run`), or when the owner already chose this style; then still build the board page as evidence and pick references yourself, noting them under **ตัดสินใจเอง** (decided on my own). A subagent without `AskUserQuestion` sends the board path to the lead. Full rules (option split, liked vs disliked, the 2 allowed asking points) → `references/owner-pick.md`. Once the owner answers, record it per "Remember the owner's taste".
-4. **Make 3 really different directions**, different in structure and elements, not only color. Each cites 1 reference opened this round (the owner's picks first). **Before the first shape, fill the borrow sheet and follow [`references/ref-to-design.md`](references/ref-to-design.md)**: borrow the craft (measured proportion · letter construction · material · light), not only the concept; one idea sentence per direction; the flat master passes 16 px · squint · swap before depth; craft check against each reference. Every redo round goes back to the picked references, never to the maker's own idea (2026-11-23: a redo drawn from the agent's own idea got "ไม่สวยเลย นี้ research มายัง"). If the owner is present, pick in the end-of-job question, after the 3 directions pass the eye check in item 5. If not, pick yourself per `parallel-attempts-pick-best` and note it under **ตัดสินใจเอง**. You may make 1 direction when the look is already locked (a piece split off a master · a set with a passed style lock · editing an existing image · reviewing work) and write the reason.
-5. **Before sending, check per `no-ai-look`**: the script on HTML/CSS files, and the eye gate on every job. The eye gate needs a fresh agent that did not do this piece to open the real image (`no-ai-look` paragraph "คนที่ไม่ได้ทำต้องตรวจด้วยตา" in item 3.2). The maker's own check does not count. A subagent that cannot call another agent sends the image back to the lead to call `design-critic`, and writes `รอหัวหน้า` (waiting for the lead) in the eye-check field.
+4. **Make 3 really different directions**, different in structure and elements, not only color. Each cites 1 reference opened this round (the owner's picks first). **Before the first shape, fill the borrow sheet and follow [`references/ref-to-design.md`](references/ref-to-design.md)**: borrow the craft (measured proportion · letter construction · material · light), not only the concept; one idea sentence per direction; the flat master passes 16 px · squint · swap before depth; craft check against each reference. Every redo round goes back to the picked references, never to the maker's own idea (2026-11-23: a redo drawn from the agent's own idea got "ไม่สวยเลย นี้ research มายัง"). **Every new element is researched and voted on too.** When the owner asks mid-job for a shape, symbol or object (a camera, a shield, a cart), search 4–8 live references of that element first, showing the different ways it is drawn (for a camera: bullet, dome, lens only, body outline, built from letters). Then vote: the owner picks from a board, or, if the owner says "you pick", 3 fresh agents vote on the board without seeing each other's choice and the majority wins (`decision-log`). Draw only after the vote. Owner 2026-11-25 on a FaoDee camera drawn without references: "กล้องมีตั้งหลายแบบ อันนี้มันดูรายละเอียดเยอะเกินไป มี ref ไหม" and "เวลาทำกราฟฟิค ให้หา ref แล้ว vote". **Design in order, script last:** (a) one idea sentence per direction; (b) sketch 10–12 small thumbnails, really varied (different silhouettes, compositions, ways of drawing the symbol), flat black at real mark size; (c) pick 3 by eye; (d) refine each in the measured proportions of its own reference (ratios, curve, weight read off the reference image, never guessed coordinates); (e) only then build the colour modes, depth and mockups in script. A mark is one visual language: one stroke weight, one corner radius, one way of drawing (solid · line · cut-out). When two symbols meet (shield and camera), redraw both in that one language, or join them as one shape (the camera cut out of the shield); parts lifted from different references and stacked look messy (owner 2026-11-25: "โล่อันนึง กล้องอันนึง เอามารวมกันมันดูเละไปหมด" and "การ design ให้คุณทำเป็นลำดับก่อน แล้วค่อยไปทำ script"). If the owner is present, pick in the end-of-job question, after the 3 directions pass the eye check in item 5. If not, pick yourself per `parallel-attempts-pick-best` and note it under **ตัดสินใจเอง**. You may make 1 direction when the look is already locked (a piece split off a master · a set with a passed style lock · editing an existing image · reviewing work) and write the reason.
+5. **Before sending, check per `no-ai-look`**: the script on HTML/CSS files, and the eye gate on every job. The eye gate needs a fresh agent that did not do this piece to open the real image (`no-ai-look` paragraph "คนที่ไม่ได้ทำต้องตรวจด้วยตา" in item 3.2). The maker's own check does not count. A subagent that cannot call another agent sends the image back to the lead to call `design-critic`, and writes `รอหัวหน้า` (waiting for the lead) in the eye-check field. **Beauty first, checklist second.** Every vote (item 3 and new elements) and every eye check asks first "which is the most beautiful and the most creative, and why", judged as a senior identity designer with taste against the references as the quality bar; 16 px, swap and copy-risk checks only break ties and flag defects. A reviewer that ranks a clever but plain piece above a beautiful one has the order wrong (2026-11-25: the critic ranked an "ownable" FaoDee mark first, the owner picked the prettier one). The owner does not want to review drafts: the reviewer decides which pieces are good enough, and the owner sees only the 3 that pass. Keep refining with a fresh reviewer each round until one scores the piece 9/10 or higher or names no fix left (cap 8 rounds, then say what still falls short); do not stop at 2–3 rounds and hand the owner a 5–7 (owner 2026-11-25: "ทำไมคุณไม่ปรับแก้จน 10/10").
 6. **Evidence line** at the end of the answer: `ด่านก่อนลงมือ: เนื้อหา <brief 6 ช่อง · เดา n ช่อง> · สไตล์เจ้าของ <อ่านแล้ว · ไม่มี> · ต้นแบบ <n> ชิ้น <ลิงก์> · เลือกโดย <เจ้าของ ชิ้น n · agent เพราะ…> · แนว <3 · 1 เพราะ…> · no-ai-look <ผล> · ตรวจตา <ชื่อ agent ที่ตรวจ · รอหัวหน้า · ข้าม เพราะ…> · จดรสนิยม <n บรรทัด · ไม่มีการเลือก>` (keep this line in Thai). Brand, logo or identity jobs append the `เกณฑ์ต้นแบบ:` field from `ref-criteria.md` and the `ประกอบชิ้นงาน:` field from `ref-to-design.md`. No such line = the gate has not passed.
 
 ## Steps
 
 Commands, examples and bot-blocking cases are in [`references/search-steps.md`](references/search-steps.md); read it before the first search of a session. Bold items cannot be skipped.
 
-1. **Make 3 sets of search terms** from the `เนื้อหา:` brief, Thai and English: exact (เรื่อง) · competitor or close (business type + คนดู) · mood (อารมณ์ + 2 nouns from ธีม, plus the owner's "สไตล์ออกแบบที่ชอบ" if any). Style vs ban conflict order: approved brand guide → the owner's direct instruction for this job → `no-ai-look` ban → the brief's tone → preferred style.
+1. **Search by what the business is and what it must say.** Make 3 sets of search terms from the `เนื้อหา:` brief, Thai and English: exact (เรื่อง: real companies and designed identities in that industry) · competitor or close (business type + คนดู) · mood (อารมณ์ + 2 nouns from ธีม, plus the owner's "สไตล์ออกแบบที่ชอบ" if any). The brief's ความหมาย field holds the 3–5 values the brand must communicate (security: strength · safety · stability · vigilance). Search the industry two ways: real companies (to learn the codes customers trust) and designer case studies for that industry (to see the codes done beautifully); real companies alone are often plain, case studies alone can lose the codes. Owner 2026-11-25 after two security rounds (0/10 from bank refs, 6/10 from real guard firms): "เราทำโปรเจกต์แนวไหน ควรไปหา ref แนวนั้นมา ดูว่ามันสื่อถึงอะไร". Style vs ban conflict order: approved brand guide → the owner's direct instruction for this job → `no-ai-look` ban → the brief's tone → preferred style.
 2. **Search live** with `python scripts/find_refs.py links <ประเภท> "<คำค้น>"`. **Search at least 1 `theme` site and 1 `social` site every time.** **If you cannot run the script, still search** with `WebSearch` `site:<site> <search term>`. **0 references while web search is possible fails the gate**, even if the user says just do it or asks only for a plan.
-3. **Pick 4–8 pieces from real work pages opened this round**, noting each name's source (a search link, or `จากความรู้ของ agent`). If 3 of the first 4 look the same, search a 2nd round from the product's world or a neighbouring category and use at least 1 reference from it. For a logo, poster, banner, document cover or slide deck, also record each work's popularity number and blend 2–3 works per direction per graphic-design `design-by-type` (if installed).
+3. **Pick 4–8 pieces from real work pages opened this round**, at least half from the client's industry ([`ref-criteria.md`](references/ref-criteria.md) rule 4), each with a line on what it communicates and which design choice carries it (rule 4a), noting each name's source (a search link, or `จากความรู้ของ agent`). If 3 of the first 4 look the same, search a 2nd round from the product's world or a neighbouring category and use at least 1 reference from it. For a logo, poster, banner, document cover or slide deck, also record each work's popularity number and blend 2–3 works per direction per graphic-design `design-by-type` (if installed).
 4. **Extract the 8-role colors** with `python scripts/find_refs.py palette-from <URL หรือภาพหน้าจอ>` from each work's page, not the results page; open the captured image every time.
 5. **Make a board page** with `python scripts/find_refs.py board <ประเภท> "<คำค้น>" --ref <URL> ...` for gate item 3.
 6. **Design it as our own.** **Never copy a reference's brand colors as they are**: shift the hue until the eye can tell them apart, then check contrast again.
@@ -1113,9 +1113,10 @@ Never let a script crawl sites where people post work (Pinterest · Dribbble · 
 - [`references/working-sources.md`](references/working-sources.md) — open first, to pick which sites actually open (tested 2026-11-19); then `search-steps.md` for how to search
 - [`references/search-steps.md`](references/search-steps.md) — open before the first search of a session, or when the owner has no preferred styles yet
 - [`references/owner-pick.md`](references/owner-pick.md) — open when asking the owner to pick from the board, or when skipping that question
-- [`references/depth-and-light.md`](references/depth-and-light.md) — open on every visual job when the owner's theme asks for depth or calls work flat: 3 layers, one light source, 1–2 flourishes, and the limits that keep it from looking AI-made
+- [`references/depth-and-light.md`](references/depth-and-light.md) — open on every visual job when the owner's theme asks for depth or calls work flat: 3 layers, one light source, 1–2 flourishes, one brand-hue colour gradient (section 3b), and the limits that keep it from looking AI-made
 - [`references/ref-criteria.md`](references/ref-criteria.md) — open before searching for any brand, logo or identity job and before building the pick board: 30 checks on sources, terms, credibility, quality, diversity, Thai market fit, owner taste, timelessness, ethics and board layout
 - [`references/ref-to-design.md`](references/ref-to-design.md) — open after the owner picks and before drawing: the borrow sheet and 51 rules on analysing, borrowing without copying, mapping to the client, mark craft, combining, colour and type, depth and material, mockups and checks, presenting
+- [`references/photo-texture.md`](references/photo-texture.md) — open when a mark, sign or scene needs real stone, metal, paper or concrete: fetch licensed photos through Chrome, recolour by luminance, composite sides and facets
 - [`references/usage-rules.md`](references/usage-rules.md) — open when fetching from sites that post work, reusing any asset, or using the fallback library · has a real example
 - Sources and check dates: [`references/sources.md`](references/sources.md)
 
@@ -1287,6 +1288,30 @@ How to count: a frame that repeats unchanged on every page of a set counts as **
 - **Glow:** only on the single focal item (the hero product, the hub centre). Never on text. It must be visible: on a screenshot, the glow's ring around the item is clearly lighter or more coloured than the background a short way off, so you can see where it ends. A glow hidden behind a white card does nothing, so drop it or move it.
 - **Colour on colour:** a line, node or icon that crosses a band of the same colour vanishes (test banner: crimson line over the crimson corner). Switch it to white or the light tint where it crosses.
 
+## 3b · Colour gradients
+
+The owner asked for colour gradients on design work (2026-11-24: "เพิ่ม skill design ให้ใช้สี gradient ด้วยก็ดีนะ"). Earlier picks point the same way: the Stripe gradient wave and the Bindplane `#522db3 → #5584c5` buttons (2026-10-28), and the gradient ribbon on a cover (2026-11-18). So each design job should have **one multi-hue gradient chosen on purpose**, not just a flat brand colour.
+
+Where it goes (pick 1 focal place per page):
+- the back layer's strong thing (section 1): a full-bleed field, a wave or a mesh behind the hero;
+- one large shape: a corner ribbon, a diagonal brand block, the hero card;
+- the main button or the one highlighted number tile;
+- a logo mark's surface, but only when the flat one-colour master already passes 16 px and squint (rule 39 of `ref-to-design.md`).
+
+How to build it:
+- Start from the brand's main hex and move to a neighbour hue 20–60° away on the colour wheel (analogous). Add a 3rd stop only if it stays in that family. A complementary pair needs a light middle stop, or it turns muddy.
+- Interpolate in OKLCH so the middle does not go grey: `background: linear-gradient(135deg in oklch, #e81018, #ff7a1a);`. Canva and PowerPoint have no OKLCH, so add a mid stop by hand instead.
+- Run the light the same way as the shadows (section 2): lighter stop at the lit corner, top left by default.
+- Add 2–4 % grain (SVG `feTurbulence` or a noise PNG at low opacity) to large gradient fields. It stops banding and the plastic look `(อนุมาน)`.
+- Mesh or blob gradient backgrounds are fine (`no-ai-look` does not count them as signals).
+
+Keep out:
+- Purple → blue → cyan and pink → purple are framework defaults (the `no-ai-look` `ai-palette` signal). Use them only when the brand colour is already in that family, and write the source hex.
+- No gradient on text or body copy (the `gradient-text` signal), no gradient circle with a hole as a logo, and not more than one multi-hue gradient focal per page. Same-hue 2-stop gradients for lit edges (section 2) are not counted.
+- Text on a gradient gets the contrast check at both the lightest and the darkest point under the text.
+
+Counting: a gradient field that is the back layer's strong thing is not a flourish; a gradient ribbon or sweep counts as 1 flourish (section 3).
+
 ## 4 · Limits (so it does not turn into an AI look)
 
 `no-ai-look` section 2 lists glow circles, frosted glass across the page and line + wide shadow as default signals. The owner's taste is the reason to use depth, but only inside these limits:
@@ -1296,7 +1321,7 @@ How to count: a frame that repeats unchanged on every page of a set counts as **
 - Glow on 1 item per page; glass only over photos, never as the page background.
 - Shadows soft and tinted; if a shadow is the first thing you notice, halve it.
 - Text on glass or photo keeps contrast 4.5:1 or more (sample the darkest and lightest pixel behind the text on a screenshot and compute the ratio).
-- Keep the colour count: depth comes from light and dark of the same hue, not new colours.
+- Keep the colour count: depth comes from light and dark of the same hue, not new colours. The one exception is the multi-hue gradient in section 3b, built from the brand hue and its neighbours.
 
 ## 5 · Check before sending
 
@@ -1305,9 +1330,12 @@ How to count: a frame that repeats unchanged on every page of a set counts as **
 3. At least 2 overlaps on the page; the page is not all boxes side by side.
 4. Count flourishes per the counting rule in section 3 (frame of at most 2 pieces = 1, plus at most 1 of the page's own); glow on at most 1 item, and visible.
 5. Read every line of text at 50% zoom; nothing is lost in a glow, glass or photo.
-6. Put it next to the owner's liked example (deck in `corporate-profile-deck.md`): if yours is clearly flatter, the back layer is missing its strong thing.
+6. One multi-hue gradient chosen on purpose (section 3b): its hexes come from the brand hue, it sits on 1 focal place, and it is not on text.
+7. Put it next to the owner's liked example (deck in `corporate-profile-deck.md`): if yours is clearly flatter, the back layer is missing its strong thing.
 
 ## Tools
+
+Stone, metal, paper or concrete surfaces come from a real photo, not a gradient: [`photo-texture.md`](photo-texture.md).
 
 | Tool | Depth | Light | Flourish |
 |---|---|---|---|
@@ -1337,6 +1365,76 @@ Why: an agent picking from thumbnails on its own tends to land on a middle-of-th
 A reference only counts if its structure is clearly visible at the size you opened it. A thumbnail that shows only color, or a blank space where the image has not loaded, does not count. Theme stores blocking bots is normal (ThemeForest · TemplateMonster blocked bots 2026-11-06); try a store that opens, such as wordpress.org/themes, and note which site would not open.
 
 
+## reference: photo-texture.md
+
+# Real material from photos · design-references
+
+Open when a mark, sign or scene needs stone, metal, paper, wood or concrete (rule 40 in [`ref-to-design.md`](ref-to-design.md)), and for any dimensional render the owner's theme asks for ([`depth-and-light.md`](depth-and-light.md)). This file is how to take the surface from a real licensed photo instead of drawing it with code gradients or `feTurbulence` noise.
+
+Why: 2026-11-24 HinThong C round 4 (stone H with gold). Rounds 1–3 drew the stone with SVG gradients and turbulence noise, and the owner scored them 5–7. Round 4 composited real photos (sandstone strata, hand-laid gold leaf, raw concrete). The owner accepted all 3 directions and picked C2. A fresh reviewer still called the first stone crop "foam / stucco" until it was switched to a bedded sandstone. So which photo you pick matters as much as using a photo at all. Labels: `วัดเอง` = measured on that job · `อนุมาน` = our inference.
+
+## 1 · Find the photo (licence first)
+
+- Use Unsplash's free photos. The Unsplash Licence allows commercial use without credit but bans selling unaltered copies; this is from memory, so open unsplash.com/license before a client delivery `(ยังไม่ได้ตรวจ)`. Keep the photo id and the search page in the job notes (rule 12 of `ref-to-design.md`). Skip anything marked Unsplash+, which is paid.
+- Search with the material plus its finish: `sandstone texture` · `laterite` · `gold leaf texture` · `brushed brass` · `raw concrete wall` · `kraft paper texture`. For scenes, search for the touchpoint shot straight on: `raw concrete wall` · `construction hoarding` (rule 44).
+- **curl, WebFetch and the `/download` endpoint are blocked** (HTTP 401/403 for scripts, measured 2026-11-24). What worked: drive a real Chrome with Playwright (`headless=False`, open unsplash.com once and wait ~7 s), read the result `<img>` `currentSrc` from `a[href*="/photos/"]`, then fetch that `images.unsplash.com/photo-…` URL through the same browser context with `w=2000`. `วัดเอง`
+- Make a contact sheet of the thumbnails and **look at it** before picking. Pick by the craft words of the reference (grain size, strata, pits, sheen), not by the search title.
+- Thai scenes are scarce on Unsplash (2026-11-24: "bangkok construction site" gave 9 results and no hoarding). If the scene must read as Thailand and nothing fits, use a touchpoint that has no location (cards or stationery on concrete, a wall sign close up), or ask the owner for a real site photo. A foreign street dressed up as Thai fails `no-ai-look` item 1 (a reviewer read the Cairo and Pune hoardings as non-Thai at once). `วัดเอง`
+
+## 2 · Pick the right surface
+
+| Material | Worked | Failed | Why |
+|---|---|---|---|
+| Stone face | bedded sandstone with visible strata, low contrast | rough rust stone with even crumple | even noise at mark size reads as foam, suede or stucco; strata read as dressed stone |
+| Gold | hand-laid gold leaf with brush marks | flat gold paper | leaf has its own light variation, so the facet does not look printed |
+| Wall for a sign | flat raw concrete with one seam, shot straight on | — | the seam gives scale; even light means one light for the scene |
+
+Prefer textures whose feature size is about 1/20–1/40 of the mark at hero size. Bigger features become blobs, and smaller ones become noise. `อนุมาน`
+
+## 3 · Recolour, do not paste
+
+Take the photo's **luminance only** and map it onto the brand's 3-stop ramp, so the colour stays the approved hex and the photo gives only the surface:
+
+```python
+l = np.asarray(img.convert("L").crop(sq).resize((N, N)), float)
+t = np.clip(.5 + (l - l.mean()) / l.std() * contrast, 0, 1)[..., None]   # contrast .25–.32 stone, .4 gold
+rgb = np.where(t < .5, lo + (mid - lo) * t * 2, mid + (hi - mid) * (t - .5) * 2)
+rgb *= light_falloff   # 1.08 top-left → .90 bottom-right, same light as the scene
+```
+
+- Use a different crop of the photo for each direction, so the same crack is not in the same place on every mark.
+- Never copy a reference brand's hex through the ramp; the ramp is ours (step 6 of `search-steps.md`).
+
+## 4 · Build the dimensional mark from 2 flat masks
+
+Rasterise the flat master as separate masks (body, accent) with Playwright `omit_background=True`, then composite in numpy, back to front, all premultiplied. Light comes from the top left:
+
+1. Cast shadow: union mask offset down-right, blur ~3 % of the box, about 35 % opacity, plus a tight contact shadow (offset ~1 %, blur ~0.5 %).
+2. Side faces: for each depth step, draw the **body texture at its own position** times 0.5–0.65, through the shifted mask. Shifting the texture with the mask smears it into wood grain. The whole side is body material, so an accent facet does not make the side turn gold. `วัดเอง`
+3. Accent face. A chisel facet faces away from the light, so make it about 30 % darker than the body face, with a bright ridge where it meets the body. A vein or inlay sits recessed, with the body's inner wall (body texture × 0.45) over it and the body shading it.
+4. Body face, then a lit edge on the top-left arrises (mask minus mask shifted 4 px, about 80 %).
+5. Un-premultiply before saving the PNG.
+
+Geometry that made the cut read as real, not a sticker:
+- Remove the corner from the outline; the accent is only the band between the lip and the new edge.
+- Nudge the lip 0.5–1.6 % of the box sideways at 5–6 points, since a chiselled edge is never a ruler line. Keep it near straight if a wavy edge reads as a page curl (C2, 2026-11-24).
+- Push every cut polygon 10 units past the outline, because a cut that ends exactly on the edge leaves an anti-aliased ghost line. `วัดเอง`
+- A crack needs uneven jogs, a width that varies, and one side dropped a few units. Three even zigzags still read as a lightning bolt. `วัดเอง`
+
+## 5 · Put it in the scene
+
+- Wall sign: contact plus cast shadow in the photo's light direction, then multiply the sign by the wall's blurred luminance (exponent about 0.6) so it picks up the wall's falloff.
+- Print on a corrugated or textured surface: warp to the quad, then multiply by the surface's own luminance, so the ribs and post gaps run through the print.
+- Text colour on the scene: check contrast against the real wall (brick on mid-grey concrete measured 1.05:1, unreadable). Use the dark ink or white there.
+- Flat-lay cards: rotate a few degrees, give each card a soft and a tight shadow, add slight paper noise, and do not let one card cover the other's logo.
+
+## 6 · Check
+
+- The reviewer is told which photo each surface came from, and judges the surface as stone, metal or paper by name.
+- Credit line in the job notes: photo id · photographer if shown · licence · date fetched.
+- The flat master still passes 16 px, squint and one colour **before** any texture (rule 39 of `ref-to-design.md`). Texture never rescues a weak form.
+
+
 ## reference: ref-criteria.md
 
 # Criteria for finding and choosing references · design-references
@@ -1352,7 +1450,8 @@ For brand, logo and identity jobs these rules replace the general minimum in `SK
 1. **Curated sources first**: sites with an editor or jury (Brand New "Reviewed" · The Brand Identity · World Brand Design Society · Creative Boom · award pages such as DEmark, RGD, iF), then studio portfolio pages. General image search and SEO listicles never count. Check: every piece names the curated source it came from. `จากแหล่ง`
 2. **Open the studio's own project page**, not a repost, a Pinterest pin or an aggregator thumbnail. Check: the board link points to the studio, the photographer or the award page. `จากแหล่ง`
 3. **At least 3 of 6–8 pieces come from Thai work or the Thai market** when the client sells in Thailand (Thai studios, DEmark winners, Thai brands). Check: count them; fewer than 3 → search again in Thai before building the board. `จากแหล่ง` that Thai context changes the look · the number 3 `อนุมาน`
-4. **One piece from a different industry** that solves the same feeling (a builder board may hold a luxury watch or a stone-cladding supplier). Check: at least 1 piece outside the client's category. `จากแหล่ง`
+4. **Same industry first, then one from outside.** At least half the board comes from the client's own industry (real companies in that business, from any country). If curated sources hold none, search the industry directly (official sites, rebrand news, photos of uniforms, vehicles, signs) and accept the lower source score. Then add at least 1 piece from a different industry that solves the same feeling (a builder board may hold a luxury watch). Check: same-industry pieces ≥ half · other-industry ≥ 1. `จากแหล่ง` · same-industry rule from the owner 2026-11-25 after FaoDee (security) got 0/10 from a board of banks and insurers: "เราทำโปรเจกต์แนวไหน ควรไปหา ref แนวนั้นมา"
+4a. **Write what each piece communicates.** Under every piece name the values it makes you feel for this business (for security: strength · safety · stability · vigilance · fast response) and the design choice that carries each one (heavy weight and wide base → strength · an enclosing shape → safety · a level base and symmetry → stability · an eye or aperture → vigilance · a slant → speed). Pick directions by the values the brief needs, not by look alone. Check: every piece has the values line. `จากแหล่ง` · owner 2026-11-25
 5. **A blocked page is not a reason to drop the best piece.** If the strongest result blocks scripts (Cloudflare · 403), note it, open it another way (a browser screenshot by the owner, the studio's own site, an award page about the same project), or say on the board which strong piece could not be shown. `อนุมาน` (2026-11-23: DesignRush, Design Week and iF blocked the script; three candidates vanished silently)
 
 ## B · Search terms
@@ -1394,7 +1493,7 @@ For brand, logo and identity jobs these rules replace the general minimum in `SK
 ## H · Timeless versus trend
 
 24. **Most pieces should be marks still in use after about 5 years; at most 1 trend piece**, and only with a reason for this client. Write the year of each piece. `จากแหล่ง` · numbers `อนุมาน`
-25. **Keep competitor analysis off the pick board.** Competitors go in a separate swap test ([`ref-to-design.md`](ref-to-design.md) rule 11); the board shows inspiration only. `จากแหล่ง`
+25. **Keep direct local competitors off the pick board.** The 4–5 rivals in the same market go to a separate swap test ([`ref-to-design.md`](ref-to-design.md) rule 11). Strong brands of the same industry from other markets do belong on the board (rule 4). `จากแหล่ง`
 
 ## I · Law and ethics
 
@@ -1405,7 +1504,7 @@ For brand, logo and identity jobs these rules replace the general minimum in `SK
 
 28. **6–8 pieces in 3 named directions** for brand, logo and identity jobs; this overrides the general 4–8 in `SKILL.md` and `owner-pick.md`, which still applies to other design jobs. `อนุมาน`
 29. **Three lines under every image**: source (studio · client · year · link) · why it was chosen (rule 15) · what makes it beautiful and what we would borrow (rule 16: colour, shape, type or finish). Ask "ชอบตรงไหน" (which part do you like) inside the same board question as a free note, never as a separate question (`owner-pick.md` allows 2 asking points); record the answer. `จากแหล่ง` for captions with reasons · the craft wording `อนุมาน`
-30. **Evidence line**: add `เกณฑ์ต้นแบบ: ไทย n/8 · คะแนน ≥4 n/8 · ทิศทาง n · ต่างอุตสาหกรรม n · เปิดไม่ได้ <list>` (reference criteria: Thai n of 8 · score ≥ 4 n of 8 · directions n · other-industry n · could not open) to the `ด่านก่อนลงมือ:` line. No line = gate item 2 not passed.
+30. **Evidence line**: add `เกณฑ์ต้นแบบ: ไทย n/8 · อุตสาหกรรมเดียวกัน n/8 · คะแนน ≥4 n/8 · ทิศทาง n · ต่างอุตสาหกรรม n · เปิดไม่ได้ <list>` (reference criteria: Thai n of 8 · same industry n of 8 · score ≥ 4 n of 8 · directions n · other-industry n · could not open) to the `ด่านก่อนลงมือ:` line. No line = gate item 2 not passed.
 
 
 ## reference: ref-to-design.md
@@ -1413,6 +1512,8 @@ For brand, logo and identity jobs these rules replace the general minimum in `SK
 # Turning chosen references into the piece · design-references
 
 Open after the owner picks references and before drawing anything (gate item 4 in `SKILL.md`). Fill the **borrow sheet** (section 0), then follow the rules while drawing, then run the checks in section H before the eye gate.
+
+- Contents: [0 Borrow sheet](#0--borrow-sheet-write-it-before-the-first-shape) · [A Analyse](#a--analyse-the-reference) · [B Borrow](#b--borrow-the-thinking-not-the-shape) · [C Map](#c--map-to-the-client) · [D Mark craft](#d--mark-craft) · [E Combine](#e--combine-references) · [F Colour and type](#f--colour-and-type) · [G Depth](#g--depth-material-light) · [H Checks](#h--mockups-and-checks) · [I Presenting](#i--presenting-to-the-owner)
 
 Why this file exists: on 2026-11-23 three logo rounds borrowed only the concept of each reference (an H made of stone bars, a chiselled corner) and lost the craft that made the reference beautiful: proportion, letter construction, real material and photographed light. The results read as generic icons and scored 5–7 of 10. Labels: `จากแหล่ง` = 2+ independent sources opened agree · `อนุมาน` = one source or our own inference. Sources: [`sources.md`](sources.md) section "Reference to design".
 
@@ -1452,9 +1553,11 @@ Then write the **one idea** sentence (rule 14) and which references feed it. No 
 ## C · Map to the client
 
 13. **Start from the name.** Use a wordmark or lettermark unless the business has one everyday object people recognise instantly (a wallet for payment, a parcel for delivery); then the object may lead. Write the reason for any symbol. `จากแหล่ง` · object exception from owner scores 2026-11-23 (wallet 10 · parcel 8 · pin 8)
+    **When the name itself names an object** (ตะกร้า = basket, กระเป๋า = wallet), at least 2 of the 3 directions show that object or its closest everyday cousin (basket → shopping cart), so a viewer gets what the shop sells without the name. Keep it drawn with the same craft as the letters, not as clip art. Owner 2026-11-24 on TakraDee: "อยากให้สื่อถึงตะกร้า หรือรถเข็นด้วย" after letter-only directions.
+    **When the name names no object, use the industry's own symbol** that customers already read as the promise: security → shield, CCTV camera, lock; clinic → cross; logistics → box, truck. At least 2 of the 3 directions carry it, inside a closed silhouette (shield, badge) or standing alone, drawn in the brand palette with one accent. Make it ours with the Thai name inside, a cut or a detail from the brand (rank chevron, recording light), because a bare symbol fails the swap test. Owner 2026-11-25 on FaoDee: three rounds of abstract marks (lens ring, name disc, faceted letters) scored 3–6; shield + name, shield + lens, shield + camera drew "ดีขึ้นนะ" after "ให้มีกล้อง หรือ โล่ หรือ อะไรที่ดูแข็งแกร่ง".
 14. **Write the one idea in one sentence** ("the crossbar is a gold ingot between two stones"). The mark expresses that sentence and no second idea. `จากแหล่ง`
 15. **Tie every change from a reference to a client fact** (initial, meaning of the name, product, place). `จากแหล่ง`
-16. **Appropriate in tone, not a literal picture of the product.** Literal pictograms drift to clip art. `จากแหล่ง`
+16. **Appropriate in tone, not a literal picture of the product.** Literal pictograms drift to clip art. `จากแหล่ง` The exception is the named object in rule 13: show it, but build it from the brand's own letters, material or construction so it is not a stock icon.
 17. **A second reading only if planned** (H that is also a house); never claim one that is not drawn. `อนุมาน`
 
 ## D · Mark craft
@@ -1490,7 +1593,7 @@ Then write the **one idea** sentence (rule 14) and which references feed it. No 
 ## G · Depth, material, light
 
 39. **The flat master passes rules 18–21 first; the dimensional version is the hero.** Depth never rescues a weak form. `จากแหล่ง` for "flat master first" · the dimensional hero comes from the owner's taste ("มีมิติ แสงเงา" 2026-11-17, OnNing wallet 10/10 2026-11-23), not from the sources, which keep the master flat and render material only on mockups
-40. **Copy material from a real photo**, not from a generic gradient: highlight shape, bevel width, roughness, shadow softness, side by side with the photo. Prefer compositing a real licensed texture or photo over code gradients for stone, metal, paper. `อนุมาน`
+40. **Copy material from a real photo**, not from a generic gradient: highlight shape, bevel width, roughness, shadow softness, side by side with the photo. Prefer compositing a real licensed texture or photo over code gradients for stone, metal, paper; how to fetch, recolour and composite: [`photo-texture.md`](photo-texture.md). `อนุมาน` (2026-11-24: photo stone and gold leaf on HinThong C, owner accepted all 3 directions)
 41. **One light for the whole scene**: same direction, warmth and softness on mark, object and background ([`depth-and-light.md`](depth-and-light.md)). `อนุมาน`
 42. **Set depth numbers**: extrusion depth, mounting distance, cast-shadow offset; check at the final size. `อนุมาน`
 
