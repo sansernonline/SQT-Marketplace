@@ -32,7 +32,7 @@ The hook announces `skill ที่ต้องเปิด` (skills to open) �
 - **`grep`/`rg` always get `--glob` and end with `| head -50`**
 - **Write intermediate results to `_to_delete/`** and read only what you use · output may be long → `wc -l` first · `test` `build` `install` go to a file, then `tail`
 - **Edit in place, never overwrite the whole file** · **do not re-read a file after editing** · **do not paste what you just wrote into the answer**, name the edited lines only
-- **If unclear, ask once before starting, as a multiple-choice question**, only when different readings change the whole result; once started, do not ask again · **every option comes from evidence, never assumed** (how to ask → `superuser` `references/autonomy.md`)
+- **Ask the owner almost nothing**: order · scope · format · screens · numbers · policy → research + 3-agent vote, unclear → easiest to undo · "where is X" → search the machine, never ask · ask only facts absent from machine and web · real money · law or irreversible, with a safe stand-in marked `ยืนยันก่อน` · 0–3 questions in one list at the end, **every option from evidence** (→ `superuser` `references/autonomy.md`)
 
 ## Finish the job
 
