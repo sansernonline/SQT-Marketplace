@@ -28,13 +28,13 @@ The owner rejected agent-drawn SVG icons (2026-10-26) and called past logos "AI-
 3. 1–2 colours; depth only from shades of the same hue. Source: uipro `data/logo/styles.csv` rows Minimalist and Negative Space.
 4. Place and trim the font letterforms of rule 5 on a grid or circles, not freehand (PayMe shows its construction circles); the grid places and cuts, it does not draw new paths.
 5. Build from a licensed font's letterforms instead of drawing paths (owner rule).
-6. The mark carries meaning from the product's world (Thai letter, payslip line, coin) that a competitor could not reuse. Source: `no-ai-look` eye gate item 1.
+6. The mark carries meaning from the product's world (Thai letter, payslip line, coin) that a competitor could not reuse. Source: `design-gate/no-ai-look` eye gate item 1.
 7. Step away from the category average: Thai accounting SaaS uses a light-blue circle with thin caps, or a purple-blue gradient.
-8. Shift the brand hue until the eye can tell it from every reference (`design-references` step 6).
+8. Shift the brand hue until the eye can tell it from every reference (`design-gate/design-references` step 6).
 9. The Thai lockup uses a Thai face whose personality matches the mark (a looped-head mark pairs with a looped Thai face).
 10. Large wordmarks can be tracked tighter than text, but check descenders and dots (y, j) for collisions.
-11. Make two versions of the mark: a **rich** one with light, shadow and dimensional shape for the hero use (app icon, sheet, signage), and a **flat** one-colour version for 16–32 px and print. The owner rejected a flat mark as stiff on 2026-11-19 ("ขอปรับให้มีลูกเล่นมากกว่านี้หน่อย แสงเงา รูปร่าง"). Depth follows `design-references` `references/depth-and-light.md`: one light source, at most 3 layers.
-12. Avoid the generic AI marks: letter in a rounded square, gradient blob, swoosh, circuit, infinity (`no-ai-look` section 2, Logos).
+11. Make two versions of the mark: a **rich** one with light, shadow and dimensional shape for the hero use (app icon, sheet, signage), and a **flat** one-colour version for 16–32 px and print. The owner rejected a flat mark as stiff on 2026-11-19 ("ขอปรับให้มีลูกเล่นมากกว่านี้หน่อย แสงเงา รูปร่าง"). Depth follows `design-gate/design-references` `references/depth-and-light.md`: one light source, at most 3 layers.
+12. Avoid the generic AI marks: letter in a rounded square, gradient blob, swoosh, circuit, infinity (`design-gate/no-ai-look` section 2, Logos).
 
 ## Stiff or AI-looking in the first drafts (2026-11-19) and the fix
 

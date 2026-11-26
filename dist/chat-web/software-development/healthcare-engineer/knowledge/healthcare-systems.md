@@ -426,7 +426,7 @@ If the clinical workflow is unclear, **watch a clinician at work before you desi
 - `healthcare-systems` — HIPAA safeguards implementation
 - `healthcare-systems` — HL7 FHIR standards
 - `healthcare-systems` — clinical process patterns
-- `polished-document-style` (from superuser) — for docs
+- `design-gate/polished-document-style` (from superuser) — for docs
 
 ## Common Patterns
 
@@ -732,7 +732,7 @@ OR use expert determination (statistical method).
 
 ## Output: Polished HIPAA Risk Analysis
 
-Use `polished-document-style` skill to produce:
+Use `design-gate/polished-document-style` skill to produce:
 
 ```markdown
 # HIPAA Risk Analysis
@@ -1409,7 +1409,7 @@ Workflow:
 6. **Plan validation:** profiles, required fields, code bindings (LOINC, SNOMED, RxNorm)
 7. **Design AuditEvent** and map legacy data (field mapping, code translation, identifiers)
 8. **Plan testing:** Inferno or Touchstone for the guide, EHR sandbox
-9. **Produce polished FHIR design** using `polished-document-style`: resource model, endpoints, SMART sequence diagram, sample resources, migration plan
+9. **Produce polished FHIR design** using `design-gate/polished-document-style`: resource model, endpoints, SMART sequence diagram, sample resources, migration plan
 10. **Hand-off:** implementation → `developer`, HIPAA review → `hipaa-officer`, deployment → `devops-engineer`
 
 Reference for steps 3–8: anthropics/healthcare `fhir-developer` (github.com/anthropics/healthcare) has real validation code and value sets — ToS: link only, do not copy
@@ -1429,7 +1429,7 @@ Workflow:
 6. **Check BAAs** against every vendor that touches PHI
 7. **Risk-rank gaps:** Critical, High, Medium, Low
 8. **Plan remediation:** 30/60/90 days with owners
-9. **Produce polished HIPAA audit report** using `polished-document-style`: summary, PHI data flow diagram, scorecard per safeguard, findings, sign-off
+9. **Produce polished HIPAA audit report** using `design-gate/polished-document-style`: summary, PHI data flow diagram, scorecard per safeguard, findings, sign-off
 10. **Hand-off:** technical fixes → `developer`, `devops-engineer`, `security-engineer` · breach or live incident → `security-analyst` · clinical workflow changes → `healthcare-engineer`
 
 

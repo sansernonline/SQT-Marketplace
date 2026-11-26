@@ -21,7 +21,7 @@ description: Use when writing code that can fail, with retry and timeout
 |---|---|---|
 | The JSON shape of errors the API sends out | `web-service-essentials` · `api-conventions` | instead |
 | Log line format and data masking | `logging-standards` | instead |
-| Fixing one specific bug someone reported | `targeted-fix` | instead |
+| Fixing one specific bug someone reported | `fix-at-source/targeted-fix` | instead |
 | Steps when the system is really down | `incident-runbook-template` | instead |
 | Error-rate metrics and alerts | `observability-basics` | alongside |
 | Where a failed background job goes next | `background-jobs` | alongside |

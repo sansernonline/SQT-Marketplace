@@ -274,7 +274,7 @@ Public: per disclosure obligations
 
 ## Output: Incident Report
 
-Use `polished-document-style` + `postmortem-template` skills.
+Use `design-gate/polished-document-style` + `postmortem-template` skills.
 
 Include:
 - Executive summary

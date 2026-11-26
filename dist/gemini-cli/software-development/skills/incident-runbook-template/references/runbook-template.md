@@ -75,7 +75,7 @@ kubectl logs -n prod deployment/api --since=10m | grep -c '"status":5'
 
 ## Mitigation Steps
 
-> **Human approval:** an agent only proposes the command and its expected effect. A human on-call runs it or approves it before it touches production (`principle-proceed-on-reversible-work`, `incident-response` Phase 3).
+> **Human approval:** an agent only proposes the command and its expected effect. A human on-call runs it or approves it before it touches production (`ground-rules/principle-proceed-on-reversible-work`, `incident-response` Phase 3).
 
 Try mitigations in order of risk (lowest first) — the same order as `incident-response` Phase 3:
 

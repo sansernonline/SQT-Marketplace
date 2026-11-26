@@ -51,9 +51,9 @@ This group is **all markdown** and **does not depend on project size**. It depen
 | ADR | `solution-architect` | `adr-writer` |
 | Test Plan · Test Cases | `qa-tester` | `test-case-template` |
 | mockups | `ux-designer` | `web-app-design` · `ui-craft` |
-| User guide (`MAN`) | `technical-writer` | `polished-document-style` |
+| User guide (`MAN`) | `technical-writer` | `design-gate/polished-document-style` |
 | Runbook | `devops-engineer` | `incident-runbook-template` |
-| BUILD-PLAN | `project-manager` | `superuser:simplify` |
+| BUILD-PLAN | `project-manager` | `superuser:ground-rules` |
 | AGENT-LOOP | `developer` | `spec-to-code-loop` |
 | API-SPEC | `system-analyst` | `api-conventions` |
 | DATA-DICTIONARY | `system-analyst` | `database-design` |

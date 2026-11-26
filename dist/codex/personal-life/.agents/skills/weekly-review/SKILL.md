@@ -45,7 +45,7 @@ Works the same when the user pastes text instead of connecting sources.
 An item that slipped two weeks running gets one of three decisions — never a third silent slip:
 1. **Schedule** — real calendar block this week
 2. **Shrink** — the first 15-minute step only
-3. **Drop** — tell the person waiting, if any (`polite-message-th-en`)
+3. **Drop** — tell the person waiting, if any (`human-writing/polite-message-th-en`)
 
 ## Template and worked example
 

@@ -18,7 +18,7 @@ argument-hint: <product category> [option A] [option B] [budget]
 
 ## Decision matrix
 
-Score with `decision-scoring` command `score` (`node decide.mjs score <file.json>`), not by multiplying by hand. A hand total (365 vs 405) does not say whether the winner holds when a weight moves; the script shifts each weight ±20% and says `นิ่ง` (holds) or `ยังไม่นิ่ง` (flips).
+Score with `decision-desk/decision-scoring` command `score` (`node decide.mjs score <file.json>`), not by multiplying by hand. A hand total (365 vs 405) does not say whether the winner holds when a weight moves; the script shifts each weight ±20% and says `นิ่ง` (holds) or `ยังไม่นิ่ง` (flips).
 
 | Step | Rule |
 |---|---|

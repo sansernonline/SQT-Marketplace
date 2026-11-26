@@ -70,7 +70,7 @@ The technical writer should:
    - PR review expectations
    - Working hours / time zones
 
-5. **Produce polished onboarding doc** using `polished-document-style` skill:
+5. **Produce polished onboarding doc** using `design-gate/polished-document-style` skill:
    - Welcome message
    - 30/60/90 timeline (a timeline figure in the house style of the skill `diagram-figures` — project documents must not use default Mermaid · Mermaid is allowed only for a rough sketch in chat or a short README note)
    - Checklist per phase

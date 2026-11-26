@@ -37,7 +37,7 @@ Social security ม.33 already covers medical care at the registered hospital; c
 
 ## Comparing quotes
 
-Use `decision-scoring`, command `score`, when 2 or more plans fill the same gap. Get every figure from the agent's benefit table in writing. Script path: see `decision-scoring` (superuser plugin).
+Use `decision-desk/decision-scoring`, command `score`, when 2 or more plans fill the same gap. Get every figure from the agent's benefit table in writing. Script path: see `decision-desk/decision-scoring` (superuser plugin).
 
 | Step | Value |
 |---|---|

@@ -1,18 +1,13 @@
-# playbook · review — check before sending
+# playbook · review — check work before delivery
 
-Use when: reviewing a PR or diff · checking a design · checking a document · "Take a look and tell me if I missed anything"
-Output: a verdict with a list of confirmed problems · **read-only — do not fix it yourself and do not write any file, including `docs/BUILD-PLAN.md` · `CONTEXT.md`.** Everything goes in the reply
+Use when: checking work before delivery or real use · "ช่วยดูหน่อยว่ามีอะไรพลาด" (take a look and see if anything is wrong) · the user did it themselves and wants it checked
+Result: a verdict with a list of confirmed problems · **does not fix anything automatically** · read-only work, does not create `CONTEXT.md`
 
-## Real tools used for checking in code work
+## ขั้นตอน — Steps (copy into the todo exactly)
 
-- Step 3: send a fresh `reviewer` together with `code-review-checklist` and the "check before sending" list of the stack's skill
-- Big or high-risk work uses `adversarial-review-panel` (a fresh `reviewer` per angle)
-- Visual work → (if plugin `graphic-design` is installed) `design-critic` or `design-review`; if not, check per [`ui-craft`](../../ui-craft/SKILL.md)
-- Step 6 under **ที่ทำ** (what was done) uses the status table of type `ตรวจ` (check) from `status-report` in the reply only
+Labels kept in Thai because the validator matches them: `ใคร:` = who · `หัวหน้าทีม` = the lead · `ตัวใหม่` = fresh (a new instance) · `ตัวเดิม (ถือ …)` = the same agent, holding something.
 
-## ขั้นตอน · Steps (copy into the todo as written)
-
-1. Set the scope — the files or diff to check (`git diff --stat main...HEAD`, then open the per-file diff only for what needs a look) and the surrounding files that must be read to understand it ([`code-orientation`](../../code-orientation/SKILL.md)); find the impact outside the diff per [`blast-radius`](../../blast-radius/SKILL.md) · ใคร: หัวหน้าทีม
+1. Set the scope: the piece to check, and the source to compare against · ใคร: หัวหน้าทีม
 <!-- superuser:begin review-steps -->
 2. Prepare the review package per [`review-lenses`](review-lenses.md) item 1: the intent of the work in 1 paragraph (who uses it, for what; if unsure, choose the interpretation with the least impact and do not stop to ask) · the diff as a file · the spec's conditions quoted exactly · the `head:` id · the author's reasoning kept separate in `author-notes.md`, with no opinion on pass or fail put in the prompt · ใคร: หัวหน้าทีม
 3. Choose lenses by the kind of work from [`review-lenses`](review-lenses.md) item 2 (every job has `spec` and `quality`), then follow the checklist of this playbook's main skill (none → a related skill) · ใคร: หัวหน้าทีม

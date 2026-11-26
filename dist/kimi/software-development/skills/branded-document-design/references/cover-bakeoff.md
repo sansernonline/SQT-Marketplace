@@ -1,6 +1,6 @@
 # Make 3 styles, then vote 2 of 3
 
-Used with `cover-design.md` step 7. It is a variant of `parallel-attempts-pick-best` that swaps "1 middleman agent" for "3 reviewers who vote".
+Used with `cover-design.md` step 7. It is a variant of `crew-patterns/parallel-attempts-pick-best` that swaps "1 middleman agent" for "3 reviewers who vote".
 Cost: about 3–5 times the work of a single style. Use it when you set a project's look for the first time, not at every version bump.
 
 ## 1 · Prepare before launching
@@ -37,7 +37,7 @@ Then vote: `overall` 1 style · `per_project` the best style for each project ·
 ## 4 · Count the votes
 
 - The style with **2 of 3** wins, for both `overall` and per project (per-project winners may differ from overall).
-- If the vote splits 3 ways, the team lead reads the total score per criterion. The "repeatable" criterion decides when scores are close. Then log it in `decision-log`.
+- If the vote splits 3 ways, the team lead reads the total score per criterion. The "repeatable" criterion decides when scores are close. Then log it in `decision-desk/decision-log`.
 - The team lead looks at all the images before reading the votes, then compares. If they disagree, read both sides' reasons before deciding.
 
 ## 5 · Merge the results

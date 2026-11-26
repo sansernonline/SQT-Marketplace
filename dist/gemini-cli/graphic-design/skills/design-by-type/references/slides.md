@@ -15,13 +15,13 @@ Story, slide order and layouts live in `software-development:presentation-design
 
 1. The slide title states the point, not the topic ("4 บริการ เรียงตามทางที่ของเดิน", not "บริการของเรา"). Source: `presentation-design`.
 2. One key number per slide is the focal element, with its measuring period and `(รอยืนยัน)` underneath. Source: Behance GHTK deck; uipro `slide-layout-logic.csv` row proof.
-3. Services that are not equal are not drawn equal: one lead card, or the services placed in their real order along a route or timeline, instead of a grid of 4 icon cards. Source: `depth-and-light.md` section 1, `no-ai-look`.
+3. Services that are not equal are not drawn equal: one lead card, or the services placed in their real order along a route or timeline, instead of a grid of 4 icon cards. Source: `depth-and-light.md` section 1, `design-gate/no-ai-look`.
 4. Every slide has at least 2 overlaps (a card across the photo's diagonal cut, a photo bleeding off a card, a route end-dot over a card edge). Source: `depth-and-light.md`.
 5. Light from the top left on every slide; 2-layer shadows tinted toward the background, never pure black.
 6. The back layer has one strong thing: a real photo cut on a diagonal, a dimmed photo on a dark base, or a full-bleed colour block. A slide without one looks flat (test 2026-11-19).
 7. Cover: text left, photo right, with one element crossing the seam. Source: uipro `slide-layout-logic.csv` hook = split-hero.
 8. Thai line height 1.4 or more; break lines where the idea ends, never mid-word (the test broke "ตรวจ/สภาพ" before fixing).
-9. A small italic English word above the Thai heading is fine (the owner's liked deck does it); capsule badges and wide-tracked capitals on the cover are not (`no-ai-look` `eyebrow-badge`).
+9. A small italic English word above the Thai heading is fine (the owner's liked deck does it); capsule badges and wide-tracked capitals on the cover are not (`design-gate/no-ai-look` `eyebrow-badge`).
 10. Credit real photos on the slide and crop out any text or ads inside the photo.
 11. Measure contrast on coloured panels; a mid green with white text measured 3.4:1 and had to go darker to reach about 5:1 (pixel measurement 2026-11-19).
 12. Content slides carry a footer: section name left, page number right. Source: `presentation-design`.

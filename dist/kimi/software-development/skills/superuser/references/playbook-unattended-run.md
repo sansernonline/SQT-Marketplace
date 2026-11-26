@@ -1,19 +1,10 @@
-# playbook · unattended-run — long work with nobody watching
+# playbook · unattended-run — long work the user is not watching
 
-Use when: "Finish it, I'll come back to look" · "Do it overnight" · "Don't ask" · multi-step work that a person will check all at once (covers pstack's `autonomous run` · `multi-phase plan` · `orchestrate` · `autopilot-full`)
-This is a wrapper around the work and does not replace the work's own playbook — it keeps the run going to the end, while each piece inside still picks its playbook by the work as usual
-Main skills: `decision-log` · `principle-proceed-on-reversible-work` · `status-report`
-Worker per piece: per that piece's sub-playbook (for example, a fresh `developer`)
-Reviewer per piece: a fresh `reviewer`
-Common `รออนุมัติ` (awaiting approval) items: deploy · delete data · merge into the main branch · send messages to outsiders
-
-## Real tools used in code work
-
-- The done condition (step 1) uses things a machine can check: which test suite must pass · which screen must be clickable · if the task is unclear, let a fresh `brainstormer` help break down the work (step 2)
-- For multi-day or multi-phase work, write the phase plan into the task table in `docs/BUILD-PLAN.md`; the team lead coordinates and does not write code itself (shared items and small pieces it may do itself)
-- After a piece passes review, commit on the work's branch per rule 9 of `superuser` (if not permitted → leave it in the files and summarise the diff at the end)
-- After getting blocked, keep the leftover work in branch `stuck/<ID>` and return the line of work to green tests · if the user answers later → continue per playbook `pickup-and-pause`
-- If the project has `.sandbox/`, use mode `-Isolated` (or one sandbox per piece when working in parallel) and `sync` the results out as a patch at the end
+Use when: "ทำให้เสร็จ เดี๋ยวกลับมาดู" (finish it, I'll come back to look) · "ไม่ต้องถาม" (don't ask) · multi-step work the user will check in one go
+It is a wrapper around the work, not a replacement for the work's playbook: it controls carrying on until finished, while each piece inside still chooses its playbook by the work as usual.
+`ลูกทีมต่อชิ้น` (worker per piece): `general-purpose` ตัวใหม่
+`ผู้ตรวจต่อชิ้น` (checker per piece): `reviewer` ตัวใหม่
+`รออนุมัติที่เจอบ่อย` (commonly found awaiting-approval items): sending a message to outsiders · paying money · deleting the user's files
 
 <!-- superuser:begin unattended-steps -->
 ## ขั้นตอน — Steps (copy into the todo exactly)
@@ -40,3 +31,7 @@ Labels kept in Thai because the validator matches them: `ใคร:` = who · `�
 
 All the step 1 conditions pass, or every remaining piece has a reason why it is stuck
 <!-- superuser:end unattended-steps -->
+
+## Sources
+
+Checking tools before starting and stopping when absent: pagerduty (LICENSE present, type not yet stated) · `commands/pre-commit-risk-scoring.md` and rootly · `agents/deploy-guardian.md` · outbox: claude-remember (redistribution not permitted · take the mechanism only) · `outbound/README.md` · see 2026-11-10

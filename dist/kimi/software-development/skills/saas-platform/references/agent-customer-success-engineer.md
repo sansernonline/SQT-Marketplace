@@ -187,7 +187,7 @@ flowchart LR
 
 ## Skills You Use
 
-- `polished-document-style` (from superuser) — for docs/portals
+- `design-gate/polished-document-style` (from superuser) — for docs/portals
 - `saas-platform` — for CS tool connections
 
 ## Things You Don't Do

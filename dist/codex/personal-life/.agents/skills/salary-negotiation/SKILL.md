@@ -46,7 +46,7 @@ Social security ceiling steps under the ministerial regulation (B.E. 2568): 17,5
 
 Two offers (A: 60,000 base · 2 months bonus · 3,000 allowance · 5% PVD match; B: 66,000 base · 1 month bonus) come to 912,000 vs 858,000 a year: B's base is 10% higher but A is worth 54,000 more, before insurance. Full table: [references/worked-example-two-offers.md](references/worked-example-two-offers.md). Show a table like it before any discussion of "which is better".
 
-### Compare offers by numbers (`decision-scoring`, command `score`)
+### Compare offers by numbers (`decision-desk/decision-scoring`, command `score`)
 
 1. **Iron rule first (กฎเหล็ก):** total compensation per year below your walk-away (Step 3) is dropped, however good the rest looks. Put it in `must` as `min`. An offer with no written terms for base, bonus and PVD is not scored until it is in writing.
 2. **Criteria (default weights, starting value, not yet measured — the user changes them):**
@@ -58,7 +58,7 @@ Two offers (A: 60,000 base · 2 months bonus · 3,000 allowance · 5% PVD match;
 | Growth, 1–5 (user's score: scope, mentor, title path) | high | 0.25 |
 | Annual leave days | high | 0.15 |
 
-3. **Run:** `node decide.mjs score offers.json` (path of the script: see the `decision-scoring` skill). Input, using the table above plus a third offer that is under the walk-away:
+3. **Run:** `node decide.mjs score offers.json` (path of the script: see the `decision-desk/decision-scoring` skill). Input, using the table above plus a third offer that is under the walk-away:
 
 Example input (3 offers, iron rule 850,000) and the result when run: [references/offer-scoring-example.md](references/offer-scoring-example.md)
 4. **Unstable or close** (`ยังไม่นิ่ง`, `สูสี`) → show the user the top two and the criterion that flips them; the user decides. Money and career: the score is supporting data, not advice.
@@ -105,7 +105,7 @@ Many Thai companies, and most large ones, have a salary band (กรอบเง
 2. Is it a real base change in writing, or a promise ("next review")? Only written counts.
 3. Will your manager trust you the same way after you nearly left?
 4. Never use a fake offer to get a counter — it is easily called.
-5. If you accept the new offer: resign in writing, give the contract notice, and keep it polite — `polite-message-th-en`.
+5. If you accept the new offer: resign in writing, give the contract notice, and keep it polite — `human-writing/polite-message-th-en`.
 
 ## Rules
 

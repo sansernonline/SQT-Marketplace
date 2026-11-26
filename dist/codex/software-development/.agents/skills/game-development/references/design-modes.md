@@ -68,7 +68,7 @@ The game designer should:
 
 8. **Apply `game-development` skill** for implementation feasibility check
 
-9. **Produce polished game design document** using `polished-document-style` skill (from superuser):
+9. **Produce polished game design document** using `design-gate/polished-document-style` skill (from superuser):
    - Pitch (one paragraph)
    - Target audience
    - Core loops (house-style figure via `diagram-figures`)
@@ -145,7 +145,7 @@ The game-developer agent should:
     - Disconnect penalty (competitive)
     - Backfill for casual
 
-11. **Produce polished multiplayer architecture document** using `polished-document-style` skill (from superuser):
+11. **Produce polished multiplayer architecture document** using `design-gate/polished-document-style` skill (from superuser):
     - Architecture diagram and network flow sequence diagrams (house-style figures via `diagram-figures`)
     - Tick rate + bandwidth budget
     - Matchmaking flow

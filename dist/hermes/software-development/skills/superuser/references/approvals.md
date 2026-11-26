@@ -4,7 +4,7 @@
 
 Moved from `superuser` section 6 (to shrink the main file that loads every time, 2026-11-11)
 
-Principle behind this section: `principle-proceed-on-reversible-work`
+Principle behind this section: `ground-rules/principle-proceed-on-reversible-work`
 
 Examples of reversible work and this plugin's order of official sources → [`examples`](examples.md)
 

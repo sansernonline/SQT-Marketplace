@@ -24,7 +24,7 @@ The web app's shadow tokens (`--shadow-color` · `--elev-1` to `--elev-3` · the
 
 ## Depth languages, choose one
 
-The whole project uses 1 of these 4 languages and records it on the same line as the app character in the first-line comment of the token file (`/* app-character: 3 lifestyle · look: paper/print · depth: กระดาษ */` — `กระดาษ` means "paper") · mixing several languages on one page, such as a clay card beside a glass panel beside torn paper, is a sign of AI drawing (`no-ai-look` catalog item 6, one visual language)
+The whole project uses 1 of these 4 languages and records it on the same line as the app character in the first-line comment of the token file (`/* app-character: 3 lifestyle · look: paper/print · depth: กระดาษ */` — `กระดาษ` means "paper") · mixing several languages on one page, such as a clay card beside a glass panel beside torn paper, is a sign of AI drawing (`design-gate/no-ai-look` catalog item 6, one visual language)
 
 | Language | Look | Recipes | looks |
 |---|---|---|---|
@@ -171,7 +171,7 @@ Unify photos from several sources into one set with the brand's 2 colors (the da
 
 ### 10 · Soft raised object with gradient + tidy type
 
-A knob or dial with a real function (a decorative floating circle is an AI sign in `no-ai-look` item 6) · the last 2 lines work in every depth language
+A knob or dial with a real function (a decorative floating circle is an AI sign in `design-gate/no-ai-look` item 6) · the last 2 lines work in every depth language
 
 ```css
 .knob {

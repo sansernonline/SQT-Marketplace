@@ -4,7 +4,7 @@ Use when writing a brief and prompt for AI images
 
 # Brief to Image
 
-> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `design-gate/no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
 Write the brief before making the first image.
 
@@ -12,7 +12,7 @@ This skill writes the brief and prompt. Generation happens in whatever image too
 
 ## Workflow
 
-0. **Find reference work before writing the brief** — every time; when a style lock sheet or brand kit already fixes the look, keep its palette and light and search only for composition and staging: research 3–5 pieces of strong real work in the same category (**ค้นต้นแบบก่อน:** run the project's keywords through a live search per `design-references` (plugin `superuser`), type `illustration` or `social`, then pull the colours from the chosen work · use the stored palette bank only when live search is unavailable · award archives · competitor campaigns) · write 1 line per piece on *why it works* (composition · light · palette · type) · save links beside the brief in `briefs/<asset-name>.md` under "References" · the style, palette and light lines of the brief then cite these benchmarks, and tools that accept reference images get 1–2 of them · **references are a bar to clear, not a piece to copy** — the concept must stand at their level without imitating any one of them
+0. **Find reference work before writing the brief** — every time; when a style lock sheet or brand kit already fixes the look, keep its palette and light and search only for composition and staging: research 3–5 pieces of strong real work in the same category (**ค้นต้นแบบก่อน:** run the project's keywords through a live search per `design-gate/design-references` (plugin `superuser`), type `illustration` or `social`, then pull the colours from the chosen work · use the stored palette bank only when live search is unavailable · award archives · competitor campaigns) · write 1 line per piece on *why it works* (composition · light · palette · type) · save links beside the brief in `briefs/<asset-name>.md` under "References" · the style, palette and light lines of the brief then cite these benchmarks, and tools that accept reference images get 1–2 of them · **references are a bar to clear, not a piece to copy** — the concept must stand at their level without imitating any one of them
 1. **Ask 5 things** if missing: image style (pick from the style list in `image-generation` → `references/styles.md` — one style per set; unattended → pick from the use and log why; references from step 0 outrank the default list) · what must the image show · where it will be used (placement → aspect ratio, from `social-formats`) · what text goes on it (usually none in the image — add text in layout) · brand kit or style lock sheet to follow
 2. **Fill the brief** with the anatomy below; save it as `briefs/<asset-name>.md` using [prompt-anatomy.md](references/prompt-anatomy.md)
 3. **Assemble the prompt** in anatomy order, most important first
@@ -41,7 +41,7 @@ One tactile 3D object as the hero (paper cut, clay, felt): use the 8-line templa
 
 ## Pick the image (ตัดสินด้วยตัวเลข)
 
-Use `decision-scoring` command `score` (`node decide.mjs score <file.json>`) on the 3–4 variations. The score picks among images that are already acceptable; taste is the user's final call.
+Use `decision-desk/decision-scoring` command `score` (`node decide.mjs score <file.json>`) on the 3–4 variations. The score picks among images that are already acceptable; taste is the user's final call.
 
 | Part | Rule |
 |---|---|
@@ -87,7 +87,7 @@ Request → brief → prompt → review for a matcha drink post: [references/wor
 
 ## Not an AI look
 
-Every prompt carries the items in `no-ai-look` section 4 (named style, hex, light, what to avoid); the eye check (3.2) covers images.
+Every prompt carries the items in `design-gate/no-ai-look` section 4 (named style, hex, light, what to avoid); the eye check (3.2) covers images.
 
 ## Related
 
@@ -215,7 +215,7 @@ text, watermark, logo, signature · extra fingers, distorted hands · duplicate 
 
 ## Tactile 3D hero object
 
-One physical-looking object as the hero of a post or page (paper cut, clay, felt, wood). Generic "soft 3D render, clay, studio lighting" prompts give the glossy CGI look that `no-ai-look` flags; these 8 lines name what a real object has. One line each, in this order, then set the aspect ratio as a parameter.
+One physical-looking object as the hero of a post or page (paper cut, clay, felt, wood). Generic "soft 3D render, clay, studio lighting" prompts give the glossy CGI look that `design-gate/no-ai-look` flags; these 8 lines name what a real object has. One line each, in this order, then set the aspect ratio as a parameter.
 
 | # | Line | Fill with | Weak → strong |
 |---|---|---|---|
@@ -236,7 +236,7 @@ Other materials: swap line 2 for "polymer clay with faint fingerprints, soft mat
 
 **Negative / settings:** glossy plastic, smooth CGI surface, glow, text, letters, teal-orange colour grade, floating particles, extra objects · aspect ratio 4:5.
 
-The cream backdrop and orange come from this brief. Cream with a warm orange accent is also a palette models reach for when nobody chose one (`no-ai-look` catalog section 1), so use it only when the brand or the brief asks for it.
+The cream backdrop and orange come from this brief. Cream with a warm orange accent is also a palette models reach for when nobody chose one (`design-gate/no-ai-look` catalog section 1), so use it only when the brand or the brief asks for it.
 
 
 ## reference: worked-example.md

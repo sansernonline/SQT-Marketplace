@@ -25,7 +25,7 @@ Search the repo first: `render.yaml` · `package.json` / `requirements.txt` / `D
 - Does the database already exist or is it new (never create over the existing one)
 - Who approves the first release (step 5 stops and waits for that person)
 
-No answer → treat it as an experiment: free plan · no real customer data · `autoDeployTrigger: checksPass` · note in `decision-log` that you chose it, mark `(รอยืนยัน)` on whether it is real · if it is real, move the plan before data goes in.
+No answer → treat it as an experiment: free plan · no real customer data · `autoDeployTrigger: checksPass` · note in `decision-desk/decision-log` that you chose it, mark `(รอยืนยัน)` on whether it is real · if it is real, move the plan before data goes in.
 
 ### 2 · Route
 Default is **Blueprint** (`render.yaml`). Dashboard for logs, rollback and `sync: false` values. CLI for `render blueprints validate` · `render deploys create`. Render MCP creates only web · static · cron · Postgres · Key Value and cannot delete or change scaling (use the Dashboard or REST API).

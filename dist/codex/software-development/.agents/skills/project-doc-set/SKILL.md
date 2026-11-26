@@ -19,7 +19,7 @@ Use it when: opening a new project and deciding which docs it needs · docs are 
 | Situation | Use instead |
 |---|---|
 | Folder layout of the **code** (including the `docs/` inside code in type A) · README · CHANGELOG · linter | `project-bootstrap` |
-| Naming **files** and version numbers of docs | `document-naming` |
+| Naming **files** and version numbers of docs | `workspace-rules/document-naming` |
 | Actually writing one doc | The skill for that doc (table in section 4) |
 | Making document pages look good | `branded-document-design` |
 
@@ -70,7 +70,7 @@ Use it when: opening a new project and deciding which docs it needs · docs are 
 - **Never lose the source files of figures.** If a figure must change next year and only the PNG is left, the whole figure must be redrawn.
 - **Every button in a mockup must really click**, because a fake button makes the review wrong.
 - **`.docx` / `.xlsx` live only in `docs/` and `qa/`.** Do not scatter them to the project root.
-- **Temporary items go to `_to_delete/`** (`temp-file-discipline`).
+- **Temporary items go to `_to_delete/`** (`workspace-rules/temp-file-discipline`).
 - **`docs/README.md` is the index.** It says what to read first and who owns what (template in `project-bootstrap` → `assets/starter-files.md`).
 
 ---
@@ -182,10 +182,10 @@ Exceptions that do not follow the theme: service provider logo colours · grey s
 - [ ] The source file of every figure is in `docs/figures/src/` (if this folder exists)
 - [ ] Technical docs that meet the conditions in section 2.2 are all present. For example, if there is an API there must be an API-SPEC, and if an LLM is used there must be a PROMPT-LIBRARY
 - [ ] Every abbreviation is spelled out at first appearance
-- [ ] File names follow `document-naming`: no `final2`, no `ล่าสุด` ("latest")
+- [ ] File names follow `workspace-rules/document-naming`: no `final2`, no `ล่าสุด` ("latest")
 - [ ] Docs in the set cite each other's versions consistently
 - [ ] Run `scripts/open_items.py`, and the open-items register has no row with status "เปิด" (open), or the client knows about every row still open
-- [ ] Tell the user what is left in `_to_delete/` (delete only what `temp-file-discipline` step 9 allows: old task folders nothing else still uses)
+- [ ] Tell the user what is left in `_to_delete/` (delete only what `workspace-rules/temp-file-discipline` step 9 allows: old task folders nothing else still uses)
 
 ---
 
@@ -197,7 +197,7 @@ Wrong: `.docx` with no Heading style · keeping only the PNG and not the source 
 
 ## 10 · Links to other skills
 
-Doc status in `docs/BUILD-PLAN.md` → `status-report` · checklist for the printed version → `assets/doc-set-checklist.md`
+Doc status in `docs/BUILD-PLAN.md` → `superuser/status-report` · checklist for the printed version → `assets/doc-set-checklist.md`
 
 **Read more when needed:** [`references/writer-templates.md`](references/writer-templates.md): `technical-writer` doc templates (tutorial · API reference · release notes · for README see `project-bootstrap`)
 

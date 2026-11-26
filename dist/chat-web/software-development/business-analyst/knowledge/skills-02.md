@@ -1,350 +1,3 @@
-# skill: polished-document-style
-
-Use when a kept document needs headings, tables and theme
-
-# Polished Document Style — headings, tables, callouts, and theme for a kept document
-
-> **Gate before starting (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand controls color and font, the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
-
-> **Boundary:** this skill handles the look; the wording belongs to `human-writing`. Open both for a document people keep to read.
-
-## Use when
-- Output is for general readers (managers, executives, clients), needs sign-off, or will be shared widely or converted to PDF/Word · any doc with 3+ sections or 500+ words
-- Laying out any document people keep to read (Markdown · Word · PDF), including Thai text in Office files
-- Not for: internal notes for the author's own team, scratch notes, code comments · a whole Markdown report that must come out as one .docx → `markdown-report-docx` · a rendered .docx/.pptx/.pdf → `branded-document-design` on top of this skill (this skill governs the markdown source)
-
-## Steps
-1. **Find an existing template first.** Check the client's or organization's standard: Word/Google Docs templates the client gave · earlier documents in the project (`docs/`, `ref/`) · format requirements in the TOR or contract. If found, use it (headings, order, field names, running numbers) and say which file it came from. If not, use this skill's structure and say no template was found. Readability applies either way.
-2. **Start with the header.** A plain-text H1, then a quote box with version, date, status, author, reviewer, tags, closed with `---` (example in [`references/markdown-patterns.md`](references/markdown-patterns.md)). Formal documents (proposal · formal report · contract · postmortem) open with a cover block: type, version, status, date, author, reviewer, related documents.
-   - Status takes only: **Draft** (ร่าง) · **Review** (กำลังรีวิว) · **Approved** (อนุมัติแล้ว) · **Archived** (เก็บถาวร) (`status-report` adds `ยังไม่เริ่ม` for work not begun) · in a Sign-off table the Status column is the signer's: **Approved** · **Review** · **Pending** · **Rejected**.
-3. **Headings.** One H1 · H2 numbered (`## 1. Section`) · H3 (`### 1.1 Sub-topic`) · H4 rare. 5+ sections → add a table of contents whose links reach the real headings.
-4. **Declare the theme once.** At the end of the header put `<!-- doc-theme: accent=… · ที่มา=… · ยืนยันเมื่อ=YYYY-MM-DD -->`; every tool (`diagram-figures` · `branded-document-design` · `presentation-design`) reads the color from there. To choose a color or put real colors into a figure, .docx, or slides, open [`references/theme-colors.md`](references/theme-colors.md).
-5. **Labels are words, never emoji** (emoji in headings and badges signal AI-made, `no-ai-look`):
-
-   | Used for | Words |
-   |---|---|
-   | Importance | วิกฤต · สูง · กลาง · ต่ำ |
-   | Work status | เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่ |
-   | Check result | ผ่าน · ไม่ผ่าน |
-   | Text box type | ข้อแนะนำ (Tip) · ข้อควรจำ (Note) · ข้อควรระวัง (Warning) · อันตราย (Critical) · คำถามที่ยังเปิด (Open Question) |
-
-   Yes/no cells may use `✓` `✗` or "ใช่" / "ไม่". Status badge = a bold word (`**Status:** Approved`).
-6. **Callouts** are blockquotes with a bold label · 1–3 sentences · one per topic, no stacking · at most 3–5 per page.
-7. **Tables** when items have 2+ attributes (bullets whose lines hold several comma-separated values become a table). Left-align text, center checkmarks and numbers, right-align money · `—` for not applicable · short cells (long content goes in paragraphs; cells over 2 sentences become headings) · bold key columns.
-   - Compare options or weigh pros and cons → comparison table with a Recommendation column · needs approval → end with a Sign-off table · 5+ abbreviations → glossary. Examples in `references/markdown-patterns.md`.
-8. **Figures** in project documents are drawn with `diagram-figures` (house style) and embedded as images; Mermaid (`software-diagrams`) only for quick figures in a README, PR, or code notes. Place the figure after the paragraph that says what question it answers · 1-line caption under it starting **รูปที่ N —** · never repeat a figure; refer to its number.
-9. **Lists and code.** Never nest bullets: use sub-headings or a table. Code blocks always name the language; long code gets the file name as a comment on line 1.
-10. **Thai in Word · Excel · PDF** (complex-script font · no justify · embed fonts · BOM CSV): open [`references/thai-office.md`](references/thai-office.md) before creating the file.
-11. If the skill that writes the document has a template in `assets/`, run `python scripts/check_outline.py <template.md> <document.md>` before sending. It checks headings are complete and in template order, bold fields complete, table headers match, no field unfilled. In a template, end an optional heading or field with `<!-- optional -->`. After editing the checker, run `--self-test` first.
-
-## Check before done
-- H1 in plain text · no emoji in any heading, callout, badge, or table
-- Header block with version, date, status, authors · TOC if 5+ sections · sections numbered consistently · TOC links work
-- Tables where data has 2+ attributes · every flow or relationship has a `diagram-figures` figure, not default Mermaid
-- Code blocks have language hints · glossary if 5+ abbreviations · terms used consistently ("user" vs "customer")
-- No placeholder text (TBD, TODO, Lorem ipsum); `(รอยืนยัน)` markers listed in the pending-confirmation list are not placeholders, keep them
-- Rendered once in the real viewer (Word · PDF · GitHub preview) · item 3 of `no-ai-look` passed
-
-## References
-- [`references/markdown-patterns.md`](references/markdown-patterns.md) — open when writing a header, TOC, callout, table, badge, cover block, comparison table, sign-off, or glossary (copy the examples)
-- [`references/theme-colors.md`](references/theme-colors.md) — open when choosing the main color or putting colors into a figure, .docx, or slides
-- [`references/thai-office.md`](references/thai-office.md) — open when creating Word · Excel · PDF with Thai
-- Abbreviation writing → `spell-out-abbreviations`
-
-
-## reference: markdown-patterns.md
-
-# รูปแบบ markdown พร้อมตัวอย่าง
-
-Markdown code examples for every format that `SKILL.md` refers to, ready to copy and use · the rules on when to use each one live in `SKILL.md`
-
-**สารบัญ:** Document Header · Table of Contents · Callout Boxes · Tables · Figures · Status Badges · Cover Block · Comparison / Decision Tables · Lists · Code Blocks · Approval/Sign-off · Glossary
-
-## Document Header (Always)
-
-Every polished doc MUST start with:
-
-```markdown
-# <Document Title>
-
-> **Version:** 1.0 · **Date:** YYYY-MM-DD · **Status:** Draft
-> **Authors:** <names> · **Reviewers:** <names>
-> **Tags:** `<area>` `<topic>`
-
----
-```
-
-Status values:
-- **Draft** — work in progress
-- **Review** — under stakeholder review
-- **Approved** — signed off
-- **Archived** — historical reference
-
-## Table of Contents
-
-**Always add Table of Contents** for docs with 5+ sections:
-
-```markdown
-## Table of Contents
-
-1. [Executive Summary](#1-executive-summary)
-2. [Scope](#2-scope)
-3. [Details](#3-details)
-```
-
-## Callout Boxes
-
-Use blockquotes with a bold label — no emoji. 5 ชนิด ชื่อไทยคู่กัน: Tip (ข้อแนะนำ) · Note (ข้อควรจำ) · Warning (ข้อควรระวัง) · Critical (อันตราย) · Open Question (คำถามที่ยังเปิด):
-
-```markdown
-> **Tip:** Brief actionable insight.
-
-> **Warning:** Important caveat or limitation.
-
-> **Critical:** Must-read before proceeding.
-
-> **Note:** Additional context or background.
-
-> **Open Question:** Needs decision/clarification.
-```
-
-## Tables — When and How
-
-### When to use tables instead of bullets
-
-Use tables when items have **2+ attributes**:
-
-Don't use bullets:
-```markdown
-- email: string, required, unique
-- age: number, optional
-- role: enum, required, default "user"
-```
-
-Use a table:
-```markdown
-| Field | Type   | Required | Default | Description       |
-|-------|--------|:--------:|:-------:|-------------------|
-| email | string | ✓        | —       | Unique login email|
-| age   | number | ✗        | —       | Optional          |
-| role  | enum   | ✓        | `user`  | Access level      |
-```
-
-## Figures (รูปในเอกสาร)
-
-Figures in project documents are drawn with `diagram-figures` (plugin `software-development` · house style) and embedded as image files · use Mermaid only for quick figures in a README · do not use it in documents that are handed on, nor in PRs
-
-```markdown
-ลำดับการเรียกเมื่อผู้ใช้กดบันทึกแสดงในรูปที่ 3
-
-![ลำดับการเรียกเมื่อผู้ใช้กดบันทึก](figures/fig-03.png)
-
-**รูปที่ 3 —** ลำดับการเรียกเมื่อผู้ใช้กดบันทึก
-```
-
-## Status Badges (Inline)
-
-For key fields in headers/tables:
-
-```markdown
-**Status:** Approved
-**Priority:** High
-**Risk Level:** Medium
-**Service Level Agreement (SLA):** < 200ms
-```
-
-Multiple badges in a header:
-
-```markdown
-> **Approved** · **High Priority** · Owner @alice · Due 2025-03-15
-```
-
-## Cover Block Pattern
-
-For formal documents (Business Requirements Document (BRD), Functional Specification Document (FSD), Architecture Decision Record (ADR), postmortem):
-
-```markdown
-# <Title>
-
-| | |
-|--|--|
-| **Document Type** | BRD \| FSD \| ADR \| Postmortem |
-| **Version** | 1.2 |
-| **Status** | Approved |
-| **Date** | 2025-01-15 |
-| **Author(s)** | @alice, @bob |
-| **Reviewer(s)** | @charlie |
-| **Related** | [BRD-001](link), [FSD-005](link) |
-
----
-```
-
-## Comparison / Decision Tables
-
-For trade-off analysis (architect, Project Manager (PM), Search Engine Optimization (SEO) recommendations):
-
-```markdown
-| Option | Cost | Effort | Risk | Time-to-Value | Recommendation |
-|--------|:----:|:------:|:----:|:-------------:|:--------------:|
-| **A**  | ฿80k | Med  | Low  | Fast | **Recommended** |
-| B      | ฿40k | Low  | High | Med  | Not recommended |
-| C      | ฿150k| High | Low  | Slow | Future consideration |
-```
-
-## Lists — When to nest, when to flatten
-
-### Good list
-```markdown
-- Email is unique across all users
-- Passwords must be 8+ characters with mixed case
-- Sessions expire after 30 days of inactivity
-```
-
-### Bad list (over-nested)
-```markdown
-- Users
-  - Email
-    - Must be unique
-    - Required
-  - Password
-    - 8+ chars
-    - Mixed case
-```
-
-→ Should be a table instead.
-
-## Code Blocks
-
-Always specify language:
-
-````markdown
-```typescript
-const user: User = { id: 1, email: 'a@b.com' };
-```
-
-```bash
-npm install
-```
-
-```sql
-SELECT * FROM users WHERE id = $1;
-```
-````
-
-For long blocks, put the file name in a comment on the first line:
-
-```typescript
-// src/services/auth.ts
-export async function login(email: string, password: string) {
-  // ...
-}
-```
-
-## Approval/Sign-off Section (End of Doc)
-
-For documents needing formal approval:
-
-```markdown
-## Sign-off
-
-| Role | Name | Status | Date |
-|------|------|:------:|------|
-| Product Owner | @alice | Approved | 2025-01-15 |
-| Tech Lead | @bob | Review | — |
-| QA Lead | @charlie | Pending | — |
-| Security | @dave | Rejected | 2025-01-14 |
-```
-
-## Glossary Section
-
-For docs with 5+ technical terms:
-
-```markdown
-## Glossary
-
-| Term | Definition |
-|------|------------|
-| **API** | Application Programming Interface |
-| **JWT** | JSON Web Token, used for stateless auth |
-| **SLA** | Service Level Agreement |
-```
-
-Define acronyms on first use, then add to glossary.
-
-
-## reference: thai-office.md
-
-# Thai Office documents
-
-Applies to every Word · Excel · PDF file that contains Thai, whether a script builds it or a person makes it by hand. Details and helpers are in `branded-document-design`.
-
-- Word treats Thai as a complex script, so it has separate font, size and bold fields from Latin. If you set only the Latin field, the Thai text does not change. Set both.
-- Do not justify Thai paragraphs. Thai has no spaces between words, so Word stretches the letter spacing and leaves gaps. The exception is a thesis guide that requires Thai Distributed.
-- Never use a mono font for Thai text, because Consolas and Cascadia have no Thai letters. Use mono only for codes, keys and numbers.
-- Always embed fonts when exporting PDF. Otherwise a machine without the font substitutes another one and the tone marks float.
-- Save a CSV that Thai users will open in Excel as UTF-8 with BOM (byte order mark). Otherwise the Thai text turns to garbage.
-- Before you say it is done, render every page to an image and look at it. Overflowing tables, headings stranded at the bottom of a page and floating tone marks do not show up in the code.
-
-
-## reference: theme-colors.md
-
-# Document theme color table
-
-This file says who controls the color of each part of a document, and what the house default colors are. Use it when you must put real colors into a figure, a .docx file or slides.
-
-## Declare the theme — decide once, use everywhere in that document
-
-One document passes through several skills: markdown (`polished-document-style`) · figures from `diagram-figures` ·
-.docx files from `branded-document-design` · slides from `presentation-design` (all three are in plugin `software-development`).
-If each one picks its own color, the reader gets a document with figures in one color, headings in another, and slides in a third.
-
-**Markdown is the main source (source of truth), so the theme is declared here** — put it at the end of the document header or in a file beside it:
-
-```markdown
-<!-- doc-theme: accent=<สีหลัก> · ที่มา=<แบรนด์ลูกค้า / เสนอจากเนื้องาน> · ยืนยันเมื่อ=YYYY-MM-DD -->
-```
-
-(Keys: `accent` = main color · `ที่มา` = source (client brand / proposed from the work's content) · `ยืนยันเมื่อ` = confirmed on.)
-
-**The main color comes from the work's content, not from a tool's default.** Read the content and write the `เนื้อหา:` brief first (`design-references` `references/content-to-theme.md`); the tone you propose must carry its reason from that brief.
-If a brand color already exists, use it. If not, search for references per `design-references` (plugin `superuser`) of type `document` and extract the color from the chosen work · if live search is not possible, use the house default, write `(รอยืนยัน)` (awaiting confirmation), carry on without stopping to ask, and propose a tone that fits the work's content in the report.
-(Backup: the table matching work content to color tones is in `colour-by-domain` of skill `diagram-figures` (plugin `software-development`).)
-
-Markdown itself has no color, so use labels and font weight instead. Diagrams, figures, .docx files and slides read the value from `doc-theme`. If `doc-theme` has not declared a work-specific accent, use the house default. Both tables are below.
-
-**Status words do not depend on the theme** — วิกฤต (critical) · ผ่าน (pass) use the same words in every document. Status colors in .docx files and slides are below.
-
-## Who controls the color of which part
-
-| Part of the document | Who controls the color | Read the value from |
-|---|---|---|
-| Headings, tables, text boxes in markdown | Markdown has no color; use bold labels and font weight instead | — |
-| Mermaid diagrams | `diagram-figures` → `references/engine-mermaid.md` (README · PR: `software-diagrams` item 2 in plugin `software-development`) | `doc-theme` |
-| Figures that are image files | `diagram-figures` (plugin `software-development`) | `doc-theme` |
-| Exported .docx / .pdf files | `branded-document-design` (plugin `software-development`) items 0–1 | `doc-theme` |
-| Slides | `presentation-design` (plugin `software-development`) | `doc-theme` |
-
-## House default
-
-If `doc-theme` has not declared a work-specific accent, every skill uses this set as the default, so figures, documents and slides share one palette from the start. This is the same set as `presentation-design` and `branded-document-design`:
-
-| token | Value | Used for |
-|---|---|---|
-| brand | `#2A78D6` | Main color · headings · accent lines |
-| brand-deep | `#2A4C86` | Table headers · H2 · system names |
-| brand-2 | `#6A5CD6` | Secondary accent (purple) |
-| tint | `#EDF1FB` | Table header background · highlight box background |
-| ink / body | `#333B4A` / `#414957` | Headings / body text |
-| muted / faint | `#7D8492` / `#A9AEB9` | Captions / notes |
-| line | `#E4E7EE` | Borders · connector lines |
-| exception | `#C77A11` | A path/zone that is not the main route (always different from brand) |
-| Font | Tahoma (documents/slides) · Noto Sans Thai → Tahoma (images) | Both Thai and English |
-
-Once a work-specific accent is declared, use it in place of brand, and compute the other colors from that accent.
-
-
----
-
 # skill: diagram-figures
 
 Use when a document or slide needs a designed diagram
@@ -353,7 +6,7 @@ Use when a document or slide needs a designed diagram
 
 > **One rule:** the figure's main colour = the project's main colour. Look for it in the order in step 5. Only if nothing is found, use the house palette `#2A78D6` from `polished-document-style/references/theme-colors.md` ("ค่าตั้งต้นประจำบ้าน", the house default).
 
-> **Pre-work gate (every time):** read the owner's theme → search live for a reference → 3 genuinely different directions → check `no-ai-look` before sending. Follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search finds this piece's structure). Close the work with a line `ด่านก่อนลงมือ:`.
+> **Pre-work gate (every time):** read the owner's theme → search live for a reference → 3 genuinely different directions → check `design-gate/no-ai-look` before sending. Follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search finds this piece's structure). Close the work with a line `ด่านก่อนลงมือ:`.
 
 ## Use when
 - A figure in a work document (business plan · process chart · research summary · BRD · SRS · ER diagram) or any figure that must look designed: client proposals · slides · print · sign-off documents, including cloud diagrams with real logos.
@@ -376,9 +29,9 @@ Not for: a quick diagram in a README · Pull Request · code note → `software-
 3. **Header needs all 6 parts:** project logo (`<img class="logo">` → the project's `assets/logo/`; if there is none, say so in the report) · title · 1-line sub-title (what the real thing is, not an expansion of the title) · figure number · version and date · owner. Wrong/right sub-title example: [`references/design-system.md`](references/design-system.md), "Figure header".
 4. **Sizes.** Sizes, spacing and corners are already in `:root` of `assets/figure-template.html`; do not set new values. Icon frame ≥ 66px (below 56px looks hollow). Connectors vertical or horizontal only, bent with rounded corners; no diagonals. Full table: [`references/design-system.md`](references/design-system.md), "Size system" (open when adjusting or writing a template). Text size follows the placed size: for a figure placed in an A4 document, smallest text after placing must be ≥ 7 pt → `minimum px = 0.247 × canvas width(px) ÷ placed width(cm)` (2000px canvas: 29px on a 17 cm page, 20px on 25.7 cm). Make boxes wide enough that Thai names are not cut mid-word. In-document version uses `?embed=1` (hides header); aspect ratio width ÷ height ≥ 1.46 for a landscape page; one `figure-theme.css` for the whole set.
 5. **Colour.** Stop at the first hit:
-   1. `doc-theme` in the project's documents (`polished-document-style`, section "ธีมของเอกสาร").
+   1. `doc-theme` in the project's documents (`design-gate/polished-document-style`, section "ธีมของเอกสาร").
    2. The project's brand colour: `--primary` · `--brand` · `--accent` in CSS · `primary` in Tailwind / UI theme · `colorPrimary` in a mobile app · brand kit · logo. Read the background colour from the same places (`--background` · `--bg` · dark or light mode), because figures follow the project's design.
-   3. Nothing yet → search live per `design-references` (plugin `superuser`), type `document`, then extract colours from the chosen work. Use the stored colour library only if live search is not possible.
+   3. Nothing yet → search live per `design-gate/design-references` (plugin `superuser`), type `document`, then extract colours from the chosen work. Use the stored colour library only if live search is not possible.
    4. Live search not possible → use `#2A78D6`, write `(รอยืนยัน)` in the report, carry on without asking, and list a tone from [references/colour-by-domain.md](references/colour-by-domain.md) for later.
 
    Never use a colour from an example or reference image. In HTML templates change `--accent` in `:root` (SVG/Python: `ACCENT` in `theme.py`); background that follows the project → append `#accent=<main colour>&bg=<background colour>` to the file name. The 7 icon colour groups (`t-neutral` · `t-edge` · `t-app` · `t-view` · `t-data` · `t-alert` · `t-warn`) and provider/structural exceptions: [`references/design-system.md`](references/design-system.md), "Colour system". An 8th colour means colour is used for looks. The main colour must show across the whole figure, with 1 `.focus` card (brand border + glow), a 6px glowing main path and thin grey secondary lines. Full rules: [`references/focal-point-and-layout.md`](references/focal-point-and-layout.md).
@@ -398,7 +51,7 @@ Not for: a quick diagram in a README · Pull Request · code note → `software-
     ```
     Always use multiplier 2 (1 is blurry when enlarged). Folder mode makes 2 versions per figure (full + `?embed=1`) and checks text smaller than `--min-px`, wrapped names or labels, overflow, overlapping labels: `problems: 0` and exit 0 = pass. Keep `render.py` at `docs/figures/render.py` next to `src/`, never in `_to_delete/` or a scratchpad; never delete `docs/figures/src/` (.png files are only output). Send the client a PNG; keep the HTML source in the repo.
 11. If a figure comes out wrong (missing arrowhead, line to the wrong box, missing Thai vowels, label over a box), open the symptom → cause → fix table [references/pitfalls.md](references/pitfalls.md) before fixing it yourself.
-12. Run `no-ai-look` item 3 (for HTML, run its script; also eye gate 3.2; 0 findings from the script is not yet a pass). Hand-off by medium: slide → `presentation-design` · Word / PDF → `branded-document-design` · SRS → `srs-writing` · app screens → `ui-craft`.
+12. Run `design-gate/no-ai-look` item 3 (for HTML, run its script; also eye gate 3.2; 0 findings from the script is not yet a pass). Hand-off by medium: slide → `presentation-design` · Word / PDF → `branded-document-design` · SRS → `srs-writing` · app screens → `ui-craft`.
 
 ## Check before done
 - [ ] Every cross-column wire has an arrowhead; no line crosses a box or text; labels readable and not overlapping.
@@ -421,7 +74,7 @@ Not for: a quick diagram in a README · Pull Request · code note → `software-
 
 # Work domain → colour tone
 
-Use this when the document has no `doc-theme` and no brand colour. Use the house default `#2A78D6`, mark it `(รอยืนยัน)` (to be confirmed), and carry on without stopping to ask. Put a tone from this table in the report so the user can choose later (the full order is in `diagram-figures` item 5). Read the work's content first and write the `เนื้อหา:` brief per `design-references` `references/content-to-theme.md` (plugin `superuser`); its section 3 has the fuller mood-and-colour table for every kind of work, and section 4 says what each colour tends to carry. This table is shared by both engines of `diagram-figures` and by every skill that draws figures.
+Use this when the document has no `doc-theme` and no brand colour. Use the house default `#2A78D6`, mark it `(รอยืนยัน)` (to be confirmed), and carry on without stopping to ask. Put a tone from this table in the report so the user can choose later (the full order is in `diagram-figures` item 5). Read the work's content first and write the `เนื้อหา:` brief per `design-gate/design-references` `references/content-to-theme.md` (plugin `superuser`); its section 3 has the fuller mood-and-colour table for every kind of work, and section 4 says what each colour tends to carry. This table is shared by both engines of `diagram-figures` and by every skill that draws figures.
 
 | Domain | Suggested tone | Reason |
 |---|---|---|
@@ -522,7 +175,7 @@ An image drawn by Mermaid itself has free-curved, diagonal lines and colours tha
 
 1. Copy the folder `assets/mermaid-engine/` to `docs/figures/src/gen/`
 2. Edit `figures.json`:
-   - `prefix` is the project code (`document-naming`)
+   - `prefix` is the project code (`workspace-rules/document-naming`)
    - `drafts` is the folder of `.md` files that hold Mermaid blocks
    - `skip` is the blocks that already have a hand-drawn figure
    - `captions` replaces captions generated from headings
@@ -570,7 +223,7 @@ The cost is time, because 1 figure takes several rounds of fixes. So use it only
 ## 0 · Colour comes from the work — do not stop to ask
 
 **If the source document already declares a `doc-theme`, use that value and do not ask again.**
-(See `polished-document-style`, section "Document theme".) If there is none yet, follow the steps below, then write the result back into `doc-theme`.
+(See `design-gate/polished-document-style`, section "Document theme".) If there is none yet, follow the steps below, then write the result back into `doc-theme`.
 
 **No brand colour → follow the order in `diagram-figures` section 5:** use the house value `#2A78D6`, write `(รอยืนยัน)` (awaiting confirmation) in the report, and carry on without stopping to ask.
 Put a tone suggested from the content, using the table in [colour-by-domain.md](colour-by-domain.md), in the report so the user can choose later.
@@ -784,7 +437,7 @@ Open when you build or restyle a figure and need the full rules behind the short
 
 ## Colour weight
 
-Limit the number of colours, not the weight of colour. The main colour must be visible across the whole figure, not only in the header bar. Labels that must be found fast (step number · owner · status) use a solid fill · card headers are a full-width solid colour band (a thick colour stripe beside a rounded card is an AI signal in `no-ai-look`) · summary boxes use a dark fill · pastel colours only as a fill that has text or a dark border with it · check with the "colour power" axis in the beauty gate of `ui-craft` (`ui-craft/references/states-and-checks.md`, plugin `software-development`).
+Limit the number of colours, not the weight of colour. The main colour must be visible across the whole figure, not only in the header bar. Labels that must be found fast (step number · owner · status) use a solid fill · card headers are a full-width solid colour band (a thick colour stripe beside a rounded card is an AI signal in `design-gate/no-ai-look`) · summary boxes use a dark fill · pastel colours only as a fill that has text or a dark border with it · check with the "colour power" axis in the beauty gate of `ui-craft` (`ui-craft/references/states-and-checks.md`, plugin `software-development`).
 
 If you found a colour in step 5 item 2 but there is no `doc-theme` yet, declare a `doc-theme` with that value so the project's figures, documents and slides share it.
 
@@ -801,7 +454,7 @@ A readable but flat figure (white cards that all look alike, all lines the same 
 | Contrast | Secondary text on a dark fill ≥ 7:1 (light grey, not mid grey) |
 | Theme | Every colour is a variable in a single css file · arrowheads read colour from the variable (`getComputedStyle`), no values hard-coded in JavaScript · meaning colours (`t-app` `t-alert` `t-warn`) have a dark-background pair · no colour in `style=""` of figure files |
 
-**Dot grid + glowing lines = an approved house style** (the exception "an approved look always wins" in `no-ai-look`). When scanning with `slop_scan.py`, add `slop-ok` at `grid-bg` and `neon-glow` of these figures, with a short reason.
+**Dot grid + glowing lines = an approved house style** (the exception "an approved look always wins" in `design-gate/no-ai-look`). When scanning with `slop_scan.py`, add `slop-ok` at `grid-bg` and `neon-glow` of these figures, with a short reason.
 
 **How to choose a direction:** write 3 directions as override css, inject them into 2 real figures at render time (`add_init_script` before the line-drawing script runs) → place them next to the original → have a reviewer who did not do the work score them → edit the one theme css file and render the whole set. A dark figure in a white-page document must be a recorded decision (for example, chapter-opening pages and the cover are dark too), not an accident.
 
@@ -1045,9 +698,9 @@ Use when a Markdown doc needs an image, SVG or ASCII art
 
 # Markdown Visuals
 
-> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `design-gate/no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
-> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
+> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `design-gate/polished-document-style`.
 
 > **Rule:** Every plan, process, design, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
 
@@ -1122,7 +775,7 @@ What are you showing?
 
 ### สี
 
-If the document or project already has a colour palette, use it. If not, search for references per `design-references` (plugin `superuser`), type `document`, and take the colours from the chosen work · if live search is not possible, use the house value `#2A78D6`, mark it `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask (order in `diagram-figures` item 5 · colour-by-domain table [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) · for role-based tokens (`bg-canvas` · `accent-primary` · `state-*` …) see [references/svg-snippets.md](references/svg-snippets.md) · and **1 document uses 1 palette**
+If the document or project already has a colour palette, use it. If not, search for references per `design-gate/design-references` (plugin `superuser`), type `document`, and take the colours from the chosen work · if live search is not possible, use the house value `#2A78D6`, mark it `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask (order in `diagram-figures` item 5 · colour-by-domain table [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) · for role-based tokens (`bg-canvas` · `accent-primary` · `state-*` …) see [references/svg-snippets.md](references/svg-snippets.md) · and **1 document uses 1 palette**
 
 ### Reusable snippets
 
@@ -1228,7 +881,7 @@ When a markdown doc needs a design picture (clickable app screens go to the plat
 
 ## ไม่ให้ดูเหมือน AI ทำ
 
-Before sending, go through item 3 of `no-ai-look` — for HTML work, run its script · every piece must also pass eye check 3.2 (a web page adds items 10–14), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for all media is there
+Before sending, go through item 3 of `design-gate/no-ai-look` — for HTML work, run its script · every piece must also pass eye check 3.2 (a web page adds items 10–14), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for all media is there
 
 
 ## reference: ascii-patterns.md

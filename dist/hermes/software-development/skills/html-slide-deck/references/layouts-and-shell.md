@@ -42,7 +42,7 @@ Every page has `<p class="foot">ชื่องาน · หัวข้อ · �
 
 ## Animation (switch on per page — the default is still)
 
-Content sliding up piece by piece on every page, numbers counting up, and glow that loops forever are AI signals in `no-ai-look`, so the shell does not add them to every page: put `data-anim` on the `<section>` only for pages where motion helps the eye follow the story (a system map where arrows must be drawn in order · section openers). `data-count` · `data-loop` · `.bars` · `data-chat` work only on the pieces where they are set.
+Content sliding up piece by piece on every page, numbers counting up, and glow that loops forever are AI signals in `design-gate/no-ai-look`, so the shell does not add them to every page: put `data-anim` on the `<section>` only for pages where motion helps the eye follow the story (a system map where arrows must be drawn in order · section openers). `data-count` · `data-loop` · `.bars` · `data-chat` work only on the pieces where they are set.
 
 | What happens | Where |
 |---|---|

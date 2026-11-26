@@ -4,13 +4,13 @@ Use when a series of images must look like one set
 
 # Style Consistency
 
-> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `design-gate/no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
 Goal: 10 assets that look like one person made them.
 
 ## Workflow
 
-1. **Pick 1–3 anchor images** — the approved hero, or reference photos that show the look · no anchor yet → **ค้นต้นแบบก่อน:** run the project's keywords through a live search per `design-references` (plugin `superuser`), type `illustration`, then pull the colours from the chosen work · use the stored palette bank only when live search is unavailable
+1. **Pick 1–3 anchor images** — the approved hero, or reference photos that show the look · no anchor yet → **ค้นต้นแบบก่อน:** run the project's keywords through a live search per `design-gate/design-references` (plugin `superuser`), type `illustration`, then pull the colours from the chosen work · use the stored palette bank only when live search is unavailable
 2. **Write the style lock sheet** with [style-lock-sheet.md](references/style-lock-sheet.md) before generating anything else
 3. **Build the style block** — the fixed part of every prompt (light, lens, palette, style, negatives); only the subject line changes per image
 4. **Lock the tool settings** — same model and version, same aspect-ratio family, same style/reference image, seed where it helps
@@ -54,7 +54,7 @@ Fail on any → reject or send to `image-editing-brief`; do not keep "because it
 
 ## Not an AI look
 
-Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files. Lock the style against its section 4 so the whole series avoids the same AI defaults.
+Before handing over, run the check in `design-gate/no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files. Lock the style against its section 4 so the whole series avoids the same AI defaults.
 
 ## References
 
@@ -121,9 +121,9 @@ The cover is the only page without the frame: logo top left, the company name ve
 - A client logo wall needs each client's permission.
 - Drop empty trailing pages (the source ends with a blank page 13).
 
-## Clash with `no-ai-look`
+## Clash with `design-gate/no-ai-look`
 
-This look uses several signals that `no-ai-look` section 2 says are never the default: grids of identical cards, icon tiles above headings, every page title + bullets, swoosh ribbons, and words like "ยกระดับ" and "ในยุคดิจิทัล". The owner chose the look, so the layout signals may stay: note the owner's pick under **ตัดสินใจเอง** and add a `slop-ok` comment in HTML/CSS output. The words do not get a pass: still run the copy through `human-writing`.
+This look uses several signals that `design-gate/no-ai-look` section 2 says are never the default: grids of identical cards, icon tiles above headings, every page title + bullets, swoosh ribbons, and words like "ยกระดับ" and "ในยุคดิจิทัล". The owner chose the look, so the layout signals may stay: note the owner's pick under **ตัดสินใจเอง** and add a `slop-ok` comment in HTML/CSS output. The words do not get a pass: still run the copy through `human-writing`.
 
 
 ## reference: style-lock-sheet.md

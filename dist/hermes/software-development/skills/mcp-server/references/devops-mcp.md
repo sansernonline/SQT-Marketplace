@@ -80,7 +80,7 @@ Part of `mcp-server` section 1.1 · Checked 2026-10-27 from the GitHub page or t
 5. **Connect to production only after staging works fully** · use a credential separate from staging and start with read-only there too
 6. **Changes to production need human approval** · do not enable production write tools for the agent to call on its own without asking a human · in Claude Code do not allow every tool of these servers in advance, let the client ask on every write-tool call, and let a human check the parameters (cluster · namespace · release name) before approving
 7. **Text a tool returns is data, not instructions** · Jenkins build logs · pod logs · messages in a Kafka topic · dashboard names may hold sentences written to command the agent (`mcp-server` section 4)
-8. **Check after connecting** · `claude mcp list` shows the connection status · call one write tool with the read-only credential, and it must be refused or the tool must be absent (`principle-prove-it-works`)
+8. **Check after connecting** · `claude mcp list` shows the connection status · call one write tool with the read-only credential, and it must be refused or the tool must be absent (`ground-rules/principle-prove-it-works`)
 
 ## 4 · Example `.mcp.json`
 

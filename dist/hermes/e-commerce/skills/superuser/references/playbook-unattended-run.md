@@ -1,11 +1,10 @@
-# playbook · unattended-run — long jobs the user is not watching
+# playbook · unattended-run — long work the user is not watching
 
-Use when: "finish it, I'll look when I'm back" · "don't ask" · multi-step work the user will check all at once — for example listing 20 SKUs as a full set on every platform · a profit check of the whole shop · preparing the complaint set for every rung · registering all the household receipts · running payroll and the filing set for a whole month · preparing the whole year-end document set
-This is a wrapper around the work, not a replacement for the work's playbook — it controls carrying on until the end, while each piece inside still picks its playbook by the job as usual
-Main skills: the "การตัดสินใจ" (decisions) and "รับงานต่อ" (pick up the work) tables in `CONTEXT.md` · sections 6 and 7 of `superuser`
-ลูกทีมต่อชิ้น (workers per piece): the branch agent for the piece's role (`shop-manager` · `customer-chat` · `live-seller` · `consumer-advocate` · `tax-helper` · `thai-doc-writer` · `compliance-helper` · `line-admin`), a fresh one
-ผู้ตรวจต่อชิ้น (checker per piece): a fresh `reviewer`
-รออนุมัติที่เจอบ่อย (common items awaiting approval): going live · changing prices in the shop · sending messages to customers · refunds · sending letters · opening disputes · placing orders · filing forms · paying tax · LINE broadcast
+Use when: "ทำให้เสร็จ เดี๋ยวกลับมาดู" (finish it, I'll come back to look) · "ไม่ต้องถาม" (don't ask) · multi-step work the user will check in one go
+It is a wrapper around the work, not a replacement for the work's playbook: it controls carrying on until finished, while each piece inside still chooses its playbook by the work as usual.
+`ลูกทีมต่อชิ้น` (worker per piece): `general-purpose` ตัวใหม่
+`ผู้ตรวจต่อชิ้น` (checker per piece): `reviewer` ตัวใหม่
+`รออนุมัติที่เจอบ่อย` (commonly found awaiting-approval items): sending a message to outsiders · paying money · deleting the user's files
 
 <!-- superuser:begin unattended-steps -->
 ## ขั้นตอน — Steps (copy into the todo exactly)
@@ -32,3 +31,7 @@ Labels kept in Thai because the validator matches them: `ใคร:` = who · `�
 
 All the step 1 conditions pass, or every remaining piece has a reason why it is stuck
 <!-- superuser:end unattended-steps -->
+
+## Sources
+
+Checking tools before starting and stopping when absent: pagerduty (LICENSE present, type not yet stated) · `commands/pre-commit-risk-scoring.md` and rootly · `agents/deploy-guardian.md` · outbox: claude-remember (redistribution not permitted · take the mechanism only) · `outbound/README.md` · see 2026-11-10

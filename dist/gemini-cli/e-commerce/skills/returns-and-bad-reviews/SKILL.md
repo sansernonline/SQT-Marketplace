@@ -51,7 +51,7 @@ value at stake = refund amount + shipping lost (+ rating points at risk, only if
 cost of time   = minutes spent x your hourly rate / 60
 ```
 
-Start from a chance of winning of 0.7 for a clear video and 0.5 for tracking proof only (starting value, not yet measured; replace with the shop's own win rate once 10 disputes are logged). Example: ฿400 item, video proof, 20 minutes at ฿150 an hour → 0.7 x 400 - 50 = ฿230 → dispute. ฿120 item, tracking only, 20 minutes → 0.5 x 120 - 50 = ฿10, below ฿100 → refund fast and keep the rating. When the outcome hangs on a platform ruling you cannot estimate, `decision-scoring` command `payoff` compares dispute vs refund across scenarios. The numbers are information; the seller decides.
+Start from a chance of winning of 0.7 for a clear video and 0.5 for tracking proof only (starting value, not yet measured; replace with the shop's own win rate once 10 disputes are logged). Example: ฿400 item, video proof, 20 minutes at ฿150 an hour → 0.7 x 400 - 50 = ฿230 → dispute. ฿120 item, tracking only, 20 minutes → 0.5 x 120 - 50 = ฿10, below ฿100 → refund fast and keep the rating. When the outcome hangs on a platform ruling you cannot estimate, `decision-desk/decision-scoring` command `payoff` compares dispute vs refund across scenarios. The numbers are information; the seller decides.
 
 ## Review replies
 

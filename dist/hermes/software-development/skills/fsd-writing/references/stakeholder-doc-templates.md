@@ -63,7 +63,7 @@ Every stakeholder doc MUST follow the 11 FSD sections (`SKILL.md` §3, full outl
 
 ### Visual Markers
 
-No emoji or icons in headings, body, tables, labels or callouts (`human-writing` · `polished-document-style`). Use words:
+No emoji or icons in headings, body, tables, labels or callouts (`human-writing` · `design-gate/polished-document-style`). Use words:
 
 | Need | Write |
 |--------|---------|

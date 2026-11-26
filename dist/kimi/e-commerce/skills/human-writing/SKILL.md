@@ -1,6 +1,6 @@
 ---
 name: human-writing
-description: Use before writing anything people read, in Thai or English
+description: Use before writing anything people read, Thai or English
 ---
 
 # human-writing — write like a person: smooth to read, easy to understand
@@ -8,7 +8,7 @@ description: Use before writing anything people read, in Thai or English
 ## Use when
 - Writing anything a person will read, from chat to labels in a diagram, in Thai or English.
 
-Not for: the look of kept documents (headings, tables, text boxes, theme) → `polished-document-style` · abbreviations and glossaries → `spell-out-abbreviations`.
+Not for: the look of kept documents (headings, tables, text boxes, theme) → `design-gate/polished-document-style` · abbreviations and glossaries → `human-writing/spell-out-abbreviations`.
 
 ## Steps
 
@@ -28,13 +28,13 @@ Not for: the look of kept documents (headings, tables, text boxes, theme) → `p
 - **Task status** uses these 5 words in every document: `เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่`. Check results use `ผ่าน · ไม่ผ่าน`.
 
 ### 3 · Words
-- Use words people actually say. No bureaucratic words or literal-translation jargon. Keep terms the field uses in English (token · prompt · API · OCR). Explain a coined or confusing term the first time. Abbreviations → `spell-out-abbreviations`.
+- Use words people actually say. No bureaucratic words or literal-translation jargon. Keep terms the field uses in English (token · prompt · API · OCR). Explain a coined or confusing term the first time. Abbreviations → `human-writing/spell-out-abbreviations`.
 - Call one thing by one word across the whole set: chat, slides, documents, diagrams.
 - Two-language documents: pick 1 main language and put the other in brackets or a second column. Do not switch inside a sentence.
 - Cut padding words ("ทำการ" · "มีการ" · "ในส่วนของ" · "ได้มีการ" · "เป็นการ").
 - **Cut items, not function words.** Every length budget (words per bullet · characters per commit title · characters per subtitle) is met by dropping items, condensing, or moving content to the next piece. Never cut `จะ` `ให้` `ก็` `ด้วย` `แล้ว` `ต่างหาก` or polite words (`ขอ` `รบกวน` `นะ` and ครับ/ค่ะ, per register). They do work in the sentence; without them Thai turns curt and reads like a translation.
 - Avoid AI-looking moves: a quotable opener · the slogan "ไม่ใช่แค่… แต่ยัง…" for emphasis (a sentence that contrasts with something real or reframes the problem is fine, but it must close with "ด้วย") · grouping everything in threes · praising something as more important than it is · bold on every line · a closing recap · opening with "แน่นอน" · closing with "หวังว่าจะช่วยได้" · "หลาย" when you know the number · stacked hedges (hedge once, where you are truly unsure).
-- For work people look at (screens · slides · ads) also avoid: broad ad words (ยกระดับ · ไร้รอยต่อ · ล้ำสมัย · supercharge) · em dashes in every sentence · canned openers ("ในยุคดิจิทัลที่…") · short fragments split by full stops ("เร็ว. ง่าย. ครบ.") · claims a competitor could also make (put in a real name or number). For the look of the work, use `no-ai-look`.
+- For work people look at (screens · slides · ads) also avoid: broad ad words (ยกระดับ · ไร้รอยต่อ · ล้ำสมัย · supercharge) · em dashes in every sentence · canned openers ("ในยุคดิจิทัลที่…") · short fragments split by full stops ("เร็ว. ง่าย. ครบ.") · claims a competitor could also make (put in a real name or number). For the look of the work, use `design-gate/no-ai-look`.
 
 ### 4 · Answering in chat
 - First sentence answers directly, then the reason. Short question → 2–3 sentences, no headings or tables.
@@ -79,3 +79,16 @@ Applies to slide titles, figure titles, document headings, and box titles in a d
 - [`references/thai-grammar.md`](references/thai-grammar.md) — open when writing Thai of 1 paragraph or more (sentence structure · register); example paragraphs in [`references/thai-examples.md`](references/thai-examples.md)
 - [`references/strict-review.md`](references/strict-review.md) — open for research or work sent to outsiders
 - [`references/thai-line-breaking.md`](references/thai-line-breaking.md) — open for Thai documents with justified alignment
+
+## Parts
+Hard rules of the parts (full steps in each guide):
+- spell-out-abbreviations: write every abbreviation in full the first time, with the abbreviation in brackets; after that you may use the abbreviation.
+- spell-out-abbreviations: put a short explanation in brackets the first time you use a technical term an outside reader may not know.
+- translate-th-en: translate meaning one paragraph at a time, not word by word; 1 term = 1 translation across the whole project, recorded in `docs/glossary.md`.
+- polite-message-th-en: say the hard thing clearly; politeness belongs in the wording, not in hiding the request. One ask per message, with a date. Move up one tone level per reminder, never two. Do not stack softeners.
+
+| When | Open |
+|---|---|
+| First use of an abbreviation or technical term; glossary | [parts/spell-out-abbreviations/guide.md](parts/spell-out-abbreviations/guide.md) |
+| Translating Thai-English, paired files, screen text | [parts/translate-th-en/guide.md](parts/translate-th-en/guide.md) |
+| Awkward message to ask, decline, chase payment, apologise or complain | [parts/polite-message-th-en/guide.md](parts/polite-message-th-en/guide.md) |

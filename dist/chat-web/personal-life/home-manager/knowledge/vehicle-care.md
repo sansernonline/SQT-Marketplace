@@ -46,7 +46,7 @@ Bring: registration book copy (สำเนาเล่มทะเบียน)
 | ชั้น 2 | ✘ | ✘ | ✔ | ✔ | |
 | ชั้น 3 | ✘ | ✘ | ✘ | ✔ | Cheapest legal-liability top-up to พ.ร.บ. |
 
-### Compare insurance quotes by numbers (`decision-scoring`, command `score`)
+### Compare insurance quotes by numbers (`decision-desk/decision-scoring`, command `score`)
 
 1. **Iron rules (กฎเหล็ก):** insurer not licensed on oic.or.th · sum insured above the car's market value (you pay for cover you cannot collect) · class below what the lender requires. Put them in `must`.
 2. **Criteria (default weights, starting value, not yet measured, the user changes them):** premium per year, baht (low, 0.35) · excess per claim, baht (low, 0.20) · claim service 1–5 from the user's own reading of reviews and the garage list (high, 0.25) · garage type 1–5 (อู่ห้าง = 5, high, 0.20). Use quotes with the same sum insured and the same drivers.
@@ -57,7 +57,7 @@ Compare quotes on: sum insured (ทุนประกัน — not above market
 
 ## Before buying a car (compare 5-year cost)
 
-Same method as the insurance quotes, with `decision-scoring` command `score`: copy [references/buy-car-score-example.json](references/buy-car-score-example.json) (made-up numbers) and put in the real quotes.
+Same method as the insurance quotes, with `decision-desk/decision-scoring` command `score`: copy [references/buy-car-score-example.json](references/buy-car-score-example.json) (made-up numbers) and put in the real quotes.
 
 1. **Iron rule (กฎเหล็ก):** monthly instalment above the limit the user set before looking at cars → dropped, not scored (the example uses 12,000 baht). Also dropped: no licensed lender or dealer (check the dealer and any lender on official registers, not on the seller's word).
 2. **Total cost over 5 years, in baht, per option:** instalments + interest + insurance + annual tax + servicing + fuel − resale value at year 5. The user fills each part from quotes and the maintenance table below; resale value is the user's estimate (default, not measured; ask a dealer in writing). Never invent a price or a loan rate: loan rates and car prices change, so every figure comes from the user's own quote.

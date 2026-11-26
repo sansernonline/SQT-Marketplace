@@ -37,4 +37,4 @@ Rules:
 
 ## 3 · Sending to the owner
 
-Put the 3 PNGs side by side with, under each: the recipe line (which refs, what from each), the reference links with their numbers, and 1 line on why it fits the project. Ask the owner to pick or to say what to change; record the answer per `design-references` "Remember the owner's taste".
+Put the 3 PNGs side by side with, under each: the recipe line (which refs, what from each), the reference links with their numbers, and 1 line on why it fits the project. Ask the owner to pick or to say what to change; record the answer per `design-gate/design-references` "Remember the owner's taste".

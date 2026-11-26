@@ -6,7 +6,7 @@ One lead is good at 4 things: **dispatching** · **rating team members** · **ma
 
 ## 3 lines before touching the task
 
-**3 lines before touching the task** (1 minute at most), written with these Thai labels word for word: `เป้า:` (goal) what the user gets · `เสร็จเมื่อ:` (done-when) how it is checked · `เสี่ยง:` (risk) what is lost if it goes wrong, and can it be undone (irreversible → rule 7) · Medium tasks and up add to the end of the done-when line which workflow: Loop (one piece, do-check-fix) · Graph (split into pieces, then merge) · Dynamic (facts may change midway) · The lead picks from the request table in [`agent-patterns`](../../agent-patterns/SKILL.md) and does not ask the user · If the user asks to see the plan before work starts → put these 3 lines at the very top of the plan sent (eval 2026-11-09: the plan had no done-when line in 3 of 3 rounds)
+**3 lines before touching the task** (1 minute at most), written with these Thai labels word for word: `เป้า:` (goal) what the user gets · `เสร็จเมื่อ:` (done-when) how it is checked · `เสี่ยง:` (risk) what is lost if it goes wrong, and can it be undone (irreversible → rule 7) · Medium tasks and up add to the end of the done-when line which workflow: Loop (one piece, do-check-fix) · Graph (split into pieces, then merge) · Dynamic (facts may change midway) · The lead picks from the request table in [`crew-patterns/agent-patterns`](../../crew-patterns/parts/agent-patterns/guide.md) and does not ask the user · If the user asks to see the plan before work starts → put these 3 lines at the very top of the plan sent (eval 2026-11-09: the plan had no done-when line in 3 of 3 rounds)
 
 ## Size
 
@@ -17,7 +17,7 @@ One lead is good at 4 things: **dispatching** · **rating team members** · **ma
 | **Large or unclear** | (the hook counts ≥ 5 pieces or risky work as "must open this skill", which may be medium in this table) over 8 pieces, or a critical path longer than 4 pieces · several possible routes · a wrong pick is costly | A fresh `brainstormer` proposes 2–3 routes → the lead picks 1 → brief per [`brief-template`](brief-template.md) at `docs/BRIEF.md` → playbook · lay out the whole graph first; worker count comes from graph width, with non-overlapping duties |
 | **XL (several days · milestones · people on the team)** | cannot finish in one session · a real person takes a piece alongside an agent | [`team-project`](playbook-team-project.md) — brief → BUILD-PLAN splits milestones → a `handoff` note for every piece · check per milestone · close the day with "รับงานต่อ" (pickup) |
 
-The numeric thresholds are defaults and not yet measured (tied to S/M/L 20/50/100k and WORKFLOW_AT 8 in `plan.mjs`) · For an unknown piece size, use that step's PERT expected value from `model-scorecard` (section "ขนาดชิ้นงานจากงานเก่า", piece size from past work) · Unsure of size → treat as one size up · Used more than 2 times the planned workers and still not done → review the plan and log 1 row in "การตัดสินใจ"
+The numeric thresholds are defaults and not yet measured (tied to S/M/L 20/50/100k and WORKFLOW_AT 8 in `plan.mjs`) · For an unknown piece size, use that step's PERT expected value from `superuser/model-scorecard` (section "ขนาดชิ้นงานจากงานเก่า", piece size from past work) · Unsure of size → treat as one size up · Used more than 2 times the planned workers and still not done → review the plan and log 1 row in "การตัดสินใจ"
 
 ## Budget
 

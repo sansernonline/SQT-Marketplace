@@ -2,7 +2,7 @@
 
 Use when: <the situation, or 2–3 phrases the user says>
 Result: <what the user gets · file format>
-Main patterns: <Planning · ReAct · Reflection · Multi-Agent · MoA (Mixture-of-Agents) · Reranker used> (`agent-patterns`)
+Main patterns: <Planning · ReAct · Reflection · Multi-Agent · MoA (Mixture-of-Agents) · Reranker used> (`crew-patterns/agent-patterns`)
 
 ## ขั้นตอน — Steps (copy into the todo exactly)
 

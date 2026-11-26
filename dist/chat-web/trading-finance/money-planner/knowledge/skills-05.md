@@ -20,7 +20,7 @@ Not for: filing itself (ภ.ง.ด.90/91, deadlines) and dividends, interest, c
 3. **Compute tax now** with `node scripts/tax.mjs <file.json>` (never by hand): income − expense deduction (50%, max 100,000 for salary) − allowances already locked in = net income → rate table. Caps and rates → [`references/deductions-2569.md`](references/deductions-2569.md), never from memory.
 4. **Find the marginal rate.** A 1-baht deduction saves the marginal rate of the band the net income falls in. A deduction that crosses into a lower band saves the lower rate on the crossing part (`tax.mjs` prints the rate before and after). If net income is already in the 0% band, stop: more deductions save nothing.
 5. **Walk the checklist** (20 items with caps and the question to ask) in [`references/checklist-and-example.md`](references/checklist-and-example.md); for each line ask "already have it / can still add / not applicable".
-6. **Size the funds last.** Room left: RMF ≤ 30% of income, ThaiESG ≤ 30% and 300,000, and PVD + RMF + pension insurance + กอช. ≤ 500,000 combined. When items compete for one budget, use `decision-scoring` command `knapsack` (script path in `decision-scoring`, superuser plugin; fields, example, `value` per block → [`references/knapsack.md`](references/knapsack.md)). One block changes the saving of the next, so **after the script gives a set, put it under `buy` and rerun `tax.mjs`** and show that figure, not the sum of the estimates.
+6. **Size the funds last.** Room left: RMF ≤ 30% of income, ThaiESG ≤ 30% and 300,000, and PVD + RMF + pension insurance + กอช. ≤ 500,000 combined. When items compete for one budget, use `decision-desk/decision-scoring` command `knapsack` (script path in `decision-desk/decision-scoring`, superuser plugin; fields, example, `value` per block → [`references/knapsack.md`](references/knapsack.md)). One block changes the saving of the next, so **after the script gives a set, put it under `buy` and rerun `tax.mjs`** and show that figure, not the sum of the estimates.
 7. **Recompute** and show before / after / saved, and the cash the plan locks up (RMF to age 55, ThaiESG 5 years).
 8. **List the paperwork** for January: 50 ทวิ, insurance premium certificates (ask the insurer to send data to RD), fund tax certificates (ask the AMC to send data), home loan interest certificate, e-Donation, ล.ย.03 for parents.
 
@@ -228,7 +228,7 @@ ThaiESG after 2569: max 100,000 and 8-year hold for 2570–2575 per SEC Q&A (ร
 
 Moved from `SKILL.md` (tax-deduction-planner) section "Choosing several items under a budget" · open only when several items compete for one budget
 
-Use `decision-scoring`, command `knapsack`. Its `templates/knapsack.json` is an example. Script path: see `decision-scoring` (superuser plugin).
+Use `decision-desk/decision-scoring`, command `knapsack`. Its `templates/knapsack.json` is an example. Script path: see `decision-desk/decision-scoring` (superuser plugin).
 
 | Field | What to enter |
 |---|---|

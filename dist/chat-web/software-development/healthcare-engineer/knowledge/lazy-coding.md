@@ -10,7 +10,7 @@ Use when writing or reviewing code, for the simplest that works
 
 - Writing or reviewing any code. On by default at **full** in every response; switch with `lazy lite | full | ultra`; off only on "stop lazy" / "normal mode".
 
-Not for: names, function shape and file layout → `readable-code` (**always load together**: lazy decides how much code, readable-code decides how it looks) · the repo skeleton → `project-bootstrap` · docs, plans, architecture → `superuser:simplify`
+Not for: names, function shape and file layout → `readable-code` (**always load together**: lazy decides how much code, readable-code decides how it looks) · the repo skeleton → `project-bootstrap` · docs, plans, architecture → `superuser:ground-rules`
 
 ## Steps
 
@@ -53,7 +53,7 @@ Not for: names, function shape and file layout → `readable-code` (**always loa
 - [`references/structure.md`](references/structure.md) — open when deciding where code, config, constants and tests live
 - [`references/examples.md`](references/examples.md) — open for shortcut-marking examples and the 3 intensity levels answering the same request
 
-Pairs with: `simplify` · `readable-code` · `project-bootstrap` · `code-review-checklist` (a lazy diff still gets reviewed)
+Pairs with: `ground-rules/simplify` · `readable-code` · `project-bootstrap` · `code-review-checklist` (a lazy diff still gets reviewed)
 
 
 ## reference: examples.md

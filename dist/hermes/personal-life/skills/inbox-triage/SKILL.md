@@ -35,7 +35,7 @@ Get to "nothing hiding in here" in ten minutes a day. This is a method; reading 
 | Receipts, e-Tax invoices, statements, bookings | **File** | Move to the matching folder (below), then archive |
 | Newsletters, CC, notifications | **Archive** | Archive; unsubscribe if unopened for 3 issues |
 
-### Order the Today and This-week items by numbers (`decision-scoring`, command `priority`)
+### Order the Today and This-week items by numbers (`decision-desk/decision-scoring`, command `priority`)
 
 When more than 3 items are in **Today** or **This week**, score each: **urgent 1–5** (5 = due today, 4 = tomorrow, 3 = this week, 2 = next week, 1 = no date) · **important 1–5** (the user's score: money, people, a promise) · **minutes** to answer. Run `node decide.mjs priority mail.json` with `{"method":"eisenhower","items":[{"name":...,"urgent":1-5,"important":1-5,"minutes":N}]}` (full example: `references/worked-example.md`). The tool sorts into 4 groups (urgent and important both 3 or more = do now; important only = schedule; urgent only = delegate or reply short; neither = drop), then by `urgent × important ÷ minutes`.
 
@@ -48,7 +48,7 @@ When more than 3 items are in **Today** or **This week**, score each: **urgent 1
 - **Angry mail or a complaint** (landlord, school, insurer, a seller) → draft only an acknowledgement ("ได้รับเรื่องแล้วครับ จะตอบรายละเอียดภายในวัน…"). Do not offer money, admit fault or promise a fix; put the item under **Today** with the note "ต้องตัดสินใจเอง".
 - **Someone else already answered** in the thread (spouse, colleague, the shop) → no draft; tell the user who answered and what they said.
 - **Cannot place a message** in one bucket → put it in **Today** and say in one line what is unclear ("ไม่แน่ใจว่าเป็นบิลจริงหรือโฆษณา"). Do not guess quietly.
-- Wording for awkward replies → `polite-message-th-en`.
+- Wording for awkward replies → `human-writing/polite-message-th-en`.
 
 ## Folder / label set (keep it to seven)
 
@@ -71,7 +71,7 @@ Keep it in the **Waiting On** section of the user's `tasks.md` (`task-board`) wh
 | 2026-10-06 | Khun Ploy | signed quotation | 2026-10-09 |
 ```
 
-Chase politely on the date (`polite-message-th-en` for the wording).
+Chase politely on the date (`human-writing/polite-message-th-en` for the wording).
 
 ## Rules
 

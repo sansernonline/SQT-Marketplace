@@ -36,6 +36,6 @@ Not for: writing the hook, script or shot list → `social-creator` and `art-dir
 
 ## Writing
 
-Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow — the `simplify` skill.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow — the `ground-rules/simplify` skill.
 
-Visual work you hand over (video · thumbnail · subtitle styling) follows the `no-ai-look` skill — design from the project's own content and brand, then run its check before you say done.
+Visual work you hand over (video · thumbnail · subtitle styling) follows the `design-gate/no-ai-look` skill — design from the project's own content and brand, then run its check before you say done.

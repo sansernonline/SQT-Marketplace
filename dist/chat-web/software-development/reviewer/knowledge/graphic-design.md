@@ -4,7 +4,7 @@ Use for a one-off logo or poster, not a full brand kit
 
 # Graphic Design
 
-> **Pre-work gate "ด่านก่อนลงมือ" (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for finding the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
+> **Pre-work gate "ด่านก่อนลงมือ" (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `design-gate/no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for finding the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
 > **The one rule of this skill:** write the direction into a file first, then touch the first pixel.
 
@@ -35,7 +35,7 @@ Also when reviewing work that "looks AI-made" and you cannot say why.
 
 ## 1 · Work sequence
 
-0. **Search for references first:** take the project's keywords and search live as in `design-references` (plugin `superuser`), type `logo` · `social` · `illustration` as the work needs, then pull colours from the chosen work. Use the stored colour library when live search is not possible.
+0. **Search for references first:** take the project's keywords and search live as in `design-gate/design-references` (plugin `superuser`), type `logo` · `social` · `illustration` as the work needs, then pull colours from the chosen work. Use the stored colour library when live search is not possible.
 1. **Write the direction into a file.** Copy `assets/brand-direction.md` and fill it in.
 2. **Pick a position on the 4 axes** (section 2), then write 1 line of reasoning per axis.
 3. **Write the list of things to avoid.** It is the most useful part of the whole file.
@@ -176,7 +176,7 @@ or like it could have come out of any machine?
 
 ## Do not look AI-made
 
-Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script. Every piece must also pass the eye check (ด่านตา) 3.2 (web pages answer items 10–14 as well), because a script result of 0 items does not yet mean a pass. The bans in this file are specific to this work. The full list for every medium is there.
+Before sending, go through item 3 of `design-gate/no-ai-look`. For HTML work, run its script. Every piece must also pass the eye check (ด่านตา) 3.2 (web pages answer items 10–14 as well), because a script result of 0 items does not yet mean a pass. The bans in this file are specific to this work. The full list for every medium is there.
 
 
 **Read more when needed:** [`references/designer-outputs.md`](references/designer-outputs.md) — formats for a designer's deliverables
@@ -257,7 +257,7 @@ the lettermark as symbol for favicons and embroidery
 A logo rejected as "not beautiful, not wow" is usually a commonly used symbol, such as the `>_` of a terminal program or a flat single-color wordmark. What works:
 
 1. **Make at least 1 direction come from what users see every day in the work**, for example the underscore cursor of a terminal for a telnet/SSH app, because the work's owner often ties the brand to that picture (the real owner picked the cursor direction after 2 rounds)
-2. **Make 3 directions at the same time**, each with a different idea, such as connection lines · letters as stacked layers · plain geometric shapes, then choose from real images placed side by side (`parallel-attempts-pick-best`)
+2. **Make 3 directions at the same time**, each with a different idea, such as connection lines · letters as stacked layers · plain geometric shapes, then choose from real images placed side by side (`crew-patterns/parallel-attempts-pick-best`)
 3. **Have depth in a form that passes `SKILL.md` section 7** — stacked layers of shapes · different line weights · a gradient of one hue whose shades differ by no more than 10 degrees · **no glow and no multi-color gradients**, and at 16px a readable silhouette must remain
    - Glow or light layers are allowed only when the user asks for that direction (opt-in) and it must be written in the direction file
 4. **Make a preview sheet every round** — sizes 16 · 24 · 32 · 48 · 64 · 128 · 256 on dark and white backgrounds · the logo + name lockup on both backgrounds · single-color version · in the Windows taskbar and the app window title bar, then look at it with your own eyes and revise at least 3 rounds (an example of a sheet that passed: `assets/logo-preview-sheet-example.webp`)

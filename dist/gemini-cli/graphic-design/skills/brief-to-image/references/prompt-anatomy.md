@@ -91,7 +91,7 @@ text, watermark, logo, signature · extra fingers, distorted hands · duplicate 
 
 ## Tactile 3D hero object
 
-One physical-looking object as the hero of a post or page (paper cut, clay, felt, wood). Generic "soft 3D render, clay, studio lighting" prompts give the glossy CGI look that `no-ai-look` flags; these 8 lines name what a real object has. One line each, in this order, then set the aspect ratio as a parameter.
+One physical-looking object as the hero of a post or page (paper cut, clay, felt, wood). Generic "soft 3D render, clay, studio lighting" prompts give the glossy CGI look that `design-gate/no-ai-look` flags; these 8 lines name what a real object has. One line each, in this order, then set the aspect ratio as a parameter.
 
 | # | Line | Fill with | Weak → strong |
 |---|---|---|---|
@@ -112,4 +112,4 @@ Other materials: swap line 2 for "polymer clay with faint fingerprints, soft mat
 
 **Negative / settings:** glossy plastic, smooth CGI surface, glow, text, letters, teal-orange colour grade, floating particles, extra objects · aspect ratio 4:5.
 
-The cream backdrop and orange come from this brief. Cream with a warm orange accent is also a palette models reach for when nobody chose one (`no-ai-look` catalog section 1), so use it only when the brand or the brief asks for it.
+The cream backdrop and orange come from this brief. Cream with a warm orange accent is also a palette models reach for when nobody chose one (`design-gate/no-ai-look` catalog section 1), so use it only when the brand or the brief asks for it.

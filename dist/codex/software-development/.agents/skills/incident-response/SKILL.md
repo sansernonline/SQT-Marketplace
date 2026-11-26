@@ -78,7 +78,7 @@ Common mitigations, lowest risk first (same order as `incident-runbook-template`
 - **Block** at WAF (web application firewall) or firewall
 - **Failover** to backup region/instance (last resort)
 
-> **Production changes need a human.** The agent proposes the action, the command and the expected effect. A human on-call runs it or approves it before rollback, failover, WAF or firewall blocks, scaling or flag changes touch production (`principle-proceed-on-reversible-work`).
+> **Production changes need a human.** The agent proposes the action, the command and the expected effect. A human on-call runs it or approves it before rollback, failover, WAF or firewall blocks, scaling or flag changes touch production (`ground-rules/principle-proceed-on-reversible-work`).
 
 Document what worked AND what didn't.
 
@@ -108,7 +108,7 @@ Document what worked AND what didn't.
 
 ## Output Required
 
-Throughout the incident, keep a running **incident log** as plain timestamped lines. After the all-clear, format it with `polished-document-style`. It covers:
+Throughout the incident, keep a running **incident log** as plain timestamped lines. After the all-clear, format it with `design-gate/polished-document-style`. It covers:
 - Severity + timeline table
 - Affected services + user count
 - Investigation steps + findings (the first paragraph answers "what broke and why" before any evidence; hypotheses carry the tags from Phase 2)

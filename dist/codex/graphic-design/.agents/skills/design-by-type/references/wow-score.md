@@ -1,6 +1,6 @@
 # Wow score · design-by-type
 
-The eye gate in `no-ai-look` (n/9) only says a piece does not look AI-made. On 2026-11-19 the owner accepted four of five types at 7–8/9 but asked for work that is "ว้าว ตั้งแต่แรก ไม่ต้อง design ใหม่". This score measures the step above passing: would the piece make someone stop and want it. Give it before sending, next to the eye gate.
+The eye gate in `design-gate/no-ai-look` (n/9) only says a piece does not look AI-made. On 2026-11-19 the owner accepted four of five types at 7–8/9 but asked for work that is "ว้าว ตั้งแต่แรก ไม่ต้อง design ใหม่". This score measures the step above passing: would the piece make someone stop and want it. Give it before sending, next to the eye gate.
 
 ## Five criteria, 0–2 each (total 10)
 
@@ -9,7 +9,7 @@ The eye gate in `no-ai-look` (n/9) only says a piece does not look AI-made. On 2
 | 1 | **Stops the eye** at thumbnail size (about 300 px wide, 1 second) | nothing stands out, or everything shouts | one element stands out but is ordinary | one striking element you remember after looking away | Awwwards "Design" 40 % |
 | 2 | **An idea from this job** | could be any company's | the idea fits but competitors use it too | a twist only this business has (the payslip that is the mark, the route that ends at the key number) | D&AD: original idea, relevant to its context |
 | 3 | **A flourish with meaning** (1–2 playful moves: an overlap, a cut-out, a shape that bends, a hidden second reading) | none, everything sits in its box | present but decorative | it carries the idea and makes you smile | Awwwards "Creativity" 20 %; owner wants `ลูกเล่น` |
-| 4 | **Depth and light** | flat, no light direction | some shadow or gradient, mixed or timid | 3 layers, one light source, materials you can almost touch, inside `design-references` `references/depth-and-light.md` limits | owner's theme `มีมิติ` · `แสงเงา` |
+| 4 | **Depth and light** | flat, no light direction | some shadow or gradient, mixed or timid | 3 layers, one light source, materials you can almost touch, inside `design-gate/design-references` `references/depth-and-light.md` limits | owner's theme `มีมิติ` · `แสงเงา` |
 | 5 | **Craft** at 100–200 % zoom | broken Thai marks, soft images, clipped or colliding text | clean but some loose edges, spacing or kerning | every edge, kern, Thai mark and image crisp | D&AD: "brilliantly executed" |
 
 A deliberately flat style (Swiss, flat brand) scores criterion 4 on how well the flatness is controlled, and says so.

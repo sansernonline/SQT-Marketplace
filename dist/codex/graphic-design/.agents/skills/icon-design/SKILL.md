@@ -5,7 +5,7 @@ description: Use when an app or brand needs icons or a favicon
 
 # icon-design — icons a real designer would make, not shapes drawn by code
 
-> **Gate before starting (every time):** read the owner's theme → search live prototypes → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (Gate before starting) of `design-references` (plugin `superuser`) even when a brand already exists (the brand sets color and font, while the search is for finding this piece's structure) · close the work with a line `ด่านก่อนลงมือ:` (Gate before starting:)
+> **Gate before starting (every time):** read the owner's theme → search live prototypes → 3 genuinely different directions → check `design-gate/no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (Gate before starting) of `design-gate/design-references` (plugin `superuser`) even when a brand already exists (the brand sets color and font, while the search is for finding this piece's structure) · close the work with a line `ด่านก่อนลงมือ:` (Gate before starting:)
 
 > **One rule:** every kind of icon starts from something a designer already made (a ready-made icon set for screens, an example the user likes for a brand), not an SVG the agent writes stroke by stroke from zero. That gives stiff basic shapes that look AI-made (3 plugin icon directions made this way were all rejected on 2026-10-26).
 
@@ -15,7 +15,7 @@ description: Use when an app or brand needs icons or a favicon
 - The user says the icons look generic or AI-made
 - The user already has an SVG and wants it checked → skip to section 4
 
-Not for: a whole brand set → `brand-kit` · illustrations or photos → `image-generation` · whether a whole screen looks AI-made → `no-ai-look`. Icons inside an app screen also use `ui-craft`; a brand system sets color and logo rules (`brand-kit`).
+Not for: a whole brand set → `brand-kit` · illustrations or photos → `image-generation` · whether a whole screen looks AI-made → `design-gate/no-ai-look`. Icons inside an app screen also use `ui-craft`; a brand system sets color and logo rules (`brand-kit`).
 
 ## 1 · Split the job first
 
@@ -25,7 +25,7 @@ Not for: a whole brand set → `brand-kit` · illustrations or photos → `image
 | Start from | A free icon set whose license allows use (section 2) | An example the user likes (section 3) |
 | Draw yourself? | Only the missing ones, by that set's rules | Draw or generate new, never SVG stroke by stroke from zero |
 
-Search prototypes first: live search with the project's words per `design-references`, type `icon`, then pull colors from the chosen work (stored color library only if live search is impossible).
+Search prototypes first: live search with the project's words per `design-gate/design-references`, type `icon`, then pull colors from the chosen work (stored color library only if live search is impossible).
 
 ## 2 · Screen icons: one set across the whole app
 

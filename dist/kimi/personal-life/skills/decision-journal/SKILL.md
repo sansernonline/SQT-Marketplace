@@ -32,7 +32,7 @@ Entry and revisit templates: [references/entry-template.md](references/entry-tem
 9. **Schedule the revisit** in the calendar now.
 10. **At the revisit** — fill the revisit block **without editing the original**, give the verdict, write one process lesson.
 
-## Choose between options by numbers (`decision-scoring`)
+## Choose between options by numbers (`decision-desk/decision-scoring`)
 
 Use this at step 3–5, once the options and the numbers exist. Pick the command by what is known:
 

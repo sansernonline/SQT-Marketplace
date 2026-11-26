@@ -14,7 +14,7 @@
 - [Do not look AI-made](#do-not-look-ai-made)
 
 
-> **Gate before starting (every time):** read the owner's theme → search live for references → 3 truly different styles → check `no-ai-look` before sending. Follow the "ด่านก่อนลงมือ" (gate before starting) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls color and fonts; the search is for the structure of this piece). Close the work with a `ด่านก่อนลงมือ:` line.
+> **Gate before starting (every time):** read the owner's theme → search live for references → 3 truly different styles → check `design-gate/no-ai-look` before sending. Follow the "ด่านก่อนลงมือ" (gate before starting) section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls color and fonts; the search is for the structure of this piece). Close the work with a `ด่านก่อนลงมือ:` line.
 
 > **The one rule:** the cover must say which project it belongs to at a glance, without reading the name. Do it with the logo's shapes or the app's real screen, not with color alone.
 
@@ -34,7 +34,7 @@ The default path is logo shapes. The fallbacks are the real screen, or a pictogr
 
 ## 1 · Find the idea from real things: write it in `docs/design/cover-direction.md` before drawing anything
 
-0. **Look at other people's real covers first.** **Search for references first:** take the project's keywords and search live following `design-references` (plugin `superuser`), type `document`, then pull the colors from the chosen work. The stored color library is for when live search is not possible. Collect at least 6 real document or book covers close to this work (same field as the app · tech publishers · Thai examples), then choose which series system to borrow, following [`cover-real-examples.md`](cover-real-examples.md). For every idea on the cover, you must be able to say which cover it came from.
+0. **Look at other people's real covers first.** **Search for references first:** take the project's keywords and search live following `design-gate/design-references` (plugin `superuser`), type `document`, then pull the colors from the chosen work. The stored color library is for when live search is not possible. Collect at least 6 real document or book covers close to this work (same field as the app · tech publishers · Thai examples), then choose which series system to borrow, following [`cover-real-examples.md`](cover-real-examples.md). For every idea on the cover, you must be able to say which cover it came from.
 
 1. **Open the logo's SVG file (vector image) as text** and note the basic shapes with unit coordinates (e.g. 2 L shapes on a 64 grid · T bar + cursor · 2 dots + arrow). Do not count the glow and gradient background of the icon file.
 2. **Find the app's main verb** from the first paragraph of the README (if none → the introduction of the BRD or SRS): connect · type · swipe.
@@ -117,4 +117,4 @@ If the user says the cover is not beautiful → cut things before adding (matche
 
 ## Do not look AI-made
 
-Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye check 3.2 ("ด่านตา 3.2" in `no-ai-look`; web pages add items 10–14), because 0 hits from the script is not yet a pass.
+Before sending, go through item 3 of `design-gate/no-ai-look`. For HTML work, run its script. Every job must also pass the eye check 3.2 ("ด่านตา 3.2" in `design-gate/no-ai-look`; web pages add items 10–14), because 0 hits from the script is not yet a pass.

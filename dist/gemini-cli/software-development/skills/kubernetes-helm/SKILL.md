@@ -42,7 +42,7 @@ Search the repo and the machine: Dockerfile · `deploy/` · `Chart.yaml` · `kub
 | Monthly money ceiling for the GPU node pool | The section "เงินและของนอกเครื่อง" (money and things outside the machine) |
 | Who approves going to production | Step 8 stops and waits for that person |
 
-No answer → use the recommended value (secrets: External Secrets if there is a vault, otherwise Sealed Secrets) and note it in `decision-log` or under the heading "ตัดสินใจเอง" (decided on my own) at the end of the report. There is no recommended money ceiling. Write `(รอยืนยัน)` (awaiting confirmation) and never add GPUs beyond what exists.
+No answer → use the recommended value (secrets: External Secrets if there is a vault, otherwise Sealed Secrets) and note it in `decision-desk/decision-log` or under the heading "ตัดสินใจเอง" (decided on my own) at the end of the report. There is no recommended money ceiling. Write `(รอยืนยัน)` (awaiting confirmation) and never add GPUs beyond what exists.
 
 ## 2 · Dockerfile
 

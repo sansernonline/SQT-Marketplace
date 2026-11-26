@@ -4,9 +4,9 @@ Use when a Markdown doc needs an image, SVG or ASCII art
 
 # Markdown Visuals
 
-> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `design-gate/no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
-> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
+> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `design-gate/polished-document-style`.
 
 > **Rule:** Every plan, process, design, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
 
@@ -81,7 +81,7 @@ What are you showing?
 
 ### สี
 
-If the document or project already has a colour palette, use it. If not, search for references per `design-references` (plugin `superuser`), type `document`, and take the colours from the chosen work · if live search is not possible, use the house value `#2A78D6`, mark it `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask (order in `diagram-figures` item 5 · colour-by-domain table [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) · for role-based tokens (`bg-canvas` · `accent-primary` · `state-*` …) see [references/svg-snippets.md](references/svg-snippets.md) · and **1 document uses 1 palette**
+If the document or project already has a colour palette, use it. If not, search for references per `design-gate/design-references` (plugin `superuser`), type `document`, and take the colours from the chosen work · if live search is not possible, use the house value `#2A78D6`, mark it `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask (order in `diagram-figures` item 5 · colour-by-domain table [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) · for role-based tokens (`bg-canvas` · `accent-primary` · `state-*` …) see [references/svg-snippets.md](references/svg-snippets.md) · and **1 document uses 1 palette**
 
 ### Reusable snippets
 
@@ -187,7 +187,7 @@ When a markdown doc needs a design picture (clickable app screens go to the plat
 
 ## ไม่ให้ดูเหมือน AI ทำ
 
-Before sending, go through item 3 of `no-ai-look` — for HTML work, run its script · every piece must also pass eye check 3.2 (a web page adds items 10–14), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for all media is there
+Before sending, go through item 3 of `design-gate/no-ai-look` — for HTML work, run its script · every piece must also pass eye check 3.2 (a web page adds items 10–14), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for all media is there
 
 
 ## reference: ascii-patterns.md
@@ -361,7 +361,7 @@ Use when a document or slide needs a designed diagram
 
 > **One rule:** the figure's main colour = the project's main colour. Look for it in the order in step 5. Only if nothing is found, use the house palette `#2A78D6` from `polished-document-style/references/theme-colors.md` ("ค่าตั้งต้นประจำบ้าน", the house default).
 
-> **Pre-work gate (every time):** read the owner's theme → search live for a reference → 3 genuinely different directions → check `no-ai-look` before sending. Follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search finds this piece's structure). Close the work with a line `ด่านก่อนลงมือ:`.
+> **Pre-work gate (every time):** read the owner's theme → search live for a reference → 3 genuinely different directions → check `design-gate/no-ai-look` before sending. Follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search finds this piece's structure). Close the work with a line `ด่านก่อนลงมือ:`.
 
 ## Use when
 - A figure in a work document (business plan · process chart · research summary · BRD · SRS · ER diagram) or any figure that must look designed: client proposals · slides · print · sign-off documents, including cloud diagrams with real logos.
@@ -384,9 +384,9 @@ Not for: a quick diagram in a README · Pull Request · code note → `software-
 3. **Header needs all 6 parts:** project logo (`<img class="logo">` → the project's `assets/logo/`; if there is none, say so in the report) · title · 1-line sub-title (what the real thing is, not an expansion of the title) · figure number · version and date · owner. Wrong/right sub-title example: [`references/design-system.md`](references/design-system.md), "Figure header".
 4. **Sizes.** Sizes, spacing and corners are already in `:root` of `assets/figure-template.html`; do not set new values. Icon frame ≥ 66px (below 56px looks hollow). Connectors vertical or horizontal only, bent with rounded corners; no diagonals. Full table: [`references/design-system.md`](references/design-system.md), "Size system" (open when adjusting or writing a template). Text size follows the placed size: for a figure placed in an A4 document, smallest text after placing must be ≥ 7 pt → `minimum px = 0.247 × canvas width(px) ÷ placed width(cm)` (2000px canvas: 29px on a 17 cm page, 20px on 25.7 cm). Make boxes wide enough that Thai names are not cut mid-word. In-document version uses `?embed=1` (hides header); aspect ratio width ÷ height ≥ 1.46 for a landscape page; one `figure-theme.css` for the whole set.
 5. **Colour.** Stop at the first hit:
-   1. `doc-theme` in the project's documents (`polished-document-style`, section "ธีมของเอกสาร").
+   1. `doc-theme` in the project's documents (`design-gate/polished-document-style`, section "ธีมของเอกสาร").
    2. The project's brand colour: `--primary` · `--brand` · `--accent` in CSS · `primary` in Tailwind / UI theme · `colorPrimary` in a mobile app · brand kit · logo. Read the background colour from the same places (`--background` · `--bg` · dark or light mode), because figures follow the project's design.
-   3. Nothing yet → search live per `design-references` (plugin `superuser`), type `document`, then extract colours from the chosen work. Use the stored colour library only if live search is not possible.
+   3. Nothing yet → search live per `design-gate/design-references` (plugin `superuser`), type `document`, then extract colours from the chosen work. Use the stored colour library only if live search is not possible.
    4. Live search not possible → use `#2A78D6`, write `(รอยืนยัน)` in the report, carry on without asking, and list a tone from [references/colour-by-domain.md](references/colour-by-domain.md) for later.
 
    Never use a colour from an example or reference image. In HTML templates change `--accent` in `:root` (SVG/Python: `ACCENT` in `theme.py`); background that follows the project → append `#accent=<main colour>&bg=<background colour>` to the file name. The 7 icon colour groups (`t-neutral` · `t-edge` · `t-app` · `t-view` · `t-data` · `t-alert` · `t-warn`) and provider/structural exceptions: [`references/design-system.md`](references/design-system.md), "Colour system". An 8th colour means colour is used for looks. The main colour must show across the whole figure, with 1 `.focus` card (brand border + glow), a 6px glowing main path and thin grey secondary lines. Full rules: [`references/focal-point-and-layout.md`](references/focal-point-and-layout.md).
@@ -406,7 +406,7 @@ Not for: a quick diagram in a README · Pull Request · code note → `software-
     ```
     Always use multiplier 2 (1 is blurry when enlarged). Folder mode makes 2 versions per figure (full + `?embed=1`) and checks text smaller than `--min-px`, wrapped names or labels, overflow, overlapping labels: `problems: 0` and exit 0 = pass. Keep `render.py` at `docs/figures/render.py` next to `src/`, never in `_to_delete/` or a scratchpad; never delete `docs/figures/src/` (.png files are only output). Send the client a PNG; keep the HTML source in the repo.
 11. If a figure comes out wrong (missing arrowhead, line to the wrong box, missing Thai vowels, label over a box), open the symptom → cause → fix table [references/pitfalls.md](references/pitfalls.md) before fixing it yourself.
-12. Run `no-ai-look` item 3 (for HTML, run its script; also eye gate 3.2; 0 findings from the script is not yet a pass). Hand-off by medium: slide → `presentation-design` · Word / PDF → `branded-document-design` · SRS → `srs-writing` · app screens → `ui-craft`.
+12. Run `design-gate/no-ai-look` item 3 (for HTML, run its script; also eye gate 3.2; 0 findings from the script is not yet a pass). Hand-off by medium: slide → `presentation-design` · Word / PDF → `branded-document-design` · SRS → `srs-writing` · app screens → `ui-craft`.
 
 ## Check before done
 - [ ] Every cross-column wire has an arrowhead; no line crosses a box or text; labels readable and not overlapping.
@@ -429,7 +429,7 @@ Not for: a quick diagram in a README · Pull Request · code note → `software-
 
 # Work domain → colour tone
 
-Use this when the document has no `doc-theme` and no brand colour. Use the house default `#2A78D6`, mark it `(รอยืนยัน)` (to be confirmed), and carry on without stopping to ask. Put a tone from this table in the report so the user can choose later (the full order is in `diagram-figures` item 5). Read the work's content first and write the `เนื้อหา:` brief per `design-references` `references/content-to-theme.md` (plugin `superuser`); its section 3 has the fuller mood-and-colour table for every kind of work, and section 4 says what each colour tends to carry. This table is shared by both engines of `diagram-figures` and by every skill that draws figures.
+Use this when the document has no `doc-theme` and no brand colour. Use the house default `#2A78D6`, mark it `(รอยืนยัน)` (to be confirmed), and carry on without stopping to ask. Put a tone from this table in the report so the user can choose later (the full order is in `diagram-figures` item 5). Read the work's content first and write the `เนื้อหา:` brief per `design-gate/design-references` `references/content-to-theme.md` (plugin `superuser`); its section 3 has the fuller mood-and-colour table for every kind of work, and section 4 says what each colour tends to carry. This table is shared by both engines of `diagram-figures` and by every skill that draws figures.
 
 | Domain | Suggested tone | Reason |
 |---|---|---|
@@ -530,7 +530,7 @@ An image drawn by Mermaid itself has free-curved, diagonal lines and colours tha
 
 1. Copy the folder `assets/mermaid-engine/` to `docs/figures/src/gen/`
 2. Edit `figures.json`:
-   - `prefix` is the project code (`document-naming`)
+   - `prefix` is the project code (`workspace-rules/document-naming`)
    - `drafts` is the folder of `.md` files that hold Mermaid blocks
    - `skip` is the blocks that already have a hand-drawn figure
    - `captions` replaces captions generated from headings
@@ -578,7 +578,7 @@ The cost is time, because 1 figure takes several rounds of fixes. So use it only
 ## 0 · Colour comes from the work — do not stop to ask
 
 **If the source document already declares a `doc-theme`, use that value and do not ask again.**
-(See `polished-document-style`, section "Document theme".) If there is none yet, follow the steps below, then write the result back into `doc-theme`.
+(See `design-gate/polished-document-style`, section "Document theme".) If there is none yet, follow the steps below, then write the result back into `doc-theme`.
 
 **No brand colour → follow the order in `diagram-figures` section 5:** use the house value `#2A78D6`, write `(รอยืนยัน)` (awaiting confirmation) in the report, and carry on without stopping to ask.
 Put a tone suggested from the content, using the table in [colour-by-domain.md](colour-by-domain.md), in the report so the user can choose later.
@@ -792,7 +792,7 @@ Open when you build or restyle a figure and need the full rules behind the short
 
 ## Colour weight
 
-Limit the number of colours, not the weight of colour. The main colour must be visible across the whole figure, not only in the header bar. Labels that must be found fast (step number · owner · status) use a solid fill · card headers are a full-width solid colour band (a thick colour stripe beside a rounded card is an AI signal in `no-ai-look`) · summary boxes use a dark fill · pastel colours only as a fill that has text or a dark border with it · check with the "colour power" axis in the beauty gate of `ui-craft` (`ui-craft/references/states-and-checks.md`, plugin `software-development`).
+Limit the number of colours, not the weight of colour. The main colour must be visible across the whole figure, not only in the header bar. Labels that must be found fast (step number · owner · status) use a solid fill · card headers are a full-width solid colour band (a thick colour stripe beside a rounded card is an AI signal in `design-gate/no-ai-look`) · summary boxes use a dark fill · pastel colours only as a fill that has text or a dark border with it · check with the "colour power" axis in the beauty gate of `ui-craft` (`ui-craft/references/states-and-checks.md`, plugin `software-development`).
 
 If you found a colour in step 5 item 2 but there is no `doc-theme` yet, declare a `doc-theme` with that value so the project's figures, documents and slides share it.
 
@@ -809,7 +809,7 @@ A readable but flat figure (white cards that all look alike, all lines the same 
 | Contrast | Secondary text on a dark fill ≥ 7:1 (light grey, not mid grey) |
 | Theme | Every colour is a variable in a single css file · arrowheads read colour from the variable (`getComputedStyle`), no values hard-coded in JavaScript · meaning colours (`t-app` `t-alert` `t-warn`) have a dark-background pair · no colour in `style=""` of figure files |
 
-**Dot grid + glowing lines = an approved house style** (the exception "an approved look always wins" in `no-ai-look`). When scanning with `slop_scan.py`, add `slop-ok` at `grid-bg` and `neon-glow` of these figures, with a short reason.
+**Dot grid + glowing lines = an approved house style** (the exception "an approved look always wins" in `design-gate/no-ai-look`). When scanning with `slop_scan.py`, add `slop-ok` at `grid-bg` and `neon-glow` of these figures, with a short reason.
 
 **How to choose a direction:** write 3 directions as override css, inject them into 2 real figures at render time (`add_init_script` before the line-drawing script runs) → place them next to the original → have a reviewer who did not do the work score them → edit the one theme css file and render the whole set. A dark figure in a white-page document must be a recorded decision (for example, chapter-opening pages and the cover are dark too), not an accident.
 
@@ -1043,77 +1043,3 @@ If you write fixed coordinates, one text edit knocks the lines off across the wh
 - **No more than 5** cross-column lines per figure, because beyond that the figure turns into a spider web.
 - Connect to the **smallest box that is correct**, not the large box around it. If a box is very tall, set `tp` so the line does not aim at the middle of the box.
 - A label on a line says **what flows through**, such as `HTTPS 443`, not `เชื่อมต่อ` (connect). If there is nothing to say about a line, leave the label off rather than writing "use".
-
-
----
-
-# skill: spell-out-abbreviations
-
-Use when text is heavy with abbreviations or jargon
-
-# Spell Out Abbreviations
-
-> **Rule 1:** write every abbreviation in full the first time, with the abbreviation in brackets. After that you may use the abbreviation.
-> **Rule 2:** put a short explanation in brackets the first time you use any technical term, so readers from outside the field do not have to guess.
-
-## Format
-
-```
-ถูก: Model Context Protocol (MCP) ทำให้ Claude ต่อกับระบบอื่นได้ ... MCP รองรับ ...
-ผิด: MCP ทำให้ Claude ต่อกับระบบอื่นได้
-```
-
-- **The first time in each document**, write it in full with the abbreviation in brackets. After that, use the bare abbreviation.
-- In a long document split into chapters, write it in full again **the first time in each chapter**, because people often read one chapter at a time.
-- If a table or heading has no room, write it in full on the first line of that section instead.
-- A document with 5 or more abbreviations must have a **glossary** at the end.
-
-### Thai documents
-
-The first time, write **Thai (English full name: abbreviation)**, for example ปัญญาประดิษฐ์ (Artificial Intelligence: AI). After that, use either the Thai word or the abbreviation, but pick one style for the whole document. This rule is the only place that sets the format. `human-writing` `references/thai-grammar.md` section 5 row 4 follows it.
-
-## Exceptions — no need to expand
-
-Terms the public knows better than the full name: URL, PDF, HTML, CSS, JSON, USB, Wi-Fi, ID, OK
-and file extensions (`.docx`, `.pptx`). If you are not sure, **expand it**, because expanding too much does no harm, but a reader who does not understand does.
-
-## Technical terms — explain in brackets, not just the abbreviation
-
-Expanding the abbreviation may not be enough if the full name still says nothing. **A term that an outside reader does not know
-needs a short explanation in brackets the first time.**
-
-```
-ผิด: ใช้ idempotency key กันงานซ้ำ
-ถูก: ใช้ idempotency key (รหัสกำกับคำขอ ส่งซ้ำแล้วไม่ทำงานซ้ำ) กันงานซ้ำ
-
-ผิด: ต้องดู cash flow ก่อนกู้
-ถูก: ต้องดู cash flow (เงินเข้า-ออกจริงแต่ละเดือน) ก่อนกู้
-```
-
-**The explanation must be shorter than 1 line.** If it is longer, make it a sentence of its own.
-
-**Decide which terms need explaining** with one question: could a person who works in a different field from this topic
-read it and guess the meaning? If they cannot guess, explain it.
-
-| Reader level | How much to explain |
-|---|---|
-| Customers, executives, people outside the field | Every technical term, even words engineers use every day |
-| The same team but a different area of work | Only the terms specific to that area, such as names of formats and processes |
-| People already working on this | Only terms newly coined in this project |
-
----
-
-## What it applies to
-
-Every kind of document · slides · labels and on-screen text · sales copy · diagram descriptions · code comments ·
-chat answers — **anything a person reads**
-
-Code-side abbreviations (RBAC · SSO · CI/CD · SRS · ADR and so on) → the extension in plugin `software-development` → `superuser` → `references/code-extensions.md`
-
-## Anti-patterns
-
-- Expanding the abbreviation every time it appears — cluttered and distracting. The first time is enough.
-- Reversed brackets — `MCP (Model Context Protocol)` reads less smoothly than writing the full name first.
-- Expanding wrongly — if you do not know what it stands for, look it up first. Do not guess.
-- Expanding every abbreviation but leaving technical terms unexplained — `Quadratic Weighted Kappa (QWK)` still helps no one unless you say what the value measures.
-- A paragraph-long explanation in brackets — brackets are for short words. If it is long, split it into sentences.

@@ -62,7 +62,7 @@ The manufacturer's warranty is a contract on top of this — read what it exclud
 
 ## Extended warranty — decision rule
 
-Buy only when a repair would hurt the budget **and** chance of failure x covered repair cost > plan price (no chance figure → plan under about 10–15% of item price, or `decision-scoring` `payoff` minimax regret) **and** it covers what actually fails. Full rule, skip conditions and the laptop example → [references/extended-warranty.md](references/extended-warranty.md).
+Buy only when a repair would hurt the budget **and** chance of failure x covered repair cost > plan price (no chance figure → plan under about 10–15% of item price, or `decision-desk/decision-scoring` `payoff` minimax regret) **and** it covers what actually fails. Full rule, skip conditions and the laptop example → [references/extended-warranty.md](references/extended-warranty.md).
 
 ## Monthly check (5 minutes)
 

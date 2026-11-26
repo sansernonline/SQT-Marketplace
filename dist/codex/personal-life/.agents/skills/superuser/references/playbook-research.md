@@ -2,7 +2,7 @@
 
 Use when: you must find an answer that needs evidence · compare options · "ช่วยหาข้อมูล" (help me find information) · numbers or rules that may have changed
 Result: an answer with sources, the date checked, and labels per [`evidence`](evidence.md) (`ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ`) · user data you do not know gets `(รอยืนยัน)`
-Main patterns: Reranker · ReAct (`agent-patterns`)
+Main patterns: Reranker · ReAct (`crew-patterns/agent-patterns`)
 Deep mode: 4 or more sub-questions · the user asks for "deep research" or "วิจัยละเอียด" (research in detail) · a report needing a citation in every paragraph → use [`deep-research`](deep-research.md) instead of the 7 steps below (file queue · workers search in parallel · every claim checked)
 
 ## ขั้นตอน — Steps (copy into the todo exactly)

@@ -12,7 +12,7 @@ description: Use when creating or changing a skill, agent or playbook
 - Write or change a skill's evals; `/skill-doctor` or `scripts/evals/triggers` says a skill is not being called.
 - Review a skill someone else wrote before merging.
 
-Not for: unfiltered lessons from work → `session-lessons-to-skills` first (it picks the skill, then come here) · a repeated mistake that can become an automatic check → `repeated-mistakes-to-checks` · a team lead splitting skill writing among team members → playbook `skill-authoring` in plugin `software-development` (`skills/superuser/references/playbook-skill-authoring.md`), which uses these rules.
+Not for: unfiltered lessons from work → `learn-loop/session-lessons-to-skills` first (it picks the skill, then come here) · a repeated mistake that can become an automatic check → `learn-loop/repeated-mistakes-to-checks` · a team lead splitting skill writing among team members → playbook `skill-authoring` in plugin `software-development` (`skills/superuser/references/playbook-skill-authoring.md`), which uses these rules.
 
 ## Steps
 1. Declare before writing: name · target size · 3 topics not covered · which file holds what (knowledge · contract · steps), per [`skill-structure`](references/skill-structure.md). Do 1 real run of the task first and keep the methods that worked.

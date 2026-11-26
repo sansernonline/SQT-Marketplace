@@ -14,8 +14,8 @@ description: Use when someone wants an app like another app
 
 | Task | Use this instead |
 |---|---|
-| Choosing a library, tool or model to adopt instead of building it | `prior-art-review` |
-| General research (technology · market) that is not about a single app | (if plugin `superuser` is installed) playbook `research`. If it is missing, use this skill or `prior-art-review`, whichever is closer. |
+| Choosing a library, tool or model to adopt instead of building it | `research-with-sources/prior-art-review` |
+| General research (technology · market) that is not about a single app | (if plugin `superuser` is installed) playbook `research`. If it is missing, use this skill or `research-with-sources/prior-art-review`, whichever is closer. |
 
 ## 1 · Before searching — narrow the frame
 
@@ -157,7 +157,7 @@ The next documents cite back with the code (`IMP-03` · `[7]`) so you can trace 
 
 - Use the reference app as **inspiration**, not as a pattern to copy. Never copy their text, icons, logo, images or proper names into the work.
 - Our app's name must not be so similar that it confuses people (use `product-naming` if a name is needed).
-- If any part is open source, check the license before thinking of using the code (`prior-art-review` step 4).
+- If any part is open source, check the license before thinking of using the code (`research-with-sources/prior-art-review` step 4).
 - You may quote a user opinion briefly with its source. Do not include the reviewer's name.
 
 ---
@@ -172,7 +172,7 @@ The next documents cite back with the code (`IMP-03` · `[7]`) so you can trace 
 - [ ] The hand-off table to BRD / SRS / mockup is present
 - [ ] No image, text or logo of theirs is in the document (links only)
 - [ ] Raw notes are in `_to_delete/research/`, not mixed into `docs/`
-- [ ] At the end, a status table is written following `status-report`
+- [ ] At the end, a status table is written following `superuser/status-report`
 
 ---
 
@@ -184,7 +184,7 @@ The next documents cite back with the code (`IMP-03` · `[7]`) so you can trace 
 | "Should make the UI more modern" | It cannot be checked or done. Say which page, what problem, what evidence, how to fix it. |
 | A proposal that comes from the agent's own taste | Without evidence it is not a proposal. Move it to "Unknown". |
 | Conclude from a single review or thread | A loud voice does not mean a majority problem. |
-| Copy every feature to be "as complete as theirs" | Our first app would grow too big to finish. Cut with `superuser:simplify`. |
+| Copy every feature to be "as complete as theirs" | Our first app would grow too big to finish. Cut with `superuser:ground-rules`. |
 | Use old-edition data without checking the date | The feature may have been changed or removed. |
 
 ---
@@ -193,10 +193,10 @@ The next documents cite back with the code (`IMP-03` · `[7]`) so you can trace 
 
 | Need | Use together with |
 |---|---|
-| Decide whether to adopt a ready-made product or build | `prior-art-review` |
+| Decide whether to adopt a ready-made product or build | `research-with-sources/prior-art-review` |
 | Turn proposals into BR / FR | `user-story-writer` · `srs-writing` |
 | Assess their UI and design ours | `ui-craft` · the platform skill |
-| Cut proposals down to what the first app needs | `superuser:simplify` |
+| Cut proposals down to what the first app needs | `superuser:ground-rules` |
 | Name our app so it does not collide with theirs | `product-naming` |
-| Raw notes during the search | `temp-file-discipline` |
-| Report status at the end | `status-report` |
+| Raw notes during the search | `workspace-rules/temp-file-discipline` |
+| Report status at the end | `superuser/status-report` |

@@ -1,0 +1,20 @@
+# planner — full field list, output, pictures, `--actual`
+
+For a graph of about 5 pieces or more, or with pieces that wait on each other through several steps, write a `plan.json` and run `node scripts/plan.mjs plan.json` (uses no tokens · no outside library). A smaller graph can be worked out in the table yourself.
+
+```json
+{ "name": "เพิ่มระบบสมาชิก", "max_agents": 6, "tasks": [
+  { "id": "a", "title": "ออกแบบตาราง", "size": 20, "owns": ["db/schema.sql"], "step": "design" },
+  { "id": "b", "title": "API", "size": 30, "needs": ["a"], "step": "code" },
+  { "id": "d", "title": "ทดสอบรวม", "size": 15, "needs": ["b"], "solo": true, "step": "test" } ] }
+```
+
+- `size` = total tokens, roughly, in thousands · `scope` (plan level, optional) = the full list of scopes, such as `["บท 1", "บท 2"]` · `covers` = items from `scope` that this piece takes · `needs` = pieces that must finish first · `owns` = files this piece owns · `solo` = done by one worker alone · `step` uses the same step names as `superuser/model-scorecard` (plan · research · design · write · code · test · review · other); any other name gets k = 1 with no warning · used to pull the k value from the log (`--log`, default `.claude/superuser/log`) · `max_agents` or `--agents N` = the cap from the budget
+- **Checked before computing:** tasks empty or not a list · needs or owns not a list · size not greater than 0 · cyclic graph · waiting on a piece that does not exist · duplicate id · 2 pieces own the same file but do not wait on each other · with a `scope`, any item that is in no piece's `covers`, in several, or a `covers` that names an item not in `scope` → exits with code 1 with the list to fix
+- **Output:** a `คาด:` (estimate) line · critical path · total work · minimum time · release-order table (rank · slack by the CPM method (critical path method) computed as if workers were unlimited · worker number · start → end · timeline) · `--json` for machines · if parallelism speeds things up by less than 1.3 times, the script recommends a single worker (self-set value, not measured)
+- **The lab format and the deep research queue work as they are:** `research/<งาน>/queue.json` can go to the planner directly · the file may be an empty array · `depends_on` = `needs` · `exclusive` = `solo` · `size` may be the labels `S` `M` `L` (default 20k · 50k · 100k are self-set values, not measured; change with the field `"sizes": { "S": 30 }`, and the k value from the log adjusts further)
+- **Pictures:** `--mermaid` prints a flowchart of the DAG (directed acyclic graph) to paste into markdown (GitHub shows it as a picture · thick orange line = critical path) · `--html <file.html>` writes one page with an SVG of the DAG and a Gantt of the plan; open it in a browser, nothing to install; for a PNG, capture the page.
+- **Compare with the real work:** `--actual` reads `runs.jsonl` in superuser's log and ties worker tasks to plan pieces by a **task description that starts with the piece's id** (the description field of the Agent tool, such as `a: ออกแบบตาราง`). You get a table of who ran which model, when it started and how many minutes it took, real tokens against the estimate, check results, pieces not yet released, and pieces that used more than 1.5 times the estimated tokens. Add it with `--html` for one more picture, a Gantt of what really happened.
+- **The length of the critical path sets the time, not the number of pieces.** Example from `02_DAG_Planner` of the course (a calculation tool, not measured on real work): 2 briefs with the same 22 pieces gave 131 minutes and 194 minutes because their critical paths differ. When the critical path is the limit, adding workers does not help; cut dependencies (such as testing with text instead of voice) and move the deploy layer off the critical path.
+- `--now <ISO time>` fixes the time used when computing quota so repeated runs give the same result.
+- Test: `node scripts/plan.mjs --self-test` · idea from labs `02_DAG_Planner` and `04_Multi_Agent_Orchestra` of the CWN2026 course, rewritten, no code copied.

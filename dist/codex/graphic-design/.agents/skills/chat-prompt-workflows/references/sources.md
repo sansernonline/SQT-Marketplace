@@ -3,7 +3,7 @@
 ## Sources
 
 - The Loop · Graph · Dynamic templates and the work-check sheet from the AI Workflow course (CWN2026) of the repo owner · shortened and adapted to the team's terms · read 2026-10-26
-- Team rules the templates match: `agent-patterns` and [`pattern-details`](../../agent-patterns/references/pattern-details.md) section 1 plan adjustment · 3 Reflection · 4 Multi-Agent
+- Team rules the templates match: `crew-patterns/agent-patterns` and [`pattern-details`](../../crew-patterns/parts/agent-patterns/references/pattern-details.md) section 1 plan adjustment · 3 Reflection · 4 Multi-Agent
 - [Anthropic · Building effective agents](https://www.anthropic.com/engineering/building-effective-agents) (start from the simplest pattern · evaluator-optimizer · round ceiling) · opened 2026-10-26
 - [Huang et al. · LLMs Cannot Self-Correct Reasoning Yet (ICLR 2024)](https://arxiv.org/abs/2310.01798) (self-correcting with no real material to compare against gets worse) · opened 2026-10-26
 - [Madaan et al. · Self-Refine](https://arxiv.org/abs/2303.17651) (the first rounds give the most · the checker often answers "fine" on math items) · opened 2026-10-26

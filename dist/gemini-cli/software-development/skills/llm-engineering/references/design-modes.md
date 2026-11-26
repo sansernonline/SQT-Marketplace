@@ -22,7 +22,7 @@ Workflow:
 4. **Apply its Security section:** retrieved text is data, filter by the user's access at query time
 5. **Design evaluation** with `references/llm-evaluation-patterns.md` (eval set 20-50 to start, 50+ before production)
 6. **Plan production:** incremental indexing and re-indexing, caching, monitoring (retrieval quality, latency, cost), fallback when retrieval fails
-7. **Produce polished design** using `polished-document-style`: architecture and sequence diagrams, stack with reasons, cost projection, phased rollout, risks
+7. **Produce polished design** using `design-gate/polished-document-style`: architecture and sequence diagrams, stack with reasons, cost projection, phased rollout, risks
 8. **Hand-off:** data pipeline → `data-engineer`, application integration → `developer`, production deployment → `devops-engineer`
 
 ---
@@ -38,5 +38,5 @@ Workflow:
 4. **Choose metrics by task** from its metrics tables, plus operational metrics (latency p95, tokens, cost, error rate)
 5. **Set up LLM-as-judge** if needed, validated against human labels
 6. **Define regression gates** (quality, safety, latency, cost) with numbers the user confirms
-7. **Produce polished eval document** using `polished-document-style`: eval set, metric definitions, judge prompts, baseline, CI hook, monitoring
+7. **Produce polished eval document** using `design-gate/polished-document-style`: eval set, metric definitions, judge prompts, baseline, CI hook, monitoring
 8. **Hand-off:** implementation → `developer`, CI integration → `devops-engineer`, production monitoring → `ai-engineer`

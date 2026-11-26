@@ -14,7 +14,7 @@ Line length, reading speed, and punctuation rules live in the Caption and on-scr
 - Existing subtitles must be fixed so they can be read in time (long lines · too fast · 3 lines · a full stop closing the sentence).
 - After burning in, Thai letters are squares or tone marks float in the wrong place.
 
-Not for: on-screen text designed as graphics (headings · prices · promotions) → `video-script-to-clip` · `motion-basics` · automatic subtitles in an editing app (CapCut · DaVinci Resolve) → `production-tools.md` item 1, then steps 4–6 here to check the result · cutting or joining audio first → `video-editing` · translating subtitles → `translate-th-en`, then check the file with step 4.
+Not for: on-screen text designed as graphics (headings · prices · promotions) → `video-script-to-clip` · `motion-basics` · automatic subtitles in an editing app (CapCut · DaVinci Resolve) → `production-tools.md` item 1, then steps 4–6 here to check the result · cutting or joining audio first → `video-editing` · translating subtitles → `human-writing/translate-th-en`, then check the file with step 4.
 
 ## Steps
 0. **Find an existing pattern first.** Check the brand fonts and colors (`brand-kit` · `doc-theme` · files the user gave), subtitles of earlier clips on the channel, and fonts on this video's graphics. If found, use that pattern and say which file's pattern you used; if not, use this skill's defaults and say no earlier pattern was found. Any chosen font must have Thai letters and a license that allows embedding in video; with no brand font, use IBM Plex Sans Thai.

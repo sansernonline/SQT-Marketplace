@@ -1,3 +1,1429 @@
+# skill: architecture-patterns
+
+Use when choosing monolith, microservices or serverless
+
+# Architecture Patterns
+
+## When to use this skill
+
+- Architecture decisions for a new system
+- Choosing communication patterns between services
+- Splitting a monolith into modules or microservices
+- Designing event-driven systems
+- Implementing Command Query Responsibility Segregation (CQRS), Event Sourcing or Saga
+- Reviewing existing architecture
+- Making decisions big enough for an Architecture Decision Record (ADR)
+
+---
+
+## High-Level Architecture Choice
+
+### Decision tree
+
+```
+How many engineers? Team count? Domain complexity?
+│
+├─ <10 engineers, 1 team
+│  └─ Monolith (modular monolith)
+│
+├─ 10-50 engineers, 2-5 teams
+│  └─ Modular monolith OR few services
+│
+├─ 50+ engineers, 5+ teams
+│  └─ Consider microservices (only if needed)
+│
+└─ Any size + spiky/event-driven workload
+   └─ Add serverless for that piece
+```
+
+---
+
+## Patterns 1–3, communication and cross-cutting decisions
+
+Details are in [references/core-patterns.md](references/core-patterns.md). Load it after the decision tree picks a direction:
+
+- Pattern 1: Modular Monolith (the default) · Pattern 2: Microservices · Pattern 3: Serverless / Functions
+- Communication: synchronous vs asynchronous (event-driven), and when to choose which
+- Cross-cutting: database per service vs shared DB · caching tiers · idempotency · decision matrix template
+
+---
+
+## Patterns 4–8: CQRS, Event Sourcing, Saga, API Gateway, Strangler Fig
+
+Details for each are in [references/advanced-patterns.md](references/advanced-patterns.md). Load that file when the decision involves one of these:
+
+- Pattern 4: CQRS (Command Query Responsibility Segregation)
+- Pattern 5: Event Sourcing
+- Pattern 6: Saga (Distributed Transactions)
+- Pattern 7: API Gateway
+- Pattern 8: Strangler Fig (Migration)
+
+---
+
+## Anti-patterns
+
+- **Microservices too early** — start with a monolith
+- **Distributed monolith** — services that must deploy together
+- **God service** — one service that does everything
+- **Chatty interfaces** — one request fans out into many service calls (N+1)
+- **Shared database across microservices** — all the coupling, none of the isolation
+- **Synchronous calls in critical path** — cascading failures
+- **No bulkheads** (no limits that isolate one service's resources) — one slow service drags everything down
+- **Resume-driven architecture** — using K8s/microservices to look fancy
+
+---
+
+## Quick Reference: When to Use What
+
+| Need | Pattern |
+|------|---------|
+| Small team, fast iteration | Modular monolith |
+| Independent team deploys | Microservices |
+| Spiky background jobs | Serverless |
+| High write throughput, complex reads | CQRS |
+| Full audit trail, view state at any past time | Event Sourcing |
+| Multi-service transaction | Saga |
+| Reduce service-to-service complexity | Service mesh |
+| Multiple external clients | API Gateway |
+| Migrate legacy system | Strangler Fig |
+
+---
+
+## Always Reference
+
+When you make a decision, record it with the **adr-writer** skill. Architecture decisions are trade-offs. Future you, or whoever replaces you, needs to know why.
+
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/architecture-overview-template.md`](references/architecture-overview-template.md) — แม่แบบภาพรวมสถาปัตยกรรม
+
+
+## reference: advanced-patterns.md
+
+# Architecture Patterns — Advanced Pattern Catalogue
+
+Details moved out of [SKILL.md](../SKILL.md). Load this file when the decision involves one of these patterns.
+
+## Contents
+
+- [Pattern 4: CQRS (Command Query Responsibility Segregation)](#pattern-4-cqrs-command-query-responsibility-segregation)
+- [Pattern 5: Event Sourcing](#pattern-5-event-sourcing)
+- [Pattern 6: Saga (Distributed Transactions)](#pattern-6-saga-distributed-transactions)
+- [Pattern 7: API Gateway](#pattern-7-api-gateway)
+- [Pattern 8: Strangler Fig (Migration)](#pattern-8-strangler-fig-migration)
+
+---
+
+## Pattern 4: CQRS (Command Query Responsibility Segregation)
+
+**Use one model for writes and a separate model for reads.**
+
+```
+Commands ──► Write Model ──► Event Store
+                              │
+                              ▼
+                          Projector
+                              │
+                              ▼
+Queries ◄── Read Models (denormalized for query)
+```
+
+**When to use:**
+- Read load and write load are very different
+- Complex reporting / dashboards
+- Multiple read views from same data
+
+**When NOT to use:**
+- Simple create/read/update/delete (CRUD) apps (far too much)
+- Reads must always show the latest write
+
+---
+
+## Pattern 5: Event Sourcing
+
+**Store every change as an event, not just the current state.**
+
+```
+Instead of:           Store:
+Account                Events:
+  balance: $100        ├─ AccountOpened
+                       ├─ Deposit($50)
+                       ├─ Deposit($75)
+                       └─ Withdraw($25)
+
+State is computed from events
+```
+
+**When to use:**
+- Strong audit/compliance requirements
+- Need to replay history
+- Questions about the past ("balance at date X")
+- Complex business logic with many state transitions
+
+**When NOT to use:**
+- Apps with simple state (too much)
+- No team experience with it
+- Don't need history/audit
+- You must be able to delete data, e.g. under GDPR (events are hard to delete)
+
+> Note: **CQRS and Event Sourcing both add a lot of complexity. Use them only where they pay off.**
+
+---
+
+## Pattern 6: Saga (Distributed Transactions)
+
+**When several services must all succeed or all roll back.**
+
+### Orchestration (centralized)
+```
+Orchestrator
+   │
+   ├──► Service A (do step 1)
+   │    [if fail → Orchestrator triggers compensations]
+   ├──► Service B (do step 2)
+   └──► Service C (do step 3)
+```
+
+### Choreography (decentralized)
+```
+Service A ──Event──► Service B ──Event──► Service C
+   ▲                                            │
+   └──────────── Compensation Event ────────────┘
+```
+
+| | Orchestration | Choreography |
+|---|--------------|--------------|
+| Visibility | ✓Central | ✗Distributed |
+| Coupling | ~ Coupled to orchestrator | ✓Loosely coupled |
+| Debugging | ✓Easier | ✗Hard |
+| Adding services | ~ Update orchestrator | ✓Add subscriber |
+
+**Choose orchestration** when: complex flow, need clear visibility
+**Choose choreography** when: simple flow, many independent teams
+
+---
+
+## Pattern 7: API Gateway
+
+```
+Clients ──► API Gateway ──► Multiple Services
+              │
+              ├─ Routing
+              ├─ Auth
+              ├─ Rate limit
+              ├─ Logging
+              └─ Aggregation
+```
+
+**Tools:** Kong, AWS API Gateway, Envoy, Tyk, NGINX
+
+**Use when:** external clients call many services, and you want auth, rate limits and logging in one place
+
+---
+
+## Pattern 8: Strangler Fig (Migration)
+
+**Move off a monolith step by step.**
+
+```
+Phase 1:    Phase 2:           Phase 3:
+[Monolith]  [Mono] [NewSvc]    [NewSvc1] [NewSvc2]
+                ▲    │              ▲
+                └────┘ Proxy routes  └── Old Monolith deprecated
+                  selective traffic
+```
+
+**Steps:**
+1. Pick one business area (bounded context) to pull out
+2. Build new service for that context
+3. Add a proxy or feature flag that routes part of the traffic
+4. Gradually shift traffic to new service
+5. Delete old code when fully migrated
+
+> **Safer than rewriting everything at once.**
+
+
+## reference: architecture-overview-template.md
+
+# Architecture Overview Document Template
+
+**สารบัญ:** แม่แบบเต็ม 1 บล็อก: Context · Quality Attributes · High-Level Architecture · Components · Data Flow · Tech Stack · Cross-Cutting Concerns · Trade-offs · References
+
+Open this only when you actually need to write this kind of document · put `(รอยืนยัน)` (awaiting confirmation) on anything you do not know
+
+## Standard Output: Polished Architecture Overview
+
+```markdown
+# Architecture: <System Name>
+
+| | |
+|--|--|
+| **Document Type** | Architecture Overview |
+| **Version** | 1.0 |
+| **Status** | Draft |
+| **Date** | YYYY-MM-DD |
+| **Architect** | @name |
+| **Related ADRs** | ADR-0001 (`docs/decisions/ADR-0001-database-choice.md`), ADR-0002 (`docs/decisions/ADR-0002-api-style.md`) |
+
+---
+
+## Table of Contents
+
+1. [Context](#1-context)
+2. [Quality Attributes](#2-quality-attributes)
+3. [High-Level Architecture](#3-high-level-architecture)
+4. [Components](#4-components)
+5. [Data Flow](#5-data-flow)
+6. [Tech Stack](#6-tech-stack)
+7. [Cross-Cutting Concerns](#7-cross-cutting-concerns)
+8. [Trade-offs](#8-trade-offs)
+
+---
+
+## 1. Context
+
+> What problem does this solve? Why now?
+
+## 2. Quality Attributes (Priority Order)
+
+| Rank | Attribute | Target | Why |
+|:----:|-----------|--------|-----|
+| 1 | Performance | < 200ms p95 | Customer-facing |
+| 2 | Security | PDPA compliant | Legal req |
+| 3 | Scalability | 10k RPS | Growth plan |
+| 4 | Cost | < $5k/month | Budget |
+
+## 3. High-Level Architecture
+
+_[รูปภาพรวมสถาปัตยกรรม: User → CDN → Load Balancer → API Gateway → Auth / App → Redis · PostgreSQL · Queue → Worker. วาดเป็นรูปสไตล์เดียวกับเอกสารด้วย skill `diagram-figures` ไม่ใช้ Mermaid]_
+
+## 4. Components
+
+| Component | Responsibility | Technology | Owner |
+|-----------|----------------|------------|-------|
+| API Gateway | Routing, rate-limit | Kong | Platform |
+| Auth Service | JWT, OAuth | Node.js | Security |
+| App Service | Business logic | Node.js + NestJS | App Team |
+| Database | Persistence | PostgreSQL 16 | DBA |
+| Cache | Session, hot data | Redis 7 | Platform |
+
+## 5. Data Flow
+
+_[รูปลำดับ Data Flow: User → API → App → DB แล้วตอบกลับ. วาดด้วย skill `diagram-figures`]_
+
+## 6. Tech Stack
+
+| Layer | Technology | Rationale |
+|-------|-----------|-----------|
+| Frontend | React + Next.js (ใส่เวอร์ชันที่ใช้จริง) | SSR, ecosystem |
+| Backend | Node.js + NestJS | Team expertise |
+| Database | PostgreSQL 16 | ACID + JSON |
+| Cache | Redis 7 | Standard |
+| Infra | AWS (ECS Fargate) | Cost + ops simplicity |
+| CI/CD | GitHub Actions | Already in use |
+
+## 7. Cross-Cutting Concerns
+
+| Concern | Approach |
+|---------|----------|
+| Authentication | JWT with refresh tokens |
+| Logging | Structured JSON → CloudWatch |
+| Monitoring | Prometheus + Grafana |
+| Alerting | PagerDuty (P1), Slack (P2-P3) |
+| Error Handling | Standard error envelope, Sentry |
+
+## 8. Trade-offs
+
+| Decision | Chose | Over | Reason |
+|----------|-------|------|--------|
+| Database | PostgreSQL | MongoDB | Strong consistency needed |
+| Hosting | ECS Fargate | EKS | Lower ops burden |
+| API Style | REST | GraphQL | Simpler caching, client maturity |
+
+> **Known Limitations:** Single-region deployment limits availability to 99.9%. Multi-region planned for v2.
+
+## References
+
+- ADR-0001: Database choice (`docs/decisions/ADR-0001-database-choice.md`)
+- ADR-0002: API style (`docs/decisions/ADR-0002-api-style.md`)
+```
+
+
+## reference: core-patterns.md
+
+# Architecture Patterns — Core Patterns and Cross-Cutting Decisions
+
+Details moved out of [SKILL.md](../SKILL.md). Load this file once the decision tree has pointed at a pattern, or when the choice involves communication style, data ownership, caching or idempotency.
+
+## Contents
+
+- [Pattern 1: Modular Monolith](#pattern-1-modular-monolith)
+- [Pattern 2: Microservices](#pattern-2-microservices)
+- [Pattern 3: Serverless / Functions](#pattern-3-serverless--functions)
+- [Communication Patterns](#communication-patterns)
+  - [Synchronous (Request-Response)](#synchronous-request-response)
+  - [Asynchronous (Event-Driven)](#asynchronous-event-driven)
+  - [When to choose which](#when-to-choose-which)
+- [Cross-Cutting Decisions](#cross-cutting-decisions)
+  - [Database per service vs Shared DB](#database-per-service-vs-shared-db)
+  - [Caching tiers](#caching-tiers)
+  - [Idempotency](#idempotency)
+- [Decision Matrix Template](#decision-matrix-template)
+
+---
+
+## Pattern 1: Modular Monolith
+
+**The 2026 default for most teams.** One deployable app, split into modules with strict boundaries.
+
+```
+┌─────────────────────────────────────┐
+│   Single deployable application     │
+│ ┌───────┐ ┌───────┐ ┌───────────┐  │
+│ │Module │ │Module │ │  Module   │  │
+│ │  A    │ │  B    │ │     C     │  │
+│ └───────┘ └───────┘ └───────────┘  │
+│   ▲           ▲           ▲         │
+│   └── Strict module boundaries ──┘  │
+└─────────────────────────────────────┘
+         │
+         ▼
+    Single DB (or per-module schemas)
+```
+
+**When to use:**
+- Small/medium team (up to about 50 engineers; same bands as the decision tree in SKILL.md)
+- You need to ship changes fast
+- Operations needs are simple
+- All parts can deploy together
+
+**When NOT to use:**
+- Multiple teams needing independent deploys
+- Features need very different scaling
+- Parts need different tech stacks
+
+**Implementation tips:**
+- Enforce module boundaries (e.g., NestJS modules, Java packages, Go internal/)
+- Each module exposes a public interface
+- Don't let one module read another module's tables
+- One DB, with a separate schema per module
+
+---
+
+## Pattern 2: Microservices
+
+**When you've outgrown the monolith.**
+
+```
+┌──────┐  ┌──────┐  ┌──────┐
+│ Svc A│  │ Svc B│  │ Svc C│
+└──┬───┘  └──┬───┘  └──┬───┘
+   │ ▲      │ ▲      │ ▲
+   │ │      │ │      │ │     ← Each owns its DB
+   ▼ │      ▼ │      ▼ │
+  ┌──┴┐    ┌──┴┐    ┌──┴┐
+  │DB │    │DB │    │DB │
+  └───┘    └───┘    └───┘
+```
+
+**When to use:**
+- Independent teams (Conway's Law)
+- Different scaling needs per service
+- Services need different languages or stacks
+- Mature continuous integration and delivery (CI/CD) and monitoring already in place
+
+**When NOT to use (most projects):**
+- Small team — the extra overhead slows everyone down
+- No Kubernetes (K8s) or infrastructure-as-code (IaC) skills on the team
+- Can't afford distributed tracing
+- Business areas don't have clear boundaries yet
+
+**Hidden costs:**
+- Much harder to operate (more services to deploy, monitor and debug)
+- Network latency between services
+- Transactions across services are hard
+- Bugs are harder to trace
+- You need a service mesh and a monitoring stack
+
+> **Microservices are an organizational scaling pattern**, not a tech pattern. Adopt them only when teams blocking each other is the real bottleneck.
+
+---
+
+## Pattern 3: Serverless / Functions
+
+**For spiky, event-driven workloads.**
+
+```
+Event ──► Function ──► Service / DB / Queue
+```
+
+**Good fits:**
+- Async background processing
+- Scheduled tasks (cron)
+- Glue code between services
+- Spiky / unpredictable traffic
+- Image/video processing pipelines
+
+**Bad fits:**
+- Long-running processes (the limit is usually 15 min)
+- Processing that must keep state between calls
+- Frequent calls that need a fast response (cold starts add delay)
+- Heavy traffic all day (the bill climbs fast)
+
+---
+
+## Communication Patterns
+
+### Synchronous (Request-Response)
+
+```
+Client ──HTTP/gRPC──► Server
+       ◄──Response───
+```
+
+| Protocol | When |
+|----------|------|
+| REST | Public APIs, simple CRUD |
+| GraphQL | Mobile clients, multiple read patterns |
+| gRPC | Internal service-to-service |
+| WebSocket | Real-time bidirectional |
+
+**Pros:** Easy to reason about and debug
+**Cons:** Services depend on each other directly, one failure spreads to the next, hard to scale each part on its own
+
+### Asynchronous (Event-Driven)
+
+```
+Producer ──► Topic/Queue ──► Consumer(s)
+         (publish)         (subscribe)
+```
+
+| Tech | When |
+|------|------|
+| Kafka | High throughput, event sourcing, replay needed |
+| RabbitMQ | Traditional queuing, work distribution |
+| SQS/SNS | AWS-native, simpler than Kafka |
+| NATS | Lightweight, low-latency |
+| Redis Pub/Sub | Simple, messages are not stored |
+
+**Pros:** Services don't depend on each other directly, survive failures better, scale more easily
+**Cons:** Data is consistent only after a delay (eventual consistency), harder to debug, message order is hard to guarantee
+
+### When to choose which
+
+```
+Need immediate response? ─Yes─► Sync
+                         └─No──► Async
+
+Is producer impacted by consumer? ─Yes─► Sync
+                                  └─No──► Async
+
+Multiple consumers? ─Yes─► Async (pub/sub)
+                   └─No──► Either
+```
+
+---
+
+
+## Cross-Cutting Decisions
+
+### Database per service vs Shared DB
+
+| | Shared DB | DB per service |
+|---|-----------|----------------|
+| Coupling | ✗High | ✓Low |
+| Consistency | ✓ACID (all-or-nothing transactions) | ~ Eventual |
+| Schema changes | ✗Coordinate | ✓Independent |
+| Performance | ✓Easy joins | ✗Network calls |
+| Use when | Monolith | Microservices |
+
+### Caching tiers
+
+```
+Browser cache ──► CDN ──► Reverse Proxy ──► App Cache (Redis) ──► DB
+       1                  2                       3                4
+       ▲                                                           ▲
+       Closest to user (fastest)              Furthest (last resort)
+```
+
+Each tier is faster than the next (the gap depends on your system; measure it). CDN = content delivery network.
+
+### Idempotency
+
+**Always design APIs so a repeated request does no extra harm:**
+```
+Client retries → Server detects duplicate → Same result, no side effect
+```
+
+Methods:
+- Idempotency key header (Stripe pattern)
+- A time window in which the server drops duplicates
+- Methods that are safe to repeat by nature (PUT, unlike POST)
+
+---
+
+## Decision Matrix Template
+
+When proposing architecture, compare options:
+
+```markdown
+| Factor | Weight | Option A | Option B | Option C |
+|--------|:------:|:--------:|:--------:|:--------:|
+| Performance | 30% | 8 | 9 | 7 |
+| Cost | 20% | 9 | 6 | 8 |
+| Team skill | 20% | 9 | 5 | 7 |
+| Operations | 15% | 8 | 5 | 7 |
+| Future-proof | 15% | 6 | 9 | 7 |
+| **Total** | 100% | **8.10** | 7.00 | 7.20 |
+```
+
+
+---
+
+# skill: database-design
+
+Use when designing or changing a database schema
+
+# Database design
+
+> **One rule:** the schema is the hardest thing in a system to change.
+
+## When to use this skill
+
+- Designing the database of a new system or a new module
+- Adding or changing a table, column, relationship or index
+- Writing a migration, especially once the system holds real data
+- A query is slow and you suspect the schema or an index
+
+Not for: overall architecture → `architecture-patterns` · endpoints and JSON shapes → `api-conventions` · passwords, tokens, permissions → `auth-implementation-patterns` · running migrations in a pipeline → `cicd-and-release`
+
+**Syntax specific to each database, data types compared, and the migration commands of each Object-Relational Mapping (ORM) tool** are in `references/per-stack.md`.
+
+---
+
+## 1 · Choose the database type first
+
+| Criterion | Relational (PostgreSQL, SQL Server, MySQL) | Document (MongoDB) |
+|---|---|---|
+| Data has clear relationships and needs joins | ✓ | ✗ must be done by hand |
+| Data shape is uncertain and differs per record | Careful: use a JSON column | ✓ |
+| Needs transactions across several tables | ✓ | Careful: possible but costlier |
+| Reports, totals, analysis | ✓ | ✗ |
+| Very heavy writes, log/telemetry | Careful | ✓ or use a time-series database |
+
+> **The default is relational.** Choose document only when you **can answer why**.
+> "More flexible" is not a reason. It means the design is not done yet.
+
+**You can mix them**: use relational as the base, and store data of uncertain shape in a `jsonb` column.
+In almost every case this is better than running 2 separate databases.
+
+---
+
+## 2 · Naming rules — choose once, use across the whole system
+
+| What you name | Format | Example |
+|---|---|---|
+| Table | `snake_case` **plural** | `orders`, `order_items` |
+| Column | `snake_case` singular | `created_at`, `total_amount` |
+| primary key | `id` | `id` |
+| foreign key | `<singular table>_id` | `customer_id` |
+| Join table | `<a>_<b>` in alphabetical order | `role_users` ✓ (not `user_roles`) |
+| index | `ix_<table>_<column>` | `ix_orders_customer_id` |
+| unique | `ux_<table>_<column>` | `ux_users_email` |
+| foreign key constraint | `fk_<table>_<target table>` | `fk_orders_customers` |
+| check constraint | `ck_<table>_<topic>` | `ck_orders_total_non_negative` |
+
+**Do not:**
+
+- Wrong: put the data type in the name, such as `name_varchar`, `is_active_bit`
+- Wrong: prefix a column with the table name, such as `order_order_date` (it is already in the `orders` table)
+- Wrong: use reserved words such as `user`, `order`, `group`, `key`, which need quotes every time. Use `users`, `orders` instead.
+- Wrong: use abbreviations people cannot read, such as `cst_nm`. It saves 8 characters but costs 3 years of confusion.
+
+> SQL Server may use `PascalCase` if the existing project already does.
+> **Using one style across the whole system matters more than which style is right.** Do not switch midway.
+
+---
+
+## 3 · Columns every table must have
+
+```sql
+id           bigint / uuid   PRIMARY KEY
+created_at   timestamptz     NOT NULL DEFAULT now()
+updated_at   timestamptz     NOT NULL DEFAULT now()
+```
+
+Add these as needed:
+
+| Column | Add when | Note |
+|---|---|---|
+| `deleted_at timestamptz` | Data must be recoverable, or the law requires keeping it | **Every query must filter on it**, or deleted data shows up |
+| `created_by` / `updated_by` | You must be able to say who changed it | Store the user id, not the name |
+| `row_version` / `xmin` | Several people can edit at the same time | Use with the ETag in `api-conventions` |
+| `tenant_id` | Multi-tenant system | See section 10 |
+
+> **soft delete (delete by only setting a flag) has a cost**: every unique constraint must be rethought.
+> `ux_users_email` will block signing up with the same email again, even though the old account was deleted.
+> Fix it with a partial index: `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL`
+
+---
+
+## 4 · Choose the identifier type
+
+| Type | Pros | Cons | Use when |
+|---|---|---|---|
+| `bigint` auto-increment | Small, fast, index does not fragment, easy to read when tracing problems | Next id can be guessed · ids collide when merging data from several places | Default, single system, single database |
+| **UUIDv7 / ULID** | Sorted by time · can be generated on the app side · no collisions | 16 bytes · hard to read by eye | Distributed system · id needed before saving · id appears in a URL |
+| `UUIDv4` fully random | No collisions, cannot be guessed | **index fragments, and writes get clearly slower with lots of data** | Avoid if you can |
+
+> **UUIDv4 as a primary key is the most common trap.**
+> Fully random values make every insert land in the middle of the index structure.
+> You do not feel it at tens of thousands of rows, but at tens of millions it gets so slow you must rebuild.
+> If you must use a UUID, use **v7**, which starts with the time, so it grows in order like bigint.
+
+**A number people see is not the primary key**: a purchase order number such as `SO-2026-00042` that the customer refers to
+should be stored as a separate column with a unique constraint, and the primary key should not be shown.
+
+---
+
+## 5 · How much normalisation is enough
+
+**Always start at Third Normal Form (3NF)**: each fact is stored in one place.
+
+You may denormalise (accept duplicated data) only when all 3 of these hold:
+
+1. You measured and it is truly slow (with numbers, not a feeling).
+2. You know how the duplicated data will be updated so that the copies match.
+3. You wrote the reason in the table comment.
+
+**A commonly accepted exception**: data that must be "frozen" at a point in time.
+The product price in a purchase order must be copied into `order_items.unit_price`
+and not joined to `products.price`, because today's price is not the price on the day the customer bought.
+
+---
+
+## 6 · Four data types people get wrong all the time
+
+Details of the 4 data types people get wrong all the time (money · time · enum or status · boolean), with examples, are in [`data-types`](references/data-types.md).
+
+## 7 · index — where to put one so it works
+
+**Must have:**
+
+- Every foreign key (most databases **do not create it automatically**)
+- Columns in the `WHERE` of frequently run queries
+- Columns used in `ORDER BY` together with pagination
+
+**composite index (an index on several columns): column order matters**
+
+```sql
+-- query: WHERE tenant_id = ? AND status = ? ORDER BY created_at DESC
+CREATE INDEX ix_orders_tenant_status_created
+  ON orders (tenant_id, status, created_at DESC);
+```
+
+Order the columns by condition type: **equals → range → sort**.
+An index `(a, b)` works for a query that filters on `a` alone, but **not** for one that filters on `b` alone.
+
+**Do not add an index when:**
+
+- The table has fewer than a few thousand rows, because the database reads the whole table faster
+- The column has many repeated values, such as `is_active` where 95% are true
+- The table is written far more often than read, because every index adds cost on every write
+
+> **Measure before guessing**: `EXPLAIN ANALYZE` (PostgreSQL) or the execution plan (SQL Server)
+> tells you whether the index is really used. Guessing that it "should help" is wrong more often than right.
+
+---
+
+## 8 · Constraints live in the database, not only in the app
+
+| Rule | Where it should live |
+|---|---|
+| Email must not repeat | `UNIQUE` in the database **and** a check in the app so the error message looks nice |
+| Amount must not be negative | `CHECK (total_amount >= 0)` |
+| A purchase order must have a real customer | `FOREIGN KEY` |
+| Status must be one of the defined values | `CHECK` or a lookup table |
+
+> **Reason:** the app is not the only thing that touches the data. There are also urgent data-fix scripts,
+> import jobs at 3 a.m., and a 2nd service written later.
+> A constraint in the database is the last gate that nobody can skip.
+
+**Choose `ON DELETE` on purpose:**
+
+| Option | Meaning | Use with |
+|---|---|---|
+| `RESTRICT` (the default you should use) | Cannot delete while children exist | Almost every case |
+| `CASCADE` | Delete all the children too | True components, such as `order_items` |
+| `SET NULL` | Child becomes parentless | Optional relationships |
+
+If you put `CASCADE` in the wrong place just once, deleting 1 customer wipes 10 years of purchase history with it.
+
+---
+
+## 9 · migration — change the schema without taking the system down
+
+The expand-and-contract steps, and example migrations that deploy without downtime, are in [`migrations`](references/migrations.md).
+
+Data warehouses for analysis (star schema · SCD · ELT) are in [`warehouse-modeling`](references/warehouse-modeling.md) · pipelines that can rerun safely (incremental · backfill · data quality tests · checklist before going to production) are in [`data-pipeline-patterns`](references/data-pipeline-patterns.md).
+
+## 10 · Multi-tenant systems
+
+| Style | How separate | Cost | Fits |
+|---|---|---|---|
+| A `tenant_id` column in every table | Low: one slip and data leaks across tenants | Cheapest | Many tenants, small data per tenant |
+| A separate schema per tenant | Medium | Migrations must loop over every schema | Tens to hundreds of tenants |
+| A separate database per tenant | Highest | Most expensive | Enterprise customers who require separation |
+
+> **Important:** if you choose the `tenant_id` style, **enforce it at the lowest layer, not by adding it to each query**.
+> Use the database's row-level security, or the ORM's global filter.
+> A single query that forgets `WHERE tenant_id = ?` shows one customer's data to another,
+> and no error appears at all.
+
+---
+
+## 11 · Personal data
+
+- Keep a list of **which columns are personal data**. Without this list you cannot answer the question "where is my data?".
+- National ID numbers, credit card numbers and health data: encrypt at the column level, or do not store them at all if not needed.
+- Set a **retention period** per table, and have a real job that deletes accordingly.
+- Data must be deletable when the owner asks, and soft delete alone does not count as deleting.
+- Never copy real data onto a developer machine without masking it.
+
+---
+
+## 12 · Anti-patterns
+
+- **One table that stores everything** (`entity` / `attribute` / `value`): every query becomes hard.
+- **`varchar(255)` on every column**: this number means nothing. Set it from real data.
+- **Several values in one column**, such as `"1,4,7"`: cannot search it, cannot add a constraint. Use a join table.
+- **No foreign key because "the app takes care of it"**: one day you will have orphan rows.
+- **An index on every column just in case**: writes get slower and storage bloats, with no one benefiting.
+- **`SELECT *` in real code**: the code breaks every time a column is added.
+- **Business logic in triggers**: problems are untraceable, because nobody sees it running.
+- **A migration that also writes data**, mixed with the structure change: on rollback the data is lost.
+- **Changing the schema on production by hand**: at the next deploy the schema will not match.
+
+
+## reference: data-pipeline-patterns.md
+
+# Data pipeline patterns — incremental, backfill, quality, catalog
+
+Every pipeline must give the same result when run again (`principle-safe-to-rerun`) and must always pass values into SQL as parameters.
+
+**สารบัญ:**
+
+- [Pipeline Patterns](#pipeline-patterns)
+- [Data Catalog Pattern](#data-catalog-pattern)
+- [Production Pipeline Checklist](#production-pipeline-checklist)
+
+## Pipeline Patterns
+
+### Pattern 1: Incremental Loading
+
+```sql
+-- dbt incremental model
+{{ config(materialized='incremental', unique_key='id') }}
+
+SELECT
+    id,
+    user_id,
+    event_type,
+    created_at
+FROM {{ source('raw', 'events') }}
+WHERE 1=1
+{% if is_incremental() %}
+    -- Only new since last run
+    AND created_at > (SELECT MAX(created_at) FROM {{ this }})
+{% endif %}
+```
+
+### Pattern 2: Late-arriving Data
+
+```sql
+-- Don't just look at last 1 hour, look back further for late events
+WHERE created_at > NOW() - INTERVAL '7 days'  -- buffer
+  AND created_at > (SELECT MAX(created_at) - INTERVAL '1 day' FROM target)
+```
+
+### Pattern 3: Data Quality Tests (dbt)
+
+```yaml
+# models/marts/orders.yml
+version: 2
+
+models:
+  - name: orders
+    description: One row per order
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('customers')
+              field: customer_id
+      - name: amount
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+```
+
+### Pattern 4: Idempotent Backfills
+
+```python
+# Backfill should be safe to re-run
+async def backfill(start_date: date, end_date: date):
+    for d in date_range(start_date, end_date):
+        # DELETE then INSERT in one transaction (idempotent); value passed as a parameter, never in the SQL string
+        async with db.transaction():
+            await db.execute("DELETE FROM target WHERE date = $1", d)
+            await load_for_date(d)
+```
+
+### Pattern 5: Real-time Pipeline
+
+```python
+# Kafka consumer pattern
+from kafka import KafkaConsumer
+
+consumer = KafkaConsumer(
+    'events',
+    bootstrap_servers='kafka:9092',
+    enable_auto_commit=False,  # ← manual commit = at-least-once (not exactly-once)
+    isolation_level='read_committed',
+)
+
+batch = []
+for message in consumer:
+    batch.append(parse(message))
+
+    if len(batch) >= 1000:
+        # Write first, commit the offset after. Kafka and the DB share no
+        # transaction, so a crash between the two replays this batch
+        # (at-least-once). Make the write idempotent so a replay is harmless.
+        with db.transaction():
+            db.bulk_upsert('events', batch, key=('topic', 'partition', 'offset'))  # unique key + ON CONFLICT DO NOTHING
+        consumer.commit()  # only after the DB write succeeds
+        batch = []
+```
+
+For exactly-once effect: idempotent upsert as above, or store the offsets in the
+same DB transaction as the data and seek to them on start (skip `consumer.commit()`).
+
+## Data Catalog Pattern
+
+For every table, document:
+
+```yaml
+- table: dim_customer
+  description: Slowly-changing customer master
+  owner: data-team
+  freshness: hourly
+  source: postgres.app.users (CDC)
+  pii: yes
+  retention: 7 years
+  columns:
+    - name: customer_key
+      description: Surrogate key
+    - name: customer_id
+      description: Natural key from source system
+    - name: email
+      pii: yes
+```
+
+## Production Pipeline Checklist
+
+- [ ] Schema validation at ingestion
+- [ ] Schema evolution handled (additive only)
+- [ ] Tests on critical columns (uniqueness, not-null, ranges)
+- [ ] Monitoring on row counts, freshness, error rates
+- [ ] Alerting (PagerDuty / Slack) on failures
+- [ ] Backfill procedure documented + tested
+- [ ] Idempotency verified
+- [ ] Lineage visible (dbt docs, OpenLineage)
+- [ ] PII tagged
+- [ ] Access controls per dataset
+- [ ] Cost monitored (query / storage)
+
+
+## reference: data-types.md
+
+# 6 · Four data types that are routinely got wrong
+
+### Money
+
+```sql
+total_amount   numeric(19,4)   NOT NULL      -- ถูก:
+currency       char(3)         NOT NULL      -- ถูก: ISO 4217 เช่น THB
+total_amount   float / double                -- ผิด: 0.1 + 0.2 ไม่เท่ากับ 0.3
+```
+
+> Wrong: **float for money is a bug you cannot find.** The total drifts by 1 satang per line
+> You only learn at month-end close, and cannot trace back where it drifted
+
+### Time
+
+| Store | Use | Reason |
+|---|---|---|
+| Time an event happened | `timestamptz` (SQL Server uses `datetimeoffset`) stored as UTC | Thailand has no daylight saving, but systems sold abroad do |
+| Birth date, due date | `date` | no time, no time zone |
+| Shop opening hours | `time` + a separate time zone column | |
+
+**Rule:** store UTC and convert to `+07:00` only at display time; never store raw Thai time in a `timestamp` that has no zone
+
+**Buddhist Era (BE)**: always store Common Era (CE), then convert to BE at display time
+If you store the year 2569 in the database, every function will compute durations wrongly
+
+### enum / status
+
+| Approach | Good when | Bad when |
+|---|---|---|
+| Lookup table + foreign key | values can be added without a deploy, has Thai/English names, and has a display order | needs a join |
+| `check constraint` as text | constant values that rarely change | adding a value needs a migration |
+| PostgreSQL `enum` type | fast, small | **a value cannot be removed** and the order cannot be changed |
+| raw `int` | — | ✗ reading `status = 3`, nobody knows what it means |
+
+### boolean
+
+- Name it as a positive statement: `is_active` (right) · `is_not_disabled` (wrong)
+- **If a third state might appear in the future, do not use boolean**, because `is_approved` will become `approval_status`
+  within 6 months, once "รออนุมัติ" (awaiting approval) is added
+
+---
+
+
+## reference: migrations.md
+
+# 9 · migration — change the schema without taking the system down
+
+**3 rules:**
+
+1. **Forward only**: a migration that has been merged must not be edited; if it is wrong, write a new one over it
+2. **1 migration does one thing**: easy to trace problems, and rollback is exact
+3. **Old-version code and the new-version schema must work together**, because during a deploy both versions of the code always run at the same time
+
+### expand / contract — the standard steps for a change that destroys something existing
+
+Example: rename the column `name` → `full_name`
+
+| Deploy round | Database | Code |
+|:--:|---|---|
+| **1 · Expand** | add `full_name` (nullable) | write to both columns · read from `name` |
+| **2 · Migrate** | copy old data in batches | read from `full_name`, fall back to `name` if it has no value |
+| **3 · Contract** | set `NOT NULL` · drop `name` | read and write only `full_name` |
+
+3 rounds looks slow, but every round can roll back without losing data
+If you do it in one round, you must accept that the system has to go down
+
+**Commands that lock the table until the system hangs** (be extra careful on large tables):
+
+- Adding a column with both `DEFAULT` and `NOT NULL` at once — newer PostgreSQL does this fast, and MySQL 8.0.12 and up can add a column as INSTANT (changing a data type still rewrites the table)
+- Changing a data type
+- Creating a plain index; use `CREATE INDEX CONCURRENTLY` instead (PostgreSQL) or `ONLINE = ON` (SQL Server)
+
+**Always test a migration against a copy of real data**, because a migration that runs in 0.2 seconds on your own machine
+may take 40 minutes on production and hold the table lock the whole time
+
+---
+
+
+## reference: per-stack.md
+
+# Syntax and tools per database and ORM
+
+**Contents:** 1 Data types compared · 2 PostgreSQL · 3 SQL Server · 4 MySQL / MariaDB · 5 MongoDB · 6 Entity Framework Core (.NET) · 7 Prisma / Drizzle (Node) · 8 Alembic (Python) · 9 Slow query commands
+
+1. [Data types compared](#1--data-types-compared)
+2. [PostgreSQL](#2--postgresql)
+3. [SQL Server](#3--sql-server)
+4. [MySQL / MariaDB](#4--mysql--mariadb)
+5. [MongoDB](#5--mongodb)
+6. [Entity Framework Core (.NET)](#6--entity-framework-core-net)
+7. [Prisma / Drizzle (Node)](#7--prisma--drizzle-node)
+8. [Alembic (Python)](#8--alembic-python)
+9. [Slow query commands](#9--slow-query-commands)
+
+---
+
+## 1 · Data types compared
+
+| To store | PostgreSQL | SQL Server | MySQL |
+|---|---|---|---|
+| Auto-increment id | `bigint GENERATED ALWAYS AS IDENTITY` | `bigint IDENTITY(1,1)` | `BIGINT AUTO_INCREMENT` |
+| UUID | `uuid` | `uniqueidentifier` | `BINARY(16)` or `CHAR(36)` |
+| Money | `numeric(19,4)` | `decimal(19,4)` | `DECIMAL(19,4)` |
+| Time + time zone | `timestamptz` | `datetimeoffset(3)` | `TIMESTAMP` (store UTC) |
+| Date only | `date` | `date` | `DATE` |
+| Unlimited-length text | `text` | `nvarchar(max)` | `TEXT` / `LONGTEXT` |
+| Thai text | `text` (already UTF-8) | **`nvarchar` only** | `utf8mb4` |
+| True/false | `boolean` | `bit` | `TINYINT(1)` |
+| JSON | `jsonb` (can be indexed) | `nvarchar(max)` + `JSON_VALUE` | `JSON` |
+| Binary file | `bytea` (or store outside the database) | `varbinary(max)` | `BLOB` |
+
+> **SQL Server + Thai**: `varchar` turns Thai characters into `?`.
+> Use `nvarchar` and always write literals as `N'ข้อความ'`.
+>
+> **MySQL must use `utf8mb4`**, because MySQL's character set named plain `utf8`
+> stores only 3 bytes per character, so emoji and some other characters are lost.
+
+---
+
+## 2 · PostgreSQL
+
+```sql
+CREATE TABLE orders (
+  id            bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  order_no      varchar(20)  NOT NULL,
+  customer_id   bigint       NOT NULL REFERENCES customers(id) ON DELETE RESTRICT,
+  status        varchar(20)  NOT NULL DEFAULT 'draft',
+  total_amount  numeric(19,4) NOT NULL DEFAULT 0,
+  currency      char(3)      NOT NULL DEFAULT 'THB',
+  meta          jsonb,
+  created_at    timestamptz  NOT NULL DEFAULT now(),
+  updated_at    timestamptz  NOT NULL DEFAULT now(),
+  deleted_at    timestamptz,
+  CONSTRAINT ck_orders_total_non_negative CHECK (total_amount >= 0),
+  CONSTRAINT ck_orders_status CHECK (status IN ('draft','confirmed','shipped','cancelled'))
+);
+
+CREATE UNIQUE INDEX ux_orders_order_no ON orders (order_no) WHERE deleted_at IS NULL;
+CREATE INDEX ix_orders_customer_id ON orders (customer_id);
+CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC);
+```
+
+**Create an index without locking the table:**
+
+```sql
+CREATE INDEX CONCURRENTLY ix_orders_status ON orders (status);
+-- Must not run inside a transaction · if it fails it leaves an index in invalid state: DROP it and redo
+```
+
+**Update `updated_at` automatically:**
+
+```sql
+CREATE OR REPLACE FUNCTION touch_updated_at() RETURNS trigger AS $$
+BEGIN NEW.updated_at = now(); RETURN NEW; END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_orders_touch BEFORE UPDATE ON orders
+FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
+```
+
+**Row-level security for multi-tenant systems:**
+
+```sql
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation ON orders
+  USING (tenant_id = current_setting('app.tenant_id')::bigint);
+-- The app sets this per connection: SET app.tenant_id = '42';
+```
+
+**Common PostgreSQL traps** (ideas from wshobson postgresql-table-design · version numbers are the version where the behaviour began)
+
+| Trap | Do this instead |
+|---|---|
+| `timestamp` (no time zone) silently drops the offset, so a `+07:00` machine and UTC store values with different meanings | Always `timestamptz` |
+| `serial` creates a separate sequence whose permissions and `DROP` do not follow the table | `GENERATED ALWAYS AS IDENTITY` (PG 10+) |
+| `ADD COLUMN ... NOT NULL` on a big table risks a long lock | With a constant `DEFAULT` the table is no longer rewritten (PG 11+) · a function DEFAULT such as `now()` still rewrites the whole table |
+| `ADD CONSTRAINT` (FK · CHECK) scans the whole table while holding the lock | Use `... NOT VALID` first, then run `VALIDATE CONSTRAINT` as a separate statement (lighter lock) |
+| DDL queues behind a long transaction, and every query after it waits too | Run `SET lock_timeout = '5s'` before every DDL, and rerun if it times out |
+| A unique index lets `NULL` repeat on many rows | `UNIQUE NULLS NOT DISTINCT` (PG 15+) or a partial index `WHERE col IS NOT NULL` |
+| `LIKE '%คำ%'` and `ILIKE` do not use a btree index | Extension `pg_trgm` + GIN index · for serious text search use `tsvector` |
+| `jsonb` search with `->>` does not use an index | GIN index on the column (`@>` · `?`) or an expression index on `(meta->>'key')` |
+| `count(*)` over the whole table to show a page count | Use the estimate from `pg_class.reltuples`, or drop the total count (cursor pagination) |
+
+---
+
+## 3 · SQL Server
+
+```sql
+CREATE TABLE orders (
+  id            bigint IDENTITY(1,1) PRIMARY KEY,
+  order_no      nvarchar(20)   NOT NULL,
+  customer_id   bigint         NOT NULL,
+  status        nvarchar(20)   NOT NULL CONSTRAINT df_orders_status DEFAULT N'draft',
+  total_amount  decimal(19,4)  NOT NULL CONSTRAINT df_orders_total DEFAULT 0,
+  created_at    datetimeoffset(3) NOT NULL CONSTRAINT df_orders_created DEFAULT sysdatetimeoffset(),
+  updated_at    datetimeoffset(3) NOT NULL CONSTRAINT df_orders_updated DEFAULT sysdatetimeoffset(),
+  row_version   rowversion,
+  CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers(id),
+  CONSTRAINT ck_orders_total_non_negative CHECK (total_amount >= 0)
+);
+
+CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC)
+  WITH (ONLINE = ON);   -- Enterprise / Azure SQL only
+```
+
+- `rowversion` works directly as an ETag to detect conflicting edits.
+- To sort Thai correctly, set the collation `Thai_100_CI_AS` at the column or database level.
+- The old `datetime` has a precision of only 3.33 milliseconds. Use `datetime2` / `datetimeoffset` instead.
+
+---
+
+## 4 · MySQL / MariaDB
+
+```sql
+CREATE TABLE orders (
+  id           BIGINT AUTO_INCREMENT PRIMARY KEY,
+  order_no     VARCHAR(20)   NOT NULL,
+  customer_id  BIGINT        NOT NULL,
+  total_amount DECIMAL(19,4) NOT NULL DEFAULT 0,
+  created_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY ux_orders_order_no (order_no),
+  KEY ix_orders_customer_id (customer_id),
+  CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+- From MySQL 8.0.12, `ADD COLUMN` can use `ALGORITHM=INSTANT` (before 8.0.29 it could add only at the end of the table). Changing a data type still rewrites the table (dev.mysql.com online DDL, checked 22 Oct 2026 (B.E. 2569)). For big tables that need a rebuild, use `pt-online-schema-change` or `gh-ost`.
+- Set the server time to UTC (`default_time_zone = '+00:00'`).
+
+---
+
+## 5 · MongoDB
+
+```js
+db.createCollection("orders", {
+  validator: { $jsonSchema: {
+    bsonType: "object",
+    required: ["orderNo", "customerId", "totalAmount", "createdAt"],
+    properties: {
+      orderNo:     { bsonType: "string" },
+      customerId:  { bsonType: "objectId" },
+      totalAmount: { bsonType: "decimal" },   // wrong: do not use double for money
+      createdAt:   { bsonType: "date" }
+    }
+  }}
+});
+db.orders.createIndex({ orderNo: 1 }, { unique: true });
+db.orders.createIndex({ customerId: 1, createdAt: -1 });
+```
+
+- Embed when the child data is **always read together with the parent and does not grow without limit**. Otherwise use references.
+- One document has a 16 MB ceiling, so an array that keeps growing will hit it one day.
+- Use `Decimal128` for money, and nothing else.
+
+---
+
+## 6 · Entity Framework Core (.NET)
+
+```bash
+dotnet ef migrations add AddOrderStatus
+dotnet ef migrations script <from> <to> -o migrate.sql   # right: review the SQL before the real run
+dotnet ef database update                                # dev only
+```
+
+> **On production, run the reviewed script, not `database update`.**
+> That command needs the app's connection to have permission to change the schema, which it should not have in the first place.
+
+```csharp
+modelBuilder.Entity<Order>(e => {
+    e.ToTable("orders");
+    e.Property(x => x.TotalAmount).HasColumnType("decimal(19,4)");
+    e.HasIndex(x => new { x.Status, x.CreatedAt }).HasDatabaseName("ix_orders_status_created");
+    e.HasQueryFilter(x => x.DeletedAt == null);          // soft delete across the whole system
+    e.Property(x => x.RowVersion).IsRowVersion();        // detect conflicting edits
+});
+```
+
+---
+
+## 7 · Prisma / Drizzle (Node)
+
+```prisma
+model Order {
+  id          BigInt   @id @default(autoincrement())
+  orderNo     String   @unique @map("order_no") @db.VarChar(20)
+  totalAmount Decimal  @map("total_amount") @db.Decimal(19, 4)
+  status      String   @db.VarChar(20)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  customer    Customer @relation(fields: [customerId], references: [id])
+  customerId  BigInt   @map("customer_id")
+
+  @@index([status, createdAt], name: "ix_orders_status_created")
+  @@map("orders")
+}
+```
+
+```bash
+npx prisma migrate dev --name add_order_status   # dev — creates the migration file
+npx prisma migrate deploy                        # production — runs only the existing ones
+```
+
+- Prisma's `Decimal` returns an object, not a number. Calculate with `decimal.js` and do not convert to float.
+- `BigInt` cannot be converted to JSON directly. Convert it to a string at the API layer.
+
+---
+
+## 8 · Alembic (Python)
+
+```bash
+alembic revision --autogenerate -m "add order status"
+alembic upgrade head
+alembic downgrade -1
+```
+
+Split into 3 migrations (1 migration does one thing):
+
+```python
+# 1) schema: add a nullable column
+def upgrade():
+    op.add_column("orders", sa.Column("status", sa.String(20), nullable=True))
+
+# 2) data: backfill existing values (on a big table, do it in small batches)
+def upgrade():
+    op.execute("UPDATE orders SET status = 'draft' WHERE status IS NULL")
+
+# 3) schema: enforce NOT NULL and create the index
+def upgrade():
+    op.alter_column("orders", "status", nullable=False)
+    # CREATE INDEX CONCURRENTLY must not run inside a transaction, so step out of Alembic's transaction
+    with op.get_context().autocommit_block():
+        op.create_index("ix_orders_status_created", "orders", ["status", "created_at"],
+                        postgresql_concurrently=True)
+```
+
+> `--autogenerate` **does not see** renames (it reads them as a drop plus a new add, so the data is lost).
+> Always read the file it generates before you commit.
+
+---
+
+## 9 · Slow query commands
+
+| Database | Command |
+|---|---|
+| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) <query>;` · extension `pg_stat_statements` |
+| SQL Server | Turn on "Include Actual Execution Plan" · `sys.dm_exec_query_stats` |
+| MySQL | `EXPLAIN ANALYZE <query>;` · `performance_schema` |
+| MongoDB | `db.orders.find(...).explain("executionStats")` |
+
+**Danger signs to fix:** `Seq Scan` / `Table Scan` on a big table ·
+estimated row count differs from the actual by more than 10 times · a `Nested Loop` that runs hundreds of thousands of times
+
+
+## reference: warehouse-modeling.md
+
+# Warehouse modeling — ELT, stack, star schema, SCD
+
+For an analytics warehouse, not an application database.
+
+**สารบัญ:**
+
+- [ELT vs ETL (Modern Default: ELT)](#elt-vs-etl-modern-default-elt)
+- [Tech Stack (2026 Recommendations)](#tech-stack-2026-recommendations)
+- [Schema Design: Star/Snowflake](#schema-design-starsnowflake)
+- [SCD (Slowly Changing Dimensions)](#scd-slowly-changing-dimensions)
+
+## ELT vs ETL (Modern Default: ELT)
+
+```
+ETL (old way):
+Source → Transform → Warehouse
+        ↑
+        Limited compute, slow
+
+ELT (modern):
+Source → Load raw → Transform in warehouse
+                    ↑
+                    Snowflake/BigQuery scale
+```
+
+> **2026 default: ELT with dbt** — load raw to warehouse, transform with SQL via dbt
+
+## Tech Stack (2026 Recommendations)
+
+> The tool list comes from model knowledge and has not been checked against official websites (รอยืนยัน, awaiting confirmation). Check before recommending.
+
+### Warehouse / Lake
+| Tool | Best for | Cost |
+|------|----------|------|
+| **Snowflake** | Pure warehouse, separation of compute/storage | $$|
+| **BigQuery** | Serverless, ad-hoc, GCP shops | $$|
+| **Databricks** | Unified lake + warehouse, ML-heavy | $$$|
+| **DuckDB** | Local dev, embedded analytics | $free |
+| **Redshift** | AWS-native, legacy | $$|
+| **Postgres** | Small data (<1TB), simplicity | $|
+
+### Transformation
+- **dbt** — SQL-based, version controlled, tested (industry default)
+- **SQLMesh** — newer alternative to dbt, stronger features
+
+### Orchestration
+- **Airflow** — most popular, mature
+- **Prefect** — modern Python-native
+- **Dagster** — software-engineering approach to pipelines
+
+### Stream Processing
+- **Kafka + Flink** — high throughput, exactly-once
+- **Kinesis Streams + Flink** — AWS-native
+- **Pub/Sub + Dataflow** — GCP-native
+- **Materialized views** (Snowflake, BigQuery) — for simple cases
+
+### Ingestion
+- **Airbyte** — open source, many connectors
+- **Fivetran** — managed, expensive but reliable
+- **Estuary** — modern, streaming-first
+- **Custom** — for sources not covered
+
+## Schema Design: Star/Snowflake
+
+```sql
+-- Fact table (events / measurements)
+CREATE TABLE fact_orders (
+    order_key BIGINT PRIMARY KEY,
+    customer_key BIGINT,
+    product_key BIGINT,
+    date_key INT,
+    quantity INT,
+    amount NUMERIC(19,4)
+    -- foreign keys to dimensions
+);
+
+-- Dimension tables (descriptive context)
+CREATE TABLE dim_customer (
+    customer_key BIGINT PRIMARY KEY,
+    customer_id VARCHAR,        -- natural key
+    name VARCHAR,
+    email VARCHAR,
+    country VARCHAR,
+    -- SCD Type 2 tracking:
+    valid_from DATE,
+    valid_to DATE,
+    is_current BOOLEAN
+);
+```
+
+> **Star = denormalized, query-fast**
+> **Snowflake = normalized dims, save storage**
+> **Wide tables / OBT (One Big Table) = even faster for analytics**
+
+## SCD (Slowly Changing Dimensions)
+
+### Type 1: Overwrite
+```
+Customer Bob lived in Bangkok. Moved to Phuket.
+→ Update row, lose Bangkok history
+```
+
+### Type 2: New row per change (most common)
+```
+| customer_key | id | name | city    | valid_from | valid_to   | is_current |
+| 1            | 42 | Bob  | Bangkok | 2024-01-01 | 2025-06-30 | false      |
+| 2            | 42 | Bob  | Phuket  | 2025-07-01 | 9999-12-31 | true       |
+```
+
+### Type 3: Add column
+```
+Customer table: current_city, previous_city
+→ Only most recent change preserved
+```
+
+
+---
+
 # skill: api-conventions
 
 Use when adding API endpoints or checking API consistency
@@ -296,1233 +1722,3 @@ Our default: Schemathesis in a CI job after the service is up with test data (th
 - [ ] OpenAPI is in the repo and generated from code · CI fails if the file does not match the code
 - [ ] Schemathesis (or equivalent) runs against a service brought up with test data · `oasdiff breaking` runs on every PR
 - [ ] Callers in a separate team → at least 1 pact file per caller, and the provider checks it in CI
-
-
----
-
-# skill: web-service-essentials
-
-Use when building or reviewing an HTTP backend
-
-# Web Service Essentials
-
-> **The one rule:** before writing the first business endpoint, the service must be able to answer
-> "Are you still alive? · Are you ready for work? · Which version are you running now?" If it cannot, on the day the system goes down you will be guessing blind.
-
-## When to use this skill
-
-- Starting a new service / REST API / microservice
-- Someone asks for a health check, ping, readiness, liveness, or version endpoint
-- Deploying to production for the first time, or moving into Docker/Kubernetes
-- You must set one API error format for the whole system
-
-## When **not** to use it
-
-- To design business endpoints, use the command `/api-design`
-- For URL style · paging · dates · API ids, use `api-conventions`
-- For log format, use `logging-standards`
-- To choose an architecture, use `architecture-patterns`
-- To check responses against OpenAPI in CI or catch breaking changes, see `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md)
-
----
-
-## 1 · The 4 basic endpoints
-
-| Endpoint | What it answers | auth | Checks dependencies | Who calls it |
-|---|---|:---:|:---:|---|
-| `GET /ping` | `pong` (text) | no | no | load balancer, every second |
-| `GET /health/live` | the process is still alive | no | **no** | orchestrator (restarts if dead) |
-| `GET /health/ready` | ready to take traffic | no | yes | orchestrator (removes from the pool) |
-| `GET /version` | what is running | no* | no | a person, when tracing a problem |
-
-> **live must not check dependencies.** This is the most common mistake.
-> If `/health/live` checks the database (DB) and the DB goes down briefly, Kubernetes will **kill every pod**
-> even though the app itself is fine. When the DB comes back, no pod is left to take traffic.
-> The dependency check belongs in `/health/ready`, which only removes a pod from the pool for a while.
-
-\* If you do not want the public to see the commit hash in `/version`, restrict it so only the internal network can call it.
-
-**Wire it to Kubernetes like this** — live and ready must point to different paths, or the point above means nothing.
-
-```yaml
-livenessProbe:            # dead → restart the container
-  httpGet: { path: /health/live, port: 3000 }
-  initialDelaySeconds: 15 # let the app start first, or it gets killed before it can listen
-  periodSeconds: 10
-  failureThreshold: 3     # restart only after 3 failures in a row (30 seconds)
-readinessProbe:           # not ready → remove from the Service for a while, no restart
-  httpGet: { path: /health/ready, port: 3000 }
-  initialDelaySeconds: 5
-  periodSeconds: 10
-```
-
-For an app with a long warm-up (loading a model · a big cache), add a `startupProbe` pointing to `/health/live` with a high `failureThreshold`, instead of stretching the liveness `initialDelaySeconds`.
-
-### Response shape (the same in every language)
-
-```jsonc
-// GET /health/ready → 200 normally · 503 when a critical dependency is down
-{
-  "status": "up",                       // up | degraded | down
-  "timestamp": "2026-08-31T09:42:13.482Z",
-  "checks": {
-    "db":    { "status": "up",   "durationMs": 12 },
-    "redis": { "status": "up",   "durationMs": 3 },
-    "mail":  { "status": "down", "durationMs": 3001, "error": "smtp timeout" }
-  }
-}
-```
-
-```jsonc
-// GET /version → 200
-{
-  "name": "orders-api", "version": "1.4.0", "commit": "abc1234",
-  "buildTime": "2026-08-31T09:00:00Z", "env": "production", "host": "pod-7f9c"
-}
-```
-
-**3 states, not 2:**
-- `up` — everything is normal → 200
-- `degraded` — a **non-critical** dependency is down (such as email) but the service can still take traffic → 200
-- `down` — a critical dependency is down (such as the DB) → **503**
-
-**Every check must have a timeout** (default 3 seconds). Otherwise a hung dependency
-makes the health endpoint hang too, and the orchestrator makes the wrong decision for the whole system.
-
-**Never send a stack trace or connection string out through these endpoints**, because anyone can call them.
-
----
-
-## 2 · One error format for the whole system
-
-Follow **RFC 9457 (`application/problem+json`)**, which is a real standard, so you do not invent your own.
-
-```jsonc
-// 422 — the format is right, but the data fails a rule (see the table below)
-{
-  "type": "https://api.example.com/errors/validation",
-  "title": "ข้อมูลที่ส่งมาไม่ถูกต้อง",
-  "status": 422,
-  "detail": "จำนวนสินค้าต้องมากกว่า 0",
-  "instance": "/api/v1/orders",
-  "requestId": "a3f9c1b2",              // matches the cid in the log — trace the case at once
-  "errors": [                           // validation only · every field in one response
-    { "field": "items[0].qty", "code": "min_value", "message": "ต้องมากกว่า 0" }
-  ]
-}
-```
-
-- `field` is the full path including array indexes · `code` is for programs · `message` is for people
-
-| Status | Use when |
-|---|---|
-| 400 | Malformed data |
-| 401 | Not yet authenticated |
-| 403 | Authenticated but not allowed |
-| 404 | The thing does not exist |
-| 409 | Conflicts with current state (duplicate, overwrite) |
-| 422 | Format is right but breaks a business rule |
-| 429 | Called too often — must have `Retry-After` |
-| 500 | Our side broke — **never send internal details out**, send `requestId` instead |
-
-> **A 500 must say only "an error occurred, please report this requestId".** The real details stay in the log.
-> Sending a stack trace out is like handing the system's blueprint to someone looking for a way in.
-
----
-
-## 3 · Request id
-
-- Accept it from the **`X-Request-Id`** header only when it matches `^[A-Za-z0-9-]{1,64}$` · if it is missing or does not match → create a new one (a uuid cut to 8 characters).
-  This value goes into every log line. If you accept it as is, the sender can insert new lines or fake text into the log (log injection).
-- **Return it in a response header every time**, including on errors.
-- Put it in every log line (see `logging-standards`) and in the error body.
-- Pass it on to the downstream service every time you call across systems.
-
-When a customer calls to say "it broke", ask for the requestId and `grep` once to find the whole story.
-
----
-
-## 4 · Graceful shutdown
-
-On a new deploy the orchestrator sends `SIGTERM`. If the app dies at once, requests in progress are cut off midway.
-
-```
-SIGTERM → 1. Stop accepting new requests (make /health/ready answer down at once)
-          2. Wait for in-flight requests to finish (timeout 15–30 seconds)
-          3. Close the DB pool / queues / files
-          4. exit(0)
-```
-
-> Step 1 matters more than it looks. `/health/ready` must answer `down` about 5 seconds **before** the real shutdown,
-> so the load balancer removes us from the pool in time. Otherwise traffic keeps arriving while we are closing.
-
----
-
-## 5 · What must exist before deploy (not optional)
-
-- **Timeouts everywhere**: incoming requests, outgoing calls, and DB queries. Without a timeout, the moment a downstream is slow, the whole system hangs with it.
-- **Limit body size** (for example 1MB) to stop memory blowing up from a large payload.
-- **Cross-Origin Resource Sharing (CORS) names the origin explicitly** — `*` is allowed only for a public API with no cookies.
-- **Rate limit** at least on the login endpoint and on anything that sends a one-time password (OTP)/email.
-- **Security headers**: `X-Content-Type-Options: nosniff` · `Content-Security-Policy: frame-ancestors 'none'` (replaces the old `X-Frame-Options` header · also add `X-Frame-Options: DENY` for old browsers) ·
-  `Strict-Transport-Security` (HTTP Strict Transport Security · HSTS)
-  Node: `helmet` sets them all in one line · .NET: `UseHsts()` sets only HSTS, and the rest needs a short middleware or the package `NetEscapades.AspNetCore.SecurityHeaders` (example in `references/per-stack.md`)
-- **Turn off the full error page in production** (`app.UseDeveloperExceptionPage()` in dev only)
-- **Put the version in the path**: `/api/v1/...` from day one, because moving later costs much more.
-- **OpenAPI** generated from the real code, not written by hand and then forgotten.
-
----
-
-## 6 · Ready-made code
-
-| File | Stack | Status |
-|---|---|---|
-| `assets/health.node.js` | Node / Express | ✓ all 4 endpoints run and tested, plus the degraded/down/timeout cases |
-| `assets/health_py.py` | Python / FastAPI | ✓ run and tested the same way, results match on every field |
-| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | Caution: not yet compiled or tested |
-
-Usage snippets for the Node and Python routers: [`references/per-stack.md`](references/per-stack.md).
-
----
-
-## 7 · Check the work
-
-```bash
-curl -i localhost:8080/ping                    # 200 pong
-curl -s localhost:8080/health/live  | jq
-curl -s localhost:8080/health/ready | jq
-curl -s localhost:8080/version      | jq
-
-# stop the DB and call again — ready must be 503 but live must still be 200
-docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:8080/health/live
-```
-
-- [ ] `/health/live` does **not** touch the DB — it still answers 200 with the DB stopped
-- [ ] `/health/ready` answers 503 when a critical dependency is down
-- [ ] When a non-critical dependency is down, the result is `degraded` + 200 (still takes traffic)
-- [ ] Every check has a timeout — make a dependency hang, and the endpoint must answer within ~3 seconds
-- [ ] `/version` matches the commit actually deployed
-- [ ] Every response has `X-Request-Id`, including a 500
-- [ ] Trigger a 500 and confirm no stack trace / connection string leaks out
-- [ ] After `SIGTERM`, in-flight requests finish before the app closes
-- [ ] `/ping` is not written to the log (or the file fills up with pings)
-
-
-## reference: per-stack.md
-
-# .NET และ Angular
-
-> Caution: the code in this file is **not yet compiled or tested** (unlike `assets/health.node.js` and
-> `assets/health_py.py`, which have been run against every endpoint). It is the standard setup of
-> ASP.NET Core. On the first run, compare the response with the shape in SKILL.md section 1.
-
----
-
-## สารบัญ
-
-1. [ASP.NET Core — health checks](#aspnet-core--health-checks)
-2. [Angular — ฝั่งที่เรียกใช้](#angular--ฝั่งที่เรียกใช้)
-3. [ตารางเทียบ](#ตารางเทียบ)
-
----
-
-## ASP.NET Core — health checks
-
-```bash
-dotnet add package AspNetCore.HealthChecks.NpgSql
-dotnet add package AspNetCore.HealthChecks.Redis
-dotnet add package AspNetCore.HealthChecks.Network   # AddSmtpHealthCheck อยู่ในแพ็กเกจนี้
-```
-
-```csharp
-builder.Services.AddHealthChecks()
-    // tag "ready" = ตัวที่ /health/ready จะเรียก · ไม่ติด tag = ไม่ถูกเรียกที่ไหนเลย
-    .AddNpgSql(cs, name: "db", timeout: TimeSpan.FromSeconds(3), tags: ["ready", "critical"])
-    .AddRedis(redisCs, name: "redis", timeout: TimeSpan.FromSeconds(3), tags: ["ready", "critical"])
-    .AddSmtpHealthCheck(o => { }, name: "mail",
-        failureStatus: HealthStatus.Degraded,          // ไม่ critical → degraded ไม่ใช่ down
-        tags: ["ready"])
-    // ตอนกำลังปิด → Unhealthy → /health/ready ตอบ 503 (ดู "Graceful shutdown" ข้างล่าง)
-    .AddCheck<ShutdownHealthCheck>("shutdown", tags: ["ready", "critical"]);
-```
-
-```csharp
-// ---- ping: เบาที่สุด ไม่ผ่าน middleware ที่ไม่จำเป็น ----
-app.MapGet("/ping", () => Results.Text("pong")).ExcludeFromDescription();
-
-// ---- liveness: ไม่เรียก check ตัวไหนเลย (predicate = _ => false) ----
-// ถ้าเผลอให้เช็ค DB ตรงนี้ DB สะดุด = Kubernetes ฆ่า pod ยกแถว
-app.MapHealthChecks("/health/live", new HealthCheckOptions
-{
-    Predicate = _ => false,
-    ResponseWriter = WriteLive,
-});
-
-// ---- readiness: เฉพาะ check ที่ติด tag "ready" ----
-app.MapHealthChecks("/health/ready", new HealthCheckOptions
-{
-    Predicate = c => c.Tags.Contains("ready"),
-    ResponseWriter = WriteReady,
-    ResultStatusCodes =
-    {
-        [HealthStatus.Healthy]   = StatusCodes.Status200OK,
-        [HealthStatus.Degraded]  = StatusCodes.Status200OK,     // ยังรับ traffic ได้
-        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable,
-    },
-});
-
-app.MapGet("/version", () => Results.Ok(new
-{
-    name = "orders-api",
-    version = typeof(Program).Assembly.GetName().Version?.ToString() ?? "0.0.0",
-    commit = Environment.GetEnvironmentVariable("GIT_SHA") ?? "unknown",
-    buildTime = Environment.GetEnvironmentVariable("BUILD_TIME") ?? "unknown",
-    env = app.Environment.EnvironmentName,
-    host = Environment.MachineName,
-}));
-```
-
-Make the response match the same format as the other stacks:
-
-```csharp
-static Task WriteReady(HttpContext ctx, HealthReport report)
-{
-    ctx.Response.ContentType = "application/json; charset=utf-8";
-    return ctx.Response.WriteAsJsonAsync(new
-    {
-        status = report.Status switch
-        {
-            HealthStatus.Healthy  => "up",
-            HealthStatus.Degraded => "degraded",
-            _                     => "down",
-        },
-        timestamp = DateTimeOffset.UtcNow,
-        checks = report.Entries.ToDictionary(
-            e => e.Key,
-            e => new
-            {
-                status = e.Value.Status == HealthStatus.Healthy ? "up" : "down",
-                durationMs = (int)e.Value.Duration.TotalMilliseconds,
-                // ข้อความเท่านั้น ห้ามส่ง exception เต็ม ๆ — endpoint นี้เปิดสาธารณะ
-                error = e.Value.Exception?.Message,
-            }),
-    });
-}
-
-static Task WriteLive(HttpContext ctx, HealthReport _)
-{
-    ctx.Response.ContentType = "application/json; charset=utf-8";
-    return ctx.Response.WriteAsJsonAsync(new { status = "up", timestamp = DateTimeOffset.UtcNow });
-}
-```
-
-### Error envelope (RFC 9457)
-
-ASP.NET Core already ships `ProblemDetails`. Use it, and do not invent your own format.
-
-```csharp
-builder.Services.AddProblemDetails(o => o.CustomizeProblemDetails = ctx =>
-{
-    ctx.ProblemDetails.Instance = ctx.HttpContext.Request.Path;
-    ctx.ProblemDetails.Extensions["requestId"] =
-        ctx.HttpContext.Response.Headers["X-Request-Id"].ToString();
-});
-
-app.UseExceptionHandler();      // แปลง exception ที่หลุดเป็น problem+json ให้อัตโนมัติ
-app.UseStatusCodePages();
-```
-
-### Graceful shutdown
-
-Make `/health/ready` answer down for a short while before the real shutdown, so the load balancer removes the instance from its pool in time.
-Use `IHostedLifecycleService.StoppingAsync` (.NET 8 and later), because the host calls it **before** it stops Kestrel (after `ApplicationStopping`).
-So you can wait with `await Task.Delay` without blocking a thread, and the server still answers 503 for the load balancer to see.
-
-```csharp
-// สถานะร่วม: ตัวรอปิดเขียน · health check อ่าน
-public sealed class ReadinessState { public volatile bool IsShuttingDown; }
-
-public sealed class ShutdownHealthCheck(ReadinessState state) : IHealthCheck
-{
-    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken ct = default) =>
-        Task.FromResult(state.IsShuttingDown
-            ? HealthCheckResult.Unhealthy("shutting down")
-            : HealthCheckResult.Healthy());
-}
-
-public sealed class DrainOnShutdown(ReadinessState state) : IHostedLifecycleService
-{
-    public async Task StoppingAsync(CancellationToken ct)
-    {
-        state.IsShuttingDown = true;                       // /health/ready → 503 ทันที
-        await Task.Delay(TimeSpan.FromSeconds(5), ct);     // รอ load balancer ตัดออก
-    }
-    public Task StartingAsync(CancellationToken ct) => Task.CompletedTask;
-    public Task StartAsync(CancellationToken ct)    => Task.CompletedTask;
-    public Task StartedAsync(CancellationToken ct)  => Task.CompletedTask;
-    public Task StopAsync(CancellationToken ct)     => Task.CompletedTask;
-    public Task StoppedAsync(CancellationToken ct)  => Task.CompletedTask;
-}
-
-// ก่อน builder.Build()
-builder.Services.AddSingleton<ReadinessState>();
-builder.Services.AddHostedService<DrainOnShutdown>();
-builder.Services.Configure<HostOptions>(o =>
-    o.ShutdownTimeout = TimeSpan.FromSeconds(30));   // รวมเวลารอ 5 วินาทีข้างบน + request ที่ค้าง
-```
-
-Host shutdown order (.NET 8+): `ApplicationStopping` → `StoppingAsync` → `StopAsync` of the hosted services (including Kestrel) → `StoppedAsync` → `ApplicationStopped` — per the .NET Generic Host page at learn.microsoft.com (checked 22 Oct 2026)
-
-### สิ่งที่ต้องเปิดก่อน deploy
-
-Register services only **before** `builder.Build()`. After Build the service list is read-only, and calling `builder.Services.Add…` then throws `InvalidOperationException` at app start.
-
-```csharp
-// ---- ก่อน Build: ลงทะเบียน service ----
-builder.Services.Configure<KestrelServerOptions>(o => o.Limits.MaxRequestBodySize = 1_048_576);
-builder.Services.AddRateLimiter(o =>
-{
-    o.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-    // อย่างน้อยที่ /login และที่ส่งรหัสผ่านใช้ครั้งเดียว (One-Time Password · OTP)
-    o.AddFixedWindowLimiter("login", w => { w.PermitLimit = 5; w.Window = TimeSpan.FromMinutes(1); });
-});
-builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
-    p.WithOrigins("https://app.example.com")   // ระบุ origin ห้าม AllowAnyOrigin คู่กับ cookie
-     .AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
-
-var app = builder.Build();
-
-// ---- หลัง Build: ลำดับ middleware ----
-if (!app.Environment.IsDevelopment())
-    app.UseHsts();                             // ตั้งแค่ Strict-Transport-Security · ไม่ใช้ตอน dev เพราะเบราว์เซอร์จำค่าไว้
-app.UseHttpsRedirection();
-app.Use(async (ctx, next) =>                   // header ที่ UseHsts ไม่ได้ตั้งให้
-{
-    ctx.Response.Headers["X-Content-Type-Options"] = "nosniff";
-    ctx.Response.Headers["Content-Security-Policy"] = "frame-ancestors 'none'";
-    ctx.Response.Headers["X-Frame-Options"] = "DENY";   // สำหรับเบราว์เซอร์เก่า
-    await next();
-});
-app.UseCors();
-app.UseRateLimiter();
-
-app.MapPost("/api/v1/login", Login).RequireRateLimiting("login");
-```
-
-To avoid writing your own middleware, use the package `NetEscapades.AspNetCore.SecurityHeaders` (`app.UseSecurityHeaders()`) which sets the full basic header set
-
----
-
-## Angular — ฝั่งที่เรียกใช้
-
-**Interceptor ใส่ request id ทุก request** (คู่กับ `logging-standards`):
-
-```ts
-export const requestIdInterceptor: HttpInterceptorFn = (req, next) => {
-  const id = crypto.randomUUID().slice(0, 8);
-  return next(req.clone({ setHeaders: { 'X-Request-Id': id } }));
-};
-```
-
-**Turn problem+json into a message the user can understand**:
-
-```ts
-export const errorInterceptor: HttpInterceptorFn = (req, next) => {
-  const toast = inject(ToastService);
-  return next(req).pipe(
-    catchError((e: HttpErrorResponse) => {
-      const p = e.error;                       // ProblemDetails
-      // 500 ไม่มีรายละเอียดให้แสดง — โชว์ requestId เพื่อให้ผู้ใช้แจ้งทีมได้
-      const msg = p?.detail || p?.title || 'เกิดข้อผิดพลาด';
-      toast.error(p?.requestId ? `${msg} (รหัสอ้างอิง ${p.requestId})` : msg);
-      return throwError(() => e);
-    }),
-  );
-};
-```
-
-**System status page**, so the support team can check it without calling a developer:
-
-```ts
-this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r));
-// r.status = 'up' | 'degraded' | 'down' → แสดงเป็น pill สีเขียว/เหลือง/แดง
-// (ใช้คลาส .pill-green / .pill-amber / .pill-red จาก web-app-design)
-```
-
----
-
-## ตารางเทียบ
-
-| เรื่อง | .NET | Node/Express | Python/FastAPI |
-|---|---|---|---|
-| health | `AddHealthChecks()` + tag | `createHealthRouter()` | `make_health_router()` |
-| error envelope | `ProblemDetails` (มีในตัว) | `express-problem-json` หรือเขียน middleware | `HTTPException` + custom handler |
-| request id | middleware + `LogContext` | `AsyncLocalStorage` | `ContextVar` + middleware |
-| graceful shutdown | `IHostedLifecycleService.StoppingAsync` | `server.close()` ใน `SIGTERM` | `lifespan` context ของ FastAPI |
-| security headers | `UseHsts()` (HTTP Strict Transport Security (HSTS) เท่านั้น) + middleware สั้น ๆ หรือ `NetEscapades.AspNetCore.SecurityHeaders` | `helmet` | `secure` middleware |
-| OpenAPI | `Microsoft.AspNetCore.OpenApi` (`AddOpenApi()` + `MapOpenApi()` · มากับ template ตั้งแต่ .NET 9) · ทางเลือก: Swashbuckle / NSwag | `swagger-jsdoc` | มีในตัว `/docs` |
-| rate limit | `AddRateLimiter` | `express-rate-limit` | `slowapi` |
-
-## Wiring the ready-made health router
-
-```js
-// Node
-app.use(createHealthRouter({
-  version: { name: 'orders-api', version: '1.4.0', commit: process.env.GIT_SHA },
-  checks: {
-    db:   async () => { await pool.query('SELECT 1'); },          // critical
-    mail: { critical: false, run: async () => { await smtp.verify(); } },
-  },
-}));
-```
-
-```python
-# Python
-app.include_router(make_health_router(
-    version={"name": "orders-api", "version": "1.4.0", "commit": os.getenv("GIT_SHA")},
-    checks={"db": lambda: db.execute("SELECT 1"),
-            "mail": {"critical": False, "run": smtp.verify}},
-))
-```
-
-
----
-
-# skill: error-handling-patterns
-
-Use when writing code that can fail, with retry and timeout
-
-# Error handling
-
-> **The one rule:** catch an error only when you **can really do something about it.**
-> Catching it and doing nothing is worse than not catching, because the system keeps going while it is already broken inside.
-
-## When to use this skill
-
-- Writing code that calls the network, a database, files, or another team's system
-- Deciding whether to retry, how many times, and how long to wait
-- The user sees "an error occurred" and does not know what to do next
-- Tracing a problem and finding nothing in the log because someone caught and discarded the error
-
-## When to use another skill, or use it alongside
-
-| Task | Skill | |
-|---|---|---|
-| The JSON shape of errors the API sends out | `web-service-essentials` · `api-conventions` | instead |
-| Log line format and data masking | `logging-standards` | instead |
-| Fixing one specific bug someone reported | `targeted-fix` | instead |
-| Steps when the system is really down | `incident-runbook-template` | instead |
-| Error-rate metrics and alerts | `observability-basics` | alongside |
-| Where a failed background job goes next | `background-jobs` | alongside |
-| Error messages that must be translated into several languages | `i18n-and-locale` | alongside |
-| Tests for failure cases | `testing-standards` | alongside |
-
----
-
-## 1 · Where to catch, where to let it pass
-
-| Layer | What to do |
-|---|---|
-| Innermost layer (calls DB, HTTP, files) | **let it pass**, or convert it into a domain error that has meaning |
-| Business logic layer | catch only where there is a real fallback (a default value, a backup data source) |
-| **Outermost layer** (controller, handler, main) | **catch everything** · log once · convert to an answer the user understands |
-
-> **Log in one place only, the outermost layer.** If every layer catches, logs, and rethrows,
-> 1 error becomes 10 log lines and nobody knows they are the same event.
-
-**3 things you must never do:**
-
-```csharp
-try { ... } catch { }                      // wrong: swallowed silently
-try { ... } catch (Exception) { return null; }   // wrong: the caller gets null and never learns what happened
-catch (Exception ex) { log.Error(ex); throw; }   // wrong: logs again at every layer
-```
-
-**If you really mean to swallow it, write the reason:**
-
-```csharp
-catch (SmtpException ex)
-{
-    // swallowed on purpose — a failed notification email should not make the order fail
-    log.Warning(ex, "ส่งอีเมลยืนยันไม่สำเร็จ orderId={OrderId}", order.Id);
-}
-```
-
----
-
-## 2 · The message to the user ≠ the message in the log
-
-| | The user sees | The log keeps |
-|---|---|---|
-| Content | what happened · what to do next | stack trace · variable values · request id |
-| Language | the user's language | English is fine |
-| Internal detail | **none at all** | allowed |
-| Link between the 2 sides | **a reference code** | the same code |
-
-```
-Wrong: "เกิดข้อผิดพลาด" (An error occurred)   the user cannot tell what to do
-Wrong: "SqlException: timeout expired"      leaks internal detail, and they cannot read it anyway
-Right: "บันทึกไม่สำเร็จเพราะระบบตอบช้า ลองอีกครั้งใน 1 นาที (อ้างอิง: 01J9Z8K)"
-       (Save failed because the system was slow. Try again in 1 minute. Reference: 01J9Z8K)
-```
-
-**A good message has 3 parts**: what happened · why (if you can say) · what to do next.
-The reference code is the same correlation id as in `logging-standards`.
-
----
-
-## 3 · Classify before deciding
-
-| Type | Example | What to do | Log level |
-|---|---|---|---|
-| **User mistake** | incomplete input, wrong format | tell them to fix it · **do not retry** | no log needed |
-| **Transient** | timeout · 503 · deadlock · dropped connection | **may retry** | warning |
-| **Rate limited** | 429 Too Many Requests | may retry **after the time `Retry-After` gives** (if absent, use the formula in §4) · never fire faster than that | warning |
-| **Permanent** | 404 · 401 · data fails a condition | do not retry · say so clearly | warning |
-| **Our bug** | null reference · cannot convert the type | do not retry · **someone must fix it** | error |
-| **Inconsistent data** | totals do not match, an impossible state | stop · **call a person** | error + alert |
-
-> **Retrying an error that no number of tries will cure means firing again at a system that is already down, so it falls harder.**
-> Sending `400` or `401` another 100 times gets the same answer.
-
----
-
-## 4 · Timeout and retry
-
-**Every call that leaves the process needs a timeout** — the default in most libraries is "wait forever"
-
-| Call | A timeout that works in general |
-|---|---|
-| Ordinary database query | 5–10 seconds |
-| Internal HTTP | 3–5 seconds |
-| External HTTP | 10–30 seconds |
-| Heavy background job | set it from the real work, and it must be possible to cut it off |
-
-**The retry formula** (service-to-service calls · jobs in a queue use the numbers in [`background-jobs`](../background-jobs/SKILL.md) §4 · when a person sits waiting on the screen → see the last item below):
-
-```
-at most 3 tries · exponential delay + jitter
-try 1 waits 1 second · try 2 waits 2 · try 3 waits 4  (each ±20% random)
-```
-
-- **You need the random part** — otherwise every instance retries at the exact same moment and hits the target system again together
-- **The total retry time must be less than the caller's timeout**, or the caller has given up while we are still trying
-- **Retrying a write needs an idempotency key**, or the customer is charged twice (see `api-conventions`)
-- **A person sits waiting on the screen** → at most 1 automatic retry, then show a "ลองอีกครั้ง" (try again) button for them to press (do not use the 3 tries of the formula above)
-
----
-
-## 5 · Circuit breaker
-
-When the target is down, firing more does not help. It only makes us hang along with it.
-
-```
-closed (normal) → N failures in a row → open (do not call at all, answer with an error at once)
-                → wait X seconds → half-open: let 1 request try → success: back to closed · failure: stay open
-```
-
-A default that works: if 5 calls fail in a row within 30 seconds, keep the circuit open for 60 seconds.
-
-**Add one when** — calling an external system that has gone down before · calling across several services · a slow target spreads the slowness to us
-**Not needed when** — calling your own database · a job that runs once a day
-
----
-
-## 6 · Partial failure
-
-Work that handles many items must be able to answer **"8 of 10 succeeded, where did the other 2 go?"**
-
-| Style | Fits |
-|---|---|
-| All or nothing (transaction) | money · stock · anything that breaks when half done |
-| Do what you can, then report the items that failed | data import · notifying many people |
-
-The second style must **return the failed items with a reason for each**, not just say "some items failed".
-
-**Cleanup must always run**, whether or not the main work succeeds: closing files, returning connections, deleting temp files.
-Use `finally` / `using` / `with` / `defer` instead of repeating it on every exit path.
-
----
-
-## 7 · Check before sending
-
-Go through this against the diff every time you touch code that calls outside the process
-
-- [ ] Every `catch` clearly does one of these: handles it and goes on · converts it to an error of its own layer and throws on · lets it pass to the outermost layer to log (section 1) — no `catch` that logs and rethrows
-- [ ] Every outside call (HTTP · DB · queue · file) has a deliberate timeout and retries only the transient types in section 3 · a write that retries has an idempotency key (section 4)
-- [ ] The message to the user says what to do next · no stack trace or table name goes out (section 2) · the log for the same error has a correlation id and enough data to reproduce it
-- [ ] Outcomes the business expects (not found · insufficient balance · duplicate) are return values or types the caller must handle, not exceptions
-- [ ] Each outside dependency has at least 1 failure-path test (timeout · 5xx · bad payload), and a test confirms that partial failure follows section 6 and does not fail the whole page
-- [ ] None of these 4 kinds of silent failure swallowing:
-  - **optional chaining or `?? default`** that lets a missing value pass with nobody knowing (`order?.total ?? 0` turns an order that failed to load into a zero total)
-  - **falling back to a mock or sample data outside tests** — the live system shows fake data and looks normal
-  - **retries run out, then silence** — after the last try it returns empty or success, throws no error, and tells the caller nothing
-  - **a catch that logs and carries on in the UI** — the user sees a normal screen although the data never arrived; show an error state they can see
-
-## References
-
-- [`references/sources.md`](references/sources.md) — where the checklist ideas came from
-
-
-## reference: sources.md
-
-# Sources · error-handling-patterns
-
-- Section 7 checklist: idea from ECC error-handling.
-- The 4 silent-failure kinds in section 7: adapted from silent-failure-hunter in pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10.
-
-
----
-
-# skill: observability-basics
-
-Use when a live system needs metrics, logs or alerts
-
-# Measuring and monitoring a system
-
-> **The one rule:** if a customer is the one who tells us the system is down, monitoring has failed.
-> It does not mean the customer is kind.
-
-## When to use this skill
-
-- The system has real users
-- Someone asks "is the system healthy right now?" and you must open the logs to answer
-- You get woken in the middle of the night by an alert that needs no action
-- The system is slow and you do not know where
-
-## When **not** to use it
-
-| Job | Use this instead |
-|---|---|
-| Log line format and masking | `logging-standards` |
-| A trail of who did what | `audit-trail` |
-| Health check endpoint | `web-service-essentials` |
-| Steps during an incident | `incident-runbook-template` |
-| Post-incident summary | `postmortem-template` |
-
----
-
-## 1 · These three answer different questions
-
-| | Answers the question | Example | Cost |
-|---|---|---|---|
-| **metric** | "Is it bad now? Getting better or worse?" | error 2.3% · p95 = 840 ms | Cheapest, keeps a long time |
-| **log** | "What happened in that request?" | message + stack trace + id | Medium cost |
-| **trace** | "Which step is slow?" | one request across 5 services | Most expensive, sample it |
-
-**Order of use during an incident:** the metric says there **is a problem** → the trace says **where** → the log says **why**.
-All 3 must be linked by the same correlation id (see `logging-standards`).
-
----
-
-## 2 · The four signals to measure
-
-| Signal | Measures | Numbers to watch |
-|---|---|---|
-| **Request rate** | How much work is coming in | Per second, split by endpoint |
-| **Error rate** | What percentage fails | Split 4xx (user's fault) from 5xx (our fault) |
-| **Response time** | How slow | **p50 · p95 · p99** |
-| **Resources** | Is anything near full | CPU · memory · disk space · connection pool |
-
-> **Never look at the average response time.** An average of 200 ms sounds good
-> while 5% of users wait 9 seconds. The average always hides the people who hit the problem. **Look at p95 and p99.**
-
-**For queues and background jobs**, add 3 more: jobs waiting in the queue · wait time in the queue · jobs that failed for good
-(see `background-jobs`).
-
----
-
-## 3 · Naming metrics
-
-```
-<domain>_<what is measured>_<unit>
-
-http_requests_total              cumulative count
-http_request_duration_seconds    duration
-orders_created_total             business event
-queue_depth_jobs                 value at this moment
-```
-
-| Rule | Reason |
-|---|---|
-| Always end with the unit | `_seconds`, not `_time`, which nobody can tell is seconds or milliseconds |
-| End cumulative values with `_total` | It says the value keeps rising and is not the current value |
-| Use labels instead of making new names | `http_requests_total{route,status}`, not a separate name per endpoint |
-| **A label must not take unbounded values** | If you put a user id or order id in a label, the metrics system cannot cope |
-
-### 3.1 · If you use Prometheus and Grafana
-
-- **Metric types:** a counter counts events (read it with `rate()`) · a gauge holds the value right now · a histogram holds durations when you need p95 · a summary is for when you do not need to aggregate across instances
-- **Units:** seconds · bytes · ratio 0 to 1 (`_seconds`, not `_milliseconds`)
-- p95: `histogram_quantile(0.95, sum by (le) (rate(<name>_bucket[5m])))`
-- Every alert rule has `for:` · `severity` · a runbook link · alert on symptoms (latency · error), not on CPU or GPU
-- Keep dashboards as JSON in git and provision them from files · RED per service · USE per resource
-- Details on PromQL · alert rule examples · provisioning · a voice agent example (STT · LLM · TTS latency · Kafka lag · GPU): `references/prometheus-grafana.md`
-
----
-
-## 4 · Alerts
-
-> **Every alert must give the receiver something to do.** If the person reads it and has nothing to do,
-> in 3 weeks they will mute alerts, and the day a real one fires nobody will see it.
-
-**Alert on what users feel, not on machine numbers**
-
-| ✗ Alert like this | ✓ Alert like this |
-|---|---|
-| CPU over 80% | Error rate over 2% for 5 minutes |
-| Memory over 70% | p95 of the payment page over 3 seconds for 10 minutes |
-| pod restart | Successful orders drop by more than 50% against last week |
-| disk 60% | **disk will be full in 4 hours at the current rate** |
-
-| Level | Example | Send to |
-|---|---|---|
-| **Wake a person** | Users cannot use the system · data is being damaged | Phone call · push |
-| **Check in work hours** | disk will be full in 3 days · errors rising but still low | Team chat |
-| **Just record it** | Everything else | Dashboard |
-
-**Every alert must have:** what broke · who is affected · **a link to the runbook** · a link to the dashboard.
-**Always set a duration (for N minutes)**, not an alert the moment a value spikes once.
-
-### 4.1 · Error budget and burn rate
-
-A system with an SLO uses this instead of a fixed error % threshold, because it says "if this goes on, when will the whole month's budget run out?"
-
-- **Budget** = the time you may fail in 30 days → SLO 99.9% = 43 minutes · 99.5% = 3.6 hours · 99% = 7.2 hours
-- **Burn rate** = current error rate ÷ (1 − SLO) → burn 1 = the budget runs out exactly on day 30 · burn 10 = gone in 3 days
-- Set 3 alert levels as in the table, and every level must hold true over both the long window and the short window (short window = 1/12 of the long one), so the alert stops as soon as the system recovers
-
-| Level | burn rate | Long window · short window | Budget already used | SLO 99.9% means errors above | Send to |
-|---|---|---|---|---|---|
-| Fast burn | 14.4 | 1 hour · 5 minutes | 2% of the month in 1 hour | 1.44% | Wake a person |
-| Slow burn | 6 | 6 hours · 30 minutes | 5% of the month in 6 hours | 0.6% | Wake a person |
-| Slow leak | 1 | 3 days · 6 hours | 10% of the month in 3 days | 0.1% | Team chat |
-
-Show the remaining budget on the overview dashboard. When the budget is nearly gone, stop shipping features and fix stability first. Agree this rule with the product owner in advance, not in the middle of an argument.
-
----
-
-## 5 · Dashboards
-
-Two pages are enough.
-
-| Page | Answers the question | Contains |
-|---|---|---|
-| **Overview** | "Is it normal now?" | The 4 signals for the whole system · dependency status · latest releases |
-| **Deep dive per service** | "Where did it break?" | The 4 signals split by endpoint · queues · database |
-
-- **A vertical line marks the deploy time.** Most problems start after this line, and you see it in one second
-- The overview page must be readable in 10 seconds, so keep it to 6 graphs at most
-- Draw the alert threshold lines on the graphs, so you can see how far the value is from the line
-
----
-
-## 6 · Business metrics
-
-Technical metrics all green while the business has stalled really happens, and you will not catch it unless you measure it.
-
-| Example | What it catches |
-|---|---|
-| Successful orders per hour | The pay button is broken even though every endpoint returns 200 |
-| Successful login rate | A problem with an external identity provider |
-| Background jobs waiting more than N minutes | The queue is stuck but the API still answers normally |
-| Emails that failed to send | Customers do not get receipts, with no error anywhere |
-
-**Pick 3–5 that are the heart of the business**, and alert when they drop abnormally against the same period last week.
-
----
-
-## References
-
-- [`references/prometheus-grafana.md`](references/prometheus-grafana.md) — open for PromQL · alert rules · Grafana provisioning · voice agent example
-- `mcp-server` item 1.1 — when an agent must read Prometheus or Grafana through MCP
-- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
-
-
-## reference: prometheus-grafana.md
-
-# Prometheus and Grafana — using them correctly
-
-Part of `observability-basics` · the thinking about what to measure and what to alert on is in `SKILL.md` sections 2 · 4 · 5 · this file says how to do it in Prometheus and Grafana · metric names and numbers labelled `ตัวอย่าง` (example) are hypothetical data and must be adjusted to the real system
-
-## Contents
-
-- [1 · The 4 metric types](#1--the-4-metric-types)
-- [2 · Names and units](#2--names-and-units)
-- [3 · Labels and cardinality](#3--labels-and-cardinality)
-- [4 · Common PromQL](#4--common-promql)
-- [5 · Alert rules](#5--alert-rules)
-- [6 · Grafana](#6--grafana)
-- [7 · Voice agent system example](#7--voice-agent-system-example)
-- [8 · Check before sending](#8--check-before-sending)
-- [9 · Sources](#9--sources)
-
-## 1 · The 4 metric types
-
-| Type | What it is | Use when | Example |
-|---|---|---|---|
-| counter | A cumulative value that only goes up and returns to 0 when the process restarts | Counting events that have happened (requests · errors · finished jobs) · read with `rate()`, never the raw value | `http_requests_total` |
-| gauge | The value at that moment, can go up and down | Things that are pending or measurable right now (calls in progress · queue length · memory) | `voice_calls_active` |
-| histogram | Counts measured values into ranges (buckets), with a sum and a count | Durations or sizes where you need p95 · p99 and want to aggregate across many instances | `http_request_duration_seconds` |
-| summary | Computes quantiles on the app side, over a sliding time window | Use only when you do not need to aggregate across instances · the quantiles and window are chosen when writing the code and cannot be changed later | Rare; normally choose histogram |
-
-- Never average quantiles from a summary across several instances; the result has no statistical meaning (the Prometheus docs use this wording)
-- **How to choose** (prometheus.io/docs/practices/histograms/ checked 2026-10-27): if the library and Prometheus you use support it, use a native histogram first, because you can change the percentile and time window later in PromQL · if not supported but you need to aggregate across instances, use a classic histogram · use a summary only when you do not need to aggregate across instances
-- The Prometheus docs recommend native histograms first, but the libraries that support them are still limited; if your library does not support them, use a classic histogram and place buckets so that an edge sits at the SLO value, otherwise the estimated p95 will be off (example in the docs: true p95 about 320 ms is estimated as 443 ms because the bucket is wide from 300 to 450 ms)
-
-## 2 · Names and units
-
-| Rule | Right | Wrong |
-|---|---|---|
-| Start with one word that names the system | `voice_stage_duration_seconds` | `stage_duration` |
-| Use base units: seconds · bytes · ratio 0 to 1 | `_seconds` · `_bytes` · `_ratio` | `_milliseconds` · `_megabytes` · `_percent` |
-| The unit goes at the end, in plural form | `node_memory_usage_bytes` | `node_memory_usage_byte` |
-| A counter ends in `_total` (if it has a unit, the unit comes first) | `process_cpu_seconds_total` · `http_requests_total` | `http_requests_count` |
-| 1 name, 1 unit, 1 meaning | All in seconds | Half in seconds, half in milliseconds |
-| Do not put a label name again in the metric name | `http_requests_total{route=…}` | `http_requests_by_route_total` |
-
-## 3 · Labels and cardinality
-
-Every unique set of label values is 1 new time series. The Prometheus docs warn you to avoid labels whose values are unbounded, such as user id or email.
-
-| Must not be a label | Use instead |
-|---|---|
-| `user_id` · `customer_id` · phone number · email | Leave it out · keep it in logs or traces · if you must count per person, use a database, not a metric |
-| `call_id` · `session_id` · `request_id` · `trace_id` | Logs and traces tied to the same id (`logging-standards`) |
-| A full URL that has an id or query string | A route template such as `/orders/{id}` |
-| An error message with variable values | A limited set of error codes such as `reason="timeout"` |
-
-- A label you may use must have all its possible values countable in advance (stage = 3 values · status = 5 groups) · the number of series of one metric is close to the product of the number of values in each label · a histogram multiplies by the number of buckets on top
-- To find which metric makes series explode: open the TSDB status page in the Prometheus UI · the `tsdb_stats` tool of `prometheus-mcp` gives similar information (see `mcp-server` step 1.1)
-
-## 4 · Common PromQL
-
-| Need | Query | Note |
-|---|---|---|
-| Requests per second | `sum by (route) (rate(http_requests_total[5m]))` | The `[5m]` range should be several times the scrape interval (number not yet checked against the docs) |
-| Error rate | `sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m]))` | Count 5xx (our fault) apart from 4xx · with no traffic the quotient is NaN and the alert rule will not fire, which can hide a system receiving no requests at all; add a separate rule that alerts on no requests |
-| p95 of latency (classic histogram) | `histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket[5m])))` | Keep `le` in `sum by` · to split by route, add `route` to `by` |
-| p95 (native histogram) | `histogram_quantile(0.95, sum(rate(http_request_duration_seconds[5m])))` | Use when the library and Prometheus support it |
-| Average latency (for context only, never for deciding) | `rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m])` | See `SKILL.md` section 2 |
-| Disk will be full in 4 hours | `predict_linear(node_filesystem_avail_bytes[1h], 4*3600) < 0` | An example of saturation that warns ahead of time (not yet checked against the PromQL docs) |
-
-## 5 · Alert rules
-
-Principle from the Prometheus docs: alert on symptoms users feel (latency · errors) at the highest point in the stack you can · wake someone for latency at a single point of the stack · put causes (CPU · GPU · consumer lag) on the dashboard for tracing, and do not wake anyone for them · except for things a person must act on before the system goes down, such as capacity
-
-Exception: a number users feel directly counts as a symptom even if it comes from an underlying system, such as Kafka consumer lag that makes callers wait for an answer (section 7); it may wake someone · lag that affects nobody right away, such as a report job after the call ends, is a cause; put it on the dashboard or the team chat
-
-Every rule must have 4 things
-
-| Item | Where | Reason |
-|---|---|---|
-| `for:` | In the rule | Do not alert the moment the value spikes once · if omitted, the rule fires from the first evaluation round |
-| Severity level | Label `severity` (the name and values are a convention the team sets, not required by Prometheus) | Lets Alertmanager route it to the right place · use 3 levels per `SKILL.md` section 4: wake someone · look during work hours · log it |
-| Runbook link | Annotation `runbook_url` (the key name is a convention; the docs say only that an annotation can hold a runbook link) | The responder starts from a procedure, not from zero at 3 a.m. |
-| `summary` stating the symptom and who is affected | Annotation | Reading it on a phone tells you what to do |
-
-Example (hypothetical thresholds; set them from the real SLO):
-
-```yaml
-groups:
-  - name: voice-agent-symptoms
-    rules:
-      - alert: VoiceTurnLatencyHigh
-        expr: |
-          histogram_quantile(0.95,
-            sum by (le) (rate(voice_turn_duration_seconds_bucket[5m]))) > 1.5
-        for: 10m
-        labels:
-          severity: page
-        annotations:
-          summary: "ผู้โทรรอคำตอบเกิน 1.5 วินาที (p95) นาน 10 นาที"
-          runbook_url: https://runbooks.example.com/voice/turn-latency
-```
-
-`keep_firing_for` stops alerts from flapping when the value hovers around the threshold · for burn rate alerts see `SKILL.md` section 4.1
-
-## 6 · Grafana
-
-| Topic | How |
-|---|---|
-| 1 dashboard per 1 service | A service that takes requests uses RED: Rate · Errors · Duration · resources (CPU · GPU · disk · connection pool) use USE: Utilization · Saturation · Errors · the Grafana docs say RED stands for the user experience, so set alerts from RED and use USE to trace causes |
-| Keep it as code | Dashboard JSON lives in git · the Grafana docs treat not keeping JSON in version control as a sign the system is not yet in order · when many dashboards look alike, generate them with grafonnet (Jsonnet) or grafanalib (Python) |
-| Load automatically | A provider YAML file in `provisioning/dashboards/` points `options.path` to the JSON folder |
-| Stop edits in the browser from being lost | Set `allowUiUpdates: false` · whoever wants a change edits the JSON in git and opens a PR · loading from files always overwrites the version in the database |
-| Do not copy a dashboard | Use template variables (choose service · environment) on a parent dashboard · the Grafana docs warn that copying means you do not get fixes from the original |
-| Temporary dashboards | Name them starting with `TEST:` and delete when done |
-| uid | Set a fixed `uid` in the JSON so links from alerts do not break · `uid` and `title` must be unique within the same folder |
-
-Example provider (checked against the Grafana docs 2026-10-27):
-
-```yaml
-apiVersion: 1
-providers:
-  - name: services
-    type: file
-    allowUiUpdates: false
-    updateIntervalSeconds: 30
-    options:
-      path: /var/lib/grafana/dashboards
-      foldersFromFilesStructure: true
-```
-
-## 7 · Voice agent system example
-
-All metric names in this section are set by the team (examples), except `DCGM_FI_DEV_GPU_UTIL` and `kafka_consumergroup_lag*`, which come from exporters
-
-**Latency of each stage of a call** · 1 histogram split by stage with a `stage` label that has limited values
-
-```
-voice_stage_duration_seconds_bucket{stage="stt|llm|tts", le="…"}
-voice_turn_duration_seconds_bucket{le="…"}   # จากผู้โทรพูดจบถึงเสียงตอบแรกออก
-```
-
-- Place buckets densely in the range 0.1 to 3 seconds, for example `0.1, 0.2, 0.3, 0.5, 0.8, 1.2, 1.5, 2, 3, 5`, with an edge at the threshold you set (1.5 seconds in the example of section 5)
-- p95 per stage: `histogram_quantile(0.95, sum by (le, stage) (rate(voice_stage_duration_seconds_bucket[5m])))` · put it in one chart with 3 lines and you see at once which stage eats the time
-- Alert on `voice_turn_duration_seconds` (the symptom callers feel); do not alert on every stage · stages are for tracing causes
-- Never put `call_id` or the caller's phone number as a label · the call id goes to logs and traces
-
-**Kafka consumer lag** · when the pipeline sends call events through Kafka
-
-- The lag value comes from a Kafka exporter · `kafka_exporter` (danielqsj · Apache-2.0 · not an official Apache project · checked 2026-10-27) gives `kafka_consumergroup_lag{consumergroup,topic,partition}` and `kafka_consumergroup_lag_sum{consumergroup,topic}` · if you use another exporter, the names may differ
-- Wake someone when the lag of a consumer that makes callers wait (such as the real-time call summarizer) is high and does not fall for a long time · example `sum by (consumergroup, topic) (kafka_consumergroup_lag_sum) > 1000` with `for: 10m` (hypothetical threshold) · lag of a report job after the call ends is fine to send to the team chat
-- The `partition` label is only for drill-down charts; do not put it in alert rules
-
-**GPU utilization** · the exporter is NVIDIA `dcgm-exporter`
-
-- `DCGM_FI_DEV_GPU_UTIL` is a gauge in % (checked from `etc/default-counters.csv` of the repo 2026-10-27) · this name was set by the exporter and does not follow the rules of section 2; use it as it is
-- GPU is a cause (USE), not a symptom · put it on the dashboard next to the latency of the stages that use the GPU (STT · TTS) · high utilization together with a high p95 of that stage means the machine is saturated and you must add machines or reduce load
-- GPU that stays high for many hours alerts at the look-during-work-hours level; it does not wake anyone
-
-## 8 · Check before sending
-
-- [ ] Every metric has a unit and `_total` per the rules · no label with unbounded values (user · phone · call id)
-- [ ] Latency is a histogram with a bucket edge at the SLO threshold · no decisions from averages
-- [ ] Every alert has `for:` · `severity` · `runbook_url` · `summary` · alerts on symptoms, not on CPU or GPU
-- [ ] Dashboards are JSON in git · provisioned from files · `allowUiUpdates: false`
-- [ ] There is a RED dashboard per service and USE per resource
-
-## 9 · Sources
-
-Checked 2026-10-27
-
-| Topic | Source |
-|---|---|
-| Metric types | prometheus.io/docs/concepts/metric_types/ |
-| Names, units, label cardinality | prometheus.io/docs/practices/naming/ |
-| histogram · summary · `histogram_quantile` · native histogram | prometheus.io/docs/practices/histograms/ |
-| Principle of alerting on symptoms | prometheus.io/docs/practices/alerting/ |
-| Rule syntax `for` · `keep_firing_for` · annotations | prometheus.io/docs/prometheus/latest/configuration/alerting_rules/ |
-| RED · USE · dashboard as code · sprawl | grafana.com/docs/grafana/latest/dashboards/build-dashboards/best-practices/ |
-| Dashboard provisioning | grafana.com/docs/grafana/latest/administration/provisioning/ |
-| `DCGM_FI_DEV_GPU_UTIL` | github.com/NVIDIA/dcgm-exporter → etc/default-counters.csv |
-| `kafka_consumergroup_lag` | github.com/danielqsj/kafka_exporter (not official to Kafka) |
-| `predict_linear` · `[5m]` range vs scrape interval · NaN behavior when dividing by 0 | General team knowledge (not yet checked against the official PromQL pages) |
-
-
-## reference: sources.md
-
-# Sources · observability-basics
-
-Source of item 3.1: prometheus.io (metric types · naming · histograms · alerting) and grafana.com (dashboard best practices · provisioning), checked 2026-10-27 · full links are at the end of `references/prometheus-grafana.md`
-
-
----
-
-# skill: background-jobs
-
-Use when work runs outside the request in queues or schedules
-
-# Background jobs
-
-> **The one rule:** every background job must be **safe to run again without repeating its effect**,
-> because it will certainly run again: the machine dies halfway · a person clicks again · the system retries by itself.
-
-## When to use this skill
-
-- Work the user should not have to sit and wait for: sending email, building a report, importing a file
-- Scheduled work: a daily summary, month-end closing, deleting expired data
-- Calling an external system that is slow or often down
-- A jammed queue, or jobs that vanish with nobody noticing
-
-## When to use another skill, or use it alongside
-
-| Task | Skill | |
-|---|---|---|
-| Timeouts and retries for ordinary requests | `error-handling-patterns` | instead |
-| Metrics and alerts | `observability-basics` | instead |
-| Events across several services through Kafka (several consumers read the same event · history is kept) | `kafka-streaming` | instead |
-| A job queue through RabbitMQ (several workers · retry · dead letter · needs a real broker) | `rabbitmq-messaging` | instead |
-| Importing Excel/CSV files as the main job | `data-import-export` | instead |
-| Sending email/SMS as the main job | `notifications` | instead |
-| Designing an agent system (Loop · Graph · Dynamic · choosing a framework) | `llm-engineering` → [`agent-systems.md`](../llm-engineering/references/agent-systems.md) | alongside |
-
----
-
-## 1 · What belongs in the background
-
-| Send to the background | Do inside the request |
-|---|---|
-| Takes more than 1–2 seconds | Fast, and the user must see the result at once |
-| Calls an external system that can fail | Permission checks · data validation |
-| The user does not wait for the result (email, notification) | The result is what they clicked to see |
-| Many items done as a batch | |
-
-> **Do not move work to the background just because it is slow.** If the user must see the result before moving on,
-> moving it adds a waiting screen, a notification, and a place to store results.
-> Sometimes making it faster is much cheaper (see `lazy-coding`).
-
----
-
-## 2 · Choose a mechanism
-
-| Mechanism | Fits | Watch out for |
-|---|---|---|
-| **Job table in the database** | small to medium systems · up to a few thousand jobs a day | you must write the job picker yourself · watch for workers fighting over jobs |
-| **A real queue** (Redis · RabbitMQ · Amazon Simple Queue Service (SQS)) | many jobs · need built-in retry and dead letter | one more thing to look after |
-| In-app scheduler (cron in code) | scheduled work with a single instance | **several instances will run it at the same time** · see section 5 |
-| Platform scheduler | scheduled work on the cloud | |
-
-**If the system is still small, always start with a table in the database,** because PostgreSQL's `SELECT ... FOR UPDATE SKIP LOCKED`
-lets several workers pick jobs at once safely, with no new system to add.
-
-**Every job needs at least:** `id` · `type` · `payload` · `status` · `attempts` ·
-`run_after` · `locked_by` · `locked_at` · `last_error` · `created_at`
-
----
-
-## 3 · Running again must not repeat the effect
-
-Almost every queue system guarantees only "delivered at least once", **not exactly once**.
-
-| Method | How to use it |
-|---|---|
-| **Duplicate-blocking key** | a unique constraint on `(job_type, business_key)` makes a duplicate job fail to insert |
-| **Check state before acting** | "if the email for this purchase order was already sent, stop" |
-| **Pass on an idempotency key** | when calling an external API (see `api-conventions`) |
-| **Set a new value, do not add to the old one** | `set status = 'paid'` is safer than `balance = balance + 100` |
-
-> **A job that adds to a value or sends something outside costs real money if it runs twice.**
-> Two emails are only annoying, but two money transfers are a big problem.
-
----
-
-## 4 · Retry and dead jobs
-
-These numbers are for jobs in a queue · for retries outside a queue use [`error-handling-patterns`](../error-handling-patterns/SKILL.md) §4: service-to-service calls use 3 tries at 1/2/4 seconds · when a person waits on the screen → at most 1 retry, then let them press again
-
-```
-fail → wait 1 min → fail → wait 4 min → fail → wait 16 min → 4th failure → dead letter
-```
-
-| Rule | Detail |
-|---|---|
-| **Always set a cap** | 3–5 tries · with unlimited retries a single job can jam the queue |
-| Increase the wait each round (a fixed multiple such as ×4) + a little randomness | same as `error-handling-patterns` |
-| Bad data needs no retry | a malformed payload stays the same however many times you try |
-| **A job that has run out of tries goes to one place** | dead letter (where jobs that failed until they ran out of tries are kept), keeping the full payload and the last error |
-| A person must watch the dead letter | **alert when a new job arrives there**, do not wait for a customer to complain |
-| It can be run again | after fixing the cause, you can re-run from the dead letter without writing a script |
-
-**A job stuck because a worker died** needs an unlocker.
-If a job's `locked_at` is older than N minutes, treat it as having nobody working on it, and unlock it so another worker picks it up.
-
-**Job state is a state machine, not a boolean** — every mechanism in section 2 must be able to say which state a job is in: `queued → running → succeeded`, or `running → failed (attempts < cap) → queued`, or `failed → dead` · keep `attempts` · `locked_at` · `last_error` · `finished_at` with the job · move only along the arrows above (a `succeeded` job cannot go back to `running`; create a new job) · the admin screen and the dead letter read from this state in one place
-
----
-
-## 5 · Scheduled jobs
-
-> **With several instances, a scheduled job runs several times at once.**
-> A summary report sent 3 times, or money charged 3 times, comes from this.
-
-| Method | Use when |
-|---|---|
-| Lock in the database (advisory lock) | you can do it right away with nothing added |
-| The platform scheduler calls an endpoint | on the cloud · Kubernetes CronJob |
-| A scheduler that supports several instances directly | Quartz · Hangfire |
-
-**Rules for scheduled jobs:**
-
-- **Take the time range as a parameter**, so you can re-run missed dates without changing code
-- If a run is missed, you must be able to catch up, not skip it for good
-- State the time zone clearly: "every midnight" in which zone (see `i18n-and-locale`)
-- **Record which runs succeeded**, do not infer it from logs
-
----
-
-## 6 · Long jobs the user waits on
-
-| Needed | Detail |
-|---|---|
-| Job id | return it the moment the job is accepted · the user uses it to ask about progress |
-| State | `queued` · `running` · `succeeded` · `failed` · `cancelled` |
-| Progress | "340 of 1,200 items done" (ทำแล้ว 340 จาก 1,200 รายการ), not a blind spinner |
-| Cancellable | the job must check for a cancel signal regularly |
-| Result | keep it available to download, with an expiry date |
-| Notify when done | email or an in-system notification (see `notifications`) |
-
-**Split a big job into small pieces.** For example, import 50,000 rows as sub-jobs of 500 rows each,
-because a single 40-minute job that fails at minute 39 must start over from the beginning.
-
----
-
-## 7 · What to measure
-
-| Metric | Alert when |
-|---|---|
-| Jobs waiting in the queue | keeps growing and does not fall |
-| Wait time in the queue (p95 · 95% of jobs wait no longer than this) | above what was promised |
-| Failure rate | above the threshold |
-| **Count in the dead letter** | **rises, even by just one** |
-| Scheduled runs that did not run | a run was skipped |
-| Jobs stuck in the running state for an unusual time | more than N times the normal |
-
-> **A jammed queue is completely silent.** The API still answers 200 to every request and the health checks are all green,
-> but no email has gone out for 3 hours. You see it only if you measure.
-
----
-
-## 8 · Payload
-
-- **Send the id, not the whole data block, in the payload** — the job reads it itself, so it gets the latest data too
-
----
-
-## 9 · Durable workflow for agent jobs that run long or wait for human approval
-
-An agent job that runs tens of minutes, calls an LLM and tools many times, or pauses for approval across days cannot use a plain queue, because a failure at step 8 of 10 means starting over and paying the token cost again · use an engine that records the result of every step and resumes from the same point
-
-- [`references/durable-workflow.md`](references/durable-workflow.md) — open before choosing an engine (Temporal · Step Functions · checkpointer) or writing replayable code
-
-## References
-
-- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
-
-
-## reference: durable-workflow.md
-
-# Durable workflow for agent jobs · background-jobs
-
-| Tool | Fits | Waits for human approval | Watch out for |
-|---|---|---|---|
-| **Temporal** | Python and other languages · the agent loop lives in a workflow, while LLM and tool calls are activities · has `OpenAIAgentsPlugin` · `activity_as_tool` | (`ยังไม่ได้ตรวจ` · see the signal page) | the integration with the OpenAI Agents SDK is still in Public Preview |
-| **AWS Step Functions** | fixed steps on AWS · fan-out with `Map` (Inline in parallel 40 · Distributed 10,000 child jobs) | `.waitForTaskToken` can wait up to 1 year until `SendTaskSuccess` / `SendTaskFailure` arrives · set `HeartbeatSeconds` to prevent a silent hang | when an LLM must choose the route, let Lambda or Bedrock decide, then use `Choice` |
-| **Agent framework checkpointer** | you do not want to add an engine · LangGraph `PostgresSaver` · Microsoft Agent Framework `CheckpointManager` · OpenAI `RunState.to_json()` | LangGraph `interrupt()` · OpenAI `needs_approval` · Microsoft Agent Framework `RequestInfoExecutor` | an in-memory store is lost when the process restarts · use a database-backed store in production |
-
-**Rules for code that must be replayable** (Temporal · Google ADK · Claude Code workflows use the same principle · checked against [Temporal: Workflow Definition](https://docs.temporal.io/workflow-definition) 2026-10-26)
-
-- **Never read the time or draw a random value in code that controls the order of work** (`Date.now()` · `datetime.now()` · `Math.random()` · `uuid4()`) · on replay the value differs from the first run, the order drifts, and the old result cannot be reused · do anything that needs time or randomness in an activity, or use the SDK's own API for it
-- **All LLM calls, tool calls, and outside reads and writes go in activities.** The result is recorded once, and replay reads the record instead of calling again.
-- **The order of calls must be the same on every run** · changing the order of steps in code that still has jobs in flight makes the old jobs fail replay (Temporal calls this a nondeterminism error) · switch to the engine's versioning or patching
-- **The steps before a wait point must be safe to repeat** (section 3) · LangGraph re-runs the paused node from the start on resume, so move side effects to after the wait point
-- **Saved state carries no identity check** (the OpenAI docs warn about `RunState`) · load it only from a store we control
-- The cap on rounds, the token budget, and stopping when there is no improvement are still needed, as for jobs in a queue · details in [`agent-systems.md`](../../llm-engineering/references/agent-systems.md) section 6
-
-
-## reference: sources.md
-
-# Sources · background-jobs
-
-Sources (opened 2026-10-26): [Temporal · OpenAI Agents SDK](https://docs.temporal.io/ai-cookbook/openai-agents-sdk-python) · [Temporal announcement](https://temporal.io/blog/announcing-openai-agents-sdk-integration) · [Step Functions integration patterns](https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html) · [Step Functions Map](https://docs.aws.amazon.com/step-functions/latest/dg/state-map.html) · [LangGraph interrupts](https://docs.langchain.com/oss/python/langgraph/interrupts) · [OpenAI human in the loop](https://openai.github.io/openai-agents-python/human_in_the_loop/) · [Claude Code workflows](https://code.claude.com/docs/en/workflows)

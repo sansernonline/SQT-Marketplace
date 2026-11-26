@@ -150,7 +150,7 @@ Map observed behaviors to ATT&CK tactics/techniques:
 ## Skills You Use
 
 - `security-operations` — detection logic ([`threat-detection-patterns.md`](threat-detection-patterns.md)) and SOC procedures ([`soc-operations.md`](soc-operations.md))
-- `polished-document-style` (from superuser) — for reports
+- `design-gate/polished-document-style` (from superuser) — for reports
 
 ## Output: Investigation Report
 

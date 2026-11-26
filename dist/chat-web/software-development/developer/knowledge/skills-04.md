@@ -700,7 +700,7 @@ Use when building test-first from a spec and mockups
 ## Steps
 1. **Check prerequisites.** Requirements must each be testable with an ID such as `FR-AUTH-010`; if not, stop and use `srs-writing`. A 1-line test command must really run; if not, stop and set up the test skeleton with `testing-standards`. If there are screens, a command to run the app is needed; if missing, skip image comparison and tell the user. Mockup images must be named to match the screens; if not, ask the user.
 2. **Round zero, no code.** Read requirements and mockups in full. Split into sub-tasks, 1 requirement per task, in `docs/BUILD-PLAN.md` (row format in [`references/plan-and-files.md`](references/plan-and-files.md)): รหัส · milestone · สิ่งที่ต้องได้ · ไฟล์ที่จะแตะ · test ที่จะเขียน · สถานะ · commit.
-3. **Set document order before splitting.** Write one line at the top of `BUILD-PLAN.md`, such as `ลำดับเอกสาร: TEST-DATA.md > REQUIREMENTS.md > DESIGN.md > mockup`. If the user set an order, use it. Otherwise use that default (test data with expected values > SRS > design document > mockup) and log it in `decision-log` with `(รอยืนยัน)`. On a real conflict, follow the higher-ranked document, record the conflicting pair (file · section · both values) under "ค้างอยู่", and never edit the source documents.
+3. **Set document order before splitting.** Write one line at the top of `BUILD-PLAN.md`, such as `ลำดับเอกสาร: TEST-DATA.md > REQUIREMENTS.md > DESIGN.md > mockup`. If the user set an order, use it. Otherwise use that default (test data with expected values > SRS > design document > mockup) and log it in `decision-desk/decision-log` with `(รอยืนยัน)`. On a real conflict, follow the higher-ranked document, record the conflicting pair (file · section · both values) under "ค้างอยู่", and never edit the source documents.
 4. **Ambiguous item** (you cannot write a test): do not guess. List it as a question at the end of the file under **"ค้างอยู่"** and carry on with the others.
 5. **Check the plan yourself** (no agent needed) on 5 items; fix in place, no re-check: complete (every requirement has a row) · size (1 sensible thing per row; wide → split, detailed → leave signature and test name) · names match across rows · biting cases (each input and failure path has a test) · proportion (a plan many times longer than the requirements is pre-written code; cut to signatures and assertions). Table in the reference.
 6. **Stop** at the end of round zero and let the user read the plan. Do not flow on into code.
@@ -731,8 +731,8 @@ Use when building test-first from a spec and mockups
 State lives in `docs/BUILD-PLAN.md`, not in the head. Read it before every round; starting without reading it is the number 1 cause of rework.
 - Status has 5 values: `เสร็จ` · `ทำอยู่` · `ติด` · `รออนุมัติ` · `ค้างอยู่` (not yet started = `ค้างอยู่`). `ติด` needs a 1-line reason.
 - Every `เสร็จ` item has a commit number. If commit is not yet permitted, put the recommended commit message + `(รอ commit)` and the test evidence (test name + run result) in its place; it may then count as `เสร็จ`.
-- At the end of each round update `## สถานะล่าสุด` and `## ประวัติสถานะ` at the top of the file per `status-report`.
-- Converted `.docx`/`.pdf` text, screenshots and logs are temporary: put them in `_to_delete/extracted/` · `_to_delete/check/` · `_to_delete/logs/`, never in `docs/` (see `temp-file-discipline`).
+- At the end of each round update `## สถานะล่าสุด` and `## ประวัติสถานะ` at the top of the file per `superuser/status-report`.
+- Converted `.docx`/`.pdf` text, screenshots and logs are temporary: put them in `_to_delete/extracted/` · `_to_delete/check/` · `_to_delete/logs/`, never in `docs/` (see `workspace-rules/temp-file-discipline`).
 
 ## Parallel agents
 Split only when the files to touch do not overlap at all. Each writing agent gets its own worktree. A split-off agent never edits `BUILD-PLAN.md`; it reports back and the main agent writes it. Recipe and handover list in the reference.
@@ -866,7 +866,7 @@ _to_delete/
 | The plan and status `BUILD-PLAN.md` | `docs/` (a real document) |
 | Code and tests | The project folder |
 
-Never write converted files into `docs/` mixed with the originals; in 3 months nobody will know which file the customer signed. Full detail: `temp-file-discipline`.
+Never write converted files into `docs/` mixed with the originals; in 3 months nobody will know which file the customer signed. Full detail: `workspace-rules/temp-file-discipline`.
 
 ## Compare to the mockup with a real image
 
@@ -898,7 +898,7 @@ One criterion: the files to be touched must not overlap at all (see the "files t
 | A **read-only** checking agent running alongside an agent that writes code | Work that already has to wait for the result of another task |
 | Turning requirements into tests for several modules at once | When there is no plan yet |
 
-- Each agent that writes files gets its own worktree, per `superuser/references/code-extensions.md` section "parallel-split-and-merge" (including how to handle uncommitted work).
+- Each agent that writes files gets its own worktree, per `superuser/references/code-extensions.md` section "crew-patterns" (including how to handle uncommitted work).
 - Every split-off agent receives: the IDs of the requirements it owns · the list of files it may touch · the test command · all of the iron rules (especially rule 3).
 - Never let a split-off agent edit `BUILD-PLAN.md`. It reports back, and the main agent writes the one file.
 
@@ -918,7 +918,7 @@ Anti-patterns: throwing the whole requirements document in one round · writing 
 
 ## Other skills to use together
 
-`srs-writing` (testable requirements) · `test-case-template` · `testing-standards` (skeleton, framework, names, coverage) · `e2e-testing-patterns` (real browser) · `lazy-coding` · `targeted-fix` (red test) · `commit-message-format` · `temp-file-discipline` · `test-evidence` item 5 and `e2e-testing-patterns` (oracle-and-mutation) for number-chasing loops · `handoff` · `status-report`.
+`srs-writing` (testable requirements) · `test-case-template` · `testing-standards` (skeleton, framework, names, coverage) · `e2e-testing-patterns` (real browser) · `lazy-coding` · `fix-at-source/targeted-fix` (red test) · `commit-message-format` · `workspace-rules/temp-file-discipline` · `test-evidence` item 5 and `e2e-testing-patterns` (oracle-and-mutation) for number-chasing loops · `handoff` · `superuser/status-report`.
 
 
 ---
@@ -963,7 +963,7 @@ Use when no scripted way to run the app, or verify is stale
    - For a page with CAPTCHA, use the provider's test keys or turn it off in the test environment. Never write a script that solves CAPTCHAs.
    - For an app that reads hardware (sensor · camera · GPS), feed values known in advance, through the emulator (`adb emu sensor set light 420`, virtual camera) or a fake data source that can be turned on only in a debug build. Label every check `emulator` or `เครื่องจริง` (real device), because real sensor accuracy cannot be proven on an emulator. If it has not run on a real device, write "ยังไม่ได้ตรวจบนเครื่องจริง" (not yet checked on a real device).
 
-3. **Write `test/e2e/verify.*`** so it opens the app itself on a port that does not clash (mobile: install the APK and clear app data), seeds test data, and waits until ready **with a time limit** (web: if it is not up in 10 seconds, count it as failed · mobile: set separate times for build · emulator boot · app start · each check, see the reference). Always close the app at the end, and a second run must give the same result (`principle-build-a-tool-not-handwork`).
+3. **Write `test/e2e/verify.*`** so it opens the app itself on a port that does not clash (mobile: install the APK and clear app data), seeds test data, and waits until ready **with a time limit** (web: if it is not up in 10 seconds, count it as failed · mobile: set separate times for build · emulator boot · app start · each check, see the reference). Always close the app at the end, and a second run must give the same result (`ground-rules/principle-build-a-tool-not-handwork`).
    - **For a web app or API that needs a server started first**, use [`scripts/with_server.py`](scripts/with_server.py). It starts the server, waits for the port, runs the script, then shuts everything down. For example `python -I scripts/with_server.py --server "npm run dev" --port 5173 -- node test/e2e/verify.mjs` (start several servers by repeating `--server` and `--port` · logs go to `--log-dir`, default `_to_delete/with-server-logs`, created automatically if missing). For dynamic apps, wait for `networkidle` (Playwright `page.wait_for_load_state("networkidle")`) or `data-ready="true"` before reading the DOM. Never guess with `sleep`.
 
 4. **Keep the feature list as data in the script.** Go through the menu · routes · command list · SRS, and write 1 group per feature with 1 line per check (`what to do → what must be seen`). Cover at least 3 main features and 1 error case per feature. **Every check starts from a clean state**, can run alone or in a different order, and prints `PASS/FAIL` with expected and actual values.
@@ -1069,7 +1069,7 @@ Source: code.claude.com/docs/en/skills (read 2026-10-23) · the version numbers 
 - `/verify` and `/code-review` run only when the user invokes them (since v2.1.215 — before that Claude could invoke them itself)
 - `/run-skill-generator` runs from a clean environment, records what really works (install commands · env · launch script), and commits it as a project skill at `.claude/skills/run-<name>/` — run once per project, and again when the build method changes
 - `/verify` can record its own recipe: if there is no recipe, it writes what works to `.claude/skills/verify/SKILL.md` at the project root (monorepo: in the package folder that was touched) · **a skill at the root named `verify` replaces the bundled `/verify`**
-- A session that starts with a project skill named `verify` or `simplify` (or personal · organization · `.claude/commands/`) → the Claude Code commit command tells it to run before every commit, except when only docs or tests changed · bundled ones · plugin skills · skills from claude.ai do not count
+- A session that starts with a project skill named `verify` or `ground-rules/simplify` (or personal · organization · `.claude/commands/`) → the Claude Code commit command tells it to run before every commit, except when only docs or tests changed · bundled ones · plugin skills · skills from claude.ai do not count
 - The whole set can be turned off with `disableBundledSkills` (leaving `/doctor`)
 
 ## What `app-verifier-setup` adds
@@ -1118,53 +1118,16 @@ Use it when a verify skill built by [`app-verifier-setup`](../SKILL.md) no longe
 ## Steps
 
 1. **List the real features** by pulling from routes · menu · command list · the latest Software Requirements Specification (SRS). Compare against the feature map in the script `<project-name>/test/e2e/verify.*`, and split into 3 groups: matching · missing from the feature map · no longer in the app.
-2. **Read the code in parallel.** Send 1 fresh `qa-tester` agent per feature group (at most 5 features each). Each reads only, then reports whether each feature's checks in `verify.*` still match the code, with file and line number, using `parallel-split-and-merge`.
+2. **Read the code in parallel.** Send 1 fresh `qa-tester` agent per feature group (at most 5 features each). Each reads only, then reports whether each feature's checks in `verify.*` still match the code, with file and line number, using `crew-patterns/parallel-split-and-merge`.
 3. **Drive the real app once.** Use 1 agent to run `verify.*` (the script opens and closes the app itself) for every feature, and record pass or fail · screenshots · the step that failed.
 4. **Fix only what is proven.** Every fix needs evidence from step 2 or 3. If a feature fails because the app is really broken, not because the steps are wrong, file it as a bug report (`bug-report-template`). Do not edit the steps to make it pass.
 5. **Add the features missing from the map** in the existing format, and run each at least once for real before saving.
 6. **Bundle the fixes into one set**, prepared as a single commit or a single Pull Request (PR) (commit only when the user says so), and state the count of each group in the message: matching · fixed · added · removed · bugs found.
-7. `status-report` type `ตรวจ` (check).
+7. `superuser/status-report` type `ตรวจ` (check).
 
 ## What not to do
 
 - Remove a feature from the map because it is hard to test.
-
-
----
-
-# skill: principle-build-a-tool-not-handwork
-
-Use when the same edit repeats across many files or rows
-
-# principle · build a tool, not handwork — turn mechanical work into a tool
-> Use together with: `principle-small-verifiable-steps` (cut into small pieces that can be checked) · `parallel-split-and-merge` (run several pieces at once)
-
-> Work has 2 parts: the part that needs judgment, and the part that is purely mechanical.
-> For the mechanical part, do not make the agent work out a new method every time. Write it as a program once, and save the thinking effort for the parts that need a decision.
-
-## When to build a tool
-
-| Signal | Tool |
-|---|---|
-| The same change in more than 10 places (files · sheet rows · documents · code) | A script or find-and-replace, tried on a sample first (code: codemod · `sed`) |
-| Many documents from one template (40 quotations) | A template + a script that merges data from the sheet |
-| Checking every screen, every file or every row | A looping check script that prints a result table |
-| Every agent must set up the environment itself before checking | A `start` script in the verify skill (`app-verifier-setup` (plugin `software-development`)) |
-| Moving or importing data | A script that gives the same result when rerun, with a trial mode (dry run) |
-| The claim "everywhere already does it this way" | A grep command or script that proves it |
-| Doing the same job for the 3rd time | Make it a command or a skill |
-
-## Rules for the tool
-
-- **Same result when rerun** — running it twice must not break anything and must not change things twice (`principle-safe-to-rerun` (plugin `software-development`))
-- **Print results that can be checked** — say how many were changed · which items were skipped · which items failed
-- **As small as it can be and still work** — it need not be pretty, and need not handle every future case (`lazy-coding` (plugin `software-development`))
-- **Keep it in the right place** — a one-off script goes in `_to_delete/`, while a script used repeatedly goes in `scripts/` with one line in the README saying when to run it
-- **The skill shrinks to a thin description** — the fixed steps live in the script, while SKILL.md says only when to call it and how to read the result
-
-## When not to bother
-
-A change in 2–3 places that really differ, because writing a script takes longer than editing by hand
 
 
 ---
@@ -1204,15 +1167,15 @@ Use it together with [`principle-secure-by-default`](../principle-secure-by-defa
    | Level | What to do |
    |---|---|
    | Real secret leaked | **Stop at once and tell the user.** The secret must be rotated at the provider, because deleting it from the file is not enough, and the agent never rewrites git history itself. |
-   | Confirmed critical · high | **Do not ship** until fixed, or until the user accepts the risk in writing in `decision-log`. |
-   | medium | Fix it in this round if the estimate is 1 hour or less (a starting value, not yet measured · adjust per team). If it takes longer, open a separate task in the queue and rank it with `decision-scoring` command `priority` in `rice` mode (people or systems affected × impact × confidence ÷ hours to fix). If the scores are close, let a person choose. |
+   | Confirmed critical · high | **Do not ship** until fixed, or until the user accepts the risk in writing in `decision-desk/decision-log`. |
+   | medium | Fix it in this round if the estimate is 1 hour or less (a starting value, not yet measured · adjust per team). If it takes longer, open a separate task in the queue and rank it with `decision-desk/decision-scoring` command `priority` in `rice` mode (people or systems affected × impact × confidence ÷ hours to fix). If the scores are close, let a person choose. |
    | low · false alarm | Record the reason. No fix needed. |
 
 5. **Fix**
    - For a vulnerable dependency, update to a fixed version, then run the tests.
    - For a vulnerability in code, use the playbook `bug-fix` (find the root cause + write a test that fails before the fix + search for other places written the same way).
-   - For a pattern that keeps coming back, pass it to `repeated-mistakes-to-checks` to turn into a lint rule.
-6. **Report** — `qa/security/<year-month-day>-gate.md`, a table `| ระดับ | เรื่อง | ไฟล์:บรรทัด หรือแพ็กเกจ | ยืนยัน | ทำอะไร |` (level · issue · file:line or package · confirmed · action), with a 1-line verdict (`ผ่าน` · `ผ่านหลังแก้` (passed after fixes) · `ไม่ผ่าน`). Never copy secrets into the report (use `--redact` output). Then report status with `status-report` type `ตรวจ` (check).
+   - For a pattern that keeps coming back, pass it to `learn-loop/repeated-mistakes-to-checks` to turn into a lint rule.
+6. **Report** — `qa/security/<year-month-day>-gate.md`, a table `| ระดับ | เรื่อง | ไฟล์:บรรทัด หรือแพ็กเกจ | ยืนยัน | ทำอะไร |` (level · issue · file:line or package · confirmed · action), with a 1-line verdict (`ผ่าน` · `ผ่านหลังแก้` (passed after fixes) · `ไม่ผ่าน`). Never copy secrets into the report (use `--redact` output). Then report status with `superuser/status-report` type `ตรวจ` (check).
    - **The report must have a section "ไม่ได้รัน" (not run)** before the verdict. List by name, with a reason each: tools or rulesets that could not be installed · tools that exited with a non-zero code · languages the scanner does not support (such as Dart) · files or folders skipped. A report that scanned partly but reads as complete is worse than no scan. If this section has any entry, a `ผ่าน` verdict must end with `(ยกเว้นที่ไม่ได้รัน)` (except what was not run).
    - Before handing over to a customer, or when the contract names OWASP → fill in the per-item report A01–A10 following [`references/owasp-top10.md`](references/owasp-top10.md), as a second file `qa/security/<year-month-day>-owasp.md`. This gate's scan results serve as evidence for items A02 · A03 · A04 · A05 · A08.
 
@@ -1271,7 +1234,7 @@ Answer 3 questions per entry, then fill the table `| แพ็กเกจ | เ
 |---|---|---|
 | Does our code call the vulnerable function, and can outside input reach it | `grep` the function name in the advisory · the path of input | Does not reach → may be downgraded, but the reason must be recorded, not closed silently |
 | Referenced directly or through another package (transitive) | `npm ls <pkg>` · `pipdeptree -r -p <pkg>` · `dotnet nuget why <pkg>` | transitive → fix at the parent first, and if the parent has no new version yet, override in the lockfile and note that it must be removed when the parent is fixed |
-| Is there a fixed version | The `fixed in` field of the advisory | None → find a replacement package, or close the input's entry path and record it as an accepted risk in `decision-log` |
+| Is there a fixed version | The `fixed in` field of the advisory | None → find a replacement package, or close the input's entry path and record it as an accepted risk in `decision-desk/decision-log` |
 
 Resulting summary: **fix now** (really reached + a fix exists) · **fix next round** (cannot be reached, but a fix exists) · **accept the risk temporarily** (no fix — the user must see it and agree)
 
@@ -1293,7 +1256,7 @@ Automatic route: turn on **Renovate** or **Dependabot** to file PRs in the order
 ## 5 · Record
 
 - `CHANGELOG.md` under the heading Security: package · from → to · vulnerability ID (CVE or GHSA) · 1 line on whether we reach that vulnerability
-- Entries with an accepted risk or an override in the lockfile → `decision-log` with the date to come back and look
+- Entries with an accepted risk or an override in the lockfile → `decision-desk/decision-log` with the date to come back and look
 - That round's gate report (`qa/security/<วัน>-gate.md`) points to the CHANGELOG instead of writing it again
 
 
@@ -1477,7 +1440,7 @@ How to write it for the team's stacks (.NET · TypeScript/Node/Angular · Python
   | `ผ่าน` (pass) | Yes | There is evidence that can be run — test name + run result · tool name + result file |
   | `ผ่าน (ตรวจด้วยตา)` (pass, checked by eye) | Yes, if it says which file was checked and that item truly cannot have a test written | For example a server configuration the team did not deploy a test for |
   | `ไม่เกี่ยว — <เหตุผล>` (not applicable — <reason>) | Yes | The system has no such part at all |
-  | `ยอมรับความเสี่ยง — <วันที่ · ใคร>` (risk accepted — <date · who>) | Yes | The customer approved in writing, recorded in `decision-log` |
+  | `ยอมรับความเสี่ยง — <วันที่ · ใคร>` (risk accepted — <date · who>) | Yes | The customer approved in writing, recorded in `decision-desk/decision-log` |
   | `ไม่ผ่าน` (fail) | No | A confirmed vulnerability was found |
   | `ยังไม่ได้ตรวจ — <เหตุผล>` (not yet checked — <reason>) | No | The tool cannot run or it has not been done |
 
@@ -1486,7 +1449,7 @@ How to write it for the team's stacks (.NET · TypeScript/Node/Angular · Python
 - Always include a section **scope not checked**, for example penetration testing by outsiders · the customer's servers the team did not deploy · libraries with no vulnerability data
 - Never write "100% secure" or "OWASP certified" — OWASP issues no certificates · if it can be delivered, write "passes the OWASP Top 10:2025 criteria per the checklist in this report"
 - The totals count all 6 statuses separately, for example `ผ่าน 7 · ผ่าน (ตรวจด้วยตา) 1 · ไม่เกี่ยว 2 · ยอมรับความเสี่ยง 0 · ไม่ผ่าน 0 · ยังไม่ได้ตรวจ 0`
-- Summarise the status into `docs/BUILD-PLAN.md` with `status-report` of type `ตรวจ` (check) (who did it · who checked · check result `ผ่าน — ผ่าน 8 · ไม่เกี่ยว 2` or `ไม่ผ่าน — A01 · A07`)
+- Summarise the status into `docs/BUILD-PLAN.md` with `superuser/status-report` of type `ตรวจ` (check) (who did it · who checked · check result `ผ่าน — ผ่าน 8 · ไม่เกี่ยว 2` or `ไม่ผ่าน — A01 · A07`)
 
 ---
 

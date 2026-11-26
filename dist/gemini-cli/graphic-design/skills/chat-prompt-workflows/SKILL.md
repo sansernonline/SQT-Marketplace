@@ -21,9 +21,9 @@ Do not use when: a one-shot question with no check criteria (a plain prompt is e
 
 | Situation | Use |
 |---|---|
-| A team lead in Claude Code plans work for subagents (the agent-team versions of Loop · Graph · Dynamic have files and a fresh reviewer) | `agent-patterns` |
+| A team lead in Claude Code plans work for subagents (the agent-team versions of Loop · Graph · Dynamic have files and a fresh reviewer) | `crew-patterns/agent-patterns` |
 | Writing code that calls a Large Language Model (LLM) · structured output · RAG · eval | `llm-engineering` in `software-development` |
-| Splitting work so several agents really run at once in Claude Code | `parallel-split-and-merge` |
+| Splitting work so several agents really run at once in Claude Code | `crew-patterns/parallel-split-and-merge` |
 | Wording of the answers and of the check criteria | `human-writing` (use together) |
 
 ## 1 · Choose the pattern with 2 questions

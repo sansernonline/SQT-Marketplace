@@ -19,4 +19,4 @@ The core `SKILL.md` section 7 holds only the short form · Open this file before
 
 ## Full quality bar (section 4)
 
-**True**: every fact and number comes from the user, a document, or a checked source; if none, put `(รอยืนยัน)` · **On target**: matches the "goal" and "done-when", with unrelated parts cut · **Ready to use**: the user can use it at once with no fixing or guessing · simple per `simplify`
+**True**: every fact and number comes from the user, a document, or a checked source; if none, put `(รอยืนยัน)` · **On target**: matches the "goal" and "done-when", with unrelated parts cut · **Ready to use**: the user can use it at once with no fixing or guessing · simple per `ground-rules/simplify`

@@ -1,7 +1,7 @@
 # playbook · ship — prepare work to go onto the main branch
 
 Use when: "Open a PR" · "Keep the PR green" · "Fix per the review comments" · "Ready to merge yet" (covers pstack's `opening a PR` · `babysit` · `shipping` · `autopilot-stack`)
-Main skills: `pr-description-template` · `commit-message-format` · `cicd-and-release` · `adversarial-review-panel`
+Main skills: `pr-description-template` · `commit-message-format` · `cicd-and-release` · `crew-patterns/adversarial-review-panel`
 
 > The agent **does not commit · push · merge by itself** unless permitted under the commit rule in `superuser` section 6. For a step that needs that permission when it has not been granted, prepare the command under "รออนุมัติ" (awaiting approval) and carry on with the other parts
 
@@ -14,9 +14,9 @@ Main skills: `pr-description-template` · `commit-message-format` · `cicd-and-r
 3. Arrange the commits as small pieces, each passing tests and, read in order, making sense as one story; write the messages per `commit-message-format` · ใคร: หัวหน้าทีม
 4. Write the PR description per `pr-description-template` — effect on users first · how it was proven · risks · screenshots if any · ใคร: หัวหน้าทีม
 5. If the user allows it, push and open the PR. If not, put the commands and the PR text in the reply · ใคร: หัวหน้าทีม (ผู้ใช้อนุญาต)
-6. **Watch until green** — if CI is red, find the root cause and fix it (`principle-fix-root-cause`); do not retry or switch off a test. For review comments from people or bots, judge each one, fix the ones that are real problems, and reply to the ones that are not, with a reason · ใคร: `developer` ตัวใหม่
+6. **Watch until green** — if CI is red, find the root cause and fix it (`fix-at-source/principle-fix-root-cause`); do not retry or switch off a test. For review comments from people or bots, judge each one, fix the ones that are real problems, and reply to the ones that are not, with a reason · ใคร: `developer` ตัวใหม่
 7. Before merge, check (ตรวจ) the whole PR again per the playbook [`review`](playbook-review.md), because a green CI does not mean it is safe · ใคร: `reviewer` ตัวใหม่
-8. Merging into the main branch must wait for **`รออนุมัติ`** (awaiting approval) even when everything passes (have the merge command ready), then finish with `status-report` · ใคร: หัวหน้าทีม (merge: ผู้ใช้ ใน "รออนุมัติ")
+8. Merging into the main branch must wait for **`รออนุมัติ`** (awaiting approval) even when everything passes (have the merge command ready), then finish with `superuser/status-report` · ใคร: หัวหน้าทีม (merge: ผู้ใช้ ใน "รออนุมัติ")
 9. After the user approves the merge, **delete the branch in the same step, no need to ask again:** `gh pr merge <เลข> --merge --delete-branch` (deletes both on GitHub and locally, then switches to the main branch) · before deleting, check there are no leftover files in the working tree and no other worktree uses this branch · if not using `gh` → `git branch -d <ชื่อ>` (only works for merged branches · never `-D`) and `git push origin --delete <ชื่อ>` · a deleted branch can be restored from the PR page on GitHub · ใคร: หัวหน้าทีม
 
 ## Common excuses — read before skipping a step
@@ -27,7 +27,7 @@ Main skills: `pr-description-template` · `commit-message-format` · `cicd-and-r
 | "I read my own diff carefully, no need for anyone else" | Same writer, same blind spot · a fresh reviewer is the only fresh pair of eyes you have |
 | "The reviewer said minor, so it's minor" | That label was given where the spec was silent · re-label by the effect on the user, then decide |
 | "The fix is obvious, no need for a test that fails first" | A test that fails first is the only evidence the problem was real and is gone · without it you have only a diff and hope |
-| "CI is red because it's flaky, just hit retry" | Retry hides the cause · find it per `principle-fix-root-cause` |
+| "CI is red because it's flaky, just hit retry" | Retry hides the cause · find it per `fix-at-source/principle-fix-root-cause` |
 
 ## Done when
 

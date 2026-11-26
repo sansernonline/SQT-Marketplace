@@ -1,29 +1,27 @@
-# Examples for this plugin — model tiers · autonomy · team patterns
+# Examples for this plugin — model tiers · team patterns
 
-Moved from `SKILL.md` sections 5 · 6 · 9. The rules are in `SKILL.md`, and this file holds examples only.
+Moved from `SKILL.md` sections 5 and 9. The rules live in `SKILL.md`. This file has only examples.
 
-## Model tiers — example jobs (section 5)
+## Model tiers — example tasks (section 5)
 
-The rules, model names and mid-task switching are in `superuser:superuser` section 5 (the core). This file holds only example jobs for each tier.
+The rules, model names, and mid-task switching are in `SKILL.md` section 5 (handing out work). This file has only example tasks for each tier.
 
-Tiers run from top to bottom under the core's 3 rules, and the first match wins (large → small → medium). **Large** `opus` — almost every piece of this plugin touches money: find error patterns in the trade journal · plan tax with several kinds of income · check a suspected scam · calculate position size · **Small** `haiku` — mechanical work that has a pattern to follow: sort news into the given list of topics · search a file and report · **Medium** `sonnet` (everything else) — summarise news not yet used for a trading decision · arrange a watchlist table · draft notes
-
-## Autonomy — reversible work and sources (section 6)
-
-| Found | Do |
-|---|---|
-| Reversible work — draft a plan · calculate in a spreadsheet or script · record a paper portfolio · organise the trade journal files | Do it now |
-| Public fact not known (tax rates and deduction ceilings · market rules · XD dates · a provider's licence) | Search it yourself, going through sources in this order: Revenue Department, Stock Exchange, SEC Office, Bank of Thailand → documents of listed companies and funds → financial news outlets. Usable under the 3-source rule in `SKILL.md` section 6 |
+| Tier | Example tasks | Example often chosen wrongly |
+|---|---|---|
+| **Large** `opus` | Design the whole user-permission system · compute payroll amounts sent to the bank · draft an email telling customers about a data leak · final check of risky work | A piece writing the manual for the user-permission system → large, not medium, because the whole job is risky |
+| **Medium** `sonnet` (default) | Add a product search page · fix a calendar bug · draft an install guide · search and compare libraries · first-round check | Move callbacks to async/await → medium even with tests, because a way to fix must be chosen |
+| **Small** `haiku` | Fill postal codes into a table from a given list · convert a book list from CSV to JSON in a given structure · search a word in documents and report the lines | Trim trailing spaces from every file → write a script, do not send a worker |
+| **`fable`** (not the default) | A piece where opus failed twice, even after raising effort to high and the account has credit | Using fable from the start on a hard task → start with opus first |
 
 ## Team patterns — how each is used in this work (section 9)
 
-How to run each pattern, its cost and its traps are in `agent-patterns`.
+How to do each, its cost, and its traps are in `crew-patterns/agent-patterns`.
 
-| Pattern | How it is used here |
+| Pattern | How it is used in this work |
 |---|---|
-| **Planning** | thesis → stop-loss point → position size → order |
-| **ReAct** | fetch price → read the value → compare the time → calculate |
-| **Reflection** | A new `reviewer` (read-only, not the `risk-manager` that did the piece) checks every order before it goes to the user |
-| **Multi-Agent** | `market-analyst` → `risk-manager` → `trade-journal-coach` |
-| **Mixture-of-Agents (MoA)** | Retirement or tax plan → 3 assumptions (cautious · middle · good), then show them side by side |
-| **Reranker** | Dozens of news items → score the impact on the stocks held → keep 5 |
+| **Planning** | playbook → todo · long job → a plan in `CONTEXT.md` section "ความคืบหน้า" (progress) |
+| **ReAct** | Every step: think → do 1 thing → look at the real result → next step |
+| **Reflection** | The playbook's check step uses a fresh `reviewer` (or a read-only specialist reviewer) that has not seen the work before, not the one that did it |
+| **Multi-Agent** | Section 5 · independent pieces split among several workers, handed on through files |
+| **Mixture-of-Agents (MoA)** | A wrongly chosen path that would be very expensive: 3 `brainstormer`s from different angles, then merge |
+| **Reranker** | playbook `research`: gather sources widely → score → read in full only the top scorers |

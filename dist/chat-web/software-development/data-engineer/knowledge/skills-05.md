@@ -1,203 +1,3 @@
-# skill: background-jobs
-
-Use when work runs outside the request in queues or schedules
-
-# Background jobs
-
-> **The one rule:** every background job must be **safe to run again without repeating its effect**,
-> because it will certainly run again: the machine dies halfway · a person clicks again · the system retries by itself.
-
-## When to use this skill
-
-- Work the user should not have to sit and wait for: sending email, building a report, importing a file
-- Scheduled work: a daily summary, month-end closing, deleting expired data
-- Calling an external system that is slow or often down
-- A jammed queue, or jobs that vanish with nobody noticing
-
-## When to use another skill, or use it alongside
-
-| Task | Skill | |
-|---|---|---|
-| Timeouts and retries for ordinary requests | `error-handling-patterns` | instead |
-| Metrics and alerts | `observability-basics` | instead |
-| Events across several services through Kafka (several consumers read the same event · history is kept) | `kafka-streaming` | instead |
-| A job queue through RabbitMQ (several workers · retry · dead letter · needs a real broker) | `rabbitmq-messaging` | instead |
-| Importing Excel/CSV files as the main job | `data-import-export` | instead |
-| Sending email/SMS as the main job | `notifications` | instead |
-| Designing an agent system (Loop · Graph · Dynamic · choosing a framework) | `llm-engineering` → [`agent-systems.md`](../llm-engineering/references/agent-systems.md) | alongside |
-
----
-
-## 1 · What belongs in the background
-
-| Send to the background | Do inside the request |
-|---|---|
-| Takes more than 1–2 seconds | Fast, and the user must see the result at once |
-| Calls an external system that can fail | Permission checks · data validation |
-| The user does not wait for the result (email, notification) | The result is what they clicked to see |
-| Many items done as a batch | |
-
-> **Do not move work to the background just because it is slow.** If the user must see the result before moving on,
-> moving it adds a waiting screen, a notification, and a place to store results.
-> Sometimes making it faster is much cheaper (see `lazy-coding`).
-
----
-
-## 2 · Choose a mechanism
-
-| Mechanism | Fits | Watch out for |
-|---|---|---|
-| **Job table in the database** | small to medium systems · up to a few thousand jobs a day | you must write the job picker yourself · watch for workers fighting over jobs |
-| **A real queue** (Redis · RabbitMQ · Amazon Simple Queue Service (SQS)) | many jobs · need built-in retry and dead letter | one more thing to look after |
-| In-app scheduler (cron in code) | scheduled work with a single instance | **several instances will run it at the same time** · see section 5 |
-| Platform scheduler | scheduled work on the cloud | |
-
-**If the system is still small, always start with a table in the database,** because PostgreSQL's `SELECT ... FOR UPDATE SKIP LOCKED`
-lets several workers pick jobs at once safely, with no new system to add.
-
-**Every job needs at least:** `id` · `type` · `payload` · `status` · `attempts` ·
-`run_after` · `locked_by` · `locked_at` · `last_error` · `created_at`
-
----
-
-## 3 · Running again must not repeat the effect
-
-Almost every queue system guarantees only "delivered at least once", **not exactly once**.
-
-| Method | How to use it |
-|---|---|
-| **Duplicate-blocking key** | a unique constraint on `(job_type, business_key)` makes a duplicate job fail to insert |
-| **Check state before acting** | "if the email for this purchase order was already sent, stop" |
-| **Pass on an idempotency key** | when calling an external API (see `api-conventions`) |
-| **Set a new value, do not add to the old one** | `set status = 'paid'` is safer than `balance = balance + 100` |
-
-> **A job that adds to a value or sends something outside costs real money if it runs twice.**
-> Two emails are only annoying, but two money transfers are a big problem.
-
----
-
-## 4 · Retry and dead jobs
-
-These numbers are for jobs in a queue · for retries outside a queue use [`error-handling-patterns`](../error-handling-patterns/SKILL.md) §4: service-to-service calls use 3 tries at 1/2/4 seconds · when a person waits on the screen → at most 1 retry, then let them press again
-
-```
-fail → wait 1 min → fail → wait 4 min → fail → wait 16 min → 4th failure → dead letter
-```
-
-| Rule | Detail |
-|---|---|
-| **Always set a cap** | 3–5 tries · with unlimited retries a single job can jam the queue |
-| Increase the wait each round (a fixed multiple such as ×4) + a little randomness | same as `error-handling-patterns` |
-| Bad data needs no retry | a malformed payload stays the same however many times you try |
-| **A job that has run out of tries goes to one place** | dead letter (where jobs that failed until they ran out of tries are kept), keeping the full payload and the last error |
-| A person must watch the dead letter | **alert when a new job arrives there**, do not wait for a customer to complain |
-| It can be run again | after fixing the cause, you can re-run from the dead letter without writing a script |
-
-**A job stuck because a worker died** needs an unlocker.
-If a job's `locked_at` is older than N minutes, treat it as having nobody working on it, and unlock it so another worker picks it up.
-
-**Job state is a state machine, not a boolean** — every mechanism in section 2 must be able to say which state a job is in: `queued → running → succeeded`, or `running → failed (attempts < cap) → queued`, or `failed → dead` · keep `attempts` · `locked_at` · `last_error` · `finished_at` with the job · move only along the arrows above (a `succeeded` job cannot go back to `running`; create a new job) · the admin screen and the dead letter read from this state in one place
-
----
-
-## 5 · Scheduled jobs
-
-> **With several instances, a scheduled job runs several times at once.**
-> A summary report sent 3 times, or money charged 3 times, comes from this.
-
-| Method | Use when |
-|---|---|
-| Lock in the database (advisory lock) | you can do it right away with nothing added |
-| The platform scheduler calls an endpoint | on the cloud · Kubernetes CronJob |
-| A scheduler that supports several instances directly | Quartz · Hangfire |
-
-**Rules for scheduled jobs:**
-
-- **Take the time range as a parameter**, so you can re-run missed dates without changing code
-- If a run is missed, you must be able to catch up, not skip it for good
-- State the time zone clearly: "every midnight" in which zone (see `i18n-and-locale`)
-- **Record which runs succeeded**, do not infer it from logs
-
----
-
-## 6 · Long jobs the user waits on
-
-| Needed | Detail |
-|---|---|
-| Job id | return it the moment the job is accepted · the user uses it to ask about progress |
-| State | `queued` · `running` · `succeeded` · `failed` · `cancelled` |
-| Progress | "340 of 1,200 items done" (ทำแล้ว 340 จาก 1,200 รายการ), not a blind spinner |
-| Cancellable | the job must check for a cancel signal regularly |
-| Result | keep it available to download, with an expiry date |
-| Notify when done | email or an in-system notification (see `notifications`) |
-
-**Split a big job into small pieces.** For example, import 50,000 rows as sub-jobs of 500 rows each,
-because a single 40-minute job that fails at minute 39 must start over from the beginning.
-
----
-
-## 7 · What to measure
-
-| Metric | Alert when |
-|---|---|
-| Jobs waiting in the queue | keeps growing and does not fall |
-| Wait time in the queue (p95 · 95% of jobs wait no longer than this) | above what was promised |
-| Failure rate | above the threshold |
-| **Count in the dead letter** | **rises, even by just one** |
-| Scheduled runs that did not run | a run was skipped |
-| Jobs stuck in the running state for an unusual time | more than N times the normal |
-
-> **A jammed queue is completely silent.** The API still answers 200 to every request and the health checks are all green,
-> but no email has gone out for 3 hours. You see it only if you measure.
-
----
-
-## 8 · Payload
-
-- **Send the id, not the whole data block, in the payload** — the job reads it itself, so it gets the latest data too
-
----
-
-## 9 · Durable workflow for agent jobs that run long or wait for human approval
-
-An agent job that runs tens of minutes, calls an LLM and tools many times, or pauses for approval across days cannot use a plain queue, because a failure at step 8 of 10 means starting over and paying the token cost again · use an engine that records the result of every step and resumes from the same point
-
-- [`references/durable-workflow.md`](references/durable-workflow.md) — open before choosing an engine (Temporal · Step Functions · checkpointer) or writing replayable code
-
-## References
-
-- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
-
-
-## reference: durable-workflow.md
-
-# Durable workflow for agent jobs · background-jobs
-
-| Tool | Fits | Waits for human approval | Watch out for |
-|---|---|---|---|
-| **Temporal** | Python and other languages · the agent loop lives in a workflow, while LLM and tool calls are activities · has `OpenAIAgentsPlugin` · `activity_as_tool` | (`ยังไม่ได้ตรวจ` · see the signal page) | the integration with the OpenAI Agents SDK is still in Public Preview |
-| **AWS Step Functions** | fixed steps on AWS · fan-out with `Map` (Inline in parallel 40 · Distributed 10,000 child jobs) | `.waitForTaskToken` can wait up to 1 year until `SendTaskSuccess` / `SendTaskFailure` arrives · set `HeartbeatSeconds` to prevent a silent hang | when an LLM must choose the route, let Lambda or Bedrock decide, then use `Choice` |
-| **Agent framework checkpointer** | you do not want to add an engine · LangGraph `PostgresSaver` · Microsoft Agent Framework `CheckpointManager` · OpenAI `RunState.to_json()` | LangGraph `interrupt()` · OpenAI `needs_approval` · Microsoft Agent Framework `RequestInfoExecutor` | an in-memory store is lost when the process restarts · use a database-backed store in production |
-
-**Rules for code that must be replayable** (Temporal · Google ADK · Claude Code workflows use the same principle · checked against [Temporal: Workflow Definition](https://docs.temporal.io/workflow-definition) 2026-10-26)
-
-- **Never read the time or draw a random value in code that controls the order of work** (`Date.now()` · `datetime.now()` · `Math.random()` · `uuid4()`) · on replay the value differs from the first run, the order drifts, and the old result cannot be reused · do anything that needs time or randomness in an activity, or use the SDK's own API for it
-- **All LLM calls, tool calls, and outside reads and writes go in activities.** The result is recorded once, and replay reads the record instead of calling again.
-- **The order of calls must be the same on every run** · changing the order of steps in code that still has jobs in flight makes the old jobs fail replay (Temporal calls this a nondeterminism error) · switch to the engine's versioning or patching
-- **The steps before a wait point must be safe to repeat** (section 3) · LangGraph re-runs the paused node from the start on resume, so move side effects to after the wait point
-- **Saved state carries no identity check** (the OpenAI docs warn about `RunState`) · load it only from a store we control
-- The cap on rounds, the token budget, and stopping when there is no improvement are still needed, as for jobs in a queue · details in [`agent-systems.md`](../../llm-engineering/references/agent-systems.md) section 6
-
-
-## reference: sources.md
-
-# Sources · background-jobs
-
-Sources (opened 2026-10-26): [Temporal · OpenAI Agents SDK](https://docs.temporal.io/ai-cookbook/openai-agents-sdk-python) · [Temporal announcement](https://temporal.io/blog/announcing-openai-agents-sdk-integration) · [Step Functions integration patterns](https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html) · [Step Functions Map](https://docs.aws.amazon.com/step-functions/latest/dg/state-map.html) · [LangGraph interrupts](https://docs.langchain.com/oss/python/langgraph/interrupts) · [OpenAI human in the loop](https://openai.github.io/openai-agents-python/human_in_the_loop/) · [Claude Code workflows](https://code.claude.com/docs/en/workflows)
-
-
----
-
 # skill: observability-basics
 
 Use when a live system needs metrics, logs or alerts
@@ -550,3 +350,154 @@ Checked 2026-10-27
 # Sources · observability-basics
 
 Source of item 3.1: prometheus.io (metric types · naming · histograms · alerting) and grafana.com (dashboard best practices · provisioning), checked 2026-10-27 · full links are at the end of `references/prometheus-grafana.md`
+
+
+---
+
+# skill: context-budget
+
+Use when a task reads large material or writes long output
+
+# context-budget — decide before you read what enters context
+
+> **One rule:** decide **before** you read, not regret it after. Tokens that enter context cannot be removed, except by `/clear` (drops everything) · `/compact` (shrinks to a summary) · `/rewind` (cuts back to an earlier point). Things you read in (files · PDFs · web pages · search results · command output) are the biggest source, so be most disciplined about them. If a Command-Line Interface (CLI) can do what a Model Context Protocol (MCP) tool does, use the CLI.
+
+## Use when
+- About to read something big: a folder of documents · a long PDF · several web pages · search results · a whole code project · command output that may be long.
+- Starting work on a folder or project whose structure you do not know.
+- Context fills unusually fast, or `/compact` triggers often.
+- Setting context rules for the whole team or every project.
+
+Not for: shorter **answers** → `lean-reply/answer-shape` · work summary across sessions → `handoff` · where temp files go → `workspace-rules/temp-file-discipline` · a coding loop that must survive context loss → `spec-to-code-loop` (plugin `software-development`).
+
+## Steps
+
+### 2 · Before reading, choose the route
+- Know the file, page and line → read only that range (item 3); several items → read them together in one message.
+- Need to find where it is → bounded search (item 3).
+- Must search across many items whose location you do not know → send a subagent (item 4).
+- Must convert, merge or count a lot of data → write to a file and read only the summary (item 5).
+
+If you do not know how big the thing is, check the size first: PDF pages · file count and size in a folder (`ls -l`, `du -h`) · lines (`wc -l`).
+
+### 3 · Read only a range, and search with a boundary
+3 numeric rules (use them as they are if the user's `CLAUDE.md` has no "งบ context" section): **read only a range of any file over 300 lines** · **add `--glob` to `grep`/`rg`** · **end with `| head -50`**.
+
+| Thing | How to read it |
+|---|---|
+| Folder of documents | Names and sizes first, then open only files whose names match the question |
+| PDF · long report | Table of contents first, then name the pages or chapters |
+| Web page | Ask for only the part you need (a number, a date, one heading) |
+| Code | `rg -l` to learn which file, then drill in · `-C2` context is enough |
+| Session files · `.jsonl` logs | One line can be megabytes: never `cat` · `wc -l -c <file>` first · find long lines with `awk 'length>100000{print NR": "length}' <file> \| head -20` · read one field at a time with `cut -c1-2000` or `jq` |
+
+Read the whole file when you are about to overwrite it, or it is short, or you must understand all of it to edit correctly and it is under ~300 lines.
+
+### 4 · Send a subagent instead (the biggest saving)
+A subagent has its own context: it can read 20 items and send back one paragraph.
+
+| Use a subagent when | Do it yourself when |
+|---|---|
+| You expect to read over 20k tokens or over 5 files whose location you do not know (default, not measured; estimate from the step's PERT in `superuser/model-scorecard` if present), or must search across many items to answer one question | You know the files and locations, even 4–6 of them: read them together in one message, faster than a new subagent |
+| Exploring an unknown folder or project · checking across many files | Editing the file already open · work that needs full detail to continue |
+
+**Always set the format and length of the result**, or the subagent returns a long report and you save nothing. Wrong: "Take a look at these 12 contracts". Right: "Find the expiry date, penalty and renewal terms of each contract. Return a table, 1 line per contract, with file:page. Do not paste contract text. At most 15 lines." Code work: "Return a list of file:line in call order, do not paste code".
+
+### 5 · Write to a file instead of holding it in the conversation
+```bash
+<command with long output> > <temp folder>/out.log 2>&1; tail -20 <temp folder>/out.log
+```
+Use it for text pulled from the web or PDFs · big data tables (filter or count with a script, do not read every row) · test results · logs · file conversions. Where to put these files → `workspace-rules/temp-file-discipline`. Note what you find into a file on the first pass so you do not read it again.
+
+If it repeats on every task, let a hook filter long output before it enters context: coding example in `superuser` → `references/code-extensions.md` (the addition in plugin `software-development`).
+
+### 6 · So the next session does not explore again
+Work you return to often needs a short map that **loads automatically**: where things are · what must not be read · commands used often. General work: the section "ของอยู่ที่ไหน" in `.claude/superuser/CONTEXT.md`, at most 40 lines. Files with other names (`notes.md`) do not load themselves, so they are wasted. An outdated map is worse than none: no full file list or change history in it. Code work (project and folder `CLAUDE.md`, example maps) → `superuser` → `references/code-extensions.md`.
+
+### 7 · Other settings that help
+Turn off MCP servers and plugins you do not use · pick model and effort at the start · `/clear` when the topic changes · project `CLAUDE.md` at most 40 lines (table with reasons: [`references/settings.md`](references/settings.md)) · on Windows (Git Bash · PowerShell) see [`references/windows-shell.md`](references/windows-shell.md).
+
+**Compact yourself at about 70%, do not wait for the system** (70% is a default, not measured). When about 70% of context is used and a step has just finished (tests pass · file saved · check passed): first update "รับงานต่อ" in `CONTEXT.md` (`handoff` item 5), then `/compact` and say what to keep (files edited · decisions · next step). The system's own compaction often hits mid-step, before anything is written down.
+
+### 7.1 · Seams between phases
+Ask in order; **the first yes is the route**, then stop:
+
+| # | Ask | If yes |
+|---|---|---|
+| 1 | Does the next phase need this context as its source, and is there room left (roughly over 150k tokens · default, not measured)? | **Continue** in the same session |
+| 2 | Will the next phase move to another vendor's tool, model, or repo? | **handoff**: update "รับงานต่อ" and start in the new place (`handoff` item 5) |
+| 3 | Can the next phase be split off without talking to us (no user answer to wait for, no context beyond what a brief can say)? | **subagent**: send the 5-part brief |
+| 4 | Can this whole context be dropped (everything needed is in files) and the new topic is unrelated? | **clear**: cannot be undone; check `notes/` and "รับงานต่อ" are complete first |
+| 5 | None of the above | **compact** and say what to keep (item 7) |
+
+Item 4 is the only one that cannot be undone: answer yes only with evidence everything is in files; if unsure, go to 5.
+
+## Project map
+- Workers read `docs/FILE-MAP.md` instead of exploring the repo.
+- Generate it: `node scripts/map-folder.mjs [dir=.] [--out docs/FILE-MAP.md] [--max 400] [--stdout]`.
+- It lists each file with a role line and its relative imports, then a Mermaid folder graph.
+- Over `--max` files it lists folders with file counts only.
+- It never copies file contents beyond the role line. Regenerate after big changes.
+
+## Check before done
+- Big things were read by range, bounded search, subagent or file, not opened whole.
+- Every subagent brief said the result format and length.
+- Long output went to a file with only a tail or summary read back.
+
+## Anti-patterns
+Opening the whole thing to "see what is in it" when the table of contents or `head -40` answers it · searching without a boundary (`rg` without `--glob`; opening every search link) · searching across 10 items yourself instead of a subagent · sending a subagent to read something whose location you know · letting long output in one lump · reading the same thing again because you forgot (note findings to a file) · a map file that does not load automatically · a 300-line `CLAUDE.md` · all MCP servers always on.
+
+## References
+- [`references/settings.md`](references/settings.md) — open when setting rules for a team or project
+- [`references/windows-shell.md`](references/windows-shell.md) — open when working in Git Bash or PowerShell on Windows
+- [`references/sources.md`](references/sources.md) — sources and licences
+
+## Squeeze logs
+- Run long test or build logs through `node scripts/squeeze-log.mjs [file] [--max 100] [--context 3]` (stdin if no file) before reading them or handing them to another agent.
+- It keeps the first 10 and last 20 lines, every error/fail/warn line with context, and collapses repeated lines as `(×N)`.
+- The first output line says `squeeze-log: <in> → <out> lines · errors <k>`.
+
+
+## reference: settings.md
+
+# Settings that save context
+
+Moved from `SKILL.md` item 7. Open it when you are about to advise the user on settings.
+
+| Action | Effect |
+|---|---|
+| **Turn off MCP servers the task does not use**. If a CLI can do the job, use the CLI | Tool names and instructions of every server still load in every session |
+| Pick the model and effort at the start of the session | Switching model mid-session loses the cache, so the whole conversation is read again (changing effort on Opus · Sonnet · Haiku 5.5 and Fable 5.1 through an Application Programming Interface (API) key or a subscription keeps the cache · through Bedrock · Agent Platform · a gateway or special setups, see the conditions at the link) · ([Claude Code: prompt caching](https://code.claude.com/docs/en/prompt-caching) · checked 21 Oct 2569 BE) |
+| Fast mode — the user turns it on with `/fast` at the start of the session · the agent never turns it on | Opus only · up to 2.5 times faster text generation, but the first token is not faster · 2 times the price, and subscription users pay from usage credits, not the quota · worth it for a step that writes a long piece, not for short steps that wait on tools · turning it on mid-session pays the fast price once for the whole uncached conversation · ([Claude Code: fast mode](https://code.claude.com/docs/en/fast-mode) · [API: fast mode](https://platform.claude.com/docs/en/build-with-claude/fast-mode) · checked 21 Oct 2569 BE) |
+| Turn off plugins unrelated to the task | The description of every skill is always in context |
+| `permissions.deny` in `.claude/settings.json` for folders that should not be read | The system guards it, so you do not depend on discipline |
+| `/clear` when the topic changes (costs nothing) · `/compact <what to keep>` at a rest point in the work, not when nearly full · on the wrong path → `/rewind` to an earlier point | Frees space · `/compact` while the cache is warm is cheap, but after a long pause the whole conversation is read again · `/rewind` cuts back to a point where the cache already exists |
+| Project `CLAUDE.md` at most 40 lines · `~/.claude/CLAUDE.md` (used by every project) at most 60 lines — this set's own cap, stricter than the official docs, which suggest at most 200 · the one shipped in `scripts/install/CLAUDE.global.md` is 84 lines (over the cap, waiting to be cut) | Every line costs tokens in every session |
+
+
+## reference: sources.md
+
+# Sources · context-budget
+
+- Compact yourself at about 70% (section 7): idea from strategic-compact in everything-claude-code (MIT). 70% is a default, not measured.
+- Seams between phases (section 7.1): mattpocock-skills (MIT) · PHASE-BOUNDARIES · seen 2026-11-10. The 150k token line is a default, not measured.
+
+
+## reference: windows-shell.md
+
+# Shell traps on Windows
+
+Open it when working on a Windows machine through Git Bash or PowerShell · every item happened in the SQT-Marketplace repo between 2026-10-23 and 25 · kept as a reference file first; if it happens again, promote it to a skill.
+
+| Symptom | Cause | Do this instead |
+|---|---|---|
+| Deleted every folder the user told you to keep (2026-10-25) | `ls` on the machine is aliased to `ls -F`, so folder names end with `/`. The keep list written as a regex matched no name, and then `rm -rf` deleted all of them · `rm` in Git Bash does not use the recycle bin | Build the list with `find <dir> -mindepth 1 -maxdepth 1 -printf '%f\n'` or `\ls -1A` · print the delete list and the keep list and compare them before running `rm` · move to `_to_delete/` instead of deleting |
+| A pattern in JSON or a regex is wrong: `\b` became `\b` (2026-10-23) | Python code was sent through a heredoc in the Bash tool, and the escapes were interpreted twice | Edit the file with the Edit tool · or write the script to a file first and then run it · check the result by reading the actual value · a `\r` that became a real CR character in a .md is now caught by the SQT-Marketplace checker (2026-10-25), but a lost `\b` is still not caught |
+| The validator fails with "documents do not match the real ones" though the content matches · the zip in `dist/` changes though nothing was edited (2026-10-25) | A new worktree with `core.autocrlf=true` checks files out as CRLF, but the scripts build text with LF | Scripts that compare or build files must convert CRLF to LF first (`sync-docs` · `writeZip` already do) · files that must be CRLF are declared in `.gitattributes` · check whether they really differ with `git diff --ignore-cr-at-eol --stat` |
+| A plugin hook does nothing, with no error (2026-10-25) | It checks it is the main file with `fileURLToPath(import.meta.url) === process.argv[1]`, which does not match on Windows when called through `${CLAUDE_PLUGIN_ROOT}/…` | Compare with `process.argv[1].replace(/\/g, "/").endsWith("<file name>")` as in `superuser-hook.mjs` · test the hook by calling it through the real path Claude Code uses |
+
+## Small things worth knowing
+
+- `perl -i` or `sed -i` on a CRLF file: a regex anchored to the line end with `$` must allow for `\r` (`(\r?)$`), or the edit silently does not apply
+- `cd` in Bash does not carry across commands · use a full quoted path, because folder names often contain spaces and `&`
+- A `.cmd` script that ends with `pause` waits for a key · when running it from an agent, pass empty stdin (`< /dev/null`), save the output to a file, and read the end of the file

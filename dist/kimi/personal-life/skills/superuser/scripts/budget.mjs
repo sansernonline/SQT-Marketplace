@@ -10,7 +10,7 @@ import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { homedir } from "node:os";
 import { accountLeft, estimates, runningTokens } from "../../../hooks/superuser-hook.mjs";
-import { accountName } from "../../parallel-split-and-merge/scripts/quota.mjs";
+import { accountName } from "../../crew-patterns/parts/parallel-split-and-merge/scripts/quota.mjs";
 
 const args = process.argv.slice(2);
 const opt = (name) => { const i = args.indexOf(`--${name}`); return i >= 0 ? Number(args[i + 1]) : null; };

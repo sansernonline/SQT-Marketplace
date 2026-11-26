@@ -180,7 +180,7 @@ Recommended build order (`อนุมาน`, inferred): get planner + web-sear
 - [ ] Kill a worker mid-job, and the job continues from the checkpoint with no duplicate results
 - [ ] KEDA scales up and down with lag at staging and does not exceed the ceiling
 - [ ] Every metric in section 8 has a chart, and at least 3 have alerts (time · backlog · claims failing)
-- [ ] Before delivering, run `security-gate` and `principle-prove-it-works`
+- [ ] Before delivering, run `security-gate` and `ground-rules/principle-prove-it-works`
 
 ## 11. Sources
 

@@ -220,7 +220,7 @@ Preservation:
 
 ## Output: Incident Report
 
-Use `polished-document-style` + `postmortem-template` skills.
+Use `design-gate/polished-document-style` + `postmortem-template` skills.
 
 ```markdown
 # Incident Report: <Title>
@@ -265,7 +265,7 @@ Use `polished-document-style` + `postmortem-template` skills.
 
 - `security-operations` — IR-specific patterns
 - `postmortem-template` (from software-development)
-- `polished-document-style` (from superuser)
+- `design-gate/polished-document-style` (from superuser)
 
 ## Things You Don't Do
 

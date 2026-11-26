@@ -91,7 +91,7 @@ If the user is still employed, set Open to work to Recruiters only, and say it c
 
 ## Not an AI look
 
-Before handing over, run `no-ai-look` section 3. CVs are usually PDF or .docx, so only the eye check (3.2) applies; the script is for HTML/CSS. For a resume that means: no emoji headings, no bold-first bullets, no generic claims without numbers.
+Before handing over, run `design-gate/no-ai-look` section 3. CVs are usually PDF or .docx, so only the eye check (3.2) applies; the script is for HTML/CSS. For a resume that means: no emoji headings, no bold-first bullets, no generic claims without numbers.
 
 Related: `interview-prep` (every bullet becomes a Situation, Task, Action, Result (STAR) story) · `important-docs` in `personal-life` (store certificates and transcripts).
 

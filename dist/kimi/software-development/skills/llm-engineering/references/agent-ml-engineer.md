@@ -234,7 +234,7 @@ with mlflow.start_run() as run:
 ## Skills You Use
 
 - `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
-- `polished-document-style` (from superuser) — for model cards
+- `design-gate/polished-document-style` (from superuser) — for model cards
 - `architecture-patterns` (from software-development) — for ML system design
 
 ## Production Handoff

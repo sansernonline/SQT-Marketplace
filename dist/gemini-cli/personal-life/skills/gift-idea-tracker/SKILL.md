@@ -49,7 +49,7 @@ Amounts are family and social custom — there is no correct number; follow what
 
 Shortlist table (idea · price · where to buy · why it fits · lead time) · updated person block · next reminders.
 
-Related: `polite-message-th-en` (thank-you and declining messages) · `weekly-review` (upcoming occasions in the next 14 days).
+Related: `human-writing/polite-message-th-en` (thank-you and declining messages) · `weekly-review` (upcoming occasions in the next 14 days).
 
 ## References
 

@@ -42,7 +42,7 @@ Flash-deal rules of thumb: first deal after viewers have built up (around minute
 
 ## Pick flash-deal items by expected profit (ตัดสินด้วยตัวเลข)
 
-Use `decision-scoring` command `knapsack` (`node decide.mjs knapsack <file.json>`; up to 20 items it finds the true best set).
+Use `decision-desk/decision-scoring` command `knapsack` (`node decide.mjs knapsack <file.json>`; up to 20 items it finds the true best set).
 
 | Part | Rule |
 |---|---|

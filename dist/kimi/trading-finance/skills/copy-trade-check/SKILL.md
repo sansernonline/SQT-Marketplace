@@ -51,9 +51,9 @@ Prints a table and a **ผล** line (win rate with 95% Wilson interval, t-stat,
 
 **Script path:** installed: `ls -d ~/.claude/plugins/cache/*/trading-finance/*/skills/copy-trade-check/scripts/signal-check.mjs | sort -V | tail -1` · in the repo: `plugins/trading-finance/skills/copy-trade-check/scripts/signal-check.mjs` · Node only. It reads closed trades only (floating losses are invisible), so set it beside the equity drawdown on the statistics page.
 
-## 4 · Compare the survivors — `decision-scoring` `score`
+## 4 · Compare the survivors — `decision-desk/decision-scoring` `score`
 
-Only providers that passed section 2, several of them → `decision-scoring` command `score`. Weights (starting values, not yet measured; the user's win): Sharpe high 0.3 · Equity drawdown % low 0.3 · recovery factor high 0.2 · weeks high 0.2. Put the hard rules in `must` (full file `scripts/score-example.json`, run with `decide.mjs score`):
+Only providers that passed section 2, several of them → `decision-desk/decision-scoring` command `score`. Weights (starting values, not yet measured; the user's win): Sharpe high 0.3 · Equity drawdown % low 0.3 · recovery factor high 0.2 · weeks high 0.2. Put the hard rules in `must` (full file `scripts/score-example.json`, run with `decide.mjs score`):
 
 ```json
 "must": [

@@ -1,109 +1,3 @@
-# skill: personal-kb
-
-Use when building a personal knowledge base
-
-# Personal KB (คลังความรู้ส่วนตัว)
-
-A knowledge base works only if search finds the note in ten seconds. Plain Markdown files, so it survives any app change. When a notes plugin or app (Obsidian, Notion, Apple Notes) is installed, write there and keep this as the naming and tagging convention.
-
-## Layout
-
-```
-kb/
-  index.md            ← evergreen notes by category, refreshed monthly
-  names.md            ← short decoder of nicknames, relatives and home words (≤ 100 lines)
-  inbox/              ← quick captures, emptied weekly
-  people/             ← one note per person (context, last talk, preferences)
-  projects/           ← one folder per active project; archive when done
-  reference/          ← how-tos, recipes, manuals, addresses, procedures
-  journal/            ← dated notes, meeting notes, weekly reviews
-  archive/
-```
-
-Two levels deep at most. A note's home is decided in two seconds: *is it about a person, a project, a reusable fact, or a day?*
-
-## Naming
-
-| Kind | Pattern | Example |
-|---|---|---|
-| Dated | `YYYY-MM-DD topic.md` | `2026-10-06 condo committee.md` |
-| Evergreen | `topic.md` — noun first | `aircon service – Daikin bedroom.md` |
-| Person | `firstname lastname.md` (plus Thai name in the note) | `ploy srisuk.md` |
-
-## The Thai search problem
-
-Thai has no spaces between words, so many tools match Thai words badly ("ภาษี" may not find "ภาษีเงินได้" in some apps, or finds too much). Fix:
-
-- **File names in English or transliteration** (`tax 2569 deductions.md`), Thai content inside
-- **Tags line at the top in both languages**: `tags: #tax #ภาษี #ลดหย่อน #deduction`
-- **One spelling** — pick `Ploy` not `Ploi/พลอย/Ploy S.` and keep an alias line: `aliases: พลอย, Ploi`
-- Dates always ค.ศ. `YYYY-MM-DD` in names — sorting and search break with mixed พ.ศ./ค.ศ.
-
-### `names.md` — the decoder read first
-
-Thai family talk is full of nicknames and kin words that match no file name ("ป้าน้อย" · "บ้านสวน" · "พี่หมู ที่ทำงาน"). Keep one short file, read before any search:
-
-```markdown
-ป้าน้อย = พี่สาวแม่ · ชื่อจริง สมศรี · → people/somsri.md
-บ้านสวน = ที่ดินราชบุรี · → reference/ratchaburi land.md
-พี่หมู = หัวหน้าทีมบัญชี (งาน) · → people/kittipong.md
-```
-
-Keep it under about 100 lines. A name used every week goes up here; one not used for months moves down into its people note's `aliases:` line. Never put ID numbers, phone numbers or health details in it.
-
-## Note template
-
-```markdown
-# [Title]
-tags: #area #คำไทย
-aliases: [other names people use]
-source: [link / book / person] · created YYYY-MM-DD
-
-[One idea, in your own words. Max ~1 screen.]
-
-Related: [[other note]]
-```
-
-## Workflow
-
-1. **Capture (< 1 minute)** — drop into `kb/inbox/` with a dated name; formatting optional.
-2. **Weekly sort (10 minutes, in `weekly-review`)** — for each inbox note: delete · merge into an existing note · file it with a proper name and tags.
-3. **Split** notes over one screen into one-idea notes and link them.
-4. **Index and lint monthly** — add new evergreen notes to `kb/index.md` under their category, then run the lint: notes with no `tags:` line (`grep -rL '^tags:' kb --include=*.md`) · inbox notes older than 14 days · two notes with the same title · `[[links]]` to notes that do not exist · people notes with no "last talk" date. Fix or delete each hit in the same sitting; a lint list that is carried over is a to-do list, not a knowledge base.
-5. **Retrieval** — decode the words with `names.md` first, then search by file name, then tags, then full text. When a note was hard to find, rename it or add the alias you searched for — that is the maintenance loop.
-6. **Answering from notes** — every answer names the note and its date ("จาก `2025-05-11 notes.md`"). A note used for a status (who is doing what, a balance, a booking) that is older than 1 month, or for a fact older than 1 year, gets the line "โน้ตนี้อายุ … อาจเปลี่ยนแล้ว". **Two notes that disagree → show both with their dates**; never pick one silently.
-
-## Rules
-
-- Capture is fast; organisation happens weekly, not at capture time
-- **Never store passwords, OTPs, recovery codes, full ID or card numbers** — they go to a password manager (`digital-hygiene`)
-- Notes about other people: facts and preferences they shared with you, not gossip or health details they did not want written
-- Back up the `kb/` folder with the rest of the user's files (3-2-1 rule in `digital-hygiene`)
-
-Related: `meeting` (Leg 2 summaries file into `journal/`) · `important-docs` (documents, not notes) · `weekly-review`.
-
-## References
-
-- [`references/worked-example.md`](references/worked-example.md) — open for a model fix of a hard-to-find note
-- [`references/sources.md`](references/sources.md) — where the `names.md` and answering rules came from
-
-
-## reference: sources.md
-
-# Sources · personal-kb
-
-- Source for `names.md` and the answering rules: ideas from anthropics/knowledge-work-plugins `productivity/skills/memory-management` and `enterprise-search/skills/knowledge-synthesis` (Apache-2.0, rewritten, viewed 2026-11-10).
-
-
-## reference: worked-example.md
-
-# Worked example · personal-kb
-
-User: "I wrote down how to reset the water pump last year." Search `pump` → nothing; full-text `ปั๊ม` → 14 hits in chat exports. Found it in `2025-05-11 notes.md`, mixed with a shopping list. Fix: move into `reference/water pump – reset and service.md`, tags `#home #ปั๊มน้ำ #pump`, alias "Mitsubishi pump", link from `index.md` under Home. Next search: 2 seconds.
-
-
----
-
 # skill: travel-prep
 
 Use when a trip is near or a passport expires
@@ -158,7 +52,7 @@ Current visa-free list for Thai passports: [references/travel-facts.md](referenc
 
 Trip card · entry decision per traveller with source and date · checklist from the template · itinerary file `YYYY-MM-DD-destination-itinerary.md`.
 
-Related: `important-docs` (passport expiry) · `polite-message-th-en` (hotel or airline requests) · `digital-hygiene` (public Wi-Fi, SIM swap).
+Related: `important-docs` (passport expiry) · `human-writing/polite-message-th-en` (hotel or airline requests) · `digital-hygiene` (public Wi-Fi, SIM swap).
 
 ## เรียกเป็นคำสั่ง
 
@@ -303,3 +197,129 @@ Nok (Thai, 34) and her German husband, Tokyo 10–17 January 2027. Check on 2026
 - Japan visa exemption for Thai ordinary passports: 15 days, temporary measure to 30 June 2027 → covers 7 days; recheck in December.
 - Husband: German passport, Japan visa-free; returning to Bangkok he fills TDAC online before arrival.
 - Insurance: annual Asia plan; Japan 100 V, plug A/B — Thai two-flat-pin chargers fit, check the device says 100–240 V.
+
+
+---
+
+# skill: gift-idea-tracker
+
+Use when a gift is needed for a birthday or holiday
+
+# Gift Idea Tracker (ของขวัญและของฝาก)
+
+Never the blank-page "what do I get them" again — and no repeats, no awkward over- or under-giving.
+
+Registry template and occasion calendar: [references/gift-registry-template.md](references/gift-registry-template.md).
+
+## Workflow
+
+1. **Build the people list once** — family, close friends, boss/team, kids' teachers, helpers (แม่บ้าน, คนขับรถ, รปภ.). One block per person.
+2. **Load the occasion calendar** — birthdays plus the Thai calendar below; set a reminder 14 days ahead (30 days if shipping from abroad or ordering custom).
+3. **Capture year-round** — when someone says "อยากได้…" / "I wish I had…", add it to their wish list the same day with the date.
+4. **Before an occasion** — read the person's block: last 2 years' gifts (avoid repeats), wishes, sizes, dislikes, budget.
+5. **Shortlist 3 ideas** within budget — one from their wish list if any, one experience, one practical/consumable. Each with *why it fits this person*.
+6. **Decide and buy** — note delivery time; for a group gift name who collects money and the per-person share.
+7. **Log after giving** — what, cost, reaction (loved / fine / unused). The reaction is next year's data.
+
+## Thai occasions and what is customary
+
+| Occasion | Usual form | Notes |
+|---|---|---|
+| ปีใหม่ (New Year) | Gift basket (กระเช้า), snacks, small gift for helpers and teams | Order baskets by mid-December — prices and lead times rise |
+| ตรุษจีน | อั่งเปา (red envelope) to children and elders, even amounts; fruit (ส้ม) when visiting | Avoid amounts with 4; new notes |
+| สงกรานต์ | Visit elders, รดน้ำดำหัว with ผ้าขาวม้า/ผ้า, fragrant water, food | Plan travel weeks ahead |
+| วันแม่ 12 ส.ค. · วันพ่อ 5 ธ.ค. | Meal together, flowers (มะลิ for mothers), health items | Booking restaurants fills early |
+| Birthday | Personal gift; for elders, a merit-making outing (ทำบุญ) works well | |
+| งานแต่ง | ซองช่วยงาน in the envelope from the invitation | Amount by closeness and venue — family norm, not a rule |
+| งานบวช / ขึ้นบ้านใหม่ | ซองทำบุญ, or useful household item for a new home | |
+| งานศพ | ซองทำบุญ at the funeral rites; flowers/wreath (พวงหรีด) | No "gift" — never give anything festive |
+| Visit / back from a trip | ของฝาก — local snack or product | Team: one shareable box beats individual items |
+| Teacher (วันครู 16 ม.ค., end of term) | Card made by the child, small useful item | Check school policy |
+
+Amounts are family and social custom — there is no correct number; follow what the family did before and the user's budget.
+
+## Rules
+
+- **Budget is a hard ceiling**, set before looking at ideas
+- Experiences beat objects for people who have everything — always include one experience option
+- Kids: agree with the parents before anything big, noisy or screen-based
+- **Gifts to government officials**: a state official may accept a customary gift only up to 3,000 บาท per giver per occasion (ระเบียบ ป.ป.ช.); many companies have stricter no-gift policies — for work contacts, check their policy first
+- Track sizes with the date measured — children's sizes go stale in six months
+- Never put the price tag or receipt in the box, but keep the receipt (exchange) in the registry note
+
+## Output
+
+Shortlist table (idea · price · where to buy · why it fits · lead time) · updated person block · next reminders.
+
+Related: `human-writing/polite-message-th-en` (thank-you and declining messages) · `weekly-review` (upcoming occasions in the next 14 days).
+
+## References
+
+- [`references/worked-example.md`](references/worked-example.md) — open for a sample shortlist (birthday, budget 2,000 บาท)
+- [`references/sources.md`](references/sources.md) — gift-limit sources (checked 2026-10-06)
+
+
+## reference: gift-registry-template.md
+
+# Gift registry template
+
+One file `gift-tracker.md`. Keep people in alphabetical order; newest log line on top.
+
+## Person block
+
+```markdown
+## [Name] — [relationship]
+- Birthday: YYYY-MM-DD · Other dates: [wedding anniversary, วันเกิดลูก]
+- Budget per occasion: ___ บาท
+- Sizes (date measured): shirt ___ · shoes ___ · ring ___ · (YYYY-MM)
+- Likes: ___ · Dislikes / allergies: ___ · Already owns plenty of: ___
+- Coordinate with: [spouse, siblings — group gifts]
+
+### Wish list (date heard · item · where)
+- 2026-07-20 · walking shoes · said at the park
+
+### Given
+| Date | Occasion | Gift | Cost | Reaction (loved / fine / unused) |
+|---|---|---|---|---|
+| 2025-11-03 | Birthday | Blender | 1,650 | loved — uses daily |
+```
+
+## Occasion calendar (fill once a year)
+
+| Month | Fixed occasions | People |
+|---|---|---|
+| Jan | ปีใหม่ · วันครู 16 ม.ค. | |
+| Jan/Feb | ตรุษจีน (lunar date — check the year) | |
+| Apr | สงกรานต์ 13–15 เม.ย. | |
+| Aug | วันแม่ 12 ส.ค. | |
+| Dec | วันพ่อ 5 ธ.ค. · Christmas / year-end team gifts | |
+| Any | Birthdays, weddings, งานบวช, ขึ้นบ้านใหม่, new baby | |
+
+## Group gift note
+
+```
+Gift: ___  Total: ___ บาท  People: ___  Each: ___ บาท
+Collector: ___  PromptPay/account: ___  Paid by date: ___
+Bought by: ___  Card signed by: ___
+```
+
+
+## reference: sources.md
+
+# Sources · gift-idea-tracker
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.sec.or.th/TH/Documents/AboutUs/SEC-NACC-Guidelines-On-Ethical-Gifts-2020.pdf · https://www.prachachat.net/?p=1112842
+
+
+## reference: worked-example.md
+
+# Worked example
+
+Mother-in-law, 64, birthday 3 November, budget 2,000 บาท. Record: 2024 scarf (fine), 2025 blender (loved — uses daily); wish noted 2026-07-20: "เข่าไม่ค่อยดี อยากเดินสวนแต่ไม่มีรองเท้าดีๆ"; dislikes perfume.
+
+Shortlist:
+1. Walking shoes with good cushioning, size 38 (measured 2026-07) — 1,890 บาท — straight from her wish, practical.
+2. Morning ทำบุญ at her favourite temple + breakfast together — about 1,200 บาท — experience she values.
+3. Herbal compress set + Thai massage voucher — 1,500 บาท — supports the knee comment without being medical.
+
+Chosen: 1 + a handwritten card. Log reaction after the day.

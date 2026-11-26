@@ -14,7 +14,7 @@ description: Use when software bug reports pile up and need triage
 |---|---|
 | One bug you found yourself and must write up | `bug-report-template` |
 | Write test cases from requirements | `test-case-template` |
-| You already know where the bug is and must fix it | `targeted-fix` |
+| You already know where the bug is and must fix it | `fix-at-source/targeted-fix` |
 
 ## Prerequisites
 
@@ -34,14 +34,14 @@ description: Use when software bug reports pile up and need triage
    - `ยืนยันแล้ว` (confirmed) means it can be reproduced, with steps and images.
    - `ทำซ้ำไม่ได้` (cannot reproduce): state what you tried, and that it is probably about the reporter's data, environment or usage (tag `อนุมาน`, inferred).
    - `ข้อมูลไม่พอ` (not enough information): write the questions to ask the reporter. Do not send them yourself.
-7. **Rank the `ยืนยันแล้ว` groups** with the skill `decision-scoring`, command `priority`.
+7. **Rank the `ยืนยันแล้ว` groups** with the skill `decision-desk/decision-scoring`, command `priority`.
    - **Hard rules (always first, not part of scoring):** severity S1 per `bug-report-template` (system unusable, data lost, no workaround) · a confirmed security hole goes straight to `security-gate`
    - For the rest, use `rice` = people affected per month × impact (0.25–3) × confidence (0–1) ÷ effort (person-days). If there is a real deadline (contract, law, campaign), use `wsjf` = (value + time urgency + risk reduction) ÷ job size.
    - The reach number comes from the count of reports merged in step 3 or from real usage statistics, never a guess. If unknown, put `(รอยืนยัน)` (awaiting confirmation) and start from the lowest possible value. Impact and confidence are values the reviewer gives (defaults, not measured), and the user can adjust them.
    - Two groups whose scores differ by less than about 10% are a near tie. Let a person choose the order. Do not let the script choose.
    - Put the rank in the rank column of `qa/inbox-triage.md`.
 8. **Write the report.** Each confirmed group gets a file `qa/bugs/BUG-<NNNN>-<topic>.md` per `bug-report-template`. Then summarise every group in `qa/inbox-triage.md` with the table `| วันที่ | เรื่อง | แหล่ง | จำนวนรายงาน | สถานะ | ไฟล์ |`. In the "ไฟล์" column, put all cross-links for the group: report IDs from every source · existing duplicate `qa/bugs/` files · the commit or PR from step 4, so a person can follow everything from one place.
-9. **Update `qa/inbox-state.json`,** then run `status-report`.
+9. **Update `qa/inbox-state.json`,** then run `superuser/status-report`.
 
 ## Never
 

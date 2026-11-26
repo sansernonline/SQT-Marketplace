@@ -31,7 +31,7 @@ Deep mode uses several times more tokens than plain mode (section 8). If the use
 The lead does this alone, before releasing the first worker (the rule "lay out the whole task graph first" in [`team-roles`](team-roles.md), section "แบ่งงาน" (splitting the work)).
 
 1. Ask yourself first: what will the user do with the report · how much of an answer is enough · if it is unclear and readings differ so much that the whole job differs → pick the reading by research + vote ([`autonomy`](autonomy.md)), state it in the plan, and start; do not ask.
-2. Split the topic into **4–12 sub-questions**. Cover the whole topic with no overlap and no gap (the split table of `parallel-split-and-merge`).
+2. Split the topic into **4–12 sub-questions**. Cover the whole topic with no overlap and no gap (the split table of `crew-patterns/parallel-split-and-merge`).
 3. Each one has 4 fields.
 
    | Field | Meaning |
@@ -41,18 +41,18 @@ The lead does this alone, before releasing the first worker (the rule "lay out t
    | `depends_on` | ids that must finish first (for example a comparison waits for the one that names the options) · waits for none = `[]` |
    | Size | `S` one claim or one official source · `M` compare 2–3 sources · `L` must read a long document or many pages |
 
-4. If some questions wait on others → have the planner work out the release order: `node <plugin>/skills/parallel-split-and-merge/scripts/plan.mjs plan.json`. You can pass `queue.json` straight to the planner (the planner reads `ข้อย่อย` · `คำถาม` · `depends_on` · `ขนาด` · `ไฟล์ผล` by itself). The output gives the critical path and release order. Add `--html research/<task-name>/plan.html` to get a DAG (directed acyclic graph) and Gantt chart. When reporting, add `--actual` to see which questions took more time and tokens than estimated (a worker's task description must start with the question's id). If no question waits on another, release all of them at once and skip the planner.
+4. If some questions wait on others → have the planner work out the release order: `node <plugin>/skills/crew-patterns/parts/parallel-split-and-merge/scripts/plan.mjs plan.json`. You can pass `queue.json` straight to the planner (the planner reads `ข้อย่อย` · `คำถาม` · `depends_on` · `ขนาด` · `ไฟล์ผล` by itself). The output gives the critical path and release order. Add `--html research/<task-name>/plan.html` to get a DAG (directed acyclic graph) and Gantt chart. When reporting, add `--actual` to see which questions took more time and tokens than estimated (a worker's task description must start with the question's id). If no question waits on another, release all of them at once and skip the planner.
 5. If you must first know what there is to compare (for example how many products exist) → release a survey question first, then add sub-questions to the queue.
 
 ## 3 · Central queue `research/<task-name>/queue.json`
 
-Template: [`templates/research-queue.json`](../templates/research-queue.json). The task name is lowercase English joined with `-` (`document-naming`).
+Template: [`templates/research-queue.json`](../templates/research-queue.json). The task name is lowercase English joined with `-` (`workspace-rules/document-naming`).
 
 - Each question's status uses the standard words of `human-writing`: `ค้างอยู่` (pending, not yet released) · `ทำอยู่` (in progress) · `เสร็จ` (done) · `ติด` (blocked).
-- **Only the lead writes it.** Workers touch only their own result file (rule 3 of `parallel-split-and-merge`). A worker returns a path plus a first line giving the result, and the lead then updates the status.
+- **Only the lead writes it.** Workers touch only their own result file (rule 3 of `crew-patterns/parallel-split-and-merge`). A worker returns a path plus a first line giving the result, and the lead then updates the status.
 - When you release a worker, change the status from `ค้างอยู่` to `ทำอยู่` and record the worker's name and the last-edit time. When the worker returns, change it to `เสร็จ` or `ติด` with the reason in `หมายเหตุ` (note).
 - **Session lost or context nearly full** → open `queue.json` and continue: skip `เสร็จ` · for `ทำอยู่` with no result file or an incomplete one, release a new worker to redo it · for `ติด`, read the reason and decide. Sections 4–5 of the [`handoff`](../../handoff/SKILL.md) note point to queue.json instead of retelling it.
-- If a question is `ติด` twice, record it as `ยังไม่ได้ตรวจ` (not yet checked) in the report and stop looping (same as rule 6 of `parallel-split-and-merge`).
+- If a question is `ติด` twice, record it as `ยังไม่ได้ตรวจ` (not yet checked) in the report and stop looping (same as rule 6 of `crew-patterns/parallel-split-and-merge`).
 
 ## 4 · Worker result file `research/<task-name>/<id>.md`
 
@@ -84,7 +84,7 @@ Source ranking and the 3-source rule follow [`research-with-sources`](../../rese
 
 ## 6 · Check every claim
 
-Unlike the plain playbook, which spot-checks 3 numbers, deep mode checks **every row** before merging the report (items that fail are filtered out, in the manner of the Reranker in `agent-patterns`).
+Unlike the plain playbook, which spot-checks 3 numbers, deep mode checks **every row** before merging the report (items that fail are filtered out, in the manner of the Reranker in `crew-patterns/agent-patterns`).
 
 - Send a fresh `general-purpose` to check each result file or each group of rows. It must not be the worker who wrote that file (fresh eyes).
 - Why not `reviewer`: `reviewer` has only Read · Grep · Glob · Bash · Skill and no tool to open the web, so it cannot open a link and compare text. A fresh `reviewer` is still used at the end to check the merged report (every paragraph has a reference number, and the number points to the right row).
@@ -115,7 +115,7 @@ The lead writes it alone, at `research/<task-name>/report.md`. Use only rows tha
 - **Number of workers = width of the question tree** (the number of questions that can be released at once), but not above what `team-roles` can bear. Put the value in `ลูกทีมสูงสุด` (max workers) of `queue.json`.
 - Stop searching a sub-question once **3 independent sources agree** and there is 1 official source (the rule of `research-with-sources`). Do not search more just for comfort.
 - The multi-agent system Anthropic describes uses about 15 times the tokens of a chat (checked 2026-10-27) → before starting, tell the user this mode costs more than plain mode, and what they get is a report with a citation for every claim.
-- **More than 8 at once** → offer a dynamic workflow for the user to start themselves (`parallel-split-and-merge`, section on dynamic workflow). The lead does not start it.
+- **More than 8 at once** → offer a dynamic workflow for the user to start themselves (`crew-patterns/parallel-split-and-merge`, section on dynamic workflow). The lead does not start it.
 
 ## 9 · Repeat research over time
 
@@ -164,4 +164,4 @@ If the checker opens the link and does not find this text on the page → cut ro
 ## Sources
 
 - The idea of a lead agent plus parallel search subagents · saving results to files and returning light references · a separate citation agent (CitationAgent) · about 15 times the tokens of a chat: [Anthropic: How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) · actually opened 2026-10-27
-- The way of splitting work, the rule against writing to the same place, and the planner come from `parallel-split-and-merge` · the 3-source rule comes from `research-with-sources` in this set
+- The way of splitting work, the rule against writing to the same place, and the planner come from `crew-patterns/parallel-split-and-merge` · the 3-source rule comes from `research-with-sources` in this set

@@ -1,10 +1,10 @@
 # SQT software-development — Kimi Code CLI
 
-> สร้างอัตโนมัติจาก plugins/software-development/ โดย scripts/build/build-targets.mjs (v3.9.1) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/software-development/ โดย scripts/build/build-targets.mjs (v3.10.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Simulates a complete software development company — 38 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 95 skills and 29 slash commands for the whole SDLC.
 
-ชุดนี้มี skill 138 ตัว · บทบาท 42 บทบาท · คำสั่งสำเร็จรูป 12 คำสั่ง
+ชุดนี้มี skill 114 ตัว · บทบาท 42 บทบาท · คำสั่งสำเร็จรูป 12 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `/skill:ชื่อคำสั่ง`

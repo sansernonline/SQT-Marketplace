@@ -12,7 +12,7 @@ description: Use when starting a repository or setting up a new machine
 
 Starting a new repository · a newcomer needs half a day before the project runs · a pull request shows a whole-file diff because formatters disagree · nobody knows where the documents are
 
-Not for: build and deploy pipeline → `cicd-and-release` · per-environment settings and secrets → `config-and-secrets` · choosing an architecture → `architecture-patterns` · test framework → `testing-standards` · naming documents → `document-naming`
+Not for: build and deploy pipeline → `cicd-and-release` · per-environment settings and secrets → `config-and-secrets` · choosing an architecture → `architecture-patterns` · test framework → `testing-standards` · naming documents → `workspace-rules/document-naming`
 
 ---
 
@@ -107,7 +107,7 @@ Use the Keep a Changelog 1.1.0 format. Order the headings in each version as fol
 - A new dependency needs a reason in the pull request (`lazy-coding`).
 
 **Before adding a library, ask 3 questions:** can the language's standard library do it, is the project still alive, and
-does the license allow use in work that is sold (see `prior-art-review`)?
+does the license allow use in work that is sold (see `research-with-sources/prior-art-review`)?
 
 ---
 
@@ -133,4 +133,4 @@ Tick `[x]` only for items you **ran or opened in this round**. For an item not y
 - [`references/code-folder.md`](references/code-folder.md) — annotated code-folder tree and the per-stack table (Node · .NET · Python · Dart / Flutter); open when choosing code, test and file-name layout
 - [`references/readme-skeleton.md`](references/readme-skeleton.md) · [`references/readme-by-stack.md`](references/readme-by-stack.md) — README section table and fallback commands by language; open at layer 3 of item 2
 - [`references/changelog-examples.md`](references/changelog-examples.md) — open when writing a CHANGELOG entry
-- Temp files → `temp-file-discipline` · commits that can build a CHANGELOG → `commit-message-format` · before adding a dependency → `lazy-coding`, `prior-art-review` · file templates → `assets/starter-files.md`
+- Temp files → `workspace-rules/temp-file-discipline` · commits that can build a CHANGELOG → `commit-message-format` · before adding a dependency → `lazy-coding`, `research-with-sources/prior-art-review` · file templates → `assets/starter-files.md`

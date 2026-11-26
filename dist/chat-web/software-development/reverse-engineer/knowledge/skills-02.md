@@ -13,8 +13,8 @@ Use when someone wants an app like another app
 
 | Task | Use this instead |
 |---|---|
-| Choosing a library, tool or model to adopt instead of building it | `prior-art-review` |
-| General research (technology · market) that is not about a single app | (if plugin `superuser` is installed) playbook `research`. If it is missing, use this skill or `prior-art-review`, whichever is closer. |
+| Choosing a library, tool or model to adopt instead of building it | `research-with-sources/prior-art-review` |
+| General research (technology · market) that is not about a single app | (if plugin `superuser` is installed) playbook `research`. If it is missing, use this skill or `research-with-sources/prior-art-review`, whichever is closer. |
 
 ## 1 · Before searching — narrow the frame
 
@@ -156,7 +156,7 @@ The next documents cite back with the code (`IMP-03` · `[7]`) so you can trace 
 
 - Use the reference app as **inspiration**, not as a pattern to copy. Never copy their text, icons, logo, images or proper names into the work.
 - Our app's name must not be so similar that it confuses people (use `product-naming` if a name is needed).
-- If any part is open source, check the license before thinking of using the code (`prior-art-review` step 4).
+- If any part is open source, check the license before thinking of using the code (`research-with-sources/prior-art-review` step 4).
 - You may quote a user opinion briefly with its source. Do not include the reviewer's name.
 
 ---
@@ -171,7 +171,7 @@ The next documents cite back with the code (`IMP-03` · `[7]`) so you can trace 
 - [ ] The hand-off table to BRD / SRS / mockup is present
 - [ ] No image, text or logo of theirs is in the document (links only)
 - [ ] Raw notes are in `_to_delete/research/`, not mixed into `docs/`
-- [ ] At the end, a status table is written following `status-report`
+- [ ] At the end, a status table is written following `superuser/status-report`
 
 ---
 
@@ -183,7 +183,7 @@ The next documents cite back with the code (`IMP-03` · `[7]`) so you can trace 
 | "Should make the UI more modern" | It cannot be checked or done. Say which page, what problem, what evidence, how to fix it. |
 | A proposal that comes from the agent's own taste | Without evidence it is not a proposal. Move it to "Unknown". |
 | Conclude from a single review or thread | A loud voice does not mean a majority problem. |
-| Copy every feature to be "as complete as theirs" | Our first app would grow too big to finish. Cut with `superuser:simplify`. |
+| Copy every feature to be "as complete as theirs" | Our first app would grow too big to finish. Cut with `superuser:ground-rules`. |
 | Use old-edition data without checking the date | The feature may have been changed or removed. |
 
 ---
@@ -192,13 +192,13 @@ The next documents cite back with the code (`IMP-03` · `[7]`) so you can trace 
 
 | Need | Use together with |
 |---|---|
-| Decide whether to adopt a ready-made product or build | `prior-art-review` |
+| Decide whether to adopt a ready-made product or build | `research-with-sources/prior-art-review` |
 | Turn proposals into BR / FR | `user-story-writer` · `srs-writing` |
 | Assess their UI and design ours | `ui-craft` · the platform skill |
-| Cut proposals down to what the first app needs | `superuser:simplify` |
+| Cut proposals down to what the first app needs | `superuser:ground-rules` |
 | Name our app so it does not collide with theirs | `product-naming` |
-| Raw notes during the search | `temp-file-discipline` |
-| Report status at the end | `status-report` |
+| Raw notes during the search | `workspace-rules/temp-file-discipline` |
+| Report status at the end | `superuser/status-report` |
 
 
 ## reference: exploring-the-app.md
@@ -233,7 +233,7 @@ Use when a task reads large material or writes long output
 - Context fills unusually fast, or `/compact` triggers often.
 - Setting context rules for the whole team or every project.
 
-Not for: shorter **answers** → `answer-shape` · work summary across sessions → `handoff` · where temp files go → `temp-file-discipline` · a coding loop that must survive context loss → `spec-to-code-loop` (plugin `software-development`).
+Not for: shorter **answers** → `lean-reply/answer-shape` · work summary across sessions → `handoff` · where temp files go → `workspace-rules/temp-file-discipline` · a coding loop that must survive context loss → `spec-to-code-loop` (plugin `software-development`).
 
 ## Steps
 
@@ -263,7 +263,7 @@ A subagent has its own context: it can read 20 items and send back one paragraph
 
 | Use a subagent when | Do it yourself when |
 |---|---|
-| You expect to read over 20k tokens or over 5 files whose location you do not know (default, not measured; estimate from the step's PERT in `model-scorecard` if present), or must search across many items to answer one question | You know the files and locations, even 4–6 of them: read them together in one message, faster than a new subagent |
+| You expect to read over 20k tokens or over 5 files whose location you do not know (default, not measured; estimate from the step's PERT in `superuser/model-scorecard` if present), or must search across many items to answer one question | You know the files and locations, even 4–6 of them: read them together in one message, faster than a new subagent |
 | Exploring an unknown folder or project · checking across many files | Editing the file already open · work that needs full detail to continue |
 
 **Always set the format and length of the result**, or the subagent returns a long report and you save nothing. Wrong: "Take a look at these 12 contracts". Right: "Find the expiry date, penalty and renewal terms of each contract. Return a table, 1 line per contract, with file:page. Do not paste contract text. At most 15 lines." Code work: "Return a list of file:line in call order, do not paste code".
@@ -272,7 +272,7 @@ A subagent has its own context: it can read 20 items and send back one paragraph
 ```bash
 <command with long output> > <temp folder>/out.log 2>&1; tail -20 <temp folder>/out.log
 ```
-Use it for text pulled from the web or PDFs · big data tables (filter or count with a script, do not read every row) · test results · logs · file conversions. Where to put these files → `temp-file-discipline`. Note what you find into a file on the first pass so you do not read it again.
+Use it for text pulled from the web or PDFs · big data tables (filter or count with a script, do not read every row) · test results · logs · file conversions. Where to put these files → `workspace-rules/temp-file-discipline`. Note what you find into a file on the first pass so you do not read it again.
 
 If it repeats on every task, let a hook filter long output before it enters context: coding example in `superuser` → `references/code-extensions.md` (the addition in plugin `software-development`).
 
@@ -366,40 +366,3 @@ Open it when working on a Windows machine through Git Bash or PowerShell · ever
 - `perl -i` or `sed -i` on a CRLF file: a regex anchored to the line end with `$` must allow for `\r` (`(\r?)$`), or the edit silently does not apply
 - `cd` in Bash does not carry across commands · use a full quoted path, because folder names often contain spaces and `&`
 - A `.cmd` script that ends with `pause` waits for a key · when running it from an agent, pass empty stdin (`< /dev/null`), save the output to a file, and read the end of the file
-
-
----
-
-# skill: principle-build-a-tool-not-handwork
-
-Use when the same edit repeats across many files or rows
-
-# principle · build a tool, not handwork — turn mechanical work into a tool
-> Use together with: `principle-small-verifiable-steps` (cut into small pieces that can be checked) · `parallel-split-and-merge` (run several pieces at once)
-
-> Work has 2 parts: the part that needs judgment, and the part that is purely mechanical.
-> For the mechanical part, do not make the agent work out a new method every time. Write it as a program once, and save the thinking effort for the parts that need a decision.
-
-## When to build a tool
-
-| Signal | Tool |
-|---|---|
-| The same change in more than 10 places (files · sheet rows · documents · code) | A script or find-and-replace, tried on a sample first (code: codemod · `sed`) |
-| Many documents from one template (40 quotations) | A template + a script that merges data from the sheet |
-| Checking every screen, every file or every row | A looping check script that prints a result table |
-| Every agent must set up the environment itself before checking | A `start` script in the verify skill (`app-verifier-setup` (plugin `software-development`)) |
-| Moving or importing data | A script that gives the same result when rerun, with a trial mode (dry run) |
-| The claim "everywhere already does it this way" | A grep command or script that proves it |
-| Doing the same job for the 3rd time | Make it a command or a skill |
-
-## Rules for the tool
-
-- **Same result when rerun** — running it twice must not break anything and must not change things twice (`principle-safe-to-rerun` (plugin `software-development`))
-- **Print results that can be checked** — say how many were changed · which items were skipped · which items failed
-- **As small as it can be and still work** — it need not be pretty, and need not handle every future case (`lazy-coding` (plugin `software-development`))
-- **Keep it in the right place** — a one-off script goes in `_to_delete/`, while a script used repeatedly goes in `scripts/` with one line in the README saying when to run it
-- **The skill shrinks to a thin description** — the fixed steps live in the script, while SKILL.md says only when to call it and how to read the result
-
-## When not to bother
-
-A change in 2–3 places that really differ, because writing a script takes longer than editing by hand

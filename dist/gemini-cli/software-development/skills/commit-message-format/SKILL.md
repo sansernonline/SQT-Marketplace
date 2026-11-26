@@ -5,11 +5,11 @@ description: Use when setting up commitlint or semantic-release
 
 # Conventional Commit Message Format
 
-> When to commit and logging each step → `commit-log` (shared skill). This file adds the release side: scope, commitlint, semantic-release.
+> When to commit and logging each step → `workspace-rules/commit-log` (shared skill). This file adds the release side: scope, commitlint, semantic-release.
 
 ## When to use this skill
 
-- Writing commits that feed release tooling (commitlint, semantic-release) — everyday commits use `commit-log`
+- Writing commits that feed release tooling (commitlint, semantic-release) — everyday commits use `workspace-rules/commit-log`
 - Reviewing commits in a PR for consistency
 - Setting up commitlint / semantic-release
 
@@ -85,7 +85,7 @@ Co-authored-by: ...      ← attribution
 
 - [ ] Type matches the change (not just "chore" for everything)
 - [ ] Scope is meaningful (component/module name)
-- [ ] Subject is imperative and ≤50 chars — Thai subjects count base consonants only (~50); vowels and tone marks do not count · กติกาเต็มอยู่ใน `superuser` skill `commit-log`
+- [ ] Subject is imperative and ≤50 chars — Thai subjects count base consonants only (~50); vowels and tone marks do not count · กติกาเต็มอยู่ใน `superuser` skill `workspace-rules/commit-log`
 - [ ] Body explains WHY (if change isn't obvious)
 - [ ] Breaking changes marked with `!` AND `BREAKING CHANGE:` footer
 - [ ] Linked to issue/ticket when applicable

@@ -14,7 +14,7 @@ Your calendar is the honest record of your priorities. Read it once a month.
 3. **Compute the split** in hours and % of available hours (e.g. 4 weeks × 5 days × 8 h = 160 h).
 4. **Compare with the target split** the user names (default targets below) and with their stated top three priorities — any priority with under 10% of time is not really a priority this month.
 5. **List recurring meetings** with: sessions in the period, total hours (× attendees if the user organises it), decisions produced.
-6. **Pick the worst three by numbers** with `decision-scoring` command `priority` (below), then choose an action for each: kill · shorten · less often · make async · send a delegate.
+6. **Pick the worst three by numbers** with `decision-desk/decision-scoring` command `priority` (below), then choose an action for each: kill · shorten · less often · make async · send a delegate.
 7. **Protect** — put focus blocks and guard rails into next month's calendar *now*, as real events.
 8. **Record** the split in a running file so next month shows a trend.
 
@@ -37,7 +37,7 @@ Managers often run 50–60% meetings by design — adjust targets to the role, b
 
 **Refocus overhead.** A meeting dropped into a focus block costs its length plus about 23 minutes to get back into the work. Count it: `meetings that cut a focus block × 23 min` and add it to the meetings column — 5 scattered 30-minute calls in a day cost about 2 h of focus on top of their 2.5 h. Same-length meetings back to back cost nothing extra, which is why the guard rails below cluster them. (23 minutes: Mark, Gudith and Klocke, "The cost of interrupted work: more speed and stress", CHI 2008 — figure as widely quoted; paper not opened on 2026-10-23 → รอยืนยัน.)
 
-## Rank recurring meetings by numbers (`decision-scoring`, command `priority`)
+## Rank recurring meetings by numbers (`decision-desk/decision-scoring`, command `priority`)
 
 Per recurring meeting give: **urgent 1–5** (does a decision or deadline wait on it this month: 5 = yes now, 1 = no) · **important 1–5** (how much it serves one of the user's top three priorities; the user's own score) · **minutes** = the user's own minutes per month, plus the 23-minute refocus overhead for each session that cuts a focus block. Run `node decide.mjs priority meetings.json` with `{"method":"eisenhower","items":[{"name":"weekly status sync","urgent":2,"important":2,"minutes":240},{"name":"daily stand-up","urgent":3,"important":3,"minutes":600},{"name":"vendor call","urgent":3,"important":4,"minutes":240}]}`.
 
@@ -56,7 +56,7 @@ Per recurring meeting give: **urgent 1–5** (does a decision or deadline wait o
 ## Rules
 
 - Name the worst offenders politely but concretely ("weekly sync, 4 sessions, zero decisions")
-- Changes go to the organiser with an alternative, never a silent decline — `polite-message-th-en` has wording
+- Changes go to the organiser with an alternative, never a silent decline — `human-writing/polite-message-th-en` has wording
 - The audit is worthless unless next month's calendar changes before the session ends
 
 Output: split table vs target · worst three with action · events added · one-line trend vs last month.

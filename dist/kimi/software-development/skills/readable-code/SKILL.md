@@ -14,7 +14,7 @@ description: Use when writing or reviewing code for readability
 - A newcomer joins the project and cannot find files
 - The `utils/` folder is starting to become a junk drawer
 
-Not for: writing **less** code → `lazy-coding` · repo-level folder structure, README, linter → `project-bootstrap` · correctness, security, testing → `code-review-checklist` · documentation file names → `document-naming` · product or brand names → `product-naming`
+Not for: writing **less** code → `lazy-coding` · repo-level folder structure, README, linter → `project-bootstrap` · correctness, security, testing → `code-review-checklist` · documentation file names → `workspace-rules/document-naming` · product or brand names → `product-naming`
 
 ## Steps
 
@@ -36,7 +36,7 @@ Not for: writing **less** code → `lazy-coding` · repo-level folder structure,
    - Return early rather than nest `else`.
    - If indentation goes past 3 levels, split the function.
 7. **Write comments for "why", not "what".** A comment that explains what the code does means the name is wrong: fix the name and delete the comment. Keep a comment only for: an external constraint (API · law · hardware) · a deliberate decision that looks odd · a formula or business rule with its source (cite the clause number) · a `TODO(owner)` with a condition. If you change code, change its comment in the same round.
-8. **Before review, sort every comment the diff adds or edits:** delete (translates code · outdated · commented-out code) · rename then delete (explains what a name is) · turn into a type, assert, test or lint then delete (states a constraint; `repeated-mistakes-to-checks`) · keep (the 4 kinds in step 7). If the diff is large, have a mid-level subagent read only and make the list, while the main agent decides. Report counts: deleted · renamed · became checks · kept.
+8. **Before review, sort every comment the diff adds or edits:** delete (translates code · outdated · commented-out code) · rename then delete (explains what a name is) · turn into a type, assert, test or lint then delete (states a constraint; `learn-loop/repeated-mistakes-to-checks`) · keep (the 4 kinds in step 7). If the diff is large, have a mid-level subagent read only and make the list, while the main agent decides. Report counts: deleted · renamed · became checks · kept.
 9. **Lay out files by feature, not by file type.** The test: a newcomer gets "the save-invoice button does not work" and must guess the right folder within 30 seconds. Layout example → `references/examples.md`.
    - A file name is the name of what it mainly exports (`InvoiceRenderer` in `invoice-renderer.ts`); letter case follows the language (Dart/Python snake_case, .NET `InvoiceRenderer.cs`).
    - A test file sits beside the file it tests, except where tooling forces a test folder (Flutter `test/` · .NET `tests/`; table in `project-bootstrap` step 1), where `test/` mirrors `lib/` exactly.

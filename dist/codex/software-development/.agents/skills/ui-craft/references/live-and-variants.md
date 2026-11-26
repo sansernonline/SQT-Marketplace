@@ -24,7 +24,7 @@ Never deliver work whose values live only in the browser — they vanish when th
 Use for a piece with several routes where choosing wrong is costly (hero · main card · empty page) · for small pieces (button color · corner radius) section 1 is enough
 
 1. Name exactly 1 piece (for example `product card in the list page`) and what must not change (tokens · sample data · box size)
-2. Make **3 genuinely different variants** — different in structure (image on top/beside · price prominent/name prominent), not just in color · for a large piece, send one new subagent per variant per `parallel-attempts-pick-best`
+2. Make **3 genuinely different variants** — different in structure (image on top/beside · price prominent/name prominent), not just in color · for a large piece, send one new subagent per variant per `crew-patterns/parallel-attempts-pick-best`
 3. Put all 3 variants in the existing mockup file and switch with an attribute; do not make 3 files:
    ```html
    <div class="variants" data-show="a">

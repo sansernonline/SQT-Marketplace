@@ -56,7 +56,7 @@ The conversion rate optimization (CRO) specialist should:
    - Sample size + duration
    - Tracking plan
 
-9. **Produce polished audit report** using `polished-document-style` skill (from superuser):
+9. **Produce polished audit report** using `design-gate/polished-document-style` skill (from superuser):
    - Executive summary
    - Funnel breakdown (funnel diagram via `diagram-figures`, house style)
    - Heuristic scorecard
@@ -120,7 +120,7 @@ The recommendation engineer should:
    - Online A/B test: click-through rate (CTR), conversion, revenue per impression
    - Guardrail metrics
 
-9. **Produce polished design document** using `polished-document-style` skill (from superuser):
+9. **Produce polished design document** using `design-gate/polished-document-style` skill (from superuser):
    - Architecture diagram (`diagram-figures`, house style)
    - Data flow
    - Algorithm rationale + alternatives considered

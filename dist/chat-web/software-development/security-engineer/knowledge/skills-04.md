@@ -1,3 +1,240 @@
+# skill: auth-implementation-patterns
+
+Use when building login with sessions, JWT, OAuth or SSO
+
+# auth-implementation-patterns — secure login, token, MFA and authorization choices
+
+## Use when
+- Building login/signup/logout or a password reset flow.
+- Adding multi-factor authentication (MFA): TOTP, SMS, WebAuthn.
+- Choosing session vs token authentication.
+- Integrating OAuth or OpenID Connect (OIDC) logins, or single sign-on (SSO) with SAML or OIDC.
+- Designing API authentication (API keys, JSON Web Token (JWT), OAuth).
+- Reviewing existing auth code for security issues.
+
+## Steps
+
+1. **Choose the pattern by who is authenticating.**
+   - Browser user, first-party app → session cookies (`HttpOnly`, `Secure`, `SameSite`). Cross-domain → JWT in an `HttpOnly` cookie, never `localStorage`.
+   - Mobile app → OAuth 2.0 PKCE flow.
+   - Service-to-service → same org: mTLS or service mesh; external: OAuth 2.0 Client Credentials.
+   - Third-party developer → API keys (with rotation) or OAuth.
+
+2. **Sessions (server-rendered apps, monoliths, one domain).** Cookie `HttpOnly` + `Secure` + `SameSite=Lax` (or Strict). Session ID cryptographically random, ≥ 128 bits. Store in Redis with a time-to-live (TTL), not in app memory if more than one instance runs. Idle timeout 30 min, absolute timeout 8–12 hours. Issue a new session ID when privileges change (login, role change). On logout, delete the session from the store. Avoid: session inside a JWT (cannot revoke) · session token in `localStorage` (cross-site scripting (XSS) can steal it) · same ID after login (session fixation).
+
+3. **JWT (microservices, mobile, single-page app (SPA) with a backend API).** JWT is overused: with a single backend, sessions are simpler and safer. Algorithm `RS256` or `ES256`, not `HS256` for distributed systems. Access token 5–15 min. Refresh token lives days, is stored separately, is revocable, and is replaced each time it is used. Required claims `sub`, `iat`, `exp`, `iss`, `aud`. Store in an `HttpOnly Secure` cookie. Have a way to cancel tokens (blocklist, short expiry). Avoid: accepting `alg: none` (check the algorithm explicitly) · skipping signature verification · sensitive data in the payload (base64, not encrypted).
+
+4. **OAuth 2.0 / OIDC ("Login with Google/GitHub", handing login to an identity provider (IdP)).** Always Authorization Code Flow with PKCE, even for confidential clients (steps in [`references/auth-flows.md`](references/auth-flows.md)). Validate the `id_token` signature with the IdP's JWKS, and validate `aud`, `iss`, `exp`, `nonce`. Use the `state` parameter against cross-site request forgery (CSRF) and validate it. Match `code_verifier` to `code_challenge`. Use a library (Auth0, Passport.js), do not write your own. Avoid: implicit flow · Resource Owner Password Credentials flow (both deprecated).
+
+5. **MFA.** For a new app use WebAuthn (passkeys) by default (no shared secret to steal). Use TOTP when users need easy standard 2FA. Use SMS or email only as a last resort (SMS is not safe against SIM swap). Details: [`references/mfa.md`](references/mfa.md).
+
+6. **Passwords.**
+   - Hash with **Argon2id** (preferred) or **bcrypt** with cost ≥ 12. Never MD5, SHA-1, raw SHA-256 or plain text.
+   - Policy per NIST SP 800-63B-4 (checked 2026-10-14): minimum **15 characters** when the password is the only factor, **8** when used only inside MFA. Check against breached passwords (Have I Been Pwned (HIBP) API). Allow long passphrases (any maximum at least 64) and special characters. No forced composition rules, no forced regular changes (only on suspected breach).
+   - Reset flow: the response is the same whether or not the email exists. Token random, ≥ 256 bits, stored as a hash, expires in 15 minutes. After the new password is set, revoke all old sessions and send a confirmation email. All 9 steps: [`references/auth-flows.md`](references/auth-flows.md).
+
+7. **Lockout and rate limiting.** 5 failed attempts in 15 min → lock 15 min; 10 in 1 hour → lock 1 hour; key on IP + email together. Message "Too many failed attempts. Try again in 15 minutes." Never "Account locked." (reveals the account exists). Use existing tools: [`references/libraries-and-code.md`](references/libraries-and-code.md).
+
+8. **API authentication.** API key for simple server-to-server · OAuth 2.0 Client Credentials for service-to-service · mTLS for high-security internal · HMAC signing for webhooks. For an API key, show the secret once at creation, store it as a hash, let users revoke it at once. Table: [`references/api-auth-and-authorization.md`](references/api-auth-and-authorization.md).
+
+9. **Authorization.** RBAC (Role-Based Access Control) as the main model; ABAC (Attribute-Based Access Control) when permissions depend on data attributes. Check at every endpoint, on the server, using the user from the session or token. Never trust a role sent by the client or JWT claims as the authorization source.
+
+## Check before done
+- [ ] Session ID regenerated on login (fixation)
+- [ ] CSRF token or SameSite cookie
+- [ ] Rate limiting (brute force) and HIBP check or MFA (credential stuffing)
+- [ ] Redirect URLs on an allowlist (open redirect)
+- [ ] Same error message every time (user enumeration)
+- [ ] Constant-time comparison (timing attacks)
+- [ ] No token in the URL; header or cookie only
+- [ ] Logout invalidates on the server
+- [ ] Authorization re-checked after a role change
+- [ ] No homemade crypto or auth; no reversible password storage
+
+## References
+- [`references/auth-flows.md`](references/auth-flows.md) — open when writing session, JWT, OAuth with PKCE or password reset code
+- [`references/mfa.md`](references/mfa.md) — open when building MFA (TOTP setup, WebAuthn, SMS limits)
+- [`references/api-auth-and-authorization.md`](references/api-auth-and-authorization.md) — open when designing API keys or RBAC/ABAC
+- [`references/libraries-and-code.md`](references/libraries-and-code.md) — open when choosing a library or needing hashing and rate-limit samples
+- [`references/sources.md`](references/sources.md) — NIST source and check date
+
+
+## reference: api-auth-and-authorization.md
+
+# API Authentication และ Authorization Patterns
+
+How each type of API authentication works, principles for managing API keys, and examples of RBAC and ABAC
+
+## Pattern 7: API Authentication
+
+| Method | Use case | Token format |
+|--------|----------|--------------|
+| **API Keys** | Server-to-server, simple | `sk_live_xxx` |
+| **OAuth 2.0 Client Credentials** | Service-to-service | JWT bearer |
+| **mTLS** (both sides present certificates) | High-security, internal | X.509 certs |
+| **HMAC signing** | Webhook verification | `HMAC-SHA256` |
+
+### API Key best practices
+- Prefix with environment: `sk_test_xxx`, `sk_live_xxx`
+- Show the secret ONCE, when it is created
+- Store it hashed (like a password)
+- Allow scopes/permissions per key
+- Allow expiry and replacement
+- Show when each key was last used
+- Let users revoke a key instantly
+
+## Authorization Patterns (after authentication)
+
+### RBAC (Role-Based Access Control)
+```
+User → Role → Permissions
+e.g., user@example.com → admin → [users.read, users.write, billing.read]
+```
+
+### ABAC (Attribute-Based) — fine-grained
+```
+Allow if user.department === resource.department AND action === "read"
+```
+
+
+## reference: auth-flows.md
+
+# ลำดับขั้นของแต่ละ flow
+
+Step-by-step order for session, JWT, OAuth with PKCE and password reset. Use it when writing code, or when reviewing whether the code covers every step. The requirements and mistakes to avoid are in `SKILL.md`
+
+## Pattern 1: Session-Based Auth — Flow
+
+```
+1. User submits credentials
+2. Server validates, creates session ID
+3. Server stores session in Redis/DB
+4. Server sets HttpOnly Secure cookie
+5. Client sends cookie on every request
+6. Server looks up session, identifies user
+```
+
+## Pattern 2: JWT — Flow
+
+```
+1. User submits credentials
+2. Server validates, signs JWT
+3. Client stores JWT (in HttpOnly cookie preferred)
+4. Client sends JWT on every request (Authorization header or cookie)
+5. Server verifies signature, extracts claims
+```
+
+## Pattern 3: OAuth 2.0 / OIDC — Authorization Code Flow with PKCE
+
+PKCE = Proof Key for Code Exchange. It stops a stolen code from being swapped for a token.
+
+```
+1. App → IdP: /authorize?code_challenge=...
+2. User logs in at IdP
+3. IdP → App: /callback?code=...
+4. App → IdP: /token (with code_verifier)
+5. IdP → App: access_token + id_token + refresh_token
+```
+
+## Pattern 5: Password reset flow
+
+```
+1. User requests reset (enter email)
+2. Server: always show "if email exists, link sent" (don't leak)
+3. Generate random token (≥ 256 bits), hash it, store with expiry (15 min)
+4. Email link with raw token
+5. User clicks → /reset?token=...
+6. Server hashes input, compares, verifies expiry
+7. User sets new password (apply policy)
+8. Invalidate all existing sessions
+9. Send confirmation email
+```
+
+
+## reference: libraries-and-code.md
+
+# ไลบรารีและโค้ดตัวอย่าง
+
+Sample code for storing passwords, rate-limiting tools, and recommended libraries by language
+
+## Password storage — code
+
+```typescript
+// Good (using bcrypt)
+const hash = await bcrypt.hash(password, 12);
+const valid = await bcrypt.compare(password, storedHash);
+
+// Bad
+const hash = crypto.createHash('sha256').update(password).digest('hex');
+```
+
+## Rate limiting tools
+
+Use existing tools:
+- `express-rate-limit` (Node.js)
+- `django-ratelimit` (Django)
+- Cloudflare / AWS WAF (edge)
+
+## Library Recommendations
+
+| Stack | Library | Notes |
+|-------|---------|-------|
+| Node.js | `passport`, Auth.js, Better Auth | Lucia v3 is deprecated (lucia-auth.com, checked 22 Oct 2026) so do not start new work on it; Better Auth status (รอยืนยัน, check before use) |
+| Python | `authlib`, `PyJWT` (or `joserfc`) | authlib for OAuth; python-jose is rarely maintained (รอยืนยัน) |
+| Go | `oauth2`, `golang-jwt` | Standard |
+| Rust | `axum-login`, `jsonwebtoken` | — |
+| Any | Auth0, Clerk, Supabase Auth | Managed (faster) |
+
+
+## reference: mfa.md
+
+# Pattern 4: Multi-Factor Authentication (MFA)
+
+Details of all 3 types of multi-factor authentication. Use it when choosing or building MFA
+
+## TOTP (Google Authenticator, Authy)
+**When:** standard two-factor login (2FA), easy for users. TOTP = time-based one-time password.
+
+```
+Setup:
+1. Server generates random secret (160 bits)
+2. Server shows QR code: otpauth://totp/...?secret=...
+3. User scans with authenticator app
+4. User confirms with first code
+5. Server stores secret encrypted
+
+Verify:
+1. User enters 6-digit code
+2. Server computes expected code(s) (±1 window for clock drift)
+3. Match → grant access
+```
+
+## WebAuthn (Passkeys) — Future-proof
+**When:** you want login that phishing can't beat, no SMS, hardware keys
+
+- Use `@simplewebauthn` library
+- Supports Touch ID, Face ID, YubiKey
+- No shared secret, so nothing to phish
+- Default for new apps in 2026+
+
+## SMS / Email codes
+**When:** there's no other option (users without smartphone apps)
+
+- Note: SMS is **NOT secure** (SIM swap attacks)
+- Use only as a last resort, never as the main method
+- Use strict rate limits
+- Codes: 6 digits, 5 min expiry
+
+
+## reference: sources.md
+
+# Sources · auth-implementation-patterns
+
+- Password policy (minimum 15 characters as the only factor, 8 inside multi-factor authentication, breached-password check, no composition rules, no forced rotation, maximum at least 64): NIST SP 800-63B-4 §3.1.1.2, https://pages.nist.gov/800-63-4/sp800-63b.html, checked 2026-10-14.
+
+
+---
+
 # skill: config-and-secrets
 
 Use when settings differ by environment or secrets need hiding
@@ -595,320 +832,3 @@ Show it as a sentence people can read, not raw JSON (the sample below is the Tha
 ```
 
 Show the time in the viewer's time zone, but store it as UTC (see `i18n-and-locale`).
-
-
----
-
-# skill: file-upload-and-storage
-
-Use when users upload files or an app serves stored files
-
-# Accepting file uploads and storing files
-
-> **One rule:** a file a user sends is untrusted data.
-> The file name, the extension, the type the browser reports, and the size it claims can **all be faked**.
-
-## When to use this skill
-
-- A screen lets users attach files, images, or documents.
-- The system must store files and send them back for viewing or download.
-- You must decide where to keep the files.
-- Some files should be hidden from others, but right now anyone with the link can open them.
-
-## When to use another skill instead, or together
-
-| Task | Skill | |
-|---|---|---|
-| Import Excel/CSV and load the data into the system | `data-import-export` | instead |
-| Permissions: who may access what | `auth-implementation-patterns` | instead |
-| Process large files as a background job | `background-jobs` | instead |
-
----
-
-## 1 · Check before accepting
-
-| What to check | How |
-|---|---|
-| **File type** | Read the **contents** (magic bytes). Do not trust the extension or `Content-Type`. |
-| **Size** | Enforce it on the server **and** at the front-facing request receiver. A check in the browser is only a convenience. |
-| Files per request | Set a limit. |
-| Total size per user | Set a quota, or one person uses up all the space. |
-| Allowed types | **An allow list, not a deny list.** |
-
-```
-Typical allow list: jpg · png · webp · pdf · xlsx · docx · csv
-Always forbidden: executables (exe, sh, bat) · server script files (php, aspx, jsp) · svg that has not been sanitised
-```
-
-> **SVG is HTML.** It can run scripts. To accept it, sanitise it first or convert it to PNG.
->
-> **Check the size before reading the file into memory.** Otherwise a 5 GB file kills the server
-> before the size-check code gets to run.
-
-**Virus-scan** any file that other people will download. While the scan result is pending, set the status to `pending`
-and give nobody access.
-
----
-
-## 2 · Where to store
-
-| Store | Good for | Note |
-|---|---|---|
-| **object storage** (S3 · Azure Blob · GCS) | The default to use | Scales · has expiring links built in |
-| The server's disk | A small, single-machine system | **Must sit outside the folder the web serves**, and must be backed up |
-| In the database | Very small files that must be in the same transaction | Grows fast · backups get much slower |
-
-> Wrong: **keeping files in the app's folder.** They vanish on every deploy, and with several instances they cannot see each other.
-> Wrong: **keeping files directly in the folder the web serves.** Someone uploads a script file and runs it.
-
-**The database holds only metadata; the file itself lives elsewhere.** The metadata table needs the columns
-`id` · `original_name` · `stored_key` · `content_type` · `size_bytes` · `checksum` ·
-`uploaded_by` · `uploaded_at` · `scan_status` · `owner_entity_type` · `owner_entity_id`
-
----
-
-## 3 · Naming the stored file
-
-**Never use the file name the user sent as the real stored name.**
-
-```
-Wrong: uploads/รายงาน (1).xlsx              spaces · Thai · brackets
-Wrong: uploads/../../etc/passwd             escapes the folder
-Right: 2026/09/25/01J9Z8K7X2M4.xlsx         random · split into folders by date
-```
-
-- The real stored name is a random value (UUIDv7 or ULID) + an extension that you have **verified**.
-- Keep the user's original name in the database, and send it back on download through a header.
-- Split folders by date. One folder with millions of files is slow and cannot be browsed.
-- Store a checksum too. It detects duplicates and checks the file is not corrupted.
-
----
-
-## 4 · Sending files back to the user
-
-| File | How to send |
-|---|---|
-| Public (logo, product image) | A direct URL through a CDN is fine |
-| **Private** (document, receipt, user photo) | **A signed link that expires** in 5–15 minutes |
-
-> **A "hard-to-guess link" is not access control.** Links get forwarded, logged by proxies,
-> and left in the `Referer` header. For a private file, **check permission every time**, then issue a temporary link.
-
-- For large files, let the user upload straight to object storage with a link we sign, so the file does not pass through the app.
-  **The checks in §1 are still all required.** This route bypasses the app, so restore the checks like this:
-  - **When signing the link:** limit size and type inside the signature. S3 uses a presigned POST whose policy has `content-length-range` and a `Content-Type` condition (a presigned PUT cannot enforce size). Other providers have equivalents, for example GCS uses the header `x-goog-content-length-range`.
-  - **When signing the link:** set the key yourself (a random name as in §3) in a holding folder · keep the link's expiry short · save a metadata row with `scan_status = pending`.
-  - **After the upload finishes** (a storage event, or the user reports it done): read the real magic bytes from the object · compare the real size with the limit · virus-scan. If it passes, move it to the real store and set `clean`. If it fails, delete or quarantine it.
-  - While `pending`, issue no download link to anyone.
-- When serving a file for download, set `Content-Disposition` and `Content-Type` correctly,
-  and never send back user-uploaded HTML in a way that lets the browser render it.
-- If you can, serve user files from a different domain than the app, so scripts in a file cannot reach the app's cookies.
-
----
-
-## 5 · Images
-
-- **Never send the original camera image to the screen.** An 8 MB photo on a phone is a page that does not load.
-- Pre-generate 2–3 sizes (thumbnail · medium · a downsized full size).
-- **Strip EXIF.** The photo holds the location where it was taken, and users do not know they are publishing it.
-- Convert to WebP if the browser supports it.
-- Rotate the image according to EXIF before you strip EXIF, or phone photos come out sideways.
-- If the file is large or there are many, resize as a background job (see `background-jobs`).
-
----
-
-## 6 · Deleting and retention
-
-| Topic | Rule |
-|---|---|
-| Deleting the parent record | A job must also hunt down and delete the orphan files left behind. |
-| Order of deletion | Delete the metadata first, then the file. An orphan file is harmless, but metadata pointing to a file that is gone breaks the screen. |
-| An uploaded file never linked to anything | Delete it after 24 hours. |
-| Retention | Set it per file type · a file with personal data needs an expiry date (see `pdpa-compliance`). |
-| Backup | Files belong in the backup plan just like the database, **and a restore must have been tested for real.** |
-
-
----
-
-# skill: error-handling-patterns
-
-Use when writing code that can fail, with retry and timeout
-
-# Error handling
-
-> **The one rule:** catch an error only when you **can really do something about it.**
-> Catching it and doing nothing is worse than not catching, because the system keeps going while it is already broken inside.
-
-## When to use this skill
-
-- Writing code that calls the network, a database, files, or another team's system
-- Deciding whether to retry, how many times, and how long to wait
-- The user sees "an error occurred" and does not know what to do next
-- Tracing a problem and finding nothing in the log because someone caught and discarded the error
-
-## When to use another skill, or use it alongside
-
-| Task | Skill | |
-|---|---|---|
-| The JSON shape of errors the API sends out | `web-service-essentials` · `api-conventions` | instead |
-| Log line format and data masking | `logging-standards` | instead |
-| Fixing one specific bug someone reported | `targeted-fix` | instead |
-| Steps when the system is really down | `incident-runbook-template` | instead |
-| Error-rate metrics and alerts | `observability-basics` | alongside |
-| Where a failed background job goes next | `background-jobs` | alongside |
-| Error messages that must be translated into several languages | `i18n-and-locale` | alongside |
-| Tests for failure cases | `testing-standards` | alongside |
-
----
-
-## 1 · Where to catch, where to let it pass
-
-| Layer | What to do |
-|---|---|
-| Innermost layer (calls DB, HTTP, files) | **let it pass**, or convert it into a domain error that has meaning |
-| Business logic layer | catch only where there is a real fallback (a default value, a backup data source) |
-| **Outermost layer** (controller, handler, main) | **catch everything** · log once · convert to an answer the user understands |
-
-> **Log in one place only, the outermost layer.** If every layer catches, logs, and rethrows,
-> 1 error becomes 10 log lines and nobody knows they are the same event.
-
-**3 things you must never do:**
-
-```csharp
-try { ... } catch { }                      // wrong: swallowed silently
-try { ... } catch (Exception) { return null; }   // wrong: the caller gets null and never learns what happened
-catch (Exception ex) { log.Error(ex); throw; }   // wrong: logs again at every layer
-```
-
-**If you really mean to swallow it, write the reason:**
-
-```csharp
-catch (SmtpException ex)
-{
-    // swallowed on purpose — a failed notification email should not make the order fail
-    log.Warning(ex, "ส่งอีเมลยืนยันไม่สำเร็จ orderId={OrderId}", order.Id);
-}
-```
-
----
-
-## 2 · The message to the user ≠ the message in the log
-
-| | The user sees | The log keeps |
-|---|---|---|
-| Content | what happened · what to do next | stack trace · variable values · request id |
-| Language | the user's language | English is fine |
-| Internal detail | **none at all** | allowed |
-| Link between the 2 sides | **a reference code** | the same code |
-
-```
-Wrong: "เกิดข้อผิดพลาด" (An error occurred)   the user cannot tell what to do
-Wrong: "SqlException: timeout expired"      leaks internal detail, and they cannot read it anyway
-Right: "บันทึกไม่สำเร็จเพราะระบบตอบช้า ลองอีกครั้งใน 1 นาที (อ้างอิง: 01J9Z8K)"
-       (Save failed because the system was slow. Try again in 1 minute. Reference: 01J9Z8K)
-```
-
-**A good message has 3 parts**: what happened · why (if you can say) · what to do next.
-The reference code is the same correlation id as in `logging-standards`.
-
----
-
-## 3 · Classify before deciding
-
-| Type | Example | What to do | Log level |
-|---|---|---|---|
-| **User mistake** | incomplete input, wrong format | tell them to fix it · **do not retry** | no log needed |
-| **Transient** | timeout · 503 · deadlock · dropped connection | **may retry** | warning |
-| **Rate limited** | 429 Too Many Requests | may retry **after the time `Retry-After` gives** (if absent, use the formula in §4) · never fire faster than that | warning |
-| **Permanent** | 404 · 401 · data fails a condition | do not retry · say so clearly | warning |
-| **Our bug** | null reference · cannot convert the type | do not retry · **someone must fix it** | error |
-| **Inconsistent data** | totals do not match, an impossible state | stop · **call a person** | error + alert |
-
-> **Retrying an error that no number of tries will cure means firing again at a system that is already down, so it falls harder.**
-> Sending `400` or `401` another 100 times gets the same answer.
-
----
-
-## 4 · Timeout and retry
-
-**Every call that leaves the process needs a timeout** — the default in most libraries is "wait forever"
-
-| Call | A timeout that works in general |
-|---|---|
-| Ordinary database query | 5–10 seconds |
-| Internal HTTP | 3–5 seconds |
-| External HTTP | 10–30 seconds |
-| Heavy background job | set it from the real work, and it must be possible to cut it off |
-
-**The retry formula** (service-to-service calls · jobs in a queue use the numbers in [`background-jobs`](../background-jobs/SKILL.md) §4 · when a person sits waiting on the screen → see the last item below):
-
-```
-at most 3 tries · exponential delay + jitter
-try 1 waits 1 second · try 2 waits 2 · try 3 waits 4  (each ±20% random)
-```
-
-- **You need the random part** — otherwise every instance retries at the exact same moment and hits the target system again together
-- **The total retry time must be less than the caller's timeout**, or the caller has given up while we are still trying
-- **Retrying a write needs an idempotency key**, or the customer is charged twice (see `api-conventions`)
-- **A person sits waiting on the screen** → at most 1 automatic retry, then show a "ลองอีกครั้ง" (try again) button for them to press (do not use the 3 tries of the formula above)
-
----
-
-## 5 · Circuit breaker
-
-When the target is down, firing more does not help. It only makes us hang along with it.
-
-```
-closed (normal) → N failures in a row → open (do not call at all, answer with an error at once)
-                → wait X seconds → half-open: let 1 request try → success: back to closed · failure: stay open
-```
-
-A default that works: if 5 calls fail in a row within 30 seconds, keep the circuit open for 60 seconds.
-
-**Add one when** — calling an external system that has gone down before · calling across several services · a slow target spreads the slowness to us
-**Not needed when** — calling your own database · a job that runs once a day
-
----
-
-## 6 · Partial failure
-
-Work that handles many items must be able to answer **"8 of 10 succeeded, where did the other 2 go?"**
-
-| Style | Fits |
-|---|---|
-| All or nothing (transaction) | money · stock · anything that breaks when half done |
-| Do what you can, then report the items that failed | data import · notifying many people |
-
-The second style must **return the failed items with a reason for each**, not just say "some items failed".
-
-**Cleanup must always run**, whether or not the main work succeeds: closing files, returning connections, deleting temp files.
-Use `finally` / `using` / `with` / `defer` instead of repeating it on every exit path.
-
----
-
-## 7 · Check before sending
-
-Go through this against the diff every time you touch code that calls outside the process
-
-- [ ] Every `catch` clearly does one of these: handles it and goes on · converts it to an error of its own layer and throws on · lets it pass to the outermost layer to log (section 1) — no `catch` that logs and rethrows
-- [ ] Every outside call (HTTP · DB · queue · file) has a deliberate timeout and retries only the transient types in section 3 · a write that retries has an idempotency key (section 4)
-- [ ] The message to the user says what to do next · no stack trace or table name goes out (section 2) · the log for the same error has a correlation id and enough data to reproduce it
-- [ ] Outcomes the business expects (not found · insufficient balance · duplicate) are return values or types the caller must handle, not exceptions
-- [ ] Each outside dependency has at least 1 failure-path test (timeout · 5xx · bad payload), and a test confirms that partial failure follows section 6 and does not fail the whole page
-- [ ] None of these 4 kinds of silent failure swallowing:
-  - **optional chaining or `?? default`** that lets a missing value pass with nobody knowing (`order?.total ?? 0` turns an order that failed to load into a zero total)
-  - **falling back to a mock or sample data outside tests** — the live system shows fake data and looks normal
-  - **retries run out, then silence** — after the last try it returns empty or success, throws no error, and tells the caller nothing
-  - **a catch that logs and carries on in the UI** — the user sees a normal screen although the data never arrived; show an error state they can see
-
-## References
-
-- [`references/sources.md`](references/sources.md) — where the checklist ideas came from
-
-
-## reference: sources.md
-
-# Sources · error-handling-patterns
-
-- Section 7 checklist: idea from ECC error-handling.
-- The 4 silent-failure kinds in section 7: adapted from silent-failure-hunter in pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10.

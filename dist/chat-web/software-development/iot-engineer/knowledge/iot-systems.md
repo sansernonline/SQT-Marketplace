@@ -873,7 +873,7 @@ Workflow:
 6. **Outline fleet management** (full design: mode `device-fleet-design`)
 7. **Design security:** device identity, mTLS, per-device ACLs, certificate lifecycle
 8. **Estimate cost and scaling**
-9. **Produce polished IoT architecture** using `polished-document-style`: system and sequence diagrams, compute placement matrix, stack with reasons
+9. **Produce polished IoT architecture** using `design-gate/polished-document-style`: system and sequence diagrams, compute placement matrix, stack with reasons
 10. **Hand-off:** firmware → `iot-engineer`, backend services → `solution-architect`, deployment → `devops-engineer`
 
 ---
@@ -891,7 +891,7 @@ Workflow:
 6. **Design monitoring:** health tiers, key metrics and SLOs, alert thresholds
 7. **Design diagnostics:** remote logs, live metrics, self-test, support escalation
 8. **Plan decommissioning:** wipe, certificate revocation, audit trail
-9. **Produce polished fleet design** using `polished-document-style`: lifecycle diagram, provisioning sequence, rollout phases, runbook
+9. **Produce polished fleet design** using `design-gate/polished-document-style`: lifecycle diagram, provisioning sequence, rollout phases, runbook
 10. **Hand-off:** firmware → `iot-engineer`, backend → `developer`, deployment → `devops-engineer`
 
 

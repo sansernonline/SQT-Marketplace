@@ -18,7 +18,7 @@ description: Use when writing a pull request description
 | Task | Use instead |
 |---|---|
 | Reviewing someone's PR or self-reviewing the code | `code-review-checklist` |
-| Adversarial review of a risky or contested change | `adversarial-review-panel` |
+| Adversarial review of a risky or contested change | `crew-patterns/adversarial-review-panel` |
 
 ## 0 · Look for an existing format first (every time)
 

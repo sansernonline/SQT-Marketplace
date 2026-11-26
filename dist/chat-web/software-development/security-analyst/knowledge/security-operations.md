@@ -273,7 +273,7 @@ Preservation:
 
 ## Output: Incident Report
 
-Use `polished-document-style` + `postmortem-template` skills.
+Use `design-gate/polished-document-style` + `postmortem-template` skills.
 
 ```markdown
 # Incident Report: <Title>
@@ -318,7 +318,7 @@ Use `polished-document-style` + `postmortem-template` skills.
 
 - `security-operations` — IR-specific patterns
 - `postmortem-template` (from software-development)
-- `polished-document-style` (from superuser)
+- `design-gate/polished-document-style` (from superuser)
 
 ## Things You Don't Do
 
@@ -579,7 +579,7 @@ Network:
 
 ## Output: Security Architecture Doc
 
-Use `polished-document-style` skill (from superuser).
+Use `design-gate/polished-document-style` skill (from superuser).
 
 ```markdown
 # Security Architecture: <System/Org>
@@ -611,7 +611,7 @@ Use `polished-document-style` skill (from superuser).
 
 ## Skills You Use
 
-- `polished-document-style` (from superuser)
+- `design-gate/polished-document-style` (from superuser)
 - `architecture-patterns` (from software-development)
 - `security-operations`
 
@@ -793,7 +793,7 @@ Map observed behaviors to ATT&CK tactics/techniques:
 ## Skills You Use
 
 - `security-operations` — detection logic ([`threat-detection-patterns.md`](threat-detection-patterns.md)) and SOC procedures ([`soc-operations.md`](soc-operations.md))
-- `polished-document-style` (from superuser) — for reports
+- `design-gate/polished-document-style` (from superuser) — for reports
 
 ## Output: Investigation Report
 
@@ -1089,7 +1089,7 @@ for ioc in iocs:
 
 - `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `security-operations` — detection patterns
-- `polished-document-style` (from superuser) — for hunt reports
+- `design-gate/polished-document-style` (from superuser) — for hunt reports
 
 ## Things You Don't Do
 
@@ -1145,7 +1145,7 @@ Workflow:
 7. **Playbook library:** top scenarios
 8. **Key performance indicators (KPIs) + service level agreements (SLAs):** mean time to detect (MTTD), mean time to acknowledge (MTTA), mean time to respond (MTTR), false positive (FP) rate
 9. **Staffing + training plan**
-10. **Produce polished SOC design** using `polished-document-style` (from superuser)
+10. **Produce polished SOC design** using `design-gate/polished-document-style` (from superuser)
 11. **Hand-off:** implementation → `developer`, `devops-engineer` (from software-development)
 
 ---
@@ -1162,7 +1162,7 @@ Workflow:
 4. **Execute hunt:** queries across SIEM, EDR, etc.
 5. **Analyze results:** triage findings, eliminate FPs
 6. **Outcome:** escalate to incident response (IR) OR convert to detection OR document negative — any containment step during IR needs the user's approval per action (`security-operations` → `references/security-incident-response.md` Phase 3)
-7. **Produce polished hunt report** using `polished-document-style` (from superuser)
+7. **Produce polished hunt report** using `design-gate/polished-document-style` (from superuser)
 8. **Hand-off:** to SOC for new detection rule, IR for findings
 
 
@@ -1444,7 +1444,7 @@ Public: per disclosure obligations
 
 ## Output: Incident Report
 
-Use `polished-document-style` + `postmortem-template` skills.
+Use `design-gate/polished-document-style` + `postmortem-template` skills.
 
 Include:
 - Executive summary

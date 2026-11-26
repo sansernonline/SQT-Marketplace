@@ -38,7 +38,7 @@ Goal → illustrations at a level usable on a real website, not sketches · some
 
 1. Render to PNG at the real size with playwright into `_to_delete/`, then open it with `Read`
 2. **Guess test** — send the PNG to a fresh subagent that does not know the file name and does not see the prompt, and ask one thing: "what is this picture?" · a wrong guess or a vague one ("geometric shapes") → redraw
-3. **Beauty gate** — another checker scores 1–5 against the reference images on 4 axes: you can tell at once what it is · readable at real size · colours and lines go the same way · does not look AI-made (`no-ai-look`) · every axis ≥ 4 to pass (app screens: the criteria in `ui-craft` item 9 in plugin `software-development`)
+3. **Beauty gate** — another checker scores 1–5 against the reference images on 4 axes: you can tell at once what it is · readable at real size · colours and lines go the same way · does not look AI-made (`design-gate/no-ai-look`) · every axis ≥ 4 to pass (app screens: the criteria in `ui-craft` item 9 in plugin `software-development`)
 4. Lay all images of the set side by side → light direction, lines and colours must match
 
 Fails after 1 round of fixes → go route 3 (free photos) for the whole set

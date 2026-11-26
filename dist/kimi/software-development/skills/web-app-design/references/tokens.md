@@ -30,7 +30,7 @@ All definitions are in `assets/appstrack.css`, in the `:root` block.
 | `--brand-50` | `#eef4fd` | avatar · mention background · focus ring |
 | `--brand-100` | `#dde9fb` | spinner track |
 
-> **No gradient** — buttons, chips, progress and charts use solid `--brand` (`no-ai-look`: purple-blue gradient → 1 solid brand color)
+> **No gradient** — buttons, chips, progress and charts use solid `--brand` (`design-gate/no-ai-look`: purple-blue gradient → 1 solid brand color)
 > **`--brand` must pass 4.5:1** for white text on a brand background (`#226cc6` = 5.21) · brand on `--bg` (4.87) · brand on `--brand-50` (4.71) — checked 22 Oct 2026
 
 ## Surfaces · lines · shadows

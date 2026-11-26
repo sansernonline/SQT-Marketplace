@@ -1,6 +1,6 @@
 # Signs that give away AI drawing · fix to
 
-If you find 2 or more on one page, fix them before sending. The full list for every medium is in `no-ai-look`.
+If you find 2 or more on one page, fix them before sending. The full list for every medium is in `design-gate/no-ai-look`.
 
 | Sign | Fix to |
 |---|---|

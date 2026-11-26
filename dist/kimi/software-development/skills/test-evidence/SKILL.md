@@ -87,7 +87,7 @@ Use this when test results decide whether an app got better or worse (against th
 
 ## Check before sending
 
-- [ ] A case marked `Pass` was really run this round (`principle-prove-it-works`) · one not run gets `Not run` with a reason
+- [ ] A case marked `Pass` was really run this round (`ground-rules/principle-prove-it-works`) · one not run gets `Not run` with a reason
 - [ ] Open the GIF of at least 1 failed case by eye: the caption reads clearly, and the red frame sits on the spot
 - [ ] The count in the report's summary table = the number of cases in `run.json` = the results in Excel
 - [ ] If the results judge an app or a loop: the exam was run against the old system · every uncounted item has a reason · "failed at setup" is separated from "fail" (item 5)

@@ -12,7 +12,7 @@ description: Use when replacing an API, table or component
 1. **Delete before you add.** Remove dead code · duplicate validators · stubs · flags that are now permanently on. Then build on the smaller base.
 2. **Count every user of the old thing** with a repeatable command (grep · find references). This number is the evidence.
 3. **Build the new thing in the shape it should have.** Do not bend it to look like the old one.
-4. **Migrate every user.** If there are more than 10 places, use a codemod (`principle-build-a-tool-not-handwork`).
+4. **Migrate every user.** If there are more than 10 places, use a codemod (`ground-rules/principle-build-a-tool-not-handwork`).
 5. **Delete the old thing in the same PR or batch**, then rerun the command from step 2. It must show 0 places.
 
 ## Do not
@@ -29,6 +29,6 @@ description: Use when replacing an API, table or component
 | A database table that is live | Expand-and-contract per `database-design` |
 | Old mobile app versions still in use | Support down to the minimum version that is forced to update |
 
-Record every exception in `decision-log` with the date it will be removed.
+Record every exception in `decision-desk/decision-log` with the date it will be removed.
 
 Upgrading a whole framework (.NET Framework → .NET 8 · Angular major · Python 2 → 3 · Node LTS) follows the same principle, one package at a time. The playbook per stack is at [`legacy-spec-recovery/references/framework-upgrade.md`](../legacy-spec-recovery/references/framework-upgrade.md)

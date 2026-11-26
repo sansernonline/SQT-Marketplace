@@ -4,9 +4,9 @@ Use when a Markdown doc needs an image, SVG or ASCII art
 
 # Markdown Visuals
 
-> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `design-gate/no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
-> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
+> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `design-gate/polished-document-style`.
 
 > **Rule:** Every plan, process, design, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
 
@@ -81,7 +81,7 @@ What are you showing?
 
 ### สี
 
-If the document or project already has a colour palette, use it. If not, search for references per `design-references` (plugin `superuser`), type `document`, and take the colours from the chosen work · if live search is not possible, use the house value `#2A78D6`, mark it `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask (order in `diagram-figures` item 5 · colour-by-domain table [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) · for role-based tokens (`bg-canvas` · `accent-primary` · `state-*` …) see [references/svg-snippets.md](references/svg-snippets.md) · and **1 document uses 1 palette**
+If the document or project already has a colour palette, use it. If not, search for references per `design-gate/design-references` (plugin `superuser`), type `document`, and take the colours from the chosen work · if live search is not possible, use the house value `#2A78D6`, mark it `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask (order in `diagram-figures` item 5 · colour-by-domain table [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) · for role-based tokens (`bg-canvas` · `accent-primary` · `state-*` …) see [references/svg-snippets.md](references/svg-snippets.md) · and **1 document uses 1 palette**
 
 ### Reusable snippets
 
@@ -187,7 +187,7 @@ When a markdown doc needs a design picture (clickable app screens go to the plat
 
 ## ไม่ให้ดูเหมือน AI ทำ
 
-Before sending, go through item 3 of `no-ai-look` — for HTML work, run its script · every piece must also pass eye check 3.2 (a web page adds items 10–14), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for all media is there
+Before sending, go through item 3 of `design-gate/no-ai-look` — for HTML work, run its script · every piece must also pass eye check 3.2 (a web page adds items 10–14), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for all media is there
 
 
 ## reference: ascii-patterns.md
@@ -1165,7 +1165,7 @@ Use when writing code that can fail, with retry and timeout
 |---|---|---|
 | The JSON shape of errors the API sends out | `web-service-essentials` · `api-conventions` | instead |
 | Log line format and data masking | `logging-standards` | instead |
-| Fixing one specific bug someone reported | `targeted-fix` | instead |
+| Fixing one specific bug someone reported | `fix-at-source/targeted-fix` | instead |
 | Steps when the system is really down | `incident-runbook-template` | instead |
 | Error-rate metrics and alerts | `observability-basics` | alongside |
 | Where a failed background job goes next | `background-jobs` | alongside |
@@ -1713,240 +1713,3 @@ export const correlationInterceptor: HttpInterceptorFn = (req, next) =>
 | correlation | `LogContext.PushProperty` | `AsyncLocalStorage` + `child()` | `ContextVar` | header `X-Request-Id` |
 | Level | `LogEventLevel` | `level` | `setLevel` | Its own enum |
 | External configuration | `appsettings.json` | env `LOG_LEVEL` | env `LOG_LEVEL` | `isDevMode()` |
-
-
----
-
-# skill: auth-implementation-patterns
-
-Use when building login with sessions, JWT, OAuth or SSO
-
-# auth-implementation-patterns — secure login, token, MFA and authorization choices
-
-## Use when
-- Building login/signup/logout or a password reset flow.
-- Adding multi-factor authentication (MFA): TOTP, SMS, WebAuthn.
-- Choosing session vs token authentication.
-- Integrating OAuth or OpenID Connect (OIDC) logins, or single sign-on (SSO) with SAML or OIDC.
-- Designing API authentication (API keys, JSON Web Token (JWT), OAuth).
-- Reviewing existing auth code for security issues.
-
-## Steps
-
-1. **Choose the pattern by who is authenticating.**
-   - Browser user, first-party app → session cookies (`HttpOnly`, `Secure`, `SameSite`). Cross-domain → JWT in an `HttpOnly` cookie, never `localStorage`.
-   - Mobile app → OAuth 2.0 PKCE flow.
-   - Service-to-service → same org: mTLS or service mesh; external: OAuth 2.0 Client Credentials.
-   - Third-party developer → API keys (with rotation) or OAuth.
-
-2. **Sessions (server-rendered apps, monoliths, one domain).** Cookie `HttpOnly` + `Secure` + `SameSite=Lax` (or Strict). Session ID cryptographically random, ≥ 128 bits. Store in Redis with a time-to-live (TTL), not in app memory if more than one instance runs. Idle timeout 30 min, absolute timeout 8–12 hours. Issue a new session ID when privileges change (login, role change). On logout, delete the session from the store. Avoid: session inside a JWT (cannot revoke) · session token in `localStorage` (cross-site scripting (XSS) can steal it) · same ID after login (session fixation).
-
-3. **JWT (microservices, mobile, single-page app (SPA) with a backend API).** JWT is overused: with a single backend, sessions are simpler and safer. Algorithm `RS256` or `ES256`, not `HS256` for distributed systems. Access token 5–15 min. Refresh token lives days, is stored separately, is revocable, and is replaced each time it is used. Required claims `sub`, `iat`, `exp`, `iss`, `aud`. Store in an `HttpOnly Secure` cookie. Have a way to cancel tokens (blocklist, short expiry). Avoid: accepting `alg: none` (check the algorithm explicitly) · skipping signature verification · sensitive data in the payload (base64, not encrypted).
-
-4. **OAuth 2.0 / OIDC ("Login with Google/GitHub", handing login to an identity provider (IdP)).** Always Authorization Code Flow with PKCE, even for confidential clients (steps in [`references/auth-flows.md`](references/auth-flows.md)). Validate the `id_token` signature with the IdP's JWKS, and validate `aud`, `iss`, `exp`, `nonce`. Use the `state` parameter against cross-site request forgery (CSRF) and validate it. Match `code_verifier` to `code_challenge`. Use a library (Auth0, Passport.js), do not write your own. Avoid: implicit flow · Resource Owner Password Credentials flow (both deprecated).
-
-5. **MFA.** For a new app use WebAuthn (passkeys) by default (no shared secret to steal). Use TOTP when users need easy standard 2FA. Use SMS or email only as a last resort (SMS is not safe against SIM swap). Details: [`references/mfa.md`](references/mfa.md).
-
-6. **Passwords.**
-   - Hash with **Argon2id** (preferred) or **bcrypt** with cost ≥ 12. Never MD5, SHA-1, raw SHA-256 or plain text.
-   - Policy per NIST SP 800-63B-4 (checked 2026-10-14): minimum **15 characters** when the password is the only factor, **8** when used only inside MFA. Check against breached passwords (Have I Been Pwned (HIBP) API). Allow long passphrases (any maximum at least 64) and special characters. No forced composition rules, no forced regular changes (only on suspected breach).
-   - Reset flow: the response is the same whether or not the email exists. Token random, ≥ 256 bits, stored as a hash, expires in 15 minutes. After the new password is set, revoke all old sessions and send a confirmation email. All 9 steps: [`references/auth-flows.md`](references/auth-flows.md).
-
-7. **Lockout and rate limiting.** 5 failed attempts in 15 min → lock 15 min; 10 in 1 hour → lock 1 hour; key on IP + email together. Message "Too many failed attempts. Try again in 15 minutes." Never "Account locked." (reveals the account exists). Use existing tools: [`references/libraries-and-code.md`](references/libraries-and-code.md).
-
-8. **API authentication.** API key for simple server-to-server · OAuth 2.0 Client Credentials for service-to-service · mTLS for high-security internal · HMAC signing for webhooks. For an API key, show the secret once at creation, store it as a hash, let users revoke it at once. Table: [`references/api-auth-and-authorization.md`](references/api-auth-and-authorization.md).
-
-9. **Authorization.** RBAC (Role-Based Access Control) as the main model; ABAC (Attribute-Based Access Control) when permissions depend on data attributes. Check at every endpoint, on the server, using the user from the session or token. Never trust a role sent by the client or JWT claims as the authorization source.
-
-## Check before done
-- [ ] Session ID regenerated on login (fixation)
-- [ ] CSRF token or SameSite cookie
-- [ ] Rate limiting (brute force) and HIBP check or MFA (credential stuffing)
-- [ ] Redirect URLs on an allowlist (open redirect)
-- [ ] Same error message every time (user enumeration)
-- [ ] Constant-time comparison (timing attacks)
-- [ ] No token in the URL; header or cookie only
-- [ ] Logout invalidates on the server
-- [ ] Authorization re-checked after a role change
-- [ ] No homemade crypto or auth; no reversible password storage
-
-## References
-- [`references/auth-flows.md`](references/auth-flows.md) — open when writing session, JWT, OAuth with PKCE or password reset code
-- [`references/mfa.md`](references/mfa.md) — open when building MFA (TOTP setup, WebAuthn, SMS limits)
-- [`references/api-auth-and-authorization.md`](references/api-auth-and-authorization.md) — open when designing API keys or RBAC/ABAC
-- [`references/libraries-and-code.md`](references/libraries-and-code.md) — open when choosing a library or needing hashing and rate-limit samples
-- [`references/sources.md`](references/sources.md) — NIST source and check date
-
-
-## reference: api-auth-and-authorization.md
-
-# API Authentication และ Authorization Patterns
-
-How each type of API authentication works, principles for managing API keys, and examples of RBAC and ABAC
-
-## Pattern 7: API Authentication
-
-| Method | Use case | Token format |
-|--------|----------|--------------|
-| **API Keys** | Server-to-server, simple | `sk_live_xxx` |
-| **OAuth 2.0 Client Credentials** | Service-to-service | JWT bearer |
-| **mTLS** (both sides present certificates) | High-security, internal | X.509 certs |
-| **HMAC signing** | Webhook verification | `HMAC-SHA256` |
-
-### API Key best practices
-- Prefix with environment: `sk_test_xxx`, `sk_live_xxx`
-- Show the secret ONCE, when it is created
-- Store it hashed (like a password)
-- Allow scopes/permissions per key
-- Allow expiry and replacement
-- Show when each key was last used
-- Let users revoke a key instantly
-
-## Authorization Patterns (after authentication)
-
-### RBAC (Role-Based Access Control)
-```
-User → Role → Permissions
-e.g., user@example.com → admin → [users.read, users.write, billing.read]
-```
-
-### ABAC (Attribute-Based) — fine-grained
-```
-Allow if user.department === resource.department AND action === "read"
-```
-
-
-## reference: auth-flows.md
-
-# ลำดับขั้นของแต่ละ flow
-
-Step-by-step order for session, JWT, OAuth with PKCE and password reset. Use it when writing code, or when reviewing whether the code covers every step. The requirements and mistakes to avoid are in `SKILL.md`
-
-## Pattern 1: Session-Based Auth — Flow
-
-```
-1. User submits credentials
-2. Server validates, creates session ID
-3. Server stores session in Redis/DB
-4. Server sets HttpOnly Secure cookie
-5. Client sends cookie on every request
-6. Server looks up session, identifies user
-```
-
-## Pattern 2: JWT — Flow
-
-```
-1. User submits credentials
-2. Server validates, signs JWT
-3. Client stores JWT (in HttpOnly cookie preferred)
-4. Client sends JWT on every request (Authorization header or cookie)
-5. Server verifies signature, extracts claims
-```
-
-## Pattern 3: OAuth 2.0 / OIDC — Authorization Code Flow with PKCE
-
-PKCE = Proof Key for Code Exchange. It stops a stolen code from being swapped for a token.
-
-```
-1. App → IdP: /authorize?code_challenge=...
-2. User logs in at IdP
-3. IdP → App: /callback?code=...
-4. App → IdP: /token (with code_verifier)
-5. IdP → App: access_token + id_token + refresh_token
-```
-
-## Pattern 5: Password reset flow
-
-```
-1. User requests reset (enter email)
-2. Server: always show "if email exists, link sent" (don't leak)
-3. Generate random token (≥ 256 bits), hash it, store with expiry (15 min)
-4. Email link with raw token
-5. User clicks → /reset?token=...
-6. Server hashes input, compares, verifies expiry
-7. User sets new password (apply policy)
-8. Invalidate all existing sessions
-9. Send confirmation email
-```
-
-
-## reference: libraries-and-code.md
-
-# ไลบรารีและโค้ดตัวอย่าง
-
-Sample code for storing passwords, rate-limiting tools, and recommended libraries by language
-
-## Password storage — code
-
-```typescript
-// Good (using bcrypt)
-const hash = await bcrypt.hash(password, 12);
-const valid = await bcrypt.compare(password, storedHash);
-
-// Bad
-const hash = crypto.createHash('sha256').update(password).digest('hex');
-```
-
-## Rate limiting tools
-
-Use existing tools:
-- `express-rate-limit` (Node.js)
-- `django-ratelimit` (Django)
-- Cloudflare / AWS WAF (edge)
-
-## Library Recommendations
-
-| Stack | Library | Notes |
-|-------|---------|-------|
-| Node.js | `passport`, Auth.js, Better Auth | Lucia v3 is deprecated (lucia-auth.com, checked 22 Oct 2026) so do not start new work on it; Better Auth status (รอยืนยัน, check before use) |
-| Python | `authlib`, `PyJWT` (or `joserfc`) | authlib for OAuth; python-jose is rarely maintained (รอยืนยัน) |
-| Go | `oauth2`, `golang-jwt` | Standard |
-| Rust | `axum-login`, `jsonwebtoken` | — |
-| Any | Auth0, Clerk, Supabase Auth | Managed (faster) |
-
-
-## reference: mfa.md
-
-# Pattern 4: Multi-Factor Authentication (MFA)
-
-Details of all 3 types of multi-factor authentication. Use it when choosing or building MFA
-
-## TOTP (Google Authenticator, Authy)
-**When:** standard two-factor login (2FA), easy for users. TOTP = time-based one-time password.
-
-```
-Setup:
-1. Server generates random secret (160 bits)
-2. Server shows QR code: otpauth://totp/...?secret=...
-3. User scans with authenticator app
-4. User confirms with first code
-5. Server stores secret encrypted
-
-Verify:
-1. User enters 6-digit code
-2. Server computes expected code(s) (±1 window for clock drift)
-3. Match → grant access
-```
-
-## WebAuthn (Passkeys) — Future-proof
-**When:** you want login that phishing can't beat, no SMS, hardware keys
-
-- Use `@simplewebauthn` library
-- Supports Touch ID, Face ID, YubiKey
-- No shared secret, so nothing to phish
-- Default for new apps in 2026+
-
-## SMS / Email codes
-**When:** there's no other option (users without smartphone apps)
-
-- Note: SMS is **NOT secure** (SIM swap attacks)
-- Use only as a last resort, never as the main method
-- Use strict rate limits
-- Codes: 6 digits, 5 min expiry
-
-
-## reference: sources.md
-
-# Sources · auth-implementation-patterns
-
-- Password policy (minimum 15 characters as the only factor, 8 inside multi-factor authentication, breached-password check, no composition rules, no forced rotation, maximum at least 64): NIST SP 800-63B-4 §3.1.1.2, https://pages.nist.gov/800-63-4/sp800-63b.html, checked 2026-10-14.

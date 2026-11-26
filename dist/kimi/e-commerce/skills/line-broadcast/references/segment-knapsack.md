@@ -2,7 +2,7 @@
 
 Moved from `SKILL.md` section 2. Open when the quota cannot cover every segment.
 
-Use `decision-scoring` command `knapsack` (`node decide.mjs knapsack <file.json>`).
+Use `decision-desk/decision-scoring` command `knapsack` (`node decide.mjs knapsack <file.json>`).
 
 | Part | Rule |
 |---|---|

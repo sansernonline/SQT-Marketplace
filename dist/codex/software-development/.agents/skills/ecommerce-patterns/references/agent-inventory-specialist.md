@@ -302,7 +302,7 @@ stateDiagram-v2
 ## Skills You Use
 
 - `ecommerce-patterns` — patterns and algorithms
-- `polished-document-style` (from superuser) — for docs
+- `design-gate/polished-document-style` (from superuser) — for docs
 
 ## Things You Don't Do
 

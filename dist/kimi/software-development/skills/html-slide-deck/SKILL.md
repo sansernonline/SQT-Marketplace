@@ -5,7 +5,7 @@ description: Use when the deck must be HTML or animated, or pptx as HTML
 
 # HTML Slide Deck — one .html file that opens in a browser and presents at once
 
-> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand fixes colors and fonts; the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
+> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run `design-gate/no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand fixes colors and fonts; the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
 > **One rule:** the deck is **one** .html file. Images embedded in the file · slide titles are conclusions · every page passes `check_deck.py` before sending. Story structure and slide titles come from `presentation-design`; this skill covers how it is built and looks.
 
@@ -20,7 +20,7 @@ Not for: "make a slide deck" with no mention of html, or the customer needs a .p
 ## Steps
 1. Write the story structure per `presentation-design`: every slide title is a conclusion · sections · time per page.
 2. If the project already has `docs/deck/` or an .html deck, add `<section>` to the existing `slides.html` and use the same shell · css · `--brand`; do not start a new file (same principle as `ui-craft` step 0). Otherwise copy `assets/slides-example.html` to the project's `docs/deck/slides.html`, keep only the `<section>` of the layouts you use and fill in the content. Layout classes: [`references/layouts-and-shell.md`](references/layouts-and-shell.md).
-3. Choose the direction before building. It comes from `presentation-design` step 1, stage 0 (order: source work → project's own design → attached reference → live search per `design-references` type `slide` → house defaults, only when there is no information at all). Extract colors from the source with `presentation-design/scripts/source_palette.py <source file>`; if the source has none, use the order in `diagram-figures` step 5; if live search is not possible, use `--theme bright` without `--brand` (gives `2A78D6,1F5FAF`), write `(รอยืนยัน)` in the report and carry on. Never copy colors from the example table in the theme reference. Use `--theme bright` for every new deck unless the source work has a dark background (then `dark`, the default when omitted). Use one main color plus at most 2 secondary colors from the source; green `ok`, blue `blue`, orange `warn` only for pass · info · warning. Theme, tokens, fonts and contrast numbers: [`references/theme.md`](references/theme.md).
+3. Choose the direction before building. It comes from `presentation-design` step 1, stage 0 (order: source work → project's own design → attached reference → live search per `design-gate/design-references` type `slide` → house defaults, only when there is no information at all). Extract colors from the source with `presentation-design/scripts/source_palette.py <source file>`; if the source has none, use the order in `diagram-figures` step 5; if live search is not possible, use `--theme bright` without `--brand` (gives `2A78D6,1F5FAF`), write `(รอยืนยัน)` in the report and carry on. Never copy colors from the example table in the theme reference. Use `--theme bright` for every new deck unless the source work has a dark background (then `dark`, the default when omitted). Use one main color plus at most 2 secondary colors from the source; green `ok`, blue `blue`, orange `warn` only for pass · info · warning. Theme, tokens, fonts and contrast numbers: [`references/theme.md`](references/theme.md).
 4. Build the file:
    ```bash
    python scripts/build_deck.py docs/deck/slides.html -o docs/<PRJ>-DECK-v1.0-DRAFT.html \
@@ -47,7 +47,7 @@ Look rules:
 - [ ] File opens with the network off: all images show, fallback fonts readable.
 - [ ] Every page has an `<aside>` of speaker notes, and `data-at` times add up to no more than the time given.
 - [ ] No personal data or real customer data (use mock data and say so in the foot).
-- [ ] Edited `slides.html` and rebuilt, never the built .html · `no-ai-look` item 3 passed (HTML work runs its script and the eye gate 3.2; 0 script findings is not yet a pass).
+- [ ] Edited `slides.html` and rebuilt, never the built .html · `design-gate/no-ai-look` item 3 passed (HTML work runs its script and the eye gate 3.2; 0 script findings is not yet a pass).
 
 ## References
 - [`references/layouts-and-shell.md`](references/layouts-and-shell.md) — open when choosing layouts, or to see shell keys and animation
