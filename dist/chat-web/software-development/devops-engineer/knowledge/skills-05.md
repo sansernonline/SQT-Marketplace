@@ -39,7 +39,7 @@ If you pass all 3 gates, do not ask: decide by research + vote (`superuser` `ref
 
 # skill: status-report
 
-Use when a task ends, to report status in a table
+Use when a task ends, or the user asks what is still pending (งานค้าง), to report status in a table
 
 # Report status when a task ends
 
@@ -115,6 +115,21 @@ Show "ภาพรวม" (overview, if any) + a table of only **the rows that c
 - Do not create a new status file (`STATUS.md` `progress.md`), because status then scatters across places.
 - Do not hide failing items in prose, because a reader of the table will think everything passed.
 - Do not append to the table every round, and do not let a subagent write the central file.
+
+---
+
+## 7 · When the user asks what is pending (`งานค้าง` · `มีอะไรค้าง` · what is left)
+
+The owner wants to clear the list in one reply, so every row says what the owner must do (owner asked 2026-11-26).
+
+1. **Look before you list.** Read `## รับงานต่อ` in `CONTEXT.md`, run `git worktree list` · `git status --porcelain` in the main folder · open PRs and unmerged branches. Drop what is already closed; list nothing from memory.
+2. **First line: the verdict**, such as `งานใน git ปิดหมดแล้ว เหลือ 5 เรื่องที่รอคุณ`.
+3. **One table, columns exactly** `# · งาน · สถานะ · ต้องให้ทำอะไร`. Rows needing the owner come first, then work you can finish yourself.
+   - `ต้องให้ทำอะไร` is one concrete action the owner can do in one reply: a word to type in quotes (`สั่ง "เริ่มรวม skill"` · `ตอบ "คงไว้" หรือ "เอาออก"`), a file or board to open, a budget to approve. Work you can do alone: `ไม่ต้อง ผมทำต่อได้`, then do it unless it needs approval.
+   - `สถานะ` says where it stands with the evidence (merged PR · file path · what is not yet run).
+4. **Small items** that need no decision go in at most 4 short bullets under the table, not in the table.
+5. **Last line: a recommendation**, `แนะนำ: ทำข้อ N ก่อน` with a one-line reason (fastest to clear · unblocks other work · deadline).
+6. Number the rows so the owner can answer by number (`ข้อ 2 เอาออก`).
 
 ---
 
