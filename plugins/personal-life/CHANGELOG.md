@@ -1,5 +1,9 @@
 # Changelog — personal-life
 
+## 0.27.1 — 2026-11-26
+
+- ต้องใช้ superuser `^4.0` แทน `^3.0` · รุ่นก่อนทำให้ `claude plugin update superuser` ข้าม 4.0.0
+
 ## 0.27.0 — 2026-11-26
 
 - ชี้ชื่อ skill ของ superuser 4.0.0 ที่รวมแล้ว (เช่น `design-gate` · `ground-rules` · `workspace-rules`) แทนชื่อเดิม
