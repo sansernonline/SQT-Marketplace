@@ -25,7 +25,7 @@ On marketplaces the platform's shipping rate and subsidies apply; the comparison
 3. **Get quotes** for each typical parcel from each courier's app or website, **as a business account** (volume rates are lower than walk-in), Bangkok and upcountry
 4. **Compute chargeable weight** for each (rule below)
 5. **Add COD cost** = COD fee % × COD amount (+ VAT if charged) for the COD share
-6. **Score** with the comparison table, then the weighted score below (`decision-scoring` command `score`): cost per average order, delivery days, damage rate, COD payout days
+6. **Score** with the comparison table, then the weighted score below (`decision-desk/decision-scoring` command `score`): cost per average order, delivery days, damage rate, COD payout days
 7. **Trial** the winner for two weeks on real orders before switching everything; keep a second courier for remote areas and outages
 
 ## Chargeable weight
@@ -65,7 +65,7 @@ Near tie — decide on pick-up reliability and COD payout speed, not the rate ca
 
 ## Score the couriers (ตัดสินด้วยตัวเลข)
 
-Ranking by cost alone hides a courier that breaks 3% of parcels. Use `decision-scoring` command `score` (`node decide.mjs score <file.json>`): one option per courier, numbers from your own last month.
+Ranking by cost alone hides a courier that breaks 3% of parcels. Use `decision-desk/decision-scoring` command `score` (`node decide.mjs score <file.json>`): one option per courier, numbers from your own last month.
 
 | Step | Rule |
 |---|---|

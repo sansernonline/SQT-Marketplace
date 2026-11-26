@@ -880,7 +880,7 @@ app.post('/webhook/docusign', verifyDocusignSignature, async (req) => {
 ## Skills You Use
 
 - `legal-document-systems` — legal requirements
-- `polished-document-style` (from superuser)
+- `design-gate/polished-document-style` (from superuser)
 
 ## Things You Don't Do
 
@@ -1334,7 +1334,7 @@ async function checkRetention() {
 
 - `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `legal-document-systems` — contract analysis and signing references
-- `polished-document-style` (from superuser)
+- `design-gate/polished-document-style` (from superuser)
 
 ## Things You Don't Do
 
@@ -1768,7 +1768,7 @@ Workflow:
 5. **Plan LLM integration** with privacy + verification
 6. **Design review queue** for uncertain cases
 7. **Plan accuracy measurement + improvement**
-8. **Produce polished design doc** using `polished-document-style`
+8. **Produce polished design doc** using `design-gate/polished-document-style`
 9. **Hand-off:** Implementation → `developer`, LLM details → `ai-engineer`
 
 ---
@@ -1787,7 +1787,7 @@ Workflow:
 7. **Audit Certificate of Completion** quality
 8. **Check carve-outs** (must-be-wet documents)
 9. **Plan remediation** for gaps
-10. **Produce polished compliance audit** using `polished-document-style`
+10. **Produce polished compliance audit** using `design-gate/polished-document-style`
 11. **Hand-off:** Fixes → `legaltech-engineer`, compliance details → `legal-compliance-officer`
 
 

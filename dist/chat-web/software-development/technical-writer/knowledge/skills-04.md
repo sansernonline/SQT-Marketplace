@@ -4,14 +4,14 @@ Use when planning a slide deck story and layouts
 
 # Presentation Design — slide deck story, layouts, and checks
 
-> **Pre-work gate (every time):** read the owner's theme → search live for a reference → 3 genuinely different directions → check `no-ai-look` before sending. Follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for this piece's structure). Close the work with a line `ด่านก่อนลงมือ:`.
+> **Pre-work gate (every time):** read the owner's theme → search live for a reference → 3 genuinely different directions → check `design-gate/no-ai-look` before sending. Follow the section "ด่านก่อนลงมือ" of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for this piece's structure). Close the work with a line `ด่านก่อนลงมือ:`.
 
 > **One rule:** a slide title is a **conclusion**, not a **topic name**. If the audience reads only the titles and understands the whole story, the deck is usable.
 
 ## Use when
 - Making a deck: client proposal · business plan · research summary · progress report · training · design review
 - Reviewing a deck someone else made, or converting a long document into a deck
-- Not for: a real `.pptx` file (python-pptx, fonts, cover) → `branded-document-design` · chart palette → `diagram-figures` (`references/colour-by-domain.md`) · diagrams on a slide → `diagram-figures` · a document read alone → `polished-document-style` + `branded-document-design` (a deck sent to be read alone is a document: make a deck for speaking and attach a document)
+- Not for: a real `.pptx` file (python-pptx, fonts, cover) → `branded-document-design` · chart palette → `diagram-figures` (`references/colour-by-domain.md`) · diagrams on a slide → `diagram-figures` · a document read alone → `design-gate/polished-document-style` + `branded-document-design` (a deck sent to be read alone is a document: make a deck for speaking and attach a document)
 
 ## Steps
 1. **Choose the delivered file.** Do not ask which type: not stated = .pptx · at the end say in 1 line that an .html version with animation is possible.
@@ -25,14 +25,14 @@ Use when planning a slide deck story and layouts
 
 2. **Research only what is missing.** If the deck cites facts, numbers, a market, or competitors, collect them with sources per `research-with-sources` (plugin `superuser`) before writing titles: a conclusion title must stand on real facts, not memory.
 3. **Take the theme from the source work, for every deck.** Run `python scripts/source_palette.py <source file>` on the file, logo, or website the user gave, then choose the mood from the table in [`deck-theme`](references/deck-theme.md) item 2 · if the source has no colour, use the project's colour per `diagram-figures` item 5 · light background by default, section-change pages full-slide main colour · only when live search is really impossible, use the house colour `#2A78D6` and write `(รอยืนยัน)` · if the work already has colours, do not pick new ones. Write a head-of-work line: which file the colour came from · which mood row · light or dark.
-4. **Choose the visual direction, stopping at the first hit:** the source work → the design the project already has → a reference the user attached → research (search live per `design-references`, type `slide`, then extract colours from the chosen work; pick 2–3 decks of the same kind and choose light or dark · font · density · image style; write a 1-line reason with sources) → the house default "Stage" (`branded-document-design` · `brandkit_stage.py`). Stage is the fallback when there is no information at all, not the answer for every deck: two decks for different work look different. If the source, project, or user reference supplies colour and fonts, search only for page structure and storytelling. The direction belongs to this deck alone: do not reuse the last deck's without checking the work differs. Render diagram figures with the deck's background colour (`#bg=`).
+4. **Choose the visual direction, stopping at the first hit:** the source work → the design the project already has → a reference the user attached → research (search live per `design-gate/design-references`, type `slide`, then extract colours from the chosen work; pick 2–3 decks of the same kind and choose light or dark · font · density · image style; write a 1-line reason with sources) → the house default "Stage" (`branded-document-design` · `brandkit_stage.py`). Stage is the fallback when there is no information at all, not the answer for every deck: two decks for different work look different. If the source, project, or user reference supplies colour and fonts, search only for page structure and storytelling. The direction belongs to this deck alone: do not reuse the last deck's without checking the work differs. Render diagram figures with the deck's background colour (`#bg=`).
 5. **Write every slide title as plain text, one line per slide.** Read them in order; if they do not form one story, reorder now (much cheaper than later), then cut slides that do not move the story. This step takes under 20 minutes and decides good or bad. Order by purpose: [`references/deck-details.md`](references/deck-details.md). For executives, put the conclusion on slide 1.
 6. **Choose a layout per slide** from the 6 in the reference, then put in content and trim to the budget. Every slide has the same footer: section name left, page number right.
 7. **Budget per slide, counted in lines on the real slide** (Thai words cannot be counted): title at most 2 lines · at most 6 bullets · at most 2 lines per bullet · bullets are gist, not full sentences. If over, cut whole bullets or move them to the next slide. Never cut function words (จะ ให้ ก็ แล้ว, polite words) to fit; cut items.
 8. **Text size.** Smallest content text 18 pt (40 cover · 26 title · 18 bullet in .pptx; table and the Stage-deck exception in the reference). If content does not fit at 18 pt, cut content; never shrink text. 2 weights only; titles bold, body not.
 9. **Data slides:** 1 chart, 1 conclusion (a chart saying 2 things becomes 2 slides) · the title is the conclusion · highlight the point in the brand colour and grey the rest · numbers on bars, no gridlines or legend if data can be labelled · state period, sample size, and source · a table over 5 rows by 4 columns becomes a chart or an attachment.
 10. **Thai type:** line height at least 1.4 for titles and 1.5 for body · break long Thai titles yourself where the thought ends · a font with real regular and bold · one family for Thai and English on a line (details in the reference).
-11. **Render and view the whole deck as thumbnails**, then run the checks below. Before sending, go through item 3 of `no-ai-look` (for HTML work run its script; the eye gate 3.2 must also pass, and web pages answer items 10–14).
+11. **Render and view the whole deck as thumbnails**, then run the checks below. Before sending, go through item 3 of `design-gate/no-ai-look` (for HTML work run its script; the eye gate 3.2 must also pass, and web pages answer items 10–14).
 
 ## Check before done
 - Reading only the titles gives the whole story · every title is a conclusion
@@ -188,7 +188,7 @@ Chart colour palette: `diagram-figures` → `references/colour-by-domain.md` · 
 | Convert .pptx to .html with animation · click-by-click reveal | `html-slide-deck` (`references/from-pptx.md`) |
 | Spacing rules and eye order (app screens) | `ui-craft` (plugin `software-development`) |
 | Content comes from a Software Requirements Specification (SRS) | `srs-writing` (plugin `software-development`) |
-| Cut content down to what is necessary | `superuser:simplify` |
+| Cut content down to what is necessary | `superuser:ground-rules` |
 | Brand colour and type system · illustration | `graphic-design` (plugin `software-development`) |
 
 
@@ -210,7 +210,7 @@ The central file for every slide skill (`presentation-design` · `html-slide-dec
    ```
    The script reports the main colour, up to 2 secondary colours, and whether the source background is dark or light, then prints values ready to put into `build_deck.py` · `StageDeck` · `pptx_to_html.py`. It reads .pptx .docx .xlsx .html .css .svg images and .pdf (needs `pdftoppm`). Colours it ignores: grey, white, black · the default Office theme (colours the author did not choose) · Word styles the content does not use · colours that appear fewer than 3 times or under 10% of the main colour
 2. If the source has no colour (plain text · black-and-white documents), use the project's colour in the order in `diagram-figures` item 5 (`doc-theme`, then the brand colour in code or the logo)
-3. If there is still none, search for a reference per `design-references`, type `slide`, with the work's keywords, then extract colours from the chosen work (the same script works on a screenshot of the reference)
+3. If there is still none, search for a reference per `design-gate/design-references`, type `slide`, with the work's keywords, then extract colours from the chosen work (the same script works on a screenshot of the reference)
 4. If live search is not possible, use the house colour `#2A78D6` and write `(รอยืนยัน)` (to be confirmed) in the report
 
 You must still open and look at the script result once: the main colour it gives must be one that people remember the work by (logo colour · cover colour). If it picked the colour of an illustration or a screenshot that happens to cover a large area, feed it the logo or cover file instead.
@@ -219,7 +219,7 @@ You must still open and look at the script result once: the main colour it gives
 
 ## 2 · Mood comes from the content
 
-Start from the `เนื้อหา:` brief (gate item 0 of `design-references`, file `references/content-to-theme.md`): its **อารมณ์** and **ธีม** pick the row below. That file holds the same table for every kind of work, plus what colours tend to carry.
+Start from the `เนื้อหา:` brief (gate item 0 of `design-gate/design-references`, file `references/content-to-theme.md`): its **อารมณ์** and **ธีม** pick the row below. That file holds the same table for every kind of work, plus what colours tend to carry.
 
 Look at what the source work is about and who is listening, then choose from the table. Material used for visuals must come from that work's own world (real product photos · real screens · materials · signs of the trade), not ready-made icons.
 
@@ -238,17 +238,17 @@ If the work matches several rows, go by the audience (fitness but asking executi
 
 ## 3 · What "bright" means on a slide
 
-When the user says "สดใส" (bright) "น่าดู" (good to look at) "ไม่จืด" (not flat), or says nothing at all, do the following by default (`no-ai-look` forbids ordering by free-floating adjectives, so this is turned into rules that can be checked):
+When the user says "สดใส" (bright) "น่าดู" (good to look at) "ไม่จืด" (not flat), or says nothing at all, do the following by default (`design-gate/no-ai-look` forbids ordering by free-floating adjectives, so this is turned into rules that can be checked):
 
 1. **Light background by default.** Use a dark background only when the source work or app is dark (the script says `พื้นต้นทาง … (เข้ม)`)
 2. **Full-slide main colour** on the cover, section openers and closing page · `build_deck.py --theme bright` does all 3 types (`.hero` `.divider` `.close`) · `StageDeck(block=True)` does the cover and chapter dividers (no separate closing page) · content pages use a light background, with cards tinted faintly with the main colour
    - **Logos on solid-colour pages use a pure white or pure black version** to match that page's text colour, because a logo the same colour as the background, or close to it, disappears · if you only have a coloured logo, place it on a white rounded box, or move the logo to the first content page
 3. **Secondary colour from the source** (if any) separates sections, for example section 2's opener is fully the secondary colour, or it emphasises numbers whose meaning differs from the main colour · the whole deck has at most 3 colours plus status colours
 4. **Real images in at least 1 of every 3 slides.** Images from the source work, screenshots, product photos, or images made per `image-generation` · no more than 3 text-only slides in a row
-5. **No layout repeated more than 2 slides in a row** (`no-ai-look` item 3.2 item 5)
+5. **No layout repeated more than 2 slides in a row** (`design-gate/no-ai-look` item 3.2 item 5)
 6. **Never use vividness in place of readability.** Text of every size on a solid colour must reach ≥ 4.5:1 · `build_deck.py --theme bright` and `StageDeck(block=True)` choose for you: white when white reaches 4.5:1; if not, near-black (for example on yellow); and if near-black still falls short, pure black (for example on orange, teal and the house blue) · you must still open every slide image and check per item 7 of `presentation-design`
 
-Do not count as vividness, and still forbidden per `no-ai-look`: purple-blue gradients · gradient text · neon or glow · several pastel colours not in the source work · decorative icons on every card · every animation
+Do not count as vividness, and still forbidden per `design-gate/no-ai-look`: purple-blue gradients · gradient text · neon or glow · several pastel colours not in the source work · decorative icons on every card · every animation
 
 Work in the "stable" and "calm" rows of item 2 uses only items 1 2 4 5 6 · use item 3 when the source really has a secondary colour, and full-slide main colour is left only on the cover and closing page.
 
@@ -278,7 +278,7 @@ Use when the deck must be HTML or animated, or pptx as HTML
 
 # HTML Slide Deck — one .html file that opens in a browser and presents at once
 
-> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand fixes colors and fonts; the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
+> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run `design-gate/no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand fixes colors and fonts; the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
 > **One rule:** the deck is **one** .html file. Images embedded in the file · slide titles are conclusions · every page passes `check_deck.py` before sending. Story structure and slide titles come from `presentation-design`; this skill covers how it is built and looks.
 
@@ -293,7 +293,7 @@ Not for: "make a slide deck" with no mention of html, or the customer needs a .p
 ## Steps
 1. Write the story structure per `presentation-design`: every slide title is a conclusion · sections · time per page.
 2. If the project already has `docs/deck/` or an .html deck, add `<section>` to the existing `slides.html` and use the same shell · css · `--brand`; do not start a new file (same principle as `ui-craft` step 0). Otherwise copy `assets/slides-example.html` to the project's `docs/deck/slides.html`, keep only the `<section>` of the layouts you use and fill in the content. Layout classes: [`references/layouts-and-shell.md`](references/layouts-and-shell.md).
-3. Choose the direction before building. It comes from `presentation-design` step 1, stage 0 (order: source work → project's own design → attached reference → live search per `design-references` type `slide` → house defaults, only when there is no information at all). Extract colors from the source with `presentation-design/scripts/source_palette.py <source file>`; if the source has none, use the order in `diagram-figures` step 5; if live search is not possible, use `--theme bright` without `--brand` (gives `2A78D6,1F5FAF`), write `(รอยืนยัน)` in the report and carry on. Never copy colors from the example table in the theme reference. Use `--theme bright` for every new deck unless the source work has a dark background (then `dark`, the default when omitted). Use one main color plus at most 2 secondary colors from the source; green `ok`, blue `blue`, orange `warn` only for pass · info · warning. Theme, tokens, fonts and contrast numbers: [`references/theme.md`](references/theme.md).
+3. Choose the direction before building. It comes from `presentation-design` step 1, stage 0 (order: source work → project's own design → attached reference → live search per `design-gate/design-references` type `slide` → house defaults, only when there is no information at all). Extract colors from the source with `presentation-design/scripts/source_palette.py <source file>`; if the source has none, use the order in `diagram-figures` step 5; if live search is not possible, use `--theme bright` without `--brand` (gives `2A78D6,1F5FAF`), write `(รอยืนยัน)` in the report and carry on. Never copy colors from the example table in the theme reference. Use `--theme bright` for every new deck unless the source work has a dark background (then `dark`, the default when omitted). Use one main color plus at most 2 secondary colors from the source; green `ok`, blue `blue`, orange `warn` only for pass · info · warning. Theme, tokens, fonts and contrast numbers: [`references/theme.md`](references/theme.md).
 4. Build the file:
    ```bash
    python scripts/build_deck.py docs/deck/slides.html -o docs/<PRJ>-DECK-v1.0-DRAFT.html \
@@ -320,7 +320,7 @@ Look rules:
 - [ ] File opens with the network off: all images show, fallback fonts readable.
 - [ ] Every page has an `<aside>` of speaker notes, and `data-at` times add up to no more than the time given.
 - [ ] No personal data or real customer data (use mock data and say so in the foot).
-- [ ] Edited `slides.html` and rebuilt, never the built .html · `no-ai-look` item 3 passed (HTML work runs its script and the eye gate 3.2; 0 script findings is not yet a pass).
+- [ ] Edited `slides.html` and rebuilt, never the built .html · `design-gate/no-ai-look` item 3 passed (HTML work runs its script and the eye gate 3.2; 0 script findings is not yet a pass).
 
 ## References
 - [`references/layouts-and-shell.md`](references/layouts-and-shell.md) — open when choosing layouts, or to see shell keys and animation
@@ -347,7 +347,7 @@ The model is the Independent Study (IS) presentation deck "Few-shot Key Informat
 
 ## 1 · Steps
 
-1. **Finish the .pptx first** — colours and mood come from the source work, following `presentation-design` [`references/deck-theme.md`](../../presentation-design/references/deck-theme.md) (extract colours with `presentation-design/scripts/source_palette.py` · light background is the default · section-divider slides are a full sheet of the main colour, which `StageDeck(..., block=True)` does) · if the source work has no colours and no look yet → **search for a model first:** take the project's words and search live following `design-references` (plugin `superuser`) type `slide`, then extract colours from the chosen work · the stored palette library is for when a live search is not possible · no .pptx → build one with `branded-document-design` (`StageDeck`) · the slide title goes in the title placeholder (it becomes the name in the table of contents) · put speaker notes in notes · split into parts with PowerPoint Sections (they become groups in the table of contents)
+1. **Finish the .pptx first** — colours and mood come from the source work, following `presentation-design` [`references/deck-theme.md`](../../presentation-design/references/deck-theme.md) (extract colours with `presentation-design/scripts/source_palette.py` · light background is the default · section-divider slides are a full sheet of the main colour, which `StageDeck(..., block=True)` does) · if the source work has no colours and no look yet → **search for a model first:** take the project's words and search live following `design-gate/design-references` (plugin `superuser`) type `slide`, then extract colours from the chosen work · the stored palette library is for when a live search is not possible · no .pptx → build one with `branded-document-design` (`StageDeck`) · the slide title goes in the title placeholder (it becomes the name in the table of contents) · put speaker notes in notes · split into parts with PowerPoint Sections (they become groups in the table of contents)
 2. **Steps you want to open one click at a time** — in PowerPoint add On Click animation · when building with python, use `scripts/click_steps.py`:
    ```python
    from click_steps import add_click_steps
@@ -474,7 +474,7 @@ Every page has `<p class="foot">ชื่องาน · หัวข้อ · �
 
 ## Animation (switch on per page — the default is still)
 
-Content sliding up piece by piece on every page, numbers counting up, and glow that loops forever are AI signals in `no-ai-look`, so the shell does not add them to every page: put `data-anim` on the `<section>` only for pages where motion helps the eye follow the story (a system map where arrows must be drawn in order · section openers). `data-count` · `data-loop` · `.bars` · `data-chat` work only on the pieces where they are set.
+Content sliding up piece by piece on every page, numbers counting up, and glow that loops forever are AI signals in `design-gate/no-ai-look`, so the shell does not add them to every page: put `data-anim` on the `<section>` only for pages where motion helps the eye follow the story (a system map where arrows must be drawn in order · section openers). `data-count` · `data-loop` · `.bars` · `data-chat` work only on the pieces where they are set.
 
 | What happens | Where |
 |---|---|
@@ -500,7 +500,7 @@ The look of the house defaults comes from the X Fitness pitch deck (45 slides, 1
 
 ## Direction
 
-The visual direction always comes from `presentation-design` step 1, stage 0; rules on color and mood are in [deck-theme](../../presentation-design/references/deck-theme.md). Selection order: the source work the deck is made from → the design the project already has → a reference the user attached → a reference searched live per `design-references` (plugin `superuser`) type `slide` → house defaults. House defaults are a fallback for when there is no information at all, not a rule. Two decks for different jobs should look different.
+The visual direction always comes from `presentation-design` step 1, stage 0; rules on color and mood are in [deck-theme](../../presentation-design/references/deck-theme.md). Selection order: the source work the deck is made from → the design the project already has → a reference the user attached → a reference searched live per `design-gate/design-references` (plugin `superuser`) type `slide` → house defaults. House defaults are a fallback for when there is no information at all, not a rule. Two decks for different jobs should look different.
 
 ## `--theme`
 
@@ -527,48 +527,3 @@ Extract colors with `presentation-design/scripts/source_palette.py <source file>
 - **Where the house contrast numbers come from:** the house bright color `5B9BE6` reads on a dark background (6.9:1) but only 2.89:1 on white, so it must change to `--brand 2A78D6,1F5FAF` (the second color on white is 6.34:1 · the main color `2A78D6` gets 4.42:1, so use it for bars, lines or large text, not small text · computed with the WCAG formula 2026-10-26).
 - House fonts (when no other direction): headings **Chakra Petch** · body **IBM Plex Sans Thai** · code **JetBrains Mono** (Google Fonts · offline → Tahoma) · if the deck's direction sets other fonts → use those (Thai + English in one family, real bold).
 - **One main color plus at most 2 secondary colors from the source work** · green `ok`, blue `blue`, orange `warn` are used only for their meaning (pass · info · warning).
-
-
----
-
-# skill: answer-shape
-
-Use when an answer needs prose, a table or a diagram
-
-# The shape of an answer — pick prose, table, list or figure from the content
-
-> **One rule:** whatever structure the content has, the answer uses that shape. Comparison → table · connections → figure · one thing → sentences.
-
-## Use when
-- Deciding how to lay out an answer: prose, table, list or figure.
-- The question compares options, asks what connects to what, or you are blocked and must ask for something.
-
-## Steps
-1. Pick the shape from the signal in the question (quoted signals are Thai phrasings; English in brackets):
-
-   | Signal | Shape |
-   |---|---|
-   | "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" (which is better · how they differ · what options) | **Comparison table** |
-   | "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" (what connects to what · how data flows · the sequence) | **Figure** |
-   | "มีอะไรบ้าง" (what are there) when the items are not compared | **Bullet list** |
-   | "ทำไม" · "แปลว่าอะไร" (why · what does it mean) · one thing with no branches | **Plain sentences** |
-   | Several numbers that must be seen together | **Table** |
-   | Steps that must be done in order | **Numbered list** |
-   | Cannot continue · must wait for something from the user | **Short list: what is blocking → what is needed** |
-
-   Having 2 or more "things being compared" is the strongest signal for a table, because in a paragraph the reader must hold the first one in their head while reading the second.
-2. **If you use a table:** the first column is the thing compared, the next columns the aspects · 3–5 columns, at most 8 rows in chat · every cell has content (no data → "ไม่มี"; a table where every cell says "it depends" has no content either) · at most 1 line per cell, longer goes below the table · rows ordered by weight (recommended or most used first, not alphabetical) · column headings are the reader's questions (`เร็วแค่ไหน` · `ต้องดูแลมากไหม`, not `ประสิทธิภาพ` · `ความซับซ้อน`) · always close with a 1-line conclusion.
-3. **If the relationship is the answer** (what connects to what, what sits inside what, a sequence with forks or loops, one thing in several states), draw a figure. In chat a small ASCII figure or a short Mermaid is enough (`กล้อง ──DICOM──▶ Orthanc ──▶ API ──▶ รายงาน`). A figure that must be a real file for a document or slides uses that plugin's figure-drawing skill, if there is one.
-4. **If the answer is shorter than 3 lines, is yes/no plus 1 sentence of reason, or the reason matters more than the options, use sentences.** A 1–2 row table, or a figure that draws what one sentence can say, is the wrong shape.
-5. **If you cannot continue,** list only 2 things: what is blocking, and what you need from the user. 1 line per item, at most 4 items. Do not tell the cause at length, answer side topics or plan ahead. If the user must choose among paths, 1 item per path, easiest first. Example:
-   ```
-   ติดอยู่ 1 เรื่อง:
-      - มองไม่เห็นไฟล์ — โฟลเดอร์ที่เชื่อมไว้ว่าง
-      ต้องการ 1 อย่าง:
-      - แนบ Mockup.html มา หรือบอก path ใหม่
-   ```
-
-## Check before done
-- [ ] The shape matches the content's structure (not a table for one thing, not a paragraph for a comparison).
-- [ ] Every table has content in every cell and ends with a 1-line conclusion.
-- [ ] A blocked answer lists only what is blocking and what is needed.

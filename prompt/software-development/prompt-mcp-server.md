@@ -31,7 +31,7 @@
 ## กฎเฉพาะไฟล์นี้
 
 - **เริ่มที่ stdio บนเครื่องและอ่านอย่างเดียวเสมอ** · จะเพิ่ม tool เขียน (ฉบับ 3) หรือยกเป็น remote (ฉบับ 5) ต้องเขียนเหตุผลลง ADR ก่อน
-- "ใช้ได้" แปลว่าผ่าน Inspector · `claude mcp list` เชื่อมได้ · eval 3 กรณีผ่านพร้อมวันที่ · compile ผ่านอย่างเดียวยังไม่นับ (`principle-prove-it-works`)
+- "ใช้ได้" แปลว่าผ่าน Inspector · `claude mcp list` เชื่อมได้ · eval 3 กรณีผ่านพร้อมวันที่ · compile ผ่านอย่างเดียวยังไม่นับ (`ground-rules/principle-prove-it-works`)
 - eval รันโดย agent ตัวใหม่ที่ไม่ได้เขียน server และไม่เห็นเฉลย
 - agent ที่ใช้: `solution-architect` (ฉบับ 1 และ 5) · `developer` (นำฉบับ 2–4) · `ai-engineer` (คำอธิบาย tool และ eval) · `security-engineer` (ฉบับ 3 และ 5) · `technical-writer` (ฉบับ 4) · `reviewer` ตรวจทุกฉบับ
 
@@ -39,7 +39,7 @@
 
 ## 1. ออกแบบ tool จากระบบของลูกค้า และเลือกว่าจะสร้างเองหรือใช้ MCP ของผู้ผลิต
 
-playbook `project-docs` · agent `solution-architect` (นำ) + `ai-engineer` · skill `mcp-server` (ข้อ 1–3 · `references/tool-design.md`) · `prior-art-review` · `pdpa-compliance` · `adr-writer`
+playbook `project-docs` · agent `solution-architect` (นำ) + `ai-engineer` · skill `mcp-server` (ข้อ 1–3 · `references/tool-design.md`) · `research-with-sources/prior-art-review` · `pdpa-compliance` · `adr-writer`
 **ผลลัพธ์:** `docs/mcp/MCP-DESIGN.md` · ADR การเลือก (สร้างเอง · ใช้ของผู้ผลิต · ใช้คู่กัน) ใน `docs/decisions/` · **ไม่เขียนโค้ดและไม่ต่อระบบจริง**
 
 ### ระบบ (ผู้ใช้กรอก)
@@ -53,7 +53,7 @@ playbook `project-docs` · agent `solution-architect` (นำ) + `ai-engineer` �
 
 ### หัวข้อที่ต้องมี
 
-1. **สร้างเองหรือใช้ของผู้ผลิต:** ค้นก่อนว่าผู้ผลิตระบบมี MCP ทางการไหม (`prior-art-review`) แล้วเทียบ tool ของเขากับงานในช่องกรอก · ครอบคลุมงานราว 80% ขึ้นไปให้ใช้ของเขา · ขาด 1–2 tool ให้ใช้ของเขาคู่กับ server เล็กที่ทำเฉพาะส่วนที่ขาด ไม่ fork ของเขามาแก้ · server ของชุมชนถือเป็นโค้ดที่ไม่ไว้ใจ ต้องอ่านทั้งไฟล์และลองใน `docker-sandbox` ก่อน · ทุกข้อมีแหล่งและวันที่ตรวจ
+1. **สร้างเองหรือใช้ของผู้ผลิต:** ค้นก่อนว่าผู้ผลิตระบบมี MCP ทางการไหม (`research-with-sources/prior-art-review`) แล้วเทียบ tool ของเขากับงานในช่องกรอก · ครอบคลุมงานราว 80% ขึ้นไปให้ใช้ของเขา · ขาด 1–2 tool ให้ใช้ของเขาคู่กับ server เล็กที่ทำเฉพาะส่วนที่ขาด ไม่ fork ของเขามาแก้ · server ของชุมชนถือเป็นโค้ดที่ไม่ไว้ใจ ต้องอ่านทั้งไฟล์และลองใน `docker-sandbox` ก่อน · ทุกข้อมีแหล่งและวันที่ตรวจ
 2. **ตาราง tool 5–15 ตัว:** `| ชื่อ | อ่าน/เขียน | ทำอะไร · ใช้เมื่อไหร่ (1 ประโยค) | พารามิเตอร์ (type · ขอบเขต) | field ที่คืน | ข้อมูลส่วนบุคคลไหม |` · ชื่อแบบ `<ระบบ>_<กริยา>_<สิ่งของ>` · tool ที่คืนรายการมี `limit` และ `has_more` · ไม่มี tool แบบ `run_sql(query)` หรือ dump ทั้งตาราง · ไม่ห่อทุก endpoint เป็น tool ตัวต่อตัว · tool เขียนแยกไว้ท้ายตาราง ทำในฉบับ 3
 3. **transport:** stdio บนเครื่องเป็นค่าเริ่ม · ช่อง "ใครใช้" ติ๊ก claude.ai หรือทีมที่ระบบต้นทางอยู่บน cloud ให้บอกว่าจะยกเป็น remote ในฉบับ 5 พร้อมเหตุผล ไม่เริ่มที่ remote ตั้งแต่วันแรก
 4. **ข้อมูลน้อยที่สุด:** field ที่แต่ละ tool คืน และ field ที่ตัดทิ้งเพราะอยู่ในช่อง "ข้อมูลที่ห้ามออก" · tool ที่คืนข้อมูลส่วนบุคคลแยกเป็นตัวของมันเอง และมีเหตุผลเขียนไว้

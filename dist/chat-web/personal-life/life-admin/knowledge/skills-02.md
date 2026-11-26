@@ -189,7 +189,7 @@ Few goals, measured honestly, carried by habits small enough to survive a bad we
 9. **Failure review** when two weeks in a row are missed, or at quarter end. See the failure review section below
 10. **Quarter end**: score each goal, write three lines of lessons, and carry forward or drop
 
-## Choosing goals by numbers (`decision-scoring`, command `knapsack`)
+## Choosing goals by numbers (`decision-desk/decision-scoring`, command `knapsack`)
 
 1. **Budget = real free hours per week**, not wished-for hours: 168 minus sleep, work, commute, family and chores, as the user counts it from last week's calendar. Write that number first.
 2. **For each brain-dump item** give: cost = hours per week it needs; value = **impact × desire**, each 1–5 by the user (impact = how much life changes if it happens; desire = how much the user wants it, not how much they should). Value is 1–25.

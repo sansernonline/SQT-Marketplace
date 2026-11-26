@@ -12,7 +12,7 @@ General information, not tax advice. The company's accountant (นักบั�
 - Deciding which document to issue and when, or working out VAT and withholding tax lines
 - Chasing overdue invoices from several credit customers
 
-Not for: full tax-invoice fields, abbreviated invoices, e-Tax → `e-tax-invoice` · one awkward message to one customer → `polite-message-th-en` · contracts → `doc-contract-th`
+Not for: full tax-invoice fields, abbreviated invoices, e-Tax → `e-tax-invoice` · one awkward message to one customer → `human-writing/polite-message-th-en` · contracts → `doc-contract-th`
 
 ## Steps
 
@@ -73,7 +73,7 @@ Confirm VAT rate and payment terms before producing the final document; amounts 
 
 # Chasing overdue invoices (ตามหนี้ลูกค้าเครดิต) · doc-quotation
 
-Open when the user asks to chase overdue invoices from several credit customers (B2B buyers, resellers, agents), at month end or billing day. One awkward message to one customer → `polite-message-th-en` (plugin `superuser`), whose tone ladder the levels below follow. Process from Anthropic's invoice-chase skill (`anthropics/knowledge-work-plugins` small-business, Apache-2.0, read 2026-11-10), rewritten for Thai sellers; no text copied.
+Open when the user asks to chase overdue invoices from several credit customers (B2B buyers, resellers, agents), at month end or billing day. One awkward message to one customer → `human-writing/polite-message-th-en` (plugin `superuser`), whose tone ladder the levels below follow. Process from Anthropic's invoice-chase skill (`anthropics/knowledge-work-plugins` small-business, Apache-2.0, read 2026-11-10), rewritten for Thai sellers; no text copied.
 
 ## Levels
 

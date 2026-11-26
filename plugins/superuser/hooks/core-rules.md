@@ -1,4 +1,4 @@
-<!-- สำเนาที่ scripts/sync/sync-superuser.mjs สร้างจาก scripts/install/CLAUDE.global.md · ห้ามแก้ไฟล์นี้ แก้ที่ต้นฉบับ · sha256:1ff5c48f0c86 -->
+<!-- สำเนาที่ scripts/sync/sync-superuser.mjs สร้างจาก scripts/install/CLAUDE.global.md · ห้ามแก้ไฟล์นี้ แก้ที่ต้นฉบับ · sha256:9a1688d9f66a -->
 <!-- sqt-core-rules -->
 # Personal rules (all projects)
 
@@ -11,18 +11,18 @@ Skill descriptions are often cut down to just the name. **When the task matches 
 | Task | Open |
 |---|---|
 | Write or edit anything people read (long answer · email · report · README · document · slide · label) | `superuser:human-writing` |
-| Answer has options, comparisons, trade-offs, or several connected parts | `superuser:answer-shape` |
-| Word · Portable Document Format (PDF) · kept documents | `anthropic-skills:docx` or `anthropic-skills:pdf` + `superuser:human-writing` + `superuser:polished-document-style` |
+| Answer has options, comparisons, trade-offs, or several connected parts | `superuser:lean-reply` |
+| Word · Portable Document Format (PDF) · kept documents | `anthropic-skills:docx` or `anthropic-skills:pdf` + `superuser:human-writing` + `superuser:design-gate` |
 | Slides · Excel | `anthropic-skills:pptx` or `software-development:presentation-design` · `anthropic-skills:xlsx` (+ `superuser:human-writing`) |
-| Any creative work (screen · mockup · poster · image · slide · cover · icon) | `superuser:design-references` (read the theme in `~/.claude/superuser-style.md`, then search live references **before every start**) + `superuser:no-ai-look` + the task's skill (`software-development:ui-craft` · `graphic-design:superuser` · `software-development:diagram-figures`) |
-| Write or edit code | `superuser:simplify` (not Claude Code's `/simplify`) + `software-development:lazy-coding` + `software-development:readable-code` + `software-development:stack-python` (or stack-typescript · stack-dotnet · stack-sql · stack-mql by language) |
-| Fix a bug · something broken | `superuser:principle-fix-root-cause` + `superuser:targeted-fix` |
+| Any creative work (screen · mockup · poster · image · slide · cover · icon) | `superuser:design-gate` (read the content and the theme in `~/.claude/superuser-style.md`, search live references **before every start**, then the no-ai-look check) + the task's skill (`software-development:ui-craft` · `graphic-design:superuser` · `software-development:diagram-figures`) |
+| Write or edit code | `superuser:ground-rules` (part simplify, not Claude Code's `/simplify`) + `software-development:lazy-coding` + `software-development:readable-code` + `software-development:stack-python` (or stack-typescript · stack-dotnet · stack-sql · stack-mql by language) |
+| Fix a bug · something broken | `superuser:fix-at-source` |
 | Find information that needs sources (prices · rules · rates · compare options) | `superuser:research-with-sources` |
-| Settle open items (รอยืนยัน · TBD) or "เลือกให้เลย" by research · compare · vote | `superuser:research-vote-decision` |
-| About to say done · passed · fixed | `superuser:principle-prove-it-works` |
+| Settle open items (รอยืนยัน · TBD) or "เลือกให้เลย" by research · compare · vote | `superuser:decision-desk` |
+| About to say done · passed · fixed | `superuser:ground-rules` |
 | Large or risky work (≥ 5 items · whole repo · search then edit · money · law · health · personal data · delete or overwrite · live system · sent to outsiders) | `<plugin>:superuser` of the matching branch (`superuser:superuser` · `software-development:superuser` · `e-commerce:superuser` · `trading-finance:superuser` · `personal-life:superuser` · `graphic-design:superuser`) |
 | Brief a worker · hand off or take over work · switch model | `superuser:handoff` |
-| commit · temp files · naming documents | `superuser:commit-log` · `superuser:temp-file-discipline` · `superuser:document-naming` |
+| commit · temp files · naming documents | `superuser:workspace-rules` |
 
 The hook announces `skill ที่ต้องเปิด` (skills to open) → open those · **small task (1 item in one file · a single question): when the hook says `งานเล็ก`, call Skill `superuser:quick` (runs on haiku and does not see this chat) with the full request, file paths and any facts from the chat in the args, then relay its result. If it returns `เกินงานเล็ก` or `ขาดบริบท`, do the task yourself.**
 
@@ -38,11 +38,11 @@ The hook announces `skill ที่ต้องเปิด` (skills to open) �
 ## Finish the job
 
 - **Once told, finish the whole set in one go**, never ask "continue?" · several prompts run back to back, one report at the end
-- **If you must decide midway, decide yourself**: take the lowest-impact path, then summarize under **ตัดสินใจเอง** at the end of the answer · for a decision that changes the work, **research first, then a 3-agent vote**, and list it with its `D<n>` so the user can change it later, no closing question (`decision-log` · `superuser` section 6)
+- **If you must decide midway, decide yourself**: take the lowest-impact path, then summarize under **ตัดสินใจเอง** at the end of the answer · for a decision that changes the work, **research first, then a 3-agent vote**, and list it with its `D<n>` so the user can change it later, no closing question (`decision-desk/decision-log` · `superuser` section 6)
 - **The owner's defaults live in `~/.claude/superuser-style.md`**, use them without asking (person names for empty roles · free first, then cheapest)
 - **Unknown facts with no default (numbers, names, dates, budget) are not decisions, never guess** · write `(รอยืนยัน)` and continue
 - You may stop early only for: deleting or overwriting user files not asked for · push or commit outside the conditions in the files-and-git section · sending off the machine · truly stuck with no way forward, after finishing the other parts and saying what is stuck
-- **Large work follows the `superuser` playbook** · medium work (2–4 items) do yourself as the hook says · if `docs/BUILD-PLAN.md` exists, also log in the `decision-log` table
+- **Large work follows the `superuser` playbook** · medium work (2–4 items) do yourself as the hook says · if `docs/BUILD-PLAN.md` exists, also log in the `decision-desk/decision-log` table
 
 ## Code
 
@@ -61,10 +61,10 @@ The hook announces `skill ที่ต้องเปิด` (skills to open) �
 
 ## Files and git
 
-- Temp files go in `_to_delete/<YYYY-MM-DD>-<topic>/` at the project root, 1 task 1 folder (`temp-file-discipline`) · **the root must hold no temp files**
+- Temp files go in `_to_delete/<YYYY-MM-DD>-<topic>/` at the project root, 1 task 1 folder (`workspace-rules/temp-file-discipline`) · **the root must hold no temp files**
 - **Source code lives in a root folder named like the project, lowercase joined with `-`** · the root holds only `ref/` `docs/` `mockup/` `assets/` `qa/` `_to_delete/` `.claude/` and the code folder, created when there is content · README CHANGELOG and config files live in the code folder (`project-doc-set` type B) · declare exceptions in the README
 - Never delete user files without asking · before overwriting a file the user gave you or that was already sent out, back it up to `_to_delete/` first
-- New file names follow `document-naming`: lowercase English joined with `-`, no spaces, Thai, emoji, final, new · dates `YYYY-MM-DD` · if the task's skill sets another rule, follow it
+- New file names follow `workspace-rules/document-naming`: lowercase English joined with `-`, no spaces, Thai, emoji, final, new · dates `YYYY-MM-DD` · if the task's skill sets another rule, follow it
 - ID card numbers · account numbers · passwords · One-Time Password (OTP) never go in work files or logs (keep only the last 4 digits) · mask personal data in screenshots
-- **Never `push` unless told**, except when the **git อัตโนมัติ** (auto git) line in the "กติกา" (rules) section of `CONTEXT.md` is `auto` (no such line → ask once per `workspace-setup`) · commit only when permitted (user says so · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · "กติกา" in `CONTEXT.md`), then commit one step at a time per `commit-log` · not permitted → offer the commit message in the answer · never commit to the main branch without asking
+- **Never `push` unless told**, except when the **git อัตโนมัติ** (auto git) line in the "กติกา" (rules) section of `CONTEXT.md` is `auto` (no such line → ask once per `workspace-rules/workspace-setup`) · commit only when permitted (user says so · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · "กติกา" in `CONTEXT.md`), then commit one step at a time per `workspace-rules/commit-log` · not permitted → offer the commit message in the answer · never commit to the main branch without asking
 - Edit paired files (Thai/English · spec/test) all in one round

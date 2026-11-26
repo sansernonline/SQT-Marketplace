@@ -1,5 +1,25 @@
 # Changelog — superuser
 
+## 4.0.0 — 2026-11-26
+
+รวม skill ของ superuser จาก 41 เหลือ 16 (เปลี่ยนชื่อแบบไม่เข้ากับของเดิม) · ผู้ใช้สั่ง 2026-11-26 ตามแผน `.claude/superuser/plans/2026-11-25-skill-merge-plan.md`
+
+- `superuser` ← `status-report` · `model-scorecard`
+- `lean-reply` ← `answer-shape`
+- `human-writing` ← `spell-out-abbreviations` · `translate-th-en` · `polite-message-th-en`
+- `design-gate` ← `design-references` · `no-ai-look` · `polished-document-style`
+- `ground-rules` ← `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-build-a-tool-not-handwork` · `principle-proceed-on-reversible-work` · `principle-user-experience-first` · `simplify`
+- `fix-at-source` ← `principle-fix-root-cause` · `targeted-fix`
+- `decision-desk` ← `decision-log` · `flag-and-propose` · `decision-scoring` · `research-vote-decision`
+- `research-with-sources` ← `prior-art-review`
+- `crew-patterns` ← `agent-patterns` · `parallel-split-and-merge` · `parallel-attempts-pick-best` · `adversarial-review-panel`
+- `learn-loop` ← `session-lessons-to-skills` · `repeated-mistakes-to-checks` · `owner-style-capture`
+- `workspace-rules` ← `commit-log` · `temp-file-discipline` · `document-naming` · `workspace-setup`
+- `lean-reply` รับ `caveman` กับ `short-answers` จาก skill ส่วนตัวของผู้ใช้มาเป็น part ด้วย
+- เนื้อหาเดิมย้ายไป `skills/<ใหม่>/parts/<เดิม>/guide.md` ครบไม่ตัดทิ้ง · SKILL.md ใหม่มีกฎเด็ดขาดของทุก part และตารางเปิด part · `handoff` คงชื่อเดิมเพราะชนกับชื่อโมดูล `handoff` ใน config
+- router · guard · CLAUDE.global.md · eval · ลิงก์และ import ทั้ง repo ชี้ชื่อใหม่ · `scripts/sync/prior-names.json` จดชื่อเก่า → ใหม่
+- หลังอัปเดต: คัด `scripts/install/CLAUDE.global.md` ไปทับ `~/.claude/CLAUDE.md` และลบ `~/.claude/skills/caveman` กับ `short-answers` ที่ซ้ำ
+
 ## 3.60.0 — 2026-11-26
 
 - `status-report` หัวข้อ 7: เมื่อผู้ใช้ถามว่างานค้างอะไร ตอบบรรทัดสรุปก่อน แล้วเป็นตาราง `# · งาน · สถานะ · ต้องให้ทำอะไร` ทุกแถวบอกสิ่งที่ผู้ใช้ทำได้ในคำตอบเดียว ปิดด้วยคำแนะนำว่าทำข้อไหนก่อน · ตรวจของจริงก่อนลิสต์ · router จับ งานค้าง · มีอะไรค้าง · what is pending · eval `status-report-behaviour` (ยังไม่ได้รัน) · ผู้ใช้ขอ 2026-11-26

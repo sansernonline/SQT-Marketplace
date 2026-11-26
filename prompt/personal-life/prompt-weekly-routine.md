@@ -75,7 +75,7 @@ playbook `meeting` · agent `meeting-prep` · skill `meeting`
 
 ## 3. กลับจากลาพักร้อน อีเมลค้างเป็นร้อย
 
-playbook `weekly-reset` (ขั้น 1–3 และ 5: อ่าน · คัด 5 กอง · ทบทวน · 3 เรื่องสำคัญ) · agent `life-admin` · skill `inbox-triage` · `weekly-review` · `polite-message-th-en`
+playbook `weekly-reset` (ขั้น 1–3 และ 5: อ่าน · คัด 5 กอง · ทบทวน · 3 เรื่องสำคัญ) · agent `life-admin` · skill `inbox-triage` · `weekly-review` · `human-writing/polite-message-th-en`
 **ผลลัพธ์:** หัวข้อ "กลับจากลา YYYY-MM-DD" ต่อท้าย `weekly-reviews.md` · ร่างอีเมลที่ต้องตอบวันนี้ · **รออนุมัติ:** ส่งอีเมล · เก็บถาวรหรือลบอีเมลทีละมาก
 
 ### ข้อมูล (ผู้ใช้กรอก)

@@ -6,7 +6,7 @@ argument-hint: <path to the asset>
 
 # Design Review — 8 points, 3 ranked fixes, 1 thing to keep
 
-> **Pre-work gate:** work sent for review must carry the line `ด่านก่อนลงมือ:` as set out in that section of `design-references` (plugin `superuser`) · a missing line, or prototypes without links → fix number 1 · work designed by the user or an outsider does not need this line, but still gets the eye check of `no-ai-look`
+> **Pre-work gate:** work sent for review must carry the line `ด่านก่อนลงมือ:` as set out in that section of `design-gate/design-references` (plugin `superuser`) · a missing line, or prototypes without links → fix number 1 · work designed by the user or an outsider does not need this line, but still gets the eye check of `design-gate/no-ai-look`
 
 > **One rule:** 8 points, 3 fixes, then ship. A review that lists 20 nitpicks is a redesign request. A review that only says "feels busy" is not a review.
 
@@ -21,11 +21,11 @@ Not for: a second look at text, code or a plan → a new `reviewer` agent · fix
 2. View at real size: on a phone for social (or 375 px wide on screen), at arm's length for print proofs. Look at the exported file, not the layout.
 3. 2-second test: look for 2 seconds, look away, say what it was about. Then squint, zoom to 10%, or blur 10 px: what still shows is the real hierarchy. If the offer or the one action disappears and the photo stays, point 2 fails whatever the sizes say.
 4. Score the 8 points below, pass or fail by the criteria, 1 line each. On a first sketch check points 1 and 2 only; before it ships check all 8 plus the defects list.
-5. Rank the top 3 fixes by impact on the one action. Each fix names the element, the change and the amount (not "feels busy"; say "remove the second badge; the price badge alone carries the offer"). With more than 3 candidates, rank with `decision-scoring` `priority`: `node <decision-scoring>/scripts/decide.mjs priority fixes.json` (`<decision-scoring>` = folder of skill `superuser:decision-scoring`): reach = how many pieces in the set the fault touches, impact 0.25–3 on the one action, confidence 0–1, effort in hours; example [fix-priority.example.json](references/fix-priority.example.json) (made-up numbers, run 2026-10-28); a tie → the cheaper fix first.
+5. Rank the top 3 fixes by impact on the one action. Each fix names the element, the change and the amount (not "feels busy"; say "remove the second badge; the price badge alone carries the offer"). With more than 3 candidates, rank with `decision-desk/decision-scoring` `priority`: `node <decision-scoring>/scripts/decide.mjs priority fixes.json` (`<decision-scoring>` = folder of skill `superuser:decision-desk`): reach = how many pieces in the set the fault touches, impact 0.25–3 on the one action, confidence 0–1, effort in hours; example [fix-priority.example.json](references/fix-priority.example.json) (made-up numbers, run 2026-10-28); a tie → the cheaper fix first.
 6. Name 1 specific thing to keep that the fixes must not break.
 7. Write the result with the sheet in [review-sheet.md](references/review-sheet.md).
 8. Severity: a fail on 1, 3 or 8 (wrong price, unreadable text, broken hands) blocks shipping. Fails on 4–7 can ship if the deadline is hard and they go on the next-round list. Judge against the job and the kit, not personal taste; when asked "is it good?", state the criterion first.
-9. If you made the asset yourself, hand the exported file to a fresh `design-critic` agent (see `no-ai-look` 3.2), and run the check in `no-ai-look` section 3 (its script on HTML/CSS, the eye check 3.2 on images and other files).
+9. If you made the asset yourself, hand the exported file to a fresh `design-critic` agent (see `design-gate/no-ai-look` 3.2), and run the check in `design-gate/no-ai-look` section 3 (its script on HTML/CSS, the eye check 3.2 on images and other files).
 
 ## The eight points
 

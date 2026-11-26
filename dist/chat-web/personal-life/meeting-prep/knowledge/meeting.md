@@ -11,7 +11,7 @@ Two legs, one habit. Pick the leg from the request: meeting soon or invite given
 - A meeting just ended and the user has notes, chat, or a transcript to turn into minutes.
 - A formal Thai minutes document (รายงานการประชุม) is needed.
 
-Not for: which meetings are worth keeping → `calendar-audit` · agenda request or decline wording → `polite-message-th-en` · collecting your actions → `weekly-review`.
+Not for: which meetings are worth keeping → `calendar-audit` · agenda request or decline wording → `human-writing/polite-message-th-en` · collecting your actions → `weekly-review`.
 
 ## Leg 1 · Before the meeting (prep card, one page, 15 minutes)
 If you cannot fill the goal line, the meeting is not ready.
@@ -45,7 +45,7 @@ The meeting did not happen unless the summary exists. Write it within the hour. 
 4. **Extract actions:** one owner (a person, not a team) + due date + verb-first task. Missing owner or date → mark `[owner?]` / `[date?]` and list them at the top.
 5. **Open questions:** what is unresolved, who answers, by when.
 6. **Check numbers and names** against the source: amounts, dates, spelling of names and titles (คุณ / ดร. / ผศ.). Auto-generated transcripts err most on names and numbers; flag uncertain ones `[check]`.
-7. **File:** append to the meeting's running note, or create `docs/meetings/YYYY-MM-DD-<topic>.md` (naming per `document-naming`; personal meetings go in the user's notes folder with the same name).
+7. **File:** append to the meeting's running note, or create `docs/meetings/YYYY-MM-DD-<topic>.md` (naming per `workspace-rules/document-naming`; personal meetings go in the user's notes folder with the same name).
 8. **Draft the send, then wait:** include "please reply by [date] if anything is wrong" (silence = accepted). Send only after the user says send.
 9. **The next meeting opens with the action table:** status of each item.
 - Summarise what was decided and assigned, not who said what; quote only when wording matters (commitments · prices). Remove side talk and sensitive items (health · salaries) unless they are the subject.

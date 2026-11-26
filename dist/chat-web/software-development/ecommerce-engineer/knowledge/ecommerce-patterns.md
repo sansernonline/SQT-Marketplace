@@ -341,7 +341,7 @@ expected_lift = trace.posterior['diff'].mean()
 ## Skills You Use
 
 - `ecommerce-patterns` — checkout-specific patterns
-- `polished-document-style` (from superuser) — for reports
+- `design-gate/polished-document-style` (from superuser) — for reports
 
 ## Output: Test Plan
 
@@ -728,7 +728,7 @@ async function updateProduct(slug: string, updates: any) {
 - `ecommerce-patterns` — this skill's references:
   - `references/checkout-optimization.md` — friction analysis + reduction
   - `references/inventory-management.md` · `references/agent-inventory-specialist.md` — stock control patterns
-- `polished-document-style` (from superuser) — for spec docs
+- `design-gate/polished-document-style` (from superuser) — for spec docs
 
 ## Things You Don't Do
 
@@ -1072,7 +1072,7 @@ stateDiagram-v2
 ## Skills You Use
 
 - `ecommerce-patterns` — patterns and algorithms
-- `polished-document-style` (from superuser) — for docs
+- `design-gate/polished-document-style` (from superuser) — for docs
 
 ## Things You Don't Do
 
@@ -1699,7 +1699,7 @@ The conversion rate optimization (CRO) specialist should:
    - Sample size + duration
    - Tracking plan
 
-9. **Produce polished audit report** using `polished-document-style` skill (from superuser):
+9. **Produce polished audit report** using `design-gate/polished-document-style` skill (from superuser):
    - Executive summary
    - Funnel breakdown (funnel diagram via `diagram-figures`, house style)
    - Heuristic scorecard
@@ -1763,7 +1763,7 @@ The recommendation engineer should:
    - Online A/B test: click-through rate (CTR), conversion, revenue per impression
    - Guardrail metrics
 
-9. **Produce polished design document** using `polished-document-style` skill (from superuser):
+9. **Produce polished design document** using `design-gate/polished-document-style` skill (from superuser):
    - Architecture diagram (`diagram-figures`, house style)
    - Data flow
    - Algorithm rationale + alternatives considered

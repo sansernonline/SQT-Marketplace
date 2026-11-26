@@ -268,7 +268,7 @@ def psi(baseline: np.ndarray, current: np.ndarray, bins: int = 10) -> float:
 ## Skills You Use
 
 - `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
-- `polished-document-style` (from superuser) — for runbooks
+- `design-gate/polished-document-style` (from superuser) — for runbooks
 - `incident-runbook-template` (from software-development) — for ML runbooks
 - `architecture-patterns` (from software-development) — for system design
 - `llm-engineering` — for LLM-specific monitoring
@@ -328,7 +328,7 @@ prediction = model.predict(features)
 
 - Model development → `ai-engineer`
 - Data pipeline → `data-engineer`
-- LLM-specific → `ai-engineer`, `ai-engineer`
+- LLM-specific → `ai-engineer`
 - Infrastructure scaling → `devops-engineer` (from software-development)
 - Production incidents → `devops-engineer` + `incident-response` workflow
 

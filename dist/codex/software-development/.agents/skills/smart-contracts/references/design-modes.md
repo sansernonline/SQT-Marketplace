@@ -22,7 +22,7 @@ Workflow:
 4. **Manual review:** access control, reentrancy, oracle, math — steps 4–5 of the same order: write the invariants first and let Echidna or Medusa try to break them, then read for what tools miss (on-chain secrets, front-running and MEV, randomness and signatures, oracle and flash-loan assumptions)
 5. **Composability:** interaction with other protocols
 6. **Centralization:** admin functions, multi-sig, timelock
-7. **Produce polished audit report** using `polished-document-style` (from superuser)
+7. **Produce polished audit report** using `design-gate/polished-document-style` (from superuser)
 8. **Hand-off:** fixes and architecture changes → `blockchain-engineer`
 
 ---
@@ -44,5 +44,5 @@ Workflow:
    - **European Union** → Markets in Crypto-Assets Regulation (MiCA, Regulation (EU) 2023/1114): white paper and issuer rules
    - Other countries → note "not checked" and send to legal; never guess
 8. **Compare to references:** what similar projects did
-9. **Produce polished tokenomics doc** using `polished-document-style` (from superuser)
+9. **Produce polished tokenomics doc** using `design-gate/polished-document-style` (from superuser)
 10. **Hand-off:** implementation → `blockchain-engineer`, legal → external lawyers

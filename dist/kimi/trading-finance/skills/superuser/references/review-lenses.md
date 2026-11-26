@@ -1,6 +1,6 @@
 # review-lenses — review package · lenses · item-by-item validator gate
 
-Used with [`playbook-review`](playbook-review.md) · `reviewer` · skill `adversarial-review-panel` of plugin superuser · everywhere a fresh reviewer is used.
+Used with [`playbook-review`](playbook-review.md) · `reviewer` · skill `crew-patterns/adversarial-review-panel` of plugin superuser · everywhere a fresh reviewer is used.
 
 The one flow in brief: **review package → reviewer holds lenses (checklists) → validator confirms item by item → log dismissed items with reasons → freshness check before reporting.** Reviewers find problems easily. Validators leave only the real ones. The package and the freshness check make everyone look at the same version of the work.
 
@@ -12,7 +12,7 @@ The lead creates the folder `_to_delete/<task folder>/review-<round>/` and puts 
 |---|---|---|
 | `package.md` | Task name · what the user wrote (the user's words **verbatim**) · conditions from the spec or brief **copied verbatim, never shortened** · "done-when" · paths of the work · skills the work must follow · `head:` commit ID (or file hash) under review · intent in 1 paragraph · for code with tests that is not risky, add a `โหมด test` (test mode) line with the test command and the result before the fix (fails) and after the fix (passes). The reviewer then checks only the diff and runs the tests once (`reviewer` section Test mode) | Every reviewer |
 | `diff.patch` | The diff of the work as a file (`git diff <base>`, with the command written at the top of the file) · for non-code work, the list of changed files | Every reviewer |
-| `author-notes.md` | The task, constraints, and why the doer chose this path (summarised from `decision-log` · `handoff`) | Only the "challenge intent" round in section 6 |
+| `author-notes.md` | The task, constraints, and why the doer chose this path (summarised from `decision-desk/decision-log` · `handoff`) | Only the "challenge intent" round in section 6 |
 | `ledger.md` | Findings · confirmation results · dismissed items with reasons (section 4) | Lead · next round |
 
 Package rules:

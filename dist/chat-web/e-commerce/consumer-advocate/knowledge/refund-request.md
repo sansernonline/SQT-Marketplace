@@ -83,7 +83,7 @@ Evidence list, workflow, tone rules, letter templates (to the seller, platform, 
 
 Worked example (direct-marketing cancellation, with dates): [references/worked-example.md](references/worked-example.md)
 
-Related: `warranty-tracker` · `scam-check` in `trading-finance` (if installed) · `polite-message-th-en` (plugin `superuser`) · `important-docs` in `personal-life` (if installed).
+Related: `warranty-tracker` · `scam-check` in `trading-finance` (if installed) · `human-writing/polite-message-th-en` (plugin `superuser`) · `important-docs` in `personal-life` (if installed).
 
 
 ## reference: cancellation-notice.md

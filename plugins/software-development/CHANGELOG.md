@@ -1,5 +1,9 @@
 # Changelog — software-development
 
+## 3.10.0 — 2026-11-26
+
+- ชี้ชื่อ skill ของ superuser 4.0.0 ที่รวมแล้ว (เช่น `design-gate` · `ground-rules` · `workspace-rules`) แทนชื่อเดิม
+
 ## 3.9.1 — 2026-11-25
 
 - `project-doc-set`: ตอนปิดงาน ลบโฟลเดอร์งานเก่าใน `_to_delete/` ที่ไม่มีใครใช้แล้วได้เอง ตามกฎถังขยะใหม่ของ superuser 3.51.0 (เดิมห้ามลบเอง)

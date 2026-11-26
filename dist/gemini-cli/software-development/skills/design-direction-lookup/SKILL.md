@@ -5,7 +5,7 @@ description: Use for a starting palette and Thai-Latin fonts on a new screen
 
 # design-direction-lookup — find 3 starting looks from a Thai or English brief
 
-> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-references` (plugin `superuser`) even when a brand exists (the brand fixes colors and fonts; the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
+> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run `design-gate/no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand fixes colors and fonts; the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
 > **One rule:** the draft gives a starting point; it does not replace the beauty gate. Every direction must become a mockup and be chosen at the beauty gate of `ui-craft` step 9. If the search finds nothing, say so plainly; never invent colors or fonts and claim they came from data.
 
@@ -14,7 +14,7 @@ description: Use for a starting palette and Thai-Latin fonts on a new screen
 - You need a 2-mode palette, a Thai-Latin font pair, or Thai UX rules that fit the business, such as "ทำเว็บคลินิกทันตกรรม อยากได้โทนสีกับฟอนต์ไทยที่เข้ากัน".
 - You want to know which chart fits the data, how the home page should order its sections, or what look rules a framework has.
 
-Not for: a project whose look already passed the beauty gate (copy the sibling page per `ui-craft` step 0) · a whole brand set, logo, or corporate colors, or a customer who already has a brand → `graphic-design:brand-kit` · checking finished work for looking AI-made → `no-ai-look` · web app or dashboard screens → `web-app-design` · mobile PWA → `mobile-app-design` · Windows desktop → `windows-app-design`.
+Not for: a project whose look already passed the beauty gate (copy the sibling page per `ui-craft` step 0) · a whole brand set, logo, or corporate colors, or a customer who already has a brand → `graphic-design:brand-kit` · checking finished work for looking AI-made → `design-gate/no-ai-look` · web app or dashboard screens → `web-app-design` · mobile PWA → `mobile-app-design` · Windows desktop → `windows-app-design`.
 
 ## Steps
 1. **Search one topic at a time.**
@@ -25,7 +25,7 @@ Not for: a project whose look already passed the beauty gate (copy the sibling p
    ```
    - Domains: `industry` · `palette` (backup store; results start with a warning to search live first) · `font` · `look` · `ux` · `chart` · `landing` · `stack`. Upstream domains (English, [`data/upstream/uipro/README.md`](data/upstream/uipro/README.md)): `style` · `product` · `motion` · `slide` · `slide-strategy` · `slide-copy`. Colors from upstream are not contrast-checked.
    - 1 run, 1 intent, 2–5 words, in Thai, English, or mixed. You may search again once with different words; if still not found, tell the user.
-2. **Get colors live first, every time there is a network, before drafting.** Palettes in `data/` are a backup store; colors passed with `--palette` or `--extra-palettes` always beat the store. The method (search per `design-references`, choose 3–5 active sites, extract colors with `scripts/brand_colors.py`, build palettes, `--palette` forms, record in DESIGN.md) is in [`references/live-colors.md`](references/live-colors.md); open it before this step.
+2. **Get colors live first, every time there is a network, before drafting.** Palettes in `data/` are a backup store; colors passed with `--palette` or `--extra-palettes` always beat the store. The method (search per `design-gate/design-references`, choose 3–5 active sites, extract colors with `scripts/brand_colors.py`, build palettes, `--palette` forms, record in DESIGN.md) is in [`references/live-colors.md`](references/live-colors.md); open it before this step.
    - The extractor reads only HTML and CSS. If it cannot extract a site, report that as is; never guess colors instead.
    - No network, or no site could be extracted: skip live colors. The draft uses the backup store with a warning on screen and in DESIGN.md: "ใช้คลังสีสำรอง ค้นสดตาม design-references จะทันสมัยกว่า".
 3. **Draft 3 directions in one command.**
@@ -39,12 +39,12 @@ Not for: a project whose look already passed the beauty gate (copy the sibling p
 4. **After the draft:**
    1. Open the comparison page and look at both modes yourself; do not trust the contrast numbers alone. In some Thai fonts the upper vowels hit the previous line.
    2. Send the 3 directions to `ui-craft` step 0.1 stage 3 (a fresh subagent per direction; an agent that cannot call a sub-team does each direction in turn and notes it under "ตัดสินใจเอง"). Each direction adds 1 bold move of its own; the draft does not choose it.
-   3. If the customer has brand colors or fonts, substitute them in each direction and rerun the contrast check (`no-ai-look/scripts/slop_scan.py`).
+   3. If the customer has brand colors or fonts, substitute them in each direction and rerun the contrast check (`design-gate/parts/no-ai-look/scripts/slop_scan.py`).
    4. Choose the direction that passes the beauty gate and write the reason under `## ตัดสินใจเอง` of `docs/BUILD-PLAN.md`.
 
 ## Check before done
 - [ ] `python scripts/design_search.py --self-test` · `python scripts/design_draft.py --self-test` · `python scripts/brand_colors.py --self-test` all pass.
-- [ ] With a network: searched live per `design-references`, and DESIGN.md lists the URLs of real business sites and design sources viewed, with the viewing date of each. With no network: DESIGN.md has the backup-store warning.
+- [ ] With a network: searched live per `design-gate/design-references`, and DESIGN.md lists the URLs of real business sites and design sources viewed, with the viewing date of each. With no network: DESIGN.md has the backup-store warning.
 - [ ] If you changed the search or the data: `--eval references/relevance-cases.json` and the holdout is not below 85 %.
 - [ ] DESIGN.md has 3 directions with distinct looks and says they are a starting point, not a verdict.
 - [ ] The comparison page has no Inter as the main font, no Tailwind default colors, and no Thai font without a Latin partner.

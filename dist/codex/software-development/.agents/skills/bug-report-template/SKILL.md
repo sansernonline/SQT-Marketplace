@@ -117,7 +117,7 @@ Load the matching skill before writing, not after:
 
 | What is being handed over | Load |
 |---|---|
-| Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
+| Markdown someone reads (repo, wiki, issue tracker) | `design-gate/polished-document-style` |
 | A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
 | The point needs a picture to land | `markdown-visuals`, then `diagram-figures` for project documents (`software-diagrams` only for README / PR notes) |
 

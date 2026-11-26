@@ -5,7 +5,7 @@ description: Use when an image needs edits like a background swap
 
 # Image Editing Brief
 
-> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references for the result you want → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) · editing an existing image needs only 1 direction · close the work with a `ด่านก่อนลงมือ:` line
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references for the result you want → run the `design-gate/no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` (plugin `superuser`) · editing an existing image needs only 1 direction · close the work with a `ด่านก่อนลงมือ:` line
 
 Change only what the brief names. AI edits drift: ask for a new cup and the lighting, the face and the palette change too. The keep list is the anchor.
 
@@ -54,7 +54,7 @@ A story background run through 3 rounds (remove straw · remove stray cup · ext
 
 ## Not an AI look
 
-Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files. Fix AI tells (plastic skin, teal-orange grade, warped text) as part of the edit.
+Before handing over, run the check in `design-gate/no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files. Fix AI tells (plastic skin, teal-orange grade, warped text) as part of the edit.
 
 ## Related
 

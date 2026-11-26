@@ -6,7 +6,7 @@ argument-hint: <path to master asset> [platforms needed]
 
 # Social Formats
 
-> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `design-gate/no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
 Right size first, design second. A beautiful post in the wrong ratio gets cropped by the platform, and the crop always takes the headline.
 
@@ -14,7 +14,7 @@ Platforms change sizes, safe zones and file limits without notice, so this skill
 
 ## Workflow
 
-0. **Find reference work first:** search live for the project's terms per `design-references` (plugin `superuser`), type `social`, and take the colours from the chosen work · the stored palette library is used when live search is not possible
+0. **Find reference work first:** search live for the project's terms per `design-gate/design-references` (plugin `superuser`), type `social`, and take the colours from the chosen work · the stored palette library is used when live search is not possible
 1. **List placements** the campaign really needs (from the `campaign-set` matrix) — only the platforms the audience uses, not every platform
 2. **Group by ratio** — most needs fit 4 canvases: **9:16** (stories, reels, TikTok, Shorts), **4:5** (feed), **1.91:1 / 16:9** (link, X, YouTube), **special** (LINE rich menu, covers)
 3. **Design the master** at the largest canvas of the main ratio (e.g. 1440 × 2560 for 9:16 if ads, 1080 × 1920 for organic)
@@ -53,7 +53,7 @@ Keep text and logos out of the areas the platform UI covers. The areas differ pe
 
 ## Not an AI look
 
-Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files.
+Before handing over, run the check in `design-gate/no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files.
 
 ## Related
 

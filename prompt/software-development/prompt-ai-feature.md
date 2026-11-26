@@ -39,7 +39,7 @@
 
 ## 1. ออกแบบฟีเจอร์ AI และเลือก model
 
-playbook `project-docs` · agent `ai-engineer` + `product-manager` · skill `llm-engineering` · `superuser:simplify` · `architecture-patterns` · `adr-writer`
+playbook `project-docs` · agent `ai-engineer` + `product-manager` · skill `llm-engineering` · `superuser:ground-rules` · `architecture-patterns` · `adr-writer`
 **ผลลัพธ์:** `docs/ai/AI-DESIGN.md` · ADR การเลือก model ใน `docs/decisions/`
 
 ### โจทย์ (ผู้ใช้กรอก)
@@ -63,7 +63,7 @@ playbook `project-docs` · agent `ai-engineer` + `product-manager` · skill `llm
 
 ## 2. ชุดทดสอบ (eval) และเกณฑ์ผ่าน
 
-playbook `project-docs` · agent `ai-engineer` + `qa-tester` · skill `llm-engineering` · `test-case-template` · `principle-prove-it-works`
+playbook `project-docs` · agent `ai-engineer` + `qa-tester` · skill `llm-engineering` · `test-case-template` · `ground-rules/principle-prove-it-works`
 **ต้องมีก่อน:** `docs/ai/AI-DESIGN.md`
 **ผลลัพธ์:** `docs/ai/eval/eval-plan.md` · `docs/ai/eval/cases.jsonl`
 

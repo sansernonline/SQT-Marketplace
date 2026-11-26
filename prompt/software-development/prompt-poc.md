@@ -37,7 +37,7 @@
 
 ## 1. วางแผน POC และเกณฑ์ผ่าน
 
-playbook `project-docs` · agent `solution-architect` + `project-manager` · skill `superuser:simplify` · `principle-small-verifiable-steps` · `architecture-patterns`
+playbook `project-docs` · agent `solution-architect` + `project-manager` · skill `superuser:ground-rules` · `ground-rules/principle-small-verifiable-steps` · `architecture-patterns`
 **ผลลัพธ์:** `docs/poc/poc-plan.md`
 
 ### โจทย์ (ผู้ใช้กรอก)
@@ -69,7 +69,7 @@ playbook `project-docs` · agent `solution-architect` + `project-manager` · ski
 
 ## 2. สร้าง POC
 
-playbook `new-project` (ยังไม่มีโค้ด) หรือ `feature` (ต่อจากโค้ดเดิม) · agent `developer` (+ agent เฉพาะทางตามเรื่อง เช่น `ai-engineer` · `data-engineer` · `mobile-engineer`) · skill `lazy-coding` · `readable-code` · `principle-secure-by-default` · `config-and-secrets` · `principle-prove-it-works`
+playbook `new-project` (ยังไม่มีโค้ด) หรือ `feature` (ต่อจากโค้ดเดิม) · agent `developer` (+ agent เฉพาะทางตามเรื่อง เช่น `ai-engineer` · `data-engineer` · `mobile-engineer`) · skill `lazy-coding` · `readable-code` · `principle-secure-by-default` · `config-and-secrets` · `ground-rules/principle-prove-it-works`
 **ต้องมีก่อน:** `docs/poc/poc-plan.md`
 **ผลลัพธ์:** โค้ดในโฟลเดอร์โค้ดของโปรเจกต์ (ชื่อโปรเจกต์ ตัวพิมพ์เล็ก คั่นด้วย `-`) บน branch `poc/<เรื่อง>` · `docs/poc/poc-build-log.md` · **ไม่แก้โค้ด** เว้นแต่ข้างล่างติ๊ก `[x]`
 
@@ -94,7 +94,7 @@ playbook `new-project` (ยังไม่มีโค้ด) หรือ `feat
 
 ## 3. วัดผลและเตรียม demo
 
-playbook `review` · agent `qa-tester` + `developer` · skill `principle-prove-it-works` · `test-case-template` · `security-gate`
+playbook `review` · agent `qa-tester` + `developer` · skill `ground-rules/principle-prove-it-works` · `test-case-template` · `security-gate`
 **ต้องมีก่อน:** `poc-plan.md` · โค้ด POC ที่รันได้
 **ผลลัพธ์:** `docs/poc/poc-results.md` · `docs/poc/poc-demo.md`
 
@@ -121,7 +121,7 @@ playbook `review` · agent `qa-tester` + `developer` · skill `principle-prove-i
 
 ## 4. สรุปผลและข้อเสนอไปต่อหรือไม่
 
-playbook `project-docs` · agent `solution-architect` + `product-manager` + `technical-writer` · skill `polished-document-style` · `branded-document-design` (ตอน render) · `presentation-design` (ถ้าต้องนำเสนอ) · `adr-writer`
+playbook `project-docs` · agent `solution-architect` + `product-manager` + `technical-writer` · skill `design-gate/polished-document-style` · `branded-document-design` (ตอน render) · `presentation-design` (ถ้าต้องนำเสนอ) · `adr-writer`
 **ต้องมีก่อน:** `poc-plan.md` · `poc-results.md`
 **ผลลัพธ์:** `docs/poc/poc-report.md` → .docx + .pdf · ADR ของเทคโนโลยีที่เลือกใน `docs/decisions/`
 

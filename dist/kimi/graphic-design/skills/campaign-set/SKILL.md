@@ -6,7 +6,7 @@ argument-hint: <campaign idea in one sentence>
 
 # Campaign Set
 
-> **ด่านก่อนลงมือ** (pre-work gate, every time): read the owner theme → search live references → 3 directions that really differ → check `no-ai-look` before sending. Follow the "ด่านก่อนลงมือ" section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for the layout of this piece). Close the work with the line `ด่านก่อนลงมือ:`
+> **ด่านก่อนลงมือ** (pre-work gate, every time): read the owner theme → search live references → 3 directions that really differ → check `design-gate/no-ai-look` before sending. Follow the "ด่านก่อนลงมือ" section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for the layout of this piece). Close the work with the line `ด่านก่อนลงมือ:`
 
 1 concept, every format it needs, in the right order. 5 one-off designs are not a campaign. 1 idea shown 5 ways is.
 
@@ -15,7 +15,7 @@ argument-hint: <campaign idea in one sentence>
 1. **Campaign card** — fill the card below. If you cannot write the 1-sentence summary, stop and get it from the owner
 2. **Asset matrix** (the table of every asset needed) — 1 row per placement, using [asset-matrix-template.md](references/asset-matrix-template.md). Sizes come from `social-formats`
 3. **Cut** — remove any row that does not serve the sentence or the audience's channels
-4. **Style lock** — **ค้นต้นแบบก่อน:** run the project's keywords through a live search per `design-references` (plugin `superuser`), type `social`, then pull the colours from the chosen work · use the stored palette bank only when live search is unavailable · then write or reuse a style lock sheet (`style-consistency`) before any generation or shoot
+4. **Style lock** — **ค้นต้นแบบก่อน:** run the project's keywords through a live search per `design-gate/design-references` (plugin `superuser`), type `social`, then pull the colours from the chosen work · use the stored palette bank only when live search is unavailable · then write or reuse a style lock sheet (`style-consistency`) before any generation or shoot
 5. **Master first** — design the hero at the main placement's ratio (the one that carries most of the campaign), at its largest canvas. Get it approved before deriving anything. Then derive tallest to widest
 6. **Derive in order** — stills by ratio (9:16 → 4:5 → 1:1 → wide) → covers and banners → motion and video last, built from the still's look
 7. **Name** every file with the `asset-organize` pattern, putting the matrix ID in its optional `<id>` token
@@ -52,7 +52,7 @@ argument-hint: <campaign idea in one sentence>
 
 ## Not an AI look
 
-Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files.
+Before handing over, run the check in `design-gate/no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files.
 
 ## Related
 

@@ -1,10 +1,536 @@
+# skill: docker-sandbox
+
+Use when a project needs a Docker sandbox for untrusted code
+
+# docker-sandbox: one lab per project
+
+> Inside, you can install, delete, run servers, and build test databases freely, because when something breaks you wipe it and rebuild with one command.
+> Outside (the real machine · real systems · real accounts) cannot be touched, because there is no way in from the inside.
+
+Do not use when: writing a Dockerfile or image for a real deploy → [`kubernetes-helm`](../kubernetes-helm/SKILL.md), because the lab is a temporary place to run work, not an image that goes to production.
+
+---
+
+## 1 · One project = one lab
+
+- **One lab per project**, named `sandbox-agent-<folder name>-<creation date>` (e.g. `sandbox-agent-sample-app-20260125`).
+  - The name is set once at the first `up` and stored in the file `.sandbox/.name-<folder name>`. Later commands read the name from this file, so the name does not change with the date.
+  - The creation date is also kept in the label `sqt.created`.
+  - If the project needs a database, cache, or browser, add it as a service in the **same lab** (one stack). Do not create a separate lab.
+- **The base image is shared across the whole machine.** `sqt-sandbox-base:1` (Node · Python · Git · Playwright Chromium · Claude Code) is built once. Each project's image adds only a thin layer the project needs, so disk is not used twice.
+- **A stopped lab uses no CPU or memory**, only disk. Run `stop` when you finish a task, and `stop-all` when you finish for the day.
+- **Extra temporary labs** (`-Name <project>-a1`) are for trying several paths in parallel when they need truly separate machines. (For ordinary multi-path trials, use one git worktree per attempt following `crew-patterns/parallel-split-and-merge`; it is faster.) `destroy` them as soon as you pick a path.
+- **Never put several projects in one lab**, because installed things collide, one project's breakage spreads to another, and you cannot wipe one project at a time.
+
+## 2 · Two modes: choose by the work
+
+| | **mount** (default) | **isolated** (`-Isolated`) |
+|---|---|---|
+| Project files | The real folder is attached at `/work`; edits show on the machine at once | A copy lives in a volume; the real folder is attached read-only at `/src` |
+| Who edits files | Claude Code on the machine edits files as usual (`sandbox.ps1 claude` does not work in this mode) | Claude Code **inside the lab** (`sandbox.ps1 claude`) |
+| Who runs commands | Sent into the lab with `sandbox.ps1 exec "..."` | Claude Code in the lab runs them itself, with no permission prompt |
+| How results come back | Already in the folder | `sandbox.ps1 sync` → a patch in `_to_delete\sandbox\`, then the person runs `git apply` |
+| Use when | Daily work while a person is watching | Overnight work · risky work · trying several paths that need separate machines (one lab per path) |
+
+You can add `-Locked` to either mode. It blocks outbound internet, leaving only the hosts in `allowlist.txt`. It suits work that runs code you do not yet trust.
+
+---
+
+## 3 · Set up the lab for a project (first time)
+
+1. Check that Docker Desktop is running: `docker version` must show both Client and Server. If it does not, tell the user to open Docker Desktop and stop only this task.
+2. Copy every file in this skill's `assets/` to `<project>/.sandbox/` (at the root). Then declare `.sandbox/` as a root exception in the README of the code folder, following `project-doc-set` item 1.
+3. Adjust the `Dockerfile` (the project layer).
+   - For .NET, set `INSTALL_DOTNET=1` and add an `apt-get install` for whatever the project needs.
+   - **Do not edit `base.Dockerfile`** unless necessary, because every project shares it.
+   - If you need a test database, add it as a new service in `compose.yaml` (do not open a port to the outside).
+4. Add `.sandbox/.mode-*` and `.sandbox/.name-*` to `.gitignore`.
+5. Start the lab with `.\.sandbox\sandbox.ps1 up` (or `up -Isolated` · `up -Browser`). The first project on a machine must build the base image first, which takes about 5–15 minutes. Later projects are much faster.
+6. **Prove it works:** `sandbox.ps1 exec "node -v && python3 --version && git status"`. If the project has a test command, run it once through `exec`. In `-Locked` mode you must see the line `check passed`.
+7. Record in the project's `docs/README.md`: the lab name (`sandbox-agent-<folder name>-<date>`) · mode · port · test command in the lab.
+
+If the script breaks on another machine, use the `bug-fix` playbook on the script itself.
+
+**Ports:** `up` finds a free port itself, starting at 3000, and says which port it got.
+- Inside the lab it sets the variables `APP_PORT` and `PORT` to that port, and `HOST=0.0.0.0`.
+- The app must listen on `HOST`, because if it listens only on `127.0.0.1` inside the lab, the machine cannot reach it.
+- On the machine side the port is still opened only on `127.0.0.1`, so you reach it from the machine at `http://127.0.0.1:<port>`.
+
+**A different Playwright version:** the base image has the latest Chromium. If the project pins another Playwright version, run `npx playwright install chromium` in the lab once after `npm ci` (no `--with-deps` needed, because the image already has them).
+
+---
+
+## 4 · Daily use
+
+| Need | Command (run at the project root on the machine) |
+|---|---|
+| Run a command in the lab (agents use this one) | `.\.sandbox\sandbox.ps1 exec "npm test"` |
+| Open a shell in the lab | `.\.sandbox\sandbox.ps1 shell` |
+| Let Claude Code work fully in the lab (**isolated only**) | `.\.sandbox\sandbox.ps1 claude` (log in once the first time; the volume keeps it · in mount mode the script refuses, because `/work` is the real folder) |
+| Bring work out of an isolated lab | `.\.sandbox\sandbox.ps1 sync`, then read the patch before `git apply` |
+| All labs on the machine | `.\.sandbox\sandbox.ps1 list` |
+| Wipe the lab clean and start over | `reset`, then `up` |
+| Stop every lab on the machine and free memory | `.\.sandbox\sandbox.ps1 stop-all` |
+| Several labs for one project | Put `-Name <project>-a1` on every command |
+
+**Agent rules when a project has `.sandbox/`**
+- Run install · build · test · dev server · migration and any script through `sandbox.ps1 exec`. Never run them on the machine.
+- The project's app-checking skill (`app-verifier-setup`) runs Playwright headless in the lab, then copies the images out with `docker compose cp` into `_to_delete/`.
+- If the lab is stopped, you may `up` it yourself (reversible). If the lab breaks beyond repair, you may `reset` it yourself, because what is in the lab is not the user's. **Exception:** an isolated lab that has not been `sync`ed must be synced first, then reset.
+
+---
+
+## 5 · Virtual browser for testing
+
+| Type | Use when | How |
+|---|---|---|
+| Headless in the lab (default) | Automated tests · verify skill · nobody needs to watch | Playwright Chromium already comes with the base image |
+| **Visible** (`up -Browser`) | You want to watch the agent click step by step · check the screen by eye · record images | A real browser in a separate container, watched live at `http://127.0.0.1:7900`. Playwright in the lab drives it through `SELENIUM_REMOTE_URL` automatically (Playwright calls this capability experimental) |
+| Let Claude Code in the lab control the browser itself | Exploring web pages that have no script yet | Install the Playwright MCP server in the lab (the project's `.mcp.json`) and run it headless |
+
+- The browser in the lab has no accounts, cookies, or user passwords. Log in only with the project's test accounts.
+- Copy images and videos from tests out to `_to_delete/` with `docker compose cp`.
+- Playwright MCP quirks (root, `--browser`, screenshot paths, click timeouts): [references/playwright-mcp.md](references/playwright-mcp.md).
+- The user's own browser on the machine (the logged-in Chrome) is for real websites that need a real account, and follows that tool's rules. It is not a place to test.
+
+## 6 · CAPTCHA
+
+- **Our own system:** a CAPTCHA should not block testing from the start.
+  - Use the test site keys the provider publishes, which pass every time. reCAPTCHA · hCaptcha · Cloudflare Turnstile all have them; see the provider's documentation for the values.
+  - Or turn it off with a setting for the test environment only (`CAPTCHA_ENABLED=false`).
+  - **Test values must never reach the real system.** Add a startup check that production must not use a test key (`config-and-secrets`).
+- **Other people's websites:** the agent **does not solve a CAPTCHA and does not look for a way around it** (no solving services, no pretending to be a person). If you meet a CAPTCHA, stop that step, tell the user to do it themselves, and continue with the other parts. If you need data from that site often, look for an official API instead.
+
+## 7 · What you may do freely in the lab
+
+Install programs (`sudo apt-get` · `npm -g` · `pip`) · delete files in the lab · run servers and test databases · download dependencies · commit in the copy in isolated mode · try destroying things and rebuild.
+
+These still stay under "รออนุมัติ" (awaiting approval) even inside the lab (prepare them, do not do them yourself), because the result leaves the lab:
+- Sending data, email, or messages, or calling an API that has a real effect on people or outside systems.
+- Using real accounts, real secrets, or the real database.
+- Pushing to a remote · deploying.
+- In mount mode: deleting or overwriting the user's files in `/work` that are not this round's work (it is the real folder).
+
+---
+
+## 8 · Never edit compose to include these
+
+| Never | Because |
+|---|---|
+| `privileged: true` · `pid: host` · `network_mode: host` | The lab could see and touch the real machine |
+| Mounting `/var/run/docker.sock` or `//./pipe/docker_engine` | Controlling Docker = controlling the machine |
+| Mounting the machine's home folder · `.ssh` · `.aws` · `.azure` · `.claude` · browser profiles · a whole drive | Secrets can leak the moment code in the lab reads them |
+| Opening a port like `"3000:3000"` (every network card) | People on the same network can reach it. Always use `127.0.0.1:` |
+| Putting real secrets in the `Dockerfile` or image | The secret stays in the image forever |
+| Removing or raising the limits `cpus` `mem_limit` `pids_limit` until the machine hangs | A lab stuck in a loop will eat the whole machine |
+| Mounting things from the machine as writable when the lab only needs to read (`ref/` · sample data · a shared SDK cache · the source folder of isolated mode) | Tricked code in the lab can write back to the machine. Add `:ro` to every mount that is not this round's work, and have the lab copy into its own space if it must edit |
+
+The Claude Code documentation warns that even in a container, running without permission prompts (`--dangerously-skip-permissions`) cannot stop project code that deliberately steals what is in the lab, including Claude Code's own token. Use it only with a repo you trust, and use `-Locked` when unsure.
+
+**Limits of `-Locked`:** DNS can go out only through the resolver the lab was given (Docker's), not any DNS server. But that resolver still forwards queries outward, so data can still be smuggled out through DNS (DNS tunnelling). For work where data must never leak, run with no network at all.
+
+---
+
+## 9 · Windows notes
+
+- Docker Desktop uses WSL 2. Files on drive `C:` that are mounted in are slower than files in a volume. If build or test is very slow, use `-Isolated`.
+- **Projects in a OneDrive folder:** mount mode makes `node_modules` and build files sync to the cloud, so use `-Isolated` or move the project out of OneDrive.
+- If you cannot run `sandbox.ps1`, use `powershell -ExecutionPolicy Bypass -File .\.sandbox\sandbox.ps1 <command>`.
+- `-Locked` reads the host's IP once at startup. A service whose IP changes often may drop out; run `up -Locked` again.
+
+## Links to other skills
+
+- `config-and-secrets`: put test values in a `.env` that stays out of git, and do not bake them into the image.
+- The `superuser` playbook `housekeeping`: cleans up old labs and images.
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
+
+
+## reference: playwright-mcp.md
+
+# Playwright MCP in the lab · docker-sandbox
+
+Open from SKILL.md section 5 when you run Playwright MCP inside the lab.
+
+- Playwright MCP in the lab (examples from teaching work, not yet a standard): running as root needs `--no-sandbox` · the `--browser` value must match the `--help` of the installed version (`chromium` or `chrome`; if it does not match, it cannot find the browser) · screenshots with a relative file name land in the process's working directory, not `--output-dir`, so move them yourself · a click that times out with "not visible/stable" may be a background tab; see `e2e-testing-patterns`.
+
+
+## reference: sources.md
+
+# Sources · docker-sandbox
+
+- Tested for real on Windows + Docker Desktop 4.46 (2026-10-05, project `sample-app`): the lab built · unit tests passed 15/15 · e2e on Chromium passed 14/14 in the lab.
+- Bugs found during testing were fixed in the script: PowerShell 5.1 with stderr · Playwright a different version from the base image · port collisions.
+- Verified: `npm ci` for just 2 packages took 52 seconds on a OneDrive folder (why `-Isolated` is advised on OneDrive).
+- The `:ro` mount rule is an idea from anthropics/claude-code devcontainer and trailofbits/skills.
+
+
+---
+
+# skill: markdown-visuals
+
+Use when a Markdown doc needs an image, SVG or ASCII art
+
+# Markdown Visuals
+
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `design-gate/no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
+
+> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `design-gate/polished-document-style`.
+
+> **Rule:** Every plan, process, design, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
+
+## When to use this skill
+
+- A picture *inside a markdown file* — sketch, flow or state in a business plan, report, process guide, spec or README
+- Writing a plan, Functional Specification Document (FSD), Business Requirements Document (BRD), Architecture Decision Record (ADR) or architecture doc that describes layout, flow, or relationships (the diagrams themselves follow the routing rule below)
+- Explaining state transitions, user journeys, or system interactions
+- Comparing 2+ visual options for the user
+- The user asked "show me how it looks" inside a markdown doc or chat reply
+
+**If the doc has zero visuals and is about anything visual or structural — stop and add one.**
+
+## When NOT to use
+
+| Task | Use instead |
+|---|---|
+| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) (plugin `software-development`) |
+| Chart colours and chart design in an app or dashboard | `web-app-design` (plugin `software-development`) → `references/tokens.md` "สีข้อมูล (กราฟ)" |
+| Designed figure for a proposal, slide or print | `diagram-figures` |
+
+## Decision tree: which format?
+
+```
+What are you showing?
+│
+├─ UI sketch in a doc / component state / icon → Inline SVG (doc read on GitHub → same SVG as a `.svg` file, §2)
+├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
+├─ Flow / process / money flow / decision   →  repo note (README · Pull Request (PR) · code note) → Mermaid (`software-diagrams`, plugin `software-development`)
+│                                              project document (BRD · Software Requirements Specification (SRS) · FSD · ADR) or read outside the team → `diagram-figures`
+├─ Architecture / Entity-Relationship (ER) / class → same rule as the line above
+├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
+├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design (plugin `software-development`) tokens.md "สีข้อมูล (กราฟ)"
+├─ Photo, screenshot, complex illustration  →  External file → ![alt](figures/x.png) (file in `docs/figures/`)
+└─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
+```
+
+**Routing rule (same in `software-diagrams` and `diagram-figures`):** markdown in a repo read by the team (README · PR · code note) → Mermaid via `software-diagrams` · a project document (BRD · SRS · FSD · ADR · ER · flows) or anything people outside the team read → `diagram-figures`.
+
+**Follow the tree above.** Where the doc will be read decides inline SVG vs image file:
+
+- **Inline `<svg>` renders** in VS Code preview, Obsidian, many static-site generators and chat replies.
+- **Inline `<svg>` does not render on GitHub** — GitHub's sanitizer drops the `<svg>` element, so the reader sees nothing. Other hosts (GitLab, Bitbucket): preview before relying on it.
+- **Doc will be read on GitHub** → save the SVG as `docs/figures/x.svg` and reference it with `![alt](figures/x.svg)` or `<img>` (§2). It still versions cleanly in git and stays editable.
+
+## 1 · Inline SVG (for viewers that render it — not GitHub)
+
+### Boilerplate
+
+```markdown
+<p align="center">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-label="<what this shows>">
+  <!-- background = bg-canvas of the project palette (see สี below) -->
+  <rect width="640" height="280" rx="14" fill="<bg-canvas>"/>
+
+  <!-- content goes here -->
+</svg>
+</p>
+```
+
+**Required attributes:**
+- `xmlns="http://www.w3.org/2000/svg"` — required when the same markup is saved as a `.svg` file (GitHub shows `.svg` files only through `![]()` / `<img>`, and only with `xmlns`)
+- `viewBox` — sets the coordinate space; lets the SVG scale responsively
+- `role="img"` + `aria-label` — accessibility, screen readers
+- `<p align="center">` wrapper — centers in the rendered page
+
+**Sizing:** Use `viewBox` (not width/height) so it scales. Common sizes:
+- Sketch of a UI bar: `viewBox="0 0 640 200"` (wide, short)
+- Component state: `viewBox="0 0 400 300"` (squarer)
+- Icon / chip: `viewBox="0 0 64 64"`
+- Full screen layout: `viewBox="0 0 800 500"`
+
+### สี
+
+If the document or project already has a colour palette, use it. If not, search for references per `design-gate/design-references` (plugin `superuser`), type `document`, and take the colours from the chosen work · if live search is not possible, use the house value `#2A78D6`, mark it `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask (order in `diagram-figures` item 5 · colour-by-domain table [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) · for role-based tokens (`bg-canvas` · `accent-primary` · `state-*` …) see [references/svg-snippets.md](references/svg-snippets.md) · and **1 document uses 1 palette**
+
+### Reusable snippets
+
+Window chrome, phone frame, button, card, status badge, running dot and tooltip snippets, plus the UI-state worked example, are in [references/svg-snippets.md](references/svg-snippets.md). Copy the structure and swap in the agreed colour tokens.
+
+## 2 · External image files
+
+Use when:
+- The doc will be read on GitHub (inline `<svg>` is dropped there) — save the SVG as a file
+- Photo or screenshot
+- Illustration too complex to author as SVG by hand (50+ shapes)
+- Reusing the same image across many docs
+- Generated by a design tool (Figma export, etc.)
+
+### Folder convention
+
+```
+docs/
+  figures/
+    01-hover-state.svg
+    02-empty-state.png
+    architecture-overview.svg
+    src/                      editable sources (.mmd · .drawio · .html)
+```
+
+- Put figures in `docs/figures/` (editable sources in `docs/figures/src/`) — relative to the doc · brand files (logo, icons) live in the project-root `assets/`, not here
+- Name files `<doc-section-number>-<short-slug>.<ext>` so they sort with the doc
+- Prefer `.svg` over `.png` when possible (scales, smaller, diff-friendly)
+
+### Reference syntax
+
+```markdown
+![Hover state showing magnified Projects tile](figures/01-hover-state.svg)
+```
+
+- **Alt text** describes what the image shows, for accessibility — not "screenshot.png"
+- Path is **relative to the markdown file**, not absolute
+- For centered + sized images, wrap in HTML:
+
+```markdown
+<p align="center">
+  <img src="figures/01-hover-state.svg" alt="Hover state" width="640"/>
+</p>
+```
+
+### Creating SVG files
+
+When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file in `docs/figures/`.
+
+## 3 · ASCII art
+
+For quick layouts, state diagrams, and structural sketches that don't need pixel-perfect visuals. Renders identically in every viewer and in terminal/diff output.
+
+Box-drawing characters plus worked layout sketch, state machine and curve examples are in [references/ascii-patterns.md](references/ascii-patterns.md).
+
+Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
+
+## 4 · Mermaid
+
+**Choosing a diagram type, theme, readability rules and Thai labels is covered in `software-diagrams` (plugin `software-development`) items 1–5 and `assets/mermaid-theme.md`** · for Mermaid in project documents that must be converted to a picture for Word, use the converter in `diagram-figures` → `references/engine-mermaid.md`
+This file only says *when to choose Mermaid over other formats*
+
+| Choose Mermaid when | Choose something else when |
+|---|---|
+| It is boxes and arrows that the engine can lay out | If you must control placement yourself, use inline SVG; for a figure that must look designed, use `diagram-figures` (HTML layout or engine-svg-python) and embed it as an image file |
+| It lives in a file that must be diffed in git | It is a real screenshot: use an image file |
+| Readers open it in GitHub or Notion | Readers open it in a Word document or slides: use an image file |
+
+## Combining formats in one doc
+
+A full design spec usually mixes formats (SVG mockup, reference table, ASCII sketch, Mermaid state diagram, acceptance table). The 6-part pattern is in [references/combining-formats.md](references/combining-formats.md). Don't force everything into one format.
+
+## Accessibility checklist
+
+For every visual:
+
+- [ ] **Inline SVG** has `role="img"` and `aria-label="<description>"`
+- [ ] **Image file** has descriptive alt text (not "image.png")
+- [ ] **Mermaid** diagrams have a 1-sentence caption above or below
+- [ ] **ASCII art** has a prose summary nearby — screen readers will read the characters literally
+- [ ] **Colour** is not the only signal — pair red badges with `!`, green dots with a label
+- [ ] **Contrast** for text in SVG ≥ 4.5:1 against its background
+
+## Anti-patterns
+
+- **Linking to Figma / external design tools as the only source** — visuals must render in the repo
+- **PNG screenshots of text** — use the text, in a code block
+- **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
+- **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
+
+## Quick-start recipe
+
+When a markdown doc needs a design picture (clickable app screens go to the platform design skill, `mockup/<CODE>-mockup.html`):
+
+1. **Identify what kinds of visuals are needed** (UI state? flow? architecture?)
+2. **Pick the format(s)** using the decision tree above
+3. **For each visual:**
+   - State a one-line caption
+   - Emit the SVG/Mermaid/ASCII
+   - Add `role="img"` + `aria-label` (SVG) or alt text (file)
+4. **Add a feature reference table** below the visuals — what each element means
+5. **Cross-check accessibility checklist** before delivery
+
+## ไม่ให้ดูเหมือน AI ทำ
+
+Before sending, go through item 3 of `design-gate/no-ai-look` — for HTML work, run its script · every piece must also pass eye check 3.2 (a web page adds items 10–14), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for all media is there
+
+
+## reference: ascii-patterns.md
+
+# ASCII patterns
+
+Worked ASCII examples for markdown docs · used by [SKILL.md](../SKILL.md) §3 · always wrap ASCII in a fenced code block so spacing is preserved
+
+## Box-drawing characters
+
+```
+┌─────┐  ┏━━━━━┓  ╭─────╮  ┌╌╌╌╌╌┐
+│     │  ┃     ┃  │     │  ╎     ╎
+└─────┘  ┗━━━━━┛  ╰─────╯  └╌╌╌╌╌┘
+ light    heavy   rounded   dashed
+```
+
+Corners: `┌ ┐ └ ┘` ‧ `┏ ┓ ┗ ┛` ‧ `╭ ╮ ╰ ╯`
+Lines:   `─ │` ‧ `━ ┃` ‧ `═ ║`
+Joins:   `├ ┤ ┬ ┴ ┼`
+Arrows:  `→ ← ↑ ↓ ▲ ▼ ▶ ◀ ↔ ↕ ⇒ ⇐`
+Dots:    `• · ◦ ● ○ ▪ ▫`
+
+## Common patterns
+
+**Layout sketch:**
+```
+┌─────────────────────────────────────┐
+│ Header        [Search]      [👤]    │
+├──────────┬──────────────────────────┤
+│ Sidebar  │ Main content             │
+│  • Item  │                          │
+│  • Item  │  ┌────────────────────┐  │
+│          │  │  Primary CTA       │  │
+│          │  └────────────────────┘  │
+└──────────┴──────────────────────────┘
+```
+
+**State machine:**
+```
+┌─────────┐  hover  ┌──────────┐  click  ┌─────────┐
+│  REST   │────────►│ MAGNIFIED│────────►│ LAUNCH  │
+└─────────┘◄────────└──────────┘◄────────└─────────┘
+            exit               done
+```
+
+**Curve / chart:**
+```
+scale
+ ↑
+1.7│         ╱╲
+1.4│       ╱    ╲
+1.2│     ╱        ╲
+1.0│___╱            ╲___
+   └──────────┬──────────→ cursor X
+         tile.Center
+```
+
+
+## reference: combining-formats.md
+
+# Combining formats in one doc
+
+Used by [SKILL.md](../SKILL.md) · a full design spec usually mixes formats.
+
+The 6-part pattern for a design spec:
+
+```
+1. Inline SVG mockup of each UI state              ← "what it looks like"
+2. Feature reference table                          ← "what it does"
+3. ASCII layout sketch with measurements           ← "how it's positioned"
+4. Mermaid state diagram                            ← "how it transitions"
+5. ASCII / inline-SVG zoom curve                    ← "the math"
+6. Acceptance criteria table                        ← "how we verify"
+```
+
+Don't force everything into one format. Each format is best at something different.
+
+
+## reference: svg-snippets.md
+
+# Inline SVG snippets
+
+Reusable building blocks for inline SVG pictures of a screen inside .md docs (the real mockup is HTML) · used by [SKILL.md](../SKILL.md) §1
+
+## Colour: it comes from the subject, not from a ready-made table
+
+If the document or project already has a colour set, use that set.
+If not, use the house value `#2A78D6`, write `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask. Propose a tone drawn from the subject in the report: medical green · finance dark blue ·
+industrial amber · government navy · general software blue (the full table is in [`diagram-figures/references/colour-by-domain.md`](../../diagram-figures/references/colour-by-domain.md))
+
+Define **tokens by role** at the top of the document, then use the same values in every figure in that document:
+
+| Token | Role | Comes from |
+|---|---|---|
+| `bg-canvas` | Background of the figure | The darkest shade (dark mode) or the lightest (light mode) |
+| `bg-surface` | Sheets, panels, cards | Different enough from canvas to show the edge without drawing a line |
+| `bg-elevated` | A tile raised one more layer | |
+| `accent-primary` | Emphasis, the active state | **The brand colour** (none → `#2A78D6` + `(รอยืนยัน)`) |
+| `text-primary` | Main text | Contrast ≥ 4.5:1 against the surface it sits on |
+| `text-muted` | Secondary text, placeholder | `rgba(...,0.55)` of `text-primary` |
+| `state-success` · `state-warning` · `state-danger` | Status | **Does not change with the brand.** Green always means pass and red always means fail |
+
+**One document, one colour set.** 10 figures in one document with mismatched colours are harder to read than plain figures with matching colours.
+
+## Snippets
+
+> The examples below use one dark-mode colour set as a stand-in only.
+> **Change the colour values to match the agreed set before use.** The structure is what you copy, not the colour values.
+
+**Window chrome (desktop app mockup):**
+```xml
+<rect x="20" y="20" width="600" height="360" rx="10" fill="#2a3245"/>
+<circle cx="42" cy="42" r="6" fill="#ff5f57"/>
+<circle cx="62" cy="42" r="6" fill="#febc2e"/>
+<circle cx="82" cy="42" r="6" fill="#28c940"/>
+<text x="320" y="46" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Window title</text>
+<line x1="20" y1="64" x2="620" y2="64" stroke="rgba(255,255,255,0.08)"/>
+```
+
+**Phone frame (mobile mockup):**
+```xml
+<rect x="100" y="20" width="200" height="400" rx="28" fill="#0a0d14" stroke="#2a3245" stroke-width="2"/>
+<rect x="120" y="50" width="160" height="340" rx="6" fill="#1c2230"/>
+<rect x="170" y="28" width="60" height="14" rx="7" fill="#0a0d14"/>
+```
+
+**Button:**
+```xml
+<rect x="40" y="100" width="120" height="40" rx="8" fill="#0078d4"/>
+<text x="100" y="125" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="14" font-weight="500">Click me</text>
+```
+
+**Card with title and body:**
+```xml
+<rect x="40" y="40" width="240" height="120" rx="12" fill="#2a3245"/>
+<text x="60" y="72" fill="#fff" font-family="system-ui" font-size="14" font-weight="600">Card title</text>
+<text x="60" y="96" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="12">Supporting body text goes here.</text>
+<rect x="60" y="116" width="80" height="28" rx="6" fill="#0078d4"/>
+<text x="100" y="134" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Action</text>
+```
+
+**Status badge (top-right of tile):**
+```xml
+<circle cx="<tile-right-x>" cy="<tile-top-y>" r="9" fill="#e24b4a"/>
+<text x="<tile-right-x>" y="<tile-top-y + 4>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="13" font-weight="500">!</text>
+```
+
+**Running dot (indicator below tile):**
+```xml
+<circle cx="<tile-center-x>" cy="<tile-bottom-y + 12>" r="4" fill="#4cc2ff"/>
+```
+
+**Tooltip text (no balloon — plain floating text):**
+```xml
+<text x="<tile-center-x>" y="<tile-top-y - 12>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12" font-weight="500">Tooltip label</text>
+```
+
+## Worked example — UI state mockup
+
+Use this pattern by default for showing UI feature states. On GitHub, save the SVG as a file in `docs/figures/` and reference it (inline `<svg>` is dropped there).
+
+
+---
+
 # skill: branded-document-design
 
 Use when a Word, PowerPoint or PDF or its cover must look designed
 
 # Branded Document Design — .docx / .pptx / .pdf that looks intentionally designed
 
-> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the owner's theme → search live for reference designs → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand controls color and fonts; the search is for this piece's structure) · close the job with the line `ด่านก่อนลงมือ:`
+> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the owner's theme → search live for reference designs → 3 genuinely different directions → check `design-gate/no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls color and fonts; the search is for this piece's structure) · close the job with the line `ด่านก่อนลงมือ:`
 
 > **One rule:** an exported document has one color set, and one set of type sizes and spacing that is the same on every page. It must not look like someone opened Word and just typed.
 
@@ -13,14 +539,14 @@ Use when a Word, PowerPoint or PDF or its cover must look designed
 - A document set needs its own cover from the logo shape or a real mockup, or covers look alike across projects → step 3 and `references/cover-design.md`
 - Mixed Thai–English documents (they break easily if fonts are not fully set)
 - The same kind of document is issued repeatedly and every copy should look the same
-- Not for: markdown output → `polished-document-style` · reading or extracting a received Office file → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` · diagrams in markdown → `markdown-visuals` · a whole-book report from one Markdown file → `markdown-report-docx`
+- Not for: markdown output → `design-gate/polished-document-style` · reading or extracting a received Office file → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` · diagrams in markdown → `markdown-visuals` · a whole-book report from one Markdown file → `markdown-report-docx`
 
-Order: write the content as markdown first (`polished-document-style`), then render it with this skill. Always fix content in the markdown (the source).
+Order: write the content as markdown first (`design-gate/polished-document-style`), then render it with this skill. Always fix content in the markdown (the source).
 
 Install before use: `pip install python-docx python-pptx` · LibreOffice (`soffice`) to convert to PDF · `pdftoppm` (poppler) to convert to images.
 
 ## Steps
-1. **Colors.** If the source markdown has a `doc-theme`, use it: do not ask, do not set a new one (`polished-document-style`, "ธีมของเอกสาร"). Otherwise look in the order in `diagram-figures` item 5 (`doc-theme` → brand colors in code, logo, brand kit → nothing). If there is nothing, search live for reference designs per `design-references` (plugin `superuser`), type `document`, then extract colors from the chosen work (stored palette library when live search is impossible). If live search is impossible, use the house color `#2A78D6`, write `(รอยืนยัน)` in the report, and carry on without asking; put a tone suggested by the content in the report for the user to choose later ([`references/palette-examples.md`](references/palette-examples.md)). A customer's brand colors always win. Write the colors back into `doc-theme` in the markdown so document, figures, and slides match.
+1. **Colors.** If the source markdown has a `doc-theme`, use it: do not ask, do not set a new one (`design-gate/polished-document-style`, "ธีมของเอกสาร"). Otherwise look in the order in `diagram-figures` item 5 (`doc-theme` → brand colors in code, logo, brand kit → nothing). If there is nothing, search live for reference designs per `design-gate/design-references` (plugin `superuser`), type `document`, then extract colors from the chosen work (stored palette library when live search is impossible). If live search is impossible, use the house color `#2A78D6`, write `(รอยืนยัน)` in the report, and carry on without asking; put a tone suggested by the content in the report for the user to choose later ([`references/palette-examples.md`](references/palette-examples.md)). A customer's brand colors always win. Write the colors back into `doc-theme` in the markdown so document, figures, and slides match.
    - **One main color.** All light and dark shades are computed from it. Only the status colors (success · warning · error) are independent and keep their meaning.
 2. **Continue the look of the brand or app, before the first render.** The skill's defaults (Tahoma · solid color band cover · lines in every table cell) are the floor, not the deliverable look.
    - Is there an identity already? Check the brand kit (`graphic-design:brand-kit`), `assets/logo/`, `docs/design/`, a mockup that passed the beauty gate (score in `docs/BUILD-PLAN.md`), field `doc-theme` in `docs/README.md`. If yes, use the same logo (cover + page header), colors, and patterns as the app. If no, follow step 1.
@@ -40,7 +566,7 @@ Install before use: `pip install python-docx python-pptx` · LibreOffice (`soffi
 7. **Use the elements** `cover()` · `table()` · `pill_table()` · `kpi_row()` · `callout()` · `figure()` · `code()` · `signoff()` (methods in `references/tokens-and-type.md`). At most 3–5 callouts per 10 pages · KPI strip of 3–5 cells · a table over 6 columns goes on a landscape page (`landscape_section()`).
 8. **Use brandkit.** `from brandkit import BrandDoc, use_brand, to_pdf` (put `scripts/` on the path) · slides → `brandkit_pptx.BrandDeck` · speaking deck → `brandkit_stage.StageDeck` (default: `accent`/`bg` from the source work per `presentation-design` `references/deck-theme.md`, `source_palette.py` prints the `StageDeck(...)` line; light `FFFFFF` with `block=True`, dark only if the source is dark; no color at all → `#2A78D6` on `FFFFFF` + `(รอยืนยัน)`). Sample code and methods: [`references/brandkit-usage.md`](references/brandkit-usage.md), `references/api.md`.
 9. **Look at every page before delivery.** Render to PDF, convert to images, open each page (Read tool): the code cannot show tables overflowing the margin, stranded headings, floating tone marks. Commands and the 7-point checklist: [`references/visual-check.md`](references/visual-check.md).
-10. Before sending, go through item 3 of `no-ai-look` (HTML work: run its script; the eye gate 3.2 must also pass, web pages answer items 10–14).
+10. Before sending, go through item 3 of `design-gate/no-ai-look` (HTML work: run its script; the eye gate 3.2 must also pass, web pages answer items 10–14).
 
 **Hard rules (covers):**
 - A project cover shows its project by logo shape or a real screen at a glance, not by colour alone.
@@ -309,7 +835,7 @@ d.save("deck.pptx")
 
 # Make 3 styles, then vote 2 of 3
 
-Used with `cover-design.md` step 7. It is a variant of `parallel-attempts-pick-best` that swaps "1 middleman agent" for "3 reviewers who vote".
+Used with `cover-design.md` step 7. It is a variant of `crew-patterns/parallel-attempts-pick-best` that swaps "1 middleman agent" for "3 reviewers who vote".
 Cost: about 3–5 times the work of a single style. Use it when you set a project's look for the first time, not at every version bump.
 
 ## 1 · Prepare before launching
@@ -346,7 +872,7 @@ Then vote: `overall` 1 style · `per_project` the best style for each project ·
 ## 4 · Count the votes
 
 - The style with **2 of 3** wins, for both `overall` and per project (per-project winners may differ from overall).
-- If the vote splits 3 ways, the team lead reads the total score per criterion. The "repeatable" criterion decides when scores are close. Then log it in `decision-log`.
+- If the vote splits 3 ways, the team lead reads the total score per criterion. The "repeatable" criterion decides when scores are close. Then log it in `decision-desk/decision-log`.
 - The team lead looks at all the images before reading the votes, then compares. If they disagree, read both sides' reasons before deciding.
 
 ## 5 · Merge the results
@@ -399,7 +925,7 @@ Round 2 (the user said much more should change, and to learn from other people's
 - [Do not look AI-made](#do-not-look-ai-made)
 
 
-> **Gate before starting (every time):** read the owner's theme → search live for references → 3 truly different styles → check `no-ai-look` before sending. Follow the "ด่านก่อนลงมือ" (gate before starting) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls color and fonts; the search is for the structure of this piece). Close the work with a `ด่านก่อนลงมือ:` line.
+> **Gate before starting (every time):** read the owner's theme → search live for references → 3 truly different styles → check `design-gate/no-ai-look` before sending. Follow the "ด่านก่อนลงมือ" (gate before starting) section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls color and fonts; the search is for the structure of this piece). Close the work with a `ด่านก่อนลงมือ:` line.
 
 > **The one rule:** the cover must say which project it belongs to at a glance, without reading the name. Do it with the logo's shapes or the app's real screen, not with color alone.
 
@@ -419,7 +945,7 @@ The default path is logo shapes. The fallbacks are the real screen, or a pictogr
 
 ## 1 · Find the idea from real things: write it in `docs/design/cover-direction.md` before drawing anything
 
-0. **Look at other people's real covers first.** **Search for references first:** take the project's keywords and search live following `design-references` (plugin `superuser`), type `document`, then pull the colors from the chosen work. The stored color library is for when live search is not possible. Collect at least 6 real document or book covers close to this work (same field as the app · tech publishers · Thai examples), then choose which series system to borrow, following [`cover-real-examples.md`](cover-real-examples.md). For every idea on the cover, you must be able to say which cover it came from.
+0. **Look at other people's real covers first.** **Search for references first:** take the project's keywords and search live following `design-gate/design-references` (plugin `superuser`), type `document`, then pull the colors from the chosen work. The stored color library is for when live search is not possible. Collect at least 6 real document or book covers close to this work (same field as the app · tech publishers · Thai examples), then choose which series system to borrow, following [`cover-real-examples.md`](cover-real-examples.md). For every idea on the cover, you must be able to say which cover it came from.
 
 1. **Open the logo's SVG file (vector image) as text** and note the basic shapes with unit coordinates (e.g. 2 L shapes on a 64 grid · T bar + cursor · 2 dots + arrow). Do not count the glow and gradient background of the icon file.
 2. **Find the app's main verb** from the first paragraph of the README (if none → the introduction of the BRD or SRS): connect · type · swipe.
@@ -502,7 +1028,7 @@ If the user says the cover is not beautiful → cut things before adding (matche
 
 ## Do not look AI-made
 
-Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye check 3.2 ("ด่านตา 3.2" in `no-ai-look`; web pages add items 10–14), because 0 hits from the script is not yet a pass.
+Before sending, go through item 3 of `design-gate/no-ai-look`. For HTML work, run its script. Every job must also pass the eye check 3.2 ("ด่านตา 3.2" in `design-gate/no-ai-look`; web pages add items 10–14), because 0 hits from the script is not yet a pass.
 
 
 ## reference: cover-real-examples.md
@@ -615,7 +1141,7 @@ Open when a document set needs its own cover.
 Use when a document set (proposal · report · business plan) needs its own cover and the default cover looks like another job's. Do one direction first; use this only if the user is not wowed or asks for several directions (3–5 times the labor).
 
 1. **Find the real thing to hold on to:** logo, name, the main verb of the job (propose · analyze · sell), or real images of the work · look at at least 6 real covers by others · every image on the cover must point back to something real, otherwise cut it.
-2. **3 designers (use `parallel-attempts-pick-best`).** Same brief, different directions: A drawn from the job's real data · B a real image of the work is the hero (screen, photo, sample of the output) · C the logo shape or lettering is the structure, no drawn image · each agent needs Bash to render and open the image itself.
+2. **3 designers (use `crew-patterns/parallel-attempts-pick-best`).** Same brief, different directions: A drawn from the job's real data · B a real image of the work is the hero (screen, photo, sample of the output) · C the logo shape or lettering is the structure, no drawn image · each agent needs Bash to render and open the image itself.
 3. **3 new reviewers who have not seen the work, each from a different angle:** art director (is it truly wow, does it look AI-made) · brand and customer (is it memorable, does it show what the work is about, does it go with the whole set) · Word production (is it repeatable, can the text be edited) · include the old cover as an option too.
 4. **Criteria scored 1–5, then vote:** wow compared with the old cover · not a repeat of other work · tells the truth of the work · fits the whole set · craftsmanship (Thai, contrast, smallest text) · buildable and repeatable in Word · the direction with **2 of 3 votes wins** · borrow at most 2 strong pieces from a losing direction · if the votes split 3 ways, "repeatable" decides.
 5. **Text on the cover is editable Word text** (title, version, date) · the background image has no lettering baked in · anchor the image to the first paragraph, not in the header.
@@ -690,7 +1216,7 @@ Opening on a machine without the fonts (fonts are embedded, but not yet tried) �
 
 Open this when the user is not wowed by the first direction, asks for several directions, or the job needs the document beauty gate (`ด่านสวย`). Moved from SKILL.md item 0.1, steps 2–4.
 
-2. **Do 1 direction first.** Only if the user is not wowed, or asks for several directions, do **3 directions in parallel** (3–5 times the labor · `parallel-attempts-pick-best` · a new agent with Bash per direction · for the cover use the 3-direction vote method in [`cover-vote.md`](cover-vote.md)). Each direction makes an HTML mock of A4 pages: cover · a content page with a real 4-row requirements table + callout · a table-of-contents page or a figure page · **1 figure redone for the direction** (use `diagram-figures`) · the file header says how to build each piece in real Word. When doing several directions they must really differ, for example a dark cover continuing from the app / a light editorial report / an engineering spec.
+2. **Do 1 direction first.** Only if the user is not wowed, or asks for several directions, do **3 directions in parallel** (3–5 times the labor · `crew-patterns/parallel-attempts-pick-best` · a new agent with Bash per direction · for the cover use the 3-direction vote method in [`cover-vote.md`](cover-vote.md)). Each direction makes an HTML mock of A4 pages: cover · a content page with a real 4-row requirements table + callout · a table-of-contents page or a figure page · **1 figure redone for the direction** (use `diagram-figures`) · the file header says how to build each piece in real Word. When doing several directions they must really differ, for example a dark cover continuing from the app / a light editorial report / an engineering spec.
 3. **2 reviewers who did not do the work** (if there is only one direction, score that one only; no mixing) score 1–5 (pass = 4): first impression · continuity with the app · craftsmanship (a long Thai table of 60 rows without breaking mid-word · type scale · contrast) · figures readable when placed for real · really buildable in Word → **mixing is allowed** (cover from one direction, body from another) if the reviewers name the pieces clearly.
 4. Work on the render script (do not edit .docx files one by one) → render every copy → **document beauty gate (`ด่านสวย`)**: 2 new reviewers look at images of the real pages (cover · table of contents · chapter opener · long table page · figure page) using the 5 axes above, and take the lower score · ceiling **3 rounds** (more detail in `ui-craft/references/states-and-checks.md` in plugin `software-development` if installed) · record every round's score in `docs/BUILD-PLAN.md`
 
@@ -961,2214 +1487,3 @@ footer        "หน้า N" กลางหน้า สีเทา 9pt
 6. **Figures in documents:** the smallest text after real placement ≥ 7pt → minimum pixels on the canvas = `0.247 × canvas width(px) ÷ placed width(cm)` (a 2000px canvas placed 17 cm wide = 29px · placed on a 25.7 cm landscape page = 20px · use 26px to get 9pt) · a wide figure should go on a landscape page at the full column width (≥ 95%) · use the **version placed in the document without a figure title**, because the Word caption already gives the number and the figure's name · figure caption ≥ 9pt in body text color · after a figure, start a new section; the next paragraph must not flow onto the figure's page.
 7. **What the beauty gate (`ด่านสวย`) often catches (put them as rules in the render script's `check`):** stray markdown marks (`**` · backtick) · Thai text in a mono font · a table overflowing a text column · a table of contents with a single entry stranded on the next page · a code list cut in the middle of a code (one code per line, one font for the whole column) · the "(รอยืนยัน)" tag uses the warning color, not the brand color · identity lost after the cover (chapter opener pages use the app's brand color bar) · a light cover available to print alongside the dark cover.
 8. **Cover — plain lettering first, images later** (a project-specific cover that uses the logo shape or a real screen instead of decorative images → [`cover-design.md`](cover-design.md))**:** an illustration on the cover is optional, and an open cover with well-set lettering always beats an image that does not wow · a design that passed the gate: the document type (SRS · FSD · ARCH) large at 150–200px in the brand color as the only highlight (width at most ~85% of the column · a name over 5 letters such as TESTPLAN splits into 2 lines, never shrunk smaller than other copies, since the whole set must look the same size) → a short brand-colored line → Thai title → English title → a 1-sentence summary line (≥ 12pt, narrow column) → an info row at the page foot (labels ≥ 10pt) · leave the rest empty · parts with fixed positions (logo · document type · line · status tag) are drawn into the cover background image, while the title and info are Word text that can be searched and edited · the `(รอยืนยัน)` (awaiting confirmation) tag on a dark background uses a bright warning color, with no highlight fill · **if the user says the cover is not beautiful → cut the decorative images first** (curves, glowing dots, gradients), then make 3 plain-lettering covers to choose from (project has a logo or mockup → use `cover-design.md` item 7 instead)
-
-
----
-
-# skill: security-operations
-
-Use when running SOC, SIEM rules or threat hunting
-
-# security-operations
-
-Operational security work — incident response · Security Operations Center (SOC, the team that watches for security events) · detection rules · threat hunting · security architecture (for code, use `security-gate` · `principle-secure-by-default`)
-
-**Open only the files that match the job.** Do not read them all, because each file is the full guide to its topic.
-
-## หัวข้อ
-
-| ใช้เมื่อ | อ่าน |
-|---|---|
-| leading security incident response — IR lifecycle (PICERL), containment strategies, evidence handling, communications, regulatory notifications. Distinct from operational incidents | [`references/security-incident-response.md`](references/security-incident-response.md) |
-| designing SOC processes — staffing models, tier structure, on-call rotation, escalation paths, playbooks, KPIs, or SOC tooling integration. Covers Tier 1-3 operations | [`references/soc-operations.md`](references/soc-operations.md) |
-| writing SIEM detection rules, designing detection logic, mapping to MITRE ATT&CK, tuning false positives, or building security analytics. Covers common detection patterns across endpoint, network, identity | [`references/threat-detection-patterns.md`](references/threat-detection-patterns.md) |
-
-## คู่มือบทบาท
-
-An agent called in for this area opens its own role file before starting.
-
-| บทบาท | อ่าน | agent |
-|---|---|---|
-| designing security architecture — zero trust, identity, network segmentation, defense-in-depth, security control frameworks, or evaluating security tools | [`references/agent-security-architect.md`](references/agent-security-architect.md) | `security-analyst` |
-| leading security incident response — containment, eradication, recovery, lessons learned. Different from devops-engineer incident-response (which is operational); this is for security breaches | [`references/agent-incident-responder.md`](references/agent-incident-responder.md) | `security-analyst` |
-| triaging security alerts, investigating SIEM findings, analyzing potential incidents, doing first-line security operations work, or building SOC playbooks | [`references/agent-soc-analyst.md`](references/agent-soc-analyst.md) | `security-analyst` |
-| proactively hunting for threats — hypothesis-driven searches, threat intelligence-informed hunts, adversary behavior detection, or building new detection rules | [`references/agent-threat-hunter.md`](references/agent-threat-hunter.md) | `security-analyst` |
-
-## ไม่ใช้เมื่อ
-
-- Write an incident runbook for on-call → `incident-runbook-template` · summarise an incident after it ends → `postmortem-template`
-
-## agent ของสายนี้
-
-`security-analyst`
-
-## โหมดออกแบบ (เรียกเป็นคำสั่ง)
-
-`/software-development:security-operations <soc-design | threat-hunt> <details>`
-
-Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
-
-| Mode | What it does |
-|---|---|
-| `soc-design` | Design SOC structure, processes, and tooling using the security-analyst agent. |
-| `threat-hunt` | Conduct hypothesis-driven threat hunt using security-analyst agent. |
-
-ขั้นตอนเต็มของแต่ละโหมด → [references/design-modes.md](references/design-modes.md)
-
-
-## reference: agent-incident-responder.md
-
-> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `incident-responder` ใน plugin `software-development-cybersecurity` แล้วรวมเข้า agent `security-analyst` ใน v2.0.0
-
-**สารบัญ:** 
-
-- [Your Responsibilities](#your-responsibilities)
-- [Initial Discovery (URGENT)](#initial-discovery-urgent)
-- [IR Quality Standards](#ir-quality-standards)
-- [Incident Response Lifecycle](#incident-response-lifecycle)
-- [Phase 1: Identification (already done by SOC usually)](#phase-1-identification-already-done-by-soc-usually)
-- [Phase 2: Containment](#phase-2-containment)
-- [Phase 3: Eradication](#phase-3-eradication)
-- [Phase 4: Recovery](#phase-4-recovery)
-- [Phase 5: Lessons Learned](#phase-5-lessons-learned)
-- [Communication](#communication)
-- [Evidence Handling](#evidence-handling)
-- [Output: Incident Report](#output-incident-report)
-- Impact Summary
-- Timeline (UTC)
-- Initial Vector
-- Adversary Activity
-- Containment Actions
-- Eradication Verification
-- Action Items
-- Communications Log
-- [Skills You Use](#skills-you-use)
-- [Things You Don't Do](#things-you-dont-do)
-- [When to Hand Off](#when-to-hand-off)
-- [Common Pitfalls](#common-pitfalls)
-
-You are a **Security Incident Responder**. You lead the response when something bad has happened — containing damage, evicting the adversary, and getting back to normal.
-
-## Your Responsibilities
-
-1. **Containment** — Stop active damage
-2. **Investigation** — Understand scope + root cause
-3. **Eradication** — Remove adversary access
-4. **Recovery** — Restore safe operations
-5. **Communication** — Internal + external comms
-6. **Lessons Learned** — Drive improvements
-7. **Legal/Compliance Coordination** — Notifications, evidence
-
-## Initial Discovery (URGENT)
-
-When taking over an incident:
-
-1. **What's confirmed** — and what is only assumed
-2. **Scope** — affected systems, data, users
-3. **Adversary access** — where the attacker is right now
-4. **Timing** — when did it start? Is it still active?
-5. **Crown jewels exposed** — which critical data or systems are at risk?
-6. **Existing containment** — what's already done?
-
-## IR Quality Standards
-
-- **Containment ASAP** — minutes, not hours
-- **Evidence preservation** — chain of custody
-- **Clear communication** — internal and external updates on time
-- **Eradication completeness** — no backdoors remaining
-- **Recovery verification** — systems confirmed clean
-- **Postmortem within 7 days**
-
-## Incident Response Lifecycle
-
-```mermaid
-flowchart LR
-    A[Preparation] --> B[Identification]
-    B --> C[Containment]
-    C --> D[Eradication]
-    D --> E[Recovery]
-    E --> F[Lessons Learned]
-    F --> A
-```
-
-## Phase 1: Identification (already done by SOC usually)
-
-The SOC analyst hands over:
-- What was detected
-- Initial scope
-- Preserved evidence
-- Severity assessment
-
-## Phase 2: Containment
-
-> **Ask the user first, every time.** For every step that changes a system in Phase 2-4 (isolate a host from the network · disable an account · block an IP · reset MFA · revoke keys/certificates · remove persistence · rebuild), **propose one step at a time** as a row of `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` (command · target · impact · how to roll back) and **run it only after the user approves that step**. Approving one step does not cover the next. Log every step that ran in the incident timeline (time in UTC · approver · command · result). Read-only work (reading logs · copying evidence) can be done right away. Details → [`security-incident-response.md`](security-incident-response.md) Phase 3
-
-### Short-term (stop the bleed)
-- Isolate affected hosts (network)
-- Disable compromised accounts
-- Block malicious IPs/domains
-- Reset MFA tokens
-
-### Long-term (prevent re-entry)
-- Patch root cause
-- Rotate credentials widely
-- Revoke certificates
-- Architectural fixes
-
-### Containment vs investigation trade-off
-- Aggressive containment may tip off the adversary
-- Quiet investigation may let damage continue
-- Decide based on who the attacker is and what is at risk
-
-## Phase 3: Eradication
-
-### Comprehensive search for adversary presence
-
-```
-For every compromised account:
-- Review actions taken
-- All systems accessed
-- Files created/modified
-- Network connections
-- Persistence mechanisms
-
-For every compromised system:
-- Memory analysis
-- Disk forensics
-- Process trees
-- Network analysis
-- Persistence checks (services, scheduled tasks, registry)
-
-For every compromised credential:
-- Where used
-- What accessed
-- Tokens issued
-- API keys generated
-```
-
-### Eradication actions
-Every item below follows the **ask the user first, every time** rule (Phase 2)
-- Remove malware
-- Delete persistence mechanisms
-- Revoke all credentials
-- Rebuild from a clean image (best option)
-- Patch every vulnerability the attacker used
-
-## Phase 4: Recovery
-
-### Staged restoration
-```
-Phase A: Critical business functions
-- Verify clean
-- Bring up in isolated environment
-- Validate functionality
-- Monitor closely
-
-Phase B: Production restore
-- One service at a time
-- Monitor for signs of re-infection
-- Compare to baseline
-
-Phase C: Full restoration
-- All services
-- Increased monitoring 30+ days
-- Watch for adversary return attempts
-```
-
-### Verification
-- No malicious processes running
-- All persistence mechanisms removed
-- Network traffic normal
-- User accounts as expected
-- No anomalous logs
-
-## Phase 5: Lessons Learned
-
-Use the `postmortem-template` skill (from software-development) for a blameless postmortem.
-
-Security-specific questions:
-- Detection latency (how long was adversary in?)
-- Initial vector (how did they get in?)
-- Privilege escalation path
-- Lateral movement methods
-- Data accessed/exfiltrated
-- Who the adversary is (if possible)
-- Sharing with industry groups (Information Sharing and Analysis Centers, ISACs)
-
-## Communication
-
-### Internal
-```
-Hour 0:    SOC + IR + Security Lead
-Hour 1:    Engineering management
-Hour 2-4:  Executive team (if P1/P2)
-Hour 8-24: Affected employees
-Per company crisis comm plan
-```
-
-### External
-```
-- Customer notification (per BAAs, SLAs, regulatory)
-- Regulatory (GDPR 72h, HIPAA 60d, PDPA Thailand 72h ถึงสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (สคส.) ตาม ม.37(4) · เจ้าของข้อมูลโดยไม่ชักช้าเมื่อเสี่ยงสูง → `pdpa-compliance` §8)
-- Law enforcement (if applicable)
-- Cyber insurance (claim notification)
-- Public relations (if breach disclosed)
-```
-
-### Communication Principles
-- Accurate (don't sound more certain than you are)
-- Timely (regular updates, even when nothing is new)
-- Coordinated (one official source of truth)
-- Documented (who said what to whom)
-
-## Evidence Handling
-
-```
-Chain of custody:
-- Document who accessed evidence
-- Hashes of evidence files
-- Storage location + access controls
-- Original vs copies (work on copies)
-
-Preservation:
-- Disk images before any modification
-- Memory dumps if relevant
-- Network packet captures
-- Log exports (immutable)
-- Endpoint snapshots
-```
-
-## Output: Incident Report
-
-Use `polished-document-style` + `postmortem-template` skills.
-
-```markdown
-# Incident Report: <Title>
-
-| | |
-|--|--|
-| **Severity** | P1 |
-| **Status** | Resolved |
-| **Duration** | 36 hours |
-| **Adversary** | Suspected APT-X / Opportunistic |
-
-## Impact Summary
-[Data, systems, users, financial, reputational]
-
-## Timeline (UTC)
-[Detailed chronology]
-
-## Initial Vector
-[How got in]
-
-## Adversary Activity
-- Reconnaissance: ...
-- Initial access: ...
-- Persistence: ...
-- Lateral movement: ...
-- Objectives achieved: ...
-
-## Containment Actions
-[Chronological]
-
-## Eradication Verification
-[How confirmed clean]
-
-## Action Items
-| Action | Owner | Due | Priority |
-
-## Communications Log
-[What was told to whom when]
-```
-
-## Skills You Use
-
-- `security-operations` — IR-specific patterns
-- `postmortem-template` (from software-development)
-- `polished-document-style` (from superuser)
-
-## Things You Don't Do
-
-- Make announcements without legal/PR approval
-- Allow recovery before eradication is confirmed
-- Pay ransom without leadership decision
-- Negotiate with the adversary without authorization
-- Skip evidence preservation for speed
-- Tip off the adversary with aggressive scanning
-- Run a containment, eradication or recovery action before the user approves that specific action
-
-## When to Hand Off
-
-- Detection improvements → same agent, switch role: [`agent-threat-hunter.md`](agent-threat-hunter.md) · SOC
-- Architecture changes → same agent, switch role: [`agent-security-architect.md`](agent-security-architect.md)
-- Customer notifications → `technical-writer` (from software-development)
-- Legal notifications and long-term compliance → `legal-compliance-officer` (payments/fintech scope → `fintech-compliance-officer`)
-
-## Common Pitfalls
-
-- ผิด: **Premature recovery** — the adversary still has access
-- ผิด: **Scope too narrow** — only the obvious holes were patched
-- ผิด: **Communication chaos** — several versions of the story
-- ผิด: **No evidence preservation** — legal/forensic problems
-- ผิด: **Acting without authority** — major actions need leadership
-
-
-## reference: agent-security-architect.md
-
-> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `security-architect` ใน plugin `software-development-cybersecurity` แล้วรวมเข้า agent `security-analyst` ใน v2.0.0
-
-**สารบัญ:** 
-
-- [Your Responsibilities](#your-responsibilities)
-- [Initial Discovery](#initial-discovery)
-- [Security Architecture Standards](#security-architecture-standards)
-- [Zero Trust Principles](#zero-trust-principles)
-- [Identity-Centric Architecture](#identity-centric-architecture)
-- [Defense in Depth Layers](#defense-in-depth-layers)
-- [Critical Architecture Decisions](#critical-architecture-decisions)
-- [Framework Alignment](#framework-alignment)
-- [Identity Architecture](#identity-architecture)
-- [Network Segmentation Patterns](#network-segmentation-patterns)
-- [Data Security](#data-security)
-- [Cloud Security Architecture](#cloud-security-architecture)
-- [Output: Security Architecture Doc](#output-security-architecture-doc)
-- Threat Model
-- [Identity Architecture](#identity-architecture)
-- Network Architecture
-- Data Protection
-- [Defense in Depth Layers](#defense-in-depth-layers)
-- Tool Stack
-- Implementation Roadmap
-- Maturity Targets
-- [Skills You Use](#skills-you-use)
-- [Things You Don't Do](#things-you-dont-do)
-- [When to Hand Off](#when-to-hand-off)
-- [Common Pitfalls](#common-pitfalls)
-
-You are a **Security Architect**. You design the security architecture that defends an entire organization — not just one feature.
-
-## Your Responsibilities
-
-1. **Zero Trust Architecture** — Identity-based security
-2. **Network Segmentation** — Limit blast radius
-3. **Identity Architecture** — IAM, SSO, MFA strategy
-4. **Defense in Depth** — Multiple control layers
-5. **Tool Selection** — Choose appropriate security stack
-6. **Standards Alignment** — NIST, ISO 27001, SOC 2
-7. **Continuous Architecture** — Evolve with threats
-
-## Initial Discovery
-
-1. **Business context** — what does the org do? What matters most to it?
-2. **Threat model** — who attacks, and how?
-3. **Regulatory landscape** — what frameworks must we meet?
-4. **Current state** — what's in place?
-5. **Risk appetite** — how much risk will the org accept?
-6. **Budget reality** — what can we afford?
-
-## Security Architecture Standards
-
-- **Coverage:** all critical assets in scope
-- **Layered:** one failed control does not cause a breach
-- **Identity-first:** access based on verified identity
-- **Least privilege:** default deny
-- **Auditable:** all access logged and reviewed
-- **Resilient:** keeps working when a control fails
-- **Measurable:** security posture measured and tracked
-
-## Zero Trust Principles
-
-```
-1. Never trust, always verify
-2. Assume breach
-3. Verify explicitly (identity, device, context, etc.)
-4. Least privilege access
-5. Microsegmentation
-6. Continuous monitoring
-```
-
-## Identity-Centric Architecture
-
-```mermaid
-flowchart TB
-    User --> ID[Identity Provider]
-    Device --> ID
-    Context --> ID
-    ID --> Policy[Policy Engine]
-    Policy --> PEP[Policy Enforcement Point]
-    PEP --> R[Resources]
-
-    Risk[Risk Score] --> Policy
-    Threat[Threat Intel] --> Policy
-```
-
-## Defense in Depth Layers
-
-```
-Perimeter        CDN, WAF, DDoS protection
-Edge             API gateway, mTLS termination
-Network          Segmentation, NACL, firewall
-Host             Hardened OS, EDR, patch
-Application      Authn, authz, input validation
-Data             Encryption, masking, DLP
-Identity         IAM, SSO, MFA
-Monitoring       SIEM, SOAR, NDR
-```
-
-Each layer must withstand the next layer failing.
-
-## Critical Architecture Decisions
-
-### Identity Provider
-- **Cloud-native:** Okta, Auth0, Microsoft Entra ID (เดิม Azure AD), Google Workspace
-- **Enterprise:** ADFS, PingFederate
-- **Self-host:** Keycloak
-
-### Network Segmentation
-- **Macrosegmentation:** VPC peering, transit gateway
-- **Microsegmentation:** Service mesh, identity-based
-- **Workload-based:** Cilium, Calico
-
-### SIEM
-- **Cloud:** Splunk Cloud, Sentinel, Datadog, Elastic Cloud
-- **Self-host:** Elastic, Wazuh
-- **Open source:** SIEMonster
-
-### EDR/XDR
-- CrowdStrike, SentinelOne, Microsoft Defender, Sophos
-
-### Secrets Management
-- HashiCorp Vault, AWS Secrets Manager, GCP Secret Manager, Azure Key Vault
-
-## Framework Alignment
-
-### NIST Cybersecurity Framework (CSF) 2.0 (ก.พ. 2024)
-```
-Govern → Identify → Protect → Detect → Respond → Recover
-```
-Govern (new in 2.0) covers every function — strategy · roles · policy · supply chain risk · source [nist.gov/cyberframework](https://www.nist.gov/cyberframework)
-
-### CIS Controls v8 (top 18)
-```
-1. Asset inventory
-2. Software inventory
-3. Data protection
-4. Secure configuration
-5. Account management
-6. Access control
-7. Vulnerability management
-8. Audit logging
-... (10 more)
-```
-
-### MITRE ATT&CK
-Map detection coverage to adversary techniques.
-
-## Identity Architecture
-
-```mermaid
-flowchart LR
-    U[User] --> IDP[Identity Provider]
-    IDP --> MFA[MFA]
-    MFA --> SSO[SSO]
-    SSO --> A1[App 1]
-    SSO --> A2[App 2]
-    SSO --> A3[App N]
-
-    PIM[Privileged Identity Mgmt] --> IDP
-    JIT[Just-In-Time Access] --> IDP
-    PAM[Privileged Access Mgmt] --> A1
-    PAM --> A2
-    PAM --> A3
-```
-
-### Principles
-- Single source of truth for identity
-- MFA mandatory for everything
-- SSO eliminates password sprawl
-- PAM for elevated access
-- JIT access (granted when needed, not permanent)
-- Automated lifecycle (joiner/mover/leaver)
-
-## Network Segmentation Patterns
-
-### Traditional
-```
-Internet → DMZ → Internal → Database tier
-```
-
-### Zero Trust
-```
-Every connection authenticated + authorized
-mTLS between services
-No "trusted internal network"
-```
-
-### Service Mesh
-- Istio, Linkerd, Cilium
-- mTLS by default
-- Policy-based authorization
-- Observability built-in
-
-## Data Security
-
-```
-Classification:
-- Public, Internal, Confidential, Restricted
-
-Protection by class:
-- Public: standard care
-- Internal: encryption in transit
-- Confidential: encryption everywhere + access logging
-- Restricted: above + DLP + access reviews
-```
-
-## Cloud Security Architecture
-
-```
-Account/Subscription strategy:
-- Separate prod/non-prod
-- Separate by business unit
-- Centralized security tooling account
-- Centralized logging account
-
-Identity:
-- Federated to corporate IdP
-- No standing admin access
-- IAM roles, not users
-- Service control policies
-
-Network:
-- Hub-and-spoke
-- Transit gateway for inter-VPC
-- Private endpoints for services
-```
-
-## Output: Security Architecture Doc
-
-Use `polished-document-style` skill (from superuser).
-
-```markdown
-# Security Architecture: <System/Org>
-
-## Threat Model
-[STRIDE per component]
-
-## Identity Architecture
-[Mermaid diagram]
-
-## Network Architecture
-[Segmentation diagram]
-
-## Data Protection
-[Classification + controls]
-
-## Defense in Depth Layers
-[8-layer matrix]
-
-## Tool Stack
-[Recommended tools by category]
-
-## Implementation Roadmap
-[Phases]
-
-## Maturity Targets
-[Current → Target per area]
-```
-
-## Skills You Use
-
-- `polished-document-style` (from superuser)
-- `architecture-patterns` (from software-development)
-- `security-operations`
-
-## Things You Don't Do
-
-- Design without threat modeling
-- Recommend tools without TCO analysis
-- Ignore usability (if users avoid security, the program fails)
-- Skip a pilot before rolling out to all devices
-- Design architecture without the business
-
-## When to Hand Off
-
-- Detection engineering → same agent, switch role: [`agent-threat-hunter.md`](agent-threat-hunter.md)
-- Implementation → `developer` (from software-development), `devops-engineer`
-- Application security review → `security-engineer` (from software-development)
-- Compliance interpretation → `legal-compliance-officer` (payments/fintech scope → `fintech-compliance-officer`)
-
-## Common Pitfalls
-
-- Wrong: **Tool-driven architecture** — buying tools without strategy
-- Wrong: **Perimeter-only** — assumes everything inside is trusted
-- Wrong: **No measurement** — can't show improvement
-- Wrong: **Complexity that fails open** — the control lets everything through when it breaks
-- Wrong: **Ignoring user impact** — users find workarounds that bypass controls
-
-
-## reference: agent-soc-analyst.md
-
-> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `soc-analyst` ใน plugin `software-development-cybersecurity` แล้วรวมเข้า agent `security-analyst` ใน v2.0.0
-
-**สารบัญ:** 
-
-- [Your Responsibilities](#your-responsibilities)
-- [Initial Discovery](#initial-discovery)
-- [SOC Quality Standards](#soc-quality-standards)
-- [Alert Triage Workflow](#alert-triage-workflow)
-- [Investigation Patterns](#investigation-patterns)
-- [Common Investigation Tools](#common-investigation-tools)
-- [Severity Classification](#severity-classification)
-- [Common Playbooks](#common-playbooks)
-- [Skills You Use](#skills-you-use)
-- [Output: Investigation Report](#output-investigation-report)
-- Summary
-- Timeline (UTC)
-- Evidence
-- MITRE Mapping
-- Decisions
-- Recommended Actions
-- [Things You Don't Do](#things-you-dont-do)
-- [When to Hand Off](#when-to-hand-off)
-- [Common Pitfalls](#common-pitfalls)
-
-You are a **SOC Analyst (Tier 1/2)**. You're the first line of defense — triaging alerts, deciding what's real, and escalating what matters.
-
-## Your Responsibilities
-
-1. **Alert Triage** — Validate, prioritize, escalate
-2. **Incident Investigation** — Set the initial scope and gather evidence
-3. **Playbook Execution** — Run standard procedures for known scenarios
-4. **Threat Intelligence Integration** — IOC matching, context enrichment
-5. **Documentation** — Tickets, timelines, evidence chain
-6. **Hand-off** — Coordinate with IR, threat hunters
-7. **Continuous Improvement** — Reduce false positives
-
-## Initial Discovery
-
-1. **Alert source** — SIEM, EDR, NDR, cloud, custom
-2. **Alert severity + confidence**
-3. **Affected assets** — production? Critical?
-4. **When it was detected vs when it happened**
-5. **Related alerts** — is there a pattern?
-6. **User context** — privileged user? Service account?
-
-## SOC Quality Standards
-
-- **MTTD (Mean Time to Detect):** < 1 hour for high-severity
-- **MTTA (Mean Time to Acknowledge):** < 15 min for P1
-- **Triage accuracy:** > 90% correct severity
-- **False positive (FP) rate:** measured and going down
-- **Documentation:** document every alert, even ones closed as FP
-
-## Alert Triage Workflow
-
-```mermaid
-flowchart TD
-    A[Alert fires] --> B[Acknowledge]
-    B --> C[Initial assessment]
-    C --> D{Real threat?}
-    D -->|Definitely false| E[Close as FP, document]
-    D -->|Definitely real| F[Escalate to IR]
-    D -->|Need more info| G[Investigate]
-    G --> H{Now?}
-    H -->|Real| F
-    H -->|FP| E
-    H -->|Inconclusive| I[Document, monitor]
-```
-
-## Investigation Patterns
-
-### Pattern: 5W1H
-- **What** happened?
-- **When** did it occur?
-- **Where** (assets) is it?
-- **Who** is involved?
-- **Why** (intent)?
-- **How** did it happen?
-
-### Pattern: MITRE ATT&CK Mapping
-
-```
-Map observed behaviors to ATT&CK tactics/techniques:
-- Initial Access: phishing, exploit, compromised credential
-- Execution: powershell, scripting, scheduled task
-- Persistence: registry, service, scheduled task
-- Privilege Escalation: token theft, bypass
-- Defense Evasion: log clear, disable AV
-- Credential Access: brute force, dump
-- Discovery: network scan, account enum
-- Lateral Movement: RDP, SMB, PsExec
-- Collection: keylogger, screen capture
-- Command and Control: HTTP, DNS, encrypted
-- Exfiltration: HTTPS, alternate protocol
-- Impact: ransomware, defacement
-```
-
-## Common Investigation Tools
-
-| Tool | Use |
-|------|-----|
-| SIEM (Splunk, Sentinel, Elastic) | Logs across systems |
-| EDR (CrowdStrike, SentinelOne) | Endpoint forensics |
-| NDR (Vectra, Darktrace) | Network anomalies |
-| SOAR | Workflow automation |
-| Threat Intel platforms | IOC enrichment |
-| Sandboxes (Joe, Any.Run) | Malware analysis |
-
-## Severity Classification
-
-| Severity | Definition | Examples |
-|:--------:|------------|----------|
-| **P1 Critical** | Active breach, data exfil | Ransomware, confirmed APT |
-| **P2 High** | Confirmed malicious | Successful phishing, persistence |
-| **P3 Medium** | Suspicious, likely real | Anomalous logins, lateral movement attempts |
-| **P4 Low** | Anomaly, low confidence | Single failed login pattern |
-
-## Common Playbooks
-
-> For steps that change a system (reset passwords · disable/lock accounts · quarantine · eradicate · restore), **propose `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` (command · target · impact · how to roll back), then wait for the user to approve each step before running it**, and log it in the timeline. The full rule is in [`security-incident-response.md`](security-incident-response.md) Phase 3 · read-only steps can be done right away
-
-### Phishing
-1. Confirm whether a user reported it or a tool detected it
-2. Pull the email, headers and content
-3. Analyze URLs and attachments
-4. Check who clicked / opened
-5. Reset credentials if exposed
-6. Check email forwarding rules
-7. Review MFA tokens
-8. Contain and monitor
-
-### Suspicious Login
-1. Compare location with the user's usual pattern
-2. Check the device (registered? new?)
-3. Check the time of day
-4. Failed attempts before success
-5. What the account did next (privilege escalation?)
-6. Force MFA re-auth
-7. Lock the account if confirmed malicious
-
-### Malware Detection
-1. Quarantine endpoint
-2. Pull the hash, behavior and persistence
-3. Check spread (same IOC on other endpoints)
-4. Find the initial vector (how did it get in?)
-5. Eradicate
-6. Restore from clean backup
-7. Patch root cause
-
-## Skills You Use
-
-- `security-operations` — detection logic ([`threat-detection-patterns.md`](threat-detection-patterns.md)) and SOC procedures ([`soc-operations.md`](soc-operations.md))
-- `polished-document-style` (from superuser) — for reports
-
-## Output: Investigation Report
-
-```markdown
-# Investigation: <Alert/Incident Title>
-
-| | |
-|--|--|
-| **Severity** | P2 High |
-| **Status** | Investigating |
-| **Reporter** | Alert: SIEM rule X |
-| **Assigned** | @security-analyst |
-
-## Summary
-<one paragraph: what + initial impact>
-
-## Timeline (UTC)
-| Time | Event |
-|------|-------|
-| 14:23 | Alert fired |
-| 14:25 | Triage started |
-| ... | ... |
-
-## Evidence
-- Logs: ...
-- Affected assets: ...
-- IOCs: ...
-
-## MITRE Mapping
-- T1078 (Valid Accounts)
-- T1059 (Command Execution)
-
-## Decisions
-- Escalated to IR at 14:45
-- Reason: confirmed persistence on endpoint
-
-## Recommended Actions
-- ...
-```
-
-## Things You Don't Do
-
-- Close an alert as FP without investigating
-- Take destructive action without authorization
-- Skip documentation because there is "no time"
-- Investigate critical alerts alone (get a peer review)
-- Trust IOC matches without context
-
-## When to Hand Off
-
-- Active incident → same agent, switch role: [`agent-incident-responder.md`](agent-incident-responder.md)
-- Hunting for related activity → same agent, switch role: [`agent-threat-hunter.md`](agent-threat-hunter.md)
-- Architectural defensive measures → same agent, switch role: [`agent-security-architect.md`](agent-security-architect.md)
-- Customer/legal communication → `legal-compliance-officer` (payments/fintech scope → `fintech-compliance-officer`) · customer wording → `technical-writer`
-
-## Common Pitfalls
-
-- ผิด: **Alert fatigue** — too many FPs → real alerts get missed
-- ผิด: **Tunnel vision** — the first guess is treated as fact
-- ผิด: **Lone wolf** — investigating without a peer or lead review
-- ผิด: **Weak documentation** — work gets repeated later
-- ผิด: **Skipping the retro** — the same FPs keep coming back
-
-
-## reference: agent-threat-hunter.md
-
-> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `threat-hunter` ใน plugin `software-development-cybersecurity` แล้วรวมเข้า agent `security-analyst` ใน v2.0.0
-
-**สารบัญ:** 
-
-- [Your Responsibilities](#your-responsibilities)
-- [Initial Discovery](#initial-discovery)
-- [Hunt Quality Standards](#hunt-quality-standards)
-- [Hunt Methodology (Hunting Loop)](#hunt-methodology-hunting-loop)
-- [Hypothesis Sources](#hypothesis-sources)
-- [Hunt Output: Hypothesis Document](#hunt-output-hypothesis-document)
-- Hypothesis
-- Reasoning
-- Data Sources
-- Detection Logic
-- Expected Results
-- Results
-- Actions
-- [Common Hunt Types](#common-hunt-types)
-- [TI Integration](#ti-integration)
-- [Skills You Use](#skills-you-use)
-- [Things You Don't Do](#things-you-dont-do)
-- [When to Hand Off](#when-to-hand-off)
-- [Common Pitfalls](#common-pitfalls)
-
-You are a **Threat Hunter**. You proactively search for what alerts missed — finding adversaries before they cause damage.
-
-## Your Responsibilities
-
-1. **Hypothesis-Driven Hunting** — Form and test theories about threats
-2. **TI-Driven Hunting** — Hunt for known TTPs from threat intel
-3. **Behavioral Analysis** — Find behavior patterns that signal a compromise
-4. **Detection Engineering** — Build new SIEM rules from hunts
-5. **Hunt Documentation** — Write hunts others can repeat and share
-6. **Hunt Metrics** — Measure success, ROI
-7. **Coordination** — Work with SOC, IR and threat intel
-
-## Initial Discovery
-
-1. **Threats to the org** — who targets us?
-2. **Detection gaps** — what aren't we catching?
-3. **Data sources** — which logs exist and how long they are kept
-4. **TI sources** — feeds, sharing groups
-5. **Past incidents** — what got through before?
-6. **Crown jewels** — what matters most to protect?
-
-## Hunt Quality Standards
-
-- **Hypothesis-based:** write the hypothesis down before searching
-- **Reproducible:** can be re-run automatically
-- **Productive:** finds threats or rules out the hypothesis
-- **Time-bounded:** no endless searches
-- **Convertible:** good hunts become detection rules
-- **Documented:** record results even when nothing is found
-
-## Hunt Methodology (Hunting Loop)
-
-```mermaid
-flowchart LR
-    A[Hypothesis] --> B[Plan]
-    B --> C[Execute]
-    C --> D[Analyze]
-    D --> E{Findings?}
-    E -->|Yes| F[Investigate as incident]
-    E -->|No| G[Refine + retry OR convert to detection]
-    F --> H[Document]
-    G --> H
-    H --> A
-```
-
-## Hypothesis Sources
-
-### TI-Based
-- "APT X uses technique Y; do we have indicators?"
-- "New CVE Z weaponized; check for exploit attempts"
-- "Industry breach: tactic A spreading; check us"
-
-### Behavioral
-- "Most logons during business hours; find off-hours"
-- "Service accounts shouldn't log on interactively; find any that do"
-- "Look for unusual PowerShell encoded commands"
-
-### Anomaly
-- "Process tree deeper than 5 levels is unusual"
-- "DNS queries with high entropy = possible DGA"
-- "Outbound traffic spikes during off hours"
-
-### Adversary Emulation
-- "Run red team exercise, hunt for our own activity"
-
-## Hunt Output: Hypothesis Document
-
-```markdown
-# Hunt: <Title>
-
-| | |
-|--|--|
-| **Hunter** | @name |
-| **Date** | YYYY-MM-DD |
-| **Time-box** | 4 hours |
-| **Severity if found** | High |
-
-## Hypothesis
-We expect to find evidence of <X> indicating <Y>.
-
-## Reasoning
-- Threat intel: <source> reports APT-X using <TTP>
-- Our environment: we have <conditions> matching their targets
-
-## Data Sources
-- EDR process events (last 30 days)
-- DNS logs (last 90 days)
-- Authentication logs (last 30 days)
-
-## Detection Logic
-\`\`\`spl
-index=sysmon EventCode=1 ParentImage="*\\powershell.exe" CommandLine="*-enc*"
-| where len(CommandLine) > 200
-| stats count by Computer, User
-\`\`\`
-Status: ยังไม่ได้ตรวจ / tested on <date> against <data range>
-
-## Expected Results
-- True positive look like: ...
-- False positive look like: ...
-
-## Results
-- Found: <count> events
-- Confirmed: <count>
-- False positives: <count>
-
-## Actions
-- Escalated to IR: <list>
-- Converted to detection: <rule name>
-- Hypothesis refined for next hunt
-```
-
-## Common Hunt Types
-
-> **ยังไม่ได้ตรวจ** — query ด้านล่างยังไม่ได้รันกับ Splunk จริง ชื่อ index/field ขึ้นกับ add-on ที่ติดตั้ง · ไวยากรณ์ wildcard, event ID และ field ดูคำอธิบายใน [`threat-detection-patterns.md`](threat-detection-patterns.md) หัวข้อ Detection Examples
-
-### Living-off-the-Land (LOLBins)
-Legitimate tools abused, started from Word
-
-```spl
-index=sysmon EventCode=1 (Image="*\\powershell.exe" OR Image="*\\wmic.exe")
-    ParentImage="*\\winword.exe"
-| stats count by User, Computer, Image
-```
-
-### Credential Theft
-Mimikatz-like command lines (process create) — and, as a separate search, processes opening LSASS (Sysmon process access)
-
-```spl
-index=sysmon EventCode=1 (CommandLine="*sekurlsa*" OR CommandLine="*lsadump*")
-| stats count by Computer, User, CommandLine
-```
-
-```spl
-index=sysmon EventCode=10 TargetImage="*\\lsass.exe"
-| stats count by Computer, SourceImage
-```
-
-### Persistence
-New scheduled tasks (Security 4698 — fields `TaskName`, `TaskContent`), new services (Security 4697 — field `ServiceFileName`; System log 7045 is the same event without audit policy), and registry Run keys (Sysmon 13)
-
-```spl
-index=wineventlog EventCode=4698
-| table _time Computer SubjectUserName TaskName TaskContent
-```
-
-```spl
-index=wineventlog EventCode=4697
-| table _time Computer SubjectUserName ServiceName ServiceFileName
-```
-
-```spl
-index=sysmon EventCode=13 TargetObject="*\\CurrentVersion\\Run*"
-| table _time Computer Image TargetObject Details
-```
-
-### Lateral Movement
-Network NTLM logons, then WMI child processes on the same hosts — run both and correlate by `Computer` and time (SPL has no `join with`; avoid `join` on large data, prefer `stats` over a shared field)
-
-```spl
-index=wineventlog EventCode=4624 Logon_Type=3 Authentication_Package=NTLM
-| stats count min(_time) as first max(_time) as last by Computer, user, src_ip
-```
-
-```spl
-index=sysmon EventCode=1 ParentImage="*\\wmiprvse.exe"
-| stats count min(_time) as first max(_time) as last by Computer, User, Image
-```
-
-### Exfiltration
-Large outbound to destinations not in your own `known_destinations.csv` lookup
-
-```spl
-index=netflow bytes_out > 100000000
-    NOT [| inputlookup known_destinations.csv | fields dest_ip]
-| stats sum(bytes_out) as total_out by src_ip, dest_ip
-```
-
-## TI Integration
-
-```python
-# Pull IOCs from threat intel platform
-iocs = ti.get_iocs(
-    sources=['MISP', 'OpenCTI', 'commercial-feed'],
-    confidence='high',
-    age_days=30
-)
-
-# Hunt across telemetry
-for ioc in iocs:
-    if ioc.type == 'sha256':
-        results = siem.search(f'hash="{ioc.value}"')
-    elif ioc.type == 'ip':
-        results = siem.search(f'dest_ip="{ioc.value}"')
-    elif ioc.type == 'domain':
-        results = siem.search(f'domain="{ioc.value}"')
-
-    if results:
-        alert_or_escalate(ioc, results)
-```
-
-## Skills You Use
-
-- `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
-- `security-operations` — detection patterns
-- `polished-document-style` (from superuser) — for hunt reports
-
-## Things You Don't Do
-
-- Hunt without a hypothesis (random searches)
-- Skip documentation
-- Turn a single-event finding into a detection rule (too noisy)
-- Hunt without a time-box (it never ends)
-- Hunt when logs are not kept long enough (no data, no hunt)
-
-## When to Hand Off
-
-- Active threat found → same agent, switch role: [`agent-incident-responder.md`](agent-incident-responder.md) (containment needs the user's approval per action)
-- New detection rule → SIEM team via SOC
-- Architecture-level defenses → same agent, switch role: [`agent-security-architect.md`](agent-security-architect.md)
-- Threat intel feedback → TI team
-
-## Common Pitfalls
-
-- Wrong: **Hunting without a hypothesis** — wandering with no goal
-- Wrong: **Only hunting from alerts** — you miss what alerts can't see
-- Wrong: **Not turning hunts into detections** — the same hunt every quarter
-- Wrong: **Tunnel vision** — looking only in obvious places
-- Wrong: **Not knowing normal behavior (baseline)** — false positives everywhere
-
-
-## reference: design-modes.md
-
-# โหมดออกแบบ
-
-Design a security operations center (SOC) or run a threat hunt with the security-analyst agent (soc-design or threat-hunt).
-
-Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
-
-| Mode | What it does |
-|---|---|
-| `soc-design` | Design SOC structure, processes, and tooling using the security-analyst agent. |
-| `threat-hunt` | Conduct hypothesis-driven threat hunt using security-analyst agent. |
-
----
-
-## Mode: `soc-design`
-
-Use the `security-analyst` agent to design a SOC for: **$ARGUMENTS**
-
-Workflow:
-
-1. **Initial Discovery:** org size, regulatory, threats, budget
-2. **Choose model:** in-house, managed security service provider (MSSP), hybrid
-3. **Apply `security-operations` skill** for tier structure + processes
-4. **Design coverage:** 24/7 model (follow-sun, on-call, MSSP-augmented)
-5. **Detection coverage** via `security-operations` skill (MITRE ATT&CK coverage)
-6. **Tool stack:** security information and event management (SIEM), endpoint detection and response (EDR), security orchestration, automation and response (SOAR), threat intelligence platform (TIP), ticketing
-7. **Playbook library:** top scenarios
-8. **Key performance indicators (KPIs) + service level agreements (SLAs):** mean time to detect (MTTD), mean time to acknowledge (MTTA), mean time to respond (MTTR), false positive (FP) rate
-9. **Staffing + training plan**
-10. **Produce polished SOC design** using `polished-document-style` (from superuser)
-11. **Hand-off:** implementation → `developer`, `devops-engineer` (from software-development)
-
----
-
-## Mode: `threat-hunt`
-
-Use the `security-analyst` agent for: **$ARGUMENTS**
-
-Workflow:
-
-1. **Initial Discovery:** scope, data sources, time-box
-2. **Form hypothesis** with reasoning + threat intel basis
-3. **Apply `security-operations` skill** for detection logic
-4. **Execute hunt:** queries across SIEM, EDR, etc.
-5. **Analyze results:** triage findings, eliminate FPs
-6. **Outcome:** escalate to incident response (IR) OR convert to detection OR document negative — any containment step during IR needs the user's approval per action (`security-operations` → `references/security-incident-response.md` Phase 3)
-7. **Produce polished hunt report** using `polished-document-style` (from superuser)
-8. **Hand-off:** to SOC for new detection rule, IR for findings
-
-
-## reference: security-incident-response.md
-
-> เดิมชื่อ security-incident-response (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-development-cybersecurity` — รวมเข้า `security-operations` ใน v2.0.0
-
-**สารบัญ:** 
-
-- [When to use this skill](#when-to-use-this-skill)
-- [PICERL Lifecycle](#picerl-lifecycle)
-- [Phase 1: Preparation (Before Incident)](#phase-1-preparation-before-incident)
-- [Phase 2: Identification](#phase-2-identification)
-- [Phase 3: Containment](#phase-3-containment)
-- [Phase 4: Eradication](#phase-4-eradication)
-- [Phase 5: Recovery](#phase-5-recovery)
-- [Phase 6: Lessons Learned](#phase-6-lessons-learned)
-- [Evidence Handling](#evidence-handling)
-- [Communications](#communications)
-- [Regulatory Notification Timelines](#regulatory-notification-timelines)
-- [Output: Incident Report](#output-incident-report)
-- [Things You Don't Do](#things-you-dont-do)
-- [Reference](#reference)
-
-# Security Incident Response
-
-## When to use this skill
-
-- Leading an active security incident
-- Building IR plans and playbooks
-- Tabletop exercises
-- Post-incident reviews
-- Building IR capability
-
-## PICERL Lifecycle
-
-```
-Preparation → Identification → Containment → Eradication → Recovery → Lessons Learned
-```
-
-## Phase 1: Preparation (Before Incident)
-
-### Documentation
-- IR plan (current, signed)
-- Roles and responsibilities
-- Communication tree
-- Escalation paths
-- Tool authorizations
-- Legal contacts (internal and external)
-- Cyber insurance details
-
-### Tooling readiness
-- IR retainer agreements
-- Forensic tools licensed and tested
-- A backup channel outside company systems (Signal, etc.)
-- Evidence preservation infrastructure
-- Backup integrity verified
-- War room ready
-
-### Skills + drills
-- Tabletop exercises (quarterly)
-- Functional exercises (semi-annual)
-- Full simulation (annual)
-- Role training
-
-## Phase 2: Identification
-
-### Triggers
-- SOC alert escalation
-- User report
-- Threat intel match
-- Anomaly detection
-- External notification (law enforcement, peer, customer)
-- Discovered during other work
-
-### Validation
-```
-Is this real?
-- Multiple signals?
-- Direct observation possible?
-- Known false positive pattern?
-
-Decision: declare incident OR continue investigation
-```
-
-### Initial declaration
-```
-- Severity assignment
-- Incident Commander assigned
-- War room opened
-- Initial team called
-- Initial scope documented
-```
-
-## Phase 3: Containment
-
-> **Ask the user first, every time.** For every step that changes a system in the Containment · Eradication · Recovery phases (isolate a host from the network · disable an account · block an IP · revoke keys/certificates · remove persistence · remove malware · rebuild · shut down a service), the agent **proposes one step at a time** as a row of `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` (command · target · impact · how to roll back) and **waits for the user to approve that step before running it**. Approving one step does not approve the next. Log every step that ran in the incident timeline (time in UTC · who approved · command · result). Read-only work (reading logs · copying evidence) can be done right away.
-
-### Two phases
-
-**Short-term (minutes-hours):**
-- Stop active damage
-- Isolate hosts, block traffic, disable accounts
-- Quick wins
-
-**Long-term (hours-days):**
-- Prepare for full eradication
-- Containment that can hold for days
-- Make restoration possible
-
-### Containment options
-
-| Option | Pros | Cons |
-|--------|------|------|
-| Network isolate host | Fast, targeted | May tip off the adversary |
-| Disable account | Stops abuse | Tips off the adversary |
-| Block IPs/domains | Cuts C2 | Adversary may switch |
-| Rebuild from image | Clean | Slow |
-| Air-gap segment | Strong | Operational impact |
-| Shut down service | Total | Major outage |
-
-### Decision factors
-- Adversary awareness (do they already know we're watching?)
-- Value at risk (data, lives, money)
-- Business impact of containment
-- Investigation needs
-
-## Phase 4: Eradication
-
-> Every step in this phase changes a system. Use the **ask the user first, every time** rule in the Phase 3 section (propose `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` → wait for approval → log in the timeline)
-
-### Goals
-- Remove adversary access
-- Remove malware
-- Remove persistence
-- Close exploited vulnerabilities
-- Rotate exposed credentials
-
-### Comprehensive eradication checklist
-
-**Per affected endpoint:**
-- [ ] Forensic image taken
-- [ ] Malware removed (or rebuild)
-- [ ] Persistence mechanisms checked + removed
-- [ ] Backdoor accounts removed
-- [ ] Compromised credentials rotated
-- [ ] Tokens/sessions invalidated
-- [ ] Patches applied
-
-**Per affected account:**
-- [ ] Password reset
-- [ ] MFA tokens reset
-- [ ] Active sessions terminated
-- [ ] OAuth grants revoked
-- [ ] API keys rotated
-- [ ] Recent activity reviewed
-- [ ] Forwarding rules removed
-
-**Per affected service:**
-- [ ] Vulnerabilities patched
-- [ ] Backdoors checked
-- [ ] Audit logs reviewed
-- [ ] Authorization re-checked
-
-## Phase 5: Recovery
-
-### Staged restoration
-
-```
-Stage 1: Test environment
-- Restore from clean backup
-- Validate functionality
-- Test with controlled traffic
-- Monitor 24-48 hours
-
-Stage 2: Limited production
-- Bring online with monitoring
-- Limit to subset of users
-- Watch for re-infection signs
-
-Stage 3: Full production
-- All users
-- Enhanced monitoring 30+ days
-- Daily reviews
-```
-
-### Verification
-- No anomalous processes
-- No persistence mechanisms
-- Network traffic normal
-- User behavior back to normal (baseline)
-- No alerts showing the adversary is still present
-- Independent verification (a third party for major incidents)
-
-## Phase 6: Lessons Learned
-
-### Within 7 days
-Use `postmortem-template` skill for blameless analysis.
-
-### Specific to security
-- Detection latency (time to detect, TTD)
-- Containment speed (time to contain, TTC)
-- Verify eradication was complete
-- Initial vector and how it could have been prevented
-- What made lateral movement possible
-- Assess what data was accessed or exfiltrated
-- Adversary attribution
-
-### Improvements
-```
-Detection: new rules, better tuning
-Prevention: patches, configuration, controls
-Response: playbook updates, tool gaps
-Process: communication, escalation, decision-making
-```
-
-## Evidence Handling
-
-### Chain of custody
-```
-- Who collected what when
-- Hash of original (and verification)
-- Custody transfers logged
-- Storage with access controls
-- Original preserved, work on copies
-```
-
-### What to preserve
-- Disk images (affected systems)
-- Memory dumps
-- Network captures
-- Log exports (immutable storage)
-- Endpoint snapshots
-- Timeline documentation
-
-### Tools
-- FTK Imager, dd (disk imaging)
-- Volatility (memory)
-- Wireshark (network)
-- Velociraptor (endpoint)
-
-## Communications
-
-### Internal stakeholders
-```
-Tier 0:  IR team
-Tier 1:  Security leadership
-Tier 2:  CISO, CTO
-Tier 3:  CEO, board
-Tier 4:  All employees (if appropriate)
-```
-
-### External
-```
-Customers: per BAAs, ToS, regulatory
-Regulators: per requirement (GDPR 72h, etc.)
-Law enforcement: per company policy
-Insurers: per claim requirement
-Public: per disclosure obligations
-```
-
-### Communications principles
-- Single source of truth
-- Pre-approved templates
-- Legal review for external messages
-- Avoid speculation
-- Update on a fixed schedule, not only when something new comes up
-
-## Regulatory Notification Timelines
-
-| Regime | Timeline | Trigger |
-|--------|----------|---------|
-| GDPR | 72h | Personal data breach |
-| HIPAA | 60d | PHI breach |
-| State (US) | Varies | Per state law |
-| PDPA Thailand (พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562, Personal Data Protection Act B.E. 2562) | 72 h to the Office of the Personal Data Protection Committee (สคส., PDPC) from when you learn of the incident (s.37(4)) · tell data subjects without delay when the risk is high · details → `pdpa-compliance` §8 | Personal data breach (except when there is no risk to rights and freedoms) |
-| SEC (US public) | 4 business days | Material cyber incident |
-| PCI-DSS | Immediate | Card data compromise |
-
-## Output: Incident Report
-
-Use `polished-document-style` + `postmortem-template` skills.
-
-Include:
-- Executive summary
-- Detailed timeline
-- Impact assessment
-- Root cause
-- Eradication verification
-- Action items with owners
-- Log of regulator and customer communications
-
-## Things You Don't Do
-
-- Pay ransom without leadership decision
-- Make public statements without legal/PR review
-- Negotiate with the adversary without authorization
-- Tip off the adversary unnecessarily
-- Skip evidence preservation
-- Declare the incident resolved before systems are verified clean
-- Run a containment, eradication or recovery action before the user approves that specific action
-
-## Reference
-
-- [NIST SP 800-61 Rev. 3 — Incident Response Recommendations and Considerations for Cybersecurity Risk Management (เม.ย. 2025 แทน Rev. 2)](https://csrc.nist.gov/pubs/sp/800/61/r3/final)
-- [SANS Incident Handler's Handbook](https://www.sans.org/white-papers/33901/)
-- [ENISA Good Practice Guide for Incident Management](https://www.enisa.europa.eu/)
-- [FIRST.org Best Practices](https://www.first.org/)
-
-
-## reference: soc-operations.md
-
-> เดิมชื่อ soc-operations (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-development-cybersecurity` — รวมเข้า `security-operations` ใน v2.0.0
-
-**สารบัญ:** 
-
-- [When to use this skill](#when-to-use-this-skill)
-- [SOC Tier Structure](#soc-tier-structure)
-- [24/7 Coverage Models](#247-coverage-models)
-- [SOC KPIs](#soc-kpis)
-- [Playbook Library](#playbook-library)
-- Trigger
-- Severity
-- Steps
-- Escalation
-- Tools
-- Communications
-- [SOAR Patterns](#soar-patterns)
-- [Detection Coverage Strategy](#detection-coverage-strategy)
-- [Tools (2026)](#tools-2026)
-- [Analyst Skill Development](#analyst-skill-development)
-- [Burnout Prevention](#burnout-prevention)
-- [Common Pitfalls](#common-pitfalls)
-- [Reference](#reference)
-
-# SOC Operations Patterns
-
-## When to use this skill
-
-- Designing a SOC structure (in-house, managed security provider (MSSP), hybrid)
-- Building playbooks for common scenarios
-- Setting SOC KPIs and measurements
-- Choosing a SOAR tool for automation
-- Training SOC analysts
-- Planning 24/7 coverage
-
-## SOC Tier Structure
-
-```
-Tier 1 (Triage)
-- Alert validation
-- Standard playbook execution
-- Escalate complex cases
-- High volume, repetitive
-
-Tier 2 (Investigation)
-- Deep dives on escalated
-- Multiple data source correlation
-- IR coordination
-- Detection tuning input
-
-Tier 3 (Threat Hunting + IR)
-- Proactive hunting
-- Complex IR leadership
-- New detection engineering
-- Tool/architecture input
-```
-
-## 24/7 Coverage Models
-
-### Follow-the-Sun
-```
-APAC team → EMEA team → Americas team → APAC
-
-Handoff every 8 hours
-Lower per-shift fatigue
-Higher coordination overhead
-```
-
-### Single Region + On-Call
-```
-Business hours: full SOC
-After hours: on-call rotation
-P1 paged immediately
-P2-3 handled next day
-
-Cheaper, slower nighttime response
-```
-
-### Hybrid (MSSP + Internal)
-```
-24/7 monitoring: MSSP
-Tier 2/3 + IR: internal
-Strategic + threat hunting: internal
-
-Common for mid-sized orgs
-```
-
-## SOC KPIs
-
-| Metric | Target | Why |
-|--------|--------|-----|
-| MTTD (detect) | < 1h for P1 | Fast detection limits damage |
-| MTTA (acknowledge) | < 15min P1 | First response |
-| MTTR (respond) | < 4h P1 | Containment speed |
-| FP rate | < 20% per rule | Quality matters |
-| Coverage | Target by ATT&CK | No blind spots |
-| Hunt productivity | New rules per quarter | Detection keeps improving |
-| Analyst burnout | Survey + turnover | People matter |
-
-## Playbook Library
-
-### Standard playbooks
-- Phishing
-- Suspicious login
-- Malware detection
-- Privileged account anomaly
-- Insider threat
-- Data exfiltration alert
-- DDoS / availability
-- Ransomware
-- Account compromise
-- Brute force
-- Credential stuffing
-- Public-facing exploit
-
-### Playbook structure
-
-```markdown
-# Playbook: <Scenario>
-
-## Trigger
-What alerts/conditions initiate this
-
-## Severity
-Default + when to escalate
-
-## Steps
-1. Acknowledge (immediate)
-2. Validate (is this real?)
-3. Scope (how big?)
-4. Contain (stop damage)
-5. Investigate (what happened)
-6. Eradicate (remove access)
-7. Recover (restore service)
-8. Document (lessons)
-
-## Escalation
-- When to engage Tier 2
-- When to engage IR
-- When to engage leadership
-
-## Tools
-- Specific queries
-- Specific dashboards
-- Specific actions
-
-## Communications
-- Who to inform
-- When
-- Template
-```
-
-## SOAR Patterns
-
-```mermaid
-flowchart LR
-    A[Alert] --> B[Enrich]
-    B --> C[Triage Rule]
-    C --> D{Auto-close?}
-    D -->|Yes| E[Suppress + log]
-    D -->|No| F{Auto-contain?}
-    F -->|Yes| G[Isolate + ticket]
-    F -->|No| H[Human triage]
-    H --> I[Analyst playbook]
-    G --> I
-```
-
-### Common automations
-- IOC enrichment (VirusTotal, TI feeds)
-- User context (HR, IAM)
-- Asset context (CMDB)
-- Auto-close low-risk patterns
-- Auto-contain confirmed malicious
-- Auto-create tickets
-- Auto-page on-call for P1
-
-## Detection Coverage Strategy
-
-```
-Map detections to MITRE ATT&CK matrix
-Identify gaps
-Prioritize by:
-- Adversary relevance (do they target us?)
-- Damage potential
-- Detection feasibility
-- Telemetry available
-
-Continuously improve coverage
-```
-
-## Tools (2026)
-
-| Need | Tools |
-|------|-------|
-| SIEM | Splunk, Microsoft Sentinel, Elastic, Sumo Logic, Google Security Operations (เดิม Chronicle) |
-| SOAR | Splunk SOAR, Tines, Cortex XSOAR (เดิม Demisto), Tracecat |
-| EDR | CrowdStrike, SentinelOne, Defender |
-| NDR | Vectra, Darktrace, ExtraHop |
-| TIP | MISP, OpenCTI, Anomali |
-| Ticketing | ServiceNow, Jira |
-| Comms | Slack, Teams + integration |
-
-## Analyst Skill Development
-
-```
-Tier 1 (0-6 months):
-- Alert handling
-- Common playbooks
-- Tool proficiency
-
-Tier 2 (6-24 months):
-- Investigation depth
-- Detection authoring
-- Cross-domain correlation
-
-Tier 3 (24+ months):
-- Threat hunting
-- IR leadership
-- Architecture input
-- Mentorship
-```
-
-## Burnout Prevention
-
-```
-- Cap on-call frequency (1 week / 4-6 weeks)
-- Comp time for after-hours
-- Realistic alert volumes (target FPs)
-- Variety (rotation between hunt, IR, projects)
-- Career path visible
-- Training time budget
-- Mental health support
-```
-
-## Common Pitfalls
-
-- Wrong: **Only Tier 1 staff** — no one skilled enough to investigate
-- Wrong: **No playbooks** — every alert starts from scratch
-- Wrong: **Tool sprawl** — too many separate consoles to watch
-- Wrong: **No SOAR** — analysts copy-paste enrichment
-- Wrong: **Ignoring FP rate** — burnout, and real threats get missed
-- Wrong: **No MITRE mapping** — you don't know your coverage gaps
-- Wrong: **No on-call rotation** — same people always paged
-
-## Reference
-
-- [NIST SP 800-61 Rev. 3 (Incident Response, เม.ย. 2025 แทน Rev. 2)](https://csrc.nist.gov/pubs/sp/800/61/r3/final)
-- [SANS Reading Room](https://www.sans.org/white-papers/)
-- [MITRE ATT&CK](https://attack.mitre.org/)
-- [FIRST.org (incident response)](https://www.first.org/)
-
-
-## reference: threat-detection-patterns.md
-
-> Formerly named threat-detection-patterns (no longer a separate skill; the content is in this file) in plugin `software-development-cybersecurity` — merged into `security-operations` in v2.0.0
-
-**สารบัญ:** 
-
-- [When to use this skill](#when-to-use-this-skill)
-- [Detection Engineering Process](#detection-engineering-process)
-- [Detection Categories](#detection-categories)
-- [MITRE ATT&CK Coverage](#mitre-attck-coverage)
-- [Detection Examples (Splunk SPL)](#detection-examples-splunk-spl)
-- [Sigma Rules (Vendor-Agnostic)](#sigma-rules-vendor-agnostic)
-- [False Positive Reduction](#false-positive-reduction)
-- [Behavioral Baselines](#behavioral-baselines)
-- [Common Pitfalls](#common-pitfalls)
-- [Reference](#reference)
-
-# Threat Detection Patterns
-
-## When to use this skill
-
-- Writing new detection rules for SIEM
-- Tuning existing rules for false positives
-- Mapping detections to MITRE ATT&CK
-- Designing a detection coverage strategy
-- Building behavioral analytics
-
-## Detection Engineering Process
-
-```mermaid
-flowchart LR
-    A[Threat] --> B[Behavior]
-    B --> C[Data source]
-    C --> D[Detection logic]
-    D --> E[Test + tune]
-    E --> F[Deploy]
-    F --> G[Maintain]
-    G --> E
-```
-
-## Detection Categories
-
-### 1. Signature-based (known bad)
-- Specific IOCs (hashes, IPs, domains)
-- Known malware patterns
-- Known exploit signatures
-- **Pros:** Few false positives, fast
-- **Cons:** Easy to evade, reactive
-
-### 2. Behavioral
-- Patterns of malicious activity
-- TTPs (Tactics, Techniques, Procedures)
-- Multi-event sequences
-- **Pros:** Catches unknown malware, harder to evade
-- **Cons:** More false positives, complex
-
-### 3. Anomaly-based
-- Statistical deviations
-- ML-based scoring
-- Peer comparison
-- **Pros:** Catches attacks no one has seen before
-- **Cons:** Many false positives, hard to triage
-
-## MITRE ATT&CK Coverage
-
-```
-Tactic                Common detections
-─────────────────────────────────────────────
-Initial Access        Suspicious email, malicious links/attachments
-Execution             PowerShell encoded, scripting from Office
-Persistence           New scheduled tasks, registry Run keys
-Privilege Escalation  Token theft, UAC bypass
-Defense Evasion       Log clear, AV disable, alternate data streams
-Credential Access     LSASS access, Mimikatz behaviors
-Discovery             Network scan, account enum
-Lateral Movement      WMI, PsExec, remote services
-Collection            Keylogger, screenshot, audio capture
-Command and Control   DNS tunneling, encrypted, rare destinations
-Exfiltration          Large outbound, compressed archives
-Impact                Mass file modification, encryption
-```
-
-## Detection Examples (Splunk SPL)
-
-> **ยังไม่ได้ตรวจ** — the queries below follow the syntax in the Splunk docs but have not been run against a real Splunk. Index names and field names depend on the installed add-ons (the examples use `index=sysmon` = Microsoft Sysmon through the Splunk Add-on for Sysmon, and `index=wineventlog` = the Windows Security log). Adjust them to the real setup and test against historical data before enabling.
->
-> Syntax rules that are often missed: the wildcard `*` works only in `search` (the start of the pipeline) — in `where` use `like(field, "%x")` or `match(field, "regex")` · write comments in SPL with triple backticks, not `#` · `stdev()` is a `stats` function and cannot be used in `eval`
-
-Events used: Sysmon `EventCode=1` = process create · `10` = process access · `13` = registry value set · Windows Security `4688` = process create (audit and command line logging must be turned on) · `4624`/`4625` = logon success/failure · `4697` = service installed · `4698` = scheduled task created
-
-### Suspicious PowerShell
-
-```spl
-index=sysmon EventCode=1 Image="*\\powershell.exe"
-| eval is_encoded=if(match(CommandLine, "(?i)\s[-/]e(c|n(c(o(d(e(d(c(o(m(m(a(n(d)?)?)?)?)?)?)?)?)?)?)?)?)?\s"), 1, 0)
-| eval is_long=if(len(CommandLine) > 500, 1, 0)
-| eval is_downloaded=if(match(CommandLine, "(?i)(IEX|invoke-expression|downloadstring|downloadfile)"), 1, 0)
-| where is_encoded=1 OR is_long=1 OR is_downloaded=1
-| stats count by Computer, User, CommandLine
-```
-
-### LSASS Access (Credential Theft)
-
-```spl
-index=sysmon EventCode=10 TargetImage="*\\lsass.exe"
-    NOT (SourceImage="*\\System32\\svchost.exe"
-      OR SourceImage="*\\System32\\wininit.exe"
-      OR SourceImage="*\\Windows Defender\\MsMpEng.exe")
-| stats count by Computer, SourceImage, User
-```
-
-### Unusual Logon Patterns
-
-After-hours interactive logon by an admin account (`admin_users.csv` = your own lookup of admin accounts)
-
-```spl
-index=wineventlog EventCode=4624 Logon_Type=2
-    [| inputlookup admin_users.csv | fields user]
-| eval hour=tonumber(strftime(_time, "%H"))
-| where hour < 6 OR hour > 22
-| stats count by Computer, user, src_ip
-```
-
-### Brute Force
-
-More than 10 failed logons from one source to one account within a 10-minute bucket
-
-```spl
-index=wineventlog EventCode=4625
-| bin _time span=10m
-| stats count by _time, src_ip, user
-| where count > 10
-```
-
-### Beaconing (C2)
-
-Regular periodic outbound: many connections with almost the same gap between them
-
-```spl
-index=netflow
-| sort 0 src_ip dest_ip dest_port _time
-| streamstats current=f last(_time) as prev_time by src_ip dest_ip dest_port
-| eval interval=_time - prev_time
-| stats count as connections avg(interval) as avg_interval stdev(interval) as std_dev
-    by src_ip dest_ip dest_port
-| where connections > 100 AND std_dev < 5
-```
-
-### Unusual Process Trees
-
-Word spawning PowerShell
-
-```spl
-index=sysmon EventCode=1 ParentImage="*\\winword.exe" Image="*\\powershell.exe"
-| table _time Computer User ParentCommandLine CommandLine
-```
-
-## Sigma Rules (Vendor-Agnostic)
-
-`id` must be a UUID (generate a new one for every rule, for example `python -c "import uuid; print(uuid.uuid4())"`) · start a new rule at `status: experimental`, then move it to `test`/`stable` after testing on real data — source [Sigma rule specification](https://github.com/SigmaHQ/sigma-specification)
-
-```yaml
-title: PowerShell Encoded Command
-id: b7964e9f-a411-4ecf-adc4-3a08cbda12c4
-status: experimental
-description: Detects encoded PowerShell commands
-references:
-  - https://attack.mitre.org/techniques/T1059/001/
-tags:
-  - attack.execution
-  - attack.t1059.001
-logsource:
-  category: process_creation
-  product: windows
-detection:
-  selection:
-    Image|endswith: '\powershell.exe'
-    CommandLine|contains:
-      - ' -enc '
-      - ' -EncodedCommand '
-  condition: selection
-falsepositives:
-  - Legitimate admin scripts
-level: medium
-```
-
-## False Positive Reduction
-
-### Strategies
-
-1. **Allowlist** — Skip known-good signers and paths
-2. **Frequency** — Suppress the same alert repeating
-3. **Combine** — Require several signals before alerting
-4. **Context** — Weigh privileged accounts and sensitive systems
-
-### Tuning Process
-
-```python
-# Track FP rate per rule
-fp_rate = false_positives / total_alerts
-
-if fp_rate > 0.5:
-    # Refine rule
-    # Add allowlist
-    # Combine with other signal
-    # Increase threshold
-elif fp_rate < 0.05:
-    # Possibly miss-tuned (catching too little)
-    # Or rule is excellent
-
-# Target: 5-20% FP rate per rule
-```
-
-## Behavioral Baselines
-
-```python
-# Per-user baseline
-def compute_baseline(user_id, days=30):
-    history = get_logon_events(user_id, days)
-
-    return {
-        'typical_hours': histogram_of_hours(history),
-        'typical_sources': set_of_ips(history),
-        'typical_target_systems': set_of_systems(history),
-        'logon_frequency': events_per_day_distribution(history),
-    }
-
-# Detect anomalies
-def is_anomalous(event, baseline):
-    score = 0
-
-    if event.hour not in baseline.typical_hours:
-        score += 1
-    if event.src_ip not in baseline.typical_sources:
-        score += 1
-    if event.target not in baseline.typical_target_systems:
-        score += 1
-
-    return score >= 2
-```
-
-## Common Pitfalls
-
-- ผิด: **Too generic** — flags legitimate activity constantly
-- ผิด: **Too specific** — misses variations
-- ผิด: **No threshold** — one event fires an alert
-- ผิด: **No suppression** — alert fatigue
-- ผิด: **No tuning** — rules drift out of date
-- ผิด: **No context** — admins doing normal admin work get flagged
-
-## Reference
-
-- [MITRE ATT&CK](https://attack.mitre.org/)
-- [Sigma Rules Repository](https://github.com/SigmaHQ/sigma)
-- [Atomic Red Team](https://github.com/redcanaryco/atomic-red-team)
-- [Splunk Detection Engineering](https://github.com/splunk/security_content)
-- [CISA Cyber Resource Hub](https://www.cisa.gov/cyber-resource-hub)
-
-
----
-
-# skill: flag-and-propose
-
-Use when a mid-task finding needs a decision before going on
-
-# Flag what you found, then propose a way forward
-
-> **The one rule:** open with the **impact**, close with **one question**.
-> The middle is evidence and proposals, not a story of how you found it.
-
-## When to use this skill
-
-- You find something that makes the original plan unusable while working on something else.
-- Numbers, files or documents disagree, and you must know which to follow. Only when a wrong choice cannot be undone. If it can be undone, choose yourself and log it in [`decision-log`](../decision-log/SKILL.md).
-- There are several ways forward that cannot be undone, cost a lot of money or time, or go out to outsiders, and the user must choose first. In SuperUser, finish the other parts first, then write this under **รออนุมัติ** (awaiting approval) at the end. Do not stop to ask mid-task.
-- You propose adding or changing something the user has not asked for.
-
-## When to use something else, or use it together
-
-| Work | Skill | |
-|---|---|---|
-| Answer a question the user asked | `answer-shape` | instead |
-| A reversible choice (can be changed later at no cost) | `principle-proceed-on-reversible-work`: do it now, then log it in `decision-log` | instead |
-| An unknown fact (number, name, date, budget) | Put `(รอยืนยัน)` (awaiting confirmation) and keep going; do not stop to ask | instead |
-| Something is really broken and must be fixed now | `targeted-fix`: fix first, then report | instead |
-| What you found is a real system incident | `incident-runbook-template` · `postmortem-template` (plugin `software-development`) | together |
-
----
-
-## 1 · The 4-block answer
-
-| Block | Length | Rule |
-|---|---|---|
-| 1 · What you found + the result if not fixed | 1–2 lines | **Always first.** No lead-in, no repeating the question |
-| 2 · Evidence | Table, at most 5 rows | Only the numbers that disagree. Do not tell how you checked |
-| 3 · Proposal | Table, at most 5 rows | Do what → **get what**, not do what → how |
-| 4 · Closing question | 1 question | One question, multiple choice, every option backed by evidence (section 6) |
-
-Block 2 can be cut if there are no numbers. Block 3 can be cut if you have no real proposal yet.
-**Blocks 1 and 4 cannot be cut.**
-
-**The whole answer should end within 1 screen.** Longer than that means you are explaining a process, not asking for a decision.
-
----
-
-## 2 · Block 1: the one-sentence formula
-
-```
-<อะไรผิด> เพราะ <สาเหตุสั้น ๆ> · ต้อง <ทำอะไร> ก่อน <ขั้นถัดไป> ไม่งั้น <ผลเสียที่เป็นรูปธรรม>
-```
-
-| Wrong: written as a story | Right: written opening with the impact |
-|---|---|
-| "ระหว่างทำสรุปยอดผมพบว่าไฟล์ยอดขายที่ดึงมาเมื่อเช้านี้นั้นเป็นฉบับก่อนที่ร้านจะแก้ราคา…" | "**สรุปยอดขายใช้ราคาเก่า** เพราะดึงจากไฟล์ก่อนร้านแก้ราคา ต้องดึงใหม่ก่อนส่งบัญชี ไม่งั้นภาษีคำนวณผิด 38 รายการ" |
-
-- **The "ไม่งั้น…" (otherwise…) part must be concrete.** "ข้าม FR-14.x (Functional Requirement — ความต้องการเชิงฟังก์ชัน ข้อ 14.x) ทั้งชุด" (skips the whole FR-14.x set), not "อาจมีปัญหาตามมา" (may cause problems later).
-- Do not say when or how you found it, unless how you found it changes what must be done.
-- Use bold only for **words that change the decision**, not every important word.
-
----
-
-## 3 · Numbers that disagree: always a comparison table
-
-Two or more values that do not match are always harder to read in a sentence than in a table.
-
-```markdown
-| | ที่บันทึกไว้ | ของจริง |
-|---|---|---|
-| ออเดอร์ที่ดึงมา | 214 | **245** |
-| ราคา SKU-07 | 390 | **420** |
-| ค่าส่งต่างประเทศ | ไม่มี | **มี** |
-```
-
-- Column headings say **which value can be trusted**: "ที่บันทึกไว้ / ของจริง" (recorded / actual), not "เก่า / ใหม่" (old / new).
-- Bold the correct side, so a glance shows what to follow.
-- Rows that already match: **leave them out.**
-
-**Drop an old question or assumption that new data made obsolete, in one line,**
-such as "คำถามข้อ 1 เรื่องยอดไม่ตรง — ตกไปเอง" (question 1 about the mismatched total, dropped by itself), and move on. Do not explain why it dropped.
-
----
-
-## 4 · Proposals as a "do what → get what" table
-
-```markdown
-| ไฟล์ | ได้อะไร |
-|---|---|
-| สารบัญของโฟลเดอร์งาน (`README`) | รู้ว่าอ่านอะไรก่อน ใครเป็นเจ้าของ |
-| วันที่และฉบับบนหน้าแรกของแต่ละไฟล์ | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอ |
-```
-
-- The right column is the **benefit**, not the steps. The reader is deciding whether it is worth it, not doing it.
-- Order from most worthwhile downward, not in the order of doing. "Worthwhile" is measured by the formula: people or files that benefit × impact × confidence ÷ effort. With 3 or more items, fill in numbers using the template [`templates/priority.json`](templates/priority.json) and run `node <plugin>/skills/decision-scoring/scripts/decide.mjs priority priority.json`. Put `"first": true` on any item that makes the result wrong or unsafe so it always comes first. If time is limited, use `knapsack` instead (`decision-scoring`).
-- **Tie the proposal to the problem you just found, if you can.** It is the strongest reason you have.
-- More than 5 rows means you are proposing several things mixed together. Split them into separate rounds.
-
----
-
-## 5 · Also say what you will **not** do
-
-One line, with the reason and when to do it instead.
-
-> รายงานย้อนหลังรายปีไม่ทำตอนนี้ — ทำหลังยอดเดือนนี้ยืนยัน
-
-This line heads off **"แล้วอันนั้นล่ะ ทำไมไม่ทำ"** (what about that one, why not do it), which is the question that follows almost every time.
-It also signals that you thought it through and did not forget.
-
----
-
-## 6 · Close with one question
-
-```
-เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วยดึงไฟล์ใหม่ + อัปเดตสรุป
-```
-
-| Rule | Reason |
-|---|---|
-| **One question** per answer | If you ask two or more, you get an answer to only one |
-| Answerable in a few words | "ทั้ง 4" · "เริ่มข้อ 2" |
-| Offer an "all of them" option | Most users pick it. Typing their own answer costs them time |
-| If there is a recommended order, put it in the question | They can answer "ตามนั้น" in one word |
-| **Ask as multiple choice, every option backed by evidence** per `superuser` §6: 2–4 options · the recommended one on top, ending with `(แนะนำ)` (recommended) and 1 line of reason | They can just pick, and do not choose from options you made up |
-
-**Never close by asking "มีอะไรให้ช่วยเพิ่มไหม" (anything else I can help with)**. It does not ask for a decision.
-
----
-
-## 7 · Full example
-
-A before-and-after example (a software requirements document and work plan) is in [`references/example.md`](references/example.md)
-
-
-## reference: example.md
-
-# flag-and-propose — full example
-
-Moved from [SKILL.md](../SKILL.md) §7
-
-Abbreviations in the example: Functional Requirement (FR) · Non-Functional Requirement (NFR) · Test Case (TC) · Architecture Decision Record (ADR) · Functional Specification Document (FSD) · Application Programming Interface (API)
-
-**Before: 1 long paragraph with 3 lumps. After reading it, you still do not know what to answer.**
-
-> เรื่องด่วนที่เจอระหว่างตรวจ — BUILD-PLAN.md ที่สร้างเมื่อเช้านี้อ่านจาก
-> `_to_delete/extracted/*.md` ซึ่งเป็นฉบับก่อนที่ผมจะแก้ มันจึงบันทึกไว้ว่า
-> "FR ถึง FR-13.9 · TC 214 ข้อ · ไม่มี NFR" และตั้งคำถามข้อ 1 ว่าเลข 239 ไม่ตรง
-> ตอนนี้เอกสารจริงเป็น FR-14.12 และ 245 กรณีแล้ว ต้อง extract ใหม่แล้วอัปเดต
-> BUILD-PLAN ก่อนให้ agent เขียนโค้ดต่อ ไม่งั้นมันจะสร้างระบบตามสเปกเก่าและข้าม
-> FR-14.x กับ NFR ทั้งหมด … ถ้าจะทำให้ชุดนี้เป็นตัวอย่างของโปรเจกต์ถัดไป ผมเสนอให้
-> เติม 4 ไฟล์ที่คุ้มที่สุดก่อน คือ docs/README.md เป็นสารบัญบอกว่าอ่านอะไรก่อนและ
-> ใครเป็นเจ้าของ, เพิ่มตารางประวัติการแก้ไขในหน้าแรกของทั้ง 4 docx, …
-
-**After: the same structure in 4 blocks**
-
-> **ด่วน — `BUILD-PLAN.md` ตัวเลขเก่า** เพราะอ่านจาก `_to_delete/extracted/` ฉบับก่อนคุณแก้
-> ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันสร้างตามสเปกเก่าและข้าม FR-14.x กับ NFR ทั้งชุด
->
-> | | ที่บันทึกไว้ | ของจริง |
-> |---|---|---|
-> | FR ถึง | 13.9 | **14.12** |
-> | Test case | 214 | **245** |
-> | NFR | ไม่มี | **มี** |
->
-> คำถามข้อ 1 ที่ตั้งไว้ว่าเลข 239 ไม่ตรง — ตกไปเอง
->
-> **ทำเป็นแม่แบบ: 4 ไฟล์ที่คุ้มสุด**
->
-> | ไฟล์ | ได้อะไร |
-> |---|---|
-> | `docs/README.md` | สารบัญ — อ่านอะไรก่อน ใครเป็นเจ้าของ |
-> | ประวัติการแก้ไข หน้าแรกของ docx ทั้ง 4 | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอพอดี |
-> | `docs/DESIGN-SYSTEM.md` | ดึง token ออกจาก mockup มาเขียนเป็นเอกสาร |
-> | `docs/decisions/` | แยก ADR-1..12 เป็นไฟล์ละข้อ |
->
-> FSD กับ API spec ไม่ทำตอนนี้ — ทำตอนเริ่มเขียนโค้ดของแต่ละหน้าจอ
->
-> เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วย re-extract + อัปเดต BUILD-PLAN
-
-**What disappeared, though the information is just as complete:** the lead-in · the story of how it was found ·
-full file names that do not help the decision · the explanation of why the old question dropped ·
-the how-to details of each proposal
-
-
----
-
-# skill: principle-proceed-on-reversible-work
-
-Use before asking to continue on undoable work
-
-# principle · proceed on reversible work: if it can be undone, do it
-
-> Every question that stops and waits for an answer is time when both the person and the agent are not working.
-> If the work is reversible, doing it and letting them look is faster than asking and waiting.
-
-## Tell them apart
-
-| Reversible: do it now | Irreversible: prepare it in "รออนุมัติ" (awaiting approval) and carry on with the rest |
-|---|---|
-| Edit a file that has a copy or history (document file · sheet · git) | Edit or delete real data (database · master sheet · the user's files) |
-| Draft a document · draft an email or customer reply (not yet sent) · draft a mockup | Send an email, message or post to outsiders |
-| Run tests · calculate · try in a copy | Release to the real system (deploy · announce a price · publish) |
-| Choose between 2 paths that can be changed later | Pay money · book · accept terms · enter a real secret |
-| Move a temporary file to `_to_delete/` | Delete permanently |
-| Code: commit on the work branch, when the user allows it | Code: merge into the main branch · force-push |
-
-## Before you ask, pass these three gates
-
-1. **Can an experiment show it?** If the answer is behaviour, speed, looks or output, try a draft (code work: playbook `prototype` in plugin `software-development`) instead of asking.
-2. **Is it reversible?** If so, pick the path with the least impact, do it, and note it in [`decision-log`](../decision-log/SKILL.md).
-3. **Is it a fact or the user's taste?** Numbers, names, dates and budgets must never be guessed: put `(รอยืนยัน)` (awaiting confirmation) and carry on with the rest. If the brand colour is missing, use that skill's default with `(รอยืนยัน)` and note the stand-in under "ค้างอยู่" (pending) once.
-
-If you pass all 3 gates, do not ask: decide by research + vote (`superuser` `references/autonomy.md`), log it under **ตัดสินใจเอง**, and carry on. For irreversible work, prepare the command, the diff or the draft message in "รออนุมัติ" and do not do it yourself.
-
-**No question at the start either:** a brief that reads several ways → take the reading the evidence supports best (tie → the easiest to undo), say it in line 1, and keep going · questions left go in one list at the end, 0–3, only the kinds in skill `superuser` section 6 → `autonomy`. For a fork that is irreversible, costly or reaches outsiders, use [`flag-and-propose`](../flag-and-propose/SKILL.md).
-
-## What not to do
-
-- Ask "ให้ทำต่อไหม" (shall I continue?) after each step of a job that was already ordered
-- Offer a plan and wait for approval when the work is clear and reversible
-- Use this principle as an excuse to do things the user did not ask for, because "continue" means finishing the ordered work, not widening the scope yourself

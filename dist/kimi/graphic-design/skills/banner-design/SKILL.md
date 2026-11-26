@@ -5,7 +5,7 @@ description: Use when making a banner, event cover or web hero
 
 # banner-design — 3 banner directions at real size, checked before delivery
 
-> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `design-gate/no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
 The owner is the agent `social-creator`.
 
@@ -27,17 +27,17 @@ Do not use when:
 ## Steps
 
 1. **Collect the brief once** (use `AskUserQuestion` · do not ask what the conversation already answers): where it is used and the size · headline, sub-text, button or action · brand logo, colours, fonts · date, time, place · if you do not know the real data, put `(รอยืนยัน)` (awaiting confirmation) and do not invent it
-2. **Find real references** following `design-references` (plugin `superuser`): first read the "สไตล์ออกแบบที่ชอบ" (favourite design styles) section in `~/.claude/superuser-style.md` · search at least 1 site in the `theme` category and 1 in the `social` category (Pinterest · Behance) with queries like `[purpose] banner design [style]` · `creative banner layout [industry]` (more example queries at the end of [`references/uipro-banner-sizes-and-styles.md`](references/uipro-banner-sizes-and-styles.md)) · open each page by hand, no fetch script · collect 3–5 images
+2. **Find real references** following `design-gate/design-references` (plugin `superuser`): first read the "สไตล์ออกแบบที่ชอบ" (favourite design styles) section in `~/.claude/superuser-style.md` · search at least 1 site in the `theme` category and 1 in the `social` category (Pinterest · Behance) with queries like `[purpose] banner design [style]` · `creative banner layout [industry]` (more example queries at the end of [`references/uipro-banner-sizes-and-styles.md`](references/uipro-banner-sizes-and-styles.md)) · open each page by hand, no fetch script · collect 3–5 images
 3. **Pick 3 art directions** from the 22 in the reference file, and make them truly different (for example plain minimal · big type as the hero · 3D objects) · write 1 line per direction on why it fits this job, and cite the reference from step 2
 4. **Build real-size HTML/CSS**, 1 file per direction · the outermost frame is `<div class="stage">` with width and height exactly the size · key items sit in the centre 70–80 %, at least 50 px from the edge · at most 2 font families, and both must fully support Thai (see `design-direction-lookup` domain `font`) · headline at least 32 px, body at least 16 px · one button, at least 44 px tall · text against background contrast at least 4.5:1 · one icon set (`icon-design`) inserted as `<span class="ic" style="--i:url(icons/x.svg)">`
-   - Illustrations in this order: what the user supplied → images under an open licence (categories `3d` · `illustration` in `design-references`) → an image tool the session has (the prompt contains no text in the image) → build it with CSS and layered SVG (gradients, soft shadows, glowing edges) · never draw icons or logos yourself
+   - Illustrations in this order: what the user supplied → images under an open licence (categories `3d` · `illustration` in `design-gate/design-references`) → an image tool the session has (the prompt contains no text in the image) → build it with CSS and layered SVG (gradients, soft shadows, glowing edges) · never draw icons or logos yourself
    - All text lives in the HTML, not in the image, so it can be edited later
 5. **Render and check the size**
    ```bash
    python scripts/render_banner.py <ไฟล์>.html --size 1200x628 --out <ไฟล์>.png --compare <ภาพต้นแบบ>.png
    ```
    You get a PNG at 2x resolution · it reports which fonts really loaded (Thai font not showing = do not send) · a size mismatch exits with 1 · `--compare` puts the reference on top and our work below · the script writes `<ไฟล์>.built.html` beside the source file (icons are inlined) and it can be deleted
-6. **Check it does not look AI-made** following `no-ai-look`: run `slop_scan.py` on the HTML file · for things you deliberately copied from the reference (line pattern · light behind the object) write `slop-ok` with the reason · send the comparison image to a fresh `design-critic` to find 3 points where we lose to the reference, with scores of 1–10 for our work and the reference (answer in at most 10 lines) · fix, then render again
+6. **Check it does not look AI-made** following `design-gate/no-ai-look`: run `slop_scan.py` on the HTML file · for things you deliberately copied from the reference (line pattern · light behind the object) write `slop-ok` with the reason · send the comparison image to a fresh `design-critic` to find 3 points where we lose to the reference, with scores of 1–10 for our work and the reference (answer in at most 10 lines) · fix, then render again
 7. **Deliver the 3 directions together.** Each direction has a PNG · a comparison image · the cited reference · the reviewer's score · the points where it still loses to the reference · let the user pick 1 direction, then make the other sizes
 
 ## Rules

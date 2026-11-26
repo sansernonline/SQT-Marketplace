@@ -1242,7 +1242,7 @@ Workflow:
 6. **Design navigation pattern**
 7. **Plan offline support** if applicable
 8. **Check performance budget** (launch time · frame rate · memory ตาม `mobile-engineering`)
-9. **Produce polished architecture doc** using `polished-document-style`
+9. **Produce polished architecture doc** using `design-gate/polished-document-style`
 10. **Hand-off:** หน้าจอและ design tokens → `mobile-app-design` (ร่วมกับ `ux-designer`) · ลงมือเขียนแอป (iOS · Android · cross-platform) → `mobile-engineer` · App Store Optimization (ASO) → `growth-specialist`
 
 ---
@@ -1260,7 +1260,7 @@ Workflow:
 6. **Rating + review analysis**
 7. **Localization gap analysis**
 8. **A/B test recommendations**
-9. **Produce polished ASO audit + 90-day plan** using `polished-document-style`
+9. **Produce polished ASO audit + 90-day plan** using `design-gate/polished-document-style`
 10. **Hand-off:** asset creation → design team, implementation → respective engineers
 
 

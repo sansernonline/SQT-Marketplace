@@ -4,7 +4,7 @@ An example runbook index page and an example of linking a runbook from an alert;
 
 ## Runbook Index Pattern
 
-Maintain a central index (`docs/runbook-index.md`). Each runbook is one file `docs/runbook-<service>-<เรื่อง>.md` per `document-naming`:
+Maintain a central index (`docs/runbook-index.md`). Each runbook is one file `docs/runbook-<service>-<เรื่อง>.md` per `workspace-rules/document-naming`:
 
 ```markdown
 # Runbook Index

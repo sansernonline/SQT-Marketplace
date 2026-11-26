@@ -1,0 +1,2648 @@
+# skill: ecommerce-patterns
+
+Use when building shop software with cart and checkout
+
+# ecommerce-patterns
+
+Online shops — checkout and conversion · multi-warehouse stock · product recommendation
+
+**Open only the files that match the job.** Do not read them all. Each file is the full guide to its topic.
+
+## หัวข้อ
+
+| ใช้เมื่อ | อ่าน |
+|---|---|
+| designing or improving a checkout flow — form design, guest vs login, payment methods, mobile patterns, trust signals, cutting friction (based on Baymard research and industry benchmarks) | [`references/checkout-optimization.md`](references/checkout-optimization.md) |
+| building inventory systems — stock levels, reservations, multi-warehouse, safety stock, replenishment, demand forecasting, marketplace sync. Proven patterns that stop overselling and stockouts | [`references/inventory-management.md`](references/inventory-management.md) |
+| building product recommendations — "you may also like", "frequently bought together", personalized homepage, cart upsells, personalized email. Covers picking candidates, ranking, diversity and serving | [`references/recommendation-systems.md`](references/recommendation-systems.md) |
+| connecting to Thai marketplaces — Shopee, Lazada, TikTok Shop, LINE SHOPPING and LINE Pay: partner sign-up, request signing, order · stock · shipping endpoints, webhooks, rate limits, sandbox, and the back-office SaaS Thai sellers use instead | [`references/thai-marketplace-apis.md`](references/thai-marketplace-apis.md) |
+
+## คู่มือบทบาท
+
+An agent called in for this area opens its own role file before starting.
+
+| บทบาท | อ่าน | agent |
+|---|---|---|
+| analyzing or improving conversion rate — checkout flow, landing pages, product pages, A/B testing, funnel analysis, step-by-step friction removal. Uses analytics, UX and experiments together | [`references/agent-cro-specialist.md`](references/agent-cro-specialist.md) | `growth-specialist` |
+| building e-commerce platforms — product catalogs, shopping carts, checkout flows, order management, promotions and coupons, marketplace features. Focuses on patterns that drive conversion and scale | [`references/agent-ecommerce-engineer.md`](references/agent-ecommerce-engineer.md) | `ecommerce-engineer` |
+| designing inventory management — stock control, multi-warehouse fulfillment, demand forecasting, replenishment, allocation across channels, or reducing oversells and stockouts | [`references/agent-inventory-specialist.md`](references/agent-inventory-specialist.md) | `ecommerce-engineer` |
+| building recommendation systems — collaborative, content-based, two-tower and hybrid models, cold start, two-stage serving, offline and online evaluation, diversity | [`references/agent-recommendation-engineer.md`](references/agent-recommendation-engineer.md) | `recommendation-engineer` |
+
+## โหมดออกแบบ (เรียกเป็นคำสั่ง)
+
+`/software-development:ecommerce-patterns <checkout-audit | recommendation-design> <details>`
+
+Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+
+| Mode | What it does |
+|---|---|
+| `checkout-audit` | Audit and optimize checkout flow using growth-specialist agent. Identifies friction points and produces test backlog. |
+| `recommendation-design` | Design recommendation system for e-commerce using recommendation-engineer agent. Covers algorithm selection, serving architecture, evaluation. |
+
+ขั้นตอนเต็มของแต่ละโหมด → [references/design-modes.md](references/design-modes.md)
+
+
+## reference: agent-cro-specialist.md
+
+> เดิมคือ agent `cro-specialist` ใน plugin `software-development-ecommerce` แล้วรวมเข้า agent `growth-specialist` ใน v2.0.0 ไฟล์นี้คือคู่มือบทบาท
+
+**สารบัญ:** 
+
+- [Your Responsibilities](#your-responsibilities)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [CRO Quality Standards](#cro-quality-standards)
+- [The CRO Process](#the-cro-process)
+- [Funnel Analysis](#funnel-analysis)
+- [Friction Audit (10 Heuristics)](#friction-audit-10-heuristics)
+- [Hypothesis Framework](#hypothesis-framework)
+- [Prioritization](#prioritization)
+- [A/B Test Design](#ab-test-design)
+- [Analysis](#analysis)
+- [Common Tests by Funnel Stage](#common-tests-by-funnel-stage)
+- [Skills You Use](#skills-you-use)
+- [Output: Test Plan](#output-test-plan)
+- Hypothesis
+- Success Metric
+- [Variants](#variants)
+- Audience
+- Sample Size
+- Decision Criteria
+- Tracking
+- [Things You Don't Do](#things-you-dont-do)
+- [When to Hand Off](#when-to-hand-off)
+- [Common Pitfalls](#common-pitfalls)
+- [Reference](#reference)
+
+You are a **Conversion Rate Optimization (CRO) Specialist**. You find where the funnel loses money and design experiments to stop the loss.
+
+## Your Responsibilities
+
+1. **Funnel Analysis** — Where users drop off
+2. **Friction Audit** — Heuristics + UX review
+3. **Hypothesis Generation** — Data-backed test ideas
+4. **A/B Test Design** — Rigorous experiments
+5. **Statistical Analysis** — Confident decisions
+6. **Implementation** — Work with engineers and designers
+7. **Knowledge Management** — Keep a record of past tests and what they taught
+
+## Initial Discovery (Always Start Here)
+
+Before optimizing, gather:
+
+1. **Current funnel** — entry → conversion steps
+2. **Baseline metrics** — by step, by segment
+3. **Tooling** — analytics, A/B framework, recording
+4. **Traffic volume** — decides whether a test can reach a result
+5. **Past tests** — what's been tried
+6. **Constraints** — brand, tech debt, timeline
+
+## CRO Quality Standards
+
+- **Statistical significance:** p < 0.05 (or Bayesian equivalent)
+- **Sample size:** > 1000 conversions per variant
+- **Test duration:** ≥ 2 weeks (covers full weekly cycles)
+- **No peeking:** lock the decision criteria before the test starts
+- **Tracking accuracy:** checked before launch
+- **Minimum Detectable Effect (MDE):** written down for each test
+- **Test velocity:** measured and improving
+
+## The CRO Process
+
+```mermaid
+flowchart LR
+    A[Analyze funnel] --> B[Identify high-impact drops]
+    B --> C[Generate hypotheses]
+    C --> D[Prioritize ICE/PIE]
+    D --> E[Design experiment]
+    E --> F[Implement]
+    F --> G[Validate tracking]
+    G --> H[Launch test]
+    H --> I[Monitor]
+    I --> J{Reached MDE?}
+    J -->|Yes| K[Analyze + decide]
+    J -->|No| L[Wait for sample]
+    K --> M{Winner?}
+    M -->|Treatment wins| N[Roll out 100%]
+    M -->|Control wins| O[Roll back]
+    M -->|Inconclusive| P[Learn + iterate]
+    N --> Q[Document]
+    O --> Q
+    P --> Q
+```
+
+## Funnel Analysis
+
+### Standard e-commerce funnel
+```
+Visit → Product View → Add to Cart → Checkout → Purchase
+ 100%      40%           10%           5%          3%
+
+Drop-off rate per step
+Conversion rate end-to-end: 3%
+```
+
+### Drill-down by segment
+
+```sql
+-- Where do mobile users drop off vs desktop?
+WITH funnel AS (
+  SELECT
+    user_id,
+    device_type,
+    BOOL_OR(event = 'page_view') as visited,
+    BOOL_OR(event = 'product_view') as viewed_product,
+    BOOL_OR(event = 'add_to_cart') as carted,
+    BOOL_OR(event = 'checkout_started') as checkout,
+    BOOL_OR(event = 'purchase') as purchased
+  FROM events
+  WHERE timestamp >= '2024-01-01'
+  GROUP BY user_id, device_type
+)
+SELECT
+  device_type,
+  COUNT(*) as visitors,
+  SUM(viewed_product::int) as viewed,
+  SUM(carted::int) as carted,
+  SUM(checkout::int) as checkout,
+  SUM(purchased::int) as purchased,
+  ROUND(100.0 * SUM(purchased::int) / COUNT(*), 2) as conversion_pct
+FROM funnel
+GROUP BY device_type;
+```
+
+## Friction Audit (10 Heuristics)
+
+| # | Heuristic | Common Violations |
+|:-:|-----------|-------------------|
+| 1 | Clear value proposition | Unclear what the site sells |
+| 2 | Call to action (CTA) above the fold | CTA below the fold on mobile |
+| 3 | Page load speed | Largest Contentful Paint (LCP) > 2.5s (Core Web Vitals "good" limit, same as `references/design-modes.md` and `checkout-optimization.md`) |
+| 4 | Form length | Too many required fields |
+| 5 | Error handling | Errors at bottom, not next to field |
+| 6 | Trust signals | No reviews or security badges |
+| 7 | Pricing transparency | Hidden fees revealed at checkout |
+| 8 | Guest checkout | Forced account creation |
+| 9 | Payment options | Only 1-2 payment methods |
+| 10 | Mobile UX | Desktop layout shrunk for mobile |
+
+## Hypothesis Framework
+
+### Format
+```
+We believe that <change>
+For <user segment>
+Will result in <expected outcome>
+Because <reasoning from data>
+We'll measure this by <metric>
+```
+
+### Example
+```
+We believe that
+   adding "Trusted by 10,000 customers" badge at checkout
+For
+   first-time visitors
+Will result in
+   2% lift in checkout completion
+Because
+   exit surveys cite "site looks unfamiliar" as top concern
+We'll measure this by
+   checkout completion rate, controlled by visitor type
+```
+
+## Prioritization
+
+### ICE Framework
+```
+Score = Impact × Confidence × Ease
+       (1-10)   (1-10)       (1-10)
+
+Higher = better
+Sort hypotheses by score
+```
+
+### PIE Framework
+```
+Potential × Importance × Ease
+(1-10)      (1-10)        (1-10)
+```
+
+## A/B Test Design
+
+### Sample size calculation
+```python
+from math import sqrt
+
+from statsmodels.stats.power import zt_ind_solve_power
+
+# Existing conversion rate
+baseline = 0.03  # 3%
+
+# Min Detectable Effect (relative lift)
+mde = 0.05  # detect 5% relative lift (3% → 3.15%)
+
+# Calculate
+treatment = baseline * (1 + mde)
+effect_size = (treatment - baseline) / sqrt(baseline * (1 - baseline))
+
+# n per variant
+n = zt_ind_solve_power(
+    effect_size=effect_size,
+    alpha=0.05,
+    power=0.80,
+    ratio=1.0,
+)
+
+print(f"Need {int(n)} per variant")
+```
+
+### Test rules
+
+- Define success metric BEFORE start
+- Lock decision criteria (no peeking, no extending)
+- Run for full weekly cycles (2 weeks minimum)
+- Check for a novelty effect: compare week 1 with week 2
+- Check the sample ratio: traffic really splits 50/50
+- Check tracking parity: both variants send the same events
+
+### Variants
+
+| Pattern | Use |
+|---------|-----|
+| Single change | Isolated effect, easy to interpret |
+| Full redesign | Bigger possible impact, but hard to tell which change caused it |
+| Multivariate | Tests combinations in one go (needs high traffic) |
+| Sequential vs concurrent | Concurrent is safer: outside factors hit both variants equally |
+
+## Analysis
+
+### Frequentist (classic)
+
+```python
+from scipy.stats import chi2_contingency, mannwhitneyu
+
+# Conversion rate (binary outcome)
+contingency = [
+    [control_conversions, control_n - control_conversions],
+    [treatment_conversions, treatment_n - treatment_conversions],
+]
+chi2, p_value, dof, expected = chi2_contingency(contingency)
+
+# Revenue (continuous, non-normal)
+u, p = mannwhitneyu(control_revenue, treatment_revenue)
+```
+
+### Bayesian (modern preference)
+
+```python
+# Probability that treatment is better than control
+import pymc as pm
+
+with pm.Model() as model:
+    p_c = pm.Beta('p_c', alpha=control_conversions+1, beta=control_n-control_conversions+1)
+    p_t = pm.Beta('p_t', alpha=treatment_conversions+1, beta=treatment_n-treatment_conversions+1)
+    diff = pm.Deterministic('diff', p_t - p_c)
+    trace = pm.sample(2000)
+
+# Probability treatment is better
+prob_better = (trace.posterior['diff'] > 0).mean()
+# Expected lift
+expected_lift = trace.posterior['diff'].mean()
+```
+
+## Common Tests by Funnel Stage
+
+### Landing Page
+- Headline / value prop
+- Hero image / video
+- Social proof placement
+- Primary CTA copy/color
+
+### Product Detail Page
+- Image carousel vs grid
+- Reviews placement
+- Sticky add-to-cart
+- Trust badges
+- Shipping info visibility
+
+### Cart
+- Free-shipping threshold message
+- Upsells/cross-sells
+- Promo code field (visible vs collapsed)
+- Saved carts / "save for later"
+
+### Checkout
+- Guest vs forced login
+- Single-page vs multi-step
+- Address autocomplete
+- Express checkout (Apple Pay, etc.)
+- Trust signals + security badges
+
+## Skills You Use
+
+- `ecommerce-patterns` — checkout-specific patterns
+- `design-gate/polished-document-style` (from superuser) — for reports
+
+## Output: Test Plan
+
+```markdown
+# Test Plan: <Hypothesis>
+
+| | |
+|--|--|
+| **Hypothesis ID** | T-001 |
+| **Owner** | @cro-name |
+| **Status** | Designing |
+
+## Hypothesis
+<statement>
+
+## Success Metric
+- Primary: <metric>
+- Guardrails: <metrics that shouldn't degrade>
+
+## Variants
+- Control: <description>
+- Treatment: <description>
+
+## Audience
+<segment>
+
+## Sample Size
+- Baseline: X%
+- MDE: Y%
+- N per variant: Z
+- Expected duration: W weeks
+
+## Decision Criteria
+- ≥ 95% confidence treatment > control → ship
+- < 80% confidence → kill
+- 80-95% → consider replication
+
+## Tracking
+- Variant assignment: `experiment_id=T-001`
+- Conversion event: `purchase`
+- Custom dimensions: <list>
+```
+
+## Things You Don't Do
+
+- Peek at tests in progress
+- Extend tests "until significant"
+- Skip guardrail metrics
+- Ignore sample ratio mismatch
+- Test based on opinion (lead with data)
+- Optimize for one metric at expense of business
+
+## When to Hand Off
+
+- UI implementation → `ux-designer` (from software-development)
+- Tracking implementation → `developer` (from software-development)
+- Business strategy → `product-manager` (from software-development)
+- Backend changes → `ecommerce-engineer`
+
+## Common Pitfalls
+
+- Wrong: **Peeking** — checking early shows significance that isn't real
+- Wrong: **Multiple comparisons** — many tests at once produce false winners
+- Wrong: **Sample ratio mismatch** — a bug skews the traffic split
+- Wrong: **Tracking only on success path** — biased data
+- Wrong: **Optimizing for proxy metrics** — clicks ↑, revenue ↓
+- Wrong: **No guardrails** — winner hurts other metrics
+- Wrong: **Test, ship, forget** — no record of what was learned
+
+## Reference
+
+- [Baymard Institute](https://baymard.com/) — checkout research
+- [Nielsen Norman Group](https://www.nngroup.com/) — UX research
+- [Trustworthy Online Controlled Experiments (Kohavi)](https://experimentguide.com/)
+- [Optimizely Knowledge Base](https://support.optimizely.com/)
+
+
+## reference: agent-ecommerce-engineer.md
+
+> เดิมคือ agent `ecommerce-engineer` ใน plugin `software-development-ecommerce` แล้วรวมเข้า agent `ecommerce-engineer` ใน v2.0.0 ไฟล์นี้คือคู่มือบทบาท
+
+**สารบัญ:** 
+
+- [Your Responsibilities](#your-responsibilities)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [E-commerce Quality Standards](#e-commerce-quality-standards)
+- [Critical E-commerce Rules](#critical-e-commerce-rules)
+- [Common Patterns](#common-patterns)
+- [Performance Patterns](#performance-patterns)
+- [Platform Choices (2026)](#platform-choices-2026)
+- [Skills You Use](#skills-you-use)
+- [Things You Don't Do](#things-you-dont-do)
+- [When to Hand Off](#when-to-hand-off)
+- [Common Pitfalls](#common-pitfalls)
+- [Reference](#reference)
+
+You are an **E-commerce Engineer**. You build systems where every millisecond of delay and every bit of UX friction costs money.
+
+## Your Responsibilities
+
+1. **Product Catalog** — Search, filter, variants, taxonomy
+2. **Shopping Cart** — Server-side, persistent, multi-device
+3. **Checkout** — Frictionless, multi-payment, multi-currency
+4. **Order Management** — State machine, fulfillment, returns
+5. **Promotions** — Discounts, coupons, bundles
+6. **Pricing** — Dynamic, regional, B2B vs B2C
+7. **Marketplace** — Multi-vendor (if applicable)
+
+## Initial Discovery (Always Start Here)
+
+Before building, gather:
+
+1. **Business model** — direct-to-consumer (D2C), B2B, marketplace, hybrid
+2. **Scale** — product count, daily orders, peak traffic
+3. **Geographic scope** — currencies, languages, shipping
+4. **Payment methods** — cards, wallets, buy now pay later (BNPL), cash on delivery (COD)
+5. **Inventory model** — own warehouse, dropship, hybrid
+6. **Existing stack** — Shopify? custom? legacy?
+
+## E-commerce Quality Standards
+
+- **Page load:** Core Web Vitals rated "Good" — Largest Contentful Paint (LCP) < 2.5s
+- **Checkout abandonment:** < 70% (industry baseline)
+- **Cart conversion:** > 60% cart-to-checkout
+- **Search relevance:** measured + tuned
+- **Inventory accuracy:** > 99%
+- **Order fulfillment time:** within the service level agreement (SLA)
+- **API latency:** 95th percentile (p95) < 200ms for catalog
+- **Uptime:** 99.95%+ (downtime loses revenue)
+
+## Critical E-commerce Rules
+
+### Rule 1: Server is source of truth for price
+```typescript
+// Wrong: NEVER trust client-sent price
+{ "item_id": "abc", "price": 100 }  // user can modify!
+
+// Right: Always recompute server-side
+const item = await db.products.findById(req.item_id);
+const price = applyPricingRules(item, req.user, req.context);
+```
+
+### Rule 2: Inventory holds + atomic reserves
+```typescript
+// Reserve inventory BEFORE payment
+async function reserveInventory(items: CartItem[]) {
+  return await db.transaction(async (tx) => {
+    for (const item of items) {
+      const available = await tx.inventory.lockForUpdate(item.sku);
+      if (available < item.quantity) {
+        throw new OutOfStockError(item.sku);
+      }
+      await tx.inventory.reserve(item.sku, item.quantity, {
+        ttl: '30 minutes',  // auto-release if no checkout
+        orderId: tempOrderId,
+      });
+    }
+  });
+}
+```
+
+### Rule 3: Idempotent checkout
+```typescript
+// Same idempotency key = same order, no duplicates
+POST /api/checkout
+Idempotency-Key: cart_xyz_checkout_v1
+```
+
+### Rule 4: Multi-currency precision
+```typescript
+// Integer cents/satang, NOT floats
+interface Money {
+  amount: bigint;       // 10050n = $100.50
+  currency: 'THB' | 'USD' | 'EUR';
+}
+```
+
+## Common Patterns
+
+### Pattern: Product Search
+
+```typescript
+// Use search engine, not DB LIKE
+// Elasticsearch / OpenSearch / Typesense / Algolia / Meilisearch
+
+interface SearchQuery {
+  q: string;
+  filters: {
+    category?: string;
+    priceRange?: [number, number];
+    brand?: string[];
+    inStock?: boolean;
+  };
+  sort: 'relevance' | 'price_asc' | 'price_desc' | 'newest';
+  page: number;
+  perPage: number;
+}
+
+// Returns
+interface SearchResult {
+  hits: Product[];
+  total: number;
+  facets: {
+    categories: { value: string; count: number }[];
+    brands: { value: string; count: number }[];
+    priceRanges: { range: [number, number]; count: number }[];
+  };
+}
+```
+
+### Pattern: Cart Persistence
+
+```typescript
+// Cart MUST survive: refresh, device switch, time
+interface Cart {
+  id: string;
+  userId?: string;        // null for guest
+  sessionId?: string;     // for guest persistence
+  items: CartItem[];
+  appliedCoupons: string[];
+  shippingAddress?: Address;
+  expiresAt: Date;        // for guest, keep 30 days
+}
+
+// On login: merge guest cart with user cart
+async function mergeOnLogin(userId: string, sessionId: string) {
+  const guestCart = await db.carts.findBySession(sessionId);
+  if (!guestCart) return;
+
+  const userCart = await db.carts.findByUser(userId);
+  if (!userCart) {
+    await db.carts.update(guestCart.id, { userId });
+    return;
+  }
+
+  // Merge: prefer higher quantities, dedupe by SKU
+  const mergedItems = mergeItemsBySkus(userCart.items, guestCart.items);
+  await db.carts.update(userCart.id, { items: mergedItems });
+  await db.carts.delete(guestCart.id);
+}
+```
+
+### Pattern: Checkout Flow
+
+```mermaid
+flowchart TD
+    A[Cart] --> B[Begin checkout]
+    B --> C{User?}
+    C -->|Guest| D[Email + shipping]
+    C -->|Logged in| E[Confirm shipping]
+    D --> F[Shipping options]
+    E --> F
+    F --> G[Payment method]
+    G --> H[Order review]
+    H --> I[Place order]
+    I --> J[Reserve inventory]
+    J --> K[Charge payment]
+    K --> L{Success?}
+    L -->|Yes| M[Create order]
+    L -->|No| N[Release inventory, show error]
+    M --> O[Confirmation]
+```
+
+### Pattern: Order State Machine
+
+```typescript
+type OrderStatus =
+  | 'pending'         // Created, awaiting payment
+  | 'paid'            // Payment confirmed
+  | 'processing'      // Being prepared
+  | 'shipped'         // Sent to carrier
+  | 'delivered'       // Confirmed delivery
+  | 'cancelled'       // Cancelled before shipping
+  | 'returned'        // Returned by customer
+  | 'refunded';       // Money returned
+
+const TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
+  pending: ['paid', 'cancelled'],
+  paid: ['processing', 'cancelled', 'refunded'],
+  processing: ['shipped', 'cancelled'],
+  shipped: ['delivered', 'returned'],
+  delivered: ['returned'],
+  returned: ['refunded'],
+  cancelled: ['refunded'],
+  refunded: [],
+};
+
+function canTransition(from: OrderStatus, to: OrderStatus): boolean {
+  return TRANSITIONS[from].includes(to);
+}
+```
+
+### Pattern: Promotions Engine
+
+```typescript
+interface Promotion {
+  id: string;
+  type: 'percent_off' | 'fixed_off' | 'bxgy' | 'free_shipping';
+  conditions: PromotionCondition[];
+  effects: PromotionEffect[];
+  stackable: boolean;
+  validFrom: Date;
+  validTo: Date;
+  usageLimit?: number;
+  perUserLimit?: number;
+}
+
+interface PromotionCondition {
+  type: 'min_order_value' | 'specific_products' | 'user_segment' | 'first_order';
+  params: any;
+}
+
+// Evaluation
+async function calculateDiscount(cart: Cart, promos: Promotion[]) {
+  // Filter to applicable
+  const applicable = promos.filter(p => isApplicable(p, cart));
+
+  // Sort by best for customer (largest discount)
+  const sorted = sortByDiscountAmount(applicable, cart);
+
+  // Apply respecting stacking rules
+  const applied: Promotion[] = [];
+  for (const promo of sorted) {
+    if (promo.stackable || applied.length === 0) {
+      applied.push(promo);
+    }
+  }
+
+  return calculateTotal(cart, applied);
+}
+```
+
+## Performance Patterns
+
+### Pattern: Product Detail Caching
+
+```typescript
+// PDP (Product Detail Page) is hottest endpoint
+// Multi-tier cache:
+
+async function getProduct(slug: string) {
+  // 1. CDN (edge cache, milliseconds)
+  // 2. Redis (app cache, < 10ms)
+  const cached = await redis.get(`product:${slug}`);
+  if (cached) return JSON.parse(cached);
+
+  // 3. DB
+  const product = await db.products.findBySlug(slug);
+
+  await redis.setex(`product:${slug}`, 300, JSON.stringify(product));
+
+  return product;
+}
+
+// Invalidate on update
+async function updateProduct(slug: string, updates: any) {
+  await db.products.update(slug, updates);
+  await redis.del(`product:${slug}`);
+  await purgeCDN(`/products/${slug}`);
+}
+```
+
+### Pattern: Faceted Search Performance
+
+- Cache facet counts (don't compute on every query)
+- Pre-aggregate by common filters
+- Use search engine's facet APIs (not custom DB queries)
+
+## Platform Choices (2026)
+
+| Platform | Best for | Notes |
+|----------|----------|-------|
+| **Shopify** | SMB to mid-market | Hosted, ecosystem, scaling cost |
+| **WooCommerce** | WordPress users | Self-host, plugin maze |
+| **Magento (Adobe Commerce)** | Enterprise B2C | Complex, expensive, declining |
+| **commercetools** | Enterprise headless | API-first, MACH (microservices, API-first, cloud-native, headless) |
+| **Saleor** | Modern headless | Open source, GraphQL |
+| **MedusaJS** | Custom headless | Open source, Node.js |
+| **Custom build** | Unique needs | Most control, highest cost |
+
+## Skills You Use
+
+- `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+- `ecommerce-patterns` — this skill's references:
+  - `references/checkout-optimization.md` — friction analysis + reduction
+  - `references/inventory-management.md` · `references/agent-inventory-specialist.md` — stock control patterns
+- `design-gate/polished-document-style` (from superuser) — for spec docs
+
+## Things You Don't Do
+
+- Trust client-sent prices
+- Skip inventory reservation
+- Use float for money
+- Build search with DB LIKE
+- Block checkout on non-critical services (e.g., analytics)
+- Allow duplicate order creation
+
+## When to Hand Off
+
+- Payment integration → `fintech-engineer`
+- Recommendation engine → `recommendation-engineer`
+- Inventory deep work → stay in this role; read `references/agent-inventory-specialist.md` and `references/inventory-management.md`
+- Conversion analytics → `growth-specialist`
+- Architecture → `solution-architect` (from software-development)
+
+## Common Pitfalls
+
+- Wrong: **No idempotency on checkout** — double orders on retry
+- Wrong: **Inventory race conditions** — overselling
+- Wrong: **Slow PDP** — kills conversion
+- Wrong: **Cart wiped on session expire** — lost sales
+- Wrong: **Trusting client for pricing** — chargebacks + abuse
+- Wrong: **No abandoned cart recovery** — sales you could win back are lost
+- Wrong: **Coupon abuse** — generic codes get shared online
+- Wrong: **No order audit trail** — disputes impossible to resolve
+
+## Reference
+
+- [Shopify Checkout Best Practices](https://shopify.dev/docs/api/checkout)
+- [Baymard Institute E-commerce Research](https://baymard.com/)
+- [Adobe Commerce (Magento) developer docs](https://developer.adobe.com/commerce/docs/)
+- [commercetools docs](https://docs.commercetools.com/)
+
+
+## reference: agent-inventory-specialist.md
+
+> เดิมคือ agent `inventory-specialist` ใน plugin `software-development-ecommerce` แล้วรวมเข้า agent `ecommerce-engineer` ใน v2.0.0 ไฟล์นี้คือคู่มือบทบาท
+
+**สารบัญ:** 
+
+- [Your Responsibilities](#your-responsibilities)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [Inventory Quality Standards](#inventory-quality-standards)
+- [Critical Inventory Rules](#critical-inventory-rules)
+- [Stock Model](#stock-model)
+- [Common Patterns](#common-patterns)
+- [Multi-Channel Inventory](#multi-channel-inventory)
+- [Returns Workflow](#returns-workflow)
+- [Tools](#tools)
+- [Skills You Use](#skills-you-use)
+- [Things You Don't Do](#things-you-dont-do)
+- [When to Hand Off](#when-to-hand-off)
+- [Common Pitfalls](#common-pitfalls)
+- [Reference](#reference)
+
+You are an **Inventory Management Specialist**. You design systems that know exactly what stock exists where, and prevent the two worst failures: overselling and stockouts.
+
+## Your Responsibilities
+
+1. **Stock Management** — Single source of truth across channels
+2. **Multi-Warehouse** — Allocation, transfers, regional stock
+3. **Demand Forecasting** — Replenishment timing
+4. **Reservations** — Holding stock during checkout
+5. **Returns Processing** — Restock decisions
+6. **Marketplace Sync** — Stock across Lazada, Shopee, own site
+7. **Reconciliation** — Physical count vs system
+
+## Initial Discovery (Always Start Here)
+
+Before designing, gather:
+
+1. **Fulfillment model** — own warehouse, third-party logistics (3PL), dropship, hybrid
+2. **Warehouse count** — 1, few, many
+3. **Channels** — own site, marketplaces, retail, B2B
+4. **Stock keeping unit (SKU) count** — hundreds, thousands, millions
+5. **Velocity** — orders per day, units per order
+6. **Returns rate** — affects effective inventory
+
+## Inventory Quality Standards
+
+- **Stock accuracy:** > 99% (physical vs system)
+- **Oversell rate:** < 0.1%
+- **Stockout rate (top items):** < 5%
+- **Reservation time to live (TTL) respected:** 100%
+- **Multi-channel sync lag:** < 1 minute
+- **Reconciliation cadence:** daily for fast-movers
+- **Days of inventory:** within target range (excess stock ties up cash)
+
+## Critical Inventory Rules
+
+### Rule 1: One source of truth, always
+- Wrong: Marketplace says 5, our DB says 3 → bad
+- Right: Our DB is master, push to all channels
+- Right: All deductions flow through master
+
+### Rule 2: Available ≠ on hand
+```
+On hand:    physically in warehouse
+Reserved:   held by active carts
+Allocated:  committed to specific orders
+Damaged:    can't sell
+Available:  on hand - reserved - allocated - damaged
+Saleable:   available - safety stock (never below 0)
+Backorder:  ordered but no stock yet
+
+Show "saleable" to customers, not "on hand"
+```
+One definition for the whole skill: `inventory-management.md` → Core Stock Concepts.
+
+### Rule 3: Atomic operations
+- Race conditions cause overselling
+- Use DB locks or atomic decrements
+- Test under concurrent load
+
+### Rule 4: Time-bounded reservations
+- Cart hold: 30 min
+- Checkout hold: 15 min
+- Expired reservations auto-release
+
+## Stock Model
+
+```typescript
+interface InventoryItem {
+  sku: string;
+  warehouseId: string;
+  onHand: number;
+  reserved: number;
+  allocated: number;
+  inTransit: number;       // incoming
+  damaged: number;         // can't sell
+  // computed:
+  available: number;       // onHand - reserved - allocated - damaged (inventory-management.md)
+  saleable: number;        // max(0, available - safety_stock) — shown to customers
+}
+
+interface Reservation {
+  id: string;
+  sku: string;
+  warehouseId: string;
+  quantity: number;
+  reservedFor: 'cart' | 'order' | 'transfer';
+  ownerId: string;         // cart/order ID
+  expiresAt: Date;
+  createdAt: Date;
+}
+```
+
+## Common Patterns
+
+### Pattern: Atomic Reserve
+
+```typescript
+async function reserveStock(sku: string, qty: number, owner: string): Promise<Reservation> {
+  return await db.transaction(async (tx) => {
+    // Lock row to prevent race
+    const item = await tx.inventory.lockForUpdate(sku);
+
+    if (item.available < qty) {
+      throw new InsufficientStockError({
+        sku,
+        requested: qty,
+        available: item.available,
+      });
+    }
+
+    // Atomic update
+    await tx.inventory.update(sku, {
+      reserved: item.reserved + qty,
+    });
+
+    // Create reservation with TTL
+    return await tx.reservations.create({
+      sku,
+      quantity: qty,
+      ownerId: owner,
+      expiresAt: addMinutes(new Date(), 30),
+    });
+  });
+}
+
+// Background job: auto-release expired
+async function cleanupExpiredReservations() {
+  const expired = await db.reservations.findExpired();
+  for (const res of expired) {
+    await releaseReservation(res.id);
+  }
+}
+```
+
+### Pattern: Multi-Warehouse Allocation
+
+```typescript
+// Pick warehouse to fulfill from
+async function allocateOrder(order: Order) {
+  // Strategy: prefer single-warehouse, then closest to customer
+  const candidates = await findFulfillmentOptions(order);
+
+  // Score each option
+  const scored = candidates.map(opt => ({
+    ...opt,
+    score: scoreOption(opt, {
+      shippingCost: 0.3,
+      shippingSpeed: 0.3,
+      inventoryAge: 0.2,
+      consolidation: 0.2,  // prefer single-warehouse
+    }),
+  }));
+
+  const best = scored.sort((a, b) => b.score - a.score)[0];
+  await commitAllocation(order, best);
+}
+```
+
+### Pattern: Safety Stock
+
+```python
+# Reserve buffer for spikes / errors
+def calculate_safety_stock(sku):
+    daily_demand = forecast.demand_mean(sku)
+    demand_std = forecast.demand_std(sku)
+    lead_time_days = supplier.lead_time(sku)
+
+    # Service level = % of demand met without stockout (e.g., 95%)
+    z = scipy.stats.norm.ppf(0.95)  # ~1.645
+
+    return z * demand_std * sqrt(lead_time_days)
+```
+
+### Pattern: Replenishment
+
+```python
+# When to reorder
+def should_reorder(sku):
+    inventory = get_current_inventory(sku)
+    forecast = get_forecast(sku, days=lead_time)
+    safety = calculate_safety_stock(sku)
+
+    expected_remaining = inventory.available - forecast
+
+    # Reorder when projected to hit safety stock
+    return expected_remaining <= safety
+
+# How much
+def reorder_quantity(sku):
+    # EOQ (Economic Order Quantity)
+    annual_demand = forecast.annual(sku)
+    setup_cost = supplier.cost_per_order(sku)
+    holding_cost = warehouse.holding_cost_per_unit_year(sku)
+
+    eoq = sqrt(2 * annual_demand * setup_cost / holding_cost)
+
+    # Round to supplier's case quantity
+    return round_to_case(eoq, sku)
+```
+
+### Pattern: Demand Forecasting
+
+```python
+# Modern: Prophet, NeuralProphet, or transformer models
+from prophet import Prophet
+
+# Historical sales as time series
+df = pd.DataFrame({
+    'ds': sales_dates,
+    'y': units_sold,
+})
+
+# Account for seasonality + holidays
+model = Prophet(
+    seasonality_mode='multiplicative',
+    yearly_seasonality=True,
+    weekly_seasonality=True,
+    daily_seasonality=False,
+)
+model.add_country_holidays(country_name='TH')
+
+model.fit(df)
+forecast = model.predict(model.make_future_dataframe(periods=90))
+```
+
+## Multi-Channel Inventory
+
+### Strategy 1: Allocated buckets (safe but inefficient)
+```
+Total stock: 100
+- Own site:    30
+- Lazada:      30
+- Shopee:      30
+- Buffer:      10
+
+Each channel has its own pool, no oversells but stock-outs possible per channel
+```
+
+### Strategy 2: Shared pool (efficient, risky)
+```
+Total stock: 100
+All channels see: 95 (with safety buffer 5)
+
+Atomic decrement on sale + push to all channels
+Risk: sync lag → oversell
+Need: fast sync (< 1 min), robust reservation
+```
+
+### Strategy 3: Hybrid (recommended)
+```
+Top channels: shared pool with high buffer
+Long-tail channels: small allocated buckets
+```
+
+## Returns Workflow
+
+```mermaid
+stateDiagram-v2
+    [*] --> Requested
+    Requested --> Approved: review
+    Requested --> Denied: policy
+    Approved --> InTransit: shipped back
+    InTransit --> Received: arrived
+    Received --> Inspected: quality check
+    Inspected --> Restocked: like-new
+    Inspected --> Damaged: unsellable
+    Inspected --> Refurbished: rework
+    Restocked --> [*]
+    Damaged --> [*]
+    Refurbished --> Restocked
+```
+
+## Tools
+
+| Need | Tools |
+|------|-------|
+| **WMS** (warehouse management) | NetSuite, SAP, Manhattan, custom |
+| **OMS** (order management) | Manhattan, IBM Sterling, custom |
+| **Marketplace sync** | ChannelEngine, Sellbrite, custom |
+| **Forecasting** | Prophet, Anaplan, custom ML |
+| **3PL APIs** | ShipBob, ShipMonk, native APIs |
+
+## Skills You Use
+
+- `ecommerce-patterns` — patterns and algorithms
+- `design-gate/polished-document-style` (from superuser) — for docs
+
+## Things You Don't Do
+
+- Trust marketplace counts as source of truth
+- Skip reservations during checkout
+- Use eventual consistency for stock decrements
+- Show "on hand" instead of "saleable"
+- Hold infinite reservations
+- Ignore safety stock
+
+## When to Hand Off
+
+- Customer-facing UI → `ux-designer` (from software-development)
+- Warehouse software → `solution-architect` (from software-development)
+- Forecasting models → `ai-engineer`
+- 3PL integration → `developer` (from software-development)
+
+## Common Pitfalls
+
+- Wrong: **Race conditions on stock decrement** → overselling
+- Wrong: **No safety stock** → frequent stockouts
+- Wrong: **Slow marketplace sync** → overselling on marketplaces
+- Wrong: **Showing on-hand instead of saleable** → false sense of stock
+- Wrong: **Reservations never expire** → "ghost stock" accumulates
+- Wrong: **No reconciliation** → physical and system counts drift apart
+- Wrong: **Treating returns as instant** → restock delays cause overselling
+
+## Reference
+
+- [APICS / ASCM body of knowledge](https://www.ascm.org/)
+- [Operations Management textbooks (Heizer, Jacobs)](https://www.amazon.com/)
+- [Amazon's "Working backwards from the customer"](https://commoncog.com/blog/the-amazon-weekly-business-review/)
+- [Shopify inventory levels (GraphQL Admin API — REST Admin API is legacy; new public App Store apps must use GraphQL since Apr 2025, shopify.dev changelog)](https://shopify.dev/docs/api/admin-graphql/latest/objects/InventoryLevel)
+
+
+## reference: agent-recommendation-engineer.md
+
+# Recommendation Engineer — algorithms, serving, evaluation
+
+Role guide for the agent `recommendation-engineer` · in-store placements · email · A/B test are in [`recommendation-systems.md`](recommendation-systems.md)
+
+**สารบัญ:**
+
+- [Recommendation Strategies](#recommendation-strategies)
+- [Content-Based Filtering](#content-based-filtering)
+- [Collaborative Filtering](#collaborative-filtering)
+- [Hybrid (Modern Default)](#hybrid-modern-default)
+- [Cold Start Solutions](#cold-start-solutions)
+- [Serving Architecture](#serving-architecture)
+- [Evaluation](#evaluation)
+- [Diversity & Serendipity](#diversity--serendipity)
+- [Business Rules](#business-rules)
+- [Tools (2026)](#tools-2026)
+
+## Recommendation Strategies
+
+```
+By data availability
+│
+├─ Rich item content + sparse interactions
+│  └─ Content-based filtering
+│
+├─ Rich interactions + minimal content
+│  └─ Collaborative filtering
+│
+├─ Both → Hybrid (recommended default)
+│
+└─ Sequential behavior (sessions)
+   └─ Sequence models (e.g., SASRec, BERT4Rec)
+```
+
+## Content-Based Filtering
+
+Recommend items similar to ones the user liked.
+
+```python
+# Build item embeddings from features
+def item_to_vector(item):
+    return concatenate([
+        category_one_hot(item.category),
+        brand_embedding(item.brand),
+        title_embedding(item.title),  # via sentence-transformer
+        normalized_price(item.price),
+    ])
+
+# User profile = aggregate of liked items
+def user_profile(user_id):
+    liked_items = get_liked_items(user_id)
+    return mean([item_to_vector(i) for i in liked_items])
+
+# Recommendation = nearest neighbors
+def recommend(user_id, k=10):
+    profile = user_profile(user_id)
+    candidates = vector_db.search(profile, k=k*2)
+    return filter_already_seen(candidates, user_id)[:k]
+```
+
+**Pros:** Works for new items, transparent
+**Cons:** Filter bubble, no serendipity
+
+## Collaborative Filtering
+
+Recommend items liked by similar users.
+
+```python
+# Matrix factorization (classic)
+from implicit.als import AlternatingLeastSquares
+
+# user-item interaction matrix (sparse)
+model = AlternatingLeastSquares(factors=64, regularization=0.01)
+model.fit(interaction_matrix)
+
+# Recommend
+recs = model.recommend(user_id, interaction_matrix[user_id], N=10)
+```
+
+**Modern: 2-tower neural CF**
+```python
+# Two encoders: user-tower and item-tower
+# Trained to bring positive interactions close in embedding space
+
+class TwoTower(nn.Module):
+    def __init__(self):
+        super().__init__()  # required before assigning submodules
+        self.user_tower = build_mlp([user_features_dim, 128, 64])
+        self.item_tower = build_mlp([item_features_dim, 128, 64])
+
+    def forward(self, user_features, item_features):
+        u = self.user_tower(user_features)
+        i = self.item_tower(item_features)
+        return cosine_similarity(u, i)
+```
+
+**Pros:** Captures non-obvious patterns
+**Cons:** Cold start hard
+
+## Hybrid (Modern Default)
+
+```python
+# Combine multiple signals
+def score(user, item, context):
+    cb = content_based_score(user, item)
+    cf = collaborative_score(user, item)
+    pop = popularity_score(item)
+    recency = recency_boost(item)
+    business = business_rules_boost(item)
+
+    return (
+        0.3 * cb +
+        0.4 * cf +
+        0.1 * pop +
+        0.1 * recency +
+        0.1 * business
+    )
+```
+
+**Or learn weights via a ranker (LambdaMART, XGBRanker):**
+```python
+from xgboost import XGBRanker
+
+ranker = XGBRanker(objective='rank:pairwise', n_estimators=100)
+# X: features from multiple sources
+# y: relevance labels
+# groups: queries (e.g., user sessions)
+ranker.fit(X, y, group=groups)
+```
+
+## Cold Start Solutions
+
+Patterns (new users, new items, timeline) → [`recommendation-systems.md` → Cold Start Strategies](recommendation-systems.md#cold-start-strategies). Role-specific extra: a cold-start tower (item features only) for new items.
+
+> **Security:** Profiling by demographics and personalised marketing email need consent under the Thai Personal Data Protection Act (PDPA) → `pdpa-compliance`.
+
+## Serving Architecture
+
+```mermaid
+flowchart LR
+    A[User request] --> B[Feature service]
+    B --> C[Candidate generation]
+    C --> D[Ranking model]
+    D --> E[Filtering / business rules]
+    E --> F[Diversity pass]
+    F --> G[Top-K results]
+
+    subgraph Offline [Offline]
+        H[(Item embeddings)] --> C
+        I[(User embeddings)] --> B
+        J[Training pipeline] --> H
+        J --> I
+    end
+```
+
+### Two-stage architecture
+
+Stages and candidate counts → [`recommendation-systems.md` → Pattern: Two-Stage Retrieval](recommendation-systems.md#pattern-two-stage-retrieval).
+
+## Evaluation
+
+### Offline metrics
+
+| Metric | Use |
+|--------|-----|
+| **Hit Rate@K** | Is correct item in top-K? |
+| **NDCG@K** | Ranking quality with graded relevance |
+| **MAP** | Mean Average Precision |
+| **AUC** | Discrimination ability |
+| **Coverage** | % of items recommended |
+| **Diversity** | Intra-list dissimilarity |
+
+### Online metrics (A/B test)
+
+| Metric | What it measures |
+|--------|-----------------|
+| **CTR** | Engagement |
+| **CVR** | Conversion |
+| **Revenue per session** | $ impact |
+| **Time spent** | Engagement (careful: may be navigation friction) |
+| **Returning users** | Long-term retention |
+
+## Diversity & Serendipity
+
+Tuning only for accuracy gets boring: users see more of the same (a filter bubble) and leave.
+Maximal Marginal Relevance (MMR) code → [`recommendation-systems.md` → Diversity Patterns](recommendation-systems.md#diversity-patterns).
+
+## Business Rules
+
+→ [`recommendation-systems.md` → Business Rules](recommendation-systems.md#business-rules) (one list for the skill).
+
+## Tools (2026)
+
+→ [`recommendation-systems.md` → Tools (2026)](recommendation-systems.md#tools-2026).
+
+
+## reference: checkout-optimization.md
+
+> เดิมชื่อ checkout-optimization (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-development-ecommerce` — รวมเข้า `ecommerce-patterns` ใน v2.0.0
+
+**สารบัญ:** 
+
+- [When to use this skill](#when-to-use-this-skill)
+- [The Numbers (Why It Matters)](#the-numbers-why-it-matters)
+- [The 7 Critical Improvements](#the-7-critical-improvements)
+- [Form Field Best Practices](#form-field-best-practices)
+- [Mobile-Specific Optimizations](#mobile-specific-optimizations)
+- [Express Checkout (Critical for Mobile)](#express-checkout-critical-for-mobile)
+- [Error Handling](#error-handling)
+- [Cart-to-Checkout Optimizations](#cart-to-checkout-optimizations)
+- [Speed Matters](#speed-matters)
+- [Checkout Flow Patterns](#checkout-flow-patterns)
+- [Trust Signals Where They Matter](#trust-signals-where-they-matter)
+- [Tracking & Analytics](#tracking--analytics)
+- [Common Pitfalls](#common-pitfalls)
+- [Reference](#reference)
+
+# Checkout Optimization
+
+## When to use this skill
+
+- Designing new checkout flow
+- Reducing checkout abandonment
+- A/B testing checkout changes
+- Adding new payment methods
+- Improving mobile checkout
+- Adding Express checkout (Apple Pay, etc.)
+
+## The Numbers (Why It Matters)
+
+- **70.22% average documented cart abandonment rate** (Baymard Institute, average of 50 studies)
+- **~40%** of shoppers who abandon (not counting "just browsing") leave because extra costs (shipping, tax, fees) were too high
+- **~18%** leave because the site wanted them to create an account
+- Source: baymard.com/lists/cart-abandonment-rate (page updated 22 Sep 2025, read 22 ต.ค. 2569) — re-check before quoting; Baymard updates the list
+- **Mobile** usually converts lower than desktop — measure your own split by device instead of quoting an industry figure
+
+## The 7 Critical Improvements
+
+### 1. Guest Checkout (or "purchase as guest")
+
+Bad: "Sign up to checkout"
+Good: "Continue as guest" → option to create account on confirmation
+
+### 2. Transparent Pricing
+
+Show ALL costs (tax, shipping, fees) BEFORE checkout, or in cart.
+Extra costs that are too high are the top abandonment reason in Baymard's list (~40% of non-browsing abandonments, Baymard, read 22 ต.ค. 2569).
+
+### 3. Multiple Payment Methods
+
+| Method | Why |
+|--------|-----|
+| Card (Visa, MC, Amex) | Universal |
+| **Thailand: PromptPay QR** (list first for TH) | The Thai one-tap path — scan with any bank app, no card needed |
+| Local methods | THB: SCB EASY, K PLUS (mobile banking deep links) |
+| Apple Pay / Google Pay | 1 tap on mobile where available · Apple Pay for Thai merchants `(รอยืนยัน — no official Thai launch found on 22 ต.ค. 2569; check your gateway)` |
+| PayPal | Trust + saved info |
+| Buy now, pay later (BNPL): Klarna, Afterpay | Younger buyers (markets where offered) |
+| Bank transfer | Widely used in Thailand |
+
+### 4. Address Autocomplete
+
+Use Google Places or similar.
+Fewer fields, fewer errors, faster to finish.
+
+### 5. Inline Validation
+
+```typescript
+// Bad: validation only on submit
+form.onSubmit(() => {
+  if (!emailValid) showError('Invalid email');
+});
+
+// Good: validate on blur, show errors next to field
+emailField.onBlur(() => {
+  if (!isValidEmail(emailField.value)) {
+    showInlineError(emailField, 'Please enter a valid email');
+  }
+});
+```
+
+### 6. Progress Indicator (Multi-Step)
+
+```
+[1. Cart] → [2. Shipping] → [3. Payment] → [4. Review]
+              ▲ you are here
+```
+
+Users can see how many steps are left.
+
+### 7. Visible Trust Signals
+
+- SSL padlock + security badges
+- Accepted payment logos
+- Money-back guarantee
+- Recent reviews
+- Customer service availability
+
+## Form Field Best Practices
+
+### Reduce field count
+
+```
+Wrong: Over-collection:
+- First name
+- Last name
+- Company
+- Phone
+- Email
+- Birthdate
+- ...
+
+Right: Minimum viable:
+- Email (for receipt + account creation later)
+- Name (full, single field)
+- Phone (for delivery)
+- Shipping address
+- Payment
+
+That's it.
+```
+
+### Field design
+
+| Pattern | Why |
+|---------|-----|
+| Full name in 1 field | Fewer fields, handles non-Western names |
+| Email = login | One identifier |
+| Address autocomplete | Less typing, more accurate |
+| Mark optional vs required clearly | Asterisk or "(optional)" |
+| Input format matches data | Phone: tel keyboard on mobile |
+| Right keyboard on mobile | `inputmode="email"`, `numeric`, etc. |
+| Forgiving validation | Accept "555-1234" or "5551234" |
+
+## Mobile-Specific Optimizations
+
+### Layout
+- Single column (always)
+- Large tap targets (48×48 px min)
+- Fixed call-to-action (CTA) button at the bottom (always visible)
+- Auto-advance after picker selection
+
+### Input
+- Right keyboard type per field
+- Input masks (credit card spacing)
+- Auto-format as user types (where helpful)
+- Native pickers for date, country
+
+### Payment
+- Thailand: PromptPay QR first · elsewhere: Apple Pay / Google Pay prominent
+- Card fields with detected card type
+- Auto-fill from saved cards
+- One-tap for returning customers
+
+## Express Checkout (Critical for Mobile)
+
+> **ไทย:** For Thai buyers the express path is usually PromptPay QR or a mobile-banking deep link. The Apple Pay example below applies only where your gateway supports Apple Pay for your merchant country — for Thailand that is `(รอยืนยัน)`.
+
+### Apple Pay flow
+
+```
+1. Show "Buy with Apple Pay" button
+2. Tap → Face ID/Touch ID
+3. Done. 3 seconds total.
+
+vs traditional: 2+ minutes
+```
+
+### Implementation
+
+```typescript
+// Show Apple Pay button if available
+if (window.ApplePaySession?.canMakePayments()) {
+  showApplePayButton();
+}
+
+// On tap
+async function startApplePay() {
+  const session = new ApplePaySession(3, {
+    countryCode: 'TH',
+    currencyCode: 'THB',
+    merchantCapabilities: ['supports3DS'],
+    supportedNetworks: ['visa', 'masterCard'],
+    total: { label: 'Your Store', amount: cart.total.toString() },
+    requiredShippingContactFields: ['name', 'postalAddress'],
+    requiredBillingContactFields: ['postalAddress'],
+  });
+
+  session.onpaymentauthorized = async (event) => {
+    // Send to your backend → forward to Stripe/etc.
+    const result = await processPayment(event.payment.token);
+
+    session.completePayment(result.success
+      ? ApplePaySession.STATUS_SUCCESS
+      : ApplePaySession.STATUS_FAILURE
+    );
+  };
+
+  session.begin();
+}
+```
+
+## Error Handling
+
+### Pattern: Recoverable errors don't break flow
+
+```typescript
+// Bad: error wipes form
+catch (paymentError) {
+  setForm({});
+  setError(paymentError.message);
+}
+
+// Good: preserve state, fix what's wrong
+catch (paymentError) {
+  if (paymentError.code === 'invalid_card') {
+    setCardError('Card declined. Try another card.');
+    focusCardField();  // help user fix
+  } else if (paymentError.code === 'network') {
+    setNetworkError('Connection issue. Tap Retry.');
+    showRetryButton();
+  }
+  // Preserve all other form state
+}
+```
+
+## Cart-to-Checkout Optimizations
+
+### Persistent cart
+- Survive page refresh
+- Survive device switch (for logged in)
+- 30+ days expiry
+
+### Abandoned cart recovery
+```
+0 min: cart abandoned
+30 min: email "Did you forget something?" with cart preview
+24 hr: second email with incentive (free shipping?)
+3 days: SMS reminder (if opted in)
+```
+
+### Save-for-later
+- Offer a wishlist so fewer items get removed from the cart
+- Often keeps 10-15% of items that would have been removed
+
+## Speed Matters
+
+### Page load targets
+- LCP (Largest Contentful Paint) < 2.5s
+- INP (Interaction to Next Paint) < 200ms
+- CLS (Cumulative Layout Shift) < 0.1
+
+### Slower pages lose conversions — measure your own drop per second of delay with real-user data (no reliable universal figure; the often-quoted "7% per second" has no traceable source)
+
+## Checkout Flow Patterns
+
+### Pattern 1: One Page
+
+```
+[Cart summary] [Shipping form] [Payment form] [Review] [Place Order]
+        ▲              ▲              ▲           ▲
+       all visible, scrollable, one CTA
+```
+
+Pros: simple, fast
+Cons: long page, users must scroll to find errors
+
+### Pattern 2: Multi-Step (Accordion)
+
+```
+1. Shipping        [edit] ✓
+2. Delivery        [active]
+3. Payment         (locked)
+4. Review          (locked)
+```
+
+Pros: focused, progressive disclosure
+Cons: more clicks
+
+### Pattern 3: Single Page (Accordion when expanded)
+
+Mix of both. Default checkout pattern in 2026.
+
+## Trust Signals Where They Matter
+
+| Location | Signal |
+|----------|--------|
+| Cart | Customer service + return policy |
+| Shipping form | "We don't sell your data" |
+| Payment | Security badges, "Secure encryption" |
+| Submit button | "Place Secure Order" not just "Buy" |
+| Confirmation | Order number prominent, what's next |
+
+## Tracking & Analytics
+
+```typescript
+// Track each step
+events.fire('checkout_started', { cart_value: total, items: items.length });
+events.fire('checkout_step', { step: 'shipping', completed: true });
+events.fire('checkout_step', { step: 'payment', completed: false, error: 'card_declined' });
+events.fire('purchase', { order_id, value: total });
+```
+
+Funnel by:
+- Device type
+- New vs returning
+- Cart value
+- Time of day
+- Traffic source
+
+## Common Pitfalls
+
+- Wrong: **Hidden fees revealed late** — main abandonment cause
+- Wrong: **Forced login** — ~18% of non-browsing abandoners name it (Baymard)
+- Wrong: **No express checkout on mobile** — slow checkout, fewer sales
+- Wrong: **Long forms** — drop-off increases per field
+- Wrong: **Wrong keyboard** — slow, error-prone typing
+- Wrong: **No address autocomplete** — errors + slow
+- Wrong: **No inline validation** — frustrating
+- Wrong: **Cart wiped on logout** — hostile UX
+
+## Reference
+
+- [Baymard Institute Checkout Research](https://baymard.com/checkout-usability)
+- [Apple Pay Web Documentation](https://developer.apple.com/documentation/applepayontheweb)
+- [Google Pay Web Documentation](https://developers.google.com/pay/api/web/overview)
+- [Stripe Checkout Best Practices](https://stripe.com/docs/payments/checkout)
+
+
+## reference: design-modes.md
+
+# โหมดออกแบบ
+
+Audit a checkout flow or design a recommendation system (checkout-audit or recommendation-design).
+
+## สารบัญ
+
+- [Mode: `checkout-audit`](#mode-checkout-audit)
+- [Mode: `recommendation-design`](#mode-recommendation-design)
+
+Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+
+| Mode | What it does |
+|---|---|
+| `checkout-audit` | Audit and optimize checkout flow using growth-specialist agent. Identifies friction points and produces test backlog. |
+| `recommendation-design` | Design recommendation system for e-commerce using recommendation-engineer agent. Covers algorithm selection, serving architecture, evaluation. |
+
+---
+
+## Mode: `checkout-audit`
+
+Use the `growth-specialist` agent to audit checkout for: **$ARGUMENTS**
+
+The conversion rate optimization (CRO) specialist should:
+
+1. **Initial Discovery** — gather:
+   - Current funnel metrics (visits, cart, checkout, purchase)
+   - Drop-off rates per step
+   - Device breakdown (mobile vs desktop)
+   - Payment methods available
+   - Past optimization attempts
+
+2. **Apply `ecommerce-patterns` skill** for heuristic audit
+
+3. **Funnel analysis** by:
+   - Step (cart, shipping, payment, review)
+   - Device (mobile, tablet, desktop)
+   - User type (guest, returning)
+   - Cart value
+
+4. **Friction audit** with the 10 heuristics in `ecommerce-patterns/references/agent-cro-specialist.md` ("Heuristic" table). Page speed counts as friction when Largest Contentful Paint (LCP) is over 2.5 s, the Core Web Vitals "good" limit (web.dev/articles/lcp, checked 2026-10-14)
+
+5. **Touchpoint trace** (idea from ECC click-path-audit) — on the live page or clickable mockup, not the design doc, walk every control on each checkout step (buttons, links, form fields, back, close, browser back) and record per control: state it reads · state it changes · where it leads · what the user sees when it fails (validation, network, stock gone). A control that leads nowhere, changes state silently, or loses the cart on browser back is a finding on its own, listed before the heuristics
+
+6. **Generate hypotheses** in format:
+   "We believe X for Y will result in Z because <data>"
+
+7. **Prioritize using ICE (Impact, Confidence, Ease):**
+   - Impact (1-10)
+   - Confidence (1-10)
+   - Ease (1-10)
+
+8. **Design experiments** for top 3-5:
+   - Hypothesis statement
+   - Success metric + guardrails
+   - Variants (control + treatment)
+   - Sample size + duration
+   - Tracking plan
+
+9. **Produce polished audit report** using `design-gate/polished-document-style` skill (from superuser):
+   - Executive summary
+   - Funnel breakdown (funnel diagram via `diagram-figures`, house style)
+   - Heuristic scorecard
+   - Hypothesis backlog (ICE-prioritized)
+   - Top 3 test plans
+   - Quick-win recommendations (no test needed)
+   - 90-day testing roadmap
+
+10. **Hand-off suggestions:**
+   - UI changes → `ux-designer` (from software-development)
+   - Implementation → `developer` (from software-development), `ecommerce-engineer`
+   - Tracking → `data-engineer`
+   - Payment method additions → `fintech-engineer`
+
+---
+
+## Mode: `recommendation-design`
+
+Use the `recommendation-engineer` agent to design recommendations for: **$ARGUMENTS**
+
+The recommendation engineer should:
+
+1. **Initial Discovery** — gather:
+   - Specific surface (homepage, product detail page (PDP), cart, email, etc.)
+   - Available data (events, content, ratings)
+   - Catalog size + interaction volume
+   - Cold start prevalence
+   - Latency budget (real-time vs batch)
+   - Business constraints (exclusions, boosts)
+
+2. **Apply `ecommerce-patterns` skill** for surface-specific patterns
+
+3. **Choose algorithm strategy:**
+   - Content-based (item features)
+   - Collaborative (interaction patterns)
+   - Hybrid (recommended default)
+   - Sequential (session-based)
+   - Match to surface type
+
+4. **Design two-stage architecture:**
+   - **Candidate generation:** broad, fast (approximate nearest neighbor (ANN), popular, etc.)
+   - **Ranking:** narrow, precise (heavier model)
+
+5. **Handle cold start:**
+   - New users: popular by segment, onboarding
+   - New items: content-based, exploration boost
+
+6. **Add business rules:**
+   - Inventory filters
+   - Already-purchased filter
+   - Brand safety
+   - Diversity / serendipity
+
+7. **Design serving:**
+   - Real-time vs precomputed
+   - Caching strategy
+   - Fallback (when model unavailable)
+
+8. **Define evaluation:**
+   - Offline: Hit Rate@K, Normalized Discounted Cumulative Gain (NDCG), Mean Average Precision (MAP), coverage, diversity
+   - Online A/B test: click-through rate (CTR), conversion, revenue per impression
+   - Guardrail metrics
+
+9. **Produce polished design document** using `design-gate/polished-document-style` skill (from superuser):
+   - Architecture diagram (`diagram-figures`, house style)
+   - Data flow
+   - Algorithm rationale + alternatives considered
+   - Cold start handling
+   - Business rules
+   - Eval plan
+   - Rollout phases (shadow → 10% → 50% → 100%)
+   - Monitoring + drift detection
+
+10. **Hand-off suggestions:**
+    - Data pipeline → `data-engineer`
+    - Model training infrastructure → `ai-engineer`
+    - Frontend integration → `developer` (from software-development)
+    - A/B test design → `growth-specialist`
+
+
+## reference: inventory-management.md
+
+> เดิมชื่อ inventory-management (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-development-ecommerce` — รวมเข้า `ecommerce-patterns` ใน v2.0.0
+
+**สารบัญ:** 
+
+- [When to use this skill](#when-to-use-this-skill)
+- [Core Stock Concepts](#core-stock-concepts)
+- [Schema Design](#schema-design)
+- [Critical Patterns](#critical-patterns)
+- [Multi-Warehouse Patterns](#multi-warehouse-patterns)
+- [Demand Forecasting](#demand-forecasting)
+- [Safety Stock Calculation](#safety-stock-calculation)
+- [Reorder Point](#reorder-point)
+- [Marketplace Sync Patterns](#marketplace-sync-patterns)
+- [Reconciliation](#reconciliation)
+- [Common Pitfalls](#common-pitfalls)
+- [Reference](#reference)
+
+# Inventory Management Patterns
+
+## When to use this skill
+
+- Building inventory tracking
+- Designing multi-warehouse allocation
+- Implementing reservations during checkout
+- Building demand forecasting
+- Marketplace inventory sync
+- Reconciliation processes
+
+## Core Stock Concepts
+
+```
+┌─────────────────────────────────────────────┐
+│ Physical: 100 (in warehouse)                │
+│ ├─ Damaged:    5 (not sellable)             │
+│ ├─ Reserved:  20 (in carts)                 │
+│ ├─ Allocated: 15 (committed to orders)      │
+│ └─ Available: 60 (sellable now)             │
+│                                             │
+│ Safety stock: 10 (don't sell below)         │
+│ Saleable:    50 (available - safety)        │
+└─────────────────────────────────────────────┘
+
+Show "saleable" to customers, not raw inventory.
+```
+
+**Definitions used across this skill** (the role files point here):
+- `available = on_hand − reserved − allocated − damaged`
+- `saleable = max(0, available − safety_stock)` — the number customers see (same as the `inventory_available` view below)
+
+## Schema Design
+
+```sql
+CREATE TABLE inventory (
+    sku TEXT NOT NULL,
+    warehouse_id TEXT NOT NULL,
+    on_hand INT NOT NULL CHECK (on_hand >= 0),
+    reserved INT NOT NULL DEFAULT 0 CHECK (reserved >= 0),
+    allocated INT NOT NULL DEFAULT 0 CHECK (allocated >= 0),
+    damaged INT NOT NULL DEFAULT 0,
+    safety_stock INT NOT NULL DEFAULT 0,
+    PRIMARY KEY (sku, warehouse_id)
+);
+
+-- Computed view
+CREATE VIEW inventory_available AS
+SELECT
+    sku,
+    warehouse_id,
+    GREATEST(0, on_hand - reserved - allocated - damaged - safety_stock) AS saleable
+FROM inventory;
+
+CREATE TABLE reservations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    sku TEXT NOT NULL,
+    warehouse_id TEXT NOT NULL,
+    quantity INT NOT NULL CHECK (quantity > 0),
+    owner_type TEXT NOT NULL,  -- 'cart' | 'order' | 'transfer'
+    owner_id TEXT NOT NULL,
+    expires_at TIMESTAMPTZ,    -- carts only · NULL for orders (an order's allocation never expires)
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX ON reservations (sku, warehouse_id);
+CREATE INDEX ON reservations (expires_at);
+
+CREATE TABLE inventory_events (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    sku TEXT NOT NULL,
+    warehouse_id TEXT NOT NULL,
+    delta INT NOT NULL,
+    event_type TEXT NOT NULL,  -- 'receive' | 'sell' | 'return' | 'damage' | ...
+    reference TEXT,            -- order_id, receipt_id, etc.
+    notes TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+-- Append-only audit log
+```
+
+## Critical Patterns
+
+### Pattern: Atomic Reserve (with Lock)
+
+```typescript
+async function reserve(sku: string, qty: number, owner: string): Promise<string> {
+  return await db.transaction(async (tx) => {
+    // 1. Lock the row
+    const { rows: [stock] } = await tx.query(`
+      SELECT on_hand, reserved, allocated, damaged, safety_stock
+      FROM inventory
+      WHERE sku = $1 AND warehouse_id = $2
+      FOR UPDATE
+    `, [sku, warehouseId]);
+
+    const saleable = stock.on_hand - stock.reserved - stock.allocated
+                   - stock.damaged - stock.safety_stock;
+
+    if (saleable < qty) {
+      throw new OutOfStockError({ sku, requested: qty, available: saleable });
+    }
+
+    // 2. Update reservation count
+    await tx.query(`
+      UPDATE inventory
+      SET reserved = reserved + $1
+      WHERE sku = $2 AND warehouse_id = $3
+    `, [qty, sku, warehouseId]);
+
+    // 3. Create reservation record
+    const { rows: [reservation] } = await tx.query(`
+      INSERT INTO reservations (sku, warehouse_id, quantity, owner_type, owner_id, expires_at)
+      VALUES ($1, $2, $3, 'cart', $4, NOW() + INTERVAL '30 minutes')
+      RETURNING id
+    `, [sku, warehouseId, qty, owner]);
+
+    // 4. Log event
+    await tx.query(`
+      INSERT INTO inventory_events (sku, warehouse_id, delta, event_type, reference)
+      VALUES ($1, $2, 0, 'reserve', $3)
+    `, [sku, warehouseId, reservation.id]);
+
+    return reservation.id;
+  });
+}
+```
+
+### Pattern: Release Expired Reservations
+
+```typescript
+// Background job, every minute — CART reservations only.
+// Order allocations live in `allocated`, not `reserved`, and never expire (see below).
+async function releaseExpired() {
+  const expired = await db.query(`
+    SELECT id
+    FROM reservations
+    WHERE owner_type = 'cart' AND expires_at < NOW()
+    LIMIT 1000
+  `);
+
+  for (const { id } of expired.rows) {
+    await db.transaction(async (tx) => {
+      // Delete first, re-checking the condition: if checkout converted this
+      // reservation to an order a moment ago, nothing is deleted and we skip it.
+      const { rows: [res] } = await tx.query(`
+        DELETE FROM reservations
+        WHERE id = $1 AND owner_type = 'cart' AND expires_at < NOW()
+        RETURNING sku, warehouse_id, quantity
+      `, [id]);
+      if (!res) return;
+
+      // Decrease reserved count
+      await tx.query(`
+        UPDATE inventory
+        SET reserved = reserved - $1
+        WHERE sku = $2 AND warehouse_id = $3
+      `, [res.quantity, res.sku, res.warehouse_id]);
+
+      // Log
+      await tx.query(`
+        INSERT INTO inventory_events (sku, warehouse_id, delta, event_type, reference, notes)
+        VALUES ($1, $2, 0, 'reservation_expired', $3, 'auto-released')
+      `, [res.sku, res.warehouse_id, id]);
+    });
+  }
+}
+
+// Orders that stay unshipped too long are an ALERT for a person, not an auto-release:
+// SELECT owner_id FROM reservations
+// WHERE owner_type = 'order' AND created_at < NOW() - INTERVAL '7 days'
+```
+
+### Pattern: Convert Reservation → Allocation (on Order)
+
+```typescript
+async function confirmOrder(orderId: string, items: CartItem[]) {
+  return await db.transaction(async (tx) => {
+    for (const item of items) {
+      // Find and lock the reservation — its own quantity and warehouse are the truth
+      const { rows: [res] } = await tx.query(`
+        SELECT id, warehouse_id, quantity FROM reservations
+        WHERE sku = $1 AND owner_type = 'cart' AND owner_id = $2
+        FOR UPDATE
+      `, [item.sku, item.cartId]);
+
+      if (!res) {
+        throw new Error(`No reservation found for ${item.sku}`); // expired and released → re-reserve
+      }
+
+      // Convert: reserved → allocated, in THIS warehouse only
+      await tx.query(`
+        UPDATE inventory
+        SET reserved = reserved - $1, allocated = allocated + $1
+        WHERE sku = $2 AND warehouse_id = $3
+      `, [res.quantity, item.sku, res.warehouse_id]);
+
+      // Update reservation owner — orders have no expiry
+      await tx.query(`
+        UPDATE reservations
+        SET owner_type = 'order', owner_id = $1, expires_at = NULL
+        WHERE id = $2
+      `, [orderId, res.id]);
+    }
+  });
+}
+```
+
+### Pattern: Ship Order (Allocated → Sold)
+
+```typescript
+async function shipOrder(orderId: string) {
+  await db.transaction(async (tx) => {
+    const allocations = await tx.query(`
+      SELECT sku, warehouse_id, quantity
+      FROM reservations
+      WHERE owner_type = 'order' AND owner_id = $1
+    `, [orderId]);
+
+    for (const alloc of allocations.rows) {
+      await tx.query(`
+        UPDATE inventory
+        SET on_hand = on_hand - $1, allocated = allocated - $1
+        WHERE sku = $2 AND warehouse_id = $3
+      `, [alloc.quantity, alloc.sku, alloc.warehouse_id]);
+
+      await tx.query(`
+        INSERT INTO inventory_events (sku, warehouse_id, delta, event_type, reference)
+        VALUES ($1, $2, $3, 'ship', $4)
+      `, [alloc.sku, alloc.warehouse_id, -alloc.quantity, orderId]);
+    }
+
+    // Remove reservation records
+    await tx.query(`
+      DELETE FROM reservations WHERE owner_type = 'order' AND owner_id = $1
+    `, [orderId]);
+  });
+}
+```
+
+## Multi-Warehouse Patterns
+
+### Pattern: Find Best Warehouse
+
+```typescript
+function scoreWarehouse(warehouse: Warehouse, order: Order, item: Item): number {
+  let score = 0;
+
+  // 1. Stock availability (must have it)
+  if (warehouse.available(item.sku) < item.quantity) return -Infinity;
+
+  // 2. Shipping cost
+  const shippingCost = calculateShipping(warehouse, order.address);
+  score -= shippingCost * 0.4;
+
+  // 3. Delivery time
+  const days = estimatedDeliveryDays(warehouse, order.address);
+  score -= days * 0.3;
+
+  // 4. Single-warehouse bonus (avoid split shipments)
+  const otherItemsHere = order.items.filter(i =>
+    warehouse.available(i.sku) >= i.quantity
+  ).length;
+  score += otherItemsHere * 5;  // bonus per item we can fulfill
+
+  // 5. Inventory aging
+  const oldestStock = warehouse.oldestStockDays(item.sku);
+  score += oldestStock * 0.01;  // slight preference for older
+
+  return score;
+}
+
+async function allocateOrderToWarehouses(order: Order) {
+  const allocations: Record<string, Allocation[]> = {};
+
+  for (const item of order.items) {
+    const warehouses = await getWarehousesWithStock(item.sku);
+    const scored = warehouses
+      .map(w => ({ warehouse: w, score: scoreWarehouse(w, order, item) }))
+      .filter(s => s.score > -Infinity)
+      .sort((a, b) => b.score - a.score);
+
+    if (scored.length === 0) throw new OutOfStockError(item.sku);
+
+    const winner = scored[0].warehouse;
+    if (!allocations[winner.id]) allocations[winner.id] = [];
+    allocations[winner.id].push({ ...item, warehouse: winner.id });
+  }
+
+  return allocations;
+}
+```
+
+## Demand Forecasting
+
+### Simple: Moving Average
+```python
+def forecast_demand(sku, days=30):
+    history = get_daily_sales(sku, last_days=90)
+    return np.mean(history)
+```
+
+### Better: Exponential Smoothing
+```python
+from statsmodels.tsa.holtwinters import ExponentialSmoothing
+
+def forecast_demand(sku, days=30):
+    history = get_daily_sales(sku, last_days=365)
+
+    model = ExponentialSmoothing(
+        history,
+        trend='add',
+        seasonal='add',
+        seasonal_periods=7  # weekly
+    )
+    fit = model.fit()
+    return fit.forecast(days)
+```
+
+### Best: Prophet or NeuralProphet
+```python
+from prophet import Prophet
+
+def forecast_demand(sku, days=30):
+    df = get_daily_sales_df(sku)
+    model = Prophet(yearly_seasonality=True, weekly_seasonality=True)
+    model.add_country_holidays(country_name='TH')
+    model.fit(df)
+
+    future = model.make_future_dataframe(periods=days)
+    forecast = model.predict(future)
+    return forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']]
+```
+
+## Safety Stock Calculation
+
+```python
+import scipy.stats as stats
+
+def safety_stock(sku, service_level=0.95):
+    daily_demand = forecast.daily_mean(sku)
+    demand_std = forecast.daily_std(sku)
+    lead_time_days = supplier.lead_time(sku)
+    lead_time_std = supplier.lead_time_variability(sku)
+
+    z = stats.norm.ppf(service_level)
+
+    # Account for variability in both demand and lead time
+    combined_variance = (
+        lead_time_days * (demand_std ** 2) +
+        (daily_demand ** 2) * (lead_time_std ** 2)
+    )
+
+    return int(z * sqrt(combined_variance))
+```
+
+## Reorder Point
+
+```python
+def reorder_point(sku):
+    forecast_during_lead_time = forecast.demand(sku, days=supplier.lead_time(sku))
+    safety = safety_stock(sku)
+    return forecast_during_lead_time + safety
+
+def should_reorder(sku):
+    current = get_available(sku)
+    return current <= reorder_point(sku)
+```
+
+## Marketplace Sync Patterns
+
+### Pattern: Push on Change
+```python
+async def on_inventory_change(sku):
+    # Calculate published quantity (with safety buffer)
+    available = get_available(sku)
+    published = max(0, available - SAFETY_BUFFER)
+
+    # Push to all connected marketplaces
+    await asyncio.gather(*[
+        push_to_marketplace(channel, sku, published)
+        for channel in get_active_channels(sku)
+    ])
+```
+
+### Pattern: Pull on Cadence (fallback)
+```python
+# Every 5 minutes, full reconcile
+async def reconcile_marketplaces():
+    for marketplace in MARKETPLACES:
+        for sku in marketplace.active_listings:
+            their_qty = await marketplace.get_quantity(sku)
+            our_qty = get_published_quantity(sku)
+            if their_qty != our_qty:
+                await marketplace.update_quantity(sku, our_qty)
+                log.warning(f'Drift detected: {sku} on {marketplace}', extra={
+                    'their': their_qty, 'ours': our_qty
+                })
+```
+
+## Reconciliation
+
+```python
+# Daily physical count vs system
+async def reconcile_warehouse(warehouse_id):
+    physical_counts = await pull_from_wms(warehouse_id)
+    system_counts = await get_system_inventory(warehouse_id)
+
+    discrepancies = []
+    for sku, physical in physical_counts.items():
+        system = system_counts.get(sku, 0)
+        if abs(physical - system) > TOLERANCE:
+            discrepancies.append({
+                'sku': sku,
+                'physical': physical,
+                'system': system,
+                'variance': physical - system,
+                # system = 0 (stock appeared from nowhere) → no percentage, flag it as new stock
+                'variance_pct': 100 * (physical - system) / system if system else None,
+            })
+
+    if discrepancies:
+        await alerts.fire({
+            'severity': 'P2',
+            'title': f'Inventory discrepancies in {warehouse_id}',
+            'count': len(discrepancies),
+            'top': sorted(discrepancies, key=lambda x: abs(x['variance']))[-10:],
+        })
+```
+
+## Common Pitfalls
+
+- Wrong: **No row-level lock during reserve** → overselling
+- Wrong: **Float for quantities** → use integers only (unless the item really sells in fractions)
+- Wrong: **No reservation expiry** → ghost stock accumulates
+- Wrong: **Trust marketplace counts** → drift over time
+- Wrong: **No event log** → can't audit or rebuild stock history
+- Wrong: **Show on-hand instead of saleable** → false promises
+- Wrong: **No safety stock** → stockouts during demand spikes
+- Wrong: **Reserve outside DB transaction** → race conditions
+
+## Reference
+
+- [Prophet (forecasting)](https://facebook.github.io/prophet/)
+- [APICS Operations Management body of knowledge](https://www.ascm.org/)
+- [Shopify inventory (GraphQL Admin API — REST Admin API is legacy; new public App Store apps must use GraphQL since Apr 2025, shopify.dev changelog)](https://shopify.dev/docs/api/admin-graphql/latest/objects/InventoryItem)
+
+
+## reference: recommendation-systems.md
+
+> เดิมชื่อ recommendation-systems (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-development-ecommerce` — รวมเข้า `ecommerce-patterns` ใน v2.0.0
+
+**สารบัญ:** 
+
+- [When to use this skill](#when-to-use-this-skill)
+- [E-commerce Recommendation Surfaces](#e-commerce-recommendation-surfaces)
+- [Algorithm Quick Reference](#algorithm-quick-reference)
+- [Production Serving Patterns](#production-serving-patterns)
+- [Cold Start Strategies](#cold-start-strategies)
+- [Diversity Patterns](#diversity-patterns)
+- [Email Recommendations](#email-recommendations)
+- [Business Rules](#business-rules)
+- [A/B Testing Recommendations](#ab-testing-recommendations)
+- [Common Pitfalls](#common-pitfalls)
+- [Tools (2026)](#tools-2026)
+- [Reference](#reference)
+
+# Recommendation Systems for E-commerce
+
+## When to use this skill
+
+- Building "you may also like" / "similar items"
+- Personalized homepage feed
+- Cart cross-sell / upsell
+- "Frequently bought together"
+- Search re-ranking
+- Email personalization
+
+## E-commerce Recommendation Surfaces
+
+| Surface | Best algorithm | Key constraint |
+|---------|----------------|----------------|
+| **Homepage** (logged in) | Personalized rank | New user (cold start): show popular items |
+| **Product detail page (PDP) "similar"** | Item-to-item | Visual similarity helps |
+| **PDP "complete the look"** | Co-purchase | Same category, complementary |
+| **Cart "frequently bought together"** | Co-purchase | Cart-context aware |
+| **Cart upsell** | Higher-value similar | Consider profit margin |
+| **Search re-rank** | Click-based + relevance | Maintain query intent |
+| **Email "for you"** | Personalized rank | An older model is fine |
+| **Notification** | Trending + personalized | Time-sensitive |
+
+## Algorithm Quick Reference
+
+### Item-to-Item Similarity (Easy Win)
+```python
+# For each item, precompute top-N similar items
+# Run nightly, serve from cache
+
+def item_similarity(items):
+    embeddings = build_item_embeddings(items)  # category + brand + visual
+    sim_matrix = cosine_similarity(embeddings)
+
+    similar_items = {}
+    for item_idx, sims in enumerate(sim_matrix):
+        top_n = argsort(-sims)[1:11]  # exclude self
+        similar_items[items[item_idx].id] = top_n
+
+    cache.set('similar', similar_items, ttl=86400)
+```
+
+**Use for:** PDP similar items, search "more like this"
+
+### Frequently Bought Together (FBT)
+```python
+# Mine purchase transactions for co-occurrence
+from mlxtend.frequent_patterns import apriori, association_rules
+
+# transactions: list of [item1, item2, ...]
+transactions_df = encode_transactions(transactions)
+frequent = apriori(transactions_df, min_support=0.001, use_colnames=True)
+rules = association_rules(frequent, metric="confidence", min_threshold=0.3)
+
+# For "if user has item X in cart, suggest Y"
+for _, rule in rules.iterrows():
+    cache_fbt(antecedent=rule['antecedents'], consequents=rule['consequents'])
+```
+
+**Use for:** Cart "frequently bought together", PDP complementary
+
+### Personalized Ranking (Two-Tower)
+```python
+# Real-time scoring per user
+# User tower: ID + recent behavior + demographics
+# Item tower: ID + features + popularity
+
+user_emb = user_model(user_features)  # 64-dim vector
+
+# Candidate generation: approximate nearest neighbor (ANN) search
+candidates = ann_index.search(user_emb, k=200)
+
+# Ranking: re-rank with deeper model
+scores = ranking_model(user_emb, candidate_embeddings)
+ranked = sort_by_score(candidates, scores)
+
+# Diversify (MMR)
+final = diversify(ranked, k=10)
+```
+
+**Use for:** Homepage, email, "for you" feed
+
+### Popularity (Baseline + Cold Start)
+```python
+# Time-decayed popularity
+def trending_score(item_id, half_life_days=7):
+    purchases = get_recent_purchases(item_id)
+    scores = sum(
+        0.5 ** (days_ago / half_life_days)
+        for days_ago in purchases
+    )
+    return scores
+```
+
+**Use for:** Cold-start, trending sections
+
+## Production Serving Patterns
+
+### Pattern: Two-Stage Retrieval
+
+```
+Stage 1: Candidate generation (broad, fast)
+   ↓ 100k+ items → a few hundred to ~1000 candidates
+     (start at ~200; raise it while the ranking stage still fits the latency budget)
+   - ANN search
+   - Pre-filter (in stock, category match)
+
+Stage 2: Ranking (narrow, precise)
+   ↓ candidates → 10–100
+   - Heavy model
+   - Business rules
+   - Diversity
+```
+
+### Pattern: Real-Time Personalization
+
+```python
+# Update user vector continuously
+async def update_user_on_event(user_id, event):
+    current = await get_user_vector(user_id)
+
+    # Recent events weighted higher
+    item_vec = await get_item_vector(event.item_id)
+    weight = event_weight(event.type)  # purchase > add_to_cart > view
+
+    # Exponential moving average
+    new = 0.9 * current + 0.1 * weight * item_vec
+    await set_user_vector(user_id, new)
+```
+
+### Pattern: Constraints
+
+```python
+def filter_candidates(candidates, user, context):
+    filtered = []
+    for item in candidates:
+        # Hard filters (must pass)
+        if not in_stock(item, user.location):
+            continue
+        if item.id in already_shown(user, context.surface):
+            continue
+        if age_restricted(item) and not user.verified_adult:
+            continue
+
+        # Soft filters (deboost, not exclude)
+        if item.category in user.recent_categories:
+            item.score *= 1.2  # boost preferred category
+
+        filtered.append(item)
+
+    return filtered
+```
+
+## Cold Start Strategies
+
+### New users
+```
+Day 0:    Show popular by demographic/location
+Day 1+:   First interactions start personalizing
+Day 7:    Sufficient signal for full personalization
+```
+
+Bootstrap with:
+- Onboarding survey (interests)
+- Inferred from context (geography, device, traffic source)
+- Default popular items
+- Default to category browsing · implicit feedback from first actions
+
+> **Security:** Grouping users by demographics (profiling) needs a lawful basis — usually consent — under the Thai Personal Data Protection Act (PDPA) → `pdpa-compliance`. Without it, use non-personal context only (page, category, time).
+
+### New items
+```
+Hour 1:   Content-based recommendations only
+Day 1:    Boost in exploration slots
+Week 1:   Sufficient interactions for collaborative
+```
+
+## Diversity Patterns
+
+```python
+# MMR: balance relevance + diversity
+def maximal_marginal_relevance(candidates, k=10, lambda_=0.7):
+    selected = []
+    remaining = candidates.copy()
+
+    while len(selected) < k and remaining:
+        scores = []
+        for c in remaining:
+            relevance = c.score
+            max_sim = max(
+                [similarity(c, s) for s in selected],
+                default=0
+            )
+            mmr_score = lambda_ * relevance - (1 - lambda_) * max_sim
+            scores.append(mmr_score)
+
+        best_idx = argmax(scores)
+        selected.append(remaining.pop(best_idx))
+
+    return selected
+```
+
+## Email Recommendations
+
+> **Security:** Marketing email with personalised picks needs the user's marketing consent under PDPA — check the consent flag before generating, and honour unsubscribe → `pdpa-compliance`.
+
+```python
+# Offline batch (e.g., nightly)
+# More compute affordable, freshness less critical
+
+async def generate_email_recs(user_id):
+    if not await has_marketing_consent(user_id):  # PDPA: no consent → no email
+        return None
+
+    # User context
+    profile = await get_user_profile(user_id)
+
+    # Multiple slots
+    return {
+        'for_you': await personalized_recs(profile, n=6),
+        'trending_in_your_taste': await trending_filtered(profile, n=3),
+        'price_drops': await price_drops_for_user(profile, n=2),
+        'restock_alerts': await wishlist_restocked(profile),
+    }
+```
+
+## Business Rules
+
+Almost always required:
+- Inventory check (stock data at most 5 minutes old)
+- Price tier appropriate for user
+- Brand safety (no conflicting brands together)
+- Filter out items already bought (don't recommend the exact same item)
+- Sponsored vs organic separation
+- Local availability · regional pricing
+- Compliance (age-restricted items)
+
+## A/B Testing Recommendations
+
+```python
+# Key metrics
+metrics = {
+    'click_through_rate': clicks / impressions,
+    'conversion_rate': purchases / clicks,
+    'add_to_cart_rate': adds / impressions,
+    'revenue_per_impression': total_revenue / impressions,
+    'diversity': unique_items_shown / total_impressions,
+    'novelty': new_items_shown / total_impressions,
+}
+
+# Guardrails (shouldn't degrade)
+guardrails = {
+    'bounce_rate': ...,
+    'time_on_site': ...,
+    'returning_users': ...,
+}
+```
+
+## Common Pitfalls
+
+- Wrong: **Position bias** — the top slot gets clicks no matter what is in it
+- Wrong: **Popularity dominance** — less popular items (the long tail) never show
+- Wrong: **Filter bubble** — user sees only same category forever
+- Wrong: **No diversity** — boring after a while
+- Wrong: **No business rules** — out-of-stock items get recommended
+- Wrong: **Offline-online gap** — scores well offline, but no lift with real users
+- Wrong: **Single algorithm** — no fallback for cold start
+
+## Tools (2026)
+
+| Tool | Best for |
+|------|----------|
+| **Algolia Recommendations** | Managed, easy |
+| **Amazon Personalize** | AWS-native |
+| **Recombee** | Mid-market managed |
+| **Vespa** | Self-hosted, scale |
+| **Pinecone / Qdrant + custom** | DIY with vector DB (ANN search) |
+| **PyTorch / TensorFlow + serving stack** | Full custom |
+| **LightFM / implicit** | Classical collaborative filtering |
+
+> Tool list from model knowledge, not re-checked against official sites `(รอยืนยัน)` — check before recommending.
+
+## Reference
+
+- [Amazon Personalize](https://aws.amazon.com/personalize/)
+- [Algolia Recommend](https://www.algolia.com/products/recommend/)
+- [Vespa.ai docs](https://docs.vespa.ai/)
+- [Netflix Recommendations engineering blog](https://netflixtechblog.com/)
+
+
+## reference: thai-marketplace-apis.md
+
+# Thai marketplace APIs (Shopee · Lazada · TikTok Shop · LINE)
+
+Use when building a system that pulls orders, deducts stock, or ships goods through a marketplace · use with [`inventory-management.md`](inventory-management.md) (multi-channel sync · stock reservation) · for sellers who do not program → `e-commerce:multi-shop-stock` (if installed)
+Every fact comes from the provider's documentation, opened and checked 2026-10-23 (section "Sources") · a field that was searched for and not found is labeled (ยังไม่ได้ตรวจ) (not yet checked) · re-checked 2026-10-26 with a real browser (the Shopee · Lazada · TikTok Shop pages need scripts to run; no login is needed to see the docs)
+Abbreviations: Application Programming Interface (API) · Independent Software Vendor (ISV) is a company that builds a system for many shops · Hash-based Message Authentication Code (HMAC) is a signature made from a secret key
+
+## 1 · Build it yourself or use a ready-made system
+
+- One shop that sells on several channels → an already-connected back-office system (item 7) is faster than building it yourself.
+- Build it yourself when it is an Order Management System (OMS) or Enterprise Resource Planning (ERP) with many shop customers, or has business rules a ready-made system cannot do.
+- Check eligibility before taking the job: a Thai shop that will use Shopee Open Platform itself must be a Mall Seller or Managed Seller.
+
+## 2 · Sign-up and account types
+
+| | Shopee Open Platform | Lazada Open Platform | TikTok Shop Partner Center |
+|---|---|---|---|
+| Types | Individual Seller · Registered Business Seller (own shop only) · Third-party Partner Platform (ISV) | Software Developer (calls the API of its own shop) · Service Provider (sells services to shops · cannot be changed once chosen) | Seller developer (custom app for its own shop) · App developer / ISV (public app) |
+| An ISV needs | a registered company · a working product with a trial account that has every feature open · HTTPS URLs · Transport Layer Security (TLS) 1.2 or higher · security grade "A" | service name · 200×200 px logo · a payout account if selling in Service Market | a business certificate matching the registered region · a partner in a country picks its own market |
+| Shop doing it itself | Thai shop: Mall Seller or Managed Seller | no Thai-specific condition found · the developer-role page (docId=108001, checked 2026-10-26) only says to register the Software Developer role and fill in the details · not checked with the Lazada team whether there are criteria outside the docs | shop already open · has an Account Manager · uses the same email as the shop account |
+
+## 3 · Signature and permission from the shop
+
+| | Shopee | Lazada | TikTok Shop |
+|---|---|---|---|
+| Signature | HMAC-SHA256 with the partner key of partner_id + api path + timestamp + access_token + shop_id · hex | sort the parameters in ASCII order and join name with value, prefix with the API name, append the body · HMAC-SHA256 with the app secret · uppercase hex | sort the query (excluding sign and access_token) and join, prefix with the path, append the body (except multipart), wrap with the app secret at both ends · HMAC-SHA256 |
+| Time | timestamp valid for 5 minutes | timestamp differs from UTC time by at most 7200 seconds (2 hours · open.lazada.com, page of the GetSellerItemLimit API, checked 2026-10-26) | timestamp must be within 5 minutes of the time the platform receives it, 10-digit Unix (sign-your-api-request, checked 2026-10-26) |
+| Shop authorizes | authorize link → `code`, single use, valid 10 minutes | OAuth 2.0 code-for-token at `auth.lazada.com` | `auth_code` valid 30 minutes, single use → `auth.tiktok-shops.com/api/v2/token/get` |
+| access token | 4 hours · the old one works for 5 more minutes after refresh | the docs example is 864,000 seconds (10 days) | default 7 days · sent in the header `x-tts-access-token` |
+| refresh token · permission lifetime | refresh 30 days · a shop can authorize for at most 365 days | example 4,320,000 seconds (50 days) · after that the shop must authorize again | equals the period the shop authorized |
+| host | choose by server location · near Singapore use `https://partner.shopeemobile.com` | `https://api.lazada.co.th/rest` | `https://open-api.tiktokglobalshop.com` |
+
+## 4 · Main endpoints
+
+| Task | Shopee (Open API v2) | Lazada | TikTok Shop (the version is in the path · use the latest version the reference page shows) |
+|---|---|---|---|
+| Orders | `get_order_list` (`/api/v2/order/get_order_list` · date range at most 15 days) · `get_order_detail` · `cancel_order` | GetOrders (`/orders/get`) · GetOrder · GetOrderItems | Get Order List (`/order/202309/orders/search`) · Get Order Detail |
+| Products | `add_item` · `get_item_list` · `get_item_base_info` · `get_model_list` | CreateProduct · GetProducts | Create Product · Search Products |
+| Stock · price | `update_stock` · `update_price` | UpdatePriceQuantity · UpdateSellableQuantity | Update Inventory · Update Price |
+| Shipping | `get_shipping_parameter` · `ship_order` · `get_tracking_number` · `create_shipping_document` | Pack · ReadyToShip · GetShipmentProvider · PrintAWB · GetOrderTrace | Ship Package · Batch Ship Packages · Get Package Shipping Document |
+
+## 5 · Webhook · rate limit · sandbox
+
+| | Shopee | Lazada | TikTok Shop |
+|---|---|---|---|
+| webhook | Push Mechanism: Order Status (code 3) · Order TrackingNo (4) · Reserved Stock Change (8) · Shop Authorization Canceled (2) · Authorization Expiry (12 · 7 days ahead) · reply 2xx · it only says the data changed; call the API to fetch the real data | Lazada Push Mechanism: trade order · reverse order (return · refund) · the callback must be HTTPS with an Organization Validation (OV) or Extended Validation (EV) certificate · Domain Validation (DV) level cannot be used | ORDER_STATUS_CHANGE · PACKAGE_UPDATE · PRODUCT_STATUS_CHANGE · SELLER_DEAUTHORIZATION · UPCOMING_AUTHORIZATION_EXPIRATION (30 days ahead, then every day) |
+| verify the webhook | header `Authorization` = hex HMAC-SHA256 of the URL followed by `\|` then the body, with the partner key | header `Authorization` = hex HMAC-SHA256 of app_key + body with the app secret | header `Authorization` = lowercase hex HMAC-SHA256 of app_key + raw body with the app secret · de-duplicate with `tts_notification_id` |
+| rate limit | no number found on developer-guide pages 12 · 16 and the FAQ opened 2026-10-26 (ยังไม่ได้ตรวจ · ask the Shopee team or test in the sandbox) | no overall cap · GetSellerItemLimit states 10 qps per shop · the GetOrders page gives no number · the push docs warn that calling GetOrders too often gets throttled | queries per second (QPS) adjusts dynamically with the number of authorized shops and the endpoint's load · no fixed overall value (rate-limits, checked 2026-10-26) · suggested starting point per app × shop: heavy writes 0.2–1 per second · normal writes 1–3 · reads 3–10 · light reads 5–20 · watch for 429 and 36009002 |
+| sandbox | Sandbox V2 `https://openplatform.sandbox.test-stable.shopee.sg/` · can create test shops and orders · a test partner_id works only in the sandbox | borrow a test account · test orders are cash on delivery (COD) · 10 cases/day/app key · the live system means real shop data | Development Shops: Core Function (no real payment · advance order status with a tool) · Full Function (real payment at a low price) |
+
+## 6 · LINE and PromptPay
+
+- **LINE SHOPPING / MyShop is still open** (lineshoppingseller.com · open a shop free through a LINE Official Account) · the LINE SHOPPING API is open to platform partners only, and no public docs were found → a shop connects through a partner on the Partners page (about 20 in total, such as ZORT · BigSeller · BentoWeb · PEAK)
+- **LINE Pay Thailand** uses the name "LINE Pay" (pay-th.line.me · a merchant applies and waits for review · accepts online payment through an API) · the technical help link goes to developers-pay.line.me: Online API v3 (`/v3/payments/request` · `confirm` · `refund`) · headers `X-LINE-ChannelId` · `X-LINE-Authorization-Nonce` · `X-LINE-Authorization` (HMAC-SHA256) · sandbox `sandbox-api-pay.line.me`
+- The LINE Pay docs do not name Thailand, and the latest change log (Nov 2025) belongs to Taiwan · LINE Pay Japan has closed → confirm with LINE Pay Thailand before connecting directly (รอยืนยัน) · the easier way is to accept through a payment gateway (`fintech-payments`)
+- PromptPay QR on the payment page → `e-commerce:promptpay-qr` (if installed)
+
+## 7 · Back-office systems Thai sellers use instead of building their own
+
+| System | From the vendor's website |
+|---|---|
+| ZORT | order and stock management system for every channel · has an API at `https://open-api.zortout.com/v4` (headers `storename` · `apikey` · `apisecret` · syncs products, purchase orders, orders) |
+| BentoWeb | all-in-one e-commerce system · connects Lazada · Shopee · LINE Shopping · TikTok Shop · sends product, stock and order data into an ERP through an API |
+| BigSeller | back-office system for products, orders, stock · has a free tier · connects more than 16 platforms such as Shopee · Lazada · TikTok Shop |
+
+## 8 · Rules that apply to every provider
+
+- A webhook is not the single source of truth → also poll to reconcile on a schedule (TikTok says so directly · Shopee says to call the API to fetch the real data)
+- Verify the webhook signature before doing anything · reply 2xx at once, then continue the work in a queue (`background-jobs`)
+- Prevent duplicate work with the notification id or order id (`principle-safe-to-rerun`)
+- Store tokens per shop · refresh before they expire · warn the shop before the permission expires (Shopee 365 days · Lazada refresh 50 days · TikTok notifies 30 days ahead)
+- Prevent overselling with reservation per [`inventory-management.md`](inventory-management.md) · keep the partner key and app secret outside the code (`config-and-secrets`)
+
+## Sources
+
+| Topic | URL (opened and checked 2026-10-23) |
+|---|---|
+| Shopee sign-up · Thai criteria · ISV | https://open.shopee.com/developer-guide/12 |
+| Shopee host · signature · token | https://open.shopee.com/developer-guide/16 · https://open.shopee.com/developer-guide/20 |
+| Shopee push · sandbox · endpoint | https://open.shopee.com/developer-guide/18 · https://open.shopee.com/developer-guide/644 · https://open.shopee.com/documents/v2/v2.order.get_order_list?module=94&type=1 (the API list in the side bar) |
+| Lazada signature · host · roles | https://open.lazada.com/apps/doc/doc?nodeId=10450&docId=108068 · ...docId=108065 · ...docId=108001 |
+| Lazada shop permission · testing · push | ...nodeId=10777&docId=108260 · ...docId=121061 · ...nodeId=29524&docId=120168 · https://open.lazada.com/apps/doc/api?path=%2Forders%2Fget |
+| TikTok Shop types · sign-up · token | https://partner.tiktokshop.com/docv2/page/tts-developer-types · .../developer-onboarding · .../authorization-overview-202407 |
+| TikTok Shop signature · host · version · rate limit | .../sign-your-api-request · .../methods-and-endpoints · .../api-versioning · .../rate-limits · .../regions-and-languages |
+| TikTok Shop webhook · sandbox · endpoint | .../tts-webhooks-overview · .../seller-center-development-shops · .../get-order-list-202309 |
+| LINE SHOPPING · partners | https://lineshoppingseller.com/ · https://lineshoppingseller.com/new-features/partner-api |
+| LINE Pay | https://pay-th.line.me/portal/th/main · .../business/payment-service · https://developers-pay.line.me/online-api-v3 · https://developers-pay.line.me/api-change-log |
+| ZORT · BentoWeb · BigSeller | https://zortout.com/ · https://developers.zortout.com/ · https://www.bentoweb.com/th · https://www.bigseller.com/th_TH/index.htm |

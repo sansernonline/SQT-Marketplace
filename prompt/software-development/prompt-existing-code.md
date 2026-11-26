@@ -37,7 +37,7 @@
 
 ## 1. ย้อนสร้างเอกสารจากโค้ดที่มีอยู่ (Reverse Spec)
 
-agent `solution-architect` + `system-analyst` · skill `legacy-spec-recovery` · `architecture-patterns` · `software-diagrams` · `database-design` · `prior-art-review` · `polished-document-style`
+agent `solution-architect` + `system-analyst` · skill `legacy-spec-recovery` · `architecture-patterns` · `software-diagrams` · `database-design` · `research-with-sources/prior-art-review` · `design-gate/polished-document-style`
 **ผลลัพธ์:** ไฟล์ใน `docs/as-is/` — **อ่านโค้ดอย่างเดียว ห้ามแก้โค้ด** · รัน test และเปิดแอปบนเครื่องได้ตามกฎแอปที่มีอยู่แล้วข้างบน (แทน rule 4 ของ `legacy-spec-recovery`) · ทุกข้อความในเอกสารคือ "สิ่งที่โค้ดทำ" ไม่ใช่ "สิ่งที่ควรทำ"
 
 ### ขอบเขต (ผู้ใช้กรอก)
@@ -78,7 +78,7 @@ agent `solution-architect` + `system-analyst` · skill `legacy-spec-recovery` ·
 
 ## 2. SRS ฉบับส่งมอบจากสภาพปัจจุบัน
 
-agent `business-analyst` + `system-analyst` · skill `srs-writing` · `polished-document-style`
+agent `business-analyst` + `system-analyst` · skill `srs-writing` · `design-gate/polished-document-style`
 **ต้องมีก่อน:** `docs/as-is/features.md` จากฉบับ 1
 **ผลลัพธ์:** `docs/srs.md` โครงตาม skill `srs-writing` (หัวข้อเดียวกับ `prompt-new-project.md` ฉบับ 3) — **ไม่แก้โค้ด · ไม่แก้ข้อความเดิมใน `docs/as-is/`** (เพิ่มแถวใหม่ใน `findings.md` ได้ ใช้กับฉบับ 3–5 ด้วย)
 
@@ -99,7 +99,7 @@ agent `business-analyst` + `system-analyst` · skill `srs-writing` · `polished-
 
 ## 3. FSD ต่อโมดูลจากสภาพปัจจุบัน
 
-agent `system-analyst` · skill `fsd-writing` · `polished-document-style` · `e2e-testing-patterns` (ถ่ายภาพหน้าจอ)
+agent `system-analyst` · skill `fsd-writing` · `design-gate/polished-document-style` · `e2e-testing-patterns` (ถ่ายภาพหน้าจอ)
 **ต้องมีก่อน:** `docs/srs.md` จากฉบับ 2 · แอปที่เปิดได้ (ถ้าจะใส่ภาพหน้าจอ)
 **ผลลัพธ์:** `docs/fsd-<โมดูล>.md` หัวข้อตาม skill `fsd-writing` (เดียวกับ `prompt-new-project.md` ฉบับ 8) — **ไม่แก้โค้ด** · ไม่มี `mockup/` → ใช้ภาพหน้าจอจริงใน `docs/figures/fsd-<โมดูล>/` · ไม่มี `docs/architecture.md` → ใช้ `docs/as-is/overview.md`
 
@@ -116,7 +116,7 @@ agent `system-analyst` · skill `fsd-writing` · `polished-document-style` · `e
 
 ## 4. เอกสารเชิงเทคนิค (เลือกหนึ่งชนิดต่อครั้ง)
 
-agent `technical-writer` หรือ `system-analyst` · skill `polished-document-style` · `software-diagrams` · `api-conventions` (API-SPEC) · `database-design` (DATA-DICTIONARY)
+agent `technical-writer` หรือ `system-analyst` · skill `design-gate/polished-document-style` · `software-diagrams` · `api-conventions` (API-SPEC) · `database-design` (DATA-DICTIONARY)
 **ต้องมีก่อน:** ไฟล์ที่เกี่ยวใน `docs/as-is/` จากฉบับ 1
 **ผลลัพธ์:** หัวข้อและที่เก็บไฟล์ตาม `prompt-new-project.md` ฉบับ 10 (`docs/API-SPEC.md` · `docs/DATA-DICTIONARY.md`) — **ไม่แก้โค้ด**
 

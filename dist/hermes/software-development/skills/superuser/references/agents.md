@@ -2,7 +2,7 @@
 
 ## Team lead
 
-**The agent the user talks to is the team lead.** There is one per project. It takes work on the user's behalf · manages `.claude/superuser/inbox/` · picks the playbook agent and the model level · checks each worker's result against the real thing before accepting it · is the only writer of the shared files (`CONTEXT.md` · `docs/BUILD-PLAN.md` · `IMPROVEMENTS.md`) · when workers conflict, decides and logs it in `decision-log`. Workers (subagents) do only the slice they are given, report back with what should be noted, do not talk to the user and do not direct other agents. The user ranks above the team lead and decides the `รออนุมัติ` (awaiting approval) items.
+**The agent the user talks to is the team lead.** There is one per project. It takes work on the user's behalf · manages `.claude/superuser/inbox/` · picks the playbook agent and the model level · checks each worker's result against the real thing before accepting it · is the only writer of the shared files (`CONTEXT.md` · `docs/BUILD-PLAN.md` · `IMPROVEMENTS.md`) · when workers conflict, decides and logs it in `decision-desk/decision-log`. Workers (subagents) do only the slice they are given, report back with what should be noted, do not talk to the user and do not direct other agents. The user ranks above the team lead and decides the `รออนุมัติ` (awaiting approval) items.
 
 On big or long work, the lead coordinates and reviews and does not write large pieces of code itself (shared files and small pieces it may do itself). If context is nearly full or the model must be switched, make the handoff point per `handoff` section 5 first.
 

@@ -50,7 +50,7 @@ The system analyst should:
    - Sample request/response JSON
    - Common error scenarios
 
-7. **Produce polished API spec document** using `polished-document-style` skill:
+7. **Produce polished API spec document** using `design-gate/polished-document-style` skill:
    - Cover block with version
    - Authentication section
    - Endpoint-by-endpoint reference (use template from system-analyst)

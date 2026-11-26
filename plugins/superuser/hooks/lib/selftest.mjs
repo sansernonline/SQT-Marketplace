@@ -25,7 +25,7 @@ export function extraGates(env) {
   mkdirSync(join(proj, "clean"), { recursive: true });
   writeFileSync(envOk, `STRIPE_TOKEN=${GH}\n`); writeFileSync(envClean, "PORT=3000\n");
   const router = readJson(join(HERE, "skill-router.json"), {});
-  const inst = { full: new Set(["software-development:stack-python", "superuser:simplify"]), bare: new Set(["stack-python", "simplify", "commit-log", "human-writing"]) };
+  const inst = { full: new Set(["software-development:stack-python", "superuser:ground-rules"]), bare: new Set(["stack-python", "ground-rules", "workspace-rules", "human-writing"]) };
   const state = (o) => ({ lastCodeEdit: -1, lastTest: -1, edited: [], lastText: "", usedSuperuser: false, ...o });
   const T = (...blocks) => JSON.stringify({ message: { role: "assistant", content: blocks } });
   const editJs = T({ type: "tool_use", name: "Edit", input: { file_path: "/p/src/a.mjs", new_string: "x" } });
@@ -97,24 +97,24 @@ export function extraGates(env) {
       const c = toolRoute({ ...ipc, tool_input: { command: "git commit -m x" }, session_id: `t4-${process.pid}` }, router, { inst, sessDir: sess });
       const im = toolRoute({ ...ipc, tool_name: "Write", tool_input: { file_path: "/p/m.txt", content: "from fastapi import FastAPI" }, session_id: `t5-${process.pid}` }, router, { inst, sessDir: sess });
       const miss = toolRoute({ ...ipc, tool_input: { command: "kubectl get pods" }, session_id: `t6-${process.pid}` }, router, { inst, sessDir: sess });
-      return /commit-log/.test(c) && /stack-python/.test(im) && /ยังไม่ได้ติดตั้ง/.test(miss) && /ไม่ติดตั้งเอง/.test(miss);
+      return /workspace-rules/.test(c) && /stack-python/.test(im) && /ยังไม่ได้ติดตั้ง/.test(miss) && /ไม่ติดตั้งเอง/.test(miss);
     }],
     ["ตัวบอกตามเครื่องมือ: skill ทุกชื่อใน byTool และ scored มีจริงใน plugins/", [], true, () => {
       const root = join(HERE, "..", ".."), names = new Set();
       for (const r of [...(router.byTool?.rules ?? []), ...(router.scored ?? [])]) for (const s of r.skills ?? [r.skill]) names.add(s);
       return [...names].every((s) => s.includes(":") ? existsSync(join(root, s.split(":")[0], "skills", s.split(":")[1], "SKILL.md")) : skillExists(root, s));
     }],
-    ["คำพ้องรูป: simplify → superuser:simplify · ชื่ออื่นไม่เปลี่ยน · เรียกชื่อเปล่าเตือนครั้งเดียว", [], true, () => {
-      const w = () => homonymWarn({ tool_name: "Skill", tool_input: { skill: "simplify" }, session_id: `h-${process.pid}` }, router, sess);
-      return fixHomonyms(["simplify", "lazy-coding"], router).join() === "superuser:simplify,lazy-coding" && /superuser:simplify/.test(w()) && w() === "" && !homonymWarn({ tool_name: "Skill", tool_input: { skill: "superuser:simplify" }, session_id: "h2" }, router, sess);
+    ["คำพ้องรูป: simplify → superuser:ground-rules · ชื่ออื่นไม่เปลี่ยน · เรียกชื่อเปล่าเตือนครั้งเดียว", [], true, () => {
+      const w = () => homonymWarn({ tool_name: "Skill", tool_input: { skill: "ground-rules" }, session_id: `h-${process.pid}` }, router, sess);
+      return fixHomonyms(["ground-rules", "lazy-coding"], router).join() === "superuser:ground-rules,lazy-coding" && /superuser:ground-rules/.test(w()) && w() === "" && !homonymWarn({ tool_name: "Skill", tool_input: { skill: "superuser:ground-rules" }, session_id: "h2" }, router, sess);
     }],
     ["เดาชื่อ skill: stack-pyton → stack-python · ชื่อที่มี · ชื่อไกลมาก → เงียบ", [], true, () => /stack-python/.test(suggestSkill("stack-pyton", inst)) && suggestSkill("stack-python", inst) === "" && suggestSkill("zzzzzzzz", inst) === ""],
     ["ชื่อ skill: prefix ผิด plugin → เตือนพร้อมชื่อถูก · plugin ที่สแกนไม่เจอ (anthropic-skills) → เงียบ · ชื่อสั้นแปลงเป็นชื่อเต็ม", [], true, () =>
       /software-development:stack-python/.test(suggestSkill("superuser:stack-python", inst)) && suggestSkill("anthropic-skills:pdf", inst) === ""
-      && qualify("stack-python", inst) === "software-development:stack-python" && qualify("commit-log", inst) === "commit-log" && qualify("superuser:simplify", inst) === "superuser:simplify"
+      && qualify("stack-python", inst) === "software-development:stack-python" && qualify("workspace-rules", inst) === "workspace-rules" && qualify("superuser:ground-rules", inst) === "superuser:ground-rules"
       && qualify("x", null) === "x" && qualify("dup", { full: new Set(["a:dup", "superuser:dup"]), bare: new Set(["dup"]) }) === "superuser:dup"
       && qualify("deck", { full: new Set(["old-co:deck", "software-development:deck"]), bare: new Set(["deck"]), enabled: new Set(["software-development"]) }) === "software-development:deck"],
-    ["router.routeSkills: ชื่อ simplify ที่หลุดมาถูกแก้เป็นชื่อเต็ม", [], true, () => env.routeSkills("เขียนสคริปต์ python อ่านไฟล์ csv", router).every((s) => s !== "simplify")],
+    ["router.routeSkills: ชื่อ simplify ที่หลุดมาถูกแก้เป็นชื่อเต็ม", [], true, () => env.routeSkills("เขียนสคริปต์ python อ่านไฟล์ csv", router).every((s) => s !== "ground-rules")],
     ["เล่น log จริง: นับ prompt ที่ router ไม่ตรง", [], true, () => {
       const d = join(base, "replay", "log", "2026-11-10"); mkdirSync(d, { recursive: true });
       writeFileSync(join(d, "main.jsonl"), [{ event: "UserPromptSubmit", prompt: "เขียนอีเมลถึงลูกค้าเรื่องใบเสนอราคา" }, { event: "UserPromptSubmit", prompt: "zzzz qqqq wwww eeee" }, { event: "PostToolUse" }].map((x) => JSON.stringify(x)).join("\n"));

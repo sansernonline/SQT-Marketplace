@@ -1,1060 +1,1109 @@
-# skill: stack-python
+# skill: load-testing
 
-Use when writing or testing Python code
+Use when checking how many users a system holds
 
-# stack-python — Python that is easy to read, correctly typed, and safe to rerun
+# load-testing — load tests with a goal, a pass threshold and permission
 
-## Use when
-- Writing, changing or testing Python (scripts · FastAPI · Django · pandas · pytest) in any repo.
+Sample script [`assets/load-test.js`](assets/load-test.js) · sample workflow [`assets/k6-smoke.yml`](assets/k6-smoke.yml) · tool facts checked 2026-10-28, links in [`sources`](references/sources.md)
 
-Not for: writing less → `lazy-coding` · naming → `readable-code` · logging → `logging-standards` · catching errors → `error-handling-patterns` · test framework choice → `testing-standards` · LLM calls → `llm-engineering` · schema and migrations → `database-design` · background jobs → `background-jobs`.
-
-## Steps
-1. Find what the repo uses and use that; never mix tools (for example no `uv.lock` in a poetry repo).
-
-   | File found | Install | Run a command |
-   |---|---|---|
-   | `uv.lock` | `uv sync` | `uv run <cmd>` |
-   | `poetry.lock` | `poetry install` | `poetry run <cmd>` |
-   | `pdm.lock` | `pdm install` | `pdm run <cmd>` |
-   | `requirements*.txt` only | `python -m venv .venv` then `pip install -r requirements.txt` | Activate `.venv` first |
-   | Nothing (new project) | `uv init` then `uv add` | `uv run <cmd>` |
-
-   Always use a virtual environment, never `pip install` into the system Python. Read `requires-python` in `pyproject.toml` and use no newer syntax. Versions (checked 2026-10-14 · https://devguide.python.org/versions/): newest 3.15 · 3.14 bug fixes · 3.11–3.13 security only · 3.10 end of life · a new project starts at 3.14 or 3.15 if its libraries support it; check the page again before relying on this.
-2. Write code with these patterns:
-   - Type hints on every function and method called from outside the file, using `list[str]` · `X | None` (no `List` · `Optional` in new code).
-   - Inside, `@dataclass(frozen=True)`; at the system edge, pydantic; never a bare `dict` across modules.
-   - `pathlib.Path` (not `+ "/"`) · f-strings (no `%` or `.format()` in new code) · `with ...:` for files, locks, connections.
-   - Logging: `log.info("ส่งแล้ว order_id=%s", oid)`, never an f-string in a log call.
-   - Default value `None`, then build inside the function (never `def f(items=[])`).
-   - Thai text files: `open(p, encoding="utf-8")` / `p.read_text(encoding="utf-8")`; Windows otherwise reads cp874 or cp1252.
-   - Scripts: logic in functions, `if __name__ == "__main__": raise SystemExit(main())`; no code that runs at import.
-   - CLI: what the repo uses; otherwise `argparse` before typer; never parse `sys.argv` yourself.
-   - Money: `int` satang or `Decimal` from a string, never float; datetimes timezone-aware (`datetime.now(timezone.utc)`, show with `ZoneInfo("Asia/Bangkok")`, never `utcnow()`).
-3. FastAPI or Django: pydantic at the edge (never a raw `request.json()` into a service) · `Depends` + `dependency_overrides` for DB session, clients, clock · `async def` only if the whole chain is async, otherwise plain `def` · 1 DB session per request via a `yield` dependency · Django: `select_related` / `prefetch_related` with a query-count test, and read each `makemigrations` file before commit. Details and code: [`references/web-and-data.md`](references/web-and-data.md).
-4. pandas or numpy: `df.loc[mask, "col"] = x` (pandas 3.x Copy-on-Write), whole-column operations before `apply`, Thai CSV `utf-8-sig` then `cp874` with codes as `str`, seeded `np.random.default_rng(42)`. More: [`references/web-and-data.md`](references/web-and-data.md).
-5. Run the routine commands (prefix with `uv run` / `poetry run` per the repo's tool):
-   ```bash
-   ruff check .                      # lint
-   ruff format --check .             # รูปแบบโค้ด · แก้ด้วย ruff format .
-   pyright                           # หรือ mypy . · ดูว่า repo ตั้งตัวไหนใน pyproject.toml
-   pytest -q 2>&1 | tail -40         # ทั้งชุด · ดูแค่ท้ายผล (สรุปและ test ที่ล้ม)
-   pytest -q tests/test_order.py::test_refund_over_limit   # test เดียวด้วย node id
-   pytest -q -k "refund and not slow"                      # เลือกตามชื่อ
-   ```
-   Type checker: `[tool.pyright]` or `pyrightconfig.json` → pyright; `[tool.mypy]` or `mypy.ini` → mypy; neither → ask once; Astral's ty only if the repo already set it up. If the repo uses black · isort · flake8, keep them; do not move to ruff in the same task.
-6. Tests: for new logic and bugs write the failing test first, then fix. `tmp_path` for files, `monkeypatch.setenv` for env, pass the clock in as a parameter (else `time-machine`; keep `freezegun` if the repo has it), `respx` / `responses` for HTTP (no real network), `testcontainers` of the production database type (not SQLite for Postgres). Setup and examples: [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#python--pytest).
-7. Security (principles in `principle-secure-by-default`): lock and commit dependencies; scan with `pip-audit`; check a new package's exact PyPI name before adding; SQL by parameters, never an f-string; resolve user file names and check `.is_relative_to(base.resolve())`; secrets from the environment; `shell=True`, `pickle.load` of outside data and `yaml.load` are forbidden. Add dependencies only with `uv add` in a uv repo. Full list and the traps table: [`references/traps-and-security.md`](references/traps-and-security.md).
-
-## Check before done
-- [ ] `ruff check` and `ruff format --check` (or the repo's formatter) pass.
-- [ ] The repo's type checker gives 0 errors in the files you changed.
-- [ ] `pytest -q` is green for the whole suite (long output → `> _to_delete/test.txt 2>&1` then `tail -20`).
-- [ ] Every new behavior has a test that was red before the fix.
-- [ ] No blocking I/O (`requests` · `time.sleep` · sync driver) inside `async def`.
-- [ ] Every text-file open gives `encoding="utf-8"`; stored datetimes have a timezone.
-- [ ] Added dependencies are in the lock file and pass `pip-audit`.
-- [ ] Confirm it really works before saying done → `principle-prove-it-works`; before sending, `security-gate`.
-
-## References
-- [`references/web-and-data.md`](references/web-and-data.md) — open for FastAPI, Django, pandas, numpy, torch, notebooks
-- [`references/traps-and-security.md`](references/traps-and-security.md) — open when debugging a strange failure, writing tests, or reviewing security
-
-
-## reference: traps-and-security.md
-
-# Common traps, tests and security details · stack-python
-
-Open when debugging a strange Python failure, writing tests, or reviewing a diff for security.
-
-## Common traps
-
-| Trap | Symptom | Fix |
-|---|---|---|
-| datetime without timezone | Time is off by 7 hours, or comparing gives a `TypeError` | Create with `datetime.now(timezone.utc)` (3.11+ can use `datetime.UTC`), store as UTC, display with `ZoneInfo("Asia/Bangkok")`, and never use `utcnow()` |
-| Money as float | `0.1 + 0.2 != 0.3` and the total is short by 1 satang | Use `int` satang, or `Decimal("0.10")` from a string |
-| Closure in a loop | Every callback gets the last value of the loop | Bind the value at creation `lambda i=i: ...` or `functools.partial` |
-| A broad `except Exception:` | Real errors are swallowed | Catch only known types, per `error-handling-patterns` |
-| Circular imports | `ImportError` of the partially initialized kind | Move shared things into a third module, and put imports used only for types under `if TYPE_CHECKING:` |
-| CPU-heavy work in threads | Using several threads does not speed it up, because of the Global Interpreter Lock (GIL) | Use `ProcessPoolExecutor`; threads are for I/O waiting |
-| `subprocess(..., shell=True)` | User input becomes a shell command | Pass a list `["git", "log", ref]`, add `check=True` and set a `timeout` |
-| `pickle.load` of outside data | Runs someone else's code the moment it loads | Use JSON or parquet; for models use `safetensors`; for torch add `weights_only=True` |
-| `yaml.load` | Builds any object from the file | `yaml.safe_load` |
-| The repo uses `uv` but packages are added with `uv pip install` or by hand-editing `pyproject.toml` | `uv.lock` is not updated, other machines run `uv sync` and lack the package | Only `uv add <pkg>` / `uv remove <pkg>` · dev things go in with `uv add --group dev` (`[dependency-groups]`) · run everything through `uv run`, do not activate the venv yourself (idea from trailofbits `modern-python` · CC-BY-SA, rewritten) |
-| A single-file script with a separate `requirements.txt` | The runner forgets to install · versions do not match | Put the dependencies in the file header in PEP 723 form (`# /// script` … `# dependencies = ["httpx"]` … `# ///`), then `uv run script.py` builds the env itself |
-| Blocking inside `async def` | The whole server stalls at the pace of the slowest request | See [web-and-data.md](web-and-data.md), "Web" |
-
-## Tests
-
-For pytest setup · fixtures · `parametrize` and examples, see [`testing-standards/references/per-stack.md`](../../testing-standards/references/per-stack.md#python--pytest); this section keeps only Python-specific traps.
-
-- Temporary files use `tmp_path`; never write into the repo's folders · environment values use `monkeypatch.setenv`
-- Time: pass the clock into the function as a parameter first; if you cannot change it, use `time-machine`, but if the repo already uses `freezegun`, keep using it
-- External HTTP: httpx uses `respx` · requests uses `responses` · never hit the real network in a unit test
-- For a real database, use `testcontainers` of the same kind as production; do not use SQLite in place of Postgres
-- For new logic and bugs, write a test that fails (red) first, then fix until it passes (green)
-- Look at coverage only for changed lines: `pytest --cov --cov-report=term-missing`, then go through the lines in the diff that did not run
-
-## Python-specific security
-
-The 10 principles are in `principle-secure-by-default`; this is how to do them in Python.
-
-- Always lock dependencies (`uv.lock` · `poetry.lock` · `pip-compile --generate-hashes`) and commit the lock file
-- Vulnerability scanning: `pip-audit` (works with every tool); uv has `uv audit` but it is still a preview (the version that first has it (รอยืนยัน) (pending confirmation) · source: https://github.com/astral-sh/uv/blob/main/CHANGELOG.md · checked 22 Oct 2569 BE), so it may be used, but Continuous Integration (CI) still relies on `pip-audit`
-- Before `uv add` or `pip install` of a new package, spell the name exactly as on its PyPI page, check the maintainers and the latest release date, and beware of look-alike names (`reqeusts` · `python-dateutil` versus `dateutil`)
-- SQL passes values through parameters: `cur.execute("... WHERE id = %s", (oid,))`; with SQLAlchemy use `text(...)` with `:name`, and never an f-string
-- File names from users: `(base / name).resolve()` then check `.is_relative_to(base.resolve())`; for uploads see `file-upload-and-storage`
-- Secrets are read from the environment (`os.environ["KEY"]` or pydantic-settings) and checked at startup; keep `.env` in `.gitignore` (see `config-and-secrets`)
-- Django production: `DEBUG = False` · `ALLOWED_HOSTS` with real names · `SECRET_KEY` from the environment · run `python manage.py check --deploy` before release
-
-
-## reference: web-and-data.md
-
-# Web (FastAPI, Django) and data/AI details · stack-python
-
-Open when the task touches FastAPI · Django · pandas · numpy · torch · notebooks.
-
-## Web: FastAPI and Django
-
-- Data in and out goes through pydantic models at the edge, while inside you use domain types; never pass a raw `request.json()` into a service
-- FastAPI: things that must change during tests (DB session · external client · clock) are taken through `Depends` and swapped with `app.dependency_overrides`
-- `async def` only when the whole call chain is async (httpx `AsyncClient` · an async DB driver); if you use a blocking library (`requests` · `time.sleep` · a sync driver), use a plain `def` so FastAPI runs it in a threadpool, or wrap it with `asyncio.to_thread`
-- 1 DB session per request through a dependency that `yield`s; never keep a session at module level
-- Django Object-Relational Mapping (ORM): if you loop and touch a FK, use `select_related`; if you touch many-to-many or a reverse FK, use `prefetch_related`, then check the query count in tests with `assertNumQueries` or `django_assert_num_queries`
-- migration: read the file `makemigrations` creates every time before commit; if you drop a column or change a type on a big table, split it into several steps per `database-design`
-- For health endpoints · timeouts · the shape of errors sent out, see `web-service-essentials` and `api-conventions`
-
-```python
-def get_db() -> Iterator[Session]:
-    with SessionLocal() as session:
-        yield session
-
-@app.post("/refunds", status_code=201)
-def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
-    return refund_service.create(db, body.to_domain())
-```
-
-## Data and AI
-
-| Topic | Do this |
-|---|---|
-| Changing values in a DataFrame | Use `df.loc[mask, "col"] = x`, because pandas 3.x turns Copy-on-Write on by default, so `df["col"][mask] = x` does not change `df` at all |
-| Speed | Use whole-column operations (`df["a"] * df["b"]` · `np.where`) before `apply`; use `iterrows` only when there is no other way |
-| Money | Store as satang of type `int64` or `Decimal`; never use float, and round once at display time |
-| Thai CSV | Try `utf-8-sig` first (Excel adds a BOM); if that fails, try `cp874` (TIS-620), and give the `dtype` of codes that start with 0 as `str` |
-| Reproducible results | `rng = np.random.default_rng(42)` passed along as a parameter; also set the seeds of torch and `random`, and record the seed in the output |
-| notebook | Fine for trying ideas, but move code you will reuse into a module with tests; leave the notebook only calling functions and drawing charts |
-| Large files | Read in parts (`chunksize`) or use parquet instead of CSV when you control the format |
-
-- For LLM calls · prompts · RAG · evaluation, see `llm-engineering`
-- For importing or exporting Excel and Buddhist Era years, see `data-import-export`
-
-
----
-
-# skill: stack-sql
-
-Use when writing or reviewing SQL queries
-
-# stack · SQL — write queries that are correct, fast, and change data safely
-
-> **The one rule:** a query that has never run against a realistic amount of data is not finished
+> **One rule:** no pass threshold written before the run = no test result, only a graph · and never load a system that is not ours, or production, without a named person's written approval.
 
 ## Use when
-- Writing, reviewing or tuning SQL (SQL Server · PostgreSQL · MySQL), or changing data with a script.
 
-Not for: table design, naming, data types, expand-and-contract migrations → `database-design` · Excel/CSV → `data-import-export` · Thai dates and sorting in the app → `i18n-and-locale`.
+- Before launching a system or before a campaign that brings many people at once (sale · registration opening · results announcement)
+- Someone asks "ระบบรับได้กี่คน" · "ตอนคนเยอะจะช้าไหม" · "เพิ่มเครื่องแล้วดีขึ้นจริงไหม" (how many users can it hold · will it be slow when busy · did adding machines really help)
+- A postmortem says the incident happened because load was never tested (`postmortem-template` section 5)
+- Setting up a speed smoke test in CI that fails when slower than the threshold
+- The user says load test · stress test · spike · soak · k6 · Locust · JMeter · p95 · ยิงโหลด · ทดสอบประสิทธิภาพ
 
-## Steps
-1. **Know the database first.** Engine and version: `SELECT @@VERSION` (SQL Server; also `SERVERPROPERTY('Edition')`, many features are Enterprise-only) · `SELECT version()` (PostgreSQL) · `SELECT VERSION()` (MySQL). Find what runs migrations (`Migrations/` EF Core · `db/migration/V1__*.sql` Flyway · Liquibase `changelog` · `alembic/` · `prisma/migrations/` · `sql/`) and use that tool; never add a second one or change the schema by hand. Check server collation and time zone (`SERVERPROPERTY('Collation')` · `SHOW timezone`).
-2. **Never run anything on production**; prepare the commands for a person to approve (`principle-proceed-on-reversible-work`). Use a local or sandbox database with row count close to real (100 rows hides every speed problem); if none, generate mock data so volume and value distribution are close to real.
-3. **Write correct queries:**
+Do not use when: one web page loads slowly in the browser (Lighthouse · Core Web Vitals) → [`web-quality-audit`](../web-quality-audit/SKILL.md) · the live system is slow right now and you must find where → [`observability-basics`](../observability-basics/SKILL.md) first · testing that a button click gives the right result → [`e2e-testing-patterns`](../e2e-testing-patterns/SKILL.md)
 
-   | Topic | Do this | Trap |
-   |---|---|---|
-   | Values from users | Always a parameter | String concatenation → SQL injection |
-   | Columns | Full column names | `SELECT *` pulls too much, breaks on a new column, blocks covering index |
-   | NULL | `IS NULL` · `NOT EXISTS` | `= NULL` never true · `NOT IN (subquery)` with one NULL → 0 rows |
-   | JOIN | Count rows before and after | Join the 1-to-many side then `SUM` → doubled totals; sum before the join |
-   | GROUP BY | Every non-aggregate column in it | MySQL with `ONLY_FULL_GROUP_BY` off → random value |
-   | Division | `CAST(a AS decimal(18,4)) / b`, guard `NULLIF(b, 0)` | SQL Server and PostgreSQL: `5/2 = 2`; MySQL: `2.5000` |
-   | Data types | Parameter of the same type as the column | SQL Server sends `nvarchar` against `varchar` → `CONVERT_IMPLICIT` → full scan |
-   | Date range | `>= start AND < end` | `BETWEEN '2026-01-01' AND '2026-01-31'` drops the 31st after midnight |
-   | Time zone | Store UTC, convert to Asia/Bangkok on display (SQL Server `AT TIME ZONE 'UTC' AT TIME ZONE 'SE Asia Standard Time'` · PostgreSQL `AT TIME ZONE 'Asia/Bangkok'` on `timestamptz`) | Thai time with no offset → 7 hours off when merging |
-   | Buddhist Era year | Always store Common Era (ค.ศ.), convert on display | Storing 2569 breaks age, sorting, export |
-   | Money | `decimal(19,4)` · `numeric(19,4)` | `float` · `real` → 0.1 + 0.2 ≠ 0.3 |
-   | Sorting Thai names | SQL Server `Thai_100_CI_AS` · PostgreSQL `COLLATE "th-TH-x-icu"` | General collation → leading vowels (เ แ โ ใ ไ) sort wrong silently |
+## Related skills
 
-   A Thai collation is not on every server; check before choosing (commands in [`references/snippets.md`](references/snippets.md)).
-4. **Make it fast by reading the real plan on near-real data, never guessing.** Conditions sargable (no function around an indexed column) · every index can say which query it serves · deep paging uses keyset · count N+1 from the ORM log · big UPDATE/DELETE in batches. Commands per engine, keyset example, batches, parameter sniffing: [`references/performance.md`](references/performance.md).
-5. **Change data safely.** Scripts can be rerun · back up before a big change · count rows first and check before `COMMIT` · upsert in the engine's own form · touch tables in the same order (deadlocks) · `ALTER TABLE` on a big table needs `lock_timeout`. Isolation levels, upsert, non-locking index creation, row-count checks: [`references/safe-changes.md`](references/safe-changes.md).
-6. **Avoid the usual traps** (`MERGE` without `HOLDLOCK` · triggers with business rules · cursors · `NOLOCK` → use RCSI · collation mismatch in joins · gaps in ids · partial-index candidates · bloat after big deletes): [`references/traps.md`](references/traps.md).
-7. **Test** against a real database of the production kind, never SQLite or in-memory (NULL, collation, locks differ). Fresh database every run with Testcontainers and seed script; stored procedures use tSQLt (SQL Server) or pgTAP (PostgreSQL). Check row counts and values: NULL · midnight date edges · Thai names · fractional money. Run a new migration on a production-like copy with near-real volume, time it, watch the locks. For a bug, write the failing test first (`principle-fix-root-cause`); framework → `testing-standards`.
-8. **Security.** 1 app, 1 database user with only needed permissions; never `sa` · `postgres` · `root`, and migrations run as a separate user. Dynamic SQL with user values: pass values as parameters, choose table or column names from an allowlist and quote them (`sp_executesql` · `QUOTENAME` · plpgsql `format('%I')` in [`references/snippets.md`](references/snippets.md)). Several companies in one table → consider row-level security (SQL Server `CREATE SECURITY POLICY` · PostgreSQL `CREATE POLICY`; the table owner bypasses unless `FORCE ROW LEVEL SECURITY`). Do not pull personal data columns unless used; Dynamic Data Masking is not access control (`pdpa-compliance`). Changes to important data leave a trace of who (`audit-trail`). Injection and permissions → `principle-secure-by-default`.
+- `observability-basics`: open the system's dashboards next to the k6 results (section 6).
+- `cicd-and-release` · `jenkins-pipeline`: section 7 says what runs on every PR and what runs on a schedule.
+- `test-case-template`: for a whole-release test plan, put the load test in as one row, with the thresholds from section 1.
+- `kubernetes-helm` · `infra-as-code`: if you must add machines or autoscale after the run, run again with the same script and compare with the result before.
+- `pdpa-compliance`: if test data contains names or phone numbers, use fake data. Do not pull real customer data in to load the system.
 
-## Check before done
-- [ ] Every outside value is a parameter · no `SELECT *`.
-- [ ] Checked NULL · half-open date ranges · division · parameter types match the columns.
-- [ ] Looked at the real plan on near-real data, noted logical reads or time before/after.
-- [ ] Scripts can be rerun and big data goes in batches (`principle-safe-to-rerun`).
-- [ ] Transaction + row counts checked before `COMMIT` · the way back written and a backup confirmed.
-- [ ] A test runs against the same kind of database as production.
+## 1 · Goal and pass threshold — write before opening the tool
+
+Get answers to 4 questions, then note them at the top of the script file or the test plan:
+
+| Item | Example answer | If there is no answer |
+|---|---|---|
+| Expected volume | Peak hour 50 requests per second on path `/api/orders` | Pull it from the live system's logs or metrics · for a new system, use the owner's estimate and tag it `(รอยืนยัน)` (awaiting confirmation) |
+| Paths to load | Browse products 70% · add to cart 20% · pay 10% | Load the 1–3 paths that earn the most money or cost the most first |
+| Speed threshold | The `p(95)` of response time is at most how many milliseconds | Default 500 ms for an API. **Default, not measured** (`ค่าตั้งต้น ยังไม่ได้วัด`) · adjust once there is a baseline result |
+| Error threshold | `http_req_failed` below what percent | Default 1%. **Default, not measured** (`ค่าตั้งต้น ยังไม่ได้วัด`) |
+
+- Measure with percentiles, not averages: an average hides the minority who wait a long time.
+- Turn every threshold into `thresholds` in the script (section 4). Do not keep them in the head of whoever reads the result.
+- If there is no volume figure at all, you can run smoke and baseline, but you must not conclude "it can handle it", because you do not know what it is handling it against.
+
+## 2 · Permission gate — before every run beyond smoke and every run on production
+
+Loading a system without permission can really bring it down and may be illegal. So stop here and wait for approval. Do not skip it even if the user is in a hurry.
+
+1. **Whose system is it?** · If it belongs to someone else (a partner's API · payment gateway · external SaaS · a competitor's site) → do not load it · use a mock, or a sandbox the provider opens for load testing, and read their terms first.
+2. **Environment** · Run on staging or a separate load-test environment · the k6 docs say a QA environment with machines unequal to production cannot be used to judge load capacity, only for smoke.
+3. **Production** · Needs a named approver, a time window, a peak volume, and a watcher who can stop at once · start with a low-volume smoke (the k6 docs treat it as a low-risk practice) · never create real orders, payments, emails or SMS.
+4. **Anything that causes side effects when hit** · Take payment and message-sending webhooks off the path, or point them at a mock · for an external provider that charges per call, set a spending cap first.
+5. **Record** in the script header or plan: system · environment · peak volume · time window · approver · way to stop
+
+The sample script enforces this gate in code: if `BASE_URL` or `TARGET_ENV` is missing, the script stops · if the type is not smoke, or `TARGET_ENV=production` (smoke included), and `APPROVED_BY` is missing, the script stops too.
+
+## 3 · Choose the tool
+
+| If | Use | Reason |
+|---|---|---|
+| Starting fresh · HTTP API or web · want the pass threshold to fail CI directly | **k6** (default) | Written in JavaScript · `thresholds` in the script · exits with a non-0 code when a threshold fails · AGPL-3.0 licence |
+| Team prefers Python · needs complex step sequences or its own protocol | **Locust** | Test scenarios are plain Python code · can be spread over several machines · runs headless in CI · MIT licence |
+| The organisation already has a `.jmx` plan · must load JDBC · JMS · LDAP · FTP · SOAP | **JMeter** | Wide protocol support · has a GUI to record plans · use CLI mode (headless) for real runs |
+
+- Versions seen on 2026-10-28: k6 v2.3.0 (2026-09-21), and the 1.x line still gets a security patch v1.8.2 (2026-10-12) · pin the version in CI, do not use `latest` · `setup-k6-action` without `k6-version` always gets the latest ([README](https://github.com/grafana/setup-k6-action) checked 2026-10-28)
+- Grafana Cloud k6 (runs from the cloud · stores results): price and quota `(ยังไม่ได้ตรวจ)` (not yet checked) · start with k6 on a machine or a CI runner, which is free
+- The machine that sends the load must not be the same machine as the system under load, or they fight over CPU and the result is skewed.
+
+## 4 · Test types and the script
+
+Order per the k6 docs: **smoke always first** → average-load → other types by risk · use a plain load shape (ramp up · hold · ramp down). Do not run load that goes up and down several times, because the cause is hard to find.
+
+| Type | What it asks | Virtual users (VU) and time, per the k6 docs | When |
+|---|---|---|---|
+| smoke | Is the script right? Does the system answer when few people use it? | Few · seconds to a few minutes | Before every other type · every PR in CI |
+| load (average-load) | Does normal volume pass the threshold? | Equal to production average · 5–60 minutes | Before releasing a version · as the baseline |
+| stress | What happens above normal? | Above average · 5–60 minutes | Systems at risk in heavy-use periods |
+| spike | Does it survive a sudden rush? | Very high · a few minutes | Before a campaign · flash sale |
+| soak | After long use, does memory leak or do connections hang? | Average · several hours | Systems that stay up for long periods |
+| breakpoint | Where is the ceiling? | Ramp up until it breaks | Run only a few times, always needs approval per section 2 · the sample script has no such type, write the stages yourself |
+
+The script [`assets/load-test.js`](assets/load-test.js) picks the type with `TEST_TYPE`. Every type uses the `ramping-arrival-rate` executor (it fixes the number of iterations per unit of time, so when the system slows down it still gets hit at the same rate, and you see the real symptoms) · the core is thresholds:
+
+```javascript
+thresholds: {
+  http_req_failed: [{ threshold: 'rate<0.01', abortOnFail: true, delayAbortEval: '30s' }],
+  http_req_duration: ['p(95)<500'],              // default, not measured
+  'http_req_duration{type:API}': ['p(95)<500'],  // separate threshold by tag
+},
+```
+
+- `abortOnFail` stops the run when a threshold fails midway, instead of pounding the system to the end · `delayAbortEval` waits to collect samples before judging
+- Every number in the script (rate · VU · stages) is a **default, not measured** value. Adjust per section 1.
+- Run: `k6 run -e TEST_TYPE=smoke -e TARGET_ENV=staging -e BASE_URL=https://staging.example.com assets/load-test.js > _to_delete/k6.log 2>&1; tail -40 _to_delete/k6.log` (k6 prints a long progress log for as long as the run lasts, so read only the closing summary)
+
+## 5 · Reading the result
+
+Details and worked examples are in [`reading-results`](references/reading-results.md) · in short:
+
+1. Look at the thresholds lines at the end of the report first (pass/fail), then the exit code: 0 = every threshold passed · a failed threshold usually gives 99
+2. Look at `http_req_failed` before `http_req_duration`. If errors spike, the response times you see may be fast only because errors answer fast.
+3. Look at the load-sending machine. CPU at full or too few VU = the result shows the limit of the load generator, not the system.
+4. Compare with the previous baseline using the same script, same data, same environment · change one thing at a time
+5. The report says "which threshold passed or failed, at what volume", not "the system holds 10,000 people", unless you really ran that.
+
+For a multi-stage system (for example listen to audio → chat → speak): load each stage alone first, then the whole path · the bottleneck differs per stage (an example from a teaching job, not a threshold: chat holds 4 · listening holds 32 · speaking holds 2) · whole-system speed equals the weakest stage · a queue does not make it faster, it keeps it from breaking (the extra people get slower answers instead of errors) · set the consumer's prefetch equal to the number of jobs the backend can really do at once (`rabbitmq-messaging` section 4) · if the backend dies mid-run, add a watchdog per section 8 of `rabbitmq-messaging`
+
+## 6 · Run together with monitoring
+
+The k6 result says it is slow, but not why · during the run, open the dashboards per `observability-basics` section 2 (latency · traffic · errors · saturation) for the server, database and queue · note the start and end time of the run so you can match the graphs · common bottlenecks: database connection pool · queries without an index · connections not returned (example in `postmortem-template` section 5)
+
+## 7 · Plug into CI
+
+| Run when | Type | Where |
+|---|---|---|
+| Every PR or every push | smoke · a few minutes | staging or the PR's environment |
+| Overnight or on a schedule | load · stress · spike | a separate load-test environment |
+| Before a major release | the full set chosen in section 4 · run at least 2 rounds | an environment equal to production |
+
+- The k6 docs warn that load tests take 3–15 minutes or more, so do not put them on the path that deploys automatically, and do not trust pass/fail alone until the process is stable.
+- GitHub Actions: `grafana/setup-k6-action@v1.2.2` (set `k6-version`) installs k6, then `grafana/run-k6-action@v1.5.0` runs it (pinned versions, checked 2026-10-28) · full example in [`assets/k6-smoke.yml`](assets/k6-smoke.yml) · Jenkins or other CI call `k6 run` directly
+- Do not wrap `k6 run` in a script that swallows the exit code (for example one with a trailing `echo`) · make `k6 run` the last command, or keep `$?` and `exit` with that value
+- `BASE_URL` and tokens come from CI secret variables (`config-and-secrets`), not written into the script
+
+## Check before sending
+
+1. Expected volume, paths, and the p95 and error-rate thresholds exist before the run · guessed values carry the label "ค่าตั้งต้น ยังไม่ได้วัด" (default, not measured)
+2. The system is ours · the environment is stated clearly · beyond smoke there is a named approver · production has a watcher and a way to stop
+3. No real money, email, SMS or order came from the run
+4. Thresholds are in `thresholds` · `abortOnFail` is set on the error rate
+5. smoke passed before other types · the load generator is not the same machine as the system
+6. The report states results against thresholds and the baseline at the volume really run, and does not conclude beyond what was run
+7. CI does not swallow the exit code · secrets come from secret variables · the k6 version is pinned
 
 ## References
-- [`references/performance.md`](references/performance.md) — open when reading a plan, paging, batching, parameter sniffing, bloat commands
-- [`references/safe-changes.md`](references/safe-changes.md) — open when changing data, upsert, isolation, creating an index on a live table
-- [`references/snippets.md`](references/snippets.md) — open for collation checks and dynamic-SQL examples
-- [`references/traps.md`](references/traps.md) — open when a query behaves oddly or during review
+
+- [`references/reading-results.md`](references/reading-results.md) — open to read a k6 result (section 5)
+- [`references/mcp-k6.md`](references/mcp-k6.md) — open when using the k6 MCP server
+- [`references/worked-example.md`](references/worked-example.md) — open for a flash-sale example run through sections 1 to 7
+- [`references/sources.md`](references/sources.md) — links and check date 2026-10-28 for every tool fact
 
 
-## reference: performance.md
+## reference: mcp-k6.md
 
-# Making it fast — read the plan · indexes · paging · big jobs (full version)
+# k6 MCP (grafana/mcp-k6)
 
-Read this when a query is slow or you are adding an index · the short rules are in `SKILL.md` section 3
+Extension of `load-testing` · checked 2026-10-28 from https://github.com/grafana/mcp-k6 and https://api.github.com/repos/grafana/mcp-k6/releases · not embedded in the plugin; the user installs it if wanted
 
-| engine | Command to see the real plan |
+## Status
+
+| Topic | What was seen |
 |---|---|
-| SQL Server | `SET STATISTICS IO, TIME ON;` + open the Actual Execution Plan (in SQL Server Management Studio (SSMS) press `Ctrl+M`), then look at logical reads |
-| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) SELECT ...` beware that `ANALYZE` really runs the statement; for UPDATE/DELETE wrap it in `BEGIN ... ROLLBACK` |
-| MySQL 8.0.18+ | `EXPLAIN ANALYZE SELECT ...` |
+| Maintainer | Grafana (repo `grafana/mcp-k6`) |
+| Status | The README says it is still experimental |
+| Latest version | v0.7.0 on 2026-10-05 |
+| License | The repo page is inconsistent: the sidebar says AGPL-3.0 but the README says MIT · open the LICENSE file before using it in customer work |
+| Tools | `validate_script` (runs 1 VU for 1 round) · `run_script` (real run, up to 5 minutes) · `list_sections` · `get_documentation` |
 
-What to look for in a plan: a scan of a whole big table · expected vs actual row counts far apart (stale statistics) · key lookups repeated thousands of times · a sort or hash that spills to disk
+## Cautions
 
-- **sargable** means a condition that can use an index; never wrap an indexed column in a function
-  - Wrong: `WHERE YEAR(created_at) = 2026` → right: `WHERE created_at >= '2026-01-01' AND created_at < '2027-01-01'`
-  - Wrong: `WHERE LOWER(email) = @e` → right: store email in lower case from the start, or make an index on an expression (PostgreSQL) or a computed column + index (SQL Server)
-  - Wrong: `WHERE name LIKE '%สมชาย'` cannot use an index; if you must search the middle of a word, use full-text search
-- **covering index**: put the columns the query reads in `INCLUDE (...)` (SQL Server · PostgreSQL 11+) so it need not go back to read the table; MySQL has no `INCLUDE`, so append them to the key instead
-- Every index you add must answer which query it serves, because every index makes INSERT/UPDATE slower
-- **For deep paging** use keyset instead of `OFFSET`, because `OFFSET 100000` must read and throw away 100,000 rows every time
+- `run_script` sends real requests to the targets in the script · `validate_script` also sends 1 round · the permission gate in `load-testing` section 2 applies to calls through MCP too, with no exceptions
+- Start with only `get_documentation` and `validate_script` pointed at staging · have the agent call `run_script` only when the user allows it in that round
+- HTTP mode has no built-in authentication; use it only in a trusted network · stdio on your own machine is better
 
-```sql
--- keyset: ส่งค่าแถวสุดท้ายของหน้าก่อนมาเป็น parameter
-SELECT id, created_at, total_amount
-FROM orders
-WHERE (created_at, id) < ($1, $2)   -- PostgreSQL ($1, $2) · MySQL (?, ?) · ส่งค่าแถวสุดท้ายของหน้าก่อน
-ORDER BY created_at DESC, id DESC
-LIMIT 50;
--- SQL Server: WHERE created_at < @c OR (created_at = @c AND id < @id) · ใช้ TOP (50)
+## Install (the user does it, pin the version)
+
+Claude Code via Docker (command form per the README):
+
+```bash
+claude mcp add --scope=user --transport=stdio k6 -- docker run --rm -i grafana/mcp-k6:<tag ของ v0.7.0>
 ```
 
-- **N+1 from an Object-Relational Mapper (ORM)**: a loop that loads children one row at a time → 1 screen fires 201 queries; turn on the ORM's SQL log and count, then fix with `Include` (EF Core) · `selectinload` (SQLAlchemy) · `include` (Prisma)
-- **parameter sniffing (SQL Server)**: a plan is built from the first value passed and reused with values that are distributed very differently → some customers are fast, some are 100 times slower
-  - Fixes from lightest to heaviest: SQL Server 2022+ compatibility level 160 has Parameter Sensitive Plan optimization · `OPTION (RECOMPILE)` for queries that run rarely · `OPTIMIZE FOR` · force a plan through Query Store
-  - Never fix it by clearing the plan cache of the whole server
-- **statistics**: after loading a big batch of data, run `UPDATE STATISTICS dbo.orders` or, in PostgreSQL, `ANALYZE orders`
-- **Big UPDATE/DELETE** in batches, for example 5,000 rows, because doing a million rows in one batch locks the whole table, grows the log, and takes just as long to roll back
+The Docker Hub image tag that matches v0.7.0 `(ยังไม่ได้ตรวจ)` (not yet checked) · the README uses `latest`, but open the tag page and put in a pinnable version instead · other ways: Homebrew (`brew tap grafana/grafana` then `brew install mcp-k6`) or the `.deb` `.rpm` packages from the v0.7.0 release page · running natively also needs k6 on PATH
 
-```sql
--- SQL Server: ลบทีละ 5,000 แถวจนหมด
-WHILE 1 = 1
-BEGIN
-    DELETE TOP (5000) FROM dbo.audit_logs WHERE created_at < @cutoff;
-    IF @@ROWCOUNT < 5000 BREAK;
-END
--- PostgreSQL: DELETE FROM audit_logs WHERE id IN (SELECT id FROM audit_logs WHERE created_at < $1 LIMIT 5000); วนจากแอปหรือ procedure
-```
-
-## Indexes for a small share of rows, and bloated tables (SKILL.md section 5)
-
-```sql
--- PostgreSQL · partial index: index เฉพาะแถวที่ query กรองเสมอ
-CREATE INDEX CONCURRENTLY ix_orders_pending ON orders (created_at) WHERE status = 'pending';
--- SQL Server · filtered index แบบเดียวกัน (query ต้องมี WHERE status = 'pending' ตรงตัว)
-CREATE INDEX ix_orders_pending ON dbo.orders (created_at) WHERE status = 'pending';
-
--- PostgreSQL · ตารางบวมหลังลบหรืออัปเดตก้อนใหญ่
-SELECT relname, n_live_tup, n_dead_tup, last_autovacuum
-FROM pg_stat_user_tables WHERE n_dead_tup > 10000 ORDER BY n_dead_tup DESC;
-VACUUM (VERBOSE, ANALYZE) orders;          -- ปกติ
-REINDEX INDEX CONCURRENTLY ix_orders_pending; -- index บวม
-
--- SQL Server · index แตกเป็นชิ้น
-SELECT i.name, s.avg_fragmentation_in_percent, s.page_count
-FROM sys.dm_db_index_physical_stats(DB_ID(), OBJECT_ID('dbo.orders'), NULL, NULL, 'LIMITED') s
-JOIN sys.indexes i ON i.object_id = s.object_id AND i.index_id = s.index_id
-WHERE s.page_count > 1000;
-ALTER INDEX ix_orders_pending ON dbo.orders REORGANIZE; -- < 30%
-ALTER INDEX ix_orders_pending ON dbo.orders REBUILD WITH (ONLINE = ON); -- >= 30% (Enterprise/Azure)
-```
+The k6 docs still mention the command `k6 x mcp`, which pulls the latest version automatically · to pin a version, use the standalone `mcp-k6` as above (from search results citing https://grafana.com/docs/k6/v2.3.x/set-up/configure-ai-assistant/; that page was not opened directly)
 
 
-## reference: safe-changes.md
+## reference: reading-results.md
 
-# Changing data safely — engine comparison table and examples (full version)
+# Reading k6 results and writing the report
 
-Read this when writing a data-fix script, an upsert or an ALTER TABLE · the short rules are in `SKILL.md` item 4
+Extension of `load-testing` section 5 · k6 facts checked 2026-10-28 from the pages linked at the end of the file · the interpretation is general practice, not yet tested against a real system this round
 
-| Topic | SQL Server | PostgreSQL | MySQL (InnoDB) |
+## 1 · Read in this order
+
+| Order | What to look at | Interpretation |
+|---|---|---|
+| 1 | exit code | 0 = every threshold passed · not 0 = failed · a failed threshold usually gives 99 |
+| 2 | the thresholds line at the end of the report | which thresholds passed, which failed, and the actual values |
+| 3 | `http_req_failed` | if errors spike → a fast response time may only be because errors return fast, so do not celebrate the p95 yet |
+| 4 | `http_req_duration` p95 and p99 | the range most users experience, and the tail a few users wait through · the average cannot be used to decide |
+| 5 | `checks` | whether the answers are correct, not just a status 200 |
+| 6 | warnings about not enough VUs, or rounds that did not start | the load generator could not keep up with the set rate; this run shows the limit of the generator, not the system (metric name of the dropped rounds `(ยังไม่ได้ตรวจ)` — not yet checked) |
+
+## 2 · Find where it jams
+
+Look at the system graphs for the same period as the run (`observability-basics` section 2):
+
+| Symptom in the graph | Suspect first |
+|---|---|
+| App CPU full, response time grows with it | Heavy code or too few machines · try adding machines and run again |
+| App CPU idle, but response time grows | Waiting on something outside: database connection pool · table locks · an external API |
+| Errors start at a certain load and then spike | Hit a ceiling (pool · open files · rate limit) · find the setting at that load |
+| soak: memory keeps rising and never drops | Memory leak · connections not returned |
+| Response time good at first, then worse as the data grows | Query without an index · table grown from data the run created |
+
+## 3 · Re-run so results are comparable
+
+- Same script, same starting data, same environment · clean up the data the previous run created
+- Change one thing at a time (code, or a setting, or machine size) and run against the baseline
+- The k6 docs advise running the same way at least 2 rounds before releasing a version, because each round's result varies
+
+## 4 · One-page report format
+
+```markdown
+## ผล load test · <ระบบ> · <YYYY-MM-DD>
+
+- environment: <staging-perf> · ผู้อนุมัติ: <ชื่อ> · ช่วงเวลา: <เริ่ม–จบ>
+- แบบ: <smoke · load · spike> · ปริมาณสูงสุดที่ยิงจริง: <รอบต่อวินาที>
+- k6 รุ่น: <v2.x.y> · exit code: <0 หรือ 99>
+
+| เกณฑ์ | ตั้งไว้ | ได้จริง | ผล |
 |---|---|---|---|
-| Default isolation | Lock-based READ COMMITTED. Azure SQL Database already has Read Committed Snapshot Isolation (RCSI) on | READ COMMITTED (reads from a snapshot, does not block writers) | REPEATABLE READ |
-| A rerunnable upsert | `UPDATE`, then `INSERT ... WHERE NOT EXISTS` in a transaction with `UPDLOCK, HOLDLOCK` | `INSERT ... ON CONFLICT (...) DO UPDATE` | `INSERT ... ON DUPLICATE KEY UPDATE` |
-| Create an index without locking the table | `WITH (ONLINE = ON)`, Enterprise only (including 2025) | `CREATE INDEX CONCURRENTLY`, but it cannot run inside a transaction | `ALGORITHM=INPLACE, LOCK=NONE` |
+| http_req_duration p(95) | < 500 ms | <ค่า> | ผ่าน / ไม่ผ่าน |
+| http_req_failed | < 1% | <ค่า> | ผ่าน / ไม่ผ่าน |
 
-- If readers often block writers in SQL Server, consider turning on `READ_COMMITTED_SNAPSHOT ON`. It adds load on tempdb, so test first.
-- To prevent deadlocks: every piece of code touches tables in the same order, keep transactions as short as possible, and never wait on an external API while holding a transaction.
-- Every script must be rerunnable (`principle-safe-to-rerun`): `IF NOT EXISTS` · `CREATE INDEX IF NOT EXISTS` (PostgreSQL) · `CREATE OR ALTER` (SQL Server)
-- Before a command that deletes or edits a lot of data: back up the affected tables, or confirm that the latest backup can really be restored, and write down the way back before running.
-- Count the expected rows first, then check before `COMMIT`:
-
-```sql
-BEGIN TRAN;
-UPDATE dbo.orders SET status = 'cancelled'
-WHERE status = 'pending' AND created_at < @cutoff;
-IF @@ROWCOUNT <> @expected
-BEGIN ROLLBACK; THROW 50001, 'จำนวนแถวไม่ตรงกับที่นับไว้', 1; END
-COMMIT;
--- PostgreSQL: in a DO block use GET DIAGNOSTICS n = ROW_COUNT; if it does not match → RAISE EXCEPTION
+คอขวดที่เห็น: <กราฟไหน ที่ปริมาณเท่าไร>
+ทำต่อ: <ข้อแก้ 1–3 ข้อ> · ยิงซ้ำหลังแก้: <วันที่>
 ```
 
-- `ALTER TABLE` on a big table:
-  - PostgreSQL asks for an `ACCESS EXCLUSIVE` lock and waits for long queries still running. While it waits, every new query queues behind it too, so set `SET lock_timeout = '5s'` and retry.
-  - PostgreSQL 11+ can add a column with a constant default instantly, but changing a column type rewrites the whole table.
-  - SQL Server can add a `NOT NULL` column with a default instantly only on Enterprise. Other editions must write every row.
-  - To change a type or move data, use expand-and-contract per `database-design`.
-
-
-## reference: snippets.md
-
-# Short code examples — Thai time · dynamic SQL
-
-The rules are in `SKILL.md` items 2 and 7
-
-## Convert UTC to Thai time when displaying (item 2)
-
-```sql
--- Convert UTC time to Thai time when displaying
-SELECT created_at AT TIME ZONE 'UTC' AT TIME ZONE 'SE Asia Standard Time'  -- SQL Server (Windows-style zone name)
-FROM dbo.orders;
-SELECT created_at AT TIME ZONE 'Asia/Bangkok' FROM orders;                  -- PostgreSQL (timestamptz column)
-```
-
-## Dynamic SQL that passes values as parameters (item 7)
-
-```sql
--- SQL Server
-EXEC sp_executesql N'SELECT id, name FROM dbo.customers WHERE email = @email',
-                   N'@email nvarchar(320)', @email = @input;
--- Column name: QUOTENAME(@column) after checking against an allowlist
--- PostgreSQL in plpgsql
-EXECUTE format('SELECT id, name FROM %I WHERE email = $1', tbl) USING p_email;
-```
-
-## Check whether a Thai collation exists (item 2)
-
-- PostgreSQL has `th-TH-x-icu` when the server is built with International Components for Unicode (ICU). Check with `SELECT collname FROM pg_collation WHERE collname LIKE 'th%'`
-- For MySQL, check which Thai collations exist with `SHOW COLLATION LIKE '%thai%'` before choosing
-
-
-## reference: traps.md
-
-# Common SQL traps · stack-sql
-
-Open when a query behaves oddly, or when reviewing SQL for the usual mistakes. Example commands for the last two traps are in [performance.md](performance.md).
-
-- `MERGE` (SQL Server) has several bugs, and without `HOLDLOCK` 2 sessions insert duplicates → separate `UPDATE` + `INSERT`, or `MERGE ... WITH (HOLDLOCK)` with a test
-- A trigger hides business rules and breaks on multi-row inserts → keep rules in app code; use triggers only for audit · a cursor/row-by-row loop → a set-based statement
-- `WITH (NOLOCK)` reads uncommitted data, rows go missing or repeat → turn on Read Committed Snapshot Isolation (RCSI) instead · building SQL by string concatenation → parameters
-- A collation mismatch in a join → set them equal on the column (putting `COLLATE` in the query stops it using the index)
-- Ids are not always consecutive (identity jumps · a sequence does not go back on rollback) → document numbers that must have no gaps are issued by yourself in a counter table
-- A timestamp with no time zone → PostgreSQL `timestamptz` · SQL Server `datetime2` agreed to be UTC, or `datetimeoffset`
-- A query that always filters a small share of rows (`WHERE status = 'pending'` · `deleted_at IS NULL`) but the index covers every row → the index is big and the planner does not pick it → put that condition into the index itself: PostgreSQL `CREATE INDEX ... WHERE status = 'pending'` · SQL Server filtered index `CREATE INDEX ... WHERE status = 'pending'` (the query must write the same condition for it to be used · idea from supabase/agent-skills · MIT)
-- After deleting or updating many rows, queries get slower though the plan did not change → table and index bloat (dead tuples · split pages) → in PostgreSQL look at `pg_stat_user_tables.n_dead_tup` then `VACUUM (ANALYZE)` or `REINDEX CONCURRENTLY` · in SQL Server look at `sys.dm_db_index_physical_stats` then `ALTER INDEX ... REORGANIZE` (below 30%) or `REBUILD` · check this before blaming the query
-
-
----
-
-# skill: api-conventions
-
-Use when adding API endpoints or checking API consistency
-
-# Application Programming Interface (API) conventions
-
-> **The one rule:** decide once, apply to every endpoint.
-> An API where every endpoint behaves the same, even if "not quite right in theory", is easier to use
-> than an API where each endpoint is correct in its own way, because with the latter the caller must guess again every time.
-
-## When to use this skill
-
-- Starting to design the first API of a project
-- Adding an endpoint to an existing API and wanting it to match what is there
-- Reviewing an API and feeling that its parts are not alike
-- Needing to answer "if we change it this way, will clients break?"
-
-Not for: designing all the endpoints of one feature → command `/api-design` · health check, error envelope, graceful shutdown → `web-service-essentials` · tables and relations → `database-design`
-
-**A template of the conventions document that you can copy and use** → `assets/API-CONVENTIONS.md`
-
----
-
-## 1 · The conventions document must exist
-
-Put the file `docs/API-CONVENTIONS.md` in place (the template is at `assets/API-CONVENTIONS.md`).
-Write every decision made from this page into that file, with the date and a short reason.
-
----
-
-## 2 · Naming URLs
-
-```
-GET    /v1/orders                 list
-POST   /v1/orders                 create
-GET    /v1/orders/{id}            single item
-PATCH  /v1/orders/{id}            partial update
-PUT    /v1/orders/{id}            replace the whole item
-DELETE /v1/orders/{id}            delete
-GET    /v1/orders/{id}/items      child resource
-POST   /v1/orders/{id}/cancel     an action that is not CRUD (Create, Read, Update, Delete)
-```
-
-| Rule | ✓ | ✗ |
-|---|---|---|
-| Plural nouns | `/orders` | `/getOrders`, `/order` |
-| Lowercase, hyphens | `/purchase-orders` | `/purchaseOrders`, `/purchase_orders` |
-| At most 2 levels deep | `/orders/{id}/items` | `/customers/{a}/orders/{b}/items/{c}/logs` |
-| Use a verb only when it is truly not CRUD | `POST /orders/{id}/cancel` | `POST /orders/cancelOrder` |
-
-**An action that is not CRUD** (approve, cancel, resend) uses `POST /{resource}/{id}/{action}`.
-Do not bend it into a `PATCH` that edits `status`, because a status change usually has more side effects than an ordinary field edit.
-
-**How to use `PATCH`:** pick one style for the whole system. Sending only the changed fields (`merge patch`) is recommended,
-and you must define clearly whether `null` means "clear the value" or "leave it alone" (see section 6).
-
----
-
-## 3 · Versioning
-
-| Method | Pros | Cons |
-|---|---|---|
-| **In the path** `/v1/orders` | Obvious, easy to test, easy to cache | The URL changes when the version goes up |
-| In a header `Accept: application/vnd.acme.v1+json` | The URL stays fixed | Invisible when debugging, often forgotten |
-
-> **Choose the path** unless there is a specific reason — everyone can see the version from a single line in the log.
-
-**Which changes break callers:**
-
-| Change | Breaks? |
-|---|:--:|
-| Add a new endpoint | No |
-| Add an **optional** field to a request | No |
-| Add a field to a response | No* |
-| Add a new enum value | **Breaks** — a client whose `switch` covers every value will meet an unknown one |
-| Remove/rename a field | **Breaks** |
-| Change a data type (`"12"` → `12`) | **Breaks** |
-| Make a formerly optional field required | **Breaks** |
-| Change the HTTP status returned in an existing case | **Breaks** |
-| Make a validation rule stricter | **Breaks** |
-
-\* Only when callers were told from the start to "skip fields you do not recognize".
-This must be written in `API-CONVENTIONS.md`, not left to hope.
-
-**Raise the major version only when truly needed**, because every version still open is another body of code to maintain.
-
----
-
-## 4 · Pagination
-
-**Every endpoint that returns a list must have pagination from day one**, with no exceptions.
-A list that "only has a few items" will have 10,000 in 2 years.
-
-| Method | Use when | Limits |
-|---|---|---|
-| **cursor** `?limit=50&cursor=eyJ...` | Default · lots of data · data is added while the user is browsing | Cannot jump to page 7 |
-| offset `?limit=50&offset=100` | Page numbers must be clickable · little data | Slower the deeper the page · if a row is inserted while browsing, data repeats or goes missing |
-
-```jsonc
-// GET /v1/orders?limit=2 → 200
-{
-  "data": [ { "id": "1042" }, { "id": "1041" } ],
-  "page": {
-    "limit": 2,
-    "nextCursor": "eyJpZCI6MTA0MX0",   // null when there is no more
-    "hasMore": true
-  }
-}
-```
-
-- Always wrap the list in `data`, because a bare array leaves no room to add page information later.
-- `limit` has a default and a **ceiling enforced on the server** (for example default 20, maximum 100).
-- `totalCount` is expensive to count, so make it optional with `?includeTotal=true`. Do not count every time.
-- **The cursor must be opaque** (callers must never decode or build one themselves).
-
----
-
-## 5 · Filtering · sorting · requested fields
-
-```
-GET /v1/orders?status=confirmed&createdAt[gte]=2026-01-01&sort=-createdAt&fields=id,orderNo,total
-```
-
-| Topic | Convention |
-|---|---|
-| Filter by equal value | `?status=confirmed` |
-| Several values | `?status=confirmed,shipped` |
-| Range | `?createdAt[gte]=...&createdAt[lt]=...` |
-| Sort | `?sort=-createdAt,orderNo` — `-` means descending |
-| Text search | `?q=สมชาย` kept separate from filtering |
-| Select fields | `?fields=id,orderNo` |
-
-- **Accept only the fields you have defined.** If any field name is accepted, you get security holes and queries with no index.
-- For an unknown parameter, answering `400` is better than skipping it silently. Otherwise a caller who mistypes gets wrong data without knowing.
-
----
-
-## 6 · Data formats
-
-| Data | Format | Example |
-|---|---|---|
-| Field names | `camelCase` across the system | `createdAt` |
-| Time | RFC 3339 · UTC · ends with `Z` | `"2026-09-25T09:42:13.482Z"` |
-| Date only | `YYYY-MM-DD` | `"2026-09-25"` |
-| Money | the number as a **string** + a separate currency | `{ "amount": "1250.00", "currency": "THB" }` |
-| identifier | **always a string** | `"1042"` not `1042` |
-| enum | `SCREAMING_SNAKE` or `lower_snake`, pick one style | `"CONFIRMED"` |
-| Duration | seconds as a number, named so the unit is clear | `"timeoutSeconds": 30` |
-| Country / currency / language | ISO 3166 · ISO 4217 · BCP 47 | `"TH"` · `"THB"` · `"th-TH"` |
-
-> **A numeric id in JSON is a time bomb** — JavaScript stores integers safely up to 9,007,199,254,740,991.
-> A `bigint` above that is silently rounded at `JSON.parse`, and changing it to a string later is a breaking change.
->
-> **Money as a float in JSON** — `1250.10` passed through 2 programming languages may become `1250.0999999999999`.
-
-**`null` and "no field" must mean different things:**
-
-- In a response, a field that exists but has no value is sent as `null`, not dropped, so callers do not have to check 2 cases.
-- In a `PATCH`, sending `{"note": null}` means clear the value, and leaving out the `note` key entirely means leave it alone.
-
-**An empty array is `[]`, not `null`**, so callers can loop over it directly.
-
----
-
-## 7 · Errors
-
-The error format (RFC 9457 · `requestId` · an `errors` array of `{field, code, message}`) and examples live in one place, `web-service-essentials` section 2. Follow that.
-What still needs agreement is the **field-level error**:
-
-- **`code` is for programs, `message` is for people.** Never make callers write conditions against the message text.
-- Point to the field location with the full path, including array indexes.
-- **Return the errors for all fields at once**, not one at a time, so users do not have to submit 5 times.
-- If several languages are supported, choose Thai or English text from `Accept-Language`.
-
-**Pick the status to match** the table in `web-service-essentials` section 2. One addition for this skill: return `404` also when you do not want to reveal that the thing exists.
-
----
-
-## 8 · Repeat calls without repeat effects, and edit conflicts
-
-### idempotency key (a request code — sending it again does not do the work again)
-
-**Required on every `POST` that has a financial effect or sends something out to the outside world.**
-
-```
-POST /v1/payments
-Idempotency-Key: 7f3c1e10-...        ← created by the caller, kept for use when retrying
-```
-
-- The server stores the key together with the result for at least 24 hours.
-- Same key with the same body: return the earlier result and do not repeat the work.
-- Same key with a **different** body: answer `422` and do not do new work.
-- A network drop while waiting for the answer is normal, not a special case, so callers always retry.
-
-### Edit conflicts (optimistic concurrency)
-
-```
-GET   /v1/orders/1042        → 200  ETag: "v7"
-PATCH /v1/orders/1042        If-Match: "v7"
-                             → 200 normally · 412 if someone edited it first
-```
-
-Without this, whoever saves second overwrites the first person's work and nobody knows.
-
----
-
-## 9 · Rate limit
-
-```
-X-RateLimit-Limit: 1000
-X-RateLimit-Remaining: 997
-X-RateLimit-Reset: 1758790000
-Retry-After: 42                ← must always accompany a 429
-```
-
-If a `429` has no `Retry-After`, the caller must guess, and most guess "try again at once".
-
----
-
-## 10 · Retiring an endpoint
-
-1. Announce in advance, and say what to use instead.
-2. Send these headers in every response of that endpoint:
-   ```
-   Deprecation: @1790812800
-   Sunset: Wed, 31 Dec 2026 23:59:59 GMT
-   Link: <https://docs.acme.co/v2/orders>; rel="successor-version"
-   ```
-   `Deprecation` follows the Request for Comments (RFC) 9745 standard (Mar 2025). It must be a date in the form `@<unix seconds>` (this example is 1 Oct 2026 00:00 UTC), not `true`. Checked 22 Oct 2026 (B.E. 2569).
-3. **Check the logs for who still calls it**, then contact them directly. Do not wait for them to go quiet on their own.
-4. Close it only after the announced date, not before.
-
-A fitting period: for an internal API, 1 release cycle. For an API used by outsiders, at least 6 months.
-
----
-
-## 11 · Check before releasing a new endpoint
-
-Go through every item against the endpoint you added. Fail one and it is not merged yet.
-
-- [ ] The URL is a plural noun per section 2 · sits under a version per section 3 · has no `GET` that changes data
-- [ ] Every list has pagination and a page-size ceiling (section 4) · filter and sort use the same parameter names as existing endpoints (section 5)
-- [ ] Dates · ids · money are in the formats of section 6 · the response is not a raw database entity
-- [ ] Every error follows `web-service-essentials` §2 and has a fixed `code` (section 7) · a request that creates or pays accepts an idempotency key · an edit accepts `If-Match` (section 8)
-- [ ] Auth and rate limit are stated (section 9) · it is in OpenAPI, and the cURL examples in the docs really run
-- [ ] There is a contract test or an endpoint-level test with at least 1 success case and 1 error case — check the response against OpenAPI in CI · Pact when the caller is on another team · `oasdiff breaking` on every PR: [`references/contract-testing.md`](references/contract-testing.md)
-
-## 12 · Anti-patterns
-
-- **`200 OK` with `{"success": false}`** — monitors and logs will not see that it failed.
-- **Verbs in the URL** — `/createOrder`, `/getOrderById`
-- **A list with no pagination** — one day it will return 50,000 rows at once.
-- **A different date format on each endpoint** — for example `"25/09/2026"`, where nobody knows whether day or month comes first.
-- **Sending a database entity out as is** — every time a column is added, the API changes by accident, and internal data may leak.
-- **Mixed field names** such as `created_at` and `updatedAt` in one response.
-- **A `GET` that changes data** — a web page prefetcher will fire it by itself with nobody clicking.
-- **Error messages that keep changing** with no fixed `code`.
-- **No documentation** — an OpenAPI generated from the real code is better than hand-written docs that do not match.
-
-
-## reference: contract-testing.md
-
-# Contract testing — OpenAPI is the contract, and CI checks that the real thing matches
-
-The document `docs/API-CONVENTIONS.md` states the rules · the OpenAPI file states the shape of each endpoint · contract tests are what keep these 2 from being just documents
-
-## 1 · OpenAPI as the contract
-
-- Generate it from the real code (annotations · decorators · the framework's generator) and commit the resulting file — do not hand-write it separately · when the 2 sides differ, the code side is the truth, and the diff in the file is what the reviewer sees
-- Every response has a schema, including errors (`web-service-essentials` §2) · every field has a `format` for dates · ids · money, per §6 of the main SKILL.md
-
-## 2 · Check responses against the spec in CI (provider side)
-
-| Tool | What it does | licence | Note (checked 2026-10-23) |
-|---|---|---|---|
-| Schemathesis | reads OpenAPI, builds requests from the schema, fires them at the real service, and checks that responses match the spec and are not 500 · `schemathesis run <url of openapi.json>` | MIT | really fires, creates and deletes data → point it only at dev or staging · Python |
-| Prism (Stoplight) | `prism mock <spec>` lets the frontend work before the backend is done · `prism proxy <spec> <upstream>` checks real traffic against the spec | Apache-2.0 | Node ≥ 18.20 · proxy mode can sit in front of the service in a test environment |
-| Dredd | checks an API against API Blueprint / OpenAPI 2 (OpenAPI 3 experimental) | MIT | **no longer maintained** (archived 2024-11-08) — do not start using it |
-
-Our default: Schemathesis in a CI job after the service is up with test data (the reset endpoint from `app-verifier-setup`) · failure = no merge
-
-## 3 · Consumer-driven contract — when the frontend team or callers are separate from the backend
-
-- Pact (pact-foundation · MIT): the caller side writes tests of which request/response pairs it uses → produces a pact file → the provider side runs a check against that file in its own CI · the provider can change parts nobody uses without breaking tests
-- Use when: the teams are different, release separately, or there is more than 1 caller (mobile + web + partner) · one team does both sides → item 2 is enough
-- Pact files are exchanged through a Pact Broker or committed to the provider's repo — agree on one way in `API-CONVENTIONS.md`
-
-## 4 · Check for breaking changes on every PR
-
-- `oasdiff breaking <old spec> <new spec>` (Apache-2.0 · Go · has a Docker image) reports only changes that break existing callers: removing an endpoint or field · a field becoming required · a type change · an enum value removed
-- In CI: old spec = the main branch's · new spec = the PR's · on a breaking change → bump to a new version per §3, or deprecate per §10 of the main SKILL.md — do not turn off the check
-- Adding an optional field · adding an endpoint · adding an enum value that callers do not crash on in a switch = not breaking
-
-## Check before handing over
-
-- [ ] OpenAPI is in the repo and generated from code · CI fails if the file does not match the code
-- [ ] Schemathesis (or equivalent) runs against a service brought up with test data · `oasdiff breaking` runs on every PR
-- [ ] Callers in a separate team → at least 1 pact file per caller, and the provider checks it in CI
-
-
----
-
-# skill: data-import-export
-
-Use when a system imports or exports Excel or CSV
-
-# Importing and exporting data
-
-> **The one rule:** validate everything first, then write.
-> If you write halfway and then find a bad row, the data is left half-done and nobody knows what to fix.
-
-## When to use this skill
-
-- A screen lets users upload Excel or CSV to bring data into the system
-- A button exports to Excel or CSV
-- Moving data from an old system into a new one
-- A user uploads and gets the message "ไฟล์ไม่ถูกต้อง" (file is invalid) without knowing what is wrong
-
-## When to use another skill instead, or together
-
-| Job | skill | |
-|---|---|---|
-| Receiving general file uploads (images, documents) | `file-upload-and-storage` | Instead |
-| Building a nicely formatted Excel file | `anthropic-skills:xlsx` | Instead |
-| Queue mechanics and progress | `background-jobs` | Instead |
-| Buddhist Era (B.E.) years and Thai sorting order | `i18n-and-locale` | Instead |
-| Sending documents into Thai accounting software (PEAK · FlowAccount) through an API instead of a file | [`references/thai-accounting-apis.md`](references/thai-accounting-apis.md) | Instead |
-| Recording who imported or exported what | `audit-trail` | Together |
-| Masking personal data in export files | `pdpa-compliance` | Together |
-| Telling the user when an import finishes | `notifications` | Together |
-| Limits and constraints of the target table | `database-design` | Together |
-
----
-
-## 1 · Give a template, do not make people guess
-
-**Every import screen needs a button to download a template.** The template contains
-
-- Column headers that match exactly what the system needs
-- **1–2 correct sample rows**
-- A row explaining which columns are required, what format, and which values are accepted
-- A separate sheet for lists of selectable values (status, type, unit)
-
-| How the file differs from the template | Do this |
-|---|---|
-| Column order swapped | ✓ Read by header name, not by position |
-| Header has extra spaces or different letter case | ✓ Trim spaces and compare case-insensitively |
-| Extra unknown columns | ✓ Skip them, but **tell the user what was skipped** |
-| A required column is missing | ✗ Stop at once and say which column is missing |
-
----
-
-## 2 · Three layers of validation before writing anything
-
-| Layer | Checks | Example message |
-|:--:|---|---|
-| 1 · File | Opens · has the needed sheet · all required columns present · within the maximum row count | "ไม่พบคอลัมน์ 'รหัสสินค้า'" (column 'product code' not found) |
-| 2 · Per row | Data type · required values · in the allowed list · number range | "แถว 42 คอลัมน์ 'จำนวน' ต้องเป็นตัวเลขมากกว่า 0 (พบ '-5')" (row 42, column 'quantity' must be a number above 0, found '-5') |
-| 3 · Relationships | The code exists in the system · no duplicates within the file · business rules | "แถว 88 ไม่พบลูกค้ารหัส C-1042" (row 88, customer code C-1042 not found) |
-
-**An error report must state: row · column · value found · value expected**
-
-```
-Wrong: "ไฟล์ไม่ถูกต้อง"
-Wrong: "พบข้อผิดพลาด 37 รายการ"
-Right: a table of check results, with a button to download the original file with an "ข้อผิดพลาด" (error) column appended
-```
-
-> **Report all errors in one pass. Do not stop at the first bad row.**
-> The user then fixes everything in one round, instead of uploading 37 times.
-
----
-
-## 3 · Writing into the system
-
-| Mode | Use when |
-|---|---|
-| **All or nothing** | The default. The file must be fully correct to be imported |
-| Do what passes, skip the bad rows | The file is very large and the rows are unrelated, and **the user must choose this, the system does not decide for them** |
-
-- **Always show a summary page before confirming**, such as "จะเพิ่ม 120 · แก้ 45 · ข้าม 3 · ผิด 0" (will add 120 · update 45 · skip 3 · error 0), then have the user click confirm
-- If the file has duplicate rows, stop and say so. Do not silently use the last row
-- If the data already exists in the system, let the user choose: skip · overwrite · stop
-- **Every import must be recorded in the audit log**: who imported, which file, how many rows affected (see `audit-trail`)
-- **Keep the original file**, so when there is a problem you can look back at what the submitted file really looked like
-- Make it reversible: store a batch id (the id of the import run) on every imported row
-
-**Large files run as background jobs.** Above roughly 1,000 rows, put them in a queue,
-split into batches of 500 rows, show progress, and allow cancel (see `background-jobs`).
-
----
-
-## 4 · Excel and CSV traps
-
-| Trap | What happens | Fix |
-|---|---|---|
-| **Thai in CSV garbled** | Opened in Excel, the characters are unreadable | Save as UTF-8 **with a BOM**, or recommend .xlsx |
-| **Codes starting with 0 lose it** | `0812345678` becomes `812345678` | Always read as text, and on export set the cell format to text |
-| **Long numbers turn into scientific notation** | A 13-digit ID card number → `1.23457E+12` | Same as above |
-| **Dates interpreted automatically** | Is `03/04/2026` March or April | Force `YYYY-MM-DD` in the template |
-| **B.E. and C.E. years mixed** | Silently off by 543 years | **Ask on the import screen which year style the file uses** |
-| Trailing spaces in a value | Code matching fails | Trim leading and trailing spaces on every value |
-| Cells that are formulas | You get the formula instead of the value | Read the calculated value |
-| **Values starting with `=` `+` `-` `@` in an export file** | Excel runs a command when the user opens it | Prefix with `'` any value that starts with these characters |
-
-> **A vulnerability people rarely know about:** a customer name of `=cmd|'/c calc'!A1`, if exported raw
-> and someone opens it in Excel, will try to run the command for real. So always escape on export.
-
----
-
-## 5 · Export
-
-| Topic | Rule |
-|---|---|
-| Size | Above roughly 50,000 rows, run it as a background job and send a download link |
-| Permission | **Export only data that this user already has permission to see**, because this is the most common leak |
-| audit | Record every time who exported what data, which period, how many rows |
-| Personal data | Mask columns that are not needed (see `pdpa-compliance`) |
-| File name | `<เรื่อง>-<ช่วงวันที่>-<เวลาที่ส่งออก>.xlsx` |
-| File header | Put in the filter conditions used and the export time. Otherwise in 3 months nobody knows what data this file is |
-| Download link | Must expire (see `file-upload-and-storage`) |
-| Format | `.xlsx` for people to read · CSV for machines to read |
-
-
-## reference: thai-accounting-apis.md
-
-# Connecting to Thai SME accounting software through API
-
-Use when our system must push sales or purchase documents into the customer's accounting software, instead of exporting Excel for them to re-key. The rules of `SKILL.md` still apply: validate everything before writing · summary page before confirming · batch id · audit.
-Every fact comes from the vendors' documents, opened 2026-10-23. Prices and API fees were rechecked 2026-10-26 (table "Sources"). Prices and terms change often: confirm with the vendor before quoting a customer.
-Abbreviations: small and medium enterprises (SME) · Application Programming Interface (API) · User Acceptance Testing (UAT) is the test system · Hash-based Message Authentication Code (HMAC) is a signature made from a secret key · Software Development Kit (SDK).
-
-## 1 · Choose a route
-
-| Route | Use when |
-|---|---|
-| Send a file using the accounting software's import template (file format of each vendor not yet checked) | Few documents · the customer's package has no API |
-| Connect to the API directly (sections 2–3) | Hundreds of documents per month · need status back, such as paid |
-| Through a partner app the accounting software certifies (PEAK: menu ตั้งค่า > การเชื่อมต่อแอปพลิเคชันภายนอก, i.e. Settings > External application connections) | Online shop that already uses a back-office system → `ecommerce-patterns` `references/thai-marketplace-apis.md` |
-
-## 2 · PEAK
-
-| Topic | Information |
-|---|---|
-| Docs | developers.peakaccount.com (API Integration Guide · file `llms.txt` links every page) · has a Postman collection |
-| Package | PEAK PRO Plus (12,000 baht/year) or higher · PEAK PRO Plus price per the developers page on 2026-10-26 · API fee is paid before go-live under the agreed package terms; the docs state no amount (`รอยืนยัน`, pending confirmation · per the go-live document, confirm the API fee, the number of items, and the trial terms with the PEAK team before putting them in a quotation) |
-| Get access | Fill in the form, the team replies within 3 working days · you get Connect ID + Application Code · UAT and production credentials are separate |
-| Authentication | Client Token valid 24 hours (`POST /api/v1/ClientToken`) · User Token per business, the customer creates it in the menu เชื่อมต่อแอปพลิเคชันภายนอก (External application connections) with the Application Code · header `Time-Stamp` (yyyyMMddHHmmss, UTC) · `Time-Signature` = HMAC-SHA1 of the Time-Stamp, with connectId as the key |
-| What it can do | contacts · products (has adjust) · services · quotations · invoices · billing notes · receipts · credit notes · purchase orders · expenses · daily journals · receive payment · void · approve · attach files |
-| e-Tax | Has an endpoint to send e-Tax Invoice for invoice and receipt · sends e-Receipt |
-| UAT | `http://peakengineapidev.azurewebsites.net/api/v1` (http, not https) · free for 3 months · open Mon–Fri 08:00–22:00 |
-| Production | `https://api.peakaccount.com/api/v1` · before go-live must pass the Final UAT Review (test case · error case · duplicate case · accounting result) |
-| rate limit | ClientToken request 10 times/minute/IP · trial balance report (`GET /api/v1/FinancialReports/trialbalance`) 10 times/minute and 1 concurrent · per User Token: GET 20 concurrent · POST 10 concurrent · file attach 10 concurrent · over the limit → HTTP 429 `RATE_LIMITED` with `retryAfterSeconds` |
-| Billed by | Only successful POST Create (invoice · receipt · quotation · billing note · purchase order · expense · daily journal) |
-| webhook | Events Create · Edit · Void · PaidPayment · VoidPayment of the main documents (contact · product only Create · Edit) · can set a custom header per endpoint, such as `x-api-key` · the docs say nothing about signatures or redelivery |
-
-## 3 · FlowAccount
-
-| Topic | Information |
-|---|---|
-| Docs | developers.flowaccount.com · the spec actually in use `https://developers.flowaccount.com/swagger.yml` (OpenAPI 3.0.2 · 130 paths) · SDKs in several languages at github.com/flowaccount |
-| Package | Only Pro Business has Open API (price page 2026-10-26: ฿457/month · ฿5,490/year) · Free · Standard (฿1,990/year) · Pro (฿2,990/year) have no API · the price page lists no separate API fee · import up to 5,000 items/month, beyond that special pricing · the API page says "Pay when you go live" and gives no amount (`รอยืนยัน`, pending confirmation) |
-| Get access | Form request-openapi · team replies within 1–2 working days · sandbox usable for 30 days · real credentials are emailed to the business owner within 3 working days after the package is confirmed |
-| Authentication | OAuth 2.0 · Client Credentials = 1 client per business · OpenID = partner with 1 client for many businesses (scope `flowaccount-api offline_access` · refresh token about 30 days from the last use) · token at `https://openapi.flowaccount.com/{test or v1}/token` valid 86,400 seconds · sent in header `Authorization: Bearer` |
-| base URL | sandbox `https://openapi.flowaccount.com/test` · production `https://openapi.flowaccount.com/v1` |
-| What it can do | contacts · products · quotations · billing-notes · tax-invoices · receipts · cash-invoices · purchases · purchases-orders · expenses · withholding-taxes · journal-entries · chart-of-accounts · change status · receive payment · attach files · export PDF · send email |
-| Cross-system reference | Field `externalDocumentId` "รหัสเอกสารอ้างอิงจากระบบภายนอก" (document id referenced from an external system) |
-| e-Tax · rate limit · webhook | Not found in swagger.yml (searching webhook · etax · rate limit · 429 gave 0 hits) nor on the pages developers.flowaccount.com · flowaccount.com/en/developers on 2026-10-26 (not yet checked with the vendor · contact developer_support@flowaccount.com) |
-
-## 4 · Other vendors
-
-| Software | What was found |
-|---|---|
-| TRCLOUD | The vendor's API page says it has a RESTful API · create an API Key from the settings menu · has Custom API & Webhook · no public developer docs found, ask the sales team for the manual |
-| AccRevo | No public API found · the website has a launch article about AccRevoX × MCP (works with Claude) |
-| Express | Searched twice, found no vendor website and no public API |
-
-## 5 · e-Tax Invoice
-
-- Pick one system to issue the tax invoice number · our system and the accounting software must not both issue numbers
-- Send into the accounting software as the source document, then let the accounting software issue the e-Tax · PEAK has an endpoint to send e-Tax · FlowAccount not found in the spec, ask the vendor
-- Tax invoice rules (section 86/4 · e-Tax Invoice & e-Receipt vs by Email) → `e-commerce:e-tax-invoice` (if installed)
-
-## 6 · Prevent duplicates and reconcile
-
-- Keep a mapping table: our id ↔ the accounting software's id · PEAK recommends keeping External Reference and a mapping to prevent duplicate documents · FlowAccount uses `externalDocumentId` to hold our id
-- Neither vendor's docs have an idempotency key → look up the mapping before every POST create (`principle-safe-to-rerun`)
-- A timeout does not mean failure · pull the list by date range and compare before resending
-- On 429 → wait per `retryAfterSeconds` or back off exponentially (1 · 2 · 4 · 8 seconds, as PEAK recommends)
-- Reconcile every day: the document count and total of the 2 systems must match → `fintech-payments` (`references/agent-payment-integration.md`, section Settlement Reconciliation)
-- Log every send to audit: who sent · which document · destination id · result → `audit-trail`
-- Client Token · client secret · connectId stay outside the code → `config-and-secrets` · PEAK UAT is http, so use test data only
+Write results only as actually run · if you only ran 50 rounds per second → never write "can handle 1,000 users at once"
 
 ## Sources
 
-| Topic | URL (opened 2026-10-23) |
-|---|---|
-| PEAK packages · UAT free 3 months · guide | https://www.peakaccount.com/developers · https://developers.peakaccount.com/reference/api-integration-guide |
-| PEAK list of all API pages | https://developers.peakaccount.com/llms.txt |
-| PEAK token · signature | https://developers.peakaccount.com/reference/peak-api-client-token-guide.md |
-| PEAK rate limit · billing count · go-live | https://developers.peakaccount.com/reference/copy-of-api-rate-limiting-concurrency-control.md · .../peak-api-transaction-counting.md · .../peak-api-implementation-go-live-guide.md |
-| PEAK webhook · API access rights | https://developers.peakaccount.com/reference/webhook.md · .../api-access-rights.md |
-| PEAK help center (packages · User Token) | https://intercom.help/peak/en/articles/13176287 · https://intercom.help/peak/en/articles/10078711 |
-| FlowAccount API page · price (rechecked 2026-10-26) | https://flowaccount.com/en/developers · https://flowaccount.com/en/pricing |
-| FlowAccount connection · token | https://developers.flowaccount.com/tutorial/connect-open-api · .../tutorial/connect/client-credentials-flow · .../tutorial/connect/open-id-flow |
-| FlowAccount spec · SDK | https://developers.flowaccount.com/swagger.yml · https://github.com/flowaccount/open-api (README says swagger.yml is the spec in actual use) |
-| TRCLOUD · AccRevo | https://www.trcloud.co/api.php · https://www.accrevo.com/ |
-
-
----
-
-# skill: error-handling-patterns
-
-Use when writing code that can fail, with retry and timeout
-
-# Error handling
-
-> **The one rule:** catch an error only when you **can really do something about it.**
-> Catching it and doing nothing is worse than not catching, because the system keeps going while it is already broken inside.
-
-## When to use this skill
-
-- Writing code that calls the network, a database, files, or another team's system
-- Deciding whether to retry, how many times, and how long to wait
-- The user sees "an error occurred" and does not know what to do next
-- Tracing a problem and finding nothing in the log because someone caught and discarded the error
-
-## When to use another skill, or use it alongside
-
-| Task | Skill | |
-|---|---|---|
-| The JSON shape of errors the API sends out | `web-service-essentials` · `api-conventions` | instead |
-| Log line format and data masking | `logging-standards` | instead |
-| Fixing one specific bug someone reported | `targeted-fix` | instead |
-| Steps when the system is really down | `incident-runbook-template` | instead |
-| Error-rate metrics and alerts | `observability-basics` | alongside |
-| Where a failed background job goes next | `background-jobs` | alongside |
-| Error messages that must be translated into several languages | `i18n-and-locale` | alongside |
-| Tests for failure cases | `testing-standards` | alongside |
-
----
-
-## 1 · Where to catch, where to let it pass
-
-| Layer | What to do |
-|---|---|
-| Innermost layer (calls DB, HTTP, files) | **let it pass**, or convert it into a domain error that has meaning |
-| Business logic layer | catch only where there is a real fallback (a default value, a backup data source) |
-| **Outermost layer** (controller, handler, main) | **catch everything** · log once · convert to an answer the user understands |
-
-> **Log in one place only, the outermost layer.** If every layer catches, logs, and rethrows,
-> 1 error becomes 10 log lines and nobody knows they are the same event.
-
-**3 things you must never do:**
-
-```csharp
-try { ... } catch { }                      // wrong: swallowed silently
-try { ... } catch (Exception) { return null; }   // wrong: the caller gets null and never learns what happened
-catch (Exception ex) { log.Error(ex); throw; }   // wrong: logs again at every layer
-```
-
-**If you really mean to swallow it, write the reason:**
-
-```csharp
-catch (SmtpException ex)
-{
-    // swallowed on purpose — a failed notification email should not make the order fail
-    log.Warning(ex, "ส่งอีเมลยืนยันไม่สำเร็จ orderId={OrderId}", order.Id);
-}
-```
-
----
-
-## 2 · The message to the user ≠ the message in the log
-
-| | The user sees | The log keeps |
-|---|---|---|
-| Content | what happened · what to do next | stack trace · variable values · request id |
-| Language | the user's language | English is fine |
-| Internal detail | **none at all** | allowed |
-| Link between the 2 sides | **a reference code** | the same code |
-
-```
-Wrong: "เกิดข้อผิดพลาด" (An error occurred)   the user cannot tell what to do
-Wrong: "SqlException: timeout expired"      leaks internal detail, and they cannot read it anyway
-Right: "บันทึกไม่สำเร็จเพราะระบบตอบช้า ลองอีกครั้งใน 1 นาที (อ้างอิง: 01J9Z8K)"
-       (Save failed because the system was slow. Try again in 1 minute. Reference: 01J9Z8K)
-```
-
-**A good message has 3 parts**: what happened · why (if you can say) · what to do next.
-The reference code is the same correlation id as in `logging-standards`.
-
----
-
-## 3 · Classify before deciding
-
-| Type | Example | What to do | Log level |
-|---|---|---|---|
-| **User mistake** | incomplete input, wrong format | tell them to fix it · **do not retry** | no log needed |
-| **Transient** | timeout · 503 · deadlock · dropped connection | **may retry** | warning |
-| **Rate limited** | 429 Too Many Requests | may retry **after the time `Retry-After` gives** (if absent, use the formula in §4) · never fire faster than that | warning |
-| **Permanent** | 404 · 401 · data fails a condition | do not retry · say so clearly | warning |
-| **Our bug** | null reference · cannot convert the type | do not retry · **someone must fix it** | error |
-| **Inconsistent data** | totals do not match, an impossible state | stop · **call a person** | error + alert |
-
-> **Retrying an error that no number of tries will cure means firing again at a system that is already down, so it falls harder.**
-> Sending `400` or `401` another 100 times gets the same answer.
-
----
-
-## 4 · Timeout and retry
-
-**Every call that leaves the process needs a timeout** — the default in most libraries is "wait forever"
-
-| Call | A timeout that works in general |
-|---|---|
-| Ordinary database query | 5–10 seconds |
-| Internal HTTP | 3–5 seconds |
-| External HTTP | 10–30 seconds |
-| Heavy background job | set it from the real work, and it must be possible to cut it off |
-
-**The retry formula** (service-to-service calls · jobs in a queue use the numbers in [`background-jobs`](../background-jobs/SKILL.md) §4 · when a person sits waiting on the screen → see the last item below):
-
-```
-at most 3 tries · exponential delay + jitter
-try 1 waits 1 second · try 2 waits 2 · try 3 waits 4  (each ±20% random)
-```
-
-- **You need the random part** — otherwise every instance retries at the exact same moment and hits the target system again together
-- **The total retry time must be less than the caller's timeout**, or the caller has given up while we are still trying
-- **Retrying a write needs an idempotency key**, or the customer is charged twice (see `api-conventions`)
-- **A person sits waiting on the screen** → at most 1 automatic retry, then show a "ลองอีกครั้ง" (try again) button for them to press (do not use the 3 tries of the formula above)
-
----
-
-## 5 · Circuit breaker
-
-When the target is down, firing more does not help. It only makes us hang along with it.
-
-```
-closed (normal) → N failures in a row → open (do not call at all, answer with an error at once)
-                → wait X seconds → half-open: let 1 request try → success: back to closed · failure: stay open
-```
-
-A default that works: if 5 calls fail in a row within 30 seconds, keep the circuit open for 60 seconds.
-
-**Add one when** — calling an external system that has gone down before · calling across several services · a slow target spreads the slowness to us
-**Not needed when** — calling your own database · a job that runs once a day
-
----
-
-## 6 · Partial failure
-
-Work that handles many items must be able to answer **"8 of 10 succeeded, where did the other 2 go?"**
-
-| Style | Fits |
-|---|---|
-| All or nothing (transaction) | money · stock · anything that breaks when half done |
-| Do what you can, then report the items that failed | data import · notifying many people |
-
-The second style must **return the failed items with a reason for each**, not just say "some items failed".
-
-**Cleanup must always run**, whether or not the main work succeeds: closing files, returning connections, deleting temp files.
-Use `finally` / `using` / `with` / `defer` instead of repeating it on every exit path.
-
----
-
-## 7 · Check before sending
-
-Go through this against the diff every time you touch code that calls outside the process
-
-- [ ] Every `catch` clearly does one of these: handles it and goes on · converts it to an error of its own layer and throws on · lets it pass to the outermost layer to log (section 1) — no `catch` that logs and rethrows
-- [ ] Every outside call (HTTP · DB · queue · file) has a deliberate timeout and retries only the transient types in section 3 · a write that retries has an idempotency key (section 4)
-- [ ] The message to the user says what to do next · no stack trace or table name goes out (section 2) · the log for the same error has a correlation id and enough data to reproduce it
-- [ ] Outcomes the business expects (not found · insufficient balance · duplicate) are return values or types the caller must handle, not exceptions
-- [ ] Each outside dependency has at least 1 failure-path test (timeout · 5xx · bad payload), and a test confirms that partial failure follows section 6 and does not fail the whole page
-- [ ] None of these 4 kinds of silent failure swallowing:
-  - **optional chaining or `?? default`** that lets a missing value pass with nobody knowing (`order?.total ?? 0` turns an order that failed to load into a zero total)
-  - **falling back to a mock or sample data outside tests** — the live system shows fake data and looks normal
-  - **retries run out, then silence** — after the last try it returns empty or success, throws no error, and tells the caller nothing
-  - **a catch that logs and carries on in the UI** — the user sees a normal screen although the data never arrived; show an error state they can see
-
-## References
-
-- [`references/sources.md`](references/sources.md) — where the checklist ideas came from
+- exit code https://grafana.com/docs/learning-paths/automate-k6-cicd/handle-exit-code/ (checked 2026-10-28)
+- thresholds https://grafana.com/docs/k6/latest/using-k6/thresholds/ (checked 2026-10-28)
+- run at least 2 rounds again https://grafana.com/docs/k6/latest/testing-guides/automated-performance-testing/ (checked 2026-10-28)
 
 
 ## reference: sources.md
 
-# Sources · error-handling-patterns
+# Sources · load-testing
 
-- Section 7 checklist: idea from ECC error-handling.
-- The 4 silent-failure kinds in section 7: adapted from silent-failure-hunter in pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10.
+Checked 2026-10-28 (opened through a web-fetch tool that summarises pages with a small model, so reopen the raw page before locking a value in production)
+
+- thresholds · `abortOnFail` · `delayAbortEval` · per-tag thresholds https://grafana.com/docs/k6/latest/using-k6/thresholds/
+- names of all 6 executors https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ · options of `ramping-arrival-rate` https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ramping-arrival-rate/
+- test types and their order https://grafana.com/docs/k6/latest/testing-guides/test-types/
+- CI · environment · production https://grafana.com/docs/k6/latest/testing-guides/automated-performance-testing/
+- exit codes 0 and 99 · scripts that swallow the exit code https://grafana.com/docs/learning-paths/automate-k6-cicd/handle-exit-code/
+- GitHub Actions https://github.com/grafana/run-k6-action
+- k6 licence https://github.com/grafana/k6 · versions https://api.github.com/repos/grafana/k6/releases
+- Locust https://docs.locust.io/en/stable/what-is-locust.html · JMeter https://jmeter.apache.org/ (the home page links to the Apache Software Foundation licence and does not state the latest version)
+- Not yet checked (`ยังไม่ได้ตรวจ`): Grafana Cloud k6 price and quota · latest versions of Locust and JMeter
+
+
+## reference: worked-example.md
+
+# Worked example · load-testing
+
+## One worked example
+
+Label `ตัวอย่าง` (example): designed on paper, no real system has been loaded
+
+**Problem:** An online shop will run a flash sale at noon on Friday. It went down before because the connection pool filled up. They want to know whether it survives this time.
+
+| Step | What is done | Section |
+|---|---|---|
+| Goal | Volume from the previous campaign (รอยืนยัน) · path: browse products → add to cart → pay with a mock · p95 at most 500 ms · errors at most 1% (default, not measured) | 1 |
+| Permission | Load staging at production size · payment points at a mock · approver and time window noted in the script header | 2 |
+| Run | smoke → load (baseline) → spike | 4 |
+| Monitor | Dashboards of connection pool and database CPU during the run | 6 |
+| Result | Report which thresholds passed and failed at the volume really run, then add smoke to CI | 5 · 7 |
+
+
+
+---
+
+# skill: fsd-writing
+
+Use when writing or reviewing a Functional Specification Document
+
+# Writing a Functional Specification Document (FSD)
+
+> For Thai text, use the business register (`human-writing` `references/thai-grammar.md` section 4).
+
+> **The one rule:** An FSD is done when a developer can read it and **write code without guessing or asking**.
+> Every point that forces a guess becomes rework after delivery.
+
+## When to use this skill
+
+- Writing an FSD or Functional Spec for a feature, a module, or a whole system
+- Expanding a Software Requirements Specification (SRS) or Business Requirements Document (BRD) to a level detailed enough to build from
+- Reviewing someone else's FSD, where you must say what is missing
+- A developer keeps asking the same questions while building. That means the FSD is incomplete.
+
+Not for: requirements a customer signs off → `srs-writing` · user stories for a sprint → `user-story-writer` · endpoints of one feature → command `/api-design` (system-wide agreements → `api-conventions`) · tables and columns → `database-design`
+
+## Read more when
+
+| File | Open when |
+|---|---|
+| [references/worked-examples.md](references/worked-examples.md) | You are writing the first use case, screen, state table, or business rule of the document. Open the full examples and copy the format. |
+| [references/edge-cases.md](references/edge-cases.md) | You are writing the errors and edge cases section, and when you review before sending, to cover every case. |
+| [references/fsd-vs-srs.md](references/fsd-vs-srs.md) | You are unsure whether a piece of content belongs in the SRS or the FSD. Open this comparison table. |
+| [references/stakeholder-doc-templates.md](references/stakeholder-doc-templates.md) | You are writing an easy-to-read FSD for stakeholders (Mode B, the same 11 sections as item 3), or you need a reviewer-friendly template for a use case, API endpoint, or data model. |
+| [references/figures.md](references/figures.md) | You are planning which section needs which figure type. |
+| [references/outline-sections.md](references/outline-sections.md) | You must decide which section can be skipped. Open this table. The full copy-and-fill outline is in [assets/fsd-outline.md](assets/fsd-outline.md). |
+| [references/related-skills.md](references/related-skills.md) | The task needs another skill alongside this one, such as figures, API agreements, or test cases. Open it to see which one. |
+
+## 0 · Look for an existing template first (every time)
+
+Before you use the outline or templates in this file, check whether the user, customer, or project already has its own:
+
+- **Where to look:** the FSD (Functional Specification Document) template from the client or the TOR (terms of reference) · an earlier FSD of the same system · the screen spec template the dev team uses (look in `docs/`, or ask the user one question)
+- **Result:** Found → use it (sections, order, field names, numbering) and say in the reply which file it came from. Not found → use the template in this file as a fallback and say that no earlier template was found.
+- **Still required in every template:** the FSD/SRS boundary in item 1 and linking codes to use cases.
+
+## 1 · How an FSD differs from an SRS — the boundary must be clear
+
+These two documents get mixed up most often. The result is an SRS so long the customer does not read it, and an FSD so shallow that developers must ask.
+The SRS says what the system **must be able to do**. The FSD says **how** the system does it. A dimension-by-dimension comparison is in [references/fsd-vs-srs.md](references/fsd-vs-srs.md).
+
+> **An FSD must not create new requirements.** When you find something the SRS does not cover, **add it to the open-questions list**, mark it `(รอยืนยัน)` (awaiting confirmation), and keep working on the rest.
+> The item must be added to the SRS first. Do not write it quietly into the FSD.
+> An item that shows up in the FSD with no source is one the customer will refuse to pay for at acceptance.
+
+## 2 · Working order
+
+1. Read the whole SRS or BRD first, then **list the items that are still unclear**. Ask once, at the start, as multiple choice. Every option has evidence (skill `superuser` item 6). Ask only about items where different readings would change the whole deliverable (options = the possible readings, citing the item in the SRS/BRD). Mark the rest `(รอยืนยัน)` and keep going.
+2. Confirm who the document is for: developers only (**Mode A**, the default), or also a customer who reads it to sign off (**Mode B**: the same 11 sections in the same order, only laid out so a reviewer can read them easily; see [references/stakeholder-doc-templates.md](references/stakeholder-doc-templates.md)).
+3. Go use case by use case, not screen by screen. Screens come from use cases, not the other way around.
+4. Write the business rules separately first, then refer to them from the steps (item 7).
+5. Build the traceability matrix as you go, not at the end.
+6. **Draw, then collect questions.** While drawing the sequence diagram, cancellation flow, and ERD, you will find matters the stories and SRS do not answer (for example, whether a course deducts a session at booking or at attendance). Note them at the end of the document as questions with a proposed answer marked `(รอยืนยัน)`. Do not choose for the customer.
+7. Review by item 11 before sending.
+
+## 3 · Document outline
+
+There are 11 sections, in this order: Introduction · Users and permissions · Process overview · Use cases · Screen requirements · State diagram · Business rules · Data and integrations · Errors and edge cases · Traceability matrix · Revision history.
+You may skip only the screen requirements if there is no screen, and the state diagram if there are no states. The full outline is in **[`assets/fsd-outline.md`](assets/fsd-outline.md)**. The table of the question each section answers is in [references/outline-sections.md](references/outline-sections.md).
+
+## 4 · Use cases — one format across the document
+
+Every use case has a header table (comes from · actor · preconditions · result on success · frequency), followed by tables for the main steps, alternatives, and error cases. The full example UC-ORD-010 is in [references/worked-examples.md](references/worked-examples.md).
+
+**Rules for a use case:**
+
+- **One use case = one user goal**, not one screen.
+- Every use case needs at least one **alternative** and one **error case**.
+  A use case with only the smooth path is a use case that is not finished.
+- The "what the system does next" column must not be empty. An empty cell means nobody has worked out how the system responds.
+- **Always re-check preconditions on the server.** Hiding a button is not access control.
+- Write it as alternating "user does → system responds", not as a paragraph of narrative.
+
+## 5 · Screen requirements
+
+The full example SC-ORD-020 with its field table is in [references/worked-examples.md](references/worked-examples.md).
+
+**Every screen must specify all 6 things:**
+
+| Required | Detail |
+|---|---|
+| Field table | Type · required or not · validation rule · **the actual error message** · default value |
+| Permission per role | Which role can see · edit · only read · not see at all |
+| The five screen states | Empty · loading · error · partial · success (see `ui-craft`) |
+| Actions and results | Which button goes where · which button opens a confirmation box |
+| Display rules | Date format · decimals for money · rounding · time zone |
+| Data source | Which endpoint or table this field comes from |
+
+> **"The actual error message" means the words the user will really see**, not "show a warning message".
+> If you leave it out, the developer will invent one, and the system will end up with ten different phrasings.
+>
+> **Display rules must be written down.** A "total" that does not say how it rounds
+> is a bug you will find at month-end reconciliation.
+
+## 6 · State diagram — the point FSDs forget most often
+
+Anything with a "status" (an order, a leave request, a work ticket, a document) needs a table with the columns From · To · Who can do it · Condition · Side effects, and **must not have only a picture**. A sample table is in [references/worked-examples.md](references/worked-examples.md).
+
+**Rules:**
+
+- **A transition not in the table is a transition that must be rejected.** Write a clear "not allowed" row.
+  What is forbidden is the hardest thing to test if nobody wrote it down.
+- Every state needs an exit, except a final state that is meant to end.
+- Side effects on other systems (email, stock, accounting) belong in this table, not hidden in the steps.
+
+## 7 · Business rules separate from the steps
+
+Each rule has a code, a name, the rule text, and a source. A sample BR-030 is in [references/worked-examples.md](references/worked-examples.md).
+
+- **Write each rule in one place**, then cite it by code from everywhere it applies. If you copy it into three places, someday you will miss one when you change it.
+- Every rule needs a **source**. A rule with no source is a rule the team made up.
+- A rule that changes over time (tax rate, fee) must say **where it is stored**:
+  in code, in a settings table, or editable by the system administrator.
+
+## 8 · Errors and edge cases to answer in full
+
+The edge-case table is what the test team will use, and it is what most FSDs lack. It runs from no data, rapid repeated clicks, and two people editing at once, to insufficient permission. Go through every row in [references/edge-cases.md](references/edge-cases.md) and answer every row that touches the feature.
+
+## 9 · Codes and traceability
+
+```
+UC-<module>-<3-digit number>      use case              UC-ORD-010
+SC-<module>-<3-digit number>      screen requirement    SC-ORD-020
+BR-<3-digit number>               business rule         BR-030
+```
+
+Use the same system as `srs-writing`: **number in steps of 10**, and **never reuse a code that has been issued**.
+
+| SRS | FSD | Screen | test case | Status |
+|---|---|---|---|---|
+| FR-ORD-040 | UC-ORD-010 | SC-ORD-020 | TC-ORD-010..014 | Done |
+| FR-ORD-040 | UC-ORD-010 · 010-E1 | SC-ORD-020 | TC-ORD-015 | Done |
+
+- **Every use case must trace back to a requirement in the SRS.** If it cannot, someone added a bonus nobody ordered.
+- **Every requirement in the SRS must have at least one use case.** If it has none, it was forgotten.
+- Alternatives and error cases need their own test cases. Do not count them with the main path.
+
+## 10 · Figures in the document
+
+The table of which section needs which figure type is in [references/figures.md](references/figures.md). The point to remember: a state diagram goes **with the table, not instead of it**.
+
+Every figure in an FSD document (Mode A and Mode B, in markdown and in the file the customer signs off) uses `diagram-figures` in one house style. Screen sketches use `markdown-visuals`.
+Mermaid through `software-diagrams` is only for drafts discussed in chat. Do not put it in a delivered document.
+**Every figure in one version uses the same color theme**, per `doc-theme` (see `design-gate/polished-document-style`).
+
+## 11 · Completeness review before sending
+
+**Completeness**
+
+- [ ] Every requirement in the SRS has at least one use case
+- [ ] Every use case has at least one alternative and one error case
+- [ ] Every screen has a field table with all 5 columns, and the five states
+- [ ] Everything that has a status has a state transition table, including the "not allowed" rows
+- [ ] Every relevant row of the edge-case table in item 8 is answered
+
+**Clarity**
+
+- [ ] No phrase such as "as appropriate", "automatically", or "as needed" without saying what it means
+- [ ] Every error message is written as real words, not "show a warning message"
+- [ ] Every number has a unit and a source
+- [ ] Field names, status names, and endpoint names are in English, matching what the real code will use
+
+**Consistency**
+
+- [ ] The same word means the same thing throughout (there is a glossary)
+- [ ] State names match across the diagram, the table, and the use cases
+- [ ] No new requirement that is missing from the SRS
+
+> **Final test:** Have one developer who was not in the meeting read it.
+> Every question they ask is one gap to fill before sending.
+
+If nobody is free to read it, use a fresh agent that gets only the FSD file. Have it answer 8–10 questions that a developer and QA would ask (for example, "what happens on a duplicate booking?" and "which states can be reversed?"). Fix every answer that is wrong or says "I don't know" before sending. For the method and the Thai-specific questions (B.E. years · document number format), see [`../srs-writing/references/reader-test.md`](../srs-writing/references/reader-test.md).
+
+**Once code exists, compare the FSD with the real code.** Do this when you review the FSD after a build or before taking over a fix.
+
+- Go code by code through item 9. Search the code and tests for use case codes and screen names (`rg -n "UC-0[0-9]+" --glob '!**/node_modules/**' | head -50`). A code that appears nowhere in the code or tests is a gap. Answer whether it is not built yet or built under another name.
+- Compare the 3 places that differ most often: field table (item 5) ↔ validation code · state transition table (item 6) ↔ the code that changes state (including "not allowed" rows) · error messages (item 8) ↔ strings in the code.
+- Record each difference as a table `| spec:line | file:line | who is right |` and let a person decide. During the review, do not change the FSD to match the code, and do not change the code to match the FSD.
+
+
+## reference: edge-cases.md
+
+# Errors and edge cases to answer in full
+
+The test team uses this table, and most FSDs lack it. Go through every row that touches the feature, then write the answers into section 9 of the document.
+
+| Case | Question to answer |
+|---|---|
+| No data | What does the empty screen show? Is there a button that points to the next step? |
+| Very large data | How many items per page? How are they sorted? Can the user search? |
+| Rapid repeated clicks | How do you prevent duplicate work? (See idempotency key in `api-conventions`) |
+| Two people edit at once | Who wins? What does the other person see? (See ETag in `api-conventions`) |
+| Connection drops midway | Is the entered data lost? Does a retry create a duplicate? |
+| Session timeout | Does the user get kicked out at once, or is their input kept? |
+| Boundary values | 0 · negative values · today · last day of the month · leap year |
+| Unusually long text | Does a 200-character name break the layout? |
+| Thai text and special characters | Does sorting work? Does search find it? Do emoji break anything? |
+| External system does not respond | How many seconds to wait? How many retries? What does the user see meanwhile? |
+| Insufficient permission | Visible but not clickable, or not visible at all? **Choose one clearly.** |
+
+
+## reference: figures.md
+
+# Figures in an FSD document
+
+This table says which figure type belongs in which FSD section. The drawing tool and the color theme are in `SKILL.md` item 10.
+
+| Section | Figure to include |
+|---|---|
+| 3 Process overview | Flowchart of the work from start to finish |
+| 4 Use cases with several parties | Sequence diagram |
+| 5 Screens | Screen sketch with numbers pointing to the field table |
+| 6 States | State diagram — **a companion to the table, not a replacement** |
+| 8 Data | ER diagram of only the tables this module touches |
+
+
+## reference: fsd-vs-srs.md
+
+# How an FSD differs from an SRS
+
+This table compares the two documents one dimension at a time. Use it when you must decide whether a piece of content belongs in the SRS or the FSD.
+
+| | SRS | FSD |
+|---|---|---|
+| Question answered | What the system **must be able to do** | **How** the system does it |
+| Main readers | Customer · executives · the person who signs off | developer · tester · ux |
+| Level of detail | "The system must let users cancel an order" | Where the button sits · which statuses allow cancelling · who has permission · what confirms it · what message appears when cancelling is impossible · what the system does next |
+| Changes | Need approval and affect the contract | Can change inside the team, as long as they still meet the same SRS item |
+| Content unit | Requirement (`FR-…`) | Use case (`UC-…`) + screen requirement (`SC-…`) |
+| Numbers | Come from the customer | Come from the SRS; never invent new ones |
+
+
+## reference: outline-sections.md
+
+# FSD sections and when you may skip them
+
+This table sums up the question each FSD section answers. The full outline with fill-in hints is in [`../assets/fsd-outline.md`](../assets/fsd-outline.md).
+
+| # | Section | Question it answers | Skippable? |
+|---|---|---|---|
+| 1 | Introduction · scope · references | What does this version cover? Which SRS items does it cite? | No |
+| 2 | Users and permissions | Who can do what? | No |
+| 3 | Process overview | How does the work flow from start to finish? | No |
+| 4 | Individual use cases | How is each task done, step by step? | No |
+| 5 | Screen requirements | What is on the screen? What does each field validate? | Skippable if there is no screen |
+| 6 | State diagram | Which states can this item move between? | Skippable if there are no states |
+| 7 | Business rules | Which rules are enforced? | No |
+| 8 | Data and integrations | What data is used? Which systems connect? | No |
+| 9 | Errors and edge cases | How can it fail, and what does the user see? | No |
+| 10 | Traceability matrix | Which SRS item does this come from, and what tests it? | No |
+| 11 | Revision history | Who changed what, and when? | No |
+
+
+## reference: related-skills.md
+
+# Links to other skills
+
+If the task needs knowledge beyond the FSD, open the skill in the right-hand column alongside this one.
+
+| Need | Use with |
+|---|---|
+| Requirement level the customer signs off | `srs-writing` |
+| Markdown format and color theme of the document | `design-gate/polished-document-style` |
+| Look of the exported .docx file | `branded-document-design` |
+| Figures in the document | `diagram-figures` (every figure in a delivered document) · `markdown-visuals` (screen sketches) · `software-diagrams` (Mermaid drafts for chat only) |
+| API agreements the FSD refers to | `api-conventions` |
+| Data model the FSD refers to | `database-design` |
+| The five screen states and design rules | `ui-craft` + the platform skill |
+| Turning use cases into test cases | `test-case-template` |
+| Splitting into user stories at sprint start | `user-story-writer` |
+| Cutting unneeded content from the document | `superuser:ground-rules` |
+
+**Document outline you can copy and fill in right away** → [`../assets/fsd-outline.md`](../assets/fsd-outline.md)
+
+
+## reference: stakeholder-doc-templates.md
+
+# Stakeholder document (Mode B) — style, diagrams, templates
+
+**สารบัญ:** Document Structure · Formatting Rules (hierarchy · markers · callouts · tables · badges) · Diagrams · Templates: Use Case · API Endpoint · Data Model
+
+Moved from the system-analyst agent. Read when writing a Mode B document. A Mode A use case follows `SKILL.md` §4 and [`worked-examples.md`](worked-examples.md); the templates below are the same content in reviewer-friendly form, never a different format.
+
+Mode B is **the same FSD** as Mode A — the same 11 sections in the same order as `SKILL.md` §3 — styled for reviewers who sign off: a short summary up front, plain words, more tables, less code. It never adds or drops a section; only the style changes. Diagrams follow `SKILL.md` §10. IDs follow `SKILL.md` §9 (`UC-<module>-<3 digits>`, steps of 10).
+
+## Document Structure
+
+Every stakeholder doc MUST follow the 11 FSD sections (`SKILL.md` §3, full outline in [`assets/fsd-outline.md`](../assets/fsd-outline.md)):
+
+````markdown
+# <Document Title>
+
+> **Version:** 1.0 · **Date:** YYYY-MM-DD · **Status:** Draft | Review | Approved
+> **Authors:** ... · **Reviewers:** ...
+
+---
+
+## Table of Contents
+
+1. [Introduction](#1-introduction) — starts with a one-paragraph summary for non-technical readers
+2. [Users & Permissions](#2-users--permissions)
+3. [Process Overview](#3-process-overview)
+4. [Use Cases](#4-use-cases)
+5. [Screen Specifications](#5-screen-specifications)
+6. [State Machines](#6-state-machines)
+7. [Business Rules](#7-business-rules)
+8. [Data & Integrations](#8-data--integrations) — API endpoints and data model go here
+9. [Errors & Edge Cases](#9-errors--edge-cases)
+10. [Traceability](#10-traceability)
+11. [Revision History](#11-revision-history)
+
+---
+
+## 1. Introduction
+
+> **For non-technical readers** — 1 paragraph explaining what this feature does and why.
+
+### Scope
+
+**In scope**
+- ...
+
+**Out of scope**
+- ...
+
+### Glossary
+- ...
+
+[... continue all 11 sections; skip 5 only if there are no screens and 6 only if nothing has a status ...]
+````
+
+## Formatting Rules
+
+### Hierarchy & Numbering
+- H1 = document title (only ONE)
+- H2 = numbered sections (1., 2., 3.)
+- H3 = sub-sections (1.1, 1.2)
+- Always add TOC for docs with 5+ sections
+- Use anchor links in TOC
+
+### Visual Markers
+
+No emoji or icons in headings, body, tables, labels or callouts (`human-writing` · `design-gate/polished-document-style`). Use words:
+
+| Need | Write |
+|--------|---------|
+| Yes / no in a table | ✓ / ✗ |
+| Status | Draft · Approved · Pending · In Progress |
+| Severity or priority | Critical · High · Medium · Low |
+| Tip, warning, critical, note | Bold callout label (below) |
+
+### Callout Boxes (Blockquotes)
+
+```markdown
+> **Tip:** Brief insight here.
+
+> **Warning:** Important caveat.
+
+> **Critical:** Must read before proceeding.
+
+> **Note:** Additional context.
+```
+
+### Tables
+
+Prefer tables over bullet lists when data has 2+ attributes:
+
+```markdown
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| email | string | ✓ | User's email |
+| age | number | ✗ | Optional |
+```
+
+Align headers to data when helpful:
+```markdown
+| Field | Type | Required |
+|:------|:-----|:--------:|
+```
+
+### Status Badges (in tables/inline)
+
+```markdown
+**Status:** Approved
+**Priority:** High
+**Risk:** Medium
+```
+
+---
+
+# Diagrams
+
+Follow `SKILL.md` §10. A Mode B document is delivered to people who sign it, so every figure is a house-style figure made with `diagram-figures` (same theme for every figure in one document, per `doc-theme`). Mermaid through `software-diagrams` is only for a quick sketch in chat, never for the delivered file. Screen sketches use `markdown-visuals`.
+
+## When to use which diagram
+
+| Diagram | Use for | FSD section |
+|---------|---------|---|
+| Flowchart | Business processes, decision trees | 3 Process Overview |
+| Sequence diagram | Interactions between systems/actors over time | 4 Use Cases (multi-party) |
+| State diagram | Object lifecycle, status transitions — **next to the table, not instead of it** | 6 State Machines |
+| ER diagram | Tables of this module only | 8 Data & Integrations |
+| Timeline (Gantt) | Schedule, if the document has one | appendix |
+
+Embed each figure as an image with a numbered caption, for example `![Figure 4-1 Place order — sequence](figures/uc-ord-010-sequence.svg)`.
+
+---
+
+# Templates
+
+## Use Case Template (Mode B)
+
+````markdown
+### UC-ORD-010: <Use Case Name>
+
+| Field | Value |
+|-------|-------|
+| **ID** | UC-ORD-010 (next use case in this module: UC-ORD-020) |
+| **From (SRS)** | FR-ORD-040 |
+| **Actor** | Customer |
+| **Priority** | High |
+| **Status** | Approved |
+| **Trigger** | User clicks "Place Order" |
+| **Frequency** | ~200 per day `(รอยืนยัน)` |
+
+#### Preconditions
+- User is authenticated
+- Cart contains at least 1 item
+
+#### Postconditions
+- Order created with status `pending`
+- Inventory reserved
+- Confirmation email sent
+
+#### Main Flow
+
+| Step | Actor | Action | System Response |
+|:----:|:------|:-------|:----------------|
+| 1 | User | Reviews cart and clicks "Place Order" | Shows order summary |
+| 2 | User | Confirms payment method | Validates payment info |
+| 3 | System | Submits payment to gateway | Receives auth code |
+| 4 | System | Creates order record | Returns order #ORD-XXXX |
+| 5 | System | Sends confirmation email | — |
+| 6 | User | Sees confirmation page | — |
+
+#### Alternative Flows
+
+> **010-A1: Payment declined at step 3**
+> 3a. Gateway returns decline
+> 3b. System shows error, suggests alternate payment
+> 3c. Returns to step 2
+
+#### Exception Flows
+
+> **010-E1: Gateway timeout at step 3**
+> 3a. System waits 30s
+> 3b. Logs incident, marks order as `payment_pending`
+> 3c. Sends "We'll retry" email to user
+
+#### Sequence Diagram
+
+![Figure 4-1 UC-ORD-010 Place order — Customer, UI, API, Payment Gateway, Database](figures/uc-ord-010-sequence.svg)
+
+> Drawn with `diagram-figures` (house style). Steps: Customer clicks "Place Order" → UI sends POST /orders → API charges the gateway → gateway returns auth code → API inserts the order → UI shows the confirmation page.
+````
+
+## API Endpoint Template (Mode B)
+
+````markdown
+### POST `/api/v1/orders`
+
+> Create a new order from cart contents.
+
+| Attribute | Value |
+|-----------|-------|
+| **Auth Required** | Yes (Bearer token) |
+| **Rate Limit** | 10 req/min per user |
+| **Idempotent** | Yes (use `Idempotency-Key` header) |
+
+#### Request Headers
+
+| Header | Required | Example |
+|--------|:--------:|---------|
+| `Authorization` | ✓ | `Bearer eyJ...` |
+| `Idempotency-Key` | Recommended | `unique-request-id` |
+| `Content-Type` | ✓ | `application/json` |
+
+#### Request Body
+
+```json
+{
+  "items": [
+    { "product_id": "uuid", "quantity": 2 }
+  ],
+  "shipping_address_id": "uuid",
+  "payment_method_id": "uuid"
+}
+```
+
+#### Response: 201 Created
+
+```json
+{
+  "data": {
+    "id": "ORD-12345",
+    "status": "pending",
+    "total": 1250.00,
+    "created_at": "2025-01-15T10:30:00Z"
+  }
+}
+```
+
+#### Error Responses
+
+Every error body is `application/problem+json` (RFC 9457): `type` · `title` · `status` · `detail` · `requestId`, plus `errors[]` for validation. Shape and status rules: `web-service-essentials` §2.
+
+| Code | When | `type` (suffix) |
+|:----:|:-----|:-----|
+| 401 | Missing/invalid token | `unauthorized` |
+| 402 | Payment declined | `payment-declined` |
+| 409 | Inventory unavailable | `out-of-stock` |
+| 422 | Validation failed | `validation` + `errors[]` (`field` · `code` · `message`) |
+| 429 | Rate limit exceeded | `rate-limited` + `Retry-After` header |
+````
+
+## Data Model Template (Mode B)
+
+````markdown
+## 8. Data & Integrations
+
+### Entity Relationship Diagram
+
+![Figure 8-1 Order module — USER places ORDER, ORDER contains ORDER_ITEM](figures/order-er.svg)
+
+> Drawn with `diagram-figures` (house style), tables of this module only.
+
+### Tables
+
+#### `users`
+
+| Column | Type | Constraints | Description |
+|--------|------|-------------|-------------|
+| `id` | UUID | PK | Unique identifier |
+| `email` | VARCHAR(255) | UNIQUE, NOT NULL | Login email |
+| `created_at` | TIMESTAMP | NOT NULL, DEFAULT NOW() | Account creation |
+
+> **Security:** `email` is encrypted at rest using AES-256.
+````
+
+---
+
+
+## reference: worked-examples.md
+
+# Full examples of a use case, screen, state diagram, and business rule
+
+Every example in this file follows one story: cancelling an order. Copy the format and use it right away. The rules for each format are in `SKILL.md`. The Thai text inside the code blocks is sample output for a Thai FSD, so it stays in Thai.
+
+## Use case (item 4)
+
+```markdown
+### UC-ORD-010 · ยกเลิกคำสั่งซื้อ
+
+| | |
+|---|---|
+| **มาจาก** | FR-ORD-040 |
+| **ผู้ทำ** | ลูกค้า · เจ้าหน้าที่ฝ่ายขาย |
+| **เงื่อนไขก่อนเริ่ม** | เข้าสู่ระบบแล้ว · คำสั่งซื้ออยู่ในสถานะ `confirmed` |
+| **ผลเมื่อสำเร็จ** | คำสั่งซื้อเป็น `cancelled` · คืนจำนวนสินค้าเข้าคลัง · ส่งอีเมลแจ้ง |
+| **ความถี่** | ประมาณ 30 ครั้งต่อวัน |
+
+**ขั้นตอนหลัก**
+
+| # | ผู้ทำ | การกระทำ | ระบบทำอะไรต่อ |
+|:--:|---|---|---|
+| 1 | ลูกค้า | เปิดหน้ารายละเอียดคำสั่งซื้อ | แสดงปุ่ม "ยกเลิก" เฉพาะเมื่อ BR-030 ผ่าน |
+| 2 | ลูกค้า | กด "ยกเลิก" | เปิดกล่องยืนยัน พร้อมช่องเหตุผล (บังคับ) |
+| 3 | ลูกค้า | เลือกเหตุผล แล้วกดยืนยัน | ตรวจ BR-030 อีกครั้งที่ฝั่งเซิร์ฟเวอร์ |
+| 4 | ระบบ | — | เปลี่ยนสถานะ · คืนสต็อก · บันทึกผู้ทำและเวลา · ส่งอีเมล |
+| 5 | ระบบ | — | แสดงข้อความสำเร็จ และปุ่มยกเลิกหายไป |
+
+**ทางเลือกอื่น**
+
+| รหัส | แยกที่ขั้น | เงื่อนไข | ผลลัพธ์ |
+|---|:--:|---|---|
+| 010-A1 | 3 | ผู้ทำเป็นเจ้าหน้าที่ | ข้ามช่องเหตุผล แต่บังคับกรอกหมายเหตุภายใน |
+
+**กรณีผิดพลาด**
+
+| รหัส | เกิดที่ขั้น | สาเหตุ | ผู้ใช้เห็นอะไร | ระบบทำอะไร |
+|---|:--:|---|---|---|
+| 010-E1 | 3 | มีคนเปลี่ยนสถานะไปก่อนแล้ว | "คำสั่งซื้อนี้ถูกจัดส่งแล้ว ยกเลิกไม่ได้" | ไม่เปลี่ยนอะไร · โหลดหน้าใหม่ |
+| 010-E2 | 4 | คืนสต็อกไม่สำเร็จ | "ระบบขัดข้อง กรุณาลองใหม่" + รหัสอ้างอิง | ย้อนกลับทั้งรายการ · บันทึก log ระดับ error |
+```
+
+## Screen requirement (item 5)
+
+```markdown
+### SC-ORD-020 · หน้ารายละเอียดคำสั่งซื้อ
+
+**เส้นทาง:** `/orders/{id}` · **ใช้ใน:** UC-ORD-010, UC-ORD-020
+
+| ฟิลด์ | ชนิด | บังคับ | กฎตรวจ | ข้อความเมื่อไม่ผ่าน | ค่าเริ่มต้น |
+|---|---|:--:|---|---|---|
+| เหตุผลที่ยกเลิก | เลือกจากรายการ | ลูกค้า ✓ · เจ้าหน้าที่ ✗ (010-A1) | ต้องเป็นค่าในรายการ BR-031 | "กรุณาเลือกเหตุผล" | — |
+| หมายเหตุภายใน | ข้อความยาว | เจ้าหน้าที่ ✓ · ลูกค้าไม่เห็นช่องนี้ | ไม่เกิน 500 ตัวอักษร | "กรุณากรอกหมายเหตุ" · "หมายเหตุยาวเกิน 500 ตัวอักษร" | ว่าง |
+```
+
+## State transition table (item 6)
+
+| From | To | Who can do it | Condition | Side effects |
+|---|---|---|---|---|
+| `draft` | `confirmed` | Customer | At least 1 item · complete address | Deduct stock · send email |
+| `confirmed` | `cancelled` | Customer · staff | BR-030 | Return stock · send email |
+| `confirmed` | `shipped` | Warehouse staff | Has a tracking number | Send SMS |
+| `shipped` | `cancelled` | — | **Not allowed** | — |
+
+## Business rules (item 7)
+
+```markdown
+**BR-030 · ยกเลิกคำสั่งซื้อได้เมื่อไหร่**
+ยกเลิกได้เมื่อสถานะเป็น `confirmed` และยังไม่เกิน 24 ชั่วโมงนับจากเวลายืนยัน
+เจ้าหน้าที่ระดับหัวหน้าขึ้นไปยกเลิกได้โดยไม่จำกัดเวลา แต่ต้องกรอกหมายเหตุ
+**ที่มา:** นโยบายคืนเงิน ฉบับ 2026-03 ข้อ 4.2
+
+**BR-031 · เหตุผลที่ลูกค้าเลือกได้ตอนยกเลิก**
+สั่งผิดรายการ · ได้ราคาที่ถูกกว่า · รอนานเกินไป · ไม่ต้องการแล้ว · อื่น ๆ
+ผู้ดูแลระบบแก้รายการนี้ได้ในหน้าตั้งค่า โดยไม่ต้องแก้โค้ด
+**ที่มา:** นโยบายคืนเงิน ฉบับ 2026-03 ข้อ 4.3 `(รอยืนยัน)`
+```
+
+
+---
+
+# skill: stack-dotnet
+
+Use when writing or fixing C# and .NET code
+
+# stack-dotnet — write C# that builds clean, passes tests, and avoids the usual traps
+
+Use whenever the work touches C# code of any kind: ASP.NET Core (Web API · Model-View-Controller (MVC) · minimal API) · Entity Framework (EF) Core · ASP.NET MVC 5 on .NET Framework 4.x that is still maintained.
+
+---
+
+## 1 · Start: read the version first, then run the same commands every time
+
+- Find the Software Development Kit (SDK) version in `global.json`, and the target version in `<TargetFramework>` in `*.csproj` or `Directory.Build.props`.
+- Versions (last checked 2026-10-14 · source: https://dotnet.microsoft.com/platform/support/policy/dotnet-core): `net10.0` is the latest Long Term Support (LTS) release, supported until 2028-11-14 · `net8.0` (LTS) and `net9.0` (Standard Term Support, STS) are near the end, supported until 2026-11-10 · if you meet these 2, tell the owner and do not upgrade on your own mid-task · recheck this page before relying on it.
+- If you find `net48` or `v4.x` in `<TargetFrameworkVersion>`, it is .NET Framework, so use the legacy commands below.
+
+| Step | .NET (Core) 8+ | .NET Framework 4.x (Windows) |
+|---|---|---|
+| Restore packages | `dotnet restore` | `msbuild App.sln -t:restore` or `nuget restore App.sln` |
+| build | `dotnet build -warnaserror` (or per the repo's policy) | `msbuild App.sln -p:Configuration=Release` |
+| Run all tests | `dotnet test` | `vstest.console.exe Tests/bin/Release/App.Tests.dll` |
+| Format | `dotnet format --verify-no-changes` | Per `.editorconfig` in Visual Studio |
+
+Run a single test:
+
+```bash
+dotnet test --filter "FullyQualifiedName~OrderServiceTests.Cancel"   # VSTest (default)
+dotnet test --filter-method "*Cancel_*"                               # xUnit v3 on Microsoft Testing Platform (MTP)
+vstest.console.exe App.Tests.dll /TestCaseFilter:"FullyQualifiedName~Cancel"   # .NET Framework
+```
+
+- A full test run prints a long log. Append `2>&1 | tail -40` to see only the summary and the failed tests.
+- If the repo sets MTP in `global.json` (`"test": { "runner": "Microsoft.Testing.Platform" }`), use the `--filter-*` form on the 2nd line.
+- `msbuild` and `vstest.console.exe` live in Visual Studio or Build Tools. Open them through Developer PowerShell. A Linux machine cannot build a .NET Framework web project, so say plainly that it has not been built.
+
+## 2 · Structure and patterns
+
+Set this once in `Directory.Build.props` for every project in the solution:
+
+```xml
+<PropertyGroup>
+  <Nullable>enable</Nullable>
+  <ImplicitUsings>enable</ImplicitUsings>
+  <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  <AnalysisLevel>latest-recommended</AnalysisLevel>
+  <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+</PropertyGroup>
+```
+
+- If an old repo has hundreds of warnings, do not switch on `TreatWarningsAsErrors` for the whole solution in one task. Turn it on only for new projects, and add no new warnings.
+- Organise folders by feature (`Features/Orders/...`) per `readable-code`, but if the repo already uses `Controllers/ Services/`, follow the existing layout.
+- Use file-scoped namespaces (`namespace App.Orders;`), make Data Transfer Objects (DTO) a `record`, and never return an EF entity straight out of an API.
+- Async all the way: a method that waits on I/O takes `CancellationToken ct` and passes it down every layer to EF and `HttpClient`.
+- Choose minimal API or controllers to match what the repo uses. Do not mix them within one feature.
+
+Service lifetimes in Dependency Injection (DI):
+
+| Lifetime | Use for | Never |
+|---|---|---|
+| Singleton | Stateless things · caches · `TimeProvider` | Take a Scoped service in the constructor (`DbContext` would live across requests) |
+| Scoped | `DbContext` · services that use per-request data | Call it from a `BackgroundService` directly (use `IServiceScopeFactory.CreateScope()` instead) |
+| Transient | Light, stateless things | Hold a resource that needs disposing and hand it to a singleton |
+
+Use the options pattern for config values, and validate them at app start:
+
+```csharp
+builder.Services.AddOptions<SmtpOptions>()
+    .BindConfiguration("Smtp")
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+```
+
+An outcome that is "unsuccessful but expected" (not found · duplicate · out of stock) is returned as a value (a `Result<T>` record with `IsSuccess`, `Value`, `Error`, `Code`), not thrown. Keep exceptions for what the code does not expect. Use one code → status mapping for the whole system, then emit `ProblemDetails`. If the repo already has `FluentResults` or `ErrorOr`, use that one and do not add a second record on top. Code: [`references/patterns.md`](references/patterns.md).
+
+**4 checks for a new type**: (1) hide the internals: use a `record` whose constructor is `private` and give it a `Create` factory (2) the rules live in the type, so an invalid value cannot be built (3) validate once, in the constructor or factory (4) expose no setter: use `init` or a `readonly record struct`
+
+## 3 · EF Core
+
+| Topic | Do this |
+|---|---|
+| Read-only | `AsNoTracking()` · fetch only the columns you use with `Select(o => new OrderDto(...))` |
+| N+1 | Never loop and query inside the loop. Use `Include` or a projection. If you `Include` several collections, add `AsSplitQuery()` |
+| Update or delete many rows | Use `ExecuteUpdateAsync` / `ExecuteDeleteAsync`, do not load and edit one by one, but note these commands bypass the change tracker |
+| migration | Read the SQL every time: `dotnet ef migrations script --idempotent -o migrate.sql` |
+| production | Never `EnsureCreated()`, and never `Database.Migrate()` at app start when several instances start together. Run the script at deploy time instead |
+| Concurrent edits | Use `[Timestamp] byte[] RowVersion` (SQL Server) or `IsConcurrencyToken()`, then catch `DbUpdateConcurrencyException` to tell the user |
+| Time | Always store UTC, and PostgreSQL (Npgsql) requires `DateTimeKind.Utc` for `timestamptz` |
+
+Look at the SQL EF really generates before handing over:
+
+```csharp
+var sql = db.Orders.Where(o => o.Status == Status.Open).ToQueryString();
+// or in Development
+options.LogTo(Console.WriteLine, LogLevel.Information).EnableSensitiveDataLogging();
+```
+
+Use `EnableSensitiveDataLogging` on dev machines only. For schema and indexes, follow `database-design`.
+
+## 4 · Common traps
+
+| Trap | What happens | Do this instead |
+|---|---|---|
+| `async void` | An exception crashes the process and cannot be caught | Use `async Task`, except for UI event handlers |
+| `.Result` · `.Wait()` · `GetAwaiter().GetResult()` | MVC 5 deadlocks · Core eats threads until the app slows | Use `async Task<ActionResult>` all the way, and `ConfigureAwait(false)` in libraries |
+| `new HttpClient()` every time | Sockets run out and DNS never refreshes | Use `IHttpClientFactory` or a typed client; on .NET Framework use `static readonly HttpClient` |
+| Forgetting to dispose | Connections and files stay open | `using var` · `await using` for `IAsyncDisposable` |
+| Building SQL by string concatenation | SQL injection | LINQ · `FromSql($"...{id}")` (it parameterises for you) · Dapper with `new { id }` · never `FromSqlRaw` with a string you built |
+| Parsing or formatting with the machine's culture | A `th-TH` machine uses the Buddhist calendar, so the year comes out as 2569 and parsing "2026-01-05" gives a year wrong by 543 | Store and parse with `CultureInfo.InvariantCulture` · show Buddhist Era years only when displaying, per `i18n-and-locale` |
+| Money as `double` | 0.1 + 0.2 ≠ 0.3 | Use `decimal` and state the column as `decimal(18,2)` explicitly |
+| `DateTime.Now` | Cannot be tested, and time drifts with the server | Use `TimeProvider` through DI and `FakeTimeProvider` in tests |
+| Thai time | The server runs in UTC | `TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")`; on .NET Framework on Windows use `"SE Asia Standard Time"` |
+| An array or string ≥ 85,000 bytes | Lands on the Large Object Heap (LOH) and burdens the memory garbage collector (GC) | Stream the data · `ArrayPool<T>` · `IAsyncEnumerable<T>` for long lists |
+| `$"..."` in a log call | Cannot search by field, and builds the string even when the log level is off | Message template: `log.LogInformation("Order {OrderId} paid", id)`; for other formats see `logging-standards` |
+
+For where to catch exceptions and how to retry, see `error-handling-patterns`. In ASP.NET Core, use `IExceptionHandler` + `AddProblemDetails()` in one place.
+
+## 5 · Tests
+
+- Use the framework the repo already has. For a new project use xUnit (v3 for .NET 8+), per `testing-standards`.
+- FluentAssertions from v8 onward needs a paid licence for commercial use, while v7 is still free (Apache 2.0). In a new project use xUnit's asserts or AwesomeAssertions (a free fork). If the repo already uses v8, ask the owner about the licence.
+- Test names: `Method_Condition_Result`, for example `Cancel_WhenAlreadyShipped_Throws`
+- For new logic or a bug, write a failing test first, then fix it until green, and a bug needs a test that reproduces the real symptom.
+- Test a whole API path with `WebApplicationFactory<Program>`. If the test cannot see `Program`, add `public partial class Program;`.
+- For a real database use Testcontainers (`Testcontainers.MsSql` · `Testcontainers.PostgreSql`). Never use EF InMemory in place of a real database, because it does not check constraints and translates SQL differently.
+
+For the full xUnit setup and a `WebApplicationFactory` example, see [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#net--xunit)
+
+## 6 · .NET-specific security
+
+| Topic | ASP.NET Core | MVC 5 (.NET Framework) |
+|---|---|---|
+| Cross-Site Request Forgery (CSRF) | For MVC add `AutoValidateAntiforgeryToken` as a global filter; Razor Pages check it themselves | `@Html.AntiForgeryToken()` + `[ValidateAntiForgeryToken]` on every POST |
+| Login required by default | Set `FallbackPolicy` to `RequireAuthenticatedUser()`, then add `[AllowAnonymous]` one place at a time on pages open to everyone | `GlobalFilters.Filters.Add(new AuthorizeAttribute())` |
+| Extra fields posted (over-posting) | Bind into a DTO that holds only the editable fields | Use a separate view model, never bind the entity directly |
+| Output | Razor encodes for you, but never use `Html.Raw` on user data | The same, and beware `MvcHtmlString` |
+| Data Protection keys | With several instances or containers, keep the keys in one shared place (`PersistKeysToDbContext` or a file share), or cookies break on every restart | The same `machineKey` in `web.config` on every machine |
+| secret | dev: `dotnet user-secrets set "Db:Password" "..."` · prod: environment variable or secret store | Keep a separate `web.config` transform and never commit real values |
+
+- A committed `appsettings.json` or `web.config` must not hold passwords, real connection strings or API keys. For storing secrets, see `config-and-secrets`.
+- For input validation · uploads · encryption, see `principle-secure-by-default`.
+
+## 7 · Check before sending
+
+- [ ] `dotnet build -warnaserror` gives 0 warnings (or, in an old repo, adds no warnings over before)
+- [ ] `dotnet test` all pass, and the report says how many passed out of how many (long output → `> _to_delete/test.txt 2>&1`, then `tail -20`)
+- [ ] `dotnet format --verify-no-changes` finds nothing to fix
+- [ ] New behaviour has a test that was red before the fix
+- [ ] No new `.Result` · `.Wait()` · `async void`: `grep -rnE "\.Result\b|\.Wait\(\)|async void" --include=*.cs`
+- [ ] For any query you changed, you looked at the real SQL and there is no N+1
+- [ ] The migration has an `--idempotent` script, you read it, and it has no unintended `DROP`
+- [ ] If you cannot build .NET Framework on this machine, write in the report that it was not built. Do not say it passed.
+
+## References
+
+- [`references/patterns.md`](references/patterns.md) — open when writing a `Result<T>` or a validated value type (Thai national ID example, not compiled)
+
+
+## reference: patterns.md
+
+# C# patterns · stack-dotnet
+
+## Result<T> for expected failures
+
+```csharp
+public sealed record Result<T>(bool IsSuccess, T? Value, string? Error, string? Code)
+{
+    public static Result<T> Ok(T value) => new(true, value, null, null);
+    public static Result<T> Fail(string error, string? code = null) => new(false, default, error, code);
+}
+
+// service
+return stock < qty ? Result<Order>.Fail("สต็อกไม่พอ", "OUT_OF_STOCK") : Result<Order>.Ok(order);
+
+// endpoint — one code → status mapping for the whole system, then emit ProblemDetails
+return r.IsSuccess ? Results.Ok(r.Value) : Results.Problem(r.Error, statusCode: r.Code switch { "NOT_FOUND" => 404, "OUT_OF_STOCK" => 409, _ => 400 });
+```
+
+## Value type with private constructor (Thai national ID)
+
+```csharp
+// Thai national ID: 13 digits + check digit · money in satang (long), never double
+public readonly record struct ThaiNationalId
+{
+    public string Value { get; }
+    private ThaiNationalId(string v) => Value = v;
+    public static ThaiNationalId? Create(string s)
+    {
+        if (s.Length != 13 || !s.All(char.IsAsciiDigit)) return null;
+        var sum = s.Take(12).Select((c, i) => (c - '0') * (13 - i)).Sum();
+        return (11 - sum % 11) % 10 == s[12] - '0' ? new ThaiNationalId(s) : null;
+    }
+}
+```
+(This C# example has not been compiled · the check-digit formula is the same as in the TypeScript example that has been run)

@@ -2,7 +2,7 @@
 
 Use when: a report · plan · summary · letter · important message · a document that will be passed on
 Result: a document the reader can use at once, written per `human-writing`
-Main pattern: Planning · Reflection (`agent-patterns`)
+Main pattern: Planning · Reflection (`crew-patterns/agent-patterns`)
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 

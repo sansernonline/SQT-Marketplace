@@ -5,7 +5,7 @@ description: Use for a one-off logo or poster, not a full brand kit
 
 # Graphic Design
 
-> **Pre-work gate "ด่านก่อนลงมือ" (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for finding the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
+> **Pre-work gate "ด่านก่อนลงมือ" (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `design-gate/no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for finding the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
 > **The one rule of this skill:** write the direction into a file first, then touch the first pixel.
 
@@ -36,7 +36,7 @@ Also when reviewing work that "looks AI-made" and you cannot say why.
 
 ## 1 · Work sequence
 
-0. **Search for references first:** take the project's keywords and search live as in `design-references` (plugin `superuser`), type `logo` · `social` · `illustration` as the work needs, then pull colours from the chosen work. Use the stored colour library when live search is not possible.
+0. **Search for references first:** take the project's keywords and search live as in `design-gate/design-references` (plugin `superuser`), type `logo` · `social` · `illustration` as the work needs, then pull colours from the chosen work. Use the stored colour library when live search is not possible.
 1. **Write the direction into a file.** Copy `assets/brand-direction.md` and fill it in.
 2. **Pick a position on the 4 axes** (section 2), then write 1 line of reasoning per axis.
 3. **Write the list of things to avoid.** It is the most useful part of the whole file.
@@ -177,7 +177,7 @@ or like it could have come out of any machine?
 
 ## Do not look AI-made
 
-Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script. Every piece must also pass the eye check (ด่านตา) 3.2 (web pages answer items 10–14 as well), because a script result of 0 items does not yet mean a pass. The bans in this file are specific to this work. The full list for every medium is there.
+Before sending, go through item 3 of `design-gate/no-ai-look`. For HTML work, run its script. Every piece must also pass the eye check (ด่านตา) 3.2 (web pages answer items 10–14 as well), because a script result of 0 items does not yet mean a pass. The bans in this file are specific to this work. The full list for every medium is there.
 
 
 **Read more when needed:** [`references/designer-outputs.md`](references/designer-outputs.md) — formats for a designer's deliverables

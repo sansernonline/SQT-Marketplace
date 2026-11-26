@@ -4,7 +4,7 @@ Use when a Word, PowerPoint or PDF or its cover must look designed
 
 # Branded Document Design — .docx / .pptx / .pdf that looks intentionally designed
 
-> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the owner's theme → search live for reference designs → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand controls color and fonts; the search is for this piece's structure) · close the job with the line `ด่านก่อนลงมือ:`
+> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the owner's theme → search live for reference designs → 3 genuinely different directions → check `design-gate/no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls color and fonts; the search is for this piece's structure) · close the job with the line `ด่านก่อนลงมือ:`
 
 > **One rule:** an exported document has one color set, and one set of type sizes and spacing that is the same on every page. It must not look like someone opened Word and just typed.
 
@@ -13,14 +13,14 @@ Use when a Word, PowerPoint or PDF or its cover must look designed
 - A document set needs its own cover from the logo shape or a real mockup, or covers look alike across projects → step 3 and `references/cover-design.md`
 - Mixed Thai–English documents (they break easily if fonts are not fully set)
 - The same kind of document is issued repeatedly and every copy should look the same
-- Not for: markdown output → `polished-document-style` · reading or extracting a received Office file → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` · diagrams in markdown → `markdown-visuals` · a whole-book report from one Markdown file → `markdown-report-docx`
+- Not for: markdown output → `design-gate/polished-document-style` · reading or extracting a received Office file → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` · diagrams in markdown → `markdown-visuals` · a whole-book report from one Markdown file → `markdown-report-docx`
 
-Order: write the content as markdown first (`polished-document-style`), then render it with this skill. Always fix content in the markdown (the source).
+Order: write the content as markdown first (`design-gate/polished-document-style`), then render it with this skill. Always fix content in the markdown (the source).
 
 Install before use: `pip install python-docx python-pptx` · LibreOffice (`soffice`) to convert to PDF · `pdftoppm` (poppler) to convert to images.
 
 ## Steps
-1. **Colors.** If the source markdown has a `doc-theme`, use it: do not ask, do not set a new one (`polished-document-style`, "ธีมของเอกสาร"). Otherwise look in the order in `diagram-figures` item 5 (`doc-theme` → brand colors in code, logo, brand kit → nothing). If there is nothing, search live for reference designs per `design-references` (plugin `superuser`), type `document`, then extract colors from the chosen work (stored palette library when live search is impossible). If live search is impossible, use the house color `#2A78D6`, write `(รอยืนยัน)` in the report, and carry on without asking; put a tone suggested by the content in the report for the user to choose later ([`references/palette-examples.md`](references/palette-examples.md)). A customer's brand colors always win. Write the colors back into `doc-theme` in the markdown so document, figures, and slides match.
+1. **Colors.** If the source markdown has a `doc-theme`, use it: do not ask, do not set a new one (`design-gate/polished-document-style`, "ธีมของเอกสาร"). Otherwise look in the order in `diagram-figures` item 5 (`doc-theme` → brand colors in code, logo, brand kit → nothing). If there is nothing, search live for reference designs per `design-gate/design-references` (plugin `superuser`), type `document`, then extract colors from the chosen work (stored palette library when live search is impossible). If live search is impossible, use the house color `#2A78D6`, write `(รอยืนยัน)` in the report, and carry on without asking; put a tone suggested by the content in the report for the user to choose later ([`references/palette-examples.md`](references/palette-examples.md)). A customer's brand colors always win. Write the colors back into `doc-theme` in the markdown so document, figures, and slides match.
    - **One main color.** All light and dark shades are computed from it. Only the status colors (success · warning · error) are independent and keep their meaning.
 2. **Continue the look of the brand or app, before the first render.** The skill's defaults (Tahoma · solid color band cover · lines in every table cell) are the floor, not the deliverable look.
    - Is there an identity already? Check the brand kit (`graphic-design:brand-kit`), `assets/logo/`, `docs/design/`, a mockup that passed the beauty gate (score in `docs/BUILD-PLAN.md`), field `doc-theme` in `docs/README.md`. If yes, use the same logo (cover + page header), colors, and patterns as the app. If no, follow step 1.
@@ -40,7 +40,7 @@ Install before use: `pip install python-docx python-pptx` · LibreOffice (`soffi
 7. **Use the elements** `cover()` · `table()` · `pill_table()` · `kpi_row()` · `callout()` · `figure()` · `code()` · `signoff()` (methods in `references/tokens-and-type.md`). At most 3–5 callouts per 10 pages · KPI strip of 3–5 cells · a table over 6 columns goes on a landscape page (`landscape_section()`).
 8. **Use brandkit.** `from brandkit import BrandDoc, use_brand, to_pdf` (put `scripts/` on the path) · slides → `brandkit_pptx.BrandDeck` · speaking deck → `brandkit_stage.StageDeck` (default: `accent`/`bg` from the source work per `presentation-design` `references/deck-theme.md`, `source_palette.py` prints the `StageDeck(...)` line; light `FFFFFF` with `block=True`, dark only if the source is dark; no color at all → `#2A78D6` on `FFFFFF` + `(รอยืนยัน)`). Sample code and methods: [`references/brandkit-usage.md`](references/brandkit-usage.md), `references/api.md`.
 9. **Look at every page before delivery.** Render to PDF, convert to images, open each page (Read tool): the code cannot show tables overflowing the margin, stranded headings, floating tone marks. Commands and the 7-point checklist: [`references/visual-check.md`](references/visual-check.md).
-10. Before sending, go through item 3 of `no-ai-look` (HTML work: run its script; the eye gate 3.2 must also pass, web pages answer items 10–14).
+10. Before sending, go through item 3 of `design-gate/no-ai-look` (HTML work: run its script; the eye gate 3.2 must also pass, web pages answer items 10–14).
 
 **Hard rules (covers):**
 - A project cover shows its project by logo shape or a real screen at a glance, not by colour alone.
@@ -309,7 +309,7 @@ d.save("deck.pptx")
 
 # Make 3 styles, then vote 2 of 3
 
-Used with `cover-design.md` step 7. It is a variant of `parallel-attempts-pick-best` that swaps "1 middleman agent" for "3 reviewers who vote".
+Used with `cover-design.md` step 7. It is a variant of `crew-patterns/parallel-attempts-pick-best` that swaps "1 middleman agent" for "3 reviewers who vote".
 Cost: about 3–5 times the work of a single style. Use it when you set a project's look for the first time, not at every version bump.
 
 ## 1 · Prepare before launching
@@ -346,7 +346,7 @@ Then vote: `overall` 1 style · `per_project` the best style for each project ·
 ## 4 · Count the votes
 
 - The style with **2 of 3** wins, for both `overall` and per project (per-project winners may differ from overall).
-- If the vote splits 3 ways, the team lead reads the total score per criterion. The "repeatable" criterion decides when scores are close. Then log it in `decision-log`.
+- If the vote splits 3 ways, the team lead reads the total score per criterion. The "repeatable" criterion decides when scores are close. Then log it in `decision-desk/decision-log`.
 - The team lead looks at all the images before reading the votes, then compares. If they disagree, read both sides' reasons before deciding.
 
 ## 5 · Merge the results
@@ -399,7 +399,7 @@ Round 2 (the user said much more should change, and to learn from other people's
 - [Do not look AI-made](#do-not-look-ai-made)
 
 
-> **Gate before starting (every time):** read the owner's theme → search live for references → 3 truly different styles → check `no-ai-look` before sending. Follow the "ด่านก่อนลงมือ" (gate before starting) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls color and fonts; the search is for the structure of this piece). Close the work with a `ด่านก่อนลงมือ:` line.
+> **Gate before starting (every time):** read the owner's theme → search live for references → 3 truly different styles → check `design-gate/no-ai-look` before sending. Follow the "ด่านก่อนลงมือ" (gate before starting) section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls color and fonts; the search is for the structure of this piece). Close the work with a `ด่านก่อนลงมือ:` line.
 
 > **The one rule:** the cover must say which project it belongs to at a glance, without reading the name. Do it with the logo's shapes or the app's real screen, not with color alone.
 
@@ -419,7 +419,7 @@ The default path is logo shapes. The fallbacks are the real screen, or a pictogr
 
 ## 1 · Find the idea from real things: write it in `docs/design/cover-direction.md` before drawing anything
 
-0. **Look at other people's real covers first.** **Search for references first:** take the project's keywords and search live following `design-references` (plugin `superuser`), type `document`, then pull the colors from the chosen work. The stored color library is for when live search is not possible. Collect at least 6 real document or book covers close to this work (same field as the app · tech publishers · Thai examples), then choose which series system to borrow, following [`cover-real-examples.md`](cover-real-examples.md). For every idea on the cover, you must be able to say which cover it came from.
+0. **Look at other people's real covers first.** **Search for references first:** take the project's keywords and search live following `design-gate/design-references` (plugin `superuser`), type `document`, then pull the colors from the chosen work. The stored color library is for when live search is not possible. Collect at least 6 real document or book covers close to this work (same field as the app · tech publishers · Thai examples), then choose which series system to borrow, following [`cover-real-examples.md`](cover-real-examples.md). For every idea on the cover, you must be able to say which cover it came from.
 
 1. **Open the logo's SVG file (vector image) as text** and note the basic shapes with unit coordinates (e.g. 2 L shapes on a 64 grid · T bar + cursor · 2 dots + arrow). Do not count the glow and gradient background of the icon file.
 2. **Find the app's main verb** from the first paragraph of the README (if none → the introduction of the BRD or SRS): connect · type · swipe.
@@ -502,7 +502,7 @@ If the user says the cover is not beautiful → cut things before adding (matche
 
 ## Do not look AI-made
 
-Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye check 3.2 ("ด่านตา 3.2" in `no-ai-look`; web pages add items 10–14), because 0 hits from the script is not yet a pass.
+Before sending, go through item 3 of `design-gate/no-ai-look`. For HTML work, run its script. Every job must also pass the eye check 3.2 ("ด่านตา 3.2" in `design-gate/no-ai-look`; web pages add items 10–14), because 0 hits from the script is not yet a pass.
 
 
 ## reference: cover-real-examples.md
@@ -615,7 +615,7 @@ Open when a document set needs its own cover.
 Use when a document set (proposal · report · business plan) needs its own cover and the default cover looks like another job's. Do one direction first; use this only if the user is not wowed or asks for several directions (3–5 times the labor).
 
 1. **Find the real thing to hold on to:** logo, name, the main verb of the job (propose · analyze · sell), or real images of the work · look at at least 6 real covers by others · every image on the cover must point back to something real, otherwise cut it.
-2. **3 designers (use `parallel-attempts-pick-best`).** Same brief, different directions: A drawn from the job's real data · B a real image of the work is the hero (screen, photo, sample of the output) · C the logo shape or lettering is the structure, no drawn image · each agent needs Bash to render and open the image itself.
+2. **3 designers (use `crew-patterns/parallel-attempts-pick-best`).** Same brief, different directions: A drawn from the job's real data · B a real image of the work is the hero (screen, photo, sample of the output) · C the logo shape or lettering is the structure, no drawn image · each agent needs Bash to render and open the image itself.
 3. **3 new reviewers who have not seen the work, each from a different angle:** art director (is it truly wow, does it look AI-made) · brand and customer (is it memorable, does it show what the work is about, does it go with the whole set) · Word production (is it repeatable, can the text be edited) · include the old cover as an option too.
 4. **Criteria scored 1–5, then vote:** wow compared with the old cover · not a repeat of other work · tells the truth of the work · fits the whole set · craftsmanship (Thai, contrast, smallest text) · buildable and repeatable in Word · the direction with **2 of 3 votes wins** · borrow at most 2 strong pieces from a losing direction · if the votes split 3 ways, "repeatable" decides.
 5. **Text on the cover is editable Word text** (title, version, date) · the background image has no lettering baked in · anchor the image to the first paragraph, not in the header.
@@ -690,7 +690,7 @@ Opening on a machine without the fonts (fonts are embedded, but not yet tried) �
 
 Open this when the user is not wowed by the first direction, asks for several directions, or the job needs the document beauty gate (`ด่านสวย`). Moved from SKILL.md item 0.1, steps 2–4.
 
-2. **Do 1 direction first.** Only if the user is not wowed, or asks for several directions, do **3 directions in parallel** (3–5 times the labor · `parallel-attempts-pick-best` · a new agent with Bash per direction · for the cover use the 3-direction vote method in [`cover-vote.md`](cover-vote.md)). Each direction makes an HTML mock of A4 pages: cover · a content page with a real 4-row requirements table + callout · a table-of-contents page or a figure page · **1 figure redone for the direction** (use `diagram-figures`) · the file header says how to build each piece in real Word. When doing several directions they must really differ, for example a dark cover continuing from the app / a light editorial report / an engineering spec.
+2. **Do 1 direction first.** Only if the user is not wowed, or asks for several directions, do **3 directions in parallel** (3–5 times the labor · `crew-patterns/parallel-attempts-pick-best` · a new agent with Bash per direction · for the cover use the 3-direction vote method in [`cover-vote.md`](cover-vote.md)). Each direction makes an HTML mock of A4 pages: cover · a content page with a real 4-row requirements table + callout · a table-of-contents page or a figure page · **1 figure redone for the direction** (use `diagram-figures`) · the file header says how to build each piece in real Word. When doing several directions they must really differ, for example a dark cover continuing from the app / a light editorial report / an engineering spec.
 3. **2 reviewers who did not do the work** (if there is only one direction, score that one only; no mixing) score 1–5 (pass = 4): first impression · continuity with the app · craftsmanship (a long Thai table of 60 rows without breaking mid-word · type scale · contrast) · figures readable when placed for real · really buildable in Word → **mixing is allowed** (cover from one direction, body from another) if the reviewers name the pieces clearly.
 4. Work on the render script (do not edit .docx files one by one) → render every copy → **document beauty gate (`ด่านสวย`)**: 2 new reviewers look at images of the real pages (cover · table of contents · chapter opener · long table page · figure page) using the 5 axes above, and take the lower score · ceiling **3 rounds** (more detail in `ui-craft/references/states-and-checks.md` in plugin `software-development` if installed) · record every round's score in `docs/BUILD-PLAN.md`
 
@@ -989,7 +989,7 @@ Not for: user stories → `user-story-writer` · why a technology was chosen →
 5. Write each requirement by "Requirement rules" below and assign its ID at once.
 6. Write non-functional requirements (NFRs) by "NFR rules" below.
 7. Build the traceability tables. This is the step people skip most, and it is what gives value when a change request arrives.
-8. Add figures. Figures in the SRS itself use `diagram-figures`; quick figures outside the SRS (README · PR) use `software-diagrams`. One colour theme per document, declared at the top per `polished-document-style`.
+8. Add figures. Figures in the SRS itself use `diagram-figures`; quick figures outside the SRS (README · PR) use `software-diagrams`. One colour theme per document, declared at the top per `design-gate/polished-document-style`.
 9. Run the review, then send.
 
 ## Structure
@@ -1038,7 +1038,7 @@ Based on ISO/IEC/IEEE 29148. Sections: 1 Introduction · purpose · scope · def
 
 # BRD template — stakeholder version (Mode B)
 
-Business Requirements Document (BRD) template, the version sent to stakeholders, for the agent `business-analyst` · format it following `polished-document-style`
+Business Requirements Document (BRD) template, the version sent to stakeholders, for the agent `business-analyst` · format it following `design-gate/polished-document-style`
 
 **สารบัญ:**
 
@@ -1297,7 +1297,7 @@ An SRS with no figures makes each reader imagine a different picture.
 | Every figure in the SRS itself (overview · flowchart · sequence · ER · state), whether delivered as markdown, .docx or PDF | `diagram-figures` (sharp image files, placement under your own control, source files kept in the repo so git can track them) |
 | Quick figures in a README · PR · code note, outside the SRS | `software-diagrams` (Mermaid) |
 
-Every figure in one document uses the same colour theme. Declare the theme at the top per `polished-document-style` section "ธีมของเอกสาร" (Document theme); every tool reads values from that one place.
+Every figure in one document uses the same colour theme. Declare the theme at the top per `design-gate/polished-document-style` section "ธีมของเอกสาร" (Document theme); every tool reads values from that one place.
 
 Minimum figures:
 
@@ -1312,7 +1312,7 @@ Minimum figures:
 ## Bilingual documents
 
 - Choose 1 main language and put the other in brackets or a 2nd column; never switch back and forth.
-- First time a technical term appears, write Thai (full English name: abbreviation), for example ปัญญาประดิษฐ์ (Artificial Intelligence: AI), per the rule "เอกสารภาษาไทย" in `spell-out-abbreviations`. Afterwards use the Thai or the abbreviation, one way through the document.
+- First time a technical term appears, write Thai (full English name: abbreviation), for example ปัญญาประดิษฐ์ (Artificial Intelligence: AI), per the rule "เอกสารภาษาไทย" in `human-writing/spell-out-abbreviations`. Afterwards use the Thai or the abbreviation, one way through the document.
 - Thai text: `human-writing` `references/thai-grammar.md` section 4, the business register.
 - Field names, API names, and status names in the database are always English even if the document is Thai; otherwise people translate them differently when writing code.
 - Complete the glossary in section 1.3: Thai term · English term · meaning · name in the system.
@@ -1329,78 +1329,4 @@ Minimum figures:
 
 ## Other skills to use together
 
-`polished-document-style` (markdown while drafting) · `fsd-writing` (detail a developer can start from) · `user-story-writer` (break into stories) · `test-case-template` (turn requirements into test cases) · `superuser:simplify` (cut unneeded content) · `presentation-design` (present to executives).
-
-
----
-
-# skill: spell-out-abbreviations
-
-Use when text is heavy with abbreviations or jargon
-
-# Spell Out Abbreviations
-
-> **Rule 1:** write every abbreviation in full the first time, with the abbreviation in brackets. After that you may use the abbreviation.
-> **Rule 2:** put a short explanation in brackets the first time you use any technical term, so readers from outside the field do not have to guess.
-
-## Format
-
-```
-ถูก: Model Context Protocol (MCP) ทำให้ Claude ต่อกับระบบอื่นได้ ... MCP รองรับ ...
-ผิด: MCP ทำให้ Claude ต่อกับระบบอื่นได้
-```
-
-- **The first time in each document**, write it in full with the abbreviation in brackets. After that, use the bare abbreviation.
-- In a long document split into chapters, write it in full again **the first time in each chapter**, because people often read one chapter at a time.
-- If a table or heading has no room, write it in full on the first line of that section instead.
-- A document with 5 or more abbreviations must have a **glossary** at the end.
-
-### Thai documents
-
-The first time, write **Thai (English full name: abbreviation)**, for example ปัญญาประดิษฐ์ (Artificial Intelligence: AI). After that, use either the Thai word or the abbreviation, but pick one style for the whole document. This rule is the only place that sets the format. `human-writing` `references/thai-grammar.md` section 5 row 4 follows it.
-
-## Exceptions — no need to expand
-
-Terms the public knows better than the full name: URL, PDF, HTML, CSS, JSON, USB, Wi-Fi, ID, OK
-and file extensions (`.docx`, `.pptx`). If you are not sure, **expand it**, because expanding too much does no harm, but a reader who does not understand does.
-
-## Technical terms — explain in brackets, not just the abbreviation
-
-Expanding the abbreviation may not be enough if the full name still says nothing. **A term that an outside reader does not know
-needs a short explanation in brackets the first time.**
-
-```
-ผิด: ใช้ idempotency key กันงานซ้ำ
-ถูก: ใช้ idempotency key (รหัสกำกับคำขอ ส่งซ้ำแล้วไม่ทำงานซ้ำ) กันงานซ้ำ
-
-ผิด: ต้องดู cash flow ก่อนกู้
-ถูก: ต้องดู cash flow (เงินเข้า-ออกจริงแต่ละเดือน) ก่อนกู้
-```
-
-**The explanation must be shorter than 1 line.** If it is longer, make it a sentence of its own.
-
-**Decide which terms need explaining** with one question: could a person who works in a different field from this topic
-read it and guess the meaning? If they cannot guess, explain it.
-
-| Reader level | How much to explain |
-|---|---|
-| Customers, executives, people outside the field | Every technical term, even words engineers use every day |
-| The same team but a different area of work | Only the terms specific to that area, such as names of formats and processes |
-| People already working on this | Only terms newly coined in this project |
-
----
-
-## What it applies to
-
-Every kind of document · slides · labels and on-screen text · sales copy · diagram descriptions · code comments ·
-chat answers — **anything a person reads**
-
-Code-side abbreviations (RBAC · SSO · CI/CD · SRS · ADR and so on) → the extension in plugin `software-development` → `superuser` → `references/code-extensions.md`
-
-## Anti-patterns
-
-- Expanding the abbreviation every time it appears — cluttered and distracting. The first time is enough.
-- Reversed brackets — `MCP (Model Context Protocol)` reads less smoothly than writing the full name first.
-- Expanding wrongly — if you do not know what it stands for, look it up first. Do not guess.
-- Expanding every abbreviation but leaving technical terms unexplained — `Quadratic Weighted Kappa (QWK)` still helps no one unless you say what the value measures.
-- A paragraph-long explanation in brackets — brackets are for short words. If it is long, split it into sentences.
+`design-gate/polished-document-style` (markdown while drafting) · `fsd-writing` (detail a developer can start from) · `user-story-writer` (break into stories) · `test-case-template` (turn requirements into test cases) · `superuser:ground-rules` (cut unneeded content) · `presentation-design` (present to executives).

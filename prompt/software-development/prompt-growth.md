@@ -51,7 +51,7 @@ agent `seo-specialist` · skill `seo-audit-checklist`
 
 ## 2. เพิ่ม conversion
 
-agent `growth-specialist` · skill `principle-user-experience-first` · `ui-craft` · `web-app-design` หรือ `mobile-app-design`
+agent `growth-specialist` · skill `ground-rules/principle-user-experience-first` · `ui-craft` · `web-app-design` หรือ `mobile-app-design`
 **ผลลัพธ์:** `docs/growth/conversion-<หน้า>.md`
 
 ### หน้า (ผู้ใช้กรอก)

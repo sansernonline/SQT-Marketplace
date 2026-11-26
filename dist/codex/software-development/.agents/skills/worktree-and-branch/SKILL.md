@@ -10,10 +10,10 @@ description: Use when 2+ agents edit one repo or a branch must merge
 ## Use when
 - 2 or more agents will edit files in the same repo at the same time (read-only agents need no worktree).
 - A spike or refactor may break things in a way that is hard to undo, or an urgent fix is needed while the main checkout has half-finished work (branch from `main`, no stash).
-- Comparing 2 approaches (`parallel-attempts-pick-best`): one worktree per approach. Separate machines or port collisions → add `docker-sandbox`.
+- Comparing 2 approaches (`crew-patterns/parallel-attempts-pick-best`): one worktree per approach. Separate machines or port collisions → add `docker-sandbox`.
 - A branch must be merged, closed, or cleaned up, or conflicts must be resolved.
 
-Not for: a single agent on a small reversible job → a plain branch · read-only work → `Explore` · a repo with no commit yet (make the first commit first). Splitting the work into pieces → `parallel-split-and-merge` (its step "ห้ามเขียนที่เดียวกัน" points here).
+Not for: a single agent on a small reversible job → a plain branch · read-only work → `Explore` · a repo with no commit yet (make the first commit first). Splitting the work into pieces → `crew-patterns/parallel-split-and-merge` (its step "ห้ามเขียนที่เดียวกัน" points here).
 
 ## Steps
 1. **Create.** Run `git worktree add ../<repo>-<task> -b <type>/<task> [main]`, then `git worktree list` (must show main + the new one).
@@ -25,11 +25,11 @@ Not for: a single agent on a small reversible job → a plain branch · read-onl
    - Record path · branch · baseline in `docs/BUILD-PLAN.md` or that round's report.
    - Claude Code has built-in worktree commands, and PowerShell has different syntax from bash: see References.
 2. **Work only in the worktree.** Do not `cd` back to the main checkout to "just look".
-3. **Commit in verifiable steps** on the worktree's branch (`principle-small-verifiable-steps`). A commit on a work branch is **รออนุมัติ** (awaiting approval) unless the user ordered it or wrote permission (`approvals.md` of `superuser`). If not permitted, keep the diff in the worktree and propose it.
+3. **Commit in verifiable steps** on the worktree's branch (`ground-rules/principle-small-verifiable-steps`). A commit on a work branch is **รออนุมัติ** (awaiting approval) unless the user ordered it or wrote permission (`approvals.md` of `superuser`). If not permitted, keep the diff in the worktree and propose it.
 4. **Give each parallel group its own files.** Name in the work order the files each group may edit; new files go under the group's folder. Commit a shared contract (for example 1 new field in a central type) before splitting; the side waiting for it writes a fallback. Give each group its own ports and compose project names.
    - An agent must not merge, rebase, or push. It commits in its own folder, then reports: files changed · measured results · what it could not do · any file it edited outside the group (revert before committing, and say so).
    - The lead re-measures every number after merge. The next fix round must not regress (one number may drop, none may get worse). An agent that finishes unusually fast with no answer: read the log and re-issue the order.
-5. **Get evidence before closing.** The whole test set passes on this branch · `git status` clean · `git log main..HEAD --oneline -n 30` shows the commits that will go in · if there is a screen, images from `app-verifier-setup`. Record commands and results in `docs/BUILD-PLAN.md` (`principle-prove-it-works`).
+5. **Get evidence before closing.** The whole test set passes on this branch · `git status` clean · `git log main..HEAD --oneline -n 30` shows the commits that will go in · if there is a screen, images from `app-verifier-setup`. Record commands and results in `docs/BUILD-PLAN.md` (`ground-rules/principle-prove-it-works`).
 6. **If main moved**, `git fetch`, then `git rebase origin/main` (branch not pushed, one person using it) or `git merge origin/main` (already pushed or shared). Re-test after combining. On conflict, go to step 8.
 7. **Close the branch.** Tests pass first, then let the user choose 1 of 4 routes: merge locally · open a PR · keep for now · discard. Merge, push, and discard wait for **รออนุมัติ**. PR and keep leave the worktree in place. Open [`references/close-branch.md`](references/close-branch.md) before every close for the full table.
 8. **Resolve conflicts.**

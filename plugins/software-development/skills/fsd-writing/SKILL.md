@@ -146,7 +146,7 @@ The table of which section needs which figure type is in [references/figures.md]
 
 Every figure in an FSD document (Mode A and Mode B, in markdown and in the file the customer signs off) uses `diagram-figures` in one house style. Screen sketches use `markdown-visuals`.
 Mermaid through `software-diagrams` is only for drafts discussed in chat. Do not put it in a delivered document.
-**Every figure in one version uses the same color theme**, per `doc-theme` (see `polished-document-style`).
+**Every figure in one version uses the same color theme**, per `doc-theme` (see `design-gate/polished-document-style`).
 
 ## 11 · Completeness review before sending
 

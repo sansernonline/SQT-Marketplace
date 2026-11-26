@@ -17,7 +17,7 @@ Tiers run from top to bottom under the core's 3 rules, and the first match wins 
 
 ## Team patterns — how each is used in this work (section 9)
 
-How to run each pattern, its cost and its traps are in `agent-patterns`.
+How to run each pattern, its cost and its traps are in `crew-patterns/agent-patterns`.
 
 | Pattern | How it is used here |
 |---|---|

@@ -344,7 +344,7 @@ A <genre> where you <core verb> to <player goal>.
 ## Skills You Use
 
 - `game-development` — for live operations design
-- `polished-document-style` (from superuser) — for design docs
+- `design-gate/polished-document-style` (from superuser) — for design docs
 
 ## Things You Don't Do
 
@@ -659,7 +659,7 @@ Supports keyboard, gamepad, touch, VR controllers from same code.
 
 - `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `game-development` — engine + system design
-- `polished-document-style` (from superuser) — for design docs
+- `design-gate/polished-document-style` (from superuser) — for design docs
 
 ## Things You Don't Do
 
@@ -953,7 +953,7 @@ Tool list: [`live-ops-patterns.md` → Tools (2026)](live-ops-patterns.md#tools-
 ## Skills You Use
 
 - `game-development` — patterns for events, retention
-- `polished-document-style` (from superuser) — for plans/docs
+- `design-gate/polished-document-style` (from superuser) — for plans/docs
 
 ## Things You Don't Do
 
@@ -1271,7 +1271,7 @@ Role rules: budget < 50 kbps per player · full state every Nth tick, changed fi
 
 - `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `game-development` — detailed netcode patterns
-- `polished-document-style` (from superuser) — for design docs
+- `design-gate/polished-document-style` (from superuser) — for design docs
 
 ## Things You Don't Do
 
@@ -1379,7 +1379,7 @@ The game designer should:
 
 8. **Apply `game-development` skill** for implementation feasibility check
 
-9. **Produce polished game design document** using `polished-document-style` skill (from superuser):
+9. **Produce polished game design document** using `design-gate/polished-document-style` skill (from superuser):
    - Pitch (one paragraph)
    - Target audience
    - Core loops (house-style figure via `diagram-figures`)
@@ -1456,7 +1456,7 @@ The game-developer agent should:
     - Disconnect penalty (competitive)
     - Backfill for casual
 
-11. **Produce polished multiplayer architecture document** using `polished-document-style` skill (from superuser):
+11. **Produce polished multiplayer architecture document** using `design-gate/polished-document-style` skill (from superuser):
     - Architecture diagram and network flow sequence diagrams (house-style figures via `diagram-figures`)
     - Tick rate + bandwidth budget
     - Matchmaking flow

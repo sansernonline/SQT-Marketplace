@@ -37,7 +37,7 @@ Not for: 1 defect already found → `bug-report-template` · running cases and c
    ```bash
    python <โฟลเดอร์ skill polished-document-style ใน plugin superuser>/scripts/check_outline.py assets/test-case.md <your test-case file>
    ```
-   It flags missing or reordered headings, missing fields, changed table headers, and anything unfilled (`<...>`, `YYYY-MM-DD`, `XXXX`, `...`, a field still listing every option). Worked example of 3 login cases: [`references/example-login.md`](references/example-login.md). Look of the document: markdown someone reads → `polished-document-style` · rendered .docx/.pptx/PDF for sign-off → `branded-document-design` · a picture to land the point → `markdown-visuals`.
+   It flags missing or reordered headings, missing fields, changed table headers, and anything unfilled (`<...>`, `YYYY-MM-DD`, `XXXX`, `...`, a field still listing every option). Worked example of 3 login cases: [`references/example-login.md`](references/example-login.md). Look of the document: markdown someone reads → `design-gate/polished-document-style` · rendered .docx/.pptx/PDF for sign-off → `branded-document-design` · a picture to land the point → `markdown-visuals`.
 
 ## Run as a command
 

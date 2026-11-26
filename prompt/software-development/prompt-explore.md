@@ -19,7 +19,7 @@
 | # | งาน | playbook | ได้ไฟล์ |
 |---|---|---|---|
 | 1 | ตอบคำถามเชิงเทคนิค (อ่านอย่างเดียว) | `investigation` | `docs/notes/<ปี-เดือน-วัน>-<เรื่อง>.md` |
-| 2 | ทำเองหรือใช้ของที่มีอยู่แล้ว | `investigation` + skill `prior-art-review` | `docs/research/prior-art-<เรื่อง>.md` |
+| 2 | ทำเองหรือใช้ของที่มีอยู่แล้ว | `investigation` + skill `research-with-sources/prior-art-review` | `docs/research/prior-art-<เรื่อง>.md` |
 | 3 | ทดลองหลายแบบ ให้ผลรันตัดสิน | `prototype` | `docs/research/prototype-<เรื่อง>.md` · โค้ดทดลองใน `_to_delete/` |
 | 4 | หน้าจอจริงต้องตรงต้นแบบ | `visual-parity` | `qa/visual-parity/<หน้าจอ>.md` + ภาพเทียบ |
 
@@ -54,7 +54,7 @@ playbook `investigation` · agent `system-analyst` (อ่านอย่าง�
 
 ## 2. ทำเองหรือใช้ของที่มีอยู่แล้ว
 
-playbook `investigation` · agent `solution-architect` · skill `prior-art-review` · `adr-writer`
+playbook `investigation` · agent `solution-architect` · skill `research-with-sources/prior-art-review` · `adr-writer`
 **ผลลัพธ์:** `docs/research/prior-art-<เรื่อง>.md` · ตัดสินแล้ว → บันทึกการตัดสินใจด้านสถาปัตยกรรม (ADR) ใน `docs/decisions/`
 
 ### เรื่องที่จะสร้าง (ผู้ใช้กรอก)
@@ -75,7 +75,7 @@ playbook `investigation` · agent `solution-architect` · skill `prior-art-revie
 
 ## 3. ทดลองหลายแบบ ให้ผลรันตัดสิน
 
-playbook `prototype` · agent `developer` · skill `parallel-attempts-pick-best` · `decision-log`
+playbook `prototype` · agent `developer` · skill `crew-patterns/parallel-attempts-pick-best` · `decision-desk/decision-log`
 **ผลลัพธ์:** `docs/research/prototype-<เรื่อง>.md` · โค้ดทดลองใน `_to_delete/prototype-<เรื่อง>/` · **ไม่ย้ายโค้ดทดลองเข้าโปรเจกต์ตรง ๆ**
 
 ### โจทย์ (ผู้ใช้กรอก)
@@ -101,7 +101,7 @@ playbook `prototype` · agent `developer` · skill `parallel-attempts-pick-best`
 
 ## 4. หน้าจอจริงต้องตรงต้นแบบ
 
-playbook `visual-parity` · agent `developer` + `ux-designer` · skill `app-verifier-setup` · `ui-craft` · `principle-prove-it-works`
+playbook `visual-parity` · agent `developer` + `ux-designer` · skill `app-verifier-setup` · `ui-craft` · `ground-rules/principle-prove-it-works`
 **ผลลัพธ์:** `qa/visual-parity/<หน้าจอ>.md` + ภาพเทียบ `qa/visual-parity/img/` · **ไม่แก้โค้ด** เว้นแต่ข้างล่างติ๊ก `[x]`
 
 - [ ] อนุญาตให้แก้โค้ดหน้าจอให้ตรงต้นแบบ (แก้ทีละกลุ่ม · ถ่ายภาพเทียบใหม่ทุกครั้ง · commit ต่อกลุ่ม) (commit บนเครื่องเท่านั้น บน branch แยก เช่น `fix/visual-parity-<หน้าจอ>` · ไม่ push · ไม่ merge เข้า branch หลัก)

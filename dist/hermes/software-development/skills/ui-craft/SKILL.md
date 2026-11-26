@@ -5,7 +5,7 @@ description: Use with a platform skill when a task produces a screen or mockup
 
 # ui-craft — spacing, type, order and state rules that make a screen or mockup consistent
 
-> **Pre-start gate `ด่านก่อนลงมือ` (every time):** read the owner's theme → search live for reference designs → 3 genuinely different directions → check `no-ai-look` before sending. Follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand fixes color and font; the search finds the structure of this piece). Close the work with the line `ด่านก่อนลงมือ:`
+> **Pre-start gate `ด่านก่อนลงมือ` (every time):** read the owner's theme → search live for reference designs → 3 genuinely different directions → check `design-gate/no-ai-look` before sending. Follow the section "ด่านก่อนลงมือ" of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand fixes color and font; the search finds the structure of this piece). Close the work with the line `ด่านก่อนลงมือ:`
 
 > **One rule:** a good-looking screen comes from **consistency**, not pretty colors: one spacing scale, one font-size scale, one most-important thing per page.
 > Consistency alone gives "not wrong", not "wow": a mockup someone will approve needs a visual direction (section 0.1) and must pass the beauty gate `ด่านสวย` (section 9).
@@ -119,14 +119,14 @@ Dense 32–36px (data tables · all-day users) · Normal 40–44px (general apps
 17 prohibitions (relabeling an old mockup as new · starter theme as final look · adding colors to fix "not pretty" · solid buttons on every row · dividers on everything · a shadow under every card · 600ms animation, etc.) are in [`references/states-and-checks.md`](references/states-and-checks.md).
 
 ### Do not look AI-made
-Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script (with plugin `superuser`, the `ui-scan` hook runs it on every UI file edit; for a live page use `--url`). Every piece also passes eye gate item 3.2 (web pages items 10–14 too), because 0 script findings does not mean pass. If 2 or more AI signs show on one page (gradient buttons · centered hero + 2 pills · 3 equal cards with circle icons · emoji icons · "Welcome back, John" · radius 16px+ everywhere · "AI-powered" badges), fix them first: table in [`references/ai-signs.md`](references/ai-signs.md).
+Before sending, go through item 3 of `design-gate/no-ai-look`. For HTML work, run its script (with plugin `superuser`, the `ui-scan` hook runs it on every UI file edit; for a live page use `--url`). Every piece also passes eye gate item 3.2 (web pages items 10–14 too), because 0 script findings does not mean pass. If 2 or more AI signs show on one page (gradient buttons · centered hero + 2 pills · 3 equal cards with circle icons · emoji icons · "Welcome back, John" · radius 16px+ everywhere · "AI-powered" badges), fix them first: table in [`references/ai-signs.md`](references/ai-signs.md).
 
 For a web page whose code is HTML/React, also go through the Vercel Web Interface Guidelines, fetched live from `https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md` (link only; do not copy its text in).
 
 ## Check before done
 - Spacing from the scale, at most 5 font sizes, 1 primary button, the 5 states present, contrast passes.
 - Rendered and looked at; beauty gate scored by a reviewer who did not make it (mockups).
-- `no-ai-look` item 3 and eye gate 3.2 done; the work closes with the line `ด่านก่อนลงมือ:`.
+- `design-gate/no-ai-look` item 3 and eye gate 3.2 done; the work closes with the line `ด่านก่อนลงมือ:`.
 
 ## References
 - [`references/visual-direction.md`](references/visual-direction.md) — open at section 0.1, before the first screen of a new project or design

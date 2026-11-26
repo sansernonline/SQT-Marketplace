@@ -23,7 +23,7 @@ description: Use when auditing a page for accessibility or speed
 | Text, dates, numbers in Thai and English | `i18n-and-locale` |
 | Speed of an API or backend | playbook `performance` of `superuser` · `observability-basics` |
 | Putting pa11y or Lighthouse CI in the pipeline | `cicd-and-release` · `e2e-testing-patterns` |
-| Report format to send to a customer | `polished-document-style` or `branded-document-design` |
+| Report format to send to a customer | `design-gate/polished-document-style` or `branded-document-design` |
 
 ## Steps
 

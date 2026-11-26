@@ -24,7 +24,7 @@ files_allowed: [research/shipping/**]
 
 ## ใช้อะไร
 - อ่าน: `research/order-stats.md` (น้ำหนักพัสดุจริง จากชิ้น 01)
-- skill: `human-writing` · `answer-shape` · ค้นเว็บ ≥ 3 แหล่งต่อข้อเท็จจริง
+- skill: `human-writing` · `lean-reply/answer-shape` · ค้นเว็บ ≥ 3 แหล่งต่อข้อเท็จจริง
 
 ## ขอบเขต
 - เขียนได้เฉพาะ `files_allowed` · ห้ามแก้ `research/order-stats.md` (ของกลาง ต้องเปลี่ยน → แจ้งหัวหน้าทีม)

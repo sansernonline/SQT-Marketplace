@@ -110,7 +110,7 @@ The situation → skill table is in [`triggers`](references/triggers.md). Open i
 |---|---|---|
 | **Complete, nothing dropped** | every item from the source (email, calendar, statement, document) is picked up, and every task has a date and an owner | `inbox-triage` · `important-docs` |
 | **Findable later** | file names and storage follow one pattern; searching with the words a person would think of finds it | `personal-kb` · `important-docs` |
-| **Ready to act** | every item has a clear next step, a ready-to-send message draft, and click-by-click steps | `weekly-review` · `polite-message-th-en` |
+| **Ready to act** | every item has a clear next step, a ready-to-send message draft, and click-by-click steps | `weekly-review` · `human-writing/polite-message-th-en` |
 
 A summary is always shorter than the original. If the user still has to go back to the original, the summary is not enough.
 
@@ -161,7 +161,7 @@ Learn from the real thing before summaries. Reading the official docs and trying
 | rule | detail |
 |---|---|
 | **Pick the agent by role** | routine tasks, subscriptions, security, goals and messages → `life-admin` · important documents → `doc-caretaker` · meetings → `meeting-prep` · bills, home and vehicle → `home-manager` · food, school, elders, pets → `family-planner` · health → `health-organizer` (caring for several people in the household → a new one per person so data does not mix) · CV, LinkedIn, offers, promotion → `career-coach` · interviews and practice → `interview-coach` · learning technology, papers, radar, certifications, side projects → `tech-mentor` (work that splits into several pieces, such as many papers or many libraries in the radar → a new one per piece) |
-| **Cross-branch work** | polite messages → `polite-message-th-en` (plugin `superuser`) · coding on a real project → `software-development` · money, tax, insurance, debt → `trading-finance` · complaints against shops or contractors → `e-commerce` · labour-law rights → `e-commerce` · profile photos and visual portfolios → `graphic-design`. If that plugin is not installed, tell the user it exists, then continue with general knowledge labelled `ยังไม่ได้ตรวจ`. For multi-step work in that branch, hand off to that plugin's `/<plugin>:superuser`. |
+| **Cross-branch work** | polite messages → `human-writing/polite-message-th-en` (plugin `superuser`) · coding on a real project → `software-development` · money, tax, insurance, debt → `trading-finance` · complaints against shops or contractors → `e-commerce` · labour-law rights → `e-commerce` · profile photos and visual portfolios → `graphic-design`. If that plugin is not installed, tell the user it exists, then continue with general knowledge labelled `ยังไม่ได้ตรวจ`. For multi-step work in that branch, hand off to that plugin's `/<plugin>:superuser`. |
 
 ---
 
@@ -209,4 +209,4 @@ The `CONTEXT.md` template for this work is in [`context-template`](references/co
 
 - Never put in: ID card numbers, passport numbers, full account numbers · passwords · private email contents · health data of household members · disease names, results or medicine details in summary sections (point to the file instead) · national ID numbers · real salary (keep it in the user's own file) · other people's data · secrets or tokens for cloud accounts used in labs.
 
-**Work patterns.** The lead picks a pattern when planning. Method, cost and pitfalls are in `agent-patterns`. Examples from this plugin's work are in [`examples`](references/examples.md).
+**Work patterns.** The lead picks a pattern when planning. Method, cost and pitfalls are in `crew-patterns/agent-patterns`. Examples from this plugin's work are in [`examples`](references/examples.md).

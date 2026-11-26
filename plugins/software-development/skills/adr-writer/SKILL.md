@@ -24,7 +24,7 @@ Before using the structure or template in this file, check whether the user, cli
 
 - Sequential: ADR-0001, ADR-0002, ...
 - Never reuse numbers, even if ADR is superseded
-- Save as `docs/decisions/ADR-NNNN-<slug>.md` (see `document-naming` and `project-doc-set`)
+- Save as `docs/decisions/ADR-NNNN-<slug>.md` (see `workspace-rules/document-naming` and `project-doc-set`)
 - Keep an index at `docs/decisions/README.md` — one table `| ADR | Decision | Status | Date |` — add a row when an ADR is created and edit the row when its status changes, so nobody has to open 20 files to find the live decisions (idea from wshobson architecture-decision-records)
 
 ## Status Lifecycle
@@ -76,6 +76,6 @@ load the matching skill before writing, not after:
 
 | What is being handed over | Load |
 |---|---|
-| Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
+| Markdown someone reads (repo, wiki, issue tracker) | `design-gate/polished-document-style` |
 | A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
 | The point needs a picture to land | `markdown-visuals`, then `diagram-figures` for project documents (`software-diagrams` only for README / PR notes) |

@@ -21,7 +21,7 @@ Model Context Protocol (MCP) is an open protocol (JSON-RPC 2.0) that connects an
 |---|---|
 | Our system calls an LLM (prompt · RAG · structured output) — the opposite direction | `llm-engineering` |
 | One-off · read 1 CSV file · run 1 SQL statement | A plain script + `stack-python` / `stack-sql` — MCP does not pay off for a one-time job |
-| The vendor already has an official MCP that covers the job | Use theirs (section 1) — check before building (`prior-art-review`) |
+| The vendor already has an official MCP that covers the job | Use theirs (section 1) — check before building (`research-with-sources/prior-art-review`) |
 | A REST API for other programs to call, not for a model | `api-conventions` + `web-service-essentials` |
 
 ---
@@ -123,7 +123,7 @@ A complete example: `assets/inventory-mcp/server.py` (113 lines · read-only SQL
 | 3 | An instruction inside returned data is ignored — insert a test row that contains a sentence commanding the AI | The model shows it as data, does not obey it, calls no extra tool · quotes it to the user |
 
 - When you add a tool → run the 3 cases again. A deeper eval (10 multi-step questions, checking a single answer) follows Anthropic's `mcp-builder` approach, when the server will go to several clients.
-- `principle-prove-it-works`: "works" = passes Inspector + `claude mcp list` + the 3 eval cases, with a date. It does not mean "compiles".
+- `ground-rules/principle-prove-it-works`: "works" = passes Inspector + `claude mcp list` + the 3 eval cases, with a date. It does not mean "compiles".
 
 ## 8 · Hand over to the client
 
@@ -179,7 +179,7 @@ A complete example: `assets/inventory-mcp/server.py` (113 lines · read-only SQL
 | Run someone else's server you do not yet trust | `docker-sandbox` (`-Locked`) |
 | Before handover · adding a dependency | `security-gate` · `principle-secure-by-default` |
 | Health endpoint · errors per RFC 9457 for a remote server | `web-service-essentials` |
-| Check whether a vendor MCP already exists | `prior-art-review` |
+| Check whether a vendor MCP already exists | `research-with-sources/prior-art-review` |
 | MCP for Kafka · Docker · Jenkins · Kubernetes · Prometheus · Grafana | Section 1.1 and `references/devops-mcp.md` |
 | Measuring and watching the system (the side the agent will read) | `observability-basics` |
 

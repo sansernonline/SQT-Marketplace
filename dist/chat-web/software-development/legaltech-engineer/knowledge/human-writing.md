@@ -1,13 +1,13 @@
 # skill: human-writing
 
-Use before writing anything people read, in Thai or English
+Use before writing anything people read, Thai or English
 
 # human-writing — write like a person: smooth to read, easy to understand
 
 ## Use when
 - Writing anything a person will read, from chat to labels in a diagram, in Thai or English.
 
-Not for: the look of kept documents (headings, tables, text boxes, theme) → `polished-document-style` · abbreviations and glossaries → `spell-out-abbreviations`.
+Not for: the look of kept documents (headings, tables, text boxes, theme) → `design-gate/polished-document-style` · abbreviations and glossaries → `human-writing/spell-out-abbreviations`.
 
 ## Steps
 
@@ -27,13 +27,13 @@ Not for: the look of kept documents (headings, tables, text boxes, theme) → `p
 - **Task status** uses these 5 words in every document: `เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่`. Check results use `ผ่าน · ไม่ผ่าน`.
 
 ### 3 · Words
-- Use words people actually say. No bureaucratic words or literal-translation jargon. Keep terms the field uses in English (token · prompt · API · OCR). Explain a coined or confusing term the first time. Abbreviations → `spell-out-abbreviations`.
+- Use words people actually say. No bureaucratic words or literal-translation jargon. Keep terms the field uses in English (token · prompt · API · OCR). Explain a coined or confusing term the first time. Abbreviations → `human-writing/spell-out-abbreviations`.
 - Call one thing by one word across the whole set: chat, slides, documents, diagrams.
 - Two-language documents: pick 1 main language and put the other in brackets or a second column. Do not switch inside a sentence.
 - Cut padding words ("ทำการ" · "มีการ" · "ในส่วนของ" · "ได้มีการ" · "เป็นการ").
 - **Cut items, not function words.** Every length budget (words per bullet · characters per commit title · characters per subtitle) is met by dropping items, condensing, or moving content to the next piece. Never cut `จะ` `ให้` `ก็` `ด้วย` `แล้ว` `ต่างหาก` or polite words (`ขอ` `รบกวน` `นะ` and ครับ/ค่ะ, per register). They do work in the sentence; without them Thai turns curt and reads like a translation.
 - Avoid AI-looking moves: a quotable opener · the slogan "ไม่ใช่แค่… แต่ยัง…" for emphasis (a sentence that contrasts with something real or reframes the problem is fine, but it must close with "ด้วย") · grouping everything in threes · praising something as more important than it is · bold on every line · a closing recap · opening with "แน่นอน" · closing with "หวังว่าจะช่วยได้" · "หลาย" when you know the number · stacked hedges (hedge once, where you are truly unsure).
-- For work people look at (screens · slides · ads) also avoid: broad ad words (ยกระดับ · ไร้รอยต่อ · ล้ำสมัย · supercharge) · em dashes in every sentence · canned openers ("ในยุคดิจิทัลที่…") · short fragments split by full stops ("เร็ว. ง่าย. ครบ.") · claims a competitor could also make (put in a real name or number). For the look of the work, use `no-ai-look`.
+- For work people look at (screens · slides · ads) also avoid: broad ad words (ยกระดับ · ไร้รอยต่อ · ล้ำสมัย · supercharge) · em dashes in every sentence · canned openers ("ในยุคดิจิทัลที่…") · short fragments split by full stops ("เร็ว. ง่าย. ครบ.") · claims a competitor could also make (put in a real name or number). For the look of the work, use `design-gate/no-ai-look`.
 
 ### 4 · Answering in chat
 - First sentence answers directly, then the reason. Short question → 2–3 sentences, no headings or tables.
@@ -78,6 +78,19 @@ Applies to slide titles, figure titles, document headings, and box titles in a d
 - [`references/thai-grammar.md`](references/thai-grammar.md) — open when writing Thai of 1 paragraph or more (sentence structure · register); example paragraphs in [`references/thai-examples.md`](references/thai-examples.md)
 - [`references/strict-review.md`](references/strict-review.md) — open for research or work sent to outsiders
 - [`references/thai-line-breaking.md`](references/thai-line-breaking.md) — open for Thai documents with justified alignment
+
+## Parts
+Hard rules of the parts (full steps in each guide):
+- spell-out-abbreviations: write every abbreviation in full the first time, with the abbreviation in brackets; after that you may use the abbreviation.
+- spell-out-abbreviations: put a short explanation in brackets the first time you use a technical term an outside reader may not know.
+- translate-th-en: translate meaning one paragraph at a time, not word by word; 1 term = 1 translation across the whole project, recorded in `docs/glossary.md`.
+- polite-message-th-en: say the hard thing clearly; politeness belongs in the wording, not in hiding the request. One ask per message, with a date. Move up one tone level per reminder, never two. Do not stack softeners.
+
+| When | Open |
+|---|---|
+| First use of an abbreviation or technical term; glossary | [parts/spell-out-abbreviations/guide.md](parts/spell-out-abbreviations/guide.md) |
+| Translating Thai-English, paired files, screen text | [parts/translate-th-en/guide.md](parts/translate-th-en/guide.md) |
+| Awkward message to ask, decline, chase payment, apologise or complain | [parts/polite-message-th-en/guide.md](parts/polite-message-th-en/guide.md) |
 
 
 ## reference: headings-and-examples.md
@@ -422,7 +435,7 @@ Choose the register before writing, then keep it for the whole piece (`r-drift`)
 | Translate to Thai | A Thai word people know exists, or the Royal Society of Thailand coined one | เสรีภาพ · ผลิตภาพ · ทุนนิยม |
 | Write the sound in Thai | Proper names, new words with no direct Thai word | อัลกอริทึม · บล็อกเชน · ซอฟต์แวร์ |
 | Keep English letters | Brand names, abbreviations, terms developers use in English | Google · API · deploy · query |
-| Coin a Thai term + brackets at first use | A core concept used repeatedly · abbreviations | ระเบียบในจินตนาการ (imagined order), then Thai only afterwards · ปัญญาประดิษฐ์ (Artificial Intelligence: AI), then Thai or AI, one style for the whole piece. This is the one form for every plugin (`spell-out-abbreviations` · `srs-writing` · `thesis-writing` refer here). |
+| Coin a Thai term + brackets at first use | A core concept used repeatedly · abbreviations | ระเบียบในจินตนาการ (imagined order), then Thai only afterwards · ปัญญาประดิษฐ์ (Artificial Intelligence: AI), then Thai or AI, one style for the whole piece. This is the one form for every plugin (`human-writing/spell-out-abbreviations` · `srs-writing` · `thesis-writing` refer here). |
 
 Mix English only at a single noun or verb (`deploy โค้ด` `query ตาราง`), not `ทำการ deployment ของ code`. Write sounds in Thai following the Royal Society of Thailand's transliteration rules: no tone marks, unless the word's sound collides with a Thai word and causes confusion, such as `โค้ก` (item ๕) (`ซอฟต์แวร์` not `ซ้อฟต์แว่ร์`). Add the silencer mark (karan) on letters that are not pronounced (item ๓.๑). Choose 1 spelling per word and note it. (Source: Office of the Prime Minister announcement, "Rules for transliterating English", announced 26 August B.E. 2532, Royal Gazette volume 106 part 153, 14 September 1989 · read the PDF published by the Royal Society of Thailand https://www.orst.go.th/FILEROOM/CABROYINWEB/DRAWER004/GENERAL/DATA0000/00000753.PDF pages 1-5, checked 2026-10-26 · the consonant table (table 2) has not been compared letter by letter.) Write a foreign person's name in Thai, then English in brackets at first use: `ไมเคิล แซนเดล (Michael Sandel)`. Do not use commas around a modifier.
 

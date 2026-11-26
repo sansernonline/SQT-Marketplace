@@ -1,3 +1,240 @@
+# skill: auth-implementation-patterns
+
+Use when building login with sessions, JWT, OAuth or SSO
+
+# auth-implementation-patterns — secure login, token, MFA and authorization choices
+
+## Use when
+- Building login/signup/logout or a password reset flow.
+- Adding multi-factor authentication (MFA): TOTP, SMS, WebAuthn.
+- Choosing session vs token authentication.
+- Integrating OAuth or OpenID Connect (OIDC) logins, or single sign-on (SSO) with SAML or OIDC.
+- Designing API authentication (API keys, JSON Web Token (JWT), OAuth).
+- Reviewing existing auth code for security issues.
+
+## Steps
+
+1. **Choose the pattern by who is authenticating.**
+   - Browser user, first-party app → session cookies (`HttpOnly`, `Secure`, `SameSite`). Cross-domain → JWT in an `HttpOnly` cookie, never `localStorage`.
+   - Mobile app → OAuth 2.0 PKCE flow.
+   - Service-to-service → same org: mTLS or service mesh; external: OAuth 2.0 Client Credentials.
+   - Third-party developer → API keys (with rotation) or OAuth.
+
+2. **Sessions (server-rendered apps, monoliths, one domain).** Cookie `HttpOnly` + `Secure` + `SameSite=Lax` (or Strict). Session ID cryptographically random, ≥ 128 bits. Store in Redis with a time-to-live (TTL), not in app memory if more than one instance runs. Idle timeout 30 min, absolute timeout 8–12 hours. Issue a new session ID when privileges change (login, role change). On logout, delete the session from the store. Avoid: session inside a JWT (cannot revoke) · session token in `localStorage` (cross-site scripting (XSS) can steal it) · same ID after login (session fixation).
+
+3. **JWT (microservices, mobile, single-page app (SPA) with a backend API).** JWT is overused: with a single backend, sessions are simpler and safer. Algorithm `RS256` or `ES256`, not `HS256` for distributed systems. Access token 5–15 min. Refresh token lives days, is stored separately, is revocable, and is replaced each time it is used. Required claims `sub`, `iat`, `exp`, `iss`, `aud`. Store in an `HttpOnly Secure` cookie. Have a way to cancel tokens (blocklist, short expiry). Avoid: accepting `alg: none` (check the algorithm explicitly) · skipping signature verification · sensitive data in the payload (base64, not encrypted).
+
+4. **OAuth 2.0 / OIDC ("Login with Google/GitHub", handing login to an identity provider (IdP)).** Always Authorization Code Flow with PKCE, even for confidential clients (steps in [`references/auth-flows.md`](references/auth-flows.md)). Validate the `id_token` signature with the IdP's JWKS, and validate `aud`, `iss`, `exp`, `nonce`. Use the `state` parameter against cross-site request forgery (CSRF) and validate it. Match `code_verifier` to `code_challenge`. Use a library (Auth0, Passport.js), do not write your own. Avoid: implicit flow · Resource Owner Password Credentials flow (both deprecated).
+
+5. **MFA.** For a new app use WebAuthn (passkeys) by default (no shared secret to steal). Use TOTP when users need easy standard 2FA. Use SMS or email only as a last resort (SMS is not safe against SIM swap). Details: [`references/mfa.md`](references/mfa.md).
+
+6. **Passwords.**
+   - Hash with **Argon2id** (preferred) or **bcrypt** with cost ≥ 12. Never MD5, SHA-1, raw SHA-256 or plain text.
+   - Policy per NIST SP 800-63B-4 (checked 2026-10-14): minimum **15 characters** when the password is the only factor, **8** when used only inside MFA. Check against breached passwords (Have I Been Pwned (HIBP) API). Allow long passphrases (any maximum at least 64) and special characters. No forced composition rules, no forced regular changes (only on suspected breach).
+   - Reset flow: the response is the same whether or not the email exists. Token random, ≥ 256 bits, stored as a hash, expires in 15 minutes. After the new password is set, revoke all old sessions and send a confirmation email. All 9 steps: [`references/auth-flows.md`](references/auth-flows.md).
+
+7. **Lockout and rate limiting.** 5 failed attempts in 15 min → lock 15 min; 10 in 1 hour → lock 1 hour; key on IP + email together. Message "Too many failed attempts. Try again in 15 minutes." Never "Account locked." (reveals the account exists). Use existing tools: [`references/libraries-and-code.md`](references/libraries-and-code.md).
+
+8. **API authentication.** API key for simple server-to-server · OAuth 2.0 Client Credentials for service-to-service · mTLS for high-security internal · HMAC signing for webhooks. For an API key, show the secret once at creation, store it as a hash, let users revoke it at once. Table: [`references/api-auth-and-authorization.md`](references/api-auth-and-authorization.md).
+
+9. **Authorization.** RBAC (Role-Based Access Control) as the main model; ABAC (Attribute-Based Access Control) when permissions depend on data attributes. Check at every endpoint, on the server, using the user from the session or token. Never trust a role sent by the client or JWT claims as the authorization source.
+
+## Check before done
+- [ ] Session ID regenerated on login (fixation)
+- [ ] CSRF token or SameSite cookie
+- [ ] Rate limiting (brute force) and HIBP check or MFA (credential stuffing)
+- [ ] Redirect URLs on an allowlist (open redirect)
+- [ ] Same error message every time (user enumeration)
+- [ ] Constant-time comparison (timing attacks)
+- [ ] No token in the URL; header or cookie only
+- [ ] Logout invalidates on the server
+- [ ] Authorization re-checked after a role change
+- [ ] No homemade crypto or auth; no reversible password storage
+
+## References
+- [`references/auth-flows.md`](references/auth-flows.md) — open when writing session, JWT, OAuth with PKCE or password reset code
+- [`references/mfa.md`](references/mfa.md) — open when building MFA (TOTP setup, WebAuthn, SMS limits)
+- [`references/api-auth-and-authorization.md`](references/api-auth-and-authorization.md) — open when designing API keys or RBAC/ABAC
+- [`references/libraries-and-code.md`](references/libraries-and-code.md) — open when choosing a library or needing hashing and rate-limit samples
+- [`references/sources.md`](references/sources.md) — NIST source and check date
+
+
+## reference: api-auth-and-authorization.md
+
+# API Authentication และ Authorization Patterns
+
+How each type of API authentication works, principles for managing API keys, and examples of RBAC and ABAC
+
+## Pattern 7: API Authentication
+
+| Method | Use case | Token format |
+|--------|----------|--------------|
+| **API Keys** | Server-to-server, simple | `sk_live_xxx` |
+| **OAuth 2.0 Client Credentials** | Service-to-service | JWT bearer |
+| **mTLS** (both sides present certificates) | High-security, internal | X.509 certs |
+| **HMAC signing** | Webhook verification | `HMAC-SHA256` |
+
+### API Key best practices
+- Prefix with environment: `sk_test_xxx`, `sk_live_xxx`
+- Show the secret ONCE, when it is created
+- Store it hashed (like a password)
+- Allow scopes/permissions per key
+- Allow expiry and replacement
+- Show when each key was last used
+- Let users revoke a key instantly
+
+## Authorization Patterns (after authentication)
+
+### RBAC (Role-Based Access Control)
+```
+User → Role → Permissions
+e.g., user@example.com → admin → [users.read, users.write, billing.read]
+```
+
+### ABAC (Attribute-Based) — fine-grained
+```
+Allow if user.department === resource.department AND action === "read"
+```
+
+
+## reference: auth-flows.md
+
+# ลำดับขั้นของแต่ละ flow
+
+Step-by-step order for session, JWT, OAuth with PKCE and password reset. Use it when writing code, or when reviewing whether the code covers every step. The requirements and mistakes to avoid are in `SKILL.md`
+
+## Pattern 1: Session-Based Auth — Flow
+
+```
+1. User submits credentials
+2. Server validates, creates session ID
+3. Server stores session in Redis/DB
+4. Server sets HttpOnly Secure cookie
+5. Client sends cookie on every request
+6. Server looks up session, identifies user
+```
+
+## Pattern 2: JWT — Flow
+
+```
+1. User submits credentials
+2. Server validates, signs JWT
+3. Client stores JWT (in HttpOnly cookie preferred)
+4. Client sends JWT on every request (Authorization header or cookie)
+5. Server verifies signature, extracts claims
+```
+
+## Pattern 3: OAuth 2.0 / OIDC — Authorization Code Flow with PKCE
+
+PKCE = Proof Key for Code Exchange. It stops a stolen code from being swapped for a token.
+
+```
+1. App → IdP: /authorize?code_challenge=...
+2. User logs in at IdP
+3. IdP → App: /callback?code=...
+4. App → IdP: /token (with code_verifier)
+5. IdP → App: access_token + id_token + refresh_token
+```
+
+## Pattern 5: Password reset flow
+
+```
+1. User requests reset (enter email)
+2. Server: always show "if email exists, link sent" (don't leak)
+3. Generate random token (≥ 256 bits), hash it, store with expiry (15 min)
+4. Email link with raw token
+5. User clicks → /reset?token=...
+6. Server hashes input, compares, verifies expiry
+7. User sets new password (apply policy)
+8. Invalidate all existing sessions
+9. Send confirmation email
+```
+
+
+## reference: libraries-and-code.md
+
+# ไลบรารีและโค้ดตัวอย่าง
+
+Sample code for storing passwords, rate-limiting tools, and recommended libraries by language
+
+## Password storage — code
+
+```typescript
+// Good (using bcrypt)
+const hash = await bcrypt.hash(password, 12);
+const valid = await bcrypt.compare(password, storedHash);
+
+// Bad
+const hash = crypto.createHash('sha256').update(password).digest('hex');
+```
+
+## Rate limiting tools
+
+Use existing tools:
+- `express-rate-limit` (Node.js)
+- `django-ratelimit` (Django)
+- Cloudflare / AWS WAF (edge)
+
+## Library Recommendations
+
+| Stack | Library | Notes |
+|-------|---------|-------|
+| Node.js | `passport`, Auth.js, Better Auth | Lucia v3 is deprecated (lucia-auth.com, checked 22 Oct 2026) so do not start new work on it; Better Auth status (รอยืนยัน, check before use) |
+| Python | `authlib`, `PyJWT` (or `joserfc`) | authlib for OAuth; python-jose is rarely maintained (รอยืนยัน) |
+| Go | `oauth2`, `golang-jwt` | Standard |
+| Rust | `axum-login`, `jsonwebtoken` | — |
+| Any | Auth0, Clerk, Supabase Auth | Managed (faster) |
+
+
+## reference: mfa.md
+
+# Pattern 4: Multi-Factor Authentication (MFA)
+
+Details of all 3 types of multi-factor authentication. Use it when choosing or building MFA
+
+## TOTP (Google Authenticator, Authy)
+**When:** standard two-factor login (2FA), easy for users. TOTP = time-based one-time password.
+
+```
+Setup:
+1. Server generates random secret (160 bits)
+2. Server shows QR code: otpauth://totp/...?secret=...
+3. User scans with authenticator app
+4. User confirms with first code
+5. Server stores secret encrypted
+
+Verify:
+1. User enters 6-digit code
+2. Server computes expected code(s) (±1 window for clock drift)
+3. Match → grant access
+```
+
+## WebAuthn (Passkeys) — Future-proof
+**When:** you want login that phishing can't beat, no SMS, hardware keys
+
+- Use `@simplewebauthn` library
+- Supports Touch ID, Face ID, YubiKey
+- No shared secret, so nothing to phish
+- Default for new apps in 2026+
+
+## SMS / Email codes
+**When:** there's no other option (users without smartphone apps)
+
+- Note: SMS is **NOT secure** (SIM swap attacks)
+- Use only as a last resort, never as the main method
+- Use strict rate limits
+- Codes: 6 digits, 5 min expiry
+
+
+## reference: sources.md
+
+# Sources · auth-implementation-patterns
+
+- Password policy (minimum 15 characters as the only factor, 8 inside multi-factor authentication, breached-password check, no composition rules, no forced rotation, maximum at least 64): NIST SP 800-63B-4 §3.1.1.2, https://pages.nist.gov/800-63-4/sp800-63b.html, checked 2026-10-14.
+
+
+---
+
 # skill: database-design
 
 Use when designing or changing a database schema
@@ -1641,287 +1878,3 @@ Show it as a sentence people can read, not raw JSON (the sample below is the Tha
 ```
 
 Show the time in the viewer's time zone, but store it as UTC (see `i18n-and-locale`).
-
-
----
-
-# skill: file-upload-and-storage
-
-Use when users upload files or an app serves stored files
-
-# Accepting file uploads and storing files
-
-> **One rule:** a file a user sends is untrusted data.
-> The file name, the extension, the type the browser reports, and the size it claims can **all be faked**.
-
-## When to use this skill
-
-- A screen lets users attach files, images, or documents.
-- The system must store files and send them back for viewing or download.
-- You must decide where to keep the files.
-- Some files should be hidden from others, but right now anyone with the link can open them.
-
-## When to use another skill instead, or together
-
-| Task | Skill | |
-|---|---|---|
-| Import Excel/CSV and load the data into the system | `data-import-export` | instead |
-| Permissions: who may access what | `auth-implementation-patterns` | instead |
-| Process large files as a background job | `background-jobs` | instead |
-
----
-
-## 1 · Check before accepting
-
-| What to check | How |
-|---|---|
-| **File type** | Read the **contents** (magic bytes). Do not trust the extension or `Content-Type`. |
-| **Size** | Enforce it on the server **and** at the front-facing request receiver. A check in the browser is only a convenience. |
-| Files per request | Set a limit. |
-| Total size per user | Set a quota, or one person uses up all the space. |
-| Allowed types | **An allow list, not a deny list.** |
-
-```
-Typical allow list: jpg · png · webp · pdf · xlsx · docx · csv
-Always forbidden: executables (exe, sh, bat) · server script files (php, aspx, jsp) · svg that has not been sanitised
-```
-
-> **SVG is HTML.** It can run scripts. To accept it, sanitise it first or convert it to PNG.
->
-> **Check the size before reading the file into memory.** Otherwise a 5 GB file kills the server
-> before the size-check code gets to run.
-
-**Virus-scan** any file that other people will download. While the scan result is pending, set the status to `pending`
-and give nobody access.
-
----
-
-## 2 · Where to store
-
-| Store | Good for | Note |
-|---|---|---|
-| **object storage** (S3 · Azure Blob · GCS) | The default to use | Scales · has expiring links built in |
-| The server's disk | A small, single-machine system | **Must sit outside the folder the web serves**, and must be backed up |
-| In the database | Very small files that must be in the same transaction | Grows fast · backups get much slower |
-
-> Wrong: **keeping files in the app's folder.** They vanish on every deploy, and with several instances they cannot see each other.
-> Wrong: **keeping files directly in the folder the web serves.** Someone uploads a script file and runs it.
-
-**The database holds only metadata; the file itself lives elsewhere.** The metadata table needs the columns
-`id` · `original_name` · `stored_key` · `content_type` · `size_bytes` · `checksum` ·
-`uploaded_by` · `uploaded_at` · `scan_status` · `owner_entity_type` · `owner_entity_id`
-
----
-
-## 3 · Naming the stored file
-
-**Never use the file name the user sent as the real stored name.**
-
-```
-Wrong: uploads/รายงาน (1).xlsx              spaces · Thai · brackets
-Wrong: uploads/../../etc/passwd             escapes the folder
-Right: 2026/09/25/01J9Z8K7X2M4.xlsx         random · split into folders by date
-```
-
-- The real stored name is a random value (UUIDv7 or ULID) + an extension that you have **verified**.
-- Keep the user's original name in the database, and send it back on download through a header.
-- Split folders by date. One folder with millions of files is slow and cannot be browsed.
-- Store a checksum too. It detects duplicates and checks the file is not corrupted.
-
----
-
-## 4 · Sending files back to the user
-
-| File | How to send |
-|---|---|
-| Public (logo, product image) | A direct URL through a CDN is fine |
-| **Private** (document, receipt, user photo) | **A signed link that expires** in 5–15 minutes |
-
-> **A "hard-to-guess link" is not access control.** Links get forwarded, logged by proxies,
-> and left in the `Referer` header. For a private file, **check permission every time**, then issue a temporary link.
-
-- For large files, let the user upload straight to object storage with a link we sign, so the file does not pass through the app.
-  **The checks in §1 are still all required.** This route bypasses the app, so restore the checks like this:
-  - **When signing the link:** limit size and type inside the signature. S3 uses a presigned POST whose policy has `content-length-range` and a `Content-Type` condition (a presigned PUT cannot enforce size). Other providers have equivalents, for example GCS uses the header `x-goog-content-length-range`.
-  - **When signing the link:** set the key yourself (a random name as in §3) in a holding folder · keep the link's expiry short · save a metadata row with `scan_status = pending`.
-  - **After the upload finishes** (a storage event, or the user reports it done): read the real magic bytes from the object · compare the real size with the limit · virus-scan. If it passes, move it to the real store and set `clean`. If it fails, delete or quarantine it.
-  - While `pending`, issue no download link to anyone.
-- When serving a file for download, set `Content-Disposition` and `Content-Type` correctly,
-  and never send back user-uploaded HTML in a way that lets the browser render it.
-- If you can, serve user files from a different domain than the app, so scripts in a file cannot reach the app's cookies.
-
----
-
-## 5 · Images
-
-- **Never send the original camera image to the screen.** An 8 MB photo on a phone is a page that does not load.
-- Pre-generate 2–3 sizes (thumbnail · medium · a downsized full size).
-- **Strip EXIF.** The photo holds the location where it was taken, and users do not know they are publishing it.
-- Convert to WebP if the browser supports it.
-- Rotate the image according to EXIF before you strip EXIF, or phone photos come out sideways.
-- If the file is large or there are many, resize as a background job (see `background-jobs`).
-
----
-
-## 6 · Deleting and retention
-
-| Topic | Rule |
-|---|---|
-| Deleting the parent record | A job must also hunt down and delete the orphan files left behind. |
-| Order of deletion | Delete the metadata first, then the file. An orphan file is harmless, but metadata pointing to a file that is gone breaks the screen. |
-| An uploaded file never linked to anything | Delete it after 24 hours. |
-| Retention | Set it per file type · a file with personal data needs an expiry date (see `pdpa-compliance`). |
-| Backup | Files belong in the backup plan just like the database, **and a restore must have been tested for real.** |
-
-
----
-
-# skill: notifications
-
-Use when a system sends email, SMS, LINE or push
-
-# User notifications
-
-> **One rule:** users stop reading everything if they receive enough that they did not need to read.
-> Every message sent beyond what is necessary makes the necessary messages get ignored too.
-> For Thai text in templates → `human-writing` `references/thai-grammar.md` section 4, register "screen"
-
-## When to use this skill
-
-- The system must send email, SMS, LINE push or in-app notifications
-- Users complain of getting duplicates, getting too many, or getting none
-- You must build a settings page for which notifications to receive
-- Important email lands in spam
-
-## When **not** to use it
-
-| Task | Use this instead |
-|---|---|
-| Alerting the team when the system has a problem | `observability-basics` |
-| Queue mechanics and retries | `background-jobs` |
-| Multi-language messages | `i18n-and-locale` |
-| Marketing consent | `pdpa-compliance` |
-
----
-
-## 1 · Choose the channel by urgency, not by habit
-
-| Channel | Good for | Limits |
-|---|---|---|
-| **In-app** | Everything — a permanent record that can be looked back at | Seen only when the user opens the app |
-| **Email** | Receipts, summaries, attachments, things to keep | Slow · can land in spam |
-| **push** | Things the user must know now | Can be turned off · lost if not tapped |
-| **LINE** | Thailand · general customers · high open rate | Cost per message · provider rules apply |
-| **SMS** | Verification codes · urgent things that must arrive | Most expensive · 70 characters if Thai |
-
-> **Thai SMS holds only 70 characters per message** (not 160 as in English).
-> Anything longer is split into several messages and billed for every part, so always count the length before sending.
-
-**One matter goes on one channel** — unless it is something that truly cannot be missed.
-Let the user choose which channel they want (section 5).
-
----
-
-## 2 · Message templates live outside the code
-
-```
-templates/
-  order-confirmed/
-    th.subject.txt  th.html  th.txt
-    en.subject.txt  en.html  en.txt
-```
-
-| Rule | Reason |
-|---|---|
-| **Never build messages by string concatenation in code** | Every wording change would need a new deploy |
-| Variables are named | Use names like `{{customerName}}`, not positions |
-| Email needs both HTML and plain text | Spam filters lower the score of HTML-only email |
-| One file per language | See `i18n-and-locale` |
-| **Test with real values before sending** | A leaked `สวัสดีคุณ {{name}}` damages the brand |
-
-**Every message needs 3 things** — what happened · which item it concerns (with a reference number) · what to do next (a single button)
-
----
-
-## 3 · Always send as a background job
-
-> **A failed email must not make the order fail.**
-> Separate them with a queue — the transaction is saved first, then the message enters the send queue (see `background-jobs`)
-
-| Topic | Rule |
-|---|---|
-| Enqueue after the transaction succeeds | Not during the transaction, because if it rolls back later the email has already gone out |
-| retry | 3 times, doubling the wait each round, then move to the dead letter queue (a queue that holds jobs that failed to send) |
-| **Prevent duplicate sends** | Use a unique key `(type, entity_id, event_id, recipient)` — `event_id` is the id of the event or version of the change (for example, the 2nd status of the same order must be sendable). Do not just hope nobody calls twice |
-| Urgent messages (OTP codes) | Use a separate queue so they do not wait behind 5,000 monthly summary emails |
-
-**Prevent a flood** — set a per-user ceiling per hour, and merge frequent events of the same kind
-into one message ("มี 12 รายการใหม่", not 12 messages).
-
----
-
-## 4 · What must never go in a message
-
-| Never | Put this instead |
-|---|---|
-| Passwords | A reset link that expires |
-| Full card numbers · national ID numbers | The last 4 digits |
-| Health data, test results | "มีผลตรวจใหม่ กรุณาเข้าระบบเพื่อดู" |
-| Attachments with sensitive data | A link that requires login first |
-| Links reachable without identity verification | A short-lived link that checks permission |
-
-> **Treat email as a postcard** — it passes through many systems, sits in a mailbox on a device that may not be theirs,
-> and can be found forever.
-
-**Links in email must be on our own domain** — shortened links make users unable to tell them from scam email.
-
----
-
-## 5 · Let users choose
-
-| Type | Can it be turned off? |
-|---|---|
-| Transactional (receipts · verification codes · security notices) | ✗ cannot be turned off |
-| Action (order status · someone replied) | ✓ the channel can be chosen |
-| Periodic summary | ✓ the frequency can be chosen |
-| Marketing | ✓ **consent must be obtained before sending** (see `pdpa-compliance`) |
-
-- Settings table: `user_id` · `notification_type` · `channel` · `enabled`
-- **Every non-transactional message must have an unsubscribe link**, and it must take effect within 24 hours (our own internal target, stricter than the 2 days that Gmail and Yahoo set)
-- **High-volume marketing email** must also carry a one-click unsubscribe header: `List-Unsubscribe: <https://...>` (an HTTPS URL) together with `List-Unsubscribe-Post: List-Unsubscribe=One-Click` per the RFC 8058 standard, and the email must pass SPF + DKIM (Gmail applies this to senders above about 5,000 messages per day · it applies to marketing email, not transactional · without it the email is more likely to land in spam). Sources: [`references/sources.md`](references/sources.md)
-- Unsubscribing must work without logging in — use a token in the link
-- Respect "quiet hours" — never send non-urgent push or SMS at 2 a.m. (by the recipient's time zone)
-
----
-
-## 6 · Track delivery
-
-| Status | Meaning |
-|---|---|
-| `queued` · `sent` | Entered the queue · left our system |
-| `delivered` | The destination accepted it |
-| `bounced` | Did not arrive — **separate hard (the address does not exist) from soft (mailbox full)** |
-| `failed` | Could not be sent |
-
-- **Stop sending to an address immediately after a hard bounce** — continuing gets our domain blacklisted
-- Keep a send log to answer "why didn't the customer get it" — who, which channel, when, what result
-- Email that must arrive needs **SPF · DKIM · DMARC** all set, or it lands in spam with no warning at all
-- Measure: delivery success rate · bounce rate · queue backlog (see `observability-basics`)
-
----
-
-## 7 · Link to other skills
-
-- Retry queue and dead letter: `background-jobs`
-- Settings table and send log: `database-design`
-- Attachments and expiring links: `file-upload-and-storage`
-- Delivery success rate metrics: `observability-basics`
-- Alerting the team when the system has a problem: `observability-basics` · `incident-runbook-template`
-- Broadcast to LINE OA friends (quota · target group · frequency): `e-commerce:line-broadcast` (if installed)
-
-
-## reference: sources.md
-
-# Sources · notifications
-
-One-click unsubscribe header and SPF + DKIM for high-volume senders: support.google.com/a/answer/14229414 · senders.yahooinc.com/best-practices · checked 22 Oct 2026 (B.E. 2569). The standard is RFC 8058.

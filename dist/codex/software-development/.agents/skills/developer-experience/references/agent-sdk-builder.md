@@ -225,7 +225,7 @@ await client.charges.create(data, {
 
 - `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `developer-experience` → `references/sdk-design-patterns.md` — SDK patterns
-- `polished-document-style` (from superuser) — for docs
+- `design-gate/polished-document-style` (from superuser) — for docs
 
 ## Things You Don't Do
 

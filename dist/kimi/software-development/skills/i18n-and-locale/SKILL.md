@@ -162,7 +162,7 @@ So let a library handle it. Do not write `if (count > 1)` yourself, because some
 
 ## Links to other skills
 
-`error-handling-patterns` (error messages that must be translated) · `presentation-design` (Thai fonts in slides) · `data-import-export` (B.E. years in imports · CSV that opens in Excel) · `notifications` (multi-language message templates) · `translate-th-en` (plugin `superuser`: translating whole documents, a glossary per project)
+`error-handling-patterns` (error messages that must be translated) · `presentation-design` (Thai fonts in slides) · `data-import-export` (B.E. years in imports · CSV that opens in Excel) · `notifications` (multi-language message templates) · `human-writing/translate-th-en` (plugin `superuser`: translating whole documents, a glossary per project)
 
 ## References
 

@@ -6,4 +6,4 @@
 - BM25 is a widely published ranking method, written by us in `scripts/design_search.py` · k1 1.5 and b 0.75
 - The contrast thresholds 4.5:1 and 3:1 follow `ui-craft` step 5 (WCAG 2.2 criteria 1.4.3 and 1.4.11)
 - 3 directions · look · app personality from `ui-craft` step 0.1 · `ui-craft/references/web-looks.md` · `ui-craft/references/app-character.md`
-- The color and font rules that are dropped match the rules `framework-default` and `overused-font` of `no-ai-look/scripts/slop_scan.py`
+- The color and font rules that are dropped match the rules `framework-default` and `overused-font` of `design-gate/parts/no-ai-look/scripts/slop_scan.py`

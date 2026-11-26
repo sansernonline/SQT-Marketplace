@@ -5,7 +5,7 @@ description: Use when a flyer or name card goes to a print shop
 
 # print-ready-files — prepare files for print shops and sign shops
 
-> **Before sending to a print shop:** the work file must pass the eye gate of `no-ai-look` and have the line `ด่านก่อนลงมือ:` (Gate before starting:) from the design stage (that section of `design-references`, plugin `superuser`). If missing, go back and do that gate first, because print cannot be fixed afterward. For work the user or an outsider designed themselves, the line is not required, but you still run the eye gate of `no-ai-look`.
+> **Before sending to a print shop:** the work file must pass the eye gate of `design-gate/no-ai-look` and have the line `ด่านก่อนลงมือ:` (Gate before starting:) from the design stage (that section of `design-gate/design-references`, plugin `superuser`). If missing, go back and do that gate first, because print cannot be fixed afterward. For work the user or an outsider designed themselves, the line is not required, but you still run the eye gate of `design-gate/no-ai-look`.
 
 > **One rule:** ask the shop before starting the file what it needs (color mode · bleed · file type · color profile), then follow the shop. The numbers below are what most Thai shops ask for; use them when the shop does not say.
 

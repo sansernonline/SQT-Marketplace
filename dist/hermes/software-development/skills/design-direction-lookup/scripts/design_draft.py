@@ -394,7 +394,7 @@ def render_markdown(brief, industry, match, directions, rules, rejected, today, 
     lines += ['', '## ขั้นต่อไป', '',
               '1. เปิดหน้าเทียบ HTML ดูสีและฟอนต์จริงทั้ง 2 โหมด',
               '2. ทำหน้าจอพระเอก + 1 หน้าใช้งานหลักของทั้ง 3 แนวตาม `ui-craft` ข้อ 0.1 ขั้น 3 แล้วเลือกที่ด่านสวย',
-              '3. แนวที่เลือก เขียนลงไฟล์ token ของโปรเจกต์ และรัน `no-ai-look/scripts/slop_scan.py` กับ mockup', '']
+              '3. แนวที่เลือก เขียนลงไฟล์ token ของโปรเจกต์ และรัน `design-gate/parts/no-ai-look/scripts/slop_scan.py` กับ mockup', '']
     return '\n'.join(lines)
 
 

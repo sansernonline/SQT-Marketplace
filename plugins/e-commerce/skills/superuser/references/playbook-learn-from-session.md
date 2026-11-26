@@ -14,8 +14,8 @@ Labels kept in Thai because the validator matches them: `ใคร:` = who · `�
 2. **Classify**, ใคร: หัวหน้าทีม
    - **Count the mistake types first.** Tag every row `ไม่ได้เปิด skill` (did not open the skill) · `เปิดแต่ไม่ทำตาม` (opened but did not follow) · `ไม่มีกฎ` (no rule) (definitions in the agent `learning-reviewer`), then count. Mostly `ไม่ได้เปิด` → this round's job is to fix how skills are signalled (`triggers.md` · `hooks/skill-router.json`), not to write more text in the skill.
    - **A skill that has absorbed 3 merged lessons but mistakes did not drop.** Stop adding text. Propose one of: a checker, a paired example (before → after), or rolling the fix back.
-   - **A repeated mistake** (found 2 or more times · `correction: true` in the log for the same issue): make it a checker, do not write more warnings (`repeated-mistakes-to-checks` if present, otherwise a check script or an item in the pre-send checklist).
-   - **A method that worked, or a skill that says something wrong:** fix the paragraph in SKILL.md (`session-lessons-to-skills` if present).
+   - **A repeated mistake** (found 2 or more times · `correction: true` in the log for the same issue): make it a checker, do not write more warnings (`learn-loop/repeated-mistakes-to-checks` if present, otherwise a check script or an item in the pre-send checklist).
+   - **A method that worked, or a skill that says something wrong:** fix the paragraph in SKILL.md (`learn-loop/session-lessons-to-skills` if present).
    - **A playbook assembled on the spot and reused 2 or more times:** propose it as a permanent playbook per [`playbook-template`](playbook-template.md).
    - **Fixing an agent or playbook:** fix the matching paragraph · a playbook must still pass `validate-marketplace.mjs`.
    - **A user rule:** 1 line in `~/.claude/superuser-style.md`, which works from every project.

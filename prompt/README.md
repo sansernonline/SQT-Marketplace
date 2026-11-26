@@ -25,7 +25,7 @@ prompt/
 1. เปิด Claude Code, Codex CLI หรือ Gemini CLI ที่**รากโฟลเดอร์โปรเจกต์**
 2. วางทั้งไฟล์ แล้วพิมพ์ต่อท้ายว่าจะทำฉบับไหน เช่น `ทำทั้งหมด` หรือ `ทำข้อ 3 และ 4`
 3. agent เปิด skill `superuser` (playbook `project-docs`) แล้วถามช่อง "ผู้ใช้กรอก" ที่ยังว่างและจุดที่ต้องเลือกครั้งเดียวก่อนเริ่ม แบบเลือกคำตอบ (ตัวแนะนำอยู่บนสุด ทุกตัวเลือกบอกหลักฐาน · ไม่ต้องกรอกเองก่อนก็ได้) จากนั้นทำทุกฉบับที่สั่งจนจบในรอบเดียว ไม่หยุดรอให้พิมพ์ `ต่อ`
-4. ระหว่างทาง agent เลือกเองทางที่ผลกระทบน้อยสุด และจดไว้ใน `docs/BUILD-PLAN.md` หัวข้อ `## ตัดสินใจเอง` (skill `decision-log`)
+4. ระหว่างทาง agent เลือกเองทางที่ผลกระทบน้อยสุด และจดไว้ใน `docs/BUILD-PLAN.md` หัวข้อ `## ตัดสินใจเอง` (skill `decision-desk/decision-log`)
 5. คุณตรวจทีเดียวตอนจบ · agent ถามแบบเลือกคำตอบให้ `คงไว้` หรือเปลี่ยนสิ่งที่ตัดสินใจเองกลางทาง · ไม่เห็นด้วยข้อไหน → แก้ที่หัวข้อนั้น แล้วสั่งทำใหม่เฉพาะฉบับนั้น
 
 ## รายการไฟล์
@@ -154,7 +154,7 @@ prompt/
 
 - ฉบับส่วนใหญ่สร้างเอกสารอย่างเดียว ไม่แก้โค้ด · ฉบับที่แก้โค้ดมีช่องให้ติ๊กอนุญาตก่อนเสมอ: bugfix ใน `prompt-change.md` · ฉบับ 2–6 ใน `prompt-existing-dev.md` · ฉบับ 5–6 ใน `prompt-rebuild.md` · ฉบับ 3–5 ใน `prompt-test-automation.md` · ฉบับ 4 ใน `prompt-explore.md` · ฉบับ 3 และ 7 ใน `prompt-operations.md` · ฉบับ 2 ใน `prompt-poc.md` · ฉบับ 3 ใน `prompt-trading-system.md` · ฉบับ 3–4 ใน `prompt-ea-research-loop.md` · ฉบับ 4 ใน `prompt-ai-feature.md` · ฉบับ 2 ใน `prompt-sell-product.md` · ฉบับ 2–5 ใน `prompt-mcp-server.md` · ฉบับ 2 · 3 · 5 ใน `prompt-dynamic-website.md`
 - ทุกไฟล์ prompt มีบรรทัด **วนจนเสร็จ (agent loop)** — ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ (`reviewer` ตัวใหม่ทุกรอบ · งานกลางไม่เกิน 3 รอบ · งานใหญ่หรืองานเสี่ยงไม่เกิน 5 รอบ) จนผ่าน · ต้นฉบับกฎคือ skill `superuser` กฎข้อ 3 · ของ `software-development` อยู่ในบล็อกที่ `sync-prompt-rules.mjs` เขียนให้
-- กฎการทำงานร่วม (ตัดสินใจเอง · พิสูจน์ผล · รายงานสถานะ) อยู่ใน skill `superuser` · `decision-log` · `principle-prove-it-works` · `status-report` · ไม่เขียนซ้ำในไฟล์ prompt · จะแก้กฎ → แก้ที่ skill ที่เดียว
+- กฎการทำงานร่วม (ตัดสินใจเอง · พิสูจน์ผล · รายงานสถานะ) อยู่ใน skill `superuser` · `decision-desk/decision-log` · `ground-rules/principle-prove-it-works` · `superuser/status-report` · ไม่เขียนซ้ำในไฟล์ prompt · จะแก้กฎ → แก้ที่ skill ที่เดียว
 - คู่มือผู้ใช้มีที่เดียวคือ `prompt-manual.md` ฉบับ 1 · `prompt-new-project.md` ฉบับ 12 ชี้ไปที่นั่น
 - user story มีที่เดียวคือ `prompt-user-story.md` · mockup มีที่เดียวคือ `prompt-mockup.md` · `prompt-new-project.md` ฉบับ 4–6 ชี้ไปที่นั่น
 - ภาษาทุกเอกสารตาม `human-writing` · รูปในเอกสารส่งมอบใช้ `diagram-figures` แบบเดียวทั้งชุด

@@ -171,7 +171,7 @@ Architecture Decision Record (ADR) · User Interface (UI) · User Experience (UX
 
 - Every commit is readable on its own and builds, so a reviewer can go through it commit by commit and trust it
 - A Pull Request (PR) that changes more than 400 lines should be split into several PRs in a chain (the same threshold as `pr-description-template` and `code-review-checklist`)
-- For message format use `commit-log` · if setting up commitlint or automatic releases → `commit-message-format`
+- For message format use `workspace-rules/commit-log` · if setting up commitlint or automatic releases → `commit-message-format`
 - Order: things others depend on (types · schemas · shared functions) before the things that call them · changing existing things → `principle-replace-then-delete`
 
 ## principle-user-experience-first

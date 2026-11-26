@@ -16,7 +16,7 @@ graders:
   - name: skill-opened
     type: tool_used
     tool: Skill
-    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?decision-scoring"'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?decision-desk"'
     min: 1
     arm: with-only
   - name: shows-weights

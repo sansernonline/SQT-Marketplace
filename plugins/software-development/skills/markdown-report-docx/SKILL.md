@@ -5,7 +5,7 @@ description: Use when one Markdown file must become a Word report
 
 # Markdown Report → .docx
 
-> **Pre-work gate "ด่านก่อนลงมือ" (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for finding the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
+> **Pre-work gate "ด่านก่อนลงมือ" (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `design-gate/no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for finding the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
 > **The one rule of this skill:** Markdown is the source. The .docx is the result built from the source.
 > Edit the .md and rerun the script every time. Never open Word and edit by hand, because the next run wipes it all out.
@@ -23,19 +23,19 @@ Page style: logo cover centred on the page · table of contents · tables with a
 |---|---|
 | A formal document with a colour-banded cover, a metadata box, a signature table (Software Requirements Specification (SRS) · Business Requirements Document (BRD) · proposal) | `branded-document-design`, calling `BrandDoc` directly |
 | Presentation slides | `presentation-design` (its top table chooses .pptx · .html · convert) |
-| A document that lives in the repo as Markdown only | `polished-document-style` |
+| A document that lives in the repo as Markdown only | `design-gate/polished-document-style` |
 | Thesis · independent study · research article | `personal-life:thesis-writing` first (if installed): the faculty guide controls the book structure and layout. This script can still build the .docx afterwards |
 
 ---
 
 ## 1 · Steps
 
-1. Write the content in `docs/src/<name>.md` (the permanent source, per `document-naming` item 1) following `polished-document-style` (plugin `superuser`). Add front matter (section 2). If there is no `doc-theme` yet, **search for references first:** take the project's keywords and search live as in `design-references` (plugin `superuser`), type `document`, then pull colours from the chosen work. Use the stored colour library when live search is not possible.
+1. Write the content in `docs/src/<name>.md` (the permanent source, per `workspace-rules/document-naming` item 1) following `design-gate/polished-document-style` (plugin `superuser`). Add front matter (section 2). If there is no `doc-theme` yet, **search for references first:** take the project's keywords and search live as in `design-gate/design-references` (plugin `superuser`), type `document`, then pull colours from the chosen work. Use the stored colour library when live search is not possible.
 2. Run `python scripts/md_to_docx.py docs/src/<name>.md -o docs/<deliverable-file-name>.docx --pdf`
    - The script uses `brandkit.py` from `branded-document-design/scripts/` next to it, and needs `python-docx`.
-   - `--pdf` uses Word on Windows (it also updates the table of contents). Without Word, it uses LibreOffice. This PDF is for the checks in section 5. Deliver it only for a user manual or when the client asks. Otherwise move it to `_to_delete/` (`document-naming` item 1).
+   - `--pdf` uses Word on Windows (it also updates the table of contents). Without Word, it uses LibreOffice. This PDF is for the checks in section 5. Deliver it only for a user manual or when the client asks. Otherwise move it to `_to_delete/` (`workspace-rules/document-naming` item 1).
 3. Convert the PDF to images and **open every page** as in section 5. If you find a problem, fix it in the .md and rerun.
-4. Name the deliverable file per `document-naming` (plugin `superuser`), for example `CLINIC-RPT-project-v1.0-DRAFT.docx`
+4. Name the deliverable file per `workspace-rules/document-naming` (plugin `superuser`), for example `CLINIC-RPT-project-v1.0-DRAFT.docx`
 
 To see an example with every element: `python scripts/md_to_docx.py assets/example-report.md --pdf`
 
@@ -114,6 +114,6 @@ Open the image of every page (Read tool) and go through the checks:
 |---|---|
 | Add elements the script lacks (KPI · pill · signature · landscape page) | Call `BrandDoc` in [`branded-document-design`](../branded-document-design/SKILL.md) after `build()` |
 | Slides paired with the same report, same colours | [`presentation-design`](../presentation-design/SKILL.md) (its top table chooses .pptx · .html · convert) |
-| File names and versions | `document-naming` (plugin `superuser`) |
+| File names and versions | `workspace-rules/document-naming` (plugin `superuser`) |
 | Figures in the report | [`diagram-figures`](../diagram-figures/SKILL.md) |
 | A project-specific cover (logo and mockup already exist) | `branded-document-design` `references/cover-design.md` |

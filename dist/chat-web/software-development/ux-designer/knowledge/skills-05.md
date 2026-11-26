@@ -1,425 +1,373 @@
-# skill: answer-shape
+# skill: i18n-and-locale
 
-Use when an answer needs prose, a table or a diagram
+Use when a system shows text, dates or money in Thai and English
 
-# The shape of an answer — pick prose, table, list or figure from the content
+# Language and Locale Formats
 
-> **One rule:** whatever structure the content has, the answer uses that shape. Comparison → table · connections → figure · one thing → sentences.
+> **The one rule:** Store a neutral value, convert at display time.
+> Store time in UTC, store years in C.E. (Common Era), and store money as a number paired with a currency code.
+> Anything "converted first and stored after" becomes data you cannot convert back.
 
-## Use when
-- Deciding how to lay out an answer: prose, table, list or figure.
-- The question compares options, asks what connects to what, or you are blocked and must ask for something.
+## When to use this skill
 
-## Steps
-1. Pick the shape from the signal in the question (quoted signals are Thai phrasings; English in brackets):
+- The system has Thai and English users, or may have them in the future
+- You must show dates in B.E. (Buddhist Era) while storing C.E.
+- Thai names sort in the wrong order, or search does not find them
+- Thai text breaks a line in the middle of a word, or overflows a button
 
-   | Signal | Shape |
-   |---|---|
-   | "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" (which is better · how they differ · what options) | **Comparison table** |
-   | "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" (what connects to what · how data flows · the sequence) | **Figure** |
-   | "มีอะไรบ้าง" (what are there) when the items are not compared | **Bullet list** |
-   | "ทำไม" · "แปลว่าอะไร" (why · what does it mean) · one thing with no branches | **Plain sentences** |
-   | Several numbers that must be seen together | **Table** |
-   | Steps that must be done in order | **Numbered list** |
-   | Cannot continue · must wait for something from the user | **Short list: what is blocking → what is needed** |
+## When **not** to use it
 
-   Having 2 or more "things being compared" is the strongest signal for a table, because in a paragraph the reader must hold the first one in their head while reading the second.
-2. **If you use a table:** the first column is the thing compared, the next columns the aspects · 3–5 columns, at most 8 rows in chat · every cell has content (no data → "ไม่มี"; a table where every cell says "it depends" has no content either) · at most 1 line per cell, longer goes below the table · rows ordered by weight (recommended or most used first, not alphabetical) · column headings are the reader's questions (`เร็วแค่ไหน` · `ต้องดูแลมากไหม`, not `ประสิทธิภาพ` · `ความซับซ้อน`) · always close with a 1-line conclusion.
-3. **If the relationship is the answer** (what connects to what, what sits inside what, a sequence with forks or loops, one thing in several states), draw a figure. In chat a small ASCII figure or a short Mermaid is enough (`กล้อง ──DICOM──▶ Orthanc ──▶ API ──▶ รายงาน`). A figure that must be a real file for a document or slides uses that plugin's figure-drawing skill, if there is one.
-4. **If the answer is shorter than 3 lines, is yes/no plus 1 sentence of reason, or the reason matters more than the options, use sentences.** A 1–2 row table, or a figure that draws what one sentence can say, is the wrong shape.
-5. **If you cannot continue,** list only 2 things: what is blocking, and what you need from the user. 1 line per item, at most 4 items. Do not tell the cause at length, answer side topics or plan ahead. If the user must choose among paths, 1 item per path, easiest first. Example:
-   ```
-   ติดอยู่ 1 เรื่อง:
-      - มองไม่เห็นไฟล์ — โฟลเดอร์ที่เชื่อมไว้ว่าง
-      ต้องการ 1 อย่าง:
-      - แนบ Mockup.html มา หรือบอก path ใหม่
-   ```
-
-## Check before done
-- [ ] The shape matches the content's structure (not a table for one thing, not a paragraph for a comparison).
-- [ ] Every table has content in every cell and ends with a 1-line conclusion.
-- [ ] A blocked answer lists only what is blocking and what is needed.
-
+| Task | Use this instead |
+|---|---|
+| Date and time data types in the database | `database-design` |
+| Date and time format in JSON | `api-conventions` |
+| Thai fonts and document layout | `branded-document-design` |
+| Thai fonts on screen | the platform skill + `ui-craft` |
 
 ---
 
-# skill: temp-file-discipline
+## 1 · Translated text
 
-Use when a task writes temporary files into a project
+**No user-visible text may be embedded in code**, even if the project has only one language today.
 
-# Temporary file discipline — keep non-products in `_to_delete/<task folder>/`
+```
+locales/
+  th.json        ← main language, the source of truth
+  en.json
+```
 
-> **One rule:** anything that is not a real work product must live only in `_to_delete/`. Never leave it in the project root, and never mix it with work files.
+| Stack | Translation files | Key format |
+|---|---|---|
+| Web / libraries that use JSON | `locales/th.json` · `en.json` | Dot-separated by location, `order.cancel.confirmTitle` |
+| Flutter (`gen-l10n`) | `lib/l10n/app_th.arb` · `app_en.arb` + `l10n.yaml` at the root of the code folder | **camelCase, no dots**, `orderCancelConfirmTitle`. An ARB key becomes a Dart getter name, so dots do not work. |
 
-## Use when
-- A task creates check images, logs, one-off scripts, backups, extracted zips, converted copies of documents (`.docx`/`.pdf` → `.md`), or replaces a file (the old one is now temporary).
-- Finishing work in a project: confirm the root holds no stray files.
+**Name a key by where it lives, not by its content:**
 
-Not for: a work product the user keeps (goes in its own destination folder) · intermediate steps not tied to any project (use the session's workspace).
+```jsonc
+// Right: you can change the wording without changing the key
+"order.cancel.confirmTitle": "ยืนยันการยกเลิกคำสั่งซื้อ"
+// Wrong: once the wording changes, the key and the content no longer match
+"ยืนยันการยกเลิก": "ยืนยันการยกเลิกคำสั่งซื้อ"
+```
 
-## Steps
-1. **Decide what is temporary:** check images, logs, one-off scripts, backups, extracted zips, converted copies, old versions, anything no longer in use. Not temporary: a work product the user asked for · the source file of a work product (keep it in a subfolder beside it) · files the user placed themselves (never move them without asking) · build output (leave it, check `.gitignore`). If unsure whether the user created or uses a file, do not move it; tell the user. Detail: [`references/layout.md`](references/layout.md).
-2. **Use one `_to_delete/` at the project root.** From inside a subfolder (such as the code folder), write to the project root's `_to_delete/`; do not nest one. A temporary file that landed in the root: move it into `_to_delete/` right away.
-3. **Make a task folder when the task starts**, before the first temporary file: `_to_delete/YYYY-MM-DD-<topic>/` (the day the task started; topic lowercase English joined by `-`, 2–5 words, such as `2026-11-06-temp-task-folders`, not `task1`). A task that spans rounds or sessions reuses its folder; a new topic gets a new folder. Sub-agents write into the lead's task folder; put the path in the brief.
-4. **Never place a file directly in `_to_delete/`**, except what a tool or hook creates at a fixed place (`superuser-lock/` · `STOP`) and `delete-plan.txt`.
-5. **When another skill writes `_to_delete/<x>`** (such as `_to_delete/screenshots/`), read it as `_to_delete/<task folder>/<x>`. For a script whose default is `_to_delete/...`, pass `--out` pointing into the task folder.
-6. **Use only these subfolder names inside the task folder:**
+| Rule | Reason |
+|---|---|
+| Variables use names, not positions — `"เหลือ {count} รายการ"` | Word order differs in each language |
+| **Never build a sentence from fragments** | Other languages order words differently, so the resulting sentence is ungrammatical |
+| For a missing key, show the key, not an empty value | An empty value leaves a button with no text, and nobody sees that it broke |
+| Check in Continuous Integration (CI) that every language has every key | Otherwise you find out when a customer sees it |
 
-   | Subfolder | What goes in |
-   |---|---|
-   | `drafts/` | Temporary drafts that are not the original (a re-rendered markdown original lives at `docs/src/<topic>.md`; `superuser:document-naming`) |
-   | `attempts-<topic>/` | Work of each competing agent ([`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md)) |
-   | `screenshots/` | Rendered mockup images or images for checking work |
-   | `logs/` | Logs from a one-time run |
+```
+Wrong: t("มีทั้งหมด") + count + t("รายการ")
+Right: t("list.total", { count })
+```
 
-   Code work (`verify-runs/` · `security/` · `check/`) → `superuser` → `references/code-extensions.md` in plugin `software-development`.
-7. **Add `_to_delete/` to `.gitignore`** in every git project (check first, add if missing). If the project README already names another temporary folder (`tmp/` `scratch/`), follow it and record 1 row in the "การตัดสินใจ" table. Never use `.cache/`.
-8. **At the end of the work,** say where this task's temporary things are in one line (`_to_delete/2026-11-06-login-page-redesign/`), with no long list. Then run `node <this skill's folder>/scripts/root-check.mjs <project root>`. It lists things in the root outside the allowed list (`ref` `docs` `mockup` `assets` `qa` `_to_delete` `.claude` the code folder, and things in `.gitignore`); for things the project keeps in the root on purpose, add `--allow README.md,LICENSE`.
-9. **Never delete on your own.** Delete only when the user orders it (deleting in the user's folder cannot be undone). When ordered, move into `_to_delete/` first, tell the user, and actually delete only things inside `_to_delete/` when the user orders that directly:
-   1. Write the plan into `_to_delete/delete-plan.txt`, 1 path per line from the project root (a whole task = its folder on one line).
-   2. Run `node <this skill's folder>/scripts/delete-plan-check.mjs _to_delete/delete-plan.txt`. It prints the delete list and the keep list to compare. A path that escapes `_to_delete/` (`..` · full path · a link pointing outside) makes it exit 1, and you must not delete.
-   3. Only after it passes, delete line by line from the "delete" list. The script does not delete. Never build the list from `ls` (on Windows names may end in `/`; see `context-budget` → [`windows-shell`](../context-budget/references/windows-shell.md)).
+**Wording in the Thai file**
 
-## Check before done
-- [ ] Every temporary file is under `_to_delete/<task folder>/` using the standard subfolder names.
-- [ ] `root-check.mjs` shows nothing unexpected in the root.
-- [ ] `_to_delete/` is in `.gitignore`.
-- [ ] The reply says where the temporary things are, in one line, and nothing was deleted without the user's order.
+- Write the Thai text directly from what the screen must say. Do not translate word by word from the key or from English text.
+- 1 action, 1 word across the whole app (บันทึก, not a mix of เซฟ and บันทึก). Keep the word pairs in `locales/glossary.md` and check against that file every time you add a key.
+- For wording on buttons, labels, and error messages, see `human-writing` `references/thai-grammar.md` section 4, screen register.
+
+---
+
+## 2 · Time — store UTC, show in the viewer's time zone
+
+```
+Store:  2026-09-25T02:42:13.482Z          (always UTC)
+Show:   25 ก.ย. 2569 09:42                (viewer's Asia/Bangkok)
+```
+
+| Topic | Rule |
+|---|---|
+| Time an event happened | `timestamptz`, stored as UTC and converted at display time |
+| Birth date, due date | Plain `date`. **No time and no time zone.** |
+| "Today" in a report | Say whose time zone "today" means. Daily sales reports go wrong because of this very often. |
+| Business hours | Store as `time` + the branch's time zone |
+
+> **Thailand has no daylight saving (seasonal clock change), so it never hits this problem, until the day you sell to a customer abroad.**
+> Code that adds 7 hours by hand breaks the moment a user is outside the country, so always use a time zone library.
+
+---
+
+## 3 · Buddhist Era
+
+**Always store C.E., and convert to B.E. only at display time.** (`B.E. = C.E. + 543`)
+
+| Point to watch | What to do |
+|---|---|
+| The user enters "2569" | Accept it, then convert to 2026 as soon as it enters the input layer |
+| A 2-digit year "69" | **Never guess.** Force 4 digits, or ask clearly. If the spec says it is definitely a 2-digit B.E. year (official documents), convert in 2 steps and write a test: `68 → 2568 → 2025` |
+| Importing an Excel file | First check whether the year column is B.E. or C.E. If you get it wrong, years are off by 543 with no error |
+| Exporting to another system | Always send C.E., unless the destination says it needs B.E. |
+| Thai digits ๒๕๖๙ | You may display them, but **never store them**. Convert ๐–๙ → 0–9 at the input layer before parsing (forms where users paste text from official documents hit this often) |
+
+**If the system has both kinds of users, let the user pick the calendar**, but the stored value stays the same.
+
+**Checker** — write a short script that sweeps the code for Thai text embedded in code outside the translation files · hard-coded year numbers 25xx · `new Date("…")` that takes a string with no time zone. Run it in CI before merge. A converter needs its own tests.
+
+---
+
+## 4 · Sorting and searching Thai
+
+Standard sorting (by character code) **is wrong for Thai**, because leading vowels such as เ แ โ ใ ไ
+sit before the consonant they are pronounced after.
+
+| Need | What to do |
+|---|---|
+| Sort Thai names | Use a Thai collation, such as PostgreSQL `th-TH-x-icu` and SQL Server `Thai_100_CI_AS` |
+| Sort Thai names in a Flutter app | Dart has no built-in Thai collation (`compareTo` sorts by character code), so use the platform `Collator` through a plugin or platform channel. If that is not worth it, sort by creation time instead and tell the user. (`ยังไม่ได้ตรวจ` any package that does this) |
+| Search ignoring case and tone marks | Normalize the text first, then store it in a separate search column |
+| Search for a word mid-sentence | Thai has no spaces, so full-text search that splits words on spaces does not work |
+
+> **Thai is written without spaces between words**, which affects 3 things:
+> search (you need a word segmenter) · line breaking (browsers break mid-word) · truncating text with `...`
+>
+> On line breaking: major browsers already break Thai with a dictionary. **Never add `word-break: break-all`**, because it breaks mid-word.
+> (`line-break: strict` only changes the punctuation rules for Chinese, Japanese, and Korean, and does not help Thai.)
+> Then test with real Thai text. Do not test with Lorem ipsum, because it has a space after every word.
+>
+> Flutter `Text` breaks Thai lines with the engine's own word segmenter and has no CSS to set.
+> So check with real long Thai text on a real device at both screen sizes, and allow for `maxLines` + `overflow: TextOverflow.ellipsis`.
+
+---
+
+## 5 · Numbers, money, and units
+
+| Data | Store | Show |
+|---|---|---|
+| Money | Exact decimal, not float (in the database use `decimal(19,4)` per `stack-sql`) + currency code | `1,250.00 บาท` or `฿1,250.00` |
+| Thousands separator and decimal point | Not stored | Per locale. Some countries swap them relative to Thailand. |
+| Percent | Store as a decimal fraction (`0.075`) or basis points (`750` = 7.5%). **Pick one form for the whole system.** Never store as a whole-number percent, because 7.5% would become 7 or 8 | `7.5%` |
+| Address | Separate fields following the Thai structure (แขวง/เขต or ตำบล/อำเภอ — sub-district/district) | |
+| Phone number | Store in international format `+66812345678` | Show `081-234-5678` |
+
+**Plurals and gender** — Thai has no plural form, but English does.
+So let a library handle it. Do not write `if (count > 1)` yourself, because some languages have more than 2 forms.
+
+---
+
+## 6 · Screens
+
+| Topic | Rule |
+|---|---|
+| Text length | English can be up to 1.5 times longer than Thai, so **leave room and do not fix a button's width** |
+| Line height | Thai needs more, because upper vowels and tone marks stack 2 levels high |
+| Fonts | Must have every weight for both Thai and English, or the system draws a fake bold |
+| Testing | Test with real text in both languages, **not Lorem ipsum** |
+| Switching language | Save the choice in the user profile, not only in the session. For an app with no user accounts (an offline mobile app), store the value on the device, with the default "follow the device language". |
+| Exporting CSV for Thai users to open in Excel | Use UTF-8 **with a BOM** (otherwise Thai text is garbled). Use `.` for decimals and ISO 8601 UTC for time, such as `2026-10-05T03:15:00Z`. See also `data-import-export`. |
+
+---
+
+## Links to other skills
+
+`error-handling-patterns` (error messages that must be translated) · `presentation-design` (Thai fonts in slides) · `data-import-export` (B.E. years in imports · CSV that opens in Excel) · `notifications` (multi-language message templates) · `human-writing/translate-th-en` (plugin `superuser`: translating whole documents, a glossary per project)
 
 ## References
-- [`references/layout.md`](references/layout.md) — open when unsure whether a file is temporary, or for the example layout and anti-patterns.
+
+- [`references/thai-text-tools.md`](references/thai-text-tools.md) — open for word segmentation · transliteration to Roman letters · validating national ID numbers in code
+- [`references/abbreviations.md`](references/abbreviations.md) — open when a term (i18n · collation · ICU · BCP 47 · ARB · BOM) must be explained
 
 
-## reference: layout.md
+## reference: abbreviations.md
 
-# Layout of `_to_delete/` and what counts as temporary
+## 8 · Abbreviations
 
-Open when you are unsure whether a file is temporary, or when you need the example layout.
+- **i18n** — internationalization (making software support many languages and locales; abbreviated this way because 18 letters sit between i and n)
+- **locale** — the set of local conventions: language, date format, numbers, and currency
+- **collation** — a database's rules for ordering and comparing text
+- **UTC** — Coordinated Universal Time (the world standard time; Thailand is UTC+7)
+- **ICU** — International Components for Unicode (the standard library for language rules and sorting)
+- **BCP 47** — Best Current Practice (BCP) 47, the standard for language codes such as `th-TH`, `en-US`
+- **ARB** — Application Resource Bundle (the JSON-style translation file that Flutter `gen-l10n` uses)
+- **BOM** — Byte Order Mark (the 3 bytes at the start of a file that tell Excel it is UTF-8)
 
-## Example layout
 
+## reference: thai-text-tools.md
+
+# Thai text processing tools — only what was checked against official docs (2026-10-23)
+
+Use together with `i18n-and-locale` (store a neutral value, convert at display time) and `human-writing/translate-th-en` (plugin `superuser`) · every item is `จากแหล่ง` (from a source) except those with a label
+
+## Word segmentation, transliteration, dates, numbers — PyThaiNLP (Python · Apache-2.0)
+
+| Task | Function | Note |
+|---|---|---|
+| Word segmentation | `pythainlp.tokenize.word_tokenize(text, engine="newmm")` | default `newmm` (dictionary + maximal matching) · other engines `attacut` `deepcut` `icu` `longest` `nlpo3` · pass `custom_dict` as a Trie for project-specific terms |
+| Romanization by the Royal Institute (RTGS) | `pythainlp.transliterate.romanize(text, engine="royin")` | default `royin` = RTGS · use for slugs and names whose owner has no English spelling yet (for personal names always use the owner's own spelling first) |
+| Thai dates | `pythainlp.util.thai_strftime(dt, "%-d %b %y")` · `thai_strptime(text, fmt, year="be")` · `convert_years(year, src="be", target="ad")` | Thai month names and Buddhist Era years at display time · always store as Common Era in the system |
+| Numbers as words | `pythainlp.util.bahttext(1500.50)` · `num_to_thaiword(n)` · `thaiword_to_num(s)` · `thai_digit_to_arabic_digit(s)` | `bahttext` gives "หนึ่งพันห้าร้อยบาทห้าสิบสตางค์", used in quotations and receipts |
+| Clean text | `pythainlp.util.normalize(text)` | removes zero-width characters · repeated spaces · repeated vowels · stray marks — run before comparing or storing, and store as Unicode NFC |
+
+Source: [pythainlp.org/docs/5.1](https://pythainlp.org/docs/5.1/) (api/tokenize · api/transliterate · api/util) · viewed 2026-10-23 · license Apache-2.0 per the foot of the docs page (the LICENSE file in the repo was not opened)
+
+## 13-digit Thai national ID number — check the checksum
+
+- Formula: digits 1–12 multiplied by weights 13 down to 2 and summed · `r = sum mod 11` · check digit = `(11 − r) mod 10` must equal digit 13
+- PyThaiNLP **does not have** this function (the util index was checked) · use `python-stdnum` module `stdnum.th.pin` (`validate` · `is_valid` · `calc_check_digit` · version 2.2 · LGPL-2.1+) — [arthurdejong.org/python-stdnum/doc/stdnum.th.pin](https://arthurdejong.org/python-stdnum/doc/stdnum.th.pin) · or the `thai-id-validate` script (validate.py · validate.ts · MIT) in [Boom-Vitt/claude-thai-skills](https://github.com/Boom-Vitt/claude-thai-skills)
+- JavaScript: the npm package `thai-id-validator` (no dependencies · license not checked) · the 4-line formula can be written yourself, no need to install
+- A passing checksum = the format is right, not that this number really exists · an ID number is personal data; store and log it per `pdpa-compliance`
+
+## Thai addresses — split into fields
+
+- No general library has been verified to split Thai addresses completely (other libraries not checked) · one with code and tests: `thai-address` (parse.py · parse.ts · MIT · 11 fields · a table of 77 provinces and postal code → province) in Boom-Vitt/claude-thai-skills — the author states it is not for routing deliveries
+- A safer way in a form: let the user pick province → district → subdistrict from a list, and fill the postal code automatically · store in separate fields from the start, not as one line to split later
+
+## Sorting, counting length, truncating text
+
+- Do not sort Thai by codepoint · use ICU: JavaScript `new Intl.Collator("th")` · PostgreSQL collation `th-TH-x-icu` · MySQL `utf8mb4_thai_520_w2`
+- Count length and truncate at grapheme cluster boundaries (vowels and tone marks are not separated from the consonant): JavaScript `Intl.Segmenter("th", { granularity: "grapheme" })` · Python regex `\X` · to cut at a word boundary, run `word_tokenize` first
+- Old files encoded in TIS-620 / cp874 must be decoded first (`pandas.read_csv(..., encoding="cp874")`) · `chardet` often guesses wrong on short Thai text
+
+Source for the last 3 sections: `thai-text-processing` and `thai-id-validate` `thai-address` in Boom-Vitt/claude-thai-skills (MIT · viewed 2026-10-23) · reworded, not copied
+
+
+---
+
+# skill: context-budget
+
+Use when a task reads large material or writes long output
+
+# context-budget — decide before you read what enters context
+
+> **One rule:** decide **before** you read, not regret it after. Tokens that enter context cannot be removed, except by `/clear` (drops everything) · `/compact` (shrinks to a summary) · `/rewind` (cuts back to an earlier point). Things you read in (files · PDFs · web pages · search results · command output) are the biggest source, so be most disciplined about them. If a Command-Line Interface (CLI) can do what a Model Context Protocol (MCP) tool does, use the CLI.
+
+## Use when
+- About to read something big: a folder of documents · a long PDF · several web pages · search results · a whole code project · command output that may be long.
+- Starting work on a folder or project whose structure you do not know.
+- Context fills unusually fast, or `/compact` triggers often.
+- Setting context rules for the whole team or every project.
+
+Not for: shorter **answers** → `lean-reply/answer-shape` · work summary across sessions → `handoff` · where temp files go → `workspace-rules/temp-file-discipline` · a coding loop that must survive context loss → `spec-to-code-loop` (plugin `software-development`).
+
+## Steps
+
+### 2 · Before reading, choose the route
+- Know the file, page and line → read only that range (item 3); several items → read them together in one message.
+- Need to find where it is → bounded search (item 3).
+- Must search across many items whose location you do not know → send a subagent (item 4).
+- Must convert, merge or count a lot of data → write to a file and read only the summary (item 5).
+
+If you do not know how big the thing is, check the size first: PDF pages · file count and size in a folder (`ls -l`, `du -h`) · lines (`wc -l`).
+
+### 3 · Read only a range, and search with a boundary
+3 numeric rules (use them as they are if the user's `CLAUDE.md` has no "งบ context" section): **read only a range of any file over 300 lines** · **add `--glob` to `grep`/`rg`** · **end with `| head -50`**.
+
+| Thing | How to read it |
+|---|---|
+| Folder of documents | Names and sizes first, then open only files whose names match the question |
+| PDF · long report | Table of contents first, then name the pages or chapters |
+| Web page | Ask for only the part you need (a number, a date, one heading) |
+| Code | `rg -l` to learn which file, then drill in · `-C2` context is enough |
+| Session files · `.jsonl` logs | One line can be megabytes: never `cat` · `wc -l -c <file>` first · find long lines with `awk 'length>100000{print NR": "length}' <file> \| head -20` · read one field at a time with `cut -c1-2000` or `jq` |
+
+Read the whole file when you are about to overwrite it, or it is short, or you must understand all of it to edit correctly and it is under ~300 lines.
+
+### 4 · Send a subagent instead (the biggest saving)
+A subagent has its own context: it can read 20 items and send back one paragraph.
+
+| Use a subagent when | Do it yourself when |
+|---|---|
+| You expect to read over 20k tokens or over 5 files whose location you do not know (default, not measured; estimate from the step's PERT in `superuser/model-scorecard` if present), or must search across many items to answer one question | You know the files and locations, even 4–6 of them: read them together in one message, faster than a new subagent |
+| Exploring an unknown folder or project · checking across many files | Editing the file already open · work that needs full detail to continue |
+
+**Always set the format and length of the result**, or the subagent returns a long report and you save nothing. Wrong: "Take a look at these 12 contracts". Right: "Find the expiry date, penalty and renewal terms of each contract. Return a table, 1 line per contract, with file:page. Do not paste contract text. At most 15 lines." Code work: "Return a list of file:line in call order, do not paste code".
+
+### 5 · Write to a file instead of holding it in the conversation
+```bash
+<command with long output> > <temp folder>/out.log 2>&1; tail -20 <temp folder>/out.log
 ```
-โปรเจกต์/
-├── ผลงานจริง
-└── _to_delete/
-    ├── 2026-11-06-login-page-redesign/
-    │   ├── screenshots/
-    │   ├── logs/
-    │   └── transfer.zip
-    ├── 2026-11-07-fix-export-bug/
-    │   └── logs/
-    └── superuser-lock/            ← ของเครื่องมือ ไม่ใช่ของงาน
-```
+Use it for text pulled from the web or PDFs · big data tables (filter or count with a script, do not read every row) · test results · logs · file conversions. Where to put these files → `workspace-rules/temp-file-discipline`. Note what you find into a file on the first pass so you do not read it again.
 
-(Gloss: `โปรเจกต์/` = project · `ผลงานจริง` = real work products · `ของเครื่องมือ ไม่ใช่ของงาน` = belongs to the tool, not to a task.)
+If it repeats on every task, let a hook filter long output before it enters context: coding example in `superuser` → `references/code-extensions.md` (the addition in plugin `software-development`).
 
-## What counts as a temporary file
+### 6 · So the next session does not explore again
+Work you return to often needs a short map that **loads automatically**: where things are · what must not be read · commands used often. General work: the section "ของอยู่ที่ไหน" in `.claude/superuser/CONTEXT.md`, at most 40 lines. Files with other names (`notes.md`) do not load themselves, so they are wasted. An outdated map is worse than none: no full file list or change history in it. Code work (project and folder `CLAUDE.md`, example maps) → `superuser` → `references/code-extensions.md`.
 
-- A compressed file sent through chat to get files onto the machine, and the folder it was extracted to
-- Images rendered to check work · screenshots · sample files made for comparison
-- Backup copies of a file being edited · files `.bak` `.old` `.tmp` `ไฟล์ (1).xlsx` (`ไฟล์` = "file")
-- Scripts written for one use · log files from a one-time run
-- Intermediate-format files during a conversion, such as an `.svg` already converted to `.png`
-- **Documents converted to another format to make them easier to read or process** (a `.docx` or `.pdf` converted to `.md`). The original is the real thing and the converted one is temporary. Never mix them in the documents folder, or in 3 months nobody knows which file is the version the client signed off
-- Old versions of a file that was just replaced. A file no longer in use is a temporary file: when you replace an old file with a new one, move the old one into `_to_delete/` and do not leave them side by side
+### 7 · Other settings that help
+Turn off MCP servers and plugins you do not use · pick model and effort at the start · `/clear` when the topic changes · project `CLAUDE.md` at most 40 lines (table with reasons: [`references/settings.md`](references/settings.md)) · on Windows (Git Bash · PowerShell) see [`references/windows-shell.md`](references/windows-shell.md).
 
-## What does not count
+**Compact yourself at about 70%, do not wait for the system** (70% is a default, not measured). When about 70% of context is used and a step has just finished (tests pass · file saved · check passed): first update "รับงานต่อ" in `CONTEXT.md` (`handoff` item 5), then `/compact` and say what to keep (files edited · decisions · next step). The system's own compaction often hits mid-step, before anything is written down.
 
-- A work product the user asked for
-- Source files of a work product, such as design files `.psd` `.fig` · a `.py` that produces an image · an `.html` that is the source of an image. If you will edit next year, you need the source file, so keep it in a subfolder beside the work product, not in `_to_delete/`
-- Files the user placed themselves, even if they look like junk. Never move the user's things without asking
-- Output of build tools (`build/` · `node_modules/`): leave it, check that it is in `.gitignore`, and never move it into `_to_delete/`
+### 7.1 · Seams between phases
+Ask in order; **the first yes is the route**, then stop:
+
+| # | Ask | If yes |
+|---|---|---|
+| 1 | Does the next phase need this context as its source, and is there room left (roughly over 150k tokens · default, not measured)? | **Continue** in the same session |
+| 2 | Will the next phase move to another vendor's tool, model, or repo? | **handoff**: update "รับงานต่อ" and start in the new place (`handoff` item 5) |
+| 3 | Can the next phase be split off without talking to us (no user answer to wait for, no context beyond what a brief can say)? | **subagent**: send the 5-part brief |
+| 4 | Can this whole context be dropped (everything needed is in files) and the new topic is unrelated? | **clear**: cannot be undone; check `notes/` and "รับงานต่อ" are complete first |
+| 5 | None of the above | **compact** and say what to keep (item 7) |
+
+Item 4 is the only one that cannot be undone: answer yes only with evidence everything is in files; if unsure, go to 5.
+
+## Project map
+- Workers read `docs/FILE-MAP.md` instead of exploring the repo.
+- Generate it: `node scripts/map-folder.mjs [dir=.] [--out docs/FILE-MAP.md] [--max 400] [--stdout]`.
+- It lists each file with a role line and its relative imports, then a Mermaid folder graph.
+- Over `--max` files it lists folders with file counts only.
+- It never copies file contents beyond the role line. Regenerate after big changes.
+
+## Check before done
+- Big things were read by range, bounded search, subagent or file, not opened whole.
+- Every subagent brief said the result format and length.
+- Long output went to a file with only a tail or summary read back.
 
 ## Anti-patterns
+Opening the whole thing to "see what is in it" when the table of contents or `head -40` answers it · searching without a boundary (`rg` without `--glob`; opening every search link) · searching across 10 items yourself instead of a subagent · sending a subagent to read something whose location you know · letting long output in one lump · reading the same thing again because you forgot (note findings to a file) · a map file that does not load automatically · a 300-line `CLAUDE.md` · all MCP servers always on.
 
-- Extracting a zip into the project root and cleaning up later
-- Naming files `file-v2` `file-final` `file-really-new` (Thai: `ไฟล์-v2` `ไฟล์-final` `ไฟล์-ใหม่จริง`) and leaving them beside the original
-- Leaving a project task's temporary files in the session workspace, so the user cannot check back after the session ends
-- Making a new subfolder name for an existing kind of thing (`shots/` `img-check/`)
-- Placing files directly in `_to_delete/` or sharing `screenshots/` across tasks
-- Leaving stray files without telling anyone
+## References
+- [`references/settings.md`](references/settings.md) — open when setting rules for a team or project
+- [`references/windows-shell.md`](references/windows-shell.md) — open when working in Git Bash or PowerShell on Windows
+- [`references/sources.md`](references/sources.md) — sources and licences
+
+## Squeeze logs
+- Run long test or build logs through `node scripts/squeeze-log.mjs [file] [--max 100] [--context 3]` (stdin if no file) before reading them or handing them to another agent.
+- It keeps the first 10 and last 20 lines, every error/fail/warn line with context, and collapses repeated lines as `(×N)`.
+- The first output line says `squeeze-log: <in> → <out> lines · errors <k>`.
 
 
----
+## reference: settings.md
 
-# skill: status-report
+# Settings that save context
 
-Use when a task ends, or the user asks what is still pending (งานค้าง), to report status in a table
+Moved from `SKILL.md` item 7. Open it when you are about to advise the user on settings.
 
-# Report status when a task ends
-
-> **The one rule:** every time a task ends, there must be a status table in the task's central file, and the same table in the reply.
-> A task with no status table is not finished.
-> **Exception:** read-only playbooks (`research` · `review` · software-development: `investigation`) put the table in the reply only and write no file.
-
----
-
-## 1 · Where to write
-
-| Situation | What to do |
+| Action | Effect |
 |---|---|
-| General work (**default**) | `.claude/superuser/CONTEXT.md`. Edit only `## ความคืบหน้า` (progress). The heading `## รับงานต่อ` (take over) belongs to `handoff` section 5, so write it by the rules there. Touch no other heading. If the file does not exist yet, create it from [`templates/CONTEXT.md`](../superuser/templates/CONTEXT.md). |
-| The project has `docs/BUILD-PLAN.md` | Use the form in section 3 instead. Write in one place, never duplicate in two. |
-| Several subagents work at the same time | Subagents only **report back**. Let the team lead write the file alone, or the file breaks. |
+| **Turn off MCP servers the task does not use**. If a CLI can do the job, use the CLI | Tool names and instructions of every server still load in every session |
+| Pick the model and effort at the start of the session | Switching model mid-session loses the cache, so the whole conversation is read again (changing effort on Opus · Sonnet · Haiku 5.5 and Fable 5.1 through an Application Programming Interface (API) key or a subscription keeps the cache · through Bedrock · Agent Platform · a gateway or special setups, see the conditions at the link) · ([Claude Code: prompt caching](https://code.claude.com/docs/en/prompt-caching) · checked 21 Oct 2569 BE) |
+| Fast mode — the user turns it on with `/fast` at the start of the session · the agent never turns it on | Opus only · up to 2.5 times faster text generation, but the first token is not faster · 2 times the price, and subscription users pay from usage credits, not the quota · worth it for a step that writes a long piece, not for short steps that wait on tools · turning it on mid-session pays the fast price once for the whole uncached conversation · ([Claude Code: fast mode](https://code.claude.com/docs/en/fast-mode) · [API: fast mode](https://platform.claude.com/docs/en/build-with-claude/fast-mode) · checked 21 Oct 2569 BE) |
+| Turn off plugins unrelated to the task | The description of every skill is always in context |
+| `permissions.deny` in `.claude/settings.json` for folders that should not be read | The system guards it, so you do not depend on discipline |
+| `/clear` when the topic changes (costs nothing) · `/compact <what to keep>` at a rest point in the work, not when nearly full · on the wrong path → `/rewind` to an earlier point | Frees space · `/compact` while the cache is warm is cheap, but after a long pause the whole conversation is read again · `/rewind` cuts back to a point where the cache already exists |
+| Project `CLAUDE.md` at most 40 lines · `~/.claude/CLAUDE.md` (used by every project) at most 60 lines — this set's own cap, stricter than the official docs, which suggest at most 200 · the one shipped in `scripts/install/CLAUDE.global.md` is 84 lines (over the cap, waiting to be cut) | Every line costs tokens in every session |
 
-The location and rules of every file are in [`team-files`](../superuser/references/team-files.md).
 
----
+## reference: sources.md
 
-## 2 · The `## ความคืบหน้า` table
+# Sources · context-budget
 
-```markdown
-## ความคืบหน้า
-| งาน | สถานะ | หลักฐาน | อัปเดต |
-|---|---|---|---|
-| สรุปยอดขายเดือนนี้ (`docs/sales-oct.xlsx`) | เสร็จ | ยอดรวมตรงใบสั่งซื้อ 212/212 · `reviewer` ตรวจแล้ว | 2026-10-21 14:20 |
-| รายงานคู่แข่ง 5 ราย | ทำอยู่ | อ่านแหล่งทางการครบ 3/5 | 2026-10-21 14:20 |
-| ใบเสนอราคาลูกค้า A | รออนุมัติ | ร่างพร้อมใน `out/quote-A.pdf` · ส่งแล้วย้อนไม่ได้ | 2026-10-21 14:20 |
-| ค่าส่งต่างประเทศ | ค้างอยู่ | รอผู้ใช้ยืนยันเรทของขนส่ง | 2026-10-21 14:20 |
-| ค้นหาสินค้า (โค้ด) | เสร็จ | test 48/48 · `reviewer` ตรวจแล้ว | 2026-10-21 14:20 |
-```
+- Compact yourself at about 70% (section 7): idea from strategic-compact in everything-claude-code (MIT). 70% is a default, not measured.
+- Seams between phases (section 7.1): mattpocock-skills (MIT) · PHASE-BOUNDARIES · seen 2026-11-10. The 150k token line is a default, not measured.
 
-The `## รับงานต่อ` heading that sits below it is written by `handoff` section 5 (one format, used both at the end of a task and at hand-over).
 
-- Status uses the same 5 words as `superuser`: `เสร็จ` (done) · `ทำอยู่` (in progress) · `ติด` (blocked) · `รออนุมัติ` (awaiting approval) · `ค้างอยู่` (pending; not started yet also uses `ค้างอยู่`).
-- **Evidence is always required** when you write `เสร็จ`: a number that was really checked · how many items were compared · the file name that was opened · the result from `reviewer`. If it was not checked, write `ยังไม่ได้ตรวจ` (not yet checked). Never write that it passed.
-- The checker must not be the same one that did the work. If there is a subagent, name its role in the evidence column.
-- The table holds only open tasks, at most 15 rows. A finished task moves to 1 line in `HISTORY.md`. Overwrite the whole heading, never append.
-- **ค้างอยู่** (pending) is what the agent cannot continue by itself, because a person must answer or decide. Write it as a question that can be answered, and say whom to ask. If there is none, write `ไม่มี` (none).
-- **รออนุมัติ** (awaiting approval) is work that is prepared but irreversible (superuser section 6). Give the command or file that is ready to use. If there is none, leave it out.
-- **ข้อเสนอ** (proposals, in the reply) are improvements outside the scope, at most 3. Say what is gained and how much effort it takes. If there are none, leave it out.
+## reference: windows-shell.md
 
----
+# Shell traps on Windows
 
-## 3 · The form for a project that has `docs/BUILD-PLAN.md`
+Open it when working on a Windows machine through Git Bash or PowerShell · every item happened in the SQT-Marketplace repo between 2026-10-23 and 25 · kept as a reference file first; if it happens again, promote it to a skill.
 
-Write `## สถานะล่าสุด` (latest status; overwrite) and `## ประวัติสถานะ` (status history; add a line at the top) in that file instead of `CONTEXT.md`. The heading order, columns, allowed values and row ceiling are in [`build-plan-rules`](references/build-plan-rules.md). **Open it before every write.**
+| Symptom | Cause | Do this instead |
+|---|---|---|
+| Deleted every folder the user told you to keep (2026-10-25) | `ls` on the machine is aliased to `ls -F`, so folder names end with `/`. The keep list written as a regex matched no name, and then `rm -rf` deleted all of them · `rm` in Git Bash does not use the recycle bin | Build the list with `find <dir> -mindepth 1 -maxdepth 1 -printf '%f\n'` or `\ls -1A` · print the delete list and the keep list and compare them before running `rm` · move to `_to_delete/` instead of deleting |
+| A pattern in JSON or a regex is wrong: `\b` became `\b` (2026-10-23) | Python code was sent through a heredoc in the Bash tool, and the escapes were interpreted twice | Edit the file with the Edit tool · or write the script to a file first and then run it · check the result by reading the actual value · a `\r` that became a real CR character in a .md is now caught by the SQT-Marketplace checker (2026-10-25), but a lost `\b` is still not caught |
+| The validator fails with "documents do not match the real ones" though the content matches · the zip in `dist/` changes though nothing was edited (2026-10-25) | A new worktree with `core.autocrlf=true` checks files out as CRLF, but the scripts build text with LF | Scripts that compare or build files must convert CRLF to LF first (`sync-docs` · `writeZip` already do) · files that must be CRLF are declared in `.gitattributes` · check whether they really differ with `git diff --ignore-cr-at-eol --stat` |
+| A plugin hook does nothing, with no error (2026-10-25) | It checks it is the main file with `fileURLToPath(import.meta.url) === process.argv[1]`, which does not match on Windows when called through `${CLAUDE_PLUGIN_ROOT}/…` | Compare with `process.argv[1].replace(/\/g, "/").endsWith("<file name>")` as in `superuser-hook.mjs` · test the hook by calling it through the real path Claude Code uses |
 
----
+## Small things worth knowing
 
-## 4 · In the reply
-
-Show "ภาพรวม" (overview, if any) + a table of only **the rows that changed this round** + "ค้างอยู่" + "รออนุมัติ" (if any) + "ข้อเสนอ" (if any) + "ถัดไป" (next), then say where the full table lives (`CONTEXT.md` or `docs/BUILD-PLAN.md`). Do not paste the whole file.
-
----
-
-## 5 · Checklist before saying it is finished
-
-- [ ] Read the central file from disk before editing (someone else may have edited it)
-- [ ] The progress table is overwritten, not appended, and has a date and time
-- [ ] Every row that says `เสร็จ` or `ผ่าน` (pass) has evidence · the checker is not the doer
-- [ ] You did not set `Approved` yourself
-- [ ] `## รับงานต่อ` is updated per `handoff` section 5
-- [ ] You touched no other heading in the file
-- [ ] BUILD-PLAN form: the numbers in "ภาพรวม" match the table · 1 line is added to `## ประวัติสถานะ` · "ทีมตอนนี้" (current team) has no leftover `ทำอยู่` row for a task that has finished
-- [ ] BUILD-PLAN form: run the checker until it passes (the checker is in plugin `superuser`): `python <superuser folder>/skills/polished-document-style/scripts/check_outline.py assets/build-plan-status.md <path of docs/BUILD-PLAN.md>`. It catches missing headings, swapped headings, missing bold cells, changed table headers and cells not yet filled. Other headings in the file (the task table, `## ตัดสินใจเอง`) the checker lets pass.
----
-
-## 6 · What not to do
-
-- Do not create a new status file (`STATUS.md` `progress.md`), because status then scatters across places.
-- Do not hide failing items in prose, because a reader of the table will think everything passed.
-- Do not append to the table every round, and do not let a subagent write the central file.
-
----
-
-## 7 · When the user asks what is pending (`งานค้าง` · `มีอะไรค้าง` · what is left)
-
-The owner wants to clear the list in one reply, so every row says what the owner must do (owner asked 2026-11-26).
-
-1. **Look before you list.** Read `## รับงานต่อ` in `CONTEXT.md`, run `git worktree list` · `git status --porcelain` in the main folder · open PRs and unmerged branches. Drop what is already closed; list nothing from memory.
-2. **First line: the verdict**, such as `งานใน git ปิดหมดแล้ว เหลือ 5 เรื่องที่รอคุณ`.
-3. **One table, columns exactly** `# · งาน · สถานะ · ต้องให้ทำอะไร`. Rows needing the owner come first, then work you can finish yourself.
-   - `ต้องให้ทำอะไร` is one concrete action the owner can do in one reply: a word to type in quotes (`สั่ง "เริ่มรวม skill"` · `ตอบ "คงไว้" หรือ "เอาออก"`), a file or board to open, a budget to approve. Work you can do alone: `ไม่ต้อง ผมทำต่อได้`, then do it unless it needs approval.
-   - `สถานะ` says where it stands with the evidence (merged PR · file path · what is not yet run).
-4. **Small items** that need no decision go in at most 4 short bullets under the table, not in the table.
-5. **Last line: a recommendation**, `แนะนำ: ทำข้อ N ก่อน` with a one-line reason (fastest to clear · unblocks other work · deadline).
-6. Number the rows so the owner can answer by number (`ข้อ 2 เอาออก`).
-
----
-
-## Project plan and weekly report
-
-The template for a project plan (timeline · milestone · risk register · Responsible-Accountable-Consulted-Informed (RACI)) and the weekly status report sent to stakeholders is in [`references/project-plan-and-weekly-status.md`](references/project-plan-and-weekly-status.md)
-
-## Link to other skills
-
-| Need | Use together with |
-|---|---|
-| The task table and the code-writing loop in the same file | `spec-to-code-loop` (plugin `software-development`) |
-| A project's document set and document status | `project-doc-set` (plugin `software-development`) |
-| Recording context to continue in the next conversation | `handoff` |
-| The table of self-made decisions in the same file | `decision-log` |
-| Choosing a playbook and finishing every kind of task | `superuser` |
-| Table and document format | `polished-document-style` |
-| Names and status of document files | `document-naming` |
-
-
-## reference: build-plan-rules.md
-
-# Format for projects that have docs/BUILD-PLAN.md
-
-Moved from `SKILL.md` item 3 · open it when the project has `docs/BUILD-PLAN.md`
-
-Write these 2 sections in that file instead of `CONTEXT.md` · no file → create a file holding only the project name, then copy from [`assets/build-plan-status.md`](../assets/build-plan-status.md) (never invent the structure) · **never touch the job table or other sections**
-Section order: `## สถานะล่าสุด` (latest status) → job table → `## ประวัติสถานะ` (status history) → `## ตัดสินใจเอง` (decisions made on your own, `decision-log`)
-
-- `## สถานะล่าสุด` — **overwrite the whole section** every time, as the single current picture
-- `## ประวัติสถานะ` — **add 1 line at the very top** per job, never delete the old ones, in the format `วันที่ เวลา · งาน · สถานะ · ผล · ทำ <agent> · ตรวจ <agent> · ค้างกี่ข้อ` (date time · job · status · result · made by <agent> · checked by <agent> · how many items pending; if you decided anything on your own that round, append `· ตัดสินใจเอง <count>`)
-
-Section `## สถานะล่าสุด` holds: an update line (date and time · latest job) · **ภาพรวม** (overview: done N/total · in progress · blocked · failed check — counted from the table and must match) · a table `| รายการ | ประเภท | สถานะ | ใครทำ | ใครตรวจ | ผลตรวจ | ค้าง / หมายเหตุ |` (item · type · status · made by · checked by · check result · pending / note) · **ทีมตอนนี้** (team now: 1 row per agent used this round · no subagent, leave it out · starting a new round clears the old rows) · ค้างอยู่ (pending) · รออนุมัติ (awaiting approval) · ถัดไป (next, at most 3) · ข้อเสนอ (proposals)
-
-| Column | Allowed values |
-|---|---|
-| ประเภท (type) | `เอกสาร` (document) · `ตรวจ` (check) · `ส่งมอบ` (delivery) · `โค้ด` (code) · `build` |
-| สถานะ (status), documents | `ยังไม่เริ่ม` (not started) · `Draft` · `Review` · `Approved` · `Archived` (the same set as `polished-document-style`) — `Approved` belongs only to someone who can change it, and an agent may set at most `Review` |
-| สถานะ (status), others | the 5 words in `SKILL.md` item 2 |
-| ผลตรวจ (check result) | `ผ่าน — <evidence>` · `ไม่ผ่าน — <what failed>` · `ยังไม่ได้ตรวจ` · `—` |
-
-The table holds every item of the project, not just this round's work (items not touched copy their old values), at most 25 rows
-Code work (a full example table · type `build`/`ส่งมอบ` · mobile app evidence) → the extension in plugin `software-development` → `superuser` → `references/code-extensions.md`
-
-
-## reference: project-plan-and-weekly-status.md
-
-# Project plan and weekly status — stakeholder templates
-
-Template for the agent `project-manager` · moved from the agent file (2026-10-14) · the short status table at the end of a job is in the SKILL.md of `status-report`, while this file holds the project plan and the weekly report for stakeholders
-
-**สารบัญ:**
-
-- [Standard Output: Polished Project Plan](#standard-output-polished-project-plan)
-- [Standard Output: Polished Status Report](#standard-output-polished-status-report)
-
-## Standard Output: Polished Project Plan
-
-```markdown
-# Project Plan: <Project Name>
-
-| | |
-|--|--|
-| **Project Lead** | @pm-name |
-| **Sponsor** | @sponsor |
-| **Status** | ทำอยู่ (วางแผน) |
-| **Start Date** | YYYY-MM-DD |
-| **Target End** | YYYY-MM-DD |
-| **Budget** | ฿XX,XXX |
-
----
-
-## Objective
-
-> One-sentence goal that fits in a tweet.
-
-## Scope
-
-| In Scope | Out of Scope |
-|-------------|-----------------|
-| ... | ... |
-
-## Timeline
-
-![ผังเวลาโครงการ: Discovery → Build → Launch](figures/fig-01.png)
-
-**รูปที่ 1 —** ผังเวลาโครงการ วาดด้วย `diagram-figures` (plugin `software-development` · house style) แล้วฝังเป็นไฟล์ภาพ · ไม่ใช้ Mermaid ในแผนที่ส่งผู้เกี่ยวข้อง
-
-## Milestones
-
-| # | Milestone | Target Date | Owner | Status |
-|:-:|-----------|:-----------:|:------|:------:|
-| 1 | Requirements approved | YYYY-MM-DD | @ba | ค้างอยู่ |
-| 2 | Architecture signed off | YYYY-MM-DD | @architect | ค้างอยู่ |
-| 3 | Minimum Viable Product (MVP) feature complete | YYYY-MM-DD | @dev-lead | ค้างอยู่ |
-| 4 | User Acceptance Testing (UAT) passed | YYYY-MM-DD | @qa | ค้างอยู่ |
-| 5 | Production launch | YYYY-MM-DD | @devops | ค้างอยู่ |
-
-## Risk Register
-
-| ID | Risk | Likelihood | Impact | Score | Mitigation | Owner |
-|:--:|------|:----------:|:------:|:-----:|------------|:------|
-| R-001 | Payment vendor delay | Medium | High | 6 | Plan B vendor | @architect |
-| R-002 | Resource availability | Low | Medium | 2 | Cross-training | @pm |
-
-> **Score = Likelihood × Impact** (1-9 scale)
-
-## Dependencies
-
-| Type | Dependency | Owner | Status |
-|------|------------|:------|:------:|
-| External | Payment gateway (Application Programming Interface, API) | Vendor X | ติด |
-| Internal | Design team availability | @design-lead | ทำอยู่ |
-| Technical | New cloud account | @devops | ทำอยู่ |
-
-## Responsible-Accountable-Consulted-Informed (RACI) Matrix
-
-| Activity | PM | BA | Arch | Dev | QA | DevOps |
-|----------|:--:|:--:|:----:|:---:|:--:|:------:|
-| Requirements | A | R | C | I | C | I |
-| Architecture | A | C | R | C | I | C |
-| Implementation | A | I | C | R | C | C |
-| Testing | A | I | I | C | R | I |
-| Deployment | A | I | C | C | I | R |
-```
-
-## Standard Output: Polished Status Report
-
-```markdown
-# Status Report: <Project> — Week of YYYY-MM-DD
-
-| | |
-|--|--|
-| **Reporting Period** | YYYY-MM-DD to YYYY-MM-DD |
-| **Overall Status** | On Track |
-| **Health Trend** | Improving / Declining / Stable |
-
----
-
-## สรุปสั้นสำหรับผู้บริหาร (Too Long; Didn't Read, TL;DR)
-
-> 1-2 sentence summary for executives.
-
-## Status by Track
-
-| Track | Status | Notes |
-|-------|:------:|-------|
-| Scope | On track | On target |
-| Schedule | At risk | 3 days behind, recoverable |
-| Budget | On track | 65% spent, on track |
-| Quality | On track | 0 critical bugs open |
-| Team Morale | On track | High |
-
-> **Note:** On track / At risk / Off track คือระดับสุขภาพของแต่ละด้านสำหรับผู้อ่านต่างประเทศ ไม่ใช่สถานะของงาน · สถานะรายการงานใช้ 5 คำกลาง (เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่)
-
-## Completed This Period
-
-- ...
-- ...
-
-## In Progress
-
-| Item | Owner | Due | % Done |
-|------|:------|:---:|:------:|
-| Feature X | @alice | MM/DD | 75% |
-| Feature Y | @bob | MM/DD | 40% |
-
-## Blocked
-
-| Item | Blocker | Owner | Action |
-|------|---------|:------|--------|
-| ... | Waiting on legal review | @legal | Escalate to Chief Technology Officer (CTO) |
-
-## Upcoming (Next Period)
-
-- ...
-
-## New Risks / Issues
-
-| Severity | Item | Owner |
-|:--------:|------|:------|
-| High | ... | ... |
-
-## Asks for Stakeholders
-
-- Decision needed on X by MM/DD
-- Need 1 more QA resource starting next sprint
-```
+- `perl -i` or `sed -i` on a CRLF file: a regex anchored to the line end with `$` must allow for `\r` (`(\r?)$`), or the edit silently does not apply
+- `cd` in Bash does not carry across commands · use a full quoted path, because folder names often contain spaces and `&`
+- A `.cmd` script that ends with `pause` waits for a key · when running it from an agent, pass empty stdin (`< /dev/null`), save the output to a file, and read the end of the file

@@ -6,7 +6,7 @@ The look of the house defaults comes from the X Fitness pitch deck (45 slides, 1
 
 ## Direction
 
-The visual direction always comes from `presentation-design` step 1, stage 0; rules on color and mood are in [deck-theme](../../presentation-design/references/deck-theme.md). Selection order: the source work the deck is made from → the design the project already has → a reference the user attached → a reference searched live per `design-references` (plugin `superuser`) type `slide` → house defaults. House defaults are a fallback for when there is no information at all, not a rule. Two decks for different jobs should look different.
+The visual direction always comes from `presentation-design` step 1, stage 0; rules on color and mood are in [deck-theme](../../presentation-design/references/deck-theme.md). Selection order: the source work the deck is made from → the design the project already has → a reference the user attached → a reference searched live per `design-gate/design-references` (plugin `superuser`) type `slide` → house defaults. House defaults are a fallback for when there is no information at all, not a rule. Two decks for different jobs should look different.
 
 ## `--theme`
 

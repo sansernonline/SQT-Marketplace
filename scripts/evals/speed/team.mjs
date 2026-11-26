@@ -5,7 +5,7 @@
  *
  *   node scripts/evals/speed/team.mjs [t4-new-1 t4-new-2 …]   # ไม่ใส่ = ทุกรอบที่หาเจอ · พิมพ์ตาราง markdown
  *
- * ค่าใช้จ่ายรายตัวคิดจาก usage × ราคาใน model-scorecard/references/prices.json (ประมาณ ไม่ใช่ยอดตัดบัญชี)
+ * ค่าใช้จ่ายรายตัวคิดจาก usage × ราคาใน superuser/parts/model-scorecard/references/prices.json (ประมาณ ไม่ใช่ยอดตัดบัญชี)
  */
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, dirname, resolve } from "node:path";
@@ -13,7 +13,7 @@ import { homedir } from "node:os";
 import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const PRICES = JSON.parse(readFileSync(resolve(HERE, "../../../plugins/superuser/skills/model-scorecard/references/prices.json"), "utf8")).per_mtok;
+const PRICES = JSON.parse(readFileSync(resolve(HERE, "../../../plugins/superuser/skills/superuser/parts/model-scorecard/references/prices.json"), "utf8")).per_mtok;
 const PROJECTS = join(process.env.CLAUDE_CONFIG_DIR ?? join(homedir(), ".claude"), "projects");
 
 /** usage ของไฟล์ transcript 1 ไฟล์ → model ที่ใช้ · ดอลลาร์โดยประมาณ · จำนวนรอบคุย (นับข้อความ assistant ไม่ซ้ำ id) */

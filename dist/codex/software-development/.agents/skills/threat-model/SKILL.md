@@ -33,7 +33,7 @@ The security engineer should:
    - Cryptography (Transport Layer Security (TLS), at-rest, hashing)
    - Logging & monitoring (audit events)
 
-6. **Produce polished threat model document** using `polished-document-style` skill, including:
+6. **Produce polished threat model document** using `design-gate/polished-document-style` skill, including:
    - Scope section
    - Data flow diagram (`diagram-figures` figure)
    - Threat table with severity

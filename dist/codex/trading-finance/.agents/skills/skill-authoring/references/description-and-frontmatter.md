@@ -6,8 +6,8 @@ At session start Claude sees only `name` + `description` of every skill. The SKI
 
 | Rule | How | Enforced by |
 |---|---|---|
-| `name` = folder name · a-z 0-9 and `-` · at most 64 characters · no "anthropic" or "claude" | Use verb + object or the name of the output (`translate-th-en`, not `thai-helper`) | validator |
-| Name collides with a built-in Claude Code skill (e.g. `simplify`) | In `skill-router.json` prefix the plugin name: `superuser:simplify` | sync-superuser |
+| `name` = folder name · a-z 0-9 and `-` · at most 64 characters · no "anthropic" or "claude" | Use verb + object or the name of the output (`human-writing/translate-th-en`, not `thai-helper`) | validator |
+| Name collides with a built-in Claude Code skill (e.g. `ground-rules/simplify`) | In `skill-router.json` prefix the plugin name: `superuser:ground-rules` | sync-superuser |
 | `description` starts with `Use when …` or `ใช้เมื่อ …` (a skill that must be opened before work starts uses `Use before …`; an agent called at a point in the flow may use `Use at …`; the validator accepts all of these) | Put in situations and words users really type, in both Thai and English ("says reflect or รวมบทเรียน"). Do not summarise the working steps, because an agent may follow the summary instead of opening the skill | validator · idea from obra/superpowers |
 | At most 160 characters (warn at 150; agent warns at 120) · no `: ` in an unquoted value · no `<` `>` | `: ` breaks the whole YAML block and the skill silently disappears. Write `(reflect or รวมบทเรียน)` instead of `: reflect` | validator (Claude Code truncates at 1,536 characters but the Agent Skills spec says 1,024, which applies to `dist/` used outside Claude Code. Our 160 is under both ceilings; the budget for the whole list truncates long ones first) |
 | No overlap with sibling skills | `grep -rn "^description:" plugins/*/skills/*/SKILL.md \| grep -i <word>`. If they overlap, say in the description which one takes what ("Cause known → targeted-fix") and add a "use the other one instead" table in the body | the author |

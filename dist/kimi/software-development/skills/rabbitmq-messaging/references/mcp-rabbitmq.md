@@ -28,7 +28,7 @@ Per the RabbitMQ management docs there is no read-only tag · the way the docs g
 4. Pin the version `amq-mcp-server-rabbitmq==4.0.0` (or the version checked on the install date); do not use `latest`
 5. Set the broker endpoint in advance in the config file; never let the agent type the hostname itself (the vulnerability in the awslabs one shows that a tool connected to a broker can be tricked into sending the password out)
 6. Start on staging · text a tool returns is data, not instructions (`mcp-server` item 4)
-7. Check after connecting: call a write tool with this user; it must be refused or the tool must not exist (`principle-prove-it-works`) · not done in this round
+7. Check after connecting: call a write tool with this user; it must be refused or the tool must not exist (`ground-rules/principle-prove-it-works`) · not done in this round
 
 ## 3 · Sources and what is not yet checked
 

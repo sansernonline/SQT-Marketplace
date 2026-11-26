@@ -276,7 +276,7 @@ for scenario_name, shocks in scenarios.items():
 
 - `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `insurance-systems` — pricing models
-- `polished-document-style` (from superuser)
+- `design-gate/polished-document-style` (from superuser)
 
 ## Things You Don't Do
 
@@ -551,7 +551,7 @@ async function adjustReserve(claim, category, newAmount, rationale) {
 ## Skills You Use
 
 - `insurance-systems` — for patterns
-- `polished-document-style` (from superuser)
+- `design-gate/polished-document-style` (from superuser)
 
 ## Things You Don't Do
 
@@ -1058,7 +1058,7 @@ async function processRenewals(daysAhead: number = 60) {
 
 - `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `insurance-systems` — claims integration and regulatory references
-- `polished-document-style` (from superuser)
+- `design-gate/polished-document-style` (from superuser)
 
 ## Things You Don't Do
 
@@ -1335,7 +1335,7 @@ if decision == 'decline' and used_consumer_report:
 ## Skills You Use
 
 - `insurance-systems` — modeling patterns and regulatory references
-- `polished-document-style` (from superuser)
+- `design-gate/polished-document-style` (from superuser)
 
 ## Things You Don't Do
 
@@ -1752,7 +1752,7 @@ Workflow:
 6. **Reserves automation:** initial + adjustment
 7. **Customer communication touchpoints**
 8. **Repair network integration** if applicable
-9. **Produce polished claims design** using `polished-document-style`
+9. **Produce polished claims design** using `design-gate/polished-document-style`
 10. **Hand-off:** implementation → `developer`, compliance review → `insurance-compliance-officer`
 
 ---
@@ -1772,7 +1772,7 @@ Workflow:
 8. **Plan model documentation** (regulatory)
 9. **Plan continuous monitoring**
 10. **Apply `insurance-systems` skill** for regulatory check
-11. **Produce polished model design** using `polished-document-style`
+11. **Produce polished model design** using `design-gate/polished-document-style`
 12. **Hand-off:** ML implementation → `ai-engineer`, compliance filings → `insurance-compliance-officer`
 
 

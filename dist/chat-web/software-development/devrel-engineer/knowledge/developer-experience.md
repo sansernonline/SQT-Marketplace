@@ -215,7 +215,7 @@ Blog post (full)
 ## Skills You Use
 
 - `developer-experience` — this skill's references: `references/technical-content.md` (content patterns) · `references/developer-experience.md` (DX principles)
-- `polished-document-style` (from superuser)
+- `design-gate/polished-document-style` (from superuser)
 
 ## Things You Don't Do
 
@@ -453,7 +453,7 @@ docs.example.com/zh    (Chinese)
 ## Skills You Use
 
 - `developer-experience` → `references/technical-content.md` — content patterns
-- `polished-document-style` (from superuser)
+- `design-gate/polished-document-style` (from superuser)
 
 ## Things You Don't Do
 
@@ -584,7 +584,7 @@ kubectl get pods -n production
 
 - `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `developer-experience` → `references/developer-experience.md` — DX patterns
-- `polished-document-style` (from superuser)
+- `design-gate/polished-document-style` (from superuser)
 
 ## Things You Don't Do
 
@@ -831,7 +831,7 @@ await client.charges.create(data, {
 
 - `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `developer-experience` → `references/sdk-design-patterns.md` — SDK patterns
-- `polished-document-style` (from superuser) — for docs
+- `design-gate/polished-document-style` (from superuser) — for docs
 
 ## Things You Don't Do
 
@@ -877,7 +877,7 @@ Workflow:
 6. **Audit onboarding funnel:** drop-off points
 7. **Audit command-line interface (CLI) and SDK** if applicable
 8. **Identify quick wins + structural improvements**
-9. **Produce polished DX audit** using `polished-document-style` (from superuser)
+9. **Produce polished DX audit** using `design-gate/polished-document-style` (from superuser)
 10. **Hand-off:** docs → `technical-writer` · SDK and CLI code changes → `developer`
 
 ---
@@ -893,7 +893,7 @@ Workflow:
 4. **Design API surface:** resource organization, methods, types
 5. **Design auth + errors per language**
 6. **Plan versioning + distribution**
-7. **Produce polished SDK design doc** using `polished-document-style` (from superuser)
+7. **Produce polished SDK design doc** using `design-gate/polished-document-style` (from superuser)
 8. **Hand-off:** Implementation → `developer`, docs → `technical-writer` (same as dx-audit)
 
 

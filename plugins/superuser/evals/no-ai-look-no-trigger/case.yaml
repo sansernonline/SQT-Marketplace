@@ -15,7 +15,7 @@ graders:
   - name: not-opened
     type: tool_used
     tool: Skill
-    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?no-ai-look"'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?design-gate"'
     min: 0
     max: 0
     arm: both

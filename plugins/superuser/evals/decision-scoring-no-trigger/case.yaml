@@ -14,7 +14,7 @@ graders:
   - name: skill-not-opened
     type: tool_used
     tool: Skill
-    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?decision-scoring"'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?decision-desk"'
     min: 0
     max: 0
     arm: both

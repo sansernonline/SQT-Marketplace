@@ -6,7 +6,7 @@ argument-hint: <the message> [target platform and length]
 
 # video-script-to-clip — a short video from hook to shot list, readable with the sound off
 
-> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the "ด่านก่อนลงมือ" section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search is for the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `design-gate/no-ai-look` before sending · follow the "ด่านก่อนลงมือ" section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search is for the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
 ## Use when
 
@@ -28,7 +28,7 @@ Viewers decide in the first 3 seconds, and most watch with the sound off: write 
 7. **Per-shot generation brief** (style block from `style-consistency`) or shooting notes for a phone shoot; fields → `references/hooks-and-example.md`.
 8. **Captions,** burned-in or SubRip Text (SRT), by the table below; review on a phone with sound off. Platform auto-captions mis-transcribe Thai names, prices and brand words: correct them by hand.
 9. **Music:** use the platform's licensed library or tracks you own a licence for; commercial accounts often have a narrower library than personal ones (รอยืนยัน per platform).
-10. Run the `no-ai-look` check (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files.
+10. Run the `design-gate/no-ai-look` check (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files.
 
 ## Caption and on-screen text rules
 

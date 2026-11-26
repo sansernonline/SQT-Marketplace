@@ -1,367 +1,10 @@
-# skill: web-app-design
-
-Use when designing a web app screen or mockup
-
-# Web App Design
-
-> **Gate before starting (every time) (`ด่านก่อนลงมือ`):** read the owner's theme → search live prototypes → 3 genuinely different directions → check `no-ai-look` before sending · follow the "Gate before starting" section of `design-references` (plugin `superuser`), even when a brand exists (the brand controls colors and fonts, while the search is for finding this piece's structure) · close the work with the line `ด่านก่อนลงมือ:`
-
-> **The one rule:** every color in component code must come from a token.
-> If a `#hex` shows up outside the token file, the design system has started to break, and it breaks silently.
-
-## When to use this skill
-
-- Building web app screens: dashboard, admin panel, internal tool, SaaS
-- Wanting every page, made by different people, to look like one set
-- Needing to support several brands or themes without touching component code
-- Works with Angular / React / Vue / Svelte / plain HTML. It is pure CSS and tied to no framework.
-
-## When **not** to use it
-
-- A Windows desktop app: use `windows-app-design`
-- A .docx/.pptx document: use `branded-document-design`
-- A marketing website or landing page, because this system is built for **apps** that pack in data.
-  A 13px base text is too small for a sales page.
-
----
-
-## 1 · Working order: mockup first, always
-
-> **The project already has screens → copy the existing pages by `ui-craft` item 0 and do not use appstrack** (unless the owner asked for a redesign, or the existing pages have not passed the beauty gate (`ด่านสวย`)) · the order below is for projects with no look yet, or being redesigned · appstrack gives only the component classes and fallback values. The look of the work comes from the `theme.css` produced by the search.
-
-```
-0. Visual direction by ui-craft item 0.1 (search prototypes by design-references, type web or dashboard, then extract colors · hero screen · reference apps · 3 directions · pick 1 · logo) → copy assets/theme-template.css to mockup/theme.css and fill the 4 groups of values in section 2 from the chosen direction, with the source of every value
-   Pages with pictures (hero · product · service · team) → `graphic-design:image-artist` finds the pictures by image-generation into public/images/ before step 2 · never draw basic shapes yourself in place of real ones
-1. Copy assets/mockup-template.html + assets/appstrack.css next to theme.css (fallback look: assets/mockup-template-preview.webp · not the goal)
-   Choose the page structure (sidebar · top bar · 2-side split · single page with no menu) from the prototypes you found and the number of menu items in the app, not from the template's structure
-2. Edit the content into the real page to build (do not touch app code yet)
-3. python scripts/screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 1440
-   python scripts/screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 900
-   python scripts/screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 420
-4. Open the images and look at every width, fix until satisfied, and only then let others review
-5. Convert to components only after approval: copy the existing classes, write no new CSS
-6. Wire scripts/check-design-tokens.mjs into CI from day one
-```
-
-**The mockup is delivered as one file** (`mockup/<code>-mockup.html`, every screen a section) → before sending, embed the contents of `appstrack.css` followed by `theme.css` in `<style>` instead of `<link>` · check tokens with the mockup file as its own token file: `node scripts/check-design-tokens.mjs mockup/<code>-mockup.html mockup --ext html`
-
----
-
-## 2 · Design tokens
-
-> **The look comes from this job's search. Do not stop to ask.**
-> Order for finding values: the client's brand colors and fonts (if they exist, use them at once) → prototypes searched live by `design-references` and palettes extracted by `design-direction-lookup` item 2 → only if nothing can be searched at all (no internet · the user ordered the old look kept), use the fallback values in `assets/appstrack.css`, write `(รอยืนยัน)` (awaiting confirmation), and keep going.
-> The table of work type versus color tone in `colour-by-domain` (`diagram-figures` → `references/colour-by-domain.md`) is a starting point for search terms, not an answer.
-> **Brand colors must pass 4.5:1 for both white text on the brand background and the brand color on the page background.** If a client's color is too light, make a darker shade for `--brand` and keep the original color for the logo and charts.
-
-**Which values are fixed and which come from the search**
-
-| Group | token | Comes from | Fallback (appstrack) |
-|---|---|---|---|
-| Color | `--brand` `--brand-2` `--brand-50` `--brand-100` · background and text when the chosen direction needs them | Client brand → palette extracted from prototypes | `#226CC6` (a darker shade of `#2A78D6`) |
-| Type | `--font` · `--fs-xs` … `--fs-xl` | Brand font → the Thai-Latin font pair that prototypes in the field use · base size by how dense the work is (data-packed 13 · reading-heavy 14–15) | Inter + Noto Sans Thai · 11/12/13/15/22 |
-| Shape | `--radius` `--radius-sm` `--radius-pill` · `--shadow` `--shadow-lg` | The chosen direction (flat square · soft round · floating cards) | 14 · 9 · 99 · cards with no shadow |
-| Layout | `--sidebar-w` `--topbar-h` `--content-max` | Number of menu items, how long menu names are, whether the main work needs wide space | 232 · 56 · 1160 |
-| **Fixed for every job** | tokens only · contrast ≥ 4.5:1 · status colors by meaning · neutral app frame · 1 primary button per page · Thai rules in section 5 | System rules, independent of the job | — |
-
-The job's values live in the single file `theme.css` (template `assets/theme-template.css`) · every line has a comment giving its source · do not edit `appstrack.css`, so the component classes can update along with the skill.
-
-The 96 tokens are in the `:root` block of `assets/appstrack.css`, and the full details are in **`references/tokens.md`**.
-
-**Changing the brand color of the whole app = editing 4 values** (`--brand --brand-2 --brand-50 --brand-100`).
-The other colors are computed from or refer to these 4. If you need to edit a 5th color, something is hardcoded somewhere.
-
-`assets/appstrack.css` ships 5 sample color sets (ocean · emerald · sunset · plum · graphite).
-Switch them with `body[data-theme]`, and switch sidebar light/dark with `body[data-side='dark']` (dark = a neutral dark gray, not tinted with the brand color).
-**These sets exist to test that the system can really change color, not as options to pick from.** The job's colors always come from `theme.css`.
-
-**Status colors (success · warning · error) do not change with the brand.** Green always means pass, and red always means fail.
-
-**The app frame is neutral** (by the owner's preference, and the `ui-craft` beauty gate, platform note): sidebar · topbar · borders · menu icons are gray-black · brand color goes on data, primary buttons, links, the 3px menu selection bar and the logo · tint the frame only when the user asks.
-
----
-
-## 3 · Screen layout
-
-The fallback structure is sidebar + top bar · for apps with few menu items (≤ 5) or a single-page job, choose the structure from the prototypes you found, such as top bar only or a 2-side split.
-
-- Fallback diagram (sidebar 232px · topbar 56px · content max 1160px · stat-grid · cards): `references/layout-diagram.md`
-- **The settings menu sits at the bottom of the sidebar** (`.foot` has `margin-top:auto`)
-- **1 h1 per page**, always with a description under the h1. A page that does not say what it does is a page that is not finished.
-- **1 primary button per page** (`.btn-primary`, solid brand color, no gradient, no shadow). The rest are `.btn` or `.btn-ghost`.
-- **3–5 KPI cards.** More than that and the numbers get too small to stand out.
-- Every number laid out in a column needs the `.num` class, or the digits will not line up.
-
----
-
-## 4 · Components already provided
-
-Shell `.app-shell/.app-sidebar/.app-topbar/.app-main` · card `.card/.card-head/.card-body` ·
-KPI `.stat-grid > .card.stat` · status `.pill-*` in 7 tones · 4 kinds of button ·
-form `.field/.input/.select/.textarea` · table `.tb-wrap > .tb` ·
-filters `.chips/.tabs` · `.prog` · `.ava` · `.md-html` · `.empty` · `.skeleton` · `.spinner` ·
-`.toasts/.toast` · `.backdrop + .modal` · utilities `.row/.col/.grow/.ellipsis/.num`
-
-The full list with descriptions is at the end of `references/tokens.md`.
-
-**Icons:** inline SVG stroke, 15px in the sidebar / 14px in buttons / 11px in pills.
-Always use `stroke="currentColor"`, so the icon changes color with the state by itself.
-
----
-
-## 5 · Thai language
-
-- `--font` must always include a font that has Thai glyphs (the fallback `Inter` has no Thai, so `Noto Sans Thai` is chained on) · a font chosen from the search must be opened with real Thai text before use
-- Line height 1.6 (body text) / 1.85 (`.md-html`). Thai needs more than English.
-- **No justify** · **no `text-transform: uppercase` on Thai text** (it has no effect, but the
-  `letter-spacing` that comes with it throws the tone marks off) · for Thai table headers, remove uppercase
-- Thai buttons are about 20% wider than English ones, so do not fix button widths
-- Test with real Thai text, not Lorem ipsum
-
----
-
-## 6 · Check the work
-
-```bash
-# 1. Is the design system still clean?
-node scripts/check-design-tokens.mjs src/styles.css src/app
-
-# 2. Does the look still hold at every width?
-python scripts/screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 1440
-python scripts/screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 900
-python scripts/screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 420
-```
-
-Then open the images and check:
-
-- [ ] No hardcoded colors (the checker must show ✓)
-- [ ] At 1024px the sidebar shrinks to icons, and at 720px it becomes a drawer with an open button
-- [ ] A table wider than the screen scrolls only inside its frame, **not the whole page** (drag sideways and the sidebar must not move)
-- [ ] The job's theme (`theme.css`) + sidebar light/dark: no text blends into the background · every value in `theme.css` has a source comment
-- [ ] Thai text does not overflow buttons · tone marks do not collide with vowels
-- [ ] Contrast ≥ 4.5:1 for every text-on-background pair, including white on `--brand` (`--text-faint` on `--bg` is the closest call at 4.65. Never make it paler · measure any new brand color before use)
-- [ ] Tab reaches every control, and a focus ring shows at every point
-- [ ] An empty state (`.empty`) wherever a list may be empty, and loading wherever there is a wait: content uses a `.skeleton` outline in the shape of the real thing · `.spinner` only for short waits inside a button or beside text, never in the middle of the screen
-
----
-
-## 7 · Anti-patterns
-
-- **`#hex` in component files.** The number 1 cause of a broken theme. Let the checker catch it.
-- **Gradients on buttons, chips or charts · a frosted-glass topbar.** These are AI signals in `no-ai-look`, and chart colors must stay fixed. Use solid `--brand` and `--c-*`.
-- **Tinting the sidebar, topbar or borders with the brand color.** The app frame is neutral (section 2).
-- **Shadows under cards.** Static cards do not float. Separate them with lines and shifted background shades. `--shadow` is for dropdowns and tooltips only · `--shadow-lg` is for modals and toasts only.
-- **Several primary buttons on one page.** Users do not know what to press.
-- **`overflow-x` on `<body>`** to fix an overflowing table. Fix it at `.tb-wrap`.
-- **`alert()` / `confirm()`.** Use `.toast` and `.modal`.
-- **Inventing new font sizes** outside the job's `--fs-*` (`ui-craft` item 2 · minimum 11 · ≤ 5 sizes per screen)
-- **Sending a fallback-look mockup without searching.** Every job then looks like Apps Track. Use the fallback only when searching is impossible, and write `(รอยืนยัน)`.
-- **A `.modal` with no `position` set.** It sinks under `.backdrop` and nothing can be clicked
-  (the CSS already has a comment explaining this. Do not delete it.)
-- **Sending a mockup that was never rendered and looked at**
-
----
-
-## 8 · Link to other skills
-
-| Need | Use together with |
-|---|---|
-| User flow / IA before coloring | agent `ux-designer` |
-| A Windows desktop app in the same tone | `windows-app-design` |
-| Screen spec document | `polished-document-style` + `branded-document-design` |
-| Diagrams to go with the spec | `markdown-visuals` |
-| Spacing rules, visual order and the 5 states of a screen | `ui-craft` |
-| Architecture diagrams | `software-diagrams` |
-
----
-
-## Do not look AI-made
-
-Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script · every job must also pass the eye gate 3.2 (web pages answer items 10–14 too), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for every medium lives there.
-
-
-## reference: layout-diagram.md
-
-# Screen layout diagram · web-app-design
-
-Fallback structure, sidebar + top bar. Real sizes live in `theme.css`.
-
-```
-┌──────────┬─────────────────────────────────────────────────┐
-│ 232px    │ topbar 56px · solid background · sticky          │
-│ sidebar  ├─────────────────────────────────────────────────┤
-│          │  Page title h1 22px  [secondary btn] [primary]   │
-│ • menu   │  Description 12px, secondary color               │
-│ • menu   │                                                 │
-│          │  ┌─ stat-grid: number cards auto-fit 190px ────┐ │
-│  ─────   │  └─────────────────────────────────────────────┘ │
-│ Group 2  │  ┌─ card ────────────────┐ ┌─ card ──────────┐  │
-│ • menu   │  │ table / form          │ │ activity/summary│  │
-│          │  └───────────────────────┘ └─────────────────┘  │
-│ ⚙ Settings│        ← content max 1160px, centered →         │
-└──────────┴─────────────────────────────────────────────────┘
-```
-
-
-## reference: tokens.md
-
-# Token reference — Apps Track-style web app design system
-
-> Warning: **the color values in this file are a finished example, not a standard.**
-> Always pick colors from the work itself first (see the item "colors come from the work" in `SKILL.md`).
-> What to take from this file is **the list of tokens and their roles**, not the values.
-> Colors, fonts, type sizes, radii, shadows and layout widths are fallbacks. The project's values live in `theme.css` (`SKILL.md` item 2) · spacing and breakpoints follow this file.
-
-All definitions are in `assets/appstrack.css`, in the `:root` block.
-**Nothing below the `=== base ===` line may contain a raw color**, because the checker uses that line as the boundary.
-
-## Contents
-
-1. [Brand — solid color](#brand--solid-color)
-2. [Surfaces · lines · shadows](#surfaces--lines--shadows)
-3. [Typography](#typography)
-4. [Data colors (charts) — always solid](#data-colors-charts--always-solid)
-5. [Pill (status) — three values as a set](#pill-status--three-values-as-a-set)
-6. [Layout](#layout)
-7. [Switching theme / brand](#switching-theme--brand)
-8. [Ready-made component classes](#ready-made-component-classes)
-
----
-
-## Brand — solid color
-
-| Token | Value | Used for |
-|---|---|---|
-| `--brand` | `#226cc6` (a darker shade of the house default `#2A78D6`) | primary button · selected chip · progress bar · link · selected tab · menu selection bar · border on focus · logo |
-| `--brand-2` | `#6a5cd6` | 2nd data color paired with `--brand` (charts) |
-| `--brand-50` | `#eef4fd` | avatar · mention background · focus ring |
-| `--brand-100` | `#dde9fb` | spinner track |
-
-> **No gradient** — buttons, chips, progress and charts use solid `--brand` (`no-ai-look`: purple-blue gradient → 1 solid brand color)
-> **`--brand` must pass 4.5:1** for white text on a brand background (`#226cc6` = 5.21) · brand on `--bg` (4.87) · brand on `--brand-50` (4.71) — checked 22 Oct 2026
-
-## Surfaces · lines · shadows
-
-| Token | Value | Used for |
-|---|---|---|
-| `--bg` | `#f6f7fb` | page background |
-| `--surface` | `#ffffff` | cards · inputs · normal buttons |
-| `--line` | `#eef0f5` | lines inside cards · table lines |
-| `--line-strong` | `#e4e7ee` | input border · button border |
-| `--skeleton` | `#e4e7ee` | loading placeholder (`.skeleton`) |
-| `--shadow` | thin 2-layer shadow | dropdown · tooltip (small floating things) |
-| `--shadow-lg` | deep 2-layer shadow | modal · toast · floating menu |
-| `--radius` / `--radius-sm` / `--radius-pill` | `14px` / `9px` / `99px` | card / button·input / pill·chip |
-| `--ease` | `cubic-bezier(.16, 1, .3, 1)` | things that appear (dropdown · toast · modal) — shoots fast then settles (expo-out) |
-| `--ease-io` | `cubic-bezier(.65, 0, .35, 1)` | things that move (sliding a panel · switching tabs) · durations follow `ui-craft` item 7 |
-
-> **Cards have no shadow** — a still card does not float; it is separated from the page by the `--line` border + `--surface` fill on `--bg` (`ui-craft` item 4) · the topbar is a solid `--surface` fill, no frosted glass
-
-**2-part shadow from one color:** `--shadow` and `--shadow-lg` above are already 2-layer shadows in the color `rgba(20, 30, 55)` · for a project whose background is not blue-gray (cream, green, dark theme) or that needs 3 levels, add this set to the project's `:root` (not yet in `appstrack.css`).
-
-| Token | Value | Used for |
-|---|---|---|
-| `--shadow-color` | `223 47% 15%` (the HSL channels of `rgba(20, 30, 55)`) | the color of every shadow layer · change the hue to match the background; do not use translucent black |
-| `--elev-1` | `0 1px 2px hsl(var(--shadow-color) / .12), 0 2px 6px hsl(var(--shadow-color) / .06)` | small raised pieces: a table header that sticks to the top while scrolling · a switch knob |
-| `--elev-2` | `0 1px 3px hsl(var(--shadow-color) / .14), 0 8px 20px hsl(var(--shadow-color) / .08)` | dropdown · tooltip (replaces `--shadow`) |
-| `--elev-3` | `0 2px 4px hsl(var(--shadow-color) / .12), 0 18px 40px hsl(var(--shadow-color) / .12)` | modal · toast (replaces `--shadow-lg`) |
-
-The first layer is narrow and darker (under the piece, where light cannot reach); the second is wide and faint (ambient light) · at higher levels the wide layer is offset further down in the same direction · a still card still has no shadow · for layered shadows, translucent edges and other depth language → `ui-craft` → `references/depth-and-flourish.md`
-
-**Nested corners:** inner radius = outer radius − the distance from the outer edge to the inner item (padding), so the 2 curves are parallel, e.g. a `--radius` 14 card with an image 6 from the edge → the image radius is 8 · if the result is 0 or negative (padding ≥ outer radius) → use `--radius-sm`, because the 2 corners are so far apart the eye no longer compares them · source: vercel-labs/web-interface-guidelines, section nested radii (MIT · checked 2026-10-23)
-
-## Typography
-
-| Token | Value | Used for |
-|---|---|---|
-| `--text` | `#333b4a` | headings · main metric numbers (Key Performance Indicator · KPI) |
-| `--text-body` | `#414957` | body text (the default for body) |
-| `--text-muted` | `#5f6673` | labels · descriptions · table headers · empty state · inactive menu |
-| `--text-faint` | `#69707d` | timestamps · menu group headings · supporting text |
-
-Contrast (Web Content Accessibility Guidelines (WCAG) 2.2 level AA needs ≥ 4.5:1 · checked 22 Oct 2026): `--text-muted` on white 5.78 · on `--bg` 5.40 · `--text-faint` on white 4.98 · on `--bg` 4.65 ← the lowest in the system; never make it fainter
-
-A 5-size scale, matching `ui-craft` item 2 (lg 22 · md 15 · base 13 · sm 12 · xs 11 · smallest 11):
-
-| Level | Size | |
-|---|---|---|
-| h1 · KPI number | 22px / 500 · KPI 600 | page title · KPI uses `letter-spacing:-.4px` + `tabular-nums` |
-| h2 | 15px / 500 | card heading · app name in the sidebar |
-| body · h3 | 13px / 1.6 · h3 bold 500 | body text · input · tab · menu · sub-heading |
-| button · description under h1 | 12px | |
-| label · pill · table header · faint | 11px | table headers are uppercase with letter-spacing .4px (English only) |
-
-The default font is `Inter` + `Noto Sans Thai` — Inter is chosen because it reads easily at 11–13px in dense data screens (`graphic-design` item 6 says to give a reason when using a widely used font) · a project with a brand font uses the project's · **Inter has no Thai letters**; if you forget to add Noto Sans Thai
-the browser uses a system font as fallback, whose height does not match, and Thai looks smaller and shorter than English.
-
-Every number laid out in a column must use `.num` (`tabular-nums`), otherwise the digits will not line up.
-
-## Data colors (charts) — always solid
-
-`--c-blue #4a8ee0` · `--c-teal #2bbd8a` · `--c-amber #f0ad2e` · `--c-green #1f9d3f` ·
-`--c-violet #6a5cc9` · `--c-red #e87f7c` · `--c-grey #c8ced9`
-Plan/actual pair: `--c-plan #e0eaf8` vs `--c-actual #5a97e0` · overdue is defined as `--c-late #e58079`
-
-## Pill (status) — three values as a set
-
-| Tone | Background | Text | Line | Used for |
-|---|---|---|---|---|
-| green | `#e9f7ef` | `#17794a` | `#d6efe1` | done · normal |
-| blue | `#eaf2fd` | `#2160ab` | `#d8e7fb` | review · in progress |
-| amber | `#fdf5e4` | `#96660d` | `#f7e9c9` | waiting · warning |
-| orange | `#fdefe6` | `#a2541b` | `#f8ddcb` | nearly overdue |
-| red | `#fdedec` | `#a63a34` | `#f8d9d7` | stuck · error |
-| violet | `#f1eefc` | `#52439f` | `#e3ddf8` | special type |
-| grey | `#f2f4f8` | `#626a7a` | `#e7eaf1` | closed · not started |
-
-## Layout
-
-| Token | Value |
-|---|---|
-| `--sidebar-w` | `232px` (≤1024px shrinks to 64px · ≤720px becomes a 240px drawer) |
-| `--topbar-h` | `56px` |
-| `--content-max` | `1160px` |
-
-Breakpoints: **1024px** the sidebar shrinks to icons · **720px** the sidebar becomes a drawer (`body.nav-open`)
-If a table is wider than the screen, scroll horizontally **only inside `.tb-wrap`**; never let the whole page scroll.
-
-## Switching theme / brand
-
-**Switch the accent across the whole app** — `body[data-theme]`: empty (ocean `#226cc6`) · `emerald #097a54` · `sunset #b8501a` · `plum #7a4ee8` · `graphite #0a7a90`
-Each theme changes only 4 tokens (`--brand --brand-2 --brand-50 --brand-100`) · every `--brand` passes 4.5:1 with white text · `--bg` · the theme's own `--brand-50`
-
-**Light/dark sidebar** — `body[data-side='dark']` changes 9 sidebar tokens · the dark background is `--sidebar-dark-bg #1f2329`, a neutral gray, not tinted with the brand color
-Active menu: light mode = a gray fill `--sidebar-active-bg` + a 3px brand-colored bar (`--sidebar-active-bar`) · dark mode = a translucent overlay `--on-brand-veil` + a white bar
-The app frame is neutral — the brand color inside the frame appears only in the selection bar and the logo.
-
-**For a new customer brand**, copy a `body[data-theme='…']` block and put in the customer's 4 values (if the customer's color is too bright → use a darker shade that passes 4.5:1 as `--brand`, and keep the original color for the logo and charts)
-You do not touch a single line of any component.
-
-## Ready-made component classes
-
-| Group | Classes |
-|---|---|
-| Structure | `.app-shell` `.app-sidebar` `.nav-link(.on)` `.app-topbar` `.app-main > .inner` `.page-head` |
-| Card | `.card` `.card-head` `.card-body` |
-| KPI | `.stat-grid` `.card.stat` (`.label` `.value` `.foot`) |
-| Status | `.pill.pill-green/blue/amber/orange/red/violet/grey` |
-| Button | `.btn` `.btn-primary` `.btn-ghost` `.btn-danger` `.btn-sm` |
-| Form | `.field > label` `.input` `.select` `.textarea` `.err` |
-| Table | `.tb-wrap > .tb` (`.right`) |
-| Filter | `.chips > .chip(.on)` · `.tabs > .tab(.on)` |
-| Other | `.prog > i` `.ava(.ava-lg)` `.md-html` `.empty` `.skeleton(.lg)` (loading content) `.spinner` (a short wait inside a button) `.toasts > .toast(.ok/.err)` `.backdrop + .modal` |
-| Utility | `.row` `.row-between` `.col` `.grow` `.ellipsis` `.wrap` `.mt-*` `.mb-*` `.gap-*` `.num` `.muted` `.faint` |
-
-
----
-
 # skill: mobile-app-design
 
 Use when designing a phone app screen or mockup
 
 # Mobile App Design
 
-> **Gate before starting (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending. Follow the "gate before starting" section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search is for the structure of this piece). Close the work with a line `ด่านก่อนลงมือ:`.
+> **Gate before starting (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `design-gate/no-ai-look` before sending. Follow the "gate before starting" section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search is for the structure of this piece). Close the work with a line `ด่านก่อนลงมือ:`.
 
 > **One rule:** a phone screen has half the room you think it has.
 > Everything that is not content must go quiet until it is almost invisible.
@@ -409,7 +52,7 @@ You can send the link to the client without explaining that this is a phone scre
 ## 2 · Design tokens
 
 > **The look comes from this job's search. Do not stop to ask.**
-> Order for finding values: the project's `doc-theme`, or brand colours and fonts (if they exist, use them at once) → app references found live per `design-references` (type app) and the palette extracted per `design-direction-lookup` section 2 → only if nothing can be searched (no internet · user says keep the existing look) use the fallback values in `assets/speakgo.css`, write `(รอยืนยัน)` (awaiting confirmation) and carry on.
+> Order for finding values: the project's `doc-theme`, or brand colours and fonts (if they exist, use them at once) → app references found live per `design-gate/design-references` (type app) and the palette extracted per `design-direction-lookup` section 2 → only if nothing can be searched (no internet · user says keep the existing look) use the fallback values in `assets/speakgo.css`, write `(รอยืนยัน)` (awaiting confirmation) and carry on.
 > The table of work type and colour tone in `diagram-figures` section 5 is a starting point for search terms, not the answer.
 
 **Which values are fixed and which come from the search**
@@ -525,7 +168,7 @@ The 3 limits are in [`references/review.md`](references/review.md): the React Na
 
 - User flow or information architecture before colouring: agent `ux-designer`
 - Desktop web app of the same system, and the hardcoded colour checker in CI (`scripts/check-design-tokens.mjs`): `web-app-design`
-- Spec document of the screens: `polished-document-style` + `branded-document-design`
+- Spec document of the screens: `design-gate/polished-document-style` + `branded-document-design`
 - App Store Optimization: `mobile-engineering`
 - Spacing rules, eye order and the 5 screen states: `ui-craft`
 - Architecture diagrams: `software-diagrams`
@@ -534,7 +177,7 @@ The 3 limits are in [`references/review.md`](references/review.md): the React Na
 
 ## Do not look AI-made
 
-Before sending, walk through section 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye gate 3.2 (web pages answer items 10–14 as well), because a script score of 0 is not yet a pass.
+Before sending, walk through section 3 of `design-gate/no-ai-look`. For HTML work, run its script. Every job must also pass the eye gate 3.2 (web pages answer items 10–14 as well), because a script score of 0 is not yet a pass.
 
 
 ## reference: review.md
@@ -827,7 +470,7 @@ Use when building a native-looking Windows 11 app
 
 # Windows App Design
 
-> **Gate before starting (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run `no-ai-look` before sending · follow the "Gate before starting" (`ด่านก่อนลงมือ`) section of `design-references` (plugin `superuser`) even when a brand already exists (the brand controls color and fonts, while the search is for finding the structure of this piece) · close the job with the line `ด่านก่อนลงมือ:`
+> **Gate before starting (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run `design-gate/no-ai-look` before sending · follow the "Gate before starting" (`ด่านก่อนลงมือ`) section of `design-gate/design-references` (plugin `superuser`) even when a brand already exists (the brand controls color and fonts, while the search is for finding the structure of this piece) · close the job with the line `ด่านก่อนลงมือ:`
 
 > **One rule:** the app you make must look like something that ships with Windows 11, not a web page stuffed into a window.
 >
@@ -1000,7 +643,7 @@ Fix the points you agree with (a critique that is wrong because the image was mi
 |---|---|
 | user flow / wireframe before color | agent `ux-designer` |
 | charts in the dashboard | `web-app-design` → `references/tokens.md` section "Data colors (charts)" |
-| spec document of the screen | `polished-document-style` + `branded-document-design` |
+| spec document of the screen | `design-gate/polished-document-style` + `branded-document-design` |
 | choosing the app architecture | `architecture-patterns` |
 | spacing rules, visual order, and the 5 states of a screen | `ui-craft` |
 | architecture diagram | `software-diagrams` |
@@ -1009,7 +652,7 @@ Fix the points you agree with (a critique that is wrong because the image was mi
 
 ## Do not look AI-made
 
-Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye gate 3.2 (web pages answer items 10–14 as well), because 0 items from the script is not yet a pass.
+Before sending, go through item 3 of `design-gate/no-ai-look`. For HTML work, run its script. Every job must also pass the eye gate 3.2 (web pages answer items 10–14 as well), because 0 items from the script is not yet a pass.
 
 
 ## reference: frame-and-components.md

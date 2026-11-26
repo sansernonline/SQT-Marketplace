@@ -101,7 +101,7 @@ Use when writing or reviewing code for readability
 - A newcomer joins the project and cannot find files
 - The `utils/` folder is starting to become a junk drawer
 
-Not for: writing **less** code → `lazy-coding` · repo-level folder structure, README, linter → `project-bootstrap` · correctness, security, testing → `code-review-checklist` · documentation file names → `document-naming` · product or brand names → `product-naming`
+Not for: writing **less** code → `lazy-coding` · repo-level folder structure, README, linter → `project-bootstrap` · correctness, security, testing → `code-review-checklist` · documentation file names → `workspace-rules/document-naming` · product or brand names → `product-naming`
 
 ## Steps
 
@@ -123,7 +123,7 @@ Not for: writing **less** code → `lazy-coding` · repo-level folder structure,
    - Return early rather than nest `else`.
    - If indentation goes past 3 levels, split the function.
 7. **Write comments for "why", not "what".** A comment that explains what the code does means the name is wrong: fix the name and delete the comment. Keep a comment only for: an external constraint (API · law · hardware) · a deliberate decision that looks odd · a formula or business rule with its source (cite the clause number) · a `TODO(owner)` with a condition. If you change code, change its comment in the same round.
-8. **Before review, sort every comment the diff adds or edits:** delete (translates code · outdated · commented-out code) · rename then delete (explains what a name is) · turn into a type, assert, test or lint then delete (states a constraint; `repeated-mistakes-to-checks`) · keep (the 4 kinds in step 7). If the diff is large, have a mid-level subagent read only and make the list, while the main agent decides. Report counts: deleted · renamed · became checks · kept.
+8. **Before review, sort every comment the diff adds or edits:** delete (translates code · outdated · commented-out code) · rename then delete (explains what a name is) · turn into a type, assert, test or lint then delete (states a constraint; `learn-loop/repeated-mistakes-to-checks`) · keep (the 4 kinds in step 7). If the diff is large, have a mid-level subagent read only and make the list, while the main agent decides. Report counts: deleted · renamed · became checks · kept.
 9. **Lay out files by feature, not by file type.** The test: a newcomer gets "the save-invoice button does not work" and must guess the right folder within 30 seconds. Layout example → `references/examples.md`.
    - A file name is the name of what it mainly exports (`InvoiceRenderer` in `invoice-renderer.ts`); letter case follows the language (Dart/Python snake_case, .NET `InvoiceRenderer.cs`).
    - A test file sits beside the file it tests, except where tooling forces a test folder (Flutter `test/` · .NET `tests/`; table in `project-bootstrap` step 1), where `test/` mirrors `lib/` exactly.
@@ -206,7 +206,7 @@ Go through every comment the diff adds or edits, and put each into 1 of 4 ways. 
 |---|---|
 | Translates code into human language · outdated · commented-out code | Delete |
 | Explains what a variable or function is | Rename so it says so itself, then delete |
-| States a constraint ("no null" · "must be called after init" · "value at most 100") | Turn it into something checkable, such as a type · assert · test · lint (`repeated-mistakes-to-checks`), then delete |
+| States a constraint ("no null" · "must be called after init" · "value at most 100") | Turn it into something checkable, such as a type · assert · test · lint (`learn-loop/repeated-mistakes-to-checks`), then delete |
 | The 4 kinds in the table above | Keep |
 
 Report the result as numbers: how many deleted · how many renamed · how many became checks · how many kept.
@@ -260,7 +260,7 @@ Use when writing or reviewing code, for the simplest that works
 
 - Writing or reviewing any code. On by default at **full** in every response; switch with `lazy lite | full | ultra`; off only on "stop lazy" / "normal mode".
 
-Not for: names, function shape and file layout → `readable-code` (**always load together**: lazy decides how much code, readable-code decides how it looks) · the repo skeleton → `project-bootstrap` · docs, plans, architecture → `superuser:simplify`
+Not for: names, function shape and file layout → `readable-code` (**always load together**: lazy decides how much code, readable-code decides how it looks) · the repo skeleton → `project-bootstrap` · docs, plans, architecture → `superuser:ground-rules`
 
 ## Steps
 
@@ -303,7 +303,7 @@ Not for: names, function shape and file layout → `readable-code` (**always loa
 - [`references/structure.md`](references/structure.md) — open when deciding where code, config, constants and tests live
 - [`references/examples.md`](references/examples.md) — open for shortcut-marking examples and the 3 intensity levels answering the same request
 
-Pairs with: `simplify` · `readable-code` · `project-bootstrap` · `code-review-checklist` (a lazy diff still gets reviewed)
+Pairs with: `ground-rules/simplify` · `readable-code` · `project-bootstrap` · `code-review-checklist` (a lazy diff still gets reviewed)
 
 
 ## reference: examples.md
@@ -765,11 +765,11 @@ Use when reviewing a pull request or your own code
 
 # Code Review Checklist — review a pull request or your own code, with actionable comments
 
-> **In SuperUser:** start from the playbook [`review`](../superuser/references/playbook-review.md), then use this checklist for ordinary reviews. High-risk work or a large diff → `adversarial-review-panel`.
+> **In SuperUser:** start from the playbook [`review`](../superuser/references/playbook-review.md), then use this checklist for ordinary reviews. High-risk work or a large diff → `crew-patterns/adversarial-review-panel`.
 
 ## Use when
 - Reviewing a pull request, self-reviewing before submitting, or auditing an existing module
-- Not for: a second look inside a team → a new `reviewer` agent (it applies this checklist) · contested design, large or high-risk diff, "stress test" → `adversarial-review-panel` · reviewing a visual → `graphic-design:design-review` if installed, else `ui-craft` · writing the PR description → `pr-description-template` · hunting misleading patterns across the codebase → `code-gardener` · scanners, secrets, dependency check, OWASP Top 10:2025 → `security-gate` (run both before merge; `references/owasp-top10.md`, `references/owasp-stack-checks.md`)
+- Not for: a second look inside a team → a new `reviewer` agent (it applies this checklist) · contested design, large or high-risk diff, "stress test" → `crew-patterns/adversarial-review-panel` · reviewing a visual → `graphic-design:design-review` if installed, else `ui-craft` · writing the PR description → `pr-description-template` · hunting misleading patterns across the codebase → `code-gardener` · scanners, secrets, dependency check, OWASP Top 10:2025 → `security-gate` (run both before merge; `references/owasp-top10.md`, `references/owasp-stack-checks.md`)
 
 ## Steps
 1. **Understand the intent:** read the PR description and linked ticket. For a branch or PR, pin the range first (`BASE=$(git merge-base main HEAD)` · `HEAD=$(git rev-parse HEAD)` · review `git diff $BASE..$HEAD`) and write both SHAs in the report.
@@ -796,7 +796,7 @@ Use when reviewing a pull request or your own code
 8. **Avoid:** bikeshedding when there is no convention · "why not MY way" · only criticism · vague comments ("this is wrong": say why and suggest a fix) · reviewing too much at once (ask for PRs under 400 lines).
 
 ## Run as a command
-`/software-development:code-review-checklist <file path or PR description>` — use a new read-only `reviewer` agent to review **$ARGUMENTS** (high-stakes or contested → `adversarial-review-panel`). Open `superuser` with the playbook `review` and copy its steps into the todo first; use both together. The reviewer: reads the file(s) or diff and pins the range (step 1) · applies this skill · rates each finding **สูง** (must fix before merge) · **กลาง** (should fix) · **ต่ำ** (optional) · gives a concrete fix for each · outputs verdict **ผ่าน** / **ไม่ผ่าน** with counts per level (not the `blocking:`/`nit:` prefixes).
+`/software-development:code-review-checklist <file path or PR description>` — use a new read-only `reviewer` agent to review **$ARGUMENTS** (high-stakes or contested → `crew-patterns/adversarial-review-panel`). Open `superuser` with the playbook `review` and copy its steps into the todo first; use both together. The reviewer: reads the file(s) or diff and pins the range (step 1) · applies this skill · rates each finding **สูง** (must fix before merge) · **กลาง** (should fix) · **ต่ำ** (optional) · gives a concrete fix for each · outputs verdict **ผ่าน** / **ไม่ผ่าน** with counts per level (not the `blocking:`/`nit:` prefixes).
 
 The author does not fix every finding on sight: a finding can be wrong (misread code, or the "bug" is covered by a test). Push back with evidence (`file:line` · test name · command output), not opinion · fix what stands · list each rejected finding and its evidence in the report so the lead can judge.
 
@@ -882,97 +882,3 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 - [ ] Easy to modify when requirements change?
 - [ ] No magic numbers / strings (use constants)?
 - [ ] Logging at appropriate levels?
-
-
----
-
-# skill: commit-message-format
-
-Use when setting up commitlint or semantic-release
-
-# Conventional Commit Message Format
-
-> When to commit and logging each step → `commit-log` (shared skill). This file adds the release side: scope, commitlint, semantic-release.
-
-## When to use this skill
-
-- Writing commits that feed release tooling (commitlint, semantic-release) — everyday commits use `commit-log`
-- Reviewing commits in a PR for consistency
-- Setting up commitlint / semantic-release
-
-## Format
-
-```
-<type>(<scope>): <subject>
-
-<body>
-
-<footer>
-```
-
-## Types
-
-| Type | Use for | Triggers release? |
-|------|---------|-------------------|
-| `feat` | New feature | minor version bump |
-| `fix` | Bug fix | patch version bump |
-| `docs` | Documentation only | no |
-| `style` | Formatting, no code change | no |
-| `refactor` | Refactor without behavior change | no |
-| `perf` | Performance improvement | patch |
-| `test` | Adding/updating tests | no |
-| `build` | Build system, dependencies | no |
-| `ci` | CI/CD changes | no |
-| `chore` | Maintenance tasks | no |
-| `revert` | Revert previous commit | depends |
-
-## Subject Rules
-
-- **Imperative mood** — "add" not "added" or "adds"
-- **Lowercase** — start with lowercase letter
-- **No period at end**
-- **Max 50 characters**
-- **Complete this sentence:** "If applied, this commit will _____"
-
-## Short and readable (applies to every commit)
-
-Someone scanning `git log --oneline` should understand each line without opening the diff.
-
-- **Measure the repo's norm, then follow it** — `git log --oneline -30` before the first commit: language, whether `scope` is used, which types appear, typical subject length. A repo that never uses scope does not get one from you; a repo at 40 characters does not get a 72-character subject. Note what you measured in the report once (idea from ECC conventional-commit-review).
-- **Language follows the repo** — A Thai repo gets Thai descriptions; `type(scope):` stays English so tools can parse it. Lowercase and imperative mood apply to English only.
-- **Subject says what changed for the reader**, not which file was touched: `fix(stock): เบิกของเท่ากับที่เหลือพอดีได้แล้ว`, not `fix: แก้ items.js บรรทัด 42`
-- **One line is enough** for most commits. Add a body only when *why* is not obvious from the subject — at most 3 short lines or bullets
-- **No filler** — no "this commit", "minor changes", "update code", "แก้นิดหน่อย", or a list of changed files (the diff already shows them)
-- **One commit, one topic** — if the subject needs "and" or `·` to join unrelated changes, split the commit. Check `git diff --stat` before writing the subject: when the files fall into more than one topic (feature + unrelated rename, fix + formatting sweep), propose the split as a list of `<subject> → <files>` per commit and stage each with `git add <files>` or `git add -p`; never hide the second topic in the body
-
-| ✗ Hard to read | ✓ Short and clear |
-|---|---|
-| `update items.js, server.js, add test, fix bug` | `fix(stock): เบิกของเท่ากับที่เหลือพอดีได้แล้ว` |
-| `feat: implement new functionality for exporting the low-stock report data to CSV format` | `feat(report): ส่งออกรายงานของใกล้หมดเป็น CSV` |
-| `refactor: แก้โค้ดให้ดีขึ้น` | `refactor(report): อ่านประวัติเบิกครั้งเดียวแทนทุกสินค้า` |
-
-## Body Rules
-
-- Separate from subject with blank line
-- Wrap at 72 characters
-- Explain **why**, not just **what** (diff shows what)
-- Use bullet points if multiple points
-- Reference issues/tickets at the end
-
-## Footer Conventions
-
-```
-Closes #123              ← closes the issue
-Refs #456                ← references but doesn't close
-BREAKING CHANGE: ...     ← breaking change notice
-Co-authored-by: ...      ← attribution
-```
-
-## Quality Checklist
-
-- [ ] Type matches the change (not just "chore" for everything)
-- [ ] Scope is meaningful (component/module name)
-- [ ] Subject is imperative and ≤50 chars — Thai subjects count base consonants only (~50); vowels and tone marks do not count · กติกาเต็มอยู่ใน `superuser` skill `commit-log`
-- [ ] Body explains WHY (if change isn't obvious)
-- [ ] Breaking changes marked with `!` AND `BREAKING CHANGE:` footer
-- [ ] Linked to issue/ticket when applicable

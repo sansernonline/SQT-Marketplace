@@ -4,7 +4,7 @@ Open when setting colour tokens, type sizes or choosing a Thai font for large he
 
 ## Tokens and type scale
 
-**Colour comes from the work** — if there is a brand colour, use it · if not → **search references first:** take the project's words and search live per `design-references` (plugin `superuser`) type `web` or `motion`, then extract colours from the chosen work · the stored palette library is for when live search is impossible · if live search is impossible → house value `#2A78D6` (dark shade `#226CC6` for text on a light background), write `(รอยืนยัน)` (awaiting confirmation) and carry on · the values in the table are the reference site's, so stick to the **token list and its roles**, not the colour values · token names match `web-app-design` → `references/tokens.md` so page-mode pages (forms · admin) can use the same set
+**Colour comes from the work** — if there is a brand colour, use it · if not → **search references first:** take the project's words and search live per `design-gate/design-references` (plugin `superuser`) type `web` or `motion`, then extract colours from the chosen work · the stored palette library is for when live search is impossible · if live search is impossible → house value `#2A78D6` (dark shade `#226CC6` for text on a light background), write `(รอยืนยัน)` (awaiting confirmation) and carry on · the values in the table are the reference site's, so stick to the **token list and its roles**, not the colour values · token names match `web-app-design` → `references/tokens.md` so page-mode pages (forms · admin) can use the same set
 
 | Token | Reference value | Type role | Value |
 |---|---|---|---|

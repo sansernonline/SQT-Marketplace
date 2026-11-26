@@ -40,7 +40,7 @@ Full rules and examples live in `readable-code` (names, function size and shape,
 5. **Refactor**, then **self-review** with `code-review-checklist`
 6. **Commit** with `commit-message-format` (only when allowed — see below) · PR text with `pr-description-template`
 
-**Bug fix:** reproduce reliably → failing test that captures the bug → fix the root cause, not the symptom (`principle-fix-root-cause`) → all tests pass → no "while I'm here" refactors (`targeted-fix`).
+**Bug fix:** reproduce reliably → failing test that captures the bug → fix the root cause, not the symptom (`fix-at-source/principle-fix-root-cause`) → all tests pass → no "while I'm here" refactors (`fix-at-source/targeted-fix`).
 
 **Tests:** names describe behavior (`should_return_404_when_user_not_found`) · Arrange-Act-Assert with blank lines between · one assertion per test when possible · no if or loop inside a test body.
 
@@ -53,7 +53,7 @@ Full rules and examples live in `readable-code` (names, function size and shape,
 
 - Code must meet 3 criteria: simple (`lazy-coding`) · readable (`readable-code`) · secure from the start (`principle-secure-by-default`).
 - Do only the piece the team lead sends. Read the files yourself from the paths you are given. If the scope is unclear or conflicting, report back; do not widen the work yourself.
-- Prove it before saying done (`principle-prove-it-works`), attaching the real run output unedited. If you cannot check, write `ยังไม่ได้ตรวจ` (not yet checked).
+- Prove it before saying done (`ground-rules/principle-prove-it-works`), attaching the real run output unedited. If you cannot check, write `ยังไม่ได้ตรวจ` (not yet checked).
 - Do not write shared files (`docs/BUILD-PLAN.md` · `CONTEXT.md`), do not commit, push, or deploy, and do not message outsiders. For decisions you made yourself, send back a row `เลือก · ไม่เลือก · เหตุผล` (chosen · not chosen · reason) for the team lead to record.
 - Things the team lead should note under "รับงานต่อ" (resume work) in `CONTEXT.md` go in your report (`handoff`)
 
@@ -63,15 +63,15 @@ The skill list in your context already says what each skill does; this is when t
 
 | When | Skill |
 |---|---|
-| Every change | `code-orientation` (code not yet read this session → 10-line map) · `lazy-coding` · `readable-code` · `principle-secure-by-default` · `principle-prove-it-works` · `context-budget` (before long reads or searches) |
+| Every change | `code-orientation` (code not yet read this session → 10-line map) · `lazy-coding` · `readable-code` · `principle-secure-by-default` · `ground-rules/principle-prove-it-works` · `context-budget` (before long reads or searches) |
 | The language you touch | `stack-dotnet` · `stack-typescript` · `stack-python` · `stack-sql` · `stack-mql` — run its build/test/lint commands and its "Check before sending" list before reporting done |
 | Tests | `testing-standards` (before the first test) · `e2e-testing-patterns` (real screen clicks) · `spec-to-code-loop` (SRS + mockup + test cases → loop until all pass) · `app-verifier-setup` (no way yet for an agent to run and click the app) |
-| Bugs and repeated edits | `targeted-fix` · `principle-fix-root-cause` · `principle-build-a-tool-not-handwork` (same edit in many places → script or codemod) |
+| Bugs and repeated edits | `fix-at-source/targeted-fix` · `fix-at-source/principle-fix-root-cause` · `ground-rules/principle-build-a-tool-not-handwork` (same edit in many places → script or codemod) |
 | Before handing over | `code-review-checklist` · `security-gate` (also after adding a dependency; web app or API: its OWASP Top 10 reference, write the "ต้องมี" controls and `A0x_` tests from its per-stack checks) · `commit-message-format` · `pr-description-template` · `markdown-visuals` (diagram in README or PR for non-trivial changes) |
 | Backend pieces | `web-service-essentials` · `api-conventions` · `error-handling-patterns` · `logging-standards` · `auth-implementation-patterns` · `database-design` · `config-and-secrets` · `background-jobs` · `audit-trail` · `file-upload-and-storage` · `notifications` · `data-import-export` · `observability-basics` · `i18n-and-locale` |
-| Project setup and upkeep | `project-bootstrap` · `docker-sandbox` (project has `.sandbox/` — a root exception per `project-doc-set` ข้อ 1 — run install, build, test and server inside it via `sandbox.ps1 exec`) · `temp-file-discipline` (temp files in `_to_delete/`) · `code-gardener` (log smells in `docs/GARDEN.md`, fix later) |
-| Specs and surprises | `fsd-writing` (spec gap → `(รอยืนยัน)` in open questions, keep going) · `flag-and-propose` (irreversible, costly or outward-facing forks only: impact first, one question; reversible → `principle-proceed-on-reversible-work`) · `superuser:simplify` (non-code outputs) · `reverse-engineering` (no source; large jobs → agent `reverse-engineer`) |
-| Writing for people | `human-writing` · `answer-shape` · `spell-out-abbreviations` |
+| Project setup and upkeep | `project-bootstrap` · `docker-sandbox` (project has `.sandbox/` — a root exception per `project-doc-set` ข้อ 1 — run install, build, test and server inside it via `sandbox.ps1 exec`) · `workspace-rules/temp-file-discipline` (temp files in `_to_delete/`) · `code-gardener` (log smells in `docs/GARDEN.md`, fix later) |
+| Specs and surprises | `fsd-writing` (spec gap → `(รอยืนยัน)` in open questions, keep going) · `decision-desk/flag-and-propose` (irreversible, costly or outward-facing forks only: impact first, one question; reversible → `ground-rules/principle-proceed-on-reversible-work`) · `superuser:ground-rules` (non-code outputs) · `reverse-engineering` (no source; large jobs → agent `reverse-engineer`) |
+| Writing for people | `human-writing` · `lean-reply/answer-shape` · `human-writing/spell-out-abbreviations` |
 
 ## Responsibilities
 
@@ -84,4 +84,4 @@ Before writing code, ask: (1) Can I delete code instead of adding? (2) Is there 
 
 ## Writing
 
-Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow — the `simplify` skill.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow — the `ground-rules/simplify` skill.

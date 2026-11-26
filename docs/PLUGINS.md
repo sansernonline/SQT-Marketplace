@@ -13,16 +13,16 @@
 ทีมผู้ช่วยทำงานหลายขั้น: หัวหน้าทีมรับงาน → จัดขนาด → brainstorm (งานใหญ่) → เลือก playbook → แจกงานให้ agent ตัวใหม่ → ตรวจกับของจริง → ส่งงาน → เรียนรู้ · ใช้กับงานได้ทุกสาขา (เอกสาร · หาข้อมูล · ร้านค้า · เงิน · โค้ด) · plugin สาขาอื่นต่อยอดจากตัวนี้ทาง `dependencies`
 
 ### มีอะไรบ้าง
-**4 agents · 41 skills · 0 commands** · 6 playbooks · hook 1 ชุด (skill เอกสารออกแบบ สไลด์ รูป อยู่ใน `software-development` · ภาพ AI ใน `graphic-design` · ประชุมใน `personal-life`)
+**4 agents · 16 skills · 0 commands** · 6 playbooks · hook 1 ชุด (skill เอกสารออกแบบ สไลด์ รูป อยู่ใน `software-development` · ภาพ AI ใน `graphic-design` · ประชุมใน `personal-life`)
 
 - **agent กลาง:** brainstormer (คิดทางเลือก) · reviewer (ตรวจด้วยสายตาใหม่) · learning-reviewer (ทบทวนวิธีทำงาน)
 - **playbook:** research · document · review · unattended-run · learn-from-session · pickup-and-pause (รับงานต่อ · หยุดงาน)
-- **แกนทีม · ส่งต่องาน:** superuser · agent-patterns · handoff · context-budget · status-report · decision-log · flag-and-propose
-- **หลักการทำงาน:** simplify · principle-prove-it-works · principle-proceed-on-reversible-work · principle-small-verifiable-steps · principle-build-a-tool-not-handwork · principle-fix-root-cause · principle-user-experience-first · targeted-fix
-- **แบ่งงาน · ตรวจ · หาข้อมูล:** parallel-split-and-merge · parallel-attempts-pick-best · adversarial-review-panel · prior-art-review · **research-with-sources** (หาข้อมูลพร้อมแหล่ง ≥ 3 แหล่ง วันที่ และป้ายหลักฐาน)
-- **เรียนรู้ · ปรับทีม:** repeated-mistakes-to-checks · session-lessons-to-skills · owner-style-capture · commit-log
-- **เขียน:** human-writing · answer-shape · no-ai-look · temp-file-discipline
-- **เอกสารหลัก · ข้อความ:** polished-document-style · document-naming · spell-out-abbreviations · polite-message-th-en
+- **แกนทีม · ส่งต่องาน:** superuser (รวมรายงานสถานะ · ตารางคะแนน model) · quick · handoff · context-budget · decision-desk (จดการตัดสินใจ · ให้คะแนน · โหวต · ยกเรื่องขึ้นมาเสนอ)
+- **หลักการทำงาน:** ground-rules (พิสูจน์ก่อนบอกเสร็จ · ทีละก้าว · ย้อนได้ทำเลย · สร้างเครื่องมือ · ผู้ใช้มาก่อน · ตัดของเกิน) · fix-at-source (แก้ที่ต้นเหตุ · แก้เฉพาะจุด)
+- **แบ่งงาน · ตรวจ · หาข้อมูล:** crew-patterns (รูปแบบทีม agent · แตกงานขนาน · ลองหลายทางเลือกที่ดีสุด · คณะตรวจแบบค้าน) · **research-with-sources** (หาข้อมูลพร้อมแหล่ง ≥ 3 แหล่ง วันที่ และป้ายหลักฐาน · หาของที่มีคนทำแล้ว)
+- **เรียนรู้ · ปรับทีม:** learn-loop (บทเรียนเป็น skill · ผิดซ้ำเป็นตัวตรวจ · เก็บสไตล์เจ้าของ) · skill-authoring
+- **เขียน · ตอบ:** human-writing (รวมย่อคำ · แปลไทยอังกฤษ · ข้อความสุภาพ) · lean-reply (รูปคำตอบ · ตอบสั้น) · chat-prompt-workflows
+- **ออกแบบ · เอกสารหลัก · ไฟล์:** design-gate (ค้นต้นแบบ · ไม่ดูเหมือน AI ทำ · สไตล์เอกสาร) · workspace-rules (commit · ไฟล์ชั่วคราว · ตั้งชื่อเอกสาร · ตั้งโฟลเดอร์งาน)
 
 รูปทั้งหมด: [`docs/plugins/superuser/`](plugins/superuser/README.md) (flow · map · playbooks)
 
@@ -46,7 +46,7 @@ superuser = แม่แบบ + skill 6 ตัว           superuser = แก�
 ```
 
 - **ใหม่:** `handoff` (ใบสั่งงาน · ใบส่งงาน · รับงานต่อ · inbox · log · รวม `work-session-context` เดิม) · `research-with-sources`
-- **ย้ายเข้าแกน:** skill ทั่วไป 31 ตัวจาก software-development (รวม `html-slide-deck` · `pptx-to-html-deck`) · `meeting-prep-card` · `meeting-summary` · `polite-message-th-en` จาก personal-life · playbook `pickup-and-pause` แบบใช้ได้ทุกงาน
+- **ย้ายเข้าแกน:** skill ทั่วไป 31 ตัวจาก software-development (รวม `html-slide-deck` · `pptx-to-html-deck`) · `meeting-prep-card` · `meeting-summary` · `human-writing/polite-message-th-en` จาก personal-life · playbook `pickup-and-pause` แบบใช้ได้ทุกงาน
 - **รวมบางส่วนเข้าแกน:** วิธีทำปก 3 แนว โหวต 2 ใน 3 → `branded-document-design` · วิธีเขียน prompt และทำภาพเป็นชุด → `image-generation`
 - **ไม่เปลี่ยนชื่อ skill** — งานเดิมเรียกชื่อเดิมได้ · plugin สาขาได้ skill ชุดนี้ผ่าน `dependencies` เหมือนเดิม
 
@@ -205,7 +205,7 @@ _ร่างเมื่อ 6 ต.ค. 2569 · software-development ครอ�
 
 **Agents (3):** life-admin (จัดการธุระซ้ำ ๆ), meeting-prep (เตรียมก่อนประชุม สรุปหลังประชุม), doc-caretaker (เอกสารสำคัญในชีวิต)
 
-**Skills (11):** (`meeting-prep-card` · `meeting-summary` · `polite-message-th-en` ย้ายไปเป็นของกลางใน `superuser` แล้ว)
+**Skills (11):** (`meeting-prep-card` · `meeting-summary` · `human-writing/polite-message-th-en` ย้ายไปเป็นของกลางใน `superuser` แล้ว)
 - weekly-review — ทบทวนสัปดาห์: อะไรคุ้ม อะไรเสียเวลา
 - inbox-triage — วิธีคัดอีเมลที่ต้องตอบวันนี้ (ใช้กับ plugin อีเมลที่มีอยู่)
 - calendar-audit — ตรวจปฏิทินว่าเวลาไปอยู่ไหน แนะนำบล็อกเวลา
@@ -300,7 +300,7 @@ _ร่างเมื่อ 6 ต.ค. 2569 · software-development ครอ�
 |---|---|---|
 | trading-finance → 0.2.0 | `tax-basics-th` | `tax-deduction-planner` · `mutual-fund-picker` · `retirement-plan` · `debt-payoff` · `insurance-review` · `emergency-fund` |
 | thai-workplace → 0.2.0 | `tax-vat-th` · `social-security-th` · `doc-thai-official` | `payroll-th` · `e-tax-invoice` · `dbd-annual-filing` · `labour-law-basics` · `promptpay-qr` |
-| personal-life → 0.2.0 | — | `subscription-audit` · `digital-hygiene` · `goal-and-habit` · `polite-message-th-en` |
+| personal-life → 0.2.0 | — | `subscription-audit` · `digital-hygiene` · `goal-and-habit` · `human-writing/polite-message-th-en` |
 | dev-learning → 0.2.0 | skill เดิมที่สั้นกว่า 30 บรรทัด | `cert-prep` · `side-project-picker` |
 
 #### plugin ใหม่

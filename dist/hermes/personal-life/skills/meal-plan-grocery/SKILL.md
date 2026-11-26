@@ -45,7 +45,7 @@ Group items in walking order so one pass covers the store:
 
 Rules: buy rice, oil and sauces monthly in bulk (Makro or promotion weeks); buy vegetables twice a week; check unit price (ราคาต่อกรัม on the shelf label), not pack price.
 
-## Choose items inside the budget (`decision-scoring`, command `knapsack`)
+## Choose items inside the budget (`decision-desk/decision-scoring`, command `knapsack`)
 
 1. **Iron rules first (กฎเหล็ก):** anything on the allergy or doctor's avoid list is removed before the run; anything the grandparent's diet needs goes in with `"must": true`.
 2. **Budget** = the protein part of the weekly food budget, in baht (the user sets it; starting value, not yet measured until a month of receipts). **Cost** = shelf price in baht. **Value** = grams of protein in the pack (from the label), or meals served if the user prefers to count meals; one unit per run, never mixed.

@@ -55,7 +55,7 @@ Not for: writing less → `lazy-coding` · naming → `readable-code` · logging
 - [ ] No blocking I/O (`requests` · `time.sleep` · sync driver) inside `async def`.
 - [ ] Every text-file open gives `encoding="utf-8"`; stored datetimes have a timezone.
 - [ ] Added dependencies are in the lock file and pass `pip-audit`.
-- [ ] Confirm it really works before saying done → `principle-prove-it-works`; before sending, `security-gate`.
+- [ ] Confirm it really works before saying done → `ground-rules/principle-prove-it-works`; before sending, `security-gate`.
 
 ## References
 - [`references/web-and-data.md`](references/web-and-data.md) — open for FastAPI, Django, pandas, numpy, torch, notebooks

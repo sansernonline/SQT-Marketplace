@@ -30,7 +30,7 @@ Not for: complaints and refund requests about a product → use agent `consumer-
 | Recurring charges, free trials | `subscription-audit` |
 | Passwords, 2FA, LINE, backups, scams, account takeover | `digital-hygiene` |
 | Quarterly goals, habit design, failure review | `goal-and-habit` |
-| Polite Thai/English messages and tone ladder | `polite-message-th-en` |
+| Polite Thai/English messages and tone ladder | `human-writing/polite-message-th-en` |
 | Documents and expiry dates | `important-docs` |
 | Inbox and calendar | `inbox-triage`, `calendar-audit` |
 | One to-do file, what I am waiting on | `task-board` |
@@ -51,4 +51,4 @@ Not for: complaints and refund requests about a product → use agent `consumer-
 
 ## Writing
 
-Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow — the `simplify` skill.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow — the `ground-rules/simplify` skill.

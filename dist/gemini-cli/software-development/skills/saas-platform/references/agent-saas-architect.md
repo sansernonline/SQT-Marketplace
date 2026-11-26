@@ -235,7 +235,7 @@ log.info('Order created', {
 
 - `saas-platform` — implementation patterns
 - `architecture-patterns` (from software-development) — system design
-- `polished-document-style` (from superuser)
+- `design-gate/polished-document-style` (from superuser)
 
 ## Things You Don't Do
 

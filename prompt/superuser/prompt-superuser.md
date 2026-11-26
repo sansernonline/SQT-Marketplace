@@ -14,7 +14,7 @@
 
 **วนจนเสร็จ (agent loop):** ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ จนผ่านทุกข้อที่ฉบับนั้นต้องมี · ตรวจด้วยหลักฐานจริง (เปิดไฟล์ · รันคำสั่ง · เทียบแหล่ง) ไม่ใช่คำบอกของตัวที่ทำ · รอบตรวจใช้ `reviewer` ตัวใหม่ทุกรอบ · ไม่ผ่าน → แก้ที่ต้นเหตุแล้วตรวจซ้ำทั้งข้อเดิมและจุดที่แก้ · เหลือแค่ข้อระดับต่ำ → ปิดได้แล้วลงรายงาน · ครบเพดานรอบ (งานกลาง 3 · งานใหญ่หรืองานเสี่ยง 5) ยังไม่ผ่าน → ติดป้าย `ติด` ทำส่วนอื่นให้จบ แล้วรายงานข้อที่เหลือ · รายละเอียดอยู่ใน skill `superuser` กฎข้อ 3
 
-**ภาษาและไฟล์:** เขียนตาม `human-writing` · โครงคำตอบตาม `answer-shape`
+**ภาษาและไฟล์:** เขียนตาม `human-writing` · โครงคำตอบตาม `lean-reply/answer-shape`
 
 | # | งาน | plugin | playbook | ได้ไฟล์ |
 |---|---|---|---|---|
@@ -24,7 +24,7 @@
 | 4 | งานยาวที่ผู้ใช้ไม่อยู่ดู | ทุก plugin | `unattended-run` | ตามงาน · `.claude/superuser/CONTEXT.md` อัปเดตทุกชิ้น |
 | 5 | รวมบทเรียนเข้า skill | ทุก plugin | `learn-from-session` | ตารางเสนอแก้ skill (เดิม → ใหม่) |
 | 6 | ทำ superuser ให้ plugin สาขาใหม่ | `superuser` | — (ตาม `ADAPT.md`) | โฟลเดอร์ plugin ใหม่ใน repo |
-| 7 | สอน agent ให้ทำงานแบบผม | `superuser` | — (ใช้ skill `owner-style-capture` ตรง) | `~/.claude/superuser-style.md` |
+| 7 | สอน agent ให้ทำงานแบบผม | `superuser` | — (ใช้ skill `learn-loop/owner-style-capture` ตรง) | `~/.claude/superuser-style.md` |
 | 8 | แปลเอกสารทั้งชุด ไทย ↔ อังกฤษ | `superuser` | `document` | ไฟล์แปลวางคู่ต้นทาง · `docs/glossary.md` |
 | 9 | ตรวจภาษาไทยแบบเข้ม | `superuser` | — (ใช้ `human-writing` → `references/strict-review.md` ตรง) | ไฟล์ที่แก้แล้ว (ต้นฉบับเก็บใน `_to_delete/`) · ตารางจุดที่แก้ |
 | 10 | เขียนหรือแก้ skill พร้อม eval 3 กรณี | `software-development` | `skill-authoring` | `plugins/<plugin>/skills/<ชื่อ>/` · eval 3 ไฟล์ · ผลรอบแดงและเขียว |
@@ -36,7 +36,7 @@
 
 ## 1. หาข้อมูลที่ยืนยันได้
 
-playbook `research` (Reranker · ReAct ตาม `agent-patterns`)
+playbook `research` (Reranker · ReAct ตาม `crew-patterns/agent-patterns`)
 **ผลลัพธ์:** `docs/research/<หัวข้อ>.md` — คำตอบก่อน ตารางคะแนนแหล่งไว้ท้าย · ทุกข้ออ้างมีป้าย `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ` · ข้อมูลของผู้ใช้ที่ไม่รู้ใส่ `(รอยืนยัน)`
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -167,7 +167,7 @@ playbook `learn-from-session` ของ plugin ที่กรอก
 
 ## 7. สอน agent ให้ทำงานแบบผม
 
-skill `owner-style-capture` ของ plugin `superuser` · ไม่ต้องเปิด playbook
+skill `learn-loop/owner-style-capture` ของ plugin `superuser` · ไม่ต้องเปิด playbook
 **ผลลัพธ์:** ตารางเสนอ (ความชอบ · หลักฐาน · พบกี่ครั้ง) ในคำตอบ → ผู้ใช้เห็นด้วยแล้วจึงเขียน `~/.claude/superuser-style.md` (ไม่เกิน 60 บรรทัด) · `superuser` ของทุก plugin อ่านไฟล์นี้ก่อนเริ่มงาน · **ยังไม่เขียนไฟล์** จนผู้ใช้เห็นด้วย
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -188,7 +188,7 @@ skill `owner-style-capture` ของ plugin `superuser` · ไม่ต้อ�
 
 ## 8. แปลเอกสารทั้งชุด ไทย ↔ อังกฤษ
 
-playbook `document` · skill `translate-th-en` · `human-writing` (`references/thai-grammar.md` หัวข้อ 7 เมื่อแปลเป็นไทย) · `spell-out-abbreviations`
+playbook `document` · skill `human-writing/translate-th-en` · `human-writing` (`references/thai-grammar.md` หัวข้อ 7 เมื่อแปลเป็นไทย) · `human-writing/spell-out-abbreviations`
 **ผลลัพธ์:** ไฟล์แปลวางคู่ต้นทาง (เช่น `README.md` กับ `README.th.md`) · `docs/glossary.md` ที่อัปเดต · รายการ `(รอยืนยัน)` แยกหัวข้อ · **รออนุมัติ:** ส่งถึงผู้อ่าน
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -205,12 +205,12 @@ playbook `document` · skill `translate-th-en` · `human-writing` (`references/t
 2. แปลความหมายทีละย่อหน้า ไม่แปลทีละคำ · ไทยเป็นอังกฤษ: ใส่ประธานทุกประโยค · ปี พ.ศ. แปลงเป็น ค.ศ. · ประโยคไม่เกิน 25 คำ · อังกฤษเป็นไทย: เลือกระดับภาษาก่อนเลือกคำ แล้วไล่รายการ 7 ข้อใน `thai-grammar` หัวข้อ 7
 3. ไฟล์คู่แก้ครบในรอบเดียว · ลำดับหัวข้อ เลขข้อ และจำนวนแถวในตารางตรงกันทุกคู่ · บรรทัดแรกของไฟล์แปลบอกว่าแปลจากไฟล์ไหน รุ่นวันที่เท่าไร · หัวข้อที่มีภาษาเดียวติดป้าย `(ยังไม่มีฉบับ EN)`
 4. ไม่แปลโค้ด คำสั่ง path ชื่อไฟล์ URL ชื่อสินค้า และเลขข้อสัญญา · ชื่อหน่วยงานใช้ชื่อทางการของหน่วยงานนั้น
-5. ตรวจก่อนส่ง 6 ข้อของ `translate-th-en` โดย `reviewer` ตัวใหม่ที่เทียบต้นทางย่อหน้าต่อย่อหน้า: ตัวเลข วันที่ เงื่อนไข และข้อยกเว้นครบ ไม่มีคำออกตัวที่ต้นทางไม่มี · ฉบับไทยรัน `thai_tells.py` ของ `human-writing`
+5. ตรวจก่อนส่ง 6 ข้อของ `human-writing/translate-th-en` โดย `reviewer` ตัวใหม่ที่เทียบต้นทางย่อหน้าต่อย่อหน้า: ตัวเลข วันที่ เงื่อนไข และข้อยกเว้นครบ ไม่มีคำออกตัวที่ต้นทางไม่มี · ฉบับไทยรัน `thai_tells.py` ของ `human-writing`
 
 ### กฎเฉพาะฉบับนี้
 
 - ชื่อคนไทยใช้ตัวสะกดที่เจ้าของใช้เอง · ไม่มี → ถอดตามหลักราชบัณฑิตยสภาแล้วติด `(รอยืนยัน)` · ประธานที่ต้นทางละไว้และดูจากบริบทไม่ออก ติด `(รอยืนยัน)` ไม่เดา
-- ข้อความหน้าจอ (ไฟล์ภาษาของแอป) ใช้ `translate-th-en` หัวข้อ 4: ไม่ต่อสตริง · ตัวแทนค่าเท่ากันทุกคีย์ · ไม่เกินงบความยาว
+- ข้อความหน้าจอ (ไฟล์ภาษาของแอป) ใช้ `human-writing/translate-th-en` หัวข้อ 4: ไม่ต่อสตริง · ตัวแทนค่าเท่ากันทุกคีย์ · ไม่เกินงบความยาว
 
 ---
 
@@ -264,7 +264,7 @@ playbook `skill-authoring` ของ plugin `software-development` · skill `ski
 
 ### กฎเฉพาะฉบับนี้
 
-- skill ที่ไม่ชนะชัดในการทดสอบปิดตา ไม่เพิ่ม หรือแก้แล้วทดสอบใหม่ แล้วลงผลใน `decision-log`
+- skill ที่ไม่ชนะชัดในการทดสอบปิดตา ไม่เพิ่ม หรือแก้แล้วทดสอบใหม่ แล้วลงผลใน `decision-desk/decision-log`
 - ของกลางแก้ที่ `plugins/superuser` เท่านั้น แล้วรัน `node scripts/sync/sync-superuser.mjs` · ห้ามแก้สำเนาใน plugin อื่น
 - commit · push · build `dist/` ทำเมื่อผู้ใช้สั่ง
 

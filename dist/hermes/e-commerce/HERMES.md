@@ -1,10 +1,10 @@
 # SQT e-commerce — Hermes Agent
 
-> สร้างอัตโนมัติจาก plugins/e-commerce/ โดย scripts/build/build-targets.mjs (v1.11.3) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/e-commerce/ โดย scripts/build/build-targets.mjs (v1.12.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Thai online selling, buying and small-business back office — sell on Shopee, Lazada, TikTok Shop, LINE and Facebook (listings, pricing, stock, chat, live, returns), buy with confidence (total cost, warranty, OCPB 1166 complaints, refunds), and run the company (quotations, contracts, VAT and withholding tax, payroll, social security, year-end filing, labour law, PDPA, LINE OA, PromptPay). General information only, not tax or legal advice.
 
-ชุดนี้มี skill 73 ตัว · บทบาท 12 บทบาท · คำสั่งสำเร็จรูป 1 คำสั่ง
+ชุดนี้มี skill 49 ตัว · บทบาท 12 บทบาท · คำสั่งสำเร็จรูป 1 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → ไม่มี subagent แบบไฟล์ · เรียกบทบาทด้วย `/role-ชื่อบทบาท` · คำสั่งสำเร็จรูปเรียกด้วย `/ชื่อคำสั่ง`

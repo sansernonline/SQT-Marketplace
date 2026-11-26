@@ -5,7 +5,7 @@ description: Use when building a native-looking Windows 11 app
 
 # Windows App Design
 
-> **Gate before starting (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run `no-ai-look` before sending · follow the "Gate before starting" (`ด่านก่อนลงมือ`) section of `design-references` (plugin `superuser`) even when a brand already exists (the brand controls color and fonts, while the search is for finding the structure of this piece) · close the job with the line `ด่านก่อนลงมือ:`
+> **Gate before starting (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run `design-gate/no-ai-look` before sending · follow the "Gate before starting" (`ด่านก่อนลงมือ`) section of `design-gate/design-references` (plugin `superuser`) even when a brand already exists (the brand controls color and fonts, while the search is for finding the structure of this piece) · close the job with the line `ด่านก่อนลงมือ:`
 
 > **One rule:** the app you make must look like something that ships with Windows 11, not a web page stuffed into a window.
 >
@@ -178,7 +178,7 @@ Fix the points you agree with (a critique that is wrong because the image was mi
 |---|---|
 | user flow / wireframe before color | agent `ux-designer` |
 | charts in the dashboard | `web-app-design` → `references/tokens.md` section "Data colors (charts)" |
-| spec document of the screen | `polished-document-style` + `branded-document-design` |
+| spec document of the screen | `design-gate/polished-document-style` + `branded-document-design` |
 | choosing the app architecture | `architecture-patterns` |
 | spacing rules, visual order, and the 5 states of a screen | `ui-craft` |
 | architecture diagram | `software-diagrams` |
@@ -187,4 +187,4 @@ Fix the points you agree with (a critique that is wrong because the image was mi
 
 ## Do not look AI-made
 
-Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye gate 3.2 (web pages answer items 10–14 as well), because 0 items from the script is not yet a pass.
+Before sending, go through item 3 of `design-gate/no-ai-look`. For HTML work, run its script. Every job must also pass the eye gate 3.2 (web pages answer items 10–14 as well), because 0 items from the script is not yet a pass.

@@ -24,7 +24,7 @@ Each subtitle gets its text from the script and its timing from the real audio, 
 | Paid Azure AI Speech · Google Cloud TTS | Monetized clips that need clear rights | Terms grant commercial use for the paid tier (รอยืนยัน) · not in the script yet, add when the user has a key |
 | Lunarlist via PyThaiTTS | Do not use | Cannot read Latin letters · some phrases never stop |
 
-For a monetized clip, drop engines marked (รอยืนยัน) or not mentioned, then score cost against setup effort with `superuser:decision-scoring` (`decide.mjs score file.json`; example in references). Look up the live Azure and Google price at https://cloud.google.com/text-to-speech/pricing and the Azure pricing page (WebSearch/WebFetch) before quoting it; if the page will not open, mark the value (รอยืนยัน). Internal work and drafts need none of this.
+For a monetized clip, drop engines marked (รอยืนยัน) or not mentioned, then score cost against setup effort with `superuser:decision-desk` (`decide.mjs score file.json`; example in references). Look up the live Azure and Google price at https://cloud.google.com/text-to-speech/pricing and the Azure pricing page (WebSearch/WebFetch) before quoting it; if the page will not open, mark the value (รอยืนยัน). Internal work and drafts need none of this.
 
 0. **If it is a podcast, write the script this way (no hook or CTA from `speaking-script`).**
    - Go straight into the content: no greeting, no intro of yourself or the show, no "this episode is about". Do not talk to the listener: no questions back, no invitation to follow, no sign-off. Close with a content sentence.
@@ -81,7 +81,7 @@ Look up live: the Azure AI Speech and Google Cloud TTS price per million charact
 
 ## Scoring engines for a monetized clip
 
-Apply the hard rule "clear commercial rights": first drop engines the table marks (รอยืนยัน) or does not mention, then compare cost against setup effort: `node <decision-scoring>/scripts/decide.mjs score file.json` (`<decision-scoring>` is the folder of skill `superuser:decision-scoring`) · example [`tts-engine-score.example.json`](tts-engine-score.example.json) (all numbers are examples, including the Azure cost in the file, which is not a current price · ran fine 2026-10-28: dropped 2, left 2, rank 1 stayed stable when weights moved ±20%) · internal work or drafts do not need this rule · weights of 0.5/0.5 are a starting value, not measured
+Apply the hard rule "clear commercial rights": first drop engines the table marks (รอยืนยัน) or does not mention, then compare cost against setup effort: `node <decision-scoring>/scripts/decide.mjs score file.json` (`<decision-scoring>` is the folder of skill `superuser:decision-desk`) · example [`tts-engine-score.example.json`](tts-engine-score.example.json) (all numbers are examples, including the Azure cost in the file, which is not a current price · ran fine 2026-10-28: dropped 2, left 2, rank 1 stayed stable when weights moved ±20%) · internal work or drafts do not need this rule · weights of 0.5/0.5 are a starting value, not measured
 
 
 ## reference: sources.md

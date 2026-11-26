@@ -14,7 +14,7 @@ An image drawn by Mermaid itself has free-curved, diagonal lines and colours tha
 
 1. Copy the folder `assets/mermaid-engine/` to `docs/figures/src/gen/`
 2. Edit `figures.json`:
-   - `prefix` is the project code (`document-naming`)
+   - `prefix` is the project code (`workspace-rules/document-naming`)
    - `drafts` is the folder of `.md` files that hold Mermaid blocks
    - `skip` is the blocks that already have a hand-drawn figure
    - `captions` replaces captions generated from headings

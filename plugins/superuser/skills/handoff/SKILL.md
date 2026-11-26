@@ -56,7 +56,7 @@ Each step hands the next one a fixed file, so the next step never has to dig thr
 - On pause, `รับงานต่อ` points to the newest card instead of repeating its content.
 
 ## 5 · Resuming work (`รับงานต่อ`) — across sessions · switching model · context nearly full
-The `## รับงานต่อ` section in `CONTEXT.md` follows these rules. The `## ความคืบหน้า` table beside it belongs to `status-report`.
+The `## รับงานต่อ` section in `CONTEXT.md` follows these rules. The `## ความคืบหน้า` table beside it belongs to `superuser/status-report`.
 
 **Before handing over** (end of session · before switching model · context use passes half in a long job · quota runs out, below), update `รับงานต่อ`:
 - **ทำต่อเป็นข้อแรก:** 1 item, doable at once, pointing to a file or `handoff/<id>.md`.

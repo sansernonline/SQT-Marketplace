@@ -317,7 +317,7 @@ NEVER go backwards (except via reversal record)
   - `references/payment-gateway-integration.md` · `references/agent-payment-integration.md` — when integrating Stripe, Adyen, Omise, etc.
   - `references/pci-dss-compliance.md` — when handling card data
   - `references/kyc-aml-patterns.md` — when verifying customer identity
-- `polished-document-style` (from superuser) — for spec docs
+- `design-gate/polished-document-style` (from superuser) — for spec docs
 - `commit-message-format` (from software-development) — for commits
 
 ## Common Patterns
@@ -931,7 +931,7 @@ The fintech engineer should:
    - Discrepancy alerting
    - Manual reconciliation tooling
 
-8. **Produce polished design document** using `polished-document-style` skill:
+8. **Produce polished design document** using `design-gate/polished-document-style` skill:
    - Sequence diagram (`diagram-figures`, house style)
    - State machine diagram (`diagram-figures`, house style)
    - API spec for endpoints
@@ -984,7 +984,7 @@ The compliance officer should:
    - Effort to remediate
    - Dependencies
 
-6. **Produce polished PCI audit report** using `polished-document-style` skill:
+6. **Produce polished PCI audit report** using `design-gate/polished-document-style` skill:
    - Executive summary
    - Scope diagram (`diagram-figures`, house style)
    - Readiness scorecard

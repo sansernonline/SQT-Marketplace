@@ -4,11 +4,11 @@ Use when a logo, poster, banner, cover or deck must blend popular refs
 
 # design-by-type — sort the job by type, read the project, blend 2–3 popular references, let the owner pick
 
-> **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) · close the work with a `ด่านก่อนลงมือ:` line
+> **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `design-gate/no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` (plugin `superuser`) · close the work with a `ด่านก่อนลงมือ:` line
 
 > **One rule:** every direction is a blend of 2–3 real, popular works that fit this project, with a written recipe of what came from each. The owner asked for this flow on 2026-11-19: "แยกก่อนว่าเป็นงานประเภทไหน … หาตัวอย่างที่ดูสวยงาม เช็คดูว่ามียอด view เยอะ มา 2-3 งาน แล้ว รวมให้เป็นงานใหม่ให้กลมกลืนกัน".
 
-This skill adds 3 things on top of `design-references`: the type's own rules, a popularity check on references, and the blend recipe. The search, board and owner pick stay in `design-references`; do not repeat them here.
+This skill adds 3 things on top of `design-gate/design-references`: the type's own rules, a popularity check on references, and the blend recipe. The search, board and owner pick stay in `design-gate/design-references`; do not repeat them here.
 
 ## Use when
 - A logo · poster · banner or social ad · Word/PDF cover · slide deck is about to be designed, from scratch or as a redesign.
@@ -34,15 +34,15 @@ Not for: screens and web pages → `software-development:ui-craft` · icons → 
    ```
    The project beats the owner's general taste: a coffee shop gets a coffee look even though the owner likes tech-modern. Keep the owner's taste in what transfers (depth, light, one strong focal element).
 
-3. **Search references in that style family** per `design-references` steps 1–3, using the type file's site list. Add the type and style words to every query (`logistics company profile deck`, not `deck`).
+3. **Search references in that style family** per `design-gate/design-references` steps 1–3, using the type file's site list. Add the type and style words to every query (`logistics company profile deck`, not `deck`).
 
 4. **Check popularity and fit** on each work page you open, and write it down. See [`references/blend.md`](references/blend.md) section 1 for which number each site shows. Keep 5–8 works that are both popular for their site and close to the project; popularity alone does not qualify a work that misfits the project.
 
 5. **Blend 2–3 works per direction** with the recipe sheet in [`references/blend.md`](references/blend.md) section 2: one work gives the structure, one gives the signature device or hero treatment, one gives the colour and light mood. Change what makes it ours (hue shift, our content, our type). 3 directions must differ in structure, not only colour.
 
-6. **Build at real size, polish, and look at it.** Apply the polish pass in [`references/polish.md`](references/polish.md) (depth, overlap, light, shape) before the first critic. Render each direction to PNG, open it, then run the type file's check list and the stiffness check in `no-ai-look` (plugin `superuser`) `references/stiffness.md`. Fix and render again until it passes. Then have a fresh `design-critic` give the wow score in [`references/wow-score.md`](references/wow-score.md); send only at 7/10 or more with no 0, else fix the lowest criterion and score again (at most 2 rounds).
+6. **Build at real size, polish, and look at it.** Apply the polish pass in [`references/polish.md`](references/polish.md) (depth, overlap, light, shape) before the first critic. Render each direction to PNG, open it, then run the type file's check list and the stiffness check in `design-gate/no-ai-look` (plugin `superuser`) `references/stiffness.md`. Fix and render again until it passes. Then have a fresh `design-critic` give the wow score in [`references/wow-score.md`](references/wow-score.md); send only at 7/10 or more with no 0, else fix the lowest criterion and score again (at most 2 rounds).
 
-7. **Send the 3 directions for the owner to pick** (board page or artifact with the PNGs, the recipe line under each, and the reference links). The owner adjusts from there; record the pick and their words per `design-references` "Remember the owner's taste".
+7. **Send the 3 directions for the owner to pick** (board page or artifact with the PNGs, the recipe line under each, and the reference links). The owner adjusts from there; record the pick and their words per `design-gate/design-references` "Remember the owner's taste".
 
 ## Check before done
 - The type file was opened and its check list passed on every PNG.
@@ -81,7 +81,7 @@ Sizes, safe zones and the render script live in `banner-design` and `social-form
 4. Real product photos, not icons; nearly every Thai coffee ad in Meta Ad Library used a real bag or real beans (2026-11-19).
 5. At most 2 font families, both with full Thai; heading 32 px or more, body 16 px or more on 1200 wide. Source: uipro typography.
 6. Text covers about a fifth of the image; the photo does the rest. Whether Meta still limits ads with more than 20 % text is unconfirmed (see `banner-design`); less text reads faster either way.
-7. Depth from overlap: a label, plate or number crosses the edge of the photo at 1–2 spots. Source: `design-references` `depth-and-light.md`, Dribbble "Coffee Banner KV".
+7. Depth from overlap: a label, plate or number crosses the edge of the photo at 1–2 spots. Source: `design-gate/design-references` `depth-and-light.md`, Dribbble "Coffee Banner KV".
 8. Photo fades into the background with a mask instead of sitting in a hard rectangle.
 9. Colours come from the product (roasted bean, cherry red, leaf green), not from the owner's general tech palette; the project beats the owner's taste.
 10. Keep key items at least 50 px from every edge per `banner-design`; leave more room left and right (blog summaries of Meta specs say up to 120 px, `(ยังไม่ได้ตรวจ)`) when the ad also runs in placements that crop.
@@ -145,7 +145,7 @@ Rules:
 
 ## 3 · Sending to the owner
 
-Put the 3 PNGs side by side with, under each: the recipe line (which refs, what from each), the reference links with their numbers, and 1 line on why it fits the project. Ask the owner to pick or to say what to change; record the answer per `design-references` "Remember the owner's taste".
+Put the 3 PNGs side by side with, under each: the recipe line (which refs, what from each), the reference links with their numbers, and 1 line on why it fits the project. Ask the owner to pick or to say what to change; record the answer per `design-gate/design-references` "Remember the owner's taste".
 
 
 ## reference: document-cover.md
@@ -223,13 +223,13 @@ The owner rejected agent-drawn SVG icons (2026-10-26) and called past logos "AI-
 3. 1–2 colours; depth only from shades of the same hue. Source: uipro `data/logo/styles.csv` rows Minimalist and Negative Space.
 4. Place and trim the font letterforms of rule 5 on a grid or circles, not freehand (PayMe shows its construction circles); the grid places and cuts, it does not draw new paths.
 5. Build from a licensed font's letterforms instead of drawing paths (owner rule).
-6. The mark carries meaning from the product's world (Thai letter, payslip line, coin) that a competitor could not reuse. Source: `no-ai-look` eye gate item 1.
+6. The mark carries meaning from the product's world (Thai letter, payslip line, coin) that a competitor could not reuse. Source: `design-gate/no-ai-look` eye gate item 1.
 7. Step away from the category average: Thai accounting SaaS uses a light-blue circle with thin caps, or a purple-blue gradient.
-8. Shift the brand hue until the eye can tell it from every reference (`design-references` step 6).
+8. Shift the brand hue until the eye can tell it from every reference (`design-gate/design-references` step 6).
 9. The Thai lockup uses a Thai face whose personality matches the mark (a looped-head mark pairs with a looped Thai face).
 10. Large wordmarks can be tracked tighter than text, but check descenders and dots (y, j) for collisions.
-11. Make two versions of the mark: a **rich** one with light, shadow and dimensional shape for the hero use (app icon, sheet, signage), and a **flat** one-colour version for 16–32 px and print. The owner rejected a flat mark as stiff on 2026-11-19 ("ขอปรับให้มีลูกเล่นมากกว่านี้หน่อย แสงเงา รูปร่าง"). Depth follows `design-references` `references/depth-and-light.md`: one light source, at most 3 layers.
-12. Avoid the generic AI marks: letter in a rounded square, gradient blob, swoosh, circuit, infinity (`no-ai-look` section 2, Logos).
+11. Make two versions of the mark: a **rich** one with light, shadow and dimensional shape for the hero use (app icon, sheet, signage), and a **flat** one-colour version for 16–32 px and print. The owner rejected a flat mark as stiff on 2026-11-19 ("ขอปรับให้มีลูกเล่นมากกว่านี้หน่อย แสงเงา รูปร่าง"). Depth follows `design-gate/design-references` `references/depth-and-light.md`: one light source, at most 3 layers.
+12. Avoid the generic AI marks: letter in a rounded square, gradient blob, swoosh, circuit, infinity (`design-gate/no-ai-look` section 2, Logos).
 
 ## Stiff or AI-looking in the first drafts (2026-11-19) and the fix
 
@@ -339,13 +339,13 @@ Story, slide order and layouts live in `software-development:presentation-design
 
 1. The slide title states the point, not the topic ("4 บริการ เรียงตามทางที่ของเดิน", not "บริการของเรา"). Source: `presentation-design`.
 2. One key number per slide is the focal element, with its measuring period and `(รอยืนยัน)` underneath. Source: Behance GHTK deck; uipro `slide-layout-logic.csv` row proof.
-3. Services that are not equal are not drawn equal: one lead card, or the services placed in their real order along a route or timeline, instead of a grid of 4 icon cards. Source: `depth-and-light.md` section 1, `no-ai-look`.
+3. Services that are not equal are not drawn equal: one lead card, or the services placed in their real order along a route or timeline, instead of a grid of 4 icon cards. Source: `depth-and-light.md` section 1, `design-gate/no-ai-look`.
 4. Every slide has at least 2 overlaps (a card across the photo's diagonal cut, a photo bleeding off a card, a route end-dot over a card edge). Source: `depth-and-light.md`.
 5. Light from the top left on every slide; 2-layer shadows tinted toward the background, never pure black.
 6. The back layer has one strong thing: a real photo cut on a diagonal, a dimmed photo on a dark base, or a full-bleed colour block. A slide without one looks flat (test 2026-11-19).
 7. Cover: text left, photo right, with one element crossing the seam. Source: uipro `slide-layout-logic.csv` hook = split-hero.
 8. Thai line height 1.4 or more; break lines where the idea ends, never mid-word (the test broke "ตรวจ/สภาพ" before fixing).
-9. A small italic English word above the Thai heading is fine (the owner's liked deck does it); capsule badges and wide-tracked capitals on the cover are not (`no-ai-look` `eyebrow-badge`).
+9. A small italic English word above the Thai heading is fine (the owner's liked deck does it); capsule badges and wide-tracked capitals on the cover are not (`design-gate/no-ai-look` `eyebrow-badge`).
 10. Credit real photos on the slide and crop out any text or ads inside the photo.
 11. Measure contrast on coloured panels; a mid green with white text measured 3.4:1 and had to go darker to reach about 5:1 (pixel measurement 2026-11-19).
 12. Content slides carry a footer: section name left, page number right. Source: `presentation-design`.
@@ -399,7 +399,7 @@ Ideas were rewritten and checked against real renders; no file copied.
 
 # Wow score · design-by-type
 
-The eye gate in `no-ai-look` (n/9) only says a piece does not look AI-made. On 2026-11-19 the owner accepted four of five types at 7–8/9 but asked for work that is "ว้าว ตั้งแต่แรก ไม่ต้อง design ใหม่". This score measures the step above passing: would the piece make someone stop and want it. Give it before sending, next to the eye gate.
+The eye gate in `design-gate/no-ai-look` (n/9) only says a piece does not look AI-made. On 2026-11-19 the owner accepted four of five types at 7–8/9 but asked for work that is "ว้าว ตั้งแต่แรก ไม่ต้อง design ใหม่". This score measures the step above passing: would the piece make someone stop and want it. Give it before sending, next to the eye gate.
 
 ## Five criteria, 0–2 each (total 10)
 
@@ -408,7 +408,7 @@ The eye gate in `no-ai-look` (n/9) only says a piece does not look AI-made. On 2
 | 1 | **Stops the eye** at thumbnail size (about 300 px wide, 1 second) | nothing stands out, or everything shouts | one element stands out but is ordinary | one striking element you remember after looking away | Awwwards "Design" 40 % |
 | 2 | **An idea from this job** | could be any company's | the idea fits but competitors use it too | a twist only this business has (the payslip that is the mark, the route that ends at the key number) | D&AD: original idea, relevant to its context |
 | 3 | **A flourish with meaning** (1–2 playful moves: an overlap, a cut-out, a shape that bends, a hidden second reading) | none, everything sits in its box | present but decorative | it carries the idea and makes you smile | Awwwards "Creativity" 20 %; owner wants `ลูกเล่น` |
-| 4 | **Depth and light** | flat, no light direction | some shadow or gradient, mixed or timid | 3 layers, one light source, materials you can almost touch, inside `design-references` `references/depth-and-light.md` limits | owner's theme `มีมิติ` · `แสงเงา` |
+| 4 | **Depth and light** | flat, no light direction | some shadow or gradient, mixed or timid | 3 layers, one light source, materials you can almost touch, inside `design-gate/design-references` `references/depth-and-light.md` limits | owner's theme `มีมิติ` · `แสงเงา` |
 | 5 | **Craft** at 100–200 % zoom | broken Thai marks, soft images, clipped or colliding text | clean but some loose edges, spacing or kerning | every edge, kern, Thai mark and image crisp | D&AD: "brilliantly executed" |
 
 A deliberately flat style (Swiss, flat brand) scores criterion 4 on how well the flatness is controlled, and says so.

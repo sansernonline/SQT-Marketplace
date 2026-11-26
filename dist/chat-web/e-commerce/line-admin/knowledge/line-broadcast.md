@@ -33,7 +33,7 @@ Quota left: OA Manager → Insight, or the API `GET /v2/bot/message/quota` and `
 | Narrowcast with `recipient` / `filter.demographic` | Messaging API | same 50-recipient minimum |
 | Multicast to a known `userId` list | Messaging API | up to 500 IDs per call; own CRM segment (e.g. bought in the last 90 days) |
 
-Quota cannot cover every segment → pick the set by value (people x click rate x baht per click) against message cost with `decision-scoring` command `knapsack`; rules and a worked example in [references/segment-knapsack.md](references/segment-knapsack.md).
+Quota cannot cover every segment → pick the set by value (people x click rate x baht per click) against message cost with `decision-desk/decision-scoring` command `knapsack`; rules and a worked example in [references/segment-knapsack.md](references/segment-knapsack.md).
 
 ## 3. Frequency and timing
 
@@ -105,7 +105,7 @@ Checklist: one action · period stated · link tested · test send done · quota
 
 Moved from `SKILL.md` section 2. Open when the quota cannot cover every segment.
 
-Use `decision-scoring` command `knapsack` (`node decide.mjs knapsack <file.json>`).
+Use `decision-desk/decision-scoring` command `knapsack` (`node decide.mjs knapsack <file.json>`).
 
 | Part | Rule |
 |---|---|

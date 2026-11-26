@@ -15,7 +15,7 @@ Sample image: [`../assets/mockup-start-page-preview.webp`](../assets/mockup-star
 | Cards | 1 card per screen, divided into categories by topic, using the same categories as the test-case tabs. A card has a thumbnail of the real screen, the screen number, the name, a 1-line description, and the FR number. |
 | Thumbnails | Taken from the mockup itself, in both dark and light themes, and show the image matching the open theme. Hide the mockup's control bar before taking them. Embed the images in the file as webp so the mockup stays a single file (32 screens × 2 themes ≈ 170 KB). |
 | Reference tables | The screen → FR table and the "FR with no screen" table are still required. Put them under the cards or fold them away. |
-| Look | A single plain background, no glow, no gradient, no small label above headings, no blinking cursor, no glowing shadow or zoom image on hover (`no-ai-look`) · hovering a card changes only the border color · colors come from the project's tokens; with no tokens, use the house default `#2A78D6` · this rule applies to the mockup start page; a landing page that chose the soft SaaS look follows that look. |
+| Look | A single plain background, no glow, no gradient, no small label above headings, no blinking cursor, no glowing shadow or zoom image on hover (`design-gate/no-ai-look`) · hovering a card changes only the border color · colors come from the project's tokens; with no tokens, use the house default `#2A78D6` · this rule applies to the mockup start page; a landing page that chose the soft SaaS look follows that look. |
 
 ## Build with the script
 

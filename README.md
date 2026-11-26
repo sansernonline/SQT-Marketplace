@@ -27,7 +27,7 @@ scripts\build-dist.cmd                                                       # �
 
 | Plugin | Agents | Skills | Commands | สำหรับ |
 |--------|:-----:|:------:|:--------:|--------|
-| **`superuser`** | 4 | 41 | 0 | หัวหน้างานกลาง — จัดขนาด ใบสั่งงาน 5 ข้อ แจกลูกทีม ตรวจซ้ำจนผ่าน วัด token · ใช้เดี่ยวได้ หรือเป็นแกนให้ plugin อื่น ([ADAPT.md](plugins/superuser/ADAPT.md)) |
+| **`superuser`** | 4 | 16 | 0 | หัวหน้างานกลาง — จัดขนาด ใบสั่งงาน 5 ข้อ แจกลูกทีม ตรวจซ้ำจนผ่าน วัด token · ใช้เดี่ยวได้ หรือเป็นแกนให้ plugin อื่น ([ADAPT.md](plugins/superuser/ADAPT.md)) |
 | **`software-development`** | 38 | 100 | 12 | บริษัทซอฟต์แวร์ครบทุกสาขา |
 | **`trading-finance`** | 5 | 25 | 1 | เทรดหุ้น การเงินส่วนตัว ภาษีและลดหย่อน เกษียณ หนี้ ประกัน |
 | **`personal-life`** | 9 | 44 | 1 | ชีวิตประจำวันตัวเดียวครบ 5 หมวด — จัดการชีวิต (ประชุม เอกสาร ค่าสมาชิก ความปลอดภัยบัญชี) · บ้านและครอบครัว (บิล รถ ลูก ผู้สูงอายุ สัตว์เลี้ยง) · สุขภาพ (จัดระเบียบ ไม่วินิจฉัย) · อาชีพ (เรซูเม่ สัมภาษณ์ เงินเดือน) · เรียนรู้ (เรียนเทคโนโลยี paper ใบรับรอง side project วิทยานิพนธ์ — รวม `dev-learning` เดิม) |
@@ -59,7 +59,7 @@ scripts\build-dist.cmd                                                       # �
 /plugin install software-development@sqt-marketplace
 ```
 
-ทุก plugin ใช้ของกลางจาก `superuser` (แกนหัวหน้าทีม · skill `human-writing` · `simplify` · เอกสารหลัก `polished-document-style` · `document-naming` · agent `reviewer` · hook) · ติดตั้ง plugin ไหน Claude Code ติดตั้ง `superuser` ให้เองจาก `dependencies` · skill เอกสารออกแบบ สไลด์ รูปอยู่ใน `software-development` · ภาพ AI ใน `graphic-design` · ประชุม ใน `personal-life` · zip สำหรับ claude.ai มีของกลางอยู่ในตัวแล้ว
+ทุก plugin ใช้ของกลางจาก `superuser` (แกนหัวหน้าทีม · skill `human-writing` · `ground-rules/simplify` · เอกสารหลัก `design-gate/polished-document-style` · `workspace-rules/document-naming` · agent `reviewer` · hook) · ติดตั้ง plugin ไหน Claude Code ติดตั้ง `superuser` ให้เองจาก `dependencies` · skill เอกสารออกแบบ สไลด์ รูปอยู่ใน `software-development` · ภาพ AI ใน `graphic-design` · ประชุม ใน `personal-life` · zip สำหรับ claude.ai มีของกลางอยู่ในตัวแล้ว
 
 เคยติดตั้ง plugin สาขาของรุ่นก่อน v2.0.0 → ถอดออก (`/plugin uninstall software-development-<สาขา>`) เพราะรวมอยู่ในตัวหลักแล้ว
 

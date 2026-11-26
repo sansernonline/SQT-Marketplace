@@ -1,6 +1,6 @@
 # Thai text processing tools — only what was checked against official docs (2026-10-23)
 
-Use together with `i18n-and-locale` (store a neutral value, convert at display time) and `translate-th-en` (plugin `superuser`) · every item is `จากแหล่ง` (from a source) except those with a label
+Use together with `i18n-and-locale` (store a neutral value, convert at display time) and `human-writing/translate-th-en` (plugin `superuser`) · every item is `จากแหล่ง` (from a source) except those with a label
 
 ## Word segmentation, transliteration, dates, numbers — PyThaiNLP (Python · Apache-2.0)
 

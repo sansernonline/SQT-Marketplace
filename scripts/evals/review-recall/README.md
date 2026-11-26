@@ -93,7 +93,7 @@ node scripts/evals/review-recall/run-review-recall.mjs --run --runs 2 --label re
 
 ## เพิ่มเคส
 
-เคสที่ดีที่สุดมาจากของจริง: งานที่ reviewer ให้ผ่านแล้วผู้ใช้ยังเจอข้อผิด ตัดข้อมูลลูกค้าออก แล้วทำเป็นเคสใหม่ ตามขั้น "พิสูจน์ว่ามันจับได้จริง" ของ [`repeated-mistakes-to-checks`](../../../plugins/superuser/skills/repeated-mistakes-to-checks/SKILL.md) · เคสนั้นควรพลาดบน reviewer รุ่นที่ปล่อยข้อผิดออกไป และเจอบนรุ่นที่แก้แล้ว
+เคสที่ดีที่สุดมาจากของจริง: งานที่ reviewer ให้ผ่านแล้วผู้ใช้ยังเจอข้อผิด ตัดข้อมูลลูกค้าออก แล้วทำเป็นเคสใหม่ ตามขั้น "พิสูจน์ว่ามันจับได้จริง" ของ [`learn-loop/repeated-mistakes-to-checks`](../../../plugins/superuser/skills/learn-loop/parts/repeated-mistakes-to-checks/guide.md) · เคสนั้นควรพลาดบน reviewer รุ่นที่ปล่อยข้อผิดออกไป และเจอบนรุ่นที่แก้แล้ว
 
 1. สร้าง `cases/r<เลข>-<ชื่อ>/` วางไฟล์งานให้เหมือนงานจริง รวมทุกไฟล์ไม่เกิน 60 บรรทัด และบรรทัดที่ฝังต้องไม่มีปัญหาอื่น (ไม่งั้นแถวที่ชี้ปัญหาอื่นจะนับว่าเจอ)
 2. เขียน `case.json` ตามแบบในเคสที่มีอยู่ ช่องที่ต้องมี: `id` (ตรงชื่อโฟลเดอร์) · `kind` · `request` · `done_when` · `planted`

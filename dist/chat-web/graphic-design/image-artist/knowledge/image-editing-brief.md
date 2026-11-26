@@ -1,0 +1,129 @@
+# skill: image-editing-brief
+
+Use when an image needs edits like a background swap
+
+# Image Editing Brief
+
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references for the result you want → run the `design-gate/no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` (plugin `superuser`) · editing an existing image needs only 1 direction · close the work with a `ด่านก่อนลงมือ:` line
+
+Change only what the brief names. AI edits drift: ask for a new cup and the lighting, the face and the palette change too. The keep list is the anchor.
+
+## Workflow
+
+1. **Name the problem precisely** — "make it better" is not an edit. Ask what is wrong and where
+2. **Choose the edit type** from the table below — it decides the tool feature and the instruction style
+3. **Write the brief** with [edit-brief-template.md](references/edit-brief-template.md): keep list, change list, mask area
+4. **Save the original** as `<name>-v01` before any edit. Each edit is a new version. Never overwrite
+5. **Make 1 change per round** when the tool allows. Several changes at once make the drift worse
+6. **Check the keep list first**, then the change. A perfect change that broke the lighting is a fail
+7. **Stop at round 3** on the same change — re-brief, composite by hand, or regenerate from `brief-to-image`
+
+## Edit types
+
+| Edit | Tool feature (general names) | Instruction that works | Watch for |
+|---|---|---|---|
+| Remove object | Generative fill / erase / inpaint with mask | Mask the object plus a small margin; describe what should be there instead ("plain oak counter") | Repeated textures, ghost shadows left behind |
+| Add object | Inpaint with mask | Mask only where it goes; state size, angle and light direction matching the scene | Wrong light direction, wrong scale, floating object |
+| Replace background | Background removal + new background or inpaint | Describe the new background's light to match the subject | Halo around hair and glass; mismatched shadows |
+| Extend canvas | Outpaint / generative expand | Say which side and by how much (e.g. "extend top by 42% for a 4:5 → 9:16 canvas") | Repeated patterns, new objects appearing |
+| Colour change | Selective colour, recolour, or inpaint | Give the target hex; restrict to the object | Colour bleeding into skin or background |
+| Retouch / clean | Healing, spot removal | List each blemish or item | Over-smoothing; plastic skin |
+| Fix AI artefacts | Inpaint per area | 1 area per round (hand, then text, then edge) | New artefacts in the redone area |
+| Upscale | Upscaler, super resolution | Target pixel size, not "high quality" | Invented textures, sharpened noise, altered faces |
+
+## Keep list — what usually must survive
+
+- Identity of people and products (face, label, logo shape)
+- Light direction and colour temperature
+- Palette and dominant colour
+- Composition anchor (where the subject sits, where text will go)
+- Brand elements (packaging, colours from the kit)
+
+## Worked example
+
+A story background run through 3 rounds (remove straw · remove stray cup · extend canvas 4:5 to 9:16): [`references/worked-example.md`](references/worked-example.md)
+
+## Rules
+
+- 1 edit brief version per round. Never rewrite the whole brief mid-edit
+- The original file is the reference for every future edit
+- Do not edit product labels, prices or certification marks with AI — retouch by hand or reshoot. A changed label is a false claim
+- People: no edits that change a real person's identity, body or what they appear to say without their consent
+- If the edit is larger than the keep list, it is a new image — go back to `brief-to-image`
+
+## Not an AI look
+
+Before handing over, run the check in `design-gate/no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files. Fix AI tells (plastic skin, teal-orange grade, warped text) as part of the edit.
+
+## Related
+
+- `brief-to-image` — when regeneration is cheaper than editing
+- `style-consistency` — keep the edited image on the set's style
+- `design-review` — point 8 checks for artefacts after editing
+
+
+## reference: edit-brief-template.md
+
+# Edit brief template
+
+Save as `briefs/<asset-name>-edit.md`, next to the original brief.
+
+```markdown
+# Edit brief — <file name> (from v<NN>)
+
+Original: <path to v01> · Target use: <placement + canvas>
+Tool and version: <...>
+
+## Problem in one line
+<what is wrong, where>
+
+## Keep (must not change)
+- [ ] Subject identity: <product label / face / shape>
+- [ ] Light: <direction, warm/cool>
+- [ ] Palette: <dominant hex>
+- [ ] Composition anchor: <subject position, text space>
+- [ ] Brand elements: <...>
+
+## Change list (one per round)
+| # | Edit type | Area (mask) | Instruction | Done |
+|---|---|---|---|---|
+| 1 | | | | ☐ |
+| 2 | | | | ☐ |
+
+## Round log
+| Round | Change # | Result | Keep list broken? | Next |
+|---|---|---|---|---|
+| 1 | | | | |
+
+## Output
+File: <name>-v<NN> · Verified by: <name> · Date: <yyyy-mm-dd>
+```
+
+## Canvas-extension maths
+
+To go from one ratio to another with the same width W:
+
+- New height = W ÷ (target width/height ratio)
+- 4:5 → 9:16 at W = 1080: 1350 → 1920 px, add 570 px (42% of 1350)
+- 1:1 → 4:5 at W = 1080: 1080 → 1350 px, add 270 px (25%)
+- 16:9 → 1:1 at H = 1080: crop width 1920 → 1080, or extend height to 1920
+
+Decide where the new pixels go (top for text space, bottom only if it stays outside the story UI zone).
+
+
+## reference: worked-example.md
+
+# Worked example · image-editing-brief
+
+## Worked example
+
+**Image:** story background, iced matcha on a counter; text area top-right.
+**Problem:** a straw appears (brand rule: no straws in photos), a stray cup on the right, and the image is 4:5 but the story needs 9:16.
+
+| Round | Change | Mask / setting | Result |
+|---|---|---|---|
+| 1 | Remove straw — "glass rim with no straw, same condensation" | Mask straw + 10 px | Pass; keep list intact |
+| 2 | Remove right cup — "continue the oak counter and blurred shop interior" | Mask cup and its shadow | Pass after 1 retry (first try left a shadow) |
+| 3 | Extend top by 42% for 9:16 — "continue the cream wall, no objects" | Outpaint top only | Pass; top area is clean text space |
+
+Verification: face of glass, layer colours, light from right, palette — all unchanged. Saved as `matcha26-bg-v04.png`.

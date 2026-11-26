@@ -261,7 +261,7 @@ app.post('/webhook/docusign', verifyDocusignSignature, async (req) => {
 ## Skills You Use
 
 - `legal-document-systems` — legal requirements
-- `polished-document-style` (from superuser)
+- `design-gate/polished-document-style` (from superuser)
 
 ## Things You Don't Do
 

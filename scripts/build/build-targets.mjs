@@ -118,7 +118,7 @@ const loaded = listDir(join(ROOT, "plugins")).map((plugin) => {
 
 // ของกลางที่ plugin อื่นใช้ร่วม · ชุดสำหรับปลายทางอื่นต้องใช้เดี่ยวได้ จึงใส่ให้ทุก plugin ที่ประกาศ dependencies
 // รายการต้องตรงกับ SHARED_ONLY_IN_SUPERUSER ใน scripts/sync/sync-superuser.mjs
-const SHARED_SKILLS = ["adversarial-review-panel", "agent-patterns", "answer-shape", "chat-prompt-workflows", "commit-log", "context-budget", "decision-log", "decision-scoring", "design-references", "document-naming", "flag-and-propose", "handoff", "human-writing", "model-scorecard", "no-ai-look", "owner-style-capture", "parallel-attempts-pick-best", "parallel-split-and-merge", "polished-document-style", "polite-message-th-en", "principle-build-a-tool-not-handwork", "principle-fix-root-cause", "principle-proceed-on-reversible-work", "principle-prove-it-works", "principle-small-verifiable-steps", "principle-user-experience-first", "prior-art-review", "repeated-mistakes-to-checks", "research-vote-decision", "research-with-sources", "session-lessons-to-skills", "simplify", "skill-authoring", "spell-out-abbreviations", "status-report", "targeted-fix", "temp-file-discipline", "translate-th-en"];
+const SHARED_SKILLS = ["chat-prompt-workflows", "context-budget", "crew-patterns", "decision-desk", "design-gate", "fix-at-source", "ground-rules", "handoff", "human-writing", "lean-reply", "learn-loop", "research-with-sources", "skill-authoring", "workspace-rules"];
 const SHARED_AGENTS = ["brainstormer", "reviewer", "learning-reviewer", "worker"];
 const core = loaded.find((p) => p.plugin === "superuser");
 // SKILL.md ของ superuser สาขามีเฉพาะส่วนสาขา (Claude Code เปิดแกนจาก plugin superuser เอง) · ปลายทางอื่นไม่มี dependencies จึงรวมแกน + สาขาเป็นไฟล์เดียว
@@ -428,8 +428,8 @@ function writeZip(out, files) {
 // โฟลเดอร์หลักในไฟล์ zip ต้องเป็น <plugin>/ ไม่ใช่ plugins/<plugin>/
 function buildClaudeWeb(p) {
   // zip ใช้เดี่ยวได้: ใส่ของกลางจาก superuser และตัด dependencies ออกจาก plugin.json (claude.ai ไม่ได้ติดตั้ง superuser ให้)
-  // agent ที่โหลด skill กลางด้วยชื่อเต็ม (superuser:simplify) → ใน zip ของกลางเป็นของ plugin นี้เอง จึงเปลี่ยนชื่อนำหน้า
-  // ตัวบอก skill และกฎประจำตัวใน hooks/ ก็อ้าง superuser:simplify เช่นกัน
+  // agent ที่โหลด skill กลางด้วยชื่อเต็ม (superuser:ground-rules) → ใน zip ของกลางเป็นของ plugin นี้เอง จึงเปลี่ยนชื่อนำหน้า
+  // ตัวบอก skill และกฎประจำตัวใน hooks/ ก็อ้าง superuser:ground-rules เช่นกัน
   const local = (f) => /\/agents\/[^/]+\.md$|\/hooks\/(skill-router\.json|core-rules\.md)$/.test(f.name) && p.shared.length
     ? { ...f, data: Buffer.from(readFileSync(f.path, "utf8").replace(/^(\s+- )superuser:/gm, `$1${p.plugin}:`).replace(/(["`])superuser:/g, `$1${p.plugin}:`)) } : f;
   // SKILL.md ของ superuser สาขา → แกน + สาขาในไฟล์เดียว (frontmatter ของสาขาคงเดิม)

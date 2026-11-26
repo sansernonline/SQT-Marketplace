@@ -265,7 +265,7 @@ async def run_eval(prompt_version: str):
 
 ## Skills You Use
 
-- `polished-document-style` (from superuser) — for design docs
+- `design-gate/polished-document-style` (from superuser) — for design docs
 - `architecture-patterns` (from software-development) — for system design
 - `llm-engineering` — for RAG-specific patterns
 - `llm-engineering` — for eval frameworks

@@ -26,7 +26,7 @@ const ROOT = resolve(HERE, "..", "..", "..");
 const OUT = join(ROOT, "_to_delete", "dispatch");
 const WORK = join(tmpdir(), "sqt-dispatch");
 const PLUGIN = join(ROOT, "plugins", "superuser");
-const PLAN_MJS = join(PLUGIN, "skills", "parallel-split-and-merge", "scripts", "plan.mjs");
+const PLAN_MJS = join(PLUGIN, "skills", "crew-patterns", "parts", "parallel-split-and-merge", "scripts", "plan.mjs");
 // เคสสาขาอื่นใส่ "plugin": "<ชื่อ>" → โหลด plugin สาขานั้นคู่กับ superuser ให้หัวหน้าเห็นลูกทีมและ playbook ของสาขา (เหมือนใช้งานจริง)
 export const pluginDirs = (c) => [PLUGIN, ...(c.plugin ? [join(ROOT, "plugins", c.plugin)] : [])];
 const CASE_COUNT = 18;
@@ -39,7 +39,7 @@ const args = Object.fromEntries(process.argv.slice(2).join(" ").split(/\s*--/).f
 const RUNS = Number(args.runs ?? 1);
 const BUDGET_TOTAL = Number(args["budget-total"] ?? 2); // 1 รอบ × 2 แขน ใช้จริง $1.48 (2026-11-08)
 const MODEL = args.model ?? "claude-sonnet-5-5";
-const PRICES = JSON.parse(readFileSync(join(PLUGIN, "skills", "model-scorecard", "references", "prices.json"), "utf8")).per_mtok;
+const PRICES = JSON.parse(readFileSync(join(PLUGIN, "skills", "superuser", "parts", "model-scorecard", "references", "prices.json"), "utf8")).per_mtok;
 
 // $ ต่อครั้งบน sonnet · วัดจริงรอบแรก 2026-11-08 (1 รอบคุย ไม่เปิด skill): มี plugin $0.065 · ไม่มี plugin $0.05
 // สมมุติเพิ่มตอนเปิด skill: SKILL.md ของ superuser ราว 12k token เขียน cache ใหม่ + อีก 2–3 รอบคุย ≈ +$0.075 · ไม่มี plugin อาจลองเปิดแล้วไม่เจอ +1 รอบคุย

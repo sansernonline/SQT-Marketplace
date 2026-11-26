@@ -32,7 +32,7 @@ An SRS with no figures makes each reader imagine a different picture.
 | Every figure in the SRS itself (overview · flowchart · sequence · ER · state), whether delivered as markdown, .docx or PDF | `diagram-figures` (sharp image files, placement under your own control, source files kept in the repo so git can track them) |
 | Quick figures in a README · PR · code note, outside the SRS | `software-diagrams` (Mermaid) |
 
-Every figure in one document uses the same colour theme. Declare the theme at the top per `polished-document-style` section "ธีมของเอกสาร" (Document theme); every tool reads values from that one place.
+Every figure in one document uses the same colour theme. Declare the theme at the top per `design-gate/polished-document-style` section "ธีมของเอกสาร" (Document theme); every tool reads values from that one place.
 
 Minimum figures:
 
@@ -47,7 +47,7 @@ Minimum figures:
 ## Bilingual documents
 
 - Choose 1 main language and put the other in brackets or a 2nd column; never switch back and forth.
-- First time a technical term appears, write Thai (full English name: abbreviation), for example ปัญญาประดิษฐ์ (Artificial Intelligence: AI), per the rule "เอกสารภาษาไทย" in `spell-out-abbreviations`. Afterwards use the Thai or the abbreviation, one way through the document.
+- First time a technical term appears, write Thai (full English name: abbreviation), for example ปัญญาประดิษฐ์ (Artificial Intelligence: AI), per the rule "เอกสารภาษาไทย" in `human-writing/spell-out-abbreviations`. Afterwards use the Thai or the abbreviation, one way through the document.
 - Thai text: `human-writing` `references/thai-grammar.md` section 4, the business register.
 - Field names, API names, and status names in the database are always English even if the document is Thai; otherwise people translate them differently when writing code.
 - Complete the glossary in section 1.3: Thai term · English term · meaning · name in the system.
@@ -64,4 +64,4 @@ Minimum figures:
 
 ## Other skills to use together
 
-`polished-document-style` (markdown while drafting) · `fsd-writing` (detail a developer can start from) · `user-story-writer` (break into stories) · `test-case-template` (turn requirements into test cases) · `superuser:simplify` (cut unneeded content) · `presentation-design` (present to executives).
+`design-gate/polished-document-style` (markdown while drafting) · `fsd-writing` (detail a developer can start from) · `user-story-writer` (break into stories) · `test-case-template` (turn requirements into test cases) · `superuser:ground-rules` (cut unneeded content) · `presentation-design` (present to executives).

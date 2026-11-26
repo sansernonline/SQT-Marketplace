@@ -62,7 +62,7 @@ agent `solution-architect` (อ่านอย่างเดียว) + `devel
 
 ## 2. เพิ่มหรือเปลี่ยนฟีเจอร์ในแอปเดิม
 
-agent `system-analyst` + `developer` + `qa-tester` · skill `blast-radius` · `targeted-fix` · `testing-standards` · `stack-*` ตามภาษา · `principle-secure-by-default`
+agent `system-analyst` + `developer` + `qa-tester` · skill `blast-radius` · `fix-at-source/targeted-fix` · `testing-standards` · `stack-*` ตามภาษา · `principle-secure-by-default`
 **ต้องมีก่อน:** `docs/ONBOARDING-NOTES.md` (ฉบับ 1) · คำขอที่อนุมัติแล้วใน `docs/change/CR-*.md` (`prompt-change.md` ฉบับ 1) หรือคำอธิบายในช่องข้างล่าง
 **ผลลัพธ์:** โค้ด + test · เอกสารที่ถูกแตะแก้ครบในรอบเดียว (SRS · FSD · `docs/as-is/` · คู่มือ ที่มีอยู่)
 
@@ -92,7 +92,7 @@ agent `system-analyst` + `developer` + `qa-tester` · skill `blast-radius` · `t
 
 ## 3. ปรับโครงหรืออัปเกรดเวอร์ชัน
 
-agent `solution-architect` + `developer` · skill `blast-radius` · `principle-small-verifiable-steps` · `principle-replace-then-delete` · `stack-*` ตามภาษา · `adr-writer`
+agent `solution-architect` + `developer` · skill `blast-radius` · `ground-rules/principle-small-verifiable-steps` · `principle-replace-then-delete` · `stack-*` ตามภาษา · `adr-writer`
 **ใช้เมื่อ:** ปรับโครงโดยพฤติกรรมเท่าเดิม · เปลี่ยนหรืออัปเกรดไลบรารีทีละตัว · อัปเกรดรุ่นย่อย · framework หรือ runtime ข้ามรุ่นใหญ่ใช้ฉบับ 5 · อัปเดต dependency ตามผลสแกนช่องโหว่ใช้ `prompt-operations.md` ฉบับ 7
 **ต้องมีก่อน:** `docs/ONBOARDING-NOTES.md` (ฉบับ 1) · test เดิมรันได้ (ไม่มี test → เขียน test จับพฤติกรรมของ flow หลักก่อน ตาม `prompt-test-automation.md` ฉบับ 3 · skill `testing-standards` · `e2e-testing-patterns`)
 **ผลลัพธ์:** `docs/upgrade-<เรื่อง>.md` (แผน + ผล) · ADR 1 ฉบับที่ `docs/decisions/ADR-NNNN-<เรื่อง>.md` · โค้ด
@@ -150,7 +150,7 @@ agent `developer` + `devops-engineer` · skill `observability-basics` · `stack-
 
 ## 5. อัปเกรด framework หรือ runtime ข้ามรุ่นใหญ่
 
-agent `solution-architect` + `developer` + `qa-tester` (หลักฐาน regression) · skill `legacy-spec-recovery` (`references/framework-upgrade.md`) · `principle-replace-then-delete` · `principle-small-verifiable-steps` · `worktree-and-branch` · `blast-radius` · `stack-*` ตามภาษา · `adr-writer` · `status-report`
+agent `solution-architect` + `developer` + `qa-tester` (หลักฐาน regression) · skill `legacy-spec-recovery` (`references/framework-upgrade.md`) · `principle-replace-then-delete` · `ground-rules/principle-small-verifiable-steps` · `worktree-and-branch` · `blast-radius` · `stack-*` ตามภาษา · `adr-writer` · `superuser/status-report`
 **ใช้เมื่อ:** .NET Framework → .NET 8 หรือ LTS ล่าสุด · Angular ข้าม major · Python 2 → 3 แล้วต่อ Django LTS · Node ข้ามสาย LTS · framework เดิมหมดอายุการสนับสนุน
 **ต้องมีก่อน:** `docs/ONBOARDING-NOTES.md` (ฉบับ 1) · `docs/as-is/` อย่างน้อยระดับภาพรวมระบบ (`prompt-existing-code.md` ฉบับ 1) · characterization test ของโมดูลที่แตะ คือ test ที่บันทึกว่าระบบทำอะไรอยู่ตอนนี้ (ไม่มี → เขียนตาม `prompt-test-automation.md` ฉบับ 3 ก่อน) · ขาด 2 อย่างหลัง การอัปเกรดคือการเดาว่าอะไรพัง
 **ผลลัพธ์:** `docs/upgrade-<เรื่อง>.md` (inventory · ตารางความเข้ากันได้ · รายการ error จาก spike · ขั้นตอน · หลักฐาน regression) · ADR ที่ `docs/decisions/ADR-NNNN-<เรื่อง>.md` · โค้ด
@@ -169,7 +169,7 @@ agent `solution-architect` + `developer` + `qa-tester` (หลักฐาน re
 2. **ตารางความเข้ากันได้** แถวละ dependency: รุ่นเดิม · รุ่นที่รองรับเป้าหมาย · มีไหม · ตัวแทนถ้าไม่มี · ป้าย `code` · `doc` · `ask` ตาม `legacy-spec-recovery` · dependency ที่ไม่มีทางไปคือความเสี่ยงที่ต้องบอกเจ้าของระบบก่อนเริ่มขั้น 4
 3. **Spike บน worktree** ตาม `worktree-and-branch`: build บนรุ่นเป้าหมายให้จบ 1 รอบโดยยังไม่แก้ logic · จด error ทุกตัวเป็นรายการ ไม่ไล่แก้ทีละตัวในรอบนี้ · ประเมินจำนวนวันจากรายการนั้น ไม่ใช่จากความรู้สึก
 4. **ย้ายให้ครบแล้วลบของเก่า** ตาม `principle-replace-then-delete`: ไม่มี wrapper ชื่อเก่า ไม่มี flag สลับรุ่น · ย้ายทีละ project หรือ package เป็นขั้นที่ build ผ่าน · คนนอกเรียก API เดิมอยู่ → deprecate ตาม `api-conventions`
-5. **หลักฐาน regression:** characterization test ผ่านทั้งก่อนและหลัง · golden file ของรายงานและ stored procedure เทียบแล้วเท่ากัน · รันบนข้อมูลสำเนา ไม่ใช่ production · รายงานด้วย `status-report` พร้อมสิ่งที่ยังไม่ได้ทดสอบ
+5. **หลักฐาน regression:** characterization test ผ่านทั้งก่อนและหลัง · golden file ของรายงานและ stored procedure เทียบแล้วเท่ากัน · รันบนข้อมูลสำเนา ไม่ใช่ production · รายงานด้วย `superuser/status-report` พร้อมสิ่งที่ยังไม่ได้ทดสอบ
 
 ### กฎเฉพาะฉบับนี้
 
@@ -181,7 +181,7 @@ agent `solution-architect` + `developer` + `qa-tester` (หลักฐาน re
 
 ## 6. ทำหลายงานขนานด้วย worktree และปิด branch
 
-agent `developer` ตัวใหม่ 1 ตัวต่องาน · `reviewer` ตัวใหม่ตรวจแต่ละ branch · skill `worktree-and-branch` · `parallel-split-and-merge` · `principle-small-verifiable-steps` · `principle-prove-it-works` · `commit-message-format` · `pr-description-template` · `config-and-secrets`
+agent `developer` ตัวใหม่ 1 ตัวต่องาน · `reviewer` ตัวใหม่ตรวจแต่ละ branch · skill `worktree-and-branch` · `crew-patterns/parallel-split-and-merge` · `ground-rules/principle-small-verifiable-steps` · `ground-rules/principle-prove-it-works` · `commit-message-format` · `pr-description-template` · `config-and-secrets`
 **ใช้เมื่อ:** สั่งฉบับที่แก้โค้ดตั้งแต่ 2 งานพร้อมกัน (เช่น ฉบับ 2 หลายฟีเจอร์ · ฉบับ 2 คู่กับฉบับ 4) · spike ที่อาจทำ checkout หลักพัง · branch ที่ทำเสร็จค้างอยู่หลายตัว · งานเดียวที่ agent ตัวเดียวทำ ใช้ branch ธรรมดาพอ
 **ต้องมีก่อน:** repo มี commit แล้ว · คำสั่งรัน test จาก `docs/ONBOARDING-NOTES.md` (ฉบับ 1)
 **ผลลัพธ์:** worktree 1 ตัวต่องาน วางเป็นโฟลเดอร์พี่น้องของ repo (`../<repo>-<งาน>`) หรือ `.claude/worktrees/<ชื่อ>/` ที่ ignore แล้ว · repo อยู่ใต้รากโปรเจกต์ (`<project>/<repo>/`) ให้ใช้แบบหลัง จะได้ไม่มีโฟลเดอร์ใหม่โผล่ที่รากโปรเจกต์ · ตาราง worktree และทางปิด branch ใน `docs/BUILD-PLAN.md` · **รออนุมัติ:** merge ลง branch หลัก · push · เปิด PR · ทิ้ง branch
@@ -196,7 +196,7 @@ agent `developer` ตัวใหม่ 1 ตัวต่องาน · `review
 
 ### ลำดับ
 
-1. แบ่งงานเป็นชิ้นที่ไม่แก้ไฟล์เดียวกันตาม `parallel-split-and-merge` · ชิ้นที่ต้องแตะไฟล์ร่วมกันทำต่อกัน ไม่ทำขนาน
+1. แบ่งงานเป็นชิ้นที่ไม่แก้ไฟล์เดียวกันตาม `crew-patterns/parallel-split-and-merge` · ชิ้นที่ต้องแตะไฟล์ร่วมกันทำต่อกัน ไม่ทำขนาน
 2. สร้าง worktree ต่องานบน branch `<ประเภท>/<งาน>` · คัดลอก `.env` และไฟล์ตั้งค่า dev แบบระบุชื่อไฟล์ ไม่คัดลอกทั้งโฟลเดอร์ · Windows ตั้งชื่อโฟลเดอร์สั้นให้ path ไม่เกิน 260 ตัวอักษร · ติดตั้ง dependency แล้วรัน test 1 รอบเป็น baseline ก่อนแก้
 3. agent แต่ละตัวทำเฉพาะใน worktree ของตัวเอง · หัวหน้าทีมจด path · branch · baseline ลงตารางใน `docs/BUILD-PLAN.md`
 4. ก่อนปิด: test ทั้งชุดผ่านบน branch นั้น · `git status` สะอาด · `git log main..HEAD --oneline` แสดง commit ที่จะเข้า · main ขยับระหว่างทาง → รวม main ล่าสุดแล้ว test ใหม่ · conflict แก้แบบเข้าใจทั้ง 2 ฝั่ง ไม่ใช้ `--ours` หรือ `--theirs` ทั้งไฟล์

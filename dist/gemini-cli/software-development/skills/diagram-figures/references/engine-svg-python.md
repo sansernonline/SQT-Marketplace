@@ -27,7 +27,7 @@ The cost is time, because 1 figure takes several rounds of fixes. So use it only
 ## 0 · Colour comes from the work — do not stop to ask
 
 **If the source document already declares a `doc-theme`, use that value and do not ask again.**
-(See `polished-document-style`, section "Document theme".) If there is none yet, follow the steps below, then write the result back into `doc-theme`.
+(See `design-gate/polished-document-style`, section "Document theme".) If there is none yet, follow the steps below, then write the result back into `doc-theme`.
 
 **No brand colour → follow the order in `diagram-figures` section 5:** use the house value `#2A78D6`, write `(รอยืนยัน)` (awaiting confirmation) in the report, and carry on without stopping to ask.
 Put a tone suggested from the content, using the table in [colour-by-domain.md](colour-by-domain.md), in the report so the user can choose later.

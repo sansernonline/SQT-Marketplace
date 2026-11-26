@@ -5,7 +5,7 @@ description: Use when designing a web app screen or mockup
 
 # Web App Design
 
-> **Gate before starting (every time) (`ด่านก่อนลงมือ`):** read the owner's theme → search live prototypes → 3 genuinely different directions → check `no-ai-look` before sending · follow the "Gate before starting" section of `design-references` (plugin `superuser`), even when a brand exists (the brand controls colors and fonts, while the search is for finding this piece's structure) · close the work with the line `ด่านก่อนลงมือ:`
+> **Gate before starting (every time) (`ด่านก่อนลงมือ`):** read the owner's theme → search live prototypes → 3 genuinely different directions → check `design-gate/no-ai-look` before sending · follow the "Gate before starting" section of `design-gate/design-references` (plugin `superuser`), even when a brand exists (the brand controls colors and fonts, while the search is for finding this piece's structure) · close the work with the line `ด่านก่อนลงมือ:`
 
 > **The one rule:** every color in component code must come from a token.
 > If a `#hex` shows up outside the token file, the design system has started to break, and it breaks silently.
@@ -51,7 +51,7 @@ description: Use when designing a web app screen or mockup
 ## 2 · Design tokens
 
 > **The look comes from this job's search. Do not stop to ask.**
-> Order for finding values: the client's brand colors and fonts (if they exist, use them at once) → prototypes searched live by `design-references` and palettes extracted by `design-direction-lookup` item 2 → only if nothing can be searched at all (no internet · the user ordered the old look kept), use the fallback values in `assets/appstrack.css`, write `(รอยืนยัน)` (awaiting confirmation), and keep going.
+> Order for finding values: the client's brand colors and fonts (if they exist, use them at once) → prototypes searched live by `design-gate/design-references` and palettes extracted by `design-direction-lookup` item 2 → only if nothing can be searched at all (no internet · the user ordered the old look kept), use the fallback values in `assets/appstrack.css`, write `(รอยืนยัน)` (awaiting confirmation), and keep going.
 > The table of work type versus color tone in `colour-by-domain` (`diagram-figures` → `references/colour-by-domain.md`) is a starting point for search terms, not an answer.
 > **Brand colors must pass 4.5:1 for both white text on the brand background and the brand color on the page background.** If a client's color is too light, make a darker shade for `--brand` and keep the original color for the logo and charts.
 
@@ -149,7 +149,7 @@ Then open the images and check:
 ## 7 · Anti-patterns
 
 - **`#hex` in component files.** The number 1 cause of a broken theme. Let the checker catch it.
-- **Gradients on buttons, chips or charts · a frosted-glass topbar.** These are AI signals in `no-ai-look`, and chart colors must stay fixed. Use solid `--brand` and `--c-*`.
+- **Gradients on buttons, chips or charts · a frosted-glass topbar.** These are AI signals in `design-gate/no-ai-look`, and chart colors must stay fixed. Use solid `--brand` and `--c-*`.
 - **Tinting the sidebar, topbar or borders with the brand color.** The app frame is neutral (section 2).
 - **Shadows under cards.** Static cards do not float. Separate them with lines and shifted background shades. `--shadow` is for dropdowns and tooltips only · `--shadow-lg` is for modals and toasts only.
 - **Several primary buttons on one page.** Users do not know what to press.
@@ -169,7 +169,7 @@ Then open the images and check:
 |---|---|
 | User flow / IA before coloring | agent `ux-designer` |
 | A Windows desktop app in the same tone | `windows-app-design` |
-| Screen spec document | `polished-document-style` + `branded-document-design` |
+| Screen spec document | `design-gate/polished-document-style` + `branded-document-design` |
 | Diagrams to go with the spec | `markdown-visuals` |
 | Spacing rules, visual order and the 5 states of a screen | `ui-craft` |
 | Architecture diagrams | `software-diagrams` |
@@ -178,4 +178,4 @@ Then open the images and check:
 
 ## Do not look AI-made
 
-Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script · every job must also pass the eye gate 3.2 (web pages answer items 10–14 too), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for every medium lives there.
+Before sending, go through item 3 of `design-gate/no-ai-look`. For HTML work, run its script · every job must also pass the eye gate 3.2 (web pages answer items 10–14 too), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for every medium lives there.

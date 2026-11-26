@@ -1,6 +1,6 @@
 # Chasing overdue invoices (ตามหนี้ลูกค้าเครดิต) · doc-quotation
 
-Open when the user asks to chase overdue invoices from several credit customers (B2B buyers, resellers, agents), at month end or billing day. One awkward message to one customer → `polite-message-th-en` (plugin `superuser`), whose tone ladder the levels below follow. Process from Anthropic's invoice-chase skill (`anthropics/knowledge-work-plugins` small-business, Apache-2.0, read 2026-11-10), rewritten for Thai sellers; no text copied.
+Open when the user asks to chase overdue invoices from several credit customers (B2B buyers, resellers, agents), at month end or billing day. One awkward message to one customer → `human-writing/polite-message-th-en` (plugin `superuser`), whose tone ladder the levels below follow. Process from Anthropic's invoice-chase skill (`anthropics/knowledge-work-plugins` small-business, Apache-2.0, read 2026-11-10), rewritten for Thai sellers; no text copied.
 
 ## Levels
 

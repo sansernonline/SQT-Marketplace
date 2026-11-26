@@ -51,7 +51,7 @@ agent `product-manager` · skill `product-naming`
 
 ## 2. roadmap ผลิตภัณฑ์
 
-skill `product-roadmap` · agent `product-manager` · skill `user-story-writer` · `superuser:simplify`
+skill `product-roadmap` · agent `product-manager` · skill `user-story-writer` · `superuser:ground-rules`
 **ผลลัพธ์:** `docs/roadmap.md` · **ไม่แก้** SRS · ไม่เพิ่มแถวงานใน BUILD-PLAN (สถานะและตัดสินใจเองยังลงได้)
 
 ### โจทย์ (ผู้ใช้กรอก)
@@ -74,7 +74,7 @@ skill `product-roadmap` · agent `product-manager` · skill `user-story-writer` 
 
 ## 3. แผน sprint
 
-skill `sprint-plan` · agent `project-manager` · skill `user-story-writer` · `status-report`
+skill `sprint-plan` · agent `project-manager` · skill `user-story-writer` · `superuser/status-report`
 **ผลลัพธ์:** `docs/sprints/sprint-<เลข>.md` · แถวงานใหม่ใน `docs/BUILD-PLAN.md` (รูปแบบเดียวกับตารางงานใน BUILD-PLAN (`prompt-new-project.md` ฉบับ 11 ข้อ 4) · สถานะเริ่ม `รอทำ`) · คอลัมน์ Points · สถานะ · Sprint ใน `docs/USER-STORIES.md`
 
 ### ลำดับ

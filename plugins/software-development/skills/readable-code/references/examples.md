@@ -58,7 +58,7 @@ Go through every comment the diff adds or edits, and put each into 1 of 4 ways. 
 |---|---|
 | Translates code into human language · outdated · commented-out code | Delete |
 | Explains what a variable or function is | Rename so it says so itself, then delete |
-| States a constraint ("no null" · "must be called after init" · "value at most 100") | Turn it into something checkable, such as a type · assert · test · lint (`repeated-mistakes-to-checks`), then delete |
+| States a constraint ("no null" · "must be called after init" · "value at most 100") | Turn it into something checkable, such as a type · assert · test · lint (`learn-loop/repeated-mistakes-to-checks`), then delete |
 | The 4 kinds in the table above | Keep |
 
 Report the result as numbers: how many deleted · how many renamed · how many became checks · how many kept.

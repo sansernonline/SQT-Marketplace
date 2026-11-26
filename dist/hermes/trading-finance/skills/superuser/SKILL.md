@@ -17,6 +17,10 @@ description: Use when a money matter spans several steps
 | Work delivered to outsiders · closing report for several items with different statuses | [`final-answer`](references/final-answer.md) |
 | Before asking the user · making a decision that affects the work · blocked | [`autonomy`](references/autonomy.md) |
 | Session start · task end | [`modules`](references/modules.md) |
+| Status table at task end · the user asks what is pending (section 7 format) | [`status-report`](parts/status-report/guide.md) |
+| Comparing models per step | [`model-scorecard`](parts/model-scorecard/guide.md) |
+
+Part rules: every task end has a status table in the central file and the reply, every `เสร็จ` row has evidence, the checker is not the doer, at most 15 open rows (`status-report`) · scorecard data stays in the project, risky work never goes to a small model by chance, rows with fewer than 5 samples never decide (`model-scorecard`)
 
 ---
 
@@ -34,14 +38,14 @@ description: Use when a money matter spans several steps
 6. **Never invent user data** — put `(รอยืนยัน)` (awaiting confirmation) on what you do not know and keep going · Every estimated number ends with `(รอยืนยัน)`; a bare word like "estimate" is not enough
 7. **Risky or irreversible work: the lead does it or checks it before release** ("รออนุมัติ" in `autonomy`)
 8. **End with a short summary (section 7) and compare expected with actual**, except for small questions · general chat · read-only playbooks
-9. **Commit only when allowed.** 1 passing step = 1 commit per `commit-log` · If not allowed, put the commit message in the answer · Do not push unless told to, or unless **git อัตโนมัติ** (auto git) is `auto` · Edit on the task's branch, never commit to the main branch without asking · With several AIs → 1 worker 1 worktree ([`team-files`](references/team-files.md))
+9. **Commit only when allowed.** 1 passing step = 1 commit per `workspace-rules/commit-log` · If not allowed, put the commit message in the answer · Do not push unless told to, or unless **git อัตโนมัติ** (auto git) is `auto` · Edit on the task's branch, never commit to the main branch without asking · With several AIs → 1 worker 1 worktree ([`team-files`](references/team-files.md))
 10. **Cite only skills opened in this round** · Never edit a skill · agent · playbook yourself (wait for "รวมบทเรียน", the lessons roll-up)
 
 ---
 
 ## 2 · Size, pick a budget, then set the expectation
 
-**3 lines before touching the task, also on top of every plan you show the user, written with these Thai labels word for word:** `เป้า:` (goal) · `เสร็จเมื่อ:` (done-when: a check anyone can run, such as a test that passes or the failing case now working · medium tasks and up add Loop · Graph · Dynamic per [`agent-patterns`](../agent-patterns/SKILL.md)) · `เสี่ยง:` (risk: can it be undone?) · Every step in the plan also says how it is checked
+**3 lines before touching the task, also on top of every plan you show the user, written with these Thai labels word for word:** `เป้า:` (goal) · `เสร็จเมื่อ:` (done-when: a check anyone can run, such as a test that passes or the failing case now working · medium tasks and up add Loop · Graph · Dynamic per [`crew-patterns/agent-patterns`](../crew-patterns/parts/agent-patterns/guide.md)) · `เสี่ยง:` (risk: can it be undone?) · Every step in the plan also says how it is checked
 
 - **Small**: 1 piece · code total < 200 lines → the lead does it alone, no playbook
 - **Medium**: 2–8 independent pieces · code total ≥ 200 lines → the best-fit playbook
@@ -63,7 +67,7 @@ The situation → shared skill list is in [`triggers`](references/triggers.md) �
 
 ## 4 · Quality bar — every piece must pass all 3
 
-**True**: has a source, or `(รอยืนยัน)` · **On target**: matches "done-when" · **Ready to use**: usable right away, simple per `simplify`
+**True**: has a source, or `(รอยืนยัน)` · **On target**: matches "done-when" · **Ready to use**: usable right away, simple per `ground-rules/simplify`
 
 ---
 
@@ -122,7 +126,7 @@ One call lasts the whole session · casual chat gets a normal reply · any task 
 
 ## 9 · Modules and working pattern
 
-Working files live in `.claude/superuser/`, written by the lead alone · modules `context` · `log` · `improvements` · `learning` · `inbox` · `handoff` · `patterns_advanced` · `review_gate` · `split_gate` · `dispatch_gate` are switched on or off in `config.json` (no file = all on) · when off, do not read, write or mention them · details in [`modules`](references/modules.md) **Open it at session start and at task end** · The core pattern is Planning (section 2) → ReAct → Reflection (rule 3) · Multi-Agent is section 5 · MoA · Reranker · `parallel-attempts-pick-best` is the `patterns_advanced` module, used when a wrong pick is costly ([`agent-patterns`](../agent-patterns/SKILL.md))
+Working files live in `.claude/superuser/`, written by the lead alone · modules `context` · `log` · `improvements` · `learning` · `inbox` · `handoff` · `patterns_advanced` · `review_gate` · `split_gate` · `dispatch_gate` are switched on or off in `config.json` (no file = all on) · when off, do not read, write or mention them · details in [`modules`](references/modules.md) **Open it at session start and at task end** · The core pattern is Planning (section 2) → ReAct → Reflection (rule 3) · Multi-Agent is section 5 · MoA · Reranker · `crew-patterns/parallel-attempts-pick-best` is the `patterns_advanced` module, used when a wrong pick is costly ([`crew-patterns/agent-patterns`](../crew-patterns/parts/agent-patterns/guide.md))
 
 ---
 
@@ -229,4 +233,4 @@ The `CONTEXT.md` template for this work is in [`context-template`](references/co
 
 - Never put in: account numbers · account balances · income · broker passwords or tokens.
 
-**Work patterns.** The lead picks a pattern when planning. Method, cost and pitfalls are in `agent-patterns`. Examples from this plugin's work are in [`examples`](references/examples.md).
+**Work patterns.** The lead picks a pattern when planning. Method, cost and pitfalls are in `crew-patterns/agent-patterns`. Examples from this plugin's work are in [`examples`](references/examples.md).

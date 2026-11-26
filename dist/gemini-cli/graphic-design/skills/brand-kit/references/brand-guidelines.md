@@ -41,7 +41,7 @@ All 4 scripts are in `scripts/` of skill `brand-kit`, written in Node, installin
 
 ## Limits to know
 
-- The upstream is written in English and its examples are SaaS-style blue-purple · use it as a skeleton only, real colours come from the brand (`no-ai-look` item 1)
+- The upstream is written in English and its examples are SaaS-style blue-purple · use it as a skeleton only, real colours come from the brand (`design-gate/no-ai-look` item 1)
 - `update.md` is a command from the original ClaudeKit (`/brand update`), which our marketplace does not have yet, so follow the steps in the file by hand
 - There is no logo or icon generator — the owner chose not to use work an agent draws itself, so always ask for reference examples first (`icon-design`)
 

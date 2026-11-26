@@ -493,4 +493,4 @@ Claude เห็นแค่ `description` ตอนเลือก
 ## ตัวย่อ
 
 เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `spell-out-abbreviations`
+หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `human-writing/spell-out-abbreviations`

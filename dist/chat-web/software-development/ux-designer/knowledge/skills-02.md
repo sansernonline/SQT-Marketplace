@@ -1,221 +1,10 @@
-# skill: principle-prove-it-works
-
-Use before saying work is done, fixed or working
-
-# principle · prove it works — prove it against the real thing
-
-> **One rule:** before using the words done (`เสร็จ`) · fixed · passed (`ผ่าน`) · works · sent, you must have seen the result from the real thing yourself in this round.
-
-## Use when
-- You are about to report work as done, fixed, passed, working, or sent
-- A sub-agent reports done, or a draft for an outsider says "fixed"
-
-## Steps
-1. Before starting, write "how will I know it is done" in a checkable form.
-2. After the work, check against that on the real thing and record the raw result (numbers · images · output). Use the evidence column below.
-3. If you truly cannot check (no environment · needs a real account), say plainly `ยังไม่ได้ตรวจ` and what is missing; never write `ผ่าน`.
-4. For an item whose result you have not seen, write what was done and what the result is separately, e.g. "CSV: code changed, not yet opened in Excel". Do not write "fixed, but not tried yet": readers remember done and forget but.
-5. If a draft for a customer or outsider says "fixed" while the check is unfinished (even with "now testing"), write 1 version to send after the result is seen. The version that can be sent now must not contain "แก้แล้ว", "แก้ไขแล้ว" or "เรียบร้อย" in any form; it may say only "ได้รับเรื่องแล้ว ทีมกำลังตรวจ จะแจ้งผลภายใน (เวลา)".
-
-| Work | Evidence that counts |
-|---|---|
-| Document · report | A fresh reviewer opens the rendered file and checks the requirements one by one (the writer does not reread its own work) |
-| Numbers · formulas · amounts | Recompute another way on 2–3 rows; the total matches the source (receipt · statement) |
-| Message to a customer · email · booking | Read against the original question; name · amount · date match the real data; for a booking, see the confirmation page |
-| Feature in an app | Click it in the running app using the app-checking skill and see the criteria met (compiling or reading code does not count) |
-| Fix of a bug | Repeat the case that failed before, by the same path, and it passes |
-| Test · check | Pass/fail numbers come from this round's summary line (or `node scripts/test-verdict.mjs <TAP or JUnit result file> --expect <count>` → PROVEN · PARTLY · NOT PROVEN), never from memory · then break 1 line in a copy (invert a condition · return early); the test covering it must fail, otherwise the test proves nothing yet |
-| Screenshot · render | Judge from the pixels of an image you opened yourself, looking for failure signs first (red or blank screen, a box covering content), then compare with the log · ambiguous counts as failed · name the image file in the evidence |
-| Mockup | Open in a browser and click every button; no fake buttons |
-| Measured values (sensor · lux · distance · weight) | Compare with a calibrated instrument · an emulator proves only the work path (label `emulator`); accuracy needs the real thing (label `เครื่องจริง <รุ่น>`) · no instrument → `ยังไม่ได้ตรวจ` |
-| Works on another system (Windows · macOS · another machine) | Label every claim `observed` (ran it there) or `reasoned` (worked out); a pass on your own machine is the weakest evidence for another system |
-| Sub-agent work | Read the work and run it yourself |
-
-**Not evidence:** hedge words ("น่าจะใช้ได้" · "ควรจะผ่าน" · "ในทางทฤษฎี" · "เหมือนครั้งก่อน": in a final report they are a red flag, go back and check) · "test ผ่านแล้ว" with no output · "ไม่มี error" (no error is not the wanted result) · exit 0 or status `running` (exit 0 says only the program ended) · a sub-agent's own report · sending the user a command to run when you could run it · checking only the easy part. Full table with reasons and the `vastai` exit-0 case: [`references/evidence-table.md`](references/evidence-table.md).
-
-## Check before done
-- Every "done" word in the report has a raw result from this round behind it
-- Anything not seen is labelled `ยังไม่ได้ตรวจ`, with what is missing
-- No hedge word survives in the final report
-
-## References
-- [`references/evidence-table.md`](references/evidence-table.md) — open when judging a test, screenshot, measured value, cross-system claim, or sub-agent result, or when a claim of yours sounds like one on the "not evidence" list; also holds the sources
-
-
-## reference: evidence-table.md
-
-# Evidence by kind of work, and claims that do not count · principle-prove-it-works
-
-Open this when the work is a test, a screenshot, a measured value, a cross-system claim, a message to a customer, or a sub-agent result, or when a claim in your own report sounds like one in the second table.
-
-## Evidence by kind of work (full wording)
-
-| Work | Evidence that counts | Does not count |
-|---|---|---|
-| Document · report | A fresh reviewer opens the rendered file and checks the requirements one by one (the writer does not reread its own work) | The file was written successfully |
-| Numbers · formulas · amounts | Recompute another way on 2–3 rows, and the total matches the source (receipt · statement) | The formula shows no error |
-| Message to a customer · email · booking | Read it against the original question; name · amount · date match the real data, and for a booking you see the confirmation page | The draft looks good · a button was pressed and no error appeared |
-| Feature in an app | Click it in the running app using the app-checking skill, and see the result meet the criteria | It compiles · reading the code looks right |
-| Fix of a problem · bug | Repeat the case that failed before, by the same path, and it passes | Other parts pass |
-| Test · check | The pass/fail numbers come from the summary line of the command run this round (or `node scripts/test-verdict.mjs <TAP or JUnit result file> --expect <count>`, which reads the result file and gives a verdict PROVEN · PARTLY · NOT PROVEN), not a count typed by hand · then break 1 line of code in a copy (invert a condition · return early); the test that covers that line must fail · if it does not fail = the test proves nothing yet | Only "pass" · a test count recalled from memory |
-| Screenshot · render result | Judge from the pixels of the image you opened yourself, not from a description · look for failure signs first (red screen, blank screen, a box or dialog covering content), then compare with the log · ambiguous counts as failed · if a box covers it, take it again · the evidence names the image file | Reading the code and believing the look is right · saying the image "looks OK" without naming the file |
-| mockup | Open in a browser, click every button, no fake buttons | The HTML has valid syntax |
-| Measured values (sensor · lux · distance · weight) | Compare with a calibrated reference instrument · an emulator proves only the work path (label `emulator`), accuracy needs the real thing (label `เครื่องจริง <รุ่น>`, real device <model>) · no instrument → `ยังไม่ได้ตรวจ` (not yet checked) | One measurement · comparing against itself |
-| A claim that it works on another system (Windows · macOS · another machine) in a PR or report | Label every claim: `observed` (ran it and saw the result on that system) or `reasoned` (worked out by thought) · a pass on your own machine is the weakest evidence for another system | Writing "works on every system" with no label |
-| Sub-agent work | Read the work and run it yourself | The sub-agent reports it is done |
-
-## Claims that do not count as evidence
-
-The first column quotes Thai claims as examples; English meanings are in brackets.
-
-| Claim | Why it does not count | Do this instead |
-|---|---|---|
-| "น่าจะใช้ได้" · "ควรจะผ่าน" · "ในทางทฤษฎี" · "เหมือนครั้งก่อน" ("should work" · "ought to pass" · "in theory" · "same as last time") | Hedge words mean you have not looked — finding them in a final report = a red flag, go back and check before sending | Run or open it, then paste the raw result |
-| "test ผ่านแล้ว" ("tests passed") with no output | Passed in memory and passing now are different things | Paste the summary line of this round's run |
-| "แก้ตามที่บอกแล้ว" · "ไม่มี error" ("fixed as told" · "no errors") | No error ≠ the wanted result | Repeat the case that failed before and show it passes |
-| A sub-agent reports it is done | A report is words, not a work product | Look at the diff or open the changed files yourself |
-| A command ended with exit 0 · status shows `running` | exit 0 says only that the program ended, not that it worked · example from the course's `vastai` skill: the `vastai` CLI returns 0 even when the API answers with an error · `running` is not yet ready to use (`ssh … true` must return rc 0) · re-issuing the create command on a timeout got duplicate machines, paying twice | Check the end result with a list command or a command that really uses it · re-issue only after confirming the first one did not happen |
-| Sending the user a command to run themselves when we could run it · checking only the easy part and concluding everything passed | Throws the checking onto someone else | Run it all yourself before using the word done |
-| Drafting a message to a customer or outsider saying "fixed" so it can be sent right away, while the check is not finished (even with a trailing note that testing is in progress, such as "ทีมเราแก้ไขในระบบแล้ว ตอนนี้กำลังทดสอบอีกรอบ" ("our team fixed it in the system, now testing once more"), seen in eval 3 of 3 rounds 2026-11-09) | The recipient believes the word fixed at once, and if the check fails the words must be withdrawn | Draft 1 version with the condition that it is sent after the check result is seen · the version that can be sent now must not contain "แก้แล้ว" (fixed), "แก้ไขแล้ว" (has been fixed) or "เรียบร้อย" (all done) in any form; it may say only "ได้รับเรื่องแล้ว ทีมกำลังตรวจ จะแจ้งผลภายใน (เวลา)" (received, the team is checking, will report within (time)) |
-
-## Sources
-
-Sources of the screenshot row · expo · .claude/skills/expo-skill-eval/agents/visual-grader.md · seen 2026-11-10 · the test row (verdict script + break one line of code) · code-modernization · commands/modernize-verify.md · seen 2026-11-10 · the observed/reasoned row · claude-remember (do not redistribute · took the mechanism only) · CONTRIBUTING.md · seen 2026-11-10 · reviewer lenses and packages → [`review-lenses`](../../superuser/references/review-lenses.md)
-
-Source of the claims-table idea: skill `verification-before-completion` in obra/superpowers (MIT) · rewritten to cover work outside code.
-
-
----
-
-# skill: simplify
-
-Use to cut extras nobody needs yet. Not Claude Code simplify
-
-# simplify — make it simple so a first-time reader can follow
-
-> **One rule:** someone not on this work, opening it 6 months from now, must understand it and continue it without asking anyone.
-
-## Use when
-- Any work handed to people (code, documents, plans, designs, slides, tables, answers) may hold more than the task needs.
-- Cutting a spec, plan or architecture to the fewest parts: also open [`references/architecture-and-anti-patterns.md`](references/architecture-and-anti-patterns.md).
-- `human-writing` controls how it is written; this skill controls what the work contains.
-
-Not for: Claude Code's own `/simplify` command · more detail on code (if installed) → `lazy-coding` · `readable-code` in plugin `software-development`.
-
-## Steps
-1. Climb the ladder and stop at the first step that works: (a) is this really needed? If not, do not do it and say in 1 line what you skipped; (b) is there an existing thing that works (file, template, function, tool, built-in feature)? Use it; (c) do the shortest version that is still complete and correct.
-2. Do only what the task needs; cut before adding (if removing a part loses neither meaning nor function, cut it); plain things people know beat clever things that need decoding.
-3. Apply by kind of work:
-   - **Code:** names say what it is and carry units · 1 function does 1 thing · return early instead of nesting `if` · at most 3 levels of indentation · comments say why · follow the project's style. Avoid an abstraction with one user, clever hard-to-read shortcuts, one big file, a pile-up `utils/`, a new dependency for a few lines.
-   - **Documents · reports:** conclusion first · 1 paragraph 1 topic · an example for abstract points · a table for compared data. Avoid repeats, empty headings, unknown terms.
-   - **Plans · procedures:** 3–5 key items, each with an owner and a way to measure done · fewest steps that work. Avoid a 20-item list with no priority.
-   - **Designs · slides · figures:** 1 page 1 point · shortest path to the user's goal · familiar patterns. Avoid cramming and decoration that does not help.
-   - **Tables · data:** only columns used to decide · short formulas. Avoid columns that repeat a meaning and long nested formulas.
-   - **Answers:** answer first, as long as the question needs.
-4. **Simple is not sloppy:** never cut correctness, safety, validation of data from outside, error handling that prevents data loss, or what the user asked for explicitly. **Simple is not one big pile:** keep clear separation of duties, 1 part doing 1 thing.
-5. When you take a deliberate shortcut, write how far it works and when it changes, for example `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process`, and put 1 line in the report: `ข้าม: X — เพิ่มเมื่อ Y`.
-
-## Check before done
-- [ ] An outsider can open it for the first time and understand within 30 seconds.
-- [ ] No part, step or layer can be cut with no loss.
-- [ ] Every added part has a reason it is needed now, not "just in case".
-- [ ] Still complete on correctness, safety and what the user asked for.
-- [ ] Duties still clearly separated, not squashed into one place to look short.
-
-## References
-- [`references/architecture-and-anti-patterns.md`](references/architecture-and-anti-patterns.md) — open for architecture, specs, plans or designs: architecture do and avoid, extra checks per output type, anti-patterns to reject (future-proofing · layer cake · resume-driven design), wrong and right examples
-
-
-## reference: architecture-and-anti-patterns.md
-
-# Architecture, specs and anti-patterns · simplify
-
-Open this file for architecture, a spec, a plan or a design that keeps growing parts. It holds the rules not already in `SKILL.md`; each section ends with a line naming the rules `SKILL.md` covers.
-
-## Extra checks before submitting
-
-- **Simplest thing that works:** fewest moving parts, boring proven patterns. Add complexity only when something breaks.
-- **Reads in one pass:** no jargon the audience lacks, and the whole thing fits in 2 sentences.
-- Any "no" or "not sure" on these or on the `SKILL.md` checklist means: simplify before delivering.
-
-Already in `SKILL.md`: a tired teammate gets it in 6 months (the One rule) · every new component, option or layer has evidence it is needed now (checklist) · nothing can be deleted without losing meaning, deleting beats adding (step 2 and checklist) · an example for every abstract claim (step 3, documents).
-
-## Architecture
-
-Do:
-- Monolith first. Split only when a bottleneck is proven.
-- A familiar stack and standard patterns: Representational State Transfer (REST), queues, caches.
-- 1 source of truth per data type.
-
-Avoid:
-- Microservices for small teams · distributed-everything.
-- Multi-master databases before you must.
-- Event-driven by default. A synchronous call is simpler.
-
-## Documents (BRD · SRS · FSD · ADR)
-
-Business Requirements Document (BRD) · Software Requirements Specification (SRS) · Functional Specification Document (FSD) · Architecture Decision Record (ADR).
-
-Do: sentences of at most 20 words · plain English.
-
-Avoid: marketing-speak ("revolutionary", "best-in-class", "synergy") · walls of text · hedging ("might possibly potentially") · acronym soup.
-
-Already in `SKILL.md`: 1 idea per paragraph · an example for every abstract point · tables for structured data · no undefined jargon (step 3, documents).
-
-## Plans
-
-Do: realistic timelines with buffer · cut scope to fit the time.
-
-Avoid: vague goals ("improve quality") · aspirational dates with no buffer · plans without success metrics.
-
-Already in `SKILL.md`: 3–5 priorities, a named owner per item, measurable success criteria · no 20- or 50-item list with no priority (step 3, plans).
-
-## Designs (user experience (UX) · application programming interface (API))
-
-Do: stay consistent across screens · defaults that work for 80% of users · progressive disclosure (show advanced options only when asked).
-
-Avoid: a novel interaction where a standard one works · a 10-step flow when 3 steps work · required fields with no smart default · hidden features that need a tutorial.
-
-Already in `SKILL.md`: fewest steps to the user's goal · reuse familiar patterns (step 3, designs).
-
-## Anti-patterns to reject
-
-- **Future-proofing:** abstractions for needs that never arrive.
-- **"It might scale":** infrastructure for 1M users while you have 1k.
-- **Layer cake:** 6 layers where 90% just pass the call through.
-- **Resume-driven design:** fancy tech chosen to look sophisticated.
-- **Buzzword stacking:** "cloud-native event-driven AI-powered".
-
-## Wrong and right examples
-
-**API description**
-
-Wrong: "This sophisticated, enterprise-grade endpoint leverages state-of-the-art authentication to facilitate the seamless retrieval of user profile data."
-
-Right: "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use `?fields=name,email` to limit the response."
-
-**Sprint goal**
-
-Wrong: "Improve overall product quality and customer satisfaction through various initiatives."
-
-Right: "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on transient errors (1d), clearer error messages (1d)."
-
-**Architecture for a new feature**
-
-Wrong: "Event-sourced microservice with Command Query Responsibility Segregation (CQRS), Kafka ingestion, Redis cache, and a dedicated auth service."
-
-Right: "Add an endpoint to the existing API. One Postgres table for state. Standard auth middleware. Log to the existing system."
-
-
----
-
 # skill: design-direction-lookup
 
 Use for a starting palette and Thai-Latin fonts on a new screen
 
 # design-direction-lookup — find 3 starting looks from a Thai or English brief
 
-> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-references` (plugin `superuser`) even when a brand exists (the brand fixes colors and fonts; the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
+> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run `design-gate/no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand fixes colors and fonts; the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
 > **One rule:** the draft gives a starting point; it does not replace the beauty gate. Every direction must become a mockup and be chosen at the beauty gate of `ui-craft` step 9. If the search finds nothing, say so plainly; never invent colors or fonts and claim they came from data.
 
@@ -224,7 +13,7 @@ Use for a starting palette and Thai-Latin fonts on a new screen
 - You need a 2-mode palette, a Thai-Latin font pair, or Thai UX rules that fit the business, such as "ทำเว็บคลินิกทันตกรรม อยากได้โทนสีกับฟอนต์ไทยที่เข้ากัน".
 - You want to know which chart fits the data, how the home page should order its sections, or what look rules a framework has.
 
-Not for: a project whose look already passed the beauty gate (copy the sibling page per `ui-craft` step 0) · a whole brand set, logo, or corporate colors, or a customer who already has a brand → `graphic-design:brand-kit` · checking finished work for looking AI-made → `no-ai-look` · web app or dashboard screens → `web-app-design` · mobile PWA → `mobile-app-design` · Windows desktop → `windows-app-design`.
+Not for: a project whose look already passed the beauty gate (copy the sibling page per `ui-craft` step 0) · a whole brand set, logo, or corporate colors, or a customer who already has a brand → `graphic-design:brand-kit` · checking finished work for looking AI-made → `design-gate/no-ai-look` · web app or dashboard screens → `web-app-design` · mobile PWA → `mobile-app-design` · Windows desktop → `windows-app-design`.
 
 ## Steps
 1. **Search one topic at a time.**
@@ -235,7 +24,7 @@ Not for: a project whose look already passed the beauty gate (copy the sibling p
    ```
    - Domains: `industry` · `palette` (backup store; results start with a warning to search live first) · `font` · `look` · `ux` · `chart` · `landing` · `stack`. Upstream domains (English, [`data/upstream/uipro/README.md`](data/upstream/uipro/README.md)): `style` · `product` · `motion` · `slide` · `slide-strategy` · `slide-copy`. Colors from upstream are not contrast-checked.
    - 1 run, 1 intent, 2–5 words, in Thai, English, or mixed. You may search again once with different words; if still not found, tell the user.
-2. **Get colors live first, every time there is a network, before drafting.** Palettes in `data/` are a backup store; colors passed with `--palette` or `--extra-palettes` always beat the store. The method (search per `design-references`, choose 3–5 active sites, extract colors with `scripts/brand_colors.py`, build palettes, `--palette` forms, record in DESIGN.md) is in [`references/live-colors.md`](references/live-colors.md); open it before this step.
+2. **Get colors live first, every time there is a network, before drafting.** Palettes in `data/` are a backup store; colors passed with `--palette` or `--extra-palettes` always beat the store. The method (search per `design-gate/design-references`, choose 3–5 active sites, extract colors with `scripts/brand_colors.py`, build palettes, `--palette` forms, record in DESIGN.md) is in [`references/live-colors.md`](references/live-colors.md); open it before this step.
    - The extractor reads only HTML and CSS. If it cannot extract a site, report that as is; never guess colors instead.
    - No network, or no site could be extracted: skip live colors. The draft uses the backup store with a warning on screen and in DESIGN.md: "ใช้คลังสีสำรอง ค้นสดตาม design-references จะทันสมัยกว่า".
 3. **Draft 3 directions in one command.**
@@ -249,12 +38,12 @@ Not for: a project whose look already passed the beauty gate (copy the sibling p
 4. **After the draft:**
    1. Open the comparison page and look at both modes yourself; do not trust the contrast numbers alone. In some Thai fonts the upper vowels hit the previous line.
    2. Send the 3 directions to `ui-craft` step 0.1 stage 3 (a fresh subagent per direction; an agent that cannot call a sub-team does each direction in turn and notes it under "ตัดสินใจเอง"). Each direction adds 1 bold move of its own; the draft does not choose it.
-   3. If the customer has brand colors or fonts, substitute them in each direction and rerun the contrast check (`no-ai-look/scripts/slop_scan.py`).
+   3. If the customer has brand colors or fonts, substitute them in each direction and rerun the contrast check (`design-gate/parts/no-ai-look/scripts/slop_scan.py`).
    4. Choose the direction that passes the beauty gate and write the reason under `## ตัดสินใจเอง` of `docs/BUILD-PLAN.md`.
 
 ## Check before done
 - [ ] `python scripts/design_search.py --self-test` · `python scripts/design_draft.py --self-test` · `python scripts/brand_colors.py --self-test` all pass.
-- [ ] With a network: searched live per `design-references`, and DESIGN.md lists the URLs of real business sites and design sources viewed, with the viewing date of each. With no network: DESIGN.md has the backup-store warning.
+- [ ] With a network: searched live per `design-gate/design-references`, and DESIGN.md lists the URLs of real business sites and design sources viewed, with the viewing date of each. With no network: DESIGN.md has the backup-store warning.
 - [ ] If you changed the search or the data: `--eval references/relevance-cases.json` and the holdout is not below 85 %.
 - [ ] DESIGN.md has 3 directions with distinct looks and says they are a starting point, not a verdict.
 - [ ] The comparison page has no Inter as the main font, no Tailwind default colors, and no Thai font without a Latin partner.
@@ -291,7 +80,7 @@ Text the draft generates passes the ad-word filter (ยกระดับ · ไ
 
 **The palettes in this set are a backup store for when live search is not possible · the looks and font pairs are also backup values, reviewed every 6 months** to match current trends (next review 2027-04-26 · `scripts/check/expiry.json` warns when the date is near) · with a network, always start from step 2
 
-**Left out of this set on purpose** · icons: use one set across the whole app per `ui-craft` and `no-ai-look`, no table search needed · motion: each look already has a motion slot, details are in `ui-craft/references/depth-and-flourish.md` and `graphic-design:motion-basics` · Latin-only fonts: the font pairs already name the Latin font, and for the full list see fonts.google.com · stacks other than the 7 (Next.js · Vue · SwiftUI etc.) are added when real work needs them, not ahead of time
+**Left out of this set on purpose** · icons: use one set across the whole app per `ui-craft` and `design-gate/no-ai-look`, no table search needed · motion: each look already has a motion slot, details are in `ui-craft/references/depth-and-flourish.md` and `graphic-design:motion-basics` · Latin-only fonts: the font pairs already name the Latin font, and for the full list see fonts.google.com · stacks other than the 7 (Next.js · Vue · SwiftUI etc.) are added when real work needs them, not ahead of time
 
 The CSV files in `data/` (multi-value fields separated by `;`) are checked by `scripts/check_data.py` · the search reads every file at startup, no need to build an index ahead of time
 
@@ -320,7 +109,7 @@ If you add a new row and cannot find it with Thai words, put that word in the ro
 
 Do this every time there is a network, before drafting the 3 directions · color trends change fast, so the palettes in `data/` are a backup store for when live search is not possible, not the main source · colors passed to the draft with `--palette` or `--extra-palettes` always beat the store
 
-0. **Search live per the `design-references` skill of `superuser`:** find this year's reference work and real business sites in the field, and note which color tones you see
+0. **Search live per the `design-gate/design-references` skill of `superuser`:** find this year's reference work and real business sites in the field, and note which color tones you see
 1. **Choose 3–5 sites in the same field as the brief:** 2–4 Thai businesses and 1 large foreign one · choose only sites that are still active and recently redesigned, judged by the copyright year in the footer, news, or latest post · skip sites older than 2 years
 2. **Look at this year's design work from at least 1 source** among those used by `ui-craft` step 0.1 stage 2 (Siteinspire or Awwwards), filtered by field or style, and note what you see that differs from the backup store
 3. **Extract colors:**
@@ -397,4 +186,361 @@ The searcher answers "ไม่พบที่ตรง" (no match found) when t
 - BM25 is a widely published ranking method, written by us in `scripts/design_search.py` · k1 1.5 and b 0.75
 - The contrast thresholds 4.5:1 and 3:1 follow `ui-craft` step 5 (WCAG 2.2 criteria 1.4.3 and 1.4.11)
 - 3 directions · look · app personality from `ui-craft` step 0.1 · `ui-craft/references/web-looks.md` · `ui-craft/references/app-character.md`
-- The color and font rules that are dropped match the rules `framework-default` and `overused-font` of `no-ai-look/scripts/slop_scan.py`
+- The color and font rules that are dropped match the rules `framework-default` and `overused-font` of `design-gate/parts/no-ai-look/scripts/slop_scan.py`
+
+
+---
+
+# skill: web-app-design
+
+Use when designing a web app screen or mockup
+
+# Web App Design
+
+> **Gate before starting (every time) (`ด่านก่อนลงมือ`):** read the owner's theme → search live prototypes → 3 genuinely different directions → check `design-gate/no-ai-look` before sending · follow the "Gate before starting" section of `design-gate/design-references` (plugin `superuser`), even when a brand exists (the brand controls colors and fonts, while the search is for finding this piece's structure) · close the work with the line `ด่านก่อนลงมือ:`
+
+> **The one rule:** every color in component code must come from a token.
+> If a `#hex` shows up outside the token file, the design system has started to break, and it breaks silently.
+
+## When to use this skill
+
+- Building web app screens: dashboard, admin panel, internal tool, SaaS
+- Wanting every page, made by different people, to look like one set
+- Needing to support several brands or themes without touching component code
+- Works with Angular / React / Vue / Svelte / plain HTML. It is pure CSS and tied to no framework.
+
+## When **not** to use it
+
+- A Windows desktop app: use `windows-app-design`
+- A .docx/.pptx document: use `branded-document-design`
+- A marketing website or landing page, because this system is built for **apps** that pack in data.
+  A 13px base text is too small for a sales page.
+
+---
+
+## 1 · Working order: mockup first, always
+
+> **The project already has screens → copy the existing pages by `ui-craft` item 0 and do not use appstrack** (unless the owner asked for a redesign, or the existing pages have not passed the beauty gate (`ด่านสวย`)) · the order below is for projects with no look yet, or being redesigned · appstrack gives only the component classes and fallback values. The look of the work comes from the `theme.css` produced by the search.
+
+```
+0. Visual direction by ui-craft item 0.1 (search prototypes by design-references, type web or dashboard, then extract colors · hero screen · reference apps · 3 directions · pick 1 · logo) → copy assets/theme-template.css to mockup/theme.css and fill the 4 groups of values in section 2 from the chosen direction, with the source of every value
+   Pages with pictures (hero · product · service · team) → `graphic-design:image-artist` finds the pictures by image-generation into public/images/ before step 2 · never draw basic shapes yourself in place of real ones
+1. Copy assets/mockup-template.html + assets/appstrack.css next to theme.css (fallback look: assets/mockup-template-preview.webp · not the goal)
+   Choose the page structure (sidebar · top bar · 2-side split · single page with no menu) from the prototypes you found and the number of menu items in the app, not from the template's structure
+2. Edit the content into the real page to build (do not touch app code yet)
+3. python scripts/screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 1440
+   python scripts/screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 900
+   python scripts/screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 420
+4. Open the images and look at every width, fix until satisfied, and only then let others review
+5. Convert to components only after approval: copy the existing classes, write no new CSS
+6. Wire scripts/check-design-tokens.mjs into CI from day one
+```
+
+**The mockup is delivered as one file** (`mockup/<code>-mockup.html`, every screen a section) → before sending, embed the contents of `appstrack.css` followed by `theme.css` in `<style>` instead of `<link>` · check tokens with the mockup file as its own token file: `node scripts/check-design-tokens.mjs mockup/<code>-mockup.html mockup --ext html`
+
+---
+
+## 2 · Design tokens
+
+> **The look comes from this job's search. Do not stop to ask.**
+> Order for finding values: the client's brand colors and fonts (if they exist, use them at once) → prototypes searched live by `design-gate/design-references` and palettes extracted by `design-direction-lookup` item 2 → only if nothing can be searched at all (no internet · the user ordered the old look kept), use the fallback values in `assets/appstrack.css`, write `(รอยืนยัน)` (awaiting confirmation), and keep going.
+> The table of work type versus color tone in `colour-by-domain` (`diagram-figures` → `references/colour-by-domain.md`) is a starting point for search terms, not an answer.
+> **Brand colors must pass 4.5:1 for both white text on the brand background and the brand color on the page background.** If a client's color is too light, make a darker shade for `--brand` and keep the original color for the logo and charts.
+
+**Which values are fixed and which come from the search**
+
+| Group | token | Comes from | Fallback (appstrack) |
+|---|---|---|---|
+| Color | `--brand` `--brand-2` `--brand-50` `--brand-100` · background and text when the chosen direction needs them | Client brand → palette extracted from prototypes | `#226CC6` (a darker shade of `#2A78D6`) |
+| Type | `--font` · `--fs-xs` … `--fs-xl` | Brand font → the Thai-Latin font pair that prototypes in the field use · base size by how dense the work is (data-packed 13 · reading-heavy 14–15) | Inter + Noto Sans Thai · 11/12/13/15/22 |
+| Shape | `--radius` `--radius-sm` `--radius-pill` · `--shadow` `--shadow-lg` | The chosen direction (flat square · soft round · floating cards) | 14 · 9 · 99 · cards with no shadow |
+| Layout | `--sidebar-w` `--topbar-h` `--content-max` | Number of menu items, how long menu names are, whether the main work needs wide space | 232 · 56 · 1160 |
+| **Fixed for every job** | tokens only · contrast ≥ 4.5:1 · status colors by meaning · neutral app frame · 1 primary button per page · Thai rules in section 5 | System rules, independent of the job | — |
+
+The job's values live in the single file `theme.css` (template `assets/theme-template.css`) · every line has a comment giving its source · do not edit `appstrack.css`, so the component classes can update along with the skill.
+
+The 96 tokens are in the `:root` block of `assets/appstrack.css`, and the full details are in **`references/tokens.md`**.
+
+**Changing the brand color of the whole app = editing 4 values** (`--brand --brand-2 --brand-50 --brand-100`).
+The other colors are computed from or refer to these 4. If you need to edit a 5th color, something is hardcoded somewhere.
+
+`assets/appstrack.css` ships 5 sample color sets (ocean · emerald · sunset · plum · graphite).
+Switch them with `body[data-theme]`, and switch sidebar light/dark with `body[data-side='dark']` (dark = a neutral dark gray, not tinted with the brand color).
+**These sets exist to test that the system can really change color, not as options to pick from.** The job's colors always come from `theme.css`.
+
+**Status colors (success · warning · error) do not change with the brand.** Green always means pass, and red always means fail.
+
+**The app frame is neutral** (by the owner's preference, and the `ui-craft` beauty gate, platform note): sidebar · topbar · borders · menu icons are gray-black · brand color goes on data, primary buttons, links, the 3px menu selection bar and the logo · tint the frame only when the user asks.
+
+---
+
+## 3 · Screen layout
+
+The fallback structure is sidebar + top bar · for apps with few menu items (≤ 5) or a single-page job, choose the structure from the prototypes you found, such as top bar only or a 2-side split.
+
+- Fallback diagram (sidebar 232px · topbar 56px · content max 1160px · stat-grid · cards): `references/layout-diagram.md`
+- **The settings menu sits at the bottom of the sidebar** (`.foot` has `margin-top:auto`)
+- **1 h1 per page**, always with a description under the h1. A page that does not say what it does is a page that is not finished.
+- **1 primary button per page** (`.btn-primary`, solid brand color, no gradient, no shadow). The rest are `.btn` or `.btn-ghost`.
+- **3–5 KPI cards.** More than that and the numbers get too small to stand out.
+- Every number laid out in a column needs the `.num` class, or the digits will not line up.
+
+---
+
+## 4 · Components already provided
+
+Shell `.app-shell/.app-sidebar/.app-topbar/.app-main` · card `.card/.card-head/.card-body` ·
+KPI `.stat-grid > .card.stat` · status `.pill-*` in 7 tones · 4 kinds of button ·
+form `.field/.input/.select/.textarea` · table `.tb-wrap > .tb` ·
+filters `.chips/.tabs` · `.prog` · `.ava` · `.md-html` · `.empty` · `.skeleton` · `.spinner` ·
+`.toasts/.toast` · `.backdrop + .modal` · utilities `.row/.col/.grow/.ellipsis/.num`
+
+The full list with descriptions is at the end of `references/tokens.md`.
+
+**Icons:** inline SVG stroke, 15px in the sidebar / 14px in buttons / 11px in pills.
+Always use `stroke="currentColor"`, so the icon changes color with the state by itself.
+
+---
+
+## 5 · Thai language
+
+- `--font` must always include a font that has Thai glyphs (the fallback `Inter` has no Thai, so `Noto Sans Thai` is chained on) · a font chosen from the search must be opened with real Thai text before use
+- Line height 1.6 (body text) / 1.85 (`.md-html`). Thai needs more than English.
+- **No justify** · **no `text-transform: uppercase` on Thai text** (it has no effect, but the
+  `letter-spacing` that comes with it throws the tone marks off) · for Thai table headers, remove uppercase
+- Thai buttons are about 20% wider than English ones, so do not fix button widths
+- Test with real Thai text, not Lorem ipsum
+
+---
+
+## 6 · Check the work
+
+```bash
+# 1. Is the design system still clean?
+node scripts/check-design-tokens.mjs src/styles.css src/app
+
+# 2. Does the look still hold at every width?
+python scripts/screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 1440
+python scripts/screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 900
+python scripts/screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 420
+```
+
+Then open the images and check:
+
+- [ ] No hardcoded colors (the checker must show ✓)
+- [ ] At 1024px the sidebar shrinks to icons, and at 720px it becomes a drawer with an open button
+- [ ] A table wider than the screen scrolls only inside its frame, **not the whole page** (drag sideways and the sidebar must not move)
+- [ ] The job's theme (`theme.css`) + sidebar light/dark: no text blends into the background · every value in `theme.css` has a source comment
+- [ ] Thai text does not overflow buttons · tone marks do not collide with vowels
+- [ ] Contrast ≥ 4.5:1 for every text-on-background pair, including white on `--brand` (`--text-faint` on `--bg` is the closest call at 4.65. Never make it paler · measure any new brand color before use)
+- [ ] Tab reaches every control, and a focus ring shows at every point
+- [ ] An empty state (`.empty`) wherever a list may be empty, and loading wherever there is a wait: content uses a `.skeleton` outline in the shape of the real thing · `.spinner` only for short waits inside a button or beside text, never in the middle of the screen
+
+---
+
+## 7 · Anti-patterns
+
+- **`#hex` in component files.** The number 1 cause of a broken theme. Let the checker catch it.
+- **Gradients on buttons, chips or charts · a frosted-glass topbar.** These are AI signals in `design-gate/no-ai-look`, and chart colors must stay fixed. Use solid `--brand` and `--c-*`.
+- **Tinting the sidebar, topbar or borders with the brand color.** The app frame is neutral (section 2).
+- **Shadows under cards.** Static cards do not float. Separate them with lines and shifted background shades. `--shadow` is for dropdowns and tooltips only · `--shadow-lg` is for modals and toasts only.
+- **Several primary buttons on one page.** Users do not know what to press.
+- **`overflow-x` on `<body>`** to fix an overflowing table. Fix it at `.tb-wrap`.
+- **`alert()` / `confirm()`.** Use `.toast` and `.modal`.
+- **Inventing new font sizes** outside the job's `--fs-*` (`ui-craft` item 2 · minimum 11 · ≤ 5 sizes per screen)
+- **Sending a fallback-look mockup without searching.** Every job then looks like Apps Track. Use the fallback only when searching is impossible, and write `(รอยืนยัน)`.
+- **A `.modal` with no `position` set.** It sinks under `.backdrop` and nothing can be clicked
+  (the CSS already has a comment explaining this. Do not delete it.)
+- **Sending a mockup that was never rendered and looked at**
+
+---
+
+## 8 · Link to other skills
+
+| Need | Use together with |
+|---|---|
+| User flow / IA before coloring | agent `ux-designer` |
+| A Windows desktop app in the same tone | `windows-app-design` |
+| Screen spec document | `design-gate/polished-document-style` + `branded-document-design` |
+| Diagrams to go with the spec | `markdown-visuals` |
+| Spacing rules, visual order and the 5 states of a screen | `ui-craft` |
+| Architecture diagrams | `software-diagrams` |
+
+---
+
+## Do not look AI-made
+
+Before sending, go through item 3 of `design-gate/no-ai-look`. For HTML work, run its script · every job must also pass the eye gate 3.2 (web pages answer items 10–14 too), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for every medium lives there.
+
+
+## reference: layout-diagram.md
+
+# Screen layout diagram · web-app-design
+
+Fallback structure, sidebar + top bar. Real sizes live in `theme.css`.
+
+```
+┌──────────┬─────────────────────────────────────────────────┐
+│ 232px    │ topbar 56px · solid background · sticky          │
+│ sidebar  ├─────────────────────────────────────────────────┤
+│          │  Page title h1 22px  [secondary btn] [primary]   │
+│ • menu   │  Description 12px, secondary color               │
+│ • menu   │                                                 │
+│          │  ┌─ stat-grid: number cards auto-fit 190px ────┐ │
+│  ─────   │  └─────────────────────────────────────────────┘ │
+│ Group 2  │  ┌─ card ────────────────┐ ┌─ card ──────────┐  │
+│ • menu   │  │ table / form          │ │ activity/summary│  │
+│          │  └───────────────────────┘ └─────────────────┘  │
+│ ⚙ Settings│        ← content max 1160px, centered →         │
+└──────────┴─────────────────────────────────────────────────┘
+```
+
+
+## reference: tokens.md
+
+# Token reference — Apps Track-style web app design system
+
+> Warning: **the color values in this file are a finished example, not a standard.**
+> Always pick colors from the work itself first (see the item "colors come from the work" in `SKILL.md`).
+> What to take from this file is **the list of tokens and their roles**, not the values.
+> Colors, fonts, type sizes, radii, shadows and layout widths are fallbacks. The project's values live in `theme.css` (`SKILL.md` item 2) · spacing and breakpoints follow this file.
+
+All definitions are in `assets/appstrack.css`, in the `:root` block.
+**Nothing below the `=== base ===` line may contain a raw color**, because the checker uses that line as the boundary.
+
+## Contents
+
+1. [Brand — solid color](#brand--solid-color)
+2. [Surfaces · lines · shadows](#surfaces--lines--shadows)
+3. [Typography](#typography)
+4. [Data colors (charts) — always solid](#data-colors-charts--always-solid)
+5. [Pill (status) — three values as a set](#pill-status--three-values-as-a-set)
+6. [Layout](#layout)
+7. [Switching theme / brand](#switching-theme--brand)
+8. [Ready-made component classes](#ready-made-component-classes)
+
+---
+
+## Brand — solid color
+
+| Token | Value | Used for |
+|---|---|---|
+| `--brand` | `#226cc6` (a darker shade of the house default `#2A78D6`) | primary button · selected chip · progress bar · link · selected tab · menu selection bar · border on focus · logo |
+| `--brand-2` | `#6a5cd6` | 2nd data color paired with `--brand` (charts) |
+| `--brand-50` | `#eef4fd` | avatar · mention background · focus ring |
+| `--brand-100` | `#dde9fb` | spinner track |
+
+> **No gradient** — buttons, chips, progress and charts use solid `--brand` (`design-gate/no-ai-look`: purple-blue gradient → 1 solid brand color)
+> **`--brand` must pass 4.5:1** for white text on a brand background (`#226cc6` = 5.21) · brand on `--bg` (4.87) · brand on `--brand-50` (4.71) — checked 22 Oct 2026
+
+## Surfaces · lines · shadows
+
+| Token | Value | Used for |
+|---|---|---|
+| `--bg` | `#f6f7fb` | page background |
+| `--surface` | `#ffffff` | cards · inputs · normal buttons |
+| `--line` | `#eef0f5` | lines inside cards · table lines |
+| `--line-strong` | `#e4e7ee` | input border · button border |
+| `--skeleton` | `#e4e7ee` | loading placeholder (`.skeleton`) |
+| `--shadow` | thin 2-layer shadow | dropdown · tooltip (small floating things) |
+| `--shadow-lg` | deep 2-layer shadow | modal · toast · floating menu |
+| `--radius` / `--radius-sm` / `--radius-pill` | `14px` / `9px` / `99px` | card / button·input / pill·chip |
+| `--ease` | `cubic-bezier(.16, 1, .3, 1)` | things that appear (dropdown · toast · modal) — shoots fast then settles (expo-out) |
+| `--ease-io` | `cubic-bezier(.65, 0, .35, 1)` | things that move (sliding a panel · switching tabs) · durations follow `ui-craft` item 7 |
+
+> **Cards have no shadow** — a still card does not float; it is separated from the page by the `--line` border + `--surface` fill on `--bg` (`ui-craft` item 4) · the topbar is a solid `--surface` fill, no frosted glass
+
+**2-part shadow from one color:** `--shadow` and `--shadow-lg` above are already 2-layer shadows in the color `rgba(20, 30, 55)` · for a project whose background is not blue-gray (cream, green, dark theme) or that needs 3 levels, add this set to the project's `:root` (not yet in `appstrack.css`).
+
+| Token | Value | Used for |
+|---|---|---|
+| `--shadow-color` | `223 47% 15%` (the HSL channels of `rgba(20, 30, 55)`) | the color of every shadow layer · change the hue to match the background; do not use translucent black |
+| `--elev-1` | `0 1px 2px hsl(var(--shadow-color) / .12), 0 2px 6px hsl(var(--shadow-color) / .06)` | small raised pieces: a table header that sticks to the top while scrolling · a switch knob |
+| `--elev-2` | `0 1px 3px hsl(var(--shadow-color) / .14), 0 8px 20px hsl(var(--shadow-color) / .08)` | dropdown · tooltip (replaces `--shadow`) |
+| `--elev-3` | `0 2px 4px hsl(var(--shadow-color) / .12), 0 18px 40px hsl(var(--shadow-color) / .12)` | modal · toast (replaces `--shadow-lg`) |
+
+The first layer is narrow and darker (under the piece, where light cannot reach); the second is wide and faint (ambient light) · at higher levels the wide layer is offset further down in the same direction · a still card still has no shadow · for layered shadows, translucent edges and other depth language → `ui-craft` → `references/depth-and-flourish.md`
+
+**Nested corners:** inner radius = outer radius − the distance from the outer edge to the inner item (padding), so the 2 curves are parallel, e.g. a `--radius` 14 card with an image 6 from the edge → the image radius is 8 · if the result is 0 or negative (padding ≥ outer radius) → use `--radius-sm`, because the 2 corners are so far apart the eye no longer compares them · source: vercel-labs/web-interface-guidelines, section nested radii (MIT · checked 2026-10-23)
+
+## Typography
+
+| Token | Value | Used for |
+|---|---|---|
+| `--text` | `#333b4a` | headings · main metric numbers (Key Performance Indicator · KPI) |
+| `--text-body` | `#414957` | body text (the default for body) |
+| `--text-muted` | `#5f6673` | labels · descriptions · table headers · empty state · inactive menu |
+| `--text-faint` | `#69707d` | timestamps · menu group headings · supporting text |
+
+Contrast (Web Content Accessibility Guidelines (WCAG) 2.2 level AA needs ≥ 4.5:1 · checked 22 Oct 2026): `--text-muted` on white 5.78 · on `--bg` 5.40 · `--text-faint` on white 4.98 · on `--bg` 4.65 ← the lowest in the system; never make it fainter
+
+A 5-size scale, matching `ui-craft` item 2 (lg 22 · md 15 · base 13 · sm 12 · xs 11 · smallest 11):
+
+| Level | Size | |
+|---|---|---|
+| h1 · KPI number | 22px / 500 · KPI 600 | page title · KPI uses `letter-spacing:-.4px` + `tabular-nums` |
+| h2 | 15px / 500 | card heading · app name in the sidebar |
+| body · h3 | 13px / 1.6 · h3 bold 500 | body text · input · tab · menu · sub-heading |
+| button · description under h1 | 12px | |
+| label · pill · table header · faint | 11px | table headers are uppercase with letter-spacing .4px (English only) |
+
+The default font is `Inter` + `Noto Sans Thai` — Inter is chosen because it reads easily at 11–13px in dense data screens (`graphic-design` item 6 says to give a reason when using a widely used font) · a project with a brand font uses the project's · **Inter has no Thai letters**; if you forget to add Noto Sans Thai
+the browser uses a system font as fallback, whose height does not match, and Thai looks smaller and shorter than English.
+
+Every number laid out in a column must use `.num` (`tabular-nums`), otherwise the digits will not line up.
+
+## Data colors (charts) — always solid
+
+`--c-blue #4a8ee0` · `--c-teal #2bbd8a` · `--c-amber #f0ad2e` · `--c-green #1f9d3f` ·
+`--c-violet #6a5cc9` · `--c-red #e87f7c` · `--c-grey #c8ced9`
+Plan/actual pair: `--c-plan #e0eaf8` vs `--c-actual #5a97e0` · overdue is defined as `--c-late #e58079`
+
+## Pill (status) — three values as a set
+
+| Tone | Background | Text | Line | Used for |
+|---|---|---|---|---|
+| green | `#e9f7ef` | `#17794a` | `#d6efe1` | done · normal |
+| blue | `#eaf2fd` | `#2160ab` | `#d8e7fb` | review · in progress |
+| amber | `#fdf5e4` | `#96660d` | `#f7e9c9` | waiting · warning |
+| orange | `#fdefe6` | `#a2541b` | `#f8ddcb` | nearly overdue |
+| red | `#fdedec` | `#a63a34` | `#f8d9d7` | stuck · error |
+| violet | `#f1eefc` | `#52439f` | `#e3ddf8` | special type |
+| grey | `#f2f4f8` | `#626a7a` | `#e7eaf1` | closed · not started |
+
+## Layout
+
+| Token | Value |
+|---|---|
+| `--sidebar-w` | `232px` (≤1024px shrinks to 64px · ≤720px becomes a 240px drawer) |
+| `--topbar-h` | `56px` |
+| `--content-max` | `1160px` |
+
+Breakpoints: **1024px** the sidebar shrinks to icons · **720px** the sidebar becomes a drawer (`body.nav-open`)
+If a table is wider than the screen, scroll horizontally **only inside `.tb-wrap`**; never let the whole page scroll.
+
+## Switching theme / brand
+
+**Switch the accent across the whole app** — `body[data-theme]`: empty (ocean `#226cc6`) · `emerald #097a54` · `sunset #b8501a` · `plum #7a4ee8` · `graphite #0a7a90`
+Each theme changes only 4 tokens (`--brand --brand-2 --brand-50 --brand-100`) · every `--brand` passes 4.5:1 with white text · `--bg` · the theme's own `--brand-50`
+
+**Light/dark sidebar** — `body[data-side='dark']` changes 9 sidebar tokens · the dark background is `--sidebar-dark-bg #1f2329`, a neutral gray, not tinted with the brand color
+Active menu: light mode = a gray fill `--sidebar-active-bg` + a 3px brand-colored bar (`--sidebar-active-bar`) · dark mode = a translucent overlay `--on-brand-veil` + a white bar
+The app frame is neutral — the brand color inside the frame appears only in the selection bar and the logo.
+
+**For a new customer brand**, copy a `body[data-theme='…']` block and put in the customer's 4 values (if the customer's color is too bright → use a darker shade that passes 4.5:1 as `--brand`, and keep the original color for the logo and charts)
+You do not touch a single line of any component.
+
+## Ready-made component classes
+
+| Group | Classes |
+|---|---|
+| Structure | `.app-shell` `.app-sidebar` `.nav-link(.on)` `.app-topbar` `.app-main > .inner` `.page-head` |
+| Card | `.card` `.card-head` `.card-body` |
+| KPI | `.stat-grid` `.card.stat` (`.label` `.value` `.foot`) |
+| Status | `.pill.pill-green/blue/amber/orange/red/violet/grey` |
+| Button | `.btn` `.btn-primary` `.btn-ghost` `.btn-danger` `.btn-sm` |
+| Form | `.field > label` `.input` `.select` `.textarea` `.err` |
+| Table | `.tb-wrap > .tb` (`.right`) |
+| Filter | `.chips > .chip(.on)` · `.tabs > .tab(.on)` |
+| Other | `.prog > i` `.ava(.ava-lg)` `.md-html` `.empty` `.skeleton(.lg)` (loading content) `.spinner` (a short wait inside a button) `.toasts > .toast(.ok/.err)` `.backdrop + .modal` |
+| Utility | `.row` `.row-between` `.col` `.grow` `.ellipsis` `.wrap` `.mt-*` `.mb-*` `.gap-*` `.num` `.muted` `.faint` |

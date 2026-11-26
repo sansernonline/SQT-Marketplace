@@ -7,7 +7,7 @@
     {"date": "2027-04-26", "file": "plugins/software-development/skills/design-direction-lookup/data/looks.csv", "what": "ทบทวน look พาเลต และคู่ฟอนต์ให้ตรงเทรนด์ปัจจุบัน", "quote": "quiet-utility,เครื่องมือเงียบ,quiet utility"},
     {"date": "2028-12-31", "file": "plugins/e-commerce/skills/social-security-th/SKILL.md", "what": "เพดานค่าจ้างประกันสังคม 17,500 ขึ้นเป็น 20,000 ตั้งแต่ปี 2572 (เงินสมทบ 875 เปลี่ยน)", "quote": "| 2572 – 2574 | 20,000"},
     {"date": "2026-12-31", "file": "plugins/trading-finance/skills/tax-deduction-planner/scripts/rates-2569.json", "what": "อัตราและเพดานปีภาษี 2569 สิ้นสุด · ทำ rates-2570.json จาก deductions-2570.md ที่ตรวจแล้ว แล้วแก้ tax.mjs ให้อ่านไฟล์ใหม่", "quote": "\"tax_year\": 2569"},
-    {"date": "2027-02-11", "file": "plugins/superuser/skills/model-scorecard/references/prices.json", "what": "ราคา Claude API ที่ model-scorecard ใช้คิดค่าใช้จ่าย ตรวจทุก 3 เดือน · เปิดหน้าราคาทางการ แก้ per_mtok (รวม cache_write_1h) และ checked", "quote": "\"checked\": \"2026-11-11\""},
+    {"date": "2027-02-11", "file": "plugins/superuser/skills/superuser/parts/model-scorecard/references/prices.json", "what": "ราคา Claude API ที่ model-scorecard ใช้คิดค่าใช้จ่าย ตรวจทุก 3 เดือน · เปิดหน้าราคาทางการ แก้ per_mtok (รวม cache_write_1h) และ checked", "quote": "\"checked\": \"2026-11-11\""},
     {"date": "2027-09-30", "file": "plugins/e-commerce/skills/tax-vat-th/SKILL.md", "what": "VAT 7% ตาม พ.ร.ฎ. ฉบับที่ 807 หมดช่วง · ตรวจ พ.ร.ฎ. ฉบับใหม่ แล้วแก้ tax-vat-th · seller-tax-basics · doc-quotation · import-landed-cost และ rates.json 2 ไฟล์ (vat_pct_valid_until)", "quote": "30 Sep 2570"}
   ]
 }

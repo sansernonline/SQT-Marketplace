@@ -19,7 +19,7 @@ Sizes, safe zones and the render script live in `banner-design` and `social-form
 4. Real product photos, not icons; nearly every Thai coffee ad in Meta Ad Library used a real bag or real beans (2026-11-19).
 5. At most 2 font families, both with full Thai; heading 32 px or more, body 16 px or more on 1200 wide. Source: uipro typography.
 6. Text covers about a fifth of the image; the photo does the rest. Whether Meta still limits ads with more than 20 % text is unconfirmed (see `banner-design`); less text reads faster either way.
-7. Depth from overlap: a label, plate or number crosses the edge of the photo at 1–2 spots. Source: `design-references` `depth-and-light.md`, Dribbble "Coffee Banner KV".
+7. Depth from overlap: a label, plate or number crosses the edge of the photo at 1–2 spots. Source: `design-gate/design-references` `depth-and-light.md`, Dribbble "Coffee Banner KV".
 8. Photo fades into the background with a mask instead of sitting in a hard rectangle.
 9. Colours come from the product (roasted bean, cherry red, leaf green), not from the owner's general tech palette; the project beats the owner's taste.
 10. Keep key items at least 50 px from every edge per `banner-design`; leave more room left and right (blog summaries of Meta specs say up to 120 px, `(ยังไม่ได้ตรวจ)`) when the ad also runs in placements that crop.

@@ -1,503 +1,867 @@
-# skill: flag-and-propose
+# skill: project-doc-set
 
-Use when a mid-task finding needs a decision before going on
+Use when choosing a project doc set or open-items Excel
 
-# Flag what you found, then propose a way forward
+# Project doc set
 
-> **The one rule:** open with the **impact**, close with **one question**.
-> The middle is evidence and proposals, not a story of how you found it.
+> **One rule:** every doc must answer **who reads it** and **what they decide after reading**.
+> If it cannot answer, do not write it.
+
+---
 
 ## When to use this skill
 
-- You find something that makes the original plan unusable while working on something else.
-- Numbers, files or documents disagree, and you must know which to follow. Only when a wrong choice cannot be undone. If it can be undone, choose yourself and log it in [`decision-log`](../decision-log/SKILL.md).
-- There are several ways forward that cannot be undone, cost a lot of money or time, or go out to outsiders, and the user must choose first. In SuperUser, finish the other parts first, then write this under **รออนุมัติ** (awaiting approval) at the end. Do not stop to ask mid-task.
-- You propose adding or changing something the user has not asked for.
+Use it when: opening a new project and deciding which docs it needs · docs are scattered and nobody knows which is the real one · a client asks what will be delivered · about to write a doc but unsure what must come first.
 
-## When to use something else, or use it together
+## When **not** to use it
 
-| Work | Skill | |
-|---|---|---|
-| Answer a question the user asked | `answer-shape` | instead |
-| A reversible choice (can be changed later at no cost) | `principle-proceed-on-reversible-work`: do it now, then log it in `decision-log` | instead |
-| An unknown fact (number, name, date, budget) | Put `(รอยืนยัน)` (awaiting confirmation) and keep going; do not stop to ask | instead |
-| Something is really broken and must be fixed now | `targeted-fix`: fix first, then report | instead |
-| What you found is a real system incident | `incident-runbook-template` · `postmortem-template` (plugin `software-development`) | together |
-
----
-
-## 1 · The 4-block answer
-
-| Block | Length | Rule |
-|---|---|---|
-| 1 · What you found + the result if not fixed | 1–2 lines | **Always first.** No lead-in, no repeating the question |
-| 2 · Evidence | Table, at most 5 rows | Only the numbers that disagree. Do not tell how you checked |
-| 3 · Proposal | Table, at most 5 rows | Do what → **get what**, not do what → how |
-| 4 · Closing question | 1 question | One question, multiple choice, every option backed by evidence (section 6) |
-
-Block 2 can be cut if there are no numbers. Block 3 can be cut if you have no real proposal yet.
-**Blocks 1 and 4 cannot be cut.**
-
-**The whole answer should end within 1 screen.** Longer than that means you are explaining a process, not asking for a decision.
-
----
-
-## 2 · Block 1: the one-sentence formula
-
-```
-<อะไรผิด> เพราะ <สาเหตุสั้น ๆ> · ต้อง <ทำอะไร> ก่อน <ขั้นถัดไป> ไม่งั้น <ผลเสียที่เป็นรูปธรรม>
-```
-
-| Wrong: written as a story | Right: written opening with the impact |
+| Situation | Use instead |
 |---|---|
-| "ระหว่างทำสรุปยอดผมพบว่าไฟล์ยอดขายที่ดึงมาเมื่อเช้านี้นั้นเป็นฉบับก่อนที่ร้านจะแก้ราคา…" | "**สรุปยอดขายใช้ราคาเก่า** เพราะดึงจากไฟล์ก่อนร้านแก้ราคา ต้องดึงใหม่ก่อนส่งบัญชี ไม่งั้นภาษีคำนวณผิด 38 รายการ" |
-
-- **The "ไม่งั้น…" (otherwise…) part must be concrete.** "ข้าม FR-14.x (Functional Requirement — ความต้องการเชิงฟังก์ชัน ข้อ 14.x) ทั้งชุด" (skips the whole FR-14.x set), not "อาจมีปัญหาตามมา" (may cause problems later).
-- Do not say when or how you found it, unless how you found it changes what must be done.
-- Use bold only for **words that change the decision**, not every important word.
+| Folder layout of the **code** (including the `docs/` inside code in type A) · README · CHANGELOG · linter | `project-bootstrap` |
+| Naming **files** and version numbers of docs | `workspace-rules/document-naming` |
+| Actually writing one doc | The skill for that doc (table in section 4) |
+| Making document pages look good | `branded-document-design` |
 
 ---
 
-## 3 · Numbers that disagree: always a comparison table
+## 1 · Docs inside or outside the repo
 
-Two or more values that do not match are always harder to read in a sentence than in a table.
+**Decide this first** (moving later means fixing links across the whole project). **The default is type B**, even when the docs are pure markdown. The code lives in `<project-name>/` (lowercase, joined with `-`). Use type A only when the user asks.
+
+- **Type B** (docs outside the repo): use it for every set size (S · M · L). `.docx` / `.xlsx` / mockups / PNGs that the client must see stay out of pull requests. The root layout is below (this section owns the root layout).
+- **Type A** (docs inside the repo): only when the user asks and the docs are pure markdown. Docs and code change in the same pull request. The root looks like type B but has no root `docs/`. The `docs/` folder sits inside the code folder, and its inner layout belongs to `project-bootstrap` section 1.
+- A type A project that grows deliverable docs moves to type B **as a whole set in one go**. A doc that lives in 2 places means 2 versions.
+
+### Type B layout
+
+```
+<project-name>/
+├─ ref/                 things received — TOR · meeting notes · screenshots of the old system · client files  **read-only, never edit**
+├─ docs/                every doc we write — delivered .docx and technical .md live together
+│  ├─ figures/          exported figures — .png only        [exists when delivered docs have figures]
+│  │  └─ src/           source files of the figures (.html · .mmd · .drawio)
+│  ├─ decisions/        ADR-NNNN-<slug>.md, one decision per file  [optional]
+│  ├─ runbook-<topic>.md  guide for when the system has problems, one topic per file  [optional]
+│  └─ research/         research on a reference app (`reference-app-research`) [optional]
+├─ mockup/              .html that opens and really clicks
+├─ qa/                  test cases · test results · bugs/ bug reports
+├─ assets/              logos · icons in all sizes · favicon · wordmark (.svg source + exports)
+├─ _to_delete/          every kind of temporary item
+├─ .claude/            project skills (such as verify) — must sit where Claude Code is opened
+│  └─ superuser/        SuperUser working files — CONTEXT.md · HISTORY.md · IMPROVEMENTS.md · log/ · inbox/ · learn/
+└─ <project-name>/      code repo, project name lowercase joined with `-` — inner layout belongs to `project-bootstrap`
+```
+
+**SuperUser files** (`.claude/superuser/` · `docs/BRIEF.md` · `AGENTS.md`/`GEMINI.md`): the single source is [`superuser/references/team-files.md`](../superuser/references/team-files.md).
+
+**ADRs and runbooks live in the root `docs/`, not in `<project-name>/docs/`.** Type A moves the whole `docs/` into the code folder, with the same inner layout. Paths: `docs/decisions/ADR-NNNN-<slug>.md` · `docs/runbook-<topic>.md`. This section is the only place that defines this.
+
+**Root exceptions:** `.sandbox/` may sit at the root when you use `docker-sandbox` · `AGENTS.md` / `GEMINI.md` under the conditions above. Declare every exception in the README of the code folder.
+
+**Create folders when real content exists, not in advance:** `ref/` when you get files from the client or the old system (never mix them into `docs/`) · `docs/figures/` when a delivered doc has a self-drawn figure (otherwise the figure is stuck inside the `.docx` and cannot be edited) · `docs/decisions/` when a decision needs explaining later · `docs/research/` when the user wants an app like an existing one · `qa/` when test cases exist (test cases always live here; `docs/test-plan.md` holds only the plan) · `assets/` when there is a logo or icon.
+
+**Ecosystem project** (2 or more sub-projects, each with its own doc set): the folder is always named `ecosystem/` (never `projects/` `modules/` `apps/`). `ecosystem/<code>-<SUB>/` holds `docs/` `mockup/` `qa/` and its own repo. Docs that cover all sub-projects live in one place, the root `docs/`. Full layout and rules: [`references/ecosystem.md`](references/ecosystem.md). An add-on or sub-program of one app (browser extension · plugin · CLI · hook client · SDK) with no doc set of its own is not a sub-project: it lives in the code repo under `<project-name>/extension/<name>/` (`project-bootstrap` item 1).
+
+
+**Folder rules (both types):**
+
+- **`.docx` and `.md` may share one `docs/`.** No need for separate folders, because the extension already says who reads it.
+- **Never lose the source files of figures.** If a figure must change next year and only the PNG is left, the whole figure must be redrawn.
+- **Every button in a mockup must really click**, because a fake button makes the review wrong.
+- **`.docx` / `.xlsx` live only in `docs/` and `qa/`.** Do not scatter them to the project root.
+- **Temporary items go to `_to_delete/`** (`workspace-rules/temp-file-discipline`).
+- **`docs/README.md` is the index.** It says what to read first and who owns what (template in `project-bootstrap` → `assets/starter-files.md`).
+
+---
+
+## 2 · Choose the doc set by project size
+
+Size is measured by **duration × number of people who must agree**, not by lines of code.
+
+**S** ≤ 2 weeks · one team · nobody outside the team signs — **M** 1–3 months · internal client · delivered in rounds — **L** > 3 months · external client signs off · contractual obligations
+
+### 2.1 · Deliverable docs: people read and sign them
+
+| Doc | Format | Readers | S | M | L |
+|---|---|---|:-:|:-:|:-:|
+| Project Plan | `.docx` | client · team | ○ | ● | ● |
+| SRS | `.docx` | dev · client | ○ | ● | ● |
+| Architecture | `.docx` | dev · ops | ○ | ● | ● |
+| Test Plan | `.docx` | QA · client | ○ | ● | ● |
+| User guide (`MAN`) | `.docx` → `.pdf` | end users | ○ | ● | ● |
+| FSD | `.docx` | dev · QA | ○ | ○ | ● |
+| BRD | `.docx` | business side | ○ | ○ | ● |
+| Document Checklist | `.docx` | everyone | ○ | ○ | ● |
+| Test Cases | `.xlsx` | QA | ○ | ○ | ● |
+
+● required · ○ not needed unless there is a specific reason
+**Set S has none of these docs.** That is correct.
+
+---
+
+### 2.2 · Technical docs: the team and agents use them while building
+
+All markdown. They **depend on what the project contains**, not on project size. Full table (file · question answered): [`references/technical-docs.md`](references/technical-docs.md).
+
+- **Always:** `<project-name>/README.md` · `docs/BUILD-PLAN.md`
+- **Conditional:** USER-STORIES and `docs/sprints/sprint-NN.md` (work runs in sprints) · AGENT-LOOP (an agent writes code in rounds) · API-SPEC (an API that others call) · DATA-DICTIONARY (a database exists) · EVALUATION-POLICY and PROMPT-LIBRARY (LLM used) · `docs/decisions/ADR-NNNN-<slug>.md` (decisions that will be questioned again) · `docs/runbook-<topic>.md` (system in real use and someone on call)
+
+---
+
+## 3 · Writing order
+
+**Delivery track.** Never skip a step that belongs to the set for that size. Skip steps that are not in the set, such as BRD · FSD in set M.
+
+```
+Project Plan ─► BRD ─► SRS ─┬─► mockup
+                            └─► Architecture ─► FSD
+                                                 │
+              User Guide ◄─ Test Cases ◄─ Test Plan
+```
+
+**The next doc may build on the DRAFT of the previous one.** Put `(รอยืนยัน)` (awaiting confirmation) on every unconfirmed item in both docs. Never set the next doc to APPROVED before the previous one, because if the upstream doc changes, the whole chain must be redone.
+The one exception: **the mockup may run in parallel with the SRS**, because screenshots help the SRS get confirmed faster.
+
+### 3.1 · Open-items register: when the user asks "what is still stuck", answer with an Excel file, not chat text
+
+Labels such as `(รอยืนยัน)` · `(รอวัดใน Phase 0)` (awaiting measurement in Phase 0) and question tables are spread over every doc, so the decision maker sees no overall picture. Merge them into one file with the script. Do not read them all by hand:
+
+```
+python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE>    # test the script: --self-test
+```
+
+- It reads every `.docx` in `docs/`: question tables · tables of undecided assumptions · sign-off tables still "waiting" · labels in the body. It skips revision history, table of contents, label-explanation lines and `(รอบหลัง)` (later round).
+- The **สรุป** (summary) sheet counts by document × type with formulas. The **รายการค้าง** (open items) sheet has the heading in the doc · who answers · decide by · value used for now · cross-references · and "สถานะ" (status) and "คำตอบ" (answer) columns for people to fill in.
+- Types (ประเภทที่ต้องเลือก), shown in Thai in the sheet: **เจ้าของตัดสิน** (owner decides: a web search cannot close it) · **ทีมตัดสิน** (team decides: BA · SA) · **กฎหมาย** (legal) · **วัดจริง** (needs a real-world number: none is published) · **ลงนาม** (sign-off). A question that cites an owner question in another doc also counts as "เจ้าของตัดสิน".
+- **Before sending, read the list by eye.** The script matches wording. A row that was already answered but does not use the words "ตอบแล้ว · ปิดแล้ว · ตัดสินแล้ว" (answered · closed · decided) still gets through.
+- When the user fills in answers: write the answer into the source doc, remove the label, record it in the revision history, then rerun the script. This file is a work list, not a source. Do not edit answers in this file in place of the doc.
+
+**Technical track.** Write when you reach the point of need. No need to wait for anyone: README · BUILD-PLAN before the first line of code · DATA-DICTIONARY when designing the first table · API-SPEC at the first endpoint · PROMPT-LIBRARY at the first prompt really used · ADR at decision time (not in the final wrap-up, because the real reasons are gone by then) · Runbook before going live. Full table in [`references/technical-docs.md`](references/technical-docs.md).
+
+---
+
+## 4 · Who writes which doc, with which skill
+
+Full table (agent · skill for each of 16 doc types): [`references/technical-docs.md`](references/technical-docs.md). Main ones: SRS → `srs-writing` · FSD → `fsd-writing` · ADR → `adr-writer` · Test → `test-case-template` · mockup → `web-app-design` + `ui-craft` · README → `project-bootstrap`
+
+---
+
+## 5 · Figures in docs: choose correctly from the start
+
+- Figures in every kind of project doc (BRD · SRS · FSD · ADR · ER · flowcharts) · slides · print work → `diagram-figures` (one house style). Keep them in `docs/figures/` with sources in `src/`. **Default Mermaid is banned from project docs.**
+- Quick figures in a README · PR · code notes → Mermaid (`software-diagrams`) embedded in `.md` (colours are random and meaningless, Thai overflows the boxes, and shrunk to A4 it is unreadable).
+
+**Every figure header needs all 6 items:** project logo · title · 1-line subtitle · figure number · version and date · owner (details in `diagram-figures` section 3).
+
+---
+
+## 6 · Colour theme of the doc set
+
+Declare it once per project, at the top of every doc's source file:
 
 ```markdown
-| | ที่บันทึกไว้ | ของจริง |
-|---|---|---|
-| ออเดอร์ที่ดึงมา | 214 | **245** |
-| ราคา SKU-07 | 390 | **420** |
-| ค่าส่งต่างประเทศ | ไม่มี | **มี** |
+<!-- doc-theme: accent=#2A78D6 -->
 ```
 
-- Column headings say **which value can be trusted**: "ที่บันทึกไว้ / ของจริง" (recorded / actual), not "เก่า / ใหม่" (old / new).
-- Bold the correct side, so a glance shows what to follow.
-- Rows that already match: **leave them out.**
+(The example uses the house colour `#2A78D6`. Replace it with the project's main colour.)
 
-**Drop an old question or assumption that new data made obsolete, in one line,**
-such as "คำถามข้อ 1 เรื่องยอดไม่ตรง — ตกไปเอง" (question 1 about the mismatched total, dropped by itself), and move on. Do not explain why it dropped.
+`branded-document-design` · `presentation-design` · `diagram-figures`
+read this value instead of picking colours themselves, so docs, slides and every figure form one set.
+
+**Colour comes from the work, not from taste.** If there is a brand colour, use it. If not, use the house colour of `branded-document-design`, write `(รอยืนยัน)`, and carry on without stopping to ask.
+Exceptions that do not follow the theme: service provider logo colours · grey structural lines · green = pass / red = fail
 
 ---
 
-## 4 · Proposals as a "do what → get what" table
+## 7 · Checklist before delivering the doc set
 
-```markdown
-| ไฟล์ | ได้อะไร |
+- [ ] In every `.docx`, open the Navigation Pane and **see all headings** (use real Heading styles, not bold text)
+- [ ] Every doc has a revision history page · version number · date · author
+- [ ] Every figure has a figure number and is cited in the body at least once
+- [ ] The source file of every figure is in `docs/figures/src/` (if this folder exists)
+- [ ] Technical docs that meet the conditions in section 2.2 are all present. For example, if there is an API there must be an API-SPEC, and if an LLM is used there must be a PROMPT-LIBRARY
+- [ ] Every abbreviation is spelled out at first appearance
+- [ ] File names follow `workspace-rules/document-naming`: no `final2`, no `ล่าสุด` ("latest")
+- [ ] Docs in the set cite each other's versions consistently
+- [ ] Run `scripts/open_items.py`, and the open-items register has no row with status "เปิด" (open), or the client knows about every row still open
+- [ ] Tell the user what is left in `_to_delete/` (delete only what `workspace-rules/temp-file-discipline` step 9 allows: old task folders nothing else still uses)
+
+---
+
+## 8 · Anti-patterns
+
+Wrong: `.docx` with no Heading style · keeping only the PNG and not the source · `.docx` and mockups inside the code repo (at this point move to type B) · a doc in 2 places (= 2 versions) · FSD before the SRS is confirmed · using an LLM with no PROMPT-LIBRARY · sub-projects named `projects/` `modules/` `apps/` · empty folders created in advance · one doc that answers every question
+
+---
+
+## 10 · Links to other skills
+
+Doc status in `docs/BUILD-PLAN.md` → `superuser/status-report` · checklist for the printed version → `assets/doc-set-checklist.md`
+
+**Read more when needed:** [`references/writer-templates.md`](references/writer-templates.md): `technical-writer` doc templates (tutorial · API reference · release notes · for README see `project-bootstrap`)
+
+**When the guide must go on the web, be searchable and have many versions:** [`references/docs-site.md`](references/docs-site.md): choosing MkDocs Material · Docusaurus · Starlight · VitePress · Thai search test results · hosting · Thai fonts
+
+
+## reference: docs-site.md
+
+# Docs site
+
+Pick a docs-site generator when a manual or developer documentation must go on the web, be searchable, and have several versions · use with `SKILL.md` item 1 (where the documents live) and the templates in [`writer-templates.md`](writer-templates.md).
+Facts checked 2026-10-23 from official docs · npm · PyPI · GitHub and real tests (section "Sources").
+Abbreviations: Application Programming Interface (API) · Software Development Kit (SDK) · Architecture Decision Record (ADR) · SIL Open Font License (OFL) · Software as a Service (SaaS) · user interface (UI)
+
+## 1 · Is a docs site needed
+
+| Situation | Use |
 |---|---|
-| สารบัญของโฟลเดอร์งาน (`README`) | รู้ว่าอ่านอะไรก่อน ใครเป็นเจ้าของ |
-| วันที่และฉบับบนหน้าแรกของแต่ละไฟล์ | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอ |
-```
+| People outside the team read often (public API · SDK · a manual updated every release) · search needed · several versions at once | a docs site (this file) |
+| The team reads it themselves | `README.md` + `docs/*.md` on GitHub is enough |
+| The customer signs for acceptance | `.docx` per `SKILL.md` item 2.1 · a docs site does not replace the handover document |
 
-- The right column is the **benefit**, not the steps. The reader is deciding whether it is worth it, not doing it.
-- Order from most worthwhile downward, not in the order of doing. "Worthwhile" is measured by the formula: people or files that benefit × impact × confidence ÷ effort. With 3 or more items, fill in numbers using the template [`templates/priority.json`](templates/priority.json) and run `node <plugin>/skills/decision-scoring/scripts/decide.mjs priority priority.json`. Put `"first": true` on any item that makes the result wrong or unsafe so it always comes first. If time is limited, use `knapsack` instead (`decision-scoring`).
-- **Tie the proposal to the problem you just found, if you can.** It is the strongest reason you have.
-- More than 5 rows means you are proposing several things mixed together. Split them into separate rounds.
+## 2 · Comparing the 4 generators
 
----
+| | MkDocs Material | Docusaurus | Starlight | VitePress |
+|---|---|---|---|---|
+| Requires | Python | Node · React | Node · Astro | Node · Vue |
+| Latest version | 9.7.7 | 3.10.2 | 0.42.6 (not yet 1.0) | 1.6.4 · 2.0 is still alpha |
+| Built-in search | yes · lunr.js + lunr-languages (can set `lang: th`) | no · the official one is Algolia DocSearch · local search uses a community plugin | yes · Pagefind is on by default, no setup | yes · MiniSearch (`provider: 'local'`) or Algolia |
+| Versioning | via `mike`, an external tool | built in, `docusaurus docs:version` | community plugin `starlight-versions` | none · issue #109 is still open |
+| Multiple languages (i18n) | the UI can be translated (`th` exists) · a multilingual site = one project per language + a language switcher | built in | built in · a Thai UI is included | built in |
+| licence | MIT | MIT | MIT | MIT |
 
-## 5 · Also say what you will **not** do
+MkDocs Material: the maintainers announced they will maintain only critical fixes until 5 May 2027 and told users to move to Zensical (version 0.0.71 · status Alpha · MIT) · a new project that must live for years should record this in an ADR.
+Quick pick: Python team → MkDocs Material (plan a move) · need built-in versioning → Docusaurus · want a light site with little setup → Starlight · Vue team → VitePress
 
-One line, with the reason and when to do it instead.
+## 3 · Thai search, tested for real
 
-> รายงานย้อนหลังรายปีไม่ทำตอนนี้ — ทำหลังยอดเดือนนี้ยืนยัน
+Thai has no spaces between words, so a search engine that splits words on spaces cannot find a word in the middle of a sentence · tested 2026-10-23 with 2 Thai pages, searching 9 words: ภาษี · กำกับ · สต็อก · สินค้า · ร้านค้า · ภาษีมูลค่าเพิ่ม · อิเล็กทรอนิกส์ · ตัดสต็อก · ทะเบียน
 
-This line heads off **"แล้วอันนั้นล่ะ ทำไมไม่ทำ"** (what about that one, why not do it), which is the question that follows almost every time.
-It also signals that you thought it through and did not forget.
-
----
-
-## 6 · Close with one question
-
-```
-เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วยดึงไฟล์ใหม่ + อัปเดตสรุป
-```
-
-| Rule | Reason |
-|---|---|
-| **One question** per answer | If you ask two or more, you get an answer to only one |
-| Answerable in a few words | "ทั้ง 4" · "เริ่มข้อ 2" |
-| Offer an "all of them" option | Most users pick it. Typing their own answer costs them time |
-| If there is a recommended order, put it in the question | They can answer "ตามนั้น" in one word |
-| **Ask as multiple choice, every option backed by evidence** per `superuser` §6: 2–4 options · the recommended one on top, ending with `(แนะนำ)` (recommended) and 1 line of reason | They can just pick, and do not choose from options you made up |
-
-**Never close by asking "มีอะไรให้ช่วยเพิ่มไหม" (anything else I can help with)**. It does not ask for a decision.
-
----
-
-## 7 · Full example
-
-A before-and-after example (a software requirements document and work plan) is in [`references/example.md`](references/example.md)
-
-
-## reference: example.md
-
-# flag-and-propose — full example
-
-Moved from [SKILL.md](../SKILL.md) §7
-
-Abbreviations in the example: Functional Requirement (FR) · Non-Functional Requirement (NFR) · Test Case (TC) · Architecture Decision Record (ADR) · Functional Specification Document (FSD) · Application Programming Interface (API)
-
-**Before: 1 long paragraph with 3 lumps. After reading it, you still do not know what to answer.**
-
-> เรื่องด่วนที่เจอระหว่างตรวจ — BUILD-PLAN.md ที่สร้างเมื่อเช้านี้อ่านจาก
-> `_to_delete/extracted/*.md` ซึ่งเป็นฉบับก่อนที่ผมจะแก้ มันจึงบันทึกไว้ว่า
-> "FR ถึง FR-13.9 · TC 214 ข้อ · ไม่มี NFR" และตั้งคำถามข้อ 1 ว่าเลข 239 ไม่ตรง
-> ตอนนี้เอกสารจริงเป็น FR-14.12 และ 245 กรณีแล้ว ต้อง extract ใหม่แล้วอัปเดต
-> BUILD-PLAN ก่อนให้ agent เขียนโค้ดต่อ ไม่งั้นมันจะสร้างระบบตามสเปกเก่าและข้าม
-> FR-14.x กับ NFR ทั้งหมด … ถ้าจะทำให้ชุดนี้เป็นตัวอย่างของโปรเจกต์ถัดไป ผมเสนอให้
-> เติม 4 ไฟล์ที่คุ้มที่สุดก่อน คือ docs/README.md เป็นสารบัญบอกว่าอ่านอะไรก่อนและ
-> ใครเป็นเจ้าของ, เพิ่มตารางประวัติการแก้ไขในหน้าแรกของทั้ง 4 docx, …
-
-**After: the same structure in 4 blocks**
-
-> **ด่วน — `BUILD-PLAN.md` ตัวเลขเก่า** เพราะอ่านจาก `_to_delete/extracted/` ฉบับก่อนคุณแก้
-> ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันสร้างตามสเปกเก่าและข้าม FR-14.x กับ NFR ทั้งชุด
->
-> | | ที่บันทึกไว้ | ของจริง |
-> |---|---|---|
-> | FR ถึง | 13.9 | **14.12** |
-> | Test case | 214 | **245** |
-> | NFR | ไม่มี | **มี** |
->
-> คำถามข้อ 1 ที่ตั้งไว้ว่าเลข 239 ไม่ตรง — ตกไปเอง
->
-> **ทำเป็นแม่แบบ: 4 ไฟล์ที่คุ้มสุด**
->
-> | ไฟล์ | ได้อะไร |
-> |---|---|
-> | `docs/README.md` | สารบัญ — อ่านอะไรก่อน ใครเป็นเจ้าของ |
-> | ประวัติการแก้ไข หน้าแรกของ docx ทั้ง 4 | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอพอดี |
-> | `docs/DESIGN-SYSTEM.md` | ดึง token ออกจาก mockup มาเขียนเป็นเอกสาร |
-> | `docs/decisions/` | แยก ADR-1..12 เป็นไฟล์ละข้อ |
->
-> FSD กับ API spec ไม่ทำตอนนี้ — ทำตอนเริ่มเขียนโค้ดของแต่ละหน้าจอ
->
-> เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วย re-extract + อัปเดต BUILD-PLAN
-
-**What disappeared, though the information is just as complete:** the lead-in · the story of how it was found ·
-full file names that do not help the decision · the explanation of why the old question dropped ·
-the how-to details of each proposal
-
-
----
-
-# skill: principle-proceed-on-reversible-work
-
-Use before asking to continue on undoable work
-
-# principle · proceed on reversible work: if it can be undone, do it
-
-> Every question that stops and waits for an answer is time when both the person and the agent are not working.
-> If the work is reversible, doing it and letting them look is faster than asking and waiting.
-
-## Tell them apart
-
-| Reversible: do it now | Irreversible: prepare it in "รออนุมัติ" (awaiting approval) and carry on with the rest |
-|---|---|
-| Edit a file that has a copy or history (document file · sheet · git) | Edit or delete real data (database · master sheet · the user's files) |
-| Draft a document · draft an email or customer reply (not yet sent) · draft a mockup | Send an email, message or post to outsiders |
-| Run tests · calculate · try in a copy | Release to the real system (deploy · announce a price · publish) |
-| Choose between 2 paths that can be changed later | Pay money · book · accept terms · enter a real secret |
-| Move a temporary file to `_to_delete/` | Delete permanently |
-| Code: commit on the work branch, when the user allows it | Code: merge into the main branch · force-push |
-
-## Before you ask, pass these three gates
-
-1. **Can an experiment show it?** If the answer is behaviour, speed, looks or output, try a draft (code work: playbook `prototype` in plugin `software-development`) instead of asking.
-2. **Is it reversible?** If so, pick the path with the least impact, do it, and note it in [`decision-log`](../decision-log/SKILL.md).
-3. **Is it a fact or the user's taste?** Numbers, names, dates and budgets must never be guessed: put `(รอยืนยัน)` (awaiting confirmation) and carry on with the rest. If the brand colour is missing, use that skill's default with `(รอยืนยัน)` and note the stand-in under "ค้างอยู่" (pending) once.
-
-If you pass all 3 gates, do not ask: decide by research + vote (`superuser` `references/autonomy.md`), log it under **ตัดสินใจเอง**, and carry on. For irreversible work, prepare the command, the diff or the draft message in "รออนุมัติ" and do not do it yourself.
-
-**No question at the start either:** a brief that reads several ways → take the reading the evidence supports best (tie → the easiest to undo), say it in line 1, and keep going · questions left go in one list at the end, 0–3, only the kinds in skill `superuser` section 6 → `autonomy`. For a fork that is irreversible, costly or reaches outsiders, use [`flag-and-propose`](../flag-and-propose/SKILL.md).
-
-## What not to do
-
-- Ask "ให้ทำต่อไหม" (shall I continue?) after each step of a job that was already ordered
-- Offer a plan and wait for approval when the work is clear and reversible
-- Use this principle as an excuse to do things the user did not ask for, because "continue" means finishing the ordered work, not widening the scope yourself
-
-
----
-
-# skill: status-report
-
-Use when a task ends, or the user asks what is still pending (งานค้าง), to report status in a table
-
-# Report status when a task ends
-
-> **The one rule:** every time a task ends, there must be a status table in the task's central file, and the same table in the reply.
-> A task with no status table is not finished.
-> **Exception:** read-only playbooks (`research` · `review` · software-development: `investigation`) put the table in the reply only and write no file.
-
----
-
-## 1 · Where to write
-
-| Situation | What to do |
-|---|---|
-| General work (**default**) | `.claude/superuser/CONTEXT.md`. Edit only `## ความคืบหน้า` (progress). The heading `## รับงานต่อ` (take over) belongs to `handoff` section 5, so write it by the rules there. Touch no other heading. If the file does not exist yet, create it from [`templates/CONTEXT.md`](../superuser/templates/CONTEXT.md). |
-| The project has `docs/BUILD-PLAN.md` | Use the form in section 3 instead. Write in one place, never duplicate in two. |
-| Several subagents work at the same time | Subagents only **report back**. Let the team lead write the file alone, or the file breaks. |
-
-The location and rules of every file are in [`team-files`](../superuser/references/team-files.md).
-
----
-
-## 2 · The `## ความคืบหน้า` table
-
-```markdown
-## ความคืบหน้า
-| งาน | สถานะ | หลักฐาน | อัปเดต |
+| Search engine (version tested) | Used in | What the docs say about Thai | Found |
 |---|---|---|---|
-| สรุปยอดขายเดือนนี้ (`docs/sales-oct.xlsx`) | เสร็จ | ยอดรวมตรงใบสั่งซื้อ 212/212 · `reviewer` ตรวจแล้ว | 2026-10-21 14:20 |
-| รายงานคู่แข่ง 5 ราย | ทำอยู่ | อ่านแหล่งทางการครบ 3/5 | 2026-10-21 14:20 |
-| ใบเสนอราคาลูกค้า A | รออนุมัติ | ร่างพร้อมใน `out/quote-A.pdf` · ส่งแล้วย้อนไม่ได้ | 2026-10-21 14:20 |
-| ค่าส่งต่างประเทศ | ค้างอยู่ | รอผู้ใช้ยืนยันเรทของขนส่ง | 2026-10-21 14:20 |
-| ค้นหาสินค้า (โค้ด) | เสร็จ | test 48/48 · `reviewer` ตรวจแล้ว | 2026-10-21 14:20 |
-```
+| Pagefind 1.5.2 (builds an index, searches in the browser) | Starlight | has `th` · no stemming · the word-segmentation section mentions only Chinese, Japanese, Korean | 6/9 · missed กำกับ · ทะเบียน · ภาษีมูลค่าเพิ่ม |
+| lunr 2.3.9 + lunr-languages 1.23.0 `th` (word splitting with wordcut · tested in Node, not in the theme) | MkDocs Material · plugin `@easyops-cn/docusaurus-search-local` (accepts every lunr-languages language) | Material accepts `lang: th` | 6/9 · missed ร้านค้า · ตัดสต็อก · ภาษีมูลค่าเพิ่ม |
+| MiniSearch 7.2.0 defaults (prefix + fuzzy as in VitePress) | VitePress | VitePress segments with `Intl.Segmenter` only for Chinese and Japanese | 0/9 |
+| MiniSearch + a `tokenize` that uses `Intl.Segmenter('th', { granularity: 'word' })` | VitePress (`options.miniSearch.options.tokenize`) | `tokenize` can be set by yourself | 9/9 (tested in Node 22 · not yet tested in a whole VitePress site) |
+| Algolia DocSearch | Docusaurus · Starlight · VitePress | Algolia's language table: Thai segmentation "Not supported" | not tested |
 
-The `## รับงานต่อ` heading that sits below it is written by `handoff` section 5 (one format, used both at the end of a task and at hand-over).
+- Results depend on the project's vocabulary → before delivery, search 20 real terms and record the results in the docs site's README.
+- DocSearch is free only for technical documentation and technical blogs that are public. The site must be live and have no non-technical content.
 
-- Status uses the same 5 words as `superuser`: `เสร็จ` (done) · `ทำอยู่` (in progress) · `ติด` (blocked) · `รออนุมัติ` (awaiting approval) · `ค้างอยู่` (pending; not started yet also uses `ค้างอยู่`).
-- **Evidence is always required** when you write `เสร็จ`: a number that was really checked · how many items were compared · the file name that was opened · the result from `reviewer`. If it was not checked, write `ยังไม่ได้ตรวจ` (not yet checked). Never write that it passed.
-- The checker must not be the same one that did the work. If there is a subagent, name its role in the evidence column.
-- The table holds only open tasks, at most 15 rows. A finished task moves to 1 line in `HISTORY.md`. Overwrite the whole heading, never append.
-- **ค้างอยู่** (pending) is what the agent cannot continue by itself, because a person must answer or decide. Write it as a question that can be answered, and say whom to ask. If there is none, write `ไม่มี` (none).
-- **รออนุมัติ** (awaiting approval) is work that is prepared but irreversible (superuser section 6). Give the command or file that is ready to use. If there is none, leave it out.
-- **ข้อเสนอ** (proposals, in the reply) are improvements outside the scope, at most 3. Say what is gained and how much effort it takes. If there are none, leave it out.
+## 4 · Hosting
 
----
+| | GitHub Pages | Cloudflare |
+|---|---|---|
+| Price | free · a free account needs a public repo | Pages has a free plan · Workers static assets: static file requests are free and unlimited |
+| Limits | site ≤ 1 GB · bandwidth 100 GB/month (soft) · build 10 times/hour (soft · builds through GitHub Actions do not count) · a deploy over 10 minutes fails | Pages free plan: 500 builds/month · 1 build at a time · max 20 minutes · 20,000 files · each file ≤ 25 MiB |
+| Conditions | must not be used as free hosting for an online business or SaaS · the site is public even if the repo is private | the Pages page tells new projects to start on Workers |
 
-## 3 · The form for a project that has `docs/BUILD-PLAN.md`
+A document that outsiders must not see does not go on a public site. Keep it as `docs/*.md` in the repo (how each host restricts readers has not been checked).
 
-Write `## สถานะล่าสุด` (latest status; overwrite) and `## ประวัติสถานะ` (status history; add a line at the top) in that file instead of `CONTEXT.md`. The heading order, columns, allowed values and row ceiling are in [`build-plan-rules`](references/build-plan-rules.md). **Open it before every write.**
+## 5 · Thai fonts
 
----
+- Use the same fonts as the app: `Inter` + `Noto Sans Thai` (`web-app-design` → `references/tokens.md`) · other Google Fonts choices that have Thai letters and are OFL: Sarabun · IBM Plex Sans Thai · Anuphan
+- Load through the Google Fonts CSS2 API with `display=swap` · the API splits out the `/* thai */` block with `unicode-range: U+0E01-0E5B …` by itself, so the browser loads only the parts the page uses (seen in the CSS the API returned 2026-10-23)
+- Thai line-height is the English value plus 0.1 (`ui-craft` item 2)
+- Set the font in the slot the theme exposes · the setting names and CSS variables of each theme have not been checked
 
-## 4 · In the reply
+## 6 · Content lives in the repo beside the code
 
-Show "ภาพรวม" (overview, if any) + a table of only **the rows that changed this round** + "ค้างอยู่" + "รออนุมัติ" (if any) + "ข้อเสนอ" (if any) + "ถัดไป" (next), then say where the full table lives (`CONTEXT.md` or `docs/BUILD-PLAN.md`). Do not paste the whole file.
+- The docs site source lives in the code folder `<project-name>/docs/` with the generator's config file (layout A of `project-bootstrap` item 1) · code and manual change in the same pull request
+- Type B projects: the handover `.docx` · ADR · runbook · BUILD-PLAN stay in `docs/` at the root · the docs site takes only what outsiders read (manual · tutorial · API reference · release notes) · the same content must never live in 2 places
+- Build in Continuous Integration (CI) on every pull request and deploy on merge (`cicd-and-release`)
+- An exception to the root is declared in the code folder's README (`SKILL.md` item 1)
 
----
+## Sources
 
-## 5 · Checklist before saying it is finished
-
-- [ ] Read the central file from disk before editing (someone else may have edited it)
-- [ ] The progress table is overwritten, not appended, and has a date and time
-- [ ] Every row that says `เสร็จ` or `ผ่าน` (pass) has evidence · the checker is not the doer
-- [ ] You did not set `Approved` yourself
-- [ ] `## รับงานต่อ` is updated per `handoff` section 5
-- [ ] You touched no other heading in the file
-- [ ] BUILD-PLAN form: the numbers in "ภาพรวม" match the table · 1 line is added to `## ประวัติสถานะ` · "ทีมตอนนี้" (current team) has no leftover `ทำอยู่` row for a task that has finished
-- [ ] BUILD-PLAN form: run the checker until it passes (the checker is in plugin `superuser`): `python <superuser folder>/skills/polished-document-style/scripts/check_outline.py assets/build-plan-status.md <path of docs/BUILD-PLAN.md>`. It catches missing headings, swapped headings, missing bold cells, changed table headers and cells not yet filled. Other headings in the file (the task table, `## ตัดสินใจเอง`) the checker lets pass.
----
-
-## 6 · What not to do
-
-- Do not create a new status file (`STATUS.md` `progress.md`), because status then scatters across places.
-- Do not hide failing items in prose, because a reader of the table will think everything passed.
-- Do not append to the table every round, and do not let a subagent write the central file.
-
----
-
-## 7 · When the user asks what is pending (`งานค้าง` · `มีอะไรค้าง` · what is left)
-
-The owner wants to clear the list in one reply, so every row says what the owner must do (owner asked 2026-11-26).
-
-1. **Look before you list.** Read `## รับงานต่อ` in `CONTEXT.md`, run `git worktree list` · `git status --porcelain` in the main folder · open PRs and unmerged branches. Drop what is already closed; list nothing from memory.
-2. **First line: the verdict**, such as `งานใน git ปิดหมดแล้ว เหลือ 5 เรื่องที่รอคุณ`.
-3. **One table, columns exactly** `# · งาน · สถานะ · ต้องให้ทำอะไร`. Rows needing the owner come first, then work you can finish yourself.
-   - `ต้องให้ทำอะไร` is one concrete action the owner can do in one reply: a word to type in quotes (`สั่ง "เริ่มรวม skill"` · `ตอบ "คงไว้" หรือ "เอาออก"`), a file or board to open, a budget to approve. Work you can do alone: `ไม่ต้อง ผมทำต่อได้`, then do it unless it needs approval.
-   - `สถานะ` says where it stands with the evidence (merged PR · file path · what is not yet run).
-4. **Small items** that need no decision go in at most 4 short bullets under the table, not in the table.
-5. **Last line: a recommendation**, `แนะนำ: ทำข้อ N ก่อน` with a one-line reason (fastest to clear · unblocks other work · deadline).
-6. Number the rows so the owner can answer by number (`ข้อ 2 เอาออก`).
-
----
-
-## Project plan and weekly report
-
-The template for a project plan (timeline · milestone · risk register · Responsible-Accountable-Consulted-Informed (RACI)) and the weekly status report sent to stakeholders is in [`references/project-plan-and-weekly-status.md`](references/project-plan-and-weekly-status.md)
-
-## Link to other skills
-
-| Need | Use together with |
+| Topic | URL or evidence (2026-10-23) |
 |---|---|
-| The task table and the code-writing loop in the same file | `spec-to-code-loop` (plugin `software-development`) |
-| A project's document set and document status | `project-doc-set` (plugin `software-development`) |
-| Recording context to continue in the next conversation | `handoff` |
-| The table of self-made decisions in the same file | `decision-log` |
-| Choosing a playbook and finishing every kind of task | `superuser` |
-| Table and document format | `polished-document-style` |
-| Names and status of document files | `document-naming` |
+| MkDocs Material | https://squidfunk.github.io/mkdocs-material/ (status · Zensical) · .../plugins/search/ · .../setup/changing-the-language/ · .../setup/setting-up-versioning/ |
+| Docusaurus | https://docusaurus.io/docs/search · https://docusaurus.io/docs/versioning · https://docusaurus.io/docs/i18n/introduction |
+| Starlight | https://starlight.astro.build/guides/site-search/ · .../guides/i18n/ · .../resources/plugins/ |
+| VitePress | https://vitepress.dev/reference/default-theme-search · https://vitepress.dev/guide/i18n · https://github.com/vuejs/vitepress/issues/109 |
+| Pagefind | https://pagefind.app/docs/multilingual/ |
+| lunr-languages | https://github.com/MihaiValentin/lunr-languages (file `lunr.th.js` uses wordcut) |
+| MiniSearch | https://lucaong.github.io/minisearch/types/MiniSearch.Options.html |
+| Algolia | https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/ · https://docsearch.algolia.com/docs/who-can-apply/ |
+| Docusaurus local-search plugin | https://github.com/easyops-cn/docusaurus-search-local |
+| Versions and licence | registry.npmjs.org · pypi.org · api.github.com (Zensical: GitHub = MIT · PyPI = Alpha) |
+| GitHub Pages | https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits · .../creating-a-github-pages-site |
+| Cloudflare | https://developers.cloudflare.com/pages/platform/limits/ · https://developers.cloudflare.com/pages/ · https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/ |
+| Google Fonts | https://developers.google.com/fonts/docs/css2 · `METADATA.pb` in https://github.com/google/fonts · real CSS from fonts.googleapis.com |
+| Thai search test | Pagefind via `npx pagefind@1.5.2` + a browser · lunr and MiniSearch via Node 22 · 2 test pages, the 9 search words in item 3 |
 
 
-## reference: build-plan-rules.md
+## reference: ecosystem.md
 
-# Format for projects that have docs/BUILD-PLAN.md
+# Ecosystem project: 1 system split into several sub-projects
 
-Moved from `SKILL.md` item 3 · open it when the project has `docs/BUILD-PLAN.md`
+Read this when a project has 2 or more sub-projects and each one has its own doc set. The short rule is in `SKILL.md` section 1.
 
-Write these 2 sections in that file instead of `CONTEXT.md` · no file → create a file holding only the project name, then copy from [`assets/build-plan-status.md`](../assets/build-plan-status.md) (never invent the structure) · **never touch the job table or other sections**
-Section order: `## สถานะล่าสุด` (latest status) → job table → `## ประวัติสถานะ` (status history) → `## ตัดสินใจเอง` (decisions made on your own, `decision-log`)
+Use it when the project is a product suite with 2 or more sub-projects, and each has its own doc set (SRS · mockup · architecture). Example: Quanton, split into CONNECT · LAB · INTEL · DESK.
+**The folder must always be named `ecosystem/`.** Never use `projects/`, `modules/` or `apps/`. When someone opens the folder, they must see at once that everything inside is a piece of one system.
 
-- `## สถานะล่าสุด` — **overwrite the whole section** every time, as the single current picture
-- `## ประวัติสถานะ` — **add 1 line at the very top** per job, never delete the old ones, in the format `วันที่ เวลา · งาน · สถานะ · ผล · ทำ <agent> · ตรวจ <agent> · ค้างกี่ข้อ` (date time · job · status · result · made by <agent> · checked by <agent> · how many items pending; if you decided anything on your own that round, append `· ตัดสินใจเอง <count>`)
+```
+<project-name>/
+├─ docs/                ecosystem-level docs — README (index) · BUILD-PLAN · project-plan · BRD · figures/
+├─ ecosystem/
+│  └─ <code>-<SUB>/     1 folder per sub-project, e.g. QTN-CONNECT
+│     ├─ docs/          srs.md · architecture.md · decisions/ · figures/ · fsd-*.md · test-plan.md
+│     ├─ mockup/
+│     ├─ qa/
+│     └─ <sub-name>/    code repo of this sub-project (lowercase, joined with `-`)
+├─ ref/ · assets/ · _to_delete/ · .claude/   shared by the whole ecosystem (same rules as type B)
+```
 
-Section `## สถานะล่าสุด` holds: an update line (date and time · latest job) · **ภาพรวม** (overview: done N/total · in progress · blocked · failed check — counted from the table and must match) · a table `| รายการ | ประเภท | สถานะ | ใครทำ | ใครตรวจ | ผลตรวจ | ค้าง / หมายเหตุ |` (item · type · status · made by · checked by · check result · pending / note) · **ทีมตอนนี้** (team now: 1 row per agent used this round · no subagent, leave it out · starting a new round clears the old rows) · ค้างอยู่ (pending) · รออนุมัติ (awaiting approval) · ถัดไป (next, at most 3) · ข้อเสนอ (proposals)
+- Docs that cover every sub-project (BRD · project plan · BUILD-PLAN) live in one place, the root `docs/`. Never copy them into each sub-project.
+- Create a sub-project folder when you start writing that sub-project's docs. Do not create folders in advance.
+- Sub-project folder name = project code + sub-project name in capitals (`QTN-CONNECT`). Use the same code the docs cite.
+- If a project already uses `projects/`, rename it to `ecosystem/` and fix the paths in every doc and script in the same pass.
+- A project with a single product does not need `ecosystem/`. Use type B as usual.
+- An add-on or sub-program of one app (browser extension · plugin · CLI · hook client · SDK) without its own doc set is not a sub-project. It stays in that app's repo under `extension/<name>/` (`project-bootstrap` item 1). Move it here only when it gets its own SRS, mockup or release cycle.
 
-| Column | Allowed values |
+
+## reference: technical-docs.md
+
+# Technical docs: table, writing order and who writes what
+
+Read this when choosing the technical doc set or about to write one of them. The summary is in `SKILL.md` sections 2.2–4.
+
+## Technical docs (section 2.2)
+
+This group is **all markdown** and **does not depend on project size**. It depends on what the project contains.
+
+| Doc | File | Answers the question | Needed when |
+|---|---|---|---|
+| README | `<project-name>/README.md` | How to install and run | **Always** |
+| BUILD-PLAN | `docs/BUILD-PLAN.md` | What to build first and next · where we are now | **Always** |
+| USER-STORIES | `docs/USER-STORIES.md` | What to build for whom · which story is ready for a sprint · what the AC (acceptance criteria) are | Work runs in sprints or there is a backlog (`user-story-writer`) |
+| Sprint plan | `docs/sprints/sprint-NN.md` | Which stories this sprint takes · what the goal is · what the risks are | Work runs in sprints (`/sprint-plan`). One file per sprint; never overwrite old ones |
+| AGENT-LOOP | `docs/AGENT-LOOP.md` | How the agent works in a cycle · what the stop condition is | An agent writes code in rounds (`spec-to-code-loop`) |
+| API-SPEC | `docs/API-SPEC.md` | What each endpoint accepts, returns and how it fails | There is an API that others call (`api-conventions`) |
+| DATA-DICTIONARY | `docs/DATA-DICTIONARY.md` | What a field means · what values it can take | There is a database or data schema (`database-design`) |
+| EVALUATION-POLICY | `docs/EVALUATION-POLICY.md` | What measures whether the output is good enough · what the pass threshold is | Output comes from a model or LLM that is not always right |
+| PROMPT-LIBRARY | `docs/PROMPT-LIBRARY.md` | Which prompt is the real one · which version · what changed | An LLM sits on the system's main path |
+| ADR | `docs/decisions/ADR-*.md` | Why we chose this way and not the other | A decision will be questioned again (`adr-writer`) |
+| Runbook | `docs/runbook-<topic>.md`, one topic per file | What to do when the system goes down at 2 a.m. | A system is really running and someone is on call |
+
+> **The 4 conditional docs (LLM · API · database) are the ones people forget most often.**
+> The team then ends up asking the agent every round "which prompt is the real one" or "what does this field mean".
+
+## Technical track: when to write (section 3)
+
+| Write when | Doc |
 |---|---|
-| ประเภท (type) | `เอกสาร` (document) · `ตรวจ` (check) · `ส่งมอบ` (delivery) · `โค้ด` (code) · `build` |
-| สถานะ (status), documents | `ยังไม่เริ่ม` (not started) · `Draft` · `Review` · `Approved` · `Archived` (the same set as `polished-document-style`) — `Approved` belongs only to someone who can change it, and an agent may set at most `Review` |
-| สถานะ (status), others | the 5 words in `SKILL.md` item 2 |
-| ผลตรวจ (check result) | `ผ่าน — <evidence>` · `ไม่ผ่าน — <what failed>` · `ยังไม่ได้ตรวจ` · `—` |
+| Before the first line of code | README · BUILD-PLAN |
+| Before letting an agent work in rounds | AGENT-LOOP |
+| When designing the first table | DATA-DICTIONARY |
+| When designing the first endpoint | API-SPEC |
+| When writing the first prompt that will really be used | PROMPT-LIBRARY · EVALUATION-POLICY |
+| When deciding something that will be questioned again | ADR |
+| Before going live | Runbook |
 
-The table holds every item of the project, not just this round's work (items not touched copy their old values), at most 25 rows
-Code work (a full example table · type `build`/`ส่งมอบ` · mobile app evidence) → the extension in plugin `software-development` → `superuser` → `references/code-extensions.md`
+> **Write the ADR and DATA-DICTIONARY at decision time, not in the project wrap-up.**
+> You can write them afterwards, but the real reasons are gone by then.
+
+## Who writes which doc, with which skill (section 4)
+
+| Doc | agent | skill used |
+|---|---|---|
+| README · CHANGELOG | `technical-writer` | `project-bootstrap` |
+| Project Plan | `project-manager` | `branded-document-design` |
+| BRD · user story | `business-analyst` | `user-story-writer` |
+| SRS | `system-analyst` | `srs-writing` |
+| FSD | `system-analyst` | `fsd-writing` |
+| Architecture | `solution-architect` | `architecture-patterns` · `diagram-figures` |
+| ADR | `solution-architect` | `adr-writer` |
+| Test Plan · Test Cases | `qa-tester` | `test-case-template` |
+| mockups | `ux-designer` | `web-app-design` · `ui-craft` |
+| User guide (`MAN`) | `technical-writer` | `design-gate/polished-document-style` |
+| Runbook | `devops-engineer` | `incident-runbook-template` |
+| BUILD-PLAN | `project-manager` | `superuser:ground-rules` |
+| AGENT-LOOP | `developer` | `spec-to-code-loop` |
+| API-SPEC | `system-analyst` | `api-conventions` |
+| DATA-DICTIONARY | `system-analyst` | `database-design` |
+| PROMPT-LIBRARY · EVALUATION-POLICY | `developer` | none (pairs with skill `llm-engineering`) |
 
 
-## reference: project-plan-and-weekly-status.md
+## reference: writer-templates.md
 
-# Project plan and weekly status — stakeholder templates
+# technical-writer templates — README · tutorial · API reference · release notes
 
-Template for the agent `project-manager` · moved from the agent file (2026-10-14) · the short status table at the end of a job is in the SKILL.md of `status-report`, while this file holds the project plan and the weekly report for stakeholders
+**Contents:** README · Tutorial Template · API Reference Template · Release Notes Template
 
-**สารบัญ:**
+Open when you actually have to write this kind of document · put `(รอยืนยัน)` (to be confirmed) on any part you do not know.
 
-- [Standard Output: Polished Project Plan](#standard-output-polished-project-plan)
-- [Standard Output: Polished Status Report](#standard-output-polished-status-report)
+## Standard Outputs
 
-## Standard Output: Polished Project Plan
+### README
 
-```markdown
-# Project Plan: <Project Name>
+There is no README template here — use the single template of `project-bootstrap` (`SKILL.md` item 2 and `assets/starter-files.md`). The 15-section skeleton (9 always present · 6 present when the project has that thing) is in `references/readme-skeleton.md` · commands per language are in `references/readme-by-stack.md`.
 
-| | |
-|--|--|
-| **Project Lead** | @pm-name |
-| **Sponsor** | @sponsor |
-| **Status** | ทำอยู่ (วางแผน) |
-| **Start Date** | YYYY-MM-DD |
-| **Target End** | YYYY-MM-DD |
-| **Budget** | ฿XX,XXX |
+### Tutorial Template
+
+````markdown
+# Tutorial: Build Your First X in 10 Minutes
+
+> **What you'll learn:** by the end, you'll have built Y and understand Z.
+
+## What You'll Need
+
+- Node.js 22+ (Node 18 หมดอายุ 30 เม.ย. 2568, Node 20 หมด 30 เม.ย. 2569 — endoflife.date ตรวจ 22 ต.ค. 2569)
+- A free account at example.com
+- 10 minutes
+
+## Step 1: Set Up
+
+Run:
+```bash
+npx create-thing my-project
+cd my-project
+```
+
+> **What just happened?** Brief explanation.
+
+You should see:
+```
+✓ Project created
+```
+
+## Step 2: Configure
+
+...
+
+## Step 3: Run It
+
+...
+
+## Congratulations!
+
+You've built X. Try these next:
+
+- [Add feature A](#how-to-add-a) (how-to)
+- [Understand B](#concept-b) (explanation)
+- [Full API](#reference) (reference)
+````
+
+### API Reference Template (per endpoint)
+
+````markdown
+## POST `/api/v1/resource`
+
+Create a new resource.
+
+### Authentication
+
+Required. Bearer token in `Authorization` header.
+
+### Request
+
+```http
+POST /api/v1/resource HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <token>
+
+{
+  "name": "string (required)",
+  "tags": ["string (optional)"]
+}
+```
+
+### Parameters
+
+| Field | Type | Required | Description |
+|-------|------|:--------:|-------------|
+| `name` | string | ✓ | Display name, 1-100 chars |
+| `tags` | string[] | ✗ | Up to 10 tags |
+
+### Response: 201 Created
+
+```json
+{
+  "id": "res_abc123",
+  "name": "...",
+  "created_at": "2025-01-15T10:30:00Z"
+}
+```
+
+### Errors
+
+| Code | When |
+|:----:|------|
+| 400 | Validation failed (see body) |
+| 401 | Missing/invalid token |
+| 429 | Rate limit (60 req/min) |
+
+### Code Examples
+
+```typescript
+const res = await fetch('/api/v1/resource', {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ name: 'My Resource' })
+});
+```
+````
+
+### Release Notes Template
+
+> Breaking Changes must always come before the other sections (right after Highlights) — the full release notes rules are in the skill `release-notes`.
+
+````markdown
+# Release v2.1.0 — YYYY-MM-DD
+
+## Highlights
+
+> The TL;DR for busy readers.
+
+- **New:** X feature — try it: `command`
+- **Improved:** Y is faster — <measured number only, e.g. p95 login 1.2 s → 0.7 s; drop the number if not measured>
+- **Fixed:** Z bug affecting users on platform A
+
+## Breaking Changes
+
+### `api.oldMethod()` removed
+
+**Before:**
+```typescript
+api.oldMethod(arg)
+```
+
+**After:**
+```typescript
+api.newMethod({ arg })
+```
+
+[Migration guide](#)
+
+## New Features
+
+### Feature Name
+
+Description with user-facing benefit.
+
+```bash
+# Example usage
+command --new-flag
+```
+
+[Read the docs](#)
+
+## Improvements
+
+- Faster initial load time
+- Better error messages for X
+
+## Bug Fixes
+
+- Fix issue where ... ([#1234](#))
+- Resolve crash when ... ([#5678](#))
+
+## Contributors
+
+Thanks to: @alice, @bob, @charlie
+````
+
+### Release Notes Template (Thai)
+
+> Same structure as the English version · wording at news register (`human-writing` `references/thai-grammar.md` section 4): no first person · each line has subject + verb + object · numbers must be measured, and if there are none, leave them out · right/wrong examples are in the skill `release-notes` item 4.
+
+````markdown
+# เวอร์ชัน 2.1.0 — YYYY-MM-DD
+
+## สรุป
+
+- **ใหม่:** ส่งออกรายงานเป็น CSV ได้แล้ว — เมนู รายงาน → ส่งออก
+- **เร็วขึ้น:** ส่งออกรายงาน 1,000 แถวใช้เวลา 3 วินาที จาก 12 วินาที
+- **แก้แล้ว:** ลบสินค้าชิ้นสุดท้ายในตะกร้าแล้วแอปไม่ปิดตัวเองอีก
+
+## สิ่งที่ต้องแก้ก่อนอัปเดต
+
+### `api.oldMethod()` ถูกถอดออก
+
+**เดิม:** `api.oldMethod(arg)` · **ใหม่:** `api.newMethod({ arg })` · [วิธีย้าย](#)
+
+## ฟีเจอร์ใหม่
+
+### ชื่อฟีเจอร์
+
+ผู้ใช้ทำอะไรได้ 1 ประโยค แล้วตามด้วยตัวอย่างคำสั่งหรือภาพหน้าจอ
+
+## ปรับปรุง
+
+- หน้าแรกโหลดเสร็จใน 1.2 วินาที จาก 2.8 วินาที
+- ข้อความแจ้งเตือนตอนอัปโหลดไฟล์ผิดชนิด บอกชนิดที่รับได้แล้ว
+
+## แก้บั๊ก
+
+- ยอดรวมในใบเสนอราคาไม่เพี้ยนเมื่อมีส่วนลดเป็นเปอร์เซ็นต์ ([#1234](#))
+
+## ผู้ร่วมพัฒนา
+
+ขอบคุณ @alice @bob @charlie
+
+เวอร์ชัน 2.1.0 · ออก YYYY-MM-DD
+````
+
 
 ---
 
-## Objective
+# skill: product-naming
 
-> One-sentence goal that fits in a tweet.
+Use when naming a product, shop, app or brand
 
-## Scope
+# Naming a product
 
-| In Scope | Out of Scope |
-|-------------|-----------------|
-| ... | ... |
+> **The one rule:** a good name is one a person **types correctly the first time, after hearing it once.**
+> Deeper meaning can come later, but if people misspell the name, customers cannot find you.
 
-## Timeline
+## When to use this skill
 
-![ผังเวลาโครงการ: Discovery → Build → Launch](figures/fig-01.png)
+- Naming a product, shop, service, app, brand, module or internal project
+- A name exists but feels dated, long or the same as someone else's
+- There are several products and the names should form one family
+- You must choose from a brainstormed list of names and cannot decide
 
-**รูปที่ 1 —** ผังเวลาโครงการ วาดด้วย `diagram-figures` (plugin `software-development` · house style) แล้วฝังเป็นไฟล์ภาพ · ไม่ใช้ Mermaid ในแผนที่ส่งผู้เกี่ยวข้อง
-
-## Milestones
-
-| # | Milestone | Target Date | Owner | Status |
-|:-:|-----------|:-----------:|:------|:------:|
-| 1 | Requirements approved | YYYY-MM-DD | @ba | ค้างอยู่ |
-| 2 | Architecture signed off | YYYY-MM-DD | @architect | ค้างอยู่ |
-| 3 | Minimum Viable Product (MVP) feature complete | YYYY-MM-DD | @dev-lead | ค้างอยู่ |
-| 4 | User Acceptance Testing (UAT) passed | YYYY-MM-DD | @qa | ค้างอยู่ |
-| 5 | Production launch | YYYY-MM-DD | @devops | ค้างอยู่ |
-
-## Risk Register
-
-| ID | Risk | Likelihood | Impact | Score | Mitigation | Owner |
-|:--:|------|:----------:|:------:|:-----:|------------|:------|
-| R-001 | Payment vendor delay | Medium | High | 6 | Plan B vendor | @architect |
-| R-002 | Resource availability | Low | Medium | 2 | Cross-training | @pm |
-
-> **Score = Likelihood × Impact** (1-9 scale)
-
-## Dependencies
-
-| Type | Dependency | Owner | Status |
-|------|------------|:------|:------:|
-| External | Payment gateway (Application Programming Interface, API) | Vendor X | ติด |
-| Internal | Design team availability | @design-lead | ทำอยู่ |
-| Technical | New cloud account | @devops | ทำอยู่ |
-
-## Responsible-Accountable-Consulted-Informed (RACI) Matrix
-
-| Activity | PM | BA | Arch | Dev | QA | DevOps |
-|----------|:--:|:--:|:----:|:---:|:--:|:------:|
-| Requirements | A | R | C | I | C | I |
-| Architecture | A | C | R | C | I | C |
-| Implementation | A | I | C | R | C | C |
-| Testing | A | I | I | C | R | I |
-| Deployment | A | I | C | C | I | R |
-```
-
-## Standard Output: Polished Status Report
-
-```markdown
-# Status Report: <Project> — Week of YYYY-MM-DD
-
-| | |
-|--|--|
-| **Reporting Period** | YYYY-MM-DD to YYYY-MM-DD |
-| **Overall Status** | On Track |
-| **Health Trend** | Improving / Declining / Stable |
+Not for: logo, colours, brand typography → `graphic-design` · naming document files → `workspace-rules/document-naming` · naming tables and columns → `database-design` · naming endpoints → `api-conventions`
 
 ---
 
-## สรุปสั้นสำหรับผู้บริหาร (Too Long; Didn't Read, TL;DR)
+## 1 · Six tests that cut a name at once
 
-> 1-2 sentence summary for executives.
+Test before you think further. If a name fails any one, cut it. Do not feel sorry.
 
-## Status by Track
+| # | Test | Fails when |
+|:--:|---|---|
+| 1 | **Phone test**: say the name to someone over the phone. Do they type it correctly? | You have to spell it out |
+| 2 | **Length** | More than 3 syllables, or more than 12 letters |
+| 3 | **Domain and handle** | `.com` and `.co` are both taken and no social handle is free anywhere |
+| 4 | **Collision with what exists** | A product, shop or service in the same category has the same or a very close name |
+| 5 | **Meaning in other languages** | It means something bad in a language your customers speak |
+| 6 | **Thai speakers can pronounce it** | It has a consonant cluster Thai speakers avoid, or ends in a sound that gets swallowed |
 
-| Track | Status | Notes |
-|-------|:------:|-------|
-| Scope | On track | On target |
-| Schedule | At risk | 3 days behind, recoverable |
-| Budget | On track | 65% spent, on track |
-| Quality | On track | 0 critical bugs open |
-| Team Morale | On track | High |
+**Also cut:** a number in the name (`App360` · `Pro24` go stale when the version changes) · 3 or more words (nobody says the whole thing, so it gets shortened until it cannot be recognised).
 
-> **Note:** On track / At risk / Off track คือระดับสุขภาพของแต่ละด้านสำหรับผู้อ่านต่างประเทศ ไม่ใช่สถานะของงาน · สถานะรายการงานใช้ 5 คำกลาง (เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่)
+> **People often forget test 6.** If the name has `th`, `v` or `z` at the end of a word, or a cluster like `str-` or `spl-`,
+> Thai speakers will pronounce it off and type what they heard.
 
-## Completed This Period
+---
 
-- ...
-- ...
+## 2 · Nine formulas for producing names
 
-## In Progress
+Do not sit and think in the air. Walk through the formulas one at a time, come up with 5–10 names per formula, then select.
 
-| Item | Owner | Due | % Done |
-|------|:------|:---:|:------:|
-| Feature X | @alice | MM/DD | 75% |
-| Feature Y | @bob | MM/DD | 40% |
+| # | Formula | Method | Example |
+|:--:|---|---|---|
+| 1 | **Real word, cut the end** | Take an English word and drop the last syllable | `figure` → **Figma** · `velocity` → **Velo** |
+| 2 | **2 words collided** | Cut the head and tail of 2 words and join them | `fold`+`drop` → **Foldrop** · `data`+`dog` → **Datadog** |
+| 3 | **Word + suffix** | Add `-io` `-ly` `-ify` `-o` `-a` `-ex` | `home`+`ify` → **Homify** · `aurum`+`io` → **Aurio** |
+| 4 | **Latin/Greek root** | Find the root word for what it does, then shorten it | `lumen` → **Lumo** · `nexus` → **Nexa** |
+| 5 | **Family letters** | A word for the function + a family ending | **TradeXI · TelXI · DockXI · SoundXI** |
+| 6 | **Short meaningless word** | 4–5 letters, consonant-vowel-consonant, readable at once | **Quix · Zeno · Riva · Volt** |
+| 7 | **Real word borrowed across contexts** | An ordinary word unrelated to the work that gives the right feeling | **Slack · Notion · Arc · Linear** |
+| 8 | **2 syllables that read smoothly** | 2 short real words side by side | **Speak Go · Cash App** |
+| 9 | **2 whole unrelated words** | Join 2 real words that relate neither to the product nor to each other into one word | **Tailscale · Snowflake · Firebase · Basecamp** |
 
-## Blocked
+**The formulas that give the most "cool + clean" names** are 1 · 4 · 6, because they give short names with no literal meaning that are easy to remember.
+**Formula 7 gives names that look grown-up**, but its domains are the hardest to find.
 
-| Item | Blocker | Owner | Action |
-|------|---------|:------|--------|
-| ... | Waiting on legal review | @legal | Escalate to Chief Technology Officer (CTO) |
+**Letters that feel modern:** start with `x` `z` `q` `v`, or end with `-o` `-a` `-ix` `-ex`.
+**Letters that look dated:** ending with `-soft` `-tech` `-sys` `-pro` `-plus` `-max`.
 
-## Upcoming (Next Period)
+---
 
-- ...
+**Formula 9 in depth:** take 2 whole real words (cut nothing) that relate neither to the product nor to each other, and put them side by side · at most 3 syllables in total · the first word concrete · read every pair aloud before choosing → reasons, rules and the A/B word pools for pairing are in [`references/formula-9-deep-dive.md`](references/formula-9-deep-dive.md). Open it when you use formula 9.
 
-## New Risks / Issues
+## 3 · Giving the name a meaning
 
-| Severity | Item | Owner |
-|:--------:|------|:------|
-| High | ... | ... |
+A short, modern name does not have to be meaningless, because meaning can arrive 2 ways.
 
-## Asks for Stakeholders
+| Way | Formulas that give it | Example |
+|---|---|---|
+| **Built in from birth** | 4 Latin/Greek roots · 7 real words borrowed across contexts | `Aurio` from *aurum*, gold · `Anchor`, stability |
+| **Added later** | 6 short meaningless words | `Quix` is chosen first, then tied to speed |
 
-- Decision needed on X by MM/DD
-- Need 1 more QA resource starting next sprint
-```
+**Rule for meaning:** find the root from **what the user gets**, not from what the system does.
+For example, for a gold inventory system, use the root "gold", not the root "warehouse".
+
+**Test:** can you write the meaning in **1 line**?
+"Aurio: from Latin aurum, meaning gold." That is all. If it takes more than 1 sentence to explain, the meaning is too weak.
+
+**Thinking libraries:** a table of Latin/Greek roots that work in practice (light · gold · connect · time · protect and others) and a table of real words borrowed across contexts, grouped by feeling (fast · stable · clear · orderly · connected · guiding · quiet) → [`references/meaning-libraries.md`](references/meaning-libraries.md). Open it when you use formula 4 or 7. Real words are the hardest to find domains for, so keep a fallback (`arc.app` · `getprism.com`).
+
+**The story:** short, memorable, easy to retell (not a chain of initials, and not the family dog's name) → good and bad examples in `references/meaning-libraries.md`
+
+**Write the meaning into the brand document** on the day you pick the name, not when someone asks.
+That way the sales team tells it the same way every time.
+
+---
+
+## 4 · Name families, when there are several products
+
+Pick one pattern and use it for the whole family.
+
+| Pattern | Looks like | Good | Bad |
+|---|---|---|---|
+| **Same ending** | `TradeXI` `TelXI` `DockXI` | You know at once they share a house, and new names are easy to make | If one name is damaged, the whole family suffers |
+| **Same prefix** | `QuixChat` `QuixFlow` | The parent brand stands out | Every name gets longer |
+| **Independent** | `Aurio` `Homify` `Foldrop` | Each one sells itself and can be sold separately | You must build a new brand for each |
+
+**How to choose:** if you sell them as a bundle, use one family. If you might sell them separately or sell the business later, make them independent.
+
+> **Write the family's naming rules down in a document**, together with the rule for naming the next one.
+> Otherwise the 5th name breaks the pattern and the whole set looks messy.
+
+---
+
+## 5 · Check what is available before you fall in love
+
+**Check when 5 names are left, not when 1 is left.** If you love a name and then learn you cannot use it, it hurts more.
+
+| Check what | Where | Fails when |
+|---|---|---|
+| Domain | Domain registrar | `.com` and `.co` are taken and no fallback is left |
+| Thai trademark | กรมทรัพย์สินทางปัญญา (Department of Intellectual Property) | A registration exists in our goods or services category |
+| International trademark | WIPO database | Same as above, if you will sell abroad |
+| Package name (if software) | npm · PyPI · NuGet | Already used in the ecosystem you will publish to |
+| App store name (if an app) | App Store · Play Store | An app with the same name exists in the same category |
+| Social handles | X · Instagram · Facebook · TikTok · GitHub · LINE | None is free |
+| Plain search | Search engine | The first page is full of other people's results |
+
+**Decision rule:** you must get the main domain, at least half the handles must be free, and
+there must be no trademark collision in our category. These 3 have no exceptions.
+
+---
+
+## 6 · Sound and typing in the Thai context
+
+| Topic | Rule |
+|---|---|
+| Thai customers will certainly write the name in Thai | Try writing it yourself first, for example `Aurio` as "ออริโอ", and see if it reads smoothly |
+| Choose 1 official Thai form | Follow the transliteration rules of the Royal Society of Thailand (ราชบัณฑิตยสภา) with no tone marks (ซอฟต์แวร์, not ซ้อฟต์แว่ร์) · record it in the brand kit · keep other forms that customers actually type as search keywords, not for the work itself |
+| Sounds Thai speakers swallow | `-th` `-v` `-s` at the end of a word vanish almost every time |
+| Clusters they avoid | `str-` `spl-` `thr-` |
+| Names easy to mistype on a Thai keyboard | Avoid letters so close together that they can swap |
+| Length when written in Thai | No more than 5 Thai syllables |
+
+**Real test:** say the name to 3 Thai speakers over the phone and have them type it in LINE and send it back.
+If even 1 person types it differently, the name fails.
+
+---
+
+## 7 · Five tests before the final decision
+
+| # | Test | Passes when |
+|:--:|---|---|
+| 1 | Write it in a real sentence | "ลองใช้ ___ ดูสิ" (Thai for "try ___") sounds natural |
+| 2 | Write it next to the category word | "___ — ระบบจัดการคลังทอง" (Thai for "___, a gold inventory system") reads and makes sense |
+| 3 | Shrink it to an icon | The first letter or 2 can become a symbol |
+| 4 | Survives when the scope grows | A name with the word "gold" breaks the day you also sell silver |
+| 5 | Resists teasing | Try making up jokes about your own name. If they come too easily, beware |
+
+**Test 4 matters most for anything that will keep growing.** A meaningless name is safer in the long run.
+
+## Related skills
+
+Logo, colours, typography → `graphic-design` · same product already exists under this name → `research-with-sources/prior-art-review` · names in documents → `workspace-rules/document-naming` · feature terms inside the product → `i18n-and-locale` · presenting the shortlist → `presentation-design`. A shortlist table you can fill in right away → `assets/name-shortlist.md`
+
+
+## reference: formula-9-deep-dive.md
+
+# Formula 9 in depth
+
+Open this when you generate names with formula 9.
+
+## The pattern that makes a name look coolest without inventing a word
+
+`Tailscale` = *tail* + *scale*. Neither word has anything to do with private networks, and the two words have nothing to do with each other either.
+
+| How it differs from formula 2 | |
+|---|---|
+| Formula 2 | **Cuts** syllables before joining, such as `fold`+`drop` → Foldrop, so the result is not a real word |
+| Formula 9 | **Cuts nothing.** Put 2 whole real words side by side |
+
+**Why it works**
+
+| Reason | |
+|---|---|
+| Easy to remember | The listener already knows both words, so there is no new spelling to learn |
+| Unique | Nothing forces these words together, so nobody has paired them before |
+| Domains are easier to find | Usually easier than a single word, but still check them as in section 5 of `SKILL.md` |
+| Passes the phone test | The listener types it correctly at once, because the words are familiar |
+
+**Rules for this formula**
+
+- Total of at most **3 syllables**: `Tailscale` 2 · `Basecamp` 2 · `Snowflake` 2
+- **The first word should be concrete**, something you can picture (tail, snow, fire, base, bit, black, cloud)
+- Do not let the pair describe the product. If it explains the product, it becomes a dated name like `DataSync`
+- **The combined meaning must not come out odd.** Read it aloud and picture it first
+- Spellings must not collide into something hard to read. Avoid a first word that ends with the same letter the second word starts with
+
+**How to generate** — build 2 separate pools, then pair at random and read every pair aloud
+
+| Pool A: concrete | Pool B: structure/measure |
+|---|---|
+| tail · snow · fire · bit · black · cloud · iron · salt · moon · north · glass · pine | scale · flake · base · bucket · camp · bird · flare · stack · frame · gate · port · line |
+
+Example pairs: `Saltframe` · `Pinegate` · `Moonstack` · `Ironport` · `Glassline`
+
+> **Meaning can be added fully afterward** (see item 3). `Tailscale` had no meaning at the start,
+> but after some use, people tied it to the idea of a network that can scale.
+
+
+## reference: meaning-libraries.md
+
+# Libraries for developing a name's meaning
+
+Contents: Latin/Greek root library → real words borrowed across contexts → good and bad stories
+
+## Latin/Greek roots that work in practice
+
+| Meaning | Root | Resulting names |
+|---|---|---|
+| light · clarity | *lux · lumen* | Lumo · Lumen · Lucent |
+| gold · valuable | *aurum* | Aurio · Aura |
+| connect | *nexus · syn-* | Nexa · Syno · Nexo |
+| power · electricity | *volta · vis* | Volta · Vira |
+| circle · world | *orbis · kyklos* | Orbis · Kyklo |
+| time · rhythm | *tempus · chronos · kairos* | Tempo · Chrono · Kairo |
+| flow · move | *fluxus · kinesis* | Flux · Kinet |
+| sound | *sonus · vox* | Sona · Voxa |
+| store · chest | *arca* | Arca · Arka |
+| protect · shield | *aegis · scutum* | Aegis · Scuto |
+| care · look after | *cura* | Cura · Curo |
+| beginning | *arche* | Arka · Archo |
+| form | *morphe* | Morpho · Forma |
+| word · language | *lexis · verbum* | Lexi · Verba |
+| look · inspect | *specto* | Specta · Scopo |
+| new | *nova* | Nova · Novo |
+| true | *veritas* | Vera · Verio |
+| work · output | *opus* | Opus · Opero |
+| port · door | *portus · porta* | Porta · Portio |
+
+## Real words borrowed across contexts, grouped by feeling
+
+| Feeling | Words |
+|---|---|
+| fast · agile | Arc · Bolt · Dash · Swift · Rush · Skim |
+| stable · safe | Anchor · Vault · Keel · Bastion · Forge · Bedrock |
+| clear · visible | Prism · Lens · Beacon · Signal · Facet |
+| orderly | Grid · Frame · Ledger · Atlas · Index · Stack |
+| connected | Bridge · Relay · Mesh · Loom · Thread · Weave |
+| guiding | Compass · Pilot · Helm · North · Trail |
+| quiet · smooth | Slate · Quill · Linen · Drift · Still |
+
+> Warning: **real words are the hardest to find domains for**, so prepare a fallback, such as adding a category word (`arc.app`, `getprism.com`)
+> or using another short domain style.
+
+## Good and bad stories
+
+| | Example |
+|---|---|
+| ✓ Good | "Aegis is the shield of Zeus. This system exists to protect." Short, memorable, easy to retell |
+| ✗ Bad | "A stands for Advanced, U for Unified, R for Realtime…" Nobody remembers it |
+| ✗ Bad | "The name comes from the family dog's name." A personal meaning, so customers feel nothing |

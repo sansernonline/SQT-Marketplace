@@ -1,0 +1,3 @@
+# Tests · workspace-setup
+
+Tests: `node scripts/doctor.test.mjs` (6 doctor cases: a healthy machine · does not stop at the first failure · old plugin · old quota · read-only · no write command) · `node scripts/setup.mjs --self-test` (the setup script's cases: adding to `.gitignore` twice does not duplicate · a repo that is a plugin · existing permission rules kept · `--user` keeps the existing values in the user file and a new project counts as complete · broken JSON untouched · personal rules back up the old file before writing · the git policy has a single line and is inserted under the existing rules heading). All passed on 2026-11-10.

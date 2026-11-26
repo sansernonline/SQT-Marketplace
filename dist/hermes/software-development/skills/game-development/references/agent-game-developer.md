@@ -275,7 +275,7 @@ Supports keyboard, gamepad, touch, VR controllers from same code.
 
 - `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `game-development` — engine + system design
-- `polished-document-style` (from superuser) — for design docs
+- `design-gate/polished-document-style` (from superuser) — for design docs
 
 ## Things You Don't Do
 

@@ -1,1085 +1,3 @@
-# skill: config-and-secrets
-
-Use when settings differ by environment or secrets need hiding
-
-# Config and secrets
-
-> **2 rules:**
-> 1. The same code must run in every environment. The only difference is config.
-> 2. A secret must not be in git, not in logs, and not in any file sent to the browser.
-
-## When to use this skill
-
-- Starting a project, or adding a new environment.
-- You need to store a connection string, API key, certificate, or signing key.
-- You find a hardcoded value in code and must move it out.
-- A secret leaked into git, or you suspect it did: go to step 8 at once.
-
-## When to use another skill instead, or together
-
-| Task | Skill | |
-|---|---|---|
-| Storing secrets in a pipeline · approval gates | `cicd-and-release` | instead |
-| Secrets in a Jenkinsfile (`withCredentials` · single quote) | `jenkins-pipeline` | together |
-| Kubernetes secrets kept out of values.yaml (External Secrets · SealedSecret) | `kubernetes-helm` | together |
-| Designing login, tokens, user permissions | `auth-implementation-patterns` | instead |
-| Keeping sensitive values out of logs | `logging-standards` | instead |
-| Database connection strings | `database-design` | together |
-| Recording a secret leak · steps during the incident | `postmortem-template` · `incident-runbook-template` | together |
-
-**How to do it in each language and framework** is in `references/per-stack.md`.
-
----
-
-## 1 · Tell config and secret apart first
-
-| | config | secret |
-|---|---|---|
-| Examples | API address, log level, page size, time zone, feature flag | Database password, API key, token signing key, certificate |
-| Allowed in git | ✓ yes | ✗ never |
-| Who can see it | The whole team | Only those who need it |
-| If it leaks | No harm | Must be revoked and replaced at once |
-| Changes how often | With the work | On a rotation schedule |
-
-> **If you cannot decide which one it is, treat it as a secret.** Being too careful costs only a small annoyance.
-> But if you guess wrong, the key stays in git history forever.
-
----
-
-## 2 · Order of priority: later values override earlier ones
-
-```
-1. Defaults in code             (safe, really usable for dev)
-2. Config file per environment  (appsettings.Production.json, config/production.yaml)
-3. Environment variables
-4. Secret store                 (Key Vault, Secrets Manager, Kubernetes secret)
-5. Arguments at launch          (for troubleshooting only)
-```
-
-**Defaults must be safe.** If someone forgets to set a value, the system must run in its strictest mode.
-For example `DEBUG=false` · `ALLOWED_ORIGINS=` empty · Transport Layer Security (TLS) on, not the opposite.
-
----
-
-## 3 · Check at boot: if any value is missing, die at once
-
-> **Important:** this step is worth the most on this page.
-> A system that boots with wrong config will break at 2 a.m. in a function that is rarely used.
-> A system that **refuses to boot** on wrong config tells you at deploy time, when you can still roll back.
-
-Node zod example: `references/per-stack.md` section 2. The pattern is a schema that parses `process.env` once at boot, so an invalid value kills the process and names the value.
-
-**What to check:** every value is present · types are right · values are in the accepted range ·
-keys are long enough · values banned on production (`JWT_SECRET=dev-secret` must fail).
-
-**Print a config summary at boot:** the value names, and the values that are not secrets.
-For a secret, print only "set" or the last 4 characters, never the full value.
-
----
-
-## 4 · Naming environment variables
-
-```
-<system>_<group>_<name>
-
-APP_DB_HOST          APP_DB_PASSWORD
-APP_REDIS_URL        APP_SMTP_PASSWORD
-APP_FEATURE_NEW_CHECKOUT
-```
-
-| Rule | Reason |
-|---|---|
-| Uppercase with underscores | The convention on every operating system |
-| Start with a system prefix | Avoids clashing with the system's `PATH`, `HOME`, `USER` |
-| Same name in every environment | Values may differ, but names must not, or every move between environments means editing code |
-| Put the unit in the name | `APP_TIMEOUT_SECONDS`, not `APP_TIMEOUT` |
-| Do not put the environment name in the variable name | ✗ `APP_PROD_DB_HOST` |
-
----
-
-## 5 · `.env` and `.env.example`
-
-| File | In git | Role |
-|---|:--:|---|
-| `.env.example` | ✓ | The list of **all** required values, with explanations and example values that are not real |
-| `.env` | ✗ | Real values on each developer's machine |
-| `.env.production` | ✗ | **This file should not exist at all**, because production uses a secret store |
-
-```bash
-# .gitignore
-.env
-.env.*
-!.env.example
-```
-
-```bash
-# .env.example
-APP_DB_HOST=localhost              # database address
-APP_DB_PASSWORD=change-me          # important: the real value is in the team's 1Password vault
-APP_JWT_SECRET=                    # important: generate with: openssl rand -base64 48
-APP_LOG_LEVEL=debug
-```
-
-**Update `.env.example` in the same commit that adds a new value.**
-Otherwise the next person who clones hits an error nobody can explain.
-
-> **A `.env` added to `.gitignore` too late:** once the file has been tracked, even once,
-> adding it to `.gitignore` later **does not remove it from history.** Run `git rm --cached` and treat the secret as leaked.
-
-**Pre-commit gate**: `.gitignore` blocks only files you know by name, but a key pasted by mistake into code or YAML needs a scanner. Install gitleaks as a pre-commit hook in every repo (`gitleaks git --pre-commit --staged` in gitleaks 8.19 and later · earlier versions use `gitleaks protect --staged`) and rerun it in CI over the whole history with `gitleaks git --redact`. If the hook fails, never use `--no-verify`; move the value out first. If you find one in history, go to step 8 at once, not just delete the line.
-
----
-
-## 6 · Where to keep secrets
-
-| Situation | Use | Note |
-|---|---|---|
-| Developer machine | A `.env` that stays out of git; for .NET use `dotnet user-secrets` | Never use production values |
-| Small team sharing | The team's password manager (1Password, Bitwarden) | Not chat, not email, not a Google Sheet |
-| Production in the cloud | Azure Key Vault · AWS Secrets Manager · Google Secret Manager | Grant access with a managed identity, not another key |
-| Kubernetes | External Secrets Operator pulling from a vault above | A Kubernetes secret is only base64, **not encryption** |
-| You really must store in git | SOPS or sealed-secrets (encrypt before commit) | Last resort |
-
-**Permissions:** each service reads only its own secrets, environments are fully separate, and
-no account can read all of them, except an admin account whose access is logged.
-
----
-
-## 7 · Rotation
-
-**Design for it from day one**, not when you finally have to rotate.
-
-| Must have | Detail |
-|---|---|
-| Two values valid at once | During the change, both the old and the new value must work, or you must shut the system down |
-| Reload without restart | Or accept that you need one deploy, and write down that it must be done |
-| Schedule | Token signing key 90 days · database password 180 days · certificate 30 days before expiry |
-| Automatic | A task that depends on someone remembering ends up done by nobody |
-
-**A token signing key must carry an id (key id)**, so that after signing new tokens with the new key,
-you can still verify old tokens that have not expired.
-
----
-
-## 8 · When a secret leaks: order matters more than speed
-
-1. **Revoke the old value first:** disable that key at its source.
-2. Issue a new value, then deploy.
-3. Check past logs for anyone using it from a place that is not ours.
-4. Remove it from git history (`git filter-repo`) and tell everyone to clone again. (If you must force push, wait for the user's approval and tell the team first.)
-5. Record the incident with `postmortem-template`.
-
-> **Step 4 is not step 1**, because deleting the commit does not make the key any safer.
-> Anyone who forked or cloned already, and the provider's backups, still have the old value.
-> **Treat every secret that has ever been in git as leaked**, even if the repo is private.
-
----
-
-## 9 · Do not let secrets flow out other ways
-
-| Leak path | How to close it |
-|---|---|
-| Logs | The list of terms to mask is in `logging-standards` |
-| Error messages sent to the client | Return only a `requestId`, not a stack trace or connection string |
-| Crash reports / error trackers | Set a sensitive-data filter before sending out |
-| Shell command history | Use `read -s` or read from a file, instead of typing the value on the command line |
-| `docker history` | Do not put secrets in `ARG`/`ENV` at build time; use a mount at run time instead |
-| Backup files and dumps | Encrypt them and store them where you control access |
-| Screenshots in documents and issues | Always mask before attaching |
-
----
-
-## 10 · Frontend config: nothing in it is secret
-
-> **Important:** everything in a file the browser loads **is public information**,
-> whether it is named `VITE_SECRET_KEY` or sits in a file minified until it is unreadable.
-> Minifying code is not encryption. Open DevTools and you can see it.
-
-| Allowed in the frontend | Must stay on the server only |
-|---|---|
-| API address · environment name | API keys of any external service |
-| Publishable key of a payment provider | The secret key of the same provider |
-| Feature flags that are not secret | Pricing rules · approval thresholds |
-| Web ID of an analytics tool | Tokens that call a third party's API |
-
-**If you need to change a value without rebuilding,** load `/config.json` when the app starts,
-instead of embedding the value at build time (`import.meta.env`), which locks the value into the built files.
-
----
-
-
-## reference: per-stack.md
-
-# Practical how-to by language and framework
-
-**Contents:** 1 .NET / ASP.NET Core · 2 Node.js · 3 Python · 4 Angular and frontend in general · 5 Docker and Kubernetes · 6 Tools that detect secrets leaked into git · 7 Commands that generate safe random values
-
-1. [.NET / ASP.NET Core](#1--net--aspnet-core)
-2. [Node.js](#2--nodejs)
-3. [Python](#3--python)
-4. [Angular and frontend in general](#4--angular-and-frontend-in-general)
-5. [Docker and Kubernetes](#5--docker-and-kubernetes)
-6. [Tools that detect secrets leaked into git](#6--tools-that-detect-secrets-leaked-into-git)
-7. [Commands that generate safe random values](#7--commands-that-generate-safe-random-values)
-
----
-
-## 1 · .NET / ASP.NET Core
-
-**On the developer machine, stored outside the project folder so it can never reach git:**
-
-```bash
-dotnet user-secrets init
-dotnet user-secrets set "ConnectionStrings:Default" "Host=localhost;..."
-dotnet user-secrets list
-```
-
-**Validate at boot:**
-
-```csharp
-public sealed class AppOptions
-{
-    public const string Section = "App";
-
-    [Required, Url]                       public string ApiBaseUrl { get; init; } = "";
-    [Required, MinLength(32)]             public string JwtSecret  { get; init; } = "";
-    [Range(1, 300)]                       public int TimeoutSeconds { get; init; } = 30;
-}
-
-builder.Services
-    .AddOptions<AppOptions>()
-    .Bind(builder.Configuration.GetSection(AppOptions.Section))
-    .ValidateDataAnnotations()
-    .ValidateOnStart();                   // ← ขาดค่า = แอปไม่ยอมบูต
-```
-
-**Order in which ASP.NET Core reads (later values override earlier ones):**
-
-```
-appsettings.json → appsettings.{Environment}.json → user-secrets (dev)
-→ environment variable → อาร์กิวเมนต์บรรทัดคำสั่ง
-```
-
-Environment variables use `__` in place of hierarchy levels, for example `ConnectionStrings__Default`
-
-**Azure Key Vault:**
-
-```csharp
-builder.Configuration.AddAzureKeyVault(
-    new Uri($"https://{vaultName}.vault.azure.net/"),
-    new DefaultAzureCredential());        // ใช้ managed identity ไม่ต้องมี key อีกอัน
-```
-
----
-
-## 2 · Node.js
-
-```ts
-// config/env.ts — ไฟล์เดียวที่แตะ process.env ได้ทั้งโปรเจกต์
-import { z } from 'zod';
-
-const Env = z.object({
-  NODE_ENV:     z.enum(['development','test','staging','production']),
-  PORT:         z.coerce.number().int().positive().default(3000),
-  DATABASE_URL: z.string().url(),
-  JWT_SECRET:   z.string().min(32),
-  SMTP_PASSWORD: z.string().optional(),
-}).superRefine((v, ctx) => {
-  if (v.NODE_ENV === 'production' && v.JWT_SECRET.startsWith('dev-'))
-    ctx.addIssue({ code: 'custom', message: 'ห้ามใช้ JWT_SECRET ของ dev บน production' });
-});
-
-const parsed = Env.safeParse(process.env);
-if (!parsed.success) {
-  console.error('config ไม่ถูกต้อง:', z.treeifyError(parsed.error));
-  process.exit(1);
-}
-export const env = parsed.data;
-```
-
-> **Do not read `process.env` scattered through the code.** Gather it in one file
-> so you can answer which values the system uses, without grepping the whole project
-
-Node 20 and up can load `.env` itself with `node --env-file=.env`, with no need for `dotenv`
-
----
-
-## 3 · Python
-
-```python
-# settings.py
-from pydantic import Field, PostgresDsn
-from pydantic_settings import BaseSettings, SettingsConfigDict
-
-class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix="APP_", env_file=".env")
-
-    env: str = Field(pattern="^(development|staging|production)$")
-    database_url: PostgresDsn
-    jwt_secret: str = Field(min_length=32)
-    timeout_seconds: int = Field(default=30, ge=1, le=300)
-
-settings = Settings()      # ขาดค่า = ValidationError ตั้งแต่ import
-```
-
-- Reads `APP_DATABASE_URL`, `APP_JWT_SECRET` according to `env_prefix`
-- Import at the top level of the app so the error happens at boot, not at the first use
-
----
-
-## 4 · Angular and frontend in general
-
-> **Everything in a file the browser loads is public.** No exceptions
-
-**Embedded at build time** (`environment.ts`, `import.meta.env`, `NEXT_PUBLIC_*`):
-The value is baked into the built files. Every change needs a rebuild, which breaks the rule of building once and using in every environment
-
-**Loaded at run time (recommended):**
-
-```ts
-// main.ts — โหลดก่อนแอปเริ่ม
-fetch('/config.json', { cache: 'no-store' })
-  .then(r => r.json())
-  .then(cfg => {
-    (window as any).__APP_CONFIG__ = cfg;
-    return bootstrapApplication(AppComponent, appConfig);
-  });
-```
-
-```json
-// config.json — ไฟล์นี้วางแยกต่อ environment ไม่ต้อง build ใหม่
-{ "apiBaseUrl": "https://api.example.co", "env": "production", "sentryDsn": "..." }
-```
-
-Set the header `Cache-Control: no-store` on `/config.json`, otherwise the browser will use the old value
-
----
-
-## 5 · Docker and Kubernetes
-
-**For Docker, do not put secrets in at build time:**
-
-```dockerfile
-# ผิด: ค่าจะติดอยู่ในชั้นของ image ตลอดไป เห็นได้ด้วย docker history
-ARG NPM_TOKEN
-ENV NPM_TOKEN=$NPM_TOKEN
-
-# ถูก: mount เฉพาะตอนใช้ ไม่ติดไปกับ image
-RUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm ci
-```
-
-```bash
-docker build --secret id=npmrc,src=$HOME/.npmrc .
-docker run --env-file .env myapp        # ตอนรัน ส่งค่าเข้าไป
-```
-
-Do not write a trailing `# comment` on a value line in a `.env` used with `--env-file`: docker keeps the comment as part of the value, making the value wrong with no error (tested 2026-11-04: `A=value # note` gives the value `value # note`) · put the comment on its own line
-
-**Kubernetes:**
-
-```yaml
-env:
-  - name: APP_DB_PASSWORD
-    valueFrom:
-      secretKeyRef: { name: app-secrets, key: db-password }
-```
-
-> **A Kubernetes Secret is only base64, not encryption**
-> Anyone with `get secret` permission can read the value directly
-> You must turn on encryption at rest in etcd and control access with RBAC
-> A better way: let External Secrets Operator pull the value from Key Vault / Secrets Manager and create the Secret
-
----
-
-## 6 · Tools that detect secrets leaked into git
-
-```bash
-# ตรวจทั้งประวัติ
-gitleaks git --redact        # คำสั่ง detect เดิมถูกแทนด้วย git / dir
-
-# กันไว้ก่อน commit
-pip install pre-commit detect-secrets
-detect-secrets scan > .secrets.baseline
-```
-
-```yaml
-# .pre-commit-config.yaml
-repos:
-  - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.21.2   # ตัวอย่าง ตรวจ rev ล่าสุดก่อนใช้ (รอยืนยัน)
-    hooks: [{ id: gitleaks }]
-```
-
-**Remove from history** (only after the old value has been revoked):
-
-```bash
-pip install git-filter-repo
-git filter-repo --path .env --invert-paths
-# รอผู้ใช้อนุมัติก่อน · แจ้งทีมก่อน force push (เขียนประวัติร่วมทับ ทุกคนต้อง clone ใหม่)
-git push --force --all
-```
-
----
-
-## 7 · Commands that generate safe random values
-
-```bash
-openssl rand -base64 48                 # กุญแจทั่วไป
-openssl rand -hex 32                    # กุญแจ 256 บิตเป็นเลขฐานสิบหก
-uuidgen                                 # id ไม่ลับ
-
-node -e "console.log(require('crypto').randomBytes(48).toString('base64'))"
-python -c "import secrets; print(secrets.token_urlsafe(48))"
-```
-
-```powershell
-# Windows
-# PowerShell 5.1 และ 7 (ตัวสุ่มสำหรับงานเข้ารหัส ไม่ใช่ Get-Random)
-$b = New-Object byte[] 48
-[Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($b)
-[Convert]::ToBase64String($b)
-# PowerShell 7.4 ขึ้นไป: Get-SecureRandom ก็ใช้ได้
-```
-
-> Wrong: **do not use a general-purpose random generator** (`Math.random`, `random.random`, .NET `Random`)
-> because they are predictable; use the cryptographic random generator as in the commands above
-
-
----
-
-# skill: observability-basics
-
-Use when a live system needs metrics, logs or alerts
-
-# Measuring and monitoring a system
-
-> **The one rule:** if a customer is the one who tells us the system is down, monitoring has failed.
-> It does not mean the customer is kind.
-
-## When to use this skill
-
-- The system has real users
-- Someone asks "is the system healthy right now?" and you must open the logs to answer
-- You get woken in the middle of the night by an alert that needs no action
-- The system is slow and you do not know where
-
-## When **not** to use it
-
-| Job | Use this instead |
-|---|---|
-| Log line format and masking | `logging-standards` |
-| A trail of who did what | `audit-trail` |
-| Health check endpoint | `web-service-essentials` |
-| Steps during an incident | `incident-runbook-template` |
-| Post-incident summary | `postmortem-template` |
-
----
-
-## 1 · These three answer different questions
-
-| | Answers the question | Example | Cost |
-|---|---|---|---|
-| **metric** | "Is it bad now? Getting better or worse?" | error 2.3% · p95 = 840 ms | Cheapest, keeps a long time |
-| **log** | "What happened in that request?" | message + stack trace + id | Medium cost |
-| **trace** | "Which step is slow?" | one request across 5 services | Most expensive, sample it |
-
-**Order of use during an incident:** the metric says there **is a problem** → the trace says **where** → the log says **why**.
-All 3 must be linked by the same correlation id (see `logging-standards`).
-
----
-
-## 2 · The four signals to measure
-
-| Signal | Measures | Numbers to watch |
-|---|---|---|
-| **Request rate** | How much work is coming in | Per second, split by endpoint |
-| **Error rate** | What percentage fails | Split 4xx (user's fault) from 5xx (our fault) |
-| **Response time** | How slow | **p50 · p95 · p99** |
-| **Resources** | Is anything near full | CPU · memory · disk space · connection pool |
-
-> **Never look at the average response time.** An average of 200 ms sounds good
-> while 5% of users wait 9 seconds. The average always hides the people who hit the problem. **Look at p95 and p99.**
-
-**For queues and background jobs**, add 3 more: jobs waiting in the queue · wait time in the queue · jobs that failed for good
-(see `background-jobs`).
-
----
-
-## 3 · Naming metrics
-
-```
-<domain>_<what is measured>_<unit>
-
-http_requests_total              cumulative count
-http_request_duration_seconds    duration
-orders_created_total             business event
-queue_depth_jobs                 value at this moment
-```
-
-| Rule | Reason |
-|---|---|
-| Always end with the unit | `_seconds`, not `_time`, which nobody can tell is seconds or milliseconds |
-| End cumulative values with `_total` | It says the value keeps rising and is not the current value |
-| Use labels instead of making new names | `http_requests_total{route,status}`, not a separate name per endpoint |
-| **A label must not take unbounded values** | If you put a user id or order id in a label, the metrics system cannot cope |
-
-### 3.1 · If you use Prometheus and Grafana
-
-- **Metric types:** a counter counts events (read it with `rate()`) · a gauge holds the value right now · a histogram holds durations when you need p95 · a summary is for when you do not need to aggregate across instances
-- **Units:** seconds · bytes · ratio 0 to 1 (`_seconds`, not `_milliseconds`)
-- p95: `histogram_quantile(0.95, sum by (le) (rate(<name>_bucket[5m])))`
-- Every alert rule has `for:` · `severity` · a runbook link · alert on symptoms (latency · error), not on CPU or GPU
-- Keep dashboards as JSON in git and provision them from files · RED per service · USE per resource
-- Details on PromQL · alert rule examples · provisioning · a voice agent example (STT · LLM · TTS latency · Kafka lag · GPU): `references/prometheus-grafana.md`
-
----
-
-## 4 · Alerts
-
-> **Every alert must give the receiver something to do.** If the person reads it and has nothing to do,
-> in 3 weeks they will mute alerts, and the day a real one fires nobody will see it.
-
-**Alert on what users feel, not on machine numbers**
-
-| ✗ Alert like this | ✓ Alert like this |
-|---|---|
-| CPU over 80% | Error rate over 2% for 5 minutes |
-| Memory over 70% | p95 of the payment page over 3 seconds for 10 minutes |
-| pod restart | Successful orders drop by more than 50% against last week |
-| disk 60% | **disk will be full in 4 hours at the current rate** |
-
-| Level | Example | Send to |
-|---|---|---|
-| **Wake a person** | Users cannot use the system · data is being damaged | Phone call · push |
-| **Check in work hours** | disk will be full in 3 days · errors rising but still low | Team chat |
-| **Just record it** | Everything else | Dashboard |
-
-**Every alert must have:** what broke · who is affected · **a link to the runbook** · a link to the dashboard.
-**Always set a duration (for N minutes)**, not an alert the moment a value spikes once.
-
-### 4.1 · Error budget and burn rate
-
-A system with an SLO uses this instead of a fixed error % threshold, because it says "if this goes on, when will the whole month's budget run out?"
-
-- **Budget** = the time you may fail in 30 days → SLO 99.9% = 43 minutes · 99.5% = 3.6 hours · 99% = 7.2 hours
-- **Burn rate** = current error rate ÷ (1 − SLO) → burn 1 = the budget runs out exactly on day 30 · burn 10 = gone in 3 days
-- Set 3 alert levels as in the table, and every level must hold true over both the long window and the short window (short window = 1/12 of the long one), so the alert stops as soon as the system recovers
-
-| Level | burn rate | Long window · short window | Budget already used | SLO 99.9% means errors above | Send to |
-|---|---|---|---|---|---|
-| Fast burn | 14.4 | 1 hour · 5 minutes | 2% of the month in 1 hour | 1.44% | Wake a person |
-| Slow burn | 6 | 6 hours · 30 minutes | 5% of the month in 6 hours | 0.6% | Wake a person |
-| Slow leak | 1 | 3 days · 6 hours | 10% of the month in 3 days | 0.1% | Team chat |
-
-Show the remaining budget on the overview dashboard. When the budget is nearly gone, stop shipping features and fix stability first. Agree this rule with the product owner in advance, not in the middle of an argument.
-
----
-
-## 5 · Dashboards
-
-Two pages are enough.
-
-| Page | Answers the question | Contains |
-|---|---|---|
-| **Overview** | "Is it normal now?" | The 4 signals for the whole system · dependency status · latest releases |
-| **Deep dive per service** | "Where did it break?" | The 4 signals split by endpoint · queues · database |
-
-- **A vertical line marks the deploy time.** Most problems start after this line, and you see it in one second
-- The overview page must be readable in 10 seconds, so keep it to 6 graphs at most
-- Draw the alert threshold lines on the graphs, so you can see how far the value is from the line
-
----
-
-## 6 · Business metrics
-
-Technical metrics all green while the business has stalled really happens, and you will not catch it unless you measure it.
-
-| Example | What it catches |
-|---|---|
-| Successful orders per hour | The pay button is broken even though every endpoint returns 200 |
-| Successful login rate | A problem with an external identity provider |
-| Background jobs waiting more than N minutes | The queue is stuck but the API still answers normally |
-| Emails that failed to send | Customers do not get receipts, with no error anywhere |
-
-**Pick 3–5 that are the heart of the business**, and alert when they drop abnormally against the same period last week.
-
----
-
-## References
-
-- [`references/prometheus-grafana.md`](references/prometheus-grafana.md) — open for PromQL · alert rules · Grafana provisioning · voice agent example
-- `mcp-server` item 1.1 — when an agent must read Prometheus or Grafana through MCP
-- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
-
-
-## reference: prometheus-grafana.md
-
-# Prometheus and Grafana — using them correctly
-
-Part of `observability-basics` · the thinking about what to measure and what to alert on is in `SKILL.md` sections 2 · 4 · 5 · this file says how to do it in Prometheus and Grafana · metric names and numbers labelled `ตัวอย่าง` (example) are hypothetical data and must be adjusted to the real system
-
-## Contents
-
-- [1 · The 4 metric types](#1--the-4-metric-types)
-- [2 · Names and units](#2--names-and-units)
-- [3 · Labels and cardinality](#3--labels-and-cardinality)
-- [4 · Common PromQL](#4--common-promql)
-- [5 · Alert rules](#5--alert-rules)
-- [6 · Grafana](#6--grafana)
-- [7 · Voice agent system example](#7--voice-agent-system-example)
-- [8 · Check before sending](#8--check-before-sending)
-- [9 · Sources](#9--sources)
-
-## 1 · The 4 metric types
-
-| Type | What it is | Use when | Example |
-|---|---|---|---|
-| counter | A cumulative value that only goes up and returns to 0 when the process restarts | Counting events that have happened (requests · errors · finished jobs) · read with `rate()`, never the raw value | `http_requests_total` |
-| gauge | The value at that moment, can go up and down | Things that are pending or measurable right now (calls in progress · queue length · memory) | `voice_calls_active` |
-| histogram | Counts measured values into ranges (buckets), with a sum and a count | Durations or sizes where you need p95 · p99 and want to aggregate across many instances | `http_request_duration_seconds` |
-| summary | Computes quantiles on the app side, over a sliding time window | Use only when you do not need to aggregate across instances · the quantiles and window are chosen when writing the code and cannot be changed later | Rare; normally choose histogram |
-
-- Never average quantiles from a summary across several instances; the result has no statistical meaning (the Prometheus docs use this wording)
-- **How to choose** (prometheus.io/docs/practices/histograms/ checked 2026-10-27): if the library and Prometheus you use support it, use a native histogram first, because you can change the percentile and time window later in PromQL · if not supported but you need to aggregate across instances, use a classic histogram · use a summary only when you do not need to aggregate across instances
-- The Prometheus docs recommend native histograms first, but the libraries that support them are still limited; if your library does not support them, use a classic histogram and place buckets so that an edge sits at the SLO value, otherwise the estimated p95 will be off (example in the docs: true p95 about 320 ms is estimated as 443 ms because the bucket is wide from 300 to 450 ms)
-
-## 2 · Names and units
-
-| Rule | Right | Wrong |
-|---|---|---|
-| Start with one word that names the system | `voice_stage_duration_seconds` | `stage_duration` |
-| Use base units: seconds · bytes · ratio 0 to 1 | `_seconds` · `_bytes` · `_ratio` | `_milliseconds` · `_megabytes` · `_percent` |
-| The unit goes at the end, in plural form | `node_memory_usage_bytes` | `node_memory_usage_byte` |
-| A counter ends in `_total` (if it has a unit, the unit comes first) | `process_cpu_seconds_total` · `http_requests_total` | `http_requests_count` |
-| 1 name, 1 unit, 1 meaning | All in seconds | Half in seconds, half in milliseconds |
-| Do not put a label name again in the metric name | `http_requests_total{route=…}` | `http_requests_by_route_total` |
-
-## 3 · Labels and cardinality
-
-Every unique set of label values is 1 new time series. The Prometheus docs warn you to avoid labels whose values are unbounded, such as user id or email.
-
-| Must not be a label | Use instead |
-|---|---|
-| `user_id` · `customer_id` · phone number · email | Leave it out · keep it in logs or traces · if you must count per person, use a database, not a metric |
-| `call_id` · `session_id` · `request_id` · `trace_id` | Logs and traces tied to the same id (`logging-standards`) |
-| A full URL that has an id or query string | A route template such as `/orders/{id}` |
-| An error message with variable values | A limited set of error codes such as `reason="timeout"` |
-
-- A label you may use must have all its possible values countable in advance (stage = 3 values · status = 5 groups) · the number of series of one metric is close to the product of the number of values in each label · a histogram multiplies by the number of buckets on top
-- To find which metric makes series explode: open the TSDB status page in the Prometheus UI · the `tsdb_stats` tool of `prometheus-mcp` gives similar information (see `mcp-server` step 1.1)
-
-## 4 · Common PromQL
-
-| Need | Query | Note |
-|---|---|---|
-| Requests per second | `sum by (route) (rate(http_requests_total[5m]))` | The `[5m]` range should be several times the scrape interval (number not yet checked against the docs) |
-| Error rate | `sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m]))` | Count 5xx (our fault) apart from 4xx · with no traffic the quotient is NaN and the alert rule will not fire, which can hide a system receiving no requests at all; add a separate rule that alerts on no requests |
-| p95 of latency (classic histogram) | `histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket[5m])))` | Keep `le` in `sum by` · to split by route, add `route` to `by` |
-| p95 (native histogram) | `histogram_quantile(0.95, sum(rate(http_request_duration_seconds[5m])))` | Use when the library and Prometheus support it |
-| Average latency (for context only, never for deciding) | `rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m])` | See `SKILL.md` section 2 |
-| Disk will be full in 4 hours | `predict_linear(node_filesystem_avail_bytes[1h], 4*3600) < 0` | An example of saturation that warns ahead of time (not yet checked against the PromQL docs) |
-
-## 5 · Alert rules
-
-Principle from the Prometheus docs: alert on symptoms users feel (latency · errors) at the highest point in the stack you can · wake someone for latency at a single point of the stack · put causes (CPU · GPU · consumer lag) on the dashboard for tracing, and do not wake anyone for them · except for things a person must act on before the system goes down, such as capacity
-
-Exception: a number users feel directly counts as a symptom even if it comes from an underlying system, such as Kafka consumer lag that makes callers wait for an answer (section 7); it may wake someone · lag that affects nobody right away, such as a report job after the call ends, is a cause; put it on the dashboard or the team chat
-
-Every rule must have 4 things
-
-| Item | Where | Reason |
-|---|---|---|
-| `for:` | In the rule | Do not alert the moment the value spikes once · if omitted, the rule fires from the first evaluation round |
-| Severity level | Label `severity` (the name and values are a convention the team sets, not required by Prometheus) | Lets Alertmanager route it to the right place · use 3 levels per `SKILL.md` section 4: wake someone · look during work hours · log it |
-| Runbook link | Annotation `runbook_url` (the key name is a convention; the docs say only that an annotation can hold a runbook link) | The responder starts from a procedure, not from zero at 3 a.m. |
-| `summary` stating the symptom and who is affected | Annotation | Reading it on a phone tells you what to do |
-
-Example (hypothetical thresholds; set them from the real SLO):
-
-```yaml
-groups:
-  - name: voice-agent-symptoms
-    rules:
-      - alert: VoiceTurnLatencyHigh
-        expr: |
-          histogram_quantile(0.95,
-            sum by (le) (rate(voice_turn_duration_seconds_bucket[5m]))) > 1.5
-        for: 10m
-        labels:
-          severity: page
-        annotations:
-          summary: "ผู้โทรรอคำตอบเกิน 1.5 วินาที (p95) นาน 10 นาที"
-          runbook_url: https://runbooks.example.com/voice/turn-latency
-```
-
-`keep_firing_for` stops alerts from flapping when the value hovers around the threshold · for burn rate alerts see `SKILL.md` section 4.1
-
-## 6 · Grafana
-
-| Topic | How |
-|---|---|
-| 1 dashboard per 1 service | A service that takes requests uses RED: Rate · Errors · Duration · resources (CPU · GPU · disk · connection pool) use USE: Utilization · Saturation · Errors · the Grafana docs say RED stands for the user experience, so set alerts from RED and use USE to trace causes |
-| Keep it as code | Dashboard JSON lives in git · the Grafana docs treat not keeping JSON in version control as a sign the system is not yet in order · when many dashboards look alike, generate them with grafonnet (Jsonnet) or grafanalib (Python) |
-| Load automatically | A provider YAML file in `provisioning/dashboards/` points `options.path` to the JSON folder |
-| Stop edits in the browser from being lost | Set `allowUiUpdates: false` · whoever wants a change edits the JSON in git and opens a PR · loading from files always overwrites the version in the database |
-| Do not copy a dashboard | Use template variables (choose service · environment) on a parent dashboard · the Grafana docs warn that copying means you do not get fixes from the original |
-| Temporary dashboards | Name them starting with `TEST:` and delete when done |
-| uid | Set a fixed `uid` in the JSON so links from alerts do not break · `uid` and `title` must be unique within the same folder |
-
-Example provider (checked against the Grafana docs 2026-10-27):
-
-```yaml
-apiVersion: 1
-providers:
-  - name: services
-    type: file
-    allowUiUpdates: false
-    updateIntervalSeconds: 30
-    options:
-      path: /var/lib/grafana/dashboards
-      foldersFromFilesStructure: true
-```
-
-## 7 · Voice agent system example
-
-All metric names in this section are set by the team (examples), except `DCGM_FI_DEV_GPU_UTIL` and `kafka_consumergroup_lag*`, which come from exporters
-
-**Latency of each stage of a call** · 1 histogram split by stage with a `stage` label that has limited values
-
-```
-voice_stage_duration_seconds_bucket{stage="stt|llm|tts", le="…"}
-voice_turn_duration_seconds_bucket{le="…"}   # จากผู้โทรพูดจบถึงเสียงตอบแรกออก
-```
-
-- Place buckets densely in the range 0.1 to 3 seconds, for example `0.1, 0.2, 0.3, 0.5, 0.8, 1.2, 1.5, 2, 3, 5`, with an edge at the threshold you set (1.5 seconds in the example of section 5)
-- p95 per stage: `histogram_quantile(0.95, sum by (le, stage) (rate(voice_stage_duration_seconds_bucket[5m])))` · put it in one chart with 3 lines and you see at once which stage eats the time
-- Alert on `voice_turn_duration_seconds` (the symptom callers feel); do not alert on every stage · stages are for tracing causes
-- Never put `call_id` or the caller's phone number as a label · the call id goes to logs and traces
-
-**Kafka consumer lag** · when the pipeline sends call events through Kafka
-
-- The lag value comes from a Kafka exporter · `kafka_exporter` (danielqsj · Apache-2.0 · not an official Apache project · checked 2026-10-27) gives `kafka_consumergroup_lag{consumergroup,topic,partition}` and `kafka_consumergroup_lag_sum{consumergroup,topic}` · if you use another exporter, the names may differ
-- Wake someone when the lag of a consumer that makes callers wait (such as the real-time call summarizer) is high and does not fall for a long time · example `sum by (consumergroup, topic) (kafka_consumergroup_lag_sum) > 1000` with `for: 10m` (hypothetical threshold) · lag of a report job after the call ends is fine to send to the team chat
-- The `partition` label is only for drill-down charts; do not put it in alert rules
-
-**GPU utilization** · the exporter is NVIDIA `dcgm-exporter`
-
-- `DCGM_FI_DEV_GPU_UTIL` is a gauge in % (checked from `etc/default-counters.csv` of the repo 2026-10-27) · this name was set by the exporter and does not follow the rules of section 2; use it as it is
-- GPU is a cause (USE), not a symptom · put it on the dashboard next to the latency of the stages that use the GPU (STT · TTS) · high utilization together with a high p95 of that stage means the machine is saturated and you must add machines or reduce load
-- GPU that stays high for many hours alerts at the look-during-work-hours level; it does not wake anyone
-
-## 8 · Check before sending
-
-- [ ] Every metric has a unit and `_total` per the rules · no label with unbounded values (user · phone · call id)
-- [ ] Latency is a histogram with a bucket edge at the SLO threshold · no decisions from averages
-- [ ] Every alert has `for:` · `severity` · `runbook_url` · `summary` · alerts on symptoms, not on CPU or GPU
-- [ ] Dashboards are JSON in git · provisioned from files · `allowUiUpdates: false`
-- [ ] There is a RED dashboard per service and USE per resource
-
-## 9 · Sources
-
-Checked 2026-10-27
-
-| Topic | Source |
-|---|---|
-| Metric types | prometheus.io/docs/concepts/metric_types/ |
-| Names, units, label cardinality | prometheus.io/docs/practices/naming/ |
-| histogram · summary · `histogram_quantile` · native histogram | prometheus.io/docs/practices/histograms/ |
-| Principle of alerting on symptoms | prometheus.io/docs/practices/alerting/ |
-| Rule syntax `for` · `keep_firing_for` · annotations | prometheus.io/docs/prometheus/latest/configuration/alerting_rules/ |
-| RED · USE · dashboard as code · sprawl | grafana.com/docs/grafana/latest/dashboards/build-dashboards/best-practices/ |
-| Dashboard provisioning | grafana.com/docs/grafana/latest/administration/provisioning/ |
-| `DCGM_FI_DEV_GPU_UTIL` | github.com/NVIDIA/dcgm-exporter → etc/default-counters.csv |
-| `kafka_consumergroup_lag` | github.com/danielqsj/kafka_exporter (not official to Kafka) |
-| `predict_linear` · `[5m]` range vs scrape interval · NaN behavior when dividing by 0 | General team knowledge (not yet checked against the official PromQL pages) |
-
-
-## reference: sources.md
-
-# Sources · observability-basics
-
-Source of item 3.1: prometheus.io (metric types · naming · histograms · alerting) and grafana.com (dashboard best practices · provisioning), checked 2026-10-27 · full links are at the end of `references/prometheus-grafana.md`
-
-
----
-
-# skill: load-testing
-
-Use when checking how many users a system holds
-
-# load-testing — load tests with a goal, a pass threshold and permission
-
-Sample script [`assets/load-test.js`](assets/load-test.js) · sample workflow [`assets/k6-smoke.yml`](assets/k6-smoke.yml) · tool facts checked 2026-10-28, links in [`sources`](references/sources.md)
-
-> **One rule:** no pass threshold written before the run = no test result, only a graph · and never load a system that is not ours, or production, without a named person's written approval.
-
-## Use when
-
-- Before launching a system or before a campaign that brings many people at once (sale · registration opening · results announcement)
-- Someone asks "ระบบรับได้กี่คน" · "ตอนคนเยอะจะช้าไหม" · "เพิ่มเครื่องแล้วดีขึ้นจริงไหม" (how many users can it hold · will it be slow when busy · did adding machines really help)
-- A postmortem says the incident happened because load was never tested (`postmortem-template` section 5)
-- Setting up a speed smoke test in CI that fails when slower than the threshold
-- The user says load test · stress test · spike · soak · k6 · Locust · JMeter · p95 · ยิงโหลด · ทดสอบประสิทธิภาพ
-
-Do not use when: one web page loads slowly in the browser (Lighthouse · Core Web Vitals) → [`web-quality-audit`](../web-quality-audit/SKILL.md) · the live system is slow right now and you must find where → [`observability-basics`](../observability-basics/SKILL.md) first · testing that a button click gives the right result → [`e2e-testing-patterns`](../e2e-testing-patterns/SKILL.md)
-
-## Related skills
-
-- `observability-basics`: open the system's dashboards next to the k6 results (section 6).
-- `cicd-and-release` · `jenkins-pipeline`: section 7 says what runs on every PR and what runs on a schedule.
-- `test-case-template`: for a whole-release test plan, put the load test in as one row, with the thresholds from section 1.
-- `kubernetes-helm` · `infra-as-code`: if you must add machines or autoscale after the run, run again with the same script and compare with the result before.
-- `pdpa-compliance`: if test data contains names or phone numbers, use fake data. Do not pull real customer data in to load the system.
-
-## 1 · Goal and pass threshold — write before opening the tool
-
-Get answers to 4 questions, then note them at the top of the script file or the test plan:
-
-| Item | Example answer | If there is no answer |
-|---|---|---|
-| Expected volume | Peak hour 50 requests per second on path `/api/orders` | Pull it from the live system's logs or metrics · for a new system, use the owner's estimate and tag it `(รอยืนยัน)` (awaiting confirmation) |
-| Paths to load | Browse products 70% · add to cart 20% · pay 10% | Load the 1–3 paths that earn the most money or cost the most first |
-| Speed threshold | The `p(95)` of response time is at most how many milliseconds | Default 500 ms for an API. **Default, not measured** (`ค่าตั้งต้น ยังไม่ได้วัด`) · adjust once there is a baseline result |
-| Error threshold | `http_req_failed` below what percent | Default 1%. **Default, not measured** (`ค่าตั้งต้น ยังไม่ได้วัด`) |
-
-- Measure with percentiles, not averages: an average hides the minority who wait a long time.
-- Turn every threshold into `thresholds` in the script (section 4). Do not keep them in the head of whoever reads the result.
-- If there is no volume figure at all, you can run smoke and baseline, but you must not conclude "it can handle it", because you do not know what it is handling it against.
-
-## 2 · Permission gate — before every run beyond smoke and every run on production
-
-Loading a system without permission can really bring it down and may be illegal. So stop here and wait for approval. Do not skip it even if the user is in a hurry.
-
-1. **Whose system is it?** · If it belongs to someone else (a partner's API · payment gateway · external SaaS · a competitor's site) → do not load it · use a mock, or a sandbox the provider opens for load testing, and read their terms first.
-2. **Environment** · Run on staging or a separate load-test environment · the k6 docs say a QA environment with machines unequal to production cannot be used to judge load capacity, only for smoke.
-3. **Production** · Needs a named approver, a time window, a peak volume, and a watcher who can stop at once · start with a low-volume smoke (the k6 docs treat it as a low-risk practice) · never create real orders, payments, emails or SMS.
-4. **Anything that causes side effects when hit** · Take payment and message-sending webhooks off the path, or point them at a mock · for an external provider that charges per call, set a spending cap first.
-5. **Record** in the script header or plan: system · environment · peak volume · time window · approver · way to stop
-
-The sample script enforces this gate in code: if `BASE_URL` or `TARGET_ENV` is missing, the script stops · if the type is not smoke, or `TARGET_ENV=production` (smoke included), and `APPROVED_BY` is missing, the script stops too.
-
-## 3 · Choose the tool
-
-| If | Use | Reason |
-|---|---|---|
-| Starting fresh · HTTP API or web · want the pass threshold to fail CI directly | **k6** (default) | Written in JavaScript · `thresholds` in the script · exits with a non-0 code when a threshold fails · AGPL-3.0 licence |
-| Team prefers Python · needs complex step sequences or its own protocol | **Locust** | Test scenarios are plain Python code · can be spread over several machines · runs headless in CI · MIT licence |
-| The organisation already has a `.jmx` plan · must load JDBC · JMS · LDAP · FTP · SOAP | **JMeter** | Wide protocol support · has a GUI to record plans · use CLI mode (headless) for real runs |
-
-- Versions seen on 2026-10-28: k6 v2.3.0 (2026-09-21), and the 1.x line still gets a security patch v1.8.2 (2026-10-12) · pin the version in CI, do not use `latest` · `setup-k6-action` without `k6-version` always gets the latest ([README](https://github.com/grafana/setup-k6-action) checked 2026-10-28)
-- Grafana Cloud k6 (runs from the cloud · stores results): price and quota `(ยังไม่ได้ตรวจ)` (not yet checked) · start with k6 on a machine or a CI runner, which is free
-- The machine that sends the load must not be the same machine as the system under load, or they fight over CPU and the result is skewed.
-
-## 4 · Test types and the script
-
-Order per the k6 docs: **smoke always first** → average-load → other types by risk · use a plain load shape (ramp up · hold · ramp down). Do not run load that goes up and down several times, because the cause is hard to find.
-
-| Type | What it asks | Virtual users (VU) and time, per the k6 docs | When |
-|---|---|---|---|
-| smoke | Is the script right? Does the system answer when few people use it? | Few · seconds to a few minutes | Before every other type · every PR in CI |
-| load (average-load) | Does normal volume pass the threshold? | Equal to production average · 5–60 minutes | Before releasing a version · as the baseline |
-| stress | What happens above normal? | Above average · 5–60 minutes | Systems at risk in heavy-use periods |
-| spike | Does it survive a sudden rush? | Very high · a few minutes | Before a campaign · flash sale |
-| soak | After long use, does memory leak or do connections hang? | Average · several hours | Systems that stay up for long periods |
-| breakpoint | Where is the ceiling? | Ramp up until it breaks | Run only a few times, always needs approval per section 2 · the sample script has no such type, write the stages yourself |
-
-The script [`assets/load-test.js`](assets/load-test.js) picks the type with `TEST_TYPE`. Every type uses the `ramping-arrival-rate` executor (it fixes the number of iterations per unit of time, so when the system slows down it still gets hit at the same rate, and you see the real symptoms) · the core is thresholds:
-
-```javascript
-thresholds: {
-  http_req_failed: [{ threshold: 'rate<0.01', abortOnFail: true, delayAbortEval: '30s' }],
-  http_req_duration: ['p(95)<500'],              // default, not measured
-  'http_req_duration{type:API}': ['p(95)<500'],  // separate threshold by tag
-},
-```
-
-- `abortOnFail` stops the run when a threshold fails midway, instead of pounding the system to the end · `delayAbortEval` waits to collect samples before judging
-- Every number in the script (rate · VU · stages) is a **default, not measured** value. Adjust per section 1.
-- Run: `k6 run -e TEST_TYPE=smoke -e TARGET_ENV=staging -e BASE_URL=https://staging.example.com assets/load-test.js > _to_delete/k6.log 2>&1; tail -40 _to_delete/k6.log` (k6 prints a long progress log for as long as the run lasts, so read only the closing summary)
-
-## 5 · Reading the result
-
-Details and worked examples are in [`reading-results`](references/reading-results.md) · in short:
-
-1. Look at the thresholds lines at the end of the report first (pass/fail), then the exit code: 0 = every threshold passed · a failed threshold usually gives 99
-2. Look at `http_req_failed` before `http_req_duration`. If errors spike, the response times you see may be fast only because errors answer fast.
-3. Look at the load-sending machine. CPU at full or too few VU = the result shows the limit of the load generator, not the system.
-4. Compare with the previous baseline using the same script, same data, same environment · change one thing at a time
-5. The report says "which threshold passed or failed, at what volume", not "the system holds 10,000 people", unless you really ran that.
-
-For a multi-stage system (for example listen to audio → chat → speak): load each stage alone first, then the whole path · the bottleneck differs per stage (an example from a teaching job, not a threshold: chat holds 4 · listening holds 32 · speaking holds 2) · whole-system speed equals the weakest stage · a queue does not make it faster, it keeps it from breaking (the extra people get slower answers instead of errors) · set the consumer's prefetch equal to the number of jobs the backend can really do at once (`rabbitmq-messaging` section 4) · if the backend dies mid-run, add a watchdog per section 8 of `rabbitmq-messaging`
-
-## 6 · Run together with monitoring
-
-The k6 result says it is slow, but not why · during the run, open the dashboards per `observability-basics` section 2 (latency · traffic · errors · saturation) for the server, database and queue · note the start and end time of the run so you can match the graphs · common bottlenecks: database connection pool · queries without an index · connections not returned (example in `postmortem-template` section 5)
-
-## 7 · Plug into CI
-
-| Run when | Type | Where |
-|---|---|---|
-| Every PR or every push | smoke · a few minutes | staging or the PR's environment |
-| Overnight or on a schedule | load · stress · spike | a separate load-test environment |
-| Before a major release | the full set chosen in section 4 · run at least 2 rounds | an environment equal to production |
-
-- The k6 docs warn that load tests take 3–15 minutes or more, so do not put them on the path that deploys automatically, and do not trust pass/fail alone until the process is stable.
-- GitHub Actions: `grafana/setup-k6-action@v1.2.2` (set `k6-version`) installs k6, then `grafana/run-k6-action@v1.5.0` runs it (pinned versions, checked 2026-10-28) · full example in [`assets/k6-smoke.yml`](assets/k6-smoke.yml) · Jenkins or other CI call `k6 run` directly
-- Do not wrap `k6 run` in a script that swallows the exit code (for example one with a trailing `echo`) · make `k6 run` the last command, or keep `$?` and `exit` with that value
-- `BASE_URL` and tokens come from CI secret variables (`config-and-secrets`), not written into the script
-
-## Check before sending
-
-1. Expected volume, paths, and the p95 and error-rate thresholds exist before the run · guessed values carry the label "ค่าตั้งต้น ยังไม่ได้วัด" (default, not measured)
-2. The system is ours · the environment is stated clearly · beyond smoke there is a named approver · production has a watcher and a way to stop
-3. No real money, email, SMS or order came from the run
-4. Thresholds are in `thresholds` · `abortOnFail` is set on the error rate
-5. smoke passed before other types · the load generator is not the same machine as the system
-6. The report states results against thresholds and the baseline at the volume really run, and does not conclude beyond what was run
-7. CI does not swallow the exit code · secrets come from secret variables · the k6 version is pinned
-
-## References
-
-- [`references/reading-results.md`](references/reading-results.md) — open to read a k6 result (section 5)
-- [`references/mcp-k6.md`](references/mcp-k6.md) — open when using the k6 MCP server
-- [`references/worked-example.md`](references/worked-example.md) — open for a flash-sale example run through sections 1 to 7
-- [`references/sources.md`](references/sources.md) — links and check date 2026-10-28 for every tool fact
-
-
-## reference: mcp-k6.md
-
-# k6 MCP (grafana/mcp-k6)
-
-Extension of `load-testing` · checked 2026-10-28 from https://github.com/grafana/mcp-k6 and https://api.github.com/repos/grafana/mcp-k6/releases · not embedded in the plugin; the user installs it if wanted
-
-## Status
-
-| Topic | What was seen |
-|---|---|
-| Maintainer | Grafana (repo `grafana/mcp-k6`) |
-| Status | The README says it is still experimental |
-| Latest version | v0.7.0 on 2026-10-05 |
-| License | The repo page is inconsistent: the sidebar says AGPL-3.0 but the README says MIT · open the LICENSE file before using it in customer work |
-| Tools | `validate_script` (runs 1 VU for 1 round) · `run_script` (real run, up to 5 minutes) · `list_sections` · `get_documentation` |
-
-## Cautions
-
-- `run_script` sends real requests to the targets in the script · `validate_script` also sends 1 round · the permission gate in `load-testing` section 2 applies to calls through MCP too, with no exceptions
-- Start with only `get_documentation` and `validate_script` pointed at staging · have the agent call `run_script` only when the user allows it in that round
-- HTTP mode has no built-in authentication; use it only in a trusted network · stdio on your own machine is better
-
-## Install (the user does it, pin the version)
-
-Claude Code via Docker (command form per the README):
-
-```bash
-claude mcp add --scope=user --transport=stdio k6 -- docker run --rm -i grafana/mcp-k6:<tag ของ v0.7.0>
-```
-
-The Docker Hub image tag that matches v0.7.0 `(ยังไม่ได้ตรวจ)` (not yet checked) · the README uses `latest`, but open the tag page and put in a pinnable version instead · other ways: Homebrew (`brew tap grafana/grafana` then `brew install mcp-k6`) or the `.deb` `.rpm` packages from the v0.7.0 release page · running natively also needs k6 on PATH
-
-The k6 docs still mention the command `k6 x mcp`, which pulls the latest version automatically · to pin a version, use the standalone `mcp-k6` as above (from search results citing https://grafana.com/docs/k6/v2.3.x/set-up/configure-ai-assistant/; that page was not opened directly)
-
-
-## reference: reading-results.md
-
-# Reading k6 results and writing the report
-
-Extension of `load-testing` section 5 · k6 facts checked 2026-10-28 from the pages linked at the end of the file · the interpretation is general practice, not yet tested against a real system this round
-
-## 1 · Read in this order
-
-| Order | What to look at | Interpretation |
-|---|---|---|
-| 1 | exit code | 0 = every threshold passed · not 0 = failed · a failed threshold usually gives 99 |
-| 2 | the thresholds line at the end of the report | which thresholds passed, which failed, and the actual values |
-| 3 | `http_req_failed` | if errors spike → a fast response time may only be because errors return fast, so do not celebrate the p95 yet |
-| 4 | `http_req_duration` p95 and p99 | the range most users experience, and the tail a few users wait through · the average cannot be used to decide |
-| 5 | `checks` | whether the answers are correct, not just a status 200 |
-| 6 | warnings about not enough VUs, or rounds that did not start | the load generator could not keep up with the set rate; this run shows the limit of the generator, not the system (metric name of the dropped rounds `(ยังไม่ได้ตรวจ)` — not yet checked) |
-
-## 2 · Find where it jams
-
-Look at the system graphs for the same period as the run (`observability-basics` section 2):
-
-| Symptom in the graph | Suspect first |
-|---|---|
-| App CPU full, response time grows with it | Heavy code or too few machines · try adding machines and run again |
-| App CPU idle, but response time grows | Waiting on something outside: database connection pool · table locks · an external API |
-| Errors start at a certain load and then spike | Hit a ceiling (pool · open files · rate limit) · find the setting at that load |
-| soak: memory keeps rising and never drops | Memory leak · connections not returned |
-| Response time good at first, then worse as the data grows | Query without an index · table grown from data the run created |
-
-## 3 · Re-run so results are comparable
-
-- Same script, same starting data, same environment · clean up the data the previous run created
-- Change one thing at a time (code, or a setting, or machine size) and run against the baseline
-- The k6 docs advise running the same way at least 2 rounds before releasing a version, because each round's result varies
-
-## 4 · One-page report format
-
-```markdown
-## ผล load test · <ระบบ> · <YYYY-MM-DD>
-
-- environment: <staging-perf> · ผู้อนุมัติ: <ชื่อ> · ช่วงเวลา: <เริ่ม–จบ>
-- แบบ: <smoke · load · spike> · ปริมาณสูงสุดที่ยิงจริง: <รอบต่อวินาที>
-- k6 รุ่น: <v2.x.y> · exit code: <0 หรือ 99>
-
-| เกณฑ์ | ตั้งไว้ | ได้จริง | ผล |
-|---|---|---|---|
-| http_req_duration p(95) | < 500 ms | <ค่า> | ผ่าน / ไม่ผ่าน |
-| http_req_failed | < 1% | <ค่า> | ผ่าน / ไม่ผ่าน |
-
-คอขวดที่เห็น: <กราฟไหน ที่ปริมาณเท่าไร>
-ทำต่อ: <ข้อแก้ 1–3 ข้อ> · ยิงซ้ำหลังแก้: <วันที่>
-```
-
-Write results only as actually run · if you only ran 50 rounds per second → never write "can handle 1,000 users at once"
-
-## Sources
-
-- exit code https://grafana.com/docs/learning-paths/automate-k6-cicd/handle-exit-code/ (checked 2026-10-28)
-- thresholds https://grafana.com/docs/k6/latest/using-k6/thresholds/ (checked 2026-10-28)
-- run at least 2 rounds again https://grafana.com/docs/k6/latest/testing-guides/automated-performance-testing/ (checked 2026-10-28)
-
-
-## reference: sources.md
-
-# Sources · load-testing
-
-Checked 2026-10-28 (opened through a web-fetch tool that summarises pages with a small model, so reopen the raw page before locking a value in production)
-
-- thresholds · `abortOnFail` · `delayAbortEval` · per-tag thresholds https://grafana.com/docs/k6/latest/using-k6/thresholds/
-- names of all 6 executors https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ · options of `ramping-arrival-rate` https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ramping-arrival-rate/
-- test types and their order https://grafana.com/docs/k6/latest/testing-guides/test-types/
-- CI · environment · production https://grafana.com/docs/k6/latest/testing-guides/automated-performance-testing/
-- exit codes 0 and 99 · scripts that swallow the exit code https://grafana.com/docs/learning-paths/automate-k6-cicd/handle-exit-code/
-- GitHub Actions https://github.com/grafana/run-k6-action
-- k6 licence https://github.com/grafana/k6 · versions https://api.github.com/repos/grafana/k6/releases
-- Locust https://docs.locust.io/en/stable/what-is-locust.html · JMeter https://jmeter.apache.org/ (the home page links to the Apache Software Foundation licence and does not state the latest version)
-- Not yet checked (`ยังไม่ได้ตรวจ`): Grafana Cloud k6 price and quota · latest versions of Locust and JMeter
-
-
-## reference: worked-example.md
-
-# Worked example · load-testing
-
-## One worked example
-
-Label `ตัวอย่าง` (example): designed on paper, no real system has been loaded
-
-**Problem:** An online shop will run a flash sale at noon on Friday. It went down before because the connection pool filled up. They want to know whether it survives this time.
-
-| Step | What is done | Section |
-|---|---|---|
-| Goal | Volume from the previous campaign (รอยืนยัน) · path: browse products → add to cart → pay with a mock · p95 at most 500 ms · errors at most 1% (default, not measured) | 1 |
-| Permission | Load staging at production size · payment points at a mock · approver and time window noted in the script header | 2 |
-| Run | smoke → load (baseline) → spike | 4 |
-| Monitor | Dashboards of connection pool and database CPU during the run | 6 |
-| Result | Report which thresholds passed and failed at the volume really run, then add smoke to CI | 5 · 7 |
-
-
-
----
-
 # skill: render-deploy
 
 Use when deploying to Render
@@ -1106,7 +24,7 @@ Search the repo first: `render.yaml` · `package.json` / `requirements.txt` / `D
 - Does the database already exist or is it new (never create over the existing one)
 - Who approves the first release (step 5 stops and waits for that person)
 
-No answer → treat it as an experiment: free plan · no real customer data · `autoDeployTrigger: checksPass` · note in `decision-log` that you chose it, mark `(รอยืนยัน)` on whether it is real · if it is real, move the plan before data goes in.
+No answer → treat it as an experiment: free plan · no real customer data · `autoDeployTrigger: checksPass` · note in `decision-desk/decision-log` that you chose it, mark `(รอยืนยัน)` on whether it is real · if it is real, move the plan before data goes in.
 
 ### 2 · Route
 Default is **Blueprint** (`render.yaml`). Dashboard for logs, rollback and `sync: false` values. CLI for `render blueprints validate` · `render deploys create`. Render MCP creates only web · static · cron · Postgres · Key Value and cannot delete or change scaling (use the Dashboard or REST API).
@@ -1284,7 +202,7 @@ Not for: file types and virus scanning → `file-upload-and-storage` · an app w
 ## Steps
 
 1. Search the repo first: the S3 library in use · `B2_*` `R2_*` or `AWS_*` variables · `wrangler.toml` (R2) · existing upload code · `b2 --version` · the existing bucket list (read only). Then ask once together: monthly money cap · upload from browser or server · must files be public · must version history be kept.
-2. Pick the provider (B2 or R2). For R2, read [`references/cloudflare-r2.md`](references/cloudflare-r2.md) and use its token, endpoint, CORS, public-access, lifecycle and money-gate sections in place of the B2 ones below; its rules are equally binding. If the user does not answer: bucket Private · stay within the free 10 GB · create nothing that costs money until you get the money cap · upload through the server · not public. Note in `decision-log` that you chose it yourself and put `(รอยืนยัน)` (to be confirmed) on the unanswered matters.
+2. Pick the provider (B2 or R2). For R2, read [`references/cloudflare-r2.md`](references/cloudflare-r2.md) and use its token, endpoint, CORS, public-access, lifecycle and money-gate sections in place of the B2 ones below; its rules are equally binding. If the user does not answer: bucket Private · stay within the free 10 GB · create nothing that costs money until you get the money cap · upload through the server · not public. Note in `decision-desk/decision-log` that you chose it yourself and put `(รอยืนยัน)` (to be confirmed) on the unanswered matters.
 3. Use the S3 SDK by default (B2 CLI `b2` for creating buckets and lifecycle). Prices, routes and the R2 comparison → `references/costs.md`. Endpoint, signature v4, HTTPS only, and what B2 does not support (object ACL · tagging · website configuration) → `references/s3-and-presign.md`.
 4. Create the bucket as Private, after passing the money gate. If the name collides with something existing, stop and ask.
 5. Use a standard application key, never the master key, limited by `bucketIds` and `namePrefix`, with only `listFiles` `readFiles` `writeFiles` (no `deleteFiles` if the app does not delete), and a short `validDurationSeconds` for CI or one-off jobs. The key is shown once at creation: the user puts it in a secret manager at once. Secrets never go into git, chat, or logs. Check it is set without printing the value: `[ -n "$B2_APPLICATION_KEY" ] && echo OK || echo MISSING`.
@@ -1404,7 +322,7 @@ Search the repo first: the S3 library in use · `R2_*` or `AWS_*` variables · `
 | Must the files be public | Decides section 6 |
 | Must the data stay in one region (jurisdiction, such as EU) | You need the endpoint that matches the jurisdiction, set when the bucket is created |
 
-If you get no answer: stay in the free tier and create nothing that costs money until you get a money limit · private bucket · not public · upload through the server · no jurisdiction. Record in `decision-log` that you chose these yourself, and mark the unanswered items `(รอยืนยัน)` (awaiting confirmation).
+If you get no answer: stay in the free tier and create nothing that costs money until you get a money limit · private bucket · not public · upload through the server · no jurisdiction. Record in `decision-desk/decision-log` that you chose these yourself, and mark the unanswered items `(รอยืนยัน)` (awaiting confirmation).
 
 ## 2 · Choose the route
 
@@ -1613,7 +531,7 @@ Search the repo first: the build tool (`package.json` · `vite.config` · `next.
 | Is the domain already on Cloudflare? | Section 5 needs the domain in Cloudflare |
 | Monthly money cap | Decides whether it stays within the free allowance (section "เงินและของนอกเครื่อง") |
 
-No answers → set the bucket Private · do not make it public until the user approves · do not add `--delete` · note in `decision-log` that you chose it yourself, and put `(รอยืนยัน)` (to be confirmed) on the matters the user did not answer
+No answers → set the bucket Private · do not make it public until the user approves · do not add `--delete` · note in `decision-desk/decision-log` that you chose it yourself, and put `(รอยืนยัน)` (to be confirmed) on the matters the user did not answer
 
 ## 2 · Prepare the site so B2 can serve it
 
@@ -1822,3 +740,609 @@ Set in the console or CLI · example file: [`assets/lifecycle-keep-last.json`](.
 - Console presets: "Keep only the last version of the file" is `daysFromUploadingToHiding` null · `daysFromHidingToDeleting` 1 · empty prefix (whole bucket) · our example file uses the same values but limited to the prefix `uploads/` · "Keep prior versions for this number of days" · "Use custom lifecycle rules".
 - Rules run once a day, the shortest period is 1 day counted from upload time · versions with Object Lock on are not deleted.
 - **Always ask the user before setting a delete rule**, state the prefix and number of days clearly · read the existing rules first, never overwrite the user's rules.
+
+
+---
+
+# skill: project-bootstrap
+
+Use when starting a repository or setting up a new machine
+
+# Project bootstrap
+
+> **The one rule:** someone who has never seen this project must be able to run it within **30 minutes**,
+> reading only `README.md` and asking nobody.
+
+## When to use this skill
+
+Starting a new repository · a newcomer needs half a day before the project runs · a pull request shows a whole-file diff because formatters disagree · nobody knows where the documents are
+
+Not for: build and deploy pipeline → `cicd-and-release` · per-environment settings and secrets → `config-and-secrets` · choosing an architecture → `architecture-patterns` · test framework → `testing-standards` · naming documents → `workspace-rules/document-naming`
+
+---
+
+## 1 · Folder layout
+
+**The root (the folder the user opens) follows `project-doc-set` item 1, layout B.** The root tree, the ecosystem layout and the SuperUser file locations (`.claude/superuser/`) are defined there and only there. Code lives in `<project-name>/`. Its inner layout is:
+
+Inside `<project-name>/` (lowercase project name, words joined by `-`): `README.md` (item 2) · `CHANGELOG.md` · `ARCHITECTURE.md` · `CONTRIBUTING.md` · `LICENSE` (these 3 only when the conditions in `references/readme-skeleton.md` section 2 apply) · `.env.example` (only when the project really reads environment variables · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · secrets · `_to_delete/`) · `src/` (unit tests sit beside the code files · `readable-code` item 7) · `tests/` (integration · e2e only, or stacks whose tools require it, see "Exceptions by stack" below) · `scripts/` (setup · seed · migrate). The annotated tree is in [`references/code-folder.md`](references/code-folder.md). ADRs (architecture decision records) and runbooks live in `docs/` at the root, not in the code folder (`project-doc-set` item 1).
+
+**Extensions and sub-programs go in `extension/`.** When the app ships add-ons or small companion programs that belong to it (a browser extension · an IDE or app plugin · a hook client or CLI · an SDK · a tray helper · a worker that cannot run alone), put each one in `<project-name>/extension/<name>/`, named lowercase with `-` (`extension/chrome/` · `extension/hook-client/` · `extension/sdk-python/`). The folder is always named `extension/` (never `plugins/` `addons/` `packages/` `tools/`), so whoever opens the repo sees the main app first and every add-on in one place. Each `extension/<name>/` has its own README (what it extends · how to build and run · how it talks to the main app) and its own build and tests in its own stack's layout; CI builds and tests every one, and a workspace tool (pnpm · npm · Cargo · .NET solution) lists `extension/*`. The main app's code stays in `src/` (or the stack's folder). Create `extension/` when the first add-on is written, not in advance. An add-on that grows its own doc set (SRS · mockup · its own release cycle) is a sub-project: move it to `ecosystem/` per `project-doc-set` item 1.
+
+**Code folder name.** Take the project folder name, lowercase it, and turn each run of spaces and punctuation into a single `-`:
+`Lumio - Light Meter/` → `lumio-light-meter/`
+Run every build, test and run command from inside this folder. In languages that force a package-name format (Dart `name:` in pubspec · Python package), keep naming the package by the language's rules, because this rule governs only the folder name.
+
+**Root rules (the top level of the project folder):**
+- Hold only what is in the `project-doc-set` item 1 layout. Exceptions are declared in the project's README. README, CHANGELOG and config files live in the repo. Received `.docx`/`.xlsx` files go in `ref/`. Ones we write go in `docs/`.
+- **Temporary files never live at the root.** If a temp file an agent created lands at the root, move it into `_to_delete/` at once.
+- If a build leaves a stray folder at the root (such as an empty `build/` or `lib/` after moving the code), a tool cache still remembers the old path. Clear the cache (`flutter clean` · delete `obj/`) and build again.
+- Folder and file names in the repo are lowercase with hyphens and no spaces. **The exception is a language with its own convention.** Follow that language.
+
+**Exceptions by stack.** The code folder name, the test folder and the file names follow what the language's tools expect. Do not force `src/`. Test files normally sit beside the code files; use a separate test folder only for stacks whose tools require one (.NET: `tests/` with a separate test `.csproj` · Dart / Flutter: `lib/`, `test/` and `integration_test/` required). The full per-stack table is in [`references/code-folder.md`](references/code-folder.md). When another skill writes `tests/` or `test/`, read it as "the test folder of that stack". Pick one name and use it across the whole repo.
+
+**Layout A** (use only when the user asks · this item owns the layout). Add `<project-name>/docs/` inside the code folder, as plain markdown. The inner layout matches the `docs/` of layout B (`README.md` index · `decisions/ADR-NNNN-<slug>.md` · `runbook-<topic>.md` · `research/`). It has no `.docx` or PNG deliverables. The rest of the root still follows the `project-doc-set` item 1 layout, without a `docs/` at the root.
+
+**`docs/README.md` is an index, not content:**
+
+Template → `assets/starter-files.md` (columns: document · read when · owner · last updated)
+
+---
+
+## 2 · README — broad outline, then survey the project before choosing sections
+
+READMEs differ from job to job. A web app · library · CLI (Command-Line Interface) · mobile app · monorepo · infra or script project needs different sections and commands. So work in 3 layers:
+
+**Layer 1 · Broad outline (fixed).** The README must answer these questions for a newcomer, in the order they need them:
+What is this and who uses it → what must be on the machine → install and run → configure → common commands (test) → project structure → architecture → build → deploy → troubleshooting → contributing → contact → license
+Drop any question the project has nothing for. The exception is "configure", which must say there are no external settings.
+
+**Layer 2 · Survey before writing (every time).** Record the results in `_to_delete/readme-survey.md` and use them to decide layer 3.
+1. **Read the project:** package manifest files (`package.json` · `*.csproj` · `pyproject.toml` · `pubspec.yaml` and so on) · version-pin files · `Dockerfile` / `compose` · CI (Continuous Integration) files · `Makefile` / scripts · `.env.example` · top-level folders → this gives the project type, stack, the commands that really exist and the system's components (`code-orientation` if the code is large).
+2. **Search the official documentation for that stack** (`research-with-sources`): install, run, test and build commands, and which files to commit, for the version the project uses. Never put commands from memory or from the fallback table into the README without checking them.
+3. **Look at 2–3 READMEs of well-known projects of the same type** (search by project type + stack) to see which extra sections readers in that field expect. For example, a library has code samples and a table of supported versions · a CLI has command options · infra has what to prepare in the cloud account · a mobile app has flavors and how to sign the app.
+4. If search is impossible (no internet), use the layer 3 fallback tables and mark each unchecked command `(รอยืนยัน)` (awaiting confirmation).
+
+**Layer 3 · Choose sections and commands.** Arrange the sections from layer 1 plus the extra sections found in step 3. Take commands from steps 1–2. The full table (what each section answers · how long it should be · where to move it when too long) is in [`references/readme-skeleton.md`](references/readme-skeleton.md). It is a fallback and a length guide, not a list that must be complete.
+
+- **The README holds only what a newcomer uses in the first 30 minutes.** Move anything longer to `ARCHITECTURE.md` · `CONTRIBUTING.md` · `docs/runbook-deploy.md` and link back (see the "split into other files" table and the `ARCHITECTURE.md` template in the same file).
+- **Fallback tables by language** (Node · .NET · Python · Java · Go · Flutter · Rust · Laravel) → [`references/readme-by-stack.md`](references/readme-by-stack.md). Use them as the starting point for the layer 2 step 2 search. For a stack not in the tables, search the official documentation directly.
+- Copy-ready templates (Node · Flutter / Android) → `assets/starter-files.md`. An app with no DB or Docker must still list everything needed on the machine.
+
+> **Every command must have been run on a clean machine.** Most READMEs are wrong because the author
+> already has everything on their own machine and cannot see the missing steps.
+>
+> **1 install command, 1 run command.** If there are 12 steps, write them as `scripts/setup.sh`.
+
+---
+
+## 3 · CHANGELOG
+
+Use the Keep a Changelog 1.1.0 format. Order the headings in each version as follows and drop headings with no items: **เปลี่ยนที่ทำให้ของเดิมพัง** (breaking changes; our own addition, always on top) · เพิ่ม · เปลี่ยน · จะเลิกใช้ · เอาออก · แก้ · ความปลอดภัย. Keep `[ยังไม่ปล่อย]` (unreleased) at the top at all times. Put the newest version first. Write dates as `YYYY-MM-DD`. The full example is in [`references/changelog-examples.md`](references/changelog-examples.md).
+
+**Is a CHANGELOG needed?**
+
+| Situation | CHANGELOG |
+|---|---|
+| Delivered to a customer, with a UAT (user acceptance testing) round or a version number | Required — the customer and the acceptance reviewer see what this round delivers |
+| Others call it (API · library · app with users) | Required — they learn whether they must change anything on their side |
+| Prototype · personal script · solo work with no release rounds | Not needed — `git log` is enough · write the reason in the README |
+
+**Write for the people who use the product.** 1 item per line, stating the result the user sees, not a commit list, file names or ticket numbers. Leave out invisible work unless it can be felt. "เปลี่ยนที่ทำให้ของเดิมพัง" is always on top. The full rules and the wrong → right examples are in [`references/changelog-examples.md`](references/changelog-examples.md).
+- For version numbers and bump rules, see `cicd-and-release`.
+
+---
+
+## 4 · Formatters and linters — end the style arguments
+
+- `.editorconfig` (indentation · line endings · encoding) for every language · template with `.gitattributes` → `assets/starter-files.md`
+- The formatter fixes style on save (Prettier · dotnet format · black/ruff · `dart format`). The linter catches only real mistakes (ESLint · .NET analyzers · ruff · `flutter analyze`).
+- Set `end_of_line = lf` and `.gitattributes` `* text=auto eol=lf`. Otherwise a team mixing Windows with other systems gets pull requests that diff the whole file.
+- **The formatter decides for people.** Any setting is fine, but the whole team must use the same one.
+- Have CI check it too, instead of trusting that everyone set up their machine the same way.
+- When turning it on in an old project, format the whole repo in **one commit with nothing else in it**,
+  then add that commit to `.git-blame-ignore-revs`.
+
+---
+
+## 5 · Dependencies
+
+- **Always commit the lock file**, and install on CI with a command that follows the lock (`npm ci` · `flutter pub get --enforce-lockfile`). Otherwise each day's build gets a different set.
+- Check for vulnerabilities in the pipeline (`cicd-and-release`). Update on a schedule: patch monthly, minor quarterly, not only when something breaks.
+- A new dependency needs a reason in the pull request (`lazy-coding`).
+
+**Before adding a library, ask 3 questions:** can the language's standard library do it, is the project still alive, and
+does the license allow use in work that is sold (see `research-with-sources/prior-art-review`)?
+
+---
+
+## 6 · Checklist when opening a new project
+
+Tick `[x]` only for items you **ran or opened in this round**. For an item not yet built or run, write `[ ]` and say what is pending. For an item that does not apply to this project, write `N/A — <reason>`.
+
+- [ ] `README.md` answers the layer 1 questions the project has content for · sections and commands come from the layer 2 survey results (`_to_delete/readme-survey.md` exists) · commands have been run on a clean machine
+- [ ] The root matches the layout in `project-doc-set` item 1 (repo named as the lowercase project name joined by `-` · an ecosystem uses `ecosystem/`) and has no temp files or `.docx` at the root
+- [ ] Add-ons and sub-programs of the app live in `<project-name>/extension/<name>/`, each with its own README and a CI build, or `N/A` when the app has none
+- [ ] `.env.example` lists every value with comments. If the project reads no environment variables at all (for example an offline mobile app), do not create it, but write "ไม่มีค่าตั้งภายนอก" (no external settings) in the README
+- [ ] `.editorconfig` · `.gitattributes` · formatter · linter are set up, and CI checks them
+- [ ] `.gitignore` covers `.env` · build folders · `_to_delete/` · Android: `key.properties` · `*.jks` · `*.keystore`
+- [ ] `docs/README.md` is an index, with an owner for each document
+- [ ] `CHANGELOG.md` has an "ยังไม่ปล่อย" heading waiting
+- [ ] At least 1 test runs and passes, to prove the layout works
+- [ ] `main` is protected and needs a pull request and CI. A repo with no remote, or a solo repo, may skip this, but must write the reason in the README and run tests and the linter before each commit instead.
+- [ ] **Have someone who did not set up the project follow the README, and time them**
+
+---
+## References
+
+- [`references/code-folder.md`](references/code-folder.md) — annotated code-folder tree and the per-stack table (Node · .NET · Python · Dart / Flutter); open when choosing code, test and file-name layout
+- [`references/readme-skeleton.md`](references/readme-skeleton.md) · [`references/readme-by-stack.md`](references/readme-by-stack.md) — README section table and fallback commands by language; open at layer 3 of item 2
+- [`references/changelog-examples.md`](references/changelog-examples.md) — open when writing a CHANGELOG entry
+- Temp files → `workspace-rules/temp-file-discipline` · commits that can build a CHANGELOG → `commit-message-format` · before adding a dependency → `lazy-coding`, `research-with-sources/prior-art-review` · file templates → `assets/starter-files.md`
+
+
+## reference: changelog-examples.md
+
+# CHANGELOG — examples
+
+Read this when writing a CHANGELOG for the first time or reviewing one. The rules are in `SKILL.md` item 3. The blank template is in `assets/starter-files.md`. The sample below is Thai because the CHANGELOG itself is written for Thai users.
+
+```markdown
+# Changelog
+
+## [ยังไม่ปล่อย]
+### เพิ่ม
+- ส่งออกรายงานเป็น Excel
+
+## [1.2.0] — 2026-09-25
+### เปลี่ยนที่ทำให้ของเดิมพัง
+- `GET /orders` คืน `data` แทนอาเรย์ตรง ๆ — ดู API-CONVENTIONS.md
+### เพิ่ม
+- แจ้งเตือนทาง LINE
+### จะเลิกใช้
+- ส่งออกรายงานเป็น CSV จะเอาออกในรุ่น 2.0 — ใช้ Excel แทน
+### แก้
+- ยอดรวมปัดเศษผิดเมื่อมีส่วนลด
+### ความปลอดภัย
+- ผู้ใช้ที่ถูกปิดบัญชีเปิดลิงก์ใบเสร็จเก่าไม่ได้แล้ว
+
+## [1.1.1] — 2026-09-10 [ถอน]
+```
+
+## Headings and version numbers
+
+| Heading (Keep a Changelog) | Use for | Version part to bump (Semantic Versioning) |
+|---|---|---|
+| เปลี่ยนที่ทำให้ของเดิมพัง (breaking changes; our own addition) | Users or calling systems must change something on their side | MAJOR · in the `0.y.z` range, MINOR is allowed |
+| เพิ่ม (Added) | New capability | MINOR |
+| เปลี่ยน (Changed) | Existing behavior works differently but does not break | MINOR |
+| จะเลิกใช้ (Deprecated) | Still works but will be removed · name the removal version and the replacement | MINOR |
+| เอาออก (Removed) | Already removed | MAJOR |
+| แก้ (Fixed) | Bugs | PATCH |
+| ความปลอดภัย (Security) | Vulnerabilities already closed · do not describe how to attack | PATCH, or by size |
+
+The version-bump column is this skill's own proposal. Semantic Versioning says only this: MAJOR = incompatible with the old version · MINOR = backward-compatible additions or deprecation notices · PATCH = backward-compatible bug fixes.
+
+If a released version must be pulled because of a serious bug or vulnerability, append `[ถอน]` to the version heading (Keep a Changelog uses `[YANKED]`). Do not delete that version. Sources: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/) · [Semantic Versioning 2.0.0](https://semver.org/) · opened 2026-11-07
+
+Write what the user sees, not a list of commits:
+
+| ✗ | ✓ |
+|---|---|
+| `- fix(items): change > to >= in withdraw() (#42)` | `- เบิกของเท่ากับจำนวนที่เหลือพอดีได้แล้ว` |
+| `- refactor lowStockReport to read movements once` | `- รายงานของใกล้หมดเปิดได้ในไม่ถึง 1 วินาที (เดิม 50 วินาที)` |
+
+## Writing rules (full version)
+
+- Write for the **people who use the product**. Do not paste the commit list.
+- 1 item = 1 line. Say what the user gains or sees change, not which file changed.
+- Leave out file names, function names and ticket numbers, unless the reader is a developer who calls that API.
+- Leave out work the user cannot see, such as code restructuring, new tests or CI fixes. The exception is a speed or stability gain big enough to feel. Then write it as the result ("รายงานของใกล้หมดเปิดได้ในไม่ถึง 1 วินาที").
+- Within each heading, put the items that affect users most at the top. Drop any heading that has no items.
+- The heading "เปลี่ยนที่ทำให้ของเดิมพัง" must always sit at the **top** of that version. Every deprecation, removal and breaking change must be listed, even a small one.
+
+
+## reference: code-folder.md
+
+# Code folder layout — full tree
+
+The rules are in `SKILL.md` item 1. The root tree is in `project-doc-set` item 1. ADRs (architecture decision records) and runbooks live in `docs/` at the root, not here.
+
+```
+<project-name>/          ← lowercase project name, words joined by `-`
+  README.md              ← item 2 · broad outline + survey the project before choosing sections
+  CHANGELOG.md           ← what changed in each version
+  ARCHITECTURE.md        ← code map · add it when the README tree passes 15 lines or the system has many parts (references/readme-skeleton.md)
+  CONTRIBUTING.md        ← add it when the contributing section in the README passes 5 lines
+  LICENSE                ← public repo, or the contract requires it
+  .env.example           ← every required value (see config-and-secrets) · only when the project really reads environment variables
+  .editorconfig          ← item 4
+  .gitattributes
+  .gitignore             ← build output · secrets · `_to_delete/`
+  src/                   ← the real code (or the layout the stack expects, per `SKILL.md` item 1)
+  tests/                 ← required in .NET · Flutter (`test/`) · Node and Python keep only integration and e2e here (unit tests sit beside the code files) — the stack table is at the end of this file
+  scripts/               ← setup, seed, migrate — scripts a person has to run
+  extension/             ← add-ons and sub-programs of this app, 1 folder each: browser extension · plugin · CLI · hook client · SDK (`SKILL.md` item 1) · only when one exists
+    <name>/              ← own README · own build and tests in that stack's layout
+```
+
+## Exceptions by stack
+
+**Exceptions by stack.** The code folder name, the test folder and the file names in the repo follow what the language's tools expect.
+Do not force `src/`. Test files normally sit beside the code files. Use a separate test folder only for stacks whose tools require one (the cells marked **required**):
+
+| Stack | Code | Tests | File names |
+|---|---|---|---|
+| Node | `src/` | Unit tests beside the code files (`*.test.ts`) · integration and e2e in `tests/` | `kebab-case` |
+| .NET | `src/` | `tests/` **required** (a separate test `.csproj` project) | `PascalCase.cs` |
+| Python | `src/<package>/` | Unit tests beside the code files (`test_*.py`) · integration and e2e in `tests/` | `snake_case.py` |
+| Dart / Flutter | `lib/` | `test/` · `integration_test/` **required** (same layout as `lib/`) | `snake_case.dart` (lint `file_names`) · `android/` `ios/` stay in the repo |
+
+When another skill writes `tests/` or `test/`, read it as "the test folder of that stack". Pick one name and use it across the whole repo.
+
+
+## reference: readme-by-stack.md
+
+# README by language — commands, files and extra sections
+
+Use this with [`readme-skeleton.md`](readme-skeleton.md). These tables are a fallback and a starting point for search terms (`SKILL.md` item 2, layer 2). They are not commands you can paste in as is. Take the real commands from the project's files and the official documentation for the version in use. **Run every command on a clean machine before it goes into the README** (`SKILL.md` item 2). A cell marked ※ means the official page was not opened to confirm it in the round it was written (2026-11-07).
+
+## 1 · Versions, main files and per-environment settings
+
+Put these into README section 4 "Prerequisites" and section 6 "Configuration".
+
+| Stack | manifest + lock (commit both) | Pin the runtime version in a file | Per-environment settings |
+|---|---|---|---|
+| Node / TypeScript | `package.json` + `package-lock.json` or `pnpm-lock.yaml` (one lock type only) | `.nvmrc` (`nvm use`) · `engines` in `package.json` is only a warning until `engine-strict` is on | Vite: `.env` · `.env.[mode]` · `.env.local` · only `VITE_*` reaches the browser · Angular: `src/environments/` + `ng build --configuration <name>` |
+| .NET / C# | `.sln` or `.slnx` + `.csproj` · `packages.lock.json` optional ※ | `global.json` → `sdk.version` (full number) + `rollForward` (set `disable` when using a lock file) | `appsettings.json` + `appsettings.{Env}.json` · chosen by `ASPNETCORE_ENVIRONMENT` (web) or `DOTNET_ENVIRONMENT` · unset = Production · dev secrets: `dotnet user-secrets` · `launchSettings.json` is for dev machines only |
+| Python | `pyproject.toml` + `uv.lock` · do not commit `.venv` | `.python-version` (`uv python pin`) + `requires-python` | No central standard · `.env` + environment variables, or the framework's settings ※ |
+| Java / Kotlin | `pom.xml` or `build.gradle.kts` + `settings.gradle.kts` | Gradle wrapper (commit `gradlew` `gradlew.bat` `gradle/wrapper/*`) · Maven wrapper `mvnw` ※ · Java Development Kit (JDK) version | Spring Boot: `application.yml` + `application-{profile}.yml` · enable with `SPRING_PROFILES_ACTIVE` or `--spring.profiles.active=prod` |
+| Go | `go.mod` + `go.sum` | The `go 1.xx` line (minimum) + `toolchain` | No standard · environment variables ※ |
+| Flutter / Dart | `pubspec.yaml` + `pubspec.lock` (apps commit the lock · libraries do not) | `environment:` in pubspec ※ · FVM if used (not official) | Flavors: Android `productFlavors` in `android/app/build.gradle.kts` · iOS uses schemes ※ · `--dart-define` ※ |
+| Rust | `Cargo.toml` + `Cargo.lock` | `rust-toolchain.toml` (`channel` + `components`) | No standard · environment variables ※ |
+| PHP / Laravel | `composer.json` + `composer.lock` | `"php": "^8.x"` in `require` | `.env` (not committed) + `.env.example` · `APP_ENV` selects `.env.[APP_ENV]` · `APP_DEBUG=false` in production |
+
+## 2 · Commands
+
+Put these into README section 5 "Getting started", 7 "Common commands" and 10 "Build and output files".
+
+| Stack | Install | Run | test | lint · format | build / package → output files |
+|---|---|---|---|---|---|
+| Node / TypeScript | `npm ci` (follows the lock) · `pnpm install --frozen-lockfile` | `npm run dev` ※ | `npm test` ※ | `npm run lint` ※ · Prettier ※ | `npm run build` ※ → `dist/` |
+| .NET / C# | `dotnet restore` | `dotnet run` · `dotnet run -lp https` | `dotnet test` ※ | `dotnet format` ※ | `dotnet publish` (net8.0 and later default to Release) → `bin/Release/<tfm>/publish/` · `-r <RID> --self-contained` (Runtime Identifier (RID), for example `linux-x64`) |
+| Python | `uv sync` | `uv run <command>` | `uv run pytest` ※ | `ruff check` · `ruff format` | `uv build` ※ → wheel · sdist |
+| Java / Kotlin | Fetched at build time | `./mvnw spring-boot:run` · `./gradlew bootRun` ※ | `./mvnw test` · `./gradlew test` ※ | Spotless · Checkstyle · ktlint (no single standard) ※ | `./mvnw package` · `./gradlew build` ※ → a jar, run with `java -jar` |
+| Go | `go mod download` ※ | `go run ./cmd/<name>` ※ | `go test ./...` ※ | `gofmt` · `go vet` ※ | `go build ./...` ※ → one binary file |
+| Flutter / Dart | `flutter pub get` ※ | `flutter run --flavor <name>` | `flutter test` ※ | `flutter analyze` · `dart format .` ※ | `flutter build appbundle` → `build/app/outputs/bundle/release/app.aab` · `flutter build ipa` ※ |
+| Rust | `cargo fetch` ※ | `cargo run` ※ | `cargo test` ※ | `cargo clippy` · `cargo fmt` ※ | `cargo build --release` ※ → `target/release/` |
+| PHP / Laravel | `composer install` · `npm ci && npm run build` (assets) ※ | `php artisan serve` ※ | `php artisan test` | Laravel Pint ※ | deploy: `php artisan config:cache` (never run in dev) · `php artisan storage:link` |
+
+## 3 · Extra README sections by language
+
+| Stack | What to add |
+|---|---|
+| Node / TypeScript | The Node version from `.nvmrc` + tell readers to run `nvm use` · npm or pnpm (never 2 lock types) · a `scripts` table · every `VITE_*` variable, with a warning that the value reaches the browser · Angular: the list of configurations |
+| .NET / C# | The Software Development Kit (SDK) version from `global.json` · which project is the startup project · where `ASPNETCORE_ENVIRONMENT` is set · the key names to set through `user-secrets` (no values) · the `dotnet publish` command actually used · the EF Core migration commands |
+| Python | The version from `.python-version` · uv, or venv + pip (one way only) · with a src layout, install before testing · where the ruff settings live · the `.env` file that must exist |
+| Java / Kotlin | The JDK version · always use `./mvnw` or `./gradlew`, never the locally installed tool · a profile table and how to enable each · the name and location of the jar produced |
+| Go | The version from the `go` and `toolchain` lines · what each binary in `cmd/` does · the environment variables read |
+| Flutter / Dart | The Flutter and Dart versions · a flavor table (name · applicationId · entry file) · signing: where `key.properties` and the keystore are, and whom to ask (never commit them) · iOS: team and provisioning · the build command per flavor and where the output lands |
+| Rust | The toolchain from `rust-toolchain.toml` · the feature flags available · the binaries in `src/bin/` · the Minimum Supported Rust Version (MSRV) if it is a library |
+| PHP / Laravel | The PHP version and required extensions · `cp .env.example .env` → `php artisan key:generate` ※ → migrate · build assets · deploy steps (`config:cache` · `storage:link` · queue worker) |
+
+## 4 · Folder layout from official sources
+
+Use this for README section 8 "Project structure". This repo's rules (code folder name · test location) are in `SKILL.md` item 1 and win when they conflict.
+
+| Stack | Layout the tools expect | Source |
+|---|---|---|
+| Node / TypeScript | npm sets none · follow the framework generator (`src/` · `public/` · `vite.config.ts` or `angular.json`) ※ | — |
+| .NET / C# | No official page · most common is `src/<App>/` + `tests/<App>.Tests/` + `global.json` + `.slnx` ※ | — |
+| Python | src layout: `src/<package>/` · `pyproject.toml` at the root | [PyPA src vs flat](https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/) |
+| Java / Kotlin | `src/main/java` (or `kotlin`) · `src/main/resources` · `src/test/java` | [Maven Standard Directory Layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html) |
+| Go | `cmd/<binary>/main.go` · `internal/` · a small package can keep its files at the root · `golang-standards/project-layout` and `pkg/` come from the community, not the Go team | [Organizing a Go module](https://go.dev/doc/modules/layout) |
+| Flutter / Dart | `lib/` (`lib/src/` for internals) · `test/` · `android/` · `ios/` ※ | [Dart package layout](https://dart.dev/tools/pub/package-layout) |
+| Rust | `src/main.rs` · `src/lib.rs` · `src/bin/` · `tests/` · `examples/` · `benches/` | [Cargo project layout](https://doc.rust-lang.org/cargo/guide/project-layout.html) |
+| PHP / Laravel | `app/` · `config/` · `database/` · `public/` · `resources/` · `routes/` · `storage/` · `tests/` | [Laravel 13.x structure](https://laravel.com/docs/13.x/structure) |
+
+## 5 · Sources (opened 2026-11-07)
+
+[npm ci](https://docs.npmjs.com/cli/v10/commands/npm-ci) · [package.json engines](https://docs.npmjs.com/cli/v10/configuring-npm/package-json) · [pnpm install](https://pnpm.io/cli/install) · [nvm .nvmrc](https://github.com/nvm-sh/nvm/blob/master/README.md) · [Vite env and mode](https://vite.dev/guide/env-and-mode) · [Angular environments](https://angular.dev/tools/cli/environments) · [global.json](https://learn.microsoft.com/en-us/dotnet/core/tools/global-json) · [ASP.NET Core environments](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/environments) · [user-secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) · [dotnet publish](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-publish) · [Writing pyproject.toml](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/) · [uv project layout](https://docs.astral.sh/uv/concepts/projects/layout/) · [uv Python versions](https://docs.astral.sh/uv/concepts/python-versions/) · [Ruff configuration](https://docs.astral.sh/ruff/configuration/) · [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) · [Spring Boot profiles](https://docs.spring.io/spring-boot/reference/features/profiles.html) · [Spring Boot Maven run](https://docs.spring.io/spring-boot/maven-plugin/run.html) · [Go toolchains](https://go.dev/doc/toolchain) · [Flutter flavors](https://docs.flutter.dev/deployment/flavors) · [Flutter Android release](https://docs.flutter.dev/deployment/android) · [Cargo FAQ](https://doc.rust-lang.org/cargo/faq.html) · [rust-toolchain.toml](https://rust-lang.github.io/rustup/overrides.html) · [Composer basic usage](https://getcomposer.org/doc/01-basic-usage.md) · [Laravel configuration](https://laravel.com/docs/12.x/configuration)
+
+Tool versions change fast (Laravel 13.x was already out on the date checked). Before using these tables on a real project, open the official page for the version in use.
+
+
+## reference: readme-skeleton.md
+
+# README skeleton and companion documents — full version
+
+The rules are in `SKILL.md` item 2 · a copy-ready template is in `assets/starter-files.md` · commands and files for each language are in [`readme-by-stack.md`](readme-by-stack.md)
+
+## 1 · README sections in the order a newcomer needs them
+
+> This table is the fallback and the length criteria for layer 3 in `SKILL.md` item 2 · the real sections of each project come from the layer 2 survey (read the project · official docs · READMEs of projects of the same type) · a section that this type of project needs but that is not in the table may be added.
+
+The order follows what someone who has just arrived needs: what is this → install → run → change code → ship · the "Sources" column is the number of the 5 main sources (item 4) that recommend the section · a row that merges several topics gives a range · "—" means no main source recommends it; it is this skill's own judgment. The section names in the "Section" column are the Thai headings written into the README, so they stay Thai (English gloss in brackets).
+
+| # | Section | Question it answers | Present when | How long · where to move it if longer | Sources |
+|:--:|---|---|---|---|:--:|
+| 1 | ชื่อ + ทำอะไรให้ใคร (name + what it does for whom) | What is this, who uses it | always | 2–3 lines · first line at most 120 characters | 5 |
+| 2 | บรรทัดสถานะ (status line) | Is it still in development, who owns it, where are the docs | always | 1 line: status · owner · link to `docs/README.md` | 2–4 (status 2 · owner 4 · docs link 4) |
+| 3 | ภาพหน้าจอหรือตัวอย่างผล (screenshot or sample output) | What does it look like or produce | there is a screen or output to look at | 1 image, or a sample command with its output | 2 (usage example 3) |
+| 4 | ต้องมีบนเครื่อง (needed on the machine) | What must be installed first, which version | always | table: tool · version · which file pins the version (`.nvmrc` · `global.json`) | 3 |
+| 5 | เริ่มใช้งาน (getting started) | How to install and run | always | commands that can be copied, pasted and run, at most 6 commands · more than that becomes `scripts/setup` | 4 |
+| 6 | ตั้งค่า (configuration) | What must be configured, how many environments, how to switch | the project reads values from outside | table: variable name · what it is for · required or not · sample value (no real values) · for a secret give only the name and where to get it · if there is none, write "ไม่มีค่าตั้งภายนอก" (no external config) | 0 · based on Twelve-Factor |
+| 7 | คำสั่งที่ใช้บ่อย (common commands) | How to run dev · test · lint · format · build | always | table of 4–8 rows · test must be 1 command | 2 |
+| 8 | โครงโปรเจกต์ (project layout) | What is in which folder | always | a one-level tree, at most 15 lines · more → `ARCHITECTURE.md`, code-map section | 1 |
+| 9 | สถาปัตยกรรมย่อ (short architecture) | How many parts the system has, how they talk | more than 1 part (web page + API + database · queue · external service) | 3–5 lines + a Mermaid diagram at Context or Container level · full → `ARCHITECTURE.md` | — · based on matklad and C4 |
+| 10 | build และไฟล์ที่ได้ (build and output files) | How to make the deliverable, what files come out, where | there is something to build (web · app · binary · package) | build command per target + the path of the output file | 2 (counted together with deploy) |
+| 11 | deploy | Where it goes live, who triggers it, through which Continuous Integration (CI), how to roll back | it can be deployed | 3–5 lines · full steps → `docs/runbook-deploy.md` | 2 (counted together with build) |
+| 12 | ติดปัญหา (troubleshooting) | Common symptoms and fixes | always | table of symptom · fix · start from what you hit yourself while writing the README | — |
+| 13 | ร่วมพัฒนา (contributing) | branch · commit · pull request (PR) · what to check before sending | other people change the code | 3–5 lines · longer → `CONTRIBUTING.md` | 4 |
+| 14 | ติดต่อและขอความช่วยเหลือ (contact and help) | Whom to ask when stuck, which channel | always | 1–2 lines | 4 |
+| 15 | สัญญาอนุญาต (license) | How far it can be reused | always · the last section | 1 line + the `LICENSE` file · for internal work write "ใช้ภายใน <บริษัท> ห้ามเผยแพร่" (internal use at <company>, do not distribute) | 2 |
+
+**Skeleton rules**
+- Cut a section that has nothing in it; do not write "none" · except section 6, which must say there is no external config.
+- The README holds only what a newcomer needs in the first 30 minutes · anything longer moves to the file named in column 2, with a link back; do not delete it.
+- Longer than 100 lines → put a table of contents under the status line.
+- Edit the README in the same commit as the code that changes a command or setting.
+- Each language has sections to add (Flutter flavors · .NET `user-secrets`) → [`readme-by-stack.md`](readme-by-stack.md) section 3.
+
+## 2 · What goes into other files
+
+| File | Lives at | Content | Create when |
+|---|---|---|---|
+| `ARCHITECTURE.md` | `<project-name>/` | a code map for people who change the code (section 3) | the folder tree in the README exceeds 15 lines, or the system has more than 1 part |
+| `CHANGELOG.md` | `<project-name>/` | what users see changing in each version | per the table in `SKILL.md` item 3 |
+| `CONTRIBUTING.md` | `<project-name>/` | developer machine setup · branch · commit · PR · lint and test before sending | README section 13 is longer than 5 lines |
+| `LICENSE` | `<project-name>/` | the full license text | the repo is public, or the contract requires it |
+| `SECURITY.md` | `<project-name>/` or `.github/` | how to report a vulnerability · versions still supported | the repo is public, or delivered to a customer who maintains it |
+| `CODEOWNERS` | `.github/` | which folder whom must review in a PR | there are several teams or owners |
+| `runbook-deploy.md` | `docs/` at the root | build → release → run steps · each environment's setup · rolling back | the deploy steps are longer than 5 lines |
+| `decisions/ADR-NNNN-<slug>.md` | `docs/` at the root | decision records (Architecture Decision Record (ADR)), one per decision | a hard-to-reverse decision is made (`adr-writer`) |
+| Architecture, delivery edition | `docs/` at the root | an arc42-style architecture document | delivering to a customer or there is an acceptance reviewer (`project-doc-set`) |
+
+The location of `docs/` follows layout B in `project-doc-set` item 1 · GitHub looks for `CONTRIBUTING` and `CODEOWNERS` in `.github/` first, then the repo root, then `docs/` · documents in `docs/` can be split by what the reader needs into 4 kinds (Diátaxis): learning (tutorial) · getting a job done (how-to, e.g. a runbook) · looking up facts (reference, e.g. an API settings table) · understanding the reasons (explanation, e.g. ARCHITECTURE · ADR)
+
+## 3 · ARCHITECTURE.md
+
+**Default: matklad's short form** — the reader is someone who will change the code and wants to know where the thing that does X lives.
+
+```markdown
+# สถาปัตยกรรม
+
+## ภาพรวม
+<ระบบแก้ปัญหาอะไร รับอะไรเข้า ส่งอะไรออก — 1 ย่อหน้า + รูป Context หรือ Container 1 รูป>
+
+## แผนที่โค้ด
+<แต่ละโฟลเดอร์หรือโมดูลหลักทำอะไร คุยกับใคร — ทีละย่อหน้าสั้น ๆ>
+
+## ข้อห้ามที่ต้องรักษา
+<กฎที่โค้ดต้องไม่ละเมิด เช่น "ชั้น domain ไม่ import ฐานข้อมูล" · "ทุกการเขียนเงินผ่าน ledger">
+
+## เส้นแบ่งระหว่างชั้น
+<ตรงไหนคือ API สาธารณะ ตรงไหนแก้ได้อิสระ>
+
+## เรื่องที่ตัดผ่านทุกส่วน
+<log · error · สิทธิ์ · config · การทดสอบ — ทำแบบไหน อยู่ที่ไหน>
+```
+
+- Short; include only what rarely changes · you may name a file, module or type, but put no links, because links break when files move; let people search by name instead.
+- Do not explain every module in detail · do not chase every commit · review 2–3 times a year.
+- Diagrams use only the 2 C4 levels, Context and Container, which c4model.com says are enough for most teams · do not draw the Code level · draw with Mermaid per `software-diagrams`.
+
+**Use arc42 instead when** delivering to a customer or another team who will maintain it · there are quality requirements (speed, security) that must be proven · an acceptance reviewer is needed — choose only the sections that have real content from the 12 sections: goals · constraints · scope and context · solution strategy · building blocks · runtime view · deployment · cross-cutting concepts · decisions (point to ADRs) · quality requirements · risks and technical debt · glossary · this edition lives in `docs/` per `project-doc-set`, not in the code folder.
+
+## 4 · Sources (read 2026-11-07)
+
+The 5 main sources used to count the "Sources" column in item 1:
+- [standard-readme spec](https://github.com/RichardLitt/standard-readme/blob/main/spec.md) — required sections · license at the end · table of contents when over 100 lines
+- [Make a README](https://www.makeareadme.com/) — long is better than short; if too long, move, do not delete
+- [GitHub Docs: About READMEs](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes)
+- [Google documentation guide: READMEs](https://google.github.io/styleguide/docguide/READMEs.html) · [Best practices](https://google.github.io/styleguide/docguide/best_practices.html) — change docs together with code
+- [Microsoft Engineering Playbook: Project and Repositories](https://microsoft.github.io/code-with-engineering-playbook/documentation/guidance/project-and-repositories/) — folder layout · compile test build deploy
+
+Supporting sources: [GitHub community health files](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/creating-a-default-community-health-file) · [About code owners](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners) · [matklad: ARCHITECTURE.md](https://matklad.github.io/2021/02/06/ARCHITECTURE.md.html) · [arc42](https://arc42.org/overview) · [C4 model diagrams](https://c4model.com/diagrams) · [Diátaxis](https://diataxis.fr/) · [Twelve-Factor: Config](https://12factor.net/config) · [Build, release, run](https://12factor.net/build-release-run)
+
+The section order · the 15-line and 6-command ceilings · the configuration table · the troubleshooting and short-architecture sections are this skill's own judgment, not the sources' words.
+
+
+---
+
+# skill: background-jobs
+
+Use when work runs outside the request in queues or schedules
+
+# Background jobs
+
+> **The one rule:** every background job must be **safe to run again without repeating its effect**,
+> because it will certainly run again: the machine dies halfway · a person clicks again · the system retries by itself.
+
+## When to use this skill
+
+- Work the user should not have to sit and wait for: sending email, building a report, importing a file
+- Scheduled work: a daily summary, month-end closing, deleting expired data
+- Calling an external system that is slow or often down
+- A jammed queue, or jobs that vanish with nobody noticing
+
+## When to use another skill, or use it alongside
+
+| Task | Skill | |
+|---|---|---|
+| Timeouts and retries for ordinary requests | `error-handling-patterns` | instead |
+| Metrics and alerts | `observability-basics` | instead |
+| Events across several services through Kafka (several consumers read the same event · history is kept) | `kafka-streaming` | instead |
+| A job queue through RabbitMQ (several workers · retry · dead letter · needs a real broker) | `rabbitmq-messaging` | instead |
+| Importing Excel/CSV files as the main job | `data-import-export` | instead |
+| Sending email/SMS as the main job | `notifications` | instead |
+| Designing an agent system (Loop · Graph · Dynamic · choosing a framework) | `llm-engineering` → [`agent-systems.md`](../llm-engineering/references/agent-systems.md) | alongside |
+
+---
+
+## 1 · What belongs in the background
+
+| Send to the background | Do inside the request |
+|---|---|
+| Takes more than 1–2 seconds | Fast, and the user must see the result at once |
+| Calls an external system that can fail | Permission checks · data validation |
+| The user does not wait for the result (email, notification) | The result is what they clicked to see |
+| Many items done as a batch | |
+
+> **Do not move work to the background just because it is slow.** If the user must see the result before moving on,
+> moving it adds a waiting screen, a notification, and a place to store results.
+> Sometimes making it faster is much cheaper (see `lazy-coding`).
+
+---
+
+## 2 · Choose a mechanism
+
+| Mechanism | Fits | Watch out for |
+|---|---|---|
+| **Job table in the database** | small to medium systems · up to a few thousand jobs a day | you must write the job picker yourself · watch for workers fighting over jobs |
+| **A real queue** (Redis · RabbitMQ · Amazon Simple Queue Service (SQS)) | many jobs · need built-in retry and dead letter | one more thing to look after |
+| In-app scheduler (cron in code) | scheduled work with a single instance | **several instances will run it at the same time** · see section 5 |
+| Platform scheduler | scheduled work on the cloud | |
+
+**If the system is still small, always start with a table in the database,** because PostgreSQL's `SELECT ... FOR UPDATE SKIP LOCKED`
+lets several workers pick jobs at once safely, with no new system to add.
+
+**Every job needs at least:** `id` · `type` · `payload` · `status` · `attempts` ·
+`run_after` · `locked_by` · `locked_at` · `last_error` · `created_at`
+
+---
+
+## 3 · Running again must not repeat the effect
+
+Almost every queue system guarantees only "delivered at least once", **not exactly once**.
+
+| Method | How to use it |
+|---|---|
+| **Duplicate-blocking key** | a unique constraint on `(job_type, business_key)` makes a duplicate job fail to insert |
+| **Check state before acting** | "if the email for this purchase order was already sent, stop" |
+| **Pass on an idempotency key** | when calling an external API (see `api-conventions`) |
+| **Set a new value, do not add to the old one** | `set status = 'paid'` is safer than `balance = balance + 100` |
+
+> **A job that adds to a value or sends something outside costs real money if it runs twice.**
+> Two emails are only annoying, but two money transfers are a big problem.
+
+---
+
+## 4 · Retry and dead jobs
+
+These numbers are for jobs in a queue · for retries outside a queue use [`error-handling-patterns`](../error-handling-patterns/SKILL.md) §4: service-to-service calls use 3 tries at 1/2/4 seconds · when a person waits on the screen → at most 1 retry, then let them press again
+
+```
+fail → wait 1 min → fail → wait 4 min → fail → wait 16 min → 4th failure → dead letter
+```
+
+| Rule | Detail |
+|---|---|
+| **Always set a cap** | 3–5 tries · with unlimited retries a single job can jam the queue |
+| Increase the wait each round (a fixed multiple such as ×4) + a little randomness | same as `error-handling-patterns` |
+| Bad data needs no retry | a malformed payload stays the same however many times you try |
+| **A job that has run out of tries goes to one place** | dead letter (where jobs that failed until they ran out of tries are kept), keeping the full payload and the last error |
+| A person must watch the dead letter | **alert when a new job arrives there**, do not wait for a customer to complain |
+| It can be run again | after fixing the cause, you can re-run from the dead letter without writing a script |
+
+**A job stuck because a worker died** needs an unlocker.
+If a job's `locked_at` is older than N minutes, treat it as having nobody working on it, and unlock it so another worker picks it up.
+
+**Job state is a state machine, not a boolean** — every mechanism in section 2 must be able to say which state a job is in: `queued → running → succeeded`, or `running → failed (attempts < cap) → queued`, or `failed → dead` · keep `attempts` · `locked_at` · `last_error` · `finished_at` with the job · move only along the arrows above (a `succeeded` job cannot go back to `running`; create a new job) · the admin screen and the dead letter read from this state in one place
+
+---
+
+## 5 · Scheduled jobs
+
+> **With several instances, a scheduled job runs several times at once.**
+> A summary report sent 3 times, or money charged 3 times, comes from this.
+
+| Method | Use when |
+|---|---|
+| Lock in the database (advisory lock) | you can do it right away with nothing added |
+| The platform scheduler calls an endpoint | on the cloud · Kubernetes CronJob |
+| A scheduler that supports several instances directly | Quartz · Hangfire |
+
+**Rules for scheduled jobs:**
+
+- **Take the time range as a parameter**, so you can re-run missed dates without changing code
+- If a run is missed, you must be able to catch up, not skip it for good
+- State the time zone clearly: "every midnight" in which zone (see `i18n-and-locale`)
+- **Record which runs succeeded**, do not infer it from logs
+
+---
+
+## 6 · Long jobs the user waits on
+
+| Needed | Detail |
+|---|---|
+| Job id | return it the moment the job is accepted · the user uses it to ask about progress |
+| State | `queued` · `running` · `succeeded` · `failed` · `cancelled` |
+| Progress | "340 of 1,200 items done" (ทำแล้ว 340 จาก 1,200 รายการ), not a blind spinner |
+| Cancellable | the job must check for a cancel signal regularly |
+| Result | keep it available to download, with an expiry date |
+| Notify when done | email or an in-system notification (see `notifications`) |
+
+**Split a big job into small pieces.** For example, import 50,000 rows as sub-jobs of 500 rows each,
+because a single 40-minute job that fails at minute 39 must start over from the beginning.
+
+---
+
+## 7 · What to measure
+
+| Metric | Alert when |
+|---|---|
+| Jobs waiting in the queue | keeps growing and does not fall |
+| Wait time in the queue (p95 · 95% of jobs wait no longer than this) | above what was promised |
+| Failure rate | above the threshold |
+| **Count in the dead letter** | **rises, even by just one** |
+| Scheduled runs that did not run | a run was skipped |
+| Jobs stuck in the running state for an unusual time | more than N times the normal |
+
+> **A jammed queue is completely silent.** The API still answers 200 to every request and the health checks are all green,
+> but no email has gone out for 3 hours. You see it only if you measure.
+
+---
+
+## 8 · Payload
+
+- **Send the id, not the whole data block, in the payload** — the job reads it itself, so it gets the latest data too
+
+---
+
+## 9 · Durable workflow for agent jobs that run long or wait for human approval
+
+An agent job that runs tens of minutes, calls an LLM and tools many times, or pauses for approval across days cannot use a plain queue, because a failure at step 8 of 10 means starting over and paying the token cost again · use an engine that records the result of every step and resumes from the same point
+
+- [`references/durable-workflow.md`](references/durable-workflow.md) — open before choosing an engine (Temporal · Step Functions · checkpointer) or writing replayable code
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
+
+
+## reference: durable-workflow.md
+
+# Durable workflow for agent jobs · background-jobs
+
+| Tool | Fits | Waits for human approval | Watch out for |
+|---|---|---|---|
+| **Temporal** | Python and other languages · the agent loop lives in a workflow, while LLM and tool calls are activities · has `OpenAIAgentsPlugin` · `activity_as_tool` | (`ยังไม่ได้ตรวจ` · see the signal page) | the integration with the OpenAI Agents SDK is still in Public Preview |
+| **AWS Step Functions** | fixed steps on AWS · fan-out with `Map` (Inline in parallel 40 · Distributed 10,000 child jobs) | `.waitForTaskToken` can wait up to 1 year until `SendTaskSuccess` / `SendTaskFailure` arrives · set `HeartbeatSeconds` to prevent a silent hang | when an LLM must choose the route, let Lambda or Bedrock decide, then use `Choice` |
+| **Agent framework checkpointer** | you do not want to add an engine · LangGraph `PostgresSaver` · Microsoft Agent Framework `CheckpointManager` · OpenAI `RunState.to_json()` | LangGraph `interrupt()` · OpenAI `needs_approval` · Microsoft Agent Framework `RequestInfoExecutor` | an in-memory store is lost when the process restarts · use a database-backed store in production |
+
+**Rules for code that must be replayable** (Temporal · Google ADK · Claude Code workflows use the same principle · checked against [Temporal: Workflow Definition](https://docs.temporal.io/workflow-definition) 2026-10-26)
+
+- **Never read the time or draw a random value in code that controls the order of work** (`Date.now()` · `datetime.now()` · `Math.random()` · `uuid4()`) · on replay the value differs from the first run, the order drifts, and the old result cannot be reused · do anything that needs time or randomness in an activity, or use the SDK's own API for it
+- **All LLM calls, tool calls, and outside reads and writes go in activities.** The result is recorded once, and replay reads the record instead of calling again.
+- **The order of calls must be the same on every run** · changing the order of steps in code that still has jobs in flight makes the old jobs fail replay (Temporal calls this a nondeterminism error) · switch to the engine's versioning or patching
+- **The steps before a wait point must be safe to repeat** (section 3) · LangGraph re-runs the paused node from the start on resume, so move side effects to after the wait point
+- **Saved state carries no identity check** (the OpenAI docs warn about `RunState`) · load it only from a store we control
+- The cap on rounds, the token budget, and stopping when there is no improvement are still needed, as for jobs in a queue · details in [`agent-systems.md`](../../llm-engineering/references/agent-systems.md) section 6
+
+
+## reference: sources.md
+
+# Sources · background-jobs
+
+Sources (opened 2026-10-26): [Temporal · OpenAI Agents SDK](https://docs.temporal.io/ai-cookbook/openai-agents-sdk-python) · [Temporal announcement](https://temporal.io/blog/announcing-openai-agents-sdk-integration) · [Step Functions integration patterns](https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html) · [Step Functions Map](https://docs.aws.amazon.com/step-functions/latest/dg/state-map.html) · [LangGraph interrupts](https://docs.langchain.com/oss/python/langgraph/interrupts) · [OpenAI human in the loop](https://openai.github.io/openai-agents-python/human_in_the_loop/) · [Claude Code workflows](https://code.claude.com/docs/en/workflows)

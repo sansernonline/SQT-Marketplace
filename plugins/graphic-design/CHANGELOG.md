@@ -1,5 +1,9 @@
 # Changelog — graphic-design
 
+## 0.35.0 — 2026-11-26
+
+- ชี้ชื่อ skill ของ superuser 4.0.0 ที่รวมแล้ว (เช่น `design-gate` · `ground-rules` · `workspace-rules`) แทนชื่อเดิม
+
 ## 0.34.0 — 2026-11-25
 
 - skill ใหม่ `design-by-type`: แยกประเภทงานก่อน (โลโก้ · โปสเตอร์ · แบนเนอร์ · ปกเอกสาร · สไลด์) อ่านบริบทโปรเจกต์ 2 บรรทัดแล้วหาแนวด้วย `design_search.py --domain industry` หางานจริงที่มียอดนิยม จดตัวเลขพร้อมวันที่ ผสม 2–3 ชิ้นต่อแนวเป็นงานใหม่ 3 แนวให้เจ้าของเลือก · มีกฎความสวยแยกตามประเภทใน `references/` (logo · poster · banner · document-cover · slides) วิธีผสมและตารางยอดนิยมต่อเว็บใน `blend.md` และแหล่งอ้างอิงใน `sources.md` · กฎบางส่วนดัดแปลงจาก nextlevelbuilder/ui-ux-pro-max-skill (MIT) แล้วลองกับงานจริง 15 แนวเมื่อ 2026-11-19

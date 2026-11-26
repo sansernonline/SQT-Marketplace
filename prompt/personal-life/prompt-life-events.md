@@ -101,7 +101,7 @@ playbook `documents` (ขั้น 1–2 และ 4: รายการเอ�
 
 ## 4. ข้อความลำบากใจ
 
-skill `polite-message-th-en` · งานเล็ก ทำเลยไม่ต้องเปิด playbook
+skill `human-writing/polite-message-th-en` · งานเล็ก ทำเลยไม่ต้องเปิด playbook
 **ผลลัพธ์:** ร่างในแชต · **รออนุมัติ:** ส่ง
 
 ### ข้อมูล (ผู้ใช้กรอก)

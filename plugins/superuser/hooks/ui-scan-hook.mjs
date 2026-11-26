@@ -12,7 +12,7 @@ import { createHash } from "node:crypto";
 import { tmpdir, userInfo } from "node:os";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const SCANNER = join(HERE, "..", "skills", "no-ai-look", "scripts", "slop_scan.py");
+const SCANNER = join(HERE, "..", "skills", "design-gate", "parts", "no-ai-look", "scripts", "slop_scan.py");
 const UI_EXT = new Set([".html", ".htm", ".css", ".scss", ".less", ".jsx", ".tsx", ".vue", ".svelte", ".astro"]);
 const SKIP_PATH = /(^|[\\/])(\.claude|node_modules|dist|build|\.next|out|vendor|coverage|evals)([\\/]|$)|\.min\./;
 const PYTHONS = [["python", []], ["py", ["-3"]], ["python3", []]];

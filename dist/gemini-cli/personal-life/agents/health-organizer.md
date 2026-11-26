@@ -40,4 +40,4 @@ After an answer the user will act on (a checkup package, a medicine schedule, qu
 
 ## Writing
 
-Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow — the `simplify` skill.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow — the `ground-rules/simplify` skill.

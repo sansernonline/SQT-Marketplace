@@ -46,7 +46,7 @@
 
 ## 1. ตั้งโจทย์ · แนวที่อยากได้ · สูตรให้คะแนน · ล็อกข้อมูล
 
-playbook `project-docs` · agent `quant-analyst` + `business-analyst` · skill `stack-mql` · `spell-out-abbreviations`
+playbook `project-docs` · agent `quant-analyst` + `business-analyst` · skill `stack-mql` · `human-writing/spell-out-abbreviations`
 **ผลลัพธ์:** `docs/ea/research/GUIDE.md` (ผู้ใช้แก้ต่อได้) · `docs/ea/research/REWARD.md`
 
 ### โจทย์ (ผู้ใช้กรอก)
@@ -97,7 +97,7 @@ playbook `project-docs` · agent `quant-analyst` + `brainstormer` · skill `refe
 
 ## 3. สร้างเครื่องมือวน: EA แม่แบบ · สั่ง tester · อ่านผล · ให้คะแนน
 
-playbook `new-project` · agent `developer` + `quant-analyst` · skill `stack-mql` · `lazy-coding` · `readable-code` · `principle-prove-it-works` · `config-and-secrets`
+playbook `new-project` · agent `developer` + `quant-analyst` · skill `stack-mql` · `lazy-coding` · `readable-code` · `ground-rules/principle-prove-it-works` · `config-and-secrets`
 **ต้องมีก่อน:** `REWARD.md`
 **ผลลัพธ์:** EA แม่แบบใน `<repo>/MQL5/Experts/Lab/` (หรือ `MQL4/`) · เครื่องมือใน `tools/lab/` · `docs/ea/research/LAB.md` (วิธีใช้) · **ไม่แก้โค้ด** เว้นแต่ข้างล่างติ๊ก `[x]`
 
@@ -121,7 +121,7 @@ playbook `new-project` · agent `developer` + `quant-analyst` · skill `stack-mq
 
 ## 4. วนทดลอง (agent loop แบบ RL)
 
-playbook `feature` · agent `quant-analyst` (นำ) + `developer` · `brainstormer` เมื่อติด · skill `stack-mql` · `principle-small-verifiable-steps`
+playbook `feature` · agent `quant-analyst` (นำ) + `developer` · `brainstormer` เมื่อติด · skill `stack-mql` · `ground-rules/principle-small-verifiable-steps`
 **ต้องมีก่อน:** ฉบับ 1–3 ครบ และรอบทดสอบเครื่องมือผ่าน
 **ผลลัพธ์:** `experiments.csv` (เพิ่มแถวทุกรอบ) · `LEARNINGS.md` · `CHAMPION.md` · โค้ดแต่ละรุ่นบน branch `lab/<I-xx>-v<n>` หรือ commit แยก
 
@@ -172,7 +172,7 @@ playbook `review` · agent `quant-analyst` + `reviewer` (ตัวใหม่) 
 
 ## 6. ตัดสินผู้ชนะ: เปิดช่วงข้อมูลที่ล็อกไว้ ครั้งเดียว
 
-playbook `review` · agent `quant-analyst` (นำ) + `reviewer` · skill `stack-mql` · `principle-prove-it-works` · `markdown-visuals` · `polished-document-style`
+playbook `review` · agent `quant-analyst` (นำ) + `reviewer` · skill `stack-mql` · `ground-rules/principle-prove-it-works` · `markdown-visuals` · `design-gate/polished-document-style`
 **ต้องมีก่อน:** วนครบงบหรือผู้ใช้สั่งหยุด · `CHAMPION.md`
 **ผลลัพธ์:** `docs/ea/research/FINAL.md`
 

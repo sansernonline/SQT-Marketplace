@@ -53,7 +53,7 @@ Search the repo first: the build tool (`package.json` · `vite.config` · `next.
 | Is the domain already on Cloudflare? | Section 5 needs the domain in Cloudflare |
 | Monthly money cap | Decides whether it stays within the free allowance (section "เงินและของนอกเครื่อง") |
 
-No answers → set the bucket Private · do not make it public until the user approves · do not add `--delete` · note in `decision-log` that you chose it yourself, and put `(รอยืนยัน)` (to be confirmed) on the matters the user did not answer
+No answers → set the bucket Private · do not make it public until the user approves · do not add `--delete` · note in `decision-desk/decision-log` that you chose it yourself, and put `(รอยืนยัน)` (to be confirmed) on the matters the user did not answer
 
 ## 2 · Prepare the site so B2 can serve it
 

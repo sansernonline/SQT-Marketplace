@@ -19,7 +19,7 @@ Part of skill `handoff` · lives only in plugin `superuser` (merged from `work-s
 | File | Purpose | Who writes |
 |---|---|---|
 | `.claude/superuser/CONTEXT.md` | The shared file — what the project is · rules · where things are · **รับงานต่อ** (resume) | Lead |
-| `docs/BUILD-PLAN.md` | (If it exists) status · history · decisions of work that has a build plan in pieces | `status-report` · `decision-log` |
+| `docs/BUILD-PLAN.md` | (If it exists) status · history · decisions of work that has a build plan in pieces | `superuser/status-report` · `decision-desk/decision-log` |
 | `.claude/superuser/handoff/<id>.md` | Task sheet + delivery sheet, 1 piece per file | Lead orders · worker delivers (SKILL.md sections 3–4) |
 | `docs/BRIEF.md` | brief: a summary of the job for the user to read (not a task sheet) (what it is · what it can do · what the user wants to get) after brainstorming a large job | Lead, per [`brief-template`](../../superuser/references/brief-template.md) |
 | `.claude/superuser/IMPROVEMENTS.md` | Things the team should know, waiting to be merged into skills | Lead |
@@ -105,7 +105,7 @@ The plugin's hook (`hooks/superuser-hook.mjs`) writes 1 line per event, for the 
 | `ok` | ✓ succeeded · ✗ failed · empty = unknown |
 | `correction` | `true` when the user's message sounds like correcting the work (ไม่ใช่ · ผิด · อย่า · บอกแล้ว · แก้ใหม่) · `learning-reviewer` reads it at the end of a job |
 
-- **Several plugins installed** — every plugin in SQT-Marketplace has the same hook and gets the same events. The first one records and the others skip, so the log has no duplicates. The lock is an empty file the hook creates itself in `_to_delete/superuser-lock/` and the hook deletes it itself after 2 minutes. Agents leave this lock alone; the hook manages it. Agents delete other things in `_to_delete/` only per `temp-file-discipline` step 9.
+- **Several plugins installed** — every plugin in SQT-Marketplace has the same hook and gets the same events. The first one records and the others skip, so the log has no duplicates. The lock is an empty file the hook creates itself in `_to_delete/superuser-lock/` and the hook deletes it itself after 2 minutes. Agents leave this lock alone; the hook manages it. Agents delete other things in `_to_delete/` only per `workspace-rules/temp-file-discipline` step 9.
 - **Not stored:** file contents and tool output; values that look like secrets are replaced with `[ตัด]` (cut) before writing.
 - **Read** — if the user asks to "look at today's log", run `node <skill handoff folder>/scripts/log-to-md.mjs <date>` at the project root to get a Markdown table of all agents in time order. Add `--agent=<name>` to see just one, or `--out` to write `.claude/superuser/log/<date>.md`. `--out` writes `.claude/superuser/log/<date>.md`; if the file already exists you must add `--force`. Check the script with `--self-test`.
 - **Search** — `.jsonl` files can be searched with `grep` directly, and `learn-from-session` uses them to find repeated failures.
@@ -125,7 +125,7 @@ Claude Code has 2 systems: CLAUDE.md that a person writes, and **auto memory** t
 | Our file | Matches in Claude Code | Where to write now |
 |---|---|---|
 | `scripts/install/CLAUDE.global.md` (personal rules) | user `~/.claude/CLAUDE.md` · the hook sends a copy every session | Keep: rules every project must see even without the hook |
-| `~/.claude/superuser-style.md` (the owner's defaults) · before/after pairs from `owner-style-capture` | auto memory types `user` and `feedback` | **Write to auto memory instead**, letting Claude note it when the user corrects. The old file keeps only values a script or hook must read (name · costs · trusted senders). |
+| `~/.claude/superuser-style.md` (the owner's defaults) · before/after pairs from `learn-loop/owner-style-capture` | auto memory types `user` and `feedback` | **Write to auto memory instead**, letting Claude note it when the user corrects. The old file keeps only values a script or hook must read (name · costs · trusted senders). |
 | Permanent project rules in `CONTEXT.md` (folder layout · run commands · what not to touch) | project `./CLAUDE.md` or `.claude/rules/*.md` (add `paths:` so it loads only when that file is touched) | Move rules that do not change to `.claude/rules/`. `CONTEXT.md` keeps ความคืบหน้า (progress) · การตัดสินใจ (decisions) · รับงานต่อ (resume), which must be a file because auto memory does not reach subagents, does not reach Codex/Gemini and is not committed. |
 | `TEAM.md` · `LEAD-PLAYBOOK.md` in `~/.claude/superuser/` | auto memory type `project` or `reference` could also note it | Keep as files: the hook and scripts read this table (not yet checked whether auto memory works across machines) |
 | `IMPROVEMENTS.md` · `log/` · `inbox/` | No counterpart | Keep |

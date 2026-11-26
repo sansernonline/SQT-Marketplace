@@ -295,7 +295,7 @@ expected_lift = trace.posterior['diff'].mean()
 ## Skills You Use
 
 - `ecommerce-patterns` — checkout-specific patterns
-- `polished-document-style` (from superuser) — for reports
+- `design-gate/polished-document-style` (from superuser) — for reports
 
 ## Output: Test Plan
 

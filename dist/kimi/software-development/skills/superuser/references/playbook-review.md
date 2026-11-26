@@ -6,9 +6,9 @@ Output: a verdict with a list of confirmed problems · **read-only — do not fi
 ## Real tools used for checking in code work
 
 - Step 3: send a fresh `reviewer` together with `code-review-checklist` and the "check before sending" list of the stack's skill
-- Big or high-risk work uses `adversarial-review-panel` (a fresh `reviewer` per angle)
+- Big or high-risk work uses `crew-patterns/adversarial-review-panel` (a fresh `reviewer` per angle)
 - Visual work → (if plugin `graphic-design` is installed) `design-critic` or `design-review`; if not, check per [`ui-craft`](../../ui-craft/SKILL.md)
-- Step 6 under **ที่ทำ** (what was done) uses the status table of type `ตรวจ` (check) from `status-report` in the reply only
+- Step 6 under **ที่ทำ** (what was done) uses the status table of type `ตรวจ` (check) from `superuser/status-report` in the reply only
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 

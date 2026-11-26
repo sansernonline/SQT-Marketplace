@@ -81,7 +81,7 @@ The solution architect should:
    - Strategic changes (require investment)
    - Things to NOT do (anti-patterns to avoid)
 
-7. **Produce polished architecture review document** using `polished-document-style` skill:
+7. **Produce polished architecture review document** using `design-gate/polished-document-style` skill:
    - Executive summary
    - Current state diagrams (`diagram-figures` house style)
    - Quality attribute scorecard

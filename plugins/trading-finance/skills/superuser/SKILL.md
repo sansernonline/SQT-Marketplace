@@ -108,5 +108,5 @@ The `CONTEXT.md` template for this work is in [`context-template`](references/co
 
 - Never put in: account numbers · account balances · income · broker passwords or tokens.
 
-**Work patterns.** The lead picks a pattern when planning. Method, cost and pitfalls are in `agent-patterns`. Examples from this plugin's work are in [`examples`](references/examples.md).
+**Work patterns.** The lead picks a pattern when planning. Method, cost and pitfalls are in `crew-patterns/agent-patterns`. Examples from this plugin's work are in [`examples`](references/examples.md).
 

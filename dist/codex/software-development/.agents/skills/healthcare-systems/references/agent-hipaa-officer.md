@@ -133,7 +133,7 @@ OR use expert determination (statistical method).
 
 ## Output: Polished HIPAA Risk Analysis
 
-Use `polished-document-style` skill to produce:
+Use `design-gate/polished-document-style` skill to produce:
 
 ```markdown
 # HIPAA Risk Analysis

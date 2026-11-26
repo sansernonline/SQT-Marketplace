@@ -16,7 +16,7 @@
 **วนจนเสร็จ (agent loop):** ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ จนผ่านทุกข้อที่ฉบับนั้นต้องมี · ตรวจด้วยหลักฐานจริง (เปิดไฟล์ · รันคำสั่ง · เทียบแหล่ง) ไม่ใช่คำบอกของตัวที่ทำ · รอบตรวจใช้ `reviewer` ตัวใหม่ทุกรอบ · ไม่ผ่าน → แก้ที่ต้นเหตุแล้วตรวจซ้ำทั้งข้อเดิมและจุดที่แก้ · เหลือแค่ข้อระดับต่ำ → ปิดได้แล้วลงรายงาน · ครบเพดานรอบ (งานกลาง 3 · งานใหญ่หรืองานเสี่ยง 5) ยังไม่ผ่าน → ติดป้าย `ติด` ทำส่วนอื่นให้จบ แล้วรายงานข้อที่เหลือ · รายละเอียดอยู่ใน skill `superuser` กฎข้อ 3
 <!-- rules:end -->
 
-**skill หลัก:** `branded-document-design` (วิธีทำปก · `brandkit.py` · ฟอนต์ไทย · ตัวเอกสาร) · `parallel-attempts-pick-best` · `human-writing`
+**skill หลัก:** `branded-document-design` (วิธีทำปก · `brandkit.py` · ฟอนต์ไทย · ตัวเอกสาร) · `crew-patterns/parallel-attempts-pick-best` · `human-writing`
 
 | # | งาน | playbook | ได้ไฟล์ |
 |---|---|---|---|
@@ -26,7 +26,7 @@
 
 ## กฎเฉพาะไฟล์นี้
 
-- **ไม่เขียนทับ .docx ที่มีอยู่** — สร้างชุดใหม่จาก markdown ต้นฉบับแล้วขึ้นเลขเวอร์ชันตาม `document-naming` · ไม่มี markdown ต้นฉบับ → ทำแค่ปกตัวอย่างใน `_to_delete/cover-lab/final/` แล้วลงคำถามค้าง
+- **ไม่เขียนทับ .docx ที่มีอยู่** — สร้างชุดใหม่จาก markdown ต้นฉบับแล้วขึ้นเลขเวอร์ชันตาม `workspace-rules/document-naming` · ไม่มี markdown ต้นฉบับ → ทำแค่ปกตัวอย่างใน `_to_delete/cover-lab/final/` แล้วลงคำถามค้าง
 - ติดตั้งฟอนต์ลงเครื่องผู้ใช้ อยู่ใน "รออนุมัติ" (`COVER_INSTALL_FONTS=1`)
 - ผู้ออกแบบและผู้รวมผลต้องเป็น agent ที่มี Bash เพื่อ render แล้วเปิดดูภาพเอง (`branded-document-design` `references/cover-vote.md` ข้อ 6)
 - ภาพหน้าจอมาจาก mockup จริงของโปรเจกต์เท่านั้น · โลโก้ใช้ไฟล์จริง ไม่วาดใหม่ ไม่เปลี่ยนสีไฟล์โลโก้
@@ -36,7 +36,7 @@
 
 ## 1. สำรวจโปรเจกต์ + research ปก
 
-playbook `investigation` · agent `general-purpose` 2 ตัวขนานกัน (สำรวจ · research) · skill `branded-document-design` · `prior-art-review`
+playbook `investigation` · agent `general-purpose` 2 ตัวขนานกัน (สำรวจ · research) · skill `branded-document-design` · `research-with-sources/prior-art-review`
 **ผลลัพธ์:** `_to_delete/cover-lab/survey/SURVEY.md` · `_to_delete/cover-lab/research/RESEARCH.md`
 
 ### โจทย์ (ผู้ใช้กรอก)
@@ -74,7 +74,7 @@ playbook `prototype` · ผู้ออกแบบ `general-purpose` 3 ตั�
 
 ## 3. รวมผลและสร้างปกใน Word ทั้งชุด
 
-playbook `feature` · agent `general-purpose` (มี Bash) · skill `branded-document-design` · `principle-prove-it-works`
+playbook `feature` · agent `general-purpose` (มี Bash) · skill `branded-document-design` · `ground-rules/principle-prove-it-works`
 **ต้องมีก่อน:** ผลโหวตจากฉบับ 2
 **ผลลัพธ์:** `docs/design/cover-direction.md` (แนวคิด · ทะเบียนกันซ้ำ · ตารางชนิดเอกสาร = เฟรม) · ตัวสร้างปกที่รันซ้ำได้ในโฟลเดอร์ render ของโปรเจกต์ · ภาพพื้น 300 dpi ทุกฉบับ · .docx + .pdf ชุดใหม่ (เวอร์ชันใหม่) · ภาพตรวจทุกปก · เครื่องสร้างปกตัวอย่างทดสอบใน Word แล้วเฉพาะปก SRS → ฉบับอื่นต้องต่อปกเข้ากับตัว render เอกสารจริงและตรวจใน Word เอง (`branded-document-design` `references/cover-word-build.md`)
 

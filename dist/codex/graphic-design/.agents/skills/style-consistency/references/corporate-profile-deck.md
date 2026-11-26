@@ -54,6 +54,6 @@ The cover is the only page without the frame: logo top left, the company name ve
 - A client logo wall needs each client's permission.
 - Drop empty trailing pages (the source ends with a blank page 13).
 
-## Clash with `no-ai-look`
+## Clash with `design-gate/no-ai-look`
 
-This look uses several signals that `no-ai-look` section 2 says are never the default: grids of identical cards, icon tiles above headings, every page title + bullets, swoosh ribbons, and words like "ยกระดับ" and "ในยุคดิจิทัล". The owner chose the look, so the layout signals may stay: note the owner's pick under **ตัดสินใจเอง** and add a `slop-ok` comment in HTML/CSS output. The words do not get a pass: still run the copy through `human-writing`.
+This look uses several signals that `design-gate/no-ai-look` section 2 says are never the default: grids of identical cards, icon tiles above headings, every page title + bullets, swoosh ribbons, and words like "ยกระดับ" and "ในยุคดิจิทัล". The owner chose the look, so the layout signals may stay: note the owner's pick under **ตัดสินใจเอง** and add a `slop-ok` comment in HTML/CSS output. The words do not get a pass: still run the copy through `human-writing`.
