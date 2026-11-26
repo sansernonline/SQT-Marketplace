@@ -77,7 +77,7 @@ agent `solution-architect` (อ่านอย่างเดียว) + `syste
 
 ## 2. เป้าหมายรุ่นใหม่ + แนวทางรื้อ + stack
 
-agent `product-manager` + `solution-architect` + `brainstormer` · skill `architecture-patterns` · `adr-writer` · `prior-art-review` · `superuser:simplify` · `reference-app-research` (เมื่อผู้ใช้บอกว่า "อยากได้แบบแอป X")
+agent `product-manager` + `solution-architect` + `brainstormer` · skill `architecture-patterns` · `adr-writer` · `research-with-sources/prior-art-review` · `superuser:ground-rules` · `reference-app-research` (เมื่อผู้ใช้บอกว่า "อยากได้แบบแอป X")
 **ต้องมีก่อน:** `INVENTORY.md` และ `PARITY.md` (ฉบับ 1)
 **ผลลัพธ์:** `docs/rebuild/VISION.md` · ADR ที่ `docs/decisions/ADR-NNNN-<เรื่อง>.md`
 
@@ -103,15 +103,15 @@ agent `product-manager` + `solution-architect` + `brainstormer` · skill `archit
 
 ## 3. ออกแบบหน้าตาใหม่: 3 ทิศทาง โหวตเลือก แล้วทำ mockup
 
-agent `ux-designer` + `graphic-designer` (เมื่อต้องทำโลโก้หรือสีแบรนด์ใหม่) · skill `ui-craft` ข้อ 0.1 · `parallel-attempts-pick-best` · `web-app-design` / `mobile-app-design` / `windows-app-design` ตามแพลตฟอร์ม · `principle-user-experience-first`
+agent `ux-designer` + `graphic-designer` (เมื่อต้องทำโลโก้หรือสีแบรนด์ใหม่) · skill `ui-craft` ข้อ 0.1 · `crew-patterns/parallel-attempts-pick-best` · `web-app-design` / `mobile-app-design` / `windows-app-design` ตามแพลตฟอร์ม · `ground-rules/principle-user-experience-first`
 **ต้องมีก่อน:** `VISION.md` (ฉบับ 2) · flow หลักจาก `docs/as-is/`
 **ผลลัพธ์:** `docs/rebuild/DESIGN-DIRECTION.md` · `mockup/` รุ่นใหม่ (.html กดได้จริง)
 
 ### ลำดับ
 
 1. เลือก 3 หน้าที่บอกตัวตนของแอปได้มากที่สุด (เช่น หน้าแรก · หน้าทำงานหลัก · หน้ารายงาน)
-2. `ux-designer` ตัวใหม่ 3 ตัว แยกกันทำ 1 ทิศทางต่อตัว ตาม `parallel-attempts-pick-best` · แต่ละทิศทางมี: อารมณ์ 1 บรรทัด · สี · ตัวอักษร · ความหนาแน่น · 3 หน้านั้น
-3. `reviewer` ตัวใหม่ 3 ตัวให้คะแนนแยกกัน · ชนะ 2 ใน 3 · เสมอ → หัวหน้าทีมเลือกตาม `VISION.md` ข้อ 2 แล้วลง `decision-log`
+2. `ux-designer` ตัวใหม่ 3 ตัว แยกกันทำ 1 ทิศทางต่อตัว ตาม `crew-patterns/parallel-attempts-pick-best` · แต่ละทิศทางมี: อารมณ์ 1 บรรทัด · สี · ตัวอักษร · ความหนาแน่น · 3 หน้านั้น
+3. `reviewer` ตัวใหม่ 3 ตัวให้คะแนนแยกกัน · ชนะ 2 ใน 3 · เสมอ → หัวหน้าทีมเลือกตาม `VISION.md` ข้อ 2 แล้วลง `decision-desk/decision-log`
 4. ขยาย mockup ของทิศทางที่ชนะให้ครบ flow ใน `PARITY.md` ตาม `prompt-mockup.md` ฉบับ 1 และตรวจตามฉบับ 2
 
 ### กฎเฉพาะฉบับนี้
@@ -151,20 +151,20 @@ agent `developer` + `qa-tester` + `security-engineer` · skill `project-bootstra
 2. **ยกชิ้นที่เก็บก่อน** — ชิ้น `ยกมาทั้งชิ้น` ใน `INVENTORY.md`: เขียน test จากพฤติกรรมของรุ่นเดิมก่อน แล้วคัดลอกโค้ดมา ปรับให้เข้าโครงใหม่จน test เขียว · commit แยกก้อนละชิ้น ข้อความ commit บอกที่มา
 3. สร้าง `docs/AGENT-LOOP.md` ตาม `prompt-new-project.md` ฉบับ 11 · ลำดับงานเรียงตาม flow หลักใน `PARITY.md`
 4. สร้างทีละ FR ตาม `spec-to-code-loop` · หน้าจอต้องตรง mockup ฉบับ 3 (ไม่ตรง → `prompt-explore.md` ฉบับ 4)
-5. ครบทุก FR → `adversarial-review-panel` · `security-gate` · แก้ทุกข้อที่ยืนยันแล้ว
+5. ครบทุก FR → `crew-patterns/adversarial-review-panel` · `security-gate` · แก้ทุกข้อที่ยืนยันแล้ว
 
 ### กฎเฉพาะฉบับนี้
 
 - ไม่ติ๊กอนุญาต → ทำแค่ขั้น 3 (`AGENT-LOOP.md`) แล้วหยุด
 - โค้ดที่ยกมาต้องผ่านมาตรฐานรุ่นใหม่ทุกข้อ (ชื่อ · โครง · ความปลอดภัย) · ยกมาแล้วต้องแก้เกินครึ่ง → เปลี่ยนเป็น `ยกแนวคิด เขียนใหม่` แล้วแก้ `INVENTORY.md`
-- dependency และ library เดิมไม่ยกมาเพียงเพราะเคยใช้ · ทุกตัวต้องมีเหตุผลใน `decision-log`
+- dependency และ library เดิมไม่ยกมาเพียงเพราะเคยใช้ · ทุกตัวต้องมีเหตุผลใน `decision-desk/decision-log`
 - ทุกรอบรายงาน: FR ที่เสร็จ / ทั้งหมด · ความสามารถใน `PARITY.md` ที่ผ่าน / ทั้งหมด · ผล test จริง
 
 ---
 
 ## 6. ย้ายข้อมูล ตรวจเทียบ 2 รุ่น และแผนสลับระบบ
 
-agent `data-engineer` + `qa-tester` + `devops-engineer` · skill `database-design` · `data-import-export` · `principle-safe-to-rerun` · `principle-prove-it-works` · `incident-runbook-template`
+agent `data-engineer` + `qa-tester` + `devops-engineer` · skill `database-design` · `data-import-export` · `principle-safe-to-rerun` · `ground-rules/principle-prove-it-works` · `incident-runbook-template`
 **ต้องมีก่อน:** ฉบับ 5 รันได้ · สำเนาข้อมูลเดิมใน `_to_delete/` (ห้ามต่อฐานข้อมูลจริง)
 **ผลลัพธ์:** สคริปต์ย้ายข้อมูลในโฟลเดอร์โค้ดรุ่นใหม่ · `qa/parity/` ผลเทียบ · `docs/rebuild/CUTOVER.md`
 

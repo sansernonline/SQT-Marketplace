@@ -13,7 +13,7 @@ import { homedir } from "node:os";
 import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const PRICES = JSON.parse(readFileSync(resolve(HERE, "../../../plugins/superuser/skills/model-scorecard/references/prices.json"), "utf8")).per_mtok;
+const PRICES = JSON.parse(readFileSync(resolve(HERE, "../../../plugins/superuser/skills/superuser/parts/model-scorecard/references/prices.json"), "utf8")).per_mtok;
 const PROJECTS = join(process.env.CLAUDE_CONFIG_DIR ?? join(homedir(), ".claude"), "projects");
 
 /** usage ของไฟล์ transcript 1 ไฟล์ → model ที่ใช้ · ดอลลาร์โดยประมาณ · จำนวนรอบคุย (นับข้อความ assistant ไม่ซ้ำ id) */

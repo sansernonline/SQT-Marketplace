@@ -27,7 +27,7 @@
 
 ## 1. วิเคราะห์คำขอเปลี่ยน (Change Request)
 
-agent `business-analyst` + `system-analyst` · skill `srs-writing` · `superuser:simplify` · `polished-document-style`
+agent `business-analyst` + `system-analyst` · skill `srs-writing` · `superuser:ground-rules` · `design-gate/polished-document-style`
 **ผลลัพธ์:** `docs/change/CR-<เลข 3 หลัก>-<เรื่อง>.md` ไฟล์เดียว — **ไม่แก้** SRS / FSD / mockup / โค้ด
 
 ### คำขอเปลี่ยน (ผู้ใช้กรอก)
@@ -63,7 +63,7 @@ agent `business-analyst` + `system-analyst` · skill `srs-writing` · `superuser
 
 ## 2. รายงานบั๊กและแผนแก้
 
-agent `qa-tester` (รายงาน) + `developer` (หาสาเหตุ) · skill `bug-report-template` · `targeted-fix` · `test-case-template`
+agent `qa-tester` (รายงาน) + `developer` (หาสาเหตุ) · skill `bug-report-template` · `fix-at-source/targeted-fix` · `test-case-template`
 **ผลลัพธ์:** `qa/bugs/BUG-<เลข 3 หลัก>-<เรื่อง>.md` — **ไม่แก้โค้ด** เว้นแต่ข้างล่างติ๊ก `[x]`
 
 - [ ] อนุญาตให้แก้โค้ดตามแผนด้วย (แก้เฉพาะจุด + test กันบั๊กกลับมา + commit `fix:` 1 อัน · commit บนเครื่องเท่านั้น บน branch แยก `fix/BUG-<เลข>` · ไม่ push · ไม่ merge เข้า branch หลัก)

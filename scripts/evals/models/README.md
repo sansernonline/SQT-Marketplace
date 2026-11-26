@@ -15,7 +15,7 @@
 | `plan` | spec สั้นให้แตกงาน ([`plan-task.mjs`](plan-task.mjs)) | checklist 5 ข้อ ข้อละ 2: 3–6 ขั้น · ทุกขั้นมี "เสร็จเมื่อ" · ทุกขั้นระบุไฟล์ · ครอบคลุม csv เกณฑ์ รายงาน test README · ไม่เกิน 60 บรรทัด |
 | `plan-hard` | spec ย้ายตาราง `orders` จาก SQLite ไปฐานใหม่โดยไม่ปิดระบบ ([`plan-task.mjs`](plan-task.mjs)) | checklist 5 ข้อ ข้อละ 2: 4–6 ขั้น · ทุกขั้นมีไฟล์และ "เสร็จเมื่อ" เป็นคำสั่งใน `...` · "ขึ้นกับ" ชี้เฉพาะขั้นก่อนหน้า · ครอบคลุมเขียนคู่ คัดลอก เทียบ สลับ ถอย · เทียบก่อนสลับและเตรียมทางถอยก่อนหรือพร้อมสลับ และไม่เกิน 60 บรรทัด |
 
-model: `claude-haiku-5-5` · `claude-sonnet-5-5` · `claude-opus-5-5` · `claude-fable-5-1` (ราคาจาก `plugins/superuser/skills/model-scorecard/references/prices.json`) · ทุกรอบส่ง `--model` และ `--effort` (ค่าเริ่ม `medium`) ไม่โหลด plugin จึงวัดตัว model ไม่ใช่ทีม · **ข้อยกเว้น: ขั้น `review`** รันผ่าน `run-review-recall.mjs` ซึ่งโหลด plugin superuser และเรียก agent `superuser:reviewer` จึงวัดทีมรีวิว ไม่ใช่ model เปล่า
+model: `claude-haiku-5-5` · `claude-sonnet-5-5` · `claude-opus-5-5` · `claude-fable-5-1` (ราคาจาก `plugins/superuser/skills/superuser/parts/model-scorecard/references/prices.json`) · ทุกรอบส่ง `--model` และ `--effort` (ค่าเริ่ม `medium`) ไม่โหลด plugin จึงวัดตัว model ไม่ใช่ทีม · **ข้อยกเว้น: ขั้น `review`** รันผ่าน `run-review-recall.mjs` ซึ่งโหลด plugin superuser และเรียก agent `superuser:reviewer` จึงวัดทีมรีวิว ไม่ใช่ model เปล่า
 
 ## คำสั่ง
 

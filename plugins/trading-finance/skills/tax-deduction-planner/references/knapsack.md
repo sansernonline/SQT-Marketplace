@@ -2,7 +2,7 @@
 
 Moved from `SKILL.md` (tax-deduction-planner) section "Choosing several items under a budget" · open only when several items compete for one budget
 
-Use `decision-scoring`, command `knapsack`. Its `templates/knapsack.json` is an example. Script path: see `decision-scoring` (superuser plugin).
+Use `decision-desk/decision-scoring`, command `knapsack`. Its `templates/knapsack.json` is an example. Script path: see `decision-desk/decision-scoring` (superuser plugin).
 
 | Field | What to enter |
 |---|---|

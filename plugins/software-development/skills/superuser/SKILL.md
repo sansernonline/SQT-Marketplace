@@ -17,8 +17,8 @@ Other plugins have their own `superuser` (`/<plugin>:superuser`). The list is in
 
 **Rules specific to this plugin**
 
-- **Where to record** — log decisions with `decision-log` in `docs/BUILD-PLAN.md`, not in the `CONTEXT.md` table. Status tables use `status-report`. `CONTEXT.md` and handoff points follow `handoff`. Style files are made with `owner-style-capture`.
-- **Principles behind the rules** — rule 3 `principle-prove-it-works` · rule 4 `principle-proceed-on-reversible-work` (rule numbers of `superuser:superuser`). Read-only playbooks: `investigation` · `review`.
+- **Where to record** — log decisions with `decision-desk/decision-log` in `docs/BUILD-PLAN.md`, not in the `CONTEXT.md` table. Status tables use `superuser/status-report`. `CONTEXT.md` and handoff points follow `handoff`. Style files are made with `learn-loop/owner-style-capture`.
+- **Principles behind the rules** — rule 3 `ground-rules/principle-prove-it-works` · rule 4 `ground-rules/principle-proceed-on-reversible-work` (rule numbers of `superuser:superuser`). Read-only playbooks: `investigation` · `review`.
 
 ---
 
@@ -42,7 +42,7 @@ Shared skills (principles · checking · splitting work · documents · images �
 - **Simple** — nothing not yet needed · the shortest diff that is still correct · `lazy-coding`
 - **Engineer-grade structure** — folders by feature · 1 file 1 job · settings outside code · tests beside code · `readable-code`
 - **Secure from the start** — validate input immediately · SQL uses parameters · check permissions on the server · secrets outside code · [`principle-secure-by-default`](../principle-secure-by-default/SKILL.md)
-- The 3 go together. If a shorter diff makes things harder for the user, `principle-user-experience-first` wins.
+- The 3 go together. If a shorter diff makes things harder for the user, `ground-rules/principle-user-experience-first` wins.
 
 ---
 
@@ -60,12 +60,12 @@ Do reversible work right away. Do not do irreversible work or work that affects 
 
 ## 7 · The closing answer
 
-- Name a principle only when it changes the decision. Status tables use the words of `status-report` (the code-work word set differs from other plugins on purpose).
+- Name a principle only when it changes the decision. Status tables use the words of `superuser/status-report` (the code-work word set differs from other plugins on purpose).
 
 ---
 
 ## 9 · Shared files — `CONTEXT.md` · `IMPROVEMENTS.md`
 
-Software work uses `docs/BUILD-PLAN.md` (status table and `decision-log`) instead of `HISTORY.md`. Create `CONTEXT.md` per `handoff` → `references/team-memory.md` section 2.
+Software work uses `docs/BUILD-PLAN.md` (status table and `decision-desk/decision-log`) instead of `HISTORY.md`. Create `CONTEXT.md` per `handoff` → `references/team-memory.md` section 2.
 
-**Working patterns** — pick at planning time. How to run them, costs, pitfalls → `agent-patterns`. Examples → [`examples`](references/examples.md)
+**Working patterns** — pick at planning time. How to run them, costs, pitfalls → `crew-patterns/agent-patterns`. Examples → [`examples`](references/examples.md)

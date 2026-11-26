@@ -70,7 +70,7 @@ skill `english-tech-reading` · งานเล็ก ทำเลยไม่�
 
 ## 3. สรุปเรื่องที่เรียนไปเล่าให้ทีมฟัง
 
-playbook `paper-to-practice` (ขั้น 1–4 ตามเดิม · ขั้น 5 เขียนเป็นโครงเล่าแทนบันทึก) · agent `tech-mentor` · skill `learning-path` · `answer-shape`
+playbook `paper-to-practice` (ขั้น 1–4 ตามเดิม · ขั้น 5 เขียนเป็นโครงเล่าแทนบันทึก) · agent `tech-mentor` · skill `learning-path` · `lean-reply/answer-shape`
 **ผลลัพธ์:** `talks/<short-title>/outline.md` (โครงเล่า + คำถามที่น่าจะโดนถาม) · `talks/<short-title>/demo/` (โค้ด demo ที่รันได้) · **รออนุมัติ:** ส่งเข้ากลุ่มทีม · โพสต์ในช่องทางของบริษัท
 
 ### ข้อมูล (ผู้ใช้กรอก)

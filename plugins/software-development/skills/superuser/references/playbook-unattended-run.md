@@ -2,7 +2,7 @@
 
 Use when: "Finish it, I'll come back to look" · "Do it overnight" · "Don't ask" · multi-step work that a person will check all at once (covers pstack's `autonomous run` · `multi-phase plan` · `orchestrate` · `autopilot-full`)
 This is a wrapper around the work and does not replace the work's own playbook — it keeps the run going to the end, while each piece inside still picks its playbook by the work as usual
-Main skills: `decision-log` · `principle-proceed-on-reversible-work` · `status-report`
+Main skills: `decision-desk/decision-log` · `ground-rules/principle-proceed-on-reversible-work` · `superuser/status-report`
 Worker per piece: per that piece's sub-playbook (for example, a fresh `developer`)
 Reviewer per piece: a fresh `reviewer`
 Common `รออนุมัติ` (awaiting approval) items: deploy · delete data · merge into the main branch · send messages to outsiders

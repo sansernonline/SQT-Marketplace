@@ -158,7 +158,7 @@
 - product-manager: WHAT + WHY (กลยุทธ์)
 - project-manager: HOW + WHEN (delivery)
 
-**Skills ที่ใช้:** `polished-document-style`, `user-story-writer`
+**Skills ที่ใช้:** `design-gate/polished-document-style`, `user-story-writer`
 
 ---
 
@@ -175,7 +175,7 @@
 
 **Framework ใช้:** Diátaxis (Tutorial / How-To / Reference / Explanation)
 
-**Skills ที่ใช้:** `polished-document-style`, `commit-message-format`
+**Skills ที่ใช้:** `design-gate/polished-document-style`, `commit-message-format`
 
 ---
 
@@ -193,7 +193,7 @@
 
 **Framework ใช้:** OWASP Top 10, STRIDE, Defense in Depth
 
-**Skills ที่ใช้:** `polished-document-style`, `postmortem-template`, `code-review-checklist`
+**Skills ที่ใช้:** `design-gate/polished-document-style`, `postmortem-template`, `code-review-checklist`
 
 ---
 

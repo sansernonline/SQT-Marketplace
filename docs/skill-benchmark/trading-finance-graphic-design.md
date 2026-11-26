@@ -1,7 +1,7 @@
 # ผลไล่ดูการตัดสินใน skill ที่วัดเป็นตัวเลขได้ · trading-finance (25 skill) และ graphic-design (23 skill)
 
 ตรวจเมื่อ 2026-11-08 · path เทียบจาก ROOT = `SQT-Marketplace-claude-benchmark-map`
-ย่อ: TF = `plugins/trading-finance/skills` · GD = `plugins/graphic-design/skills` · TFE = `plugins/trading-finance/evals` · GDE = `plugins/graphic-design/evals` · DS = `plugins/superuser/skills/decision-scoring/scripts`
+ย่อ: TF = `plugins/trading-finance/skills` · GD = `plugins/graphic-design/skills` · TFE = `plugins/trading-finance/evals` · GDE = `plugins/graphic-design/evals` · DS = `plugins/superuser/skills/decision-desk/parts/decision-scoring/scripts`
 
 รัน `--self-test` ของสคริปต์ทุกตัววันนี้แล้ว: trading-finance 9 ตัวผ่านหมด (42 · 27 · 28 · 37 · 34 · 23 · 26 · 24 · 20 ข้อ) · graphic-design ผ่านหมดที่รันได้ · `loudnorm2.py` และ `silences.py` รันด้วย `python -I` แล้วโหลด `outguard` ที่อยู่ข้างกันไม่ขึ้น รันซ้ำแบบปกติแล้วผ่านทั้งคู่ (2026-11-08) · `slides_to_video.py` ยังไม่ได้รันซ้ำ
 เคส eval ของทั้งสอง plugin ยังไม่ครบผล (`TFE/RESULTS.md:3-10`: ผู้ตัดสิน haiku ยังไม่เทียบกับคน · 7 เคสยังไม่มีผลบันทึก) เคสที่อ้างในคอลัมน์ "มีอยู่แล้ว" วัดพฤติกรรมกว้าง ๆ ไม่ใช่ความถูกของตัวเลข

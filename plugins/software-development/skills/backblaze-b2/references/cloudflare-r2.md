@@ -48,7 +48,7 @@ Search the repo first: the S3 library in use · `R2_*` or `AWS_*` variables · `
 | Must the files be public | Decides section 6 |
 | Must the data stay in one region (jurisdiction, such as EU) | You need the endpoint that matches the jurisdiction, set when the bucket is created |
 
-If you get no answer: stay in the free tier and create nothing that costs money until you get a money limit · private bucket · not public · upload through the server · no jurisdiction. Record in `decision-log` that you chose these yourself, and mark the unanswered items `(รอยืนยัน)` (awaiting confirmation).
+If you get no answer: stay in the free tier and create nothing that costs money until you get a money limit · private bucket · not public · upload through the server · no jurisdiction. Record in `decision-desk/decision-log` that you chose these yourself, and mark the unanswered items `(รอยืนยัน)` (awaiting confirmation).
 
 ## 2 · Choose the route
 

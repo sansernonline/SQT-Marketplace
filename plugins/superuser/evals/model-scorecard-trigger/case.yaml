@@ -15,7 +15,7 @@ graders:
   - name: skill-opened
     type: tool_used
     tool: Skill
-    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?model-scorecard"'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?superuser"'
     min: 1
     arm: with-only
   - name: mentions-log-source

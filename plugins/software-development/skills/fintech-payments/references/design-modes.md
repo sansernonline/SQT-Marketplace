@@ -64,7 +64,7 @@ The fintech engineer should:
    - Discrepancy alerting
    - Manual reconciliation tooling
 
-8. **Produce polished design document** using `polished-document-style` skill:
+8. **Produce polished design document** using `design-gate/polished-document-style` skill:
    - Sequence diagram (`diagram-figures`, house style)
    - State machine diagram (`diagram-figures`, house style)
    - API spec for endpoints
@@ -117,7 +117,7 @@ The compliance officer should:
    - Effort to remediate
    - Dependencies
 
-6. **Produce polished PCI audit report** using `polished-document-style` skill:
+6. **Produce polished PCI audit report** using `design-gate/polished-document-style` skill:
    - Executive summary
    - Scope diagram (`diagram-figures`, house style)
    - Readiness scorecard

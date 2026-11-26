@@ -14,7 +14,7 @@ General information, not tax advice. The company's accountant (นักบั�
 - Deciding which document to issue and when, or working out VAT and withholding tax lines
 - Chasing overdue invoices from several credit customers
 
-Not for: full tax-invoice fields, abbreviated invoices, e-Tax → `e-tax-invoice` · one awkward message to one customer → `polite-message-th-en` · contracts → `doc-contract-th`
+Not for: full tax-invoice fields, abbreviated invoices, e-Tax → `e-tax-invoice` · one awkward message to one customer → `human-writing/polite-message-th-en` · contracts → `doc-contract-th`
 
 ## Steps
 

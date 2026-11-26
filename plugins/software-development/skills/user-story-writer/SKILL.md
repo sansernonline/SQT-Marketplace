@@ -124,7 +124,7 @@ Load the skill that matches the destination before you start writing, not after 
 
 | Delivered as | Load |
 |---|---|
-| Markdown that people read (repo · wiki · tracker) | `polished-document-style` |
+| Markdown that people read (repo · wiki · tracker) | `design-gate/polished-document-style` |
 | A `.docx` / `.pptx` / PDF that stakeholders sign off | `branded-document-design` |
 | Needs a picture to be understood | `diagram-figures` (the house style of project documents) |
 

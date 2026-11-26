@@ -54,7 +54,7 @@ _to_delete/
 | The plan and status `BUILD-PLAN.md` | `docs/` (a real document) |
 | Code and tests | The project folder |
 
-Never write converted files into `docs/` mixed with the originals; in 3 months nobody will know which file the customer signed. Full detail: `temp-file-discipline`.
+Never write converted files into `docs/` mixed with the originals; in 3 months nobody will know which file the customer signed. Full detail: `workspace-rules/temp-file-discipline`.
 
 ## Compare to the mockup with a real image
 
@@ -86,7 +86,7 @@ One criterion: the files to be touched must not overlap at all (see the "files t
 | A **read-only** checking agent running alongside an agent that writes code | Work that already has to wait for the result of another task |
 | Turning requirements into tests for several modules at once | When there is no plan yet |
 
-- Each agent that writes files gets its own worktree, per `superuser/references/code-extensions.md` section "parallel-split-and-merge" (including how to handle uncommitted work).
+- Each agent that writes files gets its own worktree, per `superuser/references/code-extensions.md` section "crew-patterns" (including how to handle uncommitted work).
 - Every split-off agent receives: the IDs of the requirements it owns · the list of files it may touch · the test command · all of the iron rules (especially rule 3).
 - Never let a split-off agent edit `BUILD-PLAN.md`. It reports back, and the main agent writes the one file.
 
@@ -106,4 +106,4 @@ Anti-patterns: throwing the whole requirements document in one round · writing 
 
 ## Other skills to use together
 
-`srs-writing` (testable requirements) · `test-case-template` · `testing-standards` (skeleton, framework, names, coverage) · `e2e-testing-patterns` (real browser) · `lazy-coding` · `targeted-fix` (red test) · `commit-message-format` · `temp-file-discipline` · `test-evidence` item 5 and `e2e-testing-patterns` (oracle-and-mutation) for number-chasing loops · `handoff` · `status-report`.
+`srs-writing` (testable requirements) · `test-case-template` · `testing-standards` (skeleton, framework, names, coverage) · `e2e-testing-patterns` (real browser) · `lazy-coding` · `fix-at-source/targeted-fix` (red test) · `commit-message-format` · `workspace-rules/temp-file-discipline` · `test-evidence` item 5 and `e2e-testing-patterns` (oracle-and-mutation) for number-chasing loops · `handoff` · `superuser/status-report`.

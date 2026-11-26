@@ -16,7 +16,7 @@
 
 **ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้ `diagram-figures` · Mermaid (`software-diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
 
-**เว็บแบบบท (ใช้ทุกฉบับ):** ทำตาม skill `dynamic-website` · การเคลื่อนไหวทุกชิ้นผ่านประตูเดียว (`T()` ใน JS + kill-switch ใน CSS) · แต่ละบทมีทางเข้าของตัวเอง ห้ามใช้ fade-up ซ้ำทุกจุด · รุ่นของ GSAP และเครื่องมืออ่านจากหน้าทางการรอบนี้ แล้วติดวันที่ตรวจ · ข้อความบนเว็บตาม `human-writing` · หน้าตาต้องไม่ดูเหมือน AI ทำ ตาม `no-ai-look` (plugin `superuser`) · โค้ดเว็บอยู่ในโฟลเดอร์โค้ด (`<repo>/`) · ภาพทดลองและผลวัดลง `_to_delete/`
+**เว็บแบบบท (ใช้ทุกฉบับ):** ทำตาม skill `dynamic-website` · การเคลื่อนไหวทุกชิ้นผ่านประตูเดียว (`T()` ใน JS + kill-switch ใน CSS) · แต่ละบทมีทางเข้าของตัวเอง ห้ามใช้ fade-up ซ้ำทุกจุด · รุ่นของ GSAP และเครื่องมืออ่านจากหน้าทางการรอบนี้ แล้วติดวันที่ตรวจ · ข้อความบนเว็บตาม `human-writing` · หน้าตาต้องไม่ดูเหมือน AI ทำ ตาม `design-gate/no-ai-look` (plugin `superuser`) · โค้ดเว็บอยู่ในโฟลเดอร์โค้ด (`<repo>/`) · ภาพทดลองและผลวัดลง `_to_delete/`
 
 | # | งาน | playbook | ได้ไฟล์ |
 |---|---|---|---|
@@ -33,13 +33,13 @@
 - เว็บเดียวมีได้ทั้ง 2 โหมด: บทเล่าเรื่องใช้ deck-mode ส่วนลงทะเบียน ชำระเงิน และแอดมินใช้ page-mode · token สีและตัวอักษรชุดเดียวกันทั้ง 2 โหมด
 - **ผู้ใช้เลือกแนวภาพเอง** เป็นค่าเริ่ม · สั่งหลายฉบับรวดเดียว → ทำฉบับ 1 จนได้หน้าเทียบ แล้วรอคำตอบเรื่องแนว เป็นจุดหยุดเดียวของไฟล์นี้ · ฉบับ 2–5 ทำต่อหลังผู้ใช้เลือก
 - เนื้อหาและรูปต้องเหมือนของจริง ห้าม Lorem ห้ามกล่องเทาว่าง ห้ามรูปทรงพื้นฐานวางแทนรูป
-- agent ที่ใช้: `ux-designer` (ฉบับ 1) · `graphic-designer` (โลโก้ สีแบรนด์ และ `no-ai-look`) · `developer` (ฉบับ 2–3) · `qa-tester` (ฉบับ 4) · `devops-engineer` + `seo-specialist` (ฉบับ 5) · `reviewer` ตรวจทุกฉบับ
+- agent ที่ใช้: `ux-designer` (ฉบับ 1) · `graphic-designer` (โลโก้ สีแบรนด์ และ `design-gate/no-ai-look`) · `developer` (ฉบับ 2–3) · `qa-tester` (ฉบับ 4) · `devops-engineer` + `seo-specialist` (ฉบับ 5) · `reviewer` ตรวจทุกฉบับ
 
 ---
 
 ## 1. ทิศทางภาพ 3 แนว ให้ผู้ใช้เลือก
 
-playbook `project-docs` · agent `ux-designer` (นำ) + `graphic-designer` · skill `ui-craft` ข้อ 0.1 · `parallel-attempts-pick-best` · `dynamic-website` (ข้อ 4 token · ข้อ 6 ฟอนต์ไทยหัวใหญ่) · `presentation-design` (โครงเรื่อง)
+playbook `project-docs` · agent `ux-designer` (นำ) + `graphic-designer` · skill `ui-craft` ข้อ 0.1 · `crew-patterns/parallel-attempts-pick-best` · `dynamic-website` (ข้อ 4 token · ข้อ 6 ฟอนต์ไทยหัวใหญ่) · `presentation-design` (โครงเรื่อง)
 **ผลลัพธ์:** `docs/design/<รหัส>-story.md` (บท · หัวบทเป็นข้อสรุป · ทางเข้าที่ตั้งใจ) · `docs/design/<รหัส>-design-directions.html` (3 แนวเคียงกัน) · **ผู้ใช้เลือกแนว** ก่อนเริ่มฉบับ 2
 
 ### เว็บ (ผู้ใช้กรอก)
@@ -55,7 +55,7 @@ playbook `project-docs` · agent `ux-designer` (นำ) + `graphic-designer` · 
 ### ขั้นตอน
 
 1. ร่างโครงเรื่องก่อนวาด: บทละ 1 ข้อสรุป · บทเปิดเป็นหน้าจอพระเอก · บทที่มีพื้นหลังหรือรายการยาวที่สุดเป็นหน้าใช้งานหลักของรอบนี้
-2. ทำตาม `ui-craft` ข้อ 0.1 ทั้ง 6 ขั้น · 3 แนวทำขนานกันด้วย subagent ตัวใหม่แนวละตัว (`parallel-attempts-pick-best`) และต่างกันจริง แต่ละแนวเลือกจากตาราง look ของเว็บใน `ui-craft`
+2. ทำตาม `ui-craft` ข้อ 0.1 ทั้ง 6 ขั้น · 3 แนวทำขนานกันด้วย subagent ตัวใหม่แนวละตัว (`crew-patterns/parallel-attempts-pick-best`) และต่างกันจริง แต่ละแนวเลือกจากตาราง look ของเว็บใน `ui-craft`
 3. แต่ละแนวบอก: สี · ฟอนต์หัวใหญ่ไทย (เลือกจาก `dynamic-website` ข้อ 6) · ทางเข้าของบทเปิด · พื้นหลัง · เปิดดูจริงที่กว้าง 1440 และ 420
 4. หน้าเทียบมีภาพเว็บอ้างอิง ใต้แต่ละแนวมี token หลักและข้อดีข้อเสีย 1 บรรทัด
 5. ไม่ติ๊กช่องให้ทีมเลือก → จบฉบับนี้ที่หน้าเทียบ แล้วถามผู้ใช้ครั้งเดียวว่าเลือกแนวไหน · ติ๊ก → ผู้ตรวจด่านสวยตัวใหม่ให้คะแนนตาม `ui-craft` ข้อ 0.1 ขั้น 5 แล้วลงผลใน `## ตัดสินใจเอง`
@@ -118,14 +118,14 @@ playbook `feature` · agent `developer` + `ux-designer` · skill `dynamic-websit
 
 ## 4. ตรวจคุณภาพก่อนเปิด
 
-playbook `review` · agent `qa-tester` ตัวใหม่ (การเข้าถึง · ความเร็ว · คีย์บอร์ด) + `graphic-designer` ตัวใหม่ (`no-ai-look`) · ผู้ตรวจต้องไม่ใช่ตัวที่สร้างหรือแก้เว็บ · skill `web-quality-audit` · `no-ai-look` (plugin `superuser`) · `dynamic-website` ข้อ 7 · `seo-audit-checklist` (ใช้ผล Lighthouse รอบเดียวกัน)
+playbook `review` · agent `qa-tester` ตัวใหม่ (การเข้าถึง · ความเร็ว · คีย์บอร์ด) + `graphic-designer` ตัวใหม่ (`design-gate/no-ai-look`) · ผู้ตรวจต้องไม่ใช่ตัวที่สร้างหรือแก้เว็บ · skill `web-quality-audit` · `design-gate/no-ai-look` (plugin `superuser`) · `dynamic-website` ข้อ 7 · `seo-audit-checklist` (ใช้ผล Lighthouse รอบเดียวกัน)
 **ต้องมีก่อน:** ฉบับ 2 (และ 3 ถ้าทำ) รันได้บนเครื่อง
 **ผลลัพธ์:** `docs/web-quality-<ปี-เดือน-วัน>.md` · ผลดิบใน `_to_delete/audit/<วันที่>/` · **ผู้ตรวจไม่แก้ไฟล์**
 
 ### สิ่งที่ตรวจ
 
 1. **การเข้าถึงและความเร็ว:** ทำตาม `prompt-quality.md` ฉบับ 4 ที่เดียว · หาไฟล์ไม่เจอ → ทำตาม `web-quality-audit` ขั้นตอน 1–4 (WCAG 2.2 AA · Lighthouse mobile บน production build · ค่ากลาง 3 รอบ)
-2. **ไม่ให้ดูเหมือน AI ทำ:** รัน `slop_scan.py` ของ `no-ai-look` กับไฟล์ HTML · ไล่ `data-enter` ทุกบทว่าไม่มี fade-up ซ้ำและบทติดกันไม่ซ้ำแบบ · ไม่มีอนุภาคลอยไร้ความหมาย glow ที่วนไม่หยุด หรือ gradient บนปุ่ม
+2. **ไม่ให้ดูเหมือน AI ทำ:** รัน `slop_scan.py` ของ `design-gate/no-ai-look` กับไฟล์ HTML · ไล่ `data-enter` ทุกบทว่าไม่มี fade-up ซ้ำและบทติดกันไม่ซ้ำแบบ · ไม่มีอนุภาคลอยไร้ความหมาย glow ที่วนไม่หยุด หรือ gradient บนปุ่ม
 3. **คีย์บอร์ด:** เปลี่ยนบทได้ครบทุกปุ่มในแผนที่ · Tab ไล่ rail แล้วเห็นวงโฟกัส · โฟกัสย้ายตามบท · ฟอร์มลงทะเบียนกรอกจนส่งได้ด้วยคีย์บอร์ดอย่างเดียว · Esc ปิด modal
 4. **reduced motion:** เปิด `prefers-reduced-motion` แล้วเห็นเนื้อหาครบทุกบท ตัวเลขเป็นค่าสุดท้าย ไม่มีคำจาง · ของที่เล่นเองเกิน 5 วินาทีมีปุ่มหยุด
 5. **ตัดของหนัก:** ปิด WebGL แล้ว fallback 2D ขึ้นและอ่านได้ · ถอดเน็ตแล้วฟอนต์ยังเป็นตัวที่ตั้งใจ · trackpad ปัดแรง 1 ครั้งเปลี่ยน 1 บท · Lighthouse ไม่ฟ้องเรื่อง passive listener

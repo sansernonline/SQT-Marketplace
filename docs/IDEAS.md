@@ -79,7 +79,7 @@ grader `tool_used: Skill` ไม่ผ่าน** · แปลว่า Claude �
 ต้องแก้ที่ `description` ไม่ใช่ที่เนื้อหา
 
 **เริ่มยังไง** — อย่าทำทั้ง 73 ตัว เลือก 5 ตัวที่ใช้บ่อยสุดก่อน (`lazy-coding`,
-`superuser:simplify`, `web-app-design`, `testing-standards`, `srs-writing`)
+`superuser:ground-rules`, `web-app-design`, `testing-standards`, `srs-writing`)
 
 ```bash
 claude plugin eval init      # สัมภาษณ์แล้วสร้างชุดทดสอบให้
@@ -97,8 +97,8 @@ skill 1 ตัวใช้ 20 คำถาม — 8-10 คำถามที่*
 
 ### 2 · กฎ "พิสูจน์ก่อนเคลม"
 
-**ช่องว่างที่ใหญ่ที่สุดของเรา** — เรามี `superuser:simplify`, `lazy-coding`, `targeted-fix`,
-`short-answers`, `spell-out-abbreviations` แต่**ไม่มีตัวไหนห้ามเคลมว่าอะไรผ่านโดยไม่ได้รัน**
+**ช่องว่างที่ใหญ่ที่สุดของเรา** — เรามี `superuser:ground-rules`, `lazy-coding`, `fix-at-source/targeted-fix`,
+`short-answers`, `human-writing/spell-out-abbreviations` แต่**ไม่มีตัวไหนห้ามเคลมว่าอะไรผ่านโดยไม่ได้รัน**
 
 ตัวอย่างที่ดีที่สุดคือ [`verification-before-completion`](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md)
 ยาวแค่ราว 3.6 KB · สิ่งที่ควรลอกมา:
@@ -293,7 +293,7 @@ description ที่เขียนไทยล้วนจึงแพงก�
 | แยกคนให้คะแนนทางเลือกออกจาก `brainstormer` | Panickssery et al. 2024 https://arxiv.org/abs/2404.13076 | log ชี้ว่าทางที่เลือกพลาดบ่อย |
 | บทเรียนหมดอายุเมื่อผ่านวันตรวจ 2 รอบโดยไม่มีหลักฐานว่าช่วย | ExpeL https://arxiv.org/abs/2308.10144 | แยก "ได้ผล" กับ "ไม่มีงานแบบนั้น" ออกได้ |
 | บอกผู้ใช้ว่าเปลี่ยนอะไรเพราะคำติของเขา ("You said, we did") | ยังไม่ได้ตรวจ | คิวกลางมีแถว "รวมแล้ว" สะสมพอ |
-| ถกเถียง 2 ฝ่ายแล้วให้ตัวกลางตัดสิน (debate) | Khan et al. 2024 https://arxiv.org/abs/2402.06782 | ข้อพิพาทที่ไม่มีตัวตรวจภายนอก · ใกล้กับ `adversarial-review-panel` |
+| ถกเถียง 2 ฝ่ายแล้วให้ตัวกลางตัดสิน (debate) | Khan et al. 2024 https://arxiv.org/abs/2402.06782 | ข้อพิพาทที่ไม่มีตัวตรวจภายนอก · ใกล้กับ `crew-patterns/adversarial-review-panel` |
 | ส่วนต่างระหว่างการตรวจกับการสร้าง วัดด้วย pass^k | Anthropic, *Demystifying evals for AI agents* | รวมกับงาน eval ในข้อ 1 |
 | hook ติดธง `reask` เมื่อผู้ใช้ส่งข้อความคล้ายเดิมภายใน 10 นาที (ไม่พอใจแบบสุภาพ) | Awadallah et al., CIKM 2013 https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/Hassan_CIKM13a.pdf | เทียบเกณฑ์ความคล้าย 0.6 กับ log จริงก่อน (รอยืนยัน) |
 | ติดธงเมื่อผู้ใช้กด Esc ขัดงาน (อ่านจาก `transcript_path`) | Claude Code hooks docs | เปิด transcript จริงดูรูปแบบบรรทัดก่อน |
@@ -318,7 +318,7 @@ description ที่เขียนไทยล้วนจึงแพงก�
 ### ตัวย่อ
 
 เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `spell-out-abbreviations`
+หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `human-writing/spell-out-abbreviations`
 
 ---
 
@@ -337,7 +337,7 @@ code — referenced it nowhere.
 
 **Many engineers referenced *no* skills at all:** all 4 mobile agents, all 4 IoT
 agents, `blockchain-engineer`, `fintech-engineer`, `healthcare-engineer`,
-`revops-analyst`, `legaltech-engineer`, `legaltech-engineer`.
+`revops-analyst`, `legaltech-engineer`.
 
 **`simplicity-first` was 372 lines** — ironically bloated for a skill about
 simplicity, and it mixed code rules with doc/plan/architecture rules.
@@ -365,7 +365,7 @@ less code, 47–77% less cost, 3–6× faster. That's the pattern worth copying.
 3. **Wired `lazy-coding` into 30 code-writing agents** across all 14 plugins —
    including the ones that previously had no skills section at all.
 
-4. **Created `spell-out-abbreviations` and `short-answers`**
+4. **Created `human-writing/spell-out-abbreviations` and `short-answers`**
    (`software-development/skills/`) — the two rules that apply to *everything*
    written for a person, not just code or docs.
 
@@ -379,8 +379,8 @@ Split rule, going forward:
 | Output | Skill |
 |--------|-------|
 | Code (write / fix / refactor / review) | `lazy-coding` |
-| Docs, plans, architecture, UX/API design | `superuser:simplify` |
-| Anything a person reads — first mention of an abbreviation | `spell-out-abbreviations` |
+| Docs, plans, architecture, UX/API design | `superuser:ground-rules` |
+| Anything a person reads — first mention of an abbreviation | `human-writing/spell-out-abbreviations` |
 | Anything a person reads — length and plainness | `short-answers` |
 | Any interface, on any platform | `ui-craft` (**with** the platform skill, not instead of it) |
 | Any picture of how software works | `software-diagrams` |
@@ -399,7 +399,7 @@ invisible outside the core plugin. Suggested additions per agent type:
 | Agents that open PRs | `pr-description-template` | Uniform PRs, faster review |
 | Agents producing diagrams in docs/PRs | `markdown-visuals` | A diagram halves review time |
 | Architect-type agents (`*-architect`, `solution-architect`, `iot-engineer`) | `adr-writer`, `architecture-patterns` | Already used by `solution-architect`; reuse, don't reinvent |
-| Compliance / officer agents | `polished-document-style`, `office-document-handling` | They produce reports and audit docs |
+| Compliance / officer agents | `design-gate/polished-document-style`, `office-document-handling` | They produce reports and audit docs |
 
 Each is a one-line addition to the agent's **Skills You Use** section, in the
 same `` `skill-name` (from software-development) — when to use `` format already in

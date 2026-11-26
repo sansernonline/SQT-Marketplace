@@ -2,7 +2,7 @@
 
 ตรวจ 2026-11-08 · อ่านจริง: SKILL.md ของทั้ง 45 ตัว (ช่วงที่มีตัวเลข ตาราง สูตร) · `evals/*/case.yaml` บางเคส · สคริปต์ 2 ตัว
 รัน self-test แล้ว (ฟรี ไม่เกิน 30 วินาที): `power-bill.mjs --self-test` = 28/28 ผ่าน · `due-dates.mjs --self-test` = 30/30 ผ่าน
-ย่อ: `PL` = `plugins/personal-life` · `DS` = `plugins/superuser/skills/decision-scoring/scripts` (มี `decide.mjs` + `decide.test.mjs` ที่ใช้ร่วม: `payoff` `score` `knapsack`)
+ย่อ: `PL` = `plugins/personal-life` · `DS` = `plugins/superuser/skills/decision-desk/parts/decision-scoring/scripts` (มี `decide.mjs` + `decide.test.mjs` ที่ใช้ร่วม: `payoff` `score` `knapsack`)
 เคส eval ใน `PL/evals/` ที่มีอยู่ส่วนใหญ่วัดแค่ "skill เปิดไหม" และ "ไม่วินิจฉัย/ให้เบอร์ 1669" ไม่ได้วัดตัวเลขในเนื้อหา
 ข้อสังเกตรวม: skill ส่วนใหญ่ของ plugin นี้เป็นคู่มือขั้นตอนไทย + ตัวเลขข้อเท็จจริงที่เปลี่ยนตามเวลา (อัตรา เบี้ย เงินช่วย) คำตอบที่ถูกคือแหล่งทางการ จึงวัดด้วย "ตัวเลขตรงแหล่ง ณ วันที่ตรวจ" ได้ แต่ต้องมีคนไล่เทียบ
 

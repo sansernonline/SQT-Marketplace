@@ -27,7 +27,7 @@ Turn "I want to watch some stocks" into a short list where every name has a reas
 
 ## Scoring when over the limit
 
-Use `decision-scoring`, command `score`, on the names that pass the hard rules. Script path: see `decision-scoring` (superuser plugin).
+Use `decision-desk/decision-scoring`, command `score`, on the names that pass the hard rules. Script path: see `decision-desk/decision-scoring` (superuser plugin).
 
 | Step | Value |
 |---|---|

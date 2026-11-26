@@ -78,7 +78,7 @@ playbook `tech-radar` (ขั้น 2–5 ทำกับไลบรารี�
 
 ## 3. ของใหม่ที่ทุกคนพูดถึง ควรลงแรงเรียนไหม
 
-playbook `tech-radar` (ขั้น 2–5 ทำกับเรื่องเดียว) · agent `tech-mentor` · skill `tech-radar` · `answer-shape`
+playbook `tech-radar` (ขั้น 2–5 ทำกับเรื่องเดียว) · agent `tech-mentor` · skill `tech-radar` · `lean-reply/answer-shape`
 **ผลลัพธ์:** `radar/evaluations/<ชื่อ>.md` (คำตัดสิน) · `examples/<ชื่อ>-trial/` (ทดลองเล็ก) · **รออนุมัติ:** สมัครบริการหรือแพ็กเกจที่เสียเงินเพื่อทดลอง
 
 ### ข้อมูล (ผู้ใช้กรอก)

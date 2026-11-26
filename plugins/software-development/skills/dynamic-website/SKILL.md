@@ -5,7 +5,7 @@ description: Use when a marketing website needs scroll motion or 3D
 
 # Dynamic Website — a chapter-by-chapter storytelling site that moves without making readers dizzy
 
-> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (Pre-work gate) of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the job with the line `ด่านก่อนลงมือ:` (Pre-work gate:)
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `design-gate/no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (Pre-work gate) of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the job with the line `ด่านก่อนลงมือ:` (Pre-work gate:)
 
 > **One rule:** every motion passes through one gate (`T()` in JS + a kill-switch in CSS) and **each chapter has its own entrance** — fade-up repeated everywhere is the number 1 AI signal of this kind of website.
 
@@ -17,13 +17,13 @@ description: Use when a marketing website needs scroll motion or 3D
 Not for: dashboard · admin · internal tool · SaaS → `web-app-design` + `ui-craft` (motion ≤ 350 ms) · presentation slides with speaker notes → `html-slide-deck` · no storyline yet → `presentation-design` steps 1–3 first · animated clip or moving logo → `motion-basics` (plugin `graphic-design`)
 
 ## Steps
-1. Run the pre-work gate above. Colour comes from the work: use the brand colour if there is one; otherwise search live per `design-references` (type `web` or `motion`) and extract colours from the chosen work. If live search is impossible, use `#2A78D6` (text on light: `#226CC6`), write `(รอยืนยัน)` and carry on.
+1. Run the pre-work gate above. Colour comes from the work: use the brand colour if there is one; otherwise search live per `design-gate/design-references` (type `web` or `motion`) and extract colours from the chosen work. If live search is impossible, use `#2A78D6` (text on light: `#226CC6`), write `(รอยืนยัน)` and carry on.
 2. Pick the mode per part of the site: deck-mode (chapters stacked `position:absolute; visibility:hidden`, only `.on` visible) for story chapters, page-mode (normal scroll, reveal item 8 of `references/recipes.md`) for registration, payment, admin. One `route()` on `hashchange`; every view pushes its teardown into `cleanups[]`, and `route()` clears them before rendering the next view.
 3. Declare the entrance in markup: `<section class="ch" data-enter="blurWords">` · heading `data-t` · followers `data-f` · image `data-w`. Content lives in HTML, not JS.
 4. Copy recipes from `references/recipes.md`; a working example is `assets/example-deck.html`. Use token names that match `web-app-design` → `references/tokens.md`; type scale and fonts are in `references/tokens-and-fonts.md`.
 5. Load three.js as a module in parallel; wait for `neural:ready` or 4 seconds; probe WebGL. If it fails, set `body.no-webgl` and show a 2D canvas fallback with the same meaning. Run `setAnimationLoop` only while the screen needs it.
 6. Apply the 15 rules below. Self-host fonts and GSAP (`vendor/`) for real delivery; cdnjs is fine for a mockup.
-7. Run the checks below, then go through item 3 of `no-ai-look` (for HTML run its script; a script result of 0 items is not yet a pass, so also pass eye gate 3.2 and items 10–14).
+7. Run the checks below, then go through item 3 of `design-gate/no-ai-look` (for HTML run its script; a script result of 0 items is not yet a pass, so also pass eye gate 3.2 and items 10–14).
 
 ## 15 rules
 1. **One gate** — every duration · delay · stagger goes through `T(s) = reduced ? 0 : s` in JS and one kill-switch block in CSS · do not check reduced-motion per animation.

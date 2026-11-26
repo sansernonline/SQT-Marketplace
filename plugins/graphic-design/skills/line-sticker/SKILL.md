@@ -5,7 +5,7 @@ description: Use when making LINE stickers that must pass file limits
 
 # LINE Sticker and Emoji
 
-> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists · close the work with the line `ด่านก่อนลงมือ:`
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `design-gate/no-ai-look` before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` (plugin `superuser`) even when a brand exists · close the work with the line `ด่านก่อนลงมือ:`
 
 > **The one rule:** check the files with `scripts/sticker_check.py` before every upload, and re-open LINE's official pages to confirm the limits once the check date has passed · the limits below were checked on 2026-11-10
 
@@ -55,7 +55,7 @@ Uploading to a Creators Market account, accepting terms, or publishing a set for
 1. The script shows `ผ่านทุกข้อ` on the real folder
 2. View every image at 100% on a white and a dark background. The Thai text is readable and no tone mark is cut off
 3. The whole set uses the same character in every image (`design-review` item 7)
-4. The line `ด่านก่อนลงมือ:` is present and the work passes the eye check of `no-ai-look`
+4. The line `ด่านก่อนลงมือ:` is present and the work passes the eye check of `design-gate/no-ai-look`
 
 ## References
 

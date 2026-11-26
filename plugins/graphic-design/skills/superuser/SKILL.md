@@ -81,7 +81,7 @@ Examples of reversible work and this plugin's order of official sources → [`ex
 - Delete the user's real files or data — move them to `_to_delete/` instead
 - Hit a CAPTCHA — do not solve it or work around it, tell the user to do it
 
-**Choosing which images to make under a credit budget** — ask the user to score each image's importance 1–10. Mark must-have images `must`, then run `node <decision-scoring>/scripts/decide.mjs knapsack file.json` (`<decision-scoring>` is the folder of skill `superuser:decision-scoring`). The result always stays within budget. Example: [`credit-knapsack.example.json`](../campaign-set/references/credit-knapsack.example.json) (made-up numbers, run OK 2026-10-28: 35 used of budget 40). The budget is a ceiling the user set. Past it, go back to `รออนุมัติ`.
+**Choosing which images to make under a credit budget** — ask the user to score each image's importance 1–10. Mark must-have images `must`, then run `node <decision-scoring>/scripts/decide.mjs knapsack file.json` (`<decision-scoring>` is the folder of skill `superuser:decision-desk`). The result always stays within budget. Example: [`credit-knapsack.example.json`](../campaign-set/references/credit-knapsack.example.json) (made-up numbers, run OK 2026-10-28: 35 used of budget 40). The budget is a ceiling the user set. Past it, go back to `รออนุมัติ`.
 
 **Pre-approved** — the user writes it in `~/.claude/superuser-style.md` or the "กติกา" section of `CONTEXT.md`, for example "up to 20 trial images per job". That item then needs no approval, but only within the stated scope. **Cannot be pre-approved:** posting or running ads on the user's behalf · using infringing work · paying or transferring money · entering passwords or card data · deleting real data · CAPTCHA
 
@@ -105,4 +105,4 @@ The `CONTEXT.md` template for this work is in [`context-template`](references/co
 
 - Never put secrets, image-tool API keys or customer data in them.
 
-**Working patterns** — the lead picks a pattern at planning time. How to run them, costs and pitfalls are in `agent-patterns`. Examples from this plugin's work are in [`examples`](references/examples.md)
+**Working patterns** — the lead picks a pattern at planning time. How to run them, costs and pitfalls are in `crew-patterns/agent-patterns`. Examples from this plugin's work are in [`examples`](references/examples.md)

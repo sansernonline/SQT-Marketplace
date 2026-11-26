@@ -21,7 +21,7 @@ Answer 3 questions per entry, then fill the table `| แพ็กเกจ | เ
 |---|---|---|
 | Does our code call the vulnerable function, and can outside input reach it | `grep` the function name in the advisory · the path of input | Does not reach → may be downgraded, but the reason must be recorded, not closed silently |
 | Referenced directly or through another package (transitive) | `npm ls <pkg>` · `pipdeptree -r -p <pkg>` · `dotnet nuget why <pkg>` | transitive → fix at the parent first, and if the parent has no new version yet, override in the lockfile and note that it must be removed when the parent is fixed |
-| Is there a fixed version | The `fixed in` field of the advisory | None → find a replacement package, or close the input's entry path and record it as an accepted risk in `decision-log` |
+| Is there a fixed version | The `fixed in` field of the advisory | None → find a replacement package, or close the input's entry path and record it as an accepted risk in `decision-desk/decision-log` |
 
 Resulting summary: **fix now** (really reached + a fix exists) · **fix next round** (cannot be reached, but a fix exists) · **accept the risk temporarily** (no fix — the user must see it and agree)
 
@@ -43,5 +43,5 @@ Automatic route: turn on **Renovate** or **Dependabot** to file PRs in the order
 ## 5 · Record
 
 - `CHANGELOG.md` under the heading Security: package · from → to · vulnerability ID (CVE or GHSA) · 1 line on whether we reach that vulnerability
-- Entries with an accepted risk or an override in the lockfile → `decision-log` with the date to come back and look
+- Entries with an accepted risk or an override in the lockfile → `decision-desk/decision-log` with the date to come back and look
 - That round's gate report (`qa/security/<วัน>-gate.md`) points to the CHANGELOG instead of writing it again

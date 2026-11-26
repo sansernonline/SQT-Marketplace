@@ -63,7 +63,7 @@ playbook `investigation` · skill `incident-response` · agent `devops-engineer`
 
 ## 2. ทบทวนหลังเหตุ (postmortem)
 
-playbook `project-docs` · agent `devops-engineer` + `project-manager` · skill `postmortem-template` · `principle-fix-root-cause` · `repeated-mistakes-to-checks`
+playbook `project-docs` · agent `devops-engineer` + `project-manager` · skill `postmortem-template` · `fix-at-source/principle-fix-root-cause` · `learn-loop/repeated-mistakes-to-checks`
 **ผลลัพธ์:** `docs/incidents/INC-<ปี-เดือน-วัน>-<เรื่อง>-postmortem.md` · แถวงานใน `docs/BUILD-PLAN.md`
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -129,7 +129,7 @@ playbook `project-docs` · skill `threat-model` · agent `security-engineer` · 
 
 ## 5. เก็บกวาดเครื่องและโปรเจกต์
 
-playbook `housekeeping` · agent `devops-engineer` · skill `temp-file-discipline` · `docker-sandbox`
+playbook `housekeeping` · agent `devops-engineer` · skill `workspace-rules/temp-file-discipline` · `docker-sandbox`
 **ผลลัพธ์:** ตาราง "รออนุมัติ" ในคำตอบ · ลบเฉพาะรายการที่ผู้ใช้อนุมัติ
 
 ### ขอบเขต (ผู้ใช้กรอก)
@@ -148,7 +148,7 @@ playbook `housekeeping` · agent `devops-engineer` · skill `temp-file-disciplin
 
 ## 6. ดูแลประจำ: คัดบั๊ก · ตรวจกลิ่นโค้ด · รายงาน MA / SLA รายเดือน
 
-playbook `project-docs` · agent `qa-tester` (คัดบั๊ก) + `developer` (ตรวจโค้ด) + `project-manager` (รายงาน) · skill `bug-inbox-triage` · `code-gardener` · `status-report` · `markdown-report-docx` (ถ้าส่งลูกค้าเป็น .docx)
+playbook `project-docs` · agent `qa-tester` (คัดบั๊ก) + `developer` (ตรวจโค้ด) + `project-manager` (รายงาน) · skill `bug-inbox-triage` · `code-gardener` · `superuser/status-report` · `markdown-report-docx` (ถ้าส่งลูกค้าเป็น .docx)
 **ผลลัพธ์:** รายงานบั๊กที่ยืนยันแล้วใน `qa/bugs/` · บันทึกใน `docs/GARDEN.md` · `docs/ma/MA-<ปี-เดือน>.md` · **ไม่แก้โค้ด** (แก้ → `prompt-change.md` ฉบับ 2) · **รออนุมัติ:** ส่งรายงานให้ลูกค้า · ตอบกลับผู้แจ้ง
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -169,9 +169,9 @@ playbook `project-docs` · agent `qa-tester` (คัดบั๊ก) + `develope
 
 ## 7. อัปเดต dependency และแก้ช่องโหว่
 
-playbook `refactor` · agent `security-engineer` (จัดลำดับความเสี่ยง) + `developer` (อัปเดตและแก้โค้ด) · skill `security-gate` (ขั้น 5 · `references/dependency-updates.md`) · `stack-*` ตามภาษา · `principle-small-verifiable-steps` · `decision-log` · `cicd-and-release` (ตั้ง Renovate หรือ Dependabot)
+playbook `refactor` · agent `security-engineer` (จัดลำดับความเสี่ยง) + `developer` (อัปเดตและแก้โค้ด) · skill `security-gate` (ขั้น 5 · `references/dependency-updates.md`) · `stack-*` ตามภาษา · `ground-rules/principle-small-verifiable-steps` · `decision-desk/decision-log` · `cicd-and-release` (ตั้ง Renovate หรือ Dependabot)
 **ใช้เมื่อ:** ตัวสแกนหรือ Dependabot แจ้งช่องโหว่ · เพิ่งเพิ่ม dependency ใหม่ · ถึงรอบอัปเดตประจำเดือนตามสัญญา MA · framework ข้ามรุ่นใหญ่ใช้ `prompt-existing-dev.md` ฉบับ 5
-**ผลลัพธ์:** ตารางจัดกลุ่มและผลสแกนก่อนกับหลังใน `qa/security/<ปี-เดือน-วัน>-gate.md` · lockfile และโค้ดที่แก้ · `CHANGELOG.md` หัวข้อ Security · ความเสี่ยงที่ยอมรับลง `decision-log` · **ไม่แก้โค้ด** เว้นแต่ข้างล่างติ๊ก `[x]` · **รออนุมัติ:** deploy รุ่นที่อัปเดตแล้ว · ยอมรับความเสี่ยงของรายการที่ยังไม่มีรุ่นแก้
+**ผลลัพธ์:** ตารางจัดกลุ่มและผลสแกนก่อนกับหลังใน `qa/security/<ปี-เดือน-วัน>-gate.md` · lockfile และโค้ดที่แก้ · `CHANGELOG.md` หัวข้อ Security · ความเสี่ยงที่ยอมรับลง `decision-desk/decision-log` · **ไม่แก้โค้ด** เว้นแต่ข้างล่างติ๊ก `[x]` · **รออนุมัติ:** deploy รุ่นที่อัปเดตแล้ว · ยอมรับความเสี่ยงของรายการที่ยังไม่มีรุ่นแก้
 
 - [ ] อนุญาตให้อัปเดต dependency และแก้โค้ด (commit บนเครื่องเท่านั้น บน branch แยก `deps/<ปี-เดือน>` · ไม่ push · ไม่ merge เข้า branch หลัก)
 

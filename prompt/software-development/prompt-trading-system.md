@@ -43,7 +43,7 @@
 
 ## 1. EA Spec: กลยุทธ์ · ความเสี่ยง · ตาราง input
 
-playbook `project-docs` · agent `quant-analyst` + `business-analyst` · skill `stack-mql` · `superuser:simplify` · `spell-out-abbreviations`
+playbook `project-docs` · agent `quant-analyst` + `business-analyst` · skill `stack-mql` · `superuser:ground-rules` · `human-writing/spell-out-abbreviations`
 **ผลลัพธ์:** `docs/ea/EA-SPEC.md`
 
 ### โจทย์ (ผู้ใช้กรอก)
@@ -93,7 +93,7 @@ playbook `project-docs` · agent `solution-architect` + `developer` · skill `st
 
 ## 3. เขียนโค้ด EA พร้อมตัวตรวจก่อนส่งออร์เดอร์
 
-playbook `new-project` (ยังไม่มีโค้ด) หรือ `feature` (ต่อจากโค้ดเดิม) · agent `developer` + `quant-analyst` · skill `stack-mql` · `lazy-coding` · `readable-code` · `principle-small-verifiable-steps` · `principle-prove-it-works` · `config-and-secrets`
+playbook `new-project` (ยังไม่มีโค้ด) หรือ `feature` (ต่อจากโค้ดเดิม) · agent `developer` + `quant-analyst` · skill `stack-mql` · `lazy-coding` · `readable-code` · `ground-rules/principle-small-verifiable-steps` · `ground-rules/principle-prove-it-works` · `config-and-secrets`
 **ต้องมีก่อน:** `EA-SPEC.md` · `EA-DESIGN.md`
 **ผลลัพธ์:** โค้ดใน `<repo>/MQL5/Experts/<ชื่อ>/` (หรือ `MQL4/`) บน branch `ea/<ชื่อ>` · script test ใน `<repo>/MQL5/Scripts/<ชื่อ>-tests/` · `docs/ea/build-log.md` · **ไม่แก้โค้ด** เว้นแต่ข้างล่างติ๊ก `[x]`
 
@@ -117,7 +117,7 @@ playbook `new-project` (ยังไม่มีโค้ด) หรือ `feat
 
 ## 4. Backtest และทดสอบความทนทาน
 
-playbook `review` · agent `quant-analyst` (นำ) + `qa-tester` · skill `stack-mql` · `principle-prove-it-works` · `markdown-visuals` · `polished-document-style`
+playbook `review` · agent `quant-analyst` (นำ) + `qa-tester` · skill `stack-mql` · `ground-rules/principle-prove-it-works` · `markdown-visuals` · `design-gate/polished-document-style`
 **ต้องมีก่อน:** โค้ดที่ compile ได้ · เกณฑ์ผ่านใน `EA-SPEC.md` หัวข้อ 5
 **ผลลัพธ์:** `docs/ea/backtest-report.md` · `tester-*.ini` และ `.set` ทุกชุดที่ใช้ใน `docs/ea/tester/`
 

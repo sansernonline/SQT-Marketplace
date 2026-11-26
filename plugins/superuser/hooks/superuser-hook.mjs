@@ -9,7 +9,7 @@ import { execFileSync } from "node:child_process";
 import { join, dirname, resolve, relative, basename } from "node:path";
 import { homedir, tmpdir, userInfo } from "node:os";
 import { fileURLToPath } from "node:url";
-import { applyQuota, accountName } from "../skills/parallel-split-and-merge/scripts/quota.mjs";
+import { applyQuota, accountName } from "../skills/crew-patterns/parts/parallel-split-and-merge/scripts/quota.mjs";
 import { readJson, moduleOn, modOn, sessionOnce, setFlags, takeFlags } from "./lib/util.mjs";
 import { isBashGuard, preRules, promptRules, postRules, stopRules, foldTestState } from "./lib/rules.mjs";
 import { scoredRoutes, fixHomonyms, homonymWarn, installedSkills, suggestSkill, toolRoute, markSkillOpened, replayRoutes, cacheDiff, qualify } from "./lib/router.mjs";
@@ -498,7 +498,7 @@ export function routerNotice(skills, note = "") {
   // ถ้อยคำแบบแนะนำ model ข้ามเมื่องานดูง่าย (eval 2026-11-09 รอบ 4: เห็นข้อความแล้วตอบรอบเดียว 0/6 ครั้งเปิด skill) จึงสั่งให้เรียกก่อนตอบ
   const list = tick;
   // skill ที่เปลี่ยนตัวแผน (ค้นต้นแบบหรือแหล่งก่อนลงมือ) ต้องเปิดพร้อม superuser · ไม่งั้นแผนออกมาโดยไม่ค้น (owner-pick 2026-11-10)
-  const lead = skills.filter((s) => /(^|:)(superuser|design-references|research-with-sources)$/.test(s));
+  const lead = skills.filter((s) => /(^|:)(superuser|design-gate|research-with-sources)$/.test(s));
   if (!lead.some((s) => /(^|:)superuser$/.test(s))) lead.length = 0;
   if (!lead.length) return `Before answering, call Skill for every one of these, even if the task looks easy (no skipping): ${list(skills)}`;
   // งานหลายขั้น: หัวหน้าเปิดครบทุกตัวก่อนแจกงาน กิน context และชนเพดานเงิน (dispatch d13 2026-11-10: เปิด 7 ตัวก่อนตอบ) · skill ของชิ้นที่แจกไปอยู่ในใบสั่งงานแทน
@@ -577,7 +577,7 @@ export function looksSmall(text) {
 }
 
 // งานเล็กเปิด skill ไม่เกิน 1 ตัว (bench 2026-11-11: t1 แก้บั๊กไฟล์เดียวเปิด 4 ตัวก่อนลงมือ) · เลือกตัวที่บอกวิธีทำงาน (แก้บั๊ก · ค้นแหล่ง) ก่อนภาษา · ตัวกว้างที่ใช้ทุกงานไม่เลือก
-const BROAD_SKILL = /(^|:)(superuser|human-writing|simplify|lazy-coding|readable-code|answer-shape)$/;
+const BROAD_SKILL = /(^|:)(superuser|human-writing|ground-rules|lazy-coding|readable-code|lean-reply)$/;
 export function pickOne(skills) {
   const tier = (s) => (/(^|:)stack-/.test(s) ? 1 : 0);
   return skills.filter((s) => !BROAD_SKILL.test(s)).sort((a, b) => tier(a) - tier(b)).slice(0, 1);
@@ -1756,15 +1756,15 @@ function selfTest() {
   gates.push(
     ["ตัวบอก skill: แก้ไฟล์ .docx → human-writing + docx", [], true, () => routes("แก้ไฟล์ report.docx ให้หัวข้อเป็นทางการ").includes("docx") && routes("แก้ไฟล์ report.docx ให้หัวข้อเป็นทางการ").includes("human-writing")],
     ["ตัวบอก skill: เขียนอีเมล → human-writing", [], true, () => routes("Write a short email to the client").includes("human-writing")],
-    ["ตัวบอก skill: เทียบ → answer-shape", [], true, () => routes("เปรียบเทียบ PostgreSQL กับ SQL Server").includes("answer-shape")],
-    ["ตัวบอก skill: โค้ด python → simplify + lazy-coding + stack-python (ตรงกับตาราง skill ใน CLAUDE.global.md)", [], true, () => { const r = routes("เขียนสคริปต์ Python อ่าน csv"); return ["superuser:simplify", "lazy-coding", "stack-python"].every((s) => r.includes(s)); }],
-    ["ตัวบอก skill: แถวใหม่ของ skill ที่เคยไม่มี router", [], true, () => routes("ขอ stress test แผนนี้หน่อย").includes("adversarial-review-panel") && routes("ช่วยตั้งชื่อไฟล์รายงานให้ถูก").includes("document-naming") && routes("รวมบทเรียนงานนี้").includes("session-lessons-to-skills") && !routes("สวัสดี").includes("status-report")],
+    ["ตัวบอก skill: เทียบ → answer-shape", [], true, () => routes("เปรียบเทียบ PostgreSQL กับ SQL Server").includes("lean-reply")],
+    ["ตัวบอก skill: โค้ด python → simplify + lazy-coding + stack-python (ตรงกับตาราง skill ใน CLAUDE.global.md)", [], true, () => { const r = routes("เขียนสคริปต์ Python อ่าน csv"); return ["superuser:ground-rules", "lazy-coding", "stack-python"].every((s) => r.includes(s)); }],
+    ["ตัวบอก skill: แถวใหม่ของ skill ที่เคยไม่มี router", [], true, () => routes("ขอ stress test แผนนี้หน่อย").includes("crew-patterns") && routes("ช่วยตั้งชื่อไฟล์รายงานให้ถูก").includes("workspace-rules") && routes("รวมบทเรียนงานนี้").includes("learn-loop") && !routes("สวัสดี").includes("superuser")],
     // คำกว้าง (reflect · stress test · fan-out · naming · รายงานสถานะ) ต้องมีคำบริบทคู่ ข้อความเรื่องโค้ดจะได้ไม่เปิด skill ผิด
-    ...[["สถานะงานถึงไหนแล้ว", "status-report"], ["ทำโลโก้มาหลายแบบให้เลือก", "parallel-attempts-pick-best"], ["ทำโลโก้ 3 แบบให้เลือก", "parallel-attempts-pick-best"], ["สั่งของจาก 1688 มาขาย ต้นทุนจริงชิ้นละเท่าไร", "import-landed-cost"], ["เดือนหน้าจะย้ายบ้านไปต่างจังหวัด ต้องทำอะไรบ้าง", "moving-house"], ["รายงานมีตัวย่อเยอะ ช่วยทำอภิธานศัพท์", "spell-out-abbreviations"], ["fan out งานนี้ให้ลูกทีม", "parallel-split-and-merge"], ["reflect งานรอบนี้หน่อย", "session-lessons-to-skills"], ["naming convention ของไฟล์รายงาน", "document-naming"],
+    ...[["สถานะงานถึงไหนแล้ว", "superuser"], ["ทำโลโก้มาหลายแบบให้เลือก", "crew-patterns"], ["ทำโลโก้ 3 แบบให้เลือก", "crew-patterns"], ["สั่งของจาก 1688 มาขาย ต้นทุนจริงชิ้นละเท่าไร", "import-landed-cost"], ["เดือนหน้าจะย้ายบ้านไปต่างจังหวัด ต้องทำอะไรบ้าง", "moving-house"], ["รายงานมีตัวย่อเยอะ ช่วยทำอภิธานศัพท์", "human-writing"], ["fan out งานนี้ให้ลูกทีม", "crew-patterns"], ["reflect งานรอบนี้หน่อย", "learn-loop"], ["naming convention ของไฟล์รายงาน", "workspace-rules"],
       // eval รอบ 3 (2026-11-09): 2 แถวนี้เคยไม่ถูกบอก แขนมี skill จึงตอบ 1 รอบโดยไม่เปิด skill
-      ["ลูกค้าบอกว่ายอดรวมในใบเสนอราคานี้ผิด ช่วยแก้ให้หน่อย", "targeted-fix"], ["แก้คำผิดในย่อหน้านี้ให้หน่อย", "targeted-fix"], ["ช่วยตรวจว่าหน้านี้ดูเหมือนคนออกแบบจริงหรือยัง", "no-ai-look"], ["รันสคริปต์ slop_scan แล้วผ่านหมด", "no-ai-look"]]
+      ["ลูกค้าบอกว่ายอดรวมในใบเสนอราคานี้ผิด ช่วยแก้ให้หน่อย", "fix-at-source"], ["แก้คำผิดในย่อหน้านี้ให้หน่อย", "fix-at-source"], ["ช่วยตรวจว่าหน้านี้ดูเหมือนคนออกแบบจริงหรือยัง", "design-gate"], ["รันสคริปต์ slop_scan แล้วผ่านหมด", "design-gate"]]
       .map(([s, k]) => [`ตัวบอก skill: "${s}" → ${k}`, [], true, () => routes(s).includes(k)]),
-    ...[["reflect package ใน Go", "session-lessons-to-skills"], ["stress test API ด้วย k6", "adversarial-review-panel"], ["naming convention ของตัวแปร", "document-naming"], ["เปลี่ยนชื่อไฟล์ utils.ts", "document-naming"], ["ออกแบบ Kafka fan-out ไปหลาย consumer", "parallel-split-and-merge"], ["เขียน endpoint รายงานสถานะ", "status-report"], ["สร้าง enum ตัวย่อสถานะในโค้ด", "spell-out-abbreviations"], ["ทำ dashboard แสดงรายงานสถานะคำสั่งซื้อ", "status-report"], ["เปลี่ยนชื่อไฟล์ทั้งโฟลเดอร์ src", "document-naming"], ["ตั้งชื่อไฟล์ migration ของ database", "document-naming"], ["ทำ unit test หลายแบบให้เลือก mock", "parallel-attempts-pick-best"], ["บิลค่าไฟขึ้นผิดปกติ", "moving-house"], ["จดทะเบียนบริษัทหรือบุคคลธรรมดาดี", "import-landed-cost"], ["ราคา 1688 บาท ต่อเดือน คุ้มไหม", "import-landed-cost"], ["ค่าชิปปิ้งของ Flash กับ Kerry อันไหนถูกกว่า", "import-landed-cost"], ["API อัปเดตย้ายที่อยู่ของลูกค้าในฐานข้อมูล", "moving-house"], ["เงินประกันคอนโดที่ซื้อประกันอัคคีภัยไว้", "moving-house"], ["ร้านนี้ขายดีไหม คิดผิดหรือเปล่า", "targeted-fix"], ["1. ค่าออกแบบโลโก้ 4,500 บาท", "no-ai-look"], ["check the slope of this line", "no-ai-look"], ["ดูเหมือนคนไข้เป็นหวัด", "no-ai-look"], ["ดูเหมือนคนทำงานหนักมาก", "no-ai-look"], ["ยอดผิดปกติในบัญชีเดือนนี้", "targeted-fix"]]
+    ...[["reflect package ใน Go", "learn-loop"], ["stress test API ด้วย k6", "crew-patterns"], ["naming convention ของตัวแปร", "workspace-rules"], ["เปลี่ยนชื่อไฟล์ utils.ts", "workspace-rules"], ["ออกแบบ Kafka fan-out ไปหลาย consumer", "crew-patterns"], ["เขียน endpoint รายงานสถานะ", "superuser"], ["สร้าง enum ตัวย่อสถานะในโค้ด", "human-writing"], ["ทำ dashboard แสดงรายงานสถานะคำสั่งซื้อ", "superuser"], ["เปลี่ยนชื่อไฟล์ทั้งโฟลเดอร์ src", "workspace-rules"], ["ตั้งชื่อไฟล์ migration ของ database", "workspace-rules"], ["ทำ unit test หลายแบบให้เลือก mock", "crew-patterns"], ["บิลค่าไฟขึ้นผิดปกติ", "moving-house"], ["จดทะเบียนบริษัทหรือบุคคลธรรมดาดี", "import-landed-cost"], ["ราคา 1688 บาท ต่อเดือน คุ้มไหม", "import-landed-cost"], ["ค่าชิปปิ้งของ Flash กับ Kerry อันไหนถูกกว่า", "import-landed-cost"], ["API อัปเดตย้ายที่อยู่ของลูกค้าในฐานข้อมูล", "moving-house"], ["เงินประกันคอนโดที่ซื้อประกันอัคคีภัยไว้", "moving-house"], ["ร้านนี้ขายดีไหม คิดผิดหรือเปล่า", "fix-at-source"], ["1. ค่าออกแบบโลโก้ 4,500 บาท", "design-gate"], ["check the slope of this line", "design-gate"], ["ดูเหมือนคนไข้เป็นหวัด", "design-gate"], ["ดูเหมือนคนทำงานหนักมาก", "design-gate"], ["ยอดผิดปกติในบัญชีเดือนนี้", "fix-at-source"]]
       .map(([s, k]) => [`ตัวบอก skill: "${s}" → ไม่เปิด ${k}`, [], false, () => routes(s).includes(k)]),
     // 10 แถวท้ายของ router (skill ชีวิตประจำวัน) ต้องไม่จับประโยคเรื่องโค้ด แต่ยังจับประโยคจริง (ผู้ตรวจรอบ 2 · 2026-11-10)
     ...[["งานค้างในระบบ CI แก้ให้หน่อย", "task-board"], ["ทดลองงาน API ใหม่ของ payment", "new-job-first-90-days"], ["ROE ของฟังก์ชันนี้คำนวณผิด", "stock-fundamentals"], ["เพิ่มหน้า to-do list ในแอป", "task-board"], ["วันนี้ต้องทำอะไรบ้างใน sprint", "shop-daily-briefing"], ["ทำ endpoint layoff ในระบบ HR", "job-exit"], ["เพิ่ม line sticker picker ในแอป", "line-sticker"], ["เพิ่ม feature ad claims moderation", "copy-claims-check"]]
@@ -1775,9 +1775,9 @@ function selfTest() {
     ["ตัวบอก skill: ทักทาย → ไม่บอก", [], true, () => routes("สวัสดีครับ").length === 0],
     // ตัดสินด้วยตัวเลข: ถามเลือกหรือจัดลำดับที่มีตัวเลขหรือเกณฑ์ → decision-scoring · ถามลอย ๆ ไม่มีตัวเลข → ไม่บอก
     ...["เทียบกองทุน 3 กอง เลือกอันไหนดี", "บั๊ก 12 ตัว ทำอะไรก่อนดี", "เทียบ 3 กองทุนให้คะแนน", "which option is best for us", "ขนส่งเจ้าไหนคุ้ม ค่าส่ง 32 กับ 28 บาท"]
-      .map((s) => [`ตัวบอก skill: ตัดสินด้วยตัวเลข → decision-scoring · ${s}`, [], true, () => routes(s).includes("decision-scoring")]),
+      .map((s) => [`ตัวบอก skill: ตัดสินด้วยตัวเลข → decision-scoring · ${s}`, [], true, () => routes(s).includes("decision-desk")]),
     ...["ซื้อเสื้อตัวไหนดี", "ฟอนต์แบบไหนดีกว่า", "ติดตั้ง node ต้องทำอะไรก่อน", "ติดตั้ง node 22 ต้องทำอะไรก่อน", "แก้บั๊กหน้า login 500 error ต้องดูอะไรก่อน", "ช่วยให้คะแนนเรียงความนี้หน่อย", "ร้านไหนดี ไป 2 คน"]
-      .map((s) => [`ตัวบอก skill: ไม่มีตัวเลข → ไม่บอก decision-scoring · ${s}`, [], true, () => !routes(s).includes("decision-scoring")]),
+      .map((s) => [`ตัวบอก skill: ไม่มีตัวเลข → ไม่บอก decision-scoring · ${s}`, [], true, () => !routes(s).includes("decision-desk")]),
     // งานหลายขั้นที่ไม่เอ่ยชื่อ → superuser · งานเล็กไม่โดน (ประโยคจริงจาก session 2026-10-27)
     ...[
       "แก้พวก flow ใน docs ให้หมดทุกไฟล์เลยให้เข้ากับ plugin ใหม่เรา",
@@ -1790,14 +1790,14 @@ function selfTest() {
       "แก้ typo บรรทัด 3 ใน README", "สวัสดีครับ", "ราคา Opus 5.5 เท่าไร", "แปลประโยคนี้เป็นอังกฤษ", "ตอบเป็นไทย",
     ].map((s) => [`ตัวบอก skill: งานเล็ก → ไม่ใช่ superuser · ${s}`, [], true, () => !routes(s).includes("superuser:superuser")]),
     ["ตัวบอก skill: ถามคอนเซปต์ git ไม่เปิด commit-log · สั่ง commit เปิด (trigger eval no-git-concept 0/1 2026-11-11)", [], true, () =>
-      ["git stash กับ git commit ต่างกันยังไง", "แก้เสร็จแล้ว\ngit commit ต่างกันกับ stash ยังไง", "commit คืออะไร"].every((p) => !routes(p).some((s) => s.endsWith("commit-log")))
-      && ["แก้เสร็จแล้ว\nช่วย commit ด้วย", "commit แล้วบอกด้วยว่าเปลี่ยนอะไรยังไง", "เสร็จแล้ว commit เลย"].every((p) => routes(p).some((s) => s.endsWith("commit-log")))],
+      ["git stash กับ git commit ต่างกันยังไง", "แก้เสร็จแล้ว\ngit commit ต่างกันกับ stash ยังไง", "commit คืออะไร"].every((p) => !routes(p).some((s) => s.endsWith("workspace-rules")))
+      && ["แก้เสร็จแล้ว\nช่วย commit ด้วย", "commit แล้วบอกด้วยว่าเปลี่ยนอะไรยังไง", "เสร็จแล้ว commit เลย"].every((p) => routes(p).some((s) => s.endsWith("workspace-rules")))],
     ["ตัวบอก skill: บอก superuser แล้วต่อท้ายคำอธิบายสาขา", [], true, () => routerNotice(["superuser:superuser"], "N").endsWith("\nN") && !routerNotice(["docx"], "N").includes("N")],
     ["ตัวบอก skill: มี superuser → สั่งเปิดแค่ superuser ก่อน ตัวอื่นให้ใส่ในใบสั่งงาน · ไม่มี → เปิดครบทุกตัว", [], true, () => {
-      const lead = routerNotice(["superuser:superuser", "lazy-coding", "no-ai-look"]), solo = routerNotice(["lazy-coding", "no-ai-look"]);
-      const plan = routerNotice(["superuser:superuser", "design-references", "lazy-coding"]);
+      const lead = routerNotice(["superuser:superuser", "lazy-coding", "lean-reply"]), solo = routerNotice(["lazy-coding", "lean-reply"]);
+      const plan = routerNotice(["superuser:superuser", "design-gate", "lazy-coding"]);
       return /open `superuser:superuser` first/.test(lead) && lead.includes("brief") && !lead.includes("every one of these") && solo.includes("every one of these")
-        && /open `superuser:superuser` · `superuser:design-references` first/.test(plan);
+        && /open `superuser:superuser` · `superuser:design-gate` first/.test(plan);
     }],
     // ให้ model ตัดสินเอง: เตือนทุกข้อความจนกว่าจะเปิด superuser · ข้อความสั้น คำสั่ง slash และรายงานลูกทีมไม่เตือน
     ["เตือนงานหลายขั้น: เตือนก่อนเปิด · เลิกเตือนหลังเปิด · ไม่เตือนข้อความสั้น", [], true, () => {
@@ -1888,9 +1888,9 @@ function selfTest() {
       .map(([want, s]) => [`ขนาดงาน ${want}: ${s.slice(0, 30)}`, [], true, () => (looksSmall(s) ? "เล็ก" : looksBig(s) ? "ใหญ่" : "กลาง") === want]),
     ["งานเล็ก: บอก skill ตัวเดียวที่ตรงสุด (วิธีทำงานก่อนภาษา · ตัวกว้างไม่เลือก) · ข้อความ ≤ 200 ตัวอักษร", [], true, () => {
       const d = join(tmpdir(), `sqt-open-one-${process.pid}`);
-      const n = promptNotice({ prompt: "แก้บั๊ก src/report.ts วันที่ผิด", session_id: "one" }, { rules: [{ pattern: "แก้บั๊ก", skills: ["human-writing", "stack-typescript", "principle-fix-root-cause", "targeted-fix"] }] }, d);
-      return n === smallNotice(["superuser:principle-fix-root-cause"]) && n.includes("also open `superuser:principle-fix-root-cause`") && n.length <= 200 && smallLeft("one", d) === 0
-        && pickOne(["superuser:superuser", "human-writing", "lazy-coding"]).length === 0 && pickOne(["stack-sql", "targeted-fix"])[0] === "targeted-fix";
+      const n = promptNotice({ prompt: "แก้บั๊ก src/report.ts วันที่ผิด", session_id: "one" }, { rules: [{ pattern: "แก้บั๊ก", skills: ["human-writing", "stack-typescript", "fix-at-source", "fix-at-source"] }] }, d);
+      return n === smallNotice(["superuser:fix-at-source"]) && n.includes("also open `superuser:fix-at-source`") && n.length <= 200 && smallLeft("one", d) === 0
+        && pickOne(["superuser:superuser", "human-writing", "lazy-coding"]).length === 0 && pickOne(["stack-sql", "fix-at-source"])[0] === "fix-at-source";
     }],
     ["งานเล็ก: ส่งให้ superuser:quick (fork · haiku) ทุกครั้ง แม้ไม่มี skill ให้เปิด · งานกลางไม่ส่ง · skill quick มีอยู่จริงและตั้ง context: fork", [], true, () => {
       const d = join(tmpdir(), `sqt-open-quick-${process.pid}`), R = { rules: [] };

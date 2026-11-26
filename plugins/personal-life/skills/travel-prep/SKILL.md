@@ -54,7 +54,7 @@ Current visa-free list for Thai passports: [references/travel-facts.md](referenc
 
 Trip card · entry decision per traveller with source and date · checklist from the template · itinerary file `YYYY-MM-DD-destination-itinerary.md`.
 
-Related: `important-docs` (passport expiry) · `polite-message-th-en` (hotel or airline requests) · `digital-hygiene` (public Wi-Fi, SIM swap).
+Related: `important-docs` (passport expiry) · `human-writing/polite-message-th-en` (hotel or airline requests) · `digital-hygiene` (public Wi-Fi, SIM swap).
 
 ## เรียกเป็นคำสั่ง
 

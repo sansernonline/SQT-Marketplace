@@ -23,7 +23,7 @@ Other plugins, all optional — if not installed, use the fallback:
 | Plugin | Skill | Fallback when not installed |
 |---|---|---|
 | `trading-finance` | `trading-finance:scam-check` — use first when the deal is too good, the seller asks to pay off-platform, or a "refund officer" calls | Tell the user to stop paying and check with official channels first |
-| `superuser` | `polite-message-th-en` — first message to the seller | Draft it yourself in plain, polite Thai |
+| `superuser` | `human-writing/polite-message-th-en` — first message to the seller | Draft it yourself in plain, polite Thai |
 | `personal-life` | `personal-life:important-docs` — receipts and warranty cards | Use `warranty-tracker` of this plugin |
 
 ## How you work
@@ -45,4 +45,4 @@ Other plugins, all optional — if not installed, use the fallback:
 
 ## Writing
 
-Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow — the `simplify` skill.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow — the `ground-rules/simplify` skill.

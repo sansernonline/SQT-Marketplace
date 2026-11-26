@@ -104,53 +104,53 @@
  "skill_groups": {
   "แกนทีม · ส่งต่องาน": [
    "superuser",
-   "agent-patterns",
+   "crew-patterns",
    "handoff",
    "context-budget",
-   "status-report",
-   "decision-log",
-   "flag-and-propose",
-   "workspace-setup"
+   "superuser",
+   "decision-desk",
+   "decision-desk",
+   "workspace-rules"
   ],
   "หลักการทำงาน": [
-   "simplify",
-   "principle-prove-it-works",
-   "principle-proceed-on-reversible-work",
-   "principle-small-verifiable-steps",
-   "principle-build-a-tool-not-handwork",
-   "principle-fix-root-cause",
-   "principle-user-experience-first",
-   "targeted-fix"
+   "ground-rules",
+   "ground-rules",
+   "ground-rules",
+   "ground-rules",
+   "ground-rules",
+   "fix-at-source",
+   "ground-rules",
+   "fix-at-source"
   ],
   "แบ่งงาน · ตรวจ · หาข้อมูล": [
-   "parallel-split-and-merge",
-   "parallel-attempts-pick-best",
-   "adversarial-review-panel",
-   "prior-art-review",
+   "crew-patterns",
+   "crew-patterns",
+   "crew-patterns",
    "research-with-sources",
-   "decision-scoring",
-   "design-references"
+   "research-with-sources",
+   "decision-desk",
+   "design-gate"
   ],
   "เรียนรู้ · ปรับทีม": [
-   "repeated-mistakes-to-checks",
-   "session-lessons-to-skills",
-   "owner-style-capture",
+   "learn-loop",
+   "learn-loop",
+   "learn-loop",
    "skill-authoring",
-   "commit-log",
-   "model-scorecard"
+   "workspace-rules",
+   "superuser"
   ],
   "เขียน": [
    "human-writing",
-   "translate-th-en",
-   "answer-shape",
-   "no-ai-look",
-   "temp-file-discipline"
+   "human-writing",
+   "lean-reply",
+   "design-gate",
+   "workspace-rules"
   ],
   "เอกสารและข้อความ": [
-   "polished-document-style",
-   "document-naming",
-   "spell-out-abbreviations",
-   "polite-message-th-en",
+   "design-gate",
+   "workspace-rules",
+   "human-writing",
+   "human-writing",
    "chat-prompt-workflows"
   ]
  }

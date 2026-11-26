@@ -27,7 +27,7 @@
 
 ## 1. เอกสารส่งมอบงาน (Handover)
 
-agent `technical-writer` + `project-manager` · skill `handoff` · `onboard` (software-development:onboard) · `polished-document-style`
+agent `technical-writer` + `project-manager` · skill `handoff` · `onboard` (software-development:onboard) · `design-gate/polished-document-style`
 **ต้องมีก่อน:** เอกสารของโปรเจกต์ที่มีอยู่ (ใช้เป็นแหล่งอ้างอิง ไม่คัดลอกซ้ำ)
 **ผลลัพธ์:** `docs/handover.md` — ผู้รับอ่านแล้วต้องรับช่วงได้โดยไม่ต้องถามผู้ส่งเรื่องพื้นฐาน
 
@@ -60,7 +60,7 @@ agent `technical-writer` + `project-manager` · skill `handoff` · `onboard` (so
 
 ## 2. เอกสารทบทวนโครงการ (Retrospective)
 
-agent `project-manager` · skill `software-development:retrospective` · `postmortem-template` (เมื่อมีเหตุร้ายแรง) · `polished-document-style`
+agent `project-manager` · skill `software-development:retrospective` · `postmortem-template` (เมื่อมีเหตุร้ายแรง) · `design-gate/polished-document-style`
 **ผลลัพธ์:** `docs/retrospective.md` — เขียนแบบไม่โทษตัวบุคคล (blameless): พูดถึง "กระบวนการและระบบ" ไม่ใช่ "ใครทำพลาด"
 
 ### ช่วงที่ทบทวน (ผู้ใช้กรอก)

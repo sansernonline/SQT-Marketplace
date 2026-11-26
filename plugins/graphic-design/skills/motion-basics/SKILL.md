@@ -5,13 +5,13 @@ description: Use when a non-designer makes motion graphics
 
 # Motion Basics
 
-> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `design-gate/no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
 Motion is emphasis. Everything else is decoration. Most amateur motion has 3 faults: linear easing, everything moving at once, and text that leaves before anyone could read it.
 
 ## Workflow
 
-0. **Search for references first:** take the project's keywords and search live per `design-references` (plugin `superuser`) type `motion`, then pull colours from the chosen work · use the stored palette library when a live search is not possible
+0. **Search for references first:** take the project's keywords and search live per `design-gate/design-references` (plugin `superuser`) type `motion`, then pull colours from the chosen work · use the stored palette library when a live search is not possible
 1. **Name the purpose** of each movement — reveal, connect, emphasise, transition. No purpose, no motion. A background must carry meaning too. A background that only decorates is cut
 2. **Pick 1 entrance and 1 exit style** for the whole piece (e.g. fade-up in, fade out)
 3. **Set durations** from the timing table
@@ -94,7 +94,7 @@ When the destination wants a small moving file (email, chat, a web page) instead
 
 ## Not an AI look
 
-Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files.
+Before handing over, run the check in `design-gate/no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files.
 
 ## References
 

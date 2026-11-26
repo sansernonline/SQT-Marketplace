@@ -1,7 +1,7 @@
 # playbook · pickup-and-pause — pick up unfinished work · pause so someone else can take over
 
 Use when: "Continue from yesterday" · "Where did we leave off" · taking over from another agent · "That's enough for now, I'll continue later" (covers pstack's `session pickup` · `pause safely` · skill `recall`)
-Main skills: `handoff` · `status-report` · `decision-log`
+Main skills: `handoff` · `superuser/status-report` · `decision-desk/decision-log`
 
 ## ขั้นตอน · Steps — pick up (copy into the todo as written)
 
@@ -15,7 +15,7 @@ Main skills: `handoff` · `status-report` · `decision-log`
 1. Bring the piece in progress to a point that can be checked, or go back to the latest checkable point — do not leave half-done code with red tests without saying so · ใคร: `developer` ตัวเดิม (ถือ the piece not yet saved)
 2. Work not yet committed — if the user does not allow commits, save `git diff` to `_to_delete/pause-<วันที่>.patch` and say so in the report · ใคร: หัวหน้าทีม
 3. Stop the dev server or processes you opened. A sandbox may keep running, but note its name · ใคร: หัวหน้าทีม
-4. `status-report`, and rewrite the "รับงานต่อ" (pick up) section in `CONTEXT.md` (`handoff` section 5) — remove finished items (1 line each to `HISTORY.md`) and your own unfinished `รับโดย:` · write: what the next step must do first · the commands to repeat · things to watch out for · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ checks (ตรวจ) against the real `git status`
+4. `superuser/status-report`, and rewrite the "รับงานต่อ" (pick up) section in `CONTEXT.md` (`handoff` section 5) — remove finished items (1 line each to `HISTORY.md`) and your own unfinished `รับโดย:` · write: what the next step must do first · the commands to repeat · things to watch out for · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ checks (ตรวจ) against the real `git status`
 
 ## Done when
 

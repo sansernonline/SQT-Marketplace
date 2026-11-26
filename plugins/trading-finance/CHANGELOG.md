@@ -1,5 +1,9 @@
 # Changelog — trading-finance
 
+## 0.24.0 — 2026-11-26
+
+- ชี้ชื่อ skill ของ superuser 4.0.0 ที่รวมแล้ว (เช่น `design-gate` · `ground-rules` · `workspace-rules`) แทนชื่อเดิม
+
 ## 0.23.4 — 2026-11-18
 
 - sync `brief-template` จาก superuser 3.50.2: บรรทัด `กติกา:` ใช้ประโยคบังคับฉบับไทยที่ด่านส่งงานตรวจ และบอกให้ใส่ `model` + `effort` ในคำสั่งเรียก

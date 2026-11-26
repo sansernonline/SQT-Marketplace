@@ -15,7 +15,7 @@ graders:
   - name: skill-opened
     type: tool_used
     tool: Skill
-    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?design-references"'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?design-gate"'
     min: 1
     arm: with-only
   - name: names-design-sites

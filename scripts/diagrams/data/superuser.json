@@ -8,45 +8,45 @@
  ],
  "core_skills": [
   "superuser",
-  "adversarial-review-panel",
-  "agent-patterns",
-  "answer-shape",
+  "crew-patterns",
+  "crew-patterns",
+  "lean-reply",
   "chat-prompt-workflows",
-  "workspace-setup",
-  "commit-log",
+  "workspace-rules",
+  "workspace-rules",
   "context-budget",
-  "decision-log",
-  "decision-scoring",
-  "design-references",
-  "document-naming",
-  "flag-and-propose",
+  "decision-desk",
+  "decision-desk",
+  "design-gate",
+  "workspace-rules",
+  "decision-desk",
   "handoff",
   "human-writing",
-  "model-scorecard",
-  "no-ai-look",
-  "owner-style-capture",
-  "parallel-attempts-pick-best",
-  "parallel-split-and-merge",
-  "polished-document-style",
-  "polite-message-th-en",
-  "principle-build-a-tool-not-handwork",
-  "principle-fix-root-cause",
-  "principle-proceed-on-reversible-work",
-  "principle-prove-it-works",
-  "principle-small-verifiable-steps",
-  "principle-user-experience-first",
-  "prior-art-review",
-  "repeated-mistakes-to-checks",
-  "research-vote-decision",
+  "superuser",
+  "design-gate",
+  "learn-loop",
+  "crew-patterns",
+  "crew-patterns",
+  "design-gate",
+  "human-writing",
+  "ground-rules",
+  "fix-at-source",
+  "ground-rules",
+  "ground-rules",
+  "ground-rules",
+  "ground-rules",
   "research-with-sources",
-  "session-lessons-to-skills",
-  "simplify",
+  "learn-loop",
+  "decision-desk",
+  "research-with-sources",
+  "learn-loop",
+  "ground-rules",
   "skill-authoring",
-  "spell-out-abbreviations",
-  "status-report",
-  "targeted-fix",
-  "temp-file-discipline",
-  "translate-th-en"
+  "human-writing",
+  "superuser",
+  "fix-at-source",
+  "workspace-rules",
+  "human-writing"
  ],
  "commands": [],
  "agents": [
@@ -56,11 +56,11 @@
    "core": true,
    "description": "Use when the user wants ideas or options, or a task is big or unclear and a wrong pick is costly. Lead picks.",
    "skills": [
-    "parallel-attempts-pick-best",
+    "crew-patterns",
     "superuser",
-    "agent-patterns",
+    "crew-patterns",
     "human-writing",
-    "simplify"
+    "ground-rules"
    ]
   },
   {
@@ -70,11 +70,11 @@
    "description": "Use at the end of a multi-step SuperUser task to review how the team worked.",
    "skills": [
     "superuser",
-    "agent-patterns",
-    "session-lessons-to-skills",
-    "repeated-mistakes-to-checks",
+    "crew-patterns",
+    "learn-loop",
+    "learn-loop",
     "human-writing",
-    "simplify"
+    "ground-rules"
    ]
   },
   {
@@ -83,9 +83,9 @@
    "core": true,
    "description": "Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.",
    "skills": [
-    "adversarial-review-panel",
-    "no-ai-look",
-    "simplify",
+    "crew-patterns",
+    "design-gate",
+    "ground-rules",
     "human-writing"
    ]
   },
@@ -96,7 +96,7 @@
    "description": "Use when the lead hands out a self-contained slice needing no special role (code slice with its test, file to fill).",
    "skills": [
     "human-writing",
-    "simplify"
+    "ground-rules"
    ]
   }
  ],
@@ -284,8 +284,8 @@
      "phase": "Steps",
      "who": null,
      "skills": [
-      "repeated-mistakes-to-checks",
-      "session-lessons-to-skills"
+      "learn-loop",
+      "learn-loop"
      ],
      "commands": [],
      "playbooks": [],
@@ -503,8 +503,8 @@
       "raw": "หัวหน้าทีม"
      },
      "skills": [
-      "status-report",
-      "decision-log"
+      "superuser",
+      "decision-desk"
      ],
      "commands": [],
      "playbooks": [],
@@ -851,7 +851,7 @@
       "raw": "หัวหน้าทีม"
      },
      "skills": [
-      "status-report"
+      "superuser"
      ],
      "commands": [],
      "playbooks": [],
@@ -903,7 +903,7 @@
       "raw": "ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note"
      },
      "skills": [
-      "parallel-split-and-merge"
+      "crew-patterns"
      ],
      "commands": [],
      "playbooks": [],
@@ -923,7 +923,7 @@
       "raw": "`reviewer` ตัวใหม่"
      },
      "skills": [
-      "adversarial-review-panel"
+      "crew-patterns"
      ],
      "commands": [],
      "playbooks": [],
@@ -941,7 +941,7 @@
       "raw": "หัวหน้าทีม"
      },
      "skills": [
-      "decision-log"
+      "decision-desk"
      ],
      "commands": [],
      "playbooks": [
@@ -966,7 +966,7 @@
       "raw": "หัวหน้าทีม"
      },
      "skills": [
-      "status-report"
+      "superuser"
      ],
      "commands": [],
      "playbooks": [],

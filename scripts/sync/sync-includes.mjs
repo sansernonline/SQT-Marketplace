@@ -5,7 +5,7 @@
 //   node scripts/sync/sync-includes.mjs --self-test
 //
 // marker (ต้องอยู่ต้นบรรทัด นอกบล็อกโค้ด):
-//   <!-- include: plugins/superuser/skills/commit-log/SKILL.md#หัวข้อที่ต้องการ -->
+//   <!-- include: plugins/superuser/skills/workspace-rules/parts/commit-log/SKILL.md#หัวข้อที่ต้องการ -->
 //   ...เนื้อที่สคริปต์เขียนให้ · อย่าแก้ตรงนี้ แก้ที่ skill...
 //   <!-- /include -->
 // หัวข้อ = ข้อความของบรรทัด # ... ตรงตัว (ไม่นับ # และช่องว่างหน้าหลัง) · เนื้อ = ใต้หัวข้อนั้นจนถึงหัวข้อระดับเท่ากันหรือสูงกว่าถัดไป ไม่รวมบรรทัดหัวข้อ

@@ -23,7 +23,7 @@ Not for: user stories → `user-story-writer` · why a technology was chosen →
 5. Write each requirement by "Requirement rules" below and assign its ID at once.
 6. Write non-functional requirements (NFRs) by "NFR rules" below.
 7. Build the traceability tables. This is the step people skip most, and it is what gives value when a change request arrives.
-8. Add figures. Figures in the SRS itself use `diagram-figures`; quick figures outside the SRS (README · PR) use `software-diagrams`. One colour theme per document, declared at the top per `polished-document-style`.
+8. Add figures. Figures in the SRS itself use `diagram-figures`; quick figures outside the SRS (README · PR) use `software-diagrams`. One colour theme per document, declared at the top per `design-gate/polished-document-style`.
 9. Run the review, then send.
 
 ## Structure

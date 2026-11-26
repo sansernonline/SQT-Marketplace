@@ -12,5 +12,5 @@
 | `slide-backgrounds.csv` · `slide-charts.csv` · `slide-color-logic.csv` · `slide-layout-logic.csv` · `slide-typography.csv` | ที่เดียวกัน | ยังไม่ได้ต่อ (ใช้อ่านประกอบ) |
 
 - ข้อมูลเป็นภาษาอังกฤษ ค้นด้วยคำอังกฤษได้ผลดีกว่า · คำไทยที่อยู่ในกลุ่มคำพ้องของตัวค้นใช้ได้ (เช่น สไลด์ · แบนเนอร์ · นักลงทุน)
-- **สีในไฟล์เหล่านี้ไม่ผ่าน `check_data.py`** (ไม่ได้ตรวจ contrast และสีตั้งต้นของ framework) · ใช้เป็นแนวทาง สีจริงมาจาก `design-references` หรือ `palettes.csv`
+- **สีในไฟล์เหล่านี้ไม่ผ่าน `check_data.py`** (ไม่ได้ตรวจ contrast และสีตั้งต้นของ framework) · ใช้เป็นแนวทาง สีจริงมาจาก `design-gate/design-references` หรือ `palettes.csv`
 - อัปเดต: ดาวน์โหลดไฟล์เดิมจาก commit ใหม่ทับ แล้วแก้ commit และวันที่ในหน้านี้ · รัน `design_search.py --self-test` และ `--eval references/relevance-cases.json`

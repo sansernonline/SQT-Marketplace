@@ -6,7 +6,7 @@ For medium-size work and up, choose **1** playbook, or compose one per `playbook
 
 | playbook | Use when |
 |---|---|
-| [`investigation`](playbook-investigation.md) | A read-only question — how X works · why it is done this way · where something should go · for matters outside the code → `prior-art-review` · `reference-app-research` ([`triggers`](triggers.md)) |
+| [`investigation`](playbook-investigation.md) | A read-only question — how X works · why it is done this way · where something should go · for matters outside the code → `research-with-sources/prior-art-review` · `reference-app-research` ([`triggers`](triggers.md)) |
 | [`pickup-and-pause`](playbook-pickup-and-pause.md) | Continue from where it was left · take over from another agent · pause so someone can take over |
 | [`new-project`](playbook-new-project.md) | Start a new project that has no code yet, until it runs and can be proven |
 | [`feature`](playbook-feature.md) | Add or change the behavior of an existing program |

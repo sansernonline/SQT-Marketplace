@@ -27,7 +27,7 @@
 
 ## 1. คู่มือผู้ใช้ปลายทาง (User Manual) แยกตามบทบาท
 
-agent `technical-writer` · skill `polished-document-style` · `i18n-and-locale` · `branded-document-design` (ตอน render) · `e2e-testing-patterns` (ถ่ายภาพหน้าจอ)
+agent `technical-writer` · skill `design-gate/polished-document-style` · `i18n-and-locale` · `branded-document-design` (ตอน render) · `e2e-testing-patterns` (ถ่ายภาพหน้าจอ)
 **ต้องมีก่อน:** โปรแกรมที่รันได้ (คำสั่งรันใน `docs/README.md` · แอปที่มีอยู่แล้วใช้คำสั่งที่ลองจริงแล้วใน `docs/as-is/overview.md` · หรือที่ผู้ใช้ระบุ — README เดิมของแอปอาจไม่ตรงกับโค้ด) · `docs/<รหัส>-SRS-*.docx` (รู้ว่ามีบทบาทอะไร · อ่านด้วย `anthropic-skills:docx`) · แอปเดิมที่ไม่มี SRS ใช้ `docs/as-is/features.md` จาก `prompt-existing-code.md` ฉบับ 1 แทน
 **ผลลัพธ์:** `docs/<รหัส>-MAN-<บทบาท>-v<M.m>-<สถานะ>.docx` + `.pdf` 1 ชุดต่อบทบาท (ร่าง `_to_delete/drafts/guide-<บทบาท>.md` → render ตามฉบับ 14 ของ `prompt-new-project.md`) · ภาพหน้าจอใน `docs/figures/<บทบาท>/`
 
@@ -65,7 +65,7 @@ agent `technical-writer` · skill `polished-document-style` · `i18n-and-locale`
 
 ## 2. คู่มือฝึกอบรมการใช้งาน (Training Guide)
 
-agent `technical-writer` + `ux-designer` (ลำดับการเรียนรู้) · skill `polished-document-style` · `presentation-design` (ถ้าทำสไลด์) · `branded-document-design`
+agent `technical-writer` + `ux-designer` (ลำดับการเรียนรู้) · skill `design-gate/polished-document-style` · `presentation-design` (ถ้าทำสไลด์) · `branded-document-design`
 **ต้องมีก่อน:** `docs/<รหัส>-MAN-<บทบาท>-*.docx` (ถ้ามี · อ่านด้วย `anthropic-skills:docx` · ใช้เป็นแหล่งขั้นตอน โดยอ้างหัวข้อ ไม่คัดลอกซ้ำ) · โปรแกรมที่รันได้
 **ผลลัพธ์:** `docs/training/` — `training-plan.md` · `facilitator-guide.md` · `exercises.md` (+ `quiz.md` ถ้าเลือก)
 

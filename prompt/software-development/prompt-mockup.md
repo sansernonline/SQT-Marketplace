@@ -42,7 +42,7 @@
 
 ## 1. สร้าง mockup ที่กดได้จริง
 
-agent `ux-designer` (ขั้น A) · `developer` (ขั้น B–C · มี shell) · `graphic-designer` (โลโก้) · skill `ui-craft` (ข้อ 0.1 ทิศทางภาพ · ข้อ 9 ด่านสวย) + skill ตามแพลตฟอร์มใน `docs/README.md`: web → `web-app-design` · mobile → `mobile-app-design` · windows → `windows-app-design` · `graphic-design` · `parallel-attempts-pick-best`
+agent `ux-designer` (ขั้น A) · `developer` (ขั้น B–C · มี shell) · `graphic-designer` (โลโก้) · skill `ui-craft` (ข้อ 0.1 ทิศทางภาพ · ข้อ 9 ด่านสวย) + skill ตามแพลตฟอร์มใน `docs/README.md`: web → `web-app-design` · mobile → `mobile-app-design` · windows → `windows-app-design` · `graphic-design` · `crew-patterns/parallel-attempts-pick-best`
 **ต้องมีก่อน:** `docs/README.md` · SRS หรือ BRD (`docs/<รหัส>-SRS-*.docx` / `docs/<รหัส>-BRD-*.docx` อ่านด้วย `anthropic-skills:docx` · ทำคู่กับ SRS ได้ → ใช้ร่างใน `_to_delete/drafts/`) · `docs/USER-STORIES.md` ถ้ามี
 **ผลลัพธ์:** `docs/design/<รหัส>-design-directions.html` · `assets/logo/` · `mockup/<รหัส>-mockup.html` ไฟล์เดียว (ตามกฎร่วมข้างบน) · ภาพตรวจลง `_to_delete/`
 
@@ -55,7 +55,7 @@ agent `ux-designer` (ขั้น A) · `developer` (ขั้น B–C · ม�
 ทำตาม `ui-craft` ข้อ 0.1 ทั้ง 6 ขั้น (หน้าจอพระเอก · แอปอ้างอิง · 3 แนวขนาน · หน้าเทียบ · เลือก 1 · ตัวตนครบชุด) · ส่วนเฉพาะของไฟล์นี้:
 
 1. อ่าน `docs/README.md` (แพลตฟอร์ม · แอปอ้างอิงหน้าตา · `doc-theme`) · ช่องแพลตฟอร์มว่าง → รวมไว้ในคำถามเดียวตอนเริ่ม · ไม่มีคำตอบ → web แล้วจดลง **ตัดสินใจเอง** · อ่าน SRS หรือ BRD ที่มีอยู่
-2. 3 แนว: `ux-designer` ตัวใหม่แนวละตัว (`parallel-attempts-pick-best`) · ภาพแอปอ้างอิงเก็บที่ `_to_delete/ref-shots/` · หน้าเทียบ `docs/design/<รหัส>-design-directions.html`
+2. 3 แนว: `ux-designer` ตัวใหม่แนวละตัว (`crew-patterns/parallel-attempts-pick-best`) · ภาพแอปอ้างอิงเก็บที่ `_to_delete/ref-shots/` · หน้าเทียบ `docs/design/<รหัส>-design-directions.html`
 3. เลือกแนวตามคำตอบตอนเริ่ม (กฎร่วม) · โลโก้โดย `graphic-designer` ลง `assets/logo/` · สีแบรนด์ที่ใช้จริงเขียนกลับลง `docs/README.md` ช่อง `doc-theme`
 
 ### ขั้น B — สร้าง mockup ตามแนวที่เลือก

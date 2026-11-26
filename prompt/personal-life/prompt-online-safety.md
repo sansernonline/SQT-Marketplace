@@ -52,7 +52,7 @@ playbook `digital-safety` · agent `life-admin` · skill `digital-hygiene`
 
 ## 2. ถูกแฮก หรือเพิ่งโอนเงินให้มิจฉาชีพ
 
-playbook `digital-safety` (ขั้น 1: ขั้นตอนชั่วโมงแรก · ขั้น 5: ข้อความเตือน) · agent `life-admin` · skill `digital-hygiene` · `polite-message-th-en` (ข้อความแจ้งเพื่อนและครอบครัว)
+playbook `digital-safety` (ขั้น 1: ขั้นตอนชั่วโมงแรก · ขั้น 5: ข้อความเตือน) · agent `life-admin` · skill `digital-hygiene` · `human-writing/polite-message-th-en` (ข้อความแจ้งเพื่อนและครอบครัว)
 **ผลลัพธ์:** รายการทำทันทีในคำตอบ (บรรทัดแรกของคำตอบ) · `incidents/YYYY-MM-DD_<เรื่อง>.md` (ลำดับเหตุการณ์ · หลักฐาน · สิ่งที่ทำแล้ว) · **รออนุมัติ:** เปลี่ยนรหัสผ่าน · ออกจากระบบทุกเครื่อง · โทรแจ้งธนาคารให้ระงับบัญชี · แจ้งความ · โพสต์หรือส่งข้อความเตือนเพื่อน — ผู้ใช้ทำเองทุกข้อ
 
 ### ข้อมูล (ผู้ใช้กรอก)

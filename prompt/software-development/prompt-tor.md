@@ -39,7 +39,7 @@
 
 ## 1. ร่าง TOR
 
-agent `business-analyst` + `solution-architect` · skill `srs-writing` · `superuser:simplify` · `pdpa-compliance` · `polished-document-style`
+agent `business-analyst` + `solution-architect` · skill `srs-writing` · `superuser:ground-rules` · `pdpa-compliance` · `design-gate/polished-document-style`
 **ผลลัพธ์:** `docs/tor/tor.md` (ยังไม่ render · render ท้ายฉบับ 3 หลังแก้ตามผลตรวจแล้ว)
 
 ### ข้อมูลงาน (ผู้ใช้กรอก)
@@ -78,7 +78,7 @@ agent `business-analyst` + `solution-architect` · skill `srs-writing` · `super
 
 ## 2. ราคากลางและเกณฑ์ให้คะแนน
 
-agent `project-manager` + `solution-architect` · skill `superuser:simplify`
+agent `project-manager` + `solution-architect` · skill `superuser:ground-rules`
 **ต้องมีก่อน:** `docs/tor/tor.md`
 **ผลลัพธ์:** `docs/tor/reference-price.md` · `docs/tor/reference-price.xlsx` · `docs/tor/evaluation.md` · หัวข้อ 12 ใน `tor.md` (สรุปเกณฑ์ผ่านขั้นต่ำและน้ำหนักคะแนนจาก `evaluation.md` แทนข้อความ `(รอฉบับ 2)`)
 
@@ -111,7 +111,7 @@ agent `project-manager` + `solution-architect` · skill `superuser:simplify`
 
 ## 3. ตรวจ TOR ก่อนประกาศ
 
-playbook `review` · agent `business-analyst` + `solution-architect` + `security-engineer` · skill `adversarial-review-panel` · `srs-writing` · `branded-document-design` (ตอน render)
+playbook `review` · agent `business-analyst` + `solution-architect` + `security-engineer` · skill `crew-patterns/adversarial-review-panel` · `srs-writing` · `branded-document-design` (ตอน render)
 **ต้องมีก่อน:** `tor.md` · `reference-price.md` · `evaluation.md`
 **ผลลัพธ์:** `docs/tor/tor-review.md` + แก้ `tor.md` ตามผลตรวจ (แก้เฉพาะข้อที่ไม่ใช่ข้อมูลของผู้ใช้) → render `tor.md` เป็น .docx + .pdf ตาม `prompt-new-project.md` ฉบับ 14 เป็นขั้นสุดท้าย
 
