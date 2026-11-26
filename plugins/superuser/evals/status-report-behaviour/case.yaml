@@ -1,0 +1,33 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: status-report-behaviour
+description: ผู้ใช้ถามว่ามีงานค้างอะไร ต้องตอบเป็นตารางมีคอลัมน์ ต้องให้ทำอะไร ทุกแถวเป็นสิ่งที่ผู้ใช้ทำได้ในคำตอบเดียว และปิดด้วยคำแนะนำว่าควรทำข้อไหนก่อน (status-report หัวข้อ 7)
+tags: [behaviour, status-report]
+runs: 10
+expected_outcome: บรรทัดแรกสรุปภาพรวม · ตาราง # งาน สถานะ ต้องให้ทำอะไร · แถวที่ต้องให้ผู้ใช้ตัดสินมาก่อน · มีคำที่ให้พิมพ์ตอบในเครื่องหมายคำพูด · บรรทัดท้าย แนะนำ ทำข้อไหนก่อน
+execution:
+  prompt: |
+    ไฟล์ .claude/superuser/CONTEXT.md หัวข้อ รับงานต่อ ตอนนี้มี:
+    - **(ปิด) 2026-11-20 แก้หน้า login:** merge PR #12 แล้ว
+    - **2026-11-24 รายงานยอดขาย (ทำอยู่):** ร่างเสร็จ 3/5 บท ที่ docs/sales.md
+    - **2026-11-24 โลโก้ร้าน (รอเจ้าของดู):** บอร์ด 3 แนวที่ _to_delete/2026-11-24-logo/board.png
+    - **2026-11-25 eval ราคา (รออนุมัติ):** รันจริงเสียเงินราว 4 ดอลลาร์
+    มีอะไรค้างอีก
+  max_turns: 4
+  timeout_seconds: 180
+graders:
+  - name: action-column
+    type: regex
+    pattern: "\\|\\s*ต้องให้ทำอะไร\\s*\\|"
+    match: contains
+    target: last_message
+  - name: recommends-first
+    type: regex
+    pattern: "แนะนำ"
+    match: contains
+    target: last_message
+  - name: closed-item-dropped
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย · ผ่านเมื่อไม่มีแถวของงานหน้า login ที่ปิดแล้ว · แถวโลโก้บอกให้เปิดบอร์ดดูแล้วเลือก · แถว eval บอกให้อนุมัติงบ · แถวรายงานยอดขายบอกว่าทำต่อเองได้ ไม่ต้องให้ผู้ใช้ทำอะไร

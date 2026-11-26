@@ -39,7 +39,6 @@
 
 ![pstack vs SuperUser](superuser-vs-pstack.png)
 
-**ตัวอย่าง planner** (วางกราฟงาน · แจกงานข้ามหลายบัญชี LLM · เทียบกับงานจริง): [`docs/examples/planner`](examples/planner/README.md)
 
 ### SuperUser ใน plugin อื่น
 
