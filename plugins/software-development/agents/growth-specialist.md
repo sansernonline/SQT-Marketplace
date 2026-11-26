@@ -4,7 +4,7 @@ description: Use when improving conversion (landing pages, A/B tests, onboarding
 tools: Read, Write, Edit, Grep, Glob, Skill, WebFetch, WebSearch
 model: sonnet
 skills:
-  - design-references
+  - design-gate
   - human-writing
 ---
 

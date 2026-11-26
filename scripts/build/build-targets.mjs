@@ -118,7 +118,7 @@ const loaded = listDir(join(ROOT, "plugins")).map((plugin) => {
 
 // ของกลางที่ plugin อื่นใช้ร่วม · ชุดสำหรับปลายทางอื่นต้องใช้เดี่ยวได้ จึงใส่ให้ทุก plugin ที่ประกาศ dependencies
 // รายการต้องตรงกับ SHARED_ONLY_IN_SUPERUSER ใน scripts/sync/sync-superuser.mjs
-const SHARED_SKILLS = ["crew-patterns", "crew-patterns", "lean-reply", "chat-prompt-workflows", "workspace-rules", "context-budget", "decision-desk", "decision-desk", "design-gate", "workspace-rules", "decision-desk", "handoff", "human-writing", "superuser", "design-gate", "learn-loop", "crew-patterns", "crew-patterns", "design-gate", "human-writing", "ground-rules", "fix-at-source", "ground-rules", "ground-rules", "ground-rules", "ground-rules", "research-with-sources", "learn-loop", "decision-desk", "research-with-sources", "learn-loop", "ground-rules", "skill-authoring", "human-writing", "superuser", "fix-at-source", "workspace-rules", "human-writing"];
+const SHARED_SKILLS = ["chat-prompt-workflows", "context-budget", "crew-patterns", "decision-desk", "design-gate", "fix-at-source", "ground-rules", "handoff", "human-writing", "lean-reply", "learn-loop", "research-with-sources", "skill-authoring", "workspace-rules"];
 const SHARED_AGENTS = ["brainstormer", "reviewer", "learning-reviewer", "worker"];
 const core = loaded.find((p) => p.plugin === "superuser");
 // SKILL.md ของ superuser สาขามีเฉพาะส่วนสาขา (Claude Code เปิดแกนจาก plugin superuser เอง) · ปลายทางอื่นไม่มี dependencies จึงรวมแกน + สาขาเป็นไฟล์เดียว

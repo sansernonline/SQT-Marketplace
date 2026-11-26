@@ -4,8 +4,7 @@ description: Use when a design feels off or before visuals ship. Reviews hierarc
 tools: Read, Glob, Bash, Skill
 model: sonnet
 skills:
-  - design-references
-  - no-ai-look
+  - design-gate
   - human-writing
 ---
 

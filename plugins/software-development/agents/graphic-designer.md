@@ -4,8 +4,7 @@ description: Use for visuals that are not screens (logo, poster, social post). S
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill
 model: sonnet
 skills:
-  - design-references
-  - no-ai-look
+  - design-gate
   - human-writing
 ---
 

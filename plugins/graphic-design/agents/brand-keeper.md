@@ -4,8 +4,7 @@ description: Use when starting a brand or when designs look inconsistent. Keeps 
 tools: Read, Write, Edit, Grep, Glob, Skill
 model: sonnet
 skills:
-  - design-references
-  - no-ai-look
+  - design-gate
   - human-writing
 ---
 

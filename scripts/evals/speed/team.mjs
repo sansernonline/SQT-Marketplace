@@ -5,7 +5,7 @@
  *
  *   node scripts/evals/speed/team.mjs [t4-new-1 t4-new-2 …]   # ไม่ใส่ = ทุกรอบที่หาเจอ · พิมพ์ตาราง markdown
  *
- * ค่าใช้จ่ายรายตัวคิดจาก usage × ราคาใน model-scorecard/references/prices.json (ประมาณ ไม่ใช่ยอดตัดบัญชี)
+ * ค่าใช้จ่ายรายตัวคิดจาก usage × ราคาใน superuser/parts/model-scorecard/references/prices.json (ประมาณ ไม่ใช่ยอดตัดบัญชี)
  */
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, dirname, resolve } from "node:path";

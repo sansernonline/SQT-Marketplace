@@ -96,7 +96,7 @@ agent `project-manager` · skill `superuser:ground-rules` · `design-gate/polish
 3. สิ่งส่งมอบ — ดึงรายการจากตารางเอกสารใน `docs/README.md` บวกตัวโปรแกรม
 4. ไทม์ไลน์และ milestone — แบ่งเป็นช่วง (สัปดาห์ หรือ sprint 2 สัปดาห์) ตามขนาดงาน มี 2 ส่วน:
    - **ตาราง milestone** `| # | milestone | ส่งมอบอะไร | FR / เอกสารที่ครอบ | สัปดาห์เป้าหมาย | เกณฑ์ผ่าน | เจ้าของ | สถานะ |` รหัส `M1…` · 1 milestone = ของที่ผู้ใช้เปิดดูหรือเซ็นรับได้ (เช่น M1 SRS อนุมัติ → M2 mockup ผ่าน → M3 ฟีเจอร์หลักรันได้ → M4 ทดสอบผ่าน → M5 ส่งมอบ) · เกณฑ์ผ่านตรวจได้ด้วยเครื่องหรือการลงนาม
-   - **Gantt 1 ภาพ** ด้วย `diagram-figures` (Mermaid engine → รูปแบบเดียวกับรูปอื่นในเอกสาร) · แถบละกิจกรรม · เพชรละ milestone · แยก section ตามระยะ · เริ่มจากแม่แบบใน `status-report/references/project-plan-and-weekly-status.md`
+   - **Gantt 1 ภาพ** ด้วย `diagram-figures` (Mermaid engine → รูปแบบเดียวกับรูปอื่นในเอกสาร) · แถบละกิจกรรม · เพชรละ milestone · แยก section ตามระยะ · เริ่มจากแม่แบบใน `superuser/parts/status-report/references/project-plan-and-weekly-status.md`
 5. ความเสี่ยงและข้อสมมติ — ตาราง: ความเสี่ยง · ผลกระทบ · วิธีรับมือ · เจ้าของ
 6. เกณฑ์ส่งมอบ/ปิดงาน — ตรวจได้ด้วยเครื่องหรือด้วยการลงนาม ไม่ใช้คำว่า "ใช้งานได้ดี"
 7. ประวัติการแก้ไข และตารางลงนาม

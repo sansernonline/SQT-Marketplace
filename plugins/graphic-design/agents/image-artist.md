@@ -3,8 +3,7 @@ name: image-artist
 description: Use when a page, app or slide needs images (hero, product, people). Asks the style; generates, draws SVG or gets photos.
 model: sonnet
 skills:
-  - design-references
-  - no-ai-look
+  - design-gate
   - human-writing
 ---
 

@@ -938,28 +938,28 @@
 ---
 
 ### 8. /threat-model `<feature>` ⭐ NEW
-**Agent:** security-engineer + polished-document-style
+**Agent:** security-engineer + design-gate
 **Use case:** STRIDE threat modeling สำหรับ feature/system
 **Output:** Threat model + data flow diagram + required controls + sign-off
 
 ---
 
 ### 9. /release-notes `<version>` ⭐ NEW
-**Agent:** technical-writer + polished-document-style
+**Agent:** technical-writer + design-gate
 **Use case:** สร้าง release notes ให้ผู้ใช้อ่าน (ไม่ใช้ภาษา dev)
 **Output:** User-facing release notes + categorized changes + migration guide
 
 ---
 
 ### 10. /product-roadmap `<horizon>` ⭐ NEW
-**Agent:** product-manager + polished-document-style
+**Agent:** product-manager + design-gate
 **Use case:** สร้าง strategic roadmap พร้อม prioritization
 **Output:** Roadmap + RICE table + Gantt + KPIs + strategic risks
 
 ---
 
 ### 11. /onboard `<role>` ⭐ NEW
-**Agent:** technical-writer + polished-document-style
+**Agent:** technical-writer + design-gate
 **Use case:** สร้าง onboarding doc สำหรับ team member ใหม่
 **Output:** 30/60/90 day plan + setup checklist + team norms + FAQ
 
@@ -973,7 +973,7 @@
 ---
 
 ### 13. /api-design `<feature>` ⭐ NEW
-**Agent:** system-analyst + polished-document-style
+**Agent:** system-analyst + design-gate
 **Use case:** ออกแบบ API spec
 **Output:** Full API spec (endpoints, schemas, errors, examples) ครบ
 
@@ -987,7 +987,7 @@
 ---
 
 ### 15. /security-scan `<scope>` ⭐ NEW
-**Agent:** security-engineer + polished-document-style
+**Agent:** security-engineer + design-gate
 **Use case:** Security audit (code, deps, infra)
 **Output:** Findings (S1-S4) + OWASP mapping + remediation roadmap
 

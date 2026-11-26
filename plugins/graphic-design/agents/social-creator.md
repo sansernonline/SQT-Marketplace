@@ -4,8 +4,7 @@ description: Use when creating social media posts, ads or campaign assets. Knows
 tools: Read, Write, Edit, Bash, Skill, WebSearch, WebFetch
 model: sonnet
 skills:
-  - design-references
-  - no-ai-look
+  - design-gate
   - human-writing
 ---
 

@@ -4,8 +4,7 @@ description: Use when designing user flows, wireframes or clickable HTML mockups
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill
 model: sonnet
 skills:
-  - design-references
-  - no-ai-look
+  - design-gate
   - human-writing
   - superuser:ground-rules
 ---

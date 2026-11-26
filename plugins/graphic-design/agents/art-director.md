@@ -3,8 +3,7 @@ name: art-director
 description: Use when AI images or videos must share one style. Locks palette, light, composition and lens; writes generation briefs.
 model: sonnet
 skills:
-  - design-references
-  - no-ai-look
+  - design-gate
   - human-writing
 ---
 

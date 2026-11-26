@@ -39,7 +39,7 @@ const RUN_REVIEW = join(EVALS, "review-recall", "run-review-recall.mjs");
 const args = Object.fromEntries(process.argv.slice(2).join(" ").split(/\s*--/).filter(Boolean).map((p) => {
   const [k, ...v] = p.trim().split(/\s+/); return [k, v.join(" ") || true];
 }));
-const PRICES = JSON.parse(readFileSync(join(ROOT, "plugins", "superuser", "skills", "superuser", "references", "prices.json"), "utf8")).per_mtok;
+const PRICES = JSON.parse(readFileSync(join(ROOT, "plugins", "superuser", "skills", "superuser", "parts", "model-scorecard", "references", "prices.json"), "utf8")).per_mtok;
 const csv = (v) => (v && v !== true ? String(v).split(",").filter(Boolean) : []);
 const REVIEW_CASE_LIST = csv(args["review-cases"]).length ? csv(args["review-cases"]) : Array.from({ length: 8 }, (_, i) => `r${i + 1}`);
 const REVIEW_CASES = REVIEW_CASE_LIST.join(",");
