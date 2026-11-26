@@ -6,7 +6,7 @@ import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-export const PLUGIN_ROOT = resolve(HERE, "..", "..", "..", "..");
+export const PLUGIN_ROOT = resolve(HERE, "..", "..", "..", "..", "..", "..");
 export const HOOKS_DIR = join(PLUGIN_ROOT, "hooks");
 export const DEFAULT_MAX_LINE = 8_000_000; // bytes; api-request records reach ~2 MB, longer = skip and count
 

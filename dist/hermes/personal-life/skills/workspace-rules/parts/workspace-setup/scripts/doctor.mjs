@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const PLUGIN_ROOT = resolve(HERE, "..", "..", "..");
+const PLUGIN_ROOT = resolve(HERE, "..", "..", "..", "..", "..");
 const CORE_MARK = "<!-- sqt-core-rules -->";
 const HOUR = 3600 * 1000;
 

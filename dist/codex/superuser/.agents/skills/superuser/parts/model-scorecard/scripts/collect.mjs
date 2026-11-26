@@ -24,7 +24,7 @@ export function classifyStep(role, description, rules) {
   return hit?.step ?? rules.default ?? "other";
 }
 
-const stepRules = () => readJson(join(HERE, "..", "..", "..", "hooks", "step-rules.json"), { default: "other", rules: [] });
+const stepRules = () => readJson(join(HERE, "..", "..", "..", "..", "..", "hooks", "step-rules.json"), { default: "other", rules: [] });
 
 function mostCommon(values) {
   const count = new Map();

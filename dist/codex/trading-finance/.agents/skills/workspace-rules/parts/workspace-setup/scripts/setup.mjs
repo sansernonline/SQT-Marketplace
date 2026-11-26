@@ -124,7 +124,7 @@ export function gitPolicy(project, value, write, today = new Date().toISOString(
 }
 
 // 3. กฎประจำตัวของเจ้าของ · ต้นฉบับคือ hooks/core-rules.md ของ plugin superuser (ตัดหัวสำเนาออก)
-export function rulesSource(hooksDir = join(HERE, "..", "..", "..", "hooks")) {
+export function rulesSource(hooksDir = join(HERE, "..", "..", "..", "..", "..", "hooks")) {
   return lf(readFileSync(join(hooksDir, "core-rules.md"), "utf8")).replace(/^<!-- สำเนาที่ [^\n]*-->\n/, "");
 }
 
