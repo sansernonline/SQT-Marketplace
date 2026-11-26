@@ -252,6 +252,7 @@
     "evals/commit-log-behaviour-exclude/case.yaml": "เคส eval: ไฟล์ที่เปลี่ยนมีค่าลับ ไฟล์ build และ log ของทีมปนอยู่ ต้อง add เฉพาะโค้ดและเสนอใส่ .gitignore (commit-log ห …",
     "evals/commit-log-behaviour-repo-style/case.yaml": "เคส eval: repo ใช้ subject ภาษาไทยกับ scope ภาษาอังกฤษ ต้องเขียน commit ตามแบบที่ repo ใช้อยู่ (commit-log หัวข้อ 2 ข้ …",
     "evals/commit-log-behaviour/case.yaml": "เคส eval: การเปลี่ยนแปลง 2 เรื่องที่ไม่เกี่ยวกัน ต้องแยกเป็น 2 commit แบบ Conventional Commit ไม่รวบเป็น commit เดียว …",
+    "evals/status-report-behaviour/case.yaml": "เคส eval: ผู้ใช้ถามว่างานค้างอะไร ต้องตอบเป็นตารางที่มีคอลัมน์ ต้องให้ทำอะไร และปิดด้วยคำแนะนำว่าทำข้อไหนก่อน",
     "evals/context-budget-behaviour-long-pdf/case.yaml": "เคส eval: สัญญา PDF 300 หน้า อยากรู้แค่ข้อบอกเลิกสัญญา ต้องหาตำแหน่งก่อนแล้วอ่านเฉพาะหน้าที่เกี่ยว ไม่อ่านทั้งเล่ม (co …",
     "evals/context-budget-behaviour-search-wide/case.yaml": "เคส eval: ค้นการเรียกฟังก์ชันใน repo 4,000 ไฟล์ ต้องจำกัดขอบเขตการค้นและขนาดผล หรือส่งลูกทีมไปค้นแล้วรับแค่สรุป (conte …",
     "evals/context-budget-behaviour/case.yaml": "เคส eval: อยากรู้ error ล่าสุดใน log 2 GB ต้องเลือกคำสั่งที่อ่านเฉพาะท้ายหรือค้นแบบจำกัดผล ไม่เปิดทั้งไฟล์ (context-bu …",

@@ -60,9 +60,9 @@ The hook announces `skill ที่ต้องเปิด` (skills to open) �
 
 ## Files and git
 
-- Temp files go in `_to_delete/<YYYY-MM-DD>-<topic>/` at the project root, 1 task 1 folder (`temp-file-discipline`) · **before starting, delete old `_to_delete/` folders nothing still uses** · **the root must hold no temp files**
+- Temp files go in `_to_delete/<YYYY-MM-DD>-<topic>/` at the project root, 1 task 1 folder (`temp-file-discipline`) · **the root must hold no temp files**
 - **Source code lives in a root folder named like the project, lowercase joined with `-`** · the root holds only `ref/` `docs/` `mockup/` `assets/` `qa/` `_to_delete/` `.claude/` and the code folder, created when there is content · README CHANGELOG and config files live in the code folder (`project-doc-set` type B) · declare exceptions in the README
-- Never delete user files without asking · **`_to_delete/` is the trash: anything already inside may be deleted for good without asking**, except a task folder still in use · before overwriting a file the user gave you or that was already sent out, back it up to `_to_delete/` first
+- Never delete user files without asking · before overwriting a file the user gave you or that was already sent out, back it up to `_to_delete/` first
 - New file names follow `document-naming`: lowercase English joined with `-`, no spaces, Thai, emoji, final, new · dates `YYYY-MM-DD` · if the task's skill sets another rule, follow it
 - ID card numbers · account numbers · passwords · One-Time Password (OTP) never go in work files or logs (keep only the last 4 digits) · mask personal data in screenshots
 - **Never `push` unless told**, except when the **git อัตโนมัติ** (auto git) line in the "กติกา" (rules) section of `CONTEXT.md` is `auto` (no such line → ask once per `workspace-setup`) · commit only when permitted (user says so · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · "กติกา" in `CONTEXT.md`), then commit one step at a time per `commit-log` · not permitted → offer the commit message in the answer · never commit to the main branch without asking
