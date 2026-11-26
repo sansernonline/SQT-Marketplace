@@ -1,6 +1,6 @@
 ---
 name: design-gate
-description: Use before design work, documents or visuals that people see
+description: Use when making designs, documents or visuals that people see
 ---
 
 # design-gate — gate before design, live references, no AI look, polished documents

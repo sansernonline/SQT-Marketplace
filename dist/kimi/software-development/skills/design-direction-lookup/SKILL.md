@@ -39,7 +39,7 @@ Not for: a project whose look already passed the beauty gate (copy the sibling p
 4. **After the draft:**
    1. Open the comparison page and look at both modes yourself; do not trust the contrast numbers alone. In some Thai fonts the upper vowels hit the previous line.
    2. Send the 3 directions to `ui-craft` step 0.1 stage 3 (a fresh subagent per direction; an agent that cannot call a sub-team does each direction in turn and notes it under "ตัดสินใจเอง"). Each direction adds 1 bold move of its own; the draft does not choose it.
-   3. If the customer has brand colors or fonts, substitute them in each direction and rerun the contrast check (`no-ai-look/scripts/slop_scan.py`).
+   3. If the customer has brand colors or fonts, substitute them in each direction and rerun the contrast check (`design-gate/parts/no-ai-look/scripts/slop_scan.py`).
    4. Choose the direction that passes the beauty gate and write the reason under `## ตัดสินใจเอง` of `docs/BUILD-PLAN.md`.
 
 ## Check before done

@@ -1,27 +1,29 @@
-# Examples for this plugin — model tiers · team patterns
+# Examples for this plugin — model tier · autonomy · team patterns
 
-Moved from `SKILL.md` sections 5 and 9. The rules live in `SKILL.md`. This file has only examples.
+The rules are in `superuser:superuser` · this file has examples only.
 
-## Model tiers — example tasks (section 5)
+## Model tier — example jobs (section 5)
 
-The rules, model names, and mid-task switching are in `SKILL.md` section 5 (handing out work). This file has only example tasks for each tier.
+The rules, model names, and mid-task switching are in `superuser:superuser` sections 2 · 5 · this file has only example jobs for each tier.
 
-| Tier | Example tasks | Example often chosen wrongly |
-|---|---|---|
-| **Large** `opus` | Design the whole user-permission system · compute payroll amounts sent to the bank · draft an email telling customers about a data leak · final check of risky work | A piece writing the manual for the user-permission system → large, not medium, because the whole job is risky |
-| **Medium** `sonnet` (default) | Add a product search page · fix a calendar bug · draft an install guide · search and compare libraries · first-round check | Move callbacks to async/await → medium even with tests, because a way to fix must be chosen |
-| **Small** `haiku` | Fill postal codes into a table from a given list · convert a book list from CSV to JSON in a given structure · search a word in documents and report the lines | Trim trailing spaces from every file → write a script, do not send a worker |
-| **`fable`** (not the default) | A piece where opus failed twice, even after raising effort to high and the account has credit | Using fable from the start on a hard task → start with opus first |
+Tiers go from top to bottom by the core's 3 rules, and the first match wins (large → small → medium) · **Large** `opus` — set the brand direction · set the campaign concept · final check before sending to the client · **Small** `haiku` — mechanical work with a pattern to follow: put the job name and date on 20 banners from a list · search files and report · **Medium** `sonnet` (everything else) — draft posts · lay out · first-round review
 
-## Team patterns — how each is used in this work (section 9)
+## Autonomy — reversible work and information sources (section 6)
 
-How to do each, its cost, and its traps are in `crew-patterns/agent-patterns`.
-
-| Pattern | How it is used in this work |
+| Situation | Do |
 |---|---|
-| **Planning** | playbook → todo · long job → a plan in `CONTEXT.md` section "ความคืบหน้า" (progress) |
-| **ReAct** | Every step: think → do 1 thing → look at the real result → next step |
-| **Reflection** | The playbook's check step uses a fresh `reviewer` (or a read-only specialist reviewer) that has not seen the work before, not the one that did it |
-| **Multi-Agent** | Section 5 · independent pieces split among several workers, handed on through files |
-| **Mixture-of-Agents (MoA)** | A wrongly chosen path that would be very expensive: 3 `brainstormer`s from different angles, then merge |
-| **Reranker** | playbook `research`: gather sources widely → score → read in full only the top scorers |
+| Reversible work — draft a brief · generate trial images · make a copy and edit the copy · organize files that have a log to undo | Just do it |
+| Do not know a public fact (platform sizes and safe zones · font and image licenses) | Look it up yourself, going through sources in this order: the platform's help page → the license page of the font or image creator → the tool's manual · allowed under the 3-source rule in `superuser:superuser` section 6 (references/autonomy.md) |
+
+## Team patterns — how to use them in this job (section 10)
+
+How to do each one, its cost, and its traps are in `crew-patterns/agent-patterns`.
+
+| Pattern | How it is used in this job |
+|---|---|
+| **Planning** | asset matrix → master piece → split into sizes |
+| **ReAct** | generate image → open it at real size → fix the brief |
+| **Reflection** | a fresh `design-critic` checks 8 points before sending |
+| **Multi-Agent** | `art-director` locks the style → `social-creator` makes the set → `brand-keeper` checks the brand |
+| **Mixture-of-Agents (MoA)** | 3 campaign concept directions → score → pick a base, borrow strengths |
+| **Reranker** | dozens of generated images → score by the lock sheet → pick 3 |

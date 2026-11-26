@@ -20,6 +20,8 @@ description: Use when work is big or risky (money, deletes) or says superuser
 | Status table at task end · the user asks what is pending (section 7 format) | [`status-report`](parts/status-report/guide.md) |
 | Comparing models per step | [`model-scorecard`](parts/model-scorecard/guide.md) |
 
+Part rules: every task end has a status table in the central file and the reply, every `เสร็จ` row has evidence, the checker is not the doer, at most 15 open rows (`status-report`) · scorecard data stays in the project, risky work never goes to a small model by chance, rows with fewer than 5 samples never decide (`model-scorecard`)
+
 ---
 
 ## 1 · Rules that cannot be skipped

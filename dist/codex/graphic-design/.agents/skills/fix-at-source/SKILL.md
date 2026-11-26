@@ -10,6 +10,8 @@ description: Use when something is broken or feedback says it is wrong
 ## Hard rules
 
 **Fix root cause**
+- Build a repeat loop before forming a hypothesis: one command that shows the symptom exactly as reported (red). Cannot reproduce it → you do not yet know what you are fixing.
+- If a fix breaks 3 times on one symptom, stop: write what was tried · how each broke · the assumption they shared, then send `brainstormer` or ask the user.
 - Catching null on the screen hides the error, but wrong data still flows through the system. Fix where the wrong value first appears.
 - Fix at that point, then run the loop until it passes. If the fix adds a condition, also add a case that must not happen.
 - Exception: patch the symptom temporarily only when the real system is being damaged and the damage must stop first. Record it as a temporary fix in `decision-desk/decision-log` and open the root-cause fix right away.

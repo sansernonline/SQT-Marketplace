@@ -1,6 +1,6 @@
 ---
 name: ground-rules
-description: Use before saying done, and to keep work small, simple, reversible
+description: Use when about to say done, or to keep work small, simple, reversible
 ---
 
 # ground-rules — the working principles behind every task

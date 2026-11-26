@@ -1,10 +1,11 @@
-# playbook · unattended-run — long work the user is not watching
+# playbook · unattended-run — long jobs the user will not watch
 
-Use when: "ทำให้เสร็จ เดี๋ยวกลับมาดู" (finish it, I'll come back to look) · "ไม่ต้องถาม" (don't ask) · multi-step work the user will check in one go
-It is a wrapper around the work, not a replacement for the work's playbook: it controls carrying on until finished, while each piece inside still chooses its playbook by the work as usual.
-`ลูกทีมต่อชิ้น` (worker per piece): `general-purpose` ตัวใหม่
-`ผู้ตรวจต่อชิ้น` (checker per piece): `reviewer` ตัวใหม่
-`รออนุมัติที่เจอบ่อย` (commonly found awaiting-approval items): sending a message to outsiders · paying money · deleting the user's files
+Use when: "finish it, I will check back later" · "don't ask" · multi-step work the user will review all at once — for example registering all the household documents · triaging a month of past inbox.
+This is a wrapper, not a replacement for the job's playbook. It controls carrying on to the end, while each piece inside still picks a playbook by its kind of work.
+Main skill: the "การตัดสินใจ" (decisions) and "รับงานต่อ" (pick up the work) tables in `CONTEXT.md` · sections 6 and 7 of `superuser`
+`ลูกทีมต่อชิ้น` (workers per piece): the branch agent for the piece's role (`life-admin` · `doc-caretaker` · `meeting-prep` · `home-manager` · `family-planner` · `health-organizer` · `career-coach` · `interview-coach`), a fresh one · learning work uses a fresh `tech-mentor`
+`ผู้ตรวจต่อชิ้น` (checker per piece): a fresh `reviewer`
+`รออนุมัติที่เจอบ่อย` (common items awaiting approval): sending email · cancelling a service · deleting a lot of email · registering for an exam · buying a course · pushing to a public repo
 
 <!-- superuser:begin unattended-steps -->
 ## ขั้นตอน — Steps (copy into the todo exactly)
@@ -31,7 +32,3 @@ Labels kept in Thai because the validator matches them: `ใคร:` = who · `�
 
 All the step 1 conditions pass, or every remaining piece has a reason why it is stuck
 <!-- superuser:end unattended-steps -->
-
-## Sources
-
-Checking tools before starting and stopping when absent: pagerduty (LICENSE present, type not yet stated) · `commands/pre-commit-risk-scoring.md` and rootly · `agents/deploy-guardian.md` · outbox: claude-remember (redistribution not permitted · take the mechanism only) · `outbound/README.md` · see 2026-11-10
