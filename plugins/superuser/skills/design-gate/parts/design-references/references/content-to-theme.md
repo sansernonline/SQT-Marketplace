@@ -2,7 +2,7 @@
 
 Gate item 0 of `design-gate/design-references`. Open it on every design job, before you search or pick a colour.
 
-> **One rule:** read what the work is about before anything else, and write it as a 6-field brief. The brief decides the search terms, the mood, the imagery and the reason for every colour. A colour with no reason tied to the brief is a guess.
+> **One rule:** read what the work is about before anything else, and write it as a 7-field brief, starting with what the project itself means. The brief decides the search terms, the mood, the imagery and the reason for every colour. A colour with no reason tied to the brief is a guess.
 
 ## 1 · What to read
 
@@ -11,14 +11,16 @@ Read the real content the piece will carry or present, in this order, and stop w
 1. The request itself and any file the owner gave (document · README · menu · price list · script · product page)
 2. The project's own words: `docs/README.md` · `CONTEXT.md` · `DESIGN.md` · the copy that will sit on the piece
 3. The product or service itself: real screenshots · product photos · the shop or app
-4. Only a name and nothing else → fill the brief from the name and the request, mark the guessed fields `(เดา)` (guessed), carry on without stopping to ask, and put the guesses in the end-of-job question
+4. **What the project means**, not only this piece: why it exists, what its name means, what people should remember it for. Look in `DESIGN.md` (if it already has a `โปรเจกต์:` line, copy it), the README's opening, an about page or pitch. Write it once per project in `DESIGN.md`; later pieces reuse it.
+5. Only a name and nothing else → fill the brief from the name and the request, mark the guessed fields `(เดา)` (guessed), carry on without stopping to ask, and put the guesses in the end-of-job question
 
-## 2 · The brief (6 fields)
+## 2 · The brief (7 fields)
 
 Write it at the head of the work, or in `DESIGN.md` when the project has one. Keep the field names in Thai.
 
 ```
 เนื้อหา:
+- โปรเจกต์: <why the project exists · what its name means · what people should remember it for>
 - เรื่อง: <what this is, 1 line, in the work's own words>
 - ความหมาย: <the 1 message the viewer must get + what they should feel or do after seeing it>
 - คนดู: <who · age range or role · where they see it (phone · print · meeting room)>
@@ -29,8 +31,10 @@ Write it at the head of the work, or in `DESIGN.md` when the project has one. Ke
 
 Rules for the fields:
 
+- **โปรเจกต์ is the project's meaning, not this piece's.** 1–2 lines: the problem it solves for whom · where the name comes from and what it says (Foldrop = folder + drop: put a folder in, it lands safely) · the 1 idea people should remember. Do not invent a name story: if nothing says where the name comes from, write what the name sounds like and mark it `(เดา)`. Every piece of the project must fit this line; a piece that fights it is wrong even if it looks good.
 - **ความหมาย is one message.** If you need "and" twice, the piece is trying to say too much; pick the one the request leads with, note it under **ตัดสินใจเอง** (decided on my own), and offer the other in the end-of-job question. Do not stop mid-job to ask.
 - **อารมณ์ uses words you can check by eye**, taken from the row of section 3 you chose by **เรื่อง** and **คนดู** (pick the row first, then take its mood words; the same word can sit in rows with different colours · if the content clearly has a second side, add at most 1 word from a second row and name that row) (`พลังสูง` · `น่าเชื่อถือ` · `สงบ` …), not free adjectives like "modern" or "premium" (`design-gate/no-ai-look` bans ordering by free adjectives).
+- **ธีม and สี must trace back to โปรเจกต์ or ความหมาย.** At least 1 ธีม noun or 1 colour reason should come from the project's idea or its name (Foldrop → folders · a drop landing · safe storage), not only from the business type.
 - **ธีม comes from the work's world, not from tech clichés.** A dental clinic: enamel white · mint · clean steel · a smile. Not glowing circles or gradients "meaning technology".
 - **สี is a tone and a reason, not a hex yet.** When the brand guide fixes the colours, the reason is `ล็อกตามแบรนด์` (brand-locked); the brief then says which brand colour leads and why. The hex comes from the reference you pick in gate item 3 (or from the brand). The brief says which tone to look for and why.
 
@@ -80,8 +84,8 @@ How to use it:
 
 ## 5 · From brief to search and colour
 
-1. **Search terms**: set (a) exact = **เรื่อง** · set (b) competitor or close = the business type + **คนดู** · set (c) mood = **อารมณ์** + 2 nouns from **ธีม** (plus the owner's preferred-style words if any). Thai and English.
-2. **Picking references**: prefer work whose mood matches **อารมณ์** and whose imagery comes from a world like **ธีม**.
+1. **Search terms**: set (a) exact = **เรื่อง** · set (b) competitor or close = the business type + **คนดู** · set (c) mood = **อารมณ์** + 2 nouns from **ธีม** + 1 word from **โปรเจกต์** (plus the owner's preferred-style words if any). Thai and English.
+2. **Picking references**: prefer work whose mood matches **อารมณ์**, whose imagery comes from a world like **ธีม**, and whose idea can carry the project's meaning in **โปรเจกต์**.
 3. **Colours**: the reference is picked first (by the owner from the board, or by the agent under **ตัดสินใจเอง** when the owner is away); only then fix the hex. "Steps" item 4 of `design-gate/design-references` extracts palettes from every candidate so the board can show them; the final hex comes from the picked one's palette, then check the hex still fits the tone and reason in **สี**. If not, shift hue toward the brief's tone and check contrast again.
 4. **Order when they conflict**: approved brand guide → the owner's direct instruction for this job → `design-gate/no-ai-look` ban → **the brief's tone** → the owner's preferred style. The brand fixes colours and fonts, but the brief still decides mood, imagery and which brand colour leads.
 
@@ -91,19 +95,20 @@ Request: "ทำโพสต์เปิดร้านกาแฟสโลว�
 
 ```
 เนื้อหา:
+- โปรเจกต์: ร้าน "ละมุน" มีไว้ให้คนเมืองได้พักช้าลง · ชื่อแปลว่านุ่มนวล ไม่เร่ง · อยากให้จำว่าเป็นร้านที่ได้หายใจช้าลง
 - เรื่อง: ร้านกาแฟสโลว์บาร์ริมทะเลบางแสน เปิดใหม่
 - ความหมาย: มีร้านดริปช้าๆ ให้นั่งชิลริมทะเล → อยากแวะมาลองสัปดาห์นี้
 - คนดู: วัยทำงานและนักศึกษา 20–35 · เห็นในฟีด IG/Facebook บนมือถือ
 - อารมณ์: อยากลอง (แถวอาหาร) · สงบ (แถวธรรมชาติ เพราะริมทะเล) · ไม่เอา: พลังสูงแบบโปรลดราคา
-- ธีม: กาแฟดริป · แก้วเซรามิก · ไม้ · ทราย · แสงเย็น
+- ธีม: กาแฟดริป · แก้วเซรามิก · ไม้ · ทราย · แสงเย็น · เส้นโค้งนุ่ม (จากชื่อ ละมุน)
 - สี: น้ำตาลกาแฟอุ่นเป็นหลัก (อยากลอง · อุ่น) + ฟ้าทะเลอ่อนเป็นรอง (ริมทะเล · สงบ) · ที่มา: เนื้อหา → รอดึงจากต้นแบบ
 ```
 
-Search set (c) → "slow bar coffee beach calm" · "ร้านกาแฟ ดริป ริมทะเล โทนอุ่น".
+Search set (c) → "slow bar coffee beach calm unhurried" · "ร้านกาแฟ ดริป ริมทะเล โทนอุ่น ละมุน" (the last word comes from **โปรเจกต์**).
 
 ## Check before done
 
-- The brief has all 6 fields; guessed fields are marked `(เดา)` and asked about at the end
+- The brief has all 7 fields, `โปรเจกต์` first and the same as in `DESIGN.md`; at least 1 ธีม noun or colour reason traces back to it; guessed fields are marked `(เดา)` and asked about at the end
 - **อารมณ์** uses words from section 3; **ธีม** nouns come from the work's world
 - Every main and accent colour has a reason that points to **ความหมาย** or **อารมณ์**, or says `ล็อกตามแบรนด์`
 - No colour hits a "Watch out" item for this audience without a written reason

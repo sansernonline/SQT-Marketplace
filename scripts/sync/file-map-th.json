@@ -71,6 +71,7 @@
     "evals/brand-kit-behaviour/case.yaml": "เคส eval: kit ต้องมีฟอนต์ไทยที่มีอยู่จริงพร้อมใบอนุญาต และตรวจคอนทราสต์ตัวอักษรกับพื้นเป็นตัวเลข (4.5:1)",
     "evals/design-by-type-trigger/case.yaml": "เคส eval: ขอโปสเตอร์งานสัมมนาโดยไม่เอ่ยชื่อ skill ต้องทำให้ design-by-type ถูกเปิด",
     "evals/design-by-type-behaviour/case.yaml": "เคส eval: ขอแบนเนอร์ร้านเมล็ดกาแฟ ต้องจดยอดนิยมของต้นแบบพร้อมวันที่ และเขียนสูตรผสม 2–3 ชิ้นต่อแนว",
+    "evals/narration-th-regression/case.yaml": "เคส eval: บทพรีเซนต์ต้องไม่ให้เครื่องอ่านแยกคำผิด และตัวย่ออ่านทีละตัว (คำของเจ้าของ 2026-11-26)",
     "evals/design-by-type-regression/case.yaml": "เคส eval: เจ้าของบอกว่างานยังดูแข็ง สีโอเคแล้ว ต้องตอบด้วยคำถามความแข็ง 6 ข้อ ไม่เปลี่ยนสี (เห็นจริง 2026-11-18)",
     "evals/banner-design-trigger/case.yaml": "เคส eval: บริษัทขอภาพปก webinar ลง Facebook กับ LinkedIn ไม่เอ่ยชื่อ skill ต้องทำให้ banner-design ถูกเปิด",
     "evals/brand-kit-trigger/case.yaml": "เคส eval: เจ้าของร้านบ่นว่าโพสต์ดูไม่เป็นชุด ไม่เอ่ยชื่อ skill ต้องทำให้ brand-kit ถูกเปิด และคำตอบมีบทบาทของสี",

@@ -64,11 +64,14 @@ def load_lexicon(path):
     return sorted(pairs, key=lambda p: -len(p[0]))  # คำยาวก่อน กัน GitHub ถูกแทนเป็น กิต+Hub
 
 
-def spoken_of(text, lexicon):
+def spoken_of(text, lexicon, join=False):
+    """join=True (--keep-spaces): คำอ่านรวมเป็นคำเดียว และลบช่องว่างรอบคำละตินที่ถูกแทน · ช่องว่างพวกนี้มีไว้ให้คนอ่าน แต่เครื่องหยุดตรงนั้น"""
     s = " ".join(text.split("\n"))
     for word, reading in lexicon:
         if re.fullmatch(r"[A-Za-z0-9.+# -]+", word):  # คำละติน (รวมศัพท์หลายคำ): แทนเฉพาะทั้งคำ ไม่สนตัวพิมพ์
-            s = re.sub(rf"(?<![A-Za-z0-9]){re.escape(word)}(?![A-Za-z0-9])", lambda _m: reading, s, flags=re.I)
+            pat = rf"(?<![A-Za-z0-9]){re.escape(word)}(?![A-Za-z0-9])"
+            say = reading.replace(" ", "") if join else reading
+            s = re.sub(rf" *{pat} *" if join else pat, lambda _m: say, s, flags=re.I)
         else:
             s = s.replace(word, reading)
     return s
@@ -117,8 +120,12 @@ def smooth(s):
     return re.sub(r"(?<=[฀-๿])\s+(?=[฀-๿])", "", s)
 
 
-def read_aloud(text, lexicon, respell):
-    """ข้อความที่ส่งเครื่องอ่าน: คำอ่าน → เลขเป็นคำ → ตัดช่องว่างกลางประโยค → สะกดใหม่ (สะกดใหม่เว้นวรรคเองได้จึงอยู่ท้าย)"""
+def read_aloud(text, lexicon, respell, keep_spaces=False):
+    """ข้อความที่ส่งเครื่องอ่าน: คำอ่าน → เลขเป็นคำ → ตัดช่องว่างกลางประโยค → สะกดใหม่ (สะกดใหม่เว้นวรรคเองได้จึงอยู่ท้าย)
+    keep_spaces: ช่องว่างไทย-ไทยเป็นจังหวะเว้นสั้น · "," เป็นที่หยุด (บทพรีเซนต์ประโยคยาวต่อสไลด์ · เจ้าของรับ 2026-11-26)"""
+    if keep_spaces:
+        s = spoken_of(numbers_to_thai(spoken_of(text, lexicon, join=True)), respell)
+        return re.sub(r",(?=\S)", ", ", s).strip()
     return spoken_of(smooth(numbers_to_thai(spoken_of(text, lexicon))), respell)
 
 
@@ -204,6 +211,9 @@ def self_test():
                    ("ปีและเลขเป็นคำทั้งก้อน", numbers_to_thai("ปี 2569 มี 1,250,000 บาท 21 ตัว 3.5 โวลต์ เบอร์ 081 ESP32")
                     == "ปี สองพันห้าร้อยหกสิบเก้า มี หนึ่งล้านสองแสนห้าหมื่น บาท ยี่สิบเอ็ด ตัว สามจุดห้า โวลต์ เบอร์ ศูนย์แปดหนึ่ง ESP32"),
                    ("ตัดช่องว่างกลางประโยคไทย คงช่องว่างข้างอักษรละติน", smooth("ปี สองพัน\nห้าร้อย ใช้ Git ได้") == "ปีสองพันห้าร้อยใช้ Git ได้"),
+                   ("--keep-spaces: คงช่องว่างไทย ลบช่องว่างรอบคำที่แทน รวมคำอ่าน",
+                    read_aloud("ส่งผ่าน Tablet เข้าเครื่อง POS,เร็ว", [("Tablet", "แทป เล็ต"), ("POS", "พี-โอ-เอส")], [], keep_spaces=True)
+                    == "ส่งผ่านแทปเล็ตเข้าเครื่องพี-โอ-เอส, เร็ว"),
                    ("เวลา .srt", ts(3661.5) == "01:01:01,500" and ts(0.0004) == "00:00:00,000"),
                    ("เวลา data-at ปัดไม่ล้นนาที", mss(59.97) == "1:00.0" and mss(75.25) == "1:15.2")]
         if not shutil.which("ffmpeg"):
@@ -239,6 +249,8 @@ def main():
     ap.add_argument("--rate", default="+0%", help="edge: ความเร็ว เช่น -10%%")
     ap.add_argument("--lexicon")
     ap.add_argument("--respell", help="คำอ่าน<TAB>คำที่สะกดให้เสียงอ่านถูก · ใช้หลัง --lexicon")
+    ap.add_argument("--keep-spaces", action="store_true",
+                    help="บทพรีเซนต์: ช่องว่างไทยเป็นจังหวะเว้นสั้น ใส่ , ตรงที่ต้องการหยุด · ไม่ใส่ = ตัดช่องว่างไทยทิ้ง (พอดแคสต์)")
     # ค่าตั้งต้น 4 ตัวนี้ยังไม่ได้วัด · ปรับตามจังหวะของงานได้
     ap.add_argument("--gap", type=float, default=0.25, help="ช่วงเงียบระหว่างซับ (วินาที) ค่าตั้งต้น ยังไม่ได้วัด")
     ap.add_argument("--slide-gap", type=float, default=0.6, help="ช่วงเงียบก่อนซับที่เปลี่ยนสไลด์ ค่าตั้งต้น ยังไม่ได้วัด")
@@ -260,7 +272,7 @@ def main():
     lexicon, respell = load_lexicon(a.lexicon), load_lexicon(a.respell)
     setting = {"windows": a.voice, "edge": f"{a.voice}|{a.rate}", "f5": f"{a.ref}|{a.ref_text}|{a.nfe}|{a.speed}|{a.f5_ckpt}"}[a.engine]
     for c in cues:
-        c["spoken"] = read_aloud(c["text"], lexicon, respell)
+        c["spoken"] = read_aloud(c["text"], lexicon, respell, a.keep_spaces)
         c["id"] = hashlib.sha1(f"{a.engine}|{setting}|{c['spoken']}".encode()).hexdigest()[:12]
 
     # ใช้ซ้ำทั้งไฟล์ที่แปลงแล้วและไฟล์ดิบที่สร้างเสร็จก่อนงานล้ม (F5 บน CPU สร้างช้า ไม่ควรเริ่มใหม่ทั้งตอน)

@@ -16,7 +16,7 @@
 | plugin | รุ่น | skill | บทบาท | คำสั่ง | ขนาด zip |
 |---|---|---:|---:|---:|---:|
 | `e-commerce` | 1.12.2 | 49 | 12 | 1 | 1.4 MB |
-| `graphic-design` | 0.36.2 | 39 | 10 | 0 | 1.4 MB |
+| `graphic-design` | 0.37.0 | 39 | 10 | 0 | 1.4 MB |
 | `personal-life` | 0.27.2 | 58 | 13 | 1 | 1.4 MB |
 | `software-development` | 3.10.2 | 114 | 42 | 12 | 7.9 MB |
 | `superuser` | 4.1.3 | 15 | 4 | 0 | 1.1 MB |
