@@ -42,11 +42,11 @@ A playbook never repeats how-to; it links to the skill. A skill never says who d
 
 | Plugin | Principle skill | Kinds of work covered |
 |---|---|---|
-| graphic-design | `design-principles` | logo · poster · banner · cover · slides · icon · video · thumbnail · product images · LINE |
-| software-development | `dev-principles` | code · architecture and API · testing · security · operations · requirements and docs · screens |
-| e-commerce | `shop-principles` | selling · customer care · shop money · Thai paperwork |
-| trading-finance | `money-principles` | personal money · investing · trading · scams and tax |
-| personal-life | `life-principles` | life admin · health care organising · career · learning · planning |
+| graphic-design | `design-principles` | logo · poster · banner · cover · slides · icon · short and long video · audio · thumbnail · product images · LINE |
+| software-development | `dev-principles` | code · architecture and API · testing · security · operations · requirements and docs · screens · data and AI · mobile and games · regulated domains · documents and diagrams |
+| e-commerce | `shop-principles` | selling · customer care · shop money · Thai paperwork · LINE OA · business setup · buying |
+| trading-finance | `money-principles` | personal money · investing · trading · scams and tax · company financials · news and alerts |
+| personal-life | `life-principles` | life admin · health care organising · career · learning · planning · family home · family legal · tech growth |
 
 A plugin's principle skill is read only when that plugin is installed. This skill and its table always work, because every plugin depends on `superuser`.
 

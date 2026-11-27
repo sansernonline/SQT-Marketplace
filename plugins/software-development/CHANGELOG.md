@@ -1,5 +1,9 @@
 # Changelog — software-development
 
+## 3.11.1 — 2026-11-27
+
+- `dev-principles` เพิ่ม 4 ชนิดงาน: data-ai · mobile-game · domain-systems · documents-diagrams · ตัวเลข กำหนดเวลา และมาตรากฎหมายที่มีแหล่งไม่ถึง 3 แหล่งตัดออก ให้ไปดูใน skill แทน
+
 ## 3.11.0 — 2026-11-27
 
 - skill ใหม่ `dev-principles`: หลักคิด 7 ชนิดงาน (code · architecture-api · testing · security ตาม OWASP Top 10:2025 · operations · requirements-docs · ui) ทุกข้อมีแหล่งตรงกันอย่างน้อย 3 แหล่ง

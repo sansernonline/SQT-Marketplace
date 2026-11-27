@@ -1,5 +1,9 @@
 # Changelog — personal-life
 
+## 0.28.1 — 2026-11-27
+
+- `life-principles` เพิ่ม 3 ชนิดงาน: family-home · family-legal · tech-growth · ตัวเลข กำหนดเวลา และมาตรากฎหมายที่มีแหล่งไม่ถึง 3 แหล่งตัดออก ให้ไปดูใน skill แทน
+
 ## 0.28.0 — 2026-11-27
 
 - skill ใหม่ `life-principles`: หลักคิด 5 ชนิดงาน (life-admin · health-care จัดระเบียบเท่านั้น ไม่วินิจฉัย ไม่บอกขนาดยา · career · learning · planning) ทุกข้อมีแหล่งตรงกันอย่างน้อย 3 แหล่ง

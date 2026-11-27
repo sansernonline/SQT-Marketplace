@@ -1,5 +1,9 @@
 # Changelog — trading-finance
 
+## 0.25.1 — 2026-11-27
+
+- `money-principles` เพิ่ม 2 ชนิดงาน: fundamentals · market-watch · ตัวเลข กำหนดเวลา และมาตรากฎหมายที่มีแหล่งไม่ถึง 3 แหล่งตัดออก ให้ไปดูใน skill แทน
+
 ## 0.25.0 — 2026-11-27
 
 - skill ใหม่ `money-principles`: หลักคิด 4 ชนิดงาน (personal-money · investing · trading · money-safety-tax) เป็นแนวปฏิบัติทั่วไป ไม่ใช่คำแนะนำรายบุคคล · ตัด "อ่านงบบริษัท" ออกเพราะแหล่งไม่ถึง 3

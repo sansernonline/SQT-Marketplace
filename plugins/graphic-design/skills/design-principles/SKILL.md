@@ -34,6 +34,8 @@ A playbook never repeats how-to; it links to the skill. A skill never says who d
 | Word/PDF cover · slide deck | [`document-cover.md`](../design-by-type/references/document-cover.md) · [`slides.md`](../design-by-type/references/slides.md) | `design-by-type` · `style-consistency` | `design` |
 | Icons · favicon · app icon | [`references/icon.md`](references/icon.md) | `icon-design` | `design` |
 | Short video · Reels · TikTok · ads | [`references/video.md`](references/video.md) | `video-script-to-clip` · `video-editing` · `subtitles-th` · `narration-th` · `motion-basics` | `video` |
+| Long video (tutorial · review · interview · narrated presentation) | [`references/long-video.md`](references/long-video.md) | `video-script-to-clip` · `speaking-script` · `video-editing` · `subtitles-th` · `narration-th` | `video` |
+| Audio (sonic logo · jingle · voice-over · podcast) | [`references/audio.md`](references/audio.md) | `narration-th` · `speaking-script` · `video-editing` · `brand-kit` | `video` · `brand-setup` |
 | Motion graphics · animated logo | `motion-basics` section "The 12 principles" | `motion-basics` | `video` |
 | YouTube thumbnail | [`references/thumbnail.md`](references/thumbnail.md) | `youtube-thumbnail` | `image-series` |
 | Product images (Shopee · Lazada · TikTok Shop) | [`references/product-images.md`](references/product-images.md) | `marketplace-product-images` · `image-editing-brief` | `image-series` |

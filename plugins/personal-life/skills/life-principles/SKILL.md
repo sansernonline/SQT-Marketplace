@@ -16,6 +16,9 @@ description: Use before life admin, health organising, career, learning or plann
 | Career | [`references/career.md`](references/career.md) | `resume-th-en` · `interview-prep` · `salary-negotiation` · `new-job-first-90-days` · `performance-self-review` · `job-exit` | `job-application` · `interview` · `offer-negotiation` · `promotion-case` · `profile-refresh` |
 | Learning | [`references/learning.md`](references/learning.md) | `learning-path` · `cert-prep` · `course-builder` · `thesis-writing` · `english-tech-reading` · `personal-kb` | `learning-path` · `cert-prep` · `paper-to-practice` |
 | Planning (week · goals · habits · tasks · meetings · inbox · decisions) | [`references/planning.md`](references/planning.md) | `weekly-review` · `goal-and-habit` · `task-board` · `calendar-audit` · `meeting` · `inbox-triage` · `decision-journal` | `weekly-reset` · `decide-and-goals` · `habit-tracking` · `meeting` |
+| Family home (school · meals · gifts · family calendar) | [`references/family-home.md`](references/family-home.md) | `kids-school` · `meal-plan-grocery` · `family-week` · `gift-idea-tracker` | `family-week` |
+| Family legal (wills · inheritance · disputes; no legal advice) | [`references/family-legal.md`](references/family-legal.md) | `estate-and-will` · `legal-help-prep` · `important-docs` | `documents` |
+| Tech growth (side projects · keeping up) | [`references/tech-growth.md`](references/tech-growth.md) | `side-project-picker` · `tech-radar` | `side-project` · `tech-radar` |
 
 Every job also follows `superuser:work-principles` (prove it works · small steps · simple · root cause · human writing · sources).
 

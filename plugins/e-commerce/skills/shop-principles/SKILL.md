@@ -15,6 +15,9 @@ description: Use before selling, customer care, shop money or Thai paperwork wor
 | Customer care (returns · refunds · reviews · complaints · warranty) | [`references/customer-care.md`](references/customer-care.md) | `returns-and-bad-reviews` · `refund-request` · `complain` · `warranty-tracker` | `customer-issue` · `refund` · `complaint` · `warranty-claim` |
 | Shop money (pricing · landed cost · cash · stock · shipping · books) | [`references/shop-money.md`](references/shop-money.md) | `marketplace-fees-pricing` · `import-landed-cost` · `cash-flow` · `multi-shop-stock` · `shipping-compare` · `sme-bookkeeping` | `pricing-check` · `stock-sync` · `monthly-close` |
 | Thai paperwork (tax · VAT · payroll · labour · contracts · PDPA · DBD) | [`references/thai-paperwork.md`](references/thai-paperwork.md) | `tax-vat-th` · `e-tax-invoice` · `payroll-th` · `labour-law-basics` · `doc-contract-th` · `pdpa-workflow` · `dbd-annual-filing` | `business-doc` · `pdpa-setup` · `year-end` · `monthly-close` |
+| LINE OA and chatbot | [`references/line-oa.md`](references/line-oa.md) | `line-oa-setup` · `line-chatbot` · `line-broadcast` · `pdpa-workflow` | `line-oa` · `pdpa-setup` |
+| Starting a Thai business | [`references/business-setup.md`](references/business-setup.md) | `thai-business-setup` · `thai-holidays` · `seller-tax-basics` · `sme-bookkeeping` | `business-doc` |
+| Buying (for use or for the shop) | [`references/buying.md`](references/buying.md) | `buy-compare` · `warranty-tracker` · `complain` · `refund-request` | `buy-decision` · `warranty-claim` |
 
 Every job also follows `superuser:work-principles` (prove it works · small steps · simple · root cause · human writing · sources).
 

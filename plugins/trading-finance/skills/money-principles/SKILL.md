@@ -15,6 +15,8 @@ description: Use before budgeting, investing, trading or tax and scam checks to 
 | Long-term investing | [`references/investing.md`](references/investing.md) | `mutual-fund-picker` · `rebalance-and-dca` · `dividend-tracker` · `portfolio-snapshot` · `bonds-and-deposits` | `portfolio-check` |
 | Active trading | [`references/trading.md`](references/trading.md) | `position-sizing` · `trade-journal` · `paper-trading` · `technical-signals` · `copy-trade-check` | `pre-trade` · `trade-review` |
 | Scams and Thai tax | [`references/money-safety-tax.md`](references/money-safety-tax.md) | `scam-check` · `tax-basics-th` · `tax-deduction-planner` | `scam-check` · `tax-season` |
+| Reading company financial statements | [`references/fundamentals.md`](references/fundamentals.md) | `stock-fundamentals` · `dividend-tracker` | `pre-trade` · `review` |
+| News · watchlists · alerts | [`references/market-watch.md`](references/market-watch.md) | `news-impact` · `watchlist-setup` · `alert-set` | `portfolio-check` · `pre-trade` |
 
 Every job also follows `superuser:work-principles` (prove it works · small steps · simple · root cause · human writing · sources).
 

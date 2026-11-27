@@ -1,5 +1,9 @@
 # CHANGELOG — e-commerce
 
+## 1.13.1 — 2026-11-27
+
+- `shop-principles` เพิ่ม 3 ชนิดงาน: line-oa · business-setup · buying · ตัวเลข กำหนดเวลา และมาตรากฎหมายที่มีแหล่งไม่ถึง 3 แหล่งตัดออก ให้ไปดูใน skill แทน
+
 ## 1.13.0 — 2026-11-27
 
 - skill ใหม่ `shop-principles`: หลักคิด 4 ชนิดงาน (selling · customer-care · shop-money · thai-paperwork) ทุกข้อมีแหล่งตรงกันอย่างน้อย 3 แหล่ง · ข้อที่อ้างร่างกฎหมายระบุว่ายังไม่ประกาศใช้

@@ -18,6 +18,10 @@ description: Use before code, architecture, tests, ops, docs or screen work to k
 | Operations · release · incidents | [`references/operations.md`](references/operations.md) | `cicd-and-release` · `observability-basics` · `incident-response` · `postmortem-template` | `ship` · `investigation` |
 | Requirements · project documents | [`references/requirements-docs.md`](references/requirements-docs.md) | `srs-writing` · `fsd-writing` · `user-story-writer` · `adr-writer` · `release-notes` · `project-doc-set` | `project-docs` · `new-project` |
 | Application screens (web · mobile · Windows) | [`references/ui.md`](references/ui.md) | `ui-craft` · `web-app-design` · `mobile-app-design` · `windows-app-design` · `web-quality-audit` | `feature` · `visual-parity` |
+| Data · AI/LLM · voice agents · MCP | [`references/data-ai.md`](references/data-ai.md) | `data-analysis` · `data-import-export` · `llm-engineering` · `voice-agent` · `mcp-server` | `feature` · `prototype` |
+| Mobile apps · games | [`references/mobile-game.md`](references/mobile-game.md) | `mobile-engineering` · `mobile-app-design` · `game-development` | `feature` · `ship` · `performance` |
+| Regulated or money domains (payments · health · insurance · IoT · smart contracts · SaaS · checkout · legal docs) | [`references/domain-systems.md`](references/domain-systems.md) | `fintech-payments` · `healthcare-systems` · `insurance-systems` · `iot-systems` · `smart-contracts` · `saas-platform` · `ecommerce-patterns` · `legal-document-systems` | `feature` · `review` · `ship` |
+| Designed documents · slides · diagrams | [`references/documents-diagrams.md`](references/documents-diagrams.md) | `branded-document-design` · `presentation-design` · `html-slide-deck` · `diagram-figures` · `software-diagrams` | `project-docs` |
 
 Every job also follows `superuser:work-principles` (prove it works · small steps · simple · root cause · human writing · sources).
 
