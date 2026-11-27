@@ -73,7 +73,7 @@ The "Rule" column is the name in `scripts/slop_scan.py` (empty = checked by the 
 | A status dot that blinks nonstop | Still · moves when the status changes | `pulsing-dot` | IM (1 source) |
 | A blinking cursor in still text | Keep it in typeable fields | `blinking-cursor` | IM (1 source) |
 | Text/logos that scroll by themselves | Still, or with a stop button | `marquee` | IM (1 source) |
-| Bouncy or stretchy easing | Settle fast · bounce only where it fits the product | `bounce-easing` | IM · GD motion-basics |
+| Bouncy or stretchy easing | Settle fast · bounce only where it fits the product | `bounce-easing` | IM · GD video-editing |
 | Animating width, spacing, or `transition: all` | transform/opacity | `layout-animation` | IM (1 source) |
 | An image that zooms or rotates on hover | Still, unless it says it can be clicked | `hover-zoom-image` | IM (1 source) |
 | Content hidden waiting for an animation, and if the script fails it never appears | Visible by default | | IM (1 source) |

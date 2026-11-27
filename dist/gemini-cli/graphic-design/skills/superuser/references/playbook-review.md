@@ -2,7 +2,7 @@
 
 Use when: checking work before delivery or real use · "ช่วยดูหน่อยว่ามีอะไรพลาด" (take a look and see if anything is wrong) · the user did it themselves and wants it checked
 Result: a verdict with a list of confirmed problems · **does not fix anything automatically** · read-only work, so it does not create `CONTEXT.md`
-Main skills: `design-review` · `brand-kit` · `social-formats` · agent `design-critic`
+Main skills: `design-review` · `brand-kit` · `campaign-set` · agent `design-critic`
 
 ## ขั้นตอน (Steps) (copy into the todo exactly)
 

@@ -1,0 +1,827 @@
+# skill: design-by-type
+
+Use when a logo, poster, banner, thumbnail or deck needs refs
+
+# design-by-type — sort the job by type, read the project, blend 2–3 popular references, let the owner pick
+
+> **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `design-gate/no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` (plugin `superuser`) · close the work with a `ด่านก่อนลงมือ:` line
+
+> **One rule:** every direction is a blend of 2–3 real, popular works that fit this project, with a written recipe of what came from each. The owner asked for this flow on 2026-11-19: "แยกก่อนว่าเป็นงานประเภทไหน … หาตัวอย่างที่ดูสวยงาม เช็คดูว่ามียอด view เยอะ มา 2-3 งาน แล้ว รวมให้เป็นงานใหม่ให้กลมกลืนกัน".
+
+This skill adds 3 things on top of `design-gate/design-references`: the type's own rules, a popularity check on references, and the blend recipe. The search, board and owner pick stay in `design-gate/design-references`; do not repeat them here.
+
+> The general method for any medium is `superuser` `design-gate/parts/design-method/guide.md` (12 steps); this skill adds the type rules, popularity check and blend.
+
+## Use when
+- A logo · poster · banner or social ad · YouTube thumbnail · Word/PDF cover · slide deck is about to be designed, from scratch or as a redesign.
+- The owner says the work looks stiff, generic or AI-made, and the job is one of those types.
+
+Not for: screens and web pages → `software-development:ui-craft` · icons → `icon-design` · a whole brand kit → `brand-kit` (it calls this skill for the logo) · a quick one-off logo or poster inside a software project, no reference blend → `software-development:graphic-design`.
+
+## Steps
+
+1. **Name the type**, then open its file. One job with several types (logo + cover) → open each.
+
+   | Type | File | Also open |
+   |---|---|---|
+   | Logo · wordmark · brand mark | [`references/logo.md`](references/logo.md) | `brand-kit` · `icon-design` (licensed sets) |
+   | Poster · flyer · event key visual | [`references/poster.md`](references/poster.md) | `print-ready-files` |
+   | Banner · social post · ad | [`references/banner.md`](references/banner.md) | [`references/banner-build.md`](references/banner-build.md) · `campaign-set` · `copy-claims-check` |
+   | Word/PDF cover and inner pages | [`references/document-cover.md`](references/document-cover.md) | `software-development:branded-document-design` |
+   | Slide deck · company profile | [`references/slides.md`](references/slides.md) | `software-development:presentation-design` · `brand-kit` (style lock) |
+   | YouTube thumbnail | [`references/thumbnail.md`](references/thumbnail.md) | `campaign-set` |
+
+2. **Read the project before searching.** For a logo, icon or key visual, first fill the feeling list and idea map in [`references/meaning-first.md`](references/meaning-first.md): 2–3 feelings the customer must get, one meaning per mark, objects from the work environment, one locked style per direction (owner 2026-11-27). Write 2 lines: what the project is (industry · audience · what the piece must make people do) and which 1–2 style families fit. Look the industry up first, it gives looks and cautions:
+   ```bash
+   python <software-development>/skills/design-direction-lookup/scripts/design_search.py "<คำของโปรเจกต์>" --domain industry -n 1
+   ```
+   The project beats the owner's general taste: a coffee shop gets a coffee look even though the owner likes tech-modern. Keep the owner's taste in what transfers (depth, light, one strong focal element).
+
+3. **Search references in that style family** per `design-gate/design-references` steps 1–3, using the type file's site list. Add the type and style words to every query (`logistics company profile deck`, not `deck`).
+
+4. **Check popularity and fit** on each work page you open, and write it down. See [`references/blend.md`](references/blend.md) section 1 for which number each site shows. Keep 5–8 works that are both popular for their site and close to the project; popularity alone does not qualify a work that misfits the project.
+
+5. **Blend 2–3 works per direction** with the recipe sheet in [`references/blend.md`](references/blend.md) section 2: one work gives the structure, one gives the signature device or hero treatment, one gives the colour and light mood. Change what makes it ours (hue shift, our content, our type). 3 directions must differ in structure, not only colour.
+
+6. **Build at real size, polish, and look at it.** Apply the polish pass in [`references/polish.md`](references/polish.md) (depth, overlap, light, shape) before the first critic. For a logo or icon, also build the **flat design** version of every direction per [`references/flat-design.md`](references/flat-design.md) and show both styles side by side (owner 2026-11-27). Render each direction to PNG, open it, then run the type file's check list and the stiffness check in `design-gate/no-ai-look` (plugin `superuser`) `references/stiffness.md`. Fix and render again until it passes. Then have a fresh `design-critic` give the wow score in [`references/wow-score.md`](references/wow-score.md); send only at 7/10 or more with no 0, else fix the lowest criterion and score again (at most 2 rounds).
+
+7. **Send the 3 directions for the owner to pick** (board page or artifact with the PNGs, the recipe line under each, and the reference links). The owner adjusts from there; record the pick and their words per `design-gate/design-references` "Remember the owner's taste".
+
+## Check before done
+- The type file was opened and its check list passed on every PNG.
+- Every direction lists 2–3 references with link, popularity number and date, and what came from each.
+- The 2-line project read exists and the style fits the project, not only the owner's taste.
+- Stiffness check passed; the `ด่านก่อนลงมือ:` line is complete.
+
+## References
+- [`references/meaning-first.md`](references/meaning-first.md) — open before searching for a logo, icon or key visual: feelings → idea map from the work environment → one style per direction → what to search
+- [`references/flat-design.md`](references/flat-design.md) — open for every logo or icon, and any flat direction: the full-colour flat style built beside the depth one
+- [`references/polish.md`](references/polish.md) — open while building: the depth, overlap, light and shape pass that makes round 1 look finished
+- [`references/wow-score.md`](references/wow-score.md) — open before sending: the 5-criterion wow score and the send rule
+- [`references/blend.md`](references/blend.md) — popularity numbers per site and the blend recipe sheet
+- [`references/logo.md`](references/logo.md) · [`references/poster.md`](references/poster.md) · [`references/banner.md`](references/banner.md) · [`references/document-cover.md`](references/document-cover.md) · [`references/slides.md`](references/slides.md) — rules, sites and checks per type
+- [`references/sources.md`](references/sources.md) — sources and check dates
+
+## Parts
+
+Hard rules of the two absorbed jobs (full steps in each file; the type file above still gives the beauty rules):
+- **Banner build** ([`references/banner-build.md`](references/banner-build.md)): deliver 3 banner directions as real-size PNGs laid side by side, each with a real reference opened this round · sizes come from the platform's official page, not the copied file · run `scripts/render_banner.py` on every direction (size matches, Thai font loaded) · no other brand's logo without permission · print work is 300 dpi, 3–5 mm bleed, CMYK.
+- **YouTube thumbnail** ([`references/thumbnail.md`](references/thumbnail.md)): it must be understood at 168 px wide · 16:9, text of 4 words or fewer, contrast 4.5:1 or more · bottom-right corner empty · size and file ceilings looked up live from YouTube Help · it must match the video and not trick people into clicking.
+
+| When | Open |
+|---|---|
+| Making a banner, event cover or web hero at real size | [references/banner-build.md](references/banner-build.md) |
+| Banner sizes, 22 art directions, example queries (MIT copy) | [references/uipro-banner-sizes-and-styles.md](references/uipro-banner-sizes-and-styles.md) · [references/sources-banner.md](references/sources-banner.md) |
+| Rendering a banner HTML to PNG and comparing with a reference | `scripts/render_banner.py` |
+| Making a YouTube thumbnail | [references/thumbnail.md](references/thumbnail.md) |
+| YouTube size, file and account rules, Test & compare | [references/youtube-requirements.md](references/youtube-requirements.md) · [references/sources-thumbnail.md](references/sources-thumbnail.md) |
+| Pairwise input for choosing between thumbnails | [references/thumbnail-pairwise.example.json](references/thumbnail-pairwise.example.json) |
+
+
+## reference: banner-build.md
+
+
+# design-by-type — 3 banner directions at real size, checked before delivery
+
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `design-gate/no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
+
+The owner is the agent `social-creator`.
+
+> **One rule:** deliver 3 banner directions rendered as real-size PNGs and laid side by side. Each direction has a real reference opened in this round, not a direction you made up.
+
+## Use when
+
+- Seminar, webinar or event covers · page headers for Facebook, LinkedIn, YouTube · web hero images · web ad banners · large printed signs
+
+Do not use when:
+
+| Situation | Use |
+|---|---|
+| You only want platform sizes and safe areas | `campaign-set` |
+| A campaign of many pieces across platforms from one direction | `campaign-set` (it calls this skill for the banner piece) |
+| A YouTube video cover | `design-by-type` |
+| Sending files to a print shop | `print-ready-files`, after step 5 |
+
+## Steps
+
+1. **Collect the brief once** (use `AskUserQuestion` · do not ask what the conversation already answers): where it is used and the size · headline, sub-text, button or action · brand logo, colours, fonts · date, time, place · if you do not know the real data, put `(รอยืนยัน)` (awaiting confirmation) and do not invent it
+2. **Find real references** following `design-gate/design-references` (plugin `superuser`): first read the "สไตล์ออกแบบที่ชอบ" (favourite design styles) section in `~/.claude/superuser-style.md` · search at least 1 site in the `theme` category and 1 in the `social` category (Pinterest · Behance) with queries like `[purpose] banner design [style]` · `creative banner layout [industry]` (more example queries at the end of [`uipro-banner-sizes-and-styles.md`](uipro-banner-sizes-and-styles.md)) · open each page by hand, no fetch script · collect 3–5 images
+3. **Pick 3 art directions** from the 22 in the reference file, and make them truly different (for example plain minimal · big type as the hero · 3D objects) · write 1 line per direction on why it fits this job, and cite the reference from step 2
+4. **Build real-size HTML/CSS**, 1 file per direction · the outermost frame is `<div class="stage">` with width and height exactly the size · key items sit in the centre 70–80 %, at least 50 px from the edge · at most 2 font families, and both must fully support Thai (see `design-direction-lookup` domain `font`) · headline at least 32 px, body at least 16 px · one button, at least 44 px tall · text against background contrast at least 4.5:1 · one icon set (`icon-design`) inserted as `<span class="ic" style="--i:url(icons/x.svg)">`
+   - Illustrations in this order: what the user supplied → images under an open licence (categories `3d` · `illustration` in `design-gate/design-references`) → an image tool the session has (the prompt contains no text in the image) → build it with CSS and layered SVG (gradients, soft shadows, glowing edges) · never draw icons or logos yourself
+   - All text lives in the HTML, not in the image, so it can be edited later
+5. **Render and check the size**
+   ```bash
+   python scripts/render_banner.py <ไฟล์>.html --size 1200x628 --out <ไฟล์>.png --compare <ภาพต้นแบบ>.png
+   ```
+   You get a PNG at 2x resolution · it reports which fonts really loaded (Thai font not showing = do not send) · a size mismatch exits with 1 · `--compare` puts the reference on top and our work below · the script writes `<ไฟล์>.built.html` beside the source file (icons are inlined) and it can be deleted
+6. **Check it does not look AI-made** following `design-gate/no-ai-look`: run `slop_scan.py` on the HTML file · for things you deliberately copied from the reference (line pattern · light behind the object) write `slop-ok` with the reason · send the comparison image to a fresh `design-critic` to find 3 points where we lose to the reference, with scores of 1–10 for our work and the reference (answer in at most 10 lines) · fix, then render again
+7. **Deliver the 3 directions together.** Each direction has a PNG · a comparison image · the cited reference · the reviewer's score · the points where it still loses to the reference · let the user pick 1 direction, then make the other sizes
+
+## Rules
+
+- **Sizes come from official sources.** The sizes in the reference file are from the source as of the copy date. Before real delivery, compare with `campaign-set` and the platform's official page. If they conflict, use the official page.
+- The reference file says Meta reduces delivery of ads with more than 20 % text. Check this `(รอยืนยัน)` against Meta's official page before using it as a reason with a client. Less text is still easier to read anyway.
+- Do not use logos or images of other brands without permission. A partner logo must be a real file from its owner.
+- Print work: 300 dpi · 3–5 mm bleed · CMYK → hand over to `print-ready-files`
+
+## Check before sending
+
+- [ ] Each of the 3 directions has a real reference from this round (with a link)
+- [ ] `render_banner.py` on every direction: size matches · Thai font really loaded
+- [ ] Open every PNG by eye · key items are in the safe area · shrunk to half, the headline is still readable
+- [ ] `slop_scan.py` P0 0 · P1 0 · remaining P2 have a `slop-ok` reason
+- [ ] The fresh reviewer has scored it, and you told the user plainly where it still loses to the reference
+- [ ] Unknown data is marked `(รอยืนยัน)` and not invented
+
+## References
+
+- [`uipro-banner-sizes-and-styles.md`](uipro-banner-sizes-and-styles.md) — the 22 art directions, sizes and example queries (steps 2 and 3)
+- [`sources-banner.md`](sources-banner.md) — credit and licence of the reference file (MIT, `LICENSE-uipro`)
+
+
+## reference: banner.md
+
+# Banner · social post · ad
+
+Sizes, safe zones and the render script live in `design-by-type` and `campaign-set`; this file adds the beauty rules and where to find popular work. Tested 2026-11-19 on a fictional Chiang Rai coffee-bean shop ad (1200x628); the test images are kept in `scripts/evals/beauty/baseline/2026-11-19/`.
+
+## Where to look
+
+| Source | What it gives | Popularity shown |
+|---|---|---|
+| Meta Ad Library (search the product in Thai, country TH) | what real competitors run now | no likes; an ad running for months is a working ad, so use the start date |
+| Real brands in the industry (the shop's own competitors, a famous roaster) | photo mood, product shots, offer wording | none |
+| Dribbble search sorted by Popular | layout ideas, hero devices | views · likes on the shot page |
+| Behance · Pinterest · template stores | more layouts | often blocked to scripts (403 or Cloudflare, 2026-11-19); open by hand or skip |
+
+## Beauty rules
+
+1. One message is the hero, about 3–4 times larger than anything else ("ส่งฟรี" or a big number). Source: uipro `banner-sizes-and-styles.md` visual hierarchy; test 2026-11-19.
+2. One button, at least 44 px tall, contrasting clearly with what is behind it. Source: uipro CTA rules.
+3. Offer terms sit next to the button, small but present (end date, area). Source: `copy-claims-check`.
+4. Real product photos, not icons; nearly every Thai coffee ad in Meta Ad Library used a real bag or real beans (2026-11-19).
+5. At most 2 font families, both with full Thai; heading 32 px or more, body 16 px or more on 1200 wide. Source: uipro typography.
+6. Text covers about a fifth of the image; the photo does the rest. Whether Meta still limits ads with more than 20 % text is unconfirmed (see [`banner-build.md`](banner-build.md)); less text reads faster either way.
+7. Depth from overlap: a label, plate or number crosses the edge of the photo at 1–2 spots. Source: `design-gate/design-references` `depth-and-light.md`, Dribbble "Coffee Banner KV".
+8. Photo fades into the background with a mask instead of sitting in a hard rectangle.
+9. Colours come from the product (roasted bean, cherry red, leaf green), not from the owner's general tech palette; the project beats the owner's taste.
+10. Keep key items at least 50 px from every edge per `design-by-type`; leave more room left and right (blog summaries of Meta specs say up to 120 px, `(ยังไม่ได้ตรวจ)`) when the ad also runs in placements that crop.
+11. Credit licensed photos in a corner at about 10 px.
+
+## Stiff or AI-looking in the first drafts (2026-11-19) and the fix
+
+- A badge repeating the headline, floating mid-photo → give it new information (origin) and seat it across the seam between shadow and photo.
+- The same claim ("from Doi Chiang Rai") in badge, subhead and body → say it once.
+- A photo cropped so tight it became a dotted circle → crop wider so the real object (plate rim) shows.
+- An underline floating away from its word → a highlight bar touching the word.
+- A small label above the heading (`eyebrow-badge`) → fold it into the body text (the only exception is the italic word in decks, `slides.md` rule 9).
+
+## Check before sending
+- [ ] One hero message, ≥ 3× the next size
+- [ ] One button; terms beside it
+- [ ] Real product photo with credit
+- [ ] At least 1 overlap across the photo edge
+- [ ] Text inside the side margins
+- [ ] Colours trace to the product or a reference, not to a default
+
+
+## reference: blend.md
+
+# Popularity and blending · design-by-type
+
+## 1 · Popularity: which number each source shows
+
+Popularity tells you the work already pleased many people; fit tells you it suits this project. Keep a work only if it has both. Write the number and the date you saw it, because counts change.
+
+| Source | Number to record | Notes (seen 2026-11-19) |
+|---|---|---|
+| Dribbble | likes · views | On the shot page when it loads; when it hides them (not logged in), use the count on the search results page. Sort the search by Popular. |
+| Behance | appreciations · views | On the project page. Often blocks scripts after a few pages (403 or Cloudflare); open by hand or move on. |
+| Meta Ad Library | how long the ad has run | No likes. An ad still running after months is one that sells; record the start date. |
+| Template stores (Envato · Creative Market · Freepik) | sales · downloads · likes, when shown | Many pages show none; use them as the "common look" to step away from. |
+| Real brands and competitors | brand size (customers · reviews · countries) | No per-work numbers. A real brand in the same industry counts as proven by the market. |
+| Pinterest · Canva | saves when shown | Usually blocked or hidden; view by hand only, never crawl. |
+
+When no number is visible, write `ไม่แสดงยอด` and say why the work is still worth using (real brand, the owner liked it, same industry). Do not invent a number.
+
+## 2 · Blend recipe sheet (one per direction)
+
+Each direction takes from 2–3 works, each giving a different job. Fill this before building:
+
+```text
+แนว <n> · <ชื่อสั้น>
+โครง (structure / grid):          จาก <ref A> · <what exactly>
+ของเด่น (signature device / hero): จาก <ref B> · <what exactly>
+อารมณ์สีและแสง (colour & light):    จาก <ref C> · <what exactly>
+ที่เปลี่ยนให้เป็นของเรา:            <hue shift from refs and competitors · our content · our type · what we dropped>
+ทำไมเข้ากับโปรเจกต์:                <1 line back to the 2-line project read>
+```
+
+Rules:
+- One job per reference. If two references both give the structure, the result is a collage, not a blend.
+- The 3 directions differ in structure (what sits where), not only in colour.
+- Shift every colour until the eye can tell it from each reference and each competitor in the industry; then measure contrast again.
+- Content stays ours. Unknown facts carry `(รอยืนยัน)`; never borrow a reference's numbers or claims.
+- Never copy a mark, an illustration or a layout one to one; take the idea, rebuild it with our parts.
+
+## 3 · Sending to the owner
+
+Put the 3 PNGs side by side with, under each: the recipe line (which refs, what from each), the reference links with their numbers, and 1 line on why it fits the project. Ask the owner to pick or to say what to change; record the answer per `design-gate/design-references` "Remember the owner's taste".
+
+
+## reference: document-cover.md
+
+# Word/PDF cover and inner pages
+
+Building the real .docx (tokens, `anchor_picture()`, tables, the cover vote) lives in `software-development:branded-document-design`, with its own cover rules in `cover-design.md` and `anti-patterns.md`. This file adds only what the 2026-11-19 test found that those files do not say yet. Tested on a fictional Thai private-hospital appointment-system SRS (cover + 1 inner page, A4); the test images are kept in `scripts/evals/beauty/baseline/2026-11-19/`.
+
+## Where to look
+
+| Source | What it gives | Popularity shown |
+|---|---|---|
+| Dribbble search `annual report cover` · `healthcare report` | covers and spreads | likes · views (e.g. "2022 Reputation Healthcare Report": 56 likes · 16k views, 2026-11-19) |
+| 100 Archive and similar curated award archives | covers that passed a jury | inclusion is the signal; no counts |
+| Real reports from the client's industry (Thai hospitals publish annual, CG and TCFD reports as PDF) | the local standard to beat | the organisation itself |
+| Thai government annual reports | the floating-earth, glowing-icon covers to avoid | none |
+| Behance · Freepik · Venngage | more covers | blocked to scripts 2026-11-19 |
+
+## Rules not yet in branded-document-design
+
+1. Confetti and small shapes must mean something from the system (released booking slots, appointments per half hour). Random confetti reads as AI.
+2. With no logo or real screenshot, build the art from the system's own unit of data (time slots, a clinic clock face, a queue) instead of drawing a fake screen.
+3. The system name is the single largest line; the document type (SRS) is the second line. A long type name first wrapped and ran into the meta row in the test.
+4. Thai headings at 84–92 px on A4 at 150 dpi: measure the width first, then `nowrap` or reduce; two drafts failed this.
+5. A gradient ribbon uses 2–3 stops of one hue, a lighter edge on the lit side, and a shadow in the same direction as everything else (source: Rotunda Hospital Annual Report 2024 on 100 Archive).
+6. Chapter openers use one solid chapter number in the main colour; outline or blurred numbers read as AI (eye check 2026-11-19).
+7. Cover and inner page share one element (a ribbon piece, a dark band), but the cover art is never repeated small inside.
+8. A light cover lets colour flow into the lower half (a soft tint or the ribbon's tail at the bottom edge), or it reads as the empty white cover the owner disliked (taste log 2026-11-18).
+9. Priority labels in requirement tables use words (ต้องมี / ควรมี), not colours alone.
+
+## Stiff or AI-looking in the first drafts (2026-11-19) and the fix
+
+- A 7×9 grid of identical slots looked generated → 5×6 with bigger slots and one lifted "booking now" slot.
+- Concentric rings with dots looked like radar or space → a clinic clock face with a slot label.
+- A blurred gradient number clipped by its filter box (a glow blob) → solid number, no shadow.
+- Thai headings breaking mid-phrase ("เลขประจำ/ตัวผู้ป่วย") → shorter headings, breaks at phrase ends.
+
+## Check before sending
+- Run the check list in `branded-document-design`, then:
+- [ ] The cover art comes from the system's own data
+- [ ] System name is the largest line and fits on one line
+- [ ] Lower half of a light cover carries colour
+- [ ] Each direction says how it is built in real Word (background PNG anchored, text as Word text)
+
+
+## reference: flat-design.md
+
+# Flat design · design-by-type
+
+Open when making a logo or icon (every time), or when a poster, banner, cover or slide gets a flat direction. On 2026-11-27, after the CodeRuen depth round, the owner asked: "อยากให้มีการใช้ style flat design ด้วย". Every logo direction now ships in two styles side by side: **depth** (light, shadow, gradient, per `polish.md`) and **flat design**. The owner picks the style along with the direction.
+
+Flat design is not the one-colour version. The one-colour version (logo rule 11) is for print and 16 px. Flat design is a full-colour style of its own, with control instead of light.
+
+## What makes it flat design
+
+- **3–4 solid tones from the brand**: main, dark, light, accent. No gradient, blur, glow, grain, gloss or drop shadow.
+- **Depth only from crisp planes**:
+  - a two-tone split, where the far half or side is the dark tone at about 20% over the main;
+  - a hard offset copy in a darker or lighter tone (2–6 % of the mark, no blur);
+  - a cut-out gutter where two parts cross, so the overlap reads as deliberate.
+  These come from the depth version's own layers: drop the blur and gradient, keep the plane.
+- **One accent per mark**, the idea's key part (CodeRuen: the mint door, slash or braces). Never two accents.
+- **Geometry is the craft.** With no light to hide behind: one stroke weight, one corner radius, optically centred, curves that join without kinks. Check at 200 % zoom.
+
+## How to build it
+
+1. Start from the same flat master that the depth version uses (`design-gate/design-references` `references/ref-to-design.md`, rule 39), so both styles share one silhouette.
+2. Write the flat version as its own function next to the depth one. Do not strip filters off the depth render. `superuser` `design-gate/parts/design-references/scripts/depth_mark.py` has both layer sets (`solid`/`stroke` and `flat_solid`/`flat_stroke`).
+3. Put both styles on the board: one row per style for each direction, with the same sheet layout and mockups, labelled `มีมิติ` and `flat design`.
+4. Below 20 px, both styles use one simplified silhouette with the accent kept. Inner detail like `</>` or a cursor turns to blobs at 16 px (CodeRuen critic, 2026-11-27).
+
+## Scoring
+
+Score with `wow-score.md`. Criterion 4 measures how well the flatness is controlled: 2 = planes and offsets agree with one implied light and every edge is crisp, 1 = flat but planes are random, 0 = it looks unfinished. A flat version can beat the depth one. In the CodeRuen round the critic placed the Thai-roof flat version at 7–8, above its depth version.
+
+## Do not
+
+- Do not use long-shadow (a 45° shadow running off the mark). It reads as a 2013 template.
+- Do not add a gradient "just a little". That makes it a weak depth version, not flat design.
+- Do not use a different silhouette from the depth version. Then the board shows 6 marks, not 3 directions in 2 styles.
+
+
+## reference: logo.md
+
+# Logo · wordmark · brand mark
+
+The full brand set (colours, type, usage rules) lives in `brand-kit`; icon sets with licences in `icon-design` `references/asset-sets.md`. This file is the logo route. Tested 2026-11-19 on a fictional Thai SME payroll SaaS (3 presentation sheets, 1600x900); the test images are kept in `scripts/evals/beauty/baseline/2026-11-19/`.
+
+## The route: build the mark from real letterforms, not hand-drawn paths
+
+The owner rejected agent-drawn SVG icons (2026-10-26) and called past logos "AI-looking" (2026-11-18). What worked on 2026-11-19:
+
+1. Pick a licensed font (OFL from google/fonts) whose personality fits the brand.
+2. Pull the glyph outlines with `fontTools` and build the mark from them plus simple geometry (circles, bars): a Thai ป whose right stem grows a P bowl, a P made of payslip lines, a `j` whose dot becomes a coin.
+3. Keep the build script next to the mark so the mark can be rebuilt and edited exactly.
+4. Show it on a presentation sheet with a real use (a notification, a payslip, a leave-balance card), not in an empty rounded frame.
+
+## Where to look
+
+| Source | What it gives | Popularity shown |
+|---|---|---|
+| Dribbble search `<industry> logo` sorted by Popular | marks with construction grids | likes · views on the shot page (e.g. PayMe by Netguru: 906 likes · 138,280 views; Unipay by Outcrowd: 301 likes · 73,889 views, both 2026-11-19) |
+| Agency case studies (Ragged Edge for Wise, Figma blog for Gusto) | why a real brand mark looks the way it does | none; the brand's size is the signal |
+| Local competitors' sites (Thai SaaS: FlowAccount, PEAK) | the category average to step away from | reviews or customer counts on their own pages |
+| Logopond · LogoLounge | marks built from local scripts | rarely shown |
+| Behance | case studies | blocked to scripts 2026-11-19 |
+
+## Beauty rules
+
+1. Recognisable at 16 px and in one colour. Source: uipro `logo-style-guide.md` scalability checklist.
+2. Start as a combination mark (mark + word); the mark alone comes later. Source: uipro `logo-style-guide.md`.
+3. 1–2 colours; depth only from shades of the same hue. Source: uipro `data/logo/styles.csv` rows Minimalist and Negative Space.
+4. Place and trim the font letterforms of rule 5 on a grid or circles, not freehand (PayMe shows its construction circles); the grid places and cuts, it does not draw new paths.
+5. Build from a licensed font's letterforms instead of drawing paths (owner rule).
+6. The mark carries meaning from the product's world (Thai letter, payslip line, coin) that a competitor could not reuse. Source: `design-gate/no-ai-look` eye gate item 1.
+7. Step away from the category average: Thai accounting SaaS uses a light-blue circle with thin caps, or a purple-blue gradient.
+8. Shift the brand hue until the eye can tell it from every reference (`design-gate/design-references` step 6).
+9. The Thai lockup uses a Thai face whose personality matches the mark (a looped-head mark pairs with a looped Thai face).
+10. Large wordmarks can be tracked tighter than text, but check descenders and dots (y, j) for collisions.
+11. Make two versions of the mark: a **rich** one with light, shadow and dimensional shape for the hero use (app icon, sheet, signage), and a **flat** one-colour version for 16–32 px and print. The owner rejected a flat mark as stiff on 2026-11-19 ("ขอปรับให้มีลูกเล่นมากกว่านี้หน่อย แสงเงา รูปร่าง"). Depth follows `design-gate/design-references` `references/depth-and-light.md`: one light source, at most 3 layers. Since 2026-11-27 every direction also gets a full-colour **flat design** version, shown beside the rich one, and the owner picks the style ("อยากให้มีการใช้ style flat design ด้วย"). Its rules are in [`flat-design.md`](flat-design.md).
+12. Avoid the generic AI marks: letter in a rounded square, gradient blob, swoosh, circuit, infinity (`design-gate/no-ai-look` section 2, Logos).
+
+## Stiff or AI-looking in the first drafts (2026-11-19) and the fix
+
+- A loop on the P's foot read as a key or a music note → used the real Thai ป glyph instead.
+- A thin join between bowl and stem → the bowl overlaps into the stem.
+- A light streak across the sheet → removed.
+- A blue gradient panel read as generic fintech → flat colour.
+- App-icon tiles with one letter in a rounded frame → replaced by a real-use card crossing the panel edge.
+- A half-empty panel, a cream ring (a colour the owner dislikes) → cropped, removed.
+
+## Check before sending
+- [ ] Mark built from a licensed font or simple geometry, with its build script
+- [ ] 16 px and 32 px tests on light, brand colour and dark
+- [ ] Rich version (light, shadow, shape) and one-colour flat version both work
+- [ ] Flat design version per `flat-design.md` (3–4 solid tones, crisp planes, same silhouette) on the board beside the rich one
+- [ ] Thai and Latin lockups
+- [ ] Mark means something from the product's world
+- [ ] Sheet shows a real use, not an empty frame
+
+
+## reference: meaning-first.md
+
+# Meaning first · design-by-type
+
+Open before searching references or textures for a logo, icon or key visual. It tells you **what** to look for, so the search and the texture pick fit the job instead of the brand name. The owner set this method on 2026-11-27 after the CodeRuen rounds. Their words:
+- "ที่จริงไม่จำเป็นต้องมีคำว่าเรือนก็ได้นะ คือมีความหมายใดความหมายหนึ่ง ก็เพียงพอแล้ว"
+- "เรารู้ว่างานของเราคือเขียนโปรแกรม เราอาจจะไปหาสิ่งแวดล้อมมา อาจจะไปหาเครื่องคอม เม้าส์ หรืออะไรมาตั้งต้นได้นะ"
+
+## 1 · Write the 2–3 feelings the customer must get
+
+Write short words, not a slogan: what the customer should feel when they see the mark. For CodeRuen these are `เร็ว · น่าเชื่อถือ`. If the brief does not say, read the business line (CodeRuen ships every 2 weeks → fast; builds back-office systems → trustworthy) and write `(รอยืนยัน · ผู้ใช้: ยืนยันคำนี้)` next to the words you inferred.
+
+## 2 · One meaning per mark is enough
+
+Each direction carries **one** feeling through **one** object. It does not have to show the brand name's literal object. CodeRuen does not need a house. A mark that says "fast" clearly beats one that says "house + code + fast" weakly. Two objects in one mark are allowed only when they become one shape (`design-gate/design-references` guide, item 4).
+
+## 3 · Fill the idea map before any search
+
+| Where ideas come from | Ask | CodeRuen example |
+|---|---|---|
+| **The work environment** | What tools and things sit on the desk while the work is done? | computer · mouse pointer · keyboard key (Enter) · terminal window · cursor block · cable · server |
+| **The result for the customer** | What does the customer get at the end? | a passing tick · a delivered box · a system that runs |
+| **The action** | What verb is the work? | click · press Enter · ship · test |
+| **The name** | Is there an object in the name? (optional) | เรือน → house |
+| **Local culture** | Is there a local shape people know? (optional) | เรือนไทย · กาแล |
+
+Then pair each feeling with 2–3 objects that carry it:
+- fast → mouse pointer with speed bars · the Enter key · a cursor running ahead;
+- trustworthy → a passing tick in a terminal · a laptop showing a tick · a shield.
+
+## 4 · Pick a different style for each direction
+
+When the owner asks for N directions in different styles, lock the style of each one before drawing, all different:
+
+| Style | Looks like | Fits | Texture or reference to search |
+|---|---|---|---|
+| Flat geometric | solid shapes, 2–3 tones, a two-tone split | apps, tech, small sizes | flat icon systems, brand marks on Behance |
+| Soft 3D (clay, keycap) | rounded volume, soft light, gentle shadow | friendly tech, consumer | clay renders, keycaps, app icons |
+| Monoline | one stroke weight, rounded ends, no fill | tools, dev tools, clean trust | line icon sets, dev tool logos |
+| Logotype (wordmark) | custom lettering carries it, the symbol is small or absent | names that are short and sayable | type foundry specimens, wordmark case studies |
+| Isometric faceted | 30° view, solid tone per face | technical, systems, products | isometric illustrations, the owner's Color Code logo |
+| Depth (rich) | gradient, soft shadow, grain (`polish.md`) | hero use, app icon | glossy icon sets, the OnNing wallet the owner gave 10 |
+| Flat design | full-colour flat, crisp planes (`flat-design.md`) | brand systems, print | flat brand identities |
+| Emblem or badge | a closed shape with name and mark inside | trades, local, trust | seals, patches |
+
+## 5 · Then search references and textures for each object + style pair
+
+Search terms combine the object, the style and the industry: `keycap logo soft 3D`, `terminal icon monoline`, `isometric laptop icon`. Pick textures only for styles that use them (soft 3D, depth, isometric materials). Flat, monoline and logotype need none. Record each reference with its link and date, as in `blend.md`.
+
+## 6 · Show the map with the board
+
+Under each direction write one line: **feeling · object · style** (CodeRuen round 9: `เร็ว · ลูกศรเมาส์ · flat geometric`). The owner then sees why each one exists, and can say "keep the feeling, change the style" in one sentence.
+
+
+## reference: polish.md
+
+# Polish pass · design-by-type
+
+Apply this to every direction before the first render goes to a critic, so the owner sees "wow" in round 1. On 2026-11-19 this pass raised four approved directions from wow 5–8 to 7–8 in one round (old vs new compared by one critic: slides better on 5 of 5 criteria, banner and document cover on 4, poster on 3; `scripts/evals/beauty/RESULTS.md`). The owner's words: "อยากให้ดูแล้วว้าว เหมือนทำจาก canva ai".
+
+## Add what fits the idea, not everything
+- **Depth:** 3 layers (back photo or texture · mid shapes · front content); soft long shadows from one light (top-left); a contact shadow where things touch.
+- **Overlap:** the hero crosses a panel edge or photo cut; a card or number sits half on the photo, half on the panel; a cut-out photo of a real object (coffee bowl, phone, building) breaks the frame.
+- **Light:** a lit side and a dark side on photos and shapes; at most one soft glow, on the key item; light grain or paper texture so surfaces do not look plastic.
+- **Shape:** the existing idea made physical (the ribbon is the schedule with lengths in real minutes, rings are appointment slots, the route ends at the key number, the "2" is filled with coffee beans).
+- **Copy:** cut repeated lines; secondary text big enough for the medium (poster time labels 26 px or more on A3 at 150 dpi).
+
+## Keep
+- One light direction everywhere; shadows agree. No rainbow gradient, sparkles, random confetti, gradient text, AI faces.
+- Thai renders, headings line-height 1.4 or more, no mid-phrase breaks, body contrast 4.5:1 or more.
+- Licensed photos with credit. Work on a copy; never overwrite the approved file.
+
+## Watch after the pass (found 2026-11-19)
+- Several identical glass cards in a row read as an AI template; make one lead card larger or put them in their real order.
+- Faint first segments (a pale start of a ribbon on pale paper) disappear.
+- Text set over a photo needs contrast measured on the real pixels.
+
+
+## reference: poster.md
+
+# Poster · flyer · event key visual
+
+Print specs (bleed, CMYK, resolution) live in `print-ready-files`. This file adds the beauty rules and where to find popular posters. Tested 2026-11-19 on a fictional Thai SME seminar poster (A3 portrait, 1240x1754); the test images are kept in `scripts/evals/beauty/baseline/2026-11-19/`.
+
+## Where to look
+
+| Source | What it gives | Popularity shown |
+|---|---|---|
+| Behance search `<topic> conference poster` / `event key visual` | full campaigns with posters | appreciations · views (e.g. "Connected Women in AI": 1,553 appreciations · 23,128 views; "50 Swiss Style Posters": 2,439 · 37,854, both 2026-11-19) |
+| Dribbble search `event poster` / `conference program` | single posters, programme layouts | likes · views |
+| Real Thai events in the same field (e.g. Techsauce) and Thai bank or agency seminar pages | local conventions: free entry, QR, afternoon time, venue line | attendance claimed on the event's own site |
+| Template stores | common layouts to step away from | sales if shown |
+
+## Beauty rules
+
+1. Three zones: top = event name, middle = people and content, bottom = date, time, venue and QR. Source: uipro `banner-sizes-and-styles.md` 3-zone rule.
+2. One registration point (QR or button), bottom right, contrasting clearly. Source: uipro CTA rules; Dribbble "Conference Program Poster".
+3. One hero element (a ribbon, the speaker panels, a city photo); everything else stays quiet.
+4. Give the hero element a meaning from the event: a ribbon that is the afternoon's timeline with speakers as stops beats a decorative ribbon (first draft 2026-11-19 was decoration and read as AI).
+5. Headline left-aligned and large; asymmetry looks designed, centring everything looks generated. Source: "50 Swiss Style Posters"; uipro `styles.csv` Swiss rows.
+6. Text may cross a panel or photo edge where it stays readable; that overlap gives depth without heavy shadows.
+7. One local pattern strip can make it Thai (e.g. a ขิด band), kept thin and with a known source; thick strips look pasted on.
+8. In a schedule, times are large and topics small; people scan by time.
+9. One base colour plus one accent; depth from light and dark of the same hue (`depth-and-light.md` section 4).
+10. At most 2 font families with full Thai; keep each Thai phrase together (`white-space: nowrap` per phrase), because Chromium split "สต็อก" mid-word in the test.
+11. Text on a photo: dim the photo and measure contrast on real pixels.
+12. The sub-headline tells the owner what they get that afternoon, not a slogan ("สามคน สามเรื่อง ในบ่ายเดียว" was flagged as a slogan).
+13. Never draw fake people; use real speaker photos, or neutral placeholders marked `(รอยืนยัน)`. Never generate a working QR to a made-up link.
+
+## Stiff or AI-looking in the first drafts (2026-11-19) and the fix
+
+- Decorative ribbon with no meaning → it became the timeline.
+- Dead empty band at the bottom, tiny faint text, QR covering the venue → rebuilt the info grid.
+- Five equal schedule columns with 350 px of dead space → three speaker columns, other times as a line.
+- Silhouettes with no shoulders → redrawn to fit the panel height.
+- Captions over bright buildings → photo moved and dimmed.
+
+## Check before sending
+- [ ] Three zones; one QR bottom right
+- [ ] One hero element, and it means something
+- [ ] Headline asymmetric, readable across a room
+- [ ] Thai phrases unbroken; contrast measured on photos
+- [ ] Print specs per `print-ready-files` before it goes to a print shop
+
+
+## reference: slides.md
+
+# Slide deck · company profile
+
+Story, slide order and layouts live in `software-development:presentation-design`; the owner's liked deck is `brand-kit/references/corporate-profile-deck.md`. This file adds the beauty rules and where to find popular decks. Tested 2026-11-19 on a fictional Thai last-mile logistics company (cover + services slide, 1920x1080); the test images are kept in `scripts/evals/beauty/baseline/2026-11-19/`.
+
+## Where to look
+
+| Source | What it gives | Popularity shown |
+|---|---|---|
+| Behance search `<industry> company profile` | full decks from real agencies, often for real firms | appreciations · views on the project page (e.g. a Vietnamese last-mile profile: 115 appreciations · 4,011 views, 2026-11-19); blocks scripts after ~5 pages |
+| Dribbble search `<industry> presentation` / `pitch deck` | single strong slides | views show on the search page; the shot page hides them when not logged in |
+| Real competitors' sites and brand colours (Thai ones too) | what to stay away from, and the local look | none |
+| Template stores (Slidesgo · Envato) | common layouts | usually none; use as "what not to look like" |
+
+## Beauty rules
+
+1. The slide title states the point, not the topic ("4 บริการ เรียงตามทางที่ของเดิน", not "บริการของเรา"). Source: `presentation-design`.
+2. One key number per slide is the focal element, with its measuring period and `(รอยืนยัน)` underneath. Source: Behance GHTK deck; uipro `slide-layout-logic.csv` row proof.
+3. Services that are not equal are not drawn equal: one lead card, or the services placed in their real order along a route or timeline, instead of a grid of 4 icon cards. Source: `depth-and-light.md` section 1, `design-gate/no-ai-look`.
+4. Every slide has at least 2 overlaps (a card across the photo's diagonal cut, a photo bleeding off a card, a route end-dot over a card edge). Source: `depth-and-light.md`.
+5. Light from the top left on every slide; 2-layer shadows tinted toward the background, never pure black.
+6. The back layer has one strong thing: a real photo cut on a diagonal, a dimmed photo on a dark base, or a full-bleed colour block. A slide without one looks flat (test 2026-11-19).
+7. Cover: text left, photo right, with one element crossing the seam. Source: uipro `slide-layout-logic.csv` hook = split-hero.
+8. Thai line height 1.4 or more; break lines where the idea ends, never mid-word (the test broke "ตรวจ/สภาพ" before fixing).
+9. A small italic English word above the Thai heading is fine (the owner's liked deck does it); capsule badges and wide-tracked capitals on the cover are not (`design-gate/no-ai-look` `eyebrow-badge`).
+10. Credit real photos on the slide and crop out any text or ads inside the photo.
+11. Measure contrast on coloured panels; a mid green with white text measured 3.4:1 and had to go darker to reach about 5:1 (pixel measurement 2026-11-19).
+12. Content slides carry a footer: section name left, page number right. Source: `presentation-design`.
+13. Shift the deck colour away from every reference and every competitor (in Thai logistics: Flash yellow, Kerry orange, Grab and GHTK green, DHL red).
+
+## Stiff or AI-looking in the first drafts (2026-11-19) and the fix
+
+- A card sitting beside the diagonal photo cut instead of across it → move it across the cut.
+- A route line running through text → reroute and move the labels.
+- Wide-tracked "COMPANY PROFILE" capsule on the cover → removed.
+- Content slide on a plain dark base → added a dimmed real photo behind.
+- Two CSS rules fighting so the key number shrank → render and look, every time.
+
+## Check before sending
+- [ ] Title states the point
+- [ ] One key number, with period and `(รอยืนยัน)` if unconfirmed
+- [ ] No grid of identical icon cards
+- [ ] ≥ 2 overlaps per slide, one light direction
+- [ ] Back layer has one strong thing
+- [ ] Contrast measured on every coloured panel
+- [ ] Footer and photo credit present
+
+
+## reference: sources-banner.md
+
+# Sources · design-by-type
+
+- The idea of the steps (brief → reference → 3 directions → HTML → export → compare) and the file [`references/uipro-banner-sizes-and-styles.md`](uipro-banner-sizes-and-styles.md) (copied, unedited) come from [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) commit `28b3b8d` · MIT · Copyright (c) 2024 Next Level Builder · the full licence text is in [`references/LICENSE-uipro`](LICENSE-uipro) · viewed 2026-10-29
+- Added by us: references from theme shops and Pinterest on the owner's order of 2026-10-29 · Thai language and Thai fonts · the script `render_banner.py` · the `design-gate/no-ai-look` check and the fresh reviewer (from the trial banner of 2026-10-28, where the reviewer gave ours 6/10 and the reference 8.5/10)
+
+
+## reference: sources-thumbnail.md
+
+# Sources · design-by-type
+
+- YouTube Help: [Add video thumbnails](https://support.google.com/youtube/answer/72431) (size · file · account verification · 4:5 thumbnail for vertical video · look up live) · [Test & compare thumbnails and titles](https://support.google.com/youtube/answer/13861714) (official)
+- Test & compare matches thumbnailtest.com · digit.in · streamlabs.com (thumbnailtest.com still says it is only for beta testers, which is out of date)
+- Contrast: [WCAG 2.2 Understanding 1.4.3](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html) (cited through `brand-kit`, checked 2026-10-06)
+- Values marked "our own value" (168 px wide · letters 1/6 of the height · line spacing 1.3 · bottom-right corner) are internal guidelines, not yet measured on real apps
+
+
+## reference: sources.md
+
+# Sources · design-by-type
+
+All viewed 2026-11-19 unless noted. Popularity numbers are what the page showed that day.
+
+## Rules borrowed (MIT, nextlevelbuilder/ui-ux-pro-max-skill, branch main, viewed 2026-11-19)
+- `.claude/skills/design/references/logo-design.md` · `logo-style-guide.md` · `logo-color-psychology.md` · `data/logo/styles.csv` · `data/logo/industries.csv`
+- `.claude/skills/design/references/banner-sizes-and-styles.md` · `social-photos-design.md`
+- `.claude/skills/design/references/slides-layout-patterns.md` · `slides-strategies.md`; repo copy `software-development/skills/design-direction-lookup/data/upstream/uipro/slide-layout-logic.csv` (commit 28b3b8d)
+- `.claude/skills/design/references/cip-design.md` · `.claude/skills/ui-ux-pro-max/data/styles.csv` · `typography.csv`
+
+Ideas were rewritten and checked against real renders; no file copied.
+
+## References opened in the test, by type
+- Logo: dribbble.com/shots/9190631 (PayMe, 906 likes · 138,280 views) · dribbble.com/shots/21652445 (Unipay, 301 · 73,889) · raggededge.com/work/wise · figma.com/blog/gusto · flowaccount.com · peakaccount.com · logopond.com
+- Poster: behance.net/gallery/218481539 (1,553 appreciations · 23,128 views) · behance.net/gallery/221881411 (475 · 13,641) · behance.net/gallery/255930189 (601 · 5,528) · behance.net/gallery/221014645 (2,439 · 37,854) · behance.net/gallery/251556319 (725 · 5,875) · dribbble.com/shots/19477765 (48 likes · 26k views) · summit.techsauce.co
+- Banner: Meta Ad Library search "เมล็ดกาแฟคั่ว" TH · nanacoffeeroasters.com · doichaangcoffee.co.th · onyxcoffeelab.com · dribbble.com/search/coffee-banner (top shots 1.5k–2.7k views)
+- Document cover: 100archive.com/projects/rotunda-hospital-annual-report-2024 · dribbble.com/shots/18708152 (56 likes · 16k views) · dribbble.com/shots/19923846 (26 · 6.9k) · dribbble.com/shots/18538084 · Bumrungrad CG 2025 PDF · BDMS TCFD 2024 PDF · HA Thailand annual report 2567 (as the look to avoid)
+- Slides: behance.net/gallery/243641201 (115 appreciations · 4,011 views) · behance.net/gallery/241060513 (236 · 4,240) · dribbble.com/shots/27061196 · dribbble.com/shots/24043910 (4.1k views) · dribbble.com/shots/26142164 · flashexpress.co.th · slidesgo.com/theme/logistic-transport-company-profile
+
+## Site access on 2026-11-19
+- Blocked to scripts: Behance (after ~5 pages, 403), Pinterest, GraphicRiver, Canva, Freepik (security filter), Venngage
+- Dribbble hides counts on shot pages when not logged in for some shots; counts on the search page still show
+
+
+## reference: thumbnail.md
+
+
+# design-by-type — YouTube video thumbnails that stay readable on a phone screen
+
+> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 truly different directions → check `design-gate/no-ai-look` before sending. Follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colours and fonts; the search is for this piece's layout). Close the work with the line `ด่านก่อนลงมือ:`.
+
+> **One rule:** a thumbnail must be understood at stamp size. Shrink the image to 168 px wide (about the size in the recommended list on mobile; our own value, not yet measured on every app version). If you can still read the words and tell what the video is about, it can be sent.
+
+## Use when
+- Making a new YouTube thumbnail, or fixing one people do not click
+- Thai text on the thumbnail is too small, sinks into the background, or has colliding tone marks
+- Testing several thumbnails to see which is better
+
+Not for: TikTok · Reels · post covers · channel banners → `campaign-set` (sizes for every platform: its `platform-sizes.md`, YouTube section) · video script or first-5-second hook → `video-script` · AI-made people or scenes → `image-generation` · a series that must look like a set → `brand-kit` · look check before sending → `design-review`. The owner is agent `social-creator`.
+
+## Steps
+1. **Pick the one thing the thumbnail must say.** Thumbnail and title tell the story together without repeating words: the title gives detail, the thumbnail gives the feeling or the result. If there is no direction yet, search references live first per `design-gate/design-references` (type `social`), then pull colours from the chosen work; the stored palette library is for when live search is not possible.
+2. **Set up a 16:9 page** at the working size from YouTube Help (look up live; see the reference), export JPG or PNG. The source may be larger, up to the maximum that page gives.
+3. **Text of at most 3–4 words**, bold, at least about 1/6 of the image height (our own value). For Thai, leave space above and below the line for tone marks and vowels (line spacing at least 1.3 times the font size; our own value). Use a Thai font that really has Bold or Black, not fake-bold.
+4. **Contrast:** text and background differ by at least 4.5:1 (WCAG 2.2 normal text, same as `brand-kit`). Busy background: add a text outline, shadow, or colour bar behind the text.
+5. **Leave the bottom-right corner empty** (the video length badge covers it). Keep text and faces left or middle.
+6. **Vertical video:** YouTube makes a 4:5 thumbnail from the 16:9 one on home and subscriptions pages, so put the important part in the middle.
+7. **Shrink to 168 px wide** and ask: can you read the text, can you tell what it is about. If not, cut words, enlarge letters, or remove elements.
+8. **Filter before upload (compare in pairs, do not score).** Shrink the 2–3 thumbnails to 168 px wide and have 3–5 people choose pair by pair which they would rather click, swapping left and right in every pair. Put the result in the format of [`thumbnail-pairwise.example.json`](thumbnail-pairwise.example.json) and run `node <decision-scoring>/scripts/decide.mjs pairwise file.json` (`<decision-scoring>` is the folder of skill `superuser:decision-desk`). If the result is close (the script says below 60%), send both into Test & compare and let YouTube decide. Drop a thumbnail that loses clearly.
+9. **Test & compare** when the channel has it enabled: make 2–3 truly different versions of 1 topic (a face vs a product image · with text vs no text), not just different colours. YouTube decides by **watch time share**, not click rate, so a thumbnail that lures clicks but makes people leave loses. Never promise the user "clicks will go up". Look up live the limits (versions, test length, who can use it) at the YouTube Help page; if the page will not open, mark the value (รอยืนยัน).
+
+## Check before done
+- 16:9 · size and file within the ceilings looked up live from YouTube Help (mobile and computer upload)
+- Text ≤ 4 words, contrast ≥ 4.5:1 · Thai tone marks do not hit the edge or another line
+- Bottom-right corner empty · vertical video has the important part in the middle
+- Shrunk to 168 px wide and still readable
+- Matches the real content of the video and does not trick people into clicking · image, fonts and faces are licensed
+- Passes `design-gate/no-ai-look` item 3
+
+## References
+- [`youtube-requirements.md`](youtube-requirements.md) — open for YouTube's size, file and account rules, Test & compare details, or the worked example
+- [`thumbnail-pairwise.example.json`](thumbnail-pairwise.example.json) — input format for step 8
+- [`sources-thumbnail.md`](sources-thumbnail.md) — open when re-checking sources
+
+
+## reference: uipro-banner-sizes-and-styles.md
+
+# Banner Sizes & Art Direction Styles Reference
+
+## Contents
+- [Complete Banner Sizes](#complete-banner-sizes) (Social Media · Web / Display Ads · Website · Print)
+- [22 Art Direction Styles](#22-art-direction-styles)
+- [Design Principles](#design-principles) (hierarchy · safe zones · CTA · typography · text-to-image · print)
+- [Pinterest Research Queries](#pinterest-research-queries)
+
+## Complete Banner Sizes
+
+### Social Media
+| Platform | Type | Size (px) | Aspect Ratio |
+|----------|------|-----------|--------------|
+| Facebook | Cover (desktop) | 820 × 312 | ~2.6:1 |
+| Facebook | Cover (mobile) | 640 × 360 | ~16:9 |
+| Facebook | Event cover | 1920 × 1080 | 16:9 |
+| Twitter/X | Header | 1500 × 500 | 3:1 |
+| Twitter/X | Ad banner | 800 × 418 | ~2:1 |
+| LinkedIn | Company cover | 1128 × 191 | ~6:1 |
+| LinkedIn | Personal banner | 1584 × 396 | 4:1 |
+| YouTube | Channel art | 2560 × 1440 | 16:9 |
+| YouTube | Safe area | 1546 × 423 | ~3.7:1 |
+| Instagram | Stories | 1080 × 1920 | 9:16 |
+| Instagram | Post | 1080 × 1080 | 1:1 |
+| Pinterest | Pin | 1000 × 1500 | 2:3 |
+
+### Web / Display Ads (Google Display Network)
+| Name | Size (px) | Notes |
+|------|-----------|-------|
+| Medium Rectangle | 300 × 250 | Highest CTR |
+| Leaderboard | 728 × 90 | Top of page |
+| Wide Skyscraper | 160 × 600 | Sidebar |
+| Half Page | 300 × 600 | Premium |
+| Large Rectangle | 336 × 280 | High performer |
+| Mobile Banner | 320 × 50 | Mobile default |
+| Large Mobile | 320 × 100 | Mobile hero |
+| Billboard | 970 × 250 | Desktop hero |
+
+### Website
+| Type | Size (px) |
+|------|-----------|
+| Full-width hero | 1920 × 600–1080 |
+| Section banner | 1200 × 400 |
+| Blog header | 1200 × 628 |
+| Email header | 600 × 200 |
+
+### Print
+| Type | Size |
+|------|------|
+| Roll-up | 850mm × 2000mm |
+| Step-and-repeat | 8ft × 8ft |
+| Vinyl outdoor | 6ft × 3ft |
+| Trade show | 33in × 78in |
+
+## 22 Art Direction Styles
+
+1. **Minimalist** — White space dominant, single focal element, 1-2 colors, clean sans-serif
+2. **Bold Typography** — Type IS the design; oversized, expressive letterforms fill canvas
+3. **Gradient / Color Wash** — Smooth transitions, mesh gradients, chromatic blends
+4. **Photo-Based** — Full-bleed photography with text overlay; hero lifestyle imagery
+5. **Illustrated / Hand-Drawn** — Custom illustrations, bespoke icons, artisan feel
+6. **Geometric / Abstract** — Shapes, lines, grids as primary visual elements
+7. **Retro / Vintage** — Distressed textures, muted palettes, serif type, halftone dots
+8. **Glassmorphism** — Frosted glass panels, blur backdrop, subtle border glow
+9. **3D / Sculptural** — Rendered objects, depth, shadows; product-centric
+10. **Neon / Cyberpunk** — Dark backgrounds, glowing neon accents, high contrast
+11. **Duotone** — Two-color photo treatment; bold brand color overlay on image
+12. **Editorial / Magazine** — Grid-heavy layouts, pull quotes, journalistic composition
+13. **Collage / Mixed Media** — Cut-paper textures, photo cutouts, layered elements
+14. **Retro Futurism** — Space-age nostalgia, chrome, gradients, optimism
+15. **Expressive / Anti-Design** — Chaotic layouts, mixed fonts, deliberate "wrong" composition
+16. **Digi-Cute / Kawaii** — Rounded shapes, pastel gradients, pixel art, playful characters
+17. **Tactile / Sensory** — Puffy/squishy textures, hyper-real materials, embossed feel
+18. **Data / Infographic** — Stats front-and-center, charts, numbers as heroes
+19. **Dark Mode / Moody** — Near-black backgrounds, rich jewel tones, high contrast
+20. **Flat / Solid Color** — Single background color, clean icons, no gradients
+21. **Nature / Organic** — Earthy tones, botanical motifs, sustainable brand feel
+22. **Motion-Ready / Kinetic** — Designed for animation; layered elements, loopable
+
+## Design Principles
+
+### Visual Hierarchy (3-Zone Rule)
+- **Top**: Logo or main value prop
+- **Middle**: Supporting message + visuals
+- **Bottom**: CTA (button/QR/URL)
+
+### Safe Zones
+- Critical content in central 70-80% of canvas
+- Avoid text/CTA within 50-100px of edges
+- YouTube: 1546 × 423px safe area inside 2560 × 1440
+- Meta/Instagram: central 80% to avoid UI chrome
+
+### CTA Rules
+- One CTA per banner
+- High contrast vs background
+- Bottom-right placement (terminal area)
+- Min 44px height for mobile tap targets
+- Action verbs: "Get", "Start", "Download", "Claim"
+
+### Typography
+- Max 2 typefaces per banner
+- Min 16px body, ≥32px headline (digital)
+- Min 4.5:1 contrast ratio
+- Max 7 words/line, 3 lines for ads
+
+### Text-to-Image Ratio
+- Ads: under 20% text (Meta penalizes)
+- Social covers: 60/40 image-to-text
+- Print: 70pt+ headlines for 3-5m viewing distance
+
+### Print Specs
+- 300 DPI minimum (150 DPI for large format)
+- 3-5mm bleed all sides
+- CMYK color mode
+- 1pt per foot viewing distance rule
+
+## Pinterest Research Queries
+
+Use these search queries on Pinterest for art direction references:
+- `[purpose] banner design [style]` (e.g., "social media banner minimalist")
+- `[platform] cover design inspiration` (e.g., "youtube channel art design")
+- `creative banner layout [industry]` (e.g., "creative banner layout tech startup")
+- `[style] graphic design 2026` (e.g., "gradient graphic design 2026")
+- `banner ad design [product type]` (e.g., "banner ad design saas")
+
+
+## reference: wow-score.md
+
+# Wow score · design-by-type
+
+The eye gate in `design-gate/no-ai-look` (n/9) only says a piece does not look AI-made. On 2026-11-19 the owner accepted four of five types at 7–8/9 but asked for work that is "ว้าว ตั้งแต่แรก ไม่ต้อง design ใหม่". This score measures the step above passing: would the piece make someone stop and want it. Give it before sending, next to the eye gate.
+
+## Five criteria, 0–2 each (total 10)
+
+| # | Criterion | 0 | 1 | 2 | Source |
+|---|---|---|---|---|---|
+| 1 | **Stops the eye** at thumbnail size (about 300 px wide, 1 second) | nothing stands out, or everything shouts | one element stands out but is ordinary | one striking element you remember after looking away | Awwwards "Design" 40 % |
+| 2 | **An idea from this job** | could be any company's | the idea fits but competitors use it too | a twist only this business has (the payslip that is the mark, the route that ends at the key number) | D&AD: original idea, relevant to its context |
+| 3 | **A flourish with meaning** (1–2 playful moves: an overlap, a cut-out, a shape that bends, a hidden second reading) | none, everything sits in its box | present but decorative | it carries the idea and makes you smile | Awwwards "Creativity" 20 %; owner wants `ลูกเล่น` |
+| 4 | **Depth and light** | flat, no light direction | some shadow or gradient, mixed or timid | 3 layers, one light source, materials you can almost touch, inside `design-gate/design-references` `references/depth-and-light.md` limits | owner's theme `มีมิติ` · `แสงเงา` |
+| 5 | **Craft** at 100–200 % zoom | broken Thai marks, soft images, clipped or colliding text | clean but some loose edges, spacing or kerning | every edge, kern, Thai mark and image crisp | D&AD: "brilliantly executed" |
+
+A deliberately flat style (Swiss, flat brand) scores criterion 4 on how well the flatness is controlled, and says so. The 0/1/2 text for that case is in `flat-design.md`.
+
+## Send rule
+
+- Send to the owner only when wow is **7 or more with no 0**, and the eye gate is 8/9 or more. The 7 line follows Awwwards' Honorable Mention bar of 6.5 out of 10 (awwwards.com/about-evaluation, viewed 2026-11-19).
+- Below that: fix the lowest criterion first, render, score again. After 2 fix rounds still below 7, send with the score and say which criterion is short.
+- Score from the rendered PNG, never from code or the maker's description. The maker never scores their own work; a fresh `design-critic` does.
+
+## Critics disagree, so compare in one call
+
+On 2026-11-19 three fresh critics scored the same logo direction through two fix rounds: wow 6 → 7 → 5 and eye gate 8 → 7 → 5. Part of the drop was the critic, not the work: the last one called a top-left light with shadows falling bottom-right "light from several directions", which is one direction. So:
+- After a fix, send the old and new PNG to one fresh critic in the same call and ask which is better on each criterion; a single new score alone does not show progress.
+- Ask the critic to name the pixel area behind every 0 or 1. A claim you can disprove on the image (like the light direction above) is dropped, and noted in `scripts/evals/beauty/RESULTS.md`.
+
+## Checking the checker with the owner
+
+The owner may score the same 5 criteria. Record both in `scripts/evals/beauty/RESULTS.md`. If the critic and the owner differ by 2 on the same criterion in 2 or more pieces, rewrite that criterion's 0/1/2 text above with the owner's words and note the date.
+
+
+## reference: youtube-requirements.md
+
+# YouTube requirements, Test & compare, worked example
+
+Open this when checking YouTube's size, file and account rules, setting up Test & compare, or following the worked example.
+
+## YouTube requirements
+
+| Topic | Value | Status |
+|---|---|---|
+| Size | Ratio 16:9 · Shorts thumbnail 9:16 · maximum size, minimum size and recommended working size: look them up live on the YouTube Help page | Look up live |
+| File | Accepted file types, and the file size ceiling for uploading from mobile and from a computer: look them up live on the YouTube Help page | Look up live |
+| Right to upload custom thumbnails | Account must be verified first · there is a daily upload limit | Official page |
+| Test & compare: how many versions can be tested | Can test thumbnails, titles, or both · look up the maximum number of versions live on the Test & compare page | Look up live |
+| Test & compare: who can use it | Channels with advanced features turned on · done in YouTube Studio on a computer · not usable with Shorts · videos made for kids · adult or 18+ videos · private videos · scheduled live streams · Premieres that have not ended | Official page + 1 source |
+| Test & compare: how it decides | Uses **watch time share**, not click rate · no clear winner → shows the first version uploaded · the result shows as Winner or Preferred | Confirmed by 3 sources |
+| Test & compare: how long it takes | Look up the test length live on the Test & compare page | Look up live |
+
+The test result is decided by watch time, so a thumbnail that lures clicks but makes people leave quickly loses. Never promise the user "clicks will go up".
+
+Look up live (WebSearch/WebFetch) the thumbnail size, file limit and Test & compare limits (number of variants, test length, who can use it) at the two YouTube Help pages in `sources.md`. If the page will not open, mark the value (รอยืนยัน).
+
+## Worked example
+
+Brief: a cooking channel, video "ต้มยำกุ้งน้ำข้น 15 นาที" (creamy tom yum goong in 15 minutes)
+
+| Step | Do | Result |
+|---|---|---|
+| One thing | The thumbnail says "fast", the title says the dish | Text on the thumbnail "15 นาที", 2 words |
+| Layout | Bowl of tom yum on the left, the cook's face top right, bottom-right corner empty | The length badge covers nothing |
+| Shrink to 168 px | "15 นาที" is readable · the orange bowl is visible | ผ่าน (pass) |
+| Test | Version A has a face · version B the bowl only | Set up Test & compare, then wait for the result for the length of time the YouTube Help page gives |
+
+The pairwise example file `thumbnail-pairwise.example.json` in this folder is made-up data; it ran and passed on 2026-10-28.

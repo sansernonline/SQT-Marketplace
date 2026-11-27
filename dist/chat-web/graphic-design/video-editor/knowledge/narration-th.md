@@ -8,7 +8,7 @@ Use when Thai narration must come from text-to-speech
 
 ## Use when
 - The user does not want to record audio: generate Thai narration from the script, one cue at a time, and get subtitles and slide timing in one round
-- Not for: writing the spoken script → `speaking-script` · cutting, joining, loudness, slides with audio → `video-editing` · Thai subtitles (transcribe, check, burn in) → `subtitles-th`
+- Not for: writing the spoken script → `video-script` · cutting, joining, loudness, slides with audio → `video-editing` · Thai subtitles (transcribe, check, burn in) → `video-editing`
 - Cloning the voice of a famous person or someone who has not consented: do not do it, tell the user why
 
 ## Steps
@@ -26,17 +26,17 @@ Each subtitle gets its text from the script and its timing from the real audio, 
 
 For a monetized clip, drop engines marked (รอยืนยัน) or not mentioned, then score cost against setup effort with `superuser:decision-desk` (`decide.mjs score file.json`; example in references). Look up the live Azure and Google price at https://cloud.google.com/text-to-speech/pricing and the Azure pricing page (WebSearch/WebFetch) before quoting it; if the page will not open, mark the value (รอยืนยัน). Internal work and drafts need none of this.
 
-0. **If it is a podcast, write the script this way (no hook or CTA from `speaking-script`).**
+0. **If it is a podcast, write the script this way (no hook or CTA from `video-script`).**
    - Go straight into the content: no greeting, no intro of yourself or the show, no "this episode is about". Do not talk to the listener: no questions back, no invitation to follow, no sign-off. Close with a content sentence.
    - 1 idea per sentence · cut modifiers, repeated connectors, and recaps.
    - **1 line in the file = 1 complete sentence.** Do not split with `|` (the voice falls and pauses each line). No on-screen subtitles, so the 35-character limit does not apply · use `--gap 0.15`.
    - No spaces inside a sentence (a space is where the engine breathes) · `tts_cues.py` strips spaces between Thai letters before sending, but the subtitle shows the text as written.
    - Arabic digits are fine: `tts_cues.py` converts whole numbers to Thai words (a year reads as one number, a number starting with 0 reads digit by digit, a number attached to Latin letters such as ESP32 is left alone, so use `words.tsv`).
-1. **Split the script into cues.** Write per `speaking-script`, then 1 line = 1 cue, at most 35 characters, using `|` to split into 2 lines · put `[สไลด์ n]` before the line where slide n starts · a line starting with `#` is a note, not read.
+1. **Split the script into cues.** Write per `video-script`, then 1 line = 1 cue, at most 35 characters, using `|` to split into 2 lines · put `[สไลด์ n]` before the line where slide n starts · a line starting with `#` is a note, not read.
 2. **Make `words.tsv`**, one line `คำ<TAB>คำอ่าน` for English words, proper names, and abbreviations (`Git<TAB>กิต`) · the engine reads the reading, the subtitle keeps the original word · English matches regardless of case · `#` lines and the header row (`คำ` or `word`) are skipped · if a number must be read a way the converter does not (2569 read split as "ยี่สิบห้า หกสิบเก้า"), write it out as words in the script.
    - **Reading is right but the audio says it wrong:** put it in `respell.tsv`, one line `คำอ่าน<TAB>คำที่สะกดให้หูได้ยินถูก` (`คอนโทรลเลอร์<TAB>คอนโทรเล่อ`; tone marks and spacing help stress and pauses) · kept apart because respelling applies only to the voice that was heard to be wrong.
    - **Before generating a whole episode (edge):** `python scripts/term_sample.py --lexicon words.tsv --respell respell.tsv --script ep01.txt -o terms` gives `term-sample-male.mp3`, `term-sample-female.mp3` (one term at a time, "1, คอนโทรเล่อ") and `term-sample-list.md` pairing numbers with terms · the user names the wrong numbers, you fix `respell.tsv` and rerun · about 20 minutes for 300 terms.
-3. **Make a draft with the Windows voice.** `python scripts/tts_cues.py ep01.txt -o draft --engine windows --lexicon words.tsv` · compare total length with the slide timing, run `srt_check.py` of `subtitles-th` on `draft/narration.srt`, and fix the script until it passes.
+3. **Make a draft with the Windows voice.** `python scripts/tts_cues.py ep01.txt -o draft --engine windows --lexicon words.tsv` · compare total length with the slide timing, run `srt_check.py` of `video-editing` on `draft/narration.srt`, and fix the script until it passes.
 4. **Generate the real voice.**
    - F5: `python scripts/tts_cues.py ep01.txt -o final --engine f5 --lexicon words.tsv --f5-python <F5>/venv/Scripts/python.exe --f5-root <F5> --ref me.wav --ref-text "ข้อความที่พูดใน me.wav ตรงทุกคำ"` · `--ref` is a 5–10 second clean clip of the user's voice · `--nfe` defaults to 32, can go down to 7 for speed.
    - edge: `--engine edge --voice th-TH-PremwadeeNeural --rate=-10% --respell respell.tsv` (Niwat uses `--rate=-8%`) · install first in the job's venv: `python -m pip install edge-tts`.
@@ -194,7 +194,7 @@ Open this when a run fails, sounds wrong, or a subtitle looks wrong.
 | The Thai reading is right but the audio sounds strange | The voice reads by Thai spelling, not by how a person says it | Respell in `respell.tsv`, then listen again with `term_sample.py` |
 | Mixing a Thai voice and an English voice in one sentence sounds jerky | Tone and rhythm change mid-sentence | Have the Thai voice read the whole sentence, and write English words as Thai in `words.tsv` (tried mixing Niwat with Andrew and Emma on 2026-11-07, and the real podcast used Thai only) |
 | The subtitle shows the reading instead of the original word | The reading was written straight into the script | Move it into `words.tsv` |
-| A short subtitle is on screen for less than 5/6 second (about 0.83 second, the lowest value in the caption table of `video-script-to-clip`) | A very short sentence such as "สวัสดีครับ" | The script already stretches cue time to at least 0.9 second, without overlapping the next cue |
+| A short subtitle is on screen for less than 5/6 second (about 0.83 second, the lowest value in the caption table of `video-script`) | A very short sentence such as "สวัสดีครับ" | The script already stretches cue time to at least 0.9 second, without overlapping the next cue |
 | The voice stops at every phrase, even inside a name ("พีทีเอส… ดาส") | The tutorial rule turned every space into `, `, and the spaces around English terms became pauses too | For a presentation use `tts_cues.py --keep-spaces` and write `,` only where a pause belongs ([`presentation.md`](presentation.md) section 1 · 2026-11-26) |
 | A loanword sounds choppy in a sentence but fine alone (แทปเล็ต) | The voice splits it into 2 words inside a sentence (แทป\|เล็ต in the word timings) | `split_words.py check` · respell until it stays whole, or `split_words.py make --splice` ([`presentation.md`](presentation.md) section 4) |
 | A spliced word jerks or feels cut short | Part of the old word stays after the joint, or the new word stops hard | Use the joint settings in `split_words.py` (quietest cut point · decay kept · 60 ms gap), which the owner accepted on 2026-11-26 |

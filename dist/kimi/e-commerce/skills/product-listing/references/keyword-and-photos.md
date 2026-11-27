@@ -28,4 +28,4 @@ Main keyword = appears in suggestions **and** in most top-seller titles. Do not 
 - [ ] No other shop's watermark, no stock photo without rights, no before/after body photos for cosmetics or slimming
 - [ ] Same main photo on every platform so returning buyers recognise it
 
-Image sizes per platform and banner formats → `graphic-design` `social-formats` (if installed).
+Image sizes per platform and banner formats → `graphic-design` `campaign-set` (if installed).

@@ -149,7 +149,7 @@ A sheet of paper with an uneven edge · distort only the base sheet in `::before
 
 ### 8 · Shadow of a free-form shape
 
-Cutouts with a transparent background (PNG · SVG), for example the paper-cut question mark from the template in `brief-to-image` of plugin `graphic-design` · `box-shadow` gives only a rectangular frame; `drop-shadow()` follows the real shape · an image that already has its own shadow needs none added
+Cutouts with a transparent background (PNG · SVG), for example the paper-cut question mark from the template in `image-generation` of plugin `graphic-design` · `box-shadow` gives only a rectangular frame; `drop-shadow()` follows the real shape · an image that already has its own shadow needs none added
 
 ```css
 .cutout {

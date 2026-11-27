@@ -22,9 +22,9 @@ The owner is agent `social-creator` · text on the product page (name · descrip
 | Task | Use |
 |---|---|
 | Product name, description, words banned in ads | `e-commerce:product-listing` (if installed) |
-| Shop banner, ad post, video clip | `social-formats` · `campaign-set` · `video-script-to-clip` |
-| Generating a product image with AI or changing the background | `brief-to-image` · `image-editing-brief` · it must still be the real product the customer will receive |
-| Several images that must look like one set | `style-consistency` |
+| Shop banner, ad post, video clip | `campaign-set` · `video-script` |
+| Generating a product image with AI or changing the background | `image-generation` · it must still be the real product the customer will receive |
+| Several images that must look like one set | `brand-kit` |
 | Labels, boxes, stickers sent to a printer | `print-ready-files` |
 
 ## Steps
@@ -33,7 +33,7 @@ The owner is agent `social-creator` · text on the product page (name · descrip
 2. **Cover image (the first image):** a single product fills most of the frame (TikTok Shop has a minimum share for the product, check live) · do not zoom so far that the product edge is cut · no frame around the 4 sides · as little text and as few stickers as possible, and never covering the product.
 3. **Images after the cover (no more than the platform allows):** other angles · material detail · size against a hand or a familiar object · size chart (clothing) · in-use image · each colour option image must match the colour actually shipped.
 4. **Check the banned items** (the ban table) on every image, not only the cover.
-5. **Name the files** per `asset-organize`, for example `mug-white-shopee-cover-v01.jpg` · keep 1 set of original files with no text added.
+5. **Name the files** per `brand-kit`, for example `mug-white-shopee-cover-v01.jpg` · keep 1 set of original files with no text added.
 
 ## Image size and count per platform
 

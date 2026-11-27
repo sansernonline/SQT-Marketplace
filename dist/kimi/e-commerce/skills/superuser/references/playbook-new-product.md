@@ -10,7 +10,7 @@ Main skills: `product-listing` · `marketplace-fees-pricing` · `multi-shop-stoc
 3. Set the price per platform with the formula in `marketplace-fees-pricing`, as a table, and tell the user to check the rates against Seller Centre · ใคร: `shop-manager` ตัวใหม่
 4. Write the product name, search keywords, description, and image checklist per platform, following `product-listing` · ใคร: `shop-manager` ตัวใหม่
 5. Set the SKU and enter it in the master stock file per `multi-shop-stock`, with a reorder point · ใคร: `shop-manager` ตัวใหม่
-6. Check (ตรวจ) banned advertising words, the SKU, and image sizes for each platform (`social-formats` in graphic-design, ถ้าติดตั้ง) · ใคร: `reviewer` ตัวใหม่
+6. Check (ตรวจ) banned advertising words, the SKU, and image sizes for each platform (`campaign-set` in graphic-design, ถ้าติดตั้ง) · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 

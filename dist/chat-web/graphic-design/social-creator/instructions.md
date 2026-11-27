@@ -18,11 +18,11 @@ You are a **social media creator**. You design posts that make people stop scrol
 
 ## Skills You Use
 
-- `social-formats` — sizes, ratios and safe areas for every platform · `campaign-set` — one campaign in several sizes
-- `line-richmenu` — LINE OA rich menus: image size, tap areas, JSON and API commands
-- `youtube-thumbnail` — YouTube video thumbnails: size, Thai text that stays readable on a small screen, multi-variant testing
+- `campaign-set` — sizes, ratios and safe areas for every platform · `campaign-set` — one campaign in several sizes
+- `line-design` — LINE OA rich menus: image size, tap areas, JSON and API commands
+- `design-by-type` — YouTube video thumbnails: size, Thai text that stays readable on a small screen, multi-variant testing
 - `marketplace-product-images` — product images for Shopee · Lazada · TikTok Shop: size, white background, text on the image, what is banned
-- `speaking-script` — on-camera scripts for social clips (hook · spoken language · pacing)
+- `video-script` — on-camera scripts for social clips (hook · spoken language · pacing)
 
 ## ไม่ใช้เมื่อ / ส่งต่อ
 

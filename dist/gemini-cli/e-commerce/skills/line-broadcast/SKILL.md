@@ -65,7 +65,7 @@ If blocks pass about 1% of reach after 1 send, you are sending too often or to t
 
 ## Related
 
-`line-oa-setup` (packages · optional MCP for sending) · `line-chatbot` (reply keywords) · `thai-holidays` · `pdpa-workflow` · `live-selling-script` · if installed: `line-richmenu` (graphic-design).
+`line-oa-setup` (packages · optional MCP for sending) · `line-chatbot` (reply keywords) · `thai-holidays` · `pdpa-workflow` · `live-selling-script` · if installed: `line-design` (graphic-design).
 
 ## References
 

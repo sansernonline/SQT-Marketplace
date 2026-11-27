@@ -241,7 +241,7 @@ Values that many files cite (social security ceiling · VAT threshold · tax rat
 | Rule | Detail |
 |---|---|
 | **Pick the agent by role** | Listings, prices and stock: `shop-manager` · customer replies and reviews: `customer-chat` · live sales: `live-seller` · buying-side work (compare · complaints · refunds · warranty): `consumer-advocate` · tax and filing calendar (including online-seller tax `seller-tax-basics` · hiring staff `hiring-th` · business setup `thai-business-setup`): `tax-helper` · business documents: `thai-doc-writer` · PDPA: `compliance-helper` · LINE OA: `line-admin`. If the work splits into several separate matters (many orders), use 1 fresh agent per matter. |
-| **Cross-branch work** | Product images, promo posts and LINE rich menu images (`line-richmenu`) go to `graphic-design` · shop or payroll systems that need code go to `software-development` (`ecommerce-engineer`) · personal tax goes to `trading-finance` · polite messages → `human-writing/polite-message-th-en` (plugin `superuser`) · document registry → `personal-life` · investment scams → `trading-finance`. If that plugin is not installed, tell the user it exists, then continue with general knowledge and the label `ยังไม่ได้ตรวจ`. Multi-step work in that branch goes to that plugin's `/<plugin>:superuser`. |
+| **Cross-branch work** | Product images, promo posts and LINE rich menu images (`line-design`) go to `graphic-design` · shop or payroll systems that need code go to `software-development` (`ecommerce-engineer`) · personal tax goes to `trading-finance` · polite messages → `human-writing/polite-message-th-en` (plugin `superuser`) · document registry → `personal-life` · investment scams → `trading-finance`. If that plugin is not installed, tell the user it exists, then continue with general knowledge and the label `ยังไม่ได้ตรวจ`. Multi-step work in that branch goes to that plugin's `/<plugin>:superuser`. |
 
 ---
 
@@ -796,14 +796,14 @@ Every lesson can point to the file it went into · a repeated mistake has a chec
 # playbook · line-oa — setting up and running a LINE Official Account
 
 Use when: creating a LINE OA · turning on the Messaging API · building a chatbot · rich menu · broadcast
-Main skills: `line-oa-setup` · `line-chatbot` · `line-broadcast` · `graphic-design:line-richmenu` (if installed) · agent `line-admin`
+Main skills: `line-oa-setup` · `line-chatbot` · `line-broadcast` · `graphic-design:line-design` (if installed) · agent `line-admin`
 
 ## ขั้นตอน (Steps — copy into the todo exactly)
 
 1. Check the account's plan and message quota on LINE's official pages · ใคร: `line-admin` ตัวใหม่
 2. Set up the channel and webhook following `line-oa-setup` — verify the X-Line-Signature signature, and keep secrets in a config file that the user fills in personally · ใคร: `line-admin` ตัวใหม่ (the user fills in the secrets personally)
 3. Chatbot — group real customer questions by intent, then answer from the knowledge base. If unsure, hand over to staff, and never invent prices or stock · ใคร: `line-admin` ตัวใหม่
-4. Rich menu — build the image size and tap areas following `graphic-design:line-richmenu` (not installed → use the sizes from LINE's official documents and tag them `ยังไม่ได้ตรวจ` (not yet checked)) · ใคร: `line-admin` ตัวใหม่
+4. Rich menu — build the image size and tap areas following `graphic-design:line-design` (not installed → use the sizes from LINE's official documents and tag them `ยังไม่ได้ตรวจ` (not yet checked)) · ใคร: `line-admin` ตัวใหม่
 5. Broadcast — calculate the quota before sending. The actual send must wait for approval · ใคร: `line-admin` ตัวใหม่ calculates the quota, then ผู้ใช้อนุมัติ the actual send (the user approves)
 6. Test (ทดสอบ) with an echo or a test message to a test account · ใคร: `line-admin` ตัวใหม่ sends to the test account · `reviewer` ตัวใหม่ checks the result against the log and the quota calculation
 
@@ -866,7 +866,7 @@ Main skills: `product-listing` · `marketplace-fees-pricing` · `multi-shop-stoc
 3. Set the price per platform with the formula in `marketplace-fees-pricing`, as a table, and tell the user to check the rates against Seller Centre · ใคร: `shop-manager` ตัวใหม่
 4. Write the product name, search keywords, description, and image checklist per platform, following `product-listing` · ใคร: `shop-manager` ตัวใหม่
 5. Set the SKU and enter it in the master stock file per `multi-shop-stock`, with a reorder point · ใคร: `shop-manager` ตัวใหม่
-6. Check (ตรวจ) banned advertising words, the SKU, and image sizes for each platform (`social-formats` in graphic-design, ถ้าติดตั้ง) · ใคร: `reviewer` ตัวใหม่
+6. Check (ตรวจ) banned advertising words, the SKU, and image sizes for each platform (`campaign-set` in graphic-design, ถ้าติดตั้ง) · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -1522,7 +1522,7 @@ Moved from `SKILL.md` section 3 · open it when unsure which skill to call, or w
 | Leave, overtime, severance | `labour-law-basics` · `doc-leave` |
 | Hiring a new employee (job ad · screening sheet · interview · offer letter) | `hiring-th` + agent `tax-helper` |
 | PDPA | `pdpa-workflow` + agent `compliance-helper` |
-| LINE OA | `line-oa-setup` · `line-chatbot` · `line-broadcast` + agent `line-admin` · rich menu image → `line-richmenu` (graphic-design) |
+| LINE OA | `line-oa-setup` · `line-chatbot` · `line-broadcast` + agent `line-admin` · rich menu image → `line-design` (graphic-design) |
 | PromptPay QR · a customer sends a payment slip, can the goods be shipped now | `promptpay-qr` (slips: section 5) |
 | Holidays | `thai-holidays` |
 

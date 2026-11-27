@@ -176,8 +176,8 @@ The situation → skill table is in [`triggers`](references/triggers.md). Open i
 
 | Criterion | Passes when | Skill |
 |---|---|---|
-| **On brand** | Colours, fonts, logo and voice match the brand kit. With no kit, follow the last piece the user approved. | `brand-kit` · `style-consistency` |
-| **Works where it will live** | Size and ratio are right for the platform · text sits inside the safe zone · contrast passes · subtitles are readable in time | `social-formats` · `motion-basics` |
+| **On brand** | Colours, fonts, logo and voice match the brand kit. With no kit, follow the last piece the user approved. | `brand-kit` |
+| **Works where it will live** | Size and ratio are right for the platform · text sits inside the safe zone · contrast passes · subtitles are readable in time | `campaign-set` · `video-editing` |
 | **Passes the 8-point check** | `design-review` passes every point, or each failed point has a reason the user accepts | `design-review` |
 
 Always write the direction in words before drawing. An image with no direction comes out like a generic template.

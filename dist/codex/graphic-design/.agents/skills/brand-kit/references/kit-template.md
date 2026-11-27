@@ -1,6 +1,6 @@
 # Brand kit folder template
 
-Copy this tree to `brand-kit/v1/` (or to `00-brand-kit/` inside the asset tree from `asset-organize`).
+Copy this tree to `brand-kit/v1/` (or to `00-brand-kit/` inside the asset tree from `brand-kit`).
 
 ```
 brand-kit/

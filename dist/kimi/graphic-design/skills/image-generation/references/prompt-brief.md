@@ -1,0 +1,103 @@
+
+# Brief to Image
+
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `design-gate/no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
+
+Contents: Workflow · Prompt anatomy · Pick the image · Model differences · Failure modes · Worked example · Rules · Not an AI look · Related
+
+Write the brief before making the first image.
+
+This skill writes the brief and prompt. Generation happens in whatever image tool or plugin the user has. No generation tool → the fallback order (Scalable Vector Graphics (SVG) set, then Openverse photos) lives in `../SKILL.md`; this file covers the brief and the prompt.
+
+## Workflow
+
+0. **Find reference work before writing the brief** — every time; when a style lock sheet or brand kit already fixes the look, keep its palette and light and search only for composition and staging: research 3–5 pieces of strong real work in the same category (**ค้นต้นแบบก่อน:** run the project's keywords through a live search per `design-gate/design-references` (plugin `superuser`), type `illustration` or `social`, then pull the colours from the chosen work · use the stored palette bank only when live search is unavailable · award archives · competitor campaigns) · write 1 line per piece on *why it works* (composition · light · palette · type) · save links beside the brief in `briefs/<asset-name>.md` under "References" · the style, palette and light lines of the brief then cite these benchmarks, and tools that accept reference images get 1–2 of them · **references are a bar to clear, not a piece to copy** — the concept must stand at their level without imitating any one of them
+1. **Ask 5 things** if missing: image style (pick from the style list in [`styles.md`](styles.md) — one style per set; unattended → pick from the use and log why; references from step 0 outrank the default list) · what must the image show · where it will be used (placement → aspect ratio, from `campaign-set`) · what text goes on it (usually none in the image — add text in layout) · brand kit or style lock sheet to follow
+2. **Fill the brief** with the anatomy below; save it as `briefs/<asset-name>.md` using [prompt-anatomy.md](prompt-anatomy.md)
+3. **Assemble the prompt** in anatomy order, most important first
+4. **Generate 3–4 variations**, not 1. Pick with the score below, not by gut feeling
+5. **Fix misses 1 element at a time** — wrong light? Change only the light line
+6. **3 misses on 1 element** → the brief is wrong or the model cannot do it. Rewrite that element or change approach (edit, composite, photograph)
+7. **Record the winning prompt, model name and version, seed and settings** next to the brief — that is the reusable asset
+
+## Prompt anatomy (in this order)
+
+| # | Element | Answers | Weak → strong |
+|---|---|---|---|
+| 1 | Subject | What, exactly, 1 focal point | "coffee" → "a glass of iced matcha latte with visible layers of green and milk" |
+| 2 | Action / state | What is happening | → "condensation running down the glass" |
+| 3 | Setting | Where | → "on a pale oak café counter, Bangkok shophouse interior blurred behind" |
+| 4 | Composition | Framing, angle, negative space | → "eye-level, subject in left third, empty space top-right for headline" |
+| 5 | Lens / camera | Focal length, depth of field | → "85mm, shallow depth of field, f/2" |
+| 6 | Light | Direction, quality, time | → "soft window light from the right, late morning, gentle shadows" |
+| 7 | Style | Medium and reference genre | → "editorial food photography, natural, not glossy" |
+| 8 | Palette | 3–5 colours, dominant first | → "muted sage green, warm cream, pale wood, one amber accent" |
+| 9 | Negatives | What must not appear | → "no text, no logo, no hands, no straw, no extra glasses" |
+| 10 | Format | Aspect ratio, resolution | → "4:5 portrait" (set as a parameter if the tool has one) |
+
+Lens and light vocabulary: see [prompt-anatomy.md](prompt-anatomy.md).
+One tactile 3D object as the hero (paper cut, clay, felt): use the 8-line template (subject · material · light · shadow · lens · background · one colour · negatives) and its worked example in [prompt-anatomy.md](prompt-anatomy.md), section "Tactile 3D hero object".
+
+## Pick the image (ตัดสินด้วยตัวเลข)
+
+Use `decision-desk/decision-scoring` command `score` (`node decide.mjs score <file.json>`) on the 3–4 variations. The score picks among images that are already acceptable; taste is the user's final call.
+
+| Part | Rule |
+|---|---|
+| Hard rules first (`must`, the variation is dropped) | physical-errors score below 3 (extra fingers, melted faces, floating objects) · garbled text when the brief asked for text · another brand's logo or an identifiable real person |
+| Criteria, each scored 1–5 by a reviewer that did not generate the image (`better: high`) | matches the brief · text readable (leave out when the image has no text) · matches the style lock · crop-ready (room for the headline, survives the placements' ratios) · physical errors are **not** scored here: they are the hard rule above, counted once |
+| Default weights (starting value, not yet measured · change per job) | brief 0.40 · style lock 0.30 · crop-ready 0.15 · text readable 0.15 |
+| Hard to score directly | use `pairwise`: show each pair twice with positions swapped and record the winner; a pair whose winner flips with position counts as a tie |
+| Result line | `ยังไม่นิ่ง` or a near tie → show the top 2 to the user and say which criterion splits them; they choose |
+
+The script re-ranks with each weight moved ±20% and says whether rank 1 holds (`นิ่ง`); if it flips, treat the top 2 as a tie. These weights have not been compared with human rankings yet: before trusting them, have a person and the reviewer rank the same 5 real sets and count the matches.
+
+Write the 1–5 scores and who gave them next to the brief (`briefs/<asset-name>.md`) with the winning prompt. A model that reviews its own output leans toward long or flashy images: use a different reviewer (scores with 1 reason each, at most 10 lines), and spot-check one score by eye.
+
+## Model differences (general, check your tool's docs)
+
+Model and tool differences (sentences vs phrases, negative field, aspect ratio, Thai text, version changes): [model-differences.md](model-differences.md).
+
+## Failure modes — what to change when the image misses
+
+| Miss | Change only this |
+|---|---|
+| Extra fingers, limbs, melted faces | Fewer people, hands out of frame or holding something; crop tighter |
+| Garbled text or signage | Remove every word from the prompt; add copy in layout |
+| 2 subjects where 1 was asked, or duplicated objects | "a single …", 1 focal point, remove plural nouns |
+| Subject always centred | Composition line with an edge: "placed far left, touching the frame edge, empty wall right" |
+| Negative word appears anyway ("no straw" gives a straw) | Describe what is there instead of what is not |
+| Colour oversaturated, plastic look | Add "natural, muted, editorial, not advertising" and the hex palette |
+| Set does not match across images | Style lock sheet (`brand-kit`) and the same seed or reference image |
+| Wrong aspect ratio | Set the parameter, delete the ratio words from the prompt |
+
+Gemini API users: Imagen models are being retired and the Gemini image model names change often, so no model list is stored here. Look up the current image model IDs and any shutdown dates at https://ai.google.dev/gemini-api/docs/image-generation and https://ai.google.dev/gemini-api/docs/deprecations; look it up live (WebSearch/WebFetch) before using it; if the page will not open, mark the value (รอยืนยัน). Record the exact model ID you used (workflow step 7).
+
+## Worked example — brief to prompt
+
+Request → brief → prompt → review for a matcha drink post: [prompt-worked-example.md](prompt-worked-example.md).
+
+## Rules
+
+- 1 brief per asset. A series shares a style lock sheet (`brand-kit`), not a copy-pasted prompt
+- Never put the headline, price or Thai copy into the image prompt
+- Generated people: no real, identifiable person without consent. No trademarked characters or logos of other brands
+- Check the tool's terms for commercial use before using an output in an ad
+
+## Not an AI look
+
+Every prompt carries the items in `design-gate/no-ai-look` section 4 (named style, hex, light, what to avoid); the eye check (3.2) covers images.
+
+## Related
+
+- `brand-kit` — locking a look across many images
+- `image-generation` — fixing an image instead of regenerating
+- `design-review` — the check before it ships
+
+## เรียกเป็นคำสั่ง
+
+`/graphic-design:image-generation <what the image must show> [where it will be used]`
+
+Run `image-generation` with the `art-director` agent for: **$ARGUMENTS**
+
+Saves the brief to the project briefs folder. Generation and the consistency check both use this same brief.

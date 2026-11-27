@@ -67,7 +67,7 @@ Not shipped with this plugin, because nothing here downloads code at run time. I
 
 ## Related
 
-`line-chatbot` · `line-broadcast` · `pdpa-workflow` · if installed: `line-richmenu` (graphic-design), `config-and-secrets`, `notifications` (software-development).
+`line-chatbot` · `line-broadcast` · `pdpa-workflow` · if installed: `line-design` (graphic-design), `config-and-secrets`, `notifications` (software-development).
 
 ## เรียกเป็นคำสั่ง
 

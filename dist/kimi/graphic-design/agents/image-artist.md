@@ -38,7 +38,7 @@ You are an **Image Artist**. You make images that people see and believe are rea
 ## Skills You Use
 
 - `image-generation` — **every job**: image style · lock the style · image list · generation script · check before sending
-- `brief-to-image` · `style-consistency` · `image-editing-brief` — write a detailed brief, lock the whole set, edit an image instead of regenerating
+- `image-generation` · `brand-kit` · `image-generation` — write a detailed brief, lock the whole set, edit an image instead of regenerating
 - `brand-kit` — brand colours and what must not be done
 - Ways of working: `human-writing` · `human-writing/spell-out-abbreviations` · `workspace-rules/temp-file-discipline` (images not chosen go to `_to_delete/`) · `superuser/status-report`
 
