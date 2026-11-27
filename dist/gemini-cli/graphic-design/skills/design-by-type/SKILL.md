@@ -11,6 +11,8 @@ description: Use when a logo, poster, banner, cover or deck must blend popular r
 
 This skill adds 3 things on top of `design-gate/design-references`: the type's own rules, a popularity check on references, and the blend recipe. The search, board and owner pick stay in `design-gate/design-references`; do not repeat them here.
 
+> The general method for any medium is `superuser` `design-gate/parts/design-method/guide.md` (12 steps); this skill adds the type rules, popularity check and blend.
+
 ## Use when
 - A logo · poster · banner or social ad · Word/PDF cover · slide deck is about to be designed, from scratch or as a redesign.
 - The owner says the work looks stiff, generic or AI-made, and the job is one of those types.

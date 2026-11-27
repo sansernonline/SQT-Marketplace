@@ -60,12 +60,11 @@ Read `~/.claude/superuser-style.md` (preferred styles + choice log) and the proj
   - loudness and clarity in graphic-design `video-editing` and `narration-th`;
   - depth limits in `design-references` `references/depth-and-light.md`;
   - flat rules in graphic-design `design-by-type/references/flat-design.md`.
-
 - **Everyone can use it (accessibility):**
   - text and key marks reach contrast 4.5:1 (3:1 for large text and icons);
   - meaning never rests on colour alone, so check a colour-blind view;
   - Thai stays legible at the smallest real size, with no broken marks;
-  - audio and video carry subtitles, and a voice is clear over the room noise from step 8's test.
+  - audio and video carry subtitles, and a voice is clear over the room noise from the edge-of-use test above.
 
 ### 9 · Make sure it is ours (originality and clash check)
 - Put the piece next to every reference from step 6, at the same size. If one could pass for the other, change the structure, not only the colour (FaoDee round 4: a camera drawn "after" a reference came out too close to it).
@@ -75,7 +74,7 @@ Read `~/.claude/superuser-style.md` (preferred styles + choice log) and the proj
 ### 10 · Show it in real use, then a fresh critic
 - **Real use:** put the piece where it will live, using real photos or real playback (a sign on a wall, a mug, a phone screen, a printed page, the voice over the actual video, a jingle on a phone speaker). A piece that only looks good on a blank canvas is not done.
 - **Fresh critic:** a fresh critic who did not make it checks the real render or recording. Calibrate the critic against the owner's past scores, because critics run 1–2 points high. Send old and new in one call and ask which is better on each criterion.
-- **Target:** 8 on the owner's scale. Stop after 2–3 fix rounds and send with the honest score and what is still short.
+- **Target:** 8 on the owner's scale (7 with no 0 is the floor for sending, per graphic-design `wow-score.md`). Stop after 2–3 fix rounds and send with the honest score and what is still short.
 
 ### 11 · Present, record, hand off
 - **Present:** one board or page with every direction, its meaning line, references with links, the critic score, and open items marked `(รอยืนยัน)`. The owner picks. Ask once at the end, as a choice.
@@ -98,12 +97,12 @@ The owner answers with a score and a few words. Turn the words into fixes before
 | ไม่สมส่วน (out of proportion) | one part too big or too wide | measure the reference's ratios and redraw to them |
 | รายละเอียดเยอะ (too much detail) | parts that vanish at small size | drop to the plain master · keep one accent |
 | ดูเละ · เอามารวมกัน (messy, mixed) | two objects stacked | one object per mark, or join them into one shape |
-| ไม่ทันสมัย (dated) | category clichés, old type | category map (brainstorm 5) · a newer typeface · a cleaner palette |
+| ไม่ทันสมัย (dated) | category clichés, old type | category map (brainstorm topic 5) · a newer typeface · a cleaner palette |
 | research มายัง (did you research?) | drawn from memory | step 6 again: live references from the same industry, and the owner picks |
 
 Record the words and the fix in the choice log, so the next round starts from them.
 
-## Brainstorm before making (steps 1–7)
+## Brainstorm topics (feed steps 1–7)
 
 What design teams talk through before a product, brand or piece takes shape (research 2026-11-27, sources at the end). Run it as a short session with the owner, or answer it yourself and show the answers on the board.
 
@@ -130,7 +129,7 @@ What design teams talk through before a product, brand or piece takes shape (res
 | Licences (11) | fonts (OFL or bought), photos (Unsplash or owned) | fonts, images, icons | voice rights, music licence, TTS terms | footage, music, voice |
 
 ## Check before sending
-- [ ] Brief and 2–3 feelings written; unknowns marked `(รอยืนยัน)`
+- [ ] Brief and 2–3 feelings written; unknowns marked `(รอยืนยัน · ผู้ใช้/agent/ภายนอก: …)`
 - [ ] Every direction has one meaning and a `ความหมาย · ตัวสื่อ · สไตล์` line
 - [ ] Live references opened this round, with links and dates
 - [ ] Directions differ in style and structure, not only colour
