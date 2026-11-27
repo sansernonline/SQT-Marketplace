@@ -17,7 +17,7 @@ description: Use when making designs, documents or visuals that people see
 - **No-ai-look:** every choice (color, font, layout, image, word) must be answerable as "chosen because of this project", not "because it is the default".
 - Last line of every answer that makes or reviews a visual piece is the `no-ai-look:` line with real counts (`ด่านตา n/9`, web pages add `(หน้าเว็บ n/14)`). Items not checked count as not passed. A script result of 0 never makes the line pass.
 - Someone who did not make the piece must check it by eye (a fresh agent opens the real rendered image) on every job before sending. The maker's own check does not count.
-- Never use a framework default as the brand color (Tailwind indigo-500 `#6366f1` · shadcn/ui default dark gray). Never invent content: missing names, numbers or dates get `(รอยืนยัน)`.
+- Never use a framework default as the brand color (Tailwind indigo-500 `#6366f1` · shadcn/ui default dark gray). Never invent content: missing names, numbers or dates get `(รอยืนยัน · ผู้ใช้: <what to give>)`, and anything the agent will still check gets `(รอยืนยัน · agent: …)`.
 - **Polished-document-style:** for a document people keep to read, follow the gate above even when a brand exists. Labels are words, never emoji. Never nest bullets (use sub-headings or a table). Code blocks always name the language.
 - This skill handles the look; the wording belongs to `human-writing`. Open both for a kept document.
 
@@ -25,11 +25,14 @@ description: Use when making designs, documents or visuals that people see
 
 | When | Open |
 |---|---|
+| Any design job in any medium (image · document · voice · music · video · screen): the 12-step method from brief and feelings to hand-off, and what each step means per medium | [parts/design-method/guide.md](parts/design-method/guide.md) |
 | Starting any design work, choosing colors or a theme, owner says "go look at real examples", the gate steps and evidence line | [parts/design-references/guide.md](parts/design-references/guide.md) |
 | Making or checking a visual so it does not look AI-made, the eye check and result line | [parts/no-ai-look/guide.md](parts/no-ai-look/guide.md) |
 | Writing a markdown document people keep (report, proposal, manual): headings, tables, labels, figures | [parts/polished-document-style/guide.md](parts/polished-document-style/guide.md) |
 
 ## Check before done
+
+- The 12 steps in `parts/design-method/guide.md` were followed: feelings written, one meaning per direction, real-use test, owner's pick recorded.
 
 - The answer has the `เนื้อหา:` brief, the `ด่านก่อนลงมือ:` line and the `no-ai-look:` line.
 - Every colour has a reason or `ล็อกตามแบรนด์`.

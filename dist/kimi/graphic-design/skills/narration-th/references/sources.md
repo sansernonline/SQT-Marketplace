@@ -1,7 +1,7 @@
 # Sources · narration-th
 
 - F5-TTS-THAI: [VYNCX/F5-TTS-THAI](https://github.com/VYNCX/F5-TTS-THAI) (code MIT · `f5_tts_webui.py` gives the NFE value and cfg strength (the weight that forces the voice to follow the text) and advice on the reference clip and English words · commit `7b0989f`) · model [VIZINTZOR/F5-TTS-THAI](https://huggingface.co/VIZINTZOR/F5-TTS-THAI) (card CC-BY-4.0) · base model [SWivid/F5-TTS](https://github.com/SWivid/F5-TTS) (CC-BY-NC because of the Emilia training data) (seen 2026-10-24)
-- [rany2/edge-tts](https://github.com/rany2/edge-tts) (LGPL-3.0 · version 7.3.1 from PyPI · seen 2026-10-24)
+- [rany2/edge-tts](https://github.com/rany2/edge-tts) (LGPL-3.0 · version 7.3.1 from PyPI · seen 2026-10-24 · `boundary="WordBoundary"` word timings used 2026-11-26)
 - Google Cloud [Text-to-Speech pricing](https://cloud.google.com/text-to-speech/pricing) (look up the live price) · [Chirp 3: HD](https://docs.cloud.google.com/text-to-speech/docs/chirp3-hd) (has th-TH · page updated 2026-10-22)
 - Azure AI Speech: [Microsoft Product Terms](https://www.microsoft.com/licensing/terms/productoffering/MicrosoftAzure/EAEAS) section Text-to-Speech (TTS) Services, the clause on rights to use generated audio, and the pricing page (an agent searched and read them on 2026-10-24 · รอยืนยัน) · [Code of Conduct for Microsoft AI Services](https://learn.microsoft.com/en-us/legal/ai-code-of-conduct) item 3 requires disclosing that the voice is synthetic (version 4.0 · 2026-05-01 · checked 2026-10-24)
 - Windows: the on-machine license `C:\Windows\System32\license.rtf` (updated April 2024 · an agent searched and read it on 2026-10-24)

@@ -12,7 +12,7 @@ The eye gate in `design-gate/no-ai-look` (n/9) only says a piece does not look A
 | 4 | **Depth and light** | flat, no light direction | some shadow or gradient, mixed or timid | 3 layers, one light source, materials you can almost touch, inside `design-gate/design-references` `references/depth-and-light.md` limits | owner's theme `มีมิติ` · `แสงเงา` |
 | 5 | **Craft** at 100–200 % zoom | broken Thai marks, soft images, clipped or colliding text | clean but some loose edges, spacing or kerning | every edge, kern, Thai mark and image crisp | D&AD: "brilliantly executed" |
 
-A deliberately flat style (Swiss, flat brand) scores criterion 4 on how well the flatness is controlled, and says so.
+A deliberately flat style (Swiss, flat brand) scores criterion 4 on how well the flatness is controlled, and says so. The 0/1/2 text for that case is in `flat-design.md`.
 
 ## Send rule
 

@@ -94,6 +94,6 @@ test("digest: blocked rows and 'waiting' section survive; old days and secrets d
 });
 
 test("digest: BLOCKED matches blocked/waiting wording but not รอบ", () => {
-  assert.ok(BLOCKED.test("ติดที่ API key") && BLOCKED.test("(รอยืนยัน) ราคา") && BLOCKED.test("งานนี้ รอ ผู้ใช้"));
+  assert.ok(BLOCKED.test("ติดที่ API key") && BLOCKED.test("(รอยืนยัน) ราคา") && BLOCKED.test("(รอยืนยัน · ผู้ใช้: บอกงบ)") && BLOCKED.test("งานนี้ รอ ผู้ใช้"));
   assert.ok(!BLOCKED.test("ตรวจรอบที่ 2 ผ่านแล้ว"));
 });
