@@ -7,6 +7,8 @@ description: Use before any logo, video, banner, icon or image job to know what 
 
 > **One rule:** read the principle of the medium before you make anything, and judge the finished piece against it. A principle says what good looks like and why. It has no step order and no "who does it": steps live in the playbook, how-to lives in the skills.
 
+The same 3 layers apply to every plugin; the shared table and the principles for every job are in `superuser:work-principles`.
+
 ## 3 layers, one job each
 
 | Layer | Answers | Who reads it | Where |

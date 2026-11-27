@@ -1,5 +1,9 @@
 # Changelog — trading-finance
 
+## 0.25.0 — 2026-11-27
+
+- skill ใหม่ `money-principles`: หลักคิด 4 ชนิดงาน (personal-money · investing · trading · money-safety-tax) เป็นแนวปฏิบัติทั่วไป ไม่ใช่คำแนะนำรายบุคคล · ตัด "อ่านงบบริษัท" ออกเพราะแหล่งไม่ถึง 3
+
 ## 0.24.2 — 2026-11-27
 
 - สำเนา `superuser/references/evidence.md`: ป้าย `(รอยืนยัน)` ต้องบอกว่ารอใคร (ผู้ใช้ · agent · ภายนอก) และคำตอบที่มีงานของผู้ใช้จบด้วย **ต้องให้คุณทำ** (ตาม superuser 4.1.0)

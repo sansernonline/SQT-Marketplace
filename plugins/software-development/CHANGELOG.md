@@ -1,5 +1,9 @@
 # Changelog — software-development
 
+## 3.11.0 — 2026-11-27
+
+- skill ใหม่ `dev-principles`: หลักคิด 7 ชนิดงาน (code · architecture-api · testing · security ตาม OWASP Top 10:2025 · operations · requirements-docs · ui) ทุกข้อมีแหล่งตรงกันอย่างน้อย 3 แหล่ง
+
 ## 3.10.2 — 2026-11-27
 
 - สำเนา `superuser/references/evidence.md`: ป้าย `(รอยืนยัน)` ต้องบอกว่ารอใคร (ผู้ใช้ · agent · ภายนอก) และคำตอบที่มีงานของผู้ใช้จบด้วย **ต้องให้คุณทำ** (ตาม superuser 4.1.0)

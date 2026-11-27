@@ -1,5 +1,9 @@
 # Changelog — superuser
 
+## 4.4.0 — 2026-11-27
+
+- skill ใหม่ `work-principles`: แนวคิด 3 ชั้น (หลักคิด · skill · playbook) สำหรับทุก plugin · ตารางหลักคิดที่ใช้กับทุกงาน (ground-rules · fix-at-source · human-writing · research-with-sources · decision-desk · design-gate) · ตารางหลักคิดราย plugin
+
 ## 4.3.0 — 2026-11-27
 
 - `design-gate`: บรีฟ `เนื้อหา:` เป็น 7 ช่อง เพิ่ม `โปรเจกต์:` เป็นช่องแรก (มีไว้ทำไม · ชื่อหมายถึงอะไร · อยากให้คนจำว่าอะไร) · เขียนครั้งเดียวใน `DESIGN.md` · ธีมหรือสีอย่างน้อย 1 อย่างโยงกลับมาที่ช่องนี้ · คำค้น mood ใช้ 1 คำจากช่องนี้ · แก้ "6 ช่อง" ทุกจุด

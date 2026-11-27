@@ -1,5 +1,9 @@
 # Changelog — personal-life
 
+## 0.28.0 — 2026-11-27
+
+- skill ใหม่ `life-principles`: หลักคิด 5 ชนิดงาน (life-admin · health-care จัดระเบียบเท่านั้น ไม่วินิจฉัย ไม่บอกขนาดยา · career · learning · planning) ทุกข้อมีแหล่งตรงกันอย่างน้อย 3 แหล่ง
+
 ## 0.27.2 — 2026-11-27
 
 - สำเนา `superuser/references/evidence.md`: ป้าย `(รอยืนยัน)` ต้องบอกว่ารอใคร (ผู้ใช้ · agent · ภายนอก) และคำตอบที่มีงานของผู้ใช้จบด้วย **ต้องให้คุณทำ** (ตาม superuser 4.1.0)
