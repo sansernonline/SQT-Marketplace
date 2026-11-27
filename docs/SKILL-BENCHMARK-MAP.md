@@ -58,7 +58,7 @@ _ตรวจ 2026-11-08 ที่ main `2d922f5` · ไม่ได้รัน
 | `household-bills` | ค่าไฟผิด 0 บาทจากบิลจริง | `power-bill.mjs` 28/28 ผ่าน | ฟรี |
 | `design-direction-lookup` | ความแม่นของตัวค้นบน 60 เคสที่รู้เฉลย | `design_search.py --eval` ได้ 100% ในชุดที่กันไว้ทดสอบ | ฟรี |
 | `security-audit` · `security-gate` | recall ของช่องโหว่และค่าลับที่ฝังไว้ | fixture + `self_test.mjs` ของ security-audit · security-gate ต้องสร้างชุดฝัง | ฟรี |
-| `print-ready-files` · `subtitles-th` · `line-richmenu` | ค่าที่เครื่องวัดได้ เช่น ระยะตัดตก 3 มม. · 35 ตัวต่อบรรทัด · ขนาด 2500×1686 | `print_check.py` `srt_check.py` `richmenu_check.py` self-test ผ่าน | ฟรี |
+| `print-ready-files` · `video-editing` · `line-design` | ค่าที่เครื่องวัดได้ เช่น ระยะตัดตก 3 มม. · 35 ตัวต่อบรรทัด · ขนาด 2500×1686 | `print_check.py` `srt_check.py` `richmenu_check.py` self-test ผ่าน | ฟรี |
 | `scam-check` | recall และอัตราเตือนผิด บนข้อความที่คนติดป้าย | มีเคส guard ยังไม่มีผล | เติมเคส |
 | superuser จัดขนาดและเลือก model | ตามหัวข้อ 2 | `run-models.mjs` · ชุด 24 เคสที่เสนอ | 12–20 ดอลลาร์ |
 

@@ -1,5 +1,9 @@
 # Changelog — software-development
 
+## 3.10.3 — 2026-11-27
+
+- skill ที่อ้าง skill ของ graphic-design ชี้ชื่อใหม่ (graphic-design 0.38.0 รวม 24 เหลือ 14) · `graphic-design` บอกให้ใช้ `graphic-design:design-by-type` เมื่อลง plugin graphic-design ไว้
+
 ## 3.10.2 — 2026-11-27
 
 - สำเนา `superuser/references/evidence.md`: ป้าย `(รอยืนยัน)` ต้องบอกว่ารอใคร (ผู้ใช้ · agent · ภายนอก) และคำตอบที่มีงานของผู้ใช้จบด้วย **ต้องให้คุณทำ** (ตาม superuser 4.1.0)

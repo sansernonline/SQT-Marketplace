@@ -810,7 +810,7 @@
     },
     {
      "n": 4,
-     "text": "Rich menu — build the image size and tap areas following `graphic-design:line-richmenu` (not installed → use the sizes from LINE's official documents and tag them `ยังไม่ได้ตรวจ` (not yet checked)) · ใคร: `line-admin` ตัวใหม่",
+     "text": "Rich menu — build the image size and tap areas following `graphic-design:line-design` (not installed → use the sizes from LINE's official documents and tag them `ยังไม่ได้ตรวจ` (not yet checked)) · ใคร: `line-admin` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1168,7 +1168,7 @@
     },
     {
      "n": 6,
-     "text": "Check (ตรวจ) banned advertising words, the SKU, and image sizes for each platform (`social-formats` in graphic-design, ถ้าติดตั้ง) · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) banned advertising words, the SKU, and image sizes for each platform (`campaign-set` in graphic-design, ถ้าติดตั้ง) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {

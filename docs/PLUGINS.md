@@ -2,7 +2,7 @@
 
 ทั้งหมด **6 plugins** · สายพัฒนาซอฟต์แวร์มี `software-development` ตัวเดียว เพราะรวมทุกสาขาไว้แล้วตั้งแต่ v2.0.0
 
-> **รวม plugin รอบ 2 (2026-10-25)** — `thai-workplace` รวมเข้า **`e-commerce`** (skill 19 ตัว คำสั่ง 8 ตัว agent 4 ตัว playbook 5 ตัว) ยกเว้น `line-richmenu` ที่ย้ายไป **`graphic-design`** · `reverse-engineer` รวมเข้า skill `reverse-engineering` และ agent `reverse-engineer` ของ **`software-development`** (module .NET · firmware · network และตัวตรวจเครื่องมือ `check-tools.mjs`) · ถอด plugin เก่าด้วย `/plugin uninstall thai-workplace` และ `/plugin uninstall reverse-engineer` · หัวข้อด้านล่างที่ยังเรียก `thai-workplace` เป็นบันทึกของรอบก่อน
+> **รวม plugin รอบ 2 (2026-10-25)** — `thai-workplace` รวมเข้า **`e-commerce`** (skill 19 ตัว คำสั่ง 8 ตัว agent 4 ตัว playbook 5 ตัว) ยกเว้น `line-design` ที่ย้ายไป **`graphic-design`** · `reverse-engineer` รวมเข้า skill `reverse-engineering` และ agent `reverse-engineer` ของ **`software-development`** (module .NET · firmware · network และตัวตรวจเครื่องมือ `check-tools.mjs`) · ถอด plugin เก่าด้วย `/plugin uninstall thai-workplace` และ `/plugin uninstall reverse-engineer` · หัวข้อด้านล่างที่ยังเรียก `thai-workplace` เป็นบันทึกของรอบก่อน
 >
 > **รวม plugin ชีวิตประจำวัน (2026-10-22)** — `online-seller` + `consumer-rights` → **`e-commerce`** (ซื้อ-ขายออนไลน์ทั้งสองฝั่ง) · `home-family` + `health-wellness` + `career` → **`personal-life`** (ชีวิตประจำวัน 4 หมวด) · `dev-learning` → **`personal-life`** (หมวดเรียนรู้: เรียนเทคโนโลยี paper ใบรับรอง side project วิทยานิพนธ์) · `seller-tax-basics` ย้ายไป `thai-workplace` · `sqt-toolkit` (เคยชื่อ `doc-toolkit`) ยุบแล้ว — skill เอกสารหลัก 4 ตัวกลับเข้า `superuser` ที่เหลือไป `software-development` `graphic-design` `personal-life` · เพิ่ม **`reverse-engineer`** (ลอกสถาปัตยกรรม REA: จุดเข้าเดียว evidence-first) · ชื่อ skill/command เดิมใช้ได้เหมือนเดิม ถอด plugin เก่าด้วย `/plugin uninstall <ชื่อเดิม>` · ไฟล์นี้ลงรายละเอียดเฉพาะ `software-development` — จำนวนของทุก plugin ดูตารางใน [README](../README.md#-plugins) และหน้าแต่ละตัวใน [docs/plugins/](plugins/)
 
@@ -232,7 +232,7 @@ _ร่างเมื่อ 6 ต.ค. 2569 · software-development ครอ�
 - line-oa-setup — ตั้ง LINE OA + Messaging API: webhook, channel token
 - line-chatbot — บอทตอบคำถามลูกค้าจาก knowledge base บริษัท
 - line-broadcast — ส่งข่าวสาร/โปรโมชัน ภายใต้โควต้าแพ็กเกจ
-- line-richmenu — ออกแบบเมนูปุ่มใต้แชท
+- line-design — ออกแบบเมนูปุ่มใต้แชท
 - doc-quotation — ใบเสนอราคา/ใบวางบิล/ใบแจ้งหนี้ ถูกรูปแบบ
 - doc-thai-official — หนังสือราชการ/หนังสือบริษัท ภาษา+รูปแบบถูกต้อง
 - doc-contract-th — สัญญาจ้าง/สัญญาเช่า เบื้องต้น + ช่องที่ต้องให้ทนายดู
@@ -256,17 +256,17 @@ _ร่างเมื่อ 6 ต.ค. 2569 · software-development ครอ�
 
 **Skills (10):**
 - brand-kit — โลโก้ สี ฟอนต์ tone บันทึกเป็นไฟล์ชุดเดียว เรียกใช้ซ้ำได้
-- brief-to-image — แปลง brief งาน → prompt ภาพ รุ่น/สไตล์/แสง ครบ
-- style-consistency — กฎทำภาพชุดให้ดูเป็นคนเดียวทำ (palette, composition, mood)
-- image-editing-brief — บรีฟแก้ภาพต่อเนื่อง: เอาอะไร ใส่อะไร คงอะไรไว้
-- video-script-to-clip — สคริปต์วิดีโอสั้น: hook 3 วิ, shot list, caption
-- motion-basics — หลัก motion graphics สำหรับคนไม่ใช่ designer
-- social-formats — ขนาดมาตรฐานทุกแพลตฟอร์ม + safe zone
+- image-generation — แปลง brief งาน → prompt ภาพ รุ่น/สไตล์/แสง ครบ
+- brand-kit — กฎทำภาพชุดให้ดูเป็นคนเดียวทำ (palette, composition, mood)
+- image-generation — บรีฟแก้ภาพต่อเนื่อง: เอาอะไร ใส่อะไร คงอะไรไว้
+- video-script — สคริปต์วิดีโอสั้น: hook 3 วิ, shot list, caption
+- video-editing — หลัก motion graphics สำหรับคนไม่ใช่ designer
+- campaign-set — ขนาดมาตรฐานทุกแพลตฟอร์ม + safe zone
 - design-review — รายการตรวจงาน: hierarchy, contrast, spacing, ความสะอาด
 - campaign-set — ชุดงานหลายชิ้นจากแคมเปญเดียว (feed/story/banner/ปก)
-- asset-organize — ตั้งชื่อ+จัดโฟลเดอร์ไฟล์งานดีไซน์ให้หาเจอ
+- brand-kit — ตั้งชื่อ+จัดโฟลเดอร์ไฟล์งานดีไซน์ให้หาเจอ
 
-**Commands (6):** /brand-kit, /brief-to-image, /video-script-to-clip, /design-review, /campaign-set, /social-formats
+**Commands (6):** /brand-kit, /image-generation, /video-script, /design-review, /campaign-set, /campaign-set
 
 ---
 

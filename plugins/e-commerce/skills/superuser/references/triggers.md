@@ -47,7 +47,7 @@ Moved from `SKILL.md` section 3 · open it when unsure which skill to call, or w
 | Leave, overtime, severance | `labour-law-basics` · `doc-leave` |
 | Hiring a new employee (job ad · screening sheet · interview · offer letter) | `hiring-th` + agent `tax-helper` |
 | PDPA | `pdpa-workflow` + agent `compliance-helper` |
-| LINE OA | `line-oa-setup` · `line-chatbot` · `line-broadcast` + agent `line-admin` · rich menu image → `line-richmenu` (graphic-design) |
+| LINE OA | `line-oa-setup` · `line-chatbot` · `line-broadcast` + agent `line-admin` · rich menu image → `line-design` (graphic-design) |
 | PromptPay QR · a customer sends a payment slip, can the goods be shipped now | `promptpay-qr` (slips: section 5) |
 | Holidays | `thai-holidays` |
 

@@ -1,0 +1,33 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: design-by-type-thumbnail-trigger
+description: ยูทูบเบอร์ถามเรื่องภาพปกคลิปและการทดสอบหลายปก ไม่เอ่ยชื่อ skill ต้องทำให้ design-by-type ถูกเปิด และบอกว่าการทดสอบตัดสินด้วยเวลาดู
+tags: [trigger, design-by-type]
+runs: 3
+expected_outcome: เรียก Skill design-by-type แล้วให้ 16:9 · ข้อความสั้นอ่านออกบนมือถือ · ขนาดและจำนวนปกที่ทดสอบได้อ้างหน้า YouTube Help หรือดูสด · Test & compare ตัดสินด้วย watch time share ไม่ใช่ยอดกด
+execution:
+  prompt: |
+    ช่อง YouTube รีวิวมือถือของผมคนกดน้อย อยากทำปกคลิปใหม่ที่ตัวหนังสือไทยอ่านออกบนมือถือ
+    แล้วได้ยินว่า YouTube ให้ลองหลายปกได้ อยากรู้ว่าลองได้กี่แบบ และมันวัดผลจากยอดคลิกใช่ไหม
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?design-by-type"'
+    min: 1
+    arm: with-only
+  - name: size-16-9
+    type: regex
+    pattern: '16\s*:\s*9'
+    match: contains
+    target: last_message
+  - name: cites-or-looks-up-limits
+    type: llm
+    focus: last_message
+    criteria: ให้ผ่านเมื่อคำตอบอ้างหน้า YouTube Help หรือบอกว่าค้นดูสดสำหรับขนาดและขีดจำกัดของปก หรือติดป้าย (รอยืนยัน) ไม่ได้พูดตัวเลขเหมือนจำได้เอง
+  - name: watch-time-not-ctr
+    type: llm
+    focus: last_message
+    criteria: ให้ผ่านเมื่อคำตอบบอกว่า YouTube ตัดสินผู้ชนะจากส่วนแบ่งเวลาดู (watch time share) ไม่ใช่อัตราการคลิก
