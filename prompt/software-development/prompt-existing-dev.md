@@ -9,12 +9,12 @@
 วางทั้งไฟล์ใน Claude Code, Codex CLI หรือ Gemini CLI ที่รากโฟลเดอร์โปรเจกต์ แล้วพิมพ์ต่อท้ายว่าจะทำฉบับไหน เช่น `ทำข้อ 1 และ 2`
 
 <!-- rules:begin -->
-**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-doc-set` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
+**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-docs` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
 
 **วนจนเสร็จ (agent loop):** ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ จนผ่านทุกข้อที่ฉบับนั้นต้องมี · ตรวจด้วยหลักฐานจริง (เปิดไฟล์ · รันคำสั่ง · เทียบแหล่ง) ไม่ใช่คำบอกของตัวที่ทำ · รอบตรวจใช้ `reviewer` ตัวใหม่ทุกรอบ · ไม่ผ่าน → แก้ที่ต้นเหตุแล้วตรวจซ้ำทั้งข้อเดิมและจุดที่แก้ · เหลือแค่ข้อระดับต่ำ → ปิดได้แล้วลงรายงาน · ครบเพดานรอบ (งานกลาง 3 · งานใหญ่หรืองานเสี่ยง 5) ยังไม่ผ่าน → ติดป้าย `ติด` ทำส่วนอื่นให้จบ แล้วรายงานข้อที่เหลือ · รายละเอียดอยู่ใน skill `superuser` กฎข้อ 3
 <!-- rules:end -->
 
-**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้ `diagram-figures` · Mermaid (`software-diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
+**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้ `diagrams` · Mermaid (`diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
 
 **แอปที่มีอยู่แล้ว (ใช้ทุกฉบับ):** `docs/` และ `qa/` อยู่ที่รากโปรเจกต์ · README และ CHANGELOG อยู่ใน repo ของแอป · รากโปรเจกต์เป็น repo เดียวกับแอป → เอกสารเข้า branch เดียวกับโค้ด · ก่อนรันแอปหรือ seed ให้ชี้ที่เก็บข้อมูล (เช่น `DATA_DIR` · connection string) ไปที่ `_to_delete/` ห้ามรันกับข้อมูลจริง · คำสั่ง test ที่ repo ประกาศไว้พัง → รายงานผลของคำสั่งนั้นตรงตัว แล้วบอกคำสั่งที่ใช้แทนแยกบรรทัด · ห้ามมีรหัสผ่านหรือค่าลับในเอกสารและภาพ แม้เป็นบัญชีทดสอบ · ไม่มี `stack-*` ที่ตรงภาษา → ข้ามแล้วบอกในรายงาน
 
@@ -41,28 +41,28 @@
 
 ## 1. รับช่วงโค้ด: รันได้บนเครื่อง และรู้ว่าแก้ตรงไหน
 
-agent `solution-architect` (อ่านอย่างเดียว) + `developer` · skill `code-orientation` · `app-verifier-setup` · `context-budget` · `/software-development:legacy-spec-recovery` (เมื่อไม่มีเอกสารเลยและต้องรับ change request ต่อ)
-**ผลลัพธ์:** `docs/ONBOARDING-NOTES.md` — **ไม่แก้โค้ดของแอป** (ไฟล์ตั้งค่าบนเครื่องที่ไม่เข้า git แก้ได้ · สคริปต์ตรวจแอปและ skill ที่ `app-verifier-setup` สร้าง เพิ่มได้แต่ยังไม่ commit · ตรวจว่า test runner ของ repo ไม่เก็บสคริปต์นั้นไปรันด้วย)
+agent `solution-architect` (อ่านอย่างเดียว) + `developer` · skill `code-craft` · `test-automation` · `context-budget` · `/software-development:legacy-spec-recovery` (เมื่อไม่มีเอกสารเลยและต้องรับ change request ต่อ)
+**ผลลัพธ์:** `docs/ONBOARDING-NOTES.md` — **ไม่แก้โค้ดของแอป** (ไฟล์ตั้งค่าบนเครื่องที่ไม่เข้า git แก้ได้ · สคริปต์ตรวจแอปและ skill ที่ `test-automation` สร้าง เพิ่มได้แต่ยังไม่ commit · ตรวจว่า test runner ของ repo ไม่เก็บสคริปต์นั้นไปรันด้วย)
 
 ### หัวข้อที่ต้องมี
 
 1. **วิธีรันที่ลองแล้วได้จริง** — คำสั่งทีละบรรทัด · สิ่งที่ต้องติดตั้งพร้อมเวอร์ชัน · ตัวแปรสภาพแวดล้อม (ชื่ออย่างเดียว ไม่ใส่ค่า) · รันไม่ขึ้น → เขียนว่าติดตรงไหน พร้อมข้อความ error
 2. **ผลรัน test เดิม** — จำนวนผ่าน/ไม่ผ่าน/ข้าม · ไม่มี test → เขียนว่าไม่มี
-3. **แผนที่โค้ด** ไม่เกิน 10 บรรทัดตาม `code-orientation` — จุดเริ่มโปรแกรม · โฟลเดอร์หลัก · ชั้นข้อมูล · ระบบภายนอก
+3. **แผนที่โค้ด** ไม่เกิน 10 บรรทัดตาม `code-craft` — จุดเริ่มโปรแกรม · โฟลเดอร์หลัก · ชั้นข้อมูล · ระบบภายนอก
 4. **ถ้าจะแก้เรื่อง X ไปที่ไหน** — ตาราง 5–10 แถวของงานที่น่าจะได้รับบ่อย
 5. **จุดเสี่ยง** — ส่วนที่ไม่มี test · โค้ดที่หลายส่วนใช้ร่วมกัน · ค่าลับที่ฝังในโค้ด (ชี้ไฟล์:บรรทัด ไม่คัดค่า)
 6. คำถามถึงผู้ที่รู้ระบบ
 
 ### กฎเฉพาะฉบับนี้
 
-- ยังไม่มีวิธีให้ agent รันแอปแล้วดูผลเอง → ทำ `app-verifier-setup` ก่อนเขียนหัวข้อ 1 (รวมขั้นให้ agent ตัวใหม่ลองใช้ skill ตรวจแอป 1 ครั้ง)
+- ยังไม่มีวิธีให้ agent รันแอปแล้วดูผลเอง → ทำ `test-automation` ก่อนเขียนหัวข้อ 1 (รวมขั้นให้ agent ตัวใหม่ลองใช้ skill ตรวจแอป 1 ครั้ง)
 - ทุกคำสั่งในหัวข้อ 1 ต้องรันจริงแล้ว · ที่ยังไม่ได้รัน → ติดป้าย `ยังไม่ได้ตรวจ` (ยังไม่ได้รัน)
 
 ---
 
 ## 2. เพิ่มหรือเปลี่ยนฟีเจอร์ในแอปเดิม
 
-agent `system-analyst` + `developer` + `qa-tester` · skill `blast-radius` · `fix-at-source/targeted-fix` · `testing-standards` · `stack-*` ตามภาษา · `principle-secure-by-default`
+agent `system-analyst` + `developer` + `qa-tester` · skill `code-craft` · `fix-at-source/targeted-fix` · `test-automation` · `stack-*` ตามภาษา · `security-gate`
 **ต้องมีก่อน:** `docs/ONBOARDING-NOTES.md` (ฉบับ 1) · คำขอที่อนุมัติแล้วใน `docs/change/CR-*.md` (`prompt-change.md` ฉบับ 1) หรือคำอธิบายในช่องข้างล่าง
 **ผลลัพธ์:** โค้ด + test · เอกสารที่ถูกแตะแก้ครบในรอบเดียว (SRS · FSD · `docs/as-is/` · คู่มือ ที่มีอยู่)
 
@@ -76,7 +76,7 @@ agent `system-analyst` + `developer` + `qa-tester` · skill `blast-radius` · `f
 
 ### ลำดับ
 
-1. หาจุดที่ต้องแก้ แล้วทำ `blast-radius` — ส่วนอื่นที่ได้รับผลกระทบทั้งหมด
+1. หาจุดที่ต้องแก้ แล้วทำ `code-craft` — ส่วนอื่นที่ได้รับผลกระทบทั้งหมด
 2. เขียน test ของพฤติกรรมใหม่ให้แดงก่อน · ส่วนที่กระทบแต่ยังไม่มี test → เขียน test จับพฤติกรรมเดิมไว้ก่อนแก้ · พฤติกรรมเดิมที่ดูเป็นบั๊ก → ไม่ล็อกด้วย test จดเป็นคำถามถึงผู้รู้ระบบ และไม่แก้ในงานนี้
 3. แก้โค้ดน้อยที่สุดที่ทำให้ test เขียว โดยใช้แบบเดียวกับโค้ดรอบข้าง ไม่จัดโครงใหม่ระหว่างทาง
 4. รัน test ทั้งชุด · เปิดแอปลองตามเกณฑ์ว่าเสร็จ
@@ -92,9 +92,9 @@ agent `system-analyst` + `developer` + `qa-tester` · skill `blast-radius` · `f
 
 ## 3. ปรับโครงหรืออัปเกรดเวอร์ชัน
 
-agent `solution-architect` + `developer` · skill `blast-radius` · `ground-rules/principle-small-verifiable-steps` · `principle-replace-then-delete` · `stack-*` ตามภาษา · `adr-writer`
+agent `solution-architect` + `developer` · skill `code-craft` · `ground-rules/principle-small-verifiable-steps` · `code-craft` · `stack-*` ตามภาษา · `architecture`
 **ใช้เมื่อ:** ปรับโครงโดยพฤติกรรมเท่าเดิม · เปลี่ยนหรืออัปเกรดไลบรารีทีละตัว · อัปเกรดรุ่นย่อย · framework หรือ runtime ข้ามรุ่นใหญ่ใช้ฉบับ 5 · อัปเดต dependency ตามผลสแกนช่องโหว่ใช้ `prompt-operations.md` ฉบับ 7
-**ต้องมีก่อน:** `docs/ONBOARDING-NOTES.md` (ฉบับ 1) · test เดิมรันได้ (ไม่มี test → เขียน test จับพฤติกรรมของ flow หลักก่อน ตาม `prompt-test-automation.md` ฉบับ 3 · skill `testing-standards` · `e2e-testing-patterns`)
+**ต้องมีก่อน:** `docs/ONBOARDING-NOTES.md` (ฉบับ 1) · test เดิมรันได้ (ไม่มี test → เขียน test จับพฤติกรรมของ flow หลักก่อน ตาม `prompt-test-automation.md` ฉบับ 3 · skill `test-automation`)
 **ผลลัพธ์:** `docs/upgrade-<เรื่อง>.md` (แผน + ผล) · ADR 1 ฉบับที่ `docs/decisions/ADR-NNNN-<เรื่อง>.md` · โค้ด
 
 - [ ] อนุญาตให้แก้โค้ดตามแผน (commit บนเครื่องเท่านั้น บน branch แยก `upgrade/…` · ไม่ push · ไม่ merge เข้า branch หลัก)
@@ -122,7 +122,7 @@ agent `solution-architect` + `developer` · skill `blast-radius` · `ground-rule
 
 ## 4. ทำให้เร็วขึ้นหรือกินเครื่องน้อยลง
 
-agent `developer` + `devops-engineer` · skill `observability-basics` · `stack-*` ตามภาษา · `stack-sql` (เมื่อช้าที่ฐานข้อมูล)
+agent `developer` + `devops-engineer` · skill `incidents-and-monitoring` · `stack-*` ตามภาษา · `stack-sql` (เมื่อช้าที่ฐานข้อมูล)
 **ต้องมีก่อน:** `docs/ONBOARDING-NOTES.md` (ฉบับ 1)
 **ผลลัพธ์:** `docs/perf-<เรื่อง>.md` ตัวเลขก่อน-หลัง · โค้ด
 
@@ -150,7 +150,7 @@ agent `developer` + `devops-engineer` · skill `observability-basics` · `stack-
 
 ## 5. อัปเกรด framework หรือ runtime ข้ามรุ่นใหญ่
 
-agent `solution-architect` + `developer` + `qa-tester` (หลักฐาน regression) · skill `legacy-spec-recovery` (`references/framework-upgrade.md`) · `principle-replace-then-delete` · `ground-rules/principle-small-verifiable-steps` · `worktree-and-branch` · `blast-radius` · `stack-*` ตามภาษา · `adr-writer` · `superuser/status-report`
+agent `solution-architect` + `developer` + `qa-tester` (หลักฐาน regression) · skill `legacy-spec-recovery` (`references/framework-upgrade.md`) · `code-craft` · `ground-rules/principle-small-verifiable-steps` · `git-and-review` · `code-craft` · `stack-*` ตามภาษา · `architecture` · `superuser/status-report`
 **ใช้เมื่อ:** .NET Framework → .NET 8 หรือ LTS ล่าสุด · Angular ข้าม major · Python 2 → 3 แล้วต่อ Django LTS · Node ข้ามสาย LTS · framework เดิมหมดอายุการสนับสนุน
 **ต้องมีก่อน:** `docs/ONBOARDING-NOTES.md` (ฉบับ 1) · `docs/as-is/` อย่างน้อยระดับภาพรวมระบบ (`prompt-existing-code.md` ฉบับ 1) · characterization test ของโมดูลที่แตะ คือ test ที่บันทึกว่าระบบทำอะไรอยู่ตอนนี้ (ไม่มี → เขียนตาม `prompt-test-automation.md` ฉบับ 3 ก่อน) · ขาด 2 อย่างหลัง การอัปเกรดคือการเดาว่าอะไรพัง
 **ผลลัพธ์:** `docs/upgrade-<เรื่อง>.md` (inventory · ตารางความเข้ากันได้ · รายการ error จาก spike · ขั้นตอน · หลักฐาน regression) · ADR ที่ `docs/decisions/ADR-NNNN-<เรื่อง>.md` · โค้ด
@@ -167,8 +167,8 @@ agent `solution-architect` + `developer` + `qa-tester` (หลักฐาน re
 
 1. **Inventory** ลงตารางเดียว: รุ่นของ runtime · framework · ทุก dependency (จาก lockfile หรือ `packages.config`) · ของที่ compile เอง (native · COM · plugin) · OS และเซิร์ฟเวอร์ที่รันอยู่
 2. **ตารางความเข้ากันได้** แถวละ dependency: รุ่นเดิม · รุ่นที่รองรับเป้าหมาย · มีไหม · ตัวแทนถ้าไม่มี · ป้าย `code` · `doc` · `ask` ตาม `legacy-spec-recovery` · dependency ที่ไม่มีทางไปคือความเสี่ยงที่ต้องบอกเจ้าของระบบก่อนเริ่มขั้น 4
-3. **Spike บน worktree** ตาม `worktree-and-branch`: build บนรุ่นเป้าหมายให้จบ 1 รอบโดยยังไม่แก้ logic · จด error ทุกตัวเป็นรายการ ไม่ไล่แก้ทีละตัวในรอบนี้ · ประเมินจำนวนวันจากรายการนั้น ไม่ใช่จากความรู้สึก
-4. **ย้ายให้ครบแล้วลบของเก่า** ตาม `principle-replace-then-delete`: ไม่มี wrapper ชื่อเก่า ไม่มี flag สลับรุ่น · ย้ายทีละ project หรือ package เป็นขั้นที่ build ผ่าน · คนนอกเรียก API เดิมอยู่ → deprecate ตาม `api-conventions`
+3. **Spike บน worktree** ตาม `git-and-review`: build บนรุ่นเป้าหมายให้จบ 1 รอบโดยยังไม่แก้ logic · จด error ทุกตัวเป็นรายการ ไม่ไล่แก้ทีละตัวในรอบนี้ · ประเมินจำนวนวันจากรายการนั้น ไม่ใช่จากความรู้สึก
+4. **ย้ายให้ครบแล้วลบของเก่า** ตาม `code-craft`: ไม่มี wrapper ชื่อเก่า ไม่มี flag สลับรุ่น · ย้ายทีละ project หรือ package เป็นขั้นที่ build ผ่าน · คนนอกเรียก API เดิมอยู่ → deprecate ตาม `api-design`
 5. **หลักฐาน regression:** characterization test ผ่านทั้งก่อนและหลัง · golden file ของรายงานและ stored procedure เทียบแล้วเท่ากัน · รันบนข้อมูลสำเนา ไม่ใช่ production · รายงานด้วย `superuser/status-report` พร้อมสิ่งที่ยังไม่ได้ทดสอบ
 
 ### กฎเฉพาะฉบับนี้
@@ -181,7 +181,7 @@ agent `solution-architect` + `developer` + `qa-tester` (หลักฐาน re
 
 ## 6. ทำหลายงานขนานด้วย worktree และปิด branch
 
-agent `developer` ตัวใหม่ 1 ตัวต่องาน · `reviewer` ตัวใหม่ตรวจแต่ละ branch · skill `worktree-and-branch` · `crew-patterns/parallel-split-and-merge` · `ground-rules/principle-small-verifiable-steps` · `ground-rules/principle-prove-it-works` · `commit-message-format` · `pr-description-template` · `config-and-secrets`
+agent `developer` ตัวใหม่ 1 ตัวต่องาน · `reviewer` ตัวใหม่ตรวจแต่ละ branch · skill `git-and-review` · `crew-patterns/parallel-split-and-merge` · `ground-rules/principle-small-verifiable-steps` · `ground-rules/principle-prove-it-works` · `git-and-review` · `web-service-essentials`
 **ใช้เมื่อ:** สั่งฉบับที่แก้โค้ดตั้งแต่ 2 งานพร้อมกัน (เช่น ฉบับ 2 หลายฟีเจอร์ · ฉบับ 2 คู่กับฉบับ 4) · spike ที่อาจทำ checkout หลักพัง · branch ที่ทำเสร็จค้างอยู่หลายตัว · งานเดียวที่ agent ตัวเดียวทำ ใช้ branch ธรรมดาพอ
 **ต้องมีก่อน:** repo มี commit แล้ว · คำสั่งรัน test จาก `docs/ONBOARDING-NOTES.md` (ฉบับ 1)
 **ผลลัพธ์:** worktree 1 ตัวต่องาน วางเป็นโฟลเดอร์พี่น้องของ repo (`../<repo>-<งาน>`) หรือ `.claude/worktrees/<ชื่อ>/` ที่ ignore แล้ว · repo อยู่ใต้รากโปรเจกต์ (`<project>/<repo>/`) ให้ใช้แบบหลัง จะได้ไม่มีโฟลเดอร์ใหม่โผล่ที่รากโปรเจกต์ · ตาราง worktree และทางปิด branch ใน `docs/BUILD-PLAN.md` · **รออนุมัติ:** merge ลง branch หลัก · push · เปิด PR · ทิ้ง branch
@@ -200,7 +200,7 @@ agent `developer` ตัวใหม่ 1 ตัวต่องาน · `review
 2. สร้าง worktree ต่องานบน branch `<ประเภท>/<งาน>` · คัดลอก `.env` และไฟล์ตั้งค่า dev แบบระบุชื่อไฟล์ ไม่คัดลอกทั้งโฟลเดอร์ · Windows ตั้งชื่อโฟลเดอร์สั้นให้ path ไม่เกิน 260 ตัวอักษร · ติดตั้ง dependency แล้วรัน test 1 รอบเป็น baseline ก่อนแก้
 3. agent แต่ละตัวทำเฉพาะใน worktree ของตัวเอง · หัวหน้าทีมจด path · branch · baseline ลงตารางใน `docs/BUILD-PLAN.md`
 4. ก่อนปิด: test ทั้งชุดผ่านบน branch นั้น · `git status` สะอาด · `git log main..HEAD --oneline` แสดง commit ที่จะเข้า · main ขยับระหว่างทาง → รวม main ล่าสุดแล้ว test ใหม่ · conflict แก้แบบเข้าใจทั้ง 2 ฝั่ง ไม่ใช้ `--ours` หรือ `--theirs` ทั้งไฟล์
-5. เลือกทางปิดต่อ branch จากตารางใน `worktree-and-branch` ข้อ 4: merge ในเครื่อง · เปิด PR · เก็บไว้ก่อน · ทิ้ง · ทางที่อยู่ใน "รออนุมัติ" เตรียมคำสั่งไว้ให้ผู้ใช้เลือก
+5. เลือกทางปิดต่อ branch จากตารางใน `git-and-review` ข้อ 4: merge ในเครื่อง · เปิด PR · เก็บไว้ก่อน · ทิ้ง · ทางที่อยู่ใน "รออนุมัติ" เตรียมคำสั่งไว้ให้ผู้ใช้เลือก
 6. เก็บกวาดหลังผู้ใช้อนุมัติทางปิด: ลบ worktree ที่ `status` สะอาด · `git worktree prune` · ลบ branch ด้วย `-d` เมื่อ `git branch --merged main` มีชื่อนั้น · `git worktree list` เหลือเฉพาะตัวที่มีเหตุผลในบันทึก
 
 ### กฎเฉพาะฉบับนี้

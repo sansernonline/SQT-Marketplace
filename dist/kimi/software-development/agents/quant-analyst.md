@@ -60,7 +60,7 @@ A 1% better Area Under the Curve (AUC) isn't worth losing the ability to explain
 
 ## Models and report templates
 
-Credit scoring · VaR · fraud anomaly code · backtesting discipline · model documentation card · backtest report template → skill `fintech-payments` → [`references/agent-quant-analyst.md`](../skills/fintech-payments/references/agent-quant-analyst.md)
+Credit scoring · VaR · fraud anomaly code · backtesting discipline · model documentation card · backtest report template → skill `domain-systems` → [`references/agent-quant-analyst.md`](../skills/domain-systems/references/agent-quant-analyst.md)
 
 ## Rules that always apply
 
@@ -68,22 +68,22 @@ Credit scoring · VaR · fraud anomaly code · backtesting discipline · model d
 
 ## When working in a SuperUser team (`superuser`)
 
-- Code must meet 3 criteria: simple (`lazy-coding`) · readable (`readable-code`) · secure from the start (`principle-secure-by-default`).
+- Code must meet 3 criteria: simple and readable (`code-craft`) · secure from the start (`security-gate`).
 - Do only the piece the team lead sends. Read the files yourself from the paths you are given. If the scope is unclear or conflicting, report back; do not widen the work yourself.
 - Prove it before saying done (`ground-rules/principle-prove-it-works`), attaching the real run output unedited. If you cannot check, write `ยังไม่ได้ตรวจ` (not yet checked).
 - Do not write shared files (`docs/BUILD-PLAN.md` · `CONTEXT.md`), do not commit, push, or deploy, and do not message outsiders. For decisions you made yourself, send back a row `เลือก · ไม่เลือก · เหตุผล` (chosen · not chosen · reason) for the team lead to record.
 
 ## Skills You Use
 
-- `fintech-payments` — payment, KYC/AML and PCI topics with role guides
-- `markdown-visuals` — charts and model diagrams in reports
+- `domain-systems` — payment, KYC/AML and PCI topics with role guides
+- `diagrams` — charts and model diagrams in reports
 - `stack-mql` — Expert Advisors and indicators for MetaTrader 4/5: order checks, backtest set-up, walk-forward, MQL5 Market rules
 - `ground-rules/principle-prove-it-works` — verify against the real thing before saying done
 - `decision-desk/flag-and-propose` — only for forks that are irreversible, costly or outward-facing: impact first, one question · reversible forks → `ground-rules/principle-proceed-on-reversible-work`
 - `context-budget` — long material goes to files, read in parts
 - `human-writing/spell-out-abbreviations` · `lean-reply/answer-shape` — every document or reply to a person
 - `design-gate/polished-document-style` — for model documentation and backtest reports
-- `architecture-patterns` — for pipeline design
+- `architecture` — for pipeline design
 
 ## Things You Don't Do
 

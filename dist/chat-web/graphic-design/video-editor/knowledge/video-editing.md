@@ -11,7 +11,7 @@ Use when editing video or audio with ffmpeg, Thai subtitles or motion
 - Joining several clips into one file
 - Adjusting loudness to a platform's value (podcast · YouTube · training clip)
 - Converting 16:9 to 9:16 · pulling a cover image · exporting MP4 that opens anywhere
-- Joining HTML slides from `html-slide-deck` with narration into one video (section "สไลด์กับเสียงบรรยายเป็นวิดีโอ")
+- Joining HTML slides from `slide-deck` with narration into one video (section "สไลด์กับเสียงบรรยายเป็นวิดีโอ")
 
 Not for: hook · script · shot list → `video-script` · Thai subtitles → [`references/subtitles.md`](references/subtitles.md) · Thai narration from a script, no recording → `narration-th` · colour correction, multi-track cutting by eye, effects, motion inside a slide, or batch clips from code → a person in DaVinci Resolve or CapCut, or HyperFrames or Remotion (`video-script` `references/production-tools.md` item 1; the agent writes the checklist). The agent for this job is `video-editor`.
 
@@ -33,7 +33,7 @@ Not for: hook · script · shot list → `video-script` · Thai subtitles → [`
 
 ## สไลด์กับเสียงบรรยายเป็นวิดีโอ (Slides with narration as video)
 Every slide's time comes from `data-at` in the deck, in one place. Then prove from the result that the video is as long as the audio and the picture at sampled times is the right slide.
-1. **Set times in the deck.** Every `<section class="slide">` has `data-at="m:ss"`, the time the slide is reached (same meaning as the presenter clock of `html-slide-deck`). Take times from the finished, cut audio, not estimates. Audio from `narration-th` already has `data_at` per slide in `cues.json`.
+1. **Set times in the deck.** Every `<section class="slide">` has `data-at="m:ss"`, the time the slide is reached (same meaning as the presenter clock of `slide-deck`). Take times from the finished, cut audio, not estimates. Audio from `narration-th` already has `data_at` per slide in `cues.json`.
 2. **Finish the audio first.** Cut and adjust loudness (steps 4–5) before setting `data-at`, because cutting later shifts every slide.
 3. **Make an image per slide.** `python <html-slide-deck>/scripts/check_deck.py deck.html --out frames` gives `p01.png …` at 1920×1080 (needs Playwright and Pillow). For animated slides add `--wait`. A content-file deck goes through `build_deck.py` first.
 4. **Check the timetable, then build.** `python scripts/slides_to_video.py deck.html frames narration.wav --check`. It stops with a reason when `data-at` does not increase · the number of images differs from slides · the last slide starts after the audio ends. When it passes, drop `--check` and add `-o episode.mp4` (H.264 with AAC at 30 fps, exactly as long as the audio).
@@ -130,7 +130,7 @@ For a destination that does not publish a value, use -16 LUFS · -1.5 dBTP (the 
 | The video is longer than the audio | `-shortest` alone leaves trailing picture when there is a filter (tested 2026-10-24: got 181.67 seconds from 180 seconds of audio) | Uses `-t` equal to the audio length |
 | ffmpeg will not open the image list | Full paths in the list file need `-safe 0` | Already added |
 
-Tested 2026-10-24 with a sample deck of 13 slides from `html-slide-deck` and 180 seconds of audio: picture and audio were both 180.00 seconds · sampling 7 times, the picture matched the slide at every point · given audio that was too short (75 seconds), the script stopped because the last slide starts at 165 seconds.
+Tested 2026-10-24 with a sample deck of 13 slides from `slide-deck` and 180 seconds of audio: picture and audio were both 180.00 seconds · sampling 7 times, the picture matched the slide at every point · given audio that was too short (75 seconds), the script stopped because the last slide starts at 165 seconds.
 
 ## Real example (cut silences and loudness)
 
@@ -357,7 +357,7 @@ Before handing over, run the check in `design-gate/no-ai-look` (section 3): its 
 
 - ffmpeg Filters Documentation: [loudnorm](https://ffmpeg.org/ffmpeg-filters.html#loudnorm) (defaults · 2 passes · `linear` needs all `measured_*` · works at 192 kHz) · [silencedetect](https://ffmpeg.org/ffmpeg-filters.html#silencedetect) · the JSON key names `input_*` come from the source `libavfilter/af_loudnorm.c` version n9.0.2, while feeding the values back as `measured_*` is a common method that the docs do not give an example of (seen 2026-10-24)
 - ffmpeg Formats Documentation: [concat demuxer](https://ffmpeg.org/ffmpeg-formats.html#concat) (`file` · `duration` · `-safe 0` for full paths · every file must have the same codec) · ffmpeg Wiki [Slideshow](https://trac.ffmpeg.org/wiki/Slideshow#Concatdemuxer) (the last image must be repeated without `duration`) (seen 2026-10-24)
-- `html-slide-deck` `assets/shell.html`: `data-at="m:ss"` is the time the slide should be reached · `scripts/check_deck.py` captures images at 1920×1080 (read 2026-10-24)
+- `slide-deck` `assets/shell.html`: `data-at="m:ss"` is the time the slide should be reached · `scripts/check_deck.py` captures images at 1920×1080 (read 2026-10-24)
 - Loudness values: [Apple Podcasts audio requirements](https://podcasters.apple.com/support/893-audio-requirements) · [Spotify loudness normalization](https://support.spotify.com/us/artists/article/loudness-normalization/) · [Spotify audio ad specs](https://ads.spotify.com/en-US/ad-specs/audio-ad-specs/) · [YouTube stable volume](https://support.google.com/youtube/answer/14106294) · [ACX audio submission requirements](https://help.acx.com/s/article/acx-audio-submission-requirements) · [EBU R 128](https://tech.ebu.ch/docs/r/r128.pdf) (viewed every page 2026-10-24)
 - This skill's test results: `references/loudness-and-slides.md` "Real example" (run on self-made test files 2026-10-24 · ffmpeg 9.0.2 on Windows)
 

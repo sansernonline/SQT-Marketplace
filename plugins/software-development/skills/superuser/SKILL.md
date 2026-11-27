@@ -39,9 +39,9 @@ Shared skills (principles · checking · splitting work · documents · images �
 ## 4 · Code criteria and principle index
 
 **Code criteria — every diff must pass all 3** (full criteria and the principle index for every group are in [`principles`](references/principles.md))
-- **Simple** — nothing not yet needed · the shortest diff that is still correct · `lazy-coding`
-- **Engineer-grade structure** — folders by feature · 1 file 1 job · settings outside code · tests beside code · `readable-code`
-- **Secure from the start** — validate input immediately · SQL uses parameters · check permissions on the server · secrets outside code · [`principle-secure-by-default`](../principle-secure-by-default/SKILL.md)
+- **Simple** — nothing not yet needed · the shortest diff that is still correct · `code-craft`
+- **Engineer-grade structure** — folders by feature · 1 file 1 job · settings outside code · tests beside code · `code-craft`
+- **Secure from the start** — validate input immediately · SQL uses parameters · check permissions on the server · secrets outside code · [`security-gate`](../security-gate/SKILL.md)
 - The 3 go together. If a shorter diff makes things harder for the user, `ground-rules/principle-user-experience-first` wins.
 
 ---

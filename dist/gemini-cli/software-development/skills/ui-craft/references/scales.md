@@ -73,7 +73,7 @@ If you want emphasis, change the **color** or the **size** first; do not rush to
 
 ## 3 · หน้าการตลาดและ landing ที่ไม่มี motion
 
-Use for pages people read down one section at a time (sales page · product home page · launch page) · apps and dashboards use sections 1–2 · pages that move section by section with scrolling → `dynamic-website`
+Use for pages people read down one section at a time (sales page · product home page · launch page) · apps and dashboards use sections 1–2 · pages that move section by section with scrolling → `web-app-design`
 
 The values in the table are starting values, set from the real page trial of 2026-11-06 and not yet measured from a prototype site · once a prototype is chosen (`design-gate/design-references`), you may measure the sizes from the prototype instead and note the source beside the token
 

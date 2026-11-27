@@ -233,8 +233,8 @@ The situation → skill table is in [`triggers`](references/triggers.md). Open i
 
 | criterion | passes when | skill |
 |---|---|---|
-| **Complete, nothing dropped** | every item from the source (email, calendar, statement, document) is picked up, and every task has a date and an owner | `inbox-triage` · `important-docs` |
-| **Findable later** | file names and storage follow one pattern; searching with the words a person would think of finds it | `personal-kb` · `important-docs` |
+| **Complete, nothing dropped** | every item from the source (email, calendar, statement, document) is picked up, and every task has a date and an owner | `weekly-review` · `family-legal` |
+| **Findable later** | file names and storage follow one pattern; searching with the words a person would think of finds it | `personal-kb` · `family-legal` |
 | **Ready to act** | every item has a clear next step, a ready-to-send message draft, and click-by-click steps | `weekly-review` · `human-writing/polite-message-th-en` |
 
 A summary is always shorter than the original. If the user still has to go back to the original, the summary is not enough.
@@ -243,8 +243,8 @@ A summary is always shorter than the original. If the user still has to go back 
 
 | criterion | passes when | skill |
 |---|---|---|
-| **Figures and dates from the real thing** | amounts, due dates and plate numbers are copied from the bill, registration book or quote · estimates labelled `อนุมาน` | `household-bills` · `vehicle-care` |
-| **Owner and date** | every task has a due date and an owner · a reminder is set | `home-maintenance` · `meal-plan-grocery` |
+| **Figures and dates from the real thing** | amounts, due dates and plate numbers are copied from the bill, registration book or quote · estimates labelled `อนุมาน` | `household-money` · `home-upkeep` |
+| **Owner and date** | every task has a due date and an owner · a reminder is set | `home-upkeep` · `family-week` |
 | **Shareable** | a table or checklist reads easily on a phone and can go straight into the family group chat | every skill |
 
 Government entitlements and rates change often. Check the official website every time they are used.
@@ -253,9 +253,9 @@ Government entitlements and rates change often. Check the official website every
 
 | criterion | passes when | skill |
 |---|---|---|
-| **Copied from the real thing** | every drug name, dose, lab value and appointment date matches the label, result sheet or appointment slip. If incomplete, put `[ถามเภสัชกร]` | `medication-schedule` · `annual-checkup` |
-| **In scope** | no sentence diagnoses, interprets results or suggests a dose, and medical questions are turned into questions for the doctor | `doctor-visit-prep` |
-| **Really usable** | a table, card or reminder that the user or carer can use at once, printed or on a phone | `medication-schedule` · `doctor-visit-prep` |
+| **Copied from the real thing** | every drug name, dose, lab value and appointment date matches the label, result sheet or appointment slip. If incomplete, put `[ถามเภสัชกร]` | `health-admin` |
+| **In scope** | no sentence diagnoses, interprets results or suggests a dose, and medical questions are turned into questions for the doctor | `health-admin` |
+| **Really usable** | a table, card or reminder that the user or carer can use at once, printed or on a phone | `health-admin` |
 
 If unsure whether something is out of scope, treat it as out of scope and send it as a question for the doctor or pharmacist.
 
@@ -263,9 +263,9 @@ If unsure whether something is out of scope, treat it as out of scope and send i
 
 | criterion | passes when | skill |
 |---|---|---|
-| **True** | every title, date and figure comes from the user or a document. If missing, put `[ใส่ตัวเลข]` | `resume-th-en` |
-| **On target** | matches the set job or reader, has all keywords from the posting, and irrelevant material is cut | `resume-th-en` |
-| **Ready to use** | the user can copy it to send or say it at once · both Thai and English when readers could be either · the Applicant Tracking System (ATS) can read the file | `interview-prep` · `salary-negotiation` |
+| **True** | every title, date and figure comes from the user or a document. If missing, put `[ใส่ตัวเลข]` | `job-search` |
+| **On target** | matches the set job or reader, has all keywords from the posting, and irrelevant material is cut | `job-search` |
+| **Ready to use** | the user can copy it to send or say it at once · both Thai and English when readers could be either · the Applicant Tracking System (ATS) can read the file | `job-search` |
 
 Answer money questions as a table of total yearly income, never base salary alone.
 
@@ -274,7 +274,7 @@ Answer money questions as a table of total yearly income, never base salary alon
 | criterion | passes when | skill |
 |---|---|---|
 | **Runs** | every code example is really run, with command and result · every milestone ends with something that runs | `learning-path` |
-| **Cites official sources** | version, feature and exam information comes from official docs, release notes or exam guides, with link and date | `tech-radar` · `cert-prep` |
+| **Cites official sources** | version, feature and exam information comes from official docs, release notes or exam guides, with link and date | `tech-growth` · `learning-path` |
 | **Fits the time** | the plan fits the time the user really has per week and has a checkpoint to continue or stop | `learning-path` |
 
 Learn from the real thing before summaries. Reading the official docs and trying to run them beats reading 10 summary articles.

@@ -1,12 +1,22 @@
 ---
 name: cicd-and-release
-description: Use when setting up or fixing a CI/CD pipeline
+description: Use when setting up or fixing CI/CD, Jenkins, releases or rollback
 ---
 
 # Continuous Integration / Continuous Delivery (CI/CD) and releasing
 
 > **The one rule:** build once, then carry the **same artifact** to every environment.
 > If you rebuild when going to production, what passed testing and what the customer runs are not the same thing.
+
+## Pick the part
+
+| Job (what the user says) | Open |
+|---|---|
+| Pipeline stages, branches, environments, gates, versions, "which commit is production running?" | This file: sections 1 to 10 |
+| Pipeline files for GitHub Actions, Azure DevOps or GitLab CI | [`references/per-platform.md`](references/per-platform.md) |
+| A Jenkinsfile, Jenkins credentials, Helm deploy from Jenkins | [`references/jenkins-pipeline.md`](references/jenkins-pipeline.md) and [`references/jenkinsfile-voice-clinic.md`](references/jenkinsfile-voice-clinic.md) |
+| Release day plan, who approves, what to check after deploy | [`references/deployment-plan-template.md`](references/deployment-plan-template.md) |
+| Android or Flutter app releases | Section "Android / Flutter apps" at the end of this file |
 
 ## When to use this skill
 
@@ -19,15 +29,15 @@ description: Use when setting up or fixing a CI/CD pipeline
 
 | Task | Skill | |
 |---|---|---|
-| Where secrets are stored and how they rotate | `config-and-secrets` | instead |
-| The pipeline runs on Jenkins (Jenkinsfile · credentials · approval input) | `jenkins-pipeline` | alongside |
-| Dockerfile · Helm chart · deploy to Kubernetes | `kubernetes-helm` | alongside |
-| Proportion and scope of tests per layer | `testing-standards` · `e2e-testing-patterns` | alongside |
+| Where secrets are stored and how they rotate | `web-service-essentials` | instead |
+| The pipeline runs on Jenkins (Jenkinsfile · credentials · approval input) | `cicd-and-release` | alongside |
+| Dockerfile · Helm chart · deploy to Kubernetes | `infra-and-deploy` | alongside |
+| Proportion and scope of tests per layer | `test-automation` | alongside |
 | Writing a migration | `database-design` | instead |
-| Steps when the system is down or a deploy breaks it | `incident-runbook-template` (+ `postmortem-template` after) | instead |
+| Steps when the system is down or a deploy breaks it | `incidents-and-monitoring` (+ `incidents-and-monitoring` after) | instead |
 | Writing release notes for users to read | command `/release-notes` | instead |
 | Health check the pipeline uses to decide | `web-service-essentials` | alongside |
-| Commit messages that can generate release notes automatically | `commit-message-format` | alongside |
+| Commit messages that can generate release notes automatically | `git-and-review` | alongside |
 
 **Working pipeline files for GitHub Actions, Azure DevOps and GitLab** are in `references/per-platform.md`.
 **Read more when needed:** [`references/deployment-plan-template.md`](references/deployment-plan-template.md) — plan template
@@ -77,7 +87,7 @@ Use Semantic Versioning (SemVer): `MAJOR.MINOR.PATCH`
 
 | Which number goes up | When |
 |---|---|
-| MAJOR | a change that breaks the callers (see the table in `api-conventions`) |
+| MAJOR | a change that breaks the callers (see the table in `api-design`) |
 | MINOR | a new capability; old behavior still works |
 | PATCH | a bug fix |
 
@@ -128,7 +138,7 @@ Use Semantic Versioning (SemVer): `MAJOR.MINOR.PATCH`
 - A pipeline that runs from an outsider's fork **must not see secrets**
 - The tool that detects secrets leaked into git must sit at stage 4, not run once a year
 
-Full detail is in `config-and-secrets`.
+Full detail is in `web-service-essentials`.
 
 ---
 
@@ -162,7 +172,7 @@ For the expand/contract method, see `database-design` item 9.
 > **Rolling has a point people often forget:** during the deploy, the old and new versions serve at the same time.
 > The API and schema must therefore work with both versions. If you did not design for this, some users will hit errors on every deploy.
 
-**Criteria for widening a canary (numeric, agreed before the deploy).** Use burn rate (the rate at which the error budget is spent) by the formula in [`observability-basics`](../observability-basics/SKILL.md) section 4.1, measured on the new version's traffic only. Do not copy the formula here.
+**Criteria for widening a canary (numeric, agreed before the deploy).** Use burn rate (the rate at which the error budget is spent) by the formula in [`incidents-and-monitoring`](../incidents-and-monitoring/SKILL.md) section 4.1, measured on the new version's traffic only. Do not copy the formula here.
 
 | Step | Traffic | Hold at least | Widen when (all must pass) |
 |---|---|---|---|
@@ -183,7 +193,7 @@ A **feature flag** (a switch that turns a feature on or off) separates "releasin
 
 ## 9 · Rollback
 
-**Set the criteria in advance.** Do not decide while everyone is panicking and arguing over whether to wait a little longer. Use the burn rate from [`observability-basics`](../observability-basics/SKILL.md) section 4.1 instead of "errors above X%":
+**Set the criteria in advance.** Do not decide while everyone is panicking and arguing over whether to wait a little longer. Use the burn rate from [`incidents-and-monitoring`](../incidents-and-monitoring/SKILL.md) section 4.1 instead of "errors above X%":
 
 | Condition (new version's traffic) | Action |
 |---|---|
@@ -241,3 +251,13 @@ what percentage of deploys break · how long recovery takes
 | Staged release | production uses a staged rollout in % (for example 5 → 20 → 50 → 100) instead of a server canary · Play tracks stand in for the environments in section 5 |
 | Rollback | **you cannot roll back a version on Play**, because the versionCode cannot go down and devices that already installed it do not go back. Halt the rollout, then release a fix with a higher versionCode, and rehearse this procedure instead of section 9 |
 | Signing key | keep the upload key in the CI secret store as base64 + the password as a separate secret · `android/key.properties` and `*.jks` go in `.gitignore` · **back up the key outside CI in at least 1 place.** If you lose it, you cannot update the app until Play support resets it (use Play App Signing so Google holds the real key) |
+
+## Check before done
+
+- **Never** rebuild for production. The artifact that passed staging is the one that ships.
+- **Never** copy real customer data into staging without masking personal data (`pdpa-compliance`).
+- **Never** let a pipeline that runs from an outsider's fork see secrets, and grant each stage only the permissions it needs.
+- **Never** let Groovy or a shell string join a secret into a command (Jenkins). Read secrets from the environment.
+- **Production needs a person who clicks approve.** A canary or staged rollout uses numbers agreed before the deploy.
+- **Rehearse the rollback.** On Google Play a version cannot be rolled back, so halt the rollout and release a fix with a higher versionCode.
+- **Back up the Android upload key** outside CI in at least one place, and keep it out of git.

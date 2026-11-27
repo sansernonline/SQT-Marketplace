@@ -9,12 +9,12 @@
 วางทั้งไฟล์ใน Claude Code, Codex CLI หรือ Gemini CLI ที่รากโฟลเดอร์โปรเจกต์ แล้วพิมพ์ต่อท้ายว่าจะทำฉบับไหน เช่น `ทำทั้งหมด` หรือ `ทำข้อ 3 และ 4`
 
 <!-- rules:begin -->
-**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-doc-set` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
+**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-docs` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
 
 **วนจนเสร็จ (agent loop):** ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ จนผ่านทุกข้อที่ฉบับนั้นต้องมี · ตรวจด้วยหลักฐานจริง (เปิดไฟล์ · รันคำสั่ง · เทียบแหล่ง) ไม่ใช่คำบอกของตัวที่ทำ · รอบตรวจใช้ `reviewer` ตัวใหม่ทุกรอบ · ไม่ผ่าน → แก้ที่ต้นเหตุแล้วตรวจซ้ำทั้งข้อเดิมและจุดที่แก้ · เหลือแค่ข้อระดับต่ำ → ปิดได้แล้วลงรายงาน · ครบเพดานรอบ (งานกลาง 3 · งานใหญ่หรืองานเสี่ยง 5) ยังไม่ผ่าน → ติดป้าย `ติด` ทำส่วนอื่นให้จบ แล้วรายงานข้อที่เหลือ · รายละเอียดอยู่ใน skill `superuser` กฎข้อ 3
 <!-- rules:end -->
 
-**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้แบบเดียวกันทั้งชุด: ผังระบบ · flow · ผังคลาวด์ → `diagram-figures` · Mermaid (`software-diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
+**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้แบบเดียวกันทั้งชุด: ผังระบบ · flow · ผังคลาวด์ → `diagrams` · Mermaid (`diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
 
 | # | เอกสาร | ได้ไฟล์ |
 |---|---|---|
@@ -27,7 +27,7 @@
 
 ## 1. เอกสารแผน deploy และ CI/CD
 
-agent `devops-engineer` · skill `cicd-and-release` · `config-and-secrets` · `observability-basics` · `web-service-essentials` · `superuser:ground-rules`
+agent `devops-engineer` · skill `cicd-and-release` · `web-service-essentials` · `incidents-and-monitoring` · `superuser:ground-rules`
 **ต้องมีก่อน:** `docs/architecture.md` (ถ้ามี) · โค้ดที่ build ได้
 **ผลลัพธ์:** `docs/deploy-guide.md` — เอกสารเท่านั้น **ไม่สร้าง pipeline / ไม่แตะเซิร์ฟเวอร์ / ไม่ใส่ค่าลับจริง** (ร่างไฟล์ตัวอย่างอยู่ในเอกสารเป็นบล็อกโค้ด ไม่บันทึกลง repo)
 
@@ -61,7 +61,7 @@ agent `devops-engineer` · skill `cicd-and-release` · `config-and-secrets` · `
 
 ## 2. บันทึกการออกรุ่น (Release Notes)
 
-agent `technical-writer` · skill `software-development:release-notes` · `commit-message-format` · `design-gate/polished-document-style`
+agent `technical-writer` · skill `software-development:project-docs` · `git-and-review` · `design-gate/polished-document-style`
 **ผลลัพธ์:** `docs/release-notes/v<เวอร์ชัน>.md` · หัวข้อรุ่นใน `CHANGELOG.md` (ถ้ามี) — เขียนเป็นภาษาผู้ใช้ ไม่ใช่ภาษาผู้พัฒนา
 
 ### ข้อมูลรุ่น (ผู้ใช้กรอก)
@@ -102,7 +102,7 @@ agent `technical-writer` · skill `software-development:release-notes` · `commi
 
 ## 3. คู่มือรับมือเหตุการณ์ (Runbook)
 
-agent `devops-engineer` · skill `incident-runbook-template` · `observability-basics` · `logging-standards` · `postmortem-template` (ลิงก์ไปเมื่อเหตุจบ)
+agent `devops-engineer` · skill `incidents-and-monitoring` · `errors-and-logs` (ลิงก์ไปเมื่อเหตุจบ)
 **ต้องมีก่อน:** `docs/architecture.md` (ไม่มี → ใช้ `docs/as-is/overview.md` และ `docs/as-is/config-and-run.md`) · `docs/deploy-guide.md` (ถ้ามี)
 **ผลลัพธ์:** `docs/runbook-<เรื่อง>.md` — เอกสารเท่านั้น ไม่รันคำสั่งที่แตะระบบจริง (คำสั่งในเอกสารเป็นข้อความตัวอย่างที่ผู้เข้าเวรจะรันเอง)
 
@@ -121,7 +121,7 @@ agent `devops-engineer` · skill `incident-runbook-template` · `observability-b
    อาการที่เห็น → ตรวจอะไรก่อน (คำสั่งจริงที่ค้นจากโปรเจกต์) → แก้ทีละขั้น → วิธียืนยันว่าหายแล้ว → เมื่อไรต้องเรียกใคร/ส่งต่อ → ข้อควรระวัง (สิ่งที่ห้ามทำ)
 4. **Rollback / กู้คืน** — อ้างอิง `docs/deploy-guide.md` · สำรองข้อมูลอยู่ที่ไหน กู้อย่างไร ทดสอบล่าสุดเมื่อไร (ไม่ทราบ = `(รอยืนยัน)`)
 5. **การสื่อสาร** — ประกาศใคร ทางไหน ข้อความตัวอย่างสำหรับผู้ใช้ 1 แบบ
-6. **หลังเหตุ** — บันทึกอะไรระหว่างแก้ · ทำ postmortem เมื่อไร (ใช้ `postmortem-template`)
+6. **หลังเหตุ** — บันทึกอะไรระหว่างแก้ · ทำ postmortem เมื่อไร (ใช้ `incidents-and-monitoring`)
 7. ตารางติดต่อ (บทบาท · ช่องทาง ให้เติม) และประวัติเวอร์ชันของเอกสาร
 
 ### กฎเฉพาะฉบับนี้
@@ -133,7 +133,7 @@ agent `devops-engineer` · skill `incident-runbook-template` · `observability-b
 
 ## 4. ออกรุ่นแอป Windows: installer · code signing · auto-update
 
-agent `devops-engineer` + `developer` · skill `cicd-and-release` · `windows-app-design` · `config-and-secrets` · `principle-safe-to-rerun` · stack ตามภาษา (`stack-dotnet` · `stack-typescript` · `stack-python`)
+agent `devops-engineer` + `developer` · skill `cicd-and-release` · `windows-app-design` · `web-service-essentials` · `code-craft` · stack ตามภาษา (`stack-dotnet` · `stack-typescript` · `stack-python`)
 **ต้องมีก่อน:** แอปที่ build ได้ · `docs/release-notes/v<เวอร์ชัน>.md` (ฉบับ 2) ถ้ามี
 **ผลลัพธ์:** `docs/release-windows.md` — เอกสารเท่านั้น **ไม่ซื้อใบรับรอง · ไม่ลงนามด้วยใบรับรองจริง · ไม่ส่งขึ้น store** (อยู่ใน "รออนุมัติ") · สคริปต์ build ตัวอย่างอยู่ในเอกสารเป็นบล็อกโค้ด
 

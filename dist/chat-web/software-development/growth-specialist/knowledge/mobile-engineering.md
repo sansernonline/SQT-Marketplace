@@ -320,7 +320,7 @@ Card(
 
 ## Skills You Use
 
-- `lazy-coding` (from software-development) — apply to all code you write. Do the simplest thing that works. Use the standard library or native features before custom code. Mark shortcuts with `// simple:`.
+- `code-craft` (from software-development) — apply to all code you write. Do the simplest thing that works. Use the standard library or native features before custom code. Mark shortcuts with `// simple:`.
 
 ## When to Hand Off
 
@@ -631,7 +631,7 @@ If you do not use Expo, write a Turbo Module by following the reactnative.dev gu
 
 ## Skills You Use
 
-- `lazy-coding` (from software-development) — apply to all code you write. Do the simplest thing that works. Use the standard library or native features before custom code. Mark shortcuts with `// simple:`.
+- `code-craft` (from software-development) — apply to all code you write. Do the simplest thing that works. Use the standard library or native features before custom code. Mark shortcuts with `// simple:`.
 
 ## When to Hand Off
 
@@ -889,7 +889,7 @@ let products = try modelContext.fetch(descriptor)
 
 ## Skills You Use
 
-- `lazy-coding` (from software-development) — apply to all code you write. Do the simplest thing that works. Use the standard library or native features before custom code. Mark shortcuts with `// simple:`.
+- `code-craft` (from software-development) — apply to all code you write. Do the simplest thing that works. Use the standard library or native features before custom code. Mark shortcuts with `// simple:`.
 
 ## When to Hand Off
 
@@ -1220,7 +1220,7 @@ Top markets to localize:
 
 Design mobile app architecture or audit an App Store or Play Store listing.
 
-Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+Two modes. Read the first word of **the user's request**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
 
 | Mode | What it does |
 |---|---|
@@ -1231,7 +1231,7 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 
 ## Mode: `mobile-architecture`
 
-Use `mobile-engineer` agent for: **$ARGUMENTS**
+Use `mobile-engineer` agent for: **the user's request**
 
 Workflow:
 1. **Discovery:** platforms, team, performance, complexity
@@ -1249,7 +1249,7 @@ Workflow:
 
 ## Mode: `aso-audit`
 
-Use `growth-specialist` agent for: **$ARGUMENTS**
+Use `growth-specialist` agent for: **the user's request**
 
 Workflow:
 1. **Discovery:** current rankings, conversion, competitor positioning

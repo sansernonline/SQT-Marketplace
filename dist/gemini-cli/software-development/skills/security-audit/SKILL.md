@@ -1,6 +1,7 @@
 ---
 name: security-audit
-description: Use when auditing a whole codebase before handover
+description: Use when auditing a whole codebase or drawing a threat model
+argument-hint: '<feature or system to analyze, or the repo path to audit>'
 ---
 
 # security-audit — hunt for vulnerabilities across the whole system from code, and verify every item before reporting
@@ -9,6 +10,20 @@ This is a multi-step job, and the team lead (`superuser`) runs it.
 
 > **The one rule:** if you cannot yet say who is harmed, how, and through which entry point, the item is not yet a vulnerability. Something that "should exist but does not", with no provable affected party, is hardening advice, not a finding.
 
+## Pick the part
+
+| Job (what the user says) | Open |
+|---|---|
+| "Audit the whole repo", "pen test from code", "check before handover", "ตรวจช่องโหว่ทั้งระบบ" | This file: the 6 steps in section 2 |
+| "Threat model", "STRIDE", "what can go wrong with this feature?" before the code exists | [`references/threat-model.md`](references/threat-model.md) |
+| Recon of the system before the hunt | [`references/recon.md`](references/recon.md) |
+| Hunting one entry point or one attack class | [`references/hunting.md`](references/hunting.md) and [`references/attack-classes.md`](references/attack-classes.md) |
+| Verifying a candidate finding | [`references/verify.md`](references/verify.md) |
+| Infrastructure files (Terraform, compose, Kubernetes, Helm) | [`references/infra-checklist.md`](references/infra-checklist.md) |
+| The report, the fingerprint and the record format | [`references/ledger.md`](references/ledger.md) and [`assets/report-th.md`](assets/report-th.md) |
+
+Hard limits for every part: this skill reads code and runs only in a lab. It never tests a live system, a system that is not our customer's, or a system that already has a breach (use `security-operations` for that).
+
 ## Use when
 
 - The customer is about to accept the system, or the contract requires a whole-system security review, not just the latest diff
@@ -16,7 +31,7 @@ This is a multi-step job, and the team lead (`superuser`) runs it.
 - You take over someone else's code and need to know which vulnerabilities are still open
 - A previous round already audited, and you want to confirm the fixed items are really closed and find new problems in the parts that changed
 
-Do not use when: a pre-merge or pre-ship gate that must be fast → `security-gate` · a question about the security of a single piece of code → answer directly from `principle-secure-by-default` without opening the 6 steps · penetration testing a live deployed system, or a system that is not our customer's → do not do it (this skill reads code and runs only in a lab) · already breached, tracing an incident, SIEM rules → `security-operations` · only an exe, APK or firmware with no source → `reverse-engineering` (continue here once you have decompiled source) · the short command `/security-scan` is a shortcut that points here (whole codebase) or to `security-gate` (diff before ship).
+Do not use when: a pre-merge or pre-ship gate that must be fast → `security-gate` · a question about the security of a single piece of code → answer directly from `security-gate` without opening the 6 steps · penetration testing a live deployed system, or a system that is not our customer's → do not do it (this skill reads code and runs only in a lab) · already breached, tracing an incident, SIEM rules → `security-operations` · only an exe, APK or firmware with no source → `reverse-engineering` (continue here once you have decompiled source) · the short command `/security-scan` is a shortcut that points here (whole codebase) or to `security-gate` (diff before ship).
 
 ## Use another skill instead, or alongside
 
@@ -25,9 +40,9 @@ Do not use when: a pre-merge or pre-ship gate that must be fast → `security-ga
 | Before merge · ship · adding a dependency | [`security-gate`](../security-gate/SKILL.md) | The gate's gitleaks · semgrep · trivy scan results come in as candidates in step 3 |
 | Terraform · compose · Kubernetes · Helm is present, or an infra review is requested | [`infra-checklist`](references/infra-checklist.md) | The hunting list for the infrastructure family (ports · IAM · buckets · encryption · images) serves as work units in step 2 |
 | The contract names OWASP Top 10 | [`security-gate` OWASP section](../security-gate/references/owasp-top10.md) | Every finding has an `owasp` field, so the report can summarize rows A01–A10 right away |
-| Designing a new feature with no code yet | [`threat-model`](../threat-model/SKILL.md) | If a threat model already exists, the recon step starts from its DFD and non-capabilities |
+| Designing a new feature with no code yet | [`security-audit`](../security-audit/SKILL.md) | If a threat model already exists, the recon step starts from its DFD and non-capabilities |
 | A finding touches personal data | [`pdpa-compliance`](../pdpa-compliance/SKILL.md) | For a confirmed item that may already have leaked, open section 8 (the first 72 hours) |
-| Running the target code to prove something | [`docker-sandbox`](../docker-sandbox/SKILL.md) | `-Isolated -Locked` lab only |
+| Running the target code to prove something | [`infra-and-deploy`](../infra-and-deploy/SKILL.md) | `-Isolated -Locked` lab only |
 
 ## 1 · Ask everything once at the start
 
@@ -174,3 +189,4 @@ The 2 validators and `render_report.mjs` have `--self-test` (`fingerprint.mjs` i
 
 - [`references/worked-example.md`](references/worked-example.md) — open when you want a full run-through of a `quick` audit
 - [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
+

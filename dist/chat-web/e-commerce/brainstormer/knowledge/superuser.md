@@ -208,9 +208,9 @@ The situation → skill table is in [`triggers`](references/triggers.md). Open i
 
 | Criterion | Passes when | Skill |
 |---|---|---|
-| **Real profit** | The pricing table covers every fee, shipping and VAT · recomputed · tells the user to check rates against Seller Centre | `marketplace-fees-pricing` |
-| **Within the rules** | No banned claims · within platform policy · no customer data exposed | `product-listing` · `chat-reply-templates` |
-| **Consistent across shops** | SKU, price and stock match the master file · each shop's displayed count is at most available − buffer, and a sync cycle exists | `multi-shop-stock` |
+| **Real profit** | The pricing table covers every fee, shipping and VAT · recomputed · tells the user to check rates against Seller Centre | `pricing-and-costs` |
+| **Within the rules** | No banned claims · within platform policy · no customer data exposed | `sales-copy` · `customer-care` |
+| **Consistent across shops** | SKU, price and stock match the master file · each shop's displayed count is at most available − buffer, and a sync cycle exists | `shop-operations` |
 
 Every message to a customer is a draft until the seller presses send.
 
@@ -218,9 +218,9 @@ Every message to a customer is a draft until the seller presses send.
 
 | Criterion | Passes when | Skill |
 |---|---|---|
-| **Has evidence** | Every claim points to a receipt, chat, photo or order page, and every date is present | `refund-request` |
-| **Right channel, in time** | Filed at the right rung of the escalation ladder, before the right's deadline, with the channel checked on an official site | `refund-request` |
-| **Ready to send** | Polite, clear Thai · states what is wanted and a reply deadline · no threats or defamatory wording | `refund-request` |
+| **Has evidence** | Every claim points to a receipt, chat, photo or order page, and every date is present | `buyer-help` |
+| **Right channel, in time** | Filed at the right rung of the escalation ladder, before the right's deadline, with the channel checked on an official site | `buyer-help` |
+| **Ready to send** | Polite, clear Thai · states what is wanted and a reply deadline · no threats or defamatory wording | `buyer-help` |
 
 Do the reversible, cheapest route first (talk to the shop), then move to heavier steps.
 
@@ -228,9 +228,9 @@ Do the reversible, cheapest route first (talk to the shop), then move to heavier
 
 | Criterion | Passes when | Skill |
 |---|---|---|
-| **Numbers correct and traceable** | Current-year rates from official sites · computed with a rerunnable formula · figures on the form match the source table | `payroll-th` · `tax-vat-th` |
-| **Correct format** | All fields required by law or regulation are present · numbers and Thai words match | `e-tax-invoice` · `doc-thai-official` · `doc-quotation` |
-| **Risk flags** | Every point an accountant, auditor or lawyer must review is clearly flagged · no advice beyond general information | `doc-contract-th` · `pdpa-workflow` |
+| **Numbers correct and traceable** | Current-year rates from official sites · computed with a rerunnable formula · figures on the form match the source table | `thai-employment` · `thai-tax` |
+| **Correct format** | All fields required by law or regulation are present · numbers and Thai words match | `thai-tax` · `thai-business-docs` |
+| **Risk flags** | Every point an accountant, auditor or lawyer must review is clearly flagged · no advice beyond general information | `thai-business-docs` · `pdpa-workflow` |
 
 Values that many files cite (social security ceiling · VAT threshold · tax rates) come from the maintainer file `scripts/check/facts.json` in the SQT-Marketplace repo. It does not ship with the plugin and cannot be opened in the user's project. In a project, check the values on official sites (rd.go.th · sso.go.th) and record the date checked. If you find a new value, note it in `IMPROVEMENTS.md`.
 
@@ -240,7 +240,7 @@ Values that many files cite (social security ceiling · VAT threshold · tax rat
 
 | Rule | Detail |
 |---|---|
-| **Pick the agent by role** | Listings, prices and stock: `shop-manager` · customer replies and reviews: `customer-chat` · live sales: `live-seller` · buying-side work (compare · complaints · refunds · warranty): `consumer-advocate` · tax and filing calendar (including online-seller tax `seller-tax-basics` · hiring staff `hiring-th` · business setup `thai-business-setup`): `tax-helper` · business documents: `thai-doc-writer` · PDPA: `compliance-helper` · LINE OA: `line-admin`. If the work splits into several separate matters (many orders), use 1 fresh agent per matter. |
+| **Pick the agent by role** | Listings, prices and stock: `shop-manager` · customer replies and reviews: `customer-chat` · live sales: `live-seller` · buying-side work (compare · complaints · refunds · warranty): `consumer-advocate` · tax and filing calendar (including online-seller tax `thai-tax` · hiring staff `thai-employment` · business setup `thai-business-setup`): `tax-helper` · business documents: `thai-doc-writer` · PDPA: `compliance-helper` · LINE OA: `line-admin`. If the work splits into several separate matters (many orders), use 1 fresh agent per matter. |
 | **Cross-branch work** | Product images, promo posts and LINE rich menu images (`line-design`) go to `graphic-design` · shop or payroll systems that need code go to `software-development` (`ecommerce-engineer`) · personal tax goes to `trading-finance` · polite messages → `human-writing/polite-message-th-en` (plugin `superuser`) · document registry → `personal-life` · investment scams → `trading-finance`. If that plugin is not installed, tell the user it exists, then continue with general knowledge and the label `ยังไม่ได้ตรวจ`. Multi-step work in that branch goes to that plugin's `/<plugin>:superuser`. |
 
 ---
@@ -388,19 +388,19 @@ Fill these in place of the blanks in the template below.
 - Job name: online clothing shop
 - What the job is: what is sold, on which platform, shop type
 - Rules (`กติกา`): where the main stock file is · target margin · the shop's tone of voice
-- Example IMPROVEMENTS row: a platform added a fee for its free-shipping program in some categories · evidence: the platform's announcement page + Seller Centre · merge into `marketplace-fees-pricing` references/fee-structures.md
+- Example IMPROVEMENTS row: a platform added a fee for its free-shipping program in some categories · evidence: the platform's announcement page + Seller Centre · merge into `pricing-and-costs` references/fee-structures.md
 
 **Buying work**
 - Job name: complaint, broken refrigerator
 - What the job is: what happened, with which shop, what is wanted, which step it is at
 - Rules (`กติกา`): deadline of the right · channels already used · where the evidence is kept
-- Example IMPROVEMENTS row: a platform moved the dispute button into the order detail page · evidence: the platform's help page + a trial in the app · merge into `refund-request`
+- Example IMPROVEMENTS row: a platform moved the dispute button into the order detail page · evidence: the platform's help page + a trial in the app · merge into `buyer-help`
 
 **Back-office work (tax, payroll, PDPA, LINE OA)**
 - Job name: back office, Example Co., Ltd.
 - What the job is: which company, VAT registered or not, how many employees, accounting period
 - Rules (`กติกา`): where the payroll file is · who the accountant and auditor are · which file holds the LINE secrets (do not open it)
-- Example IMPROVEMENTS row: the online filing system moved the withholding tax menu into e-WHT · evidence: Revenue Department website + 2 sources · merge into `tax-vat-th`
+- Example IMPROVEMENTS row: the online filing system moved the withholding tax menu into e-WHT · evidence: Revenue Department website + 2 sources · merge into `thai-tax`
 
 <!-- superuser:begin context -->
 ## CONTEXT.md
@@ -677,16 +677,17 @@ The column template and the values used in each field live in one place, the [qu
 
 # playbook · business-doc — Thai business documents
 
-Use when: a quotation · invoice · receipt · tax invoice · official letter · contract · leave request
-Main skills: `doc-quotation` · `e-tax-invoice` · `doc-thai-official` · `doc-contract-th` · `doc-leave` · agent `thai-doc-writer`
+Use when: a quotation · invoice · receipt · tax invoice · official letter · contract · leave request · registration papers for a new business
+Main principles: [`shop-principles`](../../shop-principles/SKILL.md) · [`thai-paperwork.md`](../../shop-principles/references/thai-paperwork.md) · for a new business [`business-setup.md`](../../shop-principles/references/business-setup.md)
+Main skills: `thai-business-docs` · `thai-business-setup` (registration papers) · `thai-tax` · `thai-employment` · agent `thai-doc-writer`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. Pick the document type that fits the event, per `doc-quotation` (quote · billing · payment received · tax invoice) · ใคร: หัวหน้าทีม
+1. Open the paperwork principle file first. Then pick the document type that fits the event, per `thai-business-docs` (quote · billing · payment received · tax invoice). For a new business's registration papers, follow `thai-business-setup` · ใคร: หัวหน้าทีม
 2. Collect the parties' details and line items from real sources · put the tax ID and address exactly as the user gave them · ใคร: หัวหน้าทีม
 3. Draft in the skill's format — a tax invoice has every field the law requires · an official letter follows the correspondence regulations · a contract follows the contract-clause checklist · ใคร: `thai-doc-writer` ตัวใหม่
 4. Calculate VAT, withholding tax, and the total in Thai words using the formulas · ใคร: `thai-doc-writer` ตัวใหม่
-5. Check (ตรวจ) — mandatory fields are complete · figures and words match · contract clauses that need a lawyer are flagged · ใคร: `reviewer` ตัวใหม่
+5. Check (ตรวจ) — mandatory fields are complete · figures and words match · contract clauses that need a lawyer are flagged · the document follows the principle file · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -698,16 +699,17 @@ The document is ready to send, the mandatory fields are complete, the totals mat
 # playbook · buy-decision — deciding on a big purchase
 
 Use when: buying an appliance, phone, car, course, or high-priced service · torn between several options
-Main skills: `buy-compare` · `warranty-tracker`
+Main principles: [`shop-principles`](../../shop-principles/SKILL.md) · [`buying.md`](../../shop-principles/references/buying.md)
+Main skills: `buyer-help`
 
 ## ขั้นตอน (Steps — copy into the todo exactly)
 
-1. Gather the needs — what it is for, the budget, what it must have, what it must not have. For any item you do not know, put `(รอยืนยัน)` (to be confirmed) and do not guess a value · ใคร: หัวหน้าทีม
+1. Open `buying.md` first. Then gather the needs — what it is for, the budget, what it must have, what it must not have. For any item you do not know, put `(รอยืนยัน)` (to be confirmed) and do not guess a value · ใคร: หัวหน้าทีม
 2. Shortlist 2–4 options, then take the specs and prices from the maker's website or an official shop, with the date viewed · ใคร: `consumer-advocate` ตัวใหม่
 3. Build a weighted decision table and work out the total cost over the useful life (price · electricity · repairs · consumables) · ใคร: `consumer-advocate` ตัวใหม่
-4. Check (ตรวจ) the reviews with the fake-review criteria in `buy-compare`. Drop reviews that fail, and say how many were dropped and why · ใคร: `consumer-advocate` ตัวใหม่ picks the reviews · `reviewer` ตัวใหม่ checks that the picking follows the criteria
-5. Compare the warranty terms and claim channels with `warranty-tracker` · ใคร: `consumer-advocate` ตัวใหม่
-6. Recommend 1 option with the reason, and 1 backup. Placing the order goes under "รออนุมัติ" (awaiting approval) · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ checks the whole set before it reaches the user (placing the order: ผู้ใช้)
+4. Check (ตรวจ) the reviews with the fake-review criteria in `buyer-help`. Drop reviews that fail, and say how many were dropped and why · ใคร: `consumer-advocate` ตัวใหม่ picks the reviews · `reviewer` ตัวใหม่ checks that the picking follows the criteria
+5. Compare the warranty terms and claim channels with `buyer-help` · ใคร: `consumer-advocate` ตัวใหม่
+6. Recommend 1 option with the reason, and 1 backup. Placing the order goes under "รออนุมัติ" (awaiting approval) · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ checks the whole set against `buying.md` before it reaches the user (placing the order: ผู้ใช้)
 
 ## Done when
 
@@ -719,16 +721,17 @@ There is a decision table that has been recalculated, every price has a source a
 # playbook · complaint — complaining up the ladder
 
 Use when: the shop does not fix the problem, does not ship, or does not do what it promised · bad service and the user wants to complain
-Main skill: `refund-request` (the complaint letter is in `references/complaint-letter.md` · the refund request is in the skill itself)
+Main principles: [`shop-principles`](../../shop-principles/SKILL.md) · [`customer-care.md`](../../shop-principles/references/customer-care.md)
+Main skill: `buyer-help` (the complaint letter is in `references/complaint-letter.md` · the refund request is in the skill itself)
 
 ## ขั้นตอน (Steps — copy into the todo exactly)
 
-1. Put the events in a timeline with dates, and make an evidence list. If a piece is missing, tell the user what to collect · ใคร: หัวหน้าทีม
+1. Open `customer-care.md` first. Then put the events in a timeline with dates, and make an evidence list. If a piece is missing, tell the user what to collect · ใคร: หัวหน้าทีม
 2. State clearly what is wanted — repair · replacement · refund · apology · compensation. Use the answer given at the start. If there is none, choose according to the damage and mark it `(รอยืนยัน)` (to be confirmed) · ใคร: หัวหน้าทีม
-3. Lay out the ladder following `refund-request` (`references/complaint-letter.md`) — shop → platform → the agency that takes complaints → consumer court. Then check the channel and time limit of each rung on official websites · ใคร: `consumer-advocate` ตัวใหม่
+3. Lay out the ladder following `buyer-help` (`references/complaint-letter.md`) — shop → platform → the agency that takes complaints → consumer court. Then check the channel and time limit of each rung on official websites · ใคร: `consumer-advocate` ตัวใหม่
 4. Draft the letter or message for the first rung in polite, clear Thai, with a reply deadline · ใคร: `consumer-advocate` ตัวใหม่
 5. Prepare drafts for the next rungs in advance, with the condition for when to move up a rung · ใคร: `consumer-advocate` ตัวใหม่
-6. Check (ตรวจ) that every claim points to evidence, the dates match the timeline, and there are no threatening or defamatory words · ใคร: `reviewer` ตัวใหม่
+6. Check (ตรวจ) that every claim points to evidence, the dates match the timeline, there are no threatening or defamatory words, and the letter follows `customer-care.md` · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -740,15 +743,16 @@ The timeline, the evidence list and the drafts for every rung are ready to send.
 # playbook · customer-issue — customer cases, returns, and bad reviews
 
 Use when: a customer asks or complains · an item is late, wrong, or broken · a refund request · a 1–3 star review
-Main skills: `chat-reply-templates` · `returns-and-bad-reviews` · agent `customer-chat`
+Main principles: [`shop-principles`](../../shop-principles/SKILL.md) · [`customer-care.md`](../../shop-principles/references/customer-care.md)
+Main skills: `customer-care` · agent `customer-chat`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. Read the chat or review and the real order data — parcel status, dates, shop policy · ใคร: หัวหน้าทีม
-2. Classify the case, then choose the route per `returns-and-bad-reviews`: reply · exchange · refund · dispute with the platform · ใคร: `customer-chat` ตัวใหม่
+1. Open `customer-care.md` first. Then read the chat or review and the real order data — parcel status, dates, shop policy · ใคร: หัวหน้าทีม
+2. Classify the case, then choose the route per `customer-care`: reply · exchange · refund · dispute with the platform · ใคร: `customer-chat` ตัวใหม่
 3. Draft a polite Thai reply in the shop's tone of voice, within platform policy · ใคร: `customer-chat` ตัวใหม่
 4. For a public review, draft a reply that does not argue and does not reveal customer data · ใคร: `customer-chat` ตัวใหม่
-5. Check (ตรวจ) that the reply promises nothing the shop cannot do and that the facts match the order · ใคร: `reviewer` ตัวใหม่
+5. Check (ตรวจ) that the reply promises nothing the shop cannot do, that the facts match the order, and that the reply follows `customer-care.md` · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -796,16 +800,17 @@ Every lesson can point to the file it went into · a repeated mistake has a chec
 # playbook · line-oa — setting up and running a LINE Official Account
 
 Use when: creating a LINE OA · turning on the Messaging API · building a chatbot · rich menu · broadcast
-Main skills: `line-oa-setup` · `line-chatbot` · `line-broadcast` · `graphic-design:line-design` (if installed) · agent `line-admin`
+Main principles: [`shop-principles`](../../shop-principles/SKILL.md) · [`line-oa.md`](../../shop-principles/references/line-oa.md)
+Main skills: `line-oa` · `graphic-design:line-design` (if installed) · agent `line-admin`
 
 ## ขั้นตอน (Steps — copy into the todo exactly)
 
-1. Check the account's plan and message quota on LINE's official pages · ใคร: `line-admin` ตัวใหม่
-2. Set up the channel and webhook following `line-oa-setup` — verify the X-Line-Signature signature, and keep secrets in a config file that the user fills in personally · ใคร: `line-admin` ตัวใหม่ (the user fills in the secrets personally)
+1. Open `line-oa.md` first. Then check the account's plan and message quota on LINE's official pages · ใคร: `line-admin` ตัวใหม่
+2. Set up the channel and webhook following `line-oa` — verify the X-Line-Signature signature, and keep secrets in a config file that the user fills in personally · ใคร: `line-admin` ตัวใหม่ (the user fills in the secrets personally)
 3. Chatbot — group real customer questions by intent, then answer from the knowledge base. If unsure, hand over to staff, and never invent prices or stock · ใคร: `line-admin` ตัวใหม่
 4. Rich menu — build the image size and tap areas following `graphic-design:line-design` (not installed → use the sizes from LINE's official documents and tag them `ยังไม่ได้ตรวจ` (not yet checked)) · ใคร: `line-admin` ตัวใหม่
 5. Broadcast — calculate the quota before sending. The actual send must wait for approval · ใคร: `line-admin` ตัวใหม่ calculates the quota, then ผู้ใช้อนุมัติ the actual send (the user approves)
-6. Test (ทดสอบ) with an echo or a test message to a test account · ใคร: `line-admin` ตัวใหม่ sends to the test account · `reviewer` ตัวใหม่ checks the result against the log and the quota calculation
+6. Test (ทดสอบ) with an echo or a test message to a test account · ใคร: `line-admin` ตัวใหม่ sends to the test account · `reviewer` ตัวใหม่ checks the result against the log, the quota calculation and `line-oa.md`
 
 ## Done when
 
@@ -817,14 +822,15 @@ The test message really passed, no secret is in code or chat, and the quota has 
 # playbook · live-session — prepare a live sales stream
 
 Use when: going live on TikTok Shop · Shopee Live · Lazada Live · Facebook Live
-Main skills: `live-selling-script` · `product-listing` · agent `live-seller`
+Main principles: [`shop-principles`](../../shop-principles/SKILL.md) · [`selling.md`](../../shop-principles/references/selling.md)
+Main skills: `sales-copy` · agent `live-seller`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. Choose the products and deals for the live, and check that stock and prices still leave a profit · ใคร: `shop-manager` ตัวใหม่
-2. Make a minute-by-minute run sheet per `live-selling-script` — opening hook · product order · flash deal timing · closing lines · ใคร: `live-seller` ตัวใหม่
+1. Open `selling.md` first. Then choose the products and deals for the live, and check that stock and prices still leave a profit · ใคร: `shop-manager` ตัวใหม่
+2. Make a minute-by-minute run sheet per `sales-copy` — opening hook · product order · flash deal timing · closing lines · ใคร: `live-seller` ตัวใหม่
 3. Make the back-office checklist — who answers chat, which stock is locked, product links · ใคร: `live-seller` ตัวใหม่
-4. Check (ตรวจ) every spoken line against the list of banned advertising words, and check the checklist against real stock · ใคร: `reviewer` ตัวใหม่
+4. Check (ตรวจ) every spoken line against the list of banned advertising words and against `selling.md`, and check the checklist against real stock · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -836,16 +842,17 @@ The run sheet and checklist are ready to use, and every line has passed the bann
 # playbook · monthly-close — month-end close — payroll, tax, social security
 
 Use when: running the monthly payroll · filing withholding tax, value added tax and social security
-Main skills: `payroll-th` · `social-security-th` · `tax-vat-th` · agent `tax-helper`
+Main principles: [`shop-principles`](../../shop-principles/SKILL.md) · [`shop-money.md`](../../shop-principles/references/shop-money.md) · [`thai-paperwork.md`](../../shop-principles/references/thai-paperwork.md)
+Main skills: `shop-books` · `thai-employment` · `thai-tax` · agent `tax-helper`
 
 ## ขั้นตอน (Steps — copy into the todo exactly)
 
-1. Collect the real data for the month — employee list, salary, overtime, attendance bonus, absence and leave deductions, provident fund. If the data is incomplete, put `(รอยืนยัน)` (to be confirmed) · ใคร: หัวหน้าทีม
+1. Open both principle files first. Then collect the real data for the month — from the shop's books per `shop-books` (bank and PromptPay QR statements) and the payroll inputs: employee list, salary, overtime, attendance bonus, absence and leave deductions, provident fund. If the data is incomplete, put `(รอยืนยัน)` (to be confirmed) · ใคร: หัวหน้าทีม
 2. Check this year's rates and caps on official websites — the social security wage base and tax rates · ใคร: `tax-helper` ตัวใหม่
-3. Calculate gross → net per person with spreadsheet formulas following `payroll-th` (tax withheld by the annualised estimate) · ใคร: `tax-helper` ตัวใหม่
-4. Make the list of forms due this month with their due dates, following `tax-vat-th` and `social-security-th` · ใคร: `tax-helper` ตัวใหม่
+3. Calculate gross → net per person with spreadsheet formulas following `thai-employment` (tax withheld by the annualised estimate) · ใคร: `tax-helper` ตัวใหม่
+4. Make the list of forms due this month with their due dates, following `thai-tax` and `thai-employment` · ใคร: `tax-helper` ตัวใหม่
 5. Prepare the filing files and click-by-click steps on the e-Filing system — the actual filing and payment must wait for approval · ใคร: `tax-helper` ตัวใหม่ prepares, then the user files and pays personally
-6. Check (ตรวจ) — the totals in the forms and filing files must match the payroll table, and recalculate 1 person by hand · ใคร: `reviewer` ตัวใหม่
+6. Check (ตรวจ) — the totals in the forms and filing files must match the payroll table, and recalculate 1 person by hand. Judge the close against both principle files · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -857,20 +864,21 @@ A payroll table that has been recalculated, and the filing set for every form of
 # playbook · new-product — list a new product with the full set
 
 Use when: a new product will be listed on 1 or more platforms
-Main skills: `product-listing` · `marketplace-fees-pricing` · `multi-shop-stock` · `shipping-compare`
+Main principles: [`shop-principles`](../../shop-principles/SKILL.md) · [`selling.md`](../../shop-principles/references/selling.md) · [`shop-money.md`](../../shop-principles/references/shop-money.md)
+Main skills: `sales-copy` · `pricing-and-costs` · `shop-operations`
 
-## ขั้นตอน · Steps (copy into the todo as written)
+## ขั้นตอน · Steps (copy into the todo exactly)
 
-1. Collect the data — product, cost per unit, platforms, shop type, category, parcel weight and size. Mark any missing item `(รอยืนยัน)` (awaiting confirmation) · ใคร: หัวหน้าทีม
-2. Work out the real shipping cost from the parcel size per `shipping-compare` (including volumetric weight) · ใคร: `shop-manager` ตัวใหม่
-3. Set the price per platform with the formula in `marketplace-fees-pricing`, as a table, and tell the user to check the rates against Seller Centre · ใคร: `shop-manager` ตัวใหม่
-4. Write the product name, search keywords, description, and image checklist per platform, following `product-listing` · ใคร: `shop-manager` ตัวใหม่
-5. Set the SKU and enter it in the master stock file per `multi-shop-stock`, with a reorder point · ใคร: `shop-manager` ตัวใหม่
-6. Check (ตรวจ) banned advertising words, the SKU, and image sizes for each platform (`campaign-set` in graphic-design, ถ้าติดตั้ง) · ใคร: `reviewer` ตัวใหม่
+1. Open `selling.md` and `shop-money.md` first. Then collect the data — product, cost per unit, platforms, shop type, category, parcel weight and size, stock on hand, and the SKU this product already has on any other shop. Mark any missing item `(รอยืนยัน)` (awaiting confirmation) · ใคร: หัวหน้าทีม
+2. Work out the real shipping cost from the parcel size per `pricing-and-costs` (`references/shipping-compare.md`, volumetric weight) · ใคร: `shop-manager` ตัวใหม่
+3. Set the price per platform with the formula in `pricing-and-costs`, as a table, and tell the user to check the rates against Seller Centre · ใคร: `shop-manager` ตัวใหม่
+4. Write the product name, search keywords, description, and image checklist per platform, following `sales-copy` · ใคร: `shop-manager` ตัวใหม่
+5. Set the SKU and enter it in the master stock file per `shop-operations` (`references/multi-shop-stock.md`), with a reorder point. If the product already sells on another shop, reuse that SKU and set the quantity shown on each shop to at most available − buffer with `scripts/stock-calc.mjs`; an existing oversell problem → playbook `stock-sync` · ใคร: `shop-manager` ตัวใหม่
+6. Check (ตรวจ) banned advertising words, the SKU, and image sizes for each platform (`campaign-set` in graphic-design, ถ้าติดตั้ง), judge the listing against `selling.md`, and recalculate the price and the shown stock against `shop-money.md` principles 1 and 4 (price covers every fee layer · shown stock ≤ available − buffer on every shop) · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
-The price table has been recalculated · every platform's listing has passed the banned-word check · the SKU is in the stock file · the actual listing is under "รออนุมัติ" (awaiting approval).
+The price table has been recalculated · every platform's listing has passed the banned-word check · the SKU is in the stock file and the quantity shown on each shop is ≤ available − buffer · the actual listing is under "รออนุมัติ" (awaiting approval).
 
 
 ## reference: playbook-pdpa-setup.md
@@ -878,15 +886,16 @@ The price table has been recalculated · every platform's listing has passed the
 # playbook · pdpa-setup — set up PDPA (Personal Data Protection Act) for an SME
 
 Use when: starting PDPA work · making a consent form · a data subject has made a request · data has leaked
+Main principles: [`shop-principles`](../../shop-principles/SKILL.md) · [`thai-paperwork.md`](../../shop-principles/references/thai-paperwork.md)
 Main skills: `pdpa-workflow` · agent `compliance-helper`
 
-## ขั้นตอน · Steps (copy into the todo as written)
+## ขั้นตอน · Steps (copy into the todo exactly)
 
 1. If data is leaking right now, run the breach-response steps in `pdpa-workflow` before anything else, and start the clock for notifying the authority · ใคร: หัวหน้าทีม (talk to the user at once)
-2. List the personal data the company keeps — what, whose, why, the legal basis, and how long · ใคร: `compliance-helper` ตัวใหม่
+2. Open `thai-paperwork.md` first. Then list the personal data the company keeps — what, whose, why, the legal basis, and how long · ใคร: `compliance-helper` ตัวใหม่
 3. Draft the consent form, the privacy notice, and the record of processing activities · ใคร: `compliance-helper` ตัวใหม่
 4. Set out the steps for handling data subject requests, with deadlines · ใคร: `compliance-helper` ตัวใหม่
-5. Check (ตรวจ) — every activity has a legal basis, and every point that needs a lawyer is flagged · ใคร: `reviewer` ตัวใหม่
+5. Check (ตรวจ) — every activity has a legal basis, every point that needs a lawyer is flagged, and the documents follow `thai-paperwork.md` · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -898,15 +907,16 @@ The PDPA document set is ready to use, and the steps for requests and breaches h
 # playbook · pricing-check — checking profit and repricing
 
 Use when: selling without profit left · fees changed · about to run a discount promotion
-Main skills: `marketplace-fees-pricing` · `shipping-compare` · `seller-tax-basics`
+Main principles: [`shop-principles`](../../shop-principles/SKILL.md) · [`shop-money.md`](../../shop-principles/references/shop-money.md)
+Main skills: `pricing-and-costs` · `shop-books` · `thai-tax`
 
 ## ขั้นตอน (Steps — copy into the todo exactly)
 
-1. Pull the current cost and selling price of every SKU involved · ใคร: `shop-manager` ตัวใหม่
-2. Work out the real profit per item per platform after every fee, shipping and discounts · ใคร: `shop-manager` ตัวใหม่
+1. Open `shop-money.md` first. Then pull the current cost and selling price of every SKU involved · ใคร: `shop-manager` ตัวใหม่
+2. Work out the real profit per item per platform after every fee, shipping and discounts, and check the cash that comes in per `shop-books` · ใคร: `shop-manager` ตัวใหม่
 3. Make the new price or the discount cap that still meets the target margin · ใคร: `shop-manager` ตัวใหม่
-4. If sales are near the VAT registration threshold, point to `seller-tax-basics` · ใคร: หัวหน้าทีม
-5. Check (ตรวจ) by recalculating with the spreadsheet formulas. The numbers must match on every row · ใคร: `reviewer` ตัวใหม่
+4. If sales are near the VAT registration threshold, point to `thai-tax` · ใคร: หัวหน้าทีม
+5. Check (ตรวจ) by recalculating with the spreadsheet formulas. The numbers must match on every row, and the prices follow `shop-money.md` · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -918,15 +928,16 @@ A profit table per SKU per platform, and new prices that meet the target margin.
 # playbook · refund — requesting a refund
 
 Use when: wanting money back — changed mind after a direct-sale purchase · wrong, fake or broken goods · paid but never received · an unknown or duplicate card charge
-Main skill: `refund-request` (the complaint letter is in `references/complaint-letter.md`)
+Main principles: [`shop-principles`](../../shop-principles/SKILL.md) · [`customer-care.md`](../../shop-principles/references/customer-care.md) · [`buying.md`](../../shop-principles/references/buying.md)
+Main skill: `buyer-help` (the complaint letter is in `references/complaint-letter.md`)
 
 ## ขั้นตอน (Steps — copy into the todo exactly)
 
-1. Classify the case following `refund-request` and count the deadline of each route's right, then take the route closest to its deadline first · ใคร: `consumer-advocate` ตัวใหม่
+1. Open both principle files first. Then classify the case following `buyer-help` and count the deadline of each route's right, then take the route closest to its deadline first · ใคร: `consumer-advocate` ตัวใหม่
 2. Gather the payment evidence and the condition of the goods · ใคร: หัวหน้าทีม
 3. Choose the route — ask the shop · open a dispute with the platform · ask the bank to reject the charge · complain. Then write the reason in the "การตัดสินใจ" (decisions) table · ใคร: หัวหน้าทีม
 4. Draft the request, forms and messages needed, with click-by-click steps in the platform's or bank's app · ใคร: `consumer-advocate` ตัวใหม่
-5. Check (ตรวจ) that the amount, dates and order number match the evidence · ใคร: `reviewer` ตัวใหม่
+5. Check (ตรวจ) that the amount, dates and order number match the evidence, and that the request follows both principle files · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -939,11 +950,12 @@ The request is ready to send before the deadline, with a backup plan if it is re
 
 Use when: checking work before sending or before real use · "please look for anything I got wrong" · the user did the work themselves and wants it checked
 Result: a verdict with a list of confirmed problems. **No automatic fixing**, and it is read-only work, so it does not create `CONTEXT.md`
-Main skills: sales side `product-listing` · `marketplace-fees-pricing` · `chat-reply-templates` · buying side `refund-request` · `buy-compare` · back office `payroll-th` · `e-tax-invoice` · `doc-contract-th` · `pdpa-workflow`
+Main principles: [`shop-principles`](../../shop-principles/SKILL.md) · the file of the kind of work checked (table in that SKILL.md; the checkers in step 4 judge against it)
+Main skills: sales side `sales-copy` · `pricing-and-costs` · `customer-care` · buying side `buyer-help` · back office `thai-employment` · `thai-tax` · `thai-business-docs` · `pdpa-workflow`
 
 ## ขั้นตอน (Steps — copy into the todo exactly)
 
-1. Set the scope — the piece to check, and the source documents to compare against (cost · fees in Seller Centre · platform policy · stock file · evidence · timeline · shop or platform terms · rates from official websites · payroll table · official forms) · ใคร: หัวหน้าทีม
+1. Set the scope — the piece to check, and the source documents to compare against (cost · fees in Seller Centre · platform policy · stock file · evidence · timeline · shop or platform terms · rates from official websites · payroll table · official forms), and open the principle file of that kind of work · ใคร: หัวหน้าทีม
 <!-- superuser:begin review-steps -->
 2. Prepare the review package per [`review-lenses`](review-lenses.md) item 1: the intent of the work in 1 paragraph (who uses it, for what; if unsure, choose the interpretation with the least impact and do not stop to ask) · the diff as a file · the spec's conditions quoted exactly · the `head:` id · the author's reasoning kept separate in `author-notes.md`, with no opinion on pass or fail put in the prompt · ใคร: หัวหน้าทีม
 3. Choose lenses by the kind of work from [`review-lenses`](review-lenses.md) item 2 (every job has `spec` and `quality`), then follow the checklist of this playbook's main skill (none → a related skill) · ใคร: หัวหน้าทีม
@@ -964,15 +976,16 @@ Every item in the report points to a spot in the work and has passed confirmatio
 # playbook · stock-sync — keep stock the same across several shops
 
 Use when: the same goods sell on several platforms and oversell · counts do not match
-Main skills: `multi-shop-stock`
+Main principles: [`shop-principles`](../../shop-principles/SKILL.md) · [`shop-money.md`](../../shop-principles/references/shop-money.md)
+Main skills: `shop-operations`
 
-## ขั้นตอน · Steps (copy into the todo as written)
+## ขั้นตอน · Steps (copy into the todo exactly)
 
-1. Merge the stock figures from every shop and the real goods in the warehouse into one master file · ใคร: `shop-manager` ตัวใหม่
+1. Open `shop-money.md` first. Then merge the stock figures from every shop and the real goods in the warehouse into one master file · ใคร: `shop-manager` ตัวใหม่
 2. Give SKUs the same naming style in every shop · ใคร: `shop-manager` ตัวใหม่
-3. Set the stock sync rules, a buffer (stock held back from sale) per shop, and the reorder point, per `multi-shop-stock` · ใคร: `shop-manager` ตัวใหม่
+3. Set the stock sync rules, a buffer (stock held back from sale) per shop, and the reorder point, per `shop-operations` · ใคร: `shop-manager` ตัวใหม่
 4. Make an adjustment list per shop (which shop, which SKU, from how many to how many), and keep the edits in the live shops under "รออนุมัติ" (awaiting approval) · ใคร: `shop-manager` ตัวใหม่ · ผู้ใช้อนุมัติการแก้ในร้านจริง
-5. Check (ตรวจ) that the quantity shown in each shop does not exceed available − buffer (real stock in the warehouse − reserved stock − buffer) and that a sync cadence is set · ใคร: `reviewer` ตัวใหม่
+5. Check (ตรวจ) that the quantity shown in each shop does not exceed available − buffer (real stock in the warehouse − reserved stock − buffer), that a sync cadence is set, and that the rules follow `shop-money.md` · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -1096,15 +1109,16 @@ All the step 1 conditions pass, or every remaining piece has a reason why it is 
 # playbook · warranty-claim — warranty register and claims
 
 Use when: you just bought something with a warranty · you want to keep receipts in order · something broke and you want to know whether it is still under warranty
-Main skills: `warranty-tracker`
+Main principles: [`shop-principles`](../../shop-principles/SKILL.md) · [`customer-care.md`](../../shop-principles/references/customer-care.md) · [`buying.md`](../../shop-principles/references/buying.md)
+Main skills: `buyer-help`
 
-## ขั้นตอน · Steps (copy into the todo as written)
+## ขั้นตอน · Steps (copy into the todo exactly)
 
-1. Create or open the register per `warranty-tracker` — product · purchase date · shop · warranty end · where the receipt is kept · ใคร: `consumer-advocate` ตัวใหม่
+1. Open both principle files first. Then create or open the register per `buyer-help` — product · purchase date · shop · warranty end · where the receipt is kept · ใคร: `consumer-advocate` ตัวใหม่
 2. Add the items the user sent, reading from the real receipt or warranty card · ใคร: `consumer-advocate` ตัวใหม่
 3. If a claim is planned, check that the item is still under warranty, read the exclusion terms, and prepare the documents and the message to the service center · ใคร: `consumer-advocate` ตัวใหม่ checks eligibility and prepares the documents
 4. Set a reminder 30 days before the warranty ends for items worth checking before then · ใคร: หัวหน้าทีม
-5. Check (ตรวจ) the register, the reminders, and the claim pack (if any) before it reaches the user · ใคร: `reviewer` ตัวใหม่
+5. Check (ตรวจ) the register, the reminders, and the claim pack (if any) before it reaches the user, judged against both principle files · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -1116,15 +1130,16 @@ Every row of the register matches the real documents, and the claim pack is read
 # playbook · year-end — year-end close: financial statements, shareholder meeting, ภ.ง.ด.50 (PND 50, corporate income tax return) and 50 ทวิ (withholding tax certificate)
 
 Use when: after the accounting period ends · issuing withholding tax certificates and ภ.ง.ด.1ก (PND 1 Kor, annual employee withholding tax summary) for employees
-Main skills: `dbd-annual-filing` · `payroll-th` · `tax-vat-th`
+Main principles: [`shop-principles`](../../shop-principles/SKILL.md) · [`thai-paperwork.md`](../../shop-principles/references/thai-paperwork.md)
+Main skills: `thai-tax` · `thai-employment`
 
-## ขั้นตอน · Steps (copy into the todo as written)
+## ขั้นตอน · Steps (copy into the todo exactly)
 
-1. Count back from the period end date per `dbd-annual-filing` — shareholder meeting · financial statements audited · บอจ.5 (Bor Or Jor 5, shareholder list) · ภ.ง.ด.50 · ใคร: `tax-helper` ตัวใหม่
+1. Open `thai-paperwork.md` first. Then count back from the period end date per `thai-tax` — shareholder meeting · financial statements audited · บอจ.5 (Bor Or Jor 5, shareholder list) · ภ.ง.ด.50 · ใคร: `tax-helper` ตัวใหม่
 2. Check the deadlines and penalties on the websites of the Department of Business Development and the Revenue Department · ใคร: `tax-helper` ตัวใหม่
 3. Prepare ภ.ง.ด.1ก and 50 ทวิ from the full-year payroll table · ใคร: `tax-helper` ตัวใหม่
 4. List the documents needed from the auditor and the directors, with the date each is needed · ใคร: `tax-helper` ตัวใหม่
-5. Check (ตรวจ) — the full-year amounts in each 50 ทวิ must match the 12-month totals · ใคร: `reviewer` ตัวใหม่
+5. Check (ตรวจ) — the full-year amounts in each 50 ทวิ must match the 12-month totals, and the timeline and forms follow `thai-paperwork.md` · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -1380,7 +1395,7 @@ This file is the same in every plugin · the original lives in plugin `superuser
 | agent | model tier | use when | not for |
 |---|---|---|---|
 | `brainstormer` | large | before a large task or when the problem is unclear: think through 2–3 paths on paper, scored 1–5 (5 = best) | building several real versions and picking one → `crew-patterns/parallel-attempts-pick-best` |
-| `reviewer` | per the budget table in `SKILL.md` section 2 (balanced: medium every round · large only in the last round of risky work) | check finished work before it reaches the user or outsiders; read-only, never edits | high-risk work → `crew-patterns/adversarial-review-panel` (uses several `reviewer`s) · (if plugin `software-development` is installed) code → pair with `code-review-checklist` · (if plugin `graphic-design` is installed) visual work → `design-critic` or `design-review` · if neither is installed, check against the criteria in the brief |
+| `reviewer` | per the budget table in `SKILL.md` section 2 (balanced: medium every round · large only in the last round of risky work) | check finished work before it reaches the user or outsiders; read-only, never edits | high-risk work → `crew-patterns/adversarial-review-panel` (uses several `reviewer`s) · (if plugin `software-development` is installed) code → pair with `git-and-review` · (if plugin `graphic-design` is installed) visual work → `design-critic` or `design-review` · if neither is installed, check against the criteria in the brief |
 | `learning-reviewer` | medium | at the end of a multi-step task: review how the team worked, not the work itself | — |
 
 Call a fresh one every time, because whoever did the work does not review its own work · specialist reviewers (`design-critic` · `brand-keeper` · `qa-tester` · `security-engineer` · `risk-manager`) may replace `reviewer` only in a step written as "read-only · does not edit files" (call with `model: opus`) · a step in which that agent writes a test or fixes something counts as doing the work
@@ -1481,27 +1496,27 @@ Moved from `SKILL.md` section 3 · open it when unsure which skill to call, or w
 
 | Situation | Call |
 |---|---|
-| Write or edit a listing | `product-listing` + agent `shop-manager` |
-| Set a price · selling at a loss | `marketplace-fees-pricing` |
-| Stock across several shops does not match · dead stock, cash tied up | `multi-shop-stock` |
-| What to do first this morning · orders waiting to ship, return requests, waiting chats, low stock all at once | `shop-daily-briefing` + agent `shop-manager` |
-| The shop's own regular customers have gone and the user wants them back (LINE · Facebook · storefront) | `win-back-customers` + agent `customer-chat` |
-| Ordering from China (1688 · Taobao · freight forwarding), what is the cost per item landed at the shop · import duty and VAT · by road or by sea | `import-landed-cost` + agent `shop-manager` |
-| Choose a courier · COD | `shipping-compare` |
-| Reply to a customer | `chat-reply-templates` + agent `customer-chat` |
-| Returns · bad reviews | `returns-and-bad-reviews` |
-| Live selling | `live-selling-script` + agent `live-seller` |
-| Online seller tax (section 40(8) · VAT threshold) | `seller-tax-basics` + agent `tax-helper` |
+| Write or edit a listing | `sales-copy` + agent `shop-manager` |
+| Set a price · selling at a loss | `pricing-and-costs` |
+| Stock across several shops does not match · dead stock, cash tied up | `shop-operations` |
+| What to do first this morning · orders waiting to ship, return requests, waiting chats, low stock all at once | `shop-operations` + agent `shop-manager` |
+| The shop's own regular customers have gone and the user wants them back (LINE · Facebook · storefront) | `sales-copy` + agent `customer-chat` |
+| Ordering from China (1688 · Taobao · freight forwarding), what is the cost per item landed at the shop · import duty and VAT · by road or by sea | `pricing-and-costs` + agent `shop-manager` |
+| Choose a courier · COD | `pricing-and-costs` |
+| Reply to a customer | `customer-care` + agent `customer-chat` |
+| Returns · bad reviews | `customer-care` |
+| Live selling | `sales-copy` + agent `live-seller` |
+| Online seller tax (section 40(8) · VAT threshold) | `thai-tax` + agent `tax-helper` |
 | Quotation, receipt, PromptPay QR, LINE OA | See the back-office table below |
 
 **Buying side**
 
 | Situation | Call |
 |---|---|
-| About to buy a big item · cannot choose · doubts the reviews | `buy-compare` + agent `consumer-advocate` |
-| The shop does not fix the problem · wants to complain | `refund-request` (`references/complaint-letter.md`) |
-| Wants a refund · strange card charge | `refund-request` |
-| Bought something with a warranty · broken goods | `warranty-tracker` |
+| About to buy a big item · cannot choose · doubts the reviews | `buyer-help` + agent `consumer-advocate` |
+| The shop does not fix the problem · wants to complain | `buyer-help` (`references/complaint-letter.md`) |
+| Wants a refund · strange card charge | `buyer-help` |
+| Bought something with a warranty · broken goods | `buyer-help` |
 | Needs to write a polite or chasing message | `human-writing/polite-message-th-en` (superuser) |
 | Cheated into transferring money for an investment | `scam-check` (trading-finance) |
 
@@ -1509,41 +1524,41 @@ Moved from `SKILL.md` section 3 · open it when unsure which skill to call, or w
 
 | Situation | Call |
 |---|---|
-| Monthly payroll | `payroll-th` |
-| Which tax to file, and when | `tax-vat-th` + agent `tax-helper` |
-| Keep income and expense books · how many years to keep documents · month-end closing · separate personal and shop money · whether to hire an accounting firm | `sme-bookkeeping` + agent `tax-helper` |
-| Will there be enough cash · sales are good but the bank balance is falling · platform or COD payouts are slow · about to order a big stock batch | `cash-flow` + agent `tax-helper` |
-| Social security | `social-security-th` |
+| Monthly payroll | `thai-employment` |
+| Which tax to file, and when | `thai-tax` + agent `tax-helper` |
+| Keep income and expense books · how many years to keep documents · month-end closing · separate personal and shop money · whether to hire an accounting firm | `shop-books` + agent `tax-helper` |
+| Will there be enough cash · sales are good but the bank balance is falling · platform or COD payouts are slow · about to order a big stock batch | `shop-books` + agent `tax-helper` |
+| Social security | `thai-employment` |
 | Starting a new business (individual, partnership or company · registration) | `thai-business-setup` + agent `tax-helper` |
-| Company year-end closing | `dbd-annual-filing` |
-| Quotation, receipt, tax invoice | `doc-quotation` · `e-tax-invoice` |
-| Official letter | `doc-thai-official` + agent `thai-doc-writer` |
-| Contract | `doc-contract-th` |
-| Leave, overtime, severance | `labour-law-basics` · `doc-leave` |
-| Hiring a new employee (job ad · screening sheet · interview · offer letter) | `hiring-th` + agent `tax-helper` |
+| Company year-end closing | `thai-tax` |
+| Quotation, receipt, tax invoice | `thai-business-docs` · `thai-tax` |
+| Official letter | `thai-business-docs` + agent `thai-doc-writer` |
+| Contract | `thai-business-docs` |
+| Leave, overtime, severance | `thai-employment` |
+| Hiring a new employee (job ad · screening sheet · interview · offer letter) | `thai-employment` + agent `tax-helper` |
 | PDPA | `pdpa-workflow` + agent `compliance-helper` |
-| LINE OA | `line-oa-setup` · `line-chatbot` · `line-broadcast` + agent `line-admin` · rich menu image → `line-design` (graphic-design) |
-| PromptPay QR · a customer sends a payment slip, can the goods be shipped now | `promptpay-qr` (slips: section 5) |
-| Holidays | `thai-holidays` |
+| LINE OA | `line-oa` + agent `line-admin` · rich menu image → `line-design` (graphic-design) |
+| PromptPay QR · a customer sends a payment slip, can the goods be shipped now | `shop-books` (slips: section 5) |
+| Holidays | `thai-employment` |
 
 **Slash commands (the user types them; the model does not open them on its own)**
 
 | Type | What it does | Skill used inside |
 |---|---|---|
-| `/e-commerce:buy-compare` | Compare products or services before buying | `buy-compare` |
-| `/e-commerce:complain` | Draft a complaint letter and an escalation plan to สคบ. 1166 (the Office of the Consumer Protection Board hotline) | `refund-request` |
-| `/e-commerce:doc-contract-th` | Draft an employment, rental or service contract | `doc-contract-th` |
-| `/e-commerce:line-chatbot` | Build or adjust a customer-reply bot on a LINE OA | `line-chatbot` |
-| `/e-commerce:line-oa-setup` | Set up the LINE OA Messaging API, every step | `line-oa-setup` |
-| `/e-commerce:product-listing` | Write a product page | `product-listing` |
-| `/e-commerce:live-selling-script` | Make a run sheet for a live-selling session | `live-selling-script` |
-| `/e-commerce:payroll-th` | Run monthly payroll or the year-end close | `payroll-th` |
+| `/e-commerce:buyer-help` | Compare products or services before buying | `buyer-help` |
+| `/e-commerce:buyer-help` | Draft a complaint letter and an escalation plan to สคบ. 1166 (the Office of the Consumer Protection Board hotline) | `buyer-help` |
+| `/e-commerce:thai-business-docs` | Draft an employment, rental or service contract | `thai-business-docs` |
+| `/e-commerce:line-oa` | Build or adjust a customer-reply bot on a LINE OA | `line-oa` |
+| `/e-commerce:line-oa` | Set up the LINE OA Messaging API, every step | `line-oa` |
+| `/e-commerce:sales-copy` | Write a product page | `sales-copy` |
+| `/e-commerce:sales-copy` | Make a run sheet for a live-selling session | `sales-copy` |
+| `/e-commerce:thai-employment` | Run monthly payroll or the year-end close | `thai-employment` |
 | `/e-commerce:pdpa-workflow` | PDPA work (consent · breach · data-subject requests) | `pdpa-workflow` |
-| `/e-commerce:marketplace-fees-pricing` | Set a price or check profit after fees | `marketplace-fees-pricing` |
-| `/e-commerce:doc-quotation` | Draft a quotation, invoice or receipt | `doc-quotation` |
-| `/e-commerce:chat-reply-templates` | Draft a chat reply or a customer review reply | `chat-reply-templates` · `returns-and-bad-reviews` |
-| `/e-commerce:tax-vat-th` | Tax filing calendar for a company or an individual | `tax-vat-th` |
-| `/e-commerce:dbd-annual-filing` | Order of year-end filings for a company | `dbd-annual-filing` |
+| `/e-commerce:pricing-and-costs` | Set a price or check profit after fees | `pricing-and-costs` |
+| `/e-commerce:thai-business-docs` | Draft a quotation, invoice or receipt | `thai-business-docs` |
+| `/e-commerce:customer-care` | Draft a chat reply or a customer review reply | `customer-care` |
+| `/e-commerce:thai-tax` | Tax filing calendar for a company or an individual | `thai-tax` |
+| `/e-commerce:thai-tax` | Order of year-end filings for a company | `thai-tax` |
 
 If the user does not know a command's name, tell them the command in this table when the job matches a row.
 

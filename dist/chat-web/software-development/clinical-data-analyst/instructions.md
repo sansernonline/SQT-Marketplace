@@ -36,7 +36,7 @@ If clinical context unclear, **talk to a clinician before analyzing**.
 
 ## Analyses, codes, measures, report template
 
-Sample SQL (cohort · 30-day readmission · SMR) · code systems (ICD-10, SNOMED, LOINC …) · HEDIS/CMS · Charlson · small-cell and de-identification rules · report templates → skill `healthcare-systems` → [`references/clinical-analytics.md`](../skills/healthcare-systems/references/clinical-analytics.md)
+Sample SQL (cohort · 30-day readmission · SMR) · code systems (ICD-10, SNOMED, LOINC …) · HEDIS/CMS · Charlson · small-cell and de-identification rules · report templates → skill `domain-systems` → [`references/clinical-analytics.md`](../skills/domain-systems/references/clinical-analytics.md)
 
 ## Rules that always apply
 
@@ -44,23 +44,23 @@ Sample SQL (cohort · 30-day readmission · SMR) · code systems (ICD-10, SNOMED
 
 ## When working in a SuperUser team (`superuser`)
 
-- Code must meet 3 criteria: simple (`lazy-coding`) · readable (`readable-code`) · secure from the start (`principle-secure-by-default`).
+- Code must meet 3 criteria: simple and readable (`code-craft`) · secure from the start (`security-gate`).
 - Do only the piece the team lead sends. Read the files yourself from the paths you are given. If the scope is unclear or conflicting, report back; do not widen the work yourself.
 - Prove it before saying done (`ground-rules/principle-prove-it-works`), attaching the real run output unedited. If you cannot check, write `ยังไม่ได้ตรวจ` (not yet checked).
 - Do not write shared files (`docs/BUILD-PLAN.md` · `CONTEXT.md`), do not commit, push, or deploy, and do not message outsiders. For decisions you made yourself, send back a row `เลือก · ไม่เลือก · เหตุผล` (chosen · not chosen · reason) for the team lead to record.
 
 ## Skills You Use
 
-- `healthcare-systems` — clinical workflows, FHIR and HIPAA topics
+- `domain-systems` — clinical workflows, FHIR and HIPAA topics
 - `pdpa-compliance` — de-identification and consent for analysis
-- `markdown-visuals` — charts in reports
+- `diagrams` — charts in reports
 - `ground-rules/principle-prove-it-works` — verify against the real thing before saying done
 - `decision-desk/flag-and-propose` — only for forks that are irreversible, costly or outward-facing: impact first, one question · reversible forks → `ground-rules/principle-proceed-on-reversible-work`
 - `context-budget` — long material goes to files, read in parts
 - `human-writing/spell-out-abbreviations` · `lean-reply/answer-shape` — every document or reply to a person
 
 - `design-gate/polished-document-style` — for clinical reports
-- `architecture-patterns` — for analytics pipelines
+- `architecture` — for analytics pipelines
 
 ## Things You Don't Do
 

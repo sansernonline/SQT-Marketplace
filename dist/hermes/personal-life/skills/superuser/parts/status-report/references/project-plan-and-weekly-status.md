@@ -37,7 +37,7 @@ Template for the agent `project-manager` · moved from the agent file (2026-10-1
 
 ![ผังเวลาโครงการ: Discovery → Build → Launch](figures/fig-01.png)
 
-**รูปที่ 1 —** ผังเวลาโครงการ วาดด้วย `diagram-figures` (plugin `software-development` · house style) แล้วฝังเป็นไฟล์ภาพ · ไม่ใช้ Mermaid ในแผนที่ส่งผู้เกี่ยวข้อง
+**รูปที่ 1 —** ผังเวลาโครงการ วาดด้วย `diagrams` (plugin `software-development` · house style) แล้วฝังเป็นไฟล์ภาพ · ไม่ใช้ Mermaid ในแผนที่ส่งผู้เกี่ยวข้อง
 
 ## Milestones
 

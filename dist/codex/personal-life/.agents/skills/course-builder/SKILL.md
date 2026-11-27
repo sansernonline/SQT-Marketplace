@@ -17,8 +17,8 @@ Numbers labeled `แนวของเรา` (our rule of thumb) are defaults t
 |---|---|
 | Teaching a workshop · in-company training · online course · tutoring a teammate | this skill |
 | Wanting to learn something well yourself | `learning-path` |
-| Content is ready and you only need slides | `presentation-design` (software-development) |
-| Preparing for a certification exam | `cert-prep` |
+| Content is ready and you only need slides | `slide-deck` (software-development) |
+| Preparing for a certification exam | `learning-path` |
 | Teaching ordinary people to use AI in multi-step chat (Loop · Graph · Dynamic) | this skill plans the course, then uses the prompt templates from `superuser:chat-prompt-workflows` as exercises |
 | Teaching a subject at an institution that has its own course form | fill in the institution's form first, then use sections 2 to 5 of this skill to fill in the content |
 
@@ -150,10 +150,10 @@ The full example is at [references/git-one-day-example.md](references/git-one-da
 
 | Need | Use |
 |---|---|
-| Slides someone will present | `presentation-design` (software-development) |
-| Handouts as Word from Markdown | `markdown-report-docx` (software-development) |
+| Slides someone will present | `slide-deck` (software-development) |
+| Handouts as Word from Markdown | `document-design` (software-development) |
 | Collecting learners' names or emails · recording teaching video | `pdpa-workflow` (e-commerce) |
-| Teaching contract and rights in the materials | `doc-contract-th` (e-commerce) |
+| Teaching contract and rights in the materials | `thai-business-docs` (e-commerce) |
 
 ## References
 

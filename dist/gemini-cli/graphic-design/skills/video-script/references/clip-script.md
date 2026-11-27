@@ -59,6 +59,6 @@ Related: `video-editing` (text timing) · `campaign-set` (canvas, safe zones) ·
 
 `/graphic-design:video-script <the message> [target platform and length]`
 
-Run `video-script` for: **$ARGUMENTS** — `social-creator` writes the message, hook and script; `art-director` writes the shot list, motion timing and per-shot briefs.
+Run `video-script` for: **the user's request** — `social-creator` writes the message, hook and script; `art-director` writes the shot list, motion timing and per-shot briefs.
 
 Review the storyboard as thumbnails before generating anything.

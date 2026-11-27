@@ -9,14 +9,14 @@
 วางทั้งไฟล์ใน Claude Code, Codex CLI หรือ Gemini CLI ที่รากโฟลเดอร์โปรเจกต์ แล้วพิมพ์ต่อท้ายว่าจะทำฉบับไหน เช่น `ทำทั้งหมด` หรือ `ทำข้อ 1 และ 2`
 
 <!-- rules:begin -->
-**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-doc-set` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
+**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-docs` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
 
 **วนจนเสร็จ (agent loop):** ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ จนผ่านทุกข้อที่ฉบับนั้นต้องมี · ตรวจด้วยหลักฐานจริง (เปิดไฟล์ · รันคำสั่ง · เทียบแหล่ง) ไม่ใช่คำบอกของตัวที่ทำ · รอบตรวจใช้ `reviewer` ตัวใหม่ทุกรอบ · ไม่ผ่าน → แก้ที่ต้นเหตุแล้วตรวจซ้ำทั้งข้อเดิมและจุดที่แก้ · เหลือแค่ข้อระดับต่ำ → ปิดได้แล้วลงรายงาน · ครบเพดานรอบ (งานกลาง 3 · งานใหญ่หรืองานเสี่ยง 5) ยังไม่ผ่าน → ติดป้าย `ติด` ทำส่วนอื่นให้จบ แล้วรายงานข้อที่เหลือ · รายละเอียดอยู่ใน skill `superuser` กฎข้อ 3
 <!-- rules:end -->
 
 **playbook เฉพาะไฟล์นี้:** ฉบับ 1–2 ใช้ `project-docs` · ฉบับ 3–5 เขียนโค้ด ใช้ `feature` ขั้น 1 · 5 · 6 · 7 · 8 (ข้ามขั้น 2 และ 4 เพราะงานนี้ไม่เปลี่ยนพฤติกรรมแอป · ห้ามลบโค้ดของแอป) · ฉบับที่อ้างหัวข้อจากไฟล์ prompt อื่น → วางไฟล์นั้นต่อท้ายด้วย · ไม่ได้วาง → ใช้โครงจาก skill ที่ฉบับนั้นระบุ
 
-**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้ `diagram-figures` · Mermaid (`software-diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
+**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้ `diagrams` · Mermaid (`diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
 
 **แอปที่มีอยู่แล้ว (ใช้ทุกฉบับ):** `docs/` และ `qa/` อยู่ที่รากโปรเจกต์ · README และ CHANGELOG อยู่ใน repo ของแอป · รากโปรเจกต์เป็น repo เดียวกับแอป → เอกสารเข้า branch เดียวกับโค้ด · ก่อนรันแอปหรือ seed ให้ชี้ที่เก็บข้อมูล (เช่น `DATA_DIR` · connection string) ไปที่ `_to_delete/` ห้ามรันกับข้อมูลจริง · คำสั่ง test ที่ repo ประกาศไว้พัง → รายงานผลของคำสั่งนั้นตรงตัว แล้วบอกคำสั่งที่ใช้แทนแยกบรรทัด · ห้ามมีรหัสผ่านหรือค่าลับในเอกสารและภาพ แม้เป็นบัญชีทดสอบ · ไม่มี `stack-*` ที่ตรงภาษา → ข้ามแล้วบอกในรายงาน
 
@@ -37,7 +37,7 @@
 - บัญชีทดสอบแต่ละบทบาท (ชื่อตัวแปรที่เก็บรหัสผ่าน **ไม่ใส่รหัสผ่านตรงนี้**):
 - เอกสารที่มี: ☐ SRS/FSD ☐ `docs/as-is/` ☐ test case เดิม ☐ ไม่มีเลย
 - flow ที่สำคัญที่สุด 3–5 อย่าง (เว้นว่าง = agent เสนอจากการใช้งานแอปจริง แล้วลง `## ตัดสินใจเอง`):
-- framework ที่ทีมใช้อยู่หรือบังคับ (เว้นว่าง = agent เลือกตาม `testing-standards`):
+- framework ที่ทีมใช้อยู่หรือบังคับ (เว้นว่าง = agent เลือกตาม `test-automation`):
 
 **ห้ามทดสอบกับระบบจริง (production)** · ผู้ใช้ให้มาแต่ URL จริง → หยุดถามก่อนเริ่มฉบับ 2
 
@@ -45,7 +45,7 @@
 
 ## 1. แผนทดสอบอัตโนมัติ (Test Automation Plan)
 
-agent `qa-tester` + `solution-architect` · skill `testing-standards` · `e2e-testing-patterns` · `code-orientation` (เมื่อมีโค้ด)
+agent `qa-tester` + `solution-architect` · skill `test-automation` · `code-craft` (เมื่อมีโค้ด)
 **ต้องมีก่อน:** แอปที่เปิดได้ตามช่อง "วิธีเปิดแอป" · ไม่มีเอกสารเลยและมีโค้ด → แนะนำให้ทำ `prompt-existing-code.md` ฉบับ 1 ก่อน แต่ไม่บังคับ
 **ผลลัพธ์:** `docs/test-automation-plan.md` — **ไม่แก้โค้ด**
 
@@ -60,7 +60,7 @@ agent `qa-tester` + `solution-architect` · skill `testing-standards` · `e2e-te
    | ระดับที่ทำได้ | unit · integration · API · E2E | E2E ผ่านหน้าจอ · API ที่เรียกจากภายนอกได้ |
    | หาตัวเลือก (selector) | เพิ่ม `data-testid` ในโค้ดได้ (นับเป็นงานแก้โค้ดในฉบับ 3) | ใช้ role และข้อความบนหน้าจอ ห้ามใช้ XPath ที่ผูกกับตำแหน่ง |
    | ข้อมูลทดสอบ | สร้างผ่าน seed หรือ API ภายใน | สร้างผ่านหน้าจอหรือ API สาธารณะ แล้วลบทิ้งหลังทดสอบ |
-   | ที่เก็บ test | ใน repo เดิม ตามแบบที่ repo ใช้อยู่ · ยังไม่มี → ข้างโค้ดตาม `testing-standards` | repo หรือโฟลเดอร์แยก ชื่อ `<ชื่อแอป>-tests/` |
+   | ที่เก็บ test | ใน repo เดิม ตามแบบที่ repo ใช้อยู่ · ยังไม่มี → ข้างโค้ดตาม `test-automation` | repo หรือโฟลเดอร์แยก ชื่อ `<ชื่อแอป>-tests/` |
 
 ### หัวข้อที่ต้องมี
 
@@ -69,21 +69,21 @@ agent `qa-tester` + `solution-architect` · skill `testing-standards` · `e2e-te
 3. ระดับที่ทำ · สัดส่วน · framework ที่เลือก พร้อมเหตุผล 1 บรรทัด
 4. ข้อมูลทดสอบและการล้างข้อมูลหลังรัน
 5. ลำดับทำ — flow ไหนก่อน เรียงตามความเสี่ยงต่อธุรกิจ
-6. เกณฑ์ว่า test ดี: รันซ้ำ 3 รอบผลเท่าเดิม · ไม่พึ่งลำดับ · เวลารันทั้งชุด (unit ตาม `testing-standards` · E2E ตาม `e2e-testing-patterns`)
+6. เกณฑ์ว่า test ดี: รันซ้ำ 3 รอบผลเท่าเดิม · ไม่พึ่งลำดับ · เวลารันทั้งชุด (unit ตาม `test-automation` · E2E ตาม `test-automation`)
 7. **คำสั่งรัน test 1 บรรทัด** (คาดการณ์ไว้ก่อน ยืนยันในฉบับ 3)
 
 ### กฎเฉพาะฉบับนี้
 
-- เลือก framework ตามที่ทีมใช้อยู่ก่อนเสมอ · ไม่มี → ค่าเริ่มต้นของ `testing-standards` · ไม่เพิ่มเครื่องมือตัวที่ 2 ที่ทำหน้าที่ซ้ำ · E2E นับแยกจาก unit: มี unit runner อยู่แล้วเพิ่ม Playwright ได้
+- เลือก framework ตามที่ทีมใช้อยู่ก่อนเสมอ · ไม่มี → ค่าเริ่มต้นของ `test-automation` · ไม่เพิ่มเครื่องมือตัวที่ 2 ที่ทำหน้าที่ซ้ำ · E2E นับแยกจาก unit: มี unit runner อยู่แล้วเพิ่ม Playwright ได้
 - ตัวเลขเวลาและจำนวนที่ยังไม่ได้วัด → `(รอยืนยัน)`
 
 ---
 
 ## 2. test case จากพฤติกรรมของแอปจริง
 
-agent `qa-tester` · skill `test-case-template` · `e2e-testing-patterns` · test case เกิน 100 ข้อ ทำเพิ่มเป็น .xlsx ด้วย skill `xlsx`
+agent `qa-tester` · skill `qa-docs` · `test-automation` · test case เกิน 100 ข้อ ทำเพิ่มเป็น .xlsx ด้วย skill `xlsx`
 **ต้องมีก่อน:** `docs/test-automation-plan.md`
-**ผลลัพธ์:** `qa/<รหัส>-test-cases.md` รหัสและช่องตาม `test-case-template` (`TC-<โมดูล>-NNN`) · ข้อที่มีขั้นเดียวรวมเป็นตารางต่อ flow ได้ (รหัส · ชนิด · ขั้นตอน · ผลที่คาด · ป้าย) · ใช้บล็อกเต็มเฉพาะข้อที่มีหลายขั้น — **ไม่แก้โค้ด**
+**ผลลัพธ์:** `qa/<รหัส>-test-cases.md` รหัสและช่องตาม `qa-docs` (`TC-<โมดูล>-NNN`) · ข้อที่มีขั้นเดียวรวมเป็นตารางต่อ flow ได้ (รหัส · ชนิด · ขั้นตอน · ผลที่คาด · ป้าย) · ใช้บล็อกเต็มเฉพาะข้อที่มีหลายขั้น — **ไม่แก้โค้ด**
 
 ### ลำดับ
 
@@ -94,7 +94,7 @@ agent `qa-tester` · skill `test-case-template` · `e2e-testing-patterns` · tes
 
 ### กฎเฉพาะฉบับนี้
 
-- ผลที่คาดมาจาก "สิ่งที่แอปทำตอนนี้" เท่านั้น · พฤติกรรมที่ดูผิด → ไม่เขียนเป็นผลที่คาด แต่ลงรายงานบั๊กตาม `prompt-change.md` ฉบับ 2 (skill `bug-report-template` · ไฟล์ `qa/bugs/BUG-<เลข 3 หลัก>-<เรื่อง>.md`) และลงคำถามค้าง
+- ผลที่คาดมาจาก "สิ่งที่แอปทำตอนนี้" เท่านั้น · พฤติกรรมที่ดูผิด → ไม่เขียนเป็นผลที่คาด แต่ลงรายงานบั๊กตาม `prompt-change.md` ฉบับ 2 (skill `qa-docs` · ไฟล์ `qa/bugs/BUG-<เลข 3 หลัก>-<เรื่อง>.md`) และลงคำถามค้าง
 - ไม่มีเอกสารบอกว่าถูกหรือผิด → ติดป้าย `ต้องยืนยันกับเจ้าของระบบ` · ไม่มีเอกสารเลย → ติดครั้งเดียวที่หัวไฟล์ และติดซ้ำเฉพาะข้อที่น่าสงสัย
 - ข้อสังเกตที่ไม่ใช่พฤติกรรม (ค่าลับในโค้ด · วิธีเก็บรหัสผ่าน · เอกสารเดิมไม่ตรงโค้ด) → ลง `## ค้างอยู่` ใน `docs/BUILD-PLAN.md` ไม่ทำเป็นรายงานบั๊ก
 
@@ -102,7 +102,7 @@ agent `qa-tester` · skill `test-case-template` · `e2e-testing-patterns` · tes
 
 ## 3. เขียน automated test
 
-agent `developer` + `qa-tester` · skill `testing-standards` · `e2e-testing-patterns` · `lazy-coding` · `readable-code` · `stack-*` ตามภาษา · `config-and-secrets`
+agent `developer` + `qa-tester` · skill `test-automation` · `code-craft` · `stack-*` ตามภาษา · `web-service-essentials`
 **ต้องมีก่อน:** `docs/test-automation-plan.md` · test case ในฉบับ 2
 **ผลลัพธ์:** โค้ด test ตามที่แผนกำหนด · คำสั่งรันอยู่ใน README ของ repo หัวข้อ "รัน test" (มี `docs/README.md` อยู่แล้ว → ใส่ลิงก์ไปด้วย) · ผลรันจริงอยู่ใน `qa/test-runs/<วันที่>.md`
 
@@ -117,7 +117,7 @@ agent `developer` + `qa-tester` · skill `testing-standards` · `e2e-testing-pat
 1. ตั้งเครื่องมือให้รัน test ว่าง 1 ข้อผ่านก่อน แล้วค่อยเขียนข้อจริง
 2. เขียนทีละ flow ตามลำดับในแผน · แต่ละ test อ้างรหัส test case ในชื่อหรือ comment
 3. ทุก test ต้องเคยแดงมาก่อน: ลองเปลี่ยนผลที่คาดให้ผิดแล้วต้องล้ม · test ที่ไม่เคยล้มถือว่ายังไม่ได้พิสูจน์ (`ground-rules/principle-prove-it-works`) · test หลายข้อ → เขียนสคริปต์ใน `_to_delete/` ที่ทำในสำเนา repo ทำให้โค้ดพังทีละจุดหรือกลับผลที่คาด แล้วตรวจว่าทุกชื่อ test ล้มอย่างน้อย 1 ครั้ง
-4. รันทั้งชุด 3 รอบติดกัน · ข้อที่ผลไม่เท่ากัน → ลงรายการ flaky แล้วแก้ตาม `e2e-testing-patterns` ก่อนไปข้อถัดไป
+4. รันทั้งชุด 3 รอบติดกัน · ข้อที่ผลไม่เท่ากัน → ลงรายการ flaky แล้วแก้ตาม `test-automation` ก่อนไปข้อถัดไป
 5. เขียนผลรันจริงลง `qa/test-runs/<วันที่>.md`: จำนวนผ่าน/ไม่ผ่าน · เวลา · ข้อที่ข้ามพร้อมเหตุผล · test ที่ล้มเพราะแอปมีบั๊ก (ไม่ใช่เพราะ test ผิด) → ทำเครื่องหมายว่ารู้ว่าล้ม (เช่น `todo` ใน node:test · `test.fail` ใน Playwright · ไม่ใช้ `skip`) พร้อมลิงก์รายงานบั๊ก ให้รู้ทันทีเมื่อบั๊กถูกแก้
 6. ข้อที่ไม่ผ่าน เขียนในไฟล์เดียวกันเป็นตาราง: รหัส test case · ขั้นที่ล้ม · ผลที่คาดกับผลที่ได้ (ยกจากข้อความของ assertion) · สาเหตุ (บั๊กของแอป + ลิงก์รายงานบั๊ก / test ผิด / สภาพแวดล้อม) · ลิงก์ภาพและวิดีโอ · คำสั่งเปิด trace
 
@@ -143,7 +143,7 @@ agent `developer` + `qa-tester` · skill `testing-standards` · `e2e-testing-pat
 
 ## 4. ต่อ test เข้า CI
 
-agent `devops-engineer` · skill `cicd-and-release` · `config-and-secrets` · `e2e-testing-patterns`
+agent `devops-engineer` · skill `cicd-and-release` · `web-service-essentials` · `test-automation`
 **ต้องมีก่อน:** ฉบับ 3 รันผ่านบนเครื่อง
 **ผลลัพธ์:** ไฟล์ pipeline ตามระบบ CI ที่ repo ใช้อยู่ · หัวข้อ "รัน test ใน CI" ใน `docs/test-automation-plan.md`
 
@@ -158,7 +158,7 @@ agent `devops-engineer` · skill `cicd-and-release` · `config-and-secrets` · `
 - unit/integration รันทุก pull request · E2E ที่ช้ากว่า 10 นาทีแยกไปรันตามเวลาหรือก่อน release
 - เก็บผลรัน รายงาน HTML และหลักฐานตามตารางในฉบับ 3 (ภาพ · วิดีโอ · trace ของข้อที่ล้ม) เป็น artifact ของ pipeline · กำหนดอายุ artifact (เช่น 14 วัน) เพราะ trace มีรหัสผ่านอยู่
 - ค่าลับใช้ secret ของระบบ CI · ระบุแค่ชื่อในเอกสาร
-- CI ไม่ retry อัตโนมัติ (ตาม `testing-standards`) · ต้องการ trace → retry 1 ครั้ง และนับข้อที่ผ่านรอบ retry เป็น flaky ที่ต้องแก้
+- CI ไม่ retry อัตโนมัติ (ตาม `test-automation`) · ต้องการ trace → retry 1 ครั้ง และนับข้อที่ผ่านรอบ retry เป็น flaky ที่ต้องแก้
 - ยังไม่ได้รันจริงบน CI → รายงานว่า "ยังไม่ได้ทดสอบบน CI" ห้ามบอกว่าใช้ได้
 - repo ไม่มี remote หรือ pipeline พึ่งไฟล์ที่ยังไม่ commit (เช่น lockfile) → ระบุใน `รออนุมัติ` ว่าต้อง commit หรือ push ไฟล์ไหนก่อน pipeline จะรันได้
 
@@ -166,7 +166,7 @@ agent `devops-engineer` · skill `cicd-and-release` · `config-and-secrets` · `
 
 ## 5. ทดสอบสัญญา API ด้วย OpenAPI (contract test)
 
-agent `qa-tester` + `developer` + `devops-engineer` (CI) · `system-analyst` (เมื่อต้องตกลงสัญญากับทีมที่เรียก API) · skill `api-conventions` (`references/contract-testing.md`) · `web-service-essentials` · `testing-standards` · `cicd-and-release` · `config-and-secrets`
+agent `qa-tester` + `developer` + `devops-engineer` (CI) · `system-analyst` (เมื่อต้องตกลงสัญญากับทีมที่เรียก API) · skill `api-design` (`references/contract-testing.md`) · `web-service-essentials` · `test-automation` · `cicd-and-release`
 **ใช้เมื่อ:** แอปมี API ให้ frontend แอปมือถือ หรือ partner เรียก · API เปลี่ยนแล้วฝั่งที่เรียกพังโดยไม่มีใครรู้ · ทีม frontend กับ backend แยกกันและปล่อยรุ่นคนละรอบ
 **ต้องมีก่อน:** API รันบนเครื่องหรือ staging ได้ · จะใส่ใน pipeline ให้ทำฉบับ 4 ก่อน · ไม่มี source code (black-box) → ใช้ไฟล์ OpenAPI ที่ได้มาแล้วทำได้แค่ข้อ 2
 **ผลลัพธ์:** ไฟล์ OpenAPI ที่สร้างจากโค้ดและอยู่ใน repo · job ตรวจสัญญาใน pipeline · หัวข้อ "สัญญา API" ใน `docs/test-automation-plan.md` · ผลรันจริงใน `qa/test-runs/<วันที่>.md`
@@ -182,9 +182,9 @@ agent `qa-tester` + `developer` + `devops-engineer` (CI) · `system-analyst` (�
 
 ### ลำดับ
 
-1. **OpenAPI เป็นสัญญา:** สร้างจากโค้ดจริงแล้ว commit ไฟล์ที่ได้ ไม่เขียนมือแยก · ทุก response มี schema รวมถึง error (`web-service-essentials`) · วันที่ id และเงินมี `format` ตาม `api-conventions` · pipeline ล้มเมื่อไฟล์ไม่ตรงกับโค้ด
-2. **ตรวจฝั่งที่ให้บริการ:** Schemathesis สร้าง request จาก schema ยิงใส่ service ที่ขึ้นด้วยข้อมูลทดสอบ (reset endpoint จาก `app-verifier-setup`) แล้วตรวจว่า response ตรง spec และไม่ตอบ 500 · ล้มแล้วห้าม merge
-3. **เช็ก breaking change ทุก PR:** `oasdiff breaking <spec ของ branch หลัก> <spec ของ PR>` · เจอแล้วต้องขึ้นเวอร์ชัน API หรือ deprecate ตาม `api-conventions` ไม่ใช่ปิด check · เพิ่มฟิลด์ optional หรือ endpoint ใหม่ไม่นับเป็น breaking
+1. **OpenAPI เป็นสัญญา:** สร้างจากโค้ดจริงแล้ว commit ไฟล์ที่ได้ ไม่เขียนมือแยก · ทุก response มี schema รวมถึง error (`web-service-essentials`) · วันที่ id และเงินมี `format` ตาม `api-design` · pipeline ล้มเมื่อไฟล์ไม่ตรงกับโค้ด
+2. **ตรวจฝั่งที่ให้บริการ:** Schemathesis สร้าง request จาก schema ยิงใส่ service ที่ขึ้นด้วยข้อมูลทดสอบ (reset endpoint จาก `test-automation`) แล้วตรวจว่า response ตรง spec และไม่ตอบ 500 · ล้มแล้วห้าม merge
+3. **เช็ก breaking change ทุก PR:** `oasdiff breaking <spec ของ branch หลัก> <spec ของ PR>` · เจอแล้วต้องขึ้นเวอร์ชัน API หรือ deprecate ตาม `api-design` ไม่ใช่ปิด check · เพิ่มฟิลด์ optional หรือ endpoint ใหม่ไม่นับเป็น breaking
 4. **ผู้เรียกแยกทีมหรือมีมากกว่า 1 ราย:** ทำ consumer-driven contract ด้วย Pact · ฝั่งที่เรียกเขียนคู่ request กับ response ที่ใช้จริง · ฝั่งที่ให้บริการตรวจไฟล์ pact ใน pipeline ของตัวเอง · ตกลงที่เก็บไฟล์ pact ไว้ที่เดียว · ทีมเดียวทำทั้ง 2 ฝั่ง ข้อ 2 กับ 3 พอ
 5. test ที่ล้มเพราะ API ไม่ตรงสัญญา → รายงานบั๊กตาม `prompt-change.md` ฉบับ 2 และทำเครื่องหมายว่ารู้ว่าล้มแบบเดียวกับฉบับ 3
 

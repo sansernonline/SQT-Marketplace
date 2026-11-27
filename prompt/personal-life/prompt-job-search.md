@@ -32,7 +32,7 @@
 
 ## 1. สมัครงาน 1 ตำแหน่งครบชุด
 
-playbook `job-application` · agent `career-coach` · skill `resume-th-en`
+playbook `job-application` · agent `career-coach` · skill `job-search`
 **ผลลัพธ์:** โฟลเดอร์ `applications/<บริษัท>-<ตำแหน่ง>/` · **รออนุมัติ:** กดส่งใบสมัคร
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -57,7 +57,7 @@ playbook `job-application` · agent `career-coach` · skill `resume-th-en`
 
 ## 2. เตรียมสัมภาษณ์ + ซ้อม
 
-playbook `interview` · agent `interview-coach` · skill `interview-prep` · `salary-negotiation`
+playbook `interview` · agent `interview-coach` · skill `job-search`
 **ผลลัพธ์:** `applications/<บริษัท>-<ตำแหน่ง>/interview-<รอบ>.md` · ชุดซ้อม 10 ข้อพร้อมเกณฑ์ให้คะแนน (ซ้อมสดกับหัวหน้าทีมหลังจบงาน)
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -82,7 +82,7 @@ playbook `interview` · agent `interview-coach` · skill `interview-prep` · `sa
 
 ## 3. เทียบข้อเสนอและต่อรองเงินเดือน
 
-playbook `offer-negotiation` · agent `career-coach` · skill `salary-negotiation`
+playbook `offer-negotiation` · agent `career-coach` · skill `job-search`
 **ผลลัพธ์:** `offers/<ปี-เดือน>-offer-compare.md` · **รออนุมัติ:** ส่งข้อความต่อรอง · ตอบรับ / ปฏิเสธข้อเสนอ
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -106,7 +106,7 @@ playbook `offer-negotiation` · agent `career-coach` · skill `salary-negotiatio
 
 ## 4. จบใหม่ หางานแรก
 
-playbook `profile-refresh` · agent `career-coach` · skill `resume-th-en` · `interview-prep`
+playbook `profile-refresh` · agent `career-coach` · skill `job-search`
 **ผลลัพธ์:** `cv/CV_<ชื่อ>_TH.md` · `cv/CV_<ชื่อ>_EN.md` (+ `.docx`) · `linkedin.md` · `first-job-plan.md` · **รออนุมัติ:** กดส่งใบสมัคร · ส่งข้อความหาผู้สรรหา
 
 ### ข้อมูล (ผู้ใช้กรอก)

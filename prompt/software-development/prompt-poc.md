@@ -11,12 +11,12 @@
 วางทั้งไฟล์ใน Claude Code, Codex CLI หรือ Gemini CLI ที่รากโฟลเดอร์โปรเจกต์ แล้วพิมพ์ต่อท้ายว่าจะทำฉบับไหน เช่น `ทำทั้งหมด` หรือ `ทำข้อ 1`
 
 <!-- rules:begin -->
-**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-doc-set` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
+**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-docs` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
 
 **วนจนเสร็จ (agent loop):** ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ จนผ่านทุกข้อที่ฉบับนั้นต้องมี · ตรวจด้วยหลักฐานจริง (เปิดไฟล์ · รันคำสั่ง · เทียบแหล่ง) ไม่ใช่คำบอกของตัวที่ทำ · รอบตรวจใช้ `reviewer` ตัวใหม่ทุกรอบ · ไม่ผ่าน → แก้ที่ต้นเหตุแล้วตรวจซ้ำทั้งข้อเดิมและจุดที่แก้ · เหลือแค่ข้อระดับต่ำ → ปิดได้แล้วลงรายงาน · ครบเพดานรอบ (งานกลาง 3 · งานใหญ่หรืองานเสี่ยง 5) ยังไม่ผ่าน → ติดป้าย `ติด` ทำส่วนอื่นให้จบ แล้วรายงานข้อที่เหลือ · รายละเอียดอยู่ใน skill `superuser` กฎข้อ 3
 <!-- rules:end -->
 
-**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบ (ฉบับ 4) ใช้ `diagram-figures` · Mermaid (`software-diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม (ฉบับ 1–3)
+**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบ (ฉบับ 4) ใช้ `diagrams` · Mermaid (`diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม (ฉบับ 1–3)
 
 | # | งาน | playbook | ได้ไฟล์ |
 |---|---|---|---|
@@ -37,7 +37,7 @@
 
 ## 1. วางแผน POC และเกณฑ์ผ่าน
 
-playbook `project-docs` · agent `solution-architect` + `project-manager` · skill `superuser:ground-rules` · `ground-rules/principle-small-verifiable-steps` · `architecture-patterns`
+playbook `project-docs` · agent `solution-architect` + `project-manager` · skill `superuser:ground-rules` · `ground-rules/principle-small-verifiable-steps` · `architecture`
 **ผลลัพธ์:** `docs/poc/poc-plan.md`
 
 ### โจทย์ (ผู้ใช้กรอก)
@@ -69,7 +69,7 @@ playbook `project-docs` · agent `solution-architect` + `project-manager` · ski
 
 ## 2. สร้าง POC
 
-playbook `new-project` (ยังไม่มีโค้ด) หรือ `feature` (ต่อจากโค้ดเดิม) · agent `developer` (+ agent เฉพาะทางตามเรื่อง เช่น `ai-engineer` · `data-engineer` · `mobile-engineer`) · skill `lazy-coding` · `readable-code` · `principle-secure-by-default` · `config-and-secrets` · `ground-rules/principle-prove-it-works`
+playbook `new-project` (ยังไม่มีโค้ด) หรือ `feature` (ต่อจากโค้ดเดิม) · agent `developer` (+ agent เฉพาะทางตามเรื่อง เช่น `ai-engineer` · `data-engineer` · `mobile-engineer`) · skill `code-craft` · `security-gate` · `web-service-essentials` · `ground-rules/principle-prove-it-works`
 **ต้องมีก่อน:** `docs/poc/poc-plan.md`
 **ผลลัพธ์:** โค้ดในโฟลเดอร์โค้ดของโปรเจกต์ (ชื่อโปรเจกต์ ตัวพิมพ์เล็ก คั่นด้วย `-`) บน branch `poc/<เรื่อง>` · `docs/poc/poc-build-log.md` · **ไม่แก้โค้ด** เว้นแต่ข้างล่างติ๊ก `[x]`
 
@@ -94,7 +94,7 @@ playbook `new-project` (ยังไม่มีโค้ด) หรือ `feat
 
 ## 3. วัดผลและเตรียม demo
 
-playbook `review` · agent `qa-tester` + `developer` · skill `ground-rules/principle-prove-it-works` · `test-case-template` · `security-gate`
+playbook `review` · agent `qa-tester` + `developer` · skill `ground-rules/principle-prove-it-works` · `qa-docs` · `security-gate`
 **ต้องมีก่อน:** `poc-plan.md` · โค้ด POC ที่รันได้
 **ผลลัพธ์:** `docs/poc/poc-results.md` · `docs/poc/poc-demo.md`
 
@@ -121,7 +121,7 @@ playbook `review` · agent `qa-tester` + `developer` · skill `ground-rules/prin
 
 ## 4. สรุปผลและข้อเสนอไปต่อหรือไม่
 
-playbook `project-docs` · agent `solution-architect` + `product-manager` + `technical-writer` · skill `design-gate/polished-document-style` · `branded-document-design` (ตอน render) · `presentation-design` (ถ้าต้องนำเสนอ) · `adr-writer`
+playbook `project-docs` · agent `solution-architect` + `product-manager` + `technical-writer` · skill `design-gate/polished-document-style` · `document-design` (ตอน render) · `slide-deck` (ถ้าต้องนำเสนอ) · `architecture`
 **ต้องมีก่อน:** `poc-plan.md` · `poc-results.md`
 **ผลลัพธ์:** `docs/poc/poc-report.md` → .docx + .pdf · ADR ของเทคโนโลยีที่เลือกใน `docs/decisions/`
 

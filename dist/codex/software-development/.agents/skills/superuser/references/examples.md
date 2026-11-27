@@ -19,6 +19,6 @@ How to do each one, its cost and its traps are in `crew-patterns/agent-patterns`
 | **Planning** | Pick playbooks into a todo; for long work use `docs/BUILD-PLAN.md` |
 | **ReAct** | Run every piece for real · `ground-rules/principle-small-verifiable-steps` · the project's app-checking skill |
 | **Reflection** | A fresh reviewer in the playbook's review step; if the work is risky, use `crew-patterns/adversarial-review-panel` |
-| **Multi-Agent** | Per section 5. If there are several independent pieces, use `crew-patterns/parallel-split-and-merge`; for the documents track use `/software-development:feature-kickoff` |
+| **Multi-Agent** | Per section 5. If there are several independent pieces, use `crew-patterns/parallel-split-and-merge`; for the documents track use `/software-development:requirements-writing` |
 | **Mixture-of-Agents (MoA)** | For design · API · mockups that could lock in the wrong shape, use `crew-patterns/parallel-attempts-pick-best` |
 | **Reranker** | Choose which files to read from whole-repo search results (`context-budget`) · choose best-practice sources · choose a library from `research-with-sources/prior-art-review` |

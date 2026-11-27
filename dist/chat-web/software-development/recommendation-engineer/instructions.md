@@ -33,7 +33,7 @@ Before building, gather:
 
 ## Algorithms, serving, evaluation
 
-Strategies · content-based / collaborative / two-tower / hybrid code · cold start · two-stage serving · offline and online metrics · MMR diversity · business rules · tools → skill `ecommerce-patterns` → [`references/agent-recommendation-engineer.md`](../skills/ecommerce-patterns/references/agent-recommendation-engineer.md) · shop surfaces and A/B tests → `references/recommendation-systems.md`
+Strategies · content-based / collaborative / two-tower / hybrid code · cold start · two-stage serving · offline and online metrics · MMR diversity · business rules · tools → skill `domain-systems` → [`references/agent-recommendation-engineer.md`](../skills/domain-systems/references/agent-recommendation-engineer.md) · shop surfaces and A/B tests → `references/recommendation-systems.md`
 
 Not for: shop-wide features (cart, checkout, catalog) → ecommerce-engineer · general ML models outside recommendations → ai-engineer.
 
@@ -43,21 +43,21 @@ Not for: shop-wide features (cart, checkout, catalog) → ecommerce-engineer · 
 
 ## When working in a SuperUser team (`superuser`)
 
-- Code must meet 3 criteria: simple (`lazy-coding`) · readable (`readable-code`) · secure from the start (`principle-secure-by-default`).
+- Code must meet 3 criteria: simple and readable (`code-craft`) · secure from the start (`security-gate`).
 - Do only the piece the team lead sends. Read the files yourself from the paths you are given. If the scope is unclear or conflicting, report back; do not widen the work yourself.
 - Prove it before saying done (`ground-rules/principle-prove-it-works`), attaching the real run output unedited. If you cannot check, write `ยังไม่ได้ตรวจ` (not yet checked).
 - Do not write shared files (`docs/BUILD-PLAN.md` · `CONTEXT.md`), do not commit, push, or deploy, and do not message outsiders. For decisions you made yourself, send back a row `เลือก · ไม่เลือก · เหตุผล` (chosen · not chosen · reason) for the team lead to record.
 
 ## Skills You Use
 
-- `ecommerce-patterns` — recommendation, checkout and inventory topics
-- `llm-engineering` — embeddings and evaluation when models are LLM-based
-- `observability-basics` — monitoring recommendation quality in production
+- `domain-systems` — recommendation, checkout and inventory topics
+- `ai-engineering` — embeddings and evaluation when models are LLM-based
+- `incidents-and-monitoring` — monitoring recommendation quality in production
 - `ground-rules/principle-prove-it-works` — verify against the real thing before saying done
 - `decision-desk/flag-and-propose` — only for forks that are irreversible, costly or outward-facing: impact first, one question · reversible forks → `ground-rules/principle-proceed-on-reversible-work`
 - `context-budget` — long material goes to files, read in parts
 - `human-writing/spell-out-abbreviations` · `lean-reply/answer-shape` — every document or reply to a person
-- `lazy-coding` — APPLY TO EVERY CODE OUTPUT — simplest thing that works; standard library and native features before custom code; mark shortcuts with `// simple:`.
+- `code-craft` — APPLY TO EVERY CODE OUTPUT — simplest thing that works; standard library and native features before custom code; mark shortcuts with `// simple:`.
 - `design-gate/polished-document-style` — for design docs
 
 ## Things You Don't Do

@@ -4,105 +4,105 @@
  "description": "Simulates a complete software development company — 38 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 95 skills and 29 slash commands for the whole SDLC.",
  "cross": [],
  "skills": [
-  "adr-writer",
-  "api-conventions",
-  "app-verifier-setup",
-  "architecture-patterns",
-  "audit-trail",
-  "auth-implementation-patterns",
-  "backblaze-b2",
-  "background-jobs",
-  "blast-radius",
-  "branded-document-design",
-  "bug-inbox-triage",
-  "bug-report-template",
+  "architecture",
+  "api-design",
+  "test-automation",
+  "architecture",
+  "web-service-essentials",
+  "web-service-essentials",
+  "infra-and-deploy",
+  "async-messaging",
+  "code-craft",
+  "document-design",
+  "qa-docs",
+  "qa-docs",
   "cicd-and-release",
-  "code-gardener",
-  "code-orientation",
-  "code-review-checklist",
-  "commit-message-format",
-  "config-and-secrets",
+  "code-craft",
+  "code-craft",
+  "git-and-review",
+  "git-and-review",
+  "web-service-essentials",
   "data-analysis",
   "data-import-export",
   "database-design",
-  "design-direction-lookup",
+  "design-system",
   "design-system",
   "developer-experience",
-  "diagram-figures",
-  "docker-sandbox",
-  "dynamic-website",
-  "e2e-testing-patterns",
-  "ecommerce-patterns",
-  "error-handling-patterns",
-  "file-upload-and-storage",
-  "fintech-payments",
-  "fsd-writing",
+  "diagrams",
+  "infra-and-deploy",
+  "web-app-design",
+  "test-automation",
+  "domain-systems",
+  "errors-and-logs",
+  "web-service-essentials",
+  "domain-systems",
+  "requirements-writing",
   "game-development",
   "graphic-design",
-  "healthcare-systems",
-  "html-slide-deck",
+  "domain-systems",
+  "slide-deck",
   "i18n-and-locale",
-  "incident-runbook-template",
-  "infra-as-code",
-  "insurance-systems",
-  "iot-systems",
-  "jenkins-pipeline",
-  "kafka-streaming",
-  "kubernetes-helm",
-  "lazy-coding",
+  "incidents-and-monitoring",
+  "infra-and-deploy",
+  "domain-systems",
+  "domain-systems",
+  "cicd-and-release",
+  "async-messaging",
+  "infra-and-deploy",
+  "code-craft",
   "legacy-spec-recovery",
-  "legal-document-systems",
-  "llm-engineering",
-  "load-testing",
-  "logging-standards",
-  "markdown-report-docx",
-  "markdown-visuals",
-  "mcp-server",
+  "domain-systems",
+  "ai-engineering",
+  "test-automation",
+  "errors-and-logs",
+  "document-design",
+  "diagrams",
+  "ai-engineering",
   "mobile-app-design",
   "mobile-engineering",
-  "notifications",
-  "observability-basics",
+  "async-messaging",
+  "incidents-and-monitoring",
   "pdpa-compliance",
-  "postmortem-template",
-  "pr-description-template",
-  "presentation-design",
-  "principle-data-shape-first",
-  "principle-replace-then-delete",
-  "principle-safe-to-rerun",
-  "principle-secure-by-default",
+  "incidents-and-monitoring",
+  "git-and-review",
+  "slide-deck",
+  "code-craft",
+  "code-craft",
+  "code-craft",
+  "security-gate",
   "product-naming",
   "project-bootstrap",
-  "project-doc-set",
-  "rabbitmq-messaging",
-  "readable-code",
+  "project-docs",
+  "async-messaging",
+  "code-craft",
   "reference-app-research",
-  "render-deploy",
+  "infra-and-deploy",
   "reverse-engineering",
-  "saas-platform",
+  "domain-systems",
   "security-audit",
   "security-gate",
   "security-operations",
-  "seo-audit-checklist",
-  "smart-contracts",
-  "software-diagrams",
+  "web-audit",
+  "domain-systems",
+  "diagrams",
   "spec-to-code-loop",
-  "srs-writing",
+  "requirements-writing",
   "stack-dotnet",
   "stack-mql",
   "stack-python",
   "stack-sql",
   "stack-typescript",
-  "test-case-template",
-  "test-evidence",
-  "testing-standards",
+  "qa-docs",
+  "qa-docs",
+  "test-automation",
   "ui-craft",
-  "user-story-writer",
-  "voice-agent",
+  "requirements-writing",
+  "ai-engineering",
   "web-app-design",
-  "web-quality-audit",
+  "web-audit",
   "web-service-essentials",
   "windows-app-design",
-  "worktree-and-branch"
+  "git-and-review"
  ],
  "core_skills": [
   "superuser",
@@ -148,17 +148,17 @@
  ],
  "commands": [
   "api-design",
-  "architecture-review",
+  "architecture",
   "coding-evals",
-  "feature-kickoff",
-  "incident-response",
-  "onboard",
-  "product-roadmap",
-  "release-notes",
-  "retrospective",
-  "security-scan",
-  "sprint-plan",
-  "threat-model"
+  "requirements-writing",
+  "incidents-and-monitoring",
+  "project-docs",
+  "product-planning",
+  "project-docs",
+  "product-planning",
+  "security-gate",
+  "product-planning",
+  "security-audit"
  ],
  "agents": [
   {
@@ -168,11 +168,11 @@
    "description": "Use when building with LLMs or machine learning (RAG, prompts, evals, training, serving).",
    "skills": [
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
-    "llm-engineering",
-    "voice-agent"
+    "code-craft",
+    "code-craft",
+    "security-gate",
+    "ai-engineering",
+    "ai-engineering"
    ]
   },
   {
@@ -182,10 +182,10 @@
    "description": "Use when building on blockchains (smart contracts, Solidity, Solana, DeFi, audits).",
    "skills": [
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
-    "smart-contracts"
+    "code-craft",
+    "code-craft",
+    "security-gate",
+    "domain-systems"
    ]
   },
   {
@@ -194,15 +194,15 @@
    "core": false,
    "description": "Use when gathering requirements or writing a BRD or user stories. FSD → system-analyst.",
    "skills": [
-    "user-story-writer",
+    "requirements-writing",
     "superuser",
-    "diagram-figures",
-    "markdown-visuals",
-    "software-diagrams",
-    "presentation-design",
-    "branded-document-design",
-    "srs-writing",
-    "fsd-writing",
+    "diagrams",
+    "diagrams",
+    "diagrams",
+    "slide-deck",
+    "document-design",
+    "requirements-writing",
+    "requirements-writing",
     "legacy-spec-recovery",
     "pdpa-compliance",
     "data-import-export"
@@ -214,14 +214,14 @@
    "core": false,
    "description": "Use when analyzing healthcare data (clinical dashboards, patient outcomes, research).",
    "skills": [
-    "healthcare-systems",
+    "domain-systems",
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
+    "code-craft",
+    "code-craft",
+    "security-gate",
     "pdpa-compliance",
-    "markdown-visuals",
-    "architecture-patterns"
+    "diagrams",
+    "architecture"
    ]
   },
   {
@@ -232,14 +232,14 @@
    "skills": [
     "database-design",
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
-    "llm-engineering",
+    "code-craft",
+    "code-craft",
+    "security-gate",
+    "ai-engineering",
     "data-import-export",
-    "background-jobs",
-    "observability-basics",
-    "architecture-patterns"
+    "async-messaging",
+    "incidents-and-monitoring",
+    "architecture"
    ]
   },
   {
@@ -248,44 +248,44 @@
    "core": false,
    "description": "Use when implementing features, fixing bugs, refactoring or writing unit tests.",
    "skills": [
-    "code-orientation",
-    "readable-code",
-    "lazy-coding",
-    "testing-standards",
-    "code-review-checklist",
-    "commit-message-format",
-    "pr-description-template",
+    "code-craft",
+    "code-craft",
+    "code-craft",
+    "test-automation",
+    "git-and-review",
+    "git-and-review",
+    "git-and-review",
     "superuser",
-    "principle-secure-by-default",
+    "security-gate",
     "stack-dotnet",
     "stack-typescript",
     "stack-python",
     "stack-sql",
     "stack-mql",
-    "e2e-testing-patterns",
+    "test-automation",
     "spec-to-code-loop",
-    "app-verifier-setup",
+    "test-automation",
     "security-gate",
-    "markdown-visuals",
+    "diagrams",
     "web-service-essentials",
-    "api-conventions",
-    "error-handling-patterns",
-    "logging-standards",
-    "auth-implementation-patterns",
+    "api-design",
+    "errors-and-logs",
+    "errors-and-logs",
+    "web-service-essentials",
     "database-design",
-    "config-and-secrets",
-    "background-jobs",
-    "audit-trail",
-    "file-upload-and-storage",
-    "notifications",
+    "web-service-essentials",
+    "async-messaging",
+    "web-service-essentials",
+    "web-service-essentials",
+    "async-messaging",
     "data-import-export",
-    "observability-basics",
+    "incidents-and-monitoring",
     "i18n-and-locale",
     "project-bootstrap",
-    "docker-sandbox",
-    "project-doc-set",
-    "code-gardener",
-    "fsd-writing",
+    "infra-and-deploy",
+    "project-docs",
+    "code-craft",
+    "requirements-writing",
     "reverse-engineering"
    ]
   },
@@ -296,31 +296,31 @@
    "description": "Use when setting up CI/CD, Docker, Kubernetes, monitoring, deploys or infra as code.",
    "skills": [
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
-    "postmortem-template",
-    "branded-document-design",
-    "diagram-figures",
-    "markdown-visuals",
-    "software-diagrams",
-    "incident-runbook-template",
-    "logging-standards",
+    "code-craft",
+    "code-craft",
+    "security-gate",
+    "incidents-and-monitoring",
+    "document-design",
+    "diagrams",
+    "diagrams",
+    "diagrams",
+    "incidents-and-monitoring",
+    "errors-and-logs",
     "web-service-essentials",
-    "docker-sandbox",
+    "infra-and-deploy",
     "cicd-and-release",
-    "config-and-secrets",
-    "observability-basics",
-    "load-testing",
-    "render-deploy",
-    "backblaze-b2",
+    "web-service-essentials",
+    "incidents-and-monitoring",
+    "test-automation",
+    "infra-and-deploy",
+    "infra-and-deploy",
     "project-bootstrap",
-    "background-jobs",
-    "kubernetes-helm",
-    "kafka-streaming",
-    "rabbitmq-messaging",
-    "jenkins-pipeline",
-    "mcp-server"
+    "async-messaging",
+    "infra-and-deploy",
+    "async-messaging",
+    "async-messaging",
+    "cicd-and-release",
+    "ai-engineering"
    ]
   },
   {
@@ -330,9 +330,9 @@
    "description": "Use when the product is for developers (DX audits, SDK design, docs platforms).",
    "skills": [
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
+    "code-craft",
+    "code-craft",
+    "security-gate",
     "developer-experience"
    ]
   },
@@ -343,10 +343,10 @@
    "description": "Use when building online stores (catalog, cart, checkout, orders, inventory).",
    "skills": [
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
-    "ecommerce-patterns"
+    "code-craft",
+    "code-craft",
+    "security-gate",
+    "domain-systems"
    ]
   },
   {
@@ -355,12 +355,12 @@
    "core": false,
    "description": "Use for financial regulation (PCI-DSS, BoT, AML/KYC). PDPA → legal-compliance-officer.",
    "skills": [
-    "fintech-payments",
+    "domain-systems",
     "superuser",
     "pdpa-compliance",
-    "audit-trail",
-    "branded-document-design",
-    "threat-model"
+    "web-service-essentials",
+    "document-design",
+    "security-audit"
    ]
   },
   {
@@ -370,10 +370,10 @@
    "description": "Use when building payments (Stripe, Omise, webhooks, refunds, ledgers, reconciliation).",
    "skills": [
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
-    "fintech-payments"
+    "code-craft",
+    "code-craft",
+    "security-gate",
+    "domain-systems"
    ]
   },
   {
@@ -383,9 +383,9 @@
    "description": "Use when designing how a game plays (mechanics, balance, progression, monetisation).",
    "skills": [
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
+    "code-craft",
+    "code-craft",
+    "security-gate",
     "game-development"
    ]
   },
@@ -396,9 +396,9 @@
    "description": "Use when programming games (Unity, Unreal, Godot, rendering, multiplayer netcode).",
    "skills": [
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
+    "code-craft",
+    "code-craft",
+    "security-gate",
     "game-development"
    ]
   },
@@ -411,10 +411,10 @@
     "graphic-design",
     "superuser",
     "ui-craft",
-    "presentation-design",
+    "slide-deck",
     "product-naming",
-    "branded-document-design",
-    "software-diagrams"
+    "document-design",
+    "diagrams"
    ]
   },
   {
@@ -424,12 +424,12 @@
    "description": "Use when improving conversion (landing pages, A/B tests, onboarding). SEO → seo-specialist.",
    "skills": [
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
-    "ecommerce-patterns",
+    "code-craft",
+    "code-craft",
+    "security-gate",
+    "domain-systems",
     "mobile-engineering",
-    "saas-platform"
+    "domain-systems"
    ]
   },
   {
@@ -439,10 +439,10 @@
    "description": "Use when building healthcare software (EHR integration, FHIR, telemedicine).",
    "skills": [
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
-    "healthcare-systems"
+    "code-craft",
+    "code-craft",
+    "security-gate",
+    "domain-systems"
    ]
   },
   {
@@ -451,11 +451,11 @@
    "core": false,
    "description": "Use for HIPAA compliance (Privacy, Security and Breach Rules, BAAs, risk assessments).",
    "skills": [
-    "healthcare-systems",
+    "domain-systems",
     "superuser",
     "pdpa-compliance",
-    "audit-trail",
-    "branded-document-design"
+    "web-service-essentials",
+    "document-design"
    ]
   },
   {
@@ -465,10 +465,10 @@
    "description": "Use for insurance numbers (loss reserves, IBNR, pricing, underwriting scores).",
    "skills": [
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
-    "insurance-systems"
+    "code-craft",
+    "code-craft",
+    "security-gate",
+    "domain-systems"
    ]
   },
   {
@@ -477,11 +477,11 @@
    "core": false,
    "description": "Use for insurance regulation (US state filings, Solvency II, Thailand OIC, licensing).",
    "skills": [
-    "insurance-systems",
+    "domain-systems",
     "superuser",
     "pdpa-compliance",
-    "audit-trail",
-    "branded-document-design"
+    "web-service-essentials",
+    "document-design"
    ]
   },
   {
@@ -491,10 +491,10 @@
    "description": "Use when building insurance products (policy admin, quote and rating engines, claims).",
    "skills": [
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
-    "insurance-systems"
+    "code-craft",
+    "code-craft",
+    "security-gate",
+    "domain-systems"
    ]
   },
   {
@@ -504,10 +504,10 @@
    "description": "Use when building connected devices (firmware, MQTT, edge computing, device fleets).",
    "skills": [
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
-    "iot-systems"
+    "code-craft",
+    "code-craft",
+    "security-gate",
+    "domain-systems"
    ]
   },
   {
@@ -516,11 +516,11 @@
    "core": false,
    "description": "Use for legal-tech compliance (GDPR, PDPA, data residency, retention, e-discovery).",
    "skills": [
-    "legal-document-systems",
+    "domain-systems",
     "pdpa-compliance",
     "superuser",
-    "audit-trail",
-    "branded-document-design"
+    "web-service-essentials",
+    "document-design"
    ]
   },
   {
@@ -530,10 +530,10 @@
    "description": "Use when building legal tech (contract management, clause extraction, e-signature).",
    "skills": [
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
-    "legal-document-systems"
+    "code-craft",
+    "code-craft",
+    "security-gate",
+    "domain-systems"
    ]
   },
   {
@@ -543,9 +543,9 @@
    "description": "Use when building mobile apps (Kotlin, Swift, Flutter, React Native, store submission).",
    "skills": [
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
+    "code-craft",
+    "code-craft",
+    "security-gate",
     "mobile-engineering"
    ]
   },
@@ -556,10 +556,10 @@
    "description": "Use for product vision, roadmap, priorities or user research. Schedules → project-manager.",
    "skills": [
     "superuser",
-    "branded-document-design",
-    "presentation-design",
-    "user-story-writer",
-    "markdown-visuals",
+    "document-design",
+    "slide-deck",
+    "requirements-writing",
+    "diagrams",
     "reference-app-research",
     "product-naming"
    ]
@@ -571,10 +571,10 @@
    "description": "Use for project plans, timelines, sprints, risks or status reports. Scope → product-manager.",
    "skills": [
     "superuser",
-    "markdown-visuals",
-    "presentation-design",
-    "branded-document-design",
-    "project-doc-set"
+    "diagrams",
+    "slide-deck",
+    "document-design",
+    "project-docs"
    ]
   },
   {
@@ -583,30 +583,30 @@
    "core": false,
    "description": "Use when creating test plans, test cases, bug reports or exploratory tests before release.",
    "skills": [
-    "test-case-template",
-    "test-evidence",
-    "bug-report-template",
+    "qa-docs",
+    "qa-docs",
+    "qa-docs",
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
-    "testing-standards",
-    "e2e-testing-patterns",
-    "load-testing",
-    "fsd-writing",
+    "code-craft",
+    "code-craft",
+    "security-gate",
+    "test-automation",
+    "test-automation",
+    "test-automation",
+    "requirements-writing",
     "stack-dotnet",
     "stack-typescript",
     "stack-python",
     "stack-sql",
-    "api-conventions",
+    "api-design",
     "data-import-export",
-    "error-handling-patterns",
-    "app-verifier-setup",
-    "docker-sandbox",
+    "errors-and-logs",
+    "test-automation",
+    "infra-and-deploy",
     "security-gate",
-    "bug-inbox-triage",
-    "markdown-visuals",
-    "branded-document-design"
+    "qa-docs",
+    "diagrams",
+    "document-design"
    ]
   },
   {
@@ -615,14 +615,14 @@
    "core": false,
    "description": "Use for quant risk, credit and trading models or backtests. Insurance → insurance-analyst.",
    "skills": [
-    "fintech-payments",
+    "domain-systems",
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
-    "markdown-visuals",
+    "code-craft",
+    "code-craft",
+    "security-gate",
+    "diagrams",
     "stack-mql",
-    "architecture-patterns"
+    "architecture"
    ]
   },
   {
@@ -631,13 +631,13 @@
    "core": false,
    "description": "Use when building recommendation systems (related items, personalized ranking).",
    "skills": [
-    "ecommerce-patterns",
+    "domain-systems",
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
-    "llm-engineering",
-    "observability-basics"
+    "code-craft",
+    "code-craft",
+    "security-gate",
+    "ai-engineering",
+    "incidents-and-monitoring"
    ]
   },
   {
@@ -646,15 +646,15 @@
    "core": false,
    "description": "Use to understand or recreate software without source (binary, APK). Authorized only.",
    "skills": [
-    "docker-sandbox",
+    "infra-and-deploy",
     "reverse-engineering",
     "reference-app-research",
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
+    "code-craft",
+    "code-craft",
+    "security-gate",
     "legacy-spec-recovery",
-    "markdown-visuals"
+    "diagrams"
    ]
   },
   {
@@ -663,10 +663,10 @@
    "core": false,
    "description": "Use when designing subscription billing, pricing tiers or revenue analytics (MRR, churn).",
    "skills": [
-    "saas-platform",
+    "domain-systems",
     "superuser",
-    "fintech-payments",
-    "markdown-visuals"
+    "domain-systems",
+    "diagrams"
    ]
   },
   {
@@ -676,9 +676,9 @@
    "description": "Use for security operations (incidents, alert triage, SOC). App code → security-engineer.",
    "skills": [
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
+    "code-craft",
+    "code-craft",
+    "security-gate",
     "security-operations"
    ]
   },
@@ -688,24 +688,24 @@
    "core": false,
    "description": "Use for security reviews, threat modeling or secure code. SOC → security-analyst.",
    "skills": [
-    "healthcare-systems",
-    "fintech-payments",
+    "domain-systems",
+    "domain-systems",
     "security-gate",
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
+    "code-craft",
+    "code-craft",
+    "security-gate",
     "security-audit",
-    "code-review-checklist",
-    "auth-implementation-patterns",
-    "config-and-secrets",
-    "audit-trail",
-    "file-upload-and-storage",
-    "error-handling-patterns",
+    "git-and-review",
+    "web-service-essentials",
+    "web-service-essentials",
+    "web-service-essentials",
+    "web-service-essentials",
+    "errors-and-logs",
     "pdpa-compliance",
-    "docker-sandbox",
-    "markdown-visuals",
-    "branded-document-design",
+    "infra-and-deploy",
+    "diagrams",
+    "document-design",
     "security-operations"
    ]
   },
@@ -715,10 +715,10 @@
    "core": false,
    "description": "Use when improving search ranking (SEO audits, keywords, meta tags, structured data).",
    "skills": [
-    "seo-audit-checklist",
+    "web-audit",
     "superuser",
-    "markdown-visuals",
-    "branded-document-design"
+    "diagrams",
+    "document-design"
    ]
   },
   {
@@ -727,27 +727,27 @@
    "core": false,
    "description": "Use for system architecture, stack choice, trade-offs or ADRs. Endpoints → system-analyst.",
    "skills": [
-    "adr-writer",
+    "architecture",
     "superuser",
-    "lazy-coding",
-    "readable-code",
-    "principle-secure-by-default",
-    "saas-platform",
-    "markdown-visuals",
-    "diagram-figures",
-    "project-doc-set",
-    "architecture-patterns",
+    "code-craft",
+    "code-craft",
+    "security-gate",
+    "domain-systems",
+    "diagrams",
+    "diagrams",
+    "project-docs",
+    "architecture",
     "database-design",
-    "api-conventions",
+    "api-design",
     "web-service-essentials",
-    "error-handling-patterns",
-    "observability-basics",
-    "background-jobs",
-    "audit-trail",
+    "errors-and-logs",
+    "incidents-and-monitoring",
+    "async-messaging",
+    "web-service-essentials",
     "pdpa-compliance",
     "cicd-and-release",
     "reverse-engineering",
-    "branded-document-design"
+    "document-design"
    ]
   },
   {
@@ -757,18 +757,18 @@
    "description": "Use for an FSD, use cases, data flows or endpoint API specs. Architecture → solution-architect.",
    "skills": [
     "superuser",
-    "diagram-figures",
-    "software-diagrams",
-    "markdown-visuals",
-    "branded-document-design",
-    "srs-writing",
+    "diagrams",
+    "diagrams",
+    "diagrams",
+    "document-design",
+    "requirements-writing",
     "database-design",
-    "api-conventions",
-    "fsd-writing",
+    "api-design",
+    "requirements-writing",
     "legacy-spec-recovery",
     "i18n-and-locale",
-    "audit-trail",
-    "notifications",
+    "web-service-essentials",
+    "async-messaging",
     "pdpa-compliance"
    ]
   },
@@ -779,13 +779,13 @@
    "description": "Use when writing user guides, API docs, tutorials, READMEs or release notes.",
    "skills": [
     "superuser",
-    "branded-document-design",
-    "markdown-visuals",
-    "commit-message-format",
-    "markdown-report-docx",
-    "presentation-design",
-    "html-slide-deck",
-    "project-doc-set",
+    "document-design",
+    "diagrams",
+    "git-and-review",
+    "document-design",
+    "slide-deck",
+    "slide-deck",
+    "project-docs",
     "product-naming",
     "project-bootstrap"
    ]
@@ -798,12 +798,12 @@
    "skills": [
     "ui-craft",
     "superuser",
-    "design-direction-lookup",
+    "design-system",
     "web-app-design",
     "mobile-app-design",
     "windows-app-design",
-    "markdown-visuals",
-    "diagram-figures",
+    "diagrams",
+    "diagrams",
     "i18n-and-locale"
    ]
   }
@@ -833,7 +833,7 @@
     },
     {
      "n": 2,
-     "text": "**Reproduce it yourself in the same place the user hit it.** For a web page, use the project's app-checking skill (if there is none yet, do `app-verifier-setup` first). For an API, use a real call. If you cannot reproduce it, say what is missing (data · environment · steps) and stop on this bug only. In a project that has `.sandbox/` (the root exception in `project-doc-set` item 1), reproduce inside the sandbox · ใคร: `qa-tester` ตัวใหม่",
+     "text": "**Reproduce it yourself in the same place the user hit it.** For a web page, use the project's app-checking skill (if there is none yet, do `test-automation` first). For an API, use a real call. If you cannot reproduce it, say what is missing (data · environment · steps) and stop on this bug only. In a project that has `.sandbox/` (the root exception in `project-docs` item 1), reproduce inside the sandbox · ใคร: `qa-tester` ตัวใหม่",
      "sub": [
       "For a symptom that appears at run time (leak · intermittent hang · busy while idle), add temporary measurement or logging so the symptom becomes a number before you fix it. If you were given a profile file (cpuprofile · heap snapshot · trace), read it with the tool for that file type. Do not guess from the code."
      ],
@@ -847,8 +847,8 @@
       "raw": "`qa-tester` ตัวใหม่"
      },
      "skills": [
-      "app-verifier-setup",
-      "project-doc-set"
+      "test-automation",
+      "project-docs"
      ],
      "commands": [],
      "playbooks": [],
@@ -856,9 +856,9 @@
     },
     {
      "n": 3,
-     "text": "**Write a test that fails because of this bug first**, and run it to see it red (`testing-standards`). If the project has no tests at all, first set up a first test that runs. If you truly cannot write a test (for example a symptom that happens at run time on the user's machine), write the reason in the report, and provide a runnable reproduction procedure instead · ใคร: `developer` ตัวใหม่",
+     "text": "**Write a test that fails because of this bug first**, and run it to see it red (`test-automation`). If the project has no tests at all, first set up a first test that runs. If you truly cannot write a test (for example a symptom that happens at run time on the user's machine), write the reason in the report, and provide a runnable reproduction procedure instead · ใคร: `developer` ตัวใหม่",
      "sub": [
-      "If you have not read this part in this session, do [`code-orientation`](../../code-orientation/SKILL.md) before tracing the cause"
+      "If you have not read this part in this session, do [`code-craft`](../../code-craft/SKILL.md) before tracing the cause"
      ],
      "phase": "",
      "who": {
@@ -870,8 +870,8 @@
       "raw": "`developer` ตัวใหม่"
      },
      "skills": [
-      "testing-standards",
-      "code-orientation"
+      "test-automation",
+      "code-craft"
      ],
      "commands": [],
      "playbooks": [],
@@ -899,7 +899,7 @@
     },
     {
      "n": 5,
-     "text": "If you will change something shared (helper · type · config · schema), find every spot it affects per [`blast-radius`](../../blast-radius/SKILL.md) before changing it · for a **security bug**, also search the whole repo for places written the same way · pass the list of spots to step 6 · ใคร: `Explore` ตัวใหม่",
+     "text": "If you will change something shared (helper · type · config · schema), find every spot it affects per [`code-craft`](../../code-craft/SKILL.md) before changing it · for a **security bug**, also search the whole repo for places written the same way · pass the list of spots to step 6 · ใคร: `Explore` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -909,7 +909,7 @@
       "raw": "`Explore` ตัวใหม่"
      },
      "skills": [
-      "blast-radius"
+      "code-craft"
      ],
      "commands": [],
      "playbooks": [],
@@ -917,7 +917,7 @@
     },
     {
      "n": 6,
-     "text": "Make the smallest fix that is still correct (`lazy-coding`), covering every spot from steps 4–5 in one round — pass the file locations and the root cause along · write a security bug up in the report under `qa/security/` · if a secret leaked, tell the user to rotate it at once · ใคร: `developer` ตัวใหม่",
+     "text": "Make the smallest fix that is still correct (`code-craft`), covering every spot from steps 4–5 in one round — pass the file locations and the root cause along · write a security bug up in the report under `qa/security/` · if a secret leaked, tell the user to rotate it at once · ใคร: `developer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -929,7 +929,7 @@
       "raw": "`developer` ตัวใหม่"
      },
      "skills": [
-      "lazy-coding"
+      "code-craft"
      ],
      "commands": [],
      "playbooks": [],
@@ -955,7 +955,7 @@
     },
     {
      "n": 8,
-     "text": "**Check (ตรวจ) the diff by review before saying done** — per `code-review-checklist`: the fix is at the root cause, does not spread beyond the spot, and the step 7 result covers the case that used to fail · for a security bug, look at every spot from step 5 · if it fails → a fresh `developer` fixes it, then loop per the check rounds in [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่",
+     "text": "**Check (ตรวจ) the diff by review before saying done** — per `git-and-review`: the fix is at the root cause, does not spread beyond the spot, and the step 7 result covers the case that used to fail · for a security bug, look at every spot from step 5 · if it fails → a fresh `developer` fixes it, then loop per the check rounds in [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -965,7 +965,7 @@
       "raw": "`reviewer` ตัวใหม่"
      },
      "skills": [
-      "code-review-checklist"
+      "git-and-review"
      ],
      "commands": [],
      "playbooks": [],
@@ -1016,7 +1016,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Read the relevant requirements (`docs/srs.md` · `docs/fsd-*.md` · mockup), then run [`code-orientation`](../../code-orientation/SKILL.md) on the part you will touch to get a 10-line map, then open the skill for the project's stack · ใคร: หัวหน้าทีม (unclear brief: `brainstormer` ตัวใหม่)",
+     "text": "Read the relevant requirements (`docs/srs.md` · `docs/fsd-*.md` · mockup), then run [`code-craft`](../../code-craft/SKILL.md) on the part you will touch to get a 10-line map, then open the skill for the project's stack · ใคร: หัวหน้าทีม (unclear brief: `brainstormer` ตัวใหม่)",
      "sub": [],
      "phase": "",
      "who": {
@@ -1026,7 +1026,7 @@
       "raw": "หัวหน้าทีม (unclear brief: `brainstormer` ตัวใหม่)"
      },
      "skills": [
-      "code-orientation"
+      "code-craft"
      ],
      "commands": [],
      "playbooks": [],
@@ -1037,7 +1037,7 @@
      "text": "**State the data shape first** — the types · tables · state this feature creates or changes, written as code or a short table in the reply · ใคร: หัวหน้าทีม",
      "sub": [
       "Split into 3 layers (input → business rules → storage)",
-      "If it touches outside input · login · files · money · personal data, open [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md). For a feature exposed to the outside, send a fresh `security-engineer` to do STRIDE per `threat-model/references/security-templates.md` before writing (or ask the user to run `/software-development:threat-model` themselves, because only the user can call that skill)",
+      "If it touches outside input · login · files · money · personal data, open [`security-gate`](../../security-gate/SKILL.md). For a feature exposed to the outside, send a fresh `security-engineer` to do STRIDE per `security-audit/references/security-templates.md` before writing (or ask the user to run `/software-development:security-audit` themselves, because only the user can call that skill)",
       "Web app or API → follow the \"must have\" column of [`security-gate` OWASP section](../../security-gate/references/owasp-top10.md) for the parts the feature touches, and write tests per the \"prove with\" column (test names start with the item ID, such as `A01_`)"
      ],
      "phase": "",
@@ -1048,11 +1048,11 @@
       "raw": "หัวหน้าทีม"
      },
      "skills": [
-      "principle-secure-by-default",
+      "security-gate",
       "security-gate"
      ],
      "commands": [
-      "threat-model"
+      "security-audit"
      ],
      "playbooks": [],
      "approval": false
@@ -1079,7 +1079,7 @@
     },
     {
      "n": 4,
-     "text": "At the spot you will touch, delete what is unused first, then add ([`principle-replace-then-delete`](../../principle-replace-then-delete/SKILL.md)) · ใคร: `developer` ตัวใหม่",
+     "text": "At the spot you will touch, delete what is unused first, then add ([`code-craft`](../../code-craft/SKILL.md)) · ใคร: `developer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1091,7 +1091,7 @@
       "raw": "`developer` ตัวใหม่"
      },
      "skills": [
-      "principle-replace-then-delete"
+      "code-craft"
      ],
      "commands": [],
      "playbooks": [],
@@ -1198,7 +1198,7 @@
     },
     {
      "n": 10,
-     "text": "When everything passes, deliver per the commit rules in `superuser` section 6, open a PR (`pr-description-template`) when the user asks, then finish with `status-report` · ใคร: หัวหน้าทีม",
+     "text": "When everything passes, deliver per the commit rules in `superuser` section 6, open a PR (`git-and-review`) when the user asks, then finish with `status-report` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1209,7 +1209,7 @@
      },
      "skills": [
       "superuser",
-      "pr-description-template"
+      "git-and-review"
      ],
      "commands": [],
      "playbooks": [],
@@ -1278,7 +1278,7 @@
     },
     {
      "n": 4,
-     "text": "Once the user approves, delete only the approved items. For a worktree with leftover files, keep a patch before deleting. For a sandbox, use `.sandbox/sandbox.ps1 destroy` (`.sandbox/` itself may stay at the root per `project-doc-set` item 1) · ใคร: หัวหน้าทีม",
+     "text": "Once the user approves, delete only the approved items. For a worktree with leftover files, keep a patch before deleting. For a sandbox, use `.sandbox/sandbox.ps1 destroy` (`.sandbox/` itself may stay at the root per `project-docs` item 1) · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1288,7 +1288,7 @@
       "raw": "หัวหน้าทีม"
      },
      "skills": [
-      "project-doc-set"
+      "project-docs"
      ],
      "commands": [],
      "playbooks": [],
@@ -1407,7 +1407,7 @@
     },
     {
      "n": 6,
-     "text": "**If the user asks to be taught, or says they do not understand yet**, explain in layers, starting from what they already know. Use 1 picture per layer (`software-diagrams`), each picture adding at most 2 new things. Tie \"how it works\" and \"why it is done this way\" from step 4 together, then close with 1 real example path through every layer · ใคร: หัวหน้าทีม",
+     "text": "**If the user asks to be taught, or says they do not understand yet**, explain in layers, starting from what they already know. Use 1 picture per layer (`diagrams`), each picture adding at most 2 new things. Tie \"how it works\" and \"why it is done this way\" from step 4 together, then close with 1 real example path through every layer · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1417,7 +1417,7 @@
       "raw": "หัวหน้าทีม"
      },
      "skills": [
-      "software-diagrams"
+      "diagrams"
      ],
      "commands": [],
      "playbooks": [],
@@ -1425,7 +1425,7 @@
     },
     {
      "n": 7,
-     "text": "Draft the answer — start with a 1-sentence answer, then the path, file:line, and a label `ตรวจจริง` (verified) / `จากแหล่ง` (from a source) / `อนุมาน` (inferred) / `ยังไม่ได้ตรวจ` (not yet checked) on every claim. If a picture helps, use `software-diagrams` · ใคร: หัวหน้าทีม",
+     "text": "Draft the answer — start with a 1-sentence answer, then the path, file:line, and a label `ตรวจจริง` (verified) / `จากแหล่ง` (from a source) / `อนุมาน` (inferred) / `ยังไม่ได้ตรวจ` (not yet checked) on every claim. If a picture helps, use `diagrams` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1435,7 +1435,7 @@
       "raw": "หัวหน้าทีม"
      },
      "skills": [
-      "software-diagrams"
+      "diagrams"
      ],
      "commands": [],
      "playbooks": [],
@@ -1618,7 +1618,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "**Scope that fits on one sheet of paper** — if an SRS with FR codes already exists, use those codes as the task codes in the task table of `docs/BUILD-PLAN.md` per [`spec-to-code-loop`](../../spec-to-code-loop/SKILL.md). If not, make short codes from the scope (`F-01` …) and write what is done, what is not done, and which behaviours can be read more than one way (for example, a calculator that multiplies before adding, or computes left to right). For items that can be guessed and reversed, choose yourself, then log them in `decision-log` with `(รอยืนยัน)` (pending confirmation). For unknown facts (numbers, names, dates, budget), do not guess the value: put `(รอยืนยัน)` where it is used, and collect them once under \"ค้างอยู่\" (pending) · **Timeline**: if there is a project plan (`docs/<รหัส>-PLAN-*`) → put the plan's `M…` code in the `milestone` column of the task table · if none → arrange the rows into 3–5 milestones where the user can see results (for example, set up the skeleton + verify → core features → secondary features → review + delivery), with a milestone table and 1 Gantt picture from `diagram-figures` (the picture goes in `docs/figures/`, then link it in `BUILD-PLAN.md`) per the template of `status-report` · a duration the user did not give → `(รอยืนยัน)` · ใคร: หัวหน้าทีม (unclear brief: `brainstormer` ตัวใหม่ · timeline: `project-manager` ตัวใหม่)",
+     "text": "**Scope that fits on one sheet of paper** — if an SRS with FR codes already exists, use those codes as the task codes in the task table of `docs/BUILD-PLAN.md` per [`spec-to-code-loop`](../../spec-to-code-loop/SKILL.md). If not, make short codes from the scope (`F-01` …) and write what is done, what is not done, and which behaviours can be read more than one way (for example, a calculator that multiplies before adding, or computes left to right). For items that can be guessed and reversed, choose yourself, then log them in `decision-log` with `(รอยืนยัน)` (pending confirmation). For unknown facts (numbers, names, dates, budget), do not guess the value: put `(รอยืนยัน)` where it is used, and collect them once under \"ค้างอยู่\" (pending) · **Timeline**: if there is a project plan (`docs/<รหัส>-PLAN-*`) → put the plan's `M…` code in the `milestone` column of the task table · if none → arrange the rows into 3–5 milestones where the user can see results (for example, set up the skeleton + verify → core features → secondary features → review + delivery), with a milestone table and 1 Gantt picture from `diagrams` (the picture goes in `docs/figures/`, then link it in `BUILD-PLAN.md`) per the template of `status-report` · a duration the user did not give → `(รอยืนยัน)` · ใคร: หัวหน้าทีม (unclear brief: `brainstormer` ตัวใหม่ · timeline: `project-manager` ตัวใหม่)",
      "sub": [],
      "phase": "",
      "who": {
@@ -1631,7 +1631,7 @@
      },
      "skills": [
       "spec-to-code-loop",
-      "diagram-figures"
+      "diagrams"
      ],
      "commands": [],
      "playbooks": [],
@@ -1658,7 +1658,7 @@
     },
     {
      "n": 3,
-     "text": "**State the data shape and lay out the file structure** — set up the folders per [`project-doc-set`](../../project-doc-set/SKILL.md) layout B: files received (SRS) go in `ref/`, documents we write go in `docs/`, and source code goes in `<project-name>/` (project name lowercase, joined by `-`). Business rules are pure functions that touch no screen or database. Split the layers as input → business rules → display or store. Organize folders by function, put tests next to the code, and make the README answer \"how to run · how to test · what is where\" (`project-bootstrap`) · ใคร: `developer` ตัวใหม่",
+     "text": "**State the data shape and lay out the file structure** — set up the folders per [`project-docs`](../../project-docs/SKILL.md) layout B: files received (SRS) go in `ref/`, documents we write go in `docs/`, and source code goes in `<project-name>/` (project name lowercase, joined by `-`). Business rules are pure functions that touch no screen or database. Split the layers as input → business rules → display or store. Organize folders by function, put tests next to the code, and make the README answer \"how to run · how to test · what is where\" (`project-bootstrap`) · ใคร: `developer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1670,7 +1670,7 @@
       "raw": "`developer` ตัวใหม่"
      },
      "skills": [
-      "project-doc-set",
+      "project-docs",
       "project-bootstrap"
      ],
      "commands": [],
@@ -1679,7 +1679,7 @@
     },
     {
      "n": 4,
-     "text": "**Build verify before feature 2** — verify is a script that runs the real app and checks the result. As soon as the first screen exists, create `<project-name>/test/e2e/verify.*` and a verify skill per `app-verifier-setup`. For a mobile app, verify must drive a real build on an emulator and inject hardware values (for example the emulator's sensor values), and write down which items still need trying on a real device (`principle-prove-it-works`). For a project that will be used for a long time, also set up [`docker-sandbox`](../../docker-sandbox/SKILL.md) · ใคร: `qa-tester` ตัวใหม่",
+     "text": "**Build verify before feature 2** — verify is a script that runs the real app and checks the result. As soon as the first screen exists, create `<project-name>/test/e2e/verify.*` and a verify skill per `test-automation`. For a mobile app, verify must drive a real build on an emulator and inject hardware values (for example the emulator's sensor values), and write down which items still need trying on a real device (`principle-prove-it-works`). For a project that will be used for a long time, also set up [`infra-and-deploy`](../../infra-and-deploy/SKILL.md) · ใคร: `qa-tester` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1691,8 +1691,8 @@
       "raw": "`qa-tester` ตัวใหม่"
      },
      "skills": [
-      "app-verifier-setup",
-      "docker-sandbox"
+      "test-automation",
+      "infra-and-deploy"
      ],
      "commands": [],
      "playbooks": [],
@@ -1833,7 +1833,7 @@
     },
     {
      "n": 2,
-     "text": "**Measure the baseline at least 3 rounds** on the same data set and the same machine. If `.sandbox/` exists (a root exception per `project-doc-set` item 1), measure inside the sandbox, then save the raw values to `_to_delete/perf/<เรื่อง>.tsv` · ใคร: `qa-tester` ตัวใหม่",
+     "text": "**Measure the baseline at least 3 rounds** on the same data set and the same machine. If `.sandbox/` exists (a root exception per `project-docs` item 1), measure inside the sandbox, then save the raw values to `_to_delete/perf/<เรื่อง>.tsv` · ใคร: `qa-tester` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1845,7 +1845,7 @@
       "raw": "`qa-tester` ตัวใหม่"
      },
      "skills": [
-      "project-doc-set"
+      "project-docs"
      ],
      "commands": [],
      "playbooks": [],
@@ -1889,7 +1889,7 @@
     },
     {
      "n": 5,
-     "text": "Fix one at a time (`lazy-coding`), then re-measure 3 rounds. If it is really better, beyond the noise of the measurement, keep it, and commit once per fix that works, with the before/after numbers in the message (per the commit rules in `superuser` section 6; if not allowed, keep it as a separate patch in `_to_delete/perf/`). If it is not better, revert the fix cleanly before trying the next one, and do not stack fixes that are not proven · ใคร: `developer` ตัวใหม่ fixes · `qa-tester` ตัวใหม่ measures",
+     "text": "Fix one at a time (`code-craft`), then re-measure 3 rounds. If it is really better, beyond the noise of the measurement, keep it, and commit once per fix that works, with the before/after numbers in the message (per the commit rules in `superuser` section 6; if not allowed, keep it as a separate patch in `_to_delete/perf/`). If it is not better, revert the fix cleanly before trying the next one, and do not stack fixes that are not proven · ใคร: `developer` ตัวใหม่ fixes · `qa-tester` ตัวใหม่ measures",
      "sub": [],
      "phase": "",
      "who": {
@@ -1902,7 +1902,7 @@
       "raw": "`developer` ตัวใหม่ fixes · `qa-tester` ตัวใหม่ measures"
      },
      "skills": [
-      "lazy-coding",
+      "code-craft",
       "superuser"
      ],
      "commands": [],
@@ -2159,7 +2159,7 @@
     },
     {
      "n": 3,
-     "text": "Do one document at a time in the order of the table in the prompt file, and skip documents that were not ordered. Re-read the previous document's result from disk each time, because the user may have edited it. Place files per `project-doc-set` (`ref/` read-only · `docs/` · `mockup/` · `qa/` · `assets/` · temporary files in `_to_delete/`), create a folder only when there is real content to put in it, and name files per `document-naming` · ใคร: `business-analyst` · `system-analyst` · `ux-designer` · `technical-writer` ตัวใหม่ by document type",
+     "text": "Do one document at a time in the order of the table in the prompt file, and skip documents that were not ordered. Re-read the previous document's result from disk each time, because the user may have edited it. Place files per `project-docs` (`ref/` read-only · `docs/` · `mockup/` · `qa/` · `assets/` · temporary files in `_to_delete/`), create a folder only when there is real content to put in it, and name files per `document-naming` · ใคร: `business-analyst` · `system-analyst` · `ux-designer` · `technical-writer` ตัวใหม่ by document type",
      "sub": [],
      "phase": "",
      "who": {
@@ -2174,7 +2174,7 @@
       "raw": "`business-analyst` · `system-analyst` · `ux-designer` · `technical-writer` ตัวใหม่ by document type"
      },
      "skills": [
-      "project-doc-set"
+      "project-docs"
      ],
      "commands": [],
      "playbooks": [],
@@ -2471,7 +2471,7 @@
     },
     {
      "n": 5,
-     "text": "If there is a new internal API, move every caller over, then delete the old one per [`principle-replace-then-delete`](../../principle-replace-then-delete/SKILL.md) · ใคร: `developer` ตัวใหม่",
+     "text": "If there is a new internal API, move every caller over, then delete the old one per [`code-craft`](../../code-craft/SKILL.md) · ใคร: `developer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2483,7 +2483,7 @@
       "raw": "`developer` ตัวใหม่"
      },
      "skills": [
-      "principle-replace-then-delete"
+      "code-craft"
      ],
      "commands": [],
      "playbooks": [],
@@ -2491,7 +2491,7 @@
     },
     {
      "n": 6,
-     "text": "Find the impact outside the changed spot per [`blast-radius`](../../blast-radius/SKILL.md) — indirect callers · data already saved · systems outside the repo · ใคร: `Explore` ตัวใหม่",
+     "text": "Find the impact outside the changed spot per [`code-craft`](../../code-craft/SKILL.md) — indirect callers · data already saved · systems outside the repo · ใคร: `Explore` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2501,7 +2501,7 @@
       "raw": "`Explore` ตัวใหม่"
      },
      "skills": [
-      "blast-radius"
+      "code-craft"
      ],
      "commands": [],
      "playbooks": [],
@@ -2527,7 +2527,7 @@
     },
     {
      "n": 8,
-     "text": "Check (ตรวจ) the diff per `code-review-checklist` — behaviour is unchanged per the list in step 1, the result of step 7 matches step 2, and nothing new snuck in · if it fails → a fresh `developer` fixes, then repeat per the review rounds in [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) the diff per `git-and-review` — behaviour is unchanged per the list in step 1, the result of step 7 matches step 2, and nothing new snuck in · if it fails → a fresh `developer` fixes, then repeat per the review rounds in [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2537,7 +2537,7 @@
       "raw": "`reviewer` ตัวใหม่"
      },
      "skills": [
-      "code-review-checklist"
+      "git-and-review"
      ],
      "commands": [],
      "playbooks": [],
@@ -2572,7 +2572,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Set the scope — the files or diff to check (`git diff --stat main...HEAD`, then open the per-file diff only for what needs a look) and the surrounding files that must be read to understand it ([`code-orientation`](../../code-orientation/SKILL.md)); find the impact outside the diff per [`blast-radius`](../../blast-radius/SKILL.md) · ใคร: หัวหน้าทีม",
+     "text": "Set the scope — the files or diff to check (`git diff --stat main...HEAD`, then open the per-file diff only for what needs a look) and the surrounding files that must be read to understand it ([`code-craft`](../../code-craft/SKILL.md)); find the impact outside the diff per [`code-craft`](../../code-craft/SKILL.md) · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -2582,8 +2582,8 @@
       "raw": "หัวหน้าทีม"
      },
      "skills": [
-      "code-orientation",
-      "blast-radius"
+      "code-craft",
+      "code-craft"
      ],
      "commands": [],
      "playbooks": [],
@@ -2737,7 +2737,7 @@
     },
     {
      "n": 2,
-     "text": "**Find the impact outside the diff** per [`blast-radius`](../../blast-radius/SKILL.md) — every function, table, or API that changed · ใคร: `Explore` ตัวใหม่",
+     "text": "**Find the impact outside the diff** per [`code-craft`](../../code-craft/SKILL.md) — every function, table, or API that changed · ใคร: `Explore` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2747,7 +2747,7 @@
       "raw": "`Explore` ตัวใหม่"
      },
      "skills": [
-      "blast-radius"
+      "code-craft"
      ],
      "commands": [],
      "playbooks": [],
@@ -2755,7 +2755,7 @@
     },
     {
      "n": 3,
-     "text": "Arrange the commits as small pieces, each passing tests and, read in order, making sense as one story; write the messages per `commit-message-format` · ใคร: หัวหน้าทีม",
+     "text": "Arrange the commits as small pieces, each passing tests and, read in order, making sense as one story; write the messages per `git-and-review` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -2765,7 +2765,7 @@
       "raw": "หัวหน้าทีม"
      },
      "skills": [
-      "commit-message-format"
+      "git-and-review"
      ],
      "commands": [],
      "playbooks": [],
@@ -2773,7 +2773,7 @@
     },
     {
      "n": 4,
-     "text": "Write the PR description per `pr-description-template` — effect on users first · how it was proven · risks · screenshots if any · ใคร: หัวหน้าทีม",
+     "text": "Write the PR description per `git-and-review` — effect on users first · how it was proven · risks · screenshots if any · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -2783,7 +2783,7 @@
       "raw": "หัวหน้าทีม"
      },
      "skills": [
-      "pr-description-template"
+      "git-and-review"
      ],
      "commands": [],
      "playbooks": [],

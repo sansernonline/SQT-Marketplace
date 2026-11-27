@@ -2,21 +2,21 @@
 
 ยังไม่ได้ทดสอบจริง
 
-ใช้คู่กับ plugin `software-development` · ไฟล์นี้มี prompt 5 ฉบับ · ใช้เมื่อเว็บการตลาด หน้างานสัมมนา หน้าเปิดตัวสินค้า หรือหน้า "เกี่ยวกับเรา" ต้องเล่าเรื่องทีละบทด้วยการเคลื่อนไหว (GSAP · เลื่อน · พื้นหลัง 3D) · แดชบอร์ดหรือหน้าแอดมินที่คนเข้ามาทำงาน → `prompt-mockup.md` · สไลด์ที่คนพูดกดเปลี่ยนหน้าเอง → `prompt-product.md` ฉบับ 4 หรือ skill `html-slide-deck` · ยังไม่รู้ว่าแต่ละบทจะพูดอะไร → ฉบับ 1 ร่างโครงเรื่องให้ก่อน
+ใช้คู่กับ plugin `software-development` · ไฟล์นี้มี prompt 5 ฉบับ · ใช้เมื่อเว็บการตลาด หน้างานสัมมนา หน้าเปิดตัวสินค้า หรือหน้า "เกี่ยวกับเรา" ต้องเล่าเรื่องทีละบทด้วยการเคลื่อนไหว (GSAP · เลื่อน · พื้นหลัง 3D) · แดชบอร์ดหรือหน้าแอดมินที่คนเข้ามาทำงาน → `prompt-mockup.md` · สไลด์ที่คนพูดกดเปลี่ยนหน้าเอง → `prompt-product.md` ฉบับ 4 หรือ skill `slide-deck` · ยังไม่รู้ว่าแต่ละบทจะพูดอะไร → ฉบับ 1 ร่างโครงเรื่องให้ก่อน
 
 ## วิธีใช้
 
 วางทั้งไฟล์ใน Claude Code, Codex CLI หรือ Gemini CLI ที่รากโฟลเดอร์โปรเจกต์ แล้วพิมพ์ต่อท้ายว่าจะทำฉบับไหน เช่น `ทำทั้งหมด` หรือ `ทำข้อ 1`
 
 <!-- rules:begin -->
-**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-doc-set` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
+**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-docs` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
 
 **วนจนเสร็จ (agent loop):** ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ จนผ่านทุกข้อที่ฉบับนั้นต้องมี · ตรวจด้วยหลักฐานจริง (เปิดไฟล์ · รันคำสั่ง · เทียบแหล่ง) ไม่ใช่คำบอกของตัวที่ทำ · รอบตรวจใช้ `reviewer` ตัวใหม่ทุกรอบ · ไม่ผ่าน → แก้ที่ต้นเหตุแล้วตรวจซ้ำทั้งข้อเดิมและจุดที่แก้ · เหลือแค่ข้อระดับต่ำ → ปิดได้แล้วลงรายงาน · ครบเพดานรอบ (งานกลาง 3 · งานใหญ่หรืองานเสี่ยง 5) ยังไม่ผ่าน → ติดป้าย `ติด` ทำส่วนอื่นให้จบ แล้วรายงานข้อที่เหลือ · รายละเอียดอยู่ใน skill `superuser` กฎข้อ 3
 <!-- rules:end -->
 
-**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้ `diagram-figures` · Mermaid (`software-diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
+**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้ `diagrams` · Mermaid (`diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
 
-**เว็บแบบบท (ใช้ทุกฉบับ):** ทำตาม skill `dynamic-website` · การเคลื่อนไหวทุกชิ้นผ่านประตูเดียว (`T()` ใน JS + kill-switch ใน CSS) · แต่ละบทมีทางเข้าของตัวเอง ห้ามใช้ fade-up ซ้ำทุกจุด · รุ่นของ GSAP และเครื่องมืออ่านจากหน้าทางการรอบนี้ แล้วติดวันที่ตรวจ · ข้อความบนเว็บตาม `human-writing` · หน้าตาต้องไม่ดูเหมือน AI ทำ ตาม `design-gate/no-ai-look` (plugin `superuser`) · โค้ดเว็บอยู่ในโฟลเดอร์โค้ด (`<repo>/`) · ภาพทดลองและผลวัดลง `_to_delete/`
+**เว็บแบบบท (ใช้ทุกฉบับ):** ทำตาม skill `web-app-design` · การเคลื่อนไหวทุกชิ้นผ่านประตูเดียว (`T()` ใน JS + kill-switch ใน CSS) · แต่ละบทมีทางเข้าของตัวเอง ห้ามใช้ fade-up ซ้ำทุกจุด · รุ่นของ GSAP และเครื่องมืออ่านจากหน้าทางการรอบนี้ แล้วติดวันที่ตรวจ · ข้อความบนเว็บตาม `human-writing` · หน้าตาต้องไม่ดูเหมือน AI ทำ ตาม `design-gate/no-ai-look` (plugin `superuser`) · โค้ดเว็บอยู่ในโฟลเดอร์โค้ด (`<repo>/`) · ภาพทดลองและผลวัดลง `_to_delete/`
 
 | # | งาน | playbook | ได้ไฟล์ |
 |---|---|---|---|
@@ -39,15 +39,15 @@
 
 ## 1. ทิศทางภาพ 3 แนว ให้ผู้ใช้เลือก
 
-playbook `project-docs` · agent `ux-designer` (นำ) + `graphic-designer` · skill `ui-craft` ข้อ 0.1 · `crew-patterns/parallel-attempts-pick-best` · `dynamic-website` (ข้อ 4 token · ข้อ 6 ฟอนต์ไทยหัวใหญ่) · `presentation-design` (โครงเรื่อง)
+playbook `project-docs` · agent `ux-designer` (นำ) + `graphic-designer` · skill `ui-craft` ข้อ 0.1 · `crew-patterns/parallel-attempts-pick-best` · `web-app-design` (ข้อ 4 token · ข้อ 6 ฟอนต์ไทยหัวใหญ่) · `slide-deck` (โครงเรื่อง)
 **ผลลัพธ์:** `docs/design/<รหัส>-story.md` (บท · หัวบทเป็นข้อสรุป · ทางเข้าที่ตั้งใจ) · `docs/design/<รหัส>-design-directions.html` (3 แนวเคียงกัน) · **ผู้ใช้เลือกแนว** ก่อนเริ่มฉบับ 2
 
 ### เว็บ (ผู้ใช้กรอก)
 
 - เว็บนี้ทำอะไร ให้ใครดู และอยากให้คนดูทำอะไรต่อ (ลงทะเบียน · ติดต่อ · ซื้อ):
-- บท 3–7 บท หัวบทละ 1 ประโยค (เว้นว่าง = agent ร่างตาม `presentation-design` แล้วลง `## ตัดสินใจเอง`):
+- บท 3–7 บท หัวบทละ 1 ประโยค (เว้นว่าง = agent ร่างตาม `slide-deck` แล้วลง `## ตัดสินใจเอง`):
 - พื้นหลังที่มีความหมาย (เครือข่ายคน · เส้นทางกำหนดการ · แผนที่ · ไม่ต้องมี):
-- สีแบรนด์และโลโก้ (path ใน `assets/` · ไม่มี → ใช้ค่าประจำบ้านของ `dynamic-website` แล้วติด `(รอยืนยัน)`):
+- สีแบรนด์และโลโก้ (path ใน `assets/` · ไม่มี → ใช้ค่าประจำบ้านของ `web-app-design` แล้วติด `(รอยืนยัน)`):
 - เว็บที่ชอบหน้าตา (ลิงก์ · ภาพ):
 - รหัสโปรเจกต์สำหรับตั้งชื่อไฟล์ (เว้นว่าง = อ่านจาก `docs/README.md` · ไม่มี → 3 ตัวอักษรจากชื่อเว็บ แล้วลง `## ตัดสินใจเอง`):
 - [ ] ให้ทีมเลือกแนวแทน (ไม่ติ๊ก = ผู้ใช้เลือกเองจากหน้าเทียบ)
@@ -56,7 +56,7 @@ playbook `project-docs` · agent `ux-designer` (นำ) + `graphic-designer` · 
 
 1. ร่างโครงเรื่องก่อนวาด: บทละ 1 ข้อสรุป · บทเปิดเป็นหน้าจอพระเอก · บทที่มีพื้นหลังหรือรายการยาวที่สุดเป็นหน้าใช้งานหลักของรอบนี้
 2. ทำตาม `ui-craft` ข้อ 0.1 ทั้ง 6 ขั้น · 3 แนวทำขนานกันด้วย subagent ตัวใหม่แนวละตัว (`crew-patterns/parallel-attempts-pick-best`) และต่างกันจริง แต่ละแนวเลือกจากตาราง look ของเว็บใน `ui-craft`
-3. แต่ละแนวบอก: สี · ฟอนต์หัวใหญ่ไทย (เลือกจาก `dynamic-website` ข้อ 6) · ทางเข้าของบทเปิด · พื้นหลัง · เปิดดูจริงที่กว้าง 1440 และ 420
+3. แต่ละแนวบอก: สี · ฟอนต์หัวใหญ่ไทย (เลือกจาก `web-app-design` ข้อ 6) · ทางเข้าของบทเปิด · พื้นหลัง · เปิดดูจริงที่กว้าง 1440 และ 420
 4. หน้าเทียบมีภาพเว็บอ้างอิง ใต้แต่ละแนวมี token หลักและข้อดีข้อเสีย 1 บรรทัด
 5. ไม่ติ๊กช่องให้ทีมเลือก → จบฉบับนี้ที่หน้าเทียบ แล้วถามผู้ใช้ครั้งเดียวว่าเลือกแนวไหน · ติ๊ก → ผู้ตรวจด่านสวยตัวใหม่ให้คะแนนตาม `ui-craft` ข้อ 0.1 ขั้น 5 แล้วลงผลใน `## ตัดสินใจเอง`
 6. แนวที่เลือก: สีแบรนด์และฟอนต์เขียนกลับลง `docs/README.md` · โลโก้ลง `assets/logo/`
@@ -69,7 +69,7 @@ playbook `project-docs` · agent `ux-designer` (นำ) + `graphic-designer` · 
 
 ## 2. สร้างบทเล่าเรื่องแบบเต็มจอ (deck-mode)
 
-playbook `feature` (ยังไม่มีโค้ด → `new-project`) · agent `developer` (นำ) + `ux-designer` · skill `dynamic-website` (ข้อ 1–5 · `references/recipes.md` · ตัวอย่าง `assets/example-deck.html`) · `web-app-design` (ชื่อ token) · `lazy-coding` · `readable-code`
+playbook `feature` (ยังไม่มีโค้ด → `new-project`) · agent `developer` (นำ) + `ux-designer` · skill `web-app-design` (ข้อ 1–5 · `references/recipes.md` · ตัวอย่าง `assets/example-deck.html`) · `web-app-design` (ชื่อ token) · `code-craft`
 **ต้องมีก่อน:** แนวที่ผู้ใช้เลือกจากฉบับ 1 · `docs/design/<รหัส>-story.md`
 **ผลลัพธ์:** หน้าเว็บใน `<repo>/` · GSAP self-host ใน `vendor/` · ฟอนต์ woff2 self-host · ภาพทุกบทที่กว้าง 1440 · 900 · 420 ใน `_to_delete/shots/` · **ไม่เขียนโค้ด** เว้นแต่ข้างล่างติ๊ก `[x]`
 
@@ -77,7 +77,7 @@ playbook `feature` (ยังไม่มีโค้ด → `new-project`) · a
 
 ### สิ่งที่ต้องได้
 
-1. โครงตาม `dynamic-website` ข้อ 1: `route()` ตัวเดียวบน `hashchange` · ทุก view ดันฟังก์ชันถอดลง `cleanups[]` และล้างก่อนเปลี่ยน view · เปลี่ยนบทด้วย `replaceState` · เนื้อหาอยู่ใน HTML ไม่อยู่ใน JS
+1. โครงตาม `web-app-design` ข้อ 1: `route()` ตัวเดียวบน `hashchange` · ทุก view ดันฟังก์ชันถอดลง `cleanups[]` และล้างก่อนเปลี่ยน view · เปลี่ยนบทด้วย `replaceState` · เนื้อหาอยู่ใน HTML ไม่อยู่ใน JS
 2. ประตูเดียวของการเคลื่อนไหว · ทางเข้า 4 แบบต่อเว็บ บทติดกันไม่ใช้แบบซ้ำ (`data-enter`) · ออกสั้นกว่าเข้าและเร่งออก · ล้าง filter หลังเข้าเสร็จให้ตัวหนังสือคม
 3. คีย์บอร์ดครบ (↓ PgDn Space · ↑ PgUp · Home End) · ย้ายโฟกัสไปบทใหม่ทุกครั้ง · rail มี `aria-current="step"` · รายการในบทเลื่อนจนสุดก่อนแล้วค่อยเปลี่ยนบท
 4. พื้นหลังหนักโหลดทีหลังและรอไม่เกิน 4 วินาที · เปิด WebGL ไม่ได้ → fallback 2D ที่สื่อความหมายเดียวกัน · `devicePixelRatio` ไม่เกิน 2 · loop วิ่งเฉพาะตอนที่จอต้องใช้
@@ -86,14 +86,14 @@ playbook `feature` (ยังไม่มีโค้ด → `new-project`) · a
 
 ### กฎเฉพาะฉบับนี้
 
-- GSAP โหลดจาก cdnjs ได้เฉพาะตอนลอง · ไฟล์ส่งมอบต้องเปิดได้โดยไม่พึ่ง CDN · ต้องใช้ API ของ GSAP ลึกกว่าที่ `dynamic-website` บอก → อ่าน skill ทางการของผู้ผลิตเฉพาะไฟล์ของ plugin ที่ใช้ ตาม `dynamic-website` ข้อ 5
+- GSAP โหลดจาก cdnjs ได้เฉพาะตอนลอง · ไฟล์ส่งมอบต้องเปิดได้โดยไม่พึ่ง CDN · ต้องใช้ API ของ GSAP ลึกกว่าที่ `web-app-design` บอก → อ่าน skill ทางการของผู้ผลิตเฉพาะไฟล์ของ plugin ที่ใช้ ตาม `web-app-design` ข้อ 5
 - `decodeWords` ใช้กับหัวเรื่องละตินเท่านั้น ไม่ใช้กับไทย · หัวใหญ่ไทยที่ตั้ง `letter-spacing` ติดลบต้องเปิดดูจริงทุกน้ำหนัก
 
 ---
 
 ## 3. หน้าแบบเลื่อนและหน้าลงทะเบียน (page-mode)
 
-playbook `feature` · agent `developer` + `ux-designer` · skill `dynamic-website` (2 โหมด · recipe scroll reveal) · `web-app-design` (ฟอร์ม · token ชุดเดียวกับ deck) · `i18n-and-locale` · `pdpa-compliance` · `principle-secure-by-default` · `principle-safe-to-rerun` · `notifications` (อีเมลยืนยัน ถ้ามี) · `fintech-payments` (ถ้ารับเงินออนไลน์)
+playbook `feature` · agent `developer` + `ux-designer` · skill `web-app-design` (2 โหมด · recipe scroll reveal) · `web-app-design` (ฟอร์ม · token ชุดเดียวกับ deck) · `i18n-and-locale` · `pdpa-compliance` · `security-gate` · `code-craft` · `async-messaging` (อีเมลยืนยัน ถ้ามี) · `domain-systems` (ถ้ารับเงินออนไลน์)
 **ต้องมีก่อน:** ฉบับ 2
 **ผลลัพธ์:** หน้า page-mode ในเว็บเดียวกัน (เช่น กำหนดการ · ผู้บรรยาย · คำถามที่พบบ่อย · ลงทะเบียน) · **ไม่เขียนโค้ด** เว้นแต่ข้างล่างติ๊ก `[x]` · **รออนุมัติ:** ต่อฟอร์มเข้าระบบจริง · ต่อช่องทางรับเงินจริง
 
@@ -118,13 +118,13 @@ playbook `feature` · agent `developer` + `ux-designer` · skill `dynamic-websit
 
 ## 4. ตรวจคุณภาพก่อนเปิด
 
-playbook `review` · agent `qa-tester` ตัวใหม่ (การเข้าถึง · ความเร็ว · คีย์บอร์ด) + `graphic-designer` ตัวใหม่ (`design-gate/no-ai-look`) · ผู้ตรวจต้องไม่ใช่ตัวที่สร้างหรือแก้เว็บ · skill `web-quality-audit` · `design-gate/no-ai-look` (plugin `superuser`) · `dynamic-website` ข้อ 7 · `seo-audit-checklist` (ใช้ผล Lighthouse รอบเดียวกัน)
+playbook `review` · agent `qa-tester` ตัวใหม่ (การเข้าถึง · ความเร็ว · คีย์บอร์ด) + `graphic-designer` ตัวใหม่ (`design-gate/no-ai-look`) · ผู้ตรวจต้องไม่ใช่ตัวที่สร้างหรือแก้เว็บ · skill `web-audit` · `design-gate/no-ai-look` (plugin `superuser`) · `web-app-design` ข้อ 7 · `web-audit` (ใช้ผล Lighthouse รอบเดียวกัน)
 **ต้องมีก่อน:** ฉบับ 2 (และ 3 ถ้าทำ) รันได้บนเครื่อง
 **ผลลัพธ์:** `docs/web-quality-<ปี-เดือน-วัน>.md` · ผลดิบใน `_to_delete/audit/<วันที่>/` · **ผู้ตรวจไม่แก้ไฟล์**
 
 ### สิ่งที่ตรวจ
 
-1. **การเข้าถึงและความเร็ว:** ทำตาม `prompt-quality.md` ฉบับ 4 ที่เดียว · หาไฟล์ไม่เจอ → ทำตาม `web-quality-audit` ขั้นตอน 1–4 (WCAG 2.2 AA · Lighthouse mobile บน production build · ค่ากลาง 3 รอบ)
+1. **การเข้าถึงและความเร็ว:** ทำตาม `prompt-quality.md` ฉบับ 4 ที่เดียว · หาไฟล์ไม่เจอ → ทำตาม `web-audit` ขั้นตอน 1–4 (WCAG 2.2 AA · Lighthouse mobile บน production build · ค่ากลาง 3 รอบ)
 2. **ไม่ให้ดูเหมือน AI ทำ:** รัน `slop_scan.py` ของ `design-gate/no-ai-look` กับไฟล์ HTML · ไล่ `data-enter` ทุกบทว่าไม่มี fade-up ซ้ำและบทติดกันไม่ซ้ำแบบ · ไม่มีอนุภาคลอยไร้ความหมาย glow ที่วนไม่หยุด หรือ gradient บนปุ่ม
 3. **คีย์บอร์ด:** เปลี่ยนบทได้ครบทุกปุ่มในแผนที่ · Tab ไล่ rail แล้วเห็นวงโฟกัส · โฟกัสย้ายตามบท · ฟอร์มลงทะเบียนกรอกจนส่งได้ด้วยคีย์บอร์ดอย่างเดียว · Esc ปิด modal
 4. **reduced motion:** เปิด `prefers-reduced-motion` แล้วเห็นเนื้อหาครบทุกบท ตัวเลขเป็นค่าสุดท้าย ไม่มีคำจาง · ของที่เล่นเองเกิน 5 วินาทีมีปุ่มหยุด
@@ -140,7 +140,7 @@ playbook `review` · agent `qa-tester` ตัวใหม่ (การเข้
 
 ## 5. ขึ้นใช้งานจริง
 
-playbook `ship` · agent `devops-engineer` (นำ) + `seo-specialist` · skill `cicd-and-release` · `seo-audit-checklist` · `security-gate` · `config-and-secrets` · `observability-basics`
+playbook `ship` · agent `devops-engineer` (นำ) + `seo-specialist` · skill `cicd-and-release` · `web-audit` · `security-gate` · `web-service-essentials` · `incidents-and-monitoring`
 **ต้องมีก่อน:** ฉบับ 4 ผ่าน
 **ผลลัพธ์:** `docs/deploy-<เว็บ>.md` (host · โดเมน · HTTPS · วิธีปล่อยรุ่น · วิธีย้อนรุ่น) · pipeline ใน repo · **รออนุมัติ:** push · deploy · ตั้ง DNS · เปิดฟอร์มรับข้อมูลจริง · ส่งลิงก์ถึงลูกค้าหรือคนนอก
 
@@ -155,7 +155,7 @@ playbook `ship` · agent `devops-engineer` (นำ) + `seo-specialist` · skill 
 ### สิ่งที่ต้องได้
 
 1. build จากเครื่องเปล่าแล้วเปิดได้โดยไม่พึ่ง CDN (GSAP และฟอนต์อยู่ใน repo) · `security-gate` ผ่าน · ไม่มีค่าลับในโค้ดและใน log
-2. SEO ของหน้าที่ render ด้วย JS ตาม `seo-audit-checklist`: title · description · ภาพสำหรับแชร์ (Open Graph) · เนื้อหาบทสำคัญอยู่ใน HTML ตั้งแต่โหลด
+2. SEO ของหน้าที่ render ด้วย JS ตาม `web-audit`: title · description · ภาพสำหรับแชร์ (Open Graph) · เนื้อหาบทสำคัญอยู่ใน HTML ตั้งแต่โหลด
 3. ฟอร์มลงทะเบียนต่อปลายทางบน staging ก่อน แล้วลองส่ง 1 รายการด้วยข้อมูลทดสอบ
 4. เฝ้าดูหลังเปิด: ฟอร์มส่งไม่สำเร็จ · หน้าโหลดช้ากว่าเกณฑ์ใน `docs/web-quality-*.md` · alert ส่งหาใคร
 5. วิธีย้อนรุ่นที่ลองแล้วบน staging 1 ครั้ง

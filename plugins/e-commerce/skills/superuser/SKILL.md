@@ -84,9 +84,9 @@ The situation → skill table is in [`triggers`](references/triggers.md). Open i
 
 | Criterion | Passes when | Skill |
 |---|---|---|
-| **Real profit** | The pricing table covers every fee, shipping and VAT · recomputed · tells the user to check rates against Seller Centre | `marketplace-fees-pricing` |
-| **Within the rules** | No banned claims · within platform policy · no customer data exposed | `product-listing` · `chat-reply-templates` |
-| **Consistent across shops** | SKU, price and stock match the master file · each shop's displayed count is at most available − buffer, and a sync cycle exists | `multi-shop-stock` |
+| **Real profit** | The pricing table covers every fee, shipping and VAT · recomputed · tells the user to check rates against Seller Centre | `pricing-and-costs` |
+| **Within the rules** | No banned claims · within platform policy · no customer data exposed | `sales-copy` · `customer-care` |
+| **Consistent across shops** | SKU, price and stock match the master file · each shop's displayed count is at most available − buffer, and a sync cycle exists | `shop-operations` |
 
 Every message to a customer is a draft until the seller presses send.
 
@@ -94,9 +94,9 @@ Every message to a customer is a draft until the seller presses send.
 
 | Criterion | Passes when | Skill |
 |---|---|---|
-| **Has evidence** | Every claim points to a receipt, chat, photo or order page, and every date is present | `refund-request` |
-| **Right channel, in time** | Filed at the right rung of the escalation ladder, before the right's deadline, with the channel checked on an official site | `refund-request` |
-| **Ready to send** | Polite, clear Thai · states what is wanted and a reply deadline · no threats or defamatory wording | `refund-request` |
+| **Has evidence** | Every claim points to a receipt, chat, photo or order page, and every date is present | `buyer-help` |
+| **Right channel, in time** | Filed at the right rung of the escalation ladder, before the right's deadline, with the channel checked on an official site | `buyer-help` |
+| **Ready to send** | Polite, clear Thai · states what is wanted and a reply deadline · no threats or defamatory wording | `buyer-help` |
 
 Do the reversible, cheapest route first (talk to the shop), then move to heavier steps.
 
@@ -104,9 +104,9 @@ Do the reversible, cheapest route first (talk to the shop), then move to heavier
 
 | Criterion | Passes when | Skill |
 |---|---|---|
-| **Numbers correct and traceable** | Current-year rates from official sites · computed with a rerunnable formula · figures on the form match the source table | `payroll-th` · `tax-vat-th` |
-| **Correct format** | All fields required by law or regulation are present · numbers and Thai words match | `e-tax-invoice` · `doc-thai-official` · `doc-quotation` |
-| **Risk flags** | Every point an accountant, auditor or lawyer must review is clearly flagged · no advice beyond general information | `doc-contract-th` · `pdpa-workflow` |
+| **Numbers correct and traceable** | Current-year rates from official sites · computed with a rerunnable formula · figures on the form match the source table | `thai-employment` · `thai-tax` |
+| **Correct format** | All fields required by law or regulation are present · numbers and Thai words match | `thai-tax` · `thai-business-docs` |
+| **Risk flags** | Every point an accountant, auditor or lawyer must review is clearly flagged · no advice beyond general information | `thai-business-docs` · `pdpa-workflow` |
 
 Values that many files cite (social security ceiling · VAT threshold · tax rates) come from the maintainer file `scripts/check/facts.json` in the SQT-Marketplace repo. It does not ship with the plugin and cannot be opened in the user's project. In a project, check the values on official sites (rd.go.th · sso.go.th) and record the date checked. If you find a new value, note it in `IMPROVEMENTS.md`.
 
@@ -116,7 +116,7 @@ Values that many files cite (social security ceiling · VAT threshold · tax rat
 
 | Rule | Detail |
 |---|---|
-| **Pick the agent by role** | Listings, prices and stock: `shop-manager` · customer replies and reviews: `customer-chat` · live sales: `live-seller` · buying-side work (compare · complaints · refunds · warranty): `consumer-advocate` · tax and filing calendar (including online-seller tax `seller-tax-basics` · hiring staff `hiring-th` · business setup `thai-business-setup`): `tax-helper` · business documents: `thai-doc-writer` · PDPA: `compliance-helper` · LINE OA: `line-admin`. If the work splits into several separate matters (many orders), use 1 fresh agent per matter. |
+| **Pick the agent by role** | Listings, prices and stock: `shop-manager` · customer replies and reviews: `customer-chat` · live sales: `live-seller` · buying-side work (compare · complaints · refunds · warranty): `consumer-advocate` · tax and filing calendar (including online-seller tax `thai-tax` · hiring staff `thai-employment` · business setup `thai-business-setup`): `tax-helper` · business documents: `thai-doc-writer` · PDPA: `compliance-helper` · LINE OA: `line-admin`. If the work splits into several separate matters (many orders), use 1 fresh agent per matter. |
 | **Cross-branch work** | Product images, promo posts and LINE rich menu images (`line-design`) go to `graphic-design` · shop or payroll systems that need code go to `software-development` (`ecommerce-engineer`) · personal tax goes to `trading-finance` · polite messages → `human-writing/polite-message-th-en` (plugin `superuser`) · document registry → `personal-life` · investment scams → `trading-finance`. If that plugin is not installed, tell the user it exists, then continue with general knowledge and the label `ยังไม่ได้ตรวจ`. Multi-step work in that branch goes to that plugin's `/<plugin>:superuser`. |
 
 ---

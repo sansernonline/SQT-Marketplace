@@ -1,15 +1,16 @@
 # playbook · tech-radar — weekly technology radar
 
 Use when: following news of the libraries and tools in use · "what changed this week"
-Main skill: `tech-radar`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/tech-growth.md`](../../life-principles/references/tech-growth.md)
+Main skills: `tech-growth` (`references/tech-radar.md` · `references/radar-templates.md`)
 
 ## ขั้นตอน (Steps — copy into the todo as written)
 
-1. Read the tracked items from the user's radar file. If there is no file yet, build it from the dependencies of the user's project · ใคร: หัวหน้าทีม
+1. Open the principle file [`references/tech-growth.md`](../../life-principles/references/tech-growth.md) first. Read the tracked items from the user's radar file. If there is no file yet, build it from the dependencies of the user's project · ใคร: หัวหน้าทีม
 2. Read the official release notes and changelog of each item, from the last round to today · ใคร: `tech-mentor` ตัวใหม่
 3. Keep only what affects the user's work — breaking changes · vulnerabilities · features that directly help the work · ใคร: `tech-mentor` ตัวใหม่
 4. Write the radar report from the template — what changed · why it matters · what to do next · what can be skipped · ใคร: `tech-mentor` ตัวใหม่
-5. ตรวจ that every item has an official link and a version number · ใคร: `reviewer` ตัวใหม่
+5. ตรวจ that every item has an official link and a version number (ตัดสินผลตาม [`references/tech-growth.md`](../../life-principles/references/tech-growth.md)) · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 

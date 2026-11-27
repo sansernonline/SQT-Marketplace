@@ -1,5 +1,45 @@
 # Changelog — software-development
 
+## 4.0.0 — 2026-11-27
+
+รวม skill จาก 113 เหลือ 52 (เปลี่ยนชื่อแบบไม่เข้ากับของเดิม) · เจ้าของสั่ง 2026-11-27 · เนื้อหาเดิมของแต่ละตัวย้ายไปเป็น `references/<ชื่อเก่า>.md` ของตัวที่เหลือ ไม่ได้ตัดกฎทิ้ง · eval ย้ายตามไปใต้ชื่อใหม่ · playbook ชี้ไฟล์หลักคิดและชื่อ skill ใหม่
+
+| ชื่อเก่า | ใช้แทนด้วย |
+|---|---|
+| `lazy-coding` · `readable-code` · `code-orientation` · `blast-radius` · `code-gardener` · `principle-data-shape-first` · `principle-replace-then-delete` · `principle-safe-to-rerun` | `code-craft` (ใหม่) |
+| `error-handling-patterns` · `logging-standards` | `errors-and-logs` (ใหม่) |
+| `code-review-checklist` · `pr-description-template` · `commit-message-format` · `worktree-and-branch` | `git-and-review` (ใหม่) |
+| `testing-standards` · `e2e-testing-patterns` · `load-testing` · `app-verifier-setup` | `test-automation` (ใหม่) |
+| `test-case-template` · `test-evidence` · `bug-report-template` · `bug-inbox-triage` | `qa-docs` (ใหม่) |
+| `principle-secure-by-default` · `security-scan` | `security-gate` |
+| `threat-model` | `security-audit` |
+| `api-conventions` | `api-design` |
+| `auth-implementation-patterns` · `config-and-secrets` · `file-upload-and-storage` · `audit-trail` | `web-service-essentials` |
+| `background-jobs` · `kafka-streaming` · `rabbitmq-messaging` · `notifications` | `async-messaging` (ใหม่) |
+| `architecture-patterns` · `architecture-review` · `adr-writer` | `architecture` (ใหม่) |
+| `jenkins-pipeline` | `cicd-and-release` |
+| `kubernetes-helm` · `infra-as-code` · `docker-sandbox` · `render-deploy` · `backblaze-b2` | `infra-and-deploy` (ใหม่) |
+| `observability-basics` · `incident-response` · `incident-runbook-template` · `postmortem-template` | `incidents-and-monitoring` (ใหม่) |
+| `srs-writing` · `fsd-writing` · `user-story-writer` · `feature-kickoff` | `requirements-writing` (ใหม่) |
+| `project-doc-set` · `onboard` · `release-notes` | `project-docs` (ใหม่) |
+| `product-roadmap` · `sprint-plan` · `retrospective` | `product-planning` (ใหม่) |
+| `design-direction-lookup` | `design-system` |
+| `dynamic-website` | `web-app-design` |
+| `web-quality-audit` · `seo-audit-checklist` | `web-audit` (ใหม่) |
+| `branded-document-design` · `markdown-report-docx` | `document-design` (ใหม่) |
+| `presentation-design` · `html-slide-deck` | `slide-deck` (ใหม่) |
+| `diagram-figures` · `software-diagrams` · `markdown-visuals` | `diagrams` (ใหม่) |
+| `llm-engineering` · `voice-agent` · `mcp-server` | `ai-engineering` (ใหม่) |
+| `fintech-payments` · `healthcare-systems` · `insurance-systems` · `iot-systems` · `smart-contracts` · `saas-platform` · `ecommerce-patterns` · `legal-document-systems` | `domain-systems` (ใหม่) |
+
+## 3.11.1 — 2026-11-27
+
+- `dev-principles` เพิ่ม 4 ชนิดงาน: data-ai · mobile-game · domain-systems · documents-diagrams · ตัวเลข กำหนดเวลา และมาตรากฎหมายที่มีแหล่งไม่ถึง 3 แหล่งตัดออก ให้ไปดูใน skill แทน
+
+## 3.11.0 — 2026-11-27
+
+- skill ใหม่ `dev-principles`: หลักคิด 7 ชนิดงาน (code · architecture-api · testing · security ตาม OWASP Top 10:2025 · operations · requirements-docs · ui) ทุกข้อมีแหล่งตรงกันอย่างน้อย 3 แหล่ง
+
 ## 3.10.3 — 2026-11-27
 
 - skill ที่อ้าง skill ของ graphic-design ชี้ชื่อใหม่ (graphic-design 0.38.0 รวม 24 เหลือ 14) · `graphic-design` บอกให้ใช้ `graphic-design:design-by-type` เมื่อลง plugin graphic-design ไว้

@@ -5,7 +5,7 @@
 - Work divides into independent pieces (chapters · product categories · research questions · modules · files) that different workers can do at the same time.
 - Many files need the same check or edit, or a review is split by viewpoint.
 
-Not for: a race where every worker does the same piece → `crew-patterns/parallel-attempts-pick-best` · splitting code work by git worktree → `worktree-and-branch` (software-development) · a small piece under 1 page (the main session does it faster itself).
+Not for: a race where every worker does the same piece → `crew-patterns/parallel-attempts-pick-best` · splitting code work by git worktree → `git-and-review` (software-development) · a small piece under 1 page (the main session does it faster itself).
 Use together with `ground-rules/principle-build-a-tool-not-handwork` (script repeated work) and `ground-rules/principle-small-verifiable-steps`.
 
 ## Steps

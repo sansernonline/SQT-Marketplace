@@ -6,7 +6,7 @@ Open this when the system receives webhooks (payment · LINE · shipping · mark
 
 - Anyone who can send a message into a webhook or queue is an actor. Ask who can send (the whole internet · internal systems · other tenants) and how the code knows the sender is genuine.
 - Check the signature on the raw bytes received, before parsing and before anything with effect. After the check, see what it is bound to (time · event id · shop).
-- The same message can arrive twice, out of order, or after the state has already changed. The system must survive all 3 cases (`principle-safe-to-rerun`).
+- The same message can arrive twice, out of order, or after the state has already changed. The system must survive all 3 cases (`code-craft`).
 - A provider that resends when it gets no 2xx is no reason to accept everything before checking.
 - A control outside the repo (an IP allowlist at the load balancer · a broker ACL) → `needs_validation`.
 

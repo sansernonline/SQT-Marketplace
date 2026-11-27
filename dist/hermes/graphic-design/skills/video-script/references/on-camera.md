@@ -15,9 +15,9 @@ A finished script goes on to filming or video generation per [`clip-script.md`](
 | Task | Use |
 |---|---|
 | Short ad clip led by the picture (product · demo · understandable with sound off) | `video-script` |
-| Minute-by-minute live selling | `live-selling-script` |
+| Minute-by-minute live selling | `sales-copy` |
 | Subtitles · on-screen text · safe zone | `video-script` section caption rules |
-| Speech for a meeting/stage presentation with slides | `presentation-design` + speaker notes |
+| Speech for a meeting/stage presentation with slides | `slide-deck` + speaker notes |
 | Make audio from a script without recording it yourself (text-to-speech) | `narration-th` · write the script here first, then pass it on |
 
 ---

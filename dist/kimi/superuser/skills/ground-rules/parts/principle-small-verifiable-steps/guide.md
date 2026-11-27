@@ -18,7 +18,7 @@
 | Do first | Do after |
 |---|---|
 | What others depend on (main headings · templates · source tables · types · schemas) | What calls it |
-| Add the new thing | Move users over, then delete the old one (`principle-replace-then-delete` (plugin `software-development`)) |
+| Add the new thing | Move users over, then delete the old one (`code-craft` (plugin `software-development`)) |
 | The riskiest piece | The piece you know for sure can be done |
 
 ## Hand over in pieces

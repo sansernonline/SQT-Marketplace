@@ -25,9 +25,9 @@ Also when reviewing work that "looks AI-made" and you cannot say why.
 | Work | Use this instead |
 |---|---|
 | App, web, mobile or Windows screens | `ui-craft` + the platform skill |
-| Slide layout | `presentation-design` |
-| Look of a Word / PowerPoint file | `branded-document-design` |
-| Software diagrams | `software-diagrams` |
+| Slide layout | `slide-deck` |
+| Look of a Word / PowerPoint file | `document-design` |
+| Software diagrams | `diagrams` |
 | Data charts | `web-app-design` → `references/tokens.md` section "สีข้อมูล (กราฟ)" (data colours, charts) |
 | LINE OA rich menu (size · tap areas · JSON) | `graphic-design:line-design` (if installed) |
 | AI images | `image-generation` (if installed) |

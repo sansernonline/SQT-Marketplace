@@ -18,7 +18,7 @@ For a destination that does not publish a value, use -16 LUFS · -1.5 dBTP (the 
 | The video is longer than the audio | `-shortest` alone leaves trailing picture when there is a filter (tested 2026-10-24: got 181.67 seconds from 180 seconds of audio) | Uses `-t` equal to the audio length |
 | ffmpeg will not open the image list | Full paths in the list file need `-safe 0` | Already added |
 
-Tested 2026-10-24 with a sample deck of 13 slides from `html-slide-deck` and 180 seconds of audio: picture and audio were both 180.00 seconds · sampling 7 times, the picture matched the slide at every point · given audio that was too short (75 seconds), the script stopped because the last slide starts at 165 seconds.
+Tested 2026-10-24 with a sample deck of 13 slides from `slide-deck` and 180 seconds of audio: picture and audio were both 180.00 seconds · sampling 7 times, the picture matched the slide at every point · given audio that was too short (75 seconds), the script stopped because the last slide starts at 165 seconds.
 
 ## Real example (cut silences and loudness)
 

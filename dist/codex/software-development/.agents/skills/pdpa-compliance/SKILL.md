@@ -34,11 +34,11 @@ If you later add analytics · crash reports or user accounts, the app is no long
 
 | Task | Use this instead |
 |---|---|
-| A trail of who did what to the data | `audit-trail` |
+| A trail of who did what to the data | `web-service-essentials` |
 | Tables and column-level encryption | `database-design` |
-| Authentication and permissions | `auth-implementation-patterns` |
-| Masking data in logs | `logging-standards` |
-| Where to keep keys | `config-and-secrets` |
+| Authentication and permissions | `web-service-essentials` |
+| Masking data in logs | `errors-and-logs` |
+| Where to keep keys | `web-service-essentials` |
 | Consent forms, privacy notices and a company's PDPA documents (not a software system) | (if plugin `e-commerce` is installed) `e-commerce:pdpa-workflow`; if it is not, use item 3 of this skill as the outline |
 
 ---
@@ -138,7 +138,7 @@ It may be collected only when truly necessary, and needs stricter measures than 
 
 - Set it **per data type**, not one value for the whole system
 - **Have a real deletion job that runs on a schedule.** A policy with no job running does not exist.
-- Logs that contain personal data also have a lifetime (see `logging-standards`)
+- Logs that contain personal data also have a lifetime (see `errors-and-logs`)
 - Data backups need a rotation cycle that makes old data disappear on its own in the end
 - Before the first real deletion, show the list of what will be deleted and have a person approve it
 
@@ -169,7 +169,7 @@ It may be collected only when truly necessary, and needs stricter measures than 
 | 4 | Notify the internal owner and the legal adviser at once |
 | 5 | **Notify the สำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (Personal Data Protection Committee Office) within 72 hours** when the conditions are met |
 | 6 | Notify the data subjects when the risk to them is high |
-| 7 | Record the incident with `postmortem-template` |
+| 7 | Record the incident with `incidents-and-monitoring` |
 
 **Prepare in advance, not when it happens** — who decides to notify · the legal adviser's phone number ·
 the notification message template · how to pull the list of affected people
@@ -197,7 +197,7 @@ Use this when a customer or the legal team asks "which section is this?" (checke
 
 ## 11 · Links to other skills
 
-Also: `notifications` (sending and unsubscribing from marketing messages; consent stays here) · `data-import-export` (masking exported files) · `file-upload-and-storage` (retention of attached files) · `background-jobs` (jobs that delete expired data) · `incident-runbook-template` (after a leak).
+Also: `async-messaging` (sending and unsubscribing from marketing messages; consent stays here) · `data-import-export` (masking exported files) · `web-service-essentials` (retention of attached files) · `async-messaging` (jobs that delete expired data) · `incidents-and-monitoring` (after a leak).
 
 ## References
 

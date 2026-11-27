@@ -7,7 +7,7 @@ description: Use when product photos go on Shopee, Lazada or TikTok Shop
 
 > **Gate before starting (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `design-gate/no-ai-look` before sending · follow the "ด่านก่อนลงมือ" (pre-start gate) section of `design-gate/design-references` (plugin `superuser`), even when a brand exists (the brand sets colours and fonts, and the search is for the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
-The owner is agent `social-creator` · text on the product page (name · description · banned ad claims) lives in `e-commerce:product-listing`
+The owner is agent `social-creator` · text on the product page (name · description · banned ad claims) lives in `e-commerce:sales-copy`
 
 > **One rule:** the cover image must show one real product, fully visible, on a plain background, with no contact channel and no other platform's logo (the individual bans are still `รอยืนยัน` (awaiting confirmation), see the table). Make 1 set at 1:1, 1000 × 1000 or larger (a value we chose to sit above the minimum once seen), then compare it with each platform's live minimum. Before uploading a big batch, open the official pages again.
 
@@ -21,7 +21,7 @@ The owner is agent `social-creator` · text on the product page (name · descrip
 
 | Task | Use |
 |---|---|
-| Product name, description, words banned in ads | `e-commerce:product-listing` (if installed) |
+| Product name, description, words banned in ads | `e-commerce:sales-copy` (if installed) |
 | Shop banner, ad post, video clip | `campaign-set` · `video-script` |
 | Generating a product image with AI or changing the background | `image-generation` · it must still be the real product the customer will receive |
 | Several images that must look like one set | `brand-kit` |

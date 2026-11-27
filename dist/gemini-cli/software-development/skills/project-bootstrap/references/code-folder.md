@@ -1,6 +1,6 @@
 # Code folder layout — full tree
 
-The rules are in `SKILL.md` item 1. The root tree is in `project-doc-set` item 1. ADRs (architecture decision records) and runbooks live in `docs/` at the root, not here.
+The rules are in `SKILL.md` item 1. The root tree is in `project-docs` → `references/project-doc-set.md` item 1. ADRs (architecture decision records) and runbooks live in `docs/` at the root, not here.
 
 ```
 <project-name>/          ← lowercase project name, words joined by `-`

@@ -8,7 +8,7 @@
 ## Use when
 - Feedback says one thing is wrong (a line of code, a cell, a paragraph, a price) and the cause is clear.
 
-Not for: cause not known yet (error · totals that do not match · flaky test) → `fix-at-source/principle-fix-root-cause`, then come back · editing something shared by many places (template · source sheet · helper · type · schema) → find who uses it first (`blast-radius`, plugin `software-development`) · code never read → `code-orientation` first.
+Not for: cause not known yet (error · totals that do not match · flaky test) → `fix-at-source/principle-fix-root-cause`, then come back · editing something shared by many places (template · source sheet · helper · type · schema) → find who uses it first (`code-craft`, plugin `software-development`) · code never read → `code-craft` first.
 
 ## Steps
 1. **Pin the symptom.** Quote the exact error, failing test, wrong figure or wrong sentence; exact text points to the exact spot. Cause known but line not found → search the literal wrong text, number or error string.
@@ -36,7 +36,7 @@ Comments from `reviewer`, a person or a bot are claims, not orders.
 - Say it is fixed without re-running the exact failing case.
 
 ## Check before done
-`Cause: [the one reason]. Fix: [what changed]. Verified: [the case that now passes].` Keep the change small enough to read on one screen; if it is not, the fix grew too big, so split it. Use with `lazy-coding` (smallest correct diff) and `code-review-checklist` (nothing new introduced), both in plugin `software-development`.
+`Cause: [the one reason]. Fix: [what changed]. Verified: [the case that now passes].` Keep the change small enough to read on one screen; if it is not, the fix grew too big, so split it. Use with `code-craft` (smallest correct diff) and `git-and-review` (nothing new introduced), both in plugin `software-development`.
 
 ## References
 - [`references/sources.md`](references/sources.md) — where the rules came from; open only to trace the origin.

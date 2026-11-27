@@ -13,7 +13,7 @@ Two legs, one habit. Pick the leg from the request: meeting soon or invite given
 - A meeting just ended and the user has notes, chat, or a transcript to turn into minutes.
 - A formal Thai minutes document (รายงานการประชุม) is needed.
 
-Not for: which meetings are worth keeping → `calendar-audit` · agenda request or decline wording → `human-writing/polite-message-th-en` · collecting your actions → `weekly-review`.
+Not for: which meetings are worth keeping → `weekly-review` · agenda request or decline wording → `human-writing/polite-message-th-en` · collecting your actions → `weekly-review`.
 
 ## Leg 1 · Before the meeting (prep card, one page, 15 minutes)
 If you cannot fill the goal line, the meeting is not ready.

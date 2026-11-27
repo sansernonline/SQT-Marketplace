@@ -435,7 +435,7 @@ Choose the register before writing, then keep it for the whole piece (`r-drift`)
 | Translate to Thai | A Thai word people know exists, or the Royal Society of Thailand coined one | เสรีภาพ · ผลิตภาพ · ทุนนิยม |
 | Write the sound in Thai | Proper names, new words with no direct Thai word | อัลกอริทึม · บล็อกเชน · ซอฟต์แวร์ |
 | Keep English letters | Brand names, abbreviations, terms developers use in English | Google · API · deploy · query |
-| Coin a Thai term + brackets at first use | A core concept used repeatedly · abbreviations | ระเบียบในจินตนาการ (imagined order), then Thai only afterwards · ปัญญาประดิษฐ์ (Artificial Intelligence: AI), then Thai or AI, one style for the whole piece. This is the one form for every plugin (`human-writing/spell-out-abbreviations` · `srs-writing` · `thesis-writing` refer here). |
+| Coin a Thai term + brackets at first use | A core concept used repeatedly · abbreviations | ระเบียบในจินตนาการ (imagined order), then Thai only afterwards · ปัญญาประดิษฐ์ (Artificial Intelligence: AI), then Thai or AI, one style for the whole piece. This is the one form for every plugin (`human-writing/spell-out-abbreviations` · `requirements-writing` · `thesis-writing` refer here). |
 
 Mix English only at a single noun or verb (`deploy โค้ด` `query ตาราง`), not `ทำการ deployment ของ code`. Write sounds in Thai following the Royal Society of Thailand's transliteration rules: no tone marks, unless the word's sound collides with a Thai word and causes confusion, such as `โค้ก` (item ๕) (`ซอฟต์แวร์` not `ซ้อฟต์แว่ร์`). Add the silencer mark (karan) on letters that are not pronounced (item ๓.๑). Choose 1 spelling per word and note it. (Source: Office of the Prime Minister announcement, "Rules for transliterating English", announced 26 August B.E. 2532, Royal Gazette volume 106 part 153, 14 September 1989 · read the PDF published by the Royal Society of Thailand https://www.orst.go.th/FILEROOM/CABROYINWEB/DRAWER004/GENERAL/DATA0000/00000753.PDF pages 1-5, checked 2026-10-26 · the consonant table (table 2) has not been compared letter by letter.) Write a foreign person's name in Thai, then English in brackets at first use: `ไมเคิล แซนเดล (Michael Sandel)`. Do not use commas around a modifier.
 
@@ -507,17 +507,17 @@ Thai has upper vowels, lower vowels and tone marks that can stack 2 levels, so i
 
 | Medium | Body text | Headings | Used by |
 |---|---|---|---|
-| Web page (CSS `line-height` times font size) | 1.6 · long articles 1.75–1.85 | Thai not below 1.4 · large pure-Latin headings can go down to 1.0–1.1 | `web-app-design` · `dynamic-website` |
+| Web page (CSS `line-height` times font size) | 1.6 · long articles 1.75–1.85 | Thai not below 1.4 · large pure-Latin headings can go down to 1.0–1.1 | `web-app-design` |
 | Mobile app | 1.5–1.75 · the smaller the screen, the more spacing | Not below 1.4 | `mobile-app-design` |
 | Windows app | 20px at 14px text for on-screen text · long paragraphs 22px | Follow the Fluent scale | `windows-app-design` |
-| Slides | Not below 1.5 | Not below 1.4 | `presentation-design` |
+| Slides | Not below 1.5 | Not below 1.4 | `slide-deck` |
 | Graphics · posts · posters | 1.5–1.7 | Not below 1.4 | `brand-kit` · `graphic-design` |
-| Diagram | Not below 1.5 | — | `diagram-figures` |
-| Word .docx (Tahoma font) | 1.3–1.35 as "Multiple" (หลายเท่า) | Follow the template | `branded-document-design` |
+| Diagram | Not below 1.5 | — | `diagrams` |
+| Word .docx (Tahoma font) | 1.3–1.35 as "Multiple" (หลายเท่า) | Follow the template | `document-design` |
 
 **Word does not count the same way as CSS.** "Multiple" in Word multiplies the line height that the font itself defines, and Thai fonts already reserve room for vowels and tone marks. So the number in Word can be lower than on the web without lines colliding. Whenever you change the font, reopen the PDF and look at every page again.
 
-**Web pages must tolerate user adjustment.** WCAG 2.2 criterion 1.4.12 (level AA) requires that when the user sets line spacing to 1.5 times the font size, content must not be cut off or overlap. How to check is in `web-quality-audit`.
+**Web pages must tolerate user adjustment.** WCAG 2.2 criterion 1.4.12 (level AA) requires that when the user sets line spacing to 1.5 times the font size, content must not be cut off or overlap. How to check is in `web-audit`.
 
 ## Check
 

@@ -19,7 +19,7 @@
 | A reversible choice (can be changed later at no cost) | `ground-rules/principle-proceed-on-reversible-work`: do it now, then log it in `decision-desk/decision-log` | instead |
 | An unknown fact (number, name, date, budget) | Put `(รอยืนยัน)` (awaiting confirmation) and keep going; do not stop to ask | instead |
 | Something is really broken and must be fixed now | `fix-at-source/targeted-fix`: fix first, then report | instead |
-| What you found is a real system incident | `incident-runbook-template` · `postmortem-template` (plugin `software-development`) | together |
+| What you found is a real system incident | `incidents-and-monitoring` (plugin `software-development`) | together |
 
 ---
 

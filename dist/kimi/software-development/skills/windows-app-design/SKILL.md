@@ -22,8 +22,8 @@ description: Use when building a native-looking Windows 11 app
 ## When **not** to use it
 
 - For a web app, use `web-app-design` · for a mobile app, use `mobile-app-design`
-- For .docx/.pptx documents, use `branded-document-design`
-- For diagrams in documents, use `markdown-visuals`
+- For .docx/.pptx documents, use `document-design`
+- For diagrams in documents, use `diagrams`
 
 ---
 
@@ -73,7 +73,7 @@ Values to remember without opening the table:
 
 > **The neutral values (background, text, lines, shadows) are Fluent 2 measured from real Windows 11. Do not invent them and do not adjust them to look nicer.**
 > **The only color that changes with the job is the accent.** Use the customer's brand color. If there is none, use the Windows default in the table above, write `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask. Suggest a tone from the subject matter in the report.
-> (The table for choosing a color tone by subject matter is in `colour-by-domain` (`diagram-figures` → `references/colour-by-domain.md`).)
+> (The table for choosing a color tone by subject matter is in `colour-by-domain` (`diagrams` → `references/colour-by-domain.md`).)
 > The accent value in the table above is the Windows default, a safe choice when there is no brand.
 > **It is not a value you must use**, and the accent must pass contrast ≥ 4.5:1 in both dark and light mode, so it often needs a different value per mode.
 
@@ -178,10 +178,10 @@ Fix the points you agree with (a critique that is wrong because the image was mi
 |---|---|
 | user flow / wireframe before color | agent `ux-designer` |
 | charts in the dashboard | `web-app-design` → `references/tokens.md` section "Data colors (charts)" |
-| spec document of the screen | `design-gate/polished-document-style` + `branded-document-design` |
-| choosing the app architecture | `architecture-patterns` |
+| spec document of the screen | `design-gate/polished-document-style` + `document-design` |
+| choosing the app architecture | `architecture` |
 | spacing rules, visual order, and the 5 states of a screen | `ui-craft` |
-| architecture diagram | `software-diagrams` |
+| architecture diagram | `diagrams` |
 
 ---
 

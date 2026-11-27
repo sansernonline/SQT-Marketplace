@@ -9,14 +9,14 @@
 วางทั้งไฟล์ใน Claude Code, Codex CLI หรือ Gemini CLI ที่รากโฟลเดอร์โปรเจกต์ แล้วพิมพ์ต่อท้ายว่าจะทำฉบับไหน เช่น `ทำทั้งหมด` หรือ `ทำข้อ 1 และ 2`
 
 <!-- rules:begin -->
-**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-doc-set` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
+**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-docs` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
 
 **วนจนเสร็จ (agent loop):** ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ จนผ่านทุกข้อที่ฉบับนั้นต้องมี · ตรวจด้วยหลักฐานจริง (เปิดไฟล์ · รันคำสั่ง · เทียบแหล่ง) ไม่ใช่คำบอกของตัวที่ทำ · รอบตรวจใช้ `reviewer` ตัวใหม่ทุกรอบ · ไม่ผ่าน → แก้ที่ต้นเหตุแล้วตรวจซ้ำทั้งข้อเดิมและจุดที่แก้ · เหลือแค่ข้อระดับต่ำ → ปิดได้แล้วลงรายงาน · ครบเพดานรอบ (งานกลาง 3 · งานใหญ่หรืองานเสี่ยง 5) ยังไม่ผ่าน → ติดป้าย `ติด` ทำส่วนอื่นให้จบ แล้วรายงานข้อที่เหลือ · รายละเอียดอยู่ใน skill `superuser` กฎข้อ 3
 <!-- rules:end -->
 
-**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้ `diagram-figures` · Mermaid (`software-diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
+**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้ `diagrams` · Mermaid (`diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
 
-**AI (ใช้ทุกฉบับ):** ทำตาม skill `llm-engineering` · ชื่อ model ราคา และขีดจำกัด อ่านจากหน้าทางการของผู้ให้บริการรอบนี้ ติดวันที่ตรวจ · API key อยู่ใน environment variable ไม่อยู่ในโค้ด เอกสาร หรือ log · ข้อมูลจริงของผู้ใช้ส่งออกนอกเครื่องได้เฉพาะเมื่อผู้ใช้ติ๊กอนุญาต (ฉบับ 1) · ข้อมูลส่วนบุคคล → `pdpa-compliance` · ข้อมูลสุขภาพ → `healthcare-systems` + agent `healthcare-engineer`
+**AI (ใช้ทุกฉบับ):** ทำตาม skill `ai-engineering` · ชื่อ model ราคา และขีดจำกัด อ่านจากหน้าทางการของผู้ให้บริการรอบนี้ ติดวันที่ตรวจ · API key อยู่ใน environment variable ไม่อยู่ในโค้ด เอกสาร หรือ log · ข้อมูลจริงของผู้ใช้ส่งออกนอกเครื่องได้เฉพาะเมื่อผู้ใช้ติ๊กอนุญาต (ฉบับ 1) · ข้อมูลส่วนบุคคล → `pdpa-compliance` · ข้อมูลสุขภาพ → `domain-systems` + agent `healthcare-engineer`
 
 | # | งาน | playbook | ได้ไฟล์ |
 |---|---|---|---|
@@ -39,7 +39,7 @@
 
 ## 1. ออกแบบฟีเจอร์ AI และเลือก model
 
-playbook `project-docs` · agent `ai-engineer` + `product-manager` · skill `llm-engineering` · `superuser:ground-rules` · `architecture-patterns` · `adr-writer`
+playbook `project-docs` · agent `ai-engineer` + `product-manager` · skill `ai-engineering` · `superuser:ground-rules` · `architecture`
 **ผลลัพธ์:** `docs/ai/AI-DESIGN.md` · ADR การเลือก model ใน `docs/decisions/`
 
 ### โจทย์ (ผู้ใช้กรอก)
@@ -63,7 +63,7 @@ playbook `project-docs` · agent `ai-engineer` + `product-manager` · skill `llm
 
 ## 2. ชุดทดสอบ (eval) และเกณฑ์ผ่าน
 
-playbook `project-docs` · agent `ai-engineer` + `qa-tester` · skill `llm-engineering` · `test-case-template` · `ground-rules/principle-prove-it-works`
+playbook `project-docs` · agent `ai-engineer` + `qa-tester` · skill `ai-engineering` · `qa-docs` · `ground-rules/principle-prove-it-works`
 **ต้องมีก่อน:** `docs/ai/AI-DESIGN.md`
 **ผลลัพธ์:** `docs/ai/eval/eval-plan.md` · `docs/ai/eval/cases.jsonl`
 
@@ -83,7 +83,7 @@ playbook `project-docs` · agent `ai-engineer` + `qa-tester` · skill `llm-engin
 
 ## 3. ตอบจากเอกสารของเรา (RAG)
 
-playbook `project-docs` · agent `ai-engineer` + `data-engineer` · skill `llm-engineering` · `database-design` · `principle-secure-by-default`
+playbook `project-docs` · agent `ai-engineer` + `data-engineer` · skill `ai-engineering` · `database-design` · `security-gate`
 **ใช้เมื่อ:** AI ต้องตอบจากเอกสาร คู่มือ หรือข้อมูลของเรา — ไม่ต้อง ข้ามฉบับนี้
 **ต้องมีก่อน:** `AI-DESIGN.md` · `eval-plan.md` (มีกรณีที่คำตอบอยู่ในเอกสาร และกรณีที่ไม่อยู่)
 **ผลลัพธ์:** `docs/ai/RAG-DESIGN.md`
@@ -101,7 +101,7 @@ playbook `project-docs` · agent `ai-engineer` + `data-engineer` · skill `llm-e
 
 ## 4. สร้างและวัดผล
 
-playbook `feature` (ยังไม่มีโค้ด → `new-project`) · agent `ai-engineer` + `developer` + `security-engineer` · skill `llm-engineering` · `lazy-coding` · `readable-code` · `config-and-secrets` · `error-handling-patterns` · `security-gate` · stack ตามภาษา (`stack-python` · `stack-typescript` · `stack-dotnet`)
+playbook `feature` (ยังไม่มีโค้ด → `new-project`) · agent `ai-engineer` + `developer` + `security-engineer` · skill `ai-engineering` · `code-craft` · `web-service-essentials` · `errors-and-logs` · `security-gate` · stack ตามภาษา (`stack-python` · `stack-typescript` · `stack-dotnet`)
 **ต้องมีก่อน:** `AI-DESIGN.md` · `eval-plan.md` (· `RAG-DESIGN.md`)
 **ผลลัพธ์:** โค้ดบน branch `ai/<ฟีเจอร์>` · `docs/ai/eval/results-<ปี-เดือน-วัน>.md` · **ไม่แก้โค้ด** เว้นแต่ข้างล่างติ๊ก `[x]`
 
@@ -125,7 +125,7 @@ playbook `feature` (ยังไม่มีโค้ด → `new-project`) · a
 
 ## 5. ขึ้นใช้งานจริงและเฝ้าดู
 
-playbook `ship` · agent `ai-engineer` + `devops-engineer` · skill `llm-engineering` · `observability-basics` · `incident-runbook-template` · `logging-standards`
+playbook `ship` · agent `ai-engineer` + `devops-engineer` · skill `ai-engineering` · `incidents-and-monitoring` · `errors-and-logs`
 **ต้องมีก่อน:** ผลฉบับ 4 ผ่านเกณฑ์
 **ผลลัพธ์:** `docs/ai/AI-OPS.md` · **รออนุมัติ:** เปิดให้ผู้ใช้จริง · ตั้งงบรายเดือนที่ผู้ให้บริการ
 

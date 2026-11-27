@@ -51,7 +51,7 @@ Rule: one manager per family, chosen by whoever will support everyone else.
 
 ## Recovery codes — storage rules
 
-- Print them on paper. Store one copy at home in the document folder (see `important-docs`) and one with a trusted relative in a sealed envelope
+- Print them on paper. Store one copy at home in the document folder (see `family-legal`) and one with a trusted relative in a sealed envelope
 - Not as a photo in the camera roll, and not in the same password manager the codes recover
 - Write on the envelope which account they are for and the date they were generated. Old codes stop working when new ones are generated
 

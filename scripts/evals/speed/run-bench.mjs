@@ -5,6 +5,8 @@
  *   node scripts/evals/speed/run-bench.mjs --old <git ref>|none [--new <git ref>|worktree] [--tasks all|t1,t4] [--runs 3]
  *        [--budget 8] [--parallel 4] [--save-ratios] [--prompt lead|natural] [--variants] [--dry-run] [--from-runs]
  *
+ *   --auto-allow เปิดตัวอนุญาตให้เองของ superuser (PermissionRequest) ในแขนที่มี plugin · ค่าเริ่มปิด เพราะแขน none ไม่มีตัวนี้
+ *                ใน -p คำสั่งที่ไม่ได้อนุญาตไว้ถูกปฏิเสธ · เปิดแขนเดียว = ได้เปรียบที่ไม่ได้มาจาก skill · ใช้ flag นี้เมื่อตั้งใจวัดผลของตัวอนุญาตเอง
  *   --variants   รันคำสั่งแบบอื่นของงานด้วย (task.json → variants · เช่นภาษาอังกฤษ · เขียนต่างแบบ) วัดความทนต่อถ้อยคำและภาษา
  *
  *   --old    รุ่นก่อน เป็น git ref เช่น HEAD หรือ f105afc · none = ไม่โหลด plugin เลย (แขนเทียบ "ไม่ใช้ superuser")
@@ -81,6 +83,7 @@ const phasesFor = (label, task) => {
   return ph.map((f) => { const body = readFileSync(join(HERE, "tasks", baseOf(task), f), "utf8"); return PROMPT_MODE === "lead" && label !== "none" ? "ใช้ skill `superuser` " + body : body; });
 };
 const BASELINE = args.old === "none";
+const AUTO_ALLOW = Boolean(args["auto-allow"]);
 const ALLOWED = ["Read", "Edit", "Write", "Glob", "Grep", "Agent", "Task", "Skill", "TodoWrite",
   ...["npm", "node", "python", "python3", "pytest", "git", "ls", "cat", "cd", "mkdir", "cp", "grep", "head", "tail", "echo"].map((c) => `Bash(${c} *)`)];
 
@@ -218,7 +221,7 @@ async function one({ task, label, plugin, n }) {
     const sid = randomUUID(); // ตั้ง session เอง จะได้หา transcript ของรอบนี้เจอแน่นอน
     sids.push(sid);
     r = await run("claude", ["-p", prompt, "--session-id", sid, ...plugin.flatMap((d) => ["--plugin-dir", d]), "--setting-sources", "project", "--strict-mcp-config",
-      "--permission-mode", "acceptEdits", "--allowedTools", ...ALLOWED, "--output-format", "json", "--max-budget-usd", BUDGET], { cwd: work });
+      "--permission-mode", "acceptEdits", "--allowedTools", ...ALLOWED, "--output-format", "json", "--max-budget-usd", BUDGET], { cwd: work, env: { ...process.env, SUPERUSER_AUTO_ALLOW: AUTO_ALLOW ? "1" : "0" } });
     let pj = {}; try { pj = JSON.parse(r.out); } catch { /* claude ล้ม → ดู stderr ในไฟล์ */ }
     parts.push(pj);
     if (pj.is_error ?? r.code !== 0) break;
@@ -301,7 +304,7 @@ const nPass = (rs) => rs.filter((r) => r.passAll).length;
 let cliVersion = "?"; try { cliVersion = execFileSync("claude", ["--version"], { encoding: "utf8", shell: WIN }).trim(); } catch { /* ไม่รู้รุ่น */ }
 const models = [...new Set(rows.flatMap((r) => r.models))].join(" · ") || "?";
 const lines = [`\n## ${new Date().toISOString().slice(0, 16).replace("T", " ")} · old=${args.old} · new=${args.new ?? "worktree"} · prompt=${PROMPT_MODE} · ${RUNS} รอบ/แขน`, "",
-  `- Claude Code ${cliVersion} · model ที่ถูกใช้: ${models} · plugin ที่โหลดในแขนที่มี: superuser อย่างเดียว · เพดาน $${BUDGET} ต่อรอบ`, "",
+  `- Claude Code ${cliVersion} · model ที่ถูกใช้: ${models} · plugin ที่โหลดในแขนที่มี: superuser อย่างเดียว · ตัวอนุญาตให้เอง ${AUTO_ALLOW ? "เปิด" : "ปิด"} · เพดาน $${BUDGET} ต่อรอบ`, "",
   "| ขนาด | งาน | ชนิด | แขน | เวลา (วินาที) | เวลา API | ค่าใช้จ่าย ($) | token | ลูกทีม | เปิด superuser | test ที่ซ่อนไว้ (ตั้งต้น) | ผ่านครบ | รายขั้น | เหนือตั้งต้น | กระบวนการ | ปลอดภัย | รวม | $ ต่องานที่ผ่าน | ไฟล์ที่แก้ · รอบที่แก้นอกขอบเขต | อ้างเกินจริง | ข้อตรวจเพิ่ม | ล้ม · ถูกปฏิเสธ | ลูกทีมลงมือ (ความกว้าง) · ตรง |",
   "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"];
 const avg = (xs) => { const v = xs.filter((x) => x != null); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };

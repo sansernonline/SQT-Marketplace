@@ -27,7 +27,7 @@ _ตัดของที่ซ้ำกับที่มีแล้วออ�
 
 ### 0 · เจอบั๊กระหว่างสำรวจ (แก้แล้ว)
 
-**skill 3 ตัวไม่เคยถูกเรียกใช้ได้เลย** — `web-app-design`, `mobile-app-design`, `presentation-design`
+**skill 3 ตัวไม่เคยถูกเรียกใช้ได้เลย** — `web-app-design`, `mobile-app-design`, `slide-deck`
 
 สาเหตุ: `description:` มี `": "` อยู่ข้างในโดยไม่ได้ครอบด้วยเครื่องหมายคำพูด
 
@@ -78,8 +78,8 @@ Claude Code มีคำสั่งมาตรฐานให้แล้ว: 
 grader `tool_used: Skill` ไม่ผ่าน** · แปลว่า Claude ไม่เลือก skill ของเราเมื่อผู้ใช้พิมพ์แบบธรรมชาติ
 ต้องแก้ที่ `description` ไม่ใช่ที่เนื้อหา
 
-**เริ่มยังไง** — อย่าทำทั้ง 73 ตัว เลือก 5 ตัวที่ใช้บ่อยสุดก่อน (`lazy-coding`,
-`superuser:ground-rules`, `web-app-design`, `testing-standards`, `srs-writing`)
+**เริ่มยังไง** — อย่าทำทั้ง 73 ตัว เลือก 5 ตัวที่ใช้บ่อยสุดก่อน (`code-craft`,
+`superuser:ground-rules`, `web-app-design`, `test-automation`, `requirements-writing`)
 
 ```bash
 claude plugin eval init      # สัมภาษณ์แล้วสร้างชุดทดสอบให้
@@ -97,7 +97,7 @@ skill 1 ตัวใช้ 20 คำถาม — 8-10 คำถามที่*
 
 ### 2 · กฎ "พิสูจน์ก่อนเคลม"
 
-**ช่องว่างที่ใหญ่ที่สุดของเรา** — เรามี `superuser:ground-rules`, `lazy-coding`, `fix-at-source/targeted-fix`,
+**ช่องว่างที่ใหญ่ที่สุดของเรา** — เรามี `superuser:ground-rules`, `code-craft`, `fix-at-source/targeted-fix`,
 `short-answers`, `human-writing/spell-out-abbreviations` แต่**ไม่มีตัวไหนห้ามเคลมว่าอะไรผ่านโดยไม่ได้รัน**
 
 ตัวอย่างที่ดีที่สุดคือ [`verification-before-completion`](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md)
@@ -177,7 +177,7 @@ description ที่สรุปว่าต้องทำอะไรบ้�
 - **ตารางสัญญาณอันตรายแบบ ความคิด → ความจริง** — "ขอเรียกว่างานเล็กแล้วข้าม spec" →
   "การไขว่คว้าหาป้ายเพื่อข้ามงาน *คือ* ความลังเลนั้นเอง ให้เลือกทางที่หนักกว่า"
 
-**เอาไปใช้กับ:** `architecture-patterns`, `auth-implementation-patterns`, `testing-standards`
+**เอาไปใช้กับ:** `architecture`, `web-service-essentials`, `test-automation`
 (ซึ่งถามเรื่อง framework อยู่แล้ว — เพิ่มการจัดระดับงานเข้าไป)
 
 จาก [`claude-security`](https://github.com/anthropics/claude-plugins-official/blob/main/plugins/claude-security/README.md)
@@ -189,7 +189,7 @@ description ที่สรุปว่าต้องทำอะไรบ้�
 
 ### 5 · ตรวจแบบปฏิปักษ์ (adversarial verification)
 
-เรามี `code-review-checklist` ที่เป็นรายการตรวจ แต่ไม่มีกลไกกัน false positive (รายงานว่าเจอปัญหา แต่จริง ๆ ไม่ใช่ปัญหา)
+เรามี `git-and-review` ที่เป็นรายการตรวจ แต่ไม่มีกลไกกัน false positive (รายงานว่าเจอปัญหา แต่จริง ๆ ไม่ใช่ปัญหา)
 
 **งานวิจัยที่ควรรู้:** arXiv:2503.21934 — โมเดลที่ตรวจงานตัวเองบอกว่าถูก 85.7%
 พอให้คนตรวจจริงเหลือต่ำกว่า 5% · **การตรวจงานตัวเองแทบไม่มีค่า**
@@ -235,14 +235,14 @@ description ที่สรุปว่าต้องทำอะไรบ้�
 | add-on ตัวละ | ~130-180 |
 
 หนักสุด 5 ตัว: `web-app-design` 204 · `mobile-app-design` 202 · `ui-craft` 191 ·
-`software-diagrams` 186 · `srs-writing` 186
+`diagrams` 186 · `requirements-writing` 186
 
 **อ่านตัวเลขนี้ยังไง:** ~5,700 token ไม่ได้เยอะจนน่าตกใจ และ**การลง plugin แยกตามงาน
 คือสิ่งที่คุมต้นทุนนี้อยู่แล้ว** — ลงเฉพาะ core ก็จ่าย ~3,800 ไม่ใช่ 5,700
 ข้อสรุปคือโครงสร้างที่เราวางไว้ถูกแล้ว ไม่ต้องรีบตัดอะไร
 
 แต่ควรรู้ว่า **ภาษาไทยกิน token ประมาณ 1.6 เท่าของอังกฤษต่อตัวอักษร** —
-description ที่เขียนไทยล้วนจึงแพงกว่าที่เห็น (`user-story-writer` เป็นตัวเดียวที่เป็นไทยล้วน)
+description ที่เขียนไทยล้วนจึงแพงกว่าที่เห็น (`requirements-writing` เป็นตัวเดียวที่เป็นไทยล้วน)
 
 แนวคิดจาก [`skills-janitor`](https://github.com/khendzel/skills-janitor) ที่น่าทำต่อ:
 **เทียบต้นทุน token กับจำนวนครั้งที่ถูกเรียกจริง** (อ่านจาก session transcript)
@@ -261,8 +261,8 @@ description ที่เขียนไทยล้วนจึงแพงก�
 | **สแกนความปลอดภัยของ skill เอง** | งานวิจัย Snyk พบ prompt injection ใน **36%** ของ skill ที่ตรวจ · ถ้าจะรับ contribution ต้องมี | [ToxicSkills](https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/) |
 | **`hookify`** | กฎที่ถูกฝ่าฝืนซ้ำ ๆ ควรกลายเป็น hook ไม่ใช่กฎที่ยาวขึ้น — "เอาการตรวจไปไว้ในที่ที่มันเถียงไม่ได้" · _อัปเดต 6 ต.ค.: มี hook แล้วแต่ใช้เขียน log และแจ้ง inbox ของ SuperUser ยังไม่ใช่ตัวบังคับกฎ_ | [hookify](https://github.com/anthropics/claude-plugins-official/blob/main/plugins/hookify/README.md) |
 | **ดูแล CLAUDE.md / AGENTS.md** | ~~ไม่มีอะไรดูแลความจำระดับโปรเจกต์เลย~~ · _อัปเดต 6 ต.ค.: ทำแล้ว — `work-session-context` ดูแล `CONTEXT.md` และป้าย `AGENTS.md` · `GEMINI.md` ที่ชี้ไปหามัน_ | getsentry `agents-md` |
-| **ทดสอบเว็บด้วยเบราว์เซอร์จริง** | `e2e-testing-patterns` สอนออกแบบเทสต์ แต่ไม่มีตัวที่**เปิดแอปจริงแล้วตรวจ** | [anthropics `webapp-testing`](https://github.com/anthropics/skills) |
-| **ตรวจว่าโค้ดตรงกับ spec ไหม** | เรามี `srs-writing` ที่เขียน spec แต่ไม่มีตัวที่ย้อนไปตรวจว่าโค้ดทำตามจริงไหม | trailofbits `spec-to-code-compliance` |
+| **ทดสอบเว็บด้วยเบราว์เซอร์จริง** | `test-automation` สอนออกแบบเทสต์ แต่ไม่มีตัวที่**เปิดแอปจริงแล้วตรวจ** | [anthropics `webapp-testing`](https://github.com/anthropics/skills) |
+| **ตรวจว่าโค้ดตรงกับ spec ไหม** | เรามี `requirements-writing` ที่เขียน spec แต่ไม่มีตัวที่ย้อนไปตรวจว่าโค้ดทำตามจริงไหม | trailofbits `spec-to-code-compliance` |
 | **ตรวจหลังแพตช์** | หาบั๊กแบบเดียวกันที่ยังหลงเหลือ (variant) และ regression พร้อม**ระบุช่องว่างของการตรวจอย่างชัดเจน** | trailofbits `post-patch-validation` |
 | **สร้าง MCP server** | ไม่มีเลย ทั้งที่เป็นงานที่เจอบ่อยขึ้นเรื่อย ๆ | anthropics `mcp-builder` |
 
@@ -352,17 +352,17 @@ less code, 47–77% less cost, 3–6× faster. That's the pattern worth copying.
 
 ### 2. What I changed (done)
 
-1. **Created `lazy-coding`** (`software-development/skills/lazy-coding/`) — a
+1. **Created `code-craft`** (`software-development/skills/code-craft/`) — a
    ponytail-adapted skill, 90 lines, **code only**. Keeps ponytail's ladder,
    `lite/full/ultra` intensity, and output discipline; adapted to the team's
    own rule ("a tired teammate understands it in 6 months") and uses a
    `// simple:` comment to mark deliberate shortcuts with their upgrade path.
 
 2. **Slimmed `simplicity-first`** from 372 → 119 lines, **non-code only**
-   (docs, plans, architecture, designs). Code now defers to `lazy-coding`. No
+   (docs, plans, architecture, designs). Code now defers to `code-craft`. No
    more overlap.
 
-3. **Wired `lazy-coding` into 30 code-writing agents** across all 14 plugins —
+3. **Wired `code-craft` into 30 code-writing agents** across all 14 plugins —
    including the ones that previously had no skills section at all.
 
 4. **Created `human-writing/spell-out-abbreviations` and `short-answers`**
@@ -378,12 +378,12 @@ Split rule, going forward:
 
 | Output | Skill |
 |--------|-------|
-| Code (write / fix / refactor / review) | `lazy-coding` |
+| Code (write / fix / refactor / review) | `code-craft` |
 | Docs, plans, architecture, UX/API design | `superuser:ground-rules` |
 | Anything a person reads — first mention of an abbreviation | `human-writing/spell-out-abbreviations` |
 | Anything a person reads — length and plainness | `short-answers` |
 | Any interface, on any platform | `ui-craft` (**with** the platform skill, not instead of it) |
-| Any picture of how software works | `software-diagrams` |
+| Any picture of how software works | `diagrams` |
 
 ---
 
@@ -395,10 +395,10 @@ invisible outside the core plugin. Suggested additions per agent type:
 
 | Agent type (across plugins) | Add these existing core skills | Why |
 |---|---|---|
-| Every `*-engineer` / `*-developer` that commits code | `commit-message-format`, `code-review-checklist`, `work-session-context` | Consistent commits, self-review, resumable sessions — zero extra prompting |
-| Agents that open PRs | `pr-description-template` | Uniform PRs, faster review |
-| Agents producing diagrams in docs/PRs | `markdown-visuals` | A diagram halves review time |
-| Architect-type agents (`*-architect`, `solution-architect`, `iot-engineer`) | `adr-writer`, `architecture-patterns` | Already used by `solution-architect`; reuse, don't reinvent |
+| Every `*-engineer` / `*-developer` that commits code | `git-and-review`, `work-session-context` | Consistent commits, self-review, resumable sessions — zero extra prompting |
+| Agents that open PRs | `git-and-review` | Uniform PRs, faster review |
+| Agents producing diagrams in docs/PRs | `diagrams` | A diagram halves review time |
+| Architect-type agents (`*-architect`, `solution-architect`, `iot-engineer`) | `architecture` | Already used by `solution-architect`; reuse, don't reinvent |
 | Compliance / officer agents | `design-gate/polished-document-style`, `office-document-handling` | They produce reports and audit docs |
 
 Each is a one-line addition to the agent's **Skills You Use** section, in the
@@ -415,7 +415,7 @@ Only if a real need shows up — same lazy philosophy, each ~1 page:
   language per layer) so every engineer reaches for the same proven tools
   instead of re-deciding. Cuts "which library?" prompting to zero.
 - **`pr-self-review`** — a 10-item pre-PR checklist (tests pass, diff < 400
-  lines, no debug logs). Pairs with `lazy-coding` and `code-review-checklist`.
+  lines, no debug logs). Pairs with `code-craft` and `git-and-review`.
 - **`incident-comms`** — a fill-in-the-blanks status-update template for the
   cybersecurity / SRE agents during an incident.
 
@@ -424,7 +424,7 @@ most of the gap without adding anything to maintain.
 
 ---
 
-### 5. How to use `lazy-coding`
+### 5. How to use `code-craft`
 
 It triggers automatically on any code task. To steer intensity in a prompt:
 `lazy lite` (suggest the lazier option, you pick), `lazy full` (default,

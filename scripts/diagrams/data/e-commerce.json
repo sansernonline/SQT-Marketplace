@@ -4,40 +4,40 @@
  "description": "Thai online selling, buying and small-business back office — sell on Shopee, Lazada, TikTok Shop, LINE and Facebook (listings, pricing, stock, chat, live, returns), buy with confidence (total cost, warranty, OCPB 1166 complaints, refunds), and run the company (quotations, contracts, VAT and withholding tax, payroll, social security, year-end filing, labour law, PDPA, LINE OA, PromptPay). General information only, not tax or legal advice.",
  "cross": [],
  "skills": [
-  "buy-compare",
-  "cash-flow",
-  "chat-reply-templates",
-  "dbd-annual-filing",
-  "doc-contract-th",
-  "doc-leave",
-  "doc-quotation",
-  "doc-thai-official",
-  "e-tax-invoice",
-  "hiring-th",
-  "import-landed-cost",
-  "labour-law-basics",
-  "line-broadcast",
-  "line-chatbot",
-  "line-oa-setup",
-  "live-selling-script",
-  "marketplace-fees-pricing",
-  "multi-shop-stock",
-  "payroll-th",
+  "buyer-help",
+  "shop-books",
+  "customer-care",
+  "thai-tax",
+  "thai-business-docs",
+  "thai-employment",
+  "thai-business-docs",
+  "thai-business-docs",
+  "thai-tax",
+  "thai-employment",
+  "pricing-and-costs",
+  "thai-employment",
+  "line-oa",
+  "line-oa",
+  "line-oa",
+  "sales-copy",
+  "pricing-and-costs",
+  "shop-operations",
+  "thai-employment",
   "pdpa-workflow",
-  "product-listing",
-  "promptpay-qr",
-  "refund-request",
-  "returns-and-bad-reviews",
-  "seller-tax-basics",
-  "shipping-compare",
-  "shop-daily-briefing",
-  "sme-bookkeeping",
-  "social-security-th",
-  "tax-vat-th",
+  "sales-copy",
+  "shop-books",
+  "buyer-help",
+  "customer-care",
+  "thai-tax",
+  "pricing-and-costs",
+  "shop-operations",
+  "shop-books",
+  "thai-employment",
+  "thai-tax",
   "thai-business-setup",
-  "thai-holidays",
-  "warranty-tracker",
-  "win-back-customers"
+  "thai-employment",
+  "buyer-help",
+  "sales-copy"
  ],
  "core_skills": [
   "superuser",
@@ -82,7 +82,7 @@
   "human-writing"
  ],
  "commands": [
-  "complain"
+  "buyer-help"
  ],
  "agents": [
   {
@@ -100,9 +100,9 @@
    "core": false,
    "description": "Use for a big purchase, faulty product, refused refund, complaint to a seller, platform or สคบ., card dispute, warranty.",
    "skills": [
-    "buy-compare",
-    "warranty-tracker",
-    "refund-request",
+    "buyer-help",
+    "buyer-help",
+    "buyer-help",
     "superuser"
    ]
   },
@@ -112,11 +112,11 @@
    "core": false,
    "description": "Use when a Thai online seller must answer a customer — price, stock, late parcel, refund, haggling, bad review.",
    "skills": [
-    "chat-reply-templates",
-    "returns-and-bad-reviews",
-    "win-back-customers",
-    "promptpay-qr",
-    "line-oa-setup"
+    "customer-care",
+    "customer-care",
+    "sales-copy",
+    "shop-books",
+    "line-oa"
    ]
   },
   {
@@ -125,9 +125,9 @@
    "core": false,
    "description": "Use when setting up or running a LINE Official Account — Messaging API, webhook, chatbot, broadcast, rich menu.",
    "skills": [
-    "line-oa-setup",
-    "line-chatbot",
-    "line-broadcast"
+    "line-oa",
+    "line-oa",
+    "line-oa"
    ]
   },
   {
@@ -136,9 +136,9 @@
    "core": false,
    "description": "Use when planning a live sale on TikTok Shop, Shopee, Lazada or Facebook Live. Run sheet, hook, flash deals, CTA lines.",
    "skills": [
-    "live-selling-script",
-    "product-listing",
-    "multi-shop-stock"
+    "sales-copy",
+    "sales-copy",
+    "shop-operations"
    ]
   },
   {
@@ -147,15 +147,15 @@
    "core": false,
    "description": "Use when a Thai online seller needs a listing, a price after platform fees, or stock synced across marketplaces.",
    "skills": [
-    "product-listing",
-    "marketplace-fees-pricing",
-    "multi-shop-stock",
-    "shipping-compare",
-    "import-landed-cost",
-    "seller-tax-basics",
-    "shop-daily-briefing",
-    "doc-quotation",
-    "promptpay-qr"
+    "sales-copy",
+    "pricing-and-costs",
+    "shop-operations",
+    "pricing-and-costs",
+    "pricing-and-costs",
+    "thai-tax",
+    "shop-operations",
+    "thai-business-docs",
+    "shop-books"
    ]
   },
   {
@@ -164,18 +164,18 @@
    "core": false,
    "description": "Use when a Thai SME or person asks what to file and when (VAT, WHT, social security), hiring or business setup.",
    "skills": [
-    "tax-vat-th",
-    "payroll-th",
-    "social-security-th",
-    "e-tax-invoice",
-    "dbd-annual-filing",
-    "labour-law-basics",
-    "promptpay-qr",
-    "seller-tax-basics",
-    "hiring-th",
+    "thai-tax",
+    "thai-employment",
+    "thai-employment",
+    "thai-tax",
+    "thai-tax",
+    "thai-employment",
+    "shop-books",
+    "thai-tax",
+    "thai-employment",
     "thai-business-setup",
-    "sme-bookkeeping",
-    "cash-flow"
+    "shop-books",
+    "shop-books"
    ]
   },
   {
@@ -184,11 +184,11 @@
    "core": false,
    "description": "Use when drafting Thai business documents — ใบเสนอราคา, invoice, receipt, official letter, contract, leave form.",
    "skills": [
-    "doc-quotation",
-    "e-tax-invoice",
-    "doc-thai-official",
-    "doc-contract-th",
-    "doc-leave"
+    "thai-business-docs",
+    "thai-tax",
+    "thai-business-docs",
+    "thai-business-docs",
+    "thai-employment"
    ]
   }
  ],
@@ -201,7 +201,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Pick the document type that fits the event, per `doc-quotation` (quote · billing · payment received · tax invoice) · ใคร: หัวหน้าทีม",
+     "text": "Pick the document type that fits the event, per `thai-business-docs` (quote · billing · payment received · tax invoice) · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -211,7 +211,7 @@
       "raw": "หัวหน้าทีม"
      },
      "skills": [
-      "doc-quotation"
+      "thai-business-docs"
      ],
      "commands": [],
      "playbooks": [],
@@ -348,7 +348,7 @@
     },
     {
      "n": 4,
-     "text": "Check (ตรวจ) the reviews with the fake-review criteria in `buy-compare`. Drop reviews that fail, and say how many were dropped and why · ใคร: `consumer-advocate` ตัวใหม่ picks the reviews · `reviewer` ตัวใหม่ checks that the picking follows the criteria",
+     "text": "Check (ตรวจ) the reviews with the fake-review criteria in `buyer-help`. Drop reviews that fail, and say how many were dropped and why · ใคร: `consumer-advocate` ตัวใหม่ picks the reviews · `reviewer` ตัวใหม่ checks that the picking follows the criteria",
      "sub": [],
      "phase": "",
      "who": {
@@ -360,7 +360,7 @@
       "raw": "`consumer-advocate` ตัวใหม่ picks the reviews · `reviewer` ตัวใหม่ checks that the picking follows the criteria"
      },
      "skills": [
-      "buy-compare"
+      "buyer-help"
      ],
      "commands": [],
      "playbooks": [],
@@ -368,7 +368,7 @@
     },
     {
      "n": 5,
-     "text": "Compare the warranty terms and claim channels with `warranty-tracker` · ใคร: `consumer-advocate` ตัวใหม่",
+     "text": "Compare the warranty terms and claim channels with `buyer-help` · ใคร: `consumer-advocate` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -380,7 +380,7 @@
       "raw": "`consumer-advocate` ตัวใหม่"
      },
      "skills": [
-      "warranty-tracker"
+      "buyer-help"
      ],
      "commands": [],
      "playbooks": [],
@@ -445,7 +445,7 @@
     },
     {
      "n": 3,
-     "text": "Lay out the ladder following `refund-request` (`references/complaint-letter.md`) — shop → platform → the agency that takes complaints → consumer court. Then check the channel and time limit of each rung on official websites · ใคร: `consumer-advocate` ตัวใหม่",
+     "text": "Lay out the ladder following `buyer-help` (`references/complaint-letter.md`) — shop → platform → the agency that takes complaints → consumer court. Then check the channel and time limit of each rung on official websites · ใคร: `consumer-advocate` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -457,7 +457,7 @@
       "raw": "`consumer-advocate` ตัวใหม่"
      },
      "skills": [
-      "refund-request"
+      "buyer-help"
      ],
      "commands": [],
      "playbooks": [],
@@ -542,7 +542,7 @@
     },
     {
      "n": 2,
-     "text": "Classify the case, then choose the route per `returns-and-bad-reviews`: reply · exchange · refund · dispute with the platform · ใคร: `customer-chat` ตัวใหม่",
+     "text": "Classify the case, then choose the route per `customer-care`: reply · exchange · refund · dispute with the platform · ใคร: `customer-chat` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -554,7 +554,7 @@
       "raw": "`customer-chat` ตัวใหม่"
      },
      "skills": [
-      "returns-and-bad-reviews"
+      "customer-care"
      ],
      "commands": [],
      "playbooks": [],
@@ -772,7 +772,7 @@
     },
     {
      "n": 2,
-     "text": "Set up the channel and webhook following `line-oa-setup` — verify the X-Line-Signature signature, and keep secrets in a config file that the user fills in personally · ใคร: `line-admin` ตัวใหม่ (the user fills in the secrets personally)",
+     "text": "Set up the channel and webhook following `line-oa` — verify the X-Line-Signature signature, and keep secrets in a config file that the user fills in personally · ใคร: `line-admin` ตัวใหม่ (the user fills in the secrets personally)",
      "sub": [],
      "phase": "",
      "who": {
@@ -784,7 +784,7 @@
       "raw": "`line-admin` ตัวใหม่ (the user fills in the secrets personally)"
      },
      "skills": [
-      "line-oa-setup"
+      "line-oa"
      ],
      "commands": [],
      "playbooks": [],
@@ -891,7 +891,7 @@
     },
     {
      "n": 2,
-     "text": "Make a minute-by-minute run sheet per `live-selling-script` — opening hook · product order · flash deal timing · closing lines · ใคร: `live-seller` ตัวใหม่",
+     "text": "Make a minute-by-minute run sheet per `sales-copy` — opening hook · product order · flash deal timing · closing lines · ใคร: `live-seller` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -903,7 +903,7 @@
       "raw": "`live-seller` ตัวใหม่"
      },
      "skills": [
-      "live-selling-script"
+      "sales-copy"
      ],
      "commands": [],
      "playbooks": [],
@@ -988,7 +988,7 @@
     },
     {
      "n": 3,
-     "text": "Calculate gross → net per person with spreadsheet formulas following `payroll-th` (tax withheld by the annualised estimate) · ใคร: `tax-helper` ตัวใหม่",
+     "text": "Calculate gross → net per person with spreadsheet formulas following `thai-employment` (tax withheld by the annualised estimate) · ใคร: `tax-helper` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1000,7 +1000,7 @@
       "raw": "`tax-helper` ตัวใหม่"
      },
      "skills": [
-      "payroll-th"
+      "thai-employment"
      ],
      "commands": [],
      "playbooks": [],
@@ -1008,7 +1008,7 @@
     },
     {
      "n": 4,
-     "text": "Make the list of forms due this month with their due dates, following `tax-vat-th` and `social-security-th` · ใคร: `tax-helper` ตัวใหม่",
+     "text": "Make the list of forms due this month with their due dates, following `thai-tax` and `thai-employment` · ใคร: `tax-helper` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1020,8 +1020,8 @@
       "raw": "`tax-helper` ตัวใหม่"
      },
      "skills": [
-      "tax-vat-th",
-      "social-security-th"
+      "thai-tax",
+      "thai-employment"
      ],
      "commands": [],
      "playbooks": [],
@@ -1088,7 +1088,7 @@
     },
     {
      "n": 2,
-     "text": "Work out the real shipping cost from the parcel size per `shipping-compare` (including volumetric weight) · ใคร: `shop-manager` ตัวใหม่",
+     "text": "Work out the real shipping cost from the parcel size per `pricing-and-costs` (including volumetric weight) · ใคร: `shop-manager` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1100,7 +1100,7 @@
       "raw": "`shop-manager` ตัวใหม่"
      },
      "skills": [
-      "shipping-compare"
+      "pricing-and-costs"
      ],
      "commands": [],
      "playbooks": [],
@@ -1108,7 +1108,7 @@
     },
     {
      "n": 3,
-     "text": "Set the price per platform with the formula in `marketplace-fees-pricing`, as a table, and tell the user to check the rates against Seller Centre · ใคร: `shop-manager` ตัวใหม่",
+     "text": "Set the price per platform with the formula in `pricing-and-costs`, as a table, and tell the user to check the rates against Seller Centre · ใคร: `shop-manager` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1120,7 +1120,7 @@
       "raw": "`shop-manager` ตัวใหม่"
      },
      "skills": [
-      "marketplace-fees-pricing"
+      "pricing-and-costs"
      ],
      "commands": [],
      "playbooks": [],
@@ -1128,7 +1128,7 @@
     },
     {
      "n": 4,
-     "text": "Write the product name, search keywords, description, and image checklist per platform, following `product-listing` · ใคร: `shop-manager` ตัวใหม่",
+     "text": "Write the product name, search keywords, description, and image checklist per platform, following `sales-copy` · ใคร: `shop-manager` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1140,7 +1140,7 @@
       "raw": "`shop-manager` ตัวใหม่"
      },
      "skills": [
-      "product-listing"
+      "sales-copy"
      ],
      "commands": [],
      "playbooks": [],
@@ -1148,7 +1148,7 @@
     },
     {
      "n": 5,
-     "text": "Set the SKU and enter it in the master stock file per `multi-shop-stock`, with a reorder point · ใคร: `shop-manager` ตัวใหม่",
+     "text": "Set the SKU and enter it in the master stock file per `shop-operations`, with a reorder point · ใคร: `shop-manager` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1160,7 +1160,7 @@
       "raw": "`shop-manager` ตัวใหม่"
      },
      "skills": [
-      "multi-shop-stock"
+      "shop-operations"
      ],
      "commands": [],
      "playbooks": [],
@@ -1344,7 +1344,7 @@
     },
     {
      "n": 4,
-     "text": "If sales are near the VAT registration threshold, point to `seller-tax-basics` · ใคร: หัวหน้าทีม",
+     "text": "If sales are near the VAT registration threshold, point to `thai-tax` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1354,7 +1354,7 @@
       "raw": "หัวหน้าทีม"
      },
      "skills": [
-      "seller-tax-basics"
+      "thai-tax"
      ],
      "commands": [],
      "playbooks": [],
@@ -1387,7 +1387,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Classify the case following `refund-request` and count the deadline of each route's right, then take the route closest to its deadline first · ใคร: `consumer-advocate` ตัวใหม่",
+     "text": "Classify the case following `buyer-help` and count the deadline of each route's right, then take the route closest to its deadline first · ใคร: `consumer-advocate` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1399,7 +1399,7 @@
       "raw": "`consumer-advocate` ตัวใหม่"
      },
      "skills": [
-      "refund-request"
+      "buyer-help"
      ],
      "commands": [],
      "playbooks": [],
@@ -1657,7 +1657,7 @@
     },
     {
      "n": 3,
-     "text": "Set the stock sync rules, a buffer (stock held back from sale) per shop, and the reorder point, per `multi-shop-stock` · ใคร: `shop-manager` ตัวใหม่",
+     "text": "Set the stock sync rules, a buffer (stock held back from sale) per shop, and the reorder point, per `shop-operations` · ใคร: `shop-manager` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1669,7 +1669,7 @@
       "raw": "`shop-manager` ตัวใหม่"
      },
      "skills": [
-      "multi-shop-stock"
+      "shop-operations"
      ],
      "commands": [],
      "playbooks": [],
@@ -2013,7 +2013,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Create or open the register per `warranty-tracker` — product · purchase date · shop · warranty end · where the receipt is kept · ใคร: `consumer-advocate` ตัวใหม่",
+     "text": "Create or open the register per `buyer-help` — product · purchase date · shop · warranty end · where the receipt is kept · ใคร: `consumer-advocate` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2025,7 +2025,7 @@
       "raw": "`consumer-advocate` ตัวใหม่"
      },
      "skills": [
-      "warranty-tracker"
+      "buyer-help"
      ],
      "commands": [],
      "playbooks": [],
@@ -2110,7 +2110,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Count back from the period end date per `dbd-annual-filing` — shareholder meeting · financial statements audited · บอจ.5 (Bor Or Jor 5, shareholder list) · ภ.ง.ด.50 · ใคร: `tax-helper` ตัวใหม่",
+     "text": "Count back from the period end date per `thai-tax` — shareholder meeting · financial statements audited · บอจ.5 (Bor Or Jor 5, shareholder list) · ภ.ง.ด.50 · ใคร: `tax-helper` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2122,7 +2122,7 @@
       "raw": "`tax-helper` ตัวใหม่"
      },
      "skills": [
-      "dbd-annual-filing"
+      "thai-tax"
      ],
      "commands": [],
      "playbooks": [],

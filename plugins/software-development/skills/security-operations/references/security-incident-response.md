@@ -190,7 +190,7 @@ Stage 3: Full production
 ## Phase 6: Lessons Learned
 
 ### Within 7 days
-Use `postmortem-template` skill for blameless analysis.
+Use `incidents-and-monitoring` skill for blameless analysis.
 
 ### Specific to security
 - Detection latency (time to detect, TTD)
@@ -274,7 +274,7 @@ Public: per disclosure obligations
 
 ## Output: Incident Report
 
-Use `design-gate/polished-document-style` + `postmortem-template` skills.
+Use `design-gate/polished-document-style` + `incidents-and-monitoring` skills.
 
 Include:
 - Executive summary

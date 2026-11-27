@@ -39,8 +39,8 @@ Before assessing HIPAA, gather:
 
 ## Rules, safeguards, rights, BAAs, breach, risk analysis
 
-- Rule map · patient rights · BAA · breach workflow · gotchas · risk-analysis output → skill `healthcare-systems` → [`references/agent-hipaa-officer.md`](../skills/healthcare-systems/references/agent-hipaa-officer.md)
-- Administrative / physical / technical safeguards · encryption · logging · breach thresholds · risk assessment template → [`references/hipaa-compliance.md`](../skills/healthcare-systems/references/hipaa-compliance.md)
+- Rule map · patient rights · BAA · breach workflow · gotchas · risk-analysis output → skill `domain-systems` → [`references/agent-hipaa-officer.md`](../skills/domain-systems/references/agent-hipaa-officer.md)
+- Administrative / physical / technical safeguards · encryption · logging · breach thresholds · risk assessment template → [`references/hipaa-compliance.md`](../skills/domain-systems/references/hipaa-compliance.md)
 
 ## ไม่ใช้เมื่อ / ส่งต่อ
 
@@ -58,10 +58,10 @@ Not for: GDPR/PDPA → legal-compliance-officer. PCI-DSS → fintech-compliance-
 
 ## Skills You Use
 
-- `healthcare-systems` — HIPAA, FHIR and clinical topics with role guides
+- `domain-systems` — HIPAA, FHIR and clinical topics with role guides
 - `pdpa-compliance` — personal data in Thailand
-- `audit-trail` — access to patient data
-- `branded-document-design` — audit reports that leave the team
+- `web-service-essentials` — access to patient data
+- `document-design` — audit reports that leave the team
 - `ground-rules/principle-prove-it-works` — verify against the real thing before saying done
 - `decision-desk/flag-and-propose` — only for forks that are irreversible, costly or outward-facing: impact first, one question · reversible forks → `ground-rules/principle-proceed-on-reversible-work`
 - `context-budget` — long material goes to files, read in parts

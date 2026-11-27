@@ -7,7 +7,7 @@
 - Before building or buying a tool, service, template, library or format: check what already exists first.
 - Choosing between several candidates (open source · paid · research · standards) and recording the trade-off.
 
-Not for: taking apart a reference app to build the same kind → `reference-app-research` (plugin `software-development`) · choosing an architecture pattern, not a tool → `architecture-patterns` · already decided, only the reason to record → [`decision-desk/decision-log`](../../../decision-desk/parts/decision-log/guide.md) · general research that does not end in choosing something → [`research-with-sources`](../../SKILL.md)
+Not for: taking apart a reference app to build the same kind → `reference-app-research` (plugin `software-development`) · choosing an architecture pattern, not a tool → `architecture` · already decided, only the reason to record → [`decision-desk/decision-log`](../../../decision-desk/parts/decision-log/guide.md) · general research that does not end in choosing something → [`research-with-sources`](../../SKILL.md)
 
 ## Steps
 1. Narrow the question before searching. It always has 3 things: what it must do · limits it cannot accept · conditions of use. Write it to a file before searching, so you do not drift into changing the question to fit what you find. Examples: `references/question-examples.md`.
@@ -21,7 +21,7 @@ Not for: taking apart a reference app to build the same kind → `reference-app-
    - **Adapt it yourself** (fork · adjust a template): very close but lacking something, and the license allows editing. Record what you change and how you follow upstream.
    - **Build it yourself**: no option passes the limits we cannot accept. Record the closest one and what it lacks. "Wanting control" is not a reason; say what control gets you that taking theirs cannot.
    - **Do not build**: a better thing exists at a lower price than building. Record the reason and the condition for reconsidering.
-8. Record the trade-off today with [`decision-desk/decision-log`](../../../decision-desk/parts/decision-log/guide.md), at least 3 lines (for code work that is architecture: `adr-writer`, plugin `software-development`). Keep these Thai lines as the record format:
+8. Record the trade-off today with [`decision-desk/decision-log`](../../../decision-desk/parts/decision-log/guide.md), at least 3 lines (for code work that is architecture: `architecture`, plugin `software-development`). Keep these Thai lines as the record format:
    ```
    เลือก: <ตัวเลือก>  เพราะ <เหตุผลหลักข้อเดียว>
    ยอมแลก: <สิ่งที่เสียไป>

@@ -29,7 +29,7 @@
 
 ## 1. ทะเบียนรับประกันและการเคลม
 
-playbook `warranty-claim` · agent `consumer-advocate` · skill `warranty-tracker`
+playbook `warranty-claim` · agent `consumer-advocate` · skill `buyer-help`
 **ผลลัพธ์:** `warranties.csv` (ทะเบียน) · `cases/<ปี-เดือน>-<ของ>/claim.md` เมื่อเคลม · **รออนุมัติ:** ส่งเครื่องเคลม
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -51,7 +51,7 @@ playbook `warranty-claim` · agent `consumer-advocate` · skill `warranty-tracke
 
 ## 2. ของเสียซ้ำหลังซ่อมในประกันหลายครั้ง
 
-playbook `warranty-claim` (ใช้ขั้น 1 เปิดทะเบียน · ขั้น 3 ตรวจประกันกับเงื่อนไขยกเว้น · ขั้น 5 reviewer ตัวใหม่ตรวจ · ส่วนขอเปลี่ยนเครื่องหรือคืนเงินเกินขอบเขต playbook นี้ จึงต่อด้วยฉบับ 1 ของ `prompt-complaint.md` ตามหัวข้อ 2 ของ `superuser`) · agent `consumer-advocate` · skill `warranty-tracker` · `refund-request`
+playbook `warranty-claim` (ใช้ขั้น 1 เปิดทะเบียน · ขั้น 3 ตรวจประกันกับเงื่อนไขยกเว้น · ขั้น 5 reviewer ตัวใหม่ตรวจ · ส่วนขอเปลี่ยนเครื่องหรือคืนเงินเกินขอบเขต playbook นี้ จึงต่อด้วยฉบับ 1 ของ `prompt-complaint.md` ตามหัวข้อ 2 ของ `superuser`) · agent `consumer-advocate` · skill `buyer-help`
 **ผลลัพธ์:** `cases/<ปี-เดือน>-<ของ>/repeat-defect.md` · **รออนุมัติ:** ส่งเครื่องซ่อมรอบใหม่ · ส่งหนังสือขอเปลี่ยนเครื่องหรือคืนเงิน
 
 ### ข้อมูล (ผู้ใช้กรอก)

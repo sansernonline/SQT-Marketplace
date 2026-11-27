@@ -1,6 +1,6 @@
 # Word/PDF cover and inner pages
 
-Building the real .docx (tokens, `anchor_picture()`, tables, the cover vote) lives in `software-development:branded-document-design`, with its own cover rules in `cover-design.md` and `anti-patterns.md`. This file adds only what the 2026-11-19 test found that those files do not say yet. Tested on a fictional Thai private-hospital appointment-system SRS (cover + 1 inner page, A4); the test images are kept in `scripts/evals/beauty/baseline/2026-11-19/`.
+Building the real .docx (tokens, `anchor_picture()`, tables, the cover vote) lives in `software-development:document-design`, with its own cover rules in `cover-design.md` and `anti-patterns.md`. This file adds only what the 2026-11-19 test found that those files do not say yet. Tested on a fictional Thai private-hospital appointment-system SRS (cover + 1 inner page, A4); the test images are kept in `scripts/evals/beauty/baseline/2026-11-19/`.
 
 ## Where to look
 
@@ -32,7 +32,7 @@ Building the real .docx (tokens, `anchor_picture()`, tables, the cover vote) liv
 - Thai headings breaking mid-phrase ("เลขประจำ/ตัวผู้ป่วย") → shorter headings, breaks at phrase ends.
 
 ## Check before sending
-- Run the check list in `branded-document-design`, then:
+- Run the check list in `document-design`, then:
 - [ ] The cover art comes from the system's own data
 - [ ] System name is the largest line and fits on one line
 - [ ] Lower half of a light cover carries colour

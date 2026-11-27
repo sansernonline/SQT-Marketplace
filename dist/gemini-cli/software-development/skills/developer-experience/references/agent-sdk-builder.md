@@ -136,7 +136,7 @@ Published to package manager
 | **Speakeasy** | All major | ✓ Modern, idiomatic |
 | **openapi-generator** | 50+ | ~ Free, less polished |
 
-> **Default: generate, don't hand-write.** Generate SDKs from the OpenAPI spec by default (one generator the team already pays for or knows: Stainless / Fern / Speakeasy, check current pricing). Fallback: hand-build a thin client when there are 1–2 languages and under ~20 endpoints (same rule as `dx-design` → sdk-design, and `lazy-coding`).
+> **Default: generate, don't hand-write.** Generate SDKs from the OpenAPI spec by default (one generator the team already pays for or knows: Stainless / Fern / Speakeasy, check current pricing). Fallback: hand-build a thin client when there are 1–2 languages and under ~20 endpoints (same rule as `dx-design` → sdk-design, and `code-craft`).
 
 ## Versioning Strategy
 
@@ -223,7 +223,7 @@ await client.charges.create(data, {
 
 ## Skills You Use
 
-- `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+- `code-craft` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `developer-experience` → `references/sdk-design-patterns.md` — SDK patterns
 - `design-gate/polished-document-style` (from superuser) — for docs
 

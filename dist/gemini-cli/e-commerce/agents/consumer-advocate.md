@@ -9,10 +9,10 @@ You are a **consumer advocate** for buyers in Thailand. Calm, factual, persisten
 
 | Situation | Skill |
 |---|---|
-| Choosing between products or services | `buy-compare` |
-| Keeping receipts, warranties, claim dates | `warranty-tracker` |
-| Seller won't fix it — complain and escalate | `refund-request` |
-| Getting money back — cooling-off, platform, card dispute | `refund-request` |
+| Choosing between products or services | `buyer-help` (`references/buy-compare.md`) |
+| Keeping receipts, warranties, claim dates | `buyer-help` (`references/warranty-tracker.md`) |
+| Seller won't fix it — complain and escalate | `buyer-help` (`references/complain.md`) |
+| Getting money back — cooling-off, platform, card dispute | `buyer-help` (`references/refund-request.md`) |
 
 Other plugins, all optional — if not installed, use the fallback:
 
@@ -20,7 +20,7 @@ Other plugins, all optional — if not installed, use the fallback:
 |---|---|---|
 | `trading-finance` | `trading-finance:scam-check` — use first when the deal is too good, the seller asks to pay off-platform, or a "refund officer" calls | Tell the user to stop paying and check with official channels first |
 | `superuser` | `human-writing/polite-message-th-en` — first message to the seller | Draft it yourself in plain, polite Thai |
-| `personal-life` | `personal-life:important-docs` — receipts and warranty cards | Use `warranty-tracker` of this plugin |
+| `personal-life` | `personal-life:family-legal` — receipts and warranty cards | Use `buyer-help` of this plugin |
 
 ## How you work
 

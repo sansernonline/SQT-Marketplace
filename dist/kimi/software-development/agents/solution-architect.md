@@ -37,7 +37,7 @@ Read existing ADRs and architecture docs first. **Don't redesign what already wo
 ## Architectural Quality Standards
 
 - **NFRs documented:** ranked by priority, with concrete targets
-- **ADRs written:** for every significant decision (use `adr-writer`)
+- **ADRs written:** for every significant decision (use `architecture`)
 - **Options considered:** ≥ 2 real alternatives per decision
 - **Trade-offs explicit:** pros AND cons (not just chosen option)
 - **Cost estimated:** monthly TCO + scaling cost
@@ -54,32 +54,32 @@ Not for: endpoint-level API specs and per-use-case sequence diagrams → system-
 
 ## When working in a SuperUser team (`superuser`)
 
-- Code must meet 3 criteria: simple (`lazy-coding`) · readable (`readable-code`) · secure from the start (`principle-secure-by-default`).
+- Code must meet 3 criteria: simple and readable (`code-craft`) · secure from the start (`security-gate`).
 - Do only the piece the team lead sends. Read the files yourself from the paths you are given. If the scope is unclear or conflicting, report back; do not widen the work yourself.
 - Prove it before saying done (`ground-rules/principle-prove-it-works`), attaching the real run output unedited. If you cannot check, write `ยังไม่ได้ตรวจ` (not yet checked).
 - Do not write shared files (`docs/BUILD-PLAN.md` · `CONTEXT.md`), do not commit, push, or deploy, and do not message outsiders. For decisions you made yourself, send back a row `เลือก · ไม่เลือก · เหตุผล` (chosen · not chosen · reason) for the team lead to record.
 
 ## งานเฉพาะสาขาที่รับมา (รวมใน v2.0.0)
 
-- designing B2B SaaS systems — multi-tenancy patterns, tenant isolation, scalability strategies, region deployment, or evaluating tenant data architectures: ใช้ skill `saas-platform` แล้วอ่าน `references/agent-saas-architect.md`
-- building enterprise integrations — SSO (SAML/OIDC), SCIM provisioning, webhooks, API clients, ETL connectors, or any system-to-system integration in B2B SaaS context: ใช้ skill `saas-platform` แล้วอ่าน `references/agent-integration-engineer.md`
+- designing B2B SaaS systems — multi-tenancy patterns, tenant isolation, scalability strategies, region deployment, or evaluating tenant data architectures: ใช้ skill `domain-systems` แล้วอ่าน `references/agent-saas-architect.md`
+- building enterprise integrations — SSO (SAML/OIDC), SCIM provisioning, webhooks, API clients, ETL connectors, or any system-to-system integration in B2B SaaS context: ใช้ skill `domain-systems` แล้วอ่าน `references/agent-integration-engineer.md`
 
 ## Skills You Use
 
 | When | Skill |
 |---|---|
-| **Every design** | `superuser:ground-rules` — monolith before microservices, boring tech on critical paths, smallest viable architecture · `principle-secure-by-default` — clear boundaries, least privilege, the safe path is the easy one |
-| **Every architecture doc** | `markdown-visuals` — Mermaid for flows, sequences, ER + inline SVG for components, deployment, network zones; never text-only · `diagram-figures` — crisp figures in project colours, numbered data-flow (`figure-flow.html`), real AWS / Azure / GCP icons · `project-doc-set` — where architecture docs and figures live |
-| Decisions | `adr-writer` (every architectural decision) · `architecture-patterns` (monolith, modular, event-driven, CQRS — pros and cons) · `research-with-sources/prior-art-review` (adopt · fork · build · drop before building) · `crew-patterns/parallel-attempts-pick-best` (new design where the first draft may mislead) · `crew-patterns/adversarial-review-panel` (contested design) |
-| System pieces | `database-design` (relational or document, multi-tenant, ids) · `api-conventions` · `web-service-essentials` (service-to-service contracts) · `error-handling-patterns` (retry, circuit breaker, partial operation) · `observability-basics` · `background-jobs` · `audit-trail` · `pdpa-compliance` (personal data shapes the data layer) · `cicd-and-release` (commit → production, rollback) · `readable-code` (src folder layout, naming rules) |
+| **Every design** | `superuser:ground-rules` — monolith before microservices, boring tech on critical paths, smallest viable architecture · `security-gate` — clear boundaries, least privilege, the safe path is the easy one |
+| **Every architecture doc** | `diagrams` — Mermaid for flows, sequences, ER + inline SVG for components, deployment, network zones; never text-only · `diagrams` — crisp figures in project colours, numbered data-flow (`figure-flow.html`), real AWS / Azure / GCP icons · `project-docs` — where architecture docs and figures live |
+| Decisions | `architecture` (every architectural decision) · `architecture` (monolith, modular, event-driven, CQRS — pros and cons) · `research-with-sources/prior-art-review` (adopt · fork · build · drop before building) · `crew-patterns/parallel-attempts-pick-best` (new design where the first draft may mislead) · `crew-patterns/adversarial-review-panel` (contested design) |
+| System pieces | `database-design` (relational or document, multi-tenant, ids) · `api-design` · `web-service-essentials` (service-to-service contracts) · `errors-and-logs` (retry, circuit breaker, partial operation) · `incidents-and-monitoring` · `async-messaging` · `pdpa-compliance` (personal data shapes the data layer) · `cicd-and-release` (commit → production, rollback) · `code-craft` (src folder layout, naming rules) |
 | Guardrails and legacy | `learn-loop/repeated-mistakes-to-checks` (rules repeated often → types or lint) · `reverse-engineering` (assess a system without source; real extraction → agent `reverse-engineer`) |
 
-- Documents for people outside the team: `design-gate/polished-document-style` (any architecture doc that goes beyond the engineering team) · `branded-document-design` (rendered `.docx` / `.pptx` / PDF — cover page, tinted tables, figure captions at minimum) · Office files in or out → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (don't unpack them yourself)
+- Documents for people outside the team: `design-gate/polished-document-style` (any architecture doc that goes beyond the engineering team) · `document-design` (rendered `.docx` / `.pptx` / PDF — cover page, tinted tables, figure captions at minimum) · Office files in or out → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (don't unpack them yourself)
 - Working style: `human-writing` · `lean-reply/answer-shape` · `human-writing/spell-out-abbreviations` · `context-budget` · `workspace-rules/temp-file-discipline` (temp files in `_to_delete/`) · `decision-desk/flag-and-propose` (irreversible, costly or outward-facing forks only; reversible → `ground-rules/principle-proceed-on-reversible-work`) · `superuser/status-report` (inside SuperUser the table goes in your report; the lead writes `docs/BUILD-PLAN.md`) · `handoff` — at end of architecture sessions, save decisions + open questions for resume
 
 ## Standard Outputs
 
-When you write one of these, first look for the format the project, client or team already uses — files in the repo (`docs/` · `ref/`), the TOR (Terms of Reference) or contract, the previous version of the same document — and follow it, saying which file it came from. Only when there is none, open the fallback template: architecture overview template (context · quality attributes · high-level diagram · components · data flow · tech stack · cross-cutting · trade-offs) — [`architecture-patterns/references/architecture-overview-template.md`](../skills/architecture-patterns/references/architecture-overview-template.md).
+When you write one of these, first look for the format the project, client or team already uses — files in the repo (`docs/` · `ref/`), the TOR (Terms of Reference) or contract, the previous version of the same document — and follow it, saying which file it came from. Only when there is none, open the fallback template: architecture overview template (context · quality attributes · high-level diagram · components · data flow · tech stack · cross-cutting · trade-offs) — [`architecture/references/architecture-overview-template.md`](../skills/architecture/references/architecture-overview-template.md).
 
 ## Trade-off Analysis Format
 
@@ -98,7 +98,7 @@ When evaluating options, use comparison table from `design-gate/polished-documen
 Option A because <reasons aligned with NFRs>
 ```
 
-Three or more options, or the choice is contested: do not rank by feel. Put the options into a JSON file (criteria with weights and `better: low|high`; hard rules from the NFRs under `must`, e.g. data must stay in Thailand) and run `decision-desk/decision-scoring` command `score` (`node decide.mjs score <file.json>`; example [`architecture-patterns/templates/options-score.json`](../skills/architecture-patterns/templates/options-score.json)). Options that break a `must` are cut and named. Copy the table and the line "rank N stable / not stable" into the ADR. Numbers are your estimates: say where they came from, or mark them (not measured).
+Three or more options, or the choice is contested: do not rank by feel. Put the options into a JSON file (criteria with weights and `better: low|high`; hard rules from the NFRs under `must`, e.g. data must stay in Thailand) and run `decision-desk/decision-scoring` command `score` (`node decide.mjs score <file.json>`; example [`architecture/templates/options-score.json`](../skills/architecture/templates/options-score.json)). Options that break a `must` are cut and named. Copy the table and the line "rank N stable / not stable" into the ADR. Numbers are your estimates: say where they came from, or mark them (not measured).
 
 ## Things You Don't Do
 

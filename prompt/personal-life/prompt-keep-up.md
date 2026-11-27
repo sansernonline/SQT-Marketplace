@@ -20,9 +20,9 @@
 
 | # | งาน | playbook | ได้ไฟล์ |
 |---|---|---|---|
-| 1 | เรดาร์เทคโนโลยีประจำสัปดาห์ | `tech-radar` | `radar/reports/YYYY-Www.md` |
-| 2 | ไลบรารีหลักออกเวอร์ชันใหญ่หรือเลิกสนับสนุน ต้องอัปเกรดไหม | `tech-radar` (ขั้น 2–5 กับไลบรารีเดียว) | `radar/deep-dives/<library>-<version>.md` |
-| 3 | ของใหม่ที่ทุกคนพูดถึง ควรลงแรงเรียนไหม | `tech-radar` (ขั้น 2–5 กับเรื่องเดียว) | `radar/evaluations/<ชื่อ>.md` + `examples/<ชื่อ>-trial/` |
+| 1 | เรดาร์เทคโนโลยีประจำสัปดาห์ | `tech-growth` | `radar/reports/YYYY-Www.md` |
+| 2 | ไลบรารีหลักออกเวอร์ชันใหญ่หรือเลิกสนับสนุน ต้องอัปเกรดไหม | `tech-growth` (ขั้น 2–5 กับไลบรารีเดียว) | `radar/deep-dives/<library>-<version>.md` |
+| 3 | ของใหม่ที่ทุกคนพูดถึง ควรลงแรงเรียนไหม | `tech-growth` (ขั้น 2–5 กับเรื่องเดียว) | `radar/evaluations/<ชื่อ>.md` + `examples/<ชื่อ>-trial/` |
 
 ใช้ต่อกัน: เรดาร์เจอเรื่อง "ต้องทำ" ที่เป็นเวอร์ชันใหญ่ → 1 → 2 · เรดาร์เจอของใหม่ที่น่าสนใจ → 1 → 3 แล้วคำตัดสิน "เรียนตอนนี้" → `prompt-start-learning.md` ฉบับ 1 · ตรวจก่อนใช้ → `prompt-start-learning.md` ฉบับ 4
 
@@ -30,7 +30,7 @@
 
 ## 1. เรดาร์เทคโนโลยีประจำสัปดาห์
 
-playbook `tech-radar` · agent `tech-mentor` · skill `tech-radar`
+playbook `tech-growth` · agent `tech-mentor` · skill `tech-growth`
 **ผลลัพธ์:** `radar/reports/YYYY-Www.md` · อัปเดต `radar.md` (รายการที่ติดตาม)
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -50,7 +50,7 @@ playbook `tech-radar` · agent `tech-mentor` · skill `tech-radar`
 
 ## 2. ไลบรารีหลักออกเวอร์ชันใหญ่หรือเลิกสนับสนุน ต้องอัปเกรดไหม
 
-playbook `tech-radar` (ขั้น 2–5 ทำกับไลบรารีเดียวแบบเจาะลึก) · agent `tech-mentor` · skill `tech-radar` · `english-tech-reading`
+playbook `tech-growth` (ขั้น 2–5 ทำกับไลบรารีเดียวแบบเจาะลึก) · agent `tech-mentor` · skill `tech-growth` · `learning-path`
 **ผลลัพธ์:** `radar/deep-dives/<library>-<version>.md` · **ไม่แก้โค้ดในโปรเจกต์จริง** · งานอัปเกรดจริงส่งต่อ plugin `software-development` (`prompt-existing-dev.md` ฉบับ 3)
 
 - [ ] อนุญาตให้ลองอัปเกรดในสำเนาแยก (git worktree หรือสำเนาใน `_to_delete/`) แล้วรัน test · ไม่แตะโค้ดจริง ไม่ commit
@@ -78,7 +78,7 @@ playbook `tech-radar` (ขั้น 2–5 ทำกับไลบรารี�
 
 ## 3. ของใหม่ที่ทุกคนพูดถึง ควรลงแรงเรียนไหม
 
-playbook `tech-radar` (ขั้น 2–5 ทำกับเรื่องเดียว) · agent `tech-mentor` · skill `tech-radar` · `lean-reply/answer-shape`
+playbook `tech-growth` (ขั้น 2–5 ทำกับเรื่องเดียว) · agent `tech-mentor` · skill `tech-growth` · `lean-reply/answer-shape`
 **ผลลัพธ์:** `radar/evaluations/<ชื่อ>.md` (คำตัดสิน) · `examples/<ชื่อ>-trial/` (ทดลองเล็ก) · **รออนุมัติ:** สมัครบริการหรือแพ็กเกจที่เสียเงินเพื่อทดลอง
 
 ### ข้อมูล (ผู้ใช้กรอก)

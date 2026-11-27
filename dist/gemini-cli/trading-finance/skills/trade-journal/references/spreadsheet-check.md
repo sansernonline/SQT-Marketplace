@@ -1,6 +1,6 @@
 # Check the user's spreadsheet before trusting it
 
-Used by `trade-journal` (review mode) and `portfolio-snapshot` when the user's own Excel or Google Sheets file is the source. A wrong formula in the user's sheet turns every number after it wrong, and the review then teaches the wrong lesson.
+Used by `trade-journal` (review mode) and `portfolio` when the user's own Excel or Google Sheets file is the source. A wrong formula in the user's sheet turns every number after it wrong, and the review then teaches the wrong lesson.
 
 Open the file with the `xlsx` skill (Anthropic's built-in) when it is installed; otherwise ask the user to export CSV and say formulas could not be checked. Read formulas, not only the shown values.
 

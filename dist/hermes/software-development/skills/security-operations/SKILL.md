@@ -6,7 +6,7 @@ argument-hint: <soc-design | threat-hunt> <details>
 
 # security-operations
 
-Operational security work — incident response · Security Operations Center (SOC, the team that watches for security events) · detection rules · threat hunting · security architecture (for code, use `security-gate` · `principle-secure-by-default`)
+Operational security work — incident response · Security Operations Center (SOC, the team that watches for security events) · detection rules · threat hunting · security architecture (for code, use `security-gate`)
 
 **Open only the files that match the job.** Do not read them all, because each file is the full guide to its topic.
 
@@ -31,7 +31,7 @@ An agent called in for this area opens its own role file before starting.
 
 ## ไม่ใช้เมื่อ
 
-- Write an incident runbook for on-call → `incident-runbook-template` · summarise an incident after it ends → `postmortem-template`
+- Write an incident runbook for on-call → `incidents-and-monitoring` · summarise an incident after it ends → `incidents-and-monitoring`
 
 ## agent ของสายนี้
 

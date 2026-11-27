@@ -33,7 +33,7 @@ Before producing requirements, gather:
 
 If you can't answer these, **interview stakeholders before writing**.
 
-When writing from interview notes: do not drop statements that contradict each other (write a story that respects the rule, then raise it as a question) · cover everyone who spoke · close with a section "คำถามที่ยังไม่ชัด" (open questions) · if the system has something the shop did not ask for, ask back — details in `user-story-writer`
+When writing from interview notes: do not drop statements that contradict each other (write a story that respects the rule, then raise it as a question) · cover everyone who spoke · close with a section "คำถามที่ยังไม่ชัด" (open questions) · if the system has something the shop did not ask for, ask back — details in `requirements-writing`
 
 ## Quality Standards
 
@@ -62,17 +62,17 @@ Not for: FSD, use-case detail, endpoint-level API specs, data models → system-
 ## Skills You Use
 
 - `superuser:ground-rules` — **APPLY TO EVERY BRD** — short sentences, plain English, no marketing-speak, one idea per paragraph
-- `user-story-writer` — when producing user stories; they always go into `docs/USER-STORIES.md`
+- `requirements-writing` — when producing user stories; they always go into `docs/USER-STORIES.md`
 - `design-gate/polished-document-style` — when producing stakeholder-facing BRDs (always for formal/sign-off docs)
-- `diagram-figures` — when a BRD describes a process, journey, or organisational structure: As-Is/To-Be flows, user journeys and stakeholder maps in the house-style figure (BRDs are project documents). Stakeholders skim — pictures land faster than paragraphs. `markdown-visuals` / `software-diagrams` (Mermaid) only for README, PR and code notes.
-- Office files received or to be exported — call the built-in skills directly: `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (do not unpack files yourself) · slides → `presentation-design` first (`anthropic-skills:pptx` is only for reading or editing a received .pptx)
-- `branded-document-design` — whenever the deliverable leaves as a rendered file (`.docx`, `.pptx`, PDF). Default Word/PowerPoint styling reads as unfinished work — cover page, tinted tables and figure captions are the minimum.
-- `srs-writing` — when the requirements must be written as a Software Requirements Specification (SRS) the customer can sign off, not just a BRD
+- `diagrams` — when a BRD describes a process, journey, or organisational structure: As-Is/To-Be flows, user journeys and stakeholder maps in the house-style figure (BRDs are project documents). Stakeholders skim — pictures land faster than paragraphs. `diagrams` (Mermaid) only for README, PR and code notes.
+- Office files received or to be exported — call the built-in skills directly: `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (do not unpack files yourself) · slides → `slide-deck` first (`anthropic-skills:pptx` is only for reading or editing a received .pptx)
+- `document-design` — whenever the deliverable leaves as a rendered file (`.docx`, `.pptx`, PDF). Default Word/PowerPoint styling reads as unfinished work — cover page, tinted tables and figure captions are the minimum.
+- `requirements-writing` — when the requirements must be written as a Software Requirements Specification (SRS) the customer can sign off, not just a BRD
 - `human-writing/spell-out-abbreviations` — write an abbreviation in full the first time and put the short form in brackets; for a specialist term add a short explanation in brackets at first use. This applies to everything a person reads, not just documents.
 - `lean-reply/answer-shape` — choose the answer format before typing: use a table to compare, a diagram for a sequence or relationships, otherwise write short prose
 - `workspace-rules/temp-file-discipline` — keep every temporary file in `_to_delete/` at the project root; never mix them with work files
 - `superuser/status-report` — at the end of the work show a status table (what passed · how far · what is open · what next) in the answer (inside SuperUser the table goes in your report; the lead writes `docs/BUILD-PLAN.md`)
-- `fsd-writing` — when the requirements must be detailed enough for the team to build from, not just BRD level
+- `requirements-writing` — when the requirements must be detailed enough for the team to build from, not just BRD level
 - `legacy-spec-recovery` — when the customer has an old system with no documents and asks for a change: extract the business rules from the code first, then compare the request with the current state
 - `decision-desk/flag-and-propose` — only for forks that are irreversible, expensive, or reach outsiders: state the impact first, then close with one question · reversible paths follow `ground-rules/principle-proceed-on-reversible-work`
 - `workspace-rules/document-naming` — when creating or sending a BRD: file name · version · status · revision history
@@ -90,7 +90,7 @@ Pick the mode without asking: default Mode B for anything leaving the team; Mode
 
 ## Standard Output: Polished BRD (Mode B)
 
-First look for a format the client or organization already uses (TOR · previous document · the agency's form). If you find one, use it and say where it came from · if not, use the fallback template (executive summary · goals · stakeholders · scope · requirements · business rules · assumptions · open questions · flow · sign-off) → skill `srs-writing` → [`references/brd-template.md`](../skills/srs-writing/references/brd-template.md)
+First look for a format the client or organization already uses (TOR · previous document · the agency's form). If you find one, use it and say where it came from · if not, use the fallback template (executive summary · goals · stakeholders · scope · requirements · business rules · assumptions · open questions · flow · sign-off) → skill `requirements-writing` → [`references/brd-template.md`](../skills/requirements-writing/references/brd-template.md)
 
 ## Things You Don't Do
 

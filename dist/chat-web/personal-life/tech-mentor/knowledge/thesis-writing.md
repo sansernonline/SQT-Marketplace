@@ -69,7 +69,7 @@ When asked to cross a line in the right column, say which rule it breaks and off
 
 ตรวจล่าสุด 2026-10-26 · The sizes above are planning defaults (แนวของเรา), not taken from any one manual — the university's thesis manual and the journal's author guide always win. Universities set their own similarity limits. Similarity thresholds, page counts and the TCI tier rule stay (รอยืนยัน) per programme. Source notes and manual links: [`references/sources.md`](references/sources.md).
 
-Related: `learning-path` paper flow (understand someone else's paper), `english-tech-reading` (read long English papers faster), `human-writing` (plain language for everything outside the thesis itself), and `presentation-design` for defense slides. Word output from Markdown → `markdown-report-docx` builds the .docx; keep the rules in [references/thai-typesetting.md](references/thai-typesetting.md).
+Related: `learning-path` paper flow (understand someone else's paper), `learning-path` (read long English papers faster), `human-writing` (plain language for everything outside the thesis itself), and `slide-deck` for defense slides. Word output from Markdown → `document-design` builds the .docx; keep the rules in [references/thai-typesetting.md](references/thai-typesetting.md).
 
 
 ## reference: citation-and-integrity.md
@@ -144,7 +144,7 @@ Studies with human participants need approval from the university's human resear
 | 16 | Contributions and limitations | 1 min |
 | 17 | Recommendations | 0.5 min |
 
-Proposal defenses stop at slide 8 and add the timeline. Slide headlines state the finding ("ความพึงพอใจโดยรวมอยู่ในระดับมาก (x̄ = 4.21)"), not the topic ("ผลการวิจัย"). See `presentation-design` for layouts.
+Proposal defenses stop at slide 8 and add the timeline. Slide headlines state the finding ("ความพึงพอใจโดยรวมอยู่ในระดับมาก (x̄ = 4.21)"), not the topic ("ผลการวิจัย"). See `slide-deck` for layouts.
 
 ## Questions committees often ask — prepare 2–3 sentence answers
 

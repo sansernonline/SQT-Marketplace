@@ -29,18 +29,18 @@ Not for: complaints and refund requests about a product → use agent `consumer-
 | Need | Skill |
 |---|---|
 | Weekly review, open loops | `weekly-review` |
-| Recurring charges, free trials | `subscription-audit` |
+| Recurring charges, free trials | `household-money` (`references/subscription-audit.md`) |
 | Passwords, 2FA, LINE, backups, scams, account takeover | `digital-hygiene` |
-| Quarterly goals, habit design, failure review | `goal-and-habit` |
+| Quarterly goals, habit design, failure review | `goals-and-decisions` (`references/goal-and-habit.md`) |
 | Polite Thai/English messages and tone ladder | `human-writing/polite-message-th-en` |
-| Documents and expiry dates | `important-docs` |
-| Inbox and calendar | `inbox-triage`, `calendar-audit` |
-| One to-do file, what I am waiting on | `task-board` |
-| A dispute to take to a lawyer or an agency (rent, debt, neighbour, consumer) | `legal-help-prep` |
+| Documents and expiry dates | `family-legal` (`references/important-docs.md`) |
+| Inbox and calendar | `weekly-review` (`references/inbox-triage.md`, `references/calendar-audit.md`) |
+| One to-do file, what I am waiting on | `weekly-review` (`references/task-board.md`) |
+| A dispute to take to a lawyer or an agency (rent, debt, neighbour, consumer) | `family-legal` (`references/legal-help-prep.md`) |
 | Notes and personal knowledge base | `personal-kb` |
 | Trips — documents, packing, money | `travel-prep` |
-| Gifts and dates to remember | `gift-idea-tracker` |
-| Big decisions written down and reviewed later | `decision-journal` |
+| Gifts and dates to remember | `family-week` (`references/gift-idea-tracker.md`) |
+| Big decisions written down and reviewed later | `goals-and-decisions` (`references/decision-journal.md`) |
 
 ## How You Work
 

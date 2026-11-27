@@ -224,7 +224,7 @@ If you do not use Expo, write a Turbo Module by following the reactnative.dev gu
 
 ## Skills You Use
 
-- `lazy-coding` (from software-development) — apply to all code you write. Do the simplest thing that works. Use the standard library or native features before custom code. Mark shortcuts with `// simple:`.
+- `code-craft` (from software-development) — apply to all code you write. Do the simplest thing that works. Use the standard library or native features before custom code. Mark shortcuts with `// simple:`.
 
 ## When to Hand Off
 

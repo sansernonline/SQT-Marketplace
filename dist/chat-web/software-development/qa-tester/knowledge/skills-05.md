@@ -1,152 +1,3 @@
-# skill: stack-typescript
-
-Use when writing or reviewing TypeScript code
-
-# stack-typescript — TypeScript the team can read easily and that is hard to break
-
-> **One rule:** let the compiler catch bugs instead of people. `tsc` passing with 0 errors does not mean done, but failing means not started.
-
-## Use when
-- Writing or reviewing TypeScript in a Node backend (Express · Fastify · NestJS), Angular, or React/Vite code.
-
-Not for: least code → `lazy-coding` · names and layout → `readable-code` · types and data shape before writing → `principle-data-shape-first` · browser tests → `e2e-testing-patterns` · screens and tokens → `web-app-design`
-
-## Steps
-1. Look at the repo before the first command. Use the package manager its lockfile shows (`package-lock.json` · `pnpm-lock.yaml` · `yarn.lock`), never 2 lockfiles. Follow `.nvmrc` or `engines` for Node; if absent use the latest Long Term Support (LTS), re-checking https://nodejs.org/en/about/previous-releases first (dated notes: `references/sources.md`). Follow the existing module system (`"type"` · `tsconfig` `module`), never mix ESM and CJS. Use an existing `package.json` script before guessing a command.
-2. Install and verify with the repo's commands: `npm ci` (pnpm `install --frozen-lockfile` · yarn `install --immutable`) · `npx tsc --noEmit` · `npm run lint && npm test && npm run build 2>&1 | tail -40` · one test: `npx vitest run <file> -t "<name>"`. Angular: `ng test --include=...` and check the bundle size at the end of `ng build`. `npm install <pkg>` changes the lockfile, so commit it in the same round.
-3. Write strict TypeScript. Instead of `any` use `unknown` then narrow (`typeof` · `in` · a type guard). Instead of `value!` to silence an error, check `if (!value) throw …` or fix the source type. Instead of `as Order` on outside data, parse with zod (or the repo's library). Instead of several booleans for a state, use a discriminated union. Instead of `const x: Config = {...}` that loses the literal, use `satisfies Config`.
-4. Set `tsconfig` `"strict": true` · `noUncheckedIndexedAccess` · `noImplicitOverride`. If an old repo has strict off, turn it on one folder at a time, not for the whole repo in one task. For `enum` vs string union follow the repo; a new repo uses `as const` + union. Keep API types shared by frontend and backend in one place.
-5. For types standing for a national ID number, an amount of money or a document number, apply 4 checks: hide the internals (one `parse` function creates values) · put the rules in the type (a rule-breaking value cannot be created) · validate once at the entrance · expose nothing mutable (`readonly` fields, never return an internal array). Examples: `references/examples.md`.
-6. Node backend: turn on `@typescript-eslint/no-floating-promises` and `no-misused-promises`; every `async` is `await`ed or has a `.catch` that does something real. Express 4 does not forward `async` handler errors: use Express 5 or wrap (Fastify and NestJS handle it). Parse `process.env` with a schema once at startup and refuse to start on a bad value (`config-and-secrets`). Shut down cleanly: on `SIGTERM` stop accepting requests → wait for pending → close the DB pool, with a force-exit timer (code in `references/examples.md`). Use `stream.pipeline` for large files, never `readFile` them whole. No `fs.*Sync` · heavy `crypto.*Sync` · big loops in a request path. Use parameterized queries (`$1` · `?`) or an ORM, never string-concatenated SQL. Use structured logs per `logging-standards`, no `console.log` in a server.
-7. Angular: standalone components · `inject()` · `signal`/`computed`/`input()`/`output()` · `OnPush` · `@if`/`@for (x of xs; track x.id)` · lazy routes · `async` pipe/`toSignal`/`takeUntilDestroyed()`. No new NgModule, no `*ngIf`/`*ngFor`, no `BehaviorSubject` state inside a component, no `subscribe` without unsubscribing. Keep logic in `computed`, never call a heavy function in a binding. Never use `DomSanitizer.bypassSecurityTrust*` on user data (if truly needed, comment why it is safe). In an old repo (v14–19) follow its style and do not migrate inside a feature task; propose migration separately. Full table, React/Vite notes and v22 facts: `references/angular.md`. For speed work on a React or Next.js repo read Vercel `react-best-practices` live (link in `references/angular.md`); on a conflict with step 3, follow this skill.
-8. Avoid the common traps (time zone: store ISO 8601 UTC · money: integer satang · `===` · no shared-object mutation · cancel subscriptions · narrow imports · `Intl.Collator('th')` for Thai sorting · schema-parse `JSON.parse` at the edge): `references/traps.md`.
-9. Test with the framework the repo has (Vitest and Angular examples: [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#node--typescript--vitest)). HTTP API: `supertest` (Express · NestJS) or `fastify.inject()`, no real port. Angular v21+ CLI uses Vitest, not Karma. For new logic or a bug fix, write a red test first, then fix to green. A snapshot alone is not a test; assert the values that matter. Read a signal directly (`component.unpaid()`); skip `fakeAsync` if nothing is really async.
-10. Security: before installing a new package check spelling (typosquat) · download count · maintainer · latest release date, and for an internal scope set the registry in `.npmrc`. Run `npm audit --omit=dev`; commit the lockfile and use `npm ci` in CI. Never use `innerHTML` · `[innerHTML]` · `dangerouslySetInnerHTML` with user data. Cookie login sets `HttpOnly` · `Secure` · `SameSite` and guards against Cross-Site Request Forgery (CSRF: token or `withXsrfConfiguration`). Cross-Origin Resource Sharing (CORS): list origins one by one, never `*` with `credentials`. No secrets in the frontend (`environment.ts` and `VITE_*` are readable by everyone). Security headers: `helmet` · `@fastify/helmet`.
-
-## Check before done
-- `tsc --noEmit` 0 errors · lint 0 warnings in the changed files
-- The whole test suite passes, and new behaviour has a test that was red before the fix
-- No `any` · `as` on external data · new `!` in the diff
-- No floating promise and no subscription left uncancelled
-- Frontend: bundle size compared before and after; if it grew more than 20 KB (gzip), give the reason in the report
-- If the lockfile changed, the new packages were checked per step 10
-
-## References
-- [`references/examples.md`](references/examples.md) — open for zod/union code, the branded ID type and the shutdown handler
-- [`references/angular.md`](references/angular.md) — open for an Angular or React/Vite task (full do/do-not table, v22 facts)
-- [`references/traps.md`](references/traps.md) — open when touching dates, money, equality, shared state, imports or sorting
-- [`references/sources.md`](references/sources.md) — dated sources (Node LTS status to re-check)
-- Also: `principle-secure-by-default` · `error-handling-patterns` · `i18n-and-locale` (Thai dates, Buddhist Era)
-
-
-## reference: angular.md
-
-# Angular and React notes · stack-typescript
-
-Open when the repo is Angular (or React/Vite/Next.js) and you write or review components, state, forms, HTTP or routes.
-
-The latest is v22 (released 3 Jun 2026 · source: https://angular.dev/reference/releases · checked 22 Oct 2026): new apps are zoneless and `OnPush` is the default, and Signal Forms are production-ready (these last 3 points (รอยืนยัน) — the source page does not state them; check the v22 release notes before citing).
-
-| Topic | Do this | Do not |
-|---|---|---|
-| component | standalone · `inject()` | create a new NgModule |
-| state | `signal` · `computed` · `input()` · `output()` | `BehaviorSubject` for state inside a component |
-| change detection | `OnPush` (default in v22) | `Default`/`Eager` without a reason |
-| template | `@if` · `@for (x of xs; track x.id)` · `@switch` | `*ngIf` · `*ngFor` (deprecated since v20) |
-| form | Signal Forms (v22); an existing repo uses typed reactive forms | `UntypedFormGroup` |
-| HTTP | `HttpClient` + functional interceptor (`withInterceptors`) | add the token header one place at a time |
-| subscription | `async` pipe · `toSignal` · `takeUntilDestroyed()` | `subscribe` and never unsubscribe |
-| route | lazy `loadComponent` · `loadChildren` | import every page in the root route |
-
-- Move logic out of templates into `computed` so a template only displays, and never call a heavy function in a binding.
-- Never use `DomSanitizer.bypassSecurityTrust*` on data sent by users. If it is truly needed, comment why it is safe.
-- **Old repo (v14–19)**: write in the style the repo already uses, use new features only where that version supports them, and do not migrate the whole repo inside a feature task. If you want to migrate, propose it as a separate task, then use `ng generate @angular/core:control-flow` and Angular's other schematics.
-- React or Vite: keep state in the component first · `useEffect` needs a cleanup · list keys are ids, not indexes · client-side env may use only `VITE_*`, and treat it as visible to everyone.
-- For a React or Next.js repo where speed must be chased (repeated renders · bundle · waterfall data fetching), pull the rules from Vercel `react-best-practices` and read them live while working: https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices — a link only, no rules copied here, because that repo's licence has not been checked (checked 23 Oct 2026) · a rule that conflicts with item 2 of this skill (strict TS): follow ours.
-
-```ts
-export class OrderList {
-  private orders = toSignal(inject(OrderApi).list(), { initialValue: [] });
-  readonly unpaid = computed(() => this.orders().filter(o => o.status === 'unpaid'));
-}
-// <ul>@for (o of unpaid(); track o.id) { <li>{{ o.id }}</li> } @empty { <li>ไม่มีรายการค้างจ่าย</li> }</ul>
-```
-
-
-## reference: examples.md
-
-# Code examples and new-type checks · stack-typescript
-
-Open when writing a zod parse, a discriminated union, a branded type for IDs or money, or the graceful-shutdown handler.
-
-## Parse and union
-
-```ts
-const Order = z.object({ id: z.uuid(), totalSatang: z.number().int().nonnegative() });
-type Order = z.infer<typeof Order>;
-
-type PayResult =
-  | { status: 'paid'; receiptId: string }
-  | { status: 'failed'; reason: 'declined' | 'timeout' };
-// switch (r.status) ครบทุกกรณี · default: const _never: never = r;
-```
-
-**4 new-type checks** (idea from the type-design-analyzer of pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10). Apply them to types that stand for a national ID number, an amount of money, a document number:
-
-1. **Hide the internals** — users of the type create a value in only one way (a `parse` function) and never edit fields directly.
-2. **The rules live in the type** — a value that breaks the rules cannot be created; the rules are not written only in a document.
-3. **Check at the entrance** — validate once at creation, and then the whole system can trust the type.
-4. **Expose nothing mutable** — `readonly` on every field, and never return an internal array for others to change.
-
-```ts
-type ThaiNationalId = string & { readonly __brand: 'ThaiNationalId' };  // 13 หลัก + ตรวจเลขท้าย
-const checkDigit = (d: string) => (11 - (d.slice(0, 12).split('').reduce((s, c, i) => s + Number(c) * (13 - i), 0) % 11)) % 10;
-const parseNationalId = (s: string): ThaiNationalId | null =>
-  /^\d{13}$/.test(s) && checkDigit(s) === Number(s[12]) ? (s as ThaiNationalId) : null;
-// จำนวนเงินเก็บเป็นสตางค์ (number เต็ม) ไม่ใช้ float · ตัวอย่างเลข 1234567890121 สร้างขึ้นเอง ไม่ใช่เลขของใคร
-```
-
-## Graceful shutdown
-
-```ts
-const server = app.listen(port);
-process.on('SIGTERM', () => {
-  server.close(async () => { await db.end(); process.exit(0); });
-  setTimeout(() => process.exit(1), 10_000).unref();
-});
-```
-
-
-## reference: sources.md
-
-# Sources · stack-typescript
-
-- Node LTS · https://nodejs.org/en/about/previous-releases · last checked 2026-10-14: LTS is 24 and 22 · 26 is still Current, so do not use it in production until this page lists it as LTS · the next one to expire is 22 (2027-04-30 (รอยืนยัน)) · re-check this page before use · Node 26 will probably become LTS in late Oct 2026 (รอยืนยัน); re-check this line right after that date
-- Angular releases · https://angular.dev/reference/releases · checked 22 Oct 2026 (v22 released 3 Jun 2026)
-- 4 new-type checks · idea from the type-design-analyzer of pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10
-- Vercel react-best-practices · https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices · licence not checked (checked 23 Oct 2026) · link only, no rules copied
-
-
-## reference: traps.md
-
-# Common traps · stack-typescript
-
-Open when the code touches dates and time zones, money, equality, shared objects, subscriptions, large imports, sorting Thai names or JSON parsing.
-
-| Trap | Symptom | Do this |
-|---|---|---|
-| time and time zone | the date goes back 1 day between 00:00–06:59 Thai time | store and send ISO 8601 in UTC, then display with `Intl.DateTimeFormat('th-TH', { timeZone: 'Asia/Bangkok' })`; for the Buddhist Era year see `i18n-and-locale` |
-| money | `0.1 + 0.2 !== 0.3` | store as satang (integer); for tax or currency conversion use the decimal library the repo uses |
-| `==` | `'0' == false` is true | always use `===` and turn on eslint `eqeqeq` |
-| mutating a shared object | values change by themselves across pages | create a new one with spread · `structuredClone` · `readonly` in the type |
-| memory leak | RAM keeps growing | cancel subscriptions · `removeEventListener` · `clearInterval`, and caches need a cap |
-| big imports | bundle bloats by hundreds of KB | `import { debounce } from 'lodash-es'`, not all of lodash, and check the bundle after the build |
-| sorting Thai names | leading vowels sort wrong | use `new Intl.Collator('th').compare`, not bare `localeCompare` |
-| `JSON.parse` without checks | crash deep in the code | parse with a schema at the system edge (item 2) |
-
-
----
-
 # skill: stack-python
 
 Use when writing or testing Python code
@@ -156,7 +7,7 @@ Use when writing or testing Python code
 ## Use when
 - Writing, changing or testing Python (scripts · FastAPI · Django · pandas · pytest) in any repo.
 
-Not for: writing less → `lazy-coding` · naming → `readable-code` · logging → `logging-standards` · catching errors → `error-handling-patterns` · test framework choice → `testing-standards` · LLM calls → `llm-engineering` · schema and migrations → `database-design` · background jobs → `background-jobs`.
+Not for: writing less → `code-craft` · naming → `code-craft` · logging → `errors-and-logs` · catching errors → `errors-and-logs` · test framework choice → `test-automation` · LLM calls → `ai-engineering` · schema and migrations → `database-design` · background jobs → `async-messaging`.
 
 ## Steps
 1. Find what the repo uses and use that; never mix tools (for example no `uv.lock` in a poetry repo).
@@ -192,8 +43,8 @@ Not for: writing less → `lazy-coding` · naming → `readable-code` · logging
    pytest -q -k "refund and not slow"                      # เลือกตามชื่อ
    ```
    Type checker: `[tool.pyright]` or `pyrightconfig.json` → pyright; `[tool.mypy]` or `mypy.ini` → mypy; neither → ask once; Astral's ty only if the repo already set it up. If the repo uses black · isort · flake8, keep them; do not move to ruff in the same task.
-6. Tests: for new logic and bugs write the failing test first, then fix. `tmp_path` for files, `monkeypatch.setenv` for env, pass the clock in as a parameter (else `time-machine`; keep `freezegun` if the repo has it), `respx` / `responses` for HTTP (no real network), `testcontainers` of the production database type (not SQLite for Postgres). Setup and examples: [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#python--pytest).
-7. Security (principles in `principle-secure-by-default`): lock and commit dependencies; scan with `pip-audit`; check a new package's exact PyPI name before adding; SQL by parameters, never an f-string; resolve user file names and check `.is_relative_to(base.resolve())`; secrets from the environment; `shell=True`, `pickle.load` of outside data and `yaml.load` are forbidden. Add dependencies only with `uv add` in a uv repo. Full list and the traps table: [`references/traps-and-security.md`](references/traps-and-security.md).
+6. Tests: for new logic and bugs write the failing test first, then fix. `tmp_path` for files, `monkeypatch.setenv` for env, pass the clock in as a parameter (else `time-machine`; keep `freezegun` if the repo has it), `respx` / `responses` for HTTP (no real network), `testcontainers` of the production database type (not SQLite for Postgres). Setup and examples: [`test-automation/references/per-stack.md`](../test-automation/references/per-stack.md#python--pytest).
+7. Security (principles in `security-gate`): lock and commit dependencies; scan with `pip-audit`; check a new package's exact PyPI name before adding; SQL by parameters, never an f-string; resolve user file names and check `.is_relative_to(base.resolve())`; secrets from the environment; `shell=True`, `pickle.load` of outside data and `yaml.load` are forbidden. Add dependencies only with `uv add` in a uv repo. Full list and the traps table: [`references/traps-and-security.md`](references/traps-and-security.md).
 
 ## Check before done
 - [ ] `ruff check` and `ruff format --check` (or the repo's formatter) pass.
@@ -223,7 +74,7 @@ Open when debugging a strange Python failure, writing tests, or reviewing a diff
 | datetime without timezone | Time is off by 7 hours, or comparing gives a `TypeError` | Create with `datetime.now(timezone.utc)` (3.11+ can use `datetime.UTC`), store as UTC, display with `ZoneInfo("Asia/Bangkok")`, and never use `utcnow()` |
 | Money as float | `0.1 + 0.2 != 0.3` and the total is short by 1 satang | Use `int` satang, or `Decimal("0.10")` from a string |
 | Closure in a loop | Every callback gets the last value of the loop | Bind the value at creation `lambda i=i: ...` or `functools.partial` |
-| A broad `except Exception:` | Real errors are swallowed | Catch only known types, per `error-handling-patterns` |
+| A broad `except Exception:` | Real errors are swallowed | Catch only known types, per `errors-and-logs` |
 | Circular imports | `ImportError` of the partially initialized kind | Move shared things into a third module, and put imports used only for types under `if TYPE_CHECKING:` |
 | CPU-heavy work in threads | Using several threads does not speed it up, because of the Global Interpreter Lock (GIL) | Use `ProcessPoolExecutor`; threads are for I/O waiting |
 | `subprocess(..., shell=True)` | User input becomes a shell command | Pass a list `["git", "log", ref]`, add `check=True` and set a `timeout` |
@@ -235,7 +86,7 @@ Open when debugging a strange Python failure, writing tests, or reviewing a diff
 
 ## Tests
 
-For pytest setup · fixtures · `parametrize` and examples, see [`testing-standards/references/per-stack.md`](../../testing-standards/references/per-stack.md#python--pytest); this section keeps only Python-specific traps.
+For pytest setup · fixtures · `parametrize` and examples, see [`test-automation/references/per-stack.md`](../../test-automation/references/per-stack.md#python--pytest); this section keeps only Python-specific traps.
 
 - Temporary files use `tmp_path`; never write into the repo's folders · environment values use `monkeypatch.setenv`
 - Time: pass the clock into the function as a parameter first; if you cannot change it, use `time-machine`, but if the repo already uses `freezegun`, keep using it
@@ -246,14 +97,14 @@ For pytest setup · fixtures · `parametrize` and examples, see [`testing-standa
 
 ## Python-specific security
 
-The 10 principles are in `principle-secure-by-default`; this is how to do them in Python.
+The 10 principles are in `security-gate`; this is how to do them in Python.
 
 - Always lock dependencies (`uv.lock` · `poetry.lock` · `pip-compile --generate-hashes`) and commit the lock file
 - Vulnerability scanning: `pip-audit` (works with every tool); uv has `uv audit` but it is still a preview (the version that first has it (รอยืนยัน) (pending confirmation) · source: https://github.com/astral-sh/uv/blob/main/CHANGELOG.md · checked 22 Oct 2569 BE), so it may be used, but Continuous Integration (CI) still relies on `pip-audit`
 - Before `uv add` or `pip install` of a new package, spell the name exactly as on its PyPI page, check the maintainers and the latest release date, and beware of look-alike names (`reqeusts` · `python-dateutil` versus `dateutil`)
 - SQL passes values through parameters: `cur.execute("... WHERE id = %s", (oid,))`; with SQLAlchemy use `text(...)` with `:name`, and never an f-string
-- File names from users: `(base / name).resolve()` then check `.is_relative_to(base.resolve())`; for uploads see `file-upload-and-storage`
-- Secrets are read from the environment (`os.environ["KEY"]` or pydantic-settings) and checked at startup; keep `.env` in `.gitignore` (see `config-and-secrets`)
+- File names from users: `(base / name).resolve()` then check `.is_relative_to(base.resolve())`; for uploads see `web-service-essentials`
+- Secrets are read from the environment (`os.environ["KEY"]` or pydantic-settings) and checked at startup; keep `.env` in `.gitignore` (see `web-service-essentials`)
 - Django production: `DEBUG = False` · `ALLOWED_HOSTS` with real names · `SECRET_KEY` from the environment · run `python manage.py check --deploy` before release
 
 
@@ -271,7 +122,7 @@ Open when the task touches FastAPI · Django · pandas · numpy · torch · note
 - 1 DB session per request through a dependency that `yield`s; never keep a session at module level
 - Django Object-Relational Mapping (ORM): if you loop and touch a FK, use `select_related`; if you touch many-to-many or a reverse FK, use `prefetch_related`, then check the query count in tests with `assertNumQueries` or `django_assert_num_queries`
 - migration: read the file `makemigrations` creates every time before commit; if you drop a column or change a type on a big table, split it into several steps per `database-design`
-- For health endpoints · timeouts · the shape of errors sent out, see `web-service-essentials` and `api-conventions`
+- For health endpoints · timeouts · the shape of errors sent out, see `web-service-essentials` and `api-design`
 
 ```python
 def get_db() -> Iterator[Session]:
@@ -295,7 +146,7 @@ def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
 | notebook | Fine for trying ideas, but move code you will reuse into a module with tests; leave the notebook only calling functions and drawing charts |
 | Large files | Read in parts (`chunksize`) or use parquet instead of CSV when you control the format |
 
-- For LLM calls · prompts · RAG · evaluation, see `llm-engineering`
+- For LLM calls · prompts · RAG · evaluation, see `ai-engineering`
 - For importing or exporting Excel and Buddhist Era years, see `data-import-export`
 
 
@@ -338,14 +189,14 @@ Not for: table design, naming, data types, expand-and-contract migrations → `d
 4. **Make it fast by reading the real plan on near-real data, never guessing.** Conditions sargable (no function around an indexed column) · every index can say which query it serves · deep paging uses keyset · count N+1 from the ORM log · big UPDATE/DELETE in batches. Commands per engine, keyset example, batches, parameter sniffing: [`references/performance.md`](references/performance.md).
 5. **Change data safely.** Scripts can be rerun · back up before a big change · count rows first and check before `COMMIT` · upsert in the engine's own form · touch tables in the same order (deadlocks) · `ALTER TABLE` on a big table needs `lock_timeout`. Isolation levels, upsert, non-locking index creation, row-count checks: [`references/safe-changes.md`](references/safe-changes.md).
 6. **Avoid the usual traps** (`MERGE` without `HOLDLOCK` · triggers with business rules · cursors · `NOLOCK` → use RCSI · collation mismatch in joins · gaps in ids · partial-index candidates · bloat after big deletes): [`references/traps.md`](references/traps.md).
-7. **Test** against a real database of the production kind, never SQLite or in-memory (NULL, collation, locks differ). Fresh database every run with Testcontainers and seed script; stored procedures use tSQLt (SQL Server) or pgTAP (PostgreSQL). Check row counts and values: NULL · midnight date edges · Thai names · fractional money. Run a new migration on a production-like copy with near-real volume, time it, watch the locks. For a bug, write the failing test first (`fix-at-source/principle-fix-root-cause`); framework → `testing-standards`.
-8. **Security.** 1 app, 1 database user with only needed permissions; never `sa` · `postgres` · `root`, and migrations run as a separate user. Dynamic SQL with user values: pass values as parameters, choose table or column names from an allowlist and quote them (`sp_executesql` · `QUOTENAME` · plpgsql `format('%I')` in [`references/snippets.md`](references/snippets.md)). Several companies in one table → consider row-level security (SQL Server `CREATE SECURITY POLICY` · PostgreSQL `CREATE POLICY`; the table owner bypasses unless `FORCE ROW LEVEL SECURITY`). Do not pull personal data columns unless used; Dynamic Data Masking is not access control (`pdpa-compliance`). Changes to important data leave a trace of who (`audit-trail`). Injection and permissions → `principle-secure-by-default`.
+7. **Test** against a real database of the production kind, never SQLite or in-memory (NULL, collation, locks differ). Fresh database every run with Testcontainers and seed script; stored procedures use tSQLt (SQL Server) or pgTAP (PostgreSQL). Check row counts and values: NULL · midnight date edges · Thai names · fractional money. Run a new migration on a production-like copy with near-real volume, time it, watch the locks. For a bug, write the failing test first (`fix-at-source/principle-fix-root-cause`); framework → `test-automation`.
+8. **Security.** 1 app, 1 database user with only needed permissions; never `sa` · `postgres` · `root`, and migrations run as a separate user. Dynamic SQL with user values: pass values as parameters, choose table or column names from an allowlist and quote them (`sp_executesql` · `QUOTENAME` · plpgsql `format('%I')` in [`references/snippets.md`](references/snippets.md)). Several companies in one table → consider row-level security (SQL Server `CREATE SECURITY POLICY` · PostgreSQL `CREATE POLICY`; the table owner bypasses unless `FORCE ROW LEVEL SECURITY`). Do not pull personal data columns unless used; Dynamic Data Masking is not access control (`pdpa-compliance`). Changes to important data leave a trace of who (`web-service-essentials`). Injection and permissions → `security-gate`.
 
 ## Check before done
 - [ ] Every outside value is a parameter · no `SELECT *`.
 - [ ] Checked NULL · half-open date ranges · division · parameter types match the columns.
 - [ ] Looked at the real plan on near-real data, noted logical reads or time before/after.
-- [ ] Scripts can be rerun and big data goes in batches (`principle-safe-to-rerun`).
+- [ ] Scripts can be rerun and big data goes in batches (`code-craft`).
 - [ ] Transaction + row counts checked before `COMMIT` · the way back written and a backup confirmed.
 - [ ] A test runs against the same kind of database as production.
 
@@ -443,7 +294,7 @@ Read this when writing a data-fix script, an upsert or an ALTER TABLE · the sho
 
 - If readers often block writers in SQL Server, consider turning on `READ_COMMITTED_SNAPSHOT ON`. It adds load on tempdb, so test first.
 - To prevent deadlocks: every piece of code touches tables in the same order, keep transactions as short as possible, and never wait on an external API while holding a transaction.
-- Every script must be rerunnable (`principle-safe-to-rerun`): `IF NOT EXISTS` · `CREATE INDEX IF NOT EXISTS` (PostgreSQL) · `CREATE OR ALTER` (SQL Server)
+- Every script must be rerunnable (`code-craft`): `IF NOT EXISTS` · `CREATE INDEX IF NOT EXISTS` (PostgreSQL) · `CREATE OR ALTER` (SQL Server)
 - Before a command that deletes or edits a lot of data: back up the affected tables, or confirm that the latest backup can really be restored, and write down the way back before running.
 - Count the expected rows first, then check before `COMMIT`:
 

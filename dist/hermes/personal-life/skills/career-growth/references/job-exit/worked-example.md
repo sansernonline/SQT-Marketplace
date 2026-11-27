@@ -1,0 +1,3 @@
+## Worked example
+
+`ตัวอย่าง` Salary 30,000 a month, started 2022-03-01, HR hands over a "mutual agreement" on 2026-11-10 offering one month's pay and asks for a signature today. Steps: the user asks for 3 days to read · saves the contract, 12 payslips, the agreement and the LINE message from HR · rights table: 4 years 8 months of service → the band for 3 to under 6 years in `thai-employment` → `references/labour-law-basics.md` §5 gives far more than one month · no notice given → pay in lieu also due · 4 days of annual leave left · the agreement has a clause giving up all claims → the user does not sign, takes the table to the labour office (section 6) and books a visit with `family-legal`. No ruling on whether the termination is fair.

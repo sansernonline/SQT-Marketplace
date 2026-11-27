@@ -1,5 +1,31 @@
 # Changelog — superuser
 
+## 4.5.0 — 2026-11-27
+
+- router · hook · `CLAUDE.global.md` · triggers ชี้ชื่อ skill ใหม่หลังรวม skill ของ e-commerce · trading-finance · personal-life · software-development (`lazy-coding` + `readable-code` → `software-development:code-craft`) · ติดตั้ง CLAUDE.md ใหม่หลังอัปเดต
+
+## 4.4.1 — 2026-11-27
+
+- `work-principles`: ตารางหลักคิดราย plugin อัปเดตตามชนิดงานที่เพิ่ม · ตัวเลข กำหนดเวลา และมาตรากฎหมายที่มีแหล่งไม่ถึง 3 แหล่งตัดออก ให้ไปดูใน skill แทน
+
+## 4.4.0 — 2026-11-27
+
+- skill ใหม่ `work-principles`: แนวคิด 3 ชั้น (หลักคิด · skill · playbook) สำหรับทุก plugin · ตารางหลักคิดที่ใช้กับทุกงาน (ground-rules · fix-at-source · human-writing · research-with-sources · decision-desk · design-gate) · ตารางหลักคิดราย plugin
+
+## 4.3.0 — 2026-11-27
+
+- `design-gate`: บรีฟ `เนื้อหา:` เป็น 7 ช่อง เพิ่ม `โปรเจกต์:` เป็นช่องแรก (มีไว้ทำไม · ชื่อหมายถึงอะไร · อยากให้คนจำว่าอะไร) · เขียนครั้งเดียวใน `DESIGN.md` · ธีมหรือสีอย่างน้อย 1 อย่างโยงกลับมาที่ช่องนี้ · คำค้น mood ใช้ 1 คำจากช่องนี้ · แก้ "6 ช่อง" ทุกจุด
+- `design-method` 12 ขั้น: ขั้น 1–4 กรอกบรีฟชุดเดียวกับ `content-to-theme.md` ไม่เขียนซ้ำ · ข้อเท็จจริงที่ขาดใส่ `(รอยืนยัน)` ห้ามเดา ส่วนการตีความใส่ `(เดา)` (เดิม 2 ไฟล์ขัดกัน) · แถวชื่อในตาราง idea map ต้องถามทุกครั้ง · ขั้น 5 งานชิ้นที่ 2 ขึ้นไปทำต่อจากภาษาเดิม · ขั้น 7 เพิ่มสีและฟอนต์ต่อแนวพร้อมเหตุผล · ขั้น 8 เพิ่มหลักจัดวาง (จุดเด่น · ลำดับการมอง · ระยะ · ที่ว่าง · ทดสอบเบลอ 1 วินาที) · ขั้น 10 เทียบกับชิ้นในชุด · ขั้น 11 ดูผลหลังใช้งาน · checklist และแหล่งอ้างอิง (NN/g · IxDF · Figma) ตามนั้น · ที่มา: เจ้าของให้เติมส่วนที่ขาด 2026-11-27
+- **lean-reply ใช้คำที่คนอ่านรู้จัก** (เจ้าของ 2026-11-27 "การเรียบเรียงยังดูอ่านยังไม่เข้าใจ") · ห้ามแปลศัพท์เทคนิคตรงตัว (arm → "แขน") · เรียกชื่อสิ่งนั้นแทน "ตัวนี้" · เขียนคำเต็ม · แยกเหตุผลที่ซ้อนเป็นหลายประโยค · เพิ่มใน `SKILL.md` (กฎข้อบังคับ + ข้อตรวจก่อนจบ) และ `parts/short-answers/guide.md` (หัวข้อใหม่พร้อมตัวอย่างก่อน–หลัง)
+
+## 4.2.0 — 2026-11-27
+
+- **อนุญาตให้เอง** (โมดูล `auto_allow` ค่าเริ่มเปิด · เจ้าของขอ 2026-11-27 "เวลาใช้ tool use ไม่ต้องถาม") · hook `PermissionRequest` ตอบ allow เมื่อ Claude Code จะถามสิทธิ์ เฉพาะรายการปลอดภัยใน `hooks/lib/permit.mjs`: เครื่องมืออ่านอย่างเดียว (Read · Grep · Glob · Agent · Skill · งานภายใน) · แก้ไฟล์ในโฟลเดอร์งาน · คำสั่ง test/build · git อ่าน · `git add/commit/switch/checkout -b` · ls cat grep find (ไม่มี -delete/-exec) · mkdir cp mv ภายในงาน · รันสคริปต์ที่อยู่ในงาน
+- ที่เหลือไม่ตอบ = Claude Code ถามตามปกติ: เขียนนอกโฟลเดอร์งาน · `.env` และไฟล์ความลับ · `.git/` · `.claude/settings*.json` · `guard-allow.json` และ `config.json` (ให้สิทธิ์ตัวเองไม่ได้) · hook ของ plugin · `git push` · ติดตั้ง package · `$( )` backtick heredoc `sudo` `eval` `xargs` · เขียนออก `>` นอกงาน · ค้นเว็บ · เครื่องมือของ app ภายนอก (MCP)
+- คำสั่งที่ตรงข้อใดก็ได้ใน `guard-rules.json` (ทั้ง deny และ ask) ไม่อนุญาตให้เอง แม้โมดูล guard ปิดอยู่ · ข้อที่โปรเจกต์ยกเว้นใน `guard-allow.json` หรือบรรทัด `git อัตโนมัติ` นับตามนั้น · ไม่เคยตอบ deny ที่นี่ และกฎ deny/ask ในการตั้งค่าของผู้ใช้ยังชนะ allow ตามเอกสาร Claude Code
+- ปิดได้ด้วย `config.json → modules.auto_allow = false` หรือตัวแปร `SUPERUSER_AUTO_ALLOW=0` · self-test 20 ข้อ (`node hooks/lib/permit.mjs --self-test` และรวมใน `superuser-hook.mjs --self-test`)
+- bench (`scripts/evals/speed/run-bench.mjs`) ปิดการอนุญาตอัตโนมัติไว้เป็นค่าเริ่มต้น เพราะรอบที่ไม่ใช้ plugin ไม่มีระบบนี้ ถ้าเปิดให้แค่รอบ superuser คะแนนจะดีขึ้นเพราะคำสั่งไม่ถูกบล็อก ไม่ใช่เพราะ skill เก่งขึ้น · ใส่ `--auto-allow` เมื่อต้องการวัดผลของการอนุญาตอัตโนมัติ
+
 ## 4.1.4 — 2026-11-27
 
 - router · hook · triggers · design-gate ชี้ชื่อ skill ใหม่ของ graphic-design 0.38.0 (รวม 24 เหลือ 14)

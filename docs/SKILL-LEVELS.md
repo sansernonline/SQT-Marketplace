@@ -240,7 +240,7 @@ SQT-Marketplace\
 เรียกตรงต้องใส่ชื่อ plugin นำหน้า:
 
 ```
-/software-development:srs-writing
+/software-development:requirements-writing
 ```
 
 เรียก agent ด้วยชื่อ agent ในคำสั่งภาษาคน:
@@ -344,7 +344,7 @@ skill จะถูกเลือกเองเมื่องานตรง�
 
 ```
 /srs-writing                      ← ระดับเครื่อง และระดับโปรเจกต์
-/software-development:srs-writing     ← ระดับ plugin ต้องมีชื่อ plugin นำหน้า
+/software-development:requirements-writing     ← ระดับ plugin ต้องมีชื่อ plugin นำหน้า
 ```
 
 ### เกิดอะไรขึ้นหลังมันถูกเรียก

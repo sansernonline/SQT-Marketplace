@@ -12,9 +12,9 @@ Cycle: check the provider with numbers before following (sections 1–4) → set
 - The user picks among MQL5 Signals providers, asks if a signal is safe, pastes a statistics page, or has a provider's trade history.
 - The user asks how to set up copying (deposit load, equity stop, VPS, fees), or brings this week's numbers and asks whether to keep following.
 
-Not for: learning to trade a technique yourself instead of copying → `trading-technique-course` · building or testing an own Expert Advisor (EA) → `stack-mql` · a bot that sends real orders (out of scope) · sizing one manual trade → `position-sizing`.
+Not for: learning to trade a technique yourself instead of copying → `trade-practice` · building or testing an own Expert Advisor (EA) → `stack-mql` · a bot that sends real orders (out of scope) · sizing one manual trade → `position-sizing`.
 
-Look-alikes: guaranteed profit, LINE group or "teacher", "รับฝากเทรด", "AI เทรดให้", money to a personal account → `scam-check`, stop here · fake money → `paper-trading` · tax → `tax-basics-th` · logging → `trade-journal`.
+Look-alikes: guaranteed profit, LINE group or "teacher", "รับฝากเทรด", "AI เทรดให้", money to a personal account → `scam-check`, stop here · fake money → `trade-practice` · tax → `income-tax-th` · logging → `trade-journal`.
 
 **Do not rank by highest Growth.** Past top return lost heavily on social-trading platforms (research in the reference); base rate 74–89% of retail CFD accounts lose (ESMA 2018). Say this when the user asks for the top-Growth signal.
 
@@ -73,9 +73,9 @@ Settings table, why results differ from the provider's, and the cost table (subs
 - **How much behind one provider.** Lots scale by X% of deposit, so the follower loses about the provider's drawdown × X%. The user names the most they can lose, L (% of the account). With the provider's equity drawdown D (%) inflated by k (1.5, starting value, not yet measured): **X ≤ L ÷ (D × k)**, rounded down. Never Kelly. Do not change X while positions are open.
 - **Costs before subscribing:** monthly subscription (no refund on cancel; MQL5 keeps 20%) + VPS (the terminal must stay online) + the follower broker's spread and commission. **Break-even** = monthly fixed costs ÷ account equity. If that exceeds the provider's typical month × X%, the account is too small for this signal; say so.
 
-## 6 · Fake money first — `paper-trading`
+## 6 · Fake money first — `trade-practice`
 
-A real signal cannot be copied on demo. Track the chosen provider's **new** trades in the `paper-trading` ledger for 8 weeks (starting value, not yet measured), scaled to the planned deposit load, then rerun `signal-check.mjs` on that period alone. Write the section 7 exit rules before this period starts. Go live only if the new period has no hard-rule flag, its drawdown stayed inside what the user named, and the BOT question in the legal box is answered.
+A real signal cannot be copied on demo. Track the chosen provider's **new** trades in the `trade-practice` ledger for 8 weeks (starting value, not yet measured), scaled to the planned deposit load, then rerun `signal-check.mjs` on that period alone. Write the section 7 exit rules before this period starts. Go live only if the new period has no hard-rule flag, its drawdown stayed inside what the user named, and the BOT question in the legal box is answered.
 
 ## 7 · Exit rules — written before any real money
 
@@ -105,7 +105,7 @@ Report weekly in 3 lines: the table · the ผล line · one thing to watch nex
 
 ## 9 · Tax
 
-Foreign-source income of a Thai tax resident is taxed in the year it is **brought into Thailand** (from 1 Jan 2024); which section of section 40 forex/CFD profit falls under and whether losses offset is unconfirmed (รอยืนยัน — ask Revenue Department on 1161). Details and sources: `references/legal-setup-tax.md` and `tax-basics-th`.
+Foreign-source income of a Thai tax resident is taxed in the year it is **brought into Thailand** (from 1 Jan 2024); which section of section 40 forex/CFD profit falls under and whether losses offset is unconfirmed (รอยืนยัน — ask Revenue Department on 1161). Details and sources: `references/legal-setup-tax.md` and `income-tax-th`.
 
 ## Check before sending
 - [ ] The legal box is in the answer before any step that moves real money
@@ -208,4 +208,4 @@ Settings from the MetaTrader 5 help ([signal subscriber](https://www.metatrader5
 
 ## Section 9 · Tax
 
-Revenue Department order ป.161/2566 (15 Sep 2023), amended by ป.162/2566 (20 Nov 2023): a Thai tax resident with foreign-source income must include it in the tax year it is **brought into Thailand**, for income brought in from 1 Jan 2024; income earned before 1 Jan 2024 is outside it. Tax withheld abroad under a double-tax treaty can be credited (RD news 34/2566). Not confirmed: which section of section 40 forex/CFD profit falls under and whether losses offset (รอยืนยัน — ask RD on 1161) · the 180-day residence test comes from search results only (รอยืนยัน). Details → `tax-basics-th`.
+Revenue Department order ป.161/2566 (15 Sep 2023), amended by ป.162/2566 (20 Nov 2023): a Thai tax resident with foreign-source income must include it in the tax year it is **brought into Thailand**, for income brought in from 1 Jan 2024; income earned before 1 Jan 2024 is outside it. Tax withheld abroad under a double-tax treaty can be credited (RD news 34/2566). Not confirmed: which section of section 40 forex/CFD profit falls under and whether losses offset (รอยืนยัน — ask RD on 1161) · the 180-day residence test comes from search results only (รอยืนยัน). Details → `income-tax-th`.

@@ -12,6 +12,7 @@
     "split_gate": true,
     "dispatch_gate": true,
     "guard": false,
+    "auto_allow": true,
     "recompact": false,
     "resume_check": true,
     "ui_scan": true,

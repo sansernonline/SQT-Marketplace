@@ -2,11 +2,12 @@
 
 Use when: checking work before delivery or real use · "ช่วยดูหน่อยว่ามีอะไรพลาด" (take a look and see if anything is wrong) · the user did it themselves and wants it checked
 Result: a verdict with a list of confirmed problems · **does not fix anything automatically** · read-only work, so it does not create `CONTEXT.md`
+Main principles: [`design-principles`](../../design-principles/SKILL.md) · the medium's file from its table (the checkers in step 4 judge against it)
 Main skills: `design-review` · `brand-kit` · `campaign-set` · agent `design-critic`
 
 ## ขั้นตอน (Steps) (copy into the todo exactly)
 
-1. Set the scope: the pieces to check, and the source documents to compare against (brand kit · brief · platform sizes) · ใคร: หัวหน้าทีม
+1. Set the scope: the pieces to check, and the source documents to compare against (brand kit · brief · platform sizes), and open the medium's principle file in `design-principles` · ใคร: หัวหน้าทีม
 <!-- superuser:begin review-steps -->
 2. Prepare the review package per [`review-lenses`](review-lenses.md) item 1: the intent of the work in 1 paragraph (who uses it, for what; if unsure, choose the interpretation with the least impact and do not stop to ask) · the diff as a file · the spec's conditions quoted exactly · the `head:` id · the author's reasoning kept separate in `author-notes.md`, with no opinion on pass or fail put in the prompt · ใคร: หัวหน้าทีม
 3. Choose lenses by the kind of work from [`review-lenses`](review-lenses.md) item 2 (every job has `spec` and `quality`), then follow the checklist of this playbook's main skill (none → a related skill) · ใคร: หัวหน้าทีม

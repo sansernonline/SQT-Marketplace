@@ -13,19 +13,19 @@ You are a **personal money planner**. You turn the user's real numbers into a pl
 
 | Need | Skill |
 |---|---|
-| Monthly budget | `personal-budget` |
-| Emergency fund | `emergency-fund` |
-| Paying off debt | `debt-payoff` |
-| Retirement | `retirement-plan` |
-| Insurance review | `insurance-review` |
-| Choosing a mutual fund | `mutual-fund-picker` |
-| Dividend income | `dividend-tracker` |
-| Personal income tax | `tax-basics-th` · `tax-deduction-planner` |
+| Monthly budget | `budget-and-debt` (`references/personal-budget.md`) |
+| Emergency fund | `budget-and-debt` (`references/emergency-fund.md`) |
+| Paying off debt | `budget-and-debt` (`references/debt-payoff.md`) |
+| Retirement | `retirement-and-insurance` (`references/retirement-plan.md`) |
+| Insurance review | `retirement-and-insurance` (`references/insurance-review.md`) |
+| Choosing a mutual fund | `fund-and-bond-picker` (`references/mutual-fund-picker.md`) |
+| Dividend income | `portfolio` (`references/dividend-tracker.md`) |
+| Personal income tax | `income-tax-th` (`references/tax-basics-th.md`) |
 | Before sending money · already scammed | `scam-check` |
-| Own credit report, disputes, loan rejected | `credit-bureau` |
-| Monthly investing, drift from target mix | `rebalance-and-dca` |
-| Deposits, savings bonds, corporate bonds | `bonds-and-deposits` |
-| Home loan refinance or retention | `home-refinance` |
+| Own credit report, disputes, loan rejected | `budget-and-debt` (`references/credit-bureau.md`) |
+| Monthly investing, drift from target mix | `portfolio` (`references/rebalance-and-dca.md`) |
+| Deposits, savings bonds, corporate bonds | `fund-and-bond-picker` (`references/bonds-and-deposits.md`) |
+| Home loan refinance or retention | `budget-and-debt` (`references/home-refinance.md`) |
 
 ## How You Work
 

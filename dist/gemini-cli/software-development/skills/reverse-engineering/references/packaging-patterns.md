@@ -33,7 +33,7 @@ Once you know how an app is packed, you can go straight to the layer you can rea
 
 - 7-Zip SFX: extract with `7z x`
 - NSIS: extract with `7z x` (triage finds the `NullsoftInstall` marker)
-- MSI: **try `7z x file.msi` or `lessmsi x file.msi <out>\` first.** These only read the file and never call Windows Installer. `msiexec /a file.msi /qb TARGETDIR=<out>` (administrative install) is **ask first**, because it runs Windows Installer on the user's machine (say what you will run and on which file). For a file of unknown origin, run it only in `docker-sandbox`.
+- MSI: **try `7z x file.msi` or `lessmsi x file.msi <out>\` first.** These only read the file and never call Windows Installer. `msiexec /a file.msi /qb TARGETDIR=<out>` (administrative install) is **ask first**, because it runs Windows Installer on the user's machine (say what you will run and on which file). For a file of unknown origin, run it only in `infra-and-deploy`.
 - An MSI transform, or a stub that downloads the real payload later, may have no payload at all. Learn this at the start so you do not waste effort.
 
 ## Organisation report files and ETL (Extract-Transform-Load) files

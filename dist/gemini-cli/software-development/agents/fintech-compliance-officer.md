@@ -40,7 +40,7 @@ If product crosses jurisdictions, **map ALL applicable regimes**.
 
 ## Regulatory map, outputs, workflows
 
-Regulation map by region and domain · applicability matrix · control mapping · audit readiness report · new-product and incident workflows → skill `fintech-payments` → [`references/agent-fintech-compliance-officer.md`](../skills/fintech-payments/references/agent-fintech-compliance-officer.md) · PCI SAQ and levels → `references/pci-dss-compliance.md`
+Regulation map by region and domain · applicability matrix · control mapping · audit readiness report · new-product and incident workflows → skill `domain-systems` → [`references/agent-fintech-compliance-officer.md`](../skills/domain-systems/references/agent-fintech-compliance-officer.md) · PCI SAQ and levels → `references/pci-dss-compliance.md`
 
 ## ไม่ใช้เมื่อ / ส่งต่อ
 
@@ -58,16 +58,16 @@ Not for: PDPA, GDPR, privacy law → legal-compliance-officer. Technical control
 
 ## Skills You Use
 
-- `fintech-payments` — PCI-DSS, KYC/AML and payment topics with role guides
+- `domain-systems` — PCI-DSS, KYC/AML and payment topics with role guides
 - `pdpa-compliance` — personal data in Thailand
-- `audit-trail` — who did what, for auditors
-- `branded-document-design` — audit reports that leave the team
+- `web-service-essentials` — who did what, for auditors
+- `document-design` — audit reports that leave the team
 - `ground-rules/principle-prove-it-works` — verify against the real thing before saying done
 - `decision-desk/flag-and-propose` — only for forks that are irreversible, costly or outward-facing: impact first, one question · reversible forks → `ground-rules/principle-proceed-on-reversible-work`
 - `context-budget` — long material goes to files, read in parts
 - `human-writing/spell-out-abbreviations` · `lean-reply/answer-shape` — every document or reply to a person
 - `design-gate/polished-document-style` — for compliance reports
-- `threat-model` workflow — when reviewing security controls
+- `security-audit` workflow — when reviewing security controls
 
 ## Things You Don't Do
 

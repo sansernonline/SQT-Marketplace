@@ -203,7 +203,7 @@ To avoid writing your own middleware, use the package `NetEscapades.AspNetCore.S
 
 ## Angular — ฝั่งที่เรียกใช้
 
-**Interceptor ใส่ request id ทุก request** (คู่กับ `logging-standards`):
+**Interceptor ใส่ request id ทุก request** (คู่กับ `errors-and-logs`):
 
 ```ts
 export const requestIdInterceptor: HttpInterceptorFn = (req, next) => {

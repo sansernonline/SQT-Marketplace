@@ -1,6 +1,6 @@
 # set-data-mcp — ข้อมูลตลาดหลักทรัพย์ไทย (อ่านอย่างเดียว · SQLite · stdio)
 
-server แรกตาม roadmap ใน `docs/MCP.md` · โครงคัดลอกจาก skill `mcp-server` (`assets/inventory-mcp/`) · **ตอนนี้เป็นข้อมูลตัวอย่าง 6 ตัว** (ทุกแถวมี `source="sample"`) เพื่อให้ agent ใช้งาน tool ได้ครบก่อนต่อ Settrade Open API จริง
+server แรกตาม roadmap ใน `docs/MCP.md` · โครงคัดลอกจาก skill `ai-engineering` (`assets/inventory-mcp/`) · **ตอนนี้เป็นข้อมูลตัวอย่าง 6 ตัว** (ทุกแถวมี `source="sample"`) เพื่อให้ agent ใช้งาน tool ได้ครบก่อนต่อ Settrade Open API จริง
 
 | | |
 |---|---|
@@ -45,7 +45,7 @@ codex mcp add setdata -- python C:/path/to/tools/set-data-mcp/server.py
 
 ## ต่อยอดเป็น server จริง (Settrade Open API)
 
-1. สมัคร Settrade Open API ผ่านโบรกเกอร์ (มี sandbox) · คีย์อยู่ใน env ไม่อยู่ในโค้ด (`config-and-secrets`)
+1. สมัคร Settrade Open API ผ่านโบรกเกอร์ (มี sandbox) · คีย์อยู่ใน env ไม่อยู่ในโค้ด (`web-service-essentials`)
 2. เปลี่ยน `query()` ให้ยิง HTTPS ของ Settrade (MARKET INFO: real-time + historical) — เก็บ schema ตารางเดิมไว้เป็น cache แบบอ่านได้ · เปลี่ยน `source` เป็น `"settrade"` พร้อม `as_of` จริง
-3. tool เขียน (สั่งซื้อขาย) **ไม่ทำใน server นี้** — ถ้าวันหนึ่งต้องสั่งซื้อ ให้ทำ server แยก หลัง env flag + ยืนยันจากคนทุกครั้ง + audit log (`mcp-server` ข้อ 9)
+3. tool เขียน (สั่งซื้อขาย) **ไม่ทำใน server นี้** — ถ้าวันหนึ่งต้องสั่งซื้อ ให้ทำ server แยก หลัง env flag + ยืนยันจากคนทุกครั้ง + audit log (`ai-engineering` ข้อ 9)
 4. ข้อมูลต่างประเทศทำ server แยก (เช่น ห่อ Yahoo Finance) ไม่รวมในนี้ — server หนึ่งตอบคำถามวงเดียว

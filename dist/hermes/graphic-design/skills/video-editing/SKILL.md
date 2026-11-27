@@ -12,7 +12,7 @@ description: Use when editing video or audio with ffmpeg, Thai subtitles or moti
 - Joining several clips into one file
 - Adjusting loudness to a platform's value (podcast · YouTube · training clip)
 - Converting 16:9 to 9:16 · pulling a cover image · exporting MP4 that opens anywhere
-- Joining HTML slides from `html-slide-deck` with narration into one video (section "สไลด์กับเสียงบรรยายเป็นวิดีโอ")
+- Joining HTML slides from `slide-deck` with narration into one video (section "สไลด์กับเสียงบรรยายเป็นวิดีโอ")
 
 Not for: hook · script · shot list → `video-script` · Thai subtitles → [`references/subtitles.md`](references/subtitles.md) · Thai narration from a script, no recording → `narration-th` · colour correction, multi-track cutting by eye, effects, motion inside a slide, or batch clips from code → a person in DaVinci Resolve or CapCut, or HyperFrames or Remotion (`video-script` `references/production-tools.md` item 1; the agent writes the checklist). The agent for this job is `video-editor`.
 
@@ -34,7 +34,7 @@ Not for: hook · script · shot list → `video-script` · Thai subtitles → [`
 
 ## สไลด์กับเสียงบรรยายเป็นวิดีโอ (Slides with narration as video)
 Every slide's time comes from `data-at` in the deck, in one place. Then prove from the result that the video is as long as the audio and the picture at sampled times is the right slide.
-1. **Set times in the deck.** Every `<section class="slide">` has `data-at="m:ss"`, the time the slide is reached (same meaning as the presenter clock of `html-slide-deck`). Take times from the finished, cut audio, not estimates. Audio from `narration-th` already has `data_at` per slide in `cues.json`.
+1. **Set times in the deck.** Every `<section class="slide">` has `data-at="m:ss"`, the time the slide is reached (same meaning as the presenter clock of `slide-deck`). Take times from the finished, cut audio, not estimates. Audio from `narration-th` already has `data_at` per slide in `cues.json`.
 2. **Finish the audio first.** Cut and adjust loudness (steps 4–5) before setting `data-at`, because cutting later shifts every slide.
 3. **Make an image per slide.** `python <html-slide-deck>/scripts/check_deck.py deck.html --out frames` gives `p01.png …` at 1920×1080 (needs Playwright and Pillow). For animated slides add `--wait`. A content-file deck goes through `build_deck.py` first.
 4. **Check the timetable, then build.** `python scripts/slides_to_video.py deck.html frames narration.wav --check`. It stops with a reason when `data-at` does not increase · the number of images differs from slides · the last slide starts after the audio ends. When it passes, drop `--check` and add `-o episode.mp4` (H.264 with AAC at 30 fps, exactly as long as the audio).

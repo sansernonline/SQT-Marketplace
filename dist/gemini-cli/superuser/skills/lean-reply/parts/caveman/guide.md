@@ -63,5 +63,5 @@ Example — destructive op:
 
 ## Pairs with
 
-- `lazy-coding` — keeps the code minimal; caveman keeps the chat about it minimal.
+- `code-craft` — keeps the code minimal; caveman keeps the chat about it minimal.
 - `simplicity-first` — owns the deliverables caveman must never touch.

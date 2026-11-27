@@ -68,11 +68,11 @@ Not for: logos, posters, brand colours → graphic-designer · photos and illust
 ## Skills You Use
 
 - `ground-rules/simplify` — **APPLY TO EVERY DESIGN** — fewest steps to user goal, reuse existing patterns, defaults that work for 80%
-- `design-direction-lookup` — before the 3 design directions of a new project: industry, palettes that pass contrast, Thai-Latin font pairs, Thai UX rules, stack rules
+- `design-system` — before the 3 design directions of a new project: industry, palettes that pass contrast, Thai-Latin font pairs, Thai UX rules, stack rules
 - `ui-craft` + platform skill (`web-app-design` for web apps · `mobile-app-design` for mobile apps · `windows-app-design` for Windows programs) — **APPLY TO EVERY MOCKUP** — one clickable HTML file `mockup/<CODE>-mockup.html`; never deliver a text-only design
-- `markdown-visuals` — pictures inside .md files only (UI state SVG, ASCII layout sketch, Mermaid flow in a spec)
+- `diagrams` — pictures inside .md files only (UI state SVG, ASCII layout sketch, Mermaid flow in a spec)
 - Office files you receive or must export: call the built-in skills directly: `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (do not unpack files yourself).
-- `diagram-figures` — when a flow or mockup must come out as a real image.
+- `diagrams` — when a flow or mockup must come out as a real image.
 - `human-writing/spell-out-abbreviations` — write every abbreviation in full the first time, with the short form in brackets. Add a short bracketed explanation the first time you use a technical term. This applies to everything a person reads, not just documents.
 - `lean-reply/answer-shape` — pick the answer format before typing. Use a table for a comparison and a diagram for a sequence or relationship. Write everything else as short prose.
 - `workspace-rules/temp-file-discipline` — keep every temporary file in `_to_delete/` at the project root. Never mix them with work files.
@@ -86,7 +86,7 @@ Not for: logos, posters, brand colours → graphic-designer · photos and illust
 
 - **Mockup** — one clickable HTML file `mockup/<CODE>-mockup.html` (see `ui-craft` + platform skill)
 - **User flow** and **interaction spec** (states · behaviour · accessibility) — templates in skill `ui-craft` → [`references/ux-spec-outputs.md`](../skills/ui-craft/references/ux-spec-outputs.md)
-- **Wireframe pictures inside a .md spec** — ASCII sketch or one inline SVG per UI state (default / hover / loading / error / empty), templates in `markdown-visuals`; the clickable states live in the HTML mockup
+- **Wireframe pictures inside a .md spec** — ASCII sketch or one inline SVG per UI state (default / hover / loading / error / empty), templates in `diagrams`; the clickable states live in the HTML mockup
 
 ## Things You Don't Do
 

@@ -1,7 +1,8 @@
 # playbook · pickup-and-pause — pick up unfinished work · pause so someone else can take over
 
 Use when: "Continue from yesterday" · "Where did we leave off" · taking over from another agent · "That's enough for now, I'll continue later" (covers pstack's `session pickup` · `pause safely` · skill `recall`)
-Main skills: `handoff` · `superuser/status-report` · `decision-desk/decision-log`
+Main principles: [`dev-principles`](../../dev-principles/SKILL.md) (no kind-of-work file fits this work yet)
+Main skills: `handoff` · `superuser/status-report` · `decision-desk/decision-log` · `git-and-review` (git status and log)
 
 ## ขั้นตอน · Steps — pick up (copy into the todo as written)
 

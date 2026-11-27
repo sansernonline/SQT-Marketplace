@@ -1,0 +1,64 @@
+<!-- merged from skill `meal-plan-grocery` on 2026-11-27 · description was: Use when a Thai family wants a budget meal plan -->
+# Meal Plan and Grocery List
+
+General information, not dietary advice — for diabetes, kidney disease or allergies, follow the doctor's or dietitian's list.
+
+## Inputs to ask for (once)
+
+| Input | Example |
+|---|---|
+| People and ages | 2 adults, 1 child 8, 1 grandparent 74 |
+| Meals at home | breakfast + dinner daily; weekend lunch |
+| Weekly food budget | 2,500 บาท |
+| Where they shop | ตลาดสด Sunday + Lotus's/Big C/Makro/Tops |
+| Restrictions | grandparent low-salt, soft food; child no spicy |
+| Cooking time | 30 min weekdays, 2 h Sunday |
+| Kit | rice cooker, one wok, small oven/air fryer, fridge freezer size |
+
+## Workflow
+
+1. **Budget per head per day** = weekly budget ÷ 7 ÷ people. Compare with what the household actually spent last month (`trading-finance` `budget-and-debt` (if installed))
+2. **Pick 4 proteins** for the week (e.g. chicken, pork mince, eggs, fish) and **2 cheap fillers** (tofu, beans/ถั่ว, eggs) — rotating proteins is what keeps cost down. More candidates than the budget allows → choose by numbers, see "Choose items inside the budget" below
+3. **Fill the week grid** — [references/weekly-plan-template.md](weekly-plan-template.md); one "cook once, eat twice" pair per 2–3 days
+4. **Write the grocery list by section** (below) from the grid; check fridge and pantry first and cross off what is there
+5. **Batch on Sunday:** rice/grains portions, one braise or curry paste base, washed and cut vegetables (keep 3–4 days), marinated protein portions frozen flat
+6. **Leftover night** — Thursday or Friday dinner is "fridge clear-out" (ข้าวผัด, ต้มจับฉ่าย, ไข่เจียวใส่ผัก)
+7. **Review** — cross off what was wasted; next week buy less of it
+
+## Grocery list sections
+
+Group items in walking order so one pass covers the store:
+
+| Section | Fresh market (ตลาดสด) | Supermarket |
+|---|---|---|
+| 1 ผัก / ผลไม้ | ร้านผัก — buy for 3–4 days, then top up mid-week | Produce |
+| 2 เนื้อสัตว์ / อาหารทะเล | เขียง — ask for mince/slicing on the spot | Meat counter / chilled |
+| 3 ไข่ เต้าหู้ | | Chilled |
+| 4 ของแห้ง เครื่องปรุง | ร้านของชำ | Dry goods: rice, noodles, น้ำปลา, ซีอิ๊ว, oil |
+| 5 นม / เครื่องดื่ม | | Dairy |
+| 6 แช่แข็ง | | Frozen — last, to keep cold |
+| 7 ของใช้ในบ้าน | | Household — separate budget line |
+
+Rules: buy rice, oil and sauces monthly in bulk (Makro or promotion weeks); buy vegetables twice a week; check unit price (ราคาต่อกรัม on the shelf label), not pack price.
+
+## Choose items inside the budget (`decision-desk/decision-scoring`, command `knapsack`)
+
+1. **Iron rules first (กฎเหล็ก):** anything on the allergy or doctor's avoid list is removed before the run; anything the grandparent's diet needs goes in with `"must": true`.
+2. **Budget** = the protein part of the weekly food budget, in baht (the user sets it; starting value, not yet measured until a month of receipts). **Cost** = shelf price in baht. **Value** = grams of protein in the pack (from the label), or meals served if the user prefers to count meals; one unit per run, never mixed.
+3. **Run:** `node decide.mjs knapsack grocery.json`. It tries every set up to 20 items and returns the true best, not just the cheapest per gram.
+4. Example input (illustrative prices and grams, budget 400 baht) and the result when run: [references/worked-example.md](worked-example.md)
+
+## Food safety in Thai heat
+
+- Cooked food out of the fridge: within 2 hours, 1 hour if the kitchen is above ~32 °C
+- Cool a big pot fast — split into shallow boxes before refrigerating
+- Fridge 0–4 °C, freezer −18 °C; label boxes with the date; cooked leftovers 3–4 days
+- Reheat soups and curries until boiling; do not reheat rice more than once
+
+## Worked example
+
+4 people, 2,500 บาท/week — budget per head, 7-day table, batch and leftover plan, grandparent soft/low-salt notes: [references/worked-example.md](worked-example.md)
+
+## Related
+
+`family-care` (lunch boxes, school milk) · `family-care` (diet notes from the doctor) · `household-money` (gas cylinder and electricity) · `trading-finance` `budget-and-debt` (if installed)

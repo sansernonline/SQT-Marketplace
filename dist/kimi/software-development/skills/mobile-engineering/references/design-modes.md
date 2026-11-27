@@ -2,7 +2,7 @@
 
 Design mobile app architecture or audit an App Store or Play Store listing.
 
-Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+Two modes. Read the first word of **the user's request**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
 
 | Mode | What it does |
 |---|---|
@@ -13,7 +13,7 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 
 ## Mode: `mobile-architecture`
 
-Use `mobile-engineer` agent for: **$ARGUMENTS**
+Use `mobile-engineer` agent for: **the user's request**
 
 Workflow:
 1. **Discovery:** platforms, team, performance, complexity
@@ -31,7 +31,7 @@ Workflow:
 
 ## Mode: `aso-audit`
 
-Use `growth-specialist` agent for: **$ARGUMENTS**
+Use `growth-specialist` agent for: **the user's request**
 
 Workflow:
 1. **Discovery:** current rankings, conversion, competitor positioning

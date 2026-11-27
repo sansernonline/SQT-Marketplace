@@ -16,8 +16,8 @@ Numbers labeled `แนวของเรา` (our rule of thumb) are defaults t
 |---|---|
 | Teaching a workshop · in-company training · online course · tutoring a teammate | this skill |
 | Wanting to learn something well yourself | `learning-path` |
-| Content is ready and you only need slides | `presentation-design` (software-development) |
-| Preparing for a certification exam | `cert-prep` |
+| Content is ready and you only need slides | `slide-deck` (software-development) |
+| Preparing for a certification exam | `learning-path` |
 | Teaching ordinary people to use AI in multi-step chat (Loop · Graph · Dynamic) | this skill plans the course, then uses the prompt templates from `superuser:chat-prompt-workflows` as exercises |
 | Teaching a subject at an institution that has its own course form | fill in the institution's form first, then use sections 2 to 5 of this skill to fill in the content |
 
@@ -149,10 +149,10 @@ The full example is at [references/git-one-day-example.md](references/git-one-da
 
 | Need | Use |
 |---|---|
-| Slides someone will present | `presentation-design` (software-development) |
-| Handouts as Word from Markdown | `markdown-report-docx` (software-development) |
+| Slides someone will present | `slide-deck` (software-development) |
+| Handouts as Word from Markdown | `document-design` (software-development) |
 | Collecting learners' names or emails · recording teaching video | `pdpa-workflow` (e-commerce) |
-| Teaching contract and rights in the materials | `doc-contract-th` (e-commerce) |
+| Teaching contract and rights in the materials | `thai-business-docs` (e-commerce) |
 
 ## References
 
@@ -256,11 +256,11 @@ Moved from [SKILL.md](../SKILL.md) · the skill's main rule (outcomes point back
 
 ## 6 · Teaching materials: Thai slides and handouts
 
-- **Slides**: for storyline, conclusion-style slide titles, layout and Thai fonts, use `presentation-design` (software-development). If the deck must open offline, as a single file, with speaker notes, use `html-slide-deck` (software-development). If that plugin is not installed, tell the user, then use section 6 of `human-writing` (a slide title is the conclusion of the page).
+- **Slides**: for storyline, conclusion-style slide titles, layout and Thai fonts, use `slide-deck` (software-development). If the deck must open offline, as a single file, with speaker notes, use `slide-deck` (software-development). If that plugin is not installed, tell the user, then use section 6 of `human-writing` (a slide title is the conclusion of the page).
 - **Slides are not handouts.** A slide has a conclusion-style title, a picture, or a short piece of code. Details and commands to type along go in the handout, so learners do not need to photograph the screen.
 - **Thai handouts**: write them by `human-writing` at the "explain" register (no ครับ or ค่ะ in the body) · commands go in a code block that can be copied, pasted and run · spell out abbreviations on first use · call the same thing by one word across slides, handouts and exercises · run `thai_tells.py` before sending to print.
 - **1-page summary (cheat sheet)**: the commonly used commands with examples, which learners can take back and keep beside the screen.
-- To export to Word or PDF, use `markdown-report-docx` (software-development) · break Thai words in the exported file by `human-writing` `references/thai-line-breaking.md`.
+- To export to Word or PDF, use `document-design` (software-development) · break Thai words in the exported file by `human-writing` `references/thai-line-breaking.md`.
 - Put the version and date in the file name, such as `git-basics-handout-v02-2026-11-05.pdf`, so learners know which copy they hold.
 
 ## 7 · Post-training feedback form, and what to fix next round
@@ -312,7 +312,7 @@ General information, not legal advice · for materials you will sell or use with
 - **Credit other people's work.** For every picture, text and piece of code you did not make, put the work's title, creator, link, license and the date you viewed it under the picture or at the end of the document.
 - **The teaching exception applies only when not for profit.** The Copyright Act B.E. 2537 (1994), section 32 (6) and (7), exempts teachers and educational institutions that copy or distribute works for non-profit teaching. Paid training or teaching for hire therefore should not rely on this exception (อนุมาน, inferred). Section 33 allows copying or quoting a reasonable part of a work if you say who owns it.
 - **Creative Commons (CC) licenses.** BY means you must give credit · SA means adaptations must use the same license · NC means no commercial use, so paid training avoids NC works · ND means no adaptation. A work that states no license at all should be treated as unusable until the owner allows it (แนวของเรา).
-- **Who owns the material you make.** If you made it as an employee, the copyright belongs to the creator unless a written agreement says otherwise, but the employer may publish it within the purpose of the employment (section 9). If you made it under a commission for someone else, the copyright belongs to the commissioner unless agreed otherwise (section 10). An independent trainer who wants to reuse the slides elsewhere should write that into the contract before the work starts. Use `doc-contract-th` (e-commerce).
+- **Who owns the material you make.** If you made it as an employee, the copyright belongs to the creator unless a written agreement says otherwise, but the employer may publish it within the purpose of the employment (section 9). If you made it under a commission for someone else, the copyright belongs to the commissioner unless agreed otherwise (section 10). An independent trainer who wants to reuse the slides elsewhere should write that into the contract before the work starts. Use `thai-business-docs` (e-commerce).
 
 
 ## reference: sources.md

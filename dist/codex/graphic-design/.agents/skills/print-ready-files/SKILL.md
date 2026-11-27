@@ -14,7 +14,7 @@ description: Use when a flyer or name card goes to a print shop
 - The shop sends the file back (colors off · white edge after cutting · Thai text off or strange letters · pixelated image)
 - Working in Canva or another RGB program and then sending to a print shop
 
-Not for: screen posts or ads → `campaign-set` (sRGB, not CMYK) · online-store product pictures → `marketplace-product-images` · beauty and contrast review → `design-review` (do first) · brand colors, fonts, logo → `brand-kit` · Word/PDF documents read on screen → `software-development:branded-document-design`. The reviewer for this file is agent `design-critic`.
+Not for: screen posts or ads → `campaign-set` (sRGB, not CMYK) · online-store product pictures → `marketplace-product-images` · beauty and contrast review → `design-review` (do first) · brand colors, fonts, logo → `brand-kit` · Word/PDF documents read on screen → `software-development:document-design`. The reviewer for this file is agent `design-critic`.
 
 ## Steps
 1. **Ask the shop 5 things:** real size · bleed · accepted file types (AI · PDF · PSD · JPG) · the CMYK color profile · for a vinyl banner, where the edge fold or grommet holes go. None of the 8 Thai shops checked states a profile on its website, only "CMYK", so you must ask.

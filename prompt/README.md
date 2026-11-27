@@ -144,7 +144,7 @@ prompt/
 └─ <repo>/       โค้ด
 ```
 
-สร้างโฟลเดอร์เมื่อมีไฟล์จะใส่จริงเท่านั้น · รายละเอียดอยู่ใน skill `project-doc-set`
+สร้างโฟลเดอร์เมื่อมีไฟล์จะใส่จริงเท่านั้น · รายละเอียดอยู่ใน skill `project-docs`
 
 ## agent-loop
 
@@ -157,5 +157,5 @@ prompt/
 - กฎการทำงานร่วม (ตัดสินใจเอง · พิสูจน์ผล · รายงานสถานะ) อยู่ใน skill `superuser` · `decision-desk/decision-log` · `ground-rules/principle-prove-it-works` · `superuser/status-report` · ไม่เขียนซ้ำในไฟล์ prompt · จะแก้กฎ → แก้ที่ skill ที่เดียว
 - คู่มือผู้ใช้มีที่เดียวคือ `prompt-manual.md` ฉบับ 1 · `prompt-new-project.md` ฉบับ 12 ชี้ไปที่นั่น
 - user story มีที่เดียวคือ `prompt-user-story.md` · mockup มีที่เดียวคือ `prompt-mockup.md` · `prompt-new-project.md` ฉบับ 4–6 ชี้ไปที่นั่น
-- ภาษาทุกเอกสารตาม `human-writing` · รูปในเอกสารส่งมอบใช้ `diagram-figures` แบบเดียวทั้งชุด
+- ภาษาทุกเอกสารตาม `human-writing` · รูปในเอกสารส่งมอบใช้ `diagrams` แบบเดียวทั้งชุด
 - ไฟล์แยกรายฉบับรุ่นเก่าและ `agent-loop.ps1` เก็บไว้ที่ `../_to_delete/prompt-folders-backup/` · ไฟล์เดียวต่อ plugin รุ่นเก่าเก็บไว้ที่ `../_to_delete/prompt-single-file-backup/` — ลบได้เมื่อไม่ต้องการ

@@ -1,13 +1,13 @@
 # Lane: infrastructure · cloud · container
 
-Open when the repo has Terraform · OpenTofu · Pulumi · docker-compose · Dockerfile · Kubernetes YAML · Helm charts · cloud config files, or when the user runs `/security-scan infra` · This list was moved from the old infrastructure checklist of the `/security-scan` command (before 2026-11-10 it lived in `security-scan/SKILL.md`)
+Open when the repo has Terraform · OpenTofu · Pulumi · docker-compose · Dockerfile · Kubernetes YAML · Helm charts · cloud config files, or when the user runs `/security-scan infra` · This list was moved from the old infrastructure checklist of the `/security-scan` command (before 2026-11-10 it lived in `security-gate/SKILL.md`)
 
 ## Lane rules
 
 - Check from files in the repo only · never scan ports, never call a real cloud, never open a real bucket to prove it, unless the user allows it in writing and it is a test environment
 - Results from `trivy config` · `checkov` · `tfsec` · `hadolint` are candidates for this lane, not findings yet (section 3 of SKILL.md)
 - The real state on the cloud may differ from the files (edited in the console outside IaC), so these usually end at `needs_validation` if you have no permission to read the real state
-- How to write and fix IaC is in [`infra-as-code`](../../infra-as-code/SKILL.md) · [`kubernetes-helm`](../../kubernetes-helm/SKILL.md) · this file only says what to hunt
+- How to write and fix IaC is in [`infra-and-deploy`](../../infra-and-deploy/SKILL.md) · [`infra-and-deploy`](../../infra-and-deploy/SKILL.md) · this file only says what to hunt
 
 ## Hunt list
 

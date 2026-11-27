@@ -1,0 +1,34 @@
+<!-- merged from skill `feature-kickoff` on 2026-11-27 · description was: Start a feature — business analyst → solution architect → system analyst → planning. Requirements, FSD, architecture. -->
+> **Shortcut into SuperUser:** open the `superuser` skill with the `feature` playbook, then copy the playbook's steps into the todo first. The steps below give the work format and the output of this command; use them together with the playbook, not in place of it.
+
+You will run a complete feature kickoff workflow. The feature is:
+
+**the user's request**
+
+Execute these steps **in order**, using sub-agents:
+
+1. **Business Analyst** — Use the `business-analyst` agent to:
+   - Ask the user once at the start, only what would change the whole BRD (other unknowns → `(รอยืนยัน)`, keep going)
+   - Produce a Business Requirements Document (BRD) with objective, scope, stakeholders, business rules
+   - Write user stories with acceptance criteria into `docs/USER-STORIES.md` (`user-story-writer.md` — read the file first, continue its IDs, update the index table)
+
+2. **Solution Architect** — Use the `solution-architect` agent to:
+   - Propose high-level architecture
+   - Recommend tech stack with trade-offs (use the `architecture` skill)
+   - Identify non-functional requirements (NFRs)
+
+3. **System Analyst** — Use the `system-analyst` agent to:
+   - Write a Functional Specification Document (FSD) with use cases
+   - Define API endpoints
+   - Create data model
+
+4. **Project Manager** — Use the `project-manager` agent to:
+   - Estimate phases / milestones
+   - Identify dependencies and risks
+   - Produce a project plan where every task starts with a 3-line header a developer can act on without re-reading the FSD: **Files** to create or touch · **Interfaces** it adds or changes (signature, endpoint, table) · **Failing test** that proves it, written before the code
+
+Run all 4 roles in one go without stopping to ask. Report once at the end and list your own judgment calls under **ตัดสินใจเอง**.
+
+## References
+
+- [`sources.md`](feature-kickoff/sources.md) — open to re-check dated figures, prices and rules, and their sources

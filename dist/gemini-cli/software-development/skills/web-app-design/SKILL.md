@@ -1,6 +1,6 @@
 ---
 name: web-app-design
-description: Use when designing a web app screen or mockup
+description: Use when designing a web app screen, mockup or scroll-motion site
 ---
 
 # Web App Design
@@ -9,6 +9,13 @@ description: Use when designing a web app screen or mockup
 
 > **The one rule:** every color in component code must come from a token.
 > If a `#hex` shows up outside the token file, the design system has started to break, and it breaks silently.
+
+## Pick the part
+
+| Job (what the user says) | Open |
+|---|---|
+| "Design this app screen", "dashboard", "admin panel", "SaaS screen mockup" | This file: sections 1–8 below |
+| "Marketing page with scroll motion", "chapter-by-chapter story site", "3D background that moves per chapter" | [`references/dynamic-website.md`](references/dynamic-website.md). Its rule: with reduced motion on, all content stays visible, and no text fades out. |
 
 ## When to use this skill
 
@@ -20,9 +27,9 @@ description: Use when designing a web app screen or mockup
 ## When **not** to use it
 
 - A Windows desktop app: use `windows-app-design`
-- A .docx/.pptx document: use `branded-document-design`
+- A .docx/.pptx document: use `document-design`
 - A marketing website or landing page, because this system is built for **apps** that pack in data.
-  A 13px base text is too small for a sales page.
+  A 13px base text is too small for a sales page. For scroll-motion sales pages, use the dynamic-website row in "Pick the part".
 
 ---
 
@@ -51,8 +58,8 @@ description: Use when designing a web app screen or mockup
 ## 2 · Design tokens
 
 > **The look comes from this job's search. Do not stop to ask.**
-> Order for finding values: the client's brand colors and fonts (if they exist, use them at once) → prototypes searched live by `design-gate/design-references` and palettes extracted by `design-direction-lookup` item 2 → only if nothing can be searched at all (no internet · the user ordered the old look kept), use the fallback values in `assets/appstrack.css`, write `(รอยืนยัน)` (awaiting confirmation), and keep going.
-> The table of work type versus color tone in `colour-by-domain` (`diagram-figures` → `references/colour-by-domain.md`) is a starting point for search terms, not an answer.
+> Order for finding values: the client's brand colors and fonts (if they exist, use them at once) → prototypes searched live by `design-gate/design-references` and palettes extracted by `design-system` → `references/design-direction-lookup.md` item 2 → only if nothing can be searched at all (no internet · the user ordered the old look kept), use the fallback values in `assets/appstrack.css`, write `(รอยืนยัน)` (awaiting confirmation), and keep going.
+> The table of work type versus color tone in `colour-by-domain` (`diagrams` → `references/colour-by-domain.md`) is a starting point for search terms, not an answer.
 > **Brand colors must pass 4.5:1 for both white text on the brand background and the brand color on the page background.** If a client's color is too light, make a darker shade for `--brand` and keep the original color for the logo and charts.
 
 **Which values are fixed and which come from the search**
@@ -169,10 +176,10 @@ Then open the images and check:
 |---|---|
 | User flow / IA before coloring | agent `ux-designer` |
 | A Windows desktop app in the same tone | `windows-app-design` |
-| Screen spec document | `design-gate/polished-document-style` + `branded-document-design` |
-| Diagrams to go with the spec | `markdown-visuals` |
+| Screen spec document | `design-gate/polished-document-style` + `document-design` |
+| Diagrams to go with the spec | `diagrams` |
 | Spacing rules, visual order and the 5 states of a screen | `ui-craft` |
-| Architecture diagrams | `software-diagrams` |
+| Architecture diagrams | `diagrams` |
 
 ---
 

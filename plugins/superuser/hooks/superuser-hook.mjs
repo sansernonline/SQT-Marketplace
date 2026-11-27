@@ -11,10 +11,11 @@ import { homedir, tmpdir, userInfo } from "node:os";
 import { fileURLToPath } from "node:url";
 import { applyQuota, accountName } from "../skills/crew-patterns/parts/parallel-split-and-merge/scripts/quota.mjs";
 import { readJson, moduleOn, modOn, sessionOnce, setFlags, takeFlags } from "./lib/util.mjs";
-import { isBashGuard, preRules, promptRules, postRules, stopRules, foldTestState } from "./lib/rules.mjs";
+import { isBashGuard, preRules, promptRules, postRules, stopRules, foldTestState, moduleOf, kindsOf } from "./lib/rules.mjs";
 import { scoredRoutes, fixHomonyms, homonymWarn, installedSkills, suggestSkill, toolRoute, markSkillOpened, replayRoutes, cacheDiff, qualify } from "./lib/router.mjs";
 import { parseLoopRequest, loopCancelRequested, loopStart, loopCancel, loopStartNotice, loopStopGate } from "./lib/loop.mjs";
 import { extraGates } from "./lib/selftest.mjs";
+import { permitDecision, permitOutput, permitCases } from "./lib/permit.mjs";
 // pickup.mjs หายหรือพัง → ข้ามการ์ดร่างและการนับข้อปิด ด่านอื่นยังทำงาน (reviewer 2026-11-25)
 let pickup = {};
 try { pickup = await import("../skills/handoff/scripts/pickup.mjs"); } catch { /* ไม่มีไฟล์ */ }
@@ -577,7 +578,7 @@ export function looksSmall(text) {
 }
 
 // งานเล็กเปิด skill ไม่เกิน 1 ตัว (bench 2026-11-11: t1 แก้บั๊กไฟล์เดียวเปิด 4 ตัวก่อนลงมือ) · เลือกตัวที่บอกวิธีทำงาน (แก้บั๊ก · ค้นแหล่ง) ก่อนภาษา · ตัวกว้างที่ใช้ทุกงานไม่เลือก
-const BROAD_SKILL = /(^|:)(superuser|human-writing|ground-rules|lazy-coding|readable-code|lean-reply)$/;
+const BROAD_SKILL = /(^|:)(superuser|human-writing|ground-rules|code-craft|lean-reply)$/;
 export function pickOne(skills) {
   const tier = (s) => (/(^|:)stack-/.test(s) ? 1 : 0);
   return skills.filter((s) => !BROAD_SKILL.test(s)).sort((a, b) => tier(a) - tier(b)).slice(0, 1);
@@ -1498,6 +1499,9 @@ function eventExtras(input, event, teamDir, root) {
   return parts.filter(Boolean).join("\n");
 }
 
+// ข้อด่านคำสั่งของ guard-rules.json ที่อนุญาตให้เองไม่ได้ (lib/permit.mjs)
+const permitRules = () => (readJson(join(HERE, "guard-rules.json"), { rules: [] }).rules ?? []).filter((r) => moduleOf(r) === "guard" && kindsOf(r).includes("bash") && r.decision !== "warn");
+
 function main() {
   let raw = "";
   try { raw = readFileSync(0, "utf8"); } catch { return; }
@@ -1507,6 +1511,20 @@ function main() {
   if (!scopeOk(input.cwd, configDirOf())) return;
   { const r0 = findProjectRoot(input.cwd ?? process.cwd()); if (r0 && !modOn(teamDirOf(r0), "hook")) return; }
   if (event === "PreToolUse") { preWriteGate(input); return; }
+  // อนุญาตให้เอง (lib/permit.mjs): ตอบเฉพาะ allow ของรายการปลอดภัย · ไม่ตอบ = Claude Code ถามผู้ใช้ตามปกติ · ปิดด้วย modules.auto_allow=false หรือ SUPERUSER_AUTO_ALLOW=0
+  if (event === "PermissionRequest") {
+    // ใช้เฉพาะข้อด่านคำสั่ง (module guard · ชนิด bash) ทุก decision รวม block และ ask · ข้อ post-hint และ rules อื่นไม่เกี่ยว
+    if (process.env.SUPERUSER_AUTO_ALLOW === "0") return;
+    const root = findProjectRoot(input.cwd ?? process.cwd()), teamDir = root && teamDirOf(root);
+    if (!modOn(teamDir, "auto_allow")) return;
+    try {
+      const rules = permitRules();
+      const allow = [...((teamDir && readJson(join(teamDir, "guard-allow.json"), {}).allow) || []), ...(teamDir ? POLICY_ALLOWS[gitPolicyOf(teamDir)] ?? [] : [])];
+      const d = permitDecision(input, { root: root ?? input.cwd, rules, allow });
+      if (d) process.stdout.write(permitOutput(d));
+    } catch { /* พังต้องไม่อนุญาตเอง: ไม่พิมพ์อะไร = ถามผู้ใช้ */ }
+    return;
+  }
   if (event === "Stop") {
     const root = findProjectRoot(input.cwd ?? process.cwd());
     const teamDir = root && teamDirOf(root);
@@ -1757,19 +1775,19 @@ function selfTest() {
     ["ตัวบอก skill: แก้ไฟล์ .docx → human-writing + docx", [], true, () => routes("แก้ไฟล์ report.docx ให้หัวข้อเป็นทางการ").includes("docx") && routes("แก้ไฟล์ report.docx ให้หัวข้อเป็นทางการ").includes("human-writing")],
     ["ตัวบอก skill: เขียนอีเมล → human-writing", [], true, () => routes("Write a short email to the client").includes("human-writing")],
     ["ตัวบอก skill: เทียบ → answer-shape", [], true, () => routes("เปรียบเทียบ PostgreSQL กับ SQL Server").includes("lean-reply")],
-    ["ตัวบอก skill: โค้ด python → simplify + lazy-coding + stack-python (ตรงกับตาราง skill ใน CLAUDE.global.md)", [], true, () => { const r = routes("เขียนสคริปต์ Python อ่าน csv"); return ["superuser:ground-rules", "lazy-coding", "stack-python"].every((s) => r.includes(s)); }],
+    ["ตัวบอก skill: โค้ด python → simplify + lazy-coding + stack-python (ตรงกับตาราง skill ใน CLAUDE.global.md)", [], true, () => { const r = routes("เขียนสคริปต์ Python อ่าน csv"); return ["superuser:ground-rules", "code-craft", "stack-python"].every((s) => r.includes(s)); }],
     ["ตัวบอก skill: แถวใหม่ของ skill ที่เคยไม่มี router", [], true, () => routes("ขอ stress test แผนนี้หน่อย").includes("crew-patterns") && routes("ช่วยตั้งชื่อไฟล์รายงานให้ถูก").includes("workspace-rules") && routes("รวมบทเรียนงานนี้").includes("learn-loop") && !routes("สวัสดี").includes("superuser")],
     // คำกว้าง (reflect · stress test · fan-out · naming · รายงานสถานะ) ต้องมีคำบริบทคู่ ข้อความเรื่องโค้ดจะได้ไม่เปิด skill ผิด
-    ...[["สถานะงานถึงไหนแล้ว", "superuser"], ["ทำโลโก้มาหลายแบบให้เลือก", "crew-patterns"], ["ทำโลโก้ 3 แบบให้เลือก", "crew-patterns"], ["สั่งของจาก 1688 มาขาย ต้นทุนจริงชิ้นละเท่าไร", "import-landed-cost"], ["เดือนหน้าจะย้ายบ้านไปต่างจังหวัด ต้องทำอะไรบ้าง", "moving-house"], ["รายงานมีตัวย่อเยอะ ช่วยทำอภิธานศัพท์", "human-writing"], ["fan out งานนี้ให้ลูกทีม", "crew-patterns"], ["reflect งานรอบนี้หน่อย", "learn-loop"], ["naming convention ของไฟล์รายงาน", "workspace-rules"],
+    ...[["สถานะงานถึงไหนแล้ว", "superuser"], ["ทำโลโก้มาหลายแบบให้เลือก", "crew-patterns"], ["ทำโลโก้ 3 แบบให้เลือก", "crew-patterns"], ["สั่งของจาก 1688 มาขาย ต้นทุนจริงชิ้นละเท่าไร", "pricing-and-costs"], ["เดือนหน้าจะย้ายบ้านไปต่างจังหวัด ต้องทำอะไรบ้าง", "home-upkeep"], ["รายงานมีตัวย่อเยอะ ช่วยทำอภิธานศัพท์", "human-writing"], ["fan out งานนี้ให้ลูกทีม", "crew-patterns"], ["reflect งานรอบนี้หน่อย", "learn-loop"], ["naming convention ของไฟล์รายงาน", "workspace-rules"],
       // eval รอบ 3 (2026-11-09): 2 แถวนี้เคยไม่ถูกบอก แขนมี skill จึงตอบ 1 รอบโดยไม่เปิด skill
       ["ลูกค้าบอกว่ายอดรวมในใบเสนอราคานี้ผิด ช่วยแก้ให้หน่อย", "fix-at-source"], ["แก้คำผิดในย่อหน้านี้ให้หน่อย", "fix-at-source"], ["ช่วยตรวจว่าหน้านี้ดูเหมือนคนออกแบบจริงหรือยัง", "design-gate"], ["รันสคริปต์ slop_scan แล้วผ่านหมด", "design-gate"]]
       .map(([s, k]) => [`ตัวบอก skill: "${s}" → ${k}`, [], true, () => routes(s).includes(k)]),
-    ...[["reflect package ใน Go", "learn-loop"], ["stress test API ด้วย k6", "crew-patterns"], ["naming convention ของตัวแปร", "workspace-rules"], ["เปลี่ยนชื่อไฟล์ utils.ts", "workspace-rules"], ["ออกแบบ Kafka fan-out ไปหลาย consumer", "crew-patterns"], ["เขียน endpoint รายงานสถานะ", "superuser"], ["สร้าง enum ตัวย่อสถานะในโค้ด", "human-writing"], ["ทำ dashboard แสดงรายงานสถานะคำสั่งซื้อ", "superuser"], ["เปลี่ยนชื่อไฟล์ทั้งโฟลเดอร์ src", "workspace-rules"], ["ตั้งชื่อไฟล์ migration ของ database", "workspace-rules"], ["ทำ unit test หลายแบบให้เลือก mock", "crew-patterns"], ["บิลค่าไฟขึ้นผิดปกติ", "moving-house"], ["จดทะเบียนบริษัทหรือบุคคลธรรมดาดี", "import-landed-cost"], ["ราคา 1688 บาท ต่อเดือน คุ้มไหม", "import-landed-cost"], ["ค่าชิปปิ้งของ Flash กับ Kerry อันไหนถูกกว่า", "import-landed-cost"], ["API อัปเดตย้ายที่อยู่ของลูกค้าในฐานข้อมูล", "moving-house"], ["เงินประกันคอนโดที่ซื้อประกันอัคคีภัยไว้", "moving-house"], ["ร้านนี้ขายดีไหม คิดผิดหรือเปล่า", "fix-at-source"], ["1. ค่าออกแบบโลโก้ 4,500 บาท", "design-gate"], ["check the slope of this line", "design-gate"], ["ดูเหมือนคนไข้เป็นหวัด", "design-gate"], ["ดูเหมือนคนทำงานหนักมาก", "design-gate"], ["ยอดผิดปกติในบัญชีเดือนนี้", "fix-at-source"]]
+    ...[["reflect package ใน Go", "learn-loop"], ["stress test API ด้วย k6", "crew-patterns"], ["naming convention ของตัวแปร", "workspace-rules"], ["เปลี่ยนชื่อไฟล์ utils.ts", "workspace-rules"], ["ออกแบบ Kafka fan-out ไปหลาย consumer", "crew-patterns"], ["เขียน endpoint รายงานสถานะ", "superuser"], ["สร้าง enum ตัวย่อสถานะในโค้ด", "human-writing"], ["ทำ dashboard แสดงรายงานสถานะคำสั่งซื้อ", "superuser"], ["เปลี่ยนชื่อไฟล์ทั้งโฟลเดอร์ src", "workspace-rules"], ["ตั้งชื่อไฟล์ migration ของ database", "workspace-rules"], ["ทำ unit test หลายแบบให้เลือก mock", "crew-patterns"], ["บิลค่าไฟขึ้นผิดปกติ", "home-upkeep"], ["จดทะเบียนบริษัทหรือบุคคลธรรมดาดี", "pricing-and-costs"], ["ราคา 1688 บาท ต่อเดือน คุ้มไหม", "pricing-and-costs"], ["ค่าชิปปิ้งของ Flash กับ Kerry อันไหนถูกกว่า", "pricing-and-costs"], ["API อัปเดตย้ายที่อยู่ของลูกค้าในฐานข้อมูล", "home-upkeep"], ["เงินประกันคอนโดที่ซื้อประกันอัคคีภัยไว้", "home-upkeep"], ["ร้านนี้ขายดีไหม คิดผิดหรือเปล่า", "fix-at-source"], ["1. ค่าออกแบบโลโก้ 4,500 บาท", "design-gate"], ["check the slope of this line", "design-gate"], ["ดูเหมือนคนไข้เป็นหวัด", "design-gate"], ["ดูเหมือนคนทำงานหนักมาก", "design-gate"], ["ยอดผิดปกติในบัญชีเดือนนี้", "fix-at-source"]]
       .map(([s, k]) => [`ตัวบอก skill: "${s}" → ไม่เปิด ${k}`, [], false, () => routes(s).includes(k)]),
     // 10 แถวท้ายของ router (skill ชีวิตประจำวัน) ต้องไม่จับประโยคเรื่องโค้ด แต่ยังจับประโยคจริง (ผู้ตรวจรอบ 2 · 2026-11-10)
-    ...[["งานค้างในระบบ CI แก้ให้หน่อย", "task-board"], ["ทดลองงาน API ใหม่ของ payment", "new-job-first-90-days"], ["ROE ของฟังก์ชันนี้คำนวณผิด", "stock-fundamentals"], ["เพิ่มหน้า to-do list ในแอป", "task-board"], ["วันนี้ต้องทำอะไรบ้างใน sprint", "shop-daily-briefing"], ["ทำ endpoint layoff ในระบบ HR", "job-exit"], ["เพิ่ม line sticker picker ในแอป", "line-design"], ["เพิ่ม feature ad claims moderation", "copy-claims-check"]]
+    ...[["งานค้างในระบบ CI แก้ให้หน่อย", "weekly-review"], ["ทดลองงาน API ใหม่ของ payment", "career-growth"], ["ROE ของฟังก์ชันนี้คำนวณผิด", "stock-fundamentals"], ["เพิ่มหน้า to-do list ในแอป", "weekly-review"], ["วันนี้ต้องทำอะไรบ้างใน sprint", "shop-operations"], ["ทำ endpoint layoff ในระบบ HR", "career-growth"], ["เพิ่ม line sticker picker ในแอป", "line-design"], ["เพิ่ม feature ad claims moderation", "copy-claims-check"]]
       .map(([s, k]) => [`ตัวบอก skill: ประโยคโค้ด "${s}" → ไม่เปิด ${k}`, [], false, () => routes(s).includes(k)]),
-    ...[["ช่วยรวมรายการงานที่ค้างอยู่ให้หน่อย", "task-board"], ["ช่วยอ่านงบการเงินหุ้น PTT ให้หน่อย", "stock-fundamentals"], ["บริษัทเรียกไปเซ็นใบลาออก ทำไงดี", "job-exit"], ["ลูกค้าประจำหายไปหลายคน ดึงกลับยังไง", "win-back-customers"]]
+    ...[["ช่วยรวมรายการงานที่ค้างอยู่ให้หน่อย", "weekly-review"], ["ช่วยอ่านงบการเงินหุ้น PTT ให้หน่อย", "stock-fundamentals"], ["บริษัทเรียกไปเซ็นใบลาออก ทำไงดี", "career-growth"], ["ลูกค้าประจำหายไปหลายคน ดึงกลับยังไง", "sales-copy"]]
       .map(([s, k]) => [`ตัวบอก skill: ประโยคจริง "${s}" → ${k}`, [], true, () => routes(s).includes(k)]),
     ["ตัวบอก skill: คำสั่ง slash → ไม่บอก", [], true, () => routes("/superuser:superuser เขียนรายงาน").length === 0],
     ["ตัวบอก skill: ทักทาย → ไม่บอก", [], true, () => routes("สวัสดีครับ").length === 0],
@@ -1794,8 +1812,8 @@ function selfTest() {
       && ["แก้เสร็จแล้ว\nช่วย commit ด้วย", "commit แล้วบอกด้วยว่าเปลี่ยนอะไรยังไง", "เสร็จแล้ว commit เลย"].every((p) => routes(p).some((s) => s.endsWith("workspace-rules")))],
     ["ตัวบอก skill: บอก superuser แล้วต่อท้ายคำอธิบายสาขา", [], true, () => routerNotice(["superuser:superuser"], "N").endsWith("\nN") && !routerNotice(["docx"], "N").includes("N")],
     ["ตัวบอก skill: มี superuser → สั่งเปิดแค่ superuser ก่อน ตัวอื่นให้ใส่ในใบสั่งงาน · ไม่มี → เปิดครบทุกตัว", [], true, () => {
-      const lead = routerNotice(["superuser:superuser", "lazy-coding", "lean-reply"]), solo = routerNotice(["lazy-coding", "lean-reply"]);
-      const plan = routerNotice(["superuser:superuser", "design-gate", "lazy-coding"]);
+      const lead = routerNotice(["superuser:superuser", "code-craft", "lean-reply"]), solo = routerNotice(["code-craft", "lean-reply"]);
+      const plan = routerNotice(["superuser:superuser", "design-gate", "code-craft"]);
       return /open `superuser:superuser` first/.test(lead) && lead.includes("brief") && !lead.includes("every one of these") && solo.includes("every one of these")
         && /open `superuser:superuser` · `superuser:design-gate` first/.test(plan);
     }],
@@ -1890,7 +1908,7 @@ function selfTest() {
       const d = join(tmpdir(), `sqt-open-one-${process.pid}`);
       const n = promptNotice({ prompt: "แก้บั๊ก src/report.ts วันที่ผิด", session_id: "one" }, { rules: [{ pattern: "แก้บั๊ก", skills: ["human-writing", "stack-typescript", "fix-at-source", "fix-at-source"] }] }, d);
       return n === smallNotice(["superuser:fix-at-source"]) && n.includes("also open `superuser:fix-at-source`") && n.length <= 200 && smallLeft("one", d) === 0
-        && pickOne(["superuser:superuser", "human-writing", "lazy-coding"]).length === 0 && pickOne(["stack-sql", "fix-at-source"])[0] === "fix-at-source";
+        && pickOne(["superuser:superuser", "human-writing", "code-craft"]).length === 0 && pickOne(["stack-sql", "fix-at-source"])[0] === "fix-at-source";
     }],
     ["งานเล็ก: ส่งให้ superuser:quick (fork · haiku) ทุกครั้ง แม้ไม่มี skill ให้เปิด · งานกลางไม่ส่ง · skill quick มีอยู่จริงและตั้ง context: fork", [], true, () => {
       const d = join(tmpdir(), `sqt-open-quick-${process.pid}`), R = { rules: [] };
@@ -2328,6 +2346,12 @@ ${rows}
   }]);
   const mdTok = summaryMarkdown({ "2026-10-21": { ...day, tokens: { main: { input: 1200, output: 30, cacheRead: 5000, cacheCreate: 40 }, "software-development:developer": { input: 10, output: 20, cacheRead: 0, cacheCreate: 0 } } } }, new Date("2026-10-21T04:00:00Z"));
   gates.push(["สรุป log: คอลัมน์ token ราย agent และยอดรวมวัน", [], true, () => mdTok.includes("| 2 นาที | 2026-10-21 10:04 | 10 | 20 | 0 | 0 |") && mdTok.includes("| 5 | 1 | 1,210 | 50 | 5,000 | 40 |")]);
+  for (const [name, pass] of permitCases()) gates.push([`อนุญาตให้เอง: ${name}`, [], true, () => pass]);
+  gates.push(["อนุญาตให้เอง: guard-rules.json จริง · git push และ rm -rf ไม่อนุญาต · npm test อนุญาต", [], true, () => {
+    const rules = permitRules(), R = resolve(tmpdir(), "permit-proj");
+    const d = (command) => permitDecision({ tool_name: "Bash", tool_input: { command }, cwd: R }, { root: R, rules });
+    return d("git push origin main") === null && d("rm -rf src") === null && d("npm publish") === null && d("npm test")?.behavior === "allow";
+  }]);
   try { gates.push(...extraGates({ HERE, isBashGuard, foldTranscript, freshGate, routeSkills, MULTISTEP_REMINDER })); } catch (e) { gates.push([`P3 self-test เริ่มไม่ได้: ${e.message}`, [], true, () => false]); }
   for (const [label, lines, expect, fn = (l) => reviewGate(fold(l))] of gates) {
     const hit = Boolean(fn(lines)) === expect;

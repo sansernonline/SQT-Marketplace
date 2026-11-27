@@ -1,12 +1,23 @@
 ---
 name: web-service-essentials
-description: Use when building or reviewing an HTTP backend
+description: Use when building an HTTP backend, login, config, uploads or audit
 ---
 
-# Web Service Essentials
+# web-service-essentials — the basic parts every HTTP backend needs before its first business endpoint
 
-> **The one rule:** before writing the first business endpoint, the service must be able to answer
-> "Are you still alive? · Are you ready for work? · Which version are you running now?" If it cannot, on the day the system goes down you will be guessing blind.
+> **The one rule:** before writing the first business endpoint, the service must be able to answer "Are you still alive? · Are you ready for work? · Which version are you running now?" If it cannot, on the day the system goes down you will be guessing blind.
+
+## Pick the part
+
+| Job (what the user says) | Open |
+|---|---|
+| New service, health check, ping, readiness, version endpoint, graceful shutdown, one error format | This file: sections 1 to 4 |
+| Login with sessions, JWT, OAuth, SSO, MFA, passwords, lockout | [`references/auth-implementation-patterns.md`](references/auth-implementation-patterns.md) · [`references/auth-flows.md`](references/auth-flows.md) · [`references/mfa.md`](references/mfa.md) · [`references/api-auth-and-authorization.md`](references/api-auth-and-authorization.md) |
+| Settings differ by environment, secrets must stay hidden, `.env` files | [`references/config-and-secrets.md`](references/config-and-secrets.md) |
+| Users upload files, or the app serves stored files | [`references/file-upload-and-storage.md`](references/file-upload-and-storage.md) |
+| The system must record who did what and when | [`references/audit-trail.md`](references/audit-trail.md) |
+| Ready-made libraries and sample code | [`references/libraries-and-code.md`](references/libraries-and-code.md) |
+| Stack-specific setup (.NET, Angular, Node, Python) | [`references/per-stack.md`](references/per-stack.md) |
 
 ## When to use this skill
 
@@ -18,10 +29,10 @@ description: Use when building or reviewing an HTTP backend
 ## When **not** to use it
 
 - To design business endpoints, use the command `/api-design`
-- For URL style · paging · dates · API ids, use `api-conventions`
-- For log format, use `logging-standards`
-- To choose an architecture, use `architecture-patterns`
-- To check responses against OpenAPI in CI or catch breaking changes, see `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md)
+- For URL style · paging · dates · API ids, use `api-design`
+- For log format, use `errors-and-logs`
+- To choose an architecture, use `architecture`
+- To check responses against OpenAPI in CI or catch breaking changes, see `api-design` [`references/contract-testing.md`](../api-design/references/contract-testing.md)
 
 ---
 
@@ -134,7 +145,7 @@ Follow **RFC 9457 (`application/problem+json`)**, which is a real standard, so y
 - Accept it from the **`X-Request-Id`** header only when it matches `^[A-Za-z0-9-]{1,64}$` · if it is missing or does not match → create a new one (a uuid cut to 8 characters).
   This value goes into every log line. If you accept it as is, the sender can insert new lines or fake text into the log (log injection).
 - **Return it in a response header every time**, including on errors.
-- Put it in every log line (see `logging-standards`) and in the error body.
+- Put it in every log line (see `errors-and-logs`) and in the error body.
 - Pass it on to the downstream service every time you call across systems.
 
 When a customer calls to say "it broke", ask for the requestId and `grep` once to find the whole story.
@@ -206,3 +217,10 @@ docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:808
 - [ ] After `SIGTERM`, in-flight requests finish before the app closes
 - [ ] `/ping` is not written to the log (or the file fills up with pings)
 
+## Check before done
+
+- **Never** store passwords in plain text or with MD5, SHA-1 or raw SHA-256. Use Argon2id, or bcrypt with cost 12 or more.
+- **Never** put a secret in git, in a log, or in a file sent to the browser. Log only "set" or the last 4 characters of a secret.
+- **Never** use the file name the user sent as the stored name. Check the file's real contents, not its extension, and strip EXIF location data from photos.
+- **Never** edit or delete an audit record. Write a correction entry instead, and never record passwords, tokens, ID card numbers or health data in it.
+- Every request, outgoing call and database query has a timeout, and the sections 5 and 7 checks pass before deploy.

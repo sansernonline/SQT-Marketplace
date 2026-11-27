@@ -30,7 +30,7 @@
 
 ## 1. รอบตรวจสุขภาพประจำปี
 
-playbook `checkup-cycle` · agent `health-organizer` · skill `annual-checkup`
+playbook `checkup-cycle` · agent `health-organizer` · skill `health-admin`
 **ผลลัพธ์:** `checkup/<ปี>-plan.md` (แผน) · `checkup/results.csv` (ผลย้อนหลังเทียบปีต่อปี) · **รออนุมัติ:** จองคิว ซื้อแพ็กเกจ
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -53,7 +53,7 @@ playbook `checkup-cycle` · agent `health-organizer` · skill `annual-checkup`
 
 ## 2. ผลตรวจมีค่าผิดปกติ ติดตามจนถึงนัดตรวจซ้ำ
 
-playbook `checkup-cycle` (ขั้น 5 คัดค่าลงตาราง) · agent `health-organizer` · skill `annual-checkup` · `doctor-visit-prep`
+playbook `checkup-cycle` (ขั้น 5 คัดค่าลงตาราง) · agent `health-organizer` · skill `health-admin`
 **ผลลัพธ์:** `checkup/follow-up-<ชื่อค่า>.md` หน้าเดียวต่อ 1 ค่า · แถวใหม่ใน `checkup/results.csv` · **รออนุมัติ:** จองนัดตรวจซ้ำ ซื้อแพ็กเกจตรวจเพิ่ม
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -80,7 +80,7 @@ playbook `checkup-cycle` (ขั้น 5 คัดค่าลงตาราง
 
 ## 3. ใช้สิทธิรักษาไหน ไปโรงพยาบาลไหน
 
-playbook `checkup-cycle` (ขั้น 1 ดูสิทธิ · ขั้น 3 เทียบกับของฟรี) ส่วนที่เกินจากนั้นประกอบเพิ่มตาม `playbook-template` (skill `superuser` หัวข้อ 2) · agent `health-organizer` · skill `annual-checkup`
+playbook `checkup-cycle` (ขั้น 1 ดูสิทธิ · ขั้น 3 เทียบกับของฟรี) ส่วนที่เกินจากนั้นประกอบเพิ่มตาม `playbook-template` (skill `superuser` หัวข้อ 2) · agent `health-organizer` · skill `health-admin`
 **ผลลัพธ์:** `rights.md` (สิทธิที่มี · โรงพยาบาลตามสิทธิ · ใช้อย่างไรในแต่ละกรณี) · **รออนุมัติ:** ย้ายสิทธิหรือเปลี่ยนโรงพยาบาลตามสิทธิ ซื้อประกันสุขภาพเพิ่ม
 
 ### ข้อมูล (ผู้ใช้กรอก)

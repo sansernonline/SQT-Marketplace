@@ -2,11 +2,12 @@
 
 Use when: checking work before sending or before real use · "please look for anything I got wrong" · the user did the work themselves and wants it checked
 Result: a verdict with a list of confirmed problems. **No automatic fixing**, and it is read-only work, so it does not create `CONTEXT.md`
-Main skills: sales side `product-listing` · `marketplace-fees-pricing` · `chat-reply-templates` · buying side `refund-request` · `buy-compare` · back office `payroll-th` · `e-tax-invoice` · `doc-contract-th` · `pdpa-workflow`
+Main principles: [`shop-principles`](../../shop-principles/SKILL.md) · the file of the kind of work checked (table in that SKILL.md; the checkers in step 4 judge against it)
+Main skills: sales side `sales-copy` · `pricing-and-costs` · `customer-care` · buying side `buyer-help` · back office `thai-employment` · `thai-tax` · `thai-business-docs` · `pdpa-workflow`
 
 ## ขั้นตอน (Steps — copy into the todo exactly)
 
-1. Set the scope — the piece to check, and the source documents to compare against (cost · fees in Seller Centre · platform policy · stock file · evidence · timeline · shop or platform terms · rates from official websites · payroll table · official forms) · ใคร: หัวหน้าทีม
+1. Set the scope — the piece to check, and the source documents to compare against (cost · fees in Seller Centre · platform policy · stock file · evidence · timeline · shop or platform terms · rates from official websites · payroll table · official forms), and open the principle file of that kind of work · ใคร: หัวหน้าทีม
 <!-- superuser:begin review-steps -->
 2. Prepare the review package per [`review-lenses`](review-lenses.md) item 1: the intent of the work in 1 paragraph (who uses it, for what; if unsure, choose the interpretation with the least impact and do not stop to ask) · the diff as a file · the spec's conditions quoted exactly · the `head:` id · the author's reasoning kept separate in `author-notes.md`, with no opinion on pass or fail put in the prompt · ใคร: หัวหน้าทีม
 3. Choose lenses by the kind of work from [`review-lenses`](review-lenses.md) item 2 (every job has `spec` and `quality`), then follow the checklist of this playbook's main skill (none → a related skill) · ใคร: หัวหน้าทีม

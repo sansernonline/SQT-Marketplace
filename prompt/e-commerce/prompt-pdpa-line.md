@@ -52,7 +52,7 @@ playbook `pdpa-setup` · agent `compliance-helper` · skill `pdpa-workflow`
 
 ## 2. LINE Official Account
 
-playbook `line-oa` · agent `line-admin` · skill `line-oa-setup` · `line-chatbot` · `line-richmenu` · `line-broadcast`
+playbook `line-oa` · agent `line-admin` · skill `line-oa` · `line-richmenu`
 **ผลลัพธ์:** `line-oa/` — คู่มือตั้งค่า · โค้ด webhook (ถ้าทำ bot) · `richmenu.json` · แผน broadcast · **รออนุมัติ:** deploy webhook · ตั้ง rich menu เป็นค่าเริ่มต้น · ส่ง broadcast
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -75,7 +75,7 @@ playbook `line-oa` · agent `line-admin` · skill `line-oa-setup` · `line-chatb
 
 ## 3. แจ้งลูกค้าช่วงวันหยุดยาว ผ่าน LINE OA
 
-playbook `line-oa` (ขั้น 3 chatbot ตอบกลับ · ขั้น 5 broadcast · ขั้น 6 ตรวจ) · agent `line-admin` · skill `line-broadcast` · `line-chatbot` · `thai-holidays`
+playbook `line-oa` (ขั้น 3 chatbot ตอบกลับ · ขั้น 5 broadcast · ขั้น 6 ตรวจ) · agent `line-admin` · skill `line-oa` · `thai-employment`
 **ผลลัพธ์:** `line-oa/holiday-<ปี-เดือน>.md` — ข้อความประกาศ · ข้อความตอบกลับอัตโนมัติช่วงปิด · แผนส่ง · **รออนุมัติ:** ส่ง broadcast · เปลี่ยนข้อความตอบกลับอัตโนมัติ · เปลี่ยนกลับเมื่อเปิดทำการ
 
 ### ข้อมูล (ผู้ใช้กรอก)

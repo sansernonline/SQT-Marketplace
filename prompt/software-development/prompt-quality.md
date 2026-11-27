@@ -9,12 +9,12 @@
 วางทั้งไฟล์ใน Claude Code, Codex CLI หรือ Gemini CLI ที่รากโฟลเดอร์โปรเจกต์ แล้วพิมพ์ต่อท้ายว่าจะทำฉบับไหน เช่น `ทำทั้งหมด` หรือ `ทำข้อ 3 และ 4`
 
 <!-- rules:begin -->
-**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-doc-set` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
+**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-docs` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
 
 **วนจนเสร็จ (agent loop):** ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ จนผ่านทุกข้อที่ฉบับนั้นต้องมี · ตรวจด้วยหลักฐานจริง (เปิดไฟล์ · รันคำสั่ง · เทียบแหล่ง) ไม่ใช่คำบอกของตัวที่ทำ · รอบตรวจใช้ `reviewer` ตัวใหม่ทุกรอบ · ไม่ผ่าน → แก้ที่ต้นเหตุแล้วตรวจซ้ำทั้งข้อเดิมและจุดที่แก้ · เหลือแค่ข้อระดับต่ำ → ปิดได้แล้วลงรายงาน · ครบเพดานรอบ (งานกลาง 3 · งานใหญ่หรืองานเสี่ยง 5) ยังไม่ผ่าน → ติดป้าย `ติด` ทำส่วนอื่นให้จบ แล้วรายงานข้อที่เหลือ · รายละเอียดอยู่ใน skill `superuser` กฎข้อ 3
 <!-- rules:end -->
 
-**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้แบบเดียวกันทั้งชุด: ผังระบบ · flow · ผังคลาวด์ → `diagram-figures` · Mermaid (`software-diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
+**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้แบบเดียวกันทั้งชุด: ผังระบบ · flow · ผังคลาวด์ → `diagrams` · Mermaid (`diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
 
 **แอปที่มีอยู่แล้ว (เมื่อรันแอปหรือ test):** `docs/` และ `qa/` อยู่ที่รากโปรเจกต์ · README และ CHANGELOG อยู่ใน repo ของแอป · รากโปรเจกต์เป็น repo เดียวกับแอป → เอกสารเข้า branch เดียวกับโค้ด · ก่อนรันแอปหรือ seed ให้ชี้ที่เก็บข้อมูล (เช่น `DATA_DIR` · connection string) ไปที่ `_to_delete/` ห้ามรันกับข้อมูลจริง · คำสั่ง test ที่ repo ประกาศไว้พัง → รายงานผลของคำสั่งนั้นตรงตัว แล้วบอกคำสั่งที่ใช้แทนแยกบรรทัด · ห้ามมีรหัสผ่านหรือค่าลับในเอกสารและภาพ แม้เป็นบัญชีทดสอบ · ไม่มี `stack-*` ที่ตรงภาษา → ข้ามแล้วบอกในรายงาน
 
@@ -29,7 +29,7 @@
 
 ## 1. รายงานตรวจความปลอดภัย (Security Review)
 
-agent `security-engineer` · skill `software-development:security-audit` · `software-development:threat-model` · `auth-implementation-patterns` · `pdpa-compliance`
+agent `security-engineer` · skill `software-development:security-audit` · `web-service-essentials` · `pdpa-compliance`
 **ผลลัพธ์:** `docs/security-review.md` — **ห้ามแก้โค้ด** · ห้ามรันอะไรที่ส่งข้อมูลออกนอกเครื่องหรือแตะระบบจริง · ยกเว้นคำสั่งตรวจ dependency ในข้อ 3 (ส่งแค่รายชื่อแพ็กเกจและเวอร์ชัน ไม่ส่งโค้ดหรือข้อมูล)
 
 ### ขอบเขต (ผู้ใช้กรอก)
@@ -67,7 +67,7 @@ agent `security-engineer` · skill `software-development:security-audit` · `sof
 
 ## 2. รายงานรีวิวโค้ด (Code Review)
 
-agent `developer` (ผู้รีวิว ต้องไม่ใช่ตัวที่เขียนโค้ดนั้น) · skill `code-review-checklist` · `readable-code` · `lazy-coding` · `error-handling-patterns` · `logging-standards`
+agent `developer` (ผู้รีวิว ต้องไม่ใช่ตัวที่เขียนโค้ดนั้น) · skill `git-and-review` · `code-craft` · `errors-and-logs`
 **ผลลัพธ์:** `docs/code-review.md` — **ห้ามแก้โค้ด**
 
 ### ขอบเขต (ผู้ใช้กรอก)
@@ -80,7 +80,7 @@ agent `developer` (ผู้รีวิว ต้องไม่ใช่ตั
 
 1. กำหนดชุดไฟล์ที่รีวิวจาก `git diff` / `git log` ตามขอบเขต (รายการไฟล์ก่อน แล้วอ่านทีละไฟล์ อย่าอ่านทั้ง repo) · ข้ามไฟล์ที่ generate และ lock file
 2. รัน test และ lint ของโปรเจกต์แบบอ่านอย่างเดียว (ถ้ามีคำสั่ง) แล้วบันทึกผลจริง
-3. ตรวจตาม `code-review-checklist`: ความถูกต้อง · การจัดการ error · ความปลอดภัยเบื้องต้น · การออกแบบ (ความซับซ้อนเกินจำเป็น โค้ดซ้ำ) · ความอ่านง่าย · test (ครอบคลุมกรณีที่สำคัญไหม) · ประสิทธิภาพ (เฉพาะจุดที่เห็นชัด)
+3. ตรวจตาม `git-and-review`: ความถูกต้อง · การจัดการ error · ความปลอดภัยเบื้องต้น · การออกแบบ (ความซับซ้อนเกินจำเป็น โค้ดซ้ำ) · ความอ่านง่าย · test (ครอบคลุมกรณีที่สำคัญไหม) · ประสิทธิภาพ (เฉพาะจุดที่เห็นชัด)
 4. เทียบกับ SRS/FSD: โค้ดทำตามข้อกำหนดที่ระบุ (FR ที่เกี่ยว) ไหม
 
 ### รูปแบบรายงาน
@@ -102,7 +102,7 @@ agent `developer` (ผู้รีวิว ต้องไม่ใช่ตั
 
 ## 3. รายงานเอกสารกับโค้ดที่ไม่ตรงกัน (Doc Sync)
 
-agent `system-analyst` + `qa-tester` · skill `srs-writing` · `fsd-writing` · `test-case-template`
+agent `system-analyst` + `qa-tester` · skill `requirements-writing` · `qa-docs`
 **ผลลัพธ์:** `docs/doc-sync-report.md` — **ห้ามแก้เอกสารหรือโค้ด** ผู้ใช้เป็นคนตัดสินว่าจะแก้ฝั่งไหน
 
 ### ขอบเขต (ผู้ใช้กรอก)
@@ -138,8 +138,8 @@ agent `system-analyst` + `qa-tester` · skill `srs-writing` · `fsd-writing` · 
 
 ## 4. รายงานตรวจ accessibility และความเร็วเว็บ (Web Quality Audit)
 
-agent `qa-tester` (นำ) + `ux-designer` (ตรวจมือ) · skill `web-quality-audit` · `seo-audit-checklist` (ใช้ผล Lighthouse รอบเดียวกัน) · `i18n-and-locale` (หน้า 2 ภาษา)
-**ผลลัพธ์:** `docs/web-quality-<ปี-เดือน-วัน>.md` ตามแม่แบบใน `web-quality-audit` ข้อ 5 · ผลดิบใน `_to_delete/audit/<วันที่>/` · **ห้ามแก้โค้ด** (แก้ตามรายงาน → `prompt-change.md` ฉบับ 2 · เว็บแบบบทที่กำลังสร้าง → `prompt-dynamic-website.md` ฉบับ 4) · คำสั่ง `npx` ดาวน์โหลดแพ็กเกจและเบราว์เซอร์ตอนรัน ถ้าโปรเจกต์ไม่อนุญาตให้ติดตั้งของ ให้ใช้ Chrome DevTools แทน
+agent `qa-tester` (นำ) + `ux-designer` (ตรวจมือ) · skill `web-audit` (ใช้ผล Lighthouse รอบเดียวกัน) · `i18n-and-locale` (หน้า 2 ภาษา)
+**ผลลัพธ์:** `docs/web-quality-<ปี-เดือน-วัน>.md` ตามแม่แบบใน `web-audit` ข้อ 5 · ผลดิบใน `_to_delete/audit/<วันที่>/` · **ห้ามแก้โค้ด** (แก้ตามรายงาน → `prompt-change.md` ฉบับ 2 · เว็บแบบบทที่กำลังสร้าง → `prompt-dynamic-website.md` ฉบับ 4) · คำสั่ง `npx` ดาวน์โหลดแพ็กเกจและเบราว์เซอร์ตอนรัน ถ้าโปรเจกต์ไม่อนุญาตให้ติดตั้งของ ให้ใช้ Chrome DevTools แทน
 
 ### ขอบเขต (ผู้ใช้กรอก)
 
@@ -151,7 +151,7 @@ agent `qa-tester` (นำ) + `ux-designer` (ตรวจมือ) · skill `web
 ### วิธีทำ
 
 1. รัน Lighthouse ทั้ง mobile และ desktop กับ axe หรือ pa11y ทุก URL ในขอบเขต · ตัวเลข performance วัดจาก production build ไม่ใช่ dev build · รัน 3 รอบแล้วใช้ค่ากลาง
-2. ตรวจมือตามรายการ WCAG 2.2 AA ใน `web-quality-audit` ข้อ 1: ลำดับโฟกัส · เดินฟอร์มหลัก 1 ฟอร์มด้วยคีย์บอร์ดอย่างเดียว · ความหมายของ `alt` · เปิด `prefers-reduced-motion` · ซูม 200% และกว้าง 320px · หน้าไทยใช้ `lang="th"`
+2. ตรวจมือตามรายการ WCAG 2.2 AA ใน `web-audit` ข้อ 1: ลำดับโฟกัส · เดินฟอร์มหลัก 1 ฟอร์มด้วยคีย์บอร์ดอย่างเดียว · ความหมายของ `alt` · เปิด `prefers-reduced-motion` · ซูม 200% และกว้าง 320px · หน้าไทยใช้ `lang="th"`
 3. URL จริง: ห้ามรัน axe หรือ pa11y กับหน้าที่สร้างหรือแก้ข้อมูล · ดูค่าจากผู้ใช้จริงใน Search Console หรือ PageSpeed Insights คู่กับค่าที่วัดในเครื่อง
 4. จัดระดับ Critical · High · Medium · Low ตามนิยามของ skill · ทุกข้อมีหน้า · เกณฑ์ · วิธีแก้ · เจ้าของ ไม่มีข้อที่เขียนว่า "บางหน้า"
 

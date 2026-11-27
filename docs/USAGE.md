@@ -75,7 +75,7 @@
 
 Claude จะ:
 1. เรียก `business-analyst` agent (จาก description ที่ตรงกับงาน)
-2. BA ใช้ skill `user-story-writer`
+2. BA ใช้ skill `requirements-writing`
 3. ได้ user story ตาม format มาตรฐาน
 
 ---
@@ -262,12 +262,12 @@ Step 4: Project Manager
 ```
 เขียน commit message สำหรับการเพิ่ม rate limiting ใน API
 ```
-(Claude จะเรียก `commit-message-format` skill)
+(Claude จะเรียก `git-and-review` skill)
 
 ```
 ช่วย review postmortem ของ incident เมื่อวานหน่อย
 ```
-(Claude จะเรียก `postmortem-template` skill)
+(Claude จะเรียก `incidents-and-monitoring` skill)
 
 ---
 
@@ -519,26 +519,26 @@ Step 4: Project Manager
 
 #### 🏦 FinTech
 ```
-/software-development:fintech-payments pci-audit <scope>                   # PCI-DSS readiness
-/software-development:fintech-payments transaction-flow-design <use case>  # ออกแบบ money flow
+/software-development:domain-systems pci-audit <scope>                   # PCI-DSS readiness
+/software-development:domain-systems transaction-flow-design <use case>  # ออกแบบ money flow
 ```
 
 #### 🤖 AI/ML
 ```
-/software-development:llm-engineering rag-design <use case>               # ออกแบบ RAG system
-/software-development:llm-engineering llm-eval <application>              # สร้าง eval suite
+/software-development:ai-engineering rag-design <use case>               # ออกแบบ RAG system
+/software-development:ai-engineering llm-eval <application>              # สร้าง eval suite
 ```
 
 #### 🏥 Healthcare
 ```
-/software-development:healthcare-systems hipaa-audit <scope>                 # HIPAA readiness
-/software-development:healthcare-systems fhir-design <feature>               # FHIR API design
+/software-development:domain-systems hipaa-audit <scope>                 # HIPAA readiness
+/software-development:domain-systems fhir-design <feature>               # FHIR API design
 ```
 
 #### 🛒 E-commerce
 ```
-/software-development:ecommerce-patterns checkout-audit                      # วิเคราะห์ checkout
-/software-development:ecommerce-patterns recommendation-design               # ออกแบบ recsys
+/software-development:domain-systems checkout-audit                      # วิเคราะห์ checkout
+/software-development:domain-systems recommendation-design               # ออกแบบ recsys
 ```
 
 #### 🎮 Gaming
@@ -549,8 +549,8 @@ Step 4: Project Manager
 
 #### 🌐 IoT
 ```
-/software-development:iot-systems iot-architecture <use case>         # device/edge/cloud
-/software-development:iot-systems device-fleet-design <fleet>         # provisioning + OTA
+/software-development:domain-systems iot-architecture <use case>         # device/edge/cloud
+/software-development:domain-systems device-fleet-design <fleet>         # provisioning + OTA
 ```
 
 #### 🔒 Cybersecurity
@@ -561,8 +561,8 @@ Step 4: Project Manager
 
 #### 🏢 SaaS B2B
 ```
-/software-development:saas-platform saas-architecture-review <area>     # multi-tenancy review
-/software-development:saas-platform integration-design <integration>    # SSO/SCIM/webhook
+/software-development:domain-systems saas-architecture-review <area>     # multi-tenancy review
+/software-development:domain-systems integration-design <integration>    # SSO/SCIM/webhook
 ```
 
 #### 🔧 DevTools
@@ -579,20 +579,20 @@ Step 4: Project Manager
 
 #### 🌐 Web3
 ```
-/software-development:smart-contracts smart-contract-audit <repo>         # security audit
-/software-development:smart-contracts tokenomics-design <protocol>        # token economics
+/software-development:domain-systems smart-contract-audit <repo>         # security audit
+/software-development:domain-systems tokenomics-design <protocol>        # token economics
 ```
 
 #### ⚖️ LegalTech
 ```
-/software-development:legal-document-systems contract-analysis-design <use>      # clause extraction system
-/software-development:legal-document-systems esignature-audit <system>           # eIDAS/ESIGN compliance
+/software-development:domain-systems contract-analysis-design <use>      # clause extraction system
+/software-development:domain-systems esignature-audit <system>           # eIDAS/ESIGN compliance
 ```
 
 #### 🛡️ InsurTech
 ```
-/software-development:insurance-systems claims-flow-design <LOB>            # FNOL + triage + settlement
-/software-development:insurance-systems underwriting-model-design <LOB>     # risk scoring + pricing
+/software-development:domain-systems claims-flow-design <LOB>            # FNOL + triage + settlement
+/software-development:domain-systems underwriting-model-design <LOB>     # risk scoring + pricing
 ```
 
 ---

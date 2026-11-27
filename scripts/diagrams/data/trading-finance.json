@@ -4,30 +4,30 @@
  "description": "Trading and personal finance toolkit for Thai investors — watchlists, signals, paper trading, trade journal, position sizing, dividends, budgets and scam checks, plus Thai money skills: investment tax, year-end deduction planning (/tax-plan), mutual funds, retirement, debt payoff and คลินิกแก้หนี้, insurance review and emergency funds, credit bureau reports, bonds and deposits, rebalancing and DCA, and home refinance. Uses whatever market-data plugins you already have.",
  "cross": [],
  "skills": [
-  "bonds-and-deposits",
+  "fund-and-bond-picker",
   "copy-trade-check",
-  "credit-bureau",
-  "debt-payoff",
-  "dividend-tracker",
-  "emergency-fund",
-  "home-refinance",
-  "insurance-review",
-  "mutual-fund-picker",
-  "news-impact",
-  "paper-trading",
-  "personal-budget",
-  "portfolio-snapshot",
+  "budget-and-debt",
+  "budget-and-debt",
+  "portfolio",
+  "budget-and-debt",
+  "budget-and-debt",
+  "retirement-and-insurance",
+  "fund-and-bond-picker",
+  "market-watch",
+  "trade-practice",
+  "budget-and-debt",
+  "portfolio",
   "position-sizing",
-  "rebalance-and-dca",
-  "retirement-plan",
+  "portfolio",
+  "retirement-and-insurance",
   "scam-check",
   "stock-fundamentals",
-  "tax-basics-th",
-  "tax-deduction-planner",
+  "income-tax-th",
+  "income-tax-th",
   "technical-signals",
   "trade-journal",
-  "trading-technique-course",
-  "watchlist-setup"
+  "trade-practice",
+  "market-watch"
  ],
  "core_skills": [
   "superuser",
@@ -72,7 +72,7 @@
   "human-writing"
  ],
  "commands": [
-  "alert-set"
+  "market-watch"
  ],
  "agents": [
   {
@@ -81,8 +81,8 @@
    "core": false,
    "description": "Use when the user wants price or news alerts on watched symbols. Sets scheduled checks and keeps alerts few.",
    "skills": [
-    "news-impact",
-    "watchlist-setup"
+    "market-watch",
+    "market-watch"
    ]
   },
   {
@@ -93,7 +93,7 @@
    "skills": [
     "stock-fundamentals",
     "technical-signals",
-    "news-impact"
+    "market-watch"
    ]
   },
   {
@@ -102,20 +102,20 @@
    "core": false,
    "description": "Use for personal money — budget, debt, emergency fund, retirement, insurance, funds, personal tax, scam checks.",
    "skills": [
-    "personal-budget",
-    "emergency-fund",
-    "debt-payoff",
-    "retirement-plan",
-    "insurance-review",
-    "mutual-fund-picker",
-    "dividend-tracker",
-    "tax-basics-th",
-    "tax-deduction-planner",
+    "budget-and-debt",
+    "budget-and-debt",
+    "budget-and-debt",
+    "retirement-and-insurance",
+    "retirement-and-insurance",
+    "fund-and-bond-picker",
+    "portfolio",
+    "income-tax-th",
+    "income-tax-th",
     "scam-check",
-    "credit-bureau",
-    "rebalance-and-dca",
-    "bonds-and-deposits",
-    "home-refinance"
+    "budget-and-debt",
+    "portfolio",
+    "fund-and-bond-picker",
+    "budget-and-debt"
    ]
   },
   {
@@ -135,7 +135,7 @@
    "description": "Use when reviewing past trades or a trade journal, or asking why you keep losing the same way. Finds one rule to test.",
    "skills": [
     "trade-journal",
-    "trading-technique-course"
+    "trade-practice"
    ]
   }
  ],
@@ -392,7 +392,7 @@
     },
     {
      "n": 2,
-     "text": "Make a single page under `portfolio-snapshot` — weights · profit and loss · cash · income · concentration · ใคร: `market-analyst` ตัวใหม่",
+     "text": "Make a single page under `portfolio` — weights · profit and loss · cash · income · concentration · ใคร: `market-analyst` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -404,7 +404,7 @@
       "raw": "`market-analyst` ตัวใหม่"
      },
      "skills": [
-      "portfolio-snapshot"
+      "portfolio"
      ],
      "commands": [],
      "playbooks": [],
@@ -412,7 +412,7 @@
     },
     {
      "n": 3,
-     "text": "Summarise dividends under `dividend-tracker`: XD date · payment date · amount after tax · ใคร: `market-analyst` ตัวใหม่",
+     "text": "Summarise dividends under `portfolio`: XD date · payment date · amount after tax · ใคร: `market-analyst` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -424,7 +424,7 @@
       "raw": "`market-analyst` ตัวใหม่"
      },
      "skills": [
-      "dividend-tracker"
+      "portfolio"
      ],
      "commands": [],
      "playbooks": [],
@@ -475,7 +475,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Read the thesis for this stock from the watchlist. If there is none, write the thesis (the reason to buy), the entry point, and the point where the thesis is wrong, under `watchlist-setup` · ใคร: หัวหน้าทีม (reason from the answer at the start; if none, put `(รอยืนยัน)` (pending confirmation))",
+     "text": "Read the thesis for this stock from the watchlist. If there is none, write the thesis (the reason to buy), the entry point, and the point where the thesis is wrong, under `market-watch` · ใคร: หัวหน้าทีม (reason from the answer at the start; if none, put `(รอยืนยัน)` (pending confirmation))",
      "sub": [],
      "phase": "",
      "who": {
@@ -485,7 +485,7 @@
       "raw": "หัวหน้าทีม (reason from the answer at the start; if none, put `(รอยืนยัน)` (pending confirmation))"
      },
      "skills": [
-      "watchlist-setup"
+      "market-watch"
      ],
      "commands": [],
      "playbooks": [],
@@ -493,7 +493,7 @@
     },
     {
      "n": 2,
-     "text": "Look at the price and signals under `technical-signals` and the affecting news under `news-impact` — every number has a reference time · ใคร: `market-analyst` ตัวใหม่",
+     "text": "Look at the price and signals under `technical-signals` and the affecting news under `market-watch` — every number has a reference time · ใคร: `market-analyst` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -506,7 +506,7 @@
      },
      "skills": [
       "technical-signals",
-      "news-impact"
+      "market-watch"
      ],
      "commands": [],
      "playbooks": [],
@@ -853,7 +853,7 @@
     },
     {
      "n": 3,
-     "text": "Calculate tax before and after each deduction route under `tax-deduction-planner`, and say how much room is left to buy tax-saving funds · ใคร: `money-planner` ตัวใหม่",
+     "text": "Calculate tax before and after each deduction route under `income-tax-th`, and say how much room is left to buy tax-saving funds · ใคร: `money-planner` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -865,7 +865,7 @@
       "raw": "`money-planner` ตัวใหม่"
      },
      "skills": [
-      "tax-deduction-planner"
+      "income-tax-th"
      ],
      "commands": [],
      "playbooks": [],
@@ -873,7 +873,7 @@
     },
     {
      "n": 4,
-     "text": "For tax on investments, say which form must be filed and whether to claim the dividend tax credit, under `tax-basics-th` · ใคร: `money-planner` ตัวใหม่",
+     "text": "For tax on investments, say which form must be filed and whether to claim the dividend tax credit, under `income-tax-th` · ใคร: `money-planner` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -885,7 +885,7 @@
       "raw": "`money-planner` ตัวใหม่"
      },
      "skills": [
-      "tax-basics-th"
+      "income-tax-th"
      ],
      "commands": [],
      "playbooks": [],
@@ -893,7 +893,7 @@
     },
     {
      "n": 5,
-     "text": "ตรวจ by recalculating with `tax.mjs` of `tax-deduction-planner`, and that every ceiling has a source and a year · ใคร: `reviewer` ตัวใหม่",
+     "text": "ตรวจ by recalculating with `tax.mjs` of `income-tax-th`, and that every ceiling has a source and a year · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -903,7 +903,7 @@
       "raw": "`reviewer` ตัวใหม่"
      },
      "skills": [
-      "tax-deduction-planner"
+      "income-tax-th"
      ],
      "commands": [],
      "playbooks": [],

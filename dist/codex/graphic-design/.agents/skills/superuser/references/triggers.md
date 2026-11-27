@@ -12,7 +12,7 @@ Open when unsure which skill to call, or when the job crosses into another plugi
 | Need to edit an existing image | `image-generation` |
 | Social or multi-size campaign work | `campaign-set` + agent `social-creator` |
 | LINE OA rich menu (image size · tap areas · JSON · upload via API) | `line-design` + agent `social-creator` · read image sizes from `campaign-set` |
-| Product pictures for Shopee · Lazada · TikTok Shop (size · white background · text on image · rejected pictures) | `marketplace-product-images` + agent `social-creator` · text on the product page → `e-commerce:product-listing` |
+| Product pictures for Shopee · Lazada · TikTok Shop (size · white background · text on image · rejected pictures) | `marketplace-product-images` + agent `social-creator` · text on the product page → `e-commerce:sales-copy` |
 | App icon · favicon · on-screen icon set · logo mark | `icon-design` + agent `design-critic` · the user has already rejected icons the agent hand-drew, ask for a prototype before drawing |
 | YouTube clip cover image (thumbnail) · Thai text on the cover · testing several covers | `design-by-type` + agent `social-creator` |
 | Sending files to a print shop or sign shop (flyer · name card · vinyl banner · sticker) · CMYK · bleed · distorted Thai fonts | `print-ready-files` + agent `design-critic` |

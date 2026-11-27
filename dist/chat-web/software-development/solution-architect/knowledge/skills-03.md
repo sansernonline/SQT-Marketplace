@@ -1,1255 +1,38 @@
-# skill: markdown-visuals
+# skill: project-docs
 
-Use when a Markdown doc needs an image, SVG or ASCII art
+Use when choosing project docs, onboarding docs or release notes
 
-# Markdown Visuals
+# project-docs — pick the right docs, then write them for the reader who uses them
 
-> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `design-gate/no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
+> **One rule:** every doc must answer who reads it and what they decide after reading. If it cannot answer, do not write it.
 
-> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `design-gate/polished-document-style`.
+## Pick the part
 
-> **Rule:** Every plan, process, design, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
-
-## When to use this skill
-
-- A picture *inside a markdown file* — sketch, flow or state in a business plan, report, process guide, spec or README
-- Writing a plan, Functional Specification Document (FSD), Business Requirements Document (BRD), Architecture Decision Record (ADR) or architecture doc that describes layout, flow, or relationships (the diagrams themselves follow the routing rule below)
-- Explaining state transitions, user journeys, or system interactions
-- Comparing 2+ visual options for the user
-- The user asked "show me how it looks" inside a markdown doc or chat reply
-
-**If the doc has zero visuals and is about anything visual or structural — stop and add one.**
-
-## When NOT to use
-
-| Task | Use instead |
+| Job (what the user says) | Open |
 |---|---|
-| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) (plugin `software-development`) |
-| Chart colours and chart design in an app or dashboard | `web-app-design` (plugin `software-development`) → `references/tokens.md` "สีข้อมูล (กราฟ)" |
-| Designed figure for a proposal, slide or print | `diagram-figures` |
-
-## Decision tree: which format?
-
-```
-What are you showing?
-│
-├─ UI sketch in a doc / component state / icon → Inline SVG (doc read on GitHub → same SVG as a `.svg` file, §2)
-├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
-├─ Flow / process / money flow / decision   →  repo note (README · Pull Request (PR) · code note) → Mermaid (`software-diagrams`, plugin `software-development`)
-│                                              project document (BRD · Software Requirements Specification (SRS) · FSD · ADR) or read outside the team → `diagram-figures`
-├─ Architecture / Entity-Relationship (ER) / class → same rule as the line above
-├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
-├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design (plugin `software-development`) tokens.md "สีข้อมูล (กราฟ)"
-├─ Photo, screenshot, complex illustration  →  External file → ![alt](figures/x.png) (file in `docs/figures/`)
-└─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
-```
-
-**Routing rule (same in `software-diagrams` and `diagram-figures`):** markdown in a repo read by the team (README · PR · code note) → Mermaid via `software-diagrams` · a project document (BRD · SRS · FSD · ADR · ER · flows) or anything people outside the team read → `diagram-figures`.
-
-**Follow the tree above.** Where the doc will be read decides inline SVG vs image file:
-
-- **Inline `<svg>` renders** in VS Code preview, Obsidian, many static-site generators and chat replies.
-- **Inline `<svg>` does not render on GitHub** — GitHub's sanitizer drops the `<svg>` element, so the reader sees nothing. Other hosts (GitLab, Bitbucket): preview before relying on it.
-- **Doc will be read on GitHub** → save the SVG as `docs/figures/x.svg` and reference it with `![alt](figures/x.svg)` or `<img>` (§2). It still versions cleanly in git and stays editable.
-
-## 1 · Inline SVG (for viewers that render it — not GitHub)
-
-### Boilerplate
-
-```markdown
-<p align="center">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-label="<what this shows>">
-  <!-- background = bg-canvas of the project palette (see สี below) -->
-  <rect width="640" height="280" rx="14" fill="<bg-canvas>"/>
-
-  <!-- content goes here -->
-</svg>
-</p>
-```
-
-**Required attributes:**
-- `xmlns="http://www.w3.org/2000/svg"` — required when the same markup is saved as a `.svg` file (GitHub shows `.svg` files only through `![]()` / `<img>`, and only with `xmlns`)
-- `viewBox` — sets the coordinate space; lets the SVG scale responsively
-- `role="img"` + `aria-label` — accessibility, screen readers
-- `<p align="center">` wrapper — centers in the rendered page
-
-**Sizing:** Use `viewBox` (not width/height) so it scales. Common sizes:
-- Sketch of a UI bar: `viewBox="0 0 640 200"` (wide, short)
-- Component state: `viewBox="0 0 400 300"` (squarer)
-- Icon / chip: `viewBox="0 0 64 64"`
-- Full screen layout: `viewBox="0 0 800 500"`
-
-### สี
-
-If the document or project already has a colour palette, use it. If not, search for references per `design-gate/design-references` (plugin `superuser`), type `document`, and take the colours from the chosen work · if live search is not possible, use the house value `#2A78D6`, mark it `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask (order in `diagram-figures` item 5 · colour-by-domain table [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) · for role-based tokens (`bg-canvas` · `accent-primary` · `state-*` …) see [references/svg-snippets.md](references/svg-snippets.md) · and **1 document uses 1 palette**
-
-### Reusable snippets
-
-Window chrome, phone frame, button, card, status badge, running dot and tooltip snippets, plus the UI-state worked example, are in [references/svg-snippets.md](references/svg-snippets.md). Copy the structure and swap in the agreed colour tokens.
-
-## 2 · External image files
-
-Use when:
-- The doc will be read on GitHub (inline `<svg>` is dropped there) — save the SVG as a file
-- Photo or screenshot
-- Illustration too complex to author as SVG by hand (50+ shapes)
-- Reusing the same image across many docs
-- Generated by a design tool (Figma export, etc.)
-
-### Folder convention
-
-```
-docs/
-  figures/
-    01-hover-state.svg
-    02-empty-state.png
-    architecture-overview.svg
-    src/                      editable sources (.mmd · .drawio · .html)
-```
-
-- Put figures in `docs/figures/` (editable sources in `docs/figures/src/`) — relative to the doc · brand files (logo, icons) live in the project-root `assets/`, not here
-- Name files `<doc-section-number>-<short-slug>.<ext>` so they sort with the doc
-- Prefer `.svg` over `.png` when possible (scales, smaller, diff-friendly)
-
-### Reference syntax
-
-```markdown
-![Hover state showing magnified Projects tile](figures/01-hover-state.svg)
-```
-
-- **Alt text** describes what the image shows, for accessibility — not "screenshot.png"
-- Path is **relative to the markdown file**, not absolute
-- For centered + sized images, wrap in HTML:
-
-```markdown
-<p align="center">
-  <img src="figures/01-hover-state.svg" alt="Hover state" width="640"/>
-</p>
-```
-
-### Creating SVG files
-
-When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file in `docs/figures/`.
-
-## 3 · ASCII art
-
-For quick layouts, state diagrams, and structural sketches that don't need pixel-perfect visuals. Renders identically in every viewer and in terminal/diff output.
-
-Box-drawing characters plus worked layout sketch, state machine and curve examples are in [references/ascii-patterns.md](references/ascii-patterns.md).
-
-Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
-
-## 4 · Mermaid
-
-**Choosing a diagram type, theme, readability rules and Thai labels is covered in `software-diagrams` (plugin `software-development`) items 1–5 and `assets/mermaid-theme.md`** · for Mermaid in project documents that must be converted to a picture for Word, use the converter in `diagram-figures` → `references/engine-mermaid.md`
-This file only says *when to choose Mermaid over other formats*
-
-| Choose Mermaid when | Choose something else when |
-|---|---|
-| It is boxes and arrows that the engine can lay out | If you must control placement yourself, use inline SVG; for a figure that must look designed, use `diagram-figures` (HTML layout or engine-svg-python) and embed it as an image file |
-| It lives in a file that must be diffed in git | It is a real screenshot: use an image file |
-| Readers open it in GitHub or Notion | Readers open it in a Word document or slides: use an image file |
-
-## Combining formats in one doc
-
-A full design spec usually mixes formats (SVG mockup, reference table, ASCII sketch, Mermaid state diagram, acceptance table). The 6-part pattern is in [references/combining-formats.md](references/combining-formats.md). Don't force everything into one format.
-
-## Accessibility checklist
-
-For every visual:
-
-- [ ] **Inline SVG** has `role="img"` and `aria-label="<description>"`
-- [ ] **Image file** has descriptive alt text (not "image.png")
-- [ ] **Mermaid** diagrams have a 1-sentence caption above or below
-- [ ] **ASCII art** has a prose summary nearby — screen readers will read the characters literally
-- [ ] **Colour** is not the only signal — pair red badges with `!`, green dots with a label
-- [ ] **Contrast** for text in SVG ≥ 4.5:1 against its background
-
-## Anti-patterns
-
-- **Linking to Figma / external design tools as the only source** — visuals must render in the repo
-- **PNG screenshots of text** — use the text, in a code block
-- **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
-- **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
-
-## Quick-start recipe
-
-When a markdown doc needs a design picture (clickable app screens go to the platform design skill, `mockup/<CODE>-mockup.html`):
-
-1. **Identify what kinds of visuals are needed** (UI state? flow? architecture?)
-2. **Pick the format(s)** using the decision tree above
-3. **For each visual:**
-   - State a one-line caption
-   - Emit the SVG/Mermaid/ASCII
-   - Add `role="img"` + `aria-label` (SVG) or alt text (file)
-4. **Add a feature reference table** below the visuals — what each element means
-5. **Cross-check accessibility checklist** before delivery
-
-## ไม่ให้ดูเหมือน AI ทำ
-
-Before sending, go through item 3 of `design-gate/no-ai-look` — for HTML work, run its script · every piece must also pass eye check 3.2 (a web page adds items 10–14), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for all media is there
-
-
-## reference: ascii-patterns.md
-
-# ASCII patterns
-
-Worked ASCII examples for markdown docs · used by [SKILL.md](../SKILL.md) §3 · always wrap ASCII in a fenced code block so spacing is preserved
-
-## Box-drawing characters
-
-```
-┌─────┐  ┏━━━━━┓  ╭─────╮  ┌╌╌╌╌╌┐
-│     │  ┃     ┃  │     │  ╎     ╎
-└─────┘  ┗━━━━━┛  ╰─────╯  └╌╌╌╌╌┘
- light    heavy   rounded   dashed
-```
-
-Corners: `┌ ┐ └ ┘` ‧ `┏ ┓ ┗ ┛` ‧ `╭ ╮ ╰ ╯`
-Lines:   `─ │` ‧ `━ ┃` ‧ `═ ║`
-Joins:   `├ ┤ ┬ ┴ ┼`
-Arrows:  `→ ← ↑ ↓ ▲ ▼ ▶ ◀ ↔ ↕ ⇒ ⇐`
-Dots:    `• · ◦ ● ○ ▪ ▫`
-
-## Common patterns
-
-**Layout sketch:**
-```
-┌─────────────────────────────────────┐
-│ Header        [Search]      [👤]    │
-├──────────┬──────────────────────────┤
-│ Sidebar  │ Main content             │
-│  • Item  │                          │
-│  • Item  │  ┌────────────────────┐  │
-│          │  │  Primary CTA       │  │
-│          │  └────────────────────┘  │
-└──────────┴──────────────────────────┘
-```
-
-**State machine:**
-```
-┌─────────┐  hover  ┌──────────┐  click  ┌─────────┐
-│  REST   │────────►│ MAGNIFIED│────────►│ LAUNCH  │
-└─────────┘◄────────└──────────┘◄────────└─────────┘
-            exit               done
-```
-
-**Curve / chart:**
-```
-scale
- ↑
-1.7│         ╱╲
-1.4│       ╱    ╲
-1.2│     ╱        ╲
-1.0│___╱            ╲___
-   └──────────┬──────────→ cursor X
-         tile.Center
-```
-
-
-## reference: combining-formats.md
-
-# Combining formats in one doc
-
-Used by [SKILL.md](../SKILL.md) · a full design spec usually mixes formats.
-
-The 6-part pattern for a design spec:
-
-```
-1. Inline SVG mockup of each UI state              ← "what it looks like"
-2. Feature reference table                          ← "what it does"
-3. ASCII layout sketch with measurements           ← "how it's positioned"
-4. Mermaid state diagram                            ← "how it transitions"
-5. ASCII / inline-SVG zoom curve                    ← "the math"
-6. Acceptance criteria table                        ← "how we verify"
-```
-
-Don't force everything into one format. Each format is best at something different.
-
-
-## reference: svg-snippets.md
-
-# Inline SVG snippets
-
-Reusable building blocks for inline SVG pictures of a screen inside .md docs (the real mockup is HTML) · used by [SKILL.md](../SKILL.md) §1
-
-## Colour: it comes from the subject, not from a ready-made table
-
-If the document or project already has a colour set, use that set.
-If not, use the house value `#2A78D6`, write `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask. Propose a tone drawn from the subject in the report: medical green · finance dark blue ·
-industrial amber · government navy · general software blue (the full table is in [`diagram-figures/references/colour-by-domain.md`](../../diagram-figures/references/colour-by-domain.md))
-
-Define **tokens by role** at the top of the document, then use the same values in every figure in that document:
-
-| Token | Role | Comes from |
-|---|---|---|
-| `bg-canvas` | Background of the figure | The darkest shade (dark mode) or the lightest (light mode) |
-| `bg-surface` | Sheets, panels, cards | Different enough from canvas to show the edge without drawing a line |
-| `bg-elevated` | A tile raised one more layer | |
-| `accent-primary` | Emphasis, the active state | **The brand colour** (none → `#2A78D6` + `(รอยืนยัน)`) |
-| `text-primary` | Main text | Contrast ≥ 4.5:1 against the surface it sits on |
-| `text-muted` | Secondary text, placeholder | `rgba(...,0.55)` of `text-primary` |
-| `state-success` · `state-warning` · `state-danger` | Status | **Does not change with the brand.** Green always means pass and red always means fail |
-
-**One document, one colour set.** 10 figures in one document with mismatched colours are harder to read than plain figures with matching colours.
-
-## Snippets
-
-> The examples below use one dark-mode colour set as a stand-in only.
-> **Change the colour values to match the agreed set before use.** The structure is what you copy, not the colour values.
-
-**Window chrome (desktop app mockup):**
-```xml
-<rect x="20" y="20" width="600" height="360" rx="10" fill="#2a3245"/>
-<circle cx="42" cy="42" r="6" fill="#ff5f57"/>
-<circle cx="62" cy="42" r="6" fill="#febc2e"/>
-<circle cx="82" cy="42" r="6" fill="#28c940"/>
-<text x="320" y="46" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Window title</text>
-<line x1="20" y1="64" x2="620" y2="64" stroke="rgba(255,255,255,0.08)"/>
-```
-
-**Phone frame (mobile mockup):**
-```xml
-<rect x="100" y="20" width="200" height="400" rx="28" fill="#0a0d14" stroke="#2a3245" stroke-width="2"/>
-<rect x="120" y="50" width="160" height="340" rx="6" fill="#1c2230"/>
-<rect x="170" y="28" width="60" height="14" rx="7" fill="#0a0d14"/>
-```
-
-**Button:**
-```xml
-<rect x="40" y="100" width="120" height="40" rx="8" fill="#0078d4"/>
-<text x="100" y="125" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="14" font-weight="500">Click me</text>
-```
-
-**Card with title and body:**
-```xml
-<rect x="40" y="40" width="240" height="120" rx="12" fill="#2a3245"/>
-<text x="60" y="72" fill="#fff" font-family="system-ui" font-size="14" font-weight="600">Card title</text>
-<text x="60" y="96" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="12">Supporting body text goes here.</text>
-<rect x="60" y="116" width="80" height="28" rx="6" fill="#0078d4"/>
-<text x="100" y="134" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Action</text>
-```
-
-**Status badge (top-right of tile):**
-```xml
-<circle cx="<tile-right-x>" cy="<tile-top-y>" r="9" fill="#e24b4a"/>
-<text x="<tile-right-x>" y="<tile-top-y + 4>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="13" font-weight="500">!</text>
-```
-
-**Running dot (indicator below tile):**
-```xml
-<circle cx="<tile-center-x>" cy="<tile-bottom-y + 12>" r="4" fill="#4cc2ff"/>
-```
-
-**Tooltip text (no balloon — plain floating text):**
-```xml
-<text x="<tile-center-x>" y="<tile-top-y - 12>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12" font-weight="500">Tooltip label</text>
-```
-
-## Worked example — UI state mockup
-
-Use this pattern by default for showing UI feature states. On GitHub, save the SVG as a file in `docs/figures/` and reference it (inline `<svg>` is dropped there).
-
-
----
-
-# skill: diagram-figures
-
-Use when a document or slide needs a designed diagram
-
-# Diagram Figures — designed figures (HTML template → PNG) for documents, slides and print
-
-> **One rule:** the figure's main colour = the project's main colour. Look for it in the order in step 5. Only if nothing is found, use the house palette `#2A78D6` from `design-gate/parts/polished-document-style/references/theme-colors.md` ("ค่าตั้งต้นประจำบ้าน", the house default).
-
-> **Pre-work gate (every time):** read the owner's theme → search live for a reference → 3 genuinely different directions → check `design-gate/no-ai-look` before sending. Follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search finds this piece's structure). Close the work with a line `ด่านก่อนลงมือ:`.
-
-## Use when
-- A figure in a work document (business plan · process chart · research summary · BRD · SRS · ER diagram) or any figure that must look designed: client proposals · slides · print · sign-off documents, including cloud diagrams with real logos.
-- The same style generated from data or code (re-issued when data changes, coordinates on a grid) → SVG/Python engine, [`references/engine-svg-python.md`](references/engine-svg-python.md).
-- Dozens of Mermaid blocks (sequence · state · ER · gantt) going into Word or PDF as hand-drawn-looking figures → Mermaid engine, [`references/engine-mermaid.md`](references/engine-mermaid.md).
-
-Not for: a quick diagram in a README · Pull Request · code note → `software-diagrams` (plugin `software-development`; for logos in a repo use its `diagrams` library) · how to embed a figure in markdown → `markdown-visuals`. Anything read by people outside the team → this skill. This skill costs time (several rounds of fixes per figure), so skip it for in-team figures.
-
-## Steps
-1. **Answer 3 questions first.** Where does the figure go (slide 16:9 · A4 page · screen)? Set `.sheet{width:...}` to match: slide 1600px · A4 portrait 1240px · A4 landscape 1750px. Who reads it (non-technical client → box names in Thai; technical team → real service names)? What single question does it answer (1 figure, 1 question)?
-2. **Copy one template from `assets/` and edit it; never write your own.** All share colours, sizes, fonts and the line-drawing script.
-
-   | Question the figure answers | Template | Details |
-   |---|---|---|
-   | Who outside does this system, shop or organisation talk to? (top-level overview, C4 level 1) | [`figure-context.html`](assets/figure-context.html) | [layout-context.md](references/layout-context.md) |
-   | Where is the real thing, and what is inside? (departments · places · machines; deployment) | [`figure-template.html`](assets/figure-template.html) | [layout-deployment.md](references/layout-deployment.md) |
-   | Which cloud services are used? (real AWS · Azure · Google Cloud logos) | [`figure-cloud.html`](assets/figure-cloud.html) | [layout-cloud.md](references/layout-cloud.md) |
-   | What does 1 item (message · order · money) pass through, in what order? (numbered ①–⑥, user → channel → internal → external) | [`figure-flow.html`](assets/figure-flow.html) · [example](assets/figure-flow-example.png) | [layout-flow.md](references/layout-flow.md) |
-
-3. **Header needs all 6 parts:** project logo (`<img class="logo">` → the project's `assets/logo/`; if there is none, say so in the report) · title · 1-line sub-title (what the real thing is, not an expansion of the title) · figure number · version and date · owner. Wrong/right sub-title example: [`references/design-system.md`](references/design-system.md), "Figure header".
-4. **Sizes.** Sizes, spacing and corners are already in `:root` of `assets/figure-template.html`; do not set new values. Icon frame ≥ 66px (below 56px looks hollow). Connectors vertical or horizontal only, bent with rounded corners; no diagonals. Full table: [`references/design-system.md`](references/design-system.md), "Size system" (open when adjusting or writing a template). Text size follows the placed size: for a figure placed in an A4 document, smallest text after placing must be ≥ 7 pt → `minimum px = 0.247 × canvas width(px) ÷ placed width(cm)` (2000px canvas: 29px on a 17 cm page, 20px on 25.7 cm). Make boxes wide enough that Thai names are not cut mid-word. In-document version uses `?embed=1` (hides header); aspect ratio width ÷ height ≥ 1.46 for a landscape page; one `figure-theme.css` for the whole set.
-5. **Colour.** Stop at the first hit:
-   1. `doc-theme` in the project's documents (`design-gate/polished-document-style`, section "ธีมของเอกสาร").
-   2. The project's brand colour: `--primary` · `--brand` · `--accent` in CSS · `primary` in Tailwind / UI theme · `colorPrimary` in a mobile app · brand kit · logo. Read the background colour from the same places (`--background` · `--bg` · dark or light mode), because figures follow the project's design.
-   3. Nothing yet → search live per `design-gate/design-references` (plugin `superuser`), type `document`, then extract colours from the chosen work. Use the stored colour library only if live search is not possible.
-   4. Live search not possible → use `#2A78D6`, write `(รอยืนยัน)` in the report, carry on without asking, and list a tone from [references/colour-by-domain.md](references/colour-by-domain.md) for later.
-
-   Never use a colour from an example or reference image. In HTML templates change `--accent` in `:root` (SVG/Python: `ACCENT` in `theme.py`); background that follows the project → append `#accent=<main colour>&bg=<background colour>` to the file name. The 7 icon colour groups (`t-neutral` · `t-edge` · `t-app` · `t-view` · `t-data` · `t-alert` · `t-warn`) and provider/structural exceptions: [`references/design-system.md`](references/design-system.md), "Colour system". An 8th colour means colour is used for looks. The main colour must show across the whole figure, with 1 `.focus` card (brand border + glow), a 6px glowing main path and thin grey secondary lines. Full rules: [`references/focal-point-and-layout.md`](references/focal-point-and-layout.md).
-6. **Icons.** If an official icon exists (AWS · Azure · Google Cloud · Kubernetes · most open-source tools), use it from `assets/icons/` (205 selected) or `python assets/find-icon.py <name>`; groups, commands, licences in [references/icons.md](references/icons.md). If not, or it is our own system, draw a line icon (`viewBox 0 0 24 24` · `stroke-width 1.6` · no fill · round caps · readable at 24px, max 3 strokes of detail) and footnote that it is not an official logo (the template has this line). Never mix official and hand-drawn icons in one figure. Never use a logo so that it looks like the provider endorses it.
-7. **Wires.** Same column → down arrow `.down`. Across columns → the `WIRES` list at the end of the file (`{from, fs, to, ts, tp, label}`); the script draws after layout; never write fixed coordinates. Vertical or horizontal only, rounded bends via `elbow()` (use `mx` when lines share a channel). A label must be narrower than the column gap (longer → raise `gap` of `.stage`). At most 5 cross-column lines per figure, to the smallest correct box. A label says what flows (`HTTPS 443`), not `เชื่อมต่อ`; no label if nothing to say; a not-yet-real connection uses `planned:true` with a footnote. Code example: [`references/wires.md`](references/wires.md) (open when writing `WIRES`).
-8. **Layout of process and team charts.** Read top to bottom, 1 level per tier (left to right only with a time axis). Middle element (`.focus`) in the centre, whole figure centred. Same-level things in one frame and one row, with a group name on the border; frame is a single line, no fill; equal card height. One line into a frame if all boxes receive the same thing. Line channels outside frames. Bends are curves (~12px radius), cards 14px corners, frames 20px. Every box has a name and a 1-line description. Details: [`references/focal-point-and-layout.md`](references/focal-point-and-layout.md).
-9. **Thai.** `line-height` ≥ 1.5 and never a fixed height on a text box (upper vowels and tone marks get cut). Description text ≥ 12px. Thai has no word spaces, so put `<br>` yourself in long text, and never break inside words like ทีละ · สต็อก · ร้านค้า · เช็ก (`white-space:nowrap`). Font order `"Noto Sans Thai","IBM Plex Sans Thai",Tahoma,Loma` is set in the templates; if the machine has no Thai font vowels land wrong, so always render and look.
-10. **Render and look. Never skip.**
-    ```bash
-    pip install playwright && playwright install chromium
-    cp <skill>/assets/render-figure.py docs/figures/render.py     # first time in the project
-    python docs/figures/render.py                  # every figure in docs/figures/src/ → docs/figures/*.png + docs/figures/doc/*.png
-    python docs/figures/render.py arch-01 --min-px 20             # chosen figures · smallest text by placed size (step 4)
-    python assets/render-figure.py figure.html figure.png 2       # single file (slide · trying a direction)
-    python scripts/check-figure-geometry.py docs/figures/src     # exit 0 = pass: diagonals, square corners, overlapping labels, lines over text
-    python scripts/check-figure-source.py docs/figures/src       # every figure starts from this skill's skeleton
-    ```
-    Always use multiplier 2 (1 is blurry when enlarged). Folder mode makes 2 versions per figure (full + `?embed=1`) and checks text smaller than `--min-px`, wrapped names or labels, overflow, overlapping labels: `problems: 0` and exit 0 = pass. Keep `render.py` at `docs/figures/render.py` next to `src/`, never in `_to_delete/` or a scratchpad; never delete `docs/figures/src/` (.png files are only output). Send the client a PNG; keep the HTML source in the repo.
-11. If a figure comes out wrong (missing arrowhead, line to the wrong box, missing Thai vowels, label over a box), open the symptom → cause → fix table [references/pitfalls.md](references/pitfalls.md) before fixing it yourself.
-12. Run `design-gate/no-ai-look` item 3 (for HTML, run its script; also eye gate 3.2; 0 findings from the script is not yet a pass). Hand-off by medium: slide → `presentation-design` · Word / PDF → `branded-document-design` · SRS → `srs-writing` · app screens → `ui-craft`.
+| "Which docs does this project need?", "docs are scattered", "a client asks what we deliver", "open-items Excel" | [`references/project-doc-set.md`](references/project-doc-set.md) (table of docs: [`references/technical-docs.md`](references/technical-docs.md)) |
+| "Onboard a new developer", "30/60/90-day guide", "a new QA joins next week" | [`references/onboard.md`](references/onboard.md) |
+| "Release notes for 1.4.0", "what changed in this version for users" | [`references/release-notes.md`](references/release-notes.md) (templates: [`references/writer-templates.md`](references/writer-templates.md)) |
+| "Put the docs on a website", "searchable manual with versions" | [`references/docs-site.md`](references/docs-site.md) |
+| The project has 2 or more sub-projects, each with its own docs | [`references/ecosystem.md`](references/ecosystem.md) |
+
+To list the open items in the open-items Excel, run `scripts/open_items.py`. The checklist of docs is in `assets/doc-set-checklist.md`.
+
+## Steps every part shares
+
+1. Ask who reads the doc, and what they must do after reading. Unknown answers go in as `(รอยืนยัน)` (awaiting confirmation), and the work goes on.
+2. Look for the real document first. Keep one source for each fact, and link to it instead of copying it.
+3. Put files that come from the client or the old system in `ref/`. Treat `ref/` as read-only.
+4. Create a folder only when it has real content, not in advance.
+5. Write the doc in the register its reader needs, then check it with a fresh reader who has not seen the project.
 
 ## Check before done
-- [ ] Every cross-column wire has an arrowhead; no line crosses a box or text; labels readable and not overlapping.
-- [ ] Thai text complete (no missing vowels or tone marks, no word cut mid-word).
-- [ ] Exactly one `.focus` box; header has all 6 parts; logo shows; figure has a date and owner.
-- [ ] Shrunk to 25% width, you can still tell what is where.
-- [ ] Smallest text converted to pt at the placed size is ≥ 7 pt.
-- [ ] Someone who has never seen the system can answer the original question.
-- [ ] Icons are all official or all hand-drawn; no diagonal lines or sharp corners.
-- [ ] The line `ด่านก่อนลงมือ:` closes the work.
 
-## References
-- [`references/focal-point-and-layout.md`](references/focal-point-and-layout.md) — open when styling a figure, laying out a process chart, or sizing for a placed page
-- [`references/design-system.md`](references/design-system.md) — open for header example, size table, colour groups
-- [`references/colour-by-domain.md`](references/colour-by-domain.md) — open when the colour step falls to the house palette
-- [`references/icons.md`](references/icons.md) · [`references/wires.md`](references/wires.md) · [`references/pitfalls.md`](references/pitfalls.md) — open for icons, `WIRES` code, a wrong-looking figure
-
-
-## reference: colour-by-domain.md
-
-# Work domain → colour tone
-
-Use this when the document has no `doc-theme` and no brand colour. Use the house default `#2A78D6`, mark it `(รอยืนยัน)` (to be confirmed), and carry on without stopping to ask. Put a tone from this table in the report so the user can choose later (the full order is in `diagram-figures` item 5). Read the work's content first and write the `เนื้อหา:` brief per `design-gate/design-references` `references/content-to-theme.md` (plugin `superuser`); its section 3 has the fuller mood-and-colour table for every kind of work, and section 4 says what each colour tends to carry. This table is shared by both engines of `diagram-figures` and by every skill that draws figures.
-
-| Domain | Suggested tone | Reason |
-|---|---|---|
-| Medical · health | Teal · green | Cleanliness, safety |
-| Finance · banking | Dark blue · silver grey | Stability |
-| Industry · factory | Amber yellow · steel grey | Machinery, warning |
-| Education | Purple · light orange | Enthusiasm |
-| Retail · food | Orange · pinkish red | Warmth, appetite |
-| Government · law | Navy · oxblood | Formality |
-| General software | Blue | Neutral default when there is no other context |
-
-
-## reference: design-system.md
-
-# Figure design system — details
-
-Contents: figure header → size system → colour system → hand-drawn line icons. The short rules are in `SKILL.md`.
-
-## Figure header (from item 3)
-
-The logo goes before the figure title. Every template already has an `<img class="logo">` slot pointing at the project's `assets/logo/`; change only the file name. If the project has no logo yet, the slot disappears by itself, but note in the report that the logo is missing, because a figure without a logo always gets asked "โลโก้อยู่ไหน".
-
-The reason is not looks. Architecture figures get copied into emails, slides and contracts, and then live on for a year. **A figure with no date is one nobody dares edit and nobody dares trust.**
-
-The sub-title says "what the real thing is", not an expansion of the title:
-
-```
-ผิด: ภาพรวมระบบ Dr Screening
-ถูก: เครื่องเดียวในห้อง Server ของโรงพยาบาล รันทุกบริการด้วย Docker Compose
-```
-
-## Size system (from item 4)
-
-| Item | Value |
-|---|---|
-| Text | Figure title 30 · box title 16 · description 13.5 · group label 12 uppercase |
-| Icon | Frame 66px · corner 18px · icon 29px · stroke 1.6px |
-| Box | Corner 20px · 1px light grey border · nested box corner 16px, very light grey fill |
-| `.focus` box | 2px border in a dark shade of `--accent` · corner 22px |
-| Connector | Vertical or horizontal only · right-angle bends with a rounded corner of radius 10px (SVG/Python engine uses 12–14) · no diagonal lines, no free curves, no sharp corners |
-| Spacing | 12 · 20 · 26 · 34 · 48 · column gap 130 |
-
-> **The icon frame must be big.** 66px is the point where a figure starts to look deliberate, not like a generated diagram.
-> Below 56px the icon becomes a small dot inside a big box and the figure looks hollow.
-
-## Colour system (from item 5)
-
-In the HTML templates, change `--accent` in `:root` in one place; the light and dark shades are computed from it. (In the SVG/Python engine, change `ACCENT` in `theme.py`.)
-
-**Figure background follows the project's design.** Append `#accent=<main colour>&bg=<background colour>` to the file name to match the deck or app. A dark or light background both work. Every grey is computed from the background (currently available in `figure-flow.html`). Without `bg` you get a white background.
-
-Exceptions that do not change with the brand:
-
-- **Provider logo colours.** AWS orange and Azure blue must be their real colours, not our brand colour.
-- **Structural grey.** Borders and box fills must be faint enough not to compete with the content.
-
-**Icon colour has 7 groups, and each group must mean something.**
-
-| Class | Use for |
-|---|---|
-| `t-neutral` | People, devices, things outside the system, plain file storage |
-| `t-edge` | Entry and exit points · gateway · API |
-| `t-app` | Tools the user works with |
-| `t-view` | Parts the user uses to view or read results |
-| `t-data` | Database · backup |
-| `t-alert` | Queues, work that can pile up, things that hurt when they break |
-| `t-warn` | Things with conditions — licences, legal limits |
-
-Every frame has a **light fill with a border in the same tone**, not a solid fill, because a solid colour pulls the eye away from the content.
-If you want an 8th colour, you are using colour for looks, not for meaning.
-
-## Hand-drawn line icons (from item 6)
-
-Hand-drawn line icons: `viewBox 0 0 24 24` · `stroke-width 1.6` · no fill · round line caps.
-The shape must be readable at 24px, because detail beyond 3 strokes turns into a black blob.
-
-## Fonts in figures embedded in a deck (from item 8)
-
-  For a figure that will be embedded in a deck (`StageDeck` · `html-slide-deck`), move `"IBM Plex Sans Thai"` to the first position so the figure gets the same font as the deck body. A Word document uses the brand's Thai font and falls back to Tahoma if it is missing, per `branded-document-design` item 2; a figure inside it may use a different font.
-  If the machine has none of them, the figure silently falls back to a font that places vowels in the wrong position, so **always render and look**.
-
-
-## reference: engine-mermaid.md
-
-# Mermaid → right-angle figures with rounded corners
-
-Route 3 of `diagram-figures`. Use it when a document has dozens of Mermaid blocks (sequence · state · ER · gantt) and must be delivered as a Word or PDF file that looks designed.
-An image drawn by Mermaid itself has free-curved, diagonal lines and colours that do not match hand-drawn figures. This engine reads the original blocks and redraws them with the same rules as the HTML templates.
-
-## What you get
-
-- Vertical or horizontal lines only, bent with rounded corners (radii are in `theme.py`: `WIRE_R` 12 · box `BOX_R` 10)
-- Line labels are white with a light border, and a checker makes sure no label overlaps a box or a line
-- The one main box is a dark card with a gradient border, matching the `.focus` box
-- Layout is done by ELK (`elkjs`, layered + orthogonal), so you do not place coordinates yourself
-
-## Use
-
-1. Copy the folder `assets/mermaid-engine/` to `docs/figures/src/gen/`
-2. Edit `figures.json`:
-   - `prefix` is the project code (`workspace-rules/document-naming`)
-   - `drafts` is the folder of `.md` files that hold Mermaid blocks
-   - `skip` is the blocks that already have a hand-drawn figure
-   - `captions` replaces captions generated from headings
-3. Edit `theme.py`: make `ACCENT` and `SECOND` match the project's `doc-theme`, and `MEASURE_FONTS` must point at real font files on the machine
-4. Run `python build.py`. You get `docs/figures/<prefix>-<file>-m<N>.png` and `map.md`, which says which block became which file
-   - If `elkjs` is not installed yet, `elk.py` installs version 0.9.3 into the configured `node_modules` folder by itself
-5. Always check the output:
-   - A `PROBLEM` line means a diagonal line, an overlapping label, or an unreadable block. Do not deliver while any such line remains
-   - Open and look at at least 1 figure of each type
-
-## Limits
-
-- Works for 4 types: `sequenceDiagram` · `stateDiagram-v2` · `erDiagram` · `gantt`. Draw a flowchart as an HTML template (item 2 of SKILL.md), because flowcharts are the figures people read most
-- The figure is 1240px wide to fit a portrait A4 page. If a figure has more than 7 participants, the text gets small; split the figure or put it on a landscape page
-
-
-## reference: engine-svg-python.md
-
-# SVG/Python engine — figures generated from data or code
-
-Route 2 of `diagram-figures`. Use it instead of the HTML skeleton when a figure must be generated from data or code. Examples: several figures that must be re-exported every time the data changes, or a figure where you control every position on a grid with right-angle lines and rounded corners.
-Python writes the SVG onto the grid, then renders it to PNG. Icons and logos come from the same library as the HTML skeleton ([icons.md](icons.md)).
-
-The cost is time, because 1 figure takes several rounds of fixes. So use it only for figures that people outside the team will see, and see repeatedly.
-
-> **Main colour = the project's main colour.** Find it in the order given in `diagram-figures` section 5 (colour system), then put it in `ACCENT` in `theme.py`. Use the house colour `#2A78D6` only when that order finds nothing at all.
-
----
-
-**Contents**
-- [0 · Colour comes from the work — do not stop to ask](#0--colour-comes-from-the-work--do-not-stop-to-ask)
-- [1 · Order of work](#1--order-of-work)
-- [2 · File layout](#2--file-layout)
-- [3 · Rule 1 — grid first, lines after](#3--rule-1--grid-first-lines-after)
-- [4 · Connector lines](#4--connector-lines)
-- [5 · Labels on lines — only two roles](#5--labels-on-lines--only-two-roles)
-- [6 · Zones](#6--zones)
-- [7 · Icons and logos](#7--icons-and-logos)
-- [8 · Rendering](#8--rendering)
-- [9 · Check loop — do not skip](#9--check-loop--do-not-skip)
-- [10 · Constants that work](#10--constants-that-work)
-- [11 · Legend bar](#11--legend-bar)
-- [Abbreviations](#abbreviations)
-
-## 0 · Colour comes from the work — do not stop to ask
-
-**If the source document already declares a `doc-theme`, use that value and do not ask again.**
-(See `design-gate/polished-document-style`, section "Document theme".) If there is none yet, follow the steps below, then write the result back into `doc-theme`.
-
-**No brand colour → follow the order in `diagram-figures` section 5:** use the house value `#2A78D6`, write `(รอยืนยัน)` (awaiting confirmation) in the report, and carry on without stopping to ask.
-Put a tone suggested from the content, using the table in [colour-by-domain.md](colour-by-domain.md), in the report so the user can choose later.
-
-Put **one main colour** in `ACCENT` in `assets/svg-engine/theme.py`. All light and dark shades
-are computed from it with `tint()`, so the drawing code has no other colour hard-coded.
-
-The only colour not tied to `ACCENT` is `EXCEPT_HUE`, for the "exception" label. It must always differ from the main colour.
-If the main colour is already orange, change `EXCEPT_HUE` to another contrasting colour.
-
----
-
-## 1 · Order of work
-
-1. Read all existing diagrams first, then ask **what question this figure answers**. 1 figure answers 1 question.
-2. Pick the colour by section 0 (no colour → house value + `(รอยืนยัน)`).
-3. **Place every box on the grid before drawing any line.** This is the most important step. See section 3.
-4. Finish `theme.py` and `ref.py` first, then write the figure file.
-5. **Render, then open the image file and look at it.** Checking that the script ran without errors is not enough.
-6. Once the figure is clean, write it to the target folder. Move the old figure to `_to_delete/`.
-
----
-
-## 2 · File layout
-
-```
-architecture/
-  01-system-context.png      ← output; the number prefix follows reading order
-  _src/
-    theme.py                 ← all colours — edit here only
-    ref.py                   ← visual language: zones, units, lines, labels, legend bar
-    render.py                ← SVG → PNG with Playwright at 2x
-    d01.py … dNN.py          ← one file per figure; layout only
-    logos/                   ← product logos + colors.json
-```
-
-Copy the whole folder [`assets/svg-engine/`](../assets/svg-engine/) to `_src/` and start from there. [`d01.py`](../assets/svg-engine/d01.py) is a sample figure that really renders.
-
----
-
-## 3 · Rule 1 — grid first, lines after
-
-Diagonal lines are hard to read, and bending the lines afterwards does not help. **Fix the positions.**
-
-```python
-CA,CB,CC,CD,CE,CF = 178,452,678,896,1080,1312   # columns
-R1,R2,R3          = 288,458,624                  # rows, spaced ~170 apart
-```
-
-Every box sits on an intersection of a column and a row, and none strays off the grid.
-When all points sit on the same lines, the connectors are right-angled by themselves with no bending.
-
-### Midpoint rule
-
-A node that receives from several paths must sit **midway between those paths**, not stick to one row.
-If it also sends on to several paths, it must sit midway between the outgoing paths too.
-
-Use **one merge point and one split point** so the lines are symmetric.
-
-```python
-RM = (R1+R2)//2      # Nginx sits midway between the two incoming rows
-J1, J2 = CB-74, CB+86
-
-flow([(CA+34,R1),(J1,R1),(J1,RM),(CB-30,RM)])   # enters from above
-flow([(CA+34,R2),(J1,R2),(J1,RM),(CB-30,RM)])   # enters from below
-flow([(CB+30,RM),(J2,RM),(J2,R1),(CC-30,R1)])   # leaves going up
-flow([(CB+30,RM),(J2,RM),(J2,R2),(CC-30,R2)])   # leaves going down
-```
-
-### Wiring channels
-
-A line that must cross the grid **must not run over a row that holds boxes.** Reserve separate channels for it.
-
-```python
-TB = 238        # top channel — at least 36 from the zone edge
-MB = R3-48      # middle channel — between rows
-```
-
----
-
-## 4 · Connector lines
-
-All lines are right-angled, with corners rounded at radius 14. This makes the figure look much more refined without losing clarity.
-`ref.flow(pts, dashed=False, arrow=True)` computes the rounded corners itself.
-
-**The arrowhead must end at the icon edge, not at the name label.** For example `CD-30` when the icon is 46 wide.
-
----
-
-## 5 · Labels on lines — only two roles
-
-| Role | Colour | Use for |
-|---|---|---|
-| Normal | light shade of `ACCENT` | what normally flows along the line |
-| Exception | `EXCEPT_HUE` | a path that does not pass the front gate · special cases |
-
-**A figure may have only one exception label.** If there are 2 or more, no label really stands out.
-
-A label says **what flows through**, such as `SQL` `/api/` `DICOM 11112`, not `เชื่อมต่อ` (connect).
-
----
-
-## 6 · Zones
-
-A zone is a frame with a very light fill. Its name label is a white capsule that straddles the border and has a coloured dot in front.
-
-```python
-zone(x, y, w, h, "ห้อง Server ของโรงพยาบาล", "physical")
-```
-
-| Type | Line | Meaning |
-|---|---|---|
-| `physical` | solid | A real physical boundary: room, building, machine |
-| `logical` | dashed | A logical boundary: Docker Compose · namespace · VPC |
-| `outside` | dashed | Outside the system we look after |
-
-The reader sees at once which one physically exists. Nest zones no more than 3 levels deep.
-
----
-
-## 7 · Icons and logos
-
-Icons **float on the background with no frame and no tile.** The name and description sit below the image.
-
-```python
-unit(cx, cy, "Nginx", "ประตูเดียวที่เข้าระบบได้", slug="nginx")
-#  logos/<slug>.svg exists → use the real logo, filled with the colour from colors.json
-#  does not exist         → use a line symbol of our own design
-```
-
-Values that work: icon 46 · name 11.5 bold, placed `size/2+20` from the centre · description 10, placed `size/2+35` from the centre.
-
-Take logos from this skill's icon library ([icons.md](icons.md)). Run `python assets/find-icon.py --group brands <name>` from the `diagram-figures/` folder, then `--copy` the result into `_src/logos/`.
-Simple Icons gives single-colour SVG with `viewBox 0 0 24 24` and comes with `colors.json`, which holds each brand's official colour code.
-
-### Trademarks — do not skip
-
-- A logo belongs to its owner. You may use it to refer to the product itself in the diagram,
-  but **do not alter its shape, do not stretch or squash it, and do not make it look as if the owner endorses the figure.**
-- If a product has no logo file, use a symbol instead, and **name that product in the note under the figure.**
-- Do not download new logos on your own. Use the set that exists, or have the user get them from that project's brand page.
-
----
-
-## 8 · Rendering
-
-```bash
-pip install playwright && playwright install chromium
-python render.py d01.svg ../01-architecture.png 1400 860
-```
-
-Always render at 2x, because 1x gives a blurry image when enlarged on a slide.
-
-Thai text needs a Thai font on the machine that renders, declared in the `font-family` of `<svg>`.
-**Do not use Python Imaging Library (PIL) to draw mixed Thai and English text**, because it produces square boxes in place of letters.
-
----
-
-## 9 · Check loop — do not skip
-
-Render → open the image and look → fix → render again, until it is clean.
-**These 6 problems come up every time. Check them in every round:**
-
-1. **A label on a line covers an icon or a name.** Move it to the midpoint of the longest segment, or onto the stub.
-2. **A line leaving an icon cuts through its own description.** Start the line at `cy+58`, not `cy+32`.
-3. **A zone edge cuts the description of the bottom row.** The zone's bottom edge must be ≥ `R_bottom + 58 + 24`.
-4. **Zone caption text sits on the border.** Merge it with the name into one capsule.
-5. **An arrowhead ends at the name label, not the icon.** Make it end at the icon edge.
-6. **Text overflows its frame.** Thai 11.5px ≈ 6.0 px/char · heading 15px ≈ 7.5 px/char.
-   If space is short, cut words. **Do not shrink the font.**
-
----
-
-## 10 · Constants that work
-
-```
-width 1400 · margin 56
-centred title 22 · subtitle under title 12.5
-unit name 11.5 bold · description 10 · label on line 10.5
-connector 1.6 · zone border 1.4 · corner radius 14 · label height 21
-```
-
----
-
-## 11 · Legend bar
-
-Every figure ends with a single bar that says what each kind of frame means and where the 2 label colours differ.
-After it come 2–4 lines of notes. These include the trademark line and references to other related figures.
-
----
-
-## Abbreviations
-
-- **SVG** — Scalable Vector Graphics
-- **PNG** — Portable Network Graphics
-- **PIL** — Python Imaging Library
-
-
-## reference: focal-point-and-layout.md
-
-# Focal point, layout of process charts, placed size · diagram-figures
-
-Open when you build or restyle a figure and need the full rules behind the short lines in SKILL.md.
-
-## Placed size, two versions, one theme file
-
-- **Text size depends on where the figure will be placed, not on the canvas.** A figure placed in an A4 document must be worked back from the placed size: the smallest text after placing must be ≥ 7 pt → `minimum px = 0.247 × canvas width(px) ÷ placed width(cm)`. A 2000px canvas on a 17 cm portrait page = 29px; on a 25.7 cm landscape page = 20px. After enlarging the font, boxes must be wide enough that Thai names are not cut mid-word.
-- **2 versions from one source file:** the full version (all 6 header parts, for standalone or slide use) and the in-document version (`?embed=1` hides the header because the document's caption already says it; a repeated header makes the figure smaller and cluttered). Make the aspect ratio wide enough to fill a landscape page (width ÷ height ≥ 1.46).
-- **The whole set of figures uses one CSS file** (`figure-theme.css` next to the source files) that pulls colour, font and logo from the project's identity (`assets/logo/` · mockup tokens). Change it in one place and every figure follows.
-- **The beauty gate for figures** runs together with the beauty gate for documents (`branded-document-design` step 2): main path is a solid line in the strong colour · secondary lines grey · a legend · flow order numbered when there are more than 3 steps.
-
-## Colour weight
-
-Limit the number of colours, not the weight of colour. The main colour must be visible across the whole figure, not only in the header bar. Labels that must be found fast (step number · owner · status) use a solid fill · card headers are a full-width solid colour band (a thick colour stripe beside a rounded card is an AI signal in `design-gate/no-ai-look`) · summary boxes use a dark fill · pastel colours only as a fill that has text or a dark border with it · check with the "colour power" axis in the beauty gate of `ui-craft` (`ui-craft/references/states-and-checks.md`, plugin `software-development`).
-
-If you found a colour in step 5 item 2 but there is no `doc-theme` yet, declare a `doc-theme` with that value so the project's figures, documents and slides share it.
-
-## A figure needs a focal point, not flatness
-
-A readable but flat figure (white cards that all look alike, all lines the same thickness) draws the user's "ดีขึ้นแต่ไม่ว้าว" (better but not wow). Ways that pass the beauty gate:
-
-| Part | What to do |
-|---|---|
-| Canvas | Use the same background as the app's identity. A dark app gets a figure that is dark all over (not a white frame around a dark image) · faint dot-grid pattern, at most 8% opaque, for depth |
-| Main path | 6px thick in the brand colour + glow (`filter: drop-shadow(0 0 8px <brand colour 75%>)`) · secondary lines thin, grey, no glow. The difference is clear enough that the legend need not be read |
-| Focal point | 1 `.focus` card per figure: 3px brand-colour border + surrounding glow + icon with brand-colour fill · other cards' fill blends into the canvas |
-| Sequence badge | Brand-colour fill, text in the canvas colour + a light glow |
-| Contrast | Secondary text on a dark fill ≥ 7:1 (light grey, not mid grey) |
-| Theme | Every colour is a variable in a single css file · arrowheads read colour from the variable (`getComputedStyle`), no values hard-coded in JavaScript · meaning colours (`t-app` `t-alert` `t-warn`) have a dark-background pair · no colour in `style=""` of figure files |
-
-**Dot grid + glowing lines = an approved house style** (the exception "an approved look always wins" in `design-gate/no-ai-look`). When scanning with `slop_scan.py`, add `slop-ok` at `grid-bg` and `neon-glow` of these figures, with a short reason.
-
-**How to choose a direction:** write 3 directions as override css, inject them into 2 real figures at render time (`add_init_script` before the line-drawing script runs) → place them next to the original → have a reviewer who did not do the work score them → edit the one theme css file and render the whole set. A dark figure in a white-page document must be a recorded decision (for example, chapter-opening pages and the cover are dark too), not an accident.
-
-## Layout: process charts and team charts
-
-Rule set by the user after seeing a real figure (2026-10-28): a figure with wandering curved lines and boxes scattered out of rows is confusing to read.
-
-- **Read top to bottom**, 1 level per tier: entry → middle → receiver → result · use left to right only when there is a time axis (Gantt)
-- **The middle element sits in the centre of the figure** (team lead · main system · `.focus` box), and the whole figure is centred, not pushed left leaving the other side empty
-- **Things at the same level go in the same frame, in the same row**, with a group name on the border line, such as "ทางเข้า" (entry) or "agent 8 ตัว" (8 agents)
-  - The frame is a single line, no fill, no shadow
-  - Cards in the same frame have equal height
-  - If there are too many for one row, split into several rows in the same frame and centre the last row
-- **If every box in a group receives the same thing, draw one line into the frame**, do not branch a line to every box · if each box is a different choice, draw a separate line per box and move the group name to the bottom border so the line does not cross the name
-- **Line channels are outside the frame.** Lines leaving or entering a group bend in the gap between frames and do not cross a group name or a card
-- **Keep it soft.** Straight runs of a line are still vertical or horizontal, but every bend is a curve of radius about 12 px (runs shorter than 24 px reduce the radius accordingly) · cards have 14 px corners · group frames have 20 px corners · labels are capsules · no sharp corners on boxes or lines
-- **Thai words must not break mid-word.** The browser's word breaker splits some words wrongly (for example `เช็|กมิจฉา|ชีพ`). Keep a list of these words (ทีละ · สต็อก · ร้านค้า · เช็ก) and never break a line inside a word in the list (wrap with `white-space:nowrap`) · for a long text not in the list, put `<br>` yourself · open the figure and look at every card
-- **Every box has a name and a 1-line description**, not only an icon · steps connected in a sequence (1 → 2 → 3) need no frame, because they are not the same level
-
-## Thai fonts
-
-Font order is `"Noto Sans Thai","IBM Plex Sans Thai",Tahoma,Loma`, already set in the templates. For a figure embedded in a deck (`StageDeck` · `html-slide-deck`), move `"IBM Plex Sans Thai"` to the first position. A Word document uses the brand's Thai font and falls back to Tahoma if it is missing (`branded-document-design` item 2); a figure inside it may use a different font. If the machine has no Thai font at all, vowels silently end up in the wrong position, so always render and look.
-
-
-## reference: icons.md
-
-# Icon library — shared by the HTML skeleton and the SVG/Python engine
-
-**205 icons are already provided in `assets/icons/`.** Nothing more to install.
-They are PNG files with a transparent background at 160×160, official icons of providers and tools, split into 9 groups.
-
-| Folder | Contents |
-|---|---|
-| `icons/aws/` | 39 — EC2 · RDS · S3 · Lambda · ELB · Route 53 · CloudFront · SQS · SNS · IAM · CloudWatch … |
-| `icons/azure/` | 24 — VM · App Service · AKS · Cosmos DB · Blob Storage · Key Vault … |
-| `icons/gcp/` | 21 — Compute Engine · GKE · Cloud Run · BigQuery · Pub/Sub · Firestore … |
-| `icons/k8s/` | 16 — Pod · Deployment · Service · Ingress · ConfigMap · Secret · Node … |
-| `icons/data/` | 17 — PostgreSQL · MySQL · MongoDB · Redis · Elasticsearch · ClickHouse … |
-| `icons/queue/` | 6 — RabbitMQ · Kafka · Celery · NATS · ActiveMQ · EMQX |
-| `icons/infra/` | 26 — Nginx · Docker · HAProxy · Traefik · Istio · firewall · router · Windows · Linux … |
-| `icons/ops/` | 19 — Prometheus · Grafana · Jenkins · GitLab CI · GitHub Actions · Terraform · Vault … |
-| `icons/app/` | 37 — Angular · React · .NET · Spring · Python · LINE · Slack · Stripe · user … |
-
-The full list is in [`assets/icons/INDEX.md`](../assets/icons/INDEX.md). Open [`assets/icons/contact-sheet.html`](../assets/icons/contact-sheet.html) to see every icon on one page.
-
-**If you need an icon that is not among these 205**, search the full library `assets/tech-icons.zip` (8,602 icons · 5 groups) with [`find-icon.py`](../assets/find-icon.py). It needs no installation and does not need the archive unpacked.
-
-| Group | Contents |
-|---|---|
-| `cloud/` | 1,986 PNG · AWS · Azure · Google Cloud · IBM · Oracle · Alibaba · DigitalOcean · Firebase … |
-| `platform/` | 471 PNG · databases · queues · CI/CD · monitoring · Kubernetes · programming languages · GIS |
-| `brands/` | 3,461 single-colour SVG · brand logos + official colour codes in `colors.json` |
-| `devtools/` | 572 coloured SVG · developer tool logos |
-| `ui/` | 2,112 SVG general line icons (Lucide), not logos |
-
-```bash
-python assets/find-icon.py kafka redis                       # search by name
-python assets/find-icon.py --group ui user                    # search one group only
-python assets/find-icon.py --copy cloud/aws/compute/ec2.png brands/docker.svg --to docs/figures/icons
-python assets/find-icon.py --colors docker                    # official logo colours
-```
-
-Pull out only the icons you use and put them next to the figure file. Do not unpack the whole library into the project. The library's licences are MIT · CC0 · ISC (see `--groups`), but logos remain trademarks of their owners.
-
-> **About licences** — The architecture icon sets of AWS · Azure · Google Cloud
-> are published specifically for drawing architecture diagrams, so they may be used in proposal documents.
-> What you cannot do is use a logo in a way that suggests the provider endorses or partners with you,
-> or use it as part of your own brand. If a tool has no official icon, draw a line icon yourself following [SKILL.md](../SKILL.md) section 6.
-
-
-## reference: layout-cloud.md
-
-# Skeleton `figure-cloud.html` — cloud diagram with provider logos
-
-This skeleton answers "which cloud services do we use?" The skeleton file is at [`assets/figure-cloud.html`](../assets/figure-cloud.html).
-
-Use it when the reader expects to see real Amazon Web Services (AWS) · Azure · Google Cloud ·
-Kubernetes icons, like the reference diagrams the providers publish. Find the icons in the library, per [icons.md](icons.md).
-
-```html
-<div class="unit"><img src="icons/aws/ec2.png" alt="">
-  <div class="name">Web Server</div><div class="desc">AZ-1</div></div>
-```
-
-**Rules specific to this skeleton:**
-
-- **A line that crosses a boundary leaves from the edge of the boundary box** (`n-region`), not from a box inside it,
-  because a line that starts from an inner box cuts diagonally across everything in the way.
-- **Dashed line = a boundary the provider manages for you.** A solid orange line = a machine we look after ourselves.
-  Always put these meanings in the legend.
-- Show icons bare, with no frame, because a logo already has its own colour and shape.
-- Use the official service name (`Amazon RDS`). The description under the name may be in Thai.
-
-
-## reference: layout-context.md
-
-# Skeleton `figure-context.html` — the system and the outside world
-
-This skeleton answers "who and what outside does this system talk to?" (C4 level 1). The skeleton file is at [`assets/figure-context.html`](../assets/figure-context.html).
-
-```
-┌─ figure header ─────────────────────────────────────────────────┐
-│  users (horizontal strip) → described system (large card) ← external systems │
-│  ─ staff                    ─ name + subtitle              ─ external system │
-│  ─ doctor                   ─ 3-6 functions                ─ name + status   │
-│  ─ admin                    ─ limitation tag                                 │
-├─ legend ────────────────────────────────────────────────────────┤
-│  footnote — meaning of dashed line · all abbreviations · next figure │
-└────────────────────────────────────────────────────────────────┘
-```
-
-- **Users go on the left and external systems on the right**, never mixed, because people and machines are different kinds of thing.
-- **The central card lists 3 to 6 functions.** More than that means you are writing an SRS (Software Requirements Specification), not drawing a figure.
-- **An external system not yet connected** gets a dashed line (`planned:true`), and the card says which version plans it,
-  because a figure that shows only what exists gets the question "so is HIS connected yet?" every round.
-- **Always include a legend** when a shape or line carries meaning.
-- **Spell out abbreviations in the footnote**, because readers on the customer side do not know what SEG is.
-
-
-## reference: layout-deployment.md
-
-# Skeleton `figure-template.html` — deployment · inside the machine
-
-This skeleton answers "what machine does the real thing run on, and what is inside?" The skeleton file is at [`assets/figure-template.html`](../assets/figure-template.html).
-
-It has 3 columns, left to right in the direction the data flows:
-
-```
-┌─ figure header ────────────────────────────────────────┐
-│  name + subtitle              figure number · version · owner │
-├────────────┬──────────────────────────┬────────────────┤
-│ outside    │  ⬅ .focus box             │ destination    │
-│ people,    │  what this document       │ regulations    │
-│ devices,   │  explains                 │ outgoing items │
-│ other      │  can nest 1 more level    │                │
-│ systems    │                           │                │
-├────────────┴──────────────────────────┴────────────────┤
-│ footnote — related figures · icon sources              │
-└────────────────────────────────────────────────────────┘
-```
-
-**Nest boxes no more than 3 levels:** column → large box → small box.
-A 4th level means the figure answers 2 questions, so split it into 2 figures.
-
-**A figure may have only one `.focus` box.** With 2 boxes, you have not yet decided what the figure is about.
-
-
-## reference: layout-flow.md
-
-# Skeleton `figure-flow.html` — what the data flows through, in what order
-
-This skeleton answers "what does 1 message (request · job · document) pass through, and in what order?" The skeleton file is at [`assets/figure-flow.html`](../assets/figure-flow.html) · a rendered example is at [`assets/figure-flow-example.png`](../assets/figure-flow-example.png)
-
-```
-┌─ figure header ─────────────────────── ①–⑥ meaning of sequence numbers ┐
-│ ┌users┐   ┌channels┐    ┌ host machine (grey) ──────────┐   ┌ external services ┐ │
-│ │ person │①→│ web    │②→ │ ┌ system .focus (main colour) ┐ │③→ │ AI · API     │ │
-│ │ person │①→│ LINE   │②→ │ │ layer · function      │ │   └─────────────┘ │
-│ │ person │ →│ back office│ → │ │ layer · function      │ │④→ ┌ data ────────┐ │
-│ └────┘   └──────┘    │ └──────────────────────┘ │   │ files · DB   │ │
-│                       └─────────────────────────┘   └─────────────┘ │
-├─ footnote: meaning of light fill · dashed line · all abbreviations ────┤
-```
-
-## Colour — from the project's single main colour
-
-- Change `--accent` in `:root` in one place. The dark shade, light fill and the text colour on the main-colour fill are computed for you. (For a light colour such as yellow, the script switches the text to a dark colour so it stays readable.)
-- Find the main colour in the order in SKILL.md section 5 · to try another colour without editing the file, open `figure-flow.html#accent=0F8B8D`
-- **The main colour is used for only 4 things:** the border of the `.focus` box · the system name label · the data path and its sequence numbers · the project name in the figure header
-- The rest of the skeleton is neutral grey: dashed groups, host machine boxes, cards. Icons use the 7 existing meaning colours (section 5).
-
-## Rules
-
-- **One direction, left → right**: users → channels → system → things the system calls. If a line must go back, say so in the layer's description (for example "push the reply back to LINE") instead of drawing a return line.
-- **Sequence number = the path of 1 message**, not a line number. Lines that happen together share the same number (two incoming channels are both ②) · a branch that does not happen every time (such as reading an image) needs no number.
-- **5–9 layers in the system box**, in the order the message passes through them · short layer names, 1–2 lines for each function. If there are more than 9 layers, split into a separate figure of the inside of the system.
-- **At most 2 emphasised `.guard` layers**, and explain what they mean in the footnote.
-- **Connect a line to the layer that really does the work**, not the edge of the big box. The lines are drawn above the boxes, so the arrowhead reaches the inner layer.
-- **Lines that share the same gap must not cross.** Shift the bend with `mx` (a line whose end sits higher gets a smaller `mx`), and render to check every time.
-- A label on a line is 1–3 short words saying what flows through (`HTTPS` · `webhook` · `ถาม LLM`) · if the start of the line carries a sequence number, use `lp:"start"` when the final segment is too short
-
-
-## reference: pitfalls.md
-
-# Pitfalls found in practice — HTML skeletons
-
-Symptoms that come up again and again when making figures with the skeletons in `assets/`, with their causes and fixes. Pitfalls of the SVG/Python engine are in [engine-svg-python.md](engine-svg-python.md) section 9.
-
-| Symptom | Cause · fix |
-|---|---|
-| Arrowheads vanish from the whole figure | The script deletes every `path` before redrawing, including the arrowhead triangle inside `<defs>`. Delete only `path.wire` (the skeletons already do this) |
-| A line goes to the wrong box | The `id` is attached to another box that looks the same. Open the console, look for `wire: ไม่พบ id`, and check that the `id` is unique |
-| A line aims at the middle of a tall box and cuts across what is inside | Set `tp` / `fp` so the line enters near the top edge |
-| Thai vowels disappear | The machine has no Thai font in the list. Install Noto Sans Thai or add an installed font to the list |
-| Image is blurry on a slide | Rendered at a 1x multiplier |
-| Image has a lot of white margin | You captured the whole page instead of only `.sheet` |
-| A line comes loose after editing text | You wrote fixed line coordinates instead of using `WIRES` |
-| A label on a line covers a box, or hides the line so it cannot be seen | The label is wider than the gap between columns. Increase `gap` or shorten the label text |
-| A Thai box name wraps to a second line | The column is too narrow. Widen that column. Do not shrink the font |
-| Icons used as image files, and the lines go wrong everywhere | The script calculates before the images finish loading. Call `draw()` in `window.onload`, not when the script is read (`figure-cloud.html` already does this) |
-| Elbow lines in `figure-flow.html` cross each other | Several lines use the same gap. Set `mx` so a line whose end is higher gets a smaller value, then render again |
-| Arrows disappear under the system box | The `.wires` layer has no `z-index`. The flow skeleton sets it already. If you copy to another skeleton, set it there too |
-| The figure comes out in the example figure's colour | You forgot to edit `--accent`. Find the project's main colour by SKILL.md section 5 before rendering |
-| A line cuts diagonally across the whole figure | The line starts from a box inside the boundary box. Start it from the edge of the boundary box instead |
-
-
-## reference: wires.md
-
-# Connector wires — details
-
-Open this when writing `WIRES` or fixing a line that goes the wrong way.
-
-**Within the same column**, use the downward arrow `.down` between boxes. Nothing more to write.
-
-**Across columns**, use the `WIRES` list at the end of the file. The script draws the lines after the layout is done:
-
-```js
-{from:"n-browser", fs:"r", to:"n-server", ts:"l", tp:0.10, label:"HTTPS 443"}
-//    ^source id   ^exit side ^target id  ^entry side ^position on the edge 0=top 1=bottom
-```
-
-The calculation happens after layout because box positions depend on the length of the Thai text.
-If you write fixed coordinates, one text edit knocks the lines off across the whole figure.
-
-**Rules:**
-
-- **Lines run only vertically or horizontally, and turn with rounded corners.** The `elbow()` function in the skeleton does this itself (horizontal → vertical → horizontal). Use `mx` to shift the bend when several lines share one gap. Do not write a `path` as a straight line from point to point, because when the boxes at the two ends have different heights, the line goes slanted.
-- **A label must be narrower than the gap between columns.** Otherwise it covers a box or hides the line. If a label gets longer, raise the `gap` of `.stage` to match.
-- Move a label along the line with `lp` (0 = source · 1 = target · omit = middle of the line).
-- For a line not yet really connected, use `planned:true` to get a dashed line, and **explain the meaning in the footnote.**
-- **No more than 5** cross-column lines per figure, because beyond that the figure turns into a spider web.
-- Connect to the **smallest box that is correct**, not the large box around it. If a box is very tall, set `tp` so the line does not aim at the middle of the box.
-- A label on a line says **what flows through**, such as `HTTPS 443`, not `เชื่อมต่อ` (connect). If there is nothing to say about a line, leave the label off rather than writing "use".
-
-
----
-
-# skill: project-doc-set
-
-Use when choosing a project doc set or open-items Excel
-
-# Project doc set
-
-> **One rule:** every doc must answer **who reads it** and **what they decide after reading**.
-> If it cannot answer, do not write it.
-
----
-
-## When to use this skill
-
-Use it when: opening a new project and deciding which docs it needs · docs are scattered and nobody knows which is the real one · a client asks what will be delivered · about to write a doc but unsure what must come first.
-
-## When **not** to use it
-
-| Situation | Use instead |
-|---|---|
-| Folder layout of the **code** (including the `docs/` inside code in type A) · README · CHANGELOG · linter | `project-bootstrap` |
-| Naming **files** and version numbers of docs | `workspace-rules/document-naming` |
-| Actually writing one doc | The skill for that doc (table in section 4) |
-| Making document pages look good | `branded-document-design` |
-
----
-
-## 1 · Docs inside or outside the repo
-
-**Decide this first** (moving later means fixing links across the whole project). **The default is type B**, even when the docs are pure markdown. The code lives in `<project-name>/` (lowercase, joined with `-`). Use type A only when the user asks.
-
-- **Type B** (docs outside the repo): use it for every set size (S · M · L). `.docx` / `.xlsx` / mockups / PNGs that the client must see stay out of pull requests. The root layout is below (this section owns the root layout).
-- **Type A** (docs inside the repo): only when the user asks and the docs are pure markdown. Docs and code change in the same pull request. The root looks like type B but has no root `docs/`. The `docs/` folder sits inside the code folder, and its inner layout belongs to `project-bootstrap` section 1.
-- A type A project that grows deliverable docs moves to type B **as a whole set in one go**. A doc that lives in 2 places means 2 versions.
-
-### Type B layout
-
-```
-<project-name>/
-├─ ref/                 things received — TOR · meeting notes · screenshots of the old system · client files  **read-only, never edit**
-├─ docs/                every doc we write — delivered .docx and technical .md live together
-│  ├─ figures/          exported figures — .png only        [exists when delivered docs have figures]
-│  │  └─ src/           source files of the figures (.html · .mmd · .drawio)
-│  ├─ decisions/        ADR-NNNN-<slug>.md, one decision per file  [optional]
-│  ├─ runbook-<topic>.md  guide for when the system has problems, one topic per file  [optional]
-│  └─ research/         research on a reference app (`reference-app-research`) [optional]
-├─ mockup/              .html that opens and really clicks
-├─ qa/                  test cases · test results · bugs/ bug reports
-├─ assets/              logos · icons in all sizes · favicon · wordmark (.svg source + exports)
-├─ _to_delete/          every kind of temporary item
-├─ .claude/            project skills (such as verify) — must sit where Claude Code is opened
-│  └─ superuser/        SuperUser working files — CONTEXT.md · HISTORY.md · IMPROVEMENTS.md · log/ · inbox/ · learn/
-└─ <project-name>/      code repo, project name lowercase joined with `-` — inner layout belongs to `project-bootstrap`
-```
-
-**SuperUser files** (`.claude/superuser/` · `docs/BRIEF.md` · `AGENTS.md`/`GEMINI.md`): the single source is [`superuser/references/team-files.md`](../superuser/references/team-files.md).
-
-**ADRs and runbooks live in the root `docs/`, not in `<project-name>/docs/`.** Type A moves the whole `docs/` into the code folder, with the same inner layout. Paths: `docs/decisions/ADR-NNNN-<slug>.md` · `docs/runbook-<topic>.md`. This section is the only place that defines this.
-
-**Root exceptions:** `.sandbox/` may sit at the root when you use `docker-sandbox` · `AGENTS.md` / `GEMINI.md` under the conditions above. Declare every exception in the README of the code folder.
-
-**Create folders when real content exists, not in advance:** `ref/` when you get files from the client or the old system (never mix them into `docs/`) · `docs/figures/` when a delivered doc has a self-drawn figure (otherwise the figure is stuck inside the `.docx` and cannot be edited) · `docs/decisions/` when a decision needs explaining later · `docs/research/` when the user wants an app like an existing one · `qa/` when test cases exist (test cases always live here; `docs/test-plan.md` holds only the plan) · `assets/` when there is a logo or icon.
-
-**Ecosystem project** (2 or more sub-projects, each with its own doc set): the folder is always named `ecosystem/` (never `projects/` `modules/` `apps/`). `ecosystem/<code>-<SUB>/` holds `docs/` `mockup/` `qa/` and its own repo. Docs that cover all sub-projects live in one place, the root `docs/`. Full layout and rules: [`references/ecosystem.md`](references/ecosystem.md). An add-on or sub-program of one app (browser extension · plugin · CLI · hook client · SDK) with no doc set of its own is not a sub-project: it lives in the code repo under `<project-name>/extension/<name>/` (`project-bootstrap` item 1).
-
-
-**Folder rules (both types):**
-
-- **`.docx` and `.md` may share one `docs/`.** No need for separate folders, because the extension already says who reads it.
-- **Never lose the source files of figures.** If a figure must change next year and only the PNG is left, the whole figure must be redrawn.
-- **Every button in a mockup must really click**, because a fake button makes the review wrong.
-- **`.docx` / `.xlsx` live only in `docs/` and `qa/`.** Do not scatter them to the project root.
-- **Temporary items go to `_to_delete/`** (`workspace-rules/temp-file-discipline`).
-- **`docs/README.md` is the index.** It says what to read first and who owns what (template in `project-bootstrap` → `assets/starter-files.md`).
-
----
-
-## 2 · Choose the doc set by project size
-
-Size is measured by **duration × number of people who must agree**, not by lines of code.
-
-**S** ≤ 2 weeks · one team · nobody outside the team signs — **M** 1–3 months · internal client · delivered in rounds — **L** > 3 months · external client signs off · contractual obligations
-
-### 2.1 · Deliverable docs: people read and sign them
-
-| Doc | Format | Readers | S | M | L |
-|---|---|---|:-:|:-:|:-:|
-| Project Plan | `.docx` | client · team | ○ | ● | ● |
-| SRS | `.docx` | dev · client | ○ | ● | ● |
-| Architecture | `.docx` | dev · ops | ○ | ● | ● |
-| Test Plan | `.docx` | QA · client | ○ | ● | ● |
-| User guide (`MAN`) | `.docx` → `.pdf` | end users | ○ | ● | ● |
-| FSD | `.docx` | dev · QA | ○ | ○ | ● |
-| BRD | `.docx` | business side | ○ | ○ | ● |
-| Document Checklist | `.docx` | everyone | ○ | ○ | ● |
-| Test Cases | `.xlsx` | QA | ○ | ○ | ● |
-
-● required · ○ not needed unless there is a specific reason
-**Set S has none of these docs.** That is correct.
-
----
-
-### 2.2 · Technical docs: the team and agents use them while building
-
-All markdown. They **depend on what the project contains**, not on project size. Full table (file · question answered): [`references/technical-docs.md`](references/technical-docs.md).
-
-- **Always:** `<project-name>/README.md` · `docs/BUILD-PLAN.md`
-- **Conditional:** USER-STORIES and `docs/sprints/sprint-NN.md` (work runs in sprints) · AGENT-LOOP (an agent writes code in rounds) · API-SPEC (an API that others call) · DATA-DICTIONARY (a database exists) · EVALUATION-POLICY and PROMPT-LIBRARY (LLM used) · `docs/decisions/ADR-NNNN-<slug>.md` (decisions that will be questioned again) · `docs/runbook-<topic>.md` (system in real use and someone on call)
-
----
-
-## 3 · Writing order
-
-**Delivery track.** Never skip a step that belongs to the set for that size. Skip steps that are not in the set, such as BRD · FSD in set M.
-
-```
-Project Plan ─► BRD ─► SRS ─┬─► mockup
-                            └─► Architecture ─► FSD
-                                                 │
-              User Guide ◄─ Test Cases ◄─ Test Plan
-```
-
-**The next doc may build on the DRAFT of the previous one.** Put `(รอยืนยัน)` (awaiting confirmation) on every unconfirmed item in both docs. Never set the next doc to APPROVED before the previous one, because if the upstream doc changes, the whole chain must be redone.
-The one exception: **the mockup may run in parallel with the SRS**, because screenshots help the SRS get confirmed faster.
-
-### 3.1 · Open-items register: when the user asks "what is still stuck", answer with an Excel file, not chat text
-
-Labels such as `(รอยืนยัน)` · `(รอวัดใน Phase 0)` (awaiting measurement in Phase 0) and question tables are spread over every doc, so the decision maker sees no overall picture. Merge them into one file with the script. Do not read them all by hand:
-
-```
-python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE>    # test the script: --self-test
-```
-
-- It reads every `.docx` in `docs/`: question tables · tables of undecided assumptions · sign-off tables still "waiting" · labels in the body. It skips revision history, table of contents, label-explanation lines and `(รอบหลัง)` (later round).
-- The **สรุป** (summary) sheet counts by document × type with formulas. The **รายการค้าง** (open items) sheet has the heading in the doc · who answers · decide by · value used for now · cross-references · and "สถานะ" (status) and "คำตอบ" (answer) columns for people to fill in.
-- Types (ประเภทที่ต้องเลือก), shown in Thai in the sheet: **เจ้าของตัดสิน** (owner decides: a web search cannot close it) · **ทีมตัดสิน** (team decides: BA · SA) · **กฎหมาย** (legal) · **วัดจริง** (needs a real-world number: none is published) · **ลงนาม** (sign-off). A question that cites an owner question in another doc also counts as "เจ้าของตัดสิน".
-- **Before sending, read the list by eye.** The script matches wording. A row that was already answered but does not use the words "ตอบแล้ว · ปิดแล้ว · ตัดสินแล้ว" (answered · closed · decided) still gets through.
-- When the user fills in answers: write the answer into the source doc, remove the label, record it in the revision history, then rerun the script. This file is a work list, not a source. Do not edit answers in this file in place of the doc.
-
-**Technical track.** Write when you reach the point of need. No need to wait for anyone: README · BUILD-PLAN before the first line of code · DATA-DICTIONARY when designing the first table · API-SPEC at the first endpoint · PROMPT-LIBRARY at the first prompt really used · ADR at decision time (not in the final wrap-up, because the real reasons are gone by then) · Runbook before going live. Full table in [`references/technical-docs.md`](references/technical-docs.md).
-
----
-
-## 4 · Who writes which doc, with which skill
-
-Full table (agent · skill for each of 16 doc types): [`references/technical-docs.md`](references/technical-docs.md). Main ones: SRS → `srs-writing` · FSD → `fsd-writing` · ADR → `adr-writer` · Test → `test-case-template` · mockup → `web-app-design` + `ui-craft` · README → `project-bootstrap`
-
----
-
-## 5 · Figures in docs: choose correctly from the start
-
-- Figures in every kind of project doc (BRD · SRS · FSD · ADR · ER · flowcharts) · slides · print work → `diagram-figures` (one house style). Keep them in `docs/figures/` with sources in `src/`. **Default Mermaid is banned from project docs.**
-- Quick figures in a README · PR · code notes → Mermaid (`software-diagrams`) embedded in `.md` (colours are random and meaningless, Thai overflows the boxes, and shrunk to A4 it is unreadable).
-
-**Every figure header needs all 6 items:** project logo · title · 1-line subtitle · figure number · version and date · owner (details in `diagram-figures` section 3).
-
----
-
-## 6 · Colour theme of the doc set
-
-Declare it once per project, at the top of every doc's source file:
-
-```markdown
-<!-- doc-theme: accent=#2A78D6 -->
-```
-
-(The example uses the house colour `#2A78D6`. Replace it with the project's main colour.)
-
-`branded-document-design` · `presentation-design` · `diagram-figures`
-read this value instead of picking colours themselves, so docs, slides and every figure form one set.
-
-**Colour comes from the work, not from taste.** If there is a brand colour, use it. If not, use the house colour of `branded-document-design`, write `(รอยืนยัน)`, and carry on without stopping to ask.
-Exceptions that do not follow the theme: service provider logo colours · grey structural lines · green = pass / red = fail
-
----
-
-## 7 · Checklist before delivering the doc set
-
-- [ ] In every `.docx`, open the Navigation Pane and **see all headings** (use real Heading styles, not bold text)
-- [ ] Every doc has a revision history page · version number · date · author
-- [ ] Every figure has a figure number and is cited in the body at least once
-- [ ] The source file of every figure is in `docs/figures/src/` (if this folder exists)
-- [ ] Technical docs that meet the conditions in section 2.2 are all present. For example, if there is an API there must be an API-SPEC, and if an LLM is used there must be a PROMPT-LIBRARY
-- [ ] Every abbreviation is spelled out at first appearance
-- [ ] File names follow `workspace-rules/document-naming`: no `final2`, no `ล่าสุด` ("latest")
-- [ ] Docs in the set cite each other's versions consistently
-- [ ] Run `scripts/open_items.py`, and the open-items register has no row with status "เปิด" (open), or the client knows about every row still open
-- [ ] Tell the user what is left in `_to_delete/` (delete only what `workspace-rules/temp-file-discipline` step 9 allows: old task folders nothing else still uses)
-
----
-
-## 8 · Anti-patterns
-
-Wrong: `.docx` with no Heading style · keeping only the PNG and not the source · `.docx` and mockups inside the code repo (at this point move to type B) · a doc in 2 places (= 2 versions) · FSD before the SRS is confirmed · using an LLM with no PROMPT-LIBRARY · sub-projects named `projects/` `modules/` `apps/` · empty folders created in advance · one doc that answers every question
-
----
-
-## 10 · Links to other skills
-
-Doc status in `docs/BUILD-PLAN.md` → `superuser/status-report` · checklist for the printed version → `assets/doc-set-checklist.md`
-
-**Read more when needed:** [`references/writer-templates.md`](references/writer-templates.md): `technical-writer` doc templates (tutorial · API reference · release notes · for README see `project-bootstrap`)
-
-**When the guide must go on the web, be searchable and have many versions:** [`references/docs-site.md`](references/docs-site.md): choosing MkDocs Material · Docusaurus · Starlight · VitePress · Thai search test results · hosting · Thai fonts
+- No password, token or account secret is in any doc. Link to the place where access is requested instead.
+- A document that outsiders must not see stays in `docs/` in the repo. It does not go on a public docs site.
+- A public docs site is not used as free hosting for an online business or a SaaS product, and the site counts as public even when the repo is private.
+- Release notes are written for users, from the commits since the last version, and every unknown is marked `(รอยืนยัน)`.
+- Every sub-project folder in an ecosystem is named `ecosystem/`, and shared docs live once in the root `docs/`.
 
 
 ## reference: docs-site.md
@@ -1370,6 +153,364 @@ Use it when the project is a product suite with 2 or more sub-projects, and each
 - An add-on or sub-program of one app (browser extension · plugin · CLI · hook client · SDK) without its own doc set is not a sub-project. It stays in that app's repo under `extension/<name>/` (`project-bootstrap` item 1). Move it here only when it gets its own SRS, mockup or release cycle.
 
 
+## reference: onboard.md
+
+<!-- merged from skill `onboard` on 2026-11-27 · description was: Use when a new team member needs onboarding docs (30/60/90-day guide) via technical-writer. -->
+Use the `technical-writer` agent to create an onboarding guide for: **the user's request**
+
+The technical writer should:
+
+1. **Initial Discovery** — gather:
+   - Role + level (junior, senior, lead)
+   - Team they're joining
+   - Tech stack they'll work with
+   - Existing onboarding materials
+   - Common confusion points from past onboards
+
+2. **Apply Diátaxis framework** — onboarding has 4 parts:
+   - **Tutorial** — first day setup + first task
+   - **How-To** — common dev workflows (pull request (PR), deploy, test)
+   - **Reference** — links to systems, who-owns-what
+   - **Explanation** — architecture overview, history
+
+3. **Structure as 30/60/90 day plan:**
+
+   **Day 1-7: Setup & Orientation**
+   - Environment setup checklist
+   - Setup check before hand-over: run every setup command in the README on a clean checkout (fresh clone or a `infra-and-deploy` container), note the first step that fails, and fix the README — the guide must not paper over a broken README (แนวคิดจาก borghei codebase-onboarding · เขียนใหม่)
+   - Tool access (Slack, GitHub, Amazon Web Services (AWS), etc.) — put the link to where access is requested; never put passwords or tokens in the document
+   - Key people to meet (intros)
+   - Codebase tour (key directories)
+   - First small task (warm-up)
+
+   **Day 8-30: Foundation**
+   - Architecture overview
+   - Domain knowledge basics
+   - First real feature/bug fix
+   - Pair programming sessions
+   - Code review participation
+
+   **Day 31-60: Contribution**
+   - Independent feature delivery
+   - On-call shadowing (if applicable)
+   - Participate in planning meetings
+   - Start mentoring suggestions
+
+   **Day 61-90: Full Productivity**
+   - Lead small initiatives
+   - Contribute to design discussions
+   - Improve team processes
+   - Performance check-in
+
+4. **Include practical sections:**
+
+   **Quick Reference Card:**
+   - Critical commands
+   - Important Slack channels
+   - On-call info / escalation (channel names and the on-call schedule; no passwords or tokens — link to where access is requested instead)
+   - Where to find docs
+   - Who to ask about X
+
+   **Codebase Tour:**
+   - Repository structure
+   - Build / test / deploy commands
+   - Branching strategy
+   - Code style + linting
+
+   **Team Norms:**
+   - Meeting cadence
+   - Communication channels (Slack vs email vs sync)
+   - PR review expectations
+   - Working hours / time zones
+
+5. **Produce polished onboarding doc** using `design-gate/polished-document-style` skill:
+   - Welcome message
+   - 30/60/90 timeline (a timeline figure in the house style of the skill `diagrams` — project documents must not use default Mermaid · Mermaid is allowed only for a rough sketch in chat or a short README note)
+   - Checklist per phase
+   - Frequently Asked Questions (FAQ) section
+   - Glossary of company terms
+
+6. **Hand-off suggestions:**
+   - Architecture deep dive → `solution-architect`
+   - Security training → `security-engineer`
+   - Domain training → `business-analyst`
+   - Buddy system pairing → `project-manager`
+
+
+## reference: project-doc-set.md
+
+<!-- merged from skill `project-doc-set` on 2026-11-27 · description was: Use when choosing a project doc set or open-items Excel -->
+# Project doc set
+
+## Contents
+
+- [When to use this skill](#when-to-use-this-skill)
+- [When **not** to use it](#when-not-to-use-it)
+- [1 · Docs inside or outside the repo](#1--docs-inside-or-outside-the-repo)
+- [2 · Choose the doc set by project size](#2--choose-the-doc-set-by-project-size)
+- [3 · Writing order](#3--writing-order)
+- [4 · Who writes which doc, with which skill](#4--who-writes-which-doc-with-which-skill)
+- [5 · Figures in docs: choose correctly from the start](#5--figures-in-docs-choose-correctly-from-the-start)
+- [6 · Colour theme of the doc set](#6--colour-theme-of-the-doc-set)
+- [7 · Checklist before delivering the doc set](#7--checklist-before-delivering-the-doc-set)
+- [8 · Anti-patterns](#8--anti-patterns)
+- [10 · Links to other skills](#10--links-to-other-skills)
+
+> **One rule:** every doc must answer **who reads it** and **what they decide after reading**.
+> If it cannot answer, do not write it.
+
+---
+
+## When to use this skill
+
+Use it when: opening a new project and deciding which docs it needs · docs are scattered and nobody knows which is the real one · a client asks what will be delivered · about to write a doc but unsure what must come first.
+
+## When **not** to use it
+
+| Situation | Use instead |
+|---|---|
+| Folder layout of the **code** (including the `docs/` inside code in type A) · README · CHANGELOG · linter | `project-bootstrap` |
+| Naming **files** and version numbers of docs | `workspace-rules/document-naming` |
+| Actually writing one doc | The skill for that doc (table in section 4) |
+| Making document pages look good | `document-design` |
+
+---
+
+## 1 · Docs inside or outside the repo
+
+**Decide this first** (moving later means fixing links across the whole project). **The default is type B**, even when the docs are pure markdown. The code lives in `<project-name>/` (lowercase, joined with `-`). Use type A only when the user asks.
+
+- **Type B** (docs outside the repo): use it for every set size (S · M · L). `.docx` / `.xlsx` / mockups / PNGs that the client must see stay out of pull requests. The root layout is below (this section owns the root layout).
+- **Type A** (docs inside the repo): only when the user asks and the docs are pure markdown. Docs and code change in the same pull request. The root looks like type B but has no root `docs/`. The `docs/` folder sits inside the code folder, and its inner layout belongs to `project-bootstrap` section 1.
+- A type A project that grows deliverable docs moves to type B **as a whole set in one go**. A doc that lives in 2 places means 2 versions.
+
+### Type B layout
+
+```
+<project-name>/
+├─ ref/                 things received — TOR · meeting notes · screenshots of the old system · client files  **read-only, never edit**
+├─ docs/                every doc we write — delivered .docx and technical .md live together
+│  ├─ figures/          exported figures — .png only        [exists when delivered docs have figures]
+│  │  └─ src/           source files of the figures (.html · .mmd · .drawio)
+│  ├─ decisions/        ADR-NNNN-<slug>.md, one decision per file  [optional]
+│  ├─ runbook-<topic>.md  guide for when the system has problems, one topic per file  [optional]
+│  └─ research/         research on a reference app (`reference-app-research`) [optional]
+├─ mockup/              .html that opens and really clicks
+├─ qa/                  test cases · test results · bugs/ bug reports
+├─ assets/              logos · icons in all sizes · favicon · wordmark (.svg source + exports)
+├─ _to_delete/          every kind of temporary item
+├─ .claude/            project skills (such as verify) — must sit where Claude Code is opened
+│  └─ superuser/        SuperUser working files — CONTEXT.md · HISTORY.md · IMPROVEMENTS.md · log/ · inbox/ · learn/
+└─ <project-name>/      code repo, project name lowercase joined with `-` — inner layout belongs to `project-bootstrap`
+```
+
+**SuperUser files** (`.claude/superuser/` · `docs/BRIEF.md` · `AGENTS.md`/`GEMINI.md`): the single source is [`superuser/references/team-files.md`](../../superuser/references/team-files.md).
+
+**ADRs and runbooks live in the root `docs/`, not in `<project-name>/docs/`.** Type A moves the whole `docs/` into the code folder, with the same inner layout. Paths: `docs/decisions/ADR-NNNN-<slug>.md` · `docs/runbook-<topic>.md`. This section is the only place that defines this.
+
+**Root exceptions:** `.sandbox/` may sit at the root when you use `infra-and-deploy` · `AGENTS.md` / `GEMINI.md` under the conditions above. Declare every exception in the README of the code folder.
+
+**Create folders when real content exists, not in advance:** `ref/` when you get files from the client or the old system (never mix them into `docs/`) · `docs/figures/` when a delivered doc has a self-drawn figure (otherwise the figure is stuck inside the `.docx` and cannot be edited) · `docs/decisions/` when a decision needs explaining later · `docs/research/` when the user wants an app like an existing one · `qa/` when test cases exist (test cases always live here; `docs/test-plan.md` holds only the plan) · `assets/` when there is a logo or icon.
+
+**Ecosystem project** (2 or more sub-projects, each with its own doc set): the folder is always named `ecosystem/` (never `projects/` `modules/` `apps/`). `ecosystem/<code>-<SUB>/` holds `docs/` `mockup/` `qa/` and its own repo. Docs that cover all sub-projects live in one place, the root `docs/`. Full layout and rules: [`ecosystem.md`](ecosystem.md). An add-on or sub-program of one app (browser extension · plugin · CLI · hook client · SDK) with no doc set of its own is not a sub-project: it lives in the code repo under `<project-name>/extension/<name>/` (`project-bootstrap` item 1).
+
+
+**Folder rules (both types):**
+
+- **`.docx` and `.md` may share one `docs/`.** No need for separate folders, because the extension already says who reads it.
+- **Never lose the source files of figures.** If a figure must change next year and only the PNG is left, the whole figure must be redrawn.
+- **Every button in a mockup must really click**, because a fake button makes the review wrong.
+- **`.docx` / `.xlsx` live only in `docs/` and `qa/`.** Do not scatter them to the project root.
+- **Temporary items go to `_to_delete/`** (`workspace-rules/temp-file-discipline`).
+- **`docs/README.md` is the index.** It says what to read first and who owns what (template in `project-bootstrap` → `assets/starter-files.md`).
+
+---
+
+## 2 · Choose the doc set by project size
+
+Size is measured by **duration × number of people who must agree**, not by lines of code.
+
+**S** ≤ 2 weeks · one team · nobody outside the team signs — **M** 1–3 months · internal client · delivered in rounds — **L** > 3 months · external client signs off · contractual obligations
+
+### 2.1 · Deliverable docs: people read and sign them
+
+| Doc | Format | Readers | S | M | L |
+|---|---|---|:-:|:-:|:-:|
+| Project Plan | `.docx` | client · team | ○ | ● | ● |
+| SRS | `.docx` | dev · client | ○ | ● | ● |
+| Architecture | `.docx` | dev · ops | ○ | ● | ● |
+| Test Plan | `.docx` | QA · client | ○ | ● | ● |
+| User guide (`MAN`) | `.docx` → `.pdf` | end users | ○ | ● | ● |
+| FSD | `.docx` | dev · QA | ○ | ○ | ● |
+| BRD | `.docx` | business side | ○ | ○ | ● |
+| Document Checklist | `.docx` | everyone | ○ | ○ | ● |
+| Test Cases | `.xlsx` | QA | ○ | ○ | ● |
+
+● required · ○ not needed unless there is a specific reason
+**Set S has none of these docs.** That is correct.
+
+---
+
+### 2.2 · Technical docs: the team and agents use them while building
+
+All markdown. They **depend on what the project contains**, not on project size. Full table (file · question answered): [`technical-docs.md`](technical-docs.md).
+
+- **Always:** `<project-name>/README.md` · `docs/BUILD-PLAN.md`
+- **Conditional:** USER-STORIES and `docs/sprints/sprint-NN.md` (work runs in sprints) · AGENT-LOOP (an agent writes code in rounds) · API-SPEC (an API that others call) · DATA-DICTIONARY (a database exists) · EVALUATION-POLICY and PROMPT-LIBRARY (LLM used) · `docs/decisions/ADR-NNNN-<slug>.md` (decisions that will be questioned again) · `docs/runbook-<topic>.md` (system in real use and someone on call)
+
+---
+
+## 3 · Writing order
+
+**Delivery track.** Never skip a step that belongs to the set for that size. Skip steps that are not in the set, such as BRD · FSD in set M.
+
+```
+Project Plan ─► BRD ─► SRS ─┬─► mockup
+                            └─► Architecture ─► FSD
+                                                 │
+              User Guide ◄─ Test Cases ◄─ Test Plan
+```
+
+**The next doc may build on the DRAFT of the previous one.** Put `(รอยืนยัน)` (awaiting confirmation) on every unconfirmed item in both docs. Never set the next doc to APPROVED before the previous one, because if the upstream doc changes, the whole chain must be redone.
+The one exception: **the mockup may run in parallel with the SRS**, because screenshots help the SRS get confirmed faster.
+
+### 3.1 · Open-items register: when the user asks "what is still stuck", answer with an Excel file, not chat text
+
+Labels such as `(รอยืนยัน)` · `(รอวัดใน Phase 0)` (awaiting measurement in Phase 0) and question tables are spread over every doc, so the decision maker sees no overall picture. Merge them into one file with the script. Do not read them all by hand:
+
+```
+python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE>    # test the script: --self-test
+```
+
+- It reads every `.docx` in `docs/`: question tables · tables of undecided assumptions · sign-off tables still "waiting" · labels in the body. It skips revision history, table of contents, label-explanation lines and `(รอบหลัง)` (later round).
+- The **สรุป** (summary) sheet counts by document × type with formulas. The **รายการค้าง** (open items) sheet has the heading in the doc · who answers · decide by · value used for now · cross-references · and "สถานะ" (status) and "คำตอบ" (answer) columns for people to fill in.
+- Types (ประเภทที่ต้องเลือก), shown in Thai in the sheet: **เจ้าของตัดสิน** (owner decides: a web search cannot close it) · **ทีมตัดสิน** (team decides: BA · SA) · **กฎหมาย** (legal) · **วัดจริง** (needs a real-world number: none is published) · **ลงนาม** (sign-off). A question that cites an owner question in another doc also counts as "เจ้าของตัดสิน".
+- **Before sending, read the list by eye.** The script matches wording. A row that was already answered but does not use the words "ตอบแล้ว · ปิดแล้ว · ตัดสินแล้ว" (answered · closed · decided) still gets through.
+- When the user fills in answers: write the answer into the source doc, remove the label, record it in the revision history, then rerun the script. This file is a work list, not a source. Do not edit answers in this file in place of the doc.
+
+**Technical track.** Write when you reach the point of need. No need to wait for anyone: README · BUILD-PLAN before the first line of code · DATA-DICTIONARY when designing the first table · API-SPEC at the first endpoint · PROMPT-LIBRARY at the first prompt really used · ADR at decision time (not in the final wrap-up, because the real reasons are gone by then) · Runbook before going live. Full table in [`technical-docs.md`](technical-docs.md).
+
+---
+
+## 4 · Who writes which doc, with which skill
+
+Full table (agent · skill for each of 16 doc types): [`technical-docs.md`](technical-docs.md). Main ones: SRS → `requirements-writing` · FSD → `requirements-writing` · ADR → `architecture` · Test → `qa-docs` · mockup → `web-app-design` + `ui-craft` · README → `project-bootstrap`
+
+---
+
+## 5 · Figures in docs: choose correctly from the start
+
+- Figures in every kind of project doc (BRD · SRS · FSD · ADR · ER · flowcharts) · slides · print work → `diagrams` (one house style). Keep them in `docs/figures/` with sources in `src/`. **Default Mermaid is banned from project docs.**
+- Quick figures in a README · PR · code notes → Mermaid (`diagrams`) embedded in `.md` (colours are random and meaningless, Thai overflows the boxes, and shrunk to A4 it is unreadable).
+
+**Every figure header needs all 6 items:** project logo · title · 1-line subtitle · figure number · version and date · owner (details in `diagrams` → `references/diagram-figures.md` section 3).
+
+---
+
+## 6 · Colour theme of the doc set
+
+Declare it once per project, at the top of every doc's source file:
+
+```markdown
+<!-- doc-theme: accent=#2A78D6 -->
+```
+
+(The example uses the house colour `#2A78D6`. Replace it with the project's main colour.)
+
+`document-design` · `slide-deck` · `diagrams`
+read this value instead of picking colours themselves, so docs, slides and every figure form one set.
+
+**Colour comes from the work, not from taste.** If there is a brand colour, use it. If not, use the house colour of `document-design`, write `(รอยืนยัน)`, and carry on without stopping to ask.
+Exceptions that do not follow the theme: service provider logo colours · grey structural lines · green = pass / red = fail
+
+---
+
+## 7 · Checklist before delivering the doc set
+
+- [ ] In every `.docx`, open the Navigation Pane and **see all headings** (use real Heading styles, not bold text)
+- [ ] Every doc has a revision history page · version number · date · author
+- [ ] Every figure has a figure number and is cited in the body at least once
+- [ ] The source file of every figure is in `docs/figures/src/` (if this folder exists)
+- [ ] Technical docs that meet the conditions in section 2.2 are all present. For example, if there is an API there must be an API-SPEC, and if an LLM is used there must be a PROMPT-LIBRARY
+- [ ] Every abbreviation is spelled out at first appearance
+- [ ] File names follow `workspace-rules/document-naming`: no `final2`, no `ล่าสุด` ("latest")
+- [ ] Docs in the set cite each other's versions consistently
+- [ ] Run `scripts/open_items.py`, and the open-items register has no row with status "เปิด" (open), or the client knows about every row still open
+- [ ] Tell the user what is left in `_to_delete/` (delete only what `workspace-rules/temp-file-discipline` step 9 allows: old task folders nothing else still uses)
+
+---
+
+## 8 · Anti-patterns
+
+Wrong: `.docx` with no Heading style · keeping only the PNG and not the source · `.docx` and mockups inside the code repo (at this point move to type B) · a doc in 2 places (= 2 versions) · FSD before the SRS is confirmed · using an LLM with no PROMPT-LIBRARY · sub-projects named `projects/` `modules/` `apps/` · empty folders created in advance · one doc that answers every question
+
+---
+
+## 10 · Links to other skills
+
+Doc status in `docs/BUILD-PLAN.md` → `superuser/status-report` · checklist for the printed version → `assets/doc-set-checklist.md`
+
+**Read more when needed:** [`writer-templates.md`](writer-templates.md): `technical-writer` doc templates (tutorial · API reference · release notes · for README see `project-bootstrap`)
+
+**When the guide must go on the web, be searchable and have many versions:** [`docs-site.md`](docs-site.md): choosing MkDocs Material · Docusaurus · Starlight · VitePress · Thai search test results · hosting · Thai fonts
+
+
+## reference: release-notes.md
+
+<!-- merged from skill `release-notes` on 2026-11-27 · description was: Write user-facing release notes for a version with the technical-writer agent. -->
+Use the `technical-writer` agent to create release notes for: **the user's request**
+
+The technical writer should:
+
+1. **Initial Discovery** — gather (unknown → `(รอยืนยัน)`, keep going):
+   - Audience (end users, developers, both?)
+   - Tone (formal, friendly, technical)
+   - Channel (in-app, email, blog, GitHub)
+   - Time period covered (date range or version range)
+
+2. **Gather inputs** — source is the commits since the last tag (written per `git-and-review`) plus `CHANGELOG.md`:
+   - Commit log since last release (`git log`)
+   - Merged pull requests (PRs) with their descriptions
+   - Closed issues/tickets
+   - Breaking changes noted
+
+3. **Categorize changes:**
+   - New features (user-visible)
+   - Improvements (existing features enhanced)
+   - Bug fixes (with severity context)
+   - Breaking changes — every one carries 3 fields: **what changed** · **who is affected** (which users, integrations or versions) · **how to migrate** (steps or link); a field unknown → `(รอยืนยัน)`, never a one-line "X removed"
+   - Security updates (Common Vulnerabilities and Exposures (CVE) entries patched)
+   - Documentation updates (if significant)
+
+4. **Translate dev-speak to user value:**
+   - ผิด: "Refactored auth middleware"
+   - ถูก: "Login is now 40% faster" — only with a measured number (before/after, how measured); no measurement → describe the change without a number
+   - ผิด: "Fixed null pointer in cart.ts:127"
+   - ถูก: "Fixed crash when removing the last item from cart"
+
+   **Thai text:** use the news register (`human-writing` `thai-grammar.md` section 4). No first person. Write each line as subject + verb + object ("ส่งออกรายงานเป็น CSV ได้แล้ว"). End with the version number and the date.
+   - ผิด: "ได้มีการปรับปรุงประสิทธิภาพในส่วนของการส่งออก ซึ่งทำให้ผู้ใช้ได้รับประสบการณ์ที่ดีขึ้น"
+   - ถูก: "ส่งออกรายงาน 1,000 แถวใช้เวลา 3 วินาที จาก 12 วินาที"
+   - ผิด: "เราได้แก้ไขข้อผิดพลาดที่เกิดขึ้นเมื่อผู้ใช้ทำการลบสินค้าชิ้นสุดท้าย"
+   - ถูก: "ลบสินค้าชิ้นสุดท้ายในตะกร้าแล้วแอปไม่ปิดตัวเองอีก"
+
+5. **Produce release notes** following the release-notes template in `project-docs/references/writer-templates.md`:
+   - Too long; didn't read (TL;DR) highlights at top
+   - Feature sections with examples
+   - Migration guide for breaking changes
+   - Contributors acknowledgment
+
+6. **Generate accompanying communications** (if requested):
+   - X / social post draft
+   - Email announcement
+   - Changelog entry (technical, separate)
+
+7. **Hand-off suggestions:**
+   - Marketing copy → `growth-specialist`
+   - User docs updates → technical-writer (continue)
+   - Migration code examples → `developer`
+
+
 ## reference: technical-docs.md
 
 # Technical docs: table, writing order and who writes what
@@ -1384,14 +525,14 @@ This group is **all markdown** and **does not depend on project size**. It depen
 |---|---|---|---|
 | README | `<project-name>/README.md` | How to install and run | **Always** |
 | BUILD-PLAN | `docs/BUILD-PLAN.md` | What to build first and next · where we are now | **Always** |
-| USER-STORIES | `docs/USER-STORIES.md` | What to build for whom · which story is ready for a sprint · what the AC (acceptance criteria) are | Work runs in sprints or there is a backlog (`user-story-writer`) |
+| USER-STORIES | `docs/USER-STORIES.md` | What to build for whom · which story is ready for a sprint · what the AC (acceptance criteria) are | Work runs in sprints or there is a backlog (`requirements-writing`) |
 | Sprint plan | `docs/sprints/sprint-NN.md` | Which stories this sprint takes · what the goal is · what the risks are | Work runs in sprints (`/sprint-plan`). One file per sprint; never overwrite old ones |
 | AGENT-LOOP | `docs/AGENT-LOOP.md` | How the agent works in a cycle · what the stop condition is | An agent writes code in rounds (`spec-to-code-loop`) |
-| API-SPEC | `docs/API-SPEC.md` | What each endpoint accepts, returns and how it fails | There is an API that others call (`api-conventions`) |
+| API-SPEC | `docs/API-SPEC.md` | What each endpoint accepts, returns and how it fails | There is an API that others call (`api-design`) |
 | DATA-DICTIONARY | `docs/DATA-DICTIONARY.md` | What a field means · what values it can take | There is a database or data schema (`database-design`) |
 | EVALUATION-POLICY | `docs/EVALUATION-POLICY.md` | What measures whether the output is good enough · what the pass threshold is | Output comes from a model or LLM that is not always right |
 | PROMPT-LIBRARY | `docs/PROMPT-LIBRARY.md` | Which prompt is the real one · which version · what changed | An LLM sits on the system's main path |
-| ADR | `docs/decisions/ADR-*.md` | Why we chose this way and not the other | A decision will be questioned again (`adr-writer`) |
+| ADR | `docs/decisions/ADR-*.md` | Why we chose this way and not the other | A decision will be questioned again (`architecture`) |
 | Runbook | `docs/runbook-<topic>.md`, one topic per file | What to do when the system goes down at 2 a.m. | A system is really running and someone is on call |
 
 > **The 4 conditional docs (LLM · API · database) are the ones people forget most often.**
@@ -1417,21 +558,21 @@ This group is **all markdown** and **does not depend on project size**. It depen
 | Doc | agent | skill used |
 |---|---|---|
 | README · CHANGELOG | `technical-writer` | `project-bootstrap` |
-| Project Plan | `project-manager` | `branded-document-design` |
-| BRD · user story | `business-analyst` | `user-story-writer` |
-| SRS | `system-analyst` | `srs-writing` |
-| FSD | `system-analyst` | `fsd-writing` |
-| Architecture | `solution-architect` | `architecture-patterns` · `diagram-figures` |
-| ADR | `solution-architect` | `adr-writer` |
-| Test Plan · Test Cases | `qa-tester` | `test-case-template` |
+| Project Plan | `project-manager` | `document-design` |
+| BRD · user story | `business-analyst` | `requirements-writing` |
+| SRS | `system-analyst` | `requirements-writing` |
+| FSD | `system-analyst` | `requirements-writing` |
+| Architecture | `solution-architect` | `architecture` · `diagrams` |
+| ADR | `solution-architect` | `architecture` |
+| Test Plan · Test Cases | `qa-tester` | `qa-docs` |
 | mockups | `ux-designer` | `web-app-design` · `ui-craft` |
 | User guide (`MAN`) | `technical-writer` | `design-gate/polished-document-style` |
-| Runbook | `devops-engineer` | `incident-runbook-template` |
+| Runbook | `devops-engineer` | `incidents-and-monitoring` |
 | BUILD-PLAN | `project-manager` | `superuser:ground-rules` |
 | AGENT-LOOP | `developer` | `spec-to-code-loop` |
-| API-SPEC | `system-analyst` | `api-conventions` |
+| API-SPEC | `system-analyst` | `api-design` |
 | DATA-DICTIONARY | `system-analyst` | `database-design` |
-| PROMPT-LIBRARY · EVALUATION-POLICY | `developer` | none (pairs with skill `llm-engineering`) |
+| PROMPT-LIBRARY · EVALUATION-POLICY | `developer` | none (pairs with skill `ai-engineering`) |
 
 
 ## reference: writer-templates.md
@@ -1558,7 +699,7 @@ const res = await fetch('/api/v1/resource', {
 
 ### Release Notes Template
 
-> Breaking Changes must always come before the other sections (right after Highlights) — the full release notes rules are in the skill `release-notes`.
+> Breaking Changes must always come before the other sections (right after Highlights) — the full release notes rules are in the skill `release-notes.md`.
 
 ````markdown
 # Release v2.1.0 — YYYY-MM-DD
@@ -1617,7 +758,7 @@ Thanks to: @alice, @bob, @charlie
 
 ### Release Notes Template (Thai)
 
-> Same structure as the English version · wording at news register (`human-writing` `references/thai-grammar.md` section 4): no first person · each line has subject + verb + object · numbers must be measured, and if there are none, leave them out · right/wrong examples are in the skill `release-notes` item 4.
+> Same structure as the English version · wording at news register (`human-writing` `references/thai-grammar.md` section 4): no first person · each line has subject + verb + object · numbers must be measured, and if there are none, leave them out · right/wrong examples are in the skill `release-notes.md` item 4.
 
 ````markdown
 # เวอร์ชัน 2.1.0 — YYYY-MM-DD
@@ -1655,3 +796,2120 @@ Thanks to: @alice, @bob, @charlie
 
 เวอร์ชัน 2.1.0 · ออก YYYY-MM-DD
 ````
+
+
+---
+
+# skill: database-design
+
+Use when designing or changing a database schema
+
+# Database design
+
+> **One rule:** the schema is the hardest thing in a system to change.
+
+## When to use this skill
+
+- Designing the database of a new system or a new module
+- Adding or changing a table, column, relationship or index
+- Writing a migration, especially once the system holds real data
+- A query is slow and you suspect the schema or an index
+
+Not for: overall architecture → `architecture` · endpoints and JSON shapes → `api-design` · passwords, tokens, permissions → `web-service-essentials` · running migrations in a pipeline → `cicd-and-release`
+
+**Syntax specific to each database, data types compared, and the migration commands of each Object-Relational Mapping (ORM) tool** are in `references/per-stack.md`.
+
+---
+
+## 1 · Choose the database type first
+
+| Criterion | Relational (PostgreSQL, SQL Server, MySQL) | Document (MongoDB) |
+|---|---|---|
+| Data has clear relationships and needs joins | ✓ | ✗ must be done by hand |
+| Data shape is uncertain and differs per record | Careful: use a JSON column | ✓ |
+| Needs transactions across several tables | ✓ | Careful: possible but costlier |
+| Reports, totals, analysis | ✓ | ✗ |
+| Very heavy writes, log/telemetry | Careful | ✓ or use a time-series database |
+
+> **The default is relational.** Choose document only when you **can answer why**.
+> "More flexible" is not a reason. It means the design is not done yet.
+
+**You can mix them**: use relational as the base, and store data of uncertain shape in a `jsonb` column.
+In almost every case this is better than running 2 separate databases.
+
+---
+
+## 2 · Naming rules — choose once, use across the whole system
+
+| What you name | Format | Example |
+|---|---|---|
+| Table | `snake_case` **plural** | `orders`, `order_items` |
+| Column | `snake_case` singular | `created_at`, `total_amount` |
+| primary key | `id` | `id` |
+| foreign key | `<singular table>_id` | `customer_id` |
+| Join table | `<a>_<b>` in alphabetical order | `role_users` ✓ (not `user_roles`) |
+| index | `ix_<table>_<column>` | `ix_orders_customer_id` |
+| unique | `ux_<table>_<column>` | `ux_users_email` |
+| foreign key constraint | `fk_<table>_<target table>` | `fk_orders_customers` |
+| check constraint | `ck_<table>_<topic>` | `ck_orders_total_non_negative` |
+
+**Do not:**
+
+- Wrong: put the data type in the name, such as `name_varchar`, `is_active_bit`
+- Wrong: prefix a column with the table name, such as `order_order_date` (it is already in the `orders` table)
+- Wrong: use reserved words such as `user`, `order`, `group`, `key`, which need quotes every time. Use `users`, `orders` instead.
+- Wrong: use abbreviations people cannot read, such as `cst_nm`. It saves 8 characters but costs 3 years of confusion.
+
+> SQL Server may use `PascalCase` if the existing project already does.
+> **Using one style across the whole system matters more than which style is right.** Do not switch midway.
+
+---
+
+## 3 · Columns every table must have
+
+```sql
+id           bigint / uuid   PRIMARY KEY
+created_at   timestamptz     NOT NULL DEFAULT now()
+updated_at   timestamptz     NOT NULL DEFAULT now()
+```
+
+Add these as needed:
+
+| Column | Add when | Note |
+|---|---|---|
+| `deleted_at timestamptz` | Data must be recoverable, or the law requires keeping it | **Every query must filter on it**, or deleted data shows up |
+| `created_by` / `updated_by` | You must be able to say who changed it | Store the user id, not the name |
+| `row_version` / `xmin` | Several people can edit at the same time | Use with the ETag in `api-design` |
+| `tenant_id` | Multi-tenant system | See section 10 |
+
+> **soft delete (delete by only setting a flag) has a cost**: every unique constraint must be rethought.
+> `ux_users_email` will block signing up with the same email again, even though the old account was deleted.
+> Fix it with a partial index: `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL`
+
+---
+
+## 4 · Choose the identifier type
+
+| Type | Pros | Cons | Use when |
+|---|---|---|---|
+| `bigint` auto-increment | Small, fast, index does not fragment, easy to read when tracing problems | Next id can be guessed · ids collide when merging data from several places | Default, single system, single database |
+| **UUIDv7 / ULID** | Sorted by time · can be generated on the app side · no collisions | 16 bytes · hard to read by eye | Distributed system · id needed before saving · id appears in a URL |
+| `UUIDv4` fully random | No collisions, cannot be guessed | **index fragments, and writes get clearly slower with lots of data** | Avoid if you can |
+
+> **UUIDv4 as a primary key is the most common trap.**
+> Fully random values make every insert land in the middle of the index structure.
+> You do not feel it at tens of thousands of rows, but at tens of millions it gets so slow you must rebuild.
+> If you must use a UUID, use **v7**, which starts with the time, so it grows in order like bigint.
+
+**A number people see is not the primary key**: a purchase order number such as `SO-2026-00042` that the customer refers to
+should be stored as a separate column with a unique constraint, and the primary key should not be shown.
+
+---
+
+## 5 · How much normalisation is enough
+
+**Always start at Third Normal Form (3NF)**: each fact is stored in one place.
+
+You may denormalise (accept duplicated data) only when all 3 of these hold:
+
+1. You measured and it is truly slow (with numbers, not a feeling).
+2. You know how the duplicated data will be updated so that the copies match.
+3. You wrote the reason in the table comment.
+
+**A commonly accepted exception**: data that must be "frozen" at a point in time.
+The product price in a purchase order must be copied into `order_items.unit_price`
+and not joined to `products.price`, because today's price is not the price on the day the customer bought.
+
+---
+
+## 6 · Four data types people get wrong all the time
+
+Details of the 4 data types people get wrong all the time (money · time · enum or status · boolean), with examples, are in [`data-types`](references/data-types.md).
+
+## 7 · index — where to put one so it works
+
+**Must have:**
+
+- Every foreign key (most databases **do not create it automatically**)
+- Columns in the `WHERE` of frequently run queries
+- Columns used in `ORDER BY` together with pagination
+
+**composite index (an index on several columns): column order matters**
+
+```sql
+-- query: WHERE tenant_id = ? AND status = ? ORDER BY created_at DESC
+CREATE INDEX ix_orders_tenant_status_created
+  ON orders (tenant_id, status, created_at DESC);
+```
+
+Order the columns by condition type: **equals → range → sort**.
+An index `(a, b)` works for a query that filters on `a` alone, but **not** for one that filters on `b` alone.
+
+**Do not add an index when:**
+
+- The table has fewer than a few thousand rows, because the database reads the whole table faster
+- The column has many repeated values, such as `is_active` where 95% are true
+- The table is written far more often than read, because every index adds cost on every write
+
+> **Measure before guessing**: `EXPLAIN ANALYZE` (PostgreSQL) or the execution plan (SQL Server)
+> tells you whether the index is really used. Guessing that it "should help" is wrong more often than right.
+
+---
+
+## 8 · Constraints live in the database, not only in the app
+
+| Rule | Where it should live |
+|---|---|
+| Email must not repeat | `UNIQUE` in the database **and** a check in the app so the error message looks nice |
+| Amount must not be negative | `CHECK (total_amount >= 0)` |
+| A purchase order must have a real customer | `FOREIGN KEY` |
+| Status must be one of the defined values | `CHECK` or a lookup table |
+
+> **Reason:** the app is not the only thing that touches the data. There are also urgent data-fix scripts,
+> import jobs at 3 a.m., and a 2nd service written later.
+> A constraint in the database is the last gate that nobody can skip.
+
+**Choose `ON DELETE` on purpose:**
+
+| Option | Meaning | Use with |
+|---|---|---|
+| `RESTRICT` (the default you should use) | Cannot delete while children exist | Almost every case |
+| `CASCADE` | Delete all the children too | True components, such as `order_items` |
+| `SET NULL` | Child becomes parentless | Optional relationships |
+
+If you put `CASCADE` in the wrong place just once, deleting 1 customer wipes 10 years of purchase history with it.
+
+---
+
+## 9 · migration — change the schema without taking the system down
+
+The expand-and-contract steps, and example migrations that deploy without downtime, are in [`migrations`](references/migrations.md).
+
+Data warehouses for analysis (star schema · SCD · ELT) are in [`warehouse-modeling`](references/warehouse-modeling.md) · pipelines that can rerun safely (incremental · backfill · data quality tests · checklist before going to production) are in [`data-pipeline-patterns`](references/data-pipeline-patterns.md).
+
+## 10 · Multi-tenant systems
+
+| Style | How separate | Cost | Fits |
+|---|---|---|---|
+| A `tenant_id` column in every table | Low: one slip and data leaks across tenants | Cheapest | Many tenants, small data per tenant |
+| A separate schema per tenant | Medium | Migrations must loop over every schema | Tens to hundreds of tenants |
+| A separate database per tenant | Highest | Most expensive | Enterprise customers who require separation |
+
+> **Important:** if you choose the `tenant_id` style, **enforce it at the lowest layer, not by adding it to each query**.
+> Use the database's row-level security, or the ORM's global filter.
+> A single query that forgets `WHERE tenant_id = ?` shows one customer's data to another,
+> and no error appears at all.
+
+---
+
+## 11 · Personal data
+
+- Keep a list of **which columns are personal data**. Without this list you cannot answer the question "where is my data?".
+- National ID numbers, credit card numbers and health data: encrypt at the column level, or do not store them at all if not needed.
+- Set a **retention period** per table, and have a real job that deletes accordingly.
+- Data must be deletable when the owner asks, and soft delete alone does not count as deleting.
+- Never copy real data onto a developer machine without masking it.
+
+---
+
+## 12 · Anti-patterns
+
+- **One table that stores everything** (`entity` / `attribute` / `value`): every query becomes hard.
+- **`varchar(255)` on every column**: this number means nothing. Set it from real data.
+- **Several values in one column**, such as `"1,4,7"`: cannot search it, cannot add a constraint. Use a join table.
+- **No foreign key because "the app takes care of it"**: one day you will have orphan rows.
+- **An index on every column just in case**: writes get slower and storage bloats, with no one benefiting.
+- **`SELECT *` in real code**: the code breaks every time a column is added.
+- **Business logic in triggers**: problems are untraceable, because nobody sees it running.
+- **A migration that also writes data**, mixed with the structure change: on rollback the data is lost.
+- **Changing the schema on production by hand**: at the next deploy the schema will not match.
+
+
+## reference: data-pipeline-patterns.md
+
+# Data pipeline patterns — incremental, backfill, quality, catalog
+
+Every pipeline must give the same result when run again (`code-craft`) and must always pass values into SQL as parameters.
+
+**สารบัญ:**
+
+- [Pipeline Patterns](#pipeline-patterns)
+- [Data Catalog Pattern](#data-catalog-pattern)
+- [Production Pipeline Checklist](#production-pipeline-checklist)
+
+## Pipeline Patterns
+
+### Pattern 1: Incremental Loading
+
+```sql
+-- dbt incremental model
+{{ config(materialized='incremental', unique_key='id') }}
+
+SELECT
+    id,
+    user_id,
+    event_type,
+    created_at
+FROM {{ source('raw', 'events') }}
+WHERE 1=1
+{% if is_incremental() %}
+    -- Only new since last run
+    AND created_at > (SELECT MAX(created_at) FROM {{ this }})
+{% endif %}
+```
+
+### Pattern 2: Late-arriving Data
+
+```sql
+-- Don't just look at last 1 hour, look back further for late events
+WHERE created_at > NOW() - INTERVAL '7 days'  -- buffer
+  AND created_at > (SELECT MAX(created_at) - INTERVAL '1 day' FROM target)
+```
+
+### Pattern 3: Data Quality Tests (dbt)
+
+```yaml
+# models/marts/orders.yml
+version: 2
+
+models:
+  - name: orders
+    description: One row per order
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('customers')
+              field: customer_id
+      - name: amount
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+```
+
+### Pattern 4: Idempotent Backfills
+
+```python
+# Backfill should be safe to re-run
+async def backfill(start_date: date, end_date: date):
+    for d in date_range(start_date, end_date):
+        # DELETE then INSERT in one transaction (idempotent); value passed as a parameter, never in the SQL string
+        async with db.transaction():
+            await db.execute("DELETE FROM target WHERE date = $1", d)
+            await load_for_date(d)
+```
+
+### Pattern 5: Real-time Pipeline
+
+```python
+# Kafka consumer pattern
+from kafka import KafkaConsumer
+
+consumer = KafkaConsumer(
+    'events',
+    bootstrap_servers='kafka:9092',
+    enable_auto_commit=False,  # ← manual commit = at-least-once (not exactly-once)
+    isolation_level='read_committed',
+)
+
+batch = []
+for message in consumer:
+    batch.append(parse(message))
+
+    if len(batch) >= 1000:
+        # Write first, commit the offset after. Kafka and the DB share no
+        # transaction, so a crash between the two replays this batch
+        # (at-least-once). Make the write idempotent so a replay is harmless.
+        with db.transaction():
+            db.bulk_upsert('events', batch, key=('topic', 'partition', 'offset'))  # unique key + ON CONFLICT DO NOTHING
+        consumer.commit()  # only after the DB write succeeds
+        batch = []
+```
+
+For exactly-once effect: idempotent upsert as above, or store the offsets in the
+same DB transaction as the data and seek to them on start (skip `consumer.commit()`).
+
+## Data Catalog Pattern
+
+For every table, document:
+
+```yaml
+- table: dim_customer
+  description: Slowly-changing customer master
+  owner: data-team
+  freshness: hourly
+  source: postgres.app.users (CDC)
+  pii: yes
+  retention: 7 years
+  columns:
+    - name: customer_key
+      description: Surrogate key
+    - name: customer_id
+      description: Natural key from source system
+    - name: email
+      pii: yes
+```
+
+## Production Pipeline Checklist
+
+- [ ] Schema validation at ingestion
+- [ ] Schema evolution handled (additive only)
+- [ ] Tests on critical columns (uniqueness, not-null, ranges)
+- [ ] Monitoring on row counts, freshness, error rates
+- [ ] Alerting (PagerDuty / Slack) on failures
+- [ ] Backfill procedure documented + tested
+- [ ] Idempotency verified
+- [ ] Lineage visible (dbt docs, OpenLineage)
+- [ ] PII tagged
+- [ ] Access controls per dataset
+- [ ] Cost monitored (query / storage)
+
+
+## reference: data-types.md
+
+# 6 · Four data types that are routinely got wrong
+
+### Money
+
+```sql
+total_amount   numeric(19,4)   NOT NULL      -- ถูก:
+currency       char(3)         NOT NULL      -- ถูก: ISO 4217 เช่น THB
+total_amount   float / double                -- ผิด: 0.1 + 0.2 ไม่เท่ากับ 0.3
+```
+
+> Wrong: **float for money is a bug you cannot find.** The total drifts by 1 satang per line
+> You only learn at month-end close, and cannot trace back where it drifted
+
+### Time
+
+| Store | Use | Reason |
+|---|---|---|
+| Time an event happened | `timestamptz` (SQL Server uses `datetimeoffset`) stored as UTC | Thailand has no daylight saving, but systems sold abroad do |
+| Birth date, due date | `date` | no time, no time zone |
+| Shop opening hours | `time` + a separate time zone column | |
+
+**Rule:** store UTC and convert to `+07:00` only at display time; never store raw Thai time in a `timestamp` that has no zone
+
+**Buddhist Era (BE)**: always store Common Era (CE), then convert to BE at display time
+If you store the year 2569 in the database, every function will compute durations wrongly
+
+### enum / status
+
+| Approach | Good when | Bad when |
+|---|---|---|
+| Lookup table + foreign key | values can be added without a deploy, has Thai/English names, and has a display order | needs a join |
+| `check constraint` as text | constant values that rarely change | adding a value needs a migration |
+| PostgreSQL `enum` type | fast, small | **a value cannot be removed** and the order cannot be changed |
+| raw `int` | — | ✗ reading `status = 3`, nobody knows what it means |
+
+### boolean
+
+- Name it as a positive statement: `is_active` (right) · `is_not_disabled` (wrong)
+- **If a third state might appear in the future, do not use boolean**, because `is_approved` will become `approval_status`
+  within 6 months, once "รออนุมัติ" (awaiting approval) is added
+
+---
+
+
+## reference: migrations.md
+
+# 9 · migration — change the schema without taking the system down
+
+**3 rules:**
+
+1. **Forward only**: a migration that has been merged must not be edited; if it is wrong, write a new one over it
+2. **1 migration does one thing**: easy to trace problems, and rollback is exact
+3. **Old-version code and the new-version schema must work together**, because during a deploy both versions of the code always run at the same time
+
+### expand / contract — the standard steps for a change that destroys something existing
+
+Example: rename the column `name` → `full_name`
+
+| Deploy round | Database | Code |
+|:--:|---|---|
+| **1 · Expand** | add `full_name` (nullable) | write to both columns · read from `name` |
+| **2 · Migrate** | copy old data in batches | read from `full_name`, fall back to `name` if it has no value |
+| **3 · Contract** | set `NOT NULL` · drop `name` | read and write only `full_name` |
+
+3 rounds looks slow, but every round can roll back without losing data
+If you do it in one round, you must accept that the system has to go down
+
+**Commands that lock the table until the system hangs** (be extra careful on large tables):
+
+- Adding a column with both `DEFAULT` and `NOT NULL` at once — newer PostgreSQL does this fast, and MySQL 8.0.12 and up can add a column as INSTANT (changing a data type still rewrites the table)
+- Changing a data type
+- Creating a plain index; use `CREATE INDEX CONCURRENTLY` instead (PostgreSQL) or `ONLINE = ON` (SQL Server)
+
+**Always test a migration against a copy of real data**, because a migration that runs in 0.2 seconds on your own machine
+may take 40 minutes on production and hold the table lock the whole time
+
+---
+
+
+## reference: per-stack.md
+
+# Syntax and tools per database and ORM
+
+**Contents:** 1 Data types compared · 2 PostgreSQL · 3 SQL Server · 4 MySQL / MariaDB · 5 MongoDB · 6 Entity Framework Core (.NET) · 7 Prisma / Drizzle (Node) · 8 Alembic (Python) · 9 Slow query commands
+
+1. [Data types compared](#1--data-types-compared)
+2. [PostgreSQL](#2--postgresql)
+3. [SQL Server](#3--sql-server)
+4. [MySQL / MariaDB](#4--mysql--mariadb)
+5. [MongoDB](#5--mongodb)
+6. [Entity Framework Core (.NET)](#6--entity-framework-core-net)
+7. [Prisma / Drizzle (Node)](#7--prisma--drizzle-node)
+8. [Alembic (Python)](#8--alembic-python)
+9. [Slow query commands](#9--slow-query-commands)
+
+---
+
+## 1 · Data types compared
+
+| To store | PostgreSQL | SQL Server | MySQL |
+|---|---|---|---|
+| Auto-increment id | `bigint GENERATED ALWAYS AS IDENTITY` | `bigint IDENTITY(1,1)` | `BIGINT AUTO_INCREMENT` |
+| UUID | `uuid` | `uniqueidentifier` | `BINARY(16)` or `CHAR(36)` |
+| Money | `numeric(19,4)` | `decimal(19,4)` | `DECIMAL(19,4)` |
+| Time + time zone | `timestamptz` | `datetimeoffset(3)` | `TIMESTAMP` (store UTC) |
+| Date only | `date` | `date` | `DATE` |
+| Unlimited-length text | `text` | `nvarchar(max)` | `TEXT` / `LONGTEXT` |
+| Thai text | `text` (already UTF-8) | **`nvarchar` only** | `utf8mb4` |
+| True/false | `boolean` | `bit` | `TINYINT(1)` |
+| JSON | `jsonb` (can be indexed) | `nvarchar(max)` + `JSON_VALUE` | `JSON` |
+| Binary file | `bytea` (or store outside the database) | `varbinary(max)` | `BLOB` |
+
+> **SQL Server + Thai**: `varchar` turns Thai characters into `?`.
+> Use `nvarchar` and always write literals as `N'ข้อความ'`.
+>
+> **MySQL must use `utf8mb4`**, because MySQL's character set named plain `utf8`
+> stores only 3 bytes per character, so emoji and some other characters are lost.
+
+---
+
+## 2 · PostgreSQL
+
+```sql
+CREATE TABLE orders (
+  id            bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  order_no      varchar(20)  NOT NULL,
+  customer_id   bigint       NOT NULL REFERENCES customers(id) ON DELETE RESTRICT,
+  status        varchar(20)  NOT NULL DEFAULT 'draft',
+  total_amount  numeric(19,4) NOT NULL DEFAULT 0,
+  currency      char(3)      NOT NULL DEFAULT 'THB',
+  meta          jsonb,
+  created_at    timestamptz  NOT NULL DEFAULT now(),
+  updated_at    timestamptz  NOT NULL DEFAULT now(),
+  deleted_at    timestamptz,
+  CONSTRAINT ck_orders_total_non_negative CHECK (total_amount >= 0),
+  CONSTRAINT ck_orders_status CHECK (status IN ('draft','confirmed','shipped','cancelled'))
+);
+
+CREATE UNIQUE INDEX ux_orders_order_no ON orders (order_no) WHERE deleted_at IS NULL;
+CREATE INDEX ix_orders_customer_id ON orders (customer_id);
+CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC);
+```
+
+**Create an index without locking the table:**
+
+```sql
+CREATE INDEX CONCURRENTLY ix_orders_status ON orders (status);
+-- Must not run inside a transaction · if it fails it leaves an index in invalid state: DROP it and redo
+```
+
+**Update `updated_at` automatically:**
+
+```sql
+CREATE OR REPLACE FUNCTION touch_updated_at() RETURNS trigger AS $$
+BEGIN NEW.updated_at = now(); RETURN NEW; END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_orders_touch BEFORE UPDATE ON orders
+FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
+```
+
+**Row-level security for multi-tenant systems:**
+
+```sql
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation ON orders
+  USING (tenant_id = current_setting('app.tenant_id')::bigint);
+-- The app sets this per connection: SET app.tenant_id = '42';
+```
+
+**Common PostgreSQL traps** (ideas from wshobson postgresql-table-design · version numbers are the version where the behaviour began)
+
+| Trap | Do this instead |
+|---|---|
+| `timestamp` (no time zone) silently drops the offset, so a `+07:00` machine and UTC store values with different meanings | Always `timestamptz` |
+| `serial` creates a separate sequence whose permissions and `DROP` do not follow the table | `GENERATED ALWAYS AS IDENTITY` (PG 10+) |
+| `ADD COLUMN ... NOT NULL` on a big table risks a long lock | With a constant `DEFAULT` the table is no longer rewritten (PG 11+) · a function DEFAULT such as `now()` still rewrites the whole table |
+| `ADD CONSTRAINT` (FK · CHECK) scans the whole table while holding the lock | Use `... NOT VALID` first, then run `VALIDATE CONSTRAINT` as a separate statement (lighter lock) |
+| DDL queues behind a long transaction, and every query after it waits too | Run `SET lock_timeout = '5s'` before every DDL, and rerun if it times out |
+| A unique index lets `NULL` repeat on many rows | `UNIQUE NULLS NOT DISTINCT` (PG 15+) or a partial index `WHERE col IS NOT NULL` |
+| `LIKE '%คำ%'` and `ILIKE` do not use a btree index | Extension `pg_trgm` + GIN index · for serious text search use `tsvector` |
+| `jsonb` search with `->>` does not use an index | GIN index on the column (`@>` · `?`) or an expression index on `(meta->>'key')` |
+| `count(*)` over the whole table to show a page count | Use the estimate from `pg_class.reltuples`, or drop the total count (cursor pagination) |
+
+---
+
+## 3 · SQL Server
+
+```sql
+CREATE TABLE orders (
+  id            bigint IDENTITY(1,1) PRIMARY KEY,
+  order_no      nvarchar(20)   NOT NULL,
+  customer_id   bigint         NOT NULL,
+  status        nvarchar(20)   NOT NULL CONSTRAINT df_orders_status DEFAULT N'draft',
+  total_amount  decimal(19,4)  NOT NULL CONSTRAINT df_orders_total DEFAULT 0,
+  created_at    datetimeoffset(3) NOT NULL CONSTRAINT df_orders_created DEFAULT sysdatetimeoffset(),
+  updated_at    datetimeoffset(3) NOT NULL CONSTRAINT df_orders_updated DEFAULT sysdatetimeoffset(),
+  row_version   rowversion,
+  CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers(id),
+  CONSTRAINT ck_orders_total_non_negative CHECK (total_amount >= 0)
+);
+
+CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC)
+  WITH (ONLINE = ON);   -- Enterprise / Azure SQL only
+```
+
+- `rowversion` works directly as an ETag to detect conflicting edits.
+- To sort Thai correctly, set the collation `Thai_100_CI_AS` at the column or database level.
+- The old `datetime` has a precision of only 3.33 milliseconds. Use `datetime2` / `datetimeoffset` instead.
+
+---
+
+## 4 · MySQL / MariaDB
+
+```sql
+CREATE TABLE orders (
+  id           BIGINT AUTO_INCREMENT PRIMARY KEY,
+  order_no     VARCHAR(20)   NOT NULL,
+  customer_id  BIGINT        NOT NULL,
+  total_amount DECIMAL(19,4) NOT NULL DEFAULT 0,
+  created_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY ux_orders_order_no (order_no),
+  KEY ix_orders_customer_id (customer_id),
+  CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+- From MySQL 8.0.12, `ADD COLUMN` can use `ALGORITHM=INSTANT` (before 8.0.29 it could add only at the end of the table). Changing a data type still rewrites the table (dev.mysql.com online DDL, checked 22 Oct 2026 (B.E. 2569)). For big tables that need a rebuild, use `pt-online-schema-change` or `gh-ost`.
+- Set the server time to UTC (`default_time_zone = '+00:00'`).
+
+---
+
+## 5 · MongoDB
+
+```js
+db.createCollection("orders", {
+  validator: { $jsonSchema: {
+    bsonType: "object",
+    required: ["orderNo", "customerId", "totalAmount", "createdAt"],
+    properties: {
+      orderNo:     { bsonType: "string" },
+      customerId:  { bsonType: "objectId" },
+      totalAmount: { bsonType: "decimal" },   // wrong: do not use double for money
+      createdAt:   { bsonType: "date" }
+    }
+  }}
+});
+db.orders.createIndex({ orderNo: 1 }, { unique: true });
+db.orders.createIndex({ customerId: 1, createdAt: -1 });
+```
+
+- Embed when the child data is **always read together with the parent and does not grow without limit**. Otherwise use references.
+- One document has a 16 MB ceiling, so an array that keeps growing will hit it one day.
+- Use `Decimal128` for money, and nothing else.
+
+---
+
+## 6 · Entity Framework Core (.NET)
+
+```bash
+dotnet ef migrations add AddOrderStatus
+dotnet ef migrations script <from> <to> -o migrate.sql   # right: review the SQL before the real run
+dotnet ef database update                                # dev only
+```
+
+> **On production, run the reviewed script, not `database update`.**
+> That command needs the app's connection to have permission to change the schema, which it should not have in the first place.
+
+```csharp
+modelBuilder.Entity<Order>(e => {
+    e.ToTable("orders");
+    e.Property(x => x.TotalAmount).HasColumnType("decimal(19,4)");
+    e.HasIndex(x => new { x.Status, x.CreatedAt }).HasDatabaseName("ix_orders_status_created");
+    e.HasQueryFilter(x => x.DeletedAt == null);          // soft delete across the whole system
+    e.Property(x => x.RowVersion).IsRowVersion();        // detect conflicting edits
+});
+```
+
+---
+
+## 7 · Prisma / Drizzle (Node)
+
+```prisma
+model Order {
+  id          BigInt   @id @default(autoincrement())
+  orderNo     String   @unique @map("order_no") @db.VarChar(20)
+  totalAmount Decimal  @map("total_amount") @db.Decimal(19, 4)
+  status      String   @db.VarChar(20)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  customer    Customer @relation(fields: [customerId], references: [id])
+  customerId  BigInt   @map("customer_id")
+
+  @@index([status, createdAt], name: "ix_orders_status_created")
+  @@map("orders")
+}
+```
+
+```bash
+npx prisma migrate dev --name add_order_status   # dev — creates the migration file
+npx prisma migrate deploy                        # production — runs only the existing ones
+```
+
+- Prisma's `Decimal` returns an object, not a number. Calculate with `decimal.js` and do not convert to float.
+- `BigInt` cannot be converted to JSON directly. Convert it to a string at the API layer.
+
+---
+
+## 8 · Alembic (Python)
+
+```bash
+alembic revision --autogenerate -m "add order status"
+alembic upgrade head
+alembic downgrade -1
+```
+
+Split into 3 migrations (1 migration does one thing):
+
+```python
+# 1) schema: add a nullable column
+def upgrade():
+    op.add_column("orders", sa.Column("status", sa.String(20), nullable=True))
+
+# 2) data: backfill existing values (on a big table, do it in small batches)
+def upgrade():
+    op.execute("UPDATE orders SET status = 'draft' WHERE status IS NULL")
+
+# 3) schema: enforce NOT NULL and create the index
+def upgrade():
+    op.alter_column("orders", "status", nullable=False)
+    # CREATE INDEX CONCURRENTLY must not run inside a transaction, so step out of Alembic's transaction
+    with op.get_context().autocommit_block():
+        op.create_index("ix_orders_status_created", "orders", ["status", "created_at"],
+                        postgresql_concurrently=True)
+```
+
+> `--autogenerate` **does not see** renames (it reads them as a drop plus a new add, so the data is lost).
+> Always read the file it generates before you commit.
+
+---
+
+## 9 · Slow query commands
+
+| Database | Command |
+|---|---|
+| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) <query>;` · extension `pg_stat_statements` |
+| SQL Server | Turn on "Include Actual Execution Plan" · `sys.dm_exec_query_stats` |
+| MySQL | `EXPLAIN ANALYZE <query>;` · `performance_schema` |
+| MongoDB | `db.orders.find(...).explain("executionStats")` |
+
+**Danger signs to fix:** `Seq Scan` / `Table Scan` on a big table ·
+estimated row count differs from the actual by more than 10 times · a `Nested Loop` that runs hundreds of thousands of times
+
+
+## reference: warehouse-modeling.md
+
+# Warehouse modeling — ELT, stack, star schema, SCD
+
+For an analytics warehouse, not an application database.
+
+**สารบัญ:**
+
+- [ELT vs ETL (Modern Default: ELT)](#elt-vs-etl-modern-default-elt)
+- [Tech Stack (2026 Recommendations)](#tech-stack-2026-recommendations)
+- [Schema Design: Star/Snowflake](#schema-design-starsnowflake)
+- [SCD (Slowly Changing Dimensions)](#scd-slowly-changing-dimensions)
+
+## ELT vs ETL (Modern Default: ELT)
+
+```
+ETL (old way):
+Source → Transform → Warehouse
+        ↑
+        Limited compute, slow
+
+ELT (modern):
+Source → Load raw → Transform in warehouse
+                    ↑
+                    Snowflake/BigQuery scale
+```
+
+> **2026 default: ELT with dbt** — load raw to warehouse, transform with SQL via dbt
+
+## Tech Stack (2026 Recommendations)
+
+> The tool list comes from model knowledge and has not been checked against official websites (รอยืนยัน, awaiting confirmation). Check before recommending.
+
+### Warehouse / Lake
+| Tool | Best for | Cost |
+|------|----------|------|
+| **Snowflake** | Pure warehouse, separation of compute/storage | $$|
+| **BigQuery** | Serverless, ad-hoc, GCP shops | $$|
+| **Databricks** | Unified lake + warehouse, ML-heavy | $$$|
+| **DuckDB** | Local dev, embedded analytics | $free |
+| **Redshift** | AWS-native, legacy | $$|
+| **Postgres** | Small data (<1TB), simplicity | $|
+
+### Transformation
+- **dbt** — SQL-based, version controlled, tested (industry default)
+- **SQLMesh** — newer alternative to dbt, stronger features
+
+### Orchestration
+- **Airflow** — most popular, mature
+- **Prefect** — modern Python-native
+- **Dagster** — software-engineering approach to pipelines
+
+### Stream Processing
+- **Kafka + Flink** — high throughput, exactly-once
+- **Kinesis Streams + Flink** — AWS-native
+- **Pub/Sub + Dataflow** — GCP-native
+- **Materialized views** (Snowflake, BigQuery) — for simple cases
+
+### Ingestion
+- **Airbyte** — open source, many connectors
+- **Fivetran** — managed, expensive but reliable
+- **Estuary** — modern, streaming-first
+- **Custom** — for sources not covered
+
+## Schema Design: Star/Snowflake
+
+```sql
+-- Fact table (events / measurements)
+CREATE TABLE fact_orders (
+    order_key BIGINT PRIMARY KEY,
+    customer_key BIGINT,
+    product_key BIGINT,
+    date_key INT,
+    quantity INT,
+    amount NUMERIC(19,4)
+    -- foreign keys to dimensions
+);
+
+-- Dimension tables (descriptive context)
+CREATE TABLE dim_customer (
+    customer_key BIGINT PRIMARY KEY,
+    customer_id VARCHAR,        -- natural key
+    name VARCHAR,
+    email VARCHAR,
+    country VARCHAR,
+    -- SCD Type 2 tracking:
+    valid_from DATE,
+    valid_to DATE,
+    is_current BOOLEAN
+);
+```
+
+> **Star = denormalized, query-fast**
+> **Snowflake = normalized dims, save storage**
+> **Wide tables / OBT (One Big Table) = even faster for analytics**
+
+## SCD (Slowly Changing Dimensions)
+
+### Type 1: Overwrite
+```
+Customer Bob lived in Bangkok. Moved to Phuket.
+→ Update row, lose Bangkok history
+```
+
+### Type 2: New row per change (most common)
+```
+| customer_key | id | name | city    | valid_from | valid_to   | is_current |
+| 1            | 42 | Bob  | Bangkok | 2024-01-01 | 2025-06-30 | false      |
+| 2            | 42 | Bob  | Phuket  | 2025-07-01 | 9999-12-31 | true       |
+```
+
+### Type 3: Add column
+```
+Customer table: current_city, previous_city
+→ Only most recent change preserved
+```
+
+
+---
+
+# skill: web-service-essentials
+
+Use when building an HTTP backend, login, config, uploads or audit
+
+# web-service-essentials — the basic parts every HTTP backend needs before its first business endpoint
+
+> **The one rule:** before writing the first business endpoint, the service must be able to answer "Are you still alive? · Are you ready for work? · Which version are you running now?" If it cannot, on the day the system goes down you will be guessing blind.
+
+## Pick the part
+
+| Job (what the user says) | Open |
+|---|---|
+| New service, health check, ping, readiness, version endpoint, graceful shutdown, one error format | This file: sections 1 to 4 |
+| Login with sessions, JWT, OAuth, SSO, MFA, passwords, lockout | [`references/auth-implementation-patterns.md`](references/auth-implementation-patterns.md) · [`references/auth-flows.md`](references/auth-flows.md) · [`references/mfa.md`](references/mfa.md) · [`references/api-auth-and-authorization.md`](references/api-auth-and-authorization.md) |
+| Settings differ by environment, secrets must stay hidden, `.env` files | [`references/config-and-secrets.md`](references/config-and-secrets.md) |
+| Users upload files, or the app serves stored files | [`references/file-upload-and-storage.md`](references/file-upload-and-storage.md) |
+| The system must record who did what and when | [`references/audit-trail.md`](references/audit-trail.md) |
+| Ready-made libraries and sample code | [`references/libraries-and-code.md`](references/libraries-and-code.md) |
+| Stack-specific setup (.NET, Angular, Node, Python) | [`references/per-stack.md`](references/per-stack.md) |
+
+## When to use this skill
+
+- Starting a new service / REST API / microservice
+- Someone asks for a health check, ping, readiness, liveness, or version endpoint
+- Deploying to production for the first time, or moving into Docker/Kubernetes
+- You must set one API error format for the whole system
+
+## When **not** to use it
+
+- To design business endpoints, use the command `/api-design`
+- For URL style · paging · dates · API ids, use `api-design`
+- For log format, use `errors-and-logs`
+- To choose an architecture, use `architecture`
+- To check responses against OpenAPI in CI or catch breaking changes, see `api-design` [`references/contract-testing.md`](../api-design/references/contract-testing.md)
+
+---
+
+## 1 · The 4 basic endpoints
+
+| Endpoint | What it answers | auth | Checks dependencies | Who calls it |
+|---|---|:---:|:---:|---|
+| `GET /ping` | `pong` (text) | no | no | load balancer, every second |
+| `GET /health/live` | the process is still alive | no | **no** | orchestrator (restarts if dead) |
+| `GET /health/ready` | ready to take traffic | no | yes | orchestrator (removes from the pool) |
+| `GET /version` | what is running | no* | no | a person, when tracing a problem |
+
+> **live must not check dependencies.** This is the most common mistake.
+> If `/health/live` checks the database (DB) and the DB goes down briefly, Kubernetes will **kill every pod**
+> even though the app itself is fine. When the DB comes back, no pod is left to take traffic.
+> The dependency check belongs in `/health/ready`, which only removes a pod from the pool for a while.
+
+\* If you do not want the public to see the commit hash in `/version`, restrict it so only the internal network can call it.
+
+**Wire it to Kubernetes like this** — live and ready must point to different paths, or the point above means nothing.
+
+```yaml
+livenessProbe:            # dead → restart the container
+  httpGet: { path: /health/live, port: 3000 }
+  initialDelaySeconds: 15 # let the app start first, or it gets killed before it can listen
+  periodSeconds: 10
+  failureThreshold: 3     # restart only after 3 failures in a row (30 seconds)
+readinessProbe:           # not ready → remove from the Service for a while, no restart
+  httpGet: { path: /health/ready, port: 3000 }
+  initialDelaySeconds: 5
+  periodSeconds: 10
+```
+
+For an app with a long warm-up (loading a model · a big cache), add a `startupProbe` pointing to `/health/live` with a high `failureThreshold`, instead of stretching the liveness `initialDelaySeconds`.
+
+### Response shape (the same in every language)
+
+```jsonc
+// GET /health/ready → 200 normally · 503 when a critical dependency is down
+{
+  "status": "up",                       // up | degraded | down
+  "timestamp": "2026-08-31T09:42:13.482Z",
+  "checks": {
+    "db":    { "status": "up",   "durationMs": 12 },
+    "redis": { "status": "up",   "durationMs": 3 },
+    "mail":  { "status": "down", "durationMs": 3001, "error": "smtp timeout" }
+  }
+}
+```
+
+```jsonc
+// GET /version → 200
+{
+  "name": "orders-api", "version": "1.4.0", "commit": "abc1234",
+  "buildTime": "2026-08-31T09:00:00Z", "env": "production", "host": "pod-7f9c"
+}
+```
+
+**3 states, not 2:**
+- `up` — everything is normal → 200
+- `degraded` — a **non-critical** dependency is down (such as email) but the service can still take traffic → 200
+- `down` — a critical dependency is down (such as the DB) → **503**
+
+**Every check must have a timeout** (default 3 seconds). Otherwise a hung dependency
+makes the health endpoint hang too, and the orchestrator makes the wrong decision for the whole system.
+
+**Never send a stack trace or connection string out through these endpoints**, because anyone can call them.
+
+---
+
+## 2 · One error format for the whole system
+
+Follow **RFC 9457 (`application/problem+json`)**, which is a real standard, so you do not invent your own.
+
+```jsonc
+// 422 — the format is right, but the data fails a rule (see the table below)
+{
+  "type": "https://api.example.com/errors/validation",
+  "title": "ข้อมูลที่ส่งมาไม่ถูกต้อง",
+  "status": 422,
+  "detail": "จำนวนสินค้าต้องมากกว่า 0",
+  "instance": "/api/v1/orders",
+  "requestId": "a3f9c1b2",              // matches the cid in the log — trace the case at once
+  "errors": [                           // validation only · every field in one response
+    { "field": "items[0].qty", "code": "min_value", "message": "ต้องมากกว่า 0" }
+  ]
+}
+```
+
+- `field` is the full path including array indexes · `code` is for programs · `message` is for people
+
+| Status | Use when |
+|---|---|
+| 400 | Malformed data |
+| 401 | Not yet authenticated |
+| 403 | Authenticated but not allowed |
+| 404 | The thing does not exist |
+| 409 | Conflicts with current state (duplicate, overwrite) |
+| 422 | Format is right but breaks a business rule |
+| 429 | Called too often — must have `Retry-After` |
+| 500 | Our side broke — **never send internal details out**, send `requestId` instead |
+
+> **A 500 must say only "an error occurred, please report this requestId".** The real details stay in the log.
+> Sending a stack trace out is like handing the system's blueprint to someone looking for a way in.
+
+---
+
+## 3 · Request id
+
+- Accept it from the **`X-Request-Id`** header only when it matches `^[A-Za-z0-9-]{1,64}$` · if it is missing or does not match → create a new one (a uuid cut to 8 characters).
+  This value goes into every log line. If you accept it as is, the sender can insert new lines or fake text into the log (log injection).
+- **Return it in a response header every time**, including on errors.
+- Put it in every log line (see `errors-and-logs`) and in the error body.
+- Pass it on to the downstream service every time you call across systems.
+
+When a customer calls to say "it broke", ask for the requestId and `grep` once to find the whole story.
+
+---
+
+## 4 · Graceful shutdown
+
+On a new deploy the orchestrator sends `SIGTERM`. If the app dies at once, requests in progress are cut off midway.
+
+```
+SIGTERM → 1. Stop accepting new requests (make /health/ready answer down at once)
+          2. Wait for in-flight requests to finish (timeout 15–30 seconds)
+          3. Close the DB pool / queues / files
+          4. exit(0)
+```
+
+> Step 1 matters more than it looks. `/health/ready` must answer `down` about 5 seconds **before** the real shutdown,
+> so the load balancer removes us from the pool in time. Otherwise traffic keeps arriving while we are closing.
+
+---
+
+## 5 · What must exist before deploy (not optional)
+
+- **Timeouts everywhere**: incoming requests, outgoing calls, and DB queries. Without a timeout, the moment a downstream is slow, the whole system hangs with it.
+- **Limit body size** (for example 1MB) to stop memory blowing up from a large payload.
+- **Cross-Origin Resource Sharing (CORS) names the origin explicitly** — `*` is allowed only for a public API with no cookies.
+- **Rate limit** at least on the login endpoint and on anything that sends a one-time password (OTP)/email.
+- **Security headers**: `X-Content-Type-Options: nosniff` · `Content-Security-Policy: frame-ancestors 'none'` (replaces the old `X-Frame-Options` header · also add `X-Frame-Options: DENY` for old browsers) ·
+  `Strict-Transport-Security` (HTTP Strict Transport Security · HSTS)
+  Node: `helmet` sets them all in one line · .NET: `UseHsts()` sets only HSTS, and the rest needs a short middleware or the package `NetEscapades.AspNetCore.SecurityHeaders` (example in `references/per-stack.md`)
+- **Turn off the full error page in production** (`app.UseDeveloperExceptionPage()` in dev only)
+- **Put the version in the path**: `/api/v1/...` from day one, because moving later costs much more.
+- **OpenAPI** generated from the real code, not written by hand and then forgotten.
+
+---
+
+## 6 · Ready-made code
+
+| File | Stack | Status |
+|---|---|---|
+| `assets/health.node.js` | Node / Express | ✓ all 4 endpoints run and tested, plus the degraded/down/timeout cases |
+| `assets/health_py.py` | Python / FastAPI | ✓ run and tested the same way, results match on every field |
+| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | Caution: not yet compiled or tested |
+
+Usage snippets for the Node and Python routers: [`references/per-stack.md`](references/per-stack.md).
+
+---
+
+## 7 · Check the work
+
+```bash
+curl -i localhost:8080/ping                    # 200 pong
+curl -s localhost:8080/health/live  | jq
+curl -s localhost:8080/health/ready | jq
+curl -s localhost:8080/version      | jq
+
+# stop the DB and call again — ready must be 503 but live must still be 200
+docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:8080/health/live
+```
+
+- [ ] `/health/live` does **not** touch the DB — it still answers 200 with the DB stopped
+- [ ] `/health/ready` answers 503 when a critical dependency is down
+- [ ] When a non-critical dependency is down, the result is `degraded` + 200 (still takes traffic)
+- [ ] Every check has a timeout — make a dependency hang, and the endpoint must answer within ~3 seconds
+- [ ] `/version` matches the commit actually deployed
+- [ ] Every response has `X-Request-Id`, including a 500
+- [ ] Trigger a 500 and confirm no stack trace / connection string leaks out
+- [ ] After `SIGTERM`, in-flight requests finish before the app closes
+- [ ] `/ping` is not written to the log (or the file fills up with pings)
+
+## Check before done
+
+- **Never** store passwords in plain text or with MD5, SHA-1 or raw SHA-256. Use Argon2id, or bcrypt with cost 12 or more.
+- **Never** put a secret in git, in a log, or in a file sent to the browser. Log only "set" or the last 4 characters of a secret.
+- **Never** use the file name the user sent as the stored name. Check the file's real contents, not its extension, and strip EXIF location data from photos.
+- **Never** edit or delete an audit record. Write a correction entry instead, and never record passwords, tokens, ID card numbers or health data in it.
+- Every request, outgoing call and database query has a timeout, and the sections 5 and 7 checks pass before deploy.
+
+
+## reference: api-auth-and-authorization.md
+
+# API Authentication และ Authorization Patterns
+
+How each type of API authentication works, principles for managing API keys, and examples of RBAC and ABAC
+
+## Pattern 7: API Authentication
+
+| Method | Use case | Token format |
+|--------|----------|--------------|
+| **API Keys** | Server-to-server, simple | `sk_live_xxx` |
+| **OAuth 2.0 Client Credentials** | Service-to-service | JWT bearer |
+| **mTLS** (both sides present certificates) | High-security, internal | X.509 certs |
+| **HMAC signing** | Webhook verification | `HMAC-SHA256` |
+
+### API Key best practices
+- Prefix with environment: `sk_test_xxx`, `sk_live_xxx`
+- Show the secret ONCE, when it is created
+- Store it hashed (like a password)
+- Allow scopes/permissions per key
+- Allow expiry and replacement
+- Show when each key was last used
+- Let users revoke a key instantly
+
+## Authorization Patterns (after authentication)
+
+### RBAC (Role-Based Access Control)
+```
+User → Role → Permissions
+e.g., user@example.com → admin → [users.read, users.write, billing.read]
+```
+
+### Enforcing a role on an endpoint
+- Check on the server in middleware before the handler runs; never trust a role sent by the client
+- Deny by default: a route with no rule is closed
+- No or bad credentials → `401`; signed in but without the role → `403`; do not reveal whether the resource exists
+- Test both: a request without the role gets `403`, one with it gets `200` (name tests after the rule, e.g. `A01_non_manager_gets_403`)
+
+### ABAC (Attribute-Based) — fine-grained
+```
+Allow if user.department === resource.department AND action === "read"
+```
+
+
+## reference: audit-trail.md
+
+<!-- merged from skill `audit-trail` on 2026-11-27 · description was: Use when a system must record who did what and when -->
+# Audit trail
+
+## Contents
+
+- [When to use this skill](#when-to-use-this-skill)
+- [When to use another skill, or together](#when-to-use-another-skill-or-together)
+- [1 · audit log ≠ application log](#1--audit-log--application-log)
+- [2 · Fields every entry must have](#2--fields-every-entry-must-have)
+- [3 · Which events to record](#3--which-events-to-record)
+- [4 · How to record "what changed"](#4--how-to-record-what-changed)
+- [5 · Never edit after writing](#5--never-edit-after-writing)
+- [6 · Who can view, and what must not be recorded](#6--who-can-view-and-what-must-not-be-recorded)
+- [7 · Show it to people](#7--show-it-to-people)
+
+> **One rule:** a trail cannot be built after the fact.
+> The day a customer asks "who changed this price", if it was not recorded beforehand, it can never be answered.
+
+## When to use this skill
+
+- The system has approvals, money, user permissions, or personal data
+- A customer or auditor can ask "who did it, when, and what was changed from what to what"
+- There was a dispute over edited data and nobody could answer
+- The system falls under the Personal Data Protection Act (PDPA) or a standard that must be checkable after the fact
+
+## When to use another skill, or together
+
+| Job | skill | |
+|---|---|---|
+| Logs for technical troubleshooting | `errors-and-logs` | instead |
+| Metrics and alerts | `incidents-and-monitoring` | instead |
+| Columns `created_by` `updated_at` in working tables | `database-design` | instead |
+| Permissions and identity verification | `auth-implementation-patterns.md` | instead |
+| Consent and data-subject rights | `pdpa-compliance` | instead |
+| Requirements on what to keep and for how many years | `requirements-writing` | together |
+
+---
+
+## 1 · audit log ≠ application log
+
+| | application log | **audit log** |
+|---|---|---|
+| Who reads it | developers, when troubleshooting | auditors · customers · the legal team |
+| What it records | anything that helps troubleshooting | **only events with business meaning** |
+| Where it is kept | files · a log collection system | **a table in the database**, or storage that cannot be overwritten |
+| Lifetime | 7–90 days | **years, as the law or contract requires** |
+| Can it be edited | does not matter | **never edit, never delete** |
+| Can it be lost | some loss is acceptable | **cannot be lost.** If the write fails, the transaction must fail with it |
+
+> **Always keep these 2 separate.** An audit log mixed into the general log files
+> gets deleted by the log retention period within a month, and nobody finds it when it is needed.
+
+---
+
+## 2 · Fields every entry must have
+
+| Field | Example | Note |
+|---|---|---|
+| `id` | UUIDv7 | sortable by time |
+| `occurred_at` | `2026-09-25T09:42:13.482Z` | **UTC**, and the time it happened, not the time it was recorded |
+| `actor_id` | `1042` | the user id, not the name, because names can change |
+| `actor_type` | `user` · `system` · `api_client` | automated jobs need an identity too |
+| `actor_ip` · `user_agent` | | keep only when needed for the audit |
+| `action` | `order.cancelled` | **a past-tense verb**, in one style across the system |
+| `entity_type` · `entity_id` | `order` · `1042` | the thing acted on |
+| `changes` | `{"status":{"from":"confirmed","to":"cancelled"}}` | only the fields that changed |
+| `reason` | "ลูกค้าโทรแจ้งยกเลิก" (customer phoned to cancel) | required for actions that need a reason |
+| `correlation_id` | `01J9Z8…` | links back to the application log |
+| `result` | `success` · `denied` | **denied attempts must be recorded too** |
+
+> **A denied action is worth more than a successful one**, because someone trying to reach something
+> they have no right to is what auditors most want to see, and it is the best warning sign there is.
+
+---
+
+## 3 · Which events to record
+
+**Record:**
+
+| Group | Examples |
+|---|---|
+| money and contracts | create/cancel/refund · price change · discount change |
+| approvals | approve · reject · send back for fixing |
+| permissions and identity | grant/revoke permission · create/close account · change password · consecutive failed logins |
+| personal data | view · edit · export · delete |
+| system settings | changing a value that affects the whole system |
+| bulk data access | exporting a report · downloading a name list |
+
+**Do not record:** ordinary screen views · searches · sorting · clicks that change nothing.
+An audit log that records everything is worth the same as none, because nothing can be found in it.
+
+**Name actions in one style across the system:** `<entity>.<past-tense verb>`, for example `order.cancelled` · `user.role_granted` ·
+`invoice.exported` · `patient_record.viewed`
+
+---
+
+## 4 · How to record "what changed"
+
+| Method | Good | Bad |
+|---|---|---|
+| **Record only the changed fields (from/to)** ✓ | small, readable at once | to see the whole picture you must trace back |
+| Record the whole row before and after | full picture | grows very fast and risks keeping more sensitive data than needed |
+| Record only that "it was edited" | smallest | **cannot answer the question**, so do not use it |
+
+```jsonc
+"changes": {
+  "status":       { "from": "confirmed", "to": "cancelled" },
+  "total_amount": { "from": "1250.00",   "to": "0.00" }
+}
+```
+
+**For sensitive fields, record only that it changed, not the value:**
+
+```jsonc
+"changes": { "password_hash": { "changed": true } }
+```
+
+---
+
+## 5 · Never edit after writing
+
+- Grant the audit table only **INSERT and SELECT**. The account the app uses must have no UPDATE or DELETE permission.
+- Write in the same transaction as the real data change. **If the audit write fails, the transaction must fail with it.**
+- Never edit history to "tidy up". If a record is wrong, add a correction entry. Do not overwrite.
+- A system that needs stronger protection should chain the entries with hashes, to prove nobody inserted or deleted anything.
+
+**Retention** follows the law or the contract. Accounting documents in Thailand usually must be kept 5 years.
+When the period ends, move them to cheap storage. Never delete them without someone's approval.
+
+---
+
+## 6 · Who can view, and what must not be recorded
+
+| Topic | Rule |
+|---|---|
+| Read permission | only roles with an audit duty, and **reading the audit log must also be recorded in the audit** |
+| Export | record every time who exported which period |
+| **Must not record** | passwords · tokens · ID card numbers · health data · the content of personal data |
+| Record instead | point to **which item** was viewed or edited, not the content inside |
+
+> `patient_record.viewed` with the `entity_id` is enough. **Never copy test results into the audit log.**
+> Otherwise the audit log becomes the most sensitive data store in the system, without anyone meaning it to.
+
+---
+
+## 7 · Show it to people
+
+The history screen must filter by at least 4 things: **time period · actor · action type · which item**.
+
+Show it as a sentence people can read, not raw JSON (the sample below is the Thai text shown to Thai users: on 25 Sep 2569 [B.E.; 2026] at 16:42, Somchai (sales) cancelled order SO-2026-00042, status: confirmed → cancelled, reason: customer phoned to cancel):
+
+```
+25 ก.ย. 2569 16:42  สมชาย (ฝ่ายขาย)  ยกเลิกคำสั่งซื้อ SO-2026-00042
+                    สถานะ: ยืนยันแล้ว → ยกเลิก · เหตุผล: ลูกค้าโทรแจ้งยกเลิก
+```
+
+Show the time in the viewer's time zone, but store it as UTC (see `i18n-and-locale`).
+
+
+## reference: auth-flows.md
+
+# ลำดับขั้นของแต่ละ flow
+
+Step-by-step order for session, JWT, OAuth with PKCE and password reset. Use it when writing code, or when reviewing whether the code covers every step. The requirements and mistakes to avoid are in `SKILL.md`
+
+## Pattern 1: Session-Based Auth — Flow
+
+```
+1. User submits credentials
+2. Server validates, creates session ID
+3. Server stores session in Redis/DB
+4. Server sets HttpOnly Secure cookie
+5. Client sends cookie on every request
+6. Server looks up session, identifies user
+```
+
+## Pattern 2: JWT — Flow
+
+```
+1. User submits credentials
+2. Server validates, signs JWT
+3. Client stores JWT (in HttpOnly cookie preferred)
+4. Client sends JWT on every request (Authorization header or cookie)
+5. Server verifies signature, extracts claims
+```
+
+## Pattern 3: OAuth 2.0 / OIDC — Authorization Code Flow with PKCE
+
+PKCE = Proof Key for Code Exchange. It stops a stolen code from being swapped for a token.
+
+```
+1. App → IdP: /authorize?code_challenge=...
+2. User logs in at IdP
+3. IdP → App: /callback?code=...
+4. App → IdP: /token (with code_verifier)
+5. IdP → App: access_token + id_token + refresh_token
+```
+
+## Pattern 5: Password reset flow
+
+```
+1. User requests reset (enter email)
+2. Server: always show "if email exists, link sent" (don't leak)
+3. Generate random token (≥ 256 bits), hash it, store with expiry (15 min)
+4. Email link with raw token
+5. User clicks → /reset?token=...
+6. Server hashes input, compares, verifies expiry
+7. User sets new password (apply policy)
+8. Invalidate all existing sessions
+9. Send confirmation email
+```
+
+
+## reference: auth-implementation-patterns.md
+
+<!-- merged from skill `auth-implementation-patterns` on 2026-11-27 · description was: Use when building login with sessions, JWT, OAuth or SSO -->
+# auth-implementation-patterns — secure login, token, MFA and authorization choices
+
+## Use when
+- Building login/signup/logout or a password reset flow.
+- Adding multi-factor authentication (MFA): TOTP, SMS, WebAuthn.
+- Choosing session vs token authentication.
+- Integrating OAuth or OpenID Connect (OIDC) logins, or single sign-on (SSO) with SAML or OIDC.
+- Designing API authentication (API keys, JSON Web Token (JWT), OAuth).
+- Reviewing existing auth code for security issues.
+
+## Steps
+
+1. **Choose the pattern by who is authenticating.**
+   - Browser user, first-party app → session cookies (`HttpOnly`, `Secure`, `SameSite`). Cross-domain → JWT in an `HttpOnly` cookie, never `localStorage`.
+   - Mobile app → OAuth 2.0 PKCE flow.
+   - Service-to-service → same org: mTLS or service mesh; external: OAuth 2.0 Client Credentials.
+   - Third-party developer → API keys (with rotation) or OAuth.
+
+2. **Sessions (server-rendered apps, monoliths, one domain).** Cookie `HttpOnly` + `Secure` + `SameSite=Lax` (or Strict). Session ID cryptographically random, ≥ 128 bits. Store in Redis with a time-to-live (TTL), not in app memory if more than one instance runs. Idle timeout 30 min, absolute timeout 8–12 hours. Issue a new session ID when privileges change (login, role change). On logout, delete the session from the store. Avoid: session inside a JWT (cannot revoke) · session token in `localStorage` (cross-site scripting (XSS) can steal it) · same ID after login (session fixation).
+
+3. **JWT (microservices, mobile, single-page app (SPA) with a backend API).** JWT is overused: with a single backend, sessions are simpler and safer. Algorithm `RS256` or `ES256`, not `HS256` for distributed systems. Access token 5–15 min. Refresh token lives days, is stored separately, is revocable, and is replaced each time it is used. Required claims `sub`, `iat`, `exp`, `iss`, `aud`. Store in an `HttpOnly Secure` cookie. Have a way to cancel tokens (blocklist, short expiry). Avoid: accepting `alg: none` (check the algorithm explicitly) · skipping signature verification · sensitive data in the payload (base64, not encrypted).
+
+4. **OAuth 2.0 / OIDC ("Login with Google/GitHub", handing login to an identity provider (IdP)).** Always Authorization Code Flow with PKCE, even for confidential clients (steps in [`auth-flows.md`](auth-flows.md)). Validate the `id_token` signature with the IdP's JWKS, and validate `aud`, `iss`, `exp`, `nonce`. Use the `state` parameter against cross-site request forgery (CSRF) and validate it. Match `code_verifier` to `code_challenge`. Use a library (Auth0, Passport.js), do not write your own. Avoid: implicit flow · Resource Owner Password Credentials flow (both deprecated).
+
+5. **MFA.** For a new app use WebAuthn (passkeys) by default (no shared secret to steal). Use TOTP when users need easy standard 2FA. Use SMS or email only as a last resort (SMS is not safe against SIM swap). Details: [`mfa.md`](mfa.md).
+
+6. **Passwords.**
+   - Hash with **Argon2id** (preferred) or **bcrypt** with cost ≥ 12. Never MD5, SHA-1, raw SHA-256 or plain text.
+   - Policy per NIST SP 800-63B-4 (checked 2026-10-14): minimum **15 characters** when the password is the only factor, **8** when used only inside MFA. Check against breached passwords (Have I Been Pwned (HIBP) API). Allow long passphrases (any maximum at least 64) and special characters. No forced composition rules, no forced regular changes (only on suspected breach).
+   - Reset flow: the response is the same whether or not the email exists. Token random, ≥ 256 bits, stored as a hash, expires in 15 minutes. After the new password is set, revoke all old sessions and send a confirmation email. All 9 steps: [`auth-flows.md`](auth-flows.md).
+
+7. **Lockout and rate limiting.** 5 failed attempts in 15 min → lock 15 min; 10 in 1 hour → lock 1 hour; key on IP + email together. Message "Too many failed attempts. Try again in 15 minutes." Never "Account locked." (reveals the account exists). Use existing tools: [`libraries-and-code.md`](libraries-and-code.md).
+
+8. **API authentication.** API key for simple server-to-server · OAuth 2.0 Client Credentials for service-to-service · mTLS for high-security internal · HMAC signing for webhooks. For an API key, show the secret once at creation, store it as a hash, let users revoke it at once. Table: [`api-auth-and-authorization.md`](api-auth-and-authorization.md).
+
+9. **Authorization.** RBAC (Role-Based Access Control) as the main model; ABAC (Attribute-Based Access Control) when permissions depend on data attributes. Check at every endpoint, on the server, using the user from the session or token. Never trust a role sent by the client or JWT claims as the authorization source.
+
+## Check before done
+- [ ] Session ID regenerated on login (fixation)
+- [ ] CSRF token or SameSite cookie
+- [ ] Rate limiting (brute force) and HIBP check or MFA (credential stuffing)
+- [ ] Redirect URLs on an allowlist (open redirect)
+- [ ] Same error message every time (user enumeration)
+- [ ] Constant-time comparison (timing attacks)
+- [ ] No token in the URL; header or cookie only
+- [ ] Logout invalidates on the server
+- [ ] Authorization re-checked after a role change
+- [ ] No homemade crypto or auth; no reversible password storage
+
+## References
+- [`auth-flows.md`](auth-flows.md) — open when writing session, JWT, OAuth with PKCE or password reset code
+- [`mfa.md`](mfa.md) — open when building MFA (TOTP setup, WebAuthn, SMS limits)
+- [`api-auth-and-authorization.md`](api-auth-and-authorization.md) — open when designing API keys or RBAC/ABAC
+- [`libraries-and-code.md`](libraries-and-code.md) — open when choosing a library or needing hashing and rate-limit samples
+- [`sources.md`](sources.md) — NIST source and check date
+
+
+## reference: config-and-secrets.md
+
+<!-- merged from skill `config-and-secrets` on 2026-11-27 · description was: Use when settings differ by environment or secrets need hiding -->
+# Config and secrets
+
+## Contents
+
+- [When to use this skill](#when-to-use-this-skill)
+- [When to use another skill instead, or together](#when-to-use-another-skill-instead-or-together)
+- [1 · Tell config and secret apart first](#1--tell-config-and-secret-apart-first)
+- [2 · Order of priority: later values override earlier ones](#2--order-of-priority-later-values-override-earlier-ones)
+- [3 · Check at boot: if any value is missing, die at once](#3--check-at-boot-if-any-value-is-missing-die-at-once)
+- [4 · Naming environment variables](#4--naming-environment-variables)
+- [5 · `.env` and `.env.example`](#5--env-and-envexample)
+- [6 · Where to keep secrets](#6--where-to-keep-secrets)
+- [7 · Rotation](#7--rotation)
+- [8 · When a secret leaks: order matters more than speed](#8--when-a-secret-leaks-order-matters-more-than-speed)
+- [9 · Do not let secrets flow out other ways](#9--do-not-let-secrets-flow-out-other-ways)
+- [10 · Frontend config: nothing in it is secret](#10--frontend-config-nothing-in-it-is-secret)
+
+> **2 rules:**
+> 1. The same code must run in every environment. The only difference is config.
+> 2. A secret must not be in git, not in logs, and not in any file sent to the browser.
+
+## When to use this skill
+
+- Starting a project, or adding a new environment.
+- You need to store a connection string, API key, certificate, or signing key.
+- You find a hardcoded value in code and must move it out.
+- A secret leaked into git, or you suspect it did: go to step 8 at once.
+
+## When to use another skill instead, or together
+
+| Task | Skill | |
+|---|---|---|
+| Storing secrets in a pipeline · approval gates | `cicd-and-release` | instead |
+| Secrets in a Jenkinsfile (`withCredentials` · single quote) | `cicd-and-release` | together |
+| Kubernetes secrets kept out of values.yaml (External Secrets · SealedSecret) | `infra-and-deploy` | together |
+| Designing login, tokens, user permissions | `auth-implementation-patterns.md` | instead |
+| Keeping sensitive values out of logs | `errors-and-logs` | instead |
+| Database connection strings | `database-design` | together |
+| Recording a secret leak · steps during the incident | `incidents-and-monitoring` | together |
+
+**How to do it in each language and framework** is in `per-stack.md`.
+
+---
+
+## 1 · Tell config and secret apart first
+
+| | config | secret |
+|---|---|---|
+| Examples | API address, log level, page size, time zone, feature flag | Database password, API key, token signing key, certificate |
+| Allowed in git | ✓ yes | ✗ never |
+| Who can see it | The whole team | Only those who need it |
+| If it leaks | No harm | Must be revoked and replaced at once |
+| Changes how often | With the work | On a rotation schedule |
+
+> **If you cannot decide which one it is, treat it as a secret.** Being too careful costs only a small annoyance.
+> But if you guess wrong, the key stays in git history forever.
+
+---
+
+## 2 · Order of priority: later values override earlier ones
+
+```
+1. Defaults in code             (safe, really usable for dev)
+2. Config file per environment  (appsettings.Production.json, config/production.yaml)
+3. Environment variables
+4. Secret store                 (Key Vault, Secrets Manager, Kubernetes secret)
+5. Arguments at launch          (for troubleshooting only)
+```
+
+**Defaults must be safe.** If someone forgets to set a value, the system must run in its strictest mode.
+For example `DEBUG=false` · `ALLOWED_ORIGINS=` empty · Transport Layer Security (TLS) on, not the opposite.
+
+---
+
+## 3 · Check at boot: if any value is missing, die at once
+
+> **Important:** this step is worth the most on this page.
+> A system that boots with wrong config will break at 2 a.m. in a function that is rarely used.
+> A system that **refuses to boot** on wrong config tells you at deploy time, when you can still roll back.
+
+Node zod example: `per-stack.md` section 2. The pattern is a schema that parses `process.env` once at boot, so an invalid value kills the process and names the value.
+
+**What to check:** every value is present · types are right · values are in the accepted range ·
+keys are long enough · values banned on production (`JWT_SECRET=dev-secret` must fail).
+
+**Print a config summary at boot:** the value names, and the values that are not secrets.
+For a secret, print only "set" or the last 4 characters, never the full value.
+
+---
+
+## 4 · Naming environment variables
+
+```
+<system>_<group>_<name>
+
+APP_DB_HOST          APP_DB_PASSWORD
+APP_REDIS_URL        APP_SMTP_PASSWORD
+APP_FEATURE_NEW_CHECKOUT
+```
+
+| Rule | Reason |
+|---|---|
+| Uppercase with underscores | The convention on every operating system |
+| Start with a system prefix | Avoids clashing with the system's `PATH`, `HOME`, `USER` |
+| Same name in every environment | Values may differ, but names must not, or every move between environments means editing code |
+| Put the unit in the name | `APP_TIMEOUT_SECONDS`, not `APP_TIMEOUT` |
+| Do not put the environment name in the variable name | ✗ `APP_PROD_DB_HOST` |
+
+---
+
+## 5 · `.env` and `.env.example`
+
+| File | In git | Role |
+|---|:--:|---|
+| `.env.example` | ✓ | The list of **all** required values, with explanations and example values that are not real |
+| `.env` | ✗ | Real values on each developer's machine |
+| `.env.production` | ✗ | **This file should not exist at all**, because production uses a secret store |
+
+```bash
+# .gitignore
+.env
+.env.*
+!.env.example
+```
+
+```bash
+# .env.example
+APP_DB_HOST=localhost              # database address
+APP_DB_PASSWORD=change-me          # important: the real value is in the team's 1Password vault
+APP_JWT_SECRET=                    # important: generate with: openssl rand -base64 48
+APP_LOG_LEVEL=debug
+```
+
+**Update `.env.example` in the same commit that adds a new value.**
+Otherwise the next person who clones hits an error nobody can explain.
+
+> **A `.env` added to `.gitignore` too late:** once the file has been tracked, even once,
+> adding it to `.gitignore` later **does not remove it from history.** Run `git rm --cached` and treat the secret as leaked.
+
+**Pre-commit gate**: `.gitignore` blocks only files you know by name, but a key pasted by mistake into code or YAML needs a scanner. Install gitleaks as a pre-commit hook in every repo (`gitleaks git --pre-commit --staged` in gitleaks 8.19 and later · earlier versions use `gitleaks protect --staged`) and rerun it in CI over the whole history with `gitleaks git --redact`. If the hook fails, never use `--no-verify`; move the value out first. If you find one in history, go to step 8 at once, not just delete the line.
+
+---
+
+## 6 · Where to keep secrets
+
+| Situation | Use | Note |
+|---|---|---|
+| Developer machine | A `.env` that stays out of git; for .NET use `dotnet user-secrets` | Never use production values |
+| Small team sharing | The team's password manager (1Password, Bitwarden) | Not chat, not email, not a Google Sheet |
+| Production in the cloud | Azure Key Vault · AWS Secrets Manager · Google Secret Manager | Grant access with a managed identity, not another key |
+| Kubernetes | External Secrets Operator pulling from a vault above | A Kubernetes secret is only base64, **not encryption** |
+| You really must store in git | SOPS or sealed-secrets (encrypt before commit) | Last resort |
+
+**Permissions:** each service reads only its own secrets, environments are fully separate, and
+no account can read all of them, except an admin account whose access is logged.
+
+---
+
+## 7 · Rotation
+
+**Design for it from day one**, not when you finally have to rotate.
+
+| Must have | Detail |
+|---|---|
+| Two values valid at once | During the change, both the old and the new value must work, or you must shut the system down |
+| Reload without restart | Or accept that you need one deploy, and write down that it must be done |
+| Schedule | Token signing key 90 days · database password 180 days · certificate 30 days before expiry |
+| Automatic | A task that depends on someone remembering ends up done by nobody |
+
+**A token signing key must carry an id (key id)**, so that after signing new tokens with the new key,
+you can still verify old tokens that have not expired.
+
+---
+
+## 8 · When a secret leaks: order matters more than speed
+
+1. **Revoke the old value first:** disable that key at its source.
+2. Issue a new value, then deploy.
+3. Check past logs for anyone using it from a place that is not ours.
+4. Remove it from git history (`git filter-repo`) and tell everyone to clone again. (If you must force push, wait for the user's approval and tell the team first.)
+5. Record the incident with `incidents-and-monitoring`.
+
+> **Step 4 is not step 1**, because deleting the commit does not make the key any safer.
+> Anyone who forked or cloned already, and the provider's backups, still have the old value.
+> **Treat every secret that has ever been in git as leaked**, even if the repo is private.
+
+---
+
+## 9 · Do not let secrets flow out other ways
+
+| Leak path | How to close it |
+|---|---|
+| Logs | The list of terms to mask is in `errors-and-logs` |
+| Error messages sent to the client | Return only a `requestId`, not a stack trace or connection string |
+| Crash reports / error trackers | Set a sensitive-data filter before sending out |
+| Shell command history | Use `read -s` or read from a file, instead of typing the value on the command line |
+| `docker history` | Do not put secrets in `ARG`/`ENV` at build time; use a mount at run time instead |
+| Backup files and dumps | Encrypt them and store them where you control access |
+| Screenshots in documents and issues | Always mask before attaching |
+
+---
+
+## 10 · Frontend config: nothing in it is secret
+
+> **Important:** everything in a file the browser loads **is public information**,
+> whether it is named `VITE_SECRET_KEY` or sits in a file minified until it is unreadable.
+> Minifying code is not encryption. Open DevTools and you can see it.
+
+| Allowed in the frontend | Must stay on the server only |
+|---|---|
+| API address · environment name | API keys of any external service |
+| Publishable key of a payment provider | The secret key of the same provider |
+| Feature flags that are not secret | Pricing rules · approval thresholds |
+| Web ID of an analytics tool | Tokens that call a third party's API |
+
+**If you need to change a value without rebuilding,** load `/config.json` when the app starts,
+instead of embedding the value at build time (`import.meta.env`), which locks the value into the built files.
+
+---
+
+
+## reference: file-upload-and-storage.md
+
+<!-- merged from skill `file-upload-and-storage` on 2026-11-27 · description was: Use when users upload files or an app serves stored files -->
+# Accepting file uploads and storing files
+
+## Contents
+
+- [When to use this skill](#when-to-use-this-skill)
+- [When to use another skill instead, or together](#when-to-use-another-skill-instead-or-together)
+- [1 · Check before accepting](#1--check-before-accepting)
+- [2 · Where to store](#2--where-to-store)
+- [3 · Naming the stored file](#3--naming-the-stored-file)
+- [4 · Sending files back to the user](#4--sending-files-back-to-the-user)
+- [5 · Images](#5--images)
+- [6 · Deleting and retention](#6--deleting-and-retention)
+
+> **One rule:** a file a user sends is untrusted data.
+> The file name, the extension, the type the browser reports, and the size it claims can **all be faked**.
+
+## When to use this skill
+
+- A screen lets users attach files, images, or documents.
+- The system must store files and send them back for viewing or download.
+- You must decide where to keep the files.
+- Some files should be hidden from others, but right now anyone with the link can open them.
+
+## When to use another skill instead, or together
+
+| Task | Skill | |
+|---|---|---|
+| Import Excel/CSV and load the data into the system | `data-import-export` | instead |
+| Permissions: who may access what | `auth-implementation-patterns.md` | instead |
+| Process large files as a background job | `async-messaging` | instead |
+
+---
+
+## 1 · Check before accepting
+
+| What to check | How |
+|---|---|
+| **File type** | Read the **contents** (magic bytes). Do not trust the extension or `Content-Type`. |
+| **Size** | Enforce it on the server **and** at the front-facing request receiver. A check in the browser is only a convenience. |
+| Files per request | Set a limit. |
+| Total size per user | Set a quota, or one person uses up all the space. |
+| Allowed types | **An allow list, not a deny list.** |
+
+```
+Typical allow list: jpg · png · webp · pdf · xlsx · docx · csv
+Always forbidden: executables (exe, sh, bat) · server script files (php, aspx, jsp) · svg that has not been sanitised
+```
+
+> **SVG is HTML.** It can run scripts. To accept it, sanitise it first or convert it to PNG.
+>
+> **Check the size before reading the file into memory.** Otherwise a 5 GB file kills the server
+> before the size-check code gets to run.
+
+**Virus-scan** any file that other people will download. While the scan result is pending, set the status to `pending`
+and give nobody access.
+
+---
+
+## 2 · Where to store
+
+| Store | Good for | Note |
+|---|---|---|
+| **object storage** (S3 · Azure Blob · GCS) | The default to use | Scales · has expiring links built in |
+| The server's disk | A small, single-machine system | **Must sit outside the folder the web serves**, and must be backed up |
+| In the database | Very small files that must be in the same transaction | Grows fast · backups get much slower |
+
+> Wrong: **keeping files in the app's folder.** They vanish on every deploy, and with several instances they cannot see each other.
+> Wrong: **keeping files directly in the folder the web serves.** Someone uploads a script file and runs it.
+
+**The database holds only metadata; the file itself lives elsewhere.** The metadata table needs the columns
+`id` · `original_name` · `stored_key` · `content_type` · `size_bytes` · `checksum` ·
+`uploaded_by` · `uploaded_at` · `scan_status` · `owner_entity_type` · `owner_entity_id`
+
+---
+
+## 3 · Naming the stored file
+
+**Never use the file name the user sent as the real stored name.**
+
+```
+Wrong: uploads/รายงาน (1).xlsx              spaces · Thai · brackets
+Wrong: uploads/../../etc/passwd             escapes the folder
+Right: 2026/09/25/01J9Z8K7X2M4.xlsx         random · split into folders by date
+```
+
+- The real stored name is a random value (UUIDv7 or ULID) + an extension that you have **verified**.
+- Keep the user's original name in the database, and send it back on download through a header.
+- Split folders by date. One folder with millions of files is slow and cannot be browsed.
+- Store a checksum too. It detects duplicates and checks the file is not corrupted.
+
+---
+
+## 4 · Sending files back to the user
+
+| File | How to send |
+|---|---|
+| Public (logo, product image) | A direct URL through a CDN is fine |
+| **Private** (document, receipt, user photo) | **A signed link that expires** in 5–15 minutes |
+
+> **A "hard-to-guess link" is not access control.** Links get forwarded, logged by proxies,
+> and left in the `Referer` header. For a private file, **check permission every time**, then issue a temporary link.
+
+- For large files, let the user upload straight to object storage with a link we sign, so the file does not pass through the app.
+  **The checks in §1 are still all required.** This route bypasses the app, so restore the checks like this:
+  - **When signing the link:** limit size and type inside the signature. S3 uses a presigned POST whose policy has `content-length-range` and a `Content-Type` condition (a presigned PUT cannot enforce size). Other providers have equivalents, for example GCS uses the header `x-goog-content-length-range`.
+  - **When signing the link:** set the key yourself (a random name as in §3) in a holding folder · keep the link's expiry short · save a metadata row with `scan_status = pending`.
+  - **After the upload finishes** (a storage event, or the user reports it done): read the real magic bytes from the object · compare the real size with the limit · virus-scan. If it passes, move it to the real store and set `clean`. If it fails, delete or quarantine it.
+  - While `pending`, issue no download link to anyone.
+- When serving a file for download, set `Content-Disposition` and `Content-Type` correctly,
+  and never send back user-uploaded HTML in a way that lets the browser render it.
+- If you can, serve user files from a different domain than the app, so scripts in a file cannot reach the app's cookies.
+
+---
+
+## 5 · Images
+
+- **Never send the original camera image to the screen.** An 8 MB photo on a phone is a page that does not load.
+- Pre-generate 2–3 sizes (thumbnail · medium · a downsized full size).
+- **Strip EXIF.** The photo holds the location where it was taken, and users do not know they are publishing it.
+- Convert to WebP if the browser supports it.
+- Rotate the image according to EXIF before you strip EXIF, or phone photos come out sideways.
+- If the file is large or there are many, resize as a background job (see `async-messaging`).
+
+---
+
+## 6 · Deleting and retention
+
+| Topic | Rule |
+|---|---|
+| Deleting the parent record | A job must also hunt down and delete the orphan files left behind. |
+| Order of deletion | Delete the metadata first, then the file. An orphan file is harmless, but metadata pointing to a file that is gone breaks the screen. |
+| An uploaded file never linked to anything | Delete it after 24 hours. |
+| Retention | Set it per file type · a file with personal data needs an expiry date (see `pdpa-compliance`). |
+| Backup | Files belong in the backup plan just like the database, **and a restore must have been tested for real.** |
+
+
+## reference: libraries-and-code.md
+
+# ไลบรารีและโค้ดตัวอย่าง
+
+Sample code for storing passwords, rate-limiting tools, and recommended libraries by language
+
+## Password storage — code
+
+```typescript
+// Good (using bcrypt)
+const hash = await bcrypt.hash(password, 12);
+const valid = await bcrypt.compare(password, storedHash);
+
+// Bad
+const hash = crypto.createHash('sha256').update(password).digest('hex');
+```
+
+## Rate limiting tools
+
+Use existing tools:
+- `express-rate-limit` (Node.js)
+- `django-ratelimit` (Django)
+- Cloudflare / AWS WAF (edge)
+
+## Library Recommendations
+
+| Stack | Library | Notes |
+|-------|---------|-------|
+| Node.js | `passport`, Auth.js, Better Auth | Lucia v3 is deprecated (lucia-auth.com, checked 22 Oct 2026) so do not start new work on it; Better Auth status (รอยืนยัน, check before use) |
+| Python | `authlib`, `PyJWT` (or `joserfc`) | authlib for OAuth; python-jose is rarely maintained (รอยืนยัน) |
+| Go | `oauth2`, `golang-jwt` | Standard |
+| Rust | `axum-login`, `jsonwebtoken` | — |
+| Any | Auth0, Clerk, Supabase Auth | Managed (faster) |
+
+
+## reference: mfa.md
+
+# Pattern 4: Multi-Factor Authentication (MFA)
+
+Details of all 3 types of multi-factor authentication. Use it when choosing or building MFA
+
+## TOTP (Google Authenticator, Authy)
+**When:** standard two-factor login (2FA), easy for users. TOTP = time-based one-time password.
+
+```
+Setup:
+1. Server generates random secret (160 bits)
+2. Server shows QR code: otpauth://totp/...?secret=...
+3. User scans with authenticator app
+4. User confirms with first code
+5. Server stores secret encrypted
+
+Verify:
+1. User enters 6-digit code
+2. Server computes expected code(s) (±1 window for clock drift)
+3. Match → grant access
+```
+
+## WebAuthn (Passkeys) — Future-proof
+**When:** you want login that phishing can't beat, no SMS, hardware keys
+
+- Use `@simplewebauthn` library
+- Supports Touch ID, Face ID, YubiKey
+- No shared secret, so nothing to phish
+- Default for new apps in 2026+
+
+## SMS / Email codes
+**When:** there's no other option (users without smartphone apps)
+
+- Note: SMS is **NOT secure** (SIM swap attacks)
+- Use only as a last resort, never as the main method
+- Use strict rate limits
+- Codes: 6 digits, 5 min expiry
+
+
+## reference: per-stack.md
+
+# .NET และ Angular
+
+> Caution: the code in this file is **not yet compiled or tested** (unlike `assets/health.node.js` and
+> `assets/health_py.py`, which have been run against every endpoint). It is the standard setup of
+> ASP.NET Core. On the first run, compare the response with the shape in SKILL.md section 1.
+
+---
+
+## สารบัญ
+
+1. [ASP.NET Core — health checks](#aspnet-core--health-checks)
+2. [Angular — ฝั่งที่เรียกใช้](#angular--ฝั่งที่เรียกใช้)
+3. [ตารางเทียบ](#ตารางเทียบ)
+
+---
+
+## ASP.NET Core — health checks
+
+```bash
+dotnet add package AspNetCore.HealthChecks.NpgSql
+dotnet add package AspNetCore.HealthChecks.Redis
+dotnet add package AspNetCore.HealthChecks.Network   # AddSmtpHealthCheck อยู่ในแพ็กเกจนี้
+```
+
+```csharp
+builder.Services.AddHealthChecks()
+    // tag "ready" = ตัวที่ /health/ready จะเรียก · ไม่ติด tag = ไม่ถูกเรียกที่ไหนเลย
+    .AddNpgSql(cs, name: "db", timeout: TimeSpan.FromSeconds(3), tags: ["ready", "critical"])
+    .AddRedis(redisCs, name: "redis", timeout: TimeSpan.FromSeconds(3), tags: ["ready", "critical"])
+    .AddSmtpHealthCheck(o => { }, name: "mail",
+        failureStatus: HealthStatus.Degraded,          // ไม่ critical → degraded ไม่ใช่ down
+        tags: ["ready"])
+    // ตอนกำลังปิด → Unhealthy → /health/ready ตอบ 503 (ดู "Graceful shutdown" ข้างล่าง)
+    .AddCheck<ShutdownHealthCheck>("shutdown", tags: ["ready", "critical"]);
+```
+
+```csharp
+// ---- ping: เบาที่สุด ไม่ผ่าน middleware ที่ไม่จำเป็น ----
+app.MapGet("/ping", () => Results.Text("pong")).ExcludeFromDescription();
+
+// ---- liveness: ไม่เรียก check ตัวไหนเลย (predicate = _ => false) ----
+// ถ้าเผลอให้เช็ค DB ตรงนี้ DB สะดุด = Kubernetes ฆ่า pod ยกแถว
+app.MapHealthChecks("/health/live", new HealthCheckOptions
+{
+    Predicate = _ => false,
+    ResponseWriter = WriteLive,
+});
+
+// ---- readiness: เฉพาะ check ที่ติด tag "ready" ----
+app.MapHealthChecks("/health/ready", new HealthCheckOptions
+{
+    Predicate = c => c.Tags.Contains("ready"),
+    ResponseWriter = WriteReady,
+    ResultStatusCodes =
+    {
+        [HealthStatus.Healthy]   = StatusCodes.Status200OK,
+        [HealthStatus.Degraded]  = StatusCodes.Status200OK,     // ยังรับ traffic ได้
+        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable,
+    },
+});
+
+app.MapGet("/version", () => Results.Ok(new
+{
+    name = "orders-api",
+    version = typeof(Program).Assembly.GetName().Version?.ToString() ?? "0.0.0",
+    commit = Environment.GetEnvironmentVariable("GIT_SHA") ?? "unknown",
+    buildTime = Environment.GetEnvironmentVariable("BUILD_TIME") ?? "unknown",
+    env = app.Environment.EnvironmentName,
+    host = Environment.MachineName,
+}));
+```
+
+Make the response match the same format as the other stacks:
+
+```csharp
+static Task WriteReady(HttpContext ctx, HealthReport report)
+{
+    ctx.Response.ContentType = "application/json; charset=utf-8";
+    return ctx.Response.WriteAsJsonAsync(new
+    {
+        status = report.Status switch
+        {
+            HealthStatus.Healthy  => "up",
+            HealthStatus.Degraded => "degraded",
+            _                     => "down",
+        },
+        timestamp = DateTimeOffset.UtcNow,
+        checks = report.Entries.ToDictionary(
+            e => e.Key,
+            e => new
+            {
+                status = e.Value.Status == HealthStatus.Healthy ? "up" : "down",
+                durationMs = (int)e.Value.Duration.TotalMilliseconds,
+                // ข้อความเท่านั้น ห้ามส่ง exception เต็ม ๆ — endpoint นี้เปิดสาธารณะ
+                error = e.Value.Exception?.Message,
+            }),
+    });
+}
+
+static Task WriteLive(HttpContext ctx, HealthReport _)
+{
+    ctx.Response.ContentType = "application/json; charset=utf-8";
+    return ctx.Response.WriteAsJsonAsync(new { status = "up", timestamp = DateTimeOffset.UtcNow });
+}
+```
+
+### Error envelope (RFC 9457)
+
+ASP.NET Core already ships `ProblemDetails`. Use it, and do not invent your own format.
+
+```csharp
+builder.Services.AddProblemDetails(o => o.CustomizeProblemDetails = ctx =>
+{
+    ctx.ProblemDetails.Instance = ctx.HttpContext.Request.Path;
+    ctx.ProblemDetails.Extensions["requestId"] =
+        ctx.HttpContext.Response.Headers["X-Request-Id"].ToString();
+});
+
+app.UseExceptionHandler();      // แปลง exception ที่หลุดเป็น problem+json ให้อัตโนมัติ
+app.UseStatusCodePages();
+```
+
+### Graceful shutdown
+
+Make `/health/ready` answer down for a short while before the real shutdown, so the load balancer removes the instance from its pool in time.
+Use `IHostedLifecycleService.StoppingAsync` (.NET 8 and later), because the host calls it **before** it stops Kestrel (after `ApplicationStopping`).
+So you can wait with `await Task.Delay` without blocking a thread, and the server still answers 503 for the load balancer to see.
+
+```csharp
+// สถานะร่วม: ตัวรอปิดเขียน · health check อ่าน
+public sealed class ReadinessState { public volatile bool IsShuttingDown; }
+
+public sealed class ShutdownHealthCheck(ReadinessState state) : IHealthCheck
+{
+    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken ct = default) =>
+        Task.FromResult(state.IsShuttingDown
+            ? HealthCheckResult.Unhealthy("shutting down")
+            : HealthCheckResult.Healthy());
+}
+
+public sealed class DrainOnShutdown(ReadinessState state) : IHostedLifecycleService
+{
+    public async Task StoppingAsync(CancellationToken ct)
+    {
+        state.IsShuttingDown = true;                       // /health/ready → 503 ทันที
+        await Task.Delay(TimeSpan.FromSeconds(5), ct);     // รอ load balancer ตัดออก
+    }
+    public Task StartingAsync(CancellationToken ct) => Task.CompletedTask;
+    public Task StartAsync(CancellationToken ct)    => Task.CompletedTask;
+    public Task StartedAsync(CancellationToken ct)  => Task.CompletedTask;
+    public Task StopAsync(CancellationToken ct)     => Task.CompletedTask;
+    public Task StoppedAsync(CancellationToken ct)  => Task.CompletedTask;
+}
+
+// ก่อน builder.Build()
+builder.Services.AddSingleton<ReadinessState>();
+builder.Services.AddHostedService<DrainOnShutdown>();
+builder.Services.Configure<HostOptions>(o =>
+    o.ShutdownTimeout = TimeSpan.FromSeconds(30));   // รวมเวลารอ 5 วินาทีข้างบน + request ที่ค้าง
+```
+
+Host shutdown order (.NET 8+): `ApplicationStopping` → `StoppingAsync` → `StopAsync` of the hosted services (including Kestrel) → `StoppedAsync` → `ApplicationStopped` — per the .NET Generic Host page at learn.microsoft.com (checked 22 Oct 2026)
+
+### สิ่งที่ต้องเปิดก่อน deploy
+
+Register services only **before** `builder.Build()`. After Build the service list is read-only, and calling `builder.Services.Add…` then throws `InvalidOperationException` at app start.
+
+```csharp
+// ---- ก่อน Build: ลงทะเบียน service ----
+builder.Services.Configure<KestrelServerOptions>(o => o.Limits.MaxRequestBodySize = 1_048_576);
+builder.Services.AddRateLimiter(o =>
+{
+    o.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    // อย่างน้อยที่ /login และที่ส่งรหัสผ่านใช้ครั้งเดียว (One-Time Password · OTP)
+    o.AddFixedWindowLimiter("login", w => { w.PermitLimit = 5; w.Window = TimeSpan.FromMinutes(1); });
+});
+builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
+    p.WithOrigins("https://app.example.com")   // ระบุ origin ห้าม AllowAnyOrigin คู่กับ cookie
+     .AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+
+var app = builder.Build();
+
+// ---- หลัง Build: ลำดับ middleware ----
+if (!app.Environment.IsDevelopment())
+    app.UseHsts();                             // ตั้งแค่ Strict-Transport-Security · ไม่ใช้ตอน dev เพราะเบราว์เซอร์จำค่าไว้
+app.UseHttpsRedirection();
+app.Use(async (ctx, next) =>                   // header ที่ UseHsts ไม่ได้ตั้งให้
+{
+    ctx.Response.Headers["X-Content-Type-Options"] = "nosniff";
+    ctx.Response.Headers["Content-Security-Policy"] = "frame-ancestors 'none'";
+    ctx.Response.Headers["X-Frame-Options"] = "DENY";   // สำหรับเบราว์เซอร์เก่า
+    await next();
+});
+app.UseCors();
+app.UseRateLimiter();
+
+app.MapPost("/api/v1/login", Login).RequireRateLimiting("login");
+```
+
+To avoid writing your own middleware, use the package `NetEscapades.AspNetCore.SecurityHeaders` (`app.UseSecurityHeaders()`) which sets the full basic header set
+
+---
+
+## Angular — ฝั่งที่เรียกใช้
+
+**Interceptor ใส่ request id ทุก request** (คู่กับ `errors-and-logs`):
+
+```ts
+export const requestIdInterceptor: HttpInterceptorFn = (req, next) => {
+  const id = crypto.randomUUID().slice(0, 8);
+  return next(req.clone({ setHeaders: { 'X-Request-Id': id } }));
+};
+```
+
+**Turn problem+json into a message the user can understand**:
+
+```ts
+export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+  const toast = inject(ToastService);
+  return next(req).pipe(
+    catchError((e: HttpErrorResponse) => {
+      const p = e.error;                       // ProblemDetails
+      // 500 ไม่มีรายละเอียดให้แสดง — โชว์ requestId เพื่อให้ผู้ใช้แจ้งทีมได้
+      const msg = p?.detail || p?.title || 'เกิดข้อผิดพลาด';
+      toast.error(p?.requestId ? `${msg} (รหัสอ้างอิง ${p.requestId})` : msg);
+      return throwError(() => e);
+    }),
+  );
+};
+```
+
+**System status page**, so the support team can check it without calling a developer:
+
+```ts
+this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r));
+// r.status = 'up' | 'degraded' | 'down' → แสดงเป็น pill สีเขียว/เหลือง/แดง
+// (ใช้คลาส .pill-green / .pill-amber / .pill-red จาก web-app-design)
+```
+
+---
+
+## ตารางเทียบ
+
+| เรื่อง | .NET | Node/Express | Python/FastAPI |
+|---|---|---|---|
+| health | `AddHealthChecks()` + tag | `createHealthRouter()` | `make_health_router()` |
+| error envelope | `ProblemDetails` (มีในตัว) | `express-problem-json` หรือเขียน middleware | `HTTPException` + custom handler |
+| request id | middleware + `LogContext` | `AsyncLocalStorage` | `ContextVar` + middleware |
+| graceful shutdown | `IHostedLifecycleService.StoppingAsync` | `server.close()` ใน `SIGTERM` | `lifespan` context ของ FastAPI |
+| security headers | `UseHsts()` (HTTP Strict Transport Security (HSTS) เท่านั้น) + middleware สั้น ๆ หรือ `NetEscapades.AspNetCore.SecurityHeaders` | `helmet` | `secure` middleware |
+| OpenAPI | `Microsoft.AspNetCore.OpenApi` (`AddOpenApi()` + `MapOpenApi()` · มากับ template ตั้งแต่ .NET 9) · ทางเลือก: Swashbuckle / NSwag | `swagger-jsdoc` | มีในตัว `/docs` |
+| rate limit | `AddRateLimiter` | `express-rate-limit` | `slowapi` |
+
+## Wiring the ready-made health router
+
+```js
+// Node
+app.use(createHealthRouter({
+  version: { name: 'orders-api', version: '1.4.0', commit: process.env.GIT_SHA },
+  checks: {
+    db:   async () => { await pool.query('SELECT 1'); },          // critical
+    mail: { critical: false, run: async () => { await smtp.verify(); } },
+  },
+}));
+```
+
+```python
+# Python
+app.include_router(make_health_router(
+    version={"name": "orders-api", "version": "1.4.0", "commit": os.getenv("GIT_SHA")},
+    checks={"db": lambda: db.execute("SELECT 1"),
+            "mail": {"critical": False, "run": smtp.verify}},
+))
+```
+
+
+## reference: sources.md
+
+# Sources · auth-implementation-patterns
+
+- Password policy (minimum 15 characters as the only factor, 8 inside multi-factor authentication, breached-password check, no composition rules, no forced rotation, maximum at least 64): NIST SP 800-63B-4 §3.1.1.2, https://pages.nist.gov/800-63-4/sp800-63b.html, checked 2026-10-14.

@@ -32,7 +32,7 @@
 
 ## 1. เอกสารธุรกิจ
 
-playbook `business-doc` · agent `thai-doc-writer` · skill `doc-quotation` · `e-tax-invoice` · `doc-thai-official` · `doc-contract-th` · `doc-leave` (เลือกตามประเภท)
+playbook `business-doc` · agent `thai-doc-writer` · skill `thai-business-docs` · `thai-tax` · `thai-employment` (เลือกตามประเภท)
 **ผลลัพธ์:** `docs/<ประเภท>/<เลขที่>-<คู่ค้า>.docx` · **รออนุมัติ:** ส่งถึงลูกค้าหรือหน่วยงาน · ลงนาม
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -57,7 +57,7 @@ playbook `business-doc` · agent `thai-doc-writer` · skill `doc-quotation` · `
 
 ## 2. PromptPay QR
 
-skill `promptpay-qr` · งานกลาง ไม่ต้องเปิด playbook
+skill `shop-books` · งานกลาง ไม่ต้องเปิด playbook
 **ผลลัพธ์:** `assets/promptpay-<ชื่อ>.png` · หรือโค้ดสร้าง payload ถ้าเป็นงานนักพัฒนา
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -76,7 +76,7 @@ skill `promptpay-qr` · งานกลาง ไม่ต้องเปิด 
 
 ## 3. ลูกค้าค้างจ่าย ทวงเงิน
 
-playbook `business-doc` · agent `thai-doc-writer` · skill `doc-quotation` (ใบแจ้งหนี้ / ใบวางบิลซ้ำ) · `doc-thai-official` (หนังสือทวงถาม)
+playbook `business-doc` · agent `thai-doc-writer` · skill `thai-business-docs` (ใบแจ้งหนี้ / ใบวางบิลซ้ำ) · `thai-business-docs` (หนังสือทวงถาม)
 **ผลลัพธ์:** `docs/collection/<คู่ค้า>-<ปี-เดือน>.md` (ตารางยอดค้างและแผนทวง) · ข้อความทวงขั้น 1–2 · หนังสือทวงถาม `.docx` · **รออนุมัติ:** ส่งข้อความหรือหนังสือถึงลูกค้า · ส่งหนังสือทางไปรษณีย์ลงทะเบียน · ส่งเรื่องให้ทนาย
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -102,7 +102,7 @@ playbook `business-doc` · agent `thai-doc-writer` · skill `doc-quotation` (ใ
 
 ## 4. แก้ใบกำกับภาษีด้วยใบลดหนี้ / ใบเพิ่มหนี้
 
-playbook `business-doc` · agent `thai-doc-writer` + `tax-helper` · skill `e-tax-invoice` · `doc-quotation` · `tax-vat-th`
+playbook `business-doc` · agent `thai-doc-writer` + `tax-helper` · skill `thai-tax` · `thai-business-docs`
 **ผลลัพธ์:** `docs/credit-note/<เลขที่>-<คู่ค้า>.docx` (หรือ `debit-note/`) · บันทึกผลต่อแบบภาษีมูลค่าเพิ่ม (ภ.พ.30) ของเดือนที่ออก · **รออนุมัติ:** ส่งเอกสารถึงลูกค้า · ยกเลิกใบเดิมในระบบใบกำกับภาษีอิเล็กทรอนิกส์ (e-Tax Invoice)
 
 ### ข้อมูล (ผู้ใช้กรอก)

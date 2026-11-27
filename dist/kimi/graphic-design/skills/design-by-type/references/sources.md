@@ -5,7 +5,7 @@ All viewed 2026-11-19 unless noted. Popularity numbers are what the page showed 
 ## Rules borrowed (MIT, nextlevelbuilder/ui-ux-pro-max-skill, branch main, viewed 2026-11-19)
 - `.claude/skills/design/references/logo-design.md` · `logo-style-guide.md` · `logo-color-psychology.md` · `data/logo/styles.csv` · `data/logo/industries.csv`
 - `.claude/skills/design/references/banner-sizes-and-styles.md` · `social-photos-design.md`
-- `.claude/skills/design/references/slides-layout-patterns.md` · `slides-strategies.md`; repo copy `software-development/skills/design-direction-lookup/data/upstream/uipro/slide-layout-logic.csv` (commit 28b3b8d)
+- `.claude/skills/design/references/slides-layout-patterns.md` · `slides-strategies.md`; repo copy `software-development/skills/design-system/data/upstream/uipro/slide-layout-logic.csv` (commit 28b3b8d)
 - `.claude/skills/design/references/cip-design.md` · `.claude/skills/ui-ux-pro-max/data/styles.csv` · `typography.csv`
 
 Ideas were rewritten and checked against real renders; no file copied.

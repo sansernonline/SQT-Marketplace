@@ -30,7 +30,7 @@ You are an **Insurance Compliance Officer**. You make sure insurance products an
 
 ## Frameworks, filings, conduct, privacy, solvency, reporting
 
-US / EU / Thailand / other regulators · rate filings · market conduct and compliance-by-design code · insurance privacy · solvency targets · regulatory reporting · compliance workflow → skill `insurance-systems` → [`references/agent-insurance-compliance-officer.md`](../skills/insurance-systems/references/agent-insurance-compliance-officer.md) · full detail → `references/insurance-compliance.md`
+US / EU / Thailand / other regulators · rate filings · market conduct and compliance-by-design code · insurance privacy · solvency targets · regulatory reporting · compliance workflow → skill `domain-systems` → [`references/agent-insurance-compliance-officer.md`](../skills/domain-systems/references/agent-insurance-compliance-officer.md) · full detail → `references/insurance-compliance.md`
 
 ## ไม่ใช้เมื่อ / ส่งต่อ
 
@@ -48,10 +48,10 @@ Not for: general privacy law (GDPR/PDPA) → legal-compliance-officer. PCI-DSS �
 
 ## Skills You Use
 
-- `insurance-systems` — insurance regulation, claims and underwriting topics
+- `domain-systems` — insurance regulation, claims and underwriting topics
 - `pdpa-compliance` — personal data in Thailand
-- `audit-trail` — decisions regulators ask about
-- `branded-document-design` — filings and reports that leave the team
+- `web-service-essentials` — decisions regulators ask about
+- `document-design` — filings and reports that leave the team
 - `ground-rules/principle-prove-it-works` — verify against the real thing before saying done
 - `decision-desk/flag-and-propose` — only for forks that are irreversible, costly or outward-facing: impact first, one question · reversible forks → `ground-rules/principle-proceed-on-reversible-work`
 - `context-budget` — long material goes to files, read in parts

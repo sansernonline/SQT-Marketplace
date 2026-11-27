@@ -13,7 +13,7 @@ Check the text on images, captions, scripts, and post pages before release. This
 ## Use when / Do not use when
 
 - Use when: a post, banner, video, or sales script contains a benefit claim, a superlative, a comparison with a competitor, a review, or promotion conditions
-- Do not use when: writing a product listing on Shopee, Lazada, or TikTok Shop → `product-listing` (plugin `e-commerce`, if installed) · product images for a marketplace → `marketplace-product-images` · checking how an image looks → `design-review` · personal data requirements → `pdpa-workflow` (plugin `e-commerce`)
+- Do not use when: writing a product listing on Shopee, Lazada, or TikTok Shop → `sales-copy` (plugin `e-commerce`, if installed) · product images for a marketplace → `marketplace-product-images` · checking how an image looks → `design-review` · personal data requirements → `pdpa-workflow` (plugin `e-commerce`)
 
 ## 1 · Scope actually read (2026-11-10)
 

@@ -9,12 +9,12 @@
 วางทั้งไฟล์ใน Claude Code, Codex CLI หรือ Gemini CLI ที่รากโฟลเดอร์โปรเจกต์ แล้วพิมพ์ต่อท้ายว่าจะทำฉบับไหน เช่น `ทำทั้งหมด` หรือ `ทำข้อ 3 และ 4`
 
 <!-- rules:begin -->
-**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-doc-set` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
+**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-docs` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
 
 **วนจนเสร็จ (agent loop):** ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ จนผ่านทุกข้อที่ฉบับนั้นต้องมี · ตรวจด้วยหลักฐานจริง (เปิดไฟล์ · รันคำสั่ง · เทียบแหล่ง) ไม่ใช่คำบอกของตัวที่ทำ · รอบตรวจใช้ `reviewer` ตัวใหม่ทุกรอบ · ไม่ผ่าน → แก้ที่ต้นเหตุแล้วตรวจซ้ำทั้งข้อเดิมและจุดที่แก้ · เหลือแค่ข้อระดับต่ำ → ปิดได้แล้วลงรายงาน · ครบเพดานรอบ (งานกลาง 3 · งานใหญ่หรืองานเสี่ยง 5) ยังไม่ผ่าน → ติดป้าย `ติด` ทำส่วนอื่นให้จบ แล้วรายงานข้อที่เหลือ · รายละเอียดอยู่ใน skill `superuser` กฎข้อ 3
 <!-- rules:end -->
 
-**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้แบบเดียวกันทั้งชุด: ผังระบบ · flow · ผังคลาวด์ → `diagram-figures` · Mermaid (`software-diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
+**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้แบบเดียวกันทั้งชุด: ผังระบบ · flow · ผังคลาวด์ → `diagrams` · Mermaid (`diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
 
 **แอปที่มีอยู่แล้ว (ใช้ทุกฉบับ):** `docs/` และ `qa/` อยู่ที่รากโปรเจกต์ · README และ CHANGELOG อยู่ใน repo ของแอป · รากโปรเจกต์เป็น repo เดียวกับแอป → เอกสารเข้า branch เดียวกับโค้ด · ก่อนรันแอปหรือ seed ให้ชี้ที่เก็บข้อมูล (เช่น `DATA_DIR` · connection string) ไปที่ `_to_delete/` ห้ามรันกับข้อมูลจริง · คำสั่ง test ที่ repo ประกาศไว้พัง → รายงานผลของคำสั่งนั้นตรงตัว แล้วบอกคำสั่งที่ใช้แทนแยกบรรทัด · ห้ามมีรหัสผ่านหรือค่าลับในเอกสารและภาพ แม้เป็นบัญชีทดสอบ · ไม่มี `stack-*` ที่ตรงภาษา → ข้ามแล้วบอกในรายงาน
 
@@ -37,7 +37,7 @@
 
 ## 1. ย้อนสร้างเอกสารจากโค้ดที่มีอยู่ (Reverse Spec)
 
-agent `solution-architect` + `system-analyst` · skill `legacy-spec-recovery` · `architecture-patterns` · `software-diagrams` · `database-design` · `research-with-sources/prior-art-review` · `design-gate/polished-document-style`
+agent `solution-architect` + `system-analyst` · skill `legacy-spec-recovery` · `architecture` · `diagrams` · `database-design` · `research-with-sources/prior-art-review` · `design-gate/polished-document-style`
 **ผลลัพธ์:** ไฟล์ใน `docs/as-is/` — **อ่านโค้ดอย่างเดียว ห้ามแก้โค้ด** · รัน test และเปิดแอปบนเครื่องได้ตามกฎแอปที่มีอยู่แล้วข้างบน (แทน rule 4 ของ `legacy-spec-recovery`) · ทุกข้อความในเอกสารคือ "สิ่งที่โค้ดทำ" ไม่ใช่ "สิ่งที่ควรทำ"
 
 ### ขอบเขต (ผู้ใช้กรอก)
@@ -78,9 +78,9 @@ agent `solution-architect` + `system-analyst` · skill `legacy-spec-recovery` ·
 
 ## 2. SRS ฉบับส่งมอบจากสภาพปัจจุบัน
 
-agent `business-analyst` + `system-analyst` · skill `srs-writing` · `design-gate/polished-document-style`
+agent `business-analyst` + `system-analyst` · skill `requirements-writing` · `design-gate/polished-document-style`
 **ต้องมีก่อน:** `docs/as-is/features.md` จากฉบับ 1
-**ผลลัพธ์:** `docs/srs.md` โครงตาม skill `srs-writing` (หัวข้อเดียวกับ `prompt-new-project.md` ฉบับ 3) — **ไม่แก้โค้ด · ไม่แก้ข้อความเดิมใน `docs/as-is/`** (เพิ่มแถวใหม่ใน `findings.md` ได้ ใช้กับฉบับ 3–5 ด้วย)
+**ผลลัพธ์:** `docs/srs.md` โครงตาม skill `requirements-writing` (หัวข้อเดียวกับ `prompt-new-project.md` ฉบับ 3) — **ไม่แก้โค้ด · ไม่แก้ข้อความเดิมใน `docs/as-is/`** (เพิ่มแถวใหม่ใน `findings.md` ได้ ใช้กับฉบับ 3–5 ด้วย)
 
 ### ลำดับ
 
@@ -99,9 +99,9 @@ agent `business-analyst` + `system-analyst` · skill `srs-writing` · `design-ga
 
 ## 3. FSD ต่อโมดูลจากสภาพปัจจุบัน
 
-agent `system-analyst` · skill `fsd-writing` · `design-gate/polished-document-style` · `e2e-testing-patterns` (ถ่ายภาพหน้าจอ)
+agent `system-analyst` · skill `requirements-writing` · `design-gate/polished-document-style` · `test-automation` (ถ่ายภาพหน้าจอ)
 **ต้องมีก่อน:** `docs/srs.md` จากฉบับ 2 · แอปที่เปิดได้ (ถ้าจะใส่ภาพหน้าจอ)
-**ผลลัพธ์:** `docs/fsd-<โมดูล>.md` หัวข้อตาม skill `fsd-writing` (เดียวกับ `prompt-new-project.md` ฉบับ 8) — **ไม่แก้โค้ด** · ไม่มี `mockup/` → ใช้ภาพหน้าจอจริงใน `docs/figures/fsd-<โมดูล>/` · ไม่มี `docs/architecture.md` → ใช้ `docs/as-is/overview.md`
+**ผลลัพธ์:** `docs/fsd-<โมดูล>.md` หัวข้อตาม skill `requirements-writing` (เดียวกับ `prompt-new-project.md` ฉบับ 8) — **ไม่แก้โค้ด** · ไม่มี `mockup/` → ใช้ภาพหน้าจอจริงใน `docs/figures/fsd-<โมดูล>/` · ไม่มี `docs/architecture.md` → ใช้ `docs/as-is/overview.md`
 
 ### โมดูลที่ทำ (ผู้ใช้กรอก · เว้นว่าง = ทุกโมดูลใน `docs/as-is/overview.md`)
 
@@ -116,7 +116,7 @@ agent `system-analyst` · skill `fsd-writing` · `design-gate/polished-document-
 
 ## 4. เอกสารเชิงเทคนิค (เลือกหนึ่งชนิดต่อครั้ง)
 
-agent `technical-writer` หรือ `system-analyst` · skill `design-gate/polished-document-style` · `software-diagrams` · `api-conventions` (API-SPEC) · `database-design` (DATA-DICTIONARY)
+agent `technical-writer` หรือ `system-analyst` · skill `design-gate/polished-document-style` · `diagrams` · `api-design` (API-SPEC) · `database-design` (DATA-DICTIONARY)
 **ต้องมีก่อน:** ไฟล์ที่เกี่ยวใน `docs/as-is/` จากฉบับ 1
 **ผลลัพธ์:** หัวข้อและที่เก็บไฟล์ตาม `prompt-new-project.md` ฉบับ 10 (`docs/API-SPEC.md` · `docs/DATA-DICTIONARY.md`) — **ไม่แก้โค้ด**
 
@@ -139,7 +139,7 @@ agent `technical-writer` หรือ `system-analyst` · skill `design-gate/pol
 
 ## 6. มีแค่ตัวโปรแกรม ไม่มี source
 
-agent `reverse-engineer` + `system-analyst` · skill `reverse-engineering` · `legacy-spec-recovery` · `docker-sandbox`
+agent `reverse-engineer` + `system-analyst` · skill `reverse-engineering` · `legacy-spec-recovery` · `infra-and-deploy`
 **ใช้เมื่อ:** source หาย · ได้รับแค่ไฟล์ติดตั้ง · ต้องรู้ว่าโปรแกรมเดิมทำอะไรก่อนเขียนใหม่ (ต่อด้วย `prompt-rebuild.md`) — มี source → ใช้ฉบับ 1
 **ผลลัพธ์:** ไฟล์ใน `docs/as-is/` ชื่อเดียวกับฉบับ 1 (ส่วนที่หาไม่ได้เขียนว่า `ไม่พบจากตัวโปรแกรม`) · `docs/as-is/re-notes.md` บันทึกเครื่องมือ คำสั่ง และหลักฐาน · **ไม่แก้และไม่แจกจ่ายตัวโปรแกรม**
 
@@ -154,7 +154,7 @@ agent `reverse-engineer` + `system-analyst` · skill `reverse-engineering` · `l
 ### หัวข้อที่ต้องมี
 
 1. **ระบุชนิดก่อน** — ภาษาและ framework ที่ build มา · มีการ obfuscate หรือป้องกันไหม · เลือกเครื่องมือตาม `reverse-engineering`
-2. **รันใน sandbox เท่านั้น** — ตาม `docker-sandbox` หรือเครื่องเสมือนที่ไม่มีข้อมูลจริง · ตัดเน็ตหรือบันทึกทุกการเรียกออกนอกเครื่อง
+2. **รันใน sandbox เท่านั้น** — ตาม `infra-and-deploy` หรือเครื่องเสมือนที่ไม่มีข้อมูลจริง · ตัดเน็ตหรือบันทึกทุกการเรียกออกนอกเครื่อง
 3. **หลักฐานทุกข้อ** — ไฟล์ · offset หรือชื่อ class/function · ภาพหน้าจอ · ผลรัน · ข้อที่อนุมานจากพฤติกรรมติดป้าย `อนุมาน`
 4. **ผลเข้า `docs/as-is/`** — ครบหัวข้อเดียวกับฉบับ 1 เพื่อให้ฉบับ 2–5 และ `prompt-rebuild.md` ใช้ต่อได้
 

@@ -1,7 +1,64 @@
-# skill: design-direction-lookup
+# skill: design-system
 
-Use for a starting palette and Thai-Latin fonts on a new screen
+Use for design tokens, a Tailwind theme or a starting palette
 
+# Design System — 3-layer tokens and component specs
+
+> **Gate before starting (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run `design-gate/no-ai-look` before sending · follow the "Gate before starting" (`ด่านก่อนลงมือ`) section of `design-gate/design-references` (plugin `superuser`) even when a brand already exists (the brand controls color and fonts, while the search is for finding the structure of this piece) · close the job with the line `ด่านก่อนลงมือ:`
+
+> **One rule:** screen code must have no raw colors or spacing. Every value references a token · tokens have 3 layers: **primitive** (raw value `--color-blue-600`) → **semantic** (role `--color-primary`) → **component** (`--button-bg`) · to change the theme, edit the middle layer in one place
+
+## Pick the part
+
+| Job (what the user says) | Open |
+|---|---|
+| "Write the tokens", "generate CSS from JSON", "Tailwind theme", "check the code for raw colours" | This file: steps 1–5 below |
+| "New screen, no visual direction yet", "starting palette", "Thai and English font pair", "which chart fits" | [`references/design-direction-lookup.md`](references/design-direction-lookup.md) (sources: [`references/design-direction-lookup/sources.md`](references/design-direction-lookup/sources.md)) |
+
+## Which one to use
+
+| Task | Use |
+|---|---|
+| Code already exists; the user wants to know which values it uses and where it leaves the scale | `ui-craft` → `scripts/design_tokens.py` (reads the code → `docs/DESIGN.md`) |
+| Write new tokens, generate CSS from JSON, check that code has no raw values | **this skill** |
+| Spacing and font size scales | `ui-craft` items 1–2 (use the same scale as the tokens you set) |
+| Pick starting colors and fonts | `design-system` |
+| Colors and fonts of a brand that already has a document | `brand-kit` section "เขียนเป็นเอกสาร" (write as a document) (plugin `graphic-design`) → sync into the token file here |
+
+## Steps
+
+1. **Start from the template** `templates/design-tokens-starter.json` (it has all 3 layers) · put the brand colors in the primitive layer · for spacing use the 4 8 12 16 24 32 48 64 scale of `ui-craft`
+2. **Generate CSS:** `node scripts/generate-tokens.cjs --config <tokens.json> -o <tokens.css>` (tested 2026-11-05 with the template; it produced a full `:root`)
+3. **Check the code:** `node scripts/validate-tokens.cjs --dir src/` → reports raw colors and px that should be tokens (tested 2026-11-05: found 1 hex and 1 px in the sample file) · the result is a reason to look again, not a demand to fix every line
+4. **Component states:** for buttons · inputs · cards, make a state table of default / hover / active / focus / disabled per `data/upstream/states-and-variants.md` before writing CSS
+5. **Tailwind:** `data/upstream/tailwind-integration.md` — bind the tokens into the theme · colors must come from the brand, not from the framework's starter set (`design-gate/no-ai-look`)
+
+The scripts are Node, install no extra packages, and make no network calls.
+
+## Original files
+
+| Topic | File in `data/upstream/` |
+|---|---|
+| Overview of the three layers | `token-architecture.md` |
+| Raw values · roles · components | `primitive-tokens.md` · `semantic-tokens.md` · `component-tokens.md` |
+| Component specs and states | `component-specs.md` · `states-and-variants.md` |
+| Tailwind | `tailwind-integration.md` |
+
+## Check before sending
+
+1. `validate-tokens.cjs` leaves no raw colors or px in new code (except those with a written reason)
+2. Every semantic text/background pair passes 4.5:1 in both light and dark mode
+3. Every component has all 5 states
+
+## References
+
+- [`references/sources.md`](references/sources.md) — open when you need the origin, licence or the list of upstream files not copied
+- [`references/design-direction-lookup.md`](references/design-direction-lookup.md) — open for a starting palette, font pair and Thai UX rules on a new screen
+
+
+## reference: design-direction-lookup.md
+
+<!-- merged from skill `design-direction-lookup` on 2026-11-27 · description was: Use for a starting palette and Thai-Latin fonts on a new screen -->
 # design-direction-lookup — find 3 starting looks from a Thai or English brief
 
 > **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run `design-gate/no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand fixes colors and fonts; the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
@@ -22,9 +79,9 @@ Not for: a project whose look already passed the beauty gate (copy the sibling p
    python scripts/design_search.py "ช่องวันที่ พ.ศ." --domain ux -n 5
    python scripts/design_search.py "ฟอร์ม validation" --domain stack --stack blazor --json
    ```
-   - Domains: `industry` · `palette` (backup store; results start with a warning to search live first) · `font` · `look` · `ux` · `chart` · `landing` · `stack`. Upstream domains (English, [`data/upstream/uipro/README.md`](data/upstream/uipro/README.md)): `style` · `product` · `motion` · `slide` · `slide-strategy` · `slide-copy`. Colors from upstream are not contrast-checked.
+   - Domains: `industry` · `palette` (backup store; results start with a warning to search live first) · `font` · `look` · `ux` · `chart` · `landing` · `stack`. Upstream domains (English, [`data/upstream/uipro/README.md`](../data/upstream/uipro/README.md)): `style` · `product` · `motion` · `slide` · `slide-strategy` · `slide-copy`. Colors from upstream are not contrast-checked.
    - 1 run, 1 intent, 2–5 words, in Thai, English, or mixed. You may search again once with different words; if still not found, tell the user.
-2. **Get colors live first, every time there is a network, before drafting.** Palettes in `data/` are a backup store; colors passed with `--palette` or `--extra-palettes` always beat the store. The method (search per `design-gate/design-references`, choose 3–5 active sites, extract colors with `scripts/brand_colors.py`, build palettes, `--palette` forms, record in DESIGN.md) is in [`references/live-colors.md`](references/live-colors.md); open it before this step.
+2. **Get colors live first, every time there is a network, before drafting.** Palettes in `data/` are a backup store; colors passed with `--palette` or `--extra-palettes` always beat the store. The method (search per `design-gate/design-references`, choose 3–5 active sites, extract colors with `scripts/brand_colors.py`, build palettes, `--palette` forms, record in DESIGN.md) is in [`live-colors.md`](live-colors.md); open it before this step.
    - The extractor reads only HTML and CSS. If it cannot extract a site, report that as is; never guess colors instead.
    - No network, or no site could be extracted: skip live colors. The draft uses the backup store with a warning on screen and in DESIGN.md: "ใช้คลังสีสำรอง ค้นสดตาม design-references จะทันสมัยกว่า".
 3. **Draft 3 directions in one command.**
@@ -34,7 +91,7 @@ Not for: a project whose look already passed the beauty gate (copy the sibling p
    - The draft drops a direction and takes the next if: contrast is below 4.5:1 for text or 3:1 for buttons and borders in either mode · it has a Tailwind default color (slate gray zinc neutral indigo violet) · Inter or Geist is the first font · a Thai font has no Latin partner (such as Noto Sans Thai alone).
    - The 3 looks must not repeat, and any 2 directions need main colors far apart (under 20 degrees of hue counts as the same tone). An existing DESIGN.md is not overwritten unless `--force` is given.
    - If the brief matches no industry, the draft uses a temporary industry `custom`. If the source data contains ad words (ยกระดับ · ไร้รอยต่อ · seamless · elevate), the draft stops; fix the data.
-   - Flags and the full order of the draft: [`references/draft-details.md`](references/draft-details.md).
+   - Flags and the full order of the draft: [`draft-details.md`](draft-details.md).
 4. **After the draft:**
    1. Open the comparison page and look at both modes yourself; do not trust the contrast numbers alone. In some Thai fonts the upper vowels hit the previous line.
    2. Send the 3 directions to `ui-craft` step 0.1 stage 3 (a fresh subagent per direction; an agent that cannot call a sub-team does each direction in turn and notes it under "ตัดสินใจเอง"). Each direction adds 1 bold move of its own; the draft does not choose it.
@@ -50,10 +107,10 @@ Not for: a project whose look already passed the beauty gate (copy the sibling p
 - [ ] The project's existing DESIGN.md was not overwritten by accident (no `--force` unless needed).
 
 ## References
-- [`references/query-guide.md`](references/query-guide.md) — open when choosing queries and domains or reading results.
-- [`references/live-colors.md`](references/live-colors.md) — open at step 2: live color search, extraction, building palettes, `--palette` forms.
-- [`references/draft-details.md`](references/draft-details.md) — open when tuning the draft (flags, order of checks), editing `data/` CSV files, or wanting a worked example.
-- [`references/sources.md`](references/sources.md) — sources and licences.
+- [`query-guide.md`](query-guide.md) — open when choosing queries and domains or reading results.
+- [`live-colors.md`](live-colors.md) — open at step 2: live color search, extraction, building palettes, `--palette` forms.
+- [`draft-details.md`](draft-details.md) — open when tuning the draft (flags, order of checks), editing `data/` CSV files, or wanting a worked example.
+- [`sources.md`](design-direction-lookup/sources.md) — sources and licences.
 
 
 ## reference: draft-details.md
@@ -129,7 +186,7 @@ Do this every time there is a network, before drafting the 3 directions · color
    A palette that fails contrast does not stop the command: the draft first tries setting on_primary to white or black, and if it still fails, drops it and notes it under "dropped before drafting" (`ที่ตัดออกก่อนร่าง`) · colors extracted from other people's work go in `--reference-colors [degrees]` (default 8) to shift the hue and make DESIGN.md state the source truthfully (if contrast fails after shifting, the draft adjusts lightness by at most 10% before dropping) · if 2 industries score close, the result names both; choose with `--industry` · the heading font does not repeat across the 3 directions · `--voice rounded|angular|modern|formal|classic|hand` gives direction A a font pair with the chosen personality, picked from the project's basics (`ui-craft/references/font-voice.md` · column `voice` in `font-pairs.csv`)
 6. **Record in DESIGN.md:** the URL of every site viewed, the design sources viewed, the viewing date of every source, the colors obtained, and sites that could not be extracted
 
-No network, or colors cannot be extracted from any site → skip to the draft step (SKILL.md step 3) without passing colors; the draft uses the backup store in `data/` with a warning on screen and in DESIGN.md saying "ใช้คลังสีสำรอง ค้นสดตาม design-references จะทันสมัยกว่า" (using the backup color store; a live search per design-references would be more current)
+No network, or colors cannot be extracted from any site → skip to the draft step (`design-direction-lookup.md` step 3) without passing colors; the draft uses the backup store in `data/` with a warning on screen and in DESIGN.md saying "ใช้คลังสีสำรอง ค้นสดตาม design-references จะทันสมัยกว่า" (using the backup color store; a live search per design-references would be more current)
 
 
 ## reference: query-guide.md
@@ -178,22 +235,24 @@ The searcher answers "ไม่พบที่ตรง" (no match found) when t
 
 ## reference: sources.md
 
-# Sources · design-direction-lookup
+# Sources · design-system
 
+Part of plugin `software-development` · copied and adapted from ui-ux-pro-max-skill (MIT · commit `b7d5353` · viewed 2026-11-05) · the English original is kept unchanged in `data/upstream/` · licence at `data/upstream/LICENSE`
 
-- `data/upstream/uipro/` copied unchanged from ui-ux-pro-max-skill commit `28b3b8d` (MIT · 2026-10-29), as the owner ordered it copied for improvement
-- The idea of a searchable dataset, the BM25 search with an abstain threshold, and the design-system generator come from nextlevelbuilder/ui-ux-pro-max-skill (MIT · https://github.com/nextlevelbuilder/ui-ux-pro-max-skill · viewed 2026-10-26) · the code and data here are entirely rewritten, not copied · what is done differently from the source: Thai word segmentation · 3 directions instead of 1 answer · dropping framework default colors · Thai-Latin font pairs
-- BM25 is a widely published ranking method, written by us in `scripts/design_search.py` · k1 1.5 and b 0.75
-- The contrast thresholds 4.5:1 and 3:1 follow `ui-craft` step 5 (WCAG 2.2 criteria 1.4.3 and 1.4.11)
-- 3 directions · look · app personality from `ui-craft` step 0.1 · `ui-craft/references/web-looks.md` · `ui-craft/references/app-character.md`
-- The color and font rules that are dropped match the rules `framework-default` and `overused-font` of `design-gate/parts/no-ai-look/scripts/slop_scan.py`
+- nextlevelbuilder/ui-ux-pro-max-skill `.claude/skills/design-system` · MIT · commit `b7d5353` · viewed 2026-11-05 · the files in `data/upstream/` `scripts/` `templates/` are copied unchanged
+
+## Not copied (reason)
+
+- The slide-making system (`search-slides.py` · `generate-slide.py` · `slide-token-validator.py` · the `slide-*` CSV files): the CSV files already exist in `design-system/data/upstream/uipro/` · the rest duplicates `slide-deck`
+- `fetch-background.py`: pulls images from the internet at run time, which breaks the rule of no downloads at run time
+- The examples in the original use SaaS-style blue-purple only as a data format, not as recommended values
 
 
 ---
 
 # skill: web-app-design
 
-Use when designing a web app screen or mockup
+Use when designing a web app screen, mockup or scroll-motion site
 
 # Web App Design
 
@@ -201,6 +260,13 @@ Use when designing a web app screen or mockup
 
 > **The one rule:** every color in component code must come from a token.
 > If a `#hex` shows up outside the token file, the design system has started to break, and it breaks silently.
+
+## Pick the part
+
+| Job (what the user says) | Open |
+|---|---|
+| "Design this app screen", "dashboard", "admin panel", "SaaS screen mockup" | This file: sections 1–8 below |
+| "Marketing page with scroll motion", "chapter-by-chapter story site", "3D background that moves per chapter" | [`references/dynamic-website.md`](references/dynamic-website.md). Its rule: with reduced motion on, all content stays visible, and no text fades out. |
 
 ## When to use this skill
 
@@ -212,9 +278,9 @@ Use when designing a web app screen or mockup
 ## When **not** to use it
 
 - A Windows desktop app: use `windows-app-design`
-- A .docx/.pptx document: use `branded-document-design`
+- A .docx/.pptx document: use `document-design`
 - A marketing website or landing page, because this system is built for **apps** that pack in data.
-  A 13px base text is too small for a sales page.
+  A 13px base text is too small for a sales page. For scroll-motion sales pages, use the dynamic-website row in "Pick the part".
 
 ---
 
@@ -243,8 +309,8 @@ Use when designing a web app screen or mockup
 ## 2 · Design tokens
 
 > **The look comes from this job's search. Do not stop to ask.**
-> Order for finding values: the client's brand colors and fonts (if they exist, use them at once) → prototypes searched live by `design-gate/design-references` and palettes extracted by `design-direction-lookup` item 2 → only if nothing can be searched at all (no internet · the user ordered the old look kept), use the fallback values in `assets/appstrack.css`, write `(รอยืนยัน)` (awaiting confirmation), and keep going.
-> The table of work type versus color tone in `colour-by-domain` (`diagram-figures` → `references/colour-by-domain.md`) is a starting point for search terms, not an answer.
+> Order for finding values: the client's brand colors and fonts (if they exist, use them at once) → prototypes searched live by `design-gate/design-references` and palettes extracted by `design-system` → `references/design-direction-lookup.md` item 2 → only if nothing can be searched at all (no internet · the user ordered the old look kept), use the fallback values in `assets/appstrack.css`, write `(รอยืนยัน)` (awaiting confirmation), and keep going.
+> The table of work type versus color tone in `colour-by-domain` (`diagrams` → `references/colour-by-domain.md`) is a starting point for search terms, not an answer.
 > **Brand colors must pass 4.5:1 for both white text on the brand background and the brand color on the page background.** If a client's color is too light, make a darker shade for `--brand` and keep the original color for the logo and charts.
 
 **Which values are fixed and which come from the search**
@@ -361,16 +427,81 @@ Then open the images and check:
 |---|---|
 | User flow / IA before coloring | agent `ux-designer` |
 | A Windows desktop app in the same tone | `windows-app-design` |
-| Screen spec document | `design-gate/polished-document-style` + `branded-document-design` |
-| Diagrams to go with the spec | `markdown-visuals` |
+| Screen spec document | `design-gate/polished-document-style` + `document-design` |
+| Diagrams to go with the spec | `diagrams` |
 | Spacing rules, visual order and the 5 states of a screen | `ui-craft` |
-| Architecture diagrams | `software-diagrams` |
+| Architecture diagrams | `diagrams` |
 
 ---
 
 ## Do not look AI-made
 
 Before sending, go through item 3 of `design-gate/no-ai-look`. For HTML work, run its script · every job must also pass the eye gate 3.2 (web pages answer items 10–14 too), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for every medium lives there.
+
+
+## reference: dynamic-website.md
+
+<!-- merged from skill `dynamic-website` on 2026-11-27 · description was: Use when a marketing website needs scroll motion or 3D -->
+# Dynamic Website — a chapter-by-chapter storytelling site that moves without making readers dizzy
+
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `design-gate/no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (Pre-work gate) of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the job with the line `ด่านก่อนลงมือ:` (Pre-work gate:)
+
+> **One rule:** every motion passes through one gate (`T()` in JS + a kill-switch in CSS) and **each chapter has its own entrance** — fade-up repeated everywhere is the number 1 AI signal of this kind of website.
+
+## Use when
+- Marketing sites · seminar pages · product launch pages · "About us" pages read chapter by chapter
+- One page with 3–7 full-screen chapters changed by wheel, keyboard or swipe (deck-mode), or a normal scrolling page where content appears on scroll (page-mode)
+- A "meaningful" background (a network of people · a schedule route · a map) with a camera that moves per chapter
+
+Not for: dashboard · admin · internal tool · SaaS → `web-app-design` + `ui-craft` (motion ≤ 350 ms) · presentation slides with speaker notes → `slide-deck` · no storyline yet → `slide-deck` → `references/presentation-design.md` steps 1–3 first · animated clip or moving logo → `video-editing` (plugin `graphic-design`)
+
+## Steps
+1. Run the pre-work gate above. Colour comes from the work: use the brand colour if there is one; otherwise search live per `design-gate/design-references` (type `web` or `motion`) and extract colours from the chosen work. If live search is impossible, use `#2A78D6` (text on light: `#226CC6`), write `(รอยืนยัน)` and carry on.
+2. Pick the mode per part of the site: deck-mode (chapters stacked `position:absolute; visibility:hidden`, only `.on` visible) for story chapters, page-mode (normal scroll, reveal item 8 of `recipes.md`) for registration, payment, admin. One `route()` on `hashchange`; every view pushes its teardown into `cleanups[]`, and `route()` clears them before rendering the next view.
+3. Declare the entrance in markup: `<section class="ch" data-enter="blurWords">` · heading `data-t` · followers `data-f` · image `data-w`. Content lives in HTML, not JS.
+4. Copy recipes from `recipes.md`; a working example is `assets/example-deck.html`. Use token names that match `web-app-design` → `tokens.md`; type scale and fonts are in `tokens-and-fonts.md`.
+5. Load three.js as a module in parallel; wait for `neural:ready` or 4 seconds; probe WebGL. If it fails, set `body.no-webgl` and show a 2D canvas fallback with the same meaning. Run `setAnimationLoop` only while the screen needs it.
+6. Apply the 15 rules below. Self-host fonts and GSAP (`vendor/`) for real delivery; cdnjs is fine for a mockup.
+7. Run the checks below, then go through item 3 of `design-gate/no-ai-look` (for HTML run its script; a script result of 0 items is not yet a pass, so also pass eye gate 3.2 and items 10–14).
+
+## 15 rules
+1. **One gate** — every duration · delay · stagger goes through `T(s) = reduced ? 0 : s` in JS and one kill-switch block in CSS · do not check reduced-motion per animation.
+2. **4 entrances per site**, chosen per chapter in the markup, never the same one in 2 chapters in a row.
+3. **Exit shorter than entrance, and accelerating** (`power3.in` 0.22 s) · the new chapter enters when the camera has flown about 40%.
+4. **Clear the filter after the entrance** (`clearProps:'filter'`) · blur ≤ 10px and brief · never animate `backdrop-filter`.
+5. **Animate only transform · opacity · clip-path** (+ filter briefly) · never width height top.
+6. Hidden chapters get `visibility:hidden` + `pointer-events:none` · toggle `aria-hidden` in the timeline · hash with `replaceState`, never `pushState` per chapter (Back would need 5 presses).
+7. **The background must mean something** — 1 dot = 1 person · line = schedule · pointer = camera flies there · no floating particles for fun, no endless glow, no gradient button fills.
+8. **Heavy renderer loads later**: 4-second wait, WebGL probe, 2D fallback, CSS for `body.no-webgl`.
+9. **A list inside a chapter scrolls first**: at the edge give a hint, stop, and only then change chapter.
+10. **`passive:false` only for wheel/touch in deck-mode**, removed when the route changes · `scroll` and `pointermove` are always `{passive:true}`.
+11. **Keyboard map is mandatory**: ↓ PgDn Space · ↑ PgUp · Home End · skip inside an input or modal · rail buttons have `aria-current="step"`.
+12. **Move focus after changing chapter** (`section tabindex="-1"` then `.focus()`).
+13. **Reduced motion must show all content** (WCAG 2.3.3) — real text at once, every word `.on`, particles at their destination.
+14. **Limit GPU load** — `devicePixelRatio` ≤ 2 (1.75 under 900px) · clamp `dt` to 50 ms · loop only while needed.
+15. **Self-host fonts** as woff2, split Thai/Latin with `unicode-range` · preload only 2 weights above the fold · `font-display:swap` · no Google Fonts `<link>` in delivered files.
+
+Also: trackpad inertia must not skip 2 chapters (drop delta < 6 and anything within 1 s after a change) · release a `busy` lock by itself at 2.4 s · error toasts attach to the faulty spot with a retry button, never vanish alone · hide 3D labels with an occluder per chapter · large Thai headings with negative `letter-spacing` need a check at every weight (tone marks vs vowels: back off to -.01em; `uppercase` + wide ls is for Latin eyebrows only) · the 3D background sits at z-index 0 under `main` (z 1), deck opacity 1, page-mode .22, with a scrim `.deck::before`.
+
+## Check before done
+- Keyboard complete: change chapters with the map above · Tab walks the rail with a focus ring · focus moves with the chapter
+- Emulate prefers-reduced-motion (DevTools → Rendering): all content visible in every chapter, numbers at final values, no faded words
+- `data-enter` of every chapter checked: none the same twice in a row
+- Lighthouse shows no passive-listener warning; `passive:false` exists only in deck-mode and is removed on leaving it
+- Fonts self-hosted, 2 weights preloaded; with network unplugged the intended font still shows
+- WebGL disabled (or `body.no-webgl`): the 2D fallback appears and is readable
+- 1 hard trackpad swipe = 1 chapter · an inner list scrolls to the end first
+- No hardcoded colours outside the token block (`web-app-design` → `scripts/check-design-tokens.mjs`)
+- Screenshots at 1440 · 900 · 420 of every chapter (`web-app-design` → `scripts/screenshot.py`), actually looked at · the rail below 900px is a bottom bar and covers no content
+- Go through the a11y and motion list of vercel-labs/web-interface-guidelines (local copy, do not fetch at run time; MIT · checked 2026-10-23) as a check list for focus · motion · touch target · contrast; do not copy its text
+
+## References
+- [`recipes.md`](recipes.md) — copy-ready code for every recipe
+- [`structure-and-recipes.md`](structure-and-recipes.md) — open when building the skeleton or choosing a recipe (use / do not use, reduced-motion behaviour of each)
+- [`tokens-and-fonts.md`](tokens-and-fonts.md) — open when setting tokens, type scale or a Thai font
+- [`tools.md`](tools.md) — open when choosing GSAP vs CSS scroll-driven vs View Transitions vs scroll-snap, or when you need deeper GSAP API (then read only the plugin file you use from github.com/greensock/gsap-skills; this page's rules still outrank it)
+- [`sources.md`](sources.md) — sources and check dates
+- Other skills: colour tokens/forms for page-mode → `web-app-design` · motion principles and easing → `video-editing` · storyline and text budget → `slide-deck` · SEO of JS-rendered pages → `web-audit`
 
 
 ## reference: layout-diagram.md
@@ -394,6 +525,428 @@ Fallback structure, sidebar + top bar. Real sizes live in `theme.css`.
 │ ⚙ Settings│        ← content max 1160px, centered →         │
 └──────────┴─────────────────────────────────────────────────┘
 ```
+
+
+## reference: recipes.md
+
+# Recipes — copy-ready code for dynamic-website
+
+> Every block is ≤ 15 lines · rewritten in our own form, following the ideas of the reference site ai4ba.ai-cie.com (public code read 2026-10-22 · no licence stated, so the code is not copied directly) · sentences in «…» quotes are comments by that site's author, translated from Thai
+> Requires: `gsap` 3.15 (`https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/gsap.min.js`) · `Observer.min.js` in the same folder (item 11 only) · the shorthands `$ = (s, r = document) => r.querySelector(s)` and `$$ = (s, r = document) => [...r.querySelectorAll(s)]`
+> A fully assembled example: `assets/example-deck.html`
+
+## Contents
+
+1. [T gate and CSS kill-switch](#1-t-gate-and-css-kill-switch)
+2. [splitWords](#2-splitwords)
+3. [4 entrances and the exit](#3-4-entrances-and-the-exit)
+4. [goChapter timeline skeleton](#4-gochapter-timeline-skeleton)
+5. [iris page transition](#5-iris-page-transition)
+6. [count-up](#6-count-up)
+7. [decode](#7-decode)
+8. [scroll reveal and lines](#8-scroll-reveal-and-lines)
+9. [scrubWords](#9-scrubwords)
+10. [wheel changes chapters, and locks inner scrolling lists](#10-wheel-changes-chapters-and-locks-inner-scrolling-lists)
+11. [Observer touch swipe](#11-observer-touch-swipe)
+12. [keyboard map](#12-keyboard-map)
+13. [rail markup and CSS](#13-rail-markup-and-css)
+
+---
+
+## 1 T gate and CSS kill-switch
+
+**When to use:** every file with motion — one gate in JS and one block in CSS, so each animation does not re-check reduced-motion · source app.js:238 · fx.js (reduced) · styles.css:157-162
+
+```js
+const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+const T = s => (reduced() ? 0 : s);          // every duration · delay · stagger goes through T()
+// usage: tl.to(el, { opacity: 1, duration: T(.5), stagger: T(.08) })
+// if you use gsap.matchMedia(): mm.add('(prefers-reduced-motion: no-preference)', () => { /* the moving parts */ });
+```
+```css
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; transition-delay: 0ms !important; }
+  html { scroll-behavior: auto; }
+  [data-reveal], .lines .ln > span { opacity: 1; transform: none; }   /* all content must stay visible (WCAG 2.3.3) */
+  .words .w { opacity: 1; }
+}
+```
+
+## 2 splitWords
+
+**When to use:** before the word-by-word entrances (item 3) · Thai has no spaces between words, so it splits at the spaces the author left in = put the spaces at the rhythm you want the words to enter · source app.js:285-300
+
+```js
+function splitWords(el) {
+  if (el.dataset.split) return;                  // split once; returning to the same chapter does not split again
+  el.dataset.split = 1;
+  const walk = node => [...node.childNodes].forEach(c => {
+    if (c.nodeType !== 3) return walk(c);        // keep the <em> <br> inside
+    const frag = document.createDocumentFragment();
+    c.textContent.split(/(\s+)/).forEach(p => {
+      if (!p) return;
+      if (/^\s+$/.test(p)) return frag.append(p);
+      const w = document.createElement('span'); w.className = 'wd'; w.textContent = p; frag.append(w);
+    });
+    c.replaceWith(frag);
+  });
+  walk(el);
+}
+```
+CSS: `.wd { display: inline-block; will-change: opacity, filter; }` — `will-change` only while entering, then clear it with `clearProps` (item 3)
+
+## 3 4 entrances and the exit
+
+**When to use:** every chapter declares its entrance in the markup `data-enter="blurWords|inkWords|blurLine|decodeWords"` · headline `data-t` · follower `data-f` · image `data-w` · source app.js:303-324 «4 entrances (never reuse fade+slide-up everywhere)»
+
+```js
+const ENTER = {
+  blurWords: (els, at, tl) => els.forEach(el => { splitWords(el);
+    tl.fromTo($$('.wd', el), { opacity: 0, filter: 'blur(8px)' },
+      { opacity: 1, filter: 'blur(0px)', duration: T(.55), stagger: T(.075), ease: 'expo.out' }, at); }),
+  inkWords: (els, at, tl) => els.forEach(el => { splitWords(el);          // readable from the first frame
+    tl.fromTo($$('.wd', el), { opacity: .14 }, { opacity: 1, duration: T(.5), stagger: T(.09), ease: 'power2.out' }, at); }),
+  blurLine: (els, at, tl) => tl.fromTo(els, { opacity: 0, filter: 'blur(10px)' },
+    { opacity: 1, filter: 'blur(0px)', duration: T(.6), stagger: T(.08), ease: 'expo.out' }, at),
+  wipe: (els, at, tl) => tl.fromTo(els, { clipPath: 'inset(100% 0 0 0)' },
+    { clipPath: 'inset(0 0 0 0)', duration: T(1.1), ease: 'expo.out' }, at),
+  decodeWords: (els, at, tl) => els.forEach(el => { splitWords(el); $$('.wd', el).forEach((w, k) => {
+    tl.fromTo(w, { opacity: 0 }, { opacity: 1, duration: T(.2), ease: 'none' }, at + T(k * .16));
+    tl.call(() => decode(w, 900), null, at + T(k * .16)); }); }),     // item 7 · Latin letters only
+};
+```
+```js
+function enterChapter(sec, tl, at) {
+  ENTER[sec.dataset.enter || 'blurWords']($$('[data-t]', sec), at, tl);
+  ENTER.blurLine($$('[data-f]', sec), at + T(.25), tl);
+  ENTER.wipe($$('[data-w]', sec), at + T(.1), tl);
+  tl.set($$('.wd, [data-f], [data-w]', sec), { clearProps: 'filter,will-change' }, at + T(1.8));
+}   // «clear the filter after the entrance finishes, so the text ends fully sharp and never stays blurred»
+function exitChapter(sec, tl) {   // «the exit is shorter and speeds out (power3.in)»
+  tl.to($$('.wd, [data-f], [data-w]', sec), { opacity: 0, filter: 'blur(8px)', duration: T(.22), stagger: T(.012), ease: 'power3.in', overwrite: 'auto' }, 0);
+}
+```
+
+## 4 goChapter timeline skeleton
+
+**When to use:** deck-mode — chapters stack with `position:absolute; visibility:hidden` and only `.on` is visible · one timeline per chapter change: exit → hide → (camera flies) → show + enter · source app.js:488-515 «the new chapter's content enters when the camera has flown about 40% of the way (overlap)»
+
+```js
+function goChapter(j) {
+  j = Math.max(0, Math.min(CH.length - 1, j));
+  if (deck.busy || j === deck.i) return;
+  const cur = CH[deck.i], nxt = CH[j]; let at = 0;
+  deck.busy = true; setTimeout(() => { deck.busy = false; }, 2400);     // «slow device: never lock for too long»
+  const tl = gsap.timeline({ onComplete: () => { deck.busy = false; } });
+  if (cur) { exitChapter(cur, tl); tl.add(() => { cur.classList.remove('on'); cur.setAttribute('aria-hidden', 'true'); }, T(.32)); at = T(.62); }
+  world && world.chapter(nxt.id);                                        // the 3D camera flies in parallel (if there is one)
+  tl.add(() => { nxt.classList.add('on'); nxt.removeAttribute('aria-hidden'); }, at);
+  enterChapter(nxt, tl, at);
+  deck.i = j; deck.last = performance.now();
+  $$('.rail-i').forEach((b, k) => { b.classList.toggle('on', k === j); b.setAttribute('aria-current', k === j ? 'step' : 'false'); });
+  history.replaceState(null, '', '#' + nxt.id); document.body.dataset.ch = nxt.id;   // do not use pushState
+  nxt.focus({ preventScroll: true });                                    // move focus with the chapter (the section has tabindex="-1")
+}
+```
+CSS: `.ch { position: absolute; inset: 0; visibility: hidden; pointer-events: none; } .ch.on { visibility: visible; pointer-events: auto; }`
+
+## 5 iris page transition
+
+**When to use:** changing route from a click on a "thing" on screen (a node in a network, a card) — a brand-colour circle grows from the click point, the page swaps behind the circle, then it fades out · not for every navigation · reduced → set the hash directly · source app.js:805-812, 875-884 · styles.css:563
+
+```js
+function iris(x, y, swap) {           // swap = the fn that changes the route when the circle covers the screen
+  if (reduced()) return swap();
+  const o = document.createElement('div'); o.className = 'iris'; document.body.append(o);
+  const R = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)) + 20;
+  gsap.timeline()
+    .fromTo(o, { clipPath: `circle(6px at ${x}px ${y}px)` }, { clipPath: `circle(${R}px at ${x}px ${y}px)`, duration: .62, ease: 'power3.in' })
+    .add(swap)
+    .to(o, { opacity: 0, duration: .55, delay: .25, onComplete: () => o.remove() });
+}
+```
+```css
+.iris { position: fixed; inset: 0; z-index: 70; background: var(--accent); pointer-events: none; }
+```
+
+## 6 count-up
+
+**When to use:** statistic numbers that have just scrolled into view (`[data-count="1200"]`) — use it only on numbers you want remembered, not on every card · reduced → print the final value at once · source fx.js:41-50
+
+```js
+function countUp(el) {
+  const to = Number(el.dataset.count), fmt = n => Math.round(n).toLocaleString('th-TH');
+  if (reduced()) { el.textContent = fmt(to); return; }
+  const dur = 1400, s = performance.now();
+  (function tick(now) {
+    const t = Math.min(1, (now - s) / dur), e = 1 - Math.pow(1 - t, 4);   // ease-out quart
+    el.textContent = fmt(to * e);
+    if (t < 1) requestAnimationFrame(tick);
+  })(s);
+}
+```
+
+## 7 decode
+
+**When to use:** Latin-letter headlines (the pool is A-Z 0-9) — never use it on Thai, because floating vowels and tone marks break apart · reduced → print the real text at once · source fx.js:6-20
+
+```js
+function decode(el, dur = 1100, pool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789×=#%&/<>') {
+  const final = el.dataset.text || (el.dataset.text = el.textContent);
+  if (reduced()) { el.textContent = final; return; }
+  const start = performance.now();
+  const at = [...final].map((c, i) => (i / final.length) * dur * .7 + Math.random() * dur * .3);   // left settles before right
+  (function tick(now) {
+    const t = now - start;
+    el.textContent = [...final].map((c, i) => c === ' ' || t >= at[i] ? c : pool[(Math.random() * pool.length) | 0]).join('');
+    if (t < dur) requestAnimationFrame(tick); else el.textContent = final;
+  })(start);
+}
+```
+
+## 8 scroll reveal and lines
+
+**When to use:** page-mode (a normally scrolling page) — CSS does the motion and JS only adds the class `.in` once with an IntersectionObserver · `.lines` = lines that appear from beneath a frame · reduced → the kill-switch in item 1 · source styles.css:148-162 · fx.js:22-39
+
+```css
+[data-reveal] { opacity: 0; transform: translateY(28px); transition: opacity .9s var(--ease), transform 1.1s var(--ease); transition-delay: var(--d, 0ms); }
+[data-reveal].in { opacity: 1; transform: none; }
+.lines .ln { display: block; overflow: hidden; }
+.lines .ln > span { display: inline-block; transform: translateY(115%); transition: transform 1.15s var(--ease); }
+.lines.in .ln > span { transform: none; }
+```
+```js
+const io = new IntersectionObserver(entries => entries.forEach(e => {
+  if (!e.isIntersecting) return;
+  const el = e.target; el.classList.add('in');
+  if (el.matches('[data-count]')) countUp(el);
+  if (el.matches('[data-decode]')) decode(el);
+  io.unobserve(el);                                              // play once
+}), { threshold: .15, rootMargin: '0px 0px -8% 0px' });
+const observe = (root = document) => $$('[data-reveal], .lines, [data-count], [data-decode]', root).forEach(el => io.observe(el));
+```
+Use `--d` to delay items one by one within a group (`style="--d:80ms"`), at most 4–5 items — from the 6th on, the user waits.
+
+## 9 scrubWords
+
+**When to use:** one long sentence per page (`.words > .w`) that lights up word by word with the scroll position — not for body text · passive listener · returns a remover function to put in `cleanups` · source fx.js:52-65
+
+```js
+function scrubWords(el) {
+  const words = $$('.w', el);
+  if (reduced()) { words.forEach(w => w.classList.add('on')); return () => {}; }
+  const onScroll = () => {
+    const r = el.getBoundingClientRect(), vh = innerHeight;
+    const p = Math.min(1, Math.max(0, (vh * .85 - r.top) / (r.height + vh * .35)));
+    const n = Math.round(p * words.length);
+    words.forEach((w, i) => w.classList.toggle('on', i < n));
+  };
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  return () => removeEventListener('scroll', onScroll);
+}
+```
+CSS: `.words .w { opacity: .18; transition: opacity .35s; } .words .w.on { opacity: 1; }`
+
+## 10 wheel changes chapters, and locks inner scrolling lists
+
+**When to use:** deck-mode only — `passive:false`, and remove the listener when the route changes · a `.scrollable` list inside a chapter scrolls first. At the edge, the first wheel only gives a hint. Once scrolling stops, the next wheel changes the chapter · this stops trackpad momentum from skipping 2 chapters · source app.js:724-748 «end of the list: the first time only a hint, the next time (after scrolling stops) changes the chapter»
+
+```js
+function onWheel(e) {
+  const now = performance.now(), dy = e.deltaY, sinceWheel = now - (deck.lastWheel || 0); deck.lastWheel = now;
+  const sc = e.target.closest('.scrollable');
+  if (sc && sc.scrollHeight > sc.clientHeight + 4) {
+    const atEdge = dy > 0 ? sc.scrollTop + sc.clientHeight >= sc.scrollHeight - 2 : sc.scrollTop <= 1;
+    if (!atEdge) { deck.innerAt = now; deck.edgeArm = 0; return; }                       // let the list scroll
+    if (now - deck.innerAt < 700 || sinceWheel < 220) { e.preventDefault(); if (!deck.edgeArm) { deck.edgeArm = now; edgeHint(sc, dy); } return; }
+    deck.edgeArm = 0;
+  }
+  e.preventDefault();      // «trackpad momentum: continuous scrolling after a chapter change is not counted»
+  if (Math.abs(dy) < 6 || now - deck.last < 1000 || (sinceWheel < 160 && now - deck.last < 2200)) return;
+  goChapter(deck.i + (dy > 0 ? 1 : -1));
+}
+addEventListener('wheel', onWheel, { passive: false });
+cleanups.push(() => removeEventListener('wheel', onWheel));
+```
+`edgeHint(sc, dy)` = a small message under the list, "ดูครบแล้ว · เลื่อนอีกครั้งเพื่อไปบทถัดไป" (all seen · scroll again to go to the next chapter). It appears after 0.3 seconds and disappears by itself within 1.4 seconds.
+
+## 11 Observer touch swipe
+
+**When to use:** mobile deck-mode — catches only `touch`, not wheel (item 10 handles that) · skips areas that scroll on their own · source app.js:714-723 · gsap.com/docs/v3/Plugins/Observer
+
+```js
+gsap.registerPlugin(Observer);
+const ob = Observer.create({
+  target: window, type: 'touch', tolerance: 24, preventDefault: true,
+  ignore: '.scrollable, textarea, .modal',
+  onUp: () => goChapter(deck.i + 1),      // swipe up = next chapter
+  onDown: () => goChapter(deck.i - 1),
+});
+cleanups.push(() => ob.kill());
+```
+
+## 12 keyboard map
+
+**When to use:** every chapter-style site — required · skip when focus is in an input field or modal · left and right arrows are reserved for things inside a chapter (such as stepping through days in a schedule) · source app.js:749-759
+
+```js
+function onKey(e) {
+  if (e.target.closest('input, textarea, select, [contenteditable], .modal')) return;
+  const k = e.key;
+  if (['ArrowDown', 'PageDown', ' '].includes(k)) { e.preventDefault(); deck.last = 0; goChapter(deck.i + 1); }
+  else if (['ArrowUp', 'PageUp'].includes(k)) { e.preventDefault(); deck.last = 0; goChapter(deck.i - 1); }
+  else if (k === 'Home') goChapter(0);
+  else if (k === 'End') goChapter(CH.length - 1);
+  // ArrowLeft / ArrowRight: things inside a chapter (days in a schedule · sub-slides), not chapter changes
+}
+addEventListener('keydown', onKey);
+cleanups.push(() => removeEventListener('keydown', onKey));
+```
+
+## 13 rail markup and CSS
+
+**When to use:** 3–7 chapters — a numbered list on the right of the screen, the chapter name appears on hover or focus · the current chapter has `aria-current="step"` · below 900px it becomes a bottom bar · source app.js:481-483, 509 · styles.css:551-575
+
+```js
+const rail = $('#rail');
+rail.innerHTML = `<button class="rail-arrow" type="button" data-step="-1" aria-label="บทก่อนหน้า">↑</button>`
+  + CH.map((c, i) => `<button type="button" class="rail-i" data-i="${i}" aria-current="false"><span class="n">${String(i + 1).padStart(2, '0')}</span><span class="t">${c.dataset.label}</span></button>`).join('')
+  + `<button class="rail-arrow" type="button" data-step="1" aria-label="บทถัดไป">↓</button>`;
+rail.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  deck.last = 0; goChapter(b.dataset.i != null ? +b.dataset.i : deck.i + +b.dataset.step);
+});
+```
+```css
+.rail { position: fixed; z-index: 5; right: 20px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.rail-i { display: flex; align-items: center; gap: 10px; background: none; border: 0; padding: 7px 0; cursor: pointer; color: var(--muted); font-size: 13px; }
+.rail-i .n { font-variant-numeric: tabular-nums; font-weight: 600; font-size: 12px; position: relative; padding-right: 26px; }
+.rail-i .n::after { content: ""; position: absolute; right: 0; top: 50%; width: 14px; height: 1px; background: var(--line-2); transition: width .45s var(--ease); }
+.rail-i.on { color: var(--ink); }  .rail-i.on .n::after { width: 22px; height: 2px; background: var(--accent); }
+.rail-i .t { opacity: 0; transform: translateX(8px); transition: opacity .3s var(--ease), transform .45s var(--ease); white-space: nowrap; }
+.rail-i.on .t, .rail:hover .rail-i .t, .rail-i:focus-visible .t { opacity: 1; transform: none; }
+.rail-arrow { background: none; border: 1px solid var(--line-2); border-radius: 6px; width: 30px; height: 30px; cursor: pointer; color: var(--ink-2); margin: 6px 0; }
+@media (max-width: 900px) {
+  .rail { right: 0; left: 0; top: auto; bottom: 0; transform: none; flex-direction: row; justify-content: space-between; height: 60px; padding: 0 12px env(safe-area-inset-bottom, 0px); background: var(--bg); border-top: 1px solid var(--line); }
+  .rail-i .t { display: none; }  .rail-i.on .t { display: inline; }
+}
+```
+
+
+## reference: sources.md
+
+# Sources · dynamic-website
+
+## Sources (checked 2026-10-22)
+
+The reference is the website ai4ba.ai-cie.com (public code read 2026-10-22 · no licence stated → every recipe is rewritten in our own form, keeping only the ideas and the author's Thai sentences inside «…» marks).
+
+| Topic | Source |
+|---|---|
+| Structure · recipes · rules · anti-patterns | The website ai4ba.ai-cie.com (index.html · css/styles.css · js/app.js · js/fx.js · js/neural.js · js/net3d.js) public code read · no licence stated · the vendor/ that the site uses was not downloaded (`ยังไม่ได้ตรวจ` not yet checked) |
+| GSAP free | README gsap@3.15.0 on cdn.jsdelivr.net and gsap.com/pricing "Now Free!" — free including every plugin, commercial use allowed · free since 3.13.0 (npm 2025-04-30) · the full licence (Standard "No Charge" GSAP License · effective 2025-04-30 · last revised 2025-05-30) was read from the copy web.archive.org/web/20261017164627/https://gsap.com/standard-license because gsap.com returned a maintenance page for some pages · the text prohibits only "Prohibited Uses", meaning use in a no-code visual animation builder that competes with Webflow · the short explanation on the same page also says you may not charge end users, which contradicts the text and the pricing page, so the text governs · checked 2026-10-26 · npm gsap@3.15.0 states a license pointing to gsap.com/standard-license and has no LICENSE file in the package |
+| GSAP CDN | cdnjs.com/libraries/gsap 3.15.0 (2026-04-13) · `gsap.min.js` · plugins in the same folder (`Observer.min.js` `ScrollTrigger.min.js` `SplitText.min.js` — checked 2026-10-26: all 4 files returned HTTP 200 at `cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/<name>.min.js` · api.cdnjs.com/libraries/gsap states version 3.15.0 and licence "Standard 'No Charge' GreenSock License") |
+| CSS scroll-driven | developer.mozilla.org animation-timeline · drweb.de |
+| View Transitions | web.dev/blog/same-document-view-transitions-are-now-baseline-newly-available (2025-10-16) |
+| `@starting-style` · scroll-snap | developer.mozilla.org/@starting-style · caniuse.com/css-snappoints |
+| Lenis | github.com/darkroomengineering/lenis (MIT · 1.3.x) |
+| Observer · SplitText | gsap.com/docs/v3/Plugins/Observer · Codrops "7 Must-Know GSAP Animation Tips" (2025-09-03) · Osmo masked text reveal |
+| Accessibility | WCAG 2.3.3 w3.org/WAI/WCAG21/Understanding/animation-from-interactions · Heilmann 2019 (focus after scrolling) · developer.chrome.com/docs/lighthouse/best-practices/uses-passive-event-listeners |
+| Performance | web.dev/articles/animations-guide (transform/opacity · use will-change sparingly) · cost of blur and backdrop-filter: blog.openreplay.com · f22labs.com (community articles, not benchmarks) · effect of scroll-jacking on INP (`ยังไม่ได้ตรวจ` not yet checked) |
+| Thai fonts | fontsource.org · fonts.google.com · github.com/line/seed |
+| External skills referenced | github.com/greensock/gsap-skills (MIT · per a report compared 2026-10-22 · file content `ยังไม่ได้ตรวจ` not yet checked) · github.com/vercel-labs/web-interface-guidelines (MIT · checked 2026-10-23) |
+
+
+## reference: structure-and-recipes.md
+
+# Structure and recipe index · dynamic-website
+
+Open when building or changing the page skeleton (modes, router, cleanup list, heavy renderer) or choosing which recipe to copy from `recipes.md`.
+
+## Structure
+
+```
+hashchange → route()
+   │ #view.out 180 ms → cleanup() ← cleanups[] (Observer.kill · ถอด wheel/keydown · clearInterval · ยกเลิก rAF)
+   ├─ hash เป็นชื่อบท → deck-mode: body.deck-mode → goChapter(j): [ออกบทเดิม]→ซ่อน→[กล้องบิน]→โชว์→[เข้าบทใหม่]
+   │                                   rail · คีย์บอร์ด · wheel · Observer (touch) · history.replaceState
+   └─ อื่น ๆ ────────→ page-mode: body.page-mode → IntersectionObserver ติด .in · พื้นหลังหรี่เหลือ .22
+getWorld(): รอ renderer หนักไม่เกิน 4 วินาที → WebGL ได้? → three.js (กล้องเป็น object ที่ GSAP tween) · ไม่ได้ → body.no-webgl + เครือข่าย 2D canvas
+```
+
+| Part | How |
+|---|---|
+| 2 modes | **deck-mode** chapters stacked with `position:absolute; visibility:hidden`, only `.on` is visible · **page-mode** a normal scrolling page, using reveal item 8 of recipes · one site can have both modes (story chapters = deck · registration, payment, admin = page) |
+| hash router | One function `route()` on `hashchange` · changing chapters uses `replaceState` (so the Back button is not full of chapters) · changing pages uses a normal hash |
+| cleanup list | Every view pushes its own teardown function into `cleanups[]` · `route()` clears them all before rendering a new view — no leftover listeners, no leaking timers |
+| markup that declares the entrance | `<section class="ch" data-enter="blurWords">` · heading `data-t` · followers `data-f` · image `data-w` · content lives in HTML, not in JS |
+| heavy renderer | Load three.js as a module in parallel · wait for `neural:ready` or 4 seconds · probe WebGL · if it fails → `body.no-webgl` + a 2D canvas fallback that conveys the same meaning · `setAnimationLoop` only while the screen needs it |
+
+## Recipe index
+
+All code is in `recipes.md` (each block ≤ 15 lines, with its source).
+
+| Recipe | What it does | Use / do not use | reduced-motion |
+|---|---|---|---|
+| T gate + kill-switch | The one gate of all motion | Every file · do not re-check per item | itself |
+| splitWords | Split text into `.wd` by spaces | Before a per-word entrance · Thai = put spaces at the rhythm you want the entrance to follow | not affected |
+| blurWords | Default entrance, words blurred → sharp | Thai/Latin headings ≤ 12 words | duration 0 · clear blur |
+| inkWords | Words darken from .14 | Long closing sentence · readable from the first frame | same |
+| blurLine | Whole block blurs in with stagger 0.08 | Followers `data-f` · paragraphs · forms | same |
+| wipe | `clip-path` bottom → top | 1 image or figure per chapter | same |
+| decodeWords | Random characters run until they settle | Latin headings only · **not for Thai** (floating vowels break) | type the real text at once |
+| exit | Short exit, accelerating | Pair with every entrance | 0 |
+| goChapter | One timeline: exit → hide → camera → show → enter | deck-mode | immediate |
+| iris | A brand-colour circle grows from the click point, swap page behind the circle | Route change from clicking a "thing" on screen · not every navigation | skip, set the hash directly |
+| count-up | A number flows to its value | 1 statistic you want remembered · not every card | type the final value |
+| scroll reveal + .lines | CSS does the motion, IO adds `.in` | page-mode | kill-switch |
+| scrubWords | Words light up by scroll position | 1 long sentence per page · not body text | every word `.on` |
+| wheel + inner-list lock | Wheel changes chapter, list scrolls first | deck-mode only · `passive:false` | T=0 makes it immediate |
+| Observer swipe | Swipe changes chapter `tolerance:24` | Mobile deck-mode · skip `.scrollable` | same |
+| keyboard map | ↓ PgDn Space · ↑ PgUp · Home End | Every chapter-style site (mandatory) | same |
+| rail | Number list 01–05 on the right · bottom bar on mobile | 3–7 chapters | CSS only |
+
+
+## reference: tokens-and-fonts.md
+
+# Tokens, type scale and Thai fonts · dynamic-website
+
+Open when setting colour tokens, type sizes or choosing a Thai font for large headings.
+
+## Tokens and type scale
+
+**Colour comes from the work** — if there is a brand colour, use it · if not → **search references first:** take the project's words and search live per `design-gate/design-references` (plugin `superuser`) type `web` or `motion`, then extract colours from the chosen work · the stored palette library is for when live search is impossible · if live search is impossible → house value `#2A78D6` (dark shade `#226CC6` for text on a light background), write `(รอยืนยัน)` (awaiting confirmation) and carry on · the values in the table are the reference site's, so stick to the **token list and its roles**, not the colour values · token names match `web-app-design` → `references/tokens.md` so page-mode pages (forms · admin) can use the same set
+
+| Token | Reference value | Type role | Value |
+|---|---|---|---|
+| `--bg` · `--surface` | `#F7F6F2` · `#FFF` | body text | 400 16px/1.6 "IBM Plex Sans Thai", system-ui |
+| `--ink` · `--ink-2` · `--muted` | `#0F0F0E` · `#3A3934` · `#6B6A63` | hero display | `clamp(52px, 8.4vw, 132px)` · lh 1.04 · ls -.035em · 700 |
+| `--line` · `--line-2` | `#E4E1D8` · `#CFCBBF` | chapter heading (deck) | `clamp(42px, 5.7vw, 94px)` · lh 1.02 · ls -.04em |
+| `--accent` · `--accent-ink` · `--accent-soft` | brand colour · dark shade · light shade 95% | kicker h2 | `clamp(40px, 5.2vw, 76px)` · lh 1.05 · ls -.035em |
+| `--ok` `--warn` `--bad` (+ `-soft`) | green · amber · red — do not change with the brand | closing sentence | `clamp(34px, 4.2vw, 66px)` · lh 1.16 · 600 · max-width 12.5em |
+| `--ease` | `cubic-bezier(.16,1,.3,1)` (expo-out) | lead / hero-sub | 18px or `clamp(17px,1.6vw,20px)` · max-width 34–36em |
+| `--ease-io` | `cubic-bezier(.65,0,.35,1)` | large outlined number | `clamp(100px,9vw,170px)` · `-webkit-text-stroke` 1.5px ink 13% |
+| `--r` · `--pad` · `--max` · `--top` | 8px · 24px→16px · 1200px · 64px→56px | eyebrow / small | 12–13px · ls .04–.28em (Latin only) · `tabular-nums` |
+
+- Large Thai headings with negative `letter-spacing` must be checked at every weight — when tone marks collide with vowels, back off to -.01em · `uppercase` + wide ls is for Latin eyebrows only (`web-app-design` item 5)
+- The 3D background sits at z-index 0 under `main` (z 1) · deck opacity 1 · page-mode .22 · with a gradient scrim `.deck::before` «ให้ตัวหนังสืออ่านง่ายเหนือเครือข่าย»
+
+## Thai fonts for large headings
+
+| Font | Licence | Suited to | Note |
+|---|---|---|---|
+| IBM Plex Sans Thai | OFL 1.1 | Body text + chapter headings (the reference site uses it) | Latin is Plex Sans · loopless (the looped one is named IBM Plex Sans Thai Looped · checked 2026-10-23) easy to read at small size |
+| Anuphan | OFL 1.1 | Large loopless headings, modern | Adapted from Plex Thai in a loopless style · negative ls allowed |
+| Bai Jamjuree | OFL 1.1 | Large angular headings | The maker states "suited to headings" |
+| Kanit | OFL 1.1 | Large bold headings | Cut terminals, narrow ls allowed · many weights |
+| Noto Sans Thai | OFL 1.1 | Safe fallback for every job | Pairs with Noto Sans Latin |
+| LINE Seed Sans TH | OFL 1.1 (github.com/line/seed) | Large round friendly headings | On Google Fonts (`ยังไม่ได้ตรวจ` not yet checked) |
+| Sarabun | OFL | Official-document body text | Not a large-heading font |
+| Chakra Petch | (`ยังไม่ได้ตรวจ` not yet checked) | Technology headings — `slide-deck` uses it | Check the licence before self-hosting |
+
+**Pairing with Latin:** looped Thai pairs with Latin serif · loopless Thai pairs with Latin sans is a starting convention, not a hard rule. Several looped Thai fonts go with sans, but a serif paired with loopless Thai often looks odd · sets already designed as pairs: Trirong · Taviraj (looped Thai + serif · OFL) · IBM Plex Sans Thai (loopless + sans) · sources: Anuthin Wongsunkakon on the Linotype Neue Frutiger Thai page at myfonts.com · Smich Smanloh "Thai Type Pairing" ATypI 2020 · the Trirong and Taviraj descriptions in google/fonts · Wikipedia IBM Plex (all checked 2026-10-23)
+
+Download everything as woff2 and self-host (rule 15) · do not `<link>` Google Fonts in the delivered files
 
 
 ## reference: tokens.md
@@ -544,3 +1097,21 @@ You do not touch a single line of any component.
 | Filter | `.chips > .chip(.on)` · `.tabs > .tab(.on)` |
 | Other | `.prog > i` `.ava(.ava-lg)` `.md-html` `.empty` `.skeleton(.lg)` (loading content) `.spinner` (a short wait inside a button) `.toasts > .toast(.ok/.err)` `.backdrop + .modal` |
 | Utility | `.row` `.row-between` `.col` `.grow` `.ellipsis` `.wrap` `.mt-*` `.mb-*` `.gap-*` `.num` `.muted` `.faint` |
+
+
+## reference: tools.md
+
+# Choosing tools · dynamic-website
+
+Open when deciding between GSAP, CSS scroll-driven animation, View Transitions and scroll-snap, or when you need more GSAP depth.
+
+| Need | GSAP 3 (+ Observer · ScrollTrigger · SplitText) | CSS scroll-driven (`animation-timeline`) | View Transitions (same-document) | CSS scroll-snap |
+|---|---|---|---|---|
+| Status 2026-10 | 3.15.0 on cdnjs · every plugin free since 3.13 (2025-04) | MDN "Limited availability" · Chrome/Edge 115+ · Safari 26+ · Firefox behind a flag (Interop 2026) | Baseline Newly available · Firefox 144 · Chrome 111 · Safari 18 | 97% supported · Chrome 69 · Safari 11 · Firefox 68 |
+| Choose when | Chapters that overlap in time · camera/3D rig · capturing wheel and swipe · splitting words | Progress bar · parallax · reveal in a normal scrolling page — must look fine even when it does not run | Switching a route or state where old and new DOM exist together (list → detail · theme · chapter switch with no 3D) | Chapter-style site with no JS · want the browser to handle scrolling itself |
+| Do not use for | Simple reveals that CSS + IO already do | Things that must work on Firefox today with no fallback · scroll-jacking (cannot be done) | Continuous scroll-linked effects · 3D camera | Chapters with a scrolling list inside (snap will fight) · overlapping exit/enter timelines |
+| reduced motion | `T()` + `gsap.matchMedia()` | kill-switch `@media (prefers-reduced-motion)` | `::view-transition-group(*){animation:none}` | turn off `scroll-behavior:smooth` |
+
+- `@starting-style` (Baseline 2024-08) for transitions when appearing from `display:none` · Lenis 1.3.x (MIT) if you want smooth scrolling — drive it with `gsap.ticker` so there is only one rAF loop, and `respectReducedMotion:true` (the default)
+- Load GSAP from cdnjs for the mockup · for real delivery, self-host the files in `vendor/` (the site must open without depending on a CDN that is down)
+- If you need deeper GSAP API than this page gives (pin and scrub of ScrollTrigger · nested timelines · Flip · MorphSVG) → open the maker's official skill at github.com/greensock/gsap-skills (MIT) and read only the file of the plugin you use, do not load the whole set into context · the rules on this page (reduced motion · passive · budget) still outrank their advice

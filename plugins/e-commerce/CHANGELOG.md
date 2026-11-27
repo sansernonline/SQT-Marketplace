@@ -1,5 +1,30 @@
 # CHANGELOG — e-commerce
 
+## 2.0.0 — 2026-11-27
+
+รวม skill จาก 37 เหลือ 14 (เปลี่ยนชื่อแบบไม่เข้ากับของเดิม) · เจ้าของสั่ง 2026-11-27 · เนื้อหาเดิมของแต่ละตัวย้ายไปเป็น `references/<ชื่อเก่า>.md` ของตัวที่เหลือ ไม่ได้ตัดกฎทิ้ง · eval ย้ายตามไปใต้ชื่อใหม่ · playbook ชี้ไฟล์หลักคิดและชื่อ skill ใหม่
+
+| ชื่อเก่า | ใช้แทนด้วย |
+|---|---|
+| `product-listing` · `live-selling-script` · `win-back-customers` | `sales-copy` (ใหม่) |
+| `marketplace-fees-pricing` · `import-landed-cost` · `shipping-compare` | `pricing-and-costs` (ใหม่) |
+| `multi-shop-stock` · `shop-daily-briefing` | `shop-operations` (ใหม่) |
+| `chat-reply-templates` · `returns-and-bad-reviews` | `customer-care` (ใหม่) |
+| `buy-compare` · `refund-request` · `complain` · `warranty-tracker` | `buyer-help` (ใหม่) |
+| `sme-bookkeeping` · `cash-flow` · `promptpay-qr` | `shop-books` (ใหม่) |
+| `tax-vat-th` · `seller-tax-basics` · `e-tax-invoice` · `dbd-annual-filing` | `thai-tax` (ใหม่) |
+| `hiring-th` · `payroll-th` · `social-security-th` · `labour-law-basics` · `doc-leave` · `thai-holidays` | `thai-employment` (ใหม่) |
+| `doc-quotation` · `doc-thai-official` · `doc-contract-th` | `thai-business-docs` (ใหม่) |
+| `line-oa-setup` · `line-broadcast` · `line-chatbot` | `line-oa` (ใหม่) |
+
+## 1.13.1 — 2026-11-27
+
+- `shop-principles` เพิ่ม 3 ชนิดงาน: line-oa · business-setup · buying · ตัวเลข กำหนดเวลา และมาตรากฎหมายที่มีแหล่งไม่ถึง 3 แหล่งตัดออก ให้ไปดูใน skill แทน
+
+## 1.13.0 — 2026-11-27
+
+- skill ใหม่ `shop-principles`: หลักคิด 4 ชนิดงาน (selling · customer-care · shop-money · thai-paperwork) ทุกข้อมีแหล่งตรงกันอย่างน้อย 3 แหล่ง · ข้อที่อ้างร่างกฎหมายระบุว่ายังไม่ประกาศใช้
+
 ## 1.12.3 — 2026-11-27
 
 - agent และ skill ที่อ้าง skill ของ graphic-design ชี้ชื่อใหม่ (graphic-design 0.38.0 รวม 24 เหลือ 14)

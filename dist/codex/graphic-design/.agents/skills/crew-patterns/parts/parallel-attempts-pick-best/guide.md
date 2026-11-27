@@ -32,7 +32,7 @@ Read every entry to the end before deciding. Score criterion by criterion, not b
 - The job's hard rules (required specs) filter out entries that fail, before comparing.
 - If the scores agree, treat it as confirmed.
 - If they disagree, the criteria are ambiguous or one side is biased. Read both sides' reasons before deciding.
-- If scores are close, choose the entry that is easiest to keep working on, meaning clearer scope and fewer parts (`lazy-coding` (plugin `software-development`)).
+- If scores are close, choose the entry that is easiest to keep working on, meaning clearer scope and fewer parts (`code-craft` (plugin `software-development`)).
 - **Fewer than 2 entries pass the criteria → fall back to a single piece of work.** There is nothing to compare. Skip step 5, take the entry closest to passing as the draft, and fix it by the normal review round of `superuser`. Do not launch a new round, because every entry failing together usually means the task or criteria are unclear, not that the contestants are weak. Note in `decision-desk/decision-log` why the bake-off did not work.
 
 ## 5 · Lift the strong parts in

@@ -17,7 +17,7 @@ description: Use with a platform skill when a task produces a screen or mockup
 - A screen "looks off" and you cannot say why, or you review a UI someone else made.
 - The platform has no dedicated skill yet (TV app · kiosk · smart watch).
 
-Not for: real colors, fonts, components (also chart colors) → `web-app-design` · `windows-app-design` · `mobile-app-design` (this skill sets no colors or fonts, only spacing, size, order and states) · printed documents → `branded-document-design` · slides → `presentation-design`. User flow before drawing → agent `ux-designer` (template: [`references/ux-spec-outputs.md`](references/ux-spec-outputs.md)).
+Not for: real colors, fonts, components (also chart colors) → `web-app-design` · `windows-app-design` · `mobile-app-design` (this skill sets no colors or fonts, only spacing, size, order and states) · printed documents → `document-design` · slides → `slide-deck`. User flow before drawing → agent `ux-designer` (template: [`references/ux-spec-outputs.md`](references/ux-spec-outputs.md)).
 
 ## Steps
 
@@ -41,7 +41,7 @@ New project → pick 1 of 6 app characters before the first page: [`references/a
 Full text: [`references/visual-direction.md`](references/visual-direction.md). In short:
 1. **1 hero screen**: 1 sentence on the wow moment, and the page shows it (not a settings page or form).
 2. **Reference app**: take screenshots of 2–3 official pages into `_to_delete/ref-shots/`, note 5 things that make it look good. Always search live, even with a reference app.
-3. **3 directions in parallel** (one new subagent each; cannot call sub-agents → make them yourself one at a time, never a single direction), genuinely different, each with 1 point of boldness. Start from [`design-direction-lookup`](../design-direction-lookup/SKILL.md) with `--palette`.
+3. **3 directions in parallel** (one new subagent each; cannot call sub-agents → make them yourself one at a time, never a single direction), genuinely different, each with 1 point of boldness. Start from [`design-system`](../design-system/SKILL.md) with `--palette`.
 4. **Comparison page** `docs/design/<code>-design-directions.html`.
 5. **Choose 1**: ask the user once at the start whether they want to choose; otherwise a new beauty-gate reviewer scores per section 9 and the highest wins, recorded under `## ตัดสินใจเอง`.
 6. **Identity**: logo in the title bar, brand color written to `docs/README.md` field `doc-theme`.
@@ -52,7 +52,7 @@ Sample content must look real: realistic data, real images per `image-generation
 Every padding · margin · gap is a value in this scale, even when the platform skill conflicts, **except values measured from the real system and named in the exception list of `references/scales.md`** (for example Windows: content edge 36 · gap between sections 40). Things that belong together sit closer than things that do not. Card padding ≥ the gap inside. Details → [`references/scales.md`](references/scales.md).
 
 ### 2 · Type scale
-At most 5 sizes per screen (web: lg 22 · md 15 · base 13 · sm 12 · xs 11) · smallest 11 · 2 weights · lines of 45–75 characters · Thai line-height +0.1. A marketing or landing page without motion uses the type scale and rhythm in [`references/scales.md`](references/scales.md#3--หน้าการตลาดและ-landing-ที่ไม่มี-motion) (with motion → `dynamic-website`).
+At most 5 sizes per screen (web: lg 22 · md 15 · base 13 · sm 12 · xs 11) · smallest 11 · 2 weights · lines of 45–75 characters · Thai line-height +0.1. A marketing or landing page without motion uses the type scale and rhythm in [`references/scales.md`](references/scales.md#3--หน้าการตลาดและ-landing-ที่ไม่มี-motion) (with motion → `web-app-design`).
 
 ### 3 · Visual order: one screen, one important thing
 Ask what the user opened this page to do. That item gets level 1.

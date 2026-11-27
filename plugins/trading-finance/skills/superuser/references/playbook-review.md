@@ -2,11 +2,12 @@
 
 Use when: checking work before it is sent or really used · "can you look for anything I missed" · the user did it themselves and wants it checked.
 Result: a verdict with a list of confirmed problems. **Does not fix anything automatically**, and it is read-only work that does not create `CONTEXT.md`.
-Main skill: `position-sizing` · `trade-journal` · `tax-deduction-planner`
+Main principles: [`money-principles`](../../money-principles/SKILL.md) · the file of the kind of work checked (table in that SKILL.md; the checkers in step 4 judge against it)
+Main skills: `position-sizing` · `trade-journal` · `income-tax-th`
 
 ## ขั้นตอน (Steps — copy into the todo as written)
 
-1. Set the scope — the piece to check, and the source documents to compare it with (trade journal · statements · tax rules from official sources) · ใคร: หัวหน้าทีม
+1. Set the scope — the piece to check, and the source documents to compare it with (trade journal · statements · tax rules from official sources), and open the principle file of that kind of work · ใคร: หัวหน้าทีม
 <!-- superuser:begin review-steps -->
 2. Prepare the review package per [`review-lenses`](review-lenses.md) item 1: the intent of the work in 1 paragraph (who uses it, for what; if unsure, choose the interpretation with the least impact and do not stop to ask) · the diff as a file · the spec's conditions quoted exactly · the `head:` id · the author's reasoning kept separate in `author-notes.md`, with no opinion on pass or fail put in the prompt · ใคร: หัวหน้าทีม
 3. Choose lenses by the kind of work from [`review-lenses`](review-lenses.md) item 2 (every job has `spec` and `quality`), then follow the checklist of this playbook's main skill (none → a related skill) · ใคร: หัวหน้าทีม

@@ -1,6 +1,6 @@
 # User experience (UX) spec outputs — user flow and interaction spec
 
-Text parts of a UX spec that sit beside the clickable HTML mockup (`mockup/<CODE>-mockup.html`) — moved from agent `ux-designer` (2026-10-14). Wireframe pictures inside a .md spec: ASCII and inline SVG templates are in skill `markdown-visuals` (`references/ascii-patterns.md`, `references/svg-snippets.md`).
+Text parts of a UX spec that sit beside the clickable HTML mockup (`mockup/<CODE>-mockup.html`) — moved from agent `ux-designer` (2026-10-14). Wireframe pictures inside a .md spec: ASCII and inline SVG templates are in skill `diagrams` (`references/ascii-patterns.md`, `references/svg-snippets.md`).
 
 ## User Flow
 ```markdown

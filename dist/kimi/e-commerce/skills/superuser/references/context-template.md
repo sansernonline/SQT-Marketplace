@@ -10,19 +10,19 @@ Fill these in place of the blanks in the template below.
 - Job name: online clothing shop
 - What the job is: what is sold, on which platform, shop type
 - Rules (`กติกา`): where the main stock file is · target margin · the shop's tone of voice
-- Example IMPROVEMENTS row: a platform added a fee for its free-shipping program in some categories · evidence: the platform's announcement page + Seller Centre · merge into `marketplace-fees-pricing` references/fee-structures.md
+- Example IMPROVEMENTS row: a platform added a fee for its free-shipping program in some categories · evidence: the platform's announcement page + Seller Centre · merge into `pricing-and-costs` references/fee-structures.md
 
 **Buying work**
 - Job name: complaint, broken refrigerator
 - What the job is: what happened, with which shop, what is wanted, which step it is at
 - Rules (`กติกา`): deadline of the right · channels already used · where the evidence is kept
-- Example IMPROVEMENTS row: a platform moved the dispute button into the order detail page · evidence: the platform's help page + a trial in the app · merge into `refund-request`
+- Example IMPROVEMENTS row: a platform moved the dispute button into the order detail page · evidence: the platform's help page + a trial in the app · merge into `buyer-help`
 
 **Back-office work (tax, payroll, PDPA, LINE OA)**
 - Job name: back office, Example Co., Ltd.
 - What the job is: which company, VAT registered or not, how many employees, accounting period
 - Rules (`กติกา`): where the payroll file is · who the accountant and auditor are · which file holds the LINE secrets (do not open it)
-- Example IMPROVEMENTS row: the online filing system moved the withholding tax menu into e-WHT · evidence: Revenue Department website + 2 sources · merge into `tax-vat-th`
+- Example IMPROVEMENTS row: the online filing system moved the withholding tax menu into e-WHT · evidence: Revenue Department website + 2 sources · merge into `thai-tax`
 
 <!-- superuser:begin context -->
 ## CONTEXT.md

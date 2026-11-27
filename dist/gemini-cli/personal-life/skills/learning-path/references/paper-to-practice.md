@@ -2,7 +2,7 @@
 
 Open when the user brings a paper, RFC or article and wants to apply it. From "I read it" to "it runs on my machine". Used with the `tech-mentor` agent.
 
-Not for: only understanding English wording in a paper or RFC → `english-tech-reading` · writing it up as a thesis or report → `thesis-writing`.
+Not for: only understanding English wording in a paper or RFC → `learning-path` · writing it up as a thesis or report → `thesis-writing`.
 
 ## Steps
 
@@ -23,5 +23,5 @@ Use [practice-note-template.md](practice-note-template.md) for the one-page note
 - The example runs, or the deliverable says why it could not and what was tried
 - Turn math into code or concrete numbers. A formula nobody calculated teaches nothing
 - Credit the source with title, authors, and date in the note
-- Thai wording in the note passes the EN→TH checklist in `english-tech-reading` `references/decode-template.md` (`human-writing` `references/thai-grammar.md` section 7)
+- Thai wording in the note passes the EN→TH checklist in `learning-path` `references/decode-template.md` (`human-writing` `references/thai-grammar.md` section 7)
 - If the core idea needs infrastructure the user lacks, use a simulation instead and say so

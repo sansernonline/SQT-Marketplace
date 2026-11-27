@@ -106,7 +106,7 @@ export function extraGates(env) {
     }],
     ["คำพ้องรูป: simplify → superuser:ground-rules · ชื่ออื่นไม่เปลี่ยน · เรียกชื่อเปล่าเตือนครั้งเดียว", [], true, () => {
       const w = () => homonymWarn({ tool_name: "Skill", tool_input: { skill: "ground-rules" }, session_id: `h-${process.pid}` }, router, sess);
-      return fixHomonyms(["ground-rules", "lazy-coding"], router).join() === "superuser:ground-rules,lazy-coding" && /superuser:ground-rules/.test(w()) && w() === "" && !homonymWarn({ tool_name: "Skill", tool_input: { skill: "superuser:ground-rules" }, session_id: "h2" }, router, sess);
+      return fixHomonyms(["ground-rules", "code-craft"], router).join() === "superuser:ground-rules,code-craft" && /superuser:ground-rules/.test(w()) && w() === "" && !homonymWarn({ tool_name: "Skill", tool_input: { skill: "superuser:ground-rules" }, session_id: "h2" }, router, sess);
     }],
     ["เดาชื่อ skill: stack-pyton → stack-python · ชื่อที่มี · ชื่อไกลมาก → เงียบ", [], true, () => /stack-python/.test(suggestSkill("stack-pyton", inst)) && suggestSkill("stack-python", inst) === "" && suggestSkill("zzzzzzzz", inst) === ""],
     ["ชื่อ skill: prefix ผิด plugin → เตือนพร้อมชื่อถูก · plugin ที่สแกนไม่เจอ (anthropic-skills) → เงียบ · ชื่อสั้นแปลงเป็นชื่อเต็ม", [], true, () =>

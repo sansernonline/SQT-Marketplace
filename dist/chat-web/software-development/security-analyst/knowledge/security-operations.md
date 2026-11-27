@@ -4,7 +4,7 @@ Use when running SOC, SIEM rules or threat hunting
 
 # security-operations
 
-Operational security work — incident response · Security Operations Center (SOC, the team that watches for security events) · detection rules · threat hunting · security architecture (for code, use `security-gate` · `principle-secure-by-default`)
+Operational security work — incident response · Security Operations Center (SOC, the team that watches for security events) · detection rules · threat hunting · security architecture (for code, use `security-gate`)
 
 **Open only the files that match the job.** Do not read them all, because each file is the full guide to its topic.
 
@@ -29,7 +29,7 @@ An agent called in for this area opens its own role file before starting.
 
 ## ไม่ใช้เมื่อ
 
-- Write an incident runbook for on-call → `incident-runbook-template` · summarise an incident after it ends → `postmortem-template`
+- Write an incident runbook for on-call → `incidents-and-monitoring` · summarise an incident after it ends → `incidents-and-monitoring`
 
 ## agent ของสายนี้
 
@@ -217,7 +217,7 @@ Phase C: Full restoration
 
 ## Phase 5: Lessons Learned
 
-Use the `postmortem-template` skill (from software-development) for a blameless postmortem.
+Use the `incidents-and-monitoring` skill (from software-development) for a blameless postmortem.
 
 Security-specific questions:
 - Detection latency (how long was adversary in?)
@@ -273,7 +273,7 @@ Preservation:
 
 ## Output: Incident Report
 
-Use `design-gate/polished-document-style` + `postmortem-template` skills.
+Use `design-gate/polished-document-style` + `incidents-and-monitoring` skills.
 
 ```markdown
 # Incident Report: <Title>
@@ -317,7 +317,7 @@ Use `design-gate/polished-document-style` + `postmortem-template` skills.
 ## Skills You Use
 
 - `security-operations` — IR-specific patterns
-- `postmortem-template` (from software-development)
+- `incidents-and-monitoring` (from software-development)
 - `design-gate/polished-document-style` (from superuser)
 
 ## Things You Don't Do
@@ -612,7 +612,7 @@ Use `design-gate/polished-document-style` skill (from superuser).
 ## Skills You Use
 
 - `design-gate/polished-document-style` (from superuser)
-- `architecture-patterns` (from software-development)
+- `architecture` (from software-development)
 - `security-operations`
 
 ## Things You Don't Do
@@ -1087,7 +1087,7 @@ for ioc in iocs:
 
 ## Skills You Use
 
-- `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+- `code-craft` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `security-operations` — detection patterns
 - `design-gate/polished-document-style` (from superuser) — for hunt reports
 
@@ -1121,7 +1121,7 @@ for ioc in iocs:
 
 Design a security operations center (SOC) or run a threat hunt with the security-analyst agent (soc-design or threat-hunt).
 
-Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+Two modes. Read the first word of **the user's request**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
 
 | Mode | What it does |
 |---|---|
@@ -1132,7 +1132,7 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 
 ## Mode: `soc-design`
 
-Use the `security-analyst` agent to design a SOC for: **$ARGUMENTS**
+Use the `security-analyst` agent to design a SOC for: **the user's request**
 
 Workflow:
 
@@ -1152,7 +1152,7 @@ Workflow:
 
 ## Mode: `threat-hunt`
 
-Use the `security-analyst` agent for: **$ARGUMENTS**
+Use the `security-analyst` agent for: **the user's request**
 
 Workflow:
 
@@ -1360,7 +1360,7 @@ Stage 3: Full production
 ## Phase 6: Lessons Learned
 
 ### Within 7 days
-Use `postmortem-template` skill for blameless analysis.
+Use `incidents-and-monitoring` skill for blameless analysis.
 
 ### Specific to security
 - Detection latency (time to detect, TTD)
@@ -1444,7 +1444,7 @@ Public: per disclosure obligations
 
 ## Output: Incident Report
 
-Use `design-gate/polished-document-style` + `postmortem-template` skills.
+Use `design-gate/polished-document-style` + `incidents-and-monitoring` skills.
 
 Include:
 - Executive summary

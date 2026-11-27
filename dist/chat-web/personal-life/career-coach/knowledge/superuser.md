@@ -232,8 +232,8 @@ The situation → skill table is in [`triggers`](references/triggers.md). Open i
 
 | criterion | passes when | skill |
 |---|---|---|
-| **Complete, nothing dropped** | every item from the source (email, calendar, statement, document) is picked up, and every task has a date and an owner | `inbox-triage` · `important-docs` |
-| **Findable later** | file names and storage follow one pattern; searching with the words a person would think of finds it | `personal-kb` · `important-docs` |
+| **Complete, nothing dropped** | every item from the source (email, calendar, statement, document) is picked up, and every task has a date and an owner | `weekly-review` · `family-legal` |
+| **Findable later** | file names and storage follow one pattern; searching with the words a person would think of finds it | `personal-kb` · `family-legal` |
 | **Ready to act** | every item has a clear next step, a ready-to-send message draft, and click-by-click steps | `weekly-review` · `human-writing/polite-message-th-en` |
 
 A summary is always shorter than the original. If the user still has to go back to the original, the summary is not enough.
@@ -242,8 +242,8 @@ A summary is always shorter than the original. If the user still has to go back 
 
 | criterion | passes when | skill |
 |---|---|---|
-| **Figures and dates from the real thing** | amounts, due dates and plate numbers are copied from the bill, registration book or quote · estimates labelled `อนุมาน` | `household-bills` · `vehicle-care` |
-| **Owner and date** | every task has a due date and an owner · a reminder is set | `home-maintenance` · `meal-plan-grocery` |
+| **Figures and dates from the real thing** | amounts, due dates and plate numbers are copied from the bill, registration book or quote · estimates labelled `อนุมาน` | `household-money` · `home-upkeep` |
+| **Owner and date** | every task has a due date and an owner · a reminder is set | `home-upkeep` · `family-week` |
 | **Shareable** | a table or checklist reads easily on a phone and can go straight into the family group chat | every skill |
 
 Government entitlements and rates change often. Check the official website every time they are used.
@@ -252,9 +252,9 @@ Government entitlements and rates change often. Check the official website every
 
 | criterion | passes when | skill |
 |---|---|---|
-| **Copied from the real thing** | every drug name, dose, lab value and appointment date matches the label, result sheet or appointment slip. If incomplete, put `[ถามเภสัชกร]` | `medication-schedule` · `annual-checkup` |
-| **In scope** | no sentence diagnoses, interprets results or suggests a dose, and medical questions are turned into questions for the doctor | `doctor-visit-prep` |
-| **Really usable** | a table, card or reminder that the user or carer can use at once, printed or on a phone | `medication-schedule` · `doctor-visit-prep` |
+| **Copied from the real thing** | every drug name, dose, lab value and appointment date matches the label, result sheet or appointment slip. If incomplete, put `[ถามเภสัชกร]` | `health-admin` |
+| **In scope** | no sentence diagnoses, interprets results or suggests a dose, and medical questions are turned into questions for the doctor | `health-admin` |
+| **Really usable** | a table, card or reminder that the user or carer can use at once, printed or on a phone | `health-admin` |
 
 If unsure whether something is out of scope, treat it as out of scope and send it as a question for the doctor or pharmacist.
 
@@ -262,9 +262,9 @@ If unsure whether something is out of scope, treat it as out of scope and send i
 
 | criterion | passes when | skill |
 |---|---|---|
-| **True** | every title, date and figure comes from the user or a document. If missing, put `[ใส่ตัวเลข]` | `resume-th-en` |
-| **On target** | matches the set job or reader, has all keywords from the posting, and irrelevant material is cut | `resume-th-en` |
-| **Ready to use** | the user can copy it to send or say it at once · both Thai and English when readers could be either · the Applicant Tracking System (ATS) can read the file | `interview-prep` · `salary-negotiation` |
+| **True** | every title, date and figure comes from the user or a document. If missing, put `[ใส่ตัวเลข]` | `job-search` |
+| **On target** | matches the set job or reader, has all keywords from the posting, and irrelevant material is cut | `job-search` |
+| **Ready to use** | the user can copy it to send or say it at once · both Thai and English when readers could be either · the Applicant Tracking System (ATS) can read the file | `job-search` |
 
 Answer money questions as a table of total yearly income, never base salary alone.
 
@@ -273,7 +273,7 @@ Answer money questions as a table of total yearly income, never base salary alon
 | criterion | passes when | skill |
 |---|---|---|
 | **Runs** | every code example is really run, with command and result · every milestone ends with something that runs | `learning-path` |
-| **Cites official sources** | version, feature and exam information comes from official docs, release notes or exam guides, with link and date | `tech-radar` · `cert-prep` |
+| **Cites official sources** | version, feature and exam information comes from official docs, release notes or exam guides, with link and date | `tech-growth` · `learning-path` |
 | **Fits the time** | the plan fits the time the user really has per week and has a checkpoint to continue or stop | `learning-path` |
 
 Learn from the real thing before summaries. Reading the official docs and trying to run them beats reading 10 summary articles.
@@ -437,28 +437,28 @@ Fill the blanks in the template below. Pick the set that matches the kind of wor
 - ชื่องาน: งานส่วนตัว
 - งานนี้คืออะไร: what it covers, and on what cycle
 - กติกา: where the document register file is · the weekly review day · which email plugin to use
-- Example IMPROVEMENTS row: a streaming service moved its cancel button to the website and removed it from the app · evidence: the service's help page + a trial · merge into `subscription-audit` references/cancel-steps.md
+- Example IMPROVEMENTS row: a streaming service moved its cancel button to the website and removed it from the app · evidence: the service's help page + a trial · merge into `household-money` references/cancel-steps.md
 
 **Home and family**
 - ชื่องาน: งานบ้าน
 - งานนี้คืออะไร: what is covered, which home, who in the household is responsible for what
 - กติกา: where the bills sheet is · budget per person · who gets reminders about what
-- Example IMPROVEMENTS row: car tax can be renewed online for cars that need an inspection, once inspected at a private inspection centre (ตรอ.) · evidence: Department of Land Transport website + 2 sources · merge into `vehicle-care`
+- Example IMPROVEMENTS row: car tax can be renewed online for cars that need an inspection, once inspected at a private inspection centre (ตรอ.) · evidence: Department of Land Transport website + 2 sources · merge into `home-upkeep`
 
 **Health**
 - ชื่องาน: สุขภาพ แม่
 - งานนี้คืออะไร: who is cared for and what, which appointments or cycles are running
 - กติกา: where the medication schedule file is · who is the main caregiver · do not send data out of the folder
-- Example IMPROVEMENTS row: the Social Security Office website moved its health-check entitlement list page · evidence: link to the new official page · merge into `annual-checkup`
+- Example IMPROVEMENTS row: the Social Security Office website moved its health-check entitlement list page · evidence: link to the new official page · merge into `health-admin`
 
 **Career**
 - ชื่องาน: หางาน 2026
 - งานนี้คืออะไร: career goal, positions being applied for, overall status
 - กติกา: CV language · where the main CV file is · never reveal the current salary in documents that go out (keep the real figure in the user's own file, not here)
-- Example IMPROVEMENTS row: the applicant tracking systems (ATS) of several large companies read two-column PDFs in the wrong order · evidence: converted the file to text as a test · links to 3 vendor guides · merge into `resume-th-en`
+- Example IMPROVEMENTS row: the applicant tracking systems (ATS) of several large companies read two-column PDFs in the wrong order · evidence: converted the file to text as a test · links to 3 vendor guides · merge into `job-search`
 
 **Learning** — ชื่องาน: เรียน Rust · งานนี้คืออะไร: what is being learned, for which job, which milestone it is at
-- กติกา: hours per week · command to run the examples · exam date (if any) · never put secrets or tokens of the cloud account used for labs · example IMPROVEMENTS row: a new exam guide for one certification changed the topic weights · evidence: link to the official exam guide · merge into `cert-prep` references/exam-facts.md
+- กติกา: hours per week · command to run the examples · exam date (if any) · never put secrets or tokens of the cloud account used for labs · example IMPROVEMENTS row: a new exam guide for one certification changed the topic weights · evidence: link to the official exam guide · merge into `learning-path` references/exam-facts.md
 
 <!-- superuser:begin context -->
 ## CONTEXT.md
@@ -736,15 +736,16 @@ The column template and the values used in each field live in one place, the [qu
 # playbook · bills — read bills and track monthly costs
 
 Use when: the electricity or water bill went up · the user wants to track household costs every month · setting up automatic payment
-Main skill: `household-bills`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/life-admin.md`](../../life-principles/references/life-admin.md)
+Main skills: `household-money` (`references/household-bills.md`)
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. Read the real bill the user sent. Copy the units, amount, Ft charge, and due date into the tracking table · ใคร: `home-manager` ตัวใหม่
-2. Compare with the 3 months before. If the bill rose by more than 20%, look for the cause per `household-bills` (new rate · number of days in the cycle · new appliance · leak) · ใคร: `home-manager` ตัวใหม่
+1. Open the principle file [`references/life-admin.md`](../../life-principles/references/life-admin.md) first. Read the real bill the user sent. Copy the units, amount, Ft charge, and due date into the tracking table · ใคร: `home-manager` ตัวใหม่
+2. Compare with the 3 months before. If the bill rose by more than 20%, look for the cause per `household-money` (new rate · number of days in the cycle · new appliance · leak) · ใคร: `home-manager` ตัวใหม่
 3. Check (ตรวจ) the current rate on the website of the local electricity or water authority · ใคร: `home-manager` ตัวใหม่
 4. Summarize the possible causes from most to least likely, and what the user can check at home · ใคร: `home-manager` ตัวใหม่
-5. Set a reminder for the due date of every bill · ใคร: `home-manager` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set against the real bills and the official websites
+5. Set a reminder for the due date of every bill (ตัดสินผลตาม [`references/life-admin.md`](../../life-principles/references/life-admin.md)) · ใคร: `home-manager` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set against the real bills and the official websites
 
 ## Done when
 
@@ -756,14 +757,15 @@ The bill table matches the real bills, and the explanation of why the bill rose 
 # playbook · care-setup — set up care for an older adult, a child, or a pet
 
 Use when: starting to care for an elderly parent · a child starts school or changes school · a new pet arrives
-Main skills: `elder-care` · `kids-school` · `pet-care`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/family-home.md`](../../life-principles/references/family-home.md) · [`references/health-care.md`](../../life-principles/references/health-care.md)
+Main skills: `family-care` (`references/elder-care.md` · `references/kids-school.md` · `references/pet-care.md` · `references/law-and-vaccines.md`)
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. List the related entitlements (elderly living allowance · medical coverage · child subsidy · tax deductions). Check (ตรวจ) them against official agency websites, with the documents needed and the filing steps · ใคร: `family-planner` ตัวใหม่
+1. Open the principle files [`references/family-home.md`](../../life-principles/references/family-home.md) · [`references/health-care.md`](../../life-principles/references/health-care.md) first. List the related entitlements (elderly living allowance · medical coverage · child subsidy · tax deductions). Check (ตรวจ) them against official agency websites, with the documents needed and the filing steps · ใคร: `family-planner` ตัวใหม่
 2. Make a personal record: the older adult's doctor appointments and medicines · the school term calendar · the pet's vaccine history. For elder care, add a home fall-prevention checklist and a handover note for caregivers · ใคร: `family-planner` ตัวใหม่
 3. Make an `.ics` reminder file for every due date, for the user to import into their own calendar · ใคร: `family-planner` ตัวใหม่
-4. Check (ตรวจ) the whole set (entitlements · medicines · appointments · dates in the `.ics` file) against official websites and the real documents · ใคร: `reviewer` ตัวใหม่
+4. Check (ตรวจ) the whole set (entitlements · medicines · appointments · dates in the `.ics` file) against official websites and the real documents (ตัดสินผลตาม [`references/family-home.md`](../../life-principles/references/family-home.md) · [`references/health-care.md`](../../life-principles/references/health-care.md)) · ใคร: `reviewer` ตัวใหม่
    If it fails, a fresh `family-planner` fixes it and a fresh `reviewer` checks again (at most 5 rounds)
 
 ## Done when
@@ -776,15 +778,16 @@ The personal record and the entitlement list are checked against official source
 # playbook · cert-prep — prepare for a certification exam
 
 Use when: preparing for AWS · Azure · Google Cloud · Kubernetes · Scrum or another certification.
-Main skill: `cert-prep`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/learning.md`](../../life-principles/references/learning.md)
+Main skills: `learning-path` (`references/cert-prep.md`)
 
 ## ขั้นตอน (Steps — copy into the todo as written)
 
-1. Pull the current official exam guide — topics, weights, format, time — then ตรวจ that the exam code is still in use · ใคร: `tech-mentor` ตัวใหม่
+1. Open the principle file [`references/learning.md`](../../life-principles/references/learning.md) first. Pull the current official exam guide — topics, weights, format, time — then ตรวจ that the exam code is still in use · ใคร: `tech-mentor` ตัวใหม่
 2. Build a gap map — topics the user already knows, does not know yet, and needs a lab for · ใคร: หัวหน้าทีม
 3. Make a weekly plan up to the exam date, based on the time the user has · ใคร: `tech-mentor` ตัวใหม่
 4. Set up practice-exam rounds — take it → review wrong answers → go back and revise that topic, and record the score every round · ใคร: `tech-mentor` ตัวใหม่
-5. ตรวจ that every topic in the exam guide is in the plan and that study time is split by exam weight · ใคร: `reviewer` ตัวใหม่
+5. ตรวจ that every topic in the exam guide is in the plan and that study time is split by exam weight (ตัดสินผลตาม [`references/learning.md`](../../life-principles/references/learning.md)) · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -796,15 +799,16 @@ The plan covers every topic in the official exam guide, and a practice-exam scor
 # playbook · checkup-cycle — the yearly health checkup
 
 Use when: planning the yearly health checkup · comparing hospital packages · recording results across several years
-Main skill: `annual-checkup`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/health-care.md`](../../life-principles/references/health-care.md)
+Main skills: `health-admin` (`references/annual-checkup.md` · `references/results-tracker.md`)
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. Note the age range and sex of the person being checked, and the entitlements they have (Social Security · Gold Card (universal coverage) · company benefits) · ใคร: หัวหน้าทีม
-2. Make the checkup list for the age range from `annual-checkup`, and check (ตรวจ) it against official agency websites to see which items are free under the entitlement · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) against the official websites
+1. Open the principle file [`references/health-care.md`](../../life-principles/references/health-care.md) first. Note the age range and sex of the person being checked, and the entitlements they have (Social Security · Gold Card (universal coverage) · company benefits) · ใคร: หัวหน้าทีม
+2. Make the checkup list for the age range from `health-admin`, and check (ตรวจ) it against official agency websites to see which items are free under the entitlement · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) against the official websites
 3. Compare the package the user sent with the items that are already free, and say what extra the user could pay for · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user
 4. Prepare the checkup-day checklist: fasting · documents · questions · ใคร: `health-organizer` ตัวใหม่
-5. After the checkup, copy the values from the result sheet into the multi-year tracking table **exactly, with no interpretation**. For a value the lab flags as abnormal, write it down as a question for the doctor · ใคร: `health-organizer` ตัวใหม่ copies the values · `reviewer` ตัวใหม่ checks (ตรวจ) against the result sheet, and checks the checkup-day checklist from step 4, before it reaches the user
+5. After the checkup, copy the values from the result sheet into the multi-year tracking table **exactly, with no interpretation**. For a value the lab flags as abnormal, write it down as a question for the doctor (ตัดสินผลตาม [`references/health-care.md`](../../life-principles/references/health-care.md)) · ใคร: `health-organizer` ตัวใหม่ copies the values · `reviewer` ตัวใหม่ checks (ตรวจ) against the result sheet, and checks the checkup-day checklist from step 4, before it reaches the user
 
 ## Done when
 
@@ -816,14 +820,15 @@ The checkup plan follows the user's entitlements and is checked against official
 # playbook · decide-and-goals — big decisions and goals
 
 Use when: making a big decision (job · condo · car · moving house · a large investment) · setting quarterly or new-year goals · building or dropping a habit
-Main skills: `decision-journal` · `goal-and-habit`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/planning.md`](../../life-principles/references/planning.md)
+Main skills: `goals-and-decisions` (`references/entry-template.md` · `references/goal-and-habit.md`)
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. For a decision, record it per `decision-journal`: options, reasons, expected result, confidence, review date · ใคร: หัวหน้าทีม
-2. For goals, set at most 3 measurable goals and design the habit with the 2-minute rule, per `goal-and-habit` · ใคร: `life-admin` ตัวใหม่
+1. Open the principle file [`references/planning.md`](../../life-principles/references/planning.md) first. For a decision, record it per `goals-and-decisions`: options, reasons, expected result, confidence, review date · ใคร: หัวหน้าทีม
+2. For goals, set at most 3 measurable goals and design the habit with the 2-minute rule, per `goals-and-decisions` · ใคร: `life-admin` ตัวใหม่
 3. Set a reminder for the review date · ใคร: `life-admin` ตัวใหม่
-4. Check (ตรวจ) that every goal can be measured by a number or by yes/no, and that the decision record was written before the result was known · ใคร: `reviewer` ตัวใหม่
+4. Check (ตรวจ) that every goal can be measured by a number or by yes/no, and that the decision record was written before the result was known (ตัดสินผลตาม [`references/planning.md`](../../life-principles/references/planning.md)) · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -835,15 +840,16 @@ A decision record or goal plan with a review date
 # playbook · digital-safety — digital safety for the family
 
 Use when: setting up or checking passwords, 2FA, and passkeys · moving LINE to a new phone · suspecting a hack or a scam
-Main skill: `digital-hygiene`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/life-admin.md`](../../life-principles/references/life-admin.md)
+Main skills: `digital-hygiene` (`references/scams-and-takeover.md` · `references/line-and-phone.md`)
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. If the user is being hacked or tricked into transferring money right now, do the first-hour steps in `digital-hygiene` before anything else · ใคร: หัวหน้าทีม (talk to the user at once)
+1. Open the principle file [`references/life-admin.md`](../../life-principles/references/life-admin.md) first. If the user is being hacked or tricked into transferring money right now, do the first-hour steps in `digital-hygiene` before anything else · ใคร: หัวหน้าทีม (talk to the user at once)
 2. List each person's important accounts: email, bank, LINE, social media. Ask about their status (password manager · 2FA or passkey · photo backup) once, at the start of the work. If the user does not know, write `(รอยืนยัน)` (awaiting confirmation) · ใคร: หัวหน้าทีม
 3. Make a status table for password manager · 2FA or passkey · photo backup, from the answers the user gave at the start (if unknown, `(รอยืนยัน)`) · ใคร: `life-admin` ตัวใหม่
 4. Write click-by-click steps for the user to do themselves, starting with the riskiest account · ใคร: `life-admin` ตัวใหม่ (the user follows the steps themselves)
-5. Draft a scam warning message for the family · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set before it reaches the user
+5. Draft a scam warning message for the family (ตัดสินผลตาม [`references/life-admin.md`](../../life-principles/references/life-admin.md)) · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set before it reaches the user
 
 ## Done when
 
@@ -854,16 +860,17 @@ The account status table and the click-by-click steps are ready, and the user is
 
 # playbook · doctor-visit — prepare for a doctor visit and summarize afterward
 
-Use when: before an appointment with a doctor or hospital · after the visit, when the user wants to write down what they heard
-Main skills: `doctor-visit-prep` · `medication-schedule`
+Use when: before an appointment with a doctor or hospital · after the visit, when the user wants to write down what they heard · several medicines and no medicine table yet → run playbook `medication-routine` first; step 2 here then uses its table
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/health-care.md`](../../life-principles/references/health-care.md)
+Main skills: `health-admin` (`references/doctor-visit-prep.md` · `references/question-bank.md`) · older adult: `family-care` (`references/elder-care.md`, health-care rights at public hospitals)
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. Put the symptoms in a timeline from the user's own words: when it started, what it is like, what makes it better or worse. Do not interpret · ใคร: หัวหน้าทีม
+1. Open the principle file [`references/health-care.md`](../../life-principles/references/health-care.md) first. Put the symptoms in a timeline from the user's own words: when it started, what it is like, what makes it better or worse. Do not interpret. A follow-up visit with no new symptom: write "no new symptom" and list changes since the last visit instead · ใคร: หัวหน้าทีม
 2. List the medicines in use and the drug allergy history from the real labels · ใคร: `health-organizer` ตัวใหม่
-3. Write the 3 most important questions (the doctor often has time for only 3) · ใคร: `health-organizer` ตัวใหม่
-4. Combine everything into a 1-page card the user can carry · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user
-5. After the visit, write down what the doctor said, the medicines prescribed, and the next appointment, as the user tells it, then update `medication-schedule` · ใคร: หัวหน้าทีม writes it down from the user · `health-organizer` ตัวใหม่ updates the medicine table · `reviewer` ตัวใหม่ checks (ตรวจ) the medicine table against what the doctor prescribed
+3. Write the 3 most important questions from `references/question-bank.md` (the doctor often has time for only 3); for an older adult on several medicines, ask the doctor to review whether every medicine is still needed and whether any raises the risk of falling (asked, never decided by us) · ใคร: `health-organizer` ตัวใหม่
+4. Combine everything into a 1-page card the user can carry, with who comes along to take notes, and the appointment slip, referral letter and health-care rights card to bring · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user against `health-care.md` principles 1, 2 and 5 (few questions · timeline · current medicine list · note-taker · older-adult risks), with no diagnosis wording
+5. After the visit, write down what the doctor said, the medicines prescribed, and the next appointment, as the user tells it, then update the medicine table from playbook `medication-routine` (ตัดสินผลตาม [`references/health-care.md`](../../life-principles/references/health-care.md)) · ใคร: หัวหน้าทีม writes it down from the user · `health-organizer` ตัวใหม่ updates the medicine table · `reviewer` ตัวใหม่ checks (ตรวจ) the medicine table against what the doctor prescribed
 
 ## Done when
 
@@ -875,14 +882,15 @@ The 1-page card is ready to carry, and the after-visit note (if any) contains no
 # playbook · documents — register of important documents
 
 Use when: start of the year · documents expire without anyone noticing · documents cannot be found
-Main skills: `important-docs` · `personal-kb` · agent `doc-caretaker`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/life-admin.md`](../../life-principles/references/life-admin.md) · [`references/family-legal.md`](../../life-principles/references/family-legal.md)
+Main skills: `family-legal` (`references/important-docs.md` · `references/registry-template.md`) · `personal-kb` · agent `doc-caretaker`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. List the documents by the categories in `important-docs`: ID cards, passports, house, car, insurance, contracts, education · ใคร: `doc-caretaker` ตัวใหม่
+1. Open the principle files [`references/life-admin.md`](../../life-principles/references/life-admin.md) · [`references/family-legal.md`](../../life-principles/references/family-legal.md) first. List the documents by the categories in `family-legal`: ID cards, passports, house, car, insurance, contracts, education · ใคร: `doc-caretaker` ตัวใหม่
 2. Each row says where the document is kept (original · scan), when it expires, and where to renew it. **Do not write full ID or account numbers** · ใคร: `doc-caretaker` ตัวใหม่
-3. Name the scan files so they can be found, per `important-docs` (format `YYYY-MM-DD_ผู้ถือ_รายการ.ext`, that is, date_holder_item) · ใคร: `doc-caretaker` ตัวใหม่
-4. Set reminders before expiry, at the lead time each document needs · ใคร: `doc-caretaker` ตัวใหม่ then `reviewer` ตัวใหม่ checks (ตรวจ) the expiry dates and storage places against the register
+3. Name the scan files so they can be found, per `family-legal` (format `YYYY-MM-DD_ผู้ถือ_รายการ.ext`, that is, date_holder_item) · ใคร: `doc-caretaker` ตัวใหม่
+4. Set reminders before expiry, at the lead time each document needs (ตัดสินผลตาม [`references/life-admin.md`](../../life-principles/references/life-admin.md) · [`references/family-legal.md`](../../life-principles/references/family-legal.md)) · ใคร: `doc-caretaker` ตัวใหม่ then `reviewer` ตัวใหม่ checks (ตรวจ) the expiry dates and storage places against the register
 
 ## Done when
 
@@ -894,14 +902,15 @@ The register covers every category, every row has a storage place and an expiry 
 # playbook · family-week — plan the family's week
 
 Use when: planning next week's meals, shopping list, school tasks, appointments for older adults, and pet care
-Main skills: `meal-plan-grocery` · `kids-school` · `elder-care` · `pet-care` · agent `family-planner`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/family-home.md`](../../life-principles/references/family-home.md)
+Main skills: `family-week` (`references/weekly-plan-template.md` · `references/meal-plan-grocery.md`) for the menu and schedule · `family-care` (`references/kids-school.md` · `references/elder-care.md` · `references/pet-care.md`) for school, older-adult and pet tasks · agent `family-planner`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. Collect the week's information: family members, budget per head, appointments, school tasks, medicines, pet vaccines that are almost due · ใคร: หัวหน้าทีม
-2. Plan the menu and shopping list per `meal-plan-grocery` within the budget, and think about the food that children and older adults need · ใคร: `family-planner` ตัวใหม่
-3. Put the school tasks, appointments for older adults, medicines, and pet tasks into the same schedule · ใคร: `family-planner` ตัวใหม่
-4. Check (ตรวจ) that every task has a day, a time, and a person responsible, and that the total of the shopping list stays within the budget · ใคร: `reviewer` ตัวใหม่
+1. Open the principle file [`references/family-home.md`](../../life-principles/references/family-home.md) first. Collect the week's information: family members, budget per head, appointments, school tasks, medicines, pet vaccines that are almost due · ใคร: หัวหน้าทีม
+2. Plan the menu and shopping list per `family-week` within the budget, and think about the food that children and older adults need · ใคร: `family-planner` ตัวใหม่
+3. Put the school tasks, appointments for older adults, medicines, and pet tasks into the same schedule per `family-care` · ใคร: `family-planner` ตัวใหม่
+4. Check (ตรวจ) that every task has a day, a time, and a person responsible, and that the total of the shopping list stays within the budget (ตัดสินผลตาม [`references/family-home.md`](../../life-principles/references/family-home.md)) · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -913,14 +922,15 @@ One weekly schedule that can be sent to the family group
 # playbook · habit-tracking — start exercising or log sleep
 
 Use when: the user wants to start exercising · sleeps badly or feels tired despite enough sleep · is going to see a doctor about sleep
-Main skills: `exercise-plan` · `sleep-log`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/health-care.md`](../../life-principles/references/health-care.md) · [`references/planning.md`](../../life-principles/references/planning.md)
+Main skills: `health-admin` (`references/exercise-plan.md`) · `goals-and-decisions` (`references/goal-and-habit.md`) for the habit design
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. Check (ตรวจ) the screening questions in `exercise-plan` before starting to exercise. If the user answers "yes" to any of them, they should see a doctor first · ใคร: หัวหน้าทีม
-2. Set a review point after 2 weeks, based on the real log and not on feelings · ใคร: หัวหน้าทีม
-3. For exercise, make a starter plan that follows the World Health Organization physical activity guidelines, then increase slowly · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user
-4. For sleep, use a 2-week sleep diary and the sleep hygiene checklist from `sleep-log` · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user
+1. Open the principle files [`references/health-care.md`](../../life-principles/references/health-care.md) · [`references/planning.md`](../../life-principles/references/planning.md) first. Check (ตรวจ) the screening questions in `health-admin` before starting to exercise. If the user answers "yes" to any of them, they should see a doctor first · ใคร: หัวหน้าทีม
+2. Set a review point after 2 weeks, based on the real log and not on feelings, and design the habit per `goals-and-decisions` · ใคร: หัวหน้าทีม
+3. For exercise, make a starter plan per `health-admin` (`references/exercise-plan.md`) that follows the World Health Organization physical activity guidelines, then increase slowly · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user
+4. For sleep, use a 2-week sleep diary and the sleep hygiene checklist from `health-admin` (`references/sleep-log.md`) (ตัดสินผลตาม [`references/health-care.md`](../../life-principles/references/health-care.md) · [`references/planning.md`](../../life-principles/references/planning.md)) · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user
 
 ## Done when
 
@@ -932,16 +942,17 @@ The plan or diary is ready to use, and the review date is set
 # playbook · interview — prepare for an interview
 
 Use when: an interview is scheduled · the user wants to practice · the user must answer hard HR questions (expected salary · why leaving · weaknesses)
-Main skills: `interview-prep` · `salary-negotiation` (salary questions) · agent `interview-coach`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/career.md`](../../life-principles/references/career.md)
+Main skills: `job-search` (`references/interview-prep.md` · `references/question-bank.md`) · agent `interview-coach`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. Collect the details: company, position, which round, who interviews, which language, date and time · ใคร: หัวหน้าทีม
+1. Open the principle file [`references/career.md`](../../life-principles/references/career.md) first. Collect the details: company, position, which round, who interviews, which language, date and time · ใคร: หัวหน้าทีม
 2. Research the company from official sources (company website · annual report · news from news outlets) and summarize 3 things the user should know · ใคร: `interview-coach` ตัวใหม่
 3. Build a bank of 6–8 STAR stories from real experience, tied to the job's must-haves · ใคร: `interview-coach` ตัวใหม่
-4. Prepare answers to the standard questions Thai HR asks and to the salary question, taking the expected figure from `salary-negotiation` · ใคร: `interview-coach` ตัวใหม่
+4. Prepare answers to the standard questions Thai HR asks and to the salary question, taking the expected figure from `job-search` (`references/salary-negotiation.md`) · ใคร: `interview-coach` ตัวใหม่
 5. Prepare a practice set of 10 questions, with a 1–5 scoring rubric · 1 fix point per question · a sample answer per question · ใคร: `interview-coach` ตัวใหม่
-6. Prepare 3 questions to ask back, and draft a thank-you email for after the interview · ใคร: `interview-coach` ตัวใหม่ then `reviewer` ตัวใหม่ checks (ตรวจ) the whole interview prep set before it reaches the user
+6. Prepare 3 questions to ask back, and draft a thank-you email for after the interview (ตัดสินผลตาม [`references/career.md`](../../life-principles/references/career.md)) · ใคร: `interview-coach` ตัวใหม่ then `reviewer` ตัวใหม่ checks (ตรวจ) the whole interview prep set before it reaches the user
 
 ## Done when
 
@@ -953,17 +964,18 @@ There is a 1-page interview prep card, a 10-question practice set with a scoring
 # playbook · job-application — apply for one position with a complete set
 
 Use when: there is a job ad to apply to · "ช่วยสมัครงานนี้" · changing jobs with a clear target
-Main skills: `resume-th-en` · `interview-prep`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/career.md`](../../life-principles/references/career.md)
+Main skills: `job-search` (`references/resume-th-en.md` · `references/linkedin.md`)
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. Collect the raw material: current CV · job ad · LinkedIn link · the language the company uses. For any item that is missing, write `(รอยืนยัน)` (awaiting confirmation) and carry on · ใคร: หัวหน้าทีม
+1. Open the principle file [`references/career.md`](../../life-principles/references/career.md) first. Collect the raw material: current CV · job ad · LinkedIn link · the language the company uses. For any item that is missing, write `(รอยืนยัน)` (awaiting confirmation) and carry on · ใคร: หัวหน้าทีม
 2. Read the job ad and split it into 3 groups: must-haves · nice-to-haves · keywords the Applicant Tracking System (ATS) will search for. Write them as a short table in the reply · ใคร: `career-coach` ตัวใหม่
 3. Match the experience to each must-have, one by one. For a must-have with no evidence, put it in the "ช่องว่าง" (gap) column and do not invent anything · ใคร: `career-coach` ตัวใหม่
-4. Write the CV for this job with `resume-th-en`. Every bullet needs an action + a result + a number, and uses the language of the reader (Thai · English · both) · ใคร: `career-coach` ตัวใหม่
-5. Adjust the LinkedIn headline and About section to match the CV with `resume-th-en` (`references/linkedin.md`). Positions and dates must not conflict · ใคร: `career-coach` ตัวใหม่
+4. Write the CV for this job with `job-search`. Every bullet needs an action + a result + a number, and uses the language of the reader (Thai · English · both) · ใคร: `career-coach` ตัวใหม่
+5. Adjust the LinkedIn headline and About section to match the CV with `job-search` (`references/linkedin.md`). Positions and dates must not conflict · ใคร: `career-coach` ตัวใหม่
 6. Draft a short application message or cover letter that speaks to 2–3 must-haves with evidence · ใคร: `career-coach` ตัวใหม่
-7. Check (ตรวจ) that every keyword from step 2 appears in the CV, that dates and positions match in every document, and that the ATS can read the file (no tables, text boxes, or images in place of text) · ใคร: `reviewer` ตัวใหม่
+7. Check (ตรวจ) that every keyword from step 2 appears in the CV, that dates and positions match in every document, and that the ATS can read the file (no tables, text boxes, or images in place of text) (ตัดสินผลตาม [`references/career.md`](../../life-principles/references/career.md)) · ใคร: `reviewer` ตัวใหม่
 8. If the user wants, prepare for the first-round interview with the playbook `interview`. Submitting the application sits under "รออนุมัติ" (awaiting approval) · ใคร: หัวหน้าทีม (submit: the user)
 
 ## Done when
@@ -1012,15 +1024,16 @@ Every lesson can point to the file it went into · a repeated mistake has a chec
 # playbook · learning-path — learn a new technology step by step
 
 Use when: the user wants to learn a language, framework or concept well enough to use it for real.
-Main skill: `learning-path` · `english-tech-reading`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/learning.md`](../../life-principles/references/learning.md)
+Main skills: `learning-path` (`references/path-template.md`)
 
 ## ขั้นตอน (Steps — copy into the todo as written)
 
-1. Find the answers from the information at hand: what the user already knows · which real project it can tie to · how much time per week. Put `(รอยืนยัน)` (pending confirmation) on anything unknown. Do not guess values · ใคร: หัวหน้าทีม
+1. Open the principle file [`references/learning.md`](../../life-principles/references/learning.md) first. Find the answers from the information at hand: what the user already knows · which real project it can tie to · how much time per week. Put `(รอยืนยัน)` (pending confirmation) on anything unknown. Do not guess values · ใคร: หัวหน้าทีม
 2. Break it into small milestones under `learning-path`. Each step must produce something that runs and ties to the real project · ใคร: `tech-mentor` ตัวใหม่
 3. Give every milestone an official learning source (the maker's documentation) and a checkpoint for whether to go on or stop · ใคร: `tech-mentor` ตัวใหม่
 4. Build the first milestone as a worked example — code that really runs, with its output · ใคร: `tech-mentor` ตัวใหม่
-5. ตรวจ that every milestone has a verifiable outcome and that the total time does not exceed what the user has · ใคร: `reviewer` ตัวใหม่
+5. ตรวจ that every milestone has a verifiable outcome and that the total time does not exceed what the user has (ตัดสินผลตาม [`references/learning.md`](../../life-principles/references/learning.md)) · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -1032,15 +1045,16 @@ The plan is in steps that fit the time, and the first milestone really runs.
 # playbook · maintenance — year-round home care plan and comparing contractor quotes
 
 Use when: the user wants a seasonal home maintenance schedule · is about to hire a contractor and must compare prices
-Main skill: `home-maintenance`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/life-admin.md`](../../life-principles/references/life-admin.md)
+Main skills: `home-upkeep` (`references/maintenance-calendar.md`)
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. Survey the house from what the user tells you: how many air conditioners, the water pump, the roof, the age of the house · ใคร: หัวหน้าทีม
-2. Make a 12-month calendar by season (hot, rainy, cool) from `home-maintenance` · ใคร: `home-manager` ตัวใหม่
+1. Open the principle file [`references/life-admin.md`](../../life-principles/references/life-admin.md) first. Survey the house from what the user tells you: how many air conditioners, the water pump, the roof, the age of the house · ใคร: หัวหน้าทีม
+2. Make a 12-month calendar by season (hot, rainy, cool) from `home-upkeep` · ใคร: `home-manager` ตัวใหม่
 3. Compare the contractor quotes: is the scope of work the same, the materials, the warranty, the deposit terms · ใคร: `home-manager` ตัวใหม่
 4. List the questions to ask the contractor before paying a deposit · ใคร: `home-manager` ตัวใหม่
-5. Check (ตรวจ) that every task in the calendar has a month and a person responsible, and that the numbers in the table match the quotes · ใคร: `reviewer` ตัวใหม่
+5. Check (ตรวจ) that every task in the calendar has a month and a person responsible, and that the numbers in the table match the quotes (ตัดสินผลตาม [`references/life-admin.md`](../../life-principles/references/life-admin.md)) · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -1052,15 +1066,16 @@ The 12-month calendar and the price comparison table (if any), copied exactly fr
 # playbook · medication-routine — medicine schedule and refill reminders
 
 Use when: the user or someone at home takes several prescribed medicines · forgets doses · runs out of medicine often
-Main skill: `medication-schedule`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/health-care.md`](../../life-principles/references/health-care.md)
+Main skills: `health-admin` (`references/medication-schedule.md`)
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. Copy the drug name, dose, time, and before or after meals from the label exactly, one drug at a time. If anything is missing, write `[ถามเภสัชกร]` (ask the pharmacist) · ใคร: `health-organizer` ตัวใหม่
+1. Open the principle file [`references/health-care.md`](../../life-principles/references/health-care.md) first. Copy the drug name, dose, time, and before or after meals from the label exactly, one drug at a time. If anything is missing, write `[ถามเภสัชกร]` (ask the pharmacist) · ใคร: `health-organizer` ตัวใหม่
 2. Arrange them in a daily table by meal · ใคร: `health-organizer` ตัวใหม่
 3. Calculate the date each medicine will run out from the amount left, then set a reminder 7 days before · ใคร: `health-organizer` ตัวใหม่
-4. Make a drug allergy list and a medicine list to carry to the doctor · ใคร: `health-organizer` ตัวใหม่
-5. Check (ตรวจ) that every row matches the label, that there is no dosing advice, and flag only duplicates with the same name and dose (do not judge drug interactions) · ใคร: `reviewer` ตัวใหม่
+4. Make a drug allergy list and a medicine list to carry to the doctor, each with a "last updated" date and what each medicine is for; give a copy to every carer · ใคร: `health-organizer` ตัวใหม่
+5. Check (ตรวจ) that every row matches the label, the lists carry a last-updated date and reached every carer, that there is no dosing advice, and flag only duplicates with the same name and dose (do not judge drug interactions) (ตัดสินผลตาม [`references/health-care.md`](../../life-principles/references/health-care.md)) · ใคร: `reviewer` ตัวใหม่
 6. Confirm what was found yourself, then put the whole medicine list in as 1 question for the pharmacist to check whether any drugs interact, and include the duplicates in the report · ใคร: หัวหน้าทีม
 
 ## Done when
@@ -1073,14 +1088,15 @@ A table where every row matches the label, with all refill reminders set
 # playbook · meeting — before and after a meeting
 
 Use when: before an important meeting · after a meeting that has notes or a transcript.
-Main skill: `meeting` (leg 1 before the meeting · leg 2 after the meeting) · agent `meeting-prep`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/planning.md`](../../life-principles/references/planning.md)
+Main skills: `meeting` (`references/prep-card.md` · `references/summary-templates.md`) · agent `meeting-prep`
 
 ## ขั้นตอน (Steps — copy into the todo as written)
 
-1. Before the meeting, make a 1-page card: goal · 3 questions · context to remember · what to ask for · the point where the user will give way · ใคร: `meeting-prep` ตัวใหม่
-2. After the meeting, summarise the decisions, the tasks with owner and due date, and the open questions, under `meeting` leg 2. If the user wants a formal version, make it a Thai meeting minutes report · ใคร: `meeting-prep` ตัวใหม่
+1. Open the principle file [`references/planning.md`](../../life-principles/references/planning.md) first. Before the meeting, make a 1-page card: goal · 3 questions · context to remember · what to ask for · the point where the user will give way · ใคร: `meeting-prep` ตัวใหม่
+2. After the meeting, summarise the decisions, the tasks with owner and due date, and the open questions, under `meeting` leg 2. If the user wants a formal version, make it a Thai meeting minutes report (`references/thai-minutes-template.md`) · ใคร: `meeting-prep` ตัวใหม่
 3. Draft an email that sends the summary to the attendees · ใคร: `meeting-prep` ตัวใหม่ (the user sends it)
-4. ตรวจ the summary and the email: every task has an owner and a date, and there is no text that is not in the notes or the transcript · ใคร: `reviewer` ตัวใหม่
+4. ตรวจ the summary and the email: every task has an owner and a date, and there is no text that is not in the notes or the transcript (ตัดสินผลตาม [`references/planning.md`](../../life-principles/references/planning.md)) · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -1092,16 +1108,17 @@ The card or summary is ready to use, and every task has an owner and a date.
 # playbook · offer-negotiation — compare offers and negotiate salary
 
 Use when: the user got a job offer · has 2 offers to choose from · is asking for a raise · got a counter-offer
-Main skill: `salary-negotiation` · for tax (ถ้าติดตั้ง plugin `trading-finance`) use `trading-finance:tax-basics-th`; if it is not, use general knowledge with `(รอยืนยัน)` (awaiting confirmation)
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/career.md`](../../life-principles/references/career.md)
+Main skills: `job-search` (`references/salary-negotiation.md`) · for tax (ถ้าติดตั้ง plugin `trading-finance`) use `trading-finance:income-tax-th`; if it is not, use general knowledge with `(รอยืนยัน)` (awaiting confirmation)
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. Collect the figures from real documents: offer letter · payslip · benefits. If a figure is missing, write `(รอยืนยัน)` · ใคร: หัวหน้าทีม
+1. Open the principle file [`references/career.md`](../../life-principles/references/career.md) first. Collect the figures from real documents: offer letter · payslip · benefits. If a figure is missing, write `(รอยืนยัน)` · ใคร: หัวหน้าทีม
 2. Convert every offer to total yearly income in one table: base × 12 · bonus · provident fund contribution · insurance · travel allowance · ใคร: `career-coach` ตัวใหม่
 3. Find market data for the position from named sources with a year. If you get fewer than 3 sources, add the `จากแหล่ง` label, lower the confidence, and append `(รอยืนยัน)` · ใคร: `career-coach` ตัวใหม่
 4. Set the target figure, the lowest acceptable figure, and the reasons the user can cite · ใคร: `career-coach` ตัวใหม่ drafts (any figure the user did not give gets `(รอยืนยัน)` · sending the real figure sits under "รออนุมัติ" (awaiting approval))
 5. Draft what to say or write, in Thai and English: thanks · the figure asked for · the reason · what is flexible · ใคร: `career-coach` ตัวใหม่
-6. Check (ตรวจ) by recalculating every cell with a formula, and make sure no sentence misstates the current salary · ใคร: `reviewer` ตัวใหม่
+6. Check (ตรวจ) by recalculating every cell with a formula, and make sure no sentence misstates the current salary (ตัดสินผลตาม [`references/career.md`](../../life-principles/references/career.md)) · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -1113,15 +1130,16 @@ There is a yearly total income table that has been recalculated, and a negotiati
 # playbook · paper-to-practice — from a paper or article to code that runs
 
 Use when: the user wants to understand a paper · RFC · long article well enough to use it.
-Main skill: `learning-path` · `english-tech-reading`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/learning.md`](../../life-principles/references/learning.md)
+Main skills: `learning-path` (`references/paper-to-practice.md`) · `thesis-writing` (`references/literature-matrix.md`) when the paper is for a thesis
 
 ## ขั้นตอน (Steps — copy into the todo as written)
 
-1. Read the abstract · main proposal · experiment results, then write the main idea in plain language in 3 sentences · ใคร: `tech-mentor` ตัวใหม่
-2. If there is a hard term or sentence, use `english-tech-reading`. When reading an RFC, watch the difference between MUST · SHOULD · MAY · ใคร: `tech-mentor` ตัวใหม่
+1. Open the principle file [`references/learning.md`](../../life-principles/references/learning.md) first. Read the abstract · main proposal · experiment results, then write the main idea in plain language in 3 sentences · ใคร: `tech-mentor` ตัวใหม่
+2. If there is a hard term or sentence, use `learning-path`. When reading an RFC, watch the difference between MUST · SHOULD · MAY · ใคร: `tech-mentor` ตัวใหม่
 3. Write the smallest sample code that shows the main idea, using the standard library first · ใคร: `tech-mentor` ตัวใหม่
 4. Run it for real, and try 1 case where the idea does not work, to see its limits · ใคร: `tech-mentor` ตัวใหม่ writes and runs the failing case · `reviewer` ตัวใหม่ reruns it and ตรวจ the result
-5. Write a short note using the `learning-path` paper-to-practice template — when to use it, when not to · ใคร: `tech-mentor` ตัวใหม่ · `reviewer` ตัวใหม่ checks it against the real run
+5. Write a short note using the `learning-path` paper-to-practice template — when to use it, when not to (ตัดสินผลตาม [`references/learning.md`](../../life-principles/references/learning.md)) · ใคร: `tech-mentor` ตัวใหม่ · `reviewer` ตัวใหม่ checks it against the real run
 
 ## Done when
 
@@ -1133,15 +1151,16 @@ The sample code runs and passes with its output, and there is a 1-page note.
 # playbook · profile-refresh — refresh the CV and LinkedIn as a set
 
 Use when: the user has no target job yet but wants to be ready · the CV is several years old · changing career track
-Main skills: `resume-th-en`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/career.md`](../../life-principles/references/career.md)
+Main skills: `job-search` (`references/resume-th-en.md` · `references/linkedin.md`)
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. Read the current CV and profile. List the positions, dates, and achievements, and note where the information conflicts · ใคร: `career-coach` ตัวใหม่
+1. Open the principle file [`references/career.md`](../../life-principles/references/career.md) first. Read the current CV and profile. List the positions, dates, and achievements, and note where the information conflicts · ใคร: `career-coach` ตัวใหม่
 2. Set 1–2 target tracks, then find the keywords recruiters use from at least 5 real job ads · ใคร: `career-coach` ตัวใหม่ (take the tracks from the answer given at the start; if there is none, pick the track that best fits the history and tag it `(รอยืนยัน)` (awaiting confirmation))
 3. Write a master CV that includes everything, then make a short version for each track · ใคร: `career-coach` ตัวใหม่
 4. Adjust LinkedIn (headline · About · Featured · skills) to match the master CV · ใคร: `career-coach` ตัวใหม่
-5. Check (ตรวจ) that dates and positions match everywhere, and that there is no personal data that should not be included (age · religion · ID number) unless the user asks for it · ใคร: `reviewer` ตัวใหม่
+5. Check (ตรวจ) that dates and positions match everywhere, and that there is no personal data that should not be included (age · religion · ID number) unless the user asks for it (ตัดสินผลตาม [`references/career.md`](../../life-principles/references/career.md)) · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -1153,15 +1172,16 @@ The master CV, the per-track versions, and the LinkedIn draft match in every doc
 # playbook · promotion-case — self-review and asking for a promotion
 
 Use when: the mid-year or year-end performance review · the user wants to ask for a promotion or a raise · starting to log achievements
-Main skills: `performance-self-review` · `salary-negotiation`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/career.md`](../../life-principles/references/career.md)
+Main skills: `career-growth` (`references/performance-self-review.md`) · `job-search` for the criteria of the next position
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. Collect achievements from real material: praise emails · reports · system figures · this year's KPI targets · ใคร: หัวหน้าทีม
+1. Open the principle file [`references/career.md`](../../life-principles/references/career.md) first. Collect achievements from real material: praise emails · reports · system figures · this year's KPI targets · ใคร: หัวหน้าทีม
 2. Write each achievement as its effect on the business (money · time · risk · customers), with numbers · ใคร: `career-coach` ตัวใหม่
 3. Compare with the criteria of the next position. Separate the criteria already met, with evidence, from the ones still missing · ใคร: `career-coach` ตัวใหม่
 4. Draft the self-review on the company's form, and draft a 3-minute talk for the manager · ใคร: `career-coach` ตัวใหม่
-5. Check (ตรวจ) that every claim points to evidence, and that there are no figures the user did not provide · ใคร: `reviewer` ตัวใหม่
+5. Check (ตรวจ) that every claim points to evidence, and that there are no figures the user did not provide (ตัดสินผลตาม [`references/career.md`](../../life-principles/references/career.md)) · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -1173,12 +1193,13 @@ The self-review and the talk are ready to use, and every claim has evidence
 # playbook · review — check everyday work before it goes out
 
 Use when: checking work before it is sent or really used · "can you look for anything I missed" · the user did it themselves and wants it checked.
-Result: a verdict with a list of confirmed problems. **Does not fix anything automatically**, and it is read-only work that does not create `CONTEXT.md`.
-Main skill: `weekly-review` · `meeting` · `important-docs` · `household-bills` · `medication-schedule` · `resume-th-en` · `learning-path` · `cert-prep`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · the file for the kind of piece reviewed, such as [`references/life-admin.md`](../../life-principles/references/life-admin.md) or [`references/career.md`](../../life-principles/references/career.md)
+Result: a verdict with a list of confirmed problems. The verdict is judged against the principle file for that kind of piece. **Does not fix anything automatically**, and it is read-only work that does not create `CONTEXT.md`.
+Main skill: `weekly-review` · `meeting` · `family-legal` · `household-money` · `health-admin` · `job-search` · `learning-path`
 
 ## ขั้นตอน (Steps — copy into the todo as written)
 
-1. Set the scope — the piece to check, and the source documents to compare it with (email · calendar · meeting notes · documents) · ใคร: หัวหน้าทีม
+1. Open the principle file for the kind of piece first (see Main principles). Set the scope — the piece to check, and the source documents to compare it with (email · calendar · meeting notes · documents) · ใคร: หัวหน้าทีม
 <!-- superuser:begin review-steps -->
 2. Prepare the review package per [`review-lenses`](review-lenses.md) item 1: the intent of the work in 1 paragraph (who uses it, for what; if unsure, choose the interpretation with the least impact and do not stop to ask) · the diff as a file · the spec's conditions quoted exactly · the `head:` id · the author's reasoning kept separate in `author-notes.md`, with no opinion on pass or fail put in the prompt · ใคร: หัวหน้าทีม
 3. Choose lenses by the kind of work from [`review-lenses`](review-lenses.md) item 2 (every job has `spec` and `quality`), then follow the checklist of this playbook's main skill (none → a related skill) · ใคร: หัวหน้าทีม
@@ -1199,14 +1220,15 @@ Every item in the report points to a spot in the work and has passed confirmatio
 # playbook · side-project — pick and start a side project
 
 Use when: the user wants a practice project or a portfolio piece · has too many ideas or none at all.
-Main skill: `side-project-picker` · `learning-path`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/tech-growth.md`](../../life-principles/references/tech-growth.md)
+Main skills: `tech-growth` (`references/side-project-picker.md` · `references/idea-bank.md`) · `learning-path`
 
 ## ขั้นตอน (Steps — copy into the todo as written)
 
-1. Collect ideas from the user or the idea bank, then score them under `side-project-picker` — learning value · can be finished in 2 weekends · really usable · ใคร: `tech-mentor` ตัวใหม่
+1. Open the principle file [`references/tech-growth.md`](../../life-principles/references/tech-growth.md) first. Collect ideas from the user or the idea bank, then score them under `tech-growth` — learning value · can be finished in 2 weekends · really usable · ใคร: `tech-mentor` ตัวใหม่
 2. Pick the one the user named at the start. If none, pick the highest score and mark it `(รอยืนยัน)` (pending confirmation). Cut the scope down to the part that can be finished · ใคร: หัวหน้าทีม
 3. Write a "done" definition with 3–5 checkable points · ใคร: `tech-mentor` ตัวใหม่
-4. Set up the minimum project skeleton that runs. Pass any larger code work on to `/software-development:superuser` · ใคร: `tech-mentor` ตัวใหม่ · `reviewer` ตัวใหม่ runs the real skeleton and ตรวจ that every point of the "done" definition can be measured
+4. Set up the minimum project skeleton that runs. Pass any larger code work on to `/software-development:superuser` (ตัดสินผลตาม [`references/tech-growth.md`](../../life-principles/references/tech-growth.md)) · ใคร: `tech-mentor` ตัวใหม่ · `reviewer` ตัวใหม่ runs the real skeleton and ตรวจ that every point of the "done" definition can be measured
 
 ## Done when
 
@@ -1218,15 +1240,16 @@ There is 1 project with a clear "done" definition, and the minimum skeleton runs
 # playbook · subscriptions — cut subscriptions the user does not use
 
 Use when: the user wants to find and cancel monthly charges · a free trial is about to end
-Main skill: `subscription-audit`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/life-admin.md`](../../life-principles/references/life-admin.md)
+Main skills: `household-money` (`references/subscription-audit.md` · `references/cancel-steps.md`)
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. Read the bank or card statement the user sent, and find the monthly repeat charges using the patterns in `subscription-audit` · ใคร: `life-admin` ตัวใหม่
+1. Open the principle file [`references/life-admin.md`](../../life-principles/references/life-admin.md) first. Read the bank or card statement the user sent, and find the monthly repeat charges using the patterns in `household-money` · ใคร: `life-admin` ตัวใหม่
 2. Make a table of the cost per use · ใคร: `life-admin` ตัวใหม่
 3. Decide on each item: cancel · downgrade · switch to a different month · keep, with the reason · ใคร: `life-admin` ตัวใหม่ proposes (the user decides under "รออนุมัติ" (awaiting approval))
 4. Write click-by-click cancellation steps for each service. The real act of cancelling sits under "รออนุมัติ" · ใคร: `life-admin` ตัวใหม่
-5. Set a reminder before each free trial ends · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the amounts and steps against the statement
+5. Set a reminder before each free trial ends (ตัดสินผลตาม [`references/life-admin.md`](../../life-principles/references/life-admin.md)) · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the amounts and steps against the statement
 
 ## Done when
 
@@ -1275,15 +1298,16 @@ Rules specific to XL work
 # playbook · tech-radar — weekly technology radar
 
 Use when: following news of the libraries and tools in use · "what changed this week"
-Main skill: `tech-radar`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/tech-growth.md`](../../life-principles/references/tech-growth.md)
+Main skills: `tech-growth` (`references/tech-radar.md` · `references/radar-templates.md`)
 
 ## ขั้นตอน (Steps — copy into the todo as written)
 
-1. Read the tracked items from the user's radar file. If there is no file yet, build it from the dependencies of the user's project · ใคร: หัวหน้าทีม
+1. Open the principle file [`references/tech-growth.md`](../../life-principles/references/tech-growth.md) first. Read the tracked items from the user's radar file. If there is no file yet, build it from the dependencies of the user's project · ใคร: หัวหน้าทีม
 2. Read the official release notes and changelog of each item, from the last round to today · ใคร: `tech-mentor` ตัวใหม่
 3. Keep only what affects the user's work — breaking changes · vulnerabilities · features that directly help the work · ใคร: `tech-mentor` ตัวใหม่
 4. Write the radar report from the template — what changed · why it matters · what to do next · what can be skipped · ใคร: `tech-mentor` ตัวใหม่
-5. ตรวจ that every item has an official link and a version number · ใคร: `reviewer` ตัวใหม่
+5. ตรวจ that every item has an official link and a version number (ตัดสินผลตาม [`references/tech-growth.md`](../../life-principles/references/tech-growth.md)) · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -1332,14 +1356,15 @@ How to use this template
 # playbook · trip — prepare for a trip
 
 Use when: 1–2 weeks before a trip · the passport is about to expire
-Main skill: `travel-prep`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/life-admin.md`](../../life-principles/references/life-admin.md)
+Main skills: `travel-prep` (`references/checklist-template.md` · `references/travel-facts.md`)
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. Check (ตรวจ) the passport and the destination country's visa rules on official websites (Ministry of Foreign Affairs · embassy) · ใคร: `life-admin` ตัวใหม่
+1. Open the principle file [`references/life-admin.md`](../../life-principles/references/life-admin.md) first. Check (ตรวจ) the passport and the destination country's visa rules on official websites (Ministry of Foreign Affairs · embassy) · ใคร: `life-admin` ตัวใหม่
 2. Make a checklist per `travel-prep`: travel insurance, plug adapters, money, internet · ใคร: `life-admin` ตัวใหม่
 3. Put every booking, with its confirmation number, in one file · ใคร: `life-admin` ตัวใหม่
-4. Set reminders for check-in and the time to leave home · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set (visa · expiry dates · confirmation numbers) against official sources
+4. Set reminders for check-in and the time to leave home (ตัดสินผลตาม [`references/life-admin.md`](../../life-principles/references/life-admin.md)) · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set (visa · expiry dates · confirmation numbers) against official sources
 
 ## Done when
 
@@ -1389,14 +1414,15 @@ All the step 1 conditions pass, or every remaining piece has a reason why it is 
 # playbook · vehicle — renew tax and พ.ร.บ. (compulsory motor insurance), inspection, and service mileage
 
 Use when: the car tax or พ.ร.บ. is about to expire · an inspection is needed · choosing an insurance class · checking service mileage
-Main skill: `vehicle-care`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/life-admin.md`](../../life-principles/references/life-admin.md)
+Main skills: `home-upkeep` (`references/vehicle-care.md` · `references/vehicle-record.md`)
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. Read the data from the registration book or the policy: expiry dates of the tax, พ.ร.บ., insurance, and driving licence · ใคร: `home-manager` ตัวใหม่
+1. Open the principle file [`references/life-admin.md`](../../life-principles/references/life-admin.md) first. Read the data from the registration book or the policy: expiry dates of the tax, พ.ร.บ., insurance, and driving licence · ใคร: `home-manager` ตัวใหม่
 2. Check (ตรวจ) the current conditions on the Department of Land Transport website: is an inspection needed, can it be renewed online · ใคร: `home-manager` ตัวใหม่
-3. Make the sequence of steps per `vehicle-care`: private inspection centre (ตรอ.) inspection (if needed) → พ.ร.บ. → tax, with the documents needed · ใคร: `home-manager` ตัวใหม่
-4. Set reminders per `vehicle-care`: tax 90 days before expiry · พ.ร.บ., insurance, and driving licence 30 days before expiry. Also set service reminders by kilometres · ใคร: `home-manager` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set against the real registration book and official websites
+3. Make the sequence of steps per `home-upkeep`: private inspection centre (ตรอ.) inspection (if needed) → พ.ร.บ. → tax, with the documents needed · ใคร: `home-manager` ตัวใหม่
+4. Set reminders per `home-upkeep`: tax 90 days before expiry · พ.ร.บ., insurance, and driving licence 30 days before expiry. Also set service reminders by kilometres (ตัดสินผลตาม [`references/life-admin.md`](../../life-principles/references/life-admin.md)) · ใคร: `home-manager` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set against the real registration book and official websites
 
 ## Done when
 
@@ -1408,15 +1434,16 @@ The sequence of steps with documents is checked against official sources, and al
 # playbook · weekly-reset — weekly review and clearing the inbox
 
 Use when: end of the week · the inbox is overflowing · feeling busy but not moving.
-Main skill: `weekly-review` · `inbox-triage` · `calendar-audit`
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/planning.md`](../../life-principles/references/planning.md)
+Main skills: `weekly-review` (`references/inbox-triage.md` · `references/task-board.md`)
 
 ## ขั้นตอน (Steps — copy into the todo as written)
 
-1. Pull the week's calendar and email from the installed connector into a file in `_to_delete/`. If there is no connector, use what the user sent. Then pass the path to a new `life-admin` to read on · ใคร: หัวหน้าทีม pulls it into the file
-2. Sort email into 6 piles under `inbox-triage`: must verify first (Verify) · reply today · this week · forward · file into a folder (File) · archive (Archive). Email that asks for money or account information always goes in "must verify first" · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ ตรวจ that all email asking for money or account information is in the "must verify first" pile
+1. Open the principle file [`references/planning.md`](../../life-principles/references/planning.md) first. Pull the week's calendar and email from the installed connector into a file in `_to_delete/`. If there is no connector, use what the user sent. Then pass the path to a new `life-admin` to read on · ใคร: หัวหน้าทีม pulls it into the file
+2. Sort email into 6 piles under `weekly-review`: must verify first (Verify) · reply today · this week · forward · file into a folder (File) · archive (Archive). Email that asks for money or account information always goes in "must verify first" · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ ตรวจ that all email asking for money or account information is in the "must verify first" pile
 3. Review under `weekly-review` what got done, what slipped, what is waiting on whom, what is due · ใคร: `life-admin` ตัวใหม่
-4. Every 4 weeks, run `calendar-audit` to find recurring meetings that achieve nothing · ใคร: `life-admin` ตัวใหม่
-5. Summarise the 3 key items for next week and draft replies to the email that needs a reply today · ใคร: หัวหน้าทีม summarises and drafts · `reviewer` ตัวใหม่ checks the drafts before they reach the user, then the user decides which items to do this week
+4. Every 4 weeks, run `weekly-review` to find recurring meetings that achieve nothing · ใคร: `life-admin` ตัวใหม่
+5. Summarise the 3 key items for next week and draft replies to the email that needs a reply today (ตัดสินผลตาม [`references/planning.md`](../../life-principles/references/planning.md)) · ใคร: หัวหน้าทีม summarises and drafts · `reviewer` ตัวใหม่ checks the drafts before they reach the user, then the user decides which items to do this week
 
 ## Done when
 
@@ -1672,7 +1699,7 @@ This file is the same in every plugin · the original lives in plugin `superuser
 | agent | model tier | use when | not for |
 |---|---|---|---|
 | `brainstormer` | large | before a large task or when the problem is unclear: think through 2–3 paths on paper, scored 1–5 (5 = best) | building several real versions and picking one → `crew-patterns/parallel-attempts-pick-best` |
-| `reviewer` | per the budget table in `SKILL.md` section 2 (balanced: medium every round · large only in the last round of risky work) | check finished work before it reaches the user or outsiders; read-only, never edits | high-risk work → `crew-patterns/adversarial-review-panel` (uses several `reviewer`s) · (if plugin `software-development` is installed) code → pair with `code-review-checklist` · (if plugin `graphic-design` is installed) visual work → `design-critic` or `design-review` · if neither is installed, check against the criteria in the brief |
+| `reviewer` | per the budget table in `SKILL.md` section 2 (balanced: medium every round · large only in the last round of risky work) | check finished work before it reaches the user or outsiders; read-only, never edits | high-risk work → `crew-patterns/adversarial-review-panel` (uses several `reviewer`s) · (if plugin `software-development` is installed) code → pair with `git-and-review` · (if plugin `graphic-design` is installed) visual work → `design-critic` or `design-review` · if neither is installed, check against the criteria in the brief |
 | `learning-reviewer` | medium | at the end of a multi-step task: review how the team worked, not the work itself | — |
 
 Call a fresh one every time, because whoever did the work does not review its own work · specialist reviewers (`design-critic` · `brand-keeper` · `qa-tester` · `security-engineer` · `risk-manager`) may replace `reviewer` only in a step written as "read-only · does not edit files" (call with `model: opus`) · a step in which that agent writes a test or fixes something counts as doing the work
@@ -1782,56 +1809,56 @@ Moved from `SKILL.md` section 3. Open it when unsure which skill to call, or whe
 | Situation | Call |
 |---|---|
 | End of the week · busy but not moving | `weekly-review` + agent `life-admin` |
-| Inbox overflowing | `inbox-triage` |
-| No time for real work | `calendar-audit` |
+| Inbox overflowing | `weekly-review` |
+| No time for real work | `weekly-review` |
 | Before or after a meeting | `meeting` (leg 1 before · leg 2 after) + agent `meeting-prep` |
 | Cannot find notes once written · wants a personal knowledge base | `personal-kb` + agent `life-admin` |
-| Cannot find a document · about to expire | `important-docs` + agent `doc-caretaker` |
-| Monthly subscriptions | `subscription-audit` |
+| Cannot find a document · about to expire | `family-legal` + agent `doc-caretaker` |
+| Monthly subscriptions | `household-money` |
 | About to travel | `travel-prep` |
 | Password or 2FA hacked, scammed | `digital-hygiene` |
 | Has to write an awkward message | `human-writing/polite-message-th-en` (superuser) |
-| Gifts | `gift-idea-tracker` |
-| Big decision · setting a goal | `decision-journal` · `goal-and-habit` |
+| Gifts | `family-week` |
+| Big decision · setting a goal | `goals-and-decisions` |
 
 ## Home and family
 
 | Situation | Call |
 |---|---|
-| Electricity, water, internet bills · a bill that jumped abnormally | `household-bills` + agent `home-manager` |
-| Seasonal home care · comparing contractor prices | `home-maintenance` |
-| Car tax, compulsory insurance (พ.ร.บ.), inspection, driving licence · comparing 5-year cost before buying a car | `vehicle-care` |
-| Moving house · moving house registration · closing or transferring electricity and water accounts, getting the deposit back · notifying a new address · returning a rented room and claiming the deposit | `moving-house` + agent `home-manager` · documents and due dates → `important-docs` + agent `doc-caretaker` |
-| Meal menus and shopping lists | `meal-plan-grocery` + agent `family-planner` |
-| Child's school work | `kids-school` |
-| Caring for elderly parents · elderly entitlements | `elder-care` |
-| Pets | `pet-care` |
-| Preparing for a flood · water starting to enter the house · claiming relief money or insurance after the water recedes | `flood-prep` + agent `home-manager` |
-| A household member has died · dividing an inheritance · making a will · estate executor | `estate-and-will` + agent `doc-caretaker` · for disputes or complex assets, consult a lawyer |
+| Electricity, water, internet bills · a bill that jumped abnormally | `household-money` + agent `home-manager` |
+| Seasonal home care · comparing contractor prices | `home-upkeep` |
+| Car tax, compulsory insurance (พ.ร.บ.), inspection, driving licence · comparing 5-year cost before buying a car | `home-upkeep` |
+| Moving house · moving house registration · closing or transferring electricity and water accounts, getting the deposit back · notifying a new address · returning a rented room and claiming the deposit | `home-upkeep` + agent `home-manager` · documents and due dates → `family-legal` + agent `doc-caretaker` |
+| Meal menus and shopping lists | `family-week` + agent `family-planner` |
+| Child's school work | `family-care` |
+| Caring for elderly parents · elderly entitlements | `family-care` |
+| Pets | `family-care` |
+| Preparing for a flood · water starting to enter the house · claiming relief money or insurance after the water recedes | `home-upkeep` + agent `home-manager` |
+| A household member has died · dividing an inheritance · making a will · estate executor | `family-legal` + agent `doc-caretaker` · for disputes or complex assets, consult a lawyer |
 
 ## Health
 
 | Situation | Call |
 |---|---|
-| Planning an annual health check · recording results | `annual-checkup` |
-| Has a doctor appointment · just saw a doctor | `doctor-visit-prep` |
-| Has doctor-prescribed medicine · wants a medication schedule | `medication-schedule` |
-| Wants to start exercising | `exercise-plan` |
-| Sleeping badly · going to a doctor about sleep | `sleep-log` |
-| Pregnant · antenatal care · maternity entitlements · birth registration · infant vaccines | `pregnancy-and-baby` + agent `health-organizer` · for dangerous symptoms in pregnancy, call 1669 first |
-| Is health insurance enough | `insurance-review` (trading-finance) |
+| Planning an annual health check · recording results | `health-admin` |
+| Has a doctor appointment · just saw a doctor | `health-admin` |
+| Has doctor-prescribed medicine · wants a medication schedule | `health-admin` |
+| Wants to start exercising | `health-admin` |
+| Sleeping badly · going to a doctor about sleep | `health-admin` |
+| Pregnant · antenatal care · maternity entitlements · birth registration · infant vaccines | `family-care` + agent `health-organizer` · for dangerous symptoms in pregnancy, call 1669 first |
+| Is health insurance enough | `retirement-and-insurance` (trading-finance) |
 
 ## Career
 
 | Situation | Call |
 |---|---|
-| Has a job ad, needs to write or adjust a CV | `resume-th-en` |
-| Adjusting a LinkedIn profile | `resume-th-en` (`references/linkedin.md`) |
-| Has an interview · wants to rehearse | `interview-prep` + agent `interview-coach` |
-| Got an offer · asked for expected salary · asking for a raise | `salary-negotiation` |
-| Performance review · asking for promotion | `performance-self-review` |
+| Has a job ad, needs to write or adjust a CV | `job-search` |
+| Adjusting a LinkedIn profile | `job-search` (`references/linkedin.md`) |
+| Has an interview · wants to rehearse | `job-search` + agent `interview-coach` |
+| Got an offer · asked for expected salary · asking for a raise | `job-search` |
+| Performance review · asking for promotion | `career-growth` |
 | Has to write a polite message to HR or the boss | `human-writing/polite-message-th-en` (superuser) |
-| Resignation rights, severance, leave days | `labour-law-basics` (e-commerce) |
+| Resignation rights, severance, leave days | `thai-employment` (e-commerce) |
 
 ## Learning
 
@@ -1839,12 +1866,12 @@ Moved from `SKILL.md` section 3. Open it when unsure which skill to call, or whe
 |---|---|
 | Wants to learn a new technology | `learning-path` + agent `tech-mentor` |
 | Has a paper, RFC or long article | `learning-path` (`references/paper-to-practice.md`) |
-| Hits an error message or hard-to-read English documentation | `english-tech-reading` |
-| Following weekly library news | `tech-radar` |
-| Preparing for a certification exam | `cert-prep` |
-| Looking for a practice project | `side-project-picker` |
+| Hits an error message or hard-to-read English documentation | `learning-path` |
+| Following weekly library news | `tech-growth` |
+| Preparing for a certification exam | `learning-path` |
+| Looking for a practice project | `tech-growth` |
 | Information systems (IS) thesis or research article (proposal · literature review · references · defence) | `thesis-writing` |
-| Has to teach or run training (learning outcomes · timetable · exercises · rubric · evaluation form) | `course-builder` · for slides use `presentation-design` (software-development) |
+| Has to teach or run training (learning outcomes · timetable · exercises · rubric · evaluation form) | `course-builder` · for slides use `slide-deck` (software-development) |
 | Work turns into code in a real project | `/software-development:superuser` |
 
 ## Shortcut commands
@@ -1853,21 +1880,21 @@ Moved from `SKILL.md` section 3. Open it when unsure which skill to call, or whe
 
 | Command | What it does | Skill behind it |
 |---|---|---|
-| `household-bills` | Read an electricity or water bill, check a bill spike | `household-bills` |
-| `annual-checkup` | Plan the annual health check | `annual-checkup` |
-| `decision-journal` | Record a big decision | `decision-journal` |
-| `doctor-visit-prep` | Prepare to see a doctor | `doctor-visit-prep` |
-| `family-week` | Plan the family's week | `meal-plan-grocery` · `kids-school` · `elder-care` · `pet-care` |
-| `interview-prep` | Prepare for one round of job interview | `interview-prep` |
+| `household-money` | Read an electricity or water bill, check a bill spike | `household-money` |
+| `health-admin` | Plan the annual health check | `health-admin` |
+| `goals-and-decisions` | Record a big decision | `goals-and-decisions` |
+| `health-admin` | Prepare to see a doctor | `health-admin` |
+| `family-week` | Plan the family's week | `family-week` · `family-care` |
+| `job-search` | Prepare for one round of job interview | `job-search` |
 | `learning-path` | Learn a technology through milestones from real work | `learning-path` |
-| `home-maintenance` | 12-month home care schedule · compare contractor prices | `home-maintenance` |
+| `home-upkeep` | 12-month home care schedule · compare contractor prices | `home-upkeep` |
 | `meeting` | Pre-meeting card · post-meeting summary | `meeting` |
-| `salary-negotiation` | Compare job offers · draft negotiation wording | `salary-negotiation` |
-| `tech-radar` | Weekly technology radar | `tech-radar` |
-| `resume-th-en` | Write or adjust a CV | `resume-th-en` |
-| `subscription-audit` | Check monthly subscriptions | `subscription-audit` |
+| `job-search` | Compare job offers · draft negotiation wording | `job-search` |
+| `tech-growth` | Weekly technology radar | `tech-growth` |
+| `job-search` | Write or adjust a CV | `job-search` |
+| `household-money` | Check monthly subscriptions | `household-money` |
 | `travel-prep` | Travel checklist · one-file travel plan | `travel-prep` |
-| `inbox-triage` | Split the inbox into 6 piles | `inbox-triage` |
+| `weekly-review` | Split the inbox into 6 piles | `weekly-review` |
 | `weekly-review` | 20-minute weekly review | `weekly-review` |
 
 ## Shared

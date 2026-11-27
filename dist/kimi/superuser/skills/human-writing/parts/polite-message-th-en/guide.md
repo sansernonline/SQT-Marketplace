@@ -48,7 +48,7 @@ Notes:
 - **รบกวน** literally means "to disturb". It is the default polite opener for a request: รบกวนส่ง...ภายในวันศุกร์ได้ไหมครับ
 - **ขออนุญาต** before doing something to someone: ขออนุญาตทวงถาม... (permission to follow up) softens a payment chase
 - **ท่าน** sounds stiff in LINE between peers. Keep it for seniors and for formal letters
-- For formal letters (หนังสือราชการ), use `doc-thai-official` in `e-commerce` (if installed)
+- For formal letters (หนังสือราชการ), use `thai-business-docs` in `e-commerce` (if installed)
 
 ## English register in brief
 
@@ -88,6 +88,6 @@ Rules for the ladder:
 
 Worked example (chasing an unpaid invoice, 4 levels) and sources: [references/worked-example.md](references/worked-example.md) · [references/sources.md](references/sources.md)
 
-Chasing several credit customers at once (check which payments already arrived, grade each payer, a summary table before any draft) → `doc-quotation` section 6 (plugin `e-commerce`, if installed). This skill then words each message.
+Chasing several credit customers at once (check which payments already arrived, grade each payer, a summary table before any draft) → `thai-business-docs` → `references/doc-quotation.md` section 6 (plugin `e-commerce`, if installed). This skill then words each message.
 
-Related: `meeting` (plugin `personal-life`, Leg 2 — written follow-up after a meeting). Optional, if installed: `inbox-triage` (plugin `personal-life` — which messages to answer first) · `doc-thai-official` and `doc-quotation` (plugin `e-commerce` — formal letters and quotes).
+Related: `meeting` (plugin `personal-life`, Leg 2 — written follow-up after a meeting). Optional, if installed: `weekly-review` (plugin `personal-life` — which messages to answer first) · `thai-business-docs` (plugin `e-commerce` — formal letters and quotes).

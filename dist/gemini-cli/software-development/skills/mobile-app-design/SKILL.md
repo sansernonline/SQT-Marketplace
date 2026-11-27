@@ -21,7 +21,7 @@ description: Use when designing a phone app screen or mockup
 
 - Desktop web apps (dashboard/admin): use `web-app-design`
 - Windows desktop apps: use `windows-app-design`
-- .docx/.pptx documents: use `branded-document-design`
+- .docx/.pptx documents: use `document-design`
 
 ---
 
@@ -53,8 +53,8 @@ You can send the link to the client without explaining that this is a phone scre
 ## 2 · Design tokens
 
 > **The look comes from this job's search. Do not stop to ask.**
-> Order for finding values: the project's `doc-theme`, or brand colours and fonts (if they exist, use them at once) → app references found live per `design-gate/design-references` (type app) and the palette extracted per `design-direction-lookup` section 2 → only if nothing can be searched (no internet · user says keep the existing look) use the fallback values in `assets/speakgo.css`, write `(รอยืนยัน)` (awaiting confirmation) and carry on.
-> The table of work type and colour tone in `diagram-figures` section 5 is a starting point for search terms, not the answer.
+> Order for finding values: the project's `doc-theme`, or brand colours and fonts (if they exist, use them at once) → app references found live per `design-gate/design-references` (type app) and the palette extracted per `design-system` → `references/design-direction-lookup.md` section 2 → only if nothing can be searched (no internet · user says keep the existing look) use the fallback values in `assets/speakgo.css`, write `(รอยืนยัน)` (awaiting confirmation) and carry on.
+> The table of work type and colour tone in `diagrams` → `references/diagram-figures.md` section 5 is a starting point for search terms, not the answer.
 
 **Which values are fixed and which come from the search**
 
@@ -169,10 +169,10 @@ The 3 limits are in [`references/review.md`](references/review.md): the React Na
 
 - User flow or information architecture before colouring: agent `ux-designer`
 - Desktop web app of the same system, and the hardcoded colour checker in CI (`scripts/check-design-tokens.mjs`): `web-app-design`
-- Spec document of the screens: `design-gate/polished-document-style` + `branded-document-design`
+- Spec document of the screens: `design-gate/polished-document-style` + `document-design`
 - App Store Optimization: `mobile-engineering`
 - Spacing rules, eye order and the 5 screen states: `ui-craft`
-- Architecture diagrams: `software-diagrams`
+- Architecture diagrams: `diagrams`
 
 ---
 
