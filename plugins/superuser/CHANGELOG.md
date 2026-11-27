@@ -1,5 +1,9 @@
 # Changelog — superuser
 
+## 4.1.2 — 2026-11-27
+
+- สูตรโลโก้มีมิติที่เจ้าของให้ 7–10 รวมเป็นสคริปต์ `design-gate/parts/design-references/scripts/depth_mark.py` (สีไล่ เงา ขอบหนา แสง เกรน และชุด flat design) · `ref-to-design.md` ชี้มาที่สคริปต์นี้แทนโฟลเดอร์งานทดลองใน `_to_delete` ที่ลบแล้ว
+
 ## 4.1.1 — 2026-11-27
 
 งานค้างจากรอบเฝ้าดี (เดิมเตรียมเป็น 3.59.1 ใน branch `claude/design-bar-8` ก่อนรวม skill) ย้ายมาที่ `design-gate/parts/design-references`
