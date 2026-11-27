@@ -1,5 +1,9 @@
 # Changelog — graphic-design
 
+## 0.36.2 — 2026-11-27
+
+- แก้ตามผู้ตรวจ: `meaning-first.md` ใช้ป้ายรอยืนยันที่บอกว่ารอใคร · `design-by-type` ลิงก์ไปแนวทาง 12 ขั้นของ superuser
+
 ## 0.36.1 — 2026-11-27
 
 - `flat-design.md` ชี้สคริปต์ `depth_mark.py` ของ superuser แทนโค้ดงานทดลองโค้ดเรือนที่ลบแล้ว

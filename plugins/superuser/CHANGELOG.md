@@ -1,5 +1,9 @@
 # Changelog — superuser
 
+## 4.1.3 — 2026-11-27
+
+- แก้ตามผู้ตรวจ: เป้า 8 กับเกณฑ์ขั้นต่ำ 7 เขียนให้ไม่ขัดกัน · ป้ายรอยืนยันใน checklist บอกว่ารอใคร · หัวข้อ brainstorm ไม่ใช้คำว่า steps ให้สับสนกับ 12 ขั้น · design-references ลิงก์ไป design-method
+
 ## 4.1.2 — 2026-11-27
 
 - สูตรโลโก้มีมิติที่เจ้าของให้ 7–10 รวมเป็นสคริปต์ `design-gate/parts/design-references/scripts/depth_mark.py` (สีไล่ เงา ขอบหนา แสง เกรน และชุด flat design) · `ref-to-design.md` ชี้มาที่สคริปต์นี้แทนโฟลเดอร์งานทดลองใน `_to_delete` ที่ลบแล้ว
