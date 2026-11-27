@@ -57,7 +57,7 @@ When chats pile up, answer by money at risk and deadline, not by arrival order:
 - Keep emoji to 1–2 per message; no stickers in complaint chats
 - Thai text → `human-writing` `references/thai-grammar.md` section 4, the shop-chat register · put the shop name or แอดมิน in once at the start; later sentences can leave it out
 - Quotation or tax invoice for a business buyer → `doc-quotation`
-- LINE shop auto-replies → `line-oa-setup` · `line-chatbot` · rich menu image → `graphic-design:line-richmenu` (if installed)
+- LINE shop auto-replies → `line-oa-setup` · `line-chatbot` · rich menu image → `graphic-design:line-design` (if installed)
 
 ## Related
 

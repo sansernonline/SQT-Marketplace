@@ -1,6 +1,6 @@
 # skill: design-by-type
 
-Use when a logo, poster, banner, cover or deck must blend popular refs
+Use when a logo, poster, banner, thumbnail or deck needs refs
 
 # design-by-type — sort the job by type, read the project, blend 2–3 popular references, let the owner pick
 
@@ -13,10 +13,10 @@ This skill adds 3 things on top of `design-gate/design-references`: the type's o
 > The general method for any medium is `superuser` `design-gate/parts/design-method/guide.md` (12 steps); this skill adds the type rules, popularity check and blend.
 
 ## Use when
-- A logo · poster · banner or social ad · Word/PDF cover · slide deck is about to be designed, from scratch or as a redesign.
+- A logo · poster · banner or social ad · YouTube thumbnail · Word/PDF cover · slide deck is about to be designed, from scratch or as a redesign.
 - The owner says the work looks stiff, generic or AI-made, and the job is one of those types.
 
-Not for: screens and web pages → `software-development:ui-craft` · icons → `icon-design` · a whole brand kit → `brand-kit` (it calls this skill for the logo) · YouTube thumbnails → `youtube-thumbnail` · a quick one-off logo or poster inside a software project, no reference blend → `software-development:graphic-design`.
+Not for: screens and web pages → `software-development:ui-craft` · icons → `icon-design` · a whole brand kit → `brand-kit` (it calls this skill for the logo) · a quick one-off logo or poster inside a software project, no reference blend → `software-development:graphic-design`.
 
 ## Steps
 
@@ -26,9 +26,10 @@ Not for: screens and web pages → `software-development:ui-craft` · icons → 
    |---|---|---|
    | Logo · wordmark · brand mark | [`references/logo.md`](references/logo.md) | `brand-kit` · `icon-design` (licensed sets) |
    | Poster · flyer · event key visual | [`references/poster.md`](references/poster.md) | `print-ready-files` |
-   | Banner · social post · ad | [`references/banner.md`](references/banner.md) | `banner-design` · `social-formats` · `copy-claims-check` |
+   | Banner · social post · ad | [`references/banner.md`](references/banner.md) | [`references/banner-build.md`](references/banner-build.md) · `campaign-set` · `copy-claims-check` |
    | Word/PDF cover and inner pages | [`references/document-cover.md`](references/document-cover.md) | `software-development:branded-document-design` |
-   | Slide deck · company profile | [`references/slides.md`](references/slides.md) | `software-development:presentation-design` · `style-consistency` |
+   | Slide deck · company profile | [`references/slides.md`](references/slides.md) | `software-development:presentation-design` · `brand-kit` (style lock) |
+   | YouTube thumbnail | [`references/thumbnail.md`](references/thumbnail.md) | `campaign-set` |
 
 2. **Read the project before searching.** For a logo, icon or key visual, first fill the feeling list and idea map in [`references/meaning-first.md`](references/meaning-first.md): 2–3 feelings the customer must get, one meaning per mark, objects from the work environment, one locked style per direction (owner 2026-11-27). Write 2 lines: what the project is (industry · audience · what the piece must make people do) and which 1–2 style families fit. Look the industry up first, it gives looks and cautions:
    ```bash
@@ -61,12 +62,89 @@ Not for: screens and web pages → `software-development:ui-craft` · icons → 
 - [`references/logo.md`](references/logo.md) · [`references/poster.md`](references/poster.md) · [`references/banner.md`](references/banner.md) · [`references/document-cover.md`](references/document-cover.md) · [`references/slides.md`](references/slides.md) — rules, sites and checks per type
 - [`references/sources.md`](references/sources.md) — sources and check dates
 
+## Parts
+
+Hard rules of the two absorbed jobs (full steps in each file; the type file above still gives the beauty rules):
+- **Banner build** ([`references/banner-build.md`](references/banner-build.md)): deliver 3 banner directions as real-size PNGs laid side by side, each with a real reference opened this round · sizes come from the platform's official page, not the copied file · run `scripts/render_banner.py` on every direction (size matches, Thai font loaded) · no other brand's logo without permission · print work is 300 dpi, 3–5 mm bleed, CMYK.
+- **YouTube thumbnail** ([`references/thumbnail.md`](references/thumbnail.md)): it must be understood at 168 px wide · 16:9, text of 4 words or fewer, contrast 4.5:1 or more · bottom-right corner empty · size and file ceilings looked up live from YouTube Help · it must match the video and not trick people into clicking.
+
+| When | Open |
+|---|---|
+| Making a banner, event cover or web hero at real size | [references/banner-build.md](references/banner-build.md) |
+| Banner sizes, 22 art directions, example queries (MIT copy) | [references/uipro-banner-sizes-and-styles.md](references/uipro-banner-sizes-and-styles.md) · [references/sources-banner.md](references/sources-banner.md) |
+| Rendering a banner HTML to PNG and comparing with a reference | `scripts/render_banner.py` |
+| Making a YouTube thumbnail | [references/thumbnail.md](references/thumbnail.md) |
+| YouTube size, file and account rules, Test & compare | [references/youtube-requirements.md](references/youtube-requirements.md) · [references/sources-thumbnail.md](references/sources-thumbnail.md) |
+| Pairwise input for choosing between thumbnails | [references/thumbnail-pairwise.example.json](references/thumbnail-pairwise.example.json) |
+
+
+## reference: banner-build.md
+
+
+# design-by-type — 3 banner directions at real size, checked before delivery
+
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `design-gate/no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
+
+The owner is the agent `social-creator`.
+
+> **One rule:** deliver 3 banner directions rendered as real-size PNGs and laid side by side. Each direction has a real reference opened in this round, not a direction you made up.
+
+## Use when
+
+- Seminar, webinar or event covers · page headers for Facebook, LinkedIn, YouTube · web hero images · web ad banners · large printed signs
+
+Do not use when:
+
+| Situation | Use |
+|---|---|
+| You only want platform sizes and safe areas | `campaign-set` |
+| A campaign of many pieces across platforms from one direction | `campaign-set` (it calls this skill for the banner piece) |
+| A YouTube video cover | `design-by-type` |
+| Sending files to a print shop | `print-ready-files`, after step 5 |
+
+## Steps
+
+1. **Collect the brief once** (use `AskUserQuestion` · do not ask what the conversation already answers): where it is used and the size · headline, sub-text, button or action · brand logo, colours, fonts · date, time, place · if you do not know the real data, put `(รอยืนยัน)` (awaiting confirmation) and do not invent it
+2. **Find real references** following `design-gate/design-references` (plugin `superuser`): first read the "สไตล์ออกแบบที่ชอบ" (favourite design styles) section in `~/.claude/superuser-style.md` · search at least 1 site in the `theme` category and 1 in the `social` category (Pinterest · Behance) with queries like `[purpose] banner design [style]` · `creative banner layout [industry]` (more example queries at the end of [`uipro-banner-sizes-and-styles.md`](uipro-banner-sizes-and-styles.md)) · open each page by hand, no fetch script · collect 3–5 images
+3. **Pick 3 art directions** from the 22 in the reference file, and make them truly different (for example plain minimal · big type as the hero · 3D objects) · write 1 line per direction on why it fits this job, and cite the reference from step 2
+4. **Build real-size HTML/CSS**, 1 file per direction · the outermost frame is `<div class="stage">` with width and height exactly the size · key items sit in the centre 70–80 %, at least 50 px from the edge · at most 2 font families, and both must fully support Thai (see `design-direction-lookup` domain `font`) · headline at least 32 px, body at least 16 px · one button, at least 44 px tall · text against background contrast at least 4.5:1 · one icon set (`icon-design`) inserted as `<span class="ic" style="--i:url(icons/x.svg)">`
+   - Illustrations in this order: what the user supplied → images under an open licence (categories `3d` · `illustration` in `design-gate/design-references`) → an image tool the session has (the prompt contains no text in the image) → build it with CSS and layered SVG (gradients, soft shadows, glowing edges) · never draw icons or logos yourself
+   - All text lives in the HTML, not in the image, so it can be edited later
+5. **Render and check the size**
+   ```bash
+   python scripts/render_banner.py <ไฟล์>.html --size 1200x628 --out <ไฟล์>.png --compare <ภาพต้นแบบ>.png
+   ```
+   You get a PNG at 2x resolution · it reports which fonts really loaded (Thai font not showing = do not send) · a size mismatch exits with 1 · `--compare` puts the reference on top and our work below · the script writes `<ไฟล์>.built.html` beside the source file (icons are inlined) and it can be deleted
+6. **Check it does not look AI-made** following `design-gate/no-ai-look`: run `slop_scan.py` on the HTML file · for things you deliberately copied from the reference (line pattern · light behind the object) write `slop-ok` with the reason · send the comparison image to a fresh `design-critic` to find 3 points where we lose to the reference, with scores of 1–10 for our work and the reference (answer in at most 10 lines) · fix, then render again
+7. **Deliver the 3 directions together.** Each direction has a PNG · a comparison image · the cited reference · the reviewer's score · the points where it still loses to the reference · let the user pick 1 direction, then make the other sizes
+
+## Rules
+
+- **Sizes come from official sources.** The sizes in the reference file are from the source as of the copy date. Before real delivery, compare with `campaign-set` and the platform's official page. If they conflict, use the official page.
+- The reference file says Meta reduces delivery of ads with more than 20 % text. Check this `(รอยืนยัน)` against Meta's official page before using it as a reason with a client. Less text is still easier to read anyway.
+- Do not use logos or images of other brands without permission. A partner logo must be a real file from its owner.
+- Print work: 300 dpi · 3–5 mm bleed · CMYK → hand over to `print-ready-files`
+
+## Check before sending
+
+- [ ] Each of the 3 directions has a real reference from this round (with a link)
+- [ ] `render_banner.py` on every direction: size matches · Thai font really loaded
+- [ ] Open every PNG by eye · key items are in the safe area · shrunk to half, the headline is still readable
+- [ ] `slop_scan.py` P0 0 · P1 0 · remaining P2 have a `slop-ok` reason
+- [ ] The fresh reviewer has scored it, and you told the user plainly where it still loses to the reference
+- [ ] Unknown data is marked `(รอยืนยัน)` and not invented
+
+## References
+
+- [`uipro-banner-sizes-and-styles.md`](uipro-banner-sizes-and-styles.md) — the 22 art directions, sizes and example queries (steps 2 and 3)
+- [`sources-banner.md`](sources-banner.md) — credit and licence of the reference file (MIT, `LICENSE-uipro`)
+
 
 ## reference: banner.md
 
 # Banner · social post · ad
 
-Sizes, safe zones and the render script live in `banner-design` and `social-formats`; this file adds the beauty rules and where to find popular work. Tested 2026-11-19 on a fictional Chiang Rai coffee-bean shop ad (1200x628); the test images are kept in `scripts/evals/beauty/baseline/2026-11-19/`.
+Sizes, safe zones and the render script live in `design-by-type` and `campaign-set`; this file adds the beauty rules and where to find popular work. Tested 2026-11-19 on a fictional Chiang Rai coffee-bean shop ad (1200x628); the test images are kept in `scripts/evals/beauty/baseline/2026-11-19/`.
 
 ## Where to look
 
@@ -84,11 +162,11 @@ Sizes, safe zones and the render script live in `banner-design` and `social-form
 3. Offer terms sit next to the button, small but present (end date, area). Source: `copy-claims-check`.
 4. Real product photos, not icons; nearly every Thai coffee ad in Meta Ad Library used a real bag or real beans (2026-11-19).
 5. At most 2 font families, both with full Thai; heading 32 px or more, body 16 px or more on 1200 wide. Source: uipro typography.
-6. Text covers about a fifth of the image; the photo does the rest. Whether Meta still limits ads with more than 20 % text is unconfirmed (see `banner-design`); less text reads faster either way.
+6. Text covers about a fifth of the image; the photo does the rest. Whether Meta still limits ads with more than 20 % text is unconfirmed (see [`banner-build.md`](banner-build.md)); less text reads faster either way.
 7. Depth from overlap: a label, plate or number crosses the edge of the photo at 1–2 spots. Source: `design-gate/design-references` `depth-and-light.md`, Dribbble "Coffee Banner KV".
 8. Photo fades into the background with a mask instead of sitting in a hard rectangle.
 9. Colours come from the product (roasted bean, cherry red, leaf green), not from the owner's general tech palette; the project beats the owner's taste.
-10. Keep key items at least 50 px from every edge per `banner-design`; leave more room left and right (blog summaries of Meta specs say up to 120 px, `(ยังไม่ได้ตรวจ)`) when the ad also runs in placements that crop.
+10. Keep key items at least 50 px from every edge per `design-by-type`; leave more room left and right (blog summaries of Meta specs say up to 120 px, `(ยังไม่ได้ตรวจ)`) when the ad also runs in placements that crop.
 11. Credit licensed photos in a corner at about 10 px.
 
 ## Stiff or AI-looking in the first drafts (2026-11-19) and the fix
@@ -420,7 +498,7 @@ Print specs (bleed, CMYK, resolution) live in `print-ready-files`. This file add
 
 # Slide deck · company profile
 
-Story, slide order and layouts live in `software-development:presentation-design`; the owner's liked deck is `style-consistency/references/corporate-profile-deck.md`. This file adds the beauty rules and where to find popular decks. Tested 2026-11-19 on a fictional Thai last-mile logistics company (cover + services slide, 1920x1080); the test images are kept in `scripts/evals/beauty/baseline/2026-11-19/`.
+Story, slide order and layouts live in `software-development:presentation-design`; the owner's liked deck is `brand-kit/references/corporate-profile-deck.md`. This file adds the beauty rules and where to find popular decks. Tested 2026-11-19 on a fictional Thai last-mile logistics company (cover + services slide, 1920x1080); the test images are kept in `scripts/evals/beauty/baseline/2026-11-19/`.
 
 ## Where to look
 
@@ -465,6 +543,24 @@ Story, slide order and layouts live in `software-development:presentation-design
 - [ ] Footer and photo credit present
 
 
+## reference: sources-banner.md
+
+# Sources · design-by-type
+
+- The idea of the steps (brief → reference → 3 directions → HTML → export → compare) and the file [`references/uipro-banner-sizes-and-styles.md`](uipro-banner-sizes-and-styles.md) (copied, unedited) come from [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) commit `28b3b8d` · MIT · Copyright (c) 2024 Next Level Builder · the full licence text is in [`references/LICENSE-uipro`](LICENSE-uipro) · viewed 2026-10-29
+- Added by us: references from theme shops and Pinterest on the owner's order of 2026-10-29 · Thai language and Thai fonts · the script `render_banner.py` · the `design-gate/no-ai-look` check and the fresh reviewer (from the trial banner of 2026-10-28, where the reviewer gave ours 6/10 and the reference 8.5/10)
+
+
+## reference: sources-thumbnail.md
+
+# Sources · design-by-type
+
+- YouTube Help: [Add video thumbnails](https://support.google.com/youtube/answer/72431) (size · file · account verification · 4:5 thumbnail for vertical video · look up live) · [Test & compare thumbnails and titles](https://support.google.com/youtube/answer/13861714) (official)
+- Test & compare matches thumbnailtest.com · digit.in · streamlabs.com (thumbnailtest.com still says it is only for beta testers, which is out of date)
+- Contrast: [WCAG 2.2 Understanding 1.4.3](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html) (cited through `brand-kit`, checked 2026-10-06)
+- Values marked "our own value" (168 px wide · letters 1/6 of the height · line spacing 1.3 · bottom-right corner) are internal guidelines, not yet measured on real apps
+
+
 ## reference: sources.md
 
 # Sources · design-by-type
@@ -489,6 +585,175 @@ Ideas were rewritten and checked against real renders; no file copied.
 ## Site access on 2026-11-19
 - Blocked to scripts: Behance (after ~5 pages, 403), Pinterest, GraphicRiver, Canva, Freepik (security filter), Venngage
 - Dribbble hides counts on shot pages when not logged in for some shots; counts on the search page still show
+
+
+## reference: thumbnail.md
+
+
+# design-by-type — YouTube video thumbnails that stay readable on a phone screen
+
+> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 truly different directions → check `design-gate/no-ai-look` before sending. Follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colours and fonts; the search is for this piece's layout). Close the work with the line `ด่านก่อนลงมือ:`.
+
+> **One rule:** a thumbnail must be understood at stamp size. Shrink the image to 168 px wide (about the size in the recommended list on mobile; our own value, not yet measured on every app version). If you can still read the words and tell what the video is about, it can be sent.
+
+## Use when
+- Making a new YouTube thumbnail, or fixing one people do not click
+- Thai text on the thumbnail is too small, sinks into the background, or has colliding tone marks
+- Testing several thumbnails to see which is better
+
+Not for: TikTok · Reels · post covers · channel banners → `campaign-set` (sizes for every platform: its `platform-sizes.md`, YouTube section) · video script or first-5-second hook → `video-script` · AI-made people or scenes → `image-generation` · a series that must look like a set → `brand-kit` · look check before sending → `design-review`. The owner is agent `social-creator`.
+
+## Steps
+1. **Pick the one thing the thumbnail must say.** Thumbnail and title tell the story together without repeating words: the title gives detail, the thumbnail gives the feeling or the result. If there is no direction yet, search references live first per `design-gate/design-references` (type `social`), then pull colours from the chosen work; the stored palette library is for when live search is not possible.
+2. **Set up a 16:9 page** at the working size from YouTube Help (look up live; see the reference), export JPG or PNG. The source may be larger, up to the maximum that page gives.
+3. **Text of at most 3–4 words**, bold, at least about 1/6 of the image height (our own value). For Thai, leave space above and below the line for tone marks and vowels (line spacing at least 1.3 times the font size; our own value). Use a Thai font that really has Bold or Black, not fake-bold.
+4. **Contrast:** text and background differ by at least 4.5:1 (WCAG 2.2 normal text, same as `brand-kit`). Busy background: add a text outline, shadow, or colour bar behind the text.
+5. **Leave the bottom-right corner empty** (the video length badge covers it). Keep text and faces left or middle.
+6. **Vertical video:** YouTube makes a 4:5 thumbnail from the 16:9 one on home and subscriptions pages, so put the important part in the middle.
+7. **Shrink to 168 px wide** and ask: can you read the text, can you tell what it is about. If not, cut words, enlarge letters, or remove elements.
+8. **Filter before upload (compare in pairs, do not score).** Shrink the 2–3 thumbnails to 168 px wide and have 3–5 people choose pair by pair which they would rather click, swapping left and right in every pair. Put the result in the format of [`thumbnail-pairwise.example.json`](thumbnail-pairwise.example.json) and run `node <decision-scoring>/scripts/decide.mjs pairwise file.json` (`<decision-scoring>` is the folder of skill `superuser:decision-desk`). If the result is close (the script says below 60%), send both into Test & compare and let YouTube decide. Drop a thumbnail that loses clearly.
+9. **Test & compare** when the channel has it enabled: make 2–3 truly different versions of 1 topic (a face vs a product image · with text vs no text), not just different colours. YouTube decides by **watch time share**, not click rate, so a thumbnail that lures clicks but makes people leave loses. Never promise the user "clicks will go up". Look up live the limits (versions, test length, who can use it) at the YouTube Help page; if the page will not open, mark the value (รอยืนยัน).
+
+## Check before done
+- 16:9 · size and file within the ceilings looked up live from YouTube Help (mobile and computer upload)
+- Text ≤ 4 words, contrast ≥ 4.5:1 · Thai tone marks do not hit the edge or another line
+- Bottom-right corner empty · vertical video has the important part in the middle
+- Shrunk to 168 px wide and still readable
+- Matches the real content of the video and does not trick people into clicking · image, fonts and faces are licensed
+- Passes `design-gate/no-ai-look` item 3
+
+## References
+- [`youtube-requirements.md`](youtube-requirements.md) — open for YouTube's size, file and account rules, Test & compare details, or the worked example
+- [`thumbnail-pairwise.example.json`](thumbnail-pairwise.example.json) — input format for step 8
+- [`sources-thumbnail.md`](sources-thumbnail.md) — open when re-checking sources
+
+
+## reference: uipro-banner-sizes-and-styles.md
+
+# Banner Sizes & Art Direction Styles Reference
+
+## Contents
+- [Complete Banner Sizes](#complete-banner-sizes) (Social Media · Web / Display Ads · Website · Print)
+- [22 Art Direction Styles](#22-art-direction-styles)
+- [Design Principles](#design-principles) (hierarchy · safe zones · CTA · typography · text-to-image · print)
+- [Pinterest Research Queries](#pinterest-research-queries)
+
+## Complete Banner Sizes
+
+### Social Media
+| Platform | Type | Size (px) | Aspect Ratio |
+|----------|------|-----------|--------------|
+| Facebook | Cover (desktop) | 820 × 312 | ~2.6:1 |
+| Facebook | Cover (mobile) | 640 × 360 | ~16:9 |
+| Facebook | Event cover | 1920 × 1080 | 16:9 |
+| Twitter/X | Header | 1500 × 500 | 3:1 |
+| Twitter/X | Ad banner | 800 × 418 | ~2:1 |
+| LinkedIn | Company cover | 1128 × 191 | ~6:1 |
+| LinkedIn | Personal banner | 1584 × 396 | 4:1 |
+| YouTube | Channel art | 2560 × 1440 | 16:9 |
+| YouTube | Safe area | 1546 × 423 | ~3.7:1 |
+| Instagram | Stories | 1080 × 1920 | 9:16 |
+| Instagram | Post | 1080 × 1080 | 1:1 |
+| Pinterest | Pin | 1000 × 1500 | 2:3 |
+
+### Web / Display Ads (Google Display Network)
+| Name | Size (px) | Notes |
+|------|-----------|-------|
+| Medium Rectangle | 300 × 250 | Highest CTR |
+| Leaderboard | 728 × 90 | Top of page |
+| Wide Skyscraper | 160 × 600 | Sidebar |
+| Half Page | 300 × 600 | Premium |
+| Large Rectangle | 336 × 280 | High performer |
+| Mobile Banner | 320 × 50 | Mobile default |
+| Large Mobile | 320 × 100 | Mobile hero |
+| Billboard | 970 × 250 | Desktop hero |
+
+### Website
+| Type | Size (px) |
+|------|-----------|
+| Full-width hero | 1920 × 600–1080 |
+| Section banner | 1200 × 400 |
+| Blog header | 1200 × 628 |
+| Email header | 600 × 200 |
+
+### Print
+| Type | Size |
+|------|------|
+| Roll-up | 850mm × 2000mm |
+| Step-and-repeat | 8ft × 8ft |
+| Vinyl outdoor | 6ft × 3ft |
+| Trade show | 33in × 78in |
+
+## 22 Art Direction Styles
+
+1. **Minimalist** — White space dominant, single focal element, 1-2 colors, clean sans-serif
+2. **Bold Typography** — Type IS the design; oversized, expressive letterforms fill canvas
+3. **Gradient / Color Wash** — Smooth transitions, mesh gradients, chromatic blends
+4. **Photo-Based** — Full-bleed photography with text overlay; hero lifestyle imagery
+5. **Illustrated / Hand-Drawn** — Custom illustrations, bespoke icons, artisan feel
+6. **Geometric / Abstract** — Shapes, lines, grids as primary visual elements
+7. **Retro / Vintage** — Distressed textures, muted palettes, serif type, halftone dots
+8. **Glassmorphism** — Frosted glass panels, blur backdrop, subtle border glow
+9. **3D / Sculptural** — Rendered objects, depth, shadows; product-centric
+10. **Neon / Cyberpunk** — Dark backgrounds, glowing neon accents, high contrast
+11. **Duotone** — Two-color photo treatment; bold brand color overlay on image
+12. **Editorial / Magazine** — Grid-heavy layouts, pull quotes, journalistic composition
+13. **Collage / Mixed Media** — Cut-paper textures, photo cutouts, layered elements
+14. **Retro Futurism** — Space-age nostalgia, chrome, gradients, optimism
+15. **Expressive / Anti-Design** — Chaotic layouts, mixed fonts, deliberate "wrong" composition
+16. **Digi-Cute / Kawaii** — Rounded shapes, pastel gradients, pixel art, playful characters
+17. **Tactile / Sensory** — Puffy/squishy textures, hyper-real materials, embossed feel
+18. **Data / Infographic** — Stats front-and-center, charts, numbers as heroes
+19. **Dark Mode / Moody** — Near-black backgrounds, rich jewel tones, high contrast
+20. **Flat / Solid Color** — Single background color, clean icons, no gradients
+21. **Nature / Organic** — Earthy tones, botanical motifs, sustainable brand feel
+22. **Motion-Ready / Kinetic** — Designed for animation; layered elements, loopable
+
+## Design Principles
+
+### Visual Hierarchy (3-Zone Rule)
+- **Top**: Logo or main value prop
+- **Middle**: Supporting message + visuals
+- **Bottom**: CTA (button/QR/URL)
+
+### Safe Zones
+- Critical content in central 70-80% of canvas
+- Avoid text/CTA within 50-100px of edges
+- YouTube: 1546 × 423px safe area inside 2560 × 1440
+- Meta/Instagram: central 80% to avoid UI chrome
+
+### CTA Rules
+- One CTA per banner
+- High contrast vs background
+- Bottom-right placement (terminal area)
+- Min 44px height for mobile tap targets
+- Action verbs: "Get", "Start", "Download", "Claim"
+
+### Typography
+- Max 2 typefaces per banner
+- Min 16px body, ≥32px headline (digital)
+- Min 4.5:1 contrast ratio
+- Max 7 words/line, 3 lines for ads
+
+### Text-to-Image Ratio
+- Ads: under 20% text (Meta penalizes)
+- Social covers: 60/40 image-to-text
+- Print: 70pt+ headlines for 3-5m viewing distance
+
+### Print Specs
+- 300 DPI minimum (150 DPI for large format)
+- 3-5mm bleed all sides
+- CMYK color mode
+- 1pt per foot viewing distance rule
+
+## Pinterest Research Queries
+
+Use these search queries on Pinterest for art direction references:
+- `[purpose] banner design [style]` (e.g., "social media banner minimalist")
+- `[platform] cover design inspiration` (e.g., "youtube channel art design")
+- `creative banner layout [industry]` (e.g., "creative banner layout tech startup")
+- `[style] graphic design 2026` (e.g., "gradient graphic design 2026")
+- `banner ad design [product type]` (e.g., "banner ad design saas")
 
 
 ## reference: wow-score.md
@@ -524,3 +789,39 @@ On 2026-11-19 three fresh critics scored the same logo direction through two fix
 ## Checking the checker with the owner
 
 The owner may score the same 5 criteria. Record both in `scripts/evals/beauty/RESULTS.md`. If the critic and the owner differ by 2 on the same criterion in 2 or more pieces, rewrite that criterion's 0/1/2 text above with the owner's words and note the date.
+
+
+## reference: youtube-requirements.md
+
+# YouTube requirements, Test & compare, worked example
+
+Open this when checking YouTube's size, file and account rules, setting up Test & compare, or following the worked example.
+
+## YouTube requirements
+
+| Topic | Value | Status |
+|---|---|---|
+| Size | Ratio 16:9 · Shorts thumbnail 9:16 · maximum size, minimum size and recommended working size: look them up live on the YouTube Help page | Look up live |
+| File | Accepted file types, and the file size ceiling for uploading from mobile and from a computer: look them up live on the YouTube Help page | Look up live |
+| Right to upload custom thumbnails | Account must be verified first · there is a daily upload limit | Official page |
+| Test & compare: how many versions can be tested | Can test thumbnails, titles, or both · look up the maximum number of versions live on the Test & compare page | Look up live |
+| Test & compare: who can use it | Channels with advanced features turned on · done in YouTube Studio on a computer · not usable with Shorts · videos made for kids · adult or 18+ videos · private videos · scheduled live streams · Premieres that have not ended | Official page + 1 source |
+| Test & compare: how it decides | Uses **watch time share**, not click rate · no clear winner → shows the first version uploaded · the result shows as Winner or Preferred | Confirmed by 3 sources |
+| Test & compare: how long it takes | Look up the test length live on the Test & compare page | Look up live |
+
+The test result is decided by watch time, so a thumbnail that lures clicks but makes people leave quickly loses. Never promise the user "clicks will go up".
+
+Look up live (WebSearch/WebFetch) the thumbnail size, file limit and Test & compare limits (number of variants, test length, who can use it) at the two YouTube Help pages in `sources.md`. If the page will not open, mark the value (รอยืนยัน).
+
+## Worked example
+
+Brief: a cooking channel, video "ต้มยำกุ้งน้ำข้น 15 นาที" (creamy tom yum goong in 15 minutes)
+
+| Step | Do | Result |
+|---|---|---|
+| One thing | The thumbnail says "fast", the title says the dish | Text on the thumbnail "15 นาที", 2 words |
+| Layout | Bowl of tom yum on the left, the cook's face top right, bottom-right corner empty | The length badge covers nothing |
+| Shrink to 168 px | "15 นาที" is readable · the orange bowl is visible | ผ่าน (pass) |
+| Test | Version A has a face · version B the bowl only | Set up Test & compare, then wait for the result for the length of time the YouTube Help page gives |
+
+The pairwise example file `thumbnail-pairwise.example.json` in this folder is made-up data; it ran and passed on 2026-10-28.

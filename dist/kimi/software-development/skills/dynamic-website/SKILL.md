@@ -14,7 +14,7 @@ description: Use when a marketing website needs scroll motion or 3D
 - One page with 3–7 full-screen chapters changed by wheel, keyboard or swipe (deck-mode), or a normal scrolling page where content appears on scroll (page-mode)
 - A "meaningful" background (a network of people · a schedule route · a map) with a camera that moves per chapter
 
-Not for: dashboard · admin · internal tool · SaaS → `web-app-design` + `ui-craft` (motion ≤ 350 ms) · presentation slides with speaker notes → `html-slide-deck` · no storyline yet → `presentation-design` steps 1–3 first · animated clip or moving logo → `motion-basics` (plugin `graphic-design`)
+Not for: dashboard · admin · internal tool · SaaS → `web-app-design` + `ui-craft` (motion ≤ 350 ms) · presentation slides with speaker notes → `html-slide-deck` · no storyline yet → `presentation-design` steps 1–3 first · animated clip or moving logo → `video-editing` (plugin `graphic-design`)
 
 ## Steps
 1. Run the pre-work gate above. Colour comes from the work: use the brand colour if there is one; otherwise search live per `design-gate/design-references` (type `web` or `motion`) and extract colours from the chosen work. If live search is impossible, use `#2A78D6` (text on light: `#226CC6`), write `(รอยืนยัน)` and carry on.
@@ -62,4 +62,4 @@ Also: trackpad inertia must not skip 2 chapters (drop delta < 6 and anything wit
 - [`references/tokens-and-fonts.md`](references/tokens-and-fonts.md) — open when setting tokens, type scale or a Thai font
 - [`references/tools.md`](references/tools.md) — open when choosing GSAP vs CSS scroll-driven vs View Transitions vs scroll-snap, or when you need deeper GSAP API (then read only the plugin file you use from github.com/greensock/gsap-skills; this page's rules still outrank it)
 - [`references/sources.md`](references/sources.md) — sources and check dates
-- Other skills: colour tokens/forms for page-mode → `web-app-design` · motion principles and easing → `motion-basics` · storyline and text budget → `presentation-design` · SEO of JS-rendered pages → `seo-audit-checklist`
+- Other skills: colour tokens/forms for page-mode → `web-app-design` · motion principles and easing → `video-editing` · storyline and text budget → `presentation-design` · SEO of JS-rendered pages → `seo-audit-checklist`

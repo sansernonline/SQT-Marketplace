@@ -1,5 +1,19 @@
 # Changelog — graphic-design
 
+## 0.38.0 — 2026-11-27
+
+รวม skill จาก 24 เหลือ 14 (เปลี่ยนชื่อแบบไม่เข้ากับของเดิม) · เจ้าของสั่ง 2026-11-27 ตามแผน `.claude/superuser/plans/2026-11-27-design-merge-plan.md` · เนื้อหาเดิมย้ายไปเป็นไฟล์ `references/` ของตัวที่เหลือ ไม่ได้ตัดกฎทิ้ง · eval ย้ายตามไปใต้ชื่อใหม่
+
+| ชื่อเก่า | ใช้แทนด้วย |
+|---|---|
+| `banner-design` · `youtube-thumbnail` | `design-by-type` (`references/banner-build.md` · `references/thumbnail.md`) |
+| `style-consistency` · `asset-organize` | `brand-kit` (`references/style-lock.md` · `references/file-organize.md`) |
+| `brief-to-image` · `image-editing-brief` | `image-generation` (`references/prompt-brief.md` · `references/edit-brief.md`) |
+| `social-formats` | `campaign-set` (`references/platform-formats.md`) |
+| `line-richmenu` · `line-sticker` | `line-design` ใหม่ |
+| `subtitles-th` · `motion-basics` | `video-editing` (`references/subtitles.md` · `references/motion.md`) |
+| `video-script-to-clip` · `speaking-script` | `video-script` ใหม่ |
+
 ## 0.37.0 — 2026-11-27
 
 - `narration-th`: บทพรีเซนต์สไลด์ละประโยคยาว ใช้ `tts_cues.py --keep-spaces` (ช่องว่างไทยเป็นจังหวะสั้น ใส่ , เฉพาะจุดหยุด ลบช่องว่างรอบคำอังกฤษ) แทนกฎ tutorial ที่เปลี่ยนทุกช่องว่างเป็น , · เสียง Niwat −5% กับชุดแต่งเสียงที่เจ้าของบอกว่า "โทนเสียงดีมาก" · วิธีใส่เสียงทับวิดีโอสไลด์เดิมโดยค้างภาพแทนการตัด (`references/presentation.md`)

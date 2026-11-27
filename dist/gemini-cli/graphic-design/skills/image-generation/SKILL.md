@@ -1,6 +1,6 @@
 ---
 name: image-generation
-description: Use when a page needs images and a route must be picked
+description: Use when images are needed, as a route, brief, prompt or edit
 ---
 
 # Generate real images with AI
@@ -35,9 +35,9 @@ Write `image-style.md` (kept in `docs/design/` or the work's own folder): style 
 
 ## Write the brief and prompt
 
-The line between the two skills: **this file decides how to get the images** (generate, draw SVG, or find free ones) and makes the image list · **`brief-to-image` writes the brief and prompt** once the generate route is chosen, including how to pick from 3–4 variants (`decision-desk/decision-scoring`, command `score` · for hard scoring use `pairwise` · if results are close, the user chooses) and how to fix a bad image · do not put Thai text inside a generated image, and place it afterward with the brand font
+The line between the two skills: **this file decides how to get the images** (generate, draw SVG, or find free ones) and makes the image list · **[`references/prompt-brief.md`](references/prompt-brief.md) writes the brief and prompt** once the generate route is chosen, including how to pick from 3–4 variants (`decision-desk/decision-scoring`, command `score` · for hard scoring use `pairwise` · if results are close, the user chooses) and how to fix a bad image · do not put Thai text inside a generated image, and place it afterward with the brand font
 
-**Keep a set of images consistent** — apply the `image-style.md` block above to every image · lock the same camera angle and light · for a recurring person or character, make 1 reference image first, then reuse the reference image or the same seed · lay all images side by side before sending. Full method → `style-consistency`
+**Keep a set of images consistent** — apply the `image-style.md` block above to every image · lock the same camera angle and light · for a recurring person or character, make 1 reference image first, then reuse the reference image or the same seed · lay all images side by side before sending. Full method → `brand-kit` (`references/style-lock.md`)
 
 ## 3 · Make the image list
 
@@ -52,7 +52,7 @@ The line between the two skills: **this file decides how to get the images** (ge
 | 2 | **Draw SVG as full-scene illustrations, the whole set** | Route 1 is unavailable · for style `photo` → draw detailed illustrations instead and note it in `## ตัดสินใจเอง` |
 | 3 | **Free photos from Openverse** — `scripts/fetch_free_image.py`, no key needed | The SVGs fail the beauty gate · or the user says it must be a real photo |
 
-**Route 1 — generate:** prompt = the subject + the style line (`references/styles.md`) + the style block · generate 3 variants per image → open them with `Read` → score by these criteria: matches the brief · text is legible · matches `image-style.md` · can be cropped · a physical impossibility is an iron rule that eliminates the image, not a score (command `score` of `decision-desk/decision-scoring` · details in `brief-to-image`) → pick rank 1 · if only 1 thing is wrong, fix 1 line · if the same thing fails 3 rounds in a row → write a new brief
+**Route 1 — generate:** prompt = the subject + the style line (`references/styles.md`) + the style block · generate 3 variants per image → open them with `Read` → score by these criteria: matches the brief · text is legible · matches `image-style.md` · can be cropped · a physical impossibility is an iron rule that eliminates the image, not a score (command `score` of `decision-desk/decision-scoring` · details in `image-generation`) → pick rank 1 · if only 1 thing is wrong, fix 1 line · if the same thing fails 3 rounds in a row → write a new brief
 
 **Route 2 — draw SVG:** it must be crafted, and the viewer must see at once what it depicts, not basic shapes stacked up (a triangle for a roof, a circle for the sun = the reason websites look like children's cartoons). Full steps and techniques → [`references/svg-illustration.md`](references/svg-illustration.md)
 - Look at real reference images before drawing · draw one image at a time
@@ -76,6 +76,20 @@ python <skill>/scripts/fetch_free_image.py --query "thai massage room" \
 **Use the same route for the whole set** — do not mix photos and drawings on one page unless the user orders it
 Text, prices and Thai wording → put them in HTML, not in the image
 For any image not yet done → put an `<img>` using the name in `image-list.md` with `alt` · report the status as `รอรูป` (awaiting image), not `เสร็จ`
+
+## Parts
+
+Hard rules of the two absorbed jobs (full steps in each file):
+- **Prompt brief** ([`references/prompt-brief.md`](references/prompt-brief.md)): 1 brief per asset; a series shares a style lock sheet, not a copied prompt · never put the headline, price or Thai copy in the image prompt · no real identifiable person without consent, no trademarked characters or other brands' logos · check the tool's terms for commercial use before an ad · every prompt carries the items of `design-gate/no-ai-look` section 4.
+- **Edit brief** ([`references/edit-brief.md`](references/edit-brief.md)): name the problem and the keep list before editing · 1 edit brief version per round, never rewrite it mid-edit · the original file is the reference for every later edit · never edit product labels, prices or certification marks with AI · if the edit is larger than the keep list, it is a new image, so write a prompt brief.
+
+| When | Open |
+|---|---|
+| Writing a brief and prompt for an AI image | [references/prompt-brief.md](references/prompt-brief.md) · [references/prompt-anatomy.md](references/prompt-anatomy.md) |
+| Tool differences (negative field, Thai text, aspect ratio) | [references/model-differences.md](references/model-differences.md) |
+| A model brief-to-prompt example | [references/prompt-worked-example.md](references/prompt-worked-example.md) |
+| An image needs edits such as a background swap | [references/edit-brief.md](references/edit-brief.md) · [references/edit-brief-template.md](references/edit-brief-template.md) |
+| A model edit run over 3 rounds | [references/edit-worked-example.md](references/edit-worked-example.md) |
 
 ## Check before sending
 

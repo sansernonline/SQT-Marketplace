@@ -1,6 +1,6 @@
 ---
 name: design-by-type
-description: Use when a logo, poster, banner, cover or deck must blend popular refs
+description: Use when a logo, poster, banner, thumbnail or deck needs refs
 ---
 
 # design-by-type — sort the job by type, read the project, blend 2–3 popular references, let the owner pick
@@ -14,10 +14,10 @@ This skill adds 3 things on top of `design-gate/design-references`: the type's o
 > The general method for any medium is `superuser` `design-gate/parts/design-method/guide.md` (12 steps); this skill adds the type rules, popularity check and blend.
 
 ## Use when
-- A logo · poster · banner or social ad · Word/PDF cover · slide deck is about to be designed, from scratch or as a redesign.
+- A logo · poster · banner or social ad · YouTube thumbnail · Word/PDF cover · slide deck is about to be designed, from scratch or as a redesign.
 - The owner says the work looks stiff, generic or AI-made, and the job is one of those types.
 
-Not for: screens and web pages → `software-development:ui-craft` · icons → `icon-design` · a whole brand kit → `brand-kit` (it calls this skill for the logo) · YouTube thumbnails → `youtube-thumbnail` · a quick one-off logo or poster inside a software project, no reference blend → `software-development:graphic-design`.
+Not for: screens and web pages → `software-development:ui-craft` · icons → `icon-design` · a whole brand kit → `brand-kit` (it calls this skill for the logo) · a quick one-off logo or poster inside a software project, no reference blend → `software-development:graphic-design`.
 
 ## Steps
 
@@ -27,9 +27,10 @@ Not for: screens and web pages → `software-development:ui-craft` · icons → 
    |---|---|---|
    | Logo · wordmark · brand mark | [`references/logo.md`](references/logo.md) | `brand-kit` · `icon-design` (licensed sets) |
    | Poster · flyer · event key visual | [`references/poster.md`](references/poster.md) | `print-ready-files` |
-   | Banner · social post · ad | [`references/banner.md`](references/banner.md) | `banner-design` · `social-formats` · `copy-claims-check` |
+   | Banner · social post · ad | [`references/banner.md`](references/banner.md) | [`references/banner-build.md`](references/banner-build.md) · `campaign-set` · `copy-claims-check` |
    | Word/PDF cover and inner pages | [`references/document-cover.md`](references/document-cover.md) | `software-development:branded-document-design` |
-   | Slide deck · company profile | [`references/slides.md`](references/slides.md) | `software-development:presentation-design` · `style-consistency` |
+   | Slide deck · company profile | [`references/slides.md`](references/slides.md) | `software-development:presentation-design` · `brand-kit` (style lock) |
+   | YouTube thumbnail | [`references/thumbnail.md`](references/thumbnail.md) | `campaign-set` |
 
 2. **Read the project before searching.** For a logo, icon or key visual, first fill the feeling list and idea map in [`references/meaning-first.md`](references/meaning-first.md): 2–3 feelings the customer must get, one meaning per mark, objects from the work environment, one locked style per direction (owner 2026-11-27). Write 2 lines: what the project is (industry · audience · what the piece must make people do) and which 1–2 style families fit. Look the industry up first, it gives looks and cautions:
    ```bash
@@ -61,3 +62,18 @@ Not for: screens and web pages → `software-development:ui-craft` · icons → 
 - [`references/blend.md`](references/blend.md) — popularity numbers per site and the blend recipe sheet
 - [`references/logo.md`](references/logo.md) · [`references/poster.md`](references/poster.md) · [`references/banner.md`](references/banner.md) · [`references/document-cover.md`](references/document-cover.md) · [`references/slides.md`](references/slides.md) — rules, sites and checks per type
 - [`references/sources.md`](references/sources.md) — sources and check dates
+
+## Parts
+
+Hard rules of the two absorbed jobs (full steps in each file; the type file above still gives the beauty rules):
+- **Banner build** ([`references/banner-build.md`](references/banner-build.md)): deliver 3 banner directions as real-size PNGs laid side by side, each with a real reference opened this round · sizes come from the platform's official page, not the copied file · run `scripts/render_banner.py` on every direction (size matches, Thai font loaded) · no other brand's logo without permission · print work is 300 dpi, 3–5 mm bleed, CMYK.
+- **YouTube thumbnail** ([`references/thumbnail.md`](references/thumbnail.md)): it must be understood at 168 px wide · 16:9, text of 4 words or fewer, contrast 4.5:1 or more · bottom-right corner empty · size and file ceilings looked up live from YouTube Help · it must match the video and not trick people into clicking.
+
+| When | Open |
+|---|---|
+| Making a banner, event cover or web hero at real size | [references/banner-build.md](references/banner-build.md) |
+| Banner sizes, 22 art directions, example queries (MIT copy) | [references/uipro-banner-sizes-and-styles.md](references/uipro-banner-sizes-and-styles.md) · [references/sources-banner.md](references/sources-banner.md) |
+| Rendering a banner HTML to PNG and comparing with a reference | `scripts/render_banner.py` |
+| Making a YouTube thumbnail | [references/thumbnail.md](references/thumbnail.md) |
+| YouTube size, file and account rules, Test & compare | [references/youtube-requirements.md](references/youtube-requirements.md) · [references/sources-thumbnail.md](references/sources-thumbnail.md) |
+| Pairwise input for choosing between thumbnails | [references/thumbnail-pairwise.example.json](references/thumbnail-pairwise.example.json) |

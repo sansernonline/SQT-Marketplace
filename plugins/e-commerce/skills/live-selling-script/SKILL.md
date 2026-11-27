@@ -63,7 +63,7 @@ Read the line "ชุดรองลงมา" in the result (items, total value
 - [ ] Phone on charger, stable Wi-Fi or 5G, ring light, clean background with the shop name
 - [ ] Products in run-sheet order on the table, price cards written large
 - [ ] Comment moderator ready; banned-word list set (competitor names, abuse)
-- [ ] Thumbnail and teaser posted 1–3 hours before (`graphic-design` `social-formats` (if installed))
+- [ ] Thumbnail and teaser posted 1–3 hours before (`graphic-design` `campaign-set` (if installed))
 
 ## Compliance
 

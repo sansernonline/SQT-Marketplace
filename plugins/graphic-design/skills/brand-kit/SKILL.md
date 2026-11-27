@@ -1,6 +1,6 @@
 ---
 name: brand-kit
-description: Use when starting a brand or needing a style guideline
+description: Use when a brand, a matching image series or messy files need a system
 argument-hint: '[brand or company name]'
 ---
 
@@ -62,7 +62,7 @@ Draw the clear-space box on a page in the kit (`logo/usage.png`) — people foll
 - Everything in the kit is a decision with a 1-line reason
 - Not in the kit = not brand. A new colour enters only with a new kit version, never through a one-off post
 - Confirm every font licence from the licence file in the download, not from a blog
-- Keep the kit beside the work: `asset-organize` puts it at `00-brand-kit/`
+- Keep the kit beside the work: [references/file-organize.md](references/file-organize.md) puts it at `00-brand-kit/`
 
 ## เขียนเป็นเอกสาร (full brand guideline)
 
@@ -75,9 +75,9 @@ Use this when an organisation or team needs a full guide (tone of voice, key mes
 
 ## Related
 
-- `style-consistency` — the per-campaign style lock that sits under the kit
+- [references/style-lock.md](references/style-lock.md) — the per-campaign style lock that sits under the kit
 - `design-review` — point 7 checks every asset against this kit
-- `asset-organize` — folder and naming
+- [references/file-organize.md](references/file-organize.md) — folder and naming
 
 ## เรียกเป็นคำสั่ง
 
@@ -86,6 +86,19 @@ Use this when an organisation or team needs a full guide (tone of voice, key mes
 Run `brand-kit` with the `brand-keeper` agent for: **$ARGUMENTS**
 
 Ends with a README you can read in 5 minutes and a v1 version tag.
+
+## Parts
+
+Hard rules of the two absorbed jobs (full steps in each file):
+- **Style lock** ([`references/style-lock.md`](references/style-lock.md)): write the style lock sheet before the first generation, never after · one sheet per campaign; a "slightly different" style is a new sheet · a mid-campaign change needs a version bump and a reason in the log · keep the sheet in the campaign folder next to the asset matrix.
+- **File organize** ([`references/file-organize.md`](references/file-organize.md)): names are lowercase with hyphens only · 1 naming pattern per team, and changing it means a new kit version · `scripts/apply_renames.py` checks first and copies only with `--apply`, never moves · review `04-archive/` every quarter, and nothing leaves it without a reason in the log.
+
+| When | Open |
+|---|---|
+| A series of images must look like one set | [references/style-lock.md](references/style-lock.md) · [references/style-lock-sheet.md](references/style-lock-sheet.md) · [references/style-lock-worked-example.md](references/style-lock-worked-example.md) |
+| Company profile or capability deck page system | [references/corporate-profile-deck.md](references/corporate-profile-deck.md) |
+| Design files are messy or versions are lost | [references/file-organize.md](references/file-organize.md) · [references/naming-and-tree.md](references/naming-and-tree.md) |
+| Copying and renaming files in 1 batch | `scripts/apply_renames.py` |
 
 ## References
 

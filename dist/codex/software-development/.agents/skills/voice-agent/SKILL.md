@@ -16,7 +16,7 @@ Provider, price and framework tables: [`thai-speech-options`](references/thai-sp
 - Fixing an agent that talks over the customer, fails to stop when interrupted (barge-in), stops itself because it hears its own echo, or mishears Thai names, dates and times
 - The user says "voice bot" · "AI รับโทรศัพท์" · "callbot" · "ให้ AI คุยกับลูกค้าทางโทรศัพท์"
 
-Do not use for: narration from a script into a file → `graphic-design:narration-th` · transcribing a recorded clip → `graphic-design:subtitles-th` · a text chatbot in LINE → `e-commerce:line-chatbot` · general prompt design, RAG and LLM evals with no voice → `llm-engineering`
+Do not use for: narration from a script into a file → `graphic-design:narration-th` · transcribing a recorded clip → `graphic-design:video-editing` · a text chatbot in LINE → `e-commerce:line-chatbot` · general prompt design, RAG and LLM evals with no voice → `llm-engineering`
 
 ## 1 · Ask everything once, at the start
 

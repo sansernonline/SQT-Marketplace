@@ -1,6 +1,6 @@
 # Slide deck · company profile
 
-Story, slide order and layouts live in `software-development:presentation-design`; the owner's liked deck is `style-consistency/references/corporate-profile-deck.md`. This file adds the beauty rules and where to find popular decks. Tested 2026-11-19 on a fictional Thai last-mile logistics company (cover + services slide, 1920x1080); the test images are kept in `scripts/evals/beauty/baseline/2026-11-19/`.
+Story, slide order and layouts live in `software-development:presentation-design`; the owner's liked deck is `brand-kit/references/corporate-profile-deck.md`. This file adds the beauty rules and where to find popular decks. Tested 2026-11-19 on a fictional Thai last-mile logistics company (cover + services slide, 1920x1080); the test images are kept in `scripts/evals/beauty/baseline/2026-11-19/`.
 
 ## Where to look
 

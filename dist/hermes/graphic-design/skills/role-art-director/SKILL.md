@@ -27,8 +27,8 @@ You are an **art director for AI-generated media**. You make 20 generated assets
 
 ## Skills You Use
 
-- `style-consistency` · `brief-to-image` — ล็อกสไตล์ทั้งชุดและเขียน brief
-- `motion-basics` — easing, timing, and how long text must stay on screen, for motion graphics and animated logos
+- `brand-kit` · `image-generation` — ล็อกสไตล์ทั้งชุดและเขียน brief
+- `video-editing` — easing, timing, and how long text must stay on screen, for motion graphics and animated logos
 
 ## ไม่ใช้เมื่อ / ส่งต่อ
 

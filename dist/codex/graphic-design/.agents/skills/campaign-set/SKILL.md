@@ -1,6 +1,6 @@
 ---
 name: campaign-set
-description: Use when one campaign needs assets for many platforms
+description: Use when a campaign needs platform sizes, safe zones and many assets
 argument-hint: <campaign idea in one sentence>
 ---
 
@@ -13,12 +13,12 @@ argument-hint: <campaign idea in one sentence>
 ## Workflow
 
 1. **Campaign card** — fill the card below. If you cannot write the 1-sentence summary, stop and get it from the owner
-2. **Asset matrix** (the table of every asset needed) — 1 row per placement, using [asset-matrix-template.md](references/asset-matrix-template.md). Sizes come from `social-formats`
+2. **Asset matrix** (the table of every asset needed) — 1 row per placement, using [asset-matrix-template.md](references/asset-matrix-template.md). Sizes come from [platform-formats.md](references/platform-formats.md)
 3. **Cut** — remove any row that does not serve the sentence or the audience's channels
-4. **Style lock** — **ค้นต้นแบบก่อน:** run the project's keywords through a live search per `design-gate/design-references` (plugin `superuser`), type `social`, then pull the colours from the chosen work · use the stored palette bank only when live search is unavailable · then write or reuse a style lock sheet (`style-consistency`) before any generation or shoot
+4. **Style lock** — **ค้นต้นแบบก่อน:** run the project's keywords through a live search per `design-gate/design-references` (plugin `superuser`), type `social`, then pull the colours from the chosen work · use the stored palette bank only when live search is unavailable · then write or reuse a style lock sheet (`brand-kit`) before any generation or shoot
 5. **Master first** — design the hero at the main placement's ratio (the one that carries most of the campaign), at its largest canvas. Get it approved before deriving anything. Then derive tallest to widest
 6. **Derive in order** — stills by ratio (9:16 → 4:5 → 1:1 → wide) → covers and banners → motion and video last, built from the still's look
-7. **Name** every file with the `asset-organize` pattern, putting the matrix ID in its optional `<id>` token
+7. **Name** every file with the `brand-kit` pattern, putting the matrix ID in its optional `<id>` token
 8. **Ship gate** (final check before posting) — each asset passes `design-review`, has its alt text (1 Thai line: what is seen plus the text on the image), its promo claims pass `copy-claims-check`, and its matrix row is ticked. No tick, no post
 
 ## Campaign card
@@ -50,19 +50,30 @@ argument-hint: <campaign idea in one sentence>
 - Thai promo text: check numbers and dates against the card on every row. A wrong date on 1 platform is the most common campaign error
 - Deliver the matrix as a checklist file the team ticks through, saved in the campaign's `02-exports/` folder
 
+## Platform sizes and safe zones (hard rules)
+
+Full body: [platform-formats.md](references/platform-formats.md) (step 3 and its Rules section).
+
+- Right size first, design second. Design at 4 canvases: 9:16 (1080×1920 organic · 1440×2560 Meta ads), 4:5 (1080×1350 · 1440×1800), 1:1 (1080×1080), wide (1200×630 link · 1600×900 or 1920×1080)
+- Quote sizes, safe zones and file limits only from the platform's own page, live, with link and date; mark `(รอยืนยัน)` if the page will not open
+- Derive by re-composing, never stretching or upscaling; text on 9:16 stays in the middle band; Thai needs extra top and bottom room
+- Facebook and LinkedIn link previews crop to 1.91:1; a 1:1 image there loses top and bottom
+- Number posts: 1 image = 1 conclusion, source small at the bottom
+- LINE rich menu sizes and limits live in `line-design`
+
 ## Not an AI look
 
 Before handing over, run the check in `design-gate/no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files.
 
 ## Related
 
-- `social-formats` — sizes and safe zones per row
-- `style-consistency` — the look shared by all rows
-- `video-script-to-clip` — V rows
+- [platform-formats.md](references/platform-formats.md) — sizes and safe zones per row (absorbed from the old formats skill)
+- `brand-kit` — the look shared by all rows
+- `video-script` — V rows
 - `design-review` — the ship gate
 - `copy-claims-check` — wording of offers and claims before posting
-- `line-sticker` — when the campaign includes a LINE sticker set
-- `asset-organize` — names and folders
+- `line-design` — when the campaign includes a LINE rich menu or sticker set
+- `brand-kit` — names and folders
 
 ## เรียกเป็นคำสั่ง
 
@@ -75,3 +86,11 @@ Delivers the asset matrix as a checklist. An asset counts as done only after it 
 ## References
 
 - [`references/worked-example.md`](references/worked-example.md) — open to see a 6-row matrix and a file name
+
+## Parts
+
+| When | Open |
+|---|---|
+| Platform sizes, ratios, safe zones, number posts (full former formats skill body) | [references/platform-formats.md](references/platform-formats.md) |
+| Links to each platform's own size and safe-zone pages | [references/platform-sizes.md](references/platform-sizes.md) |
+| A café campaign across 4 placements with export names | [references/platform-sizes-worked-example.md](references/platform-sizes-worked-example.md) |

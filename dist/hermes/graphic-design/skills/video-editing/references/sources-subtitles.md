@@ -1,0 +1,8 @@
+# Sources · video-editing
+
+- The Caption and on-screen text rules table in `video-script` (Netflix Thai Timed Text Style Guide · Meta safe zone · checked by that skill 2026-10-06)
+- `production-tools.md` items 3–4 (YouTube accepts UTF-8 SubRip · OFL fonts · checked 2026-10-23)
+- ffmpeg Filters Documentation: [subtitles](https://ffmpeg.org/ffmpeg-filters.html#subtitles) (`fontsdir` · `force_style` · `shaping` · needs libass) · [escaping in a filtergraph](https://ffmpeg.org/ffmpeg-filters.html#Notes-on-filtergraph-escaping) · UTF-8 reading and BOM skipping from the source `libavformat/subtitles.c` version n9.0.2 · libass needs HarfBuzz since 0.15.0 ([Changelog](https://github.com/libass/libass/blob/master/Changelog)) (seen 2026-10-24)
+- [YouTube supported subtitle and closed caption files](https://support.google.com/youtube/answer/2734698) (SRT must be pure UTF-8 with no styles · seen 2026-10-24)
+- Transcription tools: [openai/whisper](https://github.com/openai/whisper) (MIT · model sizes · Thai figures) · [whisper.cpp](https://github.com/ggml-org/whisper.cpp) (MIT · `-osrt` · 16-bit WAV) · [faster-whisper](https://github.com/SYSTRAN/faster-whisper) (MIT) · [biodatlab/whisper-th-large-v3-combined](https://huggingface.co/biodatlab/whisper-th-large-v3-combined) · [nectec/Pathumma-whisper-th-large-v3](https://huggingface.co/nectec/Pathumma-whisper-th-large-v3) · [typhoon-ai/typhoon-whisper-large-v3](https://huggingface.co/typhoon-ai/typhoon-whisper-large-v3) (seen 2026-10-24 · not downloaded or run)
+- This skill's test results: the "Real example" in `burn-in-details.md` (run on self-made test files 2026-10-24 · ffmpeg 9.0.2 on Windows)

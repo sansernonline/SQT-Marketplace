@@ -4,29 +4,29 @@
  "description": "Creative design beyond product UI — brand kits, AI image generation and briefs with style consistency, social media formats, marketplace product images, YouTube thumbnails, print-ready files, campaign sets, LINE rich menus, app and UI icons, video editing with Thai subtitles and narration, speaking scripts, motion basics, and a design-review checklist.",
  "cross": [],
  "skills": [
-  "asset-organize",
-  "banner-design",
   "brand-kit",
-  "brief-to-image",
+  "design-by-type",
+  "brand-kit",
+  "image-generation",
   "campaign-set",
   "copy-claims-check",
   "design-review",
   "icon-design",
-  "image-editing-brief",
   "image-generation",
-  "line-richmenu",
-  "line-sticker",
+  "image-generation",
+  "line-design",
+  "line-design",
   "marketplace-product-images",
-  "motion-basics",
+  "video-editing",
   "narration-th",
   "print-ready-files",
-  "social-formats",
-  "speaking-script",
-  "style-consistency",
-  "subtitles-th",
+  "campaign-set",
+  "video-script",
+  "brand-kit",
   "video-editing",
-  "video-script-to-clip",
-  "youtube-thumbnail"
+  "video-editing",
+  "video-script",
+  "design-by-type"
  ],
  "core_skills": [
   "superuser",
@@ -79,9 +79,9 @@
    "description": "Use when AI images or videos must share one style. Locks palette, light, composition and lens; writes generation briefs.",
    "skills": [
     "superuser",
-    "style-consistency",
-    "brief-to-image",
-    "motion-basics"
+    "brand-kit",
+    "image-generation",
+    "video-editing"
    ]
   },
   {
@@ -112,9 +112,9 @@
    "skills": [
     "image-generation",
     "superuser",
-    "brief-to-image",
-    "style-consistency",
-    "image-editing-brief",
+    "image-generation",
+    "brand-kit",
+    "image-generation",
     "brand-kit",
     "icon-design"
    ]
@@ -126,12 +126,12 @@
    "description": "Use when creating social media posts, ads or campaign assets. Knows platform formats and safe zones; ships whole sets.",
    "skills": [
     "superuser",
-    "social-formats",
     "campaign-set",
-    "line-richmenu",
-    "youtube-thumbnail",
+    "campaign-set",
+    "line-design",
+    "design-by-type",
     "marketplace-product-images",
-    "speaking-script"
+    "video-script"
    ]
   },
   {
@@ -141,10 +141,10 @@
    "description": "Use when footage or narration must become a finished file — cut, Thai subtitles, loudness, export. Works with ffmpeg.",
    "skills": [
     "video-editing",
-    "subtitles-th",
+    "video-editing",
     "narration-th",
-    "asset-organize",
-    "video-script-to-clip"
+    "brand-kit",
+    "video-script"
    ]
   }
  ],
@@ -173,7 +173,7 @@
     },
     {
      "n": 2,
-     "text": "Set up the folder structure and file-name pattern per `asset-organize` · ใคร: `brand-keeper` ตัวใหม่",
+     "text": "Set up the folder structure and file-name pattern per `brand-kit` · ใคร: `brand-keeper` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -185,7 +185,7 @@
       "raw": "`brand-keeper` ตัวใหม่"
      },
      "skills": [
-      "asset-organize"
+      "brand-kit"
      ],
      "commands": [],
      "playbooks": [],
@@ -366,7 +366,7 @@
     },
     {
      "n": 2,
-     "text": "Build the asset table per `campaign-set`: platform · placement · size · file name, then check sizes and safe zones against the platform's help page per `social-formats` · ใคร: `social-creator` ตัวใหม่",
+     "text": "Build the asset table per `campaign-set`: platform · placement · size · file name, then check sizes and safe zones against the platform's help page per `campaign-set` · ใคร: `social-creator` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -379,7 +379,7 @@
      },
      "skills": [
       "campaign-set",
-      "social-formats"
+      "campaign-set"
      ],
      "commands": [],
      "playbooks": [],
@@ -387,7 +387,7 @@
     },
     {
      "n": 3,
-     "text": "Make the master piece first: for AI images use `brief-to-image` and lock the style with `style-consistency` · ใคร: `social-creator` ตัวใหม่ (for AI images: `art-director` ตัวใหม่ writes the brief and locks the style)",
+     "text": "Make the master piece first: for AI images use `image-generation` and lock the style with `brand-kit` · ใคร: `social-creator` ตัวใหม่ (for AI images: `art-director` ตัวใหม่ writes the brief and locks the style)",
      "sub": [],
      "phase": "",
      "who": {
@@ -400,8 +400,8 @@
       "raw": "`social-creator` ตัวใหม่ (for AI images: `art-director` ตัวใหม่ writes the brief and locks the style)"
      },
      "skills": [
-      "brief-to-image",
-      "style-consistency"
+      "image-generation",
+      "brand-kit"
      ],
      "commands": [],
      "playbooks": [],
@@ -491,7 +491,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Write a style lock sheet per `style-consistency` — color, light, composition, lens, what is forbidden · ใคร: `art-director` ตัวใหม่",
+     "text": "Write a style lock sheet per `brand-kit` — color, light, composition, lens, what is forbidden · ใคร: `art-director` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -503,7 +503,7 @@
       "raw": "`art-director` ตัวใหม่"
      },
      "skills": [
-      "style-consistency"
+      "brand-kit"
      ],
      "commands": [],
      "playbooks": [],
@@ -511,7 +511,7 @@
     },
     {
      "n": 2,
-     "text": "Write the brief and prompt for each image per `brief-to-image`, with every image citing the same lock sheet · ใคร: `art-director` ตัวใหม่",
+     "text": "Write the brief and prompt for each image per `image-generation`, with every image citing the same lock sheet · ใคร: `art-director` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -523,7 +523,7 @@
       "raw": "`art-director` ตัวใหม่"
      },
      "skills": [
-      "brief-to-image"
+      "image-generation"
      ],
      "commands": [],
      "playbooks": [],
@@ -549,7 +549,7 @@
     },
     {
      "n": 4,
-     "text": "Check (ตรวจ) every image against the lock sheet. For an image that drifts from the style, write an `image-editing-brief` (what to keep · what to change) instead of regenerating the whole image · ใคร: `design-critic` ตัวใหม่ compares against the lock sheet · `art-director` ตัวใหม่ writes the fix brief",
+     "text": "Check (ตรวจ) every image against the lock sheet. For an image that drifts from the style, write an `image-generation` (what to keep · what to change) instead of regenerating the whole image · ใคร: `design-critic` ตัวใหม่ compares against the lock sheet · `art-director` ตัวใหม่ writes the fix brief",
      "sub": [],
      "phase": "",
      "who": {
@@ -562,7 +562,7 @@
       "raw": "`design-critic` ตัวใหม่ compares against the lock sheet · `art-director` ตัวใหม่ writes the fix brief"
      },
      "skills": [
-      "image-editing-brief"
+      "image-generation"
      ],
      "commands": [],
      "playbooks": [],
@@ -1199,7 +1199,7 @@
     },
     {
      "n": 2,
-     "text": "Make a shot list per `video-script-to-clip`: picture · on-screen text · sound · timing · ใคร: `art-director` ตัวใหม่",
+     "text": "Make a shot list per `video-script`: picture · on-screen text · sound · timing · ใคร: `art-director` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1211,7 +1211,7 @@
       "raw": "`art-director` ตัวใหม่"
      },
      "skills": [
-      "video-script-to-clip"
+      "video-script"
      ],
      "commands": [],
      "playbooks": [],
@@ -1219,7 +1219,7 @@
     },
     {
      "n": 3,
-     "text": "Set the motion rhythm per `motion-basics`: define timing in milliseconds · choose the easing curve (the pattern of speeding up and slowing down) · keep on-screen text up long enough to read · ใคร: `art-director` ตัวใหม่",
+     "text": "Set the motion rhythm per `video-editing`: define timing in milliseconds · choose the easing curve (the pattern of speeding up and slowing down) · keep on-screen text up long enough to read · ใคร: `art-director` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1231,7 +1231,7 @@
       "raw": "`art-director` ตัวใหม่"
      },
      "skills": [
-      "motion-basics"
+      "video-editing"
      ],
      "commands": [],
      "playbooks": [],
@@ -1257,7 +1257,7 @@
     },
     {
      "n": 5,
-     "text": "Once footage or audio exists: cut, join, adjust loudness, pair slides with audio, and export per `video-editing` · Thai subtitles per `subtitles-th` · if the user will not record audio → generate narration from the script per `narration-th` (gives subtitles and slide timing in one round) · a job that delivers only a brief skips this step · ใคร: `video-editor` ตัวใหม่",
+     "text": "Once footage or audio exists: cut, join, adjust loudness, pair slides with audio, and export per `video-editing` · Thai subtitles per `video-editing` · if the user will not record audio → generate narration from the script per `narration-th` (gives subtitles and slide timing in one round) · a job that delivers only a brief skips this step · ใคร: `video-editor` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1270,7 +1270,7 @@
      },
      "skills": [
       "video-editing",
-      "subtitles-th",
+      "video-editing",
       "narration-th"
      ],
      "commands": [],

@@ -2,7 +2,7 @@
 
 วิธีใช้: **1 เคส = 1 session ใหม่** ของ agent ที่โหลด marketplace แล้ว · วาง prompt ตามเคส · ตัดสินผ่าน/ไม่ผ่านจากคอลัมน์ "ผ่านเมื่อ" · เคสพวกนี้เป็น behavioral eval — โมเดลไม่ deterministic รันอย่างน้อย 2 รอบก่อนสรุป · ผ่านแล้วบันทึกวันที่ไว้ท้ายเคส (แบบเดียวกับตาราง eval ของ mcp-server)
 
-สิ่งที่แก้รอบนี้: `presentation-design` (ขั้น 0 research + ลำดับเลือกสไตล์) · `html-slide-deck` (ธีมตามทิศทาง ค่าประจำบ้านเป็นตัวสำรอง) · `brief-to-image` (ขั้น 0 หา reference งานสวย) · `set-data-mcp` (server ใหม่) · `inventory-mcp` (eval เดิม ต้องรันซ้ำบน Claude Code)
+สิ่งที่แก้รอบนี้: `presentation-design` (ขั้น 0 research + ลำดับเลือกสไตล์) · `html-slide-deck` (ธีมตามทิศทาง ค่าประจำบ้านเป็นตัวสำรอง) · `image-generation` (ขั้น 0 หา reference งานสวย) · `set-data-mcp` (server ใหม่) · `inventory-mcp` (eval เดิม ต้องรันซ้ำบน Claude Code)
 
 ---
 
@@ -132,7 +132,7 @@
 
 ---
 
-## ชุด 3 · brief-to-image (TC-IMG)
+## ชุด 3 · image-generation (TC-IMG)
 
 ### TC-IMG-001: หมวดใหม่ ไม่มี style lock — ต้องหา reference ก่อน
 

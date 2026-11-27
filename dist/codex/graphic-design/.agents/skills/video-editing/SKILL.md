@@ -1,6 +1,6 @@
 ---
 name: video-editing
-description: Use when editing video or audio with ffmpeg
+description: Use when editing video or audio with ffmpeg, Thai subtitles or motion
 ---
 
 # video-editing — cut, join, adjust audio, and export video
@@ -14,11 +14,11 @@ description: Use when editing video or audio with ffmpeg
 - Converting 16:9 to 9:16 · pulling a cover image · exporting MP4 that opens anywhere
 - Joining HTML slides from `html-slide-deck` with narration into one video (section "สไลด์กับเสียงบรรยายเป็นวิดีโอ")
 
-Not for: hook · script · shot list → `video-script-to-clip` · Thai subtitles → `subtitles-th` · Thai narration from a script, no recording → `narration-th` · colour correction, multi-track cutting by eye, effects, motion inside a slide, or batch clips from code → a person in DaVinci Resolve or CapCut, or HyperFrames or Remotion (`video-script-to-clip` `references/production-tools.md` item 1; the agent writes the checklist). The agent for this job is `video-editor`.
+Not for: hook · script · shot list → `video-script` · Thai subtitles → [`references/subtitles.md`](references/subtitles.md) · Thai narration from a script, no recording → `narration-th` · colour correction, multi-track cutting by eye, effects, motion inside a slide, or batch clips from code → a person in DaVinci Resolve or CapCut, or HyperFrames or Remotion (`video-script` `references/production-tools.md` item 1; the agent writes the checklist). The agent for this job is `video-editor`.
 
 ## Steps
 0. **Check the machine.** `ffmpeg -version`. If missing, installing on the whole machine goes under "รออนุมัติ". The subtitle filter needs libass (`--enable-libass` in the configuration line).
-1. **Look at the file first.** `ffprobe -v error -show_entries format=duration:stream=codec_name,width,height,r_frame_rate -of compact in.mp4`. Keep the original; always give the output a new name (`asset-organize`).
+1. **Look at the file first.** `ffprobe -v error -show_entries format=duration:stream=codec_name,width,height,r_frame_rate -of compact in.mp4`. Keep the original; always give the output a new name (`brand-kit`).
 2. **Cut a range.** A frame-accurate cut must re-encode: `ffmpeg -ss 00:01:30 -i in.mp4 -t 40 -c:v libx264 -crf 20 -preset veryfast -c:a aac -b:a 192k out.mp4`. `-c copy` is faster but the cut shifts to the nearest keyframe (asked 7 seconds, got 7.13); use it when speed matters more, and tell the user it may drift.
 3. **Join clips.** If all files share codec, size and fps, use the concat demuxer: a `list.txt` with one `file 'a.mp4'` per line, then `ffmpeg -f concat -safe 0 -i list.txt -c copy joined.mp4`. Otherwise re-encode every file to match first (step 2 without `-ss`), then join.
 4. **Cut silences.** Measure first: `ffmpeg -i in.wav -af volumedetect -f null -`. Then `python scripts/silences.py in.mp4` shows the silent ranges and the time that will remain. When satisfied, add `-o tight.mp4`. If the output exists the script refuses and offers a new name (`tight-v02.mp4`); add `--force` only when the user orders an overwrite (same rule in `loudnorm2.py` and `slides_to_video.py`). Set `--noise` lower than the quietest speech but higher than the room's noise floor (script default -35 dB); other flags in `references/ffmpeg-recipes.md`. Cut a wrong take by hand at the times the user noted; do not guess from silence.
@@ -27,7 +27,7 @@ Not for: hook · script · shot list → `video-script-to-clip` · Thai subtitle
    - `Dynamic`: ffmpeg squeezes loud and quiet parts. It happens when LRA (loudness range) is over `--lra` or 0, or when the 4 `measured_*` values are not all supplied. For Linear, raise `--lra`, or accept Dynamic and listen to the loudest part. Tell the user which one it was.
    - Dynamic mode works at 192 kHz, so the output `-ar` must be set (the script sets 48000). ffmpeg's defaults (I -24 · LRA 7 · TP -2) are no platform's values, so you must supply the target.
    - **Target:** look it up live for the destination (Apple Podcasts · Spotify · YouTube · TikTok · ACX · EBU R 128); if the page will not open, mark the value (รอยืนยัน). If the destination publishes none, use -16 LUFS · -1.5 dBTP and tell the user it is your chosen value. For one file published in several places, use the main channel's loudness and the lowest true-peak ceiling. Details in `references/loudness-and-slides.md`.
-6. **Change aspect ratio** (landscape to 1080×1920): crop the center, or keep the full picture on a blurred background. Filter strings in `references/ffmpeg-recipes.md`. Keep text and subtitles inside the platform's safe zone (`social-formats`).
+6. **Change aspect ratio** (landscape to 1080×1920): crop the center, or keep the full picture on a blurred background. Filter strings in `references/ffmpeg-recipes.md`. Keep text and subtitles inside the platform's safe zone (`campaign-set`).
 7. **Cover image.** `ffmpeg -ss 00:00:03 -i in.mp4 -frames:v 1 -q:v 2 thumb.jpg`
 8. **Export.** H.264 with AAC · `-pix_fmt yuv420p` · `-movflags +faststart` · size and fps per `production-tools.md` item 3.
 9. **Measure the result.** Length: `ffprobe -v error -show_entries stream=codec_type,duration -of csv=p=0 out.mp4`. Loudness: `python scripts/loudnorm2.py out.mp4 --measure`. Pull the picture at the cut point and look at it. Then have the user listen to the part that was cut.
@@ -38,7 +38,7 @@ Every slide's time comes from `data-at` in the deck, in one place. Then prove fr
 2. **Finish the audio first.** Cut and adjust loudness (steps 4–5) before setting `data-at`, because cutting later shifts every slide.
 3. **Make an image per slide.** `python <html-slide-deck>/scripts/check_deck.py deck.html --out frames` gives `p01.png …` at 1920×1080 (needs Playwright and Pillow). For animated slides add `--wait`. A content-file deck goes through `build_deck.py` first.
 4. **Check the timetable, then build.** `python scripts/slides_to_video.py deck.html frames narration.wav --check`. It stops with a reason when `data-at` does not increase · the number of images differs from slides · the last slide starts after the audio ends. When it passes, drop `--check` and add `-o episode.mp4` (H.264 with AAC at 30 fps, exactly as long as the audio).
-5. **Check the file.** Lengths from `ffprobe` · open the start of slides at 3 points · listen to confirm it is the real narration · add subtitles next with `subtitles-th`.
+5. **Check the file.** Lengths from `ffprobe` · open the start of slides at 3 points · listen to confirm it is the real narration · add subtitles next per [`references/subtitles.md`](references/subtitles.md).
 
 ## Check before done
 - New machine or edited script: `python scripts/<name>.py --self-test` of `silences` · `loudnorm2` · `slides_to_video` · `outguard` passes (without ffmpeg it skips real-file parts and says so).
@@ -48,6 +48,33 @@ Every slide's time comes from `data-at` in the deck, in one place. Then prove fr
 - Pulled the picture at 1 cut point or more and looked at it · told the user which minute to listen to.
 - Video from slides: opened the start of slides at 3 points or more and the picture matches.
 - Music, footage and fonts have a license for that channel (`production-tools.md` items 2 and 5).
+
+## Thai subtitles and motion graphics (absorbed skills)
+Open the full body in `references/` before doing either job; the hard rules are:
+
+**Thai subtitles** (`references/subtitles.md`)
+- Tool output is only a draft: fix names, brands, prices and numbers by hand, make `python scripts/srt_check.py file.srt` pass, then pull a burned-in frame and look at the tone marks.
+- Per line at most 35 characters (tone marks and upper/lower vowels not counted) and 2 lines · at most 17 characters per second · each subtitle on screen 5/6 s to 7 s · no full stop at the end · `…` as one character · UTF-8 file.
+- Burn in with `shaping=complex` and a Thai font (default IBM Plex Sans Thai, not Noto Sans Thai when English words appear) · never `Alignment=5` · keep portrait subtitles inside the platform safe zone.
+
+**Motion graphics** (`references/motion.md`)
+- Run the pre-work gate (brief, owner theme, live references, 3 directions, `design-gate/no-ai-look`) and close with a `ด่านก่อนลงมือ:` line.
+- Every movement needs a purpose (reveal · connect · emphasise · transition) · only 1 main element moves at a time · never linear easing for objects · stagger groups 40–80 ms.
+- Motion must survive mute and 2× speed · no more than 3 flashes per second · text stays long enough to read (characters ÷ 12, minimum 1.5 s, offers at least 2.5 s).
+- Small moving files (GIF · WebM): `references/motion-export-gif-webm.md`, checked with `python scripts/gif_check.py`.
+
+## Parts
+| File | Open when |
+|---|---|
+| [`references/subtitles.md`](references/subtitles.md) | Thai subtitles as `.srt` or burned in (full steps and checks) |
+| [`references/subtitles-transcription.md`](references/subtitles-transcription.md) | Choosing a transcription tool and getting the `.srt` command |
+| [`references/subtitles-burn-in.md`](references/subtitles-burn-in.md) | Sizing or positioning burned-in subtitles; measured numbers and a worked example |
+| [`references/sources-subtitles.md`](references/sources-subtitles.md) | Subtitle sources and check dates |
+| [`references/motion.md`](references/motion.md) | Motion graphics: purpose · timing · easing · text timing · common fixes |
+| [`references/motion-material-3-tokens.md`](references/motion-material-3-tokens.md) | Material 3 easing and duration tokens |
+| [`references/motion-twelve-principles.md`](references/motion-twelve-principles.md) | Full table of the 12 animation principles |
+| [`references/motion-export-gif-webm.md`](references/motion-export-gif-webm.md) | Exporting a small GIF or WebM and checking it |
+| [`references/sources-motion.md`](references/sources-motion.md) | Motion sources and check dates |
 
 ## References
 - [`references/loudness-and-slides.md`](references/loudness-and-slides.md) — open when picking a platform loudness target, when `slides_to_video.py` misbehaves, or to see the measured results

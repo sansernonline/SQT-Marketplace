@@ -217,8 +217,8 @@
 | ecom-none-insurance | 1/1 | insurance-review |
 | gd-print-files | 1/1 | print-ready-files |
 | gd-icon | 0/1 | — |
-| gd-thumbnail | 1/1 | quick, youtube-thumbnail |
-| gd-richmenu | 1/1 | quick, line-richmenu |
+| gd-thumbnail | 1/1 | quick, design-by-type |
+| gd-richmenu | 1/1 | quick, line-design |
 | gd-clip | 0/1 | quick |
 | tf-stock-gain-tax | 1/1 | superuser, tax-basics-th |
 | tf-year-end-rmf | 1/1 | tax-deduction-planner |
@@ -264,9 +264,9 @@
 | ecom-none-insurance | 1/1 | insurance-review |
 | gd-print-files | 1/1 | print-ready-files |
 | gd-icon | 0/1 | — |
-| gd-thumbnail | 1/1 | quick, youtube-thumbnail |
-| gd-richmenu | 1/1 | quick, line-richmenu |
-| gd-clip | 1/1 | quick, video-script-to-clip |
+| gd-thumbnail | 1/1 | quick, design-by-type |
+| gd-richmenu | 1/1 | quick, line-design |
+| gd-clip | 1/1 | quick, video-script |
 | tf-stock-gain-tax | 1/1 | superuser, tax-basics-th |
 | tf-year-end-rmf | 1/1 | tax-deduction-planner |
 | tf-fund-fee | 1/1 | mutual-fund-picker |
@@ -281,7 +281,7 @@
 |---|---|---|
 | slides | 1/3 | presentation-design |
 | multistep-docs-all | 3/3 | superuser |
-| gd-clip | 1/3 | quick, video-script-to-clip |
+| gd-clip | 1/3 | quick, video-script |
 | tf-fund-fee | 3/3 | mutual-fund-picker |
 
 ## 2026-11-15 04:25 · desc-before-r3 · ผ่าน 9/12 · $2.72
@@ -292,7 +292,7 @@
 |---|---|---|
 | slides | 1/3 | presentation-design |
 | multistep-docs-all | 3/3 | superuser |
-| gd-clip | 3/3 | quick, video-script-to-clip |
+| gd-clip | 3/3 | quick, video-script |
 | tf-fund-fee | 2/3 | mutual-fund-picker |
 
 ## 2026-11-15 04:27 · desc-after-clipfix · ผ่าน 3/3 · $0.74
@@ -301,4 +301,4 @@
 
 | เคส | ผ่าน | skill ที่เปิด |
 |---|---|---|
-| gd-clip | 3/3 | quick, video-script-to-clip |
+| gd-clip | 3/3 | quick, video-script |

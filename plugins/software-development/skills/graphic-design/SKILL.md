@@ -5,6 +5,8 @@ description: Use for a one-off logo or poster, not a full brand kit
 
 # Graphic Design
 
+> If the `graphic-design` plugin is installed, use `graphic-design:design-by-type` instead: it adds live references, the popularity check, depth and flat-design styles. This skill is the fallback when only software-development is installed.
+
 > **Pre-work gate "ด่านก่อนลงมือ" (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `design-gate/no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for finding the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
 > **The one rule of this skill:** write the direction into a file first, then touch the first pixel.
@@ -27,10 +29,10 @@ Also when reviewing work that "looks AI-made" and you cannot say why.
 | Look of a Word / PowerPoint file | `branded-document-design` |
 | Software diagrams | `software-diagrams` |
 | Data charts | `web-app-design` → `references/tokens.md` section "สีข้อมูล (กราฟ)" (data colours, charts) |
-| LINE OA rich menu (size · tap areas · JSON) | `graphic-design:line-richmenu` (if installed) |
-| AI images | `image-generation` · `graphic-design:brief-to-image` (if installed) |
+| LINE OA rich menu (size · tap areas · JSON) | `graphic-design:line-design` (if installed) |
+| AI images | `image-generation` (if installed) |
 
-**If plugin `graphic-design` is installed:** for deeper design work (brand kit · campaign set · AI images · video · design review), use `graphic-design:brand-kit` · `graphic-design:campaign-set` · `graphic-design:design-review`, and take each platform's sizes from `graphic-design:social-formats`. If that plugin is missing, keep following this skill.
+**If plugin `graphic-design` is installed:** for deeper design work (brand kit · campaign set · AI images · video · design review), use `graphic-design:brand-kit` · `graphic-design:campaign-set` · `graphic-design:design-review`, and take each platform's sizes from `graphic-design:campaign-set`. If that plugin is missing, keep following this skill.
 
 ---
 
@@ -115,7 +117,7 @@ A logo must pass real contexts. **Fail more than 2 and drop it:** favicon 16px �
 
 ## 5 · Print and social sizes
 
-All the numbers are in **`references/sizes-and-print.md`** (a backup copy. If plugin `graphic-design` is installed, the source for platform sizes is `graphic-design:social-formats`): LINE OA, TikTok, Facebook,
+All the numbers are in **`references/sizes-and-print.md`** (a backup copy. If plugin `graphic-design` is installed, the source for platform sizes is `graphic-design:campaign-set`): LINE OA, TikTok, Facebook,
 Instagram, print (bleed, resolution, colour mode).
 
 **The 3 most common mistakes:**

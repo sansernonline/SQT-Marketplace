@@ -75,7 +75,7 @@ Use real product photos — no AI-generated people and no text baked into images
 ## Related
 
 - `marketplace-fees-pricing`, `multi-shop-stock`, `live-selling-script` (the same claims rules apply on air)
-- `graphic-design` `marketplace-product-images` (if installed) — product photo sizes, white background, rejected images · banner and post sizes → `social-formats`
+- `graphic-design` `marketplace-product-images` (if installed) — product photo sizes, white background, rejected images · banner and post sizes → `campaign-set`
 - `line-oa-setup` — when the LINE shop is the channel
 
 ## เรียกเป็นคำสั่ง

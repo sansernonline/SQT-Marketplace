@@ -73,7 +73,7 @@ Use real product photos — no AI-generated people and no text baked into images
 ## Related
 
 - `marketplace-fees-pricing`, `multi-shop-stock`, `live-selling-script` (the same claims rules apply on air)
-- `graphic-design` `marketplace-product-images` (if installed) — product photo sizes, white background, rejected images · banner and post sizes → `social-formats`
+- `graphic-design` `marketplace-product-images` (if installed) — product photo sizes, white background, rejected images · banner and post sizes → `campaign-set`
 - `line-oa-setup` — when the LINE shop is the channel
 
 ## เรียกเป็นคำสั่ง
@@ -187,7 +187,7 @@ Main keyword = appears in suggestions **and** in most top-seller titles. Do not 
 - [ ] No other shop's watermark, no stock photo without rights, no before/after body photos for cosmetics or slimming
 - [ ] Same main photo on every platform so returning buyers recognise it
 
-Image sizes per platform and banner formats → `graphic-design` `social-formats` (if installed).
+Image sizes per platform and banner formats → `graphic-design` `campaign-set` (if installed).
 
 
 ## reference: prohibited-claims.md

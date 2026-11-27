@@ -31,7 +31,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 SR = 48000
 SLIDE = re.compile(r"^\[(?:สไลด์|slide)\s*(\d+)\]$", re.I)
-MIN_SUB, MAX_SUB = 0.9, 7.0  # ซับอยู่บนจอ 5/6–7 วินาที ตามตาราง caption ของ video-script-to-clip
+MIN_SUB, MAX_SUB = 0.9, 7.0  # ซับอยู่บนจอ 5/6–7 วินาที ตามตาราง caption ของ video-script
 
 
 def parse_script(path):

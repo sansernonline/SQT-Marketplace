@@ -1,5 +1,9 @@
 # Changelog — superuser
 
+## 4.1.4 — 2026-11-27
+
+- router · hook · triggers · design-gate ชี้ชื่อ skill ใหม่ของ graphic-design 0.38.0 (รวม 24 เหลือ 14)
+
 ## 4.1.3 — 2026-11-27
 
 - แก้ตามผู้ตรวจ: เป้า 8 กับเกณฑ์ขั้นต่ำ 7 เขียนให้ไม่ขัดกัน · ป้ายรอยืนยันใน checklist บอกว่ารอใคร · หัวข้อ brainstorm ไม่ใช้คำว่า steps ให้สับสนกับ 12 ขั้น · design-references ลิงก์ไป design-method

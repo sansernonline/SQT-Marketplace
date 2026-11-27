@@ -1,6 +1,6 @@
 # Depth, light and flourish · design-references
 
-Open on any visual job (poster · banner · social post · slide · deck · screen · cover) when the owner's "สไตล์ออกแบบที่ชอบ" asks for depth (`มีมิติ` · `แสงเงา` · `ลูกเล่น`), or when the owner calls a piece flat or bland (`แบน` · `จืด`). The owner asked for this on every design job, not one kind (2026-11-17, from a red-white Thai company profile deck they liked; that deck's full page system is in graphic-design `style-consistency/references/corporate-profile-deck.md`).
+Open on any visual job (poster · banner · social post · slide · deck · screen · cover) when the owner's "สไตล์ออกแบบที่ชอบ" asks for depth (`มีมิติ` · `แสงเงา` · `ลูกเล่น`), or when the owner calls a piece flat or bland (`แบน` · `จืด`). The owner asked for this on every design job, not one kind (2026-11-17, from a red-white Thai company profile deck they liked; that deck's full page system is in graphic-design `brand-kit/references/corporate-profile-deck.md`).
 
 Goal: the page reads as 3 layers with one light source, and has 1–2 moving elements, while the text stays flat and easy to read.
 

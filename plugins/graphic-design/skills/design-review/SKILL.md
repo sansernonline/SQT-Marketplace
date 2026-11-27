@@ -14,7 +14,7 @@ argument-hint: <path to the asset>
 - A visual (post, banner, story, print proof) is about to ship, or looks off and you must say why.
 - A second look at your own or someone else's design.
 
-Not for: a second look at text, code or a plan → a new `reviewer` agent · fixing the image itself → `image-editing-brief`
+Not for: a second look at text, code or a plan → a new `reviewer` agent · fixing the image itself → `image-generation`
 
 ## Steps
 1. Know the job: placement, campaign sentence, one action (from the `campaign-set` card). Without it, point 1 cannot be judged.
@@ -34,7 +34,7 @@ Not for: a second look at text, code or a plan → a new `reviewer` agent · fix
 | 1 | First read | In 2 seconds a stranger names the product or offer intended | They name the background, a model's face, or "a promotion" |
 | 2 | Hierarchy | Exactly 1 primary element, clearly largest or highest contrast; 3 levels or fewer | 2 elements the same size and weight; price and headline fight |
 | 3 | Contrast | Body text ≥ 4.5:1, large text ≥ 3:1 (Web Content Accessibility Guidelines (WCAG) AA); text over photo passes a squint test · icons, chart lines and button outlines ≥ 3:1 against their background · no meaning carried by colour alone (price up/down also has an arrow or a word) | Text on busy photo areas without overlay; amber on white; a pale-grey icon on white |
-| 4 | Spacing | 1 spacing scale (e.g. multiples of 8 px); outer margin ≥ inner gaps; text clear of safe zones (look up the platform's safe-zone guide live; links in social-formats/references/platform-sizes.md) | Random gaps; text touching edges; text inside the story's bottom UI zone |
+| 4 | Spacing | 1 spacing scale (e.g. multiples of 8 px); outer margin ≥ inner gaps; text clear of safe zones (look up the platform's safe-zone guide live; links in campaign-set/references/platform-sizes.md) | Random gaps; text touching edges; text inside the story's bottom UI zone |
 | 5 | Alignment | Every element sits on a shared edge or centre line | Items "almost" aligned (off by a few px); centred and left-aligned mixed |
 | 6 | Type | ≤ 2 families; ≤ 3 sizes; Thai line-height ≥ 1.5 for body; no single word alone on a headline line | Third font; faux bold; clipped tone marks or vowels; one-word last line |
 | 7 | Consistency | Colours, fonts and logo from the brand kit; matches sibling assets' style lock | Off-kit colour; stretched or recoloured logo; different lighting style |
@@ -59,7 +59,7 @@ Alt text: every post, banner or video cover that goes out has 1 line of alt text
 - [`references/fix-priority.example.json`](references/fix-priority.example.json) — open when ranking more than 3 fixes
 - [`references/worked-critique.md`](references/worked-critique.md) — open for a model critique (IG story) and weak-to-strong fix wording
 - [`references/sources.md`](references/sources.md) — WCAG source and check dates
-- Related: `brand-kit` (point 7) · `social-formats` (safe zones, point 4) · `style-consistency` (sibling comparison, point 7)
+- Related: `brand-kit` (point 7) · `campaign-set` (safe zones, point 4) · `brand-kit` (sibling comparison, point 7)
 
 ## เรียกเป็นคำสั่ง
 
