@@ -18,7 +18,7 @@ Flat design is not the one-colour version. The one-colour version (logo rule 11)
 ## How to build it
 
 1. Start from the same flat master that the depth version uses (`design-gate/design-references` `references/ref-to-design.md`, rule 39), so both styles share one silhouette.
-2. Write the flat version as its own function next to the depth one. Do not strip filters off the depth render. (CodeRuen `crmarks.py`: `a_flatd` · `b_flatd` · `c_flatd`.)
+2. Write the flat version as its own function next to the depth one. Do not strip filters off the depth render. `superuser` `design-gate/parts/design-references/scripts/depth_mark.py` has both layer sets (`solid`/`stroke` and `flat_solid`/`flat_stroke`).
 3. Put both styles on the board: one row per style for each direction, with the same sheet layout and mockups, labelled `มีมิติ` and `flat design`.
 4. Below 20 px, both styles use one simplified silhouette with the accent kept. Inner detail like `</>` or a cursor turns to blobs at 16 px (CodeRuen critic, 2026-11-27).
 
