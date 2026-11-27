@@ -14,7 +14,7 @@ Use when naming a product, shop, app or brand
 - There are several products and the names should form one family
 - You must choose from a brainstormed list of names and cannot decide
 
-Not for: logo, colours, brand typography → `graphic-design` · naming document files → `workspace-rules/document-naming` · naming tables and columns → `database-design` · naming endpoints → `api-conventions`
+Not for: logo, colours, brand typography → `graphic-design` · naming document files → `workspace-rules/document-naming` · naming tables and columns → `database-design` · naming endpoints → `api-design`
 
 ---
 
@@ -154,7 +154,7 @@ If even 1 person types it differently, the name fails.
 
 ## Related skills
 
-Logo, colours, typography → `graphic-design` · same product already exists under this name → `research-with-sources/prior-art-review` · names in documents → `workspace-rules/document-naming` · feature terms inside the product → `i18n-and-locale` · presenting the shortlist → `presentation-design`. A shortlist table you can fill in right away → `assets/name-shortlist.md`
+Logo, colours, typography → `graphic-design` · same product already exists under this name → `research-with-sources/prior-art-review` · names in documents → `workspace-rules/document-naming` · feature terms inside the product → `i18n-and-locale` · presenting the shortlist → `slide-deck`. A shortlist table you can fill in right away → `assets/name-shortlist.md`
 
 
 ## reference: formula-9-deep-dive.md

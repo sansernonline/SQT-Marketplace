@@ -49,7 +49,7 @@ Set this once in `Directory.Build.props` for every project in the solution:
 ```
 
 - If an old repo has hundreds of warnings, do not switch on `TreatWarningsAsErrors` for the whole solution in one task. Turn it on only for new projects, and add no new warnings.
-- Organise folders by feature (`Features/Orders/...`) per `readable-code`, but if the repo already uses `Controllers/ Services/`, follow the existing layout.
+- Organise folders by feature (`Features/Orders/...`) per `code-craft`, but if the repo already uses `Controllers/ Services/`, follow the existing layout.
 - Use file-scoped namespaces (`namespace App.Orders;`), make Data Transfer Objects (DTO) a `record`, and never return an EF entity straight out of an API.
 - Async all the way: a method that waits on I/O takes `CancellationToken ct` and passes it down every layer to EF and `HttpClient`.
 - Choose minimal API or controllers to match what the repo uses. Do not mix them within one feature.
@@ -111,20 +111,20 @@ Use `EnableSensitiveDataLogging` on dev machines only. For schema and indexes, f
 | `DateTime.Now` | Cannot be tested, and time drifts with the server | Use `TimeProvider` through DI and `FakeTimeProvider` in tests |
 | Thai time | The server runs in UTC | `TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")`; on .NET Framework on Windows use `"SE Asia Standard Time"` |
 | An array or string ≥ 85,000 bytes | Lands on the Large Object Heap (LOH) and burdens the memory garbage collector (GC) | Stream the data · `ArrayPool<T>` · `IAsyncEnumerable<T>` for long lists |
-| `$"..."` in a log call | Cannot search by field, and builds the string even when the log level is off | Message template: `log.LogInformation("Order {OrderId} paid", id)`; for other formats see `logging-standards` |
+| `$"..."` in a log call | Cannot search by field, and builds the string even when the log level is off | Message template: `log.LogInformation("Order {OrderId} paid", id)`; for other formats see `errors-and-logs` |
 
-For where to catch exceptions and how to retry, see `error-handling-patterns`. In ASP.NET Core, use `IExceptionHandler` + `AddProblemDetails()` in one place.
+For where to catch exceptions and how to retry, see `errors-and-logs`. In ASP.NET Core, use `IExceptionHandler` + `AddProblemDetails()` in one place.
 
 ## 5 · Tests
 
-- Use the framework the repo already has. For a new project use xUnit (v3 for .NET 8+), per `testing-standards`.
+- Use the framework the repo already has. For a new project use xUnit (v3 for .NET 8+), per `test-automation`.
 - FluentAssertions from v8 onward needs a paid licence for commercial use, while v7 is still free (Apache 2.0). In a new project use xUnit's asserts or AwesomeAssertions (a free fork). If the repo already uses v8, ask the owner about the licence.
 - Test names: `Method_Condition_Result`, for example `Cancel_WhenAlreadyShipped_Throws`
 - For new logic or a bug, write a failing test first, then fix it until green, and a bug needs a test that reproduces the real symptom.
 - Test a whole API path with `WebApplicationFactory<Program>`. If the test cannot see `Program`, add `public partial class Program;`.
 - For a real database use Testcontainers (`Testcontainers.MsSql` · `Testcontainers.PostgreSql`). Never use EF InMemory in place of a real database, because it does not check constraints and translates SQL differently.
 
-For the full xUnit setup and a `WebApplicationFactory` example, see [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#net--xunit)
+For the full xUnit setup and a `WebApplicationFactory` example, see [`test-automation/references/per-stack.md`](../test-automation/references/per-stack.md#net--xunit)
 
 ## 6 · .NET-specific security
 
@@ -137,8 +137,8 @@ For the full xUnit setup and a `WebApplicationFactory` example, see [`testing-st
 | Data Protection keys | With several instances or containers, keep the keys in one shared place (`PersistKeysToDbContext` or a file share), or cookies break on every restart | The same `machineKey` in `web.config` on every machine |
 | secret | dev: `dotnet user-secrets set "Db:Password" "..."` · prod: environment variable or secret store | Keep a separate `web.config` transform and never commit real values |
 
-- A committed `appsettings.json` or `web.config` must not hold passwords, real connection strings or API keys. For storing secrets, see `config-and-secrets`.
-- For input validation · uploads · encryption, see `principle-secure-by-default`.
+- A committed `appsettings.json` or `web.config` must not hold passwords, real connection strings or API keys. For storing secrets, see `web-service-essentials`.
+- For input validation · uploads · encryption, see `security-gate`.
 
 ## 7 · Check before sending
 

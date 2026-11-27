@@ -2,7 +2,7 @@
 
 Send 4 sub-agents at once in a single message. All are read-only: they do not run the target code and do not use the web. The team lead merges the results into `architecture.md` of about 1,000 words at most, and this file becomes the only context passed to every later step.
 
-If `docs/security/threat-model*.md` already exists (from `threat-model`), attach it to every sub-agent. The recon agent's job is to confirm the data flow diagram (DFD) still matches the code and to find what the DFD lacks. The list of non-capabilities (what the system must be unable to do even if breached) can become ledger work units directly.
+If `docs/security/threat-model*.md` already exists (from `security-audit`), attach it to every sub-agent. The recon agent's job is to confirm the data flow diagram (DFD) still matches the code and to find what the DFD lacks. The list of non-capabilities (what the system must be unable to do even if breached) can become ledger work units directly.
 
 ## Brief shared by all 4 agents
 
@@ -57,7 +57,7 @@ Ask: every entry point (route · webhook · scheduled job · queue · file uploa
 
 ## Angle 1d · what can run in the lab and what must be checked at deployment
 
-Ask: can it build and test in `docker-sandbox` (does `.sandbox/` exist yet, and which outside services does it need at run time) · which environment values can be replaced with fake ones · which facts cannot be seen from the repo at all (cloud settings · proxy · settings at the payment provider or LINE) · these facts become the `missing` of `needs_validation`.
+Ask: can it build and test in `infra-and-deploy` (does `.sandbox/` exist yet, and which outside services does it need at run time) · which environment values can be replaced with fake ones · which facts cannot be seen from the repo at all (cloud settings · proxy · settings at the payment provider or LINE) · these facts become the `missing` of `needs_validation`.
 
 ```json
 {
@@ -67,7 +67,7 @@ Ask: can it build and test in `docker-sandbox` (does `.sandbox/` exist yet, and 
 }
 ```
 
-The lab used to run a proof must be `docker-sandbox` in `-Isolated -Locked` mode. Use fake data only. Never connect to the customer's real database or services. For work where data must never leak, run with no network at all, following the limits of `-Locked` in `docker-sandbox` section 8. If the user does not allow running, or the lab cannot be set up, mark every item that needs a run as `needs_validation`.
+The lab used to run a proof must be `infra-and-deploy` in `-Isolated -Locked` mode. Use fake data only. Never connect to the customer's real database or services. For work where data must never leak, run with no network at all, following the limits of `-Locked` in `infra-and-deploy` → `references/docker-sandbox.md` section 8. If the user does not allow running, or the lab cannot be set up, mark every item that needs a run as `needs_validation`.
 
 ## architecture.md
 

@@ -1,5 +1,27 @@
 # Changelog — trading-finance
 
+## 0.26.0 — 2026-11-27
+
+รวม skill จาก 27 เหลือ 15 (เปลี่ยนชื่อแบบไม่เข้ากับของเดิม) · เจ้าของสั่ง 2026-11-27 · เนื้อหาเดิมของแต่ละตัวย้ายไปเป็น `references/<ชื่อเก่า>.md` ของตัวที่เหลือ ไม่ได้ตัดกฎทิ้ง · eval ย้ายตามไปใต้ชื่อใหม่ · playbook ชี้ไฟล์หลักคิดและชื่อ skill ใหม่
+
+| ชื่อเก่า | ใช้แทนด้วย |
+|---|---|
+| `personal-budget` · `emergency-fund` · `debt-payoff` · `credit-bureau` · `home-refinance` | `budget-and-debt` (ใหม่) |
+| `retirement-plan` · `insurance-review` | `retirement-and-insurance` (ใหม่) |
+| `mutual-fund-picker` · `bonds-and-deposits` | `fund-and-bond-picker` (ใหม่) |
+| `portfolio-snapshot` · `rebalance-and-dca` · `dividend-tracker` | `portfolio` (ใหม่) |
+| `watchlist-setup` · `news-impact` · `alert-set` | `market-watch` (ใหม่) |
+| `paper-trading` · `trading-technique-course` | `trade-practice` (ใหม่) |
+| `tax-basics-th` · `tax-deduction-planner` | `income-tax-th` (ใหม่) |
+
+## 0.25.1 — 2026-11-27
+
+- `money-principles` เพิ่ม 2 ชนิดงาน: fundamentals · market-watch · ตัวเลข กำหนดเวลา และมาตรากฎหมายที่มีแหล่งไม่ถึง 3 แหล่งตัดออก ให้ไปดูใน skill แทน
+
+## 0.25.0 — 2026-11-27
+
+- skill ใหม่ `money-principles`: หลักคิด 4 ชนิดงาน (personal-money · investing · trading · money-safety-tax) เป็นแนวปฏิบัติทั่วไป ไม่ใช่คำแนะนำรายบุคคล · ตัด "อ่านงบบริษัท" ออกเพราะแหล่งไม่ถึง 3
+
 ## 0.24.2 — 2026-11-27
 
 - สำเนา `superuser/references/evidence.md`: ป้าย `(รอยืนยัน)` ต้องบอกว่ารอใคร (ผู้ใช้ · agent · ภายนอก) และคำตอบที่มีงานของผู้ใช้จบด้วย **ต้องให้คุณทำ** (ตาม superuser 4.1.0)

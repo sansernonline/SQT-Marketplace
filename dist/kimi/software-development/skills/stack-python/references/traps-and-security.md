@@ -9,7 +9,7 @@ Open when debugging a strange Python failure, writing tests, or reviewing a diff
 | datetime without timezone | Time is off by 7 hours, or comparing gives a `TypeError` | Create with `datetime.now(timezone.utc)` (3.11+ can use `datetime.UTC`), store as UTC, display with `ZoneInfo("Asia/Bangkok")`, and never use `utcnow()` |
 | Money as float | `0.1 + 0.2 != 0.3` and the total is short by 1 satang | Use `int` satang, or `Decimal("0.10")` from a string |
 | Closure in a loop | Every callback gets the last value of the loop | Bind the value at creation `lambda i=i: ...` or `functools.partial` |
-| A broad `except Exception:` | Real errors are swallowed | Catch only known types, per `error-handling-patterns` |
+| A broad `except Exception:` | Real errors are swallowed | Catch only known types, per `errors-and-logs` |
 | Circular imports | `ImportError` of the partially initialized kind | Move shared things into a third module, and put imports used only for types under `if TYPE_CHECKING:` |
 | CPU-heavy work in threads | Using several threads does not speed it up, because of the Global Interpreter Lock (GIL) | Use `ProcessPoolExecutor`; threads are for I/O waiting |
 | `subprocess(..., shell=True)` | User input becomes a shell command | Pass a list `["git", "log", ref]`, add `check=True` and set a `timeout` |
@@ -21,7 +21,7 @@ Open when debugging a strange Python failure, writing tests, or reviewing a diff
 
 ## Tests
 
-For pytest setup · fixtures · `parametrize` and examples, see [`testing-standards/references/per-stack.md`](../../testing-standards/references/per-stack.md#python--pytest); this section keeps only Python-specific traps.
+For pytest setup · fixtures · `parametrize` and examples, see [`test-automation/references/per-stack.md`](../../test-automation/references/per-stack.md#python--pytest); this section keeps only Python-specific traps.
 
 - Temporary files use `tmp_path`; never write into the repo's folders · environment values use `monkeypatch.setenv`
 - Time: pass the clock into the function as a parameter first; if you cannot change it, use `time-machine`, but if the repo already uses `freezegun`, keep using it
@@ -32,12 +32,12 @@ For pytest setup · fixtures · `parametrize` and examples, see [`testing-standa
 
 ## Python-specific security
 
-The 10 principles are in `principle-secure-by-default`; this is how to do them in Python.
+The 10 principles are in `security-gate`; this is how to do them in Python.
 
 - Always lock dependencies (`uv.lock` · `poetry.lock` · `pip-compile --generate-hashes`) and commit the lock file
 - Vulnerability scanning: `pip-audit` (works with every tool); uv has `uv audit` but it is still a preview (the version that first has it (รอยืนยัน) (pending confirmation) · source: https://github.com/astral-sh/uv/blob/main/CHANGELOG.md · checked 22 Oct 2569 BE), so it may be used, but Continuous Integration (CI) still relies on `pip-audit`
 - Before `uv add` or `pip install` of a new package, spell the name exactly as on its PyPI page, check the maintainers and the latest release date, and beware of look-alike names (`reqeusts` · `python-dateutil` versus `dateutil`)
 - SQL passes values through parameters: `cur.execute("... WHERE id = %s", (oid,))`; with SQLAlchemy use `text(...)` with `:name`, and never an f-string
-- File names from users: `(base / name).resolve()` then check `.is_relative_to(base.resolve())`; for uploads see `file-upload-and-storage`
-- Secrets are read from the environment (`os.environ["KEY"]` or pydantic-settings) and checked at startup; keep `.env` in `.gitignore` (see `config-and-secrets`)
+- File names from users: `(base / name).resolve()` then check `.is_relative_to(base.resolve())`; for uploads see `web-service-essentials`
+- Secrets are read from the environment (`os.environ["KEY"]` or pydantic-settings) and checked at startup; keep `.env` in `.gitignore` (see `web-service-essentials`)
 - Django production: `DEBUG = False` · `ALLOWED_HOSTS` with real names · `SECRET_KEY` from the environment · run `python manage.py check --deploy` before release

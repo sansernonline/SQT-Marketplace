@@ -53,7 +53,7 @@ playbook `learning-path` · agent `tech-mentor` · skill `learning-path`
 
 ## 2. งานใหม่ต้องใช้ stack ที่ไม่เคยใช้ เวลาน้อย
 
-playbook `learning-path` · agent `tech-mentor` · skill `learning-path` · `english-tech-reading`
+playbook `learning-path` · agent `tech-mentor` · skill `learning-path`
 **ผลลัพธ์:** `paths/<เทคโนโลยี>/README.md` (แผนแบบเร่ง) · `paths/<เทคโนโลยี>/compare.md` (ของที่รู้แล้ว → ของใน stack ใหม่) · โค้ดขั้นแรก
 
 ### ข้อมูล (ผู้ใช้กรอก)

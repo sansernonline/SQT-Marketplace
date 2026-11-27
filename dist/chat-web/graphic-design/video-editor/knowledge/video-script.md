@@ -11,7 +11,7 @@ Use when scripting a short clip, Reel, TikTok ad or on-camera talk
 - A script for a person speaking to the camera: review, storytelling, teaching, opinion, vlog, spoken Reel, event host.
 - A spoken script that reads like an article and needs fixing.
 
-Not for: Thai subtitles as `.srt` or editing the finished file → `video-editing` · Thai voice-over made from text with no recording → `narration-th` · a speech with slides → `presentation-design` · minute-by-minute live selling → `live-selling-script`.
+Not for: Thai subtitles as `.srt` or editing the finished file → `video-editing` · Thai voice-over made from text with no recording → `narration-th` · a speech with slides → `slide-deck` · minute-by-minute live selling → `sales-copy`.
 
 ## Pick the job
 | The clip is | Open |
@@ -108,7 +108,7 @@ Related: `video-editing` (text timing) · `campaign-set` (canvas, safe zones) ·
 
 `/graphic-design:video-script <the message> [target platform and length]`
 
-Run `video-script` for: **$ARGUMENTS** — `social-creator` writes the message, hook and script; `art-director` writes the shot list, motion timing and per-shot briefs.
+Run `video-script` for: **the user's request** — `social-creator` writes the message, hook and script; `art-director` writes the shot list, motion timing and per-shot briefs.
 
 Review the storyboard as thumbnails before generating anything.
 
@@ -199,9 +199,9 @@ A finished script goes on to filming or video generation per [`clip-script.md`](
 | Task | Use |
 |---|---|
 | Short ad clip led by the picture (product · demo · understandable with sound off) | `video-script` |
-| Minute-by-minute live selling | `live-selling-script` |
+| Minute-by-minute live selling | `sales-copy` |
 | Subtitles · on-screen text · safe zone | `video-script` section caption rules |
-| Speech for a meeting/stage presentation with slides | `presentation-design` + speaker notes |
+| Speech for a meeting/stage presentation with slides | `slide-deck` + speaker notes |
 | Make audio from a script without recording it yourself (text-to-speech) | `narration-th` · write the script here first, then pass it on |
 
 ---

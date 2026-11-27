@@ -1,6 +1,6 @@
 # OWASP Top 10:2025 clause for contracts and the Software Requirements Specification (SRS)
 
-This draft is a starting point, not legal advice. Have `legal-compliance-officer` or the client's lawyer review the real contract. For a full Thai contract draft, use `e-commerce:doc-contract-th`.
+This draft is a starting point, not legal advice. Have `legal-compliance-officer` or the client's lawyer review the real contract. For a full Thai contract draft, use `e-commerce:thai-business-docs`.
 
 ## Why the clause must be measurable
 

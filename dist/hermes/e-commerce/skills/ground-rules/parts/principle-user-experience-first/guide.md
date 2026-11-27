@@ -14,7 +14,7 @@
 
 ## Test
 
-Before sending, open the real thing (app · document · form · message to be sent) and walk the main path as a new user. Any point where you must stop and think, read a manual, or wait without knowing what you are waiting for is a point to fix. For an app, the agent can walk it itself with the verify skill from `app-verifier-setup` (plugin `software-development`).
+Before sending, open the real thing (app · document · form · message to be sent) and walk the main path as a new user. Any point where you must stop and think, read a manual, or wait without knowing what you are waiting for is a point to fix. For an app, the agent can walk it itself with the verify skill from `test-automation` (plugin `software-development`).
 
 ## See also
 

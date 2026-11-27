@@ -1,0 +1,606 @@
+# skill: shop-books
+
+Use when a Thai shop keeps books, plans cash or needs a PromptPay QR
+
+# shop-books — bookkeeping, 13-week cash and PromptPay QR
+
+> **One rule:** one bank account for the business, one row per money movement, and one document behind every row; profit on paper is not cash in the bank.
+
+## Pick the part
+
+| Job (what the user says) | Open |
+|---|---|
+| A Thai shop or SME keeps its books, closes the month | [references/sme-bookkeeping.md](references/sme-bookkeeping.md) |
+| The seller may run short of cash in the coming weeks | [references/cash-flow.md](references/cash-flow.md) |
+| A Thai business needs a PromptPay QR for payment | [references/promptpay-qr.md](references/promptpay-qr.md) |
+
+Other files in this folder: `13-week-forecast.md`, `bookkeeping-sheet.md`, `close-the-gap.md`, `field-tables.md` and `payload.md`.
+
+## Steps every part shares
+
+1. Take the numbers from the bank statement, platform payout reports and receipts, never from the sales total alone.
+2. Use the scripts in `scripts/` (`promptpay.mjs` for the QR payload) instead of typing fields or checksums by hand.
+3. Write the date and the source next to every figure.
+
+## Check before done
+
+- Never pay a supplier deposit or a "release fee" to unlock platform money because a chat, call or link asked for it; treat that request as a likely scam (`scam-check` in `trading-finance`).
+- Before shipping, check that the money arrived in the bank app or statement (amount, time, payer name), not the transfer slip, which can be edited or reused.
+- A business bill paid from a personal card is recorded the same day as owner paid, with the receipt kept; never leave it unrecorded.
+- A QR image is regenerated from the payload, never edited by hand.
+- General information, not accounting or tax advice; a bookkeeper (ผู้ทำบัญชี) or accountant (นักบัญชี) signs off the books.
+
+Whole job with several steps → playbook [monthly-close](../superuser/references/playbook-monthly-close.md) (month-end steps) or [pricing-check](../superuser/references/playbook-pricing-check.md) (profit check).
+
+
+## reference: 13-week-forecast.md
+
+# 13-week cash-flow forecast template
+
+Copy into Google Sheets or Excel. Columns B–N are weeks 1–13 (week starting Monday, write the date in row 1). Every Monday: overwrite last week's column with actuals from `sme-bookkeeping.md`, then add a new week 13 on the right.
+
+## Tab `lags` — fill from your own history first
+
+| channel | median days order → bank | slowest 10% days | fee % of gross | return / refusal % | note |
+|---|---|---|---|---|---|
+| shopee | | | | | measured from last month's payout report |
+| lazada | | | | | |
+| tiktok | | | | | |
+| cod-courier | | | | | refused parcels = no cash |
+| transfer / promptpay | 0 | 0 | 0 | | |
+| b2b invoices | | | | | days after due date customers really pay |
+
+## Tab `forecast`
+
+| Row | Line | How to fill |
+|---|---|---|
+| 1 | week starting | 2026-10-26, 2026-11-02, … |
+| 2 | **opening cash** | B2 = today's bank balance · C2 = `=B20` and so on |
+| 3 | payout shopee | sales expected in the week that ends `lag` days earlier × (1 − fee % − return %) |
+| 4 | payout lazada | same |
+| 5 | payout tiktok | same |
+| 6 | COD remittance | COD sales × (1 − refusal %) − COD fee, shifted by courier lag |
+| 7 | transfers / PromptPay | expected direct sales |
+| 8 | customer invoices due | from the unpaid invoices list, on the realistic date |
+| 9 | other in | loan received, owner money in (mark it) |
+| 10 | **total in** | `=SUM(B3:B9)` |
+| 11 | stock and supplier payments | on the payment date; deposit and balance as separate entries |
+| 12 | packaging and shipping paid by you | |
+| 13 | ads | card bill or top-up date |
+| 14 | rent, utilities, software | |
+| 15 | wages and owner draw | pay date |
+| 16 | WHT · VAT · social security | due dates from `thai-tax` and `thai-employment` |
+| 17 | income tax instalment | ภ.ง.ด.94 / 51 / 90 / 50 in the week due |
+| 18 | loan repayments, other out | |
+| 19 | **total out** | `=SUM(B11:B18)` |
+| 20 | **closing cash** | `=B2+B10-B19` |
+| 21 | buffer | e.g. 2 weeks of rows 14 + 15 + 18 |
+| 22 | below buffer? | `=IF(B20<B21,"ACT","")` · conditional format red |
+| 23 | action and owner | what will be done, by whom, by which date |
+| 24 | slow-case closing | copy rows 3–6 with the `slowest 10% days` lag (fewer than 3 payouts measured: median × 1.3, labelled default) and recompute closing |
+| 25 | slow case below buffer? | `=IF(B24<B21,"ACT","")` · the flag in row 23 names the channel, week and amount |
+
+## Tab `actual-vs-forecast`
+
+| week | forecast closing | actual closing | gap | main reason |
+|---|---|---|---|---|
+| 2026-10-26 | | | `=C2-B2` | e.g. TikTok payout 4 days later than lag |
+
+A gap that repeats in the same direction means a lag or fee % in tab `lags` is wrong. Fix the input, not each week.
+
+
+## reference: bookkeeping-sheet.md
+
+# Bookkeeping sheet template
+
+Copy into Google Sheets or Excel. One tab per year, one row per money movement. Amounts in baht, 2 decimals. Dates as YYYY-MM-DD (Gregorian) in the sheet; write the Buddhist year only on documents that ask for it.
+
+## Tab `journal`
+
+| Column | Header | Example | Rule |
+|---|---|---|---|
+| A | date | 2026-10-03 | Date money moved (payout date, transfer date) |
+| B | channel | shopee | shopee · lazada · tiktok · line · facebook · web · cod-courier · bank · cash |
+| C | doc_no | SP-2610-001 | Platform report ID, receipt or tax invoice number; `none` → put it on the to-fix list |
+| D | description | Shopee settlement wk 40 | Plain words |
+| E | category | sales | See category list below |
+| F | money_in | 18,500.00 | Gross income only |
+| G | money_out | | Expenses and owner draws |
+| H | vat | | VAT on this row (VAT-registered only) |
+| I | wht | | Withholding tax deducted from or by you on this row |
+| J | balance | `=J2+F3-G3` (from row 3 down) | Running balance; row 2 is the opening balance (ยอดยกมา) typed by hand; must equal bank at month end |
+| K | filed | Y | Y = document scanned into `YYYY-MM` folder |
+| L | note | | Why a document is missing, who to chase |
+
+## Category list (column E)
+
+| Category | In or out | Counts as business expense |
+|---|---|---|
+| sales | in | — |
+| other-income | in | — |
+| stock | out | yes (cost of goods) |
+| packaging | out | yes |
+| platform-fee | out | yes (commission, transaction, service fees, each a row) |
+| shipping | out | yes (incl. COD fee) |
+| ads | out | yes |
+| rent-utilities | out | yes |
+| software | out | yes |
+| wages | out | yes (with payroll records, `thai-employment`) |
+| tax-paid | out | no — tax payments, kept for reconciliation |
+| owner-draw | out | **no** |
+| owner-in | in | **no** (owner putting money in is not sales) |
+| transfer | in/out | no — moves between own accounts |
+
+## Tab `month` (one row per month)
+
+| month | sales | expenses | profit | owner_draw | bank_end | journal_end | match | ytd_sales |
+|---|---|---|---|---|---|---|---|---|
+| 2026-10 | `=SUMIFS(journal!F:F,journal!E:E,"sales",…)` | `=SUMIFS(…expense categories…)` | `=B2-C2` | `=SUMIFS(journal!G:G,journal!E:E,"owner-draw",…)` | from bank statement | last `balance` | `=F2=G2` | running total → watch 1.8 M VAT line |
+
+## Tab `to-fix`
+
+| date | journal row | problem | action | done |
+|---|---|---|---|---|
+| 2026-10-07 | 14 | ad receipt missing | download from Meta billing | |
+
+
+## reference: cash-flow.md
+
+<!-- merged from skill `cash-flow` on 2026-11-27 · description was: Use when a Thai seller may run short of cash -->
+# Cash Flow for a Thai Small Business
+
+A shop can be profitable and still unable to pay the supplier on Friday. Profit is counted when you sell; cash arrives when the platform pays out, the courier remits COD, or the customer transfers. This skill forecasts cash week by week for 13 weeks and says what to do before the balance goes negative. General information, not financial or tax advice.
+
+> **One rule:** forecast cash on the day it actually moves, from your own history, not from sales figures or platform promises. Every week, replace the forecast with the actual and roll forward one week.
+
+## Use when / not when
+
+| Situation | Use |
+|---|---|
+| "Will I have enough to pay X", big stock order coming, sales up but bank down, peak season (11.11, 12.12) | this skill |
+| Recording what already happened, month-end close | `sme-bookkeeping.md` (the forecast starts from its journal) |
+| Is the product priced to make money at all | `pricing-and-costs` |
+| Which courier pays COD faster or cheaper | `pricing-and-costs` |
+| Exact tax form dates and penalties | `thai-tax` · salary and social security dates → `thai-employment` |
+| Personal household budget | `budget-and-debt` in `trading-finance` (if installed) |
+
+## 1. Measure your real delays first
+
+Do not guess payout timing. Take last month's orders and the payout reports and measure, per channel, the days from **order date** to **money in your bank**.
+
+| Channel | What drives the delay | Measure |
+|---|---|---|
+| Shopee · Lazada · TikTok Shop | Delivery time + buyer confirmation or auto-confirm window + the platform's release and withdrawal cycle. Rules differ by platform and change; read the current terms in each seller centre (รอยืนยัน per platform) | median days, and the slowest 10% |
+| Courier COD (LINE, Facebook, own web) | Delivery + the courier's COD remittance cycle + refused parcels that come back with no cash (`pricing-and-costs`) | days, and refusal rate % |
+| Bank transfer, PromptPay | Usually same day | — |
+| B2B invoice with credit terms | The terms you gave (30, 60 days) plus how late customers really pay | days after due date |
+
+Write the result as a lag table, e.g. Shopee 9 days, TikTok 12 days, COD 6 days with 8% refused. Use these numbers in the forecast. Returns and refunds also come out of later payouts; take last month's return rate per channel.
+
+Keep the slow end too, not just the median: a channel that pays in 9 days on average but sometimes in 15 is the one that leaves you short. With fewer than 3 measured payouts for a channel, use median + 30% as its slow lag and label it `(ค่าเริ่มต้น ยังไม่ได้วัดกับร้านจริง)` until real payouts replace it. The 30% is a starting value from Anthropic's cash-flow-snapshot skill, not a measured Thai figure.
+
+## 2. Build the 13-week forecast
+
+Template: [references/13-week-forecast.md](13-week-forecast.md). One column per week (Monday to Sunday), rows:
+
+1. **Opening cash** = business bank balance (week 1 = today's real balance; later weeks = previous closing).
+2. **Cash in** — platform payouts by channel (sales shifted by the lag from section 1, minus fees and returns) · COD remittances (minus refusals and COD fee) · direct transfers · customer invoices due · other (loans received, owner putting money in).
+3. **Cash out** — stock purchases on the date you pay the supplier (deposit and balance separately) · packaging · ads (card bill date, not click date) · shipping you pay · rent, utilities, software · wages and owner draw · loan repayments · **tax and social security on their due dates** (section 3).
+4. **Closing cash** = opening + in − out.
+5. **Minimum buffer** — a floor you do not go below, e.g. 2 weeks of fixed costs (rent, wages, loans, owner draw).
+
+Highlight every week where closing cash is below the buffer. That week is the problem to solve now, not then.
+
+6. **Slow-case closing** — the same week with every payout shifted by its slow lag instead of the median. A week that is fine on the median but below the buffer in the slow case still gets a flag.
+
+Every flag names the source, the week and the amount, so the owner knows whom to call: "TikTok payout in week 3 lands 6 days late in the slow case; week 3 closes at 18,400, below the 40,000 buffer". A flag that only says "cash may be tight" is not finished.
+
+## 3. Tax and contribution dates that take cash
+
+Put these in the forecast on the date the money leaves, for the forms that apply to you. Full calendar, e-Filing extensions and weekend shifts: `thai-tax` → `references/tax-vat-th.md` section 2.
+
+| What | Paid | Amount to forecast |
+|---|---|---|
+| WHT you withheld (ภ.ง.ด.1, 3, 53) | by the 7th of next month on paper; e-Filing later (see `thai-tax`) | the WHT you deducted last month — it is not your money, keep it aside |
+| VAT (ภ.พ.30), if registered | by the 15th of next month on paper; e-Filing later | output VAT − input VAT for last month; a big stock month can mean a refund or credit instead |
+| Social security (สปส.1-10) | by the 15th of next month | employee share withheld + employer share |
+| Half-year and annual income tax (ภ.ง.ด.94 / 90 individuals · ภ.ง.ด.51 / 50 companies) | see `thai-tax` | estimate from year-to-date profit; this is the payment that most often surprises small shops |
+
+Last checked 2026-10-25 (due dates are taken from `thai-tax` and `thai-employment`, which were checked against official websites on 2026-10-22; the legal text was not reopened this time) · Sources: https://www.rd.go.th · https://www.sso.go.th
+
+## 4. Warning signs and what to do
+
+| Sign | Likely cause | Action, cheapest first |
+|---|---|---|
+| Sales up, bank down | Cash tied in stock and payouts in transit | Slow the next stock order; buy in smaller lots more often |
+| Stock on hand > 2 months of sales | Over-buying, slow lines | Bundle or discount slow SKUs (`shop-operations`), stop reordering them |
+| COD refusals or returns rising | Wrong buyers, slow delivery | Push prepaid (`promptpay-qr.md`), confirm COD orders by chat before shipping |
+| Paying WHT or VAT from new sales | Tax money spent as working capital | Move withheld tax and VAT into a separate "tax" account on the day you collect it |
+| Card bill paid late or only the minimum | Ads spending ahead of payouts | Cap daily ad spend to what last week's payouts can cover |
+| Forecast below buffer within 4 weeks | Any of the above | Close the gap with the cheapest source first, ranked by cost per baht in [references/close-the-gap.md](close-the-gap.md); compare any loan on its full yearly cost in writing |
+| Owner draws exceed profit for 3 months | Business funding the household | Fix the owner draw at a set amount (`sme-bookkeeping.md` section 3) |
+
+Closing the gap: cheapest source first (supplier terms that lose no discount → early collection → smaller stock lots → short loan at its full yearly cost); the ranked table with formulas and a worked 11.11 stock-order example are in [references/close-the-gap.md](close-the-gap.md).
+
+Never pay supplier deposits or "release fees" to unlock platform money at the request of a chat, call or link — platforms pay out through the seller centre only. Treat such messages as possible scams (`scam-check` in `trading-finance`, if installed).
+
+## Check before handing over
+
+1. Week 1 opening = today's real bank balance.
+2. Payouts are shifted by measured lags, net of fees and returns.
+3. Tax, social security and owner draw appear as cash out on their dates.
+4. Every week below the buffer, on the median or the slow case, has a named source, amount, action and owner.
+
+## Related
+
+`sme-bookkeeping.md` (actuals that feed the forecast) · `pricing-and-costs` · `shop-operations` · `promptpay-qr.md` · `thai-tax` · `thai-employment`
+
+
+## reference: close-the-gap.md
+
+# Close the gap and worked example
+
+Moved from `SKILL.md` section 4. Open when a forecast week closes below the buffer.
+
+## Close the gap in order of cost per baht
+
+Work down the list and stop when the shortfall (buffer minus lowest closing cash) is covered. Cost is shown as a yearly rate so the options compare.
+
+| Order | Option | Cost per baht (formula) |
+|---|---|---|
+| 1 | Later supplier payment that loses no discount | 0% |
+| 2 | Later supplier payment that gives up an early-pay discount of d% for n extra days | d / (100 - d) x 365 / n (example: 2% for 20 days = 37% a year) |
+| 3 | Collect customer invoices early (a call, or a discount of e% for paying n days sooner) | call: 0% · discount: e / (100 - e) x 365 / n |
+| 4 | Order less stock, or split the order in two lots | no interest; the cost is sales you may miss, so check the sell-through of those SKUs first |
+| 5 | Short loan or card advance | (total fees + interest) / amount x 365 / days = yearly rate; ask the lender for the full yearly cost (interest + fees), not the headline monthly rate (current rates: ask the lender, รอยืนยัน) |
+
+Two options at the same cost → take the one that is easier to undo. Row 4 can move above row 2 when the missed sales are small. These are formulas on quoted numbers; the owner decides, the table only shows which source costs least.
+
+## Worked example — stock order before 11.11
+
+Opening cash 80,000. Weekly fixed costs 15,000, buffer 30,000. Shopee lag from the shop's own payout reports is 10 days. Plan: pay a supplier 120,000 in week 2 for 11.11 stock; extra sales of 200,000 on 11.11 (week 4). Figures are illustrative.
+
+| Week | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|---|---|---|---|---|---|
+| Opening | 80,000 | 100,000 | 0 | 20,000 | 40,000 | 240,000 |
+| Payouts in | 35,000 | 35,000 | 35,000 | 35,000 | 35,000 + 180,000 (11.11, net of fees, ~10 days later) | 35,000 |
+| Stock out | 0 | 120,000 | 0 | 0 | 0 | 0 |
+| Fixed out | 15,000 | 15,000 | 15,000 | 15,000 | 15,000 | 15,000 |
+| Closing | 100,000 | **0** | **20,000** | 40,000 | 240,000 | 260,000 |
+
+Weeks 2 and 3 break the 30,000 buffer; one late payout or refused COD batch and the shop cannot pay rent. Options: pay a 60,000 deposit in week 2 and the balance in week 5, after the 11.11 payout lands, or ship the order in two lots. With the split, week 2 closes at 60,000, week 3 at 80,000, week 5 at 240,000.
+
+
+## reference: field-tables.md
+
+# Field tables and worked examples · promptpay-qr
+
+Open when you must read or check a payload by hand, or explain why a bank app rejects it. For code and a byte-by-byte breakdown see [payload.md](payload.md).
+
+## Payload structure
+
+A PromptPay QR is a text string in EMVCo QR Code Specification for Payment Systems — Merchant-Presented Mode, rendered as a QR image. Every field is **ID (2 digits) + length (2 digits) + value**. ID 00 first, 63 last; the rest in any order (the examples use 58 · 53 · 54).
+
+| ID | Name | Value |
+|---|---|---|
+| 00 | Payload format indicator | `01` |
+| 01 | Point of initiation | `11` = **static** (reusable, payer types amount) · `12` = **dynamic** (one-time, amount fixed) |
+| 29 | Merchant account — PromptPay **credit transfer** | sub-fields below |
+| 30 | Merchant account — **bill payment** (Biller ID + references) | sub-fields below |
+| 53 | Transaction currency | `764` (THB, ISO 4217) |
+| 54 | Transaction amount | e.g. `1500.00` — omit for static |
+| 58 | Country code | `TH` |
+| 59 / 60 | Merchant name / city | optional for tag 29 |
+| 62 | Additional data (bill number, terminal) | optional |
+| 63 | CRC | 4 uppercase hex chars, always last |
+
+### Tag 29 sub-fields (person-to-person / small shop)
+
+| Sub-ID | Meaning | Format |
+|---|---|---|
+| 00 | Application ID | `A000000677010111` |
+| 01 | Mobile number | 13 digits: `0066` + number without leading 0 → `0066812345678` |
+| 02 | National ID / Tax ID | 13 digits |
+| 03 | e-Wallet ID | 15 digits |
+
+### Tag 30 sub-fields (company bill payment)
+
+| Sub-ID | Meaning | Format |
+|---|---|---|
+| 00 | Application ID | `A000000677010112` |
+| 01 | Biller ID | 15 digits — tax ID + 2-digit suffix, issued by the company's bank |
+| 02 | Reference 1 | up to 20 chars, e.g. invoice number (bank may require uppercase A–Z, 0–9) |
+| 03 | Reference 2 | optional, up to 20 chars |
+
+Tag 30 needs a bill-payment agreement with a bank, but reconciliation is automatic (the bank reports Ref1). Tag 29 needs nothing but a PromptPay ID — reconcile by amount and time.
+
+## CRC16
+
+- Algorithm **CRC-16/CCITT-FALSE**: polynomial `0x1021`, initial `0xFFFF`, no reflection, no final XOR.
+- Computed over the whole payload **including the literal `6304`** (ID and length of the CRC field), then the 4 hex digits are appended.
+- Self-test: CRC of `123456789` must be `29B1`.
+
+## Worked example (ตรวจด้วย `promptpay.mjs --self-test`)
+
+Mobile 081-234-5678.
+
+Static (payer enters amount):
+```
+00020101021129370016A000000677010111011300668123456785802TH530376463045D82
+```
+
+Dynamic, 1,500.00 baht:
+```
+00020101021229370016A000000677010111011300668123456785802TH530376454071500.0063046960
+```
+
+Breakdown of the dynamic one: `000201` · `010212` · `2937` [`0016A000000677010111` `01130066812345678`] · `5802TH` · `5303764` · `54071500.00` · `6304` + `6960`.
+
+
+## reference: payload.md
+
+# PromptPay payload — code and breakdown
+
+## Generator (Node.js, no dependencies)
+
+```js
+const field = (id, v) => id + String(v.length).padStart(2, '0') + v;
+
+function crc16(s) {                       // CRC-16/CCITT-FALSE
+  let c = 0xFFFF;
+  for (const b of Buffer.from(s, 'ascii')) {
+    c ^= b << 8;
+    for (let i = 0; i < 8; i++) c = (c & 0x8000) ? ((c << 1) ^ 0x1021) & 0xFFFF : (c << 1) & 0xFFFF;
+  }
+  return c.toString(16).toUpperCase().padStart(4, '0');
+}
+
+function promptpay(id, amount) {          // id: mobile (10 digits) or national/tax ID (13)
+  const sub = id.length === 13 ? field('02', id) : field('01', '0066' + id.replace(/^0/, ''));
+  const acct = field('00', 'A000000677010111') + sub;
+  const body = field('00', '01') + field('01', amount ? '12' : '11') + field('29', acct)
+    + field('58', 'TH') + field('53', '764') + (amount ? field('54', amount.toFixed(2)) : '') + '6304';
+  return body + crc16(body);
+}
+
+console.log(promptpay('0812345678'));        // ...63045D82
+console.log(promptpay('0812345678', 1500));  // ...63046960
+console.log(crc16('123456789'));             // 29B1  (self-test)
+```
+
+Render the string with any QR library (error correction M is common). Python equivalent: `crcmod` predefined `crc-ccitt-false`, or port the loop.
+
+## Byte-by-byte (dynamic, 1,500.00 to 081-234-5678)
+
+| Segment | ID | Len | Value |
+|---|---|---|---|
+| `000201` | 00 | 02 | `01` |
+| `010212` | 01 | 02 | `12` dynamic |
+| `2937…` | 29 | 37 | sub-fields ↓ |
+| `0016A000000677010111` | 29.00 | 16 | AID credit transfer |
+| `01130066812345678` | 29.01 | 13 | mobile in 0066 form |
+| `5802TH` | 58 | 02 | `TH` |
+| `5303764` | 53 | 03 | `764` |
+| `54071500.00` | 54 | 07 | `1500.00` |
+| `6304` | 63 | 04 | CRC follows |
+| `6960` | | | CRC-16 of everything before, including `6304` |
+
+## Bill payment (tag 30) shape
+
+```
+000201 010212
+30 LL [0016A000000677010112] [0115{BillerID15}] [02LL{Ref1}] [03LL{Ref2}]
+5303764 54LL{amount} 5802TH 5913{MERCHANT NAME} 6304{CRC}
+```
+
+Biller ID and allowed reference formats come from the company's bank — ask for the bill-payment spec sheet.
+
+## Debugging rejects
+
+| Symptom | Likely cause |
+|---|---|
+| "QR ไม่ถูกต้อง" in every app | CRC wrong — computed without `6304`, or lowercase hex |
+| Wrong recipient / not found | Mobile left as `081…` instead of `0066 81…` |
+| Amount ignored | Point of initiation left `11` while tag 54 present (use `12`) |
+| Works in one bank only | Length byte miscounted on a nested sub-field (tag 29/30 length must equal the total of its sub-fields) |
+
+
+## reference: promptpay-qr.md
+
+<!-- merged from skill `promptpay-qr` on 2026-11-27 · description was: Use when a Thai business needs a PromptPay QR -->
+# PromptPay QR (Thai QR Payment) — a correct payload string for a QR, placed on a quotation or invoice
+
+> **One rule:** if even 1 field is wrong, banking apps reject the QR as "QR ไม่ถูกต้อง". Never type fields, lengths or CRC by hand; generate the payload with `promptpay.mjs`.
+
+## Use when
+- A Thai business needs a PromptPay QR for a person, shop or company (mobile number · 13-digit national/tax ID · 15-digit e-Wallet ID · biller ID).
+- Putting a QR on a quotation or invoice, or debugging a QR a bank app rejects.
+- Checking that a customer's payment really arrived before shipping.
+
+Not for: quotation template → `thai-business-docs` · tax invoice fields → `thai-tax` · VAT and withholding → `thai-tax` · sending the QR in LINE → `line-oa` · web checkout with automatic confirmation → the bank's or payment gateway's API, not a home-made QR.
+
+## Steps
+1. **Choose the tag.** Tag 29 (credit transfer, `A000000677010111`) needs only a PromptPay ID; reconcile by amount and time. Tag 30 (bill payment, `A000000677010112`, Biller ID 15 digits + Ref1 up to 20 chars + optional Ref2) needs a bill-payment agreement with a bank, but the bank reports Ref1 for automatic reconciliation. Static (`01`=`11`) has no amount; dynamic (`01`=`12`) has a fixed amount in tag 54. Field tables, CRC and byte-by-byte examples: [`field-tables.md`](field-tables.md), code: [`payload.md`](payload.md).
+2. **Run the script** for every real payload. It builds tag 29 (mobile, 13-digit ID, or 15-digit e-Wallet ID) or tag 30 (biller ID with Ref1/Ref2) and appends the CRC16 (CRC-16/CCITT-FALSE, poly `0x1021`, init `0xFFFF`, computed over the payload including the literal `6304`). A 13-digit ID must pass the check digit (mod 11) or the script stops: the number is probably mistyped. Leave `amount` out for a static QR.
+   ```
+   node promptpay.mjs <file.json> [--json]     # example file: scripts/example.json
+   node promptpay.mjs --self-test
+   ```
+   Input: `{ "id": "081-234-5678", "amount": 1500 }` · tag 30: `{ "billerId": "<15 digits>", "ref1": "IV26100001", "ref2": "", "name": "SHOP", "amount": 1500 }`. Dashes and spaces in `id` are ignored. A bad field stops the script with a message naming it (wrong length, non-ASCII text in `name` or a reference, amount with more than 2 decimals, Ref1 missing). A Ref1 outside A–Z 0–9 only warns, because banks differ. The self-test checks the CRC of `123456789` (`29B1`) and both worked examples. The script does not draw the QR: render the payload with a QR library (error correction M is common).
+   **Script path:** installed: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/shop-books/scripts/promptpay.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/e-commerce/skills/shop-books/scripts/promptpay.mjs` · Node only, no dependencies.
+3. **Put it on a quotation or invoice.**
+   - Use a dynamic QR with the exact amount due, after withholding tax if the customer withholds (for example 21,400 − 600 = 20,800; see `thai-tax`).
+   - Place it near the total, at least 2.5 × 2.5 cm printed, with a quiet zone of 4 modules; label "สแกนชำระผ่าน PromptPay" and the account name the payer will see.
+   - Print the invoice number next to it and ask payers to send the slip (tag 29 carries no reference).
+   - On a quotation the amount may change: use a static QR, or regenerate on the invoice.
+   - Re-scan the printed PDF with 2 different bank apps before sending and read out the account name each shows; it must match the business name on the invoice. A QR that scans but shows another name goes to someone else: stop and recheck the ID.
+4. **If a bank app rejects the QR,** the usual causes are a wrong CRC (computed without `6304`, or lowercase hex), mobile left as `081…` instead of `0066 81…`, or point of initiation `11` with tag 54 present. Table in [`payload.md`](payload.md).
+5. **Before shipping, check the money arrived, not the slip** (a slip is a picture that can be edited or reused). Open the shop's bank app or statement and find the transfer: amount, time and payer name match the order. One transfer pays one order; the same slip on two orders means the second has not paid. Never ship on a slip alone, even for a regular customer, and do not accept "the bank is slow, I'll send proof later". Suggest turning on the bank's incoming-transfer notification. For many orders a day, use a payment gateway or the bank's API with a payment callback instead of reading slips.
+
+## Check before done
+- [ ] The payload came from `promptpay.mjs` (or matches the reference implementations in `sources.md` byte for byte), and `--self-test` passes.
+- [ ] Amount format: dot decimal, no comma, max 13 chars; mobile converted to `0066…`, national ID stays 13 digits.
+- [ ] The QR image was regenerated from the payload, never altered by hand.
+- [ ] The printed PDF was scanned with 2 bank apps and the account name matches the invoice.
+
+## References
+- [`field-tables.md`](field-tables.md) — open to read or check a payload by hand (tags, sub-fields, CRC, worked examples)
+- [`payload.md`](payload.md) — open for generator code, byte-by-byte breakdown, reject debugging
+- [`sources.md`](promptpay-qr/sources.md) — open to compare against reference implementations and re-check standard sources (checked 2026-10-06 to 2026-10-23)
+
+
+## reference: sme-bookkeeping.md
+
+<!-- merged from skill `sme-bookkeeping` on 2026-11-27 · description was: Use when a Thai shop or SME keeps its books -->
+# SME Bookkeeping (Thai small business and online seller)
+
+## Contents
+
+- [Use when / not when](#use-when--not-when)
+- [1. Who must keep what](#1-who-must-keep-what)
+- [2. How long to keep documents](#2-how-long-to-keep-documents)
+- [3. Separate personal and business money first](#3-separate-personal-and-business-money-first)
+- [4. The journal — one row per money movement](#4-the-journal--one-row-per-money-movement)
+- [5. Month-end close checklist](#5-month-end-close-checklist)
+- [6. When to hire an accountant](#6-when-to-hire-an-accountant)
+- [Worked example — one week, individual seller not VAT-registered](#worked-example--one-week-individual-seller-not-vat-registered)
+- [Check before handing over](#check-before-handing-over)
+- [Related](#related)
+- [References](#references)
+
+Record every baht that comes in or goes out, keep the paper that proves it, and close each month so tax filing is copying numbers, not detective work. General information, not accounting or tax advice. A bookkeeper (ผู้ทำบัญชี) or accountant (สำนักงานบัญชี) confirms what applies to you.
+
+> **One rule:** one bank account for the business, one row per money movement, one document behind every row. Without the document the expense cannot be deducted at actual cost.
+
+## Use when / not when
+
+| Situation | Use |
+|---|---|
+| Starting books, messy records, "where did the money go", preparing for an accountant | this skill |
+| Will cash run out in the coming weeks | `cash-flow.md` |
+| Which tax form, which date, WHT rates | `thai-tax` |
+| Individual seller's income tax (40(8), 60% deemed vs actual, ภ.ง.ด.90/94) | `thai-tax` |
+| Issuing quotation, invoice, receipt | `thai-business-docs` · tax invoice rules → `thai-tax` |
+| Payroll, ภ.ง.ด.1, social security | `thai-employment` · playbook `monthly-close` |
+| Company year end (audit, DBD e-Filing, ภ.ง.ด.50) | `thai-tax` |
+
+## 1. Who must keep what
+
+| You are | Records the law asks for |
+|---|---|
+| Individual (บุคคลธรรมดา) with business income 40(5)–40(8), **not** VAT-registered — most small online sellers | **รายงานเงินสดรับ-จ่าย** (cash receipts and payments report) in the Revenue Department's format. It is also the evidence that lets you deduct actual expenses instead of the 60% deemed rate |
+| VAT-registered (individual or juristic) | Sales tax report, purchase tax report, and goods and raw materials report (รายงานภาษีขาย · ภาษีซื้อ · สินค้าและวัตถุดิบ), plus tax invoices and copies |
+| Registered partnership, company limited (ห้างหุ้นส่วนจดทะเบียน · บริษัทจำกัด) | Full accounts under the Accounting Act B.E. 2543 (พ.ร.บ.การบัญชี พ.ศ. 2543), kept by a qualified bookkeeper, plus audited financial statements each year (`thai-tax`) |
+
+The number of the Revenue Department announcement that sets the cash receipts and payments report format, and how many days after a transaction an entry must be made, are (รอยืนยัน). The Department of Business Development (DBD) sets the time limits for posting entries in a company's books (cash, journals, ledger, stock). Figures often quoted online were not found in an official text (รอยืนยัน). Ask your bookkeeper; in practice, post weekly and never later than month end.
+
+## 2. How long to keep documents
+
+| Rule | Keep | From |
+|---|---|---|
+| Accounting Act B.E. 2543 section 14 — books and supporting documents | at least **5 years** | the date the accounts are closed (ปิดบัญชี) |
+| Revenue Code section 87/3 — VAT reports, tax invoices and copies | at least **5 years** | the date the return was filed |
+| Either authority may order longer | up to **7 years** | — |
+
+Keep **7 years** for anything about money: it covers both rules and the extension. Paper or clean scans both work for your own file; the original tax invoice is what backs an input VAT claim, so keep originals until your accountant says otherwise.
+
+## 3. Separate personal and business money first
+
+1. Open **one bank account used only for the business**. Every platform payout, courier COD remittance and customer transfer lands there; every supplier, ad and courier bill is paid from it.
+2. The owner takes money out as a fixed **owner draw** (individual) or **salary or dividend** (company), on one date a month, recorded as such. Not as random top-ups and withdrawals.
+3. A business bill paid from a personal card: record it the same day as "owner paid for business" and keep the receipt. A personal bill paid from the business account: record as owner draw. Never leave either unrecorded.
+4. Company money is not the owner's money. A company paying personal bills creates a loan to a director that the accountant must explain at year end.
+
+Why: mixed accounts make the bank statement useless as evidence, and the Revenue Department compares bank and platform data with your return (`thai-tax`, "Who reports your sales").
+
+## 4. The journal — one row per money movement
+
+Template: [references/bookkeeping-sheet.md](bookkeeping-sheet.md). Columns: date · channel · document no. · description · category · money in · money out · VAT · WHT · balance · document filed (Y/N).
+
+Sources to copy from, in this order each week:
+
+| Source | What to record |
+|---|---|
+| Marketplace payout / settlement report (Shopee, Lazada, TikTok Shop seller centre) | **Gross sales** as income, and **commission, transaction, service and shipping fees** as separate expense rows. Do not record only the net payout: the gross figure is what tax is based on and what the platforms report |
+| Courier COD remittance statement | Gross COD collected as income; COD fee as expense |
+| Bank statement | Every line not already covered above: direct transfers, PromptPay, supplier payments, ads, rent, owner draws |
+| Purchase receipts and tax invoices | Stock, packaging, ads, software, rent, utilities; tag stock purchases so the cost of goods sold can be worked out |
+
+Then tick each bank line against a journal row. A bank line with no row, or a row with no document, goes on the "to fix" list.
+
+## 5. Month-end close checklist
+
+Do it in the first 5 days of the next month, before the WHT and VAT dates in `thai-tax`.
+
+1. Download every platform's monthly payout or income report and the courier COD statements.
+2. Download the business bank statement; check the closing balance matches the journal balance.
+3. Every bank line has a journal row; every row has a document (or a note why not).
+4. Gross sales per channel = platform report total. Fees per channel match the platform's fee invoice. Then match payouts to the bank, hunt duplicates and list missing receipts (the 3 checks below).
+5. Stock count or stock-sheet total (`shop-operations`) recorded; note large write-offs (damage, loss).
+6. Unpaid supplier bills and unpaid customer invoices listed with due dates (feeds `cash-flow.md`).
+7. VAT-registered: sales and purchase tax reports done; ภ.พ.30 figures ready. Paid suppliers or freelancers 1,000 baht or more: WHT and 50 ทวิ done (`thai-tax`).
+8. Running total of the year's sales updated. Not VAT-registered and approaching **1.8 million baht**: register within 30 days of passing it (`thai-tax` → `references/tax-vat-th.md` section 1).
+9. One-line summary: sales · costs · profit · cash in bank · owner draws. Scan and file the month's documents in one folder named `YYYY-MM`.
+
+Do not move to the next step while the "to fix" list from steps 3 and 4 still has open rows, unless the owner says "ข้ามก่อน". Write that down next to the row.
+
+### The 3 checks in step 4
+
+**Match payouts to the bank, net to net.** Compare the **net payout** in each Shopee, Lazada or TikTok Shop payout report with the deposit that actually reached the shop account. Comparing gross sales with the bank makes every row differ by exactly the fees, and real gaps hide among them. A payout and a deposit match when the dates are at most 2 days apart and the amounts at most 1 baht apart. A bigger gap gets its own row with the difference written out. "In the report but no money arrived" and "money arrived but no report" are 2 separate lists; never net them against each other.
+
+**Hunt duplicates.** Flag pairs with the same amount, the same counterparty and dates at most 5 days apart. The owner decides whether each pair is a real duplicate or a regular payment (rent, a supplier who bills twice a month). Report it as "checked for duplicates within 5 days", not "no duplicates".
+
+**List missing receipts.** Every expense row above the owner's threshold with no document goes on a "ใบเสร็จขาด" list: date, payee, amount, what to ask for. The threshold is the owner's call (รอยืนยัน the amount with the owner or accountant). A missing receipt can cost the deduction: an individual seller who deducts actual expenses needs the document (`thai-tax`); a payment that needed withholding tax also needs the 50 ทวิ (`thai-tax`).
+
+The 2-day, 1-baht and 5-day windows are starting values, not measured on Thai payouts; widen the date window for a platform whose payouts you have seen land later.
+
+## 6. When to hire an accountant
+
+| Sign | Why |
+|---|---|
+| You are a registered partnership or company | The Accounting Act requires a qualified bookkeeper and a licensed auditor; not optional |
+| VAT-registered | Monthly ภ.พ.30 and three VAT reports; mistakes carry penalties |
+| Sales near or over 1.8 million baht a year, or deducting actual expenses on large figures | The tax result depends on records an outsider can defend |
+| Staff on payroll | ภ.ง.ด.1, social security, 50 ทวิ every month |
+| Closing the month takes you more than a day, or you are already late | The fee is usually less than the surcharges (`thai-tax` → `references/tax-vat-th.md` section 4) |
+
+Hand over: the journal, bank statements, platform and COD reports, folders of documents by month, stock sheet, and the "to fix" list. Ask for the monthly fee in writing, what is included (bookkeeping, filing, year-end), and who files.
+
+## Worked example — one week, individual seller not VAT-registered
+
+Shopee settlement: gross sales 18,500 · commission 1,110 · transaction fee 555 · payout 16,835. Courier COD remittance: COD 4,200 · fee 105 · paid 4,095. Business bank account: supplier transfer 9,000 (receipt in hand) · Facebook ads 1,200 (receipt emailed) · owner draw 5,000. Figures are illustrative.
+
+Journal rows: income 18,500 and 4,200 · expenses 1,110, 555, 105, 9,000, 1,200 · owner draw 5,000 (not an expense). Week profit before tax = 22,700 − 11,970 = **10,730**. Bank moved by 16,835 + 4,095 − 9,000 − 1,200 − 5,000 = **+5,730** = profit 10,730 − owner draw 5,000. The two agree, so nothing is missing.
+
+## Check before handing over
+
+1. Journal balance = bank closing balance for the month.
+2. Income is gross per channel, fees are separate rows.
+3. Owner draws are not counted as expenses.
+4. Every Thai legal fact you quote carries the date and source above; anything marked (รอยืนยัน) is said as unconfirmed.
+
+## Related
+
+`cash-flow.md` (forecast from the same journal) · `thai-tax` · `thai-business-docs` · `shop-operations` · `pricing-and-costs` · `thai-employment` · `thai-business-setup`
+
+## References
+
+- [`bookkeeping-sheet.md`](bookkeeping-sheet.md) — journal template (section 4)
+- [`sources.md`](sources.md) — sources and check dates (2026-10-25) for the legal facts in sections 1 and 2
+
+
+## reference: sources.md
+
+# Sources · sme-bookkeeping
+
+## Section 1 — who must keep what
+
+ตรวจล่าสุด 2026-10-25 · แหล่ง: https://www.rd.go.th/38625.html (กรมสรรพากร "ผู้มีหน้าที่จัดทำรายงานเงินสดรับ-จ่าย" · ผู้ไม่ได้จด VAT ที่มีเงินได้ 40(5)–(8)) · https://www.krungsri.com/th/krungsri-the-coach/taxes/tax-knowledge/income-expense-accounting-manual · https://flowaccount.com/blog/income-expense-accounting-record/ · the number of the Revenue Department announcement that sets the cash receipts and payments report format, and how many days after a transaction an entry must be made (รอยืนยัน)
+
+## Section 2 — how long to keep documents
+
+Last checked 2026-10-25 · sources: https://rd.go.th/25306.html (Revenue Department ruling, citing the Accounting Act (พ.ร.บ.การบัญชี) section 14 · 5 years from the account closing date · extendable to at most 7 years) · https://rd.go.th/28312.html (กค 0706/4151 · 20 Apr 2007 (B.E. 2550) · section 87/3 · 5 years from the filing date · extendable to at most 7 years) · https://www.ofm.co.th/blog/organize-accounting-documents-2026/ · both rulings are old and have not been compared with the current text in the Royal Gazette
+
+## Section 5 — month-end checks
+
+Windows in step 4 (2 days, 1 baht, 5 days): ideas from Anthropic's month-end-prep skill (`anthropics/knowledge-work-plugins` small-business, Apache-2.0, read 2026-11-10; no text copied).

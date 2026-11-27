@@ -1,17 +1,2138 @@
-# skill: software-diagrams
+# skill: document-design
 
-Use when a README or PR needs a quick Mermaid diagram
+Use when Word, PowerPoint or PDF must look designed, or MD to Word
 
+# document-design — make a Word, PowerPoint or PDF file look designed, on purpose
+
+> **One rule:** run the pre-work gate before any design work, every time. Read the owner's theme, search live for reference designs, make 3 genuinely different directions, and check the result against `design-gate/no-ai-look` before sending.
+
+## Pick the part
+
+| Job (what the user says) | Open |
+|---|---|
+| "Make this .docx or .pptx look professional", "design the cover", "use our brand in the report", "PDF with a designed look" | [`references/branded-document-design.md`](references/branded-document-design.md) (cover work: [`references/cover-design.md`](references/cover-design.md); tokens and fonts: [`references/tokens-and-type.md`](references/tokens-and-type.md); Thai fonts: [`references/thai-fonts.md`](references/thai-fonts.md)) |
+| "Turn this Markdown file into a Word report", "convert the .md to .docx" | [`references/markdown-report-docx.md`](references/markdown-report-docx.md) (layout in Word: [`references/word-layout.md`](references/word-layout.md)) |
+
+Other references: the code API is in [`references/api.md`](references/api.md), the list of mistakes to avoid is in [`references/anti-patterns.md`](references/anti-patterns.md), and the visual check is in [`references/visual-check.md`](references/visual-check.md). Scripts are in `scripts/` (`md_to_docx.py`, `brandkit.py`, `cover-engine/`).
+
+## Steps every part shares
+
+1. Write the `เนื้อหา:` brief (what the content says, who reads it, what they do next). Use the brief to choose the design.
+2. Read the owner's theme. Follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` in the `superuser` plugin, even when a brand exists. The brand sets colour and fonts; the search sets the structure.
+3. Pick 1 direction out of the 3, then build the file from its tokens.
+4. Render the file, look at it, and fix what the visual check finds.
+5. Close the work with a line that starts with `ด่านก่อนลงมือ:`.
+
+## Check before done
+
+- The file passes `design-gate/no-ai-look`: no emoji, no decorative filler, and no claims a competitor could also make.
+- The file passed the visual check in `references/visual-check.md` before it was sent.
+- Every figure in the document comes from the `diagrams` skill and uses the same theme as the rest of the file.
+- Every font in the file has its licence checked (see `references/thai-fonts.md`).
+
+
+## reference: anti-patterns.md
+
+# Anti-patterns — reasons and what to use instead
+
+The short headings are in `SKILL.md`.
+
+- **Using Word's built-in Heading styles** — they override the colors you set. Use `h1()/h2()/h3()`,
+  which set `outlineLvl` themselves, so the table of contents (TOC) still shows the headings.
+- **Thick black default table borders** — the document looks dated at once. Use lines in the `line` color at 0.5pt between rows (under the header row is the 1.5pt brand line).
+- **Pure black text** — use `text_body`, a dark gray. The body text becomes much softer.
+- **Bold table headers with no fill color** — when a table spans pages, readers cannot tell where it starts.
+- **Letting Word work out column widths** — always call `fixed_widths()`.
+  Otherwise the code column ends up as wide as the detail column.
+- **Too many emoji** — 1 per callout is enough. Do not put one in every heading.
+- **Sending the file without ever rendering it** — see item 6.
+- **Creating the .docx without keeping the source markdown** — you cannot edit it next time.
+
+
+## reference: api.md
+
+# brandkit API — method reference
+
+Every method returns the object it created (paragraph / table / slide), so you can customize it further.
+
+## Contents
+
+1. [brandkit.py — Word (.docx)](#brandkitpy--word-docx)
+2. [brandkit_pptx.py — slides (.pptx)](#brandkit_pptxpy--slides-pptx)
+3. [brandkit_stage.py — Stage deck (.pptx)](#brandkit_stagepy--stage-deck-pptx)
+4. [Column width formulas (Word)](#column-width-formulas-word)
+
+---
+
+## brandkit.py — Word (.docx)
+
+### Create a document
+
+```python
+BrandDoc(path_template=None, page="A4", margins_cm=(2.2, 2.0, 2.2, 2.0),
+         footer_text="หน้า")
+```
+
+| Parameter | Meaning |
+|-------------|----------|
+| `path_template` | A .docx/.dotx file used as the template (already holds the organization's header/logo) |
+| `page` | `"A4"` or `"Letter"` |
+| `margins_cm` | (top, right, bottom, left) |
+| `footer_text` | Prefix before the page number · `""` = bare number |
+
+### Page-level blocks
+
+| Method | Note |
+|-------|----------|
+| `cover(title, subtitle, meta, note, logo, logo_width_cm=None, eyebrow=None, meta_rows=None, top_space_pt=24, page_break=True, style="light", art_colors=None)` | The logo accepts .png and .emf, but **.svg does not work in python-docx**; convert to PNG first (`rsvg-convert -w 600` or `cairosvg`) |
+| `cover(..., style="night")` | **Full-page dark cover** (see the example `examples/example_srs-preview.png`): dark gray background `#1C1C22` + a faint brand-colored glow · `logo` (omitted = no logo) small at top left, 4.6 cm wide · `eyebrow` → document title (32pt · if longer than 2 lines, reduce to 26pt) → `subtitle` → a glow line the full width of the text · `meta_rows` short values (≤18 characters, at most 4 values) go in a 4-cell table, the rest as label/value rows · `note` last · the cover has no footer · `art_colors=(color1, color2, color3)` colors of the glow line from left to right and of the background glow (default `brand_2` → `brand` → light `brand`) · the background image/logo/line are anchored to a paragraph in the body, not the header · needs numpy + pillow (`cover_art.py`) · `logo_width_cm` default 2.6 (light) / 4.6 (night) |
+| `toc(heading="สารบัญ", levels="1-3")` | Inserts a TOC field; then in Word press **Ctrl+A then F9** so the entries appear (it is empty when created) |
+| `page_break()` | |
+| `landscape_section()` | Opens a landscape section for wide tables |
+
+### Headings and text
+
+| Method | Result |
+|-------|---------|
+| `h1(text)` `h2(text)` `h3(text)` | 16 / 12.5 / 11.5 pt · bold · brand / brand_deep / text · sets `outlineLvl` so the TOC sees them |
+| `para(text, size, color, bold, italic, align, space_after)` | `align` = `"center"｜"right"｜"justify"` (do not justify Thai) |
+| `rich([(text, opts), ...])` | Several formats in one paragraph, e.g. `[("สถานะ: ", {"bold": True}), ("อนุมัติ", {"color": "green"})]` |
+| `bullets([...], style="List Bullet")` | `style="List Number"` for numbered lists |
+| `code(text)` | Gray-background code block |
+
+### Tables and data
+
+| Method | Note |
+|-------|----------|
+| `table(headers, rows, widths=None, zebra=False, align=None, first_col_bold=False, size=None, header_style="tint")` | `widths` in twips totaling **9638** (`BODY_TWIPS`) for A4 with 2 cm margins · `align` = a list per column · `header_style="tint"` (default) header filled with `brand` mixed 80% with white, bold `brand_deep` text, no top line, a single 1.5pt `brand` line under the header, thin row lines, no vertical lines · `"classic"` = the old style (`brand_tint` header, thin gray grid) |
+| `pill_table(headers, rows, status_col, palette, widths)` | `palette = {"เสร็จ": "green", "ค้าง": "red"}` · available tones: green blue amber red violet grey |
+| `kpi_row([(value, label), ...])` | Exactly 3–5 cells |
+| `signoff([(role, name), ...])` | Sign-off table |
+
+### Other
+
+| Method | Note |
+|-------|----------|
+| `callout(kind, title, body)` | kind = `tip｜note｜warning｜critical｜success｜question` |
+| `figure(image_path, caption, width_cm=15.5, number=None)` | `number=1` prefixes the caption with "รูปที่ 1 — " (Figure 1) |
+| `save(path)` | |
+
+### Module-level functions
+
+| Function | Use when |
+|----------|---------|
+| `use_brand(**tokens)` | Change the whole color set; must be called **before** creating `BrandDoc` |
+| `style_run(run, size, color, bold, italic, mono)` | Set the font yourself (complex-script is already covered) |
+| `shade(cell, token)` · `left_accent(cell, token, size)` | Fill a cell / add a colored bar on its left |
+| `fixed_widths(table, widths)` | Force column widths |
+| `set_borders(table)` · `row_borders(table)` · `no_borders(table)` · `cell_border(cell, edge, color, size)` | `row_borders` = horizontal lines only · `cell_border(..., color=None)` = no line on that side |
+| `mix(color, other="FFFFFF", amount=0.5)` | Mix colors to make lighter/darker shades from the palette |
+| `repeat_header(row)` · `keep_with_next(paragraph)` | |
+| `add_field(paragraph, "PAGE")` | Insert a Word field |
+| `to_pdf(docx_path, outdir)` | Calls LibreOffice to convert to PDF |
+
+---
+
+## brandkit_pptx.py — slides (.pptx)
+
+```python
+BrandDeck(template=None)      # 16:9 (13.333 × 7.5 inches)
+```
+
+| Method | Resulting slide |
+|-------|-------------|
+| `title_slide(title, subtitle, meta)` | Light blue background + a brand divider line |
+| `section(title, kicker=None)` | Vertical brand bar on the left + section name |
+| `bullets_slide(title, items, subtitle=None)` | Title + purple dash under the title + 17pt bullets |
+| `kpi_slide(title, items, subtitle=None)` | Number cards |
+| `table_slide(title, headers, rows, col_widths, subtitle, status_col, palette)` | `col_widths` are proportions, e.g. `[1, 4, 2, 2]` |
+| `image_slide(title, image_path, caption, subtitle)` | Image centered on the slide, fitted to the frame automatically |
+| `quote_slide(text, source)` | Quote/conclusion slide |
+| `save(path)` | |
+
+**Limits to know**
+
+- Every slide is built from the blank layout (`slide_layouts[6]`), so there are no placeholders to edit in PowerPoint
+  as in a normal template. If the customer will edit a lot themselves, pass `template=` as the organization's .pptx file instead.
+- Tables in python-pptx have no API to turn off borders directly. If you want a table without lines, arrange text boxes instead.
+- Table row height is a minimum. Long text pushes the row taller by itself, so leave room.
+
+---
+
+## brandkit_stage.py — Stage deck (.pptx)
+
+```python
+StageDeck(accent="2A78D6", bg="09090A", project="", template=None,
+          head_font="Chakra Petch", body_font="IBM Plex Sans Thai", block=False, **colors)
+# accent / bg = main color and background color from the project's design · colors = colors the project already fixed, e.g. text="1B2430"
+# block=True = cover() and section() are a solid main-color full sheet, text on it gets ≥ 4.5:1 (white, near black or black)
+```
+
+Every sheet except the cover and chapter divider has: a main-color square + category name (`kicker`) · 28 pt slide title · a line at the foot of the page · `PROJECT · category` · 2-digit page number
+
+| Method | Resulting slide |
+|-------|-------------|
+| `cover(title, lines, meta, logo=None, mark=None)` | 60 pt title + a main-color dash · `lines[1]` is in the main color · `mark` = a large faint symbol on the right (omitted = a faint ring) |
+| `section(number, title, note)` | Chapter divider: a large number in the main color |
+| `figure(kicker, title, image, caption, subtitle)` | Full-sheet diagram image (rendered with the same `#bg=` as the deck) |
+| `compare(kicker, title, headers, rows, widths=(1, 1.85, 1.95))` | Table with row separator lines · column 1 gray, 2 bold white, 3 body text · at most 5 rows |
+| `stats(kicker, title, items, subtitle)` | 2–4 big numbers + a sample question/answer under each number |
+| `steps(kicker, title, rows, example_head, note)` | Numbered steps · `rows = [(name, what it does, example)]` at most 6 steps |
+| `points(kicker, title, points, image, caption, side, side_caption)` | Image on the left + gist with a main-color dash · `side` = a small image on the right, e.g. a QR code |
+| `statement(kicker, text, sub)` | A single statement centered on the sheet |
+| `save(path)` | |
+
+Color helpers: `make_theme(accent, bg)` returns the whole color set · `fit(color, bg)` adjusts lightness while keeping vividness until readable on that background · `is_dark(bg)` · `contrast(a, b)`
+
+---
+
+## Column width formulas (Word)
+
+| Columns | Example widths (total 9638) |
+|:---:|---|
+| 2 | `[2600, 7038]` — heading/detail |
+| 3 | `[1400, 6238, 2000]` — code/item/owner |
+| 4 | `[1100, 4478, 1900, 2160]` — code/item/owner/status |
+| 5 | `[1000, 1800, 2838, 2000, 2000]` |
+| 6 or more | Use `landscape_section()` (area 14570 twips) |
+
+
+## reference: branded-document-design.md
+
+<!-- merged from skill `branded-document-design` on 2026-11-27 · description was: Use when a Word, PowerPoint or PDF or its cover must look designed -->
+# Branded Document Design — .docx / .pptx / .pdf that looks intentionally designed
+
+> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the owner's theme → search live for reference designs → 3 genuinely different directions → check `design-gate/no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls color and fonts; the search is for this piece's structure) · close the job with the line `ด่านก่อนลงมือ:`
+
+> **One rule:** an exported document has one color set, and one set of type sizes and spacing that is the same on every page. It must not look like someone opened Word and just typed.
+
+## Use when
+- The output is a .docx / .pptx / .pdf (quotation · business plan · report · contract · SRS) that a customer, executive, or another team will open, or that must be signed off or attached to a contract
+- A document set needs its own cover from the logo shape or a real mockup, or covers look alike across projects → step 3 and `cover-design.md`
+- Mixed Thai–English documents (they break easily if fonts are not fully set)
+- The same kind of document is issued repeatedly and every copy should look the same
+- Not for: markdown output → `design-gate/polished-document-style` · reading or extracting a received Office file → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` · diagrams in markdown → `diagrams` · a whole-book report from one Markdown file → `markdown-report-docx.md`
+
+Order: write the content as markdown first (`design-gate/polished-document-style`), then render it with this skill. Always fix content in the markdown (the source).
+
+Install before use: `pip install python-docx python-pptx` · LibreOffice (`soffice`) to convert to PDF · `pdftoppm` (poppler) to convert to images.
+
+## Steps
+1. **Colors.** If the source markdown has a `doc-theme`, use it: do not ask, do not set a new one (`design-gate/polished-document-style`, "ธีมของเอกสาร"). Otherwise look in the order in `diagrams` → `references/diagram-figures.md` item 5 (`doc-theme` → brand colors in code, logo, brand kit → nothing). If there is nothing, search live for reference designs per `design-gate/design-references` (plugin `superuser`), type `document`, then extract colors from the chosen work (stored palette library when live search is impossible). If live search is impossible, use the house color `#2A78D6`, write `(รอยืนยัน)` in the report, and carry on without asking; put a tone suggested by the content in the report for the user to choose later ([`palette-examples.md`](palette-examples.md)). A customer's brand colors always win. Write the colors back into `doc-theme` in the markdown so document, figures, and slides match.
+   - **One main color.** All light and dark shades are computed from it. Only the status colors (success · warning · error) are independent and keep their meaning.
+2. **Continue the look of the brand or app, before the first render.** The skill's defaults (Tahoma · solid color band cover · lines in every table cell) are the floor, not the deliverable look.
+   - Is there an identity already? Check the brand kit (`graphic-design:brand-kit`), `assets/logo/`, `docs/design/`, a mockup that passed the beauty gate (score in `docs/BUILD-PLAN.md`), field `doc-theme` in `docs/README.md`. If yes, use the same logo (cover + page header), colors, and patterns as the app. If no, follow step 1.
+   - Do 1 direction first. Only if the user is not wowed or asks for several, do 3 directions, have 2 outside reviewers score them, and run the document beauty gate (`ด่านสวย`, ceiling 3 rounds, record every score in `docs/BUILD-PLAN.md`): [`identity-and-gate.md`](identity-and-gate.md).
+   - Work on the render script, not on .docx files one by one; render every copy.
+   - **Fonts:** the brand's Thai font installed and embedded (`embed_fonts`) · Tahoma when embedding is impossible · never set Thai text in a mono font (no Thai letters in Cascadia/Consolas); mono is for code, keys, and numbers.
+   - Figures in documents, beauty-gate rules, cover: [`word-layout.md`](word-layout.md), section at the end.
+3. **Cover for this document set.** For a software document set (BRD · SRS · FSD · ARCH) whose cover must come from the logo shape or a real mockup, follow [`cover-design.md`](cover-design.md) (page system · registry · checks · cover engine `scripts/cover-engine/`). If the default cover looks like another job's, do 1 direction first; only if the user is not wowed or asks for several, run the 3-direction, 2-of-3 vote in [`cover-vote.md`](cover-vote.md).
+4. **Tokens, never hardcode colors outside them.** `brand` · `brand_2` · `brand_deep` · `brand_tint` · `brand_tint_2` · `text` · `text_body` · `text_muted` · `line` + 6 status colors (success · info · warning · error · accent · neutral) that do not change with the brand. Set the values once with `use_brand(...)`.
+   - Choose colors by meaning (red = danger/real error only); same meaning set as diagrams.
+   - Contrast: body text and `text_muted` on the background ≥ 4.5:1 · H2 and table headers (`brand_deep`) ≥ 7:1 · H1 and KPI numbers (`brand`, large) ≥ 3:1 · `use_brand()` stops if it fails · in black and white the hierarchy must still read · if it fails, adjust darkness, not the color.
+   - Text is never pure black (use `text_body`) · no type size outside the scale (Word body 11pt · slides 17pt).
+   - Full token table, color meanings, type scale, elements: [`tokens-and-type.md`](tokens-and-type.md).
+5. **Fonts and Thai.** Word treats Thai as a complex script: never set font/size/bold by hand; use `style_run()` in `brandkit.py` (sets `w:szCs` `w:bCs` `w:iCs` and all 4 slots of `w:rFonts`). If Latin and Thai fonts differ, set `bk.FONT` and `bk.LATIN_FONT`, then call `bk.thai_runs(doc.element.body)` and on every header/footer before `save()`. Line spacing 1.3–1.35 (Tahoma) · never justify Thai paragraphs · to send a PDF, export from real Word or check by eye (LibreOffice breaks Thai differently) · Linux has no Tahoma, use Loma/Sarabun · ReportLab places tone marks wrongly. Traps and embedding: [`thai-fonts.md`](thai-fonts.md).
+6. **Word page structure.** Cover (project logo and mockup exist → project-specific cover per step 3; else the default) → table of contents → body (H1 numbered, keep-with-next on headings) → sign-off table · footer "หน้า N" centered, gray 9pt · A4, content width 17 cm = 9638 twips (`BODY_TWIPS`) so column widths add up. Full structure and dark cover (`doc.cover(..., style="night")`): [`word-layout.md`](word-layout.md).
+   - Cover background image and logo never go in the first-page header (Word shows them faded); anchor them to the cover's first paragraph. Inner-page table headers never use a full-width solid dark fill.
+7. **Use the elements** `cover()` · `table()` · `pill_table()` · `kpi_row()` · `callout()` · `figure()` · `code()` · `signoff()` (methods in `tokens-and-type.md`). At most 3–5 callouts per 10 pages · KPI strip of 3–5 cells · a table over 6 columns goes on a landscape page (`landscape_section()`).
+8. **Use brandkit.** `from brandkit import BrandDoc, use_brand, to_pdf` (put `scripts/` on the path) · slides → `brandkit_pptx.BrandDeck` · speaking deck → `brandkit_stage.StageDeck` (default: `accent`/`bg` from the source work per `slide-deck` `deck-theme.md`, `source_palette.py` prints the `StageDeck(...)` line; light `FFFFFF` with `block=True`, dark only if the source is dark; no color at all → `#2A78D6` on `FFFFFF` + `(รอยืนยัน)`). Sample code and methods: [`brandkit-usage.md`](brandkit-usage.md), `api.md`.
+9. **Look at every page before delivery.** Render to PDF, convert to images, open each page (Read tool): the code cannot show tables overflowing the margin, stranded headings, floating tone marks. Commands and the 7-point checklist: [`visual-check.md`](visual-check.md).
+10. Before sending, go through item 3 of `design-gate/no-ai-look` (HTML work: run its script; the eye gate 3.2 must also pass, web pages answer items 10–14).
+
+**Hard rules (covers):**
+- A project cover shows its project by logo shape or a real screen at a glance, not by colour alone.
+- Never draw a fake UI on a cover. Use a real mockup screenshot. No logo or mockup yet: stop and make the logo first.
+- Ask before creating or editing files outside the project (e.g. `cover-registry.md`).
+- Install fonts only after asking, and only with `COVER_INSTALL_FONTS=1`.
+
+## Check before done
+- Avoid: Word's built-in Heading styles (use `h1()/h2()/h3()`) · thick black default table lines (use 0.5pt `line`) · pure black text · bold table headers with no fill · letting Word choose column widths (`fixed_widths()`) · too many emoji · a file never rendered for a look · the skill's default look when the app already has an identity · a 2000px-wide figure on a 17 cm page (text ends near 5pt) · a decorative cover image nobody said wows · a .docx without the source markdown. Reasons: [`anti-patterns.md`](anti-patterns.md)
+- Every page was opened and looked at · colors written back to `doc-theme` · the line `ด่านก่อนลงมือ:` closes the job
+
+## References
+- [`tokens-and-type.md`](tokens-and-type.md) — open when setting the theme or choosing sizes, colors, elements · [`palette-examples.md`](palette-examples.md) — fallback tones by kind of work
+- [`thai-fonts.md`](thai-fonts.md) — open when setting fonts or a PDF looks off
+- [`word-layout.md`](word-layout.md) — open for page structure, dark cover, figure rules
+- [`cover-design.md`](cover-design.md) — open for a software document set's own cover (logo shapes or real screen) · with [`cover-real-examples.md`](cover-real-examples.md) · [`cover-structural-ideas.md`](cover-structural-ideas.md) · [`cover-word-build.md`](cover-word-build.md) · [`cover-bakeoff.md`](cover-bakeoff.md)
+- [`identity-and-gate.md`](identity-and-gate.md) — open when running several directions or the beauty gate · [`cover-vote.md`](cover-vote.md) — the 3-direction cover vote
+- [`brandkit-usage.md`](brandkit-usage.md) · [`api.md`](api.md) — open when writing the build script
+- [`visual-check.md`](visual-check.md) — open when rendering for the eye check · [`anti-patterns.md`](anti-patterns.md) — open when reviewing
+- Linked skills: slide story → `slide-deck` · SRS → `requirements-writing` · diagrams → `diagrams` / `diagrams` · brand → `graphic-design` · .html deck → `slide-deck`
+
+
+## reference: brandkit-usage.md
+
+# How to use brandkit — sample code
+
+Read when you start writing a script that builds real files · all methods are in `api.md`
+
+## Word document (`brandkit.py`)
+
+```python
+import sys; sys.path.insert(0, "scripts")     # หรือ copy brandkit.py มาไว้ข้างงาน
+from brandkit import BrandDoc, use_brand, to_pdf
+
+doc = BrandDoc()                                # A4 · Tahoma · สีประจำบ้าน
+doc.cover("เอกสารข้อกำหนดซอฟต์แวร์ (Software Specification)",
+          subtitle="ระบบตัวอย่าง (Sample System) — Project Control & Monitor",
+          meta="เวอร์ชันเอกสาร 3.5  •  ปรับปรุง 19 กรกฎาคม 2026",
+          logo="asset/Sample_Logo_Badge.png")
+doc.toc()
+
+doc.h1("1. ภาพรวมระบบ")
+doc.para("ระบบตัวอย่างเป็นระบบบริหารและติดตามโครงการ ...")
+doc.kpi_row([("19", "โครงการ"), ("115", "Work items"), ("103", "Open tasks")])
+doc.table(["หัวข้อ", "รายละเอียด"],
+          [["URL ระบบ", "https://app.example.com"]],
+          widths=[2600, 7038])                  # รวม = 9638
+doc.callout("warning", "ข้อควรระวัง", "Token ต้องไม่ถูกแสดงกลับใน UI หลังบันทึก")
+doc.figure("diagrams/context.png", "ภาพรวมระบบและขอบเขตการใช้งาน", number=1)
+doc.pill_table(["รหัส", "งาน", "สถานะ"], rows, status_col=2,
+               palette={"เสร็จ": "green", "กำลังทำ": "amber", "ค้าง": "red"})
+doc.signoff([("Product Owner", "—"), ("Tech Lead", "—")])
+doc.save("SRS.docx")
+```
+
+## Slides (`brandkit_pptx.py`)
+
+Slides use `brandkit_pptx.py`, which takes the same token set:
+
+```python
+from brandkit_pptx import BrandDeck
+d = BrandDeck()                                  # 16:9
+d.title_slide("ระบบตัวอย่าง", "Project Control & Monitor", "19 กรกฎาคม 2026")
+d.section("1 · ภาพรวมระบบ", kicker="ส่วนที่ 1")
+d.bullets_slide("ขอบเขตงาน", ["...", "..."], subtitle="สรุปจาก SRS v3.5")
+d.kpi_slide("ตัวเลขสำคัญ", [("19", "โครงการ"), ("115", "Work items")])
+d.table_slide("สถานะ Milestone", headers, rows, col_widths=[1, 4, 2, 2],
+              status_col=3, palette={"เสร็จ": "green", "กำลังทำ": "amber"})
+d.image_slide("สถาปัตยกรรม", "diagrams/arch.png", caption="ภาพรวมองค์ประกอบ")
+d.save("deck.pptx")
+```
+
+All methods are in `references/api.md`. The runnable example files are
+`scripts/example_srs.py` (document) · `scripts/example_deck.py` (`BrandDeck` slides)
+
+## "Stage" deck (`brandkit_stage.py`) — the default for a deck used for speaking
+
+`brandkit_stage.py` makes a deck with the same structure as the model deck: headings in Chakra Petch, body in IBM Plex Sans Thai, while the **background and main colors come from the project's design**, dark or light.
+(The model is for deck structure only: X Fitness Chatbot Summary v1.2 · an example already run: `examples/example_stage.pptx`)
+
+```python
+from brandkit_stage import StageDeck
+d = StageDeck(accent="2A78D6", bg="09090A", project="Sample Chatbot")   # ตัวอย่าง: สีหลัก · สีพื้นต้องมาจากดีไซน์ของโปรเจกต์คุณเอง
+d.cover("Sample Chatbot", ["สรุปการทำงานของแชตบอท", "ตอบจากข้อมูลจริง และไม่ถูกหลอก"],
+        meta="ทีมพัฒนา · ตุลาคม 2569", logo="logo.png", mark="mark.png")
+d.figure("องค์ประกอบของระบบ", "แอปเดียวรับทุกช่องทาง ความฉลาดเรียกจาก Typhoon",
+         "fig-flow-dark.png", caption="หน้าเว็บ + LINE OA → FastAPI → LightRAG + Typhoon")
+d.save("deck.pptx")
+```
+
+- **2 colors come from the project's design:** `accent` (main color) and `bg` (background color). Look in the order given in `diagrams` → `references/diagram-figures.md` item 5 (`doc-theme` → design in code, such as `--primary` · `--background` · the Tailwind theme · the app's dark/light mode → logo and brand kit → nothing at all: use the house color `#2A78D6` with background `FFFFFF` and write `(รอยืนยัน)` (awaiting confirmation)). Never use the model deck's colors · if the work being made into a deck has its own colors, extract them first with `slide-deck/scripts/source_palette.py` · for a light-background deck, set `block=True` so the cover and chapter dividers are a solid main-color full sheet (`slide-deck` `references/deck-theme.md`)
+- Every gray level is computed from `bg` (dark background mixed with white, light background mixed with black), so it carries the same tone as the project's background · `accent_hi` is the main color with lightness adjusted until readable on that background; use it for big numbers, sequence numbers and emphasis words · a project that already fixed a text color can override it, e.g. `text="1B2430"`
+- Fonts of the project can be used (`head_font=` · `body_font=`); if the project has none, use Chakra Petch + IBM Plex Sans Thai
+- **Diagram images must use the same background color as the deck** — render `diagrams` with `#accent=<main color>&bg=<background color>` (now available in `figure-flow.html`)
+- **The fonts Chakra Petch and IBM Plex Sans Thai must be installed** (Google Fonts · free to use) on the machine that opens the file. If the destination machine lacks them, send a PDF along, or rebuild with `head_font="Tahoma", body_font="Tahoma"`
+- For printing, build another set with `bg="FFFFFF"` instead of using a dark background that wastes ink · `BrandDeck` (color bar on top) is still usable for reports sent to be read on their own
+
+
+## reference: cover-bakeoff.md
+
+# Make 3 styles, then vote 2 of 3
+
+Used with `cover-design.md` step 7. It is a variant of `crew-patterns/parallel-attempts-pick-best` that swaps "1 middleman agent" for "3 reviewers who vote".
+Cost: about 3–5 times the work of a single style. Use it when you set a project's look for the first time, not at every version bump.
+
+## 1 · Prepare before launching
+
+1. **Survey** (1 middleman agent, read-only) → `_to_delete/cover-lab/survey/SURVEY.md`: app description · main verbs · logo files · colors · fonts · main-screen images from the mockup · image of the current cover, page 1 (Word through COM, the Windows automation interface → PDF → `pdftoppm`) with critique.
+2. **Research** (1 middleman agent, in parallel with step 1) → `research/RESEARCH.md`: good-looking tech-company covers · trends · cheap-looking things · image techniques done in code · Word limits · every claim has a URL.
+3. **Same brief for every designer**, `BRIEF.md`. Every designer reads `EXAMPLES.md` and looks at the overview sheet of real covers first (`cover-real-examples.md`). Start from the cover builder that already builds in Word; do not rewrite it. The brief lists the deliverables (an SRS cover for every project · the image set for BRD/SRS/ARCH · at least 1 print cover · repeatable `src/` · `METHOD.md` ≤ 90 lines), the hard rules (items 3 and 9 of cover-design.md), and a ban on opening other designers' folders.
+4. **The team lead keeps the voting criteria** and does not send them to designers (put them in the scratchpad, not in `cover-lab/`).
+
+## 2 · 3 designers — they differ by style, not just by random draw
+
+| Designer | Style (constraint sent) |
+|---|---|
+| A | The app's behavior drawn as art from real data · Swiss grid |
+| B | The app as hero, magazine-cover style · real mockup screens placed with intent |
+| C | Logo shapes as architecture · type as structure · no illustration, screenshot, or glow |
+
+- Use a large-tier model · launch all 3 in one message · one folder each: `_to_delete/cover-lab/attempt-<A|B|C>/`.
+- **Each agent needs Bash** so it can render and look at its own images (cap of 3 fix rounds). Before launching, check the tool list of the agent as **installed**. History: in the real bake-off (2026-10-15), the installed `graphic-designer` of plugin version 2.3.0 had no Bash (the current version in the repo has it). All 3 designers therefore sent code they had never seen rendered. The team lead had to render it and send a fresh `general-purpose` agent to do the fix round. If there is no Bash, use `general-purpose` and attach the designer role in the instruction.
+
+## 3 · 3 reviewers — read-only, different angles, same criteria
+
+| Reviewer | Angle |
+|---|---|
+| 1 | Art director: is it a real wow, does it look AI-made? |
+| 2 | Brand strategist + Thai client who reads the BRD: can they remember the app, do they know what it does, does a set of 6–15 documents go together? |
+| 3 | Production engineer + skill author: can an agent repeat it on a new project, how many numbers are project-specific, do the background images for Word hide all the text, is the version embedded in the image? |
+
+The options voted on must always include the **current cover** (if there is one).
+
+Score each of 7 criteria from 1 to 5: wow compared with the old cover · no repeats between projects · tells the truth about the app · document-set system · polish (Thai · contrast · smallest text · print cover · Word matches the sample image) · learned from real covers (borrow structure, do not copy) · buildable in Word and repeatable.
+Then vote: `overall` 1 style · `per_project` the best style for each project · `steal` at most 2 pieces from losing styles.
+
+## 4 · Count the votes
+
+- The style with **2 of 3** wins, for both `overall` and per project (per-project winners may differ from overall).
+- If the vote splits 3 ways, the team lead reads the total score per criterion. The "repeatable" criterion decides when scores are close. Then log it in `decision-desk/decision-log`.
+- The team lead looks at all the images before reading the votes, then compares. If they disagree, read both sides' reasons before deciding.
+
+## 5 · Merge the results
+
+1 new agent (with Bash) works in `_to_delete/cover-lab/final/`: use the per-project winning style · bring in the voted `steal` pieces · fix what reviewers flagged · make 300 dpi background images for every document · build a sample .docx with `brandkit.py` and render it in real Word to look at it · write `NOTES.md`.
+Do not overwrite the user's .docx. Build a new render from the source markdown. (Origin of this rule: SQT-Marketplace prompt set `prompt/software-development/prompt-new-project.md`, version 14, which lives outside this plugin.)
+
+## First real result (2026-10-15 · the full reviewer report was in `_to_delete/cover-lab/votes.md` of the repo at the time, a temporary file)
+
+| | A real data | B real screens | C logo shapes |
+|---|---|---|---|
+| Total score, reviewer 1 / 2 / 3 | 23.5 / 21 / 23 | 23 / 24 / 24 | 27 / 27 / 22 |
+| overall | — | 1 vote | **2 votes** |
+| LiteNet · Telex · SwipeOS | 1 · 0 · 0 | 0 · **2** · 0 | **2** · 1 · **3** |
+
+### Round 2: learned from 35 real covers, then compared with the round 1 cover (R1)
+
+| | R1 | X institutional set | Y editorial art | Z builds on R1 |
+|---|---|---|---|---|
+| Total score, reviewer 1 / 2 / 3 (7 criteria) | 26 / 24 / 24 | 24 / 24 / 24 | 26 / 26 / 30 | 31 / 29 / 28 |
+| overall | — | — | 1 | **2** |
+| LiteNet · Telex · SwipeOS | 0 · 0 · 0 | 0 · 0 · 0 | 0 · 1 · **2** | **3** · **2** · 1 |
+
+Lesson: **put the old cover in the vote every time**, so you know whether the new one is really better. Add criterion 7, "learned from real covers". Pieces taken: the series-name line (X) · version as Word text in a badge (X) · one color per document type in the brand family (Y).
+
+Pieces taken in round 1: the sentence under the title saying what the app does (from B) · the truth test for every image (from A) · `checks.json` (from C, put into B).
+
+## The lesson behind this skill (3-style bake-off · 2026-10-15 · 3 projects · 3 reviewers)
+
+The old covers of the 3 projects used one formula: black background, glow in the brand color, mono badge, data row at the bottom of the page. Only the color differed, which is the look AI produces for everything.
+We tried 3 styles in parallel and had 3 reviewers vote. **The logo-shape style won 2 of 3.** The real-screen style won only for Telex (a plain T_ logo does not say it is a terminal). The art-from-real-data style had a few standout covers (LiteNet got 1 vote) but is the hardest to repeat on a new project.
+Round 2 (the user said much more should change, and to learn from other people's real work): we collected 35 real covers, then made 3 new styles to compare with the round 1 cover. **The round 1 cover scored lowest on "learned from real work" from every reviewer.** The winner, 2 of 3, was the style that builds on round 1 with lessons from real covers (Thai title largest · version as a separate badge · logo-shape image bleeding off the edge like Stripe Press · real screen layered under a title bar like O'Reilly). SwipeOS won with a grid of 12 real hand gestures (in the style of the Microsoft Inclusive Design pictogram set).
+
+
+## reference: cover-design.md
+
+# Cover design for a software document set: cover pages that are memorable and unlike other projects
+
+- [When to use (software document sets: logo shape or real mockup cover)](#when-to-use-software-document-sets-logo-shape-or-real-mockup-cover)
+- [Default path](#default-path)
+- [1 · Find the idea from real things: write it in `docs/design/cover-direction.md` before drawing anything](#1--find-the-idea-from-real-things-write-it-in-docsdesigncover-directionmd-before-drawing-anything)
+- [2 · Stop 2 projects from looking alike](#2--stop-2-projects-from-looking-alike)
+- [3 · Page system: the same for every project, so there is only one method](#3--page-system-the-same-for-every-project-so-there-is-only-one-method)
+- [4 · Document type in the set = a frame of the same motion](#4--document-type-in-the-set--a-frame-of-the-same-motion)
+- [5 · Background image vs Word text](#5--background-image-vs-word-text)
+- [6 · Covers for print](#6--covers-for-print)
+- [7 · Make 3 styles, then vote 2 of 3 (only when steps 1–6 did not pass step 8, or the user asks for several styles · 3–5 times the work)](#7--make-3-styles-then-vote-2-of-3-only-when-steps-16-did-not-pass-step-8-or-the-user-asks-for-several-styles--35-times-the-work)
+- [8 · Check before sending: the render script must print `checks.json`, and you must open every image yourself](#8--check-before-sending-the-render-script-must-print-checksjson-and-you-must-open-every-image-yourself)
+- [9 · Do not want (from research and the bake-off)](#9--do-not-want-from-research-and-the-bake-off)
+- [Do not look AI-made](#do-not-look-ai-made)
+
+
+> **Gate before starting (every time):** read the owner's theme → search live for references → 3 truly different styles → check `design-gate/no-ai-look` before sending. Follow the "ด่านก่อนลงมือ" (gate before starting) section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls color and fonts; the search is for the structure of this piece). Close the work with a `ด่านก่อนลงมือ:` line.
+
+> **The one rule:** the cover must say which project it belongs to at a glance, without reading the name. Do it with the logo's shapes or the app's real screen, not with color alone.
+
+This file covers the **cover page** only. The whole document body (color set, Thai fonts, tables, headers and footers) lives in [`../SKILL.md`](branded-document-design.md). The cover uses the same `anchor_picture()` from `brandkit.py`.
+
+## When to use (software document sets: logo shape or real mockup cover)
+
+- A project's document set (BRD, the business requirements document · SRS, the software requirements specification · FSD, the functional specification · ARCH, architecture · PLAN, the project plan · TESTPLAN, the test plan) will go to a client or executives, and the current cover looks like another project's.
+- The user says "ปกไม่ว้าว" · "อยากได้ปกที่ไม่ซ้ำ" · "ปกทุกโปรเจกต์หน้าตาเหมือนกัน" (the cover is not wow · I want a cover that is not repeated · every project's cover looks the same).
+- Do not use when: the project has no logo or mockup yet → make the logo first (`graphic-design`), then come back. A single report from markdown that needs no identity → `markdown-report-docx.md`.
+
+## Default path
+
+The default path is logo shapes. The fallbacks are the real screen, or a pictogram of what the app really does. Every style uses the same page system (step 3). **Always look at other people's real covers first (step 1.0).** The bake-off history is at the end of [`cover-bakeoff.md`](cover-bakeoff.md).
+
+---
+
+## 1 · Find the idea from real things: write it in `docs/design/cover-direction.md` before drawing anything
+
+0. **Look at other people's real covers first.** **Search for references first:** take the project's keywords and search live following `design-gate/design-references` (plugin `superuser`), type `document`, then pull the colors from the chosen work. The stored color library is for when live search is not possible. Collect at least 6 real document or book covers close to this work (same field as the app · tech publishers · Thai examples), then choose which series system to borrow, following [`cover-real-examples.md`](cover-real-examples.md). For every idea on the cover, you must be able to say which cover it came from.
+
+1. **Open the logo's SVG file (vector image) as text** and note the basic shapes with unit coordinates (e.g. 2 L shapes on a 64 grid · T bar + cursor · 2 dots + arrow). Do not count the glow and gradient background of the icon file.
+2. **Find the app's main verb** from the first paragraph of the README (if none → the introduction of the BRD or SRS): connect · type · swipe.
+3. **Ask what the shapes do when that verb happens**: L shapes join · cursor moves · dots run into an arrow. Write it as 1 sentence. This is the "motion" of the whole set.
+4. **Pick 1 structure style** that shows that motion best, from [`cover-structural-ideas.md`](cover-structural-ideas.md) (tiling · giant crop · sequence · real screen · etc.).
+5. **Truth test:** every line and every shape on the cover must point back to a shape in the logo file or to real app data. Anything that cannot is decoration → cut it.
+6. **The logo alone does not say what the app does** (e.g. just an initial) → use the real-screen style: take a screenshot of a clickable mockup, choose the screen that says the most about the app's work, not the index page. Never draw a fake UI.
+
+## 2 · Stop 2 projects from looking alike
+
+Keep a registry of 1 row per project in each project's `cover-direction.md` and in the central registry `<parent folder of the projects>/cover-registry.md`. This file lives **outside the project**, so ask the user before creating or editing it every time. (No answer yet → write only `cover-direction.md` and put the open question in the report. Do not know where the other projects are → put the open question in the report.)
+
+| Structure style | Background brightness (dark · mid · light) | Accent color | Font pair |
+|---|---|---|---|
+
+- A new project must **differ in structure style, and in at least 1 more column.** Two projects with a dark background + green accent collide → move one to the app's own light theme.
+- **Thumbnail test:** put every project's cover side by side at 150 px wide. With the logo hidden, you can still tell which cover belongs to whom. If you cannot → redo.
+
+## 3 · Page system: the same for every project, so there is only one method
+
+- A4 at 150 dots per inch (dpi) = 1240 × 1754 pixels (px) (the sample image). The background image for Word is made at 300 dpi = 2480 × 3508 px. Margin 96 px (16 mm).
+- **The image zone is on top, with a hard floor line** and nothing spills below it. **The text zone is at the bottom on a flat color**, so every text box has a known contrast.
+- The shapes' unit grid must land on the 96 px margin. For giant type, make the **"ink" of the first letter** touch the margin. Measure it with canvas `actualBoundingBoxLeft`, not SVG `getBBox`, which measures the letter-spacing box and will be off by about 14 px.
+- 2 type families + 1 monospace (mono) font. **Thai never goes in mono.** Thai line spacing 1.4 · no letter-spacing on Thai · smallest text 18 px at 150 dpi (≈ 8.6pt · pt = px × 0.48).
+- **There is only one accent color, and it sits on a shape** (a joined L · the cursor · the active frame), not on a block of text.
+- Text on the cover: logo · **series-name line** ("LiteNet Document Series · LITENET-SRS", NIST style) · Thai title (**the largest text on the cover**, larger than the document code) · English title, smaller and lighter · **one sentence saying what the app does**, in the document's language · data row (document code · date), with one date format across the whole set.
+- **Version and status are one separate badge, in 1 place** (corner ribbon · round badge · rounded pill like "ฉบับร่าง 0.3"). The badge shape is in the background image, but **the badge's text is Word text**, so the version can change without rebuilding the image. Never show the version in a 2nd place.
+
+## 4 · Document type in the set = a frame of the same motion
+
+Each document type is 1 frame of the motion in step 1.3, not just a changed label. The text zone does not move between documents.
+
+| | Tiling (LiteNet) | Giant crop / real screen (Telex) | Sequence (SwipeOS) |
+|---|---|---|---|
+| BRD | 2 cells joined | Welcome screen · close-up | Frames 1–2 solid |
+| SRS | 5 cells | Main screen · logo must be readable | Frames 1–4 |
+| ARCH | 11 cells | Screen split into many areas · pulled back to show everything | Frame 6 shoots off the page |
+
+- **The SRS (the main document) must show the logo clearly.** Secondary documents may crop to abstraction, but must still read when placed beside the others.
+- All randomness uses a random seed computed from the project code → a rerun gives the same page, and a later document contains the state of the earlier one.
+- Document type must read at thumbnail size: clearly different frames + the document code (top right, or in a round badge). A color per document type may use only shades within the brand color family (off-brand colors such as pink or teal on a purple brand get rejected by reviewers). Do not rely on color alone, because colors run out before the 6th document.
+- **Large set of 6–15 documents:** order the documents in the sequence they are really made (PLAN → BRD → SRS → FSD → ARCH → TESTPLAN …), then divide the motion into equal stages. A sequence of 6 frames stretches to the number of documents; do not fix it at 6.
+
+## 5 · Background image vs Word text
+
+| Drawn into the background image (`layer=bg`) | Editable Word text |
+|---|---|
+| Logo shapes · logo · thin lines · giant document code · screenshots · version badge shape (no lettering) | Thai title · English title · series-name line · sentence saying what the app does · data row · **lettering inside the version and status badge** |
+
+- Anchor the background image to the cover's first paragraph with `anchor_picture()`. **Never put it in the header** (Word shows it faded). Compute text positions from px: `px ÷ 1240 × 21.0 = cm`.
+- **The sample cover engine** `scripts/cover-engine/` (in `document-design`) builds the covers of all 3 prototype projects in one command (sample image · 300 dpi background image · `checks.json` · SRS cover .docx · check image from Word). **Using it for a new project needs more edits than `projects.js`:** the logo lines and drawing functions in `cover.js` · the project list in `render.py`, `calibrate.py`, `docx_build.py` · the fonts in `fonts.py`. The full list is in cover-word-build.md.
+- The Word build recipe (spacing · z-order · fonts · image compression), how to use the cover engine, and the traps → [`cover-word-build.md`](cover-word-build.md). Install fonts on the user's machine only when `COVER_INSTALL_FONTS=1` is set, and ask the user first every time.
+
+## 6 · Covers for print
+
+Same shapes and positions; only the theme swaps: light paper (about `#F7F7F5`) · white shapes become ink color · the accent uses the light-theme color the app already has · thin lines get darker so they survive the printer · **never invert the whole page with a filter** · the real-screen style uses the image from the mockup's light theme.
+
+## 7 · Make 3 styles, then vote 2 of 3 (only when steps 1–6 did not pass step 8, or the user asks for several styles · 3–5 times the work)
+
+The procedure (3 designers · 3 reviewers · 2 of 3 votes · at most 2 pieces borrowed · Bash for designers · the lead launches reviewers) is in [`cover-vote.md`](cover-vote.md); the full bake-off steps are in [`cover-bakeoff.md`](cover-bakeoff.md).
+
+## 8 · Check before sending: the render script must print `checks.json`, and you must open every image yourself
+
+1. Text contrast of every box against the flat background ≥ 4.5:1 (round down) · smallest text ≥ 18 px · text sits below the image's floor line · nothing crosses the 96 px margin.
+2. All 3 Thai tone-mark levels (ที่ ปั๊ม ปุ่ม สื่อ) are complete · line breaks follow meaning · no half-cut words at the edge of a screenshot.
+3. Squint test: you see the shape first and the document title second · print in black and white and the accent colors can still be told apart.
+4. The set of images (BRD · SRS · ARCH side by side) reads as one motion · each project's set reads as a different idea (step 2).
+5. Render in real Word → PDF → PNG: the background image is not faded · page 2 is not empty · text matches the position in the sample image.
+6. The "do not want" list in step 9: if you find any, cut it; do not add.
+
+## 9 · Do not want (from research and the bake-off)
+
+- Glow, or a gradient with no light source · gradient type · fuzzy purple blobs · frosted glass: the default look of AI work.
+- Everything centered · more than 2 font families + mono · stock icons · stock images · fake device frames · 3D isometric.
+- The same cover for every document, differing only in the label · every project's cover on one structure, differing only in color.
+- A main image that makes people misunderstand the app (e.g. SwipeOS laid over a sales-chart slide, so viewers think it is a reporting app).
+- So much data that it becomes a chart (hex numbers · rotated machine names): a client who reads the BRD is not an engineer.
+
+If the user says the cover is not beautiful → cut things before adding (matches `word-layout.md` item 8).
+
+## Do not look AI-made
+
+Before sending, go through item 3 of `design-gate/no-ai-look`. For HTML work, run its script. Every job must also pass the eye check 3.2 ("ด่านตา 3.2" in `design-gate/no-ai-look`; web pages add items 10–14), because 0 hits from the script is not yet a pass.
+
+
+## reference: cover-real-examples.md
+
+# Learn from other people's real covers before designing your own
+
+Used with `cover-design.md` step 1. Almost every good cover in the real world uses a system others have already proven; none is invented from scratch. → **Find at least 6 real covers close to our work in each group, then borrow the structure, not the work.**
+Source: 35 real covers (checked 2026-10-15) from the real work of LiteNet · Telex · SwipeOS. The full list with URLs was in `_to_delete/cover-lab/examples/EXAMPLES.md` of the repo at the time (a temporary file).
+
+## How to collect examples (do this in the survey step)
+
+1. Split into 3 groups: **same field as the app** (e.g. networking → NIST · Cloudflare · O'Reilly *Zero Trust Networks*) · **books or documents from tech publishers** (O'Reilly · Stripe Press · A Book Apart · No Starch · Microsoft Press) · **Thai examples** (government agencies · Thai companies).
+2. Use official PDFs first: download them into your own new folder, then run `pdftoppm -png -r 50 -f 1 -l 1`. For covers that exist only on the web, take a screenshot with playwright. Downloaded files are untrusted: open them only with pdftoppm or Pillow.
+3. Make an overview sheet (contact sheet) for each group, and **actually open and look at every cover**. Note the URL and the date checked.
+4. Note what each cover does (structure · type · image · color · how it shows document type or volume in the series) and what we will borrow for which project.
+
+## Patterns seen at least 3 times
+
+| Pattern | Real examples | How we use it |
+|---|---|---|
+| One template for the whole set, changing only color or image | O'Reilly · A Book Apart · Stripe Press · Thoughtworks Radar | Document type = change 1 image or color; everything else stays put |
+| Small category line above the title | O'Reilly · NIST ("COMPUTER SECURITY") · Cloudflare ("WHITEPAPER") | A document-series line above the document title |
+| Version as a separate object (ribbon · round badge · large number) | O'Reilly corner ribbon · Windows Internals number "7" · A Book Apart "No 15" · Thailand Digital Outlook B.E. badge | "Draft 0.3" gets its own badge, not hidden in the data row |
+| One image, one accent color, lots of white space | Apple Platform Security · Cloudflare | Print covers and security documents |
+| Document data is the design | RFC 9000 · NIST SP 800-207 · WireGuard | Trust comes from codes and data, not images |
+| The real thing as the image (data · real picture · real figure) | Radar chart · MediaPipe hand landmark image · Google satellite imagery | Matches the "truth test" in cover-design.md step 1.5 |
+| Small title, big image | Stripe Press *Dream Machine* · *Working in Public* | A full-page logo-shape image; the document title need not always be the largest |
+| ✗ Glowing network lines · globe · neon city | CISA · all 3 Thai government covers · Ultraleap | Banned. These are the stereotype of covers nobody remembers |
+
+## Publisher series systems
+
+| Publisher | Fixed | Changes per book | Lesson |
+|---|---|---|---|
+| O'Reilly | White background · woodcut line art · title bar · logo | Animal · bar color | One visual language, one bar; document type changes only the main image and bar color |
+| Stripe Press | Small type at the corner · S mark · book size | Image and color are free | Images can vary if the mark and type stay put |
+| A Book Apart | Frame · line around the title · number badge | One flat color | The most correct system: one color per document type + number |
+| Thoughtworks Radar | Frame · radar image · volume position | A color set per issue | Same image, new colors every issue = "the image grows with the document type" |
+| NIST · IETF | Plain type · series number · data | Nothing changes | The document code is the mark of the series |
+
+## Thai examples
+
+The 3 Thai government tech-report covers we could find all use glowing stock images (shield · globe · neon city). → Only 2 things are worth borrowing: **a colored badge for the year (B.E.) or edition**, and **the Thai title on top with a smaller, lighter English title below**.
+
+## Rules for borrowing
+
+- Borrow structure and ideas. Never copy images, trademarks, or layouts one-to-one.
+- For every idea on the cover, write which real cover it was borrowed from and what changed (the `ADAPTED.md` file of each style).
+- For examples you could not get (403 · dead link · file too large), say so plainly. Do not guess how they look.
+
+
+## reference: cover-structural-ideas.md
+
+# Cover structure styles: pick 1 per project
+
+Read this when doing `cover-design.md` step 1.4. Every style uses the same page system (step 3). Projects on the same machine must not use the same style (step 2).
+
+## Logo-shape style (the default path, won the 2-of-3 vote)
+
+The cover image has only shapes from the real logo's SVG file, enlarged, repeated, cut, or arranged. No illustration, no screenshot, no glow.
+
+| Structure | What it shows | Fits apps that | How to build it | Document type = |
+|---|---|---|---|---|
+| **Tiling** | Many pieces forming one system | Network · platform · multi-user system | The whole page is a grid of cells the size of the logo tile. A thin-line cell = not joined yet · a solid cell = joined · the giant document code takes 2–3 cells | Number of solid cells (2 → 5 → 11 · order from a seed) |
+| **Giant crop** | One thing, its scale and focal point | Single tool · app with one clear symbol | Enlarge the shape until it overflows the page, with the shape's edge landing on a 96 px edge · construction lines and dimension lines from the logo's real units | Camera angle: close-up → whole shape → pulled back to show construction lines |
+| **Sequence (chronophotograph, a multiple-exposure image of motion)** | Change over time | Apps with movement, gestures, steps | The logo 6+ times stacked on one line. Past frames are flat colors stepping down one level at a time (not a gradient), the current frame is solid, future frames are thin lines. A frame-number ruler sits under the line | Which frame is solid |
+| **Slice / lift layers** | Layers of the system | Systems with many layers (keep for the next project) | Cut the logo into horizontal strips and shift each strip | Number of layers shifted |
+| **Stack** | Accumulation | Data · logs · storage | Logos stacked, each offset slightly | Number of pieces in the stack |
+| **Fan rotation** | Multiple options | Settings · routing | The logo rotated about one point at equal angles | Angle of the spread |
+
+## Real-screen style (the fallback, wins only for projects where the logo does not say what the app does)
+
+Use it when the logo alone does not say what the app does and the project has a clickable mockup. Take screenshots with playwright at 2x. Hide the mockup's toolbar before shooting.
+
+| Layout | How to do it | Watch out for |
+|---|---|---|
+| **Oversize crop** (Telex won) | Enlarge the screen 2x so it overflows the top and right edges of the paper. The left column is a magazine masthead. End the document title with the logo's cursor | Crop offsets are in screen pixels (1440 × 900), then multiplied by the scale. No half-cut words at the edge |
+| **Tilted plane** | The screen lies tilted as if on a desk, running off the bottom edge | It can easily look like a generic SaaS web page. It must fade out before the data row |
+| **Specimen in a frame + magnifier** | The screen is mounted on white paper like a museum piece. The key part is enlarged in a separate frame, pointed to with a CSS selector, not coordinates | The big image must not make people misunderstand the app |
+
+Document type = a different screen each (BRD welcome screen · SRS main screen · ARCH screen showing many parts at once) + a document code that stays readable in the thumbnail.
+
+## Pictogram of what the app really does (won SwipeOS in round 2)
+
+A pictogram grid of the app's whole set of commands or gestures, e.g. hand gestures G01–G12 from the data dictionary, drawn on MediaPipe's 21-point hand landmark skeleton. The cell for the gesture this document discusses is solid. Borrowed from the Microsoft Inclusive Design toolkit. It tells the client "a hand-gesture app" at a glance. Watch out: gestures with bent fingers need real hand proportions, or they look like claws or a broken hand.
+
+## Institutional document-set style (lost round 2 but the easiest to repeat)
+
+In the style of NIST SP · IETF RFC · Apple Platform Security: the document data is the design · thick lines · letter-spaced category bar · lots of white background. Reviewers said: trustworthy but so quiet that every project looks the same. → Use it for print covers or government/security documents, and borrow only the series-name line.
+
+## Art-from-real-data style (a few standout covers, but hard to repeat)
+
+Draw the app's behavior from real data, e.g. 11 real machines on an arc with a tick for each key rotation every 120 seconds · real protocol bytes · 21 hand points passing a real gesture threshold.
+Use it when the user wants a single cover with a big "wow" and accepts project-specific code (~200 lines). Watch out for: rotated text labels too tight · numbers a BRD client cannot read · a data row floating in the middle of the page.
+
+## Tried and cut
+
+- Diagonal staircase sequence of thin-line frames → the page looks empty. Changed to one line of solid stacked frames.
+- Extruding the square logo into an isometric block → it became a clip-art "tech" 3D image, and the diagonal lines fought the grid.
+- A pink-purple-blue gradient cursor following the logo file → a gradient on a dark background is the fingerprint of AI work. Use one flat color.
+- A laptop frame around the screenshot · pins pointing at parts of the screen → fake and cluttered.
+- A random connection-dot graph on top with the document title at the bottom → the same structure as the old cover.
+
+
+## reference: cover-vote.md
+
+# A cover that belongs to this document set — make 3 directions, then vote 2 of 3
+
+Open when a document set needs its own cover.
+
+Use when a document set (proposal · report · business plan) needs its own cover and the default cover looks like another job's. Do one direction first; use this only if the user is not wowed or asks for several directions (3–5 times the labor).
+
+1. **Find the real thing to hold on to:** logo, name, the main verb of the job (propose · analyze · sell), or real images of the work · look at at least 6 real covers by others · every image on the cover must point back to something real, otherwise cut it.
+2. **3 designers (use `crew-patterns/parallel-attempts-pick-best`).** Same brief, different directions: A drawn from the job's real data · B a real image of the work is the hero (screen, photo, sample of the output) · C the logo shape or lettering is the structure, no drawn image · each agent needs Bash to render and open the image itself.
+3. **3 new reviewers who have not seen the work, each from a different angle:** art director (is it truly wow, does it look AI-made) · brand and customer (is it memorable, does it show what the work is about, does it go with the whole set) · Word production (is it repeatable, can the text be edited) · include the old cover as an option too.
+4. **Criteria scored 1–5, then vote:** wow compared with the old cover · not a repeat of other work · tells the truth of the work · fits the whole set · craftsmanship (Thai, contrast, smallest text) · buildable and repeatable in Word · the direction with **2 of 3 votes wins** · borrow at most 2 strong pieces from a losing direction · if the votes split 3 ways, "repeatable" decides.
+5. **Text on the cover is editable Word text** (title, version, date) · the background image has no lettering baked in · anchor the image to the first paragraph, not in the header.
+6. **Team members cannot launch agents themselves.** The designers save the 3 covers as files and send them back; the team lead launches the 3 reviewers to vote. Before launching, check that the installed designer agent has Bash; if not, use `general-purpose` with the designer role attached, or have the lead render and send the fix round to an agent that has Bash.
+7. **Software document sets** (BRD · SRS · FSD whose cover must come from the logo shape or a real mockup, using the cover generator `scripts/cover-engine/`) → also read [`cover-design.md`](cover-design.md) (page system · registry · checks) and [`cover-bakeoff.md`](cover-bakeoff.md) (full bake-off steps).
+
+
+## reference: cover-word-build.md
+
+# Building a cover in real Word — the recipe that passed, and the reusable cover builder
+
+Used with `cover-design.md` item 5 · proven 2026-10-15 (cover builder, round 2) only for Software Requirements Specification (SRS) covers: the text in the version badge is Word text on the badge shape in the background image · the vertical position of the Word text matches the preview image (median per style 0 px · horizontal not corrected) · the background image does not fade · comes out as exactly 2 pages (Word 365 on Windows 11 · Word via Component Object Model (COM) → PDF → `pdftoppm`)
+
+## Cover builder `scripts/cover-engine/`
+
+```
+cover-engine/src/
+├─ build_all.py    สั่งทั้งหมดในคำสั่งเดียว
+├─ fonts.py        (รันเมื่อ COVER_INSTALL_FONTS=1) ตัดฟอนต์ variable เป็นไฟล์ static แล้วติดตั้งให้ผู้ใช้คนเดียว (ไม่ใช้ admin)
+├─ capture.py      ถ่ายจอจาก mockup จริงที่ 2x (แนวหน้าจอจริง)
+├─ render.py       HTML → ภาพตัวอย่าง 150 จุดต่อนิ้ว (dots per inch, dpi) · ภาพพื้น 300 dpi (ซ่อนข้อความ) · ตำแหน่งกล่องข้อความ → build/layout/*.json · checks.json
+├─ docx_build.py   ภาพพื้น + ข้อความ Word ในกรอบยึดกับหน้า ด้วย brandkit.py
+├─ word_pdf.py     Word COM → PDF → PNG
+├─ calibrate.py    วัดระยะเหลื่อมระหว่าง Word กับภาพตัวอย่าง แก้รอบถัดไป
+└─ web/            cover.html · cover.js (3 หน้า pageTile · pageShot · pageGrid + ป้ายเวอร์ชัน `pill` · บรรทัดชื่อชุด `seriesLine`) · projects.js (ข้อมูลโปรเจกต์ — แก้ที่นี่) · set.html
+```
+
+How to use it on a new project:
+1. Copy the whole `cover-engine/` folder to the project's render folder (for example `docs/design/cover/`)
+2. Put each project's logo SVG in `cover-engine/assets/<project>/` (screenshots that can be captured go to `build/shots/shot-<screen>.png`), then edit `src/web/projects.js`: logo SVG path · colors · fonts · Thai/English document title · the sentence that states the job · code, version, date · layout style (the 3 sample projects in the file are LiteNet tiled grid · Telex real screen · SwipeOS hand-pose table)
+3. **Edit the parts still tied to the 3 prototype projects** (the builder does not yet read everything from `projects.js`):
+   - `web/cover.js`: add the logo shape path to `GEO` and make the page function of the chosen style (`pageTile` tiled grid of logo shapes · `pageShot` real screen with a title bar overlaid · `pageGrid` grid of hand-pose symbol images) use the new project's data · number of cells and color per document type
+   - `render.py`: the lists `PROJECTS` · `DOCS` · the print-cover condition (`if p == "litenet"`)
+   - `calibrate.py`: the project list · `docx_build.py`: `PAGE2` (colors and page 2 content) · `fonts.py`: `SOURCES` and `NEEDED`
+   - `web/set.html`: the document types in the set image (currently BRD · SRS · ARCH)
+   - Remove the 3 sample projects from `projects.js` (their SVG files do not come along)
+4. Set `BRANDKIT_DIR` = the folder `document-design/scripts` in plugin `software-development` (if not set, the script finds the neighboring skill folder itself) · for the real-screen style set `COVER_MOCKUP` = path of the mockup file (1 project per run) · to use a Chrome installed on the machine → `COVER_CHROME` (not set = Playwright's Chromium)
+5. Run `python src/build_all.py`, then open every image in `covers/*-set.png` and `build/qa/*-80-1.png`
+- Requires: Python + `python-docx` `pillow` `numpy` `playwright` `fontTools` `pywin32` · Chrome · Word (for the PDF) · `pdftoppm` · internet (Google Fonts at render time · fonts from GitHub)
+- **`fonts.py` installs fonts on the user's machine** (`%LOCALAPPDATA%\Microsoft\Windows\Fonts` + registry HKCU) and downloads files from the `main` branch of google/fonts without checking a hash — run it only when `COVER_INSTALL_FONTS=1` is set after the user allows it · say in the report what was installed · **to remove:** delete the installed `.ttf` files in `%LOCALAPPDATA%\Microsoft\Windows\Fonts` and the values `<font name> (TrueType)` in `HKCU\Software\Microsoft\Windows NT\CurrentVersion\Fonts`
+- `docx_build.py` currently builds only the SRS cover (the BRD and ARCH covers have background images and positions, but are not yet tested in Word)
+
+## Word recipe
+
+1. **Background image** 2480 × 3508 (300 dpi) with the editable text hidden · **the logo is in the background image** (not a separate Word picture) · `anchor_picture(first paragraph, png, 0, 0, 21.0, 29.7, z=251658240)` → positioned relative to the page · `behindDoc=1` · that paragraph has 0 line spacing, exact 1pt · no header
+2. **Text** 1 box in the HTML = 1 Word paragraph in a page-anchored frame (`w:framePr hAnchor=page vAnchor=page x y w`) · exact line spacing · break lines with `<br>` only · the frame is 80 px wider than the real box so Word does not wrap lines itself
+3. **Unit conversion (150 dpi):** twips = px × 9.6 · pt = px × 0.48 · English Metric Unit (EMU) = px × 6096 · cm = px ÷ 1240 × 21 · `w:line` = line-height(px) × 9.6
+4. **Fonts:** `style_run(font=...)` on every run, then `thai_runs(paragraph)` with `bk.FONT` set to that box's font (setting one value for the whole file → a SemiBold name becomes Regular) · body and footer call `thai_runs` too
+5. **Page 2:** set `pageBreakBefore` on the first heading, do not add an empty page-break paragraph · hide the cover footer with `different_first_page_header_footer`
+6. **Images not compressed:** put `<w:doNotAutoCompressPictures/>` in the position required by the `settings.xml` schema · the .docx keeps the full image, but the PDF from Word is still reduced to 200 ppi (no switch in COM)
+7. **Word COM:** open its own instance with `DispatchEx` (do not touch a Word the user has open) · `EmbedTrueTypeFonts=True` `SaveSubsetFonts=False` → file about 5 MB · `ExportAsFixedFormat(..., 17, OptimizeFor=0)`
+8. **Position adjustment:** `calibrate.py` shifts the ink of each box against the Word 150 dpi image (±14 px) and keeps the median per style (font | weight | size | line spacing) in `build/calib.json` · round 1 had a worst offset of 8 px, round 2 reduced it to 0
+
+## Traps found
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| PDF shows font name "…SemiBold,Bold" (fake bold) | Weight 700 is not installed | Install the static file of every weight used |
+| Thai text is BrowalliaNew | The Latin font (Space Grotesk) has no Thai glyphs, and `thai_runs` was not called | Split the footer by language · call `thai_runs` in every part · check with `pdffonts` |
+| A variable font becomes Calibri in the PDF | Word only knows Regular/Bold per family | Cut it into static files with `fontTools.varLib.instancer` and give each its own family name |
+| The cover background image looks faded when editing in Word | The image was placed in the header | Anchor it to the first paragraph (item 1) |
+| The giant document code collides with the table cells | Fixed size, but the cell size changes | Compute the size from the width of 3 cells and the cap height |
+
+## ยังไม่ได้ตรวจ (not yet checked)
+
+Opening on a machine without the fonts (fonts are embedded, but not yet tried) · printing the print cover on a real printer · the reading order of the text frames with a screen reader
+
+
+## reference: identity-and-gate.md
+
+# Identity continuation and the document beauty gate · branded-document-design
+
+Open this when the user is not wowed by the first direction, asks for several directions, or the job needs the document beauty gate (`ด่านสวย`). Moved from `branded-document-design.md` item 0.1, steps 2–4.
+
+2. **Do 1 direction first.** Only if the user is not wowed, or asks for several directions, do **3 directions in parallel** (3–5 times the labor · `crew-patterns/parallel-attempts-pick-best` · a new agent with Bash per direction · for the cover use the 3-direction vote method in [`cover-vote.md`](cover-vote.md)). Each direction makes an HTML mock of A4 pages: cover · a content page with a real 4-row requirements table + callout · a table-of-contents page or a figure page · **1 figure redone for the direction** (use `diagrams`) · the file header says how to build each piece in real Word. When doing several directions they must really differ, for example a dark cover continuing from the app / a light editorial report / an engineering spec.
+3. **2 reviewers who did not do the work** (if there is only one direction, score that one only; no mixing) score 1–5 (pass = 4): first impression · continuity with the app · craftsmanship (a long Thai table of 60 rows without breaking mid-word · type scale · contrast) · figures readable when placed for real · really buildable in Word → **mixing is allowed** (cover from one direction, body from another) if the reviewers name the pieces clearly.
+4. Work on the render script (do not edit .docx files one by one) → render every copy → **document beauty gate (`ด่านสวย`)**: 2 new reviewers look at images of the real pages (cover · table of contents · chapter opener · long table page · figure page) using the 5 axes above, and take the lower score · ceiling **3 rounds** (more detail in `ui-craft/references/states-and-checks.md` in plugin `software-development` if installed) · record every round's score in `docs/BUILD-PLAN.md`
+
+
+## reference: markdown-report-docx.md
+
+<!-- merged from skill `markdown-report-docx` on 2026-11-27 · description was: Use when one Markdown file must become a Word report -->
+# Markdown Report → .docx
+
+## Contents
+
+- [When to use](#when-to-use)
+- [When **not** to use](#when-not-to-use)
+- [1 · Steps](#1--steps)
+- [2 · Front matter](#2--front-matter)
+- [3 · What each Markdown form becomes](#3--what-each-markdown-form-becomes)
+- [4 · Rules for writing so it looks good](#4--rules-for-writing-so-it-looks-good)
+- [5 · Check by eye. Never skip.](#5--check-by-eye-never-skip)
+- [6 · Anti-patterns](#6--anti-patterns)
+- [7 · Links to other skills](#7--links-to-other-skills)
+
+
+> **Pre-work gate "ด่านก่อนลงมือ" (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → check `design-gate/no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for finding the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
+
+> **The one rule of this skill:** Markdown is the source. The .docx is the result built from the source.
+> Edit the .md and rerun the script every time. Never open Word and edit by hand, because the next run wipes it all out.
+
+Page style: logo cover centred on the page · table of contents · tables with a light brand-colour header · note boxes · dark-background figures with captions · short tables that do not split across pages.
+
+## When to use
+
+- Business reports, research summaries, project reports, reports for a teacher, test result reports, handover documents whose content is already written in Markdown
+- You must build the report many times (numbers or test results change → rerun → same-looking file)
+
+## When **not** to use
+
+| Work | Use |
+|---|---|
+| A formal document with a colour-banded cover, a metadata box, a signature table (Software Requirements Specification (SRS) · Business Requirements Document (BRD) · proposal) | `document-design`, calling `BrandDoc` directly |
+| Presentation slides | `slide-deck` (its top table chooses .pptx · .html · convert) |
+| A document that lives in the repo as Markdown only | `design-gate/polished-document-style` |
+| Thesis · independent study · research article | `personal-life:thesis-writing` first (if installed): the faculty guide controls the book structure and layout. This script can still build the .docx afterwards |
+
+---
+
+## 1 · Steps
+
+1. Write the content in `docs/src/<name>.md` (the permanent source, per `workspace-rules/document-naming` item 1) following `design-gate/polished-document-style` (plugin `superuser`). Add front matter (section 2). If there is no `doc-theme` yet, **search for references first:** take the project's keywords and search live as in `design-gate/design-references` (plugin `superuser`), type `document`, then pull colours from the chosen work. Use the stored colour library when live search is not possible.
+2. Run `python scripts/md_to_docx.py docs/src/<name>.md -o docs/<deliverable-file-name>.docx --pdf`
+   - The script uses `brandkit.py` from `document-design/scripts/` next to it, and needs `python-docx`.
+   - `--pdf` uses Word on Windows (it also updates the table of contents). Without Word, it uses LibreOffice. This PDF is for the checks in section 5. Deliver it only for a user manual or when the client asks. Otherwise move it to `_to_delete/` (`workspace-rules/document-naming` item 1).
+3. Convert the PDF to images and **open every page** as in section 5. If you find a problem, fix it in the .md and rerun.
+4. Name the deliverable file per `workspace-rules/document-naming` (plugin `superuser`), for example `CLINIC-RPT-project-v1.0-DRAFT.docx`
+
+To see an example with every element: `python scripts/md_to_docx.py assets/example-report.md --pdf`
+
+## 2 · Front matter
+
+```yaml
+---
+title: Clinic Booking Assistant              # large title in brand colour on the cover
+subtitle: เอกสารการพัฒนาโครงงานและผลการทดสอบ   # secondary line in bold
+meta: วิชา 01234567 · ฉบับ 1.2 · 10 ตุลาคม 2569 # small line under the subtitle
+note: ผู้พัฒนา 6500001 ชื่อ นามสกุล             # grey italic (optional)
+logo: ../assets/logo-on-light.png             # path relative to the .md file (optional)
+logo_width_cm: 6.5
+brand: 2A78D6          # the project's main colour (order in diagram-figures item 5) · this value is the house default · used for H1 headings, the cover title, item numbers
+brand_deep: 1B4E8B     # H2 headings, table header text, inline code
+brand_tint: EAF2FB     # table header background
+brand_tint_2: F4F8FD   # alternate row background (tables over 6 rows)
+---
+```
+
+Optional values: `brand_2` (secondary accent colour) · `toc: no` (no table of contents) · `footer: Page` (the word before the page number, default "หน้า") · `figure_width_cm` (default 17) · `cover_top_pt` (distance from the top edge to the logo, default 150)
+
+**Colours come from the work's owner.** Find them in the order in `diagrams` → `references/diagram-figures.md` item 5 (colour system). If you find none at all, put `brand: 2A78D6` (the house default), write `(รอยืนยัน)` (awaiting confirmation) in the report, and keep going without stopping to ask. Never copy colours from the example or the reference report. `brand_tint` must be light enough for `brand_deep` text to read clearly (contrast ≥ 7:1 on both white and `brand_tint`; the script checks this and stops with the value if it fails).
+
+## 3 · What each Markdown form becomes
+
+| Written in .md | Result in .docx |
+|---|---|
+| `# 1. Heading` · `##` · `###` | 3 heading levels in brand colour, in the table of contents, never stranded at the page bottom · **write the item numbers yourself** |
+| Paragraph with `**bold**` · `` `code` `` | Body text in dark grey · bold in a dark colour · code in a monospace font in `brand_deep` |
+| Table `\| … \|` | Header with `brand_tint` background · first column bold · width by text length · alternate row colours over 6 rows · a table of up to 8 rows stays on one page · header row repeats across pages |
+| `> text` | A grey "หมายเหตุ" (note) box |
+| `> [!TIP]` · `[!WARNING]` · `[!IMPORTANT]` · `[!CAUTION]` · `[!NOTE]` | Boxes for tip · caution · important · danger · note |
+| `![caption](path.png)` | Centred image + italic "รูปที่ N — caption" (Figure N), on the same page as the image |
+| `1. …` | Item numbers in brand colour, restarted for every list |
+| `- …` | bullet |
+| ```` ``` ```` | Code box with grey background |
+| `<!-- pagebreak -->` | New page |
+| `---` · `<!-- other -->` | Skipped |
+
+A line before a table (a lead-in paragraph or a note box) is tied to stay on the same page as the table.
+
+## 4 · Rules for writing so it looks good
+
+- **Tables are the main tool.** Data with a heading + details is better as a 2-column table than a long paragraph.
+- **A table cell is at most ~170 characters.** Longer than that, move it below the table.
+- **Pick dark-background or white-background figures and use one for the whole book** · 1600–2000 px wide · draw with [`diagrams`](../../diagrams/SKILL.md) and export PNG
+- **Test results come from the real result files.** Build the results table with a script and insert it between `<!-- RESULTS:START -->` and `<!-- RESULTS:END -->` in the .md before running. Do not type numbers by hand.
+- **Say when data is simulated.** A 1-line note box from the first page of the content.
+
+## 5 · Check by eye. Never skip.
+
+```bash
+python -c "import pymupdf; d=pymupdf.open('report.pdf'); [p.get_pixmap(dpi=70).save(f'_to_delete/p{i+1:02}.png') for i,p in enumerate(d)]"
+```
+
+Open the image of every page (Read tool) and go through the checks:
+
+- [ ] Cover: logo is not distorted, the title does not wrap in the middle of a word
+- [ ] The table of contents has all page numbers (if empty, open in Word and press F9, or use `--pdf` on Windows)
+- [ ] No nearly empty pages · no heading stranded at the page bottom · no figure caption pushed to the next page
+- [ ] Table columns do not cut a name or code in the middle. If they do, shorten the text in the longest column
+- [ ] Brand colour matches the logo (no brand → house default + `(รอยืนยัน)`) · no leftover Word default blue
+- [ ] No leftover `[...]` placeholder · `(รอยืนยัน)` is not a placeholder, so keep it, and every instance appears in the report's awaiting-confirmation list
+
+## 6 · Anti-patterns
+
+- **Editing the .docx in Word and sending it.** It vanishes on the next run. Edit the .md.
+- **Using Word's List Number.** It continues counting across lists, which is why the script writes the numbers itself.
+- **A small screenshot enlarged to full page.** It breaks up. Retake it at width ≥ 1600 px.
+- **A table 7 columns wide or more on a portrait page.** Split it into 2 tables.
+
+## 7 · Links to other skills
+
+| Need | Use |
+|---|---|
+| Add elements the script lacks (KPI · pill · signature · landscape page) | Call `BrandDoc` in [`document-design`](../../document-design/SKILL.md) after `build()` |
+| Slides paired with the same report, same colours | [`slide-deck`](../../slide-deck/SKILL.md) (its top table chooses .pptx · .html · convert) |
+| File names and versions | `workspace-rules/document-naming` (plugin `superuser`) |
+| Figures in the report | [`diagrams`](../../diagrams/SKILL.md) |
+| A project-specific cover (logo and mockup already exist) | `document-design` `cover-design.md` |
+
+
+## reference: palette-examples.md
+
+# Color sets that were actually used (examples)
+
+> Warning: **these are examples, not standard values.**
+> Always choose colors from the content of the work first, per item 0 of `SKILL.md`.
+> Use this file to see what a complete set that passes the contrast thresholds looks like (checked with the script on 22 Oct 2026 (2569 BE)), not to copy.
+
+## Set A — blue–violet (general software · extracted from Apps Track)
+
+Light tone, airy, soft, cool gray text
+
+```python
+use_brand(
+    brand="2A78D6", brand_2="6A5CD6", brand_deep="2A4C86",
+    brand_tint="EDF1FB", brand_tint_2="F6F8FD",
+    text="333B4A", text_body="414957", text_muted="676D7A", line="E4E7EE",
+)
+```
+
+## Set B — teal green (medical · health)
+
+```python
+use_brand(
+    brand="0E8F86", brand_2="2F9E6E", brand_deep="0A5A56",
+    brand_tint="E6F4F2", brand_tint_2="F3FAF9",
+    text="2C3A38", text_body="3A4846", text_muted="636F6A", line="E1EAE8",
+)
+```
+
+## Set C — navy (government · legal)
+
+```python
+use_brand(
+    brand="1F3C88", brand_2="5B4B8A", brand_deep="14275C",
+    brand_tint="E8ECF7", brand_tint_2="F5F7FC",
+    text="2B3245", text_body="3A4156", text_muted="636A7D", line="E2E6F0",
+)
+```
+
+## Set D — amber yellow + steel gray (industrial · factory)
+
+A warm accent on a cool gray frame. Use the accent only at the spots that need attention, not across the whole page.
+
+```python
+use_brand(
+    brand="B57509", brand_2="8C5A2B", brand_deep="704805",
+    brand_tint="FBF2E1", brand_tint_2="FDF9F1",
+    text="2F3439", text_body="3E444A", text_muted="676F76", line="E5E8EA",
+)
+```
+
+## Status colors — the same set for every brand
+
+Status colors **do not change with the brand**, because their meaning is fixed.
+
+| Status | Background | Text |
+|---|---|---|
+| Success | `E9F7EF` | `17794A` |
+| Info | `EAF2FD` | `2160AB` |
+| Warning | `FDF5E4` | `96660D` |
+| Error | `FDEDEC` | `A63A34` |
+| Accent | `F1EEFC` | `52439F` |
+| Neutral | `F2F4F8` | `626A7A` |
+
+> If the brand color clashes with one of the status colors (for example the brand is green), change the **brand color in that context**.
+> Do not change the status color. Readers interpret green as "passed" before reading the text.
+
+## How to check before use
+
+1. Body text and `text_muted` on a white background and on a `brand_tint` background ≥ 4.5:1 · `brand_deep` (H2 and table headers) on white and `brand_tint` ≥ 7:1 · `brand` (H1 16pt bold, and KPI numbers count as large text) ≥ 3:1
+2. Printed in black and white, headings must still be distinguishable from body text
+3. Open the rendered file and look by eye; do not trust the values in the table
+
+## Tones suggested by the content of the work (use when there is no brand color to hold on to)
+
+| Content of the work | Suggested tone | Reason |
+|---|---|---|
+| Medical · health | Teal green · green | Cleanliness, safety |
+| Finance · banking | Dark blue · silver gray | Stability |
+| Industrial · factory | Amber yellow · steel gray | Machinery, warning |
+| Education | Purple · light orange | Enthusiasm |
+| Retail · food | Orange · pinkish red | Warmth, appetite |
+| Government · legal | Navy · oxblood | Formality |
+| General software | Blue | A neutral default when there is no other context |
+
+If the customer already has a brand, use the brand colors. This table is used only when there is nothing to hold on to.
+
+
+## reference: thai-fonts.md
+
+# Fonts and Thai — details
+
+The rules that must not be missed are abbreviated in `SKILL.md`
+
+Use **Tahoma** as the default: on every Windows/Office machine · tone marks do not collide with vowels ·
+bold reads clearly · the x-height of Thai and English is close.
+
+> **Complex script trap:** Word treats Thai as a *complex script*, a separate set from Latin.
+> If you set only `run.font.size` / `run.font.bold`, Thai text will **not follow**.
+> You must set `w:szCs`, `w:bCs`, `w:iCs` and `w:rFonts` in all of `ascii/hAnsi/cs/eastAsia`.
+> The function `style_run()` in `brandkit.py` handles this. **Never set fonts by hand.**
+
+> **Dual-font trap:** if the Latin font and the Thai font differ, such as Noto Sans + Noto Sans Thai,
+> setting only the `cs` slot is not enough. Word draws Thai with the font in the Latin slot if that font has Thai glyphs; if not, it silently falls back to Browallia New.
+> Set `bk.FONT` (Thai) and `bk.LATIN_FONT` (Latin), then call `bk.thai_runs(doc.element.body)` and on every header and footer before `save()`.
+> This function splits Thai text into runs of its own and sets all 4 slots to the Thai font.
+> For fonts that are not on every machine, call `bk.embed_fonts(doc)` to embed the fonts in the file. This works only for fonts whose license allows embedding, such as OFL, and the file grows by several MB.
+> Variable fonts such as Cascadia Mono become Calibri when Word exports to PDF. Use Consolas for code.
+
+Other rules for Thai documents:
+
+- Line spacing **1.3–1.35** for Tahoma (English only can use 1.15, but Thai has tone marks and upper–lower vowels that need room) · Noto family fonts have a built-in line height of 1.36–1.51 em, so **1.1–1.15** gives the same spacing. Decide from the real PDF page, not from the numbers.
+- **Never justify** Thai paragraphs, because Thai has no spaces between words and Word stretches words until holes appear.
+- LibreOffice breaks Thai words differently from Word. To send a PDF, export it from real Word,
+  or at least open the PDF and check by eye before sending.
+- To create a PDF on Linux without Tahoma, use **Loma** or **Sarabun** instead
+  (ReportLab places Thai tone marks wrongly; use python-docx→LibreOffice or WeasyPrint instead).
+- When previewing on Linux, Thai text looks **smaller** than Latin because the substitute font has a lower x-height.
+  It is not a bug in the font size. On Windows with real Tahoma the heights are equal, so do the final check from Word.
+
+
+## reference: tokens-and-type.md
+
+# Design tokens · type scale · reusable elements
+
+Contents: tokens → color meanings → type scale → reusable elements
+
+This table sets the **job** of each token, not the color value.
+The real values come from item 0, then you set them once with `use_brand(...)`.
+
+| Token | Job | Comes from |
+|-------|---------|----------|
+| `brand` | H1 headings · KPI numbers · accent bars · links (if `brand` is below 4.5:1 on a white background, use `brand_deep` for links) | The brand color (none → the house default + `(รอยืนยัน)` (awaiting confirmation)) |
+| `brand_2` | Secondary accent · underline under slide headings · end of a gradient | A neighbor of the main color on the color wheel |
+| `brand_deep` | H2 headings · table header text | The main color mixed with black, giving contrast ≥ 7:1 on white |
+| `brand_tint` | Table header fill · KPI cards · cover background | The main color mixed with white, about 90% |
+| `brand_tint_2` | Alternating (zebra) rows in long tables | The main color mixed with white, about 96% |
+| `text` | H3 headings · emphasized text | A dark gray tinted toward the main color |
+| `text_body` | All body text | A dark gray 1 step lighter than `text`. **Not pure black, because pure black tires the eyes** |
+| `text_muted` | Figure captions · meta · footer | A mid gray with contrast ≥ 4.5:1 on white and on `brand_tint` |
+| `line` | Table lines, dividers | A very light gray, visible but not competing for attention |
+
+**6 status colors** (each has a fill color and a text color as a pair): success · info · warning · error · highlight · neutral
+Status colors **do not change with the brand**, because green means pass and red means fail in every document.
+The fill is a very light shade and the text is a dark shade of the same color, giving contrast ≥ 4.5:1.
+
+**What each color means — always choose a color by its meaning** (the same for documents and diagrams)
+
+| Color | Means | Used for (callout / pill / box / line in a figure) |
+|---|---|---|
+| Red | Danger · forbidden · delete · error · overdue | `critical` · status "stuck/failed" · a step that destroys data · a broken line |
+| Yellow/orange | Caution · waiting for action · caveat · a path that is not the main line | `warning` · status "in progress" · exception zone/line (`#C77A11`) |
+| Green | Success · pass · safe · done | `success` · status "done" · a confirmed result |
+| Main color (the brand color; with no brand, the house blue) | Information · main action · normal path | `tip` · primary button · box/line of the main path |
+| Purple | Question · option · side note | `question` · optional extras |
+| Gray | Neutral · disabled · external | `note` · external system · a part that is switched off |
+
+The one rule: **choose a color by meaning, not by looks.** Do not use red just to stand out. Use red only when something is truly dangerous or wrong. Diagrams use this same set of meanings too (see `diagrams`, which has the orange `EXCEPT_HUE` for paths that leave the main line).
+
+> **Thresholds every color set must pass:** body text and `text_muted` on the background ≥ 4.5:1 · H2 and table headers (`brand_deep`) ≥ 7:1 ·
+> H1 and KPI numbers (`brand` in large size, per the WCAG 2.2 large-text definition, criterion 1.4.3) ≥ 3:1 ·
+> printed in black and white, the hierarchy must still be distinguishable. If a set fails, adjust the intensity and do not change the color.
+>
+> **A color set that was really used** (not a standard value; do not copy it without looking at the content of the work) → `references/palette-examples.md`
+
+> **Change the whole brand in one line:**
+> `use_brand(brand="C1121F", brand_deep="780000", brand_tint="FDECEC")`
+
+## Type scale (pt)
+
+| Level | Word | Slide | Weight · color |
+|-------|------|-------|--------------|
+| Cover title | 20 | 40 | bold · `brand` (Word) / `brand_deep` (slides) |
+| H1 | 16 | 26 | bold · `brand` |
+| H2 | 12.5 | — | bold · `brand_deep` |
+| H3 | 11.5 | — | bold · `text` |
+| Body | 11 | 17 | regular · `text_body` |
+| Table | 11 | 12.5 | regular · `text_body` |
+| Caption/footer | 8.5–9 | 10–12 | italic or regular · `text_muted` |
+
+**Do not add sizes outside this scale.** Every extra size makes the document look inconsistent, and readers notice.
+
+## Reusable elements (from item 4)
+
+| Element | Look | Method |
+|-----------|--------|-------|
+| Cover page | Logo + title in the brand color, centered on the page | `cover()` |
+| Table | Header fill `brand_tint` with `brand_deep` text · 1.5pt brand line under the header row · `line` 0.5pt between rows · header repeats on every page | `table()` |
+| Status table | The status column is tinted by value | `pill_table()` |
+| Summary figure strip | Cards with `brand_tint` fill, a big number in the brand color + a small gray label | `kpi_row()` |
+| Text box | Light fill + a thick colored bar on the left + 1 emoji | `callout()` |
+| Figure with caption | Figure centered on the page + "รูปที่ N — ..." in gray italic under the figure | `figure()` |
+| Code block | Light gray fill, Consolas 9pt font | `code()` |
+| Sign-off table | Role / name / signature / date | `signoff()` |
+
+**Good proportions:** no more than 3–5 callouts per 10 pages · a summary figure strip (KPI strip) of 3–5 cells (from 6 cells on, the numbers get too small to stand out) ·
+a table with more than 6 columns should move to a landscape page (`landscape_section()`).
+
+
+## reference: visual-check.md
+
+# Check a document by eye — commands and checklist
+
+```bash
+soffice --headless --convert-to pdf --outdir _to_delete/preview SRS.docx
+pdftoppm -png -r 80 _to_delete/preview/SRS.pdf _to_delete/preview/page      # ได้ page-1.png หรือ page-01.png (เลขเติมศูนย์ตามจำนวนหน้าทั้งหมด)
+```
+
+Then **open and look at every page image** (Read tool) before delivery. Check these:
+
+- [ ] No table overflows the paper edge; columns are wide enough; no word is squeezed onto a strange new line
+- [ ] No heading stranded on the last line of a page
+- [ ] Thai tone marks/vowels do not collide, and no character turns into a square box
+- [ ] The cover has no overflowing or edge-cut text · **page 2 is not blank** (a full-page cover, then the page-break paragraph falls onto page 2; `cover()` puts the break at the end of the last paragraph already, and a hand-written cover must do the same)
+- [ ] Spacing before/after tables and callouts is the same across the document
+- [ ] Footer page numbers on every page
+- [ ] No TBD / Lorem ipsum / leftover placeholder (except `(รอยืนยัน)` (awaiting confirmation) that is in the report's awaiting-confirmation list)
+
+
+## reference: word-layout.md
+
+# Dark cover and table headers — details from real jobs
+
+Read when making a dark cover or adjusting table headers on inner pages · the short rules to use every time are in `SKILL.md` item 3.
+
+## Dark cover style
+
+**Dark cover style (when the app or brand uses a dark screen):** a full-page cover in a neutral near-black dark gray (for example `#1C1C22`) with a very faint brand-colored glow (at most 15%). A deep purple glow filling the corner made the cover look purple, and the work's owner asked to go back to dark gray ·
+The document title, subtitle and the line under the title go **right under the logo**, not in the middle or at the bottom of the page. The document-info table sits toward the bottom ·
+A light-on-dark lettering logo at top left · document title 28–32pt · a 4-cell document-info table
+(document code · version · date · status) · inner pages have a white background and dark code blocks; the header has a small logo, the document title and the document code;
+the footer has the system name and "หน้า / ทั้งหมด" (page / total). The dark color is on the cover page only, so it can still be printed. The title size on this kind of cover may exceed the scale in item 1.
+The logo on the cover uses a **small size (about 4.5 cm wide) at top left, above the document title**. Enlarging the symbol into the main image in the middle of the cover was tried, and the work's owner asked to go back to small.
+If you want a flourish, stretch the logo's color glow into a long line as wide as the text (leave left and right margins equal to the paper margins; a line touching the paper edge was asked to be set in from the edge) as a bar of even thickness **with straight-cut ends and slightly rounded corners** (about 0.7 mm thick, corners about 0.25 mm). Tapered pointed ends were criticized as too sharp · the glow must fade to zero before the image edge, otherwise the box edge of the image shows. Use it instead of an underline below the document title (anchor the line image to the paragraph under the title so it follows both 1-line and 2-line titles) · the line must be **one continuous image** with the same thickness and glow throughout, a smoothstep gradient with both ends fading softly, drawn at 300 dpi. Never lay short bars over a long line, because it shows as a thick lump with colors that do not join (the work's owner said "the colored line is not smooth").
+> **The cover background image and the logo on the cover must not be placed in the first page's header.** Word shows everything in the header as faded while reading or editing the document, so a full-page dark cover looks washed out (it is not faded in the PDF, so checking from the PDF alone will not find it; the work's owner said "looks washed out"). Anchor the floating behind-text image to the cover's first paragraph instead, and set `relativeHeight` the way Word does (background image 251658240 · images above it increase by 1024 each), because Word re-orders small numbers like 1, 2, 3 on save, and then the background image covers the logo.
+
+Small text on a dark cover (labels, author info, notes) uses a size **of at least 8.5pt** and a light gray from `#CFCCDE` up; the subtitle uses a near-white light color. 7.5pt mid-gray text on a dark background looks faint.
+
+**Use in code:** `doc.cover(title, subtitle=..., eyebrow=..., meta_rows=[...], logo="logo.png", style="night")`. The logo is optional · the glow line colors can be adjusted with `art_colors=(color1, color2, color3)` · the resulting look: `examples/example_srs-preview.png` (cover + inner page) · the example call: `scripts/example_srs.py` · `table()` uses this table header style by default (`header_style="classic"` = the old style)
+
+## Table headers on inner pages
+
+**Table headers on inner pages must not use a full-width solid dark fill**, even when the cover is dark, because tables are on every page, so dark color is heavy on the eye and wastes ink (the work's owner really asked for this change in one job).
+Use a light fill of the brand color that still clearly reads as the header row, such as `#E4DCFD` (a lighter fill like `#F5F3FF` was called too faint by the work's owner), with bold dark brand-colored text.
+There is only one border: a 1.5pt brand-colored line under the header row. No line on top (a black top line looks heavy and was asked to be changed), and no white gaps between header cells, because that would break the line under the header into segments.
+Word cannot draw gradient borders; if you add a gradient, the color changes in steps along the columns.
+
+## Page structure (moved from `SKILL.md` item 3; wording not changed)
+
+```
+หน้าปก        โลโก้กลาง → ชื่อเอกสาร (brand, bold) → ชื่อระบบ (text, bold)
+              → บรรทัดเวอร์ชัน/วันที่ (9pt) → หมายเหตุการแก้ไข (8pt เอียง เทา)
+              → ขึ้นหน้าใหม่
+สารบัญ        field TOC (ผู้ใช้กด F9 อัปเดต) → ขึ้นหน้าใหม่
+เนื้อหา        H1 มีเลขข้อเสมอ ("1. ภาพรวมระบบ") · H2 เป็น "1.1"
+              ทุก H1/H2/H3 ตั้ง keep-with-next กันหัวข้อค้างท้ายหน้า
+ท้ายเอกสาร    ตารางลงนามอนุมัติ
+footer        "หน้า N" กลางหน้า สีเทา 9pt
+```
+
+## Figures in documents · beauty-gate rules · cover (moved from `branded-document-design.md` §0.1 items 6–8)
+
+6. **Figures in documents:** the smallest text after real placement ≥ 7pt → minimum pixels on the canvas = `0.247 × canvas width(px) ÷ placed width(cm)` (a 2000px canvas placed 17 cm wide = 29px · placed on a 25.7 cm landscape page = 20px · use 26px to get 9pt) · a wide figure should go on a landscape page at the full column width (≥ 95%) · use the **version placed in the document without a figure title**, because the Word caption already gives the number and the figure's name · figure caption ≥ 9pt in body text color · after a figure, start a new section; the next paragraph must not flow onto the figure's page.
+7. **What the beauty gate (`ด่านสวย`) often catches (put them as rules in the render script's `check`):** stray markdown marks (`**` · backtick) · Thai text in a mono font · a table overflowing a text column · a table of contents with a single entry stranded on the next page · a code list cut in the middle of a code (one code per line, one font for the whole column) · the "(รอยืนยัน)" tag uses the warning color, not the brand color · identity lost after the cover (chapter opener pages use the app's brand color bar) · a light cover available to print alongside the dark cover.
+8. **Cover — plain lettering first, images later** (a project-specific cover that uses the logo shape or a real screen instead of decorative images → [`cover-design.md`](cover-design.md))**:** an illustration on the cover is optional, and an open cover with well-set lettering always beats an image that does not wow · a design that passed the gate: the document type (SRS · FSD · ARCH) large at 150–200px in the brand color as the only highlight (width at most ~85% of the column · a name over 5 letters such as TESTPLAN splits into 2 lines, never shrunk smaller than other copies, since the whole set must look the same size) → a short brand-colored line → Thai title → English title → a 1-sentence summary line (≥ 12pt, narrow column) → an info row at the page foot (labels ≥ 10pt) · leave the rest empty · parts with fixed positions (logo · document type · line · status tag) are drawn into the cover background image, while the title and info are Word text that can be searched and edited · the `(รอยืนยัน)` (awaiting confirmation) tag on a dark background uses a bright warning color, with no highlight fill · **if the user says the cover is not beautiful → cut the decorative images first** (curves, glowing dots, gradients), then make 3 plain-lettering covers to choose from (project has a logo or mockup → use `cover-design.md` item 7 instead)
+
+
+---
+
+# skill: diagrams
+
+Use when a doc, slide, README or PR needs a diagram or figure
+
+# diagrams — pick the tool by where the picture ends up, then draw one question per figure
+
+> **One rule:** a diagram answers one question. If it answers two, draw two pictures. Choose the tool by the destination first: a delivered document or slide gets a designed figure, and a README or PR gets a quick Mermaid diagram.
+
+## Pick the part
+
+| Job (what the user says) | Open |
+|---|---|
+| "Figure for the SRS, BRD, slide or print", "designed diagram", "architecture picture with AWS or Kubernetes icons" | [`references/diagram-figures.md`](references/diagram-figures.md) (engines: [`references/engine-svg-python.md`](references/engine-svg-python.md), [`references/engine-mermaid.md`](references/engine-mermaid.md); layouts: [`references/layout-flow.md`](references/layout-flow.md), [`references/layout-cloud.md`](references/layout-cloud.md), [`references/layout-context.md`](references/layout-context.md), [`references/layout-deployment.md`](references/layout-deployment.md)) |
+| "Quick diagram for the README", "sequence or ER in the PR", "a flow in a code note" | [`references/software-diagrams.md`](references/software-diagrams.md) |
+| "Image or SVG in a Markdown doc", "ASCII art for a comment" | [`references/markdown-visuals.md`](references/markdown-visuals.md) (ASCII patterns: [`references/ascii-patterns.md`](references/ascii-patterns.md); SVG snippets: [`references/svg-snippets.md`](references/svg-snippets.md)) |
+
+Icons: [`references/icons.md`](references/icons.md). Colour by domain: [`references/colour-by-domain.md`](references/colour-by-domain.md). Mistakes to avoid: [`references/pitfalls.md`](references/pitfalls.md). Mixing formats in one doc: [`references/combining-formats.md`](references/combining-formats.md).
+
+## Steps every part shares
+
+1. Write the one question the diagram answers. Put that question in the figure title as a conclusion, with one sentence under it saying what to look at.
+2. Use the same words in the figure as in the document.
+3. Use the colour of the source document's theme. Pick colours by meaning, not decoration.
+4. Render the figure and look at it. A diagram that was never rendered is only text.
+5. Run the checker for the tool used (`scripts/check-figure-source.py`, `scripts/check-figure-geometry.py` or `scripts/check-mermaid-theme.mjs`).
+
+## Check before done
+
+- Mermaid is not in a delivered document, slide or print file. It is only for drafts discussed in chat, or for a README or PR.
+- Every Mermaid block has its theme line, and `fontFamily` sits outside `themeVariables`. Otherwise Mermaid silently falls back to its default font.
+- Thai text in a figure has a line height of at least 1.5, and no text box has a fixed height. Upper vowels and tone marks get cut otherwise.
+- Someone who has never seen the system can answer the question the figure was drawn for.
+
+
+## reference: ascii-patterns.md
+
+# ASCII patterns
+
+Worked ASCII examples for markdown docs · used by [SKILL.md](markdown-visuals.md) §3 · always wrap ASCII in a fenced code block so spacing is preserved
+
+## Box-drawing characters
+
+```
+┌─────┐  ┏━━━━━┓  ╭─────╮  ┌╌╌╌╌╌┐
+│     │  ┃     ┃  │     │  ╎     ╎
+└─────┘  ┗━━━━━┛  ╰─────╯  └╌╌╌╌╌┘
+ light    heavy   rounded   dashed
+```
+
+Corners: `┌ ┐ └ ┘` ‧ `┏ ┓ ┗ ┛` ‧ `╭ ╮ ╰ ╯`
+Lines:   `─ │` ‧ `━ ┃` ‧ `═ ║`
+Joins:   `├ ┤ ┬ ┴ ┼`
+Arrows:  `→ ← ↑ ↓ ▲ ▼ ▶ ◀ ↔ ↕ ⇒ ⇐`
+Dots:    `• · ◦ ● ○ ▪ ▫`
+
+## Common patterns
+
+**Layout sketch:**
+```
+┌─────────────────────────────────────┐
+│ Header        [Search]      [👤]    │
+├──────────┬──────────────────────────┤
+│ Sidebar  │ Main content             │
+│  • Item  │                          │
+│  • Item  │  ┌────────────────────┐  │
+│          │  │  Primary CTA       │  │
+│          │  └────────────────────┘  │
+└──────────┴──────────────────────────┘
+```
+
+**State machine:**
+```
+┌─────────┐  hover  ┌──────────┐  click  ┌─────────┐
+│  REST   │────────►│ MAGNIFIED│────────►│ LAUNCH  │
+└─────────┘◄────────└──────────┘◄────────└─────────┘
+            exit               done
+```
+
+**Curve / chart:**
+```
+scale
+ ↑
+1.7│         ╱╲
+1.4│       ╱    ╲
+1.2│     ╱        ╲
+1.0│___╱            ╲___
+   └──────────┬──────────→ cursor X
+         tile.Center
+```
+
+
+## reference: colour-by-domain.md
+
+# Work domain → colour tone
+
+Use this when the document has no `doc-theme` and no brand colour. Use the house default `#2A78D6`, mark it `(รอยืนยัน)` (to be confirmed), and carry on without stopping to ask. Put a tone from this table in the report so the user can choose later (the full order is in `diagrams` → `references/diagram-figures.md` item 5). Read the work's content first and write the `เนื้อหา:` brief per `design-gate/design-references` `references/content-to-theme.md` (plugin `superuser`); its section 3 has the fuller mood-and-colour table for every kind of work, and section 4 says what each colour tends to carry. This table is shared by both engines of `diagrams` and by every skill that draws figures.
+
+| Domain | Suggested tone | Reason |
+|---|---|---|
+| Medical · health | Teal · green | Cleanliness, safety |
+| Finance · banking | Dark blue · silver grey | Stability |
+| Industry · factory | Amber yellow · steel grey | Machinery, warning |
+| Education | Purple · light orange | Enthusiasm |
+| Retail · food | Orange · pinkish red | Warmth, appetite |
+| Government · law | Navy · oxblood | Formality |
+| General software | Blue | Neutral default when there is no other context |
+
+
+## reference: combining-formats.md
+
+# Combining formats in one doc
+
+Used by [SKILL.md](markdown-visuals.md) · a full design spec usually mixes formats.
+
+The 6-part pattern for a design spec:
+
+```
+1. Inline SVG mockup of each UI state              ← "what it looks like"
+2. Feature reference table                          ← "what it does"
+3. ASCII layout sketch with measurements           ← "how it's positioned"
+4. Mermaid state diagram                            ← "how it transitions"
+5. ASCII / inline-SVG zoom curve                    ← "the math"
+6. Acceptance criteria table                        ← "how we verify"
+```
+
+Don't force everything into one format. Each format is best at something different.
+
+
+## reference: design-system.md
+
+# Figure design system — details
+
+Contents: figure header → size system → colour system → hand-drawn line icons. The short rules are in `SKILL.md`.
+
+## Figure header (from item 3)
+
+The logo goes before the figure title. Every template already has an `<img class="logo">` slot pointing at the project's `assets/logo/`; change only the file name. If the project has no logo yet, the slot disappears by itself, but note in the report that the logo is missing, because a figure without a logo always gets asked "โลโก้อยู่ไหน".
+
+The reason is not looks. Architecture figures get copied into emails, slides and contracts, and then live on for a year. **A figure with no date is one nobody dares edit and nobody dares trust.**
+
+The sub-title says "what the real thing is", not an expansion of the title:
+
+```
+ผิด: ภาพรวมระบบ Dr Screening
+ถูก: เครื่องเดียวในห้อง Server ของโรงพยาบาล รันทุกบริการด้วย Docker Compose
+```
+
+## Size system (from item 4)
+
+| Item | Value |
+|---|---|
+| Text | Figure title 30 · box title 16 · description 13.5 · group label 12 uppercase |
+| Icon | Frame 66px · corner 18px · icon 29px · stroke 1.6px |
+| Box | Corner 20px · 1px light grey border · nested box corner 16px, very light grey fill |
+| `.focus` box | 2px border in a dark shade of `--accent` · corner 22px |
+| Connector | Vertical or horizontal only · right-angle bends with a rounded corner of radius 10px (SVG/Python engine uses 12–14) · no diagonal lines, no free curves, no sharp corners |
+| Spacing | 12 · 20 · 26 · 34 · 48 · column gap 130 |
+
+> **The icon frame must be big.** 66px is the point where a figure starts to look deliberate, not like a generated diagram.
+> Below 56px the icon becomes a small dot inside a big box and the figure looks hollow.
+
+## Colour system (from item 5)
+
+In the HTML templates, change `--accent` in `:root` in one place; the light and dark shades are computed from it. (In the SVG/Python engine, change `ACCENT` in `theme.py`.)
+
+**Figure background follows the project's design.** Append `#accent=<main colour>&bg=<background colour>` to the file name to match the deck or app. A dark or light background both work. Every grey is computed from the background (currently available in `figure-flow.html`). Without `bg` you get a white background.
+
+Exceptions that do not change with the brand:
+
+- **Provider logo colours.** AWS orange and Azure blue must be their real colours, not our brand colour.
+- **Structural grey.** Borders and box fills must be faint enough not to compete with the content.
+
+**Icon colour has 7 groups, and each group must mean something.**
+
+| Class | Use for |
+|---|---|
+| `t-neutral` | People, devices, things outside the system, plain file storage |
+| `t-edge` | Entry and exit points · gateway · API |
+| `t-app` | Tools the user works with |
+| `t-view` | Parts the user uses to view or read results |
+| `t-data` | Database · backup |
+| `t-alert` | Queues, work that can pile up, things that hurt when they break |
+| `t-warn` | Things with conditions — licences, legal limits |
+
+Every frame has a **light fill with a border in the same tone**, not a solid fill, because a solid colour pulls the eye away from the content.
+If you want an 8th colour, you are using colour for looks, not for meaning.
+
+## Hand-drawn line icons (from item 6)
+
+Hand-drawn line icons: `viewBox 0 0 24 24` · `stroke-width 1.6` · no fill · round line caps.
+The shape must be readable at 24px, because detail beyond 3 strokes turns into a black blob.
+
+## Fonts in figures embedded in a deck (from item 8)
+
+  For a figure that will be embedded in a deck (`StageDeck` · `slide-deck`), move `"IBM Plex Sans Thai"` to the first position so the figure gets the same font as the deck body. A Word document uses the brand's Thai font and falls back to Tahoma if it is missing, per `document-design` → `references/branded-document-design.md` item 2; a figure inside it may use a different font.
+  If the machine has none of them, the figure silently falls back to a font that places vowels in the wrong position, so **always render and look**.
+
+
+## reference: diagram-figures.md
+
+<!-- merged from skill `diagram-figures` on 2026-11-27 · description was: Use when a document or slide needs a designed diagram -->
+# Diagram Figures — designed figures (HTML template → PNG) for documents, slides and print
+
+> **One rule:** the figure's main colour = the project's main colour. Look for it in the order in step 5. Only if nothing is found, use the house palette `#2A78D6` from `design-gate/parts/polished-document-style/references/theme-colors.md` ("ค่าตั้งต้นประจำบ้าน", the house default).
+
+> **Pre-work gate (every time):** read the owner's theme → search live for a reference → 3 genuinely different directions → check `design-gate/no-ai-look` before sending. Follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search finds this piece's structure). Close the work with a line `ด่านก่อนลงมือ:`.
+
+## Use when
+- A figure in a work document (business plan · process chart · research summary · BRD · SRS · ER diagram) or any figure that must look designed: client proposals · slides · print · sign-off documents, including cloud diagrams with real logos.
+- The same style generated from data or code (re-issued when data changes, coordinates on a grid) → SVG/Python engine, [`engine-svg-python.md`](engine-svg-python.md).
+- Dozens of Mermaid blocks (sequence · state · ER · gantt) going into Word or PDF as hand-drawn-looking figures → Mermaid engine, [`engine-mermaid.md`](engine-mermaid.md).
+
+Not for: a quick diagram in a README · Pull Request · code note → `software-diagrams.md` (plugin `software-development`; for logos in a repo use its `diagrams` library) · how to embed a figure in markdown → `markdown-visuals.md`. Anything read by people outside the team → this skill. This skill costs time (several rounds of fixes per figure), so skip it for in-team figures.
+
+## Steps
+1. **Answer 3 questions first.** Where does the figure go (slide 16:9 · A4 page · screen)? Set `.sheet{width:...}` to match: slide 1600px · A4 portrait 1240px · A4 landscape 1750px. Who reads it (non-technical client → box names in Thai; technical team → real service names)? What single question does it answer (1 figure, 1 question)?
+2. **Copy one template from `assets/` and edit it; never write your own.** All share colours, sizes, fonts and the line-drawing script.
+
+   | Question the figure answers | Template | Details |
+   |---|---|---|
+   | Who outside does this system, shop or organisation talk to? (top-level overview, C4 level 1) | [`figure-context.html`](../assets/figure-context.html) | [layout-context.md](layout-context.md) |
+   | Where is the real thing, and what is inside? (departments · places · machines; deployment) | [`figure-template.html`](../assets/figure-template.html) | [layout-deployment.md](layout-deployment.md) |
+   | Which cloud services are used? (real AWS · Azure · Google Cloud logos) | [`figure-cloud.html`](../assets/figure-cloud.html) | [layout-cloud.md](layout-cloud.md) |
+   | What does 1 item (message · order · money) pass through, in what order? (numbered ①–⑥, user → channel → internal → external) | [`figure-flow.html`](../assets/figure-flow.html) · [example](../assets/figure-flow-example.png) | [layout-flow.md](layout-flow.md) |
+
+3. **Header needs all 6 parts:** project logo (`<img class="logo">` → the project's `assets/logo/`; if there is none, say so in the report) · title · 1-line sub-title (what the real thing is, not an expansion of the title) · figure number · version and date · owner. Wrong/right sub-title example: [`design-system.md`](design-system.md), "Figure header".
+4. **Sizes.** Sizes, spacing and corners are already in `:root` of `assets/figure-template.html`; do not set new values. Icon frame ≥ 66px (below 56px looks hollow). Connectors vertical or horizontal only, bent with rounded corners; no diagonals. Full table: [`design-system.md`](design-system.md), "Size system" (open when adjusting or writing a template). Text size follows the placed size: for a figure placed in an A4 document, smallest text after placing must be ≥ 7 pt → `minimum px = 0.247 × canvas width(px) ÷ placed width(cm)` (2000px canvas: 29px on a 17 cm page, 20px on 25.7 cm). Make boxes wide enough that Thai names are not cut mid-word. In-document version uses `?embed=1` (hides header); aspect ratio width ÷ height ≥ 1.46 for a landscape page; one `figure-theme.css` for the whole set.
+5. **Colour.** Stop at the first hit:
+   1. `doc-theme` in the project's documents (`design-gate/polished-document-style`, section "ธีมของเอกสาร").
+   2. The project's brand colour: `--primary` · `--brand` · `--accent` in CSS · `primary` in Tailwind / UI theme · `colorPrimary` in a mobile app · brand kit · logo. Read the background colour from the same places (`--background` · `--bg` · dark or light mode), because figures follow the project's design.
+   3. Nothing yet → search live per `design-gate/design-references` (plugin `superuser`), type `document`, then extract colours from the chosen work. Use the stored colour library only if live search is not possible.
+   4. Live search not possible → use `#2A78D6`, write `(รอยืนยัน)` in the report, carry on without asking, and list a tone from [references/colour-by-domain.md](colour-by-domain.md) for later.
+
+   Never use a colour from an example or reference image. In HTML templates change `--accent` in `:root` (SVG/Python: `ACCENT` in `theme.py`); background that follows the project → append `#accent=<main colour>&bg=<background colour>` to the file name. The 7 icon colour groups (`t-neutral` · `t-edge` · `t-app` · `t-view` · `t-data` · `t-alert` · `t-warn`) and provider/structural exceptions: [`design-system.md`](design-system.md), "Colour system". An 8th colour means colour is used for looks. The main colour must show across the whole figure, with 1 `.focus` card (brand border + glow), a 6px glowing main path and thin grey secondary lines. Full rules: [`focal-point-and-layout.md`](focal-point-and-layout.md).
+6. **Icons.** If an official icon exists (AWS · Azure · Google Cloud · Kubernetes · most open-source tools), use it from `assets/icons/` (205 selected) or `python assets/find-icon.py <name>`; groups, commands, licences in [references/icons.md](icons.md). If not, or it is our own system, draw a line icon (`viewBox 0 0 24 24` · `stroke-width 1.6` · no fill · round caps · readable at 24px, max 3 strokes of detail) and footnote that it is not an official logo (the template has this line). Never mix official and hand-drawn icons in one figure. Never use a logo so that it looks like the provider endorses it.
+7. **Wires.** Same column → down arrow `.down`. Across columns → the `WIRES` list at the end of the file (`{from, fs, to, ts, tp, label}`); the script draws after layout; never write fixed coordinates. Vertical or horizontal only, rounded bends via `elbow()` (use `mx` when lines share a channel). A label must be narrower than the column gap (longer → raise `gap` of `.stage`). At most 5 cross-column lines per figure, to the smallest correct box. A label says what flows (`HTTPS 443`), not `เชื่อมต่อ`; no label if nothing to say; a not-yet-real connection uses `planned:true` with a footnote. Code example: [`wires.md`](wires.md) (open when writing `WIRES`).
+8. **Layout of process and team charts.** Read top to bottom, 1 level per tier (left to right only with a time axis). Middle element (`.focus`) in the centre, whole figure centred. Same-level things in one frame and one row, with a group name on the border; frame is a single line, no fill; equal card height. One line into a frame if all boxes receive the same thing. Line channels outside frames. Bends are curves (~12px radius), cards 14px corners, frames 20px. Every box has a name and a 1-line description. Details: [`focal-point-and-layout.md`](focal-point-and-layout.md).
+9. **Thai.** `line-height` ≥ 1.5 and never a fixed height on a text box (upper vowels and tone marks get cut). Description text ≥ 12px. Thai has no word spaces, so put `<br>` yourself in long text, and never break inside words like ทีละ · สต็อก · ร้านค้า · เช็ก (`white-space:nowrap`). Font order `"Noto Sans Thai","IBM Plex Sans Thai",Tahoma,Loma` is set in the templates; if the machine has no Thai font vowels land wrong, so always render and look.
+10. **Render and look. Never skip.**
+    ```bash
+    pip install playwright && playwright install chromium
+    cp <skill>/assets/render-figure.py docs/figures/render.py     # first time in the project
+    python docs/figures/render.py                  # every figure in docs/figures/src/ → docs/figures/*.png + docs/figures/doc/*.png
+    python docs/figures/render.py arch-01 --min-px 20             # chosen figures · smallest text by placed size (step 4)
+    python assets/render-figure.py figure.html figure.png 2       # single file (slide · trying a direction)
+    python scripts/check-figure-geometry.py docs/figures/src     # exit 0 = pass: diagonals, square corners, overlapping labels, lines over text
+    python scripts/check-figure-source.py docs/figures/src       # every figure starts from this skill's skeleton
+    ```
+    Always use multiplier 2 (1 is blurry when enlarged). Folder mode makes 2 versions per figure (full + `?embed=1`) and checks text smaller than `--min-px`, wrapped names or labels, overflow, overlapping labels: `problems: 0` and exit 0 = pass. Keep `render.py` at `docs/figures/render.py` next to `src/`, never in `_to_delete/` or a scratchpad; never delete `docs/figures/src/` (.png files are only output). Send the client a PNG; keep the HTML source in the repo.
+11. If a figure comes out wrong (missing arrowhead, line to the wrong box, missing Thai vowels, label over a box), open the symptom → cause → fix table [references/pitfalls.md](pitfalls.md) before fixing it yourself.
+12. Run `design-gate/no-ai-look` item 3 (for HTML, run its script; also eye gate 3.2; 0 findings from the script is not yet a pass). Hand-off by medium: slide → `slide-deck` · Word / PDF → `document-design` · SRS → `requirements-writing` · app screens → `ui-craft`.
+
+## Check before done
+- [ ] Every cross-column wire has an arrowhead; no line crosses a box or text; labels readable and not overlapping.
+- [ ] Thai text complete (no missing vowels or tone marks, no word cut mid-word).
+- [ ] Exactly one `.focus` box; header has all 6 parts; logo shows; figure has a date and owner.
+- [ ] Shrunk to 25% width, you can still tell what is where.
+- [ ] Smallest text converted to pt at the placed size is ≥ 7 pt.
+- [ ] Someone who has never seen the system can answer the original question.
+- [ ] Icons are all official or all hand-drawn; no diagonal lines or sharp corners.
+- [ ] The line `ด่านก่อนลงมือ:` closes the work.
+
+## References
+- [`focal-point-and-layout.md`](focal-point-and-layout.md) — open when styling a figure, laying out a process chart, or sizing for a placed page
+- [`design-system.md`](design-system.md) — open for header example, size table, colour groups
+- [`colour-by-domain.md`](colour-by-domain.md) — open when the colour step falls to the house palette
+- [`icons.md`](icons.md) · [`wires.md`](wires.md) · [`pitfalls.md`](pitfalls.md) — open for icons, `WIRES` code, a wrong-looking figure
+
+
+## reference: engine-mermaid.md
+
+# Mermaid → right-angle figures with rounded corners
+
+Route 3 of `diagrams`. Use it when a document has dozens of Mermaid blocks (sequence · state · ER · gantt) and must be delivered as a Word or PDF file that looks designed.
+An image drawn by Mermaid itself has free-curved, diagonal lines and colours that do not match hand-drawn figures. This engine reads the original blocks and redraws them with the same rules as the HTML templates.
+
+## What you get
+
+- Vertical or horizontal lines only, bent with rounded corners (radii are in `theme.py`: `WIRE_R` 12 · box `BOX_R` 10)
+- Line labels are white with a light border, and a checker makes sure no label overlaps a box or a line
+- The one main box is a dark card with a gradient border, matching the `.focus` box
+- Layout is done by ELK (`elkjs`, layered + orthogonal), so you do not place coordinates yourself
+
+## Use
+
+1. Copy the folder `assets/mermaid-engine/` to `docs/figures/src/gen/`
+2. Edit `figures.json`:
+   - `prefix` is the project code (`workspace-rules/document-naming`)
+   - `drafts` is the folder of `.md` files that hold Mermaid blocks
+   - `skip` is the blocks that already have a hand-drawn figure
+   - `captions` replaces captions generated from headings
+3. Edit `theme.py`: make `ACCENT` and `SECOND` match the project's `doc-theme`, and `MEASURE_FONTS` must point at real font files on the machine
+4. Run `python build.py`. You get `docs/figures/<prefix>-<file>-m<N>.png` and `map.md`, which says which block became which file
+   - If `elkjs` is not installed yet, `elk.py` installs version 0.9.3 into the configured `node_modules` folder by itself
+5. Always check the output:
+   - A `PROBLEM` line means a diagonal line, an overlapping label, or an unreadable block. Do not deliver while any such line remains
+   - Open and look at at least 1 figure of each type
+
+## Limits
+
+- Works for 4 types: `sequenceDiagram` · `stateDiagram-v2` · `erDiagram` · `gantt`. Draw a flowchart as an HTML template (item 2 of SKILL.md), because flowcharts are the figures people read most
+- The figure is 1240px wide to fit a portrait A4 page. If a figure has more than 7 participants, the text gets small; split the figure or put it on a landscape page
+
+
+## reference: engine-svg-python.md
+
+# SVG/Python engine — figures generated from data or code
+
+Route 2 of `diagrams`. Use it instead of the HTML skeleton when a figure must be generated from data or code. Examples: several figures that must be re-exported every time the data changes, or a figure where you control every position on a grid with right-angle lines and rounded corners.
+Python writes the SVG onto the grid, then renders it to PNG. Icons and logos come from the same library as the HTML skeleton ([icons.md](icons.md)).
+
+The cost is time, because 1 figure takes several rounds of fixes. So use it only for figures that people outside the team will see, and see repeatedly.
+
+> **Main colour = the project's main colour.** Find it in the order given in `diagrams` → `references/diagram-figures.md` section 5 (colour system), then put it in `ACCENT` in `theme.py`. Use the house colour `#2A78D6` only when that order finds nothing at all.
+
+---
+
+**Contents**
+- [0 · Colour comes from the work — do not stop to ask](#0--colour-comes-from-the-work--do-not-stop-to-ask)
+- [1 · Order of work](#1--order-of-work)
+- [2 · File layout](#2--file-layout)
+- [3 · Rule 1 — grid first, lines after](#3--rule-1--grid-first-lines-after)
+- [4 · Connector lines](#4--connector-lines)
+- [5 · Labels on lines — only two roles](#5--labels-on-lines--only-two-roles)
+- [6 · Zones](#6--zones)
+- [7 · Icons and logos](#7--icons-and-logos)
+- [8 · Rendering](#8--rendering)
+- [9 · Check loop — do not skip](#9--check-loop--do-not-skip)
+- [10 · Constants that work](#10--constants-that-work)
+- [11 · Legend bar](#11--legend-bar)
+- [Abbreviations](#abbreviations)
+
+## 0 · Colour comes from the work — do not stop to ask
+
+**If the source document already declares a `doc-theme`, use that value and do not ask again.**
+(See `design-gate/polished-document-style`, section "Document theme".) If there is none yet, follow the steps below, then write the result back into `doc-theme`.
+
+**No brand colour → follow the order in `diagrams` → `references/diagram-figures.md` section 5:** use the house value `#2A78D6`, write `(รอยืนยัน)` (awaiting confirmation) in the report, and carry on without stopping to ask.
+Put a tone suggested from the content, using the table in [colour-by-domain.md](colour-by-domain.md), in the report so the user can choose later.
+
+Put **one main colour** in `ACCENT` in `assets/svg-engine/theme.py`. All light and dark shades
+are computed from it with `tint()`, so the drawing code has no other colour hard-coded.
+
+The only colour not tied to `ACCENT` is `EXCEPT_HUE`, for the "exception" label. It must always differ from the main colour.
+If the main colour is already orange, change `EXCEPT_HUE` to another contrasting colour.
+
+---
+
+## 1 · Order of work
+
+1. Read all existing diagrams first, then ask **what question this figure answers**. 1 figure answers 1 question.
+2. Pick the colour by section 0 (no colour → house value + `(รอยืนยัน)`).
+3. **Place every box on the grid before drawing any line.** This is the most important step. See section 3.
+4. Finish `theme.py` and `ref.py` first, then write the figure file.
+5. **Render, then open the image file and look at it.** Checking that the script ran without errors is not enough.
+6. Once the figure is clean, write it to the target folder. Move the old figure to `_to_delete/`.
+
+---
+
+## 2 · File layout
+
+```
+architecture/
+  01-system-context.png      ← output; the number prefix follows reading order
+  _src/
+    theme.py                 ← all colours — edit here only
+    ref.py                   ← visual language: zones, units, lines, labels, legend bar
+    render.py                ← SVG → PNG with Playwright at 2x
+    d01.py … dNN.py          ← one file per figure; layout only
+    logos/                   ← product logos + colors.json
+```
+
+Copy the whole folder [`assets/svg-engine/`](../assets/svg-engine/) to `_src/` and start from there. [`d01.py`](../assets/svg-engine/d01.py) is a sample figure that really renders.
+
+---
+
+## 3 · Rule 1 — grid first, lines after
+
+Diagonal lines are hard to read, and bending the lines afterwards does not help. **Fix the positions.**
+
+```python
+CA,CB,CC,CD,CE,CF = 178,452,678,896,1080,1312   # columns
+R1,R2,R3          = 288,458,624                  # rows, spaced ~170 apart
+```
+
+Every box sits on an intersection of a column and a row, and none strays off the grid.
+When all points sit on the same lines, the connectors are right-angled by themselves with no bending.
+
+### Midpoint rule
+
+A node that receives from several paths must sit **midway between those paths**, not stick to one row.
+If it also sends on to several paths, it must sit midway between the outgoing paths too.
+
+Use **one merge point and one split point** so the lines are symmetric.
+
+```python
+RM = (R1+R2)//2      # Nginx sits midway between the two incoming rows
+J1, J2 = CB-74, CB+86
+
+flow([(CA+34,R1),(J1,R1),(J1,RM),(CB-30,RM)])   # enters from above
+flow([(CA+34,R2),(J1,R2),(J1,RM),(CB-30,RM)])   # enters from below
+flow([(CB+30,RM),(J2,RM),(J2,R1),(CC-30,R1)])   # leaves going up
+flow([(CB+30,RM),(J2,RM),(J2,R2),(CC-30,R2)])   # leaves going down
+```
+
+### Wiring channels
+
+A line that must cross the grid **must not run over a row that holds boxes.** Reserve separate channels for it.
+
+```python
+TB = 238        # top channel — at least 36 from the zone edge
+MB = R3-48      # middle channel — between rows
+```
+
+---
+
+## 4 · Connector lines
+
+All lines are right-angled, with corners rounded at radius 14. This makes the figure look much more refined without losing clarity.
+`ref.flow(pts, dashed=False, arrow=True)` computes the rounded corners itself.
+
+**The arrowhead must end at the icon edge, not at the name label.** For example `CD-30` when the icon is 46 wide.
+
+---
+
+## 5 · Labels on lines — only two roles
+
+| Role | Colour | Use for |
+|---|---|---|
+| Normal | light shade of `ACCENT` | what normally flows along the line |
+| Exception | `EXCEPT_HUE` | a path that does not pass the front gate · special cases |
+
+**A figure may have only one exception label.** If there are 2 or more, no label really stands out.
+
+A label says **what flows through**, such as `SQL` `/api/` `DICOM 11112`, not `เชื่อมต่อ` (connect).
+
+---
+
+## 6 · Zones
+
+A zone is a frame with a very light fill. Its name label is a white capsule that straddles the border and has a coloured dot in front.
+
+```python
+zone(x, y, w, h, "ห้อง Server ของโรงพยาบาล", "physical")
+```
+
+| Type | Line | Meaning |
+|---|---|---|
+| `physical` | solid | A real physical boundary: room, building, machine |
+| `logical` | dashed | A logical boundary: Docker Compose · namespace · VPC |
+| `outside` | dashed | Outside the system we look after |
+
+The reader sees at once which one physically exists. Nest zones no more than 3 levels deep.
+
+---
+
+## 7 · Icons and logos
+
+Icons **float on the background with no frame and no tile.** The name and description sit below the image.
+
+```python
+unit(cx, cy, "Nginx", "ประตูเดียวที่เข้าระบบได้", slug="nginx")
+#  logos/<slug>.svg exists → use the real logo, filled with the colour from colors.json
+#  does not exist         → use a line symbol of our own design
+```
+
+Values that work: icon 46 · name 11.5 bold, placed `size/2+20` from the centre · description 10, placed `size/2+35` from the centre.
+
+Take logos from this skill's icon library ([icons.md](icons.md)). Run `python assets/find-icon.py --group brands <name>` from the `diagrams/` folder, then `--copy` the result into `_src/logos/`.
+Simple Icons gives single-colour SVG with `viewBox 0 0 24 24` and comes with `colors.json`, which holds each brand's official colour code.
+
+### Trademarks — do not skip
+
+- A logo belongs to its owner. You may use it to refer to the product itself in the diagram,
+  but **do not alter its shape, do not stretch or squash it, and do not make it look as if the owner endorses the figure.**
+- If a product has no logo file, use a symbol instead, and **name that product in the note under the figure.**
+- Do not download new logos on your own. Use the set that exists, or have the user get them from that project's brand page.
+
+---
+
+## 8 · Rendering
+
+```bash
+pip install playwright && playwright install chromium
+python render.py d01.svg ../01-architecture.png 1400 860
+```
+
+Always render at 2x, because 1x gives a blurry image when enlarged on a slide.
+
+Thai text needs a Thai font on the machine that renders, declared in the `font-family` of `<svg>`.
+**Do not use Python Imaging Library (PIL) to draw mixed Thai and English text**, because it produces square boxes in place of letters.
+
+---
+
+## 9 · Check loop — do not skip
+
+Render → open the image and look → fix → render again, until it is clean.
+**These 6 problems come up every time. Check them in every round:**
+
+1. **A label on a line covers an icon or a name.** Move it to the midpoint of the longest segment, or onto the stub.
+2. **A line leaving an icon cuts through its own description.** Start the line at `cy+58`, not `cy+32`.
+3. **A zone edge cuts the description of the bottom row.** The zone's bottom edge must be ≥ `R_bottom + 58 + 24`.
+4. **Zone caption text sits on the border.** Merge it with the name into one capsule.
+5. **An arrowhead ends at the name label, not the icon.** Make it end at the icon edge.
+6. **Text overflows its frame.** Thai 11.5px ≈ 6.0 px/char · heading 15px ≈ 7.5 px/char.
+   If space is short, cut words. **Do not shrink the font.**
+
+---
+
+## 10 · Constants that work
+
+```
+width 1400 · margin 56
+centred title 22 · subtitle under title 12.5
+unit name 11.5 bold · description 10 · label on line 10.5
+connector 1.6 · zone border 1.4 · corner radius 14 · label height 21
+```
+
+---
+
+## 11 · Legend bar
+
+Every figure ends with a single bar that says what each kind of frame means and where the 2 label colours differ.
+After it come 2–4 lines of notes. These include the trademark line and references to other related figures.
+
+---
+
+## Abbreviations
+
+- **SVG** — Scalable Vector Graphics
+- **PNG** — Portable Network Graphics
+- **PIL** — Python Imaging Library
+
+
+## reference: focal-point-and-layout.md
+
+# Focal point, layout of process charts, placed size · diagram-figures
+
+Open when you build or restyle a figure and need the full rules behind the short lines in `diagram-figures.md`.
+
+## Placed size, two versions, one theme file
+
+- **Text size depends on where the figure will be placed, not on the canvas.** A figure placed in an A4 document must be worked back from the placed size: the smallest text after placing must be ≥ 7 pt → `minimum px = 0.247 × canvas width(px) ÷ placed width(cm)`. A 2000px canvas on a 17 cm portrait page = 29px; on a 25.7 cm landscape page = 20px. After enlarging the font, boxes must be wide enough that Thai names are not cut mid-word.
+- **2 versions from one source file:** the full version (all 6 header parts, for standalone or slide use) and the in-document version (`?embed=1` hides the header because the document's caption already says it; a repeated header makes the figure smaller and cluttered). Make the aspect ratio wide enough to fill a landscape page (width ÷ height ≥ 1.46).
+- **The whole set of figures uses one CSS file** (`figure-theme.css` next to the source files) that pulls colour, font and logo from the project's identity (`assets/logo/` · mockup tokens). Change it in one place and every figure follows.
+- **The beauty gate for figures** runs together with the beauty gate for documents (`document-design` → `references/branded-document-design.md` step 2): main path is a solid line in the strong colour · secondary lines grey · a legend · flow order numbered when there are more than 3 steps.
+
+## Colour weight
+
+Limit the number of colours, not the weight of colour. The main colour must be visible across the whole figure, not only in the header bar. Labels that must be found fast (step number · owner · status) use a solid fill · card headers are a full-width solid colour band (a thick colour stripe beside a rounded card is an AI signal in `design-gate/no-ai-look`) · summary boxes use a dark fill · pastel colours only as a fill that has text or a dark border with it · check with the "colour power" axis in the beauty gate of `ui-craft` (`ui-craft/references/states-and-checks.md`, plugin `software-development`).
+
+If you found a colour in step 5 item 2 but there is no `doc-theme` yet, declare a `doc-theme` with that value so the project's figures, documents and slides share it.
+
+## A figure needs a focal point, not flatness
+
+A readable but flat figure (white cards that all look alike, all lines the same thickness) draws the user's "ดีขึ้นแต่ไม่ว้าว" (better but not wow). Ways that pass the beauty gate:
+
+| Part | What to do |
+|---|---|
+| Canvas | Use the same background as the app's identity. A dark app gets a figure that is dark all over (not a white frame around a dark image) · faint dot-grid pattern, at most 8% opaque, for depth |
+| Main path | 6px thick in the brand colour + glow (`filter: drop-shadow(0 0 8px <brand colour 75%>)`) · secondary lines thin, grey, no glow. The difference is clear enough that the legend need not be read |
+| Focal point | 1 `.focus` card per figure: 3px brand-colour border + surrounding glow + icon with brand-colour fill · other cards' fill blends into the canvas |
+| Sequence badge | Brand-colour fill, text in the canvas colour + a light glow |
+| Contrast | Secondary text on a dark fill ≥ 7:1 (light grey, not mid grey) |
+| Theme | Every colour is a variable in a single css file · arrowheads read colour from the variable (`getComputedStyle`), no values hard-coded in JavaScript · meaning colours (`t-app` `t-alert` `t-warn`) have a dark-background pair · no colour in `style=""` of figure files |
+
+**Dot grid + glowing lines = an approved house style** (the exception "an approved look always wins" in `design-gate/no-ai-look`). When scanning with `slop_scan.py`, add `slop-ok` at `grid-bg` and `neon-glow` of these figures, with a short reason.
+
+**How to choose a direction:** write 3 directions as override css, inject them into 2 real figures at render time (`add_init_script` before the line-drawing script runs) → place them next to the original → have a reviewer who did not do the work score them → edit the one theme css file and render the whole set. A dark figure in a white-page document must be a recorded decision (for example, chapter-opening pages and the cover are dark too), not an accident.
+
+## Layout: process charts and team charts
+
+Rule set by the user after seeing a real figure (2026-10-28): a figure with wandering curved lines and boxes scattered out of rows is confusing to read.
+
+- **Read top to bottom**, 1 level per tier: entry → middle → receiver → result · use left to right only when there is a time axis (Gantt)
+- **The middle element sits in the centre of the figure** (team lead · main system · `.focus` box), and the whole figure is centred, not pushed left leaving the other side empty
+- **Things at the same level go in the same frame, in the same row**, with a group name on the border line, such as "ทางเข้า" (entry) or "agent 8 ตัว" (8 agents)
+  - The frame is a single line, no fill, no shadow
+  - Cards in the same frame have equal height
+  - If there are too many for one row, split into several rows in the same frame and centre the last row
+- **If every box in a group receives the same thing, draw one line into the frame**, do not branch a line to every box · if each box is a different choice, draw a separate line per box and move the group name to the bottom border so the line does not cross the name
+- **Line channels are outside the frame.** Lines leaving or entering a group bend in the gap between frames and do not cross a group name or a card
+- **Keep it soft.** Straight runs of a line are still vertical or horizontal, but every bend is a curve of radius about 12 px (runs shorter than 24 px reduce the radius accordingly) · cards have 14 px corners · group frames have 20 px corners · labels are capsules · no sharp corners on boxes or lines
+- **Thai words must not break mid-word.** The browser's word breaker splits some words wrongly (for example `เช็|กมิจฉา|ชีพ`). Keep a list of these words (ทีละ · สต็อก · ร้านค้า · เช็ก) and never break a line inside a word in the list (wrap with `white-space:nowrap`) · for a long text not in the list, put `<br>` yourself · open the figure and look at every card
+- **Every box has a name and a 1-line description**, not only an icon · steps connected in a sequence (1 → 2 → 3) need no frame, because they are not the same level
+
+## Thai fonts
+
+Font order is `"Noto Sans Thai","IBM Plex Sans Thai",Tahoma,Loma`, already set in the templates. For a figure embedded in a deck (`StageDeck` · `slide-deck`), move `"IBM Plex Sans Thai"` to the first position. A Word document uses the brand's Thai font and falls back to Tahoma if it is missing (`document-design` → `references/branded-document-design.md` item 2); a figure inside it may use a different font. If the machine has no Thai font at all, vowels silently end up in the wrong position, so always render and look.
+
+
+## reference: icons.md
+
+# Icon library — shared by the HTML skeleton and the SVG/Python engine
+
+**205 icons are already provided in `assets/icons/`.** Nothing more to install.
+They are PNG files with a transparent background at 160×160, official icons of providers and tools, split into 9 groups.
+
+| Folder | Contents |
+|---|---|
+| `icons/aws/` | 39 — EC2 · RDS · S3 · Lambda · ELB · Route 53 · CloudFront · SQS · SNS · IAM · CloudWatch … |
+| `icons/azure/` | 24 — VM · App Service · AKS · Cosmos DB · Blob Storage · Key Vault … |
+| `icons/gcp/` | 21 — Compute Engine · GKE · Cloud Run · BigQuery · Pub/Sub · Firestore … |
+| `icons/k8s/` | 16 — Pod · Deployment · Service · Ingress · ConfigMap · Secret · Node … |
+| `icons/data/` | 17 — PostgreSQL · MySQL · MongoDB · Redis · Elasticsearch · ClickHouse … |
+| `icons/queue/` | 6 — RabbitMQ · Kafka · Celery · NATS · ActiveMQ · EMQX |
+| `icons/infra/` | 26 — Nginx · Docker · HAProxy · Traefik · Istio · firewall · router · Windows · Linux … |
+| `icons/ops/` | 19 — Prometheus · Grafana · Jenkins · GitLab CI · GitHub Actions · Terraform · Vault … |
+| `icons/app/` | 37 — Angular · React · .NET · Spring · Python · LINE · Slack · Stripe · user … |
+
+The full list is in [`assets/icons/INDEX.md`](../assets/icons/INDEX.md). Open [`assets/icons/contact-sheet.html`](../assets/icons/contact-sheet.html) to see every icon on one page.
+
+**If you need an icon that is not among these 205**, search the full library `assets/tech-icons.zip` (8,602 icons · 5 groups) with [`find-icon.py`](../assets/find-icon.py). It needs no installation and does not need the archive unpacked.
+
+| Group | Contents |
+|---|---|
+| `cloud/` | 1,986 PNG · AWS · Azure · Google Cloud · IBM · Oracle · Alibaba · DigitalOcean · Firebase … |
+| `platform/` | 471 PNG · databases · queues · CI/CD · monitoring · Kubernetes · programming languages · GIS |
+| `brands/` | 3,461 single-colour SVG · brand logos + official colour codes in `colors.json` |
+| `devtools/` | 572 coloured SVG · developer tool logos |
+| `ui/` | 2,112 SVG general line icons (Lucide), not logos |
+
+```bash
+python assets/find-icon.py kafka redis                       # search by name
+python assets/find-icon.py --group ui user                    # search one group only
+python assets/find-icon.py --copy cloud/aws/compute/ec2.png brands/docker.svg --to docs/figures/icons
+python assets/find-icon.py --colors docker                    # official logo colours
+```
+
+Pull out only the icons you use and put them next to the figure file. Do not unpack the whole library into the project. The library's licences are MIT · CC0 · ISC (see `--groups`), but logos remain trademarks of their owners.
+
+> **About licences** — The architecture icon sets of AWS · Azure · Google Cloud
+> are published specifically for drawing architecture diagrams, so they may be used in proposal documents.
+> What you cannot do is use a logo in a way that suggests the provider endorses or partners with you,
+> or use it as part of your own brand. If a tool has no official icon, draw a line icon yourself following [SKILL.md](diagram-figures.md) section 6.
+
+
+## reference: layout-cloud.md
+
+# Skeleton `figure-cloud.html` — cloud diagram with provider logos
+
+This skeleton answers "which cloud services do we use?" The skeleton file is at [`assets/figure-cloud.html`](../assets/figure-cloud.html).
+
+Use it when the reader expects to see real Amazon Web Services (AWS) · Azure · Google Cloud ·
+Kubernetes icons, like the reference diagrams the providers publish. Find the icons in the library, per [icons.md](icons.md).
+
+```html
+<div class="unit"><img src="icons/aws/ec2.png" alt="">
+  <div class="name">Web Server</div><div class="desc">AZ-1</div></div>
+```
+
+**Rules specific to this skeleton:**
+
+- **A line that crosses a boundary leaves from the edge of the boundary box** (`n-region`), not from a box inside it,
+  because a line that starts from an inner box cuts diagonally across everything in the way.
+- **Dashed line = a boundary the provider manages for you.** A solid orange line = a machine we look after ourselves.
+  Always put these meanings in the legend.
+- Show icons bare, with no frame, because a logo already has its own colour and shape.
+- Use the official service name (`Amazon RDS`). The description under the name may be in Thai.
+
+
+## reference: layout-context.md
+
+# Skeleton `figure-context.html` — the system and the outside world
+
+This skeleton answers "who and what outside does this system talk to?" (C4 level 1). The skeleton file is at [`assets/figure-context.html`](../assets/figure-context.html).
+
+```
+┌─ figure header ─────────────────────────────────────────────────┐
+│  users (horizontal strip) → described system (large card) ← external systems │
+│  ─ staff                    ─ name + subtitle              ─ external system │
+│  ─ doctor                   ─ 3-6 functions                ─ name + status   │
+│  ─ admin                    ─ limitation tag                                 │
+├─ legend ────────────────────────────────────────────────────────┤
+│  footnote — meaning of dashed line · all abbreviations · next figure │
+└────────────────────────────────────────────────────────────────┘
+```
+
+- **Users go on the left and external systems on the right**, never mixed, because people and machines are different kinds of thing.
+- **The central card lists 3 to 6 functions.** More than that means you are writing an SRS (Software Requirements Specification), not drawing a figure.
+- **An external system not yet connected** gets a dashed line (`planned:true`), and the card says which version plans it,
+  because a figure that shows only what exists gets the question "so is HIS connected yet?" every round.
+- **Always include a legend** when a shape or line carries meaning.
+- **Spell out abbreviations in the footnote**, because readers on the customer side do not know what SEG is.
+
+
+## reference: layout-deployment.md
+
+# Skeleton `figure-template.html` — deployment · inside the machine
+
+This skeleton answers "what machine does the real thing run on, and what is inside?" The skeleton file is at [`assets/figure-template.html`](../assets/figure-template.html).
+
+It has 3 columns, left to right in the direction the data flows:
+
+```
+┌─ figure header ────────────────────────────────────────┐
+│  name + subtitle              figure number · version · owner │
+├────────────┬──────────────────────────┬────────────────┤
+│ outside    │  ⬅ .focus box             │ destination    │
+│ people,    │  what this document       │ regulations    │
+│ devices,   │  explains                 │ outgoing items │
+│ other      │  can nest 1 more level    │                │
+│ systems    │                           │                │
+├────────────┴──────────────────────────┴────────────────┤
+│ footnote — related figures · icon sources              │
+└────────────────────────────────────────────────────────┘
+```
+
+**Nest boxes no more than 3 levels:** column → large box → small box.
+A 4th level means the figure answers 2 questions, so split it into 2 figures.
+
+**A figure may have only one `.focus` box.** With 2 boxes, you have not yet decided what the figure is about.
+
+
+## reference: layout-flow.md
+
+# Skeleton `figure-flow.html` — what the data flows through, in what order
+
+This skeleton answers "what does 1 message (request · job · document) pass through, and in what order?" The skeleton file is at [`assets/figure-flow.html`](../assets/figure-flow.html) · a rendered example is at [`assets/figure-flow-example.png`](../assets/figure-flow-example.png)
+
+```
+┌─ figure header ─────────────────────── ①–⑥ meaning of sequence numbers ┐
+│ ┌users┐   ┌channels┐    ┌ host machine (grey) ──────────┐   ┌ external services ┐ │
+│ │ person │①→│ web    │②→ │ ┌ system .focus (main colour) ┐ │③→ │ AI · API     │ │
+│ │ person │①→│ LINE   │②→ │ │ layer · function      │ │   └─────────────┘ │
+│ │ person │ →│ back office│ → │ │ layer · function      │ │④→ ┌ data ────────┐ │
+│ └────┘   └──────┘    │ └──────────────────────┘ │   │ files · DB   │ │
+│                       └─────────────────────────┘   └─────────────┘ │
+├─ footnote: meaning of light fill · dashed line · all abbreviations ────┤
+```
+
+## Colour — from the project's single main colour
+
+- Change `--accent` in `:root` in one place. The dark shade, light fill and the text colour on the main-colour fill are computed for you. (For a light colour such as yellow, the script switches the text to a dark colour so it stays readable.)
+- Find the main colour in the order in `diagram-figures.md` section 5 · to try another colour without editing the file, open `figure-flow.html#accent=0F8B8D`
+- **The main colour is used for only 4 things:** the border of the `.focus` box · the system name label · the data path and its sequence numbers · the project name in the figure header
+- The rest of the skeleton is neutral grey: dashed groups, host machine boxes, cards. Icons use the 7 existing meaning colours (section 5).
+
+## Rules
+
+- **One direction, left → right**: users → channels → system → things the system calls. If a line must go back, say so in the layer's description (for example "push the reply back to LINE") instead of drawing a return line.
+- **Sequence number = the path of 1 message**, not a line number. Lines that happen together share the same number (two incoming channels are both ②) · a branch that does not happen every time (such as reading an image) needs no number.
+- **5–9 layers in the system box**, in the order the message passes through them · short layer names, 1–2 lines for each function. If there are more than 9 layers, split into a separate figure of the inside of the system.
+- **At most 2 emphasised `.guard` layers**, and explain what they mean in the footnote.
+- **Connect a line to the layer that really does the work**, not the edge of the big box. The lines are drawn above the boxes, so the arrowhead reaches the inner layer.
+- **Lines that share the same gap must not cross.** Shift the bend with `mx` (a line whose end sits higher gets a smaller `mx`), and render to check every time.
+- A label on a line is 1–3 short words saying what flows through (`HTTPS` · `webhook` · `ถาม LLM`) · if the start of the line carries a sequence number, use `lp:"start"` when the final segment is too short
+
+
+## reference: markdown-visuals.md
+
+<!-- merged from skill `markdown-visuals` on 2026-11-27 · description was: Use when a Markdown doc needs an image, SVG or ASCII art -->
+# Markdown Visuals
+
+## Contents
+
+- [When to use this skill](#when-to-use-this-skill)
+- [When NOT to use](#when-not-to-use)
+- [Decision tree: which format?](#decision-tree-which-format)
+- [1 · Inline SVG (for viewers that render it — not GitHub)](#1--inline-svg-for-viewers-that-render-it--not-github)
+- [2 · External image files](#2--external-image-files)
+- [3 · ASCII art](#3--ascii-art)
+- [4 · Mermaid](#4--mermaid)
+- [Combining formats in one doc](#combining-formats-in-one-doc)
+- [Accessibility checklist](#accessibility-checklist)
+- [Anti-patterns](#anti-patterns)
+- [Quick-start recipe](#quick-start-recipe)
+- [ไม่ให้ดูเหมือน AI ทำ](#ไม่ให้ดูเหมือน-ai-ทำ)
+
+
+> **Pre-work gate (every time):** read the content and write the `เนื้อหา:` brief → read the owner's theme → search live references → 3 genuinely different directions → run the `design-gate/no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-gate/design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
+
+> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagrams` (designed figures). Document formatting around the picture lives in `design-gate/polished-document-style`.
+
+> **Rule:** Every plan, process, design, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
+
+## When to use this skill
+
+- A picture *inside a markdown file* — sketch, flow or state in a business plan, report, process guide, spec or README
+- Writing a plan, Functional Specification Document (FSD), Business Requirements Document (BRD), Architecture Decision Record (ADR) or architecture doc that describes layout, flow, or relationships (the diagrams themselves follow the routing rule below)
+- Explaining state transitions, user journeys, or system interactions
+- Comparing 2+ visual options for the user
+- The user asked "show me how it looks" inside a markdown doc or chat reply
+
+**If the doc has zero visuals and is about anything visual or structural — stop and add one.**
+
+## When NOT to use
+
+| Task | Use instead |
+|---|---|
+| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) (plugin `software-development`) |
+| Chart colours and chart design in an app or dashboard | `web-app-design` (plugin `software-development`) → `tokens.md` "สีข้อมูล (กราฟ)" |
+| Designed figure for a proposal, slide or print | `diagrams` |
+
+## Decision tree: which format?
+
+```
+What are you showing?
+│
+├─ UI sketch in a doc / component state / icon → Inline SVG (doc read on GitHub → same SVG as a `.svg` file, §2)
+├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
+├─ Flow / process / money flow / decision   →  repo note (README · Pull Request (PR) · code note) → Mermaid (`diagrams`, plugin `software-development`)
+│                                              project document (BRD · Software Requirements Specification (SRS) · FSD · ADR) or read outside the team → `diagrams`
+├─ Architecture / Entity-Relationship (ER) / class → same rule as the line above
+├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
+├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design (plugin `software-development`) tokens.md "สีข้อมูล (กราฟ)"
+├─ Photo, screenshot, complex illustration  →  External file → ![alt](figures/x.png) (file in `docs/figures/`)
+└─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
+```
+
+**Routing rule (same in `diagrams`):** markdown in a repo read by the team (README · PR · code note) → Mermaid via `diagrams` · a project document (BRD · SRS · FSD · ADR · ER · flows) or anything people outside the team read → `diagrams`.
+
+**Follow the tree above.** Where the doc will be read decides inline SVG vs image file:
+
+- **Inline `<svg>` renders** in VS Code preview, Obsidian, many static-site generators and chat replies.
+- **Inline `<svg>` does not render on GitHub** — GitHub's sanitizer drops the `<svg>` element, so the reader sees nothing. Other hosts (GitLab, Bitbucket): preview before relying on it.
+- **Doc will be read on GitHub** → save the SVG as `docs/figures/x.svg` and reference it with `![alt](figures/x.svg)` or `<img>` (§2). It still versions cleanly in git and stays editable.
+
+## 1 · Inline SVG (for viewers that render it — not GitHub)
+
+### Boilerplate
+
+```markdown
+<p align="center">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-label="<what this shows>">
+  <!-- background = bg-canvas of the project palette (see สี below) -->
+  <rect width="640" height="280" rx="14" fill="<bg-canvas>"/>
+
+  <!-- content goes here -->
+</svg>
+</p>
+```
+
+**Required attributes:**
+- `xmlns="http://www.w3.org/2000/svg"` — required when the same markup is saved as a `.svg` file (GitHub shows `.svg` files only through `![]()` / `<img>`, and only with `xmlns`)
+- `viewBox` — sets the coordinate space; lets the SVG scale responsively
+- `role="img"` + `aria-label` — accessibility, screen readers
+- `<p align="center">` wrapper — centers in the rendered page
+
+**Sizing:** Use `viewBox` (not width/height) so it scales. Common sizes:
+- Sketch of a UI bar: `viewBox="0 0 640 200"` (wide, short)
+- Component state: `viewBox="0 0 400 300"` (squarer)
+- Icon / chip: `viewBox="0 0 64 64"`
+- Full screen layout: `viewBox="0 0 800 500"`
+
+### สี
+
+If the document or project already has a colour palette, use it. If not, search for references per `design-gate/design-references` (plugin `superuser`), type `document`, and take the colours from the chosen work · if live search is not possible, use the house value `#2A78D6`, mark it `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask (order in `diagrams` → `references/diagram-figures.md` item 5 · colour-by-domain table [`colour-by-domain.md`](../../diagrams/references/colour-by-domain.md)) · for role-based tokens (`bg-canvas` · `accent-primary` · `state-*` …) see [references/svg-snippets.md](svg-snippets.md) · and **1 document uses 1 palette**
+
+### Reusable snippets
+
+Window chrome, phone frame, button, card, status badge, running dot and tooltip snippets, plus the UI-state worked example, are in [references/svg-snippets.md](svg-snippets.md). Copy the structure and swap in the agreed colour tokens.
+
+## 2 · External image files
+
+Use when:
+- The doc will be read on GitHub (inline `<svg>` is dropped there) — save the SVG as a file
+- Photo or screenshot
+- Illustration too complex to author as SVG by hand (50+ shapes)
+- Reusing the same image across many docs
+- Generated by a design tool (Figma export, etc.)
+
+### Folder convention
+
+```
+docs/
+  figures/
+    01-hover-state.svg
+    02-empty-state.png
+    architecture-overview.svg
+    src/                      editable sources (.mmd · .drawio · .html)
+```
+
+- Put figures in `docs/figures/` (editable sources in `docs/figures/src/`) — relative to the doc · brand files (logo, icons) live in the project-root `assets/`, not here
+- Name files `<doc-section-number>-<short-slug>.<ext>` so they sort with the doc
+- Prefer `.svg` over `.png` when possible (scales, smaller, diff-friendly)
+
+### Reference syntax
+
+```markdown
+![Hover state showing magnified Projects tile](figures/01-hover-state.svg)
+```
+
+- **Alt text** describes what the image shows, for accessibility — not "screenshot.png"
+- Path is **relative to the markdown file**, not absolute
+- For centered + sized images, wrap in HTML:
+
+```markdown
+<p align="center">
+  <img src="figures/01-hover-state.svg" alt="Hover state" width="640"/>
+</p>
+```
+
+### Creating SVG files
+
+When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file in `docs/figures/`.
+
+## 3 · ASCII art
+
+For quick layouts, state diagrams, and structural sketches that don't need pixel-perfect visuals. Renders identically in every viewer and in terminal/diff output.
+
+Box-drawing characters plus worked layout sketch, state machine and curve examples are in [references/ascii-patterns.md](ascii-patterns.md).
+
+Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
+
+## 4 · Mermaid
+
+**Choosing a diagram type, theme, readability rules and Thai labels is covered in `diagrams` (plugin `software-development`) items 1–5 and `assets/mermaid-theme.md`** · for Mermaid in project documents that must be converted to a picture for Word, use the converter in `diagrams` → `engine-mermaid.md`
+This file only says *when to choose Mermaid over other formats*
+
+| Choose Mermaid when | Choose something else when |
+|---|---|
+| It is boxes and arrows that the engine can lay out | If you must control placement yourself, use inline SVG; for a figure that must look designed, use `diagrams` (HTML layout or engine-svg-python) and embed it as an image file |
+| It lives in a file that must be diffed in git | It is a real screenshot: use an image file |
+| Readers open it in GitHub or Notion | Readers open it in a Word document or slides: use an image file |
+
+## Combining formats in one doc
+
+A full design spec usually mixes formats (SVG mockup, reference table, ASCII sketch, Mermaid state diagram, acceptance table). The 6-part pattern is in [references/combining-formats.md](combining-formats.md). Don't force everything into one format.
+
+## Accessibility checklist
+
+For every visual:
+
+- [ ] **Inline SVG** has `role="img"` and `aria-label="<description>"`
+- [ ] **Image file** has descriptive alt text (not "image.png")
+- [ ] **Mermaid** diagrams have a 1-sentence caption above or below
+- [ ] **ASCII art** has a prose summary nearby — screen readers will read the characters literally
+- [ ] **Colour** is not the only signal — pair red badges with `!`, green dots with a label
+- [ ] **Contrast** for text in SVG ≥ 4.5:1 against its background
+
+## Anti-patterns
+
+- **Linking to Figma / external design tools as the only source** — visuals must render in the repo
+- **PNG screenshots of text** — use the text, in a code block
+- **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
+- **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
+
+## Quick-start recipe
+
+When a markdown doc needs a design picture (clickable app screens go to the platform design skill, `mockup/<CODE>-mockup.html`):
+
+1. **Identify what kinds of visuals are needed** (UI state? flow? architecture?)
+2. **Pick the format(s)** using the decision tree above
+3. **For each visual:**
+   - State a one-line caption
+   - Emit the SVG/Mermaid/ASCII
+   - Add `role="img"` + `aria-label` (SVG) or alt text (file)
+4. **Add a feature reference table** below the visuals — what each element means
+5. **Cross-check accessibility checklist** before delivery
+
+## ไม่ให้ดูเหมือน AI ทำ
+
+Before sending, go through item 3 of `design-gate/no-ai-look` — for HTML work, run its script · every piece must also pass eye check 3.2 (a web page adds items 10–14), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for all media is there
+
+
+## reference: pitfalls.md
+
+# Pitfalls found in practice — HTML skeletons
+
+Symptoms that come up again and again when making figures with the skeletons in `assets/`, with their causes and fixes. Pitfalls of the SVG/Python engine are in [engine-svg-python.md](engine-svg-python.md) section 9.
+
+| Symptom | Cause · fix |
+|---|---|
+| Arrowheads vanish from the whole figure | The script deletes every `path` before redrawing, including the arrowhead triangle inside `<defs>`. Delete only `path.wire` (the skeletons already do this) |
+| A line goes to the wrong box | The `id` is attached to another box that looks the same. Open the console, look for `wire: ไม่พบ id`, and check that the `id` is unique |
+| A line aims at the middle of a tall box and cuts across what is inside | Set `tp` / `fp` so the line enters near the top edge |
+| Thai vowels disappear | The machine has no Thai font in the list. Install Noto Sans Thai or add an installed font to the list |
+| Image is blurry on a slide | Rendered at a 1x multiplier |
+| Image has a lot of white margin | You captured the whole page instead of only `.sheet` |
+| A line comes loose after editing text | You wrote fixed line coordinates instead of using `WIRES` |
+| A label on a line covers a box, or hides the line so it cannot be seen | The label is wider than the gap between columns. Increase `gap` or shorten the label text |
+| A Thai box name wraps to a second line | The column is too narrow. Widen that column. Do not shrink the font |
+| Icons used as image files, and the lines go wrong everywhere | The script calculates before the images finish loading. Call `draw()` in `window.onload`, not when the script is read (`figure-cloud.html` already does this) |
+| Elbow lines in `figure-flow.html` cross each other | Several lines use the same gap. Set `mx` so a line whose end is higher gets a smaller value, then render again |
+| Arrows disappear under the system box | The `.wires` layer has no `z-index`. The flow skeleton sets it already. If you copy to another skeleton, set it there too |
+| The figure comes out in the example figure's colour | You forgot to edit `--accent`. Find the project's main colour by `diagram-figures.md` section 5 before rendering |
+| A line cuts diagonally across the whole figure | The line starts from a box inside the boundary box. Start it from the edge of the boundary box instead |
+
+
+## reference: software-diagrams.md
+
+<!-- merged from skill `software-diagrams` on 2026-11-27 · description was: Use when a README or PR needs a quick Mermaid diagram -->
 # Software Diagrams
+
+## Contents
+
+- [When to use this skill](#when-to-use-this-skill)
+- [1 · Which question, which diagram](#1--which-question-which-diagram)
+- [2 · Theme — one set for the whole project](#2--theme--one-set-for-the-whole-project)
+- [3 · Diagrams that need real logos (infrastructure)](#3--diagrams-that-need-real-logos-infrastructure)
+- [4 · Rules that make it readable](#4--rules-that-make-it-readable)
+- [5 · Thai in diagrams](#5--thai-in-diagrams)
+- [6 · Render and look — never skip](#6--render-and-look--never-skip)
+- [Do not look AI-made](#do-not-look-ai-made)
 
 > **The one rule of this skill:** a diagram answers **one question**.
 > If it answers 2 questions, draw 2 pictures.
 
 > **The destination decides the tool:** this skill draws quick diagrams with Mermaid in the house theme, only for a README · Pull Request · note in code.
-> For figures in project documents (BRD · SRS · FSD · ADR · ER · process maps), client proposals, slides and print work, go to `diagram-figures`. The full table for choosing is at the top of that skill.
+> For figures in project documents (BRD · SRS · FSD · ADR · ER · process maps), client proposals, slides and print work, go to `diagram-figures.md`. The full table for choosing is at the top of that skill.
 >
-> **Colour in a figure must carry meaning, not decorate.** If the source document already declares a `doc-theme`, use that value and do not pick new colours per figure (the default is the house set in `design-gate/polished-document-style` · for the meaning of colours see `branded-document-design/references/tokens-and-type.md`):
-> A quick diagram uses **one main colour** = "the thing we are talking about" · grey = external/closed systems · white with a grey line (`store`) = data stores · other boxes use the defaults (3 classes `focus` · `ext` · `store` in `assets/mermaid-theme.md`). If you need several colours to separate failure points, exceptions and successes, the figure answers several questions. Split it into new figures or use `diagram-figures`.
+> **Colour in a figure must carry meaning, not decorate.** If the source document already declares a `doc-theme`, use that value and do not pick new colours per figure (the default is the house set in `design-gate/polished-document-style` · for the meaning of colours see `document-design/references/tokens-and-type.md`):
+> A quick diagram uses **one main colour** = "the thing we are talking about" · grey = external/closed systems · white with a grey line (`store`) = data stores · other boxes use the defaults (3 classes `focus` · `ext` · `store` in `assets/mermaid-theme.md`). If you need several colours to separate failure points, exceptions and successes, the figure answers several questions. Split it into new figures or use `diagram-figures.md`.
 
 ## When to use this skill
 
@@ -25,7 +2146,7 @@ In a README · Pull Request · note in code:
 - Review a diagram someone else drew
 
 
-Not for: choosing SVG / ASCII / Mermaid → `markdown-visuals` · screenshots and wireframes → `ui-craft` + the platform skill · data charts → `web-app-design` `references/tokens.md` heading "สีข้อมูล (กราฟ)" · choosing an architecture → `architecture-patterns`
+Not for: choosing SVG / ASCII / Mermaid → `markdown-visuals.md` · screenshots and wireframes → `ui-craft` + the platform skill · data charts → `web-app-design` `tokens.md` heading "สีข้อมูล (กราฟ)" · choosing an architecture → `architecture`
 
 ## 1 · Which question, which diagram
 
@@ -42,14 +2163,14 @@ Not for: choosing SVG / ASCII / Mermaid → `markdown-visuals` · screenshots an
 | "What machines does the real thing run on, and how many?" | Deployment |
 | "Who approves after whom?" | Flowchart (work steps) |
 | "A cloud diagram in the repo with real AWS / Azure logos" | Infrastructure — section 3 |
-| "I want a nice picture for the client proposal" | Not the job of this skill — `diagram-figures` |
+| "I want a nice picture for the client proposal" | Not the job of this skill — `diagram-figures.md` |
 
 **Always draw C4 levels 1 and 2 in full first.** Draw level 3 only for the parts that are truly complex.
 
 ## 2 · Theme — one set for the whole project
 
 Put the `%%{init: ...}%%` line on the **very first line** of every diagram, and use the one main colour with the 3 classes `focus` · `ext` · `store`. The main colour is reserved for "the thing we are talking about" only.
-The theme line, colour stand-ins, classes and rendered examples are in [`assets/mermaid-theme.md`](assets/mermaid-theme.md). The table that matches kinds of work to colour tones is in `diagram-figures/references/colour-by-domain.md`.
+The theme line, colour stand-ins, classes and rendered examples are in [`assets/mermaid-theme.md`](../assets/mermaid-theme.md). The table that matches kinds of work to colour tones is in `diagrams/references/colour-by-domain.md`.
 
 > Warning: **`fontFamily` must sit outside `themeVariables`.** If you put it inside, it is silently ignored and Mermaid falls back to its default font.
 
@@ -66,8 +2187,8 @@ An agent with no shell cannot run it → the main agent runs it after taking the
 
 ## 3 · Diagrams that need real logos (infrastructure)
 
-If an infrastructure diagram that lives in the repo needs real Amazon Web Services (AWS) · Azure · Kubernetes icons, which Mermaid cannot draw, use the **`diagrams`** library (Python + Graphviz), starting from [`assets/infra-diagram.py`](assets/infra-diagram.py).
-Install steps, the commonly used node rules and the traps are in [`assets/diagrams-python.md`](assets/diagrams-python.md). For cloud diagrams that a client or a slide will show, use `diagram-figures`.
+If an infrastructure diagram that lives in the repo needs real Amazon Web Services (AWS) · Azure · Kubernetes icons, which Mermaid cannot draw, use the **`diagrams`** library (Python + Graphviz), starting from [`assets/infra-diagram.py`](../assets/infra-diagram.py).
+Install steps, the commonly used node rules and the traps are in [`assets/diagrams-python.md`](../assets/diagrams-python.md). For cloud diagrams that a client or a slide will show, use `diagram-figures.md`.
 
 ## 4 · Rules that make it readable
 
@@ -162,1267 +2283,123 @@ Then **open the image file and look at it with your eyes**. Go through this list
 | Lines overlap in a mess | Too many boxes — Mermaid has no smart line routing, so cut boxes |
 | The font does not change | `fontFamily` is in the wrong place (see section 2) |
 
-If you truly cannot get the layout you want and the figure stays in a markdown document, draw an inline SVG per `markdown-visuals`. If the figure must look designed, go to `diagram-figures`.
+If you truly cannot get the layout you want and the figure stays in a markdown document, draw an inline SVG per `markdown-visuals.md`. If the figure must look designed, go to `diagram-figures.md`.
 
-To record why a design was chosen, use `adr-writer`. A figure that must look designed or needs sign-off → `diagram-figures`.
+To record why a design was chosen, use `architecture`. A figure that must look designed or needs sign-off → `diagram-figures.md`.
 
 ## Do not look AI-made
 
 Before sending, walk through item 3 of `design-gate/no-ai-look`. For HTML work, run its script. Every job must also pass eye check 3.2 (web pages also answer items 10–14), because a script result of 0 items is not yet a pass.
 
 
----
+## reference: svg-snippets.md
 
-# skill: incident-runbook-template
+# Inline SVG snippets
 
-Use when writing a runbook or on-call guide
+Reusable building blocks for inline SVG pictures of a screen inside .md docs (the real mockup is HTML) · used by [SKILL.md](markdown-visuals.md) §1
 
-# Incident Runbook Template
+## Colour: it comes from the subject, not from a ready-made table
 
-## When to use this skill
+If the document or project already has a colour set, use that set.
+If not, use the house value `#2A78D6`, write `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask. Propose a tone drawn from the subject in the report: medical green · finance dark blue ·
+industrial amber · government navy · general software blue (the full table is in [`diagrams/references/colour-by-domain.md`](../../diagrams/references/colour-by-domain.md))
 
-- Writing a runbook for a known failure mode
-- Documenting on-call procedures
-- Creating playbooks for common alerts
-- After a postmortem finds "we need a runbook for X"
-- Onboarding new on-call engineers
+Define **tokens by role** at the top of the document, then use the same values in every figure in that document:
 
-## When not to use
-
-| Task | Use this instead |
-|---|---|
-| The incident is over and you must summarise what happened and how to prevent it | `postmortem-template` |
-| Setting up a metric alert or dashboard | `observability-basics` |
-
-## Read more when
-
-| File | Open when |
-|---|---|
-| [references/runbook-template.md](references/runbook-template.md) | Every time you start a new runbook. Copy the full template from this file and fill it in |
-| [references/index-and-alert-links.md](references/index-and-alert-links.md) | If the team has no runbook index page, or alerts do not yet link to a runbook, open this file for examples |
-| [references/game-days.md](references/game-days.md) | When planning an incident drill to test that a runbook works in practice |
-
-## 0 · Look for an existing format first (every time)
-
-Before using the structure or template in this file, check whether the user, customer or project already has its own format:
-
-- **Where to look:** existing runbooks: `docs/runbooks/` · the on-call team's wiki · the alerting tool in use (PagerDuty · Opsgenie · Grafana) and the real alert names · the organisation's severity levels
-- **Result:** found → use that format (headings, order, field names, numbering) and say in the reply which file's format you used · not found → use the template in this file as a fallback and say that no existing format was found
-- **Still required either way:** alert names, commands and dashboards come from the real system. Do not invent examples.
-
-## What's a Runbook?
-
-A **runbook** answers: "Alert X fired. What do I do?" It is not architecture documentation (the bigger picture) or training material (too much detail).
-## Runbook Quality Standards
-
-A good runbook is:
-
-| Property | Test |
-|----------|------|
-| **Actionable** | Can a tired engineer at 3am follow it? |
-| **Concrete** | Are commands copy-pasteable? |
-| **Tested** | Has someone followed it during a real incident? |
-| **Updated** | Was it last reviewed less than 6 months ago? |
-| **Discoverable** | Can on-call find it from the alert link? |
-| **Concise** | Under 1 page for common cases |
-
-## Runbook Template
-
-The full template is in [references/runbook-template.md](references/runbook-template.md). Every runbook has these sections in this order, and each section must contain the following.
-
-| Section | Must contain |
-|---|---|
-| Header | Severity · Service · Owner Team · Last Reviewed · Linked Alert |
-| TL;DR (30 seconds) | One paragraph: what broke, what to do first, and whom to call |
-| How to Detect | Symptoms users see and symptoms seen internally · the alert that fires · the dashboard to open |
-| Diagnosis (60 seconds) | A decision flowchart and quick checks written as commands to copy and run, in order |
-| Mitigation Steps | Steps ordered from low risk to high (the same order as `incident-response` Phase 3). Every step states Expected effect · **VERIFY** (the command or graph to look at, and the value to expect. If you do not see that value, the step has not worked yet. Do not move to the next step without knowing what the previous step did) and Caveats or If doesn't work · the agent only proposes commands and expected results, and the on-call person runs them or approves them before anything touches production |
-| Escalation Path | Who is called when, in clear minutes |
-| Verification | A checklist to confirm it is really fixed |
-| After Resolution | Log it in the incident channel → update the status page → open a postmortem ticket → update this runbook |
-| Related Runbooks · Background | Links to related runbooks, and a short background of the problem (optional) |
-
-**Mitigation order in the template:** Reduce load (low risk) → Scale up (medium risk) → Rollback recent deploy (higher risk) → Failover to backup region (last resort)
-
-**Escalation order in the template:** If it cannot be fixed in 15 minutes, call the secondary on-call. If two people cannot fix it in 30 minutes, call the service's owning team. If it is still SEV1 after 45 minutes, call the incident commander (IC). If SEV1 runs past 1 hour, call the head of engineering.
-
-**Count it as fixed when** the error rate is back to normal · latency p95 is below the threshold · the status page says "Operational" · there are no new alerts · customers have stopped reporting problems, and you have watched for another 30 minutes.
-
-> Use `postmortem-template` skill for the full analysis
-
-## Runbook Index and Alert Links
-
-Keep one index page of runbooks in one place, searchable by service, by alert name, and by the most frequent incidents in the last 90 days.
-
-Every alert **must** link to a runbook through the alert's `runbook_url:` annotation, and should carry a matching `dashboard:` too. Examples of the index page and a Prometheus alerting rule are in [references/index-and-alert-links.md](references/index-and-alert-links.md).
-
-## What Makes Runbooks Fail
-
-| Problem | Fix |
-|---------|-----|
-| Out of date | Review every 6 months, update after every incident |
-| Too long | Split into 1 runbook per failure mode |
-| Too generic | Be specific to YOUR service |
-| No commands | Include actual copy-paste commands |
-| Not discoverable | Link it from the alert and the index page |
-| No ownership | Each runbook has a team owner |
-| Not tested | Run game days, and follow it during real incidents |
-| Commands rot silently | CI job on every change to `runbooks/`: pull every fenced `bash` block → `bash -n` (parses) · every `./scripts/*.sh` it names exists in the repo · every `kubectl` resource name exists in staging (`kubectl get ... -n staging`) · fail the build on any miss. A command that cannot run at 3am is worse than no runbook (idea from wshobson/agents incident-runbook-templates) |
-
-## Game Days
-
-Test a runbook by deliberately simulating a failure. Each quarter, pick one runbook, simulate the incident in staging, and have on-call follow it. Then update the runbook for the gaps found. The full checklist is in [references/game-days.md](references/game-days.md).
-
-## Anti-patterns
-
-- **Theoretical runbooks** written by someone who never saw the failure
-- **"Contact the team"** without saying who or how
-- **Treating mitigation as the root-cause fix** (mitigation should be FAST; the fix comes later)
-
-## Document Look
-
-This skill decides **what goes in** the document. It does not decide **how it looks** —
-load the matching skill before writing, not after:
-
-| What is being handed over | Load |
-|---|---|
-| Markdown someone reads (repo, wiki, issue tracker) | `design-gate/polished-document-style` |
-| A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
-| The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
-
-
-## reference: game-days.md
-
-# Game Days
-
-A checklist for incident-response drills that test a runbook; use it when planning the quarterly drill
-
-Test runbooks by faking failures on purpose:
-
-```markdown
-## Game Day Checklist
-
-Quarterly:
-- [ ] Pick a runbook to test
-- [ ] Simulate the failure in staging (chaos engineering)
-- [ ] On-call engineer follows runbook
-- [ ] Identify gaps
-- [ ] Update runbook based on learnings
-- [ ] Repeat with different runbook next quarter
-```
-
-
-## reference: index-and-alert-links.md
-
-# Runbook Index และการผูก runbook กับ alert
-
-An example runbook index page and an example of linking a runbook from an alert; use it when setting up the team's runbook system for the first time
-
-## Runbook Index Pattern
-
-Maintain a central index (`docs/runbook-index.md`). Each runbook is one file `docs/runbook-<service>-<เรื่อง>.md` per `workspace-rules/document-naming`:
-
-```markdown
-# Runbook Index
-
-## By Service
-- API Service
-  - [High error rate](runbook-api-high-error-rate.md)
-  - [Memory leak](runbook-api-memory-leak.md)
-- Database
-  - [Connection pool exhausted](runbook-db-conn-pool.md)
-  - [Replication lag](runbook-db-repl-lag.md)
-
-## By Alert Name
-| Alert | Runbook |
-|-------|---------|
-| `api_5xx_rate_high` | [API: High error rate](link) |
-| `db_connections_high` | [DB: Connection pool](link) |
-| `disk_full_warn` | [Generic: Disk full](link) |
-
-## Most Common Incidents (last 90 days)
-1. High error rate on payment service — [runbook](link) (12 times)
-2. DB replication lag — [runbook](link) (8 times)
-3. Cache invalidation storm — [runbook](link) (5 times)
-```
-
-## Linking Runbook to Alert
-
-Every alert MUST link to a runbook:
-
-```yaml
-# Prometheus alerting rule (rule file loaded by Prometheus; Alertmanager only routes the alert)
-- alert: APIHighErrorRate
-  # share of requests that are 5xx — needs the denominator, otherwise it is requests per second
-  expr: |
-    sum(rate(http_requests_total{status=~"5.."}[5m]))
-      / sum(rate(http_requests_total[5m])) > 0.05
-  for: 5m
-  annotations:
-    summary: "API error rate > 5%"
-    runbook_url: "https://runbooks.example.com/api/high-error-rate"
-    dashboard: "https://grafana.example.com/d/api-overview"
-```
-
-
-## reference: runbook-template.md
-
-# Runbook Template
-
-**สารบัญ:** แม่แบบเต็ม 1 บล็อก: TL;DR · How to Detect · Diagnosis · Mitigation Steps (ขั้น 1–5) · Escalation Path · Verification · After Resolution · Related Runbooks · Background
-
-- [The whole template](#runbook-template) is in a single block; copy the whole block into a new runbook file
-
-The full template for one runbook, ready to copy and fill in. The rules for what each section must contain are in `SKILL.md`
-
-````markdown
-# Runbook: <Alert Name or Failure Mode>
-
-| | |
-|--|--|
-| **Severity** | SEV1 \| SEV2 \| SEV3 \| SEV4 (table in `postmortem-template`) |
-| **Service** | service-name |
-| **Owner Team** | @team-name |
-| **Last Reviewed** | YYYY-MM-DD |
-| **Linked Alert** | [Grafana/PagerDuty link] |
-
----
-
-## TL;DR (30 seconds)
-
-> One paragraph: what's broken, what to do first, who to call.
-
-## How to Detect
-
-**Symptoms:**
-- User-facing: ...
-- Internal: ...
-
-**Alerts that fire:**
-- [Alert Name](link) — fires when ...
-- [Another Alert](link) — fires when ...
-
-**Dashboards to check:**
-- [Main Dashboard](link)
-- [Service Health](link)
-
-## Diagnosis (60 seconds)
-
-```mermaid
-flowchart TD
-    Start([Alert fires]) --> Q1{Is the service healthy in dashboard?}
-    Q1 -->|No| A[Check infrastructure]
-    Q1 -->|Yes| Q2{Are errors >5%?}
-    Q2 -->|Yes| B[Check recent deploys]
-    Q2 -->|No| Q3{Is latency high?}
-    Q3 -->|Yes| C[Check downstream services]
-    Q3 -->|No| D[Check alert config - may be false alarm]
-```
-
-### Quick checks (run in order)
-
-**1. Is service responding?**
-```bash
-curl -fsS https://api.example.com/health || echo "DOWN"
-```
-
-**2. Are recent deploys suspicious?**
-```bash
-gh release list --repo our-org/service --limit 5
-```
-
-**3. Check error rate in logs:**
-```bash
-# Last 10 min of 5xx errors
-kubectl logs -n prod deployment/api --since=10m | grep -c '"status":5'
-```
-
-**4. Check downstream dependencies:**
-- Database: [Dashboard link]
-- Redis: [Dashboard link]
-- External API: [Status page link]
-
-## Mitigation Steps
-
-> **Human approval:** an agent only proposes the command and its expected effect. A human on-call runs it or approves it before it touches production (`ground-rules/principle-proceed-on-reversible-work`, `incident-response` Phase 3).
-
-Try mitigations in order of risk (lowest first) — the same order as `incident-response` Phase 3:
-
-### Step 1: Disable the broken feature or reduce load (low risk)
-```bash
-# Turn off the feature flag of the suspect feature
-./scripts/flag.sh set new-checkout off --env prod
-
-# Or enable rate limiting
-kubectl set env deployment/api -n prod RATE_LIMIT_AGGRESSIVE=true
-```
-
-**Expected effect:** Error rate drops within 2 min
-**VERIFY:** `./scripts/flag.sh get new-checkout --env prod` → `off` · dashboard 5xx panel < 1% for 2 min
-**If doesn't work:** Go to Step 2
-
-### Step 2: Scale up (medium risk)
-```bash
-kubectl scale deployment/api -n prod --replicas=10
-```
-
-**Expected effect:** Latency improves within 3 min
-**VERIFY:** `kubectl get deployment/api -n prod` → READY `10/10` · p95 panel back under threshold
-**Caveats:** Will increase cost, monitor budget alerts
-
-### Step 3: Rollback recent deploy (higher risk)
-```bash
-kubectl rollout undo deployment/api -n prod
-```
-
-**Expected effect:** Reverts to previous version
-**VERIFY:** `kubectl rollout status deployment/api -n prod` → `successfully rolled out` · running image tag = previous release
-**Caveats:** Check for schema migrations before rolling back. A rollout undo does not delete data, but old code may break on a schema the new release already migrated — roll back only if the migration is backward-compatible
-
-### Step 4: Block bad traffic at the WAF or firewall (high risk)
-```bash
-# Block the abusive IP range / path at the web application firewall (WAF)
-./scripts/waf-block.sh --cidr 203.0.113.0/24 --ttl 1h
-```
-
-**Expected effect:** Abusive traffic stops reaching the service
-**VERIFY:** `./scripts/waf-block.sh list` shows the CIDR with TTL · requests from that range in access log → 0 · request rate from real users unchanged
-**Caveats:** Can block real users; set a TTL (time to live) and check the allow list
-
-### Step 5: Failover to backup region (last resort)
-```bash
-# Update DNS to point to backup region
-./scripts/failover-to-us-west.sh
-```
-
-**Expected effect:** All traffic shifts to backup
-**VERIFY:** `dig +short api.example.com` → backup region IP · backup region request rate ≈ previous primary rate · primary → 0
-**Caveats:** Some user data may need migration, full rollback complex
-
-## Escalation Path
-
-```
-You can't resolve in 15 min
-  ↓
-1. Page secondary on-call (PagerDuty group: team-secondary)
-  ↓
-You both can't in 30 min
-  ↓
-2. Page service owner team (team-owner)
-  ↓
-Still SEV1 after 45 min
-  ↓
-3. Page incident commander on-call (IC)
-  ↓
-SEV1 still active after 1h
-  ↓
-4. Page engineering leadership
-```
-
-## Verification (after mitigation)
-
-Confirm the issue is resolved:
-
-- [ ] Error rate back to baseline
-- [ ] Latency p95 < threshold
-- [ ] Status page updated to "Operational"
-- [ ] No new alerts firing
-- [ ] Customer reports stopped
-- [ ] Monitor for 30 min before considering resolved
-
-## After Resolution
-
-1. **Document in incident channel**: what happened, what you did
-2. **Update status page**: clear incident, post resolution message
-3. **Create postmortem ticket**: if SEV1/SEV2, schedule postmortem
-4. **Update this runbook**: if you learned something new
-
-> Use `postmortem-template` skill for the full analysis
-
-## Related Runbooks
-
-- [Database connection issues](link)
-- [Cache failure](link)
-- [Authentication service down](link)
-
-## Background / Why this happens
-
-Optional section: brief context on why this failure mode exists.
-Useful for new on-call engineers.
-````
-
-
----
-
-# skill: logging-standards
-
-Use when writing or reviewing code that logs
-
-# Logging Standards
-
-> **The one rule:** Logs exist for a person to read at 3 a.m. when the system is down, not while writing the code.
-> If a line does not help answer "what happened, to whom, and when", do not write it.
-
-## When to use this skill
-
-- Starting any new project (service, API, worker, batch, desktop, frontend)
-- Someone asks for "a log file", or asks about log format and levels
-- You are chasing a production problem and find that the existing logs are unusable
-
-## When **not** to use it
-
-- You need metrics or tracing (Prometheus, OpenTelemetry). That is a different topic from logs, so use `observability-basics`.
-- You are building a service health endpoint. Use `web-service-essentials`.
-
----
-
-## 1 · Line format — the same in every language
-
-```
-2026-08-31 09:42:13.482 +07:00  INFO   [a3f9c1b2] orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 userId=57 ms=134
-└───────── time + timezone ─────────┘ └level┘  └ cid ┘ └source┘ └─ message ─┘  └──── context k=v ────┘
-```
-
-| Part | Rule |
-|---|---|
-| time | `YYYY-MM-DD HH:mm:ss.SSS ±HH:MM` — **the timezone is required**, or you cannot compare logs across machines |
-| level | Left-aligned, 5 characters wide (`INFO ` `WARN ` `ERROR` `DEBUG` `FATAL`), so the columns line up |
-| cid | An 8-character correlation id in square brackets. If there is none, use `[--------]` (also 8 characters, so the columns line up) |
-| source | The module or class that writes the log, not the file name |
-| message | One sentence, with no variables embedded in the string |
-| context | `key=value` separated by spaces. If a value contains a space, wrap it in `"` |
-
-**Why not JSON:** This file is mainly for people to open and `grep`. This format still works with `grep "\[a3f9c1b2\]"` or `awk`, but the eye reads it at once without any tool.
-When you must ship logs to a central system such as Grafana Loki or Elasticsearch, Logstash, Kibana (ELK), add one more JSON sink (the destination logs are sent to). But **do not drop the text file**.
-
-**1 event = 1 line**, except a stack trace, which follows indented by 4 spaces.
-
----
-
-## 2 · Log levels — write them to match their meaning
-
-| Level | Use when | Example |
+| Token | Role | Comes from |
 |---|---|---|
-| `FATAL` | The app is about to die and cannot continue | Cannot connect to the DB at start |
-| `ERROR` | This job failed **and someone must look** | Saving an order failed |
-| `WARN` | Abnormal, but the system can continue | Retry number 2, disk down to 10% |
-| `INFO` | An important business event | Order created, user logged in, job started/finished |
-| `DEBUG` | Details for chasing problems — **off in production** | Values computed along the way |
-| `TRACE` | Step-by-step detail — turn on only when really chasing | Raw payload |
+| `bg-canvas` | Background of the figure | The darkest shade (dark mode) or the lightest (light mode) |
+| `bg-surface` | Sheets, panels, cards | Different enough from canvas to show the edge without drawing a line |
+| `bg-elevated` | A tile raised one more layer | |
+| `accent-primary` | Emphasis, the active state | **The brand colour** (none → `#2A78D6` + `(รอยืนยัน)`) |
+| `text-primary` | Main text | Contrast ≥ 4.5:1 against the surface it sits on |
+| `text-muted` | Secondary text, placeholder | `rgba(...,0.55)` of `text-primary` |
+| `state-success` · `state-warning` · `state-danger` | Status | **Does not change with the brand.** Green always means pass and red always means fail |
 
-> Warning: **an `ERROR` that nobody needs to act on is a `WARN`.** If ERROR fires every minute until people stop looking,
-> you have just destroyed your own alarm system.
+**One document, one colour set.** 10 figures in one document with mismatched colours are harder to read than plain figures with matching colours.
 
-The default is `DEBUG` in dev and `INFO` in production, adjustable with the env var `LOG_LEVEL`. **No new build is needed; just restart (or reload the config).** .NET reads it from `appsettings.json` instead (see `references/per-stack.md`).
+## Snippets
 
----
+> The examples below use one dark-mode colour set as a stand-in only.
+> **Change the colour values to match the agreed set before use.** The structure is what you copy, not the colour values.
 
-## 3 · Correlation id — what makes logs usable
-
-One request uses one id from start to finish, so every line that comes from that request has the same id.
-
-```
-Client ──X-Request-Id?── API Gateway ──┬── Service A ──┐
-                        (create if none)└── Service B ──┴─→ every line has the same cid
-```
-
-- Take it from the header **`X-Request-Id`** only when it matches `^[A-Za-z0-9-]{1,64}$`. If it is missing or does not match, create a new one (`uuid v4`, first 8 characters). For the reason, see `web-service-essentials` item 3.
-- **Always return it in the response header**, so the customer can send the id when reporting a problem and we can trace it at once.
-- Pass it to the downstream service on every cross-system call.
-- Store it with a mechanism that is separate per request: `AsyncLocalStorage` (Node) · `ContextVar` (Python)
-  · `IHttpContextAccessor`/`LogContext` (.NET). **Never use a global variable**, because ids mix as soon as several requests run at once.
-
----
-
-## 4 · Log files
-
-```
-logs/
-  app-20260831.log        all levels · rotate at midnight · keep 30 days · max 100MB per file
-  error-20260831.log      ERROR/FATAL only · keep 90 days
-  fatal.log               uncaught exceptions (app died)
+**Window chrome (desktop app mockup):**
+```xml
+<rect x="20" y="20" width="600" height="360" rx="10" fill="#2a3245"/>
+<circle cx="42" cy="42" r="6" fill="#ff5f57"/>
+<circle cx="62" cy="42" r="6" fill="#febc2e"/>
+<circle cx="82" cy="42" r="6" fill="#28c940"/>
+<text x="320" y="46" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Window title</text>
+<line x1="20" y1="64" x2="620" y2="64" stroke="rgba(255,255,255,0.08)"/>
 ```
 
-- Set the folder with the env var `LOG_DIR`. **Never hardcode the path.**
-- Compress old files (`.gz`) and **retention is required**. Otherwise the disk fills and the system goes down from its own logs.
-- In a container, also log to stdout (besides the file) so `docker logs` works.
-- `logs/` must be in `.gitignore`.
+**Phone frame (mobile mockup):**
+```xml
+<rect x="100" y="20" width="200" height="400" rx="28" fill="#0a0d14" stroke="#2a3245" stroke-width="2"/>
+<rect x="120" y="50" width="160" height="340" rx="6" fill="#1c2230"/>
+<rect x="170" y="28" width="60" height="14" rx="7" fill="#0a0d14"/>
+```
 
----
+**Button:**
+```xml
+<rect x="40" y="100" width="120" height="40" rx="8" fill="#0078d4"/>
+<text x="100" y="125" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="14" font-weight="500">Click me</text>
+```
 
-## 5 · What must never go into a log
+**Card with title and body:**
+```xml
+<rect x="40" y="40" width="240" height="120" rx="12" fill="#2a3245"/>
+<text x="60" y="72" fill="#fff" font-family="system-ui" font-size="14" font-weight="600">Card title</text>
+<text x="60" y="96" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="12">Supporting body text goes here.</text>
+<rect x="60" y="116" width="80" height="28" rx="6" fill="#0078d4"/>
+<text x="100" y="134" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Action</text>
+```
 
-Passwords · tokens/API keys · cookies/Authorization headers · OTP/PIN · credit card numbers/CVV ·
-**national ID numbers** · health data · full payloads that contain personal data
+**Status badge (top-right of tile):**
+```xml
+<circle cx="<tile-right-x>" cy="<tile-top-y>" r="9" fill="#e24b4a"/>
+<text x="<tile-right-x>" y="<tile-top-y + 4>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="13" font-weight="500">!</text>
+```
 
-Helper already provided: the redaction function (which hides secret values) checks **whether the key name contains a forbidden word** (`userPassword`, `pwd`,
-`accessToken` are all caught) and replaces the value with `***`. It checks up to 4 levels deep inside an object.
+**Running dot (indicator below tile):**
+```xml
+<circle cx="<tile-center-x>" cy="<tile-bottom-y + 12>" r="4" fill="#4cc2ff"/>
+```
 
-> **Log injection** — A value from a user may contain `\n`. If you let it through, the user can "forge" a fake log line,
-> which misleads readers and breaks parsers. So the provided code strips `\r\n\t` from every value and from the main message.
+**Tooltip text (no balloon — plain floating text):**
+```xml
+<text x="<tile-center-x>" y="<tile-top-y - 12>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12" font-weight="500">Tooltip label</text>
+```
 
----
+## Worked example — UI state mockup
 
-## 6 · Ready-to-use code
+Use this pattern by default for showing UI feature states. On GitHub, save the SVG as a file in `docs/figures/` and reference it (inline `<svg>` is dropped there).
 
-| File | Stack | Status |
-|---|---|---|
-| `assets/logger.node.js` | Node/TS — winston + winston-daily-rotate-file | ✓ Run and tested 2026-10-25 (Node 22.23.2 · winston 3.19.0 · winston-daily-rotate-file 5.0.0 · password redaction · correlation id · strips line breaks in the main message and values) |
-| `assets/logger_py.py` | Python — stdlib only, nothing to install | ✓ Run and tested 2026-10-25 (Python 3.13.5 · same test set) |
-| `references/per-stack.md` | .NET (Serilog) + Angular | Caution: not yet compiled or tested |
+
+## reference: wires.md
+
+# Connector wires — details
+
+Open this when writing `WIRES` or fixing a line that goes the wrong way.
+
+**Within the same column**, use the downward arrow `.down` between boxes. Nothing more to write.
+
+**Across columns**, use the `WIRES` list at the end of the file. The script draws the lines after the layout is done:
 
 ```js
-// Node
-const { withCorrelation } = require('./logger.node');
-const log = withCorrelation(req.id).child({ source: 'orders' });
-log.info('สร้างคำสั่งซื้อสำเร็จ', { orderId: 1042, ms: 134 });
-log.error('บันทึกไม่สำเร็จ', err);          // pass an Error directly; the stack is added for you
+{from:"n-browser", fs:"r", to:"n-server", ts:"l", tp:0.10, label:"HTTPS 443"}
+//    ^source id   ^exit side ^target id  ^entry side ^position on the edge 0=top 1=bottom
 ```
 
-```python
-# Python
-from logger_py import setup_logging, get_logger, set_correlation_id
-setup_logging(app_name="myapi")             # once, when the app starts
-log = get_logger("orders")
-log.info("สร้างคำสั่งซื้อสำเร็จ", extra={"ctx": {"order_id": 1042, "ms": 134}})
-log.exception("บันทึกไม่สำเร็จ")             # inside except — the stack is added for you
-```
-
----
-
-## 7 · Checking the work
-
-```bash
-# no leftover print/console.log in production code
-grep -rnE "console\.(log|error)|Console\.WriteLine|^\s*print\(" src/ --include="*.ts" \
-  --include="*.js" --include="*.cs" --include="*.py" | grep -v test | head -30
-
-# the output logs are readable and greppable
-tail -n 50 logs/app-*.log
-grep "a3f9c1b2" logs/app-*.log          # does one request show every line?
-```
-
-- [ ] Every line has all of: time+timezone · level · cid · source
-- [ ] `grep` with one cid shows the story of that request from start to finish
-- [ ] No secrets leak: log an object with `password` and `token`, and you must see `***`
-- [ ] Feeding in a value that contains `\n` produces no fake line
-- [ ] With `LOG_LEVEL=INFO`, DEBUG really disappears
-- [ ] Files rotate daily and have retention (left for 1 month, the disk must not fill)
-- [ ] `logs/` is in `.gitignore`
-- [ ] The response sends `X-Request-Id` back to the customer
-
----
-
-## 8 · Anti-patterns not covered above
-
-- **A silent `try { } catch (e) { }`** — log at least 1 line
-- **Log, then rethrow** — one problem shows up 3 times in the file. Log at the top layer that really handles the error instead.
-- **Logging inside a loop that runs thousands of times** — log one summary when the loop ends
-- **Logging everything** — the file grows so large you cannot find anything, and it is expensive and slow
-
----
-
-## 9 · Links to other skills
-
-`testing-standards` (tests with full coverage) · `incident-runbook-template` · `postmortem-template`
-
-
-## reference: per-stack.md
-
-# Set up the logger to produce the same format — .NET and Angular
-
-> Warning: the code in this file is **not yet compiled or tested** (unlike `assets/logger.node.js` and
-> `assets/logger_py.py`, which have really been run). It uses the standard setup of each library.
-> At the first build, compare the output lines with the format in SKILL.md item 1.
-
----
-
-## Contents
-
-1. [.NET / C# — Serilog](#net--c--serilog)
-2. [Angular / frontend](#angular--frontend)
-3. [Comparison table](#comparison-table)
-
----
-
-## .NET / C# — Serilog
-
-```bash
-dotnet add package Serilog.AspNetCore
-dotnet add package Serilog.Sinks.File
-```
-
-`appsettings.json` — keeps the settings outside the code, so you can change the log level without a new build:
-
-```json
-{
-  "Serilog": {
-    "MinimumLevel": {
-      "Default": "Information",
-      "Override": {
-        "Microsoft.AspNetCore": "Warning",
-        "Microsoft.EntityFrameworkCore.Database.Command": "Warning"
-      }
-    }
-  }
-}
-```
-
-`Program.cs`:
-
-```csharp
-using Serilog;
-using Serilog.Events;
-
-const string LineTemplate =
-    "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}  {Level:u5}  " +
-    "[{CorrelationId}] {SourceContext}  {Message:lj}  {Context:l}{NewLine}{Exception}";
-
-Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
-    .Enrich.FromLogContext()
-    .Enrich.WithProperty("CorrelationId", "--------") // default when there is no request (8 characters)
-    .Enrich.WithProperty("Context", "")              // empty when there is no context k=v
-    .WriteTo.Console(outputTemplate: LineTemplate)
-    .WriteTo.File(
-        path: Path.Combine(Environment.GetEnvironmentVariable("LOG_DIR") ?? "logs", "app-.log"),
-        rollingInterval: RollingInterval.Day,
-        retainedFileCountLimit: 30,
-        fileSizeLimitBytes: 100 * 1024 * 1024,
-        rollOnFileSizeLimit: true,
-        outputTemplate: LineTemplate)
-    .WriteTo.File(
-        path: Path.Combine(Environment.GetEnvironmentVariable("LOG_DIR") ?? "logs", "error-.log"),
-        restrictedToMinimumLevel: LogEventLevel.Error,
-        rollingInterval: RollingInterval.Day,
-        retainedFileCountLimit: 90,
-        outputTemplate: LineTemplate)
-    .CreateLogger();
-
-builder.Host.UseSerilog();
-```
-
-> `{Level:u5}` means upper case, 5 characters wide, which gives `INFO ` `WARN ` `ERROR` to match the other stacks.
-> `{Message:lj}` and `{Context:l}` mean the string is not wrapped in an extra layer of `"`.
-
-### Middleware correlation id
-
-```csharp
-using System.Text.RegularExpressions;
-
-public sealed class CorrelationIdMiddleware(RequestDelegate next)
-{
-    public const string Header = "X-Request-Id";
-    // accept from the customer only letters, digits, and - up to 36 characters — blocks people stuffing long text or \n into the log
- into the log
-    private static readonly Regex Valid = new("^[A-Za-z0-9-]{1,36}$", RegexOptions.Compiled);
-
-    public async Task Invoke(HttpContext ctx)
-    {
-        var cid = ctx.Request.Headers[Header].FirstOrDefault();
-        if (cid is null || !Valid.IsMatch(cid))
-            cid = Guid.NewGuid().ToString("N")[..8];   // missing or invalid → create a new one
-
-        var logCid = cid.Length > 8 ? cid[..8] : cid;   // the log uses the first 8 characters to fit the cid column (same as Node/Python) — the header returns the full value
-
-        ctx.Response.Headers[Header] = cid;          // return it so the customer can quote it
-
-        // LogContext is tied only to this request's async flow — it does not mix with other requests
-        using (Serilog.Context.LogContext.PushProperty("CorrelationId", logCid))
-            await next(ctx);
-    }
-}
-```
-
-### Writing logs
-
-```csharp
-// Right: fixed message + values go in {Context} as k=v, per the format in SKILL.md item 1
-//    Output: ... INFO   [a3f9c1b2] Orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 ms=134
-using (Serilog.Context.LogContext.PushProperty("Context", $"orderId={orderId} ms={sw.ElapsedMilliseconds}"))
-    _logger.LogInformation("สร้างคำสั่งซื้อสำเร็จ");
-
-// Wrong: a variable embedded in the string — every line becomes a different message and cannot be grouped
-_logger.LogInformation($"สร้างคำสั่งซื้อ {orderId} สำเร็จ");
-```
-
-### Redacting secrets
-
-Serilog does not redact secrets automatically. The surest way is to **never pass a whole object into the log**.
-Pick only the fields you need. If you must pass the whole object, write an `IDestructuringPolicy`
-or add `[NotLogged]` through `Destructure.ByTransforming<T>()`.
-
----
-
-## Angular / frontend
-
-The principle differs from the backend: **a browser cannot write files**, so important logs must be sent up to the backend.
-
-```ts
-// core/logger.service.ts
-import { Injectable, inject, isDevMode } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
-type Level = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
-
-@Injectable({ providedIn: 'root' })
-export class LoggerService {
-  private http = inject(HttpClient);
-  private buffer: unknown[] = [];
-
-  private write(level: Level, message: string, ctx: Record<string, unknown> = {}) {
-    // dev: print to the console for chasing problems — prod: silent, except WARN and above, which go to the server
-    if (isDevMode()) console[level === 'ERROR' ? 'error' : 'log'](level, message, ctx);
-    if (level === 'DEBUG' || (!isDevMode() && level === 'INFO')) return;   // prod sends only WARN and above
-
-    this.buffer.push({ ts: new Date().toISOString(), level, message, ctx });
-    if (this.buffer.length >= 10 || level === 'ERROR') this.flush();
-  }
-
-  /** Send in batches, not line by line — otherwise the network tab fills with the log's own requests */
-  flush() {
-    if (!this.buffer.length) return;
-    const batch = this.buffer.splice(0);
-    this.http.post('/api/client-logs', { entries: batch }).subscribe({ error: () => {} });
-  }
-
-  debug = (m: string, c?: Record<string, unknown>) => this.write('DEBUG', m, c);
-  info  = (m: string, c?: Record<string, unknown>) => this.write('INFO', m, c);
-  warn  = (m: string, c?: Record<string, unknown>) => this.write('WARN', m, c);
-  error = (m: string, c?: Record<string, unknown>) => this.write('ERROR', m, c);
-}
-```
-
-Catch every uncaught error:
-
-```ts
-// core/global-error.handler.ts
-import { ErrorHandler, Injectable, inject, isDevMode } from '@angular/core';
-import { LoggerService } from './logger.service';
-
-@Injectable()
-export class GlobalErrorHandler implements ErrorHandler {
-  private log = inject(LoggerService);
-  handleError(err: unknown) {
-    const e = err as Error;
-    this.log.error(e?.message ?? 'unknown error', { stack: e?.stack?.slice(0, 2000) });
-    if (isDevMode()) console.error(err);
-  }
-}
-// app.config.ts → providers: [{ provide: ErrorHandler, useClass: GlobalErrorHandler }]
-```
-
-Send a correlation id with every request so client-side and server-side logs connect:
-
-```ts
-// core/correlation.interceptor.ts
-import { HttpInterceptorFn } from '@angular/common/http';
-
-export const correlationInterceptor: HttpInterceptorFn = (req, next) =>
-  next(req.clone({ setHeaders: { 'X-Request-Id': crypto.randomUUID().slice(0, 8) } }));
-```
-
-**On the backend** you need an endpoint `POST /api/client-logs` that:
-- Limits the body size and applies a rate limit. Otherwise it becomes a hole for people to flood you with logs.
-- Writes to a separate file `logs/client-YYYYMMDD.log`
-- **Treats the content as untrusted data**, so strip `\r\n` from every value just like a normal log
-
----
-
-## Comparison table
-
-| Topic | .NET | Node | Python | Angular |
-|---|---|---|---|---|
-| Library | Serilog | winston | stdlib `logging` | Hand-written (thin) |
-| File rotation | `rollingInterval: Day` | `winston-daily-rotate-file` | `TimedRotatingFileHandler` | — (sent to the backend) |
-| correlation | `LogContext.PushProperty` | `AsyncLocalStorage` + `child()` | `ContextVar` | header `X-Request-Id` |
-| Level | `LogEventLevel` | `level` | `setLevel` | Its own enum |
-| External configuration | `appsettings.json` | env `LOG_LEVEL` | env `LOG_LEVEL` | `isDevMode()` |
-
-
----
-
-# skill: web-service-essentials
-
-Use when building or reviewing an HTTP backend
-
-# Web Service Essentials
-
-> **The one rule:** before writing the first business endpoint, the service must be able to answer
-> "Are you still alive? · Are you ready for work? · Which version are you running now?" If it cannot, on the day the system goes down you will be guessing blind.
-
-## When to use this skill
-
-- Starting a new service / REST API / microservice
-- Someone asks for a health check, ping, readiness, liveness, or version endpoint
-- Deploying to production for the first time, or moving into Docker/Kubernetes
-- You must set one API error format for the whole system
-
-## When **not** to use it
-
-- To design business endpoints, use the command `/api-design`
-- For URL style · paging · dates · API ids, use `api-conventions`
-- For log format, use `logging-standards`
-- To choose an architecture, use `architecture-patterns`
-- To check responses against OpenAPI in CI or catch breaking changes, see `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md)
-
----
-
-## 1 · The 4 basic endpoints
-
-| Endpoint | What it answers | auth | Checks dependencies | Who calls it |
-|---|---|:---:|:---:|---|
-| `GET /ping` | `pong` (text) | no | no | load balancer, every second |
-| `GET /health/live` | the process is still alive | no | **no** | orchestrator (restarts if dead) |
-| `GET /health/ready` | ready to take traffic | no | yes | orchestrator (removes from the pool) |
-| `GET /version` | what is running | no* | no | a person, when tracing a problem |
-
-> **live must not check dependencies.** This is the most common mistake.
-> If `/health/live` checks the database (DB) and the DB goes down briefly, Kubernetes will **kill every pod**
-> even though the app itself is fine. When the DB comes back, no pod is left to take traffic.
-> The dependency check belongs in `/health/ready`, which only removes a pod from the pool for a while.
-
-\* If you do not want the public to see the commit hash in `/version`, restrict it so only the internal network can call it.
-
-**Wire it to Kubernetes like this** — live and ready must point to different paths, or the point above means nothing.
-
-```yaml
-livenessProbe:            # dead → restart the container
-  httpGet: { path: /health/live, port: 3000 }
-  initialDelaySeconds: 15 # let the app start first, or it gets killed before it can listen
-  periodSeconds: 10
-  failureThreshold: 3     # restart only after 3 failures in a row (30 seconds)
-readinessProbe:           # not ready → remove from the Service for a while, no restart
-  httpGet: { path: /health/ready, port: 3000 }
-  initialDelaySeconds: 5
-  periodSeconds: 10
-```
-
-For an app with a long warm-up (loading a model · a big cache), add a `startupProbe` pointing to `/health/live` with a high `failureThreshold`, instead of stretching the liveness `initialDelaySeconds`.
-
-### Response shape (the same in every language)
-
-```jsonc
-// GET /health/ready → 200 normally · 503 when a critical dependency is down
-{
-  "status": "up",                       // up | degraded | down
-  "timestamp": "2026-08-31T09:42:13.482Z",
-  "checks": {
-    "db":    { "status": "up",   "durationMs": 12 },
-    "redis": { "status": "up",   "durationMs": 3 },
-    "mail":  { "status": "down", "durationMs": 3001, "error": "smtp timeout" }
-  }
-}
-```
-
-```jsonc
-// GET /version → 200
-{
-  "name": "orders-api", "version": "1.4.0", "commit": "abc1234",
-  "buildTime": "2026-08-31T09:00:00Z", "env": "production", "host": "pod-7f9c"
-}
-```
-
-**3 states, not 2:**
-- `up` — everything is normal → 200
-- `degraded` — a **non-critical** dependency is down (such as email) but the service can still take traffic → 200
-- `down` — a critical dependency is down (such as the DB) → **503**
-
-**Every check must have a timeout** (default 3 seconds). Otherwise a hung dependency
-makes the health endpoint hang too, and the orchestrator makes the wrong decision for the whole system.
-
-**Never send a stack trace or connection string out through these endpoints**, because anyone can call them.
-
----
-
-## 2 · One error format for the whole system
-
-Follow **RFC 9457 (`application/problem+json`)**, which is a real standard, so you do not invent your own.
-
-```jsonc
-// 422 — the format is right, but the data fails a rule (see the table below)
-{
-  "type": "https://api.example.com/errors/validation",
-  "title": "ข้อมูลที่ส่งมาไม่ถูกต้อง",
-  "status": 422,
-  "detail": "จำนวนสินค้าต้องมากกว่า 0",
-  "instance": "/api/v1/orders",
-  "requestId": "a3f9c1b2",              // matches the cid in the log — trace the case at once
-  "errors": [                           // validation only · every field in one response
-    { "field": "items[0].qty", "code": "min_value", "message": "ต้องมากกว่า 0" }
-  ]
-}
-```
-
-- `field` is the full path including array indexes · `code` is for programs · `message` is for people
-
-| Status | Use when |
-|---|---|
-| 400 | Malformed data |
-| 401 | Not yet authenticated |
-| 403 | Authenticated but not allowed |
-| 404 | The thing does not exist |
-| 409 | Conflicts with current state (duplicate, overwrite) |
-| 422 | Format is right but breaks a business rule |
-| 429 | Called too often — must have `Retry-After` |
-| 500 | Our side broke — **never send internal details out**, send `requestId` instead |
-
-> **A 500 must say only "an error occurred, please report this requestId".** The real details stay in the log.
-> Sending a stack trace out is like handing the system's blueprint to someone looking for a way in.
-
----
-
-## 3 · Request id
-
-- Accept it from the **`X-Request-Id`** header only when it matches `^[A-Za-z0-9-]{1,64}$` · if it is missing or does not match → create a new one (a uuid cut to 8 characters).
-  This value goes into every log line. If you accept it as is, the sender can insert new lines or fake text into the log (log injection).
-- **Return it in a response header every time**, including on errors.
-- Put it in every log line (see `logging-standards`) and in the error body.
-- Pass it on to the downstream service every time you call across systems.
-
-When a customer calls to say "it broke", ask for the requestId and `grep` once to find the whole story.
-
----
-
-## 4 · Graceful shutdown
-
-On a new deploy the orchestrator sends `SIGTERM`. If the app dies at once, requests in progress are cut off midway.
-
-```
-SIGTERM → 1. Stop accepting new requests (make /health/ready answer down at once)
-          2. Wait for in-flight requests to finish (timeout 15–30 seconds)
-          3. Close the DB pool / queues / files
-          4. exit(0)
-```
-
-> Step 1 matters more than it looks. `/health/ready` must answer `down` about 5 seconds **before** the real shutdown,
-> so the load balancer removes us from the pool in time. Otherwise traffic keeps arriving while we are closing.
-
----
-
-## 5 · What must exist before deploy (not optional)
-
-- **Timeouts everywhere**: incoming requests, outgoing calls, and DB queries. Without a timeout, the moment a downstream is slow, the whole system hangs with it.
-- **Limit body size** (for example 1MB) to stop memory blowing up from a large payload.
-- **Cross-Origin Resource Sharing (CORS) names the origin explicitly** — `*` is allowed only for a public API with no cookies.
-- **Rate limit** at least on the login endpoint and on anything that sends a one-time password (OTP)/email.
-- **Security headers**: `X-Content-Type-Options: nosniff` · `Content-Security-Policy: frame-ancestors 'none'` (replaces the old `X-Frame-Options` header · also add `X-Frame-Options: DENY` for old browsers) ·
-  `Strict-Transport-Security` (HTTP Strict Transport Security · HSTS)
-  Node: `helmet` sets them all in one line · .NET: `UseHsts()` sets only HSTS, and the rest needs a short middleware or the package `NetEscapades.AspNetCore.SecurityHeaders` (example in `references/per-stack.md`)
-- **Turn off the full error page in production** (`app.UseDeveloperExceptionPage()` in dev only)
-- **Put the version in the path**: `/api/v1/...` from day one, because moving later costs much more.
-- **OpenAPI** generated from the real code, not written by hand and then forgotten.
-
----
-
-## 6 · Ready-made code
-
-| File | Stack | Status |
-|---|---|---|
-| `assets/health.node.js` | Node / Express | ✓ all 4 endpoints run and tested, plus the degraded/down/timeout cases |
-| `assets/health_py.py` | Python / FastAPI | ✓ run and tested the same way, results match on every field |
-| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | Caution: not yet compiled or tested |
-
-Usage snippets for the Node and Python routers: [`references/per-stack.md`](references/per-stack.md).
-
----
-
-## 7 · Check the work
-
-```bash
-curl -i localhost:8080/ping                    # 200 pong
-curl -s localhost:8080/health/live  | jq
-curl -s localhost:8080/health/ready | jq
-curl -s localhost:8080/version      | jq
-
-# stop the DB and call again — ready must be 503 but live must still be 200
-docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:8080/health/live
-```
-
-- [ ] `/health/live` does **not** touch the DB — it still answers 200 with the DB stopped
-- [ ] `/health/ready` answers 503 when a critical dependency is down
-- [ ] When a non-critical dependency is down, the result is `degraded` + 200 (still takes traffic)
-- [ ] Every check has a timeout — make a dependency hang, and the endpoint must answer within ~3 seconds
-- [ ] `/version` matches the commit actually deployed
-- [ ] Every response has `X-Request-Id`, including a 500
-- [ ] Trigger a 500 and confirm no stack trace / connection string leaks out
-- [ ] After `SIGTERM`, in-flight requests finish before the app closes
-- [ ] `/ping` is not written to the log (or the file fills up with pings)
-
-
-## reference: per-stack.md
-
-# .NET และ Angular
-
-> Caution: the code in this file is **not yet compiled or tested** (unlike `assets/health.node.js` and
-> `assets/health_py.py`, which have been run against every endpoint). It is the standard setup of
-> ASP.NET Core. On the first run, compare the response with the shape in SKILL.md section 1.
-
----
-
-## สารบัญ
-
-1. [ASP.NET Core — health checks](#aspnet-core--health-checks)
-2. [Angular — ฝั่งที่เรียกใช้](#angular--ฝั่งที่เรียกใช้)
-3. [ตารางเทียบ](#ตารางเทียบ)
-
----
-
-## ASP.NET Core — health checks
-
-```bash
-dotnet add package AspNetCore.HealthChecks.NpgSql
-dotnet add package AspNetCore.HealthChecks.Redis
-dotnet add package AspNetCore.HealthChecks.Network   # AddSmtpHealthCheck อยู่ในแพ็กเกจนี้
-```
-
-```csharp
-builder.Services.AddHealthChecks()
-    // tag "ready" = ตัวที่ /health/ready จะเรียก · ไม่ติด tag = ไม่ถูกเรียกที่ไหนเลย
-    .AddNpgSql(cs, name: "db", timeout: TimeSpan.FromSeconds(3), tags: ["ready", "critical"])
-    .AddRedis(redisCs, name: "redis", timeout: TimeSpan.FromSeconds(3), tags: ["ready", "critical"])
-    .AddSmtpHealthCheck(o => { }, name: "mail",
-        failureStatus: HealthStatus.Degraded,          // ไม่ critical → degraded ไม่ใช่ down
-        tags: ["ready"])
-    // ตอนกำลังปิด → Unhealthy → /health/ready ตอบ 503 (ดู "Graceful shutdown" ข้างล่าง)
-    .AddCheck<ShutdownHealthCheck>("shutdown", tags: ["ready", "critical"]);
-```
-
-```csharp
-// ---- ping: เบาที่สุด ไม่ผ่าน middleware ที่ไม่จำเป็น ----
-app.MapGet("/ping", () => Results.Text("pong")).ExcludeFromDescription();
-
-// ---- liveness: ไม่เรียก check ตัวไหนเลย (predicate = _ => false) ----
-// ถ้าเผลอให้เช็ค DB ตรงนี้ DB สะดุด = Kubernetes ฆ่า pod ยกแถว
-app.MapHealthChecks("/health/live", new HealthCheckOptions
-{
-    Predicate = _ => false,
-    ResponseWriter = WriteLive,
-});
-
-// ---- readiness: เฉพาะ check ที่ติด tag "ready" ----
-app.MapHealthChecks("/health/ready", new HealthCheckOptions
-{
-    Predicate = c => c.Tags.Contains("ready"),
-    ResponseWriter = WriteReady,
-    ResultStatusCodes =
-    {
-        [HealthStatus.Healthy]   = StatusCodes.Status200OK,
-        [HealthStatus.Degraded]  = StatusCodes.Status200OK,     // ยังรับ traffic ได้
-        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable,
-    },
-});
-
-app.MapGet("/version", () => Results.Ok(new
-{
-    name = "orders-api",
-    version = typeof(Program).Assembly.GetName().Version?.ToString() ?? "0.0.0",
-    commit = Environment.GetEnvironmentVariable("GIT_SHA") ?? "unknown",
-    buildTime = Environment.GetEnvironmentVariable("BUILD_TIME") ?? "unknown",
-    env = app.Environment.EnvironmentName,
-    host = Environment.MachineName,
-}));
-```
-
-Make the response match the same format as the other stacks:
-
-```csharp
-static Task WriteReady(HttpContext ctx, HealthReport report)
-{
-    ctx.Response.ContentType = "application/json; charset=utf-8";
-    return ctx.Response.WriteAsJsonAsync(new
-    {
-        status = report.Status switch
-        {
-            HealthStatus.Healthy  => "up",
-            HealthStatus.Degraded => "degraded",
-            _                     => "down",
-        },
-        timestamp = DateTimeOffset.UtcNow,
-        checks = report.Entries.ToDictionary(
-            e => e.Key,
-            e => new
-            {
-                status = e.Value.Status == HealthStatus.Healthy ? "up" : "down",
-                durationMs = (int)e.Value.Duration.TotalMilliseconds,
-                // ข้อความเท่านั้น ห้ามส่ง exception เต็ม ๆ — endpoint นี้เปิดสาธารณะ
-                error = e.Value.Exception?.Message,
-            }),
-    });
-}
-
-static Task WriteLive(HttpContext ctx, HealthReport _)
-{
-    ctx.Response.ContentType = "application/json; charset=utf-8";
-    return ctx.Response.WriteAsJsonAsync(new { status = "up", timestamp = DateTimeOffset.UtcNow });
-}
-```
-
-### Error envelope (RFC 9457)
-
-ASP.NET Core already ships `ProblemDetails`. Use it, and do not invent your own format.
-
-```csharp
-builder.Services.AddProblemDetails(o => o.CustomizeProblemDetails = ctx =>
-{
-    ctx.ProblemDetails.Instance = ctx.HttpContext.Request.Path;
-    ctx.ProblemDetails.Extensions["requestId"] =
-        ctx.HttpContext.Response.Headers["X-Request-Id"].ToString();
-});
-
-app.UseExceptionHandler();      // แปลง exception ที่หลุดเป็น problem+json ให้อัตโนมัติ
-app.UseStatusCodePages();
-```
-
-### Graceful shutdown
-
-Make `/health/ready` answer down for a short while before the real shutdown, so the load balancer removes the instance from its pool in time.
-Use `IHostedLifecycleService.StoppingAsync` (.NET 8 and later), because the host calls it **before** it stops Kestrel (after `ApplicationStopping`).
-So you can wait with `await Task.Delay` without blocking a thread, and the server still answers 503 for the load balancer to see.
-
-```csharp
-// สถานะร่วม: ตัวรอปิดเขียน · health check อ่าน
-public sealed class ReadinessState { public volatile bool IsShuttingDown; }
-
-public sealed class ShutdownHealthCheck(ReadinessState state) : IHealthCheck
-{
-    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken ct = default) =>
-        Task.FromResult(state.IsShuttingDown
-            ? HealthCheckResult.Unhealthy("shutting down")
-            : HealthCheckResult.Healthy());
-}
-
-public sealed class DrainOnShutdown(ReadinessState state) : IHostedLifecycleService
-{
-    public async Task StoppingAsync(CancellationToken ct)
-    {
-        state.IsShuttingDown = true;                       // /health/ready → 503 ทันที
-        await Task.Delay(TimeSpan.FromSeconds(5), ct);     // รอ load balancer ตัดออก
-    }
-    public Task StartingAsync(CancellationToken ct) => Task.CompletedTask;
-    public Task StartAsync(CancellationToken ct)    => Task.CompletedTask;
-    public Task StartedAsync(CancellationToken ct)  => Task.CompletedTask;
-    public Task StopAsync(CancellationToken ct)     => Task.CompletedTask;
-    public Task StoppedAsync(CancellationToken ct)  => Task.CompletedTask;
-}
-
-// ก่อน builder.Build()
-builder.Services.AddSingleton<ReadinessState>();
-builder.Services.AddHostedService<DrainOnShutdown>();
-builder.Services.Configure<HostOptions>(o =>
-    o.ShutdownTimeout = TimeSpan.FromSeconds(30));   // รวมเวลารอ 5 วินาทีข้างบน + request ที่ค้าง
-```
-
-Host shutdown order (.NET 8+): `ApplicationStopping` → `StoppingAsync` → `StopAsync` of the hosted services (including Kestrel) → `StoppedAsync` → `ApplicationStopped` — per the .NET Generic Host page at learn.microsoft.com (checked 22 Oct 2026)
-
-### สิ่งที่ต้องเปิดก่อน deploy
-
-Register services only **before** `builder.Build()`. After Build the service list is read-only, and calling `builder.Services.Add…` then throws `InvalidOperationException` at app start.
-
-```csharp
-// ---- ก่อน Build: ลงทะเบียน service ----
-builder.Services.Configure<KestrelServerOptions>(o => o.Limits.MaxRequestBodySize = 1_048_576);
-builder.Services.AddRateLimiter(o =>
-{
-    o.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-    // อย่างน้อยที่ /login และที่ส่งรหัสผ่านใช้ครั้งเดียว (One-Time Password · OTP)
-    o.AddFixedWindowLimiter("login", w => { w.PermitLimit = 5; w.Window = TimeSpan.FromMinutes(1); });
-});
-builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
-    p.WithOrigins("https://app.example.com")   // ระบุ origin ห้าม AllowAnyOrigin คู่กับ cookie
-     .AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
-
-var app = builder.Build();
-
-// ---- หลัง Build: ลำดับ middleware ----
-if (!app.Environment.IsDevelopment())
-    app.UseHsts();                             // ตั้งแค่ Strict-Transport-Security · ไม่ใช้ตอน dev เพราะเบราว์เซอร์จำค่าไว้
-app.UseHttpsRedirection();
-app.Use(async (ctx, next) =>                   // header ที่ UseHsts ไม่ได้ตั้งให้
-{
-    ctx.Response.Headers["X-Content-Type-Options"] = "nosniff";
-    ctx.Response.Headers["Content-Security-Policy"] = "frame-ancestors 'none'";
-    ctx.Response.Headers["X-Frame-Options"] = "DENY";   // สำหรับเบราว์เซอร์เก่า
-    await next();
-});
-app.UseCors();
-app.UseRateLimiter();
-
-app.MapPost("/api/v1/login", Login).RequireRateLimiting("login");
-```
-
-To avoid writing your own middleware, use the package `NetEscapades.AspNetCore.SecurityHeaders` (`app.UseSecurityHeaders()`) which sets the full basic header set
-
----
-
-## Angular — ฝั่งที่เรียกใช้
-
-**Interceptor ใส่ request id ทุก request** (คู่กับ `logging-standards`):
-
-```ts
-export const requestIdInterceptor: HttpInterceptorFn = (req, next) => {
-  const id = crypto.randomUUID().slice(0, 8);
-  return next(req.clone({ setHeaders: { 'X-Request-Id': id } }));
-};
-```
-
-**Turn problem+json into a message the user can understand**:
-
-```ts
-export const errorInterceptor: HttpInterceptorFn = (req, next) => {
-  const toast = inject(ToastService);
-  return next(req).pipe(
-    catchError((e: HttpErrorResponse) => {
-      const p = e.error;                       // ProblemDetails
-      // 500 ไม่มีรายละเอียดให้แสดง — โชว์ requestId เพื่อให้ผู้ใช้แจ้งทีมได้
-      const msg = p?.detail || p?.title || 'เกิดข้อผิดพลาด';
-      toast.error(p?.requestId ? `${msg} (รหัสอ้างอิง ${p.requestId})` : msg);
-      return throwError(() => e);
-    }),
-  );
-};
-```
-
-**System status page**, so the support team can check it without calling a developer:
-
-```ts
-this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r));
-// r.status = 'up' | 'degraded' | 'down' → แสดงเป็น pill สีเขียว/เหลือง/แดง
-// (ใช้คลาส .pill-green / .pill-amber / .pill-red จาก web-app-design)
-```
-
----
-
-## ตารางเทียบ
-
-| เรื่อง | .NET | Node/Express | Python/FastAPI |
-|---|---|---|---|
-| health | `AddHealthChecks()` + tag | `createHealthRouter()` | `make_health_router()` |
-| error envelope | `ProblemDetails` (มีในตัว) | `express-problem-json` หรือเขียน middleware | `HTTPException` + custom handler |
-| request id | middleware + `LogContext` | `AsyncLocalStorage` | `ContextVar` + middleware |
-| graceful shutdown | `IHostedLifecycleService.StoppingAsync` | `server.close()` ใน `SIGTERM` | `lifespan` context ของ FastAPI |
-| security headers | `UseHsts()` (HTTP Strict Transport Security (HSTS) เท่านั้น) + middleware สั้น ๆ หรือ `NetEscapades.AspNetCore.SecurityHeaders` | `helmet` | `secure` middleware |
-| OpenAPI | `Microsoft.AspNetCore.OpenApi` (`AddOpenApi()` + `MapOpenApi()` · มากับ template ตั้งแต่ .NET 9) · ทางเลือก: Swashbuckle / NSwag | `swagger-jsdoc` | มีในตัว `/docs` |
-| rate limit | `AddRateLimiter` | `express-rate-limit` | `slowapi` |
-
-## Wiring the ready-made health router
-
-```js
-// Node
-app.use(createHealthRouter({
-  version: { name: 'orders-api', version: '1.4.0', commit: process.env.GIT_SHA },
-  checks: {
-    db:   async () => { await pool.query('SELECT 1'); },          // critical
-    mail: { critical: false, run: async () => { await smtp.verify(); } },
-  },
-}));
-```
-
-```python
-# Python
-app.include_router(make_health_router(
-    version={"name": "orders-api", "version": "1.4.0", "commit": os.getenv("GIT_SHA")},
-    checks={"db": lambda: db.execute("SELECT 1"),
-            "mail": {"critical": False, "run": smtp.verify}},
-))
-```
+The calculation happens after layout because box positions depend on the length of the Thai text.
+If you write fixed coordinates, one text edit knocks the lines off across the whole figure.
+
+**Rules:**
+
+- **Lines run only vertically or horizontally, and turn with rounded corners.** The `elbow()` function in the skeleton does this itself (horizontal → vertical → horizontal). Use `mx` to shift the bend when several lines share one gap. Do not write a `path` as a straight line from point to point, because when the boxes at the two ends have different heights, the line goes slanted.
+- **A label must be narrower than the gap between columns.** Otherwise it covers a box or hides the line. If a label gets longer, raise the `gap` of `.stage` to match.
+- Move a label along the line with `lp` (0 = source · 1 = target · omit = middle of the line).
+- For a line not yet really connected, use `planned:true` to get a dashed line, and **explain the meaning in the footnote.**
+- **No more than 5** cross-column lines per figure, because beyond that the figure turns into a spider web.
+- Connect to the **smallest box that is correct**, not the large box around it. If a box is very tall, set `tp` so the line does not aim at the middle of the box.
+- A label on a line says **what flows through**, such as `HTTPS 443`, not `เชื่อมต่อ` (connect). If there is nothing to say about a line, leave the label off rather than writing "use".

@@ -164,7 +164,7 @@ Phase C: Full restoration
 
 ## Phase 5: Lessons Learned
 
-Use the `postmortem-template` skill (from software-development) for a blameless postmortem.
+Use the `incidents-and-monitoring` skill (from software-development) for a blameless postmortem.
 
 Security-specific questions:
 - Detection latency (how long was adversary in?)
@@ -220,7 +220,7 @@ Preservation:
 
 ## Output: Incident Report
 
-Use `design-gate/polished-document-style` + `postmortem-template` skills.
+Use `design-gate/polished-document-style` + `incidents-and-monitoring` skills.
 
 ```markdown
 # Incident Report: <Title>
@@ -264,7 +264,7 @@ Use `design-gate/polished-document-style` + `postmortem-template` skills.
 ## Skills You Use
 
 - `security-operations` — IR-specific patterns
-- `postmortem-template` (from software-development)
+- `incidents-and-monitoring` (from software-development)
 - `design-gate/polished-document-style` (from superuser)
 
 ## Things You Don't Do

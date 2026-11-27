@@ -24,21 +24,21 @@ An individual registers commercial registration (anyone selling online must regi
 | Task | When | Use |
 |---|---|---|
 | Open a bank account in the business name, separate from personal money | Right away | Recommended practice |
-| Juristic person: keep books from the registration date · appoint a qualified bookkeeper · close the first accounting period within 12 months · keep books and documents for at least 5 years from the closing date | Right away | `dbd-annual-filing` |
-| Register for VAT when revenue from selling goods or services exceeds 1.8 million baht a year. File the request within 30 days of the date revenue passes it · below that, the owner can still register voluntarily · a juristic person can file the VAT request together with the incorporation request | By revenue | `tax-vat-th` |
-| Issue electronic tax invoices (e-Tax Invoice) | After VAT registration | `e-tax-invoice` |
-| First hire: register the employee as an insured person within 30 days of the start date · an employer who is an individual must register as an employer themselves | When hiring | `hiring-th` · `social-security-th` |
-| Withholding tax and monthly VAT | Every month | `tax-vat-th` |
-| Payroll | Every month | `payroll-th` |
-| Financial statements and yearly tax | After the accounting year closes | `dbd-annual-filing` |
+| Juristic person: keep books from the registration date · appoint a qualified bookkeeper · close the first accounting period within 12 months · keep books and documents for at least 5 years from the closing date | Right away | `thai-tax` |
+| Register for VAT when revenue from selling goods or services exceeds 1.8 million baht a year. File the request within 30 days of the date revenue passes it · below that, the owner can still register voluntarily · a juristic person can file the VAT request together with the incorporation request | By revenue | `thai-tax` |
+| Issue electronic tax invoices (e-Tax Invoice) | After VAT registration | `thai-tax` |
+| First hire: register the employee as an insured person within 30 days of the start date · an employer who is an individual must register as an employer themselves | When hiring | `thai-employment` |
+| Withholding tax and monthly VAT | Every month | `thai-tax` |
+| Payroll | Every month | `thai-employment` |
+| Financial statements and yearly tax | After the accounting year closes | `thai-tax` |
 | Privacy notice for customers and staff | Before collecting data | `pdpa-workflow` |
-| Quotation, invoice, receipt · PromptPay QR | When sales open | `doc-quotation` · `promptpay-qr` |
+| Quotation, invoice, receipt · PromptPay QR | When sales open | `thai-business-docs` · `shop-books` |
 
 Last checked 2026-10-23 · sources: [`references/sources.md`](references/sources.md)
 
 ## 5 · Import cost from China
 
-Moved to the skill `import-landed-cost` (CIF formula, duty and VAT · 2026 rules · by road or by sea · script `landed-cost.mjs`).
+Moved to the skill `pricing-and-costs` (CIF formula, duty and VAT · 2026 rules · by road or by sea · script `landed-cost.mjs`).
 
 ## 6 · When to ask an accountant or lawyer
 
@@ -46,7 +46,7 @@ Moved to the skill `import-landed-cost` (CIF formula, duty and VAT · 2026 rules
 - A shareholder, partner or director is a foreigner · DBD asks for extra documents under the orders of the Central Partnership and Company Registration Office (company: no. 2/2569 · partnership: no. 205/2555), and the law on foreign business operation needs a lawyer's review
 - Registered capital over 5 million baht · DBD asks for extra documents under order no. 1/2567
 - Revenue is near 1.8 million baht, or the business is about to register for VAT
-- Financial statements or tax were filed late (penalties grow every day; see `dbd-annual-filing`)
+- Financial statements or tax were filed late (penalties grow every day; see `thai-tax`)
 
 ## 7 · รออนุมัติ (awaiting approval)
 
@@ -61,9 +61,9 @@ These steps cannot be undone or they affect outsiders. The agent prepares the da
 
 | Need | Use |
 |---|---|
-| Tax for an online seller who is an individual (deducting expenses · ภ.ง.ด.90 (PND 90) and 94 (PND 94)) | `seller-tax-basics` |
-| Monthly filing of VAT, withholding tax and penalties | `tax-vat-th` + agent `tax-helper` |
-| Partnership, lease and work-for-hire contracts | `doc-contract-th` |
-| Setting a selling price on Shopee, Lazada and TikTok Shop once the cost is known | `marketplace-fees-pricing` |
-| Comparing domestic carriers | `shipping-compare` |
+| Tax for an online seller who is an individual (deducting expenses · ภ.ง.ด.90 (PND 90) and 94 (PND 94)) | `thai-tax` |
+| Monthly filing of VAT, withholding tax and penalties | `thai-tax` + agent `tax-helper` |
+| Partnership, lease and work-for-hire contracts | `thai-business-docs` |
+| Setting a selling price on Shopee, Lazada and TikTok Shop once the cost is known | `pricing-and-costs` |
+| Comparing domestic carriers | `pricing-and-costs` |
 | Naming the business before reserving the name | `product-naming` (plugin `software-development`) |

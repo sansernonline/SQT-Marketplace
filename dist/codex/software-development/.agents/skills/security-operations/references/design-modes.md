@@ -2,7 +2,7 @@
 
 Design a security operations center (SOC) or run a threat hunt with the security-analyst agent (soc-design or threat-hunt).
 
-Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+Two modes. Read the first word of **the user's request**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
 
 | Mode | What it does |
 |---|---|
@@ -13,7 +13,7 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 
 ## Mode: `soc-design`
 
-Use the `security-analyst` agent to design a SOC for: **$ARGUMENTS**
+Use the `security-analyst` agent to design a SOC for: **the user's request**
 
 Workflow:
 
@@ -33,7 +33,7 @@ Workflow:
 
 ## Mode: `threat-hunt`
 
-Use the `security-analyst` agent for: **$ARGUMENTS**
+Use the `security-analyst` agent for: **the user's request**
 
 Workflow:
 

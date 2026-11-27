@@ -82,7 +82,7 @@ playbook `trade-review` · agent `trade-journal-coach` · skill `trade-journal`
 
 ## 3. ตั้ง watchlist และการแจ้งเตือน
 
-skill `watchlist-setup` · agent `alert-dispatcher` · งานกลาง ไม่ต้องเปิด playbook
+skill `market-watch` · agent `alert-dispatcher` · งานกลาง ไม่ต้องเปิด playbook
 **ผลลัพธ์:** `watchlist.csv` · **รออนุมัติ:** ตั้ง scheduled task ส่งแจ้งเตือน
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -101,7 +101,7 @@ skill `watchlist-setup` · agent `alert-dispatcher` · งานกลาง ไ
 
 ## 4. ซ้อมเทรดด้วยเงินจำลองก่อนใช้เงินจริง
 
-playbook `pre-trade` (ทำทุกขั้นกับทุกไม้จำลอง เหมือนเงินจริง) + `trade-review` (ทุกเดือน) · agent `risk-manager` + `trade-journal-coach` · skill `paper-trading` · `position-sizing` · `trade-journal`
+playbook `pre-trade` (ทำทุกขั้นกับทุกไม้จำลอง เหมือนเงินจริง) + `trade-review` (ทุกเดือน) · agent `risk-manager` + `trade-journal-coach` · skill `trade-practice` · `position-sizing` · `trade-journal`
 **ผลลัพธ์:** บันทึกเงินจำลองใน `trade-journal.csv` (`account = paper` + คอลัมน์เงินสด) · กติกาซ้อมและเกณฑ์ผ่าน · `reviews/YYYY-MM-paper.md` · **รออนุมัติ:** ย้ายไปใช้เงินจริง
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -127,7 +127,7 @@ playbook `pre-trade` (ทำทุกขั้นกับทุกไม้จ�
 
 ## 5. ติดดอย ขาดทุนหนัก: ถือ ตัด หรือถัว
 
-playbook `pre-trade` (การถัวเฉลี่ยขาลงคือเปิดสถานะเพิ่ม ต้องผ่านทุกขั้นเหมือนไม้ใหม่) · agent `risk-manager` + `market-analyst` · skill `position-sizing` · `portfolio-snapshot` · `technical-signals` · `news-impact` · `trade-journal`
+playbook `pre-trade` (การถัวเฉลี่ยขาลงคือเปิดสถานะเพิ่ม ต้องผ่านทุกขั้นเหมือนไม้ใหม่) · agent `risk-manager` + `market-analyst` · skill `position-sizing` · `portfolio` · `technical-signals` · `market-watch` · `trade-journal`
 **ผลลัพธ์:** `positions/<หลักทรัพย์>-<ปี-เดือน-วัน>.md` — ตาราง 3 ทาง (ถือ · ตัด · ถัว) พร้อมตัวเลข · แถวในบันทึกเทรด · **รออนุมัติ:** ส่งคำสั่งขาย · ส่งคำสั่งซื้อเพิ่ม
 
 ### ข้อมูล (ผู้ใช้กรอก)

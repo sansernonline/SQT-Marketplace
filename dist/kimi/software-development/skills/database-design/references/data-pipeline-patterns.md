@@ -1,6 +1,6 @@
 # Data pipeline patterns — incremental, backfill, quality, catalog
 
-Every pipeline must give the same result when run again (`principle-safe-to-rerun`) and must always pass values into SQL as parameters.
+Every pipeline must give the same result when run again (`code-craft`) and must always pass values into SQL as parameters.
 
 **สารบัญ:**
 

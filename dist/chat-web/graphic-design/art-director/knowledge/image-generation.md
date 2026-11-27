@@ -474,7 +474,7 @@ Every prompt carries the items in `design-gate/no-ai-look` section 4 (named styl
 
 `/graphic-design:image-generation <what the image must show> [where it will be used]`
 
-Run `image-generation` with the `art-director` agent for: **$ARGUMENTS**
+Run `image-generation` with the `art-director` agent for: **the user's request**
 
 Saves the brief to the project briefs folder. Generation and the consistency check both use this same brief.
 

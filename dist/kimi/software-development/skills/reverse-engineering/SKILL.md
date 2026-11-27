@@ -15,7 +15,7 @@ Everything runs on local tools: the Python scripts in `scripts/` (standard libra
 | Task | Use this instead |
 |---|---|
 | Source code exists but has no documentation, and you need a spec of the old system | `legacy-spec-recovery` |
-| Source code exists, but you have not yet read the part you will change | `code-orientation` |
+| Source code exists, but you have not yet read the part you will change | `code-craft` |
 | You want an app like X that is public | `reference-app-research` first — documents and reviews cost less than taking it apart |
 
 ## 1 · Before opening the target (every time)
@@ -31,7 +31,7 @@ Everything runs on local tools: the Python scripts in `scripts/` (standard libra
 |---|---|
 | Read the target file with the scripts in `scripts/` · strings · a decompiler that only reads the file | Allowed after step 1 |
 | **Run the target** · attach to a process (debugger · Frida) · drive a browser or app to click on its own · **change a device** (install, delete, push files, start or stop apps through adb · flash firmware) · **capture new traffic** (proxy · live tshark) · read live data from an app or device the user is using | **Ask the user every time.** Say what you will run, on what, and for how long. Permission to look at a file is not permission to run it |
-| A target of unknown origin or one you do not trust | Run it only in a `docker-sandbox` container, never on the user's machine |
+| A target of unknown origin or one you do not trust | Run it only in a `infra-and-deploy` container, never on the user's machine |
 | Install a missing tool | Ask first. The user installs it from the official developer's site (table in section 5) |
 | Bypass DRM (Digital Rights Management) · unlock a licence or activation · bypass anti-cheat · build game cheats · skip authentication · copy copyrighted code or assets · create or improve malware | **Never, in any case** |
 | Paid tools (IDA · Hopper · JEB · Binary Ninja) | Only under the user's own genuine licence |

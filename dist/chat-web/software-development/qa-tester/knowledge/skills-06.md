@@ -1,305 +1,3 @@
-# skill: api-conventions
-
-Use when adding API endpoints or checking API consistency
-
-# Application Programming Interface (API) conventions
-
-> **The one rule:** decide once, apply to every endpoint.
-> An API where every endpoint behaves the same, even if "not quite right in theory", is easier to use
-> than an API where each endpoint is correct in its own way, because with the latter the caller must guess again every time.
-
-## When to use this skill
-
-- Starting to design the first API of a project
-- Adding an endpoint to an existing API and wanting it to match what is there
-- Reviewing an API and feeling that its parts are not alike
-- Needing to answer "if we change it this way, will clients break?"
-
-Not for: designing all the endpoints of one feature → command `/api-design` · health check, error envelope, graceful shutdown → `web-service-essentials` · tables and relations → `database-design`
-
-**A template of the conventions document that you can copy and use** → `assets/API-CONVENTIONS.md`
-
----
-
-## 1 · The conventions document must exist
-
-Put the file `docs/API-CONVENTIONS.md` in place (the template is at `assets/API-CONVENTIONS.md`).
-Write every decision made from this page into that file, with the date and a short reason.
-
----
-
-## 2 · Naming URLs
-
-```
-GET    /v1/orders                 list
-POST   /v1/orders                 create
-GET    /v1/orders/{id}            single item
-PATCH  /v1/orders/{id}            partial update
-PUT    /v1/orders/{id}            replace the whole item
-DELETE /v1/orders/{id}            delete
-GET    /v1/orders/{id}/items      child resource
-POST   /v1/orders/{id}/cancel     an action that is not CRUD (Create, Read, Update, Delete)
-```
-
-| Rule | ✓ | ✗ |
-|---|---|---|
-| Plural nouns | `/orders` | `/getOrders`, `/order` |
-| Lowercase, hyphens | `/purchase-orders` | `/purchaseOrders`, `/purchase_orders` |
-| At most 2 levels deep | `/orders/{id}/items` | `/customers/{a}/orders/{b}/items/{c}/logs` |
-| Use a verb only when it is truly not CRUD | `POST /orders/{id}/cancel` | `POST /orders/cancelOrder` |
-
-**An action that is not CRUD** (approve, cancel, resend) uses `POST /{resource}/{id}/{action}`.
-Do not bend it into a `PATCH` that edits `status`, because a status change usually has more side effects than an ordinary field edit.
-
-**How to use `PATCH`:** pick one style for the whole system. Sending only the changed fields (`merge patch`) is recommended,
-and you must define clearly whether `null` means "clear the value" or "leave it alone" (see section 6).
-
----
-
-## 3 · Versioning
-
-| Method | Pros | Cons |
-|---|---|---|
-| **In the path** `/v1/orders` | Obvious, easy to test, easy to cache | The URL changes when the version goes up |
-| In a header `Accept: application/vnd.acme.v1+json` | The URL stays fixed | Invisible when debugging, often forgotten |
-
-> **Choose the path** unless there is a specific reason — everyone can see the version from a single line in the log.
-
-**Which changes break callers:**
-
-| Change | Breaks? |
-|---|:--:|
-| Add a new endpoint | No |
-| Add an **optional** field to a request | No |
-| Add a field to a response | No* |
-| Add a new enum value | **Breaks** — a client whose `switch` covers every value will meet an unknown one |
-| Remove/rename a field | **Breaks** |
-| Change a data type (`"12"` → `12`) | **Breaks** |
-| Make a formerly optional field required | **Breaks** |
-| Change the HTTP status returned in an existing case | **Breaks** |
-| Make a validation rule stricter | **Breaks** |
-
-\* Only when callers were told from the start to "skip fields you do not recognize".
-This must be written in `API-CONVENTIONS.md`, not left to hope.
-
-**Raise the major version only when truly needed**, because every version still open is another body of code to maintain.
-
----
-
-## 4 · Pagination
-
-**Every endpoint that returns a list must have pagination from day one**, with no exceptions.
-A list that "only has a few items" will have 10,000 in 2 years.
-
-| Method | Use when | Limits |
-|---|---|---|
-| **cursor** `?limit=50&cursor=eyJ...` | Default · lots of data · data is added while the user is browsing | Cannot jump to page 7 |
-| offset `?limit=50&offset=100` | Page numbers must be clickable · little data | Slower the deeper the page · if a row is inserted while browsing, data repeats or goes missing |
-
-```jsonc
-// GET /v1/orders?limit=2 → 200
-{
-  "data": [ { "id": "1042" }, { "id": "1041" } ],
-  "page": {
-    "limit": 2,
-    "nextCursor": "eyJpZCI6MTA0MX0",   // null when there is no more
-    "hasMore": true
-  }
-}
-```
-
-- Always wrap the list in `data`, because a bare array leaves no room to add page information later.
-- `limit` has a default and a **ceiling enforced on the server** (for example default 20, maximum 100).
-- `totalCount` is expensive to count, so make it optional with `?includeTotal=true`. Do not count every time.
-- **The cursor must be opaque** (callers must never decode or build one themselves).
-
----
-
-## 5 · Filtering · sorting · requested fields
-
-```
-GET /v1/orders?status=confirmed&createdAt[gte]=2026-01-01&sort=-createdAt&fields=id,orderNo,total
-```
-
-| Topic | Convention |
-|---|---|
-| Filter by equal value | `?status=confirmed` |
-| Several values | `?status=confirmed,shipped` |
-| Range | `?createdAt[gte]=...&createdAt[lt]=...` |
-| Sort | `?sort=-createdAt,orderNo` — `-` means descending |
-| Text search | `?q=สมชาย` kept separate from filtering |
-| Select fields | `?fields=id,orderNo` |
-
-- **Accept only the fields you have defined.** If any field name is accepted, you get security holes and queries with no index.
-- For an unknown parameter, answering `400` is better than skipping it silently. Otherwise a caller who mistypes gets wrong data without knowing.
-
----
-
-## 6 · Data formats
-
-| Data | Format | Example |
-|---|---|---|
-| Field names | `camelCase` across the system | `createdAt` |
-| Time | RFC 3339 · UTC · ends with `Z` | `"2026-09-25T09:42:13.482Z"` |
-| Date only | `YYYY-MM-DD` | `"2026-09-25"` |
-| Money | the number as a **string** + a separate currency | `{ "amount": "1250.00", "currency": "THB" }` |
-| identifier | **always a string** | `"1042"` not `1042` |
-| enum | `SCREAMING_SNAKE` or `lower_snake`, pick one style | `"CONFIRMED"` |
-| Duration | seconds as a number, named so the unit is clear | `"timeoutSeconds": 30` |
-| Country / currency / language | ISO 3166 · ISO 4217 · BCP 47 | `"TH"` · `"THB"` · `"th-TH"` |
-
-> **A numeric id in JSON is a time bomb** — JavaScript stores integers safely up to 9,007,199,254,740,991.
-> A `bigint` above that is silently rounded at `JSON.parse`, and changing it to a string later is a breaking change.
->
-> **Money as a float in JSON** — `1250.10` passed through 2 programming languages may become `1250.0999999999999`.
-
-**`null` and "no field" must mean different things:**
-
-- In a response, a field that exists but has no value is sent as `null`, not dropped, so callers do not have to check 2 cases.
-- In a `PATCH`, sending `{"note": null}` means clear the value, and leaving out the `note` key entirely means leave it alone.
-
-**An empty array is `[]`, not `null`**, so callers can loop over it directly.
-
----
-
-## 7 · Errors
-
-The error format (RFC 9457 · `requestId` · an `errors` array of `{field, code, message}`) and examples live in one place, `web-service-essentials` section 2. Follow that.
-What still needs agreement is the **field-level error**:
-
-- **`code` is for programs, `message` is for people.** Never make callers write conditions against the message text.
-- Point to the field location with the full path, including array indexes.
-- **Return the errors for all fields at once**, not one at a time, so users do not have to submit 5 times.
-- If several languages are supported, choose Thai or English text from `Accept-Language`.
-
-**Pick the status to match** the table in `web-service-essentials` section 2. One addition for this skill: return `404` also when you do not want to reveal that the thing exists.
-
----
-
-## 8 · Repeat calls without repeat effects, and edit conflicts
-
-### idempotency key (a request code — sending it again does not do the work again)
-
-**Required on every `POST` that has a financial effect or sends something out to the outside world.**
-
-```
-POST /v1/payments
-Idempotency-Key: 7f3c1e10-...        ← created by the caller, kept for use when retrying
-```
-
-- The server stores the key together with the result for at least 24 hours.
-- Same key with the same body: return the earlier result and do not repeat the work.
-- Same key with a **different** body: answer `422` and do not do new work.
-- A network drop while waiting for the answer is normal, not a special case, so callers always retry.
-
-### Edit conflicts (optimistic concurrency)
-
-```
-GET   /v1/orders/1042        → 200  ETag: "v7"
-PATCH /v1/orders/1042        If-Match: "v7"
-                             → 200 normally · 412 if someone edited it first
-```
-
-Without this, whoever saves second overwrites the first person's work and nobody knows.
-
----
-
-## 9 · Rate limit
-
-```
-X-RateLimit-Limit: 1000
-X-RateLimit-Remaining: 997
-X-RateLimit-Reset: 1758790000
-Retry-After: 42                ← must always accompany a 429
-```
-
-If a `429` has no `Retry-After`, the caller must guess, and most guess "try again at once".
-
----
-
-## 10 · Retiring an endpoint
-
-1. Announce in advance, and say what to use instead.
-2. Send these headers in every response of that endpoint:
-   ```
-   Deprecation: @1790812800
-   Sunset: Wed, 31 Dec 2026 23:59:59 GMT
-   Link: <https://docs.acme.co/v2/orders>; rel="successor-version"
-   ```
-   `Deprecation` follows the Request for Comments (RFC) 9745 standard (Mar 2025). It must be a date in the form `@<unix seconds>` (this example is 1 Oct 2026 00:00 UTC), not `true`. Checked 22 Oct 2026 (B.E. 2569).
-3. **Check the logs for who still calls it**, then contact them directly. Do not wait for them to go quiet on their own.
-4. Close it only after the announced date, not before.
-
-A fitting period: for an internal API, 1 release cycle. For an API used by outsiders, at least 6 months.
-
----
-
-## 11 · Check before releasing a new endpoint
-
-Go through every item against the endpoint you added. Fail one and it is not merged yet.
-
-- [ ] The URL is a plural noun per section 2 · sits under a version per section 3 · has no `GET` that changes data
-- [ ] Every list has pagination and a page-size ceiling (section 4) · filter and sort use the same parameter names as existing endpoints (section 5)
-- [ ] Dates · ids · money are in the formats of section 6 · the response is not a raw database entity
-- [ ] Every error follows `web-service-essentials` §2 and has a fixed `code` (section 7) · a request that creates or pays accepts an idempotency key · an edit accepts `If-Match` (section 8)
-- [ ] Auth and rate limit are stated (section 9) · it is in OpenAPI, and the cURL examples in the docs really run
-- [ ] There is a contract test or an endpoint-level test with at least 1 success case and 1 error case — check the response against OpenAPI in CI · Pact when the caller is on another team · `oasdiff breaking` on every PR: [`references/contract-testing.md`](references/contract-testing.md)
-
-## 12 · Anti-patterns
-
-- **`200 OK` with `{"success": false}`** — monitors and logs will not see that it failed.
-- **Verbs in the URL** — `/createOrder`, `/getOrderById`
-- **A list with no pagination** — one day it will return 50,000 rows at once.
-- **A different date format on each endpoint** — for example `"25/09/2026"`, where nobody knows whether day or month comes first.
-- **Sending a database entity out as is** — every time a column is added, the API changes by accident, and internal data may leak.
-- **Mixed field names** such as `created_at` and `updatedAt` in one response.
-- **A `GET` that changes data** — a web page prefetcher will fire it by itself with nobody clicking.
-- **Error messages that keep changing** with no fixed `code`.
-- **No documentation** — an OpenAPI generated from the real code is better than hand-written docs that do not match.
-
-
-## reference: contract-testing.md
-
-# Contract testing — OpenAPI is the contract, and CI checks that the real thing matches
-
-The document `docs/API-CONVENTIONS.md` states the rules · the OpenAPI file states the shape of each endpoint · contract tests are what keep these 2 from being just documents
-
-## 1 · OpenAPI as the contract
-
-- Generate it from the real code (annotations · decorators · the framework's generator) and commit the resulting file — do not hand-write it separately · when the 2 sides differ, the code side is the truth, and the diff in the file is what the reviewer sees
-- Every response has a schema, including errors (`web-service-essentials` §2) · every field has a `format` for dates · ids · money, per §6 of the main SKILL.md
-
-## 2 · Check responses against the spec in CI (provider side)
-
-| Tool | What it does | licence | Note (checked 2026-10-23) |
-|---|---|---|---|
-| Schemathesis | reads OpenAPI, builds requests from the schema, fires them at the real service, and checks that responses match the spec and are not 500 · `schemathesis run <url of openapi.json>` | MIT | really fires, creates and deletes data → point it only at dev or staging · Python |
-| Prism (Stoplight) | `prism mock <spec>` lets the frontend work before the backend is done · `prism proxy <spec> <upstream>` checks real traffic against the spec | Apache-2.0 | Node ≥ 18.20 · proxy mode can sit in front of the service in a test environment |
-| Dredd | checks an API against API Blueprint / OpenAPI 2 (OpenAPI 3 experimental) | MIT | **no longer maintained** (archived 2024-11-08) — do not start using it |
-
-Our default: Schemathesis in a CI job after the service is up with test data (the reset endpoint from `app-verifier-setup`) · failure = no merge
-
-## 3 · Consumer-driven contract — when the frontend team or callers are separate from the backend
-
-- Pact (pact-foundation · MIT): the caller side writes tests of which request/response pairs it uses → produces a pact file → the provider side runs a check against that file in its own CI · the provider can change parts nobody uses without breaking tests
-- Use when: the teams are different, release separately, or there is more than 1 caller (mobile + web + partner) · one team does both sides → item 2 is enough
-- Pact files are exchanged through a Pact Broker or committed to the provider's repo — agree on one way in `API-CONVENTIONS.md`
-
-## 4 · Check for breaking changes on every PR
-
-- `oasdiff breaking <old spec> <new spec>` (Apache-2.0 · Go · has a Docker image) reports only changes that break existing callers: removing an endpoint or field · a field becoming required · a type change · an enum value removed
-- In CI: old spec = the main branch's · new spec = the PR's · on a breaking change → bump to a new version per §3, or deprecate per §10 of the main SKILL.md — do not turn off the check
-- Adding an optional field · adding an endpoint · adding an enum value that callers do not crash on in a switch = not breaking
-
-## Check before handing over
-
-- [ ] OpenAPI is in the repo and generated from code · CI fails if the file does not match the code
-- [ ] Schemathesis (or equivalent) runs against a service brought up with test data · `oasdiff breaking` runs on every PR
-- [ ] Callers in a separate team → at least 1 pact file per caller, and the provider checks it in CI
-
-
----
-
 # skill: data-import-export
 
 Use when a system imports or exports Excel or CSV
@@ -320,14 +18,14 @@ Use when a system imports or exports Excel or CSV
 
 | Job | skill | |
 |---|---|---|
-| Receiving general file uploads (images, documents) | `file-upload-and-storage` | Instead |
+| Receiving general file uploads (images, documents) | `web-service-essentials` | Instead |
 | Building a nicely formatted Excel file | `anthropic-skills:xlsx` | Instead |
-| Queue mechanics and progress | `background-jobs` | Instead |
+| Queue mechanics and progress | `async-messaging` | Instead |
 | Buddhist Era (B.E.) years and Thai sorting order | `i18n-and-locale` | Instead |
 | Sending documents into Thai accounting software (PEAK · FlowAccount) through an API instead of a file | [`references/thai-accounting-apis.md`](references/thai-accounting-apis.md) | Instead |
-| Recording who imported or exported what | `audit-trail` | Together |
+| Recording who imported or exported what | `web-service-essentials` | Together |
 | Masking personal data in export files | `pdpa-compliance` | Together |
-| Telling the user when an import finishes | `notifications` | Together |
+| Telling the user when an import finishes | `async-messaging` | Together |
 | Limits and constraints of the target table | `database-design` | Together |
 
 ---
@@ -381,12 +79,12 @@ Right: a table of check results, with a button to download the original file wit
 - **Always show a summary page before confirming**, such as "จะเพิ่ม 120 · แก้ 45 · ข้าม 3 · ผิด 0" (will add 120 · update 45 · skip 3 · error 0), then have the user click confirm
 - If the file has duplicate rows, stop and say so. Do not silently use the last row
 - If the data already exists in the system, let the user choose: skip · overwrite · stop
-- **Every import must be recorded in the audit log**: who imported, which file, how many rows affected (see `audit-trail`)
+- **Every import must be recorded in the audit log**: who imported, which file, how many rows affected (see `web-service-essentials`)
 - **Keep the original file**, so when there is a problem you can look back at what the submitted file really looked like
 - Make it reversible: store a batch id (the id of the import run) on every imported row
 
 **Large files run as background jobs.** Above roughly 1,000 rows, put them in a queue,
-split into batches of 500 rows, show progress, and allow cancel (see `background-jobs`).
+split into batches of 500 rows, show progress, and allow cancel (see `async-messaging`).
 
 ---
 
@@ -418,7 +116,7 @@ split into batches of 500 rows, show progress, and allow cancel (see `background
 | Personal data | Mask columns that are not needed (see `pdpa-compliance`) |
 | File name | `<เรื่อง>-<ช่วงวันที่>-<เวลาที่ส่งออก>.xlsx` |
 | File header | Put in the filter conditions used and the export time. Otherwise in 3 months nobody knows what data this file is |
-| Download link | Must expire (see `file-upload-and-storage`) |
+| Download link | Must expire (see `web-service-essentials`) |
 | Format | `.xlsx` for people to read · CSV for machines to read |
 
 
@@ -436,7 +134,7 @@ Abbreviations: small and medium enterprises (SME) · Application Programming Int
 |---|---|
 | Send a file using the accounting software's import template (file format of each vendor not yet checked) | Few documents · the customer's package has no API |
 | Connect to the API directly (sections 2–3) | Hundreds of documents per month · need status back, such as paid |
-| Through a partner app the accounting software certifies (PEAK: menu ตั้งค่า > การเชื่อมต่อแอปพลิเคชันภายนอก, i.e. Settings > External application connections) | Online shop that already uses a back-office system → `ecommerce-patterns` `references/thai-marketplace-apis.md` |
+| Through a partner app the accounting software certifies (PEAK: menu ตั้งค่า > การเชื่อมต่อแอปพลิเคชันภายนอก, i.e. Settings > External application connections) | Online shop that already uses a back-office system → `domain-systems` `references/thai-marketplace-apis.md` |
 
 ## 2 · PEAK
 
@@ -479,17 +177,17 @@ Abbreviations: small and medium enterprises (SME) · Application Programming Int
 
 - Pick one system to issue the tax invoice number · our system and the accounting software must not both issue numbers
 - Send into the accounting software as the source document, then let the accounting software issue the e-Tax · PEAK has an endpoint to send e-Tax · FlowAccount not found in the spec, ask the vendor
-- Tax invoice rules (section 86/4 · e-Tax Invoice & e-Receipt vs by Email) → `e-commerce:e-tax-invoice` (if installed)
+- Tax invoice rules (section 86/4 · e-Tax Invoice & e-Receipt vs by Email) → `e-commerce:thai-tax` (if installed)
 
 ## 6 · Prevent duplicates and reconcile
 
 - Keep a mapping table: our id ↔ the accounting software's id · PEAK recommends keeping External Reference and a mapping to prevent duplicate documents · FlowAccount uses `externalDocumentId` to hold our id
-- Neither vendor's docs have an idempotency key → look up the mapping before every POST create (`principle-safe-to-rerun`)
+- Neither vendor's docs have an idempotency key → look up the mapping before every POST create (`code-craft`)
 - A timeout does not mean failure · pull the list by date range and compare before resending
 - On 429 → wait per `retryAfterSeconds` or back off exponentially (1 · 2 · 4 · 8 seconds, as PEAK recommends)
-- Reconcile every day: the document count and total of the 2 systems must match → `fintech-payments` (`references/agent-payment-integration.md`, section Settlement Reconciliation)
-- Log every send to audit: who sent · which document · destination id · result → `audit-trail`
-- Client Token · client secret · connectId stay outside the code → `config-and-secrets` · PEAK UAT is http, so use test data only
+- Reconcile every day: the document count and total of the 2 systems must match → `domain-systems` (`references/agent-payment-integration.md`, section Settlement Reconciliation)
+- Log every send to audit: who sent · which document · destination id · result → `web-service-essentials`
+- Client Token · client secret · connectId stay outside the code → `web-service-essentials` · PEAK UAT is http, so use test data only
 
 ## Sources
 
@@ -509,11 +207,62 @@ Abbreviations: small and medium enterprises (SME) · Application Programming Int
 
 ---
 
-# skill: error-handling-patterns
+# skill: errors-and-logs
 
-Use when writing code that can fail, with retry and timeout
+Use when code can fail, needs retry or timeout, or writes logs
 
+# errors-and-logs — handle failures on purpose and write logs people can read
+
+> **One rule:** catch an error only when you can really do something about it, and log each failure once, at the outermost layer.
+
+## Pick the part
+
+| Job (what the user says) | Open |
+|---|---|
+| Code calls a network, database, file or another system; "should I retry?"; "the user sees a blank error" | [`references/error-handling-patterns.md`](references/error-handling-patterns.md) |
+| Writing or reviewing log lines, log levels, log files, "nothing in the log" | [`references/logging-standards.md`](references/logging-standards.md) |
+| Code for a specific stack (.NET, Angular, Node, Python) | [`references/per-stack.md`](references/per-stack.md) |
+
+## Steps every part shares
+
+1. **Decide where the error is handled.** Inner layers (DB, HTTP, files) let it pass or turn it into a domain error. Business logic catches only where a real fallback exists. The outermost layer (controller, handler, main) catches everything, logs once, and returns an answer the user understands.
+2. **Sort the failure before you act.** A user mistake, a transient failure, a rate limit, a permanent failure, or our own bug. Only a transient failure or a rate limit may retry, and only after the time the server asks for.
+3. **Give every outside call a timeout.** Most libraries wait forever by default. The total retry time must be shorter than the caller's own timeout.
+4. **Write the log line in the shared format.** Time with timezone, level 5 characters wide, an 8-character correlation id, the source module, one sentence, then `key=value` context. Read `references/logging-standards.md` section 1 for the full layout.
+5. **Show the user a message they can act on, and log the detail.** Never send a stack trace or SQL text to the user.
+
+## Check before done
+
+- **Never log** passwords, tokens or API keys, cookies or Authorization headers, OTP or PIN, card numbers or CVV, national ID numbers, health data, or full payloads that hold personal data. Check that a test log with `password` and `token` prints `***`.
+- Never write an empty `catch`, and never `return null` in place of an error. If you really swallow an error, write the reason in a comment next to it.
+- A write that retries carries an idempotency key, or a customer may be charged twice.
+- A person waiting on a screen gets at most 1 automatic retry, then a retry button they press themselves.
+- Each outside dependency has at least one failure-path test (timeout, 5xx, bad payload).
+
+## References
+
+- [`references/sources.md`](references/sources.md) and [`references/error-handling-patterns.md`](references/error-handling-patterns.md) — error patterns and where the ideas came from
+- [`assets/logger.node.js`](assets/logger.node.js) and [`assets/logger_py.py`](assets/logger_py.py) — tested logger starters with password masking
+- Retry numbers for background jobs live in `async-messaging`; alarms and error-rate metrics live in `incidents-and-monitoring`
+
+
+## reference: error-handling-patterns.md
+
+<!-- merged from skill `error-handling-patterns` on 2026-11-27 · description was: Use when writing code that can fail, with retry and timeout -->
 # Error handling
+
+## Contents
+
+- [When to use this skill](#when-to-use-this-skill)
+- [When to use another skill, or use it alongside](#when-to-use-another-skill-or-use-it-alongside)
+- [1 · Where to catch, where to let it pass](#1--where-to-catch-where-to-let-it-pass)
+- [2 · The message to the user ≠ the message in the log](#2--the-message-to-the-user--the-message-in-the-log)
+- [3 · Classify before deciding](#3--classify-before-deciding)
+- [4 · Timeout and retry](#4--timeout-and-retry)
+- [5 · Circuit breaker](#5--circuit-breaker)
+- [6 · Partial failure](#6--partial-failure)
+- [7 · Check before sending](#7--check-before-sending)
+- [References](#references)
 
 > **The one rule:** catch an error only when you **can really do something about it.**
 > Catching it and doing nothing is worse than not catching, because the system keeps going while it is already broken inside.
@@ -529,14 +278,14 @@ Use when writing code that can fail, with retry and timeout
 
 | Task | Skill | |
 |---|---|---|
-| The JSON shape of errors the API sends out | `web-service-essentials` · `api-conventions` | instead |
-| Log line format and data masking | `logging-standards` | instead |
+| The JSON shape of errors the API sends out | `web-service-essentials` · `api-design` | instead |
+| Log line format and data masking | `logging-standards.md` | instead |
 | Fixing one specific bug someone reported | `fix-at-source/targeted-fix` | instead |
-| Steps when the system is really down | `incident-runbook-template` | instead |
-| Error-rate metrics and alerts | `observability-basics` | alongside |
-| Where a failed background job goes next | `background-jobs` | alongside |
+| Steps when the system is really down | `incidents-and-monitoring` | instead |
+| Error-rate metrics and alerts | `incidents-and-monitoring` | alongside |
+| Where a failed background job goes next | `async-messaging` | alongside |
 | Error messages that must be translated into several languages | `i18n-and-locale` | alongside |
-| Tests for failure cases | `testing-standards` | alongside |
+| Tests for failure cases | `test-automation` | alongside |
 
 ---
 
@@ -588,7 +337,7 @@ Right: "บันทึกไม่สำเร็จเพราะระบบ
 ```
 
 **A good message has 3 parts**: what happened · why (if you can say) · what to do next.
-The reference code is the same correlation id as in `logging-standards`.
+The reference code is the same correlation id as in `logging-standards.md`.
 
 ---
 
@@ -619,7 +368,7 @@ The reference code is the same correlation id as in `logging-standards`.
 | External HTTP | 10–30 seconds |
 | Heavy background job | set it from the real work, and it must be possible to cut it off |
 
-**The retry formula** (service-to-service calls · jobs in a queue use the numbers in [`background-jobs`](../background-jobs/SKILL.md) §4 · when a person sits waiting on the screen → see the last item below):
+**The retry formula** (service-to-service calls · jobs in a queue use the numbers in [`async-messaging`](../../async-messaging/SKILL.md) §4 · when a person sits waiting on the screen → see the last item below):
 
 ```
 at most 3 tries · exponential delay + jitter
@@ -628,7 +377,7 @@ try 1 waits 1 second · try 2 waits 2 · try 3 waits 4  (each ±20% random)
 
 - **You need the random part** — otherwise every instance retries at the exact same moment and hits the target system again together
 - **The total retry time must be less than the caller's timeout**, or the caller has given up while we are still trying
-- **Retrying a write needs an idempotency key**, or the customer is charged twice (see `api-conventions`)
+- **Retrying a write needs an idempotency key**, or the customer is charged twice (see `api-design`)
 - **A person sits waiting on the screen** → at most 1 automatic retry, then show a "ลองอีกครั้ง" (try again) button for them to press (do not use the 3 tries of the formula above)
 
 ---
@@ -682,7 +431,406 @@ Go through this against the diff every time you touch code that calls outside th
 
 ## References
 
-- [`references/sources.md`](references/sources.md) — where the checklist ideas came from
+- [`sources.md`](sources.md) — where the checklist ideas came from
+
+
+## reference: logging-standards.md
+
+<!-- merged from skill `logging-standards` on 2026-11-27 · description was: Use when writing or reviewing code that logs -->
+# Logging Standards
+
+## Contents
+
+- [When to use this skill](#when-to-use-this-skill)
+- [When **not** to use it](#when-not-to-use-it)
+- [1 · Line format — the same in every language](#1--line-format--the-same-in-every-language)
+- [2 · Log levels — write them to match their meaning](#2--log-levels--write-them-to-match-their-meaning)
+- [3 · Correlation id — what makes logs usable](#3--correlation-id--what-makes-logs-usable)
+- [4 · Log files](#4--log-files)
+- [5 · What must never go into a log](#5--what-must-never-go-into-a-log)
+- [6 · Ready-to-use code](#6--ready-to-use-code)
+- [7 · Checking the work](#7--checking-the-work)
+- [8 · Anti-patterns not covered above](#8--anti-patterns-not-covered-above)
+- [9 · Links to other skills](#9--links-to-other-skills)
+
+> **The one rule:** Logs exist for a person to read at 3 a.m. when the system is down, not while writing the code.
+> If a line does not help answer "what happened, to whom, and when", do not write it.
+
+## When to use this skill
+
+- Starting any new project (service, API, worker, batch, desktop, frontend)
+- Someone asks for "a log file", or asks about log format and levels
+- You are chasing a production problem and find that the existing logs are unusable
+
+## When **not** to use it
+
+- You need metrics or tracing (Prometheus, OpenTelemetry). That is a different topic from logs, so use `incidents-and-monitoring`.
+- You are building a service health endpoint. Use `web-service-essentials`.
+
+---
+
+## 1 · Line format — the same in every language
+
+```
+2026-08-31 09:42:13.482 +07:00  INFO   [a3f9c1b2] orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 userId=57 ms=134
+└───────── time + timezone ─────────┘ └level┘  └ cid ┘ └source┘ └─ message ─┘  └──── context k=v ────┘
+```
+
+| Part | Rule |
+|---|---|
+| time | `YYYY-MM-DD HH:mm:ss.SSS ±HH:MM` — **the timezone is required**, or you cannot compare logs across machines |
+| level | Left-aligned, 5 characters wide (`INFO ` `WARN ` `ERROR` `DEBUG` `FATAL`), so the columns line up |
+| cid | An 8-character correlation id in square brackets. If there is none, use `[--------]` (also 8 characters, so the columns line up) |
+| source | The module or class that writes the log, not the file name |
+| message | One sentence, with no variables embedded in the string |
+| context | `key=value` separated by spaces. If a value contains a space, wrap it in `"` |
+
+**Why not JSON:** This file is mainly for people to open and `grep`. This format still works with `grep "\[a3f9c1b2\]"` or `awk`, but the eye reads it at once without any tool.
+When you must ship logs to a central system such as Grafana Loki or Elasticsearch, Logstash, Kibana (ELK), add one more JSON sink (the destination logs are sent to). But **do not drop the text file**.
+
+**1 event = 1 line**, except a stack trace, which follows indented by 4 spaces.
+
+---
+
+## 2 · Log levels — write them to match their meaning
+
+| Level | Use when | Example |
+|---|---|---|
+| `FATAL` | The app is about to die and cannot continue | Cannot connect to the DB at start |
+| `ERROR` | This job failed **and someone must look** | Saving an order failed |
+| `WARN` | Abnormal, but the system can continue | Retry number 2, disk down to 10% |
+| `INFO` | An important business event | Order created, user logged in, job started/finished |
+| `DEBUG` | Details for chasing problems — **off in production** | Values computed along the way |
+| `TRACE` | Step-by-step detail — turn on only when really chasing | Raw payload |
+
+> Warning: **an `ERROR` that nobody needs to act on is a `WARN`.** If ERROR fires every minute until people stop looking,
+> you have just destroyed your own alarm system.
+
+The default is `DEBUG` in dev and `INFO` in production, adjustable with the env var `LOG_LEVEL`. **No new build is needed; just restart (or reload the config).** .NET reads it from `appsettings.json` instead (see `per-stack.md`).
+
+---
+
+## 3 · Correlation id — what makes logs usable
+
+One request uses one id from start to finish, so every line that comes from that request has the same id.
+
+```
+Client ──X-Request-Id?── API Gateway ──┬── Service A ──┐
+                        (create if none)└── Service B ──┴─→ every line has the same cid
+```
+
+- Take it from the header **`X-Request-Id`** only when it matches `^[A-Za-z0-9-]{1,64}$`. If it is missing or does not match, create a new one (`uuid v4`, first 8 characters). For the reason, see `web-service-essentials` item 3.
+- **Always return it in the response header**, so the customer can send the id when reporting a problem and we can trace it at once.
+- Pass it to the downstream service on every cross-system call.
+- Store it with a mechanism that is separate per request: `AsyncLocalStorage` (Node) · `ContextVar` (Python)
+  · `IHttpContextAccessor`/`LogContext` (.NET). **Never use a global variable**, because ids mix as soon as several requests run at once.
+
+---
+
+## 4 · Log files
+
+```
+logs/
+  app-20260831.log        all levels · rotate at midnight · keep 30 days · max 100MB per file
+  error-20260831.log      ERROR/FATAL only · keep 90 days
+  fatal.log               uncaught exceptions (app died)
+```
+
+- Set the folder with the env var `LOG_DIR`. **Never hardcode the path.**
+- Compress old files (`.gz`) and **retention is required**. Otherwise the disk fills and the system goes down from its own logs.
+- In a container, also log to stdout (besides the file) so `docker logs` works.
+- `logs/` must be in `.gitignore`.
+
+---
+
+## 5 · What must never go into a log
+
+Passwords · tokens/API keys · cookies/Authorization headers · OTP/PIN · credit card numbers/CVV ·
+**national ID numbers** · health data · full payloads that contain personal data
+
+Helper already provided: the redaction function (which hides secret values) checks **whether the key name contains a forbidden word** (`userPassword`, `pwd`,
+`accessToken` are all caught) and replaces the value with `***`. It checks up to 4 levels deep inside an object.
+
+> **Log injection** — A value from a user may contain `\n`. If you let it through, the user can "forge" a fake log line,
+> which misleads readers and breaks parsers. So the provided code strips `\r\n\t` from every value and from the main message.
+
+---
+
+## 6 · Ready-to-use code
+
+| File | Stack | Status |
+|---|---|---|
+| `assets/logger.node.js` | Node/TS — winston + winston-daily-rotate-file | ✓ Run and tested 2026-10-25 (Node 22.23.2 · winston 3.19.0 · winston-daily-rotate-file 5.0.0 · password redaction · correlation id · strips line breaks in the main message and values) |
+| `assets/logger_py.py` | Python — stdlib only, nothing to install | ✓ Run and tested 2026-10-25 (Python 3.13.5 · same test set) |
+| `per-stack.md` | .NET (Serilog) + Angular | Caution: not yet compiled or tested |
+
+```js
+// Node
+const { withCorrelation } = require('./logger.node');
+const log = withCorrelation(req.id).child({ source: 'orders' });
+log.info('สร้างคำสั่งซื้อสำเร็จ', { orderId: 1042, ms: 134 });
+log.error('บันทึกไม่สำเร็จ', err);          // pass an Error directly; the stack is added for you
+```
+
+```python
+# Python
+from logger_py import setup_logging, get_logger, set_correlation_id
+setup_logging(app_name="myapi")             # once, when the app starts
+log = get_logger("orders")
+log.info("สร้างคำสั่งซื้อสำเร็จ", extra={"ctx": {"order_id": 1042, "ms": 134}})
+log.exception("บันทึกไม่สำเร็จ")             # inside except — the stack is added for you
+```
+
+---
+
+## 7 · Checking the work
+
+```bash
+# no leftover print/console.log in production code
+grep -rnE "console\.(log|error)|Console\.WriteLine|^\s*print\(" src/ --include="*.ts" \
+  --include="*.js" --include="*.cs" --include="*.py" | grep -v test | head -30
+
+# the output logs are readable and greppable
+tail -n 50 logs/app-*.log
+grep "a3f9c1b2" logs/app-*.log          # does one request show every line?
+```
+
+- [ ] Every line has all of: time+timezone · level · cid · source
+- [ ] `grep` with one cid shows the story of that request from start to finish
+- [ ] No secrets leak: log an object with `password` and `token`, and you must see `***`
+- [ ] Feeding in a value that contains `\n` produces no fake line
+- [ ] With `LOG_LEVEL=INFO`, DEBUG really disappears
+- [ ] Files rotate daily and have retention (left for 1 month, the disk must not fill)
+- [ ] `logs/` is in `.gitignore`
+- [ ] The response sends `X-Request-Id` back to the customer
+
+---
+
+## 8 · Anti-patterns not covered above
+
+- **A silent `try { } catch (e) { }`** — log at least 1 line
+- **Log, then rethrow** — one problem shows up 3 times in the file. Log at the top layer that really handles the error instead.
+- **Logging inside a loop that runs thousands of times** — log one summary when the loop ends
+- **Logging everything** — the file grows so large you cannot find anything, and it is expensive and slow
+
+---
+
+## 9 · Links to other skills
+
+`test-automation` (tests with full coverage) · `incidents-and-monitoring`
+
+
+## reference: per-stack.md
+
+# Set up the logger to produce the same format — .NET and Angular
+
+> Warning: the code in this file is **not yet compiled or tested** (unlike `assets/logger.node.js` and
+> `assets/logger_py.py`, which have really been run). It uses the standard setup of each library.
+> At the first build, compare the output lines with the format in `logging-standards.md` item 1.
+
+---
+
+## Contents
+
+1. [.NET / C# — Serilog](#net--c--serilog)
+2. [Angular / frontend](#angular--frontend)
+3. [Comparison table](#comparison-table)
+
+---
+
+## .NET / C# — Serilog
+
+```bash
+dotnet add package Serilog.AspNetCore
+dotnet add package Serilog.Sinks.File
+```
+
+`appsettings.json` — keeps the settings outside the code, so you can change the log level without a new build:
+
+```json
+{
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Information",
+      "Override": {
+        "Microsoft.AspNetCore": "Warning",
+        "Microsoft.EntityFrameworkCore.Database.Command": "Warning"
+      }
+    }
+  }
+}
+```
+
+`Program.cs`:
+
+```csharp
+using Serilog;
+using Serilog.Events;
+
+const string LineTemplate =
+    "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}  {Level:u5}  " +
+    "[{CorrelationId}] {SourceContext}  {Message:lj}  {Context:l}{NewLine}{Exception}";
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .Enrich.WithProperty("CorrelationId", "--------") // default when there is no request (8 characters)
+    .Enrich.WithProperty("Context", "")              // empty when there is no context k=v
+    .WriteTo.Console(outputTemplate: LineTemplate)
+    .WriteTo.File(
+        path: Path.Combine(Environment.GetEnvironmentVariable("LOG_DIR") ?? "logs", "app-.log"),
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 30,
+        fileSizeLimitBytes: 100 * 1024 * 1024,
+        rollOnFileSizeLimit: true,
+        outputTemplate: LineTemplate)
+    .WriteTo.File(
+        path: Path.Combine(Environment.GetEnvironmentVariable("LOG_DIR") ?? "logs", "error-.log"),
+        restrictedToMinimumLevel: LogEventLevel.Error,
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 90,
+        outputTemplate: LineTemplate)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+```
+
+> `{Level:u5}` means upper case, 5 characters wide, which gives `INFO ` `WARN ` `ERROR` to match the other stacks.
+> `{Message:lj}` and `{Context:l}` mean the string is not wrapped in an extra layer of `"`.
+
+### Middleware correlation id
+
+```csharp
+using System.Text.RegularExpressions;
+
+public sealed class CorrelationIdMiddleware(RequestDelegate next)
+{
+    public const string Header = "X-Request-Id";
+    // accept from the customer only letters, digits, and - up to 36 characters — blocks people stuffing long text or \n into the log
+ into the log
+    private static readonly Regex Valid = new("^[A-Za-z0-9-]{1,36}$", RegexOptions.Compiled);
+
+    public async Task Invoke(HttpContext ctx)
+    {
+        var cid = ctx.Request.Headers[Header].FirstOrDefault();
+        if (cid is null || !Valid.IsMatch(cid))
+            cid = Guid.NewGuid().ToString("N")[..8];   // missing or invalid → create a new one
+
+        var logCid = cid.Length > 8 ? cid[..8] : cid;   // the log uses the first 8 characters to fit the cid column (same as Node/Python) — the header returns the full value
+
+        ctx.Response.Headers[Header] = cid;          // return it so the customer can quote it
+
+        // LogContext is tied only to this request's async flow — it does not mix with other requests
+        using (Serilog.Context.LogContext.PushProperty("CorrelationId", logCid))
+            await next(ctx);
+    }
+}
+```
+
+### Writing logs
+
+```csharp
+// Right: fixed message + values go in {Context} as k=v, per the format in `logging-standards.md` item 1
+//    Output: ... INFO   [a3f9c1b2] Orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 ms=134
+using (Serilog.Context.LogContext.PushProperty("Context", $"orderId={orderId} ms={sw.ElapsedMilliseconds}"))
+    _logger.LogInformation("สร้างคำสั่งซื้อสำเร็จ");
+
+// Wrong: a variable embedded in the string — every line becomes a different message and cannot be grouped
+_logger.LogInformation($"สร้างคำสั่งซื้อ {orderId} สำเร็จ");
+```
+
+### Redacting secrets
+
+Serilog does not redact secrets automatically. The surest way is to **never pass a whole object into the log**.
+Pick only the fields you need. If you must pass the whole object, write an `IDestructuringPolicy`
+or add `[NotLogged]` through `Destructure.ByTransforming<T>()`.
+
+---
+
+## Angular / frontend
+
+The principle differs from the backend: **a browser cannot write files**, so important logs must be sent up to the backend.
+
+```ts
+// core/logger.service.ts
+import { Injectable, inject, isDevMode } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+type Level = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
+
+@Injectable({ providedIn: 'root' })
+export class LoggerService {
+  private http = inject(HttpClient);
+  private buffer: unknown[] = [];
+
+  private write(level: Level, message: string, ctx: Record<string, unknown> = {}) {
+    // dev: print to the console for chasing problems — prod: silent, except WARN and above, which go to the server
+    if (isDevMode()) console[level === 'ERROR' ? 'error' : 'log'](level, message, ctx);
+    if (level === 'DEBUG' || (!isDevMode() && level === 'INFO')) return;   // prod sends only WARN and above
+
+    this.buffer.push({ ts: new Date().toISOString(), level, message, ctx });
+    if (this.buffer.length >= 10 || level === 'ERROR') this.flush();
+  }
+
+  /** Send in batches, not line by line — otherwise the network tab fills with the log's own requests */
+  flush() {
+    if (!this.buffer.length) return;
+    const batch = this.buffer.splice(0);
+    this.http.post('/api/client-logs', { entries: batch }).subscribe({ error: () => {} });
+  }
+
+  debug = (m: string, c?: Record<string, unknown>) => this.write('DEBUG', m, c);
+  info  = (m: string, c?: Record<string, unknown>) => this.write('INFO', m, c);
+  warn  = (m: string, c?: Record<string, unknown>) => this.write('WARN', m, c);
+  error = (m: string, c?: Record<string, unknown>) => this.write('ERROR', m, c);
+}
+```
+
+Catch every uncaught error:
+
+```ts
+// core/global-error.handler.ts
+import { ErrorHandler, Injectable, inject, isDevMode } from '@angular/core';
+import { LoggerService } from './logger.service';
+
+@Injectable()
+export class GlobalErrorHandler implements ErrorHandler {
+  private log = inject(LoggerService);
+  handleError(err: unknown) {
+    const e = err as Error;
+    this.log.error(e?.message ?? 'unknown error', { stack: e?.stack?.slice(0, 2000) });
+    if (isDevMode()) console.error(err);
+  }
+}
+// app.config.ts → providers: [{ provide: ErrorHandler, useClass: GlobalErrorHandler }]
+```
+
+Send a correlation id with every request so client-side and server-side logs connect:
+
+```ts
+// core/correlation.interceptor.ts
+import { HttpInterceptorFn } from '@angular/common/http';
+
+export const correlationInterceptor: HttpInterceptorFn = (req, next) =>
+  next(req.clone({ setHeaders: { 'X-Request-Id': crypto.randomUUID().slice(0, 8) } }));
+```
+
+**On the backend** you need an endpoint `POST /api/client-logs` that:
+- Limits the body size and applies a rate limit. Otherwise it becomes a hole for people to flood you with logs.
+- Writes to a separate file `logs/client-YYYYMMDD.log`
+- **Treats the content as untrusted data**, so strip `\r\n` from every value just like a normal log
+
+---
+
+## Comparison table
+
+| Topic | .NET | Node | Python | Angular |
+|---|---|---|---|---|
+| Library | Serilog | winston | stdlib `logging` | Hand-written (thin) |
+| File rotation | `rollingInterval: Day` | `winston-daily-rotate-file` | `TimedRotatingFileHandler` | — (sent to the backend) |
+| correlation | `LogContext.PushProperty` | `AsyncLocalStorage` + `child()` | `ContextVar` | header `X-Request-Id` |
+| Level | `LogEventLevel` | `level` | `setLevel` | Its own enum |
+| External configuration | `appsettings.json` | env `LOG_LEVEL` | env `LOG_LEVEL` | `isDevMode()` |
 
 
 ## reference: sources.md

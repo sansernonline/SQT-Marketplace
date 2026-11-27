@@ -1,5 +1,32 @@
 # Changelog — personal-life
 
+## 0.29.0 — 2026-11-27
+
+รวม skill จาก 46 เหลือ 20 (เปลี่ยนชื่อแบบไม่เข้ากับของเดิม) · เจ้าของสั่ง 2026-11-27 · เนื้อหาเดิมของแต่ละตัวย้ายไปเป็น `references/<ชื่อเก่า>.md` ของตัวที่เหลือ ไม่ได้ตัดกฎทิ้ง · eval ย้ายตามไปใต้ชื่อใหม่ · playbook ชี้ไฟล์หลักคิดและชื่อ skill ใหม่
+
+| ชื่อเก่า | ใช้แทนด้วย |
+|---|---|
+| `resume-th-en` · `interview-prep` · `salary-negotiation` | `job-search` (ใหม่) |
+| `new-job-first-90-days` · `performance-self-review` · `job-exit` | `career-growth` (ใหม่) |
+| `annual-checkup` · `doctor-visit-prep` · `medication-schedule` · `sleep-log` · `exercise-plan` | `health-admin` (ใหม่) |
+| `pregnancy-and-baby` · `kids-school` · `elder-care` · `pet-care` | `family-care` (ใหม่) |
+| `home-maintenance` · `flood-prep` · `moving-house` · `vehicle-care` | `home-upkeep` (ใหม่) |
+| `household-bills` · `subscription-audit` | `household-money` (ใหม่) |
+| `meal-plan-grocery` · `gift-idea-tracker` | `family-week` |
+| `estate-and-will` · `legal-help-prep` · `important-docs` | `family-legal` (ใหม่) |
+| `task-board` · `calendar-audit` · `inbox-triage` | `weekly-review` |
+| `goal-and-habit` · `decision-journal` | `goals-and-decisions` (ใหม่) |
+| `cert-prep` · `english-tech-reading` | `learning-path` |
+| `tech-radar` · `side-project-picker` | `tech-growth` (ใหม่) |
+
+## 0.28.1 — 2026-11-27
+
+- `life-principles` เพิ่ม 3 ชนิดงาน: family-home · family-legal · tech-growth · ตัวเลข กำหนดเวลา และมาตรากฎหมายที่มีแหล่งไม่ถึง 3 แหล่งตัดออก ให้ไปดูใน skill แทน
+
+## 0.28.0 — 2026-11-27
+
+- skill ใหม่ `life-principles`: หลักคิด 5 ชนิดงาน (life-admin · health-care จัดระเบียบเท่านั้น ไม่วินิจฉัย ไม่บอกขนาดยา · career · learning · planning) ทุกข้อมีแหล่งตรงกันอย่างน้อย 3 แหล่ง
+
 ## 0.27.2 — 2026-11-27
 
 - สำเนา `superuser/references/evidence.md`: ป้าย `(รอยืนยัน)` ต้องบอกว่ารอใคร (ผู้ใช้ · agent · ภายนอก) และคำตอบที่มีงานของผู้ใช้จบด้วย **ต้องให้คุณทำ** (ตาม superuser 4.1.0)

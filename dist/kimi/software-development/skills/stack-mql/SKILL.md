@@ -66,4 +66,4 @@ Not for: strategy, risk and backtest criteria → the project's trading spec (re
 - [`references/platform.md`](references/platform.md) — open when compiling, backtesting from the command line, porting MT4 ↔ MT5, reading result codes, or hunting a trap (double compare, index shift, ECN SL/TP)
 - [`references/market-and-license.md`](references/market-and-license.md) — open when the EA will be sold
 
-General principles: `lazy-coding` · `readable-code` · `testing-standards` · `logging-standards` · `error-handling-patterns` · `config-and-secrets`
+General principles: `code-craft` · `test-automation` · `errors-and-logs` · `web-service-essentials`

@@ -13,11 +13,11 @@ This skill turns a company's filed statements into a handful of ratios and the p
 | Situation | Use |
 |---|---|
 | "P/E ของ ABC เท่าไร ถูกไหม" · "ROE เท่านี้ดีไหม" · "งบไตรมาสนี้อ่านยังไง" · "คัดหุ้นปันผลเข้าลิสต์" | this skill |
-| Writing the thesis, entry and invalidation for a name | `watchlist-setup` (call this skill first for the numbers) |
+| Writing the thesis, entry and invalidation for a name | `market-watch` (call this skill first for the numbers) |
 | What the chart says, entry timing | `technical-signals` |
-| Results came out today, does it change the thesis | `news-impact` (results day) |
-| Dividend dates, XD, dividend tax | `dividend-tracker` · `tax-basics-th` |
-| Choosing a mutual fund | `mutual-fund-picker` |
+| Results came out today, does it change the thesis | `market-watch` (results day) |
+| Dividend dates, XD, dividend tax | `portfolio` · `income-tax-th` |
+| Choosing a mutual fund | `fund-and-bond-picker` |
 
 ## Where the figures come from
 
@@ -66,7 +66,7 @@ The script lists these. A flag is "go read the notes to the statement", not a ve
 2. Fill the input file (example `scripts/example.json`). Missing optional fields are fine; missing required ones stop the script with the field name.
 3. Run `node scripts/ratios.mjs <file.json>` (`--json` for raw numbers · `--self-test` checks the hand-worked examples). **Script path:** installed: `ls -d ~/.claude/plugins/cache/*/trading-finance/*/skills/stock-fundamentals/scripts/ratios.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/trading-finance/skills/stock-fundamentals/scripts/ratios.mjs` · Node only.
 4. Show the table, then each flag with what to read in the statement notes. Compare P/E and P/BV only with the company's own past and its sector peers that the user names or the data plugin gives (with dates).
-5. Hand over to `watchlist-setup` if the user wants to follow the name: the numbers feed its thesis pillars.
+5. Hand over to `market-watch` if the user wants to follow the name: the numbers feed its thesis pillars.
 
 ## Screen — candidates, not conclusions
 
@@ -79,7 +79,7 @@ Put several companies in `companies` and a `screen` (`maxPE` · `minROE` · `max
 - Every flag the script printed is passed on with what to read in the notes
 - Banks and insurers have no D/E; the note about NIM, NPL or CAR is passed on
 - No buy, sell or "cheap/expensive" verdict; a screen pass is called a candidate
-- Asked "ควรขายไหม" or "ควรซื้อไหม": no "ไม่ควรขาย", no hold call and no "sell when …" list. Say the decision is the user's, give the figures to check, and hand the sell conditions to `watchlist-setup` (its invalidation line, written by the user)
+- Asked "ควรขายไหม" or "ควรซื้อไหม": no "ไม่ควรขาย", no hold call and no "sell when …" list. Say the decision is the user's, give the figures to check, and hand the sell conditions to `market-watch` (its invalidation line, written by the user)
 
 ## References
 
@@ -93,7 +93,7 @@ Put several companies in `companies` and a `screen` (`maxPE` · `minROE` · `max
 
 - Ratio groups (profitability, liquidity, leverage, efficiency, valuation) follow the idea of `analyzing-financial-statements` in anthropics/claude-cookbooks (MIT, viewed 2026-11-10) — formulas are textbook ones, the script is written from scratch in Node, no code copied
 - Flag idea (growth over 100%, margins out of range) from `audit-xls` step 3f, anthropics/financial-services (Apache-2.0, viewed 2026-11-10); thresholds here are our own starting values
-- Statement deadlines (45 days after a quarter, 2–3 months for the year): see `watchlist-setup`, checked 2026-10-26 with SET and SEC links
+- Statement deadlines (45 days after a quarter, 2–3 months for the year): see `market-watch`, checked 2026-10-26 with SET and SEC links
 
 
 ## reference: worked-example.md

@@ -31,7 +31,7 @@
 
 ## 1. เตรียมไปหาหมอ / สรุปหลังพบ
 
-playbook `doctor-visit` · agent `health-organizer` · skill `doctor-visit-prep`
+playbook `doctor-visit` · agent `health-organizer` · skill `health-admin`
 **ผลลัพธ์:** `visits/<ปี-เดือน-วัน>-<เรื่อง>.md` หน้าเดียว พิมพ์หรือเปิดในมือถือให้หมอดูได้
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -53,7 +53,7 @@ playbook `doctor-visit` · agent `health-organizer` · skill `doctor-visit-prep`
 
 ## 2. ตารางยาและการเตือนเติมยา
 
-playbook `medication-routine` · agent `health-organizer` · skill `medication-schedule`
+playbook `medication-routine` · agent `health-organizer` · skill `health-admin`
 **ผลลัพธ์:** `medications.md` (ตารางรายวัน · รายการยาและการแพ้ · วันยาจะหมด) · **รออนุมัติ:** ตั้งการแจ้งเตือนในแอปหรือปฏิทิน
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -75,7 +75,7 @@ playbook `medication-routine` · agent `health-organizer` · skill `medication-s
 
 ## 3. โรคประจำตัว: บันทึกค่าที่วัดเองที่บ้านไปให้หมอดู
 
-playbook `doctor-visit` (ขั้น 2 รายการยา · ขั้น 3 คำถาม · ขั้น 4 การ์ด 1 หน้า) ส่วนแบบบันทึกค่ารายวันประกอบเพิ่มตาม `playbook-template` (skill `superuser` หัวข้อ 2) · agent `health-organizer` · skill `doctor-visit-prep` · `medication-schedule`
+playbook `doctor-visit` (ขั้น 2 รายการยา · ขั้น 3 คำถาม · ขั้น 4 การ์ด 1 หน้า) ส่วนแบบบันทึกค่ารายวันประกอบเพิ่มตาม `playbook-template` (skill `superuser` หัวข้อ 2) · agent `health-organizer` · skill `health-admin`
 **ผลลัพธ์:** `home-readings.csv` (บันทึกรายวัน) · `visits/<ปี-เดือน-วัน>-<เรื่อง>.md` สรุปหน้าเดียวไปนัดหน้า · **รออนุมัติ:** ซื้อเครื่องวัด ตั้งการแจ้งเตือนในแอปหรือปฏิทิน
 
 ### ข้อมูล (ผู้ใช้กรอก)

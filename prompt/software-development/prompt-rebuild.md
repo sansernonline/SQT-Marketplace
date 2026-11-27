@@ -9,12 +9,12 @@
 วางทั้งไฟล์ใน Claude Code, Codex CLI หรือ Gemini CLI ที่รากโฟลเดอร์โปรเจกต์ แล้วพิมพ์ต่อท้ายว่าจะทำฉบับไหน เช่น `ทำทั้งหมด` หรือ `ทำข้อ 1 ถึง 3`
 
 <!-- rules:begin -->
-**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-doc-set` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
+**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-docs` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
 
 **วนจนเสร็จ (agent loop):** ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ จนผ่านทุกข้อที่ฉบับนั้นต้องมี · ตรวจด้วยหลักฐานจริง (เปิดไฟล์ · รันคำสั่ง · เทียบแหล่ง) ไม่ใช่คำบอกของตัวที่ทำ · รอบตรวจใช้ `reviewer` ตัวใหม่ทุกรอบ · ไม่ผ่าน → แก้ที่ต้นเหตุแล้วตรวจซ้ำทั้งข้อเดิมและจุดที่แก้ · เหลือแค่ข้อระดับต่ำ → ปิดได้แล้วลงรายงาน · ครบเพดานรอบ (งานกลาง 3 · งานใหญ่หรืองานเสี่ยง 5) ยังไม่ผ่าน → ติดป้าย `ติด` ทำส่วนอื่นให้จบ แล้วรายงานข้อที่เหลือ · รายละเอียดอยู่ใน skill `superuser` กฎข้อ 3
 <!-- rules:end -->
 
-**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้ `diagram-figures` · Mermaid (`software-diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
+**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้ `diagrams` · Mermaid (`diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
 
 **รุ่นเดิมกับรุ่นใหม่ (ใช้ทุกฉบับ):**
 
@@ -49,7 +49,7 @@
 
 ## 1. สำรวจของเดิม: มีอะไร อะไรเก็บ อะไรทิ้ง
 
-agent `solution-architect` (อ่านอย่างเดียว) + `system-analyst` + `developer` · skill `legacy-spec-recovery` · `code-orientation` · `app-verifier-setup` · `context-budget`
+agent `solution-architect` (อ่านอย่างเดียว) + `system-analyst` + `developer` · skill `legacy-spec-recovery` · `code-craft` · `test-automation` · `context-budget`
 **ผลลัพธ์:** `docs/as-is/` (ตาม `legacy-spec-recovery` ทุกข้อมีหลักฐาน `ไฟล์:บรรทัด`) · `docs/rebuild/INVENTORY.md` · `docs/rebuild/PARITY.md` ร่างแรก — **ไม่แก้โค้ดเดิม**
 
 ### หัวข้อใน `INVENTORY.md`
@@ -77,7 +77,7 @@ agent `solution-architect` (อ่านอย่างเดียว) + `syste
 
 ## 2. เป้าหมายรุ่นใหม่ + แนวทางรื้อ + stack
 
-agent `product-manager` + `solution-architect` + `brainstormer` · skill `architecture-patterns` · `adr-writer` · `research-with-sources/prior-art-review` · `superuser:ground-rules` · `reference-app-research` (เมื่อผู้ใช้บอกว่า "อยากได้แบบแอป X")
+agent `product-manager` + `solution-architect` + `brainstormer` · skill `architecture` · `research-with-sources/prior-art-review` · `superuser:ground-rules` · `reference-app-research` (เมื่อผู้ใช้บอกว่า "อยากได้แบบแอป X")
 **ต้องมีก่อน:** `INVENTORY.md` และ `PARITY.md` (ฉบับ 1)
 **ผลลัพธ์:** `docs/rebuild/VISION.md` · ADR ที่ `docs/decisions/ADR-NNNN-<เรื่อง>.md`
 
@@ -124,7 +124,7 @@ agent `ux-designer` + `graphic-designer` (เมื่อต้องทำโ�
 
 ## 4. สเปกรุ่นใหม่ (SRS · FSD · test plan) จากของเดิม + ของใหม่
 
-agent `business-analyst` + `system-analyst` + `qa-tester` · skill `srs-writing` · `fsd-writing` · `test-case-template` · `database-design`
+agent `business-analyst` + `system-analyst` + `qa-tester` · skill `requirements-writing` · `qa-docs` · `database-design`
 **ต้องมีก่อน:** ฉบับ 1–3
 **ผลลัพธ์:** เอกสารตาม `prompt-new-project.md` ฉบับ 3 (SRS) · 7 (architecture) · 8 (FSD) · 9 (test plan + test case) · `PARITY.md` ฉบับสมบูรณ์
 
@@ -139,7 +139,7 @@ agent `business-analyst` + `system-analyst` + `qa-tester` · skill `srs-writing`
 
 ## 5. สร้างรุ่นใหม่ทีละชิ้น + ยกส่วนที่เก็บมาใช้
 
-agent `developer` + `qa-tester` + `security-engineer` · skill `project-bootstrap` · `spec-to-code-loop` · `app-verifier-setup` · `testing-standards` · `stack-*` ตามภาษา · `principle-secure-by-default` · `security-gate`
+agent `developer` + `qa-tester` + `security-engineer` · skill `project-bootstrap` · `spec-to-code-loop` · `test-automation` · `stack-*` ตามภาษา · `security-gate`
 **ต้องมีก่อน:** ฉบับ 4
 **ผลลัพธ์:** โฟลเดอร์โค้ดรุ่นใหม่ที่รันและ test ได้ · `docs/AGENT-LOOP.md` · `docs/BUILD-PLAN.md` ตารางงานตามรหัส FR
 
@@ -147,7 +147,7 @@ agent `developer` + `qa-tester` + `security-engineer` · skill `project-bootstra
 
 ### ลำดับ
 
-1. วางโครงตาม `project-bootstrap` · ตั้ง verify ตาม `app-verifier-setup` ก่อนฟีเจอร์ที่ 2
+1. วางโครงตาม `project-bootstrap` · ตั้ง verify ตาม `test-automation` ก่อนฟีเจอร์ที่ 2
 2. **ยกชิ้นที่เก็บก่อน** — ชิ้น `ยกมาทั้งชิ้น` ใน `INVENTORY.md`: เขียน test จากพฤติกรรมของรุ่นเดิมก่อน แล้วคัดลอกโค้ดมา ปรับให้เข้าโครงใหม่จน test เขียว · commit แยกก้อนละชิ้น ข้อความ commit บอกที่มา
 3. สร้าง `docs/AGENT-LOOP.md` ตาม `prompt-new-project.md` ฉบับ 11 · ลำดับงานเรียงตาม flow หลักใน `PARITY.md`
 4. สร้างทีละ FR ตาม `spec-to-code-loop` · หน้าจอต้องตรง mockup ฉบับ 3 (ไม่ตรง → `prompt-explore.md` ฉบับ 4)
@@ -164,7 +164,7 @@ agent `developer` + `qa-tester` + `security-engineer` · skill `project-bootstra
 
 ## 6. ย้ายข้อมูล ตรวจเทียบ 2 รุ่น และแผนสลับระบบ
 
-agent `data-engineer` + `qa-tester` + `devops-engineer` · skill `database-design` · `data-import-export` · `principle-safe-to-rerun` · `ground-rules/principle-prove-it-works` · `incident-runbook-template`
+agent `data-engineer` + `qa-tester` + `devops-engineer` · skill `database-design` · `data-import-export` · `code-craft` · `ground-rules/principle-prove-it-works` · `incidents-and-monitoring`
 **ต้องมีก่อน:** ฉบับ 5 รันได้ · สำเนาข้อมูลเดิมใน `_to_delete/` (ห้ามต่อฐานข้อมูลจริง)
 **ผลลัพธ์:** สคริปต์ย้ายข้อมูลในโฟลเดอร์โค้ดรุ่นใหม่ · `qa/parity/` ผลเทียบ · `docs/rebuild/CUTOVER.md`
 
@@ -173,7 +173,7 @@ agent `data-engineer` + `qa-tester` + `devops-engineer` · skill `database-desig
 ### ลำดับ
 
 1. ตารางจับคู่ข้อมูล เก่า → ใหม่ ทุกตาราง ทุกคอลัมน์ · คอลัมน์ที่ไม่มีที่ไป → เขียนว่าทิ้งหรือเก็บไว้ที่ไหน
-2. สคริปต์ย้ายข้อมูลที่รันซ้ำได้ไม่เกิดข้อมูลซ้ำ (`principle-safe-to-rerun`) · ตรวจข้อมูลเสียก่อนเขียน แยกแถวที่ย้ายไม่ได้ลงรายงาน
+2. สคริปต์ย้ายข้อมูลที่รันซ้ำได้ไม่เกิดข้อมูลซ้ำ (`code-craft`) · ตรวจข้อมูลเสียก่อนเขียน แยกแถวที่ย้ายไม่ได้ลงรายงาน
 3. รันกับสำเนา แล้วเทียบ: จำนวนแถว · ผลรวมของตัวเลขสำคัญ · ตัวอย่างสุ่ม 20 รายการเทียบทีละช่อง · ผลลง `qa/parity/data-<วันที่>.md`
 4. ตรวจเทียบพฤติกรรม: test case ใน `PARITY.md` ที่สถานะ `เก็บ` รันกับทั้ง 2 รุ่นด้วย input เดียวกัน · ผลลง `qa/parity/behavior-<วันที่>.md`
 5. เขียน `CUTOVER.md`: ขั้นสลับทีละบรรทัด · เวลาที่ใช้ (จากการลองกับสำเนา) · จุดตัดสินว่าไปต่อหรือถอย · **วิธีถอยกลับไปรุ่นเดิม** · ใครต้องทำอะไร (บทบาท) · สิ่งที่ต้องแจ้งผู้ใช้

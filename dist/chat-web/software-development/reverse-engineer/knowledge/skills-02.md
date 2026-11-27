@@ -77,7 +77,7 @@ Stop searching when 3 new sources in a row give no new information, or when ever
 
 ### 4.2 UI — appearance
 
-- Main screen layout: parts and positions (you may sketch it as an ASCII box in notes · pictures that go into the document use `diagram-figures` (house style) · never copy their images into the document; link to the original image instead).
+- Main screen layout: parts and positions (you may sketch it as an ASCII box in notes · pictures that go into the document use `diagrams` (house style) · never copy their images into the document; link to the original image instead).
 - Navigation: menu, tabs, sidebar, number of levels.
 - Data density, visual style (modern/old, whether it is consistent), dark mode, resizing.
 - What stands out, good and bad, with reasons following `ui-craft`.
@@ -193,7 +193,7 @@ The next documents cite back with the code (`IMP-03` · `[7]`) so you can trace 
 | Need | Use together with |
 |---|---|
 | Decide whether to adopt a ready-made product or build | `research-with-sources/prior-art-review` |
-| Turn proposals into BR / FR | `user-story-writer` · `srs-writing` |
+| Turn proposals into BR / FR | `requirements-writing` |
 | Assess their UI and design ours | `ui-craft` · the platform skill |
 | Cut proposals down to what the first app needs | `superuser:ground-rules` |
 | Name our app so it does not collide with theirs | `product-naming` |

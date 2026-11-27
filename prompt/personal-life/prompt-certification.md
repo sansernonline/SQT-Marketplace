@@ -20,8 +20,8 @@
 
 | # | งาน | playbook | ได้ไฟล์ |
 |---|---|---|---|
-| 1 | เตรียมสอบใบรับรอง | `cert-prep` | `cert/<exam-code>-plan.md` |
-| 2 | สอบไม่ผ่าน เตรียมสอบใหม่ | `cert-prep` | `cert/<exam-code>-retake-plan.md` |
+| 1 | เตรียมสอบใบรับรอง | `learning-path` | `cert/<exam-code>-plan.md` |
+| 2 | สอบไม่ผ่าน เตรียมสอบใหม่ | `learning-path` | `cert/<exam-code>-retake-plan.md` |
 
 ใช้ต่อกัน: สอบไม่ผ่าน → 2 (แผนเดิมจากฉบับ 1 ใช้เป็นต้นทาง) · ตรวจแผนสอบก่อนใช้ → `prompt-start-learning.md` ฉบับ 4
 
@@ -29,7 +29,7 @@
 
 ## 1. เตรียมสอบใบรับรอง
 
-playbook `cert-prep` · agent `tech-mentor` · skill `cert-prep`
+playbook `learning-path` · agent `tech-mentor` · skill `learning-path`
 **ผลลัพธ์:** `cert/<exam-code>-plan.md` · **รออนุมัติ:** สมัครสอบ · ซื้อข้อสอบจำลอง
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -51,7 +51,7 @@ playbook `cert-prep` · agent `tech-mentor` · skill `cert-prep`
 
 ## 2. สอบไม่ผ่าน เตรียมสอบใหม่
 
-playbook `cert-prep` · agent `tech-mentor` · skill `cert-prep`
+playbook `learning-path` · agent `tech-mentor` · skill `learning-path`
 **ผลลัพธ์:** `cert/<exam-code>-retake-plan.md` · **รออนุมัติ:** จองรอบสอบใหม่ · จ่ายค่าสอบ · ซื้อข้อสอบจำลอง
 
 ### ข้อมูล (ผู้ใช้กรอก)

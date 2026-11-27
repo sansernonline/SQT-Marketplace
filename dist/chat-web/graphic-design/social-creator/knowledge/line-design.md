@@ -13,7 +13,7 @@ Two jobs, one skill. Pick the body by the job, open it, and follow it in full. B
 | LINE Official Account (OA) rich menu: image, JSON, upload, seasonal swap | [references/rich-menu.md](references/rich-menu.md) |
 | LINE stickers (static, animated) or emoji for Creators Market or a shop | [references/sticker.md](references/sticker.md) |
 
-Not for: OA setup, chatbot, broadcast → `line-oa-setup` · `line-chatbot` · `line-broadcast` (plugin `e-commerce`, if installed) · print stickers → `print-ready-files` · post images → `campaign-set`.
+Not for: OA setup, chatbot, broadcast → `line-oa` (plugin `e-commerce`, if installed) · print stickers → `print-ready-files` · post images → `campaign-set`.
 
 ## Hard rules: rich menu
 
@@ -110,7 +110,7 @@ Grid: 3 columns × 2 rows. Column widths 833 / 834 / 833, row height 843.
 ## Use when
 - A LINE Official Account (OA) needs a rich menu: design, JSON, upload, or a seasonal swap.
 
-Not for: stickers and emoji → the sticker body (`sticker.md`) · OA setup, chatbot, broadcast → `line-oa-setup` · `line-chatbot` · `line-broadcast` (plugin `e-commerce`, if installed)
+Not for: stickers and emoji → the sticker body (`sticker.md`) · OA setup, chatbot, broadcast → `line-oa` (plugin `e-commerce`, if installed)
 
 ## Hard limits
 `campaign-set` points here for rich menu sizes, so this table is the one copy. `../scripts/richmenu_check.py` reads these numbers (stored in [`richmenu-limits.json`](richmenu-limits.json)); re-check against https://developers.line.biz/en/reference/messaging-api/ every 6 months (ตรวจล่าสุด 2026-10-26 · ครั้งหน้า 2027-04-26).
@@ -129,7 +129,7 @@ Not for: stickers and emoji → the sticker body (`sticker.md`) · OA setup, cha
 1. Pick the 6 main customer tasks from chat history.
 2. Choose the route: 1 menu for everyone, ≤ 6 buttons, from a template → OA Manager → Rich menus (no developer needed). Different menus for members and guests, tabs, A/B, or a silent postback the bot handles → Messaging API (per-user link or rich menu alias).
 3. Write the designer brief: size, grid, safe margins, brand colours, text per cell. No brand yet → search for prototypes first: take the project's keywords and search live per `design-gate/design-references` type `app`, then pull colours from the chosen piece; use the stored palette library only when live search is not possible.
-4. Design rules: max 6 buttons on full size, 3 on compact (เช็คราคา · สั่งซื้อ · ติดตามพัสดุ · โปรโมชัน · ที่ตั้ง/เวลาทำการ · ติดต่อเจ้าหน้าที่) · 1–2 words plus an icon per button; Thai text ≥ ~60 px tall on the 2500 px image · primary action biggest (e.g. double-width cell) and "ติดต่อเจ้าหน้าที่" always present · keep 30–50 px inside each cell edge free of text · each button is a `message` (a keyword the bot knows, see `e-commerce:line-chatbot` if installed), `postback`, `uri` (https:// or tel:), or `richmenuswitch` for tabs. A ready 6-button JSON with grid coordinates: [`rich-menu-6-buttons.md`](rich-menu-6-buttons.md).
+4. Design rules: max 6 buttons on full size, 3 on compact (เช็คราคา · สั่งซื้อ · ติดตามพัสดุ · โปรโมชัน · ที่ตั้ง/เวลาทำการ · ติดต่อเจ้าหน้าที่) · 1–2 words plus an icon per button; Thai text ≥ ~60 px tall on the 2500 px image · primary action biggest (e.g. double-width cell) and "ติดต่อเจ้าหน้าที่" always present · keep 30–50 px inside each cell edge free of text · each button is a `message` (a keyword the bot knows, see `e-commerce:line-oa` if installed), `postback`, `uri` (https:// or tel:), or `richmenuswitch` for tabs. A ready 6-button JSON with grid coordinates: [`rich-menu-6-buttons.md`](rich-menu-6-buttons.md).
 5. Export ≤ 1 MB (PNG-8 or JPEG quality ~80). Check locally: `python ../scripts/richmenu_check.py menu.json menu.png` (size, 20 areas, 14 characters, areas inside the image, 1 MB; `--self-test` 8/8).
 6. API route: `validate` → create → upload → test on one user (your own account) → **ask approval** → set default → test on iOS and Android. Endpoints: [`api-sequence.md`](api-sequence.md). Every call needs `Authorization: Bearer {channel access token}`; read the token from an environment variable (e.g. `LINE_CHANNEL_TOKEN`); never write it to a file, a log or the reply.
 7. **Needs user approval first** (it changes what every follower sees and is hard to undo; `superuser` section 6, "รออนุมัติ"): `POST .../user/all/richmenu/...` (set default) and every delete of a rich menu or image. Before asking, show that `validate` passed and the menu works for one test user, then wait for a yes.

@@ -1,23 +1,29 @@
 ---
 name: learning-path
-description: Use when learning a new language or framework properly, or turning a paper, RFC or article into a working example
-argument-hint: <technology or paper> [--depth skim|working|mastery]
+description: Use to learn a framework, prep a cert, read English docs, code a paper
+argument-hint: <technology, exam or paper> [--depth skim|working|mastery]
 ---
 
 # Learning Path
 
 Learn on your own real project, in small wins.
 
-Paper, RFC or article → follow [references/paper-to-practice.md](references/paper-to-practice.md) (brief, smallest runnable example, run, one-page note) instead of the steps below.
+## Pick the part
 
-**Hard rules (paper flow):** Run the example for real. If it cannot run, say why and what was tried. Build only the smallest program that shows the core idea.
-If infrastructure is lacking, use a simulation and say so. Credit the paper with title, authors and date.
+| Job (what the user says) | Open |
+|---|---|
+| "I want to learn this technology properly" | This page (the steps below) |
+| "Turn this paper, RFC or article into a working example" | [`references/paper-to-practice.md`](references/paper-to-practice.md) (brief, smallest runnable example, run, one-page note) |
+| "I'm sitting an exam or a cloud or developer certification, or I need flashcards and quizzes" | [`references/cert-prep.md`](references/cert-prep.md) |
+| "An English error message or doc passage needs a Thai explanation" | [`references/english-tech-reading.md`](references/english-tech-reading.md) |
 
-Not for: a certification exam → `cert-prep` · choosing a practice or portfolio project → `side-project-picker`.
+**Hard rules (paper flow):** Run the example for real. If it cannot run, say why and what was tried. Build only the smallest program that shows the core idea. If infrastructure is lacking, use a simulation and say so. Credit the paper with title, authors and date.
+
+Not for: choosing a practice or portfolio project → `tech-growth`.
 
 ## Steps
 
-1. **Goal and depth** — what "learned" means here (skim, working knowledge or mastery) and why. Choose the depth out loud. Then **check the hours against the real week** ("สัปดาห์ปกติมีอะไรอยู่แล้วบ้าง") and ask whether this path **adds to or replaces** a course the user already follows; never two syllabi at once. Same checks as `cert-prep` step 4
+1. **Goal and depth** — what "learned" means here (skim, working knowledge or mastery) and why. Choose the depth out loud. Then **check the hours against the real week** ("สัปดาห์ปกติมีอะไรอยู่แล้วบ้าง") and ask whether this path **adds to or replaces** a course the user already follows; never two syllabi at once. Same check as in `references/cert-prep.md`
 2. **Baseline check** — 10 quick questions to find what the user already knows. Skip everything they already know
 3. **Milestones** — 4–7 steps, each: concept → tiny exercise → applied to the user's real project. Each step takes under 2 hours
 4. **Anchoring rule** — at least half the milestones modify or extend something the user already owns, not toy examples
@@ -36,8 +42,8 @@ Use [references/path-template.md](references/path-template.md) for the plan file
 
 ## เรียกเป็นคำสั่ง
 
-`/personal-life:learning-path <technology or paper> [--depth skim|working|mastery]`
+`/personal-life:learning-path <technology, exam or paper> [--depth skim|working|mastery]`
 
-With `--depth` or a technology: run the steps above. With a paper, RFC, or article: follow `references/paper-to-practice.md`. Both with the `tech-mentor` agent: **$ARGUMENTS**
+With `--depth` or a technology: run the steps above. With a paper, RFC, or article: follow `references/paper-to-practice.md`. With an exam: follow `references/cert-prep.md`. All with the `tech-mentor` agent: **$ARGUMENTS**
 
 Every path ends in something runnable in the user's own project.

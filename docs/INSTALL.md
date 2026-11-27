@@ -161,7 +161,7 @@ git push -u origin main
 ช่วยเขียน user story สำหรับ feature reset password หน่อย
 ```
 
-Claude ควรเรียก skill `user-story-writer` มาใช้อัตโนมัติ
+Claude ควรเรียก skill `requirements-writing` มาใช้อัตโนมัติ
 
 ### 4. ตรวจ hooks
 ```
@@ -235,7 +235,7 @@ hook เขียน log เฉพาะโปรเจกต์ที่มี 
 
 `dist/claude-web/<plugin>.zip` คือ plugin ที่บีบอัดไว้ 1 ไฟล์ต่อ 1 plugin · **อัปโหลดเข้า claude.ai** แล้วใช้ skill ได้ใน Cowork และแชทบนเว็บหรือเดสก์ท็อปด้วย ไม่ใช่แค่ใน Claude Code
 
-**`software-development.zip`:** 100 skills · 38 agents · 12 commands · `plugin.json` v3.10.3 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-development/`
+**`software-development.zip`:** 50 skills · 38 agents · 2 commands · `plugin.json` v4.0.0 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-development/`
 
 ---
 
@@ -411,4 +411,4 @@ skills:
 ส่วนที่มีเฉพาะ Claude:
 
 - `/loop` ใน `docs/AGENT-LOOP.md` (ฉบับ 11 ของ `prompt-new-project.md`) · เครื่องมืออื่นไม่มีคำสั่งนี้ → วาง prompt ทีละรอบในหน้าต่างใหม่แทน
-- `anthropic-skills:docx` / `anthropic-skills:pdf` ในฉบับ 14 · เครื่องมืออื่นไม่มี 2 ตัวนี้ → ใช้ `branded-document-design` อย่างเดียว และเครื่องต้องรัน Python ได้
+- `anthropic-skills:docx` / `anthropic-skills:pdf` ในฉบับ 14 · เครื่องมืออื่นไม่มี 2 ตัวนี้ → ใช้ `document-design` อย่างเดียว และเครื่องต้องรัน Python ได้

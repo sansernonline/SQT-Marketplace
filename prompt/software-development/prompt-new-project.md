@@ -9,20 +9,20 @@
 วางทั้งไฟล์ใน Claude Code, Codex CLI หรือ Gemini CLI ที่รากโฟลเดอร์โปรเจกต์ แล้วพิมพ์ต่อท้ายว่าจะทำฉบับไหน เช่น `ทำทั้งหมด` หรือ `ทำข้อ 3 และ 4` · อยากได้หน้าตาเหมือนแอปไหน พิมพ์ต่อท้ายได้เลย เช่น `หน้าตาแบบ C:\...\Telex` หรือ `แบบ Linear มืด ๆ`
 
 <!-- rules:begin -->
-**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-doc-set` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
+**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-docs` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
 
 **วนจนเสร็จ (agent loop):** ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ จนผ่านทุกข้อที่ฉบับนั้นต้องมี · ตรวจด้วยหลักฐานจริง (เปิดไฟล์ · รันคำสั่ง · เทียบแหล่ง) ไม่ใช่คำบอกของตัวที่ทำ · รอบตรวจใช้ `reviewer` ตัวใหม่ทุกรอบ · ไม่ผ่าน → แก้ที่ต้นเหตุแล้วตรวจซ้ำทั้งข้อเดิมและจุดที่แก้ · เหลือแค่ข้อระดับต่ำ → ปิดได้แล้วลงรายงาน · ครบเพดานรอบ (งานกลาง 3 · งานใหญ่หรืองานเสี่ยง 5) ยังไม่ผ่าน → ติดป้าย `ติด` ทำส่วนอื่นให้จบ แล้วรายงานข้อที่เหลือ · รายละเอียดอยู่ใน skill `superuser` กฎข้อ 3
 <!-- rules:end -->
 
-**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้แบบเดียวกันทั้งชุด: ผังระบบ · flow · ผังคลาวด์ → `diagram-figures` · Mermaid (`software-diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม · **Mermaid ทุกบล็อกขึ้นต้นด้วยบรรทัด `%%{init`** ของ `software-diagrams` — ฉบับที่เขียน Mermaid (3 · 7 · 8 · 10 · 11 และฉบับ 13 ตอนตรวจ) ต้องรัน `node <ที่ติดตั้ง plugin>/skills/software-diagrams/scripts/check-mermaid-theme.mjs <ไฟล์ .md ที่เขียน>` ได้ exit 0 ก่อนส่ง
+**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้แบบเดียวกันทั้งชุด: ผังระบบ · flow · ผังคลาวด์ → `diagrams` · Mermaid (`diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม · **Mermaid ทุกบล็อกขึ้นต้นด้วยบรรทัด `%%{init`** ของ `diagrams` — ฉบับที่เขียน Mermaid (3 · 7 · 8 · 10 · 11 และฉบับ 13 ตอนตรวจ) ต้องรัน `node <ที่ติดตั้ง plugin>/skills/diagrams/scripts/check-mermaid-theme.mjs <ไฟล์ .md ที่เขียน>` ได้ exit 0 ก่อนส่ง
 
 **กฎร่วมเรื่องตัวตรวจที่ subagent รันไม่ได้ และการไล่แก้ปลายน้ำเมื่อแก้ต้นน้ำ** → playbook `project-docs` ข้อ 5–6 · กฎเฉพาะของแต่ละฉบับอยู่ในฉบับนั้น
 
-**เอกสารส่งมอบ** (ตาม `project-doc-set` ข้อ 2.1): เลือกชุดตามขนาดงาน S · M · L จากตารางนั้น (ไม่ลอกรายการมาไว้ที่นี่) · ฉบับ 1 · 2 · 3 · 7 · 8 · 9 · 12 · 15 สร้างทีละตัว · อยู่ใน `docs/` เป็น `.docx` อย่างเดียว (คู่มือผู้ใช้มี `.pdf` ด้วย) ชื่อตาม `workspace-rules/document-naming`: `<รหัส>-<ประเภท>-v<M.m>-<สถานะ>.docx` (ประเภท `PLAN` · `BRD` · `SRS` · `ARCH` · `FSD` · `TESTPLAN` · `MAN` · `CHECKLIST` เช่น `ABC-SRS-v0.1-DRAFT.docx`) · Test Cases ขนาด L เป็น `.xlsx` ใน `qa/`
+**เอกสารส่งมอบ** (ตาม `project-docs` ข้อ 2.1): เลือกชุดตามขนาดงาน S · M · L จากตารางนั้น (ไม่ลอกรายการมาไว้ที่นี่) · ฉบับ 1 · 2 · 3 · 7 · 8 · 9 · 12 · 15 สร้างทีละตัว · อยู่ใน `docs/` เป็น `.docx` อย่างเดียว (คู่มือผู้ใช้มี `.pdf` ด้วย) ชื่อตาม `workspace-rules/document-naming`: `<รหัส>-<ประเภท>-v<M.m>-<สถานะ>.docx` (ประเภท `PLAN` · `BRD` · `SRS` · `ARCH` · `FSD` · `TESTPLAN` · `MAN` · `CHECKLIST` เช่น `ABC-SRS-v0.1-DRAFT.docx`) · Test Cases ขนาด L เป็น `.xlsx` ใน `qa/`
 - ร่าง markdown ของเอกสารส่งมอบเป็นไฟล์ทำงานใน `_to_delete/drafts/<ประเภทตัวเล็ก>.md` — เขียนร่างจบแล้ว render ตามฉบับ 14 ทันที · `docs/` ไม่มี .md ของเอกสารส่งมอบเหลือ · **ร่างไม่มีหัวข้อ "สารบัญ" ที่เขียนเอง** (ตัว render สร้างสารบัญให้)
 - ไม่ทำ `.pdf` เว้นแต่คู่มือผู้ใช้ หรือลูกค้าขอ
 - ฉบับถัดไปอ่านเอกสารส่งมอบจาก `.docx` ด้วย `anthropic-skills:docx` (ไม่มี → python-docx) · ในไฟล์นี้ `docs/<รหัส>-SRS-*.docx` หมายถึงฉบับล่าสุดของประเภทนั้น
-- เอกสารเชิงเทคนิค (`project-doc-set` ข้อ 2.2 — `USER-STORIES` · `API-SPEC` · `DATA-DICTIONARY` · ADR · `AGENT-LOOP` · `BUILD-PLAN` · runbook) เป็น `.md` ใน `docs/` ตามเดิม
+- เอกสารเชิงเทคนิค (`project-docs` ข้อ 2.2 — `USER-STORIES` · `API-SPEC` · `DATA-DICTIONARY` · ADR · `AGENT-LOOP` · `BUILD-PLAN` · runbook) เป็น `.md` ใน `docs/` ตามเดิม
 
 | # | เอกสาร | ได้ไฟล์ |
 |---|---|---|
@@ -47,11 +47,11 @@
 
 - ไม่มี `docs/BUILD-PLAN.md` และ `docs/README.md` → ถามผู้ใช้ครั้งเดียว 5 ค่า: รหัสโปรเจกต์ · ขนาดงาน · แพลตฟอร์ม (web · mobile · windows) · **แอปหรือโปรเจกต์ที่ชอบหน้าตา** (ลิงก์ · ชื่อแอป · path โปรเจกต์ในเครื่อง · หรือคำบรรยาย เช่น "มืด หรู แบบ Linear" — ไม่มี → ฉบับ 5 เสนอ 3 แนว) · **เลือกแนวภาพเองไหม** (ใช่ → ฉบับ 5 หยุดให้เลือก · ไม่ → ผู้ตรวจเลือกให้) · สีแบรนด์ใช้ถ้าผู้ใช้ให้มา ไม่มี → ฉบับ 5 เสนอพร้อมแนวภาพ + `(รอยืนยัน)` ไม่หยุดถาม — เขียนค่าทั้งหมด (รวมสีแบรนด์) ลง `docs/README.md` (mockup อ่านแพลตฟอร์มและแอปอ้างอิงจากที่นี่)
 - มี `docs/BUILD-PLAN.md` แล้วแต่ผู้ใช้สั่ง `ทำใหม่` → ถามครั้งเดียวรวมกัน: ฉบับไหน · ไฟล์เดิมเก็บหรือย้าย · **หน้าตาเดิมคงไว้หรือออกแบบใหม่** (สั่งทำ mockup ใหม่ = ออกแบบใหม่ เว้นแต่ผู้ใช้บอกให้คง)
-- **งานเฉพาะสาขา** → agent และ skill ของสาขาเข้าทีมทุกฉบับที่เกี่ยว (ระบุสาขาใน `docs/README.md` · ไม่ระบุ → อ่านจากโจทย์แล้วลง `## ตัดสินใจเอง`) · AI / LLM → `ai-engineer` + `llm-engineering` (+ `prompt-ai-feature.md`) · IoT · firmware → `iot-engineer` + `iot-systems` · แอปมือถือ → `mobile-engineer` + `mobile-engineering` · สุขภาพ → `healthcare-engineer` + `hipaa-officer` + `healthcare-systems` · รับเงิน · การเงิน → `fintech-engineer` + `fintech-compliance-officer` + `fintech-payments` · ร้านค้าออนไลน์ → `ecommerce-engineer` + `ecommerce-patterns` · B2B SaaS → `revops-analyst` + `saas-platform` · เกม → `game-designer` + `game-developer` + `game-development` · บล็อกเชน → `blockchain-engineer` + `smart-contracts` · ประกันภัย → `insurance-engineer` + `insurance-analyst` + `insurance-systems` · กฎหมาย · สัญญา → `legaltech-engineer` + `legal-compliance-officer` + `legal-document-systems` · ระบบเทรด · Expert Advisor (EA) → `quant-analyst` + `stack-mql` (ใช้ `prompt-trading-system.md` แทนไฟล์นี้)
+- **งานเฉพาะสาขา** → agent และ skill ของสาขาเข้าทีมทุกฉบับที่เกี่ยว (ระบุสาขาใน `docs/README.md` · ไม่ระบุ → อ่านจากโจทย์แล้วลง `## ตัดสินใจเอง`) · AI / LLM → `ai-engineer` + `ai-engineering` (+ `prompt-ai-feature.md`) · IoT · firmware → `iot-engineer` + `domain-systems` · แอปมือถือ → `mobile-engineer` + `mobile-engineering` · สุขภาพ → `healthcare-engineer` + `hipaa-officer` + `domain-systems` · รับเงิน · การเงิน → `fintech-engineer` + `fintech-compliance-officer` + `domain-systems` · ร้านค้าออนไลน์ → `ecommerce-engineer` + `domain-systems` · B2B SaaS → `revops-analyst` + `domain-systems` · เกม → `game-designer` + `game-developer` + `game-development` · บล็อกเชน → `blockchain-engineer` + `domain-systems` · ประกันภัย → `insurance-engineer` + `insurance-analyst` + `domain-systems` · กฎหมาย · สัญญา → `legaltech-engineer` + `legal-compliance-officer` + `domain-systems` · ระบบเทรด · Expert Advisor (EA) → `quant-analyst` + `stack-mql` (ใช้ `prompt-trading-system.md` แทนไฟล์นี้)
 - มี `docs/research/` (จากฉบับ 0) → BRD · SRS · mockup ใช้เป็นข้อมูลตั้งต้น · ทุกครั้งที่หยิบข้อเสนอหรือ feature จากแอปต้นแบบมาใช้ ให้อ้างรหัส `IMP-xx` / เลขแหล่ง
 - หยุดก่อนทำครบได้อีก 2 กรณี: ฉบับ 12 เมื่อยังรันแอปไม่ได้ · ฉบับ 5 ขั้น A เมื่อผู้ใช้ตอบว่าจะเลือกแนวภาพเอง (ทำฉบับอื่นที่ไม่พึ่ง mockup ต่อระหว่างรอ)
-- ฉบับที่ชี้ไปไฟล์แยก (4 · 5 · 6 · 12) → สั่ง `ทำทั้งหมด` ให้วางไฟล์นั้นต่อท้ายไฟล์นี้ในข้อความเดียวกัน · ไม่ได้วางมา → อ่านจากโฟลเดอร์ `prompt/software-development/` ถ้าเข้าถึงได้ · ไม่ได้ทั้ง 2 ทาง → ทำตาม skill ที่ระบุในฉบับนั้น (user story → `user-story-writer` · mockup → ทำตามขั้นสั้นในฉบับ 5–6 ของไฟล์นี้ + `ui-craft` ข้อ 0.1 และ 9 + skill ตามแพลตฟอร์ม · คู่มือ → `technical-writer` + `branded-document-design`) · **ห้ามข้ามขั้นออกแบบเพราะหาไฟล์ไม่เจอ** แล้วลงใน `## ตัดสินใจเอง`
-- โปรเจกต์แบบ ecosystem (หลาย sub-project แต่ละตัวมีเอกสารของตัวเอง) → เอกสารของ sub-project อยู่ใน `ecosystem/<รหัส>-<SUB>/` (`docs/` · `mockup/` · `qa/`) ส่วนแผนโครงการ · BRD · BUILD-PLAN อยู่ใน `docs/` ที่ราก · path ในตารางข้างบนให้อ่านโดยมี `ecosystem/<รหัส>-<SUB>/` นำหน้า · ชื่อโฟลเดอร์ต้องเป็น `ecosystem/` ห้ามใช้ `projects/` (skill `project-doc-set` ข้อ 1)
+- ฉบับที่ชี้ไปไฟล์แยก (4 · 5 · 6 · 12) → สั่ง `ทำทั้งหมด` ให้วางไฟล์นั้นต่อท้ายไฟล์นี้ในข้อความเดียวกัน · ไม่ได้วางมา → อ่านจากโฟลเดอร์ `prompt/software-development/` ถ้าเข้าถึงได้ · ไม่ได้ทั้ง 2 ทาง → ทำตาม skill ที่ระบุในฉบับนั้น (user story → `requirements-writing` · mockup → ทำตามขั้นสั้นในฉบับ 5–6 ของไฟล์นี้ + `ui-craft` ข้อ 0.1 และ 9 + skill ตามแพลตฟอร์ม · คู่มือ → `technical-writer` + `document-design`) · **ห้ามข้ามขั้นออกแบบเพราะหาไฟล์ไม่เจอ** แล้วลงใน `## ตัดสินใจเอง`
+- โปรเจกต์แบบ ecosystem (หลาย sub-project แต่ละตัวมีเอกสารของตัวเอง) → เอกสารของ sub-project อยู่ใน `ecosystem/<รหัส>-<SUB>/` (`docs/` · `mockup/` · `qa/`) ส่วนแผนโครงการ · BRD · BUILD-PLAN อยู่ใน `docs/` ที่ราก · path ในตารางข้างบนให้อ่านโดยมี `ecosystem/<รหัส>-<SUB>/` นำหน้า · ชื่อโฟลเดอร์ต้องเป็น `ecosystem/` ห้ามใช้ `projects/` (skill `project-docs` ข้อ 1)
 
 ---
 
@@ -96,7 +96,7 @@ agent `project-manager` · skill `superuser:ground-rules` · `design-gate/polish
 3. สิ่งส่งมอบ — ดึงรายการจากตารางเอกสารใน `docs/README.md` บวกตัวโปรแกรม
 4. ไทม์ไลน์และ milestone — แบ่งเป็นช่วง (สัปดาห์ หรือ sprint 2 สัปดาห์) ตามขนาดงาน มี 2 ส่วน:
    - **ตาราง milestone** `| # | milestone | ส่งมอบอะไร | FR / เอกสารที่ครอบ | สัปดาห์เป้าหมาย | เกณฑ์ผ่าน | เจ้าของ | สถานะ |` รหัส `M1…` · 1 milestone = ของที่ผู้ใช้เปิดดูหรือเซ็นรับได้ (เช่น M1 SRS อนุมัติ → M2 mockup ผ่าน → M3 ฟีเจอร์หลักรันได้ → M4 ทดสอบผ่าน → M5 ส่งมอบ) · เกณฑ์ผ่านตรวจได้ด้วยเครื่องหรือการลงนาม
-   - **Gantt 1 ภาพ** ด้วย `diagram-figures` (Mermaid engine → รูปแบบเดียวกับรูปอื่นในเอกสาร) · แถบละกิจกรรม · เพชรละ milestone · แยก section ตามระยะ · เริ่มจากแม่แบบใน `superuser/parts/status-report/references/project-plan-and-weekly-status.md`
+   - **Gantt 1 ภาพ** ด้วย `diagrams` (Mermaid engine → รูปแบบเดียวกับรูปอื่นในเอกสาร) · แถบละกิจกรรม · เพชรละ milestone · แยก section ตามระยะ · เริ่มจากแม่แบบใน `superuser/parts/status-report/references/project-plan-and-weekly-status.md`
 5. ความเสี่ยงและข้อสมมติ — ตาราง: ความเสี่ยง · ผลกระทบ · วิธีรับมือ · เจ้าของ
 6. เกณฑ์ส่งมอบ/ปิดงาน — ตรวจได้ด้วยเครื่องหรือด้วยการลงนาม ไม่ใช้คำว่า "ใช้งานได้ดี"
 7. ประวัติการแก้ไข และตารางลงนาม
@@ -112,7 +112,7 @@ agent `project-manager` · skill `superuser:ground-rules` · `design-gate/polish
 
 ## 2. เขียน Business Requirements Document (BRD)
 
-agent `business-analyst` · skill `user-story-writer` · `superuser:ground-rules` · `design-gate/polished-document-style` · ขนาด L (M ถ้าจำเป็น)
+agent `business-analyst` · skill `requirements-writing` · `superuser:ground-rules` · `design-gate/polished-document-style` · ขนาด L (M ถ้าจำเป็น)
 **ต้องมีก่อน:** `docs/README.md` · ไฟล์อ้างอิงของผู้ว่าจ้างใน `ref/` (ถ้ามี)
 **ผลลัพธ์:** `docs/<รหัส>-BRD-v<M.m>-<สถานะ>.docx` (ร่าง `_to_delete/drafts/brd.md` → render ตามฉบับ 14)
 
@@ -121,7 +121,7 @@ agent `business-analyst` · skill `user-story-writer` · `superuser:ground-rules
 1. ปัญหาทางธุรกิจ — เกิดกับใคร บ่อยแค่ไหน เสียอะไร (ตัวเลขจริงที่ผู้ใช้ให้ ถ้าไม่มีใส่ `(รอยืนยัน)`)
 2. เป้าหมายและตัวชี้วัดความสำเร็จ — วัดด้วยอะไร ก่อน/หลังเท่าไร
 3. ผู้มีส่วนได้ส่วนเสียและบทบาท
-4. กระบวนการปัจจุบัน (as-is) และที่ต้องการ (to-be) — แผนภาพ flow ด้วย `diagram-figures` (Mermaid เป็นร่างภายในเท่านั้น)
+4. กระบวนการปัจจุบัน (as-is) และที่ต้องการ (to-be) — แผนภาพ flow ด้วย `diagrams` (Mermaid เป็นร่างภายในเท่านั้น)
 5. ความต้องการทางธุรกิจ — รหัส `BR-001…` ข้อละ 1 ประโยค มีผู้ขอและลำดับความสำคัญ (ต้องมี / ควรมี / อยากมี)
 6. ข้อจำกัด ข้อสมมติ ความเสี่ยง
 7. ขอบเขต — อยู่ในขอบเขต / นอกขอบเขต
@@ -135,13 +135,13 @@ agent `business-analyst` · skill `user-story-writer` · `superuser:ground-rules
 
 ## 3. เขียน Software Requirements Specification (SRS)
 
-agent `business-analyst` หรือ `system-analyst` · skill `srs-writing` · `user-story-writer` · `software-diagrams` · `design-gate/polished-document-style`
+agent `business-analyst` หรือ `system-analyst` · skill `requirements-writing` · `diagrams` · `design-gate/polished-document-style`
 **ต้องมีก่อน:** `docs/README.md` · `docs/<รหัส>-BRD-*.docx` (ถ้าขนาดงานมี BRD)
 **ผลลัพธ์:** `docs/<รหัส>-SRS-v<M.m>-<สถานะ>.docx` (ร่าง `_to_delete/drafts/srs.md` → render ตามฉบับ 14)
 
 ### หัวข้อที่ต้องมี
 
-ตามโครงของ skill `srs-writing` (อ้างอิง ISO/IEC/IEEE 29148) อย่างน้อย:
+ตามโครงของ skill `requirements-writing` (อ้างอิง ISO/IEC/IEEE 29148) อย่างน้อย:
 
 1. ภาพรวมระบบ ผู้ใช้ และบริบท (ไดอะแกรมบริบท 1 ภาพ)
 2. ข้อกำหนดเชิงหน้าที่ (Functional Requirement — FR) รหัส `FR-001…` **1 ข้อ = 1 ประโยค = ผู้กระทำ 1 ราย** พร้อมเกณฑ์ยอมรับแบบ Given-When-Then และอ้าง `BR-xxx` ที่ข้อนั้นตอบ
@@ -186,16 +186,16 @@ agent `business-analyst` หรือ `system-analyst` · skill `srs-writing` ·
 
 ## 7. เขียนสถาปัตยกรรมและ ADR
 
-agent `solution-architect` · skill `architecture-patterns` · `adr-writer` · `software-diagrams` · `superuser:ground-rules` · `design-gate/polished-document-style`
+agent `solution-architect` · skill `architecture` · `diagrams` · `superuser:ground-rules` · `design-gate/polished-document-style`
 **ต้องมีก่อน:** `docs/README.md` · `docs/<รหัส>-SRS-*.docx`
 **ผลลัพธ์:** `docs/<รหัส>-ARCH-v<M.m>-<สถานะ>.docx` (ร่าง `_to_delete/drafts/arch.md` → render ตามฉบับ 14) · ADR `docs/decisions/ADR-NNNN-<เรื่อง>.md` สำหรับทุกการตัดสินใจที่จะถูกถามภายหลังว่า "ทำไมเลือกแบบนี้"
 
 ### หัวข้อที่ต้องมี
 
 1. บริบทและข้อจำกัดที่กำหนดสถาปัตยกรรม (จาก NFR: ผู้ใช้ เวลาตอบ ความพร้อมใช้งาน งบ ทีม)
-2. ภาพรวม — C4 ระดับ context และ container อย่างละ 1 ภาพ (`diagram-figures` · Mermaid เป็นร่างภายในเท่านั้น) ไม่เกิน 7 กล่องต่อภาพ ทุกลูกศรมีป้าย
+2. ภาพรวม — C4 ระดับ context และ container อย่างละ 1 ภาพ (`diagrams` · Mermaid เป็นร่างภายในเท่านั้น) ไม่เกิน 7 กล่องต่อภาพ ทุกลูกศรมีป้าย
 3. เทคโนโลยีที่เลือกและเหตุผลข้อละ 1 บรรทัด
-4. ข้อมูล — ตารางหลักและความสัมพันธ์ (ER 1 ภาพ ด้วย `diagram-figures`)
+4. ข้อมูล — ตารางหลักและความสัมพันธ์ (ER 1 ภาพ ด้วย `diagrams`)
 5. ความปลอดภัย การยืนยันตัวตน และข้อมูลส่วนบุคคล (PDPA) ในระดับแนวทาง
 6. การ deploy และสภาพแวดล้อม
 7. ความเสี่ยงทางเทคนิคและสิ่งที่ตั้งใจไม่ทำ
@@ -210,7 +210,7 @@ agent `solution-architect` · skill `architecture-patterns` · `adr-writer` · `
 
 ## 8. เขียน Functional Specification Document (FSD) 1 ฉบับ แยกบทตามโมดูล
 
-agent `system-analyst` · skill `fsd-writing` · `software-diagrams` · `design-gate/polished-document-style`
+agent `system-analyst` · skill `requirements-writing` · `diagrams` · `design-gate/polished-document-style`
 **ต้องมีก่อน:** `docs/README.md` · `docs/<รหัส>-SRS-*.docx` · `docs/<รหัส>-ARCH-*.docx` · `mockup/<รหัส>-mockup.html` (ถ้ามี)
 **โมดูลที่ทำ:** <!-- ชื่อโมดูล หรือ "ทุกโมดูลตามที่ architecture แบ่ง" -->
 **ผลลัพธ์:** `docs/<รหัส>-FSD-v<M.m>-<สถานะ>.docx` ฉบับเดียว — 1 บทต่อโมดูล (ร่าง `_to_delete/drafts/fsd.md` → render ตามฉบับ 14) · ทำทีละโมดูล → เพิ่มบทในฉบับเดิมแล้วขึ้นเวอร์ชัน ไม่แยกไฟล์
@@ -236,14 +236,14 @@ agent `system-analyst` · skill `fsd-writing` · `software-diagrams` · `design-
 
 ## 9. เขียนแผนทดสอบ (Test Plan) และ test case
 
-agent `qa-tester` · skill `test-case-template` · `testing-standards` · `e2e-testing-patterns` · ขนาด L ใช้ skill `anthropic-skills:xlsx` สำหรับตาราง test case
+agent `qa-tester` · skill `qa-docs` · `test-automation` · ขนาด L ใช้ skill `anthropic-skills:xlsx` สำหรับตาราง test case
 **ต้องมีก่อน:** `docs/README.md` · `docs/<รหัส>-SRS-*.docx` · `docs/<รหัส>-FSD-*.docx` · `docs/USER-STORIES.md` (ถ้ามี)
 **ผลลัพธ์:** `docs/<รหัส>-TESTPLAN-v<M.m>-<สถานะ>.docx` (แผน · ร่าง `_to_delete/drafts/testplan.md` → render ตามฉบับ 14) · `qa/<รหัส>-test-cases.md` (รายการ test case — ขนาด L เป็น `.xlsx` ให้ QA กรอกผลได้)
 
 ### หัวข้อที่ต้องมีในแผนทดสอบ
 
 1. ขอบเขตการทดสอบ — ทดสอบอะไร **ไม่ทดสอบ**อะไร
-2. กลยุทธ์ตามระดับ: unit · integration · E2E — สัดส่วนและเครื่องมือ (ยังไม่เลือกเฟรมเวิร์ก ใช้ค่าเริ่มต้นของ `testing-standards` ตามภาษาในสถาปัตยกรรม แล้วลง `## ตัดสินใจเอง` ของ BUILD-PLAN ไม่ใช่ในเอกสารส่งมอบ)
+2. กลยุทธ์ตามระดับ: unit · integration · E2E — สัดส่วนและเครื่องมือ (ยังไม่เลือกเฟรมเวิร์ก ใช้ค่าเริ่มต้นของ `test-automation` ตามภาษาในสถาปัตยกรรม แล้วลง `## ตัดสินใจเอง` ของ BUILD-PLAN ไม่ใช่ในเอกสารส่งมอบ)
 3. สภาพแวดล้อมและข้อมูลทดสอบ
 4. ลิงก์ไปไฟล์ test case ใน `qa/` — **ไม่คัดลอกรายการ test case มาไว้ในแผน**
 5. ตาราง FR → รหัส test case (ความครอบคลุม) · FR ที่ยังไม่มี test ต้องเห็นชัด
@@ -252,12 +252,12 @@ agent `qa-tester` · skill `test-case-template` · `testing-standards` · `e2e-t
 
 ### `qa/<รหัส>-test-cases.md`
 
-ตามรูปแบบ `test-case-template` (รหัส `TC-<โมดูล>-NNN`) — ต่อ FR: ปกติ · ขอบเขต (boundary) · ผิดพลาด (negative) · สิทธิ์ · แต่ละ FR มีอย่างน้อยกรณีปกติ 1 ข้อ + กรณีผิดพลาด 1 ข้อ · ทุกข้ออ้างรหัส FR · มี user story → บรรทัด Related อ้าง `US-xxx, ACn` ด้วย และทุก AC ของ story สถานะ Ready มี test case อย่างน้อย 1 ข้อ
+ตามรูปแบบ `qa-docs` (รหัส `TC-<โมดูล>-NNN`) — ต่อ FR: ปกติ · ขอบเขต (boundary) · ผิดพลาด (negative) · สิทธิ์ · แต่ละ FR มีอย่างน้อยกรณีปกติ 1 ข้อ + กรณีผิดพลาด 1 ข้อ · ทุกข้ออ้างรหัส FR · มี user story → บรรทัด Related อ้าง `US-xxx, ACn` ด้วย และทุก AC ของ story สถานะ Ready มี test case อย่างน้อย 1 ข้อ
 
 ### กฎเฉพาะฉบับนี้
 
 - test case ต้องอ่านแล้วทำตามได้ทันที: ขั้นตอน · ข้อมูลเข้า · ผลที่คาด (ตัวเลข/ข้อความจริง)
-- ตัวเลขเป้าหมายความครอบคลุมใช้ตาม `testing-standards` ไม่ตั้งเอง
+- ตัวเลขเป้าหมายความครอบคลุมใช้ตาม `test-automation` ไม่ตั้งเอง
 - เอกสารส่งมอบไม่อ้าง path ใน `_to_delete/` และไม่มีหัวข้อ "ตัดสินใจเอง" (ไว้ใน BUILD-PLAN)
 - สคริปต์ตรวจ (ทุก FR มี TC ≥ 2 · ทุก AC Ready มี TC · รหัสไม่ซ้ำ) เก็บไว้ใน `_to_delete/tc-check/` เพื่อรันซ้ำเมื่อ SRS เปลี่ยน
 
@@ -265,20 +265,20 @@ agent `qa-tester` · skill `test-case-template` · `testing-standards` · `e2e-t
 
 ## 10. เขียนเอกสารเชิงเทคนิค (เลือกหนึ่งชนิดต่อครั้ง)
 
-agent `technical-writer` หรือ `system-analyst` · skill `design-gate/polished-document-style` · `software-diagrams`
+agent `technical-writer` หรือ `system-analyst` · skill `design-gate/polished-document-style` · `diagrams`
 
 อ่าน `docs/README.md` · `docs/<รหัส>-SRS-*.docx` · `docs/<รหัส>-ARCH-*.docx` (เท่าที่มี · อ่าน .docx ด้วย `anthropic-skills:docx`) ก่อน แล้วทำตามหัวข้อของชนิดที่เลือก
 
 **ชนิดที่ต้องการ:** <!-- API-SPEC / DATA-DICTIONARY / ADR / PROMPT-LIBRARY / EVALUATION-POLICY / RUNBOOK -->
 
 #### API-SPEC → `docs/API-SPEC.md`
-ตามกฎใน skill `api-conventions` และ `web-service-essentials` (รูปแบบ error อยู่ที่ `web-service-essentials`) · ทุก endpoint มี request · response · error ทุกรหัส · ตัวอย่างจริง 1 ชุด
+ตามกฎใน skill `api-design` และ `web-service-essentials` (รูปแบบ error อยู่ที่ `web-service-essentials`) · ทุก endpoint มี request · response · error ทุกรหัส · ตัวอย่างจริง 1 ชุด
 
 #### DATA-DICTIONARY → `docs/DATA-DICTIONARY.md`
 ตามกฎใน skill `database-design` · ต่อตาราง: ความหมาย · คอลัมน์ · คีย์และดัชนี · ข้อมูลส่วนบุคคลหรือไม่ · ระยะเวลาเก็บ · ER diagram รวม 1 ภาพ · ระบบไม่มีฐานข้อมูลแต่มีไฟล์ตั้งค่าหรือสคีมา → ทำกับโครงข้อมูลนั้นแทน · ชื่อฟิลด์ใช้ชุดเดียวกับ FSD และ test case
 
 #### ADR → `docs/decisions/ADR-NNNN-<เรื่อง>.md`
-ตามโครงของ skill `adr-writer` (ตัวเลือกอย่างน้อย 2 ข้อ · สถานะ เสนอ/ยอมรับ/แทนที่)
+ตามโครงของ skill `architecture` (ตัวเลือกอย่างน้อย 2 ข้อ · สถานะ เสนอ/ยอมรับ/แทนที่)
 
 #### PROMPT-LIBRARY → `docs/PROMPT-LIBRARY.md`
 (เมื่อระบบใช้ LLM) ต่อ prompt: รหัส · วัตถุประสงค์ · ตัวแปรนำเข้า · ตัวเต็ม · รูปแบบผลลัพธ์ที่คาด · ตัวอย่างดี/ไม่ดี · เวอร์ชันและโมเดลที่ทดสอบ
@@ -287,7 +287,7 @@ agent `technical-writer` หรือ `system-analyst` · skill `design-gate/pol
 (เมื่อระบบใช้ LLM หรือโมเดลที่ผลไม่ถูกเสมอ) วัดอะไร · ชุดข้อมูลประเมิน · เกณฑ์ผ่านเป็นตัวเลข · ใครตรวจและบ่อยแค่ไหน · ทำอย่างไรเมื่อตกเกณฑ์
 
 #### RUNBOOK → `docs/runbook-<เรื่อง>.md`
-ใช้ skill `incident-runbook-template` · ต่อเหตุการณ์: อาการที่เห็น · ตรวจอะไรก่อน · ทำอะไรตามลำดับ (คำสั่งจริง) · เมื่อไรต้องเรียกใคร · วิธียืนยันว่าหายแล้ว
+ใช้ skill `incidents-and-monitoring` · ต่อเหตุการณ์: อาการที่เห็น · ตรวจอะไรก่อน · ทำอะไรตามลำดับ (คำสั่งจริง) · เมื่อไรต้องเรียกใคร · วิธียืนยันว่าหายแล้ว
 
 ### กฎเฉพาะฉบับนี้
 
@@ -299,7 +299,7 @@ agent `technical-writer` หรือ `system-analyst` · skill `design-gate/pol
 
 ## 11. สร้าง prompt agent-loop ของโปรเจกต์นี้
 
-agent `solution-architect` + `project-manager` · skill `superuser` (อ่าน playbook `unattended-run` `feature` `bug-fix` `visual-parity` `pickup-and-pause` ก่อนเขียน) · `spec-to-code-loop` · `app-verifier-setup` · `testing-standards` · `superuser:ground-rules`
+agent `solution-architect` + `project-manager` · skill `superuser` (อ่าน playbook `unattended-run` `feature` `bug-fix` `visual-parity` `pickup-and-pause` ก่อนเขียน) · `spec-to-code-loop` · `test-automation` · `superuser:ground-rules`
 **ต้องมีก่อน:** `docs/<รหัส>-SRS-*.docx` · `mockup/<รหัส>-mockup.html` (ถ้ามีหน้าจอ) · `docs/<รหัส>-ARCH-*.docx` · `docs/<รหัส>-FSD-*.docx` · `docs/<รหัส>-TESTPLAN-*.docx` (เท่าที่ขนาดงานมี) — ชื่อไฟล์จริงดูจากสารบัญ `docs/README.md` ถ้าโปรเจกต์ตั้งชื่อต่างจากนี้ · **render .docx ที่อ้างให้มีจริงก่อนเริ่มฉบับนี้**
 **ผลลัพธ์:** `docs/AGENT-LOOP.md` ไฟล์เดียว — prompt สำเร็จรูปที่ผู้ใช้จะเอาไปสั่งให้ agent เขียนโปรแกรมของโปรเจกต์นี้ทีละข้อกำหนด · **ฉบับนี้เขียน prompt อย่างเดียว ห้ามเริ่มเขียนโค้ด ห้ามรัน loop**
 
@@ -311,7 +311,7 @@ agent `solution-architect` + `project-manager` · skill `superuser` (อ่า�
 4. รายการรหัสข้อกำหนด (`FR-…`) ทั้งหมดจาก SRS พร้อมลำดับการพึ่งพาที่แนะนำ · FR ไหนมีหน้าจอ ให้ระบุ section ใน `mockup/<รหัส>-mockup.html` ที่ต้องเทียบ (`#s-<หน้าจอ>`)
 5. test case ที่ต้องผ่านต่อ FR (อ้างรหัสจาก test plan ถ้ามี)
 6. ข้อห้ามเฉพาะโปรเจกต์ (เช่น ห้ามต่อระบบจริง ห้ามใช้ข้อมูลส่วนบุคคลจริง) จาก NFR/สถาปัตยกรรม
-7. skill ตรวจแอปของโปรเจกต์ (สร้างด้วย `app-verifier-setup`) — path และคำสั่งเริ่ม · ถ้ายังไม่มี ให้กำหนดว่า "ข้อที่สองของแผนคือสร้าง verify skill" ต่อจากการตั้งโครงโปรเจกต์
+7. skill ตรวจแอปของโปรเจกต์ (สร้างด้วย `test-automation`) — path และคำสั่งเริ่ม · ถ้ายังไม่มี ให้กำหนดว่า "ข้อที่สองของแผนคือสร้าง verify skill" ต่อจากการตั้งโครงโปรเจกต์
 
 ### โครงของ `docs/AGENT-LOOP.md` ที่ต้องเขียน
 
@@ -333,7 +333,7 @@ agent `solution-architect` + `project-manager` · skill `superuser` (อ่า�
 4. **ไฟล์สถานะ `docs/BUILD-PLAN.md`** — ทุกรอบอ่านไฟล์นี้ก่อน สถานะอยู่ในไฟล์ ไม่อยู่ในหัว agent:
    - ตารางค่าคงที่ `| รายการ | ค่า |` แถว `install` `test` `smoke` `รันแอป` `URL แอป` (ค่าอยู่ใน backtick)
    - ตารางงาน — ถ้ามีอยู่แล้วจากการวางแผน ใช้หัวตารางเดิมได้ แต่ต้องมีคอลัมน์ `milestone` `พึ่งแถว` `เกณฑ์เสร็จ` `สถานะ` `commit` · ถ้ายังไม่มี ใช้ `| # | รหัส | milestone | ข้อกำหนด | ไฟล์อ้างอิง | พึ่งแถว | เกณฑ์เสร็จ | สถานะ | commit |` · ช่อง `milestone` ใส่รหัส `M…` จากแผนโครงการ (ฉบับ 1) · ไม่มีแผน → ว่างได้ · 1 แถว = งาน 1 ก้อนที่ commit ได้ในครั้งเดียว (FR เดียว หรือกลุ่ม FR ที่แยกไม่ได้) · สถานะใช้แค่ `รอทำ` `กำลังทำ` `เสร็จ` `ติด` (ชุดคำสำหรับโค้ดและ build ของ `superuser/status-report`)
-   - ยังไม่มี verify skill → ต้องมีแถว "สร้าง verify skill (`app-verifier-setup`)" ต่อจากแถวตั้งโครง — **เขียนลงตารางจริง** ไม่ใช่แค่บอกใน prompt
+   - ยังไม่มี verify skill → ต้องมีแถว "สร้าง verify skill (`test-automation`)" ต่อจากแถวตั้งโครง — **เขียนลงตารางจริง** ไม่ใช่แค่บอกใน prompt
    - หัวข้อ `## คำถามค้าง` (คอลัมน์ `คำตอบ · วันที่ · ใครตอบ`) และ `## ผลปิดงาน`
    - หัวข้อ `## สถานะล่าสุด` `## ประวัติสถานะ` และ `## ตัดสินใจเอง` (มีอยู่แล้วจากตอนทำเอกสาร) — **เก็บไว้ ห้ามลบ**
 5. **ด่านก่อนแถวโค้ดแรก**: การตัดสินใจที่ผูกทั้งโปรเจกต์และย้อนยาก (ภาษา เฟรมเวิร์ก ฐานข้อมูล — ADR ที่ยังเป็น "เสนอ") ต้องยืนยันแล้ว · ยังไม่ยืนยัน → ไม่เริ่มแถวโค้ด จบรอบด้วย `BLOCKED` พร้อมคำถามใน `## คำถามค้าง` · ระบุชื่อ ADR ที่ต้องยืนยันลงใน prompt · งานที่ ADR ต้องใช้ตัดสิน (spike) ทำก่อนด่านได้ แต่ระบุให้ชัด
@@ -371,7 +371,7 @@ agent `solution-architect` + `project-manager` · skill `superuser` (อ่า�
 
 ## 13. ตรวจเอกสาร (อ่านอย่างเดียว)
 
-ใช้ agent ที่ไม่ได้เขียนเอกสารนั้น ห้ามแก้ไฟล์ · skill `code-review-checklist` (หมวดเอกสาร) · `design-gate/polished-document-style`
+ใช้ agent ที่ไม่ได้เขียนเอกสารนั้น ห้ามแก้ไฟล์ · skill `git-and-review` (หมวดเอกสาร) · `design-gate/polished-document-style`
 **ไฟล์:** <!-- เช่น docs/ABC-SRS-v0.1-DRAFT.docx (อ่านด้วย anthropic-skills:docx) หรือ docs/API-SPEC.md -->
 
 ### ตรวจ
@@ -383,7 +383,7 @@ agent `solution-architect` + `project-manager` · skill `superuser` (อ่า�
 5. ตัวย่อเขียนเต็มครั้งแรกไหม · ศัพท์สม่ำเสมอไหม
 6. ตรงกับ `docs/README.md` ไหม (ชื่อไฟล์ · สถานะ)
 7. รูปแบบ: ตารางเทียบ 2 ของขึ้นไป · ไดอะแกรมอ่านได้ (ไม่เกิน 7 กล่อง ลูกศรมีป้าย) · ไฟล์ .md ผ่าน `check-mermaid-theme.mjs` · ไฟล์ต้นทางของรูปออกแบบผ่าน `check-figure-source.py` (ฉบับ 14 ข้อ 3) — agent หลักรันแล้วส่งผลให้ผู้ตรวจ
-8. ชื่อไฟล์ตาม `workspace-rules/document-naming` · `docs/` ไม่มี .md ของเอกสารส่งมอบซ้ำกับ .docx · ไม่มี .pdf ที่ไม่ได้ขอ (ยกเว้นคู่มือผู้ใช้) · ชุดเอกสารครบตาม `project-doc-set` ข้อ 2.1 ของขนาดงานนั้น · .docx ใหม่กว่าร่างทุกฉบับ (เทียบเวลาแก้ไฟล์)
+8. ชื่อไฟล์ตาม `workspace-rules/document-naming` · `docs/` ไม่มี .md ของเอกสารส่งมอบซ้ำกับ .docx · ไม่มี .pdf ที่ไม่ได้ขอ (ยกเว้นคู่มือผู้ใช้) · ชุดเอกสารครบตาม `project-docs` ข้อ 2.1 ของขนาดงานนั้น · .docx ใหม่กว่าร่างทุกฉบับ (เทียบเวลาแก้ไฟล์)
 
 ### รายงาน
 
@@ -396,15 +396,15 @@ agent `solution-architect` + `project-manager` · skill `superuser` (อ่า�
 
 ## 14. Render ร่างเป็นเอกสารส่งมอบ (.docx)
 
-agent `technical-writer` · skill `branded-document-design` · `workspace-rules/document-naming` · `diagram-figures` · `anthropic-skills:docx` · `anthropic-skills:pdf` (ถ้ามี · 2 skill นี้มีเฉพาะใน Claude · ไม่มี → ใช้ `branded-document-design` อย่างเดียว ซึ่งต้องรัน Python ได้) · technical-writer ไม่มี shell → agent หลักรัน render และตัวตรวจเอง
+agent `technical-writer` · skill `document-design` · `workspace-rules/document-naming` · `diagrams` · `anthropic-skills:docx` · `anthropic-skills:pdf` (ถ้ามี · 2 skill นี้มีเฉพาะใน Claude · ไม่มี → ใช้ `document-design` อย่างเดียว ซึ่งต้องรัน Python ได้) · technical-writer ไม่มี shell → agent หลักรัน render และตัวตรวจเอง
 **ต้นฉบับ:** <!-- เช่น _to_delete/drafts/srs.md -->
 
 ### ลำดับ
 
 1. อ่าน `docs/README.md` เอารหัสโปรเจกต์และ `doc-theme` (สีแบรนด์เดียวกับ mockup) · อ่านต้นฉบับฉบับปัจจุบันจากดิสก์
 2. ตั้งชื่อไฟล์ส่งมอบตาม `workspace-rules/document-naming`: `docs/<รหัส>-<ประเภท>-v<M.m>-<สถานะ>.docx`
-3. สร้าง .docx ด้วย builder ของ `branded-document-design` (`scripts/brandkit.py` — ใช้ตัวแปลง markdown ของ skill ถ้ามี ไม่เขียนธีมเอง): หน้าปก (มี `docs/design/cover-direction.md` → ใช้ตัวสร้างปกที่ระบุในนั้น · ยังไม่มีและโปรเจกต์มีโลโก้กับ mockup แล้ว → เสนอ `prompt-doc-cover.md` ในรายงาน) · สารบัญอัตโนมัติ · ตารางสีแบรนด์ · ส่วนหัว/ท้ายหน้า · ภาพและไดอะแกรมแทรกครบ (เจอ Mermaid ในร่าง → ทำรูปใหม่ด้วย `diagram-figures` ไม่แปลงตรง ๆ)
-   - รูปออกแบบทำตามกฎใน `diagram-figures` ทั้งหมด (เริ่มจากโครงใน `assets/` · ไอคอนทางการ · รายการตรวจข้อ 9) และรัน `python <ที่ติดตั้ง plugin>/skills/diagram-figures/scripts/check-figure-source.py <โฟลเดอร์ไฟล์ต้นทางของรูป>` ได้ exit 0 · วันที่ในรูปใช้รูปแบบเดียวกับเอกสาร
+3. สร้าง .docx ด้วย builder ของ `document-design` (`scripts/brandkit.py` — ใช้ตัวแปลง markdown ของ skill ถ้ามี ไม่เขียนธีมเอง): หน้าปก (มี `docs/design/cover-direction.md` → ใช้ตัวสร้างปกที่ระบุในนั้น · ยังไม่มีและโปรเจกต์มีโลโก้กับ mockup แล้ว → เสนอ `prompt-doc-cover.md` ในรายงาน) · สารบัญอัตโนมัติ · ตารางสีแบรนด์ · ส่วนหัว/ท้ายหน้า · ภาพและไดอะแกรมแทรกครบ (เจอ Mermaid ในร่าง → ทำรูปใหม่ด้วย `diagrams` ไม่แปลงตรง ๆ)
+   - รูปออกแบบทำตามกฎใน `diagrams` ทั้งหมด (เริ่มจากโครงใน `assets/` · ไอคอนทางการ · รายการตรวจข้อ 9) และรัน `python <ที่ติดตั้ง plugin>/skills/diagrams/scripts/check-figure-source.py <โฟลเดอร์ไฟล์ต้นทางของรูป>` ได้ exit 0 · วันที่ในรูปใช้รูปแบบเดียวกับเอกสาร
    - ตัวแปลงที่เขียนเองต้องผ่านร่างทดสอบที่มี: ตารางกว้าง 7 คอลัมน์ 60 แถว · ตัวแยกตาราง `:-:` · บรรทัดขึ้นต้นด้วย `|` `>` `!` ที่ไม่ใช่บล็อก · รูป · และต้องมี timeout
 4. ทำ `.pdf` เฉพาะคู่มือผู้ใช้ หรือเมื่อลูกค้าขอ — นอกนั้นไม่ทำ
 5. **ดูผลที่ render จริง**: แปลงทุกหน้าเป็นภาพ (Word ผ่าน COM หรือ LibreOffice → PDF → PNG) แล้วดูอย่างน้อยหน้าปก หน้าที่มีตารางยาว และหน้าที่มีไดอะแกรม — ตารางไม่ล้นขอบ **ไม่มีตารางที่หลุดเป็นข้อความดิบ (`|`)** ภาพไม่ขาด ภาษาไทยอ่านได้ ไม่มีสารบัญซ้ำ 2 ชุด
@@ -420,9 +420,9 @@ agent `technical-writer` · skill `branded-document-design` · `workspace-rules/
 
 ## 15. Document Checklist (ขนาด L)
 
-agent `project-manager` · skill `project-doc-set` · `branded-document-design`
+agent `project-manager` · skill `project-docs` · `document-design`
 **ต้องมีก่อน:** เอกสารส่งมอบของขนาดงานนี้ครบหรือรู้ว่าขาดอะไร
 **ผลลัพธ์:** `docs/<รหัส>-CHECKLIST-v<M.m>-<สถานะ>.docx` (ร่าง `_to_delete/drafts/checklist.md` → render ตามฉบับ 14)
 
-- เริ่มจากแม่แบบ `project-doc-set/assets/doc-set-checklist.md` กรอกจากของที่มีจริงใน `docs/` · `qa/` · `mockup/` — ช่องที่ยังไม่รู้เขียน `(รอยืนยัน)`
+- เริ่มจากแม่แบบ `project-docs/assets/doc-set-checklist.md` กรอกจากของที่มีจริงใน `docs/` · `qa/` · `mockup/` — ช่องที่ยังไม่รู้เขียน `(รอยืนยัน)`
 - ขนาด S · M ไม่ต้องทำฉบับนี้

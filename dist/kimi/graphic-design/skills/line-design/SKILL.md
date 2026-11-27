@@ -14,7 +14,7 @@ Two jobs, one skill. Pick the body by the job, open it, and follow it in full. B
 | LINE Official Account (OA) rich menu: image, JSON, upload, seasonal swap | [references/rich-menu.md](references/rich-menu.md) |
 | LINE stickers (static, animated) or emoji for Creators Market or a shop | [references/sticker.md](references/sticker.md) |
 
-Not for: OA setup, chatbot, broadcast → `line-oa-setup` · `line-chatbot` · `line-broadcast` (plugin `e-commerce`, if installed) · print stickers → `print-ready-files` · post images → `campaign-set`.
+Not for: OA setup, chatbot, broadcast → `line-oa` (plugin `e-commerce`, if installed) · print stickers → `print-ready-files` · post images → `campaign-set`.
 
 ## Hard rules: rich menu
 

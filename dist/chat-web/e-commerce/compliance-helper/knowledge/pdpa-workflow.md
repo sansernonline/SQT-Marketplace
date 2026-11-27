@@ -59,7 +59,7 @@ Consent is the weakest basis — it can be withdrawn. Pick the basis first (ม.
 | Courier accounts (labels, COD records) | yes / no | |
 | Backups and old exports | yes / no | |
 
-5. **Decide per item**: fulfil, partly, or refuse. Write every refusal with its reason and the law relied on (for example, tax records must be kept 5–7 years, `sme-bookkeeping` section 2), and keep that note with the ROPA (the Act requires refusals to be recorded, ม.30 and ม.39, รอยืนยัน the exact paragraph).
+5. **Decide per item**: fulfil, partly, or refuse. Write every refusal with its reason and the law relied on (for example, tax records must be kept 5–7 years, `shop-books` → `references/sme-bookkeeping.md` section 2), and keep that note with the ROPA (the Act requires refusals to be recorded, ม.30 and ม.39, รอยืนยัน the exact paragraph).
 6. **Reply in writing by day 30**: what was found, what was done, what was refused and why, and how to complain to สคส.
 7. **We only process the data for someone else** (for example, we pack orders for another brand): forward the request to that controller the same day and tell the person who will answer.
 
@@ -87,7 +87,7 @@ When the vendor sends its own agreement (chatbot, CRM, fulfilment warehouse, ad 
 - data is returned or deleted when the contract ends, with written confirmation
 - the country where data is stored; storage abroad needs the cross-border check (lawyer)
 
-These duties of a processor (ผู้ประมวลผลข้อมูลส่วนบุคคล) come from ม.40 (รอยืนยัน the full list in the Act's text on pdpc.or.th). Clauses that cap the vendor's liability at a token amount or let it use our customers' data for its own purposes go to a lawyer (`doc-contract-th` section 6).
+These duties of a processor (ผู้ประมวลผลข้อมูลส่วนบุคคล) come from ม.40 (รอยืนยัน the full list in the Act's text on pdpc.or.th). Clauses that cap the vendor's liability at a token amount or let it use our customers' data for its own purposes go to a lawyer (`thai-business-docs` → `references/doc-contract-th.md` section 6).
 
 ## Worked example
 
@@ -103,7 +103,7 @@ Health data is sensitive, so the risk is high. Contain: delete the message, ask 
 
 ## Related
 
-`line-chatbot` (chat logs) · `doc-leave` (health certificates) · `payroll-th` · `doc-contract-th` (data clauses) · if installed: `pdpa-compliance`, `audit-trail` (software-development).
+`line-oa` (chat logs) · `thai-employment` (health certificates) · `thai-business-docs` (data clauses) · if installed: `pdpa-compliance`, `web-service-essentials` (software-development).
 
 ## เรียกเป็นคำสั่ง
 

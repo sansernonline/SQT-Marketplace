@@ -1,0 +1,76 @@
+<!-- merged from skill `flood-prep` on 2026-11-27 · description was: Use when a Thai home may flood or has flooded -->
+# Flood Prep (Thailand)
+
+> **One rule:** power off at the main breaker before water reaches the sockets, and people before property. Someone trapped, injured or in moving water → **1669** (medical) or **1784** (ปภ.) first.
+
+General information, not engineering or insurance advice. Electrical work goes to the การไฟฟ้า or a licensed electrician.
+
+## Use when / not when
+
+| Situation | Use |
+|---|---|
+| Warning that water is coming; what to do in the next 48 hours | this skill |
+| Water receded: cleaning, relief money, insurance claim | this skill |
+| Yearly roof, gutter and drain work before the rains | `home-maintenance.md` |
+| Car policy class, renewal | `vehicle-care.md` |
+| Lost ID card, title deed or policy papers | `family-legal` |
+| Is my home or health cover enough | `retirement-and-insurance` (trading-finance, if installed) |
+
+## 1 · Where warnings come from
+
+| Who | Contact | For |
+|---|---|---|
+| กรมป้องกันและบรรเทาสาธารณภัย (ปภ.) | 1784 (24 h) | Disaster warnings and rescue |
+| กรมอุตุนิยมวิทยา | 1182 · tmd.go.th | Rain and storm forecasts |
+| กรมชลประทาน | 1460 | Dam releases, river levels |
+| Cell Broadcast | arrives on the phone by itself | ปภ. sent real flood alerts this way in 2569 (e.g. 29 Sep 2569); keep emergency alerts switched on in phone settings |
+| การไฟฟ้านครหลวง / ส่วนภูมิภาค | 1130 / 1129 | Power cuts, moving a meter or socket |
+
+Do not act on forwarded LINE messages alone — check one official source.
+
+## 2 · Before the water — checklist
+
+- [ ] **Power first:** if water may reach the sockets, switch off the main breaker before it arrives (steps in section 3)
+- [ ] **Documents** in zip bags, high up or with someone dry: ID cards, ทะเบียนบ้าน, title deeds, policies, bank books; photos of each in the phone (`family-legal`)
+- [ ] **Photos and video of every room and big appliance now** — the "before" for claims and relief
+- [ ] Move appliances, cables and the rice/water stock upstairs or onto blocks
+- [ ] Car to high ground (a car park building) before roads close
+- [ ] Go-bag: water and food for 3 days, medicines with the label and list (`health-admin`), torch, power bank, radio, whistle, cash, baby or pet supplies
+- [ ] Sandbags or boards at doors and floor drains; plug toilets and floor drains from below if water rises through them
+- [ ] Agree where the family meets and who checks on elders (`family-care`)
+
+## 3 · Power and gas
+
+- **Switch off the main breaker** (เบรกเกอร์ / คัตเอาต์) before water reaches the sockets. Two-storey house: cut only the ground-floor circuit if wired separately; one-storey house: do not use electricity at all once water comes in.
+- Never touch switches, plugs or a meter while wet or standing in water; keep 1–3 m from a flooded meter. The การไฟฟ้า cuts power by area — ask the community leader to request it.
+- After the water: have an electrician check before switching on; appliances that were under water are checked before use.
+- **Gas:** close the cylinder valve and the regulator, move the cylinder up and tie it so it cannot float. Smell of gas → no switches, no flame, open windows, leave. (General safety practice; no official ปภ. page on gas was found on the check date — รอยืนยัน.)
+
+## 4 · After the water — money back
+
+**Government relief** (register at the อปท./เขต/อำเภอ, keep the photos):
+
+| Scheme | Amount | Status |
+|---|---|---|
+| ระเบียบกระทรวงการคลัง emergency relief (new criteria for disasters from 6 Mar 2569) | House repair up to 88,600 บาท (actual cost, owner-occupied, not rented); rent 2,500/month up to 2 months; tools of trade up to 13,500 per family; basic living 4,900 if the house is lost; funeral up to 35,700 | confirmed (thaigov.go.th 8 Oct 2569); exact regulation title รอยืนยัน |
+| Cabinet flat payment | A flat amount per flooded household, with a lower tier for households cut off by water. Each round needs its own cabinet decision with set flood dates. Look up the current amount, tiers and covered flood period at https://www.thaigov.go.th/th/news/169925 or the latest cabinet news live (WebSearch/WebFetch) before quoting; if the page will not open, mark the value (รอยืนยัน) | register via the ทางรัฐ app or the อปท.; paid to PromptPay linked to the ID card. Never promise it for a flood outside the dates in the current decision |
+
+**Insurance:**
+
+- Home fire policy: natural perils (flood, storm, earthquake, hail) usually covered **up to 20,000 บาท a year in total** unless you bought more (รอยืนยัน — คปภ. statement 30 Mar 2568 and policy wordings, no OIC document) — read the policy schedule.
+- Car: class 1 covers flood; class 2, 3 and 3+ usually do not unless a flood rider was added; some 2+ policies include it — check yours (รอยืนยัน). พ.ร.บ. does not pay for the car.
+- Claim: call the insurer before cleaning or repairing, send the before and after photos, keep damaged items until the surveyor sees them. Insurer refuses → คปภ. 1186.
+
+## Check before sending
+
+- [ ] 1669 / 1784 line is in any answer where someone is trapped, hurt or in water
+- [ ] Breaker-off step comes before "move things"
+- [ ] Every amount has its status and date range; expired schemes are not promised
+- [ ] Photos-before step is in the checklist
+
+Related: `home-maintenance.md` · `vehicle-care.md` · `family-legal` · `family-care`
+
+## References
+
+- [`worked-example.md`](flood-prep/worked-example.md) — open to see a 2-day-warning case from photos to relief registration
+- [`sources.md`](flood-prep/sources.md) — open when re-checking relief amounts, hotlines and insurance facts (checked 2026-10-26)

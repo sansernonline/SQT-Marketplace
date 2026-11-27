@@ -123,12 +123,12 @@ Code items with the same status can be merged into an ID range (`FR-001 ถึ�
 
 ## parallel-attempts-pick-best
 
-- Each competitor uses its own git worktree per the section "parallel-split-and-merge (one worktree per agent)" above · scoring criteria for code work: less code · easy to read · passes tests · meets every requirement · if close, choose the one with the cleaner scope and the smaller Application Programming Interface (API) (`lazy-coding`)
+- Each competitor uses its own git worktree per the section "parallel-split-and-merge (one worktree per agent)" above · scoring criteria for code work: less code · easy to read · passes tests · meets every requirement · if close, choose the one with the cleaner scope and the smaller Application Programming Interface (API) (`code-craft`)
 - The Docker room (`docker-sandbox -Isolated`) only for work that needs a truly separate machine.
 
 ## team-roles (splitting work)
 
-- Code work worth splitting = the total code expected to be written is ≥ 200 lines (measured by the 2026-11-11 bench: 4 modules totalling about 100 lines cost 1.6 times more when split and were not faster) · shared items = types · interfaces · function names · `package.json` · index · the rules in the work order point to `stack-*` + `lazy-coding` + `readable-code` · the returned result includes the test result · when merging, run the whole test suite before sending to `reviewer`
+- Code work worth splitting = the total code expected to be written is ≥ 200 lines (measured by the 2026-11-11 bench: 4 modules totalling about 100 lines cost 1.6 times more when split and were not faster) · shared items = types · interfaces · function names · `package.json` · index · the rules in the work order point to `stack-*` + `code-craft` · the returned result includes the test result · when merging, run the whole test suite before sending to `reviewer`
 - On big work, the team lead does not write large pieces of code itself and sends them to `developer` · shared items and small pieces it can still do itself.
 
 ## adversarial-review-panel
@@ -142,8 +142,8 @@ Code items with the same status can be merged into an ID range (`FR-001 ถึ�
 
 ## document-naming (code-work rows)
 
-- docx project document set: Project Plan · Business Requirements Document (BRD) · Software Requirements Specification (SRS) · Architecture · Functional Specification Document (FSD) · Test Plan (`project-doc-set` item 2.1) · User Acceptance Testing (UAT) sign-off sheet — the docx format is signed by people, so the version must be locked
-- Architecture Decision Record (ADR) · API spec · data dictionary · runbook · README → markdown — ADRs in `docs/decisions/` and runbooks in `docs/` at the root (`project-doc-set` item 1) · README in the code folder · they change with the code and must be diffable
+- docx project document set: Project Plan · Business Requirements Document (BRD) · Software Requirements Specification (SRS) · Architecture · Functional Specification Document (FSD) · Test Plan (`project-docs` → `references/project-doc-set.md` item 2.1) · User Acceptance Testing (UAT) sign-off sheet — the docx format is signed by people, so the version must be locked
+- Architecture Decision Record (ADR) · API spec · data dictionary · runbook · README → markdown — ADRs in `docs/decisions/` and runbooks in `docs/` at the root (`project-docs` → `references/project-doc-set.md` item 1) · README in the code folder · they change with the code and must be diffable
 - ADR file name: `ADR-NNNN-<slug>.md`, numbered in sequence, in `docs/decisions/`, for example `docs/decisions/ADR-0007-choose-whisper.md`
 - Earlier examples: `TRS-SRS-v1.2-APPROVED.docx` · `TRS-FSD-recording-v0.3-DRAFT.docx` · `docs/runbook-recording.md`
 
@@ -162,7 +162,7 @@ Architecture Decision Record (ADR) · User Interface (UI) · User Experience (UX
 
 | Subfolder | What goes in | Skill that uses it |
 |---|---|---|
-| `verify-runs/` | Screenshots and run output of the real app during checking (verify evidence) | `app-verifier-setup` · `spec-to-code-loop` |
+| `verify-runs/` | Screenshots and run output of the real app during checking (verify evidence) | `test-automation` · `spec-to-code-loop` |
 | `screenshots/` | Rendered images of a design or mockup (previously referenced) | `mobile-app-design` · `web-app-design` · `windows-app-design` |
 | `security/` | Raw scan output | `security-gate` |
 | `check/` | The old name `spec-to-code-loop` used for check images; new work uses `verify-runs/` instead | `spec-to-code-loop` |
@@ -170,12 +170,12 @@ Architecture Decision Record (ADR) · User Interface (UI) · User Experience (UX
 ## principle-small-verifiable-steps
 
 - Every commit is readable on its own and builds, so a reviewer can go through it commit by commit and trust it
-- A Pull Request (PR) that changes more than 400 lines should be split into several PRs in a chain (the same threshold as `pr-description-template` and `code-review-checklist`)
-- For message format use `workspace-rules/commit-log` · if setting up commitlint or automatic releases → `commit-message-format`
-- Order: things others depend on (types · schemas · shared functions) before the things that call them · changing existing things → `principle-replace-then-delete`
+- A Pull Request (PR) that changes more than 400 lines should be split into several PRs in a chain (the same threshold as `git-and-review`)
+- For message format use `workspace-rules/commit-log` · if setting up commitlint or automatic releases → `git-and-review`
+- Order: things others depend on (types · schemas · shared functions) before the things that call them · changing existing things → `code-craft`
 
 ## principle-user-experience-first
 
 - Every screen has 5 states and ranks importance on the page → `ui-craft`
 - Text, dates, numbers, money, multiple languages → `i18n-and-locale`
-- Check the real thing by opening the app → `app-verifier-setup`
+- Check the real thing by opening the app → `test-automation`

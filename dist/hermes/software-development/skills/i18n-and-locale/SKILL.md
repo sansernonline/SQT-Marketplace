@@ -21,8 +21,8 @@ description: Use when a system shows text, dates or money in Thai and English
 | Task | Use this instead |
 |---|---|
 | Date and time data types in the database | `database-design` |
-| Date and time format in JSON | `api-conventions` |
-| Thai fonts and document layout | `branded-document-design` |
+| Date and time format in JSON | `api-design` |
+| Thai fonts and document layout | `document-design` |
 | Thai fonts on screen | the platform skill + `ui-craft` |
 
 ---
@@ -162,7 +162,7 @@ So let a library handle it. Do not write `if (count > 1)` yourself, because some
 
 ## Links to other skills
 
-`error-handling-patterns` (error messages that must be translated) · `presentation-design` (Thai fonts in slides) · `data-import-export` (B.E. years in imports · CSV that opens in Excel) · `notifications` (multi-language message templates) · `human-writing/translate-th-en` (plugin `superuser`: translating whole documents, a glossary per project)
+`errors-and-logs` (error messages that must be translated) · `slide-deck` (Thai fonts in slides) · `data-import-export` (B.E. years in imports · CSV that opens in Excel) · `async-messaging` (multi-language message templates) · `human-writing/translate-th-en` (plugin `superuser`: translating whole documents, a glossary per project)
 
 ## References
 

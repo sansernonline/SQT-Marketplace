@@ -178,7 +178,7 @@ The situation → skill table (14 rows) is in [`triggers`](references/triggers.m
 
 | criterion | passes when | skill |
 |---|---|---|
-| **Numbers have source and time** | every price, rate and rule carries a source and a time or year; calculations use a script or formula that can be rerun | `portfolio-snapshot` · `tax-basics-th` |
+| **Numbers have source and time** | every price, rate and rule carries a source and a time or year; calculations use a script or formula that can be rerun | `portfolio` · `income-tax-th` |
 | **Risk before profit** | every position has a stop-loss, size has passed `risk-manager`, and concentration has been checked | `position-sizing` |
 | **The decision is the user's** | shows data and options with numbers; never orders a buy or sell; no "ควรซื้อ" or "ต้องขาย" | every skill |
 

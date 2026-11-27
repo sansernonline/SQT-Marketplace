@@ -171,7 +171,7 @@ function selfTest() {
   ] };
   const acc = tallyEval(sample, {}, { threshold: 0.8, plugin: "e-commerce" });
   const rows = gradeAll(acc, 3);
-  const quote = rows.find((r) => r.skill === "doc-quotation"), cash = rows.find((r) => r.skill === "cash-flow");
+  const quote = rows.find((r) => r.skill === "thai-business-docs"), cash = rows.find((r) => r.skill === "shop-books");
   const trig = tallyTriggers([{ id: "t1", expect_all: ["human-writing"], expect_none: ["superuser"] }],
     [{ id: "t1", run: 1, skills: ["superuser:human-writing", "superuser:superuser"] }, { id: "t1", run: 2, skills: ["human-writing"] }], {}, () => "superuser");
   const cases = [

@@ -8,7 +8,7 @@ Fill the blanks in the template below.
 - `ชื่องาน` (work name): พอร์ตหุ้น
 - `งานนี้คืออะไร` (what this work is): what it covers (portfolio · budget · tax) and the overall status
 - `กติกา` (rules): risk per trade (%) · where the capital file is (no amounts) · where the trade journal file is · this month's rules
-- Example IMPROVEMENTS row: the deduction ceiling of one kind of tax-saving fund changed this tax year · evidence: Revenue Department website + 2 sources · merge into `tax-deduction-planner` references/deductions-2569.md
+- Example IMPROVEMENTS row: the deduction ceiling of one kind of tax-saving fund changed this tax year · evidence: Revenue Department website + 2 sources · merge into `income-tax-th` references/deductions-2569.md
 
 <!-- superuser:begin context -->
 ## CONTEXT.md

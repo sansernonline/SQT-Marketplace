@@ -30,7 +30,7 @@ A subagent does not write the table itself. It **reports its decisions back**, a
 
 **Do not log:** anything a skill or document already orders clearly, and small details that do not change the result (temporary file names · variable names).
 **Not here (the user must decide):** anything the agent cannot decide itself and must wait on before continuing that part (an old file, a wrong number, a blocked step) → [`decision-desk/flag-and-propose`](../flag-and-propose/guide.md). This skill records only what the agent decided itself and then carried on.
-**Not here (long-lived choices):** a choice that must stand for a long time and that people will later ask about (main vendor · contract form · architecture) → write a separate record such as `adr-writer` (plugin `software-development`), and add just 1 row to this table pointing to it.
+**Not here (long-lived choices):** a choice that must stand for a long time and that people will later ask about (main vendor · contract form · architecture) → write a separate record such as `architecture` (plugin `software-development`), and add just 1 row to this table pointing to it.
 
 ## How to choose when you must decide yourself
 

@@ -66,8 +66,8 @@ For brand kits, social posts, visual review and AI image sets (if plugin `graphi
 ## Skills You Use
 
 - `graphic-design` — **every job**: 4 direction axes · 7-context logo test · Thai type · what not to do, with alternatives · social and print sizes · no brand color → use the skill's defaults, mark `(รอยืนยัน)` (pending confirmation), and carry on
-- `ui-craft` (many elements: spacing, visual order, density) · `presentation-design` (the job is slides) · `product-naming` (the job is a name → name before the logo) · `superuser:ground-rules` (before every handover, cut what does not help people understand faster)
-- Exported documents: `branded-document-design` · Office files → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
+- `ui-craft` (many elements: spacing, visual order, density) · `slide-deck` (the job is slides) · `product-naming` (the job is a name → name before the logo) · `superuser:ground-rules` (before every handover, cut what does not help people understand faster)
+- Exported documents: `document-design` · Office files → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
 - Ways of working: `human-writing` · `lean-reply/answer-shape` · `human-writing/spell-out-abbreviations` · `context-budget` · `workspace-rules/temp-file-discipline` · `decision-desk/flag-and-propose` (only for forks that are irreversible, expensive, or reach outsiders · reversible ones follow `ground-rules/principle-proceed-on-reversible-work`) · `superuser/status-report` (in a SuperUser team put the table in the report; the team lead writes `docs/BUILD-PLAN.md`) · `handoff` (at the end record the agreed direction and open work)
 
 ## Standard Outputs
@@ -76,7 +76,7 @@ When you write one of these, first look for the format the project, client or te
 
 ## Things You Don't Do
 
-- App or web screens → `ux-designer` · slides or Word documents as the main work → the owner of that work (`presentation-design` · `branded-document-design`), but images placed in slides or Word you can make · system diagrams → `software-diagrams`
+- App or web screens → `ux-designer` · slides or Word documents as the main work → the owner of that work (`slide-deck` · `document-design`), but images placed in slides or Word you can make · system diagrams → `diagrams`
 - Ad copy → `technical-writer` or the work owner · prices or sales channels → the business owner
 - Copy copyrighted work, or make a logo that looks like another brand
 

@@ -100,7 +100,7 @@ The template for a project plan (timeline · milestone · risk register · Respo
 | Need | Use together with |
 |---|---|
 | The task table and the code-writing loop in the same file | `spec-to-code-loop` (plugin `software-development`) |
-| A project's document set and document status | `project-doc-set` (plugin `software-development`) |
+| A project's document set and document status | `project-docs` (plugin `software-development`) |
 | Recording context to continue in the next conversation | `handoff` |
 | The table of self-made decisions in the same file | `decision-desk/decision-log` |
 | Choosing a playbook and finishing every kind of task | `superuser` |

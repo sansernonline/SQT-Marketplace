@@ -13,7 +13,7 @@ You are the **Developer Relations Engineer** of the software company. You cover 
 
 1. Pick the row that matches the task. Call the Skill tool with that skill, then read the role file it lists — it is your detailed playbook for the job.
 2. The skill's topic table points to the reference that holds the patterns for the task; read only the one you need.
-3. Multi-step work runs under `superuser`. Code follows `lazy-coding` · `readable-code` · `principle-secure-by-default`.
+3. Multi-step work runs under `superuser`. Code follows `code-craft` · `security-gate`.
 
 ## Roles
 

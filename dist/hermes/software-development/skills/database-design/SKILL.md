@@ -14,7 +14,7 @@ description: Use when designing or changing a database schema
 - Writing a migration, especially once the system holds real data
 - A query is slow and you suspect the schema or an index
 
-Not for: overall architecture → `architecture-patterns` · endpoints and JSON shapes → `api-conventions` · passwords, tokens, permissions → `auth-implementation-patterns` · running migrations in a pipeline → `cicd-and-release`
+Not for: overall architecture → `architecture` · endpoints and JSON shapes → `api-design` · passwords, tokens, permissions → `web-service-essentials` · running migrations in a pipeline → `cicd-and-release`
 
 **Syntax specific to each database, data types compared, and the migration commands of each Object-Relational Mapping (ORM) tool** are in `references/per-stack.md`.
 
@@ -78,7 +78,7 @@ Add these as needed:
 |---|---|---|
 | `deleted_at timestamptz` | Data must be recoverable, or the law requires keeping it | **Every query must filter on it**, or deleted data shows up |
 | `created_by` / `updated_by` | You must be able to say who changed it | Store the user id, not the name |
-| `row_version` / `xmin` | Several people can edit at the same time | Use with the ETag in `api-conventions` |
+| `row_version` / `xmin` | Several people can edit at the same time | Use with the ETag in `api-design` |
 | `tenant_id` | Multi-tenant system | See section 10 |
 
 > **soft delete (delete by only setting a flag) has a cost**: every unique constraint must be rethought.

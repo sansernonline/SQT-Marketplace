@@ -32,7 +32,7 @@
 
 ## 1. เทียบขนส่ง
 
-skill `shipping-compare` · agent `shop-manager` · งานกลาง ไม่ต้องเปิด playbook
+skill `pricing-and-costs` · agent `shop-manager` · งานกลาง ไม่ต้องเปิด playbook
 **ผลลัพธ์:** `shipping/<ปี-เดือน>-compare.md`
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -53,7 +53,7 @@ skill `shipping-compare` · agent `shop-manager` · งานกลาง ไม
 
 ## 2. ลงสินค้าใหม่ครบชุด
 
-playbook `new-product` · agent `shop-manager` · skill `product-listing` · `marketplace-fees-pricing` · `multi-shop-stock` · `shipping-compare`
+playbook `new-product` · agent `shop-manager` · skill `sales-copy` · `pricing-and-costs` · `shop-operations`
 **ผลลัพธ์:** `products/<SKU>/listing-<แพลตฟอร์ม>.md` · ตารางราคา · แถวใหม่ใน `stock.csv` · **รออนุมัติ:** กดลงขายจริง
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -79,7 +79,7 @@ playbook `new-product` · agent `shop-manager` · skill `product-listing` · `ma
 
 ## 3. สินค้ามีคนเข้าดูแต่ไม่มีคนซื้อ
 
-playbook `new-product` (ขั้น 3–5: ราคา · listing · คำต้องห้าม + ขั้นสุดท้าย reviewer ตัวใหม่ตรวจ) · agent `shop-manager` · skill `product-listing` · `marketplace-fees-pricing`
+playbook `new-product` (ขั้น 3–5: ราคา · listing · คำต้องห้าม + ขั้นสุดท้าย reviewer ตัวใหม่ตรวจ) · agent `shop-manager` · skill `sales-copy` · `pricing-and-costs`
 **ผลลัพธ์:** `products/<SKU>/fix-<ปี-เดือน>.md` (สาเหตุ · listing ฉบับแก้แบบ "เดิม → ใหม่" · วันวัดผล) · **รออนุมัติ:** แก้หน้าสินค้าบนร้านจริง · เปลี่ยนราคา
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -95,9 +95,9 @@ playbook `new-product` (ขั้น 3–5: ราคา · listing · คำต
 
 1. ติดตรงไหน อ้างตัวเลขจริง: คนหาไม่เจอ (เข้าชมน้อย) หรือเข้ามาแล้วไม่ซื้อ (รูปแรก · ราคา · ค่าส่ง · รีวิว · คำบรรยาย)
 2. ตารางเทียบคู่แข่ง: ชื่อสินค้า · รูปแรก · ราคารวมค่าส่ง · จำนวนรีวิว · จุดที่เขาดีกว่า
-3. ชื่อ คำค้น คำบรรยายใหม่ตามสูตรของ `product-listing` เขียนแบบ "เดิม → ใหม่"
+3. ชื่อ คำค้น คำบรรยายใหม่ตามสูตรของ `sales-copy` เขียนแบบ "เดิม → ใหม่"
 4. คำถามที่ลูกค้าถามซ้ำ → ใส่คำตอบไว้ในคำบรรยาย
-5. ถ้าราคาสูงกว่าคู่แข่ง: ตารางราคาต่ำสุดที่ยังได้กำไรตาม `marketplace-fees-pricing`
+5. ถ้าราคาสูงกว่าคู่แข่ง: ตารางราคาต่ำสุดที่ยังได้กำไรตาม `pricing-and-costs`
 6. ผลตรวจคำโฆษณาต้องห้ามของ listing ใหม่
 7. วันวัดผลและตัวเลขที่จะดู (เข้าชม · สั่งซื้อ · อัตราซื้อต่อคนเข้า)
 
@@ -110,7 +110,7 @@ playbook `new-product` (ขั้น 3–5: ราคา · listing · คำต
 
 ## 4. สินค้าถูกระงับ / โดนเตือนเรื่องคำโฆษณา
 
-playbook `new-product` (ขั้น 4–5: listing · คำต้องห้าม + ขั้นสุดท้าย reviewer ตัวใหม่ตรวจ) · agent `shop-manager` · skill `product-listing`
+playbook `new-product` (ขั้น 4–5: listing · คำต้องห้าม + ขั้นสุดท้าย reviewer ตัวใหม่ตรวจ) · agent `shop-manager` · skill `sales-copy`
 **ผลลัพธ์:** `products/<SKU>/appeal-<ปี-เดือน-วัน>.md` (สาเหตุ · listing ฉบับแก้ · ร่างอุทธรณ์) · **รออนุมัติ:** แก้หน้าสินค้าบนร้านจริง · ส่งอุทธรณ์ · ลบสินค้า
 
 ### ข้อมูล (ผู้ใช้กรอก)

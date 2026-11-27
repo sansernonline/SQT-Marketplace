@@ -32,7 +32,7 @@
 
 ## 1. ขายแล้วไม่เหลือกำไร / จัดโปร
 
-playbook `pricing-check` · agent `shop-manager` · skill `marketplace-fees-pricing`
+playbook `pricing-check` · agent `shop-manager` · skill `pricing-and-costs`
 **ผลลัพธ์:** `pricing/<ปี-เดือน>-check.md` · **รออนุมัติ:** เปลี่ยนราคาบนร้าน · เปิดโปร
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -53,7 +53,7 @@ playbook `pricing-check` · agent `shop-manager` · skill `marketplace-fees-pric
 
 ## 2. ขายหลายแพลตฟอร์มแล้วสต็อกเพี้ยน
 
-playbook `stock-sync` · agent `shop-manager` · skill `multi-shop-stock`
+playbook `stock-sync` · agent `shop-manager` · skill `shop-operations`
 **ผลลัพธ์:** `stock.csv` (สต็อกหลักไฟล์เดียว) · `stock-rules.md` (กฎ sync) · **รออนุมัติ:** แก้ตัวเลขสต็อกบนแพลตฟอร์ม
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -75,7 +75,7 @@ playbook `stock-sync` · agent `shop-manager` · skill `multi-shop-stock`
 
 ## 3. ของค้างสต็อก อยากระบายออก
 
-playbook `pricing-check` · agent `shop-manager` · skill `marketplace-fees-pricing` · `multi-shop-stock`
+playbook `pricing-check` · agent `shop-manager` · skill `pricing-and-costs` · `shop-operations`
 **ผลลัพธ์:** `pricing/<ปี-เดือน>-clearance.md` · **รออนุมัติ:** เปลี่ยนราคาบนร้าน · เปิดโปร · ทำชุดสินค้า (bundle) ใหม่บนร้าน
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -92,7 +92,7 @@ playbook `pricing-check` · agent `shop-manager` · skill `marketplace-fees-pric
 2. ทางระบาย 2–3 แบบต่อ SKU (ลดราคา · จัดชุดกับสินค้าขายดี · ของแถม · ขายยกล็อต) พร้อมกำไรหรือขาดทุนต่อชิ้นของแต่ละแบบ
 3. ราคาต่ำสุดที่ยังไม่ขาดทุน และราคาที่ยอมขาดทุนได้ถ้าต้องการเงินสดคืน (บอกให้ชัดว่าขาดทุนเท่าไร)
 4. ข้อสรุปเรียงตาม SKU ที่ควรระบายก่อน
-5. ต้นเหตุที่ของค้าง (สั่งเกิน · ราคาสูง · หน้าสินค้าไม่ดี) และจุดสั่งซื้อซ้ำใหม่ตาม `multi-shop-stock`
+5. ต้นเหตุที่ของค้าง (สั่งเกิน · ราคาสูง · หน้าสินค้าไม่ดี) และจุดสั่งซื้อซ้ำใหม่ตาม `shop-operations`
 
 ### กฎเฉพาะฉบับนี้
 
@@ -103,7 +103,7 @@ playbook `pricing-check` · agent `shop-manager` · skill `marketplace-fees-pric
 
 ## 4. ปิดยอดรายเดือน
 
-playbook `pricing-check` (ขั้น 1–2: ต้นทุนและกำไรจริงต่อชิ้น + ขั้นสุดท้าย reviewer ตัวใหม่ตรวจ) · agent `shop-manager` · skill `marketplace-fees-pricing` · `seller-tax-basics`
+playbook `pricing-check` (ขั้น 1–2: ต้นทุนและกำไรจริงต่อชิ้น + ขั้นสุดท้าย reviewer ตัวใหม่ตรวจ) · agent `shop-manager` · skill `pricing-and-costs` · `thai-tax`
 **ผลลัพธ์:** `reports/<ปี-เดือน>-summary.md` · ตารางยอดสะสมทั้งปีต่อท้ายในไฟล์เดียวกัน
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -118,7 +118,7 @@ playbook `pricing-check` (ขั้น 1–2: ต้นทุนและกำ�
 1. ตารางต่อแพลตฟอร์ม: ยอดขาย · ค่าธรรมเนียมแต่ละตัว · ค่าส่งที่ร้านจ่าย · ส่วนลดที่ร้านออก · คืนเงิน · เงินเข้าจริง
 2. กำไรจริงของเดือน = เงินเข้าจริง − ต้นทุนสินค้า − ค่าใช้จ่ายอื่น คำนวณซ้ำได้
 3. สินค้าขายดี 5 อันดับ และสินค้าที่กำไรต่อชิ้นต่ำสุด 5 อันดับ
-4. ยอดขายสะสมทั้งปี เทียบเกณฑ์จดภาษีมูลค่าเพิ่ม (VAT) ตาม `seller-tax-basics` (เกณฑ์ตรวจกับกรมสรรพากรรอบนี้ ติดวันที่)
+4. ยอดขายสะสมทั้งปี เทียบเกณฑ์จดภาษีมูลค่าเพิ่ม (VAT) ตาม `thai-tax` (เกณฑ์ตรวจกับกรมสรรพากรรอบนี้ ติดวันที่)
 5. ยอดในรายงานกับเงินเข้าบัญชีไม่ตรงกัน → ตารางส่วนต่าง ไม่ปัดทิ้ง
 
 ### กฎเฉพาะฉบับนี้
@@ -130,7 +130,7 @@ playbook `pricing-check` (ขั้น 1–2: ต้นทุนและกำ�
 
 ## 5. ภาษีของคนขายออนไลน์
 
-skill `seller-tax-basics` (e-commerce) · agent `shop-manager` · งานกลาง ไม่ต้องเปิด playbook
+skill `thai-tax` (e-commerce) · agent `shop-manager` · งานกลาง ไม่ต้องเปิด playbook
 **ผลลัพธ์:** `tax/<ปี>-estimate.md` · ข้อมูลทั่วไป ยืนยันกับนักบัญชี
 
 ### ข้อมูล (ผู้ใช้กรอก)

@@ -30,9 +30,10 @@ For medium tasks and up, pick **1** playbook and read the whole file before star
 
 | playbook | use when |
 |---|---|
+| [`design`](references/playbook-design.md) | One logo · poster · banner · cover · icon · key visual, new or redesigned |
 | [`brand-setup`](references/playbook-brand-setup.md) | Starting a new brand · rebrand · every post looks like a different company |
 | [`campaign`](references/playbook-campaign.md) | Product launch · price promotion · event · seasonal promotion that needs several sizes |
-| [`image-series`](references/playbook-image-series.md) | Images for many products · a week of posts · storyboard · a recurring character · existing images need edits |
+| [`image-series`](references/playbook-image-series.md) | Images for many products · a week of posts · storyboard · a recurring character · existing images need edits · LINE stickers · rich menu |
 | [`video`](references/playbook-video.md) | Reels · TikTok · Shorts · video ads · animated text · animated logo |
 | [`asset-cleanup`](references/playbook-asset-cleanup.md) | Messy files, lost logo · names like final_v2_REAL.png |
 | [`review`](references/playbook-review.md) | Check a design before sending or going live — your own work or the user's |
@@ -64,7 +65,7 @@ Always write the direction in words before drawing. An image with no direction c
 | Rule | Detail |
 |---|---|
 | **Pick the agent by role** | Lock style and write image briefs: `art-director` · build the brand kit and check brand fit: `brand-keeper` · pre-send review: `design-critic` (a fresh agent that has not seen the work) · posts and campaigns: `social-creator` · cut, subtitle and export video: `video-editor` · real images in web pages, apps and slides: `image-artist` |
-| **Cross-branch work** | App or web screens go to `software-development` (`ux-designer` · `graphic-designer`) · product images for online shops go to `e-commerce` · LINE OA rich menus go to `e-commerce`. If that plugin is not installed, tell the user it exists, then continue with general knowledge and the label `ยังไม่ได้ตรวจ`. Multi-step work in that branch goes to that plugin's `/<plugin>:superuser`. |
+| **Cross-branch work** | App or web screens go to `software-development` (`ux-designer` · `graphic-designer`) · product images for online shops go to `e-commerce` · LINE OA setup, chatbot and broadcast go to `e-commerce` (rich menu images and stickers stay here in `line-design`). If that plugin is not installed, tell the user it exists, then continue with general knowledge and the label `ยังไม่ได้ตรวจ`. Multi-step work in that branch goes to that plugin's `/<plugin>:superuser`. |
 
 ---
 

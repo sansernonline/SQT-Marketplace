@@ -20,7 +20,7 @@ Use when designing a phone app screen or mockup
 
 - Desktop web apps (dashboard/admin): use `web-app-design`
 - Windows desktop apps: use `windows-app-design`
-- .docx/.pptx documents: use `branded-document-design`
+- .docx/.pptx documents: use `document-design`
 
 ---
 
@@ -52,8 +52,8 @@ You can send the link to the client without explaining that this is a phone scre
 ## 2 · Design tokens
 
 > **The look comes from this job's search. Do not stop to ask.**
-> Order for finding values: the project's `doc-theme`, or brand colours and fonts (if they exist, use them at once) → app references found live per `design-gate/design-references` (type app) and the palette extracted per `design-direction-lookup` section 2 → only if nothing can be searched (no internet · user says keep the existing look) use the fallback values in `assets/speakgo.css`, write `(รอยืนยัน)` (awaiting confirmation) and carry on.
-> The table of work type and colour tone in `diagram-figures` section 5 is a starting point for search terms, not the answer.
+> Order for finding values: the project's `doc-theme`, or brand colours and fonts (if they exist, use them at once) → app references found live per `design-gate/design-references` (type app) and the palette extracted per `design-system` → `references/design-direction-lookup.md` section 2 → only if nothing can be searched (no internet · user says keep the existing look) use the fallback values in `assets/speakgo.css`, write `(รอยืนยัน)` (awaiting confirmation) and carry on.
+> The table of work type and colour tone in `diagrams` → `references/diagram-figures.md` section 5 is a starting point for search terms, not the answer.
 
 **Which values are fixed and which come from the search**
 
@@ -168,10 +168,10 @@ The 3 limits are in [`references/review.md`](references/review.md): the React Na
 
 - User flow or information architecture before colouring: agent `ux-designer`
 - Desktop web app of the same system, and the hardcoded colour checker in CI (`scripts/check-design-tokens.mjs`): `web-app-design`
-- Spec document of the screens: `design-gate/polished-document-style` + `branded-document-design`
+- Spec document of the screens: `design-gate/polished-document-style` + `document-design`
 - App Store Optimization: `mobile-engineering`
 - Spacing rules, eye order and the 5 screen states: `ui-craft`
-- Architecture diagrams: `software-diagrams`
+- Architecture diagrams: `diagrams`
 
 ---
 
@@ -487,8 +487,8 @@ Use when building a native-looking Windows 11 app
 ## When **not** to use it
 
 - For a web app, use `web-app-design` · for a mobile app, use `mobile-app-design`
-- For .docx/.pptx documents, use `branded-document-design`
-- For diagrams in documents, use `markdown-visuals`
+- For .docx/.pptx documents, use `document-design`
+- For diagrams in documents, use `diagrams`
 
 ---
 
@@ -538,7 +538,7 @@ Values to remember without opening the table:
 
 > **The neutral values (background, text, lines, shadows) are Fluent 2 measured from real Windows 11. Do not invent them and do not adjust them to look nicer.**
 > **The only color that changes with the job is the accent.** Use the customer's brand color. If there is none, use the Windows default in the table above, write `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask. Suggest a tone from the subject matter in the report.
-> (The table for choosing a color tone by subject matter is in `colour-by-domain` (`diagram-figures` → `references/colour-by-domain.md`).)
+> (The table for choosing a color tone by subject matter is in `colour-by-domain` (`diagrams` → `references/colour-by-domain.md`).)
 > The accent value in the table above is the Windows default, a safe choice when there is no brand.
 > **It is not a value you must use**, and the accent must pass contrast ≥ 4.5:1 in both dark and light mode, so it often needs a different value per mode.
 
@@ -643,10 +643,10 @@ Fix the points you agree with (a critique that is wrong because the image was mi
 |---|---|
 | user flow / wireframe before color | agent `ux-designer` |
 | charts in the dashboard | `web-app-design` → `references/tokens.md` section "Data colors (charts)" |
-| spec document of the screen | `design-gate/polished-document-style` + `branded-document-design` |
-| choosing the app architecture | `architecture-patterns` |
+| spec document of the screen | `design-gate/polished-document-style` + `document-design` |
+| choosing the app architecture | `architecture` |
 | spacing rules, visual order, and the 5 states of a screen | `ui-craft` |
-| architecture diagram | `software-diagrams` |
+| architecture diagram | `diagrams` |
 
 ---
 

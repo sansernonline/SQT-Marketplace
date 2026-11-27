@@ -13,7 +13,7 @@ argument-hint: <the message> [target platform and length]
 - A script for a person speaking to the camera: review, storytelling, teaching, opinion, vlog, spoken Reel, event host.
 - A spoken script that reads like an article and needs fixing.
 
-Not for: Thai subtitles as `.srt` or editing the finished file → `video-editing` · Thai voice-over made from text with no recording → `narration-th` · a speech with slides → `presentation-design` · minute-by-minute live selling → `live-selling-script`.
+Not for: Thai subtitles as `.srt` or editing the finished file → `video-editing` · Thai voice-over made from text with no recording → `narration-th` · a speech with slides → `slide-deck` · minute-by-minute live selling → `sales-copy`.
 
 ## Pick the job
 | The clip is | Open |

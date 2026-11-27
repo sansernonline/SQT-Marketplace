@@ -1,6 +1,6 @@
 # Class family: multi-customer data and data lifecycle
 
-Open this when data from several shops, branches or customers lives in one database · there is export · backup · import · deletion or restore · a cache, search or analytics store keeps copies. Paste the chosen sections into the sub-agent brief whole. For a multi-tenant SaaS system, read the design principles in `saas-platform` alongside.
+Open this when data from several shops, branches or customers lives in one database · there is export · backup · import · deletion or restore · a cache, search or analytics store keeps copies. Paste the chosen sections into the sub-agent brief whole. For a multi-tenant SaaS system, read the design principles in `domain-systems` alongside.
 
 ## Rules for this family
 

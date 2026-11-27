@@ -41,7 +41,7 @@ Why ticks matter: stop and entry must sit on a valid tick, and on a 9.90-baht st
 
 ## Workflow
 
-1. Collect: capital in the trading account (not net worth), risk % (default 1%), entry, stop, and the user's broker commission (typical internet rate around 0.15–0.25% + 7% VAT on commission (รอยืนยัน — use the user's own broker statement)).
+1. Collect: capital in the trading account (not net worth; a separate "budget for this trade" is a ceiling, not capital: final size = the smaller of this calculation and the budget, show both), risk % (default 1%), entry, stop, and the user's broker commission (typical internet rate around 0.15–0.25% + 7% VAT on commission (รอยืนยัน — use the user's own broker statement)).
 2. Snap entry and stop to valid ticks; put the stop just beyond the invalidation level, not on it.
 3. Compute risk budget, risk per share (add round-trip cost per share), raw size, round down to 100.
 4. **Sanity checks**

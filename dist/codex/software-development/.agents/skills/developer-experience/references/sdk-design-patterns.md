@@ -338,7 +338,7 @@ const client = new Client({
 
 - Naming that breaks the language's own convention (e.g. camelCase methods in Python) — follow each language's idiom (table above)
 - Use untyped parameters when the language supports types
-- Hand-write a full multi-language SDK family — Generate SDKs from the OpenAPI spec by default (one generator the team already pays for or knows: Stainless / Fern / Speakeasy, check current pricing). Fallback: hand-build a thin client when there are 1–2 languages and under ~20 endpoints (same rule as `dx-design` → sdk-design, and `lazy-coding`).
+- Hand-write a full multi-language SDK family — Generate SDKs from the OpenAPI spec by default (one generator the team already pays for or knows: Stainless / Fern / Speakeasy, check current pricing). Fallback: hand-build a thin client when there are 1–2 languages and under ~20 endpoints (same rule as `dx-design` → sdk-design, and `code-craft`).
 - Break v1 users with a v1.x release
 - Ignore retry edge cases
 - Force callbacks when async/promises would work

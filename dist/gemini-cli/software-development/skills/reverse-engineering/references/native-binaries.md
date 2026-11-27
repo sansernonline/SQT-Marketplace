@@ -61,7 +61,7 @@ Use when steps 1–4 cannot answer the question. The user must install Ghidra an
 - Always read pseudo-C against the disassembly before citing a function in the report, because the decompiler can guess types and collapse code wrongly. The disassembly is what actually runs. (Idea from ghidra-headless in trailofbits/skills-curated (CC-BY-SA), rewritten in our own words.)
 - Check whether Ghidra · IDA · Hopper exist with `node scripts/check-tools.mjs --target native`.
 - ELF addresses are virtual addresses, not file offsets. Never add the image base yourself.
-- For an untrusted target, run Ghidra in `docker-sandbox` too, because Ghidra's parser reads the file with the user's privileges.
+- For an untrusted target, run Ghidra in `infra-and-deploy` too, because Ghidra's parser reads the file with the user's privileges.
 - IDA · Hopper · Binary Ninja may be used instead only under the user's own license, opened read-only, never saving over the file.
 
 ## 4 · Packed files and special languages

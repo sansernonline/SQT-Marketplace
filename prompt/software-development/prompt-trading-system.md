@@ -9,12 +9,12 @@
 วางทั้งไฟล์ใน Claude Code, Codex CLI หรือ Gemini CLI ที่รากโฟลเดอร์โปรเจกต์ แล้วพิมพ์ต่อท้ายว่าจะทำฉบับไหน เช่น `ทำทั้งหมด` หรือ `ทำข้อ 1 และ 2`
 
 <!-- rules:begin -->
-**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-doc-set` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
+**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-docs` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
 
 **วนจนเสร็จ (agent loop):** ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ จนผ่านทุกข้อที่ฉบับนั้นต้องมี · ตรวจด้วยหลักฐานจริง (เปิดไฟล์ · รันคำสั่ง · เทียบแหล่ง) ไม่ใช่คำบอกของตัวที่ทำ · รอบตรวจใช้ `reviewer` ตัวใหม่ทุกรอบ · ไม่ผ่าน → แก้ที่ต้นเหตุแล้วตรวจซ้ำทั้งข้อเดิมและจุดที่แก้ · เหลือแค่ข้อระดับต่ำ → ปิดได้แล้วลงรายงาน · ครบเพดานรอบ (งานกลาง 3 · งานใหญ่หรืองานเสี่ยง 5) ยังไม่ผ่าน → ติดป้าย `ติด` ทำส่วนอื่นให้จบ แล้วรายงานข้อที่เหลือ · รายละเอียดอยู่ใน skill `superuser` กฎข้อ 3
 <!-- rules:end -->
 
-**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้ `diagram-figures` · Mermaid (`software-diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
+**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้ `diagrams` · Mermaid (`diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
 
 **ขอบเขต (ห้ามข้าม):** เอกสารและโค้ดเป็นเครื่องมือ **ไม่ใช่คำแนะนำการลงทุน** · ไม่บอกว่ากลยุทธ์ "ทำกำไรได้" จาก backtest อย่างเดียว · รันได้เฉพาะ Strategy Tester และบัญชี demo · **รันบนบัญชีเงินจริง · เปิด Virtual Private Server (VPS) ที่เสียเงิน · ส่งขึ้น Market** อยู่ใน "รออนุมัติ" เสมอ · รหัสผ่านบัญชีเทรด · เลขบัญชีจริง · API key ห้ามอยู่ในโค้ด ไฟล์ `.set` และเอกสาร
 
@@ -76,7 +76,7 @@ playbook `project-docs` · agent `quant-analyst` + `business-analyst` · skill `
 
 ## 2. EA Design: ส่งออร์เดอร์ · state และการกู้คืน · MT4 กับ MT5
 
-playbook `project-docs` · agent `solution-architect` + `developer` · skill `stack-mql` · `error-handling-patterns` · `logging-standards` · `architecture-patterns`
+playbook `project-docs` · agent `solution-architect` + `developer` · skill `stack-mql` · `errors-and-logs` · `architecture`
 **ต้องมีก่อน:** `docs/ea/EA-SPEC.md`
 **ผลลัพธ์:** `docs/ea/EA-DESIGN.md`
 
@@ -93,7 +93,7 @@ playbook `project-docs` · agent `solution-architect` + `developer` · skill `st
 
 ## 3. เขียนโค้ด EA พร้อมตัวตรวจก่อนส่งออร์เดอร์
 
-playbook `new-project` (ยังไม่มีโค้ด) หรือ `feature` (ต่อจากโค้ดเดิม) · agent `developer` + `quant-analyst` · skill `stack-mql` · `lazy-coding` · `readable-code` · `ground-rules/principle-small-verifiable-steps` · `ground-rules/principle-prove-it-works` · `config-and-secrets`
+playbook `new-project` (ยังไม่มีโค้ด) หรือ `feature` (ต่อจากโค้ดเดิม) · agent `developer` + `quant-analyst` · skill `stack-mql` · `code-craft` · `ground-rules/principle-small-verifiable-steps` · `ground-rules/principle-prove-it-works` · `web-service-essentials`
 **ต้องมีก่อน:** `EA-SPEC.md` · `EA-DESIGN.md`
 **ผลลัพธ์:** โค้ดใน `<repo>/MQL5/Experts/<ชื่อ>/` (หรือ `MQL4/`) บน branch `ea/<ชื่อ>` · script test ใน `<repo>/MQL5/Scripts/<ชื่อ>-tests/` · `docs/ea/build-log.md` · **ไม่แก้โค้ด** เว้นแต่ข้างล่างติ๊ก `[x]`
 
@@ -117,7 +117,7 @@ playbook `new-project` (ยังไม่มีโค้ด) หรือ `feat
 
 ## 4. Backtest และทดสอบความทนทาน
 
-playbook `review` · agent `quant-analyst` (นำ) + `qa-tester` · skill `stack-mql` · `ground-rules/principle-prove-it-works` · `markdown-visuals` · `design-gate/polished-document-style`
+playbook `review` · agent `quant-analyst` (นำ) + `qa-tester` · skill `stack-mql` · `ground-rules/principle-prove-it-works` · `diagrams` · `design-gate/polished-document-style`
 **ต้องมีก่อน:** โค้ดที่ compile ได้ · เกณฑ์ผ่านใน `EA-SPEC.md` หัวข้อ 5
 **ผลลัพธ์:** `docs/ea/backtest-report.md` · `tester-*.ini` และ `.set` ทุกชุดที่ใช้ใน `docs/ea/tester/`
 
@@ -147,7 +147,7 @@ playbook `review` · agent `quant-analyst` (นำ) + `qa-tester` · skill `stac
 
 ## 5. Forward test บนบัญชี demo และขึ้น VPS
 
-playbook `ship` · agent `devops-engineer` + `quant-analyst` · skill `stack-mql` · `incident-runbook-template` · `observability-basics`
+playbook `ship` · agent `devops-engineer` + `quant-analyst` · skill `stack-mql` · `incidents-and-monitoring`
 **ต้องมีก่อน:** `backtest-report.md` คำตัดสิน `ผ่าน` หรือ `ผ่านแบบมีเงื่อนไข`
 **ผลลัพธ์:** `docs/ea/forward-test.md` · `docs/ea/runbook.md` · **รออนุมัติ:** เปิด VPS ที่เสียเงิน · ย้ายไปบัญชีเงินจริง
 

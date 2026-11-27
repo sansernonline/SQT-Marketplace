@@ -10,7 +10,7 @@ Abbreviations: small and medium enterprises (SME) · Application Programming Int
 |---|---|
 | Send a file using the accounting software's import template (file format of each vendor not yet checked) | Few documents · the customer's package has no API |
 | Connect to the API directly (sections 2–3) | Hundreds of documents per month · need status back, such as paid |
-| Through a partner app the accounting software certifies (PEAK: menu ตั้งค่า > การเชื่อมต่อแอปพลิเคชันภายนอก, i.e. Settings > External application connections) | Online shop that already uses a back-office system → `ecommerce-patterns` `references/thai-marketplace-apis.md` |
+| Through a partner app the accounting software certifies (PEAK: menu ตั้งค่า > การเชื่อมต่อแอปพลิเคชันภายนอก, i.e. Settings > External application connections) | Online shop that already uses a back-office system → `domain-systems` `references/thai-marketplace-apis.md` |
 
 ## 2 · PEAK
 
@@ -53,17 +53,17 @@ Abbreviations: small and medium enterprises (SME) · Application Programming Int
 
 - Pick one system to issue the tax invoice number · our system and the accounting software must not both issue numbers
 - Send into the accounting software as the source document, then let the accounting software issue the e-Tax · PEAK has an endpoint to send e-Tax · FlowAccount not found in the spec, ask the vendor
-- Tax invoice rules (section 86/4 · e-Tax Invoice & e-Receipt vs by Email) → `e-commerce:e-tax-invoice` (if installed)
+- Tax invoice rules (section 86/4 · e-Tax Invoice & e-Receipt vs by Email) → `e-commerce:thai-tax` (if installed)
 
 ## 6 · Prevent duplicates and reconcile
 
 - Keep a mapping table: our id ↔ the accounting software's id · PEAK recommends keeping External Reference and a mapping to prevent duplicate documents · FlowAccount uses `externalDocumentId` to hold our id
-- Neither vendor's docs have an idempotency key → look up the mapping before every POST create (`principle-safe-to-rerun`)
+- Neither vendor's docs have an idempotency key → look up the mapping before every POST create (`code-craft`)
 - A timeout does not mean failure · pull the list by date range and compare before resending
 - On 429 → wait per `retryAfterSeconds` or back off exponentially (1 · 2 · 4 · 8 seconds, as PEAK recommends)
-- Reconcile every day: the document count and total of the 2 systems must match → `fintech-payments` (`references/agent-payment-integration.md`, section Settlement Reconciliation)
-- Log every send to audit: who sent · which document · destination id · result → `audit-trail`
-- Client Token · client secret · connectId stay outside the code → `config-and-secrets` · PEAK UAT is http, so use test data only
+- Reconcile every day: the document count and total of the 2 systems must match → `domain-systems` (`references/agent-payment-integration.md`, section Settlement Reconciliation)
+- Log every send to audit: who sent · which document · destination id · result → `web-service-essentials`
+- Client Token · client secret · connectId stay outside the code → `web-service-essentials` · PEAK UAT is http, so use test data only
 
 ## Sources
 

@@ -68,27 +68,27 @@ jobs:
           node scripts/evals/speed/stats.mjs --self-test
           node scripts/evals/speed/breakdown.mjs --self-test
           node scripts/evals/skill-grades.mjs --self-test
-          node plugins/trading-finance/skills/debt-payoff/scripts/payoff.mjs --self-test
-          node plugins/trading-finance/skills/home-refinance/scripts/refinance.mjs --self-test
+          node plugins/trading-finance/skills/budget-and-debt/scripts/payoff.mjs --self-test
+          node plugins/trading-finance/skills/budget-and-debt/scripts/refinance.mjs --self-test
           node plugins/trading-finance/skills/copy-trade-check/scripts/signal-check.mjs --self-test
           node plugins/trading-finance/skills/copy-trade-check/scripts/copy-monitor.mjs --self-test
           node plugins/trading-finance/skills/position-sizing/scripts/size.mjs --self-test
           node plugins/trading-finance/skills/stock-fundamentals/scripts/ratios.mjs --self-test
           node plugins/trading-finance/skills/trade-journal/scripts/trade-stats.mjs --self-test
-          node plugins/e-commerce/skills/promptpay-qr/scripts/promptpay.mjs --self-test
-          node plugins/e-commerce/skills/e-tax-invoice/scripts/thai-id.mjs --self-test
-          node plugins/e-commerce/skills/doc-quotation/scripts/thai-doc-total.mjs --self-test
-          node plugins/e-commerce/skills/marketplace-fees-pricing/scripts/price-calc.mjs --self-test
-          node plugins/e-commerce/skills/payroll-th/scripts/payroll.mjs --self-test
-          node plugins/personal-life/skills/household-bills/scripts/power-bill.mjs --self-test
-          node plugins/e-commerce/skills/seller-tax-basics/scripts/tax-compare.mjs --self-test
-          node plugins/e-commerce/skills/multi-shop-stock/scripts/stock-calc.mjs --self-test
-          node plugins/e-commerce/skills/import-landed-cost/scripts/landed-cost.mjs --self-test
-          node plugins/trading-finance/skills/tax-deduction-planner/scripts/tax.mjs --self-test
-          node plugins/trading-finance/skills/retirement-plan/scripts/retire.mjs --self-test
-          node plugins/trading-finance/skills/portfolio-snapshot/scripts/money-calc.mjs --self-test
+          node plugins/e-commerce/skills/shop-books/scripts/promptpay.mjs --self-test
+          node plugins/e-commerce/skills/thai-tax/scripts/thai-id.mjs --self-test
+          node plugins/e-commerce/skills/thai-business-docs/scripts/thai-doc-total.mjs --self-test
+          node plugins/e-commerce/skills/pricing-and-costs/scripts/price-calc.mjs --self-test
+          node plugins/e-commerce/skills/thai-employment/scripts/payroll.mjs --self-test
+          node plugins/personal-life/skills/household-money/scripts/power-bill.mjs --self-test
+          node plugins/e-commerce/skills/thai-tax/scripts/tax-compare.mjs --self-test
+          node plugins/e-commerce/skills/shop-operations/scripts/stock-calc.mjs --self-test
+          node plugins/e-commerce/skills/pricing-and-costs/scripts/landed-cost.mjs --self-test
+          node plugins/trading-finance/skills/income-tax-th/scripts/tax.mjs --self-test
+          node plugins/trading-finance/skills/retirement-and-insurance/scripts/retire.mjs --self-test
+          node plugins/trading-finance/skills/portfolio/scripts/money-calc.mjs --self-test
           node plugins/trading-finance/skills/technical-signals/scripts/indicators.mjs --self-test
-          node plugins/personal-life/skills/important-docs/scripts/due-dates.mjs --self-test
+          node plugins/personal-life/skills/family-legal/scripts/due-dates.mjs --self-test
       - name: เทสต์ node:test (ระบุไฟล์ผ่าน glob เพราะ node --test รับโฟลเดอร์ไม่ได้บนเครื่องบางแบบ)
         shell: bash
         run: node --test scripts/evals/ab/*.test.mjs scripts/evals/judge/*.test.mjs plugins/superuser/skills/*/scripts/*.test.mjs

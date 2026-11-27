@@ -34,7 +34,7 @@
 
 ## 1. ปิดงานรายเดือน
 
-playbook `monthly-close` · agent `tax-helper` · skill `payroll-th` · `tax-vat-th` · `social-security-th`
+playbook `monthly-close` · agent `tax-helper` · skill `thai-employment` · `thai-tax`
 **ผลลัพธ์:** `monthly/<ปี-เดือน>/` — ตารางเงินเดือน · สลิป · ข้อมูลกรอกแบบภาษีหัก ณ ที่จ่าย (ภ.ง.ด.1 / 3 / 53) · แบบภาษีมูลค่าเพิ่ม (ภ.พ.30) · แบบนำส่งเงินสมทบประกันสังคม (สปส.1-10) · **รออนุมัติ:** ยื่นแบบ · โอนเงินเดือน · ชำระภาษี
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -57,7 +57,7 @@ playbook `monthly-close` · agent `tax-helper` · skill `payroll-th` · `tax-vat
 
 ## 2. ปิดงานสิ้นปี
 
-playbook `year-end` · agent `tax-helper` · skill `dbd-annual-filing` · `payroll-th`
+playbook `year-end` · agent `tax-helper` · skill `thai-tax` · `thai-employment`
 **ผลลัพธ์:** `year-end/<ปี>/timeline.md` (นับถอยหลังจากวันสิ้นรอบบัญชี) · ภ.ง.ด.1ก · หนังสือรับรอง 50 ทวิ · **รออนุมัติ:** ยื่นทุกแบบ · จัดประชุม
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -78,7 +78,7 @@ playbook `year-end` · agent `tax-helper` · skill `dbd-annual-filing` · `payro
 
 ## 3. ปฏิทินยื่นภาษีทั้งปี
 
-skill `tax-vat-th` · `thai-holidays` · agent `tax-helper` · งานกลาง ไม่ต้องเปิด playbook
+skill `thai-tax` · `thai-employment` · agent `tax-helper` · งานกลาง ไม่ต้องเปิด playbook
 **ผลลัพธ์:** `tax/<ปี>-calendar.md`
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -97,7 +97,7 @@ skill `tax-vat-th` · `thai-holidays` · agent `tax-helper` · งานกล�
 
 ## 4. เปิดบริษัทใหม่ ตั้งงานหลังบ้านปีแรก
 
-ไม่มี playbook ตรง → ประกอบเองตาม `playbook-template` (skill `superuser` หัวข้อ 2 งานกลาง) · agent `tax-helper` · skill `tax-vat-th` · `social-security-th` · `payroll-th` · `dbd-annual-filing` · `thai-holidays`
+ไม่มี playbook ตรง → ประกอบเองตาม `playbook-template` (skill `superuser` หัวข้อ 2 งานกลาง) · agent `tax-helper` · skill `thai-tax` · `thai-employment`
 **ผลลัพธ์:** `setup/<ปี>-checklist.md` — รายการงานปีแรก เรียงตามวันครบกำหนด · **รออนุมัติ:** ยื่นจดทะเบียนภาษีมูลค่าเพิ่ม · ขึ้นทะเบียนนายจ้างและลูกจ้างกับประกันสังคม · สมัครยื่นแบบออนไลน์ · เปิดบัญชีธนาคารบริษัท
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -120,7 +120,7 @@ skill `tax-vat-th` · `thai-holidays` · agent `tax-helper` · งานกล�
 
 ## 5. ยื่นหรือจ่ายภาษีเลยกำหนด · ได้หนังสือจากสรรพากร
 
-playbook `monthly-close` (ขั้น 4 รายการแบบ · ขั้น 5 ไฟล์ยื่นและขั้นตอนทีละคลิก · ขั้น 6 ตรวจ) · agent `tax-helper` · skill `tax-vat-th` · `payroll-th` · `doc-thai-official` (ถ้าต้องตอบหนังสือ)
+playbook `monthly-close` (ขั้น 4 รายการแบบ · ขั้น 5 ไฟล์ยื่นและขั้นตอนทีละคลิก · ขั้น 6 ตรวจ) · agent `tax-helper` · skill `thai-tax` · `thai-employment` · `thai-business-docs` (ถ้าต้องตอบหนังสือ)
 **ผลลัพธ์:** `monthly/<ปี-เดือน>/late-filing.md` — แบบที่ค้าง · ยอดที่ต้องจ่ายรวมเงินเพิ่มและเบี้ยปรับ · ร่างหนังสือชี้แจง (ถ้ามีหนังสือมา) · **รออนุมัติ:** ยื่นแบบ · ชำระภาษี เงินเพิ่ม เบี้ยปรับ · ส่งหนังสือถึงสรรพากร
 
 ### ข้อมูล (ผู้ใช้กรอก)

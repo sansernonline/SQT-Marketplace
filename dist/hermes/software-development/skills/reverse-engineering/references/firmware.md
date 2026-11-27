@@ -6,7 +6,7 @@ For firmware image files · archives embedded in a device · filesystems already
 
 - Work on a copy in the work folder. Record the file's SHA-256 and origin (downloaded from the maker · pulled from the user's device) in the evidence ledger.
 - Writing or flashing to a device needs separate permission every time, because the device may become unusable.
-- Never run extracted executables on the user's machine. If you need to watch it run, do it in `docker-sandbox` per [runtime-observation](runtime-observation.md).
+- Never run extracted executables on the user's machine. If you need to watch it run, do it in `infra-and-deploy` per [runtime-observation](runtime-observation.md).
 - Check tools with `node scripts/check-tools.mjs --target firmware`. Binwalk and Unblob are usually installed in Linux or WSL. The checker on Windows cannot see inside WSL, so a `missing` result does not mean absent; ask the user.
 
 ## 2 · Triage before extracting

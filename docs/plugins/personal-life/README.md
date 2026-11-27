@@ -36,7 +36,7 @@ agent 9 · skill 83 (ของ plugin 43 · ของกลางจาก super
 |---|---|---|
 | [`bills`](#pb-bills) | ไล่ดูบิลค่าน้ำค่าไฟ | 5 |
 | [`care-setup`](#pb-care-setup) | ตั้งระบบดูแลผู้สูงอายุ | 4 |
-| [`cert-prep`](#pb-cert-prep) | เตรียมสอบใบรับรอง | 5 |
+| [`learning-path`](#pb-cert-prep) | เตรียมสอบใบรับรอง | 5 |
 | [`checkup-cycle`](#pb-checkup-cycle) | วางแผนตรวจสุขภาพปีนี้ | 5 |
 | [`decide-and-goals`](#pb-decide-and-goals) | ตัดสินใจและตั้งเป้า | 4 |
 | [`digital-safety`](#pb-digital-safety) | ความปลอดภัยออนไลน์ | 5 |
@@ -59,7 +59,7 @@ agent 9 · skill 83 (ของ plugin 43 · ของกลางจาก super
 | [`side-project`](#pb-side-project) | เลือกโปรเจกต์ฝึกมือ | 4 |
 | [`subscriptions`](#pb-subscriptions) | ตรวจค่าสมาชิกรายเดือน | 5 |
 | `team-project` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 9 |
-| [`tech-radar`](#pb-tech-radar) | ตามข่าวเทคโนโลยี | 5 |
+| [`tech-growth`](#pb-tech-radar) | ตามข่าวเทคโนโลยี | 5 |
 | [`trip`](#pb-trip) | เตรียมเที่ยว | 4 |
 | [`unattended-run`](#pb-unattended-run) | ให้ทำงานยาวเอง | 7 |
 | [`vehicle`](#pb-vehicle) | ต่อภาษีและประกันรถ | 4 |
@@ -79,7 +79,7 @@ agent 9 · skill 83 (ของ plugin 43 · ของกลางจาก super
 
 <a id="pb-cert-prep"></a>
 
-### เตรียมสอบใบรับรอง · `cert-prep`
+### เตรียมสอบใบรับรอง · `learning-path`
 
 ![เตรียมสอบใบรับรอง](playbooks/cert-prep.png)
 
@@ -205,7 +205,7 @@ agent 9 · skill 83 (ของ plugin 43 · ของกลางจาก super
 
 <a id="pb-tech-radar"></a>
 
-### ตามข่าวเทคโนโลยี · `tech-radar`
+### ตามข่าวเทคโนโลยี · `tech-growth`
 
 ![ตามข่าวเทคโนโลยี](playbooks/tech-radar.png)
 

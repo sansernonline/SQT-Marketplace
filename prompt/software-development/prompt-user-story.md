@@ -9,7 +9,7 @@
 วางทั้งไฟล์ใน Claude Code, Codex CLI หรือ Gemini CLI ที่รากโฟลเดอร์โปรเจกต์ แล้วพิมพ์ต่อท้ายว่าจะทำฉบับไหน เช่น `ทำข้อ 1` หรือ `ทำข้อ 2 และ 3`
 
 <!-- rules:begin -->
-**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-doc-set` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
+**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-docs` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
 
 **วนจนเสร็จ (agent loop):** ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ จนผ่านทุกข้อที่ฉบับนั้นต้องมี · ตรวจด้วยหลักฐานจริง (เปิดไฟล์ · รันคำสั่ง · เทียบแหล่ง) ไม่ใช่คำบอกของตัวที่ทำ · รอบตรวจใช้ `reviewer` ตัวใหม่ทุกรอบ · ไม่ผ่าน → แก้ที่ต้นเหตุแล้วตรวจซ้ำทั้งข้อเดิมและจุดที่แก้ · เหลือแค่ข้อระดับต่ำ → ปิดได้แล้วลงรายงาน · ครบเพดานรอบ (งานกลาง 3 · งานใหญ่หรืองานเสี่ยง 5) ยังไม่ผ่าน → ติดป้าย `ติด` ทำส่วนอื่นให้จบ แล้วรายงานข้อที่เหลือ · รายละเอียดอยู่ใน skill `superuser` กฎข้อ 3
 <!-- rules:end -->
@@ -24,7 +24,7 @@
 
 ## กฎร่วมของไฟล์นี้
 
-- รูปแบบ story · AC แบบ Given-When-Then · สถานะ · ตารางสารบัญ · ประวัติการเปลี่ยน ใช้ตาม skill `user-story-writer` และแบบฟอร์ม `assets/user-stories.md` ของ skill นั้น ไม่ตั้งรูปแบบเอง
+- รูปแบบ story · AC แบบ Given-When-Then · สถานะ · ตารางสารบัญ · ประวัติการเปลี่ยน ใช้ตาม skill `requirements-writing` และแบบฟอร์ม `assets/user-stories.md` ของ skill นั้น ไม่ตั้งรูปแบบเอง
 - **อ่าน `docs/USER-STORIES.md` ก่อนเขียนเสมอ** · มีอยู่แล้ว → ต่อเลข `US-xxx` จากตัวสุดท้าย แก้ story เดิมในที่เดิม ไม่สร้างซ้ำ · เลิกทำ → สถานะ Dropped ไม่ลบ
 - คอลัมน์อ้างอิงใส่ที่มาจริง: `FR-xxx` ใน SRS · `BR-xxx` ใน BRD · `CR-xxx` คำขอเปลี่ยน · `IMP-xx` จาก research · ไม่มีที่มา → ใส่ `(รอยืนยัน)` ห้ามแต่งรหัส
 - story ต้องเป็นเรื่องที่ผู้ใช้ได้ประโยชน์ ไม่ใช่งานเทคนิค ("ตั้งฐานข้อมูล" ไม่ใช่ story — ไปอยู่ใน `docs/BUILD-PLAN.md`)
@@ -34,7 +34,7 @@
 
 ## 1. เขียน user story จาก SRS หรือ BRD
 
-agent `business-analyst` · skill `user-story-writer` · `human-writing`
+agent `business-analyst` · skill `requirements-writing` · `human-writing`
 **ต้องมีก่อน:** SRS หรือ BRD (`docs/<รหัส>-SRS-*.docx` / `docs/<รหัส>-BRD-*.docx` อ่านด้วย `anthropic-skills:docx` · มีทั้งคู่ → ยึด SRS) · `docs/research/` ถ้ามี
 **ผลลัพธ์:** `docs/USER-STORIES.md`
 
@@ -59,7 +59,7 @@ agent `business-analyst` · skill `user-story-writer` · `human-writing`
 ## 2. เขียน story ของฟีเจอร์ใหม่จากคำเล่า
 
 ใช้เมื่อยังไม่มี SRS หรือฟีเจอร์ยังไม่อยู่ใน SRS (ลูกค้าเพิ่งขอ · ไอเดียทีม) · มีคำขอเปลี่ยน (CR) แล้ว → ใส่เลข CR พอ
-agent `business-analyst` · skill `user-story-writer` · `human-writing`
+agent `business-analyst` · skill `requirements-writing` · `human-writing`
 **ผลลัพธ์:** แถวและ story ใหม่ใน `docs/USER-STORIES.md` (ยังไม่มีไฟล์ → สร้างจากแบบฟอร์ม)
 
 ### ฟีเจอร์ (ผู้ใช้กรอก)
@@ -87,7 +87,7 @@ agent `business-analyst` · skill `user-story-writer` · `human-writing`
 ## 3. ปรับ story ที่มีอยู่ให้พร้อมเข้า sprint
 
 ใช้ก่อนวางแผน sprint หรือเมื่อทีมบอกว่า story อ่านแล้วไม่รู้จะทำอะไร
-ใช้ subagent ที่ **ไม่ได้เขียน** story ชุดนั้นเป็นคนตรวจ · agent `business-analyst` แก้ตามผลตรวจ · skill `user-story-writer` (INVEST checklist)
+ใช้ subagent ที่ **ไม่ได้เขียน** story ชุดนั้นเป็นคนตรวจ · agent `business-analyst` แก้ตามผลตรวจ · skill `requirements-writing` (INVEST checklist)
 **ต้องมีก่อน:** `docs/USER-STORIES.md`
 **ผลลัพธ์:** `docs/USER-STORIES.md` ฉบับแก้ · ตารางปัญหาในคำตอบ (เขียนลง `_to_delete/story-review.md` ถ้ายาวเกิน 40 แถว)
 
@@ -97,7 +97,7 @@ agent `business-analyst` · skill `user-story-writer` · `human-writing`
 
 ### ตรวจ 6 เรื่อง
 
-1. **INVEST** — ครบทั้ง 6 ข้อตาม `user-story-writer`
+1. **INVEST** — ครบทั้ง 6 ข้อตาม `requirements-writing`
 2. **AC ตรวจได้** — ทุกข้อมี Given-When-Then · มีตัวเลขหรือข้อความจริง ไม่มีคำคลุมเครือ (เร็ว ง่าย เหมาะสม) · มีกรณีผิดพลาดอย่างน้อย 1 ข้อ
 3. **ขนาด** — ใหญ่เกิน 1 sprint หรือ Points เกิน 8 → เสนอวิธีแตก
 4. **ตรงกับต้นทาง** — AC ไม่ขัดกับ FR ที่อ้าง · มี SRS แล้วแต่ story ไม่มีรหัสอ้างอิง
@@ -112,5 +112,5 @@ agent `business-analyst` · skill `user-story-writer` · `human-writing`
 ### กฎเฉพาะฉบับนี้
 
 - Draft/Ready แก้ได้ตรง ๆ · In sprint/Done แก้ AC ได้แต่ต้องบันทึกในประวัติการเปลี่ยน และค้น `qa/` หา test case ที่อ้าง `US-xxx, ACn` นั้นใส่ในช่อง test case ที่ต้องแก้ (ไม่แก้ไฟล์ของ QA เอง)
-- story ที่ผ่านทั้ง 6 เรื่องและไม่มี `(รอยืนยัน)` → ประเมิน Points (Fibonacci 1 · 2 · 3 · 5 · 8 · 13 ตาม `user-story-writer`) ใส่คอลัมน์ Points แล้วตั้งเป็น Ready · ที่เหลือคง Draft พร้อมเหตุผล 1 บรรทัด
+- story ที่ผ่านทั้ง 6 เรื่องและไม่มี `(รอยืนยัน)` → ประเมิน Points (Fibonacci 1 · 2 · 3 · 5 · 8 · 13 ตาม `requirements-writing`) ใส่คอลัมน์ Points แล้วตั้งเป็น Ready · ที่เหลือคง Draft พร้อมเหตุผล 1 บรรทัด
 - ปิดด้วยสรุป 1 บรรทัด: Ready กี่ข้อ · Draft กี่ข้อ · ต้องถามลูกค้ากี่เรื่อง

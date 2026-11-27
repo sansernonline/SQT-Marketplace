@@ -52,7 +52,7 @@ Before handing over, run the check in `design-gate/no-ai-look` (section 3): its 
 
 ## Related
 
-`campaign-set` (which placements, in what order) · `brand-kit` (format codes in file names) · `video-script` (captions and safe zones in video) · `design-by-type` (banners, cover headers) · `design-by-type` · `marketplace-product-images` · `line-design` (image sizes, tap areas, JSON) · `print-ready-files` (CMYK, bleed)
+`campaign-set` (which placements, in what order) · `brand-kit` (format codes in file names) · `video-script` (captions and safe zones in video) · `design-by-type` (banners, cover headers) · `marketplace-product-images` · `line-design` (image sizes, tap areas, JSON) · `print-ready-files` (CMYK, bleed)
 
 ## References
 

@@ -9,7 +9,7 @@
 - Making or reviewing any visual: web page, slide, poster, post, image, logo, document cover, diagram.
 - Asked "is this OK to send?" for such work.
 
-Not for: spacing, color system, fonts and components → the job's own skill (`ui-craft` · `presentation-design` · `graphic-design` · `brand-kit` · `image-generation`). Words in the work → `human-writing`.
+Not for: spacing, color system, fonts and components → the job's own skill (`ui-craft` · `slide-deck` · `graphic-design` · `brand-kit` · `image-generation`). Words in the work → `human-writing`.
 
 **A look the project already approved wins** (brand kit · diagram house style · delivered theme). If it matches a ban below, keep it and note it as intentional.
 

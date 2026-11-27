@@ -13,7 +13,7 @@ Part of the skill `thai-business-setup`. For the abbreviations, see the top of S
 | Government fee | 50 baht | 1,000 baht | 1,000 baht | 5,500 baht (memorandum of association 500 + company registration 5,000) + stamp duty 200 (+200 if there are articles of association) |
 | Accounting and auditor | No auditor. Keep income and expense records for tax filing (รอยืนยัน (awaiting confirmation): an individual's bookkeeping duty). | A qualified bookkeeper · a licensed auditor, except a partnership with capital up to 5 million, assets up to 30 million and revenue up to 30 million baht (but ภ.ง.ด.50 (PND 50, corporate income tax return) must attach the report of the person who audited and certified the accounts) | Same as the registered ordinary partnership | A qualified bookkeeper + a licensed auditor who audits the financial statements every year |
 | Income tax | Progressive rate 0–35% (section 2) | Corporate income tax (section 2) | Corporate income tax | Corporate income tax |
-| Yearly filings | ภ.ง.ด.90 and ภ.ง.ด.94 (PND 90 and PND 94, individual income tax returns; see `seller-tax-basics`) | Financial statements + ภ.ง.ด.50 (see `dbd-annual-filing`) | Financial statements + ภ.ง.ด.50 | Shareholder meeting + financial statements + บอจ.5 (shareholder list) + ภ.ง.ด.50 |
+| Yearly filings | ภ.ง.ด.90 and ภ.ง.ด.94 (PND 90 and PND 94, individual income tax returns; see `thai-tax`) | Financial statements + ภ.ง.ด.50 (see `thai-tax`) | Financial statements + ภ.ง.ด.50 | Shareholder meeting + financial statements + บอจ.5 (shareholder list) + ภ.ง.ด.50 |
 
 **Decide with 5 questions**
 

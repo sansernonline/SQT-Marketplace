@@ -28,13 +28,13 @@ Not for: screens and web pages → `software-development:ui-craft` · icons → 
    | Logo · wordmark · brand mark | [`references/logo.md`](references/logo.md) | `brand-kit` · `icon-design` (licensed sets) |
    | Poster · flyer · event key visual | [`references/poster.md`](references/poster.md) | `print-ready-files` |
    | Banner · social post · ad | [`references/banner.md`](references/banner.md) | [`references/banner-build.md`](references/banner-build.md) · `campaign-set` · `copy-claims-check` |
-   | Word/PDF cover and inner pages | [`references/document-cover.md`](references/document-cover.md) | `software-development:branded-document-design` |
-   | Slide deck · company profile | [`references/slides.md`](references/slides.md) | `software-development:presentation-design` · `brand-kit` (style lock) |
+   | Word/PDF cover and inner pages | [`references/document-cover.md`](references/document-cover.md) | `software-development:document-design` |
+   | Slide deck · company profile | [`references/slides.md`](references/slides.md) | `software-development:slide-deck` · `brand-kit` (style lock) |
    | YouTube thumbnail | [`references/thumbnail.md`](references/thumbnail.md) | `campaign-set` |
 
 2. **Read the project before searching.** For a logo, icon or key visual, first fill the feeling list and idea map in [`references/meaning-first.md`](references/meaning-first.md): 2–3 feelings the customer must get, one meaning per mark, objects from the work environment, one locked style per direction (owner 2026-11-27). Write 2 lines: what the project is (industry · audience · what the piece must make people do) and which 1–2 style families fit. Look the industry up first, it gives looks and cautions:
    ```bash
-   python <software-development>/skills/design-direction-lookup/scripts/design_search.py "<คำของโปรเจกต์>" --domain industry -n 1
+   python <software-development>/skills/design-system/scripts/design_search.py "<คำของโปรเจกต์>" --domain industry -n 1
    ```
    The project beats the owner's general taste: a coffee shop gets a coffee look even though the owner likes tech-modern. Keep the owner's taste in what transfers (depth, light, one strong focal element).
 

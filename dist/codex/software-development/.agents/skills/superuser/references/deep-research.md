@@ -108,7 +108,7 @@ The lead writes it alone, at `research/<task-name>/report.md`. Use only rows tha
 3. **Conflicts between sources** get their own heading. Say which source says what, and which value you use and why.
 4. **Still unknown** gets its own heading, with where it could be found.
 5. Evidence labels follow [`evidence`](evidence.md) · write per `human-writing` · spell out abbreviations on first use.
-6. Illustrations: charts with `data-analysis` or `diagram-figures` (software-development) · a cover image with `graphic-design:image-generation` (if installed) · if the user wants a Word file → `markdown-report-docx` (if `software-development` is installed); if not installed → send Markdown.
+6. Illustrations: charts with `data-analysis` or `diagrams` (software-development) · a cover image with `graphic-design:image-generation` (if installed) · if the user wants a Word file → `document-design` (if `software-development` is installed); if not installed → send Markdown.
 
 ## 8 · Budget
 

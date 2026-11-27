@@ -4,8 +4,8 @@ This file says who controls the color of each part of a document, and what the h
 
 ## Declare the theme — decide once, use everywhere in that document
 
-One document passes through several skills: markdown (`design-gate/polished-document-style`) · figures from `diagram-figures` ·
-.docx files from `branded-document-design` · slides from `presentation-design` (all three are in plugin `software-development`).
+One document passes through several skills: markdown (`design-gate/polished-document-style`) · figures from `diagrams` ·
+.docx files from `document-design` · slides from `slide-deck` (all three are in plugin `software-development`).
 If each one picks its own color, the reader gets a document with figures in one color, headings in another, and slides in a third.
 
 **Markdown is the main source (source of truth), so the theme is declared here** — put it at the end of the document header or in a file beside it:
@@ -18,7 +18,7 @@ If each one picks its own color, the reader gets a document with figures in one 
 
 **The main color comes from the work's content, not from a tool's default.** Read the content and write the `เนื้อหา:` brief first (`design-gate/design-references` `references/content-to-theme.md`); the tone you propose must carry its reason from that brief.
 If a brand color already exists, use it. If not, search for references per `design-gate/design-references` (plugin `superuser`) of type `document` and extract the color from the chosen work · if live search is not possible, use the house default, write `(รอยืนยัน)` (awaiting confirmation), carry on without stopping to ask, and propose a tone that fits the work's content in the report.
-(Backup: the table matching work content to color tones is in `colour-by-domain` of skill `diagram-figures` (plugin `software-development`).)
+(Backup: the table matching work content to color tones is in `colour-by-domain` of skill `diagrams` (plugin `software-development`).)
 
 Markdown itself has no color, so use labels and font weight instead. Diagrams, figures, .docx files and slides read the value from `doc-theme`. If `doc-theme` has not declared a work-specific accent, use the house default. Both tables are below.
 
@@ -29,14 +29,14 @@ Markdown itself has no color, so use labels and font weight instead. Diagrams, f
 | Part of the document | Who controls the color | Read the value from |
 |---|---|---|
 | Headings, tables, text boxes in markdown | Markdown has no color; use bold labels and font weight instead | — |
-| Mermaid diagrams | `diagram-figures` → `references/engine-mermaid.md` (README · PR: `software-diagrams` item 2 in plugin `software-development`) | `doc-theme` |
-| Figures that are image files | `diagram-figures` (plugin `software-development`) | `doc-theme` |
-| Exported .docx / .pdf files | `branded-document-design` (plugin `software-development`) items 0–1 | `doc-theme` |
-| Slides | `presentation-design` (plugin `software-development`) | `doc-theme` |
+| Mermaid diagrams | `diagrams` → `references/engine-mermaid.md` (README · PR: `diagrams` → `references/software-diagrams.md` item 2 in plugin `software-development`) | `doc-theme` |
+| Figures that are image files | `diagrams` (plugin `software-development`) | `doc-theme` |
+| Exported .docx / .pdf files | `document-design` (plugin `software-development`) items 0–1 | `doc-theme` |
+| Slides | `slide-deck` (plugin `software-development`) | `doc-theme` |
 
 ## House default
 
-If `doc-theme` has not declared a work-specific accent, every skill uses this set as the default, so figures, documents and slides share one palette from the start. This is the same set as `presentation-design` and `branded-document-design`:
+If `doc-theme` has not declared a work-specific accent, every skill uses this set as the default, so figures, documents and slides share one palette from the start. This is the same set as `slide-deck` and `document-design`:
 
 | token | Value | Used for |
 |---|---|---|

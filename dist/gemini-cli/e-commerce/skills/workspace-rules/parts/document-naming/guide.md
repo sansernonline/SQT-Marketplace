@@ -16,9 +16,9 @@
 | Task | Skill | |
 |---|---|---|
 | Markdown formatting | `design-gate/polished-document-style` | instead |
-| The look of the rendered file | `branded-document-design` (plugin `software-development`) | instead |
+| The look of the rendered file | `document-design` (plugin `software-development`) | instead |
 | Temporary files during work | `superuser:workspace-rules` | instead |
-| Code work: commit messages · version of the **program** · the project document index | `commit-message-format` · `cicd-and-release` · `project-bootstrap` (plugin `software-development`) | instead / together |
+| Code work: commit messages · version of the **program** · the project document index | `git-and-review` · `cicd-and-release` · `project-bootstrap` (plugin `software-development`) | instead / together |
 
 **The revision-history table template and the standard file-name list** are in `assets/naming-cheatsheet.md`.
 
@@ -32,12 +32,12 @@
 |---|---|---|
 | Proposal · quotation · handover report · acceptance certificate · contract (software project document sets → plugin `software-development`) | **docx** | Someone signs it, so the version must be locked |
 | User manual | **docx + PDF** | End users can open it on any machine |
-| Presentation slides | **pptx** · if html is requested → a single .html file (file type per `presentation-design` in plugin `software-development`) · PDF when the target machine lacks the fonts | |
+| Presentation slides | **pptx** · if html is requested → a single .html file (file type per `slide-deck` in plugin `software-development`) · PDF when the target machine lacks the fonts | |
 | Work procedures · internal guides · README · meeting notes · decision records (code work → plugin `software-development`) | **markdown** in the documents folder | It changes often, needs diffs, and is easy to search |
 
 > 🚨 **Markdown source that can be re-rendered is kept permanently in `docs/src/<topic>.md`, then rendered to docx into the documents folder (`docs/`).**
 > `docs/` holds exactly one deliverable for that topic, the .docx. No .md or .pdf of the same topic sits beside it.
-> On the next revision, edit `docs/src/` and render again. Never open Word and edit by hand (matches `markdown-report-docx`). The "ต้นฉบับ" (source) line on the cover points to this file.
+> On the next revision, edit `docs/src/` and render again. Never open Word and edit by hand (matches `document-design`). The "ต้นฉบับ" (source) line on the cover points to this file.
 
 **Make a PDF only for user manuals, or when the client asks.** Otherwise, one docx.
 
@@ -118,7 +118,7 @@ Every exported document must have this table on the first page.
 
 | Topic | Rule |
 |---|---|
-| Source | Lives in `docs/src/` of the work, in one place only (code work: `project-doc-set` in plugin `software-development`) |
+| Source | Lives in `docs/src/` of the work, in one place only (code work: `project-docs` in plugin `software-development`) |
 | Exported files | Live in the documents folder (`docs/`) or the client's storage, **not the project root** |
 | Received files | Keep their original name; never rename. They refer to that name |
 | Files mid-conversion | `_to_delete/` (see `superuser:workspace-rules`) |

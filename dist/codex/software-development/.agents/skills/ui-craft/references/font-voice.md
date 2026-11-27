@@ -1,6 +1,6 @@
 # Font voice
 
-Used in `SKILL.md` section 0.1 step 3 · the type must convey the same mood as the color and layout (rounded type leans friendly, angular type leans fast and strong). If the font voice does not match the project's basics, the page looks inconsistent even when the color and layout are right · every font pair in the table is in `design-direction-lookup/data/font-pairs.csv`, column `voice`, with a checked license
+Used in `SKILL.md` section 0.1 step 3 · the type must convey the same mood as the color and layout (rounded type leans friendly, angular type leans fast and strong). If the font voice does not match the project's basics, the page looks inconsistent even when the color and layout are right · every font pair in the table is in `design-system/data/font-pairs.csv`, column `voice`, with a checked license
 
 ## Choose from the project basics, not from the maker's taste
 

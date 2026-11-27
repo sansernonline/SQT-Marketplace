@@ -12,28 +12,28 @@ Fill the blanks in the template below. Pick the set that matches the kind of wor
 - ชื่องาน: งานส่วนตัว
 - งานนี้คืออะไร: what it covers, and on what cycle
 - กติกา: where the document register file is · the weekly review day · which email plugin to use
-- Example IMPROVEMENTS row: a streaming service moved its cancel button to the website and removed it from the app · evidence: the service's help page + a trial · merge into `subscription-audit` references/cancel-steps.md
+- Example IMPROVEMENTS row: a streaming service moved its cancel button to the website and removed it from the app · evidence: the service's help page + a trial · merge into `household-money` references/cancel-steps.md
 
 **Home and family**
 - ชื่องาน: งานบ้าน
 - งานนี้คืออะไร: what is covered, which home, who in the household is responsible for what
 - กติกา: where the bills sheet is · budget per person · who gets reminders about what
-- Example IMPROVEMENTS row: car tax can be renewed online for cars that need an inspection, once inspected at a private inspection centre (ตรอ.) · evidence: Department of Land Transport website + 2 sources · merge into `vehicle-care`
+- Example IMPROVEMENTS row: car tax can be renewed online for cars that need an inspection, once inspected at a private inspection centre (ตรอ.) · evidence: Department of Land Transport website + 2 sources · merge into `home-upkeep`
 
 **Health**
 - ชื่องาน: สุขภาพ แม่
 - งานนี้คืออะไร: who is cared for and what, which appointments or cycles are running
 - กติกา: where the medication schedule file is · who is the main caregiver · do not send data out of the folder
-- Example IMPROVEMENTS row: the Social Security Office website moved its health-check entitlement list page · evidence: link to the new official page · merge into `annual-checkup`
+- Example IMPROVEMENTS row: the Social Security Office website moved its health-check entitlement list page · evidence: link to the new official page · merge into `health-admin`
 
 **Career**
 - ชื่องาน: หางาน 2026
 - งานนี้คืออะไร: career goal, positions being applied for, overall status
 - กติกา: CV language · where the main CV file is · never reveal the current salary in documents that go out (keep the real figure in the user's own file, not here)
-- Example IMPROVEMENTS row: the applicant tracking systems (ATS) of several large companies read two-column PDFs in the wrong order · evidence: converted the file to text as a test · links to 3 vendor guides · merge into `resume-th-en`
+- Example IMPROVEMENTS row: the applicant tracking systems (ATS) of several large companies read two-column PDFs in the wrong order · evidence: converted the file to text as a test · links to 3 vendor guides · merge into `job-search`
 
 **Learning** — ชื่องาน: เรียน Rust · งานนี้คืออะไร: what is being learned, for which job, which milestone it is at
-- กติกา: hours per week · command to run the examples · exam date (if any) · never put secrets or tokens of the cloud account used for labs · example IMPROVEMENTS row: a new exam guide for one certification changed the topic weights · evidence: link to the official exam guide · merge into `cert-prep` references/exam-facts.md
+- กติกา: hours per week · command to run the examples · exam date (if any) · never put secrets or tokens of the cloud account used for labs · example IMPROVEMENTS row: a new exam guide for one certification changed the topic weights · evidence: link to the official exam guide · merge into `learning-path` references/exam-facts.md
 
 <!-- superuser:begin context -->
 ## CONTEXT.md

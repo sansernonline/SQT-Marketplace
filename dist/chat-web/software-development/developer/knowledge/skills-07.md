@@ -1,287 +1,3 @@
-# skill: file-upload-and-storage
-
-Use when users upload files or an app serves stored files
-
-# Accepting file uploads and storing files
-
-> **One rule:** a file a user sends is untrusted data.
-> The file name, the extension, the type the browser reports, and the size it claims can **all be faked**.
-
-## When to use this skill
-
-- A screen lets users attach files, images, or documents.
-- The system must store files and send them back for viewing or download.
-- You must decide where to keep the files.
-- Some files should be hidden from others, but right now anyone with the link can open them.
-
-## When to use another skill instead, or together
-
-| Task | Skill | |
-|---|---|---|
-| Import Excel/CSV and load the data into the system | `data-import-export` | instead |
-| Permissions: who may access what | `auth-implementation-patterns` | instead |
-| Process large files as a background job | `background-jobs` | instead |
-
----
-
-## 1 · Check before accepting
-
-| What to check | How |
-|---|---|
-| **File type** | Read the **contents** (magic bytes). Do not trust the extension or `Content-Type`. |
-| **Size** | Enforce it on the server **and** at the front-facing request receiver. A check in the browser is only a convenience. |
-| Files per request | Set a limit. |
-| Total size per user | Set a quota, or one person uses up all the space. |
-| Allowed types | **An allow list, not a deny list.** |
-
-```
-Typical allow list: jpg · png · webp · pdf · xlsx · docx · csv
-Always forbidden: executables (exe, sh, bat) · server script files (php, aspx, jsp) · svg that has not been sanitised
-```
-
-> **SVG is HTML.** It can run scripts. To accept it, sanitise it first or convert it to PNG.
->
-> **Check the size before reading the file into memory.** Otherwise a 5 GB file kills the server
-> before the size-check code gets to run.
-
-**Virus-scan** any file that other people will download. While the scan result is pending, set the status to `pending`
-and give nobody access.
-
----
-
-## 2 · Where to store
-
-| Store | Good for | Note |
-|---|---|---|
-| **object storage** (S3 · Azure Blob · GCS) | The default to use | Scales · has expiring links built in |
-| The server's disk | A small, single-machine system | **Must sit outside the folder the web serves**, and must be backed up |
-| In the database | Very small files that must be in the same transaction | Grows fast · backups get much slower |
-
-> Wrong: **keeping files in the app's folder.** They vanish on every deploy, and with several instances they cannot see each other.
-> Wrong: **keeping files directly in the folder the web serves.** Someone uploads a script file and runs it.
-
-**The database holds only metadata; the file itself lives elsewhere.** The metadata table needs the columns
-`id` · `original_name` · `stored_key` · `content_type` · `size_bytes` · `checksum` ·
-`uploaded_by` · `uploaded_at` · `scan_status` · `owner_entity_type` · `owner_entity_id`
-
----
-
-## 3 · Naming the stored file
-
-**Never use the file name the user sent as the real stored name.**
-
-```
-Wrong: uploads/รายงาน (1).xlsx              spaces · Thai · brackets
-Wrong: uploads/../../etc/passwd             escapes the folder
-Right: 2026/09/25/01J9Z8K7X2M4.xlsx         random · split into folders by date
-```
-
-- The real stored name is a random value (UUIDv7 or ULID) + an extension that you have **verified**.
-- Keep the user's original name in the database, and send it back on download through a header.
-- Split folders by date. One folder with millions of files is slow and cannot be browsed.
-- Store a checksum too. It detects duplicates and checks the file is not corrupted.
-
----
-
-## 4 · Sending files back to the user
-
-| File | How to send |
-|---|---|
-| Public (logo, product image) | A direct URL through a CDN is fine |
-| **Private** (document, receipt, user photo) | **A signed link that expires** in 5–15 minutes |
-
-> **A "hard-to-guess link" is not access control.** Links get forwarded, logged by proxies,
-> and left in the `Referer` header. For a private file, **check permission every time**, then issue a temporary link.
-
-- For large files, let the user upload straight to object storage with a link we sign, so the file does not pass through the app.
-  **The checks in §1 are still all required.** This route bypasses the app, so restore the checks like this:
-  - **When signing the link:** limit size and type inside the signature. S3 uses a presigned POST whose policy has `content-length-range` and a `Content-Type` condition (a presigned PUT cannot enforce size). Other providers have equivalents, for example GCS uses the header `x-goog-content-length-range`.
-  - **When signing the link:** set the key yourself (a random name as in §3) in a holding folder · keep the link's expiry short · save a metadata row with `scan_status = pending`.
-  - **After the upload finishes** (a storage event, or the user reports it done): read the real magic bytes from the object · compare the real size with the limit · virus-scan. If it passes, move it to the real store and set `clean`. If it fails, delete or quarantine it.
-  - While `pending`, issue no download link to anyone.
-- When serving a file for download, set `Content-Disposition` and `Content-Type` correctly,
-  and never send back user-uploaded HTML in a way that lets the browser render it.
-- If you can, serve user files from a different domain than the app, so scripts in a file cannot reach the app's cookies.
-
----
-
-## 5 · Images
-
-- **Never send the original camera image to the screen.** An 8 MB photo on a phone is a page that does not load.
-- Pre-generate 2–3 sizes (thumbnail · medium · a downsized full size).
-- **Strip EXIF.** The photo holds the location where it was taken, and users do not know they are publishing it.
-- Convert to WebP if the browser supports it.
-- Rotate the image according to EXIF before you strip EXIF, or phone photos come out sideways.
-- If the file is large or there are many, resize as a background job (see `background-jobs`).
-
----
-
-## 6 · Deleting and retention
-
-| Topic | Rule |
-|---|---|
-| Deleting the parent record | A job must also hunt down and delete the orphan files left behind. |
-| Order of deletion | Delete the metadata first, then the file. An orphan file is harmless, but metadata pointing to a file that is gone breaks the screen. |
-| An uploaded file never linked to anything | Delete it after 24 hours. |
-| Retention | Set it per file type · a file with personal data needs an expiry date (see `pdpa-compliance`). |
-| Backup | Files belong in the backup plan just like the database, **and a restore must have been tested for real.** |
-
-
----
-
-# skill: notifications
-
-Use when a system sends email, SMS, LINE or push
-
-# User notifications
-
-> **One rule:** users stop reading everything if they receive enough that they did not need to read.
-> Every message sent beyond what is necessary makes the necessary messages get ignored too.
-> For Thai text in templates → `human-writing` `references/thai-grammar.md` section 4, register "screen"
-
-## When to use this skill
-
-- The system must send email, SMS, LINE push or in-app notifications
-- Users complain of getting duplicates, getting too many, or getting none
-- You must build a settings page for which notifications to receive
-- Important email lands in spam
-
-## When **not** to use it
-
-| Task | Use this instead |
-|---|---|
-| Alerting the team when the system has a problem | `observability-basics` |
-| Queue mechanics and retries | `background-jobs` |
-| Multi-language messages | `i18n-and-locale` |
-| Marketing consent | `pdpa-compliance` |
-
----
-
-## 1 · Choose the channel by urgency, not by habit
-
-| Channel | Good for | Limits |
-|---|---|---|
-| **In-app** | Everything — a permanent record that can be looked back at | Seen only when the user opens the app |
-| **Email** | Receipts, summaries, attachments, things to keep | Slow · can land in spam |
-| **push** | Things the user must know now | Can be turned off · lost if not tapped |
-| **LINE** | Thailand · general customers · high open rate | Cost per message · provider rules apply |
-| **SMS** | Verification codes · urgent things that must arrive | Most expensive · 70 characters if Thai |
-
-> **Thai SMS holds only 70 characters per message** (not 160 as in English).
-> Anything longer is split into several messages and billed for every part, so always count the length before sending.
-
-**One matter goes on one channel** — unless it is something that truly cannot be missed.
-Let the user choose which channel they want (section 5).
-
----
-
-## 2 · Message templates live outside the code
-
-```
-templates/
-  order-confirmed/
-    th.subject.txt  th.html  th.txt
-    en.subject.txt  en.html  en.txt
-```
-
-| Rule | Reason |
-|---|---|
-| **Never build messages by string concatenation in code** | Every wording change would need a new deploy |
-| Variables are named | Use names like `{{customerName}}`, not positions |
-| Email needs both HTML and plain text | Spam filters lower the score of HTML-only email |
-| One file per language | See `i18n-and-locale` |
-| **Test with real values before sending** | A leaked `สวัสดีคุณ {{name}}` damages the brand |
-
-**Every message needs 3 things** — what happened · which item it concerns (with a reference number) · what to do next (a single button)
-
----
-
-## 3 · Always send as a background job
-
-> **A failed email must not make the order fail.**
-> Separate them with a queue — the transaction is saved first, then the message enters the send queue (see `background-jobs`)
-
-| Topic | Rule |
-|---|---|
-| Enqueue after the transaction succeeds | Not during the transaction, because if it rolls back later the email has already gone out |
-| retry | 3 times, doubling the wait each round, then move to the dead letter queue (a queue that holds jobs that failed to send) |
-| **Prevent duplicate sends** | Use a unique key `(type, entity_id, event_id, recipient)` — `event_id` is the id of the event or version of the change (for example, the 2nd status of the same order must be sendable). Do not just hope nobody calls twice |
-| Urgent messages (OTP codes) | Use a separate queue so they do not wait behind 5,000 monthly summary emails |
-
-**Prevent a flood** — set a per-user ceiling per hour, and merge frequent events of the same kind
-into one message ("มี 12 รายการใหม่", not 12 messages).
-
----
-
-## 4 · What must never go in a message
-
-| Never | Put this instead |
-|---|---|
-| Passwords | A reset link that expires |
-| Full card numbers · national ID numbers | The last 4 digits |
-| Health data, test results | "มีผลตรวจใหม่ กรุณาเข้าระบบเพื่อดู" |
-| Attachments with sensitive data | A link that requires login first |
-| Links reachable without identity verification | A short-lived link that checks permission |
-
-> **Treat email as a postcard** — it passes through many systems, sits in a mailbox on a device that may not be theirs,
-> and can be found forever.
-
-**Links in email must be on our own domain** — shortened links make users unable to tell them from scam email.
-
----
-
-## 5 · Let users choose
-
-| Type | Can it be turned off? |
-|---|---|
-| Transactional (receipts · verification codes · security notices) | ✗ cannot be turned off |
-| Action (order status · someone replied) | ✓ the channel can be chosen |
-| Periodic summary | ✓ the frequency can be chosen |
-| Marketing | ✓ **consent must be obtained before sending** (see `pdpa-compliance`) |
-
-- Settings table: `user_id` · `notification_type` · `channel` · `enabled`
-- **Every non-transactional message must have an unsubscribe link**, and it must take effect within 24 hours (our own internal target, stricter than the 2 days that Gmail and Yahoo set)
-- **High-volume marketing email** must also carry a one-click unsubscribe header: `List-Unsubscribe: <https://...>` (an HTTPS URL) together with `List-Unsubscribe-Post: List-Unsubscribe=One-Click` per the RFC 8058 standard, and the email must pass SPF + DKIM (Gmail applies this to senders above about 5,000 messages per day · it applies to marketing email, not transactional · without it the email is more likely to land in spam). Sources: [`references/sources.md`](references/sources.md)
-- Unsubscribing must work without logging in — use a token in the link
-- Respect "quiet hours" — never send non-urgent push or SMS at 2 a.m. (by the recipient's time zone)
-
----
-
-## 6 · Track delivery
-
-| Status | Meaning |
-|---|---|
-| `queued` · `sent` | Entered the queue · left our system |
-| `delivered` | The destination accepted it |
-| `bounced` | Did not arrive — **separate hard (the address does not exist) from soft (mailbox full)** |
-| `failed` | Could not be sent |
-
-- **Stop sending to an address immediately after a hard bounce** — continuing gets our domain blacklisted
-- Keep a send log to answer "why didn't the customer get it" — who, which channel, when, what result
-- Email that must arrive needs **SPF · DKIM · DMARC** all set, or it lands in spam with no warning at all
-- Measure: delivery success rate · bounce rate · queue backlog (see `observability-basics`)
-
----
-
-## 7 · Link to other skills
-
-- Retry queue and dead letter: `background-jobs`
-- Settings table and send log: `database-design`
-- Attachments and expiring links: `file-upload-and-storage`
-- Delivery success rate metrics: `observability-basics`
-- Alerting the team when the system has a problem: `observability-basics` · `incident-runbook-template`
-- Broadcast to LINE OA friends (quota · target group · frequency): `e-commerce:line-broadcast` (if installed)
-
-
-## reference: sources.md
-
-# Sources · notifications
-
-One-click unsubscribe header and SPF + DKIM for high-volume senders: support.google.com/a/answer/14229414 · senders.yahooinc.com/best-practices · checked 22 Oct 2026 (B.E. 2569). The standard is RFC 8058.
-
-
----
-
 # skill: data-import-export
 
 Use when a system imports or exports Excel or CSV
@@ -302,14 +18,14 @@ Use when a system imports or exports Excel or CSV
 
 | Job | skill | |
 |---|---|---|
-| Receiving general file uploads (images, documents) | `file-upload-and-storage` | Instead |
+| Receiving general file uploads (images, documents) | `web-service-essentials` | Instead |
 | Building a nicely formatted Excel file | `anthropic-skills:xlsx` | Instead |
-| Queue mechanics and progress | `background-jobs` | Instead |
+| Queue mechanics and progress | `async-messaging` | Instead |
 | Buddhist Era (B.E.) years and Thai sorting order | `i18n-and-locale` | Instead |
 | Sending documents into Thai accounting software (PEAK · FlowAccount) through an API instead of a file | [`references/thai-accounting-apis.md`](references/thai-accounting-apis.md) | Instead |
-| Recording who imported or exported what | `audit-trail` | Together |
+| Recording who imported or exported what | `web-service-essentials` | Together |
 | Masking personal data in export files | `pdpa-compliance` | Together |
-| Telling the user when an import finishes | `notifications` | Together |
+| Telling the user when an import finishes | `async-messaging` | Together |
 | Limits and constraints of the target table | `database-design` | Together |
 
 ---
@@ -363,12 +79,12 @@ Right: a table of check results, with a button to download the original file wit
 - **Always show a summary page before confirming**, such as "จะเพิ่ม 120 · แก้ 45 · ข้าม 3 · ผิด 0" (will add 120 · update 45 · skip 3 · error 0), then have the user click confirm
 - If the file has duplicate rows, stop and say so. Do not silently use the last row
 - If the data already exists in the system, let the user choose: skip · overwrite · stop
-- **Every import must be recorded in the audit log**: who imported, which file, how many rows affected (see `audit-trail`)
+- **Every import must be recorded in the audit log**: who imported, which file, how many rows affected (see `web-service-essentials`)
 - **Keep the original file**, so when there is a problem you can look back at what the submitted file really looked like
 - Make it reversible: store a batch id (the id of the import run) on every imported row
 
 **Large files run as background jobs.** Above roughly 1,000 rows, put them in a queue,
-split into batches of 500 rows, show progress, and allow cancel (see `background-jobs`).
+split into batches of 500 rows, show progress, and allow cancel (see `async-messaging`).
 
 ---
 
@@ -400,7 +116,7 @@ split into batches of 500 rows, show progress, and allow cancel (see `background
 | Personal data | Mask columns that are not needed (see `pdpa-compliance`) |
 | File name | `<เรื่อง>-<ช่วงวันที่>-<เวลาที่ส่งออก>.xlsx` |
 | File header | Put in the filter conditions used and the export time. Otherwise in 3 months nobody knows what data this file is |
-| Download link | Must expire (see `file-upload-and-storage`) |
+| Download link | Must expire (see `web-service-essentials`) |
 | Format | `.xlsx` for people to read · CSV for machines to read |
 
 
@@ -418,7 +134,7 @@ Abbreviations: small and medium enterprises (SME) · Application Programming Int
 |---|---|
 | Send a file using the accounting software's import template (file format of each vendor not yet checked) | Few documents · the customer's package has no API |
 | Connect to the API directly (sections 2–3) | Hundreds of documents per month · need status back, such as paid |
-| Through a partner app the accounting software certifies (PEAK: menu ตั้งค่า > การเชื่อมต่อแอปพลิเคชันภายนอก, i.e. Settings > External application connections) | Online shop that already uses a back-office system → `ecommerce-patterns` `references/thai-marketplace-apis.md` |
+| Through a partner app the accounting software certifies (PEAK: menu ตั้งค่า > การเชื่อมต่อแอปพลิเคชันภายนอก, i.e. Settings > External application connections) | Online shop that already uses a back-office system → `domain-systems` `references/thai-marketplace-apis.md` |
 
 ## 2 · PEAK
 
@@ -461,17 +177,17 @@ Abbreviations: small and medium enterprises (SME) · Application Programming Int
 
 - Pick one system to issue the tax invoice number · our system and the accounting software must not both issue numbers
 - Send into the accounting software as the source document, then let the accounting software issue the e-Tax · PEAK has an endpoint to send e-Tax · FlowAccount not found in the spec, ask the vendor
-- Tax invoice rules (section 86/4 · e-Tax Invoice & e-Receipt vs by Email) → `e-commerce:e-tax-invoice` (if installed)
+- Tax invoice rules (section 86/4 · e-Tax Invoice & e-Receipt vs by Email) → `e-commerce:thai-tax` (if installed)
 
 ## 6 · Prevent duplicates and reconcile
 
 - Keep a mapping table: our id ↔ the accounting software's id · PEAK recommends keeping External Reference and a mapping to prevent duplicate documents · FlowAccount uses `externalDocumentId` to hold our id
-- Neither vendor's docs have an idempotency key → look up the mapping before every POST create (`principle-safe-to-rerun`)
+- Neither vendor's docs have an idempotency key → look up the mapping before every POST create (`code-craft`)
 - A timeout does not mean failure · pull the list by date range and compare before resending
 - On 429 → wait per `retryAfterSeconds` or back off exponentially (1 · 2 · 4 · 8 seconds, as PEAK recommends)
-- Reconcile every day: the document count and total of the 2 systems must match → `fintech-payments` (`references/agent-payment-integration.md`, section Settlement Reconciliation)
-- Log every send to audit: who sent · which document · destination id · result → `audit-trail`
-- Client Token · client secret · connectId stay outside the code → `config-and-secrets` · PEAK UAT is http, so use test data only
+- Reconcile every day: the document count and total of the 2 systems must match → `domain-systems` (`references/agent-payment-integration.md`, section Settlement Reconciliation)
+- Log every send to audit: who sent · which document · destination id · result → `web-service-essentials`
+- Client Token · client secret · connectId stay outside the code → `web-service-essentials` · PEAK UAT is http, so use test data only
 
 ## Sources
 
@@ -491,11 +207,401 @@ Abbreviations: small and medium enterprises (SME) · Application Programming Int
 
 ---
 
-# skill: observability-basics
+# skill: incidents-and-monitoring
 
-Use when a live system needs metrics, logs or alerts
+Use when a live system is down, or for metrics, alerts or runbooks
 
+# incidents-and-monitoring — watch a live system, run an incident, write it up
+
+> **One rule:** a person must approve any change to production during an incident. The agent proposes the command and its expected effect, and the on-call person runs it or approves it.
+
+## Pick the part
+
+| Job (what the user says) | Open |
+|---|---|
+| "Is the system healthy?", "What should we alert on?", "The system is slow, where is it?" | [`references/observability-basics.md`](references/observability-basics.md) (PromQL and Grafana details: [`references/prometheus-grafana.md`](references/prometheus-grafana.md)) |
+| "The site is down", "users cannot log in", "we may have leaked data" | [`references/incident-response.md`](references/incident-response.md) |
+| "Write a runbook", "on-call guide", "what do we do when this alert fires" | [`references/incident-runbook-template.md`](references/incident-runbook-template.md) (full template: [`references/runbook-template.md`](references/runbook-template.md)) |
+| "Write a postmortem", "blameless review", "what went wrong last week" | [`references/postmortem-template.md`](references/postmortem-template.md) (full template: [`references/template.md`](references/template.md)) |
+
+Drills for a runbook: [`references/game-days.md`](references/game-days.md). Alert-to-runbook links: [`references/index-and-alert-links.md`](references/index-and-alert-links.md).
+
+## Steps every part shares
+
+1. Name the one thing that is wrong, and write down the time of each event as it happens.
+2. Keep the live log to one timestamped line per event. Polish it after the incident, not during.
+3. Measure with symptoms users feel (errors, latency at the 95th percentile), not with averages or with CPU alone.
+4. Give the on-call person one step at a time, each with the value to expect. If the value is not there, the step did not work.
+5. After the incident is stable, write the postmortem within 48 hours.
+
+## Check before done
+
+- Every production change (rollback, failover, scaling, feature flags, WAF or firewall rules) has a named human who approved it.
+- A security breach or leaked personal data goes to `security-analyst` at once. The 72-hour clock to notify the PDPC (Personal Data Protection Committee) starts when the breach is known (`pdpa-compliance` section 8).
+- Every runbook command is checked against staging before use, and every alert links to its runbook.
+- Metric labels never hold user ids, order ids or phone numbers; those go to logs.
+- The postmortem is blameless and states facts without softening them.
+
+A full multi-step response can follow the `bug-fix` playbook in `superuser/references/playbook-bug-fix.md`, with the steps in `incident-response` as the work format.
+
+
+## reference: game-days.md
+
+# Game Days
+
+A checklist for incident-response drills that test a runbook; use it when planning the quarterly drill
+
+Test runbooks by faking failures on purpose:
+
+```markdown
+## Game Day Checklist
+
+Quarterly:
+- [ ] Pick a runbook to test
+- [ ] Simulate the failure in staging (chaos engineering)
+- [ ] On-call engineer follows runbook
+- [ ] Identify gaps
+- [ ] Update runbook based on learnings
+- [ ] Repeat with different runbook next quarter
+```
+
+
+## reference: incident-response.md
+
+<!-- merged from skill `incident-response` on 2026-11-27 · description was: Guide a live incident with devops-engineer (breaches with security-analyst) — triage, mitigate with human approval, resolve, postmortem. -->
+
+## Contents
+
+- [Phase 1: Detection & Triage (first 5 min)](#phase-1-detection--triage-first-5-min)
+- [Phase 2: Investigation (next 15-30 min)](#phase-2-investigation-next-15-30-min)
+- [Phase 3: Mitigation (stop the bleeding)](#phase-3-mitigation-stop-the-bleeding)
+- [Phase 4: Resolution](#phase-4-resolution)
+- [Phase 5: Post-Incident (within 48h)](#phase-5-post-incident-within-48h)
+- [Output Required](#output-required)
+- [Hand-off Suggestions](#hand-off-suggestions)
+> **Shortcut into SuperUser:** open the skill `superuser` with the `bug-fix` playbook and pick the playbook steps into the todo first · the steps below are the work format and output of this command, to be used alongside the playbook, not in place of it
+
+Use the `devops-engineer` agent to coordinate incident response for: **the user's request**
+
+> **Critical:** Speed matters. During the incident keep only a plain timestamped log (one line per event). Polish it after the incident. Focus on stopping the bleed.
+>
+> **Security breach or leaked personal data?** Hand the lead to the `security-analyst` agent and start `pdpa-compliance` section 8 now: the 72-hour clock to notify the PDPC (Personal Data Protection Committee) office starts when the breach is known.
+
+The DevOps engineer should follow this structured response:
+
+## Phase 1: Detection & Triage (first 5 min)
+
+1. **Confirm the incident:**
+   - Is it real? (multiple signals or just one)
+   - What's the user-facing symptom?
+   - When did it start (exact UTC time)?
+   - How widespread (all users, region, segment)?
+
+2. **Assess severity** with the one severity table in `postmortem-template.md` (Severity Levels). SEV1 pages everyone; SEV4 is tracked, not paged.
+
+3. **Assemble response team:**
+   - Incident Commander (IC)
+   - Subject Matter Experts (SMEs)
+   - Communications lead (for SEV1/2)
+   - Scribe (timestamps everything)
+
+4. **Open incident channel** (e.g., `#inc-YYYYMMDD-shortname`)
+
+5. **Update status page** (for user-facing SEV1/2)
+
+## Phase 2: Investigation (next 15-30 min)
+
+1. **Gather evidence:**
+   - Logs (application, infra)
+   - Metrics dashboards (errors, latency, traffic)
+   - Recent changes (deploys in last 24h)
+   - External factors (AWS status, vendor incidents)
+
+2. **Form hypotheses** — avoid tunnel vision:
+   - What recently changed?
+   - What pattern do logs show?
+   - Could it be capacity? Network? Bug? Config?
+
+   **Label every hypothesis with a confidence tag** that follows the evidence, not how tidy the report looks. No percentages. Keep at most 3 suspects in the report.
+
+   | Tag | Means |
+   |---|---|
+   | `[ยืนยันแล้ว]` | Seen happening: a query result, log line or graph anyone can open |
+   | `[น่าจะ]` | Evidence points to it but the failure itself was not seen (found in the code but never seen firing is at most this) |
+   | `[เป็นไปได้]` | Fits the symptoms, no direct evidence yet |
+   | `[ไม่น่า]` | Evidence against, not conclusive |
+   | `[ตัดออกแล้ว]` | Killed by one stated fact (write the fact) |
+
+   Every claim carries the query or link so a person can re-check it. These tags pair with `จากแหล่ง` and `อนุมาน` in `superuser` evidence labels.
+
+3. **Communicate updates** every 15-30 min even if "still investigating" — one message per audience, the Communications lead sends them:
+
+   | Audience | When | Says (and nothing more) |
+   |---|---|---|
+   | Internal (incident channel · support) | every 15-30 min | what is broken · who is affected · what we are trying now · next update at HH:MM |
+   | Exec (SEV1/2) | at declare · at mitigate · at all-clear | impact in business terms (users · orders · baht) · ETA or "unknown" · what we need from them (a decision, a vendor call) |
+   | Customers (status page · in-app) | at declare · on change · at all-clear | symptom in their words · workaround if any · next update time — no root cause, no blame, no promises of a fix time |
+   | Regulator / PDPC (personal-data breach only) | within 72 h of knowing, via `pdpa-compliance` section 8 | what data · how many people · what was done · contact person — drafted by `legal-compliance-officer`, not improvised in the channel |
+
+## Phase 3: Mitigation (stop the bleeding)
+
+> **Tip:** Mitigation ≠ fix. The goal is to cut user impact NOW.
+
+Common mitigations, lowest risk first (same order as `incident-runbook-template.md`):
+- **Disable** broken feature (feature flag) · **Rate limit** abusive traffic
+- **Scale up** capacity
+- **Rollback** recent deploy
+- **Block** at WAF (web application firewall) or firewall
+- **Failover** to backup region/instance (last resort)
+
+> **Production changes need a human.** The agent proposes the action, the command and the expected effect. A human on-call runs it or approves it before rollback, failover, WAF or firewall blocks, scaling or flag changes touch production (`ground-rules/principle-proceed-on-reversible-work`).
+
+Document what worked AND what didn't.
+
+## Phase 4: Resolution
+
+1. **Implement permanent fix:**
+   - Identify root cause (5 Whys)
+   - Code fix or config change
+   - Test in staging first if possible
+
+2. **Verify stability:**
+   - Monitor for at least 30 min
+   - Watch key metrics (errors, latency, throughput)
+   - Confirm no related issues
+
+3. **All-clear announcement:**
+   - Update status page
+   - Notify customer support
+   - Post in incident channel
+
+## Phase 5: Post-Incident (within 48h)
+
+1. **Schedule postmortem** within 48 hours
+2. **Use `postmortem-template.md` skill** for blameless analysis
+3. **Track action items** in real tickets
+4. **Share learnings** beyond the affected team
+
+## Output Required
+
+Throughout the incident, keep a running **incident log** as plain timestamped lines. After the all-clear, format it with `design-gate/polished-document-style`. It covers:
+- Severity + timeline table
+- Affected services + user count
+- Investigation steps + findings (the first paragraph answers "what broke and why" before any evidence; hypotheses carry the tags from Phase 2)
+- Mitigations attempted (worked + didn't)
+- Resolution actions
+- Action items for postmortem
+
+## Hand-off Suggestions
+
+- Permanent code fix → `developer`
+- Architecture issue → `solution-architect`
+- Security breach (live) → `security-analyst` + `pdpa-compliance` section 8 · code vulnerability found → `security-engineer`
+- Customer communication → `technical-writer` + `product-manager`
+- Process improvement → `project-manager`
+
+
+## reference: incident-runbook-template.md
+
+<!-- merged from skill `incident-runbook-template` on 2026-11-27 · description was: Use when writing a runbook or on-call guide -->
+# Incident Runbook Template
+
+## Contents
+
+- [When to use this skill](#when-to-use-this-skill)
+- [When not to use](#when-not-to-use)
+- [Read more when](#read-more-when)
+- [0 · Look for an existing format first (every time)](#0--look-for-an-existing-format-first-every-time)
+- [What's a Runbook?](#whats-a-runbook)
+- [Runbook Quality Standards](#runbook-quality-standards)
+- [Runbook Template](#runbook-template)
+- [Runbook Index and Alert Links](#runbook-index-and-alert-links)
+- [What Makes Runbooks Fail](#what-makes-runbooks-fail)
+- [Game Days](#game-days)
+- [Anti-patterns](#anti-patterns)
+- [Document Look](#document-look)
+
+## When to use this skill
+
+- Writing a runbook for a known failure mode
+- Documenting on-call procedures
+- Creating playbooks for common alerts
+- After a postmortem finds "we need a runbook for X"
+- Onboarding new on-call engineers
+
+## When not to use
+
+| Task | Use this instead |
+|---|---|
+| The incident is over and you must summarise what happened and how to prevent it | `postmortem-template.md` |
+| Setting up a metric alert or dashboard | `observability-basics.md` |
+
+## Read more when
+
+| File | Open when |
+|---|---|
+| [references/runbook-template.md](runbook-template.md) | Every time you start a new runbook. Copy the full template from this file and fill it in |
+| [references/index-and-alert-links.md](index-and-alert-links.md) | If the team has no runbook index page, or alerts do not yet link to a runbook, open this file for examples |
+| [references/game-days.md](game-days.md) | When planning an incident drill to test that a runbook works in practice |
+
+## 0 · Look for an existing format first (every time)
+
+Before using the structure or template in this file, check whether the user, customer or project already has its own format:
+
+- **Where to look:** existing runbooks: `docs/runbooks/` · the on-call team's wiki · the alerting tool in use (PagerDuty · Opsgenie · Grafana) and the real alert names · the organisation's severity levels
+- **Result:** found → use that format (headings, order, field names, numbering) and say in the reply which file's format you used · not found → use the template in this file as a fallback and say that no existing format was found
+- **Still required either way:** alert names, commands and dashboards come from the real system. Do not invent examples.
+
+## What's a Runbook?
+
+A **runbook** answers: "Alert X fired. What do I do?" It is not architecture documentation (the bigger picture) or training material (too much detail).
+## Runbook Quality Standards
+
+A good runbook is:
+
+| Property | Test |
+|----------|------|
+| **Actionable** | Can a tired engineer at 3am follow it? |
+| **Concrete** | Are commands copy-pasteable? |
+| **Tested** | Has someone followed it during a real incident? |
+| **Updated** | Was it last reviewed less than 6 months ago? |
+| **Discoverable** | Can on-call find it from the alert link? |
+| **Concise** | Under 1 page for common cases |
+
+## Runbook Template
+
+The full template is in [references/runbook-template.md](runbook-template.md). Every runbook has these sections in this order, and each section must contain the following.
+
+| Section | Must contain |
+|---|---|
+| Header | Severity · Service · Owner Team · Last Reviewed · Linked Alert |
+| TL;DR (30 seconds) | One paragraph: what broke, what to do first, and whom to call |
+| How to Detect | Symptoms users see and symptoms seen internally · the alert that fires · the dashboard to open |
+| Diagnosis (60 seconds) | A decision flowchart and quick checks written as commands to copy and run, in order |
+| Mitigation Steps | Steps ordered from low risk to high (the same order as `incident-response.md` Phase 3). Every step states Expected effect · **VERIFY** (the command or graph to look at, and the value to expect. If you do not see that value, the step has not worked yet. Do not move to the next step without knowing what the previous step did) and Caveats or If doesn't work · the agent only proposes commands and expected results, and the on-call person runs them or approves them before anything touches production |
+| Escalation Path | Who is called when, in clear minutes |
+| Verification | A checklist to confirm it is really fixed |
+| After Resolution | Log it in the incident channel → update the status page → open a postmortem ticket → update this runbook |
+| Related Runbooks · Background | Links to related runbooks, and a short background of the problem (optional) |
+
+**Mitigation order in the template:** Reduce load (low risk) → Scale up (medium risk) → Rollback recent deploy (higher risk) → Failover to backup region (last resort)
+
+**Escalation order in the template:** If it cannot be fixed in 15 minutes, call the secondary on-call. If two people cannot fix it in 30 minutes, call the service's owning team. If it is still SEV1 after 45 minutes, call the incident commander (IC). If SEV1 runs past 1 hour, call the head of engineering.
+
+**Count it as fixed when** the error rate is back to normal · latency p95 is below the threshold · the status page says "Operational" · there are no new alerts · customers have stopped reporting problems, and you have watched for another 30 minutes.
+
+> Use `postmortem-template.md` skill for the full analysis
+
+## Runbook Index and Alert Links
+
+Keep one index page of runbooks in one place, searchable by service, by alert name, and by the most frequent incidents in the last 90 days.
+
+Every alert **must** link to a runbook through the alert's `runbook_url:` annotation, and should carry a matching `dashboard:` too. Examples of the index page and a Prometheus alerting rule are in [references/index-and-alert-links.md](index-and-alert-links.md).
+
+## What Makes Runbooks Fail
+
+| Problem | Fix |
+|---------|-----|
+| Out of date | Review every 6 months, update after every incident |
+| Too long | Split into 1 runbook per failure mode |
+| Too generic | Be specific to YOUR service |
+| No commands | Include actual copy-paste commands |
+| Not discoverable | Link it from the alert and the index page |
+| No ownership | Each runbook has a team owner |
+| Not tested | Run game days, and follow it during real incidents |
+| Commands rot silently | CI job on every change to `runbooks/`: pull every fenced `bash` block → `bash -n` (parses) · every `./scripts/*.sh` it names exists in the repo · every `kubectl` resource name exists in staging (`kubectl get ... -n staging`) · fail the build on any miss. A command that cannot run at 3am is worse than no runbook (idea from wshobson/agents incident-runbook-templates) |
+
+## Game Days
+
+Test a runbook by deliberately simulating a failure. Each quarter, pick one runbook, simulate the incident in staging, and have on-call follow it. Then update the runbook for the gaps found. The full checklist is in [references/game-days.md](game-days.md).
+
+## Anti-patterns
+
+- **Theoretical runbooks** written by someone who never saw the failure
+- **"Contact the team"** without saying who or how
+- **Treating mitigation as the root-cause fix** (mitigation should be FAST; the fix comes later)
+
+## Document Look
+
+This skill decides **what goes in** the document. It does not decide **how it looks** —
+load the matching skill before writing, not after:
+
+| What is being handed over | Load |
+|---|---|
+| Markdown someone reads (repo, wiki, issue tracker) | `design-gate/polished-document-style` |
+| A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `document-design` |
+| The point needs a picture to land | `diagrams`, then `diagrams` |
+
+
+## reference: index-and-alert-links.md
+
+# Runbook Index และการผูก runbook กับ alert
+
+An example runbook index page and an example of linking a runbook from an alert; use it when setting up the team's runbook system for the first time
+
+## Runbook Index Pattern
+
+Maintain a central index (`docs/runbook-index.md`). Each runbook is one file `docs/runbook-<service>-<เรื่อง>.md` per `workspace-rules/document-naming`:
+
+```markdown
+# Runbook Index
+
+## By Service
+- API Service
+  - [High error rate](runbook-api-high-error-rate.md)
+  - [Memory leak](runbook-api-memory-leak.md)
+- Database
+  - [Connection pool exhausted](runbook-db-conn-pool.md)
+  - [Replication lag](runbook-db-repl-lag.md)
+
+## By Alert Name
+| Alert | Runbook |
+|-------|---------|
+| `api_5xx_rate_high` | [API: High error rate](link) |
+| `db_connections_high` | [DB: Connection pool](link) |
+| `disk_full_warn` | [Generic: Disk full](link) |
+
+## Most Common Incidents (last 90 days)
+1. High error rate on payment service — [runbook](link) (12 times)
+2. DB replication lag — [runbook](link) (8 times)
+3. Cache invalidation storm — [runbook](link) (5 times)
+```
+
+## Linking Runbook to Alert
+
+Every alert MUST link to a runbook:
+
+```yaml
+# Prometheus alerting rule (rule file loaded by Prometheus; Alertmanager only routes the alert)
+- alert: APIHighErrorRate
+  # share of requests that are 5xx — needs the denominator, otherwise it is requests per second
+  expr: |
+    sum(rate(http_requests_total{status=~"5.."}[5m]))
+      / sum(rate(http_requests_total[5m])) > 0.05
+  for: 5m
+  annotations:
+    summary: "API error rate > 5%"
+    runbook_url: "https://runbooks.example.com/api/high-error-rate"
+    dashboard: "https://grafana.example.com/d/api-overview"
+```
+
+
+## reference: observability-basics.md
+
+<!-- merged from skill `observability-basics` on 2026-11-27 · description was: Use when a live system needs metrics, logs or alerts -->
 # Measuring and monitoring a system
+
+## Contents
+
+- [When to use this skill](#when-to-use-this-skill)
+- [When **not** to use it](#when-not-to-use-it)
+- [1 · These three answer different questions](#1--these-three-answer-different-questions)
+- [2 · The four signals to measure](#2--the-four-signals-to-measure)
+- [3 · Naming metrics](#3--naming-metrics)
+- [4 · Alerts](#4--alerts)
+- [5 · Dashboards](#5--dashboards)
+- [6 · Business metrics](#6--business-metrics)
+- [References](#references)
 
 > **The one rule:** if a customer is the one who tells us the system is down, monitoring has failed.
 > It does not mean the customer is kind.
@@ -511,11 +617,11 @@ Use when a live system needs metrics, logs or alerts
 
 | Job | Use this instead |
 |---|---|
-| Log line format and masking | `logging-standards` |
-| A trail of who did what | `audit-trail` |
+| Log line format and masking | `errors-and-logs` |
+| A trail of who did what | `web-service-essentials` |
 | Health check endpoint | `web-service-essentials` |
-| Steps during an incident | `incident-runbook-template` |
-| Post-incident summary | `postmortem-template` |
+| Steps during an incident | `incident-runbook-template.md` |
+| Post-incident summary | `postmortem-template.md` |
 
 ---
 
@@ -528,7 +634,7 @@ Use when a live system needs metrics, logs or alerts
 | **trace** | "Which step is slow?" | one request across 5 services | Most expensive, sample it |
 
 **Order of use during an incident:** the metric says there **is a problem** → the trace says **where** → the log says **why**.
-All 3 must be linked by the same correlation id (see `logging-standards`).
+All 3 must be linked by the same correlation id (see `errors-and-logs`).
 
 ---
 
@@ -545,7 +651,7 @@ All 3 must be linked by the same correlation id (see `logging-standards`).
 > while 5% of users wait 9 seconds. The average always hides the people who hit the problem. **Look at p95 and p99.**
 
 **For queues and background jobs**, add 3 more: jobs waiting in the queue · wait time in the queue · jobs that failed for good
-(see `background-jobs`).
+(see `async-messaging`).
 
 ---
 
@@ -574,7 +680,7 @@ queue_depth_jobs                 value at this moment
 - p95: `histogram_quantile(0.95, sum by (le) (rate(<name>_bucket[5m])))`
 - Every alert rule has `for:` · `severity` · a runbook link · alert on symptoms (latency · error), not on CPU or GPU
 - Keep dashboards as JSON in git and provision them from files · RED per service · USE per resource
-- Details on PromQL · alert rule examples · provisioning · a voice agent example (STT · LLM · TTS latency · Kafka lag · GPU): `references/prometheus-grafana.md`
+- Details on PromQL · alert rule examples · provisioning · a voice agent example (STT · LLM · TTS latency · Kafka lag · GPU): `prometheus-grafana.md`
 
 ---
 
@@ -651,16 +757,137 @@ Technical metrics all green while the business has stalled really happens, and y
 
 ## References
 
-- [`references/prometheus-grafana.md`](references/prometheus-grafana.md) — open for PromQL · alert rules · Grafana provisioning · voice agent example
-- `mcp-server` item 1.1 — when an agent must read Prometheus or Grafana through MCP
-- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
+- [`prometheus-grafana.md`](prometheus-grafana.md) — open for PromQL · alert rules · Grafana provisioning · voice agent example
+- `ai-engineering` → `references/mcp-server.md` item 1.1 — when an agent must read Prometheus or Grafana through MCP
+- [`sources.md`](sources.md) — open to re-check dated figures, prices and rules, and their sources
+
+
+## reference: postmortem-template.md
+
+<!-- merged from skill `postmortem-template` on 2026-11-27 · description was: Use when writing a blameless post-incident review -->
+# Blameless Postmortem Template
+
+## Contents
+
+- [When to use this skill](#when-to-use-this-skill)
+- [ไม่ใช้เมื่อ](#ไม่ใช้เมื่อ)
+- [0 · Look for an existing format first (every time)](#0--look-for-an-existing-format-first-every-time)
+- [Core Principles](#core-principles)
+- [Severity Levels](#severity-levels)
+- [Output Template](#output-template)
+- [Blameless Language Guide](#blameless-language-guide)
+- [Quality Checklist](#quality-checklist)
+- [Common Mistakes](#common-mistakes)
+- [Document Look](#document-look)
+- [References](#references)
+
+## When to use this skill
+
+- After any production incident: a full postmortem for SEV1 / SEV2, repeated SEV3, security, customer-facing or data-integrity incidents; a short writeup for any other SEV3 and for SEV4
+- After a near-miss that could have been a major incident
+- After significant bugs that reached production
+- After a security incident
+
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| The incident is still happening and you need to know what to do now | `incident-runbook-template.md` |
+| An ordinary bug that did not take the real system down | `qa-docs` |
+| Action item "add a load test" (the system went down because of heavy traffic or a full connection pool) | `test-automation` — set p95 and error-rate thresholds · permission gate before firing · smoke test in CI |
+
+## 0 · Look for an existing format first (every time)
+
+Before using the structure or template in this file, check whether the user, customer or project already has its own format:
+
+- **Where to look:** the organisation's incident report format · the severity levels the organisation defines (SEV/P1–P4) · earlier postmortems in `docs/postmortems/` or where the user points
+- **Result:** found → use that format (headings, order, field names, numbering) and say in the reply which file's format you used · not found → use the template in this file as a fallback and say that no existing format was found
+- **Still required either way:** use the organisation's severity names · the blameless principle, a timeline, and action items with owners are required in every format
+
+## Core Principles
+
+1. **Blameless** — focus on systems and processes, not individuals
+2. **Honest** — don't soften facts to protect feelings
+3. **Actionable** — every postmortem produces concrete action items
+4. **Educational** — others should learn from this
+
+## Severity Levels
+
+| Level | Definition | Response Time |
+|-------|-----------|---------------|
+| **SEV1** | Total outage, data loss, security breach | Immediate, 24/7 |
+| **SEV2** | Major feature down, significant user impact | Within 1 hour |
+| **SEV3** | Degraded service, partial impact | Within business hours |
+| **SEV4** | Minor issue, no user impact | Next business day |
+
+## Output Template
+
+Open [`template.md`](template.md) and fill every section of the full template (summary · impact · timeline · detail with TTD/TTM/TTR · 5 Whys · went well/wrong/lucky · action items with type · lessons · supporting info). For a SEV3 not repeated, SEV4 or near-miss use the quick postmortem below instead.
+
+## Blameless Language Guide
+
+| ✗ Blameful | ✓ Blameless |
+|------------|--------------|
+| "Alice deployed the bug" | "A bug was deployed in PR #123" |
+| "Bob should have caught this in review" | "The review process didn't catch this; we should add automated checks" |
+| "QA missed this case" | "Our test coverage didn't include this scenario" |
+| "Someone forgot to..." | "The process doesn't ensure that..." |
+| "Human error" | "The system allowed the mistake to happen" |
+
+## Quality Checklist
+
+- [ ] Timeline includes specific times (not vague "morning of")
+- [ ] Root cause goes deep enough (not just "bug in code")
+- [ ] Action items have owners AND due dates
+- [ ] Action items are tracked in actual ticket system
+- [ ] Blameless language throughout
+- [ ] Reviewed by someone NOT involved in incident
+- [ ] Shared with broader team for learning
+
+## Common Mistakes
+
+- "Lessons learned: be more careful" — not actionable
+- Single root cause when there are usually multiple factors
+- Skipping postmortem because "minor" — near-misses teach us most
+
+### Quick postmortem (SEV3 not repeated · SEV4 · near-miss)
+
+One block in the incident channel or ticket, same day — no meeting. Trigger · Detection · action-item Type are the same words as the full template:
+
+```markdown
+**Quick postmortem:** <title> · SEV3 · YYYY-MM-DD · <XX min>
+- Trigger → impact: <what set it off> → <who felt what>
+- Detection: <alert | customer | chance> after <XX min>
+- Mitigation: <what stopped it> after <XX min> from first impact · recovered after <XX min>
+- Root cause: <one sentence>
+- Action: <one item> · @owner · Type <Prevent | Detect | Mitigate | Process> · due YYYY-MM-DD
+```
+
+---
+
+## Document Look
+
+This skill decides **what goes in** the document. It does not decide **how it looks** —
+load the matching skill before writing, not after:
+
+| What is being handed over | Load |
+|---|---|
+| Markdown someone reads (repo, wiki, issue tracker) | `design-gate/polished-document-style` |
+| A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `document-design` |
+| The point needs a picture to land | `diagrams`, then `diagrams` |
+
+Default formatting is not neutral — it reads as unfinished work.
+
+## References
+
+- [`template.md`](template.md) — open to write a full postmortem (the full template)
 
 
 ## reference: prometheus-grafana.md
 
 # Prometheus and Grafana — using them correctly
 
-Part of `observability-basics` · the thinking about what to measure and what to alert on is in `SKILL.md` sections 2 · 4 · 5 · this file says how to do it in Prometheus and Grafana · metric names and numbers labelled `ตัวอย่าง` (example) are hypothetical data and must be adjusted to the real system
+Part of `incidents-and-monitoring` · the thinking about what to measure and what to alert on is in `SKILL.md` sections 2 · 4 · 5 · this file says how to do it in Prometheus and Grafana · metric names and numbers labelled `ตัวอย่าง` (example) are hypothetical data and must be adjusted to the real system
 
 ## Contents
 
@@ -705,12 +932,12 @@ Every unique set of label values is 1 new time series. The Prometheus docs warn 
 | Must not be a label | Use instead |
 |---|---|
 | `user_id` · `customer_id` · phone number · email | Leave it out · keep it in logs or traces · if you must count per person, use a database, not a metric |
-| `call_id` · `session_id` · `request_id` · `trace_id` | Logs and traces tied to the same id (`logging-standards`) |
+| `call_id` · `session_id` · `request_id` · `trace_id` | Logs and traces tied to the same id (`errors-and-logs`) |
 | A full URL that has an id or query string | A route template such as `/orders/{id}` |
 | An error message with variable values | A limited set of error codes such as `reason="timeout"` |
 
 - A label you may use must have all its possible values countable in advance (stage = 3 values · status = 5 groups) · the number of series of one metric is close to the product of the number of values in each label · a histogram multiplies by the number of buckets on top
-- To find which metric makes series explode: open the TSDB status page in the Prometheus UI · the `tsdb_stats` tool of `prometheus-mcp` gives similar information (see `mcp-server` step 1.1)
+- To find which metric makes series explode: open the TSDB status page in the Prometheus UI · the `tsdb_stats` tool of `prometheus-mcp` gives similar information (see `ai-engineering` → `references/mcp-server.md` step 1.1)
 
 ## 4 · Common PromQL
 
@@ -838,11 +1065,331 @@ Checked 2026-10-27
 | `predict_linear` · `[5m]` range vs scrape interval · NaN behavior when dividing by 0 | General team knowledge (not yet checked against the official PromQL pages) |
 
 
+## reference: runbook-template.md
+
+# Runbook Template
+
+**สารบัญ:** แม่แบบเต็ม 1 บล็อก: TL;DR · How to Detect · Diagnosis · Mitigation Steps (ขั้น 1–5) · Escalation Path · Verification · After Resolution · Related Runbooks · Background
+
+- [The whole template](#runbook-template) is in a single block; copy the whole block into a new runbook file
+
+The full template for one runbook, ready to copy and fill in. The rules for what each section must contain are in `SKILL.md`
+
+````markdown
+# Runbook: <Alert Name or Failure Mode>
+
+| | |
+|--|--|
+| **Severity** | SEV1 \| SEV2 \| SEV3 \| SEV4 (table in `postmortem-template.md`) |
+| **Service** | service-name |
+| **Owner Team** | @team-name |
+| **Last Reviewed** | YYYY-MM-DD |
+| **Linked Alert** | [Grafana/PagerDuty link] |
+
+---
+
+## TL;DR (30 seconds)
+
+> One paragraph: what's broken, what to do first, who to call.
+
+## How to Detect
+
+**Symptoms:**
+- User-facing: ...
+- Internal: ...
+
+**Alerts that fire:**
+- [Alert Name](link) — fires when ...
+- [Another Alert](link) — fires when ...
+
+**Dashboards to check:**
+- [Main Dashboard](link)
+- [Service Health](link)
+
+## Diagnosis (60 seconds)
+
+```mermaid
+flowchart TD
+    Start([Alert fires]) --> Q1{Is the service healthy in dashboard?}
+    Q1 -->|No| A[Check infrastructure]
+    Q1 -->|Yes| Q2{Are errors >5%?}
+    Q2 -->|Yes| B[Check recent deploys]
+    Q2 -->|No| Q3{Is latency high?}
+    Q3 -->|Yes| C[Check downstream services]
+    Q3 -->|No| D[Check alert config - may be false alarm]
+```
+
+### Quick checks (run in order)
+
+**1. Is service responding?**
+```bash
+curl -fsS https://api.example.com/health || echo "DOWN"
+```
+
+**2. Are recent deploys suspicious?**
+```bash
+gh release list --repo our-org/service --limit 5
+```
+
+**3. Check error rate in logs:**
+```bash
+# Last 10 min of 5xx errors
+kubectl logs -n prod deployment/api --since=10m | grep -c '"status":5'
+```
+
+**4. Check downstream dependencies:**
+- Database: [Dashboard link]
+- Redis: [Dashboard link]
+- External API: [Status page link]
+
+## Mitigation Steps
+
+> **Human approval:** an agent only proposes the command and its expected effect. A human on-call runs it or approves it before it touches production (`ground-rules/principle-proceed-on-reversible-work`, `incident-response.md` Phase 3).
+
+Try mitigations in order of risk (lowest first) — the same order as `incident-response.md` Phase 3:
+
+### Step 1: Disable the broken feature or reduce load (low risk)
+```bash
+# Turn off the feature flag of the suspect feature
+./scripts/flag.sh set new-checkout off --env prod
+
+# Or enable rate limiting
+kubectl set env deployment/api -n prod RATE_LIMIT_AGGRESSIVE=true
+```
+
+**Expected effect:** Error rate drops within 2 min
+**VERIFY:** `./scripts/flag.sh get new-checkout --env prod` → `off` · dashboard 5xx panel < 1% for 2 min
+**If doesn't work:** Go to Step 2
+
+### Step 2: Scale up (medium risk)
+```bash
+kubectl scale deployment/api -n prod --replicas=10
+```
+
+**Expected effect:** Latency improves within 3 min
+**VERIFY:** `kubectl get deployment/api -n prod` → READY `10/10` · p95 panel back under threshold
+**Caveats:** Will increase cost, monitor budget alerts
+
+### Step 3: Rollback recent deploy (higher risk)
+```bash
+kubectl rollout undo deployment/api -n prod
+```
+
+**Expected effect:** Reverts to previous version
+**VERIFY:** `kubectl rollout status deployment/api -n prod` → `successfully rolled out` · running image tag = previous release
+**Caveats:** Check for schema migrations before rolling back. A rollout undo does not delete data, but old code may break on a schema the new release already migrated — roll back only if the migration is backward-compatible
+
+### Step 4: Block bad traffic at the WAF or firewall (high risk)
+```bash
+# Block the abusive IP range / path at the web application firewall (WAF)
+./scripts/waf-block.sh --cidr 203.0.113.0/24 --ttl 1h
+```
+
+**Expected effect:** Abusive traffic stops reaching the service
+**VERIFY:** `./scripts/waf-block.sh list` shows the CIDR with TTL · requests from that range in access log → 0 · request rate from real users unchanged
+**Caveats:** Can block real users; set a TTL (time to live) and check the allow list
+
+### Step 5: Failover to backup region (last resort)
+```bash
+# Update DNS to point to backup region
+./scripts/failover-to-us-west.sh
+```
+
+**Expected effect:** All traffic shifts to backup
+**VERIFY:** `dig +short api.example.com` → backup region IP · backup region request rate ≈ previous primary rate · primary → 0
+**Caveats:** Some user data may need migration, full rollback complex
+
+## Escalation Path
+
+```
+You can't resolve in 15 min
+  ↓
+1. Page secondary on-call (PagerDuty group: team-secondary)
+  ↓
+You both can't in 30 min
+  ↓
+2. Page service owner team (team-owner)
+  ↓
+Still SEV1 after 45 min
+  ↓
+3. Page incident commander on-call (IC)
+  ↓
+SEV1 still active after 1h
+  ↓
+4. Page engineering leadership
+```
+
+## Verification (after mitigation)
+
+Confirm the issue is resolved:
+
+- [ ] Error rate back to baseline
+- [ ] Latency p95 < threshold
+- [ ] Status page updated to "Operational"
+- [ ] No new alerts firing
+- [ ] Customer reports stopped
+- [ ] Monitor for 30 min before considering resolved
+
+## After Resolution
+
+1. **Document in incident channel**: what happened, what you did
+2. **Update status page**: clear incident, post resolution message
+3. **Create postmortem ticket**: if SEV1/SEV2, schedule postmortem
+4. **Update this runbook**: if you learned something new
+
+> Use `postmortem-template.md` skill for the full analysis
+
+## Related Runbooks
+
+- [Database connection issues](link)
+- [Cache failure](link)
+- [Authentication service down](link)
+
+## Background / Why this happens
+
+Optional section: brief context on why this failure mode exists.
+Useful for new on-call engineers.
+````
+
+
 ## reference: sources.md
 
 # Sources · observability-basics
 
 Source of item 3.1: prometheus.io (metric types · naming · histograms · alerting) and grafana.com (dashboard best practices · provisioning), checked 2026-10-27 · full links are at the end of `references/prometheus-grafana.md`
+
+
+## reference: template.md
+
+# Full postmortem template · postmortem-template
+
+## Contents
+
+- [1. Summary](#1-summary) · [2. Impact](#2-impact) · [3. Timeline](#3-timeline) · [4. What Happened](#4-what-happened-detailed) (Trigger · Detection · Investigation · Mitigation · Resolution) · [5. Root Cause](#5-root-cause-analysis)
+- [6. What Went Well](#6-what-went-well) · [7. What Went Wrong](#7-what-went-wrong) · [8. Where We Got Lucky](#8-where-we-got-lucky) · [9. Action Items](#9-action-items) · [10. Lessons Learned](#10-lessons-learned) · [11. Supporting Information](#11-supporting-information)
+
+## 1. Summary
+
+<3-5 sentences for executives: what happened, impact, what we did, what we learned>
+
+## 2. Impact
+
+- **User-facing:** Yes | No
+- **Users affected:** ~XX,XXX (X%)
+- **Duration:** XX min
+- **Revenue impact:** $XXX (if known)
+- **Data loss:** None | Minor | Significant
+- **SLA breached:** Yes | No
+- **Regulatory implications:** None | <describe> — ข้อมูลส่วนบุคคลรั่ว → `pdpa-compliance` ข้อ 8 (แจ้งสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคลภายใน 72 ชั่วโมง เมื่อเข้าเงื่อนไข)
+
+## 3. Timeline
+
+All times in UTC.
+
+| Time | Event |
+|------|-------|
+| HH:MM | First customer complaint |
+| HH:MM | On-call paged by alert |
+| HH:MM | Investigation started |
+| HH:MM | Root cause identified |
+| HH:MM | Mitigation deployed |
+| HH:MM | Service restored |
+| HH:MM | All clear confirmed |
+
+## 4. What Happened (Detailed)
+
+### Trigger
+What set it off? (deploy · config change · traffic spike · dependency outage · scheduled job) — keep separate from the root cause and from how we noticed
+
+### Detection
+How was the incident detected? Was it automated alerting or customer report?
+- Time to detect (TTD): XX minutes
+- Could we have detected faster? How?
+- If a person noticed before any alert, name the gap type: **coverage** = no rule watched it · **late** = a rule exists but fired too slowly · **noise** = it fired and was ignored. The action item fixes that type (new rule · tighter threshold or window · remove or merge noisy alerts) → alert rules in `observability-basics.md`.
+
+| Measure from first user impact | Minutes |
+|---|---|
+| Time to detect (TTD) | XX |
+| Time to mitigate (impact stops growing) | XX |
+| Time to recover (fully back to normal) | XX |
+
+### Investigation
+What did we look at? What did we rule out?
+- Tools used: ...
+- Wrong turns / red herrings: ...
+
+### Mitigation
+What stopped the bleeding? (Not necessarily the fix)
+- Time to mitigate (TTM): XX minutes
+
+### Resolution
+What was the permanent fix?
+- Time to resolve (TTR): XX minutes
+
+## 5. Root Cause Analysis
+
+Use **5 Whys** technique:
+
+- Why did the service go down? → Database queries timed out
+- Why did queries time out? → Connection pool exhausted
+- Why was the pool exhausted? → A new endpoint didn't release connections
+- Why didn't it release connections? → Missing `finally` block
+- Why wasn't this caught? → No load tests for that endpoint
+
+**Root cause:** <one-sentence statement>
+
+**Contributing factors:**
+- ...
+- ...
+
+## 6. What Went Well
+
+- Monitoring alerted within X minutes
+- Rollback completed quickly thanks to ...
+- Team collaboration on Slack was effective
+- ...
+
+## 7. What Went Wrong
+
+- Took X minutes longer than needed because ...
+- Runbook was outdated
+- Required engineer was offline; no backup
+- ...
+
+## 8. Where We Got Lucky
+
+- Issue happened during business hours; would have been worse at night
+- Customer X didn't notice because they were also having maintenance
+- ...
+
+## 9. Action Items
+
+| # | Action | Owner | Type | Priority | Due Date |
+|---|--------|-------|------|----------|----------|
+| 1 | Add monitoring for X | @alice | Prevent | P1 | YYYY-MM-DD |
+| 2 | Update runbook | @bob | Mitigate | P2 | YYYY-MM-DD |
+| 3 | Add load test for endpoint (see `test-automation`) | @charlie | Prevent | P1 | YYYY-MM-DD |
+
+**Action types:**
+- **Prevent:** stops this from happening again
+- **Detect:** catches it sooner if it happens
+- **Mitigate:** reduces impact when it happens
+- **Process:** improves how we respond
+
+## 10. Lessons Learned
+
+What can other teams learn from this?
+- Lesson 1: ...
+- Lesson 2: ...
+
+## 11. Supporting Information
+
+- Incident channel: #inc-XXX
+- Status page updates: <link>
+- Customer communications: <link>
+- Graphs / dashboards: <link>
+- Related PRs: <links>
+```
 
 
 ---
@@ -869,8 +1416,8 @@ Use when a system shows text, dates or money in Thai and English
 | Task | Use this instead |
 |---|---|
 | Date and time data types in the database | `database-design` |
-| Date and time format in JSON | `api-conventions` |
-| Thai fonts and document layout | `branded-document-design` |
+| Date and time format in JSON | `api-design` |
+| Thai fonts and document layout | `document-design` |
 | Thai fonts on screen | the platform skill + `ui-craft` |
 
 ---
@@ -1010,7 +1557,7 @@ So let a library handle it. Do not write `if (count > 1)` yourself, because some
 
 ## Links to other skills
 
-`error-handling-patterns` (error messages that must be translated) · `presentation-design` (Thai fonts in slides) · `data-import-export` (B.E. years in imports · CSV that opens in Excel) · `notifications` (multi-language message templates) · `human-writing/translate-th-en` (plugin `superuser`: translating whole documents, a glossary per project)
+`errors-and-logs` (error messages that must be translated) · `slide-deck` (Thai fonts in slides) · `data-import-export` (B.E. years in imports · CSV that opens in Excel) · `async-messaging` (multi-language message templates) · `human-writing/translate-th-en` (plugin `superuser`: translating whole documents, a glossary per project)
 
 ## References
 

@@ -19,7 +19,7 @@ General information — entry rules are set by the destination and change often;
 5. **Insurance** — buy before departure; match the destination's minimum if any (Schengen €30,000 medical incl. repatriation).
 6. **Money** — card with low foreign-exchange (FX) fee or a travel card, some cash in local currency, tell the bank / enable overseas use in the app, note the card-freeze hotline.
 7. **Connectivity and power** — roaming pack or eSIM, offline maps, plug adapter from the plug table.
-8. **Health** — enough prescription medicine for the trip + 3 days, in original packaging with the label; English medicine list (`medication-schedule` ใน plugin เดียวกัน).
+8. **Health** — enough prescription medicine for the trip + 3 days, in original packaging with the label; English medicine list (`health-admin` ใน plugin เดียวกัน).
 9. **Itinerary file** — every booking with confirmation number, address in local script, check-in time, contact.
 10. **Day-before pass** — passport, money/cards, phone + charger + adapter, medicine: four things, physically checked.
 
@@ -47,14 +47,14 @@ Current visa-free list for Thai passports: [references/travel-facts.md](referenc
 - Confirm **validity windows**, not just possession — "6 months beyond entry" or "beyond departure" is the classic failure
 - Never pay for an e-visa or K-ETA through an agent site you found by search ads; type the official address
 - Everything with a confirmation number lives in the itinerary file, nowhere else
-- Passport photo page and visa page scanned into the important-docs folder (`important-docs`) and available offline
+- Passport photo page and visa page scanned into the important-docs folder (`family-legal`) and available offline
 - Travelling with a foreign spouse or friend into Thailand: they fill the **TDAC** (Thailand Digital Arrival Card) online before arrival; Thai citizens do not
 
 ## Output
 
 Trip card · entry decision per traveller with source and date · checklist from the template · itinerary file `YYYY-MM-DD-destination-itinerary.md`.
 
-Related: `important-docs` (passport expiry) · `human-writing/polite-message-th-en` (hotel or airline requests) · `digital-hygiene` (public Wi-Fi, SIM swap).
+Related: `family-legal` (passport expiry) · `human-writing/polite-message-th-en` (hotel or airline requests) · `digital-hygiene` (public Wi-Fi, SIM swap).
 
 ## เรียกเป็นคำสั่ง
 

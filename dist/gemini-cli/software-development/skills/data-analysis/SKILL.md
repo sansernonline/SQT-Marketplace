@@ -22,12 +22,12 @@ description: Use when a CSV, Excel or SQL export must answer a question
 | An Excel import or export screen inside a system | `data-import-export` | instead |
 | Automated data pipeline · warehouse | agent `data-engineer` | instead |
 | Domain-specific numbers (health · finance · insurance · Software as a Service: SaaS revenue) | agent `clinical-data-analyst` · `quant-analyst` · `insurance-analyst` · `revops-analyst` | instead |
-| Business metrics watched live on the system's dashboard | `observability-basics` section 6 | instead |
+| Business metrics watched live on the system's dashboard | `incidents-and-monitoring` → `references/observability-basics.md` section 6 | instead |
 | Write pandas correctly (Copy-on-Write · money in satang) | `stack-python` section 4 | together |
 | Query from a database | `stack-sql` | together |
 | Buddhist Era (B.E.) years · Thai sorting · number formats | `i18n-and-locale` | together |
 | Personal data | `pdpa-compliance` section 5 | together |
-| Deliver as .docx | `markdown-report-docx` | together |
+| Deliver as .docx | `document-design` | together |
 
 ---
 
@@ -149,9 +149,9 @@ The second font `"DejaVu Sans"` catches characters the first font lacks (needed 
 
 | Format | Use when | How |
 |---|---|---|
-| Markdown (`report.md`) | The team reads it in the repo or will convert it to .docx next | `markdown-report-docx` |
+| Markdown (`report.md`) | The team reads it in the repo or will convert it to .docx next | `document-design` |
 | .xlsx | The recipient wants to filter or calculate further | `df.to_excel()` (needs openpyxl) · format with `anthropic-skills:xlsx` · for export-file rules (escape formulas · file name · a header stating the filter conditions) see `data-import-export` sections 4–5 |
-| Slides | A presentation to executives | `presentation-design` · 1 slide, 1 finding |
+| Slides | A presentation to executives | `slide-deck` · 1 slide, 1 finding |
 
 Attach `analyse.py` and `output.txt` to the report every time, so anyone who doubts a number can re-run it.
 

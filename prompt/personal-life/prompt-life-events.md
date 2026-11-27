@@ -53,7 +53,7 @@ playbook `trip` · agent `life-admin` · skill `travel-prep`
 
 ## 2. ตัดสินใจเรื่องใหญ่ / ตั้งเป้าหมาย
 
-playbook `decide-and-goals` · agent `life-admin` · skill `decision-journal` · `goal-and-habit`
+playbook `decide-and-goals` · agent `life-admin` · skill `goals-and-decisions`
 **ผลลัพธ์:** แถวใน `decision-journal.md` และ/หรือ `goals/YYYY-Qn.md` · **รออนุมัติ:** ตั้งเตือนวันทบทวน
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -72,7 +72,7 @@ playbook `decide-and-goals` · agent `life-admin` · skill `decision-journal` ·
 
 ## 3. ย้ายบ้าน เปลี่ยนที่อยู่ทุกที่
 
-playbook `documents` (ขั้น 1–2 และ 4: รายการเอกสาร · ที่ต้องแจ้ง · เตือน) · agent `doc-caretaker` · skill `important-docs` · `subscription-audit` (บริการที่ต้องย้ายหรือยกเลิก)
+playbook `documents` (ขั้น 1–2 และ 4: รายการเอกสาร · ที่ต้องแจ้ง · เตือน) · agent `doc-caretaker` · skill `family-legal` · `household-money` (บริการที่ต้องย้ายหรือยกเลิก)
 **ผลลัพธ์:** `moves/YYYY-MM-DD_<ย่านใหม่>.md` (รายการที่ต้องแจ้งเปลี่ยนที่อยู่ · ลำดับ · สถานะ) · อัปเดต `important-docs.csv` · **รออนุมัติ:** ยื่นย้ายทะเบียนบ้าน · แจ้งเปลี่ยนที่อยู่ในบัญชีต่าง ๆ · ยกเลิกหรือโอนบริการ — ผู้ใช้ทำเอง
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -87,7 +87,7 @@ playbook `documents` (ขั้น 1–2 และ 4: รายการเอ�
 
 1. ตารางทุกที่ที่ต้องแจ้ง: หน่วยงาน / บริษัท · ช่องทาง (แอป · สาขา · ออนไลน์) · เอกสารที่ต้องใช้ · ต้องทำภายในวันไหน · สถานะ
 2. เรียงลำดับ: เรื่องที่มีกำหนดตามกฎหมาย → เรื่องที่ส่งเอกสารหรือบัตรมาทางไปรษณีย์ → เรื่องที่เหลือ
-3. บริการรายเดือนของบ้านเก่า: ย้าย · ยกเลิก · เก็บไว้ พร้อมวันตัดรอบ (ตาม `subscription-audit`)
+3. บริการรายเดือนของบ้านเก่า: ย้าย · ยกเลิก · เก็บไว้ พร้อมวันตัดรอบ (ตาม `household-money`)
 4. สิ่งที่ต้องทำในบ้านเก่าก่อนส่งคืน (ถ้าเช่า): ถ่ายรูปสภาพ · อ่านมิเตอร์ · ขอเงินประกันคืน
 5. อัปเดต `important-docs.csv` และตั้งเตือนเรื่องที่ยังรอ
 
@@ -119,7 +119,7 @@ skill `human-writing/polite-message-th-en` · งานเล็ก ทำเล
 
 ## 5. ของขวัญและวันสำคัญ
 
-skill `gift-idea-tracker` · agent `life-admin` · งานกลาง ไม่ต้องเปิด playbook
+skill `family-week` · agent `life-admin` · งานกลาง ไม่ต้องเปิด playbook
 **ผลลัพธ์:** `gift-tracker.md` · **รออนุมัติ:** สั่งซื้อ
 
 ### ข้อมูล (ผู้ใช้กรอก)

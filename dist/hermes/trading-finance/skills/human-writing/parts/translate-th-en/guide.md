@@ -7,7 +7,7 @@
 - Translating a document, README, manual, proposal, email, or chat, Thai to English or English to Thai
 - Translating screen text (buttons · labels · errors · notifications) into language files
 - The project has paired Thai/English files that must be edited to match
-- Not for: writing fresh in one language → `human-writing` · storing and showing dates, numbers, money in code → `i18n-and-locale` (plugin `software-development`) · hard-to-say messages in 2 languages → `human-writing/polite-message-th-en` · CV in 2 languages → `resume-th-en` (plugin `career`)
+- Not for: writing fresh in one language → `human-writing` · storing and showing dates, numbers, money in code → `i18n-and-locale` (plugin `software-development`) · hard-to-say messages in 2 languages → `human-writing/polite-message-th-en` · CV in 2 languages → `job-search` (plugin `career`)
 
 ## Steps
 1. **Open `docs/glossary.md`** (none → create it from the terms in the first piece of work). Table `| ไทย | English | ใช้เมื่อ · ไม่ใช้ |` with product, screen, and feature names, work statuses, and words left untranslated. One term = one translation = one spelling across documents, screens, and chat; fix a word translated 2 ways. If the code project has `locales/glossary.md` per `i18n-and-locale`, use that and link it in one line from `docs/glossary.md`.

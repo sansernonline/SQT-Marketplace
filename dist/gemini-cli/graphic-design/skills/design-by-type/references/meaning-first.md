@@ -6,7 +6,7 @@ Open before searching references or textures for a logo, icon or key visual. It 
 
 ## 1 · Write the 2–3 feelings the customer must get
 
-Write short words, not a slogan: what the customer should feel when they see the mark. For CodeRuen these are `เร็ว · น่าเชื่อถือ`. If the brief does not say, read the business line (CodeRuen ships every 2 weeks → fast; builds back-office systems → trustworthy) and write `(รอยืนยัน · ผู้ใช้: ยืนยันคำนี้)` next to the words you inferred.
+Write short words, not a slogan: what the customer should feel when they see the mark. For CodeRuen these are `เร็ว · น่าเชื่อถือ`. If the brief does not say, read the business line (CodeRuen ships every 2 weeks → fast; builds back-office systems → trustworthy) and mark the words you inferred `(เดา)`, then confirm them in the end-of-job question. These words are the `อารมณ์` field of the 7-field `เนื้อหา:` brief (superuser `design-gate/parts/design-method/guide.md` steps 1–4); this file is that method applied to logos, icons and key visuals.
 
 ## 2 · One meaning per mark is enough
 

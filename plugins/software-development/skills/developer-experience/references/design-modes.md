@@ -2,7 +2,7 @@
 
 Audit developer experience (DX) or design a software development kit (SDK) with the devrel-engineer agent (dx-audit or sdk-design).
 
-Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+Two modes. Read the first word of **the user's request**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
 
 | Mode | What it does |
 |---|---|
@@ -13,7 +13,7 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 
 ## Mode: `dx-audit`
 
-Use `devrel-engineer` agent for: **$ARGUMENTS**
+Use `devrel-engineer` agent for: **the user's request**
 
 Workflow:
 1. **Discovery:** target persona, current state, friction points
@@ -31,7 +31,7 @@ Workflow:
 
 ## Mode: `sdk-design`
 
-Use `devrel-engineer` agent for: **$ARGUMENTS**
+Use `devrel-engineer` agent for: **the user's request**
 
 Workflow:
 1. **Discovery:** target languages, API style, auth model, scale

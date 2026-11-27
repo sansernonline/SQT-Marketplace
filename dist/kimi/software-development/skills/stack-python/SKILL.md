@@ -8,7 +8,7 @@ description: Use when writing or testing Python code
 ## Use when
 - Writing, changing or testing Python (scripts · FastAPI · Django · pandas · pytest) in any repo.
 
-Not for: writing less → `lazy-coding` · naming → `readable-code` · logging → `logging-standards` · catching errors → `error-handling-patterns` · test framework choice → `testing-standards` · LLM calls → `llm-engineering` · schema and migrations → `database-design` · background jobs → `background-jobs`.
+Not for: writing less → `code-craft` · naming → `code-craft` · logging → `errors-and-logs` · catching errors → `errors-and-logs` · test framework choice → `test-automation` · LLM calls → `ai-engineering` · schema and migrations → `database-design` · background jobs → `async-messaging`.
 
 ## Steps
 1. Find what the repo uses and use that; never mix tools (for example no `uv.lock` in a poetry repo).
@@ -44,8 +44,8 @@ Not for: writing less → `lazy-coding` · naming → `readable-code` · logging
    pytest -q -k "refund and not slow"                      # เลือกตามชื่อ
    ```
    Type checker: `[tool.pyright]` or `pyrightconfig.json` → pyright; `[tool.mypy]` or `mypy.ini` → mypy; neither → ask once; Astral's ty only if the repo already set it up. If the repo uses black · isort · flake8, keep them; do not move to ruff in the same task.
-6. Tests: for new logic and bugs write the failing test first, then fix. `tmp_path` for files, `monkeypatch.setenv` for env, pass the clock in as a parameter (else `time-machine`; keep `freezegun` if the repo has it), `respx` / `responses` for HTTP (no real network), `testcontainers` of the production database type (not SQLite for Postgres). Setup and examples: [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#python--pytest).
-7. Security (principles in `principle-secure-by-default`): lock and commit dependencies; scan with `pip-audit`; check a new package's exact PyPI name before adding; SQL by parameters, never an f-string; resolve user file names and check `.is_relative_to(base.resolve())`; secrets from the environment; `shell=True`, `pickle.load` of outside data and `yaml.load` are forbidden. Add dependencies only with `uv add` in a uv repo. Full list and the traps table: [`references/traps-and-security.md`](references/traps-and-security.md).
+6. Tests: for new logic and bugs write the failing test first, then fix. `tmp_path` for files, `monkeypatch.setenv` for env, pass the clock in as a parameter (else `time-machine`; keep `freezegun` if the repo has it), `respx` / `responses` for HTTP (no real network), `testcontainers` of the production database type (not SQLite for Postgres). Setup and examples: [`test-automation/references/per-stack.md`](../test-automation/references/per-stack.md#python--pytest).
+7. Security (principles in `security-gate`): lock and commit dependencies; scan with `pip-audit`; check a new package's exact PyPI name before adding; SQL by parameters, never an f-string; resolve user file names and check `.is_relative_to(base.resolve())`; secrets from the environment; `shell=True`, `pickle.load` of outside data and `yaml.load` are forbidden. Add dependencies only with `uv add` in a uv repo. Full list and the traps table: [`references/traps-and-security.md`](references/traps-and-security.md).
 
 ## Check before done
 - [ ] `ruff check` and `ruff format --check` (or the repo's formatter) pass.

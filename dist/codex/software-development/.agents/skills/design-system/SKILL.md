@@ -1,6 +1,6 @@
 ---
 name: design-system
-description: Use when authoring design tokens or a Tailwind theme
+description: Use for design tokens, a Tailwind theme or a starting palette
 ---
 
 # Design System — 3-layer tokens and component specs
@@ -9,6 +9,13 @@ description: Use when authoring design tokens or a Tailwind theme
 
 > **One rule:** screen code must have no raw colors or spacing. Every value references a token · tokens have 3 layers: **primitive** (raw value `--color-blue-600`) → **semantic** (role `--color-primary`) → **component** (`--button-bg`) · to change the theme, edit the middle layer in one place
 
+## Pick the part
+
+| Job (what the user says) | Open |
+|---|---|
+| "Write the tokens", "generate CSS from JSON", "Tailwind theme", "check the code for raw colours" | This file: steps 1–5 below |
+| "New screen, no visual direction yet", "starting palette", "Thai and English font pair", "which chart fits" | [`references/design-direction-lookup.md`](references/design-direction-lookup.md) (sources: [`references/design-direction-lookup/sources.md`](references/design-direction-lookup/sources.md)) |
+
 ## Which one to use
 
 | Task | Use |
@@ -16,7 +23,7 @@ description: Use when authoring design tokens or a Tailwind theme
 | Code already exists; the user wants to know which values it uses and where it leaves the scale | `ui-craft` → `scripts/design_tokens.py` (reads the code → `docs/DESIGN.md`) |
 | Write new tokens, generate CSS from JSON, check that code has no raw values | **this skill** |
 | Spacing and font size scales | `ui-craft` items 1–2 (use the same scale as the tokens you set) |
-| Pick starting colors and fonts | `design-direction-lookup` |
+| Pick starting colors and fonts | `design-system` |
 | Colors and fonts of a brand that already has a document | `brand-kit` section "เขียนเป็นเอกสาร" (write as a document) (plugin `graphic-design`) → sync into the token file here |
 
 ## Steps
@@ -47,3 +54,4 @@ The scripts are Node, install no extra packages, and make no network calls.
 ## References
 
 - [`references/sources.md`](references/sources.md) — open when you need the origin, licence or the list of upstream files not copied
+- [`references/design-direction-lookup.md`](references/design-direction-lookup.md) — open for a starting palette, font pair and Thai UX rules on a new screen

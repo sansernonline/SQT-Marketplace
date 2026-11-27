@@ -1,6 +1,6 @@
 # Class family: AI · LLM · agent · MCP
 
-Open this when the system calls an LLM · has RAG or persistent memory · has an agent that calls tools · is or uses an MCP server · has a customer-facing chatbot (for example a LINE chatbot wired to an LLM). Paste the chosen sections into the sub-agent brief whole. For design principles see `llm-engineering` and `mcp-server`.
+Open this when the system calls an LLM · has RAG or persistent memory · has an agent that calls tools · is or uses an MCP server · has a customer-facing chatbot (for example a LINE chatbot wired to an LLM). Paste the chosen sections into the sub-agent brief whole. For design principles see `ai-engineering`.
 
 ## Rules for this family
 

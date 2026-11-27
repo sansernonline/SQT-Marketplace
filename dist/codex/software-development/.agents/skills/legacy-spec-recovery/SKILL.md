@@ -14,7 +14,7 @@ Turn an undocumented system into an as-is spec that a change request can be meas
 | งาน | ใช้ตัวนี้แทน |
 |---|---|
 | No source code, only compiled files or an unknown file format | `reverse-engineering` |
-| Enough code and documents exist, and only a small unread part needs editing | `code-orientation` |
+| Enough code and documents exist, and only a small unread part needs editing | `code-craft` |
 
 ## The four rules
 
@@ -79,7 +79,7 @@ Produce, using the existing skills for format:
 
 | File | Content | Skill |
 |---|---|---|
-| `01-system-overview.md` | Purpose in one paragraph, context diagram, components, integrations, tech stack and versions | `software-diagrams` |
+| `01-system-overview.md` | Purpose in one paragraph, context diagram, components, integrations, tech stack and versions | `diagrams` |
 | `02-module-inventory.md` | Module → screens / endpoints / reports / jobs → main tables | — |
 | `03-data-dictionary.md` | Tables grouped by module, key columns, status codes decoded, core ER diagram | `database-design` |
 | `04-business-rules.md` | Rule register — [assets/business-rule-register.md](assets/business-rule-register.md) | — |
@@ -90,7 +90,7 @@ Produce, using the existing skills for format:
 
 ### Step 3 — Deep dive (only the module a change touches)
 
-`modules/<module>.md` at the level of `fsd-writing`: each screen, its fields and validation with the exact error text, status transitions as a state diagram, the queries behind each list, and every rule found added to the register with its ID. Keep the label on each line.
+`modules/<module>.md` at the level of `requirements-writing`: each screen, its fields and validation with the exact error text, status transitions as a state diagram, the queries behind each list, and every rule found added to the register with its ID. Keep the label on each line.
 
 Then propose **characterization tests** — tests that record what the system does today so a change that breaks something else is caught. For legacy code that cannot be unit-tested, record at the edge: fixed inputs to a stored procedure, view or report, and the output saved as a golden file to compare after the change. List them; build them only when asked, and never against production data.
 

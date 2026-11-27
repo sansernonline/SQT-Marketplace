@@ -49,9 +49,9 @@ If critical context is missing, write `(รอยืนยัน)`, carry on, an
 
 - `ground-rules/simplify` — **APPLY TO EVERY PLAN** — 3-5 priorities (not 20), measurable goals, no buzzwords, concrete owners
 - `design-gate/polished-document-style` — for project plans, status reports, and stakeholder communications
-- `markdown-visuals` — **APPLY TO EVERY PROJECT PLAN / STATUS REPORT** — timelines as Mermaid `gantt`, dependency graphs as `flowchart LR`, RAID register as quadrant (impact × likelihood), burndown / velocity as inline SVG bars. Status reports are skimmed in 30 seconds — visuals lead, narrative supports.
-- Office files you receive or must export: use the built-in skills `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` directly (do not unpack files yourself). Slides → `presentation-design` first (`anthropic-skills:pptx` is only for reading or editing a received .pptx).
-- `branded-document-design` — whenever the deliverable is a rendered file (`.docx`, `.pptx`, PDF). Default Word or PowerPoint styling looks unfinished. At minimum, add a cover page, tinted tables and figure captions.
+- `diagrams` — **APPLY TO EVERY PROJECT PLAN / STATUS REPORT** — timelines as Mermaid `gantt`, dependency graphs as `flowchart LR`, RAID register as quadrant (impact × likelihood), burndown / velocity as inline SVG bars. Status reports are skimmed in 30 seconds — visuals lead, narrative supports.
+- Office files you receive or must export: use the built-in skills `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` directly (do not unpack files yourself). Slides → `slide-deck` first (`anthropic-skills:pptx` is only for reading or editing a received .pptx).
+- `document-design` — whenever the deliverable is a rendered file (`.docx`, `.pptx`, PDF). Default Word or PowerPoint styling looks unfinished. At minimum, add a cover page, tinted tables and figure captions.
 - Working style: `human-writing` · `lean-reply/answer-shape` · `human-writing/spell-out-abbreviations` · `context-budget` · `workspace-rules/temp-file-discipline` (temp files in `_to_delete/`) · `decision-desk/flag-and-propose` (irreversible, costly or outward-facing forks only; reversible → `ground-rules/principle-proceed-on-reversible-work`) · `superuser/status-report` (inside SuperUser the table goes in your report; the lead writes `docs/BUILD-PLAN.md`) · `superuser` and `learn-loop/owner-style-capture` run in the main session, not in this agent
 - `ground-rules/principle-proceed-on-reversible-work` — the team can go ahead on reversible work. For work that cannot be undone or affects outsiders, prepare it in the "รออนุมัติ" (awaiting approval) list and carry on with the rest.
 - `decision-desk/decision-log` — record every decision you make yourself in long or unattended work, so each one can be reviewed and reversed later.
@@ -59,7 +59,7 @@ If critical context is missing, write `(รอยืนยัน)`, carry on, an
 - `learn-loop/repeated-mistakes-to-checks` — if the team repeats the same mistake, write an automatic check instead of repeating the warning.
 - `learn-loop/session-lessons-to-skills` — after a big job, turn the lessons into proposed skill fixes.
 - `workspace-rules/document-naming` — when organising project documents, set file names, versions, statuses, and storage locations.
-- `project-doc-set` — when starting a new project, choose which documents to have, which to write first, and where to keep them.
+- `project-docs` — when starting a new project, choose which documents to have, which to write first, and where to keep them.
 - `handoff` — at the end of a planning or status session, save a summary so work can resume
 
 ## Standard Outputs: Project Plan and Status Report

@@ -46,5 +46,5 @@ Choose the brand's tone axis and level of polish per `graphic-design` section 2,
 ## 4 · Record it so every piece follows it
 
 - Write the chosen character as the first-line comment of the token file, for example `/* app-character: 1 work-tool */`, and put it in the `ตัดสินใจเอง` (decided on my own) table in `docs/BUILD-PLAN.md` with the answers to the 4 questions
-- **Word documents (`branded-document-design`):** use the same brand color set, but the document body stays formal, because the readers are the approvers. Apps of character 4–5 may change only the cover, which can use brighter colors and rounder corners.
+- **Word documents (`document-design`):** use the same brand color set, but the document body stays formal, because the readers are the approvers. Apps of character 4–5 may change only the cover, which can use brighter colors and rounder corners.
 - **Logo (`graphic-design`):** the shape must lean the same way. Characters 1–2 use a square block with rounded edges. Characters 4–5 use very round shapes or a mascot.

@@ -154,9 +154,10 @@ For medium tasks and up, pick **1** playbook and read the whole file before star
 
 | playbook | use when |
 |---|---|
+| [`design`](references/playbook-design.md) | One logo · poster · banner · cover · icon · key visual, new or redesigned |
 | [`brand-setup`](references/playbook-brand-setup.md) | Starting a new brand · rebrand · every post looks like a different company |
 | [`campaign`](references/playbook-campaign.md) | Product launch · price promotion · event · seasonal promotion that needs several sizes |
-| [`image-series`](references/playbook-image-series.md) | Images for many products · a week of posts · storyboard · a recurring character · existing images need edits |
+| [`image-series`](references/playbook-image-series.md) | Images for many products · a week of posts · storyboard · a recurring character · existing images need edits · LINE stickers · rich menu |
 | [`video`](references/playbook-video.md) | Reels · TikTok · Shorts · video ads · animated text · animated logo |
 | [`asset-cleanup`](references/playbook-asset-cleanup.md) | Messy files, lost logo · names like final_v2_REAL.png |
 | [`review`](references/playbook-review.md) | Check a design before sending or going live — your own work or the user's |
@@ -188,7 +189,7 @@ Always write the direction in words before drawing. An image with no direction c
 | Rule | Detail |
 |---|---|
 | **Pick the agent by role** | Lock style and write image briefs: `art-director` · build the brand kit and check brand fit: `brand-keeper` · pre-send review: `design-critic` (a fresh agent that has not seen the work) · posts and campaigns: `social-creator` · cut, subtitle and export video: `video-editor` · real images in web pages, apps and slides: `image-artist` |
-| **Cross-branch work** | App or web screens go to `software-development` (`ux-designer` · `graphic-designer`) · product images for online shops go to `e-commerce` · LINE OA rich menus go to `e-commerce`. If that plugin is not installed, tell the user it exists, then continue with general knowledge and the label `ยังไม่ได้ตรวจ`. Multi-step work in that branch goes to that plugin's `/<plugin>:superuser`. |
+| **Cross-branch work** | App or web screens go to `software-development` (`ux-designer` · `graphic-designer`) · product images for online shops go to `e-commerce` · LINE OA setup, chatbot and broadcast go to `e-commerce` (rich menu images and stickers stay here in `line-design`). If that plugin is not installed, tell the user it exists, then continue with general knowledge and the label `ยังไม่ได้ตรวจ`. Multi-step work in that branch goes to that plugin's `/<plugin>:superuser`. |
 
 ---
 
@@ -606,15 +607,16 @@ The column template and the values used in each field live in one place, the [qu
 # playbook · asset-cleanup — organize design files
 
 Use when: files are messy, the logo cannot be found · names like final_v2_REAL.png
+Main principles: [`design-principles`](../../design-principles/SKILL.md) (no medium file covers file folders, so the naming rule in `brand-kit` applies)
 Main skill: `brand-kit`
 
 ## ขั้นตอน (Steps) (copy into the todo exactly)
 
-1. Survey the folder and list every file with its size and date · ใคร: หัวหน้าทีม
+1. Open `design-principles` for what a clean kit looks like. Then survey the folder and list every file with its size and date · ใคร: หัวหน้าทีม
 2. Set up the folder structure and file-name pattern per `brand-kit` · ใคร: `brand-keeper` ตัวใหม่
 3. Write a rename script that logs old name → new name and can run in reverse, and try it on a copy first · ใคร: `general-purpose` ตัวใหม่
 4. Run for real, and move duplicate files to `_to_delete/` instead of deleting them · ใคร: หัวหน้าทีม
-5. Check (ตรวจ) that the file count is the same before and after, and that searching for the logo by name finds it · ใคร: `reviewer` ตัวใหม่
+5. Check (ตรวจ) that the file count is the same before and after, that searching for the logo by name finds it, and that the new layout follows `design-principles` · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
 
@@ -626,14 +628,15 @@ Every file is in the new structure, there is a log that can be reversed, and the
 # playbook · brand-setup — set up or rebuild a brand kit
 
 Use when: starting a new brand · rebranding · every post looks like a different company
-Main skills: `brand-kit` · `design-review` · agent `brand-keeper`
+Main principles: [`design-principles`](../../design-principles/SKILL.md) · logo [`logo.md`](../../design-by-type/references/logo.md) + [`meaning-first.md`](../../design-by-type/references/meaning-first.md) · superuser `design-gate/parts/design-method/guide.md`
+Main skills: `brand-kit` · `icon-design` · `design-review` · agent `brand-keeper`
 
 ## ขั้นตอน (Steps) (copy into the todo exactly)
 
-1. Gather raw material: the old logo · past work · the customer group · the words people should feel · ใคร: หัวหน้าทีม
-2. Write the direction as words before drawing: 3 words of personality · what is not the brand · ใคร: `brand-keeper` ตัวใหม่ (for several routes: `brainstormer` ตัวใหม่)
-3. Build the kit per `brand-kit`: logo rules and clear space · color roles (contrast values are measured in step 5) · type scale · Thai and Latin font pair · tone of voice · ใคร: `brand-keeper` ตัวใหม่
-4. Make 5 real-use templates, then run `design-review` on every piece · ใคร: `brand-keeper` ตัวใหม่ makes the templates · `design-critic` ตัวใหม่ checks (ตรวจ)
+1. Gather raw material (the old logo · past work · the customer group), then write the 7-field `เนื้อหา:` brief per `design-method` steps 1–4 and save it in `DESIGN.md`. Open the logo principle file before drawing · ใคร: หัวหน้าทีม
+2. Turn the brief into the brand direction before drawing: its `อารมณ์` words become the personality, its `ไม่เอา` becomes what the brand is not, and every direction traces back to `โปรเจกต์` · ใคร: `brand-keeper` ตัวใหม่ (for several routes: `brainstormer` ตัวใหม่)
+3. Build the kit per `brand-kit`: logo rules and clear space · logo and icon marks per `icon-design` · color roles (contrast values are measured in step 5) · type scale · Thai and Latin font pair · tone of voice · ใคร: `brand-keeper` ตัวใหม่
+4. Make 5 real-use templates, then run `design-review` on every piece and check it against the medium's principle file in [`design-principles`](../../design-principles/SKILL.md) (logo first) · ใคร: `brand-keeper` ตัวใหม่ makes the templates · `design-critic` ตัวใหม่ checks (ตรวจ)
 5. Check (ตรวจ) that the color pairs used with text pass contrast and that the fonts are licensed for commercial use (check from the license page) · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
@@ -646,15 +649,16 @@ A kit folder that can be read through in 5 minutes, and 5 templates that pass `d
 # playbook · campaign — a multi-platform campaign piece set
 
 Use when: a product launch · a discount promotion · an event · a seasonal promotion, that needs many sizes
-Main skills: `campaign-set` · `image-generation` · `brand-kit` · agent `social-creator`
+Main principles: [`design-principles`](../../design-principles/SKILL.md) · banner and ad [`banner.md`](../../design-by-type/references/banner.md) · superuser `design-gate/parts/design-method/guide.md`
+Main skills: `campaign-set` · `image-generation` · `brand-kit` · `copy-claims-check` · agent `social-creator`
 
 ## ขั้นตอน (Steps) (copy into the todo exactly)
 
-1. Write the core idea in 1 sentence, and the main message that must be seen within 3 seconds · ใคร: หัวหน้าทีม (`brainstormer` ตัวใหม่ proposes 2–3 ideas first)
+1. Open the banner principle file, then write the 7-field `เนื้อหา:` brief per `design-method` steps 1–4 (reuse `โปรเจกต์` from `DESIGN.md`); its `ความหมาย` is the core idea and the main message that must be seen within 3 seconds · ใคร: หัวหน้าทีม (`brainstormer` ตัวใหม่ proposes 2–3 ideas first)
 2. Build the asset table per `campaign-set`: platform · placement · size · file name, then check sizes and safe zones against the platform's help page per `campaign-set` · ใคร: `social-creator` ตัวใหม่
 3. Make the master piece first: for AI images use `image-generation` and lock the style with `brand-kit` · ใคร: `social-creator` ตัวใหม่ (for AI images: `art-director` ตัวใหม่ writes the brief and locks the style)
 4. Make the other sizes from the master piece in the table's order, with the text inside the safe zone · ใคร: `social-creator` ตัวใหม่
-5. Run `design-review` on every piece, then check (ตรวจ) against the brand kit · ใคร: `design-critic` ตัวใหม่ then `brand-keeper` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only, does not edit files)
+5. Run `design-review` on every piece, then check (ตรวจ) against the medium's principle file in [`design-principles`](../../design-principles/SKILL.md) (banner · video) and the brand kit. Check every claim in the copy per `copy-claims-check` · ใคร: `design-critic` ตัวใหม่ then `brand-keeper` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only, does not edit files)
 6. Fix the 3 most important items that the lead has confirmed first · ใคร: `social-creator` ตัวใหม่
 7. Review round: check (ตรวจ) every earlier item and the changed spots, per [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
 
@@ -663,25 +667,51 @@ Main skills: `campaign-set` · `image-generation` · `brand-kit` · agent `socia
 Every row of the asset table has a really exported file, with the right size, that passes `design-review` · posting or running ads goes under "รออนุมัติ" (awaiting approval)
 
 
+## reference: playbook-design.md
+
+# playbook · design — one design piece or a small set
+
+Use when: a logo · poster · banner · cover · icon · key visual · one-off social piece, new or redesigned
+Main principles: superuser `design-gate/parts/design-method/guide.md` (12 steps) · the medium's principle file in [`design-principles`](../../design-principles/SKILL.md)
+Main skills: `design-by-type` · `design-gate` (superuser) · `icon-design` (logo · icon) · `print-ready-files` (print) · the medium's skill from the `design-principles` table · agents `art-director` · `design-critic`
+
+## ขั้นตอน (Steps) (copy into the todo exactly)
+
+1. Write the 7-field `เนื้อหา:` brief per `design-method` steps 1–4 (โปรเจกต์ first; reuse it from `DESIGN.md` if the project has one) and open the medium's principle file · ใคร: หัวหน้าทีม (unclear brief: `brainstormer` ตัวใหม่)
+2. Search live references and build the board per `design-gate/design-references` · ใคร: `art-director` ตัวใหม่
+3. Pick the references: the owner from the board, or the lead under **ตัดสินใจเอง** when the owner is away · ใคร: หัวหน้าทีม
+4. Make 3 directions that differ in style and structure, each with its `ความหมาย · ตัวสื่อ · สไตล์ · สี · ฟอนต์` line, per `design-method` step 7 and the medium's skill · ใคร: `art-director` ตัวใหม่ per direction (sent together in one message)
+5. Build the plain master of each direction, test it at the edges of use, then add depth and polish per `design-method` step 8. For a logo or icon, follow `icon-design`. For a print piece, export the files per `print-ready-files` · ใคร: ตัวเดิม (ถือแนวนั้น)
+6. Check (ตรวจ) every direction by eye against the medium's principle file and `design-gate/no-ai-look`, in real use and next to the references · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only)
+7. Fix the findings the lead has confirmed · ใคร: `art-director` ตัวใหม่
+8. Check (ตรวจ) again every earlier finding and every changed spot, until no `สูง` (high) or `กลาง` (medium) is left, per [`team-roles`](team-roles.md) · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only)
+9. Present the board, record the owner's pick and words, and deliver the files and usage guide per `design-method` step 11 · ใคร: หัวหน้าทีม
+
+## Done when
+
+The brief has 7 fields · every direction passed the principle file, `no-ai-look` and the real-use test · the owner's pick is in the choice log · final files in every variant the medium needs, with licences and a usage guide
+
+
 ## reference: playbook-image-series.md
 
 # playbook · image-series — AI images that look like one set
 
-Use when: several product images · a week of posts · a storyboard · a character that appears repeatedly · fixing an existing image
-Main skills: `image-generation` · `brand-kit` · `image-generation` · agent `art-director`
+Use when: several product images · a week of posts · a storyboard · a character that appears repeatedly · fixing an existing image · LINE stickers or a rich menu
+Main principles: [`design-principles`](../../design-principles/SKILL.md) · product images [`product-images.md`](../../design-principles/references/product-images.md) · LINE [`line.md`](../../design-principles/references/line.md) · thumbnail [`thumbnail.md`](../../design-principles/references/thumbnail.md) · superuser `design-gate/parts/design-method/guide.md`
+Main skills: `image-generation` · `brand-kit` · `marketplace-product-images` · `line-design` · `design-review` · agents `art-director` · `design-critic` · `brand-keeper`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. Write a style lock sheet per `brand-kit` — color, light, composition, lens, what is forbidden · ใคร: `art-director` ตัวใหม่
-2. Write the brief and prompt for each image per `image-generation`, with every image citing the same lock sheet · ใคร: `art-director` ตัวใหม่
+1. Write the 7-field `เนื้อหา:` brief per `design-method` steps 1–4 (reuse `โปรเจกต์` from `DESIGN.md`). Open the principle file of the medium (product images · LINE · thumbnail) before writing the style lock sheet per `brand-kit` — color, light, composition, lens, what is forbidden — with each choice tracing back to the brief. When the set must match an existing logo or brand, pull its colours with `brand-kit` `scripts/extract-colors.cjs` first. Before any image, run the medium skill's pre-work gate (live references · 3 different directions · the owner picks one · close with `ด่านก่อนลงมือ:`) · ใคร: `art-director` ตัวใหม่
+2. Write the brief and prompt for each image per `image-generation`, with every image citing the same lock sheet. For product images follow `marketplace-product-images`; for LINE stickers and rich menus follow `line-design` · ใคร: `art-director` ตัวใหม่
 3. Generate the images through the tool the user has installed. If there is no tool, hand over a brief that is ready to paste · ใคร: `art-director` ตัวใหม่
 4. Check (ตรวจ) every image against the lock sheet. For an image that drifts from the style, write an `image-generation` (what to keep · what to change) instead of regenerating the whole image · ใคร: `design-critic` ตัวใหม่ compares against the lock sheet · `art-director` ตัวใหม่ writes the fix brief
 5. Regenerate the images that need fixing following the fix brief. If there is no tool, hand over a brief that is ready to paste · ใคร: `art-director` ตัวใหม่
-6. Check (ตรวจ) the whole set by running `design-review` on it · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only)
+6. Run the medium's checker scripts (LINE: `line-design` `scripts/richmenu_check.py` and `scripts/sticker_check.py` must report all pass), compare the set with the real logo or brand kit (`brand-keeper` ตัวใหม่), then check (ตรวจ) the whole set against the medium's principle file in [`design-principles`](../../design-principles/SKILL.md) (thumbnail · product images · LINE), then run `design-review` on it · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only)
 
 ## Done when
 
-Every image passes the lock sheet and `design-review`, and the briefs are kept so the set can be regenerated
+Every image passes the lock sheet and `design-review`, the medium's checker scripts pass, and the briefs are kept so the set can be regenerated
 
 
 ## reference: playbook-learn-from-session.md
@@ -726,11 +756,12 @@ Every lesson can point to the file it went into · a repeated mistake has a chec
 
 Use when: checking work before delivery or real use · "ช่วยดูหน่อยว่ามีอะไรพลาด" (take a look and see if anything is wrong) · the user did it themselves and wants it checked
 Result: a verdict with a list of confirmed problems · **does not fix anything automatically** · read-only work, so it does not create `CONTEXT.md`
+Main principles: [`design-principles`](../../design-principles/SKILL.md) · the medium's file from its table (the checkers in step 4 judge against it)
 Main skills: `design-review` · `brand-kit` · `campaign-set` · agent `design-critic`
 
 ## ขั้นตอน (Steps) (copy into the todo exactly)
 
-1. Set the scope: the pieces to check, and the source documents to compare against (brand kit · brief · platform sizes) · ใคร: หัวหน้าทีม
+1. Set the scope: the pieces to check, and the source documents to compare against (brand kit · brief · platform sizes), and open the medium's principle file in `design-principles` · ใคร: หัวหน้าทีม
 <!-- superuser:begin review-steps -->
 2. Prepare the review package per [`review-lenses`](review-lenses.md) item 1: the intent of the work in 1 paragraph (who uses it, for what; if unsure, choose the interpretation with the least impact and do not stop to ask) · the diff as a file · the spec's conditions quoted exactly · the `head:` id · the author's reasoning kept separate in `author-notes.md`, with no opinion on pass or fail put in the prompt · ใคร: หัวหน้าทีม
 3. Choose lenses by the kind of work from [`review-lenses`](review-lenses.md) item 2 (every job has `spec` and `quality`), then follow the checklist of this playbook's main skill (none → a related skill) · ใคร: หัวหน้าทีม
@@ -863,16 +894,17 @@ All the step 1 conditions pass, or every remaining piece has a reason why it is 
 # playbook · video — short video and motion work
 
 Use when: Reels · TikTok · Shorts · video ads · animated text · animated logos · editing and adding subtitles from existing footage
-Main skills: `video-script` · `video-editing` · `brand-kit` · `video-editing` · `narration-th` · `video-editing`
+Main principles: superuser `design-gate/parts/design-method/guide.md` · the medium's principle file in [`design-principles`](../../design-principles/SKILL.md)
+Main skills: `video-script` · `video-editing` · `brand-kit` · `narration-th`
 
 ## ขั้นตอน (Steps) (copy into the todo exactly)
 
-1. Write the main message and a 3-second hook · ใคร: `social-creator` ตัวใหม่ (hook text and script) · the motion shot list and the shot-by-shot brief belong to `art-director`
+1. Write the 7-field `เนื้อหา:` brief per `design-method` steps 1–4 (reuse `โปรเจกต์` from `DESIGN.md`); its `ความหมาย` is the main message, then write a 3-second hook for it · ใคร: `social-creator` ตัวใหม่ (hook text and script) · the motion shot list and the shot-by-shot brief belong to `art-director`
 2. Make a shot list per `video-script`: picture · on-screen text · sound · timing · ใคร: `art-director` ตัวใหม่
 3. Set the motion rhythm per `video-editing`: define timing in milliseconds · choose the easing curve (the pattern of speeding up and slowing down) · keep on-screen text up long enough to read · ใคร: `art-director` ตัวใหม่
 4. Write the shot-by-shot brief for the video tool or for shooting on a phone · ใคร: `art-director` ตัวใหม่
 5. Once footage or audio exists: cut, join, adjust loudness, pair slides with audio, and export per `video-editing` · Thai subtitles per `video-editing` · if the user will not record audio → generate narration from the script per `narration-th` (gives subtitles and slide timing in one round) · a job that delivers only a brief skips this step · ใคร: `video-editor` ตัวใหม่
-6. Check (ตรวจ) that the Thai subtitles can be read in time at the real speed, that text does not fall outside the platform's safe zone, and that the exported file (if any) has the length and loudness that were measured · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only, does not edit files)
+6. Check (ตรวจ) the cut against [`design-principles/references/video.md`](../../design-principles/references/video.md), and that the Thai subtitles can be read in time at the real speed, that text does not fall outside the platform's safe zone, and that the exported file (if any) has the length and loudness that were measured · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only, does not edit files)
 
 ## Done when
 
@@ -1128,7 +1160,7 @@ This file is the same in every plugin · the original lives in plugin `superuser
 | agent | model tier | use when | not for |
 |---|---|---|---|
 | `brainstormer` | large | before a large task or when the problem is unclear: think through 2–3 paths on paper, scored 1–5 (5 = best) | building several real versions and picking one → `crew-patterns/parallel-attempts-pick-best` |
-| `reviewer` | per the budget table in `SKILL.md` section 2 (balanced: medium every round · large only in the last round of risky work) | check finished work before it reaches the user or outsiders; read-only, never edits | high-risk work → `crew-patterns/adversarial-review-panel` (uses several `reviewer`s) · (if plugin `software-development` is installed) code → pair with `code-review-checklist` · (if plugin `graphic-design` is installed) visual work → `design-critic` or `design-review` · if neither is installed, check against the criteria in the brief |
+| `reviewer` | per the budget table in `SKILL.md` section 2 (balanced: medium every round · large only in the last round of risky work) | check finished work before it reaches the user or outsiders; read-only, never edits | high-risk work → `crew-patterns/adversarial-review-panel` (uses several `reviewer`s) · (if plugin `software-development` is installed) code → pair with `git-and-review` · (if plugin `graphic-design` is installed) visual work → `design-critic` or `design-review` · if neither is installed, check against the criteria in the brief |
 | `learning-reviewer` | medium | at the end of a multi-step task: review how the team worked, not the work itself | — |
 
 Call a fresh one every time, because whoever did the work does not review its own work · specialist reviewers (`design-critic` · `brand-keeper` · `qa-tester` · `security-engineer` · `risk-manager`) may replace `reviewer` only in a step written as "read-only · does not edit files" (call with `model: opus`) · a step in which that agent writes a test or fixes something counts as doing the work
@@ -1235,7 +1267,7 @@ Open when unsure which skill to call, or when the job crosses into another plugi
 | Need to edit an existing image | `image-generation` |
 | Social or multi-size campaign work | `campaign-set` + agent `social-creator` |
 | LINE OA rich menu (image size · tap areas · JSON · upload via API) | `line-design` + agent `social-creator` · read image sizes from `campaign-set` |
-| Product pictures for Shopee · Lazada · TikTok Shop (size · white background · text on image · rejected pictures) | `marketplace-product-images` + agent `social-creator` · text on the product page → `e-commerce:product-listing` |
+| Product pictures for Shopee · Lazada · TikTok Shop (size · white background · text on image · rejected pictures) | `marketplace-product-images` + agent `social-creator` · text on the product page → `e-commerce:sales-copy` |
 | App icon · favicon · on-screen icon set · logo mark | `icon-design` + agent `design-critic` · the user has already rejected icons the agent hand-drew, ask for a prototype before drawing |
 | YouTube clip cover image (thumbnail) · Thai text on the cover · testing several covers | `design-by-type` + agent `social-creator` |
 | Sending files to a print shop or sign shop (flyer · name card · vinyl banner · sticker) · CMYK · bleed · distorted Thai fonts | `print-ready-files` + agent `design-critic` |

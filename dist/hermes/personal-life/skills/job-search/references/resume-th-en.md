@@ -1,0 +1,123 @@
+<!-- merged from skill `resume-th-en` on 2026-11-27 · description was: Use when writing a Thai or English CV or resume, or improving a LinkedIn profile for a Thai job search -->
+# Resume and LinkedIn — Thai and International
+
+## Contents
+
+- [Step 1 — pick the convention](#step-1--pick-the-convention)
+- [Never put on any CV](#never-put-on-any-cv)
+- [Step 2 — ATS-friendly structure](#step-2--ats-friendly-structure)
+- [Step 3 — the bullet formula](#step-3--the-bullet-formula)
+- [Step 4 — the one-page rule](#step-4--the-one-page-rule)
+- [Workflow](#workflow)
+- [Checklist before sending](#checklist-before-sending)
+- [LinkedIn profile](#linkedin-profile)
+- [Not an AI look](#not-an-ai-look)
+- [References](#references)
+- [เรียกเป็นคำสั่ง](#เรียกเป็นคำสั่ง)
+
+A CV gets a few seconds of a recruiter's first look, and it has to survive 2 readers: the applicant tracking system (ATS) that parses it, and the person who skims it.
+
+General information, not professional advice — for visa or licence claims on a CV, ask the employer's HR.
+
+## Step 1 — pick the convention
+
+| Signal in the job post | Convention | Photo | Age / birth date | Marital status, religion | Length |
+|---|---|---|---|---|---|
+| Thai-language post, Thai SME or family business | **Thai** | Usually expected (formal, plain background) | Common | Leave out unless the form requires it | 1–2 pages |
+| English post at a multinational in Thailand | **Hybrid** | Only if the company's own form asks | Leave out | Leave out | 1 page under ~10 years' experience, 2 max |
+| Overseas role (US, UK, EU, Australia, Singapore) | **International** | **Leave out** — photos are not expected there and can count against you | Leave out | Leave out | US: 1 page early-career · UK/EU: 2 pages ok |
+| Government / state enterprise (ราชการ / รัฐวิสาหกิจ) | Their own ใบสมัคร form | As the form says | As the form says | As the form says | Form |
+
+## Never put on any CV
+
+- เลขบัตรประจำตัวประชาชน (national ID number), passport number, bank account — identity-theft risk; HR collects these after the offer, under the Personal Data Protection Act (PDPA, พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล)
+- Full home address — เขต/จังหวัด is enough
+- Current salary — only when asked, and see `salary-negotiation.md`
+- Copies of บัตรประชาชน, ทะเบียนบ้าน or transcripts as attachments, unless the post asks
+
+## Step 2 — ATS-friendly structure
+
+1. **Header** — name, phone, email, LinkedIn URL, city. Not inside a Word header/footer or text box (many ATS skip those).
+2. **Summary** — 2–3 lines: role + years + 2 strongest results + target.
+3. **Experience** — reverse chronological; company, title, month-year range, 3–6 bullets each.
+4. **Skills** — plain comma list using the exact words of the job post.
+5. **Education** — degree, university, year. GPA only if ≥ 3.25 or the post asks, and only within ~3 years of graduating.
+6. **Certifications / languages** — with level and year (TOEIC 850, IELTS 7.0, JLPT N3).
+
+ATS rules: single column · standard headings ("Experience", "ประสบการณ์ทำงาน") · no tables, icons, skill bars or charts · real text, not images · PDF unless the portal asks for .docx · file name `Firstname-Lastname-CV-Role.pdf`.
+
+Thai CVs: use a standard Thai font (TH Sarabun New, Noto Sans Thai) and embed fonts in the PDF — otherwise vowels and tone marks break on the recruiter's machine.
+
+## Step 3 — the bullet formula
+
+**Action verb + what you did + result + number.**
+
+| Weak | Strong |
+|---|---|
+| Responsible for monthly reports | Automated the monthly sales report in Power BI, cutting preparation from 3 days to 4 hours |
+| ดูแลลูกค้าองค์กร | ดูแลลูกค้าองค์กร 35 ราย ต่อสัญญาได้ 92% และเพิ่มยอดขายต่อรายเฉลี่ย 18% ในปี 2568 |
+| มีส่วนร่วมในการพัฒนาระบบ ซึ่งทำให้การปิดงบเร็วขึ้น | ลดเวลาปิดงบจาก 8 วันเหลือ 5 วัน |
+| Helped with the ERP project | Led migration of 120,000 customer records to SAP with zero critical defects at go-live |
+
+No number? Find a proxy — people served, time saved, transactions, percentage, ranking, deadline met. If truly none, write the scope ("for 3 branches, 40 staff").
+
+Thai verbs: พัฒนา · ลด · เพิ่ม · นำทีม · ออกแบบ · บริหาร · ปรับปรุง · ประสาน · ริเริ่ม · วิเคราะห์
+English verbs: Led · Built · Cut · Grew · Launched · Automated · Negotiated · Redesigned · Delivered
+
+## Step 4 — the one-page rule
+
+- Under ~10 years' experience → 1 page. Roles older than 10–15 years → 1 line each.
+- 1 line per bullet where possible, 2 at most.
+- Remove: "References available on request", objective statements, hobbies with no signal, high-school details.
+- Margins at least 1.5 cm — white space is readability.
+
+## Workflow
+
+1. Get the job post. Mark its 8–10 key requirements and keywords, and sort them into 3 tiers: **must-have** (in the title, "required", or a licence/degree) · **strong plus** ("preferred", "an advantage") · **nice-to-have** (everything else). Must-haves each get a bullet in the top half of page 1; strong pluses go in Skills and one bullet; nice-to-haves only if true and there is room. A missing must-have is named once, honestly, in the cover email — never hidden by keyword stuffing.
+2. Pick convention (Step 1) and language. Thai post → Thai CV; English post → English CV; unsure → both.
+3. Rewrite experience with the formula; leave missing numbers as `[ใส่ตัวเลข]` — never invent.
+4. Mirror the post's exact keywords in Summary and Skills (only true ones).
+5. Run the checklist. Output the CV plus a short "what changed" list.
+
+## Checklist before sending
+
+- [ ] Phone and email correct; email is professional
+- [ ] Every bullet has a result; at least half have a number
+- [ ] Job-post keywords appear naturally
+- [ ] Dates as month + year; any gap over 6 months explained in one line (study, family, freelance)
+- [ ] No ID number, no full address, no salary
+- [ ] Spell-checked in both languages; company names in their official spelling
+- [ ] PDF opens with correct Thai on another machine
+- [ ] Thai CV uses พ.ศ. or ค.ศ. consistently (ค.ศ. = พ.ศ. − 543), never both
+- [ ] **Reader test** passed: a fresh reader (a subagent that has not seen this chat, or the user in a new chat) gets only the CV and the job post, reads for 6 seconds as the HR screener would, then answers "what role is this person for · their 2 strongest results · which must-have is missing". A wrong answer marks what to fix. Method: `thesis-writing`, "Reader test"
+
+Thai text (CV, cover email) → `human-writing` `thai-grammar.md` section 4, the job-application register · no long dash (—) in text that will be sent; use a space, "โดย" or brackets instead
+
+## LinkedIn profile
+
+For a LinkedIn profile (argument `linkedin`), use the CV bullets from Step 3 and the keywords from the Workflow, then follow [references/linkedin.md](linkedin.md): target roles, 10–15 keywords from 5 real job posts, headline formula (up to 220 characters), About in 4 paragraphs, Skills, Featured, Recommendations, settings and its own checklist. Profile and CV dates and titles must match exactly.
+
+**Hard rules (LinkedIn):** No confidential employer or client data on LinkedIn without the user's permission. Leave the phone number out of public LinkedIn fields.
+If the user is still employed, set Open to work to Recruiters only, and say it cannot be fully hidden.
+
+## Not an AI look
+
+Before handing over, run `design-gate/no-ai-look` section 3. CVs are usually PDF or .docx, so only the eye check (3.2) applies; the script is for HTML/CSS. For a resume that means: no emoji headings, no bold-first bullets, no generic claims without numbers.
+
+Related: `interview-prep.md` (every bullet becomes a Situation, Task, Action, Result (STAR) story) · `family-legal` in `personal-life` (store certificates and transcripts).
+
+## References
+
+- [`templates.md`](templates.md) — fill-in templates (English, Thai, cover email) and a worked example of a summary line; open when drafting
+- [`linkedin.md`](linkedin.md) — LinkedIn headline, About, Thai keyword table, settings, checklist and banner-size source; open for a LinkedIn profile
+
+## เรียกเป็นคำสั่ง
+
+`/personal-life:job-search <th|en|both|linkedin> [job post URL or text]`
+
+Run the `career-coach` agent with the `job-search` skill: **the user's request** (with `linkedin`, work from the LinkedIn reference instead of the CV steps)
+
+1. Ask for the current CV (or work history) and the target job post if not given.
+2. Decide Thai-company vs international convention from the job post (see the skill's decision table).
+3. Rewrite every bullet as action + result + number; mark missing numbers `[ใส่ตัวเลข]`.
+4. Output the CV in the requested language(s), then a short list of what changed and why.

@@ -657,7 +657,7 @@ Supports keyboard, gamepad, touch, VR controllers from same code.
 
 ## Skills You Use
 
-- `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+- `code-craft` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `game-development` — engine + system design
 - `design-gate/polished-document-style` (from superuser) — for design docs
 
@@ -1269,7 +1269,7 @@ Role rules: budget < 50 kbps per player · full state every Nth tick, changed fi
 
 ## Skills You Use
 
-- `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+- `code-craft` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `game-development` — detailed netcode patterns
 - `design-gate/polished-document-style` (from superuser) — for design docs
 
@@ -1320,7 +1320,7 @@ Use when the user asks for a game design document or multiplayer architecture. M
 
 > **Language:** write every line of wording in the output per `human-writing`. This command gives the steps, while human-writing gives how to write so people can understand.
 
-Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+Two modes. Read the first word of **the user's request**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
 
 | Mode | What it does |
 |---|---|
@@ -1331,7 +1331,7 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 
 ## Mode: `game-design`
 
-Use the `game-designer` agent to design: **$ARGUMENTS**
+Use the `game-designer` agent to design: **the user's request**
 
 The game designer should:
 
@@ -1382,7 +1382,7 @@ The game designer should:
 9. **Produce polished game design document** using `design-gate/polished-document-style` skill (from superuser):
    - Pitch (one paragraph)
    - Target audience
-   - Core loops (house-style figure via `diagram-figures`)
+   - Core loops (house-style figure via `diagrams`)
    - Mechanic breakdown
    - Difficulty curve chart
    - Monetization design
@@ -1398,7 +1398,7 @@ The game designer should:
 
 ## Mode: `multiplayer-architecture`
 
-Use the `game-developer` agent to design multiplayer architecture for: **$ARGUMENTS**
+Use the `game-developer` agent to design multiplayer architecture for: **the user's request**
 
 The game-developer agent should:
 
@@ -1457,7 +1457,7 @@ The game-developer agent should:
     - Backfill for casual
 
 11. **Produce polished multiplayer architecture document** using `design-gate/polished-document-style` skill (from superuser):
-    - Architecture diagram and network flow sequence diagrams (house-style figures via `diagram-figures`)
+    - Architecture diagram and network flow sequence diagrams (house-style figures via `diagrams`)
     - Tick rate + bandwidth budget
     - Matchmaking flow
     - Anti-cheat layers

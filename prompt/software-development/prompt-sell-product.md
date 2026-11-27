@@ -9,12 +9,12 @@
 วางทั้งไฟล์ใน Claude Code, Codex CLI หรือ Gemini CLI ที่รากโฟลเดอร์โปรเจกต์ แล้วพิมพ์ต่อท้ายว่าจะทำฉบับไหน เช่น `ทำทั้งหมด` หรือ `ทำข้อ 1`
 
 <!-- rules:begin -->
-**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-doc-set` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
+**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามแบบเลือกคำตอบครั้งเดียว ทุกตัวเลือกมีหลักฐาน · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ข้อที่ต้องตัดสิน: ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` ก่อน ไม่มี → ค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 · ถามผู้ใช้เฉพาะข้อที่โหวตแทนไม่ได้ และตัวแนะนำบอกผลโหวต · ตัดสินใจเอง (พร้อมผลโหวต) และสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-docs` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-development` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `reviewer` หรือ `brainstormer` (plugin เวอร์ชันเก่า) → `general-purpose` ตัวใหม่ทำหน้าที่เดียวกัน (ตรวจอย่างเดียว ไม่แก้ · เสนอ 2–3 ทาง) · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
 
 **วนจนเสร็จ (agent loop):** ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ จนผ่านทุกข้อที่ฉบับนั้นต้องมี · ตรวจด้วยหลักฐานจริง (เปิดไฟล์ · รันคำสั่ง · เทียบแหล่ง) ไม่ใช่คำบอกของตัวที่ทำ · รอบตรวจใช้ `reviewer` ตัวใหม่ทุกรอบ · ไม่ผ่าน → แก้ที่ต้นเหตุแล้วตรวจซ้ำทั้งข้อเดิมและจุดที่แก้ · เหลือแค่ข้อระดับต่ำ → ปิดได้แล้วลงรายงาน · ครบเพดานรอบ (งานกลาง 3 · งานใหญ่หรืองานเสี่ยง 5) ยังไม่ผ่าน → ติดป้าย `ติด` ทำส่วนอื่นให้จบ แล้วรายงานข้อที่เหลือ · รายละเอียดอยู่ใน skill `superuser` กฎข้อ 3
 <!-- rules:end -->
 
-**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้ `diagram-figures` · Mermaid (`software-diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
+**ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้ `diagrams` · Mermaid (`diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
 
 **ขอบเขต (ห้ามข้าม):** ราคาคู่แข่ง กฎของ store และค่าธรรมเนียม อ่านจากหน้าทางการรอบนี้ ติดวันที่ตรวจ · เงื่อนไขการใช้ · นโยบายความเป็นส่วนตัว · นโยบายคืนเงิน เป็นร่างที่ติดป้าย `(ให้ผู้รู้กฎหมายตรวจ)` ทุกฉบับ · **ตั้งราคาจริงในระบบ · เปิดรับเงิน · ส่งขึ้น store · ประกาศขาย** อยู่ใน "รออนุมัติ" เสมอ · ภาษี VAT และใบกำกับภาษี → plugin `e-commerce` (`prompt/e-commerce/prompt-tax-filing.md`)
 
@@ -38,7 +38,7 @@
 
 ## 1. ตั้งราคาและแพ็กเกจ
 
-playbook `project-docs` · agent `revops-analyst` + `product-manager` · skill `saas-platform` · `superuser:ground-rules`
+playbook `project-docs` · agent `revops-analyst` + `product-manager` · skill `domain-systems` · `superuser:ground-rules`
 **ผลลัพธ์:** `docs/sell/pricing.md`
 
 ### โจทย์ (ผู้ใช้กรอก)
@@ -61,7 +61,7 @@ playbook `project-docs` · agent `revops-analyst` + `product-manager` · skill `
 
 ## 2. ระบบ license · สมาชิก · รับเงิน
 
-playbook `project-docs` (ติ๊กแก้โค้ด → ส่วนโค้ดใช้ `feature`) · agent `fintech-engineer` + `security-engineer` + `developer` · skill `fintech-payments` · `saas-platform` · `auth-implementation-patterns` · `principle-secure-by-default` · `config-and-secrets`
+playbook `project-docs` (ติ๊กแก้โค้ด → ส่วนโค้ดใช้ `feature`) · agent `fintech-engineer` + `security-engineer` + `developer` · skill `domain-systems` · `web-service-essentials` · `security-gate`
 **ต้องมีก่อน:** `docs/sell/pricing.md`
 **ผลลัพธ์:** `docs/sell/licensing.md` · **ไม่แก้โค้ด** เว้นแต่ข้างล่างติ๊ก `[x]` · **รออนุมัติ:** เปิดบัญชี payment gateway · ใช้ key จริง
 
@@ -104,7 +104,7 @@ playbook `project-docs` · agent `legal-compliance-officer` + `product-manager` 
 
 ## 4. หน้าร้านและช่องทางขาย
 
-playbook `project-docs` · agent `growth-specialist` + `product-manager` + `technical-writer` · skill `seo-audit-checklist` · `image-generation` · `web-app-design` · `mobile-app-design` (ถ้าเป็นแอปมือถือ)
+playbook `project-docs` · agent `growth-specialist` + `product-manager` + `technical-writer` · skill `web-audit` · `image-generation` · `web-app-design` · `mobile-app-design` (ถ้าเป็นแอปมือถือ)
 **ต้องมีก่อน:** `pricing.md` · `docs/sell/legal/`
 **ผลลัพธ์:** `docs/sell/listing-<ช่องทาง>.md` ต่อช่องทาง · ภาพใน `docs/sell/assets/` · **รออนุมัติ:** ส่งขึ้น store · เผยแพร่หน้าเว็บ
 
@@ -117,13 +117,13 @@ playbook `project-docs` · agent `growth-specialist` + `product-manager` + `tech
 1. **กฎของช่องทาง** — ตาราง `| กฎ | ผลิตภัณฑ์เราเป็นอย่างไร | ผ่าน/ไม่ผ่าน | แหล่ง + วันที่ตรวจ |` (ขนาดภาพ · ความยาวชื่อ · เรื่องที่ห้ามพูด · ค่าธรรมเนียม · ต้องมีลิงก์นโยบายความเป็นส่วนตัวไหม)
 2. **ข้อความหน้าร้าน** — ชื่อ · ประโยคแรกบอกว่าแก้ปัญหาอะไรให้ใคร · ฟีเจอร์ 3–5 ข้อเป็นภาษาลูกค้า · ราคา · คำถามที่พบบ่อย
 3. **ภาพ** — ภาพหน้าจอจากแอปจริง ขนาดตามกฎช่องทาง · ภาพประกอบตาม `image-generation`
-4. **หน้าเว็บของเราเอง** (ถ้ามี) — โครงหน้า · ปุ่มซื้อ → หน้าจ่ายเงิน · ลิงก์เอกสารฉบับ 3 · SEO ตาม `seo-audit-checklist`
+4. **หน้าเว็บของเราเอง** (ถ้ามี) — โครงหน้า · ปุ่มซื้อ → หน้าจ่ายเงิน · ลิงก์เอกสารฉบับ 3 · SEO ตาม `web-audit`
 
 ---
 
 ## 5. เปิดขายและดูตัวเลขหลังขาย
 
-playbook `ship` · agent `revops-analyst` + `qa-tester` + `devops-engineer` · skill `saas-platform` · `observability-basics` · `test-case-template`
+playbook `ship` · agent `revops-analyst` + `qa-tester` + `devops-engineer` · skill `domain-systems` · `incidents-and-monitoring` · `qa-docs`
 **ต้องมีก่อน:** ฉบับ 1–4
 **ผลลัพธ์:** `docs/sell/launch-checklist.md` · `docs/sell/metrics.md` · **รออนุมัติ:** เปิดขายจริง · ส่งอีเมลหรือประกาศ
 

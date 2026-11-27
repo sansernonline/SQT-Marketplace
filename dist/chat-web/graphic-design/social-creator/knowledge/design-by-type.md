@@ -27,13 +27,13 @@ Not for: screens and web pages → `software-development:ui-craft` · icons → 
    | Logo · wordmark · brand mark | [`references/logo.md`](references/logo.md) | `brand-kit` · `icon-design` (licensed sets) |
    | Poster · flyer · event key visual | [`references/poster.md`](references/poster.md) | `print-ready-files` |
    | Banner · social post · ad | [`references/banner.md`](references/banner.md) | [`references/banner-build.md`](references/banner-build.md) · `campaign-set` · `copy-claims-check` |
-   | Word/PDF cover and inner pages | [`references/document-cover.md`](references/document-cover.md) | `software-development:branded-document-design` |
-   | Slide deck · company profile | [`references/slides.md`](references/slides.md) | `software-development:presentation-design` · `brand-kit` (style lock) |
+   | Word/PDF cover and inner pages | [`references/document-cover.md`](references/document-cover.md) | `software-development:document-design` |
+   | Slide deck · company profile | [`references/slides.md`](references/slides.md) | `software-development:slide-deck` · `brand-kit` (style lock) |
    | YouTube thumbnail | [`references/thumbnail.md`](references/thumbnail.md) | `campaign-set` |
 
 2. **Read the project before searching.** For a logo, icon or key visual, first fill the feeling list and idea map in [`references/meaning-first.md`](references/meaning-first.md): 2–3 feelings the customer must get, one meaning per mark, objects from the work environment, one locked style per direction (owner 2026-11-27). Write 2 lines: what the project is (industry · audience · what the piece must make people do) and which 1–2 style families fit. Look the industry up first, it gives looks and cautions:
    ```bash
-   python <software-development>/skills/design-direction-lookup/scripts/design_search.py "<คำของโปรเจกต์>" --domain industry -n 1
+   python <software-development>/skills/design-system/scripts/design_search.py "<คำของโปรเจกต์>" --domain industry -n 1
    ```
    The project beats the owner's general taste: a coffee shop gets a coffee look even though the owner likes tech-modern. Keep the owner's taste in what transfers (depth, light, one strong focal element).
 
@@ -107,7 +107,7 @@ Do not use when:
 1. **Collect the brief once** (use `AskUserQuestion` · do not ask what the conversation already answers): where it is used and the size · headline, sub-text, button or action · brand logo, colours, fonts · date, time, place · if you do not know the real data, put `(รอยืนยัน)` (awaiting confirmation) and do not invent it
 2. **Find real references** following `design-gate/design-references` (plugin `superuser`): first read the "สไตล์ออกแบบที่ชอบ" (favourite design styles) section in `~/.claude/superuser-style.md` · search at least 1 site in the `theme` category and 1 in the `social` category (Pinterest · Behance) with queries like `[purpose] banner design [style]` · `creative banner layout [industry]` (more example queries at the end of [`uipro-banner-sizes-and-styles.md`](uipro-banner-sizes-and-styles.md)) · open each page by hand, no fetch script · collect 3–5 images
 3. **Pick 3 art directions** from the 22 in the reference file, and make them truly different (for example plain minimal · big type as the hero · 3D objects) · write 1 line per direction on why it fits this job, and cite the reference from step 2
-4. **Build real-size HTML/CSS**, 1 file per direction · the outermost frame is `<div class="stage">` with width and height exactly the size · key items sit in the centre 70–80 %, at least 50 px from the edge · at most 2 font families, and both must fully support Thai (see `design-direction-lookup` domain `font`) · headline at least 32 px, body at least 16 px · one button, at least 44 px tall · text against background contrast at least 4.5:1 · one icon set (`icon-design`) inserted as `<span class="ic" style="--i:url(icons/x.svg)">`
+4. **Build real-size HTML/CSS**, 1 file per direction · the outermost frame is `<div class="stage">` with width and height exactly the size · key items sit in the centre 70–80 %, at least 50 px from the edge · at most 2 font families, and both must fully support Thai (see `design-system` domain `font`) · headline at least 32 px, body at least 16 px · one button, at least 44 px tall · text against background contrast at least 4.5:1 · one icon set (`icon-design`) inserted as `<span class="ic" style="--i:url(icons/x.svg)">`
    - Illustrations in this order: what the user supplied → images under an open licence (categories `3d` · `illustration` in `design-gate/design-references`) → an image tool the session has (the prompt contains no text in the image) → build it with CSS and layered SVG (gradients, soft shadows, glowing edges) · never draw icons or logos yourself
    - All text lives in the HTML, not in the image, so it can be edited later
 5. **Render and check the size**
@@ -234,7 +234,7 @@ Put the 3 PNGs side by side with, under each: the recipe line (which refs, what 
 
 # Word/PDF cover and inner pages
 
-Building the real .docx (tokens, `anchor_picture()`, tables, the cover vote) lives in `software-development:branded-document-design`, with its own cover rules in `cover-design.md` and `anti-patterns.md`. This file adds only what the 2026-11-19 test found that those files do not say yet. Tested on a fictional Thai private-hospital appointment-system SRS (cover + 1 inner page, A4); the test images are kept in `scripts/evals/beauty/baseline/2026-11-19/`.
+Building the real .docx (tokens, `anchor_picture()`, tables, the cover vote) lives in `software-development:document-design`, with its own cover rules in `cover-design.md` and `anti-patterns.md`. This file adds only what the 2026-11-19 test found that those files do not say yet. Tested on a fictional Thai private-hospital appointment-system SRS (cover + 1 inner page, A4); the test images are kept in `scripts/evals/beauty/baseline/2026-11-19/`.
 
 ## Where to look
 
@@ -266,7 +266,7 @@ Building the real .docx (tokens, `anchor_picture()`, tables, the cover vote) liv
 - Thai headings breaking mid-phrase ("เลขประจำ/ตัวผู้ป่วย") → shorter headings, breaks at phrase ends.
 
 ## Check before sending
-- Run the check list in `branded-document-design`, then:
+- Run the check list in `document-design`, then:
 - [ ] The cover art comes from the system's own data
 - [ ] System name is the largest line and fits on one line
 - [ ] Lower half of a light cover carries colour
@@ -379,7 +379,7 @@ Open before searching references or textures for a logo, icon or key visual. It 
 
 ## 1 · Write the 2–3 feelings the customer must get
 
-Write short words, not a slogan: what the customer should feel when they see the mark. For CodeRuen these are `เร็ว · น่าเชื่อถือ`. If the brief does not say, read the business line (CodeRuen ships every 2 weeks → fast; builds back-office systems → trustworthy) and write `(รอยืนยัน · ผู้ใช้: ยืนยันคำนี้)` next to the words you inferred.
+Write short words, not a slogan: what the customer should feel when they see the mark. For CodeRuen these are `เร็ว · น่าเชื่อถือ`. If the brief does not say, read the business line (CodeRuen ships every 2 weeks → fast; builds back-office systems → trustworthy) and mark the words you inferred `(เดา)`, then confirm them in the end-of-job question. These words are the `อารมณ์` field of the 7-field `เนื้อหา:` brief (superuser `design-gate/parts/design-method/guide.md` steps 1–4); this file is that method applied to logos, icons and key visuals.
 
 ## 2 · One meaning per mark is enough
 
@@ -498,7 +498,7 @@ Print specs (bleed, CMYK, resolution) live in `print-ready-files`. This file add
 
 # Slide deck · company profile
 
-Story, slide order and layouts live in `software-development:presentation-design`; the owner's liked deck is `brand-kit/references/corporate-profile-deck.md`. This file adds the beauty rules and where to find popular decks. Tested 2026-11-19 on a fictional Thai last-mile logistics company (cover + services slide, 1920x1080); the test images are kept in `scripts/evals/beauty/baseline/2026-11-19/`.
+Story, slide order and layouts live in `software-development:slide-deck`; the owner's liked deck is `brand-kit/references/corporate-profile-deck.md`. This file adds the beauty rules and where to find popular decks. Tested 2026-11-19 on a fictional Thai last-mile logistics company (cover + services slide, 1920x1080); the test images are kept in `scripts/evals/beauty/baseline/2026-11-19/`.
 
 ## Where to look
 
@@ -511,7 +511,7 @@ Story, slide order and layouts live in `software-development:presentation-design
 
 ## Beauty rules
 
-1. The slide title states the point, not the topic ("4 บริการ เรียงตามทางที่ของเดิน", not "บริการของเรา"). Source: `presentation-design`.
+1. The slide title states the point, not the topic ("4 บริการ เรียงตามทางที่ของเดิน", not "บริการของเรา"). Source: `slide-deck`.
 2. One key number per slide is the focal element, with its measuring period and `(รอยืนยัน)` underneath. Source: Behance GHTK deck; uipro `slide-layout-logic.csv` row proof.
 3. Services that are not equal are not drawn equal: one lead card, or the services placed in their real order along a route or timeline, instead of a grid of 4 icon cards. Source: `depth-and-light.md` section 1, `design-gate/no-ai-look`.
 4. Every slide has at least 2 overlaps (a card across the photo's diagonal cut, a photo bleeding off a card, a route end-dot over a card edge). Source: `depth-and-light.md`.
@@ -522,7 +522,7 @@ Story, slide order and layouts live in `software-development:presentation-design
 9. A small italic English word above the Thai heading is fine (the owner's liked deck does it); capsule badges and wide-tracked capitals on the cover are not (`design-gate/no-ai-look` `eyebrow-badge`).
 10. Credit real photos on the slide and crop out any text or ads inside the photo.
 11. Measure contrast on coloured panels; a mid green with white text measured 3.4:1 and had to go darker to reach about 5:1 (pixel measurement 2026-11-19).
-12. Content slides carry a footer: section name left, page number right. Source: `presentation-design`.
+12. Content slides carry a footer: section name left, page number right. Source: `slide-deck`.
 13. Shift the deck colour away from every reference and every competitor (in Thai logistics: Flash yellow, Kerry orange, Grab and GHTK green, DHL red).
 
 ## Stiff or AI-looking in the first drafts (2026-11-19) and the fix
@@ -570,7 +570,7 @@ All viewed 2026-11-19 unless noted. Popularity numbers are what the page showed 
 ## Rules borrowed (MIT, nextlevelbuilder/ui-ux-pro-max-skill, branch main, viewed 2026-11-19)
 - `.claude/skills/design/references/logo-design.md` · `logo-style-guide.md` · `logo-color-psychology.md` · `data/logo/styles.csv` · `data/logo/industries.csv`
 - `.claude/skills/design/references/banner-sizes-and-styles.md` · `social-photos-design.md`
-- `.claude/skills/design/references/slides-layout-patterns.md` · `slides-strategies.md`; repo copy `software-development/skills/design-direction-lookup/data/upstream/uipro/slide-layout-logic.csv` (commit 28b3b8d)
+- `.claude/skills/design/references/slides-layout-patterns.md` · `slides-strategies.md`; repo copy `software-development/skills/design-system/data/upstream/uipro/slide-layout-logic.csv` (commit 28b3b8d)
 - `.claude/skills/design/references/cip-design.md` · `.claude/skills/ui-ux-pro-max/data/styles.csv` · `typography.csv`
 
 Ideas were rewritten and checked against real renders; no file copied.

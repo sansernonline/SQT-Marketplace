@@ -10,7 +10,7 @@ Open when the task touches FastAPI · Django · pandas · numpy · torch · note
 - 1 DB session per request through a dependency that `yield`s; never keep a session at module level
 - Django Object-Relational Mapping (ORM): if you loop and touch a FK, use `select_related`; if you touch many-to-many or a reverse FK, use `prefetch_related`, then check the query count in tests with `assertNumQueries` or `django_assert_num_queries`
 - migration: read the file `makemigrations` creates every time before commit; if you drop a column or change a type on a big table, split it into several steps per `database-design`
-- For health endpoints · timeouts · the shape of errors sent out, see `web-service-essentials` and `api-conventions`
+- For health endpoints · timeouts · the shape of errors sent out, see `web-service-essentials` and `api-design`
 
 ```python
 def get_db() -> Iterator[Session]:
@@ -34,5 +34,5 @@ def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
 | notebook | Fine for trying ideas, but move code you will reuse into a module with tests; leave the notebook only calling functions and drawing charts |
 | Large files | Read in parts (`chunksize`) or use parquet instead of CSV when you control the format |
 
-- For LLM calls · prompts · RAG · evaluation, see `llm-engineering`
+- For LLM calls · prompts · RAG · evaluation, see `ai-engineering`
 - For importing or exporting Excel and Buddhist Era years, see `data-import-export`

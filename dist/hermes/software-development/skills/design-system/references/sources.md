@@ -6,6 +6,6 @@ Part of plugin `software-development` · copied and adapted from ui-ux-pro-max-s
 
 ## Not copied (reason)
 
-- The slide-making system (`search-slides.py` · `generate-slide.py` · `slide-token-validator.py` · the `slide-*` CSV files): the CSV files already exist in `design-direction-lookup/data/upstream/uipro/` · the rest duplicates `presentation-design` and `html-slide-deck`
+- The slide-making system (`search-slides.py` · `generate-slide.py` · `slide-token-validator.py` · the `slide-*` CSV files): the CSV files already exist in `design-system/data/upstream/uipro/` · the rest duplicates `slide-deck`
 - `fetch-background.py`: pulls images from the internet at run time, which breaks the rule of no downloads at run time
 - The examples in the original use SaaS-style blue-purple only as a data format, not as recommended values

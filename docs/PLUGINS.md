@@ -13,7 +13,7 @@
 ทีมผู้ช่วยทำงานหลายขั้น: หัวหน้าทีมรับงาน → จัดขนาด → brainstorm (งานใหญ่) → เลือก playbook → แจกงานให้ agent ตัวใหม่ → ตรวจกับของจริง → ส่งงาน → เรียนรู้ · ใช้กับงานได้ทุกสาขา (เอกสาร · หาข้อมูล · ร้านค้า · เงิน · โค้ด) · plugin สาขาอื่นต่อยอดจากตัวนี้ทาง `dependencies`
 
 ### มีอะไรบ้าง
-**4 agents · 16 skills · 0 commands** · 6 playbooks · hook 1 ชุด (skill เอกสารออกแบบ สไลด์ รูป อยู่ใน `software-development` · ภาพ AI ใน `graphic-design` · ประชุมใน `personal-life`)
+**4 agents · 17 skills · 0 commands** · 6 playbooks · hook 1 ชุด (skill เอกสารออกแบบ สไลด์ รูป อยู่ใน `software-development` · ภาพ AI ใน `graphic-design` · ประชุมใน `personal-life`)
 
 - **agent กลาง:** brainstormer (คิดทางเลือก) · reviewer (ตรวจด้วยสายตาใหม่) · learning-reviewer (ทบทวนวิธีทำงาน)
 - **playbook:** research · document · review · unattended-run · learn-from-session · pickup-and-pause (รับงานต่อ · หยุดงาน)
@@ -63,7 +63,7 @@ superuser = แม่แบบ + skill 6 ตัว           superuser = แก�
 จำลองบริษัทซอฟต์แวร์ครบทุกขั้นของ Software Development Life Cycle (SDLC) ตั้งแต่ทีมหลัก (product · analysis · architecture · design · development · QA · DevOps · security) ไปจนถึงผู้เชี่ยวชาญเฉพาะสาขา
 
 ### มีอะไรบ้าง
-**38 agents · 100 skills · 12 commands** (ไม่นับ skill กลาง 32 ตัวจาก `superuser`)
+**38 agents · 50 skills · 2 commands** (ไม่นับ skill กลาง 32 ตัวจาก `superuser`)
 
 ### ติดตั้ง
 ```
@@ -79,24 +79,24 @@ superuser = แม่แบบ + skill 6 ตัว           superuser = แก�
 
 | เดิม (plugin) | เรื่อง | agent | skill | command |
 |---|---|---|---|---|
-| `software-development-ai` | AI / ML · LLM · RAG | `ai-engineer` · `data-engineer` | `llm-engineering` | `/software-development:llm-engineering` |
+| `software-development-ai` | AI / ML · LLM · RAG | `ai-engineer` · `data-engineer` | `ai-engineering` | `/software-development:ai-engineering` |
 | `software-development-cybersecurity` | SOC · threat hunting · incident response | `security-analyst` | `security-operations` | `/software-development:security-operations` |
 | `software-development-devtools` | SDK · DevRel · docs | `devrel-engineer` | `developer-experience` | `/software-development:developer-experience` |
-| `software-development-ecommerce` | checkout · inventory · recommendation | `growth-specialist` · `ecommerce-engineer` · `recommendation-engineer` | `ecommerce-patterns` | `/software-development:ecommerce-patterns` |
-| `software-development-fintech` | payment · KYC/AML · PCI-DSS | `fintech-engineer` · `fintech-compliance-officer` · `quant-analyst` | `fintech-payments` | `/software-development:fintech-payments` |
+| `software-development-ecommerce` | checkout · inventory · recommendation | `growth-specialist` · `ecommerce-engineer` · `recommendation-engineer` | `domain-systems` | `/software-development:domain-systems` |
+| `software-development-fintech` | payment · KYC/AML · PCI-DSS | `fintech-engineer` · `fintech-compliance-officer` · `quant-analyst` | `domain-systems` | `/software-development:domain-systems` |
 | `software-development-gaming` | game engine · multiplayer · live-ops | `game-developer` · `game-designer` | `game-development` | `/software-development:game-development` |
-| `software-development-healthcare` | FHIR · HIPAA · clinical | `healthcare-engineer` · `hipaa-officer` · `clinical-data-analyst` | `healthcare-systems` | `/software-development:healthcare-systems` |
-| `software-development-insurtech` | claims · underwriting · insurance law | `insurance-engineer` · `insurance-analyst` · `insurance-compliance-officer` | `insurance-systems` | `/software-development:insurance-systems` |
-| `software-development-iot` | firmware · MQTT · edge · fleet | `iot-engineer` | `iot-systems` | `/software-development:iot-systems` |
-| `software-development-legaltech` | contract · document automation · e-signature | `legaltech-engineer` · `legal-compliance-officer` | `legal-document-systems` | `/software-development:legal-document-systems` |
+| `software-development-healthcare` | FHIR · HIPAA · clinical | `healthcare-engineer` · `hipaa-officer` · `clinical-data-analyst` | `domain-systems` | `/software-development:domain-systems` |
+| `software-development-insurtech` | claims · underwriting · insurance law | `insurance-engineer` · `insurance-analyst` · `insurance-compliance-officer` | `domain-systems` | `/software-development:domain-systems` |
+| `software-development-iot` | firmware · MQTT · edge · fleet | `iot-engineer` | `domain-systems` | `/software-development:domain-systems` |
+| `software-development-legaltech` | contract · document automation · e-signature | `legaltech-engineer` · `legal-compliance-officer` | `domain-systems` | `/software-development:domain-systems` |
 | `software-development-mobile` | iOS / Android / Flutter · ASO | `growth-specialist` · `mobile-engineer` | `mobile-engineering` | `/software-development:mobile-engineering` |
-| `software-development-saas-b2b` | multi-tenancy · SSO/SCIM · billing | `growth-specialist` · `solution-architect` · `revops-analyst` | `saas-platform` | `/software-development:saas-platform` |
-| `software-development-web3` | smart contract · DeFi · tokenomics | `blockchain-engineer` | `smart-contracts` | `/software-development:smart-contracts` |
+| `software-development-saas-b2b` | multi-tenancy · SSO/SCIM · billing | `growth-specialist` · `solution-architect` · `revops-analyst` | `domain-systems` | `/software-development:domain-systems` |
+| `software-development-web3` | smart contract · DeFi · tokenomics | `blockchain-engineer` | `domain-systems` | `/software-development:domain-systems` |
 
 **รวมแบบนี้:**
 - agent ที่ทำงานคล้ายกันรวมเป็นตัวเดียว (เช่น android · ios · cross-platform → `mobile-engineer`) — คู่มือบทบาทเดิมทุกตัวอยู่ครบใน `references/agent-<ชื่อเดิม>.md` ของ skill สาขานั้น
 - skill 3 ตัวของแต่ละสาขารวมเป็น skill เดียว — เนื้อหาเดิมอยู่ครบใน `references/<ชื่อเดิม>.md`
-- command 2 ตัวของแต่ละสาขารวมเป็นตัวเดียวที่เลือกโหมดได้ เช่น `/software-development:fintech-payments pci-audit <ขอบเขต>`
+- command 2 ตัวของแต่ละสาขารวมเป็นตัวเดียวที่เลือกโหมดได้ เช่น `/software-development:domain-systems pci-audit <ขอบเขต>`
 
 ---
 
@@ -298,19 +298,19 @@ _ร่างเมื่อ 6 ต.ค. 2569 · software-development ครอ�
 
 | Plugin | ทำให้ลึก | skill ใหม่ |
 |---|---|---|
-| trading-finance → 0.2.0 | `tax-basics-th` | `tax-deduction-planner` · `mutual-fund-picker` · `retirement-plan` · `debt-payoff` · `insurance-review` · `emergency-fund` |
-| thai-workplace → 0.2.0 | `tax-vat-th` · `social-security-th` · `doc-thai-official` | `payroll-th` · `e-tax-invoice` · `dbd-annual-filing` · `labour-law-basics` · `promptpay-qr` |
-| personal-life → 0.2.0 | — | `subscription-audit` · `digital-hygiene` · `goal-and-habit` · `human-writing/polite-message-th-en` |
-| dev-learning → 0.2.0 | skill เดิมที่สั้นกว่า 30 บรรทัด | `cert-prep` · `side-project-picker` |
+| trading-finance → 0.2.0 | `income-tax-th` | `income-tax-th` · `fund-and-bond-picker` · `retirement-and-insurance` · `budget-and-debt` |
+| thai-workplace → 0.2.0 | `thai-tax` · `thai-employment` · `thai-business-docs` | `thai-employment` · `thai-tax` · `shop-books` |
+| personal-life → 0.2.0 | — | `household-money` · `digital-hygiene` · `goals-and-decisions` · `human-writing/polite-message-th-en` |
+| dev-learning → 0.2.0 | skill เดิมที่สั้นกว่า 30 บรรทัด | `learning-path` · `tech-growth` |
 
 #### plugin ใหม่
 
 | # | Plugin | สำหรับ | skill |
 |---|---|---|---|
-| 6 | **online-seller** | แม่ค้าออนไลน์ Shopee · Lazada · TikTok Shop · LINE | `product-listing` · `marketplace-fees-pricing` · `multi-shop-stock` · `chat-reply-templates` · `live-selling-script` · `shipping-compare` · `returns-and-bad-reviews` · `seller-tax-basics` |
-| 7 | **home-family** | ทุกบ้าน | `household-bills` · `home-maintenance` · `vehicle-care` · `meal-plan-grocery` · `kids-school` · `elder-care` · `pet-care` |
-| 8 | **career** | คนทำงาน | `resume-th-en` · `interview-prep` · `salary-negotiation` · `performance-self-review` |
-| 9 | **health-wellness** | ทุกคน — จัดระเบียบและเตรียมคำถาม ไม่วินิจฉัย ไม่สั่งยา | `exercise-plan` · `sleep-log` · `annual-checkup` · `medication-schedule` · `doctor-visit-prep` |
-| 10 | **consumer-rights** | ผู้ซื้อ | `buy-compare` · `warranty-tracker` · `complaint-letter-th` · `refund-request` |
+| 6 | **online-seller** | แม่ค้าออนไลน์ Shopee · Lazada · TikTok Shop · LINE | `sales-copy` · `pricing-and-costs` · `shop-operations` · `customer-care` · `pricing-and-costs` · `customer-care` · `thai-tax` |
+| 7 | **home-family** | ทุกบ้าน | `household-money` · `home-upkeep` · `family-week` · `family-care` |
+| 8 | **career** | คนทำงาน | `job-search` · `career-growth` |
+| 9 | **health-wellness** | ทุกคน — จัดระเบียบและเตรียมคำถาม ไม่วินิจฉัย ไม่สั่งยา | `health-admin` |
+| 10 | **consumer-rights** | ผู้ซื้อ | `buyer-help` · `complaint-letter-th` |
 
 **ขั้นต่อไป:** ไล่ตรวจรายการ `(รอยืนยัน)` ทั้งชุดทุกต้นปีภาษี และเมื่อหน่วยงานประกาศอัตราใหม่

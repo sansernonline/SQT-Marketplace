@@ -13,6 +13,7 @@ description: Use when replying in chat, to pick prose, table or diagram, short
 - answer-shape: if you cannot continue, list only what is blocking and what you need from the user. 1 line per item, at most 4 items.
 - open items: every open item names who it waits on, using `(รอยืนยัน · ผู้ใช้: …)` · `(รอยืนยัน · agent: …)` · `(รอยืนยัน · ภายนอก: …)` (superuser `references/evidence.md`). When the user has anything to do, end with **ต้องให้คุณทำ**: one line per item, starting with a verb, saying exactly what, where and how. Items the agent will do itself never go there. Owner 2026-11-27: "ระบุด้วยว่าอยากให้ user ทำอะไร บอกให้ชัดเจน".
 - short-answers: ตอบคำถามก่อน แล้วค่อยอธิบาย และอธิบายเท่าที่เปลี่ยนการตัดสินใจของเขา. The first line is the answer, not a preamble and not the question repeated.
+- short-answers: use words the reader already knows. Never translate an English technical term word for word (arm → "แขน", baseline → "เส้นฐาน"); describe it in plain Thai ("รอบที่ไม่ใช้ plugin") or keep the English term. Name the thing instead of "ตัวนี้ / อันนั้น / มัน" when it was mentioned earlier. Write words in full ("ค่าเริ่มต้น", not "ค่าเริ่ม"). Split a stacked reason into sentences: what was done → why → what happens otherwise. Owner 2026-11-27: "การเรียบเรียงยังดูอ่านยังไม่เข้าใจ".
 - short-answers: still say what went wrong, what you did not test, and where you disagree. Short does not mean cutting the truth; cut padding, not content the reader needs.
 - caveman: terse mode is for chat only (replies · review notes · standup pings). Never use it in documents, specs, reports, READMEs, commit messages, PR descriptions, code, code comments, or anything a client or non-team reader will see.
 - caveman: default level is lite. Switch with `caveman lite | full | ultra`; off on "stop caveman" or "normal mode". Keep technical terms exact, code blocks unchanged, error text quoted exact.
@@ -27,6 +28,7 @@ description: Use when replying in chat, to pick prose, table or diagram, short
 
 ## Check before done
 - The first line answers the question.
+- Someone who did not do this work understands every word: no word-for-word translated jargon, no "ตัวนี้" without a name.
 - The shape matches the content, and every table cell has content.
 - Mistakes, untested limits and disagreements are still stated.
 - Caveman was not used in anything that leaves the team.

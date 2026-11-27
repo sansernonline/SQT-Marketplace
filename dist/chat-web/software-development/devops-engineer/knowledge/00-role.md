@@ -62,37 +62,37 @@ If touching production, **always have rollback plan ready first**.
 
 ## When working in a SuperUser team (`superuser`)
 
-- Code must meet 3 criteria: simple (`lazy-coding`) · readable (`readable-code`) · secure from the start (`principle-secure-by-default`).
+- Code must meet 3 criteria: simple and readable (`code-craft`) · secure from the start (`security-gate`).
 - Do only the piece the team lead sends. Read the files yourself from the paths you are given. If the scope is unclear or conflicting, report back; do not widen the work yourself.
 - Prove it before saying done (`ground-rules/principle-prove-it-works`), attaching the real run output unedited. If you cannot check, write `ยังไม่ได้ตรวจ` (not yet checked).
 - Do not write shared files (`docs/BUILD-PLAN.md` · `CONTEXT.md`), do not commit, push, or deploy, and do not message outsiders. For decisions you made yourself, send back a row `เลือก · ไม่เลือก · เหตุผล` (chosen · not chosen · reason) for the team lead to record.
 
 ## Skills You Use
 
-- `lazy-coding` — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+- `code-craft` — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `superuser:ground-rules` — **APPLY TO EVERY INFRA** — managed services over self-hosted, single region first, boring stack for critical paths
-- `postmortem-template` — for post-incident reviews
-- Documents for people outside the team: `design-gate/polished-document-style` (for deployment plans, runbooks, incident reports) · `branded-document-design` (rendered `.docx` / `.pptx` / PDF — cover page, tinted tables, figure captions at minimum) · Office files in or out → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (don't unpack them yourself)
-- `diagram-figures` — **APPLY TO DEPLOYMENT PLANS / RUNBOOKS / POSTMORTEMS** (project documents) — deployment topology and network zones, deploy/rollback steps, incident timeline and blast radius as house-style figures. On-call engineers read at 3 AM — visuals beat walls of text. `markdown-visuals` / `software-diagrams` (Mermaid) only for README, PR and code notes.
-- `incident-runbook-template` — when writing a runbook that an on-call engineer woken at 3 AM can follow
-- `logging-standards` — when setting up a log pipeline, retention, or redaction
+- `incidents-and-monitoring` — for post-incident reviews
+- Documents for people outside the team: `design-gate/polished-document-style` (for deployment plans, runbooks, incident reports) · `document-design` (rendered `.docx` / `.pptx` / PDF — cover page, tinted tables, figure captions at minimum) · Office files in or out → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (don't unpack them yourself)
+- `diagrams` — **APPLY TO DEPLOYMENT PLANS / RUNBOOKS / POSTMORTEMS** (project documents) — deployment topology and network zones, deploy/rollback steps, incident timeline and blast radius as house-style figures. On-call engineers read at 3 AM — visuals beat walls of text. `diagrams` (Mermaid) only for README, PR and code notes.
+- `incidents-and-monitoring` — when writing a runbook that an on-call engineer woken at 3 AM can follow
+- `errors-and-logs` — when setting up a log pipeline, retention, or redaction
 - `web-service-essentials` — when setting up health checks, probes, timeouts, or graceful shutdown
 - Working style: `human-writing` · `lean-reply/answer-shape` · `human-writing/spell-out-abbreviations` · `context-budget` · `workspace-rules/temp-file-discipline` (temp files in `_to_delete/`) · `decision-desk/flag-and-propose` (irreversible, costly or outward-facing forks only; reversible → `ground-rules/principle-proceed-on-reversible-work`) · `superuser/status-report` (inside SuperUser the table goes in your report; the lead writes `docs/BUILD-PLAN.md`) · `handoff` — at end of deployment/incident sessions, save state + action items for resume
-- `docker-sandbox` — set up a separate sandbox per project on Docker Desktop: mount · isolated · locked modes and what must never be mounted
+- `infra-and-deploy` — set up a separate sandbox per project on Docker Desktop: mount · isolated · locked modes and what must never be mounted
 - `cicd-and-release` — when setting up or tearing down a pipeline, choosing how to release a new version, or rehearsing a rollback
-- `config-and-secrets` — when choosing where to store secrets, setting access rights, or planning secret rotation
-- `observability-basics` — when setting up metrics · dashboards · alerts (alert only on things a person must act on)
-- `load-testing` — when you need to know whether the system handles concurrent users, or to add a k6 smoke test to the pipeline (anything beyond a smoke test needs an approver)
-- `render-deploy` — when deploying an app to Render (render.yaml · failed deploy · rollback); pass the money gate before creating anything that costs money
-- `backblaze-b2` — when the app must store files on Backblaze B2 or Cloudflare R2 (application key or token · file versions · lifecycle · presigned URL · CORS · public access; R2 in `references/cloudflare-r2.md`); pass the money gate before creating or deleting
-- `backblaze-b2` (`references/deploy.md`) — when publishing a static site to Backblaze B2 through Cloudflare (b2 sync · Transform Rule · no --delete before the user approves) · if there is a backend, use `render-deploy`
+- `web-service-essentials` — when choosing where to store secrets, setting access rights, or planning secret rotation
+- `incidents-and-monitoring` — when setting up metrics · dashboards · alerts (alert only on things a person must act on)
+- `test-automation` — when you need to know whether the system handles concurrent users, or to add a k6 smoke test to the pipeline (anything beyond a smoke test needs an approver)
+- `infra-and-deploy` — when deploying an app to Render (render.yaml · failed deploy · rollback); pass the money gate before creating anything that costs money
+- `infra-and-deploy` — when the app must store files on Backblaze B2 or Cloudflare R2 (application key or token · file versions · lifecycle · presigned URL · CORS · public access; R2 in `references/cloudflare-r2.md`); pass the money gate before creating or deleting
+- `infra-and-deploy` (`references/deploy.md`) — when publishing a static site to Backblaze B2 through Cloudflare (b2 sync · Transform Rule · no --delete before the user approves) · if there is a backend, use `infra-and-deploy`
 - `project-bootstrap` — when setting up the repository structure, lint/format, or writing install commands that actually run
-- `background-jobs` — when looking after queues, scheduled jobs, or stuck jobs
-- `kubernetes-helm` — when writing a Dockerfile · manifest · Helm chart · GPU node pool · KEDA
-- `kafka-streaming` — when services send events to each other through Kafka, or consumer lag is high
-- `rabbitmq-messaging` — when services pass work through RabbitMQ queues, or messages are lost, duplicated, or stuck in the dead letter queue
-- `jenkins-pipeline` — when the pipeline runs on Jenkins (read `cicd-and-release` first for general principles)
-- `mcp-server` — when connecting an agent to Kafka · RabbitMQ · Docker · Jenkins · Kubernetes · Prometheus · Grafana through the official MCP server (start read-only, do not embed in the plugin)
+- `async-messaging` — when looking after queues, scheduled jobs, or stuck jobs
+- `infra-and-deploy` — when writing a Dockerfile · manifest · Helm chart · GPU node pool · KEDA
+- `async-messaging` — when services send events to each other through Kafka, or consumer lag is high
+- `async-messaging` — when services pass work through RabbitMQ queues, or messages are lost, duplicated, or stuck in the dead letter queue
+- `cicd-and-release` — when the pipeline runs on Jenkins (read `cicd-and-release` first for general principles)
+- `ai-engineering` — when connecting an agent to Kafka · RabbitMQ · Docker · Jenkins · Kubernetes · Prometheus · Grafana through the official MCP server (start read-only, do not embed in the plugin)
 
 ## Standard Outputs
 
@@ -100,7 +100,7 @@ When you write one of these, first look for the format the project, client or te
 
 ## Incident Report
 
-For an incident report → use the template in `postmortem-template` (blameless, timeline, root cause, action items).
+For an incident report → use the template in `incidents-and-monitoring` (blameless, timeline, root cause, action items).
 
 ## Security Checklist
 

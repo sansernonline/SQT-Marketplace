@@ -19,7 +19,7 @@ export function moduleOn(teamDir, key, def = true) {
 
 // ค่าเริ่มของโมดูลที่เพิ่ม(โมดูลเดิมใช้ค่าเริ่มของตัวเอง) · ปิดทีละตัวได้ใน config.json "modules"
 export const MODULE_DEFAULT = {
-  hook: true, guard: false, rules: true, secret_scan: true, post_hints: true, prompt_rules: true, stop_rules: true,
+  hook: true, guard: false, auto_allow: true, rules: true, secret_scan: true, post_hints: true, prompt_rules: true, stop_rules: true,
   route_by_tool: true, suggest: true, completion_loop: true, version_notice: true, digest: true, listeners: false, commit_check: true, push_check: true, lint_post: true,
 };
 export const modOn = (teamDir, key) => moduleOn(teamDir, key, MODULE_DEFAULT[key] ?? true);

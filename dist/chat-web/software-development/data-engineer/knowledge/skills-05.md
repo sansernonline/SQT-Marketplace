@@ -1,359 +1,3 @@
-# skill: observability-basics
-
-Use when a live system needs metrics, logs or alerts
-
-# Measuring and monitoring a system
-
-> **The one rule:** if a customer is the one who tells us the system is down, monitoring has failed.
-> It does not mean the customer is kind.
-
-## When to use this skill
-
-- The system has real users
-- Someone asks "is the system healthy right now?" and you must open the logs to answer
-- You get woken in the middle of the night by an alert that needs no action
-- The system is slow and you do not know where
-
-## When **not** to use it
-
-| Job | Use this instead |
-|---|---|
-| Log line format and masking | `logging-standards` |
-| A trail of who did what | `audit-trail` |
-| Health check endpoint | `web-service-essentials` |
-| Steps during an incident | `incident-runbook-template` |
-| Post-incident summary | `postmortem-template` |
-
----
-
-## 1 · These three answer different questions
-
-| | Answers the question | Example | Cost |
-|---|---|---|---|
-| **metric** | "Is it bad now? Getting better or worse?" | error 2.3% · p95 = 840 ms | Cheapest, keeps a long time |
-| **log** | "What happened in that request?" | message + stack trace + id | Medium cost |
-| **trace** | "Which step is slow?" | one request across 5 services | Most expensive, sample it |
-
-**Order of use during an incident:** the metric says there **is a problem** → the trace says **where** → the log says **why**.
-All 3 must be linked by the same correlation id (see `logging-standards`).
-
----
-
-## 2 · The four signals to measure
-
-| Signal | Measures | Numbers to watch |
-|---|---|---|
-| **Request rate** | How much work is coming in | Per second, split by endpoint |
-| **Error rate** | What percentage fails | Split 4xx (user's fault) from 5xx (our fault) |
-| **Response time** | How slow | **p50 · p95 · p99** |
-| **Resources** | Is anything near full | CPU · memory · disk space · connection pool |
-
-> **Never look at the average response time.** An average of 200 ms sounds good
-> while 5% of users wait 9 seconds. The average always hides the people who hit the problem. **Look at p95 and p99.**
-
-**For queues and background jobs**, add 3 more: jobs waiting in the queue · wait time in the queue · jobs that failed for good
-(see `background-jobs`).
-
----
-
-## 3 · Naming metrics
-
-```
-<domain>_<what is measured>_<unit>
-
-http_requests_total              cumulative count
-http_request_duration_seconds    duration
-orders_created_total             business event
-queue_depth_jobs                 value at this moment
-```
-
-| Rule | Reason |
-|---|---|
-| Always end with the unit | `_seconds`, not `_time`, which nobody can tell is seconds or milliseconds |
-| End cumulative values with `_total` | It says the value keeps rising and is not the current value |
-| Use labels instead of making new names | `http_requests_total{route,status}`, not a separate name per endpoint |
-| **A label must not take unbounded values** | If you put a user id or order id in a label, the metrics system cannot cope |
-
-### 3.1 · If you use Prometheus and Grafana
-
-- **Metric types:** a counter counts events (read it with `rate()`) · a gauge holds the value right now · a histogram holds durations when you need p95 · a summary is for when you do not need to aggregate across instances
-- **Units:** seconds · bytes · ratio 0 to 1 (`_seconds`, not `_milliseconds`)
-- p95: `histogram_quantile(0.95, sum by (le) (rate(<name>_bucket[5m])))`
-- Every alert rule has `for:` · `severity` · a runbook link · alert on symptoms (latency · error), not on CPU or GPU
-- Keep dashboards as JSON in git and provision them from files · RED per service · USE per resource
-- Details on PromQL · alert rule examples · provisioning · a voice agent example (STT · LLM · TTS latency · Kafka lag · GPU): `references/prometheus-grafana.md`
-
----
-
-## 4 · Alerts
-
-> **Every alert must give the receiver something to do.** If the person reads it and has nothing to do,
-> in 3 weeks they will mute alerts, and the day a real one fires nobody will see it.
-
-**Alert on what users feel, not on machine numbers**
-
-| ✗ Alert like this | ✓ Alert like this |
-|---|---|
-| CPU over 80% | Error rate over 2% for 5 minutes |
-| Memory over 70% | p95 of the payment page over 3 seconds for 10 minutes |
-| pod restart | Successful orders drop by more than 50% against last week |
-| disk 60% | **disk will be full in 4 hours at the current rate** |
-
-| Level | Example | Send to |
-|---|---|---|
-| **Wake a person** | Users cannot use the system · data is being damaged | Phone call · push |
-| **Check in work hours** | disk will be full in 3 days · errors rising but still low | Team chat |
-| **Just record it** | Everything else | Dashboard |
-
-**Every alert must have:** what broke · who is affected · **a link to the runbook** · a link to the dashboard.
-**Always set a duration (for N minutes)**, not an alert the moment a value spikes once.
-
-### 4.1 · Error budget and burn rate
-
-A system with an SLO uses this instead of a fixed error % threshold, because it says "if this goes on, when will the whole month's budget run out?"
-
-- **Budget** = the time you may fail in 30 days → SLO 99.9% = 43 minutes · 99.5% = 3.6 hours · 99% = 7.2 hours
-- **Burn rate** = current error rate ÷ (1 − SLO) → burn 1 = the budget runs out exactly on day 30 · burn 10 = gone in 3 days
-- Set 3 alert levels as in the table, and every level must hold true over both the long window and the short window (short window = 1/12 of the long one), so the alert stops as soon as the system recovers
-
-| Level | burn rate | Long window · short window | Budget already used | SLO 99.9% means errors above | Send to |
-|---|---|---|---|---|---|
-| Fast burn | 14.4 | 1 hour · 5 minutes | 2% of the month in 1 hour | 1.44% | Wake a person |
-| Slow burn | 6 | 6 hours · 30 minutes | 5% of the month in 6 hours | 0.6% | Wake a person |
-| Slow leak | 1 | 3 days · 6 hours | 10% of the month in 3 days | 0.1% | Team chat |
-
-Show the remaining budget on the overview dashboard. When the budget is nearly gone, stop shipping features and fix stability first. Agree this rule with the product owner in advance, not in the middle of an argument.
-
----
-
-## 5 · Dashboards
-
-Two pages are enough.
-
-| Page | Answers the question | Contains |
-|---|---|---|
-| **Overview** | "Is it normal now?" | The 4 signals for the whole system · dependency status · latest releases |
-| **Deep dive per service** | "Where did it break?" | The 4 signals split by endpoint · queues · database |
-
-- **A vertical line marks the deploy time.** Most problems start after this line, and you see it in one second
-- The overview page must be readable in 10 seconds, so keep it to 6 graphs at most
-- Draw the alert threshold lines on the graphs, so you can see how far the value is from the line
-
----
-
-## 6 · Business metrics
-
-Technical metrics all green while the business has stalled really happens, and you will not catch it unless you measure it.
-
-| Example | What it catches |
-|---|---|
-| Successful orders per hour | The pay button is broken even though every endpoint returns 200 |
-| Successful login rate | A problem with an external identity provider |
-| Background jobs waiting more than N minutes | The queue is stuck but the API still answers normally |
-| Emails that failed to send | Customers do not get receipts, with no error anywhere |
-
-**Pick 3–5 that are the heart of the business**, and alert when they drop abnormally against the same period last week.
-
----
-
-## References
-
-- [`references/prometheus-grafana.md`](references/prometheus-grafana.md) — open for PromQL · alert rules · Grafana provisioning · voice agent example
-- `mcp-server` item 1.1 — when an agent must read Prometheus or Grafana through MCP
-- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
-
-
-## reference: prometheus-grafana.md
-
-# Prometheus and Grafana — using them correctly
-
-Part of `observability-basics` · the thinking about what to measure and what to alert on is in `SKILL.md` sections 2 · 4 · 5 · this file says how to do it in Prometheus and Grafana · metric names and numbers labelled `ตัวอย่าง` (example) are hypothetical data and must be adjusted to the real system
-
-## Contents
-
-- [1 · The 4 metric types](#1--the-4-metric-types)
-- [2 · Names and units](#2--names-and-units)
-- [3 · Labels and cardinality](#3--labels-and-cardinality)
-- [4 · Common PromQL](#4--common-promql)
-- [5 · Alert rules](#5--alert-rules)
-- [6 · Grafana](#6--grafana)
-- [7 · Voice agent system example](#7--voice-agent-system-example)
-- [8 · Check before sending](#8--check-before-sending)
-- [9 · Sources](#9--sources)
-
-## 1 · The 4 metric types
-
-| Type | What it is | Use when | Example |
-|---|---|---|---|
-| counter | A cumulative value that only goes up and returns to 0 when the process restarts | Counting events that have happened (requests · errors · finished jobs) · read with `rate()`, never the raw value | `http_requests_total` |
-| gauge | The value at that moment, can go up and down | Things that are pending or measurable right now (calls in progress · queue length · memory) | `voice_calls_active` |
-| histogram | Counts measured values into ranges (buckets), with a sum and a count | Durations or sizes where you need p95 · p99 and want to aggregate across many instances | `http_request_duration_seconds` |
-| summary | Computes quantiles on the app side, over a sliding time window | Use only when you do not need to aggregate across instances · the quantiles and window are chosen when writing the code and cannot be changed later | Rare; normally choose histogram |
-
-- Never average quantiles from a summary across several instances; the result has no statistical meaning (the Prometheus docs use this wording)
-- **How to choose** (prometheus.io/docs/practices/histograms/ checked 2026-10-27): if the library and Prometheus you use support it, use a native histogram first, because you can change the percentile and time window later in PromQL · if not supported but you need to aggregate across instances, use a classic histogram · use a summary only when you do not need to aggregate across instances
-- The Prometheus docs recommend native histograms first, but the libraries that support them are still limited; if your library does not support them, use a classic histogram and place buckets so that an edge sits at the SLO value, otherwise the estimated p95 will be off (example in the docs: true p95 about 320 ms is estimated as 443 ms because the bucket is wide from 300 to 450 ms)
-
-## 2 · Names and units
-
-| Rule | Right | Wrong |
-|---|---|---|
-| Start with one word that names the system | `voice_stage_duration_seconds` | `stage_duration` |
-| Use base units: seconds · bytes · ratio 0 to 1 | `_seconds` · `_bytes` · `_ratio` | `_milliseconds` · `_megabytes` · `_percent` |
-| The unit goes at the end, in plural form | `node_memory_usage_bytes` | `node_memory_usage_byte` |
-| A counter ends in `_total` (if it has a unit, the unit comes first) | `process_cpu_seconds_total` · `http_requests_total` | `http_requests_count` |
-| 1 name, 1 unit, 1 meaning | All in seconds | Half in seconds, half in milliseconds |
-| Do not put a label name again in the metric name | `http_requests_total{route=…}` | `http_requests_by_route_total` |
-
-## 3 · Labels and cardinality
-
-Every unique set of label values is 1 new time series. The Prometheus docs warn you to avoid labels whose values are unbounded, such as user id or email.
-
-| Must not be a label | Use instead |
-|---|---|
-| `user_id` · `customer_id` · phone number · email | Leave it out · keep it in logs or traces · if you must count per person, use a database, not a metric |
-| `call_id` · `session_id` · `request_id` · `trace_id` | Logs and traces tied to the same id (`logging-standards`) |
-| A full URL that has an id or query string | A route template such as `/orders/{id}` |
-| An error message with variable values | A limited set of error codes such as `reason="timeout"` |
-
-- A label you may use must have all its possible values countable in advance (stage = 3 values · status = 5 groups) · the number of series of one metric is close to the product of the number of values in each label · a histogram multiplies by the number of buckets on top
-- To find which metric makes series explode: open the TSDB status page in the Prometheus UI · the `tsdb_stats` tool of `prometheus-mcp` gives similar information (see `mcp-server` step 1.1)
-
-## 4 · Common PromQL
-
-| Need | Query | Note |
-|---|---|---|
-| Requests per second | `sum by (route) (rate(http_requests_total[5m]))` | The `[5m]` range should be several times the scrape interval (number not yet checked against the docs) |
-| Error rate | `sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m]))` | Count 5xx (our fault) apart from 4xx · with no traffic the quotient is NaN and the alert rule will not fire, which can hide a system receiving no requests at all; add a separate rule that alerts on no requests |
-| p95 of latency (classic histogram) | `histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket[5m])))` | Keep `le` in `sum by` · to split by route, add `route` to `by` |
-| p95 (native histogram) | `histogram_quantile(0.95, sum(rate(http_request_duration_seconds[5m])))` | Use when the library and Prometheus support it |
-| Average latency (for context only, never for deciding) | `rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m])` | See `SKILL.md` section 2 |
-| Disk will be full in 4 hours | `predict_linear(node_filesystem_avail_bytes[1h], 4*3600) < 0` | An example of saturation that warns ahead of time (not yet checked against the PromQL docs) |
-
-## 5 · Alert rules
-
-Principle from the Prometheus docs: alert on symptoms users feel (latency · errors) at the highest point in the stack you can · wake someone for latency at a single point of the stack · put causes (CPU · GPU · consumer lag) on the dashboard for tracing, and do not wake anyone for them · except for things a person must act on before the system goes down, such as capacity
-
-Exception: a number users feel directly counts as a symptom even if it comes from an underlying system, such as Kafka consumer lag that makes callers wait for an answer (section 7); it may wake someone · lag that affects nobody right away, such as a report job after the call ends, is a cause; put it on the dashboard or the team chat
-
-Every rule must have 4 things
-
-| Item | Where | Reason |
-|---|---|---|
-| `for:` | In the rule | Do not alert the moment the value spikes once · if omitted, the rule fires from the first evaluation round |
-| Severity level | Label `severity` (the name and values are a convention the team sets, not required by Prometheus) | Lets Alertmanager route it to the right place · use 3 levels per `SKILL.md` section 4: wake someone · look during work hours · log it |
-| Runbook link | Annotation `runbook_url` (the key name is a convention; the docs say only that an annotation can hold a runbook link) | The responder starts from a procedure, not from zero at 3 a.m. |
-| `summary` stating the symptom and who is affected | Annotation | Reading it on a phone tells you what to do |
-
-Example (hypothetical thresholds; set them from the real SLO):
-
-```yaml
-groups:
-  - name: voice-agent-symptoms
-    rules:
-      - alert: VoiceTurnLatencyHigh
-        expr: |
-          histogram_quantile(0.95,
-            sum by (le) (rate(voice_turn_duration_seconds_bucket[5m]))) > 1.5
-        for: 10m
-        labels:
-          severity: page
-        annotations:
-          summary: "ผู้โทรรอคำตอบเกิน 1.5 วินาที (p95) นาน 10 นาที"
-          runbook_url: https://runbooks.example.com/voice/turn-latency
-```
-
-`keep_firing_for` stops alerts from flapping when the value hovers around the threshold · for burn rate alerts see `SKILL.md` section 4.1
-
-## 6 · Grafana
-
-| Topic | How |
-|---|---|
-| 1 dashboard per 1 service | A service that takes requests uses RED: Rate · Errors · Duration · resources (CPU · GPU · disk · connection pool) use USE: Utilization · Saturation · Errors · the Grafana docs say RED stands for the user experience, so set alerts from RED and use USE to trace causes |
-| Keep it as code | Dashboard JSON lives in git · the Grafana docs treat not keeping JSON in version control as a sign the system is not yet in order · when many dashboards look alike, generate them with grafonnet (Jsonnet) or grafanalib (Python) |
-| Load automatically | A provider YAML file in `provisioning/dashboards/` points `options.path` to the JSON folder |
-| Stop edits in the browser from being lost | Set `allowUiUpdates: false` · whoever wants a change edits the JSON in git and opens a PR · loading from files always overwrites the version in the database |
-| Do not copy a dashboard | Use template variables (choose service · environment) on a parent dashboard · the Grafana docs warn that copying means you do not get fixes from the original |
-| Temporary dashboards | Name them starting with `TEST:` and delete when done |
-| uid | Set a fixed `uid` in the JSON so links from alerts do not break · `uid` and `title` must be unique within the same folder |
-
-Example provider (checked against the Grafana docs 2026-10-27):
-
-```yaml
-apiVersion: 1
-providers:
-  - name: services
-    type: file
-    allowUiUpdates: false
-    updateIntervalSeconds: 30
-    options:
-      path: /var/lib/grafana/dashboards
-      foldersFromFilesStructure: true
-```
-
-## 7 · Voice agent system example
-
-All metric names in this section are set by the team (examples), except `DCGM_FI_DEV_GPU_UTIL` and `kafka_consumergroup_lag*`, which come from exporters
-
-**Latency of each stage of a call** · 1 histogram split by stage with a `stage` label that has limited values
-
-```
-voice_stage_duration_seconds_bucket{stage="stt|llm|tts", le="…"}
-voice_turn_duration_seconds_bucket{le="…"}   # จากผู้โทรพูดจบถึงเสียงตอบแรกออก
-```
-
-- Place buckets densely in the range 0.1 to 3 seconds, for example `0.1, 0.2, 0.3, 0.5, 0.8, 1.2, 1.5, 2, 3, 5`, with an edge at the threshold you set (1.5 seconds in the example of section 5)
-- p95 per stage: `histogram_quantile(0.95, sum by (le, stage) (rate(voice_stage_duration_seconds_bucket[5m])))` · put it in one chart with 3 lines and you see at once which stage eats the time
-- Alert on `voice_turn_duration_seconds` (the symptom callers feel); do not alert on every stage · stages are for tracing causes
-- Never put `call_id` or the caller's phone number as a label · the call id goes to logs and traces
-
-**Kafka consumer lag** · when the pipeline sends call events through Kafka
-
-- The lag value comes from a Kafka exporter · `kafka_exporter` (danielqsj · Apache-2.0 · not an official Apache project · checked 2026-10-27) gives `kafka_consumergroup_lag{consumergroup,topic,partition}` and `kafka_consumergroup_lag_sum{consumergroup,topic}` · if you use another exporter, the names may differ
-- Wake someone when the lag of a consumer that makes callers wait (such as the real-time call summarizer) is high and does not fall for a long time · example `sum by (consumergroup, topic) (kafka_consumergroup_lag_sum) > 1000` with `for: 10m` (hypothetical threshold) · lag of a report job after the call ends is fine to send to the team chat
-- The `partition` label is only for drill-down charts; do not put it in alert rules
-
-**GPU utilization** · the exporter is NVIDIA `dcgm-exporter`
-
-- `DCGM_FI_DEV_GPU_UTIL` is a gauge in % (checked from `etc/default-counters.csv` of the repo 2026-10-27) · this name was set by the exporter and does not follow the rules of section 2; use it as it is
-- GPU is a cause (USE), not a symptom · put it on the dashboard next to the latency of the stages that use the GPU (STT · TTS) · high utilization together with a high p95 of that stage means the machine is saturated and you must add machines or reduce load
-- GPU that stays high for many hours alerts at the look-during-work-hours level; it does not wake anyone
-
-## 8 · Check before sending
-
-- [ ] Every metric has a unit and `_total` per the rules · no label with unbounded values (user · phone · call id)
-- [ ] Latency is a histogram with a bucket edge at the SLO threshold · no decisions from averages
-- [ ] Every alert has `for:` · `severity` · `runbook_url` · `summary` · alerts on symptoms, not on CPU or GPU
-- [ ] Dashboards are JSON in git · provisioned from files · `allowUiUpdates: false`
-- [ ] There is a RED dashboard per service and USE per resource
-
-## 9 · Sources
-
-Checked 2026-10-27
-
-| Topic | Source |
-|---|---|
-| Metric types | prometheus.io/docs/concepts/metric_types/ |
-| Names, units, label cardinality | prometheus.io/docs/practices/naming/ |
-| histogram · summary · `histogram_quantile` · native histogram | prometheus.io/docs/practices/histograms/ |
-| Principle of alerting on symptoms | prometheus.io/docs/practices/alerting/ |
-| Rule syntax `for` · `keep_firing_for` · annotations | prometheus.io/docs/prometheus/latest/configuration/alerting_rules/ |
-| RED · USE · dashboard as code · sprawl | grafana.com/docs/grafana/latest/dashboards/build-dashboards/best-practices/ |
-| Dashboard provisioning | grafana.com/docs/grafana/latest/administration/provisioning/ |
-| `DCGM_FI_DEV_GPU_UTIL` | github.com/NVIDIA/dcgm-exporter → etc/default-counters.csv |
-| `kafka_consumergroup_lag` | github.com/danielqsj/kafka_exporter (not official to Kafka) |
-| `predict_linear` · `[5m]` range vs scrape interval · NaN behavior when dividing by 0 | General team knowledge (not yet checked against the official PromQL pages) |
-
-
-## reference: sources.md
-
-# Sources · observability-basics
-
-Source of item 3.1: prometheus.io (metric types · naming · histograms · alerting) and grafana.com (dashboard best practices · provisioning), checked 2026-10-27 · full links are at the end of `references/prometheus-grafana.md`
-
-
----
-
 # skill: context-budget
 
 Use when a task reads large material or writes long output
@@ -501,3 +145,799 @@ Open it when working on a Windows machine through Git Bash or PowerShell · ever
 - `perl -i` or `sed -i` on a CRLF file: a regex anchored to the line end with `$` must allow for `\r` (`(\r?)$`), or the edit silently does not apply
 - `cd` in Bash does not carry across commands · use a full quoted path, because folder names often contain spaces and `&`
 - A `.cmd` script that ends with `pause` waits for a key · when running it from an agent, pass empty stdin (`< /dev/null`), save the output to a file, and read the end of the file
+
+
+---
+
+# skill: architecture
+
+Use when choosing an architecture, reviewing one or writing an ADR
+
+# architecture — choose the shape of a system, review it, and record the decision
+
+> **One rule:** start with the simplest shape that meets the real requirements (usually a modular monolith), and write down why each big choice was made, with the options it beat.
+
+## Pick the part
+
+| Job (what the user says) | Open |
+|---|---|
+| "Monolith or microservices?", "should this be serverless?", splitting a monolith | [`references/architecture-patterns.md`](references/architecture-patterns.md) |
+| Deeper pattern catalogue: CQRS, event sourcing, saga, API gateway, strangler fig | [`references/advanced-patterns.md`](references/advanced-patterns.md) and [`references/core-patterns.md`](references/core-patterns.md) |
+| "Review this architecture" against quality needs and risks, with the `solution-architect` agent | [`references/architecture-review.md`](references/architecture-review.md) |
+| "Record why we chose X", an ADR, a decision that will be hard to undo | [`references/adr-writer.md`](references/adr-writer.md) and [`assets/adr.md`](assets/adr.md) |
+| A written architecture overview for the team or a customer | [`references/architecture-overview-template.md`](references/architecture-overview-template.md) |
+| Scoring two or three options side by side | [`templates/options-score.json`](templates/options-score.json) |
+
+## Steps every part shares
+
+1. **Name the real requirements first.** Write the load, data size, team size, uptime and budget that the shape must meet. Mark any number you do not know as `(รอยืนยัน)` (awaiting confirmation).
+2. **Compare at least 2 options.** One of them may be "do nothing". Say which one wins and why, in plain words.
+3. **Keep the shape simple.** Microservices too early is a common mistake: start with a monolith, and split only when a measured limit forces it.
+4. **Record the decision** as an ADR when it is hard to reverse, or when a person will later ask why.
+
+## Check before done
+
+- Every choice names its trade-off, and every unknown number is marked `(รอยืนยัน)`, never guessed.
+- An ADR uses the format already in the project if one exists (look in `docs/adr/`, `docs/decisions/` or `.adr-dir` first), continues the latest number, and never reuses a number, even for a superseded ADR.
+- A risk in a review is scored `Likelihood (1 to 3) × Impact (1 to 3)` and has evidence (a config line, a metric, an incident or a file). A risk without evidence stays marked as unverified.
+- Security, data and money flows named in the design go on to `security-gate`, `security-audit` or `pdpa-compliance` as the case needs.
+
+## References
+
+- [`references/architecture-overview-template.md`](references/architecture-overview-template.md) and [`references/architecture-review.md`](references/architecture-review.md) — write-up templates
+- [`references/adr-writer.md`](references/adr-writer.md) — the full ADR rules
+
+
+## reference: adr-writer.md
+
+<!-- merged from skill `adr-writer` on 2026-11-27 · description was: Use when recording why an architecture choice was made -->
+# Architecture Decision Record (ADR) Writer
+
+## When to use this skill
+
+- Choosing between two or more technical options
+- Significant change to existing architecture
+- Deprecating a technology or pattern
+- Documenting "why" for future team members
+
+## 0 · Find the existing format first (every time)
+
+Before using the structure or template in this file, check whether the user, client or project already has its own format:
+
+- **Where to look:** existing ADRs (Architecture Decision Records): `docs/adr/` · `docs/decisions/` · `doc/architecture/decisions/` · `adr/` · the `.adr-dir` file → check the format (Nygard · MADR · Y-statement), the file naming and the latest number.
+- **Result:** if found, use that format (headings, order, field names, running number) and say in the reply which file it came from. If not found, use the template in this file as the fallback and say that no existing format was found.
+- **Always, whichever format:** continue the number from the latest file. Use the team's existing status names.
+
+## ADR Numbering
+
+- Sequential: ADR-0001, ADR-0002, ...
+- Never reuse numbers, even if ADR is superseded
+- Save as `docs/decisions/ADR-NNNN-<slug>.md` (see `workspace-rules/document-naming` and `project-docs`)
+- Keep an index at `docs/decisions/README.md` — one table `| ADR | Decision | Status | Date |` — add a row when an ADR is created and edit the row when its status changes, so nobody has to open 20 files to find the live decisions (idea from wshobson architecture-decision-records)
+
+## Status Lifecycle
+
+```
+Proposed → Accepted → Deprecated/Superseded
+              ↓
+           Rejected (if not accepted)
+```
+
+## Output Template
+
+Copy **[`assets/adr.md`](../assets/adr.md)** and fill it in. Do not write the outline from memory.
+
+- Do not add, remove or reorder headings and `**fields:**`. A section marked `<!-- optional -->` may be deleted whole when it does not apply.
+- A value you do not know yet → `(รอยืนยัน)`, never a guess and never the template's placeholder.
+- Before handing over, run the shared checker until it passes (paths from this skill's folder):
+
+  ```bash
+  python <โฟลเดอร์ skill polished-document-style ใน plugin superuser>/scripts/check_outline.py assets/adr.md <your ADR file>
+  ```
+
+  It flags missing or reordered headings, missing fields, changed table headers, and anything still unfilled (`<...>`, `YYYY-MM-DD`, `XXXX`, `...`, a field still listing every option).
+
+## Quality Checklist
+
+Before finalizing:
+
+- [ ] Title clearly states the decision (not just the topic)
+- [ ] Context explains WHY this decision is needed now
+- [ ] At least 2 options considered (even if one is "do nothing")
+- [ ] Trade-offs are honest — every choice has downsides
+- [ ] Consequences include both positive AND negative
+- [ ] Consequences name **one way to confirm the decision is still followed** — a test, a lint or dependency rule, or a review-checklist line (MADR calls this Confirmation); "we will be careful" is not one
+- [ ] Could a new team member understand this in 6 months?
+- [ ] `check_outline.py` passes
+
+## Anti-patterns
+
+- Writing ADR after implementation is done (write BEFORE)
+- Editing accepted ADRs (create new one that supersedes it instead)
+
+---
+
+## Document Look
+
+This skill decides **what goes in** the document. It does not decide **how it looks** —
+load the matching skill before writing, not after:
+
+| What is being handed over | Load |
+|---|---|
+| Markdown someone reads (repo, wiki, issue tracker) | `design-gate/polished-document-style` |
+| A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `document-design` |
+| The point needs a picture to land | `diagrams`, then `diagrams` for project documents (`diagrams` only for README / PR notes) |
+
+
+## reference: advanced-patterns.md
+
+# Architecture Patterns — Advanced Pattern Catalogue
+
+Details moved out of [SKILL.md](architecture-patterns.md). Load this file when the decision involves one of these patterns.
+
+## Contents
+
+- [Pattern 4: CQRS (Command Query Responsibility Segregation)](#pattern-4-cqrs-command-query-responsibility-segregation)
+- [Pattern 5: Event Sourcing](#pattern-5-event-sourcing)
+- [Pattern 6: Saga (Distributed Transactions)](#pattern-6-saga-distributed-transactions)
+- [Pattern 7: API Gateway](#pattern-7-api-gateway)
+- [Pattern 8: Strangler Fig (Migration)](#pattern-8-strangler-fig-migration)
+
+---
+
+## Pattern 4: CQRS (Command Query Responsibility Segregation)
+
+**Use one model for writes and a separate model for reads.**
+
+```
+Commands ──► Write Model ──► Event Store
+                              │
+                              ▼
+                          Projector
+                              │
+                              ▼
+Queries ◄── Read Models (denormalized for query)
+```
+
+**When to use:**
+- Read load and write load are very different
+- Complex reporting / dashboards
+- Multiple read views from same data
+
+**When NOT to use:**
+- Simple create/read/update/delete (CRUD) apps (far too much)
+- Reads must always show the latest write
+
+---
+
+## Pattern 5: Event Sourcing
+
+**Store every change as an event, not just the current state.**
+
+```
+Instead of:           Store:
+Account                Events:
+  balance: $100        ├─ AccountOpened
+                       ├─ Deposit($50)
+                       ├─ Deposit($75)
+                       └─ Withdraw($25)
+
+State is computed from events
+```
+
+**When to use:**
+- Strong audit/compliance requirements
+- Need to replay history
+- Questions about the past ("balance at date X")
+- Complex business logic with many state transitions
+
+**When NOT to use:**
+- Apps with simple state (too much)
+- No team experience with it
+- Don't need history/audit
+- You must be able to delete data, e.g. under GDPR (events are hard to delete)
+
+> Note: **CQRS and Event Sourcing both add a lot of complexity. Use them only where they pay off.**
+
+---
+
+## Pattern 6: Saga (Distributed Transactions)
+
+**When several services must all succeed or all roll back.**
+
+### Orchestration (centralized)
+```
+Orchestrator
+   │
+   ├──► Service A (do step 1)
+   │    [if fail → Orchestrator triggers compensations]
+   ├──► Service B (do step 2)
+   └──► Service C (do step 3)
+```
+
+### Choreography (decentralized)
+```
+Service A ──Event──► Service B ──Event──► Service C
+   ▲                                            │
+   └──────────── Compensation Event ────────────┘
+```
+
+| | Orchestration | Choreography |
+|---|--------------|--------------|
+| Visibility | ✓Central | ✗Distributed |
+| Coupling | ~ Coupled to orchestrator | ✓Loosely coupled |
+| Debugging | ✓Easier | ✗Hard |
+| Adding services | ~ Update orchestrator | ✓Add subscriber |
+
+**Choose orchestration** when: complex flow, need clear visibility
+**Choose choreography** when: simple flow, many independent teams
+
+---
+
+## Pattern 7: API Gateway
+
+```
+Clients ──► API Gateway ──► Multiple Services
+              │
+              ├─ Routing
+              ├─ Auth
+              ├─ Rate limit
+              ├─ Logging
+              └─ Aggregation
+```
+
+**Tools:** Kong, AWS API Gateway, Envoy, Tyk, NGINX
+
+**Use when:** external clients call many services, and you want auth, rate limits and logging in one place
+
+---
+
+## Pattern 8: Strangler Fig (Migration)
+
+**Move off a monolith step by step.**
+
+```
+Phase 1:    Phase 2:           Phase 3:
+[Monolith]  [Mono] [NewSvc]    [NewSvc1] [NewSvc2]
+                ▲    │              ▲
+                └────┘ Proxy routes  └── Old Monolith deprecated
+                  selective traffic
+```
+
+**Steps:**
+1. Pick one business area (bounded context) to pull out
+2. Build new service for that context
+3. Add a proxy or feature flag that routes part of the traffic
+4. Gradually shift traffic to new service
+5. Delete old code when fully migrated
+
+> **Safer than rewriting everything at once.**
+
+
+## reference: architecture-overview-template.md
+
+# Architecture Overview Document Template
+
+**สารบัญ:** แม่แบบเต็ม 1 บล็อก: Context · Quality Attributes · High-Level Architecture · Components · Data Flow · Tech Stack · Cross-Cutting Concerns · Trade-offs · References
+
+Open this only when you actually need to write this kind of document · put `(รอยืนยัน)` (awaiting confirmation) on anything you do not know
+
+## Standard Output: Polished Architecture Overview
+
+```markdown
+# Architecture: <System Name>
+
+| | |
+|--|--|
+| **Document Type** | Architecture Overview |
+| **Version** | 1.0 |
+| **Status** | Draft |
+| **Date** | YYYY-MM-DD |
+| **Architect** | @name |
+| **Related ADRs** | ADR-0001 (`docs/decisions/ADR-0001-database-choice.md`), ADR-0002 (`docs/decisions/ADR-0002-api-style.md`) |
+
+---
+
+## Table of Contents
+
+1. [Context](#1-context)
+2. [Quality Attributes](#2-quality-attributes)
+3. [High-Level Architecture](#3-high-level-architecture)
+4. [Components](#4-components)
+5. [Data Flow](#5-data-flow)
+6. [Tech Stack](#6-tech-stack)
+7. [Cross-Cutting Concerns](#7-cross-cutting-concerns)
+8. [Trade-offs](#8-trade-offs)
+
+---
+
+## 1. Context
+
+> What problem does this solve? Why now?
+
+## 2. Quality Attributes (Priority Order)
+
+| Rank | Attribute | Target | Why |
+|:----:|-----------|--------|-----|
+| 1 | Performance | < 200ms p95 | Customer-facing |
+| 2 | Security | PDPA compliant | Legal req |
+| 3 | Scalability | 10k RPS | Growth plan |
+| 4 | Cost | < $5k/month | Budget |
+
+## 3. High-Level Architecture
+
+_[รูปภาพรวมสถาปัตยกรรม: User → CDN → Load Balancer → API Gateway → Auth / App → Redis · PostgreSQL · Queue → Worker. วาดเป็นรูปสไตล์เดียวกับเอกสารด้วย skill `diagrams` ไม่ใช้ Mermaid]_
+
+## 4. Components
+
+| Component | Responsibility | Technology | Owner |
+|-----------|----------------|------------|-------|
+| API Gateway | Routing, rate-limit | Kong | Platform |
+| Auth Service | JWT, OAuth | Node.js | Security |
+| App Service | Business logic | Node.js + NestJS | App Team |
+| Database | Persistence | PostgreSQL 16 | DBA |
+| Cache | Session, hot data | Redis 7 | Platform |
+
+## 5. Data Flow
+
+_[รูปลำดับ Data Flow: User → API → App → DB แล้วตอบกลับ. วาดด้วย skill `diagrams`]_
+
+## 6. Tech Stack
+
+| Layer | Technology | Rationale |
+|-------|-----------|-----------|
+| Frontend | React + Next.js (ใส่เวอร์ชันที่ใช้จริง) | SSR, ecosystem |
+| Backend | Node.js + NestJS | Team expertise |
+| Database | PostgreSQL 16 | ACID + JSON |
+| Cache | Redis 7 | Standard |
+| Infra | AWS (ECS Fargate) | Cost + ops simplicity |
+| CI/CD | GitHub Actions | Already in use |
+
+## 7. Cross-Cutting Concerns
+
+| Concern | Approach |
+|---------|----------|
+| Authentication | JWT with refresh tokens |
+| Logging | Structured JSON → CloudWatch |
+| Monitoring | Prometheus + Grafana |
+| Alerting | PagerDuty (P1), Slack (P2-P3) |
+| Error Handling | Standard error envelope, Sentry |
+
+## 8. Trade-offs
+
+| Decision | Chose | Over | Reason |
+|----------|-------|------|--------|
+| Database | PostgreSQL | MongoDB | Strong consistency needed |
+| Hosting | ECS Fargate | EKS | Lower ops burden |
+| API Style | REST | GraphQL | Simpler caching, client maturity |
+
+> **Known Limitations:** Single-region deployment limits availability to 99.9%. Multi-region planned for v2.
+
+## References
+
+- ADR-0001: Database choice (`docs/decisions/ADR-0001-database-choice.md`)
+- ADR-0002: API style (`docs/decisions/ADR-0002-api-style.md`)
+```
+
+
+## reference: architecture-patterns.md
+
+<!-- merged from skill `architecture-patterns` on 2026-11-27 · description was: Use when choosing monolith, microservices or serverless -->
+# Architecture Patterns
+
+## When to use this skill
+
+- Architecture decisions for a new system
+- Choosing communication patterns between services
+- Splitting a monolith into modules or microservices
+- Designing event-driven systems
+- Implementing Command Query Responsibility Segregation (CQRS), Event Sourcing or Saga
+- Reviewing existing architecture
+- Making decisions big enough for an Architecture Decision Record (ADR)
+
+---
+
+## High-Level Architecture Choice
+
+### Decision tree
+
+```
+How many engineers? Team count? Domain complexity?
+│
+├─ <10 engineers, 1 team
+│  └─ Monolith (modular monolith)
+│
+├─ 10-50 engineers, 2-5 teams
+│  └─ Modular monolith OR few services
+│
+├─ 50+ engineers, 5+ teams
+│  └─ Consider microservices (only if needed)
+│
+└─ Any size + spiky/event-driven workload
+   └─ Add serverless for that piece
+```
+
+---
+
+## Patterns 1–3, communication and cross-cutting decisions
+
+Details are in [references/core-patterns.md](core-patterns.md). Load it after the decision tree picks a direction:
+
+- Pattern 1: Modular Monolith (the default) · Pattern 2: Microservices · Pattern 3: Serverless / Functions
+- Communication: synchronous vs asynchronous (event-driven), and when to choose which
+- Cross-cutting: database per service vs shared DB · caching tiers · idempotency · decision matrix template
+
+---
+
+## Patterns 4–8: CQRS, Event Sourcing, Saga, API Gateway, Strangler Fig
+
+Details for each are in [references/advanced-patterns.md](advanced-patterns.md). Load that file when the decision involves one of these:
+
+- Pattern 4: CQRS (Command Query Responsibility Segregation)
+- Pattern 5: Event Sourcing
+- Pattern 6: Saga (Distributed Transactions)
+- Pattern 7: API Gateway
+- Pattern 8: Strangler Fig (Migration)
+
+---
+
+## Anti-patterns
+
+- **Microservices too early** — start with a monolith
+- **Distributed monolith** — services that must deploy together
+- **God service** — one service that does everything
+- **Chatty interfaces** — one request fans out into many service calls (N+1)
+- **Shared database across microservices** — all the coupling, none of the isolation
+- **Synchronous calls in critical path** — cascading failures
+- **No bulkheads** (no limits that isolate one service's resources) — one slow service drags everything down
+- **Resume-driven architecture** — using K8s/microservices to look fancy
+
+---
+
+## Quick Reference: When to Use What
+
+| Need | Pattern |
+|------|---------|
+| Small team, fast iteration | Modular monolith |
+| Independent team deploys | Microservices |
+| Spiky background jobs | Serverless |
+| High write throughput, complex reads | CQRS |
+| Full audit trail, view state at any past time | Event Sourcing |
+| Multi-service transaction | Saga |
+| Reduce service-to-service complexity | Service mesh |
+| Multiple external clients | API Gateway |
+| Migrate legacy system | Strangler Fig |
+
+---
+
+## Always Reference
+
+When you make a decision, record it with the **adr-writer** skill. Architecture decisions are trade-offs. Future you, or whoever replaces you, needs to know why.
+
+**อ่านเพิ่มเมื่อต้องใช้:** [`architecture-overview-template.md`](architecture-overview-template.md) — แม่แบบภาพรวมสถาปัตยกรรม
+
+
+## reference: architecture-review.md
+
+<!-- merged from skill `architecture-review` on 2026-11-27 · description was: Review existing or proposed architecture with the solution-architect agent against non-functional requirements and risks. -->
+Use the `solution-architect` agent to perform an architecture review of: **the user's request**
+
+The solution architect should:
+
+1. **Initial Discovery** — gather:
+   - Current architecture docs (existing diagrams, Architecture Decision Records (ADRs))
+   - System scope (which components, boundaries)
+   - Review purpose: pre-implementation, mid-build, or operating system
+   - Stakeholder concerns driving the review
+   - Recent incidents or pain points
+
+2. **Document current architecture:**
+   - Create Context-Container-Component-Code (C4) model views (Context, Container, Component) as figures with the `diagrams` skill (not plain Mermaid)
+   - List components + responsibilities
+   - Map data flows
+   - Identify integration points
+
+3. **Evaluate against quality attributes:**
+
+   **Performance**
+   - Latency targets vs measured
+   - Throughput requirements
+   - Caching strategy
+   - Database query patterns
+
+   **Scalability**
+   - Horizontal vs vertical
+   - Bottlenecks (CPU, memory, network, DB)
+   - Stateful vs stateless components
+   - Auto-scaling readiness
+
+   **Security**
+   - Authentication / authorization
+   - Data encryption (transit + rest)
+   - Secrets management
+   - Attack surface
+   - (Hand off detailed threat model to `security-engineer`)
+
+   **Reliability**
+   - Single points of failure
+   - Failure modes
+   - Disaster recovery
+   - Backup + restore tested
+
+   **Cost**
+   - Current monthly spend
+   - Cost per service / per request
+   - Optimization opportunities
+
+   **Maintainability**
+   - Tech debt accumulated
+   - Tooling gaps
+   - Documentation quality
+   - Team familiarity
+
+4. **Apply architecture patterns** (use `architecture-patterns.md` skill):
+   - Is the chosen pattern appropriate?
+   - Are we suffering from anti-patterns (distributed monolith, etc.)?
+   - Would refactoring to a different pattern help?
+
+5. **Identify risks** — walk every component through 6 lenses so nothing hides behind the one the stakeholder named: data loss · security exposure · availability (single point of failure, no rollback) · cost run-away · lock-in (vendor, one-person knowledge) · change cost (idea from ECC production-audit)
+
+   Score each risk `Likelihood (1–3) × Impact (1–3)` and attach evidence (config line · metric · incident · file); a risk with no evidence stays `(ยังไม่ได้ตรวจ)` and never scores above Medium
+
+   | Severity | Score | Definition |
+   |----------|-------|------------|
+   | Critical | 7–9 | Will fail / cause outage soon |
+   | High | 5–6 | Significant risk within 12 months |
+   | Medium | 3–4 | Known limitation, manageable |
+   | Low | 1–2 | Future consideration |
+
+   Summary line uses the house review scale: Critical–High = สูง · Medium = กลาง · Low = ต่ำ
+
+6. **Propose improvements** with trade-offs:
+   - Quick wins (low effort, high impact)
+   - Strategic changes (require investment)
+   - Things to NOT do (anti-patterns to avoid)
+
+7. **Produce polished architecture review document** using `design-gate/polished-document-style` skill:
+   - Executive summary
+   - Current state diagrams (`diagrams` house style)
+   - Quality attribute scorecard
+   - Risk register
+   - Recommendations prioritized
+   - ADRs needed (list for follow-up)
+   - Sign-off section
+
+8. **Hand-off suggestions:**
+   - Detailed threat model → `security-engineer`
+   - Implementation of changes → `developer`
+   - Cost optimization details → `devops-engineer`
+   - Refactoring plan → `project-manager`
+
+
+## reference: core-patterns.md
+
+# Architecture Patterns — Core Patterns and Cross-Cutting Decisions
+
+Details moved out of [SKILL.md](architecture-patterns.md). Load this file once the decision tree has pointed at a pattern, or when the choice involves communication style, data ownership, caching or idempotency.
+
+## Contents
+
+- [Pattern 1: Modular Monolith](#pattern-1-modular-monolith)
+- [Pattern 2: Microservices](#pattern-2-microservices)
+- [Pattern 3: Serverless / Functions](#pattern-3-serverless--functions)
+- [Communication Patterns](#communication-patterns)
+  - [Synchronous (Request-Response)](#synchronous-request-response)
+  - [Asynchronous (Event-Driven)](#asynchronous-event-driven)
+  - [When to choose which](#when-to-choose-which)
+- [Cross-Cutting Decisions](#cross-cutting-decisions)
+  - [Database per service vs Shared DB](#database-per-service-vs-shared-db)
+  - [Caching tiers](#caching-tiers)
+  - [Idempotency](#idempotency)
+- [Decision Matrix Template](#decision-matrix-template)
+
+---
+
+## Pattern 1: Modular Monolith
+
+**The 2026 default for most teams.** One deployable app, split into modules with strict boundaries.
+
+```
+┌─────────────────────────────────────┐
+│   Single deployable application     │
+│ ┌───────┐ ┌───────┐ ┌───────────┐  │
+│ │Module │ │Module │ │  Module   │  │
+│ │  A    │ │  B    │ │     C     │  │
+│ └───────┘ └───────┘ └───────────┘  │
+│   ▲           ▲           ▲         │
+│   └── Strict module boundaries ──┘  │
+└─────────────────────────────────────┘
+         │
+         ▼
+    Single DB (or per-module schemas)
+```
+
+**When to use:**
+- Small/medium team (up to about 50 engineers; same bands as the decision tree in SKILL.md)
+- You need to ship changes fast
+- Operations needs are simple
+- All parts can deploy together
+
+**When NOT to use:**
+- Multiple teams needing independent deploys
+- Features need very different scaling
+- Parts need different tech stacks
+
+**Implementation tips:**
+- Enforce module boundaries (e.g., NestJS modules, Java packages, Go internal/)
+- Each module exposes a public interface
+- Don't let one module read another module's tables
+- One DB, with a separate schema per module
+
+---
+
+## Pattern 2: Microservices
+
+**When you've outgrown the monolith.**
+
+```
+┌──────┐  ┌──────┐  ┌──────┐
+│ Svc A│  │ Svc B│  │ Svc C│
+└──┬───┘  └──┬───┘  └──┬───┘
+   │ ▲      │ ▲      │ ▲
+   │ │      │ │      │ │     ← Each owns its DB
+   ▼ │      ▼ │      ▼ │
+  ┌──┴┐    ┌──┴┐    ┌──┴┐
+  │DB │    │DB │    │DB │
+  └───┘    └───┘    └───┘
+```
+
+**When to use:**
+- Independent teams (Conway's Law)
+- Different scaling needs per service
+- Services need different languages or stacks
+- Mature continuous integration and delivery (CI/CD) and monitoring already in place
+
+**When NOT to use (most projects):**
+- Small team — the extra overhead slows everyone down
+- No Kubernetes (K8s) or infrastructure-as-code (IaC) skills on the team
+- Can't afford distributed tracing
+- Business areas don't have clear boundaries yet
+
+**Hidden costs:**
+- Much harder to operate (more services to deploy, monitor and debug)
+- Network latency between services
+- Transactions across services are hard
+- Bugs are harder to trace
+- You need a service mesh and a monitoring stack
+
+> **Microservices are an organizational scaling pattern**, not a tech pattern. Adopt them only when teams blocking each other is the real bottleneck.
+
+---
+
+## Pattern 3: Serverless / Functions
+
+**For spiky, event-driven workloads.**
+
+```
+Event ──► Function ──► Service / DB / Queue
+```
+
+**Good fits:**
+- Async background processing
+- Scheduled tasks (cron)
+- Glue code between services
+- Spiky / unpredictable traffic
+- Image/video processing pipelines
+
+**Bad fits:**
+- Long-running processes (the limit is usually 15 min)
+- Processing that must keep state between calls
+- Frequent calls that need a fast response (cold starts add delay)
+- Heavy traffic all day (the bill climbs fast)
+
+---
+
+## Communication Patterns
+
+### Synchronous (Request-Response)
+
+```
+Client ──HTTP/gRPC──► Server
+       ◄──Response───
+```
+
+| Protocol | When |
+|----------|------|
+| REST | Public APIs, simple CRUD |
+| GraphQL | Mobile clients, multiple read patterns |
+| gRPC | Internal service-to-service |
+| WebSocket | Real-time bidirectional |
+
+**Pros:** Easy to reason about and debug
+**Cons:** Services depend on each other directly, one failure spreads to the next, hard to scale each part on its own
+
+### Asynchronous (Event-Driven)
+
+```
+Producer ──► Topic/Queue ──► Consumer(s)
+         (publish)         (subscribe)
+```
+
+| Tech | When |
+|------|------|
+| Kafka | High throughput, event sourcing, replay needed |
+| RabbitMQ | Traditional queuing, work distribution |
+| SQS/SNS | AWS-native, simpler than Kafka |
+| NATS | Lightweight, low-latency |
+| Redis Pub/Sub | Simple, messages are not stored |
+
+**Pros:** Services don't depend on each other directly, survive failures better, scale more easily
+**Cons:** Data is consistent only after a delay (eventual consistency), harder to debug, message order is hard to guarantee
+
+### When to choose which
+
+```
+Need immediate response? ─Yes─► Sync
+                         └─No──► Async
+
+Is producer impacted by consumer? ─Yes─► Sync
+                                  └─No──► Async
+
+Multiple consumers? ─Yes─► Async (pub/sub)
+                   └─No──► Either
+```
+
+---
+
+
+## Cross-Cutting Decisions
+
+### Database per service vs Shared DB
+
+| | Shared DB | DB per service |
+|---|-----------|----------------|
+| Coupling | ✗High | ✓Low |
+| Consistency | ✓ACID (all-or-nothing transactions) | ~ Eventual |
+| Schema changes | ✗Coordinate | ✓Independent |
+| Performance | ✓Easy joins | ✗Network calls |
+| Use when | Monolith | Microservices |
+
+### Caching tiers
+
+```
+Browser cache ──► CDN ──► Reverse Proxy ──► App Cache (Redis) ──► DB
+       1                  2                       3                4
+       ▲                                                           ▲
+       Closest to user (fastest)              Furthest (last resort)
+```
+
+Each tier is faster than the next (the gap depends on your system; measure it). CDN = content delivery network.
+
+### Idempotency
+
+**Always design APIs so a repeated request does no extra harm:**
+```
+Client retries → Server detects duplicate → Same result, no side effect
+```
+
+Methods:
+- Idempotency key header (Stripe pattern)
+- A time window in which the server drops duplicates
+- Methods that are safe to repeat by nature (PUT, unlike POST)
+
+---
+
+## Decision Matrix Template
+
+When proposing architecture, compare options:
+
+```markdown
+| Factor | Weight | Option A | Option B | Option C |
+|--------|:------:|:--------:|:--------:|:--------:|
+| Performance | 30% | 8 | 9 | 7 |
+| Cost | 20% | 9 | 6 | 8 |
+| Team skill | 20% | 9 | 5 | 7 |
+| Operations | 15% | 8 | 5 | 7 |
+| Future-proof | 15% | 6 | 9 | 7 |
+| **Total** | 100% | **8.10** | 7.00 | 7.20 |
+```

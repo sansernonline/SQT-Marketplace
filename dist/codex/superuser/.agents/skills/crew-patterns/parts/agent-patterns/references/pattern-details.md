@@ -95,7 +95,7 @@ Cost: 3–5 times the effort of doing it once, so use it only where a wrong choi
 5. Show the score table in the report or appendix: item · score per criterion · total · chosen or not, so the reader sees why this one was chosen
 
 Use together with the "≥ 3 sources confirm the same" rule of `superuser`, where the Reranker picks the sources and the 3-source rule decides whether to believe them.
-If it is a system the user builds (Retrieval-Augmented Generation (RAG) in a real app), use a real model-based reranker per `llm-engineering` of software-development, because this file covers only how an agent team works.
+If it is a system the user builds (Retrieval-Augmented Generation (RAG) in a real app), use a real model-based reranker per `ai-engineering` of software-development, because this file covers only how an agent team works.
 
 ## 7 · Claim ledger — when a conclusion must be proved item by item
 

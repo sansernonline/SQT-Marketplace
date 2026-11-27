@@ -30,7 +30,7 @@
 
 ## 1. จาก paper หรือบทความ สู่โค้ดที่รันได้
 
-playbook `paper-to-practice` · agent `tech-mentor` · skill `learning-path` · `english-tech-reading`
+playbook `paper-to-practice` · agent `tech-mentor` · skill `learning-path`
 **ผลลัพธ์:** `notes/<short-title>.md` · `examples/<short-title>/` (โค้ดขั้นต่ำที่รันได้)
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -51,7 +51,7 @@ playbook `paper-to-practice` · agent `tech-mentor` · skill `learning-path` · 
 
 ## 2. อ่านเอกสารอังกฤษยาก ๆ ให้เข้าใจ
 
-skill `english-tech-reading` · งานเล็ก ทำเลยไม่ต้องเปิด playbook
+skill `learning-path` · งานเล็ก ทำเลยไม่ต้องเปิด playbook
 **ผลลัพธ์:** คำอธิบายในแชต · ผู้ใช้ขอเก็บ → `notes/<short-title>.md`
 
 ### ข้อมูล (ผู้ใช้กรอก)

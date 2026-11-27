@@ -1,1704 +1,679 @@
-# skill: cicd-and-release
+# skill: human-writing
 
-Use when setting up or fixing a CI/CD pipeline
+Use before writing anything people read, Thai or English
 
-# Continuous Integration / Continuous Delivery (CI/CD) and releasing
-
-> **The one rule:** build once, then carry the **same artifact** to every environment.
-> If you rebuild when going to production, what passed testing and what the customer runs are not the same thing.
-
-## When to use this skill
-
-- Setting up a pipeline for a new project, or rebuilding an old one that is slow or gives untrustworthy results
-- Deciding about branches, versions, environments, or how to release
-- Deploys often break, or you cannot roll back
-- Someone asks "which version and which commit is production running right now?"
-
-## When to use another skill, or use it alongside
-
-| Task | Skill | |
-|---|---|---|
-| Where secrets are stored and how they rotate | `config-and-secrets` | instead |
-| The pipeline runs on Jenkins (Jenkinsfile · credentials · approval input) | `jenkins-pipeline` | alongside |
-| Dockerfile · Helm chart · deploy to Kubernetes | `kubernetes-helm` | alongside |
-| Proportion and scope of tests per layer | `testing-standards` · `e2e-testing-patterns` | alongside |
-| Writing a migration | `database-design` | instead |
-| Steps when the system is down or a deploy breaks it | `incident-runbook-template` (+ `postmortem-template` after) | instead |
-| Writing release notes for users to read | command `/release-notes` | instead |
-| Health check the pipeline uses to decide | `web-service-essentials` | alongside |
-| Commit messages that can generate release notes automatically | `commit-message-format` | alongside |
-
-**Working pipeline files for GitHub Actions, Azure DevOps and GitLab** are in `references/per-platform.md`.
-**Read more when needed:** [`references/deployment-plan-template.md`](references/deployment-plan-template.md) — plan template
-
----
-
-## 1 · Pipeline stages
-
-| Order | Stage | Blocks when | Acceptable time |
-|:--:|---|---|---|
-| 1 | Check code format + lint | a rule is broken | < 1 minute |
-| 2 | Build | compile fails · a warning set as an error appears | < 3 minutes |
-| 3 | Unit test | a test fails · coverage is below the threshold | < 5 minutes |
-| 4 | Check dependencies + secrets leaked into git | a high-severity vulnerability or a secret is found | < 2 minutes |
-| 5 | Create the artifact + stamp the version | — | < 2 minutes |
-| 6 | Deploy to staging | — | |
-| 7 | Integration + end-to-end test | a test fails | < 15 minutes |
-| 8 | **Human gate** (production only) | nobody has clicked approve yet | |
-| 9 | Deploy to production | — | |
-| 10 | Post-deploy check | a failed health check triggers an automatic rollback | < 2 minutes |
-
-**Stages 1–5 are CI. They must run on every pull request**, not only at merge.
-**Stages 1–5 together should finish within 10 minutes.** If they take longer, people start looking for ways to skip them.
-
----
-
-## 2 · Build once, then promote
-
-```
-commit → build → artifact v1.4.0+abc1234 ─┬→ staging  (this one)
-                                           ├→ uat      (same one)
-                                           └→ production (same one)
-```
-
-- An artifact is a file that can really be deployed: a container image · a published zip file · a package
-- **Environments may differ only in the config applied at run time**, not in a new build
-- Keep artifacts for at least 30 days so you can go back, because a rollback means deploying an old artifact, not rebuilding from an old commit
-
-> Wrong: **running `git pull` on the production machine and building there.** Nobody then knows which commit is running,
-> and the dependencies pulled at that moment may not be the set that was tested.
-
----
-
-## 3 · A version must trace back to a commit
-
-Use Semantic Versioning (SemVer): `MAJOR.MINOR.PATCH`
-
-| Which number goes up | When |
-|---|---|
-| MAJOR | a change that breaks the callers (see the table in `api-conventions`) |
-| MINOR | a new capability; old behavior still works |
-| PATCH | a bug fix |
-
-- **The git tag is the source of truth.** `v1.4.0` points to exactly one commit.
-- Attach the commit hash to the artifact too, for example `1.4.0+abc1234`
-- The `/version` endpoint must return the same value (see `web-service-essentials`). A mobile app with no endpoint shows it on the "About" page instead.
-- **Exception for Flutter / Android:** the number after `+` in `pubspec.yaml` is the versionCode, which must be an integer, so it cannot hold a hash (see the section "Android / Flutter apps")
-- Before 1.0.0, use `0.x` and treat big changes as still allowed
-
----
-
-## 4 · Branches
-
-| Style | How | Fits |
-|---|---|---|
-| **trunk-based** (recommended) | short-lived branches of 1–2 days, merged into `main` often · unfinished work hidden behind a feature flag | most teams · frequent releases |
-| release branch | `main` + `release/1.4` for urgent fixes | software that customers install themselves · several versions to maintain at once |
-| gitflow | `develop` + `feature` + `release` + `hotfix` | big releases, rarely · usually more complex than needed |
-
-**Rules that hold whichever style you pick:**
-
-- `main` must be deployable at all times
-- Protect `main`: require a pull request and a green CI, and never push directly
-- Expect merge conflicts on any branch older than 1 week
-- Delete the branch right after merging (`gh pr merge --delete-branch`) · turn on "Automatically delete head branches" in the repo's Settings → General on GitHub so it deletes after every PR · a deleted branch can be restored from the PR page
-
----
-
-## 5 · Environments and gates
-
-| Environment | Data | Who deploys | What it must pass |
-|---|---|---|---|
-| dev | fake | automatic on every commit | build passes |
-| staging | production-like (masked) | automatic on merge into `main` | unit + integration |
-| uat | production-like | the team clicks | users pass their testing |
-| production | real | **a person clicks approve** | everything above |
-
-- Staging must be as close to production as possible: database version, operating system, config values
-- **Never copy real data into staging without masking personal data**
-- If you have only one environment because of budget, say so plainly in the documents and use feature flags to help
-
----
-
-## 6 · Secrets in the pipeline
-
-- Store them in the platform's secret store, not in pipeline files
-- Grant only the permissions that stage needs. For example, the build stage does not need the production database password.
-- A pipeline that runs from an outsider's fork **must not see secrets**
-- The tool that detects secrets leaked into git must sit at stage 4, not run once a year
-
-Full detail is in `config-and-secrets`.
-
----
-
-## 7 · Database migration in the pipeline
-
-```
-deploy schema (expand) → deploy code → check → deploy schema (contract) in the next round
-```
-
-- Run the migration as **its own stage** before the code deploy, not when the app boots
-  (if several app instances boot at once, the migrations collide and can corrupt data)
-- Use an account that can change the schema only in this stage. The account the app runs with must not be able to change the schema.
-- A migration must work with the previous code version too, or rolling back the code will break the system
-- Always back up first, and **test that the restore really works**
-- **Exception: databases on the user's device** (SQLite · sqflite · drift on mobile) must migrate when the app opens, because there is no other way.
-  The rules above apply to server databases shared by several instances. For an on-device migration, write tests that start from every schema version ever released.
-
-For the expand/contract method, see `database-design` item 9.
-
----
-
-## 8 · Release methods
-
-| Method | How it works | Needs | Fits |
-|---|---|---|---|
-| stop and replace | shut down → replace → start | nothing | internal systems · can shut down at night |
-| **rolling** | replace machines one at a time | a reliable health check · both versions can run together | the default for systems that run several instances |
-| blue-green | bring up the whole new set, then switch traffic | 2 times the resources, temporarily | must roll back within seconds |
-| canary | release to 5% of users first, then widen 5 → 25 → 100% by the numeric criteria below | metrics that split by version | large systems · high risk |
-
-> **Rolling has a point people often forget:** during the deploy, the old and new versions serve at the same time.
-> The API and schema must therefore work with both versions. If you did not design for this, some users will hit errors on every deploy.
-
-**Criteria for widening a canary (numeric, agreed before the deploy).** Use burn rate (the rate at which the error budget is spent) by the formula in [`observability-basics`](../observability-basics/SKILL.md) section 4.1, measured on the new version's traffic only. Do not copy the formula here.
-
-| Step | Traffic | Hold at least | Widen when (all must pass) |
-|---|---|---|---|
-| 1 | 5% | 30 minutes and at least 1,000 requests | short-window burn rate < 1 · p95 (95th percentile) latency no more than 1.2 times the old version (starting value, not yet measured) · health check passes on every machine |
-| 2 | 25% | 1 hour | same criteria again |
-| 3 | 100% | watch the first hour | short-window burn rate < 1 |
-
-The hold time and the minimum request count are starting values, not yet measured. Adjust them to real traffic. If traffic is too low to reach 1,000 requests in 30 minutes, hold longer until it does. Do not lower the criteria. For a system with no SLO (Service Level Objective), use this criterion instead: the new version's errors ≤ max(2 times the old version, the old version + 0.5 percentage points) (starting value, not yet measured).
-
-A **feature flag** (a switch that turns a feature on or off) separates "releasing the code" from "turning the feature on".
-
-- You can merge unfinished code into `main` with the flag off
-- Turn it on for some groups first, and turn it off instantly without a deploy
-- **A flag needs an expiry date**, because a flag left for 1 year becomes two code paths that nobody dares to delete.
-  Remove it within 2 sprints after it reaches 100%.
-
----
-
-## 9 · Rollback
-
-**Set the criteria in advance.** Do not decide while everyone is panicking and arguing over whether to wait a little longer. Use the burn rate from [`observability-basics`](../observability-basics/SKILL.md) section 4.1 instead of "errors above X%":
-
-| Condition (new version's traffic) | Action |
-|---|---|
-| burn rate ≥ 14.4 over both the 1-hour and the 5-minute windows | roll back at once, without waiting for anyone |
-| burn rate ≥ 6 over both the 6-hour and the 30-minute windows | roll back and open an incident |
-| burn rate 1–6 | stop widening, stay at the current step, have a person look |
-| p95 latency above 2 times the old version for 10 minutes (starting value, not yet measured) or the health check fails | roll back |
-
-During a 5% canary, when the 1-hour window is not yet full, you may use the short window (5 minutes) with the 14.4 criterion. But the request count must first reach the minimum for that step before you trust the number.
-
-| Required | Criterion |
-|---|---|
-| Rollback command | works with a single command |
-| Time taken | under 5 minutes |
-| **Real rehearsal** | at least once a quarter, on staging |
-| Data | a migration already applied must not break the old code |
-
-> **A rollback that has never been rehearsed is the same as no rollback**, because you find out it does not work at the moment you need it.
-
-- No Friday-evening deploy while the team cannot yet roll back with a single command.
-- No manual deploy by following steps in a Word file: on the day the author is out sick, nobody can deploy.
-
----
-
-## 10 · The pipeline must be fast and trustworthy
-
-| Problem | Fix |
-|---|---|
-| Slow | cache dependencies · run several test sets in parallel · move slow tests to a nightly run |
-| Tests with unstable results (flaky) | **quarantine at once** and open a task to fix, because a test that sometimes fails and sometimes passes makes people stop reading results |
-| Everyone waits in the queue | add runners · let pull requests run only the relevant parts |
-| The build is not the same every time | lock dependency versions (lock file) · pin image versions by digest |
-
-**Metrics worth watching:** how often you release · how long from commit to live ·
-what percentage of deploys break · how long recovery takes
-
-**Common symptoms and the first place to look**
-
-| Symptom | Look here first |
-|---|---|
-| Passes on the machine, fails on CI | lock file not committed · environment variables that exist only locally · file name letter case (Linux tells them apart) · the runner's time zone is UTC |
-| Fails sometimes | flaky tests (row above) · jobs running at the same time fight over the same port or database · runner out of memory |
-| Slower every week | the cache key changes every time so it never hits · an unpinned image is pulled again · one test suite grows and is not split |
-| Deploy is green but nothing changes on the server | reusing an old artifact or the `latest` tag · CDN or reverse proxy cache · an old instance still receives traffic |
-| permission denied or an empty secret on a branch or PR | a PR from a fork gets no secrets · environment protection rule · the token expired or its scope is too small |
-
----
-
-## Android / Flutter apps — differences from servers
-
-| Topic | Rule |
-|---|---|
-| Version number | `pubspec.yaml` `version: X.Y.Z+N` · `X.Y.Z` follows SemVer · **`N` is the versionCode, an integer that only goes up** (for example the CI run number) · pass the commit hash through `--dart-define=GIT_SHA=<hash>` and show it on the "About" page |
-| Build once | `flutter build appbundle --release` gives one Android App Bundle (AAB) file, then promote that same file through the Play tracks: internal → closed → production · do not rebuild per track |
-| Staged release | production uses a staged rollout in % (for example 5 → 20 → 50 → 100) instead of a server canary · Play tracks stand in for the environments in section 5 |
-| Rollback | **you cannot roll back a version on Play**, because the versionCode cannot go down and devices that already installed it do not go back. Halt the rollout, then release a fix with a higher versionCode, and rehearse this procedure instead of section 9 |
-| Signing key | keep the upload key in the CI secret store as base64 + the password as a separate secret · `android/key.properties` and `*.jks` go in `.gitignore` · **back up the key outside CI in at least 1 place.** If you lose it, you cannot update the app until Play support resets it (use Play App Signing so Google holds the real key) |
-
-
-## reference: deployment-plan-template.md
-
-# แม่แบบแผน deploy
-
-Open when you actually need to write this kind of document · put `(รอยืนยัน)` on anything you do not know
-
-## Standard Output: Polished Deployment Plan
-
-```markdown
-# Deployment Plan: <Release vX.Y.Z>
-
-| | |
-|--|--|
-| **Release** | vX.Y.Z |
-| **Type** | Routine \| Major \| Hotfix |
-| **Status** | Planned |
-| **Deploy Lead** | @name |
-| **Maintenance Window** | YYYY-MM-DD HH:MM-HH:MM UTC |
-| **Expected Downtime** | Zero / 5 min |
-
----
-
-## Pre-Deployment Checklist
-
-| # | Item | Owner | Status |
-|:-:|------|:------|:------:|
-| 1 | All tests passing in CI | @dev | Done |
-| 2 | Security scan passed | @security | Done |
-| 3 | Database migrations reviewed | @dba | Pending |
-| 4 | Rollback plan documented | @devops | Pending |
-| 5 | Stakeholders notified | @pm | Pending |
-| 6 | On-call engineer briefed | @oncall | Pending |
-| 7 | Status page prepared | @devops | Pending |
-
-## Deployment Flow
-
-_[รูปขั้นตอน deploy: Tag release → CI สุดท้าย → ผ่านทั้งหมด? (ไม่ผ่าน = หยุดและตรวจ) → canary 5% → ปกติหลัง 10 นาที? (ไม่ = rollback) → 50% → ปกติ? (ไม่ = rollback) → 100% → smoke test → เสร็จ. วาดด้วย skill `diagram-figures`]_
-
-## Deployment Steps
-
-| Step | Action | Command/Link | Owner |
-|:----:|--------|--------------|:------|
-| 1 | Tag release | `git tag vX.Y.Z && git push --tags` | @devops |
-| 2 | Trigger CD pipeline | [Pipeline link](#) | @devops |
-| 3 | Deploy canary | Auto via pipeline | — |
-| 4 | Monitor canary | [Grafana](#) | @oncall |
-| 5 | Approve full deploy | Slack `/deploy approve` | @lead |
-| 6 | Verify production | Smoke test suite | @qa |
-
-## Verification
-
-### Health Checks
-- [ ] `/health` returns 200
-- [ ] All pods/instances running
-- [ ] Database connections OK
-- [ ] No spike in 5xx errors (Grafana dashboard X)
-
-### Smoke Tests
-- [ ] User login works
-- [ ] Critical user journey #1 works
-- [ ] Critical API endpoints return expected response
-
-### Key Metrics (15 min post-deploy)
-| Metric | Baseline | Threshold | Current |
-|--------|---------:|----------:|--------:|
-| p95 latency | 150ms | < 200ms | — |
-| Error rate | 0.1% | < 0.5% | — |
-| Throughput | 1000 RPS | > 800 RPS | — |
-
-## Rollback Plan
-
-> **Triggers:** Any of the following requires immediate rollback
-> - 5xx error rate > 2% sustained for 5 min
-> - p95 latency > 500ms sustained for 5 min
-> - Customer-impacting bug confirmed
-
-### Rollback Steps
-1. Run: `./scripts/rollback.sh vX.Y.Z-1`
-2. Verify health checks
-3. Post in #incidents channel
-4. Schedule post-mortem within 48h
-
-## Post-Deployment
-
-- Monitor for 1 hour post-deploy
-- Update changelog with release notes
-- Send announcement to #releases
-- Close release ticket
-```
-
-
-## reference: per-platform.md
-
-# Starter pipeline files by platform
-
-**Contents:** 1 GitHub Actions · 2 Azure DevOps · 3 GitLab CI · 4 Multi-stage Dockerfile · 5 Capability comparison table
-
-1. [GitHub Actions](#1--github-actions)
-2. [Azure DevOps](#2--azure-devops)
-3. [GitLab CI](#3--gitlab-ci)
-4. [Multi-stage Dockerfile](#4--multi-stage-dockerfile)
-5. [Capability comparison table](#5--capability-comparison-table)
-
----
-
-## 1 · GitHub Actions
-
-`.github/workflows/ci.yml` runs on every pull request.
-
-```yaml
-name: ci
-on:
-  pull_request:
-  push: { branches: [main] }
-
-concurrency:                       # cancel the older run when a new push arrives
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    permissions: { contents: read }
-    steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }   # full history is needed to compute the version
-
-      - uses: actions/setup-node@v4
-        with: { node-version: '22', cache: 'npm' }
-
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run build
-      - run: npm test -- --coverage
-
-      - name: ตรวจ dependency
-        run: npm audit --audit-level=high
-
-      - name: ตรวจ secret รั่วใน repo
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }} # required when the repo belongs to an organization; not needed for a personal account (gitleaks-action README, checked 22 Oct 2026 (B.E. 2569))
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: app-${{ github.sha }}
-          path: dist/
-          retention-days: 30
-```
-
-`.github/workflows/deploy.yml` takes the same artifact from ci and deploys it to one environment at a time.
-
-```yaml
-name: deploy
-on:
-  workflow_run:
-    workflows: [ci]
-    types: [completed]
-    branches: [main]
-
-jobs:
-  staging:
-    if: github.event.workflow_run.conclusion == 'success'
-    runs-on: ubuntu-latest
-    environment: staging
-    steps:
-      - uses: actions/checkout@v4             # scripts/deploy.sh comes from the repo
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
-      - uses: actions/download-artifact@v4    # the build output comes from the artifact (dist/)
-        with:
-          name: app-${{ github.event.workflow_run.head_sha }}
-          run-id: ${{ github.event.workflow_run.id }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-      - run: ./scripts/deploy.sh staging
-
-  production:
-    needs: staging
-    runs-on: ubuntu-latest
-    environment: production        # <- set required reviewers here = the human gate
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
-      - uses: actions/download-artifact@v4   # same artifact as staging
-        with:
-          name: app-${{ github.event.workflow_run.head_sha }}
-          run-id: ${{ github.event.workflow_run.id }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-      - run: ./scripts/deploy.sh production
-      - name: ตรวจหลัง deploy
-        run: |
-          for i in $(seq 1 10); do
-            curl -fsS https://api.example.co/health/ready && exit 0
-            sleep 6
-          done
-          ./scripts/rollback.sh && exit 1
-```
-
-**Cautions:**
-
-- `pull_request_target` can see secrets and runs code from forks, so **do not use it** unless you know exactly what you are doing.
-- Set `permissions` as narrow as possible in every workflow, because some organizations default to write access on the whole repo.
-- The versions in the examples (`@v4`, Node 22, .NET 8.x) are only examples. Check the latest versions before use (`รอยืนยัน`, awaiting confirmation).
-- Pin each action at least by version tag (`@v4`). For stricter control, pin by commit hash.
-- `environment:` is where you set approvers (required reviewers) and secrets that belong to one environment.
-
----
-
-## 2 · Azure DevOps
-
-`azure-pipelines.yml`
-
-```yaml
-trigger:
-  branches: { include: [main] }
-
-variables:
-  buildConfiguration: Release
-
-stages:
-- stage: build
-  jobs:
-  - job: build
-    pool: { vmImage: ubuntu-latest }
-    steps:
-    - task: UseDotNet@2
-      inputs: { version: '8.x' }
-    - script: dotnet restore
-    - script: dotnet build -c $(buildConfiguration) --no-restore
-    - script: dotnet test -c $(buildConfiguration) --no-build --collect:"XPlat Code Coverage"
-    - script: dotnet publish -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory) --no-build
-    - publish: $(Build.ArtifactStagingDirectory)
-      artifact: app
-
-- stage: staging
-  dependsOn: build
-  jobs:
-  - deployment: staging
-    environment: staging
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - download: current
-            artifact: app
-          - script: ./scripts/deploy.sh staging
-
-- stage: production
-  dependsOn: staging
-  jobs:
-  - deployment: production
-    environment: production        # <- set approval on the Environments page
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - download: current
-            artifact: app          # same artifact from the build stage
-          - script: ./scripts/deploy.sh production
-```
-
-- A `deployment` job differs from a plain `job` because it binds to an environment, so it gets deploy history and an approval step.
-- Keep secrets in a variable group linked to Azure Key Vault. Do not write them into files.
-- Secret variables are **not passed into scripts automatically**. Map them one by one through `env:`.
-
----
-
-## 3 · GitLab CI
-
-`.gitlab-ci.yml`
-
-```yaml
-stages: [test, build, deploy]
-
-default:
-  interruptible: true
-
-variables:
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-
-cache:
-  key: { files: [requirements.txt] }
-  paths: [.cache/pip]
-
-test:
-  stage: test
-  image: python:3.12
-  script:
-    - pip install -r requirements.txt
-    - ruff check .
-    - pytest --cov --cov-fail-under=70
-  coverage: '/TOTAL.*\s+(\d+%)$/'
-
-build:
-  stage: build
-  image: docker:27
-  services: [docker:27-dind]
-  variables:
-    DOCKER_TLS_CERTDIR: "/certs"
-  script:
-    - echo "$CI_JOB_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
-    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
-    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-
-deploy:staging:
-  stage: deploy
-  environment: { name: staging, url: https://staging.example.co }
-  script: ./scripts/deploy.sh staging $CI_COMMIT_SHA
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-
-deploy:production:
-  stage: deploy
-  environment: { name: production, url: https://example.co }
-  when: manual                     # <- human gate
-  script: ./scripts/deploy.sh production $CI_COMMIT_SHA
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-```
-
-- Mark secret variables `Masked` and `Protected` under Settings → CI/CD.
-- Use `when: manual` together with a protected environment. Only then is it an approval gate that really blocks.
-
----
-
-## 4 · Multi-stage Dockerfile
-
-```dockerfile
-# ---- build stage ----
-FROM node:22-alpine AS build
-WORKDIR /src
-COPY package*.json ./
-# this layer stays cached as long as the lock file does not change
-RUN npm ci
-COPY . .
-RUN npm run build
-
-# ---- run stage ----
-FROM node:22-alpine
-ENV NODE_ENV=production
-WORKDIR /app
-COPY --from=build /src/dist ./dist
-COPY --from=build /src/node_modules ./node_modules
-# do not run as root
-USER node
-EXPOSE 3000
-HEALTHCHECK --interval=30s --timeout=3s CMD node dist/healthcheck.js
-CMD ["node", "dist/main.js"]
-```
-
-**Rules:**
-
-- Copy the files that change least first, so the early layers reuse the cache.
-- Do not copy `.env`, `.git` or `node_modules` into the image. Block them with `.dockerignore`.
-- For a build that gives the same result every time, pin the base image by digest.
-- Always name the tag with the commit hash. `latest` may serve as an alias, but never deploy with `latest`.
-
----
-
-## 5 · Capability comparison table
-
-| Need | GitHub Actions | Azure DevOps | GitLab CI |
-|---|---|---|---|
-| Human approval gate | Environment + required reviewers | Environment approvals | `when: manual` + protected env |
-| Store artifacts | `upload/download-artifact` | `publish` / `download` | `artifacts:` |
-| Cache dependencies | `actions/cache` or `cache:` in setup | `Cache@2` | `cache:` |
-| Secrets per environment | Environment secrets | Variable group + Key Vault | Protected variables per environment |
-| Cancel older runs | `concurrency` | `batch: true` (merges triggers that arrive while a run is active; it does not cancel the older run) | `interruptible: true` |
-| Run in parallel | `strategy.matrix` | `strategy.matrix` | `parallel:` |
-| Self-hosted runners | Yes | Yes | Yes |
-
-> **Every platform can do the same things**, so do not choose by feature list.
-> Pick the one that lives where the repo lives, and put your effort into the content of the pipeline instead.
-
-
----
-
-# skill: config-and-secrets
-
-Use when settings differ by environment or secrets need hiding
-
-# Config and secrets
-
-> **2 rules:**
-> 1. The same code must run in every environment. The only difference is config.
-> 2. A secret must not be in git, not in logs, and not in any file sent to the browser.
-
-## When to use this skill
-
-- Starting a project, or adding a new environment.
-- You need to store a connection string, API key, certificate, or signing key.
-- You find a hardcoded value in code and must move it out.
-- A secret leaked into git, or you suspect it did: go to step 8 at once.
-
-## When to use another skill instead, or together
-
-| Task | Skill | |
-|---|---|---|
-| Storing secrets in a pipeline · approval gates | `cicd-and-release` | instead |
-| Secrets in a Jenkinsfile (`withCredentials` · single quote) | `jenkins-pipeline` | together |
-| Kubernetes secrets kept out of values.yaml (External Secrets · SealedSecret) | `kubernetes-helm` | together |
-| Designing login, tokens, user permissions | `auth-implementation-patterns` | instead |
-| Keeping sensitive values out of logs | `logging-standards` | instead |
-| Database connection strings | `database-design` | together |
-| Recording a secret leak · steps during the incident | `postmortem-template` · `incident-runbook-template` | together |
-
-**How to do it in each language and framework** is in `references/per-stack.md`.
-
----
-
-## 1 · Tell config and secret apart first
-
-| | config | secret |
-|---|---|---|
-| Examples | API address, log level, page size, time zone, feature flag | Database password, API key, token signing key, certificate |
-| Allowed in git | ✓ yes | ✗ never |
-| Who can see it | The whole team | Only those who need it |
-| If it leaks | No harm | Must be revoked and replaced at once |
-| Changes how often | With the work | On a rotation schedule |
-
-> **If you cannot decide which one it is, treat it as a secret.** Being too careful costs only a small annoyance.
-> But if you guess wrong, the key stays in git history forever.
-
----
-
-## 2 · Order of priority: later values override earlier ones
-
-```
-1. Defaults in code             (safe, really usable for dev)
-2. Config file per environment  (appsettings.Production.json, config/production.yaml)
-3. Environment variables
-4. Secret store                 (Key Vault, Secrets Manager, Kubernetes secret)
-5. Arguments at launch          (for troubleshooting only)
-```
-
-**Defaults must be safe.** If someone forgets to set a value, the system must run in its strictest mode.
-For example `DEBUG=false` · `ALLOWED_ORIGINS=` empty · Transport Layer Security (TLS) on, not the opposite.
-
----
-
-## 3 · Check at boot: if any value is missing, die at once
-
-> **Important:** this step is worth the most on this page.
-> A system that boots with wrong config will break at 2 a.m. in a function that is rarely used.
-> A system that **refuses to boot** on wrong config tells you at deploy time, when you can still roll back.
-
-Node zod example: `references/per-stack.md` section 2. The pattern is a schema that parses `process.env` once at boot, so an invalid value kills the process and names the value.
-
-**What to check:** every value is present · types are right · values are in the accepted range ·
-keys are long enough · values banned on production (`JWT_SECRET=dev-secret` must fail).
-
-**Print a config summary at boot:** the value names, and the values that are not secrets.
-For a secret, print only "set" or the last 4 characters, never the full value.
-
----
-
-## 4 · Naming environment variables
-
-```
-<system>_<group>_<name>
-
-APP_DB_HOST          APP_DB_PASSWORD
-APP_REDIS_URL        APP_SMTP_PASSWORD
-APP_FEATURE_NEW_CHECKOUT
-```
-
-| Rule | Reason |
-|---|---|
-| Uppercase with underscores | The convention on every operating system |
-| Start with a system prefix | Avoids clashing with the system's `PATH`, `HOME`, `USER` |
-| Same name in every environment | Values may differ, but names must not, or every move between environments means editing code |
-| Put the unit in the name | `APP_TIMEOUT_SECONDS`, not `APP_TIMEOUT` |
-| Do not put the environment name in the variable name | ✗ `APP_PROD_DB_HOST` |
-
----
-
-## 5 · `.env` and `.env.example`
-
-| File | In git | Role |
-|---|:--:|---|
-| `.env.example` | ✓ | The list of **all** required values, with explanations and example values that are not real |
-| `.env` | ✗ | Real values on each developer's machine |
-| `.env.production` | ✗ | **This file should not exist at all**, because production uses a secret store |
-
-```bash
-# .gitignore
-.env
-.env.*
-!.env.example
-```
-
-```bash
-# .env.example
-APP_DB_HOST=localhost              # database address
-APP_DB_PASSWORD=change-me          # important: the real value is in the team's 1Password vault
-APP_JWT_SECRET=                    # important: generate with: openssl rand -base64 48
-APP_LOG_LEVEL=debug
-```
-
-**Update `.env.example` in the same commit that adds a new value.**
-Otherwise the next person who clones hits an error nobody can explain.
-
-> **A `.env` added to `.gitignore` too late:** once the file has been tracked, even once,
-> adding it to `.gitignore` later **does not remove it from history.** Run `git rm --cached` and treat the secret as leaked.
-
-**Pre-commit gate**: `.gitignore` blocks only files you know by name, but a key pasted by mistake into code or YAML needs a scanner. Install gitleaks as a pre-commit hook in every repo (`gitleaks git --pre-commit --staged` in gitleaks 8.19 and later · earlier versions use `gitleaks protect --staged`) and rerun it in CI over the whole history with `gitleaks git --redact`. If the hook fails, never use `--no-verify`; move the value out first. If you find one in history, go to step 8 at once, not just delete the line.
-
----
-
-## 6 · Where to keep secrets
-
-| Situation | Use | Note |
-|---|---|---|
-| Developer machine | A `.env` that stays out of git; for .NET use `dotnet user-secrets` | Never use production values |
-| Small team sharing | The team's password manager (1Password, Bitwarden) | Not chat, not email, not a Google Sheet |
-| Production in the cloud | Azure Key Vault · AWS Secrets Manager · Google Secret Manager | Grant access with a managed identity, not another key |
-| Kubernetes | External Secrets Operator pulling from a vault above | A Kubernetes secret is only base64, **not encryption** |
-| You really must store in git | SOPS or sealed-secrets (encrypt before commit) | Last resort |
-
-**Permissions:** each service reads only its own secrets, environments are fully separate, and
-no account can read all of them, except an admin account whose access is logged.
-
----
-
-## 7 · Rotation
-
-**Design for it from day one**, not when you finally have to rotate.
-
-| Must have | Detail |
-|---|---|
-| Two values valid at once | During the change, both the old and the new value must work, or you must shut the system down |
-| Reload without restart | Or accept that you need one deploy, and write down that it must be done |
-| Schedule | Token signing key 90 days · database password 180 days · certificate 30 days before expiry |
-| Automatic | A task that depends on someone remembering ends up done by nobody |
-
-**A token signing key must carry an id (key id)**, so that after signing new tokens with the new key,
-you can still verify old tokens that have not expired.
-
----
-
-## 8 · When a secret leaks: order matters more than speed
-
-1. **Revoke the old value first:** disable that key at its source.
-2. Issue a new value, then deploy.
-3. Check past logs for anyone using it from a place that is not ours.
-4. Remove it from git history (`git filter-repo`) and tell everyone to clone again. (If you must force push, wait for the user's approval and tell the team first.)
-5. Record the incident with `postmortem-template`.
-
-> **Step 4 is not step 1**, because deleting the commit does not make the key any safer.
-> Anyone who forked or cloned already, and the provider's backups, still have the old value.
-> **Treat every secret that has ever been in git as leaked**, even if the repo is private.
-
----
-
-## 9 · Do not let secrets flow out other ways
-
-| Leak path | How to close it |
-|---|---|
-| Logs | The list of terms to mask is in `logging-standards` |
-| Error messages sent to the client | Return only a `requestId`, not a stack trace or connection string |
-| Crash reports / error trackers | Set a sensitive-data filter before sending out |
-| Shell command history | Use `read -s` or read from a file, instead of typing the value on the command line |
-| `docker history` | Do not put secrets in `ARG`/`ENV` at build time; use a mount at run time instead |
-| Backup files and dumps | Encrypt them and store them where you control access |
-| Screenshots in documents and issues | Always mask before attaching |
-
----
-
-## 10 · Frontend config: nothing in it is secret
-
-> **Important:** everything in a file the browser loads **is public information**,
-> whether it is named `VITE_SECRET_KEY` or sits in a file minified until it is unreadable.
-> Minifying code is not encryption. Open DevTools and you can see it.
-
-| Allowed in the frontend | Must stay on the server only |
-|---|---|
-| API address · environment name | API keys of any external service |
-| Publishable key of a payment provider | The secret key of the same provider |
-| Feature flags that are not secret | Pricing rules · approval thresholds |
-| Web ID of an analytics tool | Tokens that call a third party's API |
-
-**If you need to change a value without rebuilding,** load `/config.json` when the app starts,
-instead of embedding the value at build time (`import.meta.env`), which locks the value into the built files.
-
----
-
-
-## reference: per-stack.md
-
-# Practical how-to by language and framework
-
-**Contents:** 1 .NET / ASP.NET Core · 2 Node.js · 3 Python · 4 Angular and frontend in general · 5 Docker and Kubernetes · 6 Tools that detect secrets leaked into git · 7 Commands that generate safe random values
-
-1. [.NET / ASP.NET Core](#1--net--aspnet-core)
-2. [Node.js](#2--nodejs)
-3. [Python](#3--python)
-4. [Angular and frontend in general](#4--angular-and-frontend-in-general)
-5. [Docker and Kubernetes](#5--docker-and-kubernetes)
-6. [Tools that detect secrets leaked into git](#6--tools-that-detect-secrets-leaked-into-git)
-7. [Commands that generate safe random values](#7--commands-that-generate-safe-random-values)
-
----
-
-## 1 · .NET / ASP.NET Core
-
-**On the developer machine, stored outside the project folder so it can never reach git:**
-
-```bash
-dotnet user-secrets init
-dotnet user-secrets set "ConnectionStrings:Default" "Host=localhost;..."
-dotnet user-secrets list
-```
-
-**Validate at boot:**
-
-```csharp
-public sealed class AppOptions
-{
-    public const string Section = "App";
-
-    [Required, Url]                       public string ApiBaseUrl { get; init; } = "";
-    [Required, MinLength(32)]             public string JwtSecret  { get; init; } = "";
-    [Range(1, 300)]                       public int TimeoutSeconds { get; init; } = 30;
-}
-
-builder.Services
-    .AddOptions<AppOptions>()
-    .Bind(builder.Configuration.GetSection(AppOptions.Section))
-    .ValidateDataAnnotations()
-    .ValidateOnStart();                   // ← ขาดค่า = แอปไม่ยอมบูต
-```
-
-**Order in which ASP.NET Core reads (later values override earlier ones):**
-
-```
-appsettings.json → appsettings.{Environment}.json → user-secrets (dev)
-→ environment variable → อาร์กิวเมนต์บรรทัดคำสั่ง
-```
-
-Environment variables use `__` in place of hierarchy levels, for example `ConnectionStrings__Default`
-
-**Azure Key Vault:**
-
-```csharp
-builder.Configuration.AddAzureKeyVault(
-    new Uri($"https://{vaultName}.vault.azure.net/"),
-    new DefaultAzureCredential());        // ใช้ managed identity ไม่ต้องมี key อีกอัน
-```
-
----
-
-## 2 · Node.js
-
-```ts
-// config/env.ts — ไฟล์เดียวที่แตะ process.env ได้ทั้งโปรเจกต์
-import { z } from 'zod';
-
-const Env = z.object({
-  NODE_ENV:     z.enum(['development','test','staging','production']),
-  PORT:         z.coerce.number().int().positive().default(3000),
-  DATABASE_URL: z.string().url(),
-  JWT_SECRET:   z.string().min(32),
-  SMTP_PASSWORD: z.string().optional(),
-}).superRefine((v, ctx) => {
-  if (v.NODE_ENV === 'production' && v.JWT_SECRET.startsWith('dev-'))
-    ctx.addIssue({ code: 'custom', message: 'ห้ามใช้ JWT_SECRET ของ dev บน production' });
-});
-
-const parsed = Env.safeParse(process.env);
-if (!parsed.success) {
-  console.error('config ไม่ถูกต้อง:', z.treeifyError(parsed.error));
-  process.exit(1);
-}
-export const env = parsed.data;
-```
-
-> **Do not read `process.env` scattered through the code.** Gather it in one file
-> so you can answer which values the system uses, without grepping the whole project
-
-Node 20 and up can load `.env` itself with `node --env-file=.env`, with no need for `dotenv`
-
----
-
-## 3 · Python
-
-```python
-# settings.py
-from pydantic import Field, PostgresDsn
-from pydantic_settings import BaseSettings, SettingsConfigDict
-
-class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix="APP_", env_file=".env")
-
-    env: str = Field(pattern="^(development|staging|production)$")
-    database_url: PostgresDsn
-    jwt_secret: str = Field(min_length=32)
-    timeout_seconds: int = Field(default=30, ge=1, le=300)
-
-settings = Settings()      # ขาดค่า = ValidationError ตั้งแต่ import
-```
-
-- Reads `APP_DATABASE_URL`, `APP_JWT_SECRET` according to `env_prefix`
-- Import at the top level of the app so the error happens at boot, not at the first use
-
----
-
-## 4 · Angular and frontend in general
-
-> **Everything in a file the browser loads is public.** No exceptions
-
-**Embedded at build time** (`environment.ts`, `import.meta.env`, `NEXT_PUBLIC_*`):
-The value is baked into the built files. Every change needs a rebuild, which breaks the rule of building once and using in every environment
-
-**Loaded at run time (recommended):**
-
-```ts
-// main.ts — โหลดก่อนแอปเริ่ม
-fetch('/config.json', { cache: 'no-store' })
-  .then(r => r.json())
-  .then(cfg => {
-    (window as any).__APP_CONFIG__ = cfg;
-    return bootstrapApplication(AppComponent, appConfig);
-  });
-```
-
-```json
-// config.json — ไฟล์นี้วางแยกต่อ environment ไม่ต้อง build ใหม่
-{ "apiBaseUrl": "https://api.example.co", "env": "production", "sentryDsn": "..." }
-```
-
-Set the header `Cache-Control: no-store` on `/config.json`, otherwise the browser will use the old value
-
----
-
-## 5 · Docker and Kubernetes
-
-**For Docker, do not put secrets in at build time:**
-
-```dockerfile
-# ผิด: ค่าจะติดอยู่ในชั้นของ image ตลอดไป เห็นได้ด้วย docker history
-ARG NPM_TOKEN
-ENV NPM_TOKEN=$NPM_TOKEN
-
-# ถูก: mount เฉพาะตอนใช้ ไม่ติดไปกับ image
-RUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm ci
-```
-
-```bash
-docker build --secret id=npmrc,src=$HOME/.npmrc .
-docker run --env-file .env myapp        # ตอนรัน ส่งค่าเข้าไป
-```
-
-Do not write a trailing `# comment` on a value line in a `.env` used with `--env-file`: docker keeps the comment as part of the value, making the value wrong with no error (tested 2026-11-04: `A=value # note` gives the value `value # note`) · put the comment on its own line
-
-**Kubernetes:**
-
-```yaml
-env:
-  - name: APP_DB_PASSWORD
-    valueFrom:
-      secretKeyRef: { name: app-secrets, key: db-password }
-```
-
-> **A Kubernetes Secret is only base64, not encryption**
-> Anyone with `get secret` permission can read the value directly
-> You must turn on encryption at rest in etcd and control access with RBAC
-> A better way: let External Secrets Operator pull the value from Key Vault / Secrets Manager and create the Secret
-
----
-
-## 6 · Tools that detect secrets leaked into git
-
-```bash
-# ตรวจทั้งประวัติ
-gitleaks git --redact        # คำสั่ง detect เดิมถูกแทนด้วย git / dir
-
-# กันไว้ก่อน commit
-pip install pre-commit detect-secrets
-detect-secrets scan > .secrets.baseline
-```
-
-```yaml
-# .pre-commit-config.yaml
-repos:
-  - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.21.2   # ตัวอย่าง ตรวจ rev ล่าสุดก่อนใช้ (รอยืนยัน)
-    hooks: [{ id: gitleaks }]
-```
-
-**Remove from history** (only after the old value has been revoked):
-
-```bash
-pip install git-filter-repo
-git filter-repo --path .env --invert-paths
-# รอผู้ใช้อนุมัติก่อน · แจ้งทีมก่อน force push (เขียนประวัติร่วมทับ ทุกคนต้อง clone ใหม่)
-git push --force --all
-```
-
----
-
-## 7 · Commands that generate safe random values
-
-```bash
-openssl rand -base64 48                 # กุญแจทั่วไป
-openssl rand -hex 32                    # กุญแจ 256 บิตเป็นเลขฐานสิบหก
-uuidgen                                 # id ไม่ลับ
-
-node -e "console.log(require('crypto').randomBytes(48).toString('base64'))"
-python -c "import secrets; print(secrets.token_urlsafe(48))"
-```
-
-```powershell
-# Windows
-# PowerShell 5.1 และ 7 (ตัวสุ่มสำหรับงานเข้ารหัส ไม่ใช่ Get-Random)
-$b = New-Object byte[] 48
-[Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($b)
-[Convert]::ToBase64String($b)
-# PowerShell 7.4 ขึ้นไป: Get-SecureRandom ก็ใช้ได้
-```
-
-> Wrong: **do not use a general-purpose random generator** (`Math.random`, `random.random`, .NET `Random`)
-> because they are predictable; use the cryptographic random generator as in the commands above
-
-
----
-
-# skill: observability-basics
-
-Use when a live system needs metrics, logs or alerts
-
-# Measuring and monitoring a system
-
-> **The one rule:** if a customer is the one who tells us the system is down, monitoring has failed.
-> It does not mean the customer is kind.
-
-## When to use this skill
-
-- The system has real users
-- Someone asks "is the system healthy right now?" and you must open the logs to answer
-- You get woken in the middle of the night by an alert that needs no action
-- The system is slow and you do not know where
-
-## When **not** to use it
-
-| Job | Use this instead |
-|---|---|
-| Log line format and masking | `logging-standards` |
-| A trail of who did what | `audit-trail` |
-| Health check endpoint | `web-service-essentials` |
-| Steps during an incident | `incident-runbook-template` |
-| Post-incident summary | `postmortem-template` |
-
----
-
-## 1 · These three answer different questions
-
-| | Answers the question | Example | Cost |
-|---|---|---|---|
-| **metric** | "Is it bad now? Getting better or worse?" | error 2.3% · p95 = 840 ms | Cheapest, keeps a long time |
-| **log** | "What happened in that request?" | message + stack trace + id | Medium cost |
-| **trace** | "Which step is slow?" | one request across 5 services | Most expensive, sample it |
-
-**Order of use during an incident:** the metric says there **is a problem** → the trace says **where** → the log says **why**.
-All 3 must be linked by the same correlation id (see `logging-standards`).
-
----
-
-## 2 · The four signals to measure
-
-| Signal | Measures | Numbers to watch |
-|---|---|---|
-| **Request rate** | How much work is coming in | Per second, split by endpoint |
-| **Error rate** | What percentage fails | Split 4xx (user's fault) from 5xx (our fault) |
-| **Response time** | How slow | **p50 · p95 · p99** |
-| **Resources** | Is anything near full | CPU · memory · disk space · connection pool |
-
-> **Never look at the average response time.** An average of 200 ms sounds good
-> while 5% of users wait 9 seconds. The average always hides the people who hit the problem. **Look at p95 and p99.**
-
-**For queues and background jobs**, add 3 more: jobs waiting in the queue · wait time in the queue · jobs that failed for good
-(see `background-jobs`).
-
----
-
-## 3 · Naming metrics
-
-```
-<domain>_<what is measured>_<unit>
-
-http_requests_total              cumulative count
-http_request_duration_seconds    duration
-orders_created_total             business event
-queue_depth_jobs                 value at this moment
-```
-
-| Rule | Reason |
-|---|---|
-| Always end with the unit | `_seconds`, not `_time`, which nobody can tell is seconds or milliseconds |
-| End cumulative values with `_total` | It says the value keeps rising and is not the current value |
-| Use labels instead of making new names | `http_requests_total{route,status}`, not a separate name per endpoint |
-| **A label must not take unbounded values** | If you put a user id or order id in a label, the metrics system cannot cope |
-
-### 3.1 · If you use Prometheus and Grafana
-
-- **Metric types:** a counter counts events (read it with `rate()`) · a gauge holds the value right now · a histogram holds durations when you need p95 · a summary is for when you do not need to aggregate across instances
-- **Units:** seconds · bytes · ratio 0 to 1 (`_seconds`, not `_milliseconds`)
-- p95: `histogram_quantile(0.95, sum by (le) (rate(<name>_bucket[5m])))`
-- Every alert rule has `for:` · `severity` · a runbook link · alert on symptoms (latency · error), not on CPU or GPU
-- Keep dashboards as JSON in git and provision them from files · RED per service · USE per resource
-- Details on PromQL · alert rule examples · provisioning · a voice agent example (STT · LLM · TTS latency · Kafka lag · GPU): `references/prometheus-grafana.md`
-
----
-
-## 4 · Alerts
-
-> **Every alert must give the receiver something to do.** If the person reads it and has nothing to do,
-> in 3 weeks they will mute alerts, and the day a real one fires nobody will see it.
-
-**Alert on what users feel, not on machine numbers**
-
-| ✗ Alert like this | ✓ Alert like this |
-|---|---|
-| CPU over 80% | Error rate over 2% for 5 minutes |
-| Memory over 70% | p95 of the payment page over 3 seconds for 10 minutes |
-| pod restart | Successful orders drop by more than 50% against last week |
-| disk 60% | **disk will be full in 4 hours at the current rate** |
-
-| Level | Example | Send to |
-|---|---|---|
-| **Wake a person** | Users cannot use the system · data is being damaged | Phone call · push |
-| **Check in work hours** | disk will be full in 3 days · errors rising but still low | Team chat |
-| **Just record it** | Everything else | Dashboard |
-
-**Every alert must have:** what broke · who is affected · **a link to the runbook** · a link to the dashboard.
-**Always set a duration (for N minutes)**, not an alert the moment a value spikes once.
-
-### 4.1 · Error budget and burn rate
-
-A system with an SLO uses this instead of a fixed error % threshold, because it says "if this goes on, when will the whole month's budget run out?"
-
-- **Budget** = the time you may fail in 30 days → SLO 99.9% = 43 minutes · 99.5% = 3.6 hours · 99% = 7.2 hours
-- **Burn rate** = current error rate ÷ (1 − SLO) → burn 1 = the budget runs out exactly on day 30 · burn 10 = gone in 3 days
-- Set 3 alert levels as in the table, and every level must hold true over both the long window and the short window (short window = 1/12 of the long one), so the alert stops as soon as the system recovers
-
-| Level | burn rate | Long window · short window | Budget already used | SLO 99.9% means errors above | Send to |
-|---|---|---|---|---|---|
-| Fast burn | 14.4 | 1 hour · 5 minutes | 2% of the month in 1 hour | 1.44% | Wake a person |
-| Slow burn | 6 | 6 hours · 30 minutes | 5% of the month in 6 hours | 0.6% | Wake a person |
-| Slow leak | 1 | 3 days · 6 hours | 10% of the month in 3 days | 0.1% | Team chat |
-
-Show the remaining budget on the overview dashboard. When the budget is nearly gone, stop shipping features and fix stability first. Agree this rule with the product owner in advance, not in the middle of an argument.
-
----
-
-## 5 · Dashboards
-
-Two pages are enough.
-
-| Page | Answers the question | Contains |
-|---|---|---|
-| **Overview** | "Is it normal now?" | The 4 signals for the whole system · dependency status · latest releases |
-| **Deep dive per service** | "Where did it break?" | The 4 signals split by endpoint · queues · database |
-
-- **A vertical line marks the deploy time.** Most problems start after this line, and you see it in one second
-- The overview page must be readable in 10 seconds, so keep it to 6 graphs at most
-- Draw the alert threshold lines on the graphs, so you can see how far the value is from the line
-
----
-
-## 6 · Business metrics
-
-Technical metrics all green while the business has stalled really happens, and you will not catch it unless you measure it.
-
-| Example | What it catches |
-|---|---|
-| Successful orders per hour | The pay button is broken even though every endpoint returns 200 |
-| Successful login rate | A problem with an external identity provider |
-| Background jobs waiting more than N minutes | The queue is stuck but the API still answers normally |
-| Emails that failed to send | Customers do not get receipts, with no error anywhere |
-
-**Pick 3–5 that are the heart of the business**, and alert when they drop abnormally against the same period last week.
-
----
-
-## References
-
-- [`references/prometheus-grafana.md`](references/prometheus-grafana.md) — open for PromQL · alert rules · Grafana provisioning · voice agent example
-- `mcp-server` item 1.1 — when an agent must read Prometheus or Grafana through MCP
-- [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
-
-
-## reference: prometheus-grafana.md
-
-# Prometheus and Grafana — using them correctly
-
-Part of `observability-basics` · the thinking about what to measure and what to alert on is in `SKILL.md` sections 2 · 4 · 5 · this file says how to do it in Prometheus and Grafana · metric names and numbers labelled `ตัวอย่าง` (example) are hypothetical data and must be adjusted to the real system
-
-## Contents
-
-- [1 · The 4 metric types](#1--the-4-metric-types)
-- [2 · Names and units](#2--names-and-units)
-- [3 · Labels and cardinality](#3--labels-and-cardinality)
-- [4 · Common PromQL](#4--common-promql)
-- [5 · Alert rules](#5--alert-rules)
-- [6 · Grafana](#6--grafana)
-- [7 · Voice agent system example](#7--voice-agent-system-example)
-- [8 · Check before sending](#8--check-before-sending)
-- [9 · Sources](#9--sources)
-
-## 1 · The 4 metric types
-
-| Type | What it is | Use when | Example |
-|---|---|---|---|
-| counter | A cumulative value that only goes up and returns to 0 when the process restarts | Counting events that have happened (requests · errors · finished jobs) · read with `rate()`, never the raw value | `http_requests_total` |
-| gauge | The value at that moment, can go up and down | Things that are pending or measurable right now (calls in progress · queue length · memory) | `voice_calls_active` |
-| histogram | Counts measured values into ranges (buckets), with a sum and a count | Durations or sizes where you need p95 · p99 and want to aggregate across many instances | `http_request_duration_seconds` |
-| summary | Computes quantiles on the app side, over a sliding time window | Use only when you do not need to aggregate across instances · the quantiles and window are chosen when writing the code and cannot be changed later | Rare; normally choose histogram |
-
-- Never average quantiles from a summary across several instances; the result has no statistical meaning (the Prometheus docs use this wording)
-- **How to choose** (prometheus.io/docs/practices/histograms/ checked 2026-10-27): if the library and Prometheus you use support it, use a native histogram first, because you can change the percentile and time window later in PromQL · if not supported but you need to aggregate across instances, use a classic histogram · use a summary only when you do not need to aggregate across instances
-- The Prometheus docs recommend native histograms first, but the libraries that support them are still limited; if your library does not support them, use a classic histogram and place buckets so that an edge sits at the SLO value, otherwise the estimated p95 will be off (example in the docs: true p95 about 320 ms is estimated as 443 ms because the bucket is wide from 300 to 450 ms)
-
-## 2 · Names and units
-
-| Rule | Right | Wrong |
-|---|---|---|
-| Start with one word that names the system | `voice_stage_duration_seconds` | `stage_duration` |
-| Use base units: seconds · bytes · ratio 0 to 1 | `_seconds` · `_bytes` · `_ratio` | `_milliseconds` · `_megabytes` · `_percent` |
-| The unit goes at the end, in plural form | `node_memory_usage_bytes` | `node_memory_usage_byte` |
-| A counter ends in `_total` (if it has a unit, the unit comes first) | `process_cpu_seconds_total` · `http_requests_total` | `http_requests_count` |
-| 1 name, 1 unit, 1 meaning | All in seconds | Half in seconds, half in milliseconds |
-| Do not put a label name again in the metric name | `http_requests_total{route=…}` | `http_requests_by_route_total` |
-
-## 3 · Labels and cardinality
-
-Every unique set of label values is 1 new time series. The Prometheus docs warn you to avoid labels whose values are unbounded, such as user id or email.
-
-| Must not be a label | Use instead |
-|---|---|
-| `user_id` · `customer_id` · phone number · email | Leave it out · keep it in logs or traces · if you must count per person, use a database, not a metric |
-| `call_id` · `session_id` · `request_id` · `trace_id` | Logs and traces tied to the same id (`logging-standards`) |
-| A full URL that has an id or query string | A route template such as `/orders/{id}` |
-| An error message with variable values | A limited set of error codes such as `reason="timeout"` |
-
-- A label you may use must have all its possible values countable in advance (stage = 3 values · status = 5 groups) · the number of series of one metric is close to the product of the number of values in each label · a histogram multiplies by the number of buckets on top
-- To find which metric makes series explode: open the TSDB status page in the Prometheus UI · the `tsdb_stats` tool of `prometheus-mcp` gives similar information (see `mcp-server` step 1.1)
-
-## 4 · Common PromQL
-
-| Need | Query | Note |
-|---|---|---|
-| Requests per second | `sum by (route) (rate(http_requests_total[5m]))` | The `[5m]` range should be several times the scrape interval (number not yet checked against the docs) |
-| Error rate | `sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m]))` | Count 5xx (our fault) apart from 4xx · with no traffic the quotient is NaN and the alert rule will not fire, which can hide a system receiving no requests at all; add a separate rule that alerts on no requests |
-| p95 of latency (classic histogram) | `histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket[5m])))` | Keep `le` in `sum by` · to split by route, add `route` to `by` |
-| p95 (native histogram) | `histogram_quantile(0.95, sum(rate(http_request_duration_seconds[5m])))` | Use when the library and Prometheus support it |
-| Average latency (for context only, never for deciding) | `rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m])` | See `SKILL.md` section 2 |
-| Disk will be full in 4 hours | `predict_linear(node_filesystem_avail_bytes[1h], 4*3600) < 0` | An example of saturation that warns ahead of time (not yet checked against the PromQL docs) |
-
-## 5 · Alert rules
-
-Principle from the Prometheus docs: alert on symptoms users feel (latency · errors) at the highest point in the stack you can · wake someone for latency at a single point of the stack · put causes (CPU · GPU · consumer lag) on the dashboard for tracing, and do not wake anyone for them · except for things a person must act on before the system goes down, such as capacity
-
-Exception: a number users feel directly counts as a symptom even if it comes from an underlying system, such as Kafka consumer lag that makes callers wait for an answer (section 7); it may wake someone · lag that affects nobody right away, such as a report job after the call ends, is a cause; put it on the dashboard or the team chat
-
-Every rule must have 4 things
-
-| Item | Where | Reason |
-|---|---|---|
-| `for:` | In the rule | Do not alert the moment the value spikes once · if omitted, the rule fires from the first evaluation round |
-| Severity level | Label `severity` (the name and values are a convention the team sets, not required by Prometheus) | Lets Alertmanager route it to the right place · use 3 levels per `SKILL.md` section 4: wake someone · look during work hours · log it |
-| Runbook link | Annotation `runbook_url` (the key name is a convention; the docs say only that an annotation can hold a runbook link) | The responder starts from a procedure, not from zero at 3 a.m. |
-| `summary` stating the symptom and who is affected | Annotation | Reading it on a phone tells you what to do |
-
-Example (hypothetical thresholds; set them from the real SLO):
-
-```yaml
-groups:
-  - name: voice-agent-symptoms
-    rules:
-      - alert: VoiceTurnLatencyHigh
-        expr: |
-          histogram_quantile(0.95,
-            sum by (le) (rate(voice_turn_duration_seconds_bucket[5m]))) > 1.5
-        for: 10m
-        labels:
-          severity: page
-        annotations:
-          summary: "ผู้โทรรอคำตอบเกิน 1.5 วินาที (p95) นาน 10 นาที"
-          runbook_url: https://runbooks.example.com/voice/turn-latency
-```
-
-`keep_firing_for` stops alerts from flapping when the value hovers around the threshold · for burn rate alerts see `SKILL.md` section 4.1
-
-## 6 · Grafana
-
-| Topic | How |
-|---|---|
-| 1 dashboard per 1 service | A service that takes requests uses RED: Rate · Errors · Duration · resources (CPU · GPU · disk · connection pool) use USE: Utilization · Saturation · Errors · the Grafana docs say RED stands for the user experience, so set alerts from RED and use USE to trace causes |
-| Keep it as code | Dashboard JSON lives in git · the Grafana docs treat not keeping JSON in version control as a sign the system is not yet in order · when many dashboards look alike, generate them with grafonnet (Jsonnet) or grafanalib (Python) |
-| Load automatically | A provider YAML file in `provisioning/dashboards/` points `options.path` to the JSON folder |
-| Stop edits in the browser from being lost | Set `allowUiUpdates: false` · whoever wants a change edits the JSON in git and opens a PR · loading from files always overwrites the version in the database |
-| Do not copy a dashboard | Use template variables (choose service · environment) on a parent dashboard · the Grafana docs warn that copying means you do not get fixes from the original |
-| Temporary dashboards | Name them starting with `TEST:` and delete when done |
-| uid | Set a fixed `uid` in the JSON so links from alerts do not break · `uid` and `title` must be unique within the same folder |
-
-Example provider (checked against the Grafana docs 2026-10-27):
-
-```yaml
-apiVersion: 1
-providers:
-  - name: services
-    type: file
-    allowUiUpdates: false
-    updateIntervalSeconds: 30
-    options:
-      path: /var/lib/grafana/dashboards
-      foldersFromFilesStructure: true
-```
-
-## 7 · Voice agent system example
-
-All metric names in this section are set by the team (examples), except `DCGM_FI_DEV_GPU_UTIL` and `kafka_consumergroup_lag*`, which come from exporters
-
-**Latency of each stage of a call** · 1 histogram split by stage with a `stage` label that has limited values
-
-```
-voice_stage_duration_seconds_bucket{stage="stt|llm|tts", le="…"}
-voice_turn_duration_seconds_bucket{le="…"}   # จากผู้โทรพูดจบถึงเสียงตอบแรกออก
-```
-
-- Place buckets densely in the range 0.1 to 3 seconds, for example `0.1, 0.2, 0.3, 0.5, 0.8, 1.2, 1.5, 2, 3, 5`, with an edge at the threshold you set (1.5 seconds in the example of section 5)
-- p95 per stage: `histogram_quantile(0.95, sum by (le, stage) (rate(voice_stage_duration_seconds_bucket[5m])))` · put it in one chart with 3 lines and you see at once which stage eats the time
-- Alert on `voice_turn_duration_seconds` (the symptom callers feel); do not alert on every stage · stages are for tracing causes
-- Never put `call_id` or the caller's phone number as a label · the call id goes to logs and traces
-
-**Kafka consumer lag** · when the pipeline sends call events through Kafka
-
-- The lag value comes from a Kafka exporter · `kafka_exporter` (danielqsj · Apache-2.0 · not an official Apache project · checked 2026-10-27) gives `kafka_consumergroup_lag{consumergroup,topic,partition}` and `kafka_consumergroup_lag_sum{consumergroup,topic}` · if you use another exporter, the names may differ
-- Wake someone when the lag of a consumer that makes callers wait (such as the real-time call summarizer) is high and does not fall for a long time · example `sum by (consumergroup, topic) (kafka_consumergroup_lag_sum) > 1000` with `for: 10m` (hypothetical threshold) · lag of a report job after the call ends is fine to send to the team chat
-- The `partition` label is only for drill-down charts; do not put it in alert rules
-
-**GPU utilization** · the exporter is NVIDIA `dcgm-exporter`
-
-- `DCGM_FI_DEV_GPU_UTIL` is a gauge in % (checked from `etc/default-counters.csv` of the repo 2026-10-27) · this name was set by the exporter and does not follow the rules of section 2; use it as it is
-- GPU is a cause (USE), not a symptom · put it on the dashboard next to the latency of the stages that use the GPU (STT · TTS) · high utilization together with a high p95 of that stage means the machine is saturated and you must add machines or reduce load
-- GPU that stays high for many hours alerts at the look-during-work-hours level; it does not wake anyone
-
-## 8 · Check before sending
-
-- [ ] Every metric has a unit and `_total` per the rules · no label with unbounded values (user · phone · call id)
-- [ ] Latency is a histogram with a bucket edge at the SLO threshold · no decisions from averages
-- [ ] Every alert has `for:` · `severity` · `runbook_url` · `summary` · alerts on symptoms, not on CPU or GPU
-- [ ] Dashboards are JSON in git · provisioned from files · `allowUiUpdates: false`
-- [ ] There is a RED dashboard per service and USE per resource
-
-## 9 · Sources
-
-Checked 2026-10-27
-
-| Topic | Source |
-|---|---|
-| Metric types | prometheus.io/docs/concepts/metric_types/ |
-| Names, units, label cardinality | prometheus.io/docs/practices/naming/ |
-| histogram · summary · `histogram_quantile` · native histogram | prometheus.io/docs/practices/histograms/ |
-| Principle of alerting on symptoms | prometheus.io/docs/practices/alerting/ |
-| Rule syntax `for` · `keep_firing_for` · annotations | prometheus.io/docs/prometheus/latest/configuration/alerting_rules/ |
-| RED · USE · dashboard as code · sprawl | grafana.com/docs/grafana/latest/dashboards/build-dashboards/best-practices/ |
-| Dashboard provisioning | grafana.com/docs/grafana/latest/administration/provisioning/ |
-| `DCGM_FI_DEV_GPU_UTIL` | github.com/NVIDIA/dcgm-exporter → etc/default-counters.csv |
-| `kafka_consumergroup_lag` | github.com/danielqsj/kafka_exporter (not official to Kafka) |
-| `predict_linear` · `[5m]` range vs scrape interval · NaN behavior when dividing by 0 | General team knowledge (not yet checked against the official PromQL pages) |
-
-
-## reference: sources.md
-
-# Sources · observability-basics
-
-Source of item 3.1: prometheus.io (metric types · naming · histograms · alerting) and grafana.com (dashboard best practices · provisioning), checked 2026-10-27 · full links are at the end of `references/prometheus-grafana.md`
-
-
----
-
-# skill: load-testing
-
-Use when checking how many users a system holds
-
-# load-testing — load tests with a goal, a pass threshold and permission
-
-Sample script [`assets/load-test.js`](assets/load-test.js) · sample workflow [`assets/k6-smoke.yml`](assets/k6-smoke.yml) · tool facts checked 2026-10-28, links in [`sources`](references/sources.md)
-
-> **One rule:** no pass threshold written before the run = no test result, only a graph · and never load a system that is not ours, or production, without a named person's written approval.
+# human-writing — write like a person: smooth to read, easy to understand
 
 ## Use when
+- Writing anything a person will read, from chat to labels in a diagram, in Thai or English.
 
-- Before launching a system or before a campaign that brings many people at once (sale · registration opening · results announcement)
-- Someone asks "ระบบรับได้กี่คน" · "ตอนคนเยอะจะช้าไหม" · "เพิ่มเครื่องแล้วดีขึ้นจริงไหม" (how many users can it hold · will it be slow when busy · did adding machines really help)
-- A postmortem says the incident happened because load was never tested (`postmortem-template` section 5)
-- Setting up a speed smoke test in CI that fails when slower than the threshold
-- The user says load test · stress test · spike · soak · k6 · Locust · JMeter · p95 · ยิงโหลด · ทดสอบประสิทธิภาพ
+Not for: the look of kept documents (headings, tables, text boxes, theme) → `design-gate/polished-document-style` · abbreviations and glossaries → `human-writing/spell-out-abbreviations`.
 
-Do not use when: one web page loads slowly in the browser (Lighthouse · Core Web Vitals) → [`web-quality-audit`](../web-quality-audit/SKILL.md) · the live system is slow right now and you must find where → [`observability-basics`](../observability-basics/SKILL.md) first · testing that a button click gives the right result → [`e2e-testing-patterns`](../e2e-testing-patterns/SKILL.md)
+## Steps
 
-## Related skills
+### 1 · Core principles
+- Write as if explaining to a skilled coworker who is not on the project. If it trips you up when read aloud, rewrite it.
+- Answer or conclusion first, then the reason. No preamble, no repeating the question.
+- 1 sentence, 1 idea. If you chain "ซึ่ง" "โดย" "จึง" several layers deep, split into several sentences.
+- English follows the same rules: sentences under 25 words · who does what (active voice) · plain words.
 
-- `observability-basics`: open the system's dashboards next to the k6 results (section 6).
-- `cicd-and-release` · `jenkins-pipeline`: section 7 says what runs on every PR and what runs on a schedule.
-- `test-case-template`: for a whole-release test plan, put the load test in as one row, with the thresholds from section 1.
-- `kubernetes-helm` · `infra-as-code`: if you must add machines or autoscale after the run, run again with the same script and compare with the result before.
-- `pdpa-compliance`: if test data contains names or phone numbers, use fake data. Do not pull real customer data in to load the system.
+### 2 · Symbols and numbers
+- `→` means order of steps or a consequence · `·` separates short nouns on one line · `:` introduces detail · write every kind of count as a numeral.
+- **Write conditions and instructions as full sentences with connectors** (ถ้า … ให้ … · แล้ว · ส่วน · เพราะ). Do not chain sentences into fragments with `→` or `·`. If an outsider must guess what an arrow means, add words. In tables short text is fine, but it must read as human language, not code.
+- **No emoji or icons** (📌 ✅ 💡 🚀 👀) in headings, body, tables, labels, or text boxes. Use bold words instead, such as **หมายเหตุ**. Yes/no cells in a table may use `✓` `✗`. Show severity with the words `วิกฤต · สูง · กลาง · ต่ำ`, never coloured dots. Do not delete emoji the owner wrote, and do not copy them. The one exception is customer chat text that the task's own skill prescribes.
+- Say what every number means. Compare so it is easy to picture (times, easier to read than %). If a result is uncertain, say plainly why.
+- **Figures that change over time** (prices · tax rates · law · filing deadlines): give the source and the date checked. Cite only sources you actually opened, with a link or DOI. Mark hypothetical numbers or mock data with the label `ตัวอย่าง` from the first place they appear.
+- **Dates** in Thai text use พ.ศ. or ค.ศ., one style across the whole set. File names, codes, and machine-read data use `YYYY-MM-DD` in Common Era.
+- **Task status** uses these 5 words in every document: `เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่`. Check results use `ผ่าน · ไม่ผ่าน`.
 
-## 1 · Goal and pass threshold — write before opening the tool
+### 3 · Words
+- Use words people actually say. No bureaucratic words or literal-translation jargon. Keep terms the field uses in English (token · prompt · API · OCR). Explain a coined or confusing term the first time. Abbreviations → `human-writing/spell-out-abbreviations`.
+- Call one thing by one word across the whole set: chat, slides, documents, diagrams.
+- Two-language documents: pick 1 main language and put the other in brackets or a second column. Do not switch inside a sentence.
+- Cut padding words ("ทำการ" · "มีการ" · "ในส่วนของ" · "ได้มีการ" · "เป็นการ").
+- **Cut items, not function words.** Every length budget (words per bullet · characters per commit title · characters per subtitle) is met by dropping items, condensing, or moving content to the next piece. Never cut `จะ` `ให้` `ก็` `ด้วย` `แล้ว` `ต่างหาก` or polite words (`ขอ` `รบกวน` `นะ` and ครับ/ค่ะ, per register). They do work in the sentence; without them Thai turns curt and reads like a translation.
+- Avoid AI-looking moves: a quotable opener · the slogan "ไม่ใช่แค่… แต่ยัง…" for emphasis (a sentence that contrasts with something real or reframes the problem is fine, but it must close with "ด้วย") · grouping everything in threes · praising something as more important than it is · bold on every line · a closing recap · opening with "แน่นอน" · closing with "หวังว่าจะช่วยได้" · "หลาย" when you know the number · stacked hedges (hedge once, where you are truly unsure).
+- For work people look at (screens · slides · ads) also avoid: broad ad words (ยกระดับ · ไร้รอยต่อ · ล้ำสมัย · supercharge) · em dashes in every sentence · canned openers ("ในยุคดิจิทัลที่…") · short fragments split by full stops ("เร็ว. ง่าย. ครบ.") · claims a competitor could also make (put in a real name or number). For the look of the work, use `design-gate/no-ai-look`.
 
-Get answers to 4 questions, then note them at the top of the script file or the test plan:
+### 4 · Answering in chat
+- First sentence answers directly, then the reason. Short question → 2–3 sentences, no headings or tables.
+- Table to compare 2 or more options or many numbers; list for several items to scan. No nested bullets (use a new bold heading). 2–3 short items go on one line with ` · `. Include only what the reader needs.
+- Report finished work by its result, not by narrating the steps.
+- If you told them something wrong, say what was wrong and what is right, with no long apology. If unsure, say where and how to check; do not guess in a confident voice.
+- When the user must decide: offer options, name the recommended one and why, close with 1 easy question.
+- Longer than 1 screen: answer the important part first and offer the detailed version in 1 line (do not stop to ask).
+- If the user says "งง" or "พูดง่าย ๆ": rewrite the last answer at half the length, no unexplained jargon, no new content.
+- End with 1 thing they can do next. No recap.
+- **Answering from a document or the web**: retell in your own words, never sentence-by-sentence translation · cause and effect in one paragraph · small exceptions in brackets · 2–3 bold labels are enough · sources together at the end.
 
-| Item | Example answer | If there is no answer |
-|---|---|---|
-| Expected volume | Peak hour 50 requests per second on path `/api/orders` | Pull it from the live system's logs or metrics · for a new system, use the owner's estimate and tag it `(รอยืนยัน)` (awaiting confirmation) |
-| Paths to load | Browse products 70% · add to cart 20% · pay 10% | Load the 1–3 paths that earn the most money or cost the most first |
-| Speed threshold | The `p(95)` of response time is at most how many milliseconds | Default 500 ms for an API. **Default, not measured** (`ค่าตั้งต้น ยังไม่ได้วัด`) · adjust once there is a baseline result |
-| Error threshold | `http_req_failed` below what percent | Default 1%. **Default, not measured** (`ค่าตั้งต้น ยังไม่ได้วัด`) |
+### 5 · Documents and reports
+- The first paragraph is the conclusion; reading only it gives the point. Headings say what the content is, not the category name. At most 5 sentences per paragraph.
+- Column headings say what is measured · 1 column, 1 meaning. Footnotes are for definitions and number sources; never hide an important conclusion there.
+- Work summaries and status reports: bold headings only as needed, **ผล** → **ที่ทำ** → **ต่อไป** (add headings for real content, such as awaiting approval). Cut behind-the-scenes method, solved problems that do not affect the reader, and numbers not used for a decision. Tag every claim `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ` (meanings in `superuser` `references/evidence.md`).
+- Formal documents (official letters · contracts · tax invoices) use the wording the form requires; this skill covers only the parts you write yourself. Choose the register for each job (official · business · shop chat · job application · complaint · screen) from the table in `thai-grammar` section 4 before writing, and keep it through the piece.
 
-- Measure with percentiles, not averages: an average hides the minority who wait a long time.
-- Turn every threshold into `thresholds` in the script (section 4). Do not keep them in the head of whoever reads the result.
-- If there is no volume figure at all, you can run smoke and baseline, but you must not conclude "it can handle it", because you do not know what it is handling it against.
+### 6 · Slides and headings of every kind
+Applies to slide titles, figure titles, document headings, and box titles in a diagram.
+- A slide title = the conclusion of the page, not the topic name · at most 2 lines (about 15 words) · detail goes in the body.
+- **A title with 2 parts needs a connector that matches the real relationship** ("เพราะ" or "จึง" for reason · "ส่วน" for a split of roles · "แต่" for contrast) · 1 title, 1 connector. If it needs 2, you crammed too much in.
+- Use phrases people actually say, not strings of nouns · choose words by reader · the verb matches what the page shows · do not use "คน" for things that are not people.
+- The caption under a picture must say what the picture does not; if it repeats the picture, cut it · page structure: problem → fix → result · write a speaking script the way it is spoken.
+- **Test:** read the title once to an outsider. If they cannot retell it, rewrite it.
 
-## 2 · Permission gate — before every run beyond smoke and every run on production
-
-Loading a system without permission can really bring it down and may be illegal. So stop here and wait for approval. Do not skip it even if the user is in a hurry.
-
-1. **Whose system is it?** · If it belongs to someone else (a partner's API · payment gateway · external SaaS · a competitor's site) → do not load it · use a mock, or a sandbox the provider opens for load testing, and read their terms first.
-2. **Environment** · Run on staging or a separate load-test environment · the k6 docs say a QA environment with machines unequal to production cannot be used to judge load capacity, only for smoke.
-3. **Production** · Needs a named approver, a time window, a peak volume, and a watcher who can stop at once · start with a low-volume smoke (the k6 docs treat it as a low-risk practice) · never create real orders, payments, emails or SMS.
-4. **Anything that causes side effects when hit** · Take payment and message-sending webhooks off the path, or point them at a mock · for an external provider that charges per call, set a spending cap first.
-5. **Record** in the script header or plan: system · environment · peak volume · time window · approver · way to stop
-
-The sample script enforces this gate in code: if `BASE_URL` or `TARGET_ENV` is missing, the script stops · if the type is not smoke, or `TARGET_ENV=production` (smoke included), and `APPROVED_BY` is missing, the script stops too.
-
-## 3 · Choose the tool
-
-| If | Use | Reason |
-|---|---|---|
-| Starting fresh · HTTP API or web · want the pass threshold to fail CI directly | **k6** (default) | Written in JavaScript · `thresholds` in the script · exits with a non-0 code when a threshold fails · AGPL-3.0 licence |
-| Team prefers Python · needs complex step sequences or its own protocol | **Locust** | Test scenarios are plain Python code · can be spread over several machines · runs headless in CI · MIT licence |
-| The organisation already has a `.jmx` plan · must load JDBC · JMS · LDAP · FTP · SOAP | **JMeter** | Wide protocol support · has a GUI to record plans · use CLI mode (headless) for real runs |
-
-- Versions seen on 2026-10-28: k6 v2.3.0 (2026-09-21), and the 1.x line still gets a security patch v1.8.2 (2026-10-12) · pin the version in CI, do not use `latest` · `setup-k6-action` without `k6-version` always gets the latest ([README](https://github.com/grafana/setup-k6-action) checked 2026-10-28)
-- Grafana Cloud k6 (runs from the cloud · stores results): price and quota `(ยังไม่ได้ตรวจ)` (not yet checked) · start with k6 on a machine or a CI runner, which is free
-- The machine that sends the load must not be the same machine as the system under load, or they fight over CPU and the result is skewed.
-
-## 4 · Test types and the script
-
-Order per the k6 docs: **smoke always first** → average-load → other types by risk · use a plain load shape (ramp up · hold · ramp down). Do not run load that goes up and down several times, because the cause is hard to find.
-
-| Type | What it asks | Virtual users (VU) and time, per the k6 docs | When |
-|---|---|---|---|
-| smoke | Is the script right? Does the system answer when few people use it? | Few · seconds to a few minutes | Before every other type · every PR in CI |
-| load (average-load) | Does normal volume pass the threshold? | Equal to production average · 5–60 minutes | Before releasing a version · as the baseline |
-| stress | What happens above normal? | Above average · 5–60 minutes | Systems at risk in heavy-use periods |
-| spike | Does it survive a sudden rush? | Very high · a few minutes | Before a campaign · flash sale |
-| soak | After long use, does memory leak or do connections hang? | Average · several hours | Systems that stay up for long periods |
-| breakpoint | Where is the ceiling? | Ramp up until it breaks | Run only a few times, always needs approval per section 2 · the sample script has no such type, write the stages yourself |
-
-The script [`assets/load-test.js`](assets/load-test.js) picks the type with `TEST_TYPE`. Every type uses the `ramping-arrival-rate` executor (it fixes the number of iterations per unit of time, so when the system slows down it still gets hit at the same rate, and you see the real symptoms) · the core is thresholds:
-
-```javascript
-thresholds: {
-  http_req_failed: [{ threshold: 'rate<0.01', abortOnFail: true, delayAbortEval: '30s' }],
-  http_req_duration: ['p(95)<500'],              // default, not measured
-  'http_req_duration{type:API}': ['p(95)<500'],  // separate threshold by tag
-},
-```
-
-- `abortOnFail` stops the run when a threshold fails midway, instead of pounding the system to the end · `delayAbortEval` waits to collect samples before judging
-- Every number in the script (rate · VU · stages) is a **default, not measured** value. Adjust per section 1.
-- Run: `k6 run -e TEST_TYPE=smoke -e TARGET_ENV=staging -e BASE_URL=https://staging.example.com assets/load-test.js > _to_delete/k6.log 2>&1; tail -40 _to_delete/k6.log` (k6 prints a long progress log for as long as the run lasts, so read only the closing summary)
-
-## 5 · Reading the result
-
-Details and worked examples are in [`reading-results`](references/reading-results.md) · in short:
-
-1. Look at the thresholds lines at the end of the report first (pass/fail), then the exit code: 0 = every threshold passed · a failed threshold usually gives 99
-2. Look at `http_req_failed` before `http_req_duration`. If errors spike, the response times you see may be fast only because errors answer fast.
-3. Look at the load-sending machine. CPU at full or too few VU = the result shows the limit of the load generator, not the system.
-4. Compare with the previous baseline using the same script, same data, same environment · change one thing at a time
-5. The report says "which threshold passed or failed, at what volume", not "the system holds 10,000 people", unless you really ran that.
-
-For a multi-stage system (for example listen to audio → chat → speak): load each stage alone first, then the whole path · the bottleneck differs per stage (an example from a teaching job, not a threshold: chat holds 4 · listening holds 32 · speaking holds 2) · whole-system speed equals the weakest stage · a queue does not make it faster, it keeps it from breaking (the extra people get slower answers instead of errors) · set the consumer's prefetch equal to the number of jobs the backend can really do at once (`rabbitmq-messaging` section 4) · if the backend dies mid-run, add a watchdog per section 8 of `rabbitmq-messaging`
-
-## 6 · Run together with monitoring
-
-The k6 result says it is slow, but not why · during the run, open the dashboards per `observability-basics` section 2 (latency · traffic · errors · saturation) for the server, database and queue · note the start and end time of the run so you can match the graphs · common bottlenecks: database connection pool · queries without an index · connections not returned (example in `postmortem-template` section 5)
-
-## 7 · Plug into CI
-
-| Run when | Type | Where |
-|---|---|---|
-| Every PR or every push | smoke · a few minutes | staging or the PR's environment |
-| Overnight or on a schedule | load · stress · spike | a separate load-test environment |
-| Before a major release | the full set chosen in section 4 · run at least 2 rounds | an environment equal to production |
-
-- The k6 docs warn that load tests take 3–15 minutes or more, so do not put them on the path that deploys automatically, and do not trust pass/fail alone until the process is stable.
-- GitHub Actions: `grafana/setup-k6-action@v1.2.2` (set `k6-version`) installs k6, then `grafana/run-k6-action@v1.5.0` runs it (pinned versions, checked 2026-10-28) · full example in [`assets/k6-smoke.yml`](assets/k6-smoke.yml) · Jenkins or other CI call `k6 run` directly
-- Do not wrap `k6 run` in a script that swallows the exit code (for example one with a trailing `echo`) · make `k6 run` the last command, or keep `$?` and `exit` with that value
-- `BASE_URL` and tokens come from CI secret variables (`config-and-secrets`), not written into the script
+### 7 · Diagrams
+- Box labels are short nouns of 1–4 words · arrow labels are verbs · an unlabelled arrow must be impossible to misread.
+- Words in the figure match the document · the figure title is a conclusion, with 1 sentence under it saying what to look at · follow the house style if there is one.
 
 ## Check before sending
-
-1. Expected volume, paths, and the p95 and error-rate thresholds exist before the run · guessed values carry the label "ค่าตั้งต้น ยังไม่ได้วัด" (default, not measured)
-2. The system is ours · the environment is stated clearly · beyond smoke there is a named approver · production has a watcher and a way to stop
-3. No real money, email, SMS or order came from the run
-4. Thresholds are in `thresholds` · `abortOnFail` is set on the error rate
-5. smoke passed before other types · the load generator is not the same machine as the system
-6. The report states results against thresholds and the baseline at the volume really run, and does not conclude beyond what was run
-7. CI does not swallow the exit code · secrets come from secret variables · the k6 version is pinned
+1. Does it read smoothly aloud, and not like a translation?
+2. Can an outsider understand it without asking? Can every symbol be read?
+3. Does the first sentence already answer or give the conclusion?
+4. Do terms and numbers match across every file in the set?
+5. Any padding to cut without changing meaning? Cut it, but `จะ` `ให้` `ก็` `ด้วย` `แล้ว` and polite words are not padding; if cutting made a sentence curt, put them back.
+6. Does every heading pass section 6?
+7. Thai of 1 paragraph or more: run `python scripts/thai_tells.py <file>` (warns only), then walk the 7 sentence-structure rules in `thai-grammar`. Passing every rule is not the same as reading smoothly. The final verdict on language, taste and looks belongs to the user.
 
 ## References
+- [`references/headings-and-examples.md`](references/headings-and-examples.md) — open for examples of every rule, the before → after heading table, and their sources
+- [`references/thai-grammar.md`](references/thai-grammar.md) — open when writing Thai of 1 paragraph or more (sentence structure · register); example paragraphs in [`references/thai-examples.md`](references/thai-examples.md)
+- [`references/strict-review.md`](references/strict-review.md) — open for research or work sent to outsiders
+- [`references/thai-line-breaking.md`](references/thai-line-breaking.md) — open for Thai documents with justified alignment
 
-- [`references/reading-results.md`](references/reading-results.md) — open to read a k6 result (section 5)
-- [`references/mcp-k6.md`](references/mcp-k6.md) — open when using the k6 MCP server
-- [`references/worked-example.md`](references/worked-example.md) — open for a flash-sale example run through sections 1 to 7
-- [`references/sources.md`](references/sources.md) — links and check date 2026-10-28 for every tool fact
+## Parts
+Hard rules of the parts (full steps in each guide):
+- spell-out-abbreviations: write every abbreviation in full the first time, with the abbreviation in brackets; after that you may use the abbreviation.
+- spell-out-abbreviations: put a short explanation in brackets the first time you use a technical term an outside reader may not know.
+- translate-th-en: translate meaning one paragraph at a time, not word by word; 1 term = 1 translation across the whole project, recorded in `docs/glossary.md`.
+- polite-message-th-en: say the hard thing clearly; politeness belongs in the wording, not in hiding the request. One ask per message, with a date. Move up one tone level per reminder, never two. Do not stack softeners.
 
-
-## reference: mcp-k6.md
-
-# k6 MCP (grafana/mcp-k6)
-
-Extension of `load-testing` · checked 2026-10-28 from https://github.com/grafana/mcp-k6 and https://api.github.com/repos/grafana/mcp-k6/releases · not embedded in the plugin; the user installs it if wanted
-
-## Status
-
-| Topic | What was seen |
+| When | Open |
 |---|---|
-| Maintainer | Grafana (repo `grafana/mcp-k6`) |
-| Status | The README says it is still experimental |
-| Latest version | v0.7.0 on 2026-10-05 |
-| License | The repo page is inconsistent: the sidebar says AGPL-3.0 but the README says MIT · open the LICENSE file before using it in customer work |
-| Tools | `validate_script` (runs 1 VU for 1 round) · `run_script` (real run, up to 5 minutes) · `list_sections` · `get_documentation` |
-
-## Cautions
-
-- `run_script` sends real requests to the targets in the script · `validate_script` also sends 1 round · the permission gate in `load-testing` section 2 applies to calls through MCP too, with no exceptions
-- Start with only `get_documentation` and `validate_script` pointed at staging · have the agent call `run_script` only when the user allows it in that round
-- HTTP mode has no built-in authentication; use it only in a trusted network · stdio on your own machine is better
-
-## Install (the user does it, pin the version)
-
-Claude Code via Docker (command form per the README):
-
-```bash
-claude mcp add --scope=user --transport=stdio k6 -- docker run --rm -i grafana/mcp-k6:<tag ของ v0.7.0>
-```
-
-The Docker Hub image tag that matches v0.7.0 `(ยังไม่ได้ตรวจ)` (not yet checked) · the README uses `latest`, but open the tag page and put in a pinnable version instead · other ways: Homebrew (`brew tap grafana/grafana` then `brew install mcp-k6`) or the `.deb` `.rpm` packages from the v0.7.0 release page · running natively also needs k6 on PATH
-
-The k6 docs still mention the command `k6 x mcp`, which pulls the latest version automatically · to pin a version, use the standalone `mcp-k6` as above (from search results citing https://grafana.com/docs/k6/v2.3.x/set-up/configure-ai-assistant/; that page was not opened directly)
+| First use of an abbreviation or technical term; glossary | [parts/spell-out-abbreviations/guide.md](parts/spell-out-abbreviations/guide.md) |
+| Translating Thai-English, paired files, screen text | [parts/translate-th-en/guide.md](parts/translate-th-en/guide.md) |
+| Awkward message to ask, decline, chase payment, apologise or complain | [parts/polite-message-th-en/guide.md](parts/polite-message-th-en/guide.md) |
 
 
-## reference: reading-results.md
+## reference: headings-and-examples.md
 
-# Reading k6 results and writing the report
+# Headings, slides, diagrams and before → after examples (full version)
 
-Extension of `load-testing` section 5 · k6 facts checked 2026-10-28 from the pages linked at the end of the file · the interpretation is general practice, not yet tested against a real system this round
+Read when writing a slide title, figure title or diagram label, or when you want examples of fixes. The short rules are in `SKILL.md` sections 6–7.
 
-## 1 · Read in this order
+## Slides and headings of every kind
 
-| Order | What to look at | Interpretation |
+- A slide title = the conclusion of the page, not the topic name: "ยิ่ง Tier 1 เติมค่าเอง Gate ยิ่งมองไม่เห็นค่าผิด"
+
+**Write titles that read smoothly and are not ambiguous.** This applies to slide titles, figure titles, document headings and box titles in a diagram.
+
+- **A title with 2 parts needs a connector** (ส่วน · แต่ · เพราะ · จึง — as for · but · because · so). Do not just place 2 phrases side by side, because the reader has to guess how the 2 parts relate.
+- **The connector must match the real relationship.** Use "เพราะ" or "จึง" only when one part really is the cause of the other. If the 2 parts just split roles, use "ส่วน". If they contrast, use "แต่". 1 title, 1 connector. If it needs 2, you crammed too much in: cut it down to one topic.
+- **The title must still be short.** A slide title is at most 2 lines (about 15 words). If it is longer, move detail down into the page body. Do not add connectors until the title becomes a paragraph.
+- **Use phrases people actually say.** If shortening leaves a string of nouns such as "AI ทำงานภาษา", find the verb people really use, such as "AI ช่วยเขียนคำตอบ".
+- **Choose words by reader.** If the reader is not technical, use "ระบบ" (system) instead of "โค้ด" (code) and "ตรวจขาเข้า" (check incoming) instead of "Guard". Technical terms are fine when the reader is a technical team.
+- **The verb must match what the page shows.** If a box in the figure is a checking step, use "ตรวจ" (check) or "ตัดสิน" (judge), not "ตัดสินใจ" (decide), which sounds like choosing a path.
+- **Do not use "คน" (person) for things that are not people**: "ระบบเป็นคนตัดสิน" → "ให้ระบบตัดสิน"
+- **The summary line under a figure must say what the figure does not.** If it is only an arrow chain of steps that repeats the figure, cut it, or replace it with 1 sentence saying why this figure matters.
+- **Test**: read the title once to an outsider. If they cannot retell it in their own words, or have to ask "what does that mean", rewrite it.
+- Page structure: problem → fix → result. Each part can be read in one glance.
+- Write a speaking script the way it is actually spoken. It must read aloud without tripping.
+
+## Diagram
+
+- A box label is a short noun of 1–4 words that people understand: "รับข้อมูลเข้า" not "Ingress Layer Handler"
+- An arrow label is a verb: "ส่งไฟล์" · "ตรวจสิทธิ์". An unlabelled arrow must be impossible to misread.
+- Every word in the figure must match the word in the document.
+- The figure title is a conclusion, like a slide title. Under the figure, 1 sentence says what to look at.
+- If the project has a house style, follow it. For how to draw, see the figure skill of that plugin.
+
+## Before → after examples
+
+Write a condition as a full sentence with a connector (section 2):
+
+  - Before: `ไม่แน่ใจว่าขนาดไหน → ถือเป็นขนาดที่ใหญ่กว่า 1 ขั้น`
+  - After: `ถ้าไม่แน่ใจว่างานขนาดไหน ให้ถือว่าใหญ่ขึ้นอีก 1 ขั้น`
+  - Before: `ย้อนได้ → ทำเลย · ไม่รู้ → ค้นเอง · ย้อนไม่ได้ → เตรียมไว้ใน "รออนุมัติ"`
+  - After: `งานที่ย้อนได้ให้ทำเลย ไม่รู้ให้ค้นเอง ส่วนงานที่ย้อนไม่ได้ให้เตรียมไว้ใน "รออนุมัติ"`
+
+| Before | After |
+|---|---|
+| ขอบระบบ (รับ input) → service (กฎธุรกิจ) → data | แยกโค้ด 3 ชั้น: รับข้อมูลเข้า → กฎธุรกิจ → เก็บข้อมูล |
+| ตรวจ input ที่ขอบ · พังแบบปิด | ตรวจข้อมูลจากภายนอกทันทีที่เข้ามา ถ้าเกิดข้อผิดพลาดให้ปฏิเสธไว้ก่อน |
+| เล็กพลาดหรือตรวจไม่ผ่าน → ขยับขึ้นหนึ่งระดับ | ถ้าโมเดลเล็กทำพลาด ให้ขยับขึ้น 1 ระดับ ไม่ลองซ้ำกับตัวเดิม |
+| มีผลเหนือค่าเริ่มของ playbook แต่ไม่เหนือรายการ "รออนุมัติ" | ถ้าไฟล์นี้กับ playbook ขัดกัน ให้ทำตามไฟล์นี้ ยกเว้นเรื่องที่ต้องรออนุมัติ |
+| เมื่อความต้องการมีการนำเข้าหรือส่งออกไฟล์ | เมื่องานต้องนำเข้าหรือส่งออกไฟล์ |
+| ทุกข้อความผ่าน 8 ขั้น: AI ทำงานภาษา โค้ดตัดสินเรื่องสำคัญ | ทุกข้อความผ่าน 8 ขั้น: AI ช่วยเขียนคำตอบ ส่วนเรื่องสำคัญให้ระบบตัดสิน |
+| Guard ขาเข้า (ในรูปที่ทำให้คนทั่วไปดู) | ตรวจขาเข้า |
+| guard ขาเข้า → ค้นคลังความรู้ → แนบกฎร้าน → Typhoon → guard ขาออก (บรรทัดใต้รูปที่ซ้ำกับรูป) | AI มีหน้าที่เขียนให้อ่านง่าย ส่วนเรื่องเงิน เวลา และกฎร้าน ระบบตรวจทุกครั้ง |
+| ทีมที่ดีไม่ได้เก่งเพราะแต่ละคนเก่ง แต่เพราะ… | วิธีทำงานของทีม: เลือกแผน → แจกงาน → ตรวจผล → จดบันทึก |
+| คำค้น 12/12 จากประกาศงานอยู่ใน CV | คำค้นจากประกาศงานอยู่ใน CV ครบ 12 คำ · ตรวจแล้ว |
+| margin 32–35% หลังทุกค่าธรรมเนียม | หักค่าธรรมเนียมแล้วเหลือกำไร 32–35% ของราคาขาย |
+| hook จะทำงานเฉพาะโฟลเดอร์ที่มีการสร้างโฟลเดอร์ .claude/superuser ไว้แล้วเท่านั้น | hook (สคริปต์จด log) ทำงานเฉพาะโฟลเดอร์ที่มี `.claude/superuser/` |
+| ตรวจด้วย validate ผ่าน ไม่มี error และ warning แต่ยังต้อง build ใหม่ | ตัวตรวจผ่านหมด · เหลือ build ใหม่บนเครื่องคุณ |
+| `${CLAUDE_PLUGIN_ROOT}` คือ path ของ version ที่ติดตั้งอยู่ และจะเปลี่ยนเมื่อ plugin อัปเดต ส่วนโฟลเดอร์เก่าระบบจะลบทิ้งเองภายหลัง [ที่มา] | แต่ละ version ติดตั้งเป็นโฟลเดอร์ของตัวเอง พออัปเดตก็ชี้ไปโฟลเดอร์ใหม่ แล้วลบโฟลเดอร์เก่าทิ้ง |
+| ข้อยกเว้น: plugin จาก marketplace บน claude.ai … จะไม่ถูก pin ด้วยฟิลด์นี้ (แยกย่อหน้า) | … ไม่งั้นเครื่องที่ลงไว้จะใช้ชุดเก่าต่อ (ยกเว้น plugin จาก marketplace บน claude.ai ซึ่งเห็นการแก้ทันที) |
+
+## Examples for the rules in SKILL.md (moved from SKILL.md)
+
+| Section | Rule | Example |
 |---|---|---|
-| 1 | exit code | 0 = every threshold passed · not 0 = failed · a failed threshold usually gives 99 |
-| 2 | the thresholds line at the end of the report | which thresholds passed, which failed, and the actual values |
-| 3 | `http_req_failed` | if errors spike → a fast response time may only be because errors return fast, so do not celebrate the p95 yet |
-| 4 | `http_req_duration` p95 and p99 | the range most users experience, and the tail a few users wait through · the average cannot be used to decide |
-| 5 | `checks` | whether the answers are correct, not just a status 200 |
-| 6 | warnings about not enough VUs, or rounds that did not start | the load generator could not keep up with the set rate; this run shows the limit of the generator, not the system (metric name of the dropped rounds `(ยังไม่ได้ตรวจ)` — not yet checked) |
+| 1 | Plain words (English) | buy, not purchase |
+| 2 | `→` order of steps | เข้าใจ → วางแผน → ลงมือ |
+| 2 | `·` separates nouns | ทำอะไร · ได้อะไร · ใช้แรงแค่ไหน |
+| 2 | `:` introduces detail | แยกโค้ด 3 ชั้น: รับข้อมูล → กฎธุรกิจ → เก็บข้อมูล |
+| 2 | Write numbers as numerals | 3 ชั้น · 12 คำ · 1 ระดับ |
+| 2 | Say what the number means | "กำไร 32% ของราคาขาย" not a bare "margin 32%" |
+| 2 | Compare so it is easy to picture | "เร็วขึ้น 3.2 เท่า" reads easier than "ลดลง 69%" |
+| 2 | Uncertain result | "รันรอบเดียว ยังสรุปไม่ได้" |
+| 3 | Words people actually say | "ยกระดับ" → "ส่งต่อ" · "ผลสุดท้ายขัดกฎ" → "คำตอบไม่ผ่านกฎ" |
+| 3 | Abbreviation at first use | Large Language Model (LLM) |
+| 3 | Coined term | "hook (สคริปต์จด log อัตโนมัติ)" |
+| 3 | Cut padding words | "ทำการตรวจสอบ" → "ตรวจ" · "มีการนำเข้า" → "นำเข้า" |
+| 3 | No stacked hedges | อาจจะ · น่าจะ · ในบางกรณี in one sentence |
+| 4 | First sentence answers directly | Asked "ใส่ในรายงานดีไหม" → "ควรใส่ครับ", then the reason |
+| 4 | Report by result | "แก้แล้ว 8 จุด เปิดไฟล์ได้ปกติ" |
+| 4 | Cause and effect in one paragraph | "แต่ละ version ติดตั้งแยกโฟลเดอร์ พออัปเดตก็ชี้ไปโฟลเดอร์ใหม่แล้วลบของเก่า skill ที่ลบออกจึงหายไป" |
+| 4 | Bold labels | **ระวัง:** · **สิ่งที่ยังอยู่:** not "**ระวัง (เจอบ่อย):**" |
+| 5 | Heading says the content | "ระบบส่งต่อลดการเรียก LLM ได้ครึ่งหนึ่ง" is better than "ผลการทดลอง" |
+| 5 | Column heading | "เรียก LLM" · "คำตอบไม่ผ่านกฎ" |
+| 6 | Phrase people say | "AI ช่วยเขียนคำตอบ" not "AI ทำงานภาษา" |
+| 6 | Words by reader | General reader: "ระบบ" "ตรวจขาเข้า" instead of "โค้ด" "Guard" |
+| 6 | No "คน" for non-people | "ให้ระบบตัดสิน" |
 
-## 2 · Find where it jams
+Sources: ISO 24495-1 (plain language) · GOV.UK clear language · Microsoft Writing Style Guide · Wikipedia: Signs of AI writing · คู่มือการร่างเอกสารภาษาไทย (guide to drafting Thai documents)
 
-Look at the system graphs for the same period as the run (`observability-basics` section 2):
 
-| Symptom in the graph | Suspect first |
+## reference: strict-review.md
+
+# Strict review — for research and work sent to outsiders
+
+The default for `human-writing` is a **normal check**: go through the 7 points in section 8 of SKILL.md once, then send. Use this file only when the user asks for a **strict review** (ตรวจเข้ม).
+
+**Passing the rules ≠ reading smoothly.** The review pass catches only what has a rule (sentence structure · words to avoid · register). Work that passes every rule but has no voice is called **flat** (`อ่านแบน`). Label it as flat. Do not report it as passing. Whether it reads like a person wrote it is for the user to decide by reading aloud, not for the model doing the check (the model that drafted and the model that checks share the same blind spots).
+
+## When to turn it on
+
+- The user says "ตรวจเข้ม" · "ตรวจแบบงานวิจัย" · "ขัดภาษาให้สุด" · "วนตรวจจนไม่เจอที่ผิด" · "strict"
+- Or the work is a thesis · independent study (IS) · research article · report for a lecturer or committee · official letter, and the user did not ask for the quick version.
+- For book structure, chapters and citations, use skill `thesis-writing` (plugin `personal-life`) alongside. This file covers language only.
+
+## Steps
+
+1. **Open [`thai-grammar`](thai-grammar.md) in full**, and [`thai-line-breaking`](thai-line-breaking.md) if the output is a file.
+2. **Choose the register** from the table in section 4. Research uses the academic register. State the chosen register on the first line of the review result.
+3. **Read the whole piece once first** without editing. For work over 3,000 words, review chapter by chapter. Tell the user how you split it, then carry on without stopping to ask.
+4. **Review pass.** Run `python scripts/thai_tells.py <file>` first (the machine catches words to avoid · connectors over budget · mid-paragraph dots · ๆ with no space), then read it yourself for what the script cannot see. Record every spot in a table. Do not edit while recording.
+
+   | # | Rule code | Original text | Fix |
+   |---|---|---|---|
+   | 1 | `t-chueung` | …ซึ่งพัฒนาโดย… ซึ่งเปิดเป็น… | … |
+
+   **Sort by weight, not by the order found.** At the top are the spots that tell the reader at once a machine wrote it: canned opening sentences · recap at the end of a paragraph · groups of 3 everywhere · broad ad words · repeated sentence structures side by side. Then the small things (extra connectors · punctuation). Fixing the top 5 first often makes several of the lower ones vanish. A short piece with only small findings is fixed in one pass, with no loop.
+   **Compare with the author's voice.** If there is text the user wrote themselves (`ก่อน → หลัง` pairs in `~/.claude/superuser-style.md` · earlier emails or chapters by the user), read against it: sentence length · pronouns · sentence-final particles · words the user never uses. Record each spot that differs from the user's voice with code `v-voice` in the table. If there are no samples, check against the rules only, and label the result `อ่านแบน` as usual (idea from humanizer by blader · MIT).
+5. **Fix pass.** Fix according to the table, then reread the whole piece (do not look only at the fixed spots, because fixing one spot often makes the neighbouring joins stumble).
+6. **Repeat steps 4–5** until the review pass finds nothing. **At most 5 rounds.** If spots remain after 5 rounds, report them with the reason they were not fixed.
+7. If working under `superuser`, make each review round a new `reviewer` (small model · low effort), and let the lead do the fixing. The `reviewer` may report only the rule codes found, and does not judge whether it reads smoothly. For the fix pass, give the fixer the whole rule set, not just the points flagged (if you give only the flagged points, the fixer will keep going in circles).
+
+## Extra checks for research
+
+| Code | Check |
 |---|---|
-| App CPU full, response time grows with it | Heavy code or too few machines · try adding machines and run again |
-| App CPU idle, but response time grows | Waiting on something outside: database connection pool · table locks · an external API |
-| Errors start at a certain load and then spike | Hit a ceiling (pool · open files · rate limit) · find the setting at that load |
-| soak: memory keeps rising and never drops | Memory leak · connections not returned |
-| Response time good at first, then worse as the data grows | Query without an index · table grown from data the run created |
+| `a-register` | Academic register throughout · no ครับ/ค่ะ · no ผม/ฉัน (use `ผู้วิจัย` or drop the pronoun) · every formal-side word in the pairs of the `r-drift` table · `สามารถ…ได้` complete |
+| `a-term` | One word per technical term across the whole book · first use written as `ไทย (English)`, then Thai afterwards · abbreviations spelled out at first use in every chapter · matches the Royal Society of Thailand's coined terms where they exist |
+| `a-claim` | Every statement of fact has a citation · no citing a source that was not opened · the researcher's opinion is clearly separated from fact |
+| `a-hedge` | Hedge only as far as the data supports: a result from a small sample says `ในกลุ่มตัวอย่างนี้` · no stacked hedges · no claiming more than the result shows |
+| `a-number` | Numbers have units · same decimals across a table · numbers in the text match the table · percentages state the base |
+| `a-ref` | Tables, figures and equations are numbered and referred to in the text before they appear · figure and table titles are conclusions |
+| `a-cite` | One citation style across the whole book (APA 7 or the faculty's) · the reference list at the end covers everything cited in the text |
+| `a-tense` | The method chapter and results are told as things already done · do not switch between `จะ` and `ได้` in one chapter |
+| `a-break` | After export, run `scripts/thai_linebreak.py --check` and open the PDF to look at every page |
 
-## 3 · Re-run so results are comparable
+## What to send the user
 
-- Same script, same starting data, same environment · clean up the data the previous run created
-- Change one thing at a time (code, or a setting, or machine size) and run against the baseline
-- The k6 docs advise running the same way at least 2 rounds before releasing a version, because each round's result varies
+- First line: the register used · the number of rounds · `ผ่านกฎ` (passed the rules) or `เหลือ N จุด` (N spots left) · if flat, say `ผ่านกฎ · อ่านแบน` with the paragraphs worth reading aloud.
+- A table of fixes across all rounds (rule code · old · new). It lets the user answer the committee about what was changed and why.
+- Spots not fixed, and why (for example wording fixed by the faculty's template · quoted speech).
+- The fixed file overwrites the original. Keep the original in `_to_delete/`.
 
-## 4 · One-page report format
+Source of the review loop: skill `kode-thai` in [chakrit/kien-thai](https://github.com/chakrit/kien-thai) (MIT) · adapted with a cap on rounds, and used only on request, because the full version costs tens of thousands of tokens per round.
 
-```markdown
-## ผล load test · <ระบบ> · <YYYY-MM-DD>
 
-- environment: <staging-perf> · ผู้อนุมัติ: <ชื่อ> · ช่วงเวลา: <เริ่ม–จบ>
-- แบบ: <smoke · load · spike> · ปริมาณสูงสุดที่ยิงจริง: <รอบต่อวินาที>
-- k6 รุ่น: <v2.x.y> · exit code: <0 หรือ 99>
+## reference: thai-examples.md
 
-| เกณฑ์ | ตั้งไว้ | ได้จริง | ผล |
+# Thai paragraph examples, before → after (one register at a time)
+
+Open before writing a long Thai paragraph, and look at the pair for the register you will use. Example pairs teach better than rules, because you see sentence structure and tone together. Rule codes are in [`thai-grammar`](thai-grammar.md).
+
+**Rules of this file.** 1 pair = 1 paragraph. The "after" must be text the owner wrote or edited. Text written by the team is labelled `(ชั่วคราว)` (temporary) until the owner reads it and accepts it. At most 10 pairs per register. When a new rule absorbs a pair, delete that pair. Every pair states its source and date.
+
+## Register อธิบาย (explain): README and technical docs
+
+**Before**
+
+> ในยุคปัจจุบันที่ข้อมูลมีความสำคัญอย่างมาก ระบบนี้ถูกออกแบบมาเพื่อทำการประมวลผลข้อมูลจากหลายแหล่ง ซึ่งจะช่วยให้ผู้ใช้สามารถเข้าถึงข้อมูลได้อย่างมีประสิทธิภาพ โดยระบบจะทำการดึงข้อมูลทุก 5 นาที ดังนั้นผู้ใช้จึงไม่ต้องกังวลเรื่องข้อมูลไม่อัปเดต
+
+**After**
+
+> ระบบนี้รวมข้อมูลจาก 3 แหล่ง (ERP · ไฟล์ Excel ของฝ่ายขาย · API ของขนส่ง) ไว้ที่เดียว ข้อมูลพวกนี้ระบบจะดึงใหม่ทุก 5 นาที เปิดหน้า dashboard เมื่อไหร่ก็เห็นตัวเลขของ 5 นาทีก่อน ถ้าแหล่งไหนล่ม แถวของแหล่งนั้นจะขึ้นเวลาที่ดึงได้ครั้งสุดท้ายแทน
+
+Rules applied: `t-block` (ในยุคปัจจุบัน) · `t-padding` (ทำการ ×2 · มีความสำคัญ) · `t-thuk` · `t-chueung` · `t-budget` (ซึ่ง โดย ดังนั้น in one paragraph) · `t-reassure` · `f1` put the data first · `f2` condition comes first · "หลายแหล่ง" → the 3 named sources · Source: written by the team 2026-10-22 · owner read and accepted 2026-10-29
+
+## Register ธุรกิจ (business): proposal to a customer
+
+**Before**
+
+> เรามีความยินดีที่จะนำเสนอโซลูชันที่จะช่วยยกระดับการทำงานของท่าน ไม่ว่าจะเป็นการจัดการเอกสาร การอนุมัติ หรือการรายงาน ซึ่งทั้งหมดนี้จะถูกรวมไว้ในแพลตฟอร์มเดียว โดยทีมงานของเราจะทำการติดตั้งและฝึกอบรมให้อย่างครบถ้วน
+
+**After**
+
+> บริษัทฯ เสนอระบบจัดการเอกสาร (Document Management System: DMS) ที่รวมงาน 3 อย่างของฝ่ายจัดซื้อไว้ในหน้าเดียว คือยื่นเอกสาร อนุมัติ และออกรายงาน ติดตั้งและอบรมผู้ใช้ 20 คนให้เสร็จภายใน 15 วันทำการ นับจากวันลงนามในสัญญา ค่าใช้จ่ายและเงื่อนไขอยู่ในหัวข้อ 4
+
+Rules applied: register ธุรกิจ (`เรา` `ท่าน` → `บริษัทฯ` and the department name) · broad ad words (ยกระดับ · โซลูชัน) → what is actually done · `t-mai-wa` · `t-thuk` · `t-padding` · `t-doi` · key term at first use as `ไทย (English: abbreviation)` · a number replaces "อย่างครบถ้วน" · Source: written by the team 2026-10-22 · owner read and accepted 2026-10-29
+
+## Register ราชการ (official): resolution in meeting minutes
+
+**Before**
+
+> ที่ประชุมได้มีการพิจารณาเรื่องการจัดซื้อเครื่องคอมพิวเตอร์ ซึ่งฝ่ายไอทีได้ทำการเสนอราคามาแล้ว โดยที่ประชุมเห็นว่ามีความเหมาะสม ดังนั้นจึงมีมติให้ทำการจัดซื้อต่อไป ทั้งนี้ให้ฝ่ายจัดซื้อดำเนินการให้แล้วเสร็จโดยเร็ว
+
+**After**
+
+> ฝ่ายเทคโนโลยีสารสนเทศเสนอจัดซื้อเครื่องคอมพิวเตอร์ 12 เครื่อง วงเงิน 420,000 บาท ตามใบเสนอราคาเลขที่ QT-2569-031 ที่ประชุมพิจารณาแล้วเห็นว่าราคาอยู่ในงบประมาณที่ได้รับอนุมัติ มติที่ประชุม อนุมัติให้จัดซื้อตามที่เสนอ และมอบฝ่ายจัดซื้อดำเนินการให้แล้วเสร็จภายใน 30 วัน นับจากวันที่รับรองรายงานการประชุมฉบับนี้
+
+Rules applied: `t-padding` (ได้มีการ · ทำการ ×2 · มีความเหมาะสม) · `t-chueung` · `t-doi` · `t-budget` (ดังนั้น · ทั้งนี้) · extras for the official register: call departments by their real names · figures and document numbers · keep `ดำเนินการ` because it is a standard form word · deadline `ภายใน X วัน นับจาก…` instead of "โดยเร็ว" · Source: written by the team 2026-10-22 · owner read and accepted 2026-10-29
+
+## Register ข่าว (news): release note
+
+**Before**
+
+> ในเวอร์ชันนี้ เราได้ทำการปรับปรุงประสิทธิภาพในส่วนของการส่งออกรายงาน ซึ่งจะทำให้ผู้ใช้ได้รับประสบการณ์ที่ดียิ่งขึ้น นอกจากนี้ยังมีการแก้ไขข้อผิดพลาดต่าง ๆ อีกมากมาย
+
+**After**
+
+> ส่งออกรายงาน 1,000 แถวใช้เวลา 3 วินาที จากเดิม 12 วินาที เพราะเปลี่ยนมาเขียนไฟล์ทีละก้อนแทนสร้างทั้งไฟล์ในหน่วยความจำ แก้บั๊กวันที่ใน Excel แสดงเป็น ค.ศ. ทั้งที่ตั้งค่าเป็น พ.ศ. (ฝ่ายบัญชีแจ้งเมื่อ 2 ต.ค.) เวอร์ชัน 2.4.0 · 22 ต.ค. 2569
+
+Rules applied: register ข่าว (no `เรา` · first sentence says who does what to what · close with version and date) · `t-padding` · `t-block` (ในส่วนของ) · `t-chueung` · `f7` (นอกจากนี้) · "ต่าง ๆ อีกมากมาย" → say what was fixed · Source: written by the team 2026-10-22 · owner read and accepted 2026-10-29
+
+## Register แชตร้าน (shop chat): replying to a customer about a late parcel
+
+**Before**
+
+> สวัสดีค่ะ ทางร้านต้องขออภัยในความไม่สะดวกเป็นอย่างสูงนะคะ ทางร้านได้ทำการตรวจสอบแล้วพบว่าพัสดุของลูกค้าอยู่ระหว่างการจัดส่ง ทางร้านจะทำการติดตามให้อย่างใกล้ชิด ไม่ต้องกังวลนะคะ
+
+**After**
+
+> ขอโทษด้วยนะคะที่ของยังไม่ถึง ร้านเช็กกับ Flash แล้ว พัสดุเลข TH1234 ออกจากศูนย์คัดแยกลาดกระบังเมื่อเช้านี้ ปกติถึงบ้านภายใน 1–2 วันค่ะ ถ้าพรุ่งนี้เย็นยังไม่ได้รับ ทักมาได้เลย ร้านจะเปิดเรื่องตามกับขนส่งให้ทันทีค่ะ
+
+Rules applied: register แชตร้าน (`ทางร้าน` ×3 → `ร้าน` once per sentence · ค่ะ in every message · keep the apology, because polite words are not padding) · `t-padding` (ทำการ ×2) · `t-reassure` → the next step the customer can take · "อย่างใกล้ชิด" "อย่างสูง" → facts (parcel number · sorting centre · time) · Source: written by the team 2026-10-22 · owner read and accepted 2026-10-29
+
+---
+
+Registers with no pair yet: marketing · personal · academic · complaint · job application · screen. Add them from the owner's edits under the rules above (`thai-grammar` section 8). The 5 team-written pairs above wait for the owner to read them aloud and accept or edit them.
+
+
+## reference: thai-grammar.md
+
+# Smooth Thai: 7-point composition framework · words to avoid · registers
+
+Open this file when writing or editing Thai of 1 paragraph or more, or when a strict review is ordered (see [`strict-review`](strict-review.md)). Short chat messages, labels, buttons and variable names do not need it.
+
+Thai written by AI carries English sentence structure: sentences run long, are chained with "ซึ่ง" and "โดย", and open the same way every time. Deleting banned words fixes only the symptom. The cause is sentence structure, covered by the 7 points below. Once the structure is right, most of the smaller rules pass by themselves.
+
+Every rule has a code (`f1` · `t-chueung`) to cite during review.
+
+**Contents**
+
+- [1 · The 7-point composition framework](#1--the-7-point-composition-framework)
+- [2 · Moves AI likes to use (fix on sight)](#2--moves-ai-likes-to-use-fix-on-sight)
+- [3 · Grammar AI often gets wrong](#3--grammar-ai-often-gets-wrong)
+- [4 · Registers](#4--registers)
+- [5 · Loanwords: pick 1 form per word, use it throughout](#5--loanwords-pick-1-form-per-word-use-it-throughout)
+- [6 · Closing](#6--closing)
+- [7 · Translating English into Thai](#7--translating-english-into-thai)
+- [8 · Discipline for adding rules, and companion files](#8--discipline-for-adding-rules-and-companion-files)
+
+## 1 · The 7-point composition framework
+
+| Code | Point | Before (literal translation) | After (Thai) |
 |---|---|---|---|
-| http_req_duration p(95) | < 500 ms | <ค่า> | ผ่าน / ไม่ผ่าน |
-| http_req_failed | < 1% | <ค่า> | ผ่าน / ไม่ผ่าน |
+| `f1` | **Put the topic first.** Do not drag a long subject along as in English. Stop using `การที่…นั้น…` and `การที่ X ทำให้ Y`. | ระบบประมวลผลข้อมูลพวกนี้ทุก 5 นาที | ข้อมูลพวกนี้ ระบบจะ process ทุก 5 นาที |
+| `f2` | **Condition and time come first.** Do not trail them at the end with "เมื่อ…". | DB จะเริ่ม timeout เมื่อ traffic พุ่งสูง | พอ traffic พุ่ง DB ก็เริ่ม timeout |
+| `f3` | **Start a new sentence with a space or a new paragraph.** Do not put a full stop after every sentence. Use a full stop at the end of a paragraph, or between 2 long sentences on different topics. | เร็วขึ้น. ใช้ memory น้อยลง. ทีมพอใจ. | เร็วขึ้น ใช้ memory น้อยลง ทีมพอใจ |
+| `f4` | **Close the clause with a final word:** `ด้วย` `แล้ว` `เลย` `อยู่` `อยู่ดี` `ต่างหาก`. A "ไม่ได้…อย่างเดียว" or "ไม่ใช่แค่…" sentence must close with `ด้วย`. A "ไม่ได้อยู่ที่ X อยู่ที่ Y" sentence must close with `ต่างหาก`. | ปัญหาไม่ได้อยู่ที่ยอดขาย อยู่ที่ต้นทุน | ปัญหาไม่ได้อยู่ที่ยอดขาย อยู่ที่ต้นทุนต่างหาก |
+| `f5` | **Drop a subject that is already known, and use a demonstrative instead of a pronoun** (`ตัวนี้` `เคสนั้น` `ตรงนี้แหละที่…`). Do not use `มัน` `เขา` `พวกเขา` for it/they. Take care not to drop so much that it is unclear who acts. | มันลด memory และมันยังปรับปรุงการทดสอบ | ทั้งลด memory และยังปรับปรุงการทดสอบอีกด้วย |
+| `f6` | **Use "ก็" to control rhythm:** `พอ X ก็ Y` · `ถ้า X ก็ Y` · `X แล้วก็ Y`. Link a sequence of actions with `แล้ว`. | ถ่ายรูปบิล ระบบอ่านรายการให้เอง | ถ่ายรูปบิลแล้วระบบจะอ่านรายการให้เอง |
+| `f7` | **Change topic with a question, a demonstrative or "แต่"** instead of `อย่างไรก็ตาม` `นอกจากนี้` (this cuts about half of them). After listing 2–3 problems, put a turning point before the fix. | อย่างไรก็ตาม การใช้งานจริงมีข้อจำกัด | แต่พอขึ้น production จริง ก็มีเรื่องให้ปวดหัวอีก |
 
-คอขวดที่เห็น: <กราฟไหน ที่ปริมาณเท่าไร>
-ทำต่อ: <ข้อแก้ 1–3 ข้อ> · ยิงซ้ำหลังแก้: <วันที่>
+**"ก็" does not go everywhere (`f6-scope`).** A `…ทีไร` sentence does not need ก็ (`ลองทีไร พังทุกที`). A `ไม่ว่าจะ…เมื่อไหร่` sentence needs `ก็จะ`. A result that is the definition of its cause (cost = price of raw materials) takes no ก็ (`วัตถุดิบขึ้นเมื่อไหร่ ต้นทุนต่อจานขึ้นตามทันที`).
+
+## 2 · Moves AI likes to use (fix on sight)
+
+| Code | Move | Fix |
+|---|---|---|
+| `t-chueung` | "ซึ่ง" chained several levels deep | At most 1 ซึ่ง per sentence. Use "ที่" when the noun is clear. Or split the sentence. |
+| `t-budget` | Frequent formal connectors | Per paragraph: ซึ่ง ≤ 1 · โดย ≤ 1 · ดังนั้น ≤ 1. `ทั้งนี้` does not open a paragraph (allowed near a disclaimer or a call to action). This budget does **not** count the final words `ด้วย` `แล้ว` `เลย` `อยู่`, nor `เพื่อ…เพื่อ` in official letters. If a final word reads oddly, restructure the sentence, do not delete the word. In an explanatory article, order connectors ดังนั้น → นอกจากนี้ (rarely) → แต่. |
+| `t-doi` | `โดยที่… โดยการ… โดยมี…` | Use ผ่าน · จาก · ด้วย, or no connector at all. |
+| `t-khanathi` | `ในขณะที่` used to mean "while (contrast)" / "but" | `A เชื่อ X แต่ B เชื่อ Y` · `ส่วน B กลับเชื่อ Y` (ในขณะที่ = the same period of time) |
+| `t-thuk` | ถูก- in every sentence (literal passive) | ถูก/โดน is for bad things or an unknown doer. Otherwise say who did it. |
+| `t-padding` | ทำการ · มีการ · ได้มีการ · มีความ + adjective · ที่มีความ | Use the verb directly: `ซับซ้อน` not `มีความซับซ้อน`. Exception: `เป็นความ + verb` (`เป็นความตั้งใจ`) must be kept. |
+| `t-khong` | ของ…ของ…ของ | Join the nouns directly: `การพัฒนาเศรษฐกิจไทย` |
+| `t-nueng-nai` | หนึ่งใน…ที่สุด (one of the most) | `…ที่สุดคนหนึ่ง` |
+| `t-mai-wa` | ไม่ว่าจะเป็น A, B หรือ C (merely listing items) | `A B หรือ C` · `ทั้ง A B และ C` |
+| `t-hedge` | Stacked hedges `อาจจะมีความเป็นไปได้ที่จะ` | A single `อาจ`, exactly where you are truly unsure. |
+| `t-pronoun` | เรา…เรา…เรา / ท่าน | Drop after the first sentence. Address the reader as `คุณ`, not `ท่าน` (except in official letters). |
+| `t-mun` | `มันเป็นที่ชัดเจนว่า` (it is clear that) | `ชัดเจนว่า` |
+| `t-comma` | Commas around a modifier `แฮรารี, นักประวัติศาสตร์, แย้งว่า` | Use spaces. |
+| `t-dash` | Long dash — and ; | Use a space, a new paragraph, or ที่/ซึ่ง. |
+| `t-particle` | ครับ/ค่ะ in document body text | Allowed only in chat, quoted speech and personal blogs (opening, closing, and when speaking to the reader directly, such as `มาดูกันครับ`). |
+| `t-overcut` | Cutting words until it turns curt: `อยากช่วย` `ใช้ template` `ส่งมา` | Thai does not "pay rent" on every word the way English does. `จะ` `ให้` `ก็` `ด้วย` `แล้ว` `ต่างหาก` and the polite words `ขอ` `รบกวน` `นะ` do real work: `อยากจะช่วย` · `ให้ใช้ template` · `รบกวนส่งมาด้วยนะครับ`. The "cut words" rule of other skills applies only to padding words (`t-padding`). |
+| `t-reassure` | Vague soothing `ไม่ต้องกังวล` `สบายใจได้` | End on a fact and the next step: `แอดมินจะแจ้งผลภายในพรุ่งนี้ค่ะ` |
+| `t-force` | `ระบบบังคับให้…` `ระบบไม่อนุญาตให้…` (the system forces… / does not allow…) | Tell it as a capability or a sequence: `ต้องยืนยันอีเมลก่อน ถึงจะเข้าใช้ได้` (`ถึงจะ` for sequence · `ก็ต่อเมื่อ` for a single condition) |
+| `t-samrap` | `สำหรับผมแล้ว ผมคิดว่า` · `สำหรับ…นั้น` opening a sentence | `ผมว่า…` · put the topic first as in `f1` |
+| `t-topology` | Telling structure instead of the case `มีเส้นทางเชื่อมระหว่าง A กับ B` | Tell who does what and what happens: `ลูกค้ากดสั่ง ร้านเห็นรายการทันที` |
+| `t-considered` | `ถูกพิจารณาว่าเป็น` `ถูกมองว่า` (is considered) | `ถือว่าเป็น` · `คนมองว่า` · or say who is looking. |
+
+**Words and phrases to avoid (`t-block`).** Fix on sight, unless inside `` ` `` or quotation marks (quoted for discussion):
+
+`ในยุคปัจจุบัน` · `ในโลกปัจจุบัน` · `ในโลกที่…` · `เป็นที่ทราบกันดีว่า` · `เป็นที่รู้กันว่า` · `ปฏิเสธไม่ได้ว่า` · `เป็นสิ่งสำคัญที่ต้องตระหนัก` · `มีความสำคัญ` (use `สำคัญ`) · `การที่…นั้น` · `ในเรื่องของ` · `ในส่วนของ` · `อย่างมหาศาล` · `อย่างน่าทึ่ง` · `อย่างไม่น่าเชื่อ` · `ทุกสิ่งที่คุณต้องรู้เกี่ยวกับ` · `โดยสรุปแล้ว` · `กล่าวโดยสรุป` · `นั่นเอง!` · `รีบ…เลย!`
+
+Ad words that are acceptable when paired with a number: `อย่างมาก` · `อย่างมีประสิทธิภาพ` (business documents only) · a single `!` at a hook or call to action on a sales page, not elsewhere.
+
+## 3 · Grammar AI often gets wrong
+
+| Code | Topic | Example |
+|---|---|---|
+| `g-classifier` | Wrong or missing classifier | server 1 `เครื่อง` · function/parameter 1 `ตัว` · token/record 1 `อัน` · บรรทัด · หน้า · รายการ. If unsure, avoid counting. The official register needs exact classifiers (ถัง · ฉบับ · ราย); informal registers may use `อัน` `ตัว`. |
+| `g-cha` | Missing `จะ` in a future or hypothetical sentence | `จะเลือกตัวไหนขึ้นอยู่กับ…` · `วิธีนี้จะคุม rate ได้` |
+| `g-function` | Short connector used with the wrong function | `จะ` ≠ `จน` · informal language uses `เวลา` `ตอนที่` instead of `เมื่อ` · `เหมาะกับ` needs กับ |
+| `g-verb` | Literally translated verb | burst ≠ `ระเบิด` (use `ยิง`) · drop ≠ `ทิ้ง` (use `ปฏิเสธ`) · match ≠ `ซ้ำ` (use `ตรง`) · cap ≠ `ครอบ` (use `จำกัดไว้ที่`) · throttle ≠ `บีบคอ` (use `ชะลอ` `หน่วง`). A verb that is a physical image in English often needs a different Thai verb. |
+| `g-capability` | สามารถ…ได้ (can) | Academic, official and news writing use the full `สามารถ + verb + ได้`. General writing uses `verb + ได้`. |
+| `g-time` | Period of time takes ของ | `ในศตวรรษที่ 20` not `ของศตวรรษที่ 20` |
+| `g-tirai` | `ทีไร` must close with `ทุกที` or `ไม่เคย…สักที` | `ฝนตกทีไร น้ำท่วมทุกที` · `ทุกครั้ง` is weaker and breaks the idiom · `ทีไร…เสมอ` is borderline, avoid. |
+| `g-quant` | A number paired with a feeling verb | `ตัวเลขไม่ตรงกับที่คาด` not `ที่รู้สึก` |
+| `g-yamok` | Mai yamok attached to the word `ต่างๆ` `บ่อยๆ` | Put a space before and after: `ต่าง ๆ` `บ่อย ๆ` throughout. Source: spacing rules item ๑.๒.๑๕.๑ "เว้นวรรคเล็กหน้าและหลังเครื่องหมายไปยาลใหญ่ ไม้ยมก …" with example `วันหนึ่ง ๆ เขาทำอะไรบ้าง` · Royal Society of Thailand office https://www.orst.go.th/iwfm_table.asp?a=36 (checked 2026-10-26 · royin.go.th could not be opened from this machine; the same site moved to orst.go.th) |
+
+## 4 · Registers
+
+Choose the register before writing, then keep it for the whole piece (`r-drift`). Change only at a new heading.
+
+| Work | Register | Final particle ครับ/ค่ะ | Speaker/reader |
+|---|---|---|---|
+| Technical docs · README · manuals · explanatory articles | อธิบาย (explain) | None | `เรา` / `คุณ` |
+| Sales pages · landing pages | การตลาด (marketing) | None | `คุณ` only in the body (do not use `เจ้าของร้าน` `ผู้ใช้` in place of คุณ) |
+| Personal blog · telling experience · team announcements | ส่วนตัว (personal) | Opening, closing, and when speaking to the reader directly | `ผม` / `ดิฉัน` according to the author (if unknown, use the owner's default in `~/.claude/superuser-style.md` and note it as `ตัดสินใจเอง`) |
+| News · release notes · announcements · CHANGELOG | ข่าว (news) | None | No first person · first sentence says who does what to what · the source goes in sentence 2 · close with the version, date or source · `ดังนั้น` only when there is a real cause |
+| Thesis · IS · research article · long analysis | วิชาการ (academic) | None | `ผู้วิจัย` or drop the pronoun · `เรา` only for shared experience |
+| Official letters · meeting minutes · policy | ราชการ (official) | None | No first person · use standard-form wording (word table below) |
+| Company letter to a customer · proposal · BRD FSD SRS · company profile | ธุรกิจ (business) | None | `บริษัทฯ` or the team name, not `เรา` · `คุณ` only in steps telling the reader to do something · key term at first use `ไทย (English: abbreviation)` |
+| Customer chat · live selling · review replies · broadcast | แชตร้าน (shop chat) | In every message (ค่ะ or ครับ, one style for the whole shop) | The shop calls itself `ร้าน` or `แอดมิน` once per message · customer is `คุณลูกค้า` or dropped · end on a fact and the next step, no vague soothing (`t-reassure`) |
+| Complaint letter · refund request · contract cancellation | ร้องเรียน (complaint) | None | `ข้าพเจ้า` · recipient `ท่าน` or the company name · facts, dates, amounts before the demand · deadline `ภายใน X วัน นับจากวันที่ได้รับหนังสือฉบับนี้` · no threats, no apology |
+| CV · job application letter · salary negotiation · LinkedIn | สมัครงาน (job application) | None in a CV · yes in letters and messages to HR | `ผม` / `ดิฉัน` · a CV bullet starts with a verb and ends with a number (`ลดเวลาปิดงบจาก 8 วันเหลือ 5 วัน`) · no `ซึ่งทำให้` |
+| On-screen text · buttons · errors · notifications · placeholders | หน้าจอ (screen) | None | `คุณ` or dropped · a button starts with a verb (`บันทึก` `ส่งคำขอ`) · an error = what happened + what to do next, in 1–2 sentences · no stacked `กรุณา` `ท่าน` `ครับ/ค่ะ` · 1 word per action across the whole app, kept in a glossary |
+
+**Person and reader do not switch within a paragraph (`r-deixis`).** Teaching uses `เรา`, advising uses `คุณ`, never mixed in a paragraph. In text that speaks to the reader, `ใคร` `คน` `ผู้ใช้` do not appear in place of the reader: `ขาดทุน แต่ไม่มีใครรู้` → `ขาดทุนโดยไม่รู้ตัว`
+
+**Extra for the official register** (temporary · from one set of examples, waiting for real letters to confirm). A procedure sentence = doer + method + what is done + destination. Call documents by their real names, do not abbreviate like notes (`15/30/45`). Word swaps: เซ็น → `ลงนาม` · ทำ → `ดำเนินการ` · เช็ค → `ตรวจสอบ` · ส่งให้ → `ส่งมาเพื่อ…` · open questions → `ประเด็นที่ยังต้องการคำชี้แจง`. The official correspondence regulation in force is edition 4 of B.E. 2564 (checked 2026-10-22, edition 5 not found).
+
+**Extra for the marketing register.** A single `!` at a hook or call to action · `…` as a coach-style pause is allowed in financial work · a soft close (`ลองได้เลย`) is better than a curt command · do not open a sales page with a definition `X คือ…` · financial work closes with 1 sentence of advice on moderation (`กู้เท่าที่จำเป็นและชำระคืนไหว`) and folds the disclaimer into a sentence in the same voice.
+
+**Word pairs where you pick one side for the whole piece (`r-drift`)**
+
+| Informal | Formal (academic · official) |
+|---|---|
+| ยังไง | อย่างไร |
+| คนไหน · แบบไหน | คนใด · รูปแบบใด |
+| เยอะ | มาก · จำนวนมาก |
+| ทำไม | เพราะเหตุใด |
+| ตอนนี้ | ขณะนี้ · ปัจจุบัน |
+| อยากรู้ | ต้องการทราบ |
+
+**Extra for the academic register.** Sentences may be long but must alternate with short ones · `ทว่า` `อย่างไรก็ตาม` `นอกจากนี้` only at real turning points · assert directly, do not hedge if the source did not hedge · open with a question or the frame of the topic, not something broad · close by posing a new question, not by recapping.
+
+## 5 · Loanwords: pick 1 form per word, use it throughout
+
+| Form | Use when | Example |
+|---|---|---|
+| Translate to Thai | A Thai word people know exists, or the Royal Society of Thailand coined one | เสรีภาพ · ผลิตภาพ · ทุนนิยม |
+| Write the sound in Thai | Proper names, new words with no direct Thai word | อัลกอริทึม · บล็อกเชน · ซอฟต์แวร์ |
+| Keep English letters | Brand names, abbreviations, terms developers use in English | Google · API · deploy · query |
+| Coin a Thai term + brackets at first use | A core concept used repeatedly · abbreviations | ระเบียบในจินตนาการ (imagined order), then Thai only afterwards · ปัญญาประดิษฐ์ (Artificial Intelligence: AI), then Thai or AI, one style for the whole piece. This is the one form for every plugin (`human-writing/spell-out-abbreviations` · `requirements-writing` · `thesis-writing` refer here). |
+
+Mix English only at a single noun or verb (`deploy โค้ด` `query ตาราง`), not `ทำการ deployment ของ code`. Write sounds in Thai following the Royal Society of Thailand's transliteration rules: no tone marks, unless the word's sound collides with a Thai word and causes confusion, such as `โค้ก` (item ๕) (`ซอฟต์แวร์` not `ซ้อฟต์แว่ร์`). Add the silencer mark (karan) on letters that are not pronounced (item ๓.๑). Choose 1 spelling per word and note it. (Source: Office of the Prime Minister announcement, "Rules for transliterating English", announced 26 August B.E. 2532, Royal Gazette volume 106 part 153, 14 September 1989 · read the PDF published by the Royal Society of Thailand https://www.orst.go.th/FILEROOM/CABROYINWEB/DRAWER004/GENERAL/DATA0000/00000753.PDF pages 1-5, checked 2026-10-26 · the consonant table (table 2) has not been compared letter by letter.) Write a foreign person's name in Thai, then English in brackets at first use: `ไมเคิล แซนเดล (Michael Sandel)`. Do not use commas around a modifier.
+
+## 6 · Closing
+
+No recap (`c-recap`). End with what to do next, a newly posed question, or simply stop.
+
+## 7 · Translating English into Thai
+
+Use when the source is English (docs · error messages · papers · articles) and the result is Thai for people to read. Retell the whole paragraph, do not translate sentence by sentence.
+
+1. Reorder by `f1` `f2`: topic first, condition and time first. Turn English passives back into who-did-it (`t-thuk`), except for bad things or an unknown doer.
+2. Add nothing the source lacks: no ครับ/ค่ะ, no `อาจจะ` or other hedges the source did not make. Do not drop numbers or conditions.
+3. Translate idioms by meaning, not word by word. For an author's metaphor used throughout the piece, coin 1 Thai word and use it every time (section 5, row 4).
+4. `it is … that …` `there is` `one of the most` have no Thai form: `ชัดเจนว่า` · `มี…` · `…ที่สุดคนหนึ่ง` (`t-mun` `t-nueng-nai`) · `is considered` is not `ถูกพิจารณาว่า` (`t-considered`).
+5. English italics used for emphasis become a final word or word order in Thai (`ต่างหาก` `เลย` `แหละ`), not italics. Foreign person's name `ไมเคิล แซนเดล (Michael Sandel)` at first use.
+6. Technical terms stay English per section 5. Verbs that are physical images (burst · cap · throttle · drop) take a different Thai verb each (`g-verb`). Choose classifiers yourself, do not translate `a` `an`.
+7. Read the whole paragraph aloud. If you can tell the source was English, restructure it.
+
+## 8 · Discipline for adding rules, and companion files
+
+- **A new rule needs a source:** the owner's edit (before → after) · a source actually opened, with its date · or a real run result. If none, tag it `(ชั่วคราว)` (temporary), like the extra official-register rule above.
+- **The user edits an agent's Thai.** Before adding a rule, search this file for whether the rule already exists. If it exists but was not applied, fix the wording or move the rule, and do not add a duplicate. If not, store the before/after pair in [`thai-examples`](thai-examples.md) first (the "after" text must be the user's, not one the agent wrote). Only when it repeats 2 or more times, summarise it into a rule. The examples file keeps at most 10 pairs per register, and a rule that absorbs a pair deletes that pair.
+- **Before/after pairs teach better than rules.** Before writing a long Thai paragraph, open [`thai-examples`](thai-examples.md) and look at the pair for the register in use.
+- **Automatic checker** `scripts/thai_tells.py` catches `t-block` `t-budget` `t-padding` `f3` (mid-paragraph full stops) `g-yamok` `t-dash` and `ทั้งนี้` opening a paragraph. It only warns, and does not judge whether the text reads smoothly. What the script cannot see (`f1` `f2` `f4`–`f7`, register) you still have to read yourself.
+- **Thai letters in exported files** (line breaking · spacing · line-height per medium) live only in [`thai-line-breaking`](thai-line-breaking.md). Other skills link to it.
+
+---
+
+Source: distilled from [chakrit/kien-thai](https://github.com/chakrit/kien-thai) (MIT License · Copyright (c) 2026 Chakrit Wichian · full licence text in [`THIRD-PARTY-NOTICES`](../THIRD-PARTY-NOTICES.md)): the 7-point framework · files `ai-tells` · `grammar` · `register` · `style-rules` · `forbidden-phrases` · `decisions/` (polite words are not an AI tell · Thai does not cut words the English way · do not let the model judge language quality · example pairs before rules), checked 2026-10-22. Academic sources as cited by that repo: Iwasaki & Ingkaphirom · Takahashi 2023 (ก็) · Olsson 2013 (แล้ว) · spacing rules of the Royal Society of Thailand. The 5 extra register rows (business · shop chat · complaint · job application · screen) come from sweeping the templates in the SQT-Marketplace plugins on 2026-10-22.
+
+
+## reference: thai-line-breaking.md
+
+# Breaking Thai words so lines wrap cleanly
+
+Use whenever you export a Thai document as Word · PDF · HTML · slides with justified paragraphs, or when you see a line with stretched letter spacing (`เ ท ค โ น โ ล ยี`).
+
+## Why it happens
+
+Thai has no spaces between words, so the program must guess where to break. If it cannot guess (a run tagged as English · a font that does not support Thai · a file generated by a script), the whole block of Thai text becomes one long word. The previous line is left with empty space, and justification then stretches the spacing letter by letter to fill the line.
+
+## Fix by file type
+
+| File | Fix |
+|---|---|
+| **.docx** (made by you or received) | Run `python scripts/thai_linebreak.py <file>.docx` after the file is built. It inserts invisible break points (U+200B) between words · tags runs as Thai · binds numbers to neighbouring words ("4 ประเด็น" does not split across lines) · keep the original in `_to_delete/` · test the script itself with `python -B scripts/thai_linebreak.py --self-test` (pythainlp not needed). |
+| **.md before converting with pandoc** | Run the same script on the .md · code inside `` ` `` is not touched. |
+| **python-docx / docx-js** | Set the Thai language on the run (`w:lang w:bidi="th-TH"`) and the complex-script font (`w:rFonts w:cs="TH Sarabun New"`) at creation time, then run the script at the end. |
+| **HTML** | Chrome · Edge · Firefox break Thai words on their own, no ZWSP needed · set `<html lang="th">` · CSS `word-break: normal; overflow-wrap: anywhere; line-break: auto;` · use `text-align: left` for Thai content · never `word-break: break-all` (breaks mid-word). |
+| **PDF** | Fix at the source (.docx or HTML), then convert again. |
+| **Slides .pptx** | Thai text boxes left-aligned · long text cannot go through the script, so break lines by hand at phrase boundaries. |
+
+## Paragraph alignment
+
+- General Thai content: **left-aligned** is the safest.
+- Academic or official work that needs justification: use "ชิดสองข้าง" (justify, `both`) only **after** running the script.
+- Do not use "กระจายแบบไทย" (Thai distribute, `thaiDistribute`) or "กระจาย" (distribute, `distribute`) for body text, because they stretch letters on every line. The script reports paragraphs that use them, and can change them with `--align both` or `--align left`.
+
+## Never break here
+
+- A number and its unit or prefix: `4 ประเด็น` · `ตารางที่ 1` · `พ.ศ. 2569` · `50 %`
+- Before `ๆ` `ฯ`, and before vowels or tone marks that cannot start a line.
+- Short proper names: `IEEE Transactions`. If it is hard to read after wrapping onto a new line, hold it together with a non-breaking space.
+
+## Line spacing per medium (the central values other skills refer to)
+
+Thai has upper vowels, lower vowels and tone marks that can stack 2 levels, so it needs more line spacing than Latin. Pure Latin can use 1.2–1.4, but for Thai below about 1.4 the upper vowels and tone marks collide or get clipped. The values in the table are the central values the skills in this set use. Change them here, and the skills that refer to them follow.
+
+| Medium | Body text | Headings | Used by |
+|---|---|---|---|
+| Web page (CSS `line-height` times font size) | 1.6 · long articles 1.75–1.85 | Thai not below 1.4 · large pure-Latin headings can go down to 1.0–1.1 | `web-app-design` |
+| Mobile app | 1.5–1.75 · the smaller the screen, the more spacing | Not below 1.4 | `mobile-app-design` |
+| Windows app | 20px at 14px text for on-screen text · long paragraphs 22px | Follow the Fluent scale | `windows-app-design` |
+| Slides | Not below 1.5 | Not below 1.4 | `slide-deck` |
+| Graphics · posts · posters | 1.5–1.7 | Not below 1.4 | `brand-kit` · `graphic-design` |
+| Diagram | Not below 1.5 | — | `diagrams` |
+| Word .docx (Tahoma font) | 1.3–1.35 as "Multiple" (หลายเท่า) | Follow the template | `document-design` |
+
+**Word does not count the same way as CSS.** "Multiple" in Word multiplies the line height that the font itself defines, and Thai fonts already reserve room for vowels and tone marks. So the number in Word can be lower than on the web without lines colliding. Whenever you change the font, reopen the PDF and look at every page again.
+
+**Web pages must tolerate user adjustment.** WCAG 2.2 criterion 1.4.12 (level AA) requires that when the user sets line spacing to 1.5 times the font size, content must not be cut off or overlap. How to check is in `web-audit`.
+
+## Check
+
+1. Run `--check` to see the number of break points and the paragraphs that are distributed.
+2. Convert to PDF and open every page, looking for lines with abnormally wide letter spacing.
+3. The word segmenter (pythainlp `newmm`) can break wrongly now and then, for example `ท่า|ทางการ` where it should be `ท่าทาง|การ`. A wrong break point does not change the text, it only may start a new line mid-word. If you find it on a real line, fix that spot by hand.
+
+**Good to know:** the invisible break points are in the actual file. Searching for a word in Word mostly still finds it, but if you copy text into another system and search fails, run the script on the print copy only.
+
+
+---
+
+# skill: context-budget
+
+Use when a task reads large material or writes long output
+
+# context-budget — decide before you read what enters context
+
+> **One rule:** decide **before** you read, not regret it after. Tokens that enter context cannot be removed, except by `/clear` (drops everything) · `/compact` (shrinks to a summary) · `/rewind` (cuts back to an earlier point). Things you read in (files · PDFs · web pages · search results · command output) are the biggest source, so be most disciplined about them. If a Command-Line Interface (CLI) can do what a Model Context Protocol (MCP) tool does, use the CLI.
+
+## Use when
+- About to read something big: a folder of documents · a long PDF · several web pages · search results · a whole code project · command output that may be long.
+- Starting work on a folder or project whose structure you do not know.
+- Context fills unusually fast, or `/compact` triggers often.
+- Setting context rules for the whole team or every project.
+
+Not for: shorter **answers** → `lean-reply/answer-shape` · work summary across sessions → `handoff` · where temp files go → `workspace-rules/temp-file-discipline` · a coding loop that must survive context loss → `spec-to-code-loop` (plugin `software-development`).
+
+## Steps
+
+### 2 · Before reading, choose the route
+- Know the file, page and line → read only that range (item 3); several items → read them together in one message.
+- Need to find where it is → bounded search (item 3).
+- Must search across many items whose location you do not know → send a subagent (item 4).
+- Must convert, merge or count a lot of data → write to a file and read only the summary (item 5).
+
+If you do not know how big the thing is, check the size first: PDF pages · file count and size in a folder (`ls -l`, `du -h`) · lines (`wc -l`).
+
+### 3 · Read only a range, and search with a boundary
+3 numeric rules (use them as they are if the user's `CLAUDE.md` has no "งบ context" section): **read only a range of any file over 300 lines** · **add `--glob` to `grep`/`rg`** · **end with `| head -50`**.
+
+| Thing | How to read it |
+|---|---|
+| Folder of documents | Names and sizes first, then open only files whose names match the question |
+| PDF · long report | Table of contents first, then name the pages or chapters |
+| Web page | Ask for only the part you need (a number, a date, one heading) |
+| Code | `rg -l` to learn which file, then drill in · `-C2` context is enough |
+| Session files · `.jsonl` logs | One line can be megabytes: never `cat` · `wc -l -c <file>` first · find long lines with `awk 'length>100000{print NR": "length}' <file> \| head -20` · read one field at a time with `cut -c1-2000` or `jq` |
+
+Read the whole file when you are about to overwrite it, or it is short, or you must understand all of it to edit correctly and it is under ~300 lines.
+
+### 4 · Send a subagent instead (the biggest saving)
+A subagent has its own context: it can read 20 items and send back one paragraph.
+
+| Use a subagent when | Do it yourself when |
+|---|---|
+| You expect to read over 20k tokens or over 5 files whose location you do not know (default, not measured; estimate from the step's PERT in `superuser/model-scorecard` if present), or must search across many items to answer one question | You know the files and locations, even 4–6 of them: read them together in one message, faster than a new subagent |
+| Exploring an unknown folder or project · checking across many files | Editing the file already open · work that needs full detail to continue |
+
+**Always set the format and length of the result**, or the subagent returns a long report and you save nothing. Wrong: "Take a look at these 12 contracts". Right: "Find the expiry date, penalty and renewal terms of each contract. Return a table, 1 line per contract, with file:page. Do not paste contract text. At most 15 lines." Code work: "Return a list of file:line in call order, do not paste code".
+
+### 5 · Write to a file instead of holding it in the conversation
+```bash
+<command with long output> > <temp folder>/out.log 2>&1; tail -20 <temp folder>/out.log
 ```
+Use it for text pulled from the web or PDFs · big data tables (filter or count with a script, do not read every row) · test results · logs · file conversions. Where to put these files → `workspace-rules/temp-file-discipline`. Note what you find into a file on the first pass so you do not read it again.
 
-Write results only as actually run · if you only ran 50 rounds per second → never write "can handle 1,000 users at once"
+If it repeats on every task, let a hook filter long output before it enters context: coding example in `superuser` → `references/code-extensions.md` (the addition in plugin `software-development`).
 
-## Sources
+### 6 · So the next session does not explore again
+Work you return to often needs a short map that **loads automatically**: where things are · what must not be read · commands used often. General work: the section "ของอยู่ที่ไหน" in `.claude/superuser/CONTEXT.md`, at most 40 lines. Files with other names (`notes.md`) do not load themselves, so they are wasted. An outdated map is worse than none: no full file list or change history in it. Code work (project and folder `CLAUDE.md`, example maps) → `superuser` → `references/code-extensions.md`.
 
-- exit code https://grafana.com/docs/learning-paths/automate-k6-cicd/handle-exit-code/ (checked 2026-10-28)
-- thresholds https://grafana.com/docs/k6/latest/using-k6/thresholds/ (checked 2026-10-28)
-- run at least 2 rounds again https://grafana.com/docs/k6/latest/testing-guides/automated-performance-testing/ (checked 2026-10-28)
+### 7 · Other settings that help
+Turn off MCP servers and plugins you do not use · pick model and effort at the start · `/clear` when the topic changes · project `CLAUDE.md` at most 40 lines (table with reasons: [`references/settings.md`](references/settings.md)) · on Windows (Git Bash · PowerShell) see [`references/windows-shell.md`](references/windows-shell.md).
+
+**Compact yourself at about 70%, do not wait for the system** (70% is a default, not measured). When about 70% of context is used and a step has just finished (tests pass · file saved · check passed): first update "รับงานต่อ" in `CONTEXT.md` (`handoff` item 5), then `/compact` and say what to keep (files edited · decisions · next step). The system's own compaction often hits mid-step, before anything is written down.
+
+### 7.1 · Seams between phases
+Ask in order; **the first yes is the route**, then stop:
+
+| # | Ask | If yes |
+|---|---|---|
+| 1 | Does the next phase need this context as its source, and is there room left (roughly over 150k tokens · default, not measured)? | **Continue** in the same session |
+| 2 | Will the next phase move to another vendor's tool, model, or repo? | **handoff**: update "รับงานต่อ" and start in the new place (`handoff` item 5) |
+| 3 | Can the next phase be split off without talking to us (no user answer to wait for, no context beyond what a brief can say)? | **subagent**: send the 5-part brief |
+| 4 | Can this whole context be dropped (everything needed is in files) and the new topic is unrelated? | **clear**: cannot be undone; check `notes/` and "รับงานต่อ" are complete first |
+| 5 | None of the above | **compact** and say what to keep (item 7) |
+
+Item 4 is the only one that cannot be undone: answer yes only with evidence everything is in files; if unsure, go to 5.
+
+## Project map
+- Workers read `docs/FILE-MAP.md` instead of exploring the repo.
+- Generate it: `node scripts/map-folder.mjs [dir=.] [--out docs/FILE-MAP.md] [--max 400] [--stdout]`.
+- It lists each file with a role line and its relative imports, then a Mermaid folder graph.
+- Over `--max` files it lists folders with file counts only.
+- It never copies file contents beyond the role line. Regenerate after big changes.
+
+## Check before done
+- Big things were read by range, bounded search, subagent or file, not opened whole.
+- Every subagent brief said the result format and length.
+- Long output went to a file with only a tail or summary read back.
+
+## Anti-patterns
+Opening the whole thing to "see what is in it" when the table of contents or `head -40` answers it · searching without a boundary (`rg` without `--glob`; opening every search link) · searching across 10 items yourself instead of a subagent · sending a subagent to read something whose location you know · letting long output in one lump · reading the same thing again because you forgot (note findings to a file) · a map file that does not load automatically · a 300-line `CLAUDE.md` · all MCP servers always on.
+
+## References
+- [`references/settings.md`](references/settings.md) — open when setting rules for a team or project
+- [`references/windows-shell.md`](references/windows-shell.md) — open when working in Git Bash or PowerShell on Windows
+- [`references/sources.md`](references/sources.md) — sources and licences
+
+## Squeeze logs
+- Run long test or build logs through `node scripts/squeeze-log.mjs [file] [--max 100] [--context 3]` (stdin if no file) before reading them or handing them to another agent.
+- It keeps the first 10 and last 20 lines, every error/fail/warn line with context, and collapses repeated lines as `(×N)`.
+- The first output line says `squeeze-log: <in> → <out> lines · errors <k>`.
+
+
+## reference: settings.md
+
+# Settings that save context
+
+Moved from `SKILL.md` item 7. Open it when you are about to advise the user on settings.
+
+| Action | Effect |
+|---|---|
+| **Turn off MCP servers the task does not use**. If a CLI can do the job, use the CLI | Tool names and instructions of every server still load in every session |
+| Pick the model and effort at the start of the session | Switching model mid-session loses the cache, so the whole conversation is read again (changing effort on Opus · Sonnet · Haiku 5.5 and Fable 5.1 through an Application Programming Interface (API) key or a subscription keeps the cache · through Bedrock · Agent Platform · a gateway or special setups, see the conditions at the link) · ([Claude Code: prompt caching](https://code.claude.com/docs/en/prompt-caching) · checked 21 Oct 2569 BE) |
+| Fast mode — the user turns it on with `/fast` at the start of the session · the agent never turns it on | Opus only · up to 2.5 times faster text generation, but the first token is not faster · 2 times the price, and subscription users pay from usage credits, not the quota · worth it for a step that writes a long piece, not for short steps that wait on tools · turning it on mid-session pays the fast price once for the whole uncached conversation · ([Claude Code: fast mode](https://code.claude.com/docs/en/fast-mode) · [API: fast mode](https://platform.claude.com/docs/en/build-with-claude/fast-mode) · checked 21 Oct 2569 BE) |
+| Turn off plugins unrelated to the task | The description of every skill is always in context |
+| `permissions.deny` in `.claude/settings.json` for folders that should not be read | The system guards it, so you do not depend on discipline |
+| `/clear` when the topic changes (costs nothing) · `/compact <what to keep>` at a rest point in the work, not when nearly full · on the wrong path → `/rewind` to an earlier point | Frees space · `/compact` while the cache is warm is cheap, but after a long pause the whole conversation is read again · `/rewind` cuts back to a point where the cache already exists |
+| Project `CLAUDE.md` at most 40 lines · `~/.claude/CLAUDE.md` (used by every project) at most 60 lines — this set's own cap, stricter than the official docs, which suggest at most 200 · the one shipped in `scripts/install/CLAUDE.global.md` is 84 lines (over the cap, waiting to be cut) | Every line costs tokens in every session |
 
 
 ## reference: sources.md
 
-# Sources · load-testing
+# Sources · context-budget
 
-Checked 2026-10-28 (opened through a web-fetch tool that summarises pages with a small model, so reopen the raw page before locking a value in production)
-
-- thresholds · `abortOnFail` · `delayAbortEval` · per-tag thresholds https://grafana.com/docs/k6/latest/using-k6/thresholds/
-- names of all 6 executors https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ · options of `ramping-arrival-rate` https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ramping-arrival-rate/
-- test types and their order https://grafana.com/docs/k6/latest/testing-guides/test-types/
-- CI · environment · production https://grafana.com/docs/k6/latest/testing-guides/automated-performance-testing/
-- exit codes 0 and 99 · scripts that swallow the exit code https://grafana.com/docs/learning-paths/automate-k6-cicd/handle-exit-code/
-- GitHub Actions https://github.com/grafana/run-k6-action
-- k6 licence https://github.com/grafana/k6 · versions https://api.github.com/repos/grafana/k6/releases
-- Locust https://docs.locust.io/en/stable/what-is-locust.html · JMeter https://jmeter.apache.org/ (the home page links to the Apache Software Foundation licence and does not state the latest version)
-- Not yet checked (`ยังไม่ได้ตรวจ`): Grafana Cloud k6 price and quota · latest versions of Locust and JMeter
+- Compact yourself at about 70% (section 7): idea from strategic-compact in everything-claude-code (MIT). 70% is a default, not measured.
+- Seams between phases (section 7.1): mattpocock-skills (MIT) · PHASE-BOUNDARIES · seen 2026-11-10. The 150k token line is a default, not measured.
 
 
-## reference: worked-example.md
+## reference: windows-shell.md
 
-# Worked example · load-testing
+# Shell traps on Windows
 
-## One worked example
+Open it when working on a Windows machine through Git Bash or PowerShell · every item happened in the SQT-Marketplace repo between 2026-10-23 and 25 · kept as a reference file first; if it happens again, promote it to a skill.
 
-Label `ตัวอย่าง` (example): designed on paper, no real system has been loaded
-
-**Problem:** An online shop will run a flash sale at noon on Friday. It went down before because the connection pool filled up. They want to know whether it survives this time.
-
-| Step | What is done | Section |
+| Symptom | Cause | Do this instead |
 |---|---|---|
-| Goal | Volume from the previous campaign (รอยืนยัน) · path: browse products → add to cart → pay with a mock · p95 at most 500 ms · errors at most 1% (default, not measured) | 1 |
-| Permission | Load staging at production size · payment points at a mock · approver and time window noted in the script header | 2 |
-| Run | smoke → load (baseline) → spike | 4 |
-| Monitor | Dashboards of connection pool and database CPU during the run | 6 |
-| Result | Report which thresholds passed and failed at the volume really run, then add smoke to CI | 5 · 7 |
+| Deleted every folder the user told you to keep (2026-10-25) | `ls` on the machine is aliased to `ls -F`, so folder names end with `/`. The keep list written as a regex matched no name, and then `rm -rf` deleted all of them · `rm` in Git Bash does not use the recycle bin | Build the list with `find <dir> -mindepth 1 -maxdepth 1 -printf '%f\n'` or `\ls -1A` · print the delete list and the keep list and compare them before running `rm` · move to `_to_delete/` instead of deleting |
+| A pattern in JSON or a regex is wrong: `\b` became `\b` (2026-10-23) | Python code was sent through a heredoc in the Bash tool, and the escapes were interpreted twice | Edit the file with the Edit tool · or write the script to a file first and then run it · check the result by reading the actual value · a `\r` that became a real CR character in a .md is now caught by the SQT-Marketplace checker (2026-10-25), but a lost `\b` is still not caught |
+| The validator fails with "documents do not match the real ones" though the content matches · the zip in `dist/` changes though nothing was edited (2026-10-25) | A new worktree with `core.autocrlf=true` checks files out as CRLF, but the scripts build text with LF | Scripts that compare or build files must convert CRLF to LF first (`sync-docs` · `writeZip` already do) · files that must be CRLF are declared in `.gitattributes` · check whether they really differ with `git diff --ignore-cr-at-eol --stat` |
+| A plugin hook does nothing, with no error (2026-10-25) | It checks it is the main file with `fileURLToPath(import.meta.url) === process.argv[1]`, which does not match on Windows when called through `${CLAUDE_PLUGIN_ROOT}/…` | Compare with `process.argv[1].replace(/\/g, "/").endsWith("<file name>")` as in `superuser-hook.mjs` · test the hook by calling it through the real path Claude Code uses |
 
+## Small things worth knowing
+
+- `perl -i` or `sed -i` on a CRLF file: a regex anchored to the line end with `$` must allow for `\r` (`(\r?)$`), or the edit silently does not apply
+- `cd` in Bash does not carry across commands · use a full quoted path, because folder names often contain spaces and `&`
+- A `.cmd` script that ends with `pause` waits for a key · when running it from an agent, pass empty stdin (`< /dev/null`), save the output to a file, and read the end of the file

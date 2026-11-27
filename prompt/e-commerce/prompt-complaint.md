@@ -32,7 +32,7 @@
 
 ## 1. ร้องเรียนตามขั้นบันได
 
-playbook `complaint` · agent `consumer-advocate` · skill `refund-request`
+playbook `complaint` · agent `consumer-advocate` · skill `buyer-help`
 **ผลลัพธ์:** `cases/<ปี-เดือน>-<ร้าน>/complaint.md` · `letter-<ขั้น>.docx` · **รออนุมัติ:** ส่งจดหมาย · ยื่นเรื่อง
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -56,7 +56,7 @@ playbook `complaint` · agent `consumer-advocate` · skill `refund-request`
 
 ## 2. ยกเลิกสมาชิกหรือสัญญาบริการ แต่ร้านไม่ยอม
 
-playbook `complaint` · agent `consumer-advocate` · skill `refund-request`
+playbook `complaint` · agent `consumer-advocate` · skill `buyer-help`
 **ผลลัพธ์:** `cases/<ปี-เดือน>-<ร้าน>/cancel.md` · `letter-cancel.docx` · **รออนุมัติ:** ส่งหนังสือบอกเลิกสัญญา · ขอธนาคารหยุดตัดบัตร · ยื่นเรื่อง
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -72,14 +72,14 @@ playbook `complaint` · agent `consumer-advocate` · skill `refund-request`
 1. ข้อสัญญาที่เกี่ยวกับการยกเลิก ยกมาจากเอกสารจริงพร้อมเลขข้อ · ข้อที่อาจไม่เป็นธรรมให้ติดป้าย "ควรตรวจกับ สคบ. หรือทนาย" ไม่ตัดสินเอง
 2. สิ่งที่ผู้ใช้ขอได้: หยุดตัดเงินเดือนถัดไป · คืนเงินส่วนที่ยังไม่ได้ใช้ · ยกเลิกโดยไม่เสียค่าปรับ — แต่ละข้อบอกว่าอ้างอะไร (สัญญา · เงื่อนไขร้าน · กฎหมายที่ตรวจรอบนี้ ติดวันที่ตรวจ)
 3. หนังสือบอกเลิกสัญญาภาษาไทยแบบทางการ ระบุวันที่มีผล และขอหลักฐานรับเรื่อง
-4. ถ้าตัดบัตรอัตโนมัติ: ขั้นตอนขอธนาคารหยุดตัดหรือปฏิเสธรายการ ตาม `refund-request`
+4. ถ้าตัดบัตรอัตโนมัติ: ขั้นตอนขอธนาคารหยุดตัดหรือปฏิเสธรายการ ตาม `buyer-help`
 5. ขั้นบันไดถ้าร้านไม่ตอบ (ร้าน → สคบ. → ศาลคดีผู้บริโภค) พร้อมตารางติดตาม
 
 ---
 
 ## 3. เคลมประกันภัยถูกปฏิเสธหรือจ่ายไม่ครบ
 
-playbook `complaint` · agent `consumer-advocate` · skill `refund-request`
+playbook `complaint` · agent `consumer-advocate` · skill `buyer-help`
 **ผลลัพธ์:** `cases/<ปี-เดือน>-<บริษัทประกัน>/insurance-claim.md` · `letter-<ขั้น>.docx` · **รออนุมัติ:** ส่งหนังสืออุทธรณ์ถึงบริษัทประกัน · ยื่นเรื่องต่อหน่วยงานกำกับ
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -108,7 +108,7 @@ playbook `complaint` · agent `consumer-advocate` · skill `refund-request`
 
 ## 4. บ้าน คอนโด หรือผู้รับเหมาไม่ทำตามสัญญา
 
-playbook `complaint` · agent `consumer-advocate` · skill `refund-request`
+playbook `complaint` · agent `consumer-advocate` · skill `buyer-help`
 **ผลลัพธ์:** `cases/<ปี-เดือน>-<โครงการ>/home.md` · `letter-<ขั้น>.docx` · **รออนุมัติ:** ส่งหนังสือทวงถามหรือบอกเลิกสัญญา · จ่ายงวดถัดไป · ยื่นเรื่อง
 
 ### ข้อมูล (ผู้ใช้กรอก)

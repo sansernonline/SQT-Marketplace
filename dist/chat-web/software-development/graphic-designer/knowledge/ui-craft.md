@@ -16,7 +16,7 @@ Use with a platform skill when a task produces a screen or mockup
 - A screen "looks off" and you cannot say why, or you review a UI someone else made.
 - The platform has no dedicated skill yet (TV app · kiosk · smart watch).
 
-Not for: real colors, fonts, components (also chart colors) → `web-app-design` · `windows-app-design` · `mobile-app-design` (this skill sets no colors or fonts, only spacing, size, order and states) · printed documents → `branded-document-design` · slides → `presentation-design`. User flow before drawing → agent `ux-designer` (template: [`references/ux-spec-outputs.md`](references/ux-spec-outputs.md)).
+Not for: real colors, fonts, components (also chart colors) → `web-app-design` · `windows-app-design` · `mobile-app-design` (this skill sets no colors or fonts, only spacing, size, order and states) · printed documents → `document-design` · slides → `slide-deck`. User flow before drawing → agent `ux-designer` (template: [`references/ux-spec-outputs.md`](references/ux-spec-outputs.md)).
 
 ## Steps
 
@@ -40,7 +40,7 @@ New project → pick 1 of 6 app characters before the first page: [`references/a
 Full text: [`references/visual-direction.md`](references/visual-direction.md). In short:
 1. **1 hero screen**: 1 sentence on the wow moment, and the page shows it (not a settings page or form).
 2. **Reference app**: take screenshots of 2–3 official pages into `_to_delete/ref-shots/`, note 5 things that make it look good. Always search live, even with a reference app.
-3. **3 directions in parallel** (one new subagent each; cannot call sub-agents → make them yourself one at a time, never a single direction), genuinely different, each with 1 point of boldness. Start from [`design-direction-lookup`](../design-direction-lookup/SKILL.md) with `--palette`.
+3. **3 directions in parallel** (one new subagent each; cannot call sub-agents → make them yourself one at a time, never a single direction), genuinely different, each with 1 point of boldness. Start from [`design-system`](../design-system/SKILL.md) with `--palette`.
 4. **Comparison page** `docs/design/<code>-design-directions.html`.
 5. **Choose 1**: ask the user once at the start whether they want to choose; otherwise a new beauty-gate reviewer scores per section 9 and the highest wins, recorded under `## ตัดสินใจเอง`.
 6. **Identity**: logo in the title bar, brand color written to `docs/README.md` field `doc-theme`.
@@ -51,7 +51,7 @@ Sample content must look real: realistic data, real images per `image-generation
 Every padding · margin · gap is a value in this scale, even when the platform skill conflicts, **except values measured from the real system and named in the exception list of `references/scales.md`** (for example Windows: content edge 36 · gap between sections 40). Things that belong together sit closer than things that do not. Card padding ≥ the gap inside. Details → [`references/scales.md`](references/scales.md).
 
 ### 2 · Type scale
-At most 5 sizes per screen (web: lg 22 · md 15 · base 13 · sm 12 · xs 11) · smallest 11 · 2 weights · lines of 45–75 characters · Thai line-height +0.1. A marketing or landing page without motion uses the type scale and rhythm in [`references/scales.md`](references/scales.md#3--หน้าการตลาดและ-landing-ที่ไม่มี-motion) (with motion → `dynamic-website`).
+At most 5 sizes per screen (web: lg 22 · md 15 · base 13 · sm 12 · xs 11) · smallest 11 · 2 weights · lines of 45–75 characters · Thai line-height +0.1. A marketing or landing page without motion uses the type scale and rhythm in [`references/scales.md`](references/scales.md#3--หน้าการตลาดและ-landing-ที่ไม่มี-motion) (with motion → `web-app-design`).
 
 ### 3 · Visual order: one screen, one important thing
 Ask what the user opened this page to do. That item gets level 1.
@@ -202,7 +202,7 @@ Choose the brand's tone axis and level of polish per `graphic-design` section 2,
 ## 4 · Record it so every piece follows it
 
 - Write the chosen character as the first-line comment of the token file, for example `/* app-character: 1 work-tool */`, and put it in the `ตัดสินใจเอง` (decided on my own) table in `docs/BUILD-PLAN.md` with the answers to the 4 questions
-- **Word documents (`branded-document-design`):** use the same brand color set, but the document body stays formal, because the readers are the approvers. Apps of character 4–5 may change only the cover, which can use brighter colors and rounder corners.
+- **Word documents (`document-design`):** use the same brand color set, but the document body stays formal, because the readers are the approvers. Apps of character 4–5 may change only the cover, which can use brighter colors and rounder corners.
 - **Logo (`graphic-design`):** the shape must lean the same way. Characters 1–2 use a square block with rounded edges. Characters 4–5 use very round shapes or a mascot.
 
 
@@ -526,7 +526,7 @@ Write the values into `:root` of the css file the mockup `<link>`s, in that one 
 
 # Font voice
 
-Used in `SKILL.md` section 0.1 step 3 · the type must convey the same mood as the color and layout (rounded type leans friendly, angular type leans fast and strong). If the font voice does not match the project's basics, the page looks inconsistent even when the color and layout are right · every font pair in the table is in `design-direction-lookup/data/font-pairs.csv`, column `voice`, with a checked license
+Used in `SKILL.md` section 0.1 step 3 · the type must convey the same mood as the color and layout (rounded type leans friendly, angular type leans fast and strong). If the font voice does not match the project's basics, the page looks inconsistent even when the color and layout are right · every font pair in the table is in `design-system/data/font-pairs.csv`, column `voice`, with a checked license
 
 ## Choose from the project basics, not from the maker's taste
 
@@ -737,7 +737,7 @@ If you want emphasis, change the **color** or the **size** first; do not rush to
 
 ## 3 · หน้าการตลาดและ landing ที่ไม่มี motion
 
-Use for pages people read down one section at a time (sales page · product home page · launch page) · apps and dashboards use sections 1–2 · pages that move section by section with scrolling → `dynamic-website`
+Use for pages people read down one section at a time (sales page · product home page · launch page) · apps and dashboards use sections 1–2 · pages that move section by section with scrolling → `web-app-design`
 
 The values in the table are starting values, set from the real page trial of 2026-11-06 and not yet measured from a prototype site · once a prototype is chosen (`design-gate/design-references`), you may measure the sizes from the prototype instead and note the source beside the token
 
@@ -921,7 +921,7 @@ Write it as a short test that loops over every text-and-background pair, in both
 
 # User experience (UX) spec outputs — user flow and interaction spec
 
-Text parts of a UX spec that sit beside the clickable HTML mockup (`mockup/<CODE>-mockup.html`) — moved from agent `ux-designer` (2026-10-14). Wireframe pictures inside a .md spec: ASCII and inline SVG templates are in skill `markdown-visuals` (`references/ascii-patterns.md`, `references/svg-snippets.md`).
+Text parts of a UX spec that sit beside the clickable HTML mockup (`mockup/<CODE>-mockup.html`) — moved from agent `ux-designer` (2026-10-14). Wireframe pictures inside a .md spec: ASCII and inline SVG templates are in skill `diagrams` (`references/ascii-patterns.md`, `references/svg-snippets.md`).
 
 ## User Flow
 ```markdown
@@ -973,7 +973,7 @@ Open this before drawing the first screen of a new project or a new design. The 
 1. **1 hero screen.** Write 1 sentence on which moment, when the product works, makes the viewer say wow, then make that page show that moment (camera app → the camera image with the analysis overlay · terminal → a session with real colored logs · dashboard → numbers with a story). The hero screen is not a settings page or a form. Marketing page or landing: the hero screen is the opening section. It must have at least 1 real thing from the product (a screenshot in use · real numbers · a real customer voice) and at 1440 width must leave no unintended empty space over 1/3 of the screen (eye gate `ด่านตา` of `design-gate/no-ai-look`, items 3.2 and 10).
 2. **Reference app.** Read it from `docs/README.md` or the request (local path · app name · description). Take screenshots from 2–3 official pages into `_to_delete/ref-shots/` (for comparison during review only; never put them in the deliverable), then note 5 things that make it look good (theme · color · density · window frame or header bar · sample content). Do not copy the logo or images.
    Always search live, even if the customer has a reference app (pre-start gate). Has a reference app → use that app's colors, and use the search for structure and elements. No reference app → search for prototypes first: take the project's keywords and search live per `design-gate/design-references` (plugin `superuser`), type `web` · `app` · `dashboard` as the work needs, then extract colors from the chosen work. The stored palette library is for when live search is not possible. Pick 2–3 works and note the same 5 things for each.
-3. **3 directions, made in parallel** (`crew-patterns/parallel-attempts-pick-best` · one new subagent per direction). The starting point of each direction (a 2-mode palette that passes contrast · a Thai-Latin font pair · look) uses the colors extracted from the prototypes in step 2; pass them into [`design-direction-lookup`](../../design-direction-lookup/SKILL.md) via `--palette` before choosing by yourself. Each direction makes only the hero screen + 1 main working page, in both themes (return only the file paths and a summary of at most 15 lines per direction). The directions must be genuinely different: (a) close to the reference app (no reference app → close to the chosen character) (b) platform-native but lifted (c) bolder. Every direction states the app character ([`app-character.md`](app-character.md)) · brand color · font and type character chosen from the project basics (soft round · fast angular · plain modern · formal · classic luxury · handwriting, per [`font-voice.md`](font-voice.md), then pass `--voice` into `design_draft.py`) · corner radius · density.
+3. **3 directions, made in parallel** (`crew-patterns/parallel-attempts-pick-best` · one new subagent per direction). The starting point of each direction (a 2-mode palette that passes contrast · a Thai-Latin font pair · look) uses the colors extracted from the prototypes in step 2; pass them into [`design-system`](../../design-system/SKILL.md) via `--palette` before choosing by yourself. Each direction makes only the hero screen + 1 main working page, in both themes (return only the file paths and a summary of at most 15 lines per direction). The directions must be genuinely different: (a) close to the reference app (no reference app → close to the chosen character) (b) platform-native but lifted (c) bolder. Every direction states the app character ([`app-character.md`](app-character.md)) · brand color · font and type character chosen from the project basics (soft round · fast angular · plain modern · formal · classic luxury · handwriting, per [`font-voice.md`](font-voice.md), then pass `--voice` into `design_draft.py`) · corner radius · density.
    Every direction states its starting look ([`web-looks.md`](web-looks.md) · no 2 directions may use the same look) and the **1 point of boldness** it commits to (for example a full-width real image in the hero screen · a heading font with character), and the rest stays quiet.
    **The owner has a preferred style** (`~/.claude/superuser-style.md`, section "สไตล์ออกแบบที่ชอบ") → direction (a) starts from that style instead of the industry look: corners, shadows, softness of color, icons, and the type of hero image per the prototypes the owner chose (the nearest look in `web-looks.md`, for example soft SaaS). The industry sets only the content and the prohibitions. Reason: the trial page on 2026-11-06 came out as an industry-standard quiet utility, and the user answered on 2026-11-09 that the layout was better but lacked rounded corners, shadows, soft colors, graphics and icons.
    **Cannot call sub-agents** (no subagent tool · subagent fails · budget not enough) → minimum path, never skip to a single direction: make the 3 directions yourself, only for the opening section or the hero screen, at 1440 and 375 width in one file. Take screenshots and critique one direction at a time with the eye gate `ด่านตา` of `design-gate/no-ai-look` item 3.2 and the beauty gate section 9. Record that direction's score before opening the next one. Choose the highest score and note under `## ตัดสินใจเอง` that there was no separate reviewer.
@@ -1029,7 +1029,7 @@ Values are a starting point; if they conflict with `app-character.md` or the pro
 | 11 | Thai craft | 3 · 6 | mulberry-paper color + 1 natural dye color (indigo, lac, turmeric) | Thai headings with handwriting heads (Itim) or print forms (Trirong) paired with Latin serif · body Taviraj | 0–4px or torn edge | paper (grain · torn edge · SVG hand-drawn line) | the line draws in once ≤ 400ms, the rest stays still |
 | 12 | soft SaaS | 1 · 3 · 6 | white or white tinted 1–3 % with the brand color · white cards · main color of medium brightness (HSL L 45–60 %), not a very dark color on white · white text on the main color must pass 4.5:1; if it fails, lower L or use dark text · badge background uses the main color at 8–12 % · icons are lines in the main color beside headings, with no frame · every gray tinted with the brand color | bold sans heading 700, large · Thai has no heads | card 12–16px · items inside 8–10px · button 10px or capsule | layered shadow (formula 1 tinted to the background hue · cards use the lower 2 layers, the standout piece uses all 4) + top edge catching light on the primary button | 200–300ms ease-out · a clickable card lifts 2px on hover with transform |
 
-Fonts in the table: Trirong · Taviraj · Itim are Thai faces with heads by Cadson Demak (OFL per google/fonts · checked 2026-10-23) · Kanit and the Thai-with-Latin pairing rules are in `dynamic-website` section 6
+Fonts in the table: Trirong · Taviraj · Itim are Thai faces with heads by Cadson Demak (OFL per google/fonts · checked 2026-10-23) · Kanit and the Thai-with-Latin pairing rules are in `web-app-design` section 6
 
 ## Matching looks so the 3 directions are genuinely different
 

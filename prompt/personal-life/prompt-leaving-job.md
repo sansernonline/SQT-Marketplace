@@ -29,7 +29,7 @@
 
 ## 1. ลาออกอย่างดี
 
-playbook `offer-negotiation` (ใช้ขั้น 1 เก็บตัวเลขจากเอกสารจริง · ขั้น 5 ร่างสิ่งที่จะพูดหรือเขียน · ขั้น 6 ตรวจ · ขั้น 2–4 ใช้เฉพาะเมื่อที่เดิมยื่น counter-offer · ไม่มี playbook ที่ตรงทั้งตัว จึงปรับตามหัวข้อ 2 ของ `superuser`) · agent `career-coach` · skill `salary-negotiation` · `human-writing`
+playbook `offer-negotiation` (ใช้ขั้น 1 เก็บตัวเลขจากเอกสารจริง · ขั้น 5 ร่างสิ่งที่จะพูดหรือเขียน · ขั้น 6 ตรวจ · ขั้น 2–4 ใช้เฉพาะเมื่อที่เดิมยื่น counter-offer · ไม่มี playbook ที่ตรงทั้งตัว จึงปรับตามหัวข้อ 2 ของ `superuser`) · agent `career-coach` · skill `job-search` · `human-writing`
 **ผลลัพธ์:** `leaving/<ปี-เดือน>-resign.md` · `leaving/resignation-letter.docx` · **รออนุมัติ:** ยื่นใบลาออก · ส่งอีเมลแจ้งทีม · ตอบรับหรือปฏิเสธ counter-offer
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -60,7 +60,7 @@ playbook `offer-negotiation` (ใช้ขั้น 1 เก็บตัวเ�
 
 ## 2. ถูกเลิกจ้าง / ถูกบอกให้ออก
 
-playbook `offer-negotiation` (ใช้ขั้น 1 เก็บตัวเลขจากเอกสารจริง · ขั้น 2 ทำตารางเงินที่ควรได้ · ขั้น 6 คำนวณซ้ำทุกช่อง · ไม่มี playbook ที่ตรงทั้งตัว จึงปรับตามหัวข้อ 2 ของ `superuser`) · agent `career-coach` · skill `salary-negotiation` · `human-writing`
+playbook `offer-negotiation` (ใช้ขั้น 1 เก็บตัวเลขจากเอกสารจริง · ขั้น 2 ทำตารางเงินที่ควรได้ · ขั้น 6 คำนวณซ้ำทุกช่อง · ไม่มี playbook ที่ตรงทั้งตัว จึงปรับตามหัวข้อ 2 ของ `superuser`) · agent `career-coach` · skill `job-search` · `human-writing`
 **ผลลัพธ์:** `leaving/<ปี-เดือน>-termination.md` · **รออนุมัติ:** เซ็นหนังสือเลิกจ้าง ข้อตกลง หรือใบลาออกที่บริษัทเตรียมให้ · ส่งข้อความถึงบริษัท · ยื่นคำร้องต่อหน่วยงานแรงงาน · ขึ้นทะเบียนว่างงาน
 
 ### ข้อมูล (ผู้ใช้กรอก)

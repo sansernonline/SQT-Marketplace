@@ -582,7 +582,7 @@ kubectl get pods -n production
 
 ## Skills You Use
 
-- `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+- `code-craft` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `developer-experience` → `references/developer-experience.md` — DX patterns
 - `design-gate/polished-document-style` (from superuser)
 
@@ -742,7 +742,7 @@ Published to package manager
 | **Speakeasy** | All major | ✓ Modern, idiomatic |
 | **openapi-generator** | 50+ | ~ Free, less polished |
 
-> **Default: generate, don't hand-write.** Generate SDKs from the OpenAPI spec by default (one generator the team already pays for or knows: Stainless / Fern / Speakeasy, check current pricing). Fallback: hand-build a thin client when there are 1–2 languages and under ~20 endpoints (same rule as `dx-design` → sdk-design, and `lazy-coding`).
+> **Default: generate, don't hand-write.** Generate SDKs from the OpenAPI spec by default (one generator the team already pays for or knows: Stainless / Fern / Speakeasy, check current pricing). Fallback: hand-build a thin client when there are 1–2 languages and under ~20 endpoints (same rule as `dx-design` → sdk-design, and `code-craft`).
 
 ## Versioning Strategy
 
@@ -829,7 +829,7 @@ await client.charges.create(data, {
 
 ## Skills You Use
 
-- `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+- `code-craft` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `developer-experience` → `references/sdk-design-patterns.md` — SDK patterns
 - `design-gate/polished-document-style` (from superuser) — for docs
 
@@ -855,7 +855,7 @@ await client.charges.create(data, {
 
 Audit developer experience (DX) or design a software development kit (SDK) with the devrel-engineer agent (dx-audit or sdk-design).
 
-Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+Two modes. Read the first word of **the user's request**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
 
 | Mode | What it does |
 |---|---|
@@ -866,7 +866,7 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 
 ## Mode: `dx-audit`
 
-Use `devrel-engineer` agent for: **$ARGUMENTS**
+Use `devrel-engineer` agent for: **the user's request**
 
 Workflow:
 1. **Discovery:** target persona, current state, friction points
@@ -884,7 +884,7 @@ Workflow:
 
 ## Mode: `sdk-design`
 
-Use `devrel-engineer` agent for: **$ARGUMENTS**
+Use `devrel-engineer` agent for: **the user's request**
 
 Workflow:
 1. **Discovery:** target languages, API style, auth model, scale
@@ -1562,7 +1562,7 @@ const client = new Client({
 
 - Naming that breaks the language's own convention (e.g. camelCase methods in Python) — follow each language's idiom (table above)
 - Use untyped parameters when the language supports types
-- Hand-write a full multi-language SDK family — Generate SDKs from the OpenAPI spec by default (one generator the team already pays for or knows: Stainless / Fern / Speakeasy, check current pricing). Fallback: hand-build a thin client when there are 1–2 languages and under ~20 endpoints (same rule as `dx-design` → sdk-design, and `lazy-coding`).
+- Hand-write a full multi-language SDK family — Generate SDKs from the OpenAPI spec by default (one generator the team already pays for or knows: Stainless / Fern / Speakeasy, check current pricing). Fallback: hand-build a thin client when there are 1–2 languages and under ~20 endpoints (same rule as `dx-design` → sdk-design, and `code-craft`).
 - Break v1 users with a v1.x release
 - Ignore retry edge cases
 - Force callbacks when async/promises would work

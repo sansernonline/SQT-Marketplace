@@ -30,7 +30,7 @@
 
 ## 1. พ่อแม่มีหลายโรค ยาจากหลายโรงพยาบาล
 
-playbook `medication-routine` · agent `health-organizer` · skill `medication-schedule` · `doctor-visit-prep`
+playbook `medication-routine` · agent `health-organizer` · skill `health-admin`
 **ผลลัพธ์:** `medications.md` ตารางยารวมทุกที่ · `appointments.md` นัดทุกโรงพยาบาลในตารางเดียว · บันทึกส่งต่อผู้ดูแล · **รออนุมัติ:** ตั้งการแจ้งเตือนในแอปหรือปฏิทิน · แชร์ไฟล์ให้ผู้ดูแลหรือญาติ
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -55,7 +55,7 @@ playbook `medication-routine` · agent `health-organizer` · skill `medication-s
 
 ## 2. ก่อนผ่าตัดหรือนอนโรงพยาบาล และหลังกลับบ้าน
 
-playbook `doctor-visit` · agent `health-organizer` · skill `doctor-visit-prep` · `medication-schedule`
+playbook `doctor-visit` · agent `health-organizer` · skill `health-admin`
 **ผลลัพธ์:** `visits/<ปี-เดือน-วัน>-admit.md` (ก่อนเข้า · ระหว่างนอน · หลังกลับบ้าน ในไฟล์เดียว) · **รออนุมัติ:** จองห้อง วางเงินมัดจำ · เอกสารยินยอมรักษาให้ผู้ป่วยหรือญาติเซ็นเอง agent ไม่กรอกแทน
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -83,7 +83,7 @@ playbook `doctor-visit` · agent `health-organizer` · skill `doctor-visit-prep`
 
 ## 3. การ์ดสุขภาพฉุกเฉินของคนในบ้าน
 
-playbook `medication-routine` (ขั้น 4 รายการแพ้ยาและรายการยาสำหรับพก + ขั้นสุดท้าย reviewer ตัวใหม่ตรวจ) · agent `health-organizer` · skill `medication-schedule` · `doctor-visit-prep`
+playbook `medication-routine` (ขั้น 4 รายการแพ้ยาและรายการยาสำหรับพก + ขั้นสุดท้าย reviewer ตัวใหม่ตรวจ) · agent `health-organizer` · skill `health-admin`
 **ผลลัพธ์:** `emergency-card.md` 1 หน้าต่อคน พิมพ์ติดตู้เย็นหรือเก็บในมือถือ · **รออนุมัติ:** แชร์การ์ดในกลุ่มแชตครอบครัวหรือส่งให้ผู้ดูแล
 
 ### ข้อมูล (ผู้ใช้กรอก)

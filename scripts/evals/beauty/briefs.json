@@ -7,9 +7,9 @@
      "brief": "Seminar poster \"AI for Thai SME 2027\" by a Thai IT company. 15 ม.ค. 2570 13:00–17:00, hotel in Bangkok (venue (รอยืนยัน)), free registration via QR, 3 speakers (neutral photo boxes, no AI faces). A3 portrait."},
     {"id": "banner", "type": "banner", "size": [1200, 628], "skills": ["graphic-design:design-by-type", "graphic-design:design-by-type", "graphic-design:copy-claims-check"],
      "brief": "Facebook/Instagram ad 1200x628 for \"บ้านคั่ว\", a small Thai online shop of fresh-roasted coffee beans from Chiang Rai. Promo \"ซื้อ 2 ถุง ส่งฟรี\". Real coffee photos from licensed free sources only, with credit."},
-    {"id": "document-cover", "type": "document-cover", "size": [2480, 1754], "skills": ["graphic-design:design-by-type", "software-development:branded-document-design"],
+    {"id": "document-cover", "type": "document-cover", "size": [2480, 1754], "skills": ["graphic-design:design-by-type", "software-development:document-design"],
      "brief": "SRS for \"ระบบนัดหมายผู้ป่วยออนไลน์\" of a private Thai hospital, written by a Thai IT company. Clean, trustworthy, healthcare. Cover + 1 inner page side by side, A4 each."},
-    {"id": "slides", "type": "slides", "size": [1920, 1080], "skills": ["graphic-design:design-by-type", "software-development:presentation-design"],
+    {"id": "slides", "type": "slides", "size": [1920, 1080], "skills": ["graphic-design:design-by-type", "software-development:slide-deck"],
      "brief": "Company profile deck of \"ส่งไว โลจิสติกส์\", a Thai mid-size last-mile logistics company pitching to corporate clients. Cover slide + content slide \"บริการของเรา\": 4 services + 1 key number (ส่งตรงเวลา 98.6% (รอยืนยัน)). 16:9."}
   ]
 }

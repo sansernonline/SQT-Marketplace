@@ -30,7 +30,7 @@
 
 ## 1. เตรียมวันแคมเปญใหญ่
 
-playbook `pricing-check` (ราคาและเพดานส่วนลด) · agent `shop-manager` · skill `marketplace-fees-pricing` · `multi-shop-stock`
+playbook `pricing-check` (ราคาและเพดานส่วนลด) · agent `shop-manager` · skill `pricing-and-costs` · `shop-operations`
 **ผลลัพธ์:** `campaigns/<ปี-เดือน-วัน>-plan.md` · **รออนุมัติ:** สมัครเข้าร่วมแคมเปญของแพลตฟอร์ม · ตั้งราคาโปรบนร้าน · สั่งของเพิ่ม
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -45,7 +45,7 @@ playbook `pricing-check` (ราคาและเพดานส่วนลด
 
 1. ตารางราคาแคมเปญต่อ SKU (Stock Keeping Unit — รหัสสินค้า): ราคาโปร · ค่าธรรมเนียมทุกตัวรวมค่าแคมเปญ · ส่วนลดที่ร้านออก · กำไรต่อชิ้น · ราคาต่ำสุดในแคมเปญ (campaign floor)
 2. SKU ที่ไม่ควรเข้าแคมเปญเพราะขาดทุน พร้อมตัวเลข
-3. สต็อกที่ต้องมีช่วงแคมเปญ คิดจากยอดปีที่แล้ว ไม่ใช่ยอดเดือนนี้ (ตาม `multi-shop-stock`) · ของที่ต้องสั่งเพิ่มและวันที่ต้องสั่ง
+3. สต็อกที่ต้องมีช่วงแคมเปญ คิดจากยอดปีที่แล้ว ไม่ใช่ยอดเดือนนี้ (ตาม `shop-operations`) · ของที่ต้องสั่งเพิ่มและวันที่ต้องสั่ง
 4. กันของ (buffer) ต่อแพลตฟอร์มกันขายเกิน
 5. ปฏิทินงาน: วันสมัคร · วันตั้งราคา · วันล็อกสต็อก · วันไลฟ์ (ถ้ามี) · วันแพ็กของ
 
@@ -58,7 +58,7 @@ playbook `pricing-check` (ราคาและเพดานส่วนลด
 
 ## 2. เตรียมไลฟ์ขายของ
 
-playbook `live-session` · agent `live-seller` · skill `live-selling-script`
+playbook `live-session` · agent `live-seller` · skill `sales-copy`
 **ผลลัพธ์:** `live/<ปี-เดือน-วัน>-runsheet.md` พิมพ์หรือเปิดข้างจอระหว่างไลฟ์ได้
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -81,7 +81,7 @@ playbook `live-session` · agent `live-seller` · skill `live-selling-script`
 
 ## 3. สรุปหลังไลฟ์
 
-playbook `live-session` (ขั้น 1: เลือกสินค้าและดีลรอบหน้า + ขั้นสุดท้าย reviewer ตัวใหม่ตรวจ) · ส่วนสรุปตามข้อ "After the live" ของ skill `live-selling-script` · agent `live-seller` · skill `chat-reply-templates`
+playbook `live-session` (ขั้น 1: เลือกสินค้าและดีลรอบหน้า + ขั้นสุดท้าย reviewer ตัวใหม่ตรวจ) · ส่วนสรุปตามข้อ "After the live" ของ skill `sales-copy` · agent `live-seller` · skill `customer-care`
 **ผลลัพธ์:** `live/<ปี-เดือน-วัน>-recap.md` · ร่างตอบคำถามที่ค้างในแชต · **รออนุมัติ:** ส่งข้อความตอบลูกค้า
 
 ### ข้อมูล (ผู้ใช้กรอก)

@@ -33,7 +33,7 @@
 
 ## 1. พอร์ตตอนนี้เป็นอย่างไร
 
-playbook `portfolio-check` · agent `market-analyst` · skill `portfolio-snapshot` · `dividend-tracker` · `news-impact`
+playbook `portfolio-check` · agent `market-analyst` · skill `portfolio` · `market-watch`
 **ผลลัพธ์:** `snapshot-YYYY-MM.md` หน้าเดียว
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -55,7 +55,7 @@ playbook `portfolio-check` · agent `market-analyst` · skill `portfolio-snapsho
 
 ## 2. เลือกกองทุนรวม / RMF / ThaiESG
 
-skill `mutual-fund-picker` · agent `market-analyst` · งานกลาง ไม่ต้องเปิด playbook
+skill `fund-and-bond-picker` · agent `market-analyst` · งานกลาง ไม่ต้องเปิด playbook
 **ผลลัพธ์:** `funds/<ปี-เดือน>-compare.md` · **รออนุมัติ:** ซื้อกองทุน ตั้งซื้อรายเดือน (DCA)
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -76,7 +76,7 @@ skill `mutual-fund-picker` · agent `market-analyst` · งานกลาง �
 
 ## 3. เริ่มลงทุนครั้งแรก
 
-playbook `money-plan` (ครอบคลุมงบ เงินสำรอง และเลือกกองทุน) · agent `money-planner` · skill `personal-budget` · `emergency-fund` · `debt-payoff` · `mutual-fund-picker`
+playbook `money-plan` (ครอบคลุมงบ เงินสำรอง และเลือกกองทุน) · agent `money-planner` · skill `budget-and-debt` · `fund-and-bond-picker`
 **ผลลัพธ์:** `plan/first-invest.md` — พร้อมลงทุนหรือยัง · ลงเดือนละเท่าไร · ลงที่ไหน · ลำดับขั้น · **รออนุมัติ:** เปิดบัญชีกองทุนหรือหุ้น · ซื้อครั้งแรก · ตั้งซื้อรายเดือน (DCA)
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -104,7 +104,7 @@ playbook `money-plan` (ครอบคลุมงบ เงินสำรอ�
 
 ## 4. ตลาดร่วงแรง ข่าวใหญ่ กลัวพอร์ตพัง
 
-playbook `portfolio-check` · agent `market-analyst` + `risk-manager` · skill `portfolio-snapshot` · `news-impact` · `emergency-fund`
+playbook `portfolio-check` · agent `market-analyst` + `risk-manager` · skill `portfolio` · `market-watch` · `budget-and-debt`
 **ผลลัพธ์:** `snapshot-YYYY-MM-DD.md` หน้าเดียว · **รออนุมัติ:** ขาย · ซื้อเพิ่ม · เปลี่ยนแผนซื้อรายเดือน (DCA)
 
 ### ข้อมูล (ผู้ใช้กรอก)

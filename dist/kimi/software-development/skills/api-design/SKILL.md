@@ -1,8 +1,22 @@
 ---
 name: "api-design"
-description: "Design an API spec with the system-analyst agent — endpoints, schemas, errors, examples."
+description: "Use when designing an API spec or checking API consistency"
 disableModelInvocation: true
 ---
+
+# api-design — design an API spec and keep every endpoint consistent
+
+> **One rule:** decide each API rule once and apply it to every endpoint, and the spec is the contract that consumers test against.
+
+## Pick the part
+
+| Job (what the user says) | Open |
+|---|---|
+| "Design the API for this feature", new endpoints with schemas and examples | This file: the command steps below |
+| Naming URLs, versioning, pagination, filtering, data formats, errors, repeat calls, rate limits, retiring an endpoint | [`references/api-conventions.md`](references/api-conventions.md) (sections 2 to 12) |
+| "Is this API consistent?", "check before releasing a new endpoint" | [`references/api-conventions.md`](references/api-conventions.md) section 11 |
+| OpenAPI as the contract, CI checks that the real code matches it | [`references/contract-testing.md`](references/contract-testing.md) |
+| The conventions document every project needs (`docs/API-CONVENTIONS.md`) | [`assets/API-CONVENTIONS.md`](assets/API-CONVENTIONS.md) |
 
 > **Shortcut into SuperUser:** open the `superuser` skill with the `feature` playbook (or `project-docs` if the work is documents only) and copy the playbook's steps into the todo first. The steps below describe the work format and output of this command. Use them together with the playbook, not instead of it.
 
@@ -10,7 +24,7 @@ Use the `system-analyst` agent to design API specifications for: **$ARGUMENTS**
 
 The system analyst should:
 
-0. **Load the rulebooks first** — `api-conventions` (URLs, versioning, pagination, dates, ids, idempotency) and `web-service-essentials` (RFC 9457 error shape, request ids, operational endpoints). The spec follows them; do not invent new rules per document.
+0. **Load the rulebooks first** — [`references/api-conventions.md`](references/api-conventions.md) (URLs, versioning, pagination, dates, ids, idempotency) and `web-service-essentials` (RFC 9457 error shape, request ids, operational endpoints). The spec follows them; do not invent new rules per document.
 
 1. **Initial Discovery** — gather (unknown → `(รอยืนยัน)`, keep going):
    - User stories / use cases this API supports
@@ -35,12 +49,12 @@ The system analyst should:
    - Rate limits
    - Idempotency notes
 
-4. **Check every endpoint against the rulebooks from step 0** (URLs, status codes, pagination per `api-conventions` · errors per `web-service-essentials` §2). Do not restate the rules in the spec
+4. **Check every endpoint against the rulebooks from step 0** (URLs, status codes, pagination per `api-conventions.md` · errors per `web-service-essentials` §2). Do not restate the rules in the spec
 
 5. **Plan cross-cutting concerns:**
    - Authentication (Bearer? API key? OAuth?)
    - Rate limiting tiers
-   - Versioning per `api-conventions`
+   - Versioning per `api-conventions.md` section 3
    - CORS (if browser clients)
    - Idempotency keys for mutations
    - Request ID tracing
@@ -60,7 +74,7 @@ The system analyst should:
 
 8. **Change protocol** (the spec is the contract consumers test against):
    - Spec first, code second — every later change edits the OpenAPI/proto file before any handler, and the diff of that file is what reviewers read
-   - Additive changes only in place (new optional field · new endpoint · new enum value the client ignores); rename, remove, type change or new required field → new version or deprecation per `api-conventions` §10
+   - Additive changes only in place (new optional field · new endpoint · new enum value the client ignores); rename, remove, type change or new required field → new version or deprecation per `api-conventions.md` section 10
    - Each spec change names its consumers and how they were told (changelog line · deprecation header date)
 
 9. **Hand-off suggestions:**

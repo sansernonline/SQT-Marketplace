@@ -1,5 +1,16 @@
 # Changelog — graphic-design
 
+## 0.39.1 — 2026-11-27
+
+- `design-principles` ชี้ชื่อ skill หลังรวม 0.38.0 และเพิ่ม `design-review` · playbook เติม skill ที่ยังไม่มี playbook เรียก
+
+## 0.39.0 — 2026-11-27
+
+- `design-principles` เพิ่ม 2 ชนิดงาน: long-video · audio · ตัวเลข กำหนดเวลา และมาตรากฎหมายที่มีแหล่งไม่ถึง 3 แหล่งตัดออก ให้ไปดูใน skill แทน
+- แยกงาน design เป็น 3 ชั้น: หลักคิด (งานดีคืออะไร ทำไม) · skill (ทำยังไง) · playbook (ลำดับ ใครทำ เสร็จเมื่อไร) · ชั้นไหนเขียนอะไรดูจากบรรทัด: มี `ใคร:` = playbook · มีตัวเลขกติกาทำงาน = skill · บอกเหตุผล = หลักคิด
+- skill ใหม่ `design-principles`: ตารางสื่อ → ไฟล์หลักคิด → skill → playbook ครบ 12 ประเภท · ไฟล์หลักคิดใหม่ 5 ไฟล์ (video · thumbnail · icon · product-images · line) แต่ละข้อมีแหล่งที่ตรงกันอย่างน้อย 3 แหล่ง · โลโก้ โปสเตอร์ แบนเนอร์ ปก สไลด์ ชี้ไปไฟล์เดิมใน `design-by-type`
+- playbook ใหม่ `design` (9 ขั้น) สำหรับงานออกแบบชิ้นเดียว · playbook brand-setup · campaign · image-series · video ขั้นแรกเป็นบรีฟ 7 ช่องตาม `design-method` และชี้ไปไฟล์หลักคิด (brand-setup เลิกเขียน "คำบุคลิก 3 คำ" แยก ใช้ช่องอารมณ์ในบรีฟ) · `meaning-first.md` คำที่อนุมานเองใส่ `(เดา)` ตรงกับ design-method
+
 ## 0.38.0 — 2026-11-27
 
 รวม skill จาก 24 เหลือ 14 (เปลี่ยนชื่อแบบไม่เข้ากับของเดิม) · เจ้าของสั่ง 2026-11-27 ตามแผน `.claude/superuser/plans/2026-11-27-design-merge-plan.md` · เนื้อหาเดิมย้ายไปเป็นไฟล์ `references/` ของตัวที่เหลือ ไม่ได้ตัดกฎทิ้ง · eval ย้ายตามไปใต้ชื่อใหม่

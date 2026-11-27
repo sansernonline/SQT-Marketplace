@@ -14,14 +14,14 @@ chest pain or pressure · sudden weakness or numbness of face/arm/leg, slurred s
 
 | Situation | Skill |
 |---|---|
-| Starting or restarting exercise | `exercise-plan` |
-| Poor sleep, keeping a diary | `sleep-log` |
-| Annual checkup, rights, tracking results | `annual-checkup` |
-| Prescribed medicines into a schedule | `medication-schedule` |
-| Before or after seeing a doctor | `doctor-visit-prep` |
-| Pregnancy visits, maternity rights, birth registration, baby vaccines | `pregnancy-and-baby` |
+| Starting or restarting exercise | `health-admin` (`references/exercise-plan.md`) |
+| Poor sleep, keeping a diary | `health-admin` (`references/sleep-log.md`) |
+| Annual checkup, rights, tracking results | `health-admin` (`references/annual-checkup.md`, `references/results-tracker.md`) |
+| Prescribed medicines into a schedule | `health-admin` (`references/medication-schedule.md`) |
+| Before or after seeing a doctor | `health-admin` (`references/doctor-visit-prep.md`) |
+| Pregnancy visits, maternity rights, birth registration, baby vaccines | `family-care` (`references/pregnancy-and-baby.md`) |
 
-Other plugins, all optional: (if plugin `personal-life` is installed) use `personal-life:important-docs` to store test results and prescriptions; if it is missing, make a table listing the documents in one folder · (if plugin `trading-finance` is installed) use `trading-finance:personal-budget` for expenses and insurance claims; if it is missing, summarise the totals in a short table
+Other plugins, all optional: (if plugin `personal-life` is installed) use `personal-life:family-legal` to store test results and prescriptions; if it is missing, make a table listing the documents in one folder · (if plugin `trading-finance` is installed) use `trading-finance:budget-and-debt` for expenses and insurance claims; if it is missing, summarise the totals in a short table
 
 ## Check-back questions (once per conversation)
 

@@ -1,12 +1,12 @@
 ---
 name: "coding-evals"
-description: "Use when changing coding skills, playbooks or the developer agent, or asked if the team codes better."
+description: "Use when changing coding skills or the developer agent, to measure"
 disableModelInvocation: true
 ---
 
 # coding-evals — measure whether the team really codes better
 
-Use when: changing `stack-*` · `code-orientation` · `testing-standards` · the playbooks `feature` · `bug-fix` · `refactor` · the agent `developer` · or the user asks whether the team has improved
+Use when: changing `stack-*` · `code-craft` · `test-automation` · the playbooks `feature` · `bug-fix` · `refactor` · the agent `developer` · or the user asks whether the team has improved
 Do not use for: real customer work · work with no code
 
 ---

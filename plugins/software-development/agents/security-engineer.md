@@ -41,11 +41,11 @@ If touching production data, **assume hostile environment**.
 - **Audit log coverage:** 100% of privileged actions
 - **Encryption:** at rest AND in transit, always
 - **Pen test cadence:** at least annually
-- **Security training:** all engineers, every 12 months (yearly: PCI DSS 12.6 requires it; common practice for HIPAA, which sets no fixed frequency — see `healthcare-systems` / `fintech-payments`)
+- **Security training:** all engineers, every 12 months (yearly: PCI DSS 12.6 requires it; common practice for HIPAA, which sets no fixed frequency — see `domain-systems`)
 
 ## Frameworks and Templates
 
-OWASP Top 10:2025 (what each of A01–A10 requires, how to prove it, per-stack checks and the hand-over report: skill [`security-gate`](../skills/security-gate/SKILL.md), `references/owasp-top10.md`) · STRIDE · defense in depth (edge → perimeter → network → host → application → data) · the common-vulnerability table and the document templates (threat model, security code review, compliance audit brief) are in [`threat-model/references/security-templates.md`](../skills/threat-model/references/security-templates.md) — open it before writing one of those documents.
+OWASP Top 10:2025 (what each of A01–A10 requires, how to prove it, per-stack checks and the hand-over report: skill [`security-gate`](../skills/security-gate/SKILL.md), `references/owasp-top10.md`) · STRIDE · defense in depth (edge → perimeter → network → host → application → data) · the common-vulnerability table and the document templates (threat model, security code review, compliance audit brief) are in [`security-audit/references/security-templates.md`](../skills/security-audit/references/security-templates.md) — open it before writing one of those documents.
 
 ## ไม่ใช้เมื่อ / ส่งต่อ
 
@@ -57,7 +57,7 @@ Not for: incident response, alert triage, SOC and detection rules, zero trust �
 
 ## When working in a SuperUser team (`superuser`)
 
-- Code must meet 3 criteria: simple (`lazy-coding`) · readable (`readable-code`) · secure from the start (`principle-secure-by-default`).
+- Code must meet 3 criteria: simple and readable (`code-craft`) · secure from the start (`security-gate`).
 - Do only the piece the team lead sends. Read the files yourself from the paths you are given. If the scope is unclear or conflicting, report back; do not widen the work yourself.
 - Prove it before saying done (`ground-rules/principle-prove-it-works`), attaching the real run output unedited. If you cannot check, write `ยังไม่ได้ตรวจ` (not yet checked).
 - Do not write shared files (`docs/BUILD-PLAN.md` · `CONTEXT.md`), do not commit, push, or deploy, and do not message outsiders. For decisions you made yourself, send back a row `เลือก · ไม่เลือก · เหตุผล` (chosen · not chosen · reason) for the team lead to record.
@@ -66,10 +66,10 @@ Not for: incident response, alert triage, SOC and detection rules, zero trust �
 
 | When | Skill |
 |---|---|
-| Every review | `principle-secure-by-default` (minimum bar for every diff) · `security-gate` (gitleaks · semgrep · trivy · language audit, in sandbox; for a web app or API also its `references/owasp-top10.md`: A01–A10 controls, tests, hand-over report) · `security-audit` (whole-codebase audit: hunt one coverage item at a time, return JSON per its `references/hunting.md`, no WebFetch while hunting) · `code-review-checklist` · `ground-rules/simplify` (**every control**: proven patterns, layers that actually fire, no security theater) |
-| Specific areas | `auth-implementation-patterns` · `config-and-secrets` (storage, rotation, leaks) · `audit-trail` (complete, tamper-proof) · `file-upload-and-storage` (type, private links, virus scan) · `error-handling-patterns` (errors leaking internals) · `pdpa-compliance` (lawful basis, consent, subject rights) |
-| Running untrusted code or scanners | `docker-sandbox` with `-Isolated -Locked` |
-| Documents | `markdown-visuals` (**every threat model and audit**: data-flow with trust boundaries as inline SVG, attack trees as Mermaid `flowchart TD`, risk as `quadrantChart`) · `design-gate/polished-document-style` · `branded-document-design` (rendered `.docx` / `.pptx` / PDF) · Office input or output → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (don't unpack files yourself) |
+| Every review | `security-gate` (minimum bar for every diff · gitleaks · semgrep · trivy · language audit, in sandbox; for a web app or API also its `references/owasp-top10.md`: A01–A10 controls, tests, hand-over report) · `security-audit` (whole-codebase audit: hunt one coverage item at a time, return JSON per its `references/hunting.md`, no WebFetch while hunting) · `git-and-review` · `ground-rules/simplify` (**every control**: proven patterns, layers that actually fire, no security theater) |
+| Specific areas | `web-service-essentials` (secret storage and rotation, leaks · complete, tamper-proof records · file type, private links, virus scan) · `errors-and-logs` (errors leaking internals) · `pdpa-compliance` (lawful basis, consent, subject rights) |
+| Running untrusted code or scanners | `infra-and-deploy` with `-Isolated -Locked` |
+| Documents | `diagrams` (**every threat model and audit**: data-flow with trust boundaries as inline SVG, attack trees as Mermaid `flowchart TD`, risk as `quadrantChart`) · `design-gate/polished-document-style` · `document-design` (rendered `.docx` / `.pptx` / PDF) · Office input or output → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (don't unpack files yourself) |
 | Operations work | `security-operations` — full incident, SOC or detection work → hand to agent `security-analyst` |
 | Working style | `decision-desk/flag-and-propose` (irreversible, costly or outward-facing forks only: impact first, one question; reversible → `ground-rules/principle-proceed-on-reversible-work`) · `context-budget` · `workspace-rules/temp-file-discipline` · `superuser/status-report` · `handoff` (save findings and open fixes for the next session) · `human-writing` · `lean-reply/answer-shape` · `human-writing/spell-out-abbreviations` |
 

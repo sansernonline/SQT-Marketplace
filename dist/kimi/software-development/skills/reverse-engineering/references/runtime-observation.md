@@ -17,7 +17,7 @@ If the user answers no, record it in the authorization record's field "การ
 
 | Target | Where to run |
 |---|---|
-| Unknown origin · untrusted · malware | `docker-sandbox` container only · network off (`--network none`) unless the user allows it · mount no user folder except the work folder in `_to_delete/re/` |
+| Unknown origin · untrusted · malware | `infra-and-deploy` container only · network off (`--network none`) unless the user allows it · mount no user folder except the work folder in `_to_delete/re/` |
 | The user's own software that the user already runs every day | The user's machine is allowed, if the user permits |
 | Android app | An emulator created for this job, not a personal phone |
 | Untrusted Windows app | A Linux container cannot run it · use Windows Sandbox or a VM the user prepares, and have the user run it |
@@ -29,7 +29,7 @@ Runtime observation is behavior evidence, not containment. A debugger and Frida 
 | Actor | Method | Must ask |
 |---|---|---|
 | The user clicks, the agent reads the result | The user opens DevTools or records a HAR and sends the file | Ask once which page and which step to look at |
-| The agent drives the browser or app itself | Playwright in `docker-sandbox`, following the announced steps | **Every time** · opening a new page may wipe an unsaved form; tell the user first |
+| The agent drives the browser or app itself | Playwright in `infra-and-deploy`, following the announced steps | **Every time** · opening a new page may wipe an unsaved form; tell the user first |
 
 Report clearly who clicked. For passive viewing, never write that the agent clicked, opened a page, or saw what happened before recording began.
 

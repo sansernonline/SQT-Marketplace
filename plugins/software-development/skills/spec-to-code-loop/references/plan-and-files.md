@@ -106,4 +106,4 @@ Anti-patterns: throwing the whole requirements document in one round · writing 
 
 ## Other skills to use together
 
-`srs-writing` (testable requirements) · `test-case-template` · `testing-standards` (skeleton, framework, names, coverage) · `e2e-testing-patterns` (real browser) · `lazy-coding` · `fix-at-source/targeted-fix` (red test) · `commit-message-format` · `workspace-rules/temp-file-discipline` · `test-evidence` item 5 and `e2e-testing-patterns` (oracle-and-mutation) for number-chasing loops · `handoff` · `superuser/status-report`.
+`requirements-writing` (testable requirements) · `qa-docs` · `test-automation` (skeleton, framework, names, coverage) · `test-automation` (real browser) · `code-craft` · `fix-at-source/targeted-fix` (red test) · `git-and-review` · `workspace-rules/temp-file-discipline` · `qa-docs` → `references/test-evidence.md` item 5 and `test-automation` (oracle-and-mutation) for number-chasing loops · `handoff` · `superuser/status-report`.

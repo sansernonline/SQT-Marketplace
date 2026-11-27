@@ -19,14 +19,14 @@ description: Use when a system imports or exports Excel or CSV
 
 | Job | skill | |
 |---|---|---|
-| Receiving general file uploads (images, documents) | `file-upload-and-storage` | Instead |
+| Receiving general file uploads (images, documents) | `web-service-essentials` | Instead |
 | Building a nicely formatted Excel file | `anthropic-skills:xlsx` | Instead |
-| Queue mechanics and progress | `background-jobs` | Instead |
+| Queue mechanics and progress | `async-messaging` | Instead |
 | Buddhist Era (B.E.) years and Thai sorting order | `i18n-and-locale` | Instead |
 | Sending documents into Thai accounting software (PEAK · FlowAccount) through an API instead of a file | [`references/thai-accounting-apis.md`](references/thai-accounting-apis.md) | Instead |
-| Recording who imported or exported what | `audit-trail` | Together |
+| Recording who imported or exported what | `web-service-essentials` | Together |
 | Masking personal data in export files | `pdpa-compliance` | Together |
-| Telling the user when an import finishes | `notifications` | Together |
+| Telling the user when an import finishes | `async-messaging` | Together |
 | Limits and constraints of the target table | `database-design` | Together |
 
 ---
@@ -80,12 +80,12 @@ Right: a table of check results, with a button to download the original file wit
 - **Always show a summary page before confirming**, such as "จะเพิ่ม 120 · แก้ 45 · ข้าม 3 · ผิด 0" (will add 120 · update 45 · skip 3 · error 0), then have the user click confirm
 - If the file has duplicate rows, stop and say so. Do not silently use the last row
 - If the data already exists in the system, let the user choose: skip · overwrite · stop
-- **Every import must be recorded in the audit log**: who imported, which file, how many rows affected (see `audit-trail`)
+- **Every import must be recorded in the audit log**: who imported, which file, how many rows affected (see `web-service-essentials`)
 - **Keep the original file**, so when there is a problem you can look back at what the submitted file really looked like
 - Make it reversible: store a batch id (the id of the import run) on every imported row
 
 **Large files run as background jobs.** Above roughly 1,000 rows, put them in a queue,
-split into batches of 500 rows, show progress, and allow cancel (see `background-jobs`).
+split into batches of 500 rows, show progress, and allow cancel (see `async-messaging`).
 
 ---
 
@@ -117,5 +117,5 @@ split into batches of 500 rows, show progress, and allow cancel (see `background
 | Personal data | Mask columns that are not needed (see `pdpa-compliance`) |
 | File name | `<เรื่อง>-<ช่วงวันที่>-<เวลาที่ส่งออก>.xlsx` |
 | File header | Put in the filter conditions used and the export time. Otherwise in 3 months nobody knows what data this file is |
-| Download link | Must expire (see `file-upload-and-storage`) |
+| Download link | Must expire (see `web-service-essentials`) |
 | Format | `.xlsx` for people to read · CSV for machines to read |

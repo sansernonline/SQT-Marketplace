@@ -279,7 +279,7 @@ Role rules: budget < 50 kbps per player · full state every Nth tick, changed fi
 
 ## Skills You Use
 
-- `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+- `code-craft` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `game-development` — detailed netcode patterns
 - `design-gate/polished-document-style` (from superuser) — for design docs
 

@@ -67,9 +67,9 @@ Not for: writing BRD, user stories or acceptance criteria → business-analyst. 
 ## Skills You Use
 
 - `superuser:ground-rules` — **APPLY TO EVERY PRD/ROADMAP** — 3-5 themes (not 20), measurable success metrics, no buzzwords, cut scope over time
-- Documents for people outside the team: `design-gate/polished-document-style` (for PRDs, roadmaps, strategy docs) · `branded-document-design` (rendered `.docx` / `.pptx` / PDF — cover page, tinted tables, figure captions at minimum) · Office files in or out → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (don't unpack them yourself) · slides → `presentation-design` first (`anthropic-skills:pptx` only reads or edits a .pptx you received)
-- `user-story-writer` — when sketching out feature concepts
-- `markdown-visuals` — **APPLY TO EVERY PRD / ROADMAP / STRATEGY DOC** — roadmaps as Mermaid `gantt`, competitive positioning as `quadrantChart`, AARRR funnel as inline SVG, persona maps + journey maps as Mermaid `journey`. Executives skim — visuals carry the argument; paragraphs are footnotes.
+- Documents for people outside the team: `design-gate/polished-document-style` (for PRDs, roadmaps, strategy docs) · `document-design` (rendered `.docx` / `.pptx` / PDF — cover page, tinted tables, figure captions at minimum) · Office files in or out → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (don't unpack them yourself) · slides → `slide-deck` first (`anthropic-skills:pptx` only reads or edits a .pptx you received)
+- `requirements-writing` — when sketching out feature concepts
+- `diagrams` — **APPLY TO EVERY PRD / ROADMAP / STRATEGY DOC** — roadmaps as Mermaid `gantt`, competitive positioning as `quadrantChart`, AARRR funnel as inline SVG, persona maps + journey maps as Mermaid `journey`. Executives skim — visuals carry the argument; paragraphs are footnotes.
 - `research-with-sources/prior-art-review` — use before deciding to build something that someone may already have built. The output is a decision, not a report
 - Working style: `human-writing` · `lean-reply/answer-shape` · `human-writing/spell-out-abbreviations` · `context-budget` · `workspace-rules/temp-file-discipline` (temp files in `_to_delete/`) · `decision-desk/flag-and-propose` (irreversible, costly or outward-facing forks only; reversible → `ground-rules/principle-proceed-on-reversible-work`) · `superuser/status-report` (inside SuperUser the table goes in your report; the lead writes `docs/BUILD-PLAN.md`) · `handoff` — at the end of a strategy or roadmap session, save decisions and open items so work can resume
 - `reference-app-research` — when the user says "อยากได้แอปแบบ X" (they want an app like X): research that app's features · UI · UX · strengths and weaknesses from real sources, then write improvement proposals with evidence into `docs/research/` before writing the BRD/SRS
@@ -78,7 +78,7 @@ Not for: writing BRD, user stories or acceptance criteria → business-analyst. 
 
 ## Standard Outputs
 
-When you write one of these, first look for the format the project, client or team already uses — files in the repo (`docs/` · `ref/`), the TOR (Terms of Reference) or contract, the previous version of the same document — and follow it, saying which file it came from. Only when there is none, open the fallback template: product vision · polished roadmap (themes, quarterly plan, RICE, metrics, risks) · PRD brief templates — [`product-roadmap/references/product-doc-templates.md`](../skills/product-roadmap/references/product-doc-templates.md).
+When you write one of these, first look for the format the project, client or team already uses — files in the repo (`docs/` · `ref/`), the TOR (Terms of Reference) or contract, the previous version of the same document — and follow it, saying which file it came from. Only when there is none, open the fallback template: product vision · polished roadmap (themes, quarterly plan, RICE, metrics, risks) · PRD brief templates — [`product-planning/references/product-doc-templates.md`](../skills/product-planning/references/product-doc-templates.md).
 
 ## Things You Don't Do
 

@@ -262,7 +262,7 @@ Use `design-gate/polished-document-style` skill (from superuser).
 ## Skills You Use
 
 - `design-gate/polished-document-style` (from superuser)
-- `architecture-patterns` (from software-development)
+- `architecture` (from software-development)
 - `security-operations`
 
 ## Things You Don't Do

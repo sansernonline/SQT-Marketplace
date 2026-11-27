@@ -8,7 +8,7 @@
 - Cutting a spec, plan or architecture to the fewest parts: also open [`references/architecture-and-anti-patterns.md`](references/architecture-and-anti-patterns.md).
 - `human-writing` controls how it is written; this skill controls what the work contains.
 
-Not for: Claude Code's own `/simplify` command · more detail on code (if installed) → `lazy-coding` · `readable-code` in plugin `software-development`.
+Not for: Claude Code's own `/simplify` command · more detail on code (if installed) → `code-craft` in plugin `software-development`.
 
 ## Steps
 1. Climb the ladder and stop at the first step that works: (a) is this really needed? If not, do not do it and say in 1 line what you skipped; (b) is there an existing thing that works (file, template, function, tool, built-in feature)? Use it; (c) do the shortest version that is still complete and correct.

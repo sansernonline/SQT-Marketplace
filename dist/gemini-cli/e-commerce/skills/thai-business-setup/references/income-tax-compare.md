@@ -1,14 +1,14 @@
 # Income tax: individual vs juristic person (moved from SKILL.md section 2)
 
-Part of the skill `thai-business-setup`. `seller-tax-basics/scripts/tax-compare.mjs` uses this set of figures.
+Part of the skill `thai-business-setup`. `thai-tax/scripts/tax-compare.mjs` uses this set of figures.
 
 ## 2 · Income tax: individual vs juristic person
 
 **Individual** (tax year 2025 (B.E. 2568), per the ภ.ง.ด.90 (PND 90, individual income tax return) instructions)
 
-Bracket table with the cumulative tax at the top of each band: `seller-tax-basics` "Income tax brackets".
+Bracket table with the cumulative tax at the top of each band: `thai-tax` "Income tax brackets".
 
-Someone with income other than salary of 120,000 baht or more must also use a second method: assessable income (excluding salary) × 0.5%. They pay whichever method gives more tax. If the second method comes to 5,000 baht or less, they pay by the bracket table in `seller-tax-basics`. The personal allowance is 60,000 baht. For how a seller deducts expenses, use `seller-tax-basics`.
+Someone with income other than salary of 120,000 baht or more must also use a second method: assessable income (excluding salary) × 0.5%. They pay whichever method gives more tax. If the second method comes to 5,000 baht or less, they pay by the bracket table in `thai-tax`. The personal allowance is 60,000 baht. For how a seller deducts expenses, use `thai-tax`.
 
 **Juristic person**
 
@@ -36,7 +36,7 @@ The tax is close for both forms. But the remaining 895,000 baht in the company s
 At a profit of 1,000,000 the individual pays slightly less. At a profit of 3,000,000 the company pays almost 200,000 less. Changing the business form is hard to undo, so look at several scenarios.
 
 1. Ask the user for 3 things: yearly profit in a bad, middle and good case · the probability of each case (they add up to 1) · the extra bookkeeping and audit cost the company would pay, from real quotes · never fill in the probabilities or the bookkeeping cost for the user.
-2. Node is required. Put the data in a file shaped like `seller-tax-basics/scripts/example-company.json`, then run 2 commands.
+2. Node is required. Put the data in a file shaped like `thai-tax/scripts/example-company.json`, then run 2 commands.
 
 ```bash
 node <path>/tax-compare.mjs company.json            # <path>: see Script path below · tax table for both forms per scenario
@@ -44,6 +44,6 @@ node tax-compare.mjs company.json --payoff > payoff.json
 node decide.mjs payoff payoff.json                    # decision-scoring: expected value · worst case · maximum regret
 ```
 
-**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/seller-tax-basics/scripts/tax-compare.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/e-commerce/skills/seller-tax-basics/scripts/tax-compare.mjs` · `decide.mjs` is in the `decision-desk/decision-scoring` skill of plugin `superuser` (if it is not installed, walk the user through the table for both forms and let them choose).
+**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/thai-tax/scripts/tax-compare.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/e-commerce/skills/thai-tax/scripts/tax-compare.mjs` · `decide.mjs` is in the `decision-desk/decision-scoring` skill of plugin `superuser` (if it is not installed, walk the user through the table for both forms and let them choose).
 
 3. Read the result line. Expected value and minimum regret may point different ways. With probabilities 0.4 · 0.4 · 0.2 and a bookkeeping cost of 60,000, the output says "2 เกณฑ์ไม่ตรงกัน" (the 2 criteria disagree): expected value picks the individual, 172,400 vs 183,000. Minimum regret picks the company, 62,000 vs 182,000. This means the answer depends on the probabilities the user gave. Changing the form is hard to undo, so explain both criteria and let the user and the accountant decide. None of this includes the second layer of tax when money leaves the company.
