@@ -33,7 +33,7 @@ The owner rejected agent-drawn SVG icons (2026-10-26) and called past logos "AI-
 8. Shift the brand hue until the eye can tell it from every reference (`design-gate/design-references` step 6).
 9. The Thai lockup uses a Thai face whose personality matches the mark (a looped-head mark pairs with a looped Thai face).
 10. Large wordmarks can be tracked tighter than text, but check descenders and dots (y, j) for collisions.
-11. Make two versions of the mark: a **rich** one with light, shadow and dimensional shape for the hero use (app icon, sheet, signage), and a **flat** one-colour version for 16–32 px and print. The owner rejected a flat mark as stiff on 2026-11-19 ("ขอปรับให้มีลูกเล่นมากกว่านี้หน่อย แสงเงา รูปร่าง"). Depth follows `design-gate/design-references` `references/depth-and-light.md`: one light source, at most 3 layers.
+11. Make two versions of the mark: a **rich** one with light, shadow and dimensional shape for the hero use (app icon, sheet, signage), and a **flat** one-colour version for 16–32 px and print. The owner rejected a flat mark as stiff on 2026-11-19 ("ขอปรับให้มีลูกเล่นมากกว่านี้หน่อย แสงเงา รูปร่าง"). Depth follows `design-gate/design-references` `references/depth-and-light.md`: one light source, at most 3 layers. Since 2026-11-27 every direction also gets a full-colour **flat design** version, shown beside the rich one, and the owner picks the style ("อยากให้มีการใช้ style flat design ด้วย"). Its rules are in [`flat-design.md`](flat-design.md).
 12. Avoid the generic AI marks: letter in a rounded square, gradient blob, swoosh, circuit, infinity (`design-gate/no-ai-look` section 2, Logos).
 
 ## Stiff or AI-looking in the first drafts (2026-11-19) and the fix
@@ -49,6 +49,7 @@ The owner rejected agent-drawn SVG icons (2026-10-26) and called past logos "AI-
 - [ ] Mark built from a licensed font or simple geometry, with its build script
 - [ ] 16 px and 32 px tests on light, brand colour and dark
 - [ ] Rich version (light, shadow, shape) and one-colour flat version both work
+- [ ] Flat design version per `flat-design.md` (3–4 solid tones, crisp planes, same silhouette) on the board beside the rich one
 - [ ] Thai and Latin lockups
 - [ ] Mark means something from the product's world
 - [ ] Sheet shows a real use, not an empty frame

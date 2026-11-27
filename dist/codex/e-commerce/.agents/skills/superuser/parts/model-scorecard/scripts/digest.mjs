@@ -16,7 +16,7 @@ Prompt text is redacted with the superuser hook patterns and cut short.`;
 const SPEC = { log: "v", progress: "v", out: "v", stdout: "flag", today: "v", days: "v", keep: "v", help: "flag" };
 
 // "รอ" must be followed by a space or end so words like รอบ do not match
-export const BLOCKED = /\bblocked\b|\bwaiting\b|รอผู้ใช้|รออนุมัติ|รอคำตอบ|รอตัดสิน|\(รอยืนยัน\)|(?<![ก-๙])รอ(?=\s|$)|ติดที่|ติดอยู่/i;
+export const BLOCKED = /\bblocked\b|\bwaiting\b|รอผู้ใช้|รออนุมัติ|รอคำตอบ|รอตัดสิน|\(รอยืนยัน|(?<![ก-๙])รอ(?=\s|$)|ติดที่|ติดอยู่/i;
 
 async function jsonl(file) {
   const out = [];
