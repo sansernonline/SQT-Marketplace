@@ -1,6 +1,9 @@
 
 # design-references — search real work before designing, then take colors from the chosen work
 
+> Part of the 12-step method in [`../design-method/guide.md`](../design-method/guide.md) (steps 5–6). Read that first for any medium.
+
+
 > **One rule:** every design job starts by reading the content and writing its meaning, mood, theme and colour reason (gate item 0), then taking those words and searching live on sites strong in that type of work, then taking style and colors from the closest work as the reference. Do not design from memory or from a stored library, because trends change fast. This skill keeps only a list of sites, not sample work.
 
 **First answer to any design request:** (0) the 6-field `เนื้อหา:` brief from gate item 0 (1) search queries built from it (2) links to real works you opened this round (3) the board and pick question from gate item 3 if the owner is present, otherwise colours or shapes, each colour naming its source. Hex codes and `<svg>` come after step 2, never before. "Just make it, don't ask" skips the questions, not the search. No web tool in this session → give the queries and site links, and say the colours will come from the work the owner picks.
