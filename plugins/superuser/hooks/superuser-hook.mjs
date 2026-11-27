@@ -11,10 +11,11 @@ import { homedir, tmpdir, userInfo } from "node:os";
 import { fileURLToPath } from "node:url";
 import { applyQuota, accountName } from "../skills/crew-patterns/parts/parallel-split-and-merge/scripts/quota.mjs";
 import { readJson, moduleOn, modOn, sessionOnce, setFlags, takeFlags } from "./lib/util.mjs";
-import { isBashGuard, preRules, promptRules, postRules, stopRules, foldTestState } from "./lib/rules.mjs";
+import { isBashGuard, preRules, promptRules, postRules, stopRules, foldTestState, moduleOf, kindsOf } from "./lib/rules.mjs";
 import { scoredRoutes, fixHomonyms, homonymWarn, installedSkills, suggestSkill, toolRoute, markSkillOpened, replayRoutes, cacheDiff, qualify } from "./lib/router.mjs";
 import { parseLoopRequest, loopCancelRequested, loopStart, loopCancel, loopStartNotice, loopStopGate } from "./lib/loop.mjs";
 import { extraGates } from "./lib/selftest.mjs";
+import { permitDecision, permitOutput, permitCases } from "./lib/permit.mjs";
 // pickup.mjs หายหรือพัง → ข้ามการ์ดร่างและการนับข้อปิด ด่านอื่นยังทำงาน (reviewer 2026-11-25)
 let pickup = {};
 try { pickup = await import("../skills/handoff/scripts/pickup.mjs"); } catch { /* ไม่มีไฟล์ */ }
@@ -1498,6 +1499,9 @@ function eventExtras(input, event, teamDir, root) {
   return parts.filter(Boolean).join("\n");
 }
 
+// ข้อด่านคำสั่งของ guard-rules.json ที่อนุญาตให้เองไม่ได้ (lib/permit.mjs)
+const permitRules = () => (readJson(join(HERE, "guard-rules.json"), { rules: [] }).rules ?? []).filter((r) => moduleOf(r) === "guard" && kindsOf(r).includes("bash") && r.decision !== "warn");
+
 function main() {
   let raw = "";
   try { raw = readFileSync(0, "utf8"); } catch { return; }
@@ -1507,6 +1511,20 @@ function main() {
   if (!scopeOk(input.cwd, configDirOf())) return;
   { const r0 = findProjectRoot(input.cwd ?? process.cwd()); if (r0 && !modOn(teamDirOf(r0), "hook")) return; }
   if (event === "PreToolUse") { preWriteGate(input); return; }
+  // อนุญาตให้เอง (lib/permit.mjs): ตอบเฉพาะ allow ของรายการปลอดภัย · ไม่ตอบ = Claude Code ถามผู้ใช้ตามปกติ · ปิดด้วย modules.auto_allow=false หรือ SUPERUSER_AUTO_ALLOW=0
+  if (event === "PermissionRequest") {
+    // ใช้เฉพาะข้อด่านคำสั่ง (module guard · ชนิด bash) ทุก decision รวม block และ ask · ข้อ post-hint และ rules อื่นไม่เกี่ยว
+    if (process.env.SUPERUSER_AUTO_ALLOW === "0") return;
+    const root = findProjectRoot(input.cwd ?? process.cwd()), teamDir = root && teamDirOf(root);
+    if (!modOn(teamDir, "auto_allow")) return;
+    try {
+      const rules = permitRules();
+      const allow = [...((teamDir && readJson(join(teamDir, "guard-allow.json"), {}).allow) || []), ...(teamDir ? POLICY_ALLOWS[gitPolicyOf(teamDir)] ?? [] : [])];
+      const d = permitDecision(input, { root: root ?? input.cwd, rules, allow });
+      if (d) process.stdout.write(permitOutput(d));
+    } catch { /* พังต้องไม่อนุญาตเอง: ไม่พิมพ์อะไร = ถามผู้ใช้ */ }
+    return;
+  }
   if (event === "Stop") {
     const root = findProjectRoot(input.cwd ?? process.cwd());
     const teamDir = root && teamDirOf(root);
@@ -2328,6 +2346,12 @@ ${rows}
   }]);
   const mdTok = summaryMarkdown({ "2026-10-21": { ...day, tokens: { main: { input: 1200, output: 30, cacheRead: 5000, cacheCreate: 40 }, "software-development:developer": { input: 10, output: 20, cacheRead: 0, cacheCreate: 0 } } } }, new Date("2026-10-21T04:00:00Z"));
   gates.push(["สรุป log: คอลัมน์ token ราย agent และยอดรวมวัน", [], true, () => mdTok.includes("| 2 นาที | 2026-10-21 10:04 | 10 | 20 | 0 | 0 |") && mdTok.includes("| 5 | 1 | 1,210 | 50 | 5,000 | 40 |")]);
+  for (const [name, pass] of permitCases()) gates.push([`อนุญาตให้เอง: ${name}`, [], true, () => pass]);
+  gates.push(["อนุญาตให้เอง: guard-rules.json จริง · git push และ rm -rf ไม่อนุญาต · npm test อนุญาต", [], true, () => {
+    const rules = permitRules(), R = resolve(tmpdir(), "permit-proj");
+    const d = (command) => permitDecision({ tool_name: "Bash", tool_input: { command }, cwd: R }, { root: R, rules });
+    return d("git push origin main") === null && d("rm -rf src") === null && d("npm publish") === null && d("npm test")?.behavior === "allow";
+  }]);
   try { gates.push(...extraGates({ HERE, isBashGuard, foldTranscript, freshGate, routeSkills, MULTISTEP_REMINDER })); } catch (e) { gates.push([`P3 self-test เริ่มไม่ได้: ${e.message}`, [], true, () => false]); }
   for (const [label, lines, expect, fn = (l) => reviewGate(fold(l))] of gates) {
     const hit = Boolean(fn(lines)) === expect;

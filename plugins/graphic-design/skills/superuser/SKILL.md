@@ -30,6 +30,7 @@ For medium tasks and up, pick **1** playbook and read the whole file before star
 
 | playbook | use when |
 |---|---|
+| [`design`](references/playbook-design.md) | One logo · poster · banner · cover · icon · key visual, new or redesigned |
 | [`brand-setup`](references/playbook-brand-setup.md) | Starting a new brand · rebrand · every post looks like a different company |
 | [`campaign`](references/playbook-campaign.md) | Product launch · price promotion · event · seasonal promotion that needs several sizes |
 | [`image-series`](references/playbook-image-series.md) | Images for many products · a week of posts · storyboard · a recurring character · existing images need edits |

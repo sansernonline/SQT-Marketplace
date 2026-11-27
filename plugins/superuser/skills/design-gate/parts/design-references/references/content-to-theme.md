@@ -12,7 +12,8 @@ Read the real content the piece will carry or present, in this order, and stop w
 2. The project's own words: `docs/README.md` · `CONTEXT.md` · `DESIGN.md` · the copy that will sit on the piece
 3. The product or service itself: real screenshots · product photos · the shop or app
 4. **What the project means**, not only this piece: why it exists, what its name means, what people should remember it for. Look in `DESIGN.md` (if it already has a `โปรเจกต์:` line, copy it), the README's opening, an about page or pitch. Write it once per project in `DESIGN.md`; later pieces reuse it.
-5. Only a name and nothing else → fill the brief from the name and the request, mark the guessed fields `(เดา)` (guessed), carry on without stopping to ask, and put the guesses in the end-of-job question
+5. **Facts vs readings:** a fact you cannot find (a name, number, date, price, licence) is never guessed: mark it `(รอยืนยัน · ผู้ใช้: <what to give>)`. A reading (mood, theme, what the name means) may be guessed: mark it `(เดา)`. Both go in the end-of-job question.
+6. Only a name and nothing else → fill the brief from the name and the request, mark the guessed fields `(เดา)` (guessed), carry on without stopping to ask, and put the guesses in the end-of-job question
 
 ## 2 · The brief (7 fields)
 
