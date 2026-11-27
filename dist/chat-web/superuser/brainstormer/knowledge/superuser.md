@@ -513,7 +513,18 @@ End a sentence with 1 of these 4 labels. Use the same set in every file.
 
 A claim repeated across many documents is not yet confirmed (copies citing copies). For an important claim, trace it back to the first source (original · result you ran · official announcement) and label it by that source.
 
-`(รอยืนยัน)` (awaiting confirmation) is not an evidence label, but it can be appended in 2 cases: user data you do not know (budget · name · date) · a public fact where sources number fewer than 3 or conflict (use the value from the official source, label it `จากแหล่ง`, lower the confidence, then append `(รอยืนยัน)`).
+`(รอยืนยัน …)` (awaiting confirmation) is not an evidence label. It marks an open item, and it **always names who it waits on and what they must do**. A bare `(รอยืนยัน)` is not allowed in new text. The owner was confused on 2026-11-27 about whether an item waited on them or on the agent: "รอยืนยัน นี่รอผมเหรอ … แยกได้ไหม ว่ารอใคร".
+
+| Write | Waits on | When | Example |
+|---|---|---|---|
+| `(รอยืนยัน · ผู้ใช้: <ทำอะไร>)` | the user, and only the user can answer | their own data (budget · name · date · account) · a choice or approval · a file only they have | `(รอยืนยัน · ผู้ใช้: บอกงบต่อเดือน)` |
+| `(รอยืนยัน · agent: <จะตรวจอะไร ที่ไหน>)` | the agent, as its own next step; the user does nothing | sources fewer than 3 or conflicting · an original not yet read · a render or test not yet re-run | `(รอยืนยัน · agent: อ่านต้นฉบับ d.school)` |
+| `(รอยืนยัน · ภายนอก: <รอใคร เรื่องอะไร>)` | a third party; neither side can settle it now | a seller's quote · an agency's reply · a law not yet published | `(รอยืนยัน · ภายนอก: ใบเสนอราคาจาก PEAK)` |
+
+Rules:
+- For a public fact with fewer than 3 sources, or sources that conflict: use the value from the official source, label it `จากแหล่ง`, lower the confidence, and append `(รอยืนยัน · agent: …)`. Use `ผู้ใช้` instead only when the user is the one who knows.
+- Every answer that holds a `ผู้ใช้` item ends with a section **ต้องให้คุณทำ**. Write one line per item, starting with a verb and saying where or how ("ตอบว่าเลือกแบบไหน" · "พิมพ์ `! gh auth login`" · "copy ไฟล์ X ไปไว้ที่ Y"). `agent` items go under **ยังไม่รู้** or **ค้าง** with the agent's next step. They never go under **ต้องให้คุณทำ**.
+- Old text that still has a bare `(รอยืนยัน)` keeps it. Name the waiter when you next edit that line.
 
 ## Full record — claims that decide something important
 

@@ -28,7 +28,7 @@ Not for: screens and web pages → `software-development:ui-craft` · icons → 
    | Word/PDF cover and inner pages | [`references/document-cover.md`](references/document-cover.md) | `software-development:branded-document-design` |
    | Slide deck · company profile | [`references/slides.md`](references/slides.md) | `software-development:presentation-design` · `style-consistency` |
 
-2. **Read the project before searching.** Write 2 lines: what the project is (industry · audience · what the piece must make people do) and which 1–2 style families fit. Look the industry up first, it gives looks and cautions:
+2. **Read the project before searching.** For a logo, icon or key visual, first fill the feeling list and idea map in [`references/meaning-first.md`](references/meaning-first.md): 2–3 feelings the customer must get, one meaning per mark, objects from the work environment, one locked style per direction (owner 2026-11-27). Write 2 lines: what the project is (industry · audience · what the piece must make people do) and which 1–2 style families fit. Look the industry up first, it gives looks and cautions:
    ```bash
    python <software-development>/skills/design-direction-lookup/scripts/design_search.py "<คำของโปรเจกต์>" --domain industry -n 1
    ```
@@ -40,7 +40,7 @@ Not for: screens and web pages → `software-development:ui-craft` · icons → 
 
 5. **Blend 2–3 works per direction** with the recipe sheet in [`references/blend.md`](references/blend.md) section 2: one work gives the structure, one gives the signature device or hero treatment, one gives the colour and light mood. Change what makes it ours (hue shift, our content, our type). 3 directions must differ in structure, not only colour.
 
-6. **Build at real size, polish, and look at it.** Apply the polish pass in [`references/polish.md`](references/polish.md) (depth, overlap, light, shape) before the first critic. Render each direction to PNG, open it, then run the type file's check list and the stiffness check in `design-gate/no-ai-look` (plugin `superuser`) `references/stiffness.md`. Fix and render again until it passes. Then have a fresh `design-critic` give the wow score in [`references/wow-score.md`](references/wow-score.md); send only at 7/10 or more with no 0, else fix the lowest criterion and score again (at most 2 rounds).
+6. **Build at real size, polish, and look at it.** Apply the polish pass in [`references/polish.md`](references/polish.md) (depth, overlap, light, shape) before the first critic. For a logo or icon, also build the **flat design** version of every direction per [`references/flat-design.md`](references/flat-design.md) and show both styles side by side (owner 2026-11-27). Render each direction to PNG, open it, then run the type file's check list and the stiffness check in `design-gate/no-ai-look` (plugin `superuser`) `references/stiffness.md`. Fix and render again until it passes. Then have a fresh `design-critic` give the wow score in [`references/wow-score.md`](references/wow-score.md); send only at 7/10 or more with no 0, else fix the lowest criterion and score again (at most 2 rounds).
 
 7. **Send the 3 directions for the owner to pick** (board page or artifact with the PNGs, the recipe line under each, and the reference links). The owner adjusts from there; record the pick and their words per `design-gate/design-references` "Remember the owner's taste".
 
@@ -51,6 +51,8 @@ Not for: screens and web pages → `software-development:ui-craft` · icons → 
 - Stiffness check passed; the `ด่านก่อนลงมือ:` line is complete.
 
 ## References
+- [`references/meaning-first.md`](references/meaning-first.md) — open before searching for a logo, icon or key visual: feelings → idea map from the work environment → one style per direction → what to search
+- [`references/flat-design.md`](references/flat-design.md) — open for every logo or icon, and any flat direction: the full-colour flat style built beside the depth one
 - [`references/polish.md`](references/polish.md) — open while building: the depth, overlap, light and shape pass that makes round 1 look finished
 - [`references/wow-score.md`](references/wow-score.md) — open before sending: the 5-criterion wow score and the send rule
 - [`references/blend.md`](references/blend.md) — popularity numbers per site and the blend recipe sheet
@@ -191,6 +193,43 @@ Building the real .docx (tokens, `anchor_picture()`, tables, the cover vote) liv
 - [ ] Each direction says how it is built in real Word (background PNG anchored, text as Word text)
 
 
+## reference: flat-design.md
+
+# Flat design · design-by-type
+
+Open when making a logo or icon (every time), or when a poster, banner, cover or slide gets a flat direction. On 2026-11-27, after the CodeRuen depth round, the owner asked: "อยากให้มีการใช้ style flat design ด้วย". Every logo direction now ships in two styles side by side: **depth** (light, shadow, gradient, per `polish.md`) and **flat design**. The owner picks the style along with the direction.
+
+Flat design is not the one-colour version. The one-colour version (logo rule 11) is for print and 16 px. Flat design is a full-colour style of its own, with control instead of light.
+
+## What makes it flat design
+
+- **3–4 solid tones from the brand**: main, dark, light, accent. No gradient, blur, glow, grain, gloss or drop shadow.
+- **Depth only from crisp planes**:
+  - a two-tone split, where the far half or side is the dark tone at about 20% over the main;
+  - a hard offset copy in a darker or lighter tone (2–6 % of the mark, no blur);
+  - a cut-out gutter where two parts cross, so the overlap reads as deliberate.
+  These come from the depth version's own layers: drop the blur and gradient, keep the plane.
+- **One accent per mark**, the idea's key part (CodeRuen: the mint door, slash or braces). Never two accents.
+- **Geometry is the craft.** With no light to hide behind: one stroke weight, one corner radius, optically centred, curves that join without kinks. Check at 200 % zoom.
+
+## How to build it
+
+1. Start from the same flat master that the depth version uses (`design-gate/design-references` `references/ref-to-design.md`, rule 39), so both styles share one silhouette.
+2. Write the flat version as its own function next to the depth one. Do not strip filters off the depth render. (CodeRuen `crmarks.py`: `a_flatd` · `b_flatd` · `c_flatd`.)
+3. Put both styles on the board: one row per style for each direction, with the same sheet layout and mockups, labelled `มีมิติ` and `flat design`.
+4. Below 20 px, both styles use one simplified silhouette with the accent kept. Inner detail like `</>` or a cursor turns to blobs at 16 px (CodeRuen critic, 2026-11-27).
+
+## Scoring
+
+Score with `wow-score.md`. Criterion 4 measures how well the flatness is controlled: 2 = planes and offsets agree with one implied light and every edge is crisp, 1 = flat but planes are random, 0 = it looks unfinished. A flat version can beat the depth one. In the CodeRuen round the critic placed the Thai-roof flat version at 7–8, above its depth version.
+
+## Do not
+
+- Do not use long-shadow (a 45° shadow running off the mark). It reads as a 2013 template.
+- Do not add a gradient "just a little". That makes it a weak depth version, not flat design.
+- Do not use a different silhouette from the depth version. Then the board shows 6 marks, not 3 directions in 2 styles.
+
+
 ## reference: logo.md
 
 # Logo · wordmark · brand mark
@@ -228,7 +267,7 @@ The owner rejected agent-drawn SVG icons (2026-10-26) and called past logos "AI-
 8. Shift the brand hue until the eye can tell it from every reference (`design-gate/design-references` step 6).
 9. The Thai lockup uses a Thai face whose personality matches the mark (a looped-head mark pairs with a looped Thai face).
 10. Large wordmarks can be tracked tighter than text, but check descenders and dots (y, j) for collisions.
-11. Make two versions of the mark: a **rich** one with light, shadow and dimensional shape for the hero use (app icon, sheet, signage), and a **flat** one-colour version for 16–32 px and print. The owner rejected a flat mark as stiff on 2026-11-19 ("ขอปรับให้มีลูกเล่นมากกว่านี้หน่อย แสงเงา รูปร่าง"). Depth follows `design-gate/design-references` `references/depth-and-light.md`: one light source, at most 3 layers.
+11. Make two versions of the mark: a **rich** one with light, shadow and dimensional shape for the hero use (app icon, sheet, signage), and a **flat** one-colour version for 16–32 px and print. The owner rejected a flat mark as stiff on 2026-11-19 ("ขอปรับให้มีลูกเล่นมากกว่านี้หน่อย แสงเงา รูปร่าง"). Depth follows `design-gate/design-references` `references/depth-and-light.md`: one light source, at most 3 layers. Since 2026-11-27 every direction also gets a full-colour **flat design** version, shown beside the rich one, and the owner picks the style ("อยากให้มีการใช้ style flat design ด้วย"). Its rules are in [`flat-design.md`](flat-design.md).
 12. Avoid the generic AI marks: letter in a rounded square, gradient blob, swoosh, circuit, infinity (`design-gate/no-ai-look` section 2, Logos).
 
 ## Stiff or AI-looking in the first drafts (2026-11-19) and the fix
@@ -244,9 +283,64 @@ The owner rejected agent-drawn SVG icons (2026-10-26) and called past logos "AI-
 - [ ] Mark built from a licensed font or simple geometry, with its build script
 - [ ] 16 px and 32 px tests on light, brand colour and dark
 - [ ] Rich version (light, shadow, shape) and one-colour flat version both work
+- [ ] Flat design version per `flat-design.md` (3–4 solid tones, crisp planes, same silhouette) on the board beside the rich one
 - [ ] Thai and Latin lockups
 - [ ] Mark means something from the product's world
 - [ ] Sheet shows a real use, not an empty frame
+
+
+## reference: meaning-first.md
+
+# Meaning first · design-by-type
+
+Open before searching references or textures for a logo, icon or key visual. It tells you **what** to look for, so the search and the texture pick fit the job instead of the brand name. The owner set this method on 2026-11-27 after the CodeRuen rounds. Their words:
+- "ที่จริงไม่จำเป็นต้องมีคำว่าเรือนก็ได้นะ คือมีความหมายใดความหมายหนึ่ง ก็เพียงพอแล้ว"
+- "เรารู้ว่างานของเราคือเขียนโปรแกรม เราอาจจะไปหาสิ่งแวดล้อมมา อาจจะไปหาเครื่องคอม เม้าส์ หรืออะไรมาตั้งต้นได้นะ"
+
+## 1 · Write the 2–3 feelings the customer must get
+
+Write short words, not a slogan: what the customer should feel when they see the mark. For CodeRuen these are `เร็ว · น่าเชื่อถือ`. If the brief does not say, read the business line (CodeRuen ships every 2 weeks → fast; builds back-office systems → trustworthy) and write `(รอยืนยัน)` next to the words you inferred.
+
+## 2 · One meaning per mark is enough
+
+Each direction carries **one** feeling through **one** object. It does not have to show the brand name's literal object. CodeRuen does not need a house. A mark that says "fast" clearly beats one that says "house + code + fast" weakly. Two objects in one mark are allowed only when they become one shape (`design-gate/design-references` guide, item 4).
+
+## 3 · Fill the idea map before any search
+
+| Where ideas come from | Ask | CodeRuen example |
+|---|---|---|
+| **The work environment** | What tools and things sit on the desk while the work is done? | computer · mouse pointer · keyboard key (Enter) · terminal window · cursor block · cable · server |
+| **The result for the customer** | What does the customer get at the end? | a passing tick · a delivered box · a system that runs |
+| **The action** | What verb is the work? | click · press Enter · ship · test |
+| **The name** | Is there an object in the name? (optional) | เรือน → house |
+| **Local culture** | Is there a local shape people know? (optional) | เรือนไทย · กาแล |
+
+Then pair each feeling with 2–3 objects that carry it:
+- fast → mouse pointer with speed bars · the Enter key · a cursor running ahead;
+- trustworthy → a passing tick in a terminal · a laptop showing a tick · a shield.
+
+## 4 · Pick a different style for each direction
+
+When the owner asks for N directions in different styles, lock the style of each one before drawing, all different:
+
+| Style | Looks like | Fits | Texture or reference to search |
+|---|---|---|---|
+| Flat geometric | solid shapes, 2–3 tones, a two-tone split | apps, tech, small sizes | flat icon systems, brand marks on Behance |
+| Soft 3D (clay, keycap) | rounded volume, soft light, gentle shadow | friendly tech, consumer | clay renders, keycaps, app icons |
+| Monoline | one stroke weight, rounded ends, no fill | tools, dev tools, clean trust | line icon sets, dev tool logos |
+| Logotype (wordmark) | custom lettering carries it, the symbol is small or absent | names that are short and sayable | type foundry specimens, wordmark case studies |
+| Isometric faceted | 30° view, solid tone per face | technical, systems, products | isometric illustrations, the owner's Color Code logo |
+| Depth (rich) | gradient, soft shadow, grain (`polish.md`) | hero use, app icon | glossy icon sets, the OnNing wallet the owner gave 10 |
+| Flat design | full-colour flat, crisp planes (`flat-design.md`) | brand systems, print | flat brand identities |
+| Emblem or badge | a closed shape with name and mark inside | trades, local, trust | seals, patches |
+
+## 5 · Then search references and textures for each object + style pair
+
+Search terms combine the object, the style and the industry: `keycap logo soft 3D`, `terminal icon monoline`, `isometric laptop icon`. Pick textures only for styles that use them (soft 3D, depth, isometric materials). Flat, monoline and logotype need none. Record each reference with its link and date, as in `blend.md`.
+
+## 6 · Show the map with the board
+
+Under each direction write one line: **feeling · object · style** (CodeRuen round 9: `เร็ว · ลูกศรเมาส์ · flat geometric`). The owner then sees why each one exists, and can say "keep the feeling, change the style" in one sentence.
 
 
 ## reference: polish.md
@@ -411,7 +505,7 @@ The eye gate in `design-gate/no-ai-look` (n/9) only says a piece does not look A
 | 4 | **Depth and light** | flat, no light direction | some shadow or gradient, mixed or timid | 3 layers, one light source, materials you can almost touch, inside `design-gate/design-references` `references/depth-and-light.md` limits | owner's theme `มีมิติ` · `แสงเงา` |
 | 5 | **Craft** at 100–200 % zoom | broken Thai marks, soft images, clipped or colliding text | clean but some loose edges, spacing or kerning | every edge, kern, Thai mark and image crisp | D&AD: "brilliantly executed" |
 
-A deliberately flat style (Swiss, flat brand) scores criterion 4 on how well the flatness is controlled, and says so.
+A deliberately flat style (Swiss, flat brand) scores criterion 4 on how well the flatness is controlled, and says so. The 0/1/2 text for that case is in `flat-design.md`.
 
 ## Send rule
 

@@ -39,7 +39,7 @@ The hook announces `skill ที่ต้องเปิด` (skills to open) �
 - **Once told, finish the whole set in one go**, never ask "continue?" · several prompts run back to back, one report at the end
 - **If you must decide midway, decide yourself**: take the lowest-impact path, then summarize under **ตัดสินใจเอง** at the end of the answer · for a decision that changes the work, **research first, then a 3-agent vote**, and list it with its `D<n>` so the user can change it later, no closing question (`decision-desk/decision-log` · `superuser` section 6)
 - **The owner's defaults live in `~/.claude/superuser-style.md`**, use them without asking (person names for empty roles · free first, then cheapest)
-- **Unknown facts with no default (numbers, names, dates, budget) are not decisions, never guess** · write `(รอยืนยัน)` and continue
+- **Unknown facts with no default (numbers, names, dates, budget) are not decisions, never guess** · write `(รอยืนยัน · ผู้ใช้: <what to give>)` and continue · always name who an open item waits on: `ผู้ใช้` (only the user can answer) · `agent` (my own next check) · `ภายนอก` (a third party) · end the answer with **ต้องให้คุณทำ**, one line per user item saying exactly what to do
 - You may stop early only for: deleting or overwriting user files not asked for · push or commit outside the conditions in the files-and-git section · sending off the machine · truly stuck with no way forward, after finishing the other parts and saying what is stuck
 - **Large work follows the `superuser` playbook** · medium work (2–4 items) do yourself as the hook says · if `docs/BUILD-PLAN.md` exists, also log in the `decision-desk/decision-log` table
 

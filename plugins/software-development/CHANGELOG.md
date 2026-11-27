@@ -1,5 +1,9 @@
 # Changelog — software-development
 
+## 3.10.2 — 2026-11-27
+
+- สำเนา `superuser/references/evidence.md`: ป้าย `(รอยืนยัน)` ต้องบอกว่ารอใคร (ผู้ใช้ · agent · ภายนอก) และคำตอบที่มีงานของผู้ใช้จบด้วย **ต้องให้คุณทำ** (ตาม superuser 4.1.0)
+
 ## 3.10.1 — 2026-11-26
 
 - ต้องใช้ superuser `^4.0` แทน `^3.0` · รุ่นก่อนทำให้ `claude plugin update superuser` ข้าม 4.0.0

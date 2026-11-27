@@ -11,6 +11,7 @@ description: Use when replying in chat, to pick prose, table or diagram, short
 - answer-shape: whatever structure the content has, the answer uses that shape. Comparison → table · connections → figure · one thing → sentences.
 - answer-shape: a table has content in every cell, 3–5 columns, at most 8 rows in chat. A 1–2 row table, or a figure that draws what one sentence can say, is the wrong shape.
 - answer-shape: if you cannot continue, list only what is blocking and what you need from the user. 1 line per item, at most 4 items.
+- open items: every open item names who it waits on, using `(รอยืนยัน · ผู้ใช้: …)` · `(รอยืนยัน · agent: …)` · `(รอยืนยัน · ภายนอก: …)` (superuser `references/evidence.md`). When the user has anything to do, end with **ต้องให้คุณทำ**: one line per item, starting with a verb, saying exactly what, where and how. Items the agent will do itself never go there. Owner 2026-11-27: "ระบุด้วยว่าอยากให้ user ทำอะไร บอกให้ชัดเจน".
 - short-answers: ตอบคำถามก่อน แล้วค่อยอธิบาย และอธิบายเท่าที่เปลี่ยนการตัดสินใจของเขา. The first line is the answer, not a preamble and not the question repeated.
 - short-answers: still say what went wrong, what you did not test, and where you disagree. Short does not mean cutting the truth; cut padding, not content the reader needs.
 - caveman: terse mode is for chat only (replies · review notes · standup pings). Never use it in documents, specs, reports, READMEs, commit messages, PR descriptions, code, code comments, or anything a client or non-team reader will see.

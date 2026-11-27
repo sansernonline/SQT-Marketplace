@@ -17,7 +17,7 @@ export function buildCard({ date, branch, files, lastCommit }) {
   if (files == null) part = "ไม่ใช่ git";
   else if (!files.length) part = "ไม่มีไฟล์ที่เปลี่ยน";
   else part = files.slice(0, MAX_FILES).join(", ") + (files.length > MAX_FILES ? `, +${files.length - MAX_FILES} more` : "");
-  return `- **${date} ${branch ?? "-"} (กำลังทำ):** ${part} · last commit: ${lastCommit || "-"} · ต่อไป: (รอยืนยัน)`;
+  return `- **${date} ${branch ?? "-"} (กำลังทำ):** ${part} · last commit: ${lastCommit || "-"} · ต่อไป: (รอยืนยัน · agent: เขียนงานถัดไป)`;
 }
 
 const git = (root, args) => execFileSync("git", args, { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });

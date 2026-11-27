@@ -28,7 +28,7 @@ test("buildCard: รูปแบบการ์ด + ตัดไฟล์เก
   assert.match(c, /^- \*\*2026-11-25 main \(กำลังทำ\):\*\* f0\.js, /);
   assert.ok(c.includes("f14.js, +2 more"));
   assert.ok(!c.includes("f15.js"));
-  assert.ok(c.endsWith(" · last commit: fix x · ต่อไป: (รอยืนยัน)"));
+  assert.ok(c.endsWith(" · last commit: fix x · ต่อไป: (รอยืนยัน · agent: เขียนงานถัดไป)"));
 });
 
 test("buildCard/draftCard: ไม่ใช่ git → ไม่ใช่ git", () => {
