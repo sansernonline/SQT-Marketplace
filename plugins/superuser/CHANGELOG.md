@@ -1,5 +1,9 @@
 # Changelog — superuser
 
+## 4.6.0 — 2026-11-28
+
+- หลักคิดใหม่ `work-principles/references/skill-authoring.md`: เขียน skill · agent · playbook 6 ข้อ (description บอกว่าใช้เมื่อไร · แยกจากตัวข้างเคียง · ไฟล์หลักสั้น · เห็นพังก่อนเห็นผ่าน · ความเข้มตามความเปราะ · งานตรวจด้วยเครื่องเป็นสคริปต์) 5 แหล่ง เปิดอ่าน 2026-11-28 · ตารางชนิดงานใน `work-principles` และ `skill-authoring` ชี้ไฟล์นี้
+
 ## 4.5.1 — 2026-11-28
 
 - `work-principles`: ตารางชนิดงานของ superuser เอง (เอกสาร · ค้นข้อมูล · ตรวจงาน · ทำงานเป็นทีม · ตอบแชต · เก็บบทเรียน · เขียน skill · prompt หลายขั้น) วาง skill ครบทุกตัว · personal-life เพิ่มชนิดงาน teaching · playbook `document` และ `research` มีบรรทัด Main principles ขั้นแรกเปิดหลักคิด และขั้นตรวจเทียบกับหลักคิด

@@ -1,164 +1,79 @@
 {
  "plugin": "software-development",
- "version": "3.8.0",
+ "version": "4.1.0",
  "description": "Simulates a complete software development company — 38 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 95 skills and 29 slash commands for the whole SDLC.",
  "cross": [],
  "skills": [
+  "ai-engineering",
   "architecture",
-  "api-design",
-  "test-automation",
-  "architecture",
-  "web-service-essentials",
-  "web-service-essentials",
-  "infra-and-deploy",
   "async-messaging",
-  "code-craft",
-  "document-design",
-  "qa-docs",
-  "qa-docs",
   "cicd-and-release",
   "code-craft",
-  "code-craft",
-  "git-and-review",
-  "git-and-review",
-  "web-service-essentials",
   "data-analysis",
   "data-import-export",
   "database-design",
   "design-system",
-  "design-system",
+  "dev-principles",
   "developer-experience",
   "diagrams",
-  "infra-and-deploy",
-  "web-app-design",
-  "test-automation",
+  "document-design",
   "domain-systems",
   "errors-and-logs",
-  "web-service-essentials",
-  "domain-systems",
-  "requirements-writing",
   "game-development",
+  "git-and-review",
   "graphic-design",
-  "domain-systems",
-  "slide-deck",
   "i18n-and-locale",
   "incidents-and-monitoring",
   "infra-and-deploy",
-  "domain-systems",
-  "domain-systems",
-  "cicd-and-release",
-  "async-messaging",
-  "infra-and-deploy",
-  "code-craft",
   "legacy-spec-recovery",
-  "domain-systems",
-  "ai-engineering",
-  "test-automation",
-  "errors-and-logs",
-  "document-design",
-  "diagrams",
-  "ai-engineering",
   "mobile-app-design",
   "mobile-engineering",
-  "async-messaging",
-  "incidents-and-monitoring",
   "pdpa-compliance",
-  "incidents-and-monitoring",
-  "git-and-review",
-  "slide-deck",
-  "code-craft",
-  "code-craft",
-  "code-craft",
-  "security-gate",
   "product-naming",
+  "product-planning",
   "project-bootstrap",
   "project-docs",
-  "async-messaging",
-  "code-craft",
+  "qa-docs",
   "reference-app-research",
-  "infra-and-deploy",
+  "requirements-writing",
   "reverse-engineering",
-  "domain-systems",
   "security-audit",
   "security-gate",
   "security-operations",
-  "web-audit",
-  "domain-systems",
-  "diagrams",
+  "slide-deck",
   "spec-to-code-loop",
-  "requirements-writing",
   "stack-dotnet",
   "stack-mql",
   "stack-python",
   "stack-sql",
   "stack-typescript",
-  "qa-docs",
-  "qa-docs",
   "test-automation",
   "ui-craft",
-  "requirements-writing",
-  "ai-engineering",
   "web-app-design",
   "web-audit",
   "web-service-essentials",
-  "windows-app-design",
-  "git-and-review"
+  "windows-app-design"
  ],
  "core_skills": [
   "superuser",
   "crew-patterns",
-  "crew-patterns",
   "lean-reply",
   "chat-prompt-workflows",
   "workspace-rules",
-  "workspace-rules",
   "context-budget",
   "decision-desk",
-  "decision-desk",
   "design-gate",
-  "workspace-rules",
-  "decision-desk",
   "handoff",
   "human-writing",
-  "superuser",
-  "design-gate",
   "learn-loop",
-  "crew-patterns",
-  "crew-patterns",
-  "design-gate",
-  "human-writing",
   "ground-rules",
   "fix-at-source",
-  "ground-rules",
-  "ground-rules",
-  "ground-rules",
-  "ground-rules",
   "research-with-sources",
-  "learn-loop",
-  "decision-desk",
-  "research-with-sources",
-  "learn-loop",
-  "ground-rules",
-  "skill-authoring",
-  "human-writing",
-  "superuser",
-  "fix-at-source",
-  "workspace-rules",
-  "human-writing"
+  "skill-authoring"
  ],
  "commands": [
   "api-design",
-  "architecture",
-  "coding-evals",
-  "requirements-writing",
-  "incidents-and-monitoring",
-  "project-docs",
-  "product-planning",
-  "project-docs",
-  "product-planning",
-  "security-gate",
-  "product-planning",
-  "security-audit"
+  "coding-evals"
  ],
  "agents": [
   {
@@ -169,9 +84,7 @@
    "skills": [
     "superuser",
     "code-craft",
-    "code-craft",
     "security-gate",
-    "ai-engineering",
     "ai-engineering"
    ]
   },
@@ -182,7 +95,6 @@
    "description": "Use when building on blockchains (smart contracts, Solidity, Solana, DeFi, audits).",
    "skills": [
     "superuser",
-    "code-craft",
     "code-craft",
     "security-gate",
     "domain-systems"
@@ -197,12 +109,8 @@
     "requirements-writing",
     "superuser",
     "diagrams",
-    "diagrams",
-    "diagrams",
     "slide-deck",
     "document-design",
-    "requirements-writing",
-    "requirements-writing",
     "legacy-spec-recovery",
     "pdpa-compliance",
     "data-import-export"
@@ -216,7 +124,6 @@
    "skills": [
     "domain-systems",
     "superuser",
-    "code-craft",
     "code-craft",
     "security-gate",
     "pdpa-compliance",
@@ -233,7 +140,6 @@
     "database-design",
     "superuser",
     "code-craft",
-    "code-craft",
     "security-gate",
     "ai-engineering",
     "data-import-export",
@@ -249,11 +155,7 @@
    "description": "Use when implementing features, fixing bugs, refactoring or writing unit tests.",
    "skills": [
     "code-craft",
-    "code-craft",
-    "code-craft",
     "test-automation",
-    "git-and-review",
-    "git-and-review",
     "git-and-review",
     "superuser",
     "security-gate",
@@ -262,21 +164,12 @@
     "stack-python",
     "stack-sql",
     "stack-mql",
-    "test-automation",
     "spec-to-code-loop",
-    "test-automation",
-    "security-gate",
     "diagrams",
     "web-service-essentials",
     "api-design",
     "errors-and-logs",
-    "errors-and-logs",
-    "web-service-essentials",
     "database-design",
-    "web-service-essentials",
-    "async-messaging",
-    "web-service-essentials",
-    "web-service-essentials",
     "async-messaging",
     "data-import-export",
     "incidents-and-monitoring",
@@ -284,7 +177,6 @@
     "project-bootstrap",
     "infra-and-deploy",
     "project-docs",
-    "code-craft",
     "requirements-writing",
     "reverse-engineering"
    ]
@@ -297,29 +189,17 @@
    "skills": [
     "superuser",
     "code-craft",
-    "code-craft",
     "security-gate",
     "incidents-and-monitoring",
     "document-design",
     "diagrams",
-    "diagrams",
-    "diagrams",
-    "incidents-and-monitoring",
     "errors-and-logs",
     "web-service-essentials",
     "infra-and-deploy",
     "cicd-and-release",
-    "web-service-essentials",
-    "incidents-and-monitoring",
     "test-automation",
-    "infra-and-deploy",
-    "infra-and-deploy",
     "project-bootstrap",
     "async-messaging",
-    "infra-and-deploy",
-    "async-messaging",
-    "async-messaging",
-    "cicd-and-release",
     "ai-engineering"
    ]
   },
@@ -330,7 +210,6 @@
    "description": "Use when the product is for developers (DX audits, SDK design, docs platforms).",
    "skills": [
     "superuser",
-    "code-craft",
     "code-craft",
     "security-gate",
     "developer-experience"
@@ -343,7 +222,6 @@
    "description": "Use when building online stores (catalog, cart, checkout, orders, inventory).",
    "skills": [
     "superuser",
-    "code-craft",
     "code-craft",
     "security-gate",
     "domain-systems"
@@ -371,7 +249,6 @@
    "skills": [
     "superuser",
     "code-craft",
-    "code-craft",
     "security-gate",
     "domain-systems"
    ]
@@ -384,7 +261,6 @@
    "skills": [
     "superuser",
     "code-craft",
-    "code-craft",
     "security-gate",
     "game-development"
    ]
@@ -396,7 +272,6 @@
    "description": "Use when programming games (Unity, Unreal, Godot, rendering, multiplayer netcode).",
    "skills": [
     "superuser",
-    "code-craft",
     "code-craft",
     "security-gate",
     "game-development"
@@ -425,11 +300,9 @@
    "skills": [
     "superuser",
     "code-craft",
-    "code-craft",
     "security-gate",
     "domain-systems",
-    "mobile-engineering",
-    "domain-systems"
+    "mobile-engineering"
    ]
   },
   {
@@ -439,7 +312,6 @@
    "description": "Use when building healthcare software (EHR integration, FHIR, telemedicine).",
    "skills": [
     "superuser",
-    "code-craft",
     "code-craft",
     "security-gate",
     "domain-systems"
@@ -466,7 +338,6 @@
    "skills": [
     "superuser",
     "code-craft",
-    "code-craft",
     "security-gate",
     "domain-systems"
    ]
@@ -492,7 +363,6 @@
    "skills": [
     "superuser",
     "code-craft",
-    "code-craft",
     "security-gate",
     "domain-systems"
    ]
@@ -504,7 +374,6 @@
    "description": "Use when building connected devices (firmware, MQTT, edge computing, device fleets).",
    "skills": [
     "superuser",
-    "code-craft",
     "code-craft",
     "security-gate",
     "domain-systems"
@@ -531,7 +400,6 @@
    "skills": [
     "superuser",
     "code-craft",
-    "code-craft",
     "security-gate",
     "domain-systems"
    ]
@@ -543,7 +411,6 @@
    "description": "Use when building mobile apps (Kotlin, Swift, Flutter, React Native, store submission).",
    "skills": [
     "superuser",
-    "code-craft",
     "code-craft",
     "security-gate",
     "mobile-engineering"
@@ -584,14 +451,9 @@
    "description": "Use when creating test plans, test cases, bug reports or exploratory tests before release.",
    "skills": [
     "qa-docs",
-    "qa-docs",
-    "qa-docs",
     "superuser",
     "code-craft",
-    "code-craft",
     "security-gate",
-    "test-automation",
-    "test-automation",
     "test-automation",
     "requirements-writing",
     "stack-dotnet",
@@ -601,10 +463,7 @@
     "api-design",
     "data-import-export",
     "errors-and-logs",
-    "test-automation",
     "infra-and-deploy",
-    "security-gate",
-    "qa-docs",
     "diagrams",
     "document-design"
    ]
@@ -617,7 +476,6 @@
    "skills": [
     "domain-systems",
     "superuser",
-    "code-craft",
     "code-craft",
     "security-gate",
     "diagrams",
@@ -633,7 +491,6 @@
    "skills": [
     "domain-systems",
     "superuser",
-    "code-craft",
     "code-craft",
     "security-gate",
     "ai-engineering",
@@ -651,7 +508,6 @@
     "reference-app-research",
     "superuser",
     "code-craft",
-    "code-craft",
     "security-gate",
     "legacy-spec-recovery",
     "diagrams"
@@ -665,7 +521,6 @@
    "skills": [
     "domain-systems",
     "superuser",
-    "domain-systems",
     "diagrams"
    ]
   },
@@ -676,7 +531,6 @@
    "description": "Use for security operations (incidents, alert triage, SOC). App code → security-engineer.",
    "skills": [
     "superuser",
-    "code-craft",
     "code-craft",
     "security-gate",
     "security-operations"
@@ -689,17 +543,11 @@
    "description": "Use for security reviews, threat modeling or secure code. SOC → security-analyst.",
    "skills": [
     "domain-systems",
-    "domain-systems",
     "security-gate",
     "superuser",
     "code-craft",
-    "code-craft",
-    "security-gate",
     "security-audit",
     "git-and-review",
-    "web-service-essentials",
-    "web-service-essentials",
-    "web-service-essentials",
     "web-service-essentials",
     "errors-and-logs",
     "pdpa-compliance",
@@ -730,20 +578,16 @@
     "architecture",
     "superuser",
     "code-craft",
-    "code-craft",
     "security-gate",
     "domain-systems",
     "diagrams",
-    "diagrams",
     "project-docs",
-    "architecture",
     "database-design",
     "api-design",
     "web-service-essentials",
     "errors-and-logs",
     "incidents-and-monitoring",
     "async-messaging",
-    "web-service-essentials",
     "pdpa-compliance",
     "cicd-and-release",
     "reverse-engineering",
@@ -758,13 +602,10 @@
    "skills": [
     "superuser",
     "diagrams",
-    "diagrams",
-    "diagrams",
     "document-design",
     "requirements-writing",
     "database-design",
     "api-design",
-    "requirements-writing",
     "legacy-spec-recovery",
     "i18n-and-locale",
     "web-service-essentials",
@@ -782,8 +623,6 @@
     "document-design",
     "diagrams",
     "git-and-review",
-    "document-design",
-    "slide-deck",
     "slide-deck",
     "project-docs",
     "product-naming",
@@ -803,21 +642,20 @@
     "mobile-app-design",
     "windows-app-design",
     "diagrams",
-    "diagrams",
     "i18n-and-locale"
    ]
   }
  ],
  "playbooks": [
   {
-   "name": "bug-fix",
-   "title": "fix broken things with evidence",
+   "name": "ai-feature",
+   "title": "add an LLM feature measured by an eval set",
    "when": "",
    "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "Copy the symptom exactly — the error message · test name · screenshot · the steps the user took · ใคร: หัวหน้าทีม",
+     "text": "Open [`references/data-ai.md`](../../dev-principles/references/data-ai.md) first. Write the one job the model does: input · output format · what counts as right · what a wrong answer costs (money · data · trust) · whether a plain rule or search would do it without a model · the money ceiling for eval runs and production calls, asked together with the brief at the start (the agent cannot raise it; unknown → `(รอยืนยัน · ผู้ใช้: เพดานค่าใช้จ่าย)`) · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -833,7 +671,159 @@
     },
     {
      "n": 2,
-     "text": "**Reproduce it yourself in the same place the user hit it.** For a web page, use the project's app-checking skill (if there is none yet, do `test-automation` first). For an API, use a real call. If you cannot reproduce it, say what is missing (data · environment · steps) and stop on this bug only. In a project that has `.sandbox/` (the root exception in `project-docs` item 1), reproduce inside the sandbox · ใคร: `qa-tester` ตัวใหม่",
+     "text": "**Build the eval set before any prompt** — 20–50 cases from real work, including edge cases and inputs that try to make the model misbehave, each with the expected answer or a written grading rule, per `ai-engineering/references/llm-evaluation-patterns.md` · set the pass number and the latency ceiling now, inside the step 1 money ceiling,, not after seeing results · ใคร: `ai-engineer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "ai-engineer"
+      ],
+      "raw": "`ai-engineer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "Run the simplest version (one prompt, a pinned model version) against the set and record the score, cost per call and latency — this is the baseline · ใคร: `ai-engineer` ตัวใหม่ (pass in the saved eval set)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "ai-engineer"
+      ],
+      "raw": "`ai-engineer` ตัวใหม่ (pass in the saved eval set)"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "Improve one thing at a time (prompt · retrieval · model · tool) and rerun the whole set after each change · keep a change only when the score goes up and nothing else drops · for RAG, score retrieval apart from the answer · ใคร: `ai-engineer` ตัวใหม่ per change (pass in the eval set and the score log)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "ai-engineer"
+      ],
+      "raw": "`ai-engineer` ตัวใหม่ per change (pass in the eval set and the score log)"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "**Wire it in safely** — treat model output and retrieved text as untrusted data · validate the output format before use · no step that is expensive or changes data runs without a person's approval · a timeout and a fallback when the model fails · log input size, cost and latency per call without personal data (`errors-and-logs` · `security-gate`) · ใคร: `developer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer"
+      ],
+      "raw": "`developer` ตัวใหม่"
+     },
+     "skills": [
+      "errors-and-logs",
+      "security-gate"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "**Prove (พิสูจน์)** — rerun the full eval set through the real code path, not a notebook · run the injection cases from step 2 · check cost and latency against the step 2 ceiling (ตัดสินผลตาม [`references/data-ai.md`](../../dev-principles/references/data-ai.md) · [`references/security.md`](../../dev-principles/references/security.md)) · fail → back to step 4 · ใคร: `qa-tester` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "qa-tester"
+      ],
+      "raw": "`qa-tester` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "**Check (ตรวจ)** the diff and the eval report: the set was not changed to make the score pass · the model version is pinned · no hidden step can act without approval · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 8,
+     "text": "Deliver through playbook [`ship`](playbook-ship.md) with the eval set saved beside the code, so the next prompt change is measured the same way · finish with `superuser/status-report` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [
+      "ship"
+     ],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "bug-fix",
+   "title": "fix broken things with evidence",
+   "when": "",
+   "done": "",
+   "steps": [
+    {
+     "n": 1,
+     "text": "Open the principle files [`references/code.md`](../../dev-principles/references/code.md) · [`references/testing.md`](../../dev-principles/references/testing.md) first. Copy the symptom exactly — the error message · test name · screenshot · the steps the user took · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "**Reproduce it yourself in the same place the user hit it.** For a web page, use the project's app-checking skill (if there is none yet, do `test-automation` first). For an API, use a real call. If you cannot reproduce it, say what is missing (data · environment · steps) and stop on this bug only. In a project that has `.sandbox/` (the root exception in `project-docs` → `references/project-doc-set.md` item 1), reproduce inside the sandbox · ใคร: `qa-tester` ตัวใหม่",
      "sub": [
       "For a symptom that appears at run time (leak · intermittent hang · busy while idle), add temporary measurement or logging so the symptom becomes a number before you fix it. If you were given a profile file (cpuprofile · heap snapshot · trace), read it with the tool for that file type. Do not guess from the code."
      ],
@@ -851,7 +841,9 @@
       "project-docs"
      ],
      "commands": [],
-     "playbooks": [],
+     "playbooks": [
+      "project-docs"
+     ],
      "approval": false
     },
     {
@@ -879,7 +871,7 @@
     },
     {
      "n": 4,
-     "text": "Find the root cause per `principle-fix-root-cause` · for a rare or multi-layer cause, send an agent with `model: opus` (`superuser` section 5) · ใคร: `developer` ตัวใหม่ (pass in the step 3 result)",
+     "text": "Find the root cause per `fix-at-source/principle-fix-root-cause` · for a rare or multi-layer cause, send an agent with `model: opus` (`superuser` section 5) · ใคร: `developer` ตัวใหม่ (pass in the step 3 result)",
      "sub": [],
      "phase": "",
      "who": {
@@ -955,7 +947,7 @@
     },
     {
      "n": 8,
-     "text": "**Check (ตรวจ) the diff by review before saying done** — per `git-and-review`: the fix is at the root cause, does not spread beyond the spot, and the step 7 result covers the case that used to fail · for a security bug, look at every spot from step 5 · if it fails → a fresh `developer` fixes it, then loop per the check rounds in [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่",
+     "text": "**Check (ตรวจ) the diff by review before saying done** — per `git-and-review`: the fix is at the root cause, does not spread beyond the spot, and the step 7 result covers the case that used to fail · for a security bug, look at every spot from step 5 · if it fails → a fresh `developer` fixes it, then loop per the check rounds in [`team-roles`](team-roles.md) (ตัดสินผลตาม [`references/code.md`](../../dev-principles/references/code.md) · [`references/testing.md`](../../dev-principles/references/testing.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -973,7 +965,7 @@
     },
     {
      "n": 9,
-     "text": "If this bug is the kind an agent has made before, use `repeated-mistakes-to-checks` · ใคร: หัวหน้าทีม",
+     "text": "If this bug is the kind an agent has made before, use `learn-loop/repeated-mistakes-to-checks` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -989,7 +981,7 @@
     },
     {
      "n": 10,
-     "text": "Deliver per the commit rules in `superuser` section 6, then finish with `status-report` · ใคร: หัวหน้าทีม",
+     "text": "Deliver per the commit rules in `superuser` section 6, then finish with `superuser/status-report` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1016,7 +1008,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Read the relevant requirements (`docs/srs.md` · `docs/fsd-*.md` · mockup), then run [`code-craft`](../../code-craft/SKILL.md) on the part you will touch to get a 10-line map, then open the skill for the project's stack · ใคร: หัวหน้าทีม (unclear brief: `brainstormer` ตัวใหม่)",
+     "text": "Open the principle files [`references/code.md`](../../dev-principles/references/code.md) · [`references/testing.md`](../../dev-principles/references/testing.md) · [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md) first; the change touches login, permissions or personal data → also [`references/security.md`](../../dev-principles/references/security.md); it imports or exports files or data → also [`references/data-ai.md`](../../dev-principles/references/data-ai.md). Read the relevant requirements (`docs/srs.md` · `docs/fsd-*.md` · mockup), then run [`code-craft`](../../code-craft/SKILL.md) (`references/code-orientation.md`) on the part you will touch to get a 10-line map, then open the skill for the project's stack · ใคร: หัวหน้าทีม (unclear brief: `brainstormer` ตัวใหม่)",
      "sub": [],
      "phase": "",
      "who": {
@@ -1037,7 +1029,7 @@
      "text": "**State the data shape first** — the types · tables · state this feature creates or changes, written as code or a short table in the reply · ใคร: หัวหน้าทีม",
      "sub": [
       "Split into 3 layers (input → business rules → storage)",
-      "If it touches outside input · login · files · money · personal data, open [`security-gate`](../../security-gate/SKILL.md). For a feature exposed to the outside, send a fresh `security-engineer` to do STRIDE per `security-audit/references/security-templates.md` before writing (or ask the user to run `/software-development:security-audit` themselves, because only the user can call that skill)",
+      "If it touches outside input · login · files · money · personal data, open [`security-gate`](../../security-gate/SKILL.md). For a feature exposed to the outside, send a fresh `security-engineer` to do STRIDE per `security-audit/references/security-templates.md` before writing (or have that `security-engineer` draw the STRIDE model with `security-audit` → `references/threat-model.md`)",
       "Web app or API → follow the \"must have\" column of [`security-gate` OWASP section](../../security-gate/references/owasp-top10.md) for the parts the feature touches, and write tests per the \"prove with\" column (test names start with the item ID, such as `A01_`)"
      ],
      "phase": "",
@@ -1049,17 +1041,15 @@
      },
      "skills": [
       "security-gate",
-      "security-gate"
-     ],
-     "commands": [
       "security-audit"
      ],
+     "commands": [],
      "playbooks": [],
      "approval": false
     },
     {
      "n": 3,
-     "text": "If the feature crosses several modules, draft the function signatures and file locations before writing the body. If several approaches are still equally good, use `parallel-attempts-pick-best` or the `prototype` playbook · ใคร: หัวหน้าทีม (several equally good approaches: `developer` ตัวใหม่ one per approach)",
+     "text": "If the feature crosses several modules, draft the function signatures and file locations before writing the body. If several approaches are still equally good, use `crew-patterns/parallel-attempts-pick-best` or the `prototype` playbook · ใคร: หัวหน้าทีม (several equally good approaches: `developer` ตัวใหม่ one per approach)",
      "sub": [],
      "phase": "",
      "who": {
@@ -1119,9 +1109,9 @@
     },
     {
      "n": 6,
-     "text": "Check (ตรวจ) every piece before moving to the piece that waits on it — that piece's tests must pass, and click through the real app with the project's app-check skill · ใคร: `qa-tester` ตัวใหม่",
+     "text": "Check (ตรวจ) every piece before moving to the piece that waits on it — that piece's tests must pass, and click through the real app with the project's app-check skill (ตัดสินผลตาม [`references/code.md`](../../dev-principles/references/code.md) · [`references/testing.md`](../../dev-principles/references/testing.md) · [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md)) · ใคร: `qa-tester` ตัวใหม่",
      "sub": [
-      "**Every new behavior and every decision you made yourself needs at least 1 test that locks it in**, and the test must fail when the code is wrong (`principle-prove-it-works`)"
+      "**Every new behavior and every decision you made yourself needs at least 1 test that locks it in**, and the test must fail when the code is wrong (`ground-rules/principle-prove-it-works`)"
      ],
      "phase": "",
      "who": {
@@ -1139,7 +1129,7 @@
     },
     {
      "n": 7,
-     "text": "**Check (ตรวจ) by review before saying done — do not skip.** Small diff: correctness and edge cases · much logic or state: `adversarial-review-panel` with at least 2 angles, correctness and simplicity. If a dependency is added or a risky area is touched, also pass it through [`security-gate`](../../security-gate/SKILL.md) · ใคร: `reviewer` ตัวใหม่ (much logic: `reviewer` ตัวใหม่ per angle · risky area: `security-engineer` ตัวใหม่ อ่านอย่างเดียว · ไม่แก้ไฟล์)",
+     "text": "**Check (ตรวจ) by review before saying done — do not skip.** Small diff: correctness and edge cases · much logic or state: `crew-patterns/adversarial-review-panel` with at least 2 angles, correctness and simplicity. If a dependency is added or a risky area is touched, also pass it through [`security-gate`](../../security-gate/SKILL.md) and judge it against `security.md` (access checked on the server: a user without the role gets 403) (ตัดสินผลตาม [`references/code.md`](../../dev-principles/references/code.md) · [`references/testing.md`](../../dev-principles/references/testing.md) · [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md)) · ใคร: `reviewer` ตัวใหม่ (much logic: `reviewer` ตัวใหม่ per angle · risky area: `security-engineer` ตัวใหม่ อ่านอย่างเดียว · ไม่แก้ไฟล์)",
      "sub": [
       "All tests passing does not mean there are no bugs — for every finding the review confirmed, write a failing test first, then fix",
       "A screen that has a mockup or must match the old system ends its check with playbook `visual-parity`"
@@ -1182,7 +1172,7 @@
     },
     {
      "n": 9,
-     "text": "Check (ตรวจ) again — look at every earlier finding and every changed spot, and repeat until no `สูง` (high) or `กลาง` (medium) finding is left, per [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) again — look at every earlier finding and every changed spot, and repeat until no `สูง` (high) or `กลาง` (medium) finding is left, per [`team-roles`](team-roles.md) (ตัดสินผลตาม [`references/code.md`](../../dev-principles/references/code.md) · [`references/testing.md`](../../dev-principles/references/testing.md) · [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1198,7 +1188,7 @@
     },
     {
      "n": 10,
-     "text": "When everything passes, deliver per the commit rules in `superuser` section 6, open a PR (`git-and-review`) when the user asks, then finish with `status-report` · ใคร: หัวหน้าทีม",
+     "text": "When everything passes, deliver per the commit rules in `superuser` section 6, open a PR (`git-and-review`) when the user asks, then finish with `superuser/status-report` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1226,7 +1216,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Make the list. Delete nothing in this step · ใคร: หัวหน้าทีม",
+     "text": "Open the principle file [`references/operations.md`](../../dev-principles/references/operations.md) first. Make the list. Delete nothing in this step · ใคร: หัวหน้าทีม",
      "sub": [
       "git worktrees and branches that are merged or untouched for more than 30 days (`git worktree list` · `git branch --merged`)",
       "SQT sandboxes (`docker ps -a --filter label=sqt.sandbox=true`) · images and volumes no container uses",
@@ -1278,7 +1268,7 @@
     },
     {
      "n": 4,
-     "text": "Once the user approves, delete only the approved items. For a worktree with leftover files, keep a patch before deleting. For a sandbox, use `.sandbox/sandbox.ps1 destroy` (`.sandbox/` itself may stay at the root per `project-docs` item 1) · ใคร: หัวหน้าทีม",
+     "text": "Once the user approves, delete only the approved items. For a worktree with leftover files, keep a patch before deleting. For a sandbox, use `.sandbox/sandbox.ps1 destroy` (`.sandbox/` itself may stay at the root per `project-docs` → `references/project-doc-set.md` item 1) · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1291,12 +1281,14 @@
       "project-docs"
      ],
      "commands": [],
-     "playbooks": [],
+     "playbooks": [
+      "project-docs"
+     ],
      "approval": false
     },
     {
      "n": 5,
-     "text": "Report the space recovered, then finish with `status-report` · ใคร: หัวหน้าทีม",
+     "text": "Report the space recovered, then finish with `superuser/status-report` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1314,6 +1306,160 @@
    "shared": false
   },
   {
+   "name": "incident",
+   "title": "get a live system back up, then learn from it",
+   "when": "",
+   "done": "",
+   "steps": [
+    {
+     "n": 1,
+     "text": "Open [`references/operations.md`](../../dev-principles/references/operations.md) first. Declare the incident: write the one thing users feel is wrong, when it started, the severity, and who is the incident commander (one person) in a single status note `docs/postmortems/<YYYY-MM-DD>-<topic>.md` (the same file becomes the postmortem in step 6) · start the timeline there, one timestamped line per event · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "**Measure what users feel** — error rate · latency at the 95th percentile · traffic, compared with the same hour before it started, per `incidents-and-monitoring/references/observability-basics.md` · list what changed in the last 24 hours (deploys · config · flags · dependencies · traffic) · ใคร: `devops-engineer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "devops-engineer"
+      ],
+      "raw": "`devops-engineer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "**Stop the harm before finding the cause** — if a recent change lines up with the start time, prepare the rollback or flag-off command with its expected effect and put it under \"รออนุมัติ\" (awaiting approval) · if personal data or an attack may be involved, hand over to `security-analyst` at once and start the 72-hour PDPC clock from the moment it was known (`pdpa-compliance`) · ใคร: `devops-engineer` ตัวใหม่ (pass in the status note) · data or attack: `security-analyst` ตัวใหม่ · approval: the on-call person",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "devops-engineer",
+       "security-analyst"
+      ],
+      "raw": "`devops-engineer` ตัวใหม่ (pass in the status note) · data or attack: `security-analyst` ตัวใหม่ · approval: the on-call person"
+     },
+     "skills": [
+      "pdpa-compliance"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "After each approved action, check the step 2 numbers again and log the value seen in the status note · not back to normal → next hypothesis, one change at a time · ใคร: `devops-engineer` ตัวใหม่ (pass in the status note)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "devops-engineer"
+      ],
+      "raw": "`devops-engineer` ตัวใหม่ (pass in the status note)"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "Once stable, find the root cause in a copy of the system, not in production — reproduce it, then write a test that fails first, per playbook [`bug-fix`](playbook-bug-fix.md) steps 2–8, doing its step 2 reproduction in staging or a copy instead of production · ใคร: `developer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer"
+      ],
+      "raw": "`developer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [
+      "bug-fix"
+     ],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "Write the blameless postmortem within 48 hours per `incidents-and-monitoring/references/postmortem-template.md`: timeline · impact in numbers · root cause · what helped · what slowed us · follow-up items each with an owner and a date · add the missing alert or runbook line · ใคร: `technical-writer` ตัวใหม่ (pass in the status note)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "technical-writer"
+      ],
+      "raw": "`technical-writer` ตัวใหม่ (pass in the status note)"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "**Check (ตรวจ)** the postmortem and the fix: no person blamed · every production change has an approver's name · every follow-up has an owner and a date · the step 5 test passes · if personal data leaked, the notification record exists (ตัดสินผลตาม [`references/operations.md`](../../dev-principles/references/operations.md) · [`references/security.md`](../../dev-principles/references/security.md)) · fail → fix → recheck · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 8,
+     "text": "Deliver the fix through playbook [`ship`](playbook-ship.md), then finish with `superuser/status-report` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [
+      "ship"
+     ],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
    "name": "investigation",
    "title": "answer a question, read-only",
    "when": "",
@@ -1321,7 +1467,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Rewrite the question as one sentence that can be answered yes or no, or that points to a place · ใคร: หัวหน้าทีม",
+     "text": "Open the principle file that fits the question first (see Main principles). Rewrite the question as one sentence that can be answered yes or no, or that points to a place · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1443,7 +1589,7 @@
     },
     {
      "n": 8,
-     "text": "Check (ตรวจ) the answer — every claim points to a real file:line or run result, the labels match the evidence, and the 1-sentence answer answers the question in step 1 · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) the answer — every claim points to a real file:line or run result, the labels match the evidence, and the 1-sentence answer answers the question in step 1 (ตัดสินผลตาม [`references/legacy-reverse.md`](../../dev-principles/references/legacy-reverse.md) · [`references/operations.md`](../../dev-principles/references/operations.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1510,8 +1656,8 @@
      "sub": [
       "**Count the mistake types first.** Tag every row `ไม่ได้เปิด skill` (did not open the skill) · `เปิดแต่ไม่ทำตาม` (opened but did not follow) · `ไม่มีกฎ` (no rule) (definitions in the agent `learning-reviewer`), then count. Mostly `ไม่ได้เปิด` → this round's job is to fix how skills are signalled (`triggers.md` · `hooks/skill-router.json`), not to write more text in the skill.",
       "**A skill that has absorbed 3 merged lessons but mistakes did not drop.** Stop adding text. Propose one of: a checker, a paired example (before → after), or rolling the fix back.",
-      "**A repeated mistake** (found 2 or more times · `correction: true` in the log for the same issue): make it a checker, do not write more warnings (`repeated-mistakes-to-checks` if present, otherwise a check script or an item in the pre-send checklist).",
-      "**A method that worked, or a skill that says something wrong:** fix the paragraph in SKILL.md (`session-lessons-to-skills` if present).",
+      "**A repeated mistake** (found 2 or more times · `correction: true` in the log for the same issue): make it a checker, do not write more warnings (`learn-loop/repeated-mistakes-to-checks` if present, otherwise a check script or an item in the pre-send checklist).",
+      "**A method that worked, or a skill that says something wrong:** fix the paragraph in SKILL.md (`learn-loop/session-lessons-to-skills` if present).",
       "**A playbook assembled on the spot and reused 2 or more times:** propose it as a permanent playbook per [`playbook-template`](playbook-template.md).",
       "**Fixing an agent or playbook:** fix the matching paragraph · a playbook must still pass `validate-marketplace.mjs`.",
       "**A user rule:** 1 line in `~/.claude/superuser-style.md`, which works from every project.",
@@ -1618,7 +1764,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "**Scope that fits on one sheet of paper** — if an SRS with FR codes already exists, use those codes as the task codes in the task table of `docs/BUILD-PLAN.md` per [`spec-to-code-loop`](../../spec-to-code-loop/SKILL.md). If not, make short codes from the scope (`F-01` …) and write what is done, what is not done, and which behaviours can be read more than one way (for example, a calculator that multiplies before adding, or computes left to right). For items that can be guessed and reversed, choose yourself, then log them in `decision-log` with `(รอยืนยัน)` (pending confirmation). For unknown facts (numbers, names, dates, budget), do not guess the value: put `(รอยืนยัน)` where it is used, and collect them once under \"ค้างอยู่\" (pending) · **Timeline**: if there is a project plan (`docs/<รหัส>-PLAN-*`) → put the plan's `M…` code in the `milestone` column of the task table · if none → arrange the rows into 3–5 milestones where the user can see results (for example, set up the skeleton + verify → core features → secondary features → review + delivery), with a milestone table and 1 Gantt picture from `diagrams` (the picture goes in `docs/figures/`, then link it in `BUILD-PLAN.md`) per the template of `status-report` · a duration the user did not give → `(รอยืนยัน)` · ใคร: หัวหน้าทีม (unclear brief: `brainstormer` ตัวใหม่ · timeline: `project-manager` ตัวใหม่)",
+     "text": "Open the principle files [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md) · [`references/requirements-docs.md`](../../dev-principles/references/requirements-docs.md) · [`references/testing.md`](../../dev-principles/references/testing.md) first. **Scope that fits on one sheet of paper** — if an SRS with FR codes already exists, use those codes as the task codes in the task table of `docs/BUILD-PLAN.md` per [`spec-to-code-loop`](../../spec-to-code-loop/SKILL.md). If not, make short codes from the scope (`F-01` …) and write what is done, what is not done, and which behaviours can be read more than one way (for example, a calculator that multiplies before adding, or computes left to right). For items that can be guessed and reversed, choose yourself, then log them in `decision-desk/decision-log` with `(รอยืนยัน)` (pending confirmation). For unknown facts (numbers, names, dates, budget), do not guess the value: put `(รอยืนยัน)` where it is used, and collect them once under \"ค้างอยู่\" (pending) · **Timeline**: if there is a project plan (`docs/<รหัส>-PLAN-*`) → put the plan's `M…` code in the `milestone` column of the task table · if none → arrange the rows into 3–5 milestones where the user can see results (for example, set up the skeleton + verify → core features → secondary features → review + delivery), with a milestone table and 1 Gantt picture from `diagrams` (the picture goes in `docs/figures/`, then link it in `BUILD-PLAN.md`) per the template of `superuser/status-report` · a duration the user did not give → `(รอยืนยัน)` · ใคร: หัวหน้าทีม (unclear brief: `brainstormer` ตัวใหม่ · timeline: `project-manager` ตัวใหม่)",
      "sub": [],
      "phase": "",
      "who": {
@@ -1639,7 +1785,7 @@
     },
     {
      "n": 2,
-     "text": "**Choose the least technology that is enough** — use the standard parts of the language and platform before a framework. Every dependency needs a reason in `decision-log` and a locked version (lock file). **Check (ตรวจ) the toolchain first** (`flutter doctor` · `dotnet --info` · `node -v` etc.). If an SDK is missing and can be installed into the user's folder (reversible), install it right away and log it in `decision-log` with the path; but if it needs a machine-wide install or admin rights, prepare the commands under \"รออนุมัติ\" (awaiting approval) and continue with the other parts · **Check the machine before starting**: is the port you will use free (`docker ps --format \"{{.Names}} {{.Ports}}\"` · Windows `netstat -ano | findstr :<พอร์ต>` · macOS/Linux `lsof -i :<พอร์ต>`). If another project's container holds the port → you may `docker stop <ชื่อ>` (reversible; log in `decision-log` which one you stopped), but **never** `docker rm` · remove a volume · kill a process that is not this project's. If one of those is truly needed → put it under \"รออนุมัติ\" or switch to another port · ใคร: `solution-architect` ตัวใหม่ chooses the technology · `developer` ตัวใหม่ checks and installs the toolchain (needs Bash)",
+     "text": "**Choose the least technology that is enough** — use the standard parts of the language and platform before a framework. Every dependency needs a reason in `decision-desk/decision-log` and a locked version (lock file). **Check (ตรวจ) the toolchain first** (`flutter doctor` · `dotnet --info` · `node -v` etc.). If an SDK is missing and can be installed into the user's folder (reversible), install it right away and log it in `decision-desk/decision-log` with the path; but if it needs a machine-wide install or admin rights, prepare the commands under \"รออนุมัติ\" (awaiting approval) and continue with the other parts · **Check the machine before starting**: is the port you will use free (`docker ps --format \"{{.Names}} {{.Ports}}\"` · Windows `netstat -ano | findstr :<พอร์ต>` · macOS/Linux `lsof -i :<พอร์ต>`). If another project's container holds the port → you may `docker stop <ชื่อ>` (reversible; log in `decision-desk/decision-log` which one you stopped), but **never** `docker rm` · remove a volume · kill a process that is not this project's. If one of those is truly needed → put it under \"รออนุมัติ\" or switch to another port · ใคร: `solution-architect` ตัวใหม่ chooses the technology · `developer` ตัวใหม่ checks and installs the toolchain (needs Bash)",
      "sub": [],
      "phase": "",
      "who": {
@@ -1674,12 +1820,14 @@
       "project-bootstrap"
      ],
      "commands": [],
-     "playbooks": [],
+     "playbooks": [
+      "project-docs"
+     ],
      "approval": false
     },
     {
      "n": 4,
-     "text": "**Build verify before feature 2** — verify is a script that runs the real app and checks the result. As soon as the first screen exists, create `<project-name>/test/e2e/verify.*` and a verify skill per `test-automation`. For a mobile app, verify must drive a real build on an emulator and inject hardware values (for example the emulator's sensor values), and write down which items still need trying on a real device (`principle-prove-it-works`). For a project that will be used for a long time, also set up [`infra-and-deploy`](../../infra-and-deploy/SKILL.md) · ใคร: `qa-tester` ตัวใหม่",
+     "text": "**Build verify before feature 2** — verify is a script that runs the real app and checks the result. As soon as the first screen exists, create `<project-name>/test/e2e/verify.*` and a verify skill per `test-automation`. For a mobile app, verify must drive a real build on an emulator and inject hardware values (for example the emulator's sensor values), and write down which items still need trying on a real device (`ground-rules/principle-prove-it-works`). For a project that will be used for a long time, also set up [`infra-and-deploy`](../../infra-and-deploy/SKILL.md) · ใคร: `qa-tester` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1720,7 +1868,7 @@
     },
     {
      "n": 6,
-     "text": "**Check (ตรวจ) with a review panel of 3 angles** (`adversarial-review-panel`) · ใคร: `reviewer` ตัวใหม่ per angle",
+     "text": "**Check (ตรวจ) with a review panel of 3 angles** (`crew-patterns/adversarial-review-panel`) (ตัดสินผลตาม [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md) · [`references/requirements-docs.md`](../../dev-principles/references/requirements-docs.md) · [`references/testing.md`](../../dev-principles/references/testing.md)) · ใคร: `reviewer` ตัวใหม่ per angle",
      "sub": [],
      "phase": "",
      "who": {
@@ -1736,7 +1884,7 @@
     },
     {
      "n": 7,
-     "text": "**[`security-gate`](../../security-gate/SKILL.md)** — check (ตรวจ) by scanning secrets, dependencies, and code. The lead keeps the report in `qa/security/`. For a web app or API, add an OWASP report item by item A01–A10 per [`references/owasp-top10.md`](../../security-gate/references/owasp-top10.md) · ใคร: `security-engineer` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)",
+     "text": "**[`security-gate`](../../security-gate/SKILL.md)** — check (ตรวจ) by scanning secrets, dependencies, and code. The lead keeps the report in `qa/security/`. For a web app or API, add an OWASP report item by item A01–A10 per [`references/owasp-top10.md`](../../security-gate/references/owasp-top10.md) (ตัดสินผลตาม [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md) · [`references/requirements-docs.md`](../../dev-principles/references/requirements-docs.md) · [`references/testing.md`](../../dev-principles/references/testing.md)) · ใคร: `security-engineer` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)",
      "sub": [],
      "phase": "",
      "who": {
@@ -1774,7 +1922,7 @@
     },
     {
      "n": 9,
-     "text": "Check (ตรวจ) again — look at every earlier finding and every changed spot, and repeat until no `สูง` (high) or `กลาง` (medium) finding is left, per [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) again — look at every earlier finding and every changed spot, and repeat until no `สูง` (high) or `กลาง` (medium) finding is left, per [`team-roles`](team-roles.md) (ตัดสินผลตาม [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md) · [`references/requirements-docs.md`](../../dev-principles/references/requirements-docs.md) · [`references/testing.md`](../../dev-principles/references/testing.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1817,7 +1965,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Set the one number to watch (for example, report page load time in seconds), how to measure it, and the target. If there is no target, set \"at least 20% better\" and log it in `decision-log` · ใคร: หัวหน้าทีม",
+     "text": "Open the principle files [`references/operations.md`](../../dev-principles/references/operations.md) · [`references/code.md`](../../dev-principles/references/code.md) first. Set the one number to watch (for example, report page load time in seconds), how to measure it, and the target. If there is no target, set \"at least 20% better\" and log it in `decision-desk/decision-log` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1833,7 +1981,7 @@
     },
     {
      "n": 2,
-     "text": "**Measure the baseline at least 3 rounds** on the same data set and the same machine. If `.sandbox/` exists (a root exception per `project-docs` item 1), measure inside the sandbox, then save the raw values to `_to_delete/perf/<เรื่อง>.tsv` · ใคร: `qa-tester` ตัวใหม่",
+     "text": "**Measure the baseline at least 3 rounds** on the same data set and the same machine. If `.sandbox/` exists (a root exception per `project-docs` → `references/project-doc-set.md` item 1), measure inside the sandbox, then save the raw values to `_to_delete/perf/<เรื่อง>.tsv` · ใคร: `qa-tester` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1848,7 +1996,9 @@
       "project-docs"
      ],
      "commands": [],
-     "playbooks": [],
+     "playbooks": [
+      "project-docs"
+     ],
      "approval": false
     },
     {
@@ -1911,7 +2061,7 @@
     },
     {
      "n": 6,
-     "text": "Put every hypothesis in the table `| สมมติฐาน | ก่อน | หลัง | เก็บ/ทิ้ง |` (hypothesis | before | after | keep/drop) in `decision-log` · ใคร: หัวหน้าทีม",
+     "text": "Put every hypothesis in the table `| สมมติฐาน | ก่อน | หลัง | เก็บ/ทิ้ง |` (hypothesis | before | after | keep/drop) in `decision-desk/decision-log` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1943,7 +2093,7 @@
     },
     {
      "n": 8,
-     "text": "Check (ตรวจ) the whole set — the fixes kept · the raw values · the hypothesis table · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) the whole set — the fixes kept · the raw values · the hypothesis table (ตัดสินผลตาม [`references/operations.md`](../../dev-principles/references/operations.md) · [`references/code.md`](../../dev-principles/references/code.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1959,7 +2109,7 @@
     },
     {
      "n": 9,
-     "text": "Report — the before/after numbers with the number of rounds measured, and what limits the number now, then finish with `status-report` · ใคร: หัวหน้าทีม",
+     "text": "Report — the before/after numbers with the number of rounds measured, and what limits the number now, then finish with `superuser/status-report` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -2100,7 +2250,7 @@
     },
     {
      "n": 4,
-     "text": "`status-report`, and rewrite the \"รับงานต่อ\" (pick up) section in `CONTEXT.md` (`handoff` section 5) — remove finished items (1 line each to `HISTORY.md`) and your own unfinished `รับโดย:` · write: what the next step must do first · the commands to repeat · things to watch out for · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ checks (ตรวจ) against the real `git status`",
+     "text": "`superuser/status-report`, and rewrite the \"รับงานต่อ\" (pick up) section in `CONTEXT.md` (`handoff` section 5) — remove finished items (1 line each to `HISTORY.md`) and your own unfinished `รับโดย:` · write: what the next step must do first · the commands to repeat · things to watch out for · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ checks (ตรวจ) against the real `git status`",
      "sub": [],
      "phase": "",
      "who": {
@@ -2125,7 +2275,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Read `docs/BUILD-PLAN.md` (sections `สถานะล่าสุด` (latest status) and `ตัดสินใจเอง` (decided on own)) and `docs/README.md` if present — the task status, project code, job size, and colour theme are there · ใคร: หัวหน้าทีม",
+     "text": "Open the principle files [`references/requirements-docs.md`](../../dev-principles/references/requirements-docs.md) · [`references/documents-diagrams.md`](../../dev-principles/references/documents-diagrams.md) · [`references/product-project.md`](../../dev-principles/references/product-project.md) first. Read `docs/BUILD-PLAN.md` (sections `สถานะล่าสุด` (latest status) and `ตัดสินใจเอง` (decided on own)) and `docs/README.md` if present — the task status, project code, job size, and colour theme are there · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -2159,7 +2309,7 @@
     },
     {
      "n": 3,
-     "text": "Do one document at a time in the order of the table in the prompt file, and skip documents that were not ordered. Re-read the previous document's result from disk each time, because the user may have edited it. Place files per `project-docs` (`ref/` read-only · `docs/` · `mockup/` · `qa/` · `assets/` · temporary files in `_to_delete/`), create a folder only when there is real content to put in it, and name files per `document-naming` · ใคร: `business-analyst` · `system-analyst` · `ux-designer` · `technical-writer` ตัวใหม่ by document type",
+     "text": "Do one document at a time in the order of the table in the prompt file, and skip documents that were not ordered. Re-read the previous document's result from disk each time, because the user may have edited it. Place files per `project-docs` (`ref/` read-only · `docs/` · `mockup/` · `qa/` · `assets/` · temporary files in `_to_delete/`), create a folder only when there is real content to put in it, and name files per `workspace-rules/document-naming`. Pick the skill for the document type: `requirements-writing` (BRD · SRS) · `document-design` (designed documents) · `slide-deck` · `product-planning` · `product-naming` · ใคร: `business-analyst` · `system-analyst` · `ux-designer` · `technical-writer` ตัวใหม่ by document type",
      "sub": [],
      "phase": "",
      "who": {
@@ -2174,15 +2324,22 @@
       "raw": "`business-analyst` · `system-analyst` · `ux-designer` · `technical-writer` ตัวใหม่ by document type"
      },
      "skills": [
-      "project-docs"
+      "project-docs",
+      "requirements-writing",
+      "document-design",
+      "slide-deck",
+      "product-planning",
+      "product-naming"
      ],
      "commands": [],
-     "playbooks": [],
+     "playbooks": [
+      "project-docs"
+     ],
      "approval": false
     },
     {
      "n": 4,
-     "text": "If a decision is needed midway, do not stop to ask; choose the path with the least impact per `principle-proceed-on-reversible-work` and log it in `decision-log`. For facts (numbers, names, dates, budget), do not guess: put `(รอยืนยัน)` in the pending questions and continue · ใคร: หัวหน้าทีม",
+     "text": "If a decision is needed midway, do not stop to ask; choose the path with the least impact per `ground-rules/principle-proceed-on-reversible-work` and log it in `decision-desk/decision-log`. For facts (numbers, names, dates, budget), do not guess: put `(รอยืนยัน)` in the pending questions and continue · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -2214,7 +2371,7 @@
     },
     {
      "n": 6,
-     "text": "Check (ตรวจ) the document just written — every requirement is checkable, every button in the mockup is really clickable, abbreviations are spelled out the first time, and quoted text has a real source. Do not write `ผ่าน` (pass) unless it was really checked or run (`principle-prove-it-works`) · **Machine checkers that a subagent cannot run** (`solution-architect` · `project-manager` have no shell, while `business-analyst` · `system-analyst` · `technical-writer` have Bash and can run the checkers themselves: render pictures · `check-figure-source.py` · `check-mermaid-theme.mjs` · render .docx) → tell them to end the report with a list of commands, and the lead runs them as soon as the work comes back · **A mockup has 2 gates**: correct (`qa-tester` drives the browser) **and** good-looking (the 7-axis beauty gate of `ui-craft` item 9, by another checker, compared with a picture of the reference app) · a new or redesigned mockup starts from the visual direction in `ui-craft` item 0.1; this does not apply to old files that keep their look · if it does not pass, a fresh instance of the agent that wrote that document does the fix, then it is re-checked under the Reflection rule in `superuser` (a fresh reviewer every round · repeat until no `สูง` and `กลาง` findings remain · within the cap in `team-roles`: 3 rounds for medium work · 5 rounds for large work or work sent to outsiders), and log the result of every round in the review-result field of `docs/BUILD-PLAN.md` · write `ผ่าน` only when the latest round finds no `สูง` or `กลาง` finding · ใคร: `reviewer` ตัวใหม่ checks (ตรวจ) · the agent that wrote that document, ตัวใหม่, fixes on fail",
+     "text": "Check (ตรวจ) the document just written — every requirement is checkable, every button in the mockup is really clickable, abbreviations are spelled out the first time, and quoted text has a real source. Do not write `ผ่าน` (pass) unless it was really checked or run (`ground-rules/principle-prove-it-works`) · **Machine checkers that a subagent cannot run** (`solution-architect` · `project-manager` have no shell, while `business-analyst` · `system-analyst` · `technical-writer` have Bash and can run the checkers themselves: render pictures · `check-figure-source.py` · `check-mermaid-theme.mjs` · render .docx) → tell them to end the report with a list of commands, and the lead runs them as soon as the work comes back · **A mockup has 2 gates**: correct (`qa-tester` drives the browser) **and** good-looking (the 7-axis beauty gate of `ui-craft` item 9, by another checker, compared with a picture of the reference app) · a new or redesigned mockup starts from the visual direction in `ui-craft` item 0.1; this does not apply to old files that keep their look · if it does not pass, a fresh instance of the agent that wrote that document does the fix, then it is re-checked under the Reflection rule in `superuser` (a fresh reviewer every round · repeat until no `สูง` and `กลาง` findings remain · within the cap in `team-roles`: 3 rounds for medium work · 5 rounds for large work or work sent to outsiders), and log the result of every round in the review-result field of `docs/BUILD-PLAN.md` · write `ผ่าน` only when the latest round finds no `สูง` or `กลาง` finding (ตัดสินผลตาม [`references/requirements-docs.md`](../../dev-principles/references/requirements-docs.md) · [`references/documents-diagrams.md`](../../dev-principles/references/documents-diagrams.md) · [`references/product-project.md`](../../dev-principles/references/product-project.md)) · ใคร: `reviewer` ตัวใหม่ checks (ตรวจ) · the agent that wrote that document, ตัวใหม่, fixes on fail",
      "sub": [],
      "phase": "",
      "who": {
@@ -2233,7 +2390,7 @@
     },
     {
      "n": 7,
-     "text": "After each document is finished, log a `status-report` in `docs/BUILD-PLAN.md` and start the next document at once, without waiting for `ต่อ` (continue). You may stop before all are done in only 2 cases: a \"must have first\" document is missing that you cannot create yourself, or you hit a stop condition named in the prompt file · ใคร: หัวหน้าทีม",
+     "text": "After each document is finished, log a `superuser/status-report` in `docs/BUILD-PLAN.md` and start the next document at once, without waiting for `ต่อ` (continue). You may stop before all are done in only 2 cases: a \"must have first\" document is missing that you cannot create yourself, or you hit a stop condition named in the prompt file · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -2274,7 +2431,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Before starting, write the question the experiment will answer, and the deciding criterion as a number or something visible · ใคร: หัวหน้าทีม",
+     "text": "Open the principle files [`references/code.md`](../../dev-principles/references/code.md) · [`references/testing.md`](../../dev-principles/references/testing.md) first. Before starting, write the question the experiment will answer, and the deciding criterion as a number or something visible · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -2290,7 +2447,7 @@
     },
     {
      "n": 2,
-     "text": "Build 2–3 options, each as small as can still answer the question, in `_to_delete/prototype-<topic>/`. If the options are many or large, use `parallel-attempts-pick-best` · ใคร: `developer` ตัวใหม่ one per option (if it is not yet known which options to try: `brainstormer` ตัวใหม่ proposes first)",
+     "text": "Build 2–3 options, each as small as can still answer the question, in `_to_delete/prototype-<topic>/`. If the options are many or large, use `crew-patterns/parallel-attempts-pick-best` · ใคร: `developer` ตัวใหม่ one per option (if it is not yet known which options to try: `brainstormer` ตัวใหม่ proposes first)",
      "sub": [],
      "phase": "",
      "who": {
@@ -2342,7 +2499,7 @@
     },
     {
      "n": 5,
-     "text": "Check (ตรวจ) the decision — the numbers really come from the raw results in step 3, every option was measured the same way, and the criterion matches step 1 · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) the decision — the numbers really come from the raw results in step 3, every option was measured the same way, and the criterion matches step 1 (ตัดสินผลตาม [`references/code.md`](../../dev-principles/references/code.md) · [`references/testing.md`](../../dev-principles/references/testing.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2358,7 +2515,7 @@
     },
     {
      "n": 6,
-     "text": "Record the result in `decision-log` — chosen · not chosen · the measured numbers · ใคร: หัวหน้าทีม",
+     "text": "Record the result in `decision-desk/decision-log` — chosen · not chosen · the measured numbers · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -2399,7 +2556,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Write the behaviour that must stay the same as a checkable list, then check (ตรวจ) that a test or app-check skill covers it. If not, add a test that locks the existing behaviour before touching the code · ใคร: `qa-tester` ตัวใหม่",
+     "text": "Open the principle files [`references/code.md`](../../dev-principles/references/code.md) · [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md) first. Write the behaviour that must stay the same as a checkable list, then check (ตรวจ) that a test or app-check skill covers it. If not, add a test that locks the existing behaviour before touching the code (ตัดสินผลตาม [`references/code.md`](../../dev-principles/references/code.md) · [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md)) · ใคร: `qa-tester` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2453,7 +2610,7 @@
     },
     {
      "n": 4,
-     "text": "Where the same pattern needs fixing in many places, use a tool per `principle-build-a-tool-not-handwork` · ใคร: `developer` ตัวใหม่",
+     "text": "Where the same pattern needs fixing in many places, use a tool per `ground-rules/principle-build-a-tool-not-handwork` · ใคร: `developer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2527,7 +2684,7 @@
     },
     {
      "n": 8,
-     "text": "Check (ตรวจ) the diff per `git-and-review` — behaviour is unchanged per the list in step 1, the result of step 7 matches step 2, and nothing new snuck in · if it fails → a fresh `developer` fixes, then repeat per the review rounds in [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) the diff per `git-and-review` — behaviour is unchanged per the list in step 1, the result of step 7 matches step 2, and nothing new snuck in · if it fails → a fresh `developer` fixes, then repeat per the review rounds in [`team-roles`](team-roles.md) (ตัดสินผลตาม [`references/code.md`](../../dev-principles/references/code.md) · [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2545,7 +2702,7 @@
     },
     {
      "n": 9,
-     "text": "Deliver per the commit rules in `superuser` section 6, each piece must pass tests, then finish with `status-report` · ใคร: หัวหน้าทีม",
+     "text": "Deliver per the commit rules in `superuser` section 6, each piece must pass tests, then finish with `superuser/status-report` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -2572,7 +2729,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Set the scope — the files or diff to check (`git diff --stat main...HEAD`, then open the per-file diff only for what needs a look) and the surrounding files that must be read to understand it ([`code-craft`](../../code-craft/SKILL.md)); find the impact outside the diff per [`code-craft`](../../code-craft/SKILL.md) · ใคร: หัวหน้าทีม",
+     "text": "Open the principle file for the kind of work first (see Main principles). Set the scope — the files or diff to check (`git diff --stat main...HEAD`, then open the per-file diff only for what needs a look) and the surrounding files that must be read to understand it ([`code-craft`](../../code-craft/SKILL.md)); find the impact outside the diff per [`code-craft`](../../code-craft/SKILL.md) · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -2582,7 +2739,6 @@
       "raw": "หัวหน้าทีม"
      },
      "skills": [
-      "code-craft",
       "code-craft"
      ],
      "commands": [],
@@ -2714,7 +2870,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Check (ตรวจ) that every piece of work has been proven (tests · app-check skill). If not, go back to the original playbook · ใคร: `qa-tester` ตัวใหม่",
+     "text": "Open the principle files [`references/operations.md`](../../dev-principles/references/operations.md) · [`references/security.md`](../../dev-principles/references/security.md) first. Check (ตรวจ) that every piece of work has been proven (tests · app-check skill). If not, go back to the original playbook (ตัดสินผลตาม [`references/operations.md`](../../dev-principles/references/operations.md) · [`references/security.md`](../../dev-principles/references/security.md)) · ใคร: `qa-tester` ตัวใหม่",
      "sub": [
       "Run [`security-gate`](../../security-gate/SKILL.md) — if a confirmed critical or high finding is still open, do not ship. If a secret has leaked, stop and tell the user",
       "Web app or API going to customers → the [`security-gate` OWASP section](../../security-gate/references/owasp-top10.md) report must cover A01–A10, with no item `ไม่ผ่าน` (fail) or `ยังไม่ได้ตรวจ` (not yet checked) · Who: a fresh `security-engineer` fills it in · a fresh `reviewer` opens the evidence of every row marked `ผ่าน` (pass)"
@@ -2807,7 +2963,7 @@
     },
     {
      "n": 6,
-     "text": "**Watch until green** — if CI is red, find the root cause and fix it (`principle-fix-root-cause`); do not retry or switch off a test. For review comments from people or bots, judge each one, fix the ones that are real problems, and reply to the ones that are not, with a reason · ใคร: `developer` ตัวใหม่",
+     "text": "**Watch until green** — if CI is red, find the root cause and fix it (`fix-at-source/principle-fix-root-cause`); do not retry or switch off a test. For review comments from people or bots, judge each one, fix the ones that are real problems, and reply to the ones that are not, with a reason · ใคร: `developer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2825,7 +2981,7 @@
     },
     {
      "n": 7,
-     "text": "Before merge, check (ตรวจ) the whole PR again per the playbook [`review`](playbook-review.md), because a green CI does not mean it is safe · ใคร: `reviewer` ตัวใหม่",
+     "text": "Before merge, check (ตรวจ) the whole PR again per the playbook [`review`](playbook-review.md), because a green CI does not mean it is safe (ตัดสินผลตาม [`references/operations.md`](../../dev-principles/references/operations.md) · [`references/security.md`](../../dev-principles/references/security.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2843,7 +2999,7 @@
     },
     {
      "n": 8,
-     "text": "Merging into the main branch must wait for **`รออนุมัติ`** (awaiting approval) even when everything passes (have the merge command ready), then finish with `status-report` · ใคร: หัวหน้าทีม (merge: ผู้ใช้ ใน \"รออนุมัติ\")",
+     "text": "Merging into the main branch must wait for **`รออนุมัติ`** (awaiting approval) even when everything passes (have the merge command ready), then finish with `superuser/status-report` · ใคร: หัวหน้าทีม (merge: ผู้ใช้ ใน \"รออนุมัติ\")",
      "sub": [],
      "phase": "",
      "who": {
@@ -2884,7 +3040,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "First look for whether a skill already covers this — editing an existing skill beats creating a new one, and a new name must say what it does, not be a nickname · ใคร: หัวหน้าทีม",
+     "text": "Open the principle file `superuser:work-principles` → `references/skill-authoring.md` first. Look for whether a skill already covers this — editing an existing skill beats creating a new one, and a new name must say what it does, not be a nickname · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -2948,7 +3104,7 @@
     },
     {
      "n": 5,
-     "text": "**Blind test** — send 2 fresh subagents on the same task, one with the skill and one without (or with the old version of the skill), then have a 3rd subagent that does not know which result came from which set score them against criteria written beforehand · ใคร: `general-purpose` ตัวใหม่ 2 do the task · `reviewer` ตัวใหม่ scores blind",
+     "text": "**Blind test** — send 2 fresh subagents on the same task, one with the skill and one without (or with the old version of the skill), then have a 3rd subagent that does not know which result came from which set score them against criteria written beforehand (for a skill about code, take the test tasks from `coding-evals`) (ตัดสินผลตาม `superuser:work-principles` → `references/skill-authoring.md`) · ใคร: `general-purpose` ตัวใหม่ 2 do the task · `reviewer` ตัวใหม่ scores blind",
      "sub": [],
      "phase": "",
      "who": {
@@ -2964,7 +3120,7 @@
     },
     {
      "n": 6,
-     "text": "If the new skill does not clearly win, fix it and test again, or do not add it, then log the result in `decision-log` · ใคร: หัวหน้าทีม",
+     "text": "If the new skill does not clearly win, fix it and test again, or do not add it, then log the result in `decision-desk/decision-log` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -2996,7 +3152,7 @@
     },
     {
      "n": 8,
-     "text": "`status-report` · ใคร: หัวหน้าทีม",
+     "text": "`superuser/status-report` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -3053,7 +3209,7 @@
     },
     {
      "n": 3,
-     "text": "Split into milestones: each milestone must end in something checkable that can be shown to the owner · record in the \"สถานะล่าสุด\" (latest status) table in `docs/BUILD-PLAN.md` per `status-report` · ใคร: หัวหน้าทีม",
+     "text": "Split into milestones: each milestone must end in something checkable that can be shown to the owner · record in the \"สถานะล่าสุด\" (latest status) table in `docs/BUILD-PLAN.md` per `superuser/status-report` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -3101,7 +3257,7 @@
     },
     {
      "n": 6,
-     "text": "Do the work: agent pieces are sent together in one message, by rank and graph width (`team-roles` \"แบ่งงาน\" (splitting the work) · more than 8 at once → `parallel-split-and-merge`) · for a person's piece, send the note's path to the teammate with a due date for the returned note · pieces that must wait on others go in the next round · ใคร: ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note",
+     "text": "Do the work: agent pieces are sent together in one message, by rank and graph width (`team-roles` \"แบ่งงาน\" (splitting the work) · more than 8 at once → `crew-patterns/parallel-split-and-merge`) · for a person's piece, send the note's path to the teammate with a due date for the returned note · pieces that must wait on others go in the next round · ใคร: ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -3117,7 +3273,7 @@
     },
     {
      "n": 7,
-     "text": "Prove (พิสูจน์), per milestone: merge the milestone's pieces, then `reviewer` ตัวใหม่ checks the whole milestone in one go against the brief's \"เสร็จเมื่อ\" (done when) · risky work (money · law · health · sent to outsiders) uses `adversarial-review-panel` · fail → fix → recheck, up to the round ceiling in `team-roles` · ใคร: `reviewer` ตัวใหม่",
+     "text": "Prove (พิสูจน์), per milestone: merge the milestone's pieces, then `reviewer` ตัวใหม่ checks the whole milestone in one go against the brief's \"เสร็จเมื่อ\" (done when) · risky work (money · law · health · sent to outsiders) uses `crew-patterns/adversarial-review-panel` · fail → fix → recheck, up to the round ceiling in `team-roles` · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -3133,7 +3289,7 @@
     },
     {
      "n": 8,
-     "text": "End-of-day sync: collect incoming handover notes (people and agents equal) · update BUILD-PLAN + \"ความคืบหน้า\" (progress) and \"รับงานต่อ\" (pick up the work) in `CONTEXT.md` per playbook `pickup-and-pause` · record decisions in `decision-log` · ใคร: หัวหน้าทีม",
+     "text": "End-of-day sync: collect incoming handover notes (people and agents equal) · update BUILD-PLAN + \"ความคืบหน้า\" (progress) and \"รับงานต่อ\" (pick up the work) in `CONTEXT.md` per playbook `pickup-and-pause` · record decisions in `decision-desk/decision-log` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -3151,7 +3307,7 @@
     },
     {
      "n": 9,
-     "text": "Report to the owner: at the end of a milestone or week, with `status-report` · items that cost money or cannot be reversed go under \"รออนุมัติ\" without blocking other pieces · ใคร: หัวหน้าทีม",
+     "text": "Report to the owner: at the end of a milestone or week, with `superuser/status-report` · items that cost money or cannot be reversed go under \"รออนุมัติ\" without blocking other pieces · ใคร: หัวหน้าทีม",
      "sub": [
       "**Check per milestone, not at the end of the job.** For month-long work checked only once at the end, finding the break point is too late to fix.",
       "**A person's and an agent's pieces must not touch the same file.** The split table must state `files_allowed` with no overlap at all · shared files are written by the lead alone (`team-files`).",
@@ -3316,7 +3472,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Identify the reference (a file in `mockup/` or the old system's screen) and the real screen to compare, as pairs · ใคร: หัวหน้าทีม",
+     "text": "Open the principle file [`references/ui.md`](../../dev-principles/references/ui.md) first. Identify the reference (a file in `mockup/` or the old system's screen) and the real screen to compare, as pairs · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -3405,7 +3561,7 @@
     },
     {
      "n": 6,
-     "text": "For differences that are deliberate (the reference breaks `ui-craft` rules or cannot really be built), do not fix them to match, but record the reason in `decision-log` · ใคร: หัวหน้าทีม",
+     "text": "For differences that are deliberate (the reference breaks `ui-craft` rules or cannot really be built), do not fix them to match, but record the reason in `decision-desk/decision-log` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -3441,7 +3597,7 @@
     },
     {
      "n": 8,
-     "text": "Check (ตรวจ) that every difference in the step 4 list is closed, the latest comparison matches the reference, and the step 6 reasons hold up · if it fails → loop per the check rounds in [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) that every difference in the step 4 list is closed, the latest comparison matches the reference, and the step 6 reasons hold up · if it fails → loop per the check rounds in [`team-roles`](team-roles.md) (ตัดสินผลตาม [`references/ui.md`](../../dev-principles/references/ui.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -3457,7 +3613,7 @@
     },
     {
      "n": 9,
-     "text": "Finish with `status-report` · ใคร: หัวหน้าทีม",
+     "text": "Finish with `superuser/status-report` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {

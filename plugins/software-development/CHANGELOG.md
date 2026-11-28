@@ -1,5 +1,12 @@
 # Changelog — software-development
 
+## 4.1.0 — 2026-11-28
+
+- playbook ใหม่ `incident` (ระบบจริงล่ม: ประกาศเหตุ · วัดสิ่งที่ผู้ใช้รู้สึก · หยุดความเสียหายรออนุมัติ · หาต้นเหตุในระบบสำเนา · postmortem ไม่โทษคน · 8 ขั้น) แทนการยืม `bug-fix` · `incidents-and-monitoring` ชี้ playbook นี้
+- playbook ใหม่ `ai-feature` (ฟีเจอร์ LLM: ชุดทดสอบก่อน prompt · วัดรุ่นง่ายสุดเป็นฐาน · แก้ทีละอย่าง · ต่อเข้าระบบอย่างปลอดภัย · 8 ขั้น) · `ai-engineering` ชี้ playbook นี้
+- ตาราง `dev-principles` · `operations.md` · `data-ai.md` · `playbooks.md` · `triggers.md` ใส่ playbook ใหม่ · playbook `skill-authoring` ชี้หลักคิดใหม่ `superuser:work-principles` → `references/skill-authoring.md`
+- ยุบ skill ระดับผู้ใช้ที่ค้างนอก plugin: `office-document-handling` → `document-design/references/office-input-output.md` · ตัวอย่าง `login-story.md` ของ `user-story-writer` → `requirements-writing/references/examples/` (เดิมลิงก์ชี้ไฟล์ที่ไม่มี)
+
 ## 4.0.0 — 2026-11-27
 
 รวม skill จาก 113 เหลือ 52 (เปลี่ยนชื่อแบบไม่เข้ากับของเดิม) · เจ้าของสั่ง 2026-11-27 · เนื้อหาเดิมของแต่ละตัวย้ายไปเป็น `references/<ชื่อเก่า>.md` ของตัวที่เหลือ ไม่ได้ตัดกฎทิ้ง · eval ย้ายตามไปใต้ชื่อใหม่ · playbook ชี้ไฟล์หลักคิดและชื่อ skill ใหม่

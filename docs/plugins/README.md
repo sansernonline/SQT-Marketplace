@@ -20,9 +20,9 @@
 |---|---|---|
 | [`superuser` (แกนกลาง)](superuser/README.md) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | [แผนผัง](superuser/map.png) · flow 6 รูป · playbook 7 รูป |
 | [`e-commerce`](e-commerce/README.md) | ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย | [แผนผัง](e-commerce/map.png) · flow 6 รูป · playbook 16 รูป |
-| [`graphic-design`](graphic-design/README.md) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | [แผนผัง](graphic-design/map.png) · flow 6 รูป · playbook 7 รูป |
-| [`personal-life`](personal-life/README.md) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | [แผนผัง](personal-life/map.png) · flow 6 รูป · playbook 28 รูป |
-| [`software-development`](software-development/README.md) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | [แผนผัง](software-development/map.png) · flow 6 รูป · playbook 15 รูป |
+| [`graphic-design`](graphic-design/README.md) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | [แผนผัง](graphic-design/map.png) · flow 6 รูป · playbook 8 รูป |
+| [`personal-life`](personal-life/README.md) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | [แผนผัง](personal-life/map.png) · flow 6 รูป · playbook 29 รูป |
+| [`software-development`](software-development/README.md) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | [แผนผัง](software-development/map.png) · flow 6 รูป · playbook 17 รูป |
 | [`trading-finance`](trading-finance/README.md) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | [แผนผัง](trading-finance/map.png) · flow 6 รูป · playbook 8 รูป |
 
 ## สีในรูป

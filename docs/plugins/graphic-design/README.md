@@ -4,7 +4,7 @@
 
 ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน
 
-agent 6 · skill 63 (ของ plugin 23 · ของกลางจาก superuser 40) · คำสั่ง 0 · playbook 9 · ส่งงานต่อให้ —
+agent 6 · skill 29 (ของ plugin 14 · ของกลางจาก superuser 15) · คำสั่ง 0 · playbook 10 · ส่งงานต่อให้ —
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/graphic-design/`](../../../plugins/graphic-design/)
 
@@ -37,6 +37,7 @@ agent 6 · skill 63 (ของ plugin 23 · ของกลางจาก super
 | [`asset-cleanup`](#pb-asset-cleanup) | จัดระเบียบไฟล์งาน | 5 |
 | [`brand-setup`](#pb-brand-setup) | ตั้งชุดแบรนด์ใหม่ | 5 |
 | [`campaign`](#pb-campaign) | ทำแคมเปญหลายขนาด | 7 |
+| [`design`](#pb-design) | one design piece or a small set | 9 |
 | [`image-series`](#pb-image-series) | ทำภาพ AI เป็นชุด | 6 |
 | `learn-from-session` | เรียนรู้จากงานที่ทำ (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 7 |
 | [`review`](#pb-review) | ตรวจงานที่เสร็จแล้ว | 8 |
@@ -61,6 +62,12 @@ agent 6 · skill 63 (ของ plugin 23 · ของกลางจาก super
 ### ทำแคมเปญหลายขนาด · `campaign`
 
 ![ทำแคมเปญหลายขนาด](playbooks/campaign.png)
+
+<a id="pb-design"></a>
+
+### one design piece or a small set · `design`
+
+![one design piece or a small set](playbooks/design.png)
 
 <a id="pb-image-series"></a>
 

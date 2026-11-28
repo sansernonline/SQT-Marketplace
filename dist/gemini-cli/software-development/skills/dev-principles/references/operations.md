@@ -21,7 +21,7 @@
 - สวิตช์ฟีเจอร์ค้างจนไม่มีใครรู้ว่าตัวไหนเปิดอยู่ → เปิดฟีเจอร์ที่ซ่อนไว้โดยไม่ตั้งใจ (S7)
 
 ## ใช้คู่กับ
-skills: `cicd-and-release` · `infra-and-deploy` · `incidents-and-monitoring` · `errors-and-logs` · `project-docs` · playbook: `ship`
+skills: `cicd-and-release` · `infra-and-deploy` · `incidents-and-monitoring` · `errors-and-logs` · `project-docs` · playbook: `ship` · `incident`
 
 ## Sources (checked 2026-11-27)
 - S1 · Release Engineering, Google SRE Book · https://sre.google/sre-book/release-engineering/ · หลัก 1, 2, 3, 5 (build ซ้ำได้, ปล่อยถี่, config ใน repository)

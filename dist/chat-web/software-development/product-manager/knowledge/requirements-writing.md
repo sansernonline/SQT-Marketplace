@@ -1137,7 +1137,7 @@ AC2: <scenario name>
 
 ## Example
 
-See the full example at `examples/login-story.md`
+See the full example at [`examples/login-story.md`](examples/login-story.md)
 
 ## Prohibitions
 

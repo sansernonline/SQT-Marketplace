@@ -37,3 +37,5 @@ Shared: a worked example is in [`references/worked-example.md`](references/worke
 - An MCP server starts with local stdio, read-only, and 5 to 15 tools. Secrets come from environment variables, never from a file in the repo.
 - A community MCP server is read in full before it runs, and it runs in a sandbox first.
 - Prices quoted in a document carry a link and the date they were checked. Never quote a price from memory.
+
+Whole job (eval set → baseline → change one thing at a time → ship) → playbook `ai-feature` (`superuser/references/playbook-ai-feature.md`).

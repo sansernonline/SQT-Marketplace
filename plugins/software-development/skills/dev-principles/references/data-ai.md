@@ -20,7 +20,7 @@
 - เครื่องมือ MCP เดียวที่ทำได้ทุกอย่าง → โมเดลเลือกผิดและโทเคนหนึ่งใบเปิดทุกอย่าง (S14, S24)
 
 ## ใช้คู่กับ
-skills: `data-analysis` · `data-import-export` · `ai-engineering` · `pdpa-compliance` · `web-service-essentials` · playbook: `feature` · `prototype` · `review`
+skills: `data-analysis` · `data-import-export` · `ai-engineering` · `pdpa-compliance` · `web-service-essentials` · playbook: `ai-feature` · `feature` · `prototype` · `review`
 
 ## Sources (checked 2026-11-27)
 - S1 · Data Validation for Machine Learning (Breck et al.), MLSys 2019 · https://mlsys.org/Conferences/2019/doc/2019/167.pdf · หลัก 1 (ตรวจข้อมูลกับ schema ก่อนใช้)

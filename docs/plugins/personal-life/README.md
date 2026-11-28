@@ -4,7 +4,7 @@
 
 จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้
 
-agent 9 · skill 83 (ของ plugin 43 · ของกลางจาก superuser 40) · คำสั่ง 1 · playbook 30 · ส่งงานต่อให้ —
+agent 9 · skill 33 (ของ plugin 18 · ของกลางจาก superuser 15) · คำสั่ง 1 · playbook 31 · ส่งงานต่อให้ —
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/personal-life/`](../../../plugins/personal-life/)
 
@@ -36,7 +36,7 @@ agent 9 · skill 83 (ของ plugin 43 · ของกลางจาก super
 |---|---|---|
 | [`bills`](#pb-bills) | ไล่ดูบิลค่าน้ำค่าไฟ | 5 |
 | [`care-setup`](#pb-care-setup) | ตั้งระบบดูแลผู้สูงอายุ | 4 |
-| [`learning-path`](#pb-cert-prep) | เตรียมสอบใบรับรอง | 5 |
+| [`cert-prep`](#pb-cert-prep) | เตรียมสอบใบรับรอง | 5 |
 | [`checkup-cycle`](#pb-checkup-cycle) | วางแผนตรวจสุขภาพปีนี้ | 5 |
 | [`decide-and-goals`](#pb-decide-and-goals) | ตัดสินใจและตั้งเป้า | 4 |
 | [`digital-safety`](#pb-digital-safety) | ความปลอดภัยออนไลน์ | 5 |
@@ -58,8 +58,9 @@ agent 9 · skill 83 (ของ plugin 43 · ของกลางจาก super
 | [`review`](#pb-review) | ตรวจงานก่อนส่ง | 8 |
 | [`side-project`](#pb-side-project) | เลือกโปรเจกต์ฝึกมือ | 4 |
 | [`subscriptions`](#pb-subscriptions) | ตรวจค่าสมาชิกรายเดือน | 5 |
+| [`teach-a-course`](#pb-teach-a-course) | ออกแบบและสอนคอร์ส | 7 |
 | `team-project` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 9 |
-| [`tech-growth`](#pb-tech-radar) | ตามข่าวเทคโนโลยี | 5 |
+| [`tech-radar`](#pb-tech-radar) | ตามข่าวเทคโนโลยี | 5 |
 | [`trip`](#pb-trip) | เตรียมเที่ยว | 4 |
 | [`unattended-run`](#pb-unattended-run) | ให้ทำงานยาวเอง | 7 |
 | [`vehicle`](#pb-vehicle) | ต่อภาษีและประกันรถ | 4 |
@@ -79,7 +80,7 @@ agent 9 · skill 83 (ของ plugin 43 · ของกลางจาก super
 
 <a id="pb-cert-prep"></a>
 
-### เตรียมสอบใบรับรอง · `learning-path`
+### เตรียมสอบใบรับรอง · `cert-prep`
 
 ![เตรียมสอบใบรับรอง](playbooks/cert-prep.png)
 
@@ -203,9 +204,15 @@ agent 9 · skill 83 (ของ plugin 43 · ของกลางจาก super
 
 ![ตรวจค่าสมาชิกรายเดือน](playbooks/subscriptions.png)
 
+<a id="pb-teach-a-course"></a>
+
+### ออกแบบและสอนคอร์ส · `teach-a-course`
+
+![ออกแบบและสอนคอร์ส](playbooks/teach-a-course.png)
+
 <a id="pb-tech-radar"></a>
 
-### ตามข่าวเทคโนโลยี · `tech-growth`
+### ตามข่าวเทคโนโลยี · `tech-radar`
 
 ![ตามข่าวเทคโนโลยี](playbooks/tech-radar.png)
 
