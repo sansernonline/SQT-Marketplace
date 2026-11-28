@@ -42,7 +42,7 @@ For choosing among `learn-loop/session-lessons-to-skills` · `learn-loop/repeate
 
 ## Turning the queue into work
 
-`scripts/friction.mjs list` shows open rows of `IMPROVEMENTS.md` · `friction.mjs draft --min 2` writes a card draft per row seen 2+ times into `.claude/superuser/cards/` (its check fails on purpose until the lead writes a real one) · after the card is made or the row is dropped: `friction.mjs close <n> carded <card-id>` or `friction.mjs close <n> dropped <reason>`. Review failures counted by `ground-rules/parts/principle-prove-it-works/scripts/card.mjs stats` are a second source: a kind that keeps coming back is a candidate check.
+`scripts/friction.mjs list` shows open rows of `IMPROVEMENTS.md` (the project's `.claude/superuser/IMPROVEMENTS.md`, or `~/.claude/superuser/IMPROVEMENTS.md` when the project has none, so `close` may edit the machine-wide queue) · `friction.mjs draft --min 2` writes a card draft per row seen 2+ times into `.claude/superuser/cards/` (its check fails on purpose until the lead writes a real one) · after the card is made or the row is dropped: `friction.mjs close <n> carded <card-id>` or `friction.mjs close <n> dropped <reason>`. Review failures counted by `ground-rules/parts/principle-prove-it-works/scripts/card.mjs stats` are a second source: a kind that keeps coming back is a candidate check.
 
 ## What not to do
 

@@ -1,6 +1,6 @@
 ---
 name: document-design
-description: Use when Word, PowerPoint or PDF must look designed, MD to Word, or reading a .docx, .xlsx or .pdf someone sent
+description: Use when Word, Excel or PDF must look designed, or to read a .docx
 argument-hint: '<document name or brand name>'
 ---
 

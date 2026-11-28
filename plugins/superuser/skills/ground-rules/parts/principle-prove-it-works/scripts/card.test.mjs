@@ -339,3 +339,37 @@ test('--state keeps cards and evidence in another folder while git runs in root'
     assert.equal(run(root, 'verify', 'T-01').code, 2);
   } finally { rmSync(root, { recursive: true, force: true }); rmSync(main, { recursive: true, force: true }); }
 });
+
+test('status --write creates a missing folder', () => {
+  const root = makeRepo();
+  try {
+    card(root, 'T-01', {});
+    assert.equal(run(root, 'status', '--write', 'docs/plan/STATE.md').code, 0);
+    assert.ok(readFileSync(join(root, 'docs', 'plan', 'STATE.md'), 'utf8').includes('| T-01 |'));
+  } finally { rmSync(root, { recursive: true, force: true }); }
+});
+
+test('without --root, the nearest folder holding .claude/superuser is the root (monorepo sub-project)', () => {
+  const root = makeRepo();
+  try {
+    const sub = join(root, 'apps', 'web');
+    card(sub, 'W-01', {});
+    const r = spawnSync(process.execPath, [SCRIPT, 'status'], { cwd: join(sub), encoding: 'utf8' });
+    assert.equal(r.status, 0, r.stderr);
+    assert.match(r.stdout, /\| W-01 \|/);
+  } finally { rmSync(root, { recursive: true, force: true }); }
+});
+
+test('the home folder is never taken as the project even when ~/.claude/superuser exists', () => {
+  const home = mkdtempSync(join(tmpdir(), 'card-home-'));
+  try {
+    card(home, 'H-01', {});
+    const proj = join(home, 'proj');
+    mkdirSync(proj);
+    sh(proj, 'git', ['init', '-q']);
+    const env = { ...process.env, HOME: home, USERPROFILE: home };
+    const r = spawnSync(process.execPath, [SCRIPT, 'status'], { cwd: proj, encoding: 'utf8', env });
+    assert.equal(r.status, 0, r.stderr);
+    assert.doesNotMatch(r.stdout, /H-01/);
+  } finally { rmSync(home, { recursive: true, force: true }); }
+});

@@ -72,7 +72,7 @@ Values set by us, not measured (รอยืนยัน · agent: ปรับ�
 
 ## Stop gate
 
-When a project has `evidence/`, the Stop hook will not let the session end while a card touched in the last 24 hours is `doing` or `failed`. Verify it, abandon it, or write the line `ข้ามการ์ด: <reason>` in the final answer. Turn the gate off with `"card_gate": false` in `config.json` modules.
+When a project has `evidence/`, the Stop hook blocks the end of the session once per stop while a card touched in the last 24 hours is `doing` or `failed`; a second stop in a row goes through (Claude Code lets a Stop hook block only once), so the gate is a reminder the lead cannot miss, not a lock. If this session did not work on those cards, write the skip line. Verify it, abandon it, or write the line `ข้ามการ์ด: <reason>` in the final answer. Turn the gate off with `"card_gate": false` in `config.json` modules.
 
 ## Commands
 

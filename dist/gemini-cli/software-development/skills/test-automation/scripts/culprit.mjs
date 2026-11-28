@@ -5,7 +5,7 @@
 // Node repos usually need it, because the temp worktree has no node_modules.
 // Exit: 0 found · 1 not found · 2 usage or input error.
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -18,9 +18,26 @@ export function parseBisect(output) {
   return { sha: m[1], subject: s ? s[1].trim() : '' };
 }
 
-export function cardIdFrom(subject) {
-  const m = /\b[A-Z]{1,3}-\d+\b/.exec(subject || '');
-  return m ? m[0] : null;
+// knownIds (ids of files in .claude/superuser/cards/) filters out look-alikes such as UTF-8 or ISO-8601.
+export function cardIdFrom(subject, knownIds = null) {
+  for (const m of (subject || '').matchAll(/\b[A-Z]{1,3}-\d+\b/g)) {
+    if (!knownIds || knownIds.has(m[0])) return m[0];
+  }
+  return null;
+}
+
+// The message text changes between git versions; refs/bisect/bad is git's own answer once `bisect run` ends with 0.
+export function resolveFound(output, status, readBadRef) {
+  const found = parseBisect(output);
+  if (found || status !== 0) return found;
+  const sha = (readBadRef() || '').trim();
+  return sha ? { sha, subject: '' } : null;
+}
+
+function knownCardIds(root) {
+  const dir = path.join(root, '.claude', 'superuser', 'cards');
+  if (!existsSync(dir)) return null;
+  return new Set(readdirSync(dir).filter((f) => f.endsWith('.md')).map((f) => f.slice(0, -3)));
 }
 
 function git(args, cwd) {
@@ -98,17 +115,15 @@ export async function main(argv) {
       cwd: wt, encoding: 'utf8', env: { ...process.env, SQT_CULPRIT_CMD: o.test, SQT_CULPRIT_SETUP: o.setup || '' },
     });
     const out = (r.stdout || '') + (r.stderr || '');
-    // The message text changes between git versions; refs/bisect/bad is git's own answer once the run ends.
-    let found = parseBisect(out);
-    if (!found && r.status === 0) {
+    const found = resolveFound(out, r.status, () => {
       const bad = git(['rev-parse', 'refs/bisect/bad'], wt);
-      if (bad.code === 0 && bad.stdout.trim()) found = { sha: bad.stdout.trim(), subject: '' };
-    }
+      return bad.code === 0 ? bad.stdout : '';
+    });
     if (!found) return fail(`Bisect did not find a first bad commit (git bisect run exit ${r.status}):\n${out.trim().split(/\r?\n/).slice(-15).join('\n')}`, 1);
     let subject = found.subject;
     if (!subject) subject = git(['log', '-1', '--format=%s', found.sha], wt).stdout.trim();
     console.log(`first bad: ${found.sha} ${subject}`);
-    const id = cardIdFrom(subject);
+    const id = cardIdFrom(subject, knownCardIds(root));
     if (id) console.log(`card: ${id}`);
     return 0;
   } finally {
