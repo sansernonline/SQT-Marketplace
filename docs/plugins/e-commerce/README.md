@@ -4,7 +4,7 @@
 
 ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย
 
-agent 8 · skill 28 (ของ plugin 13 · ของกลางจาก superuser 15) · คำสั่ง 0 · playbook 18 · ส่งงานต่อให้ —
+agent 8 · skill 26 (ของ plugin 13 · ของกลางจาก superuser 13) · คำสั่ง 0 · playbook 18 · ส่งงานต่อให้ —
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/e-commerce/`](../../../plugins/e-commerce/)
 

@@ -207,7 +207,7 @@ Use when writing or reviewing TypeScript code
 ## Use when
 - Writing or reviewing TypeScript in a Node backend (Express · Fastify · NestJS), Angular, or React/Vite code.
 
-Not for: least code → `code-craft` · names and layout → `code-craft` · types and data shape before writing → `code-craft` · browser tests → `test-automation` · screens and tokens → `web-app-design`
+Not for: least code → `code-craft` · names and layout → `code-craft` · types and data shape before writing → `code-craft` · browser tests → `test-automation` · screens and tokens → `ui-craft`
 
 ## Steps
 1. Look at the repo before the first command. Use the package manager its lockfile shows (`package-lock.json` · `pnpm-lock.yaml` · `yarn.lock`), never 2 lockfiles. Follow `.nvmrc` or `engines` for Node; if absent use the latest Long Term Support (LTS), re-checking https://nodejs.org/en/about/previous-releases first (dated notes: `references/sources.md`). Follow the existing module system (`"type"` · `tsconfig` `module`), never mix ESM and CJS. Use an existing `package.json` script before guessing a command.

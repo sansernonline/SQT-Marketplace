@@ -1220,7 +1220,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 ```ts
 this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r));
 // r.status = 'up' | 'degraded' | 'down' → แสดงเป็น pill สีเขียว/เหลือง/แดง
-// (ใช้คลาส .pill-green / .pill-amber / .pill-red จาก web-app-design)
+// (ใช้คลาส .pill-green / .pill-amber / .pill-red จาก ui-craft ส่วน web-app-design)
 ```
 
 ---

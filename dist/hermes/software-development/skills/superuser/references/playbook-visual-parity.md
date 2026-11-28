@@ -2,7 +2,7 @@
 
 Use when: making a screen match a mockup · moving a screen from an old technology to a new one and it must look the same · the user says "ไม่เหมือนแบบ" (it does not look like the design)
 Main principles: [`dev-principles`](../../dev-principles/SKILL.md) · [`references/ui.md`](../../dev-principles/references/ui.md)
-Main skills: the project's app-checking skill (`test-automation`) · `ui-craft` · the skill for the screen kind (`web-app-design` · `mobile-app-design` · `windows-app-design`) · `ground-rules/principle-prove-it-works`
+Main skills: the project's app-checking skill (`test-automation`) · `ui-craft` · the skill for the screen kind (`ui-craft`) · `ground-rules/principle-prove-it-works`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 

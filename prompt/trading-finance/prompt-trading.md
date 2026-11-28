@@ -101,7 +101,7 @@ skill `market-watch` · agent `alert-dispatcher` · งานกลาง ไม
 
 ## 4. ซ้อมเทรดด้วยเงินจำลองก่อนใช้เงินจริง
 
-playbook `pre-trade` (ทำทุกขั้นกับทุกไม้จำลอง เหมือนเงินจริง) + `trade-review` (ทุกเดือน) · agent `risk-manager` + `trade-journal-coach` · skill `trade-practice` · `position-sizing` · `trade-journal`
+playbook `pre-trade` (ทำทุกขั้นกับทุกไม้จำลอง เหมือนเงินจริง) + `trade-review` (ทุกเดือน) · agent `risk-manager` + `trade-journal-coach` · skill `trade-journal` · `position-sizing` · `trade-journal`
 **ผลลัพธ์:** บันทึกเงินจำลองใน `trade-journal.csv` (`account = paper` + คอลัมน์เงินสด) · กติกาซ้อมและเกณฑ์ผ่าน · `reviews/YYYY-MM-paper.md` · **รออนุมัติ:** ย้ายไปใช้เงินจริง
 
 ### ข้อมูล (ผู้ใช้กรอก)

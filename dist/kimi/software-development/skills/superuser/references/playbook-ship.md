@@ -2,7 +2,7 @@
 
 Use when: "Open a PR" · "Keep the PR green" · "Fix per the review comments" · "Ready to merge yet" (covers pstack's `opening a PR` · `babysit` · `shipping` · `autopilot-stack`)
 Main principles: [`dev-principles`](../../dev-principles/SKILL.md) · [`references/operations.md`](../../dev-principles/references/operations.md) · [`references/security.md`](../../dev-principles/references/security.md)
-Main skills: `git-and-review` · `cicd-and-release` · [`security-gate`](../../security-gate/SKILL.md) · `crew-patterns/adversarial-review-panel`
+Main skills: `git-and-review` · `cicd-and-release` · [`security-gate`](../../security-gate/SKILL.md) · `handoff/adversarial-review-panel`
 
 > The agent **does not commit · push · merge by itself** unless permitted under the commit rule in `superuser` section 6. For a step that needs that permission when it has not been granted, prepare the command under "รออนุมัติ" (awaiting approval) and carry on with the other parts
 

@@ -1,10 +1,10 @@
 # SQT superuser — Hermes Agent
 
-> สร้างอัตโนมัติจาก plugins/superuser/ โดย scripts/build/build-targets.mjs (v4.7.1) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/superuser/ โดย scripts/build/build-targets.mjs (v4.8.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 SuperUser — a team lead agent. Sizes the task and picks a budget, writes a 5-point brief for every piece, dispatches low-effort subagents in parallel, scores them, and re-checks with a fresh reviewer until done. Optional modules (shared context, logs, improvements, learning loop, inbox, hook gates) switch on and off per project. Use it alone or as the core other plugins extend.
 
-ชุดนี้มี skill 16 ตัว · บทบาท 4 บทบาท · คำสั่งสำเร็จรูป 0 คำสั่ง
+ชุดนี้มี skill 14 ตัว · บทบาท 4 บทบาท · คำสั่งสำเร็จรูป 0 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → ไม่มี subagent แบบไฟล์ · เรียกบทบาทด้วย `/role-ชื่อบทบาท` · คำสั่งสำเร็จรูปเรียกด้วย `/ชื่อคำสั่ง`

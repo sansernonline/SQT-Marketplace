@@ -1,5 +1,10 @@
 # Changelog — graphic-design
 
+## 0.40.0 — 2026-11-28
+
+- `design-by-type` รับ `software-development:graphic-design` มาเป็นส่วน `parts/logo-and-poster/` (ไฟล์ทิศทาง · แผ่นทดสอบโลโก้ · ขนาดงานพิมพ์ · ตัวหนังสือไทยในงานภาพ)
+- สารบัญใน `image-generation/references/prompt-brief.md` และ `video-editing/references/motion.md`
+
 ## 0.39.1 — 2026-11-27
 
 - `design-principles` ชี้ชื่อ skill หลังรวม 0.38.0 และเพิ่ม `design-review` · playbook เติม skill ที่ยังไม่มี playbook เรียก

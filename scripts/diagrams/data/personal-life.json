@@ -1,10 +1,9 @@
 {
  "plugin": "personal-life",
- "version": "0.30.0",
+ "version": "0.31.0",
  "description": "Daily-life admin, five categories — life admin (weekly reviews, inbox triage, documents, travel, decisions, subscriptions, digital safety, goals), home and family (bills, maintenance, vehicle, meals, school, elder care, pets, floods, wills), health (exercise, sleep, checkups, medication, doctor visits, pregnancy — never diagnoses), career (CVs, interviews, salary, LinkedIn), and learning (learning paths, papers, tech radar, certs, side projects, thesis). General information only.",
  "cross": [],
  "skills": [
-  "career-growth",
   "course-builder",
   "digital-hygiene",
   "family-care",
@@ -18,16 +17,13 @@
   "life-principles",
   "meeting",
   "personal-kb",
-  "tech-growth",
   "thesis-writing",
   "travel-prep",
   "weekly-review"
  ],
  "core_skills": [
   "superuser",
-  "crew-patterns",
   "lean-reply",
-  "chat-prompt-workflows",
   "workspace-rules",
   "context-budget",
   "decision-desk",
@@ -51,7 +47,6 @@
    "description": "Use when changing jobs, asking for a raise, writing a CV or LinkedIn profile, or weighing offers. Thai or English.",
    "skills": [
     "job-search",
-    "career-growth",
     "superuser",
     "family-legal"
    ]
@@ -136,7 +131,6 @@
    "core": false,
    "description": "Use to keep up with tech, learn a new technology, prepare for a certification, or pick a 2-weekend side project.",
    "skills": [
-    "tech-growth",
     "learning-path",
     "thesis-writing",
     "course-builder"
@@ -2398,7 +2392,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Open the principle file [`references/tech-growth.md`](../../life-principles/references/tech-growth.md) first. Collect ideas from the user or the idea bank, then score them under `tech-growth` — learning value · can be finished in 2 weekends · really usable · ใคร: `tech-mentor` ตัวใหม่",
+     "text": "Open the principle file [`references/tech-growth.md`](../../life-principles/references/tech-growth.md) first. Collect ideas from the user or the idea bank, then score them under `learning-path` — learning value · can be finished in 2 weekends · really usable · ใคร: `tech-mentor` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2410,10 +2404,12 @@
       "raw": "`tech-mentor` ตัวใหม่"
      },
      "skills": [
-      "tech-growth"
+      "learning-path"
      ],
      "commands": [],
-     "playbooks": [],
+     "playbooks": [
+      "learning-path"
+     ],
      "approval": false
     },
     {
@@ -2801,7 +2797,7 @@
     },
     {
      "n": 6,
-     "text": "Do the work: agent pieces are sent together in one message, by rank and graph width (`team-roles` \"แบ่งงาน\" (splitting the work) · more than 8 at once → `crew-patterns/parallel-split-and-merge`) · for a person's piece, send the note's path to the teammate with a due date for the returned note · pieces that must wait on others go in the next round · ใคร: ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note",
+     "text": "Do the work: agent pieces are sent together in one message, by rank and graph width (`team-roles` \"แบ่งงาน\" (splitting the work) · more than 8 at once → `handoff/parallel-split-and-merge`) · for a person's piece, send the note's path to the teammate with a due date for the returned note · pieces that must wait on others go in the next round · ใคร: ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -2817,7 +2813,7 @@
     },
     {
      "n": 7,
-     "text": "Prove (พิสูจน์), per milestone: merge the milestone's pieces, then `reviewer` ตัวใหม่ checks the whole milestone in one go against the brief's \"เสร็จเมื่อ\" (done when) · risky work (money · law · health · sent to outsiders) uses `crew-patterns/adversarial-review-panel` · fail → fix → recheck, up to the round ceiling in `team-roles` · ใคร: `reviewer` ตัวใหม่",
+     "text": "Prove (พิสูจน์), per milestone: merge the milestone's pieces, then `reviewer` ตัวใหม่ checks the whole milestone in one go against the brief's \"เสร็จเมื่อ\" (done when) · risky work (money · law · health · sent to outsiders) uses `handoff/adversarial-review-panel` · fail → fix → recheck, up to the round ceiling in `team-roles` · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -3073,7 +3069,7 @@
     },
     {
      "n": 2,
-     "text": "Split the work into pieces that each end with a check (pieces whose check can be a command → write them as cards and let `ground-rules/parts/principle-prove-it-works/scripts/card.mjs verify` decide, per `references/cards.md` of that part; the Stop gate then holds the session until each card passes), record them in the \"ความคืบหน้า\" (progress) table in `CONTEXT.md`, choose a sub-playbook for each piece, and hand them out to fresh subagents one piece at a time · ใคร: หัวหน้าทีม",
+     "text": "Split the work into pieces that each end with a check (pieces whose check can be a command → write them as cards and let `ground-rules/parts/principle-prove-it-works/scripts/card.mjs verify` decide, per `references/cards.md` of that part; the Stop gate then stops the session once per stop while a card is unproven), record them in the \"ความคืบหน้า\" (progress) table in `CONTEXT.md`, choose a sub-playbook for each piece, and hand them out to fresh subagents one piece at a time · ใคร: หัวหน้าทีม",
      "sub": [
       "**Check external tools before handing out the first piece.** For any piece that needs an MCP (Model Context Protocol) tool, load that tool by name with ToolSearch and call it once to test now (before the user leaves). Cannot call it → mark that piece `ติด` at once, with the fix written step by step (which server to connect · how to log in), then carry on with other pieces. Do not call the API directly with curl or a token in a command instead, because that goes beyond the permission the user gave."
      ],

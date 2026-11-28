@@ -133,7 +133,7 @@ agent `devops-engineer` · skill `incidents-and-monitoring` · `errors-and-logs`
 
 ## 4. ออกรุ่นแอป Windows: installer · code signing · auto-update
 
-agent `devops-engineer` + `developer` · skill `cicd-and-release` · `windows-app-design` · `web-service-essentials` · `code-craft` · stack ตามภาษา (`stack-dotnet` · `stack-typescript` · `stack-python`)
+agent `devops-engineer` + `developer` · skill `cicd-and-release` · `ui-craft` · `web-service-essentials` · `code-craft` · stack ตามภาษา (`stack-dotnet` · `stack-typescript` · `stack-python`)
 **ต้องมีก่อน:** แอปที่ build ได้ · `docs/release-notes/v<เวอร์ชัน>.md` (ฉบับ 2) ถ้ามี
 **ผลลัพธ์:** `docs/release-windows.md` — เอกสารเท่านั้น **ไม่ซื้อใบรับรอง · ไม่ลงนามด้วยใบรับรองจริง · ไม่ส่งขึ้น store** (อยู่ใน "รออนุมัติ") · สคริปต์ build ตัวอย่างอยู่ในเอกสารเป็นบล็อกโค้ด
 

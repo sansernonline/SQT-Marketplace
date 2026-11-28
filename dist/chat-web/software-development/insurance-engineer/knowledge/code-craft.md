@@ -104,7 +104,7 @@ This is a template the agent writes into the user's repo, so its text stays Thai
 ## Survey round (every day, or after new commits)
 
 1. Read the "ทบทวนแล้ว" (reviewed) section of `docs/GARDEN.md`. A theme already decided does not need noting again.
-2. Look only at files changed since the last round (`git log --since`). Look at the whole repo only once a week, and split big jobs with `crew-patterns/parallel-split-and-merge`.
+2. Look only at files changed since the last round (`git log --since`). Look at the whole repo only once a week, and split big jobs with `handoff/parallel-split-and-merge`.
 3. Look for: duplicated logic · calls that skip a layer (a screen talking to the database directly) · traps of the framework in use · dead code · names that do not match `readable-code.md` · tests that pass although the code is wrong · anything that conflicts with `docs/AGENT-RULES.md`.
 4. **Append to the log table. Never edit code.** In the "รูปแบบ" (pattern) column, put a short, reusable word so grouping is easy.
 5. If you find nothing, write nothing.

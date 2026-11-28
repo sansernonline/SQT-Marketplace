@@ -16,7 +16,7 @@ This skill adds 3 things on top of `design-gate/design-references`: the type's o
 - A logo · poster · banner or social ad · YouTube thumbnail · Word/PDF cover · slide deck is about to be designed, from scratch or as a redesign.
 - The owner says the work looks stiff, generic or AI-made, and the job is one of those types.
 
-Not for: screens and web pages → `software-development:ui-craft` · icons → `icon-design` · a whole brand kit → `brand-kit` (it calls this skill for the logo) · a quick one-off logo or poster inside a software project, no reference blend → `software-development:graphic-design`.
+Not for: screens and web pages → `software-development:ui-craft` · icons → `icon-design` · a whole brand kit → `brand-kit` (it calls this skill for the logo) · a quick one-off logo or poster inside a software project, no reference blend → `graphic-design:design-by-type`.
 
 ## Steps
 
@@ -63,6 +63,8 @@ Not for: screens and web pages → `software-development:ui-craft` · icons → 
 - [`references/sources.md`](references/sources.md) — sources and check dates
 
 ## Parts
+
+- **Logo and poster kit** ([`parts/logo-and-poster/guide.md`](parts/logo-and-poster/guide.md)): write the direction into a file before the first pixel · logo preview sheet · print sizes · Thai text in graphics.
 
 Hard rules of the two absorbed jobs (full steps in each file; the type file above still gives the beauty rules):
 - **Banner build** ([`references/banner-build.md`](references/banner-build.md)): deliver 3 banner directions as real-size PNGs laid side by side, each with a real reference opened this round · sizes come from the platform's official page, not the copied file · run `scripts/render_banner.py` on every direction (size matches, Thai font loaded) · no other brand's logo without permission · print work is 300 dpi, 3–5 mm bleed, CMYK.

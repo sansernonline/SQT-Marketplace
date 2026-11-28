@@ -36,7 +36,7 @@
 
 ## 1. หาข้อมูลที่ยืนยันได้
 
-playbook `research` (Reranker · ReAct ตาม `crew-patterns/agent-patterns`)
+playbook `research` (Reranker · ReAct ตาม `handoff/agent-patterns`)
 **ผลลัพธ์:** `docs/research/<หัวข้อ>.md` — คำตอบก่อน ตารางคะแนนแหล่งไว้ท้าย · ทุกข้ออ้างมีป้าย `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ` · ข้อมูลของผู้ใช้ที่ไม่รู้ใส่ `(รอยืนยัน)`
 
 ### ข้อมูล (ผู้ใช้กรอก)

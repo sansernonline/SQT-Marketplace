@@ -4,7 +4,7 @@ Use when building a mobile app in code
 
 # mobile-engineering
 
-Mobile app engineering: architecture · performance · App Store / Play Store listings (for screen design use `mobile-app-design`)
+Mobile app engineering: architecture · performance · App Store / Play Store listings (for screen design use `ui-craft`)
 
 **Open only the files that match the job.** Do not read them all, because each file is the full guide to its topic.
 
@@ -1243,7 +1243,7 @@ Workflow:
 7. **Plan offline support** if applicable
 8. **Check performance budget** (launch time · frame rate · memory ตาม `mobile-engineering`)
 9. **Produce polished architecture doc** using `design-gate/polished-document-style`
-10. **Hand-off:** หน้าจอและ design tokens → `mobile-app-design` (ร่วมกับ `ux-designer`) · ลงมือเขียนแอป (iOS · Android · cross-platform) → `mobile-engineer` · App Store Optimization (ASO) → `growth-specialist`
+10. **Hand-off:** หน้าจอและ design tokens → `ui-craft` (ร่วมกับ `ux-designer`) · ลงมือเขียนแอป (iOS · Android · cross-platform) → `mobile-engineer` · App Store Optimization (ASO) → `growth-specialist`
 
 ---
 

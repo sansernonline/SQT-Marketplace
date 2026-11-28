@@ -24,7 +24,7 @@
 | Task | Use instead |
 |---|---|
 | Reviewing someone's PR or self-reviewing the code | `code-review-checklist.md` |
-| Adversarial review of a risky or contested change | `crew-patterns/adversarial-review-panel` |
+| Adversarial review of a risky or contested change | `handoff/adversarial-review-panel` |
 
 ## 0 · Look for an existing format first (every time)
 

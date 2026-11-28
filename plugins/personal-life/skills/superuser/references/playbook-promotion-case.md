@@ -2,7 +2,7 @@
 
 Use when: the mid-year or year-end performance review · the user wants to ask for a promotion or a raise · starting to log achievements
 Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/career.md`](../../life-principles/references/career.md)
-Main skills: `career-growth` (`references/performance-self-review.md`) · `job-search` for the criteria of the next position
+Main skills: `job-search` (`references/performance-self-review.md`) · `job-search` for the criteria of the next position
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 

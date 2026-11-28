@@ -1,7 +1,7 @@
 # Depth and surface flourish (depth and flourish)
 
 Realistic shadows, paper surface, clay and torn edges, for screens and mockups · use together with `SKILL.md` section 4 (shadow only for things that really float · 3 depth levels · still cards get no shadow), not instead of it
-The web app's shadow tokens (`--shadow-color` · `--elev-1` to `--elev-3` · the nested-corner formula) are in `web-app-design` → `references/tokens.md` · the looks that use each language are in [`web-looks.md`](web-looks.md)
+The web app's shadow tokens (`--shadow-color` · `--elev-1` to `--elev-3` · the nested-corner formula) are in `ui-craft` → `references/tokens.md` · the looks that use each language are in [`web-looks.md`](web-looks.md)
 
 ## Contents
 

@@ -1,6 +1,6 @@
 # Make 3 styles, then vote 2 of 3
 
-Used with `cover-design.md` step 7. It is a variant of `crew-patterns/parallel-attempts-pick-best` that swaps "1 middleman agent" for "3 reviewers who vote".
+Used with `cover-design.md` step 7. It is a variant of `handoff/parallel-attempts-pick-best` that swaps "1 middleman agent" for "3 reviewers who vote".
 Cost: about 3–5 times the work of a single style. Use it when you set a project's look for the first time, not at every version bump.
 
 ## 1 · Prepare before launching

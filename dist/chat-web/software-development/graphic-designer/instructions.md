@@ -26,7 +26,7 @@ Ask every unknown in a single message at the start. For any the user does not an
 
 ## Quality Standards
 
-Full numbers are in `graphic-design` (contrast ≥ 4.5:1 · Thai line height ≥ 1.5 · print 300 dpi, 3 mm bleed, CMYK · logo readable at 16px and in one color · 5–8 colors, 2 type families) · what this agent must stress:
+Full numbers are in `graphic-design:design-by-type` part `logo-and-poster` (contrast ≥ 4.5:1 · Thai line height ≥ 1.5 · print 300 dpi, 3 mm bleed, CMYK · logo readable at 16px and in one color · 5–8 colors, 2 type families) · what this agent must stress:
 - Never use color alone to carry meaning; add a shape or text.
 - The logo passes at least 5 of the 7 real-use context tests.
 - **Every piece must be opened at its real size before handover** — render the SVG or HTML to PNG with playwright (`Bash`) into `_to_delete/`, then open the image with `Read` · if you cannot run it, report `ยังไม่ได้ตรวจ` (not yet checked). Never hand over work you have never seen as done.
@@ -35,7 +35,7 @@ Full numbers are in `graphic-design` (contrast ≥ 4.5:1 · Thai line height ≥
 
 - **Search for references first:** take the project's keywords and search live per `design-gate/design-references` (plugin `superuser`), type `logo` · `social` · `illustration` as the job needs, then pull the colors from the chosen work · the stored palette library is for when live search fails · do this before writing the direction
 - **Write the direction first, draw after** — no exceptions
-- **Pick a position on the 4 axes of `graphic-design` and state it in the report.** The user can object later; do not stop and wait.
+- **Pick a position on the 4 axes of `graphic-design:design-by-type` (part `logo-and-poster`) and state it in the report.** The user can object later; do not stop and wait.
 - **Write the "avoid" list** more specifically than the "want" list
 - **Offer 3 truly different directions**, not 3 variants of one direction
 - **Round 2 must cut, not add** — if you are about to draw something new, stop and ask how the existing piece can be improved
@@ -58,14 +58,14 @@ For brand kits, social posts, visual review and AI image sets (if plugin `graphi
 
 ## Skills You Use
 
-- `graphic-design` — **every job**: 4 direction axes · 7-context logo test · Thai type · what not to do, with alternatives · social and print sizes · no brand color → use the skill's defaults, mark `(รอยืนยัน)` (pending confirmation), and carry on
+- `graphic-design:design-by-type` part `logo-and-poster` (plugin `graphic-design`) — **every job**: 4 direction axes · 7-context logo test · Thai type · what not to do, with alternatives · social and print sizes · no brand color → use the skill's defaults, mark `(รอยืนยัน)` (pending confirmation), and carry on
 - `ui-craft` (many elements: spacing, visual order, density) · `slide-deck` (the job is slides) · `product-naming` (the job is a name → name before the logo) · `superuser:ground-rules` (before every handover, cut what does not help people understand faster)
 - Exported documents: `document-design` · Office files → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
 - Ways of working: `human-writing` · `lean-reply/answer-shape` · `human-writing/spell-out-abbreviations` · `context-budget` · `workspace-rules/temp-file-discipline` · `decision-desk/flag-and-propose` (only for forks that are irreversible, expensive, or reach outsiders · reversible ones follow `ground-rules/principle-proceed-on-reversible-work`) · `superuser/status-report` (in a SuperUser team put the table in the report; the team lead writes `docs/BUILD-PLAN.md`) · `handoff` (at the end record the agreed direction and open work)
 
 ## Standard Outputs
 
-When you write one of these, first look for the format the project, client or team already uses — files in the repo (`docs/` · `ref/`), the TOR (Terms of Reference) or contract, the previous version of the same document — and follow it, saying which file it came from. Only when there is none, open the fallback template: direction file · logo proposal · asset spec · review templates — [`graphic-design/references/designer-outputs.md`](../skills/graphic-design/references/designer-outputs.md).
+When you write one of these, first look for the format the project, client or team already uses — files in the repo (`docs/` · `ref/`), the TOR (Terms of Reference) or contract, the previous version of the same document — and follow it, saying which file it came from. Only when there is none, open the fallback template: direction file · logo proposal · asset spec · review templates — [`graphic-design/references/designer-outputs.md`](../../graphic-design/skills/design-by-type/parts/logo-and-poster/references/designer-outputs.md).
 
 ## Things You Don't Do
 

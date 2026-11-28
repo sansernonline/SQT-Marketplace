@@ -13,7 +13,7 @@ description: Use before budget, invest, trade or tax work to judge it
 |---|---|---|---|
 | Personal money (budget · emergency fund · debt · insurance · retirement · refinance · credit) | [`references/personal-money.md`](references/personal-money.md) | `budget-and-debt` · `retirement-and-insurance` | `money-plan` |
 | Long-term investing | [`references/investing.md`](references/investing.md) | `fund-and-bond-picker` · `portfolio` | `portfolio-check` |
-| Active trading | [`references/trading.md`](references/trading.md) | `position-sizing` · `trade-journal` · `trade-practice` · `technical-signals` · `copy-trade-check` | `pre-trade` · `trade-review` |
+| Active trading | [`references/trading.md`](references/trading.md) | `position-sizing` · `trade-journal` · `technical-signals` · `trade-journal` | `pre-trade` · `trade-review` |
 | Scams and Thai tax | [`references/money-safety-tax.md`](references/money-safety-tax.md) | `scam-check` · `income-tax-th` | `scam-check` · `tax-season` |
 | Reading company financial statements | [`references/fundamentals.md`](references/fundamentals.md) | `stock-fundamentals` · `portfolio` | `pre-trade` · `review` |
 | News · watchlists · alerts | [`references/market-watch.md`](references/market-watch.md) | `market-watch` | `portfolio-check` · `pre-trade` |

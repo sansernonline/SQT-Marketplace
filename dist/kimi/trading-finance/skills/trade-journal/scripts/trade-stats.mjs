@@ -15,7 +15,7 @@ const MAX_AVG_LOSS_R = 1.2;
 // Starting value, not measured: above 1 rule break in 10 trades the results describe the breaks, not the strategy
 const MAX_VIOLATION_RATE = 0.1;
 
-// Wilson score interval, same formula as copy-trade-check/scripts/signal-check.mjs (z = 1.96 -> 95%)
+// Wilson score interval, same formula as trade-journal/parts/copy-trade-check/scripts/signal-check.mjs (z = 1.96 -> 95%)
 // en.wikipedia.org/wiki/Binomial_proportion_confidence_interval
 export function wilson(k, n, z = 1.96) {
   const p = k / n;

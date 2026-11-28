@@ -18,7 +18,7 @@ Tiers are checked from top to bottom by the core's 3 rules, and the first match 
 
 ## Team patterns — how to use them in this work (section 10)
 
-How to run each pattern, its cost and its traps are in `crew-patterns/agent-patterns`.
+How to run each pattern, its cost and its traps are in `handoff/agent-patterns`.
 
 | Pattern | How it is used in this work |
 |---|---|

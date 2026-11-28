@@ -554,7 +554,7 @@ Checked 2026-10-23.
 |---|---|
 | Search engine optimization (SEO) check | `seo-audit-checklist.md` — run Lighthouse once and share the results |
 | Setting color, spacing, type, and screen states from the design stage | `ui-craft` (§5 color contrast · §7 motion budget) |
-| Websites that tell a story through motion — reduced-motion rule from the build stage | `web-app-design` |
+| Websites that tell a story through motion — reduced-motion rule from the build stage | `ui-craft` |
 | Text, dates, numbers in Thai and English | `i18n-and-locale` |
 | Speed of an API or backend | playbook `performance` of `superuser` · `incidents-and-monitoring` |
 | Putting pa11y or Lighthouse CI in the pipeline | `cicd-and-release` · `test-automation` |
@@ -623,7 +623,7 @@ Criteria from w3.org/TR/WCAG22 (Recommendation 2024-12-12 · read 2026-10-23) ·
 | Criterion | Level | What you must see |
 |---|---|---|
 | 2.2.2 Pause, Stop, Hide | A | a carousel · background video · running numbers that play on their own for more than 5 seconds need a stop button |
-| 2.3.3 Animation from Interactions | AAA — optional | but `prefers-reduced-motion` is cheap, so follow the kill-switch in `web-app-design` rule 1, then open the page and check that the content is complete |
+| 2.3.3 Animation from Interactions | AAA — optional | but `prefers-reduced-motion` is cheap, so follow the kill-switch in `ui-craft` rule 1, then open the page and check that the content is complete |
 
 ### Thai text
 
@@ -683,7 +683,7 @@ Write the report from [`report-template.md`](report-template.md) (template, seve
 
 ## 6 · 10 repeat findings on Thai websites
 
-1. **The whole Thai font family loads, not subset** (Thai + Latin, every weight, from Google Fonts) → slow LCP, invisible text (FOIT) · fix: self-host as woff2 with only the weights in use (`web-app-design` §6 · `ui-craft`) · `font-display: swap` · `<link rel="preload">` for the single body font · line spacing per `human-writing` `thai-line-breaking.md`
+1. **The whole Thai font family loads, not subset** (Thai + Latin, every weight, from Google Fonts) → slow LCP, invisible text (FOIT) · fix: self-host as woff2 with only the weights in use (`ui-craft` §6 and its web part) · `font-display: swap` · `<link rel="preload">` for the single body font · line spacing per `human-writing` `thai-line-breaking.md`
 2. **Images with no `width` `height`** → CLS across the page when images load · fix: give the real size or `aspect-ratio`
 3. **A carousel that plays itself with no stop button**, and the first hero image has `loading="lazy"` → fails 2.2.2 and slows LCP · fix: a stop button · the first slide gets `fetchpriority="high"`, not lazy
 4. **Line-height so low that upper and lower vowels collide or get cut** (Western themes use 1.2) · fix: values from `thai-line-breaking.md` · test with 1.4.12

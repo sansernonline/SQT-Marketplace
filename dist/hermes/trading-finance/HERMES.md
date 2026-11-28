@@ -1,10 +1,10 @@
 # SQT trading-finance — Hermes Agent
 
-> สร้างอัตโนมัติจาก plugins/trading-finance/ โดย scripts/build/build-targets.mjs (v0.26.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/trading-finance/ โดย scripts/build/build-targets.mjs (v0.27.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Trading and personal finance toolkit for Thai investors — watchlists, signals, paper trading, trade journal, position sizing, dividends, budgets and scam checks, plus Thai money skills: investment tax, year-end deduction planning (/tax-plan), mutual funds, retirement, debt payoff and คลินิกแก้หนี้, insurance review and emergency funds, credit bureau reports, bonds and deposits, rebalancing and DCA, and home refinance. Uses whatever market-data plugins you already have.
 
-ชุดนี้มี skill 29 ตัว · บทบาท 9 บทบาท · คำสั่งสำเร็จรูป 0 คำสั่ง
+ชุดนี้มี skill 25 ตัว · บทบาท 9 บทบาท · คำสั่งสำเร็จรูป 0 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → ไม่มี subagent แบบไฟล์ · เรียกบทบาทด้วย `/role-ชื่อบทบาท` · คำสั่งสำเร็จรูปเรียกด้วย `/ชื่อคำสั่ง`

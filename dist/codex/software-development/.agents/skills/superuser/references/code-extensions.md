@@ -163,7 +163,7 @@ Architecture Decision Record (ADR) · User Interface (UI) · User Experience (UX
 | Subfolder | What goes in | Skill that uses it |
 |---|---|---|
 | `verify-runs/` | Screenshots and run output of the real app during checking (verify evidence) | `test-automation` · `spec-to-code-loop` |
-| `screenshots/` | Rendered images of a design or mockup (previously referenced) | `mobile-app-design` · `web-app-design` · `windows-app-design` |
+| `screenshots/` | Rendered images of a design or mockup (previously referenced) | `ui-craft` |
 | `security/` | Raw scan output | `security-gate` |
 | `check/` | The old name `spec-to-code-loop` used for check images; new work uses `verify-runs/` instead | `spec-to-code-loop` |
 

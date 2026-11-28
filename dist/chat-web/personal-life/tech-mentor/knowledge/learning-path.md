@@ -1,6 +1,6 @@
 # skill: learning-path
 
-Use to learn a framework, prep a cert, read English docs, code a paper
+Use to learn a tech, prep a cert, track releases or pick side projects
 
 # Learning Path
 
@@ -14,10 +14,11 @@ Learn on your own real project, in small wins.
 | "Turn this paper, RFC or article into a working example" | [`references/paper-to-practice.md`](references/paper-to-practice.md) (brief, smallest runnable example, run, one-page note) |
 | "I'm sitting an exam or a cloud or developer certification, or I need flashcards and quizzes" | [`references/cert-prep.md`](references/cert-prep.md) |
 | "An English error message or doc passage needs a Thai explanation" | [`references/english-tech-reading.md`](references/english-tech-reading.md) |
+| "What changed in the tools I follow this week?" · "What portfolio project should I build?" | [`parts/tech-growth/guide.md`](parts/tech-growth/guide.md) (tech radar · side project picker) |
 
 **Hard rules (paper flow):** Run the example for real. If it cannot run, say why and what was tried. Build only the smallest program that shows the core idea. If infrastructure is lacking, use a simulation and say so. Credit the paper with title, authors and date.
 
-Not for: choosing a practice or portfolio project → `tech-growth`.
+Choosing a practice or portfolio project → [`parts/tech-growth/guide.md`](parts/tech-growth/guide.md).
 
 ## Steps
 
@@ -204,9 +205,9 @@ Worked gap map (AWS SAA-C03) and the week-by-week plan file to copy to `cert/<ex
 - The official exam guide outranks every course, video and blog
 - Practice scores are measured, not felt. Never book on "I feel ready"
 - Dumps (leaked real questions) breach the candidate agreement and can lead to the certification being revoked. Refuse to use them
-- Certifications prove a baseline. Pair each one with a small project (see `tech-growth`) so the skill shows in a portfolio
+- Certifications prove a baseline. Pair each one with a small project (see `learning-path`) so the skill shows in a portfolio
 
-Related: `learning-path` (for skills beyond the exam), `tech-growth`, `english-tech-reading.md` (for long, conditional English questions), and `product-planning` in `software-development` for Scrum context.
+Related: `learning-path` (for skills beyond the exam), `learning-path`, `english-tech-reading.md` (for long, conditional English questions), and `product-planning` in `software-development` for Scrum context.
 
 ## References
 

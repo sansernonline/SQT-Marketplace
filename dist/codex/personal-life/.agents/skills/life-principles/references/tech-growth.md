@@ -13,7 +13,7 @@
 - อ่านข่าวเทคโนโลยีจากบทความสรุปไม่เปิดต้นทาง → พลาดรายละเอียดการเปลี่ยนที่ไม่เข้ากับของเดิม (S8, S9)
 
 ## ใช้คู่กับ
-skills: `tech-growth` · `learning-path` · playbook: `side-project` · `tech-radar` · `decide-and-goals`
+skills: `learning-path` · playbook: `side-project` · `tech-radar` · `decide-and-goals`
 
 ## Sources (checked 2026-11-27)
 - S1 · The Official Kanban Guide (จำกัดงานที่ค้าง), Kanban University · https://kanban.university/kanban-guide/ · หลัก 1

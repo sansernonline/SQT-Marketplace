@@ -44,7 +44,7 @@ Part rules: every task end has a status table in the central file and the reply,
 
 ## 2 · Size, pick a budget, then set the expectation
 
-**3 lines before touching the task, also on top of every plan you show the user, written with these Thai labels word for word:** `เป้า:` (goal) · `เสร็จเมื่อ:` (done-when: a check anyone can run, such as a test that passes or the failing case now working · medium tasks and up add Loop · Graph · Dynamic per [`crew-patterns/agent-patterns`](../crew-patterns/parts/agent-patterns/guide.md)) · `เสี่ยง:` (risk: can it be undone?) · Every step in the plan also says how it is checked
+**3 lines before touching the task, also on top of every plan you show the user, written with these Thai labels word for word:** `เป้า:` (goal) · `เสร็จเมื่อ:` (done-when: a check anyone can run, such as a test that passes or the failing case now working · medium tasks and up add Loop · Graph · Dynamic per [`handoff/agent-patterns`](../handoff/parts/agent-patterns/guide.md)) · `เสี่ยง:` (risk: can it be undone?) · Every step in the plan also says how it is checked
 
 - **Small**: 1 piece · code total < 200 lines → the lead does it alone, no playbook
 - **Medium**: 2–8 independent pieces · code total ≥ 200 lines → the best-fit playbook
@@ -125,7 +125,7 @@ One call lasts the whole session · casual chat gets a normal reply · any task 
 
 ## 9 · Modules and working pattern
 
-Working files live in `.claude/superuser/`, written by the lead alone · modules `context` · `log` · `improvements` · `learning` · `inbox` · `handoff` · `patterns_advanced` · `review_gate` · `split_gate` · `dispatch_gate` are switched on or off in `config.json` (no file = all on) · when off, do not read, write or mention them · details in [`modules`](references/modules.md) **Open it at session start and at task end** · The core pattern is Planning (section 2) → ReAct → Reflection (rule 3) · Multi-Agent is section 5 · MoA · Reranker · `crew-patterns/parallel-attempts-pick-best` is the `patterns_advanced` module, used when a wrong pick is costly ([`crew-patterns/agent-patterns`](../crew-patterns/parts/agent-patterns/guide.md))
+Working files live in `.claude/superuser/`, written by the lead alone · modules `context` · `log` · `improvements` · `learning` · `inbox` · `handoff` · `patterns_advanced` · `review_gate` · `split_gate` · `dispatch_gate` are switched on or off in `config.json` (no file = all on) · when off, do not read, write or mention them · details in [`modules`](references/modules.md) **Open it at session start and at task end** · The core pattern is Planning (section 2) → ReAct → Reflection (rule 3) · Multi-Agent is section 5 · MoA · Reranker · `handoff/parallel-attempts-pick-best` is the `patterns_advanced` module, used when a wrong pick is costly ([`handoff/agent-patterns`](../handoff/parts/agent-patterns/guide.md))
 
 ---
 
@@ -232,7 +232,7 @@ The `CONTEXT.md` template for this work is in [`context-template`](references/co
 
 - Never put in: account numbers · account balances · income · broker passwords or tokens.
 
-**Work patterns.** The lead picks a pattern when planning. Method, cost and pitfalls are in `crew-patterns/agent-patterns`. Examples from this plugin's work are in [`examples`](references/examples.md).
+**Work patterns.** The lead picks a pattern when planning. Method, cost and pitfalls are in `handoff/agent-patterns`. Examples from this plugin's work are in [`examples`](references/examples.md).
 
 
 ## reference: brief-template.md
@@ -493,7 +493,7 @@ Tiers run from top to bottom under the core's 3 rules, and the first match wins 
 
 ## Team patterns — how each is used in this work (section 9)
 
-How to run each pattern, its cost and its traps are in `crew-patterns/agent-patterns`.
+How to run each pattern, its cost and its traps are in `handoff/agent-patterns`.
 
 | Pattern | How it is used here |
 |---|---|
@@ -688,11 +688,11 @@ A portfolio summary page whose totals match, and every price has a reference tim
 
 Use when: about to buy or sell a stock · "how many shares should I buy" · "is it good to enter now".
 Main principles: [`money-principles`](../../money-principles/SKILL.md) · [`trading.md`](../../money-principles/references/trading.md) · [`fundamentals.md`](../../money-principles/references/fundamentals.md) · [`market-watch.md`](../../money-principles/references/market-watch.md)
-Main skills: `market-watch` · `technical-signals` · `position-sizing` · `trade-journal` · `stock-fundamentals` · `copy-trade-check`
+Main skills: `market-watch` · `technical-signals` · `position-sizing` · `trade-journal` · `stock-fundamentals` · `trade-journal`
 
 ## ขั้นตอน (Steps — copy into the todo exactly)
 
-1. Open `trading.md` first. Collect at the start, in one question: capital, budget, entry, stop, and a price-history CSV from the broker app if no market-data tool is connected. Then read the thesis for this stock from the user's `watchlist.md` in the finance folder (`market-watch` → `references/watchlist-setup.md` step 5). If there is none, write the thesis (the reason to buy), the entry point, and the point where the thesis is wrong, under `market-watch`. If the trade copies another person's trades or signals, check that source under `copy-trade-check` first · ใคร: หัวหน้าทีม (reason from the answer at the start; if none, put `(รอยืนยัน)` (pending confirmation))
+1. Open `trading.md` first. Collect at the start, in one question: capital, budget, entry, stop, and a price-history CSV from the broker app if no market-data tool is connected. Then read the thesis for this stock from the user's `watchlist.md` in the finance folder (`market-watch` → `references/watchlist-setup.md` step 5). If there is none, write the thesis (the reason to buy), the entry point, and the point where the thesis is wrong, under `market-watch`. If the trade copies another person's trades or signals, check that source under `trade-journal` first · ใคร: หัวหน้าทีม (reason from the answer at the start; if none, put `(รอยืนยัน)` (pending confirmation))
 2. Open `fundamentals.md` and `market-watch.md`, then look at the price and signals under `technical-signals` (price history: the `date,close,volume` CSV collected in step 1 with the other inputs; none and no market-data tool → mark the signal part `(รอยืนยัน)`), the company's statements under `stock-fundamentals`, and the affecting news under `market-watch` — every number has a reference time. Asked "are the financials OK?": pass on the script's flags and the company's own trend, say peers were not compared unless the user supplied them, and give no verdict · ใคร: `market-analyst` ตัวใหม่
 3. Have `risk-manager` calculate the position size under `position-sizing` from capital (the trading account), risk per trade and stop-loss distance, then check the portfolio's concentration; when the user also names a budget, the final size is the smaller of the script's size and the budget, and both numbers are shown · ใคร: `risk-manager` ตัวใหม่
 4. If there is no stop-loss point, stop at this step and do not calculate the size · ใคร: `risk-manager` ตัวใหม่
@@ -737,12 +737,12 @@ Every item in the report points to a spot in the work and has passed confirmatio
 
 Use when: about to transfer money to an investment, an app, a LINE group, or someone claiming to be an official · just transferred and suspects a scam.
 Main principles: [`money-principles`](../../money-principles/SKILL.md) · [`money-safety-tax.md`](../../money-principles/references/money-safety-tax.md)
-Main skills: `scam-check` · `copy-trade-check`
+Main skills: `scam-check` · `trade-journal`
 
 ## ขั้นตอน (Steps — copy into the todo exactly)
 
 1. If the money has already been transferred, do the urgent steps in `scam-check` before anything else (report to freeze the account · contact the bank · keep evidence) · ใคร: หัวหน้าทีม (talk to the user at once)
-2. If not yet transferred, open `money-safety-tax.md`, then ตรวจ the warning signs under `scam-check` and check the licence on the regulator's website. If the offer is a copy-trading service, check it under `copy-trade-check` · ใคร: `money-planner` ตัวใหม่
+2. If not yet transferred, open `money-safety-tax.md`, then ตรวจ the warning signs under `scam-check` and check the licence on the regulator's website. If the offer is a copy-trading service, check it under `trade-journal` · ใคร: `money-planner` ตัวใหม่
 3. Summarise the result: risk level · signs found · evidence · ใคร: `money-planner` ตัวใหม่ summarises · `reviewer` ตัวใหม่ checks the evidence and the result against `money-safety-tax.md` before it reaches the user
 4. Draft the message to the police or the bank, and a list of evidence · ใคร: หัวหน้าทีม drafts · `reviewer` ตัวใหม่ checks the draft, then the user sends it
 
@@ -778,7 +778,7 @@ A before-and-after tax table that has been recalculated, with the list of things
 
 Use when: big work that cannot finish in one session · several milestones · real people (teammates) take pieces and work alongside agents · "โปรเจกต์นี้ทำกับทีม" (this project is done with a team) · "งานเป็นเดือน" (month-long work)
 Result: `docs/BRIEF.md` + `docs/BUILD-PLAN.md` split into milestones and pieces · a `handoff/<id>.md` note for every piece · work that can be picked up across days without asking
-Main patterns: Planning → Multi-Agent → Reflection per milestone (`crew-patterns/agent-patterns`)
+Main patterns: Planning → Multi-Agent → Reflection per milestone (`handoff/agent-patterns`)
 
 **3 roles, never swap them.** The **owner** (the user: decides what awaits approval, does not do middle steps) · the **teammate** (a person: takes a `handoff` note and works like a worker, and writes the handover note back the same way) · the **worker** (an agent: per `team-roles`). People and agents use the same work order; only the `to:` field differs, holding a person's name.
 
@@ -791,8 +791,8 @@ Labels kept in Thai because the validator matches them: `ใคร:` = who · `�
 3. Split into milestones: each milestone must end in something checkable that can be shown to the owner · record in the "สถานะล่าสุด" (latest status) table in `docs/BUILD-PLAN.md` per `superuser/status-report` · ใคร: หัวหน้าทีม
 4. Lay out the shared things + the work split table: outline · data shape · templates · shared conventions (language · naming · commit), done by the lead alone · a table `ชิ้น | ไฟล์ที่แตะ | ขนาด | ต้องรอชิ้นไหน | ใคร (คน/agent) · ระดับ` (piece | files touched | size | must wait for which piece | who (person/agent) · tier) makes clear which piece goes to which teammate · ใคร: หัวหน้าทีม
 5. Write a note for every piece: every XL piece must be a file `handoff/<id>.md` per the skill `handoff` (because it surely crosses sessions), not just a chat message · ใคร: หัวหน้าทีม
-6. Do the work: agent pieces are sent together in one message, by rank and graph width (`team-roles` "แบ่งงาน" (splitting the work) · more than 8 at once → `crew-patterns/parallel-split-and-merge`) · for a person's piece, send the note's path to the teammate with a due date for the returned note · pieces that must wait on others go in the next round · ใคร: ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note
-7. Prove (พิสูจน์), per milestone: merge the milestone's pieces, then `reviewer` ตัวใหม่ checks the whole milestone in one go against the brief's "เสร็จเมื่อ" (done when) · risky work (money · law · health · sent to outsiders) uses `crew-patterns/adversarial-review-panel` · fail → fix → recheck, up to the round ceiling in `team-roles` · ใคร: `reviewer` ตัวใหม่
+6. Do the work: agent pieces are sent together in one message, by rank and graph width (`team-roles` "แบ่งงาน" (splitting the work) · more than 8 at once → `handoff/parallel-split-and-merge`) · for a person's piece, send the note's path to the teammate with a due date for the returned note · pieces that must wait on others go in the next round · ใคร: ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note
+7. Prove (พิสูจน์), per milestone: merge the milestone's pieces, then `reviewer` ตัวใหม่ checks the whole milestone in one go against the brief's "เสร็จเมื่อ" (done when) · risky work (money · law · health · sent to outsiders) uses `handoff/adversarial-review-panel` · fail → fix → recheck, up to the round ceiling in `team-roles` · ใคร: `reviewer` ตัวใหม่
 8. End-of-day sync: collect incoming handover notes (people and agents equal) · update BUILD-PLAN + "ความคืบหน้า" (progress) and "รับงานต่อ" (pick up the work) in `CONTEXT.md` per playbook `pickup-and-pause` · record decisions in `decision-desk/decision-log` · ใคร: หัวหน้าทีม
 9. Report to the owner: at the end of a milestone or week, with `superuser/status-report` · items that cost money or cannot be reversed go under "รออนุมัติ" without blocking other pieces · ใคร: หัวหน้าทีม
 
@@ -815,7 +815,7 @@ Rules specific to XL work
 
 Use when: <the situation, or 2–3 phrases the user says>
 Result: <what the user gets · file format>
-Main patterns: <Planning · ReAct · Reflection · Multi-Agent · MoA (Mixture-of-Agents) · Reranker used> (`crew-patterns/agent-patterns`)
+Main patterns: <Planning · ReAct · Reflection · Multi-Agent · MoA (Mixture-of-Agents) · Reranker used> (`handoff/agent-patterns`)
 
 ## ขั้นตอน — Steps (copy into the todo exactly)
 
@@ -852,14 +852,14 @@ How to use this template
 
 Use when: "summarise my trading results" · losing the same way again and again · the review cycle is due.
 Main principles: [`money-principles`](../../money-principles/SKILL.md) · [`trading.md`](../../money-principles/references/trading.md)
-Main skills: `trade-journal` (mode 2, review results) · `trade-practice` · agent `trade-journal-coach`
+Main skills: `trade-journal` (mode 2, review results) · `trade-journal` · agent `trade-journal-coach`
 
 ## ขั้นตอน (Steps — copy into the todo exactly)
 
 1. Open `trading.md` first. Then read the trade journal for that period only (filter by the date the position closed, do not open the whole file) and return a summary of at most 20 lines · ใคร: `trade-journal-coach` ตัวใหม่
 2. Calculate win rate, expectancy and drawdown with `scripts/trade-stats.mjs` of `trade-journal` · ใคร: `trade-journal-coach` ตัวใหม่
 3. Find the single most repeated error pattern, with real trades as examples · ใคร: `trade-journal-coach` ตัวใหม่
-4. Turn it into 1 new rule that can be tested next month, and decide on last month's rule (keep · adjust · drop). The new rule is practised on paper under `trade-practice` before any real money is used · ใคร: `trade-journal-coach` ตัวใหม่ proposes, then it goes under "รออนุมัติ" (awaiting approval)
+4. Turn it into 1 new rule that can be tested next month, and decide on last month's rule (keep · adjust · drop). The new rule is practised on paper under `trade-journal` before any real money is used · ใคร: `trade-journal-coach` ตัวใหม่ proposes, then it goes under "รออนุมัติ" (awaiting approval)
 5. ตรวจ that recalculating the statistics matches the journal, and that the rule fits `trading.md` · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
@@ -909,7 +909,7 @@ All the step 1 conditions pass, or every remaining piece has a reason why it is 
 
 # review-lenses — review package · lenses · item-by-item validator gate
 
-Used with [`playbook-review`](playbook-review.md) · `reviewer` · skill `crew-patterns/adversarial-review-panel` of plugin superuser · everywhere a fresh reviewer is used.
+Used with [`playbook-review`](playbook-review.md) · `reviewer` · skill `handoff/adversarial-review-panel` of plugin superuser · everywhere a fresh reviewer is used.
 
 The one flow in brief: **review package → reviewer holds lenses (checklists) → validator confirms item by item → log dismissed items with reasons → freshness check before reporting.** Reviewers find problems easily. Validators leave only the real ones. The package and the freshness check make everyone look at the same version of the work.
 
@@ -1153,8 +1153,8 @@ This file is the same in every plugin · the original lives in plugin `superuser
 
 | agent | model tier | use when | not for |
 |---|---|---|---|
-| `brainstormer` | large | before a large task or when the problem is unclear: think through 2–3 paths on paper, scored 1–5 (5 = best) | building several real versions and picking one → `crew-patterns/parallel-attempts-pick-best` |
-| `reviewer` | per the budget table in `SKILL.md` section 2 (balanced: medium every round · large only in the last round of risky work) | check finished work before it reaches the user or outsiders; read-only, never edits | high-risk work → `crew-patterns/adversarial-review-panel` (uses several `reviewer`s) · (if plugin `software-development` is installed) code → pair with `git-and-review` · (if plugin `graphic-design` is installed) visual work → `design-critic` or `design-review` · if neither is installed, check against the criteria in the brief |
+| `brainstormer` | large | before a large task or when the problem is unclear: think through 2–3 paths on paper, scored 1–5 (5 = best) | building several real versions and picking one → `handoff/parallel-attempts-pick-best` |
+| `reviewer` | per the budget table in `SKILL.md` section 2 (balanced: medium every round · large only in the last round of risky work) | check finished work before it reaches the user or outsiders; read-only, never edits | high-risk work → `handoff/adversarial-review-panel` (uses several `reviewer`s) · (if plugin `software-development` is installed) code → pair with `git-and-review` · (if plugin `graphic-design` is installed) visual work → `design-critic` or `design-review` · if neither is installed, check against the criteria in the brief |
 | `learning-reviewer` | medium | at the end of a multi-step task: review how the team worked, not the work itself | — |
 
 Call a fresh one every time, because whoever did the work does not review its own work · specialist reviewers (`design-critic` · `brand-keeper` · `qa-tester` · `security-engineer` · `risk-manager`) may replace `reviewer` only in a step written as "read-only · does not edit files" (call with `model: opus`) · a step in which that agent writes a test or fixes something counts as doing the work
@@ -1190,8 +1190,8 @@ Problem levels use one set in every file: **สูง · กลาง · ต่�
    - **เป็นเจ้าของไฟล์ (file owner)**: every file to be edited has exactly one owning piece · 2 pieces that must edit the same file → make one wait for the other, do not run them at the same time
    - **ทำคนเดียว (solo)** ✓ = a piece that must run while no other piece is running, such as building `dist/` · a migration · installing dependencies · editing a shared file
    - **Conflict table** (do it before handing out the first piece · record the result before moving on): 1 row for every pair of pieces that share a file or interface: `ชิ้น ก (ผลิต) | ชิ้น ข (ใช้) | ชื่อ รูป หรือ signature ที่ตกลง | ตัดสิน` (piece A (produces) | piece B (uses) | agreed name, shape, or signature | ruling) · add 1 more row per piece to check that the text of its own brief does not contradict itself · on a conflict → rule by the spec or the source file, and record the result · a bare sentence "scan clean" with no rows in the table counts as not done · the result for each pair goes into the `ผลิต` (produces) and `ใช้` (consumes) fields of the brief in item 7
-5. **The graph numbers**: critical path = highest rank · total work = the sum of all piece sizes · max width = the most pieces that can run at the same time at any moment · **number of workers = max width, but no more than the budget can bear**; there is no fixed number, because beyond the width the extra workers have no work and each must read the context anew · minimum time = the larger of the critical path and total work ÷ number of workers (a lower bound; it cannot go faster) · speed-up = total work ÷ the time actually achieved when releasing by rank (no more than total work ÷ minimum time) · if parallel gives a speed-up under 1.3 times, use a single worker (self-set value, not yet measured) · slack (per the Critical Path Method (CPM)) = latest start − earliest start; a piece with slack 0 is on the critical path and must not be late, a piece with a lot of slack can be moved later · put the critical path, max width, and speed-up in the `คาด:` (expected) line · for a graph of about 5 pieces or more, let `crew-patterns/parts/parallel-split-and-merge/scripts/plan.mjs` compute it (it also checks for cycles and duplicate file owners) · a speed-up near 1 time = the graph is a single chain, and doing it one piece at a time with one agent is cheaper (formulas from the labs DAG_Planner and Multi_Agent_Orchestra of the CWN2026 course)
-6. **Release by rank**: a piece that is ready (all the pieces it waits on are done) is sent to a fresh worker, one worker per piece, **all at once in a single message**, highest rank first · a solo piece is released when nothing else is running · when a piece finishes, release the next ready piece at once, with no need to wait for the full round · the team lead does small pieces itself · wider than 8 pieces, or repetitive file-by-file work → propose a dynamic workflow in the question at the start per `crew-patterns/parallel-split-and-merge` (the user is the one who starts it) · the user declines → release at most 8 per round by rank
+5. **The graph numbers**: critical path = highest rank · total work = the sum of all piece sizes · max width = the most pieces that can run at the same time at any moment · **number of workers = max width, but no more than the budget can bear**; there is no fixed number, because beyond the width the extra workers have no work and each must read the context anew · minimum time = the larger of the critical path and total work ÷ number of workers (a lower bound; it cannot go faster) · speed-up = total work ÷ the time actually achieved when releasing by rank (no more than total work ÷ minimum time) · if parallel gives a speed-up under 1.3 times, use a single worker (self-set value, not yet measured) · slack (per the Critical Path Method (CPM)) = latest start − earliest start; a piece with slack 0 is on the critical path and must not be late, a piece with a lot of slack can be moved later · put the critical path, max width, and speed-up in the `คาด:` (expected) line · for a graph of about 5 pieces or more, let `handoff/parts/parallel-split-and-merge/scripts/plan.mjs` compute it (it also checks for cycles and duplicate file owners) · a speed-up near 1 time = the graph is a single chain, and doing it one piece at a time with one agent is cheaper (formulas from the labs DAG_Planner and Multi_Agent_Orchestra of the CWN2026 course)
+6. **Release by rank**: a piece that is ready (all the pieces it waits on are done) is sent to a fresh worker, one worker per piece, **all at once in a single message**, highest rank first · a solo piece is released when nothing else is running · when a piece finishes, release the next ready piece at once, with no need to wait for the full round · the team lead does small pieces itself · wider than 8 pieces, or repetitive file-by-file work → propose a dynamic workflow in the question at the start per `handoff/parallel-split-and-merge` (the user is the one who starts it) · the user declines → release at most 8 per round by rank
 7. **The same form of brief for every brief**, per `handoff`: the short description of the work (the description of the Agent tool) starts with the id of the piece, e.g. `a: ออกแบบตาราง` (a: design the table), so that `plan.mjs --actual` can tie the real work to the plan · goal + the criteria that must pass · `ขนาด: <N>k` · paths of the shared things it needs · the same rules (language · naming · format → point to the same skills, e.g. `human-writing` + `workspace-rules/document-naming`) · files it may edit (per the file-owner field) · a short return (files changed · check result · decided on my own)
    - **Produces / consumes, exactly**: the `ผลิต:` field names the name, file shape, or signature this piece must give another piece, character for character (e.g. `getMember(id: string): Member`) · the `ใช้:` field names what this piece receives from another piece in the same form, copied from the conflict table, not rewritten from memory · the doer checks that the produced names match every character before sending
    - **Global Constraints**: rules every piece must keep (language version · no new dependency · date format · file names), written once in `docs/BRIEF.md` under the heading "ข้อจำกัดทั้งงาน" (global constraints) ([`brief-template`](brief-template.md)) and then copied into every brief, because a worker cannot see the other workers' briefs
@@ -1200,7 +1200,7 @@ Problem levels use one set in every file: **สูง · กลาง · ต่�
    - **Shell commands are given as patterns**: a brief that lets a worker use Bash writes runnable command shapes with `*` (e.g. `node scripts/check/*.mjs` · `git diff *`) with a prohibited list (e.g. `git push` · `git merge` · `-X POST` · deleting files) · a command not on the list: the worker stops and reports, and does not run it
 8. **Merge and review**: check the whole set by the task's real method, then send a fresh `reviewer` to check the whole task in one pass, including that every piece goes the same way
 
-**Multiple LLM accounts**: if several sessions are open on different accounts (different worktrees), the team lead hands pieces to the other sessions with `handoff` sheets per the cross-account distribution table of `plan.mjs --accounts` · if quota runs short midway, pass the baton with a handoff sheet and do not start over · setup and formulas in `crew-patterns/parallel-split-and-merge`, section "หลายบัญชี LLM" (multiple LLM accounts)
+**Multiple LLM accounts**: if several sessions are open on different accounts (different worktrees), the team lead hands pieces to the other sessions with `handoff` sheets per the cross-account distribution table of `plan.mjs --accounts` · if quota runs short midway, pass the baton with a handoff sheet and do not start over · setup and formulas in `handoff/parallel-split-and-merge`, section "หลายบัญชี LLM" (multiple LLM accounts)
 
 Example (sizes in made-up units): A design the table 2 → B write the API 3 → D integration test 2 · C fix the README 1 waits for no one → rank A 7 · B 5 · D 2 · C 1 · critical path 7 · total work 8 · max width 2 · 2 in parallel gives minimum time 7 and a speed-up of 1.1 times, under 1.3 → the graph is nearly a single chain, so use 1 worker (`คาด: ลูกทีม 1 · สายวิกฤต 7k · กว้างสุด 2 · เร็วขึ้น 1.0 เท่า`, i.e. expected: 1 worker · critical path 7k · max width 2 · speed-up 1.0 times) · C has 6 of slack and A B D have 0 · do A → B → D by rank, and C, a small piece, is done by the team lead while waiting
 
@@ -1217,7 +1217,7 @@ Example (sizes in made-up units): A design the table 2 → B write the API 3 →
 
 **Circuit breaker**: if one piece gets `ขาดบริบท` or `ติด` twice in a row, the brief or the problem is at fault, not the worker · stop sending that piece, record `ติด`, finish the other pieces, then report at the end with 2–3 paths for the user to choose · origin of the idea: skill `subagent-driven-development` in obra/superpowers (MIT) · adapted to use the same 5 status words
 
-**Wait for workers in an orderly way**: send same-session workers in the background and wait for the message saying they are done; never `sleep` and then `ls` or open report files in a loop (bench t5 2026-11-11: it looped 3–4 turns, reading 77k cache tokens each turn) · while waiting, carry on with your own work (small pieces · the conflict table · a draft report) · the method below applies only to work with no completion message (sent across sessions or across accounts with a `handoff` sheet): only once free, wait 5–10 minutes with `crew-patterns/parts/agent-patterns/scripts/keep-waiting.mjs --until-file <report file>` (sleeps shorter than the Bash timeout, then prints a request to rerun until the file appears, with no need to ask in chat) · at the end of each wait cycle, post a 1-line status (how many finished · how many still running), then chase the workers whose report file has arrived but has not yet been received
+**Wait for workers in an orderly way**: send same-session workers in the background and wait for the message saying they are done; never `sleep` and then `ls` or open report files in a loop (bench t5 2026-11-11: it looped 3–4 turns, reading 77k cache tokens each turn) · while waiting, carry on with your own work (small pieces · the conflict table · a draft report) · the method below applies only to work with no completion message (sent across sessions or across accounts with a `handoff` sheet): only once free, wait 5–10 minutes with `handoff/parts/agent-patterns/scripts/keep-waiting.mjs --until-file <report file>` (sleeps shorter than the Bash timeout, then prints a request to rerun until the file appears, with no need to ask in chat) · at the end of each wait cycle, post a 1-line status (how many finished · how many still running), then chase the workers whose report file has arrived but has not yet been received
 
 ## Decisions that must stay on the top model
 
@@ -1237,7 +1237,7 @@ For code work that has tests and is not risky, use the test gate before the revi
 - **Round cap**: a medium task at most 3 rounds · a large or risky task (money · law · health · reaching outsiders) at most 5 rounds · cap reached and still failing → stop looping, label `ติด`, finish the other parts, and report the remaining items at the end
 - **Escalate the fixer by round**: rounds 1–3 the fixer is the same agent for that piece (follow-up message, full criteria and the full item list) · rounds 4–5 (only for large or risky tasks whose cap is 5) switch to a fresh agent one tier higher on the ladder `haiku → sonnet → opus → fable` of `SKILL.md` section 5, with the reports of every round so far, because the same agent that has fixed for 3 rounds without passing usually keeps circling the same method · already at the top of the ladder → use a fresh agent at the same tier, and do not retry with the same one
 - **Deferred-items ledger**: medium and low items the lead chooses not to fix this round (because the cost of fixing is higher than the expected value, or the next round will review only the diff) go into the "ค้างอยู่" table of `CONTEXT.md`, one row per item: `รอบ · ไฟล์:บรรทัด · ข้อ · ระดับ · เหตุที่เลื่อน` (round · file:line · item · level · reason deferred) · at the end of the task the lead reads every row of this ledger and fixes or reports each one, never letting them vanish silently · a high item cannot be deferred
-- **Claims that must each be proved** (the conclusion of a search or analysis that the reviewer must go through one by one) use the ledger `PROVED · REFUTED · OPEN` instead of a plain list of findings → skill `crew-patterns/agent-patterns` of plugin superuser, section ledger
+- **Claims that must each be proved** (the conclusion of a search or analysis that the reviewer must go through one by one) use the ledger `PROVED · REFUTED · OPEN` instead of a plain list of findings → skill `handoff/agent-patterns` of plugin superuser, section ledger
 - **Record every round**: a `review` line (round · reviewer · result · count at each level) in `.claude/superuser/log/<date>/main.jsonl` per [`learning-loop`](learning-loop.md)
 
 ## Sources
@@ -1259,10 +1259,10 @@ Moved from `SKILL.md` section 3. Open it when unsure which skill to call, or whe
 | Reading financial statements · P/E ROE D/E · screening stocks by fundamentals | `stock-fundamentals` + agent `market-analyst` |
 | Logging a trade · reviewing results | `trade-journal` (log a trade · review mode) + agent `trade-journal-coach` |
 | Setting a price or news alert | agent `alert-dispatcher` |
-| Choosing a copy-trade signal on MQL5 (MT4/MT5) · setting up copying · weekly monitoring · whether to stop following | `copy-trade-check` + agent `risk-manager` |
+| Choosing a copy-trade signal on MQL5 (MT4/MT5) · setting up copying · weekly monitoring · whether to stop following | `trade-journal` + agent `risk-manager` |
 | Starting to follow a new stock · tidying a messy watchlist | `market-watch` |
-| Trying trading without real money | `trade-practice` |
-| Wants to learn trading step by step · which technique to start with · ready for the next stage or for real money | `trade-practice` + agent `trade-journal-coach` |
+| Trying trading without real money | `trade-journal` |
+| Wants to learn trading step by step · which technique to start with · ready for the next stage or for real money | `trade-journal` + agent `trade-journal-coach` |
 | Portfolio · dividends | `portfolio` |
 | Budget, debt, emergency fund, retirement, insurance, funds | `budget-and-debt` · `retirement-and-insurance` · `fund-and-bond-picker` + agent `money-planner` |
 | Tax and deductions | `income-tax-th` + agent `money-planner` |

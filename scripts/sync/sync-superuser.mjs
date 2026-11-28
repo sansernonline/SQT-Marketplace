@@ -13,7 +13,7 @@ import { fileURLToPath } from "node:url";
 // ของกลางที่อยู่ใน plugin superuser ที่เดียว · plugin อื่นประกาศ "dependencies": ["superuser"] แล้วใช้ร่วมกัน
 // ห้ามมีสำเนาใน plugin อื่น: สำเนาทำให้ชื่อ skill ซ้ำในรายการ skill ของทุก session จนเกินงบรายการ และ hook ทำงานซ้ำทุกเหตุการณ์
 export const SHARED_ONLY_IN_SUPERUSER = [
-  "skills/crew-patterns", "skills/lean-reply", "skills/chat-prompt-workflows", "skills/workspace-rules", "skills/context-budget", "skills/decision-desk", "skills/design-gate", "skills/handoff", "skills/human-writing", "skills/superuser/parts/model-scorecard", "skills/learn-loop", "skills/ground-rules", "skills/fix-at-source", "skills/research-with-sources", "skills/skill-authoring", "skills/superuser/parts/status-report",
+  "skills/lean-reply", "skills/workspace-rules", "skills/context-budget", "skills/decision-desk", "skills/design-gate", "skills/handoff", "skills/human-writing", "skills/superuser/parts/model-scorecard", "skills/learn-loop", "skills/ground-rules", "skills/fix-at-source", "skills/research-with-sources", "skills/skill-authoring", "skills/superuser/parts/status-report",
   "agents/learning-reviewer.md", "agents/brainstormer.md", "agents/reviewer.md", "agents/worker.md",
   "hooks",
 ];

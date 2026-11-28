@@ -20,7 +20,7 @@
 - ใช้สีบอกสถานะอย่างเดียว หรือทดสอบแค่โหมดสว่าง → คนตาบอดสีและผู้ใช้โหมดมืดหรือ high contrast มองไม่เห็น (S2, S9, S14, S16)
 
 ## ใช้คู่กับ
-skills: `ui-craft` · `web-app-design` · `mobile-app-design` · `windows-app-design` · `design-system` · `web-audit` · `i18n-and-locale` · playbook: `visual-parity` · `review` · `feature` · visual direction และ "ไม่ให้ดูเป็น AI": superuser `design-gate` · วิธีออกแบบทั่วไป: superuser `design-gate/parts/design-method/guide.md`
+skills: `ui-craft` · `design-system` · `web-audit` · `i18n-and-locale` · playbook: `visual-parity` · `review` · `feature` · visual direction และ "ไม่ให้ดูเป็น AI": superuser `design-gate` · วิธีออกแบบทั่วไป: superuser `design-gate/parts/design-method/guide.md`
 
 ## Sources (checked 2026-11-27)
 - S1 · What's New in WCAG 2.2, W3C WAI · https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/ · หลัก 6, 7, 8 (2.4.11, 2.5.7, 2.5.8, 3.3.7, 3.3.8)

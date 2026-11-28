@@ -15,7 +15,7 @@ The rules, model names, and mid-task switching are in `SKILL.md` section 5 (hand
 
 ## Team patterns — how each is used in this work (section 9)
 
-How to do each, its cost, and its traps are in `crew-patterns/agent-patterns`.
+How to do each, its cost, and its traps are in `handoff/agent-patterns`.
 
 | Pattern | How it is used in this work |
 |---|---|

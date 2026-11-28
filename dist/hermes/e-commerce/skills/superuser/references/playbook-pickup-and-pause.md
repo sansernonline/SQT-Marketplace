@@ -2,7 +2,7 @@
 
 Use when: "ทำต่อจากเมื่อวาน" (continue from yesterday) · "ค้างไว้ตรงไหน" (where did we leave off) · taking over from another agent or vendor · "พอก่อน เดี๋ยวมาทำต่อ" (enough for now, I'll continue later)
 Result: a status summary checked against the real thing (when picking up) · a "รับงานต่อ" (pick up the work) section in `CONTEXT.md` that someone else can read and start from at once (when pausing)
-Main patterns: ReAct · Reflection (`crew-patterns/agent-patterns`)
+Main patterns: ReAct · Reflection (`handoff/agent-patterns`)
 
 Code work (branch · sandbox/docker · server · test) → the same playbook in plugin `software-development`
 

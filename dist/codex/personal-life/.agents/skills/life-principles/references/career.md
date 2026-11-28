@@ -19,7 +19,7 @@
 - ลาออกด้วยอารมณ์โดยไม่เช็กสัญญาและสิทธิ์ → เสียสิทธิ์และเสี่ยงข้อพิพาท (S18, S19, S13)
 
 ## ใช้คู่กับ
-skills: `job-search` · `career-growth` · playbook: `job-application` · `interview` · `offer-negotiation` · `promotion-case` · `profile-refresh`
+skills: `job-search` · playbook: `job-application` · `interview` · `offer-negotiation` · `promotion-case` · `profile-refresh`
 
 ## Sources (checked 2026-11-27)
 - S1 · Create a strong resume, Harvard Office of Career Services · https://careerservices.fas.harvard.edu/resources/create-a-strong-resume · หลัก 1

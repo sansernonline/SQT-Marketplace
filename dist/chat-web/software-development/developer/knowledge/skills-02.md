@@ -44,7 +44,7 @@ Part rules: every task end has a status table in the central file and the reply,
 
 ## 2 · Size, pick a budget, then set the expectation
 
-**3 lines before touching the task, also on top of every plan you show the user, written with these Thai labels word for word:** `เป้า:` (goal) · `เสร็จเมื่อ:` (done-when: a check anyone can run, such as a test that passes or the failing case now working · medium tasks and up add Loop · Graph · Dynamic per [`crew-patterns/agent-patterns`](../crew-patterns/parts/agent-patterns/guide.md)) · `เสี่ยง:` (risk: can it be undone?) · Every step in the plan also says how it is checked
+**3 lines before touching the task, also on top of every plan you show the user, written with these Thai labels word for word:** `เป้า:` (goal) · `เสร็จเมื่อ:` (done-when: a check anyone can run, such as a test that passes or the failing case now working · medium tasks and up add Loop · Graph · Dynamic per [`handoff/agent-patterns`](../handoff/parts/agent-patterns/guide.md)) · `เสี่ยง:` (risk: can it be undone?) · Every step in the plan also says how it is checked
 
 - **Small**: 1 piece · code total < 200 lines → the lead does it alone, no playbook
 - **Medium**: 2–8 independent pieces · code total ≥ 200 lines → the best-fit playbook
@@ -125,7 +125,7 @@ One call lasts the whole session · casual chat gets a normal reply · any task 
 
 ## 9 · Modules and working pattern
 
-Working files live in `.claude/superuser/`, written by the lead alone · modules `context` · `log` · `improvements` · `learning` · `inbox` · `handoff` · `patterns_advanced` · `review_gate` · `split_gate` · `dispatch_gate` are switched on or off in `config.json` (no file = all on) · when off, do not read, write or mention them · details in [`modules`](references/modules.md) **Open it at session start and at task end** · The core pattern is Planning (section 2) → ReAct → Reflection (rule 3) · Multi-Agent is section 5 · MoA · Reranker · `crew-patterns/parallel-attempts-pick-best` is the `patterns_advanced` module, used when a wrong pick is costly ([`crew-patterns/agent-patterns`](../crew-patterns/parts/agent-patterns/guide.md))
+Working files live in `.claude/superuser/`, written by the lead alone · modules `context` · `log` · `improvements` · `learning` · `inbox` · `handoff` · `patterns_advanced` · `review_gate` · `split_gate` · `dispatch_gate` are switched on or off in `config.json` (no file = all on) · when off, do not read, write or mention them · details in [`modules`](references/modules.md) **Open it at session start and at task end** · The core pattern is Planning (section 2) → ReAct → Reflection (rule 3) · Multi-Agent is section 5 · MoA · Reranker · `handoff/parallel-attempts-pick-best` is the `patterns_advanced` module, used when a wrong pick is costly ([`handoff/agent-patterns`](../handoff/parts/agent-patterns/guide.md))
 
 ---
 
@@ -192,7 +192,7 @@ Do reversible work right away. Do not do irreversible work or work that affects 
 
 Software work uses `docs/BUILD-PLAN.md` (status table and `decision-desk/decision-log`) instead of `HISTORY.md`. Create `CONTEXT.md` per `handoff` → `references/team-memory.md` section 2.
 
-**Working patterns** — pick at planning time. How to run them, costs, pitfalls → `crew-patterns/agent-patterns`. Examples → [`examples`](references/examples.md)
+**Working patterns** — pick at planning time. How to run them, costs, pitfalls → `handoff/agent-patterns`. Examples → [`examples`](references/examples.md)
 
 
 ## reference: agents.md
@@ -514,7 +514,7 @@ Architecture Decision Record (ADR) · User Interface (UI) · User Experience (UX
 | Subfolder | What goes in | Skill that uses it |
 |---|---|---|
 | `verify-runs/` | Screenshots and run output of the real app during checking (verify evidence) | `test-automation` · `spec-to-code-loop` |
-| `screenshots/` | Rendered images of a design or mockup (previously referenced) | `mobile-app-design` · `web-app-design` · `windows-app-design` |
+| `screenshots/` | Rendered images of a design or mockup (previously referenced) | `ui-craft` |
 | `security/` | Raw scan output | `security-gate` |
 | `check/` | The old name `spec-to-code-loop` used for check images; new work uses `verify-runs/` instead | `spec-to-code-loop` |
 
@@ -617,15 +617,15 @@ Moved from `SKILL.md` sections 5 and 6 and `superuser:superuser` section 9. The 
 
 ## Team patterns — how to use them in this work (`superuser:superuser` section 9)
 
-How to do each one, its cost and its traps are in `crew-patterns/agent-patterns`.
+How to do each one, its cost and its traps are in `handoff/agent-patterns`.
 
 | Pattern | How it is used in this work |
 |---|---|
 | **Planning** | Pick playbooks into a todo; for long work use `docs/BUILD-PLAN.md` |
 | **ReAct** | Run every piece for real · `ground-rules/principle-small-verifiable-steps` · the project's app-checking skill |
-| **Reflection** | A fresh reviewer in the playbook's review step; if the work is risky, use `crew-patterns/adversarial-review-panel` |
-| **Multi-Agent** | Per section 5. If there are several independent pieces, use `crew-patterns/parallel-split-and-merge`; for the documents track use `/software-development:requirements-writing` |
-| **Mixture-of-Agents (MoA)** | For design · API · mockups that could lock in the wrong shape, use `crew-patterns/parallel-attempts-pick-best` |
+| **Reflection** | A fresh reviewer in the playbook's review step; if the work is risky, use `handoff/adversarial-review-panel` |
+| **Multi-Agent** | Per section 5. If there are several independent pieces, use `handoff/parallel-split-and-merge`; for the documents track use `/software-development:requirements-writing` |
+| **Mixture-of-Agents (MoA)** | For design · API · mockups that could lock in the wrong shape, use `handoff/parallel-attempts-pick-best` |
 | **Reranker** | Choose which files to read from whole-repo search results (`context-budget`) · choose best-practice sources · choose a library from `research-with-sources/prior-art-review` |
 
 
@@ -796,7 +796,7 @@ Main skills: [`code-craft`](../../code-craft/SKILL.md) · the skill for the stac
 Use when: a new feature · changing existing behavior · following requirements in an SRS or FSD
 Main principles: [`dev-principles`](../../dev-principles/SKILL.md) · [`references/code.md`](../../dev-principles/references/code.md) · [`references/testing.md`](../../dev-principles/references/testing.md) · [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md)
 Main skills: [`code-craft`](../../code-craft/SKILL.md) · the skill for the stack (`stack-dotnet` · `stack-typescript` · `stack-python` · `stack-sql` · `stack-mql`) · `test-automation` · `spec-to-code-loop` (if there are several requirements)
-Pick the skill for the part you touch: `api-design` · `web-service-essentials` · `database-design` · `async-messaging` · `errors-and-logs` · `i18n-and-locale` · `architecture` · `requirements-writing` · `domain-systems` · `ai-engineering` · `data-analysis` · `data-import-export` · `mobile-engineering` · `game-development` · `developer-experience` · screens: `web-app-design` · `mobile-app-design` · `windows-app-design` · `design-system`
+Pick the skill for the part you touch: `api-design` · `web-service-essentials` · `database-design` · `async-messaging` · `errors-and-logs` · `i18n-and-locale` · `architecture` · `requirements-writing` · `domain-systems` · `ai-engineering` · `data-analysis` · `data-import-export` · `mobile-engineering` · `game-development` · `developer-experience` · screens: `ui-craft` · `design-system`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
@@ -805,13 +805,13 @@ Pick the skill for the part you touch: `api-design` · `web-service-essentials` 
    - Split into 3 layers (input → business rules → storage)
    - If it touches outside input · login · files · money · personal data, open [`security-gate`](../../security-gate/SKILL.md). For a feature exposed to the outside, send a fresh `security-engineer` to do STRIDE per `security-audit/references/security-templates.md` before writing (or have that `security-engineer` draw the STRIDE model with `security-audit` → `references/threat-model.md`)
    - Web app or API → follow the "must have" column of [`security-gate` OWASP section](../../security-gate/references/owasp-top10.md) for the parts the feature touches, and write tests per the "prove with" column (test names start with the item ID, such as `A01_`)
-3. If the feature crosses several modules, draft the function signatures and file locations before writing the body. If several approaches are still equally good, use `crew-patterns/parallel-attempts-pick-best` or the `prototype` playbook · ใคร: หัวหน้าทีม (several equally good approaches: `developer` ตัวใหม่ one per approach)
+3. If the feature crosses several modules, draft the function signatures and file locations before writing the body. If several approaches are still equally good, use `handoff/parallel-attempts-pick-best` or the `prototype` playbook · ใคร: หัวหน้าทีม (several equally good approaches: `developer` ตัวใหม่ one per approach)
 4. At the spot you will touch, delete what is unused first, then add ([`code-craft`](../../code-craft/SKILL.md)) · ใคร: `developer` ตัวใหม่
 5. Split the work into small pieces that can be checked one by one, each piece 1 requirement or 1 screen, then send each piece to a `developer` agent ตัวใหม่ with the map from step 1, the file locations, and the pass criteria · Pieces that do not wait on each other (different files · different modules) go out together in one message, even if each is short · ใคร: `developer` ตัวใหม่ per piece
    - **Test before code** for a piece with logic (calculation · conditions · state): write a test that fails → run it and see it red → write the code until green → clean up. For a pure screen piece, check with the app-checking skill instead.
 6. Check (ตรวจ) every piece before moving to the piece that waits on it — that piece's tests must pass, and click through the real app with the project's app-check skill (ตัดสินผลตาม [`references/code.md`](../../dev-principles/references/code.md) · [`references/testing.md`](../../dev-principles/references/testing.md) · [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md)) · ใคร: `qa-tester` ตัวใหม่
    - **Every new behavior and every decision you made yourself needs at least 1 test that locks it in**, and the test must fail when the code is wrong (`ground-rules/principle-prove-it-works`)
-7. **Check (ตรวจ) by review before saying done — do not skip.** Small diff: correctness and edge cases · much logic or state: `crew-patterns/adversarial-review-panel` with at least 2 angles, correctness and simplicity. If a dependency is added or a risky area is touched, also pass it through [`security-gate`](../../security-gate/SKILL.md) and judge it against `security.md` (access checked on the server: a user without the role gets 403) (ตัดสินผลตาม [`references/code.md`](../../dev-principles/references/code.md) · [`references/testing.md`](../../dev-principles/references/testing.md) · [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md)) · ใคร: `reviewer` ตัวใหม่ (much logic: `reviewer` ตัวใหม่ per angle · risky area: `security-engineer` ตัวใหม่ อ่านอย่างเดียว · ไม่แก้ไฟล์)
+7. **Check (ตรวจ) by review before saying done — do not skip.** Small diff: correctness and edge cases · much logic or state: `handoff/adversarial-review-panel` with at least 2 angles, correctness and simplicity. If a dependency is added or a risky area is touched, also pass it through [`security-gate`](../../security-gate/SKILL.md) and judge it against `security.md` (access checked on the server: a user without the role gets 403) (ตัดสินผลตาม [`references/code.md`](../../dev-principles/references/code.md) · [`references/testing.md`](../../dev-principles/references/testing.md) · [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md)) · ใคร: `reviewer` ตัวใหม่ (much logic: `reviewer` ตัวใหม่ per angle · risky area: `security-engineer` ตัวใหม่ อ่านอย่างเดียว · ไม่แก้ไฟล์)
    - All tests passing does not mean there are no bugs — for every finding the review confirmed, write a failing test first, then fix
    - A screen that has a mockup or must match the old system ends its check with playbook `visual-parity`
 8. Fix the findings the lead has confirmed — write the failing test first, then fix · ใคร: `developer` ตัวใหม่
@@ -963,7 +963,7 @@ Every lesson can point to the file it went into · a repeated mistake has a chec
 Use when: "Make app X for me" · "Try setting up a project" · there is no code yet or only an empty folder (if you need the full document set, BRD · SRS, first, use playbook `project-docs` first, then come back here)
 Main principles: [`dev-principles`](../../dev-principles/SKILL.md) · [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md) · [`references/requirements-docs.md`](../../dev-principles/references/requirements-docs.md) · [`references/testing.md`](../../dev-principles/references/testing.md)
 Main skills: `project-bootstrap` · [`project-docs`](../../project-docs/SKILL.md) · `requirements-writing` · `spec-to-code-loop` · `architecture` · `code-craft` · [`security-gate`](../../security-gate/SKILL.md) · [`test-automation`](../../test-automation/SKILL.md) · `infra-and-deploy` · `diagrams`
-Pick the skill for the part you touch: `api-design` · `web-service-essentials` · `database-design` · `async-messaging` · `errors-and-logs` · `i18n-and-locale` · `architecture` · `requirements-writing` · `domain-systems` · `ai-engineering` · `data-analysis` · `data-import-export` · `mobile-engineering` · `game-development` · `developer-experience` · screens: `web-app-design` · `mobile-app-design` · `windows-app-design` · `design-system`
+Pick the skill for the part you touch: `api-design` · `web-service-essentials` · `database-design` · `async-messaging` · `errors-and-logs` · `i18n-and-locale` · `architecture` · `requirements-writing` · `domain-systems` · `ai-engineering` · `data-analysis` · `data-import-export` · `mobile-engineering` · `game-development` · `developer-experience` · screens: `ui-craft` · `design-system`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
@@ -972,7 +972,7 @@ Pick the skill for the part you touch: `api-design` · `web-service-essentials` 
 3. **State the data shape and lay out the file structure** — set up the folders per [`project-docs`](../../project-docs/SKILL.md) layout B: files received (SRS) go in `ref/`, documents we write go in `docs/`, and source code goes in `<project-name>/` (project name lowercase, joined by `-`). Business rules are pure functions that touch no screen or database. Split the layers as input → business rules → display or store. Organize folders by function, put tests next to the code, and make the README answer "how to run · how to test · what is where" (`project-bootstrap`) · ใคร: `developer` ตัวใหม่
 4. **Build verify before feature 2** — verify is a script that runs the real app and checks the result. As soon as the first screen exists, create `<project-name>/test/e2e/verify.*` and a verify skill per `test-automation`. For a mobile app, verify must drive a real build on an emulator and inject hardware values (for example the emulator's sensor values), and write down which items still need trying on a real device (`ground-rules/principle-prove-it-works`). For a project that will be used for a long time, also set up [`infra-and-deploy`](../../infra-and-deploy/SKILL.md) · ใคร: `qa-tester` ตัวใหม่
 5. **Build one piece at a time per playbook `feature`** — write unit tests for the rules, break the code in 1 spot and the test must fail, drive the real screen with verify, and look at the screenshot yourself · ใคร: `developer` ตัวใหม่ per piece
-6. **Check (ตรวจ) with a review panel of 3 angles** (`crew-patterns/adversarial-review-panel`) (ตัดสินผลตาม [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md) · [`references/requirements-docs.md`](../../dev-principles/references/requirements-docs.md) · [`references/testing.md`](../../dev-principles/references/testing.md)) · ใคร: `reviewer` ตัวใหม่ per angle
+6. **Check (ตรวจ) with a review panel of 3 angles** (`handoff/adversarial-review-panel`) (ตัดสินผลตาม [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md) · [`references/requirements-docs.md`](../../dev-principles/references/requirements-docs.md) · [`references/testing.md`](../../dev-principles/references/testing.md)) · ใคร: `reviewer` ตัวใหม่ per angle
 7. **[`security-gate`](../../security-gate/SKILL.md)** — check (ตรวจ) by scanning secrets, dependencies, and code. The lead keeps the report in `qa/security/`. For a web app or API, add an OWASP report item by item A01–A10 per [`references/owasp-top10.md`](../../security-gate/references/owasp-top10.md) (ตัดสินผลตาม [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md) · [`references/requirements-docs.md`](../../dev-principles/references/requirements-docs.md) · [`references/testing.md`](../../dev-principles/references/testing.md)) · ใคร: `security-engineer` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)
 8. Fix every finding from steps 6–7 that the lead has confirmed — write the failing test first, then fix · ใคร: `developer` ตัวใหม่
 9. Check (ตรวจ) again — look at every earlier finding and every changed spot, and repeat until no `สูง` (high) or `กลาง` (medium) finding is left, per [`team-roles`](team-roles.md) (ตัดสินผลตาม [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md) · [`references/requirements-docs.md`](../../dev-principles/references/requirements-docs.md) · [`references/testing.md`](../../dev-principles/references/testing.md)) · ใคร: `reviewer` ตัวใหม่
@@ -1074,7 +1074,7 @@ Main skills: `code-craft` · `test-automation` · `decision-desk/decision-log`
 ## ขั้นตอน · Steps (copy into the todo as written)
 
 1. Open the principle files [`references/code.md`](../../dev-principles/references/code.md) · [`references/testing.md`](../../dev-principles/references/testing.md) first. Before starting, write the question the experiment will answer, and the deciding criterion as a number or something visible · ใคร: หัวหน้าทีม
-2. Build 2–3 options, each as small as can still answer the question, in `_to_delete/prototype-<topic>/`. If the options are many or large, use `crew-patterns/parallel-attempts-pick-best` · ใคร: `developer` ตัวใหม่ one per option (if it is not yet known which options to try: `brainstormer` ตัวใหม่ proposes first)
+2. Build 2–3 options, each as small as can still answer the question, in `_to_delete/prototype-<topic>/`. If the options are many or large, use `handoff/parallel-attempts-pick-best` · ใคร: `developer` ตัวใหม่ one per option (if it is not yet known which options to try: `brainstormer` ตัวใหม่ proposes first)
 3. Run every option with the same way of measuring — the same data, the same machine — and record the raw results · ใคร: `qa-tester` ตัวใหม่
 4. Decide by the criterion from step 1. If the result is close, choose the option with less code that is easier to change later · ใคร: หัวหน้าทีม
 5. Check (ตรวจ) the decision — the numbers really come from the raw results in step 3, every option was measured the same way, and the criterion matches step 1 (ตัดสินผลตาม [`references/code.md`](../../dev-principles/references/code.md) · [`references/testing.md`](../../dev-principles/references/testing.md)) · ใคร: `reviewer` ตัวใหม่
@@ -1124,7 +1124,7 @@ Main skills: `code-craft` · `git-and-review` · `security-audit` (security find
 
 - Judge the work against the principle file for its kind (`code.md`, `testing.md`, `security.md`, or the file for screens, data or documents), and name that file in the checker brief.
 - Step 3: send a fresh `reviewer` together with `git-and-review` and the "check before sending" list of the stack's skill
-- Big or high-risk work uses `crew-patterns/adversarial-review-panel` (a fresh `reviewer` per angle)
+- Big or high-risk work uses `handoff/adversarial-review-panel` (a fresh `reviewer` per angle)
 - Visual work → (if plugin `graphic-design` is installed) `design-critic` or `design-review`; if not, check per [`ui-craft`](../../ui-craft/SKILL.md)
 - Step 6 under **ที่ทำ** (what was done) uses the status table of type `ตรวจ` (check) from `superuser/status-report` in the reply only
 
@@ -1152,7 +1152,7 @@ Every item in the report points to a spot in the work and has passed confirmatio
 
 Use when: "Open a PR" · "Keep the PR green" · "Fix per the review comments" · "Ready to merge yet" (covers pstack's `opening a PR` · `babysit` · `shipping` · `autopilot-stack`)
 Main principles: [`dev-principles`](../../dev-principles/SKILL.md) · [`references/operations.md`](../../dev-principles/references/operations.md) · [`references/security.md`](../../dev-principles/references/security.md)
-Main skills: `git-and-review` · `cicd-and-release` · [`security-gate`](../../security-gate/SKILL.md) · `crew-patterns/adversarial-review-panel`
+Main skills: `git-and-review` · `cicd-and-release` · [`security-gate`](../../security-gate/SKILL.md) · `handoff/adversarial-review-panel`
 
 > The agent **does not commit · push · merge by itself** unless permitted under the commit rule in `superuser` section 6. For a step that needs that permission when it has not been granted, prepare the command under "รออนุมัติ" (awaiting approval) and carry on with the other parts
 
@@ -1215,7 +1215,7 @@ The validator has no new errors, and there is a blind test result showing the sk
 
 Use when: big work that cannot finish in one session · several milestones · real people (teammates) take pieces and work alongside agents · "โปรเจกต์นี้ทำกับทีม" (this project is done with a team) · "งานเป็นเดือน" (month-long work)
 Result: `docs/BRIEF.md` + `docs/BUILD-PLAN.md` split into milestones and pieces · a `handoff/<id>.md` note for every piece · work that can be picked up across days without asking
-Main patterns: Planning → Multi-Agent → Reflection per milestone (`crew-patterns/agent-patterns`)
+Main patterns: Planning → Multi-Agent → Reflection per milestone (`handoff/agent-patterns`)
 
 **3 roles, never swap them.** The **owner** (the user: decides what awaits approval, does not do middle steps) · the **teammate** (a person: takes a `handoff` note and works like a worker, and writes the handover note back the same way) · the **worker** (an agent: per `team-roles`). People and agents use the same work order; only the `to:` field differs, holding a person's name.
 
@@ -1228,8 +1228,8 @@ Labels kept in Thai because the validator matches them: `ใคร:` = who · `�
 3. Split into milestones: each milestone must end in something checkable that can be shown to the owner · record in the "สถานะล่าสุด" (latest status) table in `docs/BUILD-PLAN.md` per `superuser/status-report` · ใคร: หัวหน้าทีม
 4. Lay out the shared things + the work split table: outline · data shape · templates · shared conventions (language · naming · commit), done by the lead alone · a table `ชิ้น | ไฟล์ที่แตะ | ขนาด | ต้องรอชิ้นไหน | ใคร (คน/agent) · ระดับ` (piece | files touched | size | must wait for which piece | who (person/agent) · tier) makes clear which piece goes to which teammate · ใคร: หัวหน้าทีม
 5. Write a note for every piece: every XL piece must be a file `handoff/<id>.md` per the skill `handoff` (because it surely crosses sessions), not just a chat message · ใคร: หัวหน้าทีม
-6. Do the work: agent pieces are sent together in one message, by rank and graph width (`team-roles` "แบ่งงาน" (splitting the work) · more than 8 at once → `crew-patterns/parallel-split-and-merge`) · for a person's piece, send the note's path to the teammate with a due date for the returned note · pieces that must wait on others go in the next round · ใคร: ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note
-7. Prove (พิสูจน์), per milestone: merge the milestone's pieces, then `reviewer` ตัวใหม่ checks the whole milestone in one go against the brief's "เสร็จเมื่อ" (done when) · risky work (money · law · health · sent to outsiders) uses `crew-patterns/adversarial-review-panel` · fail → fix → recheck, up to the round ceiling in `team-roles` · ใคร: `reviewer` ตัวใหม่
+6. Do the work: agent pieces are sent together in one message, by rank and graph width (`team-roles` "แบ่งงาน" (splitting the work) · more than 8 at once → `handoff/parallel-split-and-merge`) · for a person's piece, send the note's path to the teammate with a due date for the returned note · pieces that must wait on others go in the next round · ใคร: ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note
+7. Prove (พิสูจน์), per milestone: merge the milestone's pieces, then `reviewer` ตัวใหม่ checks the whole milestone in one go against the brief's "เสร็จเมื่อ" (done when) · risky work (money · law · health · sent to outsiders) uses `handoff/adversarial-review-panel` · fail → fix → recheck, up to the round ceiling in `team-roles` · ใคร: `reviewer` ตัวใหม่
 8. End-of-day sync: collect incoming handover notes (people and agents equal) · update BUILD-PLAN + "ความคืบหน้า" (progress) and "รับงานต่อ" (pick up the work) in `CONTEXT.md` per playbook `pickup-and-pause` · record decisions in `decision-desk/decision-log` · ใคร: หัวหน้าทีม
 9. Report to the owner: at the end of a milestone or week, with `superuser/status-report` · items that cost money or cannot be reversed go under "รออนุมัติ" without blocking other pieces · ใคร: หัวหน้าทีม
 
@@ -1252,7 +1252,7 @@ Rules specific to XL work
 
 Use when: <the situation, or 2–3 phrases the user says>
 Result: <what the user gets · file format>
-Main patterns: <Planning · ReAct · Reflection · Multi-Agent · MoA (Mixture-of-Agents) · Reranker used> (`crew-patterns/agent-patterns`)
+Main patterns: <Planning · ReAct · Reflection · Multi-Agent · MoA (Mixture-of-Agents) · Reranker used> (`handoff/agent-patterns`)
 
 ## ขั้นตอน — Steps (copy into the todo exactly)
 
@@ -1335,7 +1335,7 @@ All the step 1 conditions pass, or every remaining piece has a reason why it is 
 
 Use when: making a screen match a mockup · moving a screen from an old technology to a new one and it must look the same · the user says "ไม่เหมือนแบบ" (it does not look like the design)
 Main principles: [`dev-principles`](../../dev-principles/SKILL.md) · [`references/ui.md`](../../dev-principles/references/ui.md)
-Main skills: the project's app-checking skill (`test-automation`) · `ui-craft` · the skill for the screen kind (`web-app-design` · `mobile-app-design` · `windows-app-design`) · `ground-rules/principle-prove-it-works`
+Main skills: the project's app-checking skill (`test-automation`) · `ui-craft` · the skill for the screen kind (`ui-craft`) · `ground-rules/principle-prove-it-works`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
@@ -1436,7 +1436,7 @@ To use an item, open that item's SKILL.md and read the whole file first.
 
 # review-lenses — review package · lenses · item-by-item validator gate
 
-Used with [`playbook-review`](playbook-review.md) · `reviewer` · skill `crew-patterns/adversarial-review-panel` of plugin superuser · everywhere a fresh reviewer is used.
+Used with [`playbook-review`](playbook-review.md) · `reviewer` · skill `handoff/adversarial-review-panel` of plugin superuser · everywhere a fresh reviewer is used.
 
 The one flow in brief: **review package → reviewer holds lenses (checklists) → validator confirms item by item → log dismissed items with reasons → freshness check before reporting.** Reviewers find problems easily. Validators leave only the real ones. The package and the freshness check make everyone look at the same version of the work.
 
@@ -1680,8 +1680,8 @@ This file is the same in every plugin · the original lives in plugin `superuser
 
 | agent | model tier | use when | not for |
 |---|---|---|---|
-| `brainstormer` | large | before a large task or when the problem is unclear: think through 2–3 paths on paper, scored 1–5 (5 = best) | building several real versions and picking one → `crew-patterns/parallel-attempts-pick-best` |
-| `reviewer` | per the budget table in `SKILL.md` section 2 (balanced: medium every round · large only in the last round of risky work) | check finished work before it reaches the user or outsiders; read-only, never edits | high-risk work → `crew-patterns/adversarial-review-panel` (uses several `reviewer`s) · (if plugin `software-development` is installed) code → pair with `git-and-review` · (if plugin `graphic-design` is installed) visual work → `design-critic` or `design-review` · if neither is installed, check against the criteria in the brief |
+| `brainstormer` | large | before a large task or when the problem is unclear: think through 2–3 paths on paper, scored 1–5 (5 = best) | building several real versions and picking one → `handoff/parallel-attempts-pick-best` |
+| `reviewer` | per the budget table in `SKILL.md` section 2 (balanced: medium every round · large only in the last round of risky work) | check finished work before it reaches the user or outsiders; read-only, never edits | high-risk work → `handoff/adversarial-review-panel` (uses several `reviewer`s) · (if plugin `software-development` is installed) code → pair with `git-and-review` · (if plugin `graphic-design` is installed) visual work → `design-critic` or `design-review` · if neither is installed, check against the criteria in the brief |
 | `learning-reviewer` | medium | at the end of a multi-step task: review how the team worked, not the work itself | — |
 
 Call a fresh one every time, because whoever did the work does not review its own work · specialist reviewers (`design-critic` · `brand-keeper` · `qa-tester` · `security-engineer` · `risk-manager`) may replace `reviewer` only in a step written as "read-only · does not edit files" (call with `model: opus`) · a step in which that agent writes a test or fixes something counts as doing the work
@@ -1717,8 +1717,8 @@ Problem levels use one set in every file: **สูง · กลาง · ต่�
    - **เป็นเจ้าของไฟล์ (file owner)**: every file to be edited has exactly one owning piece · 2 pieces that must edit the same file → make one wait for the other, do not run them at the same time
    - **ทำคนเดียว (solo)** ✓ = a piece that must run while no other piece is running, such as building `dist/` · a migration · installing dependencies · editing a shared file
    - **Conflict table** (do it before handing out the first piece · record the result before moving on): 1 row for every pair of pieces that share a file or interface: `ชิ้น ก (ผลิต) | ชิ้น ข (ใช้) | ชื่อ รูป หรือ signature ที่ตกลง | ตัดสิน` (piece A (produces) | piece B (uses) | agreed name, shape, or signature | ruling) · add 1 more row per piece to check that the text of its own brief does not contradict itself · on a conflict → rule by the spec or the source file, and record the result · a bare sentence "scan clean" with no rows in the table counts as not done · the result for each pair goes into the `ผลิต` (produces) and `ใช้` (consumes) fields of the brief in item 7
-5. **The graph numbers**: critical path = highest rank · total work = the sum of all piece sizes · max width = the most pieces that can run at the same time at any moment · **number of workers = max width, but no more than the budget can bear**; there is no fixed number, because beyond the width the extra workers have no work and each must read the context anew · minimum time = the larger of the critical path and total work ÷ number of workers (a lower bound; it cannot go faster) · speed-up = total work ÷ the time actually achieved when releasing by rank (no more than total work ÷ minimum time) · if parallel gives a speed-up under 1.3 times, use a single worker (self-set value, not yet measured) · slack (per the Critical Path Method (CPM)) = latest start − earliest start; a piece with slack 0 is on the critical path and must not be late, a piece with a lot of slack can be moved later · put the critical path, max width, and speed-up in the `คาด:` (expected) line · for a graph of about 5 pieces or more, let `crew-patterns/parts/parallel-split-and-merge/scripts/plan.mjs` compute it (it also checks for cycles and duplicate file owners) · a speed-up near 1 time = the graph is a single chain, and doing it one piece at a time with one agent is cheaper (formulas from the labs DAG_Planner and Multi_Agent_Orchestra of the CWN2026 course)
-6. **Release by rank**: a piece that is ready (all the pieces it waits on are done) is sent to a fresh worker, one worker per piece, **all at once in a single message**, highest rank first · a solo piece is released when nothing else is running · when a piece finishes, release the next ready piece at once, with no need to wait for the full round · the team lead does small pieces itself · wider than 8 pieces, or repetitive file-by-file work → propose a dynamic workflow in the question at the start per `crew-patterns/parallel-split-and-merge` (the user is the one who starts it) · the user declines → release at most 8 per round by rank
+5. **The graph numbers**: critical path = highest rank · total work = the sum of all piece sizes · max width = the most pieces that can run at the same time at any moment · **number of workers = max width, but no more than the budget can bear**; there is no fixed number, because beyond the width the extra workers have no work and each must read the context anew · minimum time = the larger of the critical path and total work ÷ number of workers (a lower bound; it cannot go faster) · speed-up = total work ÷ the time actually achieved when releasing by rank (no more than total work ÷ minimum time) · if parallel gives a speed-up under 1.3 times, use a single worker (self-set value, not yet measured) · slack (per the Critical Path Method (CPM)) = latest start − earliest start; a piece with slack 0 is on the critical path and must not be late, a piece with a lot of slack can be moved later · put the critical path, max width, and speed-up in the `คาด:` (expected) line · for a graph of about 5 pieces or more, let `handoff/parts/parallel-split-and-merge/scripts/plan.mjs` compute it (it also checks for cycles and duplicate file owners) · a speed-up near 1 time = the graph is a single chain, and doing it one piece at a time with one agent is cheaper (formulas from the labs DAG_Planner and Multi_Agent_Orchestra of the CWN2026 course)
+6. **Release by rank**: a piece that is ready (all the pieces it waits on are done) is sent to a fresh worker, one worker per piece, **all at once in a single message**, highest rank first · a solo piece is released when nothing else is running · when a piece finishes, release the next ready piece at once, with no need to wait for the full round · the team lead does small pieces itself · wider than 8 pieces, or repetitive file-by-file work → propose a dynamic workflow in the question at the start per `handoff/parallel-split-and-merge` (the user is the one who starts it) · the user declines → release at most 8 per round by rank
 7. **The same form of brief for every brief**, per `handoff`: the short description of the work (the description of the Agent tool) starts with the id of the piece, e.g. `a: ออกแบบตาราง` (a: design the table), so that `plan.mjs --actual` can tie the real work to the plan · goal + the criteria that must pass · `ขนาด: <N>k` · paths of the shared things it needs · the same rules (language · naming · format → point to the same skills, e.g. `human-writing` + `workspace-rules/document-naming`) · files it may edit (per the file-owner field) · a short return (files changed · check result · decided on my own)
    - **Produces / consumes, exactly**: the `ผลิต:` field names the name, file shape, or signature this piece must give another piece, character for character (e.g. `getMember(id: string): Member`) · the `ใช้:` field names what this piece receives from another piece in the same form, copied from the conflict table, not rewritten from memory · the doer checks that the produced names match every character before sending
    - **Global Constraints**: rules every piece must keep (language version · no new dependency · date format · file names), written once in `docs/BRIEF.md` under the heading "ข้อจำกัดทั้งงาน" (global constraints) ([`brief-template`](brief-template.md)) and then copied into every brief, because a worker cannot see the other workers' briefs
@@ -1727,7 +1727,7 @@ Problem levels use one set in every file: **สูง · กลาง · ต่�
    - **Shell commands are given as patterns**: a brief that lets a worker use Bash writes runnable command shapes with `*` (e.g. `node scripts/check/*.mjs` · `git diff *`) with a prohibited list (e.g. `git push` · `git merge` · `-X POST` · deleting files) · a command not on the list: the worker stops and reports, and does not run it
 8. **Merge and review**: check the whole set by the task's real method, then send a fresh `reviewer` to check the whole task in one pass, including that every piece goes the same way
 
-**Multiple LLM accounts**: if several sessions are open on different accounts (different worktrees), the team lead hands pieces to the other sessions with `handoff` sheets per the cross-account distribution table of `plan.mjs --accounts` · if quota runs short midway, pass the baton with a handoff sheet and do not start over · setup and formulas in `crew-patterns/parallel-split-and-merge`, section "หลายบัญชี LLM" (multiple LLM accounts)
+**Multiple LLM accounts**: if several sessions are open on different accounts (different worktrees), the team lead hands pieces to the other sessions with `handoff` sheets per the cross-account distribution table of `plan.mjs --accounts` · if quota runs short midway, pass the baton with a handoff sheet and do not start over · setup and formulas in `handoff/parallel-split-and-merge`, section "หลายบัญชี LLM" (multiple LLM accounts)
 
 Example (sizes in made-up units): A design the table 2 → B write the API 3 → D integration test 2 · C fix the README 1 waits for no one → rank A 7 · B 5 · D 2 · C 1 · critical path 7 · total work 8 · max width 2 · 2 in parallel gives minimum time 7 and a speed-up of 1.1 times, under 1.3 → the graph is nearly a single chain, so use 1 worker (`คาด: ลูกทีม 1 · สายวิกฤต 7k · กว้างสุด 2 · เร็วขึ้น 1.0 เท่า`, i.e. expected: 1 worker · critical path 7k · max width 2 · speed-up 1.0 times) · C has 6 of slack and A B D have 0 · do A → B → D by rank, and C, a small piece, is done by the team lead while waiting
 
@@ -1744,7 +1744,7 @@ Example (sizes in made-up units): A design the table 2 → B write the API 3 →
 
 **Circuit breaker**: if one piece gets `ขาดบริบท` or `ติด` twice in a row, the brief or the problem is at fault, not the worker · stop sending that piece, record `ติด`, finish the other pieces, then report at the end with 2–3 paths for the user to choose · origin of the idea: skill `subagent-driven-development` in obra/superpowers (MIT) · adapted to use the same 5 status words
 
-**Wait for workers in an orderly way**: send same-session workers in the background and wait for the message saying they are done; never `sleep` and then `ls` or open report files in a loop (bench t5 2026-11-11: it looped 3–4 turns, reading 77k cache tokens each turn) · while waiting, carry on with your own work (small pieces · the conflict table · a draft report) · the method below applies only to work with no completion message (sent across sessions or across accounts with a `handoff` sheet): only once free, wait 5–10 minutes with `crew-patterns/parts/agent-patterns/scripts/keep-waiting.mjs --until-file <report file>` (sleeps shorter than the Bash timeout, then prints a request to rerun until the file appears, with no need to ask in chat) · at the end of each wait cycle, post a 1-line status (how many finished · how many still running), then chase the workers whose report file has arrived but has not yet been received
+**Wait for workers in an orderly way**: send same-session workers in the background and wait for the message saying they are done; never `sleep` and then `ls` or open report files in a loop (bench t5 2026-11-11: it looped 3–4 turns, reading 77k cache tokens each turn) · while waiting, carry on with your own work (small pieces · the conflict table · a draft report) · the method below applies only to work with no completion message (sent across sessions or across accounts with a `handoff` sheet): only once free, wait 5–10 minutes with `handoff/parts/agent-patterns/scripts/keep-waiting.mjs --until-file <report file>` (sleeps shorter than the Bash timeout, then prints a request to rerun until the file appears, with no need to ask in chat) · at the end of each wait cycle, post a 1-line status (how many finished · how many still running), then chase the workers whose report file has arrived but has not yet been received
 
 ## Decisions that must stay on the top model
 
@@ -1764,7 +1764,7 @@ For code work that has tests and is not risky, use the test gate before the revi
 - **Round cap**: a medium task at most 3 rounds · a large or risky task (money · law · health · reaching outsiders) at most 5 rounds · cap reached and still failing → stop looping, label `ติด`, finish the other parts, and report the remaining items at the end
 - **Escalate the fixer by round**: rounds 1–3 the fixer is the same agent for that piece (follow-up message, full criteria and the full item list) · rounds 4–5 (only for large or risky tasks whose cap is 5) switch to a fresh agent one tier higher on the ladder `haiku → sonnet → opus → fable` of `SKILL.md` section 5, with the reports of every round so far, because the same agent that has fixed for 3 rounds without passing usually keeps circling the same method · already at the top of the ladder → use a fresh agent at the same tier, and do not retry with the same one
 - **Deferred-items ledger**: medium and low items the lead chooses not to fix this round (because the cost of fixing is higher than the expected value, or the next round will review only the diff) go into the "ค้างอยู่" table of `CONTEXT.md`, one row per item: `รอบ · ไฟล์:บรรทัด · ข้อ · ระดับ · เหตุที่เลื่อน` (round · file:line · item · level · reason deferred) · at the end of the task the lead reads every row of this ledger and fixes or reports each one, never letting them vanish silently · a high item cannot be deferred
-- **Claims that must each be proved** (the conclusion of a search or analysis that the reviewer must go through one by one) use the ledger `PROVED · REFUTED · OPEN` instead of a plain list of findings → skill `crew-patterns/agent-patterns` of plugin superuser, section ledger
+- **Claims that must each be proved** (the conclusion of a search or analysis that the reviewer must go through one by one) use the ledger `PROVED · REFUTED · OPEN` instead of a plain list of findings → skill `handoff/agent-patterns` of plugin superuser, section ledger
 - **Record every round**: a `review` line (round · reviewer · result · count at each level) in `.claude/superuser/log/<date>/main.jsonl` per [`learning-loop`](learning-loop.md)
 
 ## Sources
@@ -1784,7 +1784,7 @@ The trigger table lives only in this file (`superuser` section 3 points here). O
 | Write or review C# · TypeScript · Python · SQL code | The skill for the stack: [`stack-dotnet`](../../stack-dotnet/SKILL.md) · [`stack-typescript`](../../stack-typescript/SKILL.md) · [`stack-python`](../../stack-python/SKILL.md) · [`stack-sql`](../../stack-sql/SKILL.md) — build · test commands · traps · check-before-sending list |
 | Edit a coding skill or playbook · want to know whether the team really codes better | [`coding-evals`](../../coding-evals/SKILL.md) — self-invocation is turned off (`disable-model-invocation`), so tell the user to run `/coding-evals` themselves · run the same set of jobs before and after and compare scores |
 | Must understand an app or file with no source code (binary · APK · bundle · undocumented file format) | Agent `reverse-engineer` + skill `reverse-engineering` inside playbook `investigation` — only for things the user has the right to |
-| The user asks for ideas · options · the task is big or unclear | A fresh `brainstormer` agent — 2–3 paths on paper, the team lead chooses · if you want to try several real versions → `crew-patterns/parallel-attempts-pick-best` |
+| The user asks for ideas · options · the task is big or unclear | A fresh `brainstormer` agent — 2–3 paths on paper, the team lead chooses · if you want to try several real versions → `handoff/parallel-attempts-pick-best` |
 | Research outside the code (market · competitors · work already done · sample apps) | `research-with-sources/prior-art-review` · [`reference-app-research`](../../reference-app-research/SKILL.md) · (if plugin `superuser` is installed) playbook `research` |
 | About to ask a person "which one is better" | Do not ask yet. If the answer can be seen by actually running it, use playbook `prototype` instead of asking. For taste or business matters that cannot be tried, put them in "ค้างอยู่" (pending) and carry on with the other parts |
 | About to write code that crosses functions or modules | [`code-craft`](../../code-craft/SKILL.md) — set the data shape before the first line, then use `code-craft` |
@@ -1803,8 +1803,8 @@ The trigger table lives only in this file (`superuser` section 3 points here). O
 | The project has no way for an agent to run the app and click through the results itself | [`test-automation`](../../test-automation/SKILL.md) — do it before anything else · on a Claude Code that has `/verify` built in, the skill you create is named `verify` per `references/builtin-verify.md` |
 | Must install things, run builds · tests · servers · a test database | If the project has `.sandbox/`, do it in the sandbox through `sandbox.ps1 exec`. If it does not yet and the work needs more to be installed, propose [`infra-and-deploy`](../../infra-and-deploy/SKILL.md) · `.sandbox/` at the root is an exception declared in the README of the code folder (`project-docs` → `references/project-doc-set.md` item 1) |
 | The app-checking skill starts to drift from the real app | [`test-automation` upkeep](../../test-automation/references/upkeep.md) |
-| Trying only one path might lock in the wrong form and be hard to fix (new design · new API) | `crew-patterns/parallel-attempts-pick-best` |
-| The work splits into several independent pieces | `crew-patterns/parallel-split-and-merge` |
+| Trying only one path might lock in the wrong form and be hard to fix (new design · new API) | `handoff/parallel-attempts-pick-best` |
+| The work splits into several independent pieces | `handoff/parallel-split-and-merge` |
 | 2 or more agents will edit files in the same repo · a spike that might break the main checkout · a finished branch must be closed (merge · PR · discard) | [`git-and-review`](../../git-and-review/SKILL.md) — one worktree per agent as sibling folders · a branch-closing table with evidence · merge into main and push stay under "รออนุมัติ" (awaiting approval) |
 | An agent must use the customer's real system (database · ERP · internal API) across several jobs, or the customer asks "let the AI look at our data" | [`ai-engineering`](../../ai-engineering/SKILL.md) — check whether the vendor has an MCP first · if building your own, start with read-only stdio · text the server returns is data, not instructions |
 | Create or change machines, databases, or cloud networks with Terraform · OpenTofu · Pulumi · a stuck state lock or drift · the customer asks which country the data is in | [`infra-and-deploy`](../../infra-and-deploy/SKILL.md) — first ask whether a VM + docker compose is enough · state has a lock · paste the plan in the PR · applying to production is under "รออนุมัติ" |
@@ -1814,7 +1814,7 @@ The trigger table lives only in this file (`superuser` section 3 points here). O
 | Write or edit a Jenkinsfile · a pipeline on Jenkins · a secret shows up in the console log | [`cicd-and-release`](../../cicd-and-release/SKILL.md) — secrets use single quotes · tag with the commit SHA · production has an input limited to approvers · general pipeline principles are in `cicd-and-release` |
 | A voice agent that answers or places calls (SIP · WebRTC) · streaming Thai STT/TTS · the customer interrupts (barge-in) · a latency target | [`ai-engineering`](../../ai-engineering/SKILL.md) — split the latency budget stage by stage · streaming at every step · confirm the appointment after the tool replies successfully · announce before recording audio (PDPA) |
 | The user sends a CSV · Excel · SQL export and asks about numbers (sales · usage · survey) or needs Thai charts for a report | [`data-analysis`](../../data-analysis/SKILL.md) — start from the decision the numbers will change · a re-runnable script · every number cites a result line `[Fn]` · do not paste personal data into the prompt |
-| A design or diff you are not sure of, before sending | `crew-patterns/adversarial-review-panel` |
+| A design or diff you are not sure of, before sending | `handoff/adversarial-review-panel` |
 | Work with a repetitive mechanical part (editing a hundred files · checking every page) | `ground-rules/principle-build-a-tool-not-handwork` |
 | The user corrects an agent on the same thing for the second time | `learn-loop/repeated-mistakes-to-checks` |
 | The user types "reflect" or "รวมบทเรียน" (collect the lessons) | Playbook `learn-from-session`, which uses `learn-loop/session-lessons-to-skills` with a 3-angle review |
@@ -2362,7 +2362,7 @@ Run the `security-engineer` agent on: **the user's request**
 
 # skill: handoff
 
-Use when work passes to a subagent, session or person
+Use when work is split across agents or passes to a session or person
 
 # handoff — pass work on so the receiver does not have to guess
 
@@ -2474,7 +2474,18 @@ Hand-off package = `CONTEXT.md` + the still-open `handoff/` pieces + `docs/BRIEF
 - Done is judged from the work product and the check result, not the word "done".
 - The reviewer gets only the work product + criteria, not the maker's context.
 
-## 8 · Our files versus Claude Code's built-in memory
+## 8 · How the team splits work (was `crew-patterns`)
+The lead picks the pattern without asking the user; workers never write to the same place; nothing is concluded before every worker is back and checked. Hard rules and checks: [`references/crew-rules.md`](references/crew-rules.md).
+
+| When | Open |
+|---|---|
+| Choosing how the team works (Loop · Graph · Dynamic · Multi-Agent) at planning time | [parts/agent-patterns/guide.md](parts/agent-patterns/guide.md) |
+| Independent pieces done at the same time, merged into one report | [parts/parallel-split-and-merge/guide.md](parts/parallel-split-and-merge/guide.md) |
+| No work yet or the best form is unknown: build several versions and choose | [parts/parallel-attempts-pick-best/guide.md](parts/parallel-attempts-pick-best/guide.md) |
+| One finished piece about to ship: a panel of 3 hunts for faults | [parts/adversarial-review-panel/guide.md](parts/adversarial-review-panel/guide.md) |
+| A multi-step prompt (Loop · Graph · Dynamic) the user pastes into a chat app | [parts/chat-prompt-workflows/guide.md](parts/chat-prompt-workflows/guide.md) |
+
+## 9 · Our files versus Claude Code's built-in memory
 Unsure whether a note goes into `CONTEXT.md` · `CLAUDE.md` · `.claude/rules/` or auto memory → [`team-memory`](references/team-memory.md) section 7.
 
 ## Check before done
@@ -2487,7 +2498,34 @@ Unsure whether a note goes into `CONTEXT.md` · `CLAUDE.md` · `.claude/rules/` 
 - [`references/sheet-examples.md`](references/sheet-examples.md) — open when writing a task sheet or delivery sheet
 - [`references/team-memory.md`](references/team-memory.md) — open for first-time setup, vendor switch, inbox, log, workbooks, auto memory
 - [`references/handoff.schema.json`](references/handoff.schema.json) — open when a machine reads the header
+- [`references/crew-rules.md`](references/crew-rules.md) — open when splitting work across agents
 - [`references/sources.md`](references/sources.md) — sources and licences
+
+
+## reference: crew-rules.md
+
+# Team patterns — hard rules (from crew-patterns, merged into handoff 2026-11-28)
+
+> **The one rule:** the lead picks the pattern without asking the user; workers never write to the same place; nothing is concluded before every worker is back and checked.
+
+## Hard rules
+
+- **agent-patterns:** The lead picks the style, without asking the user. If the user names a style, follow it; if not, choose from the table and write the chosen style at the end of the **เสร็จเมื่อ** line. Fits none → Loop, the simplest.
+- **agent-patterns:** Do not turn on agent teams by default; use subagents. Say in the report only what changes a decision.
+- **parallel-split-and-merge:** Split with no overlap: every part sits in exactly one piece, none repeated, none dropped. Fix one report format for every worker.
+- **parallel-split-and-merge:** Never write to the same place. Each editing worker gets its own file or folder (code: one git worktree per worker). The combined summary is written by the main session alone.
+- **parallel-split-and-merge:** Wait for all. Never conclude from the ones that finished first. A failed worker is released once more; if it fails again, record the piece as not checked. Serious items need a `file:line` (or page · link) the main session opened.
+- **parallel-attempts-pick-best:** Every contestant gets the same task, because the task is the contract. The difference must come from somewhere (angle or model size), and each contestant has a separate delivery folder. Never paste a whole block from another entry; write the strong parts in so the result reads as one idea.
+- **parallel-attempts-pick-best:** For taste work (icons · logos · looks · colors) ask for 2–3 examples the user likes before the contest.
+- **adversarial-review-panel:** The output is a verdict, not a fix to the work. Verify every finding one at a time before it enters the report; confidence below 80 stays out.
+- **adversarial-review-panel:** Cross-examination voters are always fixed at 3. If the `head:` does not match, or a reviewer failed, is still running or was cut, report it that way and never count it as clean.
+
+## Check before done
+
+- The chosen style is written in the **เสร็จเมื่อ** line.
+- Pieces cover the whole task with no gap and no overlap.
+- Every worker returned; failed pieces are marked not checked.
+- Serious items were opened by the main session.
 
 
 ## reference: sheet-examples.md

@@ -22,7 +22,7 @@
 | LINE Bot MCP | LINE (first-party, **preview**) | `line-oa` ของ e-commerce · `line-design` ของ graphic-design | 12 tool: push/reply/broadcast · Flex · rich menu · quota · followers · `@line/line-bot-mcp-server` · Apache-2.0 · README ระบุว่าเป็น preview |
 | MCP Toolbox for Databases | Google | `database-design` · `stack-sql` — ต่อ Postgres/MySQL แบบ self-run | หรือ Supabase/MongoDB MCP ถ้าโปรเจกต์ใช้ของเขาอยู่แล้ว |
 | Sentry MCP | Sentry | `incidents-and-monitoring` · `security-operations` | remote · OAuth |
-| Figma MCP | Figma | `ui-craft` · `web-app-design` · `graphic-design` — เมื่อลูกค้าส่งงานเป็น Figma | remote หรือ desktop |
+| Figma MCP | Figma | `ui-craft` · `graphic-design` — เมื่อลูกค้าส่งงานเป็น Figma | remote หรือ desktop |
 | Fetch / Filesystem | MCP steering group (reference) | `research-with-sources` · `research-with-sources/prior-art-review` · งานอ่านไฟล์นอกโปรเจกต์ | reference implementation — ใช้ได้แต่อย่าถือว่า production-grade |
 
 กฎการเปิดใช้: **ทุก server กิน context ด้วย tool schema** — เปิดแบบ project-local เป็นค่าเริ่มต้น เปิด global เฉพาะตัวที่ใช้ทุกวัน · ตัวหนัก (GitHub เต็มชุด · Playwright) เปิดเฉพาะโปรเจกต์ที่ต้องใช้

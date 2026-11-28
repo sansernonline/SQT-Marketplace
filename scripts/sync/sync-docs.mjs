@@ -150,8 +150,8 @@ function harvestNotes(text) {
 function updateReference(plugins, totals) {
   const core = plugins.find((p) => p.name === CORE);
   edit("docs/REFERENCE.md", (text) => {
-    const start = text.indexOf("## 🛠️ Skills (");
-    const end = text.indexOf("## ⚡ Commands (");
+    const start = text.indexOf("## Skills (");
+    const end = text.indexOf("## Commands (");
     if (start < 0 || end < 0) throw new Error("docs/REFERENCE.md: หาหัวข้อ Skills หรือ Commands ไม่เจอ");
     // เก็บคำอธิบายจากช่วง Skills เท่านั้น ไม่งั้นบล็อกสุดท้ายจะกลืนหัวข้อ Commands เข้ามาด้วย
     const notes = harvestNotes(text.slice(start, end));
@@ -177,10 +177,10 @@ function updateReference(plugins, totals) {
       return lines.join("\n");
     });
 
-    const section = `## 🛠️ Skills (${core.skills.length})\n\n${blocks.join("\n\n---\n\n")}\n\n---\n\n`;
+    const section = `## Skills (${core.skills.length})\n\n${blocks.join("\n\n---\n\n")}\n\n---\n\n`;
     text = text.slice(0, start) + section + text.slice(end);
-    text = text.replace(/## 🧑‍💼 Agents \(\d+\)/, `## 🧑‍💼 Agents (${core.agents.length})`);
-    text = text.replace(/## ⚡ Commands \(\d+\)/, `## ⚡ Commands (${core.commands.length})`);
+    text = text.replace(/## Agents \(\d+\)/, `## Agents (${core.agents.length})`);
+    text = text.replace(/## Commands \(\d+\)/, `## Commands (${core.commands.length})`);
     return text;
   });
 }

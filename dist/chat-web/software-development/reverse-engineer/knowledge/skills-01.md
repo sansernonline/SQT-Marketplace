@@ -602,7 +602,7 @@ Do not use when: writing a Dockerfile or image for a real deploy → [`kubernete
   - If the project needs a database, cache, or browser, add it as a service in the **same lab** (one stack). Do not create a separate lab.
 - **The base image is shared across the whole machine.** `sqt-sandbox-base:1` (Node · Python · Git · Playwright Chromium · Claude Code) is built once. Each project's image adds only a thin layer the project needs, so disk is not used twice.
 - **A stopped lab uses no CPU or memory**, only disk. Run `stop` when you finish a task, and `stop-all` when you finish for the day.
-- **Extra temporary labs** (`-Name <project>-a1`) are for trying several paths in parallel when they need truly separate machines. (For ordinary multi-path trials, use one git worktree per attempt following `crew-patterns/parallel-split-and-merge`; it is faster.) `destroy` them as soon as you pick a path.
+- **Extra temporary labs** (`-Name <project>-a1`) are for trying several paths in parallel when they need truly separate machines. (For ordinary multi-path trials, use one git worktree per attempt following `handoff/parallel-split-and-merge`; it is faster.) `destroy` them as soon as you pick a path.
 - **Never put several projects in one lab**, because installed things collide, one project's breakage spreads to another, and you cannot wipe one project at a time.
 
 ## 2 · Two modes: choose by the work

@@ -507,9 +507,9 @@ Thai has upper vowels, lower vowels and tone marks that can stack 2 levels, so i
 
 | Medium | Body text | Headings | Used by |
 |---|---|---|---|
-| Web page (CSS `line-height` times font size) | 1.6 · long articles 1.75–1.85 | Thai not below 1.4 · large pure-Latin headings can go down to 1.0–1.1 | `web-app-design` |
-| Mobile app | 1.5–1.75 · the smaller the screen, the more spacing | Not below 1.4 | `mobile-app-design` |
-| Windows app | 20px at 14px text for on-screen text · long paragraphs 22px | Follow the Fluent scale | `windows-app-design` |
+| Web page (CSS `line-height` times font size) | 1.6 · long articles 1.75–1.85 | Thai not below 1.4 · large pure-Latin headings can go down to 1.0–1.1 | `ui-craft` |
+| Mobile app | 1.5–1.75 · the smaller the screen, the more spacing | Not below 1.4 | `ui-craft` |
+| Windows app | 20px at 14px text for on-screen text · long paragraphs 22px | Follow the Fluent scale | `ui-craft` |
 | Slides | Not below 1.5 | Not below 1.4 | `slide-deck` |
 | Graphics · posts · posters | 1.5–1.7 | Not below 1.4 | `brand-kit` · `graphic-design` |
 | Diagram | Not below 1.5 | — | `diagrams` |

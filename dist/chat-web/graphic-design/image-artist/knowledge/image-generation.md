@@ -385,6 +385,18 @@ Write the brief before making the first image.
 
 This skill writes the brief and prompt. Generation happens in whatever image tool or plugin the user has. No generation tool → the fallback order (Scalable Vector Graphics (SVG) set, then Openverse photos) lives in `../SKILL.md`; this file covers the brief and the prompt.
 
+## Contents
+- [Workflow](#workflow)
+- [Prompt anatomy (in this order)](#prompt-anatomy-in-this-order)
+- [Pick the image (ตัดสินด้วยตัวเลข)](#pick-the-image-ตัดสินด้วยตัวเลข)
+- [Model differences (general, check your tool's docs)](#model-differences-general-check-your-tools-docs)
+- [Failure modes — what to change when the image misses](#failure-modes--what-to-change-when-the-image-misses)
+- [Worked example — brief to prompt](#worked-example--brief-to-prompt)
+- [Rules](#rules)
+- [Not an AI look](#not-an-ai-look)
+- [Related](#related)
+- [เรียกเป็นคำสั่ง](#เรียกเป็นคำสั่ง)
+
 ## Workflow
 
 0. **Find reference work before writing the brief** — every time; when a style lock sheet or brand kit already fixes the look, keep its palette and light and search only for composition and staging: research 3–5 pieces of strong real work in the same category (**ค้นต้นแบบก่อน:** run the project's keywords through a live search per `design-gate/design-references` (plugin `superuser`), type `illustration` or `social`, then pull the colours from the chosen work · use the stored palette bank only when live search is unavailable · award archives · competitor campaigns) · write 1 line per piece on *why it works* (composition · light · palette · type) · save links beside the brief in `briefs/<asset-name>.md` under "References" · the style, palette and light lines of the brief then cite these benchmarks, and tools that accept reference images get 1–2 of them · **references are a bar to clear, not a piece to copy** — the concept must stand at their level without imitating any one of them

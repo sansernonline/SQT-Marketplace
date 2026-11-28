@@ -1,6 +1,6 @@
 ---
 name: ui-craft
-description: Use with a platform skill when a task produces a screen or mockup
+description: Use when a task produces a screen or mockup for web, phone or Windows
 ---
 
 # ui-craft — spacing, type, order and state rules that make a screen or mockup consistent
@@ -13,27 +13,33 @@ description: Use with a platform skill when a task produces a screen or mockup
 > The app frame is neutral: title bar · header bar · toolbar · rail · nav · borders use gray-black lines and icons in the Windows theme style. The brand color lives in the data, primary buttons, small selection bars and the logo. Tint the frame only when the user says so.
 
 ## Use when
-- Building any user interface (UI), together with a platform skill, not instead of it.
+- Building any user interface (UI). Open the platform part below too: it holds the real colors, fonts, components and starter templates.
 - A screen "looks off" and you cannot say why, or you review a UI someone else made.
-- The platform has no dedicated skill yet (TV app · kiosk · smart watch).
+- The platform has no part yet (TV app · kiosk · smart watch).
 
-Not for: real colors, fonts, components (also chart colors) → `web-app-design` · `windows-app-design` · `mobile-app-design` (this skill sets no colors or fonts, only spacing, size, order and states) · printed documents → `document-design` · slides → `slide-deck`. User flow before drawing → agent `ux-designer` (template: [`references/ux-spec-outputs.md`](references/ux-spec-outputs.md)).
+| Platform | Open |
+|---|---|
+| Web app, dashboard, admin, SaaS, landing or scroll-motion site | [`parts/web-app-design/guide.md`](parts/web-app-design/guide.md) |
+| Phone app (PWA · React Native · Flutter) | [`parts/mobile-app-design/guide.md`](parts/mobile-app-design/guide.md) |
+| Native-looking Windows 11 app (WinUI 3 · MAUI · Avalonia) | [`parts/windows-app-design/guide.md`](parts/windows-app-design/guide.md) |
+
+Real colors, fonts, components (also chart colors) live in the platform parts above; this page sets only spacing, size, order and states. Not for: · printed documents → `document-design` · slides → `slide-deck`. User flow before drawing → agent `ux-designer` (template: [`references/ux-spec-outputs.md`](references/ux-spec-outputs.md)).
 
 ## Steps
 
 ### 0 · Before creating a new page, check whether the project already has a look
-The project's own look beats the platform skill's starter theme (the `assets/` templates are for projects with no screens yet). **Two exceptions, where you redo section 0.1 instead of copying:** (1) the user or prompt orders a new design, or says the current look is not nice (2) the current look is a mockup that has not passed the beauty gate (section 9; no beauty-gate score recorded in `docs/BUILD-PLAN.md` = not passed). Move the old files to `_to_delete/`, do not delete them. A look that is real delivered code still wins unless there is a new-design order.
+The project's own look beats the platform part's starter theme (the `assets/` templates are for projects with no screens yet). **Two exceptions, where you redo section 0.1 instead of copying:** (1) the user or prompt orders a new design, or says the current look is not nice (2) the current look is a mockup that has not passed the beauty gate (section 9; no beauty-gate score recorded in `docs/BUILD-PLAN.md` = not passed). Move the old files to `_to_delete/`, do not delete them. A look that is real delivered code still wins unless there is a new-design order.
 
 Look in: `mockup/**/*.html` · `*.css` · `styles.css` · `theme.*` · `tokens.*` · `tailwind.config.*` · `lib/core/theme.dart` · `*.xaml` · `docs/deck/` · `docs/*.html` · the project README (a line saying which file the look comes from).
 
 **Found** → run `python -I scripts/design_tokens.py <folder found> --out docs/DESIGN.md` (draft of the values the code uses, with the places off the scale; it does not overwrite an existing file), then:
 1. Copy the whole structure of the nearest sibling page (same group): `<head>` fonts, top bar, side menu, margins.
-2. `<link>` the existing css file; do not copy tokens into a new file. A new file holds only what is unique to the page and uses the existing `var(--…)`. Mockup: a new page = a new `<section>` in the existing `mockup/<code>-mockup.html`, not a new file. Link the css while working; at delivery embed it in `<style>` per the single-file rule of the platform skill.
+2. `<link>` the existing css file; do not copy tokens into a new file. A new file holds only what is unique to the page and uses the existing `var(--…)`. Mockup: a new page = a new `<section>` in the existing `mockup/<code>-mockup.html`, not a new file. Link the css while working; at delivery embed it in `<style>` per the single-file rule of the platform part.
 3. Use existing classes for existing components (button · card · table · pill).
 4. Screenshot the old and new page at the same width side by side: background, top bar, heading font and buttons must be indistinguishable.
 5. If a value in this skill conflicts with the project's, use the project's and note it under `ตัดสินใจเอง`. Do not restyle old pages unless told to.
 
-**Not found** → use the platform skill's template, then write 1 line in the project README: `หน้าตา: mockup/<code>-mockup.html`.
+**Not found** → use the platform part's template, then write 1 line in the project README: `หน้าตา: mockup/<code>-mockup.html`.
 
 New project → pick 1 of 6 app characters before the first page: [`references/app-character.md`](references/app-character.md). Customer sends a Figma file → read it through the Figma MCP server, convert variables to tokens, then make the HTML mockup per this section; when to skip Figma → [`references/figma-to-code.md`](references/figma-to-code.md).
 
@@ -49,10 +55,10 @@ Full text: [`references/visual-direction.md`](references/visual-direction.md). I
 Sample content must look real: realistic data, real images per `image-generation`, no gray placeholder boxes, no "ตัวอย่าง" or "Lorem", team notes only in the mockup's control box.
 
 ### 1 · Spacing scale: `4 8 12 16 24 32 48 64`
-Every padding · margin · gap is a value in this scale, even when the platform skill conflicts, **except values measured from the real system and named in the exception list of `references/scales.md`** (for example Windows: content edge 36 · gap between sections 40). Things that belong together sit closer than things that do not. Card padding ≥ the gap inside. Details → [`references/scales.md`](references/scales.md).
+Every padding · margin · gap is a value in this scale, even when the platform part conflicts, **except values measured from the real system and named in the exception list of `references/scales.md`** (for example Windows: content edge 36 · gap between sections 40). Things that belong together sit closer than things that do not. Card padding ≥ the gap inside. Details → [`references/scales.md`](references/scales.md).
 
 ### 2 · Type scale
-At most 5 sizes per screen (web: lg 22 · md 15 · base 13 · sm 12 · xs 11) · smallest 11 · 2 weights · lines of 45–75 characters · Thai line-height +0.1. A marketing or landing page without motion uses the type scale and rhythm in [`references/scales.md`](references/scales.md#3--หน้าการตลาดและ-landing-ที่ไม่มี-motion) (with motion → `web-app-design`).
+At most 5 sizes per screen (web: lg 22 · md 15 · base 13 · sm 12 · xs 11) · smallest 11 · 2 weights · lines of 45–75 characters · Thai line-height +0.1. A marketing or landing page without motion uses the type scale and rhythm in [`references/scales.md`](references/scales.md#3--หน้าการตลาดและ-landing-ที่ไม่มี-motion) (with motion → `ui-craft`).
 
 ### 3 · Visual order: one screen, one important thing
 Ask what the user opened this page to do. That item gets level 1.
@@ -108,9 +114,9 @@ On-screen wording (full rules: `human-writing` `references/thai-grammar.md` sect
 Dense 32–36px (data tables · all-day users) · Normal 40–44px (general apps) · Airy 48–56px (marketing · occasional use). Tap target ≥ 44×44 pt iOS · ≥ 48×48 dp Android, enlarged with padding or a pseudo-element, not a bigger icon. No airy rows mixed into dense.
 
 ### 9 · Check the work
-1. Render and look (the platform skill says how), then go through the 3 checklists in [`references/states-and-checks.md`](references/states-and-checks.md): correctness (squint · spacing scale · ≤ 5 sizes · 1 solid button · 5 states · contrast · shrink the window) · countable beauty (icons · content ≥ 60 % of the screen · equal row heights · boxes ≤ 3 · hide the mockup's controls) · **beauty gate `ด่านสวย`** (score 7 axes against the reference app image; pass when every axis ≥ 4). Passing the first 2 can still be ugly; a mockup sent for approval must pass the beauty gate.
+1. Render and look (the platform part says how), then go through the 3 checklists in [`references/states-and-checks.md`](references/states-and-checks.md): correctness (squint · spacing scale · ≤ 5 sizes · 1 solid button · 5 states · contrast · shrink the window) · countable beauty (icons · content ≥ 60 % of the screen · equal row heights · boxes ≤ 3 · hide the mockup's controls) · **beauty gate `ด่านสวย`** (score 7 axes against the reference app image; pass when every axis ≥ 4). Passing the first 2 can still be ugly; a mockup sent for approval must pass the beauty gate.
 2. Send the image to a subagent that did not make it, **with the reference app image at the same size**, and ask for the 7-axis score, 2–3 problems per page with CSS-level fixes, no praise, and 1 more answer: **bolder or quieter**, with the single point to fix. Reviewer order: `graphic-design:design-critic` if installed → `graphic-designer` → `general-purpose`; none callable → minimum path in 0.1 step 3. The correctness reviewer (clicks · Functional Requirement (FR) · contrast) and the beauty reviewer are different ones. Public web pages (marketing · landing) always also go to `design-critic` of plugin `graphic-design`; not installed → say so in the report.
-3. After fixing, take new screenshots. The number of rounds follows the beauty-gate cap in `references/states-and-checks.md`, in that one place only (sample commands: platform skill, for example `windows-app-design` section 6 and `references/review.md`).
+3. After fixing, take new screenshots. The number of rounds follows the beauty-gate cap in `references/states-and-checks.md`, in that one place only (sample commands: `scripts/screenshot.py` and section 6 of the platform part, for example [`parts/web-app-design/guide.md`](parts/web-app-design/guide.md)).
 4. The page passed but one piece does not fit → try live values in the browser or make 3 variants for the reviewer: [`references/live-and-variants.md`](references/live-and-variants.md).
 5. Multi-page work: get the 3 main pages to pass first, then the rest.
 6. The first page of a single-file mockup (`#s-start`) is a table of contents for the reviewer, not an app page: build it with `scripts/mockup-start-page.py` per [`references/mockup-start-page.md`](references/mockup-start-page.md).

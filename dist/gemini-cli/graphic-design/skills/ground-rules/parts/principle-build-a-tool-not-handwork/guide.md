@@ -1,6 +1,6 @@
 
 # principle · build a tool, not handwork — turn mechanical work into a tool
-> Use together with: `ground-rules/principle-small-verifiable-steps` (cut into small pieces that can be checked) · `crew-patterns/parallel-split-and-merge` (run several pieces at once)
+> Use together with: `ground-rules/principle-small-verifiable-steps` (cut into small pieces that can be checked) · `handoff/parallel-split-and-merge` (run several pieces at once)
 
 > Work has 2 parts: the part that needs judgment, and the part that is purely mechanical.
 > For the mechanical part, do not make the agent work out a new method every time. Write it as a program once, and save the thinking effort for the parts that need a decision.

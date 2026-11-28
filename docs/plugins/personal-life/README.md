@@ -4,7 +4,7 @@
 
 จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้
 
-agent 9 · skill 33 (ของ plugin 18 · ของกลางจาก superuser 15) · คำสั่ง 1 · playbook 31 · ส่งงานต่อให้ —
+agent 9 · skill 29 (ของ plugin 16 · ของกลางจาก superuser 13) · คำสั่ง 1 · playbook 31 · ส่งงานต่อให้ —
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/personal-life/`](../../../plugins/personal-life/)
 

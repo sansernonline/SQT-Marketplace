@@ -1,11 +1,11 @@
 <!-- merged from skill `code-review-checklist` on 2026-11-27 · description was: Use when reviewing a pull request or your own code -->
 # Code Review Checklist — review a pull request or your own code, with actionable comments
 
-> **In SuperUser:** start from the playbook [`review`](../../superuser/references/playbook-review.md), then use this checklist for ordinary reviews. High-risk work or a large diff → `crew-patterns/adversarial-review-panel`.
+> **In SuperUser:** start from the playbook [`review`](../../superuser/references/playbook-review.md), then use this checklist for ordinary reviews. High-risk work or a large diff → `handoff/adversarial-review-panel`.
 
 ## Use when
 - Reviewing a pull request, self-reviewing before submitting, or auditing an existing module
-- Not for: a second look inside a team → a new `reviewer` agent (it applies this checklist) · contested design, large or high-risk diff, "stress test" → `crew-patterns/adversarial-review-panel` · reviewing a visual → `graphic-design:design-review` if installed, else `ui-craft` · writing the PR description → `pr-description-template.md` · hunting misleading patterns across the codebase → `code-craft` · scanners, secrets, dependency check, OWASP Top 10:2025 → `security-gate` (run both before merge; `owasp-top10.md`, `owasp-stack-checks.md`)
+- Not for: a second look inside a team → a new `reviewer` agent (it applies this checklist) · contested design, large or high-risk diff, "stress test" → `handoff/adversarial-review-panel` · reviewing a visual → `graphic-design:design-review` if installed, else `ui-craft` · writing the PR description → `pr-description-template.md` · hunting misleading patterns across the codebase → `code-craft` · scanners, secrets, dependency check, OWASP Top 10:2025 → `security-gate` (run both before merge; `owasp-top10.md`, `owasp-stack-checks.md`)
 
 ## Steps
 1. **Understand the intent:** read the PR description and linked ticket. For a branch or PR, pin the range first (`BASE=$(git merge-base main HEAD)` · `HEAD=$(git rev-parse HEAD)` · review `git diff $BASE..$HEAD`) and write both SHAs in the report.
@@ -32,7 +32,7 @@
 8. **Avoid:** bikeshedding when there is no convention · "why not MY way" · only criticism · vague comments ("this is wrong": say why and suggest a fix) · reviewing too much at once (ask for PRs under 400 lines).
 
 ## Run as a command
-`/software-development:git-and-review <file path or PR description>` — use a new read-only `reviewer` agent to review **the user's request** (high-stakes or contested → `crew-patterns/adversarial-review-panel`). Open `superuser` with the playbook `review` and copy its steps into the todo first; use both together. The reviewer: reads the file(s) or diff and pins the range (step 1) · applies this skill · rates each finding **สูง** (must fix before merge) · **กลาง** (should fix) · **ต่ำ** (optional) · gives a concrete fix for each · outputs verdict **ผ่าน** / **ไม่ผ่าน** with counts per level (not the `blocking:`/`nit:` prefixes).
+`/software-development:git-and-review <file path or PR description>` — use a new read-only `reviewer` agent to review **the user's request** (high-stakes or contested → `handoff/adversarial-review-panel`). Open `superuser` with the playbook `review` and copy its steps into the todo first; use both together. The reviewer: reads the file(s) or diff and pins the range (step 1) · applies this skill · rates each finding **สูง** (must fix before merge) · **กลาง** (should fix) · **ต่ำ** (optional) · gives a concrete fix for each · outputs verdict **ผ่าน** / **ไม่ผ่าน** with counts per level (not the `blocking:`/`nit:` prefixes).
 
 The author does not fix every finding on sight: a finding can be wrong (misread code, or the "bug" is covered by a test). Push back with evidence (`file:line` · test name · command output), not opinion · fix what stands · list each rejected finding and its evidence in the report so the lead can judge.
 

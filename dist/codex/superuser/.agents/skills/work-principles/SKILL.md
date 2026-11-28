@@ -45,11 +45,11 @@ A playbook never repeats how-to; it links to the skill. A skill never says who d
 | A document people read (report · plan · letter · message) | `human-writing` · `design-gate` when it is looked at | `human-writing` · `design-gate` · `workspace-rules` (file names, versions) | `document` |
 | Finding facts that need sources | `research-with-sources` | `research-with-sources` · `decision-desk` (when a choice follows) | `research` |
 | Checking finished work | `ground-rules` part `principle-prove-it-works` | `ground-rules` · `fix-at-source` | `review` |
-| Team work, handing over, long runs | `ground-rules` part `principle-small-verifiable-steps` | `crew-patterns` · `handoff` · `context-budget` | `team-project` · `pickup-and-pause` · `unattended-run` |
+| Team work, handing over, long runs | `ground-rules` part `principle-small-verifiable-steps` | `handoff` · `context-budget` | `team-project` · `pickup-and-pause` · `unattended-run` |
 | Replying in chat | `human-writing` | `lean-reply` · `quick` (small tasks) | none (one reply) |
 | Keeping lessons and the owner's style | `fix-at-source` part `principle-fix-root-cause` | `learn-loop` | `learn-from-session` |
 | Writing skills, agents, playbooks | [`references/skill-authoring.md`](references/skill-authoring.md) · `ground-rules` part `principle-prove-it-works` (red → green before done) | `skill-authoring` | `skill-authoring` (software-development, if installed) |
-| Multi-step prompts for a chat app | `human-writing` | `chat-prompt-workflows` | none |
+| Multi-step prompts for a chat app | `human-writing` | `handoff` | none |
 
 ## Principles per plugin (kinds of work)
 

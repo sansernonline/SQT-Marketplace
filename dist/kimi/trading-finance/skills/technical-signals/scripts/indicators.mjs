@@ -51,7 +51,7 @@ export function macd(closes, fast = 12, slow = 26, sig = 9) {
   return { line, signal, hist: line.map((m, i) => (m === null || signal[i] === null ? null : m - signal[i])) };
 }
 
-// Wilson score interval, same formula as copy-trade-check/scripts/signal-check.mjs (z = 1.96 -> 95%)
+// Wilson score interval, same formula as trade-journal/parts/copy-trade-check/scripts/signal-check.mjs (z = 1.96 -> 95%)
 export function wilson(k, n, z = 1.96) {
   if (n === 0) return [0, 1];
   const p = k / n;

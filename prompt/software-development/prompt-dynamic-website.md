@@ -16,7 +16,7 @@
 
 **ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้ `diagrams` · Mermaid (`diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
 
-**เว็บแบบบท (ใช้ทุกฉบับ):** ทำตาม skill `web-app-design` · การเคลื่อนไหวทุกชิ้นผ่านประตูเดียว (`T()` ใน JS + kill-switch ใน CSS) · แต่ละบทมีทางเข้าของตัวเอง ห้ามใช้ fade-up ซ้ำทุกจุด · รุ่นของ GSAP และเครื่องมืออ่านจากหน้าทางการรอบนี้ แล้วติดวันที่ตรวจ · ข้อความบนเว็บตาม `human-writing` · หน้าตาต้องไม่ดูเหมือน AI ทำ ตาม `design-gate/no-ai-look` (plugin `superuser`) · โค้ดเว็บอยู่ในโฟลเดอร์โค้ด (`<repo>/`) · ภาพทดลองและผลวัดลง `_to_delete/`
+**เว็บแบบบท (ใช้ทุกฉบับ):** ทำตาม skill `ui-craft` · การเคลื่อนไหวทุกชิ้นผ่านประตูเดียว (`T()` ใน JS + kill-switch ใน CSS) · แต่ละบทมีทางเข้าของตัวเอง ห้ามใช้ fade-up ซ้ำทุกจุด · รุ่นของ GSAP และเครื่องมืออ่านจากหน้าทางการรอบนี้ แล้วติดวันที่ตรวจ · ข้อความบนเว็บตาม `human-writing` · หน้าตาต้องไม่ดูเหมือน AI ทำ ตาม `design-gate/no-ai-look` (plugin `superuser`) · โค้ดเว็บอยู่ในโฟลเดอร์โค้ด (`<repo>/`) · ภาพทดลองและผลวัดลง `_to_delete/`
 
 | # | งาน | playbook | ได้ไฟล์ |
 |---|---|---|---|
@@ -39,7 +39,7 @@
 
 ## 1. ทิศทางภาพ 3 แนว ให้ผู้ใช้เลือก
 
-playbook `project-docs` · agent `ux-designer` (นำ) + `graphic-designer` · skill `ui-craft` ข้อ 0.1 · `crew-patterns/parallel-attempts-pick-best` · `web-app-design` (ข้อ 4 token · ข้อ 6 ฟอนต์ไทยหัวใหญ่) · `slide-deck` (โครงเรื่อง)
+playbook `project-docs` · agent `ux-designer` (นำ) + `graphic-designer` · skill `ui-craft` ข้อ 0.1 · `handoff/parallel-attempts-pick-best` · `ui-craft` part `web-app-design` (ข้อ 4 token · ข้อ 6 ฟอนต์ไทยหัวใหญ่) · `slide-deck` (โครงเรื่อง)
 **ผลลัพธ์:** `docs/design/<รหัส>-story.md` (บท · หัวบทเป็นข้อสรุป · ทางเข้าที่ตั้งใจ) · `docs/design/<รหัส>-design-directions.html` (3 แนวเคียงกัน) · **ผู้ใช้เลือกแนว** ก่อนเริ่มฉบับ 2
 
 ### เว็บ (ผู้ใช้กรอก)
@@ -47,7 +47,7 @@ playbook `project-docs` · agent `ux-designer` (นำ) + `graphic-designer` · 
 - เว็บนี้ทำอะไร ให้ใครดู และอยากให้คนดูทำอะไรต่อ (ลงทะเบียน · ติดต่อ · ซื้อ):
 - บท 3–7 บท หัวบทละ 1 ประโยค (เว้นว่าง = agent ร่างตาม `slide-deck` แล้วลง `## ตัดสินใจเอง`):
 - พื้นหลังที่มีความหมาย (เครือข่ายคน · เส้นทางกำหนดการ · แผนที่ · ไม่ต้องมี):
-- สีแบรนด์และโลโก้ (path ใน `assets/` · ไม่มี → ใช้ค่าประจำบ้านของ `web-app-design` แล้วติด `(รอยืนยัน)`):
+- สีแบรนด์และโลโก้ (path ใน `assets/` · ไม่มี → ใช้ค่าประจำบ้านของ `ui-craft` แล้วติด `(รอยืนยัน)`):
 - เว็บที่ชอบหน้าตา (ลิงก์ · ภาพ):
 - รหัสโปรเจกต์สำหรับตั้งชื่อไฟล์ (เว้นว่าง = อ่านจาก `docs/README.md` · ไม่มี → 3 ตัวอักษรจากชื่อเว็บ แล้วลง `## ตัดสินใจเอง`):
 - [ ] ให้ทีมเลือกแนวแทน (ไม่ติ๊ก = ผู้ใช้เลือกเองจากหน้าเทียบ)
@@ -55,8 +55,8 @@ playbook `project-docs` · agent `ux-designer` (นำ) + `graphic-designer` · 
 ### ขั้นตอน
 
 1. ร่างโครงเรื่องก่อนวาด: บทละ 1 ข้อสรุป · บทเปิดเป็นหน้าจอพระเอก · บทที่มีพื้นหลังหรือรายการยาวที่สุดเป็นหน้าใช้งานหลักของรอบนี้
-2. ทำตาม `ui-craft` ข้อ 0.1 ทั้ง 6 ขั้น · 3 แนวทำขนานกันด้วย subagent ตัวใหม่แนวละตัว (`crew-patterns/parallel-attempts-pick-best`) และต่างกันจริง แต่ละแนวเลือกจากตาราง look ของเว็บใน `ui-craft`
-3. แต่ละแนวบอก: สี · ฟอนต์หัวใหญ่ไทย (เลือกจาก `web-app-design` ข้อ 6) · ทางเข้าของบทเปิด · พื้นหลัง · เปิดดูจริงที่กว้าง 1440 และ 420
+2. ทำตาม `ui-craft` ข้อ 0.1 ทั้ง 6 ขั้น · 3 แนวทำขนานกันด้วย subagent ตัวใหม่แนวละตัว (`handoff/parallel-attempts-pick-best`) และต่างกันจริง แต่ละแนวเลือกจากตาราง look ของเว็บใน `ui-craft`
+3. แต่ละแนวบอก: สี · ฟอนต์หัวใหญ่ไทย (เลือกจาก `ui-craft` part `web-app-design` ข้อ 6) · ทางเข้าของบทเปิด · พื้นหลัง · เปิดดูจริงที่กว้าง 1440 และ 420
 4. หน้าเทียบมีภาพเว็บอ้างอิง ใต้แต่ละแนวมี token หลักและข้อดีข้อเสีย 1 บรรทัด
 5. ไม่ติ๊กช่องให้ทีมเลือก → จบฉบับนี้ที่หน้าเทียบ แล้วถามผู้ใช้ครั้งเดียวว่าเลือกแนวไหน · ติ๊ก → ผู้ตรวจด่านสวยตัวใหม่ให้คะแนนตาม `ui-craft` ข้อ 0.1 ขั้น 5 แล้วลงผลใน `## ตัดสินใจเอง`
 6. แนวที่เลือก: สีแบรนด์และฟอนต์เขียนกลับลง `docs/README.md` · โลโก้ลง `assets/logo/`
@@ -69,7 +69,7 @@ playbook `project-docs` · agent `ux-designer` (นำ) + `graphic-designer` · 
 
 ## 2. สร้างบทเล่าเรื่องแบบเต็มจอ (deck-mode)
 
-playbook `feature` (ยังไม่มีโค้ด → `new-project`) · agent `developer` (นำ) + `ux-designer` · skill `web-app-design` (ข้อ 1–5 · `references/recipes.md` · ตัวอย่าง `assets/example-deck.html`) · `web-app-design` (ชื่อ token) · `code-craft`
+playbook `feature` (ยังไม่มีโค้ด → `new-project`) · agent `developer` (นำ) + `ux-designer` · skill `ui-craft` part `web-app-design` (ข้อ 1–5 · `references/recipes.md` · ตัวอย่าง `assets/example-deck.html`) · `ui-craft` (ชื่อ token) · `code-craft`
 **ต้องมีก่อน:** แนวที่ผู้ใช้เลือกจากฉบับ 1 · `docs/design/<รหัส>-story.md`
 **ผลลัพธ์:** หน้าเว็บใน `<repo>/` · GSAP self-host ใน `vendor/` · ฟอนต์ woff2 self-host · ภาพทุกบทที่กว้าง 1440 · 900 · 420 ใน `_to_delete/shots/` · **ไม่เขียนโค้ด** เว้นแต่ข้างล่างติ๊ก `[x]`
 
@@ -77,23 +77,23 @@ playbook `feature` (ยังไม่มีโค้ด → `new-project`) · a
 
 ### สิ่งที่ต้องได้
 
-1. โครงตาม `web-app-design` ข้อ 1: `route()` ตัวเดียวบน `hashchange` · ทุก view ดันฟังก์ชันถอดลง `cleanups[]` และล้างก่อนเปลี่ยน view · เปลี่ยนบทด้วย `replaceState` · เนื้อหาอยู่ใน HTML ไม่อยู่ใน JS
+1. โครงตาม `ui-craft` part `web-app-design` ข้อ 1: `route()` ตัวเดียวบน `hashchange` · ทุก view ดันฟังก์ชันถอดลง `cleanups[]` และล้างก่อนเปลี่ยน view · เปลี่ยนบทด้วย `replaceState` · เนื้อหาอยู่ใน HTML ไม่อยู่ใน JS
 2. ประตูเดียวของการเคลื่อนไหว · ทางเข้า 4 แบบต่อเว็บ บทติดกันไม่ใช้แบบซ้ำ (`data-enter`) · ออกสั้นกว่าเข้าและเร่งออก · ล้าง filter หลังเข้าเสร็จให้ตัวหนังสือคม
 3. คีย์บอร์ดครบ (↓ PgDn Space · ↑ PgUp · Home End) · ย้ายโฟกัสไปบทใหม่ทุกครั้ง · rail มี `aria-current="step"` · รายการในบทเลื่อนจนสุดก่อนแล้วค่อยเปลี่ยนบท
 4. พื้นหลังหนักโหลดทีหลังและรอไม่เกิน 4 วินาที · เปิด WebGL ไม่ได้ → fallback 2D ที่สื่อความหมายเดียวกัน · `devicePixelRatio` ไม่เกิน 2 · loop วิ่งเฉพาะตอนที่จอต้องใช้
 5. `wheel` และ `touch` แบบ `passive:false` มีเฉพาะ deck-mode และถอดเมื่อเปลี่ยน route · ฟอนต์ไทยกับละตินแยกด้วย `unicode-range` · preload แค่ 2 น้ำหนัก
-6. สีทุกตัวมาจาก token ชื่อตาม `web-app-design` · รัน `check-design-tokens.mjs` ของ `web-app-design` แล้วไม่เจอสี hardcode
+6. สีทุกตัวมาจาก token ชื่อตาม `ui-craft` · รัน `check-design-tokens.mjs` ของ `ui-craft` แล้วไม่เจอสี hardcode
 
 ### กฎเฉพาะฉบับนี้
 
-- GSAP โหลดจาก cdnjs ได้เฉพาะตอนลอง · ไฟล์ส่งมอบต้องเปิดได้โดยไม่พึ่ง CDN · ต้องใช้ API ของ GSAP ลึกกว่าที่ `web-app-design` บอก → อ่าน skill ทางการของผู้ผลิตเฉพาะไฟล์ของ plugin ที่ใช้ ตาม `web-app-design` ข้อ 5
+- GSAP โหลดจาก cdnjs ได้เฉพาะตอนลอง · ไฟล์ส่งมอบต้องเปิดได้โดยไม่พึ่ง CDN · ต้องใช้ API ของ GSAP ลึกกว่าที่ `ui-craft` บอก → อ่าน skill ทางการของผู้ผลิตเฉพาะไฟล์ของ plugin ที่ใช้ ตาม `ui-craft` part `web-app-design` ข้อ 5
 - `decodeWords` ใช้กับหัวเรื่องละตินเท่านั้น ไม่ใช้กับไทย · หัวใหญ่ไทยที่ตั้ง `letter-spacing` ติดลบต้องเปิดดูจริงทุกน้ำหนัก
 
 ---
 
 ## 3. หน้าแบบเลื่อนและหน้าลงทะเบียน (page-mode)
 
-playbook `feature` · agent `developer` + `ux-designer` · skill `web-app-design` (2 โหมด · recipe scroll reveal) · `web-app-design` (ฟอร์ม · token ชุดเดียวกับ deck) · `i18n-and-locale` · `pdpa-compliance` · `security-gate` · `code-craft` · `async-messaging` (อีเมลยืนยัน ถ้ามี) · `domain-systems` (ถ้ารับเงินออนไลน์)
+playbook `feature` · agent `developer` + `ux-designer` · skill `ui-craft` (2 โหมด · recipe scroll reveal) · `ui-craft` (ฟอร์ม · token ชุดเดียวกับ deck) · `i18n-and-locale` · `pdpa-compliance` · `security-gate` · `code-craft` · `async-messaging` (อีเมลยืนยัน ถ้ามี) · `domain-systems` (ถ้ารับเงินออนไลน์)
 **ต้องมีก่อน:** ฉบับ 2
 **ผลลัพธ์:** หน้า page-mode ในเว็บเดียวกัน (เช่น กำหนดการ · ผู้บรรยาย · คำถามที่พบบ่อย · ลงทะเบียน) · **ไม่เขียนโค้ด** เว้นแต่ข้างล่างติ๊ก `[x]` · **รออนุมัติ:** ต่อฟอร์มเข้าระบบจริง · ต่อช่องทางรับเงินจริง
 
@@ -109,7 +109,7 @@ playbook `feature` · agent `developer` + `ux-designer` · skill `web-app-design
 ### สิ่งที่ต้องได้
 
 1. หน้าเลื่อนปกติ เนื้อหาโผล่ด้วย reveal ของ CSS คู่กับ IntersectionObserver · kill-switch ตัวเดียวกับ deck · พื้นหลังหรี่ลงตามค่าใน skill · ไม่ยึดการเลื่อนของผู้ใช้
-2. ฟอร์มใช้ token และคอมโพเนนต์ชุดเดียวกับ `web-app-design` · ทุกช่องมี label จริง · ช่องชื่อ อีเมล และโทรศัพท์มี `autocomplete` · error บอกว่าช่องไหนผิดและแก้อย่างไร แนบอยู่ที่ช่องนั้นพร้อมปุ่มลองใหม่ ไม่ใช่ toast ที่หายเอง
+2. ฟอร์มใช้ token และคอมโพเนนต์ชุดเดียวกับ `ui-craft` · ทุกช่องมี label จริง · ช่องชื่อ อีเมล และโทรศัพท์มี `autocomplete` · error บอกว่าช่องไหนผิดและแก้อย่างไร แนบอยู่ที่ช่องนั้นพร้อมปุ่มลองใหม่ ไม่ใช่ toast ที่หายเอง
 3. ข้อมูลลงทะเบียนตรวจฝั่งเซิร์ฟเวอร์ทุกช่อง · ขอเฉพาะข้อมูลที่ใช้จริง · ข้อความขอความยินยอมและลิงก์นโยบายความเป็นส่วนตัวตาม `pdpa-compliance` · log ไม่มีข้อมูลส่วนบุคคล
 4. กดส่ง 2 ครั้งหรือเน็ตหลุดกลางทางแล้วไม่ได้ผู้ลงทะเบียนซ้ำ
 5. ปุ่ม Back ทำงานตามที่คนคาด: เปลี่ยนหน้าใช้ hash ปกติ ส่วนเปลี่ยนบทใช้ `replaceState`
@@ -118,7 +118,7 @@ playbook `feature` · agent `developer` + `ux-designer` · skill `web-app-design
 
 ## 4. ตรวจคุณภาพก่อนเปิด
 
-playbook `review` · agent `qa-tester` ตัวใหม่ (การเข้าถึง · ความเร็ว · คีย์บอร์ด) + `graphic-designer` ตัวใหม่ (`design-gate/no-ai-look`) · ผู้ตรวจต้องไม่ใช่ตัวที่สร้างหรือแก้เว็บ · skill `web-audit` · `design-gate/no-ai-look` (plugin `superuser`) · `web-app-design` ข้อ 7 · `web-audit` (ใช้ผล Lighthouse รอบเดียวกัน)
+playbook `review` · agent `qa-tester` ตัวใหม่ (การเข้าถึง · ความเร็ว · คีย์บอร์ด) + `graphic-designer` ตัวใหม่ (`design-gate/no-ai-look`) · ผู้ตรวจต้องไม่ใช่ตัวที่สร้างหรือแก้เว็บ · skill `web-audit` · `design-gate/no-ai-look` (plugin `superuser`) · `ui-craft` part `web-app-design` ข้อ 7 · `web-audit` (ใช้ผล Lighthouse รอบเดียวกัน)
 **ต้องมีก่อน:** ฉบับ 2 (และ 3 ถ้าทำ) รันได้บนเครื่อง
 **ผลลัพธ์:** `docs/web-quality-<ปี-เดือน-วัน>.md` · ผลดิบใน `_to_delete/audit/<วันที่>/` · **ผู้ตรวจไม่แก้ไฟล์**
 
@@ -129,7 +129,7 @@ playbook `review` · agent `qa-tester` ตัวใหม่ (การเข้
 3. **คีย์บอร์ด:** เปลี่ยนบทได้ครบทุกปุ่มในแผนที่ · Tab ไล่ rail แล้วเห็นวงโฟกัส · โฟกัสย้ายตามบท · ฟอร์มลงทะเบียนกรอกจนส่งได้ด้วยคีย์บอร์ดอย่างเดียว · Esc ปิด modal
 4. **reduced motion:** เปิด `prefers-reduced-motion` แล้วเห็นเนื้อหาครบทุกบท ตัวเลขเป็นค่าสุดท้าย ไม่มีคำจาง · ของที่เล่นเองเกิน 5 วินาทีมีปุ่มหยุด
 5. **ตัดของหนัก:** ปิด WebGL แล้ว fallback 2D ขึ้นและอ่านได้ · ถอดเน็ตแล้วฟอนต์ยังเป็นตัวที่ตั้งใจ · trackpad ปัดแรง 1 ครั้งเปลี่ยน 1 บท · Lighthouse ไม่ฟ้องเรื่อง passive listener
-6. ภาพทุกบทที่กว้าง 1440 · 900 · 420 (`screenshot.py` ของ `web-app-design`) เปิดดูจริง · จอแคบกว่า 900 rail เป็นแถบล่างและไม่ทับเนื้อหา
+6. ภาพทุกบทที่กว้าง 1440 · 900 · 420 (`screenshot.py` ของ `ui-craft`) เปิดดูจริง · จอแคบกว่า 900 rail เป็นแถบล่างและไม่ทับเนื้อหา
 
 ### กฎเฉพาะฉบับนี้
 

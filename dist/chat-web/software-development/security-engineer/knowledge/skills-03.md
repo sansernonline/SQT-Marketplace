@@ -121,47 +121,7 @@ These go under "คำแนะนำ hardening" (hardening advice) in the repor
 
 ## 7 · Where results live and the data contract
 
-Results live in `qa/security/audit-<YYYY-MM-DD>/` of the project (deliverable to the customer). Sub-agent drafts and raw scan output live in `_to_delete/security/`.
-
-| File | Content | Who writes it |
-|---|---|---|
-| `architecture.md` | The conclusions of step 1 | Team lead |
-| `ledger.json` | `{ "rows": [...] }`, 1 row per work unit · fields as in [`ledger`](references/ledger.md) | Team lead |
-| `findings.json` | `{ "audit": {date, repo, commit, profile}, "findings": [...] }` · for a folder that is not git, set `commit` to `"none"` | Team lead |
-| `REPORT.md` · `NEEDS-VALIDATION.md` | Built from the 2 files above, following the [`report-th`](assets/report-th.md) template | `scripts/render_report.mjs`, then the lead fills in the prose parts |
-
-The fields of 1 finding (field names are fixed and the validator accepts no others):
-
-| Field | Meaning |
-|---|---|
-| `id` | `F-001`, in file order |
-| `fingerprint` | 16 hex characters computed from `class` + `location.file` + `location.symbol` + `entrypoint` by the script, never typed by hand · the same root cause gets the same value every round |
-| `verdict` · `severity` | Sections 4 and 5 |
-| `title` · `class` | A short title · the attack class from `attack-classes`, such as `idor` · `webhook-signature` |
-| `owasp` · `cwe` | `A01`..`A10` or `null` · `CWE-639` or `null` |
-| `location` | `{file, line, symbol}` the place that must be fixed · a relative path in the repo using `/` |
-| `entrypoint` | `<path>#<entry point>` such as `src/routes/orders.js#GET /orders/:id` |
-| `trace` | `[{file, line, note}]` the first step is the entrypoint's file, running on to the point of harm |
-| `preconditions` | Conditions that must be true first, such as `login เป็นลูกค้าธรรมดา` |
-| `impact` · `owner_impact_th` | The technical effect · the effect in business-owner language, 1 sentence |
-| `pdpa` | `{personal_data, kinds}` such as `{"personal_data": true, "kinds": ["เลขบัตรประชาชน", "เบอร์โทร"]}` |
-| `evidence` | What was really seen: lines of code · commands run in the lab and their results (secrets cut to the last 4 characters) |
-| `missing` · `check_plan` | Required when `needs_validation` |
-| `reject_reason` | Required when `rejected` |
-| `fix` | The narrowest fix at the last trustworthy decision point + the test that must fail before the fix |
-| `hunted_by` · `verified_by` | The name or code of the agent that hunted · that verified (must not be the same) |
-| `coverage_ids` | The ledger rows this finding came from, cited back in both directions |
-
-Validate with the scripts in this skill's folder (Node with no dependencies, runs on Windows):
-
-```bash
-node <skill>/scripts/fingerprint.mjs idor src/orders/repo.js findOrderById "src/routes/orders.js#GET /orders/:id"   # no symbol: put -
-node <skill>/scripts/validate_findings.mjs qa/security/audit-2026-10-26/findings.json --ledger qa/security/audit-2026-10-26/ledger.json
-node <skill>/scripts/validate_ledger.mjs qa/security/audit-2026-10-26/ledger.json --findings qa/security/audit-2026-10-26/findings.json
-node <skill>/scripts/render_report.mjs qa/security/audit-2026-10-26            # if a report already exists, --force is needed to overwrite it
-```
-
-The 2 validators and `render_report.mjs` have `--self-test` (`fingerprint.mjs` is a calculator and has none). Exit 0 means pass · 1 means fail · 2 means bad invocation. A pass means the format and the cross-references are right, not that the vulnerability is real. If a validator fails, do not build the report. No secrets may appear in any file of the results folder. The validator catches known patterns but not every one, so the team lead must also read the `evidence` field.
+Results live in `qa/security/audit-<YYYY-MM-DD>/` of the project (deliverable to the customer). Sub-agent drafts and raw scan output live in `_to_delete/security/`. File list, who writes each file and the finding data contract: [`references/results-contract.md`](references/results-contract.md) — open before writing the first result file.
 
 ## 8 · After the audit
 
@@ -184,6 +144,7 @@ The 2 validators and `render_report.mjs` have `--self-test` (`fingerprint.mjs` i
 7. The words "100% secure" or "certified" do not appear
 
 ## References
+- [`references/results-contract.md`](references/results-contract.md) — result files and the finding data contract
 
 - [`references/worked-example.md`](references/worked-example.md) — open when you want a full run-through of a `quick` audit
 - [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
@@ -960,6 +921,55 @@ The team lead writes it personally, about 1,000 words at most, in this order:
 7. Information from the previous round (if any): the earlier audit folder · items still open
 
 
+## reference: results-contract.md
+
+# Where results live and the data contract
+
+Section 7 of [`SKILL.md`](../SKILL.md), moved here so the hard rules stay near the top of the skill.
+
+Results live in `qa/security/audit-<YYYY-MM-DD>/` of the project (deliverable to the customer). Sub-agent drafts and raw scan output live in `_to_delete/security/`.
+
+| File | Content | Who writes it |
+|---|---|---|
+| `architecture.md` | The conclusions of step 1 | Team lead |
+| `ledger.json` | `{ "rows": [...] }`, 1 row per work unit · fields as in [`ledger`](ledger.md) | Team lead |
+| `findings.json` | `{ "audit": {date, repo, commit, profile}, "findings": [...] }` · for a folder that is not git, set `commit` to `"none"` | Team lead |
+| `REPORT.md` · `NEEDS-VALIDATION.md` | Built from the 2 files above, following the [`report-th`](../assets/report-th.md) template | `scripts/render_report.mjs`, then the lead fills in the prose parts |
+
+The fields of 1 finding (field names are fixed and the validator accepts no others):
+
+| Field | Meaning |
+|---|---|
+| `id` | `F-001`, in file order |
+| `fingerprint` | 16 hex characters computed from `class` + `location.file` + `location.symbol` + `entrypoint` by the script, never typed by hand · the same root cause gets the same value every round |
+| `verdict` · `severity` | Sections 4 and 5 |
+| `title` · `class` | A short title · the attack class from `attack-classes`, such as `idor` · `webhook-signature` |
+| `owasp` · `cwe` | `A01`..`A10` or `null` · `CWE-639` or `null` |
+| `location` | `{file, line, symbol}` the place that must be fixed · a relative path in the repo using `/` |
+| `entrypoint` | `<path>#<entry point>` such as `src/routes/orders.js#GET /orders/:id` |
+| `trace` | `[{file, line, note}]` the first step is the entrypoint's file, running on to the point of harm |
+| `preconditions` | Conditions that must be true first, such as `login เป็นลูกค้าธรรมดา` |
+| `impact` · `owner_impact_th` | The technical effect · the effect in business-owner language, 1 sentence |
+| `pdpa` | `{personal_data, kinds}` such as `{"personal_data": true, "kinds": ["เลขบัตรประชาชน", "เบอร์โทร"]}` |
+| `evidence` | What was really seen: lines of code · commands run in the lab and their results (secrets cut to the last 4 characters) |
+| `missing` · `check_plan` | Required when `needs_validation` |
+| `reject_reason` | Required when `rejected` |
+| `fix` | The narrowest fix at the last trustworthy decision point + the test that must fail before the fix |
+| `hunted_by` · `verified_by` | The name or code of the agent that hunted · that verified (must not be the same) |
+| `coverage_ids` | The ledger rows this finding came from, cited back in both directions |
+
+Validate with the scripts in this skill's folder (Node with no dependencies, runs on Windows):
+
+```bash
+node <skill>/scripts/fingerprint.mjs idor src/orders/repo.js findOrderById "src/routes/orders.js#GET /orders/:id"   # no symbol: put -
+node <skill>/scripts/validate_findings.mjs qa/security/audit-2026-10-26/findings.json --ledger qa/security/audit-2026-10-26/ledger.json
+node <skill>/scripts/validate_ledger.mjs qa/security/audit-2026-10-26/ledger.json --findings qa/security/audit-2026-10-26/findings.json
+node <skill>/scripts/render_report.mjs qa/security/audit-2026-10-26            # if a report already exists, --force is needed to overwrite it
+```
+
+The 2 validators and `render_report.mjs` have `--self-test` (`fingerprint.mjs` is a calculator and has none). Exit 0 means pass · 1 means fail · 2 means bad invocation. A pass means the format and the cross-references are right, not that the vulnerability is real. If a validator fails, do not build the report. No secrets may appear in any file of the results folder. The validator catches known patterns but not every one, so the team lead must also read the `evidence` field.
+
+
 ## reference: security-templates.md
 
 # แม่แบบงานความปลอดภัย — threat model · security review · compliance brief
@@ -1455,11 +1465,11 @@ Moved from `worktree-and-branch.md` section 4 (2026-11-10)
 <!-- merged from skill `code-review-checklist` on 2026-11-27 · description was: Use when reviewing a pull request or your own code -->
 # Code Review Checklist — review a pull request or your own code, with actionable comments
 
-> **In SuperUser:** start from the playbook [`review`](../../superuser/references/playbook-review.md), then use this checklist for ordinary reviews. High-risk work or a large diff → `crew-patterns/adversarial-review-panel`.
+> **In SuperUser:** start from the playbook [`review`](../../superuser/references/playbook-review.md), then use this checklist for ordinary reviews. High-risk work or a large diff → `handoff/adversarial-review-panel`.
 
 ## Use when
 - Reviewing a pull request, self-reviewing before submitting, or auditing an existing module
-- Not for: a second look inside a team → a new `reviewer` agent (it applies this checklist) · contested design, large or high-risk diff, "stress test" → `crew-patterns/adversarial-review-panel` · reviewing a visual → `graphic-design:design-review` if installed, else `ui-craft` · writing the PR description → `pr-description-template.md` · hunting misleading patterns across the codebase → `code-craft` · scanners, secrets, dependency check, OWASP Top 10:2025 → `security-gate` (run both before merge; `owasp-top10.md`, `owasp-stack-checks.md`)
+- Not for: a second look inside a team → a new `reviewer` agent (it applies this checklist) · contested design, large or high-risk diff, "stress test" → `handoff/adversarial-review-panel` · reviewing a visual → `graphic-design:design-review` if installed, else `ui-craft` · writing the PR description → `pr-description-template.md` · hunting misleading patterns across the codebase → `code-craft` · scanners, secrets, dependency check, OWASP Top 10:2025 → `security-gate` (run both before merge; `owasp-top10.md`, `owasp-stack-checks.md`)
 
 ## Steps
 1. **Understand the intent:** read the PR description and linked ticket. For a branch or PR, pin the range first (`BASE=$(git merge-base main HEAD)` · `HEAD=$(git rev-parse HEAD)` · review `git diff $BASE..$HEAD`) and write both SHAs in the report.
@@ -1486,7 +1496,7 @@ Moved from `worktree-and-branch.md` section 4 (2026-11-10)
 8. **Avoid:** bikeshedding when there is no convention · "why not MY way" · only criticism · vague comments ("this is wrong": say why and suggest a fix) · reviewing too much at once (ask for PRs under 400 lines).
 
 ## Run as a command
-`/software-development:git-and-review <file path or PR description>` — use a new read-only `reviewer` agent to review **the user's request** (high-stakes or contested → `crew-patterns/adversarial-review-panel`). Open `superuser` with the playbook `review` and copy its steps into the todo first; use both together. The reviewer: reads the file(s) or diff and pins the range (step 1) · applies this skill · rates each finding **สูง** (must fix before merge) · **กลาง** (should fix) · **ต่ำ** (optional) · gives a concrete fix for each · outputs verdict **ผ่าน** / **ไม่ผ่าน** with counts per level (not the `blocking:`/`nit:` prefixes).
+`/software-development:git-and-review <file path or PR description>` — use a new read-only `reviewer` agent to review **the user's request** (high-stakes or contested → `handoff/adversarial-review-panel`). Open `superuser` with the playbook `review` and copy its steps into the todo first; use both together. The reviewer: reads the file(s) or diff and pins the range (step 1) · applies this skill · rates each finding **สูง** (must fix before merge) · **กลาง** (should fix) · **ต่ำ** (optional) · gives a concrete fix for each · outputs verdict **ผ่าน** / **ไม่ผ่าน** with counts per level (not the `blocking:`/`nit:` prefixes).
 
 The author does not fix every finding on sight: a finding can be wrong (misread code, or the "bug" is covered by a test). Push back with evidence (`file:line` · test name · command output), not opinion · fix what stands · list each rejected finding and its evidence in the report so the lead can judge.
 
@@ -1693,7 +1703,7 @@ Moved out of [SKILL.md](code-review-checklist.md). Open it for a large or unfami
 | Task | Use instead |
 |---|---|
 | Reviewing someone's PR or self-reviewing the code | `code-review-checklist.md` |
-| Adversarial review of a risky or contested change | `crew-patterns/adversarial-review-panel` |
+| Adversarial review of a risky or contested change | `handoff/adversarial-review-panel` |
 
 ## 0 · Look for an existing format first (every time)
 
@@ -1848,10 +1858,10 @@ Checked 2026-10-23
 ## Use when
 - 2 or more agents will edit files in the same repo at the same time (read-only agents need no worktree).
 - A spike or refactor may break things in a way that is hard to undo, or an urgent fix is needed while the main checkout has half-finished work (branch from `main`, no stash).
-- Comparing 2 approaches (`crew-patterns/parallel-attempts-pick-best`): one worktree per approach. Separate machines or port collisions → add `infra-and-deploy`.
+- Comparing 2 approaches (`handoff/parallel-attempts-pick-best`): one worktree per approach. Separate machines or port collisions → add `infra-and-deploy`.
 - A branch must be merged, closed, or cleaned up, or conflicts must be resolved.
 
-Not for: a single agent on a small reversible job → a plain branch · read-only work → `Explore` · a repo with no commit yet (make the first commit first). Splitting the work into pieces → `crew-patterns/parallel-split-and-merge` (its step "ห้ามเขียนที่เดียวกัน" points here).
+Not for: a single agent on a small reversible job → a plain branch · read-only work → `Explore` · a repo with no commit yet (make the first commit first). Splitting the work into pieces → `handoff/parallel-split-and-merge` (its step "ห้ามเขียนที่เดียวกัน" points here).
 
 ## Steps
 1. **Create.** Run `git worktree add ../<repo>-<task> -b <type>/<task> [main]`, then `git worktree list` (must show main + the new one).

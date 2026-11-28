@@ -1,11 +1,10 @@
 {
  "plugin": "trading-finance",
- "version": "0.26.0",
+ "version": "0.27.0",
  "description": "Trading and personal finance toolkit for Thai investors — watchlists, signals, paper trading, trade journal, position sizing, dividends, budgets and scam checks, plus Thai money skills: investment tax, year-end deduction planning (/tax-plan), mutual funds, retirement, debt payoff and คลินิกแก้หนี้, insurance review and emergency funds, credit bureau reports, bonds and deposits, rebalancing and DCA, and home refinance. Uses whatever market-data plugins you already have.",
  "cross": [],
  "skills": [
   "budget-and-debt",
-  "copy-trade-check",
   "fund-and-bond-picker",
   "income-tax-th",
   "market-watch",
@@ -16,14 +15,11 @@
   "scam-check",
   "stock-fundamentals",
   "technical-signals",
-  "trade-journal",
-  "trade-practice"
+  "trade-journal"
  ],
  "core_skills": [
   "superuser",
-  "crew-patterns",
   "lean-reply",
-  "chat-prompt-workflows",
   "workspace-rules",
   "context-budget",
   "decision-desk",
@@ -79,7 +75,7 @@
    "description": "Use before opening a position, asking how much to buy, or when a portfolio drifts. Never sizes without a stop-loss.",
    "skills": [
     "position-sizing",
-    "copy-trade-check"
+    "trade-journal"
    ]
   },
   {
@@ -88,8 +84,7 @@
    "core": false,
    "description": "Use when reviewing past trades or a trade journal, or asking why you keep losing the same way. Finds one rule to test.",
    "skills": [
-    "trade-journal",
-    "trade-practice"
+    "trade-journal"
    ]
   }
  ],
@@ -431,7 +426,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Open `trading.md` first. Collect at the start, in one question: capital, budget, entry, stop, and a price-history CSV from the broker app if no market-data tool is connected. Then read the thesis for this stock from the user's `watchlist.md` in the finance folder (`market-watch` → `references/watchlist-setup.md` step 5). If there is none, write the thesis (the reason to buy), the entry point, and the point where the thesis is wrong, under `market-watch`. If the trade copies another person's trades or signals, check that source under `copy-trade-check` first · ใคร: หัวหน้าทีม (reason from the answer at the start; if none, put `(รอยืนยัน)` (pending confirmation))",
+     "text": "Open `trading.md` first. Collect at the start, in one question: capital, budget, entry, stop, and a price-history CSV from the broker app if no market-data tool is connected. Then read the thesis for this stock from the user's `watchlist.md` in the finance folder (`market-watch` → `references/watchlist-setup.md` step 5). If there is none, write the thesis (the reason to buy), the entry point, and the point where the thesis is wrong, under `market-watch`. If the trade copies another person's trades or signals, check that source under `trade-journal` first · ใคร: หัวหน้าทีม (reason from the answer at the start; if none, put `(รอยืนยัน)` (pending confirmation))",
      "sub": [],
      "phase": "",
      "who": {
@@ -442,7 +437,7 @@
      },
      "skills": [
       "market-watch",
-      "copy-trade-check"
+      "trade-journal"
      ],
      "commands": [],
      "playbooks": [],
@@ -712,7 +707,7 @@
     },
     {
      "n": 2,
-     "text": "If not yet transferred, open `money-safety-tax.md`, then ตรวจ the warning signs under `scam-check` and check the licence on the regulator's website. If the offer is a copy-trading service, check it under `copy-trade-check` · ใคร: `money-planner` ตัวใหม่",
+     "text": "If not yet transferred, open `money-safety-tax.md`, then ตรวจ the warning signs under `scam-check` and check the licence on the regulator's website. If the offer is a copy-trading service, check it under `trade-journal` · ใคร: `money-planner` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -725,7 +720,7 @@
      },
      "skills": [
       "scam-check",
-      "copy-trade-check"
+      "trade-journal"
      ],
      "commands": [],
      "playbooks": [
@@ -959,7 +954,7 @@
     },
     {
      "n": 6,
-     "text": "Do the work: agent pieces are sent together in one message, by rank and graph width (`team-roles` \"แบ่งงาน\" (splitting the work) · more than 8 at once → `crew-patterns/parallel-split-and-merge`) · for a person's piece, send the note's path to the teammate with a due date for the returned note · pieces that must wait on others go in the next round · ใคร: ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note",
+     "text": "Do the work: agent pieces are sent together in one message, by rank and graph width (`team-roles` \"แบ่งงาน\" (splitting the work) · more than 8 at once → `handoff/parallel-split-and-merge`) · for a person's piece, send the note's path to the teammate with a due date for the returned note · pieces that must wait on others go in the next round · ใคร: ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -975,7 +970,7 @@
     },
     {
      "n": 7,
-     "text": "Prove (พิสูจน์), per milestone: merge the milestone's pieces, then `reviewer` ตัวใหม่ checks the whole milestone in one go against the brief's \"เสร็จเมื่อ\" (done when) · risky work (money · law · health · sent to outsiders) uses `crew-patterns/adversarial-review-panel` · fail → fix → recheck, up to the round ceiling in `team-roles` · ใคร: `reviewer` ตัวใหม่",
+     "text": "Prove (พิสูจน์), per milestone: merge the milestone's pieces, then `reviewer` ตัวใหม่ checks the whole milestone in one go against the brief's \"เสร็จเมื่อ\" (done when) · risky work (money · law · health · sent to outsiders) uses `handoff/adversarial-review-panel` · fail → fix → recheck, up to the round ceiling in `team-roles` · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -1093,7 +1088,7 @@
     },
     {
      "n": 4,
-     "text": "Turn it into 1 new rule that can be tested next month, and decide on last month's rule (keep · adjust · drop). The new rule is practised on paper under `trade-practice` before any real money is used · ใคร: `trade-journal-coach` ตัวใหม่ proposes, then it goes under \"รออนุมัติ\" (awaiting approval)",
+     "text": "Turn it into 1 new rule that can be tested next month, and decide on last month's rule (keep · adjust · drop). The new rule is practised on paper under `trade-journal` before any real money is used · ใคร: `trade-journal-coach` ตัวใหม่ proposes, then it goes under \"รออนุมัติ\" (awaiting approval)",
      "sub": [],
      "phase": "",
      "who": {
@@ -1105,7 +1100,7 @@
       "raw": "`trade-journal-coach` ตัวใหม่ proposes, then it goes under \"รออนุมัติ\" (awaiting approval)"
      },
      "skills": [
-      "trade-practice"
+      "trade-journal"
      ],
      "commands": [],
      "playbooks": [],
@@ -1154,7 +1149,7 @@
     },
     {
      "n": 2,
-     "text": "Split the work into pieces that each end with a check (pieces whose check can be a command → write them as cards and let `ground-rules/parts/principle-prove-it-works/scripts/card.mjs verify` decide, per `references/cards.md` of that part; the Stop gate then holds the session until each card passes), record them in the \"ความคืบหน้า\" (progress) table in `CONTEXT.md`, choose a sub-playbook for each piece, and hand them out to fresh subagents one piece at a time · ใคร: หัวหน้าทีม",
+     "text": "Split the work into pieces that each end with a check (pieces whose check can be a command → write them as cards and let `ground-rules/parts/principle-prove-it-works/scripts/card.mjs verify` decide, per `references/cards.md` of that part; the Stop gate then stops the session once per stop while a card is unproven), record them in the \"ความคืบหน้า\" (progress) table in `CONTEXT.md`, choose a sub-playbook for each piece, and hand them out to fresh subagents one piece at a time · ใคร: หัวหน้าทีม",
      "sub": [
       "**Check external tools before handing out the first piece.** For any piece that needs an MCP (Model Context Protocol) tool, load that tool by name with ToolSearch and call it once to test now (before the user leaves). Cannot call it → mark that piece `ติด` at once, with the fix written step by step (which server to connect · how to log in), then carry on with other pieces. Do not call the API directly with curl or a token in a command instead, because that goes beyond the permission the user gave."
      ],

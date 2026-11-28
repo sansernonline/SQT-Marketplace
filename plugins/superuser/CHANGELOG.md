@@ -1,5 +1,17 @@
 # Changelog — superuser
 
+## 4.8.0 — 2026-11-28
+
+รวม skill 3 ตัวเป็น `handoff` (skill ของ superuser 17 → 15)
+
+| ชื่อเก่า | ใช้แทนด้วย |
+|---|---|
+| `crew-patterns` | `handoff` หัวข้อ 8 · ส่วนย่อยย้ายไป `handoff/parts/` (agent-patterns · parallel-split-and-merge · parallel-attempts-pick-best · adversarial-review-panel) · กฎห้ามข้ามอยู่ที่ `handoff/references/crew-rules.md` |
+| `chat-prompt-workflows` | `handoff/parts/chat-prompt-workflows/` |
+
+- คงชื่อ `handoff` เพราะ hook · CLAUDE.md และไฟล์อื่นราว 140 ไฟล์อ้างชื่อนี้ตรง ๆ ส่วน `crew-patterns` ถูกอ้างเป็น path ทั้งหมด จึงแก้ด้วยสคริปต์ได้ครบ
+- router: แถวที่เคยส่งไป `crew-patterns` และ `chat-prompt-workflows` ส่งไป `handoff` · เคส eval trigger ของ chat-prompt-workflows ตรวจชื่อ `handoff`
+
 ## 4.7.1 — 2026-11-28
 
 แก้ตามผู้ตรวจอิสระหลัง merge 4.7.0

@@ -1,6 +1,6 @@
 
 # principle · small verifiable steps — cut the work into small pieces and check them one at a time
-> Use together with: `ground-rules/principle-build-a-tool-not-handwork` (write a script for repeated work) · `crew-patterns/parallel-split-and-merge` (run several pieces at once)
+> Use together with: `ground-rules/principle-build-a-tool-not-handwork` (write a script for repeated work) · `handoff/parallel-split-and-merge` (run several pieces at once)
 
 > Long work checked only once at the end gives no clue which piece broke when it fails.
 > Cut it into small pieces that each end in a checkable state, so a failure points straight to its piece.

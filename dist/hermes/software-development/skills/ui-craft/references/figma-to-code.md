@@ -1,6 +1,6 @@
 # Figma as the source (figma-to-code)
 
-The customer sends a Figma file → read it through Figma's Model Context Protocol (MCP) server and convert it into our HTML mockup · use together with `SKILL.md` section 0 (the project's look wins) and the tokens in `web-app-design` → `references/tokens.md`
+The customer sends a Figma file → read it through Figma's Model Context Protocol (MCP) server and convert it into our HTML mockup · use together with `SKILL.md` section 0 (the project's look wins) and the tokens in `ui-craft` → `references/tokens.md`
 The tools, plans and quotas come from Figma's documentation, opened and checked 2026-10-23 (the "Sources" table) · Figma itself writes that quotas can change at any time; open the same pages again before proposing a plan to the customer
 
 ## Contents

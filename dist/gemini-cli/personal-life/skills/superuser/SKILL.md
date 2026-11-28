@@ -45,7 +45,7 @@ Part rules: every task end has a status table in the central file and the reply,
 
 ## 2 · Size, pick a budget, then set the expectation
 
-**3 lines before touching the task, also on top of every plan you show the user, written with these Thai labels word for word:** `เป้า:` (goal) · `เสร็จเมื่อ:` (done-when: a check anyone can run, such as a test that passes or the failing case now working · medium tasks and up add Loop · Graph · Dynamic per [`crew-patterns/agent-patterns`](../crew-patterns/parts/agent-patterns/guide.md)) · `เสี่ยง:` (risk: can it be undone?) · Every step in the plan also says how it is checked
+**3 lines before touching the task, also on top of every plan you show the user, written with these Thai labels word for word:** `เป้า:` (goal) · `เสร็จเมื่อ:` (done-when: a check anyone can run, such as a test that passes or the failing case now working · medium tasks and up add Loop · Graph · Dynamic per [`handoff/agent-patterns`](../handoff/parts/agent-patterns/guide.md)) · `เสี่ยง:` (risk: can it be undone?) · Every step in the plan also says how it is checked
 
 - **Small**: 1 piece · code total < 200 lines → the lead does it alone, no playbook
 - **Medium**: 2–8 independent pieces · code total ≥ 200 lines → the best-fit playbook
@@ -126,7 +126,7 @@ One call lasts the whole session · casual chat gets a normal reply · any task 
 
 ## 9 · Modules and working pattern
 
-Working files live in `.claude/superuser/`, written by the lead alone · modules `context` · `log` · `improvements` · `learning` · `inbox` · `handoff` · `patterns_advanced` · `review_gate` · `split_gate` · `dispatch_gate` are switched on or off in `config.json` (no file = all on) · when off, do not read, write or mention them · details in [`modules`](references/modules.md) **Open it at session start and at task end** · The core pattern is Planning (section 2) → ReAct → Reflection (rule 3) · Multi-Agent is section 5 · MoA · Reranker · `crew-patterns/parallel-attempts-pick-best` is the `patterns_advanced` module, used when a wrong pick is costly ([`crew-patterns/agent-patterns`](../crew-patterns/parts/agent-patterns/guide.md))
+Working files live in `.claude/superuser/`, written by the lead alone · modules `context` · `log` · `improvements` · `learning` · `inbox` · `handoff` · `patterns_advanced` · `review_gate` · `split_gate` · `dispatch_gate` are switched on or off in `config.json` (no file = all on) · when off, do not read, write or mention them · details in [`modules`](references/modules.md) **Open it at session start and at task end** · The core pattern is Planning (section 2) → ReAct → Reflection (rule 3) · Multi-Agent is section 5 · MoA · Reranker · `handoff/parallel-attempts-pick-best` is the `patterns_advanced` module, used when a wrong pick is costly ([`handoff/agent-patterns`](../handoff/parts/agent-patterns/guide.md))
 
 ---
 
@@ -275,7 +275,7 @@ Answer money questions as a table of total yearly income, never base salary alon
 | criterion | passes when | skill |
 |---|---|---|
 | **Runs** | every code example is really run, with command and result · every milestone ends with something that runs | `learning-path` |
-| **Cites official sources** | version, feature and exam information comes from official docs, release notes or exam guides, with link and date | `tech-growth` · `learning-path` |
+| **Cites official sources** | version, feature and exam information comes from official docs, release notes or exam guides, with link and date | `learning-path` |
 | **Fits the time** | the plan fits the time the user really has per week and has a checkpoint to continue or stop | `learning-path` |
 
 Learn from the real thing before summaries. Reading the official docs and trying to run them beats reading 10 summary articles.
@@ -335,4 +335,4 @@ The `CONTEXT.md` template for this work is in [`context-template`](references/co
 
 - Never put in: ID card numbers, passport numbers, full account numbers · passwords · private email contents · health data of household members · disease names, results or medicine details in summary sections (point to the file instead) · national ID numbers · real salary (keep it in the user's own file) · other people's data · secrets or tokens for cloud accounts used in labs.
 
-**Work patterns.** The lead picks a pattern when planning. Method, cost and pitfalls are in `crew-patterns/agent-patterns`. Examples from this plugin's work are in [`examples`](references/examples.md).
+**Work patterns.** The lead picks a pattern when planning. Method, cost and pitfalls are in `handoff/agent-patterns`. Examples from this plugin's work are in [`examples`](references/examples.md).

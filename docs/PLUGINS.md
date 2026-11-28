@@ -13,7 +13,7 @@
 ทีมผู้ช่วยทำงานหลายขั้น: หัวหน้าทีมรับงาน → จัดขนาด → brainstorm (งานใหญ่) → เลือก playbook → แจกงานให้ agent ตัวใหม่ → ตรวจกับของจริง → ส่งงาน → เรียนรู้ · ใช้กับงานได้ทุกสาขา (เอกสาร · หาข้อมูล · ร้านค้า · เงิน · โค้ด) · plugin สาขาอื่นต่อยอดจากตัวนี้ทาง `dependencies`
 
 ### มีอะไรบ้าง
-**4 agents · 17 skills · 0 commands** · 6 playbooks · hook 1 ชุด (skill เอกสารออกแบบ สไลด์ รูป อยู่ใน `software-development` · ภาพ AI ใน `graphic-design` · ประชุมใน `personal-life`)
+**4 agents · 15 skills · 0 commands** · 6 playbooks · hook 1 ชุด (skill เอกสารออกแบบ สไลด์ รูป อยู่ใน `software-development` · ภาพ AI ใน `graphic-design` · ประชุมใน `personal-life`)
 
 - **agent กลาง:** brainstormer (คิดทางเลือก) · reviewer (ตรวจด้วยสายตาใหม่) · learning-reviewer (ทบทวนวิธีทำงาน)
 - **playbook:** research · document · review · unattended-run · learn-from-session · pickup-and-pause (รับงานต่อ · หยุดงาน)
@@ -63,7 +63,7 @@ superuser = แม่แบบ + skill 6 ตัว           superuser = แก�
 จำลองบริษัทซอฟต์แวร์ครบทุกขั้นของ Software Development Life Cycle (SDLC) ตั้งแต่ทีมหลัก (product · analysis · architecture · design · development · QA · DevOps · security) ไปจนถึงผู้เชี่ยวชาญเฉพาะสาขา
 
 ### มีอะไรบ้าง
-**38 agents · 50 skills · 2 commands** (ไม่นับ skill กลาง 32 ตัวจาก `superuser`)
+**38 agents · 46 skills · 2 commands** (ไม่นับ skill กลาง 32 ตัวจาก `superuser`)
 
 ### ติดตั้ง
 ```
@@ -301,7 +301,7 @@ _ร่างเมื่อ 6 ต.ค. 2569 · software-development ครอ�
 | trading-finance → 0.2.0 | `income-tax-th` | `income-tax-th` · `fund-and-bond-picker` · `retirement-and-insurance` · `budget-and-debt` |
 | thai-workplace → 0.2.0 | `thai-tax` · `thai-employment` · `thai-business-docs` | `thai-employment` · `thai-tax` · `shop-books` |
 | personal-life → 0.2.0 | — | `household-money` · `digital-hygiene` · `goals-and-decisions` · `human-writing/polite-message-th-en` |
-| dev-learning → 0.2.0 | skill เดิมที่สั้นกว่า 30 บรรทัด | `learning-path` · `tech-growth` |
+| dev-learning → 0.2.0 | skill เดิมที่สั้นกว่า 30 บรรทัด | `learning-path` |
 
 #### plugin ใหม่
 
@@ -309,7 +309,7 @@ _ร่างเมื่อ 6 ต.ค. 2569 · software-development ครอ�
 |---|---|---|---|
 | 6 | **online-seller** | แม่ค้าออนไลน์ Shopee · Lazada · TikTok Shop · LINE | `sales-copy` · `pricing-and-costs` · `shop-operations` · `customer-care` · `pricing-and-costs` · `customer-care` · `thai-tax` |
 | 7 | **home-family** | ทุกบ้าน | `household-money` · `home-upkeep` · `family-week` · `family-care` |
-| 8 | **career** | คนทำงาน | `job-search` · `career-growth` |
+| 8 | **career** | คนทำงาน | `job-search` |
 | 9 | **health-wellness** | ทุกคน — จัดระเบียบและเตรียมคำถาม ไม่วินิจฉัย ไม่สั่งยา | `health-admin` |
 | 10 | **consumer-rights** | ผู้ซื้อ | `buyer-help` · `complaint-letter-th` |
 

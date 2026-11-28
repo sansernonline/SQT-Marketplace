@@ -17,7 +17,7 @@ graders:
   - name: skill-not-opened
     type: tool_used
     tool: Skill
-    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?career-growth"'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?job-search"'
     min: 0
     max: 0
     arm: with-only

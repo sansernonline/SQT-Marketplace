@@ -16,7 +16,7 @@ graders:
   - name: skill-opened
     type: tool_used
     tool: Skill
-    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?chat-prompt-workflows"'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?handoff"'
     min: 1
     arm: with-only
   - name: shared-contract-first

@@ -28,7 +28,7 @@ General information, not legal advice (ข้อมูลทั่วไป ไ�
 | Landlord keeps the deposit · a debt collector calls · a neighbour dispute · unpaid wages · received a letter from a lawyer or the court · "จะไปปรึกษาทนาย ต้องเตรียมอะไร" | this skill |
 | Faulty product, refund refused, unknown card charge | `buyer-help` (e-commerce, if installed) — it has its own complaint ladder |
 | Reading or drafting a contract or lease | `thai-business-docs` (e-commerce, if installed) |
-| Laid off or asked to resign | `career-growth` first, then this skill for the visit |
+| Laid off or asked to resign | `job-search` first, then this skill for the visit |
 | A death in the family, inheritance, a will | `estate-and-will.md` |
 | Debt plan, which debt to pay first | `budget-and-debt` (trading-finance, if installed) |
 | Danger to someone's safety right now | call the police emergency line first; this skill can wait |
@@ -91,7 +91,7 @@ Keep the reference number an agency gives. Never write ID or account numbers in 
 | สำนักงานอัยการสูงสุด, legal aid by public prosecutors | Legal advice line; may take a request for further help after the advice | hotline **1157** · ago.go.th/oagservice · app อัยการช่วยได้ | ✓ 2026-11-10 |
 | ศูนย์ดำรงธรรม (complaint centre, Ministry of Interior) | Complaints about local officials, public nuisance, cases no other agency takes | **1567** (free call) | ✓ 2026-11-10 |
 | สคบ. (Office of the Consumer Protection Board) | Consumer disputes; register to complain online and keep the reference number | **1166** · complaint.ocpb.go.th · LINE @ocpbconnect | ✓ 2026-11-10 |
-| กรมสวัสดิการและคุ้มครองแรงงาน | Unpaid wages, severance (form คร.7) | **1546** — details in `career-growth` → `references/job-exit.md` section 6 | ✓ 2026-11-10 |
+| กรมสวัสดิการและคุ้มครองแรงงาน | Unpaid wages, severance (form คร.7) | **1546** — details in `job-search` → `references/job-exit.md` section 6 | ✓ 2026-11-10 |
 | กองทุนยุติธรรม (Justice Fund, Ministry of Justice) | Said to help with lawyer fees, court fees and bail | official page did not open; the 1111 ext. 77 line seen only in news (รอยืนยัน) | ✗ |
 
 Pick the place by the kind of dispute; when unsure, start with 1167 or 1157 and bring this brief.

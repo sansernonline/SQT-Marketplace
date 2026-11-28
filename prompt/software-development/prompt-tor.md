@@ -111,7 +111,7 @@ agent `project-manager` + `solution-architect` · skill `superuser:ground-rules`
 
 ## 3. ตรวจ TOR ก่อนประกาศ
 
-playbook `review` · agent `business-analyst` + `solution-architect` + `security-engineer` · skill `crew-patterns/adversarial-review-panel` · `requirements-writing` · `document-design` (ตอน render)
+playbook `review` · agent `business-analyst` + `solution-architect` + `security-engineer` · skill `handoff/adversarial-review-panel` · `requirements-writing` · `document-design` (ตอน render)
 **ต้องมีก่อน:** `tor.md` · `reference-price.md` · `evaluation.md`
 **ผลลัพธ์:** `docs/tor/tor-review.md` + แก้ `tor.md` ตามผลตรวจ (แก้เฉพาะข้อที่ไม่ใช่ข้อมูลของผู้ใช้) → render `tor.md` เป็น .docx + .pdf ตาม `prompt-new-project.md` ฉบับ 14 เป็นขั้นสุดท้าย
 

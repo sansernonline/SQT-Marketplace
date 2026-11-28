@@ -3,7 +3,7 @@
 Use when: a report · plan · summary · letter · important message · a document that will be passed on
 Result: a document the reader can use at once, written per `human-writing`
 Main principles: [`work-principles`](../../work-principles/SKILL.md) · `human-writing` (and `design-gate` when the document is looked at, such as a cover or a deck)
-Main pattern: Planning · Reflection (`crew-patterns/agent-patterns`)
+Main pattern: Planning · Reflection (`handoff/agent-patterns`)
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 

@@ -1,7 +1,7 @@
 # First page of a single-file mockup (`#s-start`)
 
 This page is the table-of-contents page of the mockup that the reviewer opens as the first page. **It is not a page in the app.** Large cards filling the screen are allowed here.
-The start page inside a real app follows the platform skill, for example `windows-app-design` → `patterns.md` item 8, which forbids large cards.
+The start page inside a real app follows the platform skill, for example `ui-craft` → `patterns.md` item 8, which forbids large cards.
 
 Sample image: [`../assets/mockup-start-page-preview.webp`](../assets/mockup-start-page-preview.webp) (project Telex, 32 screens) · this image was taken before the decorations were removed (glow · gradient · label above the heading); look at the structure, not the look.
 

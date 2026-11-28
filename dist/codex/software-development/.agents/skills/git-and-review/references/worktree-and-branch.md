@@ -6,10 +6,10 @@
 ## Use when
 - 2 or more agents will edit files in the same repo at the same time (read-only agents need no worktree).
 - A spike or refactor may break things in a way that is hard to undo, or an urgent fix is needed while the main checkout has half-finished work (branch from `main`, no stash).
-- Comparing 2 approaches (`crew-patterns/parallel-attempts-pick-best`): one worktree per approach. Separate machines or port collisions → add `infra-and-deploy`.
+- Comparing 2 approaches (`handoff/parallel-attempts-pick-best`): one worktree per approach. Separate machines or port collisions → add `infra-and-deploy`.
 - A branch must be merged, closed, or cleaned up, or conflicts must be resolved.
 
-Not for: a single agent on a small reversible job → a plain branch · read-only work → `Explore` · a repo with no commit yet (make the first commit first). Splitting the work into pieces → `crew-patterns/parallel-split-and-merge` (its step "ห้ามเขียนที่เดียวกัน" points here).
+Not for: a single agent on a small reversible job → a plain branch · read-only work → `Explore` · a repo with no commit yet (make the first commit first). Splitting the work into pieces → `handoff/parallel-split-and-merge` (its step "ห้ามเขียนที่เดียวกัน" points here).
 
 ## Steps
 1. **Create.** Run `git worktree add ../<repo>-<task> -b <type>/<task> [main]`, then `git worktree list` (must show main + the new one).

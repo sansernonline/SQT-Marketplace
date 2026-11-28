@@ -1,6 +1,6 @@
 ---
 name: handoff
-description: Use when work passes to a subagent, session or person
+description: Use when work is split across agents or passes to a session or person
 ---
 
 # handoff — pass work on so the receiver does not have to guess
@@ -113,7 +113,18 @@ Hand-off package = `CONTEXT.md` + the still-open `handoff/` pieces + `docs/BRIEF
 - Done is judged from the work product and the check result, not the word "done".
 - The reviewer gets only the work product + criteria, not the maker's context.
 
-## 8 · Our files versus Claude Code's built-in memory
+## 8 · How the team splits work (was `crew-patterns`)
+The lead picks the pattern without asking the user; workers never write to the same place; nothing is concluded before every worker is back and checked. Hard rules and checks: [`references/crew-rules.md`](references/crew-rules.md).
+
+| When | Open |
+|---|---|
+| Choosing how the team works (Loop · Graph · Dynamic · Multi-Agent) at planning time | [parts/agent-patterns/guide.md](parts/agent-patterns/guide.md) |
+| Independent pieces done at the same time, merged into one report | [parts/parallel-split-and-merge/guide.md](parts/parallel-split-and-merge/guide.md) |
+| No work yet or the best form is unknown: build several versions and choose | [parts/parallel-attempts-pick-best/guide.md](parts/parallel-attempts-pick-best/guide.md) |
+| One finished piece about to ship: a panel of 3 hunts for faults | [parts/adversarial-review-panel/guide.md](parts/adversarial-review-panel/guide.md) |
+| A multi-step prompt (Loop · Graph · Dynamic) the user pastes into a chat app | [parts/chat-prompt-workflows/guide.md](parts/chat-prompt-workflows/guide.md) |
+
+## 9 · Our files versus Claude Code's built-in memory
 Unsure whether a note goes into `CONTEXT.md` · `CLAUDE.md` · `.claude/rules/` or auto memory → [`team-memory`](references/team-memory.md) section 7.
 
 ## Check before done
@@ -126,4 +137,5 @@ Unsure whether a note goes into `CONTEXT.md` · `CLAUDE.md` · `.claude/rules/` 
 - [`references/sheet-examples.md`](references/sheet-examples.md) — open when writing a task sheet or delivery sheet
 - [`references/team-memory.md`](references/team-memory.md) — open for first-time setup, vendor switch, inbox, log, workbooks, auto memory
 - [`references/handoff.schema.json`](references/handoff.schema.json) — open when a machine reads the header
+- [`references/crew-rules.md`](references/crew-rules.md) — open when splitting work across agents
 - [`references/sources.md`](references/sources.md) — sources and licences

@@ -41,7 +41,7 @@ Values are a starting point; if they conflict with `app-character.md` or the pro
 | 11 | Thai craft | 3 · 6 | mulberry-paper color + 1 natural dye color (indigo, lac, turmeric) | Thai headings with handwriting heads (Itim) or print forms (Trirong) paired with Latin serif · body Taviraj | 0–4px or torn edge | paper (grain · torn edge · SVG hand-drawn line) | the line draws in once ≤ 400ms, the rest stays still |
 | 12 | soft SaaS | 1 · 3 · 6 | white or white tinted 1–3 % with the brand color · white cards · main color of medium brightness (HSL L 45–60 %), not a very dark color on white · white text on the main color must pass 4.5:1; if it fails, lower L or use dark text · badge background uses the main color at 8–12 % · icons are lines in the main color beside headings, with no frame · every gray tinted with the brand color | bold sans heading 700, large · Thai has no heads | card 12–16px · items inside 8–10px · button 10px or capsule | layered shadow (formula 1 tinted to the background hue · cards use the lower 2 layers, the standout piece uses all 4) + top edge catching light on the primary button | 200–300ms ease-out · a clickable card lifts 2px on hover with transform |
 
-Fonts in the table: Trirong · Taviraj · Itim are Thai faces with heads by Cadson Demak (OFL per google/fonts · checked 2026-10-23) · Kanit and the Thai-with-Latin pairing rules are in `web-app-design` section 6
+Fonts in the table: Trirong · Taviraj · Itim are Thai faces with heads by Cadson Demak (OFL per google/fonts · checked 2026-10-23) · Kanit and the Thai-with-Latin pairing rules are in `ui-craft` part `web-app-design` section 6
 
 ## Matching looks so the 3 directions are genuinely different
 

@@ -94,7 +94,7 @@ Take screenshots of the hero screen + 2 frequently used pages, in both themes, a
 - **Every platform:** the app frame (title bar · header bar · toolbar · rail · nav · borders) is gray-black lines and icons, not tinted with the brand color unless the user says so · the brand color lives in the data and primary buttons
 - **web · mobile:** status labels are solid-background, not thin white outlines · a large solid block of color = the main-number card · hero · chart
 - **Windows · depth and imagery axis:** depth uses Mica and Fluent elevation, no extra card shadows, and icons use Fluent — doing this does not count as a failed item
-- **Windows:** color comes through the 3×16px selection bar · hero screen · main metric numbers (Key Performance Indicator · KPI) and charts · 1 primary button · status labels are a 6–8px dot + text, not a solid background, and the notice bar is a neutral background (`windows-app-design` → `references/patterns.md` items 7–8) — doing this does not count as a failed item
+- **Windows:** color comes through the 3×16px selection bar · hero screen · main metric numbers (Key Performance Indicator · KPI) and charts · 1 primary button · status labels are a 6–8px dot + text, not a solid background, and the notice bar is a neutral background (`ui-craft` → `references/patterns.md` items 7–8) — doing this does not count as a failed item
 
 Below 4 on any axis = level 3 or lower · for the hero-screen axis, no hero page at all = 1
 

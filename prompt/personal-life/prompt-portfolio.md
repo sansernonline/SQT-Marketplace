@@ -29,7 +29,7 @@
 
 ## 1. เลือกและเริ่ม side project
 
-playbook `side-project` · agent `tech-mentor` · skill `tech-growth`
+playbook `side-project` · agent `tech-mentor` · skill `learning-path`
 **ผลลัพธ์:** `side-projects/<ชื่อ>/README.md` (ขอบเขต · นิยามเสร็จ · แผน 2 สุดสัปดาห์)
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -49,7 +49,7 @@ playbook `side-project` · agent `tech-mentor` · skill `tech-growth`
 
 ## 2. side project ทำค้าง ไม่จบสักที
 
-playbook `side-project` (ขั้น 2–4 ทำกับโปรเจกต์เดิม: ตัด scope · นิยามเสร็จ · โครงที่รันได้) · agent `tech-mentor` · skill `tech-growth`
+playbook `side-project` (ขั้น 2–4 ทำกับโปรเจกต์เดิม: ตัด scope · นิยามเสร็จ · โครงที่รันได้) · agent `tech-mentor` · skill `learning-path`
 **ผลลัพธ์:** อัปเดต `side-projects/<ชื่อ>/README.md` (ขอบเขตใหม่ · นิยามเสร็จ) · `later.md` (ส่วนที่ตัดออก) · **ไม่ลบโค้ดเดิม** · **รออนุมัติ:** ลบ repo · เปลี่ยน repo เป็นสาธารณะ · เก็บเข้าคลัง (archive) บน GitHub
 
 ### ข้อมูล (ผู้ใช้กรอก)

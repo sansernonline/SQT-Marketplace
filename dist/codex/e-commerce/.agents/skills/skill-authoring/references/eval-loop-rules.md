@@ -62,7 +62,7 @@ Before trusting a score from an `llm` grader, you need to know how closely it ag
 5. Below the threshold → look at the disagreement table, then **propose a new prompt for the user to approve** before editing · rerun on dev · never edit labels or criteria to make the number pass · once it reaches the threshold, run test once
 6. Rules that code can check (regex · line counts) do not need judge calibration · write a unit test for the checker instead
 
-Until now the `llm` criteria that work with `reviewer` and the eval graders have never been calibrated against human labels at all (checked `skills/crew-patterns/parts/adversarial-review-panel` 2026-11-10), so start with the grader whose results wobble most.
+Until now the `llm` criteria that work with `reviewer` and the eval graders have never been calibrated against human labels at all (checked `skills/handoff/parts/adversarial-review-panel` 2026-11-10), so start with the grader whose results wobble most.
 
 ## 6 · What the model cannot check itself, a script checks
 

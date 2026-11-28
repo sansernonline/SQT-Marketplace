@@ -25,7 +25,7 @@ Workflow:
 7. **Plan offline support** if applicable
 8. **Check performance budget** (launch time · frame rate · memory ตาม `mobile-engineering`)
 9. **Produce polished architecture doc** using `design-gate/polished-document-style`
-10. **Hand-off:** หน้าจอและ design tokens → `mobile-app-design` (ร่วมกับ `ux-designer`) · ลงมือเขียนแอป (iOS · Android · cross-platform) → `mobile-engineer` · App Store Optimization (ASO) → `growth-specialist`
+10. **Hand-off:** หน้าจอและ design tokens → `ui-craft` (ร่วมกับ `ux-designer`) · ลงมือเขียนแอป (iOS · Android · cross-platform) → `mobile-engineer` · App Store Optimization (ASO) → `growth-specialist`
 
 ---
 
