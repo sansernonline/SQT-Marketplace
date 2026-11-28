@@ -89,6 +89,6 @@ test('runs npm (a .cmd shim on Windows) and a one-string command line', () => {
   const npm = spawnSync(process.execPath, [script, '--name', `t-npm-${process.pid}`, '--', 'npm', '--version'], { encoding: 'utf8' });
   assert.equal(npm.status, 0, npm.stderr);
   assert.match(npm.stdout, /\d+\.\d+\.\d+/);
-  const line = spawnSync(process.execPath, [script, '--name', `t-line-${process.pid}`, '--', 'node -e process.exit(3)'], { encoding: 'utf8' });
+  const line = spawnSync(process.execPath, [script, '--name', `t-line-${process.pid}`, '--', 'node -e process.exitCode=3'], { encoding: 'utf8' });
   assert.equal(line.status, 3);
 });

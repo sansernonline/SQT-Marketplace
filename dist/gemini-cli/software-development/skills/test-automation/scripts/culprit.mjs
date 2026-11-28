@@ -97,8 +97,14 @@ export async function main(argv) {
     const r = spawnSync('git', ['bisect', 'run', process.execPath.replace(/\\/g, '/'), runner], {
       cwd: wt, encoding: 'utf8', env: { ...process.env, SQT_CULPRIT_CMD: o.test, SQT_CULPRIT_SETUP: o.setup || '' },
     });
-    const found = parseBisect((r.stdout || '') + (r.stderr || ''));
-    if (!found) return fail('Bisect did not find a first bad commit.', 1);
+    const out = (r.stdout || '') + (r.stderr || '');
+    // The message text changes between git versions; refs/bisect/bad is git's own answer once the run ends.
+    let found = parseBisect(out);
+    if (!found && r.status === 0) {
+      const bad = git(['rev-parse', 'refs/bisect/bad'], wt);
+      if (bad.code === 0 && bad.stdout.trim()) found = { sha: bad.stdout.trim(), subject: '' };
+    }
+    if (!found) return fail(`Bisect did not find a first bad commit (git bisect run exit ${r.status}):\n${out.trim().split(/\r?\n/).slice(-15).join('\n')}`, 1);
     let subject = found.subject;
     if (!subject) subject = git(['log', '-1', '--format=%s', found.sha], wt).stdout.trim();
     console.log(`first bad: ${found.sha} ${subject}`);
