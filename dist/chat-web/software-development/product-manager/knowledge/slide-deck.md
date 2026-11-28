@@ -150,7 +150,7 @@ Exception for the Stage deck: the "ตัวอย่าง" (example) line · t
 - Always state the data source: period, sample size, source (side strip or footer)
 - A table over 5 rows by 4 columns should not be on a slide: make it a chart, or move it to an attachment
 
-Chart colour palette: `diagrams` → `references/colour-by-domain.md` · for charts that must also be used with app screens, `web-app-design` (plugin `software-development`) → `references/tokens.md` "สีข้อมูล (กราฟ)" (data colours, charts).
+Chart colour palette: `diagrams` → `references/colour-by-domain.md` · for charts that must also be used with app screens, `ui-craft` part `web-app-design` (plugin `software-development`) → `references/tokens.md` "สีข้อมูล (กราฟ)" (data colours, charts).
 
 ## Thai on slides
 
@@ -174,7 +174,7 @@ Chart colour palette: `diagrams` → `references/colour-by-domain.md` · for cha
 | Spacing rules and eye order (app screens) | `ui-craft` (plugin `software-development`) |
 | Content comes from a Software Requirements Specification (SRS) | `requirements-writing` (plugin `software-development`) |
 | Cut content down to what is necessary | `superuser:ground-rules` |
-| Brand colour and type system · illustration | `graphic-design` (plugin `software-development`) |
+| Brand colour and type system · illustration | `graphic-design:design-by-type` (plugin `software-development`) |
 
 
 ## reference: deck-theme.md

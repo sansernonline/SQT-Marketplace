@@ -106,4 +106,4 @@ The `CONTEXT.md` template for this work is in [`context-template`](references/co
 
 - Never put secrets, image-tool API keys or customer data in them.
 
-**Working patterns** — the lead picks a pattern at planning time. How to run them, costs and pitfalls are in `crew-patterns/agent-patterns`. Examples from this plugin's work are in [`examples`](references/examples.md)
+**Working patterns** — the lead picks a pattern at planning time. How to run them, costs and pitfalls are in `handoff/agent-patterns`. Examples from this plugin's work are in [`examples`](references/examples.md)

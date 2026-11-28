@@ -57,7 +57,7 @@ jobs:
         shell: bash
         run: |
           node plugins/superuser/skills/superuser/parts/model-scorecard/scripts/scorecard.mjs --self-test
-          node plugins/superuser/skills/crew-patterns/parts/parallel-split-and-merge/scripts/plan.mjs --self-test
+          node plugins/superuser/skills/handoff/parts/parallel-split-and-merge/scripts/plan.mjs --self-test
           node plugins/superuser/skills/decision-desk/parts/decision-scoring/scripts/decide.mjs --self-test
           node plugins/superuser/skills/workspace-rules/parts/commit-log/scripts/commit-msg-check.test.mjs
           node plugins/superuser/skills/workspace-rules/parts/document-naming/scripts/doc-name-check.test.mjs
@@ -70,8 +70,8 @@ jobs:
           node scripts/evals/skill-grades.mjs --self-test
           node plugins/trading-finance/skills/budget-and-debt/scripts/payoff.mjs --self-test
           node plugins/trading-finance/skills/budget-and-debt/scripts/refinance.mjs --self-test
-          node plugins/trading-finance/skills/copy-trade-check/scripts/signal-check.mjs --self-test
-          node plugins/trading-finance/skills/copy-trade-check/scripts/copy-monitor.mjs --self-test
+          node plugins/trading-finance/skills/trade-journal/parts/copy-trade-check/scripts/signal-check.mjs --self-test
+          node plugins/trading-finance/skills/trade-journal/parts/copy-trade-check/scripts/copy-monitor.mjs --self-test
           node plugins/trading-finance/skills/position-sizing/scripts/size.mjs --self-test
           node plugins/trading-finance/skills/stock-fundamentals/scripts/ratios.mjs --self-test
           node plugins/trading-finance/skills/trade-journal/scripts/trade-stats.mjs --self-test

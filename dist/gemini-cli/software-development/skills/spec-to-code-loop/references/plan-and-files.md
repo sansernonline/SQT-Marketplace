@@ -86,7 +86,7 @@ One criterion: the files to be touched must not overlap at all (see the "files t
 | A **read-only** checking agent running alongside an agent that writes code | Work that already has to wait for the result of another task |
 | Turning requirements into tests for several modules at once | When there is no plan yet |
 
-- Each agent that writes files gets its own worktree, per `superuser/references/code-extensions.md` section "crew-patterns" (including how to handle uncommitted work).
+- Each agent that writes files gets its own worktree, per `superuser/references/code-extensions.md` section "handoff" (including how to handle uncommitted work).
 - Every split-off agent receives: the IDs of the requirements it owns · the list of files it may touch · the test command · all of the iron rules (especially rule 3).
 - Never let a split-off agent edit `BUILD-PLAN.md`. It reports back, and the main agent writes the one file.
 

@@ -103,14 +103,14 @@ agent `product-manager` + `solution-architect` + `brainstormer` · skill `archit
 
 ## 3. ออกแบบหน้าตาใหม่: 3 ทิศทาง โหวตเลือก แล้วทำ mockup
 
-agent `ux-designer` + `graphic-designer` (เมื่อต้องทำโลโก้หรือสีแบรนด์ใหม่) · skill `ui-craft` ข้อ 0.1 · `crew-patterns/parallel-attempts-pick-best` · `web-app-design` / `mobile-app-design` / `windows-app-design` ตามแพลตฟอร์ม · `ground-rules/principle-user-experience-first`
+agent `ux-designer` + `graphic-designer` (เมื่อต้องทำโลโก้หรือสีแบรนด์ใหม่) · skill `ui-craft` ข้อ 0.1 · `handoff/parallel-attempts-pick-best` · `ui-craft` parts `web-app-design` · `mobile-app-design` · `windows-app-design` ตามแพลตฟอร์ม · `ground-rules/principle-user-experience-first`
 **ต้องมีก่อน:** `VISION.md` (ฉบับ 2) · flow หลักจาก `docs/as-is/`
 **ผลลัพธ์:** `docs/rebuild/DESIGN-DIRECTION.md` · `mockup/` รุ่นใหม่ (.html กดได้จริง)
 
 ### ลำดับ
 
 1. เลือก 3 หน้าที่บอกตัวตนของแอปได้มากที่สุด (เช่น หน้าแรก · หน้าทำงานหลัก · หน้ารายงาน)
-2. `ux-designer` ตัวใหม่ 3 ตัว แยกกันทำ 1 ทิศทางต่อตัว ตาม `crew-patterns/parallel-attempts-pick-best` · แต่ละทิศทางมี: อารมณ์ 1 บรรทัด · สี · ตัวอักษร · ความหนาแน่น · 3 หน้านั้น
+2. `ux-designer` ตัวใหม่ 3 ตัว แยกกันทำ 1 ทิศทางต่อตัว ตาม `handoff/parallel-attempts-pick-best` · แต่ละทิศทางมี: อารมณ์ 1 บรรทัด · สี · ตัวอักษร · ความหนาแน่น · 3 หน้านั้น
 3. `reviewer` ตัวใหม่ 3 ตัวให้คะแนนแยกกัน · ชนะ 2 ใน 3 · เสมอ → หัวหน้าทีมเลือกตาม `VISION.md` ข้อ 2 แล้วลง `decision-desk/decision-log`
 4. ขยาย mockup ของทิศทางที่ชนะให้ครบ flow ใน `PARITY.md` ตาม `prompt-mockup.md` ฉบับ 1 และตรวจตามฉบับ 2
 
@@ -151,7 +151,7 @@ agent `developer` + `qa-tester` + `security-engineer` · skill `project-bootstra
 2. **ยกชิ้นที่เก็บก่อน** — ชิ้น `ยกมาทั้งชิ้น` ใน `INVENTORY.md`: เขียน test จากพฤติกรรมของรุ่นเดิมก่อน แล้วคัดลอกโค้ดมา ปรับให้เข้าโครงใหม่จน test เขียว · commit แยกก้อนละชิ้น ข้อความ commit บอกที่มา
 3. สร้าง `docs/AGENT-LOOP.md` ตาม `prompt-new-project.md` ฉบับ 11 · ลำดับงานเรียงตาม flow หลักใน `PARITY.md`
 4. สร้างทีละ FR ตาม `spec-to-code-loop` · หน้าจอต้องตรง mockup ฉบับ 3 (ไม่ตรง → `prompt-explore.md` ฉบับ 4)
-5. ครบทุก FR → `crew-patterns/adversarial-review-panel` · `security-gate` · แก้ทุกข้อที่ยืนยันแล้ว
+5. ครบทุก FR → `handoff/adversarial-review-panel` · `security-gate` · แก้ทุกข้อที่ยืนยันแล้ว
 
 ### กฎเฉพาะฉบับนี้
 

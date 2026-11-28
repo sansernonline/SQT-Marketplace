@@ -363,7 +363,7 @@ GOOD = {
     'charts.csv': ['c1,time series,trend,line,pie,พ.ศ.,trend'],
     'landing.csv': ['g1,ขายของ,shop,hero;proof;cta,สั่งเลย,x'],
     'stacks/react.csv': ['r1,form,กฎ,do,dont,react,https://react.dev/'],
-    'stacks/flutter.csv': ['f1,form,กฎ,do,dont,flutter,software-development:mobile-app-design'],
+    'stacks/flutter.csv': ['f1,form,กฎ,do,dont,flutter,software-development:ui-craft'],
 }
 HEADERS = dict(COLUMNS, **RULE_COLUMNS, **{'stacks/react.csv': STACK_COLUMNS, 'stacks/flutter.csv': STACK_COLUMNS})
 

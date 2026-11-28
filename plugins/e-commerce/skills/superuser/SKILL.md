@@ -162,4 +162,4 @@ The `CONTEXT.md` template for this work is in [`context-template`](references/co
 
 - Never put customer data (name, phone, address) · shop passwords or tokens · card or account numbers · other people's data · per-person salaries · national ID numbers · LINE channel secret and access token in them.
 
-**Working patterns** — the lead picks a pattern at planning time. How to run them, costs and pitfalls are in `crew-patterns/agent-patterns`. Examples from this plugin's work are in [`examples`](references/examples.md)
+**Working patterns** — the lead picks a pattern at planning time. How to run them, costs and pitfalls are in `handoff/agent-patterns`. Examples from this plugin's work are in [`examples`](references/examples.md)

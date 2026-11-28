@@ -153,7 +153,7 @@ python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE> 
 
 ## 4 · Who writes which doc, with which skill
 
-Full table (agent · skill for each of 16 doc types): [`technical-docs.md`](technical-docs.md). Main ones: SRS → `requirements-writing` · FSD → `requirements-writing` · ADR → `architecture` · Test → `qa-docs` · mockup → `web-app-design` + `ui-craft` · README → `project-bootstrap`
+Full table (agent · skill for each of 16 doc types): [`technical-docs.md`](technical-docs.md). Main ones: SRS → `requirements-writing` · FSD → `requirements-writing` · ADR → `architecture` · Test → `qa-docs` · mockup → `ui-craft` · README → `project-bootstrap`
 
 ---
 

@@ -4,7 +4,7 @@ name: chat-prompt-workflows-no-trigger
 description: ขอ prompt บรรทัดเดียวให้แชตแปลประโยคเดียว เป็นงานขั้นเดียว ต้องไม่เปิด chat-prompt-workflows ซึ่งใช้กับ prompt หลายขั้น
 tags: [no-trigger, chat-prompt-workflows]
 runs: 10
-expected_outcome: ไม่เรียก Skill chat-prompt-workflows · ให้ prompt สั้นที่มีประโยคที่จะแปลอยู่ในนั้น ไม่มีแผนหลายขั้น
+expected_outcome: ไม่เรียก Skill handoff · ให้ prompt สั้นที่มีประโยคที่จะแปลอยู่ในนั้น ไม่มีแผนหลายขั้น
 execution:
   prompt: |
     ขอ prompt สั้น ๆ บรรทัดเดียวไว้วางใน ChatGPT ให้แปลประโยคนี้เป็นภาษาอังกฤษแบบสุภาพ: "รบกวนส่งใบเสนอราคาภายในวันศุกร์นี้ด้วยค่ะ"
@@ -14,7 +14,7 @@ graders:
   - name: skill-not-opened
     type: tool_used
     tool: Skill
-    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?chat-prompt-workflows"'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?handoff"'
     min: 0
     max: 0
     arm: both

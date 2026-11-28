@@ -1,6 +1,6 @@
 ---
 name: learning-path
-description: Use to learn a framework, prep a cert, read English docs, code a paper
+description: Use to learn a tech, prep a cert, code a paper or pick a side project
 argument-hint: <technology, exam or paper> [--depth skim|working|mastery]
 ---
 
@@ -16,10 +16,11 @@ Learn on your own real project, in small wins.
 | "Turn this paper, RFC or article into a working example" | [`references/paper-to-practice.md`](references/paper-to-practice.md) (brief, smallest runnable example, run, one-page note) |
 | "I'm sitting an exam or a cloud or developer certification, or I need flashcards and quizzes" | [`references/cert-prep.md`](references/cert-prep.md) |
 | "An English error message or doc passage needs a Thai explanation" | [`references/english-tech-reading.md`](references/english-tech-reading.md) |
+| "What changed in the tools I follow this week?" · "What portfolio project should I build?" | [`parts/tech-growth/guide.md`](parts/tech-growth/guide.md) (tech radar · side project picker) |
 
 **Hard rules (paper flow):** Run the example for real. If it cannot run, say why and what was tried. Build only the smallest program that shows the core idea. If infrastructure is lacking, use a simulation and say so. Credit the paper with title, authors and date.
 
-Not for: choosing a practice or portfolio project → `tech-growth`.
+Choosing a practice or portfolio project → [`parts/tech-growth/guide.md`](parts/tech-growth/guide.md).
 
 ## Steps
 

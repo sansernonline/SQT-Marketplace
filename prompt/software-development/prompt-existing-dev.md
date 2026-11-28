@@ -181,7 +181,7 @@ agent `solution-architect` + `developer` + `qa-tester` (หลักฐาน re
 
 ## 6. ทำหลายงานขนานด้วย worktree และปิด branch
 
-agent `developer` ตัวใหม่ 1 ตัวต่องาน · `reviewer` ตัวใหม่ตรวจแต่ละ branch · skill `git-and-review` · `crew-patterns/parallel-split-and-merge` · `ground-rules/principle-small-verifiable-steps` · `ground-rules/principle-prove-it-works` · `git-and-review` · `web-service-essentials`
+agent `developer` ตัวใหม่ 1 ตัวต่องาน · `reviewer` ตัวใหม่ตรวจแต่ละ branch · skill `git-and-review` · `handoff/parallel-split-and-merge` · `ground-rules/principle-small-verifiable-steps` · `ground-rules/principle-prove-it-works` · `git-and-review` · `web-service-essentials`
 **ใช้เมื่อ:** สั่งฉบับที่แก้โค้ดตั้งแต่ 2 งานพร้อมกัน (เช่น ฉบับ 2 หลายฟีเจอร์ · ฉบับ 2 คู่กับฉบับ 4) · spike ที่อาจทำ checkout หลักพัง · branch ที่ทำเสร็จค้างอยู่หลายตัว · งานเดียวที่ agent ตัวเดียวทำ ใช้ branch ธรรมดาพอ
 **ต้องมีก่อน:** repo มี commit แล้ว · คำสั่งรัน test จาก `docs/ONBOARDING-NOTES.md` (ฉบับ 1)
 **ผลลัพธ์:** worktree 1 ตัวต่องาน วางเป็นโฟลเดอร์พี่น้องของ repo (`../<repo>-<งาน>`) หรือ `.claude/worktrees/<ชื่อ>/` ที่ ignore แล้ว · repo อยู่ใต้รากโปรเจกต์ (`<project>/<repo>/`) ให้ใช้แบบหลัง จะได้ไม่มีโฟลเดอร์ใหม่โผล่ที่รากโปรเจกต์ · ตาราง worktree และทางปิด branch ใน `docs/BUILD-PLAN.md` · **รออนุมัติ:** merge ลง branch หลัก · push · เปิด PR · ทิ้ง branch
@@ -196,7 +196,7 @@ agent `developer` ตัวใหม่ 1 ตัวต่องาน · `review
 
 ### ลำดับ
 
-1. แบ่งงานเป็นชิ้นที่ไม่แก้ไฟล์เดียวกันตาม `crew-patterns/parallel-split-and-merge` · ชิ้นที่ต้องแตะไฟล์ร่วมกันทำต่อกัน ไม่ทำขนาน
+1. แบ่งงานเป็นชิ้นที่ไม่แก้ไฟล์เดียวกันตาม `handoff/parallel-split-and-merge` · ชิ้นที่ต้องแตะไฟล์ร่วมกันทำต่อกัน ไม่ทำขนาน
 2. สร้าง worktree ต่องานบน branch `<ประเภท>/<งาน>` · คัดลอก `.env` และไฟล์ตั้งค่า dev แบบระบุชื่อไฟล์ ไม่คัดลอกทั้งโฟลเดอร์ · Windows ตั้งชื่อโฟลเดอร์สั้นให้ path ไม่เกิน 260 ตัวอักษร · ติดตั้ง dependency แล้วรัน test 1 รอบเป็น baseline ก่อนแก้
 3. agent แต่ละตัวทำเฉพาะใน worktree ของตัวเอง · หัวหน้าทีมจด path · branch · baseline ลงตารางใน `docs/BUILD-PLAN.md`
 4. ก่อนปิด: test ทั้งชุดผ่านบน branch นั้น · `git status` สะอาด · `git log main..HEAD --oneline` แสดง commit ที่จะเข้า · main ขยับระหว่างทาง → รวม main ล่าสุดแล้ว test ใหม่ · conflict แก้แบบเข้าใจทั้ง 2 ฝั่ง ไม่ใช้ `--ours` หรือ `--theirs` ทั้งไฟล์

@@ -7,6 +7,18 @@ Motion is emphasis. Everything else is decoration. Most amateur motion has 3 fau
 
 **Contents:** Workflow · Timing · Easing · The 12 principles · On-screen text timing · Common fixes · Export as a GIF or WebM · Rules · Not an AI look
 
+## Contents
+- [Workflow](#workflow)
+- [Timing](#timing)
+- [Easing](#easing)
+- [The 12 principles, condensed for marketing motion](#the-12-principles-condensed-for-marketing-motion)
+- [On-screen text timing](#on-screen-text-timing)
+- [Common fixes](#common-fixes)
+- [Export as a GIF or WebM](#export-as-a-gif-or-webm)
+- [Rules](#rules)
+- [Not an AI look](#not-an-ai-look)
+- [References](#references)
+
 ## Workflow
 
 0. **Search for references first:** take the project's keywords and search live per `design-gate/design-references` (plugin `superuser`) type `motion`, then pull colours from the chosen work · use the stored palette library when a live search is not possible

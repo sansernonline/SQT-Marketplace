@@ -1,6 +1,6 @@
 ---
 name: trade-journal
-description: Use when logging trades or reviewing win rate
+description: Use to log trades, review win rate, paper-trade or check a copy signal
 argument-hint: <entry|exit|read|review> [trade details or week|month]
 ---
 
@@ -9,6 +9,11 @@ argument-hint: <entry|exit|read|review> [trade details or week|month]
 The minimum record that still teaches you something later. Fill-in template and CSV header: [references/journal-template.md](references/journal-template.md).
 
 Two modes: **1 Log a trade** (entry, exit, read) and **2 Review** (weekly or monthly, from the same file). General information, not investment advice.
+
+| Other job | Open |
+|---|---|
+| Practising on paper, or a staged technique course with level gates before real money | [parts/trade-practice/guide.md](parts/trade-practice/guide.md) |
+| Picking or checking a copy-trade signal (MQL5 Signals), its setup, costs and weekly exit check · say the legal box first when real money will leave Thailand | [parts/copy-trade-check/guide.md](parts/copy-trade-check/guide.md) |
 
 ## Mode 1 · Log a trade
 
@@ -41,7 +46,7 @@ calm · confident · FOMO (กลัวตกรถ) · revenge (เอาคื
 - Entry takes **under a minute** — longer and the habit dies within two weeks.
 - **Never edit past entries**; a later lesson goes in a new note column or a new row.
 - Write the reason **before** the price moves; a reason written after the exit is a story, not data.
-- Paper trades go in the same format, flagged `paper`, so `trade-practice` stats are comparable.
+- Paper trades go in the same format, flagged `paper`, so `trade-journal` part `trade-practice` stats are comparable.
 - Record the costs actually charged; Thai broker statements show commission, trading fee, clearing fee and VAT separately — add them up.
 - Screenshot optional; the written record is mandatory.
 - The `trade-journal-coach` agent quotes this file back in reviews — write it knowing someone will read it.
@@ -70,7 +75,7 @@ Fewer than 20 closed trades: report the numbers but say the sample is too small 
 
 Output (mode 2): one page: stats table (live, paper separately) · sample-size warning if N < 20 · the one pattern with quoted evidence · the one new rule · last rule's verdict. No pep talks, no list of ten lessons.
 
-Related: strategy practice in `trade-practice`; sizing fixes in `position-sizing`.
+Related: strategy practice in `trade-journal` part `trade-practice`; sizing fixes in `position-sizing`.
 
 ## เรียกเป็นคำสั่ง
 

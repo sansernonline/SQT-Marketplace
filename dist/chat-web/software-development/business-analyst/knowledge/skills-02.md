@@ -788,8 +788,8 @@ This skeleton answers "what does 1 message (request · job · document) pass thr
 
 | Task | Use instead |
 |---|---|
-| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) (plugin `software-development`) |
-| Chart colours and chart design in an app or dashboard | `web-app-design` (plugin `software-development`) → `tokens.md` "สีข้อมูล (กราฟ)" |
+| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`ui-craft` parts `web-app-design` · `windows-app-design` · `mobile-app-design`) (plugin `software-development`) |
+| Chart colours and chart design in an app or dashboard | `ui-craft` part `web-app-design` (plugin `software-development`) → `tokens.md` "สีข้อมูล (กราฟ)" |
 | Designed figure for a proposal, slide or print | `diagrams` |
 
 ## Decision tree: which format?
@@ -803,7 +803,7 @@ What are you showing?
 │                                              project document (BRD · Software Requirements Specification (SRS) · FSD · ADR) or read outside the team → `diagrams`
 ├─ Architecture / Entity-Relationship (ER) / class → same rule as the line above
 ├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
-├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design (plugin `software-development`) tokens.md "สีข้อมูล (กราฟ)"
+├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from ui-craft part web-app-design (plugin `software-development`) tokens.md "สีข้อมูล (กราฟ)"
 ├─ Photo, screenshot, complex illustration  →  External file → ![alt](figures/x.png) (file in `docs/figures/`)
 └─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
 ```
@@ -1015,7 +1015,7 @@ In a README · Pull Request · note in code:
 - Review a diagram someone else drew
 
 
-Not for: choosing SVG / ASCII / Mermaid → `markdown-visuals.md` · screenshots and wireframes → `ui-craft` + the platform skill · data charts → `web-app-design` `tokens.md` heading "สีข้อมูล (กราฟ)" · choosing an architecture → `architecture`
+Not for: choosing SVG / ASCII / Mermaid → `markdown-visuals.md` · screenshots and wireframes → `ui-craft` + the platform skill · data charts → `ui-craft` part `web-app-design` `tokens.md` heading "สีข้อมูล (กราฟ)" · choosing an architecture → `architecture`
 
 ## 1 · Which question, which diagram
 
@@ -1428,7 +1428,7 @@ Exception for the Stage deck: the "ตัวอย่าง" (example) line · t
 - Always state the data source: period, sample size, source (side strip or footer)
 - A table over 5 rows by 4 columns should not be on a slide: make it a chart, or move it to an attachment
 
-Chart colour palette: `diagrams` → `references/colour-by-domain.md` · for charts that must also be used with app screens, `web-app-design` (plugin `software-development`) → `references/tokens.md` "สีข้อมูล (กราฟ)" (data colours, charts).
+Chart colour palette: `diagrams` → `references/colour-by-domain.md` · for charts that must also be used with app screens, `ui-craft` part `web-app-design` (plugin `software-development`) → `references/tokens.md` "สีข้อมูล (กราฟ)" (data colours, charts).
 
 ## Thai on slides
 
@@ -1452,7 +1452,7 @@ Chart colour palette: `diagrams` → `references/colour-by-domain.md` · for cha
 | Spacing rules and eye order (app screens) | `ui-craft` (plugin `software-development`) |
 | Content comes from a Software Requirements Specification (SRS) | `requirements-writing` (plugin `software-development`) |
 | Cut content down to what is necessary | `superuser:ground-rules` |
-| Brand colour and type system · illustration | `graphic-design` (plugin `software-development`) |
+| Brand colour and type system · illustration | `graphic-design:design-by-type` (plugin `software-development`) |
 
 
 ## reference: deck-theme.md

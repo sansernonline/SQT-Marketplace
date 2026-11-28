@@ -16,7 +16,7 @@ graders:
   - name: skill-opened
     type: tool_used
     tool: Skill
-    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?trade-practice"'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?trade-journal"'
     min: 1
     arm: with-only
   - name: risk-first

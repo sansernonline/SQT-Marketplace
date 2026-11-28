@@ -10,7 +10,7 @@
 - Ordering work (bugs · vulnerabilities · emails · daily tasks)
 - Picking the best of several attempts already made · deciding whether to review one more round
 
-Not for: a direct formula exists (loan installment · tax · position size) → that task's skill · taste (color, icon, tone) → a person looks · only one option · option numbers not yet available → `research-with-sources` first · no options yet → `brainstormer` · splitting big work or order of pieces → `crew-patterns/parallel-split-and-merge` (`plan.mjs`) · which model fits which step → `superuser/model-scorecard` · recording the decision → `decision-desk/decision-log` (paste this skill's result table in).
+Not for: a direct formula exists (loan installment · tax · position size) → that task's skill · taste (color, icon, tone) → a person looks · only one option · option numbers not yet available → `research-with-sources` first · no options yet → `brainstormer` · splitting big work or order of pieces → `handoff/parallel-split-and-merge` (`plan.mjs`) · which model fits which step → `superuser/model-scorecard` · recording the decision → `decision-desk/decision-log` (paste this skill's result table in).
 
 ## Steps
 1. **Find the script.** Installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/superuser/*/skills/decision-desk/parts/decision-scoring/scripts/decide.mjs | sort -V | tail -1`. In the SQT-Marketplace repo: `plugins/superuser/skills/decision-desk/parts/decision-scoring/scripts/decide.mjs`. Node only, no dependencies.

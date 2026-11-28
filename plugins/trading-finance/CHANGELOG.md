@@ -1,5 +1,14 @@
 # Changelog — trading-finance
 
+## 0.27.0 — 2026-11-28
+
+รวม skill 3 ตัวเป็น `trade-journal` (15 → 13)
+
+| ชื่อเก่า | ใช้แทนด้วย |
+|---|---|
+| `trade-practice` | `trade-journal/parts/trade-practice/` |
+| `copy-trade-check` | `trade-journal/parts/copy-trade-check/` (สคริปต์ `signal-check.mjs` `copy-monitor.mjs` ย้ายตามไป · CI ชี้ path ใหม่) |
+
 ## 0.26.0 — 2026-11-27
 
 รวม skill จาก 27 เหลือ 15 (เปลี่ยนชื่อแบบไม่เข้ากับของเดิม) · เจ้าของสั่ง 2026-11-27 · เนื้อหาเดิมของแต่ละตัวย้ายไปเป็น `references/<ชื่อเก่า>.md` ของตัวที่เหลือ ไม่ได้ตัดกฎทิ้ง · eval ย้ายตามไปใต้ชื่อใหม่ · playbook ชี้ไฟล์หลักคิดและชื่อ skill ใหม่

@@ -104,7 +104,7 @@ This is a template the agent writes into the user's repo, so its text stays Thai
 ## Survey round (every day, or after new commits)
 
 1. Read the "ทบทวนแล้ว" (reviewed) section of `docs/GARDEN.md`. A theme already decided does not need noting again.
-2. Look only at files changed since the last round (`git log --since`). Look at the whole repo only once a week, and split big jobs with `crew-patterns/parallel-split-and-merge`.
+2. Look only at files changed since the last round (`git log --since`). Look at the whole repo only once a week, and split big jobs with `handoff/parallel-split-and-merge`.
 3. Look for: duplicated logic · calls that skip a layer (a screen talking to the database directly) · traps of the framework in use · dead code · names that do not match `readable-code.md` · tests that pass although the code is wrong · anything that conflicts with `docs/AGENT-RULES.md`.
 4. **Append to the log table. Never edit code.** In the "รูปแบบ" (pattern) column, put a short, reusable word so grouping is easy.
 5. If you find nothing, write nothing.
@@ -1969,7 +1969,7 @@ Use it when a verify skill built by [`test-automation`](app-verifier-setup.md) n
 ## Steps
 
 1. **List the real features** by pulling from routes · menu · command list · the latest Software Requirements Specification (SRS). Compare against the feature map in the script `<project-name>/test/e2e/verify.*`, and split into 3 groups: matching · missing from the feature map · no longer in the app.
-2. **Read the code in parallel.** Send 1 fresh `qa-tester` agent per feature group (at most 5 features each). Each reads only, then reports whether each feature's checks in `verify.*` still match the code, with file and line number, using `crew-patterns/parallel-split-and-merge`.
+2. **Read the code in parallel.** Send 1 fresh `qa-tester` agent per feature group (at most 5 features each). Each reads only, then reports whether each feature's checks in `verify.*` still match the code, with file and line number, using `handoff/parallel-split-and-merge`.
 3. **Drive the real app once.** Use 1 agent to run `verify.*` (the script opens and closes the app itself) for every feature, and record pass or fail · screenshots · the step that failed.
 4. **Fix only what is proven.** Every fix needs evidence from step 2 or 3. If a feature fails because the app is really broken, not because the steps are wrong, file it as a bug report (`qa-docs`). Do not edit the steps to make it pass.
 5. **Add the features missing from the map** in the existing format, and run each at least once for real before saving.
@@ -2088,11 +2088,11 @@ Moved from `worktree-and-branch.md` section 4 (2026-11-10)
 <!-- merged from skill `code-review-checklist` on 2026-11-27 · description was: Use when reviewing a pull request or your own code -->
 # Code Review Checklist — review a pull request or your own code, with actionable comments
 
-> **In SuperUser:** start from the playbook [`review`](../../superuser/references/playbook-review.md), then use this checklist for ordinary reviews. High-risk work or a large diff → `crew-patterns/adversarial-review-panel`.
+> **In SuperUser:** start from the playbook [`review`](../../superuser/references/playbook-review.md), then use this checklist for ordinary reviews. High-risk work or a large diff → `handoff/adversarial-review-panel`.
 
 ## Use when
 - Reviewing a pull request, self-reviewing before submitting, or auditing an existing module
-- Not for: a second look inside a team → a new `reviewer` agent (it applies this checklist) · contested design, large or high-risk diff, "stress test" → `crew-patterns/adversarial-review-panel` · reviewing a visual → `graphic-design:design-review` if installed, else `ui-craft` · writing the PR description → `pr-description-template.md` · hunting misleading patterns across the codebase → `code-craft` · scanners, secrets, dependency check, OWASP Top 10:2025 → `security-gate` (run both before merge; `owasp-top10.md`, `owasp-stack-checks.md`)
+- Not for: a second look inside a team → a new `reviewer` agent (it applies this checklist) · contested design, large or high-risk diff, "stress test" → `handoff/adversarial-review-panel` · reviewing a visual → `graphic-design:design-review` if installed, else `ui-craft` · writing the PR description → `pr-description-template.md` · hunting misleading patterns across the codebase → `code-craft` · scanners, secrets, dependency check, OWASP Top 10:2025 → `security-gate` (run both before merge; `owasp-top10.md`, `owasp-stack-checks.md`)
 
 ## Steps
 1. **Understand the intent:** read the PR description and linked ticket. For a branch or PR, pin the range first (`BASE=$(git merge-base main HEAD)` · `HEAD=$(git rev-parse HEAD)` · review `git diff $BASE..$HEAD`) and write both SHAs in the report.
@@ -2119,7 +2119,7 @@ Moved from `worktree-and-branch.md` section 4 (2026-11-10)
 8. **Avoid:** bikeshedding when there is no convention · "why not MY way" · only criticism · vague comments ("this is wrong": say why and suggest a fix) · reviewing too much at once (ask for PRs under 400 lines).
 
 ## Run as a command
-`/software-development:git-and-review <file path or PR description>` — use a new read-only `reviewer` agent to review **the user's request** (high-stakes or contested → `crew-patterns/adversarial-review-panel`). Open `superuser` with the playbook `review` and copy its steps into the todo first; use both together. The reviewer: reads the file(s) or diff and pins the range (step 1) · applies this skill · rates each finding **สูง** (must fix before merge) · **กลาง** (should fix) · **ต่ำ** (optional) · gives a concrete fix for each · outputs verdict **ผ่าน** / **ไม่ผ่าน** with counts per level (not the `blocking:`/`nit:` prefixes).
+`/software-development:git-and-review <file path or PR description>` — use a new read-only `reviewer` agent to review **the user's request** (high-stakes or contested → `handoff/adversarial-review-panel`). Open `superuser` with the playbook `review` and copy its steps into the todo first; use both together. The reviewer: reads the file(s) or diff and pins the range (step 1) · applies this skill · rates each finding **สูง** (must fix before merge) · **กลาง** (should fix) · **ต่ำ** (optional) · gives a concrete fix for each · outputs verdict **ผ่าน** / **ไม่ผ่าน** with counts per level (not the `blocking:`/`nit:` prefixes).
 
 The author does not fix every finding on sight: a finding can be wrong (misread code, or the "bug" is covered by a test). Push back with evidence (`file:line` · test name · command output), not opinion · fix what stands · list each rejected finding and its evidence in the report so the lead can judge.
 
@@ -2326,7 +2326,7 @@ Moved out of [SKILL.md](code-review-checklist.md). Open it for a large or unfami
 | Task | Use instead |
 |---|---|
 | Reviewing someone's PR or self-reviewing the code | `code-review-checklist.md` |
-| Adversarial review of a risky or contested change | `crew-patterns/adversarial-review-panel` |
+| Adversarial review of a risky or contested change | `handoff/adversarial-review-panel` |
 
 ## 0 · Look for an existing format first (every time)
 
@@ -2481,10 +2481,10 @@ Checked 2026-10-23
 ## Use when
 - 2 or more agents will edit files in the same repo at the same time (read-only agents need no worktree).
 - A spike or refactor may break things in a way that is hard to undo, or an urgent fix is needed while the main checkout has half-finished work (branch from `main`, no stash).
-- Comparing 2 approaches (`crew-patterns/parallel-attempts-pick-best`): one worktree per approach. Separate machines or port collisions → add `infra-and-deploy`.
+- Comparing 2 approaches (`handoff/parallel-attempts-pick-best`): one worktree per approach. Separate machines or port collisions → add `infra-and-deploy`.
 - A branch must be merged, closed, or cleaned up, or conflicts must be resolved.
 
-Not for: a single agent on a small reversible job → a plain branch · read-only work → `Explore` · a repo with no commit yet (make the first commit first). Splitting the work into pieces → `crew-patterns/parallel-split-and-merge` (its step "ห้ามเขียนที่เดียวกัน" points here).
+Not for: a single agent on a small reversible job → a plain branch · read-only work → `Explore` · a repo with no commit yet (make the first commit first). Splitting the work into pieces → `handoff/parallel-split-and-merge` (its step "ห้ามเขียนที่เดียวกัน" points here).
 
 ## Steps
 1. **Create.** Run `git worktree add ../<repo>-<task> -b <type>/<task> [main]`, then `git worktree list` (must show main + the new one).

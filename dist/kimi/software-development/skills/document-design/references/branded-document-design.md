@@ -57,4 +57,4 @@ Install before use: `pip install python-docx python-pptx` · LibreOffice (`soffi
 - [`identity-and-gate.md`](identity-and-gate.md) — open when running several directions or the beauty gate · [`cover-vote.md`](cover-vote.md) — the 3-direction cover vote
 - [`brandkit-usage.md`](brandkit-usage.md) · [`api.md`](api.md) — open when writing the build script
 - [`visual-check.md`](visual-check.md) — open when rendering for the eye check · [`anti-patterns.md`](anti-patterns.md) — open when reviewing
-- Linked skills: slide story → `slide-deck` · SRS → `requirements-writing` · diagrams → `diagrams` / `diagrams` · brand → `graphic-design` · .html deck → `slide-deck`
+- Linked skills: slide story → `slide-deck` · SRS → `requirements-writing` · diagrams → `diagrams` / `diagrams` · brand → `graphic-design:design-by-type` · .html deck → `slide-deck`

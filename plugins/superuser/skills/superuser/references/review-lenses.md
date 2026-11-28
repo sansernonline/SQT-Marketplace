@@ -1,6 +1,6 @@
 # review-lenses — review package · lenses · item-by-item validator gate
 
-Used with [`playbook-review`](playbook-review.md) · `reviewer` · skill `crew-patterns/adversarial-review-panel` of plugin superuser · everywhere a fresh reviewer is used.
+Used with [`playbook-review`](playbook-review.md) · `reviewer` · skill `handoff/adversarial-review-panel` of plugin superuser · everywhere a fresh reviewer is used.
 
 The one flow in brief: **review package → reviewer holds lenses (checklists) → validator confirms item by item → log dismissed items with reasons → freshness check before reporting.** Reviewers find problems easily. Validators leave only the real ones. The package and the freshness check make everyone look at the same version of the work.
 

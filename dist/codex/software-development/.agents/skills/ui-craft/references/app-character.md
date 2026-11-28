@@ -32,7 +32,7 @@ Comparison image: [`../assets/app-character-sheet.webp`](../assets/app-character
 | Illustration | none | very little | photos lead | drawings, mascot | mascot, stars, rewards | large photos |
 | Message tone | direct, short, technical terms allowed | polite, clear, no alarming terms | friendly | playful, emoji allowed | easy words, praise often | few words, chosen words |
 
-Choose the brand's tone axis and level of polish per `graphic-design` section 2, then compare with this table. If they do not fit (for example a "challenging" brand in a character-2 app), tell the user.
+Choose the brand's tone axis and level of polish per `graphic-design:design-by-type` section 2, then compare with this table. If they do not fit (for example a "challenging" brand in a character-2 app), tell the user.
 
 ## 3 · What does not change in any character
 
@@ -47,4 +47,4 @@ Choose the brand's tone axis and level of polish per `graphic-design` section 2,
 
 - Write the chosen character as the first-line comment of the token file, for example `/* app-character: 1 work-tool */`, and put it in the `ตัดสินใจเอง` (decided on my own) table in `docs/BUILD-PLAN.md` with the answers to the 4 questions
 - **Word documents (`document-design`):** use the same brand color set, but the document body stays formal, because the readers are the approvers. Apps of character 4–5 may change only the cover, which can use brighter colors and rounder corners.
-- **Logo (`graphic-design`):** the shape must lean the same way. Characters 1–2 use a square block with rounded edges. Characters 4–5 use very round shapes or a mascot.
+- **Logo (`graphic-design:design-by-type`):** the shape must lean the same way. Characters 1–2 use a square block with rounded edges. Characters 4–5 use very round shapes or a mascot.

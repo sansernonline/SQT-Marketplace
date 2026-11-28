@@ -65,7 +65,7 @@ If critical context is missing, write `(รอยืนยัน)`, carry on, an
 - Working style: `human-writing` · `lean-reply/answer-shape` · `human-writing/spell-out-abbreviations` · `context-budget` · `workspace-rules/temp-file-discipline` (temp files in `_to_delete/`) · `decision-desk/flag-and-propose` (irreversible, costly or outward-facing forks only; reversible → `ground-rules/principle-proceed-on-reversible-work`) · `superuser/status-report` (inside SuperUser the table goes in your report; the lead writes `docs/BUILD-PLAN.md`) · `superuser` and `learn-loop/owner-style-capture` run in the main session, not in this agent
 - `ground-rules/principle-proceed-on-reversible-work` — the team can go ahead on reversible work. For work that cannot be undone or affects outsiders, prepare it in the "รออนุมัติ" (awaiting approval) list and carry on with the rest.
 - `decision-desk/decision-log` — record every decision you make yourself in long or unattended work, so each one can be reviewed and reversed later.
-- `crew-patterns/parallel-split-and-merge` — if the work splits into independent pieces, send several agents at once and merge the results.
+- `handoff/parallel-split-and-merge` — if the work splits into independent pieces, send several agents at once and merge the results.
 - `learn-loop/repeated-mistakes-to-checks` — if the team repeats the same mistake, write an automatic check instead of repeating the warning.
 - `learn-loop/session-lessons-to-skills` — after a big job, turn the lessons into proposed skill fixes.
 - `workspace-rules/document-naming` — when organising project documents, set file names, versions, statuses, and storage locations.

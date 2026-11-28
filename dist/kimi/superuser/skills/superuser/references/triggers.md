@@ -6,8 +6,8 @@ The main document skills (`design-gate/polished-document-style` · `workspace-ru
 
 | Situation | Call |
 |---|---|
-| Planning how to do the work (plan first · have another agent check · several agents from different angles · select from a lot · Loop · Graph · Dynamic) | `crew-patterns/agent-patterns` |
-| The user wants a multi-step prompt to paste into chat (have the AI do it and check itself · split work then merge · adjust the plan when new information arrives) | `chat-prompt-workflows` |
+| Planning how to do the work (plan first · have another agent check · several agents from different angles · select from a lot · Loop · Graph · Dynamic) | `handoff/agent-patterns` |
+| The user wants a multi-step prompt to paste into chat (have the AI do it and check itself · split work then merge · adjust the plan when new information arrives) | `handoff` part `chat-prompt-workflows` |
 | Writing an answer, report, document, or a label in a diagram | `human-writing` · has options, several numbers, or connected parts → `lean-reply/answer-shape` |
 | The work has repetitive mechanical parts (rename 100 files · compute every row · check every piece) | `ground-rules/principle-build-a-tool-not-handwork` |
 | Giving orders to workers · handing work on · picking up from a previous session · switching models · there is a message in the inbox | `handoff` |
@@ -22,8 +22,8 @@ The main document skills (`design-gate/polished-document-style` · `workspace-ru
 | Reversible multi-step work, about to ask "continue?" | `ground-rules/principle-proceed-on-reversible-work` · long work split into checkable steps → `ground-rules/principle-small-verifiable-steps` |
 | Choosing between easy to build and easy to use | `ground-rules/principle-user-experience-first` |
 | Deciding on your own mid-job / meeting something that changes the plan and needs the user to decide | `decision-desk/decision-log` / `decision-desk/flag-and-propose` |
-| Work can be split into independent pieces / one path may be wrong for the whole job and you want to try several | `crew-patterns/parallel-split-and-merge` / `crew-patterns/parallel-attempts-pick-best` |
-| High-risk work before delivery (money · law · sent to outsiders) | `crew-patterns/adversarial-review-panel` |
+| Work can be split into independent pieces / one path may be wrong for the whole job and you want to try several | `handoff/parallel-split-and-merge` / `handoff/parallel-attempts-pick-best` |
+| High-risk work before delivery (money · law · sent to outsiders) | `handoff/adversarial-review-panel` |
 | About to build something that someone may have already built (tool · template · service) | `research-with-sources/prior-art-review` |
 | Need information that can be confirmed (prices · rules · rates · comparing options) | `research-with-sources` |
 | Translating Thai to English or English to Thai (documents · screen text · chat), or keeping a 2-language file in sync | `human-writing/translate-th-en` paired with `human-writing` |
@@ -45,9 +45,9 @@ The main document skills (`design-gate/polished-document-style` · `workspace-ru
 | Icons in an app that do not match or are not good-looking · app icons · favicon · plugin icons · a pictorial logo mark | `icon-design` (plugin `graphic-design`): for brand icons always ask first for examples the user likes |
 | Fixed deposits, government bonds, corporate bonds · credit bureau · home refinancing · DCA and portfolio rebalancing | `fund-and-bond-picker` · `budget-and-debt` · `portfolio` (plugin `trading-finance`) |
 | A family member has died or is making a will · flood · pregnancy and a newborn | `family-legal` · `home-upkeep` · `family-care` (plugin `personal-life`) |
-| Personal tasks scattered in many places · making flashcards or practising Q&A before an exam · starting a new job · being laid off or resigning · a dispute that needs a lawyer or an agency | `weekly-review` · `learning-path` · `career-growth` · `family-legal` (plugin `personal-life`) |
+| Personal tasks scattered in many places · making flashcards or practising Q&A before an exam · starting a new job · being laid off or resigning · a dispute that needs a lawyer or an agency | `weekly-review` · `learning-path` · `job-search` part `career-growth` · `family-legal` (plugin `personal-life`) |
 | Reading a stock's financial statements or ratios · screening stocks into a watchlist | `stock-fundamentals` (plugin `trading-finance`) |
-| Setting up, monitoring, or quitting a copy trade · learning trading techniques gate by gate before using real money | `copy-trade-check` · `trade-practice` (plugin `trading-finance`) |
+| Setting up, monitoring, or quitting a copy trade · learning trading techniques gate by gate before using real money | `trade-journal` parts `copy-trade-check` · `trade-practice` (plugin `trading-finance`) |
 | Only the .ex5 file of an EA or indicator and you want to know how it works | `reverse-engineering` section .ex5 (plugin `software-development`): infer behaviour as a black box, do not decompile |
 | An online shop: what to do first at the start of the day · bringing back regular customers who have gone | `shop-operations` · `sales-copy` (plugin `e-commerce`) |
 | Checking exaggerated ad copy before posting · making LINE stickers or emoji | `copy-claims-check` · `line-design` (plugin `graphic-design`) |

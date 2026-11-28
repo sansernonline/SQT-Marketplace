@@ -20,7 +20,7 @@
 - ทดสอบความลื่นเฉพาะเครื่องแรงของทีม → เครื่องรุ่นล่างกระตุกและถูกให้คะแนนต่ำ (S17, S6)
 
 ## ใช้คู่กับ
-skills: `mobile-engineering` · `mobile-app-design` · `game-development` · `pdpa-compliance` · `domain-systems` · playbook: `feature` · `prototype` · `ship` · `performance`
+skills: `mobile-engineering` · `ui-craft` part `mobile-app-design` · `game-development` · `pdpa-compliance` · `domain-systems` · playbook: `feature` · `prototype` · `ship` · `performance`
 
 ## Sources (checked 2026-11-27)
 - S1 · Build an offline-first app, Android Developers · https://developer.android.com/topic/architecture/data-layer/offline-first · หลัก 1 (ข้อมูลในเครื่องเป็นต้นฉบับ ซิงก์ แก้ข้อมูลชน)

@@ -24,7 +24,7 @@ This file covers the **cover page** only. The whole document body (color set, Th
 
 - A project's document set (BRD, the business requirements document · SRS, the software requirements specification · FSD, the functional specification · ARCH, architecture · PLAN, the project plan · TESTPLAN, the test plan) will go to a client or executives, and the current cover looks like another project's.
 - The user says "ปกไม่ว้าว" · "อยากได้ปกที่ไม่ซ้ำ" · "ปกทุกโปรเจกต์หน้าตาเหมือนกัน" (the cover is not wow · I want a cover that is not repeated · every project's cover looks the same).
-- Do not use when: the project has no logo or mockup yet → make the logo first (`graphic-design`), then come back. A single report from markdown that needs no identity → `markdown-report-docx.md`.
+- Do not use when: the project has no logo or mockup yet → make the logo first (`graphic-design:design-by-type`), then come back. A single report from markdown that needs no identity → `markdown-report-docx.md`.
 
 ## Default path
 

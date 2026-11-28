@@ -1,6 +1,6 @@
 {
  "plugin": "software-development",
- "version": "4.2.0",
+ "version": "4.3.0",
  "description": "Simulates a complete software development company — 38 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 95 skills and 29 slash commands for the whole SDLC.",
  "cross": [],
  "skills": [
@@ -21,12 +21,10 @@
   "errors-and-logs",
   "game-development",
   "git-and-review",
-  "graphic-design",
   "i18n-and-locale",
   "incidents-and-monitoring",
   "infra-and-deploy",
   "legacy-spec-recovery",
-  "mobile-app-design",
   "mobile-engineering",
   "pdpa-compliance",
   "product-naming",
@@ -49,16 +47,12 @@
   "stack-typescript",
   "test-automation",
   "ui-craft",
-  "web-app-design",
   "web-audit",
-  "web-service-essentials",
-  "windows-app-design"
+  "web-service-essentials"
  ],
  "core_skills": [
   "superuser",
-  "crew-patterns",
   "lean-reply",
-  "chat-prompt-workflows",
   "workspace-rules",
   "context-budget",
   "decision-desk",
@@ -283,7 +277,6 @@
    "core": false,
    "description": "Use for visuals that are not screens (logo, poster, social post). Screens → ux-designer.",
    "skills": [
-    "graphic-design",
     "superuser",
     "ui-craft",
     "slide-deck",
@@ -638,9 +631,6 @@
     "ui-craft",
     "superuser",
     "design-system",
-    "web-app-design",
-    "mobile-app-design",
-    "windows-app-design",
     "diagrams",
     "i18n-and-locale"
    ]
@@ -1049,7 +1039,7 @@
     },
     {
      "n": 3,
-     "text": "If the feature crosses several modules, draft the function signatures and file locations before writing the body. If several approaches are still equally good, use `crew-patterns/parallel-attempts-pick-best` or the `prototype` playbook · ใคร: หัวหน้าทีม (several equally good approaches: `developer` ตัวใหม่ one per approach)",
+     "text": "If the feature crosses several modules, draft the function signatures and file locations before writing the body. If several approaches are still equally good, use `handoff/parallel-attempts-pick-best` or the `prototype` playbook · ใคร: หัวหน้าทีม (several equally good approaches: `developer` ตัวใหม่ one per approach)",
      "sub": [],
      "phase": "",
      "who": {
@@ -1129,7 +1119,7 @@
     },
     {
      "n": 7,
-     "text": "**Check (ตรวจ) by review before saying done — do not skip.** Small diff: correctness and edge cases · much logic or state: `crew-patterns/adversarial-review-panel` with at least 2 angles, correctness and simplicity. If a dependency is added or a risky area is touched, also pass it through [`security-gate`](../../security-gate/SKILL.md) and judge it against `security.md` (access checked on the server: a user without the role gets 403) (ตัดสินผลตาม [`references/code.md`](../../dev-principles/references/code.md) · [`references/testing.md`](../../dev-principles/references/testing.md) · [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md)) · ใคร: `reviewer` ตัวใหม่ (much logic: `reviewer` ตัวใหม่ per angle · risky area: `security-engineer` ตัวใหม่ อ่านอย่างเดียว · ไม่แก้ไฟล์)",
+     "text": "**Check (ตรวจ) by review before saying done — do not skip.** Small diff: correctness and edge cases · much logic or state: `handoff/adversarial-review-panel` with at least 2 angles, correctness and simplicity. If a dependency is added or a risky area is touched, also pass it through [`security-gate`](../../security-gate/SKILL.md) and judge it against `security.md` (access checked on the server: a user without the role gets 403) (ตัดสินผลตาม [`references/code.md`](../../dev-principles/references/code.md) · [`references/testing.md`](../../dev-principles/references/testing.md) · [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md)) · ใคร: `reviewer` ตัวใหม่ (much logic: `reviewer` ตัวใหม่ per angle · risky area: `security-engineer` ตัวใหม่ อ่านอย่างเดียว · ไม่แก้ไฟล์)",
      "sub": [
       "All tests passing does not mean there are no bugs — for every finding the review confirmed, write a failing test first, then fix",
       "A screen that has a mockup or must match the old system ends its check with playbook `visual-parity`"
@@ -1868,7 +1858,7 @@
     },
     {
      "n": 6,
-     "text": "**Check (ตรวจ) with a review panel of 3 angles** (`crew-patterns/adversarial-review-panel`) (ตัดสินผลตาม [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md) · [`references/requirements-docs.md`](../../dev-principles/references/requirements-docs.md) · [`references/testing.md`](../../dev-principles/references/testing.md)) · ใคร: `reviewer` ตัวใหม่ per angle",
+     "text": "**Check (ตรวจ) with a review panel of 3 angles** (`handoff/adversarial-review-panel`) (ตัดสินผลตาม [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md) · [`references/requirements-docs.md`](../../dev-principles/references/requirements-docs.md) · [`references/testing.md`](../../dev-principles/references/testing.md)) · ใคร: `reviewer` ตัวใหม่ per angle",
      "sub": [],
      "phase": "",
      "who": {
@@ -2447,7 +2437,7 @@
     },
     {
      "n": 2,
-     "text": "Build 2–3 options, each as small as can still answer the question, in `_to_delete/prototype-<topic>/`. If the options are many or large, use `crew-patterns/parallel-attempts-pick-best` · ใคร: `developer` ตัวใหม่ one per option (if it is not yet known which options to try: `brainstormer` ตัวใหม่ proposes first)",
+     "text": "Build 2–3 options, each as small as can still answer the question, in `_to_delete/prototype-<topic>/`. If the options are many or large, use `handoff/parallel-attempts-pick-best` · ใคร: `developer` ตัวใหม่ one per option (if it is not yet known which options to try: `brainstormer` ตัวใหม่ proposes first)",
      "sub": [],
      "phase": "",
      "who": {
@@ -3257,7 +3247,7 @@
     },
     {
      "n": 6,
-     "text": "Do the work: agent pieces are sent together in one message, by rank and graph width (`team-roles` \"แบ่งงาน\" (splitting the work) · more than 8 at once → `crew-patterns/parallel-split-and-merge`) · for a person's piece, send the note's path to the teammate with a due date for the returned note · pieces that must wait on others go in the next round · ใคร: ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note",
+     "text": "Do the work: agent pieces are sent together in one message, by rank and graph width (`team-roles` \"แบ่งงาน\" (splitting the work) · more than 8 at once → `handoff/parallel-split-and-merge`) · for a person's piece, send the note's path to the teammate with a due date for the returned note · pieces that must wait on others go in the next round · ใคร: ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -3273,7 +3263,7 @@
     },
     {
      "n": 7,
-     "text": "Prove (พิสูจน์), per milestone: merge the milestone's pieces, then `reviewer` ตัวใหม่ checks the whole milestone in one go against the brief's \"เสร็จเมื่อ\" (done when) · risky work (money · law · health · sent to outsiders) uses `crew-patterns/adversarial-review-panel` · fail → fix → recheck, up to the round ceiling in `team-roles` · ใคร: `reviewer` ตัวใหม่",
+     "text": "Prove (พิสูจน์), per milestone: merge the milestone's pieces, then `reviewer` ตัวใหม่ checks the whole milestone in one go against the brief's \"เสร็จเมื่อ\" (done when) · risky work (money · law · health · sent to outsiders) uses `handoff/adversarial-review-panel` · fail → fix → recheck, up to the round ceiling in `team-roles` · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -3353,7 +3343,7 @@
     },
     {
      "n": 2,
-     "text": "Split the work into pieces that each end with a check (pieces whose check can be a command → write them as cards and let `ground-rules/parts/principle-prove-it-works/scripts/card.mjs verify` decide, per `references/cards.md` of that part; the Stop gate then holds the session until each card passes), record them in the \"ความคืบหน้า\" (progress) table in `CONTEXT.md`, choose a sub-playbook for each piece, and hand them out to fresh subagents one piece at a time · ใคร: หัวหน้าทีม",
+     "text": "Split the work into pieces that each end with a check (pieces whose check can be a command → write them as cards and let `ground-rules/parts/principle-prove-it-works/scripts/card.mjs verify` decide, per `references/cards.md` of that part; the Stop gate then stops the session once per stop while a card is unproven), record them in the \"ความคืบหน้า\" (progress) table in `CONTEXT.md`, choose a sub-playbook for each piece, and hand them out to fresh subagents one piece at a time · ใคร: หัวหน้าทีม",
      "sub": [
       "**Check external tools before handing out the first piece.** For any piece that needs an MCP (Model Context Protocol) tool, load that tool by name with ToolSearch and call it once to test now (before the user leaves). Cannot call it → mark that piece `ติด` at once, with the fix written step by step (which server to connect · how to log in), then carry on with other pieces. Do not call the API directly with curl or a token in a command instead, because that goes beyond the permission the user gave."
      ],

@@ -85,7 +85,7 @@ _ตรวจกับโค้ด 2026-11-25 · ทุกสูตรอ้า�
 
 18 เคส · ให้หัวหน้าตอบแผนเป็น JavaScript Object Notation (JSON) · 2 แขน · **วัดแผน ไม่ได้วัดการลงมือ**
 
-**เฉลยจำนวนลูกทีม** (`plugins/superuser/skills/crew-patterns/parts/parallel-split-and-merge/scripts/plan.mjs` ตามวิธี Critical Path Method (CPM))
+**เฉลยจำนวนลูกทีม** (`plugins/superuser/skills/handoff/parts/parallel-split-and-merge/scripts/plan.mjs` ตามวิธี Critical Path Method (CPM))
 
 | ชื่อ | สูตร | บรรทัด |
 |---|---|---|

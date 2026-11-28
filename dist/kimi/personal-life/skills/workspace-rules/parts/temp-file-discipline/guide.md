@@ -20,7 +20,7 @@ Not for: a work product the user keeps (goes in its own destination folder) · i
    | Subfolder | What goes in |
    |---|---|
    | `drafts/` | Temporary drafts that are not the original (a re-rendered markdown original lives at `docs/src/<topic>.md`; `superuser:workspace-rules`) |
-   | `attempts-<topic>/` | Work of each competing agent ([`crew-patterns/parallel-attempts-pick-best`](../../../crew-patterns/parts/parallel-attempts-pick-best/guide.md)) |
+   | `attempts-<topic>/` | Work of each competing agent ([`handoff/parallel-attempts-pick-best`](../../../handoff/parts/parallel-attempts-pick-best/guide.md)) |
    | `screenshots/` | Rendered mockup images or images for checking work |
    | `logs/` | Logs from a one-time run |
 

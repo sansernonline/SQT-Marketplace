@@ -27,10 +27,10 @@
 - ไม่มี `docs/README.md` → ถามผู้ใช้ครั้งเดียวก่อนเริ่ม: รหัสโปรเจกต์ · แพลตฟอร์ม (web · mobile · windows) · **แอปหรือโปรเจกต์ที่ชอบหน้าตา** (ลิงก์ · ชื่อแอป · path ในเครื่อง · คำบรรยาย · ไม่มี → เสนอ 3 แนวให้เลือก) · สีแบรนด์ใช้ถ้าผู้ใช้ให้มา ไม่มี → ได้จากทิศทางภาพที่เลือก (ฉบับ 1 ขั้น A) + `(รอยืนยัน)` ไม่หยุดถาม · มีไฟล์แต่ช่องแพลตฟอร์มว่าง → ถามแพลตฟอร์มก่อนเริ่ม แล้วเขียนลง `docs/README.md`
 - คำถามตอนเริ่ม (ถามรวมครั้งเดียวกับข้อข้างบน ไม่ว่ามี `docs/README.md` หรือไม่): **เลือกแนวภาพเองไหม** (ใช่ → หยุดให้เลือกที่ฉบับ 1 ขั้น A ข้อ 5 · ไม่ → ผู้ตรวจเลือกให้) · มี mockup เดิมแล้วและสั่งทำใหม่ → **คงหน้าตาเดิมหรือออกแบบใหม่** (ไม่ตอบ = ออกแบบใหม่)
 - **mockup เป็นไฟล์เดียว** `mockup/<รหัส>-mockup.html`: ทุกหน้าจอเป็น `<section id="s-<หน้าจอ>">` · สลับหน้าจอด้วย hash (`#s-login`) · CSS ของ skill แพลตฟอร์มและ JavaScript ฝังในไฟล์ (ไม่มี `<link>` ไป CSS ภายนอก ยกเว้นฟอนต์) · หน้าแรก `#s-start` มีตาราง "หน้าจอ → FR ที่รองรับ" (มี user story → เพิ่มคอลัมน์ `US-xxx`) ลิงก์ไปทุก section และหัวข้อ "ประวัติการแก้" · id ขึ้นต้น `s-` เสมอ ไม่ให้ชื่ออย่าง `#add` `#feed` ถูกตัวตรวจอ่านเป็นสี
-- ตัวตรวจสี hardcode คือ `skills/web-app-design/scripts/check-design-tokens.mjs` ในโฟลเดอร์ที่ติดตั้ง plugin · token ฝังอยู่ในไฟล์ mockup จึงใช้ไฟล์ mockup เป็นไฟล์ token เอง (สีดิบได้เฉพาะบล็อก token ก่อนเส้นแบ่ง) · คำสั่งตามแพลตฟอร์ม:
+- ตัวตรวจสี hardcode คือ `skills/ui-craft/parts/web-app-design/scripts/check-design-tokens.mjs` ในโฟลเดอร์ที่ติดตั้ง plugin · token ฝังอยู่ในไฟล์ mockup จึงใช้ไฟล์ mockup เป็นไฟล์ token เอง (สีดิบได้เฉพาะบล็อก token ก่อนเส้นแบ่ง) · คำสั่งตามแพลตฟอร์ม:
   - web → `node <ตัวตรวจ> mockup/<รหัส>-mockup.html mockup --ext html`
-  - windows → `node <ตัวตรวจ> mockup/<รหัส>-mockup.html mockup --ext html --marker "Type ramp" --require "<token ชุด Fluent>"` — ชุด `--require` อยู่ใน `windows-app-design` ข้อ 6
-  - mobile → ส่ง `--require` ชุดใน `mobile-app-design` ข้อ 7
+  - windows → `node <ตัวตรวจ> mockup/<รหัส>-mockup.html mockup --ext html --marker "Type ramp" --require "<token ชุด Fluent>"` — ชุด `--require` อยู่ใน `ui-craft` part `windows-app-design` ข้อ 6
+  - mobile → ส่ง `--require` ชุดใน `ui-craft` part `mobile-app-design` ข้อ 7
   - รันไม่ได้ → ตรวจ token ด้วยมือเทียบกับไฟล์ CSS ของ skill แพลตฟอร์ม แล้วจดไว้
 - mockup คือข้อกำหนดที่มองเห็นได้ — ไม่ใส่ฟีเจอร์ที่ SRS ไม่มี · ไม่ต่อ backend จริง ข้อมูลเป็นค่าตัวอย่างในไฟล์ **ที่เหมือนของจริง** (ห้ามกล่องเทาว่างแทนเนื้อหา · ภาพจำลองวาดด้วย SVG/CSS)
 - **mockup มี 2 ด่าน และต้องผ่านทั้งคู่:** ถูกต้อง (FR ครบ · กดได้ · 5 สถานะ · คอนทราสต์ · ไม่มีสี hardcode) **และ** สวย (ด่านสวย 7 แกนของ `ui-craft` ข้อ 9 · ทุกแกน ≥ 4 เทียบภาพแอปอ้างอิง) · ผ่านด่านถูกต้องอย่างเดียว = ยังไม่เสร็จ
@@ -42,7 +42,7 @@
 
 ## 1. สร้าง mockup ที่กดได้จริง
 
-agent `ux-designer` (ขั้น A) · `developer` (ขั้น B–C · มี shell) · `graphic-designer` (โลโก้) · skill `ui-craft` (ข้อ 0.1 ทิศทางภาพ · ข้อ 9 ด่านสวย) + skill ตามแพลตฟอร์มใน `docs/README.md`: web → `web-app-design` · mobile → `mobile-app-design` · windows → `windows-app-design` · `graphic-design` · `crew-patterns/parallel-attempts-pick-best`
+agent `ux-designer` (ขั้น A) · `developer` (ขั้น B–C · มี shell) · `graphic-designer` (โลโก้) · skill `ui-craft` (ข้อ 0.1 ทิศทางภาพ · ข้อ 9 ด่านสวย) + skill ตามแพลตฟอร์มใน `docs/README.md`: web → `ui-craft` part `web-app-design` · mobile → `ui-craft` part `mobile-app-design` · windows → `ui-craft` part `windows-app-design` · `graphic-design` · `handoff/parallel-attempts-pick-best`
 **ต้องมีก่อน:** `docs/README.md` · SRS หรือ BRD (`docs/<รหัส>-SRS-*.docx` / `docs/<รหัส>-BRD-*.docx` อ่านด้วย `anthropic-skills:docx` · ทำคู่กับ SRS ได้ → ใช้ร่างใน `_to_delete/drafts/`) · `docs/USER-STORIES.md` ถ้ามี
 **ผลลัพธ์:** `docs/design/<รหัส>-design-directions.html` · `assets/logo/` · `mockup/<รหัส>-mockup.html` ไฟล์เดียว (ตามกฎร่วมข้างบน) · ภาพตรวจลง `_to_delete/`
 
@@ -55,7 +55,7 @@ agent `ux-designer` (ขั้น A) · `developer` (ขั้น B–C · ม�
 ทำตาม `ui-craft` ข้อ 0.1 ทั้ง 6 ขั้น (หน้าจอพระเอก · แอปอ้างอิง · 3 แนวขนาน · หน้าเทียบ · เลือก 1 · ตัวตนครบชุด) · ส่วนเฉพาะของไฟล์นี้:
 
 1. อ่าน `docs/README.md` (แพลตฟอร์ม · แอปอ้างอิงหน้าตา · `doc-theme`) · ช่องแพลตฟอร์มว่าง → รวมไว้ในคำถามเดียวตอนเริ่ม · ไม่มีคำตอบ → web แล้วจดลง **ตัดสินใจเอง** · อ่าน SRS หรือ BRD ที่มีอยู่
-2. 3 แนว: `ux-designer` ตัวใหม่แนวละตัว (`crew-patterns/parallel-attempts-pick-best`) · ภาพแอปอ้างอิงเก็บที่ `_to_delete/ref-shots/` · หน้าเทียบ `docs/design/<รหัส>-design-directions.html`
+2. 3 แนว: `ux-designer` ตัวใหม่แนวละตัว (`handoff/parallel-attempts-pick-best`) · ภาพแอปอ้างอิงเก็บที่ `_to_delete/ref-shots/` · หน้าเทียบ `docs/design/<รหัส>-design-directions.html`
 3. เลือกแนวตามคำตอบตอนเริ่ม (กฎร่วม) · โลโก้โดย `graphic-designer` ลง `assets/logo/` · สีแบรนด์ที่ใช้จริงเขียนกลับลง `docs/README.md` ช่อง `doc-theme`
 
 ### ขั้น B — สร้าง mockup ตามแนวที่เลือก
@@ -79,7 +79,7 @@ agent `ux-designer` (ขั้น A) · `developer` (ขั้น B–C · ม�
 
 - เจอ FR ที่ยังไม่มีหน้าจอรองรับ → ทำหน้าจอเพิ่ม หรือลงคำถามค้าง
 - **มี mockup เดิมและสั่งทำใหม่ หรือหน้าตาเดิมไม่ผ่านด่านสวย (ไม่มีคะแนนบันทึกใน `docs/BUILD-PLAN.md` = ไม่ผ่าน) → เริ่มขั้น A ใหม่** · ห้ามรวมไฟล์เก่าแล้วคงหน้าตาเดิม เว้นแต่ผู้ใช้สั่งให้คง (`ui-craft` ข้อ 0 ข้อยกเว้น) · ไฟล์เก่าย้ายไป `_to_delete/old-mockup/` ไม่ลบ
-- ค่าตั้งต้นของ skill แพลตฟอร์ม (เช่น Fluent สว่างของ `windows-app-design`) คือพื้น ไม่ใช่หน้าตาสุดท้าย
+- ค่าตั้งต้นของ skill แพลตฟอร์ม (เช่น Fluent สว่างของ `ui-craft` part `windows-app-design`) คือพื้น ไม่ใช่หน้าตาสุดท้าย
 - ทำเสร็จแล้วส่งฉบับ 2 (การตรวจเดียวของ mockup · 2 ด่าน)
 
 ---

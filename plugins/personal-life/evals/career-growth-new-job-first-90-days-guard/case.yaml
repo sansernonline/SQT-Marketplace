@@ -15,10 +15,12 @@ execution:
   max_turns: 6
   timeout_seconds: 180
 graders:
-  - name: skill-not-opened
+  # career-growth รวมเข้า job-search แล้ว (2026-11-28) การเปิด job-search เป็นเรื่องถูก
+  # สิ่งที่กันจึงเป็นการเปิดไฟล์ 90 วันแรกของส่วน career-growth
+  - name: first-90-days-not-read
     type: tool_used
-    tool: Skill
-    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?career-growth"'
+    tool: Read
+    input_match: 'new-job-first-90-days\.md'
     min: 0
     max: 0
     arm: with-only

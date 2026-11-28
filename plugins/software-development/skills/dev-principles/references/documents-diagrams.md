@@ -22,7 +22,7 @@
 - ตรวจแค่ในโปรแกรมแก้ไข ไม่เปิดไฟล์ที่ส่งออก → ฟอนต์หายและตัดคำไทยเพี้ยนตอนผู้อ่านเปิดจริง (S14, S15)
 
 ## ใช้คู่กับ
-skills: `document-design` · `diagrams` · `slide-deck` · `graphic-design` · playbook: `project-docs` · `review` · superuser: `design-gate/parts/design-method/guide.md`
+skills: `document-design` · `diagrams` · `slide-deck` · `graphic-design:design-by-type` · playbook: `project-docs` · `review` · superuser: `design-gate/parts/design-method/guide.md`
 
 ## Sources (checked 2026-11-27)
 - S1 · Assertion-Evidence Approach, Michael Alley, Penn State · https://www.assertion-evidence.com/ · หลัก 1 (หัวเรื่องเป็นประโยคสรุป พร้อมหลักฐานภาพ)

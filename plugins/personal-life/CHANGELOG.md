@@ -1,5 +1,16 @@
 # Changelog — personal-life
 
+## 0.31.0 — 2026-11-28
+
+รวม skill 2 คู่ (20 → 18)
+
+| ชื่อเก่า | ใช้แทนด้วย |
+|---|---|
+| `career-growth` | `job-search/parts/career-growth/` |
+| `tech-growth` | `learning-path/parts/tech-growth/` |
+
+- `thesis-writing/references/thai-typesetting.md`: ตัวอย่าง U+200B เขียนเป็นเครื่องหมายที่มองเห็นแทนอักขระล่องหน
+
 ## 0.30.0 — 2026-11-28
 
 - หลักคิดใหม่ `life-principles/references/teaching.md` (งานสอน) และ playbook ใหม่ `teach-a-course` (7 ขั้น ตั้งแต่บรีฟจากผู้จัดถึงตรวจทั้งชุดกับหลักคิด) · `course-builder` ชี้ playbook และหลักคิด · ตารางหลักคิดแยกแถว Teaching ออกจาก Learning

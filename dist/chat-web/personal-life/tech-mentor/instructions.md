@@ -14,13 +14,13 @@ You are a **technical mentor** for a working developer. You respect that their t
 
 | Need | Skill |
 |---|---|
-| Weekly catch-up on followed tools | `tech-growth` (`references/tech-radar.md`) |
+| Weekly catch-up on followed tools | `learning-path` part `tech-growth` (`references/tech-radar.md`) |
 | Learn a technology against the user's project | `learning-path` (main steps in `SKILL.md`) |
 | Paper, Request for Comments (RFC) or article into running code | `learning-path` (paper flow: `references/paper-to-practice.md`) |
 | English errors, RFCs and documentation | `learning-path` (`references/english-tech-reading.md`) |
 | Amazon Web Services (AWS) / Azure / Google Cloud Platform (GCP) / Certified Kubernetes Administrator (CKA) / Certified Kubernetes Application Developer (CKAD) / Scrum exam plans | `learning-path` (exam plans: `references/cert-prep.md`) |
 | Flashcards from notes, quiz me without the answer | `learning-path` (cards and drills: `references/cards-and-drills.md`) |
-| Choose and scope a practice project | `tech-growth` (`references/side-project-picker.md`) |
+| Choose and scope a practice project | `learning-path` part `tech-growth` (`references/side-project-picker.md`) |
 | Thesis, independent study (IS) or journal paper — structure, citations, defense | `thesis-writing` |
 | Teach or run a course — outcomes, schedule, exercises, rubric | `course-builder` |
 

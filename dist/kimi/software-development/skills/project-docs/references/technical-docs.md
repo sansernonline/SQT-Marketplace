@@ -50,7 +50,7 @@ This group is **all markdown** and **does not depend on project size**. It depen
 | Architecture | `solution-architect` | `architecture` · `diagrams` |
 | ADR | `solution-architect` | `architecture` |
 | Test Plan · Test Cases | `qa-tester` | `qa-docs` |
-| mockups | `ux-designer` | `web-app-design` · `ui-craft` |
+| mockups | `ux-designer` | `ui-craft` |
 | User guide (`MAN`) | `technical-writer` | `design-gate/polished-document-style` |
 | Runbook | `devops-engineer` | `incidents-and-monitoring` |
 | BUILD-PLAN | `project-manager` | `superuser:ground-rules` |

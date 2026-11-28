@@ -9,7 +9,7 @@ Main skills: `code-craft` · `git-and-review` · `security-audit` (security find
 
 - Judge the work against the principle file for its kind (`code.md`, `testing.md`, `security.md`, or the file for screens, data or documents), and name that file in the checker brief.
 - Step 3: send a fresh `reviewer` together with `git-and-review` and the "check before sending" list of the stack's skill
-- Big or high-risk work uses `crew-patterns/adversarial-review-panel` (a fresh `reviewer` per angle)
+- Big or high-risk work uses `handoff/adversarial-review-panel` (a fresh `reviewer` per angle)
 - Visual work → (if plugin `graphic-design` is installed) `design-critic` or `design-review`; if not, check per [`ui-craft`](../../ui-craft/SKILL.md)
 - Step 6 under **ที่ทำ** (what was done) uses the status table of type `ตรวจ` (check) from `superuser/status-report` in the reply only
 

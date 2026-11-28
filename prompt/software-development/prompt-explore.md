@@ -75,7 +75,7 @@ playbook `investigation` · agent `solution-architect` · skill `research-with-s
 
 ## 3. ทดลองหลายแบบ ให้ผลรันตัดสิน
 
-playbook `prototype` · agent `developer` · skill `crew-patterns/parallel-attempts-pick-best` · `decision-desk/decision-log`
+playbook `prototype` · agent `developer` · skill `handoff/parallel-attempts-pick-best` · `decision-desk/decision-log`
 **ผลลัพธ์:** `docs/research/prototype-<เรื่อง>.md` · โค้ดทดลองใน `_to_delete/prototype-<เรื่อง>/` · **ไม่ย้ายโค้ดทดลองเข้าโปรเจกต์ตรง ๆ**
 
 ### โจทย์ (ผู้ใช้กรอก)

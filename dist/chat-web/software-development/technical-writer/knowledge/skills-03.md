@@ -83,11 +83,11 @@ Moved from `worktree-and-branch.md` section 4 (2026-11-10)
 <!-- merged from skill `code-review-checklist` on 2026-11-27 · description was: Use when reviewing a pull request or your own code -->
 # Code Review Checklist — review a pull request or your own code, with actionable comments
 
-> **In SuperUser:** start from the playbook [`review`](../../superuser/references/playbook-review.md), then use this checklist for ordinary reviews. High-risk work or a large diff → `crew-patterns/adversarial-review-panel`.
+> **In SuperUser:** start from the playbook [`review`](../../superuser/references/playbook-review.md), then use this checklist for ordinary reviews. High-risk work or a large diff → `handoff/adversarial-review-panel`.
 
 ## Use when
 - Reviewing a pull request, self-reviewing before submitting, or auditing an existing module
-- Not for: a second look inside a team → a new `reviewer` agent (it applies this checklist) · contested design, large or high-risk diff, "stress test" → `crew-patterns/adversarial-review-panel` · reviewing a visual → `graphic-design:design-review` if installed, else `ui-craft` · writing the PR description → `pr-description-template.md` · hunting misleading patterns across the codebase → `code-craft` · scanners, secrets, dependency check, OWASP Top 10:2025 → `security-gate` (run both before merge; `owasp-top10.md`, `owasp-stack-checks.md`)
+- Not for: a second look inside a team → a new `reviewer` agent (it applies this checklist) · contested design, large or high-risk diff, "stress test" → `handoff/adversarial-review-panel` · reviewing a visual → `graphic-design:design-review` if installed, else `ui-craft` · writing the PR description → `pr-description-template.md` · hunting misleading patterns across the codebase → `code-craft` · scanners, secrets, dependency check, OWASP Top 10:2025 → `security-gate` (run both before merge; `owasp-top10.md`, `owasp-stack-checks.md`)
 
 ## Steps
 1. **Understand the intent:** read the PR description and linked ticket. For a branch or PR, pin the range first (`BASE=$(git merge-base main HEAD)` · `HEAD=$(git rev-parse HEAD)` · review `git diff $BASE..$HEAD`) and write both SHAs in the report.
@@ -114,7 +114,7 @@ Moved from `worktree-and-branch.md` section 4 (2026-11-10)
 8. **Avoid:** bikeshedding when there is no convention · "why not MY way" · only criticism · vague comments ("this is wrong": say why and suggest a fix) · reviewing too much at once (ask for PRs under 400 lines).
 
 ## Run as a command
-`/software-development:git-and-review <file path or PR description>` — use a new read-only `reviewer` agent to review **the user's request** (high-stakes or contested → `crew-patterns/adversarial-review-panel`). Open `superuser` with the playbook `review` and copy its steps into the todo first; use both together. The reviewer: reads the file(s) or diff and pins the range (step 1) · applies this skill · rates each finding **สูง** (must fix before merge) · **กลาง** (should fix) · **ต่ำ** (optional) · gives a concrete fix for each · outputs verdict **ผ่าน** / **ไม่ผ่าน** with counts per level (not the `blocking:`/`nit:` prefixes).
+`/software-development:git-and-review <file path or PR description>` — use a new read-only `reviewer` agent to review **the user's request** (high-stakes or contested → `handoff/adversarial-review-panel`). Open `superuser` with the playbook `review` and copy its steps into the todo first; use both together. The reviewer: reads the file(s) or diff and pins the range (step 1) · applies this skill · rates each finding **สูง** (must fix before merge) · **กลาง** (should fix) · **ต่ำ** (optional) · gives a concrete fix for each · outputs verdict **ผ่าน** / **ไม่ผ่าน** with counts per level (not the `blocking:`/`nit:` prefixes).
 
 The author does not fix every finding on sight: a finding can be wrong (misread code, or the "bug" is covered by a test). Push back with evidence (`file:line` · test name · command output), not opinion · fix what stands · list each rejected finding and its evidence in the report so the lead can judge.
 
@@ -321,7 +321,7 @@ Moved out of [SKILL.md](code-review-checklist.md). Open it for a large or unfami
 | Task | Use instead |
 |---|---|
 | Reviewing someone's PR or self-reviewing the code | `code-review-checklist.md` |
-| Adversarial review of a risky or contested change | `crew-patterns/adversarial-review-panel` |
+| Adversarial review of a risky or contested change | `handoff/adversarial-review-panel` |
 
 ## 0 · Look for an existing format first (every time)
 
@@ -476,10 +476,10 @@ Checked 2026-10-23
 ## Use when
 - 2 or more agents will edit files in the same repo at the same time (read-only agents need no worktree).
 - A spike or refactor may break things in a way that is hard to undo, or an urgent fix is needed while the main checkout has half-finished work (branch from `main`, no stash).
-- Comparing 2 approaches (`crew-patterns/parallel-attempts-pick-best`): one worktree per approach. Separate machines or port collisions → add `infra-and-deploy`.
+- Comparing 2 approaches (`handoff/parallel-attempts-pick-best`): one worktree per approach. Separate machines or port collisions → add `infra-and-deploy`.
 - A branch must be merged, closed, or cleaned up, or conflicts must be resolved.
 
-Not for: a single agent on a small reversible job → a plain branch · read-only work → `Explore` · a repo with no commit yet (make the first commit first). Splitting the work into pieces → `crew-patterns/parallel-split-and-merge` (its step "ห้ามเขียนที่เดียวกัน" points here).
+Not for: a single agent on a small reversible job → a plain branch · read-only work → `Explore` · a repo with no commit yet (make the first commit first). Splitting the work into pieces → `handoff/parallel-split-and-merge` (its step "ห้ามเขียนที่เดียวกัน" points here).
 
 ## Steps
 1. **Create.** Run `git worktree add ../<repo>-<task> -b <type>/<task> [main]`, then `git worktree list` (must show main + the new one).
@@ -723,7 +723,7 @@ Exception for the Stage deck: the "ตัวอย่าง" (example) line · t
 - Always state the data source: period, sample size, source (side strip or footer)
 - A table over 5 rows by 4 columns should not be on a slide: make it a chart, or move it to an attachment
 
-Chart colour palette: `diagrams` → `references/colour-by-domain.md` · for charts that must also be used with app screens, `web-app-design` (plugin `software-development`) → `references/tokens.md` "สีข้อมูล (กราฟ)" (data colours, charts).
+Chart colour palette: `diagrams` → `references/colour-by-domain.md` · for charts that must also be used with app screens, `ui-craft` part `web-app-design` (plugin `software-development`) → `references/tokens.md` "สีข้อมูล (กราฟ)" (data colours, charts).
 
 ## Thai on slides
 
@@ -747,7 +747,7 @@ Chart colour palette: `diagrams` → `references/colour-by-domain.md` · for cha
 | Spacing rules and eye order (app screens) | `ui-craft` (plugin `software-development`) |
 | Content comes from a Software Requirements Specification (SRS) | `requirements-writing` (plugin `software-development`) |
 | Cut content down to what is necessary | `superuser:ground-rules` |
-| Brand colour and type system · illustration | `graphic-design` (plugin `software-development`) |
+| Brand colour and type system · illustration | `graphic-design:design-by-type` (plugin `software-development`) |
 
 
 ## reference: deck-theme.md

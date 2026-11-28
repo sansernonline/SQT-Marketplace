@@ -1,6 +1,6 @@
 # skill: ui-craft
 
-Use with a platform skill when a task produces a screen or mockup
+Use when a task produces a screen or mockup for web, phone or Windows
 
 # ui-craft — spacing, type, order and state rules that make a screen or mockup consistent
 
@@ -12,27 +12,33 @@ Use with a platform skill when a task produces a screen or mockup
 > The app frame is neutral: title bar · header bar · toolbar · rail · nav · borders use gray-black lines and icons in the Windows theme style. The brand color lives in the data, primary buttons, small selection bars and the logo. Tint the frame only when the user says so.
 
 ## Use when
-- Building any user interface (UI), together with a platform skill, not instead of it.
+- Building any user interface (UI). Open the platform part below too: it holds the real colors, fonts, components and starter templates.
 - A screen "looks off" and you cannot say why, or you review a UI someone else made.
-- The platform has no dedicated skill yet (TV app · kiosk · smart watch).
+- The platform has no part yet (TV app · kiosk · smart watch).
 
-Not for: real colors, fonts, components (also chart colors) → `web-app-design` · `windows-app-design` · `mobile-app-design` (this skill sets no colors or fonts, only spacing, size, order and states) · printed documents → `document-design` · slides → `slide-deck`. User flow before drawing → agent `ux-designer` (template: [`references/ux-spec-outputs.md`](references/ux-spec-outputs.md)).
+| Platform | Open |
+|---|---|
+| Web app, dashboard, admin, SaaS, landing or scroll-motion site | [`parts/web-app-design/guide.md`](parts/web-app-design/guide.md) |
+| Phone app (PWA · React Native · Flutter) | [`parts/mobile-app-design/guide.md`](parts/mobile-app-design/guide.md) |
+| Native-looking Windows 11 app (WinUI 3 · MAUI · Avalonia) | [`parts/windows-app-design/guide.md`](parts/windows-app-design/guide.md) |
+
+Real colors, fonts, components (also chart colors) live in the platform parts above; this page sets only spacing, size, order and states. Not for: printed documents → `document-design` · slides → `slide-deck`. User flow before drawing → agent `ux-designer` (template: [`references/ux-spec-outputs.md`](references/ux-spec-outputs.md)).
 
 ## Steps
 
 ### 0 · Before creating a new page, check whether the project already has a look
-The project's own look beats the platform skill's starter theme (the `assets/` templates are for projects with no screens yet). **Two exceptions, where you redo section 0.1 instead of copying:** (1) the user or prompt orders a new design, or says the current look is not nice (2) the current look is a mockup that has not passed the beauty gate (section 9; no beauty-gate score recorded in `docs/BUILD-PLAN.md` = not passed). Move the old files to `_to_delete/`, do not delete them. A look that is real delivered code still wins unless there is a new-design order.
+The project's own look beats the platform part's starter theme (the `assets/` templates are for projects with no screens yet). **Two exceptions, where you redo section 0.1 instead of copying:** (1) the user or prompt orders a new design, or says the current look is not nice (2) the current look is a mockup that has not passed the beauty gate (section 9; no beauty-gate score recorded in `docs/BUILD-PLAN.md` = not passed). Move the old files to `_to_delete/`, do not delete them. A look that is real delivered code still wins unless there is a new-design order.
 
 Look in: `mockup/**/*.html` · `*.css` · `styles.css` · `theme.*` · `tokens.*` · `tailwind.config.*` · `lib/core/theme.dart` · `*.xaml` · `docs/deck/` · `docs/*.html` · the project README (a line saying which file the look comes from).
 
 **Found** → run `python -I scripts/design_tokens.py <folder found> --out docs/DESIGN.md` (draft of the values the code uses, with the places off the scale; it does not overwrite an existing file), then:
 1. Copy the whole structure of the nearest sibling page (same group): `<head>` fonts, top bar, side menu, margins.
-2. `<link>` the existing css file; do not copy tokens into a new file. A new file holds only what is unique to the page and uses the existing `var(--…)`. Mockup: a new page = a new `<section>` in the existing `mockup/<code>-mockup.html`, not a new file. Link the css while working; at delivery embed it in `<style>` per the single-file rule of the platform skill.
+2. `<link>` the existing css file; do not copy tokens into a new file. A new file holds only what is unique to the page and uses the existing `var(--…)`. Mockup: a new page = a new `<section>` in the existing `mockup/<code>-mockup.html`, not a new file. Link the css while working; at delivery embed it in `<style>` per the single-file rule of the platform part.
 3. Use existing classes for existing components (button · card · table · pill).
 4. Screenshot the old and new page at the same width side by side: background, top bar, heading font and buttons must be indistinguishable.
 5. If a value in this skill conflicts with the project's, use the project's and note it under `ตัดสินใจเอง`. Do not restyle old pages unless told to.
 
-**Not found** → use the platform skill's template, then write 1 line in the project README: `หน้าตา: mockup/<code>-mockup.html`.
+**Not found** → use the platform part's template, then write 1 line in the project README: `หน้าตา: mockup/<code>-mockup.html`.
 
 New project → pick 1 of 6 app characters before the first page: [`references/app-character.md`](references/app-character.md). Customer sends a Figma file → read it through the Figma MCP server, convert variables to tokens, then make the HTML mockup per this section; when to skip Figma → [`references/figma-to-code.md`](references/figma-to-code.md).
 
@@ -48,10 +54,10 @@ Full text: [`references/visual-direction.md`](references/visual-direction.md). I
 Sample content must look real: realistic data, real images per `image-generation`, no gray placeholder boxes, no "ตัวอย่าง" or "Lorem", team notes only in the mockup's control box.
 
 ### 1 · Spacing scale: `4 8 12 16 24 32 48 64`
-Every padding · margin · gap is a value in this scale, even when the platform skill conflicts, **except values measured from the real system and named in the exception list of `references/scales.md`** (for example Windows: content edge 36 · gap between sections 40). Things that belong together sit closer than things that do not. Card padding ≥ the gap inside. Details → [`references/scales.md`](references/scales.md).
+Every padding · margin · gap is a value in this scale, even when the platform part conflicts, **except values measured from the real system and named in the exception list of `references/scales.md`** (for example Windows: content edge 36 · gap between sections 40). Things that belong together sit closer than things that do not. Card padding ≥ the gap inside. Details → [`references/scales.md`](references/scales.md).
 
 ### 2 · Type scale
-At most 5 sizes per screen (web: lg 22 · md 15 · base 13 · sm 12 · xs 11) · smallest 11 · 2 weights · lines of 45–75 characters · Thai line-height +0.1. A marketing or landing page without motion uses the type scale and rhythm in [`references/scales.md`](references/scales.md#3--หน้าการตลาดและ-landing-ที่ไม่มี-motion) (with motion → `web-app-design`).
+At most 5 sizes per screen (web: lg 22 · md 15 · base 13 · sm 12 · xs 11) · smallest 11 · 2 weights · lines of 45–75 characters · Thai line-height +0.1. A marketing or landing page without motion uses the type scale and rhythm in [`references/scales.md`](references/scales.md#3--หน้าการตลาดและ-landing-ที่ไม่มี-motion) (with motion → `ui-craft` part `web-app-design`).
 
 ### 3 · Visual order: one screen, one important thing
 Ask what the user opened this page to do. That item gets level 1.
@@ -107,9 +113,9 @@ On-screen wording (full rules: `human-writing` `references/thai-grammar.md` sect
 Dense 32–36px (data tables · all-day users) · Normal 40–44px (general apps) · Airy 48–56px (marketing · occasional use). Tap target ≥ 44×44 pt iOS · ≥ 48×48 dp Android, enlarged with padding or a pseudo-element, not a bigger icon. No airy rows mixed into dense.
 
 ### 9 · Check the work
-1. Render and look (the platform skill says how), then go through the 3 checklists in [`references/states-and-checks.md`](references/states-and-checks.md): correctness (squint · spacing scale · ≤ 5 sizes · 1 solid button · 5 states · contrast · shrink the window) · countable beauty (icons · content ≥ 60 % of the screen · equal row heights · boxes ≤ 3 · hide the mockup's controls) · **beauty gate `ด่านสวย`** (score 7 axes against the reference app image; pass when every axis ≥ 4). Passing the first 2 can still be ugly; a mockup sent for approval must pass the beauty gate.
+1. Render and look (the platform part says how), then go through the 3 checklists in [`references/states-and-checks.md`](references/states-and-checks.md): correctness (squint · spacing scale · ≤ 5 sizes · 1 solid button · 5 states · contrast · shrink the window) · countable beauty (icons · content ≥ 60 % of the screen · equal row heights · boxes ≤ 3 · hide the mockup's controls) · **beauty gate `ด่านสวย`** (score 7 axes against the reference app image; pass when every axis ≥ 4). Passing the first 2 can still be ugly; a mockup sent for approval must pass the beauty gate.
 2. Send the image to a subagent that did not make it, **with the reference app image at the same size**, and ask for the 7-axis score, 2–3 problems per page with CSS-level fixes, no praise, and 1 more answer: **bolder or quieter**, with the single point to fix. Reviewer order: `graphic-design:design-critic` if installed → `graphic-designer` → `general-purpose`; none callable → minimum path in 0.1 step 3. The correctness reviewer (clicks · Functional Requirement (FR) · contrast) and the beauty reviewer are different ones. Public web pages (marketing · landing) always also go to `design-critic` of plugin `graphic-design`; not installed → say so in the report.
-3. After fixing, take new screenshots. The number of rounds follows the beauty-gate cap in `references/states-and-checks.md`, in that one place only (sample commands: platform skill, for example `windows-app-design` section 6 and `references/review.md`).
+3. After fixing, take new screenshots. The number of rounds follows the beauty-gate cap in `references/states-and-checks.md`, in that one place only (sample commands: `scripts/screenshot.py` and section 6 of the platform part, for example [`parts/web-app-design/guide.md`](parts/web-app-design/guide.md)).
 4. The page passed but one piece does not fit → try live values in the browser or make 3 variants for the reviewer: [`references/live-and-variants.md`](references/live-and-variants.md).
 5. Multi-page work: get the 3 main pages to pass first, then the rest.
 6. The first page of a single-file mockup (`#s-start`) is a table of contents for the reviewer, not an app page: build it with `scripts/mockup-start-page.py` per [`references/mockup-start-page.md`](references/mockup-start-page.md).
@@ -188,7 +194,7 @@ Comparison image: [`../assets/app-character-sheet.webp`](../assets/app-character
 | Illustration | none | very little | photos lead | drawings, mascot | mascot, stars, rewards | large photos |
 | Message tone | direct, short, technical terms allowed | polite, clear, no alarming terms | friendly | playful, emoji allowed | easy words, praise often | few words, chosen words |
 
-Choose the brand's tone axis and level of polish per `graphic-design` section 2, then compare with this table. If they do not fit (for example a "challenging" brand in a character-2 app), tell the user.
+Choose the brand's tone axis and level of polish per `graphic-design:design-by-type` section 2, then compare with this table. If they do not fit (for example a "challenging" brand in a character-2 app), tell the user.
 
 ## 3 · What does not change in any character
 
@@ -203,7 +209,7 @@ Choose the brand's tone axis and level of polish per `graphic-design` section 2,
 
 - Write the chosen character as the first-line comment of the token file, for example `/* app-character: 1 work-tool */`, and put it in the `ตัดสินใจเอง` (decided on my own) table in `docs/BUILD-PLAN.md` with the answers to the 4 questions
 - **Word documents (`document-design`):** use the same brand color set, but the document body stays formal, because the readers are the approvers. Apps of character 4–5 may change only the cover, which can use brighter colors and rounder corners.
-- **Logo (`graphic-design`):** the shape must lean the same way. Characters 1–2 use a square block with rounded edges. Characters 4–5 use very round shapes or a mascot.
+- **Logo (`graphic-design:design-by-type`):** the shape must lean the same way. Characters 1–2 use a square block with rounded edges. Characters 4–5 use very round shapes or a mascot.
 
 
 ## reference: depth-and-flourish.md
@@ -211,7 +217,7 @@ Choose the brand's tone axis and level of polish per `graphic-design` section 2,
 # Depth and surface flourish (depth and flourish)
 
 Realistic shadows, paper surface, clay and torn edges, for screens and mockups · use together with `SKILL.md` section 4 (shadow only for things that really float · 3 depth levels · still cards get no shadow), not instead of it
-The web app's shadow tokens (`--shadow-color` · `--elev-1` to `--elev-3` · the nested-corner formula) are in `web-app-design` → `references/tokens.md` · the looks that use each language are in [`web-looks.md`](web-looks.md)
+The web app's shadow tokens (`--shadow-color` · `--elev-1` to `--elev-3` · the nested-corner formula) are in `ui-craft` part `web-app-design` → `references/tokens.md` · the looks that use each language are in [`web-looks.md`](web-looks.md)
 
 ## Contents
 
@@ -411,7 +417,7 @@ Checked on MDN on 2026-10-23; every item in this list is Baseline widely availab
 
 # Figma as the source (figma-to-code)
 
-The customer sends a Figma file → read it through Figma's Model Context Protocol (MCP) server and convert it into our HTML mockup · use together with `SKILL.md` section 0 (the project's look wins) and the tokens in `web-app-design` → `references/tokens.md`
+The customer sends a Figma file → read it through Figma's Model Context Protocol (MCP) server and convert it into our HTML mockup · use together with `SKILL.md` section 0 (the project's look wins) and the tokens in `ui-craft` part `web-app-design` → `references/tokens.md`
 The tools, plans and quotas come from Figma's documentation, opened and checked 2026-10-23 (the "Sources" table) · Figma itself writes that quotas can change at any time; open the same pages again before proposing a plan to the customer
 
 ## Contents
@@ -587,7 +593,7 @@ Never deliver work whose values live only in the browser — they vanish when th
 Use for a piece with several routes where choosing wrong is costly (hero · main card · empty page) · for small pieces (button color · corner radius) section 1 is enough
 
 1. Name exactly 1 piece (for example `product card in the list page`) and what must not change (tokens · sample data · box size)
-2. Make **3 genuinely different variants** — different in structure (image on top/beside · price prominent/name prominent), not just in color · for a large piece, send one new subagent per variant per `crew-patterns/parallel-attempts-pick-best`
+2. Make **3 genuinely different variants** — different in structure (image on top/beside · price prominent/name prominent), not just in color · for a large piece, send one new subagent per variant per `handoff/parallel-attempts-pick-best`
 3. Put all 3 variants in the existing mockup file and switch with an attribute; do not make 3 files:
    ```html
    <div class="variants" data-show="a">
@@ -622,7 +628,7 @@ Use for a piece with several routes where choosing wrong is costly (hero · main
 # First page of a single-file mockup (`#s-start`)
 
 This page is the table-of-contents page of the mockup that the reviewer opens as the first page. **It is not a page in the app.** Large cards filling the screen are allowed here.
-The start page inside a real app follows the platform skill, for example `windows-app-design` → `patterns.md` item 8, which forbids large cards.
+The start page inside a real app follows the platform skill, for example `ui-craft` part `windows-app-design` → `patterns.md` item 8, which forbids large cards.
 
 Sample image: [`../assets/mockup-start-page-preview.webp`](../assets/mockup-start-page-preview.webp) (project Telex, 32 screens) · this image was taken before the decorations were removed (glow · gradient · label above the heading); look at the structure, not the look.
 
@@ -683,7 +689,7 @@ This scale controls only padding · margin · gap; corner radius and component s
 
 | Platform | Value | Source |
 |---|---|---|
-| Windows | content edge left/right 36 · gap between sections 40 | `windows-app-design` → `references/tokens.md` (measured from Windows 11) |
+| Windows | content edge left/right 36 · gap between sections 40 | `ui-craft` part `windows-app-design` → `references/tokens.md` (measured from Windows 11) |
 
 Other values of the platform skill that are not in this table use this scale
 
@@ -737,7 +743,7 @@ If you want emphasis, change the **color** or the **size** first; do not rush to
 
 ## 3 · หน้าการตลาดและ landing ที่ไม่มี motion
 
-Use for pages people read down one section at a time (sales page · product home page · launch page) · apps and dashboards use sections 1–2 · pages that move section by section with scrolling → `web-app-design`
+Use for pages people read down one section at a time (sales page · product home page · launch page) · apps and dashboards use sections 1–2 · pages that move section by section with scrolling → `ui-craft` part `web-app-design`
 
 The values in the table are starting values, set from the real page trial of 2026-11-06 and not yet measured from a prototype site · once a prototype is chosen (`design-gate/design-references`), you may measure the sizes from the prototype instead and note the source beside the token
 
@@ -869,7 +875,7 @@ Take screenshots of the hero screen + 2 frequently used pages, in both themes, a
 - **Every platform:** the app frame (title bar · header bar · toolbar · rail · nav · borders) is gray-black lines and icons, not tinted with the brand color unless the user says so · the brand color lives in the data and primary buttons
 - **web · mobile:** status labels are solid-background, not thin white outlines · a large solid block of color = the main-number card · hero · chart
 - **Windows · depth and imagery axis:** depth uses Mica and Fluent elevation, no extra card shadows, and icons use Fluent — doing this does not count as a failed item
-- **Windows:** color comes through the 3×16px selection bar · hero screen · main metric numbers (Key Performance Indicator · KPI) and charts · 1 primary button · status labels are a 6–8px dot + text, not a solid background, and the notice bar is a neutral background (`windows-app-design` → `references/patterns.md` items 7–8) — doing this does not count as a failed item
+- **Windows:** color comes through the 3×16px selection bar · hero screen · main metric numbers (Key Performance Indicator · KPI) and charts · 1 primary button · status labels are a 6–8px dot + text, not a solid background, and the notice bar is a neutral background (`ui-craft` part `windows-app-design` → `references/patterns.md` items 7–8) — doing this does not count as a failed item
 
 Below 4 on any axis = level 3 or lower · for the hero-screen axis, no hero page at all = 1
 
@@ -973,13 +979,13 @@ Open this before drawing the first screen of a new project or a new design. The 
 1. **1 hero screen.** Write 1 sentence on which moment, when the product works, makes the viewer say wow, then make that page show that moment (camera app → the camera image with the analysis overlay · terminal → a session with real colored logs · dashboard → numbers with a story). The hero screen is not a settings page or a form. Marketing page or landing: the hero screen is the opening section. It must have at least 1 real thing from the product (a screenshot in use · real numbers · a real customer voice) and at 1440 width must leave no unintended empty space over 1/3 of the screen (eye gate `ด่านตา` of `design-gate/no-ai-look`, items 3.2 and 10).
 2. **Reference app.** Read it from `docs/README.md` or the request (local path · app name · description). Take screenshots from 2–3 official pages into `_to_delete/ref-shots/` (for comparison during review only; never put them in the deliverable), then note 5 things that make it look good (theme · color · density · window frame or header bar · sample content). Do not copy the logo or images.
    Always search live, even if the customer has a reference app (pre-start gate). Has a reference app → use that app's colors, and use the search for structure and elements. No reference app → search for prototypes first: take the project's keywords and search live per `design-gate/design-references` (plugin `superuser`), type `web` · `app` · `dashboard` as the work needs, then extract colors from the chosen work. The stored palette library is for when live search is not possible. Pick 2–3 works and note the same 5 things for each.
-3. **3 directions, made in parallel** (`crew-patterns/parallel-attempts-pick-best` · one new subagent per direction). The starting point of each direction (a 2-mode palette that passes contrast · a Thai-Latin font pair · look) uses the colors extracted from the prototypes in step 2; pass them into [`design-system`](../../design-system/SKILL.md) via `--palette` before choosing by yourself. Each direction makes only the hero screen + 1 main working page, in both themes (return only the file paths and a summary of at most 15 lines per direction). The directions must be genuinely different: (a) close to the reference app (no reference app → close to the chosen character) (b) platform-native but lifted (c) bolder. Every direction states the app character ([`app-character.md`](app-character.md)) · brand color · font and type character chosen from the project basics (soft round · fast angular · plain modern · formal · classic luxury · handwriting, per [`font-voice.md`](font-voice.md), then pass `--voice` into `design_draft.py`) · corner radius · density.
+3. **3 directions, made in parallel** (`handoff/parallel-attempts-pick-best` · one new subagent per direction). The starting point of each direction (a 2-mode palette that passes contrast · a Thai-Latin font pair · look) uses the colors extracted from the prototypes in step 2; pass them into [`design-system`](../../design-system/SKILL.md) via `--palette` before choosing by yourself. Each direction makes only the hero screen + 1 main working page, in both themes (return only the file paths and a summary of at most 15 lines per direction). The directions must be genuinely different: (a) close to the reference app (no reference app → close to the chosen character) (b) platform-native but lifted (c) bolder. Every direction states the app character ([`app-character.md`](app-character.md)) · brand color · font and type character chosen from the project basics (soft round · fast angular · plain modern · formal · classic luxury · handwriting, per [`font-voice.md`](font-voice.md), then pass `--voice` into `design_draft.py`) · corner radius · density.
    Every direction states its starting look ([`web-looks.md`](web-looks.md) · no 2 directions may use the same look) and the **1 point of boldness** it commits to (for example a full-width real image in the hero screen · a heading font with character), and the rest stays quiet.
    **The owner has a preferred style** (`~/.claude/superuser-style.md`, section "สไตล์ออกแบบที่ชอบ") → direction (a) starts from that style instead of the industry look: corners, shadows, softness of color, icons, and the type of hero image per the prototypes the owner chose (the nearest look in `web-looks.md`, for example soft SaaS). The industry sets only the content and the prohibitions. Reason: the trial page on 2026-11-06 came out as an industry-standard quiet utility, and the user answered on 2026-11-09 that the layout was better but lacked rounded corners, shadows, soft colors, graphics and icons.
    **Cannot call sub-agents** (no subagent tool · subagent fails · budget not enough) → minimum path, never skip to a single direction: make the 3 directions yourself, only for the opening section or the hero screen, at 1440 and 375 width in one file. Take screenshots and critique one direction at a time with the eye gate `ด่านตา` of `design-gate/no-ai-look` item 3.2 and the beauty gate section 9. Record that direction's score before opening the next one. Choose the highest score and note under `## ตัดสินใจเอง` that there was no separate reviewer.
 4. **Comparison page** `docs/design/<code>-design-directions.html`: the 3 directions side by side + the reference app image. Under each direction, the main tokens and 1 line of pros/cons.
 5. **Choose 1 direction.** At the start of the work, ask the user once "do you want to choose the direction yourself?". Yes → stop and let them choose at this step. No → a new beauty-gate reviewer (order: `graphic-design:design-critic` if installed → `graphic-designer` → `general-purpose` told to critique only) scores per section 9, then choose the highest score and record it under `## ตัดสินใจเอง`.
-6. **Complete identity.** The logo (`graphic-design` · works at 16px) sits in the title bar/app icon. Write the chosen direction's brand color back into `docs/README.md`, field `doc-theme`, so documents use the same color.
+6. **Complete identity.** The logo (`graphic-design:design-by-type` · works at 16px) sits in the title bar/app icon. Write the chosen direction's brand color back into `docs/README.md`, field `doc-theme`, so documents use the same color.
 
 **Sample content must look real.** Realistic data. Photos and main illustrations (hero · product or service cards · people) use real images per `image-generation` (plugin `graphic-design` · agent `image-artist` · order: generate with the session's tool → draw a full-scene SVG illustration → free stock photo · no setup needed). Ask about the image direction once at the start. No basic shapes (triangle, circle, square) placed in place of the real thing. No empty gray boxes in place of content, no "ตัวอย่าง" or "Lorem". Team notes (requirement codes · "รอยืนยัน") live only in the mockup's control box; never mix them into program text.
 
@@ -1029,7 +1035,7 @@ Values are a starting point; if they conflict with `app-character.md` or the pro
 | 11 | Thai craft | 3 · 6 | mulberry-paper color + 1 natural dye color (indigo, lac, turmeric) | Thai headings with handwriting heads (Itim) or print forms (Trirong) paired with Latin serif · body Taviraj | 0–4px or torn edge | paper (grain · torn edge · SVG hand-drawn line) | the line draws in once ≤ 400ms, the rest stays still |
 | 12 | soft SaaS | 1 · 3 · 6 | white or white tinted 1–3 % with the brand color · white cards · main color of medium brightness (HSL L 45–60 %), not a very dark color on white · white text on the main color must pass 4.5:1; if it fails, lower L or use dark text · badge background uses the main color at 8–12 % · icons are lines in the main color beside headings, with no frame · every gray tinted with the brand color | bold sans heading 700, large · Thai has no heads | card 12–16px · items inside 8–10px · button 10px or capsule | layered shadow (formula 1 tinted to the background hue · cards use the lower 2 layers, the standout piece uses all 4) + top edge catching light on the primary button | 200–300ms ease-out · a clickable card lifts 2px on hover with transform |
 
-Fonts in the table: Trirong · Taviraj · Itim are Thai faces with heads by Cadson Demak (OFL per google/fonts · checked 2026-10-23) · Kanit and the Thai-with-Latin pairing rules are in `web-app-design` section 6
+Fonts in the table: Trirong · Taviraj · Itim are Thai faces with heads by Cadson Demak (OFL per google/fonts · checked 2026-10-23) · Kanit and the Thai-with-Latin pairing rules are in `ui-craft` part `web-app-design` section 6
 
 ## Matching looks so the 3 directions are genuinely different
 

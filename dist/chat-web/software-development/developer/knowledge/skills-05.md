@@ -214,7 +214,7 @@ One criterion: the files to be touched must not overlap at all (see the "files t
 | A **read-only** checking agent running alongside an agent that writes code | Work that already has to wait for the result of another task |
 | Turning requirements into tests for several modules at once | When there is no plan yet |
 
-- Each agent that writes files gets its own worktree, per `superuser/references/code-extensions.md` section "crew-patterns" (including how to handle uncommitted work).
+- Each agent that writes files gets its own worktree, per `superuser/references/code-extensions.md` section "handoff" (including how to handle uncommitted work).
 - Every split-off agent receives: the IDs of the requirements it owns · the list of files it may touch · the test command · all of the iron rules (especially rule 3).
 - Never let a split-off agent edit `BUILD-PLAN.md`. It reports back, and the main agent writes the one file.
 
@@ -1029,8 +1029,8 @@ This skeleton answers "what does 1 message (request · job · document) pass thr
 
 | Task | Use instead |
 |---|---|
-| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) (plugin `software-development`) |
-| Chart colours and chart design in an app or dashboard | `web-app-design` (plugin `software-development`) → `tokens.md` "สีข้อมูล (กราฟ)" |
+| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`ui-craft` parts `web-app-design` · `windows-app-design` · `mobile-app-design`) (plugin `software-development`) |
+| Chart colours and chart design in an app or dashboard | `ui-craft` part `web-app-design` (plugin `software-development`) → `tokens.md` "สีข้อมูล (กราฟ)" |
 | Designed figure for a proposal, slide or print | `diagrams` |
 
 ## Decision tree: which format?
@@ -1044,7 +1044,7 @@ What are you showing?
 │                                              project document (BRD · Software Requirements Specification (SRS) · FSD · ADR) or read outside the team → `diagrams`
 ├─ Architecture / Entity-Relationship (ER) / class → same rule as the line above
 ├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
-├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design (plugin `software-development`) tokens.md "สีข้อมูล (กราฟ)"
+├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from ui-craft part web-app-design (plugin `software-development`) tokens.md "สีข้อมูล (กราฟ)"
 ├─ Photo, screenshot, complex illustration  →  External file → ![alt](figures/x.png) (file in `docs/figures/`)
 └─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
 ```
@@ -1256,7 +1256,7 @@ In a README · Pull Request · note in code:
 - Review a diagram someone else drew
 
 
-Not for: choosing SVG / ASCII / Mermaid → `markdown-visuals.md` · screenshots and wireframes → `ui-craft` + the platform skill · data charts → `web-app-design` `tokens.md` heading "สีข้อมูล (กราฟ)" · choosing an architecture → `architecture`
+Not for: choosing SVG / ASCII / Mermaid → `markdown-visuals.md` · screenshots and wireframes → `ui-craft` + the platform skill · data charts → `ui-craft` part `web-app-design` `tokens.md` heading "สีข้อมูล (กราฟ)" · choosing an architecture → `architecture`
 
 ## 1 · Which question, which diagram
 
@@ -2739,7 +2739,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 ```ts
 this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r));
 // r.status = 'up' | 'degraded' | 'down' → แสดงเป็น pill สีเขียว/เหลือง/แดง
-// (ใช้คลาส .pill-green / .pill-amber / .pill-red จาก web-app-design)
+// (ใช้คลาส .pill-green / .pill-amber / .pill-red จาก ui-craft ส่วน web-app-design)
 ```
 
 ---

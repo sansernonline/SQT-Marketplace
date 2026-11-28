@@ -93,7 +93,7 @@ A document that outsiders must not see does not go on a public site. Keep it as 
 
 ## 5 · Thai fonts
 
-- Use the same fonts as the app: `Inter` + `Noto Sans Thai` (`web-app-design` → `references/tokens.md`) · other Google Fonts choices that have Thai letters and are OFL: Sarabun · IBM Plex Sans Thai · Anuphan
+- Use the same fonts as the app: `Inter` + `Noto Sans Thai` (`ui-craft` part `web-app-design` → `references/tokens.md`) · other Google Fonts choices that have Thai letters and are OFL: Sarabun · IBM Plex Sans Thai · Anuphan
 - Load through the Google Fonts CSS2 API with `display=swap` · the API splits out the `/* thai */` block with `unicode-range: U+0E01-0E5B …` by itself, so the browser loads only the parts the page uses (seen in the CSS the API returned 2026-10-23)
 - Thai line-height is the English value plus 0.1 (`ui-craft` item 2)
 - Set the font in the slot the theme exposes · the setting names and CSS variables of each theme have not been checked
@@ -395,7 +395,7 @@ python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE> 
 
 ## 4 · Who writes which doc, with which skill
 
-Full table (agent · skill for each of 16 doc types): [`technical-docs.md`](technical-docs.md). Main ones: SRS → `requirements-writing` · FSD → `requirements-writing` · ADR → `architecture` · Test → `qa-docs` · mockup → `web-app-design` + `ui-craft` · README → `project-bootstrap`
+Full table (agent · skill for each of 16 doc types): [`technical-docs.md`](technical-docs.md). Main ones: SRS → `requirements-writing` · FSD → `requirements-writing` · ADR → `architecture` · Test → `qa-docs` · mockup → `ui-craft` · README → `project-bootstrap`
 
 ---
 
@@ -566,7 +566,7 @@ This group is **all markdown** and **does not depend on project size**. It depen
 | Architecture | `solution-architect` | `architecture` · `diagrams` |
 | ADR | `solution-architect` | `architecture` |
 | Test Plan · Test Cases | `qa-tester` | `qa-docs` |
-| mockups | `ux-designer` | `web-app-design` · `ui-craft` |
+| mockups | `ux-designer` | `ui-craft` |
 | User guide (`MAN`) | `technical-writer` | `design-gate/polished-document-style` |
 | Runbook | `devops-engineer` | `incidents-and-monitoring` |
 | BUILD-PLAN | `project-manager` | `superuser:ground-rules` |
@@ -817,7 +817,7 @@ Use when naming a product, shop, app or brand
 - There are several products and the names should form one family
 - You must choose from a brainstormed list of names and cannot decide
 
-Not for: logo, colours, brand typography → `graphic-design` · naming document files → `workspace-rules/document-naming` · naming tables and columns → `database-design` · naming endpoints → `api-design`
+Not for: logo, colours, brand typography → `graphic-design:design-by-type` · naming document files → `workspace-rules/document-naming` · naming tables and columns → `database-design` · naming endpoints → `api-design`
 
 ---
 
@@ -957,7 +957,7 @@ If even 1 person types it differently, the name fails.
 
 ## Related skills
 
-Logo, colours, typography → `graphic-design` · same product already exists under this name → `research-with-sources/prior-art-review` · names in documents → `workspace-rules/document-naming` · feature terms inside the product → `i18n-and-locale` · presenting the shortlist → `slide-deck`. A shortlist table you can fill in right away → `assets/name-shortlist.md`
+Logo, colours, typography → `graphic-design:design-by-type` · same product already exists under this name → `research-with-sources/prior-art-review` · names in documents → `workspace-rules/document-naming` · feature terms inside the product → `i18n-and-locale` · presenting the shortlist → `slide-deck`. A shortlist table you can fill in right away → `assets/name-shortlist.md`
 
 
 ## reference: formula-9-deep-dive.md

@@ -307,7 +307,7 @@ So: remove the phrase spaces, and put U+200B at every Thai word boundary. The te
 3. Insert U+200B at word boundaries with a Thai tokenizer (PyThaiNLP `word_tokenize(text, engine="newmm")`) inside the body paragraphs only
 4. Set body paragraphs (Thai, at least about 100 characters, not centred) to Thai Distributed. In python-docx: `paragraph.alignment = WD_ALIGN_PARAGRAPH.THAI_JUSTIFY`
 5. Change text run by run so bold labels and fonts survive. Then check that, after removing spaces and U+200B, each paragraph has exactly the same characters as before
-6. Export to PDF with Word and look at every page. A line with letters spread apart means a break point is still missing there. The usual culprit is a long compound the tokenizer keeps whole (การประมวลผล, ความเชื่อมั่น) right after an English word: add U+200B inside it (การ​ประมวล​ผล) and export again
+6. Export to PDF with Word and look at every page. A line with letters spread apart means a break point is still missing there. The usual culprit is a long compound the tokenizer keeps whole (การประมวลผล, ความเชื่อมั่น) right after an English word: add U+200B inside it (การ|ประมวล|ผล, where each `|` stands for one U+200B) and export again
 
 ## Check before sending
 

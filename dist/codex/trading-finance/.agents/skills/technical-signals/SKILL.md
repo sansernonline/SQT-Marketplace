@@ -71,4 +71,4 @@ Daily chart, illustrative numbers (ABC 48.50 breakout: trend, momentum, volume, 
 
 Per symbol: timeframe and parameters used · one-line trend · one-line momentum · volume note · nearest support/resistance · the single thing to watch next · the invalidation price. Close with "technicals describe odds, not certainty".
 
-Related: put levels on the watchlist with `market-watch`; practise the setup first with `trade-practice`.
+Related: put levels on the watchlist with `market-watch`; practise the setup first with `trade-journal` part `trade-practice`.

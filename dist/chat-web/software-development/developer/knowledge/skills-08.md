@@ -1008,7 +1008,7 @@ Do not use when: writing a Dockerfile or image for a real deploy → [`kubernete
   - If the project needs a database, cache, or browser, add it as a service in the **same lab** (one stack). Do not create a separate lab.
 - **The base image is shared across the whole machine.** `sqt-sandbox-base:1` (Node · Python · Git · Playwright Chromium · Claude Code) is built once. Each project's image adds only a thin layer the project needs, so disk is not used twice.
 - **A stopped lab uses no CPU or memory**, only disk. Run `stop` when you finish a task, and `stop-all` when you finish for the day.
-- **Extra temporary labs** (`-Name <project>-a1`) are for trying several paths in parallel when they need truly separate machines. (For ordinary multi-path trials, use one git worktree per attempt following `crew-patterns/parallel-split-and-merge`; it is faster.) `destroy` them as soon as you pick a path.
+- **Extra temporary labs** (`-Name <project>-a1`) are for trying several paths in parallel when they need truly separate machines. (For ordinary multi-path trials, use one git worktree per attempt following `handoff/parallel-split-and-merge`; it is faster.) `destroy` them as soon as you pick a path.
 - **Never put several projects in one lab**, because installed things collide, one project's breakage spreads to another, and you cannot wipe one project at a time.
 
 ## 2 · Two modes: choose by the work
@@ -2384,7 +2384,7 @@ A document that outsiders must not see does not go on a public site. Keep it as 
 
 ## 5 · Thai fonts
 
-- Use the same fonts as the app: `Inter` + `Noto Sans Thai` (`web-app-design` → `references/tokens.md`) · other Google Fonts choices that have Thai letters and are OFL: Sarabun · IBM Plex Sans Thai · Anuphan
+- Use the same fonts as the app: `Inter` + `Noto Sans Thai` (`ui-craft` part `web-app-design` → `references/tokens.md`) · other Google Fonts choices that have Thai letters and are OFL: Sarabun · IBM Plex Sans Thai · Anuphan
 - Load through the Google Fonts CSS2 API with `display=swap` · the API splits out the `/* thai */` block with `unicode-range: U+0E01-0E5B …` by itself, so the browser loads only the parts the page uses (seen in the CSS the API returned 2026-10-23)
 - Thai line-height is the English value plus 0.1 (`ui-craft` item 2)
 - Set the font in the slot the theme exposes · the setting names and CSS variables of each theme have not been checked
@@ -2686,7 +2686,7 @@ python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE> 
 
 ## 4 · Who writes which doc, with which skill
 
-Full table (agent · skill for each of 16 doc types): [`technical-docs.md`](technical-docs.md). Main ones: SRS → `requirements-writing` · FSD → `requirements-writing` · ADR → `architecture` · Test → `qa-docs` · mockup → `web-app-design` + `ui-craft` · README → `project-bootstrap`
+Full table (agent · skill for each of 16 doc types): [`technical-docs.md`](technical-docs.md). Main ones: SRS → `requirements-writing` · FSD → `requirements-writing` · ADR → `architecture` · Test → `qa-docs` · mockup → `ui-craft` · README → `project-bootstrap`
 
 ---
 
@@ -2857,7 +2857,7 @@ This group is **all markdown** and **does not depend on project size**. It depen
 | Architecture | `solution-architect` | `architecture` · `diagrams` |
 | ADR | `solution-architect` | `architecture` |
 | Test Plan · Test Cases | `qa-tester` | `qa-docs` |
-| mockups | `ux-designer` | `web-app-design` · `ui-craft` |
+| mockups | `ux-designer` | `ui-craft` |
 | User guide (`MAN`) | `technical-writer` | `design-gate/polished-document-style` |
 | Runbook | `devops-engineer` | `incidents-and-monitoring` |
 | BUILD-PLAN | `project-manager` | `superuser:ground-rules` |

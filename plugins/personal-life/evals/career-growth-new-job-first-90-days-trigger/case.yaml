@@ -5,7 +5,7 @@ name: career-growth-new-job-first-90-days-trigger
 description: ผู้ใช้เซ็นสัญญางานใหม่แล้ว เริ่มงานต้นเดือนหน้า ขอแผนช่วงแรกและวิธีผ่านทดลองงาน ไม่เอ่ยชื่อ skill ต้องทำให้ new-job-first-90-days ถูกเปิด
 tags: [trigger, career-growth]
 runs: 3
-expected_outcome: เรียก Skill new-job-first-90-days แล้วมีคำถามถามหัวหน้าในสัปดาห์แรกว่าความสำเร็จใน 90 วันหน้าตาอย่างไร และเป้า 30/60/90 วัน
+expected_outcome: เรียก Skill job-search แล้วเปิด new-job-first-90-days แล้วมีคำถามถามหัวหน้าในสัปดาห์แรกว่าความสำเร็จใน 90 วันหน้าตาอย่างไร และเป้า 30/60/90 วัน
 execution:
   prompt: |
     เพิ่งเซ็นสัญญางานใหม่ตำแหน่ง data analyst เริ่ม 1 ธ.ค. ทดลองงาน 119 วัน
@@ -16,7 +16,7 @@ graders:
   - name: skill-opened
     type: tool_used
     tool: Skill
-    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?career-growth"'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?job-search"'
     min: 1
     arm: with-only
   - name: has-90-day-stages

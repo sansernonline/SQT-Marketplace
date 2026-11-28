@@ -24,9 +24,9 @@ A subagent does not write the table itself. It **reports its decisions back**, a
 - The user corrects or changes the direction of the work. Start the "เหตุผล · หลักฐาน" (reason · evidence) cell with `ผู้ใช้แก้ —` (user corrected). The agent `learning-reviewer` uses this to find where the user made corrections.
 - You choose among several ways that would all work.
 - The document does not say, and the agent fills in a value itself.
-- Two documents conflict, and you choose to follow one. If it is a checkable fact, follow the one with evidence. If it is a rule or policy of the owner, do not choose yourself: write both sides, mark them `(รอยืนยัน)` (awaiting confirmation), and carry on with the parts that do not depend on this point (`crew-patterns/agent-patterns` section 4 item 9).
+- Two documents conflict, and you choose to follow one. If it is a checkable fact, follow the one with evidence. If it is a rule or policy of the owner, do not choose yourself: write both sides, mark them `(รอยืนยัน)` (awaiting confirmation), and carry on with the parts that do not depend on this point (`handoff/agent-patterns` section 4 item 9).
 - You skip an ordered step or document because it cannot be done or is not needed.
-- An experiment or a comparison of options decides it (for example `crew-patterns/parallel-attempts-pick-best`).
+- An experiment or a comparison of options decides it (for example `handoff/parallel-attempts-pick-best`).
 
 **Do not log:** anything a skill or document already orders clearly, and small details that do not change the result (temporary file names · variable names).
 **Not here (the user must decide):** anything the agent cannot decide itself and must wait on before continuing that part (an old file, a wrong number, a blocked step) → [`decision-desk/flag-and-propose`](../flag-and-propose/guide.md). This skill records only what the agent decided itself and then carried on.

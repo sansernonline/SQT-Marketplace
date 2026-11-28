@@ -1,5 +1,17 @@
 # Changelog — software-development
 
+## 4.3.0 — 2026-11-28
+
+รวม skill ออกแบบหน้าจอ 4 ตัวเป็น `ui-craft` และย้าย `graphic-design` ไป plugin graphic-design (52 → 48)
+
+| ชื่อเก่า | ใช้แทนด้วย |
+|---|---|
+| `web-app-design` · `mobile-app-design` · `windows-app-design` | `ui-craft` ส่วน `parts/<ชื่อเดิม>/` (template · token · script ย้ายไปทั้งโฟลเดอร์) |
+| `graphic-design` | `graphic-design:design-by-type` ส่วน `parts/logo-and-poster/` (ต้องติดตั้ง plugin graphic-design) |
+
+- `security-audit/SKILL.md` 22 KB → 19 KB: ย้ายหัวข้อ 7 (ไฟล์ผลและ data contract) ไป `references/results-contract.md`
+- agent `graphic-designer` ชี้ `graphic-design:design-by-type`
+
 ## 4.2.1 — 2026-11-28
 
 แก้ตามผู้ตรวจอิสระหลัง merge 4.2.0

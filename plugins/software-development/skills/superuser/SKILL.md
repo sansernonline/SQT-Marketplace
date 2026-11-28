@@ -68,4 +68,4 @@ Do reversible work right away. Do not do irreversible work or work that affects 
 
 Software work uses `docs/BUILD-PLAN.md` (status table and `decision-desk/decision-log`) instead of `HISTORY.md`. Create `CONTEXT.md` per `handoff` → `references/team-memory.md` section 2.
 
-**Working patterns** — pick at planning time. How to run them, costs, pitfalls → `crew-patterns/agent-patterns`. Examples → [`examples`](references/examples.md)
+**Working patterns** — pick at planning time. How to run them, costs, pitfalls → `handoff/agent-patterns`. Examples → [`examples`](references/examples.md)

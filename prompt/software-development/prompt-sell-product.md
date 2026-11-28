@@ -104,7 +104,7 @@ playbook `project-docs` · agent `legal-compliance-officer` + `product-manager` 
 
 ## 4. หน้าร้านและช่องทางขาย
 
-playbook `project-docs` · agent `growth-specialist` + `product-manager` + `technical-writer` · skill `web-audit` · `image-generation` · `web-app-design` · `mobile-app-design` (ถ้าเป็นแอปมือถือ)
+playbook `project-docs` · agent `growth-specialist` + `product-manager` + `technical-writer` · skill `web-audit` · `image-generation` · `ui-craft` parts `web-app-design` · `mobile-app-design` (ถ้าเป็นแอปมือถือ)
 **ต้องมีก่อน:** `pricing.md` · `docs/sell/legal/`
 **ผลลัพธ์:** `docs/sell/listing-<ช่องทาง>.md` ต่อช่องทาง · ภาพใน `docs/sell/assets/` · **รออนุมัติ:** ส่งขึ้น store · เผยแพร่หน้าเว็บ
 

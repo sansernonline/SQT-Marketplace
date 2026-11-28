@@ -8,7 +8,7 @@ Use when a brand, a matching image series or messy files need a system
 
 One folder, one README, everything the brand needs to look like itself.
 
-For app or product screens, the `software-development` plugin's `design-system` skill (if installed) covers writing tokens for code (CSS variables, Tailwind theme) and `ui-craft` covers reading existing screens; without it, keep to this skill. This skill is for marketing, social and print. A software project's one-off visuals (logo, poster, LINE art) are lighter work in `software-development:graphic-design`; once the brand needs a full kit or campaign, work here.
+For app or product screens, the `software-development` plugin's `design-system` skill (if installed) covers writing tokens for code (CSS variables, Tailwind theme) and `ui-craft` covers reading existing screens; without it, keep to this skill. This skill is for marketing, social and print. A software project's one-off visuals (logo, poster, LINE art) are lighter work in `graphic-design:design-by-type`; once the brand needs a full kit or campaign, work here.
 
 ## Workflow
 

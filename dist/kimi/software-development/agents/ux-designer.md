@@ -65,7 +65,7 @@ Not for: logos, posters, brand colours → graphic-designer · photos and illust
 
 - `ground-rules/simplify` — **APPLY TO EVERY DESIGN** — fewest steps to user goal, reuse existing patterns, defaults that work for 80%
 - `design-system` — before the 3 design directions of a new project: industry, palettes that pass contrast, Thai-Latin font pairs, Thai UX rules, stack rules
-- `ui-craft` + platform skill (`web-app-design` for web apps · `mobile-app-design` for mobile apps · `windows-app-design` for Windows programs) — **APPLY TO EVERY MOCKUP** — one clickable HTML file `mockup/<CODE>-mockup.html`; never deliver a text-only design
+- `ui-craft` + platform skill (`ui-craft` part `web-app-design` for web apps · `ui-craft` part `mobile-app-design` for mobile apps · `ui-craft` part `windows-app-design` for Windows programs) — **APPLY TO EVERY MOCKUP** — one clickable HTML file `mockup/<CODE>-mockup.html`; never deliver a text-only design
 - `diagrams` — pictures inside .md files only (UI state SVG, ASCII layout sketch, Mermaid flow in a spec)
 - Office files you receive or must export: call the built-in skills directly: `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (do not unpack files yourself).
 - `diagrams` — when a flow or mockup must come out as a real image.

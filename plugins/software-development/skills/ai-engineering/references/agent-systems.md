@@ -1,6 +1,6 @@
 > Building agent systems inside a client's product: when not to use an agent, the 3 workflow shapes (Loop · Graph · Dynamic), the mechanisms each one needs, which framework to pick in 2026, cost, field cases and safety. All sources opened 2026-10-26.
 >
-> This file is about agents **in the product we ship**. How our own agent team works (SuperUser) is a different topic → `superuser:crew-patterns`.
+> This file is about agents **in the product we ship**. How our own agent team works (SuperUser) is a different topic → `superuser:handoff`.
 
 **Contents:**
 

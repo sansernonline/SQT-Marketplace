@@ -20,7 +20,7 @@
 - ไม่จดบันทึก → จำได้แต่ชัยชนะ แก้ข้อผิดพลาดซ้ำไม่ได้ (S11, S12)
 
 ## ใช้คู่กับ
-skills: `position-sizing` · `trade-journal` · `trade-practice` · `technical-signals` · `copy-trade-check` · `market-watch` · playbook: `pre-trade` · `trade-review`
+skills: `position-sizing` · `trade-journal` · `technical-signals` · `trade-journal` · `market-watch` · playbook: `pre-trade` · `trade-review`
 
 ## Sources (checked 2026-11-27)
 - S1 · Day Trading: Your Dollars at Risk, สำนักงานกำกับหลักทรัพย์และตลาดหลักทรัพย์สหรัฐ (U.S. Securities and Exchange Commission, SEC) · https://www.sec.gov/investor/pubs/daytips.htm · หลัก 1, 2, 5, 8

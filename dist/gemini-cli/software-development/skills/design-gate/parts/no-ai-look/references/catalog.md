@@ -69,7 +69,7 @@ The "Rule" column is the name in `scripts/slop_scan.py` (empty = checked by the 
 
 | Signal | Use instead | Rule | Source |
 |---|---|---|---|
-| fade-up and hover-scale on every piece | Move only what has meaning, 150–300 ms ease-out · a site that must feel alive uses 4 entrance styles in turn, not the same one everywhere (`web-app-design` in software-development) | | UN · SK · BL |
+| fade-up and hover-scale on every piece | Move only what has meaning, 150–300 ms ease-out · a site that must feel alive uses 4 entrance styles in turn, not the same one everywhere (`ui-craft` part `web-app-design` in software-development) | | UN · SK · BL |
 | A status dot that blinks nonstop | Still · moves when the status changes | `pulsing-dot` | IM (1 source) |
 | A blinking cursor in still text | Keep it in typeable fields | `blinking-cursor` | IM (1 source) |
 | Text/logos that scroll by themselves | Still, or with a stop button | `marquee` | IM (1 source) |

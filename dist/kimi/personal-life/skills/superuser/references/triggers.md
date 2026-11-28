@@ -62,7 +62,7 @@ Moved from `SKILL.md` section 3. Open it when unsure which skill to call, or whe
 | Adjusting a LinkedIn profile | `job-search` (`references/linkedin.md`) |
 | Has an interview · wants to rehearse | `job-search` + agent `interview-coach` |
 | Got an offer · asked for expected salary · asking for a raise | `job-search` |
-| Performance review · asking for promotion | `career-growth` |
+| Performance review · asking for promotion | `job-search` part `career-growth` |
 | Has to write a polite message to HR or the boss | `human-writing/polite-message-th-en` (superuser) |
 | Resignation rights, severance, leave days | `thai-employment` (e-commerce) |
 
@@ -73,9 +73,9 @@ Moved from `SKILL.md` section 3. Open it when unsure which skill to call, or whe
 | Wants to learn a new technology | `learning-path` + agent `tech-mentor` |
 | Has a paper, RFC or long article | `learning-path` (`references/paper-to-practice.md`) |
 | Hits an error message or hard-to-read English documentation | `learning-path` |
-| Following weekly library news | `tech-growth` |
+| Following weekly library news | `learning-path` part `tech-growth` |
 | Preparing for a certification exam | `learning-path` |
-| Looking for a practice project | `tech-growth` |
+| Looking for a practice project | `learning-path` part `tech-growth` |
 | Information systems (IS) thesis or research article (proposal · literature review · references · defence) | `thesis-writing` |
 | Has to teach or run training (learning outcomes · timetable · exercises · rubric · evaluation form) | `course-builder` · for slides use `slide-deck` (software-development) |
 | Work turns into code in a real project | `/software-development:superuser` |
@@ -96,7 +96,7 @@ Moved from `SKILL.md` section 3. Open it when unsure which skill to call, or whe
 | `home-upkeep` | 12-month home care schedule · compare contractor prices | `home-upkeep` |
 | `meeting` | Pre-meeting card · post-meeting summary | `meeting` |
 | `job-search` | Compare job offers · draft negotiation wording | `job-search` |
-| `tech-growth` | Weekly technology radar | `tech-growth` |
+| `learning-path` part `tech-growth` | Weekly technology radar | `learning-path` part `tech-growth` |
 | `job-search` | Write or adjust a CV | `job-search` |
 | `household-money` | Check monthly subscriptions | `household-money` |
 | `travel-prep` | Travel checklist · one-file travel plan | `travel-prep` |

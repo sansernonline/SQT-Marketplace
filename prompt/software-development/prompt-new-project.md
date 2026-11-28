@@ -171,7 +171,7 @@ agent `business-analyst` หรือ `system-analyst` · skill `requirements-wr
 
 ใช้ `prompt-mockup.md` ฉบับ 1 ที่เดียว · หาไฟล์ไม่เจอ → ทำขั้นสั้นด้านล่าง (ห้ามข้าม):
 
-1. **ขั้น A ทิศทางภาพ** ตาม `ui-craft` ข้อ 0.1 — หน้าจอพระเอก 1 หน้า · ดูแอปอ้างอิงจาก `docs/README.md` · ทำ 3 แนวขนานกัน (`crew-patterns/parallel-attempts-pick-best`) · รวมเป็น `docs/design/<รหัส>-design-directions.html` · เลือก 1 แนว (ผู้ใช้เลือก หรือผู้ตรวจตัวใหม่ให้คะแนนด่านสวย) · โลโก้ลง `assets/logo/`
+1. **ขั้น A ทิศทางภาพ** ตาม `ui-craft` ข้อ 0.1 — หน้าจอพระเอก 1 หน้า · ดูแอปอ้างอิงจาก `docs/README.md` · ทำ 3 แนวขนานกัน (`handoff/parallel-attempts-pick-best`) · รวมเป็น `docs/design/<รหัส>-design-directions.html` · เลือก 1 แนว (ผู้ใช้เลือก หรือผู้ตรวจตัวใหม่ให้คะแนนด่านสวย) · โลโก้ลง `assets/logo/`
 2. **ขั้น B** ทำ 3 หน้าจอหลักให้ผ่านด่านสวยก่อน แล้วขยายครบทุก FR · เนื้อหาเหมือนของจริง · 5 สถานะ · 2 ธีม · ทุกปุ่มกดได้ · หมายเหตุทีมอยู่ในกล่อง MOCKUP ONLY · หน้าแรกมีภาพย่อทุกหน้าจอ
 3. **ขั้น C** `developer` รัน Playwright (console error 0 · id ซ้ำ 0 · ทุกปุ่มมีผล · คอนทราสต์ ≥ 4.5:1) + ถ่ายภาพทุกหน้าทั้ง 2 ธีม
 - สั่งทำใหม่ หรือหน้าตาเดิมไม่ผ่านด่านสวย = เริ่มขั้น A ใหม่ ห้ามรวมไฟล์เก่าแล้วคงหน้าตาเดิม
@@ -329,7 +329,7 @@ agent `solution-architect` + `project-manager` · skill `superuser` (อ่า�
    | รอบปิดงาน | `review` + skill `security-gate` |
    | รอบถูกตัดกลางทาง หรือ context ใกล้เต็ม | `pickup-and-pause` (pause) |
 
-   **บทบาท** ตามกฎใน `superuser` หัวข้อ 5 (อ้างชื่อ ไม่คัดลอก): agent หลักเขียน `docs/BUILD-PLAN.md` คนเดียวและไม่เขียนโค้ด · โค้ดแถวละ `developer` ตัวใหม่ · test อัตโนมัติและขับแอป → `qa-tester` · ก่อน commit มีผู้ตรวจตัวใหม่ (ข้ามโมดูลหรือแตะความปลอดภัย → `crew-patterns/adversarial-review-panel`) · เพิ่ม dependency หรือแตะ login · สิทธิ์ · ไฟล์ · ข้อมูลส่วนบุคคล → `security-gate` · แถวขนานที่ไม่แตะไฟล์เดียวกัน → `crew-patterns/parallel-split-and-merge` (commit แถวละ 1 ครั้ง)
+   **บทบาท** ตามกฎใน `superuser` หัวข้อ 5 (อ้างชื่อ ไม่คัดลอก): agent หลักเขียน `docs/BUILD-PLAN.md` คนเดียวและไม่เขียนโค้ด · โค้ดแถวละ `developer` ตัวใหม่ · test อัตโนมัติและขับแอป → `qa-tester` · ก่อน commit มีผู้ตรวจตัวใหม่ (ข้ามโมดูลหรือแตะความปลอดภัย → `handoff/adversarial-review-panel`) · เพิ่ม dependency หรือแตะ login · สิทธิ์ · ไฟล์ · ข้อมูลส่วนบุคคล → `security-gate` · แถวขนานที่ไม่แตะไฟล์เดียวกัน → `handoff/parallel-split-and-merge` (commit แถวละ 1 ครั้ง)
 4. **ไฟล์สถานะ `docs/BUILD-PLAN.md`** — ทุกรอบอ่านไฟล์นี้ก่อน สถานะอยู่ในไฟล์ ไม่อยู่ในหัว agent:
    - ตารางค่าคงที่ `| รายการ | ค่า |` แถว `install` `test` `smoke` `รันแอป` `URL แอป` (ค่าอยู่ใน backtick)
    - ตารางงาน — ถ้ามีอยู่แล้วจากการวางแผน ใช้หัวตารางเดิมได้ แต่ต้องมีคอลัมน์ `milestone` `พึ่งแถว` `เกณฑ์เสร็จ` `สถานะ` `commit` · ถ้ายังไม่มี ใช้ `| # | รหัส | milestone | ข้อกำหนด | ไฟล์อ้างอิง | พึ่งแถว | เกณฑ์เสร็จ | สถานะ | commit |` · ช่อง `milestone` ใส่รหัส `M…` จากแผนโครงการ (ฉบับ 1) · ไม่มีแผน → ว่างได้ · 1 แถว = งาน 1 ก้อนที่ commit ได้ในครั้งเดียว (FR เดียว หรือกลุ่ม FR ที่แยกไม่ได้) · สถานะใช้แค่ `รอทำ` `กำลังทำ` `เสร็จ` `ติด` (ชุดคำสำหรับโค้ดและ build ของ `superuser/status-report`)
