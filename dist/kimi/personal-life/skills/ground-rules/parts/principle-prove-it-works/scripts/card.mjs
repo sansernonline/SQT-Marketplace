@@ -5,7 +5,8 @@
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
+import { homedir } from 'node:os';
 import { pathToFileURL } from 'node:url';
 
 const KINDS = ['spec-mismatch', 'missing-test', 'out-of-scope', 'docs', 'quality', 'security', 'other'];
@@ -140,8 +141,16 @@ function fileHash(root, path) {
   return existsSync(full) ? sha1(readFileSync(full)) : 'deleted';
 }
 
+// Same rule as the superuser hook: the nearest folder holding .claude/superuser wins (monorepo sub-projects),
+// then the git top level, then cwd.
 function findRoot(flagRoot) {
   if (flagRoot) return resolve(flagRoot);
+  // The home folder is skipped: ~/.claude/superuser is the machine-wide queue, not a project.
+  const home = resolve(homedir());
+  for (let dir = process.cwd(); ; dir = dirname(dir)) {
+    if (resolve(dir) !== home && existsSync(join(dir, '.claude', 'superuser'))) return dir;
+    if (dirname(dir) === dir) break;
+  }
   const top = git(process.cwd(), ['rev-parse', '--show-toplevel']);
   return top ? resolve(top.trim()) : process.cwd();
 }
@@ -299,7 +308,11 @@ function cmdStatus(root, state, flags) {
     console.log(`${file} is up to date.`);
     return 0;
   }
-  if (flags.write) writeFileSync(resolve(root, String(flags.write)), table);
+  if (flags.write) {
+    const out = resolve(root, String(flags.write));
+    mkdirSync(dirname(out), { recursive: true });
+    writeFileSync(out, table);
+  }
   process.stdout.write(table);
   return 0;
 }

@@ -65,11 +65,19 @@ function main(argv) {
     const c = spawnSync(opt.check, { cwd: root, shell: true, stdio: 'inherit' });
     if ((c.status ?? 1) !== 0) {
       let note = `check exit ${c.status ?? 1}`;
+      let result = 'rolled back';
       if (mergeSha !== before) {
-        if (git(root, ['rev-parse', 'HEAD']).out === mergeSha) git(root, ['reset', '--hard', before]);
-        else note += ', HEAD moved, not reset';
+        // --keep (not --hard): uncommitted edits the clean check let through (.claude/superuser/) survive;
+        // if one sits in a file the merge touched, git refuses instead of overwriting it.
+        if (git(root, ['rev-parse', 'HEAD']).out !== mergeSha) {
+          result = 'rollback failed';
+          note += ', HEAD moved during the check, not reset';
+        } else if (git(root, ['reset', '--keep', before]).code !== 0) {
+          result = 'rollback failed';
+          note += `, git refused (uncommitted edits in merged files) — the merge is still in place; undo by hand: git reset --keep ${before}`;
+        }
       }
-      results.push([id, 'rolled back', note]);
+      results.push([id, result, note]);
       break;
     }
     results.push([id, 'merged', '']);

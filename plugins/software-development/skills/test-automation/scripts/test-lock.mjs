@@ -100,7 +100,13 @@ export async function main(argv) {
     }
     await sleep(Math.min(2000, left));
   }
-  const release = () => rmSync(file, { force: true });
+  // Delete the lock only while it is still ours: a run longer than 6 h may have lost it to another waiter.
+  const release = () => {
+    let raw = '';
+    try { raw = readFileSync(file, 'utf8'); } catch { return; } // already gone
+    // Matching the raw text (not JSON.parse) still frees our own lock if the file got cut short.
+    if (raw.includes(`"pid":${process.pid},`)) rmSync(file, { force: true });
+  };
   let child = null;
   const onSignal = () => {
     if (child && child.exitCode === null) { try { child.kill(); } catch { /* already gone */ } }

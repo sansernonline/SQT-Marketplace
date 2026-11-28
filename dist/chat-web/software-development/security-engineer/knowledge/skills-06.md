@@ -1278,7 +1278,7 @@ If you write fixed coordinates, one text edit knocks the lines off across the wh
 
 # skill: document-design
 
-Use when Word, PowerPoint or PDF must look designed, MD to Word, or reading a .docx, .xlsx or .pdf someone sent
+Use when Word, Excel or PDF must look designed, or to read a .docx
 
 # document-design — make a Word, PowerPoint or PDF file look designed, on purpose
 
@@ -2146,6 +2146,19 @@ Open the image of every page (Read tool) and go through the checks:
 
 Moved from the user-level skill `office-document-handling` on 2026-11-28 (merged into `document-design`; the look of the finished file stays in the other `document-design` references). A `.md` file that must become a designed `.docx` → [`markdown-report-docx.md`](markdown-report-docx.md) (`scripts/md_to_docx.py` + `brandkit.py`), not `anthropic-skills:docx`.
 
+
+## Contents
+
+- [When to use this file](#when-to-use-this-file)
+- [The Skills You'll Use](#the-skills-youll-use)
+- [Decision Tree: Which Skill?](#decision-tree-which-skill)
+- [Common Patterns by Role](#common-patterns-by-role)
+- [Workflow Patterns](#workflow-patterns)
+- [Format Selection Guidance](#format-selection-guidance)
+- [Quality Checklist](#quality-checklist)
+- [Habits that keep content intact](#habits-that-keep-content-intact)
+- [When to Hand Off](#when-to-hand-off)
+- [Quick Reference](#quick-reference)
 
 ## When to use this file
 

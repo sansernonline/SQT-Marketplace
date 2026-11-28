@@ -91,8 +91,11 @@ export function main(argv) {
     } else if (argv[i] === '--ignore') {
       if (i + 1 >= argv.length) { console.error('Usage: --ignore needs a glob'); return 2; }
       args.ignore.push(...argv[++i].split(',').map((g) => g.trim()).filter(Boolean));
+    } else if (argv[i] === '--help' || argv[i] === '-h') {
+      console.log('Usage: node docs-truth.mjs [--root <dir>] [--ignore <glob>[,<glob>]] [<file>...]\nChecks that paths with a folder and npm/pnpm/yarn scripts named in agent docs exist. Default files: CLAUDE.md AGENTS.md README.md .claude/CLAUDE.md docs/INDEX.md');
+      return 0;
     } else if (argv[i].startsWith('--')) {
-      console.error(`Unknown option: ${argv[i]}`); return 2;
+      console.error(`Unknown option: ${argv[i]} (see --help)`); return 2;
     } else args.files.push(argv[i]);
   }
   const root = findRoot(args);

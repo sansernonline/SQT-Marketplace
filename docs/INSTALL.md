@@ -235,7 +235,7 @@ hook เขียน log เฉพาะโปรเจกต์ที่มี 
 
 `dist/claude-web/<plugin>.zip` คือ plugin ที่บีบอัดไว้ 1 ไฟล์ต่อ 1 plugin · **อัปโหลดเข้า claude.ai** แล้วใช้ skill ได้ใน Cowork และแชทบนเว็บหรือเดสก์ท็อปด้วย ไม่ใช่แค่ใน Claude Code
 
-**`software-development.zip`:** 50 skills · 38 agents · 2 commands · `plugin.json` v4.2.0 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-development/`
+**`software-development.zip`:** 50 skills · 38 agents · 2 commands · `plugin.json` v4.2.1 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-development/`
 
 ---
 

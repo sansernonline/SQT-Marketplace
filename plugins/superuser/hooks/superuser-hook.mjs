@@ -1195,7 +1195,7 @@ export function cardGate(root, lastAssistantText, now = Date.now()) {
   }
   if (!open.length || /(^|\n)\s*ข้ามการ์ด\s*:\s*\S/.test(lastAssistantText ?? "")) return null;
   const cardMjs = join(HERE, "..", "skills", "ground-rules", "parts", "principle-prove-it-works", "scripts", "card.mjs");
-  return `Card gate (SuperUser): card(s) ${open.join(", ")} are not proven — run \`node "${cardMjs}" verify <id>\` until it passes, or \`node "${cardMjs}" abandon <id> --reason …\` · to finish anyway put the line \`ข้ามการ์ด: <เหตุผล>\` in the final answer`;
+  return `Card gate (SuperUser): card(s) ${open.join(", ")} are not proven — run \`node "${cardMjs}" verify <id>\` until it passes, or \`node "${cardMjs}" abandon <id> --reason …\` · if this session did not work on these cards, or to finish anyway, put the line \`ข้ามการ์ด: <เหตุผล>\` in the final answer`;
 }
 
 // ── สรุป log ให้คนอ่าน (Stop ของหัวหน้าทีม) ─────────────────────────────

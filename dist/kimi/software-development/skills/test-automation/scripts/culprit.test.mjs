@@ -5,7 +5,7 @@ import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseBisect, cardIdFrom } from './culprit.mjs';
+import { parseBisect, cardIdFrom, resolveFound } from './culprit.mjs';
 
 const script = path.join(path.dirname(fileURLToPath(import.meta.url)), 'culprit.mjs');
 const sha40 = 'a'.repeat(40);
@@ -110,4 +110,18 @@ test('a test exiting 125 is skipped, not counted as bad', () => {
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test('resolveFound: message, ref fallback only after exit 0, missing ref', () => {
+  const msg = 'abc1234 is the first bad commit\ncommit abc1234\n\n    T-02 break it\n';
+  assert.equal(resolveFound(msg, 0, () => 'zzz').sha, 'abc1234');
+  assert.equal(resolveFound('bisect found something', 0, () => 'def5678\n').sha, 'def5678');
+  assert.equal(resolveFound('error', 3, () => 'def5678'), null);
+  assert.equal(resolveFound('done', 0, () => ''), null);
+});
+
+test('cardIdFrom ignores look-alikes when the card list is known', () => {
+  assert.equal(cardIdFrom('fix UTF-8 for T-02'), 'UTF-8');
+  assert.equal(cardIdFrom('fix UTF-8 for T-02', new Set(['T-02'])), 'T-02');
+  assert.equal(cardIdFrom('ISO-8601 dates', new Set(['T-02'])), null);
 });

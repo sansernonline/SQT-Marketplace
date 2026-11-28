@@ -515,10 +515,10 @@ Pick once per project and write it in `CLAUDE.md`. The default is `gate`, becaus
 | Mode | Card `done_when` runs | Full suite runs |
 |---|---|---|
 | `every` | the full suite | on every card |
-| `targeted` | only the tests of the card's files | at the milestone gate card |
-| `gate` (default) | the card's own tests | once, on a gate card that `depends` on every card of the milestone |
+| `targeted` | the tests the test runner links to the changed files (`jest --findRelatedTests`, `vitest related`, `pytest --testmon`), so a break in a neighbour shows early | at the milestone gate card |
+| `gate` (default) | only the test files the card adds or names in `done_when` | once, on a gate card that `depends` on every card of the milestone |
 
-Wrap full-suite and load-test commands in `scripts/test-lock.mjs --` so 2 lanes never run them at once. When the gate card fails, `scripts/culprit.mjs` finds the card that broke it.
+Wrap full-suite and load-test commands in `scripts/test-lock.mjs --` so 2 lanes never run them at once. When the gate card fails, `scripts/culprit.mjs` finds the commit that broke it, and names the card when the commit subject holds the card id (write commits as `T-03: …`).
 
 ## Check before done
 
@@ -2015,7 +2015,7 @@ Use for PR review, PR text, commit messages or git worktrees
 
 | Job (what the user says) | Open |
 |---|---|
-| Cards running in parallel need their own folder, port and test database · "merge the lanes one at a time" | [`scripts/lane.mjs`](scripts/lane.mjs) `add <card>` (worktree + `PORT` + `TEST_DB_NAME` in `.env.lane`) · [`scripts/merge-queue.mjs`](scripts/merge-queue.mjs) `<card>... --check "<cmd>"` (merge one, re-check, roll back if it breaks, never pushes) · which cards may run together: `superuser` `card.mjs next --parallel` |
+| Cards running in parallel need their own folder, port and test database · "merge the lanes one at a time" | [`scripts/lane.mjs`](scripts/lane.mjs) `add <card>` (worktree beside the project folder as `<project>-lane-<card>` + `PORT` + `TEST_DB_NAME` in `.env.lane`, which is added to `.git/info/exclude` so it is never committed) · [`scripts/merge-queue.mjs`](scripts/merge-queue.mjs) `<card>... --check "<cmd>"` (merge one, re-check, roll back if it breaks, never pushes) · which cards may run together: `superuser` `card.mjs next --parallel` |
 | "Review this PR", "check my code before I submit", "is this diff safe?" | [`references/code-review-checklist.md`](references/code-review-checklist.md) |
 | "Write the PR description", "what do I put in the pull request?" | [`references/pr-description-template.md`](references/pr-description-template.md) |
 | Commit messages, commitlint, semantic-release, "what format for the commit?" | [`references/commit-message-format.md`](references/commit-message-format.md) |

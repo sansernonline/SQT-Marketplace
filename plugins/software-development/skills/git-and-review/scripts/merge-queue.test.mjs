@@ -146,3 +146,47 @@ test('--into switches back to the original branch', () => {
     fs.rmSync(root, { recursive: true, force: true });
   }
 });
+
+test('rollback keeps an uncommitted edit to a tracked file under .claude/superuser/', () => {
+  const { root, main } = makeRepo();
+  try {
+    const card = path.join(root, '.claude', 'superuser', 'cards', 'T-1.md');
+    fs.mkdirSync(path.dirname(card), { recursive: true });
+    fs.writeFileSync(card, 'card v1\n');
+    sh(root, 'add', '.');
+    sh(root, 'commit', '-m', 'track card');
+    makeLane(root, main, 'T-1', 'b.txt', 'b\n');
+    fs.writeFileSync(card, 'card v2 UNSAVED EDIT\n');
+    const before = sh(root, 'rev-parse', 'HEAD');
+    const r = run(root, 'T-1', '--check', FAIL);
+    assert.equal(r.status, 1);
+    assert.match(r.stdout, /rolled back/);
+    assert.equal(sh(root, 'rev-parse', 'HEAD'), before);
+    assert.equal(fs.readFileSync(card, 'utf8'), 'card v2 UNSAVED EDIT\n');
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('an uncommitted edit in a file the merge touches makes the rollback fail loudly, not silently', () => {
+  const { root, main } = makeRepo();
+  try {
+    const card = path.join(root, '.claude', 'superuser', 'cards', 'T-1.md');
+    fs.mkdirSync(path.dirname(card), { recursive: true });
+    fs.writeFileSync(card, 'card v1\n');
+    sh(root, 'add', '.');
+    sh(root, 'commit', '-m', 'track card');
+    makeLane(root, main, 'T-1', '.claude/superuser/cards/T-1.md', 'card from lane\n');
+    const before = sh(root, 'rev-parse', 'HEAD');
+    const checker = path.join(os.tmpdir(), `mq-edit-${process.pid}.cjs`);
+    fs.writeFileSync(checker, "require('fs').writeFileSync('.claude/superuser/cards/T-1.md', 'edited during check\\n'); process.exit(1);\n");
+    const r = run(root, 'T-1', '--check', `node "${checker}"`);
+    fs.rmSync(checker, { force: true });
+    assert.equal(r.status, 1);
+    assert.match(r.stdout, /rollback failed/);
+    assert.notEqual(sh(root, 'rev-parse', 'HEAD'), before);
+    assert.equal(fs.readFileSync(card, 'utf8'), 'edited during check\n');
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});

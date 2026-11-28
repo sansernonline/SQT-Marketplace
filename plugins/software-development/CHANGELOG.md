@@ -1,5 +1,13 @@
 # Changelog — software-development
 
+## 4.2.1 — 2026-11-28
+
+แก้ตามผู้ตรวจอิสระหลัง merge 4.2.0
+- `merge-queue.mjs`: ย้อน merge ด้วย `git reset --keep` แทน `--hard` · เดิมงานที่แก้ค้างในไฟล์ที่อยู่ใน git ใต้ `.claude/superuser/` หายเงียบเมื่อตัวตรวจไม่ผ่าน · ถ้า git ไม่ยอมย้อน จะบอกคำสั่งให้ย้อนเอง · มี test กันซ้ำ
+- `culprit.mjs`: แยกการอ่านผล bisect เป็นฟังก์ชันที่มี test ครบ 4 กรณี · รหัสการ์ดนับเฉพาะที่มีไฟล์การ์ดจริง (ไม่จับ UTF-8 หรือ ISO-8601)
+- `test-lock.mjs`: ลบ lock เฉพาะเมื่อยังเป็นของตัวเอง · `docs-truth.mjs --help`
+- เอกสาร: test mode `targeted` กับ `gate` ต่างกันตรงไหน · ใส่รหัสการ์ดในหัว commit ให้ `culprit` บอกการ์ดได้ · lane สร้าง worktree ข้างโฟลเดอร์โปรเจกต์ · `document-design` description สั้นลงเหลือ 70 ตัว · `office-input-output.md` มีสารบัญ
+
 ## 4.2.0 — 2026-11-28
 
 เครื่องมือคู่กับการ์ดของ superuser 4.7.0
