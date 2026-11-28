@@ -207,6 +207,7 @@ For medium tasks and up, read the request and pick **1** playbook, or assemble y
 | [`learning-path`](references/playbook-learning-path.md) | want to learn a new language, framework or concept well enough to use it for real |
 | [`paper-to-practice`](references/playbook-paper-to-practice.md) | want to understand a paper, RFC or long article until it is usable |
 | [`tech-radar`](references/playbook-tech-radar.md) | follow news on libraries and tools in use · "สัปดาห์นี้มีอะไรเปลี่ยน" |
+| [`teach-a-course`](references/playbook-teach-a-course.md) | will teach a workshop, in-company training, online course or a teammate · "ต้องไปสอน" |
 | [`cert-prep`](references/playbook-cert-prep.md) | prepare for AWS · Azure · Google Cloud · Kubernetes · Scrum or another certification |
 | [`side-project`](references/playbook-side-project.md) | want a practice or portfolio project · too many ideas or none · for a thesis or research paper use skill `thesis-writing` |
 
@@ -1254,6 +1255,29 @@ Main skills: `household-money` (`references/subscription-audit.md` · `reference
 ## Done when
 
 A table of all items with the verdicts, and the cancellation steps ready to follow
+
+
+## reference: playbook-teach-a-course.md
+
+# playbook · teach-a-course — design and run a course you will teach
+
+Use when: the user will teach a workshop · in-company training · online course · tutoring a teammate · "ช่วยออกแบบหลักสูตร" · "ต้องไปสอน"
+Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/teaching.md`](../../life-principles/references/teaching.md)
+Main skills: `course-builder` (`references/git-one-day-example.md` · `references/materials-feedback-online-copyright.md`) · `slide-deck` in software-development (if installed) · agent `tech-mentor`
+
+## ขั้นตอน (Steps — copy into the todo as written)
+
+1. Open the principle file [`references/teaching.md`](../../life-principles/references/teaching.md) first. Ask the organizer's 6 questions in one go per `course-builder` section 1 and write `course/brief.md`; anything unknown gets `(รอยืนยัน)` · ใคร: หัวหน้าทีม
+2. Write the learning outcomes with visible verbs per `course-builder` section 2, each with the exercise and the assessment that will show it · ใคร: `tech-mentor` ตัวใหม่
+3. Build the timed schedule per `course-builder` section 3; every session points to an outcome number, and hands-on time is written next to teaching time · ใคร: `tech-mentor` ตัวใหม่
+4. Write the exercises from guided to alone and the rubric with sample work per `course-builder` sections 4–5 · ใคร: `tech-mentor` ตัวใหม่
+5. Make the handouts and feedback form per `course-builder` sections 6–9; slides per `slide-deck` if software-development is installed, otherwise the handout alone · ใคร: `tech-mentor` ตัวใหม่
+6. Check (ตรวจ) the whole `course/` folder against [`references/teaching.md`](../../life-principles/references/teaching.md): every session ↔ outcome ↔ exercise ↔ assessment links up, the schedule fits the hours in the brief, materials are readable and their sources and licences are written · ใคร: `reviewer` ตัวใหม่
+7. Report: the folder, what is still `(รอยืนยัน)`, and the feedback form and post-teaching log to fill in after the session (`course-builder` → `references/materials-feedback-online-copyright.md` section 7) · ใคร: หัวหน้าทีม
+
+## Done when
+
+`course/` holds the brief, outcomes, schedule, exercises, rubric, materials, the feedback form and the post-teaching log template; every session points to an outcome with an exercise and an assessment, and the check against `teaching.md` passed.
 
 
 ## reference: playbook-team-project.md

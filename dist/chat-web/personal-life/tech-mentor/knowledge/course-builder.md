@@ -158,6 +158,8 @@ The full example is at [references/git-one-day-example.md](references/git-one-da
 
 - [`references/sources.md`](references/sources.md) — open to re-check dated figures, prices and rules, and their sources
 
+- A whole course with several steps → playbook `superuser/references/playbook-teach-a-course.md` · what good teaching is → `life-principles` → `references/teaching.md`.
+
 
 ## reference: git-one-day-example.md
 

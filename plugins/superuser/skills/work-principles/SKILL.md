@@ -38,6 +38,19 @@ A playbook never repeats how-to; it links to the skill. A skill never says who d
 | Decide with options, scores and a written reason | `decision-desk` |
 | Anything people look at: meaning first, live references, no AI look | `design-gate` (`design-method` · `design-references` · `no-ai-look`) |
 
+## Kinds of work in this plugin
+
+| Kind of work | Principle | Skills | Playbook |
+|---|---|---|---|
+| A document people read (report · plan · letter · message) | `human-writing` · `design-gate` when it is looked at | `human-writing` · `design-gate` · `workspace-rules` (file names, versions) | `document` |
+| Finding facts that need sources | `research-with-sources` | `research-with-sources` · `decision-desk` (when a choice follows) | `research` |
+| Checking finished work | `ground-rules` part `principle-prove-it-works` | `ground-rules` · `fix-at-source` | `review` |
+| Team work, handing over, long runs | `ground-rules` part `principle-small-verifiable-steps` | `crew-patterns` · `handoff` · `context-budget` | `team-project` · `pickup-and-pause` · `unattended-run` |
+| Replying in chat | `human-writing` | `lean-reply` · `quick` (small tasks) | none (one reply) |
+| Keeping lessons and the owner's style | `fix-at-source` part `principle-fix-root-cause` | `learn-loop` | `learn-from-session` |
+| Writing skills, agents, playbooks | `ground-rules` part `principle-prove-it-works` (red → green before done) | `skill-authoring` | `skill-authoring` (software-development, if installed) |
+| Multi-step prompts for a chat app | `human-writing` | `chat-prompt-workflows` | none |
+
 ## Principles per plugin (kinds of work)
 
 | Plugin | Principle skill | Kinds of work covered |
@@ -46,7 +59,7 @@ A playbook never repeats how-to; it links to the skill. A skill never says who d
 | software-development | `dev-principles` | code · architecture and API · testing · security · operations · requirements and docs · screens · data and AI · mobile and games · regulated domains · documents and diagrams · product and project planning · systems without docs or source |
 | e-commerce | `shop-principles` | selling · customer care · shop money · Thai paperwork · LINE OA · business setup · buying |
 | trading-finance | `money-principles` | personal money · investing · trading · scams and tax · company financials · news and alerts |
-| personal-life | `life-principles` | life admin · health care organising · career · learning · planning · family home · family legal · tech growth |
+| personal-life | `life-principles` | life admin · health care organising · career · learning · teaching · planning · family home · family legal · tech growth |
 
 A plugin's principle skill is read only when that plugin is installed. This skill and its table always work, because every plugin depends on `superuser`.
 
