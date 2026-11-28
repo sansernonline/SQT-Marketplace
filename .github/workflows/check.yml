@@ -64,6 +64,7 @@ jobs:
           node plugins/superuser/skills/handoff/scripts/log-to-md.test.mjs
           node plugins/superuser/skills/workspace-rules/parts/temp-file-discipline/scripts/delete-plan-check.test.mjs
           node plugins/superuser/skills/workspace-rules/parts/temp-file-discipline/scripts/root-check.test.mjs
+          node --test plugins/superuser/hooks/statusline.test.mjs
           node plugins/superuser/skills/human-writing/parts/translate-th-en/scripts/i18n-pair-check.test.mjs
           node scripts/evals/speed/stats.mjs --self-test
           node scripts/evals/speed/breakdown.mjs --self-test
