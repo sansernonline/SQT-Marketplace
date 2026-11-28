@@ -4,7 +4,7 @@
 
 วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ
 
-agent 5 · skill 64 (ของ plugin 24 · ของกลางจาก superuser 40) · คำสั่ง 1 · playbook 10 · ส่งงานต่อให้ —
+agent 5 · skill 29 (ของ plugin 14 · ของกลางจาก superuser 15) · คำสั่ง 0 · playbook 10 · ส่งงานต่อให้ —
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/trading-finance/`](../../../plugins/trading-finance/)
 

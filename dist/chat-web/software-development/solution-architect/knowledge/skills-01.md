@@ -1524,6 +1524,39 @@ The column template and the values used in each field live in one place, the [qu
 - **Lessons live at the point of use.** The queue is only a holding place. A merged lesson must end up in a skill, a checker, or a playbook that gets opened during the work, not in a list someone must go and search.
 
 
+## reference: playbook-ai-feature.md
+
+# playbook · ai-feature — add an LLM feature measured by an eval set
+
+Use when: "add a chatbot" · "summarise these with AI" · "RAG over our documents" · "improve the prompt" · "the AI answers are wrong" · an agent or MCP server inside the product (a quick try to learn if it can work at all → `prototype` first)
+Main principles: [`dev-principles`](../../dev-principles/SKILL.md) · [`references/data-ai.md`](../../dev-principles/references/data-ai.md) · [`references/security.md`](../../dev-principles/references/security.md)
+Main skills: [`ai-engineering`](../../ai-engineering/SKILL.md) (`references/llm-evaluation-patterns.md` · `prompt-engineering-patterns.md` · `rag-architecture.md` · `agent-systems.md`) · `data-analysis` · `security-gate` · `pdpa-compliance` (personal data · voice recording · health data) · `test-automation` · `errors-and-logs`
+
+## ขั้นตอน · Steps (copy into the todo as written)
+
+1. Open [`references/data-ai.md`](../../dev-principles/references/data-ai.md) first. Write the one job the model does: input · output format · what counts as right · what a wrong answer costs (money · data · trust) · whether a plain rule or search would do it without a model · the money ceiling for eval runs and production calls, asked together with the brief at the start (the agent cannot raise it; unknown → `(รอยืนยัน · ผู้ใช้: เพดานค่าใช้จ่าย)`) · ใคร: หัวหน้าทีม
+2. **Build the eval set before any prompt** — 20–50 cases from real work, including edge cases and inputs that try to make the model misbehave, each with the expected answer or a written grading rule, per `ai-engineering/references/llm-evaluation-patterns.md` · set the pass number and the latency ceiling now, inside the step 1 money ceiling,, not after seeing results · ใคร: `ai-engineer` ตัวใหม่
+3. Run the simplest version (one prompt, a pinned model version) against the set and record the score, cost per call and latency — this is the baseline · ใคร: `ai-engineer` ตัวใหม่ (pass in the saved eval set)
+4. Improve one thing at a time (prompt · retrieval · model · tool) and rerun the whole set after each change · keep a change only when the score goes up and nothing else drops · for RAG, score retrieval apart from the answer · ใคร: `ai-engineer` ตัวใหม่ per change (pass in the eval set and the score log)
+5. **Wire it in safely** — treat model output and retrieved text as untrusted data · validate the output format before use · no step that is expensive or changes data runs without a person's approval · a timeout and a fallback when the model fails · log input size, cost and latency per call without personal data (`errors-and-logs` · `security-gate`) · ใคร: `developer` ตัวใหม่
+6. **Prove (พิสูจน์)** — rerun the full eval set through the real code path, not a notebook · run the injection cases from step 2 · check cost and latency against the step 2 ceiling (ตัดสินผลตาม [`references/data-ai.md`](../../dev-principles/references/data-ai.md) · [`references/security.md`](../../dev-principles/references/security.md)) · fail → back to step 4 · ใคร: `qa-tester` ตัวใหม่
+7. **Check (ตรวจ)** the diff and the eval report: the set was not changed to make the score pass · the model version is pinned · no hidden step can act without approval · ใคร: `reviewer` ตัวใหม่
+8. Deliver through playbook [`ship`](playbook-ship.md) with the eval set saved beside the code, so the next prompt change is measured the same way · finish with `superuser/status-report` · ใคร: หัวหน้าทีม
+
+## Common excuses — read before skipping a step
+
+| Excuse | Reality |
+|---|---|
+| "I tried 5 prompts by hand and it looks good" | 5 hand-picked inputs hide the cases that fail · without a fixed set, the next change breaks them silently |
+| "Use the biggest model, then it will be fine" | Without a baseline you cannot tell if the cost bought anything |
+| "Edit the eval case, the expected answer was strict" | Changing the test to pass hides the failure · change it only with the reason written down, then rerun everything |
+| "The model only reads, so injection does not matter" | If it can read secrets and send text out, injected text can leak them |
+
+## Done when
+
+Eval score before and after, cost and latency are in the report and meet the step 2 numbers · injection cases pass · the eval set is committed beside the code
+
+
 ## reference: playbook-bug-fix.md
 
 # playbook · bug-fix — fix broken things with evidence
@@ -1619,6 +1652,41 @@ Principle: cleaning up means deleting. Anything that may hold someone's work goe
 ## Done when
 
 Only what the user approved was deleted, and no one's work was lost without a backup patch
+
+
+## reference: playbook-incident.md
+
+# playbook · incident — get a live system back up, then learn from it
+
+Use when: "the site is down" · "users cannot log in since 14:00" · "errors jumped after the deploy" · "we may have leaked data" · an alert fires on production (a bug found in a test or on a dev machine → `bug-fix`)
+Main principles: [`dev-principles`](../../dev-principles/SKILL.md) · [`references/operations.md`](../../dev-principles/references/operations.md) · [`references/security.md`](../../dev-principles/references/security.md) (when data may have leaked)
+Main skills: [`incidents-and-monitoring`](../../incidents-and-monitoring/SKILL.md) (work format: `references/incident-response.md`) · `cicd-and-release` (rollback) · `errors-and-logs` · `pdpa-compliance` (personal data) · `security-operations` (an attack) · `fix-at-source/principle-fix-root-cause`
+
+> Every change to production (rollback · failover · scaling · feature flag · firewall rule) waits for a named person's approval. The agent prepares the command and the value it expects to see; the on-call person runs it or approves it.
+
+## ขั้นตอน · Steps (copy into the todo as written)
+
+1. Open [`references/operations.md`](../../dev-principles/references/operations.md) first. Declare the incident: write the one thing users feel is wrong, when it started, the severity, and who is the incident commander (one person) in a single status note `docs/postmortems/<YYYY-MM-DD>-<topic>.md` (the same file becomes the postmortem in step 6) · start the timeline there, one timestamped line per event · ใคร: หัวหน้าทีม
+2. **Measure what users feel** — error rate · latency at the 95th percentile · traffic, compared with the same hour before it started, per `incidents-and-monitoring/references/observability-basics.md` · list what changed in the last 24 hours (deploys · config · flags · dependencies · traffic) · ใคร: `devops-engineer` ตัวใหม่
+3. **Stop the harm before finding the cause** — if a recent change lines up with the start time, prepare the rollback or flag-off command with its expected effect and put it under "รออนุมัติ" (awaiting approval) · if personal data or an attack may be involved, hand over to `security-analyst` at once and start the 72-hour PDPC clock from the moment it was known (`pdpa-compliance`) · ใคร: `devops-engineer` ตัวใหม่ (pass in the status note) · data or attack: `security-analyst` ตัวใหม่ · approval: the on-call person
+4. After each approved action, check the step 2 numbers again and log the value seen in the status note · not back to normal → next hypothesis, one change at a time · ใคร: `devops-engineer` ตัวใหม่ (pass in the status note)
+5. Once stable, find the root cause in a copy of the system, not in production — reproduce it, then write a test that fails first, per playbook [`bug-fix`](playbook-bug-fix.md) steps 2–8, doing its step 2 reproduction in staging or a copy instead of production · ใคร: `developer` ตัวใหม่
+6. Write the blameless postmortem within 48 hours per `incidents-and-monitoring/references/postmortem-template.md`: timeline · impact in numbers · root cause · what helped · what slowed us · follow-up items each with an owner and a date · add the missing alert or runbook line · ใคร: `technical-writer` ตัวใหม่ (pass in the status note)
+7. **Check (ตรวจ)** the postmortem and the fix: no person blamed · every production change has an approver's name · every follow-up has an owner and a date · the step 5 test passes · if personal data leaked, the notification record exists (ตัดสินผลตาม [`references/operations.md`](../../dev-principles/references/operations.md) · [`references/security.md`](../../dev-principles/references/security.md)) · fail → fix → recheck · ใคร: `reviewer` ตัวใหม่
+8. Deliver the fix through playbook [`ship`](playbook-ship.md), then finish with `superuser/status-report` · ใคร: หัวหน้าทีม
+
+## Common excuses — read before skipping a step
+
+| Excuse | Reality |
+|---|---|
+| "I'll write the timeline afterwards" | Memory after an incident is wrong about times and order · one line per event now costs seconds |
+| "Rolling back is obvious, just do it" | A rollback is a production change · it still needs the approver's name, and the database change may not roll back with the app |
+| "Find the cause first, then fix" | Users are hurt every minute · stop the harm first, find the cause in a copy afterwards |
+| "It is back up, so we are done" | Without a postmortem and follow-up items with owners, the same incident comes back |
+
+## Done when
+
+Users' numbers are back to normal (step 2 values before and after) · the postmortem has owners and dates for every follow-up · the root-cause fix passed `ship`
 
 
 ## reference: playbook-investigation.md
@@ -1918,16 +1986,16 @@ The PR is green · every comment has an answer · it passed an independent check
 # playbook · skill-authoring — write or edit a skill and prove it really helps
 
 Use when: creating a new skill · editing SKILL.md · editing an agent file · editing a prompt in `prompt/` (covers pstack's `authoring a skill` · `eval`)
-Main principles: [`dev-principles`](../../dev-principles/SKILL.md) (no kind-of-work file fits this work yet)
+Main principles: `superuser:work-principles` → `references/skill-authoring.md` (6 principles: when-to-use description · distinct from siblings · short main file · red → green · strictness by fragility · scripts for machine checks)
 Main skills: `learn-loop/repeated-mistakes-to-checks` · `human-writing/spell-out-abbreviations` · `superuser:ground-rules` · `coding-evals`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. First look for whether a skill already covers this — editing an existing skill beats creating a new one, and a new name must say what it does, not be a nickname · ใคร: หัวหน้าทีม
+1. Open the principle file `superuser:work-principles` → `references/skill-authoring.md` first. Look for whether a skill already covers this — editing an existing skill beats creating a new one, and a new name must say what it does, not be a nickname · ใคร: หัวหน้าทีม
 2. Write the description to say "use when" (ใช้เมื่อ) in words the user really says, and it must not contain `": "` outside quotation marks · ใคร: หัวหน้าทีม
 3. Content — short rules · steps that can be followed · what is forbidden. Move mechanical parts out of SKILL.md: `scripts/` for code that runs · `assets/` for templates (SKILL.md only says when to call them) · ใคร: หัวหน้าทีม
 4. Prepare 3–5 test tasks the skill should help with, and 1 that should not call it · ใคร: หัวหน้าทีม
-5. **Blind test** — send 2 fresh subagents on the same task, one with the skill and one without (or with the old version of the skill), then have a 3rd subagent that does not know which result came from which set score them against criteria written beforehand (for a skill about code, take the test tasks from `coding-evals`) · ใคร: `general-purpose` ตัวใหม่ 2 do the task · `reviewer` ตัวใหม่ scores blind
+5. **Blind test** — send 2 fresh subagents on the same task, one with the skill and one without (or with the old version of the skill), then have a 3rd subagent that does not know which result came from which set score them against criteria written beforehand (for a skill about code, take the test tasks from `coding-evals`) (ตัดสินผลตาม `superuser:work-principles` → `references/skill-authoring.md`) · ใคร: `general-purpose` ตัวใหม่ 2 do the task · `reviewer` ตัวใหม่ scores blind
 6. If the new skill does not clearly win, fix it and test again, or do not add it, then log the result in `decision-desk/decision-log` · ใคร: หัวหน้าทีม
 7. In the SQT-Marketplace repo, run (รัน) `node scripts/check/validate-marketplace.mjs --self-test`, then `node scripts/check/validate-marketplace.mjs` · `node scripts/sync/sync-docs.mjs` · `node scripts/build/build-targets.mjs` · ใคร: หัวหน้าทีม
 8. `superuser/status-report` · ใคร: หัวหน้าทีม
@@ -2096,6 +2164,8 @@ For medium-size work and up, choose **1** playbook, or compose one per `playbook
 | [`pickup-and-pause`](playbook-pickup-and-pause.md) | Continue from where it was left · take over from another agent · pause so someone can take over |
 | [`new-project`](playbook-new-project.md) | Start a new project that has no code yet, until it runs and can be proven |
 | [`feature`](playbook-feature.md) | Add or change the behavior of an existing program |
+| [`incident`](playbook-incident.md) | A live system is down or hurting users now — declare · stop the harm · root cause · blameless postmortem (a bug found in tests or on a dev machine → `bug-fix`) |
+| [`ai-feature`](playbook-ai-feature.md) | Add or improve a feature that calls an LLM · RAG · agent · MCP, measured by an eval set built before the prompt |
 | [`bug-fix`](playbook-bug-fix.md) | Something is broken — an error · a failing test · a wrong screen · a memory leak · a user report |
 | [`refactor`](playbook-refactor.md) | Change the structure with the same behavior · migrate a system |
 | [`performance`](playbook-performance.md) | Slow · heavy on the machine · you want one number to improve to a target |
@@ -2566,6 +2636,8 @@ The trigger table lives only in this file (`superuser` section 3 points here). O
 
 - Broken or leaking when it should not happen (error · memory leak · CPU running while idle) → `bug-fix` · still works but you want a number to improve to a target → `performance`
 - The screen must match a mockup or the old system → finish with `visual-parity` · moving the internal structure with the look unchanged → `refactor`
+- Production is down or users are hurt now → `incident` (it calls `bug-fix` steps for the root cause once stable) · broken only in tests or on a dev machine → `bug-fix`
+- A feature that calls an LLM → `ai-feature` · only checking whether it can work at all → `prototype` first, then `ai-feature`
 - A new project that needs BRD · SRS documents → code uses `new-project` · documents use `project-docs`
 - `unattended-run` wraps other playbooks and does not choose in their place — inside, each piece still chooses its playbook by the work
 

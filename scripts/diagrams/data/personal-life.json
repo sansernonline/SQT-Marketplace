@@ -1,94 +1,44 @@
 {
  "plugin": "personal-life",
- "version": "0.26.0",
+ "version": "0.30.0",
  "description": "Daily-life admin, five categories — life admin (weekly reviews, inbox triage, documents, travel, decisions, subscriptions, digital safety, goals), home and family (bills, maintenance, vehicle, meals, school, elder care, pets, floods, wills), health (exercise, sleep, checkups, medication, doctor visits, pregnancy — never diagnoses), career (CVs, interviews, salary, LinkedIn), and learning (learning paths, papers, tech radar, certs, side projects, thesis). General information only.",
  "cross": [],
  "skills": [
-  "health-admin",
-  "weekly-review",
-  "learning-path",
+  "career-growth",
   "course-builder",
-  "goals-and-decisions",
   "digital-hygiene",
-  "health-admin",
   "family-care",
-  "learning-path",
   "family-legal",
-  "health-admin",
-  "home-upkeep",
-  "family-week",
   "goals-and-decisions",
+  "health-admin",
   "home-upkeep",
   "household-money",
-  "family-legal",
-  "weekly-review",
   "job-search",
-  "career-growth",
-  "family-care",
   "learning-path",
-  "family-legal",
-  "family-week",
-  "health-admin",
+  "life-principles",
   "meeting",
-  "home-upkeep",
-  "career-growth",
-  "career-growth",
   "personal-kb",
-  "family-care",
-  "family-care",
-  "job-search",
-  "job-search",
-  "tech-growth",
-  "health-admin",
-  "household-money",
-  "weekly-review",
   "tech-growth",
   "thesis-writing",
   "travel-prep",
-  "home-upkeep",
   "weekly-review"
  ],
  "core_skills": [
   "superuser",
   "crew-patterns",
-  "crew-patterns",
   "lean-reply",
   "chat-prompt-workflows",
   "workspace-rules",
-  "workspace-rules",
   "context-budget",
   "decision-desk",
-  "decision-desk",
   "design-gate",
-  "workspace-rules",
-  "decision-desk",
   "handoff",
   "human-writing",
-  "superuser",
-  "design-gate",
   "learn-loop",
-  "crew-patterns",
-  "crew-patterns",
-  "design-gate",
-  "human-writing",
   "ground-rules",
   "fix-at-source",
-  "ground-rules",
-  "ground-rules",
-  "ground-rules",
-  "ground-rules",
   "research-with-sources",
-  "learn-loop",
-  "decision-desk",
-  "research-with-sources",
-  "learn-loop",
-  "ground-rules",
-  "skill-authoring",
-  "human-writing",
-  "superuser",
-  "fix-at-source",
-  "workspace-rules",
-  "human-writing"
+  "skill-authoring"
  ],
  "commands": [
   "family-week"
@@ -101,10 +51,6 @@
    "description": "Use when changing jobs, asking for a raise, writing a CV or LinkedIn profile, or weighing offers. Thai or English.",
    "skills": [
     "job-search",
-    "job-search",
-    "career-growth",
-    "job-search",
-    "career-growth",
     "career-growth",
     "superuser",
     "family-legal"
@@ -117,8 +63,7 @@
    "description": "Use when an important document is missing, expiring or piled up. Keeps one registry of ID, property, vehicle, insurance.",
    "skills": [
     "family-legal",
-    "home-upkeep",
-    "family-legal"
+    "home-upkeep"
    ]
   },
   {
@@ -128,8 +73,6 @@
    "description": "Use when a Thai family needs its week organised — meals, groceries, school fees, elder appointments, pet vaccines.",
    "skills": [
     "family-week",
-    "family-care",
-    "family-care",
     "family-care"
    ]
   },
@@ -139,10 +82,6 @@
    "core": false,
    "description": "Use to organise family health admin — checkups, results, medication, sleep, doctor questions. Never diagnoses; 1669.",
    "skills": [
-    "health-admin",
-    "health-admin",
-    "health-admin",
-    "health-admin",
     "health-admin",
     "family-care"
    ]
@@ -154,9 +93,6 @@
    "description": "Use for Thai household bills and upkeep — utilities, repairs, contractor quotes, vehicle tax, พ.ร.บ., renewals.",
    "skills": [
     "household-money",
-    "home-upkeep",
-    "home-upkeep",
-    "home-upkeep",
     "home-upkeep"
    ]
   },
@@ -166,8 +102,6 @@
    "core": false,
    "description": "Use when an interview is coming — practice sets, STAR stories, hard Thai HR questions, scoring. Offers → career-coach.",
    "skills": [
-    "job-search",
-    "job-search",
     "job-search"
    ]
   },
@@ -182,14 +116,9 @@
     "digital-hygiene",
     "goals-and-decisions",
     "family-legal",
-    "weekly-review",
-    "weekly-review",
-    "weekly-review",
-    "family-legal",
     "personal-kb",
     "travel-prep",
-    "family-week",
-    "goals-and-decisions"
+    "family-week"
    ]
   },
   {
@@ -209,9 +138,6 @@
    "skills": [
     "tech-growth",
     "learning-path",
-    "learning-path",
-    "learning-path",
-    "tech-growth",
     "thesis-writing",
     "course-builder"
    ]
@@ -226,7 +152,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Read the real bill the user sent. Copy the units, amount, Ft charge, and due date into the tracking table · ใคร: `home-manager` ตัวใหม่",
+     "text": "Open the principle file [`references/life-admin.md`](../../life-principles/references/life-admin.md) first. Read the real bill the user sent. Copy the units, amount, Ft charge, and due date into the tracking table · ใคร: `home-manager` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -300,7 +226,7 @@
     },
     {
      "n": 5,
-     "text": "Set a reminder for the due date of every bill · ใคร: `home-manager` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set against the real bills and the official websites",
+     "text": "Set a reminder for the due date of every bill (ตัดสินผลตาม [`references/life-admin.md`](../../life-principles/references/life-admin.md)) · ใคร: `home-manager` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set against the real bills and the official websites",
      "sub": [],
      "phase": "",
      "who": {
@@ -327,7 +253,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "List the related entitlements (elderly living allowance · medical coverage · child subsidy · tax deductions). Check (ตรวจ) them against official agency websites, with the documents needed and the filing steps · ใคร: `family-planner` ตัวใหม่",
+     "text": "Open the principle files [`references/family-home.md`](../../life-principles/references/family-home.md) · [`references/health-care.md`](../../life-principles/references/health-care.md) first. List the related entitlements (elderly living allowance · medical coverage · child subsidy · tax deductions). Check (ตรวจ) them against official agency websites, with the documents needed and the filing steps · ใคร: `family-planner` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -381,7 +307,7 @@
     },
     {
      "n": 4,
-     "text": "Check (ตรวจ) the whole set (entitlements · medicines · appointments · dates in the `.ics` file) against official websites and the real documents · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) the whole set (entitlements · medicines · appointments · dates in the `.ics` file) against official websites and the real documents (ตัดสินผลตาม [`references/family-home.md`](../../life-principles/references/family-home.md) · [`references/health-care.md`](../../life-principles/references/health-care.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -399,14 +325,14 @@
    "shared": false
   },
   {
-   "name": "learning-path",
+   "name": "cert-prep",
    "title": "prepare for a certification exam",
    "when": "",
    "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "Pull the current official exam guide — topics, weights, format, time — then ตรวจ that the exam code is still in use · ใคร: `tech-mentor` ตัวใหม่",
+     "text": "Open the principle file [`references/learning.md`](../../life-principles/references/learning.md) first. Pull the current official exam guide — topics, weights, format, time — then ตรวจ that the exam code is still in use · ใคร: `tech-mentor` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -476,7 +402,7 @@
     },
     {
      "n": 5,
-     "text": "ตรวจ that every topic in the exam guide is in the plan and that study time is split by exam weight · ใคร: `reviewer` ตัวใหม่",
+     "text": "ตรวจ that every topic in the exam guide is in the plan and that study time is split by exam weight (ตัดสินผลตาม [`references/learning.md`](../../life-principles/references/learning.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -501,7 +427,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Note the age range and sex of the person being checked, and the entitlements they have (Social Security · Gold Card (universal coverage) · company benefits) · ใคร: หัวหน้าทีม",
+     "text": "Open the principle file [`references/health-care.md`](../../life-principles/references/health-care.md) first. Note the age range and sex of the person being checked, and the entitlements they have (Social Security · Gold Card (universal coverage) · company benefits) · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -573,7 +499,7 @@
     },
     {
      "n": 5,
-     "text": "After the checkup, copy the values from the result sheet into the multi-year tracking table **exactly, with no interpretation**. For a value the lab flags as abnormal, write it down as a question for the doctor · ใคร: `health-organizer` ตัวใหม่ copies the values · `reviewer` ตัวใหม่ checks (ตรวจ) against the result sheet, and checks the checkup-day checklist from step 4, before it reaches the user",
+     "text": "After the checkup, copy the values from the result sheet into the multi-year tracking table **exactly, with no interpretation**. For a value the lab flags as abnormal, write it down as a question for the doctor (ตัดสินผลตาม [`references/health-care.md`](../../life-principles/references/health-care.md)) · ใคร: `health-organizer` ตัวใหม่ copies the values · `reviewer` ตัวใหม่ checks (ตรวจ) against the result sheet, and checks the checkup-day checklist from step 4, before it reaches the user",
      "sub": [],
      "phase": "",
      "who": {
@@ -600,7 +526,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "For a decision, record it per `goals-and-decisions`: options, reasons, expected result, confidence, review date · ใคร: หัวหน้าทีม",
+     "text": "Open the principle file [`references/planning.md`](../../life-principles/references/planning.md) first. For a decision, record it per `goals-and-decisions`: options, reasons, expected result, confidence, review date · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -656,7 +582,7 @@
     },
     {
      "n": 4,
-     "text": "Check (ตรวจ) that every goal can be measured by a number or by yes/no, and that the decision record was written before the result was known · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) that every goal can be measured by a number or by yes/no, and that the decision record was written before the result was known (ตัดสินผลตาม [`references/planning.md`](../../life-principles/references/planning.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -681,7 +607,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "If the user is being hacked or tricked into transferring money right now, do the first-hour steps in `digital-hygiene` before anything else · ใคร: หัวหน้าทีม (talk to the user at once)",
+     "text": "Open the principle file [`references/life-admin.md`](../../life-principles/references/life-admin.md) first. If the user is being hacked or tricked into transferring money right now, do the first-hour steps in `digital-hygiene` before anything else · ใคร: หัวหน้าทีม (talk to the user at once)",
      "sub": [],
      "phase": "",
      "who": {
@@ -751,7 +677,7 @@
     },
     {
      "n": 5,
-     "text": "Draft a scam warning message for the family · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set before it reaches the user",
+     "text": "Draft a scam warning message for the family (ตัดสินผลตาม [`references/life-admin.md`](../../life-principles/references/life-admin.md)) · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set before it reaches the user",
      "sub": [],
      "phase": "",
      "who": {
@@ -778,7 +704,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Put the symptoms in a timeline from the user's own words: when it started, what it is like, what makes it better or worse. Do not interpret · ใคร: หัวหน้าทีม",
+     "text": "Open the principle file [`references/health-care.md`](../../life-principles/references/health-care.md) first. Put the symptoms in a timeline from the user's own words: when it started, what it is like, what makes it better or worse. Do not interpret. A follow-up visit with no new symptom: write \"no new symptom\" and list changes since the last visit instead · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -812,7 +738,7 @@
     },
     {
      "n": 3,
-     "text": "Write the 3 most important questions (the doctor often has time for only 3) · ใคร: `health-organizer` ตัวใหม่",
+     "text": "Write the 3 most important questions from `references/question-bank.md` (the doctor often has time for only 3); for an older adult on several medicines, ask the doctor to review whether every medicine is still needed and whether any raises the risk of falling (asked, never decided by us) · ใคร: `health-organizer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -830,7 +756,7 @@
     },
     {
      "n": 4,
-     "text": "Combine everything into a 1-page card the user can carry · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user",
+     "text": "Combine everything into a 1-page card the user can carry, with who comes along to take notes, and the appointment slip, referral letter and health-care rights card to bring · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user against `health-care.md` principles 1, 2 and 5 (few questions · timeline · current medicine list · note-taker · older-adult risks), with no diagnosis wording",
      "sub": [],
      "phase": "",
      "who": {
@@ -839,7 +765,7 @@
       "agents": [
        "health-organizer"
       ],
-      "raw": "`health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user"
+      "raw": "`health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user against `health-care.md` principles 1, 2 and 5 (few questions · timeline · current medicine list · note-taker · older-adult risks), with no diagnosis wording"
      },
      "skills": [],
      "commands": [],
@@ -848,7 +774,7 @@
     },
     {
      "n": 5,
-     "text": "After the visit, write down what the doctor said, the medicines prescribed, and the next appointment, as the user tells it, then update `health-admin` · ใคร: หัวหน้าทีม writes it down from the user · `health-organizer` ตัวใหม่ updates the medicine table · `reviewer` ตัวใหม่ checks (ตรวจ) the medicine table against what the doctor prescribed",
+     "text": "After the visit, write down what the doctor said, the medicines prescribed, and the next appointment, as the user tells it, then update the medicine table from playbook `medication-routine` (ตัดสินผลตาม [`references/health-care.md`](../../life-principles/references/health-care.md)) · ใคร: หัวหน้าทีม writes it down from the user · `health-organizer` ตัวใหม่ updates the medicine table · `reviewer` ตัวใหม่ checks (ตรวจ) the medicine table against what the doctor prescribed",
      "sub": [],
      "phase": "",
      "who": {
@@ -859,11 +785,11 @@
       ],
       "raw": "หัวหน้าทีม writes it down from the user · `health-organizer` ตัวใหม่ updates the medicine table · `reviewer` ตัวใหม่ checks (ตรวจ) the medicine table against what the doctor prescribed"
      },
-     "skills": [
-      "health-admin"
-     ],
+     "skills": [],
      "commands": [],
-     "playbooks": [],
+     "playbooks": [
+      "medication-routine"
+     ],
      "approval": false
     }
    ],
@@ -877,7 +803,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "List the documents by the categories in `family-legal`: ID cards, passports, house, car, insurance, contracts, education · ใคร: `doc-caretaker` ตัวใหม่",
+     "text": "Open the principle files [`references/life-admin.md`](../../life-principles/references/life-admin.md) · [`references/family-legal.md`](../../life-principles/references/family-legal.md) first. List the documents by the categories in `family-legal`: ID cards, passports, house, car, insurance, contracts, education · ใคร: `doc-caretaker` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -935,7 +861,7 @@
     },
     {
      "n": 4,
-     "text": "Set reminders before expiry, at the lead time each document needs · ใคร: `doc-caretaker` ตัวใหม่ then `reviewer` ตัวใหม่ checks (ตรวจ) the expiry dates and storage places against the register",
+     "text": "Set reminders before expiry, at the lead time each document needs (ตัดสินผลตาม [`references/life-admin.md`](../../life-principles/references/life-admin.md) · [`references/family-legal.md`](../../life-principles/references/family-legal.md)) · ใคร: `doc-caretaker` ตัวใหม่ then `reviewer` ตัวใหม่ checks (ตรวจ) the expiry dates and storage places against the register",
      "sub": [],
      "phase": "",
      "who": {
@@ -962,7 +888,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Collect the week's information: family members, budget per head, appointments, school tasks, medicines, pet vaccines that are almost due · ใคร: หัวหน้าทีม",
+     "text": "Open the principle file [`references/family-home.md`](../../life-principles/references/family-home.md) first. Collect the week's information: family members, budget per head, appointments, school tasks, medicines, pet vaccines that are almost due · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -989,16 +915,16 @@
       ],
       "raw": "`family-planner` ตัวใหม่"
      },
-     "skills": [
+     "skills": [],
+     "commands": [],
+     "playbooks": [
       "family-week"
      ],
-     "commands": [],
-     "playbooks": [],
      "approval": false
     },
     {
      "n": 3,
-     "text": "Put the school tasks, appointments for older adults, medicines, and pet tasks into the same schedule · ใคร: `family-planner` ตัวใหม่",
+     "text": "Put the school tasks, appointments for older adults, medicines, and pet tasks into the same schedule per `family-care` · ใคร: `family-planner` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1009,14 +935,16 @@
       ],
       "raw": "`family-planner` ตัวใหม่"
      },
-     "skills": [],
+     "skills": [
+      "family-care"
+     ],
      "commands": [],
      "playbooks": [],
      "approval": false
     },
     {
      "n": 4,
-     "text": "Check (ตรวจ) that every task has a day, a time, and a person responsible, and that the total of the shopping list stays within the budget · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) that every task has a day, a time, and a person responsible, and that the total of the shopping list stays within the budget (ตัดสินผลตาม [`references/family-home.md`](../../life-principles/references/family-home.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1041,7 +969,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Check (ตรวจ) the screening questions in `health-admin` before starting to exercise. If the user answers \"yes\" to any of them, they should see a doctor first · ใคร: หัวหน้าทีม",
+     "text": "Open the principle files [`references/health-care.md`](../../life-principles/references/health-care.md) · [`references/planning.md`](../../life-principles/references/planning.md) first. Check (ตรวจ) the screening questions in `health-admin` before starting to exercise. If the user answers \"yes\" to any of them, they should see a doctor first · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1059,7 +987,7 @@
     },
     {
      "n": 2,
-     "text": "Set a review point after 2 weeks, based on the real log and not on feelings · ใคร: หัวหน้าทีม",
+     "text": "Set a review point after 2 weeks, based on the real log and not on feelings, and design the habit per `goals-and-decisions` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1068,14 +996,16 @@
       "agents": [],
       "raw": "หัวหน้าทีม"
      },
-     "skills": [],
+     "skills": [
+      "goals-and-decisions"
+     ],
      "commands": [],
      "playbooks": [],
      "approval": false
     },
     {
      "n": 3,
-     "text": "For exercise, make a starter plan that follows the World Health Organization physical activity guidelines, then increase slowly · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user",
+     "text": "For exercise, make a starter plan per `health-admin` (`references/exercise-plan.md`) that follows the World Health Organization physical activity guidelines, then increase slowly · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user",
      "sub": [],
      "phase": "",
      "who": {
@@ -1086,14 +1016,16 @@
       ],
       "raw": "`health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user"
      },
-     "skills": [],
+     "skills": [
+      "health-admin"
+     ],
      "commands": [],
      "playbooks": [],
      "approval": false
     },
     {
      "n": 4,
-     "text": "For sleep, use a 2-week sleep diary and the sleep hygiene checklist from `health-admin` · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user",
+     "text": "For sleep, use a 2-week sleep diary and the sleep hygiene checklist from `health-admin` (`references/sleep-log.md`) (ตัดสินผลตาม [`references/health-care.md`](../../life-principles/references/health-care.md) · [`references/planning.md`](../../life-principles/references/planning.md)) · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user",
      "sub": [],
      "phase": "",
      "who": {
@@ -1122,7 +1054,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Collect the details: company, position, which round, who interviews, which language, date and time · ใคร: หัวหน้าทีม",
+     "text": "Open the principle file [`references/career.md`](../../life-principles/references/career.md) first. Collect the details: company, position, which round, who interviews, which language, date and time · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1174,7 +1106,7 @@
     },
     {
      "n": 4,
-     "text": "Prepare answers to the standard questions Thai HR asks and to the salary question, taking the expected figure from `job-search` · ใคร: `interview-coach` ตัวใหม่",
+     "text": "Prepare answers to the standard questions Thai HR asks and to the salary question, taking the expected figure from `job-search` (`references/salary-negotiation.md`) · ใคร: `interview-coach` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1212,7 +1144,7 @@
     },
     {
      "n": 6,
-     "text": "Prepare 3 questions to ask back, and draft a thank-you email for after the interview · ใคร: `interview-coach` ตัวใหม่ then `reviewer` ตัวใหม่ checks (ตรวจ) the whole interview prep set before it reaches the user",
+     "text": "Prepare 3 questions to ask back, and draft a thank-you email for after the interview (ตัดสินผลตาม [`references/career.md`](../../life-principles/references/career.md)) · ใคร: `interview-coach` ตัวใหม่ then `reviewer` ตัวใหม่ checks (ตรวจ) the whole interview prep set before it reaches the user",
      "sub": [],
      "phase": "",
      "who": {
@@ -1239,7 +1171,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Collect the raw material: current CV · job ad · LinkedIn link · the language the company uses. For any item that is missing, write `(รอยืนยัน)` (awaiting confirmation) and carry on · ใคร: หัวหน้าทีม",
+     "text": "Open the principle file [`references/career.md`](../../life-principles/references/career.md) first. Collect the raw material: current CV · job ad · LinkedIn link · the language the company uses. For any item that is missing, write `(รอยืนยัน)` (awaiting confirmation) and carry on · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1349,7 +1281,7 @@
     },
     {
      "n": 7,
-     "text": "Check (ตรวจ) that every keyword from step 2 appears in the CV, that dates and positions match in every document, and that the ATS can read the file (no tables, text boxes, or images in place of text) · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) that every keyword from step 2 appears in the CV, that dates and positions match in every document, and that the ATS can read the file (no tables, text boxes, or images in place of text) (ตัดสินผลตาม [`references/career.md`](../../life-principles/references/career.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1415,8 +1347,8 @@
      "sub": [
       "**Count the mistake types first.** Tag every row `ไม่ได้เปิด skill` (did not open the skill) · `เปิดแต่ไม่ทำตาม` (opened but did not follow) · `ไม่มีกฎ` (no rule) (definitions in the agent `learning-reviewer`), then count. Mostly `ไม่ได้เปิด` → this round's job is to fix how skills are signalled (`triggers.md` · `hooks/skill-router.json`), not to write more text in the skill.",
       "**A skill that has absorbed 3 merged lessons but mistakes did not drop.** Stop adding text. Propose one of: a checker, a paired example (before → after), or rolling the fix back.",
-      "**A repeated mistake** (found 2 or more times · `correction: true` in the log for the same issue): make it a checker, do not write more warnings (`repeated-mistakes-to-checks` if present, otherwise a check script or an item in the pre-send checklist).",
-      "**A method that worked, or a skill that says something wrong:** fix the paragraph in SKILL.md (`session-lessons-to-skills` if present).",
+      "**A repeated mistake** (found 2 or more times · `correction: true` in the log for the same issue): make it a checker, do not write more warnings (`learn-loop/repeated-mistakes-to-checks` if present, otherwise a check script or an item in the pre-send checklist).",
+      "**A method that worked, or a skill that says something wrong:** fix the paragraph in SKILL.md (`learn-loop/session-lessons-to-skills` if present).",
       "**A playbook assembled on the spot and reused 2 or more times:** propose it as a permanent playbook per [`playbook-template`](playbook-template.md).",
       "**Fixing an agent or playbook:** fix the matching paragraph · a playbook must still pass `validate-marketplace.mjs`.",
       "**A user rule:** 1 line in `~/.claude/superuser-style.md`, which works from every project.",
@@ -1523,7 +1455,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Find the answers from the information at hand: what the user already knows · which real project it can tie to · how much time per week. Put `(รอยืนยัน)` (pending confirmation) on anything unknown. Do not guess values · ใคร: หัวหน้าทีม",
+     "text": "Open the principle file [`references/learning.md`](../../life-principles/references/learning.md) first. Find the answers from the information at hand: what the user already knows · which real project it can tie to · how much time per week. Put `(รอยืนยัน)` (pending confirmation) on anything unknown. Do not guess values · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1597,7 +1529,7 @@
     },
     {
      "n": 5,
-     "text": "ตรวจ that every milestone has a verifiable outcome and that the total time does not exceed what the user has · ใคร: `reviewer` ตัวใหม่",
+     "text": "ตรวจ that every milestone has a verifiable outcome and that the total time does not exceed what the user has (ตัดสินผลตาม [`references/learning.md`](../../life-principles/references/learning.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1622,7 +1554,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Survey the house from what the user tells you: how many air conditioners, the water pump, the roof, the age of the house · ใคร: หัวหน้าทีม",
+     "text": "Open the principle file [`references/life-admin.md`](../../life-principles/references/life-admin.md) first. Survey the house from what the user tells you: how many air conditioners, the water pump, the roof, the age of the house · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1694,7 +1626,7 @@
     },
     {
      "n": 5,
-     "text": "Check (ตรวจ) that every task in the calendar has a month and a person responsible, and that the numbers in the table match the quotes · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) that every task in the calendar has a month and a person responsible, and that the numbers in the table match the quotes (ตัดสินผลตาม [`references/life-admin.md`](../../life-principles/references/life-admin.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1719,7 +1651,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Copy the drug name, dose, time, and before or after meals from the label exactly, one drug at a time. If anything is missing, write `[ถามเภสัชกร]` (ask the pharmacist) · ใคร: `health-organizer` ตัวใหม่",
+     "text": "Open the principle file [`references/health-care.md`](../../life-principles/references/health-care.md) first. Copy the drug name, dose, time, and before or after meals from the label exactly, one drug at a time. If anything is missing, write `[ถามเภสัชกร]` (ask the pharmacist) · ใคร: `health-organizer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1773,7 +1705,7 @@
     },
     {
      "n": 4,
-     "text": "Make a drug allergy list and a medicine list to carry to the doctor · ใคร: `health-organizer` ตัวใหม่",
+     "text": "Make a drug allergy list and a medicine list to carry to the doctor, each with a \"last updated\" date and what each medicine is for; give a copy to every carer · ใคร: `health-organizer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1791,7 +1723,7 @@
     },
     {
      "n": 5,
-     "text": "Check (ตรวจ) that every row matches the label, that there is no dosing advice, and flag only duplicates with the same name and dose (do not judge drug interactions) · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) that every row matches the label, the lists carry a last-updated date and reached every carer, that there is no dosing advice, and flag only duplicates with the same name and dose (do not judge drug interactions) (ตัดสินผลตาม [`references/health-care.md`](../../life-principles/references/health-care.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1832,7 +1764,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Before the meeting, make a 1-page card: goal · 3 questions · context to remember · what to ask for · the point where the user will give way · ใคร: `meeting-prep` ตัวใหม่",
+     "text": "Open the principle file [`references/planning.md`](../../life-principles/references/planning.md) first. Before the meeting, make a 1-page card: goal · 3 questions · context to remember · what to ask for · the point where the user will give way · ใคร: `meeting-prep` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1850,7 +1782,7 @@
     },
     {
      "n": 2,
-     "text": "After the meeting, summarise the decisions, the tasks with owner and due date, and the open questions, under `meeting` leg 2. If the user wants a formal version, make it a Thai meeting minutes report · ใคร: `meeting-prep` ตัวใหม่",
+     "text": "After the meeting, summarise the decisions, the tasks with owner and due date, and the open questions, under `meeting` leg 2. If the user wants a formal version, make it a Thai meeting minutes report (`references/thai-minutes-template.md`) · ใคร: `meeting-prep` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1890,7 +1822,7 @@
     },
     {
      "n": 4,
-     "text": "ตรวจ the summary and the email: every task has an owner and a date, and there is no text that is not in the notes or the transcript · ใคร: `reviewer` ตัวใหม่",
+     "text": "ตรวจ the summary and the email: every task has an owner and a date, and there is no text that is not in the notes or the transcript (ตัดสินผลตาม [`references/planning.md`](../../life-principles/references/planning.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1915,7 +1847,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Collect the figures from real documents: offer letter · payslip · benefits. If a figure is missing, write `(รอยืนยัน)` · ใคร: หัวหน้าทีม",
+     "text": "Open the principle file [`references/career.md`](../../life-principles/references/career.md) first. Collect the figures from real documents: offer letter · payslip · benefits. If a figure is missing, write `(รอยืนยัน)` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -2003,7 +1935,7 @@
     },
     {
      "n": 6,
-     "text": "Check (ตรวจ) by recalculating every cell with a formula, and make sure no sentence misstates the current salary · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) by recalculating every cell with a formula, and make sure no sentence misstates the current salary (ตัดสินผลตาม [`references/career.md`](../../life-principles/references/career.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2028,7 +1960,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Read the abstract · main proposal · experiment results, then write the main idea in plain language in 3 sentences · ใคร: `tech-mentor` ตัวใหม่",
+     "text": "Open the principle file [`references/learning.md`](../../life-principles/references/learning.md) first. Read the abstract · main proposal · experiment results, then write the main idea in plain language in 3 sentences · ใคร: `tech-mentor` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2061,7 +1993,9 @@
       "learning-path"
      ],
      "commands": [],
-     "playbooks": [],
+     "playbooks": [
+      "learning-path"
+     ],
      "approval": false
     },
     {
@@ -2102,7 +2036,7 @@
     },
     {
      "n": 5,
-     "text": "Write a short note using the `learning-path` paper-to-practice template — when to use it, when not to · ใคร: `tech-mentor` ตัวใหม่ · `reviewer` ตัวใหม่ checks it against the real run",
+     "text": "Write a short note using the `learning-path` paper-to-practice template — when to use it, when not to (ตัดสินผลตาม [`references/learning.md`](../../life-principles/references/learning.md)) · ใคร: `tech-mentor` ตัวใหม่ · `reviewer` ตัวใหม่ checks it against the real run",
      "sub": [],
      "phase": "",
      "who": {
@@ -2133,7 +2067,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Read the current CV and profile. List the positions, dates, and achievements, and note where the information conflicts · ใคร: `career-coach` ตัวใหม่",
+     "text": "Open the principle file [`references/career.md`](../../life-principles/references/career.md) first. Read the current CV and profile. List the positions, dates, and achievements, and note where the information conflicts · ใคร: `career-coach` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2205,7 +2139,7 @@
     },
     {
      "n": 5,
-     "text": "Check (ตรวจ) that dates and positions match everywhere, and that there is no personal data that should not be included (age · religion · ID number) unless the user asks for it · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) that dates and positions match everywhere, and that there is no personal data that should not be included (age · religion · ID number) unless the user asks for it (ตัดสินผลตาม [`references/career.md`](../../life-principles/references/career.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2230,7 +2164,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Collect achievements from real material: praise emails · reports · system figures · this year's KPI targets · ใคร: หัวหน้าทีม",
+     "text": "Open the principle file [`references/career.md`](../../life-principles/references/career.md) first. Collect achievements from real material: praise emails · reports · system figures · this year's KPI targets · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -2300,7 +2234,7 @@
     },
     {
      "n": 5,
-     "text": "Check (ตรวจ) that every claim points to evidence, and that there are no figures the user did not provide · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) that every claim points to evidence, and that there are no figures the user did not provide (ตัดสินผลตาม [`references/career.md`](../../life-principles/references/career.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2325,7 +2259,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Set the scope — the piece to check, and the source documents to compare it with (email · calendar · meeting notes · documents) · ใคร: หัวหน้าทีม",
+     "text": "Open the principle file for the kind of piece first (see Main principles). Set the scope — the piece to check, and the source documents to compare it with (email · calendar · meeting notes · documents) · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -2464,7 +2398,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Collect ideas from the user or the idea bank, then score them under `tech-growth` — learning value · can be finished in 2 weekends · really usable · ใคร: `tech-mentor` ตัวใหม่",
+     "text": "Open the principle file [`references/tech-growth.md`](../../life-principles/references/tech-growth.md) first. Collect ideas from the user or the idea bank, then score them under `tech-growth` — learning value · can be finished in 2 weekends · really usable · ใคร: `tech-mentor` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2518,7 +2452,7 @@
     },
     {
      "n": 4,
-     "text": "Set up the minimum project skeleton that runs. Pass any larger code work on to `/software-development:superuser` · ใคร: `tech-mentor` ตัวใหม่ · `reviewer` ตัวใหม่ runs the real skeleton and ตรวจ that every point of the \"done\" definition can be measured",
+     "text": "Set up the minimum project skeleton that runs. Pass any larger code work on to `/software-development:superuser` (ตัดสินผลตาม [`references/tech-growth.md`](../../life-principles/references/tech-growth.md)) · ใคร: `tech-mentor` ตัวใหม่ · `reviewer` ตัวใหม่ runs the real skeleton and ตรวจ that every point of the \"done\" definition can be measured",
      "sub": [],
      "phase": "",
      "who": {
@@ -2545,7 +2479,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Read the bank or card statement the user sent, and find the monthly repeat charges using the patterns in `household-money` · ใคร: `life-admin` ตัวใหม่",
+     "text": "Open the principle file [`references/life-admin.md`](../../life-principles/references/life-admin.md) first. Read the bank or card statement the user sent, and find the monthly repeat charges using the patterns in `household-money` · ใคร: `life-admin` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2619,7 +2553,7 @@
     },
     {
      "n": 5,
-     "text": "Set a reminder before each free trial ends · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the amounts and steps against the statement",
+     "text": "Set a reminder before each free trial ends (ตัดสินผลตาม [`references/life-admin.md`](../../life-principles/references/life-admin.md)) · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the amounts and steps against the statement",
      "sub": [],
      "phase": "",
      "who": {
@@ -2631,6 +2565,147 @@
       "raw": "`life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the amounts and steps against the statement"
      },
      "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "teach-a-course",
+   "title": "design and run a course you will teach",
+   "when": "",
+   "done": "",
+   "steps": [
+    {
+     "n": 1,
+     "text": "Open the principle file [`references/teaching.md`](../../life-principles/references/teaching.md) first. Ask the organizer's 6 questions in one go per `course-builder` section 1 and write `course/brief.md`; anything unknown gets `(รอยืนยัน)` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "course-builder"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "Write the learning outcomes with visible verbs per `course-builder` section 2, each with the exercise and the assessment that will show it · ใคร: `tech-mentor` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "tech-mentor"
+      ],
+      "raw": "`tech-mentor` ตัวใหม่"
+     },
+     "skills": [
+      "course-builder"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "Build the timed schedule per `course-builder` section 3; every session points to an outcome number, and hands-on time is written next to teaching time · ใคร: `tech-mentor` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "tech-mentor"
+      ],
+      "raw": "`tech-mentor` ตัวใหม่"
+     },
+     "skills": [
+      "course-builder"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "Write the exercises from guided to alone and the rubric with sample work per `course-builder` sections 4–5 · ใคร: `tech-mentor` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "tech-mentor"
+      ],
+      "raw": "`tech-mentor` ตัวใหม่"
+     },
+     "skills": [
+      "course-builder"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "Make the handouts and feedback form per `course-builder` sections 6–9; slides per `slide-deck` if software-development is installed, otherwise the handout alone · ใคร: `tech-mentor` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "tech-mentor"
+      ],
+      "raw": "`tech-mentor` ตัวใหม่"
+     },
+     "skills": [
+      "course-builder"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "Check (ตรวจ) the whole `course/` folder against [`references/teaching.md`](../../life-principles/references/teaching.md): every session ↔ outcome ↔ exercise ↔ assessment links up, the schedule fits the hours in the brief, materials are readable and their sources and licences are written · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "Report: the folder, what is still `(รอยืนยัน)`, and the feedback form and post-teaching log to fill in after the session (`course-builder` → `references/materials-feedback-online-copyright.md` section 7) · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "course-builder"
+     ],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -2678,7 +2753,7 @@
     },
     {
      "n": 3,
-     "text": "Split into milestones: each milestone must end in something checkable that can be shown to the owner · record in the \"สถานะล่าสุด\" (latest status) table in `docs/BUILD-PLAN.md` per `status-report` · ใคร: หัวหน้าทีม",
+     "text": "Split into milestones: each milestone must end in something checkable that can be shown to the owner · record in the \"สถานะล่าสุด\" (latest status) table in `docs/BUILD-PLAN.md` per `superuser/status-report` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -2726,7 +2801,7 @@
     },
     {
      "n": 6,
-     "text": "Do the work: agent pieces are sent together in one message, by rank and graph width (`team-roles` \"แบ่งงาน\" (splitting the work) · more than 8 at once → `parallel-split-and-merge`) · for a person's piece, send the note's path to the teammate with a due date for the returned note · pieces that must wait on others go in the next round · ใคร: ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note",
+     "text": "Do the work: agent pieces are sent together in one message, by rank and graph width (`team-roles` \"แบ่งงาน\" (splitting the work) · more than 8 at once → `crew-patterns/parallel-split-and-merge`) · for a person's piece, send the note's path to the teammate with a due date for the returned note · pieces that must wait on others go in the next round · ใคร: ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -2742,7 +2817,7 @@
     },
     {
      "n": 7,
-     "text": "Prove (พิสูจน์), per milestone: merge the milestone's pieces, then `reviewer` ตัวใหม่ checks the whole milestone in one go against the brief's \"เสร็จเมื่อ\" (done when) · risky work (money · law · health · sent to outsiders) uses `adversarial-review-panel` · fail → fix → recheck, up to the round ceiling in `team-roles` · ใคร: `reviewer` ตัวใหม่",
+     "text": "Prove (พิสูจน์), per milestone: merge the milestone's pieces, then `reviewer` ตัวใหม่ checks the whole milestone in one go against the brief's \"เสร็จเมื่อ\" (done when) · risky work (money · law · health · sent to outsiders) uses `crew-patterns/adversarial-review-panel` · fail → fix → recheck, up to the round ceiling in `team-roles` · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -2758,7 +2833,7 @@
     },
     {
      "n": 8,
-     "text": "End-of-day sync: collect incoming handover notes (people and agents equal) · update BUILD-PLAN + \"ความคืบหน้า\" (progress) and \"รับงานต่อ\" (pick up the work) in `CONTEXT.md` per playbook `pickup-and-pause` · record decisions in `decision-log` · ใคร: หัวหน้าทีม",
+     "text": "End-of-day sync: collect incoming handover notes (people and agents equal) · update BUILD-PLAN + \"ความคืบหน้า\" (progress) and \"รับงานต่อ\" (pick up the work) in `CONTEXT.md` per playbook `pickup-and-pause` · record decisions in `decision-desk/decision-log` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -2774,7 +2849,7 @@
     },
     {
      "n": 9,
-     "text": "Report to the owner: at the end of a milestone or week, with `status-report` · items that cost money or cannot be reversed go under \"รออนุมัติ\" without blocking other pieces · ใคร: หัวหน้าทีม",
+     "text": "Report to the owner: at the end of a milestone or week, with `superuser/status-report` · items that cost money or cannot be reversed go under \"รออนุมัติ\" without blocking other pieces · ใคร: หัวหน้าทีม",
      "sub": [
       "**Check per milestone, not at the end of the job.** For month-long work checked only once at the end, finding the break point is too late to fix.",
       "**A person's and an agent's pieces must not touch the same file.** The split table must state `files_allowed` with no overlap at all · shared files are written by the lead alone (`team-files`).",
@@ -2797,14 +2872,14 @@
    "shared": true
   },
   {
-   "name": "tech-growth",
+   "name": "tech-radar",
    "title": "weekly technology radar",
    "when": "",
    "done": "",
    "steps": [
     {
      "n": 1,
-     "text": "Read the tracked items from the user's radar file. If there is no file yet, build it from the dependencies of the user's project · ใคร: หัวหน้าทีม",
+     "text": "Open the principle file [`references/tech-growth.md`](../../life-principles/references/tech-growth.md) first. Read the tracked items from the user's radar file. If there is no file yet, build it from the dependencies of the user's project · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -2874,7 +2949,7 @@
     },
     {
      "n": 5,
-     "text": "ตรวจ that every item has an official link and a version number · ใคร: `reviewer` ตัวใหม่",
+     "text": "ตรวจ that every item has an official link and a version number (ตัดสินผลตาม [`references/tech-growth.md`](../../life-principles/references/tech-growth.md)) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2899,7 +2974,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Check (ตรวจ) the passport and the destination country's visa rules on official websites (Ministry of Foreign Affairs · embassy) · ใคร: `life-admin` ตัวใหม่",
+     "text": "Open the principle file [`references/life-admin.md`](../../life-principles/references/life-admin.md) first. Check (ตรวจ) the passport and the destination country's visa rules on official websites (Ministry of Foreign Affairs · embassy) · ใคร: `life-admin` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2955,7 +3030,7 @@
     },
     {
      "n": 4,
-     "text": "Set reminders for check-in and the time to leave home · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set (visa · expiry dates · confirmation numbers) against official sources",
+     "text": "Set reminders for check-in and the time to leave home (ตัดสินผลตาม [`references/life-admin.md`](../../life-principles/references/life-admin.md)) · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set (visa · expiry dates · confirmation numbers) against official sources",
      "sub": [],
      "phase": "",
      "who": {
@@ -3117,7 +3192,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Read the data from the registration book or the policy: expiry dates of the tax, พ.ร.บ., insurance, and driving licence · ใคร: `home-manager` ตัวใหม่",
+     "text": "Open the principle file [`references/life-admin.md`](../../life-principles/references/life-admin.md) first. Read the data from the registration book or the policy: expiry dates of the tax, พ.ร.บ., insurance, and driving licence · ใคร: `home-manager` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -3173,7 +3248,7 @@
     },
     {
      "n": 4,
-     "text": "Set reminders per `home-upkeep`: tax 90 days before expiry · พ.ร.บ., insurance, and driving licence 30 days before expiry. Also set service reminders by kilometres · ใคร: `home-manager` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set against the real registration book and official websites",
+     "text": "Set reminders per `home-upkeep`: tax 90 days before expiry · พ.ร.บ., insurance, and driving licence 30 days before expiry. Also set service reminders by kilometres (ตัดสินผลตาม [`references/life-admin.md`](../../life-principles/references/life-admin.md)) · ใคร: `home-manager` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set against the real registration book and official websites",
      "sub": [],
      "phase": "",
      "who": {
@@ -3202,7 +3277,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Pull the week's calendar and email from the installed connector into a file in `_to_delete/`. If there is no connector, use what the user sent. Then pass the path to a new `life-admin` to read on · ใคร: หัวหน้าทีม pulls it into the file",
+     "text": "Open the principle file [`references/planning.md`](../../life-principles/references/planning.md) first. Pull the week's calendar and email from the installed connector into a file in `_to_delete/`. If there is no connector, use what the user sent. Then pass the path to a new `life-admin` to read on · ใคร: หัวหน้าทีม pulls it into the file",
      "sub": [],
      "phase": "",
      "who": {
@@ -3278,7 +3353,7 @@
     },
     {
      "n": 5,
-     "text": "Summarise the 3 key items for next week and draft replies to the email that needs a reply today · ใคร: หัวหน้าทีม summarises and drafts · `reviewer` ตัวใหม่ checks the drafts before they reach the user, then the user decides which items to do this week",
+     "text": "Summarise the 3 key items for next week and draft replies to the email that needs a reply today (ตัดสินผลตาม [`references/planning.md`](../../life-principles/references/planning.md)) · ใคร: หัวหน้าทีม summarises and drafts · `reviewer` ตัวใหม่ checks the drafts before they reach the user, then the user decides which items to do this week",
      "sub": [],
      "phase": "",
      "who": {

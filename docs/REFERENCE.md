@@ -458,7 +458,7 @@
 
 ### 38. document-design
 **ใช้กับ:** business-analyst, devops-engineer, fintech-compliance-officer, graphic-designer, hipaa-officer, insurance-compliance-officer, legal-compliance-officer, product-manager, project-manager, qa-tester, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer
-**Description:** Use when Word, PowerPoint or PDF must look designed, or MD to Word
+**Description:** Use when Word, PowerPoint or PDF must look designed, MD to Word, or reading a .docx, .xlsx or .pdf someone sent
 
 ---
 

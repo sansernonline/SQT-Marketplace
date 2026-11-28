@@ -1,74 +1,40 @@
 {
  "plugin": "graphic-design",
- "version": "0.32.2",
+ "version": "0.39.1",
  "description": "Creative design beyond product UI — brand kits, AI image generation and briefs with style consistency, social media formats, marketplace product images, YouTube thumbnails, print-ready files, campaign sets, LINE rich menus, app and UI icons, video editing with Thai subtitles and narration, speaking scripts, motion basics, and a design-review checklist.",
  "cross": [],
  "skills": [
   "brand-kit",
-  "design-by-type",
-  "brand-kit",
-  "image-generation",
   "campaign-set",
   "copy-claims-check",
+  "design-by-type",
+  "design-principles",
   "design-review",
   "icon-design",
   "image-generation",
-  "image-generation",
-  "line-design",
   "line-design",
   "marketplace-product-images",
-  "video-editing",
   "narration-th",
   "print-ready-files",
-  "campaign-set",
-  "video-script",
-  "brand-kit",
   "video-editing",
-  "video-editing",
-  "video-script",
-  "design-by-type"
+  "video-script"
  ],
  "core_skills": [
   "superuser",
   "crew-patterns",
-  "crew-patterns",
   "lean-reply",
   "chat-prompt-workflows",
   "workspace-rules",
-  "workspace-rules",
   "context-budget",
   "decision-desk",
-  "decision-desk",
   "design-gate",
-  "workspace-rules",
-  "decision-desk",
   "handoff",
   "human-writing",
-  "superuser",
-  "design-gate",
   "learn-loop",
-  "crew-patterns",
-  "crew-patterns",
-  "design-gate",
-  "human-writing",
   "ground-rules",
   "fix-at-source",
-  "ground-rules",
-  "ground-rules",
-  "ground-rules",
-  "ground-rules",
   "research-with-sources",
-  "learn-loop",
-  "decision-desk",
-  "research-with-sources",
-  "learn-loop",
-  "ground-rules",
-  "skill-authoring",
-  "human-writing",
-  "superuser",
-  "fix-at-source",
-  "workspace-rules",
-  "human-writing"
+  "skill-authoring"
  ],
  "commands": [],
  "agents": [
@@ -101,7 +67,8 @@
    "description": "Use when a design feels off or before visuals ship. Reviews hierarchy, contrast, spacing, alignment; names 2–3 fixes.",
    "skills": [
     "design-review",
-    "print-ready-files"
+    "print-ready-files",
+    "design-by-type"
    ]
   },
   {
@@ -112,9 +79,6 @@
    "skills": [
     "image-generation",
     "superuser",
-    "image-generation",
-    "brand-kit",
-    "image-generation",
     "brand-kit",
     "icon-design"
    ]
@@ -126,7 +90,6 @@
    "description": "Use when creating social media posts, ads or campaign assets. Knows platform formats and safe zones; ships whole sets.",
    "skills": [
     "superuser",
-    "campaign-set",
     "campaign-set",
     "line-design",
     "design-by-type",
@@ -140,7 +103,6 @@
    "core": false,
    "description": "Use when footage or narration must become a finished file — cut, Thai subtitles, loudness, export. Works with ffmpeg.",
    "skills": [
-    "video-editing",
     "video-editing",
     "narration-th",
     "brand-kit",
@@ -157,7 +119,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Survey the folder and list every file with its size and date · ใคร: หัวหน้าทีม",
+     "text": "Open `design-principles` for what a clean kit looks like. Then survey the folder and list every file with its size and date · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -166,7 +128,9 @@
       "agents": [],
       "raw": "หัวหน้าทีม"
      },
-     "skills": [],
+     "skills": [
+      "design-principles"
+     ],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -225,7 +189,7 @@
     },
     {
      "n": 5,
-     "text": "Check (ตรวจ) that the file count is the same before and after, and that searching for the logo by name finds it · ใคร: `reviewer` ตัวใหม่",
+     "text": "Check (ตรวจ) that the file count is the same before and after, that searching for the logo by name finds it, and that the new layout follows `design-principles` · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -234,7 +198,9 @@
       "agents": [],
       "raw": "`reviewer` ตัวใหม่"
      },
-     "skills": [],
+     "skills": [
+      "design-principles"
+     ],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -250,7 +216,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Gather raw material: the old logo · past work · the customer group · the words people should feel · ใคร: หัวหน้าทีม",
+     "text": "Gather raw material (the old logo · past work · the customer group), then write the 7-field `เนื้อหา:` brief per `design-method` steps 1–4 and save it in `DESIGN.md`. Open the logo principle file before drawing · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -266,7 +232,7 @@
     },
     {
      "n": 2,
-     "text": "Write the direction as words before drawing: 3 words of personality · what is not the brand · ใคร: `brand-keeper` ตัวใหม่ (for several routes: `brainstormer` ตัวใหม่)",
+     "text": "Turn the brief into the brand direction before drawing: its `อารมณ์` words become the personality, its `ไม่เอา` becomes what the brand is not, and every direction traces back to `โปรเจกต์` · ใคร: `brand-keeper` ตัวใหม่ (for several routes: `brainstormer` ตัวใหม่)",
      "sub": [],
      "phase": "",
      "who": {
@@ -284,7 +250,7 @@
     },
     {
      "n": 3,
-     "text": "Build the kit per `brand-kit`: logo rules and clear space · color roles (contrast values are measured in step 5) · type scale · Thai and Latin font pair · tone of voice · ใคร: `brand-keeper` ตัวใหม่",
+     "text": "Build the kit per `brand-kit`: logo rules and clear space · logo and icon marks per `icon-design` · color roles (contrast values are measured in step 5) · type scale · Thai and Latin font pair · tone of voice · ใคร: `brand-keeper` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -296,7 +262,8 @@
       "raw": "`brand-keeper` ตัวใหม่"
      },
      "skills": [
-      "brand-kit"
+      "brand-kit",
+      "icon-design"
      ],
      "commands": [],
      "playbooks": [],
@@ -304,7 +271,7 @@
     },
     {
      "n": 4,
-     "text": "Make 5 real-use templates, then run `design-review` on every piece · ใคร: `brand-keeper` ตัวใหม่ makes the templates · `design-critic` ตัวใหม่ checks (ตรวจ)",
+     "text": "Make 5 real-use templates, then run `design-review` on every piece and check it against the medium's principle file in [`design-principles`](../../design-principles/SKILL.md) (logo first) · ใคร: `brand-keeper` ตัวใหม่ makes the templates · `design-critic` ตัวใหม่ checks (ตรวจ)",
      "sub": [],
      "phase": "",
      "who": {
@@ -317,7 +284,8 @@
       "raw": "`brand-keeper` ตัวใหม่ makes the templates · `design-critic` ตัวใหม่ checks (ตรวจ)"
      },
      "skills": [
-      "design-review"
+      "design-review",
+      "design-principles"
      ],
      "commands": [],
      "playbooks": [],
@@ -350,7 +318,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Write the core idea in 1 sentence, and the main message that must be seen within 3 seconds · ใคร: หัวหน้าทีม (`brainstormer` ตัวใหม่ proposes 2–3 ideas first)",
+     "text": "Open the banner principle file, then write the 7-field `เนื้อหา:` brief per `design-method` steps 1–4 (reuse `โปรเจกต์` from `DESIGN.md`); its `ความหมาย` is the core idea and the main message that must be seen within 3 seconds · ใคร: หัวหน้าทีม (`brainstormer` ตัวใหม่ proposes 2–3 ideas first)",
      "sub": [],
      "phase": "",
      "who": {
@@ -378,7 +346,6 @@
       "raw": "`social-creator` ตัวใหม่"
      },
      "skills": [
-      "campaign-set",
       "campaign-set"
      ],
      "commands": [],
@@ -427,7 +394,7 @@
     },
     {
      "n": 5,
-     "text": "Run `design-review` on every piece, then check (ตรวจ) against the brand kit · ใคร: `design-critic` ตัวใหม่ then `brand-keeper` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only, does not edit files)",
+     "text": "Run `design-review` on every piece, then check (ตรวจ) against the medium's principle file in [`design-principles`](../../design-principles/SKILL.md) (banner · video) and the brand kit. Check every claim in the copy per `copy-claims-check` · ใคร: `design-critic` ตัวใหม่ then `brand-keeper` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only, does not edit files)",
      "sub": [],
      "phase": "",
      "who": {
@@ -440,7 +407,9 @@
       "raw": "`design-critic` ตัวใหม่ then `brand-keeper` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only, does not edit files)"
      },
      "skills": [
-      "design-review"
+      "design-review",
+      "design-principles",
+      "copy-claims-check"
      ],
      "commands": [],
      "playbooks": [],
@@ -484,6 +453,172 @@
    "shared": false
   },
   {
+   "name": "design",
+   "title": "one design piece or a small set",
+   "when": "",
+   "done": "",
+   "steps": [
+    {
+     "n": 1,
+     "text": "Write the 7-field `เนื้อหา:` brief per `design-method` steps 1–4 (โปรเจกต์ first; reuse it from `DESIGN.md` if the project has one) and open the medium's principle file · ใคร: หัวหน้าทีม (unclear brief: `brainstormer` ตัวใหม่)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม (unclear brief: `brainstormer` ตัวใหม่)"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "Search live references and build the board per `design-gate/design-references` · ใคร: `art-director` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "art-director"
+      ],
+      "raw": "`art-director` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "Pick the references: the owner from the board, or the lead under **ตัดสินใจเอง** when the owner is away · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "Make 3 directions that differ in style and structure, each with its `ความหมาย · ตัวสื่อ · สไตล์ · สี · ฟอนต์` line, per `design-method` step 7 and the medium's skill · ใคร: `art-director` ตัวใหม่ per direction (sent together in one message)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "art-director"
+      ],
+      "raw": "`art-director` ตัวใหม่ per direction (sent together in one message)"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "Build the plain master of each direction, test it at the edges of use, then add depth and polish per `design-method` step 8. For a logo or icon, follow `icon-design`. For a print piece, export the files per `print-ready-files` · ใคร: ตัวเดิม (ถือแนวนั้น)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "ตัวเดิม (ถือแนวนั้น)"
+     },
+     "skills": [
+      "icon-design",
+      "print-ready-files"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "Check (ตรวจ) every direction by eye against the medium's principle file and `design-gate/no-ai-look`, in real use and next to the references · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "design-critic"
+      ],
+      "raw": "`design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only)"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "Fix the findings the lead has confirmed · ใคร: `art-director` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "art-director"
+      ],
+      "raw": "`art-director` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 8,
+     "text": "Check (ตรวจ) again every earlier finding and every changed spot, until no `สูง` (high) or `กลาง` (medium) is left, per [`team-roles`](team-roles.md) · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "design-critic"
+      ],
+      "raw": "`design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only)"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 9,
+     "text": "Present the board, record the owner's pick and words, and deliver the files and usage guide per `design-method` step 11 · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
    "name": "image-series",
    "title": "AI images that look like one set",
    "when": "",
@@ -491,7 +626,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Write a style lock sheet per `brand-kit` — color, light, composition, lens, what is forbidden · ใคร: `art-director` ตัวใหม่",
+     "text": "Write the 7-field `เนื้อหา:` brief per `design-method` steps 1–4 (reuse `โปรเจกต์` from `DESIGN.md`). Open the principle file of the medium (product images · LINE · thumbnail) before writing the style lock sheet per `brand-kit` — color, light, composition, lens, what is forbidden — with each choice tracing back to the brief. When the set must match an existing logo or brand, pull its colours with `brand-kit` `scripts/extract-colors.cjs` first. Before any image, run the medium skill's pre-work gate (live references · 3 different directions · the owner picks one · close with `ด่านก่อนลงมือ:`) · ใคร: `art-director` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -511,7 +646,7 @@
     },
     {
      "n": 2,
-     "text": "Write the brief and prompt for each image per `image-generation`, with every image citing the same lock sheet · ใคร: `art-director` ตัวใหม่",
+     "text": "Write the brief and prompt for each image per `image-generation`, with every image citing the same lock sheet. For product images follow `marketplace-product-images`; for LINE stickers and rich menus follow `line-design` · ใคร: `art-director` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -523,7 +658,9 @@
       "raw": "`art-director` ตัวใหม่"
      },
      "skills": [
-      "image-generation"
+      "image-generation",
+      "marketplace-product-images",
+      "line-design"
      ],
      "commands": [],
      "playbooks": [],
@@ -588,7 +725,7 @@
     },
     {
      "n": 6,
-     "text": "Check (ตรวจ) the whole set by running `design-review` on it · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only)",
+     "text": "Run the medium's checker scripts (LINE: `line-design` `scripts/richmenu_check.py` and `scripts/sticker_check.py` must report all pass), compare the set with the real logo or brand kit (`brand-keeper` ตัวใหม่), then check (ตรวจ) the whole set against the medium's principle file in [`design-principles`](../../design-principles/SKILL.md) (thumbnail · product images · LINE), then run `design-review` on it · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only)",
      "sub": [],
      "phase": "",
      "who": {
@@ -600,6 +737,8 @@
       "raw": "`design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only)"
      },
      "skills": [
+      "line-design",
+      "design-principles",
       "design-review"
      ],
      "commands": [],
@@ -640,8 +779,8 @@
      "sub": [
       "**Count the mistake types first.** Tag every row `ไม่ได้เปิด skill` (did not open the skill) · `เปิดแต่ไม่ทำตาม` (opened but did not follow) · `ไม่มีกฎ` (no rule) (definitions in the agent `learning-reviewer`), then count. Mostly `ไม่ได้เปิด` → this round's job is to fix how skills are signalled (`triggers.md` · `hooks/skill-router.json`), not to write more text in the skill.",
       "**A skill that has absorbed 3 merged lessons but mistakes did not drop.** Stop adding text. Propose one of: a checker, a paired example (before → after), or rolling the fix back.",
-      "**A repeated mistake** (found 2 or more times · `correction: true` in the log for the same issue): make it a checker, do not write more warnings (`repeated-mistakes-to-checks` if present, otherwise a check script or an item in the pre-send checklist).",
-      "**A method that worked, or a skill that says something wrong:** fix the paragraph in SKILL.md (`session-lessons-to-skills` if present).",
+      "**A repeated mistake** (found 2 or more times · `correction: true` in the log for the same issue): make it a checker, do not write more warnings (`learn-loop/repeated-mistakes-to-checks` if present, otherwise a check script or an item in the pre-send checklist).",
+      "**A method that worked, or a skill that says something wrong:** fix the paragraph in SKILL.md (`learn-loop/session-lessons-to-skills` if present).",
       "**A playbook assembled on the spot and reused 2 or more times:** propose it as a permanent playbook per [`playbook-template`](playbook-template.md).",
       "**Fixing an agent or playbook:** fix the matching paragraph · a playbook must still pass `validate-marketplace.mjs`.",
       "**A user rule:** 1 line in `~/.claude/superuser-style.md`, which works from every project.",
@@ -748,7 +887,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Set the scope: the pieces to check, and the source documents to compare against (brand kit · brief · platform sizes) · ใคร: หัวหน้าทีม",
+     "text": "Set the scope: the pieces to check, and the source documents to compare against (brand kit · brief · platform sizes), and open the medium's principle file in `design-principles` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -757,7 +896,9 @@
       "agents": [],
       "raw": "หัวหน้าทีม"
      },
-     "skills": [],
+     "skills": [
+      "design-principles"
+     ],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -919,7 +1060,7 @@
     },
     {
      "n": 3,
-     "text": "Split into milestones: each milestone must end in something checkable that can be shown to the owner · record in the \"สถานะล่าสุด\" (latest status) table in `docs/BUILD-PLAN.md` per `status-report` · ใคร: หัวหน้าทีม",
+     "text": "Split into milestones: each milestone must end in something checkable that can be shown to the owner · record in the \"สถานะล่าสุด\" (latest status) table in `docs/BUILD-PLAN.md` per `superuser/status-report` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -967,7 +1108,7 @@
     },
     {
      "n": 6,
-     "text": "Do the work: agent pieces are sent together in one message, by rank and graph width (`team-roles` \"แบ่งงาน\" (splitting the work) · more than 8 at once → `parallel-split-and-merge`) · for a person's piece, send the note's path to the teammate with a due date for the returned note · pieces that must wait on others go in the next round · ใคร: ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note",
+     "text": "Do the work: agent pieces are sent together in one message, by rank and graph width (`team-roles` \"แบ่งงาน\" (splitting the work) · more than 8 at once → `crew-patterns/parallel-split-and-merge`) · for a person's piece, send the note's path to the teammate with a due date for the returned note · pieces that must wait on others go in the next round · ใคร: ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -983,7 +1124,7 @@
     },
     {
      "n": 7,
-     "text": "Prove (พิสูจน์), per milestone: merge the milestone's pieces, then `reviewer` ตัวใหม่ checks the whole milestone in one go against the brief's \"เสร็จเมื่อ\" (done when) · risky work (money · law · health · sent to outsiders) uses `adversarial-review-panel` · fail → fix → recheck, up to the round ceiling in `team-roles` · ใคร: `reviewer` ตัวใหม่",
+     "text": "Prove (พิสูจน์), per milestone: merge the milestone's pieces, then `reviewer` ตัวใหม่ checks the whole milestone in one go against the brief's \"เสร็จเมื่อ\" (done when) · risky work (money · law · health · sent to outsiders) uses `crew-patterns/adversarial-review-panel` · fail → fix → recheck, up to the round ceiling in `team-roles` · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -999,7 +1140,7 @@
     },
     {
      "n": 8,
-     "text": "End-of-day sync: collect incoming handover notes (people and agents equal) · update BUILD-PLAN + \"ความคืบหน้า\" (progress) and \"รับงานต่อ\" (pick up the work) in `CONTEXT.md` per playbook `pickup-and-pause` · record decisions in `decision-log` · ใคร: หัวหน้าทีม",
+     "text": "End-of-day sync: collect incoming handover notes (people and agents equal) · update BUILD-PLAN + \"ความคืบหน้า\" (progress) and \"รับงานต่อ\" (pick up the work) in `CONTEXT.md` per playbook `pickup-and-pause` · record decisions in `decision-desk/decision-log` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -1015,7 +1156,7 @@
     },
     {
      "n": 9,
-     "text": "Report to the owner: at the end of a milestone or week, with `status-report` · items that cost money or cannot be reversed go under \"รออนุมัติ\" without blocking other pieces · ใคร: หัวหน้าทีม",
+     "text": "Report to the owner: at the end of a milestone or week, with `superuser/status-report` · items that cost money or cannot be reversed go under \"รออนุมัติ\" without blocking other pieces · ใคร: หัวหน้าทีม",
      "sub": [
       "**Check per milestone, not at the end of the job.** For month-long work checked only once at the end, finding the break point is too late to fix.",
       "**A person's and an agent's pieces must not touch the same file.** The split table must state `files_allowed` with no overlap at all · shared files are written by the lead alone (`team-files`).",
@@ -1180,7 +1321,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Write the main message and a 3-second hook · ใคร: `social-creator` ตัวใหม่ (hook text and script) · the motion shot list and the shot-by-shot brief belong to `art-director`",
+     "text": "Write the 7-field `เนื้อหา:` brief per `design-method` steps 1–4 (reuse `โปรเจกต์` from `DESIGN.md`); its `ความหมาย` is the main message, then write a 3-second hook for it · ใคร: `social-creator` ตัวใหม่ (hook text and script) · the motion shot list and the shot-by-shot brief belong to `art-director`",
      "sub": [],
      "phase": "",
      "who": {
@@ -1270,7 +1411,6 @@
      },
      "skills": [
       "video-editing",
-      "video-editing",
       "narration-th"
      ],
      "commands": [],
@@ -1279,7 +1419,7 @@
     },
     {
      "n": 6,
-     "text": "Check (ตรวจ) that the Thai subtitles can be read in time at the real speed, that text does not fall outside the platform's safe zone, and that the exported file (if any) has the length and loudness that were measured · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only, does not edit files)",
+     "text": "Check (ตรวจ) the cut against [`design-principles/references/video.md`](../../design-principles/references/video.md), and that the Thai subtitles can be read in time at the real speed, that text does not fall outside the platform's safe zone, and that the exported file (if any) has the length and loudness that were measured · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only, does not edit files)",
      "sub": [],
      "phase": "",
      "who": {

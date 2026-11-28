@@ -35,6 +35,7 @@ Not for: unfiltered lessons from work → `learn-loop/session-lessons-to-skills`
 - `version` in `plugin.json` bumped after content changes (manual check) · after installing, count the skills in a fresh chat.
 
 ## References
+- [`work-principles/references/skill-authoring.md`](../work-principles/references/skill-authoring.md) — open first: what a good skill is and why (6 principles, sources)
 - [`references/eval-format.md`](references/eval-format.md) — open for the official eval format
 - [`references/description-and-frontmatter.md`](references/description-and-frontmatter.md) — open when writing name, description or frontmatter fields
 - [`references/body-shape.md`](references/body-shape.md) — open when drafting or restructuring a body, or costing money

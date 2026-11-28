@@ -10,6 +10,8 @@ For medium-size work and up, choose **1** playbook, or compose one per `playbook
 | [`pickup-and-pause`](playbook-pickup-and-pause.md) | Continue from where it was left · take over from another agent · pause so someone can take over |
 | [`new-project`](playbook-new-project.md) | Start a new project that has no code yet, until it runs and can be proven |
 | [`feature`](playbook-feature.md) | Add or change the behavior of an existing program |
+| [`incident`](playbook-incident.md) | A live system is down or hurting users now — declare · stop the harm · root cause · blameless postmortem (a bug found in tests or on a dev machine → `bug-fix`) |
+| [`ai-feature`](playbook-ai-feature.md) | Add or improve a feature that calls an LLM · RAG · agent · MCP, measured by an eval set built before the prompt |
 | [`bug-fix`](playbook-bug-fix.md) | Something is broken — an error · a failing test · a wrong screen · a memory leak · a user report |
 | [`refactor`](playbook-refactor.md) | Change the structure with the same behavior · migrate a system |
 | [`performance`](playbook-performance.md) | Slow · heavy on the machine · you want one number to improve to a target |

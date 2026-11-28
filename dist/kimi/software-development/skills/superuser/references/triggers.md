@@ -64,5 +64,7 @@ The trigger table lives only in this file (`superuser` section 3 points here). O
 
 - Broken or leaking when it should not happen (error · memory leak · CPU running while idle) → `bug-fix` · still works but you want a number to improve to a target → `performance`
 - The screen must match a mockup or the old system → finish with `visual-parity` · moving the internal structure with the look unchanged → `refactor`
+- Production is down or users are hurt now → `incident` (it calls `bug-fix` steps for the root cause once stable) · broken only in tests or on a dev machine → `bug-fix`
+- A feature that calls an LLM → `ai-feature` · only checking whether it can work at all → `prototype` first, then `ai-feature`
 - A new project that needs BRD · SRS documents → code uses `new-project` · documents use `project-docs`
 - `unattended-run` wraps other playbooks and does not choose in their place — inside, each piece still chooses its playbook by the work

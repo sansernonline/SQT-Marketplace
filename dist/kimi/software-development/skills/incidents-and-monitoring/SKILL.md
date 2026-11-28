@@ -35,4 +35,4 @@ Drills for a runbook: [`references/game-days.md`](references/game-days.md). Aler
 - Metric labels never hold user ids, order ids or phone numbers; those go to logs.
 - The postmortem is blameless and states facts without softening them.
 
-A full multi-step response can follow the `bug-fix` playbook in `superuser/references/playbook-bug-fix.md`, with the steps in `incident-response` as the work format.
+Whole job → playbook `incident` (`superuser/references/playbook-incident.md`), with the steps in `incident-response` as the work format.

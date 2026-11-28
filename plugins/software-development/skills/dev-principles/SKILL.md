@@ -15,17 +15,17 @@ description: Use before code, tests, ops, docs or screen work to judge it
 | Architecture · API · database | [`references/architecture-api.md`](references/architecture-api.md) | `architecture` · `api-design` · `database-design` | `new-project` · `feature` |
 | Testing · quality evidence | [`references/testing.md`](references/testing.md) | `test-automation` · `qa-docs` | `feature` · `bug-fix` · `review` |
 | Security | [`references/security.md`](references/security.md) | `security-gate` · `security-audit` · `security-operations` | `review` · `ship` |
-| Operations · release · incidents | [`references/operations.md`](references/operations.md) | `cicd-and-release` · `incidents-and-monitoring` | `ship` · `investigation` |
+| Operations · release · incidents | [`references/operations.md`](references/operations.md) | `cicd-and-release` · `incidents-and-monitoring` | `ship` · `incident` · `investigation` |
 | Requirements · project documents | [`references/requirements-docs.md`](references/requirements-docs.md) | `requirements-writing` · `architecture` · `project-docs` | `project-docs` · `new-project` |
 | Application screens (web · mobile · Windows) | [`references/ui.md`](references/ui.md) | `ui-craft` · `web-app-design` · `mobile-app-design` · `windows-app-design` · `web-audit` | `feature` · `visual-parity` |
-| Data · AI/LLM · voice agents · MCP | [`references/data-ai.md`](references/data-ai.md) | `data-analysis` · `data-import-export` · `ai-engineering` | `feature` · `prototype` |
+| Data · AI/LLM · voice agents · MCP | [`references/data-ai.md`](references/data-ai.md) | `data-analysis` · `data-import-export` · `ai-engineering` | `ai-feature` · `feature` · `prototype` |
 | Mobile apps · games | [`references/mobile-game.md`](references/mobile-game.md) | `mobile-engineering` · `mobile-app-design` · `game-development` | `feature` · `ship` · `performance` |
 | Regulated or money domains (payments · health · insurance · IoT · smart contracts · SaaS · checkout · legal docs) | [`references/domain-systems.md`](references/domain-systems.md) | `domain-systems` | `feature` · `review` · `ship` |
 | Designed documents · slides · diagrams · one-off logo or poster | [`references/documents-diagrams.md`](references/documents-diagrams.md) | `document-design` · `slide-deck` · `diagrams` · `graphic-design` | `project-docs` |
 | Product and project planning (roadmap · sprint · retrospective · naming · reference apps) | [`references/product-project.md`](references/product-project.md) | `product-planning` · `product-naming` · `reference-app-research` · `requirements-writing` | `new-project` · `prototype` · `project-docs` |
 | Systems without docs or source (legacy spec recovery · authorized reverse engineering · framework upgrades) | [`references/legacy-reverse.md`](references/legacy-reverse.md) | `legacy-spec-recovery` · `reverse-engineering` · `code-craft` | `investigation` · `refactor` · `project-docs` |
 
-Writing or changing a skill, agent or playbook: the principles are in `superuser:skill-authoring`; playbook `skill-authoring`.
+Writing or changing a skill, agent or playbook: the principles are in `superuser:work-principles` → `references/skill-authoring.md`; how-to in `superuser:skill-authoring`; playbook `skill-authoring`.
 
 Every job also follows `superuser:work-principles` (prove it works · small steps · simple · root cause · human writing · sources).
 

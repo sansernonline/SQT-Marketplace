@@ -1,79 +1,42 @@
 {
  "plugin": "trading-finance",
- "version": "0.23.3",
+ "version": "0.26.0",
  "description": "Trading and personal finance toolkit for Thai investors — watchlists, signals, paper trading, trade journal, position sizing, dividends, budgets and scam checks, plus Thai money skills: investment tax, year-end deduction planning (/tax-plan), mutual funds, retirement, debt payoff and คลินิกแก้หนี้, insurance review and emergency funds, credit bureau reports, bonds and deposits, rebalancing and DCA, and home refinance. Uses whatever market-data plugins you already have.",
  "cross": [],
  "skills": [
-  "fund-and-bond-picker",
+  "budget-and-debt",
   "copy-trade-check",
-  "budget-and-debt",
-  "budget-and-debt",
-  "portfolio",
-  "budget-and-debt",
-  "budget-and-debt",
-  "retirement-and-insurance",
   "fund-and-bond-picker",
+  "income-tax-th",
   "market-watch",
-  "trade-practice",
-  "budget-and-debt",
+  "money-principles",
   "portfolio",
   "position-sizing",
-  "portfolio",
   "retirement-and-insurance",
   "scam-check",
   "stock-fundamentals",
-  "income-tax-th",
-  "income-tax-th",
   "technical-signals",
   "trade-journal",
-  "trade-practice",
-  "market-watch"
+  "trade-practice"
  ],
  "core_skills": [
   "superuser",
   "crew-patterns",
-  "crew-patterns",
   "lean-reply",
   "chat-prompt-workflows",
   "workspace-rules",
-  "workspace-rules",
   "context-budget",
   "decision-desk",
-  "decision-desk",
   "design-gate",
-  "workspace-rules",
-  "decision-desk",
   "handoff",
   "human-writing",
-  "superuser",
-  "design-gate",
   "learn-loop",
-  "crew-patterns",
-  "crew-patterns",
-  "design-gate",
-  "human-writing",
   "ground-rules",
   "fix-at-source",
-  "ground-rules",
-  "ground-rules",
-  "ground-rules",
-  "ground-rules",
   "research-with-sources",
-  "learn-loop",
-  "decision-desk",
-  "research-with-sources",
-  "learn-loop",
-  "ground-rules",
-  "skill-authoring",
-  "human-writing",
-  "superuser",
-  "fix-at-source",
-  "workspace-rules",
-  "human-writing"
+  "skill-authoring"
  ],
- "commands": [
-  "market-watch"
- ],
+ "commands": [],
  "agents": [
   {
    "name": "alert-dispatcher",
@@ -81,7 +44,6 @@
    "core": false,
    "description": "Use when the user wants price or news alerts on watched symbols. Sets scheduled checks and keeps alerts few.",
    "skills": [
-    "market-watch",
     "market-watch"
    ]
   },
@@ -103,19 +65,11 @@
    "description": "Use for personal money — budget, debt, emergency fund, retirement, insurance, funds, personal tax, scam checks.",
    "skills": [
     "budget-and-debt",
-    "budget-and-debt",
-    "budget-and-debt",
-    "retirement-and-insurance",
     "retirement-and-insurance",
     "fund-and-bond-picker",
     "portfolio",
     "income-tax-th",
-    "income-tax-th",
-    "scam-check",
-    "budget-and-debt",
-    "portfolio",
-    "fund-and-bond-picker",
-    "budget-and-debt"
+    "scam-check"
    ]
   },
   {
@@ -171,8 +125,8 @@
      "sub": [
       "**Count the mistake types first.** Tag every row `ไม่ได้เปิด skill` (did not open the skill) · `เปิดแต่ไม่ทำตาม` (opened but did not follow) · `ไม่มีกฎ` (no rule) (definitions in the agent `learning-reviewer`), then count. Mostly `ไม่ได้เปิด` → this round's job is to fix how skills are signalled (`triggers.md` · `hooks/skill-router.json`), not to write more text in the skill.",
       "**A skill that has absorbed 3 merged lessons but mistakes did not drop.** Stop adding text. Propose one of: a checker, a paired example (before → after), or rolling the fix back.",
-      "**A repeated mistake** (found 2 or more times · `correction: true` in the log for the same issue): make it a checker, do not write more warnings (`repeated-mistakes-to-checks` if present, otherwise a check script or an item in the pre-send checklist).",
-      "**A method that worked, or a skill that says something wrong:** fix the paragraph in SKILL.md (`session-lessons-to-skills` if present).",
+      "**A repeated mistake** (found 2 or more times · `correction: true` in the log for the same issue): make it a checker, do not write more warnings (`learn-loop/repeated-mistakes-to-checks` if present, otherwise a check script or an item in the pre-send checklist).",
+      "**A method that worked, or a skill that says something wrong:** fix the paragraph in SKILL.md (`learn-loop/session-lessons-to-skills` if present).",
       "**A playbook assembled on the spot and reused 2 or more times:** propose it as a permanent playbook per [`playbook-template`](playbook-template.md).",
       "**Fixing an agent or playbook:** fix the matching paragraph · a playbook must still pass `validate-marketplace.mjs`.",
       "**A user rule:** 1 line in `~/.claude/superuser-style.md`, which works from every project.",
@@ -279,7 +233,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Collect real numbers — income, spending from statements, debts, insurance, savings. Put `(รอยืนยัน)` (pending confirmation) on any that is missing · ใคร: หัวหน้าทีม",
+     "text": "Open `personal-money.md` first. Then collect real numbers — income, spending from statements, debts, insurance, savings. Put `(รอยืนยัน)` (pending confirmation) on any that is missing · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -349,7 +303,7 @@
     },
     {
      "n": 5,
-     "text": "ตรวจ that the calculation formulas can be rerun and that total income and spending match the statements · ใคร: `reviewer` ตัวใหม่",
+     "text": "ตรวจ that the calculation formulas can be rerun, that total income and spending match the statements, and that the plan follows `personal-money.md` · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -374,7 +328,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Read the holdings from the user's file and fetch current prices with their time, returned as a table of at most 20 rows · ใคร: `market-analyst` ตัวใหม่",
+     "text": "Open `investing.md` and `market-watch.md` first. Then read the holdings from the user's file and fetch current prices with their time, returned as a table of at most 20 rows · ใคร: `market-analyst` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -432,7 +386,7 @@
     },
     {
      "n": 4,
-     "text": "Pick the news that affects the holdings, at most 5 items · ใคร: `market-analyst` ตัวใหม่",
+     "text": "Pick the news that affects the holdings, at most 5 items. For a holding that the news hits, read its statements under `stock-fundamentals` · ใคร: `market-analyst` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -443,14 +397,16 @@
       ],
       "raw": "`market-analyst` ตัวใหม่"
      },
-     "skills": [],
+     "skills": [
+      "stock-fundamentals"
+     ],
      "commands": [],
      "playbooks": [],
      "approval": false
     },
     {
      "n": 5,
-     "text": "ตรวจ that the total value matches the sum of the individual holdings and that every price has a time · ใคร: `reviewer` ตัวใหม่",
+     "text": "ตรวจ that the total value matches the sum of the individual holdings, that every price has a time, and that the page follows `investing.md` · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -475,7 +431,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Read the thesis for this stock from the watchlist. If there is none, write the thesis (the reason to buy), the entry point, and the point where the thesis is wrong, under `market-watch` · ใคร: หัวหน้าทีม (reason from the answer at the start; if none, put `(รอยืนยัน)` (pending confirmation))",
+     "text": "Open `trading.md` first. Collect at the start, in one question: capital, budget, entry, stop, and a price-history CSV from the broker app if no market-data tool is connected. Then read the thesis for this stock from the user's `watchlist.md` in the finance folder (`market-watch` → `references/watchlist-setup.md` step 5). If there is none, write the thesis (the reason to buy), the entry point, and the point where the thesis is wrong, under `market-watch`. If the trade copies another person's trades or signals, check that source under `copy-trade-check` first · ใคร: หัวหน้าทีม (reason from the answer at the start; if none, put `(รอยืนยัน)` (pending confirmation))",
      "sub": [],
      "phase": "",
      "who": {
@@ -485,7 +441,8 @@
       "raw": "หัวหน้าทีม (reason from the answer at the start; if none, put `(รอยืนยัน)` (pending confirmation))"
      },
      "skills": [
-      "market-watch"
+      "market-watch",
+      "copy-trade-check"
      ],
      "commands": [],
      "playbooks": [],
@@ -493,7 +450,7 @@
     },
     {
      "n": 2,
-     "text": "Look at the price and signals under `technical-signals` and the affecting news under `market-watch` — every number has a reference time · ใคร: `market-analyst` ตัวใหม่",
+     "text": "Open `fundamentals.md` and `market-watch.md`, then look at the price and signals under `technical-signals` (price history: the `date,close,volume` CSV collected in step 1 with the other inputs; none and no market-data tool → mark the signal part `(รอยืนยัน)`), the company's statements under `stock-fundamentals`, and the affecting news under `market-watch` — every number has a reference time. Asked \"are the financials OK?\": pass on the script's flags and the company's own trend, say peers were not compared unless the user supplied them, and give no verdict · ใคร: `market-analyst` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -506,6 +463,7 @@
      },
      "skills": [
       "technical-signals",
+      "stock-fundamentals",
       "market-watch"
      ],
      "commands": [],
@@ -514,7 +472,7 @@
     },
     {
      "n": 3,
-     "text": "Have `risk-manager` calculate the position size under `position-sizing` from capital, risk per trade and stop-loss distance, then check the portfolio's concentration · ใคร: `risk-manager` ตัวใหม่",
+     "text": "Have `risk-manager` calculate the position size under `position-sizing` from capital (the trading account), risk per trade and stop-loss distance, then check the portfolio's concentration; when the user also names a budget, the final size is the smaller of the script's size and the budget, and both numbers are shown · ใคร: `risk-manager` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -570,7 +528,7 @@
     },
     {
      "n": 6,
-     "text": "ตรวจ the order — the position size matches the result of step 3, there is a stop-loss point, every number has a reference time · ใคร: `reviewer` ตัวใหม่",
+     "text": "ตรวจ the order — the position size matches the result of step 3, there is a stop-loss point, every number has a reference time, and the order follows `trading.md` principles 1–4 and 8 (loss cap, size from the loss, exit written first, concentration, costs) and the step 2 summary follows `fundamentals.md` (no verdict, statement date shown) · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -595,7 +553,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Set the scope — the piece to check, and the source documents to compare it with (trade journal · statements · tax rules from official sources) · ใคร: หัวหน้าทีม",
+     "text": "Set the scope — the piece to check, and the source documents to compare it with (trade journal · statements · tax rules from official sources), and open the principle file of that kind of work · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -754,7 +712,7 @@
     },
     {
      "n": 2,
-     "text": "If not yet transferred, ตรวจ the warning signs under `scam-check` and check the licence on the regulator's website · ใคร: `money-planner` ตัวใหม่",
+     "text": "If not yet transferred, open `money-safety-tax.md`, then ตรวจ the warning signs under `scam-check` and check the licence on the regulator's website. If the offer is a copy-trading service, check it under `copy-trade-check` · ใคร: `money-planner` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -766,7 +724,8 @@
       "raw": "`money-planner` ตัวใหม่"
      },
      "skills": [
-      "scam-check"
+      "scam-check",
+      "copy-trade-check"
      ],
      "commands": [],
      "playbooks": [
@@ -776,7 +735,7 @@
     },
     {
      "n": 3,
-     "text": "Summarise the result: risk level · signs found · evidence · ใคร: `money-planner` ตัวใหม่ summarises · `reviewer` ตัวใหม่ checks the evidence before it reaches the user",
+     "text": "Summarise the result: risk level · signs found · evidence · ใคร: `money-planner` ตัวใหม่ summarises · `reviewer` ตัวใหม่ checks the evidence and the result against `money-safety-tax.md` before it reaches the user",
      "sub": [],
      "phase": "",
      "who": {
@@ -785,7 +744,7 @@
       "agents": [
        "money-planner"
       ],
-      "raw": "`money-planner` ตัวใหม่ summarises · `reviewer` ตัวใหม่ checks the evidence before it reaches the user"
+      "raw": "`money-planner` ตัวใหม่ summarises · `reviewer` ตัวใหม่ checks the evidence and the result against `money-safety-tax.md` before it reaches the user"
      },
      "skills": [],
      "commands": [],
@@ -819,7 +778,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Collect the whole year's income and the deductions already used, from real documents (50 ทวิ · certificates) · ใคร: หัวหน้าทีม",
+     "text": "Open `money-safety-tax.md` first. Then collect the whole year's income and the deductions already used, from real documents (50 ทวิ · certificates) · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -893,7 +852,7 @@
     },
     {
      "n": 5,
-     "text": "ตรวจ by recalculating with `tax.mjs` of `income-tax-th`, and that every ceiling has a source and a year · ใคร: `reviewer` ตัวใหม่",
+     "text": "ตรวจ by recalculating with `tax.mjs` of `income-tax-th`, that every ceiling has a source and a year, and that the advice follows `money-safety-tax.md` · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -952,7 +911,7 @@
     },
     {
      "n": 3,
-     "text": "Split into milestones: each milestone must end in something checkable that can be shown to the owner · record in the \"สถานะล่าสุด\" (latest status) table in `docs/BUILD-PLAN.md` per `status-report` · ใคร: หัวหน้าทีม",
+     "text": "Split into milestones: each milestone must end in something checkable that can be shown to the owner · record in the \"สถานะล่าสุด\" (latest status) table in `docs/BUILD-PLAN.md` per `superuser/status-report` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -1000,7 +959,7 @@
     },
     {
      "n": 6,
-     "text": "Do the work: agent pieces are sent together in one message, by rank and graph width (`team-roles` \"แบ่งงาน\" (splitting the work) · more than 8 at once → `parallel-split-and-merge`) · for a person's piece, send the note's path to the teammate with a due date for the returned note · pieces that must wait on others go in the next round · ใคร: ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note",
+     "text": "Do the work: agent pieces are sent together in one message, by rank and graph width (`team-roles` \"แบ่งงาน\" (splitting the work) · more than 8 at once → `crew-patterns/parallel-split-and-merge`) · for a person's piece, send the note's path to the teammate with a due date for the returned note · pieces that must wait on others go in the next round · ใคร: ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -1016,7 +975,7 @@
     },
     {
      "n": 7,
-     "text": "Prove (พิสูจน์), per milestone: merge the milestone's pieces, then `reviewer` ตัวใหม่ checks the whole milestone in one go against the brief's \"เสร็จเมื่อ\" (done when) · risky work (money · law · health · sent to outsiders) uses `adversarial-review-panel` · fail → fix → recheck, up to the round ceiling in `team-roles` · ใคร: `reviewer` ตัวใหม่",
+     "text": "Prove (พิสูจน์), per milestone: merge the milestone's pieces, then `reviewer` ตัวใหม่ checks the whole milestone in one go against the brief's \"เสร็จเมื่อ\" (done when) · risky work (money · law · health · sent to outsiders) uses `crew-patterns/adversarial-review-panel` · fail → fix → recheck, up to the round ceiling in `team-roles` · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -1032,7 +991,7 @@
     },
     {
      "n": 8,
-     "text": "End-of-day sync: collect incoming handover notes (people and agents equal) · update BUILD-PLAN + \"ความคืบหน้า\" (progress) and \"รับงานต่อ\" (pick up the work) in `CONTEXT.md` per playbook `pickup-and-pause` · record decisions in `decision-log` · ใคร: หัวหน้าทีม",
+     "text": "End-of-day sync: collect incoming handover notes (people and agents equal) · update BUILD-PLAN + \"ความคืบหน้า\" (progress) and \"รับงานต่อ\" (pick up the work) in `CONTEXT.md` per playbook `pickup-and-pause` · record decisions in `decision-desk/decision-log` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "Steps",
      "who": {
@@ -1048,7 +1007,7 @@
     },
     {
      "n": 9,
-     "text": "Report to the owner: at the end of a milestone or week, with `status-report` · items that cost money or cannot be reversed go under \"รออนุมัติ\" without blocking other pieces · ใคร: หัวหน้าทีม",
+     "text": "Report to the owner: at the end of a milestone or week, with `superuser/status-report` · items that cost money or cannot be reversed go under \"รออนุมัติ\" without blocking other pieces · ใคร: หัวหน้าทีม",
      "sub": [
       "**Check per milestone, not at the end of the job.** For month-long work checked only once at the end, finding the break point is too late to fix.",
       "**A person's and an agent's pieces must not touch the same file.** The split table must state `files_allowed` with no overlap at all · shared files are written by the lead alone (`team-files`).",
@@ -1078,7 +1037,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "Read the trade journal for that period only (filter by the date the position closed, do not open the whole file) and return a summary of at most 20 lines · ใคร: `trade-journal-coach` ตัวใหม่",
+     "text": "Open `trading.md` first. Then read the trade journal for that period only (filter by the date the position closed, do not open the whole file) and return a summary of at most 20 lines · ใคร: `trade-journal-coach` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1134,7 +1093,7 @@
     },
     {
      "n": 4,
-     "text": "Turn it into 1 new rule that can be tested next month, and decide on last month's rule (keep · adjust · drop) · ใคร: `trade-journal-coach` ตัวใหม่ proposes, then it goes under \"รออนุมัติ\" (awaiting approval)",
+     "text": "Turn it into 1 new rule that can be tested next month, and decide on last month's rule (keep · adjust · drop). The new rule is practised on paper under `trade-practice` before any real money is used · ใคร: `trade-journal-coach` ตัวใหม่ proposes, then it goes under \"รออนุมัติ\" (awaiting approval)",
      "sub": [],
      "phase": "",
      "who": {
@@ -1145,14 +1104,16 @@
       ],
       "raw": "`trade-journal-coach` ตัวใหม่ proposes, then it goes under \"รออนุมัติ\" (awaiting approval)"
      },
-     "skills": [],
+     "skills": [
+      "trade-practice"
+     ],
      "commands": [],
      "playbooks": [],
      "approval": false
     },
     {
      "n": 5,
-     "text": "ตรวจ that recalculating the statistics matches the journal · ใคร: `reviewer` ตัวใหม่",
+     "text": "ตรวจ that recalculating the statistics matches the journal, and that the rule fits `trading.md` · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {

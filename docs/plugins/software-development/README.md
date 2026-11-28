@@ -4,7 +4,7 @@
 
 ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ
 
-agent 38 · skill 139 (ของ plugin 99 · ของกลางจาก superuser 40) · คำสั่ง 12 · playbook 17 · ส่งงานต่อให้ —
+agent 38 · skill 64 (ของ plugin 49 · ของกลางจาก superuser 15) · คำสั่ง 2 · playbook 19 · ส่งงานต่อให้ —
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/software-development/`](../../../plugins/software-development/)
 
@@ -34,9 +34,11 @@ agent 38 · skill 139 (ของ plugin 99 · ของกลางจาก sup
 
 | playbook | ทำอะไร | ขั้น |
 |---|---|---|
+| [`ai-feature`](#pb-ai-feature) | ฟีเจอร์ AI วัดด้วยชุดทดสอบ | 8 |
 | [`bug-fix`](#pb-bug-fix) | แก้บั๊ก | 10 |
 | [`feature`](#pb-feature) | เพิ่มฟีเจอร์ | 10 |
 | [`housekeeping`](#pb-housekeeping) | เก็บกวาดเครื่อง | 5 |
+| [`incident`](#pb-incident) | ระบบจริงล่ม | 8 |
 | [`investigation`](#pb-investigation) | สืบหาคำตอบ | 9 |
 | `learn-from-session` | เรียนรู้จากงานที่ผ่านมา (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 7 |
 | [`new-project`](#pb-new-project) | เริ่มโปรเจกต์ใหม่ | 10 |
@@ -51,6 +53,12 @@ agent 38 · skill 139 (ของ plugin 99 · ของกลางจาก sup
 | `team-project` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 9 |
 | [`unattended-run`](#pb-unattended-run) | ปล่อยให้ทำเองยาว ๆ | 7 |
 | [`visual-parity`](#pb-visual-parity) | ทำหน้าจอให้ตรงต้นแบบ | 9 |
+
+<a id="pb-ai-feature"></a>
+
+### ฟีเจอร์ AI วัดด้วยชุดทดสอบ · `ai-feature`
+
+![ฟีเจอร์ AI วัดด้วยชุดทดสอบ](playbooks/ai-feature.png)
 
 <a id="pb-bug-fix"></a>
 
@@ -69,6 +77,12 @@ agent 38 · skill 139 (ของ plugin 99 · ของกลางจาก sup
 ### เก็บกวาดเครื่อง · `housekeeping`
 
 ![เก็บกวาดเครื่อง](playbooks/housekeeping.png)
+
+<a id="pb-incident"></a>
+
+### ระบบจริงล่ม · `incident`
+
+![ระบบจริงล่ม](playbooks/incident.png)
 
 <a id="pb-investigation"></a>
 
