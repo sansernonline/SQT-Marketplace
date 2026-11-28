@@ -1,5 +1,13 @@
 # Changelog — software-development
 
+## 4.2.0 — 2026-11-28
+
+เครื่องมือคู่กับการ์ดของ superuser 4.7.0
+- `spec-to-code-loop/scripts/spec-matrix.mjs`: ทุกรหัสในสเปก (AC · SC · FR · US · NFR) ต้องมีไฟล์ test ที่ระบุรหัสนั้น ขาด = exit 1 · ใช้เป็นตาราง traceability ขั้นปิดงาน
+- `test-automation/scripts/culprit.mjs`: หา commit แรกที่ทำให้ test พัง ใน worktree ชั่วคราว (ไม่แตะไฟล์ของผู้ใช้) แล้วบอกรหัสการ์ด · `test-lock.mjs`: test หนักรันทีละตัวต่อเครื่อง · หัวข้อใหม่ "Test mode for cards" (every · targeted · gate ค่าเริ่ม gate)
+- `git-and-review/scripts/lane.mjs`: เลนละ worktree พร้อม `PORT` และ `TEST_DB_NAME` ของตัวเอง · `merge-queue.mjs`: merge ทีละเลน รันตัวตรวจซ้ำ พังแล้วย้อน merge เอง ไม่ push
+- `project-docs/scripts/docs-truth.mjs`: path ที่มีโฟลเดอร์ และ `npm run` script ที่เขียนใน `CLAUDE.md` · `AGENTS.md` · `README.md` ต้องมีอยู่จริง · ชื่อไฟล์เดี่ยวและชื่อ 2 ท่อนที่ไม่มีจุดตั้งใจข้าม เพราะในเอกสาร agent มักเป็นชื่อทั่วไป (รอบแรกที่ตรวจทุกอย่างฟ้องผิด 26 จุดใน repo นี้)
+
 ## 4.1.0 — 2026-11-28
 
 - playbook ใหม่ `incident` (ระบบจริงล่ม: ประกาศเหตุ · วัดสิ่งที่ผู้ใช้รู้สึก · หยุดความเสียหายรออนุมัติ · หาต้นเหตุในระบบสำเนา · postmortem ไม่โทษคน · 8 ขั้น) แทนการยืม `bug-fix` · `incidents-and-monitoring` ชี้ playbook นี้

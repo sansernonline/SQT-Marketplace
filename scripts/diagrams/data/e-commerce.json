@@ -1836,7 +1836,7 @@
     },
     {
      "n": 2,
-     "text": "Split the work into pieces that each end with a check, record them in the \"ความคืบหน้า\" (progress) table in `CONTEXT.md`, choose a sub-playbook for each piece, and hand them out to fresh subagents one piece at a time · ใคร: หัวหน้าทีม",
+     "text": "Split the work into pieces that each end with a check (pieces whose check can be a command → write them as cards and let `ground-rules/parts/principle-prove-it-works/scripts/card.mjs verify` decide, per `references/cards.md` of that part; the Stop gate then holds the session until each card passes), record them in the \"ความคืบหน้า\" (progress) table in `CONTEXT.md`, choose a sub-playbook for each piece, and hand them out to fresh subagents one piece at a time · ใคร: หัวหน้าทีม",
      "sub": [
       "**Check external tools before handing out the first piece.** For any piece that needs an MCP (Model Context Protocol) tool, load that tool by name with ToolSearch and call it once to test now (before the user leaves). Cannot call it → mark that piece `ติด` at once, with the fix written step by step (which server to connect · how to log in), then carry on with other pieces. Do not call the API directly with curl or a token in a command instead, because that goes beyond the permission the user gave."
      ],

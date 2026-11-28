@@ -1,5 +1,12 @@
 # Changelog — superuser
 
+## 4.7.0 — 2026-11-28
+
+การ์ดงานที่ปิดไม่ได้จนเครื่องตรวจผ่าน (ไอเดียจาก Super Agent Framework, MIT, อ่าน 2026-11-28 · เขียนโค้ดใหม่เอง)
+- `ground-rules/parts/principle-prove-it-works/scripts/card.mjs`: การ์ดใน `.claude/superuser/cards/` · `verify` รันคำสั่ง `done_when` แล้วเก็บหลักฐานเป็น JSON (exit code · ผลท้าย · ไฟล์ที่เปลี่ยน) · การ์ดไม่ผ่านถ้าแก้ไฟล์นอก `touch` หรือใน `dont_touch` หรือแก้เกิน 2 เท่าของเพดานขนาด (S/M/L) · `review` เก็บผลตรวจทีละรอบเป็นไฟล์ · `status --write/--check` ทำตารางสถานะจากหลักฐาน · `next --parallel` บอกการ์ดที่ทำพร้อมกันได้ · `stats` นับผลตรวจไม่ผ่านตามชนิด · คู่มือ `references/cards.md`
+- hook Stop ด่านใหม่ `card_gate`: โปรเจกต์ที่มีโฟลเดอร์ evidence จะจบ session ไม่ได้ถ้ามีการ์ดที่แตะภายใน 24 ชั่วโมงยัง `doing` หรือ `failed` · ข้ามด้วยบรรทัด `ข้ามการ์ด: <เหตุผล>` · ปิดได้ใน config
+- `learn-loop/parts/repeated-mistakes-to-checks/scripts/friction.mjs`: แถวใน `IMPROVEMENTS.md` ที่เจอซ้ำ → ร่างการ์ด (ตัวตรวจตั้งใจให้ไม่ผ่านจนหัวหน้าทีมเขียนของจริง) · ปิดแถวเป็น `carded` หรือ `dropped`
+
 ## 4.6.0 — 2026-11-28
 
 - หลักคิดใหม่ `work-principles/references/skill-authoring.md`: เขียน skill · agent · playbook 6 ข้อ (description บอกว่าใช้เมื่อไร · แยกจากตัวข้างเคียง · ไฟล์หลักสั้น · เห็นพังก่อนเห็นผ่าน · ความเข้มตามความเปราะ · งานตรวจด้วยเครื่องเป็นสคริปต์) 5 แหล่ง เปิดอ่าน 2026-11-28 · ตารางชนิดงานใน `work-principles` และ `skill-authoring` ชี้ไฟล์นี้

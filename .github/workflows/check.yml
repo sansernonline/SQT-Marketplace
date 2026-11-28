@@ -92,6 +92,16 @@ jobs:
       - name: เทสต์ node:test (ระบุไฟล์ผ่าน glob เพราะ node --test รับโฟลเดอร์ไม่ได้บนเครื่องบางแบบ)
         shell: bash
         run: node --test scripts/evals/ab/*.test.mjs scripts/evals/judge/*.test.mjs plugins/superuser/skills/*/scripts/*.test.mjs
+      - name: เทสต์ตัวตรวจการ์ดและเครื่องมือทีม (card · friction · spec-matrix · culprit · test-lock · lane · merge-queue · docs-truth)
+        shell: bash
+        run: >-
+          node --test
+          plugins/superuser/skills/ground-rules/parts/principle-prove-it-works/scripts/card.test.mjs
+          plugins/superuser/skills/learn-loop/parts/repeated-mistakes-to-checks/scripts/friction.test.mjs
+          plugins/software-development/skills/spec-to-code-loop/scripts/spec-matrix.test.mjs
+          plugins/software-development/skills/test-automation/scripts/*.test.mjs
+          plugins/software-development/skills/git-and-review/scripts/*.test.mjs
+          plugins/software-development/skills/project-docs/scripts/docs-truth.test.mjs
       - name: dist ที่ commit ไว้ตรงกับที่สร้างใหม่
         shell: bash
         run: |

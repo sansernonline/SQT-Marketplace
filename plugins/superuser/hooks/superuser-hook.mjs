@@ -667,10 +667,10 @@ export function reviewGate(s) {
 // คืนเหตุผลที่ไม่ให้จบ (หรือ "") · ด่านรีวิวก่อน แล้วกฎ stop ใน guard-rules.json (R7) · บล็อกได้ครั้งเดียวต่อการหยุด (stop_hook_active)
 function stopGate(input, teamDir, root) {
   if (input.stop_hook_active || !input.transcript_path || !existsSync(input.transcript_path)) return "";
-  const review = moduleOn(teamDir, "review_gate"), rules = modOn(teamDir, "stop_rules"), resume = moduleOn(teamDir, "resume_check");
-  if (!review && !rules && !resume) return "";
+  const review = moduleOn(teamDir, "review_gate"), rules = modOn(teamDir, "stop_rules"), resume = moduleOn(teamDir, "resume_check"), card = moduleOn(teamDir, "card_gate");
+  if (!review && !rules && !resume && !card) return "";
   const s = gateState(teamDir, input.transcript_path);
-  return (review && reviewGate(s)) || (resume && resumeGate(s, !!contextFile(teamDir, root), root)) || (rules && stopRules(s, teamDir, root, HERE, input)) || "";
+  return (review && reviewGate(s)) || (resume && resumeGate(s, !!contextFile(teamDir, root), root)) || (card && cardGate(root, s.lastText)) || (rules && stopRules(s, teamDir, root, HERE, input)) || "";
 }
 
 // ── ด่านแตกงาน (PreToolUse ของหัวหน้าทีม) ───────────────────────────────
@@ -1175,6 +1175,27 @@ export function resumeGate(s, hasContext, root) {
   if (!hasContext || n < REVIEW_MIN_FILES || s.pending?.length) return null;
   let card = ""; try { if (root) card = `\nDraft card (check, edit, paste): ${draftCard(root)}`; } catch { /* ร่างการ์ดไม่ได้ก็ข้ามเงียบ ๆ */ }
   return `Resume gate (SuperUser): ${n} work file(s) edited since "รับงานต่อ" in CONTEXT.md was last touched — update it per handoff section 5 before finishing (close done items · remove your own claim · add what the next session must do first) · if nothing changed for the next session, put the line \`ข้ามรับงานต่อ: <เหตุผล>\` in the final answer${card}`;
+}
+
+// Stop: การ์ดงานที่เปิดอยู่ (status doing หรือ failed · ไฟล์หลักฐานแก้ไขภายใน 24 ชม.) → ไม่ให้จบ · ข้ามได้ด้วยบรรทัด `ข้ามการ์ด: <เหตุผล>`
+// กฎ status เขียนซ้ำจาก card.mjs (ไม่ import เพื่อให้ hook เร็ว): abandoned → ปิด · ไม่มี verified → doing · verified.pass และไม่มี reviewFailed → done · นอกนั้น failed
+export function cardGate(root, lastAssistantText, now = Date.now()) {
+  const dir = join(root, ".claude", "superuser", "evidence");
+  if (!existsSync(dir)) return null;
+  const open = [];
+  for (const f of readdirSync(dir).filter((n) => n.endsWith(".json")).sort()) {
+    const file = join(dir, f);
+    try {
+      if (now - statSync(file).mtimeMs > 24 * 3600 * 1000) continue;
+      const e = JSON.parse(readFileSync(file, "utf8"));
+      if (e.abandoned) continue;
+      const done = e.verified && e.verified.pass && !e.reviewFailed;
+      if (!done) open.push(e.id ?? f.slice(0, -5));
+    } catch { /* ไฟล์หลักฐานอ่านไม่ได้ก็ข้าม */ }
+  }
+  if (!open.length || /(^|\n)\s*ข้ามการ์ด\s*:\s*\S/.test(lastAssistantText ?? "")) return null;
+  const cardMjs = join(HERE, "..", "skills", "ground-rules", "parts", "principle-prove-it-works", "scripts", "card.mjs");
+  return `Card gate (SuperUser): card(s) ${open.join(", ")} are not proven — run \`node "${cardMjs}" verify <id>\` until it passes, or \`node "${cardMjs}" abandon <id> --reason …\` · to finish anyway put the line \`ข้ามการ์ด: <เหตุผล>\` in the final answer`;
 }
 
 // ── สรุป log ให้คนอ่าน (Stop ของหัวหน้าทีม) ─────────────────────────────
@@ -2306,6 +2327,41 @@ ${rows}
     ["resume_check: แก้ไฟล์งาน 3 ไฟล์ ไม่แตะ CONTEXT.md → เตือนก่อนจบ", [skill, edit("a"), edit("b"), edit("c")], true, (l) => resumeGate(fold(l), true)],
     ["resume_check: แตะ CONTEXT.md หลังแก้ → ไม่เตือน · แก้ต่ออีก 2 ไฟล์ยังไม่ถึงเกณฑ์", [edit("a"), edit("b"), edit("c"), T({ type: "tool_use", name: "Edit", input: { file_path: "/p/.claude/superuser/CONTEXT.md" } }), edit("d"), edit("e")], false, (l) => resumeGate(fold(l), true)],
     ["resume_check: บรรทัด ข้ามรับงานต่อ: นับเป็นจุดอัปเดต · ไม่มี CONTEXT.md ไม่เตือน", [edit("a"), edit("b"), edit("c"), say("เสร็จ\nข้ามรับงานต่อ: งานทดลอง")], false, (l) => resumeGate(fold(l), true) || resumeGate(fold([edit("a"), edit("b"), edit("c")]), false)],
+    ["card_gate: การ์ด doing บล็อก · failed บล็อก · done ไม่บล็อก · abandoned ไม่บล็อก", [], true, () => {
+      const r = join(tmpdir(), `sqt-card-test-${process.pid}`), ev = join(r, ".claude", "superuser", "evidence"); mkdirSync(ev, { recursive: true });
+      const put = (id, o) => writeFileSync(join(ev, `${id}.json`), JSON.stringify({ id, ...o }));
+      put("T-01", { started: {} });
+      const doing = cardGate(r, "เสร็จ"); put("T-01", { verified: { pass: false } });
+      const failed = cardGate(r, ""); put("T-01", { verified: { pass: true } });
+      const done = cardGate(r, ""); put("T-01", { verified: { pass: true }, reviewFailed: 1 });
+      const rf = cardGate(r, ""); put("T-01", { started: {}, abandoned: { reason: "x" } });
+      const ab = cardGate(r, ""); rmSync(r, { recursive: true, force: true });
+      return /T-01 are not proven/.test(doing) && /card\.mjs/.test(doing) && !!failed && done === null && !!rf && ab === null;
+    }],
+    ["card_gate: บรรทัด ข้ามการ์ด: ไม่บล็อก · อ้างกลางประโยคยังบล็อก", [], true, () => {
+      const r = join(tmpdir(), `sqt-card-test2-${process.pid}`), ev = join(r, ".claude", "superuser", "evidence"); mkdirSync(ev, { recursive: true });
+      writeFileSync(join(ev, "T-02.json"), JSON.stringify({ id: "T-02", started: {} }));
+      const skip = cardGate(r, "จบ\nข้ามการ์ด: งานทดลอง"), mid = cardGate(r, "ใส่ ข้ามการ์ด: เหตุผล ได้"); rmSync(r, { recursive: true, force: true });
+      return skip === null && !!mid;
+    }],
+    ["card_gate: ไฟล์หลักฐานเก่ากว่า 24 ชม. ไม่บล็อก", [], true, () => {
+      const r = join(tmpdir(), `sqt-card-test3-${process.pid}`), ev = join(r, ".claude", "superuser", "evidence"); mkdirSync(ev, { recursive: true });
+      writeFileSync(join(ev, "T-03.json"), JSON.stringify({ id: "T-03", started: {} }));
+      const now = Date.now(), fresh = cardGate(r, "", now), old = cardGate(r, "", now + 25 * 3600 * 1000); rmSync(r, { recursive: true, force: true });
+      return !!fresh && old === null;
+    }],
+    ["card_gate: ไม่มีโฟลเดอร์ evidence → ไม่บล็อก · reviews/ ไม่นับ", [], true, () => {
+      const r = join(tmpdir(), `sqt-card-test4-${process.pid}`); mkdirSync(join(r, ".claude", "superuser"), { recursive: true });
+      const none = cardGate(r, ""); mkdirSync(join(r, ".claude", "superuser", "evidence", "reviews"), { recursive: true });
+      writeFileSync(join(r, ".claude", "superuser", "evidence", "reviews", "T-04.json"), "[]");
+      const rev = cardGate(r, ""); rmSync(r, { recursive: true, force: true });
+      return none === null && rev === null;
+    }],
+    ["card_gate: ปิดได้ใน config · แม่แบบเปิดเป็นค่าเริ่ม", [], true, () => {
+      writeFileSync(join(gTeam, "config.json"), JSON.stringify({ modules: { card_gate: false } }));
+      const off = moduleOn(gTeam, "card_gate"); unlinkSync(join(gTeam, "config.json"));
+      return off === false && moduleOn(gTeam, "card_gate") === true && readJson(join(HERE, "..", "skills", "superuser", "templates", "config.json"), {}).modules?.card_gate === true;
+    }],
     ["hooks.json: parse ได้ · PreToolUse จับ Bash · มี SessionStart และ PostCompact", [], true, () => {
       const h = readJson(join(HERE, "hooks.json"), null)?.hooks;
       return Boolean(h?.SessionStart && h.PostCompact) && h.PreToolUse.some((e) => new RegExp(e.matcher).test("Bash"));
