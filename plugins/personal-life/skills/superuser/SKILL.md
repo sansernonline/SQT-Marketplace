@@ -83,6 +83,7 @@ For medium tasks and up, read the request and pick **1** playbook, or assemble y
 | [`learning-path`](references/playbook-learning-path.md) | want to learn a new language, framework or concept well enough to use it for real |
 | [`paper-to-practice`](references/playbook-paper-to-practice.md) | want to understand a paper, RFC or long article until it is usable |
 | [`tech-radar`](references/playbook-tech-radar.md) | follow news on libraries and tools in use · "สัปดาห์นี้มีอะไรเปลี่ยน" |
+| [`teach-a-course`](references/playbook-teach-a-course.md) | will teach a workshop, in-company training, online course or a teammate · "ต้องไปสอน" |
 | [`cert-prep`](references/playbook-cert-prep.md) | prepare for AWS · Azure · Google Cloud · Kubernetes · Scrum or another certification |
 | [`side-project`](references/playbook-side-project.md) | want a practice or portfolio project · too many ideas or none · for a thesis or research paper use skill `thesis-writing` |
 

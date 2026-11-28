@@ -1,5 +1,9 @@
 # Changelog — superuser
 
+## 4.5.1 — 2026-11-28
+
+- `work-principles`: ตารางชนิดงานของ superuser เอง (เอกสาร · ค้นข้อมูล · ตรวจงาน · ทำงานเป็นทีม · ตอบแชต · เก็บบทเรียน · เขียน skill · prompt หลายขั้น) วาง skill ครบทุกตัว · personal-life เพิ่มชนิดงาน teaching · playbook `document` และ `research` มีบรรทัด Main principles ขั้นแรกเปิดหลักคิด และขั้นตรวจเทียบกับหลักคิด
+
 ## 4.5.0 — 2026-11-27
 
 - router · hook · `CLAUDE.global.md` · triggers ชี้ชื่อ skill ใหม่หลังรวม skill ของ e-commerce · trading-finance · personal-life · software-development (`lazy-coding` + `readable-code` → `software-development:code-craft`) · ติดตั้ง CLAUDE.md ใหม่หลังอัปเดต

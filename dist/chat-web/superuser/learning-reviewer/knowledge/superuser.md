@@ -798,15 +798,16 @@ The full procedure (the `review` line · the `learn/` file · the central queue 
 
 Use when: a report · plan · summary · letter · important message · a document that will be passed on
 Result: a document the reader can use at once, written per `human-writing`
+Main principles: [`work-principles`](../../work-principles/SKILL.md) · `human-writing` (and `design-gate` when the document is looked at, such as a cover or a deck)
 Main pattern: Planning · Reflection (`crew-patterns/agent-patterns`)
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
-1. Identify the reader · what they will do after reading · the file format to deliver · ใคร: หัวหน้าทีม
+1. Open `human-writing` first. Identify the reader · what they will do after reading · the file format to deliver · ใคร: หัวหน้าทีม
 2. Gather the facts before writing. Anything with no evidence gets `(รอยืนยัน)` (awaiting confirmation) and is never made up · ใคร: `general-purpose` ตัวใหม่
 3. Lay out the structure: conclusion first → reasons → details → what the reader must do · ใคร: หัวหน้าทีม
 4. Draft one section at a time following the structure · numbers as numerals · 1 topic, 1 term · ใคร: `general-purpose` ตัวใหม่
-5. Check (ตรวจ): a fresh subagent reads as the real reader would: can they understand it · can they act on it · is anything missing · compare the numbers against the source · ใคร: `reviewer` ตัวใหม่
+5. Check (ตรวจ) against `human-writing`: a fresh subagent reads as the real reader would: can they understand it · can they act on it · is anything missing · compare the numbers against the source · ใคร: `reviewer` ตัวใหม่
 6. Fix the points the team lead has confirmed · ใคร: `general-purpose` ตัวใหม่
 7. Check (ตรวจ) again: look at every earlier finding and every changed spot, then open the real file and look once more (headings · tables · links · images) per [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
 8. Send: if it must go to other people, prepare it in "รออนุมัติ" (awaiting approval) and do not send it yourself · ใคร: หัวหน้าทีม (sends: ผู้ใช้)
@@ -894,6 +895,7 @@ A person or bot taking over, from any vendor, can read only `CONTEXT.md` and con
 
 Use when: you must find an answer that needs evidence · compare options · "ช่วยหาข้อมูล" (help me find information) · numbers or rules that may have changed
 Result: an answer with sources, the date checked, and labels per [`evidence`](evidence.md) (`ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ`) · user data you do not know gets `(รอยืนยัน)`
+Main principles: [`work-principles`](../../work-principles/SKILL.md) · `research-with-sources`
 Main patterns: Reranker · ReAct (`crew-patterns/agent-patterns`)
 Deep mode: 4 or more sub-questions · the user asks for "deep research" or "วิจัยละเอียด" (research in detail) · a report needing a citation in every paragraph → use [`deep-research`](deep-research.md) instead of the 7 steps below (file queue · workers search in parallel · every claim checked)
 
@@ -901,12 +903,12 @@ Deep mode: 4 or more sub-questions · the user asks for "deep research" or "ว�
 
 Labels kept in Thai because the validator matches them: `ใคร:` = who · `หัวหน้าทีม` = the lead · `ตัวใหม่` = fresh (a new instance) · `ตัวเดิม (ถือ …)` = the same agent, holding something.
 
-1. Write 1–3 clear questions, then state what the user will do with the answer and how much of an answer is enough · ใคร: หัวหน้าทีม
+1. Open `research-with-sources` first. Write 1–3 clear questions, then state what the user will do with the answer and how much of an answer is enough · ใคร: หัวหน้าทีม
 2. Gather widely, 10–30 sources: official sources first, then standards, then named tool maintainers or experts · ใคร: `general-purpose` ตัวใหม่ · return a table of source · link · conclusion of no more than about 40 lines; a long result is written to a file and the path is sent
 3. Score each source 0–3 on 4 items: matches the question · credible · recent enough · complete. If there are many sources, have a small-tier subagent do the first cut · ใคร: `general-purpose` ตัวใหม่ (small tier)
 4. Read in full only the 3–5 top-scoring sources, then record the answer with link and date · ใคร: `general-purpose` ตัวใหม่
 5. Decide. If ≥ 3 independent sources agree, label it `จากแหล่ง` (high confidence when an official source is among them) · what you reasoned from a source gets `อนุมาน` · if fewer than 3 or they conflict, use the value from the official source, label it `จากแหล่ง`, lower the confidence 1 level, append `(รอยืนยัน)`, and say where they conflict · ใคร: หัวหน้าทีม
-6. Check (ตรวจ): a fresh subagent spot-checks 3 important numbers against the real source · ใคร: `reviewer` ตัวใหม่
+6. Check (ตรวจ) against `research-with-sources`: a fresh subagent spot-checks 3 important numbers against the real source · ใคร: `reviewer` ตัวใหม่
 7. Report: answer first, the source scoring table at the end, and say plainly what is still unknown · ใคร: หัวหน้าทีม
 
 ## Done when
