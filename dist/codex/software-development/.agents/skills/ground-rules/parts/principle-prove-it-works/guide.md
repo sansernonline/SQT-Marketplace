@@ -8,7 +8,7 @@
 - A sub-agent reports done, or a draft for an outsider says "fixed"
 
 ## Steps
-1. Before starting, write "how will I know it is done" in a checkable form.
+1. Before starting, write "how will I know it is done" in a checkable form. Work with 2 or more pieces, or unattended work → write it as cards whose `done_when` lines are commands, and let `scripts/card.mjs verify` decide ([`references/cards.md`](references/cards.md)).
 2. After the work, check against that on the real thing and record the raw result (numbers · images · output). Use the evidence column below.
 3. If you truly cannot check (no environment · needs a real account), say plainly `ยังไม่ได้ตรวจ` and what is missing; never write `ผ่าน`.
 4. For an item whose result you have not seen, write what was done and what the result is separately, e.g. "CSV: code changed, not yet opened in Excel". Do not write "fixed, but not tried yet": readers remember done and forget but.
@@ -36,4 +36,5 @@
 - No hedge word survives in the final report
 
 ## References
+- [`references/cards.md`](references/cards.md) — open when work has 2+ pieces or runs unattended: card format, `card.mjs` commands, size caps, the Stop gate
 - [`references/evidence-table.md`](references/evidence-table.md) — open when judging a test, screenshot, measured value, cross-system claim, or sub-agent result, or when a claim of yours sounds like one on the "not evidence" list; also holds the sources

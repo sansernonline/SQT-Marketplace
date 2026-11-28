@@ -10,6 +10,7 @@ Use when choosing project docs, onboarding docs or release notes
 
 | Job (what the user says) | Open |
 |---|---|
+| "Are the paths and commands in CLAUDE.md still true?", agent docs drifted from the code | [`scripts/docs-truth.mjs`](scripts/docs-truth.mjs) · checks that every path with a folder (`docs/guide.md`, `src/auth/login.ts`) and every `npm run` script named in `CLAUDE.md` · `AGENTS.md` · `README.md` exists · bare file names (`SKILL.md`) and two-part names without a dot (`owner/repo`, `ground-rules/simplify`) are skipped on purpose, because in agent docs they are usually generic names, not paths · `--ignore '.claude/**'` for folders kept out of git · put it in CI or a card's `done_when` |
 | "Which docs does this project need?", "docs are scattered", "a client asks what we deliver", "open-items Excel" | [`references/project-doc-set.md`](references/project-doc-set.md) (table of docs: [`references/technical-docs.md`](references/technical-docs.md)) |
 | "Onboard a new developer", "30/60/90-day guide", "a new QA joins next week" | [`references/onboard.md`](references/onboard.md) |
 | "Release notes for 1.4.0", "what changed in this version for users" | [`references/release-notes.md`](references/release-notes.md) (templates: [`references/writer-templates.md`](references/writer-templates.md)) |

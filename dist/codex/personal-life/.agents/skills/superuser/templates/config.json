@@ -15,6 +15,7 @@
     "auto_allow": true,
     "recompact": false,
     "resume_check": true,
+    "card_gate": true,
     "ui_scan": true,
     "code_patterns": true,
     "pii_gate": true,

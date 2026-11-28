@@ -493,6 +493,7 @@ Use for automated, end-to-end or load tests and app verifiers
 
 | Job (what the user says) | Open |
 |---|---|
+| "Which commit broke the tests?", "the suite was green last week" | [`scripts/culprit.mjs`](scripts/culprit.mjs) `--good <commit> --test "<cmd>"` · finds the first bad commit in a temporary worktree and names its card · "two agents ran heavy tests and the machine froze" → wrap heavy runs in [`scripts/test-lock.mjs`](scripts/test-lock.mjs) `-- <cmd>` (one at a time per machine) |
 | "Set up tests", "tests are flaky", "what should a good test look like?" | [`references/testing-standards.md`](references/testing-standards.md) |
 | "Write end-to-end tests", "the browser test keeps failing" | [`references/e2e-testing-patterns.md`](references/e2e-testing-patterns.md) |
 | "How many users can it hold?", "will it be slow at peak?" | [`references/load-testing.md`](references/load-testing.md) |
@@ -506,6 +507,18 @@ Other references in this folder: [`flaky-tests.md`](references/flaky-tests.md) �
 2. **Keep tests deterministic.** Use fixed data, a fixed clock, and no real outside service. A test that flips between red and green gets fixed or removed, never silently skipped.
 3. **Prove the test can fail.** Break the feature once on purpose and confirm the test goes red. A test that cannot fail gives no evidence.
 4. **Run the check the same way in CI and on your machine.** Pin the tool version. Do not use `latest`.
+
+## Test mode for cards
+
+Pick once per project and write it in `CLAUDE.md`. The default is `gate`, because the full suite on every card is the slowest path and parallel full runs can run the machine out of memory.
+
+| Mode | Card `done_when` runs | Full suite runs |
+|---|---|---|
+| `every` | the full suite | on every card |
+| `targeted` | only the tests of the card's files | at the milestone gate card |
+| `gate` (default) | the card's own tests | once, on a gate card that `depends` on every card of the milestone |
+
+Wrap full-suite and load-test commands in `scripts/test-lock.mjs --` so 2 lanes never run them at once. When the gate card fails, `scripts/culprit.mjs` finds the card that broke it.
 
 ## Check before done
 
@@ -2002,6 +2015,7 @@ Use for PR review, PR text, commit messages or git worktrees
 
 | Job (what the user says) | Open |
 |---|---|
+| Cards running in parallel need their own folder, port and test database · "merge the lanes one at a time" | [`scripts/lane.mjs`](scripts/lane.mjs) `add <card>` (worktree + `PORT` + `TEST_DB_NAME` in `.env.lane`) · [`scripts/merge-queue.mjs`](scripts/merge-queue.mjs) `<card>... --check "<cmd>"` (merge one, re-check, roll back if it breaks, never pushes) · which cards may run together: `superuser` `card.mjs next --parallel` |
 | "Review this PR", "check my code before I submit", "is this diff safe?" | [`references/code-review-checklist.md`](references/code-review-checklist.md) |
 | "Write the PR description", "what do I put in the pull request?" | [`references/pr-description-template.md`](references/pr-description-template.md) |
 | Commit messages, commitlint, semantic-release, "what format for the commit?" | [`references/commit-message-format.md`](references/commit-message-format.md) |
