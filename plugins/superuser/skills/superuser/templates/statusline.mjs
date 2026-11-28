@@ -19,12 +19,14 @@ const candidates = [
 ];
 const found = candidates.find((p) => existsSync(p));
 
+let text = "";
+for await (const chunk of process.stdin) text += chunk;
+let shown = false;
 if (found) {
-  const { main } = await import(pathToFileURL(found).href);
-  await main();
-} else {
-  let text = "";
-  for await (const chunk of process.stdin) text += chunk;
+  // รุ่นที่หาเจอ import ไม่ได้หรือพังกลางทาง → ตกไปแสดงแบบสั้น แถบล่างไม่ว่าง
+  try { const { main } = await import(pathToFileURL(found).href); await main(text); shown = true; } catch { /* ใช้แบบสั้น */ }
+}
+if (!shown) {
   let input = {};
   try { input = JSON.parse(text) ?? {}; } catch { /* ข้อมูลเสีย */ }
   const dir = String(input.workspace?.current_dir ?? input.cwd ?? "").split(/[\\/]/).filter(Boolean).at(-1);

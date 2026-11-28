@@ -50,7 +50,7 @@ Opus 5.5 (high) · Quanton · main* · บริบท 34% · 5 ชม. 7% ร�
 |---|---|
 | `ts` | เวลาที่จด (ISO, UTC) |
 | `session` | 8 ตัวแรกของรหัสแชต ใช้ชื่อเดียวกับใน `runs.jsonl` |
-| `project` · `branch` | โฟลเดอร์โปรเจกต์ · branch ของ git |
+| `project` · `branch` | ชื่อโฟลเดอร์โปรเจกต์ (เก็บแค่ชื่อ ไม่เก็บ path เต็มที่มีชื่อผู้ใช้ของเครื่อง) · branch ของ git |
 | `model` · `effort` | รหัส model · ระดับความคิด |
 | `context_pct` | % ความจำแชตที่ใช้ไป |
 | `five_hour` · `week` | `{ used, reset }` % ที่ใช้ และเวลารีเซ็ต (ISO) · ไม่มีข้อมูลเป็น `null` |

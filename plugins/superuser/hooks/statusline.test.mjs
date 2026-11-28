@@ -44,6 +44,11 @@ test("งานเบื้องหลัง: ตัดงานที่ส่
   assert.equal(plain(render(input, { now, workers: w }).split("\n")[1]), "เบื้องหลัง 1 งาน: งาน a (12 นาที)");
 });
 
+test("งานที่ไม่มี tool_use_id นับแยกกัน ไม่รวมเป็นงานเดียว", () => {
+  const w = runningWorkers([run(null, { description: "x" }), run(null, { description: "y" })], "0a0d4022", now);
+  assert.deepEqual(w.map((x) => x.name), ["x", "y"]);
+});
+
 test("เกิน 3 งานแสดง +N", () => {
   const w = ["a", "b", "c", "d", "e"].map((n) => ({ name: n, minutes: 70 }));
   assert.equal(render(input, { now, workers: w }).split("\n")[1],"เบื้องหลัง 5 งาน: a (1 ชม. 10 นาที) · b (1 ชม. 10 นาที) · c (1 ชม. 10 นาที) +2");
@@ -53,6 +58,7 @@ test("snapshot มีช่องคงที่ให้ dashboard", () => {
   const s = snapshot(input, { now, workers: [], branch: { name: "main", dirty: false } });
   assert.deepEqual(Object.keys(s), ["ts", "session", "project", "branch", "model", "effort", "context_pct", "five_hour", "week", "cost_usd", "duration_min", "lines_added", "lines_removed", "workers"]);
   assert.equal(s.session, "0a0d4022");
+  assert.equal(s.project, "Quanton");                       // ชื่อโฟลเดอร์ ไม่ใช่ path เต็ม
   assert.deepEqual(s.week, { used: 96, reset: "2026-11-28T20:00:00.000Z" });
   assert.equal(s.duration_min, 30);
   assert.equal(snapshot({}, { now }).five_hour, null);

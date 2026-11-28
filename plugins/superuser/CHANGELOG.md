@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- status line (แถบล่าง) ของ superuser: `hooks/statusline.mjs` แสดง model (effort) · โฟลเดอร์ · branch git · บริบท % · โควตา 5 ชม. และรายสัปดาห์พร้อมเวลารีเซ็ต (เหลือง ≥ 70% · แดง ≥ 90%) · บรรทัดที่ 2 แสดงงานเบื้องหลังที่ยังไม่ส่งผลกลับ อ่านจาก `runs.jsonl` เพราะ Claude Code ไม่ส่งข้อมูลนี้มา · จดโควตาแทน `quota.mjs record` · จด snapshot ลง `log/<วันที่>/statusline.jsonl` ไม่เกินนาทีละครั้งต่อแชต ไว้ทำ dashboard (ปิดด้วยโมดูล `log`) · ตัวเรียก `skills/superuser/templates/statusline.mjs` หารุ่นใหม่สุดเอง · ตั้ง `refreshInterval: 60` · วิธีติดตั้งที่ `docs/plugins/superuser/statusline.md` · test 8 ข้อ (ผู้ใช้ขอ 2026-11-29)
+- status line (แถบล่าง) ของ superuser: `hooks/statusline.mjs` แสดง model (effort) · โฟลเดอร์ · branch git · บริบท % · โควตา 5 ชม. และรายสัปดาห์พร้อมเวลารีเซ็ต (เหลือง ≥ 70% · แดง ≥ 90%) · บรรทัดที่ 2 แสดงงานเบื้องหลังที่ยังไม่ส่งผลกลับ อ่านจาก `runs.jsonl` เพราะ Claude Code ไม่ส่งข้อมูลนี้มา · จดโควตาแทน `quota.mjs record` · จด snapshot ลง `log/<วันที่>/statusline.jsonl` ไม่เกินนาทีละครั้งต่อแชต ไว้ทำ dashboard (ปิดด้วยโมดูล `log`) · ตัวเรียก `skills/superuser/templates/statusline.mjs` หารุ่นใหม่สุดเอง · ตั้ง `refreshInterval: 60` · วิธีติดตั้งที่ `docs/plugins/superuser/statusline.md` · test 9 ข้อ (ผู้ใช้ขอ 2026-11-29)
 
 ## 4.8.0 — 2026-11-28
 

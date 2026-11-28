@@ -8,7 +8,7 @@
 // ช่องข้อมูลตาม code.claude.com/docs/en/statusline (ตรวจ 2026-11-28) · Claude Code ไม่ส่งข้อมูลงานเบื้องหลังมา จึงอ่าน runs.jsonl ที่ hook จด
 // ตั้งใน settings.json: "statusLine": { "type": "command", "command": "node <ตัวเรียก>", "refreshInterval": 60 } · ดู docs/plugins/superuser/statusline.md
 // ไม่มีวันล้ม: error ทุกจุดถูกจับ แถบล่างยังแสดงเท่าที่ได้
-import { readFileSync, writeFileSync, appendFileSync, mkdirSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, appendFileSync, mkdirSync, existsSync, renameSync } from "node:fs";
 import { homedir } from "node:os";
 import { join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -44,7 +44,7 @@ export function runningWorkers(runs, session, now) {
   return runs.filter((r) => r.event === "run" && r.async && (!session || r.session === session)
     && now - Date.parse(r.ts) <= RUNNING_WINDOW_H * 3600000
     && !done.has(r.tool_use_id) && !done.has(r.spawned_id)
-    && !seen.has(r.tool_use_id) && seen.add(r.tool_use_id))
+    && (!r.tool_use_id || (!seen.has(r.tool_use_id) && seen.add(r.tool_use_id))))
     .map((r) => ({ name: r.description || r.role || "งาน", role: r.role ?? null, model: r.resolved_model ?? r.model ?? null, minutes: Math.round((now - Date.parse(r.ts)) / 60000) }));
 }
 
@@ -58,12 +58,15 @@ function readRuns(teamDir, now) {
   return out;
 }
 
+// repo ที่เปิดอาจไม่น่าไว้ใจ: ปิด fsmonitor (ค่าใน .git/config สั่งรันโปรแกรมได้) และไม่จับ lock ของ index
+const GIT_SAFE = ["-c", "core.fsmonitor=false", "-c", "core.untrackedCache=false"];
+const GIT_OPTS = { encoding: "utf8", timeout: 1000, windowsHide: true, env: { ...process.env, GIT_OPTIONAL_LOCKS: "0" } };
 function gitBranch(cwd) {
   if (!cwd) return null;
-  const b = spawnSync("git", ["-C", cwd, "branch", "--show-current"], { encoding: "utf8", timeout: 1000, windowsHide: true });
+  const b = spawnSync("git", [...GIT_SAFE, "-C", cwd, "branch", "--show-current"], GIT_OPTS);
   const name = b.status === 0 ? b.stdout.trim() : "";
   if (!name) return null;
-  const s = spawnSync("git", ["-C", cwd, "status", "--porcelain", "-uno"], { encoding: "utf8", timeout: 1000, windowsHide: true });
+  const s = spawnSync("git", [...GIT_SAFE, "-C", cwd, "status", "--porcelain", "-uno"], GIT_OPTS);
   return { name, dirty: s.status === 0 && s.stdout.trim() !== "" };
 }
 
@@ -97,7 +100,8 @@ export function snapshot(input, { now = Date.now(), workers = [], branch = null 
   return {
     ts: new Date(now).toISOString(),
     session: String(input.session_id ?? "").slice(0, 8) || null,
-    project: input.workspace?.project_dir ?? input.workspace?.current_dir ?? input.cwd ?? null,
+    // ชื่อโฟลเดอร์อย่างเดียว ไม่เก็บ path เต็มที่มีชื่อผู้ใช้ของเครื่อง
+    project: String(input.workspace?.project_dir ?? input.workspace?.current_dir ?? input.cwd ?? "").split(/[\\/]/).filter(Boolean).at(-1) ?? null,
     branch: branch?.name ?? null,
     model: input.model?.id ?? null,
     effort: input.effort?.level ?? null,
@@ -126,10 +130,9 @@ export function writeLog(teamDir, snap, now = Date.now()) {
   return true;
 }
 
-// ตัวเรียกใน ~/.claude/superuser/statusline.mjs import ไฟล์นี้จากรุ่นใหม่สุดแล้วเรียก main()
-export async function main() {
-  let text = "";
-  for await (const chunk of process.stdin) text += chunk;
+// ตัวเรียกใน ~/.claude/superuser/statusline.mjs อ่าน stdin เองแล้วส่ง text มา · รันไฟล์นี้ตรง ๆ จะอ่าน stdin ที่นี่
+export async function main(text) {
+  if (text == null) { text = ""; for await (const chunk of process.stdin) text += chunk; }
   let input = {};
   try { input = JSON.parse(text) ?? {}; } catch { /* ข้อมูลเสีย แสดงเท่าที่ได้ */ }
   const now = Date.now();
@@ -140,10 +143,18 @@ export async function main() {
   try { branch = gitBranch(cwd); } catch { /* ไม่มี git */ }
   try {
     const q = fromStatusLine(input);
-    if (q) { mkdirSync(QUOTA_DIR, { recursive: true }); writeFileSync(join(QUOTA_DIR, `${q.account.replace(/[^\w.-]/g, "_")}.json`), JSON.stringify(q)); }
+    if (q) {
+      // เขียนไฟล์ชั่วคราวแล้ว rename: หลายแชตเขียนพร้อมกัน ผู้อ่านจะไม่เจอ JSON ครึ่งไฟล์
+      mkdirSync(QUOTA_DIR, { recursive: true });
+      const file = join(QUOTA_DIR, `${q.account.replace(/[^\w.-]/g, "_")}.json`), tmp = `${file}.${process.pid}.tmp`;
+      writeFileSync(tmp, JSON.stringify(q));
+      renameSync(tmp, file);
+    }
   } catch { /* จดโควตาไม่ได้ ไม่กระทบแถบล่าง */ }
   try { writeLog(teamDir, snapshot(input, { now, workers, branch }), now); } catch { /* จด log ไม่ได้ */ }
-  console.log(render(input, { now, workers, branch }));
+  let out = "";
+  try { out = render(input, { now, workers, branch }); } catch { /* แสดงว่างดีกว่าล้ม */ }
+  console.log(out);
 }
 
 if (process.argv[1]?.replace(/\\/g, "/").endsWith("hooks/statusline.mjs")) main().catch(() => console.log(""));
