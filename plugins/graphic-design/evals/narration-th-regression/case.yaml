@@ -18,7 +18,7 @@ execution:
 graders:
   - name: split-check
     type: regex
-    pattern: "split_words\\.py|WordBoundary|แยก(เป็น)? ?2 ?คำ|split"
+    pattern: "split_words\\.py|WordBoundary|แยก(เป็น)? ?(2|สอง) ?คำ"
     flags: i
     match: contains
     target: last_message
