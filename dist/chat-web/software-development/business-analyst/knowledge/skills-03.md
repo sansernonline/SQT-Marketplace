@@ -866,7 +866,7 @@ Open the image of every page (Read tool) and go through the checks:
 
 # Office files in and out — which built-in skill to call, by role
 
-Moved from the user-level skill `office-document-handling` on 2026-11-28 (merged into `document-design`; the look of the finished file stays in the other `document-design` references). A `.md` file that must become a designed `.docx` → [`markdown-report-docx.md`](markdown-report-docx.md) (`scripts/md_to_docx.py` + `brandkit.py`), not `anthropic-skills:docx`..
+Moved from the user-level skill `office-document-handling` on 2026-11-28 (merged into `document-design`; the look of the finished file stays in the other `document-design` references). A `.md` file that must become a designed `.docx` → [`markdown-report-docx.md`](markdown-report-docx.md) (`scripts/md_to_docx.py` + `brandkit.py`), not `anthropic-skills:docx`.
 
 
 ## When to use this file
