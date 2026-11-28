@@ -41,7 +41,7 @@
 | trading-finance | trade-journal | 1R และ R-multiple ต่อเทรด (`TF/trade-journal/SKILL.md:21-25`) | ผิด 0 ค่า จากตัวอย่างบรรทัด 25 (+1.55R) ขยาย 10 เคส | ตัวอย่างบรรทัด 25 + `trade-stats.mjs` | ฟรี | self-test `TF/trade-journal/scripts/trade-stats.mjs:154` | วัดได้เลย |
 | trading-finance | watchlist-setup | กรองหุ้นเข้ารายชื่อ (thesis 1 ประโยค · สภาพคล่อง 20 วัน ≥ 5 ล้านบาท/วัน) แล้วจัดอันดับด้วย reward-to-risk (`TF/watchlist-setup/SKILL.md:30-35`) | ผ่าน/ตกกฎตรง 100% จาก 10 หุ้น · reward-to-risk ผิด ≤ 0.01 | สูตรบรรทัด 35 + `decide.mjs score` | ฟรี | `DS/decide.test.mjs` · ไม่มีเคสของ skill นี้ | เติมเคส |
 
-สคริปต์คิดเลขใน trading-finance 9 ตัว ทุกตัวมี self-test และผ่านวันนี้: `trade-journal` part `copy-trade-check` · `debt-payoff` · `home-refinance` · `portfolio-snapshot` · `position-sizing` · `trade-journal` · `retirement-plan` · `tax-deduction-planner` · `technical-signals`
+สคริปต์คิดเลขใน trading-finance 9 ตัว ทุกตัวมี self-test และผ่านวันนี้: `copy-trade-check` · `debt-payoff` · `home-refinance` · `portfolio-snapshot` · `position-sizing` · `trade-journal` · `retirement-plan` · `tax-deduction-planner` · `technical-signals`
 
 ## ส่วนที่ 2 · graphic-design
 

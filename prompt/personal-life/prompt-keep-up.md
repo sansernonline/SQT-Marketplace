@@ -20,9 +20,9 @@
 
 | # | งาน | playbook | ได้ไฟล์ |
 |---|---|---|---|
-| 1 | เรดาร์เทคโนโลยีประจำสัปดาห์ | `learning-path` part `tech-growth` | `radar/reports/YYYY-Www.md` |
-| 2 | ไลบรารีหลักออกเวอร์ชันใหญ่หรือเลิกสนับสนุน ต้องอัปเกรดไหม | `learning-path` part `tech-growth` (ขั้น 2–5 กับไลบรารีเดียว) | `radar/deep-dives/<library>-<version>.md` |
-| 3 | ของใหม่ที่ทุกคนพูดถึง ควรลงแรงเรียนไหม | `learning-path` part `tech-growth` (ขั้น 2–5 กับเรื่องเดียว) | `radar/evaluations/<ชื่อ>.md` + `examples/<ชื่อ>-trial/` |
+| 1 | เรดาร์เทคโนโลยีประจำสัปดาห์ | `tech-radar` | `radar/reports/YYYY-Www.md` |
+| 2 | ไลบรารีหลักออกเวอร์ชันใหญ่หรือเลิกสนับสนุน ต้องอัปเกรดไหม | `tech-radar` (ขั้น 2–5 กับไลบรารีเดียว) | `radar/deep-dives/<library>-<version>.md` |
+| 3 | ของใหม่ที่ทุกคนพูดถึง ควรลงแรงเรียนไหม | `tech-radar` (ขั้น 2–5 กับเรื่องเดียว) | `radar/evaluations/<ชื่อ>.md` + `examples/<ชื่อ>-trial/` |
 
 ใช้ต่อกัน: เรดาร์เจอเรื่อง "ต้องทำ" ที่เป็นเวอร์ชันใหญ่ → 1 → 2 · เรดาร์เจอของใหม่ที่น่าสนใจ → 1 → 3 แล้วคำตัดสิน "เรียนตอนนี้" → `prompt-start-learning.md` ฉบับ 1 · ตรวจก่อนใช้ → `prompt-start-learning.md` ฉบับ 4
 

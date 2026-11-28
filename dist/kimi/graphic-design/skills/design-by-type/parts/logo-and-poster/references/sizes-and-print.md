@@ -4,7 +4,7 @@
 > Before sending real work, open the platform's documents and confirm again
 > The print numbers (section 3) are industry standards and rarely change
 >
-> Sections 1–2 are a quick copy — the source is `campaign-set` (it searches the platform guides live for safe areas, links are in `campaign-set/references/platform-sizes.md`), and if the numbers differ, treat the plugin's as correct
+> Sections 1–2 are a quick copy — the source is `campaign-set` (it searches the platform guides live for safe areas, links are in `campaign-set/references/platform-sizes.md`), and if the numbers differ, treat campaign-set's as correct
 
 ## Contents
 
