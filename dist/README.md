@@ -15,7 +15,7 @@
 
 | plugin | รุ่น | skill | บทบาท | คำสั่ง | ขนาด zip |
 |---|---|---:|---:|---:|---:|
-| `e-commerce` | 2.0.0 | 26 | 12 | 0 | 1.4 MB |
+| `e-commerce` | 2.0.1 | 26 | 12 | 0 | 1.4 MB |
 | `graphic-design` | 0.40.0 | 27 | 10 | 0 | 1.5 MB |
 | `personal-life` | 0.31.0 | 29 | 13 | 1 | 1.5 MB |
 | `software-development` | 4.3.0 | 58 | 42 | 2 | 8.0 MB |

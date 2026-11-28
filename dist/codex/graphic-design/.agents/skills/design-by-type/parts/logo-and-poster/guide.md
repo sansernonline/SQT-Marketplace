@@ -20,15 +20,15 @@ Also when reviewing work that "looks AI-made" and you cannot say why.
 
 | Work | Use this instead |
 |---|---|
-| App, web, mobile or Windows screens | `ui-craft` + the platform skill |
-| Slide layout | `slide-deck` |
-| Look of a Word / PowerPoint file | `document-design` |
-| Software diagrams | `diagrams` |
-| Data charts | `ui-craft` → `references/tokens.md` section "สีข้อมูล (กราฟ)" (data colours, charts) |
-| LINE OA rich menu (size · tap areas · JSON) | `graphic-design:line-design` (if installed) |
-| AI images | `image-generation` (if installed) |
+| App, web, mobile or Windows screens | `software-development:ui-craft` and its platform part |
+| Slide layout | `software-development:slide-deck` |
+| Look of a Word / PowerPoint file | `software-development:document-design` |
+| Software diagrams | `software-development:diagrams` |
+| Data charts | `software-development:ui-craft` → `parts/web-app-design/references/tokens.md` section "สีข้อมูล (กราฟ)" (data colours, charts) |
+| LINE OA rich menu (size · tap areas · JSON) | `line-design` |
+| AI images | `image-generation` |
 
-**If plugin `graphic-design` is installed:** for deeper design work (brand kit · campaign set · AI images · video · design review), use `graphic-design:brand-kit` · `graphic-design:campaign-set` · `graphic-design:design-review`, and take each platform's sizes from `graphic-design:campaign-set`. If that plugin is missing, keep following this skill.
+**Deeper design work** (brand kit · campaign set · AI images · video · design review): use `brand-kit` · `campaign-set` · `design-review`, and take each platform's sizes from `campaign-set`.
 
 ---
 
@@ -113,7 +113,7 @@ A logo must pass real contexts. **Fail more than 2 and drop it:** favicon 16px �
 
 ## 5 · Print and social sizes
 
-All the numbers are in **`references/sizes-and-print.md`** (a backup copy. If plugin `graphic-design` is installed, the source for platform sizes is `graphic-design:campaign-set`): LINE OA, TikTok, Facebook,
+All the numbers are in **`references/sizes-and-print.md`** (a backup copy; the source for platform sizes is `campaign-set`): LINE OA, TikTok, Facebook,
 Instagram, print (bleed, resolution, colour mode).
 
 **The 3 most common mistakes:**

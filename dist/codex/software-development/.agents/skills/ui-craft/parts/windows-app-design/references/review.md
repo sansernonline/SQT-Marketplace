@@ -1,4 +1,4 @@
-# Review, critique, prohibitions and limits: extension of `ui-craft`
+# Review, critique, prohibitions and limits: extension of `ui-craft` part `windows-app-design`
 
 Open when doing items 6 · 7 · 8 of `SKILL.md`
 

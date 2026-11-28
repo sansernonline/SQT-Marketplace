@@ -723,7 +723,7 @@ Exception for the Stage deck: the "ตัวอย่าง" (example) line · t
 - Always state the data source: period, sample size, source (side strip or footer)
 - A table over 5 rows by 4 columns should not be on a slide: make it a chart, or move it to an attachment
 
-Chart colour palette: `diagrams` → `references/colour-by-domain.md` · for charts that must also be used with app screens, `ui-craft` (plugin `software-development`) → `references/tokens.md` "สีข้อมูล (กราฟ)" (data colours, charts).
+Chart colour palette: `diagrams` → `references/colour-by-domain.md` · for charts that must also be used with app screens, `ui-craft` part `web-app-design` (plugin `software-development`) → `references/tokens.md` "สีข้อมูล (กราฟ)" (data colours, charts).
 
 ## Thai on slides
 

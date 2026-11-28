@@ -7,7 +7,7 @@ The main document skills (`design-gate/polished-document-style` · `workspace-ru
 | Situation | Call |
 |---|---|
 | Planning how to do the work (plan first · have another agent check · several agents from different angles · select from a lot · Loop · Graph · Dynamic) | `handoff/agent-patterns` |
-| The user wants a multi-step prompt to paste into chat (have the AI do it and check itself · split work then merge · adjust the plan when new information arrives) | `handoff` |
+| The user wants a multi-step prompt to paste into chat (have the AI do it and check itself · split work then merge · adjust the plan when new information arrives) | `handoff` part `chat-prompt-workflows` |
 | Writing an answer, report, document, or a label in a diagram | `human-writing` · has options, several numbers, or connected parts → `lean-reply/answer-shape` |
 | The work has repetitive mechanical parts (rename 100 files · compute every row · check every piece) | `ground-rules/principle-build-a-tool-not-handwork` |
 | Giving orders to workers · handing work on · picking up from a previous session · switching models · there is a message in the inbox | `handoff` |
@@ -45,9 +45,9 @@ The main document skills (`design-gate/polished-document-style` · `workspace-ru
 | Icons in an app that do not match or are not good-looking · app icons · favicon · plugin icons · a pictorial logo mark | `icon-design` (plugin `graphic-design`): for brand icons always ask first for examples the user likes |
 | Fixed deposits, government bonds, corporate bonds · credit bureau · home refinancing · DCA and portfolio rebalancing | `fund-and-bond-picker` · `budget-and-debt` · `portfolio` (plugin `trading-finance`) |
 | A family member has died or is making a will · flood · pregnancy and a newborn | `family-legal` · `home-upkeep` · `family-care` (plugin `personal-life`) |
-| Personal tasks scattered in many places · making flashcards or practising Q&A before an exam · starting a new job · being laid off or resigning · a dispute that needs a lawyer or an agency | `weekly-review` · `learning-path` · `job-search` · `family-legal` (plugin `personal-life`) |
+| Personal tasks scattered in many places · making flashcards or practising Q&A before an exam · starting a new job · being laid off or resigning · a dispute that needs a lawyer or an agency | `weekly-review` · `learning-path` · `job-search` part `career-growth` · `family-legal` (plugin `personal-life`) |
 | Reading a stock's financial statements or ratios · screening stocks into a watchlist | `stock-fundamentals` (plugin `trading-finance`) |
-| Setting up, monitoring, or quitting a copy trade · learning trading techniques gate by gate before using real money | `trade-journal` (plugin `trading-finance`) |
+| Setting up, monitoring, or quitting a copy trade · learning trading techniques gate by gate before using real money | `trade-journal` parts `copy-trade-check` · `trade-practice` (plugin `trading-finance`) |
 | Only the .ex5 file of an EA or indicator and you want to know how it works | `reverse-engineering` section .ex5 (plugin `software-development`): infer behaviour as a black box, do not decompile |
 | An online shop: what to do first at the start of the day · bringing back regular customers who have gone | `shop-operations` · `sales-copy` (plugin `e-commerce`) |
 | Checking exaggerated ad copy before posting · making LINE stickers or emoji | `copy-claims-check` · `line-design` (plugin `graphic-design`) |

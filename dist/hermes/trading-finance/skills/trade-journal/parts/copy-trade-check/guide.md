@@ -11,7 +11,7 @@ Cycle: check the provider with numbers before following (sections 1–4) → set
 
 Not for: learning to trade a technique yourself instead of copying → [`../trade-practice/guide.md`](../trade-practice/guide.md) · building or testing an own Expert Advisor (EA) → `stack-mql` · a bot that sends real orders (out of scope) · sizing one manual trade → `position-sizing`.
 
-Look-alikes: guaranteed profit, LINE group or "teacher", "รับฝากเทรด", "AI เทรดให้", money to a personal account → `scam-check`, stop here · fake money → `trade-journal` · tax → `income-tax-th` · logging → `trade-journal`.
+Look-alikes: guaranteed profit, LINE group or "teacher", "รับฝากเทรด", "AI เทรดให้", money to a personal account → `scam-check`, stop here · fake money → `trade-journal` part `trade-practice` · tax → `income-tax-th` · logging → `trade-journal`.
 
 **Do not rank by highest Growth.** Past top return lost heavily on social-trading platforms (research in the reference); base rate 74–89% of retail CFD accounts lose (ESMA 2018). Say this when the user asks for the top-Growth signal.
 
@@ -70,9 +70,9 @@ Settings table, why results differ from the provider's, and the cost table (subs
 - **How much behind one provider.** Lots scale by X% of deposit, so the follower loses about the provider's drawdown × X%. The user names the most they can lose, L (% of the account). With the provider's equity drawdown D (%) inflated by k (1.5, starting value, not yet measured): **X ≤ L ÷ (D × k)**, rounded down. Never Kelly. Do not change X while positions are open.
 - **Costs before subscribing:** monthly subscription (no refund on cancel; MQL5 keeps 20%) + VPS (the terminal must stay online) + the follower broker's spread and commission. **Break-even** = monthly fixed costs ÷ account equity. If that exceeds the provider's typical month × X%, the account is too small for this signal; say so.
 
-## 6 · Fake money first — `trade-journal`
+## 6 · Fake money first — `trade-journal` part `trade-practice`
 
-A real signal cannot be copied on demo. Track the chosen provider's **new** trades in the `trade-journal` ledger for 8 weeks (starting value, not yet measured), scaled to the planned deposit load, then rerun `signal-check.mjs` on that period alone. Write the section 7 exit rules before this period starts. Go live only if the new period has no hard-rule flag, its drawdown stayed inside what the user named, and the BOT question in the legal box is answered.
+A real signal cannot be copied on demo. Track the chosen provider's **new** trades in the `trade-journal` part `trade-practice` ledger for 8 weeks (starting value, not yet measured), scaled to the planned deposit load, then rerun `signal-check.mjs` on that period alone. Write the section 7 exit rules before this period starts. Go live only if the new period has no hard-rule flag, its drawdown stayed inside what the user named, and the BOT question in the legal box is answered.
 
 ## 7 · Exit rules — written before any real money
 

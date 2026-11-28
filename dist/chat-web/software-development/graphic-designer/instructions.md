@@ -58,7 +58,7 @@ For brand kits, social posts, visual review and AI image sets (if plugin `graphi
 
 ## Skills You Use
 
-- `graphic-design:design-by-type` part `logo-and-poster` (plugin `graphic-design`) — **every job**: 4 direction axes · 7-context logo test · Thai type · what not to do, with alternatives · social and print sizes · no brand color → use the skill's defaults, mark `(รอยืนยัน)` (pending confirmation), and carry on
+- `graphic-design:design-by-type` part `logo-and-poster` (plugin `graphic-design`) — **every job**: 4 direction axes · 7-context logo test · Thai type · what not to do, with alternatives · social and print sizes · no brand color → use the skill's defaults, mark `(รอยืนยัน)` (pending confirmation), and carry on · plugin `graphic-design` not installed → say so once, then work from the numbers in this file with `design-gate`
 - `ui-craft` (many elements: spacing, visual order, density) · `slide-deck` (the job is slides) · `product-naming` (the job is a name → name before the logo) · `superuser:ground-rules` (before every handover, cut what does not help people understand faster)
 - Exported documents: `document-design` · Office files → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
 - Ways of working: `human-writing` · `lean-reply/answer-shape` · `human-writing/spell-out-abbreviations` · `context-budget` · `workspace-rules/temp-file-discipline` · `decision-desk/flag-and-propose` (only for forks that are irreversible, expensive, or reach outsiders · reversible ones follow `ground-rules/principle-proceed-on-reversible-work`) · `superuser/status-report` (in a SuperUser team put the table in the report; the team lead writes `docs/BUILD-PLAN.md`) · `handoff` (at the end record the agreed direction and open work)

@@ -3,7 +3,7 @@
 Use when: a new feature · changing existing behavior · following requirements in an SRS or FSD
 Main principles: [`dev-principles`](../../dev-principles/SKILL.md) · [`references/code.md`](../../dev-principles/references/code.md) · [`references/testing.md`](../../dev-principles/references/testing.md) · [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md)
 Main skills: [`code-craft`](../../code-craft/SKILL.md) · the skill for the stack (`stack-dotnet` · `stack-typescript` · `stack-python` · `stack-sql` · `stack-mql`) · `test-automation` · `spec-to-code-loop` (if there are several requirements)
-Pick the skill for the part you touch: `api-design` · `web-service-essentials` · `database-design` · `async-messaging` · `errors-and-logs` · `i18n-and-locale` · `architecture` · `requirements-writing` · `domain-systems` · `ai-engineering` · `data-analysis` · `data-import-export` · `mobile-engineering` · `game-development` · `developer-experience` · screens: `ui-craft` · `design-system`
+Pick the skill for the part you touch: `api-design` · `web-service-essentials` · `database-design` · `async-messaging` · `errors-and-logs` · `i18n-and-locale` · `architecture` · `requirements-writing` · `domain-systems` · `ai-engineering` · `data-analysis` · `data-import-export` · `mobile-engineering` · `game-development` · `developer-experience` · screens: `ui-craft` parts `web-app-design` · `mobile-app-design` · `windows-app-design` · `design-system`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 

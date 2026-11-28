@@ -688,11 +688,11 @@ A portfolio summary page whose totals match, and every price has a reference tim
 
 Use when: about to buy or sell a stock · "how many shares should I buy" · "is it good to enter now".
 Main principles: [`money-principles`](../../money-principles/SKILL.md) · [`trading.md`](../../money-principles/references/trading.md) · [`fundamentals.md`](../../money-principles/references/fundamentals.md) · [`market-watch.md`](../../money-principles/references/market-watch.md)
-Main skills: `market-watch` · `technical-signals` · `position-sizing` · `trade-journal` · `stock-fundamentals` · `trade-journal`
+Main skills: `market-watch` · `technical-signals` · `position-sizing` · `trade-journal` · `stock-fundamentals` · `trade-journal` part `copy-trade-check`
 
 ## ขั้นตอน (Steps — copy into the todo exactly)
 
-1. Open `trading.md` first. Collect at the start, in one question: capital, budget, entry, stop, and a price-history CSV from the broker app if no market-data tool is connected. Then read the thesis for this stock from the user's `watchlist.md` in the finance folder (`market-watch` → `references/watchlist-setup.md` step 5). If there is none, write the thesis (the reason to buy), the entry point, and the point where the thesis is wrong, under `market-watch`. If the trade copies another person's trades or signals, check that source under `trade-journal` first · ใคร: หัวหน้าทีม (reason from the answer at the start; if none, put `(รอยืนยัน)` (pending confirmation))
+1. Open `trading.md` first. Collect at the start, in one question: capital, budget, entry, stop, and a price-history CSV from the broker app if no market-data tool is connected. Then read the thesis for this stock from the user's `watchlist.md` in the finance folder (`market-watch` → `references/watchlist-setup.md` step 5). If there is none, write the thesis (the reason to buy), the entry point, and the point where the thesis is wrong, under `market-watch`. If the trade copies another person's trades or signals, check that source under `trade-journal` part `copy-trade-check` first · ใคร: หัวหน้าทีม (reason from the answer at the start; if none, put `(รอยืนยัน)` (pending confirmation))
 2. Open `fundamentals.md` and `market-watch.md`, then look at the price and signals under `technical-signals` (price history: the `date,close,volume` CSV collected in step 1 with the other inputs; none and no market-data tool → mark the signal part `(รอยืนยัน)`), the company's statements under `stock-fundamentals`, and the affecting news under `market-watch` — every number has a reference time. Asked "are the financials OK?": pass on the script's flags and the company's own trend, say peers were not compared unless the user supplied them, and give no verdict · ใคร: `market-analyst` ตัวใหม่
 3. Have `risk-manager` calculate the position size under `position-sizing` from capital (the trading account), risk per trade and stop-loss distance, then check the portfolio's concentration; when the user also names a budget, the final size is the smaller of the script's size and the budget, and both numbers are shown · ใคร: `risk-manager` ตัวใหม่
 4. If there is no stop-loss point, stop at this step and do not calculate the size · ใคร: `risk-manager` ตัวใหม่
@@ -737,12 +737,12 @@ Every item in the report points to a spot in the work and has passed confirmatio
 
 Use when: about to transfer money to an investment, an app, a LINE group, or someone claiming to be an official · just transferred and suspects a scam.
 Main principles: [`money-principles`](../../money-principles/SKILL.md) · [`money-safety-tax.md`](../../money-principles/references/money-safety-tax.md)
-Main skills: `scam-check` · `trade-journal`
+Main skills: `scam-check` · `trade-journal` part `copy-trade-check`
 
 ## ขั้นตอน (Steps — copy into the todo exactly)
 
 1. If the money has already been transferred, do the urgent steps in `scam-check` before anything else (report to freeze the account · contact the bank · keep evidence) · ใคร: หัวหน้าทีม (talk to the user at once)
-2. If not yet transferred, open `money-safety-tax.md`, then ตรวจ the warning signs under `scam-check` and check the licence on the regulator's website. If the offer is a copy-trading service, check it under `trade-journal` · ใคร: `money-planner` ตัวใหม่
+2. If not yet transferred, open `money-safety-tax.md`, then ตรวจ the warning signs under `scam-check` and check the licence on the regulator's website. If the offer is a copy-trading service, check it under `trade-journal` part `copy-trade-check` · ใคร: `money-planner` ตัวใหม่
 3. Summarise the result: risk level · signs found · evidence · ใคร: `money-planner` ตัวใหม่ summarises · `reviewer` ตัวใหม่ checks the evidence and the result against `money-safety-tax.md` before it reaches the user
 4. Draft the message to the police or the bank, and a list of evidence · ใคร: หัวหน้าทีม drafts · `reviewer` ตัวใหม่ checks the draft, then the user sends it
 
@@ -852,14 +852,14 @@ How to use this template
 
 Use when: "summarise my trading results" · losing the same way again and again · the review cycle is due.
 Main principles: [`money-principles`](../../money-principles/SKILL.md) · [`trading.md`](../../money-principles/references/trading.md)
-Main skills: `trade-journal` (mode 2, review results) · `trade-journal` · agent `trade-journal-coach`
+Main skills: `trade-journal` (mode 2, review results) · `trade-journal` part `trade-practice` · agent `trade-journal-coach`
 
 ## ขั้นตอน (Steps — copy into the todo exactly)
 
 1. Open `trading.md` first. Then read the trade journal for that period only (filter by the date the position closed, do not open the whole file) and return a summary of at most 20 lines · ใคร: `trade-journal-coach` ตัวใหม่
 2. Calculate win rate, expectancy and drawdown with `scripts/trade-stats.mjs` of `trade-journal` · ใคร: `trade-journal-coach` ตัวใหม่
 3. Find the single most repeated error pattern, with real trades as examples · ใคร: `trade-journal-coach` ตัวใหม่
-4. Turn it into 1 new rule that can be tested next month, and decide on last month's rule (keep · adjust · drop). The new rule is practised on paper under `trade-journal` before any real money is used · ใคร: `trade-journal-coach` ตัวใหม่ proposes, then it goes under "รออนุมัติ" (awaiting approval)
+4. Turn it into 1 new rule that can be tested next month, and decide on last month's rule (keep · adjust · drop). The new rule is practised on paper under `trade-journal` part `trade-practice` before any real money is used · ใคร: `trade-journal-coach` ตัวใหม่ proposes, then it goes under "รออนุมัติ" (awaiting approval)
 5. ตรวจ that recalculating the statistics matches the journal, and that the rule fits `trading.md` · ใคร: `reviewer` ตัวใหม่
 
 ## Done when
@@ -1259,10 +1259,10 @@ Moved from `SKILL.md` section 3. Open it when unsure which skill to call, or whe
 | Reading financial statements · P/E ROE D/E · screening stocks by fundamentals | `stock-fundamentals` + agent `market-analyst` |
 | Logging a trade · reviewing results | `trade-journal` (log a trade · review mode) + agent `trade-journal-coach` |
 | Setting a price or news alert | agent `alert-dispatcher` |
-| Choosing a copy-trade signal on MQL5 (MT4/MT5) · setting up copying · weekly monitoring · whether to stop following | `trade-journal` + agent `risk-manager` |
+| Choosing a copy-trade signal on MQL5 (MT4/MT5) · setting up copying · weekly monitoring · whether to stop following | `trade-journal` part `copy-trade-check` + agent `risk-manager` |
 | Starting to follow a new stock · tidying a messy watchlist | `market-watch` |
-| Trying trading without real money | `trade-journal` |
-| Wants to learn trading step by step · which technique to start with · ready for the next stage or for real money | `trade-journal` + agent `trade-journal-coach` |
+| Trying trading without real money | `trade-journal` part `trade-practice` |
+| Wants to learn trading step by step · which technique to start with · ready for the next stage or for real money | `trade-journal` part `trade-practice` + agent `trade-journal-coach` |
 | Portfolio · dividends | `portfolio` |
 | Budget, debt, emergency fund, retirement, insurance, funds | `budget-and-debt` · `retirement-and-insurance` · `fund-and-bond-picker` + agent `money-planner` |
 | Tax and deductions | `income-tax-th` + agent `money-planner` |

@@ -33,6 +33,6 @@ The `radar.md` tracking list and the report skeleton are in [references/radar-te
 
 `/personal-life:learning-path [--deep <project>]`
 
-Run the `learning-path` skill with the `tech-mentor` agent: **the user's request**
+Run the `learning-path` part `tech-growth` skill with the `tech-mentor` agent: **the user's request**
 
 --deep follows one project's release notes in detail and drafts upgrade steps.

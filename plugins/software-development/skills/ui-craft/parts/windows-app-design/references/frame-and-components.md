@@ -1,4 +1,4 @@
-# Window frame and components in fluent.css: extension of `ui-craft`
+# Window frame and components in fluent.css: extension of `ui-craft` part `windows-app-design`
 
 Open when laying out a settings page/dashboard (item 3) or looking for ready-made classes (item 4) · for data-dense tool apps see `patterns.md`
 

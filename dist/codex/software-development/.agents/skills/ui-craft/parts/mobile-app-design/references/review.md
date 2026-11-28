@@ -1,4 +1,4 @@
-# Review, anti-patterns and limits — extension of `ui-craft`
+# Review, anti-patterns and limits — extension of `ui-craft` part `mobile-app-design`
 
 Open this when doing items 7 · 8 · 9 of `SKILL.md`.
 

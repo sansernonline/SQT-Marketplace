@@ -49,7 +49,7 @@ A playbook never repeats how-to; it links to the skill. A skill never says who d
 | Replying in chat | `human-writing` | `lean-reply` · `quick` (small tasks) | none (one reply) |
 | Keeping lessons and the owner's style | `fix-at-source` part `principle-fix-root-cause` | `learn-loop` | `learn-from-session` |
 | Writing skills, agents, playbooks | [`references/skill-authoring.md`](references/skill-authoring.md) · `ground-rules` part `principle-prove-it-works` (red → green before done) | `skill-authoring` | `skill-authoring` (software-development, if installed) |
-| Multi-step prompts for a chat app | `human-writing` | `handoff` | none |
+| Multi-step prompts for a chat app | `human-writing` | `handoff` part `chat-prompt-workflows` | none |
 
 ## Principles per plugin (kinds of work)
 

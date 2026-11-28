@@ -15,8 +15,8 @@
 
 ## When **not** to use it
 
-- Desktop web apps (dashboard/admin): use `ui-craft`
-- Windows desktop apps: use `ui-craft`
+- Desktop web apps (dashboard/admin): use `ui-craft` part `web-app-design`
+- Windows desktop apps: use `ui-craft` part `windows-app-design`
 - .docx/.pptx documents: use `document-design`
 
 ---
@@ -145,7 +145,7 @@ It communicates even to colour-blind users. Never use colour alone.
 
 ## 7 · Review
 
-Capture images at 3 sizes (390×844 · 360×800 · 430×932) and run the token checker of `ui-craft` with `--require` set to this system's set (the command and the 10-item checklist are in [`references/review.md`](references/review.md)). Then really look at the images. The only raw colour allowed is `<meta name="theme-color">`.
+Capture images at 3 sizes (390×844 · 360×800 · 430×932) and run the token checker of `ui-craft` part `web-app-design` with `--require` set to this system's set (the command and the 10-item checklist are in [`references/review.md`](references/review.md)). Then really look at the images. The only raw colour allowed is `<meta name="theme-color">`.
 
 ---
 
@@ -164,7 +164,7 @@ The 3 limits are in [`references/review.md`](references/review.md): the React Na
 ## 10 · Links to other skills
 
 - User flow or information architecture before colouring: agent `ux-designer`
-- Desktop web app of the same system, and the hardcoded colour checker in CI (`scripts/check-design-tokens.mjs`): `ui-craft`
+- Desktop web app of the same system, and the hardcoded colour checker in CI (`scripts/check-design-tokens.mjs`): [`../web-app-design/guide.md`](../web-app-design/guide.md)
 - Spec document of the screens: `design-gate/polished-document-style` + `document-design`
 - App Store Optimization: `mobile-engineering`
 - Spacing rules, eye order and the 5 screen states: `ui-craft`

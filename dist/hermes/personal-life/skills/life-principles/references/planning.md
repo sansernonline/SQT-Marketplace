@@ -20,7 +20,7 @@
 - ตัดสินใจเรื่องใหญ่จากข้อมูลล้วนโดยไม่ตรวจอคติหรือจินตนาการความล้มเหลว → มั่นใจเกินจริง (S14, S16)
 
 ## ใช้คู่กับ
-skills: `weekly-review` · `goals-and-decisions` · `meeting` · `family-week` · `learning-path` · playbook: `weekly-reset` · `decide-and-goals` · `habit-tracking` · `meeting` · `family-week` · `side-project`
+skills: `weekly-review` · `goals-and-decisions` · `meeting` · `family-week` · `learning-path` part `tech-growth` · playbook: `weekly-reset` · `decide-and-goals` · `habit-tracking` · `meeting` · `family-week` · `side-project`
 
 ## Sources (checked 2026-11-27)
 - S1 · Weekly Review Checklist, Getting Things Done (David Allen) · https://gettingthingsdone.com/wp-content/uploads/2014/10/Weekly_Review_Checklist.pdf · หลัก 1, 4, 7

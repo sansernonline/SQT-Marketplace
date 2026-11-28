@@ -4,7 +4,7 @@ Open when setting colour tokens, type sizes or choosing a Thai font for large he
 
 ## Tokens and type scale
 
-**Colour comes from the work** — if there is a brand colour, use it · if not → **search references first:** take the project's words and search live per `design-gate/design-references` (plugin `superuser`) type `web` or `motion`, then extract colours from the chosen work · the stored palette library is for when live search is impossible · if live search is impossible → house value `#2A78D6` (dark shade `#226CC6` for text on a light background), write `(รอยืนยัน)` (awaiting confirmation) and carry on · the values in the table are the reference site's, so stick to the **token list and its roles**, not the colour values · token names match `ui-craft` → `references/tokens.md` so page-mode pages (forms · admin) can use the same set
+**Colour comes from the work** — if there is a brand colour, use it · if not → **search references first:** take the project's words and search live per `design-gate/design-references` (plugin `superuser`) type `web` or `motion`, then extract colours from the chosen work · the stored palette library is for when live search is impossible · if live search is impossible → house value `#2A78D6` (dark shade `#226CC6` for text on a light background), write `(รอยืนยัน)` (awaiting confirmation) and carry on · the values in the table are the reference site's, so stick to the **token list and its roles**, not the colour values · token names match `ui-craft` part `web-app-design` → `references/tokens.md` so page-mode pages (forms · admin) can use the same set
 
 | Token | Reference value | Type role | Value |
 |---|---|---|---|
@@ -17,7 +17,7 @@ Open when setting colour tokens, type sizes or choosing a Thai font for large he
 | `--ease-io` | `cubic-bezier(.65,0,.35,1)` | large outlined number | `clamp(100px,9vw,170px)` · `-webkit-text-stroke` 1.5px ink 13% |
 | `--r` · `--pad` · `--max` · `--top` | 8px · 24px→16px · 1200px · 64px→56px | eyebrow / small | 12–13px · ls .04–.28em (Latin only) · `tabular-nums` |
 
-- Large Thai headings with negative `letter-spacing` must be checked at every weight — when tone marks collide with vowels, back off to -.01em · `uppercase` + wide ls is for Latin eyebrows only (`ui-craft` item 5)
+- Large Thai headings with negative `letter-spacing` must be checked at every weight — when tone marks collide with vowels, back off to -.01em · `uppercase` + wide ls is for Latin eyebrows only (`ui-craft` part `web-app-design` item 5)
 - The 3D background sits at z-index 0 under `main` (z 1) · deck opacity 1 · page-mode .22 · with a gradient scrim `.deck::before` «ให้ตัวหนังสืออ่านง่ายเหนือเครือข่าย»
 
 ## Thai fonts for large headings

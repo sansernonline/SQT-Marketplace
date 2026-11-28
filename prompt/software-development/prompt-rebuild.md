@@ -103,7 +103,7 @@ agent `product-manager` + `solution-architect` + `brainstormer` · skill `archit
 
 ## 3. ออกแบบหน้าตาใหม่: 3 ทิศทาง โหวตเลือก แล้วทำ mockup
 
-agent `ux-designer` + `graphic-designer` (เมื่อต้องทำโลโก้หรือสีแบรนด์ใหม่) · skill `ui-craft` ข้อ 0.1 · `handoff/parallel-attempts-pick-best` · `ui-craft` ตามแพลตฟอร์ม · `ground-rules/principle-user-experience-first`
+agent `ux-designer` + `graphic-designer` (เมื่อต้องทำโลโก้หรือสีแบรนด์ใหม่) · skill `ui-craft` ข้อ 0.1 · `handoff/parallel-attempts-pick-best` · `ui-craft` parts `web-app-design` · `mobile-app-design` · `windows-app-design` ตามแพลตฟอร์ม · `ground-rules/principle-user-experience-first`
 **ต้องมีก่อน:** `VISION.md` (ฉบับ 2) · flow หลักจาก `docs/as-is/`
 **ผลลัพธ์:** `docs/rebuild/DESIGN-DIRECTION.md` · `mockup/` รุ่นใหม่ (.html กดได้จริง)
 

@@ -22,7 +22,7 @@
 
 ## When **not** to use it
 
-- A Windows desktop app: use `ui-craft`
+- A Windows desktop app: use `ui-craft` part `windows-app-design`
 - A .docx/.pptx document: use `document-design`
 - A marketing website or landing page, because this system is built for **apps** that pack in data.
   A 13px base text is too small for a sales page. For scroll-motion sales pages, use the dynamic-website row in "Pick the part".
@@ -171,7 +171,7 @@ Then open the images and check:
 | Need | Use together with |
 |---|---|
 | User flow / IA before coloring | agent `ux-designer` |
-| A Windows desktop app in the same tone | `ui-craft` |
+| A Windows desktop app in the same tone | `ui-craft` part `windows-app-design` |
 | Screen spec document | `design-gate/polished-document-style` + `document-design` |
 | Diagrams to go with the spec | `diagrams` |
 | Spacing rules, visual order and the 5 states of a screen | `ui-craft` |

@@ -1,4 +1,4 @@
-# Flutter screen layout and components: extension of `ui-craft`
+# Flutter screen layout and components: extension of `ui-craft` part `mobile-app-design`
 
 Open this when laying out screens (section 4), working on Flutter / Android native (section 4.1), or looking for a class in `speakgo.css` (section 5).
 
@@ -28,7 +28,7 @@ Open this when laying out screens (section 4), working on Flutter / Android nati
 | Topic | Do this |
 |---|---|
 | token | Keep the main colours in `ColorScheme` (`ColorScheme.fromSeed`, then `copyWith`). Keep semantic colours that Material does not provide in our own `ThemeExtension`. Spacing is a constant in a single theme file. Real example: `lib/core/theme.dart` of the Lumio app |
-| raw colour check | The `ui-craft` checker does not catch Dart. Use `grep -rn -e "Color(0x" -e "Colors\.[a-z]" lib --include=*.dart`, and matches must appear only in the theme file |
+| raw colour check | The `ui-craft` part `web-app-design` checker does not catch Dart. Use `grep -rn -e "Color(0x" -e "Colors\.[a-z]" lib --include=*.dart`, and matches must appear only in the theme file |
 | dark mode | Build a full second set of tokens (not an automatic colour inversion). Then check the contrast of every text/background pair so both sets pass AA (≥ 4.5:1). Start with `ThemeMode.system` |
 | screenshots | Capture the real app with `adb exec-out screencap -p > _to_delete/screenshots/<name>.png` in both light and dark mode. A 360×800 dp screen is the smallest one to check |
 | screen edges | Edge-to-edge (forced on Android 15 and up): wrap content in `SafeArea` and set the status bar and navigation bar icon colours to match the theme (`SystemUiOverlayStyle`) |

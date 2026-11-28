@@ -1174,7 +1174,7 @@ The master CV, the per-track versions, and the LinkedIn draft match in every doc
 
 Use when: the mid-year or year-end performance review · the user wants to ask for a promotion or a raise · starting to log achievements
 Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/career.md`](../../life-principles/references/career.md)
-Main skills: `job-search` (`references/performance-self-review.md`) · `job-search` for the criteria of the next position
+Main skills: `job-search` part `career-growth` (`references/performance-self-review.md`) · `job-search` for the criteria of the next position
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
@@ -1222,11 +1222,11 @@ Every item in the report points to a spot in the work and has passed confirmatio
 
 Use when: the user wants a practice project or a portfolio piece · has too many ideas or none at all.
 Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/tech-growth.md`](../../life-principles/references/tech-growth.md)
-Main skills: `learning-path` (`references/side-project-picker.md` · `references/idea-bank.md`) · `learning-path`
+Main skills: `learning-path` part `tech-growth` (`references/side-project-picker.md` · `references/idea-bank.md`) · `learning-path`
 
 ## ขั้นตอน (Steps — copy into the todo as written)
 
-1. Open the principle file [`references/tech-growth.md`](../../life-principles/references/tech-growth.md) first. Collect ideas from the user or the idea bank, then score them under `learning-path` — learning value · can be finished in 2 weekends · really usable · ใคร: `tech-mentor` ตัวใหม่
+1. Open the principle file [`references/tech-growth.md`](../../life-principles/references/tech-growth.md) first. Collect ideas from the user or the idea bank, then score them under `learning-path` part `tech-growth` — learning value · can be finished in 2 weekends · really usable · ใคร: `tech-mentor` ตัวใหม่
 2. Pick the one the user named at the start. If none, pick the highest score and mark it `(รอยืนยัน)` (pending confirmation). Cut the scope down to the part that can be finished · ใคร: หัวหน้าทีม
 3. Write a "done" definition with 3–5 checkable points · ใคร: `tech-mentor` ตัวใหม่
 4. Set up the minimum project skeleton that runs. Pass any larger code work on to `/software-development:superuser` (ตัดสินผลตาม [`references/tech-growth.md`](../../life-principles/references/tech-growth.md)) · ใคร: `tech-mentor` ตัวใหม่ · `reviewer` ตัวใหม่ runs the real skeleton and ตรวจ that every point of the "done" definition can be measured
@@ -1323,7 +1323,7 @@ Rules specific to XL work
 
 Use when: following news of the libraries and tools in use · "what changed this week"
 Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/tech-growth.md`](../../life-principles/references/tech-growth.md)
-Main skills: `learning-path` (`references/tech-radar.md` · `references/radar-templates.md`)
+Main skills: `learning-path` part `tech-growth` (`references/tech-radar.md` · `references/radar-templates.md`)
 
 ## ขั้นตอน (Steps — copy into the todo as written)
 
@@ -1880,7 +1880,7 @@ Moved from `SKILL.md` section 3. Open it when unsure which skill to call, or whe
 | Adjusting a LinkedIn profile | `job-search` (`references/linkedin.md`) |
 | Has an interview · wants to rehearse | `job-search` + agent `interview-coach` |
 | Got an offer · asked for expected salary · asking for a raise | `job-search` |
-| Performance review · asking for promotion | `job-search` |
+| Performance review · asking for promotion | `job-search` part `career-growth` |
 | Has to write a polite message to HR or the boss | `human-writing/polite-message-th-en` (superuser) |
 | Resignation rights, severance, leave days | `thai-employment` (e-commerce) |
 
@@ -1891,9 +1891,9 @@ Moved from `SKILL.md` section 3. Open it when unsure which skill to call, or whe
 | Wants to learn a new technology | `learning-path` + agent `tech-mentor` |
 | Has a paper, RFC or long article | `learning-path` (`references/paper-to-practice.md`) |
 | Hits an error message or hard-to-read English documentation | `learning-path` |
-| Following weekly library news | `learning-path` |
+| Following weekly library news | `learning-path` part `tech-growth` |
 | Preparing for a certification exam | `learning-path` |
-| Looking for a practice project | `learning-path` |
+| Looking for a practice project | `learning-path` part `tech-growth` |
 | Information systems (IS) thesis or research article (proposal · literature review · references · defence) | `thesis-writing` |
 | Has to teach or run training (learning outcomes · timetable · exercises · rubric · evaluation form) | `course-builder` · for slides use `slide-deck` (software-development) |
 | Work turns into code in a real project | `/software-development:superuser` |
@@ -1914,7 +1914,7 @@ Moved from `SKILL.md` section 3. Open it when unsure which skill to call, or whe
 | `home-upkeep` | 12-month home care schedule · compare contractor prices | `home-upkeep` |
 | `meeting` | Pre-meeting card · post-meeting summary | `meeting` |
 | `job-search` | Compare job offers · draft negotiation wording | `job-search` |
-| `learning-path` | Weekly technology radar | `learning-path` |
+| `learning-path` part `tech-growth` | Weekly technology radar | `learning-path` part `tech-growth` |
 | `job-search` | Write or adjust a CV | `job-search` |
 | `household-money` | Check monthly subscriptions | `household-money` |
 | `travel-prep` | Travel checklist · one-file travel plan | `travel-prep` |

@@ -19,7 +19,7 @@ description: Use before life admin, health, career or learning work to judge it
 | Planning (week · goals · habits · tasks · meetings · inbox · decisions) | [`references/planning.md`](references/planning.md) | `weekly-review` · `goals-and-decisions` · `meeting` | `weekly-reset` · `decide-and-goals` · `habit-tracking` · `meeting` |
 | Family home (school · meals · gifts · family calendar) | [`references/family-home.md`](references/family-home.md) | `family-care` · `family-week` | `family-week` |
 | Family legal (wills · inheritance · disputes; no legal advice) | [`references/family-legal.md`](references/family-legal.md) | `family-legal` | `documents` |
-| Tech growth (side projects · keeping up) | [`references/tech-growth.md`](references/tech-growth.md) | `learning-path` | `side-project` · `tech-radar` |
+| Tech growth (side projects · keeping up) | [`references/tech-growth.md`](references/tech-growth.md) | `learning-path` part `tech-growth` | `side-project` · `tech-radar` |
 
 Every job also follows `superuser:work-principles` (prove it works · small steps · simple · root cause · human writing · sources).
 

@@ -33,7 +33,7 @@ In a README · Pull Request · note in code:
 - Review a diagram someone else drew
 
 
-Not for: choosing SVG / ASCII / Mermaid → `markdown-visuals.md` · screenshots and wireframes → `ui-craft` + the platform skill · data charts → `ui-craft` `tokens.md` heading "สีข้อมูล (กราฟ)" · choosing an architecture → `architecture`
+Not for: choosing SVG / ASCII / Mermaid → `markdown-visuals.md` · screenshots and wireframes → `ui-craft` + the platform skill · data charts → `ui-craft` part `web-app-design` `tokens.md` heading "สีข้อมูล (กราฟ)" · choosing an architecture → `architecture`
 
 ## 1 · Which question, which diagram
 

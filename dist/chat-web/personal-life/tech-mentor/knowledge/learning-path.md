@@ -1,6 +1,6 @@
 # skill: learning-path
 
-Use to learn a tech, prep a cert, track releases or pick side projects
+Use to learn a tech, prep a cert, code a paper or pick a side project
 
 # Learning Path
 
@@ -205,9 +205,9 @@ Worked gap map (AWS SAA-C03) and the week-by-week plan file to copy to `cert/<ex
 - The official exam guide outranks every course, video and blog
 - Practice scores are measured, not felt. Never book on "I feel ready"
 - Dumps (leaked real questions) breach the candidate agreement and can lead to the certification being revoked. Refuse to use them
-- Certifications prove a baseline. Pair each one with a small project (see `learning-path`) so the skill shows in a portfolio
+- Certifications prove a baseline. Pair each one with a small project (see `learning-path` part `tech-growth`) so the skill shows in a portfolio
 
-Related: `learning-path` (for skills beyond the exam), `learning-path`, `english-tech-reading.md` (for long, conditional English questions), and `product-planning` in `software-development` for Scrum context.
+Related: `learning-path` (for skills beyond the exam), `learning-path` part `tech-growth`, `english-tech-reading.md` (for long, conditional English questions), and `product-planning` in `software-development` for Scrum context.
 
 ## References
 

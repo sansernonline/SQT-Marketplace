@@ -507,9 +507,9 @@ Thai has upper vowels, lower vowels and tone marks that can stack 2 levels, so i
 
 | Medium | Body text | Headings | Used by |
 |---|---|---|---|
-| Web page (CSS `line-height` times font size) | 1.6 · long articles 1.75–1.85 | Thai not below 1.4 · large pure-Latin headings can go down to 1.0–1.1 | `ui-craft` |
-| Mobile app | 1.5–1.75 · the smaller the screen, the more spacing | Not below 1.4 | `ui-craft` |
-| Windows app | 20px at 14px text for on-screen text · long paragraphs 22px | Follow the Fluent scale | `ui-craft` |
+| Web page (CSS `line-height` times font size) | 1.6 · long articles 1.75–1.85 | Thai not below 1.4 · large pure-Latin headings can go down to 1.0–1.1 | `ui-craft` part `web-app-design` |
+| Mobile app | 1.5–1.75 · the smaller the screen, the more spacing | Not below 1.4 | `ui-craft` part `mobile-app-design` |
+| Windows app | 20px at 14px text for on-screen text · long paragraphs 22px | Follow the Fluent scale | `ui-craft` part `windows-app-design` |
 | Slides | Not below 1.5 | Not below 1.4 | `slide-deck` |
 | Graphics · posts · posters | 1.5–1.7 | Not below 1.4 | `brand-kit` · `graphic-design` |
 | Diagram | Not below 1.5 | — | `diagrams` |
@@ -1046,7 +1046,7 @@ Architecture Decision Record (ADR) · User Interface (UI) · User Experience (UX
 | Subfolder | What goes in | Skill that uses it |
 |---|---|---|
 | `verify-runs/` | Screenshots and run output of the real app during checking (verify evidence) | `test-automation` · `spec-to-code-loop` |
-| `screenshots/` | Rendered images of a design or mockup (previously referenced) | `ui-craft` |
+| `screenshots/` | Rendered images of a design or mockup (previously referenced) | `ui-craft` parts `mobile-app-design` · `web-app-design` · `windows-app-design` |
 | `security/` | Raw scan output | `security-gate` |
 | `check/` | The old name `spec-to-code-loop` used for check images; new work uses `verify-runs/` instead | `spec-to-code-loop` |
 
@@ -1328,7 +1328,7 @@ Main skills: [`code-craft`](../../code-craft/SKILL.md) · the skill for the stac
 Use when: a new feature · changing existing behavior · following requirements in an SRS or FSD
 Main principles: [`dev-principles`](../../dev-principles/SKILL.md) · [`references/code.md`](../../dev-principles/references/code.md) · [`references/testing.md`](../../dev-principles/references/testing.md) · [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md)
 Main skills: [`code-craft`](../../code-craft/SKILL.md) · the skill for the stack (`stack-dotnet` · `stack-typescript` · `stack-python` · `stack-sql` · `stack-mql`) · `test-automation` · `spec-to-code-loop` (if there are several requirements)
-Pick the skill for the part you touch: `api-design` · `web-service-essentials` · `database-design` · `async-messaging` · `errors-and-logs` · `i18n-and-locale` · `architecture` · `requirements-writing` · `domain-systems` · `ai-engineering` · `data-analysis` · `data-import-export` · `mobile-engineering` · `game-development` · `developer-experience` · screens: `ui-craft` · `design-system`
+Pick the skill for the part you touch: `api-design` · `web-service-essentials` · `database-design` · `async-messaging` · `errors-and-logs` · `i18n-and-locale` · `architecture` · `requirements-writing` · `domain-systems` · `ai-engineering` · `data-analysis` · `data-import-export` · `mobile-engineering` · `game-development` · `developer-experience` · screens: `ui-craft` parts `web-app-design` · `mobile-app-design` · `windows-app-design` · `design-system`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
@@ -1495,7 +1495,7 @@ Every lesson can point to the file it went into · a repeated mistake has a chec
 Use when: "Make app X for me" · "Try setting up a project" · there is no code yet or only an empty folder (if you need the full document set, BRD · SRS, first, use playbook `project-docs` first, then come back here)
 Main principles: [`dev-principles`](../../dev-principles/SKILL.md) · [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md) · [`references/requirements-docs.md`](../../dev-principles/references/requirements-docs.md) · [`references/testing.md`](../../dev-principles/references/testing.md)
 Main skills: `project-bootstrap` · [`project-docs`](../../project-docs/SKILL.md) · `requirements-writing` · `spec-to-code-loop` · `architecture` · `code-craft` · [`security-gate`](../../security-gate/SKILL.md) · [`test-automation`](../../test-automation/SKILL.md) · `infra-and-deploy` · `diagrams`
-Pick the skill for the part you touch: `api-design` · `web-service-essentials` · `database-design` · `async-messaging` · `errors-and-logs` · `i18n-and-locale` · `architecture` · `requirements-writing` · `domain-systems` · `ai-engineering` · `data-analysis` · `data-import-export` · `mobile-engineering` · `game-development` · `developer-experience` · screens: `ui-craft` · `design-system`
+Pick the skill for the part you touch: `api-design` · `web-service-essentials` · `database-design` · `async-messaging` · `errors-and-logs` · `i18n-and-locale` · `architecture` · `requirements-writing` · `domain-systems` · `ai-engineering` · `data-analysis` · `data-import-export` · `mobile-engineering` · `game-development` · `developer-experience` · screens: `ui-craft` parts `web-app-design` · `mobile-app-design` · `windows-app-design` · `design-system`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 
@@ -1867,7 +1867,7 @@ All the step 1 conditions pass, or every remaining piece has a reason why it is 
 
 Use when: making a screen match a mockup · moving a screen from an old technology to a new one and it must look the same · the user says "ไม่เหมือนแบบ" (it does not look like the design)
 Main principles: [`dev-principles`](../../dev-principles/SKILL.md) · [`references/ui.md`](../../dev-principles/references/ui.md)
-Main skills: the project's app-checking skill (`test-automation`) · `ui-craft` · the skill for the screen kind (`ui-craft`) · `ground-rules/principle-prove-it-works`
+Main skills: the project's app-checking skill (`test-automation`) · `ui-craft` · the skill for the screen kind (`ui-craft` parts `web-app-design` · `mobile-app-design` · `windows-app-design`) · `ground-rules/principle-prove-it-works`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 

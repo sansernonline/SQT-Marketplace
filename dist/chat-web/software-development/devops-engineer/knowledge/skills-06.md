@@ -1,6 +1,6 @@
 # skill: handoff
 
-Use when work is split across agents or passes to a session or person
+Use when work is split across agents, handed on, or made a chat prompt
 
 # handoff — pass work on so the receiver does not have to guess
 

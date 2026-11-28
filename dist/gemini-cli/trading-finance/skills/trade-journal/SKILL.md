@@ -46,7 +46,7 @@ calm · confident · FOMO (กลัวตกรถ) · revenge (เอาคื
 - Entry takes **under a minute** — longer and the habit dies within two weeks.
 - **Never edit past entries**; a later lesson goes in a new note column or a new row.
 - Write the reason **before** the price moves; a reason written after the exit is a story, not data.
-- Paper trades go in the same format, flagged `paper`, so `trade-journal` stats are comparable.
+- Paper trades go in the same format, flagged `paper`, so `trade-journal` part `trade-practice` stats are comparable.
 - Record the costs actually charged; Thai broker statements show commission, trading fee, clearing fee and VAT separately — add them up.
 - Screenshot optional; the written record is mandatory.
 - The `trade-journal-coach` agent quotes this file back in reviews — write it knowing someone will read it.
@@ -75,7 +75,7 @@ Fewer than 20 closed trades: report the numbers but say the sample is too small 
 
 Output (mode 2): one page: stats table (live, paper separately) · sample-size warning if N < 20 · the one pattern with quoted evidence · the one new rule · last rule's verdict. No pep talks, no list of ten lessons.
 
-Related: strategy practice in `trade-journal`; sizing fixes in `position-sizing`.
+Related: strategy practice in `trade-journal` part `trade-practice`; sizing fixes in `position-sizing`.
 
 ## เรียกเป็นคำสั่ง
 

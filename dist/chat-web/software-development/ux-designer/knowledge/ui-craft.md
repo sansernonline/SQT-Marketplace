@@ -22,7 +22,7 @@ Use when a task produces a screen or mockup for web, phone or Windows
 | Phone app (PWA · React Native · Flutter) | [`parts/mobile-app-design/guide.md`](parts/mobile-app-design/guide.md) |
 | Native-looking Windows 11 app (WinUI 3 · MAUI · Avalonia) | [`parts/windows-app-design/guide.md`](parts/windows-app-design/guide.md) |
 
-Real colors, fonts, components (also chart colors) live in the platform parts above; this page sets only spacing, size, order and states. Not for: · printed documents → `document-design` · slides → `slide-deck`. User flow before drawing → agent `ux-designer` (template: [`references/ux-spec-outputs.md`](references/ux-spec-outputs.md)).
+Real colors, fonts, components (also chart colors) live in the platform parts above; this page sets only spacing, size, order and states. Not for: printed documents → `document-design` · slides → `slide-deck`. User flow before drawing → agent `ux-designer` (template: [`references/ux-spec-outputs.md`](references/ux-spec-outputs.md)).
 
 ## Steps
 
@@ -57,7 +57,7 @@ Sample content must look real: realistic data, real images per `image-generation
 Every padding · margin · gap is a value in this scale, even when the platform part conflicts, **except values measured from the real system and named in the exception list of `references/scales.md`** (for example Windows: content edge 36 · gap between sections 40). Things that belong together sit closer than things that do not. Card padding ≥ the gap inside. Details → [`references/scales.md`](references/scales.md).
 
 ### 2 · Type scale
-At most 5 sizes per screen (web: lg 22 · md 15 · base 13 · sm 12 · xs 11) · smallest 11 · 2 weights · lines of 45–75 characters · Thai line-height +0.1. A marketing or landing page without motion uses the type scale and rhythm in [`references/scales.md`](references/scales.md#3--หน้าการตลาดและ-landing-ที่ไม่มี-motion) (with motion → `ui-craft`).
+At most 5 sizes per screen (web: lg 22 · md 15 · base 13 · sm 12 · xs 11) · smallest 11 · 2 weights · lines of 45–75 characters · Thai line-height +0.1. A marketing or landing page without motion uses the type scale and rhythm in [`references/scales.md`](references/scales.md#3--หน้าการตลาดและ-landing-ที่ไม่มี-motion) (with motion → `ui-craft` part `web-app-design`).
 
 ### 3 · Visual order: one screen, one important thing
 Ask what the user opened this page to do. That item gets level 1.
@@ -217,7 +217,7 @@ Choose the brand's tone axis and level of polish per `graphic-design:design-by-t
 # Depth and surface flourish (depth and flourish)
 
 Realistic shadows, paper surface, clay and torn edges, for screens and mockups · use together with `SKILL.md` section 4 (shadow only for things that really float · 3 depth levels · still cards get no shadow), not instead of it
-The web app's shadow tokens (`--shadow-color` · `--elev-1` to `--elev-3` · the nested-corner formula) are in `ui-craft` → `references/tokens.md` · the looks that use each language are in [`web-looks.md`](web-looks.md)
+The web app's shadow tokens (`--shadow-color` · `--elev-1` to `--elev-3` · the nested-corner formula) are in `ui-craft` part `web-app-design` → `references/tokens.md` · the looks that use each language are in [`web-looks.md`](web-looks.md)
 
 ## Contents
 
@@ -417,7 +417,7 @@ Checked on MDN on 2026-10-23; every item in this list is Baseline widely availab
 
 # Figma as the source (figma-to-code)
 
-The customer sends a Figma file → read it through Figma's Model Context Protocol (MCP) server and convert it into our HTML mockup · use together with `SKILL.md` section 0 (the project's look wins) and the tokens in `ui-craft` → `references/tokens.md`
+The customer sends a Figma file → read it through Figma's Model Context Protocol (MCP) server and convert it into our HTML mockup · use together with `SKILL.md` section 0 (the project's look wins) and the tokens in `ui-craft` part `web-app-design` → `references/tokens.md`
 The tools, plans and quotas come from Figma's documentation, opened and checked 2026-10-23 (the "Sources" table) · Figma itself writes that quotas can change at any time; open the same pages again before proposing a plan to the customer
 
 ## Contents
@@ -628,7 +628,7 @@ Use for a piece with several routes where choosing wrong is costly (hero · main
 # First page of a single-file mockup (`#s-start`)
 
 This page is the table-of-contents page of the mockup that the reviewer opens as the first page. **It is not a page in the app.** Large cards filling the screen are allowed here.
-The start page inside a real app follows the platform skill, for example `ui-craft` → `patterns.md` item 8, which forbids large cards.
+The start page inside a real app follows the platform skill, for example `ui-craft` part `windows-app-design` → `patterns.md` item 8, which forbids large cards.
 
 Sample image: [`../assets/mockup-start-page-preview.webp`](../assets/mockup-start-page-preview.webp) (project Telex, 32 screens) · this image was taken before the decorations were removed (glow · gradient · label above the heading); look at the structure, not the look.
 
@@ -689,7 +689,7 @@ This scale controls only padding · margin · gap; corner radius and component s
 
 | Platform | Value | Source |
 |---|---|---|
-| Windows | content edge left/right 36 · gap between sections 40 | `ui-craft` → `references/tokens.md` (measured from Windows 11) |
+| Windows | content edge left/right 36 · gap between sections 40 | `ui-craft` part `windows-app-design` → `references/tokens.md` (measured from Windows 11) |
 
 Other values of the platform skill that are not in this table use this scale
 
@@ -743,7 +743,7 @@ If you want emphasis, change the **color** or the **size** first; do not rush to
 
 ## 3 · หน้าการตลาดและ landing ที่ไม่มี motion
 
-Use for pages people read down one section at a time (sales page · product home page · launch page) · apps and dashboards use sections 1–2 · pages that move section by section with scrolling → `ui-craft`
+Use for pages people read down one section at a time (sales page · product home page · launch page) · apps and dashboards use sections 1–2 · pages that move section by section with scrolling → `ui-craft` part `web-app-design`
 
 The values in the table are starting values, set from the real page trial of 2026-11-06 and not yet measured from a prototype site · once a prototype is chosen (`design-gate/design-references`), you may measure the sizes from the prototype instead and note the source beside the token
 
@@ -875,7 +875,7 @@ Take screenshots of the hero screen + 2 frequently used pages, in both themes, a
 - **Every platform:** the app frame (title bar · header bar · toolbar · rail · nav · borders) is gray-black lines and icons, not tinted with the brand color unless the user says so · the brand color lives in the data and primary buttons
 - **web · mobile:** status labels are solid-background, not thin white outlines · a large solid block of color = the main-number card · hero · chart
 - **Windows · depth and imagery axis:** depth uses Mica and Fluent elevation, no extra card shadows, and icons use Fluent — doing this does not count as a failed item
-- **Windows:** color comes through the 3×16px selection bar · hero screen · main metric numbers (Key Performance Indicator · KPI) and charts · 1 primary button · status labels are a 6–8px dot + text, not a solid background, and the notice bar is a neutral background (`ui-craft` → `references/patterns.md` items 7–8) — doing this does not count as a failed item
+- **Windows:** color comes through the 3×16px selection bar · hero screen · main metric numbers (Key Performance Indicator · KPI) and charts · 1 primary button · status labels are a 6–8px dot + text, not a solid background, and the notice bar is a neutral background (`ui-craft` part `windows-app-design` → `references/patterns.md` items 7–8) — doing this does not count as a failed item
 
 Below 4 on any axis = level 3 or lower · for the hero-screen axis, no hero page at all = 1
 

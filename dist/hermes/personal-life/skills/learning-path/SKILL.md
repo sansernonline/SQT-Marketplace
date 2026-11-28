@@ -1,6 +1,6 @@
 ---
 name: learning-path
-description: Use to learn a tech, prep a cert, track releases or pick side projects
+description: Use to learn a tech, prep a cert, code a paper or pick a side project
 argument-hint: <technology, exam or paper> [--depth skim|working|mastery]
 ---
 

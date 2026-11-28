@@ -19,7 +19,7 @@ This scale controls only padding · margin · gap; corner radius and component s
 
 | Platform | Value | Source |
 |---|---|---|
-| Windows | content edge left/right 36 · gap between sections 40 | `ui-craft` → `references/tokens.md` (measured from Windows 11) |
+| Windows | content edge left/right 36 · gap between sections 40 | `ui-craft` part `windows-app-design` → `references/tokens.md` (measured from Windows 11) |
 
 Other values of the platform skill that are not in this table use this scale
 
@@ -73,7 +73,7 @@ If you want emphasis, change the **color** or the **size** first; do not rush to
 
 ## 3 · หน้าการตลาดและ landing ที่ไม่มี motion
 
-Use for pages people read down one section at a time (sales page · product home page · launch page) · apps and dashboards use sections 1–2 · pages that move section by section with scrolling → `ui-craft`
+Use for pages people read down one section at a time (sales page · product home page · launch page) · apps and dashboards use sections 1–2 · pages that move section by section with scrolling → `ui-craft` part `web-app-design`
 
 The values in the table are starting values, set from the real page trial of 2026-11-06 and not yet measured from a prototype site · once a prototype is chosen (`design-gate/design-references`), you may measure the sizes from the prototype instead and note the source beside the token
 

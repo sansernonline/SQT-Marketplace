@@ -6,7 +6,7 @@ argument-hint: <mobile-architecture | aso-audit> <details>
 
 # mobile-engineering
 
-Mobile app engineering: architecture · performance · App Store / Play Store listings (for screen design use `ui-craft`)
+Mobile app engineering: architecture · performance · App Store / Play Store listings (for screen design use `ui-craft` part `mobile-app-design`)
 
 **Open only the files that match the job.** Do not read them all, because each file is the full guide to its topic.
 

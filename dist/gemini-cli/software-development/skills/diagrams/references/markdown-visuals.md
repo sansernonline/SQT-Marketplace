@@ -37,8 +37,8 @@
 
 | Task | Use instead |
 |---|---|
-| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`ui-craft`) (plugin `software-development`) |
-| Chart colours and chart design in an app or dashboard | `ui-craft` (plugin `software-development`) → `tokens.md` "สีข้อมูล (กราฟ)" |
+| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`ui-craft` parts `web-app-design` · `windows-app-design` · `mobile-app-design`) (plugin `software-development`) |
+| Chart colours and chart design in an app or dashboard | `ui-craft` part `web-app-design` (plugin `software-development`) → `tokens.md` "สีข้อมูล (กราฟ)" |
 | Designed figure for a proposal, slide or print | `diagrams` |
 
 ## Decision tree: which format?

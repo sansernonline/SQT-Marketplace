@@ -58,7 +58,7 @@ Monthly: trades, win rate, avg R, expectancy, max drawdown, violations, passed/n
 
 `/trading-finance:trade-journal <log|stats|setup> [trade details]`
 
-Run the virtual trading account with the `trade-journal` skill: **the user's request**
+Run the virtual trading account with the `trade-journal` part `trade-practice` skill: **the user's request**
 
 - `log` — record a planned trade (entry, stop, target, thesis) BEFORE it happens
 - `stats` — monthly summary: trades, win rate, expectancy, rule violations

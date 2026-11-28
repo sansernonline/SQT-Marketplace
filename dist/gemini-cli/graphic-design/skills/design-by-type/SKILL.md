@@ -17,7 +17,7 @@ This skill adds 3 things on top of `design-gate/design-references`: the type's o
 - A logo · poster · banner or social ad · YouTube thumbnail · Word/PDF cover · slide deck is about to be designed, from scratch or as a redesign.
 - The owner says the work looks stiff, generic or AI-made, and the job is one of those types.
 
-Not for: screens and web pages → `software-development:ui-craft` · icons → `icon-design` · a whole brand kit → `brand-kit` (it calls this skill for the logo) · a quick one-off logo or poster inside a software project, no reference blend → `graphic-design:design-by-type`.
+Not for: screens and web pages → `software-development:ui-craft` · icons → `icon-design` · a whole brand kit → `brand-kit` (it calls this skill for the logo) · a quick one-off logo or poster inside a software project, no reference blend → [`parts/logo-and-poster/guide.md`](parts/logo-and-poster/guide.md).
 
 ## Steps
 

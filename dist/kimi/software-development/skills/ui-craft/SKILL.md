@@ -23,7 +23,7 @@ description: Use when a task produces a screen or mockup for web, phone or Windo
 | Phone app (PWA · React Native · Flutter) | [`parts/mobile-app-design/guide.md`](parts/mobile-app-design/guide.md) |
 | Native-looking Windows 11 app (WinUI 3 · MAUI · Avalonia) | [`parts/windows-app-design/guide.md`](parts/windows-app-design/guide.md) |
 
-Real colors, fonts, components (also chart colors) live in the platform parts above; this page sets only spacing, size, order and states. Not for: · printed documents → `document-design` · slides → `slide-deck`. User flow before drawing → agent `ux-designer` (template: [`references/ux-spec-outputs.md`](references/ux-spec-outputs.md)).
+Real colors, fonts, components (also chart colors) live in the platform parts above; this page sets only spacing, size, order and states. Not for: printed documents → `document-design` · slides → `slide-deck`. User flow before drawing → agent `ux-designer` (template: [`references/ux-spec-outputs.md`](references/ux-spec-outputs.md)).
 
 ## Steps
 
@@ -58,7 +58,7 @@ Sample content must look real: realistic data, real images per `image-generation
 Every padding · margin · gap is a value in this scale, even when the platform part conflicts, **except values measured from the real system and named in the exception list of `references/scales.md`** (for example Windows: content edge 36 · gap between sections 40). Things that belong together sit closer than things that do not. Card padding ≥ the gap inside. Details → [`references/scales.md`](references/scales.md).
 
 ### 2 · Type scale
-At most 5 sizes per screen (web: lg 22 · md 15 · base 13 · sm 12 · xs 11) · smallest 11 · 2 weights · lines of 45–75 characters · Thai line-height +0.1. A marketing or landing page without motion uses the type scale and rhythm in [`references/scales.md`](references/scales.md#3--หน้าการตลาดและ-landing-ที่ไม่มี-motion) (with motion → `ui-craft`).
+At most 5 sizes per screen (web: lg 22 · md 15 · base 13 · sm 12 · xs 11) · smallest 11 · 2 weights · lines of 45–75 characters · Thai line-height +0.1. A marketing or landing page without motion uses the type scale and rhythm in [`references/scales.md`](references/scales.md#3--หน้าการตลาดและ-landing-ที่ไม่มี-motion) (with motion → `ui-craft` part `web-app-design`).
 
 ### 3 · Visual order: one screen, one important thing
 Ask what the user opened this page to do. That item gets level 1.

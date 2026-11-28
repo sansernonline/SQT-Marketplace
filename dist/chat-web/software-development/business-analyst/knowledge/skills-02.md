@@ -788,8 +788,8 @@ This skeleton answers "what does 1 message (request · job · document) pass thr
 
 | Task | Use instead |
 |---|---|
-| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`ui-craft`) (plugin `software-development`) |
-| Chart colours and chart design in an app or dashboard | `ui-craft` (plugin `software-development`) → `tokens.md` "สีข้อมูล (กราฟ)" |
+| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`ui-craft` parts `web-app-design` · `windows-app-design` · `mobile-app-design`) (plugin `software-development`) |
+| Chart colours and chart design in an app or dashboard | `ui-craft` part `web-app-design` (plugin `software-development`) → `tokens.md` "สีข้อมูล (กราฟ)" |
 | Designed figure for a proposal, slide or print | `diagrams` |
 
 ## Decision tree: which format?
@@ -1015,7 +1015,7 @@ In a README · Pull Request · note in code:
 - Review a diagram someone else drew
 
 
-Not for: choosing SVG / ASCII / Mermaid → `markdown-visuals.md` · screenshots and wireframes → `ui-craft` + the platform skill · data charts → `ui-craft` `tokens.md` heading "สีข้อมูล (กราฟ)" · choosing an architecture → `architecture`
+Not for: choosing SVG / ASCII / Mermaid → `markdown-visuals.md` · screenshots and wireframes → `ui-craft` + the platform skill · data charts → `ui-craft` part `web-app-design` `tokens.md` heading "สีข้อมูล (กราฟ)" · choosing an architecture → `architecture`
 
 ## 1 · Which question, which diagram
 
@@ -1428,7 +1428,7 @@ Exception for the Stage deck: the "ตัวอย่าง" (example) line · t
 - Always state the data source: period, sample size, source (side strip or footer)
 - A table over 5 rows by 4 columns should not be on a slide: make it a chart, or move it to an attachment
 
-Chart colour palette: `diagrams` → `references/colour-by-domain.md` · for charts that must also be used with app screens, `ui-craft` (plugin `software-development`) → `references/tokens.md` "สีข้อมูล (กราฟ)" (data colours, charts).
+Chart colour palette: `diagrams` → `references/colour-by-domain.md` · for charts that must also be used with app screens, `ui-craft` part `web-app-design` (plugin `software-development`) → `references/tokens.md` "สีข้อมูล (กราฟ)" (data colours, charts).
 
 ## Thai on slides
 

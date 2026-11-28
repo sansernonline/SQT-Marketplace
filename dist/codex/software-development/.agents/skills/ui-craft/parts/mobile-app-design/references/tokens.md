@@ -6,7 +6,7 @@
 > Colors, fonts, radii, shadows and widths are fallbacks. The project's values live in `theme.css` (`SKILL.md` item 2) · spacing, type sizes and breakpoints follow this file.
 
 All definitions are in `assets/speakgo.css`, in the `:root` block.
-**Nothing below the `=== base ===` line may contain a raw color** — the same checker as `ui-craft` works here.
+**Nothing below the `=== base ===` line may contain a raw color** — the same checker as `ui-craft` part `web-app-design` works here.
 
 ## Contents
 

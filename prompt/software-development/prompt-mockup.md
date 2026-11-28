@@ -42,7 +42,7 @@
 
 ## 1. สร้าง mockup ที่กดได้จริง
 
-agent `ux-designer` (ขั้น A) · `developer` (ขั้น B–C · มี shell) · `graphic-designer` (โลโก้) · skill `ui-craft` (ข้อ 0.1 ทิศทางภาพ · ข้อ 9 ด่านสวย) + skill ตามแพลตฟอร์มใน `docs/README.md`: web → `ui-craft` · mobile → `ui-craft` · windows → `ui-craft` · `graphic-design` · `handoff/parallel-attempts-pick-best`
+agent `ux-designer` (ขั้น A) · `developer` (ขั้น B–C · มี shell) · `graphic-designer` (โลโก้) · skill `ui-craft` (ข้อ 0.1 ทิศทางภาพ · ข้อ 9 ด่านสวย) + skill ตามแพลตฟอร์มใน `docs/README.md`: web → `ui-craft` part `web-app-design` · mobile → `ui-craft` part `mobile-app-design` · windows → `ui-craft` part `windows-app-design` · `graphic-design` · `handoff/parallel-attempts-pick-best`
 **ต้องมีก่อน:** `docs/README.md` · SRS หรือ BRD (`docs/<รหัส>-SRS-*.docx` / `docs/<รหัส>-BRD-*.docx` อ่านด้วย `anthropic-skills:docx` · ทำคู่กับ SRS ได้ → ใช้ร่างใน `_to_delete/drafts/`) · `docs/USER-STORIES.md` ถ้ามี
 **ผลลัพธ์:** `docs/design/<รหัส>-design-directions.html` · `assets/logo/` · `mockup/<รหัส>-mockup.html` ไฟล์เดียว (ตามกฎร่วมข้างบน) · ภาพตรวจลง `_to_delete/`
 
@@ -79,7 +79,7 @@ agent `ux-designer` (ขั้น A) · `developer` (ขั้น B–C · ม�
 
 - เจอ FR ที่ยังไม่มีหน้าจอรองรับ → ทำหน้าจอเพิ่ม หรือลงคำถามค้าง
 - **มี mockup เดิมและสั่งทำใหม่ หรือหน้าตาเดิมไม่ผ่านด่านสวย (ไม่มีคะแนนบันทึกใน `docs/BUILD-PLAN.md` = ไม่ผ่าน) → เริ่มขั้น A ใหม่** · ห้ามรวมไฟล์เก่าแล้วคงหน้าตาเดิม เว้นแต่ผู้ใช้สั่งให้คง (`ui-craft` ข้อ 0 ข้อยกเว้น) · ไฟล์เก่าย้ายไป `_to_delete/old-mockup/` ไม่ลบ
-- ค่าตั้งต้นของ skill แพลตฟอร์ม (เช่น Fluent สว่างของ `ui-craft`) คือพื้น ไม่ใช่หน้าตาสุดท้าย
+- ค่าตั้งต้นของ skill แพลตฟอร์ม (เช่น Fluent สว่างของ `ui-craft` part `windows-app-design`) คือพื้น ไม่ใช่หน้าตาสุดท้าย
 - ทำเสร็จแล้วส่งฉบับ 2 (การตรวจเดียวของ mockup · 2 ด่าน)
 
 ---

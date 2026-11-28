@@ -17,7 +17,7 @@
 
 ## When **not** to use it
 
-- For a web app, use `ui-craft` · for a mobile app, use `ui-craft`
+- For a web app, use `ui-craft` part `web-app-design` · for a mobile app, use `ui-craft` part `mobile-app-design`
 - For .docx/.pptx documents, use `document-design`
 - For diagrams in documents, use `diagrams`
 
@@ -140,7 +140,7 @@ Then open the images and check as follows:
 - [ ] Every click target is at least 32×32px
 - [ ] Text contrast ≥ 4.5:1 (secondary text on a card background is where it fails most often)
 - [ ] Every button can be reached with Tab, and a **focus ring is visible** everywhere
-- [ ] No raw colors are left, and every `var(--win-…)` has a real definition. Run the checker of `ui-craft` (pass `--require` as the Fluent token set because the default is the web's names, and `--marker "Type ramp"` because `fluent.css` has no `base` line):
+- [ ] No raw colors are left, and every `var(--win-…)` has a real definition. Run the checker of `ui-craft` part `web-app-design` (pass `--require` as the Fluent token set because the default is the web's names, and `--marker "Type ramp"` because `fluent.css` has no `base` line):
 
   Both commands (separate token file · single-file mockup) are in [`references/review.md`](references/review.md). If the app adds its own tokens, append them to `--require`. Name the sections in the mockup page starting with `s-`.
 
@@ -173,7 +173,7 @@ Fix the points you agree with (a critique that is wrong because the image was mi
 | Need | Use with |
 |---|---|
 | user flow / wireframe before color | agent `ux-designer` |
-| charts in the dashboard | `ui-craft` → `references/tokens.md` section "Data colors (charts)" |
+| charts in the dashboard | `ui-craft` part `web-app-design` → `references/tokens.md` section "Data colors (charts)" |
 | spec document of the screen | `design-gate/polished-document-style` + `document-design` |
 | choosing the app architecture | `architecture` |
 | spacing rules, visual order, and the 5 states of a screen | `ui-craft` |

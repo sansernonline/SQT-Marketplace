@@ -10,7 +10,7 @@
 - You need a 2-mode palette, a Thai-Latin font pair, or Thai UX rules that fit the business, such as "ทำเว็บคลินิกทันตกรรม อยากได้โทนสีกับฟอนต์ไทยที่เข้ากัน".
 - You want to know which chart fits the data, how the home page should order its sections, or what look rules a framework has.
 
-Not for: a project whose look already passed the beauty gate (copy the sibling page per `ui-craft` step 0) · a whole brand set, logo, or corporate colors, or a customer who already has a brand → `graphic-design:brand-kit` · checking finished work for looking AI-made → `design-gate/no-ai-look` · web app or dashboard screens → `ui-craft` · mobile PWA → `ui-craft` · Windows desktop → `ui-craft`.
+Not for: a project whose look already passed the beauty gate (copy the sibling page per `ui-craft` step 0) · a whole brand set, logo, or corporate colors, or a customer who already has a brand → `graphic-design:brand-kit` · checking finished work for looking AI-made → `design-gate/no-ai-look` · web app or dashboard screens → `ui-craft` part `web-app-design` · mobile PWA → `ui-craft` part `mobile-app-design` · Windows desktop → `ui-craft` part `windows-app-design`.
 
 ## Steps
 1. **Search one topic at a time.**

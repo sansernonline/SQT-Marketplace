@@ -30,7 +30,7 @@
 
 ## 1. ประเมินตัวเองและขอเลื่อนตำแหน่ง
 
-playbook `promotion-case` · agent `career-coach` · skill `job-search`
+playbook `promotion-case` · agent `career-coach` · skill `job-search` part `career-growth`
 **ผลลัพธ์:** `review/<ปี>-<H1/H2>-self-review.md` · `brag.md` (จดผลงานต่อเนื่อง) · **รออนุมัติ:** ส่ง self-review เข้าระบบ · ส่งคำขอเลื่อนตำแหน่งหรือขึ้นเงินเดือนถึงหัวหน้า
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -53,7 +53,7 @@ playbook `promotion-case` · agent `career-coach` · skill `job-search`
 
 ## 2. เริ่มงานใหม่ ผ่านช่วงทดลองงาน
 
-playbook `promotion-case` (ใช้ขั้น 1–2 และ 5: รวบรวมผลงาน · เขียนเป็นผล · ตรวจหลักฐาน · ขั้น 3–4 เรื่องตำแหน่งถัดไปไม่ใช้ จดเหตุผลตามหัวข้อ 2 ของ `superuser`) · agent `career-coach` · skill `job-search`
+playbook `promotion-case` (ใช้ขั้น 1–2 และ 5: รวบรวมผลงาน · เขียนเป็นผล · ตรวจหลักฐาน · ขั้น 3–4 เรื่องตำแหน่งถัดไปไม่ใช้ จดเหตุผลตามหัวข้อ 2 ของ `superuser`) · agent `career-coach` · skill `job-search` part `career-growth`
 **ผลลัพธ์:** `review/<ปี>-probation.md` · `brag.md` · **รออนุมัติ:** ส่งสรุปผลงานหรือนัดคุยกับหัวหน้า
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -80,7 +80,7 @@ playbook `promotion-case` (ใช้ขั้น 1–2 และ 5: รวบร
 
 ## 3. คุยกับหัวหน้าเรื่องยาก
 
-playbook `promotion-case` (ใช้ขั้น 1 รวบรวมหลักฐาน และขั้น 4 ร่างบทพูดกับหัวหน้า · ไม่มี playbook ที่ตรงทั้งตัว จึงปรับตามหัวข้อ 2 ของ `superuser`) · agent `career-coach` · skill `job-search` · `human-writing`
+playbook `promotion-case` (ใช้ขั้น 1 รวบรวมหลักฐาน และขั้น 4 ร่างบทพูดกับหัวหน้า · ไม่มี playbook ที่ตรงทั้งตัว จึงปรับตามหัวข้อ 2 ของ `superuser`) · agent `career-coach` · skill `job-search` part `career-growth` · `human-writing`
 **ผลลัพธ์:** `talks/<ปี-เดือน>-<เรื่อง>.md` · **รออนุมัติ:** ส่งข้อความหรืออีเมลถึงหัวหน้า · ส่งเรื่องถึงฝ่ายบุคคล (Human Resources: HR)
 
 ### ข้อมูล (ผู้ใช้กรอก)

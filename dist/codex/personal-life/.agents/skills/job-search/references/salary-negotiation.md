@@ -16,7 +16,7 @@
 
 Negotiate on **total compensation per year**, not base salary per month.
 
-Not for: writing up what you achieved for a review → `job-search`.
+Not for: writing up what you achieved for a review → `job-search` part `career-growth`.
 
 General information, not professional advice — for tax effects ask a นักบัญชี or check `income-tax-th` in `trading-finance` (if installed); for contract disputes ask a labour lawyer.
 
@@ -129,7 +129,7 @@ Many Thai companies, and most large ones, have a salary band (กรอบเง
 Run the `career-coach` agent with the `job-search` skill: **the user's request**
 
 - `offer` — build the total-compensation table for the offer (and the current job), find the gap, draft the reply in Thai and English
-- `raise` — build the case from `job-search`, pick the number, draft the meeting opener
+- `raise` — build the case from `job-search` part `career-growth`, pick the number, draft the meeting opener
 - `counter` — the current employer counter-offered; run the counter-offer checklist before answering
 
 ## References

@@ -16,7 +16,7 @@ Not for: dashboard · admin · internal tool · SaaS → this part's [`guide.md`
 1. Run the pre-work gate above. Colour comes from the work: use the brand colour if there is one; otherwise search live per `design-gate/design-references` (type `web` or `motion`) and extract colours from the chosen work. If live search is impossible, use `#2A78D6` (text on light: `#226CC6`), write `(รอยืนยัน)` and carry on.
 2. Pick the mode per part of the site: deck-mode (chapters stacked `position:absolute; visibility:hidden`, only `.on` visible) for story chapters, page-mode (normal scroll, reveal item 8 of `recipes.md`) for registration, payment, admin. One `route()` on `hashchange`; every view pushes its teardown into `cleanups[]`, and `route()` clears them before rendering the next view.
 3. Declare the entrance in markup: `<section class="ch" data-enter="blurWords">` · heading `data-t` · followers `data-f` · image `data-w`. Content lives in HTML, not JS.
-4. Copy recipes from `recipes.md`; a working example is `assets/example-deck.html`. Use token names that match `ui-craft` → `tokens.md`; type scale and fonts are in `tokens-and-fonts.md`.
+4. Copy recipes from `recipes.md`; a working example is `assets/example-deck.html`. Use token names that match `ui-craft` part `web-app-design` → `tokens.md`; type scale and fonts are in `tokens-and-fonts.md`.
 5. Load three.js as a module in parallel; wait for `neural:ready` or 4 seconds; probe WebGL. If it fails, set `body.no-webgl` and show a 2D canvas fallback with the same meaning. Run `setAnimationLoop` only while the screen needs it.
 6. Apply the 15 rules below. Self-host fonts and GSAP (`vendor/`) for real delivery; cdnjs is fine for a mockup.
 7. Run the checks below, then go through item 3 of `design-gate/no-ai-look` (for HTML run its script; a script result of 0 items is not yet a pass, so also pass eye gate 3.2 and items 10–14).
@@ -48,8 +48,8 @@ Also: trackpad inertia must not skip 2 chapters (drop delta < 6 and anything wit
 - Fonts self-hosted, 2 weights preloaded; with network unplugged the intended font still shows
 - WebGL disabled (or `body.no-webgl`): the 2D fallback appears and is readable
 - 1 hard trackpad swipe = 1 chapter · an inner list scrolls to the end first
-- No hardcoded colours outside the token block (`ui-craft` → `scripts/check-design-tokens.mjs`)
-- Screenshots at 1440 · 900 · 420 of every chapter (`ui-craft` → `scripts/screenshot.py`), actually looked at · the rail below 900px is a bottom bar and covers no content
+- No hardcoded colours outside the token block (`scripts/check-design-tokens.mjs` of this part)
+- Screenshots at 1440 · 900 · 420 of every chapter (`<ui-craft>/scripts/screenshot.py`), actually looked at · the rail below 900px is a bottom bar and covers no content
 - Go through the a11y and motion list of vercel-labs/web-interface-guidelines (local copy, do not fetch at run time; MIT · checked 2026-10-23) as a check list for focus · motion · touch target · contrast; do not copy its text
 
 ## References
@@ -58,4 +58,4 @@ Also: trackpad inertia must not skip 2 chapters (drop delta < 6 and anything wit
 - [`tokens-and-fonts.md`](tokens-and-fonts.md) — open when setting tokens, type scale or a Thai font
 - [`tools.md`](tools.md) — open when choosing GSAP vs CSS scroll-driven vs View Transitions vs scroll-snap, or when you need deeper GSAP API (then read only the plugin file you use from github.com/greensock/gsap-skills; this page's rules still outrank it)
 - [`sources.md`](sources.md) — sources and check dates
-- Other skills: colour tokens/forms for page-mode → `ui-craft` · motion principles and easing → `video-editing` · storyline and text budget → `slide-deck` · SEO of JS-rendered pages → `web-audit`
+- Other skills: colour tokens/forms for page-mode → `ui-craft` part `web-app-design` · motion principles and easing → `video-editing` · storyline and text budget → `slide-deck` · SEO of JS-rendered pages → `web-audit`

@@ -9,7 +9,7 @@ A course with levels. Each level teaches one technique as written rules, tests i
 
 Use when the user wants to learn to trade, asks which technique to start with, wants a study plan for trend, breakout, mean reversion or support and resistance, or asks if they are ready to move to the next technique or to real money.
 
-Not when: one trade to size now → `position-sizing` · what this chart says today → `technical-signals` · following someone else's signal → `trade-journal` · building an Expert Advisor → `stack-mql` (software-development).
+Not when: one trade to size now → `position-sizing` · what this chart says today → `technical-signals` · following someone else's signal → `trade-journal` part `copy-trade-check` · building an Expert Advisor → `stack-mql` (software-development).
 
 ## Use another skill instead, or with this one
 
@@ -21,7 +21,7 @@ This skill holds the levels and the gates. The how-to lives in these skills; ope
 | Indicator settings and false signals | `technical-signals` (defaults table, `signal-meanings.md`, `indicators.mjs`) | The SMA, EMA, RSI, volume and zone definitions the rules use |
 | Practice account with Thai market friction | `paper-trading.md` (realism rules, graduation gate) | The paper part of every level and the real-money gate |
 | Logging and the numbers | `trade-journal` (R-multiple, fixed setup names, `trade-stats.mjs`) | Expectancy, win rate, drawdown, violation rate for each gate |
-| Forex or CFD with real money | `trade-journal` legal box | The BOT rules before any money leaves Thailand |
+| Forex or CFD with real money | `trade-journal` part `copy-trade-check` legal box | The BOT rules before any money leaves Thailand |
 | Guaranteed-profit course, LINE group "teacher", pay to join signals | `scam-check` — stop here | |
 
 ## 1 · Before level 0 — ask once
@@ -59,7 +59,7 @@ Every number here is a starting value, not yet measured, except where a skill is
 | Level 0 → level 1 | 10 paper trades logged before entry, each with a stop and a size from `size.mjs` · zero `no-stop`, `oversize` or `moved-stop` violations · average loss 1.2R or less (the `trade-stats.mjs` flag) |
 | Backtest → paper (each level) | 30 or more signals on 3 or more symbols · expectancy above 0R after costs. If not: change one rule and retest, at most 2 times, because each retest on the same charts makes a lucky fit more likely. Still not above 0 → mark the level **dropped**: record it and move on, but this technique never goes live |
 | Level n → level n+1 | 20 or more closed paper trades with this setup (the `paper-trading.md` minimum for a first look) · expectancy above 0R · violation rate 5% or less (`paper-trading.md`) · average loss 1.2R or less · max drawdown within the user's limit · paper expectancy at least half the backtest expectancy; lower means the rules are not being followed as written, so find which |
-| A technique → real money | The `paper-trading.md` graduation gate for that setup alone: 30 or more trades, expectancy above +0.2R, violations 5% or less, drawdown within the limit, 2 months or more including a down week. Then live at one quarter of the planned risk for 20 trades. One technique live at a time. Forex or CFD → the `trade-journal` legal box first. The user decides |
+| A technique → real money | The `paper-trading.md` graduation gate for that setup alone: 30 or more trades, expectancy above +0.2R, violations 5% or less, drawdown within the limit, 2 months or more including a down week. Then live at one quarter of the planned risk for 20 trades. One technique live at a time. Forex or CFD → the `trade-journal` part `copy-trade-check` legal box first. The user decides |
 
 Fail a gate → stay on the level and run another 20 paper trades; do not skip ahead. A user who asks to go live before the gate: name the missing gate numbers, keep the whole amount on paper, and give the next paper step (stop-loss on every trade, position sizing). A smaller live amount before the gate still skips the gate. The win rate is reported with its 95% interval but is never a gate on its own, because a 35% win rate with 2R winners beats a 70% win rate with 0.3R winners.
 

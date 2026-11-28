@@ -19,7 +19,7 @@ description: Use before code, tests, ops, docs or screen work to judge it
 | Requirements · project documents | [`references/requirements-docs.md`](references/requirements-docs.md) | `requirements-writing` · `architecture` · `project-docs` | `project-docs` · `new-project` |
 | Application screens (web · mobile · Windows) | [`references/ui.md`](references/ui.md) | `ui-craft` · `web-audit` | `feature` · `visual-parity` |
 | Data · AI/LLM · voice agents · MCP | [`references/data-ai.md`](references/data-ai.md) | `data-analysis` · `data-import-export` · `ai-engineering` | `ai-feature` · `feature` · `prototype` |
-| Mobile apps · games | [`references/mobile-game.md`](references/mobile-game.md) | `mobile-engineering` · `ui-craft` · `game-development` | `feature` · `ship` · `performance` |
+| Mobile apps · games | [`references/mobile-game.md`](references/mobile-game.md) | `mobile-engineering` · `ui-craft` part `mobile-app-design` · `game-development` | `feature` · `ship` · `performance` |
 | Regulated or money domains (payments · health · insurance · IoT · smart contracts · SaaS · checkout · legal docs) | [`references/domain-systems.md`](references/domain-systems.md) | `domain-systems` | `feature` · `review` · `ship` |
 | Designed documents · slides · diagrams · one-off logo or poster | [`references/documents-diagrams.md`](references/documents-diagrams.md) | `document-design` · `slide-deck` · `diagrams` · `graphic-design:design-by-type` | `project-docs` |
 | Product and project planning (roadmap · sprint · retrospective · naming · reference apps) | [`references/product-project.md`](references/product-project.md) | `product-planning` · `product-naming` · `reference-app-research` · `requirements-writing` | `new-project` · `prototype` · `project-docs` |

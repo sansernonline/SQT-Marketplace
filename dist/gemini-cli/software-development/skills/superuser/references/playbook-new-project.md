@@ -3,7 +3,7 @@
 Use when: "Make app X for me" · "Try setting up a project" · there is no code yet or only an empty folder (if you need the full document set, BRD · SRS, first, use playbook `project-docs` first, then come back here)
 Main principles: [`dev-principles`](../../dev-principles/SKILL.md) · [`references/architecture-api.md`](../../dev-principles/references/architecture-api.md) · [`references/requirements-docs.md`](../../dev-principles/references/requirements-docs.md) · [`references/testing.md`](../../dev-principles/references/testing.md)
 Main skills: `project-bootstrap` · [`project-docs`](../../project-docs/SKILL.md) · `requirements-writing` · `spec-to-code-loop` · `architecture` · `code-craft` · [`security-gate`](../../security-gate/SKILL.md) · [`test-automation`](../../test-automation/SKILL.md) · `infra-and-deploy` · `diagrams`
-Pick the skill for the part you touch: `api-design` · `web-service-essentials` · `database-design` · `async-messaging` · `errors-and-logs` · `i18n-and-locale` · `architecture` · `requirements-writing` · `domain-systems` · `ai-engineering` · `data-analysis` · `data-import-export` · `mobile-engineering` · `game-development` · `developer-experience` · screens: `ui-craft` · `design-system`
+Pick the skill for the part you touch: `api-design` · `web-service-essentials` · `database-design` · `async-messaging` · `errors-and-logs` · `i18n-and-locale` · `architecture` · `requirements-writing` · `domain-systems` · `ai-engineering` · `data-analysis` · `data-import-export` · `mobile-engineering` · `game-development` · `developer-experience` · screens: `ui-craft` parts `web-app-design` · `mobile-app-design` · `windows-app-design` · `design-system`
 
 ## ขั้นตอน · Steps (copy into the todo as written)
 

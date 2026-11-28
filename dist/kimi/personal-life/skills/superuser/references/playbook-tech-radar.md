@@ -2,7 +2,7 @@
 
 Use when: following news of the libraries and tools in use · "what changed this week"
 Main principles: [`life-principles`](../../life-principles/SKILL.md) · [`references/tech-growth.md`](../../life-principles/references/tech-growth.md)
-Main skills: `learning-path` (`references/tech-radar.md` · `references/radar-templates.md`)
+Main skills: `learning-path` part `tech-growth` (`references/tech-radar.md` · `references/radar-templates.md`)
 
 ## ขั้นตอน (Steps — copy into the todo as written)
 
