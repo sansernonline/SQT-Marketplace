@@ -4,7 +4,7 @@ voice guesses word edges; a loanword such as แทปเล็ต comes out as 
   check  every line of a script: print the lexicon/respell readings the voice splits into 2+ words
   make   one line's audio with fixes:
            --splice WORD=SAMPLE   cut WORD as said in SAMPLE (where it stays one word) into the line
-           --speedup A,B=TEMPO    play the stretch from just before A to the end of B faster, same pitch
+           --speedup A,B=TEMPO    play the stretch from just before A to the end of B faster, same pitch (TEMPO 0.5-2.0)
                                   (spelled-out letters such as พี-โอ-เอส: --speedup โอ,เอส=1.2)
 
 Use:
@@ -128,6 +128,17 @@ def speedup_edits(a, marks, first, last, tempo):
     return edits
 
 
+def drop_overlaps(edits):
+    """Keep edits in the order given; skip any that cuts into a span an earlier edit already replaced."""
+    kept = []
+    for e in edits:
+        if any(e[0] < k[1] and k[0] < e[1] for k in kept):
+            print(f"skipped an edit at {e[0] / R:.2f}-{e[1] / R:.2f} s: it overlaps an earlier --splice or --speedup")
+        else:
+            kept.append(e)
+    return kept
+
+
 def apply(a, edits):
     for i0, i1, new, edge in sorted(edits, key=lambda e: e[0], reverse=True):   # right to left keeps positions valid
         a = np.concatenate([fade(a[:i0].copy(), edge, out=True), new, fade(a[i1:].copy(), edge, out=False)])
@@ -136,29 +147,51 @@ def apply(a, edits):
 
 def write_mp3(a, path):
     wav = Path(path).with_suffix(".tmp.wav")
-    with wave.open(str(wav), "wb") as f:
-        f.setnchannels(1); f.setsampwidth(2); f.setframerate(R)
-        f.writeframes(np.clip(a, -32768, 32767).astype(np.int16).tobytes())
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(wav), "-b:a", "96k", str(path)], check=True)
-    wav.unlink()
+    try:
+        with wave.open(str(wav), "wb") as f:
+            f.setnchannels(1); f.setsampwidth(2); f.setframerate(R)
+            f.writeframes(np.clip(a, -32768, 32767).astype(np.int16).tobytes())
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(wav), "-b:a", "96k", str(path)], check=True)
+    finally:
+        wav.unlink(missing_ok=True)
+
+
+def parse_splice(item):
+    word, sep, sample = item.partition("=")
+    if not sep or not word.strip() or not sample.strip():
+        raise SystemExit(f"--splice {item!r}: expected WORD=SAMPLE TEXT")
+    return word.strip(), sample
+
+
+def parse_speedup(item):
+    pair, sep, tempo = item.rpartition("=")
+    first, comma, last = pair.partition(",")
+    if not sep or not comma or not first.strip() or not last.strip():
+        raise SystemExit(f"--speedup {item!r}: expected FIRST,LAST=TEMPO such as โอ,เอส=1.2")
+    try:
+        value = float(tempo)
+    except ValueError:
+        raise SystemExit(f"--speedup {item!r}: TEMPO {tempo!r} is not a number") from None
+    if not 0.5 <= value <= 2.0:   # ffmpeg atempo takes 0.5-100 per pass; past 2x speech stops sounding natural
+        raise SystemExit(f"--speedup {item!r}: TEMPO must be between 0.5 and 2.0")
+    return first.strip(), last.strip(), value
 
 
 def make(a):
+    splices = [parse_splice(item) for item in a.splice]       # check every option before calling the voice service
+    speedups = [parse_speedup(item) for item in a.speedup]
     audio, marks = speak(a.text, a.voice, a.rate)
     line, edits = pcm(audio), []
-    for item in a.splice:
-        word, sample = item.split("=", 1)
+    for word, sample in splices:
         s_audio, s_marks = speak(sample, a.voice, a.rate)
         e = splice_edit(line, marks, word, pcm(s_audio), s_marks)
         print(f"splice {word}:", "done" if e else "not found in line or not one word in sample")
         edits += [e] if e else []
-    for item in a.speedup:
-        pair, tempo = item.rsplit("=", 1)
-        first, last = pair.split(",")
-        found = speedup_edits(line, marks, first, last, float(tempo))
-        print(f"speedup {pair} x{tempo}: {len(found)} place(s)")
+    for first, last, tempo in speedups:
+        found = speedup_edits(line, marks, first, last, tempo)
+        print(f"speedup {first},{last} x{tempo}: {len(found)} place(s)")
         edits += found
-    write_mp3(apply(line, edits), a.out)
+    write_mp3(apply(line, drop_overlaps(edits)), a.out)
 
 
 def check(a):
@@ -180,6 +213,14 @@ def check(a):
     return 1 if bad else 0
 
 
+def _rejects(parse, item):
+    try:
+        parse(item)
+    except SystemExit:
+        return True
+    return False
+
+
 def self_test():
     marks = [(0.0, 0.2, "ผ่าน"), (0.2, 0.4, "แทป"), (0.4, 0.55, "เล็ต"), (0.55, 0.8, "ส่ง")]
     tone = np.concatenate([np.zeros(int(0.2 * R)), np.full(int(0.6 * R), 1000.0)]).astype(np.float32)
@@ -187,7 +228,12 @@ def self_test():
               ("one-mark word", span(marks, "ส่ง") == (0.55, 0.8, 1)),
               ("missing word", span(marks, "พอส") is None),
               ("cut lands in silence", quietest(tone, 0.1, 0.3) < int(0.2 * R)),
-              ("edit shortens audio", len(apply(tone.copy(), [(100, 2100, np.zeros(1000, np.float32), 0.001)])) == len(tone) - 1000)]
+              ("edit shortens audio", len(apply(tone.copy(), [(100, 2100, np.zeros(1000, np.float32), 0.001)])) == len(tone) - 1000),
+              ("overlapping edit skipped", [e[0] for e in drop_overlaps([(100, 500, None, 0), (400, 900, None, 0), (900, 1000, None, 0)])] == [100, 900]),
+              ("speedup parsed", parse_speedup("โอ,เอส=1.2") == ("โอ", "เอส", 1.2)),
+              ("bad tempo rejected", _rejects(parse_speedup, "โอ,เอส=fast") and _rejects(parse_speedup, "โอ,เอส=5")),
+              ("speedup without comma rejected", _rejects(parse_speedup, "โอเอส=1.2")),
+              ("splice without = rejected", _rejects(parse_splice, "แทปเล็ต"))]
     for name, ok in checks:
         print(f"{name}:", "pass" if ok else "FAIL")
     ok = all(ok for _, ok in checks)
